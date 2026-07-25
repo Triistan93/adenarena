@@ -1,0 +1,202 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Cinzel", "Times New Roman", serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: #06080f;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  font-family: var(--font-sans);
+}
+
+canvas {
+  touch-action: none;
+  display: block;
+}
+
+@keyframes floatUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.animate-float {
+  animation: floatUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes pulseGlow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+  }
+  50% {
+    box-shadow: 0 0 34px 6px rgba(255, 255, 255, 0.14);
+  }
+}
+.animate-pulseGlow {
+  animation: pulseGlow 2.6s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.04);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+}
+
+/* =========================================================
+   MODE SWITCH — always-visible crest pair (light DOM)
+   Sits above both the idle chronicle (shadow host) and the
+   3D arena overlays. Hand-embossed iron discs that light up
+   gilt when active, with a slowly rotating dashed bezel.
+   ========================================================= */
+.mode-switch {
+  position: fixed;
+  left: 16px;
+  bottom: 18px;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 6px 4px;
+  user-select: none;
+  pointer-events: auto;
+}
+.mode-switch__caption {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 8px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: #6a6458;
+  padding-left: 0.4em;
+}
+.mode-switch__spine {
+  width: 1px;
+  height: 12px;
+  background: linear-gradient(180deg, transparent, #8a6a24 40%, #d4a744 50%, #8a6a24 60%, transparent);
+  opacity: 0.7;
+}
+.mode-crest {
+  position: relative;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at 32% 26%, #2a2f3c 0%, #14171f 58%, #0a0c11 100%);
+  border: 1px solid #2d3342;
+  box-shadow:
+    0 2px 0 rgba(0, 0, 0, 0.6),
+    0 10px 22px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    inset 0 -6px 12px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  color: #6a6458;
+  padding: 0;
+  transition:
+    transform 0.2s cubic-bezier(0.2, 0.8, 0.3, 1),
+    box-shadow 0.3s,
+    border-color 0.3s,
+    color 0.3s;
+}
+.mode-crest__glyph {
+  font-size: 21px;
+  line-height: 1;
+  margin-top: 1px;
+  filter: grayscale(0.65) brightness(0.75);
+  transition: filter 0.3s, transform 0.3s;
+}
+.mode-crest__label {
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: "Cinzel", "Times New Roman", serif;
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #6a6458;
+  white-space: nowrap;
+  transition: color 0.3s, text-shadow 0.3s;
+}
+.mode-crest::after {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  border: 1px dashed rgba(212, 167, 68, 0);
+  pointer-events: none;
+  transition: border-color 0.4s;
+}
+.mode-crest:hover {
+  transform: translateY(-2px) scale(1.05);
+  border-color: #8a6a24;
+  color: #9d9486;
+}
+.mode-crest:hover .mode-crest__glyph {
+  filter: grayscale(0.2) brightness(1);
+}
+.mode-crest:active {
+  transform: translateY(0) scale(0.95);
+}
+.mode-crest:focus-visible {
+  outline: 2px solid #d4a744;
+  outline-offset: 3px;
+}
+.mode-crest.is-active {
+  background: radial-gradient(circle at 32% 26%, #6a4e16 0%, #2c2109 55%, #140d03 100%);
+  border-color: #d4a744;
+  color: #f2c660;
+  box-shadow:
+    0 2px 0 rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(212, 167, 68, 0.35),
+    0 12px 28px rgba(212, 167, 68, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -6px 14px rgba(0, 0, 0, 0.55);
+}
+.mode-crest.is-active .mode-crest__glyph {
+  filter: drop-shadow(0 0 6px rgba(242, 198, 96, 0.75)) brightness(1.12);
+  transform: scale(1.07);
+}
+.mode-crest.is-active .mode-crest__label {
+  color: #f2c660;
+  text-shadow: 0 0 8px rgba(212, 167, 68, 0.5);
+}
+.mode-crest.is-active::after {
+  border-color: rgba(212, 167, 68, 0.5);
+  animation: crest-spin 22s linear infinite;
+}
+@keyframes crest-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -1,0 +1,250 @@
+// The idle game's DOM, injected verbatim into a Shadow Root so its styles
+// and IDs cannot collide with the 3D arena that shares the page.
+export const IDLE_MARKUP = `
+  <div id="game">
+    <div class="ambient-layer" aria-hidden="true"></div>
+    <div id="float-layer" class="float-layer" aria-hidden="true"></div>
+    <!-- Top Bar -->
+    <header class="top-bar">
+      <span id="game-title">LINEAGE <em>IDLE</em></span>
+      <div class="top-stats">
+        <span class="ts-zone"><span class="ts-label">Zone</span><span id="zone-name">Talking Island</span></span>
+        <span class="ts-clock"><span class="ts-label">Session</span><span id="clock">00:00:00</span></span>
+      </div>
+    </header>
+
+    <!-- Main Layout -->
+    <main class="main-grid">
+      <!-- Left: Character Stats -->
+      <aside class="panel stats-panel">
+        <div class="stat-row">
+          <label>HP</label>
+          <div class="bar-container">
+            <div id="hp-bar" class="bar hp" style="width:100%"></div>
+            <span id="hp-text">100 / 100</span>
+          </div>
+        </div>
+        <div class="stat-row">
+          <label>MP</label>
+          <div class="bar-container">
+            <div id="mp-bar" class="bar mp" style="width:100%"></div>
+            <span id="mp-text">50 / 50</span>
+          </div>
+        </div>
+        <div class="stat-row">
+          <label>XP</label>
+          <div class="bar-container">
+            <div id="xp-bar" class="bar xp" style="width:0%"></div>
+            <span id="xp-text">0 / 100</span>
+          </div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-row"><label>Level</label><span id="level-text" class="stat-value">1</span></div>
+        <div class="stat-row"><label>Saga</label><span id="saga-text" class="stat-value">Interlude</span></div>
+        <div class="stat-row"><label>Race</label><span id="race-text" class="stat-value">Human</span></div>
+        <div class="stat-row"><label>Class</label><span id="class-text" class="stat-value">Fighter</span></div>
+        <div class="stat-divider"></div>
+        <div class="stat-row"><label>ATK</label><span id="atk-text" class="stat-value">10</span></div>
+        <div class="stat-row"><label>DEF</label><span id="def-text" class="stat-value">5</span></div>
+        <div class="stat-row"><label>EVA</label><span id="eva-text" class="stat-value">0</span></div>
+        <div class="stat-row"><label>MATK</label><span id="matk-text" class="stat-value">0</span></div>
+        <div class="stat-row"><label>MDEF</label><span id="mdef-text" class="stat-value">0</span></div>
+        <div class="stat-row"><label>CRIT</label><span id="crit-text" class="stat-value">0%</span></div>
+        <div class="stat-row"><label>Loot</label><span id="loot-text" class="stat-value">100%</span></div>
+        <div class="stat-divider"></div>
+        <div class="stat-row"><label>SP</label><span id="sp-text" class="stat-value">0</span></div>
+        <div class="stat-row"><label>Gold</label><span id="gold-text-stat" class="stat-value gold">0</span></div>
+        <div class="stat-row"><label>Gold/s</label><span id="gps-text" class="stat-value gold-dim">—</span></div>
+        <div class="stat-row"><label>Craft Lv</label><span id="craft-level-stat" class="stat-value">1</span></div>
+        <div class="stat-divider"></div>
+        <div class="active-buffs" id="active-buffs"><span class="ab-empty">No active buffs</span></div>
+      </aside>
+
+      <!-- Center: live battle stage + combat ticker -->
+      <section class="panel log-panel center-panel">
+        <div class="stage" id="stage" data-state="idle">
+          <div class="st-layer st-sky"></div>
+          <div class="st-layer st-sun"></div>
+          <div class="st-layer st-mountains"></div>
+          <div class="st-layer st-trees"></div>
+          <div class="st-layer st-ground"></div>
+          <div class="st-layer st-embers" aria-hidden="true"></div>
+          <div class="st-layer st-fog"></div>
+          <div class="stage-zone" id="stage-zone">—</div>
+          <div class="stage-vs" aria-hidden="true">&#9876;</div>
+          <div class="stage-hero" id="stage-hero"></div>
+          <div class="stage-monster" id="stage-monster">
+            <div class="m-name" id="m-name"></div>
+            <div class="m-hp"><div class="m-hp-fill" id="m-hp-fill"></div></div>
+            <div class="m-art" id="m-art"></div>
+          </div>
+          <div class="stage-floats" id="stage-floats"></div>
+        </div>
+        <div id="log" class="log">
+          <p class="log-entry system">Welcome to Lineage Idle.</p>
+          <p class="log-entry system">Select your Race &amp; Class to begin.</p>
+        </div>
+      </section>
+
+      <!-- Right: Tabs -->
+      <aside class="panel tabs-panel">
+        <div class="tab-buttons">
+          <button class="tab-btn active" data-tab="character">Char</button>
+          <button class="tab-btn" data-tab="equipment">Equip</button>
+          <button class="tab-btn" data-tab="skills">Skills</button>
+          <button class="tab-btn" data-tab="inventory">Inv</button>
+          <button class="tab-btn" data-tab="shop">Shop</button>
+          <button class="tab-btn" data-tab="craft">Craft</button>
+          <button class="tab-btn" data-tab="zones">Zones</button>
+        </div>
+        <div class="tab-content">
+          <!-- Character Tab -->
+          <div id="tab-character" class="tab-pane active">
+            <div class="portrait" id="portrait">
+              <div class="portrait-aura" id="portrait-aura"></div>
+              <div class="portrait-art" id="portrait-art"></div>
+              <div class="portrait-meta">
+                <div class="portrait-name" id="portrait-name">Adventurer</div>
+                <div class="portrait-sub" id="portrait-sub">Choose your lineage</div>
+              </div>
+            </div>
+            <div class="pane-section">
+              <h3>Race</h3>
+              <div class="race-grid">
+                <button class="race-btn" data-race="human">Human</button>
+                <button class="race-btn" data-race="elf">Elf</button>
+                <button class="race-btn" data-race="darkelf">Dark Elf</button>
+                <button class="race-btn" data-race="orc">Orc</button>
+                <button class="race-btn" data-race="dwarf">Dwarf</button>
+                <button class="race-btn" data-race="kamael">Kamael</button>
+                <button class="race-btn" data-race="ertheia">Ertheia</button>
+              </div>
+              <p class="race-desc">Select a race.</p>
+            </div>
+            <div class="pane-section">
+              <h3>Class</h3>
+              <div class="class-grid" id="class-grid">
+                <button class="class-btn" data-class="fighter">Fighter</button>
+                <button class="class-btn" data-class="mage">Mage</button>
+              </div>
+              <p class="class-desc">Select a class.</p>
+            </div>
+            <button id="save-btn" class="action-btn" style="margin-bottom: 6px;">Save Game</button>
+            <button id="start-btn" class="action-btn">Begin the Saga</button>
+            <button id="reset-btn" class="action-btn action-btn--danger">Abandon Chronicle</button>
+          </div>
+
+          <!-- Equipment Tab -->
+          <div id="tab-equipment" class="tab-pane">
+            <h3>Equipped Gear</h3>
+            <div class="paperdoll">
+              <div class="doll-art" id="doll-art"></div>
+              <div class="doll-slots equipment-grid">
+                <div class="equip-slot" data-slot="weapon"><span class="slot-label">⚔</span><span class="slot-item" id="equip-weapon">Empty</span></div>
+                <div class="equip-slot" data-slot="helmet"><span class="slot-label">⛑</span><span class="slot-item" id="equip-helmet">Empty</span></div>
+                <div class="equip-slot" data-slot="armor"><span class="slot-label">🛡</span><span class="slot-item" id="equip-armor">Empty</span></div>
+                <div class="equip-slot" data-slot="gloves"><span class="slot-label">🧤</span><span class="slot-item" id="equip-gloves">Empty</span></div>
+                <div class="equip-slot" data-slot="boots"><span class="slot-label">👢</span><span class="slot-item" id="equip-boots">Empty</span></div>
+                <div class="equip-slot" data-slot="ring"><span class="slot-label">💍</span><span class="slot-item" id="equip-ring">Empty</span></div>
+              </div>
+            </div>
+            <div class="equip-bonuses">
+              <h4>Equipment Bonuses</h4>
+              <div id="bonus-list"></div>
+            </div>
+            <button class="action-btn action-btn--ghost" id="unequip-all-btn">Unequip All</button>
+          </div>
+
+          <!-- Skills Tab -->
+          <div id="tab-skills" class="tab-pane">
+            <div class="skills-head">
+              <h3>Talent Tree</h3>
+              <span class="sp-pill"><span class="sp-icon">✦</span> <span id="sp-available">0</span> SP</span>
+            </div>
+            <div class="skills-body">
+              <div class="skill-tree-scroll">
+                <div class="skill-tree" id="skill-tree"></div>
+              </div>
+              <aside class="skill-info-panel" id="skill-info-panel"></aside>
+            </div>
+          </div>
+
+          <!-- Inventory Tab -->
+          <div id="tab-inventory" class="tab-pane">
+            <h3>Inventory</h3>
+            <div class="inv-filters">
+              <button class="filter-btn active" data-filter="all">All</button>
+              <button class="filter-btn" data-filter="weapon">⚔</button>
+              <button class="filter-btn" data-filter="armor">🛡</button>
+              <button class="filter-btn" data-filter="helmet">⛑</button>
+              <button class="filter-btn" data-filter="boots">👢</button>
+              <button class="filter-btn" data-filter="gloves">🧤</button>
+              <button class="filter-btn" data-filter="ring">💍</button>
+              <button class="filter-btn" data-filter="consumable">🧪</button>
+              <button class="filter-btn" data-filter="material">💎</button>
+            </div>
+            <div class="inventory-grid" id="inventory-grid"></div>
+            <div class="inv-summary">
+              <span>Slots: <span id="inv-slots">0/50</span></span>
+              <span>Gold: <span id="gold-text">0</span></span>
+            </div>
+          </div>
+
+          <!-- Shop Tab -->
+          <div id="tab-shop" class="tab-pane">
+            <div class="shop-head">
+              <h3>Merchant's Guild</h3>
+              <span class="shop-gold-pill">🪙 <span id="shop-gold">0</span></span>
+            </div>
+            <div class="shop-subtabs">
+              <button class="shop-subtab active" data-shoptab="gear">⚔ Gear</button>
+              <button class="shop-subtab" data-shoptab="potions">🧪 Potions</button>
+              <button class="shop-subtab" data-shoptab="powerups">✨ Powerups</button>
+              <button class="shop-subtab" data-shoptab="class">🎖 Class</button>
+              <button class="shop-subtab" data-shoptab="mystic">✦ Mystic</button>
+            </div>
+            <div class="shop-list" id="shop-list"></div>
+          </div>
+
+          <!-- Craft Tab -->
+          <div id="tab-craft" class="tab-pane">
+            <h3>Crafting</h3>
+            <p class="stat-value">Craft Lv: <span id="craft-level">1</span></p>
+            <p class="shop-info">Combine materials to create equipment.</p>
+            <div class="craft-list" id="craft-list"></div>
+          </div>
+
+          <!-- Zones Tab -->
+          <div id="tab-zones" class="tab-pane">
+            <h3>Zones</h3>
+            <div class="zone-list" id="zone-list"></div>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <!-- Death Modal -->
+    <div id="death-modal" class="modal">
+      <div class="modal-content">
+        <h2>You have been defeated!</h2>
+        <p id="death-penalty">You will lose <span id="xp-loss">0</span> XP.</p>
+        <div class="modal-actions">
+          <button id="res-free" class="action-btn">Resurrect (Free, -20% XP)</button>
+          <button id="res-scroll" class="action-btn">Use Scroll (Item, -10% XP)</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Saga Unlock Modal -->
+    <div id="saga-modal" class="modal">
+      <div class="modal-content">
+        <h2 id="saga-title">Saga Unlocked!</h2>
+        <p id="saga-desc">New zones await.</p>
+        <button id="saga-ok" class="action-btn">Continue</button>
+      </div>
+    </div>
+
+    <!-- Item Tooltip -->
+    <div id="item-tooltip" class="item-tooltip"></div>
+  </div>
+`;
