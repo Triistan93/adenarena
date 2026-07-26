@@ -64,6 +64,7 @@ export const IDLE_MARKUP = `
       <section class="panel log-panel center-panel">
         <div class="combat-controls-bar">
           <button id="soulshot-toggle-btn" class="combat-ctrl-btn" title="Ativar Soulshot no combate (+100% dano físico/mágico por golpe)">⚡ Soulshot: OFF</button>
+          <button id="autopotion-toggle-btn" class="combat-ctrl-btn" title="Usar poções de HP automaticamente quando HP < 50%">🧪 Auto-Poção: OFF</button>
           <button id="speed-toggle-btn" class="combat-ctrl-btn" title="Velocidade do combate (1x Normal ou 2x Turbo)">⏩ Velocidade: 1x</button>
         </div>
         <div class="stage" id="stage" data-state="idle">
@@ -83,6 +84,15 @@ export const IDLE_MARKUP = `
             <div class="m-art" id="m-art"></div>
           </div>
           <div class="stage-floats" id="stage-floats"></div>
+        </div>
+        <div class="log-controls-bar">
+          <div class="log-filters">
+            <button class="log-filter-btn active" data-logfilter="all">Todos</button>
+            <button class="log-filter-btn" data-logfilter="combat">⚔️ Combate</button>
+            <button class="log-filter-btn" data-logfilter="loot">💰 Loot</button>
+            <button class="log-filter-btn" data-logfilter="system">⚙️ Sistema</button>
+          </div>
+          <button id="clear-log-btn" class="log-clear-btn" title="Limpar histórico de log">🧹 Limpar Log</button>
         </div>
         <div id="log" class="log">
           <p class="log-entry system">Welcome to Lineage Idle.</p>
@@ -378,6 +388,16 @@ export const IDLE_MARKUP = `
         <h2 id="saga-title">Nova Saga Desbloqueada!</h2>
         <p id="saga-desc">Novas áreas e perigos aguardam.</p>
         <button id="saga-ok" class="action-btn">Continuar</button>
+      </div>
+    </div>
+
+    <!-- Offline Progress Modal -->
+    <div id="offline-modal" class="modal">
+      <div class="modal-content">
+        <h2 id="offline-title">⌛ Bem-vindo de Volta!</h2>
+        <p id="offline-desc">Enquanto esteve ausente, seu herói continuou o treinamento em Aden.</p>
+        <div id="offline-rewards" style="margin: 14px 0; font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--gilt-bright);"></div>
+        <button id="offline-ok" class="action-btn action-btn--primary">Coletar Recompensas ⚔️</button>
       </div>
     </div>
 

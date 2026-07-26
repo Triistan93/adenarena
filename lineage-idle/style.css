@@ -530,6 +530,64 @@ select:focus-visible {
 .ab-empty { font-size: 10px; color: var(--ink-mute); font-family: "IBM Plex Mono", monospace; letter-spacing: 0.1em; }
 @keyframes chip-in { from { transform: scale(0.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
+/* Log Controls Bar */
+.log-controls-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 12px;
+  background: rgba(10, 12, 16, 0.9);
+  border-bottom: 1px solid rgba(212, 167, 68, 0.2);
+  gap: 8px;
+}
+
+.log-filters {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.log-filter-btn {
+  padding: 3px 8px;
+  background: rgba(30, 35, 45, 0.8);
+  border: 1px solid rgba(212, 167, 68, 0.2);
+  border-radius: 4px;
+  color: var(--ink-dim);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.log-filter-btn:hover {
+  color: var(--gilt-bright);
+  border-color: var(--gilt);
+}
+
+.log-filter-btn.active {
+  background: linear-gradient(180deg, rgba(138,106,36,0.6), rgba(48,35,15,0.95));
+  color: var(--gilt-bright);
+  border-color: var(--gilt);
+}
+
+.log-clear-btn {
+  padding: 3px 8px;
+  background: linear-gradient(180deg, rgba(40,20,20,0.8), rgba(20,10,10,0.95));
+  border: 1px solid rgba(180,60,60,0.3);
+  border-radius: 4px;
+  color: #ff9999;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.log-clear-btn:hover {
+  background: linear-gradient(180deg, rgba(80,30,30,0.9), rgba(40,15,15,0.95));
+  border-color: #ff4444;
+  color: #ffffff;
+}
+
 /* ============ LOG ============ */
 .log {
   height: 100%;

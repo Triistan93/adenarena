@@ -162,7 +162,7 @@ let state = DEFAULT_STATE();
 
 // FUNÇÃO DE SAVE/LOAD COM DEEP MERGE PARA IMPEDIR RESET DE SKILLS
 function save(manual = false) {
-  const data = { ...state, totalPlaytime: state.totalPlaytime + (Date.now() - state.startTime) };
+  const data = { ...state, totalPlaytime: state.totalPlaytime + (Date.now() - state.startTime), lastSaveTime: Date.now() };
   delete data.startTime;
   localStorage.setItem(SAVE_KEY, JSON.stringify(data));
   if (manual) {
@@ -182,7 +182,6 @@ function load() {
       : [];
     state = { ...def, ...data };
     
-    // Deep Merge crucial para não perder as skills padrão ou níveis ganhos
     state.skills = { ...def.skills, ...(data.skills || {}) };
     state.equipment = { ...def.equipment, ...(data.equipment || {}) };
     state.base = { ...def.base, ...(data.base || {}) };
@@ -194,9 +193,14 @@ function load() {
     state.craftTab = data.craftTab || 'recipes';
     state.zoneTab = data.zoneTab || 'map';
     state.soulshotActive = !!data.soulshotActive;
+    state.autoPotionActive = !!data.autoPotionActive;
     state.combatSpeed = data.combatSpeed === 2 ? 2 : 1;
     state.selectedSkill = data.selectedSkill || null;
     state.startTime = Date.now();
+    
+    if (data.lastSaveTime) {
+      setTimeout(() => checkOfflineProgress(data.lastSaveTime), 600);
+    }
     return true;
   } catch {
     localStorage.removeItem(SAVE_KEY);
@@ -1045,6 +1049,13 @@ function toggleSoulshot() {
   save();
 }
 
+function toggleAutoPotion() {
+  state.autoPotionActive = !state.autoPotionActive;
+  updateCombatControlsUI();
+  log(`Auto-Poção ${state.autoPotionActive ? 'ATIVADA (Bebe poção quando HP < 50%)' : 'DESATIVADA'}.`, 'system');
+  save();
+}
+
 function toggleCombatSpeed() {
   state.combatSpeed = state.combatSpeed === 1 ? 2 : 1;
   updateCombatControlsUI();
@@ -1065,10 +1076,74 @@ function updateCombatControlsUI() {
     const count = getInventoryCount(shotId);
     ssBtn.textContent = `⚡ Soulshot: ${state.soulshotActive ? 'ON' : 'OFF'} (${count})`;
   }
+  const apBtn = el('autopotion-toggle-btn');
+  if (apBtn) {
+    apBtn.classList.toggle('active', !!state.autoPotionActive);
+    const potCount = getInventoryCount('hp_potion_s') + getInventoryCount('hp_potion_m') + getInventoryCount('hp_potion_l') + getInventoryCount('hp_potion_xl');
+    apBtn.textContent = `🧪 Auto-Poção: ${state.autoPotionActive ? 'ON' : 'OFF'} (${potCount})`;
+  }
   const spdBtn = el('speed-toggle-btn');
   if (spdBtn) {
     spdBtn.classList.toggle('active', state.combatSpeed === 2);
     spdBtn.textContent = `⏩ Velocidade: ${state.combatSpeed || 1}x`;
+  }
+}
+
+function clearLog() {
+  const logEl = el('log');
+  if (logEl) {
+    logEl.innerHTML = '<p class="log-entry system">Histórico de log limpo.</p>';
+  }
+}
+
+function setLogFilter(filterType) {
+  state.logFilter = filterType;
+  qsa('.log-filter-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.logfilter === filterType);
+  });
+  const entries = qsa('#log .log-entry');
+  entries.forEach(entry => {
+    if (filterType === 'all') {
+      entry.style.display = 'block';
+    } else if (filterType === 'combat') {
+      const isCombat = entry.classList.contains('combat') || entry.classList.contains('damage') || entry.classList.contains('heal');
+      entry.style.display = isCombat ? 'block' : 'none';
+    } else if (filterType === 'loot') {
+      const isLoot = entry.classList.contains('loot') || entry.classList.contains('xp') || entry.classList.contains('saga') || entry.className.includes('rarity-');
+      entry.style.display = isLoot ? 'block' : 'none';
+    } else if (filterType === 'system') {
+      const isSys = entry.classList.contains('system');
+      entry.style.display = isSys ? 'block' : 'none';
+    }
+  });
+}
+
+function checkOfflineProgress(lastTime) {
+  if (!lastTime) return;
+  const elapsedMs = Date.now() - lastTime;
+  if (elapsedMs < 60000) return;
+  
+  const minutesOffline = Math.min(480, Math.floor(elapsedMs / 60000));
+  if (minutesOffline < 1) return;
+  
+  const kills = minutesOffline * 10;
+  const goldEarned = Math.floor(kills * (state.level * 6 + 10));
+  const xpEarned = Math.floor(kills * (state.level * 12 + 15));
+  
+  state.gold += goldEarned;
+  state.xp += xpEarned;
+  checkLevelUp();
+  
+  const rewardsEl = el('offline-rewards');
+  const modalEl = el('offline-modal');
+  if (rewardsEl && modalEl) {
+    rewardsEl.innerHTML = `
+      <div>⏱️ Tempo Ausente: <strong>${minutesOffline} minutos</strong></div>
+      <div>⚔️ Monstros Derrotados: <strong>~${kills}</strong></div>
+      <div>💰 Ouro Ganho: <strong style="color:var(--gilt-bright);">+${goldEarned.toLocaleString()}g</strong></div>
+      <div>📘 XP Ganho: <strong style="color:#60a5fa;">+${xpEarned.toLocaleString()} XP</strong></div>
+    `;
+    modalEl.classList.add('active');
   }
 }
 
@@ -1365,6 +1440,17 @@ function attackMonster() {
 
   const isMage = state.class === 'mage' || state.class === 'soulbreaker';
   const activeTreeClass = isMage ? 'mage' : 'fighter';
+
+  if (state.autoPotionActive && state.hp < state.maxHp * 0.5) {
+    const pots = ['hp_potion_xl','hp_potion_l','hp_potion_m','hp_potion_s'];
+    for (const pId of pots) {
+      const item = state.inventory.find(i => i.itemId === pId && (i.count || 1) > 0);
+      if (item) {
+        useItem(item.uid);
+        break;
+      }
+    }
+  }
   
   if (!state._cds) state._cds = {};
   const now = combatTick * 200; 
@@ -1664,7 +1750,11 @@ export function init() {
     const sellSelBtn = el('sell-selected-btn'); if (sellSelBtn) sellSelBtn.onclick = sellSelectedItems;
     const salvSelBtn = el('salvage-selected-btn'); if (salvSelBtn) salvSelBtn.onclick = salvageSelectedItems;
     const ssToggleBtn = el('soulshot-toggle-btn'); if (ssToggleBtn) ssToggleBtn.onclick = toggleSoulshot;
+    const apToggleBtn = el('autopotion-toggle-btn'); if (apToggleBtn) apToggleBtn.onclick = toggleAutoPotion;
     const spdToggleBtn = el('speed-toggle-btn'); if (spdToggleBtn) spdToggleBtn.onclick = toggleCombatSpeed;
+    const clearLogBtn = el('clear-log-btn'); if (clearLogBtn) clearLogBtn.onclick = clearLog;
+    qsa('.log-filter-btn').forEach(btn => btn.onclick = () => setLogFilter(btn.dataset.logfilter));
+    const offlineOkBtn = el('offline-ok'); if (offlineOkBtn) offlineOkBtn.onclick = () => { const modal = el('offline-modal'); if (modal) modal.classList.remove('active'); };
     const resetSpBtn = el('reset-sp-btn'); if (resetSpBtn) resetSpBtn.onclick = resetSP;
     const autoEquipBtn = el('auto-equip-btn'); if (autoEquipBtn) autoEquipBtn.onclick = autoEquipBest;
     const startBtn = el('start-btn'); if (startBtn) startBtn.onclick = startGame;
