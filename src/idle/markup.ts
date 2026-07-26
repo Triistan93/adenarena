@@ -144,20 +144,66 @@ export const IDLE_MARKUP = `
           <div id="tab-equipment" class="tab-pane">
             <h3>Equipamentos Ativos</h3>
             <div class="equipment-workspace">
-              <div class="paperdoll">
-                <div class="doll-art" id="doll-art"></div>
-                <div class="doll-slots equipment-grid">
-                  <div class="equip-slot" data-slot="weapon"><span class="slot-label">⚔</span><span class="slot-item" id="equip-weapon">Empty</span></div>
-                  <div class="equip-slot" data-slot="helmet"><span class="slot-label">⛑</span><span class="slot-item" id="equip-helmet">Empty</span></div>
-                  <div class="equip-slot" data-slot="armor"><span class="slot-label">🛡</span><span class="slot-item" id="equip-armor">Empty</span></div>
-                  <div class="equip-slot" data-slot="gloves"><span class="slot-label">🧤</span><span class="slot-item" id="equip-gloves">Empty</span></div>
-                  <div class="equip-slot" data-slot="boots"><span class="slot-label">👢</span><span class="slot-item" id="equip-boots">Empty</span></div>
-                  <div class="equip-slot" data-slot="ring"><span class="slot-label">💍</span><span class="slot-item" id="equip-ring">Empty</span></div>
+              <div class="paperdoll-container">
+                <!-- Left Slots Column -->
+                <div class="paperdoll-col paperdoll-left">
+                  <div class="equip-slot" data-slot="helmet">
+                    <span class="slot-label">⛑</span>
+                    <div class="slot-meta">
+                      <span class="slot-type">Capacete</span>
+                      <span class="slot-item" id="equip-helmet">Vazio</span>
+                    </div>
+                  </div>
+                  <div class="equip-slot" data-slot="armor">
+                    <span class="slot-label">🛡</span>
+                    <div class="slot-meta">
+                      <span class="slot-type">Armadura</span>
+                      <span class="slot-item" id="equip-armor">Vazio</span>
+                    </div>
+                  </div>
+                  <div class="equip-slot" data-slot="boots">
+                    <span class="slot-label">👢</span>
+                    <div class="slot-meta">
+                      <span class="slot-type">Botas</span>
+                      <span class="slot-item" id="equip-boots">Vazio</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Center Character Art Showcase -->
+                <div class="paperdoll-center">
+                  <div class="doll-art" id="doll-art"></div>
+                </div>
+
+                <!-- Right Slots Column -->
+                <div class="paperdoll-col paperdoll-right">
+                  <div class="equip-slot" data-slot="weapon">
+                    <span class="slot-label">⚔</span>
+                    <div class="slot-meta">
+                      <span class="slot-type">Arma</span>
+                      <span class="slot-item" id="equip-weapon">Vazio</span>
+                    </div>
+                  </div>
+                  <div class="equip-slot" data-slot="gloves">
+                    <span class="slot-label">🧤</span>
+                    <div class="slot-meta">
+                      <span class="slot-type">Luvas</span>
+                      <span class="slot-item" id="equip-gloves">Vazio</span>
+                    </div>
+                  </div>
+                  <div class="equip-slot" data-slot="ring">
+                    <span class="slot-label">💍</span>
+                    <div class="slot-meta">
+                      <span class="slot-type">Anel</span>
+                      <span class="slot-item" id="equip-ring">Vazio</span>
+                    </div>
+                  </div>
                 </div>
               </div>
+
               <div class="equip-details">
                 <div class="equip-bonuses">
-                  <h4>Bônus Conjuntos de Equipamentos</h4>
+                  <h4>Bônus Totais de Equipamentos</h4>
                   <div id="bonus-list"></div>
                 </div>
                 <button class="action-btn action-btn--ghost" id="unequip-all-btn">Desequipar Tudo</button>
