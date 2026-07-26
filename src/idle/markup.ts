@@ -60,6 +60,8 @@ export const IDLE_MARKUP = `
         <div class="active-buffs" id="active-buffs"><span class="ab-empty">No active buffs</span></div>
       </aside>
 
+      <div class="grid-resizer grid-resizer-v" id="resizer-col-1" title="Arrastre para redimensionar painel de atributos"></div>
+
       <!-- Center: live battle stage + combat ticker (compact & centered) -->
       <section class="panel log-panel center-panel">
         <div class="combat-controls-bar">
@@ -85,6 +87,7 @@ export const IDLE_MARKUP = `
           </div>
           <div class="stage-floats" id="stage-floats"></div>
         </div>
+        <div class="grid-resizer grid-resizer-h" id="resizer-row-stage" title="Arrastre para redimensionar janela de combate"></div>
         <div class="log-controls-bar">
           <div class="log-filters">
             <button class="log-filter-btn active" data-logfilter="all">Todos</button>
@@ -103,6 +106,8 @@ export const IDLE_MARKUP = `
           <button type="submit" class="chat-send-btn">Enviar</button>
         </form>
       </section>
+
+      <div class="grid-resizer grid-resizer-v" id="resizer-col-2" title="Arrastre para redimensionar inventário e abas"></div>
 
       <!-- Right: Main Menu Workspace (Expanded) -->
       <aside class="panel tabs-panel">

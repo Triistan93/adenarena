@@ -1371,16 +1371,36 @@ function updateShopUI() {
   const list = el('shop-list'); if (!list) return; list.innerHTML = '';
   if (!state.zone && state.shopTab !== 'powerups' && state.shopTab !== 'mystic') { list.innerHTML = '<p class="shop-empty">Travel to a zone to visit the merchant.</p>'; return; }
   if (state.shopTab === 'gear') renderShopGear(list); else if (state.shopTab === 'potions') renderShopPotions(list); else if (state.shopTab === 'powerups') renderShopPowerups(list); else if (state.shopTab === 'class') renderShopClass(list); else if (state.shopTab === 'mystic') renderShopMystic(list);
-  list.querySelectorAll('[data-buy]').forEach(btn => btn.onclick = () => buyItem(btn.dataset.buy));
+  list.querySelectorAll('[data-buy]').forEach(btn => btn.onclick = () => buyItem(btn.dataset.buy, parseInt(btn.dataset.qty || 1)));
   list.querySelectorAll('[data-buy-rarity]').forEach(btn => btn.onclick = () => buyMysticItem(btn.dataset.buyRarity, btn.dataset.rarity));
 }
 
 function shopRow(def, id, price, extra = '') {
-  const canAfford = state.gold >= price; const statsLine = buildStatLine(def);
-  const lockLvl = def.req && def.req.level > state.level; const lockCls = def.classReq && def.classReq !== state.class;
+  const canAfford = state.gold >= price; 
+  const statsLine = buildStatLine(def);
+  const lockLvl = def.req && def.req.level > state.level; 
+  const lockCls = def.classReq && def.classReq !== state.class;
   const lockReason = lockLvl ? `Lv.${def.req.level}` : lockCls ? `Needs ${getClass(def.classReq)?.name}` : '';
-  const row = mkEl('div'); row.className = 'shop-item' + (lockLvl || lockCls ? ' locked' : '');
-  row.innerHTML = `<div class="item-info"><div class="item-name">${def.name}${def.tier ? ' <span class="tier-tag">T'+def.tier+'</span>' : ''}</div><div class="item-desc">${def.desc || ''}</div>${statsLine ? `<div class="item-stats">${statsLine}</div>` : ''}${lockReason ? `<div class="lock-reason">🔒 ${lockReason}</div>` : ''}</div><button class="item-action" data-buy="${id}" ${(!canAfford || lockLvl || lockCls) ? 'disabled' : ''}>${price}g</button>${extra}`;
+  const row = mkEl('div'); 
+  row.className = 'shop-item' + (lockLvl || lockCls ? ' locked' : '');
+
+  const isStackable = def.slot === 'consumable' || def.slot === 'scroll' || def.slot === 'powerup' || def.stack;
+
+  let buyActionHtml = '';
+  if (isStackable && !lockLvl && !lockCls) {
+    buyActionHtml = `
+      <div class="shop-bulk-actions">
+        <button class="item-action" data-buy="${id}" data-qty="1" ${state.gold < price ? 'disabled' : ''}>1x (${price}g)</button>
+        <button class="item-action" data-buy="${id}" data-qty="10" ${state.gold < price * 10 ? 'disabled' : ''}>10x (${(price * 10).toLocaleString()}g)</button>
+        <button class="item-action" data-buy="${id}" data-qty="100" ${state.gold < price * 100 ? 'disabled' : ''}>100x (${(price * 100).toLocaleString()}g)</button>
+        <button class="item-action" data-buy="${id}" data-qty="1000" ${state.gold < price * 1000 ? 'disabled' : ''}>1000x (${(price * 1000).toLocaleString()}g)</button>
+      </div>
+    `;
+  } else {
+    buyActionHtml = `<button class="item-action" data-buy="${id}" data-qty="1" ${(!canAfford || lockLvl || lockCls) ? 'disabled' : ''}>${price.toLocaleString()}g</button>`;
+  }
+
+  row.innerHTML = `<div class="item-info"><div class="item-name">${def.name}${def.tier ? ' <span class="tier-tag">T'+def.tier+'</span>' : ''}</div><div class="item-desc">${def.desc || ''}</div>${statsLine ? `<div class="item-stats">${statsLine}</div>` : ''}${lockReason ? `<div class="lock-reason">🔒 ${lockReason}</div>` : ''}</div>${buyActionHtml}${extra}`;
   return row;
 }
 
@@ -1399,8 +1419,8 @@ function renderShopGear(list) {
 }
 function renderShopPotions(list) {
   const zone = ZONES[state.zone], shopId = zone?.shop, items = shopId ? D().SHOP_INVENTORY[shopId] : null;
-  const base = ['hp_potion_s','hp_potion_m','hp_potion_l','hp_potion_xl','mp_potion_s','mp_potion_m','mp_potion_l','mp_potion_xl','antidote','scroll_of_resurrection','scroll_of_rebirth'];
-  const shown = new Set(), list2 = [...(items || []).map(i => i.id), ...base]; let count = 0;
+  const base = ['soulshot_ng','spiritshot_ng','hp_potion_s','hp_potion_m','hp_potion_l','hp_potion_xl','mp_potion_s','mp_potion_m','mp_potion_l','mp_potion_xl','antidote','scroll_of_resurrection','scroll_of_rebirth'];
+  const shown = new Set(), list2 = [...base, ...(items || []).map(i => i.id)]; let count = 0;
   for (const id of list2) { if (shown.has(id)) continue; const def = D().ALL_ITEMS[id]; if (!def || (def.slot !== 'consumable' && def.slot !== 'scroll') || (def.req && def.req.level > state.level)) continue; shown.add(id); list.appendChild(shopRow(def, id, def.price)); count++; }
   if (!count) list.innerHTML = '<p class="shop-empty">No potions in stock.</p>';
 }
@@ -1469,13 +1489,18 @@ function renderShopMystic(list) {
 
 function fmtCountdown(ms) { const s = Math.max(0, Math.floor(ms / 1000)), m = Math.floor(s / 60), ss = s % 60; return `${m}:${ss.toString().padStart(2,'0')}`; }
 
-function buyItem(itemId) {
+function buyItem(itemId, qty = 1) {
   const def = D().ALL_ITEMS[itemId]; if (!def) return;
-  if (state.gold < def.price) { log('Not enough gold!', 'system'); return; }
+  const count = Math.max(1, parseInt(qty) || 1);
+  const totalPrice = (def.price || 10) * count;
+  if (state.gold < totalPrice) { log(`Ouro insuficiente (${totalPrice.toLocaleString()}g necessário).`, 'system'); return; }
   if (def.req && def.req.level > state.level) { log('Level too low.', 'system'); return; }
   if (def.classReq && !classSatisfies(state.class, def.classReq)) { log('Wrong class for this item.', 'system'); return; }
-  if (!addToInventory(itemId, 1, null)) return;
-  state.gold -= def.price; log(`Bought ${def.name} for ${def.price}g`, 'loot'); updateAllUI(); save();
+  if (!addToInventory(itemId, count, null)) return;
+  state.gold -= totalPrice; 
+  log(`Comprado x${count} ${def.name} por ${totalPrice.toLocaleString()}g`, 'loot'); 
+  updateAllUI(); 
+  save();
 }
 
 function buyMysticItem(itemId, rarity) {
@@ -1979,13 +2004,15 @@ function attackMonster() {
   let wasCrit = false;
   
   if (state.soulshotActive) {
-    const shotId = isMage ? 'spiritshot_ng' : 'soulshot_ng';
-    const shotItem = state.inventory.find(i => i.itemId === shotId && (i.count || 1) > 0);
+    const isMageClass = state.class === 'mage' || state.class === 'soulbreaker' || (getClass(state.class)?.archetype === 'mage');
+    const shotId = isMageClass ? 'spiritshot_ng' : 'soulshot_ng';
+    const shotItem = state.inventory.find(i => (i.itemId === shotId || i.itemId.startsWith('soulshot') || i.itemId.startsWith('spiritshot')) && (i.count || 1) > 0);
     if (shotItem) {
-      if (shotItem.count > 1) shotItem.count--;
+      if ((shotItem.count || 1) > 1) shotItem.count--;
       else removeFromInventory(shotItem.uid, 1);
       damage = Math.floor(damage * 2);
       stageFloat('⚡ SHOT', 'sf-crit', 'left');
+      updateCombatControlsUI();
     }
   }
 
@@ -2413,9 +2440,102 @@ function bindEvents() {
         }
       };
     }
+
+    initPanelResizers();
   } catch (err) {
     console.error('Failed to bind UI events:', err);
   }
+}
+
+function initPanelResizers() {
+  const grid = qs('.main-grid');
+  if (!grid) return;
+
+  const r1 = el('resizer-col-1');
+  const r2 = el('resizer-col-2');
+  const rh = el('resizer-row-stage');
+
+  let isDragging = false;
+  let activeResizer = null;
+  let startX = 0, startY = 0;
+  let startW1 = 210, startW3 = 480, startStageH = 340;
+
+  if (r1) {
+    r1.onmousedown = (e) => {
+      e.preventDefault();
+      isDragging = true;
+      activeResizer = 'col1';
+      startX = e.clientX;
+      const statsPanel = qs('.stats-panel');
+      startW1 = statsPanel ? statsPanel.getBoundingClientRect().width : 210;
+      doc().body.style.cursor = 'col-resize';
+    };
+  }
+
+  if (r2) {
+    r2.onmousedown = (e) => {
+      e.preventDefault();
+      isDragging = true;
+      activeResizer = 'col3';
+      startX = e.clientX;
+      const tabsPanel = qs('.tabs-panel');
+      startW3 = tabsPanel ? tabsPanel.getBoundingClientRect().width : 480;
+      doc().body.style.cursor = 'col-resize';
+    };
+  }
+
+  if (rh) {
+    rh.onmousedown = (e) => {
+      e.preventDefault();
+      isDragging = true;
+      activeResizer = 'stage';
+      startY = e.clientY;
+      const stagePanel = el('stage');
+      startStageH = stagePanel ? stagePanel.getBoundingClientRect().height : 340;
+      doc().body.style.cursor = 'row-resize';
+    };
+  }
+
+  const onMove = (e) => {
+    if (!isDragging || !activeResizer) return;
+    const clientX = e.clientX || (e.touches && e.touches[0]?.clientX) || 0;
+    const clientY = e.clientY || (e.touches && e.touches[0]?.clientY) || 0;
+
+    if (activeResizer === 'col1') {
+      const deltaX = clientX - startX;
+      const newW = Math.max(160, Math.min(450, startW1 + deltaX));
+      grid.style.setProperty('--col1-w', `${newW}px`);
+    } else if (activeResizer === 'col3') {
+      const deltaX = startX - clientX;
+      const newW = Math.max(300, Math.min(850, startW3 + deltaX));
+      grid.style.setProperty('--col3-w', `${newW}px`);
+    } else if (activeResizer === 'stage') {
+      const deltaY = clientY - startY;
+      const stagePanel = el('stage');
+      if (stagePanel) {
+        const newH = Math.max(180, Math.min(750, startStageH + deltaY));
+        stagePanel.style.height = `${newH}px`;
+        stagePanel.style.flex = 'none';
+      }
+    }
+  };
+
+  const onEnd = () => {
+    if (isDragging) {
+      isDragging = false;
+      activeResizer = null;
+      doc().body.style.cursor = '';
+    }
+  };
+
+  window.removeEventListener('mousemove', onMove);
+  window.addEventListener('mousemove', onMove);
+  window.removeEventListener('mouseup', onEnd);
+  window.addEventListener('mouseup', onEnd);
+  window.removeEventListener('touchmove', onMove);
+  window.addEventListener('touchmove', onMove);
+  window.removeEventListener('touchend', onEnd);
+  window.addEventListener('touchend', onEnd);
 }
 
 export function init() {
