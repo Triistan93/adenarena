@@ -10,20 +10,20 @@ const HERO_IMG = {
   human_fighter: "/img/human_fighter.png",
   human_mage: "/img/human_mage.png",
   elf_fighter: "/img/elf_fighter.png",
-  elf_mage: "/img/elf_fighter.png",         
+  elf_mage: "/img/elf_mage.png",         
   elf_archer: "/img/elf_fighter.png",
-  elf_mystic: "/img/darkelf_mage.png",
+  elf_mystic: "/img/elf_mage.png",
   elf_sentinel: "/img/elf_fighter.png",
-  darkelf_fighter: "/img/darkelf_mage.png",
+  darkelf_fighter: "/img/darkelf_fighter.png",
   darkelf_mage: "/img/darkelf_mage.png",
-  darkelf_assassin: "/img/darkelf_mage.png",
+  darkelf_assassin: "/img/darkelf_fighter.png",
   darkelf_shillien: "/img/darkelf_mage.png",
   darkelf_sorcerer: "/img/darkelf_mage.png",
   orc_fighter: "/img/orc_fighter.png",
-  orc_mage: "/img/orc_fighter.png",
+  orc_mage: "/img/orc_mage.png",
   orc_destroyer: "/img/orc_fighter.png",
   orc_monk: "/img/orc_fighter.png",
-  orc_overlord: "/img/orc_fighter.png",
+  orc_overlord: "/img/orc_mage.png",
   dwarf_artisan: "/img/dwarf_artisan.png",
   dwarf_fighter: "/img/dwarf_artisan.png",
   dwarf_warsmith: "/img/dwarf_artisan.png",
@@ -31,14 +31,14 @@ const HERO_IMG = {
   kamael_fighter: "/img/kamael_soulbreaker.png",
   kamael_berserker: "/img/kamael_soulbreaker.png",
   ertheia_fighter: "/img/elf_fighter.png",
-  ertheia_mage: "/img/darkelf_mage.png",
+  ertheia_mage: "/img/elf_mage.png",
 };
 
 // Fallback by race only
 const RACE_FALLBACK = {
   human: "/img/human_fighter.png",
   elf: "/img/elf_fighter.png",
-  darkelf: "/img/darkelf_mage.png",
+  darkelf: "/img/darkelf_fighter.png",
   orc: "/img/orc_fighter.png",
   dwarf: "/img/dwarf_artisan.png",
   kamael: "/img/kamael_soulbreaker.png",
@@ -69,20 +69,25 @@ const MON_IMG = {
   goblinKing: "/img/mon_armoredgoblin.png",
   skeleton: "/img/mon_skeleton.png",
   dragon: "/img/mon_dragon.png",
-  dragonKnight: "/img/mon_dragonknight.png", // Espaço em branco corrigido aqui
+  dragonKnight: "/img/mon_dragonknight.png",
   orc: "/img/mon_orc.png",
   goblinThief: "/img/mon_goblinthief.png",
   koboldLeader: "/img/mon_koboldleader.png",
   direWolf: "/img/mon_direwolf.png",
   crimsonBabyDragon: "/img/mon_crimsombabydragon.png",
   alphaWolf: "/img/mon_alphawolf.png",
-  wolfAlpha: "/img/mon_alphawolf.png", // Fallback para o boss antigo
+  wolfAlpha: "/img/mon_alphawolf.png",
   darkMage: "/img/mon_darkmage.png",
   devilBone: "/img/devilbone.png",
   deathKnight: "/img/mon_deathknight.png",
   voidCreature: "/img/mon_voidcreature.png",
   emeraldDragon: "/img/mon_emereldadragon.png",
-  cerberus: "/img/mon_cerberus.png"
+  cerberus: "/img/mon_cerberus.png",
+  queen_ant: "/img/mon_spider.png",
+  zaken: "/img/mon_deathwizard.png",
+  baium: "/img/mon_frostknight.png",
+  antharas: "/img/mon_dragon.png",
+  valakas: "/img/mon_dragon.png"
 };
 
 // Monsters without painted art get a tinted SVG silhouette

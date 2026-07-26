@@ -1023,6 +1023,49 @@ select:focus-visible {
   border-color: var(--gilt);
 }
 
+.inv-batch-execute-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+.inv-execute-btn {
+  flex: 1;
+  min-width: 140px;
+  padding: 6px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: inherit;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid var(--line);
+}
+.inv-execute-btn.sell-btn {
+  background: linear-gradient(180deg, rgba(140,105,25,0.9), rgba(60,45,10,0.95));
+  border-color: var(--gilt);
+  color: var(--gilt-bright);
+}
+.inv-execute-btn.sell-btn:hover:not(:disabled) {
+  background: linear-gradient(180deg, rgba(180,135,30,0.95), rgba(90,68,15,0.98));
+  box-shadow: 0 0 14px rgba(212,167,68,0.4);
+}
+.inv-execute-btn.salvage-btn {
+  background: linear-gradient(180deg, rgba(40,55,75,0.9), rgba(18,25,35,0.95));
+  border-color: rgba(90,140,200,0.4);
+  color: #aed5ff;
+}
+.inv-execute-btn.salvage-btn:hover:not(:disabled) {
+  background: linear-gradient(180deg, rgba(60,85,115,0.95), rgba(28,40,58,0.98));
+  border-color: #60a5fa;
+  box-shadow: 0 0 14px rgba(96,165,250,0.3);
+}
+.inv-execute-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  filter: grayscale(0.8);
+}
+
 .inventory-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
@@ -1052,6 +1095,32 @@ select:focus-visible {
 .inv-slot.is-equipped {
   background: linear-gradient(180deg, rgba(26,40,35,0.9), rgba(13,20,18,0.9));
   border-color: rgba(90,161,138,0.7);
+}
+.inv-slot.is-selected {
+  border: 2px solid var(--gilt-bright) !important;
+  background: linear-gradient(180deg, rgba(85,65,20,0.85), rgba(35,25,8,0.95)) !important;
+  box-shadow: inset 0 0 10px rgba(255,215,0,0.3), 0 0 12px rgba(212,167,68,0.3) !important;
+}
+.slot-select-checkbox {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  border: 1px solid rgba(212,167,68,0.5);
+  background: rgba(10,12,16,0.8);
+  color: var(--gilt-bright);
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+.inv-slot.is-selected .slot-select-checkbox {
+  background: var(--gilt);
+  color: #000;
+  border-color: #fff;
 }
 .inv-slot .qty {
   position: absolute;

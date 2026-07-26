@@ -276,13 +276,21 @@ export const IDLE_MARKUP = `
                 </div>
               </div>
 
-              <!-- Batch Actions Row -->
+              <!-- Batch Selection Row -->
               <div class="inv-filter-row inv-batch-actions">
-                <span class="filter-label">Ações em Lote:</span>
+                <span class="filter-label">Seleção em Lote:</span>
                 <div class="batch-btn-group">
-                  <button id="sell-commons-btn" class="inv-batch-btn" title="Vender todos os itens comuns não equipados">💰 Vender Comuns</button>
-                  <button id="salvage-commons-btn" class="inv-batch-btn" title="Desmontar todos os equipamentos comuns em materiais">🔨 Desmontar Comuns</button>
+                  <button id="select-commons-btn" class="inv-batch-btn" title="Selecionar todos os itens comuns não equipados">✓ Comuns</button>
+                  <button id="select-uncommons-btn" class="inv-batch-btn" title="Selecionar todos os itens incomuns não equipados">✓ Incomuns</button>
+                  <button id="select-all-btn" class="inv-batch-btn" title="Selecionar todos os itens não equipados">✓ Selecionar Todos</button>
+                  <button id="clear-selection-btn" class="inv-batch-btn" title="Limpar todas as seleções">✕ Limpar</button>
                 </div>
+              </div>
+
+              <!-- Batch Execution Row -->
+              <div class="inv-batch-execute-row">
+                <button id="sell-selected-btn" class="inv-execute-btn sell-btn" disabled>💰 Vender Selecionados (0g)</button>
+                <button id="salvage-selected-btn" class="inv-execute-btn salvage-btn" disabled>🔨 Desmontar Selecionados (0)</button>
               </div>
             </div>
 

@@ -466,58 +466,77 @@ function salvageItem(uid) {
   updateAllUI(); save();
 }
 
-function sellAllCommons() {
-  let sold = 0, totalGold = 0;
-  for (let i = state.inventory.length - 1; i >= 0; i--) {
-    const item = state.inventory[i];
-    if (item.equipped) continue;
-    const rarity = item.rarity || 'common';
-    if (rarity !== 'common') continue;
-    const def = D().ALL_ITEMS[item.itemId];
-    if (!def) continue;
-    const price = Math.floor((def.price || 10) * 0.4);
-    totalGold += price * (item.count || 1);
-    state.inventory.splice(i, 1);
-    sold++;
-  }
-  if (sold > 0) {
-    state.gold += totalGold;
-    log(`Sold ${sold} common item(s) for ${totalGold}g`, 'loot');
-    updateAllUI(); save();
-  } else {
-    log('No common items to sell in bag.', 'system');
-  }
+function toggleSelectItem(uid) {
+  if (!state.selectedUids) state.selectedUids = new Set();
+  if (state.selectedUids.has(uid)) state.selectedUids.delete(uid);
+  else state.selectedUids.add(uid);
+  updateInventoryUI();
 }
 
-function salvageAllCommons() {
-  let salvaged = 0;
-  for (let i = state.inventory.length - 1; i >= 0; i--) {
-    const item = state.inventory[i];
-    if (item.equipped) continue;
-    const rarity = item.rarity || 'common';
-    if (rarity !== 'common') continue;
+function selectItemsByFilter(filterFn) {
+  if (!state.selectedUids) state.selectedUids = new Set();
+  for (const item of state.inventory) {
+    if (!item.equipped && filterFn(item)) {
+      state.selectedUids.add(item.uid);
+    }
+  }
+  updateInventoryUI();
+}
+
+function clearItemSelection() {
+  if (state.selectedUids) state.selectedUids.clear();
+  updateInventoryUI();
+}
+
+function sellSelectedItems() {
+  if (!state.selectedUids || state.selectedUids.size === 0) return;
+  let totalGold = 0, count = 0;
+  const toDelete = Array.from(state.selectedUids);
+  
+  for (const uid of toDelete) {
+    const item = state.inventory.find(i => i.uid === uid);
+    if (!item || item.equipped) continue;
+    const def = D().ALL_ITEMS[item.itemId];
+    if (!def) continue;
+    const itemQty = item.count || 1;
+    const basePrice = def.price || 10;
+    const mult = item.rarity ? D().RARITY[item.rarity].mult : 1;
+    const enchantMult = 1 + (item.enchant || 0) * 0.1;
+    const goldEarned = Math.floor(basePrice * mult * enchantMult * 0.4) * itemQty;
+    
+    totalGold += goldEarned;
+    count += itemQty;
+    removeFromInventory(uid, itemQty);
+  }
+  
+  state.selectedUids.clear();
+  state.gold += totalGold;
+  log(`💰 Sold ${count} selected item(s) for ${totalGold.toLocaleString()}g!`, 'loot');
+  updateAllUI();
+  save();
+}
+
+function salvageSelectedItems() {
+  if (!state.selectedUids || state.selectedUids.size === 0) return;
+  let count = 0;
+  const toDelete = Array.from(state.selectedUids);
+  
+  for (const uid of toDelete) {
+    const item = state.inventory.find(i => i.uid === uid);
+    if (!item || item.equipped) continue;
     const def = D().ALL_ITEMS[item.itemId];
     if (!def || !['weapon','armor','helmet','gloves','boots','ring'].includes(def.slot)) continue;
     
-    const reqLvl = def.req ? def.req.level : 1;
-    const grade = getItemGrade(reqLvl);
-    let matId = (def.slot === 'weapon') ? 'iron_ore' : 'cloth';
-    if (grade === 'S Grade') matId = 'crystal_s';
-    else if (grade === 'A Grade') matId = 'crystal_a';
-    else if (grade === 'B Grade') matId = 'crystal_b';
-    else if (grade === 'C Grade') matId = 'crystal_c';
-    else if (grade === 'D Grade') matId = 'crystal_d';
-    
-    state.inventory.splice(i, 1);
-    addToInventory(matId, 1);
-    salvaged++;
+    const matYield = Math.max(1, Math.floor((item.rarity ? D().RARITY[item.rarity].mult : 1) * 2));
+    addToInventory('iron_ore', matYield, null);
+    removeFromInventory(uid, item.count || 1);
+    count++;
   }
-  if (salvaged > 0) {
-    log(`Broke ${salvaged} common gear item(s) into crafting materials!`, 'loot');
-    updateAllUI(); save();
-  } else {
-    log('No common equipment to break in bag.', 'system');
-  }
+  
+  state.selectedUids.clear();
+  log(`🔨 Salvaged ${count} selected equipment(s) into Iron Ore!`, 'loot');
+  updateAllUI();
+  save();
 }
 
 function useItem(uid) {
@@ -785,12 +804,16 @@ function updateSkillInfoPanel() {
 
 function updateInventoryUI() {
   const grid = el('inventory-grid'); if (!grid) return; grid.innerHTML = '';
+  if (!state.selectedUids) state.selectedUids = new Set();
   const filter = state.filter || 'all';
   const rarityFilter = state.rarityFilter || 'all';
   const equipFilter = state.equipFilter || 'all';
 
   const sorted = [...state.inventory].sort((a, b) => { const da = D().ALL_ITEMS[a.itemId], db = D().ALL_ITEMS[b.itemId]; if (!da || !db) return 0; return (db.tier || 0) - (da.tier || 0); });
   let shown = 0;
+  let selectedValue = 0;
+  let salvageableCount = 0;
+
   for (const item of sorted) {
     const def = D().ALL_ITEMS[item.itemId]; if (!def) continue;
     if (filter !== 'all' && def.slot !== filter) continue;
@@ -799,19 +822,52 @@ function updateInventoryUI() {
     if (equipFilter === 'equipped' && !item.equipped) continue;
     if (equipFilter === 'bag' && item.equipped) continue;
 
+    const isSelected = state.selectedUids.has(item.uid);
+    if (isSelected && !item.equipped) {
+      const qty = item.count || 1;
+      const basePrice = def.price || 10;
+      const mult = item.rarity ? D().RARITY[item.rarity].mult : 1;
+      const enchantMult = 1 + (item.enchant || 0) * 0.1;
+      selectedValue += Math.floor(basePrice * mult * enchantMult * 0.4) * qty;
+      if (['weapon','armor','helmet','gloves','boots','ring'].includes(def.slot)) {
+        salvageableCount += qty;
+      }
+    }
+
     const slot = mkEl('div');
-    slot.className = `inv-slot rarity-${rarity}` + (item.equipped ? ' is-equipped' : '');
+    slot.className = `inv-slot rarity-${rarity}` + (item.equipped ? ' is-equipped' : '') + (isSelected ? ' is-selected' : '');
     const qty = (item.count || 1) > 1 ? `<span class="qty">${item.count}</span>` : '';
     const tag = item.equipped ? `<span class="equipped-badge">EQUIP</span>` : '';
     const enchantStr = item.enchant ? `+${item.enchant} ` : '';
-    slot.innerHTML = `<span style="font-size:18px">${getItemIcon(def)}</span><span class="name">${enchantStr}${def.name}</span>${qty}${tag}`;
+    const checkHtml = `<div class="slot-select-checkbox">${isSelected ? '✓' : ''}</div>`;
+    slot.innerHTML = `${checkHtml}<span style="font-size:18px">${getItemIcon(def)}</span><span class="name">${enchantStr}${def.name}</span>${qty}${tag}`;
     
     slot.onclick = (e) => {
-      e.stopPropagation(); 
-      showItemTooltip(item, e);
+      e.stopPropagation();
+      if (e.target.classList.contains('slot-select-checkbox') || isSelected) {
+        toggleSelectItem(item.uid);
+      } else {
+        showItemTooltip(item, e);
+      }
+    };
+
+    slot.oncontextmenu = (e) => {
+      e.preventDefault();
+      toggleSelectItem(item.uid);
     };
 
     grid.appendChild(slot); shown++;
+  }
+
+  const sellBtn = el('sell-selected-btn');
+  if (sellBtn) {
+    sellBtn.disabled = state.selectedUids.size === 0;
+    sellBtn.textContent = `💰 Vender Selecionados (${selectedValue.toLocaleString()}g)`;
+  }
+  const salvageBtn = el('salvage-selected-btn');
+  if (salvageBtn) {
+    salvageBtn.disabled = salvageableCount === 0;
+    salvageBtn.textContent = `🔨 Desmontar Selecionados (${salvageableCount})`;
   }
 
   const slotCount = el('inv-slots'); if (slotCount) slotCount.textContent = `${state.inventory.length}/50`;
@@ -1519,8 +1575,12 @@ export function init() {
     qsa('.filter-btn').forEach(btn => { btn.onclick = () => { state.filter = btn.dataset.filter; qsa('.filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); updateInventoryUI(); }; });
     qsa('.rarity-filter-btn').forEach(btn => { btn.onclick = () => { state.rarityFilter = btn.dataset.rarity; qsa('.rarity-filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); updateInventoryUI(); }; });
     qsa('.equip-filter-btn').forEach(btn => { btn.onclick = () => { state.equipFilter = btn.dataset.equipfilter; qsa('.equip-filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); updateInventoryUI(); }; });
-    const sellCommonsBtn = el('sell-commons-btn'); if (sellCommonsBtn) sellCommonsBtn.onclick = sellAllCommons;
-    const salvageCommonsBtn = el('salvage-commons-btn'); if (salvageCommonsBtn) salvageCommonsBtn.onclick = salvageAllCommons;
+    const selCommonsBtn = el('select-commons-btn'); if (selCommonsBtn) selCommonsBtn.onclick = () => selectItemsByFilter(i => (i.rarity || 'common') === 'common');
+    const selUncommonsBtn = el('select-uncommons-btn'); if (selUncommonsBtn) selUncommonsBtn.onclick = () => selectItemsByFilter(i => i.rarity === 'uncommon');
+    const selAllBtn = el('select-all-btn'); if (selAllBtn) selAllBtn.onclick = () => selectItemsByFilter(() => true);
+    const clearSelBtn = el('clear-selection-btn'); if (clearSelBtn) clearSelBtn.onclick = clearItemSelection;
+    const sellSelBtn = el('sell-selected-btn'); if (sellSelBtn) sellSelBtn.onclick = sellSelectedItems;
+    const salvSelBtn = el('salvage-selected-btn'); if (salvSelBtn) salvSelBtn.onclick = salvageSelectedItems;
     const ssToggleBtn = el('soulshot-toggle-btn'); if (ssToggleBtn) ssToggleBtn.onclick = toggleSoulshot;
     const spdToggleBtn = el('speed-toggle-btn'); if (spdToggleBtn) spdToggleBtn.onclick = toggleCombatSpeed;
     const startBtn = el('start-btn'); if (startBtn) startBtn.onclick = startGame;
