@@ -1869,9 +1869,146 @@ function monsterAttack(monster) {
   if (Math.random() < stats.eva / 100) { log(`${monster.name} missed!`, 'combat'); stageFloat('DODGE', 'sf-miss', 'left'); return; }
   
   let damage = dealDamage({ atk: 0, def: 0 }, monster.atk);
+  if (state.godMode) damage = 0;
   if (damage > 0) { state.hp -= damage; log(`${monster.name} hits for ${damage}`, 'damage'); stageHeroHurt(damage); }
   if (state.hp <= 0) { state.hp = 0; playerDeath(monster); }
   updateStatsUI();
+}
+
+// --------------------------- GM ADMIN & CHAT CONSOLE ---------------------------
+function generateUid() { return 'item_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9); }
+
+function spawnAdminItem(itemId, qty = 1, rarity = 'common', enchant = 0) {
+  const def = D().ALL_ITEMS[itemId];
+  if (!def) { log(`[Admin] Item '${itemId}' não encontrado.`, 'system'); return; }
+  
+  if (def.stack && (def.slot === 'consumable' || def.slot === 'material' || def.slot === 'scroll' || def.slot === 'powerup') && rarity === 'common') {
+    addToInventory(itemId, qty, null);
+  } else {
+    for (let i = 0; i < qty; i++) {
+      state.inventory.push({
+        uid: generateUid(),
+        itemId: itemId,
+        rarity: rarity,
+        enchant: enchant,
+        equipped: false,
+        count: 1
+      });
+    }
+  }
+
+  const enchantStr = enchant > 0 ? `+${enchant} ` : '';
+  log(`🎁 [Admin] ${qty}x ${enchantStr}${def.name} [${rarity}] gerado(s) na mochila!`, 'rarity-legendary');
+  floatText('🎁 ITEM GERADO!', 'float-jackpot');
+  updateInventoryUI();
+  save();
+}
+
+function handleChatSubmit(inputStr) {
+  if (!inputStr || !inputStr.trim()) return;
+  const raw = inputStr.trim();
+  const lower = raw.toLowerCase();
+
+  // Open Admin Console secret commands
+  if (lower === '//admin' || lower === '/admin' || lower === '//gm' || lower === 'admin' || lower === 'gm') {
+    openAdminModal();
+    log('🛡️ [GM Console] Acesso Concedido! Painel de Administrador desbloqueado.', 'rarity-legendary');
+    return;
+  }
+
+  // Direct Admin Cheats
+  if (lower.startsWith('//level ')) {
+    const lvl = parseInt(lower.replace('//level ', '').trim());
+    if (lvl > 0 && lvl <= 100) {
+      state.level = lvl;
+      state.xp = getTotalXP(lvl - 1);
+      log(`⚡ [Admin] Nível alterado para ${lvl}!`, 'rarity-legendary');
+      updateAllUI();
+      save();
+    }
+    return;
+  }
+
+  if (lower.startsWith('//gold ')) {
+    const amt = parseInt(lower.replace('//gold ', '').trim());
+    if (!isNaN(amt)) {
+      state.gold += amt;
+      log(`🪙 [Admin] +${amt.toLocaleString()} Gold concedido!`, 'rarity-legendary');
+      updateAllUI();
+      save();
+    }
+    return;
+  }
+
+  if (lower.startsWith('//sp ')) {
+    const amt = parseInt(lower.replace('//sp ', '').trim());
+    if (!isNaN(amt)) {
+      state.sp += amt;
+      log(`✦ [Admin] +${amt.toLocaleString()} SP concedido!`, 'rarity-legendary');
+      updateAllUI();
+      save();
+    }
+    return;
+  }
+
+  if (lower === '//god') {
+    state.godMode = !state.godMode;
+    log(`🛡️ [Admin] God Mode (Invencibilidade): ${state.godMode ? 'ATIVADO' : 'DESATIVADO'}`, 'rarity-legendary');
+    return;
+  }
+
+  if (lower.startsWith('//item ')) {
+    const parts = raw.split(' ');
+    const itemId = parts[1];
+    const qty = parseInt(parts[2]) || 1;
+    if (itemId) {
+      spawnAdminItem(itemId, qty, 'epic', 7);
+    }
+    return;
+  }
+
+  // Normal Player Chat Message
+  const heroName = (RACES[state.race]?.name || 'Hero') + ' ' + (getClass(state.class)?.name || 'Adventurer');
+  log(`💬 [Global] ${heroName}: ${raw}`, 'system');
+}
+
+function openAdminModal() {
+  const modal = el('admin-modal');
+  if (!modal) return;
+  populateAdminItemSelect();
+  modal.classList.add('active');
+}
+
+function populateAdminItemSelect() {
+  const sel = el('admin-item-select');
+  if (!sel || sel.children.length > 0) return;
+  
+  const sorted = Object.entries(D().ALL_ITEMS).sort((a, b) => a[1].name.localeCompare(b[1].name));
+  for (const [id, def] of sorted) {
+    const opt = mkEl('option');
+    opt.value = id;
+    opt.textContent = `${def.name} (${def.slot} · Lv.${def.req?.level || 1})`;
+    sel.appendChild(opt);
+  }
+}
+
+function executeAdminCmd(cmd) {
+  if (cmd === 'level20') { state.level = 20; state.xp = getTotalXP(19); log('⚡ [Admin] Nível alterado para 20!', 'rarity-legendary'); }
+  else if (cmd === 'level40') { state.level = 40; state.xp = getTotalXP(39); log('⚡ [Admin] Nível alterado para 40!', 'rarity-legendary'); }
+  else if (cmd === 'level76') { state.level = 76; state.xp = getTotalXP(75); log('⚡ [Admin] Nível alterado para 76 (Noblesses)!', 'rarity-legendary'); }
+  else if (cmd === 'level85') { state.level = 85; state.xp = getTotalXP(84); log('⚡ [Admin] Nível alterado para 85 (Máximo)!', 'rarity-legendary'); }
+  else if (cmd === 'add5levels') { state.level += 5; state.xp = getTotalXP(state.level - 1); log(`⚡ [Admin] Nível +5 (Atual: Lv.${state.level})!`, 'rarity-legendary'); }
+  else if (cmd === 'gold1m') { state.gold += 1000000; log('🪙 [Admin] +1.000.000 Ouro concedido!', 'rarity-legendary'); }
+  else if (cmd === 'gold10m') { state.gold += 10000000; log('🪙 [Admin] +10.000.000 Ouro concedido!', 'rarity-legendary'); }
+  else if (cmd === 'sp5k') { state.sp += 5000; log('✦ [Admin] +5.000 SP concedido!', 'rarity-legendary'); }
+  else if (cmd === 'sp50k') { state.sp += 50000; log('✦ [Admin] +50.000 SP concedido!', 'rarity-legendary'); }
+  else if (cmd === 'godmode') { state.godMode = !state.godMode; log(`🛡️ [Admin] Invencibilidade: ${state.godMode ? 'ATIVADO' : 'DESATIVADO'}!`, 'rarity-legendary'); }
+  else if (cmd === 'healfull') { const stats = getStats(); state.hp = stats.maxHp; state.mp = stats.maxMp; log('❤️ [Admin] HP/MP Restaurados 100%!', 'rarity-legendary'); }
+  else if (cmd === 'autoequip') { autoEquipBest(); }
+  else if (cmd === 'resetsave') { resetSave(); }
+
+  updateAllUI();
+  save();
 }
 
 function startCombat() { if (state.combatActive) return; if (!state.zone) return; state.combatActive = true; log(`Entering ${ZONES[state.zone].name}...`, 'system'); pickRandomMonster(); combatTick = 0; state._cds = {}; if (combatInterval) clearInterval(combatInterval); combatInterval = setInterval(attackMonster, 200); }
@@ -2081,6 +2218,46 @@ export function init() {
     const unequipBtn = el('unequip-all-btn'); if (unequipBtn) unequipBtn.onclick = () => { for (const slot of Object.keys(state.equipment)) unequipItem(slot); };
     qsa('.equip-slot').forEach(slot => { slot.onclick = () => { const s = slot.dataset.slot, uid = state.equipment[s]; if (uid) unequipItem(s); }; });
     const navCraftBtn = el('nav-craft-btn'); if (navCraftBtn) navCraftBtn.onclick = () => { const craftTab = qs('.tab-btn[data-tab="craft"]'); if (craftTab) craftTab.click(); };
+    
+    // Chat & Admin Console Handlers
+    const chatForm = el('chat-form');
+    if (chatForm) {
+      chatForm.onsubmit = (e) => {
+        e.preventDefault();
+        const input = el('chat-input');
+        if (input) {
+          handleChatSubmit(input.value);
+          input.value = '';
+        }
+      };
+    }
+
+    const closeAdminBtn = el('close-admin-modal-btn');
+    if (closeAdminBtn) {
+      closeAdminBtn.onclick = () => {
+        const modal = el('admin-modal');
+        if (modal) modal.classList.remove('active');
+      };
+    }
+
+    qsa('[data-admin-cmd]').forEach(btn => {
+      btn.onclick = () => executeAdminCmd(btn.dataset.adminCmd);
+    });
+
+    const spawnBtn = el('admin-spawn-btn');
+    if (spawnBtn) {
+      spawnBtn.onclick = () => {
+        const itemSel = el('admin-item-select');
+        const qtyInput = el('admin-item-qty');
+        const raritySel = el('admin-item-rarity');
+        const enchantSel = el('admin-item-enchant');
+        if (itemSel && itemSel.value) {
+          const qty = parseInt(qtyInput?.value || 1) || 1;
+          spawnAdminItem(itemSel.value, qty, raritySel?.value || 'common', parseInt(enchantSel?.value || 0) || 0);
+        }
+      };
+    }
+
     _intervals.push(setInterval(updateClock, 1000)); _intervals.push(setInterval(save, 30000)); _intervals.push(setInterval(tickUI, 1000));
   } catch (err) {
     console.error('Game init failed:', err);

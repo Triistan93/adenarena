@@ -2589,6 +2589,149 @@ select:focus-visible {
   box-shadow: 0 0 10px rgba(74,222,128,0.5);
 }
 
+/* ============ CHAT INPUT BAR ============ */
+.chat-input-bar {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+  padding: 4px;
+  background: rgba(15, 12, 8, 0.95);
+  border: 1px solid rgba(212, 167, 68, 0.25);
+  border-radius: 4px;
+}
+.chat-input {
+  flex: 1;
+  background: #0d0a08;
+  border: 1px solid #3e2e18;
+  border-radius: 3px;
+  padding: 6px 10px;
+  color: #f0d080;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 11px;
+}
+.chat-input:focus {
+  outline: none;
+  border-color: #d4a744;
+  box-shadow: 0 0 6px rgba(212,167,68,0.3);
+}
+.chat-send-btn {
+  background: linear-gradient(180deg, #604618, #302008);
+  border: 1px solid #d4a744;
+  color: #ffe082;
+  font-family: "Cinzel", serif;
+  font-size: 10.5px;
+  font-weight: bold;
+  padding: 0 12px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.chat-send-btn:hover {
+  background: linear-gradient(180deg, #805c20, #45300d);
+  box-shadow: 0 0 8px rgba(212,167,68,0.4);
+}
+
+/* ============ ADMIN MODAL CONTROL PANEL ============ */
+.admin-modal-box {
+  max-width: 650px !important;
+  width: 95%;
+  background: linear-gradient(180deg, #1e1814, #0f0a06) !important;
+  border: 2px solid #d4a744 !important;
+  box-shadow: 0 0 30px rgba(212,167,68,0.3) !important;
+}
+.admin-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 10px;
+}
+@media (max-width: 600px) {
+  .admin-grid { grid-template-columns: 1fr; }
+}
+.admin-section {
+  background: rgba(30, 22, 14, 0.8);
+  border: 1px solid rgba(212,167,68,0.2);
+  border-radius: 4px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.admin-section.admin-spawner {
+  grid-column: 1 / -1;
+}
+.admin-section h3 {
+  font-family: "Cinzel", serif;
+  font-size: 12px;
+  color: #ffe082;
+  margin: 0;
+  letter-spacing: 0.04em;
+}
+.admin-btn-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.admin-btn {
+  background: linear-gradient(180deg, #3a2a16, #1c140a);
+  border: 1px solid #8a6c40;
+  color: #c8b898;
+  border-radius: 3px;
+  padding: 6px 10px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.admin-btn:hover {
+  background: linear-gradient(180deg, #604618, #302008);
+  border-color: #f0d080;
+  color: #fff;
+  box-shadow: 0 0 6px rgba(240,208,128,0.3);
+}
+.admin-btn.primary {
+  background: linear-gradient(180deg, #15803d, #14532d);
+  border-color: #4ade80;
+  color: #fff;
+  width: 100%;
+}
+.admin-btn.danger {
+  background: linear-gradient(180deg, #991b1b, #450a0a);
+  border-color: #f87171;
+  color: #fff;
+}
+.spawner-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.spawner-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  font-size: 10px;
+  color: #a89470;
+}
+.admin-select {
+  background: #0d0a08;
+  border: 1px solid #5a462e;
+  color: #f0d080;
+  padding: 5px 8px;
+  font-size: 11px;
+  border-radius: 3px;
+}
+.admin-num-input {
+  background: #0d0a08;
+  border: 1px solid #5a462e;
+  color: #f0d080;
+  padding: 4px 6px;
+  width: 60px;
+  font-size: 11px;
+  border-radius: 3px;
+}
+
 /* ============ RESPONSIVE ============ */
 @media (max-width: 980px) {
   .main-grid { grid-template-columns: 1fr; grid-template-rows: auto 1fr auto; }

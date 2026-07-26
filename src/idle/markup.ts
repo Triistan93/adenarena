@@ -98,6 +98,10 @@ export const IDLE_MARKUP = `
           <p class="log-entry system">Welcome to Lineage Idle.</p>
           <p class="log-entry system">Select your Race &amp; Class to begin.</p>
         </div>
+        <form id="chat-form" class="chat-input-bar">
+          <input type="text" id="chat-input" class="chat-input" placeholder="Digite uma mensagem ou comando (ex: //admin)..." autocomplete="off" />
+          <button type="submit" class="chat-send-btn">Enviar</button>
+        </form>
       </section>
 
       <!-- Right: Main Menu Workspace (Expanded) -->
@@ -442,6 +446,81 @@ export const IDLE_MARKUP = `
         <div id="class-options-container" class="class-options-container"></div>
         <div class="modal-actions" style="margin-top: 16px;">
           <button id="close-class-modal-btn" class="action-btn">Fechar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- GM Admin Control Panel Modal -->
+    <div id="admin-modal" class="modal">
+      <div class="modal-content admin-modal-box">
+        <div class="modal-header">
+          <h2>🛡️ GM Admin Command Panel</h2>
+          <button id="close-admin-modal-btn" class="modal-close-x">✕</button>
+        </div>
+        <div class="admin-grid">
+          <!-- Section 1: Level & Stats Cheats -->
+          <div class="admin-section">
+            <h3>📊 Nível &amp; Atributos</h3>
+            <div class="admin-btn-group">
+              <button class="admin-btn" data-admin-cmd="level20">Set Level 20</button>
+              <button class="admin-btn" data-admin-cmd="level40">Set Level 40</button>
+              <button class="admin-btn" data-admin-cmd="level76">Set Level 76</button>
+              <button class="admin-btn" data-admin-cmd="level85">Set Level 85</button>
+              <button class="admin-btn" data-admin-cmd="add5levels">+5 Níveis</button>
+            </div>
+          </div>
+
+          <!-- Section 2: Currency & Points -->
+          <div class="admin-section">
+            <h3>🪙 Ouro &amp; Skill Points</h3>
+            <div class="admin-btn-group">
+              <button class="admin-btn" data-admin-cmd="gold1m">+1.000.000 Gold</button>
+              <button class="admin-btn" data-admin-cmd="gold10m">+10.000.000 Gold</button>
+              <button class="admin-btn" data-admin-cmd="sp5k">+5.000 SP</button>
+              <button class="admin-btn" data-admin-cmd="sp50k">+50.000 SP</button>
+            </div>
+          </div>
+
+          <!-- Section 3: Item Spawner -->
+          <div class="admin-section admin-spawner">
+            <h3>🎁 Spawner de Itens</h3>
+            <div class="spawner-fields">
+              <select id="admin-item-select" class="admin-select"></select>
+              <div class="spawner-row">
+                <label>Qtd: <input type="number" id="admin-item-qty" value="1" min="1" max="999" class="admin-num-input" /></label>
+                <label>Raridade: 
+                  <select id="admin-item-rarity" class="admin-select">
+                    <option value="common">Comum</option>
+                    <option value="uncommon">Incomum</option>
+                    <option value="rare">Raro</option>
+                    <option value="epic">Épico (Roxo)</option>
+                    <option value="legendary">Lendário (Dourado)</option>
+                  </select>
+                </label>
+                <label>Encanto: 
+                  <select id="admin-item-enchant" class="admin-select">
+                    <option value="0">+0</option>
+                    <option value="3">+3</option>
+                    <option value="7">+7</option>
+                    <option value="10">+10</option>
+                    <option value="16">+16 (Máx)</option>
+                  </select>
+                </label>
+              </div>
+              <button id="admin-spawn-btn" class="admin-btn primary">✨ Gerar Item na Mochila</button>
+            </div>
+          </div>
+
+          <!-- Section 4: Utility Cheats -->
+          <div class="admin-section">
+            <h3>⚡ Utilitários &amp; Deuses</h3>
+            <div class="admin-btn-group">
+              <button class="admin-btn" data-admin-cmd="godmode">🛡️ Invencibilidade (God Mode)</button>
+              <button class="admin-btn" data-admin-cmd="healfull">❤️ Recuperar HP/MP Full</button>
+              <button class="admin-btn" data-admin-cmd="autoequip">⚔️ Auto-Equipar Melhores</button>
+              <button class="admin-btn danger" data-admin-cmd="resetsave">🗑️ Resetar Progresso</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
