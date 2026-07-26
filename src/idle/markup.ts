@@ -215,7 +215,10 @@ export const IDLE_MARKUP = `
           <div id="tab-skills" class="tab-pane">
             <div class="skills-head">
               <h3>Árvore de Habilidades &amp; Talentos</h3>
-              <span class="sp-pill"><span class="sp-icon">✦</span> <span id="sp-available">0</span> SP Disponível</span>
+              <div style="display:flex; gap:10px; align-items:center;">
+                <span class="sp-pill"><span class="sp-icon">✦</span> <span id="sp-available">0</span> SP Disponível</span>
+                <button id="reset-sp-btn" class="inv-batch-btn" title="Redistribuir todos os pontos de habilidade investidos">🔄 Resetar SP</button>
+              </div>
             </div>
             <div class="skills-body">
               <div class="skill-tree-scroll">
@@ -230,6 +233,7 @@ export const IDLE_MARKUP = `
             <div class="inv-tab-header">
               <h3>Mochila &amp; Inventário</h3>
               <div class="inv-summary">
+                <button id="auto-equip-btn" class="inv-batch-btn auto-equip-btn" title="Equipar os melhores itens da mochila automaticamente">⚡ Equipar Melhores</button>
                 <span class="inv-badge">Slots: <span id="inv-slots">0/50</span></span>
                 <span class="inv-badge gold">Ouro: <span id="gold-text">0</span>g</span>
               </div>

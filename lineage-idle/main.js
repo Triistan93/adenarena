@@ -112,30 +112,30 @@ const ZONES = {
 };
 
 const MONSTERS = {
-  goblin: { name: 'Goblin', hp: 30, atk: 5, def: 2, eva: 2, matk: 0, mdef: 0, xp: 10, sp: 0, gold: [5, 15] },
+  goblin: { name: 'Goblin', hp: 30, atk: 5, def: 2, eva: 2, matk: 0, mdef: 0, xp: 10, sp: 1, gold: [5, 15] },
   wolf: { name: 'Wolf', hp: 45, atk: 8, def: 1, eva: 5, matk: 0, mdef: 0, xp: 15, sp: 1, gold: [8, 20] },
-  spider: { name: 'Spider', hp: 35, atk: 6, def: 1, eva: 8, matk: 0, mdef: 0, xp: 12, sp: 0, gold: [6, 18] },
-  kobold: { name: 'Kobold', hp: 25, atk: 4, def: 3, eva: 3, matk: 0, mdef: 0, xp: 8, sp: 0, gold: [4, 12] },
+  spider: { name: 'Spider', hp: 35, atk: 6, def: 1, eva: 8, matk: 0, mdef: 0, xp: 12, sp: 1, gold: [6, 18] },
+  kobold: { name: 'Kobold', hp: 25, atk: 4, def: 3, eva: 3, matk: 0, mdef: 0, xp: 8, sp: 1, gold: [4, 12] },
   kamaelScout: { name: 'Kamael Scout', hp: 55, atk: 12, def: 2, eva: 8, matk: 0, mdef: 0, xp: 25, sp: 2, gold: [12, 30] },
-  skeleton: { name: 'Skeleton', hp: 50, atk: 9, def: 5, eva: 1, matk: 0, mdef: 0, xp: 18, sp: 1, gold: [8, 22] },
+  skeleton: { name: 'Skeleton', hp: 50, atk: 9, def: 5, eva: 1, matk: 0, mdef: 0, xp: 18, sp: 2, gold: [8, 22] },
   goblinKing: { name: 'Goblin King', hp: 120, atk: 15, def: 8, eva: 3, matk: 0, mdef: 0, xp: 50, sp: 5, gold: [25, 50], boss: true },
-  wolfAlpha: { name: 'Wolf Alpha', hp: 100, atk: 18, def: 3, eva: 10, matk: 0, mdef: 0, xp: 40, sp: 3, gold: [20, 40], boss: true },
-  knight: { name: 'Knight', hp: 150, atk: 20, def: 12, eva: 2, matk: 0, mdef: 5, xp: 60, sp: 5, gold: [30, 60] },
-  mage: { name: 'Mage', hp: 80, atk: 5, def: 2, eva: 3, matk: 25, mdef: 8, xp: 55, sp: 5, gold: [25, 55] },
-  dragon: { name: 'Dragon', hp: 300, atk: 30, def: 15, eva: 5, matk: 20, mdef: 10, xp: 120, sp: 10, gold: [80, 150], boss: true },
-  dragonKnight: { name: 'Dragon Knight', hp: 500, atk: 40, def: 25, eva: 8, matk: 15, mdef: 15, xp: 200, sp: 15, gold: [150, 300], boss: true },
+  wolfAlpha: { name: 'Wolf Alpha', hp: 100, atk: 18, def: 3, eva: 10, matk: 0, mdef: 0, xp: 40, sp: 4, gold: [20, 40], boss: true },
+  knight: { name: 'Knight', hp: 150, atk: 20, def: 12, eva: 2, matk: 0, mdef: 5, xp: 60, sp: 3, gold: [30, 60] },
+  mage: { name: 'Mage', hp: 80, atk: 5, def: 2, eva: 3, matk: 25, mdef: 8, xp: 55, sp: 3, gold: [25, 55] },
+  dragon: { name: 'Dragon', hp: 300, atk: 30, def: 15, eva: 5, matk: 20, mdef: 10, xp: 120, sp: 8, gold: [80, 150], boss: true },
+  dragonKnight: { name: 'Dragon Knight', hp: 500, atk: 40, def: 25, eva: 8, matk: 15, mdef: 15, xp: 200, sp: 10, gold: [150, 300], boss: true },
   goblinThief: { name: 'Goblin Thief', lvl: 2, hp: 45, atk: 9, def: 3, eva: 12, xp: 18, sp: 1, gold: [8, 20], element: 'none', traits: ['ambush', 'packTactics'], stealsGold: 0.15 },
   orc: { name: 'Orc', lvl: 5, hp: 140, atk: 20, def: 10, eva: 4, xp: 45, sp: 2, gold: [20, 45], element: 'none', traits: ['enrage'] },
-  koboldLeader: { name: 'Kobold Leader', lvl: 8, hp: 260, atk: 30, def: 14, eva: 8, xp: 110, sp: 5, gold: [60, 120], element: 'none', traits: ['packLeader', 'trap'], elite: true },
-  direWolf: { name: 'Dire Wolf', lvl: 12, hp: 420, atk: 52, def: 18, eva: 18, xp: 220, sp: 7, gold: [80, 160], element: 'none', traits: ['bleed', 'firstStrike'], atkSpd: 1.35 },
-  crimsonBabyDragon: { name: 'Crimson Baby Dragon', lvl: 15, hp: 620, atk: 70, def: 26, eva: 10, xp: 340, sp: 10, gold: [120, 240], element: 'fire', resist: { fire: 0.75, water: 1.3 }, traits: ['fireBreath'] },
-  alphaWolf: { name: 'Alpha Wolf', lvl: 18, hp: 900, atk: 85, def: 30, eva: 20, xp: 520, sp: 14, gold: [180, 340], element: 'none', traits: ['packLeader', 'bleed', 'howl'], elite: true },
-  darkMage: { name: 'Dark Mage', lvl: 25, hp: 1150, atk: 145, def: 28, eva: 14, xp: 1100, sp: 26, gold: [300, 600], element: 'dark', magic: true, resist: { dark: 0.5, holy: 1.5 }, traits: ['curse', 'manaBurn'], atkSpd: 0.75 },
-  devilBone: { name: 'Devil Bone', lvl: 28, hp: 2400, atk: 120, def: 78, eva: 3, xp: 1400, sp: 30, gold: [350, 700], element: 'dark', resist: { physical: 0.7, magic: 1.25 }, traits: ['boneArmor', 'reassemble'] },
-  deathKnight: { name: 'Death Knight', lvl: 35, boss: true, hp: 4200, atk: 210, def: 90, eva: 12, xp: 3200, sp: 55, gold: [900, 1800], element: 'dark', resist: { dark: 0.3, holy: 1.6 }, traits: ['lifesteal', 'deathCoil', 'enrage'] },
-  voidCreature: { name: 'Void Creature', lvl: 42, boss: true, hp: 5600, atk: 280, def: 60, eva: 30, xp: 5200, sp: 80, gold: [1200, 2400], element: 'void', resist: { physical: 0.85, magic: 0.85 }, traits: ['voidPierce', 'phaseShift', 'distort'] },
-  emeraldDragon: { name: 'Emerald Dragon', lvl: 48, boss: true, hp: 9800, atk: 330, def: 120, eva: 8, xp: 9000, sp: 120, gold: [2500, 5000], element: 'earth', resist: { poison: 0.0, fire: 1.2 }, traits: ['poison', 'wingBuffet', 'regen'] },
-  cerberus: { name: 'Cerberus', lvl: 50, boss: true, finalBoss: true, hp: 15000, atk: 400, def: 140, eva: 14, xp: 15000, sp: 180, gold: [5000, 10000], element: 'chaos', resist: { fire: 0.5, dark: 0.5, holy: 1.25 }, traits: ['multiHead', 'lifesteal', 'enrage', 'hellChain'] }
+  koboldLeader: { name: 'Kobold Leader', lvl: 8, hp: 260, atk: 30, def: 14, eva: 8, xp: 110, sp: 4, gold: [60, 120], element: 'none', traits: ['packLeader', 'trap'], elite: true },
+  direWolf: { name: 'Dire Wolf', lvl: 12, hp: 420, atk: 52, def: 18, eva: 18, xp: 220, sp: 3, gold: [80, 160], element: 'none', traits: ['bleed', 'firstStrike'], atkSpd: 1.35 },
+  crimsonBabyDragon: { name: 'Crimson Baby Dragon', lvl: 15, hp: 620, atk: 70, def: 26, eva: 10, xp: 340, sp: 5, gold: [120, 240], element: 'fire', resist: { fire: 0.75, water: 1.3 }, traits: ['fireBreath'] },
+  alphaWolf: { name: 'Alpha Wolf', lvl: 18, hp: 900, atk: 85, def: 30, eva: 20, xp: 520, sp: 6, gold: [180, 340], element: 'none', traits: ['packLeader', 'bleed', 'howl'], elite: true },
+  darkMage: { name: 'Dark Mage', lvl: 25, hp: 1150, atk: 145, def: 28, eva: 14, xp: 1100, sp: 8, gold: [300, 600], element: 'dark', magic: true, resist: { dark: 0.5, holy: 1.5 }, traits: ['curse', 'manaBurn'], atkSpd: 0.75 },
+  devilBone: { name: 'Devil Bone', lvl: 28, hp: 2400, atk: 120, def: 78, eva: 3, xp: 1400, sp: 10, gold: [350, 700], element: 'dark', resist: { physical: 0.7, magic: 1.25 }, traits: ['boneArmor', 'reassemble'] },
+  deathKnight: { name: 'Death Knight', lvl: 35, boss: true, hp: 4200, atk: 210, def: 90, eva: 12, xp: 3200, sp: 15, gold: [900, 1800], element: 'dark', resist: { dark: 0.3, holy: 1.6 }, traits: ['lifesteal', 'deathCoil', 'enrage'] },
+  voidCreature: { name: 'Void Creature', lvl: 42, boss: true, hp: 5600, atk: 280, def: 60, eva: 30, xp: 5200, sp: 18, gold: [1200, 2400], element: 'void', resist: { physical: 0.85, magic: 0.85 }, traits: ['voidPierce', 'phaseShift', 'distort'] },
+  emeraldDragon: { name: 'Emerald Dragon', lvl: 48, boss: true, hp: 9800, atk: 330, def: 120, eva: 8, xp: 9000, sp: 22, gold: [2500, 5000], element: 'earth', resist: { poison: 0.0, fire: 1.2 }, traits: ['poison', 'wingBuffet', 'regen'] },
+  cerberus: { name: 'Cerberus', lvl: 50, boss: true, finalBoss: true, hp: 15000, atk: 400, def: 140, eva: 14, xp: 15000, sp: 30, gold: [5000, 10000], element: 'chaos', resist: { fire: 0.5, dark: 0.5, holy: 1.25 }, traits: ['multiHead', 'lifesteal', 'enrage', 'hellChain'] }
 };
 
 function getXPForLevel(lvl) { return Math.floor(100 * Math.pow(1.8, lvl - 1)); }
@@ -775,6 +775,13 @@ function updateSkillUI() {
   updateSkillInfoPanel();
 }
 
+function getSkillCost(skillId, currentLvl) {
+  const def = SKILL_DEFS[skillId];
+  if (!def) return 0;
+  const baseCost = def.cost || 5;
+  return Math.floor(baseCost * Math.pow(1.4, currentLvl || 0));
+}
+
 function updateSkillInfoPanel() {
   const panel = el('skill-info-panel'); if (!panel) return;
   const isMage = state.class === 'mage' || state.class === 'soulbreaker';
@@ -783,10 +790,11 @@ function updateSkillInfoPanel() {
   if (!def) { panel.innerHTML = ''; return; }
   const lvl = state.skills[id] || 0;
   const maxed = lvl >= def.max;
+  const cost = getSkillCost(id, lvl);
   const reqs = SKILL_REQS[id];
   const meetsReqs = !reqs || Object.entries(reqs).every(([s, v]) => (state.skills[s] || 0) >= v);
   const lvlOk = state.level >= def.reqLvl;
-  const canAfford = state.sp >= def.cost && !maxed;
+  const canAfford = state.sp >= cost && !maxed;
   
   let reqHtml = reqs ? Object.entries(reqs).map(([s, v]) => { const ok = (state.skills[s] || 0) >= v; return `<span class="req ${ok ? 'ok' : 'no'}">${SKILL_DEFS[s]?.name || s} ${v}</span>`; }).join('') : '';
   reqHtml += `<span class="req ${lvlOk ? 'ok' : 'no'}">Level ${def.reqLvl}</span>`;
@@ -796,8 +804,8 @@ function updateSkillInfoPanel() {
     <div class="si-head"><span class="si-icon">${def.icon || '✦'}</span><div class="si-title"><h3>${def.name}</h3><p class="si-tier">${tier} · Lv.${lvl}/${def.max}</p></div></div>
     <p class="si-desc">${def.desc}</p><div class="si-effect">${def.info}</div>
     <div class="si-reqs"><span class="si-label">Requires</span>${reqHtml}</div>
-    <button class="si-btn" data-skillup="${id}" ${(!canAfford || !meetsReqs || !lvlOk) ? 'disabled' : ''}>${maxed ? '✦ MAXED' : `Invest ${def.cost} SP`}</button>
-    <p class="si-sp">SP available: <strong>${state.sp}</strong></p>
+    <button class="si-btn" data-skillup="${id}" ${(!canAfford || !meetsReqs || !lvlOk) ? 'disabled' : ''}>${maxed ? '✦ MAXED' : `Invest ${cost.toLocaleString()} SP`}</button>
+    <p class="si-sp">SP available: <strong>${state.sp.toLocaleString()}</strong></p>
   `;
   const btn = panel.querySelector('[data-skillup]'); if (btn) btn.onclick = () => spendSP(btn.dataset.skillup);
 }
@@ -1489,9 +1497,10 @@ function checkLevelUp() {
   while (state.xp >= getTotalXP(state.level)) {
     state.level++; const stats = getStats(); state.maxHp = stats.maxHp; state.maxMp = stats.maxMp; state.hp = state.maxHp; state.mp = state.maxMp; 
     
-    const spReward = state.level * 3;
+    const spReward = Math.min(10, Math.floor(state.level * 0.8 + 1));
     state.sp += spReward;
-    log(`LEVEL UP! Now Lv.${state.level}! (+${spReward} SP)`, 'xp');
+    log(`🎉 LEVEL UP! Nível ${state.level} Alcançado! (+${spReward} SP)`, 'rarity-legendary');
+    floatText(`🎉 LEVEL UP! Nível ${state.level}`, 'float-jackpot');
     
     for (const saga of SAGAS) { if (saga.unlocksAt === state.level && !SAGAS.slice(0, saga.level).includes(saga)) { state.currentSaga = saga.level; showSagaModal(saga); break; } }
     updateAllUI(); save();
@@ -1512,13 +1521,86 @@ function showSagaModal(saga) { el('saga-title').textContent = saga.name + ' Unlo
 function spendSP(skillId) {
   const def = SKILL_DEFS[skillId]; if (!def) return; const lvl = state.skills[skillId] || 0;
   if (lvl >= def.max) { log(`${def.name} already mastered.`, 'system'); return; }
-  if (state.sp < def.cost) { log('Not enough SP.', 'system'); return; }
+  const cost = getSkillCost(skillId, lvl);
+  if (state.sp < cost) { log(`Not enough SP (${cost} SP required).`, 'system'); return; }
   if (state.level < def.reqLvl) { log(`Level ${def.reqLvl} required.`, 'system'); return; }
   const reqs = SKILL_REQS[skillId]; if (reqs && !Object.entries(reqs).every(([s, v]) => (state.skills[s] || 0) >= v)) { log('Requirements not met.', 'system'); return; }
-  state.sp -= def.cost; state.skills[skillId] = lvl + 1; const newLvl = state.skills[skillId], tier = TIER_NAMES[def.tier] || '';
-  log(`✦ ${def.name} → Lv.${newLvl}  [${tier}]`, newLvl === def.max ? 'saga' : 'xp');
+  state.sp -= cost; state.skills[skillId] = lvl + 1; const newLvl = state.skills[skillId], tier = TIER_NAMES[def.tier] || '';
+  log(`✦ ${def.name} → Lv.${newLvl} [${tier}] (-${cost} SP)`, newLvl === def.max ? 'saga' : 'xp');
   const stats = getStats(); state.maxHp = stats.maxHp; state.maxMp = stats.maxMp; state.hp = Math.min(state.hp + 20, state.maxHp); state.mp = Math.min(state.mp + 10, state.maxMp);
   updateAllUI(); save();
+}
+
+function resetSP() {
+  let totalRefunded = 0;
+  const isMage = state.class === 'mage' || state.class === 'soulbreaker';
+  const starterSkill = isMage ? 'energyBolt' : 'mortalBlow';
+  
+  for (const [sId, lvl] of Object.entries(state.skills)) {
+    if (lvl > 0) {
+      const baseLvl = (sId === starterSkill) ? 1 : 0;
+      for (let l = baseLvl; l < lvl; l++) {
+        totalRefunded += getSkillCost(sId, l);
+      }
+      state.skills[sId] = baseLvl;
+    }
+  }
+  
+  state.sp += totalRefunded;
+  log(`🔄 Skills reset! Refunded ${totalRefunded.toLocaleString()} SP.`, 'rarity-legendary');
+  floatText(`+${totalRefunded.toLocaleString()} SP`, 'float-jackpot');
+  updateAllUI();
+  save();
+}
+
+function autoEquipBest() {
+  const slots = ['weapon','armor','helmet','gloves','boots','ring'];
+  let equippedCount = 0;
+  
+  for (const slot of slots) {
+    const candidates = state.inventory.filter(i => {
+      if (i.equipped) return false;
+      const def = D().ALL_ITEMS[i.itemId];
+      if (!def || def.slot !== slot) return false;
+      if (def.req && def.req.level > state.level) return false;
+      if (def.classReq && def.classReq !== state.class) return false;
+      return true;
+    });
+    
+    if (!candidates.length) continue;
+    
+    candidates.sort((a, b) => {
+      const defA = D().ALL_ITEMS[a.itemId], defB = D().ALL_ITEMS[b.itemId];
+      const multA = (a.rarity ? D().RARITY[a.rarity].mult : 1) * (1 + (a.enchant || 0) * 0.1);
+      const multB = (b.rarity ? D().RARITY[b.rarity].mult : 1) * (1 + (b.enchant || 0) * 0.1);
+      const scoreA = ((defA.atk || 0) + (defA.matk || 0) + (defA.def || 0) * 0.8 + (defA.hp || 0) * 0.1) * multA;
+      const scoreB = ((defB.atk || 0) + (defB.matk || 0) + (defB.def || 0) * 0.8 + (defB.hp || 0) * 0.1) * multB;
+      return scoreB - scoreA;
+    });
+    
+    const bestItem = candidates[0];
+    const currentUid = state.equipment[slot];
+    if (currentUid) {
+      const currentItem = state.inventory.find(i => i.uid === currentUid);
+      if (currentItem) {
+        const defC = D().ALL_ITEMS[currentItem.itemId];
+        const multC = (currentItem.rarity ? D().RARITY[currentItem.rarity].mult : 1) * (1 + (currentItem.enchant || 0) * 0.1);
+        const scoreC = ((defC.atk || 0) + (defC.matk || 0) + (defC.def || 0) * 0.8 + (defC.hp || 0) * 0.1) * multC;
+        const bestScore = ((D().ALL_ITEMS[bestItem.itemId].atk || 0) + (D().ALL_ITEMS[bestItem.itemId].matk || 0) + (D().ALL_ITEMS[bestItem.itemId].def || 0) * 0.8 + (D().ALL_ITEMS[bestItem.itemId].hp || 0) * 0.1) * ((bestItem.rarity ? D().RARITY[bestItem.rarity].mult : 1) * (1 + (bestItem.enchant || 0) * 0.1));
+        if (bestScore <= scoreC) continue;
+      }
+    }
+    
+    equipItem(bestItem.uid);
+    equippedCount++;
+  }
+  
+  if (equippedCount > 0) {
+    log(`⚡ Auto-equipped ${equippedCount} superior item(s)!`, 'rarity-legendary');
+    floatText('⚡ EQUIPADO!', 'float-jackpot');
+  } else {
+    log('Você já está usando os melhores equipamentos da mochila!', 'system');
+  }
 }
 
 function setRace(raceId) { state.race = raceId; if (raceId === 'dwarf') state.class = 'artisan'; else if (raceId === 'kamael') state.class = 'soulbreaker'; else if (state.class === 'artisan' || state.class === 'soulbreaker') state.class = 'fighter'; const race = RACES[raceId]; state.base = { ...race.stats }; const cls = getClass(state.class); if (cls) { for (const k of ['atk','def','eva','matk','mdef']) { state.base[k] = (state.base[k] || 0) + (cls.base[k] || 0); } } updateRaceClassUI(); updateStatsUI(); }
@@ -1583,6 +1665,8 @@ export function init() {
     const salvSelBtn = el('salvage-selected-btn'); if (salvSelBtn) salvSelBtn.onclick = salvageSelectedItems;
     const ssToggleBtn = el('soulshot-toggle-btn'); if (ssToggleBtn) ssToggleBtn.onclick = toggleSoulshot;
     const spdToggleBtn = el('speed-toggle-btn'); if (spdToggleBtn) spdToggleBtn.onclick = toggleCombatSpeed;
+    const resetSpBtn = el('reset-sp-btn'); if (resetSpBtn) resetSpBtn.onclick = resetSP;
+    const autoEquipBtn = el('auto-equip-btn'); if (autoEquipBtn) autoEquipBtn.onclick = autoEquipBest;
     const startBtn = el('start-btn'); if (startBtn) startBtn.onclick = startGame;
     const resetBtn = el('reset-btn'); if (resetBtn) resetBtn.onclick = resetSave;
     const resFree = el('res-free'); if (resFree) resFree.onclick = () => resurrect(false);
