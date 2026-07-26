@@ -154,6 +154,7 @@ const DEFAULT_STATE = () => ({
   zone: null, currentSaga: 0, gold: 0, inventory: [], 
   equipment: { weapon: null, armor: null, helmet: null, gloves: null, boots: null, ring: null },
   craftLevel: 1, craftXp: 0, shopTab: 'gear', selectedSkill: null, filter: 'all',
+  craftTab: 'recipes', zoneTab: 'map', soulshotActive: false, combatSpeed: 1,
   totalPlaytime: 0, buffs: {}, _cds: {}, gameMode: 'idle'
 });
 
@@ -190,6 +191,10 @@ function load() {
     state.filter = data.filter || 'all';
     state.gameMode = data.gameMode === 'arena' ? 'arena' : 'idle';
     state.shopTab = data.shopTab || 'gear';
+    state.craftTab = data.craftTab || 'recipes';
+    state.zoneTab = data.zoneTab || 'map';
+    state.soulshotActive = !!data.soulshotActive;
+    state.combatSpeed = data.combatSpeed === 2 ? 2 : 1;
     state.selectedSkill = data.selectedSkill || null;
     state.startTime = Date.now();
     return true;
@@ -218,10 +223,11 @@ function getEquipBonus(slot) {
   if (!inv) return null;
   const def = D().ALL_ITEMS[inv.itemId];
   if (!def) return null;
-  const mult = inv.rarity ? D().RARITY[inv.rarity].mult : 1;
+  const rarityMult = inv.rarity ? D().RARITY[inv.rarity].mult : 1;
+  const enchantMult = 1 + (inv.enchant || 0) * 0.10;
   const out = { ...def };
   ['atk','def','matk','mdef','hp','mp','eva','crit','speed','lifesteal'].forEach(k => {
-    if (out[k]) out[k] = Math.floor(Number(out[k]) * mult);
+    if (out[k]) out[k] = Math.floor(Number(out[k]) * rarityMult * enchantMult);
   });
   return out;
 }
@@ -665,8 +671,9 @@ function updateEquipmentUI() {
     const item = state.inventory.find(i => i.uid === uid);
     if (!item) { state.equipment[slot] = null; elem.textContent = 'Empty'; elem.title = ''; if (wrap) { wrap.style.borderColor = ''; wrap.title = slot + ' · empty'; } continue; }
     const def = D().ALL_ITEMS[item.itemId];
-    const full = def.name + (item.rarity ? ' [' + D().RARITY[item.rarity].name + ']' : '');
-    elem.textContent = def.name; const col = item.rarity ? D().RARITY[item.rarity].color : 'var(--gilt)';
+    const enchantStr = item.enchant ? `+${item.enchant} ` : '';
+    const full = enchantStr + def.name + (item.rarity ? ' [' + D().RARITY[item.rarity].name + ']' : '');
+    elem.textContent = enchantStr + def.name; const col = item.rarity ? D().RARITY[item.rarity].color : 'var(--gilt)';
     elem.style.color = col; elem.title = full; if (wrap) { wrap.style.borderColor = col; wrap.title = full; }
   }
   const eb = getTotalEquipBonuses(); const list = el('bonus-list'); list.innerHTML = '';
@@ -796,7 +803,8 @@ function updateInventoryUI() {
     slot.className = `inv-slot rarity-${rarity}` + (item.equipped ? ' is-equipped' : '');
     const qty = (item.count || 1) > 1 ? `<span class="qty">${item.count}</span>` : '';
     const tag = item.equipped ? `<span class="equipped-badge">EQUIP</span>` : '';
-    slot.innerHTML = `<span style="font-size:18px">${getItemIcon(def)}</span><span class="name">${def.name}</span>${qty}${tag}`;
+    const enchantStr = item.enchant ? `+${item.enchant} ` : '';
+    slot.innerHTML = `<span style="font-size:18px">${getItemIcon(def)}</span><span class="name">${enchantStr}${def.name}</span>${qty}${tag}`;
     
     slot.onclick = (e) => {
       e.stopPropagation(); 
@@ -817,7 +825,8 @@ function getItemIcon(def) { const icons = { weapon: '⚔️', armor: '🛡️', 
 function showItemTooltip(item, e) {
   const def = D().ALL_ITEMS[item.itemId]; if (!def) return;
   const tt = el('item-tooltip'), rarity = item.rarity || 'common', mult = D().RARITY[rarity].mult, rc = D().RARITY[rarity].color;
-  let html = `<div class="tt-name" style="color:${rc}">${def.name}</div>`;
+  const enchantStr = item.enchant ? `+${item.enchant} ` : '';
+  let html = `<div class="tt-name" style="color:${rc}">${enchantStr}${def.name}</div>`;
   if (item.rarity) html += `<div class="tt-rarity" style="color:${rc}">${D().RARITY[rarity].name}</div>`;
   const reqLvl = def.req ? def.req.level : 1; const grade = getItemGrade(reqLvl);
   html += `<div style="color:var(--text-muted);font-size:10px;text-transform:capitalize;">${def.slot} · <span style="font-weight:bold; color:var(--gilt);">${grade}</span></div>`;
@@ -957,8 +966,64 @@ function buyMysticItem(itemId, rarity) {
   state.gold -= price; log(`Mystic purchase: ${def.name} [${D().RARITY[rarity].name}] for ${price}g`, 'rarity-' + rarity); updateAllUI(); save();
 }
 
+const RAID_BOSSES = {
+  queen_ant: { id: 'queen_ant', name: 'Queen Ant ★★★', lvl: 30, hp: 8000, atk: 120, def: 45, eva: 10, xp: 5000, sp: 50, gold: [2000, 5000], boss: true, raid: true, reqLvl: 20, desc: 'Rainha Formiga dos Ermos de Gludio.' },
+  zaken: { id: 'zaken', name: 'Zaken o Pirata ★★★★', lvl: 50, hp: 22000, atk: 250, def: 85, eva: 15, xp: 18000, sp: 120, gold: [8000, 15000], boss: true, raid: true, reqLvl: 40, desc: 'Capitão pirata fantasma da Ilha do Diabo.' },
+  baium: { id: 'baium', name: 'Imperador Baium ★★★★★', lvl: 70, hp: 60000, atk: 420, def: 140, eva: 12, xp: 60000, sp: 350, gold: [25000, 50000], boss: true, raid: true, reqLvl: 60, desc: 'O Imperador Imortal aprisionado na Torre da Insolência.' },
+  antharas: { id: 'antharas', name: 'Dragão Antharas 🐉', lvl: 85, hp: 150000, atk: 650, def: 220, eva: 10, xp: 200000, sp: 1000, gold: [100000, 250000], boss: true, raid: true, reqLvl: 75, desc: 'Dragão da Terra adormecido no Vale dos Dragões.' },
+  valakas: { id: 'valakas', name: 'Dragão Valakas 🔥', lvl: 90, hp: 300000, atk: 950, def: 300, eva: 8, xp: 500000, sp: 2500, gold: [300000, 600000], boss: true, raid: true, reqLvl: 80, desc: 'Senhor do Vulcão de Goddard.' }
+};
+
+function toggleSoulshot() {
+  state.soulshotActive = !state.soulshotActive;
+  updateCombatControlsUI();
+  log(`Soulshots ${state.soulshotActive ? 'ATIVADOS (Consome soulshots para +100% DANO)' : 'DESATIVADOS'}.`, 'system');
+  save();
+}
+
+function toggleCombatSpeed() {
+  state.combatSpeed = state.combatSpeed === 1 ? 2 : 1;
+  updateCombatControlsUI();
+  if (state.combatActive) {
+    if (combatInterval) clearInterval(combatInterval);
+    combatInterval = setInterval(attackMonster, Math.round(200 / state.combatSpeed));
+  }
+  log(`Velocidade de combate: ${state.combatSpeed}x ${state.combatSpeed === 2 ? 'TURBO ⏩' : 'Normal'}.`, 'system');
+  save();
+}
+
+function updateCombatControlsUI() {
+  const ssBtn = el('soulshot-toggle-btn');
+  if (ssBtn) {
+    ssBtn.classList.toggle('active', !!state.soulshotActive);
+    const isMage = state.class === 'mage' || state.class === 'soulbreaker';
+    const shotId = isMage ? 'spiritshot_ng' : 'soulshot_ng';
+    const count = getInventoryCount(shotId);
+    ssBtn.textContent = `⚡ Soulshot: ${state.soulshotActive ? 'ON' : 'OFF'} (${count})`;
+  }
+  const spdBtn = el('speed-toggle-btn');
+  if (spdBtn) {
+    spdBtn.classList.toggle('active', state.combatSpeed === 2);
+    spdBtn.textContent = `⏩ Velocidade: ${state.combatSpeed || 1}x`;
+  }
+}
+
 function updateCraftUI() {
-  const list = el('craft-list'); list.innerHTML = '';
+  qsa('.craft-subtab').forEach(b => {
+    b.classList.toggle('active', b.dataset.crafttab === state.craftTab);
+    b.onclick = () => { state.craftTab = b.dataset.crafttab; updateCraftUI(); };
+  });
+  const recipesView = el('craft-recipes-view');
+  const enchantView = el('craft-enchant-view');
+  if (recipesView) recipesView.classList.toggle('active', state.craftTab === 'recipes');
+  if (enchantView) enchantView.classList.toggle('active', state.craftTab === 'enchant');
+
+  if (state.craftTab === 'recipes') renderCraftRecipes();
+  else if (state.craftTab === 'enchant') updateEnchantUI();
+}
+
+function renderCraftRecipes() {
+  const list = el('craft-list'); if (!list) return; list.innerHTML = '';
   for (const [recipeId, recipe] of Object.entries(D().CRAFTING_RECIPES)) {
     const def = D().ALL_ITEMS[recipeId]; if (!def || (def.req && def.req.level > state.level)) continue;
     const canCraft = canCraftRecipe(recipeId), item = mkEl('div'); item.className = 'craft-item' + (canCraft ? '' : ' locked'); const reqLevel = getCraftLevelReq(recipe.level);
@@ -968,9 +1033,90 @@ function updateCraftUI() {
   qsa('[data-craft]').forEach(btn => btn.onclick = () => craftItem(btn.dataset.craft));
 }
 
+function updateEnchantUI() {
+  const ws = el('enchant-workspace'); if (!ws) return; ws.innerHTML = '';
+  const equippable = state.inventory.filter(i => {
+    const def = D().ALL_ITEMS[i.itemId];
+    return def && ['weapon','armor','helmet','gloves','boots','ring'].includes(def.slot);
+  });
+  
+  if (!equippable.length) {
+    ws.innerHTML = '<p class="shop-empty">Você não possui equipamentos na mochila para encantar.</p>';
+    return;
+  }
+
+  for (const item of equippable) {
+    const def = D().ALL_ITEMS[item.itemId];
+    const isWeapon = def.slot === 'weapon';
+    const scrollId = isWeapon ? 'enchant_weapon_scroll' : 'enchant_armor_scroll';
+    const scrollDef = D().ALL_ITEMS[scrollId];
+    const count = getInventoryCount(scrollId);
+    const enchant = item.enchant || 0;
+    const rarityColor = item.rarity ? D().RARITY[item.rarity].color : 'var(--gilt)';
+    
+    const card = mkEl('div'); card.className = 'enchant-card';
+    const title = (enchant > 0 ? `+${enchant} ` : '') + def.name + (item.rarity ? ` [${D().RARITY[item.rarity].name}]` : '');
+    const safeMsg = enchant < 3 ? '100% Seguro (Até +3)' : `Sucesso: ${Math.max(30, 100 - (enchant - 3) * 10)}%`;
+    
+    card.innerHTML = `
+      <div class="enchant-card-info">
+        <div class="enchant-item-title" style="color:${rarityColor}">${title} ${item.equipped ? '⚡ (EQUIPADO)' : ''}</div>
+        <div class="enchant-item-sub">Req: ${scrollDef ? scrollDef.name : scrollId} (Possui: ${count}) · ${safeMsg}</div>
+      </div>
+      <button class="item-action" data-enchant="${item.uid}" ${count < 1 ? 'disabled title="Sem pergaminhos de encantamento"' : ''}>Encantar (+1)</button>
+    `;
+    ws.appendChild(card);
+  }
+
+  ws.querySelectorAll('[data-enchant]').forEach(btn => {
+    btn.onclick = () => enchantItem(btn.dataset.enchant);
+  });
+}
+
+function enchantItem(uid) {
+  const item = state.inventory.find(i => i.uid === uid); if (!item) return;
+  const def = D().ALL_ITEMS[item.itemId]; if (!def) return;
+  const isWeapon = def.slot === 'weapon';
+  const scrollId = isWeapon ? 'enchant_weapon_scroll' : 'enchant_armor_scroll';
+  const scrollItem = state.inventory.find(i => i.itemId === scrollId && (i.count || 1) > 0);
+  if (!scrollItem) { log('Pergaminho de encantamento necessário!', 'system'); return; }
+  
+  if (scrollItem.count > 1) scrollItem.count--;
+  else removeFromInventory(scrollItem.uid, 1);
+
+  const currentEnchant = item.enchant || 0;
+  const chance = currentEnchant < 3 ? 1.0 : Math.max(0.3, 1.0 - (currentEnchant - 3) * 0.1);
+  
+  if (Math.random() < chance) {
+    item.enchant = currentEnchant + 1;
+    log(`✨ ENCHANT SUCCESS! ${def.name} is now +${item.enchant}!`, 'rarity-legendary');
+    floatText(`✨ +${item.enchant} SUCESSO!`, 'float-jackpot');
+  } else {
+    item.enchant = Math.max(0, currentEnchant - 1);
+    log(`💥 Enchant Failed! ${def.name} reduced to +${item.enchant}.`, 'system');
+    floatText(`💥 FALHOU (-1)`, 'float-crit');
+  }
+  
+  updateAllUI(); save();
+}
+
 function canCraftRecipe(id) { return canCraft(id); }
 
 function updateZoneUI() {
+  qsa('.zone-subtab').forEach(b => {
+    b.classList.toggle('active', b.dataset.zonetab === state.zoneTab);
+    b.onclick = () => { state.zoneTab = b.dataset.zonetab; updateZoneUI(); };
+  });
+  const mapView = el('zone-map-view');
+  const raidsView = el('zone-raids-view');
+  if (mapView) mapView.classList.toggle('active', state.zoneTab === 'map');
+  if (raidsView) raidsView.classList.toggle('active', state.zoneTab === 'raids');
+
+  if (state.zoneTab === 'map') renderZoneMap();
+  else if (state.zoneTab === 'raids') updateRaidUI();
+}
+
+function renderZoneMap() {
   const list = el('zone-list'); if (!list) return;
   const coords = ART.ZONE_COORDS, order = ART.ZONE_ORDER, unlocked = {};
   SAGAS.slice(0, state.currentSaga + 1).forEach(s => s.zones.forEach(z => { unlocked[z] = true; }));
@@ -982,6 +1128,51 @@ function updateZoneUI() {
   }
   list.innerHTML = `<svg class="zone-map" viewBox="0 0 360 240" preserveAspectRatio="xMidYMid meet">${ART.mapBackdrop()}<g class="zm-routes">${routes}</g><g class="zm-nodes">${nodes}</g></svg>`;
   list.querySelectorAll('.zm-node').forEach(n => { n.onclick = () => { const id = n.dataset.zone, z = ZONES[id]; if (unlocked[id] && z.level <= state.level) selectZone(id); }; });
+}
+
+function updateRaidUI() {
+  const list = el('raid-boss-list'); if (!list) return; list.innerHTML = '';
+  for (const [id, boss] of Object.entries(RAID_BOSSES)) {
+    const card = mkEl('div'); card.className = 'raid-card';
+    const reqOk = state.level >= boss.reqLvl;
+    card.innerHTML = `
+      <div>
+        <div class="raid-card-title">${boss.name}</div>
+        <div class="raid-card-desc">${boss.desc} · Lv.${boss.lvl}</div>
+      </div>
+      <button class="raid-btn" data-raid="${id}" ${!reqOk ? 'disabled' : ''}>${reqOk ? 'Desafiar Raid ⚔️' : `Lv.${boss.reqLvl} Req`}</button>
+    `;
+    list.appendChild(card);
+  }
+  list.querySelectorAll('[data-raid]').forEach(btn => {
+    btn.onclick = () => startRaidBoss(btn.dataset.raid);
+  });
+}
+
+function startRaidBoss(raidId) {
+  const bossTemplate = RAID_BOSSES[raidId]; if (!bossTemplate) return;
+  if (state.level < bossTemplate.reqLvl) { log(`Level ${bossTemplate.reqLvl} required for this Raid!`, 'system'); return; }
+  
+  state.zone = null;
+  state.target = raidId;
+  MONSTERS[raidId] = bossTemplate;
+  state.activeMonster = {
+    ...bossTemplate,
+    _maxHp: bossTemplate.hp,
+    hp: bossTemplate.hp,
+    _stunnedUntil: 0
+  };
+  
+  const sz = el('stage-zone');
+  if (sz) sz.textContent = `🐉 RAID · ${bossTemplate.name}`;
+  stopCombat();
+  state.combatActive = true;
+  log(`⚔️ EPIC RAID: Challenge against ${bossTemplate.name} initiated!`, 'rarity-legendary');
+  renderStageMonster();
+  combatTick = 0;
+  state._cds = {};
+  if (combatInterval) clearInterval(combatInterval);
+  combatInterval = setInterval(attackMonster, Math.round(200 / (state.combatSpeed || 1)));
 }
 
 function updateRaceClassUI() {
@@ -1046,6 +1237,7 @@ function updateAllUI() {
   safeUiUpdate('craft', updateCraftUI);
   safeUiUpdate('zone', updateZoneUI);
   safeUiUpdate('race-class', updateRaceClassUI);
+  safeUiUpdate('combat-controls', updateCombatControlsUI);
 }
 
 // --------------------------- VISUALS / STAGE ---------------------------
@@ -1172,6 +1364,17 @@ function attackMonster() {
   let damage = dealDamage(monster, atkVal, atkType);
   let wasCrit = false;
   
+  if (state.soulshotActive) {
+    const shotId = isMage ? 'spiritshot_ng' : 'soulshot_ng';
+    const shotItem = state.inventory.find(i => i.itemId === shotId && (i.count || 1) > 0);
+    if (shotItem) {
+      if (shotItem.count > 1) shotItem.count--;
+      else removeFromInventory(shotItem.uid, 1);
+      damage = Math.floor(damage * 2);
+      stageFloat('⚡ SHOT', 'sf-crit', 'left');
+    }
+  }
+
   if (Math.random() < stats.crit / 100) { 
     damage = Math.floor(damage * 1.5 * stats.critDmg); 
     wasCrit = true; 
@@ -1318,6 +1521,8 @@ export function init() {
     qsa('.equip-filter-btn').forEach(btn => { btn.onclick = () => { state.equipFilter = btn.dataset.equipfilter; qsa('.equip-filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); updateInventoryUI(); }; });
     const sellCommonsBtn = el('sell-commons-btn'); if (sellCommonsBtn) sellCommonsBtn.onclick = sellAllCommons;
     const salvageCommonsBtn = el('salvage-commons-btn'); if (salvageCommonsBtn) salvageCommonsBtn.onclick = salvageAllCommons;
+    const ssToggleBtn = el('soulshot-toggle-btn'); if (ssToggleBtn) ssToggleBtn.onclick = toggleSoulshot;
+    const spdToggleBtn = el('speed-toggle-btn'); if (spdToggleBtn) spdToggleBtn.onclick = toggleCombatSpeed;
     const startBtn = el('start-btn'); if (startBtn) startBtn.onclick = startGame;
     const resetBtn = el('reset-btn'); if (resetBtn) resetBtn.onclick = resetSave;
     const resFree = el('res-free'); if (resFree) resFree.onclick = () => resurrect(false);

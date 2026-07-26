@@ -128,7 +128,11 @@ const CONSUMABLES = {
   scroll_of_rebirth: { name: 'Scroll of Rebirth', slot: 'scroll', type: 'resurrect', loss: 0.0, price: 2000, stack: 99, desc: 'No XP loss on death' },
   attack_potion: { name: 'Attack Potion', slot: 'consumable', type: 'buff', stat: 'atk', amount: 10, duration: 300, price: 150, stack: 99, desc: '+10 ATK for 5 min' },
   defense_potion: { name: 'Defense Potion', slot: 'consumable', type: 'buff', stat: 'def', amount: 10, duration: 300, price: 150, stack: 99, desc: '+10 DEF for 5 min' },
-  speed_potion: { name: 'Speed Potion', slot: 'consumable', type: 'buff', stat: 'speed', amount: 15, duration: 300, price: 200, stack: 99, desc: '+15% Speed for 5 min' }
+  speed_potion: { name: 'Speed Potion', slot: 'consumable', type: 'buff', stat: 'speed', amount: 15, duration: 300, price: 200, stack: 99, desc: '+15% Speed for 5 min' },
+  soulshot_ng: { name: 'Soulshot (No-Grade)', slot: 'consumable', type: 'soulshot', price: 10, stack: 9999, desc: 'Increases physical attack damage by +100% on hit.' },
+  spiritshot_ng: { name: 'Spiritshot (No-Grade)', slot: 'consumable', type: 'spiritshot', price: 15, stack: 9999, desc: 'Increases magic attack damage by +100% on spell.' },
+  enchant_weapon_scroll: { name: 'Scroll: Enchant Weapon', slot: 'scroll', type: 'enchant_weapon', price: 1500, stack: 99, desc: 'Enchants a weapon (+10% stats per +1). Safe up to +3.' },
+  enchant_armor_scroll: { name: 'Scroll: Enchant Armor', slot: 'scroll', type: 'enchant_armor', price: 1000, stack: 99, desc: 'Enchants armor (+10% stats per +1). Safe up to +3.' }
 };
 
 const MATERIALS = {
@@ -249,6 +253,7 @@ Object.assign(ALL_ITEMS, CLASS_WEAPONS, CLASS_ARMORS, POWERUPS);
 const SHOP_INVENTORY = {
   talkingIsland: [
     { id: 'hp_potion_s', stock: 99 }, { id: 'mp_potion_s', stock: 99 },
+    { id: 'soulshot_ng', stock: 999 }, { id: 'spiritshot_ng', stock: 999 },
     { id: 'wooden_sword', stock: 1 }, { id: 'training_dagger', stock: 1 },
     { id: 'oak_staff', stock: 1 }, { id: 'short_bow', stock: 1 },
     { id: 'cloth_robe', stock: 1 }, { id: 'leather_vest', stock: 1 },
@@ -259,6 +264,8 @@ const SHOP_INVENTORY = {
   ],
   giranOutskirts: [
     { id: 'hp_potion_m', stock: 99 }, { id: 'mp_potion_m', stock: 99 },
+    { id: 'soulshot_ng', stock: 999 }, { id: 'spiritshot_ng', stock: 999 },
+    { id: 'enchant_weapon_scroll', stock: 99 }, { id: 'enchant_armor_scroll', stock: 99 },
     { id: 'iron_sword', stock: 1 }, { id: 'steel_dagger', stock: 1 },
     { id: 'crystal_staff', stock: 1 }, { id: 'composite_bow', stock: 1 },
     { id: 'iron_armor', stock: 1 }, { id: 'mage_robe', stock: 1 },

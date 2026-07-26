@@ -409,7 +409,44 @@ select:focus-visible {
   flex-direction: column;
   gap: 7px;
 }
-.log-panel { background: rgba(8,10,14,0.6); }
+.log-panel {
+  background: rgba(8,10,14,0.6);
+  display: flex;
+  flex-direction: column;
+}
+
+.combat-controls-bar {
+  display: flex;
+  gap: 8px;
+  padding: 6px 10px;
+  background: linear-gradient(180deg, rgba(20,24,32,0.95), rgba(12,14,20,0.95));
+  border-bottom: 1px solid var(--line);
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.combat-ctrl-btn {
+  background: linear-gradient(180deg, rgba(35,30,22,0.9), rgba(18,15,10,0.95));
+  border: 1px solid rgba(212,167,68,0.3);
+  color: var(--text-sub);
+  border-radius: 4px;
+  padding: 4px 10px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+.combat-ctrl-btn:hover {
+  background: linear-gradient(180deg, rgba(70,55,25,0.9), rgba(30,22,10,0.95));
+  color: var(--gilt-bright);
+  border-color: var(--gilt);
+}
+.combat-ctrl-btn.active {
+  background: linear-gradient(180deg, rgba(180,135,40,0.8), rgba(90,65,15,0.95));
+  color: #fff;
+  border-color: var(--gilt-bright);
+  box-shadow: 0 0 8px rgba(212,167,68,0.4);
+}
 .tabs-panel {
   background:
     linear-gradient(180deg, rgba(18, 21, 28, 0.96) 0%, rgba(10, 12, 18, 0.98) 100%),
@@ -1711,6 +1748,119 @@ select:focus-visible {
 ::-webkit-scrollbar-track { background: var(--bg-0); }
 ::-webkit-scrollbar-thumb { background: var(--line); border: 1px solid var(--bg-0); }
 ::-webkit-scrollbar-thumb:hover { background: var(--gilt-deep); }
+
+/* ============ SUBTABS & NEW VIEWS ============ */
+.craft-head, .zone-head-tabs {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.craft-subtabs, .zone-head-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.craft-subtab, .zone-subtab {
+  background: linear-gradient(180deg, rgba(35,30,22,0.9), rgba(18,15,10,0.95));
+  border: 1px solid rgba(212,167,68,0.3);
+  color: var(--text-sub);
+  border-radius: 4px;
+  padding: 5px 12px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+.craft-subtab.active, .zone-subtab.active {
+  background: linear-gradient(180deg, rgba(138,106,36,0.65), rgba(48,35,15,0.95));
+  color: var(--gilt-bright);
+  border-color: var(--gilt);
+  box-shadow: 0 0 10px rgba(212,167,68,0.25);
+}
+
+.craft-view, .zone-view {
+  display: none;
+}
+.craft-view.active, .zone-view.active {
+  display: block;
+}
+
+.enchant-workspace {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.enchant-card {
+  background: linear-gradient(180deg, rgba(20,24,32,0.9), rgba(10,12,16,0.95));
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 10px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+.enchant-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.enchant-item-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gilt-bright);
+}
+.enchant-item-sub {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.raid-boss-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+.raid-card {
+  background: linear-gradient(180deg, rgba(35,15,15,0.85), rgba(15,8,8,0.95));
+  border: 1px solid rgba(212,68,68,0.4);
+  border-radius: 6px;
+  padding: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+.raid-card-title {
+  font-family: "Cinzel", serif;
+  font-size: 13px;
+  color: #ff6b6b;
+  font-weight: 700;
+}
+.raid-card-desc {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+.raid-btn {
+  background: linear-gradient(180deg, #991b1b, #450a0a);
+  border: 1px solid #f87171;
+  color: #fff;
+  border-radius: 4px;
+  padding: 6px 14px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.raid-btn:hover {
+  background: linear-gradient(180deg, #dc2626, #7f1d1d);
+  box-shadow: 0 0 10px rgba(248,113,113,0.5);
+}
 
 /* ============ RESPONSIVE ============ */
 @media (max-width: 980px) {

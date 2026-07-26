@@ -62,6 +62,10 @@ export const IDLE_MARKUP = `
 
       <!-- Center: live battle stage + combat ticker (compact & centered) -->
       <section class="panel log-panel center-panel">
+        <div class="combat-controls-bar">
+          <button id="soulshot-toggle-btn" class="combat-ctrl-btn" title="Ativar Soulshot no combate (+100% dano físico/mágico por golpe)">⚡ Soulshot: OFF</button>
+          <button id="speed-toggle-btn" class="combat-ctrl-btn" title="Velocidade do combate (1x Normal ou 2x Turbo)">⏩ Velocidade: 1x</button>
+        </div>
         <div class="stage" id="stage" data-state="idle">
           <div class="st-layer st-sky"></div>
           <div class="st-layer st-sun"></div>
@@ -255,18 +259,44 @@ export const IDLE_MARKUP = `
             <div class="shop-list" id="shop-list"></div>
           </div>
 
-          <!-- Craft Tab -->
+          <!-- Craft & Enchant Tab -->
           <div id="tab-craft" class="tab-pane">
-            <h3>Forja de Itens &amp; Criação</h3>
-            <p class="stat-value">Nível de Forja: <span id="craft-level">1</span></p>
-            <p class="shop-info">Combine materiais e receitas para forjar relíquias poderosas.</p>
-            <div class="craft-list" id="craft-list"></div>
+            <div class="craft-head">
+              <h3>Forja &amp; Encantamento (+1 a +16)</h3>
+              <p class="stat-value">Nível de Forja: <span id="craft-level">1</span></p>
+            </div>
+            
+            <div class="craft-subtabs">
+              <button class="craft-subtab active" data-crafttab="recipes">⚒️ Receitas de Criação</button>
+              <button class="craft-subtab" data-crafttab="enchant">✨ Encantar Equipamento</button>
+            </div>
+
+            <div id="craft-recipes-view" class="craft-view active">
+              <p class="shop-info">Combine materiais para forjar armas e armaduras poderosas.</p>
+              <div class="craft-list" id="craft-list"></div>
+            </div>
+
+            <div id="craft-enchant-view" class="craft-view">
+              <p class="shop-info">Encante seus equipamentos usando Pergaminhos de Encantamento (+10% status por +1).</p>
+              <div class="enchant-workspace" id="enchant-workspace"></div>
+            </div>
           </div>
 
-          <!-- Zones Tab -->
+          <!-- Zones & Raids Tab -->
           <div id="tab-zones" class="tab-pane">
-            <h3>Locais de Caça &amp; Zonas</h3>
-            <div class="zone-list" id="zone-list"></div>
+            <div class="zone-head-tabs">
+              <button class="zone-subtab active" data-zonetab="map">🗺️ Zonas de Caça</button>
+              <button class="zone-subtab" data-zonetab="raids">🐉 Raids de Chefões Epicos</button>
+            </div>
+
+            <div id="zone-map-view" class="zone-view active">
+              <div class="zone-list" id="zone-list"></div>
+            </div>
+
+            <div id="zone-raids-view" class="zone-view">
+              <p class="shop-info">Desafie Chefões Épicos de Aden para obter recompensas e itens lendários!</p>
+              <div class="raid-boss-list" id="raid-boss-list"></div>
+            </div>
           </div>
         </div>
       </aside>
