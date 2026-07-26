@@ -2332,7 +2332,7 @@ function bindEvents() {
         else if (tabName === 'shop') safeUiUpdate('shop', updateShopUI);
         else if (tabName === 'craft') safeUiUpdate('craft', updateCraftUI);
         else if (tabName === 'enchant') safeUiUpdate('enchant', updateEnchantUI);
-        else if (tabName === 'zones') safeUiUpdate('zones', updateZonesUI);
+        else if (tabName === 'zones') safeUiUpdate('zones', updateZoneUI);
       };
     });
 
