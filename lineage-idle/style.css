@@ -1750,7 +1750,7 @@ select:focus-visible {
 #mystic-timer { color: var(--amethyst); font-weight: 700; }
 
 .shop-item {
-  display: flex; justify-content: space-between; align-items: center; gap: 8px;
+  display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap;
   padding: 7px 10px;
   background: linear-gradient(180deg, var(--bg-2), var(--bg-1));
   border: 1px solid var(--line);
@@ -1777,7 +1777,7 @@ select:focus-visible {
 }
 @keyframes buff-blink { 0%,100% { opacity: 0.4; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }
 
-.item-info { flex: 1; min-width: 0; }
+.item-info { flex: 1 1 180px; min-width: 0; word-break: break-word; }
 .item-name {
   font-family: "Cinzel", serif;
   font-weight: 700; font-size: 12px;

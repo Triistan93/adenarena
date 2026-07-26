@@ -262,7 +262,7 @@ const DEFAULT_STATE = () => ({
     weaponMastM: 0, energyBolt: 1, robeMast: 0, iceBolt: 0, antiMagic: 0, auraBurn: 0, higherMana: 0, blaze: 0, boostMana: 0, quickRecycle: 0, vampiric: 0, flameStrike: 0,
     armorMast: 0, mortalBlow: 1, wpnMastF: 0, powerSmash: 0, lightArmor: 0, stunAttack: 0, heavyArmor: 0, wildSweep: 0, boostHp: 0, warCry: 0, fatalStrike: 0, powerCrush: 0
   },
-  zone: null, currentSaga: 0, gold: 0, inventory: [], 
+  zone: 'talkingIsland', currentSaga: 0, gold: 1000, inventory: [], 
   equipment: { weapon: null, armor: null, helmet: null, gloves: null, boots: null, ring: null },
   craftLevel: 1, craftXp: 0, shopTab: 'gear', selectedSkill: null, filter: 'all',
   craftTab: 'recipes', zoneTab: 'map', soulshotActive: false, combatSpeed: 1,
@@ -1367,9 +1367,10 @@ function showSkillTooltip(skillId, e) {
 }
 
 function updateShopUI() {
+  if (!state.zone && state.race && RACES[state.race]?.startZone) state.zone = RACES[state.race].startZone;
+  if (!state.zone) state.zone = 'talkingIsland';
   qsa('.shop-subtab').forEach(b => { b.classList.toggle('active', b.dataset.shoptab === state.shopTab); b.onclick = () => { state.shopTab = b.dataset.shoptab; updateShopUI(); }; });
   const list = el('shop-list'); if (!list) return; list.innerHTML = '';
-  if (!state.zone && state.shopTab !== 'powerups' && state.shopTab !== 'mystic') { list.innerHTML = '<p class="shop-empty">Travel to a zone to visit the merchant.</p>'; return; }
   if (state.shopTab === 'gear') renderShopGear(list); else if (state.shopTab === 'potions') renderShopPotions(list); else if (state.shopTab === 'powerups') renderShopPowerups(list); else if (state.shopTab === 'class') renderShopClass(list); else if (state.shopTab === 'mystic') renderShopMystic(list);
   list.querySelectorAll('[data-buy]').forEach(btn => btn.onclick = () => buyItem(btn.dataset.buy, parseInt(btn.dataset.qty || 1)));
   list.querySelectorAll('[data-buy-rarity]').forEach(btn => btn.onclick = () => buyMysticItem(btn.dataset.buyRarity, btn.dataset.rarity));
