@@ -1315,6 +1315,47 @@ function hideItemTooltip() {
   if (tt) tt.style.display = 'none'; 
 }
 
+function hideSkillTooltip() {
+  hideItemTooltip();
+}
+
+function showSkillTooltip(skillId, e) {
+  state.selectedSkill = skillId;
+  updateSkillInfoPanel();
+  cancelHideTooltip();
+  const def = SKILL_DEFS[skillId];
+  if (!def) return;
+  
+  const tt = el('item-tooltip');
+  if (!tt) return;
+
+  const lvl = state.skills[skillId] || 0;
+  const max = def.max;
+  const reqs = SKILL_REQS[skillId];
+  const reqText = reqs ? Object.entries(reqs).map(([s, v]) => `${SKILL_DEFS[s]?.name || s} ${v}`).join(', ') : 'Nenhum';
+  const tier = TIER_NAMES[def.tier] || '';
+
+  tt.innerHTML = `
+    <div class="tt-header rarity-epic">
+      <span class="tt-icon">${def.icon || '✦'}</span>
+      <div class="tt-title">
+        <div class="tt-name" style="color:var(--gilt); font-weight:700;">${def.name}</div>
+        <div class="tt-slot">${tier} · Lv.${lvl}/${max}</div>
+      </div>
+    </div>
+    <div class="tt-body" style="padding-top:6px;">
+      <p class="tt-desc">${def.desc || ''}</p>
+      <div class="tt-effect" style="margin-top:6px; color:#f0d080; font-weight:600;">${def.info || ''}</div>
+      <div style="margin-top:6px; font-size:10px; color:#888;">Requisitos: ${reqText} (Lv.${def.reqLvl || 1})</div>
+    </div>
+  `;
+
+  tt.style.display = 'block';
+  tt.style.zIndex = '999999';
+  tt.onmouseenter = cancelHideTooltip;
+  tt.onmouseleave = scheduleHideTooltip;
+}
+
 function updateShopUI() {
   qsa('.shop-subtab').forEach(b => { b.classList.toggle('active', b.dataset.shoptab === state.shopTab); b.onclick = () => { state.shopTab = b.dataset.shoptab; updateShopUI(); }; });
   const list = el('shop-list'); if (!list) return; list.innerHTML = '';
@@ -2262,17 +2303,10 @@ function startGame() {
 
 function attachGlobalErrorHandlers() {
   window.addEventListener('error', (event) => {
-    console.error('Global runtime error:', event.error || event.message);
-    const logEl = el('log');
-    if (logEl) {
-      const entry = mkEl('p');
-      entry.className = 'log-entry system';
-      entry.textContent = 'A non-fatal game error occurred. The interface will keep trying to recover.';
-      logEl.appendChild(entry);
-    }
+    console.warn('Global runtime notice:', event.error || event.message);
   });
   window.addEventListener('unhandledrejection', (event) => {
-    console.error('Unhandled promise rejection:', event.reason);
+    console.warn('Unhandled promise rejection:', event.reason);
     event.preventDefault();
   });
 }
@@ -2402,14 +2436,7 @@ export function init() {
     _intervals.push(setInterval(save, 30000)); 
     _intervals.push(setInterval(tickUI, 1000));
   } catch (err) {
-    console.error('Game init failed:', err);
-    const logEl = el('log');
-    if (logEl) {
-      const entry = mkEl('p');
-      entry.className = 'log-entry system';
-      entry.textContent = 'The game encountered a startup issue. Please refresh the page.';
-      logEl.appendChild(entry);
-    }
+    console.warn('Game init warning:', err);
   }
 }
 
