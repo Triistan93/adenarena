@@ -122,6 +122,16 @@ export const IDLE_MARKUP = `
                 <div class="portrait-sub" id="portrait-sub">Choose your lineage</div>
               </div>
             </div>
+
+            <!-- Class Advancement Promotion Banner -->
+            <div id="class-advancement-banner" class="class-advancement-banner" style="display:none;">
+              <div class="banner-icon">⚔️</div>
+              <div class="banner-info">
+                <h4 id="class-advancement-title">1ª Troca de Classe Disponível!</h4>
+                <p id="class-advancement-sub">Atingiu Nível 20! Escolha a evolução da sua Ordem de Aden.</p>
+              </div>
+              <button id="class-advancement-btn" class="class-adv-action-btn">🎖️ Avançar Classe</button>
+            </div>
             <div class="pane-section">
               <h3>Raça (Race)</h3>
               <div class="race-grid">
@@ -421,6 +431,18 @@ export const IDLE_MARKUP = `
         <p id="offline-desc">Enquanto esteve ausente, seu herói continuou o treinamento em Aden.</p>
         <div id="offline-rewards" style="margin: 14px 0; font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--gilt-bright);"></div>
         <button id="offline-ok" class="action-btn action-btn--primary">Coletar Recompensas ⚔️</button>
+      </div>
+    </div>
+
+    <!-- Class Transfer Modal -->
+    <div id="class-transfer-modal" class="modal">
+      <div class="modal-content class-transfer-box">
+        <h2 id="class-modal-heading">📜 Cerimônia de Avanço de Classe</h2>
+        <p class="modal-sub">Escolha o seu caminho definitivo de evolução em Aden. Esta promoção concederá novos atributos, bônus passivos e desbloqueará habilidades de ordem nobre!</p>
+        <div id="class-options-container" class="class-options-container"></div>
+        <div class="modal-actions" style="margin-top: 16px;">
+          <button id="close-class-modal-btn" class="action-btn">Fechar</button>
+        </div>
       </div>
     </div>
 

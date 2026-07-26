@@ -22,12 +22,38 @@ const RACES = {
 };
 
 const CLASSES = {
-  fighter: { name: 'Fighter', desc: 'A melee warrior with high attack and defense.', base: { atk: 10, def: 5, mdef: 0 } },
-  mage: { name: 'Mage', desc: 'A spellcaster with powerful magic attacks.', base: { atk: 0, def: 0, matk: 10, mdef: 5 } }
+  // Base Tier 0 (Level 1)
+  fighter: { name: 'Fighter', archetype: 'fighter', stage: 0, desc: 'A melee warrior with high attack and defense.', base: { atk: 10, def: 5, mdef: 0 } },
+  mage: { name: 'Mage', archetype: 'mage', stage: 0, desc: 'A spellcaster with powerful magic attacks.', base: { atk: 0, def: 0, matk: 10, mdef: 5 } },
+  artisan: { name: 'Artisan', archetype: 'artisan', stage: 0, desc: 'A master craftsman with bonus loot.', base: { atk: 6, def: 6, matk: 0, mdef: 0, lootBonus: 0.2 } },
+  soulbreaker: { name: 'Soulbreaker', archetype: 'soulbreaker', stage: 0, desc: 'A dual-wielding Kamael warrior.', base: { atk: 12, def: -2, eva: 8, matk: 0, mdef: 0 } },
+
+  // 1st Class Transfer (Level 20)
+  warrior: { name: 'Warrior', archetype: 'fighter', stage: 1, parent: 'fighter', desc: 'Master of heavy blades and physical power.', base: { atk: 25, def: 12, hp: 50, mdef: 5 } },
+  knight: { name: 'Knight', archetype: 'fighter', stage: 1, parent: 'fighter', desc: 'Shield-bearer devoted to protecting allies.', base: { atk: 15, def: 28, hp: 120, mdef: 15 } },
+  rogue: { name: 'Rogue', archetype: 'fighter', stage: 1, parent: 'fighter', desc: 'Swift assassin favoring critical blows and agility.', base: { atk: 22, def: 10, eva: 12, crit: 8, mdef: 5 } },
+  wizard: { name: 'Wizard', archetype: 'mage', stage: 1, parent: 'mage', desc: 'Master of elemental destruction spells.', base: { matk: 32, mdef: 18, mp: 80, atk: 5 } },
+  cleric: { name: 'Cleric', archetype: 'mage', stage: 1, parent: 'mage', desc: 'Holy servant capable of divine healing and buffs.', base: { matk: 20, mdef: 25, def: 18, hp: 40, mp: 60 } },
+  scavenger: { name: 'Scavenger', archetype: 'artisan', stage: 1, parent: 'artisan', desc: 'Expert scavenger uncovering rare spoils.', base: { atk: 18, def: 18, lootBonus: 0.35 } },
+  trooper: { name: 'Trooper', archetype: 'soulbreaker', stage: 1, parent: 'soulbreaker', desc: 'Kamael blade master with dark burst potential.', base: { atk: 30, eva: 12, crit: 10 } },
+
+  // 2nd Class Transfer (Level 40)
+  gladiator: { name: 'Gladiator', archetype: 'fighter', stage: 2, parent: 'warrior', desc: 'Dual-blade champion devastating foes in close combat.', base: { atk: 55, def: 25, hp: 150, crit: 12 } },
+  warlord: { name: 'Warlord', archetype: 'fighter', stage: 2, parent: 'warrior', desc: 'Polearm master striking multiple enemies at once.', base: { atk: 48, def: 35, hp: 180, mdef: 20 } },
+  paladin: { name: 'Paladin', archetype: 'fighter', stage: 2, parent: 'knight', desc: 'Holy defender infused with sacred light.', base: { atk: 32, def: 60, hp: 280, mdef: 35 } },
+  darkAvenger: { name: 'Dark Avenger', archetype: 'fighter', stage: 2, parent: 'knight', desc: 'Dread knight commanding dark aura and punishment.', base: { atk: 45, def: 50, hp: 220, mdef: 30 } },
+  treasureHunter: { name: 'Treasure Hunter', archetype: 'fighter', stage: 2, parent: 'rogue', desc: 'Deadly assassin executing lethal strikes.', base: { atk: 50, def: 18, eva: 25, crit: 20 } },
+  hawkeye: { name: 'Hawkeye', archetype: 'fighter', stage: 2, parent: 'rogue', desc: 'Master archer striking from maximum distance.', base: { atk: 58, def: 15, eva: 18, crit: 18 } },
+  sorcerer: { name: 'Sorcerer', archetype: 'mage', stage: 2, parent: 'wizard', desc: 'Archon of fire unleashing apocalyptic blazes.', base: { matk: 70, mdef: 40, mp: 180 } },
+  necromancer: { name: 'Necromancer', archetype: 'mage', stage: 2, parent: 'wizard', desc: 'Dark lord summoning undead and draining vitality.', base: { matk: 65, mdef: 35, mp: 150, hp: 80 } },
+  bishop: { name: 'Bishop', archetype: 'mage', stage: 2, parent: 'cleric', desc: 'Supreme healer capable of miraculous restoration.', base: { matk: 45, mdef: 55, def: 30, mp: 160 } },
+  prophet: { name: 'Prophet', archetype: 'mage', stage: 2, parent: 'cleric', desc: 'Grand buffer empowering allies with ancient chants.', base: { matk: 40, mdef: 45, def: 40, hp: 100 } },
+  bountyHunter: { name: 'Bounty Hunter', archetype: 'artisan', stage: 2, parent: 'scavenger', desc: 'Fortune hunter maximizing spoils and rare drops.', base: { atk: 40, def: 40, lootBonus: 0.5 } },
+  soulhound: { name: 'Soulhound', archetype: 'soulbreaker', stage: 2, parent: 'trooper', desc: 'Master of rapier and dark souls.', base: { atk: 62, eva: 20, crit: 18 } }
 };
 
-const DWARF_CLASS = { name: 'Artisan', desc: 'A master craftsman with bonus loot.', base: { atk: 6, def: 6, matk: 0, mdef: 0, lootBonus: 0.2 } };
-const KAMAEL_CLASS = { name: 'Soulbreaker', desc: 'A dual-wielding warrior with high burst.', base: { atk: 12, def: -2, eva: 8, matk: 0, mdef: 0 } };
+const DWARF_CLASS = CLASSES.artisan;
+const KAMAEL_CLASS = CLASSES.soulbreaker;
 
 // --------------------------- SKILLS & TALENT TREES ---------------------------
 const SKILL_DEFS = {
@@ -345,9 +371,125 @@ function getStats() {
 }
 
 function getClass(c) {
-  if (c === 'artisan') return DWARF_CLASS;
-  if (c === 'soulbreaker') return KAMAEL_CLASS;
-  return CLASSES[c];
+  if (!c) return CLASSES.fighter;
+  return CLASSES[c] || CLASSES.fighter;
+}
+
+function classSatisfies(playerClass, reqClass) {
+  if (!reqClass) return true;
+  if (playerClass === reqClass) return true;
+  const pDef = getClass(playerClass);
+  if (!pDef) return false;
+  if (pDef.archetype === reqClass) return true;
+  if (pDef.parent === reqClass) return true;
+  const parentDef = getClass(pDef.parent);
+  if (parentDef && (parentDef.archetype === reqClass || parentDef.parent === reqClass)) return true;
+  return false;
+}
+
+function checkClassAdvancement() {
+  const currentClassDef = getClass(state.class);
+  const currentStage = currentClassDef?.stage || 0;
+  const banner = el('class-advancement-banner');
+  if (!banner) return;
+
+  let canAdvance = false;
+  let advTitle = '';
+  let advSub = '';
+
+  if (state.level >= 20 && currentStage === 0) {
+    canAdvance = true;
+    advTitle = '⚡ 1ª Troca de Classe Disponível!';
+    advSub = `Atingiu o Nível ${state.level}! Escolha o caminho de evolução para a Ordem de ${currentClassDef.name}.`;
+  } else if (state.level >= 40 && currentStage === 1) {
+    canAdvance = true;
+    advTitle = '⚔️ 2ª Troca de Classe Disponível!';
+    advSub = `Atingiu o Nível ${state.level}! Escolha a sua Classe Épica de Noblesses.`;
+  }
+
+  if (canAdvance) {
+    banner.style.display = 'flex';
+    const titleEl = el('class-advancement-title');
+    const subEl = el('class-advancement-sub');
+    if (titleEl) titleEl.textContent = advTitle;
+    if (subEl) subEl.textContent = advSub;
+    const btn = el('class-advancement-btn');
+    if (btn) btn.onclick = openClassTransferModal;
+  } else {
+    banner.style.display = 'none';
+  }
+}
+
+function openClassTransferModal() {
+  const currentClassDef = getClass(state.class);
+  const currentStage = currentClassDef?.stage || 0;
+  const targetStage = currentStage + 1;
+  const modal = el('class-transfer-modal');
+  const container = el('class-options-container');
+  if (!modal || !container) return;
+
+  container.innerHTML = '';
+
+  const availableOptions = Object.entries(CLASSES).filter(([id, def]) => {
+    if (def.stage !== targetStage) return false;
+    if (targetStage === 1 && (def.parent === state.class || def.archetype === state.class)) return true;
+    if (targetStage === 2 && (def.parent === state.class || def.archetype === currentClassDef.archetype)) return true;
+    return false;
+  });
+
+  if (!availableOptions.length) {
+    container.innerHTML = '<p class="shop-empty">Nenhum caminho de promoção disponível.</p>';
+    modal.classList.add('active');
+    return;
+  }
+
+  for (const [classId, def] of availableOptions) {
+    const card = mkEl('div'); card.className = 'class-option-card';
+    const statsStr = Object.entries(def.base || {}).map(([k, v]) => `+${v} ${k.toUpperCase()}`).join(' · ');
+    card.innerHTML = `
+      <div class="class-opt-header">
+        <div class="class-opt-name">🎖️ ${def.name}</div>
+        <span class="rarity-tag" style="color:#ffe082;">${targetStage === 1 ? '1ª Classe' : '2ª Classe Épica'}</span>
+      </div>
+      <div class="class-opt-desc">${def.desc}</div>
+      <div class="class-opt-bonus">✨ Bônus de Atributos: ${statsStr}</div>
+      <button class="class-opt-promote-btn" data-promote="${classId}">Promover a ${def.name}</button>
+    `;
+    container.appendChild(card);
+  }
+
+  container.querySelectorAll('[data-promote]').forEach(btn => {
+    btn.onclick = () => promoteClass(btn.dataset.promote);
+  });
+
+  const closeBtn = el('close-class-modal-btn');
+  if (closeBtn) closeBtn.onclick = () => modal.classList.remove('active');
+
+  modal.classList.add('active');
+}
+
+function promoteClass(newClassId) {
+  const newClassDef = getClass(newClassId);
+  if (!newClassDef) return;
+
+  state.class = newClassId;
+  
+  const race = RACES[state.race];
+  state.base = { atk: 0, def: 0, eva: 0, matk: 0, mdef: 0 };
+  if (race) {
+    for (const k of ['atk','def','eva','matk','mdef']) {
+      state.base[k] = (race.stats[k] || 0) + (newClassDef.base[k] || 0);
+    }
+  }
+
+  log(`🎉 PARABÉNS! Você concluiu a Cerimônia e agora é um **${newClassDef.name}**!`, 'rarity-legendary');
+  floatText(`🎉 ${newClassDef.name.toUpperCase()}!`, 'float-jackpot');
+
+  const modal = el('class-transfer-modal');
+  if (modal) modal.classList.remove('active');
+
+  updateAllUI();
+  save();
 }
 
 // --------------------------- INVENTORY / SALVAGE ---------------------------
@@ -806,12 +948,12 @@ function updateSkillUI() {
   const H = rows * TREE_NODE_H + TREE_PAD_Y * 2;
   wrap.style.width = W + 'px'; wrap.style.height = H + 'px';
 
-  const isMage = state.class === 'mage' || state.class === 'soulbreaker';
-  const activeTreeClass = isMage ? 'mage' : 'fighter';
+  const pDef = getClass(state.class);
+  const activeTreeClass = pDef?.archetype || 'fighter';
 
   const pos = {};
   for (const [id, layout] of Object.entries(SKILL_TREE_LAYOUT)) {
-    if (SKILL_DEFS[id] && SKILL_DEFS[id].classReq === activeTreeClass) {
+    if (SKILL_DEFS[id] && classSatisfies(state.class, SKILL_DEFS[id].classReq)) {
       pos[id] = { x: TREE_PAD_X + layout.col * TREE_NODE_W + TREE_NODE_W / 2, y: TREE_PAD_Y + layout.row * TREE_NODE_H + TREE_NODE_H / 2 };
     }
   }
@@ -1477,7 +1619,7 @@ function updateRaceClassUI() {
   qsa('.class-btn').forEach(btn => { const c = btn.dataset.class; btn.disabled = (state.race === 'dwarf' || state.race === 'kamael'); btn.classList.toggle('selected', c === state.class); });
   qs('.race-desc').textContent = state.race ? RACES[state.race].desc : 'Select a race.';
   qs('.class-desc').textContent = state.class ? getClass(state.class).desc : 'Select a class.';
-  renderStageHero(); updateSkillUI();
+  renderStageHero(); updateSkillUI(); checkClassAdvancement();
 }
 
 function updateClock() { const now = Date.now(), elapsed = Math.floor((now - state.startTime + (state.totalPlaytime || 0)) / 1000), h = Math.floor(elapsed / 3600), m = Math.floor((elapsed % 3600) / 60), s = elapsed % 60; const _ck = el('clock'); if (_ck) _ck.textContent = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`; }
