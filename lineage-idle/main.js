@@ -181,14 +181,14 @@ const SKILL_TREE_LAYOUT = {
   robeMast: { col: 1, row: 0 }, iceBolt: { col: 1, row: 2 },
   antiMagic: { col: 2, row: 1 }, auraBurn: { col: 2, row: 3 },
   higherMana: { col: 3, row: 0 }, greaterHeal: { col: 3, row: 1 }, blaze: { col: 3, row: 2 }, prominence: { col: 3, row: 3 }, boostMana: { col: 3, row: 4 },
-  quickRecycle: { col: 4, row: 1 }, deathSpike: { col: 4, row: 2 }, vampiric: { col: 4, row: 3 }, flameStrike: { col: 4, row: 4 },
+  solarFlare: { col: 4, row: 0 }, quickRecycle: { col: 4, row: 1 }, deathSpike: { col: 4, row: 2 }, vampiric: { col: 4, row: 3 }, flameStrike: { col: 4, row: 4 }, hurricane: { col: 4, row: 5 },
 
   // Fighter
   armorMast: { col: 0, row: 1 }, mortalBlow: { col: 0, row: 3 },
   wpnMastF: { col: 1, row: 0 }, powerSmash: { col: 1, row: 2 },
   lightArmor: { col: 2, row: 1 }, stunAttack: { col: 2, row: 3 },
   heavyArmor: { col: 3, row: 0 }, shieldStun: { col: 3, row: 1 }, wildSweep: { col: 3, row: 2 }, tripleSlash: { col: 3, row: 3 }, boostHp: { col: 3, row: 4 },
-  warCry: { col: 4, row: 1 }, lethalBlow: { col: 4, row: 3 }, fatalStrike: { col: 4, row: 4 }, powerCrush: { col: 4, row: 5 }
+  frenzy: { col: 4, row: 0 }, warCry: { col: 4, row: 1 }, bisonPummel: { col: 4, row: 2 }, danceOfFire: { col: 4, row: 3 }, lethalBlow: { col: 4, row: 4 }, fatalStrike: { col: 4, row: 5 }, powerCrush: { col: 4, row: 5 }
 };
 const TIER_NAMES = ['Foundation', 'Discipline', 'Mastery', 'Ascendancy', 'Legend'];
 
@@ -1031,7 +1031,7 @@ const TREE_NODE_W = 110; const TREE_NODE_H = 78; const TREE_PAD_X = 14; const TR
 function updateSkillUI() {
   const wrap = el('skill-tree');
   if (!wrap) return;
-  const cols = 5, rows = 5;
+  const cols = 5, rows = 6;
   const W = cols * TREE_NODE_W + TREE_PAD_X * 2;
   const H = rows * TREE_NODE_H + TREE_PAD_Y * 2;
   wrap.style.width = W + 'px'; wrap.style.height = H + 'px';
@@ -1725,8 +1725,8 @@ function startRaidBoss(raidId) {
 function updateRaceClassUI() {
   qsa('.race-btn').forEach(btn => { const r = btn.dataset.race; btn.disabled = (r === 'ertheia' && state.level < 10); btn.classList.toggle('selected', r === state.race); });
   qsa('.class-btn').forEach(btn => { const c = btn.dataset.class; btn.disabled = (state.race === 'dwarf' || state.race === 'kamael'); btn.classList.toggle('selected', c === state.class); });
-  qs('.race-desc').textContent = state.race ? RACES[state.race].desc : 'Select a race.';
-  qs('.class-desc').textContent = state.class ? getClass(state.class).desc : 'Select a class.';
+  const rd = qs('.race-desc'); if (rd) rd.textContent = state.race ? (RACES[state.race]?.desc || '') : 'Select a race.';
+  const cd = qs('.class-desc'); if (cd) cd.textContent = state.class ? (getClass(state.class)?.desc || '') : 'Select a class.';
   renderStageHero(); updateSkillUI(); checkClassAdvancement();
 }
 
