@@ -1124,113 +1124,492 @@ select:focus-visible {
   filter: grayscale(0.8);
 }
 
-.inventory-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-  gap: 6px;
-  margin-bottom: 8px;
-  min-height: 120px;
+/* ============================================================
+   AUTHENTIC LINEAGE 2 CLASSIC INVENTORY & PAPERDOLL WINDOW
+   ============================================================ */
+
+#tab-inventory {
+  display: flex;
+  flex-direction: column;
+  background: #1e1814;
+  border: 3px solid #5a462e;
+  border-image: linear-gradient(to bottom, #7a6040, #3e2e18, #2a1e0f) 1;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.9), inset 0 0 15px rgba(0,0,0,0.8);
+  font-family: "IBM Plex Mono", monospace;
+  color: #c8b898;
+  padding: 0;
+  border-radius: 4px;
+  overflow: hidden;
 }
-.inv-slot {
-  aspect-ratio: 1.1;
-  background: linear-gradient(180deg, var(--bg-2), var(--bg-1));
-  border: 1px solid var(--line);
-  border-radius: 6px;
+
+/* ---- Window Top Header Frame ---- */
+.l2inv-header-frame {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(180deg, #3c2e1e 0%, #281e12 60%, #1a120a 100%);
+  border-bottom: 2px solid #5a462e;
+  padding: 4px 10px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+}
+.l2inv-title-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.l2inv-window-icon {
+  font-size: 14px;
+}
+.l2inv-window-title {
+  font-family: "Cinzel", serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: #e8d098;
+  letter-spacing: 0.08em;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.9);
+}
+.l2inv-counter {
+  font-size: 11px;
+  color: #a89470;
+  margin-left: 4px;
+}
+.l2inv-window-controls {
+  display: flex;
+  gap: 2px;
+}
+.l2inv-win-btn {
+  background: linear-gradient(180deg, #382c1c, #20180d);
+  border: 1px solid #5a462e;
+  color: #a89470;
+  font-size: 10px;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 2px;
+  padding: 0;
+  line-height: 1;
+}
+.l2inv-win-btn:hover {
+  background: linear-gradient(180deg, #58442c, #382c1c);
+  color: #f0d080;
+  border-color: #8a6c40;
+}
+.l2inv-win-btn.close:hover {
+  background: linear-gradient(180deg, #782828, #481414);
+  color: #ffaaaa;
+  border-color: #a83838;
+}
+
+/* ---- Main 2-Panel Workspace ---- */
+.l2inv-main-container {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  background: #140e0a;
+}
+
+/* ---- Left Panel: 3-column Paperdoll Equipment + Stats ---- */
+.l2inv-left-paperdoll {
+  width: 170px;
+  min-width: 170px;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 6px;
+  background:
+    radial-gradient(ellipse at center, rgba(45,32,20,0.4) 0%, rgba(15,10,6,0.95) 100%),
+    linear-gradient(180deg, #18120c, #0e0a06);
+  border-right: 2px solid #3c2e1e;
+  box-shadow: inset -3px 0 10px rgba(0,0,0,0.5);
+  gap: 8px;
+}
+
+.l2inv-paperdoll-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+}
+.l2inv-doll-col {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.l2inv-pd-slot {
+  aspect-ratio: 1;
+  background:
+    linear-gradient(135deg, rgba(30,22,14,0.9) 0%, rgba(10,7,4,0.95) 100%);
+  border: 1px solid #3e2e1c;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.12s;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.03),
+    inset 0 -1px 0 rgba(0,0,0,0.6),
+    inset 1px 0 0 rgba(255,255,255,0.02);
+}
+.l2inv-pd-slot:hover {
+  border-color: #8a6c40;
+  box-shadow: 0 0 8px rgba(200,168,78,0.3), inset 0 0 8px rgba(200,168,78,0.15);
+}
+.l2inv-pd-slot.has-item {
+  border-color: #6a5030;
+  background: linear-gradient(135deg, rgba(55,40,22,0.9), rgba(20,14,6,0.98));
+}
+.l2inv-pd-slot.has-item.rarity-uncommon { border-color: rgba(70,140,90,0.8); }
+.l2inv-pd-slot.has-item.rarity-rare     { border-color: rgba(70,110,180,0.85); box-shadow: inset 0 0 6px rgba(70,110,180,0.35); }
+.l2inv-pd-slot.has-item.rarity-epic     { border-color: rgba(140,80,180,0.85); box-shadow: inset 0 0 8px rgba(140,80,180,0.45); }
+.l2inv-pd-slot.has-item.rarity-legendary {
+  border-color: #d4a744;
+  box-shadow: inset 0 0 10px rgba(212,167,68,0.6), 0 0 8px rgba(212,167,68,0.4);
+  animation: legendary-glow 2.5s ease-in-out infinite alternate;
+}
+
+.l2inv-pd-icon {
+  font-size: 16px;
+  filter: grayscale(0.8) opacity(0.4);
+  transition: all 0.12s;
+}
+.l2inv-pd-slot:hover .l2inv-pd-icon,
+.l2inv-pd-slot.has-item .l2inv-pd-icon {
+  filter: grayscale(0) opacity(1);
+}
+
+.l2inv-pd-item {
+  position: absolute;
+  bottom: 1px;
+  right: 2px;
+  font-size: 7px;
+  font-weight: bold;
+  color: #f0d080;
+  text-shadow: 0 1px 2px #000;
+}
+
+/* Paperdoll Stats Box */
+.l2inv-stats-box {
+  background: rgba(12,8,5,0.8);
+  border: 1px solid #3c2e1e;
+  border-radius: 2px;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 9.5px;
+}
+.l2inv-stat-row {
+  display: flex;
+  justify-content: space-between;
+  color: #8a7858;
+}
+.l2inv-stat-row strong {
+  color: #d4a744;
+}
+.l2inv-unequip-all {
+  margin-top: 4px;
+  background: linear-gradient(180deg, #3a2818, #201408);
+  border: 1px solid #5a4228;
+  color: #a88850;
+  font-size: 8.5px;
+  padding: 3px;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.12s;
+}
+.l2inv-unequip-all:hover {
+  background: linear-gradient(180deg, #583c20, #382410);
+  color: #f0d080;
+  border-color: #8a6630;
+}
+
+/* ---- Right Panel: Item Grid Area ---- */
+.l2inv-right-grid-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* L2 Classic Metallic Filter Tabs Header */
+.l2inv-tabs-header {
+  display: flex;
+  background: linear-gradient(180deg, #241a10 0%, #181008 100%);
+  border-bottom: 2px solid #3c2e1e;
+  padding: 3px 4px 0;
+  gap: 2px;
+}
+.l2inv-tab-btn {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 5px 12px;
+  background: linear-gradient(180deg, #342618 0%, #20160b 100%);
+  border: 1px solid #4a3622;
+  border-bottom: none;
+  color: #8a7650;
+  cursor: pointer;
+  border-radius: 3px 3px 0 0;
+  transition: all 0.12s;
+  letter-spacing: 0.04em;
+}
+.l2inv-tab-btn:hover {
+  background: linear-gradient(180deg, #483622 0%, #2e1e0e 100%);
+  color: #d4a744;
+}
+.l2inv-tab-btn.active {
+  background: linear-gradient(180deg, #4e3820 0%, #281a0a 100%);
+  border-color: #7a5c36;
+  color: #f0d080;
+  text-shadow: 0 0 6px rgba(240,208,128,0.4);
+}
+
+/* Subbar */
+.l2inv-subbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 8px;
+  background: #140d08;
+  border-bottom: 1px solid #2e2012;
+  gap: 6px;
+}
+.l2inv-rarity-pills, .l2inv-batch-pills {
+  display: flex;
+  gap: 2px;
+}
+.l2inv-rarity-pills .rarity-filter-btn {
+  font-size: 8.5px;
+  padding: 2px 6px;
+  background: #1c140c;
+  border: 1px solid #3a2818;
+  color: #7a6644;
+  border-radius: 2px;
+  cursor: pointer;
+}
+.l2inv-rarity-pills .rarity-filter-btn.active {
+  background: #3e2a14;
+  border-color: #8a6428;
+  color: #f0d080;
+}
+.l2inv-pill-btn {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 8px;
+  padding: 2px 5px;
+  background: #1c140c;
+  border: 1px solid #3a2818;
+  color: #7a6644;
+  cursor: pointer;
+  border-radius: 2px;
+}
+.l2inv-pill-btn:hover {
+  background: #342412;
+  color: #d4a744;
+}
+
+/* 8-Column Items Slots Grid */
+.l2inv-slots-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-auto-rows: min-content;
+  gap: 2px;
+  padding: 6px;
+  background:
+    repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.3) 35px, rgba(0,0,0,0.3) 36px),
+    linear-gradient(180deg, #1a120a 0%, #100a05 100%);
+  overflow-y: auto;
+  max-height: 280px;
+  min-height: 200px;
+}
+
+.l2inv-slots-grid::-webkit-scrollbar { width: 6px; }
+.l2inv-slots-grid::-webkit-scrollbar-track { background: #0c0804; }
+.l2inv-slots-grid::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #4a3622, #261a0c);
+  border-radius: 3px;
+  border: 1px solid #342412;
+}
+
+/* Individual Slot inside 8-col grid */
+.l2inv-slots-grid .inv-slot {
+  aspect-ratio: 1;
+  background:
+    linear-gradient(135deg, rgba(42,30,18,0.9) 0%, rgba(12,8,4,0.98) 100%);
+  border: 1px solid #2e2012;
+  border-radius: 2px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
   position: relative;
-  padding: 6px 4px;
-  transition: all .18s;
+  cursor: pointer;
+  padding: 2px;
+  transition: all 0.1s;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.03),
+    inset 0 -1px 0 rgba(0,0,0,0.7),
+    inset 1px 0 0 rgba(255,255,255,0.02);
 }
-.inv-slot:hover {
-  transform: translateY(-2px);
-  border-color: var(--gilt);
-  box-shadow: 0 4px 14px rgba(0,0,0,0.5), 0 0 10px rgba(212,167,68,0.2);
+
+.l2inv-slots-grid .inv-slot:hover {
+  border-color: #d4a744;
+  box-shadow: 0 0 10px rgba(212,167,68,0.4), inset 0 0 10px rgba(212,167,68,0.2);
+  z-index: 5;
 }
-.inv-slot.is-equipped {
-  background: linear-gradient(180deg, rgba(26,40,35,0.9), rgba(13,20,18,0.9));
-  border-color: rgba(90,161,138,0.7);
+
+.l2inv-slots-grid .inv-slot .name {
+  font-size: 6.5px;
+  color: #7a6848;
+  text-align: center;
+  line-height: 1.1;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-top: 1px;
 }
-.inv-slot.is-selected {
-  border: 2px solid var(--gilt-bright) !important;
-  background: linear-gradient(180deg, rgba(85,65,20,0.85), rgba(35,25,8,0.95)) !important;
-  box-shadow: inset 0 0 10px rgba(255,215,0,0.3), 0 0 12px rgba(212,167,68,0.3) !important;
-}
-.slot-select-checkbox {
+
+.l2inv-slots-grid .inv-slot .qty {
   position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 16px;
-  height: 16px;
-  border-radius: 3px;
-  border: 1px solid rgba(212,167,68,0.5);
-  background: rgba(10,12,16,0.8);
-  color: var(--gilt-bright);
-  font-size: 10px;
+  bottom: 1px;
+  right: 2px;
+  font-size: 8.5px;
+  font-weight: 700;
+  color: #f0d080;
+  text-shadow: 0 1px 2px #000, 0 0 4px #000;
+}
+
+.l2inv-slots-grid .inv-slot.is-equipped {
+  border-color: rgba(70,140,90,0.7);
+  background: linear-gradient(135deg, rgba(20,45,28,0.9), rgba(6,14,8,0.98));
+}
+
+.l2inv-slots-grid .inv-slot.is-selected {
+  border: 1px solid #f0d080 !important;
+  background: linear-gradient(135deg, rgba(90,65,20,0.9), rgba(30,20,5,0.98)) !important;
+  box-shadow: 0 0 12px rgba(240,208,128,0.4), inset 0 0 12px rgba(240,208,128,0.2) !important;
+}
+
+/* ---- Bottom Bar matching L2 UI ---- */
+.l2inv-bottom-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 8px;
+  background: linear-gradient(180deg, #241a10 0%, #140c06 100%);
+  border-top: 2px solid #3c2e1e;
+  gap: 8px;
+}
+
+.l2inv-bottom-left-actions {
+  display: flex;
+  gap: 4px;
+}
+.l2inv-icon-btn {
+  background: linear-gradient(180deg, #362616, #1c1208);
+  border: 1px solid #503a22;
+  color: #d4a744;
+  font-size: 14px;
+  width: 28px;
+  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.12s;
 }
-.inv-slot.is-selected .slot-select-checkbox {
-  background: var(--gilt);
-  color: #000;
-  border-color: #fff;
+.l2inv-icon-btn:hover {
+  background: linear-gradient(180deg, #543c22, #362616);
+  border-color: #8a6428;
+  box-shadow: 0 0 8px rgba(212,167,68,0.3);
 }
-.inv-slot .qty {
-  position: absolute;
-  bottom: 4px;
-  right: 6px;
+
+.l2inv-bottom-right-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.l2inv-gold-counter {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(0,0,0,0.6);
+  border: 1px solid #3c2e1e;
+  padding: 3px 8px;
+  border-radius: 2px;
+}
+.l2inv-gold-icon { font-size: 13px; }
+.l2inv-gold-val {
   font-family: "IBM Plex Mono", monospace;
-  font-size: 10px;
-  color: var(--gilt-bright);
+  font-size: 12px;
   font-weight: 700;
-  text-shadow: 0 1px 2px #000;
-}
-.inv-slot .name {
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 8.5px;
-  text-align: center;
-  line-height: 1.2;
-  color: var(--ink-dim);
-  max-width: 100%;
-  overflow: hidden;
-  margin-top: 3px;
-}
-.equipped-badge {
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 7px;
-  font-weight: bold;
-  background: rgba(90,161,138,0.9);
-  color: #06070b;
-  padding: 1px 4px;
-  border-radius: 3px;
-  letter-spacing: 0.05em;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.6);
+  color: #f0d080;
+  text-shadow: 0 0 6px rgba(240,208,128,0.4);
 }
 
-.inv-slot.rarity-uncommon { border-color: rgba(90,161,138,0.5); }
-.inv-slot.rarity-rare     { border-color: var(--r-rare); box-shadow: 0 0 8px rgba(90,138,199,0.35) inset; }
-.inv-slot.rarity-epic     { border-color: var(--r-epic); box-shadow: 0 0 10px rgba(154,115,199,0.45) inset; }
-.inv-slot.rarity-legendary{
-  border-color: var(--r-legendary);
-  box-shadow: 0 0 12px rgba(212,167,68,0.55) inset, 0 0 8px rgba(212,167,68,0.3);
-  animation: legendary-glow 2.5s ease-in-out infinite alternate;
+.l2inv-weight-gauge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  color: #8a7858;
+}
+.l2inv-weight-icon { font-size: 12px; }
+
+.l2inv-trash-actions {
+  display: flex;
+  gap: 3px;
+}
+.l2inv-trash-btn {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 9.5px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.12s;
+  white-space: nowrap;
+}
+.l2inv-trash-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  filter: grayscale(0.8);
+}
+.l2inv-trash-btn.sell {
+  background: linear-gradient(180deg, #483416, #281a08);
+  border: 1px solid #7a5824;
+  color: #f0d080;
+}
+.l2inv-trash-btn.sell:not(:disabled):hover {
+  background: linear-gradient(180deg, #6c4e20, #483416);
+  box-shadow: 0 0 10px rgba(212,167,68,0.4);
+}
+.l2inv-trash-btn.salvage {
+  background: linear-gradient(180deg, #1c2b3a, #0e1620);
+  border: 1px solid #34506c;
+  color: #96c4f0;
+}
+.l2inv-trash-btn.salvage:not(:disabled):hover {
+  background: linear-gradient(180deg, #2b425a, #1c2b3a);
+  box-shadow: 0 0 10px rgba(150,196,240,0.3);
 }
 
+/* empty state */
 .inv-empty-msg {
   grid-column: 1 / -1;
-  color: var(--ink-mute);
+  color: #4a3820;
   text-align: center;
   padding: 30px 10px;
   font-family: "IBM Plex Mono", monospace;
-  font-size: 12px;
+  font-size: 11px;
+  letter-spacing: 0.1em;
 }
 
 /* ============ SHOP ============ */

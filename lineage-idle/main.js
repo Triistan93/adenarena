@@ -713,22 +713,69 @@ function updateStatsUI() {
 }
 
 function updateEquipmentUI() {
-  for (const slot of Object.keys(state.equipment)) {
-    const uid = state.equipment[slot]; const elem = el(`equip-${slot}`);
-    if (!elem) continue; const wrap = elem.closest ? elem.closest('.equip-slot') : null;
-    if (!uid) { elem.textContent = 'Empty'; elem.style.color = ''; elem.title = ''; if (wrap) { wrap.style.borderColor = ''; wrap.title = slot + ' · empty'; } continue; }
+  const stats = getStats();
+  const atkEl = el('l2stat-atk'); if (atkEl) atkEl.textContent = stats.atk;
+  const defEl = el('l2stat-def'); if (defEl) defEl.textContent = stats.def;
+  const matkEl = el('l2stat-matk'); if (matkEl) matkEl.textContent = stats.matk;
+  const mdefEl = el('l2stat-mdef'); if (mdefEl) mdefEl.textContent = stats.mdef;
+  const critEl = el('l2stat-crit'); if (critEl) critEl.textContent = `${stats.crit}%`;
+  const spdEl = el('l2stat-speed'); if (spdEl) spdEl.textContent = stats.speed;
+
+  for (const slot of ['helmet', 'armor', 'gloves', 'boots', 'weapon', 'ring']) {
+    const uid = state.equipment[slot];
+    const itemLabel = el(`pd-item-${slot}`);
+    const pdSlots = qsa(`.l2inv-pd-slot[data-slot="${slot}"]`);
+    const pdSlot = pdSlots && pdSlots.length ? pdSlots[0] : null;
+    const elem = el(`equip-${slot}`);
+    const wrap = elem && elem.closest ? elem.closest('.equip-slot') : null;
+    
+    if (!uid) {
+      if (itemLabel) itemLabel.textContent = '';
+      if (pdSlot) { pdSlot.classList.remove('has-item', 'rarity-common', 'rarity-uncommon', 'rarity-rare', 'rarity-epic', 'rarity-legendary'); pdSlot.title = `${slot} · vazio`; }
+      if (elem) { elem.textContent = 'Empty'; elem.style.color = ''; elem.title = ''; }
+      if (wrap) { wrap.style.borderColor = ''; wrap.title = slot + ' · empty'; }
+      continue;
+    }
+
     const item = state.inventory.find(i => i.uid === uid);
-    if (!item) { state.equipment[slot] = null; elem.textContent = 'Empty'; elem.title = ''; if (wrap) { wrap.style.borderColor = ''; wrap.title = slot + ' · empty'; } continue; }
-    const def = D().ALL_ITEMS[item.itemId];
-    const enchantStr = item.enchant ? `+${item.enchant} ` : '';
-    const full = enchantStr + def.name + (item.rarity ? ' [' + D().RARITY[item.rarity].name + ']' : '');
-    elem.textContent = enchantStr + def.name; const col = item.rarity ? D().RARITY[item.rarity].color : 'var(--gilt)';
-    elem.style.color = col; elem.title = full; if (wrap) { wrap.style.borderColor = col; wrap.title = full; }
+    if (!item) {
+      state.equipment[slot] = null;
+      if (itemLabel) itemLabel.textContent = '';
+      if (pdSlot) { pdSlot.classList.remove('has-item', 'rarity-common', 'rarity-uncommon', 'rarity-rare', 'rarity-epic', 'rarity-legendary'); pdSlot.title = `${slot} · vazio`; }
+      if (elem) { elem.textContent = 'Empty'; elem.style.color = ''; elem.title = ''; }
+      if (wrap) { wrap.style.borderColor = ''; wrap.title = slot + ' · empty'; }
+      continue;
+    }
+
+    const def = D().ALL_ITEMS[item.itemId]; if (!def) continue;
+    const rarity = item.rarity || 'common';
+    const enchantStr = item.enchant ? `+${item.enchant}` : '';
+    const full = (enchantStr ? enchantStr + ' ' : '') + def.name + (item.rarity ? ' [' + D().RARITY[item.rarity].name + ']' : '');
+    const col = item.rarity ? D().RARITY[rarity]?.color : 'var(--gilt)';
+
+    if (itemLabel) itemLabel.textContent = enchantStr;
+    if (pdSlot) {
+      pdSlot.classList.add('has-item', `rarity-${rarity}`);
+      pdSlot.title = `${enchantStr ? enchantStr + ' ' : ''}${def.name} (${slot})`;
+    }
+    if (elem) {
+      elem.textContent = (enchantStr ? enchantStr + ' ' : '') + def.name;
+      elem.style.color = col;
+      elem.title = full;
+    }
+    if (wrap) {
+      wrap.style.borderColor = col;
+      wrap.title = full;
+    }
   }
-  const eb = getTotalEquipBonuses(); const list = el('bonus-list'); list.innerHTML = '';
-  const labels = { atk: 'ATK', def: 'DEF', matk: 'MATK', mdef: 'MDEF', hp: 'HP', mp: 'MP', eva: 'EVA', crit: 'CRIT', speed: 'SPD', lifesteal: 'LIFE STEAL' };
-  for (const [k, label] of Object.entries(labels)) { if (eb[k]) { const div = mkEl('div'); div.innerHTML = `<span>${label}</span><span class="bonus-val">+${eb[k]}${k==='crit'?'%':''}</span>`; list.appendChild(div); } }
-  if (!list.children.length) list.innerHTML = '<div style="color:var(--text-muted)">No equipment</div>';
+
+  const eb = getTotalEquipBonuses(); const list = el('bonus-list');
+  if (list) {
+    list.innerHTML = '';
+    const labels = { atk: 'ATK', def: 'DEF', matk: 'MATK', mdef: 'MDEF', hp: 'HP', mp: 'MP', eva: 'EVA', crit: 'CRIT', speed: 'SPD', lifesteal: 'LIFE STEAL' };
+    for (const [k, label] of Object.entries(labels)) { if (eb[k]) { const div = mkEl('div'); div.innerHTML = `<span>${label}</span><span class="bonus-val">+${eb[k]}${k==='crit'?'%':''}</span>`; list.appendChild(div); } }
+    if (!list.children.length) list.innerHTML = '<div style="color:var(--text-muted)">No equipment</div>';
+  }
   renderStageHero();
 }
 
@@ -841,6 +888,7 @@ function updateSkillInfoPanel() {
 }
 
 function updateInventoryUI() {
+  updateEquipmentUI();
   const grid = el('inventory-grid'); if (!grid) return; grid.innerHTML = '';
   const selectedSet = getSelectedSet();
   const filter = state.filter || 'all';
@@ -857,7 +905,16 @@ function updateInventoryUI() {
 
   for (const item of sorted) {
     const def = D().ALL_ITEMS[item.itemId]; if (!def) continue;
-    if (filter !== 'all' && def.slot !== filter) continue;
+    
+    // Category Filter matching L2 Tabs
+    if (filter !== 'all') {
+      if (filter === 'gear' && !['weapon','armor','helmet','gloves','boots','ring'].includes(def.slot)) continue;
+      else if (filter === 'consumable' && !['consumable','potion','scroll','powerup'].includes(def.slot)) continue;
+      else if (filter === 'material' && !['material','gem','craft'].includes(def.slot)) continue;
+      else if (filter === 'scroll' && !['scroll','quest'].includes(def.slot)) continue;
+      else if (!['gear','consumable','material','scroll'].includes(filter) && def.slot !== filter) continue;
+    }
+
     const rarity = item.rarity || 'common';
     if (rarityFilter !== 'all' && rarity !== rarityFilter) continue;
     if (equipFilter === 'equipped' && !item.equipped) continue;
@@ -879,7 +936,7 @@ function updateInventoryUI() {
     const slot = mkEl('div');
     slot.className = `inv-slot rarity-${rarity}` + (item.equipped ? ' is-equipped' : '') + (isSelected ? ' is-selected' : '');
     const qty = (item.count || 1) > 1 ? `<span class="qty">${item.count}</span>` : '';
-    const tag = item.equipped ? `<span class="equipped-badge">EQUIP</span>` : '';
+    const tag = item.equipped ? `<span class="equipped-badge">E</span>` : '';
     const enchantStr = item.enchant ? `+${item.enchant} ` : '';
     const checkHtml = `<div class="slot-select-checkbox">${isSelected ? '✓' : ''}</div>`;
     slot.innerHTML = `${checkHtml}<span style="font-size:18px">${getItemIcon(def)}</span><span class="name">${enchantStr}${def.name}</span>${qty}${tag}`;
@@ -904,18 +961,19 @@ function updateInventoryUI() {
   const sellBtn = el('sell-selected-btn');
   if (sellBtn) {
     sellBtn.disabled = selectedSet.size === 0;
-    sellBtn.textContent = `💰 Vender Selecionados (${selectedValue.toLocaleString()}g)`;
+    sellBtn.textContent = selectedSet.size > 0 ? `💰 Vender (${selectedValue.toLocaleString()}g)` : `💰 Vender`;
   }
   const salvageBtn = el('salvage-selected-btn');
   if (salvageBtn) {
     salvageBtn.disabled = selectedSet.size === 0 || salvageableCount === 0;
-    salvageBtn.textContent = `🔨 Desmontar Selecionados (${salvageableCount})`;
+    salvageBtn.textContent = salvageableCount > 0 ? `🔨 Desmontar (${salvageableCount})` : `🔨 Desmontar`;
   }
 
   const slotCount = el('inv-slots'); if (slotCount) slotCount.textContent = `${state.inventory.length}/50`;
+  const slotCountVal = el('inv-slots-count'); if (slotCountVal) slotCountVal.textContent = state.inventory.length;
   const goldCount = el('gold-text'); if (goldCount) goldCount.textContent = state.gold.toLocaleString();
 
-  if (shown === 0) grid.innerHTML = '<div class="inv-empty-msg">Nenhum item encontrado com os filtros selecionados</div>';
+  if (shown === 0) grid.innerHTML = '<div class="inv-empty-msg">Nenhum item encontrado nesta categoria</div>';
 }
 
 function getItemIcon(def) { const icons = { weapon: '⚔️', armor: '🛡️', helmet: '⛑️', gloves: '🧤', boots: '👢', ring: '💍', consumable: '🧪', material: '💎', scroll: '📜' }; return icons[def.slot] || '📦'; }
@@ -1794,6 +1852,7 @@ export function init() {
     const sagaOk = el('saga-ok'); if (sagaOk) sagaOk.onclick = () => { const modal = el('saga-modal'); if (modal) modal.classList.remove('active'); };
     const unequipBtn = el('unequip-all-btn'); if (unequipBtn) unequipBtn.onclick = () => { for (const slot of Object.keys(state.equipment)) unequipItem(slot); };
     qsa('.equip-slot').forEach(slot => { slot.onclick = () => { const s = slot.dataset.slot, uid = state.equipment[s]; if (uid) unequipItem(s); }; });
+    const navCraftBtn = el('nav-craft-btn'); if (navCraftBtn) navCraftBtn.onclick = () => { const craftTab = qs('.tab-btn[data-tab="craft"]'); if (craftTab) craftTab.click(); };
     _intervals.push(setInterval(updateClock, 1000)); _intervals.push(setInterval(save, 30000)); _intervals.push(setInterval(tickUI, 1000));
   } catch (err) {
     console.error('Game init failed:', err);

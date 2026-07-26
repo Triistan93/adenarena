@@ -104,9 +104,8 @@ export const IDLE_MARKUP = `
       <aside class="panel tabs-panel">
         <div class="tab-buttons">
           <button class="tab-btn active" data-tab="character">👤 Personagem</button>
-          <button class="tab-btn" data-tab="equipment">⚔️ Equipamento</button>
+          <button class="tab-btn" data-tab="inventory">🎒 Inventário &amp; Equip.</button>
           <button class="tab-btn" data-tab="skills">✦ Habilidades</button>
-          <button class="tab-btn" data-tab="inventory">🎒 Inventário</button>
           <button class="tab-btn" data-tab="shop">🛒 Mercador</button>
           <button class="tab-btn" data-tab="craft">⚒️ Forja</button>
           <button class="tab-btn" data-tab="zones">🗺️ Caça</button>
@@ -150,77 +149,6 @@ export const IDLE_MARKUP = `
             </div>
           </div>
 
-          <!-- Equipment Tab -->
-          <div id="tab-equipment" class="tab-pane">
-            <h3>Equipamentos Ativos</h3>
-            <div class="equipment-workspace">
-              <div class="paperdoll-container">
-                <!-- Left Slots Column -->
-                <div class="paperdoll-col paperdoll-left">
-                  <div class="equip-slot" data-slot="helmet">
-                    <span class="slot-label">⛑</span>
-                    <div class="slot-meta">
-                      <span class="slot-type">Capacete</span>
-                      <span class="slot-item" id="equip-helmet">Vazio</span>
-                    </div>
-                  </div>
-                  <div class="equip-slot" data-slot="armor">
-                    <span class="slot-label">🛡</span>
-                    <div class="slot-meta">
-                      <span class="slot-type">Armadura</span>
-                      <span class="slot-item" id="equip-armor">Vazio</span>
-                    </div>
-                  </div>
-                  <div class="equip-slot" data-slot="boots">
-                    <span class="slot-label">👢</span>
-                    <div class="slot-meta">
-                      <span class="slot-type">Botas</span>
-                      <span class="slot-item" id="equip-boots">Vazio</span>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Center Character Art Showcase -->
-                <div class="paperdoll-center">
-                  <div class="doll-art" id="doll-art"></div>
-                </div>
-
-                <!-- Right Slots Column -->
-                <div class="paperdoll-col paperdoll-right">
-                  <div class="equip-slot" data-slot="weapon">
-                    <span class="slot-label">⚔</span>
-                    <div class="slot-meta">
-                      <span class="slot-type">Arma</span>
-                      <span class="slot-item" id="equip-weapon">Vazio</span>
-                    </div>
-                  </div>
-                  <div class="equip-slot" data-slot="gloves">
-                    <span class="slot-label">🧤</span>
-                    <div class="slot-meta">
-                      <span class="slot-type">Luvas</span>
-                      <span class="slot-item" id="equip-gloves">Vazio</span>
-                    </div>
-                  </div>
-                  <div class="equip-slot" data-slot="ring">
-                    <span class="slot-label">💍</span>
-                    <div class="slot-meta">
-                      <span class="slot-type">Anel</span>
-                      <span class="slot-item" id="equip-ring">Vazio</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="equip-details">
-                <div class="equip-bonuses">
-                  <h4>Bônus Totais de Equipamentos</h4>
-                  <div id="bonus-list"></div>
-                </div>
-                <button class="action-btn action-btn--ghost" id="unequip-all-btn">Desequipar Tudo</button>
-              </div>
-            </div>
-          </div>
-
           <!-- Skills Tab -->
           <div id="tab-skills" class="tab-pane">
             <div class="skills-head">
@@ -238,77 +166,172 @@ export const IDLE_MARKUP = `
             </div>
           </div>
 
-          <!-- Inventory Tab -->
+          <!-- Authentic Lineage 2 Inventory & Equipment Window Tab -->
           <div id="tab-inventory" class="tab-pane">
-            <div class="inv-tab-header">
-              <h3>Mochila &amp; Inventário</h3>
-              <div class="inv-summary">
-                <button id="auto-equip-btn" class="inv-batch-btn auto-equip-btn" title="Equipar os melhores itens da mochila automaticamente">⚡ Equipar Melhores</button>
-                <span class="inv-badge">Slots: <span id="inv-slots">0/50</span></span>
-                <span class="inv-badge gold">Ouro: <span id="gold-text">0</span>g</span>
+            <!-- Window Header matching L2 frame -->
+            <div class="l2inv-header-frame">
+              <div class="l2inv-title-group">
+                <span class="l2inv-window-icon">🎒</span>
+                <span class="l2inv-window-title">Inventory</span>
+                <span class="l2inv-counter" id="l2inv-counter">(<span id="inv-slots-count">0</span>/50)</span>
+              </div>
+              <div class="l2inv-window-controls">
+                <button class="l2inv-win-btn" title="Ajuda">?</button>
+                <button class="l2inv-win-btn" title="Gênero">♂</button>
+                <button class="l2inv-win-btn" title="Minimizar">_</button>
+                <button class="l2inv-win-btn close" title="Fechar">✕</button>
               </div>
             </div>
 
-            <div class="inv-filter-container">
-              <!-- Slot Filter -->
-              <div class="inv-filter-row">
-                <span class="filter-label">Tipo:</span>
-                <div class="inv-filters">
-                  <button class="filter-btn active" data-filter="all">Todos</button>
-                  <button class="filter-btn" data-filter="weapon">⚔️ Armas</button>
-                  <button class="filter-btn" data-filter="armor">🛡️ Armaduras</button>
-                  <button class="filter-btn" data-filter="helmet">⛑️ Capacetes</button>
-                  <button class="filter-btn" data-filter="boots">👢 Botas</button>
-                  <button class="filter-btn" data-filter="gloves">🧤 Luvas</button>
-                  <button class="filter-btn" data-filter="ring">💍 Anéis</button>
-                  <button class="filter-btn" data-filter="consumable">🧪 Consumíveis</button>
-                  <button class="filter-btn" data-filter="material">💎 Materiais</button>
-                </div>
-              </div>
+            <!-- Two-panel layout -->
+            <div class="l2inv-main-container">
+              <!-- Left Panel: 3-column Paperdoll Equipment Grid + Stats -->
+              <div class="l2inv-left-paperdoll">
+                <div class="l2inv-paperdoll-grid">
+                  <!-- Column 1 (Left) -->
+                  <div class="l2inv-doll-col">
+                    <div class="l2inv-pd-slot" data-slot="hair" title="Acessório de Cabeça">
+                      <span class="l2inv-pd-icon">👒</span>
+                    </div>
+                    <div class="l2inv-pd-slot equip-slot" data-slot="gloves" title="Luvas">
+                      <span class="l2inv-pd-icon">🧤</span>
+                      <span class="l2inv-pd-item" id="pd-item-gloves"></span>
+                    </div>
+                    <div class="l2inv-pd-slot equip-slot" data-slot="weapon" title="Arma Principal">
+                      <span class="l2inv-pd-icon">⚔️</span>
+                      <span class="l2inv-pd-item" id="pd-item-weapon"></span>
+                    </div>
+                    <div class="l2inv-pd-slot" data-slot="necklace" title="Colar">
+                      <span class="l2inv-pd-icon">📿</span>
+                    </div>
+                    <div class="l2inv-pd-slot equip-slot" data-slot="ring" title="Anel">
+                      <span class="l2inv-pd-icon">💍</span>
+                      <span class="l2inv-pd-item" id="pd-item-ring"></span>
+                    </div>
+                    <div class="l2inv-pd-slot" data-slot="belt" title="Cinto">
+                      <span class="l2inv-pd-icon">🪢</span>
+                    </div>
+                  </div>
 
-              <!-- Rarity & Equip Filter Row -->
-              <div class="inv-filter-row inv-subfilters">
-                <div class="filter-group">
-                  <span class="filter-label">Raridade:</span>
-                  <div class="rarity-filters">
-                    <button class="rarity-filter-btn active" data-rarity="all">Todas</button>
-                    <button class="rarity-filter-btn r-common" data-rarity="common">Comum</button>
-                    <button class="rarity-filter-btn r-uncommon" data-rarity="uncommon">Incomum</button>
-                    <button class="rarity-filter-btn r-rare" data-rarity="rare">Raro</button>
-                    <button class="rarity-filter-btn r-epic" data-rarity="epic">Épico</button>
-                    <button class="rarity-filter-btn r-legendary" data-rarity="legendary">Lendário</button>
+                  <!-- Column 2 (Center) -->
+                  <div class="l2inv-doll-col">
+                    <div class="l2inv-pd-slot equip-slot" data-slot="helmet" title="Capacete">
+                      <span class="l2inv-pd-icon">⛑️</span>
+                      <span class="l2inv-pd-item" id="pd-item-helmet"></span>
+                    </div>
+                    <div class="l2inv-pd-slot equip-slot" data-slot="armor" title="Armadura / Peito">
+                      <span class="l2inv-pd-icon">🛡️</span>
+                      <span class="l2inv-pd-item" id="pd-item-armor"></span>
+                    </div>
+                    <div class="l2inv-pd-slot" data-slot="gaiters" title="Perneiras">
+                      <span class="l2inv-pd-icon">👖</span>
+                    </div>
+                    <div class="l2inv-pd-slot" data-slot="shield" title="Escudo / Secundária">
+                      <span class="l2inv-pd-icon">🛡️</span>
+                    </div>
+                    <div class="l2inv-pd-slot equip-slot" data-slot="boots" title="Botas">
+                      <span class="l2inv-pd-icon">👢</span>
+                      <span class="l2inv-pd-item" id="pd-item-boots"></span>
+                    </div>
+                  </div>
+
+                  <!-- Column 3 (Right) -->
+                  <div class="l2inv-doll-col">
+                    <div class="l2inv-pd-slot" data-slot="hair2" title="Máscara">
+                      <span class="l2inv-pd-icon">🎭</span>
+                    </div>
+                    <div class="l2inv-pd-slot" data-slot="earring1" title="Brinco 1">
+                      <span class="l2inv-pd-icon">💎</span>
+                    </div>
+                    <div class="l2inv-pd-slot" data-slot="earring2" title="Brinco 2">
+                      <span class="l2inv-pd-icon">💎</span>
+                    </div>
+                    <div class="l2inv-pd-slot" data-slot="ring2" title="Anel 2">
+                      <span class="l2inv-pd-icon">💍</span>
+                    </div>
+                    <div class="l2inv-pd-slot" data-slot="cloak" title="Capa">
+                      <span class="l2inv-pd-icon">🧥</span>
+                    </div>
+                    <div class="l2inv-pd-slot" data-slot="talisman" title="Talismã">
+                      <span class="l2inv-pd-icon">🔮</span>
+                    </div>
                   </div>
                 </div>
 
-                <div class="filter-group">
-                  <span class="filter-label">Estado:</span>
-                  <div class="equip-filters">
-                    <button class="equip-filter-btn active" data-equipfilter="all">Todos</button>
-                    <button class="equip-filter-btn" data-equipfilter="equipped">Equipados</button>
-                    <button class="equip-filter-btn" data-equipfilter="bag">No Alforge</button>
+                <!-- Paperdoll Stats Summary -->
+                <div class="l2inv-stats-box">
+                  <div class="l2inv-stat-row">
+                    <span>P.Atk: <strong id="l2stat-atk">0</strong></span>
+                    <span>P.Def: <strong id="l2stat-def">0</strong></span>
+                  </div>
+                  <div class="l2inv-stat-row">
+                    <span>M.Atk: <strong id="l2stat-matk">0</strong></span>
+                    <span>M.Def: <strong id="l2stat-mdef">0</strong></span>
+                  </div>
+                  <div class="l2inv-stat-row">
+                    <span>Crit: <strong id="l2stat-crit">0%</strong></span>
+                    <span>Speed: <strong id="l2stat-speed">0</strong></span>
+                  </div>
+                  <button class="l2inv-unequip-all" id="unequip-all-btn" title="Desequipar todos os itens">Desequipar Tudo</button>
+                </div>
+              </div>
+
+              <!-- Right Panel: Items Grid and Tabs -->
+              <div class="l2inv-right-grid-area">
+                <!-- L2 Metallic Filter Tabs -->
+                <div class="l2inv-tabs-header">
+                  <button class="l2inv-tab-btn filter-btn active" data-filter="all">All</button>
+                  <button class="l2inv-tab-btn filter-btn" data-filter="gear">Equip</button>
+                  <button class="l2inv-tab-btn filter-btn" data-filter="consumable">Supplies</button>
+                  <button class="l2inv-tab-btn filter-btn" data-filter="material">Crafting</button>
+                  <button class="l2inv-tab-btn filter-btn" data-filter="scroll">Quest</button>
+                </div>
+
+                <!-- Sub-filters Bar (Rarity & Batch Selection) -->
+                <div class="l2inv-subbar">
+                  <div class="l2inv-rarity-pills">
+                    <button class="rarity-filter-btn active" data-rarity="all">All</button>
+                    <button class="rarity-filter-btn r-common" data-rarity="common">C</button>
+                    <button class="rarity-filter-btn r-uncommon" data-rarity="uncommon">I</button>
+                    <button class="rarity-filter-btn r-rare" data-rarity="rare">R</button>
+                    <button class="rarity-filter-btn r-epic" data-rarity="epic">É</button>
+                    <button class="rarity-filter-btn r-legendary" data-rarity="legendary">L</button>
+                  </div>
+                  <div class="l2inv-batch-pills">
+                    <button id="select-commons-btn" class="l2inv-pill-btn" title="Selecionar comuns">✓ Comum</button>
+                    <button id="select-uncommons-btn" class="l2inv-pill-btn" title="Selecionar incomuns">✓ Incomum</button>
+                    <button id="select-all-btn" class="l2inv-pill-btn" title="Selecionar todos">✓ Todos</button>
+                    <button id="clear-selection-btn" class="l2inv-pill-btn" title="Limpar seleções">✕</button>
                   </div>
                 </div>
-              </div>
 
-              <!-- Batch Selection Row -->
-              <div class="inv-filter-row inv-batch-actions">
-                <span class="filter-label">Seleção em Lote:</span>
-                <div class="batch-btn-group">
-                  <button id="select-commons-btn" class="inv-batch-btn" title="Selecionar todos os itens comuns não equipados">✓ Comuns</button>
-                  <button id="select-uncommons-btn" class="inv-batch-btn" title="Selecionar todos os itens incomuns não equipados">✓ Incomuns</button>
-                  <button id="select-all-btn" class="inv-batch-btn" title="Selecionar todos os itens não equipados">✓ Selecionar Todos</button>
-                  <button id="clear-selection-btn" class="inv-batch-btn" title="Limpar todas as seleções">✕ Limpar</button>
-                </div>
-              </div>
-
-              <!-- Batch Execution Row -->
-              <div class="inv-batch-execute-row">
-                <button id="sell-selected-btn" class="inv-execute-btn sell-btn" disabled>💰 Vender Selecionados (0g)</button>
-                <button id="salvage-selected-btn" class="inv-execute-btn salvage-btn" disabled>🔨 Desmontar Selecionados (0)</button>
+                <!-- Item Slots Grid (8 columns x 7 rows dark reddish-brown slots) -->
+                <div class="l2inv-slots-grid" id="inventory-grid"></div>
               </div>
             </div>
 
-            <div class="inventory-grid" id="inventory-grid"></div>
+            <!-- Bottom Bar matching L2 UI -->
+            <div class="l2inv-bottom-bar">
+              <div class="l2inv-bottom-left-actions">
+                <button class="l2inv-icon-btn" id="nav-craft-btn" title="Abrir Forja / Crafting">⚒️</button>
+                <button class="l2inv-icon-btn" id="auto-equip-btn" title="Equipar Melhores Itens">⚡</button>
+              </div>
+
+              <div class="l2inv-bottom-right-info">
+                <div class="l2inv-gold-counter">
+                  <span class="l2inv-gold-icon">🪙</span>
+                  <span class="l2inv-gold-val" id="gold-text">0</span>
+                </div>
+                <div class="l2inv-weight-gauge" title="Capacidade do Alforge">
+                  <span class="l2inv-weight-icon">🎒</span>
+                  <span id="inv-slots">0/50</span>
+                </div>
+                <div class="l2inv-trash-actions">
+                  <button id="sell-selected-btn" class="l2inv-trash-btn sell" disabled title="Vender Itens Selecionados">💰 Vender</button>
+                  <button id="salvage-selected-btn" class="l2inv-trash-btn salvage" disabled title="Desmontar Selecionados">🔨 Desmontar</button>
+                </div>
+              </div>
+            </div>
           </div>
 
           <!-- Shop Tab -->
