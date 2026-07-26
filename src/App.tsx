@@ -614,7 +614,7 @@ function ArenaApp() {
   );
 }
 
-// ---------- Mode switch (always visible) ----------
+// ---------- Mode switch (top-left collapsible hamburger menu) ----------
 type Mode = "idle" | "arena";
 
 function ModeSwitch({
@@ -624,34 +624,86 @@ function ModeSwitch({
   mode: Mode;
   setMode: (m: Mode) => void;
 }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        setIsOpen(false);
+      }
+    }
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("keydown", handleKeyDown);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen]);
+
+  const selectMode = (m: Mode) => {
+    setMode(m);
+    setIsOpen(false);
+  };
+
   return (
-    <div className="mode-switch" role="tablist" aria-label="Game mode">
-      <span className="mode-switch__caption">mode</span>
+    <div className="mode-menu-container" ref={menuRef}>
       <button
         type="button"
-        role="tab"
-        aria-selected={mode === "idle"}
-        aria-pressed={mode === "idle"}
-        title="Idle Chronicle — the text-driven RPG"
-        className={"mode-crest" + (mode === "idle" ? " is-active" : "")}
-        onClick={() => setMode("idle")}
+        aria-label="Toggle game mode menu"
+        aria-expanded={isOpen}
+        className={cn("hamburger-btn", isOpen && "is-active")}
+        onClick={() => setIsOpen(!isOpen)}
       >
-        <span className="mode-crest__glyph" aria-hidden="true">📜</span>
-        <span className="mode-crest__label">Idle</span>
+        <div className="hamburger-icon">
+          <span />
+          <span />
+          <span />
+        </div>
+        <span className="hamburger-mode-badge">
+          {mode === "idle" ? "📜 Idle Chronicle" : "⚔ 3D Arena"}
+        </span>
+        <span className="hamburger-chevron">▾</span>
       </button>
-      <span className="mode-switch__spine" aria-hidden="true" />
-      <button
-        type="button"
-        role="tab"
-        aria-selected={mode === "arena"}
-        aria-pressed={mode === "arena"}
-        title="3D Arena — the action combat game"
-        className={"mode-crest" + (mode === "arena" ? " is-active" : "")}
-        onClick={() => setMode("arena")}
-      >
-        <span className="mode-crest__glyph" aria-hidden="true">⚔</span>
-        <span className="mode-crest__label">Arena</span>
-      </button>
+
+      {isOpen && (
+        <div className="mode-dropdown">
+          <div className="mode-dropdown__header">
+            <span>MODO DE JOGO</span>
+          </div>
+          <button
+            type="button"
+            className={cn("mode-dropdown__item", mode === "idle" && "is-active")}
+            onClick={() => selectMode("idle")}
+          >
+            <span className="mode-dropdown__icon">📜</span>
+            <div className="mode-dropdown__info">
+              <div className="mode-dropdown__title">Idle Chronicle</div>
+              <div className="mode-dropdown__desc">RPG de texto e progressão automática</div>
+            </div>
+            {mode === "idle" && <span className="mode-dropdown__check">✓</span>}
+          </button>
+          <button
+            type="button"
+            className={cn("mode-dropdown__item", mode === "arena" && "is-active")}
+            onClick={() => selectMode("arena")}
+          >
+            <span className="mode-dropdown__icon">⚔</span>
+            <div className="mode-dropdown__info">
+              <div className="mode-dropdown__title">3D Arena</div>
+              <div className="mode-dropdown__desc">Combate de ação em tempo real</div>
+            </div>
+            {mode === "arena" && <span className="mode-dropdown__check">✓</span>}
+          </button>
+        </div>
+      )}
     </div>
   );
 }
@@ -666,3 +718,4 @@ export default function Shell() {
     </>
   );
 }
+

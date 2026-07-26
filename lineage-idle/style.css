@@ -205,7 +205,7 @@ select:focus-visible {
   justify-content: space-between;
   align-items: center;
   gap: 10px;
-  padding: 12px 18px;
+  padding: 10px 18px 10px 180px;
   background:
     linear-gradient(180deg, rgba(20, 23, 31, 0.98) 0%, rgba(9, 11, 16, 0.98) 100%),
     radial-gradient(circle at top left, rgba(212,167,68,0.12), transparent 45%);
