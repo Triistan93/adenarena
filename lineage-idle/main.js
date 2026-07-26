@@ -542,7 +542,7 @@ function equipItem(uid) {
   const def = D().ALL_ITEMS[item.itemId];
   if (!def || !['weapon','armor','helmet','gloves','boots','ring'].includes(def.slot)) { log(`${def.name} cannot be equipped.`, 'system'); return; }
   if (def.req && def.req.level > state.level) { log(`Level ${def.req.level} required for ${def.name}`, 'system'); return; }
-  if (def.classReq && def.classReq !== state.class) { log(`${def.name} requires class: ${getClass(def.classReq)?.name || def.classReq}`, 'system'); return; }
+  if (def.classReq && !classSatisfies(state.class, def.classReq)) { log(`${def.name} requires class: ${getClass(def.classReq)?.name || def.classReq}`, 'system'); return; }
   
   const currentUid = state.equipment[def.slot];
   if (currentUid) { const current = state.inventory.find(i => i.uid === currentUid); if (current) current.equipped = false; }
@@ -1150,7 +1150,7 @@ function showItemTooltip(item, e) {
   const reqLvl = def.req ? def.req.level : 1; const grade = getItemGrade(reqLvl);
   html += `<div style="color:var(--text-muted);font-size:10px;text-transform:capitalize;">${def.slot} · <span style="font-weight:bold; color:var(--gilt);">${grade}</span></div>`;
   if (def.req) html += `<div class="tt-req">Req: Lv.${def.req.level}</div>`;
-  if (def.classReq) { const cls = getClass(def.classReq); const ok = def.classReq === state.class; html += `<div class="tt-req ${ok?'ok':'no'}">Class: ${cls?.name || def.classReq}${ok?' ✓':''}</div>`; }
+  if (def.classReq) { const cls = getClass(def.classReq); const ok = classSatisfies(state.class, def.classReq); html += `<div class="tt-req ${ok?'ok':'no'}">Class: ${cls?.name || def.classReq}${ok?' ✓':''}</div>`; }
   if (def.desc) html += `<div class="tt-desc">${def.desc}</div>`;
   const stats = ['atk','def','matk','mdef','hp','mp','eva','crit','speed','lifesteal'];
   for (const s of stats) { if (def[s]) { const v = Math.floor(def[s] * mult); html += `<div class="tt-stat"><span>${s.toUpperCase()}</span><span class="v">+${v}${s === 'crit' ? '%' : ''}</span></div>`; } }
@@ -1160,7 +1160,7 @@ function showItemTooltip(item, e) {
   if (item.equipped) html += `<div class="tt-equipped">[ EQUIPPED ]</div>`;
   
   const canEquipLvl = !def.req || state.level >= def.req.level;
-  const canEquipCls = !def.classReq || def.classReq === state.class;
+  const canEquipCls = classSatisfies(state.class, def.classReq);
   const canEquip = canEquipLvl && canEquipCls;
   
   html += `<div class="tt-actions">`;
@@ -1314,7 +1314,7 @@ function buyItem(itemId) {
   const def = D().ALL_ITEMS[itemId]; if (!def) return;
   if (state.gold < def.price) { log('Not enough gold!', 'system'); return; }
   if (def.req && def.req.level > state.level) { log('Level too low.', 'system'); return; }
-  if (def.classReq && def.classReq !== state.class) { log('Wrong class for this item.', 'system'); return; }
+  if (def.classReq && !classSatisfies(state.class, def.classReq)) { log('Wrong class for this item.', 'system'); return; }
   if (!addToInventory(itemId, 1, null)) return;
   state.gold -= def.price; log(`Bought ${def.name} for ${def.price}g`, 'loot'); updateAllUI(); save();
 }
@@ -1324,7 +1324,7 @@ function buyMysticItem(itemId, rarity) {
   const price = Math.floor((def.price || 500) * D().RARITY[rarity].mult * 2);
   if (state.gold < price) { log('Not enough gold!', 'system'); return; }
   if (def.req && def.req.level > state.level) { log('Level too low.', 'system'); return; }
-  if (def.classReq && def.classReq !== state.class) { log('Wrong class for this item.', 'system'); return; }
+  if (def.classReq && !classSatisfies(state.class, def.classReq)) { log('Wrong class for this item.', 'system'); return; }
   if (!addToInventory(itemId, 1, rarity)) return;
   state.gold -= price; log(`Mystic purchase: ${def.name} [${D().RARITY[rarity].name}] for ${price}g`, 'rarity-' + rarity); updateAllUI(); save();
 }

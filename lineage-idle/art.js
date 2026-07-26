@@ -52,9 +52,18 @@ function resolveImg(path) {
   return path;
 }
 
+const MAGE_CLASSES = new Set(['mage', 'wizard', 'cleric', 'sorcerer', 'necromancer', 'bishop', 'prophet', 'spellsinger', 'spellhowler', 'shillien', 'overlord']);
+
 function heroImgPath(race, cls) {
-  const key = HERO_IMG[`${race}_${cls}`] || RACE_FALLBACK[race] || "/img/human_fighter.png";
-  return resolveImg(key);
+  const directKey = `${race}_${cls}`;
+  if (HERO_IMG[directKey]) return resolveImg(HERO_IMG[directKey]);
+
+  const archetype = MAGE_CLASSES.has(cls) ? 'mage' : 'fighter';
+  const archKey = `${race}_${archetype}`;
+  if (HERO_IMG[archKey]) return resolveImg(HERO_IMG[archKey]);
+
+  const fallback = RACE_FALLBACK[race] || "/img/human_fighter.png";
+  return resolveImg(fallback);
 }
 
 // ---- Monster image map ----
