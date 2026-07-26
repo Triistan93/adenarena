@@ -290,7 +290,11 @@ const DEFAULT_STATE = () => ({
     armorMast: 0, mortalBlow: 1, wpnMastF: 0, powerSmash: 0, lightArmor: 0, stunAttack: 0, heavyArmor: 0, wildSweep: 0, boostHp: 0, warCry: 0, fatalStrike: 0, powerCrush: 0
   },
   zone: 'talkingIsland', currentSaga: 0, gold: 1000, inventory: [], 
-  equipment: { weapon: null, armor: null, helmet: null, gloves: null, boots: null, ring: null },
+  equipment: {
+    weapon: null, shield: null, helmet: null, armor: null, legs: null, gloves: null, boots: null,
+    hair: null, hair2: null, necklace: null, earring1: null, earring2: null, ring: null, ring2: null,
+    belt: null, cloak: null, talisman: null
+  },
   craftLevel: 1, craftXp: 0, shopTab: 'gear', selectedSkill: null, filter: 'all',
   craftTab: 'recipes', zoneTab: 'map', soulshotActive: false, combatSpeed: 1,
   totalPlaytime: 0, buffs: {}, _cds: {}, gameMode: 'idle'
@@ -649,18 +653,45 @@ function removeFromInventory(uid, amount = 1) {
   return true;
 }
 
+const ALL_EQUIP_SLOTS = [
+  'weapon', 'shield', 'helmet', 'armor', 'legs', 'gloves', 'boots',
+  'hair', 'hair2', 'necklace', 'earring1', 'earring2', 'ring', 'ring2',
+  'belt', 'cloak', 'talisman'
+];
+
+function resolveEquipSlot(slot) {
+  if (['shield', 'offhand', 'sigil'].includes(slot)) return 'shield';
+  if (['legs', 'gaiters', 'pants'].includes(slot)) return 'legs';
+  if (['hair', 'headgear'].includes(slot)) return 'hair';
+  if (['hair2', 'mask'].includes(slot)) return 'hair2';
+  if (slot === 'earring') {
+    if (!state.equipment.earring1) return 'earring1';
+    if (!state.equipment.earring2) return 'earring2';
+    return 'earring1';
+  }
+  if (slot === 'ring') {
+    if (!state.equipment.ring) return 'ring';
+    if (!state.equipment.ring2) return 'ring2';
+    return 'ring';
+  }
+  if (slot === 'ring1') return 'ring';
+  return slot;
+}
+
 function equipItem(uid) {
   const item = state.inventory.find(i => i.uid === uid);
   if (!item) return;
   const def = D().ALL_ITEMS[item.itemId];
-  if (!def || !['weapon','armor','helmet','gloves','boots','ring'].includes(def.slot)) { log(`${def.name} cannot be equipped.`, 'system'); return; }
-  if (def.req && def.req.level > state.level) { log(`Level ${def.req.level} required for ${def.name}`, 'system'); return; }
-  if (def.classReq && !classSatisfies(state.class, def.classReq)) { log(`${def.name} requires class: ${getClass(def.classReq)?.name || def.classReq}`, 'system'); return; }
+  if (!def) return;
+  const targetSlot = resolveEquipSlot(def.slot);
+  if (!ALL_EQUIP_SLOTS.includes(targetSlot)) { log(`${def.name} não pode ser equipado.`, 'system'); return; }
+  if (def.req && def.req.level > state.level) { log(`Nível ${def.req.level} necessário para equipar ${def.name}`, 'system'); return; }
+  if (def.classReq && !classSatisfies(state.class, def.classReq)) { log(`${def.name} exige a classe: ${getClass(def.classReq)?.name || def.classReq}`, 'system'); return; }
   
-  const currentUid = state.equipment[def.slot];
+  const currentUid = state.equipment[targetSlot];
   if (currentUid) { const current = state.inventory.find(i => i.uid === currentUid); if (current) current.equipped = false; }
-  state.equipment[def.slot] = uid; item.equipped = true;
-  log(`Equipped ${def.name}${item.rarity ? ' [' + D().RARITY[item.rarity].name + ']' : ''}`, 'loot');
+  state.equipment[targetSlot] = uid; item.equipped = true;
+  log(`Equipou ${def.name}${item.rarity ? ' [' + D().RARITY[item.rarity].name + ']' : ''}`, 'loot');
   
   const stats = getStats();
   state.maxHp = stats.maxHp; state.maxMp = stats.maxMp;
@@ -710,7 +741,7 @@ function salvageItem(uid) {
   const item = state.inventory[idx];
   if (item.equipped) { log('Unequip first!', 'system'); return; }
   const def = D().ALL_ITEMS[item.itemId];
-  if (!def || !['weapon','armor','helmet','gloves','boots','ring'].includes(def.slot)) return;
+  if (!def || !ALL_EQUIP_SLOTS.includes(resolveEquipSlot(def.slot))) return;
 
   const reqLvl = def.req ? def.req.level : 1;
   const grade = getItemGrade(reqLvl);
@@ -825,7 +856,7 @@ function useItem(uid) {
   const def = D().ALL_ITEMS[item.itemId];
   if (!def) return;
   const usable = def.slot === 'consumable' || def.slot === 'scroll' || def.slot === 'powerup';
-  if (!usable) { if (['weapon','armor','helmet','gloves','boots','ring'].includes(def.slot)) equipItem(uid); return; }
+  if (!usable) { if (ALL_EQUIP_SLOTS.includes(resolveEquipSlot(def.slot))) equipItem(uid); return; }
   
   state.buffs = state.buffs || {};
   const applyBuff = (key, amt, dur) => {
@@ -993,7 +1024,7 @@ function updateEquipmentUI() {
   const critEl = el('l2stat-crit'); if (critEl) critEl.textContent = `${stats.crit}%`;
   const spdEl = el('l2stat-speed'); if (spdEl) spdEl.textContent = stats.speed;
 
-  for (const slot of ['helmet', 'armor', 'gloves', 'boots', 'weapon', 'ring']) {
+  for (const slot of ALL_EQUIP_SLOTS) {
     const uid = state.equipment[slot];
     const itemLabel = el(`pd-item-${slot}`);
     const pdSlots = qsa(`.l2inv-pd-slot[data-slot="${slot}"]`);
@@ -2309,16 +2340,17 @@ function resetSP() {
 }
 
 function autoEquipBest() {
-  const slots = ['weapon','armor','helmet','gloves','boots','ring'];
   let equippedCount = 0;
   
-  for (const slot of slots) {
+  for (const slot of ALL_EQUIP_SLOTS) {
     const candidates = state.inventory.filter(i => {
       if (i.equipped) return false;
       const def = D().ALL_ITEMS[i.itemId];
-      if (!def || def.slot !== slot) return false;
+      if (!def) return false;
+      const targetSlot = resolveEquipSlot(def.slot);
+      if (targetSlot !== slot) return false;
       if (def.req && def.req.level > state.level) return false;
-      if (def.classReq && def.classReq !== state.class) return false;
+      if (def.classReq && !classSatisfies(state.class, def.classReq)) return false;
       return true;
     });
     
@@ -2328,8 +2360,8 @@ function autoEquipBest() {
       const defA = D().ALL_ITEMS[a.itemId], defB = D().ALL_ITEMS[b.itemId];
       const multA = (a.rarity ? D().RARITY[a.rarity].mult : 1) * (1 + (a.enchant || 0) * 0.1);
       const multB = (b.rarity ? D().RARITY[b.rarity].mult : 1) * (1 + (b.enchant || 0) * 0.1);
-      const scoreA = ((defA.atk || 0) + (defA.matk || 0) + (defA.def || 0) * 0.8 + (defA.hp || 0) * 0.1) * multA;
-      const scoreB = ((defB.atk || 0) + (defB.matk || 0) + (defB.def || 0) * 0.8 + (defB.hp || 0) * 0.1) * multB;
+      const scoreA = ((defA.atk || 0) + (defA.matk || 0) + (defA.def || 0) * 0.8 + (defA.mdef || 0) * 0.5 + (defA.hp || 0) * 0.1) * multA;
+      const scoreB = ((defB.atk || 0) + (defB.matk || 0) + (defB.def || 0) * 0.8 + (defB.mdef || 0) * 0.5 + (defB.hp || 0) * 0.1) * multB;
       return scoreB - scoreA;
     });
     
@@ -2338,11 +2370,15 @@ function autoEquipBest() {
     if (currentUid) {
       const currentItem = state.inventory.find(i => i.uid === currentUid);
       if (currentItem) {
-        const defC = D().ALL_ITEMS[currentItem.itemId];
-        const multC = (currentItem.rarity ? D().RARITY[currentItem.rarity].mult : 1) * (1 + (currentItem.enchant || 0) * 0.1);
-        const scoreC = ((defC.atk || 0) + (defC.matk || 0) + (defC.def || 0) * 0.8 + (defC.hp || 0) * 0.1) * multC;
-        const bestScore = ((D().ALL_ITEMS[bestItem.itemId].atk || 0) + (D().ALL_ITEMS[bestItem.itemId].matk || 0) + (D().ALL_ITEMS[bestItem.itemId].def || 0) * 0.8 + (D().ALL_ITEMS[bestItem.itemId].hp || 0) * 0.1) * ((bestItem.rarity ? D().RARITY[bestItem.rarity].mult : 1) * (1 + (bestItem.enchant || 0) * 0.1));
-        if (bestScore <= scoreC) continue;
+        const defCurr = D().ALL_ITEMS[currentItem.itemId];
+        const multCurr = (currentItem.rarity ? D().RARITY[currentItem.rarity].mult : 1) * (1 + (currentItem.enchant || 0) * 0.1);
+        const scoreCurr = ((defCurr.atk || 0) + (defCurr.matk || 0) + (defCurr.def || 0) * 0.8 + (defCurr.mdef || 0) * 0.5 + (defCurr.hp || 0) * 0.1) * multCurr;
+        
+        const defBest = D().ALL_ITEMS[bestItem.itemId];
+        const multBest = (bestItem.rarity ? D().RARITY[bestItem.rarity].mult : 1) * (1 + (bestItem.enchant || 0) * 0.1);
+        const scoreBest = ((defBest.atk || 0) + (defBest.matk || 0) + (defBest.def || 0) * 0.8 + (defBest.mdef || 0) * 0.5 + (defBest.hp || 0) * 0.1) * multBest;
+        
+        if (scoreBest <= scoreCurr) continue;
       }
     }
     

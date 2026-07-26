@@ -139,6 +139,88 @@ const CONSUMABLES = {
   spellbook_4star: { name: 'Spellbook: 4-Star ⭐⭐⭐⭐', slot: 'scroll', type: 'spellbook', price: 500000, stack: 99, desc: 'Mythic 4-Star ⭐⭐⭐⭐ spellbook unlocking supreme class aura transformations.' }
 };
 
+const LEGS = {
+  cloth_pants: { name: 'Cloth Pants', slot: 'legs', tier: 1, def: 2, mdef: 2, req: { level: 1 }, price: 30 },
+  leather_gaiters: { name: 'Leather Gaiters', slot: 'legs', tier: 1, def: 4, mdef: 1, req: { level: 3 }, price: 70 },
+  iron_gaiters: { name: 'Iron Gaiters', slot: 'legs', tier: 2, def: 10, mdef: 4, req: { level: 10 }, price: 300 },
+  mage_stockings: { name: 'Mage Stockings', slot: 'legs', tier: 2, def: 4, mdef: 12, matk: 3, req: { level: 12 }, price: 350 },
+  steel_gaiters: { name: 'Steel Gaiters', slot: 'legs', tier: 3, def: 20, mdef: 8, req: { level: 20 }, price: 1200 },
+  shadow_pants: { name: 'Shadow Pants', slot: 'legs', tier: 3, def: 8, mdef: 14, eva: 5, req: { level: 22 }, price: 1400 },
+  knight_gaiters: { name: 'Knight Gaiters', slot: 'legs', tier: 4, def: 35, mdef: 18, hp: 35, req: { level: 40 }, price: 5000 },
+  arcane_stockings: { name: 'Arcane Stockings', slot: 'legs', tier: 4, def: 14, mdef: 40, matk: 15, req: { level: 42 }, price: 6000 },
+  divine_gaiters: { name: 'Divine Gaiters', slot: 'legs', tier: 5, def: 60, mdef: 65, matk: 25, req: { level: 76 }, price: 20000 },
+  dragon_scale_gaiters: { name: 'Dragon Scale Gaiters', slot: 'legs', tier: 5, def: 80, mdef: 35, hp: 150, req: { level: 76 }, price: 24000 }
+};
+
+const SHIELDS = {
+  wooden_shield: { name: 'Wooden Shield', slot: 'shield', tier: 1, def: 3, mdef: 1, req: { level: 1 }, price: 40 },
+  bronze_shield: { name: 'Bronze Shield', slot: 'shield', tier: 2, def: 8, mdef: 3, hp: 20, req: { level: 10 }, price: 250 },
+  sigil_of_devotion: { name: 'Sigil of Devotion', slot: 'shield', tier: 2, def: 2, mdef: 8, matk: 5, req: { level: 12 }, price: 300 },
+  steel_shield: { name: 'Steel Shield', slot: 'shield', tier: 3, def: 16, mdef: 6, hp: 50, req: { level: 20 }, price: 1000 },
+  sigil_of_grace: { name: 'Sigil of Grace', slot: 'shield', tier: 3, def: 5, mdef: 15, matk: 10, req: { level: 22 }, price: 1200 },
+  knight_shield: { name: 'Knight Shield', slot: 'shield', tier: 4, def: 30, mdef: 15, hp: 100, req: { level: 40 }, price: 4500 },
+  sigil_of_mastery: { name: 'Sigil of Mastery', slot: 'shield', tier: 4, def: 10, mdef: 35, matk: 20, req: { level: 42 }, price: 5000 },
+  imperial_shield: { name: 'Imperial Crusader Shield', slot: 'shield', tier: 5, def: 65, mdef: 30, hp: 250, req: { level: 76 }, price: 18000 },
+  sigil_of_arcana: { name: 'Sigil of Arcana', slot: 'shield', tier: 5, def: 25, mdef: 60, matk: 40, req: { level: 76 }, price: 20000 }
+};
+
+const NECKLACES = {
+  oak_necklace: { name: 'Oak Necklace', slot: 'necklace', tier: 1, mdef: 3, hp: 10, mp: 10, req: { level: 1 }, price: 50 },
+  elven_necklace: { name: 'Elven Necklace', slot: 'necklace', tier: 2, mdef: 10, mp: 30, speed: 2, req: { level: 20 }, price: 800 },
+  necklace_of_grace: { name: 'Necklace of Grace', slot: 'necklace', tier: 3, mdef: 25, matk: 10, crit: 3, req: { level: 40 }, price: 3500 },
+  black_ore_necklace: { name: 'Black Ore Necklace', slot: 'necklace', tier: 4, mdef: 45, hp: 80, matk: 20, req: { level: 60 }, price: 12000 },
+  necklace_of_valakas: { name: 'Necklace of Valakas', slot: 'necklace', tier: 5, mdef: 80, atk: 30, matk: 45, crit: 10, req: { level: 76 }, price: 35000 }
+};
+
+const EARRINGS = {
+  oak_earring: { name: 'Oak Earring', slot: 'earring', tier: 1, mdef: 2, mp: 5, req: { level: 1 }, price: 40 },
+  elven_earring: { name: 'Elven Earring', slot: 'earring', tier: 2, mdef: 8, mp: 20, eva: 2, req: { level: 20 }, price: 600 },
+  earring_of_grace: { name: 'Earring of Grace', slot: 'earring', tier: 3, mdef: 20, matk: 8, req: { level: 40 }, price: 2500 },
+  black_ore_earring: { name: 'Black Ore Earring', slot: 'earring', tier: 4, mdef: 35, mp: 50, eva: 5, req: { level: 60 }, price: 8000 },
+  earring_of_antharas: { name: 'Earring of Antharas', slot: 'earring', tier: 5, mdef: 65, hp: 120, lifesteal: 5, req: { level: 76 }, price: 25000 },
+  earring_of_zaken: { name: 'Earring of Zaken', slot: 'earring', tier: 5, mdef: 60, lifesteal: 7, atk: 15, req: { level: 76 }, price: 25000 }
+};
+
+const BELTS = {
+  novice_belt: { name: 'Novice Leather Belt', slot: 'belt', tier: 1, def: 2, hp: 15, req: { level: 1 }, price: 60 },
+  mithril_belt: { name: 'Mithril Belt', slot: 'belt', tier: 2, def: 8, hp: 50, lootBonus: 0.05, req: { level: 20 }, price: 1000 },
+  belt_of_power: { name: 'Belt of Power', slot: 'belt', tier: 3, def: 18, atk: 10, hp: 100, req: { level: 40 }, price: 4000 },
+  champion_belt: { name: 'Champion Belt', slot: 'belt', tier: 4, def: 35, atk: 20, hp: 200, req: { level: 60 }, price: 15000 },
+  dragon_belt: { name: 'Dragon Belt', slot: 'belt', tier: 5, def: 55, atk: 40, matk: 40, hp: 350, req: { level: 76 }, price: 30000 }
+};
+
+const CLOAKS = {
+  adventurer_cloak: { name: 'Adventurer Cloak', slot: 'cloak', tier: 1, def: 2, mdef: 2, speed: 3, req: { level: 1 }, price: 100 },
+  cloak_of_valor: { name: 'Cloak of Valor', slot: 'cloak', tier: 2, def: 6, mdef: 8, speed: 5, req: { level: 20 }, price: 1200 },
+  cloak_of_freedom: { name: 'Cloak of Freedom', slot: 'cloak', tier: 3, def: 14, mdef: 18, speed: 8, eva: 4, req: { level: 40 }, price: 5000 },
+  cloak_of_shadows_gear: { name: 'Cloak of Shadows', slot: 'cloak', tier: 4, def: 25, mdef: 30, eva: 8, crit: 5, req: { level: 60 }, price: 18000 },
+  ancient_cloak_of_aden: { name: 'Ancient Cloak of Aden', slot: 'cloak', tier: 5, def: 45, mdef: 55, speed: 12, atk: 25, matk: 25, req: { level: 76 }, price: 40000 }
+};
+
+const TALISMANS = {
+  talisman_novice: { name: 'Talisman of Novice', slot: 'talisman', tier: 1, atk: 2, matk: 2, req: { level: 1 }, price: 80 },
+  talisman_protection: { name: 'Talisman of Protection', slot: 'talisman', tier: 2, def: 10, mdef: 10, req: { level: 20 }, price: 1500 },
+  talisman_of_power: { name: 'Talisman of Power', slot: 'talisman', tier: 3, atk: 15, matk: 20, crit: 4, req: { level: 40 }, price: 6000 },
+  talisman_of_eva: { name: 'Talisman of Eva', slot: 'talisman', tier: 4, mp: 100, matk: 35, speed: 5, req: { level: 60 }, price: 20000 },
+  venir_talisman: { name: "Venir's Talisman", slot: 'talisman', tier: 5, atk: 45, matk: 55, crit: 8, lifesteal: 5, req: { level: 76 }, price: 45000 }
+};
+
+const HAIR = {
+  apprentice_circlet: { name: 'Apprentice Circlet', slot: 'hair', tier: 1, mdef: 2, mp: 10, req: { level: 1 }, price: 50 },
+  bronze_feather_circlet: { name: 'Bronze Feather Circlet', slot: 'hair', tier: 2, def: 4, mdef: 8, speed: 3, req: { level: 20 }, price: 900 },
+  silver_tiara: { name: 'Silver Tiara', slot: 'hair', tier: 3, def: 8, mdef: 16, matk: 10, req: { level: 40 }, price: 4000 },
+  noble_gold_crown: { name: 'Noble Gold Crown', slot: 'hair', tier: 4, def: 18, mdef: 30, atk: 15, matk: 20, req: { level: 60 }, price: 16000 },
+  essence_crown_of_aden: { name: 'Essence Crown of Aden', slot: 'hair', tier: 5, def: 30, mdef: 50, atk: 35, matk: 45, req: { level: 76 }, price: 38000 }
+};
+
+const HAIR2 = {
+  novice_mask: { name: 'Novice Mask', slot: 'hair2', tier: 1, eva: 2, req: { level: 1 }, price: 50 },
+  assassin_mask: { name: 'Assassin Mask', slot: 'hair2', tier: 2, eva: 5, atk: 5, req: { level: 20 }, price: 900 },
+  phantom_mask_gear: { name: 'Phantom Mask', slot: 'hair2', tier: 3, eva: 8, crit: 4, req: { level: 40 }, price: 4000 },
+  executioner_mask: { name: 'Executioner Mask', slot: 'hair2', tier: 4, eva: 12, crit: 8, atk: 18, req: { level: 60 }, price: 16000 },
+  boss_facemask_valakas: { name: 'Facemask of Valakas', slot: 'hair2', tier: 5, eva: 18, crit: 12, atk: 40, matk: 40, req: { level: 76 }, price: 38000 }
+};
+
 const MATERIALS = {
   crystal_d: { name: 'Crystal: D Grade', slot: 'material', price: 50, stack: 999, desc: 'Used for D Grade crafting' },
   crystal_c: { name: 'Crystal: C Grade', slot: 'material', price: 150, stack: 999, desc: 'Used for C Grade crafting' },
@@ -161,7 +243,11 @@ const MATERIALS = {
   ancient_relic: { name: 'Ancient Relic', slot: 'material', price: 5000, stack: 999, desc: 'Mysterious artifact' }
 };
 
-const ALL_ITEMS = { ...WEAPONS, ...ARMORS, ...HELMETS, ...BOOTS, ...GLOVES, ...RINGS, ...CONSUMABLES, ...MATERIALS };
+const ALL_ITEMS = {
+  ...WEAPONS, ...ARMORS, ...LEGS, ...HELMETS, ...BOOTS, ...GLOVES,
+  ...SHIELDS, ...NECKLACES, ...EARRINGS, ...BELTS, ...CLOAKS, ...TALISMANS,
+  ...HAIR, ...HAIR2, ...RINGS, ...CONSUMABLES, ...MATERIALS
+};
 
 // ======================================
 // MONSTER DROPS (Loot rebalanceado)
@@ -261,10 +347,16 @@ const SHOP_INVENTORY = {
     { id: 'wooden_sword', stock: 1 }, { id: 'training_dagger', stock: 1 },
     { id: 'oak_staff', stock: 1 }, { id: 'short_bow', stock: 1 },
     { id: 'cloth_robe', stock: 1 }, { id: 'leather_vest', stock: 1 },
+    { id: 'cloth_pants', stock: 1 }, { id: 'leather_gaiters', stock: 1 },
+    { id: 'wooden_shield', stock: 1 },
     { id: 'cloth_cap', stock: 1 }, { id: 'leather_helm', stock: 1 },
     { id: 'cloth_boots', stock: 1 }, { id: 'leather_boots', stock: 1 },
     { id: 'cloth_gloves', stock: 1 }, { id: 'leather_gloves', stock: 1 },
-    { id: 'copper_ring', stock: 1 }, { id: 'scroll_of_resurrection', stock: 99 }
+    { id: 'oak_necklace', stock: 1 }, { id: 'oak_earring', stock: 1 },
+    { id: 'copper_ring', stock: 1 }, { id: 'novice_belt', stock: 1 },
+    { id: 'adventurer_cloak', stock: 1 }, { id: 'talisman_novice', stock: 1 },
+    { id: 'apprentice_circlet', stock: 1 }, { id: 'novice_mask', stock: 1 },
+    { id: 'scroll_of_resurrection', stock: 99 }
   ],
   giranOutskirts: [
     { id: 'hp_potion_m', stock: 99 }, { id: 'mp_potion_m', stock: 99 },
@@ -273,10 +365,15 @@ const SHOP_INVENTORY = {
     { id: 'iron_sword', stock: 1 }, { id: 'steel_dagger', stock: 1 },
     { id: 'crystal_staff', stock: 1 }, { id: 'composite_bow', stock: 1 },
     { id: 'iron_armor', stock: 1 }, { id: 'mage_robe', stock: 1 },
+    { id: 'iron_gaiters', stock: 1 }, { id: 'mage_stockings', stock: 1 },
+    { id: 'bronze_shield', stock: 1 }, { id: 'sigil_of_devotion', stock: 1 },
     { id: 'iron_helm', stock: 1 }, { id: 'mage_hood', stock: 1 },
     { id: 'iron_boots', stock: 1 }, { id: 'mage_sandals', stock: 1 },
     { id: 'iron_gauntlets', stock: 1 }, { id: 'mage_gloves', stock: 1 },
-    { id: 'silver_ring', stock: 1 },
+    { id: 'elven_necklace', stock: 1 }, { id: 'elven_earring', stock: 1 },
+    { id: 'silver_ring', stock: 1 }, { id: 'mithril_belt', stock: 1 },
+    { id: 'cloak_of_valor', stock: 1 }, { id: 'talisman_protection', stock: 1 },
+    { id: 'bronze_feather_circlet', stock: 1 }, { id: 'assassin_mask', stock: 1 },
     { id: 'attack_potion', stock: 99 }, { id: 'defense_potion', stock: 99 },
     { id: 'scroll_of_resurrection', stock: 99 }
   ],
@@ -285,11 +382,17 @@ const SHOP_INVENTORY = {
     { id: 'knight_sword', stock: 1 }, { id: 'assassins_blade', stock: 1 },
     { id: 'archmage_staff', stock: 1 }, { id: 'elven_bow', stock: 1 },
     { id: 'steel_plate', stock: 1 }, { id: 'shadow_cloak', stock: 1 }, { id: 'elven_garb', stock: 1 },
+    { id: 'steel_gaiters', stock: 1 }, { id: 'shadow_pants', stock: 1 },
+    { id: 'steel_shield', stock: 1 }, { id: 'sigil_of_grace', stock: 1 },
     { id: 'steel_helm', stock: 1 }, { id: 'shadow_mask', stock: 1 },
     { id: 'steel_boots', stock: 1 }, { id: 'shadow_boots', stock: 1 },
     { id: 'steel_gauntlets', stock: 1 }, { id: 'shadow_gloves', stock: 1 },
+    { id: 'necklace_of_grace', stock: 1 }, { id: 'earring_of_grace', stock: 1 },
     { id: 'gold_ring', stock: 1 }, { id: 'ruby_ring', stock: 1 },
     { id: 'emerald_ring', stock: 1 }, { id: 'sapphire_ring', stock: 1 },
+    { id: 'belt_of_power', stock: 1 }, { id: 'cloak_of_freedom', stock: 1 },
+    { id: 'talisman_of_power', stock: 1 }, { id: 'silver_tiara', stock: 1 },
+    { id: 'phantom_mask_gear', stock: 1 },
     { id: 'speed_potion', stock: 99 }, { id: 'scroll_of_rebirth', stock: 99 }
   ],
   adenCity: [
@@ -298,10 +401,16 @@ const SHOP_INVENTORY = {
     { id: 'staff_of_magic', stock: 1 }, { id: 'dragon_bow', stock: 1 },
     { id: 'titan_hammer', stock: 1 }, { id: 'dual_swords', stock: 1 },
     { id: 'knight_armor', stock: 1 }, { id: 'arcane_robe', stock: 1 },
+    { id: 'knight_gaiters', stock: 1 }, { id: 'arcane_stockings', stock: 1 },
+    { id: 'knight_shield', stock: 1 }, { id: 'sigil_of_mastery', stock: 1 },
     { id: 'knight_helm', stock: 1 }, { id: 'arcane_circlet', stock: 1 },
     { id: 'knight_boots', stock: 1 }, { id: 'arcane_boots', stock: 1 },
     { id: 'knight_gauntlets', stock: 1 }, { id: 'arcane_gloves', stock: 1 },
+    { id: 'black_ore_necklace', stock: 1 }, { id: 'black_ore_earring', stock: 1 },
     { id: 'diamond_ring', stock: 1 }, { id: 'onyx_ring', stock: 1 }, { id: 'amethyst_ring', stock: 1 },
+    { id: 'champion_belt', stock: 1 }, { id: 'cloak_of_shadows_gear', stock: 1 },
+    { id: 'talisman_of_eva', stock: 1 }, { id: 'noble_gold_crown', stock: 1 },
+    { id: 'executioner_mask', stock: 1 },
     { id: 'scroll_of_rebirth', stock: 99 }
   ],
   dragonValley: [
@@ -309,10 +418,16 @@ const SHOP_INVENTORY = {
     { id: 'bow_of_silence', stock: 1 }, { id: 'dragon_slayer', stock: 1 },
     { id: 'chaos_blade', stock: 1 },
     { id: 'divine_robe', stock: 1 }, { id: 'dragon_scale_armor', stock: 1 },
+    { id: 'divine_gaiters', stock: 1 }, { id: 'dragon_scale_gaiters', stock: 1 },
+    { id: 'imperial_shield', stock: 1 }, { id: 'sigil_of_arcana', stock: 1 },
     { id: 'divine_crown', stock: 1 }, { id: 'dragon_circlet', stock: 1 },
     { id: 'divine_boots', stock: 1 }, { id: 'dragon_boots', stock: 1 },
     { id: 'divine_gloves', stock: 1 }, { id: 'dragon_gauntlets', stock: 1 },
-    { id: 'dragon_eye_ring', stock: 1 }, { id: 'eternity_ring', stock: 1 },
+    { id: 'necklace_of_valakas', stock: 1 }, { id: 'earring_of_antharas', stock: 1 },
+    { id: 'earring_of_zaken', stock: 1 }, { id: 'dragon_eye_ring', stock: 1 },
+    { id: 'eternity_ring', stock: 1 }, { id: 'dragon_belt', stock: 1 },
+    { id: 'ancient_cloak_of_aden', stock: 1 }, { id: 'venir_talisman', stock: 1 },
+    { id: 'essence_crown_of_aden', stock: 1 }, { id: 'boss_facemask_valakas', stock: 1 },
     { id: 'ancient_relic', stock: 99 }
   ]
 };
