@@ -864,9 +864,9 @@ function craftItem(recipeId) {
 let ROOT = document; let _intervals = [];
 export function setRoot(r) { ROOT = r || document; }
 export function destroy() { try { stopCombat(); } catch (e) {} _intervals.forEach(id => clearInterval(id)); _intervals = []; }
-const el = id => ROOT.getElementById(id);
-const qs = sel => ROOT.querySelector(sel);
-const qsa = sel => ROOT.querySelectorAll(sel);
+const el = id => (ROOT && ROOT.getElementById ? ROOT.getElementById(id) : null) || (ROOT && ROOT.querySelector ? ROOT.querySelector('#' + id) : null) || (document.getElementById(id));
+const qs = sel => (ROOT && ROOT.querySelector ? ROOT.querySelector(sel) : null) || (document.querySelector(sel));
+const qsa = sel => (ROOT && ROOT.querySelectorAll ? ROOT.querySelectorAll(sel) : []) || (document.querySelectorAll(sel));
 // Always create elements in the same document as ROOT so Shadow DOM styles apply.
 const doc = () => (ROOT && ROOT.ownerDocument) ? ROOT.ownerDocument : document;
 const mkEl = tag => doc().createElement(tag);
@@ -2277,16 +2277,12 @@ function attachGlobalErrorHandlers() {
   });
 }
 
-export function init() {
+function bindEvents() {
   try {
-    attachGlobalErrorHandlers();
-    state.startTime = Date.now(); const hasSave = load();
-    updateGameModeUI();
-    if (hasSave) { updateAllUI(); if (state.zone) startCombat(); } 
-    else { state.race = 'human'; state.class = 'fighter'; const race = RACES.human, cls = CLASSES.fighter; state.base = { atk: 0, def: 0, eva: 0, matk: 0, mdef: 0 }; for (const k of ['atk','def','eva','matk','mdef']) { state.base[k] = (race.stats[k] || 0) + (cls.base[k] || 0); } updateRaceClassUI(); updateStatsUI(); }
-    
-    ROOT.addEventListener('click', hideItemTooltip);
-    ROOT.addEventListener('click', () => closeGameModeMenu());
+    if (ROOT && ROOT.addEventListener) {
+      ROOT.addEventListener('click', hideItemTooltip);
+      ROOT.addEventListener('click', () => closeGameModeMenu());
+    }
 
     qsa('.tab-btn').forEach(btn => {
       btn.onclick = () => {
@@ -2297,18 +2293,21 @@ export function init() {
         const pane = el(`tab-${tabName}`);
         if (pane) pane.classList.add('active');
 
-        if (tabName === 'inventory') updateInventoryUI();
-        else if (tabName === 'skills') updateSkillUI();
-        else if (tabName === 'shop') updateShopUI();
-        else if (tabName === 'craft') updateCraftUI();
-        else if (tabName === 'enchant') updateEnchantUI();
-        else if (tabName === 'zones') updateZonesUI();
+        if (tabName === 'inventory') safeUiUpdate('inventory', updateInventoryUI);
+        else if (tabName === 'skills') safeUiUpdate('skills', updateSkillUI);
+        else if (tabName === 'shop') safeUiUpdate('shop', updateShopUI);
+        else if (tabName === 'craft') safeUiUpdate('craft', updateCraftUI);
+        else if (tabName === 'enchant') safeUiUpdate('enchant', updateEnchantUI);
+        else if (tabName === 'zones') safeUiUpdate('zones', updateZonesUI);
       };
     });
-    qsa('.race-btn').forEach(btn => btn.onclick = () => setRace(btn.dataset.race)); qsa('.class-btn').forEach(btn => btn.onclick = () => setClass(btn.dataset.class));
+
+    qsa('.race-btn').forEach(btn => btn.onclick = () => setRace(btn.dataset.race));
+    qsa('.class-btn').forEach(btn => btn.onclick = () => setClass(btn.dataset.class));
     qsa('.filter-btn').forEach(btn => { btn.onclick = () => { state.filter = btn.dataset.filter; qsa('.filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); updateInventoryUI(); }; });
     qsa('.rarity-filter-btn').forEach(btn => { btn.onclick = () => { state.rarityFilter = btn.dataset.rarity; qsa('.rarity-filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); updateInventoryUI(); }; });
     qsa('.equip-filter-btn').forEach(btn => { btn.onclick = () => { state.equipFilter = btn.dataset.equipfilter; qsa('.equip-filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); updateInventoryUI(); }; });
+    
     const selCommonsBtn = el('select-commons-btn'); if (selCommonsBtn) selCommonsBtn.onclick = () => selectItemsByFilter(i => (i.rarity || 'common') === 'common');
     const selUncommonsBtn = el('select-uncommons-btn'); if (selUncommonsBtn) selUncommonsBtn.onclick = () => selectItemsByFilter(i => i.rarity === 'uncommon');
     const selAllBtn = el('select-all-btn'); if (selAllBtn) selAllBtn.onclick = () => selectItemsByFilter(() => true);
@@ -2370,8 +2369,38 @@ export function init() {
         }
       };
     }
+  } catch (err) {
+    console.error('Failed to bind UI events:', err);
+  }
+}
 
-    _intervals.push(setInterval(updateClock, 1000)); _intervals.push(setInterval(save, 30000)); _intervals.push(setInterval(tickUI, 1000));
+export function init() {
+  try {
+    attachGlobalErrorHandlers();
+    bindEvents();
+
+    state.startTime = Date.now(); 
+    const hasSave = load();
+    updateGameModeUI();
+
+    if (hasSave) { 
+      updateAllUI(); 
+      if (state.zone) startCombat(); 
+    } else { 
+      state.race = 'human'; 
+      state.class = 'fighter'; 
+      const race = RACES.human, cls = CLASSES.fighter; 
+      state.base = { atk: 0, def: 0, eva: 0, matk: 0, mdef: 0 }; 
+      for (const k of ['atk','def','eva','matk','mdef']) { 
+        state.base[k] = (race.stats[k] || 0) + (cls.base[k] || 0); 
+      } 
+      updateRaceClassUI(); 
+      updateStatsUI(); 
+    }
+
+    _intervals.push(setInterval(updateClock, 1000)); 
+    _intervals.push(setInterval(save, 30000)); 
+    _intervals.push(setInterval(tickUI, 1000));
   } catch (err) {
     console.error('Game init failed:', err);
     const logEl = el('log');
