@@ -188,7 +188,7 @@ const SKILL_TREE_LAYOUT = {
   wpnMastF: { col: 1, row: 0 }, powerSmash: { col: 1, row: 2 },
   lightArmor: { col: 2, row: 1 }, stunAttack: { col: 2, row: 3 },
   heavyArmor: { col: 3, row: 0 }, shieldStun: { col: 3, row: 1 }, wildSweep: { col: 3, row: 2 }, tripleSlash: { col: 3, row: 3 }, boostHp: { col: 3, row: 4 },
-  frenzy: { col: 4, row: 0 }, warCry: { col: 4, row: 1 }, bisonPummel: { col: 4, row: 2 }, danceOfFire: { col: 4, row: 3 }, lethalBlow: { col: 4, row: 4 }, fatalStrike: { col: 4, row: 5 }, powerCrush: { col: 4, row: 5 }
+  frenzy: { col: 4, row: 0 }, warCry: { col: 4, row: 1 }, bisonPummel: { col: 4, row: 2 }, danceOfFire: { col: 4, row: 3 }, lethalBlow: { col: 4, row: 4 }, fatalStrike: { col: 4, row: 5 }, powerCrush: { col: 4, row: 6 }
 };
 const TIER_NAMES = ['Foundation', 'Discipline', 'Mastery', 'Ascendancy', 'Legend'];
 
@@ -1031,7 +1031,7 @@ const TREE_NODE_W = 110; const TREE_NODE_H = 78; const TREE_PAD_X = 14; const TR
 function updateSkillUI() {
   const wrap = el('skill-tree');
   if (!wrap) return;
-  const cols = 5, rows = 6;
+  const cols = 5, rows = 7;
   const W = cols * TREE_NODE_W + TREE_PAD_X * 2;
   const H = rows * TREE_NODE_H + TREE_PAD_Y * 2;
   wrap.style.width = W + 'px'; wrap.style.height = H + 'px';
@@ -1082,7 +1082,13 @@ function updateSkillUI() {
     const reqs = SKILL_REQS[id], reqOk = !reqs || Object.entries(reqs).every(([s, v]) => (state.skills[s] || 0) >= v);
     const lvlOk = state.level >= (def.reqLvl || 1), canBuy = reqOk && lvlOk && state.sp >= getSkillCost(id, lvl) && lvl < max;
     const btnClass = canBuy ? 'skill-btn can-buy' : 'skill-btn';
-    node.innerHTML = `<button class="${btnClass}" data-skill="${id}"><span class="icon">${def.icon}</span><span class="name">${def.name}</span><span class="lvl">${lvl}/${max}</span></button>`;
+    node.innerHTML = `
+      <button class="${btnClass}" data-skill="${id}">
+        <span class="skill-icon">${def.icon || '✦'}</span>
+        <span class="skill-name">${def.name}</span>
+        <span class="skill-lvl-num">${lvl}/${max}</span>
+      </button>
+    `;
     nodesLayer.appendChild(node);
   }
 

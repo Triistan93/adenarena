@@ -823,35 +823,60 @@ select:focus-visible {
 .skill-tree-nodes { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
 .skill-node {
   position: absolute;
-  width: 86px; height: 62px;
   margin: 0;
   padding: 0;
   background: linear-gradient(180deg, var(--bg-3), var(--bg-1));
   border: 1.5px solid var(--line);
   color: var(--ink-dim);
-  cursor: pointer;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 2px;
+  border-radius: 4px;
   transition: transform .15s, border-color .2s, box-shadow .2s;
   font-family: "Cinzel", serif;
+  overflow: hidden;
 }
 .skill-node:hover { transform: translateY(-2px); border-color: var(--gilt-deep); }
-.skill-node .skill-icon { font-size: 20px; line-height: 1; filter: grayscale(0.5); transition: filter .2s; }
-.skill-node .skill-lvl-ring {
-  position: absolute; inset: -2px;
-  border: 2px solid transparent;
-  border-top-color: var(--gilt);
-  border-right-color: var(--gilt);
-  --p: 0;
-  mask: conic-gradient(#000 calc(var(--p) * 1%), transparent 0);
-  -webkit-mask: conic-gradient(#000 calc(var(--p) * 1%), transparent 0);
-  pointer-events: none;
+
+.skill-btn {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-family: inherit;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  gap: 2px;
+  box-sizing: border-box;
+}
+.skill-btn.can-buy {
+  box-shadow: inset 0 0 8px rgba(212,167,68,0.25);
+}
+.skill-node .skill-icon {
+  font-size: 20px;
+  line-height: 1;
+  filter: grayscale(0.3);
+  transition: filter .2s, transform .15s;
+}
+.skill-node .skill-name {
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 96%;
+  color: #e0d0b0;
+  line-height: 1.1;
 }
 .skill-node .skill-lvl-num {
   font-family: "IBM Plex Mono", monospace;
   font-size: 9px;
-  color: var(--ink-mute);
-  letter-spacing: 0.1em;
+  color: var(--gilt-bright);
+  letter-spacing: 0.08em;
 }
 .skill-node.locked { opacity: 0.35; cursor: not-allowed; }
 .skill-node.locked .skill-icon { filter: grayscale(1); }
