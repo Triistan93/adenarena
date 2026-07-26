@@ -28,16 +28,43 @@ const CLASSES = {
   artisan: { name: 'Artisan', archetype: 'artisan', stage: 0, desc: 'A master craftsman with bonus loot.', base: { atk: 6, def: 6, matk: 0, mdef: 0, lootBonus: 0.2 } },
   soulbreaker: { name: 'Soulbreaker', archetype: 'soulbreaker', stage: 0, desc: 'A dual-wielding Kamael warrior.', base: { atk: 12, def: -2, eva: 8, matk: 0, mdef: 0 } },
 
-  // 1st Class Transfer (Level 20)
-  warrior: { name: 'Warrior', archetype: 'fighter', stage: 1, parent: 'fighter', desc: 'Master of heavy blades and physical power.', base: { atk: 25, def: 12, hp: 50, mdef: 5 } },
-  knight: { name: 'Knight', archetype: 'fighter', stage: 1, parent: 'fighter', desc: 'Shield-bearer devoted to protecting allies.', base: { atk: 15, def: 28, hp: 120, mdef: 15 } },
-  rogue: { name: 'Rogue', archetype: 'fighter', stage: 1, parent: 'fighter', desc: 'Swift assassin favoring critical blows and agility.', base: { atk: 22, def: 10, eva: 12, crit: 8, mdef: 5 } },
-  wizard: { name: 'Wizard', archetype: 'mage', stage: 1, parent: 'mage', desc: 'Master of elemental destruction spells.', base: { matk: 32, mdef: 18, mp: 80, atk: 5 } },
-  cleric: { name: 'Cleric', archetype: 'mage', stage: 1, parent: 'mage', desc: 'Holy servant capable of divine healing and buffs.', base: { matk: 20, mdef: 25, def: 18, hp: 40, mp: 60 } },
-  scavenger: { name: 'Scavenger', archetype: 'artisan', stage: 1, parent: 'artisan', desc: 'Expert scavenger uncovering rare spoils.', base: { atk: 18, def: 18, lootBonus: 0.35 } },
-  trooper: { name: 'Trooper', archetype: 'soulbreaker', stage: 1, parent: 'soulbreaker', desc: 'Kamael blade master with dark burst potential.', base: { atk: 30, eva: 12, crit: 10 } },
+  // Human 1st Transfer (Lv 20)
+  warrior: { name: 'Warrior', archetype: 'fighter', stage: 1, parent: 'fighter', race: 'human', desc: 'Master of heavy blades and physical power.', base: { atk: 25, def: 12, hp: 50, mdef: 5 } },
+  knight: { name: 'Knight', archetype: 'fighter', stage: 1, parent: 'fighter', race: 'human', desc: 'Shield-bearer devoted to protecting allies.', base: { atk: 15, def: 28, hp: 120, mdef: 15 } },
+  rogue: { name: 'Rogue', archetype: 'fighter', stage: 1, parent: 'fighter', race: 'human', desc: 'Swift assassin favoring critical blows and agility.', base: { atk: 22, def: 10, eva: 12, crit: 8, mdef: 5 } },
+  wizard: { name: 'Wizard', archetype: 'mage', stage: 1, parent: 'mage', race: 'human', desc: 'Master of elemental destruction spells.', base: { matk: 32, mdef: 18, mp: 80, atk: 5 } },
+  cleric: { name: 'Cleric', archetype: 'mage', stage: 1, parent: 'mage', race: 'human', desc: 'Holy servant capable of divine healing and buffs.', base: { matk: 20, mdef: 25, def: 18, hp: 40, mp: 60 } },
 
-  // 2nd Class Transfer (Level 40)
+  // Elven 1st Transfer (Lv 20)
+  elvenKnight: { name: 'Elven Knight', archetype: 'fighter', stage: 1, parent: 'fighter', race: 'elf', desc: 'Noble defender combining high evasion and divine shield prowess.', base: { atk: 18, def: 25, eva: 10, hp: 100, mdef: 12 } },
+  elvenScout: { name: 'Elven Scout', archetype: 'fighter', stage: 1, parent: 'fighter', race: 'elf', desc: 'Agile wilderness scout specializing in swift bows and daggers.', base: { atk: 24, def: 8, eva: 18, crit: 10 } },
+  elvenWizard: { name: 'Elven Wizard', archetype: 'mage', stage: 1, parent: 'mage', race: 'elf', desc: 'Scholar of light and water elemental destruction.', base: { matk: 34, mdef: 20, mp: 90, eva: 5 } },
+  oracle: { name: 'Oracle', archetype: 'mage', stage: 1, parent: 'mage', race: 'elf', desc: 'Priestess of Eva casting sacred speed and protection chants.', base: { matk: 22, mdef: 28, def: 16, hp: 50, mp: 80 } },
+
+  // Dark Elven 1st Transfer (Lv 20)
+  palusKnight: { name: 'Palus Knight', archetype: 'fighter', stage: 1, parent: 'fighter', race: 'darkelf', desc: 'Shadow knight harnessing dark curses and counter-strikes.', base: { atk: 24, def: 22, hp: 90, mdef: 14 } },
+  assassin: { name: 'Assassin', archetype: 'fighter', stage: 1, parent: 'fighter', race: 'darkelf', desc: 'Deadly shadow killer dealing unmatched critical strikes.', base: { atk: 30, def: 6, eva: 14, crit: 15 } },
+  darkWizard: { name: 'Dark Wizard', archetype: 'mage', stage: 1, parent: 'mage', race: 'darkelf', desc: 'Destructive black mage wielding wind and dark curses.', base: { matk: 40, mdef: 15, mp: 75, atk: 8 } },
+  shillienOracle: { name: 'Shillien Oracle', archetype: 'mage', stage: 1, parent: 'mage', race: 'darkelf', desc: 'Priest of Shillien empowering allies with dark strength buffs.', base: { matk: 26, mdef: 24, def: 14, hp: 45, mp: 70 } },
+
+  // Orc 1st Transfer (Lv 20)
+  orcRaider: { name: 'Orc Raider', archetype: 'fighter', stage: 1, parent: 'fighter', race: 'orc', desc: 'Brutal warrior swinging massive two-handed blades and axes.', base: { atk: 32, def: 18, hp: 140, mdef: 4 } },
+  monk: { name: 'Monk', archetype: 'fighter', stage: 1, parent: 'fighter', race: 'orc', desc: 'Martial artist striking with lightning-fast fist weapons.', base: { atk: 28, def: 14, eva: 8, hp: 120, crit: 6 } },
+  orcShaman: { name: 'Orc Shaman', archetype: 'mage', stage: 1, parent: 'mage', race: 'orc', desc: 'Tribal mystic chanting ancient totem buffs and curses.', base: { matk: 24, mdef: 22, def: 20, hp: 90, mp: 60 } },
+
+  // Dwarven 1st Transfer (Lv 20)
+  scavenger: { name: 'Scavenger', archetype: 'artisan', stage: 1, parent: 'artisan', race: 'dwarf', desc: 'Expert scavenger uncovering rare spoils.', base: { atk: 18, def: 18, lootBonus: 0.35 } },
+  artisanClass: { name: 'Artisan Master', archetype: 'artisan', stage: 1, parent: 'artisan', race: 'dwarf', desc: 'Skilled blacksmith crafting heavy armor and siege tools.', base: { atk: 20, def: 22, lootBonus: 0.25, hp: 60 } },
+
+  // Kamael 1st Transfer (Lv 20)
+  trooper: { name: 'Trooper', archetype: 'soulbreaker', stage: 1, parent: 'soulbreaker', race: 'kamael', desc: 'Kamael blade master with dark burst potential.', base: { atk: 30, eva: 12, crit: 10 } },
+  warder: { name: 'Warder', archetype: 'soulbreaker', stage: 1, parent: 'soulbreaker', race: 'kamael', desc: 'Swift crossbow warden piercing armor from afar.', base: { atk: 28, def: 8, eva: 14, crit: 12 } },
+
+  // Ertheia 1st Transfer (Lv 20)
+  marauder: { name: 'Marauder', archetype: 'fighter', stage: 1, parent: 'fighter', race: 'ertheia', desc: 'Wind dancer striking with hurricane fists.', base: { atk: 26, def: 10, eva: 16, crit: 10 } },
+  sayhaSeer: { name: 'Sayha Seer', archetype: 'mage', stage: 1, parent: 'mage', race: 'ertheia', desc: 'Oracle of Sayha commanding wind spirits.', base: { matk: 36, mdef: 18, mp: 85 } },
+
+  // Human 2nd Transfer (Lv 40)
   gladiator: { name: 'Gladiator', archetype: 'fighter', stage: 2, parent: 'warrior', desc: 'Dual-blade champion devastating foes in close combat.', base: { atk: 55, def: 25, hp: 150, crit: 12 } },
   warlord: { name: 'Warlord', archetype: 'fighter', stage: 2, parent: 'warrior', desc: 'Polearm master striking multiple enemies at once.', base: { atk: 48, def: 35, hp: 180, mdef: 20 } },
   paladin: { name: 'Paladin', archetype: 'fighter', stage: 2, parent: 'knight', desc: 'Holy defender infused with sacred light.', base: { atk: 32, def: 60, hp: 280, mdef: 35 } },
@@ -48,8 +75,43 @@ const CLASSES = {
   necromancer: { name: 'Necromancer', archetype: 'mage', stage: 2, parent: 'wizard', desc: 'Dark lord summoning undead and draining vitality.', base: { matk: 65, mdef: 35, mp: 150, hp: 80 } },
   bishop: { name: 'Bishop', archetype: 'mage', stage: 2, parent: 'cleric', desc: 'Supreme healer capable of miraculous restoration.', base: { matk: 45, mdef: 55, def: 30, mp: 160 } },
   prophet: { name: 'Prophet', archetype: 'mage', stage: 2, parent: 'cleric', desc: 'Grand buffer empowering allies with ancient chants.', base: { matk: 40, mdef: 45, def: 40, hp: 100 } },
+
+  // Elven 2nd Transfer (Lv 40)
+  templeKnight: { name: 'Temple Knight', archetype: 'fighter', stage: 2, parent: 'elvenKnight', desc: 'Ethereal guardian with divine defense and high evasion.', base: { atk: 35, def: 58, hp: 240, eva: 15, mdef: 32 } },
+  swordsinger: { name: 'Sword Singer', archetype: 'fighter', stage: 2, parent: 'elvenKnight', desc: 'Bard knight chanting songs of haste, defense, and power.', base: { atk: 45, def: 40, hp: 200, eva: 12, crit: 10 } },
+  plainsWalker: { name: 'Plains Walker', archetype: 'fighter', stage: 2, parent: 'elvenScout', desc: 'Swift assassin using extreme evasion and fatal thrusts.', base: { atk: 52, def: 16, eva: 30, crit: 22 } },
+  silverRanger: { name: 'Silver Ranger', archetype: 'fighter', stage: 2, parent: 'elvenScout', desc: 'Master elven sniper firing rapid lunar arrows.', base: { atk: 60, def: 14, eva: 22, crit: 20 } },
+  spellsinger: { name: 'Spellsinger', archetype: 'mage', stage: 2, parent: 'elvenWizard', desc: 'Fastest archmage casting water and light torrents.', base: { matk: 72, mdef: 42, mp: 190, eva: 8 } },
+  elementalSummoner: { name: 'Elemental Summoner', archetype: 'mage', stage: 2, parent: 'elvenWizard', desc: 'Summoner of spirit unicorns and elemental forces.', base: { matk: 62, mdef: 38, mp: 170, hp: 60 } },
+  elder: { name: 'Elven Elder', archetype: 'mage', stage: 2, parent: 'oracle', desc: 'High priestess of Eva providing supreme mana and speed buffs.', base: { matk: 48, mdef: 58, def: 28, mp: 200 } },
+
+  // Dark Elven 2nd Transfer (Lv 40)
+  shillienKnight: { name: 'Shillien Knight', archetype: 'fighter', stage: 2, parent: 'palusKnight', desc: 'Dark defender summoning cubic curses and vampiric shields.', base: { atk: 48, def: 52, hp: 210, mdef: 35 } },
+  bladedancer: { name: 'Blade Dancer', archetype: 'fighter', stage: 2, parent: 'palusKnight', desc: 'Dual-sword dancer unleashing ferocious attack and crit songs.', base: { atk: 56, def: 32, hp: 190, crit: 14 } },
+  abyssWalker: { name: 'Abyss Walker', archetype: 'fighter', stage: 2, parent: 'assassin', desc: 'Lethal dark assassin inflicting devastating bleeding stabs.', base: { atk: 62, def: 14, eva: 20, crit: 26 } },
+  phantomRanger: { name: 'Phantom Ranger', archetype: 'fighter', stage: 2, parent: 'assassin', desc: 'Sniper of the abyss dealing immense single-target arrow damage.', base: { atk: 66, def: 12, eva: 16, crit: 24 } },
+  spellhowler: { name: 'Spellhowler', archetype: 'mage', stage: 2, parent: 'darkWizard', desc: 'Highest M.Atk archmage unleashing wind hurricanes.', base: { matk: 85, mdef: 38, mp: 175 } },
+  phantomSummoner: { name: 'Phantom Summoner', archetype: 'mage', stage: 2, parent: 'darkWizard', desc: 'Summoner of shadow demons and dark specters.', base: { matk: 66, mdef: 36, mp: 160, hp: 70 } },
+  shillienElder: { name: 'Shillien Elder', archetype: 'mage', stage: 2, parent: 'shillienOracle', desc: 'Dark priestess granting empowering magic attack buffs.', base: { matk: 52, mdef: 50, def: 26, mp: 180 } },
+
+  // Orc 2nd Transfer (Lv 40)
+  destroyer: { name: 'Destroyer', archetype: 'fighter', stage: 2, parent: 'orcRaider', desc: 'Colossal berserker entering Frenzy for insane damage when wounded.', base: { atk: 68, def: 35, hp: 320, mdef: 15 } },
+  tyrant: { name: 'Tyrant', archetype: 'fighter', stage: 2, parent: 'monk', desc: 'Pummeling martial titan channeling bison spirit power.', base: { atk: 60, def: 28, eva: 14, hp: 260, crit: 12 } },
+  overlord: { name: 'Overlord', archetype: 'mage', stage: 2, parent: 'orcShaman', desc: 'Ruler of clans casting mass seal curses and clan buffs.', base: { matk: 50, mdef: 48, def: 45, hp: 180, mp: 140 } },
+  warcryer: { name: 'Warcryer', archetype: 'mage', stage: 2, parent: 'orcShaman', desc: 'Chanter empowering entire parties with attack and haste chants.', base: { matk: 46, mdef: 44, def: 40, hp: 160, mp: 150 } },
+
+  // Dwarven 2nd Transfer (Lv 40)
   bountyHunter: { name: 'Bounty Hunter', archetype: 'artisan', stage: 2, parent: 'scavenger', desc: 'Fortune hunter maximizing spoils and rare drops.', base: { atk: 40, def: 40, lootBonus: 0.5 } },
-  soulhound: { name: 'Soulhound', archetype: 'soulbreaker', stage: 2, parent: 'trooper', desc: 'Master of rapier and dark souls.', base: { atk: 62, eva: 20, crit: 18 } }
+  warsmith: { name: 'Warsmith', archetype: 'artisan', stage: 2, parent: 'artisanClass', desc: 'Master engineer forging Golem automatons and masterwork gear.', base: { atk: 44, def: 48, hp: 160, lootBonus: 0.35 } },
+
+  // Kamael 2nd Transfer (Lv 40)
+  berserker: { name: 'Berserker', archetype: 'soulbreaker', stage: 2, parent: 'trooper', desc: 'Two-handed sword fighter crushing lines with soul charges.', base: { atk: 64, def: 20, eva: 16, crit: 16 } },
+  soulhound: { name: 'Soulhound', archetype: 'soulbreaker', stage: 2, parent: 'trooper', desc: 'Master of rapier and dark souls.', base: { atk: 62, eva: 20, crit: 18 } },
+  arbalester: { name: 'Arbalester', archetype: 'soulbreaker', stage: 2, parent: 'warder', desc: 'Master of heavy crossbow traps and rapid soul bolts.', base: { atk: 60, def: 16, eva: 22, crit: 20 } },
+
+  // Ertheia 2nd Transfer (Lv 40)
+  ertheiaWarrior: { name: 'Eviscerator', archetype: 'fighter', stage: 2, parent: 'marauder', desc: 'Wind dancer executing airborne hurricane combos.', base: { atk: 62, def: 22, eva: 28, crit: 18 } },
+  windRider: { name: 'Sayha Seeker', archetype: 'mage', stage: 2, parent: 'sayhaSeer', desc: 'Archon of wind unleashing elemental tornadoes.', base: { matk: 74, mdef: 40, mp: 185 } }
 };
 
 const DWARF_CLASS = CLASSES.artisan;
@@ -71,6 +133,8 @@ const SKILL_DEFS = {
   boostMana:    { name: 'Boost Mana', info: '+30 Max MP / lvl', cost: 40, max: 10, type: 'stat', classReq: 'mage', reqLvl: 25, icon: '🧠', tier: 3, desc: 'Max MP increases.' },
   quickRecycle: { name: 'Quick Recycle', info: 'Magic Re-use time -10% / lvl', cost: 50, max: 3, type: 'stat', classReq: 'mage', reqLvl: 30, icon: '⏳', tier: 4, desc: 'Upon use of magic, re-use time decreases.' },
   vampiric:     { name: 'Vampiric Touch', info: '23 Pwr Dark dmg, absorbs 40%', cost: 60, max: 5, type: 'proc', baseCd: 12000, pwr: 23, effect: 'vampiric', classReq: 'mage', reqLvl: 35, icon: '🦇', tier: 4, desc: 'Absorbs 40% of the damage as HP.' },
+  solarFlare:   { name: 'Solar Flare', info: '64 Pwr Holy light beam', cost: 70, max: 5, type: 'proc', baseCd: 8500, pwr: 64, effect: 'dmg', classReq: 'spellsinger', reqLvl: 40, icon: '🌞', tier: 4, desc: 'Unleashes intense holy light radiation.' },
+  hurricane:    { name: 'Hurricane', info: '70 Pwr Windstorm destruction', cost: 75, max: 5, type: 'proc', baseCd: 8000, pwr: 70, effect: 'dmg', classReq: 'spellhowler', reqLvl: 40, icon: '🌪️', tier: 4, desc: 'Summons a devastating windstorm.' },
   deathSpike:   { name: 'Death Spike', info: '60 Pwr Dark bone missile hit', cost: 75, max: 5, type: 'proc', baseCd: 8000, pwr: 60, effect: 'dmg', classReq: 'necromancer', reqLvl: 40, icon: '💀', tier: 4, desc: 'Fires a bone missile imbued with dark curses.' },
   flameStrike:  { name: 'Flame Strike', info: 'AoE Fire dmg (13 Pwr)', cost: 80, max: 5, type: 'proc', baseCd: 15000, pwr: 13, effect: 'dmg', classReq: 'mage', reqLvl: 40, icon: '☄', tier: 4, desc: 'Launches a fireball with a wide range.' },
 
@@ -87,6 +151,9 @@ const SKILL_DEFS = {
   wildSweep:    { name: 'Wild Sweep', info: 'Auto-cast: Cleave Physical dmg', cost: 40, max: 5, type: 'proc', baseCd: 10000, pwr: 25, effect: 'dmg', classReq: 'fighter', reqLvl: 25, icon: '🌪', tier: 3, desc: 'Attacks a multitude of enemies.' },
   boostHp:      { name: 'Boost HP', info: '+60 Max HP / lvl', cost: 35, max: 10, type: 'stat', classReq: 'fighter', reqLvl: 25, icon: '❤', tier: 3, desc: 'Max HP increases.' },
   warCry:       { name: 'War Cry', info: '+20% ATK for 60s (Auto-buff)', cost: 50, max: 3, type: 'proc', baseCd: 65000, pwr: 0, effect: 'warcry', classReq: 'fighter', reqLvl: 30, icon: '🗣', tier: 4, desc: 'Increases P. Atk. by 20%.' },
+  frenzy:       { name: 'Frenzy', info: '+100% ATK when HP drops (Auto-buff)', cost: 65, max: 5, type: 'proc', baseCd: 60000, pwr: 0, effect: 'warcry', classReq: 'destroyer', reqLvl: 40, icon: '😡', tier: 4, desc: 'Enrages in wounded battle for massive attack boost.' },
+  bisonPummel:  { name: 'Bison Pummel', info: '54 Pwr fist barrage hit', cost: 70, max: 5, type: 'proc', baseCd: 7500, pwr: 54, effect: 'dmg', classReq: 'tyrant', reqLvl: 40, icon: '🦬', tier: 4, desc: 'Pummels the target with totem spirit power.' },
+  danceOfFire:  { name: 'Dance of Fire', info: '+30% Crit Dmg for 60s', cost: 60, max: 3, type: 'proc', baseCd: 60000, pwr: 0, effect: 'warcry', classReq: 'bladedancer', reqLvl: 40, icon: '💃', tier: 4, desc: 'Perform blade dance boosting critical strikes.' },
   lethalBlow:   { name: 'Lethal Blow', info: 'High-crit deadly assassin hit (80 Pwr)', cost: 75, max: 5, type: 'proc', baseCd: 9000, pwr: 80, effect: 'dmg', classReq: 'rogue', reqLvl: 40, icon: '🗡️', tier: 4, desc: 'Strikes vital spots for massive lethal damage.' },
   fatalStrike:  { name: 'Fatal Strike', info: 'High dmg, ignores defense', cost: 60, max: 5, type: 'proc', baseCd: 12000, pwr: 35, effect: 'dmg', classReq: 'fighter', reqLvl: 35, icon: '🩸', tier: 4, desc: 'Strong attack ignoring defense.' },
   powerCrush:   { name: 'Power Crush', info: '664 Power massive hit', cost: 80, max: 5, type: 'proc', baseCd: 18000, pwr: 66, effect: 'dmg', classReq: 'fighter', reqLvl: 40, icon: '☄', tier: 4, desc: 'Attacks the enemy with massive power.' }
@@ -450,8 +517,9 @@ function openClassTransferModal() {
 
   const availableOptions = Object.entries(CLASSES).filter(([id, def]) => {
     if (def.stage !== targetStage) return false;
-    if (targetStage === 1 && (def.parent === state.class || def.archetype === state.class)) return true;
-    if (targetStage === 2 && (def.parent === state.class || def.archetype === currentClassDef.archetype)) return true;
+    if (def.race && def.race !== state.race) return false;
+    if (targetStage === 1) return (def.parent === state.class || def.archetype === state.class);
+    if (targetStage === 2) return (def.parent === state.class);
     return false;
   });
 
