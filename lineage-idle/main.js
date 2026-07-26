@@ -652,27 +652,33 @@ function updateStatsUI() {
   state.maxHp = stats.maxHp; state.maxMp = stats.maxMp;
   const xpForLevel = getXPForLevel(state.level);
   updateBar('xp-bar', state.xp - getTotalXP(state.level - 1), xpForLevel);
-  el('xp-text').textContent = `${state.xp - getTotalXP(state.level - 1)} / ${xpForLevel}`;
-  el('sp-text').textContent = state.sp; el('level-text').textContent = state.level;
-  el('atk-text').textContent = stats.atk; el('def-text').textContent = stats.def;
-  el('eva-text').textContent = stats.eva; el('matk-text').textContent = stats.matk;
-  el('mdef-text').textContent = stats.mdef; el('crit-text').textContent = `${stats.crit}%`;
-  el('loot-text').textContent = `${Math.round(stats.loot * 100)}%`;
+  const _xtEl = el('xp-text'); if (_xtEl) _xtEl.textContent = `${state.xp - getTotalXP(state.level - 1)} / ${xpForLevel}`;
+  const _spEl = el('sp-text'); if (_spEl) _spEl.textContent = state.sp;
+  const _lvEl = el('level-text'); if (_lvEl) _lvEl.textContent = state.level;
+  const _atkEl = el('atk-text'); if (_atkEl) _atkEl.textContent = stats.atk;
+  const _defEl = el('def-text'); if (_defEl) _defEl.textContent = stats.def;
+  const _evaEl = el('eva-text'); if (_evaEl) _evaEl.textContent = stats.eva;
+  const _matkEl = el('matk-text'); if (_matkEl) _matkEl.textContent = stats.matk;
+  const _mdefEl = el('mdef-text'); if (_mdefEl) _mdefEl.textContent = stats.mdef;
+  const _critEl = el('crit-text'); if (_critEl) _critEl.textContent = `${stats.crit}%`;
+  const _lootEl = el('loot-text'); if (_lootEl) _lootEl.textContent = `${Math.round(stats.loot * 100)}%`;
   
   const _gEl = el('gold-text-stat');
   if (_gEl) { _gEl.textContent = state.gold.toLocaleString(); if (_gEl._lastGold != null && state.gold > _gEl._lastGold) { _gEl.classList.remove('pulse'); void _gEl.offsetWidth; _gEl.classList.add('pulse'); } _gEl._lastGold = state.gold; }
   const gps = getGoldPerSec();
   const gpsEl = el('gps-text'); if (gpsEl) gpsEl.textContent = gps > 0 ? `${gps.toFixed(1)}/s` : '—';
   
-  el('craft-level-stat').textContent = state.craftLevel;
-  el('race-text').textContent = state.race ? RACES[state.race].name : '-';
-  el('class-text').textContent = state.class ? getClass(state.class).name : '-';
-  el('saga-text').textContent = SAGAS[state.currentSaga].name;
+  const _clEl = el('craft-level-stat'); if (_clEl) _clEl.textContent = state.craftLevel;
+  const _rcEl = el('race-text'); if (_rcEl) _rcEl.textContent = state.race ? RACES[state.race].name : '-';
+  const _csEl = el('class-text'); if (_csEl) _csEl.textContent = state.class ? getClass(state.class).name : '-';
+  const _sgEl = el('saga-text'); if (_sgEl) _sgEl.textContent = SAGAS[state.currentSaga].name;
   const _sz = el('stage-zone');
   if (_sz) { const _t = state.zone ? ZONES[state.zone].name + (ZONES[state.zone].town ? ' · town' : '') : '—'; if (_sz.textContent !== _t) _sz.textContent = _t; }
-  el('sp-available').textContent = state.sp; el('gold-text').textContent = state.gold.toLocaleString();
-  el('shop-gold').textContent = state.gold.toLocaleString(); el('craft-level').textContent = state.craftLevel;
-  el('inv-slots').textContent = `${state.inventory.length}/50`;
+  const _spaEl = el('sp-available'); if (_spaEl) _spaEl.textContent = state.sp;
+  const _gtEl = el('gold-text'); if (_gtEl) _gtEl.textContent = state.gold.toLocaleString();
+  const _sgdEl = el('shop-gold'); if (_sgdEl) _sgdEl.textContent = state.gold.toLocaleString();
+  const _cl2El = el('craft-level'); if (_cl2El) _cl2El.textContent = state.craftLevel;
+  const _isEl = el('inv-slots'); if (_isEl) _isEl.textContent = `${state.inventory.length}/50`;
 
   const abEl = el('active-buffs');
   if (abEl) {
@@ -838,7 +844,8 @@ function updateInventoryUI() {
     if (isSelected && !item.equipped) {
       const qty = item.count || 1;
       const basePrice = def.price || 10;
-      const mult = item.rarity ? D().RARITY[item.rarity].mult : 1;
+      const rarityDef = item.rarity ? D().RARITY[item.rarity] : null;
+      const mult = rarityDef ? rarityDef.mult : 1;
       const enchantMult = 1 + (item.enchant || 0) * 0.1;
       selectedValue += Math.floor(basePrice * mult * enchantMult * 0.4) * qty;
       if (['weapon','armor','helmet','gloves','boots','ring'].includes(def.slot)) {
@@ -1322,7 +1329,7 @@ function updateRaceClassUI() {
   renderStageHero(); updateSkillUI();
 }
 
-function updateClock() { const now = Date.now(), elapsed = Math.floor((now - state.startTime + (state.totalPlaytime || 0)) / 1000), h = Math.floor(elapsed / 3600), m = Math.floor((elapsed % 3600) / 60), s = elapsed % 60; el('clock').textContent = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`; }
+function updateClock() { const now = Date.now(), elapsed = Math.floor((now - state.startTime + (state.totalPlaytime || 0)) / 1000), h = Math.floor(elapsed / 3600), m = Math.floor((elapsed % 3600) / 60), s = elapsed % 60; const _ck = el('clock'); if (_ck) _ck.textContent = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`; }
 
 function updateGameModeUI() {
   const switchEl = el('game-mode-switch');
@@ -1781,7 +1788,7 @@ function tickUI() {
   const now = Date.now(); let buffChanged = false;
   for (const k of Object.keys(state.buffs || {})) { if (state.buffs[k].until < now) { delete state.buffs[k]; buffChanged = true; } }
   const gpsEl = el('gps-text'); if (gpsEl) { gpsEl.textContent = getGoldPerSec() > 0 ? `${getGoldPerSec().toFixed(1)}/s` : '—'; }
-  updateStatsUI(); 
+  safeUiUpdate('stats-tick', updateStatsUI);
   const mt = el('mystic-timer'); if (mt) { mt.textContent = fmtCountdown(D().getMysticRotation()[0]?.msLeft || 0); }
-  if (buffChanged) { updateShopUI(); }
+  if (buffChanged) { safeUiUpdate('shop-tick', updateShopUI); }
 }
