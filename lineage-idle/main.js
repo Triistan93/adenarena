@@ -70,11 +70,12 @@ const CLASSES = {
   paladin: { name: 'Paladin', archetype: 'fighter', stage: 2, parent: 'knight', desc: 'Holy defender infused with sacred light.', base: { atk: 32, def: 60, hp: 280, mdef: 35 } },
   darkAvenger: { name: 'Dark Avenger', archetype: 'fighter', stage: 2, parent: 'knight', desc: 'Dread knight commanding dark aura and punishment.', base: { atk: 45, def: 50, hp: 220, mdef: 30 } },
   treasureHunter: { name: 'Treasure Hunter', archetype: 'fighter', stage: 2, parent: 'rogue', desc: 'Deadly assassin executing lethal strikes.', base: { atk: 50, def: 18, eva: 25, crit: 20 } },
-  hawkeye: { name: 'Hawkeye', archetype: 'fighter', stage: 2, parent: 'rogue', desc: 'Master archer striking from maximum distance.', base: { atk: 58, def: 15, eva: 18, crit: 18 } },
+  sagittarius: { name: 'Sagittarius', archetype: 'fighter', stage: 2, parent: 'rogue', desc: 'Master archer striking from maximum distance.', base: { atk: 58, def: 15, eva: 18, crit: 18 } },
   sorcerer: { name: 'Sorcerer', archetype: 'mage', stage: 2, parent: 'wizard', desc: 'Archon of fire unleashing apocalyptic blazes.', base: { matk: 70, mdef: 40, mp: 180 } },
   necromancer: { name: 'Necromancer', archetype: 'mage', stage: 2, parent: 'wizard', desc: 'Dark lord summoning undead and draining vitality.', base: { matk: 65, mdef: 35, mp: 150, hp: 80 } },
   bishop: { name: 'Bishop', archetype: 'mage', stage: 2, parent: 'cleric', desc: 'Supreme healer capable of miraculous restoration.', base: { matk: 45, mdef: 55, def: 30, mp: 160 } },
   prophet: { name: 'Prophet', archetype: 'mage', stage: 2, parent: 'cleric', desc: 'Grand buffer empowering allies with ancient chants.', base: { matk: 40, mdef: 45, def: 40, hp: 100 } },
+  deathKnight: { name: 'Death Knight', archetype: 'fighter', stage: 2, parent: 'knight', desc: 'Hellbound knight commanding elemental fire, ice, and darkness.', base: { atk: 65, def: 55, hp: 260, mdef: 40 } },
 
   // Elven 2nd Transfer (Lv 40)
   templeKnight: { name: 'Temple Knight', archetype: 'fighter', stage: 2, parent: 'elvenKnight', desc: 'Ethereal guardian with divine defense and high evasion.', base: { atk: 35, def: 58, hp: 240, eva: 15, mdef: 32 } },
@@ -156,7 +157,33 @@ const SKILL_DEFS = {
   danceOfFire:  { name: 'Dance of Fire', info: '+30% Crit Dmg for 60s', cost: 60, max: 3, type: 'proc', baseCd: 60000, pwr: 0, effect: 'warcry', classReq: 'bladedancer', reqLvl: 40, icon: '💃', tier: 4, desc: 'Perform blade dance boosting critical strikes.' },
   lethalBlow:   { name: 'Lethal Blow', info: 'High-crit deadly assassin hit (80 Pwr)', cost: 75, max: 5, type: 'proc', baseCd: 9000, pwr: 80, effect: 'dmg', classReq: 'rogue', reqLvl: 40, icon: '🗡️', tier: 4, desc: 'Strikes vital spots for massive lethal damage.' },
   fatalStrike:  { name: 'Fatal Strike', info: 'High dmg, ignores defense', cost: 60, max: 5, type: 'proc', baseCd: 12000, pwr: 35, effect: 'dmg', classReq: 'fighter', reqLvl: 35, icon: '🩸', tier: 4, desc: 'Strong attack ignoring defense.' },
-  powerCrush:   { name: 'Power Crush', info: '664 Power massive hit', cost: 80, max: 5, type: 'proc', baseCd: 18000, pwr: 66, effect: 'dmg', classReq: 'fighter', reqLvl: 40, icon: '☄', tier: 4, desc: 'Attacks the enemy with massive power.' }
+  powerCrush:   { name: 'Power Crush', info: '664 Power massive hit', cost: 80, max: 5, type: 'proc', baseCd: 18000, pwr: 66, effect: 'dmg', classReq: 'fighter', reqLvl: 40, icon: '☄', tier: 4, desc: 'Attacks the enemy with massive power.' },
+
+  // Essence 1-Star to 4-Star Star Skills
+  tripleSonicSlash: { name: 'Triple Sonic Slash ⭐', info: '58 Pwr armor piercing 3-hit slash (1-Star ⭐)', cost: 100, max: 5, type: 'proc', baseCd: 6000, pwr: 58, effect: 'dmg', classReq: 'gladiator', reqLvl: 76, starRank: 1, icon: '🗡️', tier: 4, desc: 'Devastating 3-hit sonic slash ignoring defense.' },
+  sonicRage:        { name: 'Sonic Rage ⭐⭐', info: '21 Pwr auto-proc wind blades (2-Star ⭐⭐)', cost: 150, max: 5, type: 'proc', baseCd: 800, pwr: 21, effect: 'dmg', classReq: 'gladiator', reqLvl: 80, starRank: 2, icon: '⚡', tier: 4, desc: 'Continuous wind blades building sonic charges.' },
+  rushImpact:       { name: 'Rush Impact ⭐⭐⭐', info: '42 Pwr charge + 3s Stun (3-Star ⭐⭐⭐)', cost: 250, max: 5, type: 'proc', baseCd: 12000, pwr: 42, effect: 'stun', classReq: 'gladiator', reqLvl: 84, starRank: 3, icon: '💨', tier: 4, desc: 'Rushes to target inflicting AoE damage and stun.' },
+  duelistAura:      { name: 'Master of Dual Swords ⭐⭐⭐⭐', info: '+35% ATK, Max Charges (4-Star ⭐⭐⭐⭐)', cost: 500, max: 5, type: 'proc', baseCd: 90000, pwr: 0, effect: 'warcry', classReq: 'gladiator', reqLvl: 90, starRank: 4, icon: '👑', tier: 4, desc: 'Supreme dual blade posture maintaining max charges.' },
+
+  multipleArrow:    { name: 'Multiple Arrow ⭐', info: '42 Pwr 5-arrow AoE rain (1-Star ⭐)', cost: 100, max: 5, type: 'proc', baseCd: 4500, pwr: 42, effect: 'dmg', classReq: 'sagittarius', reqLvl: 76, starRank: 1, icon: '🌧️', tier: 4, desc: 'Rains arrows on enemies in range.' },
+  snipeMastery:     { name: 'Snipe Mastery ⭐⭐', info: '+25% ATK, +200 Range mobile (2-Star ⭐⭐)', cost: 150, max: 5, type: 'proc', baseCd: 40000, pwr: 0, effect: 'warcry', classReq: 'sagittarius', reqLvl: 80, starRank: 2, icon: '🔭', tier: 4, desc: 'Mobile sniper posture boosting ATK and range.' },
+  lethalShotSag:    { name: 'Lethal Shot ⭐⭐⭐', info: '65 Pwr Armor Pierce (3-Star ⭐⭐⭐)', cost: 250, max: 5, type: 'proc', baseCd: 8000, pwr: 65, effect: 'dmg', classReq: 'sagittarius', reqLvl: 84, starRank: 3, icon: '⚡', tier: 4, desc: 'Surgical precision shot ignoring defense.' },
+  sagittariusAura:  { name: 'Sagittarius Aura ⭐⭐⭐⭐', info: '+40% ATK, 1000 Range, 100% Crit (4-Star ⭐⭐⭐⭐)', cost: 500, max: 5, type: 'proc', baseCd: 90000, pwr: 0, effect: 'warcry', classReq: 'sagittarius', reqLvl: 90, starRank: 4, icon: '🌟', tier: 4, desc: 'Celestial archer aura granting max range and 100% crit.' },
+
+  rainOfFire:       { name: 'Rain of Fire ⭐', info: '48 Pwr Fire AoE storm (1-Star ⭐)', cost: 100, max: 5, type: 'proc', baseCd: 5000, pwr: 48, effect: 'dmg', classReq: 'sorcerer', reqLvl: 76, starRank: 1, icon: '🌧️🔥', tier: 4, desc: 'Torrential fire storm reducing fire resistance.' },
+  arcanePowerMastery:{ name: 'Arcane Power Mastery ⭐⭐', info: '+30% MATK, +25% MCrit Dmg (2-Star ⭐⭐)', cost: 150, max: 5, type: 'proc', baseCd: 45000, pwr: 0, effect: 'warcry', classReq: 'sorcerer', reqLvl: 80, starRank: 2, icon: '✨', tier: 4, desc: 'Supreme arcane posture without HP drain.' },
+  meteorMastery:    { name: 'Meteor Mastery ⭐⭐⭐', info: '72 Pwr Meteor + 3s Stun (3-Star ⭐⭐⭐)', cost: 250, max: 5, type: 'proc', baseCd: 15000, pwr: 72, effect: 'stun', classReq: 'sorcerer', reqLvl: 84, starRank: 3, icon: '☄️', tier: 4, desc: 'Giant meteor cataclysm knocking down targets.' },
+  phoenixFlameAura: { name: 'Phoenix Flame Aura ⭐⭐⭐⭐', info: '+45% MATK, 100% MCrit (4-Star ⭐⭐⭐⭐)', cost: 500, max: 5, type: 'proc', baseCd: 90000, pwr: 0, effect: 'warcry', classReq: 'sorcerer', reqLvl: 90, starRank: 4, icon: '🦅🔥', tier: 4, desc: 'Phoenix flame aura unleashing solar eruptions.' },
+
+  shadowStepEssence:{ name: 'Shadow Step ⭐', info: '15 Pwr shadow teleport + 30% Backstab (1-Star ⭐)', cost: 100, max: 5, type: 'proc', baseCd: 6000, pwr: 15, effect: 'dmg', classReq: 'treasureHunter', reqLvl: 76, starRank: 1, icon: '👤', tier: 4, desc: 'Teleports behind target boosting next backstab.' },
+  bluffMastery:     { name: 'Bluff Mastery ⭐⭐', info: 'Clears target + 3s Stun (2-Star ⭐⭐)', cost: 150, max: 5, type: 'proc', baseCd: 10000, pwr: 0, effect: 'stun', classReq: 'treasureHunter', reqLvl: 80, starRank: 2, icon: '🌀', tier: 4, desc: 'Turns target around removing aggro with stun.' },
+  lethalBlowMastery:{ name: 'Lethal Blow Mastery ⭐⭐⭐', info: '68 Pwr armor pierce + lifesteal (3-Star ⭐⭐⭐)', cost: 250, max: 5, type: 'proc', baseCd: 7000, pwr: 68, effect: 'vampiric', classReq: 'treasureHunter', reqLvl: 84, starRank: 3, icon: '🩸', tier: 4, desc: 'Deadly dagger strike with lifesteal.' },
+  shadowMasteryAura:{ name: 'Shadow Mastery Aura ⭐⭐⭐⭐', info: '+40% Blow Dmg, 80% Mirage (4-Star ⭐⭐⭐⭐)', cost: 500, max: 5, type: 'proc', baseCd: 90000, pwr: 0, effect: 'warcry', classReq: 'treasureHunter', reqLvl: 90, starRank: 4, icon: '🌌', tier: 4, desc: 'Shadow assassin aura granting mirage protection.' },
+
+  deathHuger:       { name: 'Death Hug ⭐', info: 'Chain pull + 2s Stun (1-Star ⭐)', cost: 100, max: 5, type: 'proc', baseCd: 6000, pwr: 20, effect: 'stun', classReq: 'deathKnight', reqLvl: 76, starRank: 1, icon: '⛓️💀', tier: 4, desc: 'Pulls distant target inflicting stun.' },
+  deathKnightAura2: { name: 'Death Knight Aura ⭐⭐', info: '+35% ATK, +30% Crit Dmg (2-Star ⭐⭐)', cost: 150, max: 5, type: 'proc', baseCd: 40000, pwr: 0, effect: 'warcry', classReq: 'deathKnight', reqLvl: 80, starRank: 2, icon: '👑💀', tier: 4, desc: 'Aura of death boosting physical attack.' },
+  deathExecution:   { name: 'Death Execution ⭐⭐⭐', info: '72 Pwr execution + heal block (3-Star ⭐⭐⭐)', cost: 250, max: 5, type: 'proc', baseCd: 8000, pwr: 72, effect: 'dmg', classReq: 'deathKnight', reqLvl: 84, starRank: 3, icon: '💀🗡️', tier: 4, desc: 'Slay target ignoring defense and blocking healing.' },
+  hellboundDeathAura:{ name: 'Hellbound Death Aura ⭐⭐⭐⭐', info: '+50% ATK/DEF, 100% Crit (4-Star ⭐⭐⭐⭐)', cost: 500, max: 5, type: 'proc', baseCd: 90000, pwr: 0, effect: 'warcry', classReq: 'deathKnight', reqLvl: 90, starRank: 4, icon: '👑🔥💀', tier: 4, desc: 'Hellbound knight transformation with elemental slashes.' }
 };
 
 const SKILL_REQS = {
@@ -1420,7 +1447,7 @@ function renderShopGear(list) {
 }
 function renderShopPotions(list) {
   const zone = ZONES[state.zone], shopId = zone?.shop, items = shopId ? D().SHOP_INVENTORY[shopId] : null;
-  const base = ['soulshot_ng','spiritshot_ng','hp_potion_s','hp_potion_m','hp_potion_l','hp_potion_xl','mp_potion_s','mp_potion_m','mp_potion_l','mp_potion_xl','antidote','scroll_of_resurrection','scroll_of_rebirth'];
+  const base = ['soulshot_ng','spiritshot_ng','hp_potion_s','hp_potion_m','hp_potion_l','hp_potion_xl','mp_potion_s','mp_potion_m','mp_potion_l','mp_potion_xl','antidote','scroll_of_resurrection','scroll_of_rebirth','spellbook_1star','spellbook_2star','spellbook_3star','spellbook_4star'];
   const shown = new Set(), list2 = [...base, ...(items || []).map(i => i.id)]; let count = 0;
   for (const id of list2) { if (shown.has(id)) continue; const def = D().ALL_ITEMS[id]; if (!def || (def.slot !== 'consumable' && def.slot !== 'scroll') || (def.req && def.req.level > state.level)) continue; shown.add(id); list.appendChild(shopRow(def, id, def.price)); count++; }
   if (!count) list.innerHTML = '<p class="shop-empty">No potions in stock.</p>';
@@ -2235,11 +2262,24 @@ function showSagaModal(saga) { el('saga-title').textContent = saga.name + ' Unlo
 // --------------------------- CHARACTER ---------------------------
 function spendSP(skillId) {
   const def = SKILL_DEFS[skillId]; if (!def) return; const lvl = state.skills[skillId] || 0;
-  if (lvl >= def.max) { log(`${def.name} already mastered.`, 'system'); return; }
+  if (lvl >= def.max) { log(`${def.name} já atingiu o nível máximo.`, 'system'); return; }
   const cost = getSkillCost(skillId, lvl);
-  if (state.sp < cost) { log(`Not enough SP (${cost} SP required).`, 'system'); return; }
-  if (state.level < def.reqLvl) { log(`Level ${def.reqLvl} required.`, 'system'); return; }
-  const reqs = SKILL_REQS[skillId]; if (reqs && !Object.entries(reqs).every(([s, v]) => (state.skills[s] || 0) >= v)) { log('Requirements not met.', 'system'); return; }
+  if (state.sp < cost) { log(`SP insuficiente (${cost} SP necessário).`, 'system'); return; }
+  if (state.level < def.reqLvl) { log(`Nível ${def.reqLvl} necessário para esta habilidade.`, 'system'); return; }
+
+  // Essence Star Rank Spellbook Requirement (1-Star to 4-Star)
+  if (def.starRank && def.starRank > 0 && lvl === 0) {
+    const bookId = `spellbook_${def.starRank}star`;
+    const bookItem = state.inventory.find(i => i.itemId === bookId && (i.count || 1) > 0);
+    if (!bookItem) {
+      log(`⭐ Exige o livro de habilidade Spellbook: ${def.starRank}-Star ⭐ no mercador ou mochila para aprender!`, 'system');
+      return;
+    }
+    removeFromInventory(bookItem.uid, 1);
+    log(`📖 Livro Spellbook: ${def.starRank}-Star ⭐ consumido com sucesso!`, 'rarity-legendary');
+  }
+
+  const reqs = SKILL_REQS[skillId]; if (reqs && !Object.entries(reqs).every(([s, v]) => (state.skills[s] || 0) >= v)) { log('Pré-requisitos de habilidades não preenchidos.', 'system'); return; }
   state.sp -= cost; state.skills[skillId] = lvl + 1; const newLvl = state.skills[skillId], tier = TIER_NAMES[def.tier] || '';
   log(`✦ ${def.name} → Lv.${newLvl} [${tier}] (-${cost} SP)`, newLvl === def.max ? 'saga' : 'xp');
   const stats = getStats(); state.maxHp = stats.maxHp; state.maxMp = stats.maxMp; state.hp = Math.min(state.hp + 20, state.maxHp); state.mp = Math.min(state.mp + 10, state.maxMp);

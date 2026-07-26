@@ -132,7 +132,11 @@ const CONSUMABLES = {
   soulshot_ng: { name: 'Soulshot (No-Grade)', slot: 'consumable', type: 'soulshot', price: 10, stack: 9999, desc: 'Increases physical attack damage by +100% on hit.' },
   spiritshot_ng: { name: 'Spiritshot (No-Grade)', slot: 'consumable', type: 'spiritshot', price: 15, stack: 9999, desc: 'Increases magic attack damage by +100% on spell.' },
   enchant_weapon_scroll: { name: 'Scroll: Enchant Weapon', slot: 'scroll', type: 'enchant_weapon', price: 1500, stack: 99, desc: 'Enchants a weapon (+10% stats per +1). Safe up to +3.' },
-  enchant_armor_scroll: { name: 'Scroll: Enchant Armor', slot: 'scroll', type: 'enchant_armor', price: 1000, stack: 99, desc: 'Enchants armor (+10% stats per +1). Safe up to +3.' }
+  enchant_armor_scroll: { name: 'Scroll: Enchant Armor', slot: 'scroll', type: 'enchant_armor', price: 1000, stack: 99, desc: 'Enchants armor (+10% stats per +1). Safe up to +3.' },
+  spellbook_1star: { name: 'Spellbook: 1-Star ⭐', slot: 'scroll', type: 'spellbook', price: 5000, stack: 99, desc: 'Ancient L-Coin spellbook required to learn 1-Star ⭐ Essence skills.' },
+  spellbook_2star: { name: 'Spellbook: 2-Star ⭐⭐', slot: 'scroll', type: 'spellbook', price: 25000, stack: 99, desc: 'Mastery spellbook required to learn 2-Star ⭐⭐ Essence mastery skills.' },
+  spellbook_3star: { name: 'Spellbook: 3-Star ⭐⭐⭐', slot: 'scroll', type: 'spellbook', price: 100000, stack: 99, desc: 'High-rank spellbook required to learn 3-Star ⭐⭐⭐ Essence ultimate skills.' },
+  spellbook_4star: { name: 'Spellbook: 4-Star ⭐⭐⭐⭐', slot: 'scroll', type: 'spellbook', price: 500000, stack: 99, desc: 'Mythic 4-Star ⭐⭐⭐⭐ spellbook unlocking supreme class aura transformations.' }
 };
 
 const MATERIALS = {
