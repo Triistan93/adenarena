@@ -2292,31 +2292,69 @@ select:focus-visible {
 /* ============ ITEM TOOLTIP ============ */
 .item-tooltip {
   position: fixed;
-  background: linear-gradient(180deg, var(--bg-2), var(--bg-0));
-  border: 1px solid var(--gilt-deep);
-  padding: 10px 12px;
+  background: linear-gradient(180deg, #241c14, #120e0a);
+  border: 2px solid #8a6c40;
+  border-radius: 4px;
+  padding: 10px 14px;
   font-size: 11px;
-  max-width: 260px;
-  pointer-events: none;
+  max-width: 270px;
+  pointer-events: auto;
   display: none;
-  z-index: 200;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.7), 0 0 0 1px rgba(212,167,68,0.15) inset;
+  z-index: 99999 !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.9), inset 0 0 10px rgba(212,167,68,0.2);
 }
 .item-tooltip::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, transparent, var(--gilt), transparent);
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, #f0d080, transparent);
 }
-.tt-name { font-family: "Cinzel", serif; font-weight: 700; font-size: 13px; margin-bottom: 2px; letter-spacing: 0.05em; }
-.tt-rarity { font-family: "IBM Plex Mono", monospace; font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 6px; }
-.tt-req { font-family: "IBM Plex Mono", monospace; font-size: 10px; color: var(--ink-mute); letter-spacing: 0.08em; }
-.tt-req.ok { color: var(--verdigris); }
-.tt-req.no { color: var(--blood); }
-.tt-desc { color: var(--ink-dim); margin: 6px 0; font-style: italic; font-size: 11px; line-height: 1.4; }
-.tt-stat { display: flex; justify-content: space-between; padding: 1px 0; font-family: "IBM Plex Mono", monospace; font-size: 10px; color: var(--ink-dim); }
-.tt-stat .v { color: var(--verdigris); font-weight: 600; }
-.tt-equipped { margin-top: 6px; color: var(--gilt-bright); font-family: "Cinzel", serif; font-size: 10px; letter-spacing: 0.2em; }
+.tt-name { font-family: "Cinzel", serif; font-weight: 700; font-size: 13px; margin-bottom: 2px; letter-spacing: 0.05em; text-shadow: 0 1px 3px #000; }
+.tt-rarity { font-family: "IBM Plex Mono", monospace; font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 6px; font-weight: bold; }
+.tt-req { font-family: "IBM Plex Mono", monospace; font-size: 10px; color: #8a7858; letter-spacing: 0.08em; }
+.tt-req.ok { color: #4ade80; }
+.tt-req.no { color: #f87171; }
+.tt-desc { color: #c8b898; margin: 6px 0; font-style: italic; font-size: 10.5px; line-height: 1.4; }
+.tt-stat { display: flex; justify-content: space-between; padding: 1px 0; font-family: "IBM Plex Mono", monospace; font-size: 10px; color: #a89470; }
+.tt-stat .v { color: #4ade80; font-weight: 600; }
+.tt-equipped { margin-top: 6px; color: #f0d080; font-family: "Cinzel", serif; font-size: 10px; letter-spacing: 0.2em; font-weight: bold; }
 .tt-actions { margin-top: 8px; display: flex; gap: 4px; pointer-events: auto; }
-.tt-actions .item-action { padding: 4px 8px; font-size: 9px; }
+.tt-actions .item-action { padding: 4px 8px; font-size: 9.5px; font-weight: bold; cursor: pointer; }
+
+/* ============ PROMINENT ITEM RARITY BORDERS ============ */
+.inv-slot.rarity-common,
+.l2inv-pd-slot.rarity-common,
+.l2inv-slots-grid .inv-slot.rarity-common {
+  border: 2px solid #6b7280 !important;
+  box-shadow: inset 0 0 4px rgba(107, 114, 128, 0.3) !important;
+}
+
+.inv-slot.rarity-uncommon,
+.l2inv-pd-slot.rarity-uncommon,
+.l2inv-slots-grid .inv-slot.rarity-uncommon {
+  border: 2px solid #22c55e !important;
+  box-shadow: inset 0 0 6px rgba(34, 197, 94, 0.4) !important;
+}
+
+.inv-slot.rarity-rare,
+.l2inv-pd-slot.rarity-rare,
+.l2inv-slots-grid .inv-slot.rarity-rare {
+  border: 2px solid #3b82f6 !important;
+  box-shadow: inset 0 0 8px rgba(59, 130, 246, 0.45) !important;
+}
+
+.inv-slot.rarity-epic,
+.l2inv-pd-slot.rarity-epic,
+.l2inv-slots-grid .inv-slot.rarity-epic {
+  border: 2px solid #a855f7 !important; /* ROXO VÍVIDO PARA ITENS ÉPICOS */
+  box-shadow: 0 0 8px rgba(168, 85, 247, 0.5), inset 0 0 8px rgba(168, 85, 247, 0.35) !important;
+}
+
+.inv-slot.rarity-legendary,
+.l2inv-pd-slot.rarity-legendary,
+.l2inv-slots-grid .inv-slot.rarity-legendary {
+  border: 2px solid #f59e0b !important;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.6), inset 0 0 10px rgba(245, 158, 11, 0.4) !important;
+  animation: legendary-glow 2.5s ease-in-out infinite alternate;
+}
 
 /* ============ SCROLLBAR ============ */
 ::-webkit-scrollbar { width: 8px; height: 8px; }

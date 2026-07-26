@@ -108,7 +108,8 @@ export const IDLE_MARKUP = `
           <button class="tab-btn" data-tab="skills">✦ Habilidades</button>
           <button class="tab-btn" data-tab="shop">🛒 Mercador</button>
           <button class="tab-btn" data-tab="craft">⚒️ Forja</button>
-          <button class="tab-btn" data-tab="zones">🗺️ Caça</button>
+          <button class="tab-btn" data-tab="enchant">✨ Encantamento</button>
+          <button class="tab-btn" data-tab="zones">🗺️ Caça &amp; Raids</button>
         </div>
         <div class="tab-content">
           <!-- Character Tab -->
@@ -350,27 +351,26 @@ export const IDLE_MARKUP = `
             <div class="shop-list" id="shop-list"></div>
           </div>
 
-          <!-- Craft & Enchant Tab -->
+          <!-- Craft Tab -->
           <div id="tab-craft" class="tab-pane">
             <div class="craft-head">
-              <h3>Forja &amp; Encantamento (+1 a +16)</h3>
+              <h3>Forja &amp; Criação de Itens</h3>
               <p class="stat-value">Nível de Forja: <span id="craft-level">1</span></p>
             </div>
-            
-            <div class="craft-subtabs">
-              <button class="craft-subtab active" data-crafttab="recipes">⚒️ Receitas de Criação</button>
-              <button class="craft-subtab" data-crafttab="enchant">✨ Encantar Equipamento</button>
-            </div>
-
             <div id="craft-recipes-view" class="craft-view active">
-              <p class="shop-info">Combine materiais para forjar armas e armaduras poderosas.</p>
+              <p class="shop-info">Combine materiais para forjar armas, armaduras e relíquias poderosas.</p>
               <div class="craft-list" id="craft-list"></div>
             </div>
+          </div>
 
-            <div id="craft-enchant-view" class="craft-view">
-              <p class="shop-info">Encante seus equipamentos usando Pergaminhos de Encantamento (+10% status por +1).</p>
-              <div class="enchant-workspace" id="enchant-workspace"></div>
+          <!-- Dedicated Enchantment Tab -->
+          <div id="tab-enchant" class="tab-pane">
+            <div class="craft-head">
+              <h3>Oficina de Encantamento (+1 a +16)</h3>
+              <p class="stat-value">Reforço com Pergaminhos Ancestrais</p>
             </div>
+            <p class="shop-info">Encante seus equipamentos usando Pergaminhos de Encantamento (+10% de atributos adicionais por nível de encantamento).</p>
+            <div class="enchant-workspace" id="enchant-workspace-dedicated"></div>
           </div>
 
           <!-- Zones & Raids Tab -->

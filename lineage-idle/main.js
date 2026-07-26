@@ -941,6 +941,10 @@ function updateInventoryUI() {
     const checkHtml = `<div class="slot-select-checkbox">${isSelected ? '✓' : ''}</div>`;
     slot.innerHTML = `${checkHtml}<span style="font-size:18px">${getItemIcon(def)}</span><span class="name">${enchantStr}${def.name}</span>${qty}${tag}`;
     
+    // Hover tooltips for backpack items
+    slot.onmouseenter = (e) => showItemTooltip(item, e);
+    slot.onmouseleave = hideItemTooltip;
+
     slot.onclick = (e) => {
       e.stopPropagation();
       if (e.target.classList.contains('slot-select-checkbox') || isSelected) {
@@ -980,10 +984,10 @@ function getItemIcon(def) { const icons = { weapon: '⚔️', armor: '🛡️', 
 
 function showItemTooltip(item, e) {
   const def = D().ALL_ITEMS[item.itemId]; if (!def) return;
-  const tt = el('item-tooltip'), rarity = item.rarity || 'common', mult = D().RARITY[rarity].mult, rc = D().RARITY[rarity].color;
+  const tt = el('item-tooltip'), rarity = item.rarity || 'common', mult = D().RARITY[rarity]?.mult || 1, rc = D().RARITY[rarity]?.color || '#c8a84e';
   const enchantStr = item.enchant ? `+${item.enchant} ` : '';
   let html = `<div class="tt-name" style="color:${rc}">${enchantStr}${def.name}</div>`;
-  if (item.rarity) html += `<div class="tt-rarity" style="color:${rc}">${D().RARITY[rarity].name}</div>`;
+  if (item.rarity) html += `<div class="tt-rarity" style="color:${rc}">${D().RARITY[rarity]?.name || rarity}</div>`;
   const reqLvl = def.req ? def.req.level : 1; const grade = getItemGrade(reqLvl);
   html += `<div style="color:var(--text-muted);font-size:10px;text-transform:capitalize;">${def.slot} · <span style="font-weight:bold; color:var(--gilt);">${grade}</span></div>`;
   if (def.req) html += `<div class="tt-req">Req: Lv.${def.req.level}</div>`;
@@ -1014,11 +1018,16 @@ function showItemTooltip(item, e) {
   
   tt.onclick = (ev) => ev.stopPropagation();
 
-  const rect = e.currentTarget.getBoundingClientRect(); 
-  let leftPos = rect.right + 10;
-  if (leftPos + 260 > window.innerWidth) leftPos = rect.left - 270; 
-  tt.style.left = leftPos + 'px'; 
-  tt.style.top = rect.top + 'px';
+  if (e && e.currentTarget) {
+    const rect = e.currentTarget.getBoundingClientRect(); 
+    let leftPos = rect.right + 10;
+    if (leftPos + 260 > window.innerWidth) leftPos = rect.left - 270; 
+    tt.style.left = Math.max(10, leftPos) + 'px'; 
+    tt.style.top = Math.max(10, rect.top) + 'px';
+  } else if (e && e.clientX) {
+    tt.style.left = Math.min(window.innerWidth - 270, e.clientX + 15) + 'px';
+    tt.style.top = Math.min(window.innerHeight - 300, e.clientY + 15) + 'px';
+  }
   
   tt.querySelectorAll('.item-action').forEach(btn => {
     btn.onclick = (ev) => { 
@@ -1088,16 +1097,55 @@ function renderShopPowerups(list) {
   for (const id of powerupIds) { const def = D().ALL_ITEMS[id]; if (def) list.appendChild(shopRow(def, id, def.price)); }
 }
 function renderShopClass(list) {
-  if (!state.class) { list.innerHTML = '<p class="shop-empty">Choose a class to see exclusive gear.</p>'; return; }
-  const clsName = getClass(state.class)?.name || state.class, hdr = mkEl('div'); hdr.className = 'shop-header'; hdr.innerHTML = `<h4>${clsName} Exclusive</h4><p>Masterwork gear forged for your order.</p>`; list.appendChild(hdr);
-  let count = 0; for (const id of Object.keys(D().ALL_ITEMS)) { const def = D().ALL_ITEMS[id]; if (def.classReq !== state.class || (def.req && def.req.level > state.level + 5)) continue; list.appendChild(shopRow(def, id, def.price)); count++; }
-  if (!count) list.innerHTML += '<p class="shop-empty">No exclusive gear available at your level.</p>';
+  const clsName = state.class ? (getClass(state.class)?.name || state.class) : 'Aventureiro';
+  const hdr = mkEl('div'); hdr.className = 'shop-header';
+  hdr.innerHTML = `<h4>🎖️ ${clsName} Exclusivos &amp; Avanço de Ordem</h4><p>Equipamentos mestres e emblemas da sua ordem.</p>`;
+  list.appendChild(hdr);
+  
+  let count = 0;
+  for (const id of Object.keys(D().ALL_ITEMS)) {
+    const def = D().ALL_ITEMS[id];
+    if (!def) continue;
+    if (def.classReq && def.classReq === state.class) {
+      list.appendChild(shopRow(def, id, def.price));
+      count++;
+    }
+  }
+  
+  // Show high-level class weapons if none available
+  if (count === 0) {
+    const fallbackClassItems = ['arcane_wand', 'council_staff', 'starfall_staff', 'shadow_fangs', 'wraith_reavers', 'void_talons', 'warlords_plate', 'arcane_vestments'];
+    for (const id of fallbackClassItems) {
+      const def = D().ALL_ITEMS[id];
+      if (def) { list.appendChild(shopRow(def, id, def.price)); count++; }
+    }
+  }
 }
+
 function renderShopMystic(list) {
-  const rot = D().getMysticRotation(), hdr = mkEl('div'); hdr.className = 'shop-header mystic-header'; hdr.innerHTML = `<h4>✦ Mystic Curio ✦</h4><p>Rotating rare offerings. Next refresh in <span id="mystic-timer">${fmtCountdown(rot[0]?.msLeft || 0)}</span></p>`; list.appendChild(hdr);
+  const rot = D().getMysticRotation(), hdr = mkEl('div'); hdr.className = 'shop-header mystic-header';
+  hdr.innerHTML = `<h4>✦ Relíquias &amp; Tesouros Místicos ✦</h4><p>Ofertas raras e encantos ancestrais. Renovação em <span id="mystic-timer">${fmtCountdown(rot[0]?.msLeft || 0)}</span></p>`;
+  list.appendChild(hdr);
+  
   for (const pick of rot) {
-    const def = D().ALL_ITEMS[pick.id]; if (!def) continue; const price = Math.floor((def.price || 500) * D().RARITY[pick.rarity].mult * 2), cloned = D().rollItemWithRarity(pick.id, pick.rarity), canAfford = state.gold >= price, lockLvl = def.req && def.req.level > state.level, lockCls = def.classReq && def.classReq !== state.class, row = mkEl('div'); row.className = `shop-item rarity-${pick.rarity}` + (lockLvl || lockCls ? ' locked' : ''); const statsLine = buildStatLine(cloned);
-    row.innerHTML = `<div class="item-info"><div class="item-name rarity-${pick.rarity}">${def.name} <span class="rarity-tag">${D().RARITY[pick.rarity].name}</span></div><div class="item-desc">${def.desc || ''}</div>${statsLine ? `<div class="item-stats">${statsLine}</div>` : ''}</div><button class="item-action mystic-buy" data-buy-rarity="${pick.id}" data-rarity="${pick.rarity}" ${(!canAfford || lockLvl || lockCls) ? 'disabled' : ''}>${price}g</button>`; list.appendChild(row);
+    const def = D().ALL_ITEMS[pick.id]; if (!def) continue;
+    const price = Math.floor((def.price || 500) * D().RARITY[pick.rarity].mult * 2);
+    const cloned = D().rollItemWithRarity(pick.id, pick.rarity);
+    const canAfford = state.gold >= price;
+    const lockLvl = def.req && def.req.level > state.level;
+    const lockCls = def.classReq && def.classReq !== state.class;
+    const row = mkEl('div');
+    row.className = `shop-item rarity-${pick.rarity}` + (lockLvl || lockCls ? ' locked' : '');
+    const statsLine = buildStatLine(cloned);
+    row.innerHTML = `<div class="item-info"><div class="item-name rarity-${pick.rarity}">${def.name} <span class="rarity-tag">${D().RARITY[pick.rarity].name}</span></div><div class="item-desc">${def.desc || ''}</div>${statsLine ? `<div class="item-stats">${statsLine}</div>` : ''}</div><button class="item-action mystic-buy" data-buy-rarity="${pick.id}" data-rarity="${pick.rarity}" ${(!canAfford || lockLvl || lockCls) ? 'disabled' : ''}>${price.toLocaleString()}g</button>`;
+    list.appendChild(row);
+  }
+
+  // Mystic Enchant Scrolls & Artifacts
+  const mysticArtifacts = ['enchant_weapon_scroll', 'enchant_armor_scroll', 'scroll_of_resurrection', 'teleport_scroll'];
+  const sep = mkEl('div'); sep.className = 'shop-header'; sep.innerHTML = '<h4>✦ Pergaminhos Místicos Ancestrais</h4>'; list.appendChild(sep);
+  for (const id of mysticArtifacts) {
+    const def = D().ALL_ITEMS[id]; if (def) list.appendChild(shopRow(def, id, Math.floor(def.price * 1.2)));
   }
 }
 
@@ -1261,43 +1309,48 @@ function renderCraftRecipes() {
 }
 
 function updateEnchantUI() {
-  const ws = el('enchant-workspace'); if (!ws) return; ws.innerHTML = '';
-  const equippable = state.inventory.filter(i => {
-    const def = D().ALL_ITEMS[i.itemId];
-    return def && ['weapon','armor','helmet','gloves','boots','ring'].includes(def.slot);
-  });
+  const wsList = [el('enchant-workspace'), el('enchant-workspace-dedicated')].filter(Boolean);
+  if (!wsList.length) return;
   
-  if (!equippable.length) {
-    ws.innerHTML = '<p class="shop-empty">Você não possui equipamentos na mochila para encantar.</p>';
-    return;
-  }
-
-  for (const item of equippable) {
-    const def = D().ALL_ITEMS[item.itemId];
-    const isWeapon = def.slot === 'weapon';
-    const scrollId = isWeapon ? 'enchant_weapon_scroll' : 'enchant_armor_scroll';
-    const scrollDef = D().ALL_ITEMS[scrollId];
-    const count = getInventoryCount(scrollId);
-    const enchant = item.enchant || 0;
-    const rarityColor = item.rarity ? D().RARITY[item.rarity].color : 'var(--gilt)';
+  for (const ws of wsList) {
+    ws.innerHTML = '';
+    const equippable = state.inventory.filter(i => {
+      const def = D().ALL_ITEMS[i.itemId];
+      return def && ['weapon','armor','helmet','gloves','boots','ring'].includes(def.slot);
+    });
     
-    const card = mkEl('div'); card.className = 'enchant-card';
-    const title = (enchant > 0 ? `+${enchant} ` : '') + def.name + (item.rarity ? ` [${D().RARITY[item.rarity].name}]` : '');
-    const safeMsg = enchant < 3 ? '100% Seguro (Até +3)' : `Sucesso: ${Math.max(30, 100 - (enchant - 3) * 10)}%`;
-    
-    card.innerHTML = `
-      <div class="enchant-card-info">
-        <div class="enchant-item-title" style="color:${rarityColor}">${title} ${item.equipped ? '⚡ (EQUIPADO)' : ''}</div>
-        <div class="enchant-item-sub">Req: ${scrollDef ? scrollDef.name : scrollId} (Possui: ${count}) · ${safeMsg}</div>
-      </div>
-      <button class="item-action" data-enchant="${item.uid}" ${count < 1 ? 'disabled title="Sem pergaminhos de encantamento"' : ''}>Encantar (+1)</button>
-    `;
-    ws.appendChild(card);
-  }
+    if (!equippable.length) {
+      ws.innerHTML = '<p class="shop-empty">Você não possui equipamentos na mochila para encantar.</p>';
+      continue;
+    }
 
-  ws.querySelectorAll('[data-enchant]').forEach(btn => {
-    btn.onclick = () => enchantItem(btn.dataset.enchant);
-  });
+    for (const item of equippable) {
+      const def = D().ALL_ITEMS[item.itemId];
+      const isWeapon = def.slot === 'weapon';
+      const scrollId = isWeapon ? 'enchant_weapon_scroll' : 'enchant_armor_scroll';
+      const scrollDef = D().ALL_ITEMS[scrollId];
+      const count = getInventoryCount(scrollId);
+      const enchant = item.enchant || 0;
+      const rarityColor = item.rarity ? D().RARITY[item.rarity].color : 'var(--gilt)';
+      
+      const card = mkEl('div'); card.className = 'enchant-card';
+      const title = (enchant > 0 ? `+${enchant} ` : '') + def.name + (item.rarity ? ` [${D().RARITY[item.rarity].name}]` : '');
+      const safeMsg = enchant < 3 ? '100% Seguro (Até +3)' : `Sucesso: ${Math.max(30, 100 - (enchant - 3) * 10)}%`;
+      
+      card.innerHTML = `
+        <div class="enchant-card-info">
+          <div class="enchant-item-title" style="color:${rarityColor}">${title} ${item.equipped ? '⚡ (EQUIPADO)' : ''}</div>
+          <div class="enchant-item-sub">Req: ${scrollDef ? scrollDef.name : scrollId} (Possui: ${count}) · ${safeMsg}</div>
+        </div>
+        <button class="item-action" data-enchant="${item.uid}" ${count < 1 ? 'disabled title="Sem pergaminhos de encantamento"' : ''}>Encantar (+1)</button>
+      `;
+      ws.appendChild(card);
+    }
+
+    ws.querySelectorAll('[data-enchant]').forEach(btn => {
+      btn.onclick = () => enchantItem(btn.dataset.enchant);
+    });
+  }
 }
 
 function enchantItem(uid) {
