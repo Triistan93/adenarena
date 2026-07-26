@@ -159,30 +159,68 @@ const SKILL_DEFS = {
   fatalStrike:  { name: 'Fatal Strike', info: 'High dmg, ignores defense', cost: 60, max: 5, type: 'proc', baseCd: 12000, pwr: 35, effect: 'dmg', classReq: 'fighter', reqLvl: 35, icon: '🩸', tier: 4, desc: 'Strong attack ignoring defense.' },
   powerCrush:   { name: 'Power Crush', info: '664 Power massive hit', cost: 80, max: 5, type: 'proc', baseCd: 18000, pwr: 66, effect: 'dmg', classReq: 'fighter', reqLvl: 40, icon: '☄', tier: 4, desc: 'Attacks the enemy with massive power.' },
 
+  // === ARCHER TREE (Sagittarius / Silver Ranger / Phantom Ranger / Trickster) ===
+  bow_mastery_arch: { name: 'Bow Mastery', info: '+18% P. Atk & +15 Accuracy', cost: 5, max: 10, type: 'stat', classReq: 'rogue', reqLvl: 1, icon: '🏹', tier: 0, desc: 'Increases P. Atk. and accuracy with bows.' },
+  rapid_shot_arch: { name: 'Rapid Shot', info: '+20% Attack Speed with Bows', cost: 10, max: 5, type: 'proc', baseCd: 30000, pwr: 0, effect: 'warcry', classReq: 'rogue', reqLvl: 10, icon: '⚡🏹', tier: 1, desc: 'Increases bow attack speed.' },
+  eagle_eye_arch: { name: 'Eagle Eye', info: '+15% P. Crit Rate & +100 Range', cost: 15, max: 5, type: 'proc', baseCd: 30000, pwr: 0, effect: 'warcry', classReq: 'rogue', reqLvl: 15, icon: '🦅', tier: 1, desc: 'Sharpens vision for higher crit rate and range.' },
+  archers_will_arch: { name: "Archer's Will", info: '+10% P. Atk & +100 Range on hit', cost: 25, max: 5, type: 'stat', classReq: 'sagittarius', reqLvl: 40, icon: '🌟🏹', tier: 2, desc: 'Increases physical attack and range.' },
+
+  double_shot_arch: { name: 'Double Shot', info: 'Auto-cast: 24 Pwr 2-arrow burst', cost: 5, max: 5, type: 'proc', baseCd: 2500, pwr: 24, effect: 'dmg', classReq: 'rogue', reqLvl: 1, icon: '🎯', tier: 0, desc: 'Fires two rapid arrows at the target.' },
+  hamstring_shot_arch: { name: 'Hamstring Shot', info: 'Auto-cast: 28 Pwr physical + 40% slow', cost: 15, max: 5, type: 'proc', baseCd: 8000, pwr: 28, effect: 'dmg', classReq: 'rogue', reqLvl: 15, icon: '🦵', tier: 1, desc: 'Slows down the target upon impact.' },
+  stun_shot_arch: { name: 'Stun Shot', info: 'Auto-cast: 32 Pwr physical + 3s Stun', cost: 25, max: 5, type: 'proc', baseCd: 10000, pwr: 32, effect: 'stun', classReq: 'rogue', reqLvl: 25, icon: '💫🏹', tier: 2, desc: 'Stuns the target with a heavy arrow strike.' },
+  arrow_shower_arch: { name: 'Arrow Shower', info: 'Auto-cast: 48 Pwr physical AoE rain', cost: 40, max: 5, type: 'proc', baseCd: 6000, pwr: 48, effect: 'dmg', classReq: 'sagittarius', reqLvl: 45, icon: '🌧️', tier: 2, desc: 'Rains down lethal arrows over an area.' },
+
+  // === DAGGER / ASSASSIN TREE (Treasure Hunter / Ghost Hunter / Plains Walker) ===
+  dagger_mastery_dag: { name: 'Dagger Mastery', info: '+20% P. Atk & +25% Blow Rate', cost: 5, max: 10, type: 'stat', classReq: 'rogue', reqLvl: 1, icon: '🗡️', tier: 0, desc: 'Increases P. Atk. and blow success rate.' },
+  assassin_speed_dag: { name: 'Assassin Speed', info: '+25% Move Speed & +15 Evasion', cost: 10, max: 5, type: 'stat', classReq: 'rogue', reqLvl: 10, icon: '💨', tier: 1, desc: 'Increases movement speed and evasion.' },
+  critical_chance_dag: { name: 'Critical Chance', info: '+20% Critical Rate', cost: 15, max: 5, type: 'stat', classReq: 'rogue', reqLvl: 15, icon: '💥', tier: 1, desc: 'Increases physical critical rate.' },
+  shadow_cloak_buff_dag: { name: 'Shadow Cloak', info: '+30% Evasion & Stealth', cost: 25, max: 5, type: 'proc', baseCd: 40000, pwr: 0, effect: 'warcry', classReq: 'treasureHunter', reqLvl: 40, icon: '👤', tier: 2, desc: 'Enters shadow stealth boosting evasion.' },
+
+  backstab_dag: { name: 'Backstab', info: 'Auto-cast: 40 Pwr lethal backstab hit', cost: 15, max: 5, type: 'proc', baseCd: 5000, pwr: 40, effect: 'dmg', classReq: 'rogue', reqLvl: 15, icon: '🩸', tier: 1, desc: 'Stabs the target from behind for massive damage.' },
+  deadlyBlow: { name: 'Deadly Blow', info: 'Auto-cast: 34 Pwr critical strike', cost: 25, max: 5, type: 'proc', baseCd: 7000, pwr: 34, effect: 'dmg', classReq: 'rogue', reqLvl: 25, icon: '🗡️⚡', tier: 2, desc: 'A deadly dagger thrust at vital points.' },
+  bluff_strike_dag: { name: 'Bluff Strike', info: 'Auto-cast: 38 Pwr strike + 2s Stun', cost: 40, max: 5, type: 'proc', baseCd: 10000, pwr: 38, effect: 'stun', classReq: 'treasureHunter', reqLvl: 45, icon: '🌀', tier: 2, desc: 'Disorients the target causing stun.' },
+
+  // === TANK / SHIELD TREE (Paladin / Dark Avenger / Shillien Templar / Eva Templar) ===
+  shield_mastery_tnk: { name: 'Shield Mastery', info: '+25% P. Def & +18% Block Rate', cost: 5, max: 10, type: 'stat', classReq: 'knight', reqLvl: 1, icon: '🛡️', tier: 0, desc: 'Increases P. Def. and shield block rate.' },
+  fortress_guard_tnk: { name: 'Fortress Guard', info: '+20% P. Def & +20% M. Def', cost: 10, max: 5, type: 'stat', classReq: 'knight', reqLvl: 10, icon: '🏰', tier: 1, desc: 'Increases P. Def. and M. Def.' },
+  iron_will_tnk: { name: 'Iron Will', info: '+15% M. Def & +10% HP Regen', cost: 15, max: 5, type: 'stat', classReq: 'knight', reqLvl: 15, icon: '🪨', tier: 1, desc: 'Increases magic defense and health regen.' },
+  aegis_aura_tnk: { name: 'Aegis Aura', info: '+30% Shield Block in 360°', cost: 25, max: 5, type: 'proc', baseCd: 45000, pwr: 0, effect: 'warcry', classReq: 'knight', reqLvl: 40, icon: '🛡️✨', tier: 2, desc: 'Allows blocking attacks from all directions.' },
+
+  tribunal_tnk: { name: 'Tribunal Strike', info: 'Auto-cast: 30 Pwr holy/dark hit', cost: 15, max: 5, type: 'proc', baseCd: 6000, pwr: 30, effect: 'dmg', classReq: 'knight', reqLvl: 15, icon: '⚔️✨', tier: 1, desc: 'Strikes enemy with sacred power.' },
+  judgment_tnk: { name: 'Judgment', info: 'Auto-cast: 35 Pwr hit & -15% P. Def', cost: 25, max: 5, type: 'proc', baseCd: 8000, pwr: 35, effect: 'dmg', classReq: 'knight', reqLvl: 25, icon: '⚖️', tier: 2, desc: 'Strikes the enemy and degrades defense.' },
+  lightning_strike_tnk: { name: 'Lightning Strike', info: 'Auto-cast: 34 Pwr magic + 4s Paralysis', cost: 40, max: 5, type: 'proc', baseCd: 10000, pwr: 34, effect: 'stun', classReq: 'knight', reqLvl: 45, icon: '⚡🛡️', tier: 2, desc: 'Paralyzes the target with a dark lightning bolt.' },
+  dark_shillien_drain_tnk: { name: 'Dark Life Drain', info: 'Auto-cast: 28 Pwr hit + 50% HP lifesteal', cost: 50, max: 5, type: 'proc', baseCd: 6000, pwr: 28, effect: 'vampiric', classReq: 'knight', reqLvl: 50, icon: '🩸🛡️', tier: 3, desc: 'Drains health from the enemy to heal self.' },
+
+  // === DUAL SWORD TREE (Duelist / Gladiator / Spectral Dancer / Sword Muse) ===
+  dual_sword_mast_dua: { name: 'Dual Sword Mastery', info: '+25% P. Atk & +15% Atk Speed', cost: 5, max: 10, type: 'stat', classReq: 'warrior', reqLvl: 1, icon: '⚔️', tier: 0, desc: 'Increases P. Atk. when using dual blades.' },
+  sonic_focus_dua: { name: 'Sonic Focus', info: 'Builds sonic charges on hit', cost: 10, max: 5, type: 'stat', classReq: 'warrior', reqLvl: 10, icon: '🌀', tier: 1, desc: 'Accumulates sonic force for special slashes.' },
+  song_of_hunter_dua: { name: 'Song of Hunter', info: '+20% Critical Rate for 60s', cost: 25, max: 5, type: 'proc', baseCd: 60000, pwr: 0, effect: 'warcry', classReq: 'gladiator', reqLvl: 40, icon: '🎵', tier: 2, desc: 'Chants a song boosting critical rate.' },
+  sonic_blaster_dua: { name: 'Sonic Blaster', info: 'Auto-cast: 45 Pwr long-range wave', cost: 25, max: 5, type: 'proc', baseCd: 7000, pwr: 45, effect: 'dmg', classReq: 'gladiator', reqLvl: 25, icon: '💥⚔️', tier: 2, desc: 'Launches a sonic shockwave at range.' },
+
   // Essence 1-Star to 4-Star Star Skills
-  tripleSonicSlash: { name: 'Triple Sonic Slash ⭐', info: '58 Pwr armor piercing 3-hit slash (1-Star ⭐)', cost: 100, max: 5, type: 'proc', baseCd: 6000, pwr: 58, effect: 'dmg', classReq: 'gladiator', reqLvl: 76, starRank: 1, icon: '🗡️', tier: 4, desc: 'Devastating 3-hit sonic slash ignoring defense.' },
-  sonicRage:        { name: 'Sonic Rage ⭐⭐', info: '21 Pwr auto-proc wind blades (2-Star ⭐⭐)', cost: 150, max: 5, type: 'proc', baseCd: 800, pwr: 21, effect: 'dmg', classReq: 'gladiator', reqLvl: 80, starRank: 2, icon: '⚡', tier: 4, desc: 'Continuous wind blades building sonic charges.' },
-  rushImpact:       { name: 'Rush Impact ⭐⭐⭐', info: '42 Pwr charge + 3s Stun (3-Star ⭐⭐⭐)', cost: 250, max: 5, type: 'proc', baseCd: 12000, pwr: 42, effect: 'stun', classReq: 'gladiator', reqLvl: 84, starRank: 3, icon: '💨', tier: 4, desc: 'Rushes to target inflicting AoE damage and stun.' },
+  tripleSonicSlash: { name: 'Triple Sonic Slash ⭐', info: '58 Pwr armor piercing 3-hit slash (1-Star ⭐)', cost: 100, max: 5, type: 'proc', baseCd: 6000, pwr: 58, effect: 'dmg', classReq: 'gladiator', reqLvl: 76, starRank: 1, icon: '🗡️', tier: 3, desc: 'Devastating 3-hit sonic slash ignoring defense.' },
+  sonicRage:        { name: 'Sonic Rage ⭐⭐', info: '21 Pwr auto-proc wind blades (2-Star ⭐⭐)', cost: 150, max: 5, type: 'proc', baseCd: 800, pwr: 21, effect: 'dmg', classReq: 'gladiator', reqLvl: 80, starRank: 2, icon: '⚡', tier: 3, desc: 'Continuous wind blades building sonic charges.' },
+  rushImpact:       { name: 'Rush Impact ⭐⭐⭐', info: '42 Pwr charge + 3s Stun (3-Star ⭐⭐⭐)', cost: 250, max: 5, type: 'proc', baseCd: 12000, pwr: 42, effect: 'stun', classReq: 'gladiator', reqLvl: 84, starRank: 3, icon: '💨', tier: 3, desc: 'Rushes to target inflicting AoE damage and stun.' },
   duelistAura:      { name: 'Master of Dual Swords ⭐⭐⭐⭐', info: '+35% ATK, Max Charges (4-Star ⭐⭐⭐⭐)', cost: 500, max: 5, type: 'proc', baseCd: 90000, pwr: 0, effect: 'warcry', classReq: 'gladiator', reqLvl: 90, starRank: 4, icon: '👑', tier: 4, desc: 'Supreme dual blade posture maintaining max charges.' },
 
-  multipleArrow:    { name: 'Multiple Arrow ⭐', info: '42 Pwr 5-arrow AoE rain (1-Star ⭐)', cost: 100, max: 5, type: 'proc', baseCd: 4500, pwr: 42, effect: 'dmg', classReq: 'sagittarius', reqLvl: 76, starRank: 1, icon: '🌧️', tier: 4, desc: 'Rains arrows on enemies in range.' },
-  snipeMastery:     { name: 'Snipe Mastery ⭐⭐', info: '+25% ATK, +200 Range mobile (2-Star ⭐⭐)', cost: 150, max: 5, type: 'proc', baseCd: 40000, pwr: 0, effect: 'warcry', classReq: 'sagittarius', reqLvl: 80, starRank: 2, icon: '🔭', tier: 4, desc: 'Mobile sniper posture boosting ATK and range.' },
-  lethalShotSag:    { name: 'Lethal Shot ⭐⭐⭐', info: '65 Pwr Armor Pierce (3-Star ⭐⭐⭐)', cost: 250, max: 5, type: 'proc', baseCd: 8000, pwr: 65, effect: 'dmg', classReq: 'sagittarius', reqLvl: 84, starRank: 3, icon: '⚡', tier: 4, desc: 'Surgical precision shot ignoring defense.' },
+  multipleArrow:    { name: 'Multiple Arrow ⭐', info: '42 Pwr 5-arrow AoE rain (1-Star ⭐)', cost: 100, max: 5, type: 'proc', baseCd: 4500, pwr: 42, effect: 'dmg', classReq: 'sagittarius', reqLvl: 76, starRank: 1, icon: '🌧️', tier: 3, desc: 'Rains arrows on enemies in range.' },
+  snipeMastery:     { name: 'Snipe Mastery ⭐⭐', info: '+25% ATK, +200 Range mobile (2-Star ⭐⭐)', cost: 150, max: 5, type: 'proc', baseCd: 40000, pwr: 0, effect: 'warcry', classReq: 'sagittarius', reqLvl: 80, starRank: 2, icon: '🔭', tier: 3, desc: 'Mobile sniper posture boosting ATK and range.' },
+  lethalShotSag:    { name: 'Lethal Shot ⭐⭐⭐', info: '65 Pwr Armor Pierce (3-Star ⭐⭐⭐)', cost: 250, max: 5, type: 'proc', baseCd: 8000, pwr: 65, effect: 'dmg', classReq: 'sagittarius', reqLvl: 84, starRank: 3, icon: '⚡', tier: 3, desc: 'Surgical precision shot ignoring defense.' },
   sagittariusAura:  { name: 'Sagittarius Aura ⭐⭐⭐⭐', info: '+40% ATK, 1000 Range, 100% Crit (4-Star ⭐⭐⭐⭐)', cost: 500, max: 5, type: 'proc', baseCd: 90000, pwr: 0, effect: 'warcry', classReq: 'sagittarius', reqLvl: 90, starRank: 4, icon: '🌟', tier: 4, desc: 'Celestial archer aura granting max range and 100% crit.' },
 
-  rainOfFire:       { name: 'Rain of Fire ⭐', info: '48 Pwr Fire AoE storm (1-Star ⭐)', cost: 100, max: 5, type: 'proc', baseCd: 5000, pwr: 48, effect: 'dmg', classReq: 'sorcerer', reqLvl: 76, starRank: 1, icon: '🌧️🔥', tier: 4, desc: 'Torrential fire storm reducing fire resistance.' },
-  arcanePowerMastery:{ name: 'Arcane Power Mastery ⭐⭐', info: '+30% MATK, +25% MCrit Dmg (2-Star ⭐⭐)', cost: 150, max: 5, type: 'proc', baseCd: 45000, pwr: 0, effect: 'warcry', classReq: 'sorcerer', reqLvl: 80, starRank: 2, icon: '✨', tier: 4, desc: 'Supreme arcane posture without HP drain.' },
-  meteorMastery:    { name: 'Meteor Mastery ⭐⭐⭐', info: '72 Pwr Meteor + 3s Stun (3-Star ⭐⭐⭐)', cost: 250, max: 5, type: 'proc', baseCd: 15000, pwr: 72, effect: 'stun', classReq: 'sorcerer', reqLvl: 84, starRank: 3, icon: '☄️', tier: 4, desc: 'Giant meteor cataclysm knocking down targets.' },
+  rainOfFire:       { name: 'Rain of Fire ⭐', info: '48 Pwr Fire AoE storm (1-Star ⭐)', cost: 100, max: 5, type: 'proc', baseCd: 5000, pwr: 48, effect: 'dmg', classReq: 'sorcerer', reqLvl: 76, starRank: 1, icon: '🌧️🔥', tier: 3, desc: 'Torrential fire storm reducing fire resistance.' },
+  arcanePowerMastery:{ name: 'Arcane Power Mastery ⭐⭐', info: '+30% MATK, +25% MCrit Dmg (2-Star ⭐⭐)', cost: 150, max: 5, type: 'proc', baseCd: 45000, pwr: 0, effect: 'warcry', classReq: 'sorcerer', reqLvl: 80, starRank: 2, icon: '✨', tier: 3, desc: 'Supreme arcane posture without HP drain.' },
+  meteorMastery:    { name: 'Meteor Mastery ⭐⭐⭐', info: '72 Pwr Meteor + 3s Stun (3-Star ⭐⭐⭐)', cost: 250, max: 5, type: 'proc', baseCd: 15000, pwr: 72, effect: 'stun', classReq: 'sorcerer', reqLvl: 84, starRank: 3, icon: '☄️', tier: 3, desc: 'Giant meteor cataclysm knocking down targets.' },
   phoenixFlameAura: { name: 'Phoenix Flame Aura ⭐⭐⭐⭐', info: '+45% MATK, 100% MCrit (4-Star ⭐⭐⭐⭐)', cost: 500, max: 5, type: 'proc', baseCd: 90000, pwr: 0, effect: 'warcry', classReq: 'sorcerer', reqLvl: 90, starRank: 4, icon: '🦅🔥', tier: 4, desc: 'Phoenix flame aura unleashing solar eruptions.' },
 
-  shadowStepEssence:{ name: 'Shadow Step ⭐', info: '15 Pwr shadow teleport + 30% Backstab (1-Star ⭐)', cost: 100, max: 5, type: 'proc', baseCd: 6000, pwr: 15, effect: 'dmg', classReq: 'treasureHunter', reqLvl: 76, starRank: 1, icon: '👤', tier: 4, desc: 'Teleports behind target boosting next backstab.' },
-  bluffMastery:     { name: 'Bluff Mastery ⭐⭐', info: 'Clears target + 3s Stun (2-Star ⭐⭐)', cost: 150, max: 5, type: 'proc', baseCd: 10000, pwr: 0, effect: 'stun', classReq: 'treasureHunter', reqLvl: 80, starRank: 2, icon: '🌀', tier: 4, desc: 'Turns target around removing aggro with stun.' },
-  lethalBlowMastery:{ name: 'Lethal Blow Mastery ⭐⭐⭐', info: '68 Pwr armor pierce + lifesteal (3-Star ⭐⭐⭐)', cost: 250, max: 5, type: 'proc', baseCd: 7000, pwr: 68, effect: 'vampiric', classReq: 'treasureHunter', reqLvl: 84, starRank: 3, icon: '🩸', tier: 4, desc: 'Deadly dagger strike with lifesteal.' },
+  shadowStepEssence:{ name: 'Shadow Step ⭐', info: '15 Pwr shadow teleport + 30% Backstab (1-Star ⭐)', cost: 100, max: 5, type: 'proc', baseCd: 6000, pwr: 15, effect: 'dmg', classReq: 'treasureHunter', reqLvl: 76, starRank: 1, icon: '👤', tier: 3, desc: 'Teleports behind target boosting next backstab.' },
+  bluffMastery:     { name: 'Bluff Mastery ⭐⭐', info: 'Clears target + 3s Stun (2-Star ⭐⭐)', cost: 150, max: 5, type: 'proc', baseCd: 10000, pwr: 0, effect: 'stun', classReq: 'treasureHunter', reqLvl: 80, starRank: 2, icon: '🌀', tier: 3, desc: 'Turns target around removing aggro with stun.' },
+  lethalBlowMastery:{ name: 'Lethal Blow Mastery ⭐⭐⭐', info: '68 Pwr armor pierce + lifesteal (3-Star ⭐⭐⭐)', cost: 250, max: 5, type: 'proc', baseCd: 7000, pwr: 68, effect: 'vampiric', classReq: 'treasureHunter', reqLvl: 84, starRank: 3, icon: '🩸', tier: 3, desc: 'Deadly dagger strike with lifesteal.' },
   shadowMasteryAura:{ name: 'Shadow Mastery Aura ⭐⭐⭐⭐', info: '+40% Blow Dmg, 80% Mirage (4-Star ⭐⭐⭐⭐)', cost: 500, max: 5, type: 'proc', baseCd: 90000, pwr: 0, effect: 'warcry', classReq: 'treasureHunter', reqLvl: 90, starRank: 4, icon: '🌌', tier: 4, desc: 'Shadow assassin aura granting mirage protection.' },
 
-  deathHuger:       { name: 'Death Hug ⭐', info: 'Chain pull + 2s Stun (1-Star ⭐)', cost: 100, max: 5, type: 'proc', baseCd: 6000, pwr: 20, effect: 'stun', classReq: 'deathKnight', reqLvl: 76, starRank: 1, icon: '⛓️💀', tier: 4, desc: 'Pulls distant target inflicting stun.' },
-  deathKnightAura2: { name: 'Death Knight Aura ⭐⭐', info: '+35% ATK, +30% Crit Dmg (2-Star ⭐⭐)', cost: 150, max: 5, type: 'proc', baseCd: 40000, pwr: 0, effect: 'warcry', classReq: 'deathKnight', reqLvl: 80, starRank: 2, icon: '👑💀', tier: 4, desc: 'Aura of death boosting physical attack.' },
-  deathExecution:   { name: 'Death Execution ⭐⭐⭐', info: '72 Pwr execution + heal block (3-Star ⭐⭐⭐)', cost: 250, max: 5, type: 'proc', baseCd: 8000, pwr: 72, effect: 'dmg', classReq: 'deathKnight', reqLvl: 84, starRank: 3, icon: '💀🗡️', tier: 4, desc: 'Slay target ignoring defense and blocking healing.' },
+  deathHuger:       { name: 'Death Hug ⭐', info: 'Chain pull + 2s Stun (1-Star ⭐)', cost: 100, max: 5, type: 'proc', baseCd: 6000, pwr: 20, effect: 'stun', classReq: 'deathKnight', reqLvl: 76, starRank: 1, icon: '⛓️💀', tier: 3, desc: 'Pulls distant target inflicting stun.' },
+  deathKnightAura2: { name: 'Death Knight Aura ⭐⭐', info: '+35% ATK, +30% Crit Dmg (2-Star ⭐⭐)', cost: 150, max: 5, type: 'proc', baseCd: 40000, pwr: 0, effect: 'warcry', classReq: 'deathKnight', reqLvl: 80, starRank: 2, icon: '👑💀', tier: 3, desc: 'Aura of death boosting physical attack.' },
+  deathExecution:   { name: 'Death Execution ⭐⭐⭐', info: '72 Pwr execution + heal block (3-Star ⭐⭐⭐)', cost: 250, max: 5, type: 'proc', baseCd: 8000, pwr: 72, effect: 'dmg', classReq: 'deathKnight', reqLvl: 84, starRank: 3, icon: '💀🗡️', tier: 3, desc: 'Slay target ignoring defense and blocking healing.' },
   hellboundDeathAura:{ name: 'Hellbound Death Aura ⭐⭐⭐⭐', info: '+50% ATK/DEF, 100% Crit (4-Star ⭐⭐⭐⭐)', cost: 500, max: 5, type: 'proc', baseCd: 90000, pwr: 0, effect: 'warcry', classReq: 'deathKnight', reqLvl: 90, starRank: 4, icon: '👑🔥💀', tier: 4, desc: 'Hellbound knight transformation with elemental slashes.' }
 };
 
@@ -597,6 +635,25 @@ function promoteClass(newClassId) {
     for (const k of ['atk','def','eva','matk','mdef']) {
       state.base[k] = (race.stats[k] || 0) + (newClassDef.base[k] || 0);
     }
+  }
+
+  // Reembolso automático de SP para redistribuição na nova árvore exclusiva
+  let totalRefunded = 0;
+  for (const [sId, lvl] of Object.entries(state.skills)) {
+    if (lvl > 0 && SKILL_DEFS[sId]) {
+      const def = SKILL_DEFS[sId];
+      if (!classSatisfies(newClassId, def.classReq)) {
+        for (let l = 0; l < lvl; l++) {
+          totalRefunded += getSkillCost(sId, l);
+        }
+        state.skills[sId] = 0;
+      }
+    }
+  }
+  if (totalRefunded > 0) {
+    state.sp += totalRefunded;
+    log(`🔄 ${totalRefunded.toLocaleString()} SP foram reembolsados para distribuição na nova árvore exclusiva de ${newClassDef.name}!`, 'rarity-legendary');
+    floatText(`+${totalRefunded.toLocaleString()} SP`, 'float-jackpot');
   }
 
   log(`🎉 PARABÉNS! Você concluiu a Cerimônia e agora é um **${newClassDef.name}**!`, 'rarity-legendary');
@@ -1098,10 +1155,24 @@ function updateSkillUI() {
   const activeTreeClass = pDef?.archetype || 'fighter';
 
   const pos = {};
-  for (const [id, layout] of Object.entries(SKILL_TREE_LAYOUT)) {
-    if (SKILL_DEFS[id] && classSatisfies(state.class, SKILL_DEFS[id].classReq)) {
-      pos[id] = { x: TREE_PAD_X + layout.col * TREE_NODE_W + TREE_NODE_W / 2, y: TREE_PAD_Y + layout.row * TREE_NODE_H + TREE_NODE_H / 2 };
-    }
+  const classSkills = Object.entries(SKILL_DEFS).filter(([id, def]) => classSatisfies(state.class, def.classReq));
+  const skillsByTier = { 0: [], 1: [], 2: [], 3: [], 4: [] };
+  for (const [id, def] of classSkills) {
+    const t = def.tier !== undefined ? def.tier : 0;
+    if (skillsByTier[t]) skillsByTier[t].push([id, def]);
+  }
+
+  for (let c = 0; c < 5; c++) {
+    const list = skillsByTier[c] || [];
+    list.forEach(([id, def], idx) => {
+      const explicit = SKILL_TREE_LAYOUT[id];
+      const col = (explicit && explicit.col !== undefined) ? explicit.col : c;
+      const row = (explicit && explicit.row !== undefined) ? explicit.row : idx;
+      pos[id] = {
+        x: TREE_PAD_X + col * TREE_NODE_W + TREE_NODE_W / 2,
+        y: TREE_PAD_Y + row * TREE_NODE_H + TREE_NODE_H / 2
+      };
+    });
   }
 
   let lines = '';
