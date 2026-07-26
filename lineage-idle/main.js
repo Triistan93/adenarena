@@ -653,8 +653,25 @@ function log(msg, type = 'system') {
   const logEl = el('log');
   if (!logEl) return;
   const entry = mkEl('p');
-  entry.className = `log-entry ${type}`; entry.textContent = msg;
-  logEl.appendChild(entry); logEl.scrollTop = logEl.scrollHeight;
+  entry.className = `log-entry ${type}`;
+  entry.textContent = msg;
+
+  const currentFilter = state.logFilter || 'all';
+  if (currentFilter !== 'all') {
+    if (currentFilter === 'combat') {
+      const isCombat = type === 'combat' || type === 'damage' || type === 'heal';
+      if (!isCombat) entry.style.display = 'none';
+    } else if (currentFilter === 'loot') {
+      const isLoot = type === 'loot' || type === 'xp' || type === 'saga' || type.startsWith('rarity-');
+      if (!isLoot) entry.style.display = 'none';
+    } else if (currentFilter === 'system') {
+      const isSys = type === 'system';
+      if (!isSys) entry.style.display = 'none';
+    }
+  }
+
+  logEl.appendChild(entry);
+  logEl.scrollTop = logEl.scrollHeight;
   while (logEl.children.length > 100) logEl.removeChild(logEl.firstChild);
 }
 
@@ -1245,7 +1262,7 @@ function setLogFilter(filterType) {
       const isCombat = entry.classList.contains('combat') || entry.classList.contains('damage') || entry.classList.contains('heal');
       entry.style.display = isCombat ? 'block' : 'none';
     } else if (filterType === 'loot') {
-      const isLoot = entry.classList.contains('loot') || entry.classList.contains('xp') || entry.classList.contains('saga') || entry.className.includes('rarity-');
+      const isLoot = entry.classList.contains('loot') || entry.classList.contains('xp') || entry.classList.contains('saga') || Array.from(entry.classList).some(c => c.startsWith('rarity-'));
       entry.style.display = isLoot ? 'block' : 'none';
     } else if (filterType === 'system') {
       const isSys = entry.classList.contains('system');
@@ -1879,7 +1896,23 @@ export function init() {
     ROOT.addEventListener('click', hideItemTooltip);
     ROOT.addEventListener('click', () => closeGameModeMenu());
 
-    qsa('.tab-btn').forEach(btn => { btn.onclick = () => { qsa('.tab-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); qsa('.tab-pane').forEach(p => p.classList.remove('active')); const pane = el(`tab-${btn.dataset.tab}`); if (pane) pane.classList.add('active'); }; });
+    qsa('.tab-btn').forEach(btn => {
+      btn.onclick = () => {
+        const tabName = btn.dataset.tab;
+        qsa('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        qsa('.tab-pane').forEach(p => p.classList.remove('active'));
+        const pane = el(`tab-${tabName}`);
+        if (pane) pane.classList.add('active');
+
+        if (tabName === 'inventory') updateInventoryUI();
+        else if (tabName === 'skills') updateSkillUI();
+        else if (tabName === 'shop') updateShopUI();
+        else if (tabName === 'craft') updateCraftUI();
+        else if (tabName === 'enchant') updateEnchantUI();
+        else if (tabName === 'zones') updateZonesUI();
+      };
+    });
     qsa('.race-btn').forEach(btn => btn.onclick = () => setRace(btn.dataset.race)); qsa('.class-btn').forEach(btn => btn.onclick = () => setClass(btn.dataset.class));
     qsa('.filter-btn').forEach(btn => { btn.onclick = () => { state.filter = btn.dataset.filter; qsa('.filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); updateInventoryUI(); }; });
     qsa('.rarity-filter-btn').forEach(btn => { btn.onclick = () => { state.rarityFilter = btn.dataset.rarity; qsa('.rarity-filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); updateInventoryUI(); }; });
