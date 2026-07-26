@@ -154,7 +154,7 @@ function MenuScreen({
         />
       </div>
 
-      <div className="relative mx-auto max-w-6xl px-4 py-8 sm:px-6">
+      <div className="relative mx-auto max-w-6xl px-4 pt-14 pb-8 sm:px-6 sm:pt-16">
         <header className="mb-6 text-center animate-float">
           <p className="text-xs font-semibold uppercase tracking-[0.4em] text-amber-300/80">
             Lineage-inspired Browser RPG
