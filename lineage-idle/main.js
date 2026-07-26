@@ -1089,9 +1089,13 @@ function updateSkillUI() {
   qsa('.skill-btn').forEach(btn => {
     const sId = btn.dataset.skill, def = SKILL_DEFS[sId]; if (!def) return;
     btn.onmouseenter = (e) => showSkillTooltip(sId, e); btn.onmouseleave = hideSkillTooltip;
-    btn.onclick = () => buySkill(sId);
+    btn.onclick = () => spendSP(sId);
   });
   updateSkillInfoPanel();
+}
+
+function buySkill(sId) {
+  spendSP(sId);
 }
 
 function getSkillCost(skillId, currentLvl) {
