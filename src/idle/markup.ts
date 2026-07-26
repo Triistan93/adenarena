@@ -60,7 +60,7 @@ export const IDLE_MARKUP = `
         <div class="active-buffs" id="active-buffs"><span class="ab-empty">No active buffs</span></div>
       </aside>
 
-      <!-- Center: live battle stage + combat ticker -->
+      <!-- Center: live battle stage + combat ticker (compact & centered) -->
       <section class="panel log-panel center-panel">
         <div class="stage" id="stage" data-state="idle">
           <div class="st-layer st-sky"></div>
@@ -86,16 +86,16 @@ export const IDLE_MARKUP = `
         </div>
       </section>
 
-      <!-- Right: Tabs -->
+      <!-- Right: Main Menu Workspace (Expanded) -->
       <aside class="panel tabs-panel">
         <div class="tab-buttons">
-          <button class="tab-btn active" data-tab="character">Char</button>
-          <button class="tab-btn" data-tab="equipment">Equip</button>
-          <button class="tab-btn" data-tab="skills">Skills</button>
-          <button class="tab-btn" data-tab="inventory">Inv</button>
-          <button class="tab-btn" data-tab="shop">Shop</button>
-          <button class="tab-btn" data-tab="craft">Craft</button>
-          <button class="tab-btn" data-tab="zones">Zones</button>
+          <button class="tab-btn active" data-tab="character">👤 Personagem</button>
+          <button class="tab-btn" data-tab="equipment">⚔️ Equipamento</button>
+          <button class="tab-btn" data-tab="skills">✦ Habilidades</button>
+          <button class="tab-btn" data-tab="inventory">🎒 Inventário</button>
+          <button class="tab-btn" data-tab="shop">🛒 Mercador</button>
+          <button class="tab-btn" data-tab="craft">⚒️ Forja</button>
+          <button class="tab-btn" data-tab="zones">🗺️ Caça</button>
         </div>
         <div class="tab-content">
           <!-- Character Tab -->
@@ -109,7 +109,7 @@ export const IDLE_MARKUP = `
               </div>
             </div>
             <div class="pane-section">
-              <h3>Race</h3>
+              <h3>Raça (Race)</h3>
               <div class="race-grid">
                 <button class="race-btn" data-race="human">Human</button>
                 <button class="race-btn" data-race="elf">Elf</button>
@@ -122,44 +122,50 @@ export const IDLE_MARKUP = `
               <p class="race-desc">Select a race.</p>
             </div>
             <div class="pane-section">
-              <h3>Class</h3>
+              <h3>Classe (Class)</h3>
               <div class="class-grid" id="class-grid">
                 <button class="class-btn" data-class="fighter">Fighter</button>
                 <button class="class-btn" data-class="mage">Mage</button>
               </div>
               <p class="class-desc">Select a class.</p>
             </div>
-            <button id="save-btn" class="action-btn" style="margin-bottom: 6px;">Save Game</button>
-            <button id="start-btn" class="action-btn">Begin the Saga</button>
-            <button id="reset-btn" class="action-btn action-btn--danger">Abandon Chronicle</button>
+            <div class="char-actions">
+              <button id="save-btn" class="action-btn">Salvar Jogo</button>
+              <button id="start-btn" class="action-btn action-btn--primary">Iniciar Saga</button>
+              <button id="reset-btn" class="action-btn action-btn--danger">Reiniciar Personagem</button>
+            </div>
           </div>
 
           <!-- Equipment Tab -->
           <div id="tab-equipment" class="tab-pane">
-            <h3>Equipped Gear</h3>
-            <div class="paperdoll">
-              <div class="doll-art" id="doll-art"></div>
-              <div class="doll-slots equipment-grid">
-                <div class="equip-slot" data-slot="weapon"><span class="slot-label">⚔</span><span class="slot-item" id="equip-weapon">Empty</span></div>
-                <div class="equip-slot" data-slot="helmet"><span class="slot-label">⛑</span><span class="slot-item" id="equip-helmet">Empty</span></div>
-                <div class="equip-slot" data-slot="armor"><span class="slot-label">🛡</span><span class="slot-item" id="equip-armor">Empty</span></div>
-                <div class="equip-slot" data-slot="gloves"><span class="slot-label">🧤</span><span class="slot-item" id="equip-gloves">Empty</span></div>
-                <div class="equip-slot" data-slot="boots"><span class="slot-label">👢</span><span class="slot-item" id="equip-boots">Empty</span></div>
-                <div class="equip-slot" data-slot="ring"><span class="slot-label">💍</span><span class="slot-item" id="equip-ring">Empty</span></div>
+            <h3>Equipamentos Ativos</h3>
+            <div class="equipment-workspace">
+              <div class="paperdoll">
+                <div class="doll-art" id="doll-art"></div>
+                <div class="doll-slots equipment-grid">
+                  <div class="equip-slot" data-slot="weapon"><span class="slot-label">⚔</span><span class="slot-item" id="equip-weapon">Empty</span></div>
+                  <div class="equip-slot" data-slot="helmet"><span class="slot-label">⛑</span><span class="slot-item" id="equip-helmet">Empty</span></div>
+                  <div class="equip-slot" data-slot="armor"><span class="slot-label">🛡</span><span class="slot-item" id="equip-armor">Empty</span></div>
+                  <div class="equip-slot" data-slot="gloves"><span class="slot-label">🧤</span><span class="slot-item" id="equip-gloves">Empty</span></div>
+                  <div class="equip-slot" data-slot="boots"><span class="slot-label">👢</span><span class="slot-item" id="equip-boots">Empty</span></div>
+                  <div class="equip-slot" data-slot="ring"><span class="slot-label">💍</span><span class="slot-item" id="equip-ring">Empty</span></div>
+                </div>
+              </div>
+              <div class="equip-details">
+                <div class="equip-bonuses">
+                  <h4>Bônus Conjuntos de Equipamentos</h4>
+                  <div id="bonus-list"></div>
+                </div>
+                <button class="action-btn action-btn--ghost" id="unequip-all-btn">Desequipar Tudo</button>
               </div>
             </div>
-            <div class="equip-bonuses">
-              <h4>Equipment Bonuses</h4>
-              <div id="bonus-list"></div>
-            </div>
-            <button class="action-btn action-btn--ghost" id="unequip-all-btn">Unequip All</button>
           </div>
 
           <!-- Skills Tab -->
           <div id="tab-skills" class="tab-pane">
             <div class="skills-head">
-              <h3>Talent Tree</h3>
-              <span class="sp-pill"><span class="sp-icon">✦</span> <span id="sp-available">0</span> SP</span>
+              <h3>Árvore de Habilidades &amp; Talentos</h3>
+              <span class="sp-pill"><span class="sp-icon">✦</span> <span id="sp-available">0</span> SP Disponível</span>
             </div>
             <div class="skills-body">
               <div class="skill-tree-scroll">
@@ -171,52 +177,86 @@ export const IDLE_MARKUP = `
 
           <!-- Inventory Tab -->
           <div id="tab-inventory" class="tab-pane">
-            <h3>Inventory</h3>
-            <div class="inv-filters">
-              <button class="filter-btn active" data-filter="all">All</button>
-              <button class="filter-btn" data-filter="weapon">⚔</button>
-              <button class="filter-btn" data-filter="armor">🛡</button>
-              <button class="filter-btn" data-filter="helmet">⛑</button>
-              <button class="filter-btn" data-filter="boots">👢</button>
-              <button class="filter-btn" data-filter="gloves">🧤</button>
-              <button class="filter-btn" data-filter="ring">💍</button>
-              <button class="filter-btn" data-filter="consumable">🧪</button>
-              <button class="filter-btn" data-filter="material">💎</button>
+            <div class="inv-tab-header">
+              <h3>Mochila &amp; Inventário</h3>
+              <div class="inv-summary">
+                <span class="inv-badge">Slots: <span id="inv-slots">0/50</span></span>
+                <span class="inv-badge gold">Ouro: <span id="gold-text">0</span>g</span>
+              </div>
             </div>
+
+            <div class="inv-filter-container">
+              <!-- Slot Filter -->
+              <div class="inv-filter-row">
+                <span class="filter-label">Tipo:</span>
+                <div class="inv-filters">
+                  <button class="filter-btn active" data-filter="all">Todos</button>
+                  <button class="filter-btn" data-filter="weapon">⚔️ Armas</button>
+                  <button class="filter-btn" data-filter="armor">🛡️ Armaduras</button>
+                  <button class="filter-btn" data-filter="helmet">⛑️ Capacetes</button>
+                  <button class="filter-btn" data-filter="boots">👢 Botas</button>
+                  <button class="filter-btn" data-filter="gloves">🧤 Luvas</button>
+                  <button class="filter-btn" data-filter="ring">💍 Anéis</button>
+                  <button class="filter-btn" data-filter="consumable">🧪 Consumíveis</button>
+                  <button class="filter-btn" data-filter="material">💎 Materiais</button>
+                </div>
+              </div>
+
+              <!-- Rarity & Equip Filter Row -->
+              <div class="inv-filter-row inv-subfilters">
+                <div class="filter-group">
+                  <span class="filter-label">Raridade:</span>
+                  <div class="rarity-filters">
+                    <button class="rarity-filter-btn active" data-rarity="all">Todas</button>
+                    <button class="rarity-filter-btn r-common" data-rarity="common">Comum</button>
+                    <button class="rarity-filter-btn r-uncommon" data-rarity="uncommon">Incomum</button>
+                    <button class="rarity-filter-btn r-rare" data-rarity="rare">Raro</button>
+                    <button class="rarity-filter-btn r-epic" data-rarity="epic">Épico</button>
+                    <button class="rarity-filter-btn r-legendary" data-rarity="legendary">Lendário</button>
+                  </div>
+                </div>
+
+                <div class="filter-group">
+                  <span class="filter-label">Estado:</span>
+                  <div class="equip-filters">
+                    <button class="equip-filter-btn active" data-equipfilter="all">Todos</button>
+                    <button class="equip-filter-btn" data-equipfilter="equipped">Equipados</button>
+                    <button class="equip-filter-btn" data-equipfilter="bag">No Alforge</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <div class="inventory-grid" id="inventory-grid"></div>
-            <div class="inv-summary">
-              <span>Slots: <span id="inv-slots">0/50</span></span>
-              <span>Gold: <span id="gold-text">0</span></span>
-            </div>
           </div>
 
           <!-- Shop Tab -->
           <div id="tab-shop" class="tab-pane">
             <div class="shop-head">
-              <h3>Merchant's Guild</h3>
+              <h3>Guilda dos Mercadores de Aden</h3>
               <span class="shop-gold-pill">🪙 <span id="shop-gold">0</span></span>
             </div>
             <div class="shop-subtabs">
-              <button class="shop-subtab active" data-shoptab="gear">⚔ Gear</button>
-              <button class="shop-subtab" data-shoptab="potions">🧪 Potions</button>
-              <button class="shop-subtab" data-shoptab="powerups">✨ Powerups</button>
-              <button class="shop-subtab" data-shoptab="class">🎖 Class</button>
-              <button class="shop-subtab" data-shoptab="mystic">✦ Mystic</button>
+              <button class="shop-subtab active" data-shoptab="gear">⚔ Equipamentos</button>
+              <button class="shop-subtab" data-shoptab="potions">🧪 Porções</button>
+              <button class="shop-subtab" data-shoptab="powerups">✨ Encantamentos</button>
+              <button class="shop-subtab" data-shoptab="class">🎖 Classe</button>
+              <button class="shop-subtab" data-shoptab="mystic">✦ Místico</button>
             </div>
             <div class="shop-list" id="shop-list"></div>
           </div>
 
           <!-- Craft Tab -->
           <div id="tab-craft" class="tab-pane">
-            <h3>Crafting</h3>
-            <p class="stat-value">Craft Lv: <span id="craft-level">1</span></p>
-            <p class="shop-info">Combine materials to create equipment.</p>
+            <h3>Forja de Itens &amp; Criação</h3>
+            <p class="stat-value">Nível de Forja: <span id="craft-level">1</span></p>
+            <p class="shop-info">Combine materiais e receitas para forjar relíquias poderosas.</p>
             <div class="craft-list" id="craft-list"></div>
           </div>
 
           <!-- Zones Tab -->
           <div id="tab-zones" class="tab-pane">
-            <h3>Zones</h3>
+            <h3>Locais de Caça &amp; Zonas</h3>
             <div class="zone-list" id="zone-list"></div>
           </div>
         </div>
@@ -226,11 +266,11 @@ export const IDLE_MARKUP = `
     <!-- Death Modal -->
     <div id="death-modal" class="modal">
       <div class="modal-content">
-        <h2>You have been defeated!</h2>
-        <p id="death-penalty">You will lose <span id="xp-loss">0</span> XP.</p>
+        <h2>Você foi derrotado em combate!</h2>
+        <p id="death-penalty">Você perderá <span id="xp-loss">0</span> XP.</p>
         <div class="modal-actions">
-          <button id="res-free" class="action-btn">Resurrect (Free, -20% XP)</button>
-          <button id="res-scroll" class="action-btn">Use Scroll (Item, -10% XP)</button>
+          <button id="res-free" class="action-btn">Ressuscitar (Grátis, -20% XP)</button>
+          <button id="res-scroll" class="action-btn">Usar Pergaminho (-10% XP)</button>
         </div>
       </div>
     </div>
@@ -238,9 +278,9 @@ export const IDLE_MARKUP = `
     <!-- Saga Unlock Modal -->
     <div id="saga-modal" class="modal">
       <div class="modal-content">
-        <h2 id="saga-title">Saga Unlocked!</h2>
-        <p id="saga-desc">New zones await.</p>
-        <button id="saga-ok" class="action-btn">Continue</button>
+        <h2 id="saga-title">Nova Saga Desbloqueada!</h2>
+        <p id="saga-desc">Novas áreas e perigos aguardam.</p>
+        <button id="saga-ok" class="action-btn">Continuar</button>
       </div>
     </div>
 
@@ -248,3 +288,4 @@ export const IDLE_MARKUP = `
     <div id="item-tooltip" class="item-tooltip"></div>
   </div>
 `;
+

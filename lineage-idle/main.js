@@ -715,15 +715,26 @@ function updateSkillInfoPanel() {
 }
 
 function updateInventoryUI() {
-  const grid = el('inventory-grid'); grid.innerHTML = ''; const filter = state.filter;
+  const grid = el('inventory-grid'); if (!grid) return; grid.innerHTML = '';
+  const filter = state.filter || 'all';
+  const rarityFilter = state.rarityFilter || 'all';
+  const equipFilter = state.equipFilter || 'all';
+
   const sorted = [...state.inventory].sort((a, b) => { const da = D().ALL_ITEMS[a.itemId], db = D().ALL_ITEMS[b.itemId]; if (!da || !db) return 0; return (db.tier || 0) - (da.tier || 0); });
   let shown = 0;
   for (const item of sorted) {
-    const def = D().ALL_ITEMS[item.itemId]; if (!def) continue; if (filter !== 'all' && def.slot !== filter) continue;
-    const slot = mkEl('div'); const rarity = item.rarity || 'common';
-    slot.className = `inv-slot rarity-${rarity}`; if (item.equipped) slot.style.opacity = '0.5';
+    const def = D().ALL_ITEMS[item.itemId]; if (!def) continue;
+    if (filter !== 'all' && def.slot !== filter) continue;
+    const rarity = item.rarity || 'common';
+    if (rarityFilter !== 'all' && rarity !== rarityFilter) continue;
+    if (equipFilter === 'equipped' && !item.equipped) continue;
+    if (equipFilter === 'bag' && item.equipped) continue;
+
+    const slot = mkEl('div');
+    slot.className = `inv-slot rarity-${rarity}` + (item.equipped ? ' is-equipped' : '');
     const qty = (item.count || 1) > 1 ? `<span class="qty">${item.count}</span>` : '';
-    slot.innerHTML = `<span style="font-size:18px">${getItemIcon(def)}</span><span class="name">${def.name}</span>${qty}`;
+    const tag = item.equipped ? `<span class="equipped-badge">EQUIP</span>` : '';
+    slot.innerHTML = `<span style="font-size:18px">${getItemIcon(def)}</span><span class="name">${def.name}</span>${qty}${tag}`;
     
     slot.onclick = (e) => {
       e.stopPropagation(); 
@@ -732,7 +743,11 @@ function updateInventoryUI() {
 
     grid.appendChild(slot); shown++;
   }
-  if (shown === 0) grid.innerHTML = '<div style="grid-column:1/-1;color:var(--text-muted);text-align:center;padding:20px;">No items</div>';
+
+  const slotCount = el('inv-slots'); if (slotCount) slotCount.textContent = `${state.inventory.length}/50`;
+  const goldCount = el('gold-text'); if (goldCount) goldCount.textContent = state.gold.toLocaleString();
+
+  if (shown === 0) grid.innerHTML = '<div class="inv-empty-msg">Nenhum item encontrado com os filtros selecionados</div>';
 }
 
 function getItemIcon(def) { const icons = { weapon: '⚔️', armor: '🛡️', helmet: '⛑️', gloves: '🧤', boots: '👢', ring: '💍', consumable: '🧪', material: '💎', scroll: '📜' }; return icons[def.slot] || '📦'; }
@@ -1228,6 +1243,8 @@ export function init() {
     qsa('.tab-btn').forEach(btn => { btn.onclick = () => { qsa('.tab-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); qsa('.tab-pane').forEach(p => p.classList.remove('active')); const pane = el(`tab-${btn.dataset.tab}`); if (pane) pane.classList.add('active'); }; });
     qsa('.race-btn').forEach(btn => btn.onclick = () => setRace(btn.dataset.race)); qsa('.class-btn').forEach(btn => btn.onclick = () => setClass(btn.dataset.class));
     qsa('.filter-btn').forEach(btn => { btn.onclick = () => { state.filter = btn.dataset.filter; qsa('.filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); updateInventoryUI(); }; });
+    qsa('.rarity-filter-btn').forEach(btn => { btn.onclick = () => { state.rarityFilter = btn.dataset.rarity; qsa('.rarity-filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); updateInventoryUI(); }; });
+    qsa('.equip-filter-btn').forEach(btn => { btn.onclick = () => { state.equipFilter = btn.dataset.equipfilter; qsa('.equip-filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); updateInventoryUI(); }; });
     const startBtn = el('start-btn'); if (startBtn) startBtn.onclick = startGame;
     const resetBtn = el('reset-btn'); if (resetBtn) resetBtn.onclick = resetSave;
     const resFree = el('res-free'); if (resFree) resFree.onclick = () => resurrect(false);
