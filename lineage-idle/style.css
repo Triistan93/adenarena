@@ -377,7 +377,7 @@ select:focus-visible {
 /* ---- Main Grid ---- */
 .main-grid {
   display: grid;
-  grid-template-columns: 220px 380px 1fr;
+  grid-template-columns: 210px 1.4fr 1fr;
   flex: 1;
   overflow: hidden;
   min-height: 0;
@@ -963,8 +963,8 @@ select:focus-visible {
 
 .inventory-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  gap: 8px;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 6px;
   margin-bottom: 8px;
   min-height: 120px;
 }
