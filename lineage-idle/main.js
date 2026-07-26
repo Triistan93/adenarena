@@ -5,7 +5,10 @@ import * as ART from "./art.js";
 // ========================================
 
 const SAVE_KEY = 'lineageIdleSave_v2';
-const D = window.GameData; 
+// Lazy accessor — window.GameData is set by items.js side-effects which
+// run at module-evaluation time.  Accessing D() instead of D ensures we
+// always read the value AFTER all imports have been fully evaluated.
+const D = () => window.GameData;
 
 // --------------------------- RACES & CLASSES ---------------------------
 const RACES = {
@@ -174,7 +177,7 @@ function load() {
     const data = JSON.parse(raw);
     const def = DEFAULT_STATE();
     const safeInventory = Array.isArray(data.inventory)
-      ? data.inventory.filter(item => item && item.itemId && D.ALL_ITEMS[item.itemId])
+      ? data.inventory.filter(item => item && item.itemId && D().ALL_ITEMS[item.itemId])
       : [];
     state = { ...def, ...data };
     
@@ -213,9 +216,9 @@ function getEquipBonus(slot) {
   if (!itemId) return null;
   const inv = state.inventory.find(i => i.uid === itemId);
   if (!inv) return null;
-  const def = D.ALL_ITEMS[inv.itemId];
+  const def = D().ALL_ITEMS[inv.itemId];
   if (!def) return null;
-  const mult = inv.rarity ? D.RARITY[inv.rarity].mult : 1;
+  const mult = inv.rarity ? D().RARITY[inv.rarity].mult : 1;
   const out = { ...def };
   ['atk','def','matk','mdef','hp','mp','eva','crit','speed','lifesteal'].forEach(k => {
     if (out[k]) out[k] = Math.floor(Number(out[k]) * mult);
@@ -329,7 +332,7 @@ function getInventoryCount(itemId) {
 }
 
 function addToInventory(itemId, amount = 1, rarity = null) {
-  const def = D.ALL_ITEMS[itemId];
+  const def = D().ALL_ITEMS[itemId];
   if (!def) return false;
 
   if (def.stack && (def.slot === 'consumable' || def.slot === 'material' || def.slot === 'scroll' || def.slot === 'powerup') && !rarity) {
@@ -370,7 +373,7 @@ function removeFromInventory(uid, amount = 1) {
 function equipItem(uid) {
   const item = state.inventory.find(i => i.uid === uid);
   if (!item) return;
-  const def = D.ALL_ITEMS[item.itemId];
+  const def = D().ALL_ITEMS[item.itemId];
   if (!def || !['weapon','armor','helmet','gloves','boots','ring'].includes(def.slot)) { log(`${def.name} cannot be equipped.`, 'system'); return; }
   if (def.req && def.req.level > state.level) { log(`Level ${def.req.level} required for ${def.name}`, 'system'); return; }
   if (def.classReq && def.classReq !== state.class) { log(`${def.name} requires class: ${getClass(def.classReq)?.name || def.classReq}`, 'system'); return; }
@@ -378,7 +381,7 @@ function equipItem(uid) {
   const currentUid = state.equipment[def.slot];
   if (currentUid) { const current = state.inventory.find(i => i.uid === currentUid); if (current) current.equipped = false; }
   state.equipment[def.slot] = uid; item.equipped = true;
-  log(`Equipped ${def.name}${item.rarity ? ' [' + D.RARITY[item.rarity].name + ']' : ''}`, 'loot');
+  log(`Equipped ${def.name}${item.rarity ? ' [' + D().RARITY[item.rarity].name + ']' : ''}`, 'loot');
   
   const stats = getStats();
   state.maxHp = stats.maxHp; state.maxMp = stats.maxMp;
@@ -395,7 +398,7 @@ function unequipItem(slot) {
   const stats = getStats();
   state.maxHp = stats.maxHp; state.maxMp = stats.maxMp;
   state.hp = Math.min(state.hp, state.maxHp); state.mp = Math.min(state.mp, state.maxMp);
-  log(`Unequipped ${D.ALL_ITEMS[item ? item.itemId : '']?.name || slot}`, 'system');
+  log(`Unequipped ${D().ALL_ITEMS[item ? item.itemId : '']?.name || slot}`, 'system');
   updateAllUI(); save();
 }
 
@@ -404,8 +407,8 @@ function sellItem(uid) {
   if (idx < 0) return;
   const item = state.inventory[idx];
   if (item.equipped) { log('Unequip first!', 'system'); return; }
-  const def = D.ALL_ITEMS[item.itemId];
-  const mult = item.rarity ? D.RARITY[item.rarity].mult : 1;
+  const def = D().ALL_ITEMS[item.itemId];
+  const mult = item.rarity ? D().RARITY[item.rarity].mult : 1;
   const price = Math.floor((def.price || 10) * 0.4 * mult);
   state.gold += price * (item.count || 1);
   log(`Sold ${def.name} for ${price}g`, 'loot');
@@ -427,12 +430,12 @@ function salvageItem(uid) {
   if (idx < 0) return;
   const item = state.inventory[idx];
   if (item.equipped) { log('Unequip first!', 'system'); return; }
-  const def = D.ALL_ITEMS[item.itemId];
+  const def = D().ALL_ITEMS[item.itemId];
   if (!def || !['weapon','armor','helmet','gloves','boots','ring'].includes(def.slot)) return;
 
   const reqLvl = def.req ? def.req.level : 1;
   const grade = getItemGrade(reqLvl);
-  const rarityMult = item.rarity ? D.RARITY[item.rarity].mult : 1;
+  const rarityMult = item.rarity ? D().RARITY[item.rarity].mult : 1;
 
   let matId = 'iron_ore';
   if (grade === 'S Grade') matId = 'crystal_s';
@@ -445,7 +448,7 @@ function salvageItem(uid) {
   const amount = Math.max(1, Math.floor((reqLvl / 5 + 1) * rarityMult));
   state.inventory.splice(idx, 1);
   addToInventory(matId, amount);
-  log(`Broke ${def.name} into ${amount}x ${D.ALL_ITEMS[matId].name}`, 'loot');
+  log(`Broke ${def.name} into ${amount}x ${D().ALL_ITEMS[matId].name}`, 'loot');
   updateAllUI(); save();
 }
 
@@ -453,7 +456,7 @@ function useItem(uid) {
   const idx = state.inventory.findIndex(i => i.uid === uid);
   if (idx < 0) return;
   const item = state.inventory[idx];
-  const def = D.ALL_ITEMS[item.itemId];
+  const def = D().ALL_ITEMS[item.itemId];
   if (!def) return;
   const usable = def.slot === 'consumable' || def.slot === 'scroll' || def.slot === 'powerup';
   if (!usable) { if (['weapon','armor','helmet','gloves','boots','ring'].includes(def.slot)) equipItem(uid); return; }
@@ -491,13 +494,13 @@ function useItem(uid) {
 // --------------------------- CRAFTING ---------------------------
 function getCraftLevelReq(recipeLevel) { return Math.max(1, Math.floor(recipeLevel / 10) + 1); }
 function canCraft(recipeId) {
-  const recipe = D.CRAFTING_RECIPES[recipeId];
+  const recipe = D().CRAFTING_RECIPES[recipeId];
   if (!recipe || getCraftLevelReq(recipe.level) > state.craftLevel) return false;
   for (const [matId, qty] of Object.entries(recipe.materials)) { if (getInventoryCount(matId) < qty) return false; }
   return true;
 }
 function craftItem(recipeId) {
-  const recipe = D.CRAFTING_RECIPES[recipeId];
+  const recipe = D().CRAFTING_RECIPES[recipeId];
   if (!recipe || !canCraft(recipeId)) { log('Missing materials or craft level too low.', 'system'); return; }
   for (const [matId, qty] of Object.entries(recipe.materials)) {
     let remaining = qty;
@@ -510,10 +513,10 @@ function craftItem(recipeId) {
     }
   }
   const rarityBoost = state.race === 'dwarf' ? 1 : 0;
-  const rarity = D.rollRarity(rarityBoost);
+  const rarity = D().rollRarity(rarityBoost);
   addToInventory(recipeId, 1, rarity);
-  log(`Crafted ${D.ALL_ITEMS[recipeId].name} [${D.RARITY[rarity].name}]!`, 'rarity-' + rarity);
-  state.craftXp += 10 + (D.ALL_ITEMS[recipeId].tier || 1) * 5;
+  log(`Crafted ${D().ALL_ITEMS[recipeId].name} [${D().RARITY[rarity].name}]!`, 'rarity-' + rarity);
+  state.craftXp += 10 + (D().ALL_ITEMS[recipeId].tier || 1) * 5;
   while (state.craftXp >= state.craftLevel * 50) { state.craftXp -= state.craftLevel * 50; state.craftLevel++; log(`Crafting Level Up! Now Lv.${state.craftLevel}`, 'xp'); }
   updateAllUI(); save();
 }
@@ -525,6 +528,10 @@ export function destroy() { try { stopCombat(); } catch (e) {} _intervals.forEac
 const el = id => ROOT.getElementById(id);
 const qs = sel => ROOT.querySelector(sel);
 const qsa = sel => ROOT.querySelectorAll(sel);
+// Always create elements in the same document as ROOT so Shadow DOM styles apply.
+const doc = () => (ROOT && ROOT.ownerDocument) ? ROOT.ownerDocument : document;
+const mkEl = tag => doc().createElement(tag);
+const mkNS = (ns, tag) => doc().createElementNS(ns, tag);
 
 function updateBar(id, cur, max) {
   const bar = el(id); const text = el(id.replace('-bar', '-text'));
@@ -534,7 +541,7 @@ function updateBar(id, cur, max) {
 function log(msg, type = 'system') {
   const logEl = el('log');
   if (!logEl) return;
-  const entry = document.createElement('p');
+  const entry = mkEl('p');
   entry.className = `log-entry ${type}`; entry.textContent = msg;
   logEl.appendChild(entry); logEl.scrollTop = logEl.scrollHeight;
   while (logEl.children.length > 100) logEl.removeChild(logEl.firstChild);
@@ -595,14 +602,14 @@ function updateEquipmentUI() {
     if (!uid) { elem.textContent = 'Empty'; elem.style.color = ''; elem.title = ''; if (wrap) { wrap.style.borderColor = ''; wrap.title = slot + ' · empty'; } continue; }
     const item = state.inventory.find(i => i.uid === uid);
     if (!item) { state.equipment[slot] = null; elem.textContent = 'Empty'; elem.title = ''; if (wrap) { wrap.style.borderColor = ''; wrap.title = slot + ' · empty'; } continue; }
-    const def = D.ALL_ITEMS[item.itemId];
-    const full = def.name + (item.rarity ? ' [' + D.RARITY[item.rarity].name + ']' : '');
-    elem.textContent = def.name; const col = item.rarity ? D.RARITY[item.rarity].color : 'var(--gilt)';
+    const def = D().ALL_ITEMS[item.itemId];
+    const full = def.name + (item.rarity ? ' [' + D().RARITY[item.rarity].name + ']' : '');
+    elem.textContent = def.name; const col = item.rarity ? D().RARITY[item.rarity].color : 'var(--gilt)';
     elem.style.color = col; elem.title = full; if (wrap) { wrap.style.borderColor = col; wrap.title = full; }
   }
   const eb = getTotalEquipBonuses(); const list = el('bonus-list'); list.innerHTML = '';
   const labels = { atk: 'ATK', def: 'DEF', matk: 'MATK', mdef: 'MDEF', hp: 'HP', mp: 'MP', eva: 'EVA', crit: 'CRIT', speed: 'SPD', lifesteal: 'LIFE STEAL' };
-  for (const [k, label] of Object.entries(labels)) { if (eb[k]) { const div = document.createElement('div'); div.innerHTML = `<span>${label}</span><span class="bonus-val">+${eb[k]}${k==='crit'?'%':''}</span>`; list.appendChild(div); } }
+  for (const [k, label] of Object.entries(labels)) { if (eb[k]) { const div = mkEl('div'); div.innerHTML = `<span>${label}</span><span class="bonus-val">+${eb[k]}${k==='crit'?'%':''}</span>`; list.appendChild(div); } }
   if (!list.children.length) list.innerHTML = '<div style="color:var(--text-muted)">No equipment</div>';
   renderStageHero();
 }
@@ -645,12 +652,12 @@ function updateSkillUI() {
   let tierLabels = '';
   for (let c = 0; c < cols; c++) { const x = TREE_PAD_X + c * TREE_NODE_W + TREE_NODE_W / 2; tierLabels += `<text class="tier-label" x="${x}" y="${H - 4}">${TIER_NAMES[c] || ''}</text>`; }
   wrap.querySelector('svg')?.remove();
-  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  const svg = mkNS('http://www.w3.org/2000/svg', 'svg');
   svg.setAttribute('class', 'skill-tree-svg'); svg.setAttribute('width', W); svg.setAttribute('height', H); svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
   svg.innerHTML = lines + tierLabels; wrap.insertBefore(svg, wrap.firstChild);
 
   let nodesLayer = wrap.querySelector('.skill-tree-nodes');
-  if (!nodesLayer) { nodesLayer = document.createElement('div'); nodesLayer.className = 'skill-tree-nodes'; wrap.appendChild(nodesLayer); }
+  if (!nodesLayer) { nodesLayer = mkEl('div'); nodesLayer.className = 'skill-tree-nodes'; wrap.appendChild(nodesLayer); }
   nodesLayer.innerHTML = '';
   
   if (!state.selectedSkill || SKILL_DEFS[state.selectedSkill]?.classReq !== activeTreeClass) {
@@ -668,7 +675,7 @@ function updateSkillUI() {
     const isSelected = state.selectedSkill === id;
     const state_ = maxed ? 'maxed' : (lvl > 0 ? 'owned' : (meetsReqs ? 'available' : 'locked'));
     
-    const node = document.createElement('button');
+    const node = mkEl('button');
     node.className = `skill-node ${state_} ${isSelected ? 'selected' : ''}`;
     const NODE_PX_W = 86, NODE_PX_H = 62;
     node.style.left = (TREE_PAD_X + layout.col * TREE_NODE_W + (TREE_NODE_W - NODE_PX_W) / 2) + 'px';
@@ -709,11 +716,11 @@ function updateSkillInfoPanel() {
 
 function updateInventoryUI() {
   const grid = el('inventory-grid'); grid.innerHTML = ''; const filter = state.filter;
-  const sorted = [...state.inventory].sort((a, b) => { const da = D.ALL_ITEMS[a.itemId], db = D.ALL_ITEMS[b.itemId]; if (!da || !db) return 0; return (db.tier || 0) - (da.tier || 0); });
+  const sorted = [...state.inventory].sort((a, b) => { const da = D().ALL_ITEMS[a.itemId], db = D().ALL_ITEMS[b.itemId]; if (!da || !db) return 0; return (db.tier || 0) - (da.tier || 0); });
   let shown = 0;
   for (const item of sorted) {
-    const def = D.ALL_ITEMS[item.itemId]; if (!def) continue; if (filter !== 'all' && def.slot !== filter) continue;
-    const slot = document.createElement('div'); const rarity = item.rarity || 'common';
+    const def = D().ALL_ITEMS[item.itemId]; if (!def) continue; if (filter !== 'all' && def.slot !== filter) continue;
+    const slot = mkEl('div'); const rarity = item.rarity || 'common';
     slot.className = `inv-slot rarity-${rarity}`; if (item.equipped) slot.style.opacity = '0.5';
     const qty = (item.count || 1) > 1 ? `<span class="qty">${item.count}</span>` : '';
     slot.innerHTML = `<span style="font-size:18px">${getItemIcon(def)}</span><span class="name">${def.name}</span>${qty}`;
@@ -731,10 +738,10 @@ function updateInventoryUI() {
 function getItemIcon(def) { const icons = { weapon: '⚔️', armor: '🛡️', helmet: '⛑️', gloves: '🧤', boots: '👢', ring: '💍', consumable: '🧪', material: '💎', scroll: '📜' }; return icons[def.slot] || '📦'; }
 
 function showItemTooltip(item, e) {
-  const def = D.ALL_ITEMS[item.itemId]; if (!def) return;
-  const tt = el('item-tooltip'), rarity = item.rarity || 'common', mult = D.RARITY[rarity].mult, rc = D.RARITY[rarity].color;
+  const def = D().ALL_ITEMS[item.itemId]; if (!def) return;
+  const tt = el('item-tooltip'), rarity = item.rarity || 'common', mult = D().RARITY[rarity].mult, rc = D().RARITY[rarity].color;
   let html = `<div class="tt-name" style="color:${rc}">${def.name}</div>`;
-  if (item.rarity) html += `<div class="tt-rarity" style="color:${rc}">${D.RARITY[rarity].name}</div>`;
+  if (item.rarity) html += `<div class="tt-rarity" style="color:${rc}">${D().RARITY[rarity].name}</div>`;
   const reqLvl = def.req ? def.req.level : 1; const grade = getItemGrade(reqLvl);
   html += `<div style="color:var(--text-muted);font-size:10px;text-transform:capitalize;">${def.slot} · <span style="font-weight:bold; color:var(--gilt);">${grade}</span></div>`;
   if (def.req) html += `<div class="tt-req">Req: Lv.${def.req.level}</div>`;
@@ -751,7 +758,7 @@ function showItemTooltip(item, e) {
   if (item.equipped) html += `<button class="item-action" data-action="unequip" data-uid="${item.uid}">Unequip</button>`;
   else if (['weapon','armor','helmet','gloves','boots','ring'].includes(def.slot)) { html += `<button class="item-action" data-action="equip" data-uid="${item.uid}">Equip</button>`; html += `<button class="item-action" data-action="salvage" data-uid="${item.uid}">Break</button>`; }
   if (def.slot === 'consumable' || def.slot === 'scroll' || def.slot === 'powerup') html += `<button class="item-action" data-action="use" data-uid="${item.uid}">Use</button>`;
-  const sellPrice = Math.floor((def.price||10)*0.4*(item.rarity?D.RARITY[item.rarity].mult:1));
+  const sellPrice = Math.floor((def.price||10)*0.4*(item.rarity?D().RARITY[item.rarity].mult:1));
   html += `<button class="item-action sell" data-action="sell" data-uid="${item.uid}">Sell ${sellPrice}g</button></div>`;
   
   tt.innerHTML = html; tt.style.display = 'block'; 
@@ -796,7 +803,7 @@ function shopRow(def, id, price, extra = '') {
   const canAfford = state.gold >= price; const statsLine = buildStatLine(def);
   const lockLvl = def.req && def.req.level > state.level; const lockCls = def.classReq && def.classReq !== state.class;
   const lockReason = lockLvl ? `Lv.${def.req.level}` : lockCls ? `Needs ${getClass(def.classReq)?.name}` : '';
-  const row = document.createElement('div'); row.className = 'shop-item' + (lockLvl || lockCls ? ' locked' : '');
+  const row = mkEl('div'); row.className = 'shop-item' + (lockLvl || lockCls ? ' locked' : '');
   row.innerHTML = `<div class="item-info"><div class="item-name">${def.name}${def.tier ? ' <span class="tier-tag">T'+def.tier+'</span>' : ''}</div><div class="item-desc">${def.desc || ''}</div>${statsLine ? `<div class="item-stats">${statsLine}</div>` : ''}${lockReason ? `<div class="lock-reason">🔒 ${lockReason}</div>` : ''}</div><button class="item-action" data-buy="${id}" ${(!canAfford || lockLvl || lockCls) ? 'disabled' : ''}>${price}g</button>${extra}`;
   return row;
 }
@@ -808,47 +815,47 @@ function buildStatLine(def) {
 }
 
 function renderShopGear(list) {
-  const zone = ZONES[state.zone], shopId = zone?.shop, items = shopId ? D.SHOP_INVENTORY[shopId] : null;
+  const zone = ZONES[state.zone], shopId = zone?.shop, items = shopId ? D().SHOP_INVENTORY[shopId] : null;
   if (!items) { list.innerHTML = '<p class="shop-empty">No gear merchant in this area.</p>'; return; }
   let count = 0;
-  for (const shopItem of items) { const def = D.ALL_ITEMS[shopItem.id]; if (!def || def.slot === 'consumable' || def.slot === 'scroll' || def.slot === 'powerup' || def.classReq || (def.req && def.req.level > state.level + 5)) continue; list.appendChild(shopRow(def, shopItem.id, def.price)); count++; }
+  for (const shopItem of items) { const def = D().ALL_ITEMS[shopItem.id]; if (!def || def.slot === 'consumable' || def.slot === 'scroll' || def.slot === 'powerup' || def.classReq || (def.req && def.req.level > state.level + 5)) continue; list.appendChild(shopRow(def, shopItem.id, def.price)); count++; }
   if (!count) list.innerHTML = '<p class="shop-empty">The merchant has no gear for you yet.</p>';
 }
 function renderShopPotions(list) {
-  const zone = ZONES[state.zone], shopId = zone?.shop, items = shopId ? D.SHOP_INVENTORY[shopId] : null;
+  const zone = ZONES[state.zone], shopId = zone?.shop, items = shopId ? D().SHOP_INVENTORY[shopId] : null;
   const base = ['hp_potion_s','hp_potion_m','hp_potion_l','hp_potion_xl','mp_potion_s','mp_potion_m','mp_potion_l','mp_potion_xl','antidote','scroll_of_resurrection','scroll_of_rebirth'];
   const shown = new Set(), list2 = [...(items || []).map(i => i.id), ...base]; let count = 0;
-  for (const id of list2) { if (shown.has(id)) continue; const def = D.ALL_ITEMS[id]; if (!def || (def.slot !== 'consumable' && def.slot !== 'scroll') || (def.req && def.req.level > state.level)) continue; shown.add(id); list.appendChild(shopRow(def, id, def.price)); count++; }
+  for (const id of list2) { if (shown.has(id)) continue; const def = D().ALL_ITEMS[id]; if (!def || (def.slot !== 'consumable' && def.slot !== 'scroll') || (def.req && def.req.level > state.level)) continue; shown.add(id); list.appendChild(shopRow(def, id, def.price)); count++; }
   if (!count) list.innerHTML = '<p class="shop-empty">No potions in stock.</p>';
 }
 function renderShopPowerups(list) {
   const powerupIds = ['xp_boost_1h','xp_boost_4h','gold_boost_1h','gold_boost_4h','luck_boost_1h','auto_potion_1h','teleport_scroll','berserker_elixir','aegis_draught','sages_tea'];
   const activeBuffs = Object.entries(state.buffs || {}).filter(([k,b]) => ['xpBoost','goldBoost','luckBoost','autoPotion'].includes(k) && b.until > Date.now());
   if (activeBuffs.length) {
-    const hdr = document.createElement('div'); hdr.className = 'shop-header'; hdr.innerHTML = '<h4>Active Powerups</h4>'; list.appendChild(hdr);
-    for (const [k, b] of activeBuffs) { const remaining = Math.max(0, b.until - Date.now()); const names = { xpBoost: '📘 XP Boost', goldBoost: '🪙 Gold Boost', luckBoost: '🍀 Luck Boost', autoPotion: '🧪 Auto-Potion' }; const row = document.createElement('div'); row.className = 'shop-item active-buff'; row.innerHTML = `<div class="item-info"><div class="item-name">${names[k] || k}</div><div class="item-desc">+${Math.round(b.amount*100)}% · ${fmtCountdown(remaining)}</div></div><div class="buff-pulse"></div>`; list.appendChild(row); }
-    const sep = document.createElement('div'); sep.className = 'shop-header'; sep.innerHTML = '<h4>Buy More</h4>'; list.appendChild(sep);
+    const hdr = mkEl('div'); hdr.className = 'shop-header'; hdr.innerHTML = '<h4>Active Powerups</h4>'; list.appendChild(hdr);
+    for (const [k, b] of activeBuffs) { const remaining = Math.max(0, b.until - Date.now()); const names = { xpBoost: '📘 XP Boost', goldBoost: '🪙 Gold Boost', luckBoost: '🍀 Luck Boost', autoPotion: '🧪 Auto-Potion' }; const row = mkEl('div'); row.className = 'shop-item active-buff'; row.innerHTML = `<div class="item-info"><div class="item-name">${names[k] || k}</div><div class="item-desc">+${Math.round(b.amount*100)}% · ${fmtCountdown(remaining)}</div></div><div class="buff-pulse"></div>`; list.appendChild(row); }
+    const sep = mkEl('div'); sep.className = 'shop-header'; sep.innerHTML = '<h4>Buy More</h4>'; list.appendChild(sep);
   }
-  for (const id of powerupIds) { const def = D.ALL_ITEMS[id]; if (def) list.appendChild(shopRow(def, id, def.price)); }
+  for (const id of powerupIds) { const def = D().ALL_ITEMS[id]; if (def) list.appendChild(shopRow(def, id, def.price)); }
 }
 function renderShopClass(list) {
   if (!state.class) { list.innerHTML = '<p class="shop-empty">Choose a class to see exclusive gear.</p>'; return; }
-  const clsName = getClass(state.class)?.name || state.class, hdr = document.createElement('div'); hdr.className = 'shop-header'; hdr.innerHTML = `<h4>${clsName} Exclusive</h4><p>Masterwork gear forged for your order.</p>`; list.appendChild(hdr);
-  let count = 0; for (const id of Object.keys(D.ALL_ITEMS)) { const def = D.ALL_ITEMS[id]; if (def.classReq !== state.class || (def.req && def.req.level > state.level + 5)) continue; list.appendChild(shopRow(def, id, def.price)); count++; }
+  const clsName = getClass(state.class)?.name || state.class, hdr = mkEl('div'); hdr.className = 'shop-header'; hdr.innerHTML = `<h4>${clsName} Exclusive</h4><p>Masterwork gear forged for your order.</p>`; list.appendChild(hdr);
+  let count = 0; for (const id of Object.keys(D().ALL_ITEMS)) { const def = D().ALL_ITEMS[id]; if (def.classReq !== state.class || (def.req && def.req.level > state.level + 5)) continue; list.appendChild(shopRow(def, id, def.price)); count++; }
   if (!count) list.innerHTML += '<p class="shop-empty">No exclusive gear available at your level.</p>';
 }
 function renderShopMystic(list) {
-  const rot = D.getMysticRotation(), hdr = document.createElement('div'); hdr.className = 'shop-header mystic-header'; hdr.innerHTML = `<h4>✦ Mystic Curio ✦</h4><p>Rotating rare offerings. Next refresh in <span id="mystic-timer">${fmtCountdown(rot[0]?.msLeft || 0)}</span></p>`; list.appendChild(hdr);
+  const rot = D().getMysticRotation(), hdr = mkEl('div'); hdr.className = 'shop-header mystic-header'; hdr.innerHTML = `<h4>✦ Mystic Curio ✦</h4><p>Rotating rare offerings. Next refresh in <span id="mystic-timer">${fmtCountdown(rot[0]?.msLeft || 0)}</span></p>`; list.appendChild(hdr);
   for (const pick of rot) {
-    const def = D.ALL_ITEMS[pick.id]; if (!def) continue; const price = Math.floor((def.price || 500) * D.RARITY[pick.rarity].mult * 2), cloned = D.rollItemWithRarity(pick.id, pick.rarity), canAfford = state.gold >= price, lockLvl = def.req && def.req.level > state.level, lockCls = def.classReq && def.classReq !== state.class, row = document.createElement('div'); row.className = `shop-item rarity-${pick.rarity}` + (lockLvl || lockCls ? ' locked' : ''); const statsLine = buildStatLine(cloned);
-    row.innerHTML = `<div class="item-info"><div class="item-name rarity-${pick.rarity}">${def.name} <span class="rarity-tag">${D.RARITY[pick.rarity].name}</span></div><div class="item-desc">${def.desc || ''}</div>${statsLine ? `<div class="item-stats">${statsLine}</div>` : ''}</div><button class="item-action mystic-buy" data-buy-rarity="${pick.id}" data-rarity="${pick.rarity}" ${(!canAfford || lockLvl || lockCls) ? 'disabled' : ''}>${price}g</button>`; list.appendChild(row);
+    const def = D().ALL_ITEMS[pick.id]; if (!def) continue; const price = Math.floor((def.price || 500) * D().RARITY[pick.rarity].mult * 2), cloned = D().rollItemWithRarity(pick.id, pick.rarity), canAfford = state.gold >= price, lockLvl = def.req && def.req.level > state.level, lockCls = def.classReq && def.classReq !== state.class, row = mkEl('div'); row.className = `shop-item rarity-${pick.rarity}` + (lockLvl || lockCls ? ' locked' : ''); const statsLine = buildStatLine(cloned);
+    row.innerHTML = `<div class="item-info"><div class="item-name rarity-${pick.rarity}">${def.name} <span class="rarity-tag">${D().RARITY[pick.rarity].name}</span></div><div class="item-desc">${def.desc || ''}</div>${statsLine ? `<div class="item-stats">${statsLine}</div>` : ''}</div><button class="item-action mystic-buy" data-buy-rarity="${pick.id}" data-rarity="${pick.rarity}" ${(!canAfford || lockLvl || lockCls) ? 'disabled' : ''}>${price}g</button>`; list.appendChild(row);
   }
 }
 
 function fmtCountdown(ms) { const s = Math.max(0, Math.floor(ms / 1000)), m = Math.floor(s / 60), ss = s % 60; return `${m}:${ss.toString().padStart(2,'0')}`; }
 
 function buyItem(itemId) {
-  const def = D.ALL_ITEMS[itemId]; if (!def) return;
+  const def = D().ALL_ITEMS[itemId]; if (!def) return;
   if (state.gold < def.price) { log('Not enough gold!', 'system'); return; }
   if (def.req && def.req.level > state.level) { log('Level too low.', 'system'); return; }
   if (def.classReq && def.classReq !== state.class) { log('Wrong class for this item.', 'system'); return; }
@@ -856,20 +863,20 @@ function buyItem(itemId) {
 }
 
 function buyMysticItem(itemId, rarity) {
-  const def = D.ALL_ITEMS[itemId]; if (!def) return;
-  const price = Math.floor((def.price || 500) * D.RARITY[rarity].mult * 2);
+  const def = D().ALL_ITEMS[itemId]; if (!def) return;
+  const price = Math.floor((def.price || 500) * D().RARITY[rarity].mult * 2);
   if (state.gold < price) { log('Not enough gold!', 'system'); return; }
   if (def.req && def.req.level > state.level) { log('Level too low.', 'system'); return; }
   if (def.classReq && def.classReq !== state.class) { log('Wrong class for this item.', 'system'); return; }
-  state.gold -= price; addToInventory(itemId, 1, rarity); log(`Mystic purchase: ${def.name} [${D.RARITY[rarity].name}] for ${price}g`, 'rarity-' + rarity); updateAllUI(); save();
+  state.gold -= price; addToInventory(itemId, 1, rarity); log(`Mystic purchase: ${def.name} [${D().RARITY[rarity].name}] for ${price}g`, 'rarity-' + rarity); updateAllUI(); save();
 }
 
 function updateCraftUI() {
   const list = el('craft-list'); list.innerHTML = '';
-  for (const [recipeId, recipe] of Object.entries(D.CRAFTING_RECIPES)) {
-    const def = D.ALL_ITEMS[recipeId]; if (!def || (def.req && def.req.level > state.level)) continue;
-    const canCraft = canCraftRecipe(recipeId), item = document.createElement('div'); item.className = 'craft-item' + (canCraft ? '' : ' locked'); const reqLevel = getCraftLevelReq(recipe.level);
-    const matHtml = Object.entries(recipe.materials).map(([matId, qty]) => { const have = getInventoryCount(matId), matDef = D.ALL_ITEMS[matId], cls = have >= qty ? 'have' : 'need'; return `<span class="${cls}">${matDef.name} ${have}/${qty}</span>`; }).join(', ');
+  for (const [recipeId, recipe] of Object.entries(D().CRAFTING_RECIPES)) {
+    const def = D().ALL_ITEMS[recipeId]; if (!def || (def.req && def.req.level > state.level)) continue;
+    const canCraft = canCraftRecipe(recipeId), item = mkEl('div'); item.className = 'craft-item' + (canCraft ? '' : ' locked'); const reqLevel = getCraftLevelReq(recipe.level);
+    const matHtml = Object.entries(recipe.materials).map(([matId, qty]) => { const have = getInventoryCount(matId), matDef = D().ALL_ITEMS[matId], cls = have >= qty ? 'have' : 'need'; return `<span class="${cls}">${matDef.name} ${have}/${qty}</span>`; }).join(', ');
     item.innerHTML = `<div class="item-info"><div class="item-name">${def.name}</div><div class="item-mats">${matHtml}</div><div class="item-desc">Req: Craft Lv.${reqLevel}</div></div><button class="item-action" data-craft="${recipeId}" ${!canCraft ? 'disabled' : ''}>Craft</button>`; list.appendChild(item);
   }
   qsa('[data-craft]').forEach(btn => btn.onclick = () => craftItem(btn.dataset.craft));
@@ -956,7 +963,7 @@ function updateAllUI() {
 }
 
 // --------------------------- VISUALS / STAGE ---------------------------
-function topEquipRarityColor() { const rank = { common: 0, uncommon: 1, rare: 2, epic: 3, legendary: 4 }; let best = -1, col = ''; for (const s of Object.keys(state.equipment)) { const uid = state.equipment[s]; if (!uid) continue; const it = state.inventory.find(i => i.uid === uid); if (!it || !it.rarity) continue; const r = rank[it.rarity] ?? -1; if (r > best) { best = r; col = D.RARITY[it.rarity].color; } } return col; }
+function topEquipRarityColor() { const rank = { common: 0, uncommon: 1, rare: 2, epic: 3, legendary: 4 }; let best = -1, col = ''; for (const s of Object.keys(state.equipment)) { const uid = state.equipment[s]; if (!uid) continue; const it = state.inventory.find(i => i.uid === uid); if (!it || !it.rarity) continue; const r = rank[it.rarity] ?? -1; if (r > best) { best = r; col = D().RARITY[it.rarity].color; } } return col; }
 function renderStageHero() {
   const hero = el('stage-hero'), pArt = el('portrait-art'), dArt = el('doll-art');
   if (!state.race || !state.class) { if (hero) hero.innerHTML = ''; if (pArt) pArt.innerHTML = ''; if (dArt) dArt.innerHTML = ''; return; }
@@ -980,7 +987,7 @@ function stageMonsterDie() { const fill = el('m-hp-fill'); if (fill) fill.style.
 function stageMonsterLunge() { const m = el('stage-monster'); if (!m) return; m.classList.remove('lunge'); reflow(m); m.classList.add('lunge'); setTimeout(() => m.classList.remove('lunge'), 440); }
 function stageHeroHurt(dmg) { const h = el('stage-hero'); if (h) { h.classList.remove('hurt'); reflow(h); h.classList.add('hurt'); setTimeout(() => h.classList.remove('hurt'), 420); } stageFloat('-' + Math.round(dmg), 'sf-hurt', 'left'); }
 function stageHeroBlock() { stageFloat('BLOCK', 'sf-block', 'left'); }
-function stageFloat(text, cls, side) { const c = el('stage-floats'); if (!c) return; const s = document.createElement('span'); s.className = 'sf ' + cls; s.textContent = text; s.style.left = (side === 'left' ? (16 + Math.random() * 8) : (68 + Math.random() * 12)) + '%'; c.appendChild(s); setTimeout(() => s.remove(), 1100); }
+function stageFloat(text, cls, side) { const c = el('stage-floats'); if (!c) return; const s = mkEl('span'); s.className = 'sf ' + cls; s.textContent = text; s.style.left = (side === 'left' ? (16 + Math.random() * 8) : (68 + Math.random() * 12)) + '%'; c.appendChild(s); setTimeout(() => s.remove(), 1100); }
 
 // --------------------------- COMBAT ---------------------------
 let combatInterval = null; let combatTick = 0;
@@ -994,7 +1001,7 @@ function dealDamage(target, amount, type = 'physical') {
 const goldEvents = []; 
 function trackGold(amount) { goldEvents.push({ t: Date.now(), v: amount }); }
 function getGoldPerSec() { const now = Date.now(); while (goldEvents.length && now - goldEvents[0].t > 30000) goldEvents.shift(); if (!goldEvents.length) return 0; return goldEvents.reduce((s, e) => s + e.v, 0) / 30; }
-function floatText(text, cls = 'float-gold') { const layer = el('float-layer'); if (!layer) return; const span = document.createElement('span'); span.className = 'float-text ' + cls; span.textContent = text; const rect = layer.getBoundingClientRect(); span.style.left = (rect.width * (0.35 + Math.random() * 0.3)) + 'px'; span.style.top = (rect.height * 0.55 + (Math.random() * 60 - 30)) + 'px'; layer.appendChild(span); setTimeout(() => span.remove(), 1400); }
+function floatText(text, cls = 'float-gold') { const layer = el('float-layer'); if (!layer) return; const span = mkEl('span'); span.className = 'float-text ' + cls; span.textContent = text; const rect = layer.getBoundingClientRect(); span.style.left = (rect.width * (0.35 + Math.random() * 0.3)) + 'px'; span.style.top = (rect.height * 0.55 + (Math.random() * 60 - 30)) + 'px'; layer.appendChild(span); setTimeout(() => span.remove(), 1400); }
 
 function attackMonster() {
   if (!state.zone || !state.target) return;
@@ -1093,7 +1100,7 @@ function attackMonster() {
   if (monster.hp <= 0 && !castedSkillThisTick) stageMonsterDie(); else if (!castedSkillThisTick) stageMonsterHurt(damage, wasCrit);
   
   if (monster.hp <= 0) {
-    const zoneMult = D.ZONE_GOLD_MULT[state.zone] || 1, xpMult = 1 + (stats.xpBoost || 0);
+    const zoneMult = D().ZONE_GOLD_MULT[state.zone] || 1, xpMult = 1 + (stats.xpBoost || 0);
     const xpGain = Math.floor(monster.xp * xpMult), spGain = monster.sp + (monster.boss ? 2 : 0);
     state.xp += xpGain; state.sp += spGain;
     log(`Defeated ${monster.name}! +${xpGain} XP, +${spGain} SP`, 'xp');
@@ -1104,10 +1111,10 @@ function attackMonster() {
     state.gold += gold; trackGold(gold);
     if (jackpot) { log(`💰 JACKPOT! +${gold} Gold (×10)`, 'rarity-legendary'); floatText(`💰 +${gold}g`, 'float-jackpot'); } else { log(`+${gold} Gold`, 'loot'); if (gold >= 20) floatText(`+${gold}g`, 'float-gold'); }
 
-    const drops = D.rollDrop(state.target, stats.loot);
+    const drops = D().rollDrop(state.target, stats.loot);
     for (const drop of drops) {
-      if (drop.isEquipment) { addToInventory(drop.id, 1, drop.rarity); log(`✦ ${D.ALL_ITEMS[drop.id].name} [${D.RARITY[drop.rarity].name}]`, 'rarity-' + drop.rarity); floatText(`✦ ${D.RARITY[drop.rarity].name}!`, 'float-' + drop.rarity); } 
-      else { addToInventory(drop.id, drop.amount); log(`+ ${drop.amount}× ${D.ALL_ITEMS[drop.id].name}`, 'loot'); }
+      if (drop.isEquipment) { addToInventory(drop.id, 1, drop.rarity); log(`✦ ${D().ALL_ITEMS[drop.id].name} [${D().RARITY[drop.rarity].name}]`, 'rarity-' + drop.rarity); floatText(`✦ ${D().RARITY[drop.rarity].name}!`, 'float-' + drop.rarity); } 
+      else { addToInventory(drop.id, drop.amount); log(`+ ${drop.amount}× ${D().ALL_ITEMS[drop.id].name}`, 'loot'); }
     }
     checkLevelUp(); pickRandomMonster();
   } else { setTimeout(() => monsterAttack(monster), 500); }
@@ -1195,7 +1202,7 @@ function attachGlobalErrorHandlers() {
     console.error('Global runtime error:', event.error || event.message);
     const logEl = el('log');
     if (logEl) {
-      const entry = document.createElement('p');
+      const entry = mkEl('p');
       entry.className = 'log-entry system';
       entry.textContent = 'A non-fatal game error occurred. The interface will keep trying to recover.';
       logEl.appendChild(entry);
@@ -1251,7 +1258,7 @@ export function init() {
     console.error('Game init failed:', err);
     const logEl = el('log');
     if (logEl) {
-      const entry = document.createElement('p');
+      const entry = mkEl('p');
       entry.className = 'log-entry system';
       entry.textContent = 'The game encountered a startup issue. Please refresh the page.';
       logEl.appendChild(entry);
@@ -1291,6 +1298,6 @@ function tickUI() {
   for (const k of Object.keys(state.buffs || {})) { if (state.buffs[k].until < now) { delete state.buffs[k]; buffChanged = true; } }
   const gpsEl = el('gps-text'); if (gpsEl) { gpsEl.textContent = getGoldPerSec() > 0 ? `${getGoldPerSec().toFixed(1)}/s` : '—'; }
   updateStatsUI(); 
-  const mt = el('mystic-timer'); if (mt) { mt.textContent = fmtCountdown(D.getMysticRotation()[0]?.msLeft || 0); }
+  const mt = el('mystic-timer'); if (mt) { mt.textContent = fmtCountdown(D().getMysticRotation()[0]?.msLeft || 0); }
   if (buffChanged) { updateShopUI(); }
 }
