@@ -162,7 +162,12 @@ let state = DEFAULT_STATE();
 
 // FUNÇÃO DE SAVE/LOAD COM DEEP MERGE PARA IMPEDIR RESET DE SKILLS
 function save(manual = false) {
-  const data = { ...state, totalPlaytime: state.totalPlaytime + (Date.now() - state.startTime), lastSaveTime: Date.now() };
+  const data = { 
+    ...state, 
+    totalPlaytime: state.totalPlaytime + (Date.now() - state.startTime), 
+    lastSaveTime: Date.now(),
+    selectedUids: Array.from(getSelectedSet())
+  };
   delete data.startTime;
   localStorage.setItem(SAVE_KEY, JSON.stringify(data));
   if (manual) {
@@ -186,6 +191,7 @@ function load() {
     state.equipment = { ...def.equipment, ...(data.equipment || {}) };
     state.base = { ...def.base, ...(data.base || {}) };
     state.inventory = safeInventory;
+    state.selectedUids = new Set(Array.isArray(data.selectedUids) ? data.selectedUids : []);
     state.buffs = data.buffs || {};
     state.filter = data.filter || 'all';
     state.gameMode = data.gameMode === 'arena' ? 'arena' : 'idle';
@@ -470,32 +476,45 @@ function salvageItem(uid) {
   updateAllUI(); save();
 }
 
+function getSelectedSet() {
+  if (!(state.selectedUids instanceof Set)) {
+    if (Array.isArray(state.selectedUids)) {
+      state.selectedUids = new Set(state.selectedUids);
+    } else {
+      state.selectedUids = new Set();
+    }
+  }
+  return state.selectedUids;
+}
+
 function toggleSelectItem(uid) {
-  if (!state.selectedUids) state.selectedUids = new Set();
-  if (state.selectedUids.has(uid)) state.selectedUids.delete(uid);
-  else state.selectedUids.add(uid);
+  const set = getSelectedSet();
+  if (set.has(uid)) set.delete(uid);
+  else set.add(uid);
   updateInventoryUI();
 }
 
 function selectItemsByFilter(filterFn) {
-  if (!state.selectedUids) state.selectedUids = new Set();
+  const set = getSelectedSet();
   for (const item of state.inventory) {
-    if (!item.equipped && filterFn(item)) {
-      state.selectedUids.add(item.uid);
+    if (item && !item.equipped && filterFn(item)) {
+      set.add(item.uid);
     }
   }
   updateInventoryUI();
 }
 
 function clearItemSelection() {
-  if (state.selectedUids) state.selectedUids.clear();
+  const set = getSelectedSet();
+  set.clear();
   updateInventoryUI();
 }
 
 function sellSelectedItems() {
-  if (!state.selectedUids || state.selectedUids.size === 0) return;
+  const set = getSelectedSet();
+  if (set.size === 0) return;
   let totalGold = 0, count = 0;
-  const toDelete = Array.from(state.selectedUids);
+  const toDelete = Array.from(set);
   
   for (const uid of toDelete) {
     const item = state.inventory.find(i => i.uid === uid);
@@ -513,7 +532,7 @@ function sellSelectedItems() {
     removeFromInventory(uid, itemQty);
   }
   
-  state.selectedUids.clear();
+  set.clear();
   state.gold += totalGold;
   log(`💰 Sold ${count} selected item(s) for ${totalGold.toLocaleString()}g!`, 'loot');
   updateAllUI();
@@ -521,9 +540,10 @@ function sellSelectedItems() {
 }
 
 function salvageSelectedItems() {
-  if (!state.selectedUids || state.selectedUids.size === 0) return;
+  const set = getSelectedSet();
+  if (set.size === 0) return;
   let count = 0;
-  const toDelete = Array.from(state.selectedUids);
+  const toDelete = Array.from(set);
   
   for (const uid of toDelete) {
     const item = state.inventory.find(i => i.uid === uid);
@@ -537,7 +557,7 @@ function salvageSelectedItems() {
     count++;
   }
   
-  state.selectedUids.clear();
+  set.clear();
   log(`🔨 Salvaged ${count} selected equipment(s) into Iron Ore!`, 'loot');
   updateAllUI();
   save();
@@ -822,12 +842,15 @@ function updateSkillInfoPanel() {
 
 function updateInventoryUI() {
   const grid = el('inventory-grid'); if (!grid) return; grid.innerHTML = '';
-  if (!state.selectedUids) state.selectedUids = new Set();
+  const selectedSet = getSelectedSet();
   const filter = state.filter || 'all';
   const rarityFilter = state.rarityFilter || 'all';
   const equipFilter = state.equipFilter || 'all';
 
-  const sorted = [...state.inventory].sort((a, b) => { const da = D().ALL_ITEMS[a.itemId], db = D().ALL_ITEMS[b.itemId]; if (!da || !db) return 0; return (db.tier || 0) - (da.tier || 0); });
+  const sorted = [...state.inventory]
+    .filter(i => i && i.itemId && D().ALL_ITEMS[i.itemId])
+    .sort((a, b) => { const da = D().ALL_ITEMS[a.itemId], db = D().ALL_ITEMS[b.itemId]; if (!da || !db) return 0; return (db.tier || 0) - (da.tier || 0); });
+    
   let shown = 0;
   let selectedValue = 0;
   let salvageableCount = 0;
@@ -840,7 +863,7 @@ function updateInventoryUI() {
     if (equipFilter === 'equipped' && !item.equipped) continue;
     if (equipFilter === 'bag' && item.equipped) continue;
 
-    const isSelected = state.selectedUids.has(item.uid);
+    const isSelected = selectedSet.has(item.uid);
     if (isSelected && !item.equipped) {
       const qty = item.count || 1;
       const basePrice = def.price || 10;
@@ -880,12 +903,12 @@ function updateInventoryUI() {
 
   const sellBtn = el('sell-selected-btn');
   if (sellBtn) {
-    sellBtn.disabled = state.selectedUids.size === 0;
+    sellBtn.disabled = selectedSet.size === 0;
     sellBtn.textContent = `💰 Vender Selecionados (${selectedValue.toLocaleString()}g)`;
   }
   const salvageBtn = el('salvage-selected-btn');
   if (salvageBtn) {
-    salvageBtn.disabled = salvageableCount === 0;
+    salvageBtn.disabled = selectedSet.size === 0 || salvageableCount === 0;
     salvageBtn.textContent = `🔨 Desmontar Selecionados (${salvageableCount})`;
   }
 
