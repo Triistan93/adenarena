@@ -914,8 +914,10 @@ function updateEquipmentUI() {
 
     if (itemLabel) itemLabel.textContent = enchantStr;
     if (pdSlot) {
-      pdSlot.classList.add('has-item', `rarity-${rarity}`);
+      pdSlot.className = `l2inv-pd-slot equip-slot has-item rarity-${rarity}`;
       pdSlot.title = `${enchantStr ? enchantStr + ' ' : ''}${def.name} (${slot})`;
+      pdSlot.onmouseenter = (e) => { cancelHideTooltip(); showItemTooltip(item, e); };
+      pdSlot.onmouseleave = scheduleHideTooltip;
     }
     if (elem) {
       elem.textContent = (enchantStr ? enchantStr + ' ' : '') + def.name;
@@ -984,30 +986,25 @@ function updateSkillUI() {
   if (!nodesLayer) { nodesLayer = mkEl('div'); nodesLayer.className = 'skill-tree-nodes'; wrap.appendChild(nodesLayer); }
   nodesLayer.innerHTML = '';
   
-  if (!state.selectedSkill || SKILL_DEFS[state.selectedSkill]?.classReq !== activeTreeClass) {
-    state.selectedSkill = isMage ? 'weaponMastM' : 'armorMast';
-  }
-
   for (const [id, def] of Object.entries(SKILL_DEFS)) {
-    if (def.classReq !== activeTreeClass) continue;
-    const layout = SKILL_TREE_LAYOUT[id];
-    if (!layout) continue;
-    const lvl = state.skills[id] || 0;
-    const maxed = lvl >= def.max;
-    const reqs = SKILL_REQS[id];
-    const meetsReqs = (!reqs || Object.entries(reqs).every(([s, v]) => (state.skills[s] || 0) >= v)) && (state.level >= def.reqLvl);
-    const isSelected = state.selectedSkill === id;
-    const state_ = maxed ? 'maxed' : (lvl > 0 ? 'owned' : (meetsReqs ? 'available' : 'locked'));
-    
-    const node = mkEl('button');
-    node.className = `skill-node ${state_} ${isSelected ? 'selected' : ''}`;
-    const NODE_PX_W = 86, NODE_PX_H = 62;
-    node.style.left = (TREE_PAD_X + layout.col * TREE_NODE_W + (TREE_NODE_W - NODE_PX_W) / 2) + 'px';
-    node.style.top  = (TREE_PAD_Y + layout.row * TREE_NODE_H + (TREE_NODE_H - NODE_PX_H) / 2) + 'px';
-    node.innerHTML = `<span class="skill-icon">${def.icon || '✦'}</span><span class="skill-lvl-ring" style="--p:${(lvl/def.max)*100}"></span><span class="skill-lvl-num">${lvl}/${def.max}</span>`;
-    node.title = def.name; node.onclick = () => { state.selectedSkill = id; updateSkillUI(); };
+    if (!classSatisfies(state.class, def.classReq)) continue;
+    const p = pos[id]; if (!p) continue;
+    const lvl = state.skills[id] || 0, max = def.max;
+    const node = mkEl('div'); node.className = `skill-node tier-${def.tier}` + (lvl > 0 ? ' owned' : '') + (lvl === max ? ' maxed' : '');
+    node.style.left = (p.x - TREE_NODE_W / 2) + 'px'; node.style.top = (p.y - TREE_NODE_H / 2) + 'px';
+    node.style.width = TREE_NODE_W + 'px'; node.style.height = TREE_NODE_H + 'px';
+    const reqs = SKILL_REQS[id], reqOk = !reqs || Object.entries(reqs).every(([s, v]) => (state.skills[s] || 0) >= v);
+    const lvlOk = state.level >= (def.reqLvl || 1), canBuy = reqOk && lvlOk && state.sp >= getSkillCost(id, lvl) && lvl < max;
+    const btnClass = canBuy ? 'skill-btn can-buy' : 'skill-btn';
+    node.innerHTML = `<button class="${btnClass}" data-skill="${id}"><span class="icon">${def.icon}</span><span class="name">${def.name}</span><span class="lvl">${lvl}/${max}</span></button>`;
     nodesLayer.appendChild(node);
   }
+
+  qsa('.skill-btn').forEach(btn => {
+    const sId = btn.dataset.skill, def = SKILL_DEFS[sId]; if (!def) return;
+    btn.onmouseenter = (e) => showSkillTooltip(sId, e); btn.onmouseleave = hideSkillTooltip;
+    btn.onclick = () => buySkill(sId);
+  });
   updateSkillInfoPanel();
 }
 
@@ -1100,16 +1097,21 @@ function updateInventoryUI() {
     const checkHtml = `<div class="slot-select-checkbox">${isSelected ? '✓' : ''}</div>`;
     slot.innerHTML = `${checkHtml}<span style="font-size:18px">${getItemIcon(def)}</span><span class="name">${enchantStr}${def.name}</span>${qty}${tag}`;
     
-    // Hover tooltips for backpack items
-    slot.onmouseenter = (e) => showItemTooltip(item, e);
-    slot.onmouseleave = hideItemTooltip;
+    // Hover tooltips for backpack items with smooth grace period
+    slot.onmouseenter = (e) => { cancelHideTooltip(); showItemTooltip(item, e); };
+    slot.onmouseleave = scheduleHideTooltip;
 
     slot.onclick = (e) => {
       e.stopPropagation();
-      if (e.target.classList.contains('slot-select-checkbox') || isSelected) {
-        toggleSelectItem(item.uid);
-      } else {
-        showItemTooltip(item, e);
+      toggleSelectItem(item.uid);
+    };
+
+    slot.ondblclick = (e) => {
+      e.stopPropagation();
+      if (['weapon','armor','helmet','gloves','boots','ring'].includes(def.slot)) {
+        equipItem(item.uid);
+      } else if (['consumable','scroll','powerup'].includes(def.slot)) {
+        useItem(item.uid);
       }
     };
 
@@ -1141,7 +1143,24 @@ function updateInventoryUI() {
 
 function getItemIcon(def) { const icons = { weapon: '⚔️', armor: '🛡️', helmet: '⛑️', gloves: '🧤', boots: '👢', ring: '💍', consumable: '🧪', material: '💎', scroll: '📜' }; return icons[def.slot] || '📦'; }
 
+let tooltipTimer = null;
+
+function scheduleHideTooltip() {
+  if (tooltipTimer) clearTimeout(tooltipTimer);
+  tooltipTimer = setTimeout(() => {
+    hideItemTooltip();
+  }, 220);
+}
+
+function cancelHideTooltip() {
+  if (tooltipTimer) {
+    clearTimeout(tooltipTimer);
+    tooltipTimer = null;
+  }
+}
+
 function showItemTooltip(item, e) {
+  cancelHideTooltip();
   const def = D().ALL_ITEMS[item.itemId]; if (!def) return;
   const tt = el('item-tooltip'), rarity = item.rarity || 'common', mult = D().RARITY[rarity]?.mult || 1, rc = D().RARITY[rarity]?.color || '#c8a84e';
   const enchantStr = item.enchant ? `+${item.enchant} ` : '';
@@ -1175,14 +1194,16 @@ function showItemTooltip(item, e) {
   
   tt.innerHTML = html; tt.style.display = 'block'; 
   
+  tt.onmouseenter = cancelHideTooltip;
+  tt.onmouseleave = scheduleHideTooltip;
   tt.onclick = (ev) => ev.stopPropagation();
 
   if (e && e.currentTarget) {
     const rect = e.currentTarget.getBoundingClientRect(); 
-    let leftPos = rect.right + 10;
-    if (leftPos + 260 > window.innerWidth) leftPos = rect.left - 270; 
+    let leftPos = rect.right + 6;
+    if (leftPos + 270 > window.innerWidth) leftPos = rect.left - 275; 
     tt.style.left = Math.max(10, leftPos) + 'px'; 
-    tt.style.top = Math.max(10, rect.top) + 'px';
+    tt.style.top = Math.max(10, rect.top - 10) + 'px';
   } else if (e && e.clientX) {
     tt.style.left = Math.min(window.innerWidth - 270, e.clientX + 15) + 'px';
     tt.style.top = Math.min(window.innerHeight - 300, e.clientY + 15) + 'px';
@@ -1203,6 +1224,7 @@ function showItemTooltip(item, e) {
 }
 
 function hideItemTooltip() { 
+  cancelHideTooltip();
   const tt = el('item-tooltip');
   if (tt) tt.style.display = 'none'; 
 }
