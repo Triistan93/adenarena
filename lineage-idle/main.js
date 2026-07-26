@@ -242,6 +242,14 @@ function getStats() {
   const race = state.race ? RACES[state.race] : null;
   const cls = getClass(state.class);
   const skills = state.skills || {};
+
+  const isMage = state.class === 'mage' || state.class === 'soulbreaker';
+  const activeTreeClass = isMage ? 'mage' : 'fighter';
+  const sk = (id) => {
+    const def = SKILL_DEFS[id];
+    if (def && def.classReq !== activeTreeClass) return 0;
+    return Number(skills[id]) || 0;
+  };
   
   let baseAtk = Number(state.base.atk) || 0;
   let baseDef = Number(state.base.def) || 0;
@@ -249,15 +257,15 @@ function getStats() {
   let baseMatk = Number(state.base.matk) || 0;
   let baseMdef = Number(state.base.mdef) || 0;
 
-  baseAtk += (Number(skills.wpnMastF) || 0) * 4.5;
-  baseAtk += (Number(skills.weaponMastM) || 0) * 1.5;
-  baseMatk += (Number(skills.weaponMastM) || 0) * 2.5;
-  baseDef += (Number(skills.armorMast) || 0) * 11;
-  baseDef += (Number(skills.robeMast) || 0) * 1.7;
-  baseDef += (Number(skills.lightArmor) || 0) * 4.2;
-  baseEva += (Number(skills.lightArmor) || 0) * 3;
-  baseMdef += (Number(skills.antiMagic) || 0) * 18;
-  const mpRegenBonus = (Number(skills.higherMana) || 0) * 2;
+  baseAtk += sk('wpnMastF') * 4.5;
+  baseAtk += sk('weaponMastM') * 1.5;
+  baseMatk += sk('weaponMastM') * 2.5;
+  baseDef += sk('armorMast') * 11;
+  baseDef += sk('robeMast') * 1.7;
+  baseDef += sk('lightArmor') * 4.2;
+  baseEva += sk('lightArmor') * 3;
+  baseMdef += sk('antiMagic') * 18;
+  const mpRegenBonus = sk('higherMana') * 2;
 
   const eb = getTotalEquipBonuses();
   let itemCraftBonus = 0, itemLootBonus = 0;
@@ -287,8 +295,8 @@ function getStats() {
   }
 
   const atkMult = 1 + buffAtkMult;
-  const defMult = 1 + (Number(skills.heavyArmor) || 0) * 0.05;
-  const cdr = (Number(skills.quickRecycle) || 0) * 0.10;
+  const defMult = 1 + sk('heavyArmor') * 0.05;
+  const cdr = sk('quickRecycle') * 0.10;
 
   const finalAtk  = Math.floor((baseAtk + (Number(eb.atk) || 0) + buffAtk) * atkMult);
   const finalDef  = Math.floor((baseDef + (Number(eb.def) || 0) + buffDef) * defMult);
@@ -302,14 +310,14 @@ function getStats() {
   const lifeDrain = (Number(eb.lifesteal) || 0) / 100;
   const craftBonus = itemCraftBonus;
 
-  const critDmg = 1 + (Number(skills.executioner) || 0) * 0.15;
-  const regenHp = (Number(skills.holylight) || 0) * 0.01;
-  const meteorLvl = Number(skills.meteor) || 0;
-  const execute = (Number(skills.assassinate) || 0) * 0.02;
-  const block = (Number(skills.divineshield) || 0) * 0.05;
+  const critDmg = 1 + sk('executioner') * 0.15;
+  const regenHp = sk('holylight') * 0.01;
+  const meteorLvl = sk('meteor');
+  const execute = sk('assassinate') * 0.02;
+  const block = sk('divineshield') * 0.05;
 
-  const maxHp = Math.floor(100 + state.level * 10 + (Number(skills.boostHp) || 0) * 60 + (Number(eb.hp) || 0));
-  const maxMp = Math.floor(50 + state.level * 5 + (Number(skills.boostMana) || 0) * 30 + (Number(eb.mp) || 0));
+  const maxHp = Math.floor(100 + state.level * 10 + sk('boostHp') * 60 + (Number(eb.hp) || 0));
+  const maxMp = Math.floor(50 + state.level * 5 + sk('boostMana') * 30 + (Number(eb.mp) || 0));
   
   return {
     atk: finalAtk || 1, def: finalDef || 0, eva: finalEva || 0, matk: finalMatk || 1, mdef: finalMdef || 0,
@@ -450,6 +458,60 @@ function salvageItem(uid) {
   addToInventory(matId, amount);
   log(`Broke ${def.name} into ${amount}x ${D().ALL_ITEMS[matId].name}`, 'loot');
   updateAllUI(); save();
+}
+
+function sellAllCommons() {
+  let sold = 0, totalGold = 0;
+  for (let i = state.inventory.length - 1; i >= 0; i--) {
+    const item = state.inventory[i];
+    if (item.equipped) continue;
+    const rarity = item.rarity || 'common';
+    if (rarity !== 'common') continue;
+    const def = D().ALL_ITEMS[item.itemId];
+    if (!def) continue;
+    const price = Math.floor((def.price || 10) * 0.4);
+    totalGold += price * (item.count || 1);
+    state.inventory.splice(i, 1);
+    sold++;
+  }
+  if (sold > 0) {
+    state.gold += totalGold;
+    log(`Sold ${sold} common item(s) for ${totalGold}g`, 'loot');
+    updateAllUI(); save();
+  } else {
+    log('No common items to sell in bag.', 'system');
+  }
+}
+
+function salvageAllCommons() {
+  let salvaged = 0;
+  for (let i = state.inventory.length - 1; i >= 0; i--) {
+    const item = state.inventory[i];
+    if (item.equipped) continue;
+    const rarity = item.rarity || 'common';
+    if (rarity !== 'common') continue;
+    const def = D().ALL_ITEMS[item.itemId];
+    if (!def || !['weapon','armor','helmet','gloves','boots','ring'].includes(def.slot)) continue;
+    
+    const reqLvl = def.req ? def.req.level : 1;
+    const grade = getItemGrade(reqLvl);
+    let matId = (def.slot === 'weapon') ? 'iron_ore' : 'cloth';
+    if (grade === 'S Grade') matId = 'crystal_s';
+    else if (grade === 'A Grade') matId = 'crystal_a';
+    else if (grade === 'B Grade') matId = 'crystal_b';
+    else if (grade === 'C Grade') matId = 'crystal_c';
+    else if (grade === 'D Grade') matId = 'crystal_d';
+    
+    state.inventory.splice(i, 1);
+    addToInventory(matId, 1);
+    salvaged++;
+  }
+  if (salvaged > 0) {
+    log(`Broke ${salvaged} common gear item(s) into crafting materials!`, 'loot');
+    updateAllUI(); save();
+  } else {
+    log('No common equipment to break in bag.', 'system');
+  }
 }
 
 function useItem(uid) {
@@ -769,9 +831,16 @@ function showItemTooltip(item, e) {
   if (def.stack) html += `<div class="tt-stat"><span>Stack</span><span class="v">${item.count || 1}</span></div>`;
   if (item.equipped) html += `<div class="tt-equipped">[ EQUIPPED ]</div>`;
   
+  const canEquipLvl = !def.req || state.level >= def.req.level;
+  const canEquipCls = !def.classReq || def.classReq === state.class;
+  const canEquip = canEquipLvl && canEquipCls;
+  
   html += `<div class="tt-actions">`;
   if (item.equipped) html += `<button class="item-action" data-action="unequip" data-uid="${item.uid}">Unequip</button>`;
-  else if (['weapon','armor','helmet','gloves','boots','ring'].includes(def.slot)) { html += `<button class="item-action" data-action="equip" data-uid="${item.uid}">Equip</button>`; html += `<button class="item-action" data-action="salvage" data-uid="${item.uid}">Break</button>`; }
+  else if (['weapon','armor','helmet','gloves','boots','ring'].includes(def.slot)) {
+    html += `<button class="item-action" data-action="equip" data-uid="${item.uid}" ${!canEquip ? 'disabled title="Nível ou classe incompatível"' : ''}>Equip</button>`;
+    html += `<button class="item-action" data-action="salvage" data-uid="${item.uid}">Break</button>`;
+  }
   if (def.slot === 'consumable' || def.slot === 'scroll' || def.slot === 'powerup') html += `<button class="item-action" data-action="use" data-uid="${item.uid}">Use</button>`;
   const sellPrice = Math.floor((def.price||10)*0.4*(item.rarity?D().RARITY[item.rarity].mult:1));
   html += `<button class="item-action sell" data-action="sell" data-uid="${item.uid}">Sell ${sellPrice}g</button></div>`;
@@ -874,7 +943,8 @@ function buyItem(itemId) {
   if (state.gold < def.price) { log('Not enough gold!', 'system'); return; }
   if (def.req && def.req.level > state.level) { log('Level too low.', 'system'); return; }
   if (def.classReq && def.classReq !== state.class) { log('Wrong class for this item.', 'system'); return; }
-  state.gold -= def.price; addToInventory(itemId, 1, null); log(`Bought ${def.name} for ${def.price}g`, 'loot'); updateAllUI(); save();
+  if (!addToInventory(itemId, 1, null)) return;
+  state.gold -= def.price; log(`Bought ${def.name} for ${def.price}g`, 'loot'); updateAllUI(); save();
 }
 
 function buyMysticItem(itemId, rarity) {
@@ -883,7 +953,8 @@ function buyMysticItem(itemId, rarity) {
   if (state.gold < price) { log('Not enough gold!', 'system'); return; }
   if (def.req && def.req.level > state.level) { log('Level too low.', 'system'); return; }
   if (def.classReq && def.classReq !== state.class) { log('Wrong class for this item.', 'system'); return; }
-  state.gold -= price; addToInventory(itemId, 1, rarity); log(`Mystic purchase: ${def.name} [${D().RARITY[rarity].name}] for ${price}g`, 'rarity-' + rarity); updateAllUI(); save();
+  if (!addToInventory(itemId, 1, rarity)) return;
+  state.gold -= price; log(`Mystic purchase: ${def.name} [${D().RARITY[rarity].name}] for ${price}g`, 'rarity-' + rarity); updateAllUI(); save();
 }
 
 function updateCraftUI() {
@@ -987,9 +1058,9 @@ function renderStageHero() {
   const pn = el('portrait-name'), ps = el('portrait-sub'), pau = el('portrait-aura');
   if (pn) pn.textContent = ((RACES[state.race]?.name || '') + ' ' + (getClass(state.class)?.name || '')).trim(); if (ps) ps.textContent = state.zone ? ('Hunting · ' + ZONES[state.zone].name) : 'Awaiting the road'; if (pau) pau.style.setProperty('--aura', aura ? aura + '55' : 'rgba(212,167,68,0.0)');
 }
-function updateMonsterHP() { const fill = el('m-hp-fill'), mon = state.target ? MONSTERS[state.target] : null; if (!fill) return; if (!mon || !mon._maxHp) { fill.style.width = '100%'; return; } fill.style.width = Math.max(0, (mon.hp / mon._maxHp) * 100) + '%'; }
+function updateMonsterHP() { const fill = el('m-hp-fill'), mon = state.activeMonster; if (!fill) return; if (!mon || !mon._maxHp) { fill.style.width = '100%'; return; } fill.style.width = Math.max(0, (mon.hp / mon._maxHp) * 100) + '%'; }
 function renderStageMonster() {
-  const art = el('m-art'), nm = el('m-name'), box = el('stage-monster'), mon = state.target ? MONSTERS[state.target] : null;
+  const art = el('m-art'), nm = el('m-name'), box = el('stage-monster'), mon = state.activeMonster;
   if (box) box.classList.remove('hurt', 'lunge');
   if (!mon) { if (art) art.innerHTML = ''; if (nm) nm.textContent = ''; return; }
   if (art) { art.innerHTML = ART.monsterSVG(state.target, { crown: !!mon.boss }); art.classList.remove('swap'); void art.offsetWidth; art.classList.add('swap'); }
@@ -1020,7 +1091,7 @@ function floatText(text, cls = 'float-gold') { const layer = el('float-layer'); 
 
 function attackMonster() {
   if (!state.zone || !state.target) return;
-  const stats = getStats(), monster = MONSTERS[state.target]; if (!monster) return;
+  const stats = getStats(), monster = state.activeMonster || MONSTERS[state.target]; if (!monster) return;
   combatTick++;
 
   if (stats.regenHp > 0) {
@@ -1152,7 +1223,7 @@ function monsterAttack(monster) {
 
 function startCombat() { if (state.combatActive) return; if (!state.zone) return; state.combatActive = true; log(`Entering ${ZONES[state.zone].name}...`, 'system'); pickRandomMonster(); combatTick = 0; state._cds = {}; if (combatInterval) clearInterval(combatInterval); combatInterval = setInterval(attackMonster, 200); }
 function stopCombat() { state.combatActive = false; if (combatInterval) { clearInterval(combatInterval); combatInterval = null; } }
-function pickRandomMonster() { const zone = ZONES[state.zone], available = zone.monsters.filter(m => { const mon = MONSTERS[m]; return mon && (mon.xp / 10) <= state.level + 5; }); if (available.length === 0) { state.target = zone.monsters[0]; } else { state.target = available[Math.floor(Math.random() * available.length)]; } const mon = MONSTERS[state.target]; if (mon) { if (mon._maxHp == null) mon._maxHp = mon.hp; mon.hp = mon._maxHp; log(`A wild ${mon.name} appears!`, 'combat'); renderStageMonster(); } }
+function pickRandomMonster() { const zone = ZONES[state.zone], available = zone.monsters.filter(m => { const mon = MONSTERS[m]; return mon && (mon.xp / 10) <= state.level + 5; }); if (available.length === 0) { state.target = zone.monsters[0]; } else { state.target = available[Math.floor(Math.random() * available.length)]; } const template = MONSTERS[state.target]; if (template) { state.activeMonster = { ...template, _maxHp: template.hp, hp: template.hp, _stunnedUntil: 0 }; log(`A wild ${template.name} appears!`, 'combat'); renderStageMonster(); } }
 function selectZone(zoneId) { const zone = ZONES[zoneId]; if (zone.level > state.level) { log(`Level ${zone.level} required.`, 'system'); return; } state.zone = zoneId; el('zone-name').textContent = zone.name; stopCombat(); startCombat(); updateAllUI(); save(); }
 
 function checkLevelUp() {
@@ -1245,6 +1316,8 @@ export function init() {
     qsa('.filter-btn').forEach(btn => { btn.onclick = () => { state.filter = btn.dataset.filter; qsa('.filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); updateInventoryUI(); }; });
     qsa('.rarity-filter-btn').forEach(btn => { btn.onclick = () => { state.rarityFilter = btn.dataset.rarity; qsa('.rarity-filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); updateInventoryUI(); }; });
     qsa('.equip-filter-btn').forEach(btn => { btn.onclick = () => { state.equipFilter = btn.dataset.equipfilter; qsa('.equip-filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); updateInventoryUI(); }; });
+    const sellCommonsBtn = el('sell-commons-btn'); if (sellCommonsBtn) sellCommonsBtn.onclick = sellAllCommons;
+    const salvageCommonsBtn = el('salvage-commons-btn'); if (salvageCommonsBtn) salvageCommonsBtn.onclick = salvageAllCommons;
     const startBtn = el('start-btn'); if (startBtn) startBtn.onclick = startGame;
     const resetBtn = el('reset-btn'); if (resetBtn) resetBtn.onclick = resetSave;
     const resFree = el('res-free'); if (resFree) resFree.onclick = () => resurrect(false);

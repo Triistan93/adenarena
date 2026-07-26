@@ -225,6 +225,15 @@ export const IDLE_MARKUP = `
                   </div>
                 </div>
               </div>
+
+              <!-- Batch Actions Row -->
+              <div class="inv-filter-row inv-batch-actions">
+                <span class="filter-label">Ações em Lote:</span>
+                <div class="batch-btn-group">
+                  <button id="sell-commons-btn" class="inv-batch-btn" title="Vender todos os itens comuns não equipados">💰 Vender Comuns</button>
+                  <button id="salvage-commons-btn" class="inv-batch-btn" title="Desmontar todos os equipamentos comuns em materiais">🔨 Desmontar Comuns</button>
+                </div>
+              </div>
             </div>
 
             <div class="inventory-grid" id="inventory-grid"></div>

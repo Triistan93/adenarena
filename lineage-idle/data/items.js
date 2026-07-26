@@ -225,9 +225,9 @@ const POWERUPS = {
   luck_boost_1h: { name: "Fortune's Eye (1h)", slot: 'powerup', type: 'luckBoost', amount: 0.3, duration: 3600, price: 750, stack: 9, desc: '+30% loot & rarity chance for 1 hour.' },
   auto_potion_1h: { name: 'Auto-Potion Charm (1h)', slot: 'powerup', type: 'autoPotion', amount: 1, duration: 3600, price: 1000, stack: 9, desc: 'Auto-uses best HP potion below 30% HP.' },
   teleport_scroll: { name: 'Teleport Scroll', slot: 'powerup', type: 'teleport', amount: 1, duration: 0, price: 200, stack: 99, desc: 'Instant zone change, no combat pause.' },
-  berserker_elixir: { name: 'Berserker Elixir', slot: 'powerup', type: 'atk', amount: 25, duration: 600, price: 400, stack: 9, desc: '+25 ATK for 10 minutes.' },
-  aegis_draught: { name: 'Aegis Draught', slot: 'powerup', type: 'def', amount: 25, duration: 600, price: 400, stack: 9, desc: '+25 DEF for 10 minutes.' },
-  sages_tea: { name: "Sage's Tea", slot: 'powerup', type: 'matk', amount: 25, duration: 600, price: 400, stack: 9, desc: '+25 MATK for 10 minutes.' }
+  berserker_elixir: { name: 'Berserker Elixir', slot: 'powerup', type: 'buff', stat: 'atk', amount: 25, duration: 600, price: 400, stack: 9, desc: '+25 ATK for 10 minutes.' },
+  aegis_draught: { name: 'Aegis Draught', slot: 'powerup', type: 'buff', stat: 'def', amount: 25, duration: 600, price: 400, stack: 9, desc: '+25 DEF for 10 minutes.' },
+  sages_tea: { name: "Sage's Tea", slot: 'powerup', type: 'buff', stat: 'matk', amount: 25, duration: 600, price: 400, stack: 9, desc: '+25 MATK for 10 minutes.' }
 };
 
 const ZONE_GOLD_MULT = {

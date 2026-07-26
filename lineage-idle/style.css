@@ -961,6 +961,31 @@ select:focus-visible {
 .rarity-filter-btn.r-epic { border-color: rgba(154,115,199,0.6); color: var(--r-epic); }
 .rarity-filter-btn.r-legendary { border-color: rgba(212,167,68,0.6); color: var(--r-legendary); }
 
+.inv-batch-actions {
+  margin-top: 4px;
+}
+.batch-btn-group {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.inv-batch-btn {
+  background: linear-gradient(180deg, rgba(35,30,22,0.9), rgba(18,15,10,0.95));
+  border: 1px solid rgba(212,167,68,0.3);
+  color: var(--text-sub);
+  border-radius: 4px;
+  padding: 4px 10px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+.inv-batch-btn:hover {
+  background: linear-gradient(180deg, rgba(70,55,25,0.9), rgba(30,22,10,0.95));
+  color: var(--gilt-bright);
+  border-color: var(--gilt);
+}
+
 .inventory-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
