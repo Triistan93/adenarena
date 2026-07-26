@@ -1223,25 +1223,7 @@ export function init() {
     else { state.race = 'human'; state.class = 'fighter'; const race = RACES.human, cls = CLASSES.fighter; state.base = { atk: 0, def: 0, eva: 0, matk: 0, mdef: 0 }; for (const k of ['atk','def','eva','matk','mdef']) { state.base[k] = (race.stats[k] || 0) + (cls.base[k] || 0); } updateRaceClassUI(); updateStatsUI(); }
     
     ROOT.addEventListener('click', hideItemTooltip);
-
-    const saveBtn = el('save-btn');
-    if(saveBtn) saveBtn.onclick = () => save(true);
-
-    const gameModeSwitch = el('game-mode-switch');
-    if (gameModeSwitch) {
-      gameModeSwitch.onclick = (event) => { event.stopPropagation(); toggleGameModeMenu(); };
-      gameModeSwitch.onkeydown = (event) => {
-        if (event.key === 'Enter' || event.key === ' ') {
-          event.preventDefault();
-          event.stopPropagation();
-          toggleGameModeMenu();
-        }
-      };
-    }
-    document.addEventListener('click', () => closeGameModeMenu());
-    qsa('.mode-option').forEach(btn => {
-      btn.onclick = (event) => { event.stopPropagation(); setGameMode(btn.dataset.mode); closeGameModeMenu(); };
-    });
+    ROOT.addEventListener('click', () => closeGameModeMenu());
 
     qsa('.tab-btn').forEach(btn => { btn.onclick = () => { qsa('.tab-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); qsa('.tab-pane').forEach(p => p.classList.remove('active')); const pane = el(`tab-${btn.dataset.tab}`); if (pane) pane.classList.add('active'); }; });
     qsa('.race-btn').forEach(btn => btn.onclick = () => setRace(btn.dataset.race)); qsa('.class-btn').forEach(btn => btn.onclick = () => setClass(btn.dataset.class));
@@ -1264,33 +1246,6 @@ export function init() {
       logEl.appendChild(entry);
     }
   }
-
-  const saveBtn = el('save-btn');
-  if(saveBtn) saveBtn.onclick = () => save(true);
-
-  const gameModeSwitch = el('game-mode-switch');
-  if (gameModeSwitch) {
-    gameModeSwitch.onclick = (event) => { event.stopPropagation(); toggleGameModeMenu(); };
-    gameModeSwitch.onkeydown = (event) => {
-      if (event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault();
-        event.stopPropagation();
-        toggleGameModeMenu();
-      }
-    };
-  }
-  document.addEventListener('click', () => closeGameModeMenu());
-  qsa('.mode-option').forEach(btn => {
-    btn.onclick = (event) => { event.stopPropagation(); setGameMode(btn.dataset.mode); closeGameModeMenu(); };
-  });
-
-  qsa('.tab-btn').forEach(btn => { btn.onclick = () => { qsa('.tab-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); qsa('.tab-pane').forEach(p => p.classList.remove('active')); el(`tab-${btn.dataset.tab}`).classList.add('active'); }; });
-  qsa('.race-btn').forEach(btn => btn.onclick = () => setRace(btn.dataset.race)); qsa('.class-btn').forEach(btn => btn.onclick = () => setClass(btn.dataset.class));
-  qsa('.filter-btn').forEach(btn => { btn.onclick = () => { state.filter = btn.dataset.filter; qsa('.filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); updateInventoryUI(); }; });
-  el('start-btn').onclick = startGame; el('reset-btn').onclick = resetSave; el('res-free').onclick = () => resurrect(false); el('res-scroll').onclick = () => resurrect(true); el('saga-ok').onclick = () => el('saga-modal').classList.remove('active');
-  el('unequip-all-btn').onclick = () => { for (const slot of Object.keys(state.equipment)) unequipItem(slot); };
-  qsa('.equip-slot').forEach(slot => { slot.onclick = () => { const s = slot.dataset.slot, uid = state.equipment[s]; if (uid) unequipItem(s); }; });
-  _intervals.push(setInterval(updateClock, 1000)); _intervals.push(setInterval(save, 30000)); _intervals.push(setInterval(tickUI, 1000));
 }
 
 function tickUI() {
