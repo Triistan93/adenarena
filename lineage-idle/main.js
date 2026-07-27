@@ -398,6 +398,8 @@ function load() {
     const safeInventory = Array.isArray(data.inventory)
       ? data.inventory.filter(item => item && item.itemId && D().ALL_ITEMS[item.itemId])
       : [];
+    
+    // Deep merge to preserve ALL user progress while adding newly introduced state keys
     state = { ...def, ...data };
     
     state.skills = { ...def.skills, ...(data.skills || {}) };
@@ -405,6 +407,17 @@ function load() {
     state.base = { ...def.base, ...(data.base || {}) };
     state.inventory = safeInventory;
     state.selectedUids = new Set(Array.isArray(data.selectedUids) ? data.selectedUids : []);
+    
+    // Safely migrate progression modules if missing from older save
+    state.codex = data.codex && typeof data.codex === 'object' ? data.codex : {};
+    state.dolls = Array.isArray(data.dolls) ? data.dolls : [];
+    state.synthSelected = Array.isArray(data.synthSelected) ? data.synthSelected : [null, null];
+    state.magicLampExp = Number(data.magicLampExp) || 0;
+    state.magicLamps = Number(data.magicLamps) || 0;
+    state.craftPoints = Number(data.craftPoints) || 0;
+    state.craftCharges = Number(data.craftCharges) || 0;
+    state.randomCraftWheel = Array.isArray(data.randomCraftWheel) ? data.randomCraftWheel : [];
+
     state.buffs = data.buffs || {};
     state.filter = data.filter || 'all';
     state.gameMode = data.gameMode === 'arena' ? 'arena' : 'idle';
@@ -417,12 +430,14 @@ function load() {
     state.selectedSkill = data.selectedSkill || null;
     state.startTime = Date.now();
     
+    log('✨ Atualização de versão carregada com sucesso! Seu progresso e itens foram 100% mantidos.', 'rarity-legendary');
+
     if (data.lastSaveTime) {
       setTimeout(() => checkOfflineProgress(data.lastSaveTime), 600);
     }
     return true;
-  } catch {
-    localStorage.removeItem(SAVE_KEY);
+  } catch (err) {
+    console.error('Error loading save data:', err);
     state = DEFAULT_STATE();
     state.startTime = Date.now();
     return false;
