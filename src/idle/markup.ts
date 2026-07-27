@@ -119,6 +119,9 @@ export const IDLE_MARKUP = `
           <button class="tab-btn" data-tab="craft">⚒️ Forja</button>
           <button class="tab-btn" data-tab="enchant">✨ Encantamento</button>
           <button class="tab-btn" data-tab="zones">🗺️ Caça &amp; Raids</button>
+          <button class="tab-btn" data-tab="codex">📜 Codex</button>
+          <button class="tab-btn" data-tab="dolls">🧸 Dolls</button>
+          <button class="tab-btn" data-tab="magiclamp">🪔 Lâmpada &amp; Craft</button>
         </div>
         <div class="tab-content">
           <!-- Character Tab -->
@@ -417,6 +420,75 @@ export const IDLE_MARKUP = `
             <div id="zone-raids-view" class="zone-view">
               <p class="shop-info">Desafie Chefões Épicos de Aden para obter recompensas e itens lendários!</p>
               <div class="raid-boss-list" id="raid-boss-list"></div>
+            </div>
+          </div>
+
+          <!-- Codex Tab -->
+          <div id="tab-codex" class="tab-pane">
+            <div class="codex-header">
+              <h3>📜 Codex de Coleções de Aden</h3>
+              <p class="shop-info">Registre e destrua itens específicos para desbloquear bônus de atributos permanentes em sua conta!</p>
+              <div class="codex-summary" id="codex-summary"></div>
+            </div>
+            <div class="codex-grid" id="codex-grid"></div>
+          </div>
+
+          <!-- Dolls Tab -->
+          <div id="tab-dolls" class="tab-pane">
+            <div class="dolls-header">
+              <h3>🧸 Coleção &amp; Síntese de Boss Dolls</h3>
+              <p class="shop-info">Mantenha Bonecos de Chefões em sua coleção para obter grandes bônus. Combine 2 Dolls idênticas do mesmo nível para tentar elevar seu nível!</p>
+              <div class="dolls-summary" id="dolls-summary"></div>
+            </div>
+            <div class="dolls-synthesis-box">
+              <h4>🔮 Altar de Síntese de Dolls</h4>
+              <div class="synthesis-slots" style="display: flex; gap: 12px; align-items: center; justify-content: center; margin: 12px 0;">
+                <div class="synth-slot" id="synth-slot-1" style="border: 2px dashed var(--border-gilt); padding: 12px; border-radius: 8px; min-width: 140px; text-align: center; background: rgba(0,0,0,0.3);">Doll Base</div>
+                <span class="synth-plus" style="font-size: 20px; color: var(--gilt-bright);">+</span>
+                <div class="synth-slot" id="synth-slot-2" style="border: 2px dashed var(--border-gilt); padding: 12px; border-radius: 8px; min-width: 140px; text-align: center; background: rgba(0,0,0,0.3);">Doll Material</div>
+              </div>
+              <button class="action-btn action-btn--primary" id="start-doll-synth-btn">Combinar &amp; Sintetizar ✨</button>
+            </div>
+            <div class="dolls-grid" id="dolls-grid" style="margin-top: 16px;"></div>
+          </div>
+
+          <!-- Magic Lamp & Special Craft Tab -->
+          <div id="tab-magiclamp" class="tab-pane">
+            <div class="lamp-box">
+              <h3>🪔 Lâmpada Mágica &amp; Cartas de EXP</h3>
+              <p class="shop-info">Ao derrotar monstros, a barra da Lâmpada Mágica acumula experiência. Use lâmpadas para sortear cartas mágicas e receber EXP &amp; SP massivos!</p>
+              <div class="lamp-gauge-container" style="margin: 12px 0;">
+                <div class="lamp-progress-bar" id="lamp-progress-bar" style="height: 10px; background: linear-gradient(90deg, #3b82f6, #8b5cf6); width: 0%; border-radius: 5px; transition: width 0.3s;"></div>
+                <span class="lamp-count-label" id="lamp-count-label" style="display: block; font-weight: bold; margin-top: 6px; color: var(--gilt-bright);">0 Lâmpadas Mágicas Disponíveis</span>
+              </div>
+              <button class="action-btn action-btn--primary" id="use-magic-lamp-btn">Sortear Carta Mágica 🪔</button>
+              <div class="lamp-result-card" id="lamp-result-card" style="margin-top: 12px;"></div>
+            </div>
+
+            <hr style="border-color: var(--border-gilt); margin: 20px 0;" />
+
+            <div class="craft-box">
+              <h3>🛠️ Random Craft &amp; Special Craft</h3>
+              <div class="craft-gauge-container" style="margin: 12px 0;">
+                <div class="craft-progress-bar" id="craft-progress-bar" style="height: 10px; background: linear-gradient(90deg, #10b981, #f59e0b); width: 0%; border-radius: 5px; transition: width 0.3s;"></div>
+                <span class="craft-count-label" id="craft-count-label" style="display: block; font-weight: bold; margin-top: 6px; color: var(--gilt-bright);">0 Pontos / Cargas de Craft</span>
+              </div>
+
+              <!-- Random Craft Section -->
+              <div class="random-craft-section">
+                <h4>🎰 Roleta Random Craft (5 Slot Wheel)</h4>
+                <div class="random-wheel-slots" id="random-wheel-slots" style="display: flex; gap: 8px; margin: 12px 0; overflow-x: auto;"></div>
+                <div class="random-craft-actions" style="display: flex; gap: 10px;">
+                  <button class="action-btn" id="refresh-random-craft-btn">Recarregar Roleta 🔄</button>
+                  <button class="action-btn action-btn--primary" id="spin-random-craft-btn">Crafting! (1 Carga) ⚡</button>
+                </div>
+              </div>
+
+              <!-- Special Craft Section -->
+              <div class="special-craft-section" style="margin-top: 20px;">
+                <h4>✨ Special Crafting Recipes</h4>
+                <div class="special-craft-grid" id="special-craft-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-top: 10px;"></div>
+              </div>
             </div>
           </div>
         </div>

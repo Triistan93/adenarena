@@ -364,6 +364,8 @@ const DEFAULT_STATE = () => ({
     hair: null, hair2: null, necklace: null, earring1: null, earring2: null, ring: null, ring2: null,
     belt: null, cloak: null, talisman: null
   },
+  codex: {}, dolls: [], synthSelected: [null, null],
+  magicLampExp: 0, magicLamps: 0, craftPoints: 0, craftCharges: 0, randomCraftWheel: [],
   craftLevel: 1, craftXp: 0, shopTab: 'gear', selectedSkill: null, filter: 'all',
   craftTab: 'recipes', zoneTab: 'map', soulshotActive: false, combatSpeed: 1,
   totalPlaytime: 0, buffs: {}, _cds: {}, gameMode: 'idle'
@@ -525,16 +527,19 @@ function getStats() {
   const defMult = 1 + sk('heavyArmor') * 0.05;
   const cdr = sk('quickRecycle') * 0.10;
 
-  const finalAtk  = Math.floor((baseAtk + (Number(eb.atk) || 0) + buffAtk) * atkMult);
-  const finalDef  = Math.floor((baseDef + (Number(eb.def) || 0) + buffDef) * defMult);
-  const finalEva  = Math.floor(baseEva + (Number(eb.eva) || 0));
-  const finalMatk = Math.floor(baseMatk + (Number(eb.matk) || 0) + buffMatk);
-  const finalMdef = Math.floor(baseMdef + (Number(eb.mdef) || 0));
-  const finalCrit = Number(eb.crit) || 0;
+  const codexB = getCodexBonuses();
+  const dollsB = getDollsBonuses();
+
+  const finalAtk  = Math.floor((baseAtk + (Number(eb.atk) || 0) + buffAtk + codexB.atk + dollsB.atk) * atkMult);
+  const finalDef  = Math.floor((baseDef + (Number(eb.def) || 0) + buffDef + codexB.def + dollsB.def) * defMult);
+  const finalEva  = Math.floor(baseEva + (Number(eb.eva) || 0) + codexB.eva + dollsB.eva);
+  const finalMatk = Math.floor(baseMatk + (Number(eb.matk) || 0) + buffMatk + codexB.matk + dollsB.matk);
+  const finalMdef = Math.floor(baseMdef + (Number(eb.mdef) || 0) + codexB.mdef + dollsB.mdef);
+  const finalCrit = (Number(eb.crit) || 0) + codexB.crit + dollsB.crit;
   
   const lootBonus = (Number(race?.stats?.lootBonus) || 0) + (Number(cls?.base?.lootBonus) || 0) + itemLootBonus + luckBoost;
-  const atkSpd    = buffSpd / 100;
-  const lifeDrain = (Number(eb.lifesteal) || 0) / 100;
+  const atkSpd    = (buffSpd + (dollsB.speed || 0)) / 100;
+  const lifeDrain = ((Number(eb.lifesteal) || 0) + (dollsB.lifesteal || 0)) / 100;
   const craftBonus = itemCraftBonus;
 
   const critDmg = 1 + sk('executioner') * 0.15;
@@ -543,8 +548,8 @@ function getStats() {
   const execute = sk('assassinate') * 0.02;
   const block = sk('divineshield') * 0.05;
 
-  const maxHp = Math.floor(100 + state.level * 10 + sk('boostHp') * 60 + (Number(eb.hp) || 0));
-  const maxMp = Math.floor(50 + state.level * 5 + sk('boostMana') * 30 + (Number(eb.mp) || 0));
+  const maxHp = Math.floor(100 + state.level * 10 + sk('boostHp') * 60 + (Number(eb.hp) || 0) + codexB.hp + dollsB.hp);
+  const maxMp = Math.floor(50 + state.level * 5 + sk('boostMana') * 30 + (Number(eb.mp) || 0) + codexB.mp + dollsB.mp);
   
   return {
     atk: finalAtk || 1, def: finalDef || 0, eva: finalEva || 0, matk: finalMatk || 1, mdef: finalMdef || 0,
@@ -1766,22 +1771,28 @@ function checkOfflineProgress(lastTime) {
   const minutesOffline = Math.min(480, Math.floor(elapsedMs / 60000));
   if (minutesOffline < 1) return;
   
-  const kills = minutesOffline * 10;
+  const OFFLINE_EFFICIENCY = 0.30; // Auto-Hunt Offline limit de 30%
+  const rawKills = minutesOffline * 10;
+  const kills = Math.floor(rawKills * OFFLINE_EFFICIENCY);
   const goldEarned = Math.floor(kills * (state.level * 6 + 10));
   const xpEarned = Math.floor(kills * (state.level * 12 + 15));
+  const spEarned = Math.floor(kills * (state.level * 4 + 5));
   
   state.gold += goldEarned;
   state.xp += xpEarned;
+  state.sp += spEarned;
   checkLevelUp();
   
   const rewardsEl = el('offline-rewards');
   const modalEl = el('offline-modal');
   if (rewardsEl && modalEl) {
     rewardsEl.innerHTML = `
+      <div style="color:var(--rarity-epic); font-weight:bold; margin-bottom:8px;">🌙 Eficiência Auto-Hunt Offline: 30% (vs 100% Online)</div>
       <div>⏱️ Tempo Ausente: <strong>${minutesOffline} minutos</strong></div>
-      <div>⚔️ Monstros Derrotados: <strong>~${kills}</strong></div>
+      <div>⚔️ Monstros Derrotados (30%): <strong>~${kills}</strong></div>
       <div>💰 Ouro Ganho: <strong style="color:var(--gilt-bright);">+${goldEarned.toLocaleString()}g</strong></div>
       <div>📘 XP Ganho: <strong style="color:#60a5fa;">+${xpEarned.toLocaleString()} XP</strong></div>
+      <div>✨ SP Ganho: <strong style="color:#a855f7;">+${spEarned.toLocaleString()} SP</strong></div>
     `;
     modalEl.classList.add('active');
   }
@@ -2517,6 +2528,454 @@ function startGame() {
   if (zonesPane) zonesPane.classList.add('active');
 }
 
+// --------------------------- CODEX / COLLECTIONS ---------------------------
+const CODEX_SETS = {
+  novice_weapons: {
+    name: '⚔️ Armamento de Recruta',
+    desc: 'Registre as armas iniciais de caça dos novatos.',
+    items: ['wooden_sword', 'apprentice_staff', 'short_bow'],
+    bonus: { atk: 25, matk: 25 },
+    label: '+25 P. Atk & +25 M. Atk'
+  },
+  novice_armors: {
+    name: '🛡️ Vestimentas de Tecido & Couro',
+    desc: 'Registre os trajes defensivos básicos de treino.',
+    items: ['cloth_shirt', 'leather_armor', 'cloth_pants'],
+    bonus: { def: 30, mdef: 30 },
+    label: '+30 P. Def & +30 M. Def'
+  },
+  novice_jewels: {
+    name: '📿 Joias de Carvalho de Elmore',
+    desc: 'Registre joias ancestrais de madeira mística.',
+    items: ['oak_necklace', 'oak_earring'],
+    bonus: { hp: 100, mp: 50 },
+    label: '+100 Max HP & +50 Max MP'
+  },
+  d_grade_champions: {
+    name: '🗡️ Equipamentos de Ordem D-Grade',
+    desc: 'Registre lâminas e vestes de guerreiros comprovados.',
+    items: ['bastard_sword', 'elven_bow', 'mithril_gaiters'],
+    bonus: { atk: 50, crit: 5 },
+    label: '+50 P. Atk & +5% P. Crit Rate'
+  },
+  crystal_masters: {
+    name: '💎 Cristais das Cavernas de Aden',
+    desc: 'Registre cristais extraídos do desmanche nobre.',
+    items: ['crystal_d', 'crystal_c', 'crystal_b'],
+    bonus: { atk: 60, matk: 60, hp: 150 },
+    label: '+60 P. Atk, +60 M. Atk, +150 HP'
+  },
+  spellbook_codex: {
+    name: '📖 Livros Sagrados dos Astros',
+    desc: 'Registre os grimórios das estrelas de Aden.',
+    items: ['spellbook_1star', 'spellbook_2star', 'spellbook_3star', 'spellbook_4star'],
+    bonus: { atk: 100, matk: 100, hp: 300, def: 50 },
+    label: '+100 P. Atk, +100 M. Atk, +300 HP, +50 Def'
+  }
+};
+
+function getCodexBonuses() {
+  const totals = { atk: 0, def: 0, matk: 0, mdef: 0, hp: 0, mp: 0, eva: 0, crit: 0 };
+  state.codex = state.codex || {};
+  for (const [setId, setDef] of Object.entries(CODEX_SETS)) {
+    const regList = state.codex[setId] || [];
+    if (setDef.items.every(itemId => regList.includes(itemId))) {
+      for (const [k, val] of Object.entries(setDef.bonus)) {
+        totals[k] = (totals[k] || 0) + val;
+      }
+    }
+  }
+  return totals;
+}
+
+function updateCodexUI() {
+  const grid = el('codex-grid'); if (!grid) return;
+  const summaryEl = el('codex-summary');
+  grid.innerHTML = '';
+  state.codex = state.codex || {};
+
+  let totalSets = Object.keys(CODEX_SETS).length, completedSets = 0;
+
+  for (const [setId, setDef] of Object.entries(CODEX_SETS)) {
+    const regList = state.codex[setId] || [];
+    const isComplete = setDef.items.every(i => regList.includes(i));
+    if (isComplete) completedSets++;
+
+    const card = mkEl('div');
+    card.className = 'codex-card' + (isComplete ? ' completed' : '');
+    card.style.cssText = 'border: 1px solid var(--border-gilt); padding: 12px; border-radius: 8px; background: rgba(15,18,25,0.8); margin-bottom: 12px;';
+
+    const itemsHtml = setDef.items.map(itemId => {
+      const itemDef = D().ALL_ITEMS[itemId] || { name: itemId };
+      const isReg = regList.includes(itemId);
+      const inInv = getInventoryCount(itemId) > 0;
+      let btn = '';
+      if (isReg) btn = '<span style="color:#10b981; font-weight:bold;">✓ Registrado</span>';
+      else if (inInv) btn = `<button class="action-btn action-btn--primary" style="padding: 2px 8px; font-size: 11px;" onclick="registerCodexItem('${setId}', '${itemId}')">Registrar 📥</button>`;
+      else btn = '<span style="color:var(--text-muted); font-size: 11px;">Não possui</span>';
+
+      return `<div style="display:flex; justify-content:space-between; align-items:center; margin: 4px 0; font-size: 12px;"><span>${itemDef.name}</span>${btn}</div>`;
+    }).join('');
+
+    card.innerHTML = `
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h4 style="margin:0; color:${isComplete ? '#10b981' : 'var(--gilt-bright)'}">${setDef.name} ${isComplete ? '🏆 (Completo)' : ''}</h4>
+        <span style="font-size:11px; background:rgba(0,0,0,0.5); padding:2px 8px; border-radius:10px; color:#f59e0b;">${setDef.label}</span>
+      </div>
+      <p style="font-size:11px; color:var(--text-muted); margin: 4px 0 8px 0;">${setDef.desc}</p>
+      <div style="background:rgba(0,0,0,0.3); padding:8px; border-radius:6px;">${itemsHtml}</div>
+    `;
+    grid.appendChild(card);
+  }
+
+  if (summaryEl) {
+    const b = getCodexBonuses();
+    summaryEl.innerHTML = `<span style="color:var(--gilt-bright); font-weight:bold;">Coleções Concluídas: ${completedSets}/${totalSets}</span> · Bônus Totais: +${b.atk} ATK, +${b.def} DEF, +${b.matk} MATK, +${b.hp} HP`;
+  }
+}
+
+function registerCodexItem(setId, itemId) {
+  const invIdx = state.inventory.findIndex(i => i.itemId === itemId && !i.equipped);
+  if (invIdx < 0) { log('Você não possui este item para registrar no Codex.', 'system'); return; }
+
+  state.inventory.splice(invIdx, 1);
+  state.codex = state.codex || {};
+  state.codex[setId] = state.codex[setId] || [];
+  if (!state.codex[setId].includes(itemId)) state.codex[setId].push(itemId);
+
+  const itemDef = D().ALL_ITEMS[itemId];
+  log(`📜 Item **${itemDef?.name || itemId}** registrado com sucesso no Codex!`, 'rarity-rare');
+  floatText('📜 CODEX REGISTRADO!', 'float-jackpot');
+
+  const setDef = CODEX_SETS[setId];
+  if (setDef && setDef.items.every(i => state.codex[setId].includes(i))) {
+    log(`🏆 PARABÉNS! Coleção **${setDef.name}** 100% Completa! Bônus Permanente Ativado: ${setDef.label}`, 'rarity-legendary');
+    floatText('🏆 COLEÇÃO COMPLETA!', 'float-jackpot');
+  }
+
+  updateAllUI(); save();
+}
+
+// --------------------------- DOLLS COLLECTION & SYNTHESIS ---------------------------
+const BOSS_DOLLS = {
+  doll_queen_ant: {
+    name: '🐜 Queen Ant Doll', icon: '🐜',
+    statsByLvl: {
+      1: { atk: 15, crit: 3, label: '+15 P. Atk, +3% Crit' },
+      2: { atk: 35, crit: 6, label: '+35 P. Atk, +6% Crit' },
+      3: { atk: 60, crit: 10, label: '+60 P. Atk, +10% Crit' },
+      4: { atk: 100, crit: 15, label: '+100 P. Atk, +15% Crit' },
+      5: { atk: 160, crit: 25, label: '+160 P. Atk, +25% Crit' }
+    }
+  },
+  doll_baium: {
+    name: '⚡ Baium Doll', icon: '⚡',
+    statsByLvl: {
+      1: { speed: 5, label: '+5% Speed' },
+      2: { speed: 10, label: '+10% Speed' },
+      3: { speed: 15, label: '+15% Speed' },
+      4: { speed: 22, label: '+22% Speed' },
+      5: { speed: 30, label: '+30% Speed' }
+    }
+  },
+  doll_orfen: {
+    name: '🦋 Orfen Doll', icon: '🦋',
+    statsByLvl: {
+      1: { matk: 20, crit: 3, label: '+20 M. Atk, +3% M. Crit' },
+      2: { matk: 45, crit: 6, label: '+45 M. Atk, +6% M. Crit' },
+      3: { matk: 80, crit: 10, label: '+80 M. Atk, +10% M. Crit' },
+      4: { matk: 120, crit: 15, label: '+120 M. Atk, +15% M. Crit' },
+      5: { matk: 180, crit: 25, label: '+180 M. Atk, +25% M. Crit' }
+    }
+  },
+  doll_zaken: {
+    name: '🏴‍☠️ Zaken Doll', icon: '🏴‍☠️',
+    statsByLvl: {
+      1: { def: 25, lifesteal: 3, label: '+25 Def, +3% Lifesteal' },
+      2: { def: 50, lifesteal: 5, label: '+50 Def, +5% Lifesteal' },
+      3: { def: 85, lifesteal: 8, label: '+85 Def, +8% Lifesteal' },
+      4: { def: 130, lifesteal: 12, label: '+130 Def, +12% Lifesteal' },
+      5: { def: 200, lifesteal: 18, label: '+200 Def, +18% Lifesteal' }
+    }
+  }
+};
+
+function getDollsBonuses() {
+  const totals = { atk: 0, def: 0, matk: 0, mdef: 0, hp: 0, mp: 0, eva: 0, crit: 0, speed: 0, lifesteal: 0 };
+  state.dolls = state.dolls || [];
+  for (const d of state.dolls) {
+    const dollDef = BOSS_DOLLS[d.dollId];
+    if (!dollDef) continue;
+    const lvlInfo = dollDef.statsByLvl[d.level || 1];
+    if (!lvlInfo) continue;
+    for (const [k, v] of Object.entries(lvlInfo)) {
+      if (k !== 'label') totals[k] = (totals[k] || 0) + v;
+    }
+  }
+  return totals;
+}
+
+function updateDollsUI() {
+  const grid = el('dolls-grid'); if (!grid) return;
+  const summaryEl = el('dolls-summary');
+  grid.innerHTML = '';
+  state.dolls = state.dolls || [];
+  state.synthSelected = state.synthSelected || [null, null];
+
+  const slot1El = el('synth-slot-1');
+  const slot2El = el('synth-slot-2');
+  const d1 = state.dolls.find(i => i.uid === state.synthSelected[0]);
+  const d2 = state.dolls.find(i => i.uid === state.synthSelected[1]);
+
+  if (slot1El) slot1El.textContent = d1 ? `${BOSS_DOLLS[d1.dollId]?.name} Lv.${d1.level}` : 'Doll Base';
+  if (slot2El) slot2El.textContent = d2 ? `${BOSS_DOLLS[d2.dollId]?.name} Lv.${d2.level}` : 'Doll Material';
+
+  const synthBtn = el('start-doll-synth-btn');
+  if (synthBtn) synthBtn.onclick = synthesizeDolls;
+
+  for (const d of state.dolls) {
+    const def = BOSS_DOLLS[d.dollId]; if (!def) continue;
+    const lvlInfo = def.statsByLvl[d.level || 1];
+    const isSel1 = state.synthSelected[0] === d.uid;
+    const isSel2 = state.synthSelected[1] === d.uid;
+
+    const item = mkEl('div');
+    item.className = 'doll-card' + (isSel1 || isSel2 ? ' selected' : '');
+    item.style.cssText = `border: 2px solid ${isSel1 || isSel2 ? 'var(--gilt-bright)' : 'var(--border-gilt)'}; padding: 10px; border-radius: 8px; background: rgba(20,25,35,0.9); display: flex; align-items: center; justify-content: space-between;`;
+    item.innerHTML = `
+      <div style="display:flex; align-items:center; gap: 10px;">
+        <span style="font-size: 24px;">${def.icon}</span>
+        <div>
+          <div style="font-weight:bold; color:var(--gilt-bright);">${def.name} <span style="color:#60a5fa;">Lv.${d.level || 1}</span></div>
+          <div style="font-size:11px; color:#10b981;">${lvlInfo?.label || ''}</div>
+        </div>
+      </div>
+      <button class="action-btn" style="padding: 4px 8px; font-size: 11px;" onclick="selectDollForSynth('${d.uid}')">${isSel1 ? 'Slot 1' : isSel2 ? 'Slot 2' : 'Selecionar 🔮'}</button>
+    `;
+    grid.appendChild(item);
+  }
+
+  if (summaryEl) {
+    const b = getDollsBonuses();
+    summaryEl.innerHTML = `Dolls na Coleção: <strong>${state.dolls.length}</strong> · Bônus Totais: +${b.atk} ATK, +${b.def} DEF, +${b.matk} MATK`;
+  }
+}
+
+function selectDollForSynth(uid) {
+  state.synthSelected = state.synthSelected || [null, null];
+  if (state.synthSelected[0] === uid) state.synthSelected[0] = null;
+  else if (state.synthSelected[1] === uid) state.synthSelected[1] = null;
+  else if (!state.synthSelected[0]) state.synthSelected[0] = uid;
+  else if (!state.synthSelected[1]) state.synthSelected[1] = uid;
+  else state.synthSelected[0] = uid;
+  updateDollsUI();
+}
+
+function synthesizeDolls() {
+  state.synthSelected = state.synthSelected || [null, null];
+  const u1 = state.synthSelected[0], u2 = state.synthSelected[1];
+  if (!u1 || !u2 || u1 === u2) { log('Selecione 2 Dolls idênticas no altar de síntese.', 'system'); return; }
+
+  const idx1 = state.dolls.findIndex(d => d.uid === u1);
+  const idx2 = state.dolls.findIndex(d => d.uid === u2);
+  if (idx1 < 0 || idx2 < 0) return;
+
+  const d1 = state.dolls[idx1], d2 = state.dolls[idx2];
+  if (d1.dollId !== d2.dollId || d1.level !== d2.level) { log('As duas Dolls devem ser do mesmo tipo e nível!', 'system'); return; }
+  if (d1.level >= 5) { log('Sua Doll já está no Nível Máximo (Lv. 5)!', 'system'); return; }
+
+  const rates = { 1: 0.70, 2: 0.55, 3: 0.40, 4: 0.25 };
+  const chance = rates[d1.level] || 0.30;
+  const roll = Math.random();
+
+  state.dolls.splice(idx2, 1);
+  state.synthSelected = [null, null];
+
+  if (roll < chance) {
+    d1.level += 1;
+    log(`🎉 SÍNTESE DE SUCESSO! Sua **${BOSS_DOLLS[d1.dollId]?.name}** evoluiu para o **Nível ${d1.level}**!`, 'rarity-legendary');
+    floatText('✨ SÍNTESE SUCESSO!', 'float-jackpot');
+  } else {
+    log(`💔 SÍNTESE FALHOU! A Doll de material foi consumida, mas a Doll base foi mantida.`, 'system');
+    floatText('💔 FALHOU', 'float-gold');
+  }
+
+  updateAllUI(); save();
+}
+
+// --------------------------- MAGIC LAMP & CRAFT GAUGE ---------------------------
+function updateMagicLampUI() {
+  const bar = el('lamp-progress-bar');
+  const countLabel = el('lamp-count-label');
+  const pct = Math.min(100, Math.floor(((state.magicLampExp || 0) / 50000) * 100));
+  if (bar) bar.style.width = pct + '%';
+  if (countLabel) countLabel.textContent = `${state.magicLamps || 0} Lâmpadas Mágicas Disponíveis (${pct}% para a próxima)`;
+
+  const btn = el('use-magic-lamp-btn');
+  if (btn) btn.onclick = useMagicLamp;
+
+  updateCraftGaugeUI();
+}
+
+function useMagicLamp() {
+  if (!state.magicLamps || state.magicLamps < 1) { log('Você não possui Lâmpadas Mágicas para sortear!', 'system'); return; }
+
+  state.magicLamps -= 1;
+  const roll = Math.random();
+  let cardType = 'blue', expWon = 50000, spWon = 5000, cardName = '🟦 Carta Azul (Normal)';
+
+  if (roll < 0.05) {
+    cardType = 'red'; expWon = 500000; spWon = 50000; cardName = '🟥 Carta Vermelha (SUPER JACKPOT!)';
+  } else if (roll < 0.25) {
+    cardType = 'purple'; expWon = 150000; spWon = 15000; cardName = '🟪 Carta Roxa (Bônus Alto)';
+  }
+
+  state.xp += expWon; state.sp += spWon;
+  checkLevelUp();
+
+  const cardRes = el('lamp-result-card');
+  if (cardRes) {
+    cardRes.innerHTML = `
+      <div style="border:2px solid var(--gilt-bright); padding:16px; border-radius:10px; background:rgba(10,15,25,0.9); text-align:center;">
+        <h4 style="margin:0; font-size:18px;">${cardName}</h4>
+        <p style="font-size:16px; color:#60a5fa; margin:8px 0 0 0;">+${expWon.toLocaleString()} XP &amp; +${spWon.toLocaleString()} SP!</p>
+      </div>
+    `;
+  }
+
+  log(`🪔 Lâmpada Mágica utilizada! Sorteou **${cardName}** (+${expWon.toLocaleString()} XP, +${spWon.toLocaleString()} SP)!`, 'rarity-legendary');
+  floatText(`🪔 +${expWon.toLocaleString()} XP!`, 'float-jackpot');
+
+  updateAllUI(); save();
+}
+
+function updateCraftGaugeUI() {
+  const bar = el('craft-progress-bar');
+  const label = el('craft-count-label');
+  const pct = Math.min(100, Math.floor(((state.craftPoints || 0) / 100) * 100));
+  if (bar) bar.style.width = pct + '%';
+  if (label) label.textContent = `${state.craftCharges || 0} Cargas de Craft Disponíveis (${pct}%)`;
+
+  const refBtn = el('refresh-random-craft-btn');
+  const spinBtn = el('spin-random-craft-btn');
+  if (refBtn) refBtn.onclick = refreshRandomCraftWheel;
+  if (spinBtn) spinBtn.onclick = spinRandomCraft;
+
+  renderRandomCraftWheelUI();
+  renderSpecialCraftRecipes();
+}
+
+function refreshRandomCraftWheel() {
+  const pool = Object.keys(D().ALL_ITEMS);
+  const selected = [];
+  for (let i = 0; i < 5; i++) {
+    const itemKey = pool[Math.floor(Math.random() * pool.length)];
+    selected.push(itemKey);
+  }
+  state.randomCraftWheel = selected;
+  log('🎰 Roleta Random Craft atualizada com 5 novos itens!', 'system');
+  renderRandomCraftWheelUI(); save();
+}
+
+function renderRandomCraftWheelUI() {
+  const container = el('random-wheel-slots'); if (!container) return;
+  container.innerHTML = '';
+  if (!state.randomCraftWheel || !state.randomCraftWheel.length) refreshRandomCraftWheel();
+
+  state.randomCraftWheel.forEach((itemId, idx) => {
+    const def = D().ALL_ITEMS[itemId] || { name: itemId };
+    const div = mkEl('div');
+    div.style.cssText = 'border:1px solid var(--border-gilt); padding:10px; border-radius:8px; min-width:110px; text-align:center; background:rgba(0,0,0,0.4);';
+    div.innerHTML = `<div style="font-size:11px; color:var(--text-muted);">Slot ${idx+1}</div><div style="font-weight:bold; font-size:12px; margin-top:4px; color:var(--gilt-bright);">${def.name}</div>`;
+    container.appendChild(div);
+  });
+}
+
+function spinRandomCraft() {
+  if (!state.craftCharges || state.craftCharges < 1) { log('Você não possui Cargas de Craft suficientes!', 'system'); return; }
+  if (!state.randomCraftWheel || !state.randomCraftWheel.length) refreshRandomCraftWheel();
+
+  state.craftCharges -= 1;
+  const wonId = state.randomCraftWheel[Math.floor(Math.random() * state.randomCraftWheel.length)];
+  const def = D().ALL_ITEMS[wonId];
+
+  if (def && ['weapon','armor','helmet','gloves','boots','ring','necklace','earring','belt','cloak','talisman','legs','shield','hair','hair2'].includes(def.slot)) {
+    addToInventory(wonId, 1, 'rare');
+  } else {
+    addToInventory(wonId, 1);
+  }
+
+  log(`🎰 RANDOM CRAFT! Você criou com sucesso: **${def?.name || wonId}**!`, 'rarity-legendary');
+  floatText(`🎰 ${def?.name || wonId}!`, 'float-jackpot');
+  refreshRandomCraftWheel();
+  updateAllUI(); save();
+}
+
+function renderSpecialCraftRecipes() {
+  const grid = el('special-craft-grid'); if (!grid) return;
+  grid.innerHTML = '';
+
+  const recipes = [
+    { id: 'spellbook_selector', name: '📖 Selector 4⭐ Star Spellbook', costCharges: 5, crystalId: 'crystal_s', crystalQty: 10, resultId: 'spellbook_4star' },
+    { id: 'boss_doll_box', name: '📦 Caixas de Boss Dolls (Queen Ant/Baium/Zaken)', costCharges: 3, crystalId: 'crystal_a', crystalQty: 5, resultDoll: 'doll_queen_ant' },
+    { id: 's_weapon_chest', name: '⚔️ Baú de Armas S-Grade', costCharges: 4, crystalId: 'crystal_a', crystalQty: 10, resultId: 'dragon_slayer' },
+    { id: 'enchant_scroll_s', name: '📜 Scroll Enchant S-Grade', costCharges: 1, crystalId: 'crystal_b', crystalQty: 5, resultId: 'crystal_s' }
+  ];
+
+  recipes.forEach(r => {
+    const card = mkEl('div');
+    card.style.cssText = 'border:1px solid var(--border-gilt); padding:10px; border-radius:8px; background:rgba(15,20,30,0.8);';
+    card.innerHTML = `
+      <div style="font-weight:bold; color:var(--gilt-bright); font-size:12px;">${r.name}</div>
+      <div style="font-size:11px; color:var(--text-muted); margin:4px 0;">Custo: ${r.costCharges} Cargas + ${r.crystalQty}x ${D().ALL_ITEMS[r.crystalId]?.name || r.crystalId}</div>
+      <button class="action-btn action-btn--primary" style="padding:2px 8px; font-size:11px; width:100%; margin-top:6px;" onclick="craftSpecialRecipe('${r.id}')">Forjar ✨</button>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function removeFromInventoryByItemId(itemId, count = 1) {
+  let remaining = count;
+  for (let i = state.inventory.length - 1; i >= 0; i--) {
+    const item = state.inventory[i];
+    if (item.itemId === itemId && !item.equipped) {
+      const take = Math.min(remaining, item.count || 1);
+      item.count = (item.count || 1) - take;
+      remaining -= take;
+      if (item.count <= 0) state.inventory.splice(i, 1);
+      if (remaining <= 0) break;
+    }
+  }
+}
+
+function craftSpecialRecipe(recipeId) {
+  if (recipeId === 'spellbook_selector') {
+    if ((state.craftCharges || 0) < 5 || getInventoryCount('crystal_s') < 10) { log('Recursos insuficientes! Requer 5 Cargas de Craft e 10x Crystal S.', 'system'); return; }
+    state.craftCharges -= 5; removeFromInventoryByItemId('crystal_s', 10);
+    addToInventory('spellbook_4star', 1);
+    log('✨ SPECIAL CRAFT! Criou 1x Spellbook 4-Star ⭐!', 'rarity-legendary');
+  } else if (recipeId === 'boss_doll_box') {
+    if ((state.craftCharges || 0) < 3 || getInventoryCount('crystal_a') < 5) { log('Recursos insuficientes! Requer 3 Cargas de Craft e 5x Crystal A.', 'system'); return; }
+    state.craftCharges -= 3; removeFromInventoryByItemId('crystal_a', 5);
+    const dollKeys = ['doll_queen_ant', 'doll_baium', 'doll_orfen', 'doll_zaken'];
+    const chosen = dollKeys[Math.floor(Math.random() * dollKeys.length)];
+    state.dolls = state.dolls || [];
+    state.dolls.push({ uid: 'doll_' + Date.now(), dollId: chosen, level: 1 });
+    log(`✨ SPECIAL CRAFT! Abriu a caixa e obteve: **${BOSS_DOLLS[chosen]?.name}**!`, 'rarity-legendary');
+  } else if (recipeId === 's_weapon_chest') {
+    if ((state.craftCharges || 0) < 4 || getInventoryCount('crystal_a') < 10) { log('Recursos insuficientes! Requer 4 Cargas de Craft e 10x Crystal A.', 'system'); return; }
+    state.craftCharges -= 4; removeFromInventoryByItemId('crystal_a', 10);
+    addToInventory('dragon_slayer', 1, 'epic');
+    log('✨ SPECIAL CRAFT! Criou 1x Dragon Slayer (S-Grade)!', 'rarity-legendary');
+  } else if (recipeId === 'enchant_scroll_s') {
+    if ((state.craftCharges || 0) < 1 || getInventoryCount('crystal_b') < 5) { log('Recursos insuficientes! Requer 1 Carga de Craft e 5x Crystal B.', 'system'); return; }
+    state.craftCharges -= 1; removeFromInventoryByItemId('crystal_b', 5);
+    addToInventory('crystal_s', 2);
+    log('✨ SPECIAL CRAFT! Forjou 2x Crystal S!', 'rarity-rare');
+  }
+  updateAllUI(); save();
+}
+
 function attachGlobalErrorHandlers() {
   window.addEventListener('error', (event) => {
     console.warn('Global runtime notice:', event.error || event.message);
@@ -2549,6 +3008,9 @@ function bindEvents() {
         else if (tabName === 'craft') safeUiUpdate('craft', updateCraftUI);
         else if (tabName === 'enchant') safeUiUpdate('enchant', updateEnchantUI);
         else if (tabName === 'zones') safeUiUpdate('zones', updateZoneUI);
+        else if (tabName === 'codex') safeUiUpdate('codex', updateCodexUI);
+        else if (tabName === 'dolls') safeUiUpdate('dolls', updateDollsUI);
+        else if (tabName === 'magiclamp') safeUiUpdate('magiclamp', updateMagicLampUI);
       };
     });
 
