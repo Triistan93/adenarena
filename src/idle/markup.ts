@@ -353,6 +353,15 @@ export const IDLE_MARKUP = `
                     <button class="rarity-filter-btn r-epic" data-rarity="epic">É</button>
                     <button class="rarity-filter-btn r-legendary" data-rarity="legendary">L</button>
                   </div>
+                  <div style="display:flex; align-items:center; gap:4px; font-size:10px; color:var(--gilt-bright);">
+                    <span style="font-weight:600;">Auto-Venda:</span>
+                    <select id="auto-sell-rarity-select" style="background:#090b10; color:#fff; border:1px solid rgba(212,167,68,0.3); border-radius:4px; padding:2px 4px; font-size:10px; cursor:pointer;">
+                      <option value="off">Desativado</option>
+                      <option value="common">≤ Comum</option>
+                      <option value="uncommon">≤ Incomum</option>
+                      <option value="rare">≤ Raro</option>
+                    </select>
+                  </div>
                   <div class="l2inv-batch-pills">
                     <button id="select-commons-btn" class="l2inv-pill-btn" title="Selecionar comuns">✓ Comum</button>
                     <button id="select-uncommons-btn" class="l2inv-pill-btn" title="Selecionar incomuns">✓ Incomum</button>

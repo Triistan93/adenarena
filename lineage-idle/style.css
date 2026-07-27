@@ -522,7 +522,14 @@ select:focus-visible {
 }
 
 /* Combat Juice Animations */
-.stage.is-hero-atk .h-art {
+.stage, .log {
+  transition: background-image 0.35s ease-in-out;
+}
+
+.stage.is-hero-atk #stage-hero,
+.stage.is-hero-atk .h-art,
+.stage.is-hero-atk #hero-art,
+#stage-hero.lunge {
   animation: heroSquashAtk 0.22s ease-out;
 }
 @keyframes heroSquashAtk {
@@ -532,7 +539,9 @@ select:focus-visible {
   100% { transform: scale(1, 1) translateX(0); }
 }
 
-.stage.is-hero-hurt {
+#stage-hero.hurt,
+.stage.is-hero-hurt #stage-hero,
+#stage.hurt {
   animation: stageHeroHurtShake 0.25s ease-out;
 }
 @keyframes stageHeroHurtShake {
@@ -542,6 +551,7 @@ select:focus-visible {
   75% { transform: translate(-2px, -1px); }
 }
 
+#stage.kill-flash,
 .stage.is-monster-kill {
   animation: stageKillFlash 0.35s ease-out;
 }

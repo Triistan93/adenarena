@@ -410,7 +410,8 @@ const DEFAULT_STATE = () => ({
   subclasses: [], activeSubclassIndex: null, certifications: {}, mainClassData: null,
   craftLevel: 1, craftXp: 0, shopTab: 'gear', selectedSkill: null, filter: 'all',
   craftTab: 'recipes', zoneTab: 'map', soulshotActive: false, combatSpeed: 1,
-  totalPlaytime: 0, buffs: {}, _cds: {}, gameMode: 'idle', privilegeLevel: 0
+  totalPlaytime: 0, buffs: {}, _cds: {}, gameMode: 'idle', privilegeLevel: 0,
+  autoSellRarity: 'off'
 });
 
 let state = DEFAULT_STATE();
@@ -1493,6 +1494,16 @@ function updateInventoryUI() {
   const rarityFilter = state.rarityFilter || 'all';
   const equipFilter = state.equipFilter || 'all';
 
+  const autoSellSel = el('auto-sell-rarity-select');
+  if (autoSellSel) {
+    autoSellSel.value = state.autoSellRarity || 'off';
+    autoSellSel.onchange = (e) => {
+      state.autoSellRarity = e.target.value;
+      log(`⚙️ Auto-Venda configurado para: ${e.target.value.toUpperCase()}`, 'system');
+      save();
+    };
+  }
+
   const sorted = [...state.inventory]
     .filter(i => i && i.itemId && D().ALL_ITEMS[i.itemId])
     .sort((a, b) => { const da = D().ALL_ITEMS[a.itemId], db = D().ALL_ITEMS[b.itemId]; if (!da || !db) return 0; return (db.tier || 0) - (da.tier || 0); });
@@ -1518,6 +1529,19 @@ function updateInventoryUI() {
     if (equipFilter === 'equipped' && !item.equipped) continue;
     if (equipFilter === 'bag' && item.equipped) continue;
 
+    let isUpgrade = false;
+    if (!item.equipped) {
+      const targetSlot = resolveEquipSlot(def.slot);
+      if (targetSlot && ALL_EQUIP_SLOTS.includes(targetSlot)) {
+        const currentEquipUid = state.equipment[targetSlot];
+        const currentEquipItem = currentEquipUid ? state.inventory.find(i => i.uid === currentEquipUid) : null;
+        const currentDef = currentEquipItem ? D().ALL_ITEMS[currentEquipItem.itemId] : null;
+        const itemPwr = (def.stats?.atk || 0) + (def.stats?.def || 0) + (def.stats?.matk || 0) + (def.stats?.mdef || 0);
+        const currPwr = currentDef ? ((currentDef.stats?.atk || 0) + (currentDef.stats?.def || 0) + (currentDef.stats?.matk || 0) + (currentDef.stats?.mdef || 0)) : 0;
+        if (itemPwr > currPwr) isUpgrade = true;
+      }
+    }
+
     const isSelected = selectedSet.has(item.uid);
     if (isSelected && !item.equipped) {
       const qty = item.count || 1;
@@ -1534,7 +1558,7 @@ function updateInventoryUI() {
     const slot = mkEl('div');
     slot.className = `inv-slot rarity-${rarity}` + (item.equipped ? ' is-equipped' : '') + (isSelected ? ' is-selected' : '');
     const qty = (item.count || 1) > 1 ? `<span class="qty">${item.count}</span>` : '';
-    const tag = item.equipped ? `<span class="equipped-badge">E</span>` : '';
+    const tag = item.equipped ? `<span class="equipped-badge">E</span>` : (isUpgrade ? `<span class="equipped-badge" style="background:#10b981; color:#fff;" title="Upgrade de Equipamento">↑</span>` : '');
     const enchantStr = item.enchant ? `+${item.enchant} ` : '';
     const checkHtml = `<div class="slot-select-checkbox">${isSelected ? '✓' : ''}</div>`;
     slot.innerHTML = `${checkHtml}<span style="font-size:18px">${getItemIcon(def)}</span><span class="name">${enchantStr}${def.name}</span>${qty}${tag}`;
@@ -1545,6 +1569,8 @@ function updateInventoryUI() {
 
     slot.onclick = (e) => {
       e.stopPropagation();
+      cancelHideTooltip();
+      showItemTooltip(item, e);
       toggleSelectItem(item.uid);
     };
 
@@ -2837,16 +2863,18 @@ function hasSkillUpgradeAvailable() {
   for (const [sId, def] of Object.entries(SKILL_DEFS)) {
     if (!classSatisfies(state.class, def.classReq)) continue;
     const lvl = state.skills[sId] || 0;
-    if (lvl >= def.maxLevel) continue;
-    const cost = getSkillCost(def, lvl);
+    const maxLvl = def.max || 10;
+    if (lvl >= maxLvl) continue;
+    const cost = getSkillCost(sId, lvl);
     if (state.sp >= cost) return true;
   }
   return false;
 }
 
 function hasCraftAvailable() {
-  if (typeof CRAFTING_RECIPES === 'undefined') return false;
-  for (const recipe of CRAFTING_RECIPES) {
+  const recipes = D().CRAFTING_RECIPES;
+  if (!recipes || !Array.isArray(recipes)) return false;
+  for (const recipe of recipes) {
     let canCraft = true;
     for (const mat of recipe.materials) {
       const invItem = state.inventory.find(i => i.itemId === mat.itemId);
@@ -2863,7 +2891,8 @@ function hasCraftAvailable() {
 function hasQuestsClaimable() {
   if (!state.quests || !state.quests.progress) return false;
   if (typeof QUEST_DEFS === 'undefined') return false;
-  for (const qDef of QUEST_DEFS) {
+  const allQuests = [...(QUEST_DEFS.daily || []), ...(QUEST_DEFS.weekly || [])];
+  for (const qDef of allQuests) {
     if (state.quests.claimed && state.quests.claimed.includes(qDef.id)) continue;
     const current = state.quests.progress[qDef.id] || 0;
     if (current >= qDef.target) return true;
@@ -3368,7 +3397,7 @@ function monsterAttack(monster) {
   const stats = getStats(); stageMonsterLunge();
   if (Math.random() < stats.eva / 100) { log(`${monster.name} missed!`, 'combat'); stageFloat('DODGE', 'sf-miss', 'left'); return; }
   
-  const type = (monster.isMage || monster.boss) ? 'magical' : 'physical';
+  const type = (monster.atkType === 'magical' || monster.isMage === true) ? 'magical' : 'physical';
   let damage = dealDamage({ def: stats.def, mdef: stats.mdef }, monster.atk, type);
   if (state.godMode) damage = 0;
   if (damage > 0) { state.hp -= damage; log(`${monster.name} hits for ${damage}`, 'damage'); stageHeroHurt(damage); }
