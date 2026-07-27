@@ -801,9 +801,15 @@ function getInventoryCount(itemId) {
   return state.inventory.filter(i => i.itemId === itemId && !i.equipped).reduce((s, i) => s + (i.count || 1), 0);
 }
 
+function getMaxInventorySlots() {
+  return (state.race === 'dwarf') ? 250 : 150;
+}
+
 function addToInventory(itemId, amount = 1, rarity = null) {
   const def = D().ALL_ITEMS[itemId];
   if (!def) return false;
+
+  const maxSlots = getMaxInventorySlots();
 
   if (def.stack && (def.slot === 'consumable' || def.slot === 'material' || def.slot === 'scroll' || def.slot === 'powerup') && !rarity) {
     let remaining = amount;
@@ -815,7 +821,7 @@ function addToInventory(itemId, amount = 1, rarity = null) {
         existing.count = (existing.count || 1) + add;
         remaining -= add;
       } else {
-        if (state.inventory.length >= 50) { log('Inventory full!', 'system'); return false; }
+        if (state.inventory.length >= maxSlots) { log('Inventory full!', 'system'); return false; }
         const add = Math.min(def.stack, remaining);
         state.inventory.push({ uid: Date.now() + '_' + Math.random().toString(36).slice(2, 8), itemId, count: add, rarity: null, equipped: false });
         remaining -= add;
@@ -839,7 +845,7 @@ function addToInventory(itemId, amount = 1, rarity = null) {
   }
 
   for (let i = 0; i < amount; i++) {
-    if (state.inventory.length >= 50) { log('Inventory full!', 'system'); return false; }
+    if (state.inventory.length >= maxSlots) { log('Inventory full!', 'system'); return false; }
     state.inventory.push({ uid: Date.now() + '_' + Math.random().toString(36).slice(2, 8), itemId, count: 1, rarity, equipped: false });
   }
   return true;
@@ -1609,8 +1615,10 @@ function updateInventoryUI() {
     salvageBtn.textContent = salvageableCount > 0 ? `🔨 Desmontar (${salvageableCount})` : `🔨 Desmontar`;
   }
 
-  const slotCount = el('inv-slots'); if (slotCount) slotCount.textContent = `${state.inventory.length}/50`;
+  const maxSlots = getMaxInventorySlots();
+  const slotCount = el('inv-slots'); if (slotCount) slotCount.textContent = `${state.inventory.length}/${maxSlots}`;
   const slotCountVal = el('inv-slots-count'); if (slotCountVal) slotCountVal.textContent = state.inventory.length;
+  const slotCounterEl = el('l2inv-counter'); if (slotCounterEl) slotCounterEl.textContent = `(${state.inventory.length}/${maxSlots})`;
   const goldCount = el('gold-text'); if (goldCount) goldCount.textContent = state.gold.toLocaleString();
 
   if (shown === 0) grid.innerHTML = '<div class="inv-empty-msg">Nenhum item encontrado nesta categoria</div>';

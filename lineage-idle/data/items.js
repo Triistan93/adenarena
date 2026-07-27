@@ -617,16 +617,17 @@ const CRAFTING_RECIPES = {
   earring_of_antharas: { id: 'earring_of_antharas', materials: { oriharukon: 8, dragon_bone: 10, crystal_s: 25 }, level: 76 }
 };
 
-// ROLETA DE RARIDADE HARDCORE: 
-// A cada drop que ocorre (equipamento), a chance de ser Lendário é 2% (0.02).
-// Com 5% a 10% de chance geral de drop, a chance absoluta de pegar um Lendário num mob comum é ~0.2%.
+// ROLETA DE RARIDADE E REBALANÇO DE DROPS:
+// Equipamentos completos tem apenas 3% de chance de drop direto.
+// Dentro desses 3%, a chance de ser Lendário é de apenas 0.5% (0.005).
+// 97% do foco dos drops é em Materiais de Craft para alimentar a Forja.
 function rollRarity(bonus = 0) {
   const r = Math.random();
-  if (r < 0.02 + bonus * 0.02) return 'legendary'; 
-  if (r < 0.08 + bonus * 0.03) return 'epic';      
-  if (r < 0.25 + bonus * 0.04) return 'rare';      
-  if (r < 0.55 + bonus * 0.05) return 'uncommon';  
-  return 'common';                                 
+  if (r < 0.005 + bonus * 0.005) return 'legendary'; // 0.5% Lendário
+  if (r < 0.045 + bonus * 0.01) return 'epic';       // 4% Épico
+  if (r < 0.15 + bonus * 0.02) return 'rare';        // 10.5% Raro
+  if (r < 0.45 + bonus * 0.03) return 'uncommon';    // 30% Incomum
+  return 'common';                                   // ~55% Comum
 }
 
 function rollDrop(target, lootBonus = 1) {
@@ -636,19 +637,23 @@ function rollDrop(target, lootBonus = 1) {
   const drops = [];
   const chanceMultiplier = Math.max(0.1, lootBonus || 1);
 
+  // 1. Materiais de Craft e Consumíveis (Foco Principal ~97%)
   for (const itemDrop of monsterDrops.items || []) {
-    const chance = (itemDrop.chance || 0) * chanceMultiplier;
-    if (Math.random() < chance) {
-      const amount = Array.isArray(itemDrop.amount) && itemDrop.amount.length === 2
+    const boostedChance = Math.min(0.95, (itemDrop.chance || 0.2) * 1.8) * chanceMultiplier;
+    if (Math.random() < boostedChance) {
+      const baseAmount = Array.isArray(itemDrop.amount) && itemDrop.amount.length === 2
         ? itemDrop.amount[0] + Math.floor(Math.random() * (itemDrop.amount[1] - itemDrop.amount[0] + 1))
         : (itemDrop.amount ?? 1);
+      const amount = Math.max(1, Math.floor(baseAmount * 1.5));
       drops.push({ id: itemDrop.id, amount, isEquipment: false });
     }
   }
 
+  // 2. Equipamentos Completos (Armas, Armaduras, Joias) — Capped em 3% de chance max
   for (const equipmentDrop of monsterDrops.equipment || []) {
-    const chance = (equipmentDrop.chance || 0) * chanceMultiplier;
-    if (Math.random() < chance) {
+    const rawChance = equipmentDrop.chance || 0.03;
+    const cappedChance = Math.min(0.03, rawChance) * chanceMultiplier; // Capped em 3%
+    if (Math.random() < cappedChance) {
       const pool = equipmentDrop.pool || [];
       if (!pool.length) continue;
       const id = pool[Math.floor(Math.random() * pool.length)];

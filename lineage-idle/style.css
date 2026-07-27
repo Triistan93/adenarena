@@ -1595,20 +1595,20 @@ select:focus-visible {
   color: #d4a744;
 }
 
-/* 8-Column Items Slots Grid */
+/* Auto-Fit Responsive Items Slots Grid */
 .l2inv-slots-grid {
   flex: 1;
   display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  grid-auto-rows: min-content;
-  gap: 2px;
+  grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+  grid-auto-rows: minmax(66px, auto);
+  gap: 4px;
   padding: 6px;
   background:
     repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.3) 35px, rgba(0,0,0,0.3) 36px),
     linear-gradient(180deg, #1a120a 0%, #100a05 100%);
   overflow-y: auto;
-  max-height: 280px;
-  min-height: 200px;
+  max-height: 62vh;
+  min-height: 240px;
 }
 
 .l2inv-slots-grid::-webkit-scrollbar { width: 6px; }
@@ -1619,21 +1619,21 @@ select:focus-visible {
   border: 1px solid #342412;
 }
 
-/* Individual Slot inside 8-col grid */
+/* Individual Slot inside grid */
 .l2inv-slots-grid .inv-slot {
-  aspect-ratio: 1;
+  min-height: 64px;
   background:
     linear-gradient(135deg, rgba(42,30,18,0.9) 0%, rgba(12,8,4,0.98) 100%);
   border: 1px solid #2e2012;
-  border-radius: 2px;
+  border-radius: 4px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   position: relative;
   cursor: pointer;
-  padding: 2px;
-  transition: all 0.1s;
+  padding: 4px 2px;
+  transition: all 0.15s ease;
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,0.03),
     inset 0 -1px 0 rgba(0,0,0,0.7),
@@ -1647,15 +1647,21 @@ select:focus-visible {
 }
 
 .l2inv-slots-grid .inv-slot .name {
-  font-size: 6.5px;
-  color: #7a6848;
+  font-size: 8px;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.03em;
+  color: #e2c074;
   text-align: center;
   line-height: 1.1;
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
-  margin-top: 1px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  word-break: break-word;
+  margin-top: 2px;
 }
 
 .l2inv-slots-grid .inv-slot .qty {
