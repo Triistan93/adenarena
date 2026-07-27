@@ -234,25 +234,44 @@ const SKILL_DEFS = {
   rushImpact:       { name: 'Rush Impact ⭐⭐⭐', info: '42 Pwr charge + 3s Stun (3-Star ⭐⭐⭐)', cost: 250, max: 5, type: 'proc', baseCd: 12000, pwr: 42, effect: 'stun', classReq: 'gladiator', reqLvl: 84, starRank: 3, icon: '💨', tier: 3, desc: 'Rushes to target inflicting AoE damage and stun.' },
   duelistAura:      { name: 'Master of Dual Swords ⭐⭐⭐⭐', info: '+35% ATK, Max Charges (4-Star ⭐⭐⭐⭐)', cost: 500, max: 5, type: 'proc', baseCd: 90000, pwr: 0, effect: 'warcry', classReq: 'gladiator', reqLvl: 90, starRank: 4, icon: '👑', tier: 4, desc: 'Supreme dual blade posture maintaining max charges.' },
 
-  multipleArrow:    { name: 'Multiple Arrow ⭐', info: '42 Pwr 5-arrow AoE rain (1-Star ⭐)', cost: 100, max: 5, type: 'proc', baseCd: 4500, pwr: 42, effect: 'dmg', classReq: 'sagittarius', reqLvl: 76, starRank: 1, icon: '🌧️', tier: 3, desc: 'Rains arrows on enemies in range.' },
-  snipeMastery:     { name: 'Snipe Mastery ⭐⭐', info: '+25% ATK, +200 Range mobile (2-Star ⭐⭐)', cost: 150, max: 5, type: 'proc', baseCd: 40000, pwr: 0, effect: 'warcry', classReq: 'sagittarius', reqLvl: 80, starRank: 2, icon: '🔭', tier: 3, desc: 'Mobile sniper posture boosting ATK and range.' },
-  lethalShotSag:    { name: 'Lethal Shot ⭐⭐⭐', info: '65 Pwr Armor Pierce (3-Star ⭐⭐⭐)', cost: 250, max: 5, type: 'proc', baseCd: 8000, pwr: 65, effect: 'dmg', classReq: 'sagittarius', reqLvl: 84, starRank: 3, icon: '⚡', tier: 3, desc: 'Surgical precision shot ignoring defense.' },
-  sagittariusAura:  { name: 'Sagittarius Aura ⭐⭐⭐⭐', info: '+40% ATK, 1000 Range, 100% Crit (4-Star ⭐⭐⭐⭐)', cost: 500, max: 5, type: 'proc', baseCd: 90000, pwr: 0, effect: 'warcry', classReq: 'sagittarius', reqLvl: 90, starRank: 4, icon: '🌟', tier: 4, desc: 'Celestial archer aura granting max range and 100% crit.' },
+  // === GENERIC BASE SKILLS — Fighter Archetype (classReq: 'fighter') ===
+  armorMast:    { name: 'Armor Mastery', info: '+11 DEF / lvl', cost: 5, max: 10, type: 'stat', classReq: 'fighter', reqLvl: 1, icon: '🛡️', tier: 0, desc: 'Increases physical defense through armor training.' },
+  mortalBlow:   { name: 'Mortal Blow', info: 'Auto-cast: 26 Pwr vital spot blow', cost: 5, max: 5, type: 'proc', baseCd: 4000, pwr: 26, effect: 'dmg', classReq: 'fighter', reqLvl: 1, icon: '🗡️⚡', tier: 0, desc: 'Strikes vital points with weapon.' },
+  wpnMastF:     { name: 'Weapon Mastery', info: '+4.5 ATK / lvl', cost: 5, max: 10, type: 'stat', classReq: 'fighter', reqLvl: 1, icon: '⚔️', tier: 0, desc: 'Increases physical attack through weapon training.' },
+  powerSmash:   { name: 'Power Smash', info: 'Auto-cast: 32 Pwr heavy smash', cost: 10, max: 5, type: 'proc', baseCd: 5000, pwr: 32, effect: 'dmg', classReq: 'fighter', reqLvl: 5, icon: '💥', tier: 0, desc: 'Delivers a crushing power blow.' },
+  lightArmor:   { name: 'Light Armor Mastery', info: '+4.2 DEF, +3 EVA / lvl', cost: 10, max: 5, type: 'stat', classReq: 'fighter', reqLvl: 10, icon: '🥷', tier: 1, desc: 'Light armor training improving defense and evasion.' },
+  stunAttack:   { name: 'Stun Attack', info: 'Auto-cast: 28 Pwr hit + 2s Stun', cost: 15, max: 5, type: 'proc', baseCd: 8000, pwr: 28, effect: 'stun', classReq: 'fighter', reqLvl: 15, icon: '💫', tier: 1, desc: 'Stuns the target with a heavy blow.' },
+  heavyArmor:   { name: 'Heavy Armor Mastery', info: '+8 DEF, +5 HP / lvl', cost: 15, max: 5, type: 'stat', classReq: 'fighter', reqLvl: 20, icon: '🏰', tier: 2, desc: 'Heavy armor training maximizing physical defense.' },
+  shieldStun:   { name: 'Shield Bash', info: 'Auto-cast: 25 Pwr hit + 3s Stun', cost: 15, max: 5, type: 'proc', baseCd: 7500, pwr: 25, effect: 'stun', classReq: 'fighter', reqLvl: 20, icon: '🛡️💥', tier: 2, desc: 'Stuns enemy using a heavy shield bash.' },
+  wildSweep:    { name: 'Wild Sweep', info: 'Auto-cast: 36 Pwr AoE sweep', cost: 20, max: 5, type: 'proc', baseCd: 6500, pwr: 36, effect: 'dmg', classReq: 'fighter', reqLvl: 25, icon: '🌀⚔️', tier: 2, desc: 'Sweeps weapon across multiple targets.' },
+  tripleSlash:  { name: 'Triple Slash', info: 'Auto-cast: 18 Pwr x3 rapid slashes', cost: 20, max: 5, type: 'proc', baseCd: 3500, pwr: 18, effect: 'dmg', classReq: 'fighter', reqLvl: 25, icon: '🗡️🗡️🗡️', tier: 2, desc: 'Three consecutive slashes in quick succession.' },
+  boostHp:      { name: 'Boost HP', info: '+50 Max HP / lvl', cost: 10, max: 5, type: 'stat', classReq: 'fighter', reqLvl: 15, icon: '❤️', tier: 1, desc: 'Increases maximum HP through physical conditioning.' },
+  warCry:       { name: 'War Cry', info: '+15% ATK for 30s warcry', cost: 25, max: 5, type: 'proc', baseCd: 30000, pwr: 0, effect: 'warcry', classReq: 'fighter', reqLvl: 30, icon: '📯', tier: 2, desc: 'Battle cry that boosts physical attack power.' },
+  lethalBlow:   { name: 'Lethal Blow', info: 'Auto-cast: 45 Pwr critical thrust', cost: 30, max: 5, type: 'proc', baseCd: 9000, pwr: 45, effect: 'dmg', classReq: 'fighter', reqLvl: 35, icon: '🩸', tier: 2, desc: 'Delivers a powerful lethal thrust.' },
+  frenzy:       { name: 'Frenzy', info: '+30% ATK when below 40% HP', cost: 25, max: 5, type: 'proc', baseCd: 60000, pwr: 0, effect: 'warcry', classReq: 'fighter', reqLvl: 30, icon: '🔥💢', tier: 2, desc: 'Unleashes berserk power when gravely wounded.' },
+  bisonPummel:  { name: 'Bison Pummel', info: 'Auto-cast: 42 Pwr charge + knockback', cost: 30, max: 5, type: 'proc', baseCd: 10000, pwr: 42, effect: 'stun', classReq: 'fighter', reqLvl: 35, icon: '🐂', tier: 2, desc: 'Charges into enemy with massive force.' },
+  fatalStrike:  { name: 'Fatal Strike', info: 'Auto-cast: 55 Pwr armor-pierce hit', cost: 35, max: 5, type: 'proc', baseCd: 11000, pwr: 55, effect: 'dmg', classReq: 'fighter', reqLvl: 40, icon: '☠️', tier: 2, desc: 'A lethal strike that bypasses armor.' },
+  danceOfFire:  { name: 'Dance of Fire', info: '+20% ATK for party (Dance)', cost: 25, max: 5, type: 'proc', baseCd: 30000, pwr: 0, effect: 'warcry', classReq: 'fighter', reqLvl: 30, icon: '🔥💃', tier: 2, desc: 'Fire dance that boosts entire party attack.' },
+  powerCrush:   { name: 'Power Crush', info: 'Auto-cast: 50 Pwr brutal overhead', cost: 35, max: 5, type: 'proc', baseCd: 12000, pwr: 50, effect: 'dmg', classReq: 'fighter', reqLvl: 40, icon: '💪💥', tier: 2, desc: 'Crushes foe with overwhelming brute force.' },
 
-  rainOfFire:       { name: 'Rain of Fire ⭐', info: '48 Pwr Fire AoE storm (1-Star ⭐)', cost: 100, max: 5, type: 'proc', baseCd: 5000, pwr: 48, effect: 'dmg', classReq: 'sorcerer', reqLvl: 76, starRank: 1, icon: '🌧️🔥', tier: 3, desc: 'Torrential fire storm reducing fire resistance.' },
-  arcanePowerMastery:{ name: 'Arcane Power Mastery ⭐⭐', info: '+30% MATK, +25% MCrit Dmg (2-Star ⭐⭐)', cost: 150, max: 5, type: 'proc', baseCd: 45000, pwr: 0, effect: 'warcry', classReq: 'sorcerer', reqLvl: 80, starRank: 2, icon: '✨', tier: 3, desc: 'Supreme arcane posture without HP drain.' },
-  meteorMastery:    { name: 'Meteor Mastery ⭐⭐⭐', info: '72 Pwr Meteor + 3s Stun (3-Star ⭐⭐⭐)', cost: 250, max: 5, type: 'proc', baseCd: 15000, pwr: 72, effect: 'stun', classReq: 'sorcerer', reqLvl: 84, starRank: 3, icon: '☄️', tier: 3, desc: 'Giant meteor cataclysm knocking down targets.' },
-  phoenixFlameAura: { name: 'Phoenix Flame Aura ⭐⭐⭐⭐', info: '+45% MATK, 100% MCrit (4-Star ⭐⭐⭐⭐)', cost: 500, max: 5, type: 'proc', baseCd: 90000, pwr: 0, effect: 'warcry', classReq: 'sorcerer', reqLvl: 90, starRank: 4, icon: '🦅🔥', tier: 4, desc: 'Phoenix flame aura unleashing solar eruptions.' },
-
-  shadowStepEssence:{ name: 'Shadow Step ⭐', info: '15 Pwr shadow teleport + 30% Backstab (1-Star ⭐)', cost: 100, max: 5, type: 'proc', baseCd: 6000, pwr: 15, effect: 'dmg', classReq: 'treasureHunter', reqLvl: 76, starRank: 1, icon: '👤', tier: 3, desc: 'Teleports behind target boosting next backstab.' },
-  bluffMastery:     { name: 'Bluff Mastery ⭐⭐', info: 'Clears target + 3s Stun (2-Star ⭐⭐)', cost: 150, max: 5, type: 'proc', baseCd: 10000, pwr: 0, effect: 'stun', classReq: 'treasureHunter', reqLvl: 80, starRank: 2, icon: '🌀', tier: 3, desc: 'Turns target around removing aggro with stun.' },
-  lethalBlowMastery:{ name: 'Lethal Blow Mastery ⭐⭐⭐', info: '68 Pwr armor pierce + lifesteal (3-Star ⭐⭐⭐)', cost: 250, max: 5, type: 'proc', baseCd: 7000, pwr: 68, effect: 'vampiric', classReq: 'treasureHunter', reqLvl: 84, starRank: 3, icon: '🩸', tier: 3, desc: 'Deadly dagger strike with lifesteal.' },
-  shadowMasteryAura:{ name: 'Shadow Mastery Aura ⭐⭐⭐⭐', info: '+40% Blow Dmg, 80% Mirage (4-Star ⭐⭐⭐⭐)', cost: 500, max: 5, type: 'proc', baseCd: 90000, pwr: 0, effect: 'warcry', classReq: 'treasureHunter', reqLvl: 90, starRank: 4, icon: '🌌', tier: 4, desc: 'Shadow assassin aura granting mirage protection.' },
-
-  deathHuger:       { name: 'Death Hug ⭐', info: 'Chain pull + 2s Stun (1-Star ⭐)', cost: 100, max: 5, type: 'proc', baseCd: 6000, pwr: 20, effect: 'stun', classReq: 'deathKnight', reqLvl: 76, starRank: 1, icon: '⛓️💀', tier: 3, desc: 'Pulls distant target inflicting stun.' },
-  deathKnightAura2: { name: 'Death Knight Aura ⭐⭐', info: '+35% ATK, +30% Crit Dmg (2-Star ⭐⭐)', cost: 150, max: 5, type: 'proc', baseCd: 40000, pwr: 0, effect: 'warcry', classReq: 'deathKnight', reqLvl: 80, starRank: 2, icon: '👑💀', tier: 3, desc: 'Aura of death boosting physical attack.' },
-  deathExecution:   { name: 'Death Execution ⭐⭐⭐', info: '72 Pwr execution + heal block (3-Star ⭐⭐⭐)', cost: 250, max: 5, type: 'proc', baseCd: 8000, pwr: 72, effect: 'dmg', classReq: 'deathKnight', reqLvl: 84, starRank: 3, icon: '💀🗡️', tier: 3, desc: 'Slay target ignoring defense and blocking healing.' },
-  hellboundDeathAura:{ name: 'Hellbound Death Aura ⭐⭐⭐⭐', info: '+50% ATK/DEF, 100% Crit (4-Star ⭐⭐⭐⭐)', cost: 500, max: 5, type: 'proc', baseCd: 90000, pwr: 0, effect: 'warcry', classReq: 'deathKnight', reqLvl: 90, starRank: 4, icon: '👑🔥💀', tier: 4, desc: 'Hellbound knight transformation with elemental slashes.' }
+  // === GENERIC BASE SKILLS — Mage Archetype (classReq: 'mage') ===
+  weaponMastM:  { name: 'Magical Weapon Mastery', info: '+1.5 ATK, +2.5 MATK / lvl', cost: 5, max: 10, type: 'stat', classReq: 'mage', reqLvl: 1, icon: '🔮', tier: 0, desc: 'Increases magical and physical attack through staff training.' },
+  energyBolt:   { name: 'Energy Bolt', info: 'Auto-cast: 20 Pwr magic bolt', cost: 5, max: 5, type: 'proc', baseCd: 3000, pwr: 20, effect: 'dmg', classReq: 'mage', reqLvl: 1, icon: '⚡🔮', tier: 0, desc: 'Fires a bolt of pure magical energy.' },
+  robeMast:     { name: 'Robe Mastery', info: '+1.7 DEF / lvl', cost: 10, max: 5, type: 'stat', classReq: 'mage', reqLvl: 5, icon: '👘', tier: 0, desc: 'Increases physical defense when wearing robes.' },
+  iceBolt:      { name: 'Ice Bolt', info: 'Auto-cast: 18 Pwr Ice bolt + slow', cost: 10, max: 5, type: 'proc', baseCd: 3500, pwr: 18, effect: 'dmg', classReq: 'mage', reqLvl: 5, icon: '❄️⚡', tier: 0, desc: 'Fires an ice bolt that slows the target.' },
+  antiMagic:    { name: 'Anti Magic', info: '+18 MDEF, +5% Magic Resist / lvl', cost: 15, max: 5, type: 'stat', classReq: 'mage', reqLvl: 10, icon: '🛡️✨', tier: 1, desc: 'Resistance to magic attacks increases.' },
+  auraBurn:     { name: 'Aura Burn', info: 'Auto-cast: 30 Pwr fire aura burst', cost: 15, max: 5, type: 'proc', baseCd: 5000, pwr: 30, effect: 'dmg', classReq: 'mage', reqLvl: 10, icon: '🔥✨', tier: 1, desc: 'Ignites target in magical flames.' },
+  higherMana:   { name: 'Higher Mana', info: '+2 MP regen / lvl', cost: 15, max: 5, type: 'stat', classReq: 'mage', reqLvl: 15, icon: '💧', tier: 1, desc: 'Increases mana regeneration rate.' },
+  blaze:        { name: 'Blaze', info: 'Auto-cast: 23 Pwr fire damage burst', cost: 15, max: 5, type: 'proc', baseCd: 4000, pwr: 23, effect: 'dmg', classReq: 'mage', reqLvl: 15, icon: '🔥💥', tier: 1, desc: 'Erupts intense flames at the target.' },
+  greaterHeal:  { name: 'Greater Heal', info: 'Heals 15% Max HP every 30s', cost: 20, max: 5, type: 'proc', baseCd: 30000, pwr: 0, effect: 'warcry', classReq: 'mage', reqLvl: 20, icon: '💚', tier: 2, desc: 'Channels healing light to restore HP.' },
+  prominence:   { name: 'Prominence', info: 'Auto-cast: 55 Pwr fire pillar', cost: 20, max: 5, type: 'proc', baseCd: 6000, pwr: 55, effect: 'dmg', classReq: 'mage', reqLvl: 20, icon: '☀️🔥', tier: 2, desc: 'Summons a pillar of intense solar fire.' },
+  boostMana:    { name: 'Boost Mana', info: '+40 Max MP / lvl', cost: 10, max: 5, type: 'stat', classReq: 'mage', reqLvl: 15, icon: '🌊', tier: 1, desc: 'Increases maximum mana capacity.' },
+  quickRecycle: { name: 'Quick Recharge', info: '-15% Skill cooldowns / lvl', cost: 25, max: 5, type: 'stat', classReq: 'mage', reqLvl: 25, icon: '⏩', tier: 2, desc: 'Reduces cooldown time for magical skills.' },
+  vampiric:     { name: 'Vampiric Aura', info: 'Auto-cast: 28 Pwr magic + 10% lifesteal', cost: 25, max: 5, type: 'proc', baseCd: 7000, pwr: 28, effect: 'vampiric', classReq: 'mage', reqLvl: 25, icon: '🧛', tier: 2, desc: 'Drains life force from the target.' },
+  flameStrike:  { name: 'Flame Strike', info: 'Auto-cast: 28 Pwr fire AoE fireball', cost: 30, max: 5, type: 'proc', baseCd: 8000, pwr: 28, effect: 'dmg', classReq: 'mage', reqLvl: 30, icon: '☄️', tier: 2, desc: 'Launches a fireball covering a wide area.' },
+  solarFlare:   { name: 'Solar Flare', info: 'Auto-cast: 64 Pwr Holy light beam', cost: 30, max: 5, type: 'proc', baseCd: 8000, pwr: 64, effect: 'dmg', classReq: 'mage', reqLvl: 30, icon: '🌞', tier: 2, desc: 'Unleashes intense holy light radiation.' },
+  deathSpike:   { name: 'Death Spike', info: 'Auto-cast: 60 Pwr dark bone missile', cost: 30, max: 5, type: 'proc', baseCd: 7000, pwr: 60, effect: 'dmg', classReq: 'mage', reqLvl: 35, icon: '💀', tier: 2, desc: 'Fires a bone missile imbued with dark curses.' },
+  hurricane:    { name: 'Hurricane', info: 'Auto-cast: 70 Pwr windstorm', cost: 35, max: 5, type: 'proc', baseCd: 6000, pwr: 70, effect: 'dmg', classReq: 'mage', reqLvl: 35, icon: '🌪️⚡', tier: 2, desc: 'Summons a devastating windstorm.' }
 };
 
 const SKILL_REQS = {
@@ -355,8 +374,14 @@ const DEFAULT_STATE = () => ({
   maxHp: 100, hp: 100, maxMp: 50, mp: 50,
   base: { atk: 0, def: 0, eva: 0, matk: 0, mdef: 0 },
   skills: {
-    weaponMastM: 0, energyBolt: 1, robeMast: 0, iceBolt: 0, antiMagic: 0, auraBurn: 0, higherMana: 0, blaze: 0, boostMana: 0, quickRecycle: 0, vampiric: 0, flameStrike: 0,
-    armorMast: 0, mortalBlow: 1, wpnMastF: 0, powerSmash: 0, lightArmor: 0, stunAttack: 0, heavyArmor: 0, wildSweep: 0, boostHp: 0, warCry: 0, fatalStrike: 0, powerCrush: 0
+    // Generic Fighter skills
+    armorMast: 0, mortalBlow: 1, wpnMastF: 0, powerSmash: 0, lightArmor: 0, stunAttack: 0,
+    heavyArmor: 0, shieldStun: 0, wildSweep: 0, tripleSlash: 0, boostHp: 0, warCry: 0,
+    frenzy: 0, bisonPummel: 0, danceOfFire: 0, lethalBlow: 0, fatalStrike: 0, powerCrush: 0,
+    // Generic Mage skills
+    weaponMastM: 0, energyBolt: 1, robeMast: 0, iceBolt: 0, antiMagic: 0, auraBurn: 0,
+    higherMana: 0, blaze: 0, greaterHeal: 0, prominence: 0, boostMana: 0, quickRecycle: 0,
+    vampiric: 0, flameStrike: 0, solarFlare: 0, deathSpike: 0, hurricane: 0
   },
   zone: 'talkingIsland', currentSaga: 0, gold: 1000, inventory: [], 
   equipment: {
@@ -506,13 +531,8 @@ function getStats() {
   const cls = getClass(state.class);
   const skills = state.skills || {};
 
-  const isMage = state.class === 'mage' || state.class === 'soulbreaker';
-  const activeTreeClass = isMage ? 'mage' : 'fighter';
-  const sk = (id) => {
-    const def = SKILL_DEFS[id];
-    if (def && def.classReq !== activeTreeClass) return 0;
-    return Number(skills[id]) || 0;
-  };
+  // sk() reads skill level; works for both legacy generic and new class-specific skills
+  const sk = (id) => Number(skills[id]) || 0;
   
   let baseAtk = Number(state.base.atk) || 0;
   let baseDef = Number(state.base.def) || 0;
@@ -1354,10 +1374,18 @@ function getSkillCost(skillId, currentLvl) {
 
 function updateSkillInfoPanel() {
   const panel = el('skill-info-panel'); if (!panel) return;
-  const isMage = state.class === 'mage' || state.class === 'soulbreaker';
-  const id = state.selectedSkill || (isMage ? 'weaponMastM' : 'armorMast');
-  const def = SKILL_DEFS[id];
-  if (!def) { panel.innerHTML = ''; return; }
+  // Find the first applicable skill for the current class as fallback
+  let id = state.selectedSkill;
+  if (!id || !SKILL_DEFS[id]) {
+    const firstApplicable = Object.keys(SKILL_DEFS).find(sid =>
+      classSatisfies(state.class, SKILL_DEFS[sid].classReq) && (state.skills[sid] || 0) > 0
+    ) || Object.keys(SKILL_DEFS).find(sid =>
+      classSatisfies(state.class, SKILL_DEFS[sid].classReq)
+    );
+    id = firstApplicable || null;
+  }
+  const def = id ? SKILL_DEFS[id] : null;
+  if (!def) { panel.innerHTML = '<p style="color:var(--text-muted);padding:12px">Select a skill to view details.</p>'; return; }
   const lvl = state.skills[id] || 0;
   const maxed = lvl >= def.max;
   const cost = getSkillCost(id, lvl);
@@ -2802,9 +2830,11 @@ function spendSP(skillId) {
 
 function resetSP() {
   let totalRefunded = 0;
-  const isMage = state.class === 'mage' || state.class === 'soulbreaker';
-  const starterSkill = isMage ? 'energyBolt' : 'mortalBlow';
-  
+  // Determine the starter skill based on player archetype
+  const clsDef = getClass(state.class);
+  const archetype = clsDef?.archetype || 'fighter';
+  const starterSkill = (archetype === 'mage') ? 'energyBolt' : 'mortalBlow';
+
   for (const [sId, lvl] of Object.entries(state.skills)) {
     if (lvl > 0) {
       const baseLvl = (sId === starterSkill) ? 1 : 0;
