@@ -249,35 +249,87 @@ const ALL_ITEMS = {
   ...HAIR, ...HAIR2, ...RINGS, ...CONSUMABLES, ...MATERIALS
 };
 
+// Key aliases mapping to guarantee item lookups never return undefined
+ALL_ITEMS.novice_cloak = ALL_ITEMS.adventurer_cloak;
+ALL_ITEMS.novice_talisman = ALL_ITEMS.talisman_novice;
+ALL_ITEMS.novice_circlet = ALL_ITEMS.apprentice_circlet;
+ALL_ITEMS.sigil_devotion = ALL_ITEMS.sigil_of_devotion;
+ALL_ITEMS.sigil_grace = ALL_ITEMS.sigil_of_grace;
+ALL_ITEMS.sigil_mastery = ALL_ITEMS.sigil_of_mastery;
+ALL_ITEMS.sigil_arcana = ALL_ITEMS.sigil_of_arcana;
+ALL_ITEMS.phantom_mask_item = ALL_ITEMS.phantom_mask_gear;
+ALL_ITEMS.valakas_mask = ALL_ITEMS.boss_facemask_valakas;
+ALL_ITEMS.noble_crown = ALL_ITEMS.noble_gold_crown;
+ALL_ITEMS.essence_crown = ALL_ITEMS.essence_crown_of_aden;
+
 // ======================================
 // MONSTER DROPS (Loot rebalanceado)
 // ======================================
 const MONSTER_DROPS = {
-  goblin: { items: [{ id: 'iron_ore', chance: 0.15, amount: [1, 2] }, { id: 'cloth', chance: 0.15, amount: [1, 2] }, { id: 'goblin_ear', chance: 0.2, amount: [1, 1] }, { id: 'hp_potion_s', chance: 0.05, amount: [1, 1] }], equipment: [{ pool: ['wooden_sword', 'training_dagger', 'oak_staff', 'short_bow', 'leather_vest', 'cloth_robe', 'leather_helm', 'cloth_boots', 'leather_gloves', 'copper_ring'], chance: 0.08 }] },
-  wolf: { items: [{ id: 'beast_blood', chance: 0.15, amount: [1, 2] }, { id: 'wolf_fang', chance: 0.15, amount: [1, 2] }, { id: 'leather', chance: 0.15, amount: [1, 2] }], equipment: [{ pool: ['training_dagger', 'short_bow', 'leather_vest', 'leather_helm', 'leather_boots', 'leather_gloves', 'copper_ring'], chance: 0.08 }] },
-  spider: { items: [{ id: 'beast_blood', chance: 0.15, amount: [1, 2] }, { id: 'magic_powder', chance: 0.15, amount: [1, 1] }, { id: 'cloth', chance: 0.15, amount: [1, 2] }], equipment: [{ pool: ['oak_staff', 'leather_vest', 'cloth_robe', 'cloth_boots', 'copper_ring'], chance: 0.08 }] },
-  orc: { items: [{ id: 'iron_ore', chance: 0.2, amount: [2, 4] }, { id: 'leather', chance: 0.15, amount: [1, 3] }, { id: 'hp_potion_m', chance: 0.05, amount: [1, 1] }], equipment: [{ pool: ['iron_sword', 'bronze_mace', 'iron_boots', 'iron_gauntlets', 'iron_helm', 'silver_ring'], chance: 0.1 }] },
-  kobold: { items: [{ id: 'iron_ore', chance: 0.2, amount: [1, 3] }, { id: 'steel_ingot', chance: 0.1, amount: [1, 1] }, { id: 'mp_potion_s', chance: 0.05, amount: [1, 1] }], equipment: [{ pool: ['iron_sword', 'steel_dagger', 'composite_bow', 'iron_armor', 'iron_boots', 'iron_helm'], chance: 0.1 }] },
-  kamaelScout: { items: [{ id: 'magic_powder', chance: 0.15, amount: [1, 3] }, { id: 'crystal_fragment', chance: 0.15, amount: [1, 2] }], equipment: [{ pool: ['crystal_staff', 'assassins_blade', 'shadow_cloak', 'shadow_mask', 'shadow_boots', 'silver_ring'], chance: 0.1 }] },
-  skeleton: { items: [{ id: 'iron_ore', chance: 0.2, amount: [1, 2] }, { id: 'steel_ingot', chance: 0.1, amount: [1, 1] }], equipment: [{ pool: ['iron_sword', 'crystal_staff', 'iron_armor', 'mage_robe', 'mage_hood', 'iron_helm'], chance: 0.1 }] },
-  goblinKing: { items: [{ id: 'steel_ingot', chance: 0.3, amount: [2, 4] }, { id: 'mithril_ore', chance: 0.15, amount: [1, 2] }, { id: 'scroll_of_resurrection', chance: 0.2, amount: [1, 1] }], equipment: [{ pool: ['knight_sword', 'archmage_staff', 'elven_bow', 'warhammer', 'dark_katana', 'steel_plate', 'steel_helm', 'steel_boots', 'gold_ring'], chance: 0.2, rarityBoost: 1 }] },
-  wolfAlpha: { items: [{ id: 'wolf_fang', chance: 0.3, amount: [3, 6] }, { id: 'beast_blood', chance: 0.3, amount: [2, 4] }, { id: 'leather', chance: 0.3, amount: [3, 5] }], equipment: [{ pool: ['steel_dagger', 'composite_bow', 'iron_armor', 'shadow_cloak', 'steel_boots', 'silver_ring'], chance: 0.2 }] },
-  knight: { items: [{ id: 'steel_ingot', chance: 0.2, amount: [2, 4] }, { id: 'mithril_ore', chance: 0.15, amount: [1, 2] }], equipment: [{ pool: ['blade_of_doom', 'soul_seeker', 'staff_of_magic', 'dragon_bow', 'titan_hammer', 'dual_swords', 'knight_armor', 'arcane_robe', 'knight_helm', 'arcane_circlet', 'diamond_ring', 'onyx_ring', 'amethyst_ring'], chance: 0.1, rarityBoost: 1 }] },
-  mage: { items: [{ id: 'magic_powder', chance: 0.2, amount: [2, 4] }, { id: 'crystal_fragment', chance: 0.2, amount: [2, 3] }, { id: 'mithril_ore', chance: 0.1, amount: [1, 2] }], equipment: [{ pool: ['archmage_staff', 'staff_of_magic', 'arcane_robe', 'arcane_circlet', 'arcane_boots', 'arcane_gloves', 'ruby_ring', 'sapphire_ring'], chance: 0.1, rarityBoost: 1 }] },
-  dragon: { items: [{ id: 'dragon_scale', chance: 0.4, amount: [2, 4] }, { id: 'dragon_bone', chance: 0.3, amount: [1, 3] }, { id: 'oriharukon', chance: 0.2, amount: [1, 2] }, { id: 'ancient_relic', chance: 0.1, amount: [1, 1] }, { id: 'scroll_of_rebirth', chance: 0.3, amount: [1, 1] }], equipment: [{ pool: ['divine_sword', 'staff_of_eternity', 'bow_of_silence', 'dragon_slayer', 'chaos_blade', 'divine_robe', 'dragon_scale_armor', 'divine_crown', 'dragon_circlet', 'divine_boots', 'divine_gloves', 'dragon_boots', 'dragon_gauntlets', 'dragon_eye_ring', 'eternity_ring'], chance: 0.25, rarityBoost: 2 }] },
-  dragonKnight: { items: [{ id: 'dragon_scale', chance: 0.5, amount: [3, 5] }, { id: 'dragon_bone', chance: 0.4, amount: [2, 4] }, { id: 'oriharukon', chance: 0.3, amount: [2, 3] }, { id: 'ancient_relic', chance: 0.15, amount: [1, 2] }], equipment: [{ pool: ['divine_sword', 'staff_of_eternity', 'bow_of_silence', 'dragon_slayer', 'chaos_blade', 'divine_robe', 'dragon_scale_armor', 'divine_crown', 'dragon_eye_ring', 'eternity_ring'], chance: 0.3, rarityBoost: 3 }] },
+  goblin: { 
+    items: [{ id: 'iron_ore', chance: 0.15, amount: [1, 2] }, { id: 'cloth', chance: 0.15, amount: [1, 2] }, { id: 'goblin_ear', chance: 0.2, amount: [1, 1] }, { id: 'hp_potion_s', chance: 0.05, amount: [1, 1] }], 
+    equipment: [{ pool: ['wooden_sword', 'training_dagger', 'oak_staff', 'short_bow', 'leather_vest', 'cloth_robe', 'cloth_pants', 'wooden_shield', 'leather_helm', 'cloth_boots', 'leather_gloves', 'oak_necklace', 'oak_earring', 'copper_ring', 'novice_belt', 'adventurer_cloak', 'talisman_novice', 'apprentice_circlet', 'novice_mask'], chance: 0.10 }] 
+  },
+  wolf: { 
+    items: [{ id: 'beast_blood', chance: 0.15, amount: [1, 2] }, { id: 'wolf_fang', chance: 0.15, amount: [1, 2] }, { id: 'leather', chance: 0.15, amount: [1, 2] }], 
+    equipment: [{ pool: ['training_dagger', 'short_bow', 'leather_vest', 'leather_gaiters', 'leather_helm', 'leather_boots', 'leather_gloves', 'oak_necklace', 'oak_earring', 'copper_ring', 'novice_belt', 'adventurer_cloak', 'talisman_novice'], chance: 0.10 }] 
+  },
+  spider: { 
+    items: [{ id: 'beast_blood', chance: 0.15, amount: [1, 2] }, { id: 'magic_powder', chance: 0.15, amount: [1, 1] }, { id: 'cloth', chance: 0.15, amount: [1, 2] }], 
+    equipment: [{ pool: ['oak_staff', 'cloth_robe', 'cloth_pants', 'cloth_boots', 'oak_necklace', 'oak_earring', 'copper_ring', 'apprentice_circlet', 'talisman_novice'], chance: 0.10 }] 
+  },
+  orc: { 
+    items: [{ id: 'iron_ore', chance: 0.2, amount: [2, 4] }, { id: 'leather', chance: 0.15, amount: [1, 3] }, { id: 'hp_potion_m', chance: 0.05, amount: [1, 1] }], 
+    equipment: [{ pool: ['iron_sword', 'bronze_mace', 'iron_gaiters', 'bronze_shield', 'iron_boots', 'iron_gauntlets', 'iron_helm', 'silver_ring', 'elven_necklace', 'elven_earring', 'mithril_belt', 'cloak_of_valor', 'talisman_protection'], chance: 0.12 }] 
+  },
+  kobold: { 
+    items: [{ id: 'iron_ore', chance: 0.2, amount: [1, 3] }, { id: 'steel_ingot', chance: 0.1, amount: [1, 1] }, { id: 'mp_potion_s', chance: 0.05, amount: [1, 1] }], 
+    equipment: [{ pool: ['iron_sword', 'steel_dagger', 'composite_bow', 'iron_armor', 'iron_gaiters', 'bronze_shield', 'iron_boots', 'iron_helm', 'silver_ring', 'mithril_belt'], chance: 0.12 }] 
+  },
+  kamaelScout: { 
+    items: [{ id: 'magic_powder', chance: 0.15, amount: [1, 3] }, { id: 'crystal_fragment', chance: 0.15, amount: [1, 2] }], 
+    equipment: [{ pool: ['crystal_staff', 'assassins_blade', 'mage_stockings', 'sigil_of_devotion', 'cloak_of_valor', 'assassin_mask', 'shadow_boots', 'silver_ring', 'elven_earring'], chance: 0.12 }] 
+  },
+  skeleton: { 
+    items: [{ id: 'iron_ore', chance: 0.2, amount: [1, 2] }, { id: 'steel_ingot', chance: 0.1, amount: [1, 1] }], 
+    equipment: [{ pool: ['iron_sword', 'crystal_staff', 'iron_armor', 'mage_robe', 'mage_stockings', 'iron_gaiters', 'bronze_shield', 'mage_hood', 'iron_helm', 'talisman_protection'], chance: 0.12 }] 
+  },
+  goblinKing: { 
+    items: [{ id: 'steel_ingot', chance: 0.3, amount: [2, 4] }, { id: 'mithril_ore', chance: 0.15, amount: [1, 2] }, { id: 'scroll_of_resurrection', chance: 0.2, amount: [1, 1] }], 
+    equipment: [{ pool: ['knight_sword', 'archmage_staff', 'elven_bow', 'warhammer', 'dark_katana', 'steel_plate', 'steel_gaiters', 'steel_shield', 'sigil_of_grace', 'steel_helm', 'steel_boots', 'gold_ring', 'necklace_of_grace', 'earring_of_grace', 'belt_of_power', 'cloak_of_freedom', 'talisman_of_power', 'silver_tiara'], chance: 0.22, rarityBoost: 1 }] 
+  },
+  wolfAlpha: { 
+    items: [{ id: 'wolf_fang', chance: 0.3, amount: [3, 6] }, { id: 'beast_blood', chance: 0.3, amount: [2, 4] }, { id: 'leather', chance: 0.3, amount: [3, 5] }], 
+    equipment: [{ pool: ['steel_dagger', 'composite_bow', 'iron_armor', 'shadow_pants', 'cloak_of_valor', 'steel_boots', 'silver_ring', 'mithril_belt'], chance: 0.20 }] 
+  },
+  knight: { 
+    items: [{ id: 'steel_ingot', chance: 0.2, amount: [2, 4] }, { id: 'mithril_ore', chance: 0.15, amount: [1, 2] }], 
+    equipment: [{ pool: ['blade_of_doom', 'soul_seeker', 'staff_of_magic', 'dragon_bow', 'titan_hammer', 'dual_swords', 'knight_armor', 'arcane_robe', 'knight_gaiters', 'arcane_stockings', 'knight_shield', 'sigil_of_mastery', 'knight_helm', 'arcane_circlet', 'diamond_ring', 'onyx_ring', 'amethyst_ring', 'black_ore_necklace', 'black_ore_earring', 'champion_belt', 'cloak_of_shadows_gear', 'talisman_of_eva', 'noble_gold_crown', 'executioner_mask'], chance: 0.15, rarityBoost: 1 }] 
+  },
+  mage: { 
+    items: [{ id: 'magic_powder', chance: 0.2, amount: [2, 4] }, { id: 'crystal_fragment', chance: 0.2, amount: [2, 3] }, { id: 'mithril_ore', chance: 0.1, amount: [1, 2] }], 
+    equipment: [{ pool: ['archmage_staff', 'staff_of_magic', 'arcane_robe', 'arcane_stockings', 'sigil_of_mastery', 'arcane_circlet', 'arcane_boots', 'arcane_gloves', 'ruby_ring', 'sapphire_ring', 'black_ore_necklace', 'black_ore_earring', 'talisman_of_eva'], chance: 0.15, rarityBoost: 1 }] 
+  },
+  dragon: { 
+    items: [{ id: 'dragon_scale', chance: 0.4, amount: [2, 4] }, { id: 'dragon_bone', chance: 0.3, amount: [1, 3] }, { id: 'oriharukon', chance: 0.2, amount: [1, 2] }, { id: 'ancient_relic', chance: 0.1, amount: [1, 1] }, { id: 'scroll_of_rebirth', chance: 0.3, amount: [1, 1] }], 
+    equipment: [{ pool: ['divine_sword', 'staff_of_eternity', 'bow_of_silence', 'dragon_slayer', 'chaos_blade', 'divine_robe', 'dragon_scale_armor', 'divine_gaiters', 'dragon_scale_gaiters', 'imperial_shield', 'sigil_of_arcana', 'divine_crown', 'dragon_circlet', 'divine_boots', 'divine_gloves', 'dragon_boots', 'dragon_gauntlets', 'necklace_of_valakas', 'earring_of_antharas', 'earring_of_zaken', 'dragon_eye_ring', 'eternity_ring', 'dragon_belt', 'ancient_cloak_of_aden', 'venir_talisman', 'essence_crown_of_aden', 'boss_facemask_valakas'], chance: 0.30, rarityBoost: 2 }] 
+  },
+  dragonKnight: { 
+    items: [{ id: 'dragon_scale', chance: 0.5, amount: [3, 5] }, { id: 'dragon_bone', chance: 0.4, amount: [2, 4] }, { id: 'oriharukon', chance: 0.3, amount: [2, 3] }, { id: 'ancient_relic', chance: 0.15, amount: [1, 2] }], 
+    equipment: [{ pool: ['divine_sword', 'staff_of_eternity', 'bow_of_silence', 'dragon_slayer', 'chaos_blade', 'divine_robe', 'dragon_scale_armor', 'divine_gaiters', 'dragon_scale_gaiters', 'imperial_shield', 'sigil_of_arcana', 'divine_crown', 'dragon_eye_ring', 'eternity_ring', 'dragon_belt', 'ancient_cloak_of_aden', 'venir_talisman'], chance: 0.35, rarityBoost: 3 }] 
+  },
   
-  goblinThief: { items: [{ id: 'iron_ore', chance: 0.15, amount: [1, 3] }, { id: 'cloth', chance: 0.15, amount: [1, 2] }], equipment: [{ pool: ['wooden_sword', 'training_dagger', 'short_bow', 'leather_vest', 'cloth_boots'], chance: 0.08 }] },
-  koboldLeader: { items: [{ id: 'steel_ingot', chance: 0.2, amount: [1, 2] }, { id: 'iron_ore', chance: 0.2, amount: [2, 4] }], equipment: [{ pool: ['iron_sword', 'composite_bow', 'iron_armor', 'iron_boots'], chance: 0.15 }] },
-  direWolf: { items: [{ id: 'beast_blood', chance: 0.2, amount: [2, 4] }, { id: 'wolf_fang', chance: 0.2, amount: [2, 4] }], equipment: [{ pool: ['steel_dagger', 'composite_bow', 'shadow_cloak', 'shadow_boots'], chance: 0.08 }] },
-  crimsonBabyDragon: { items: [{ id: 'dragon_scale', chance: 0.15, amount: [1, 1] }, { id: 'dragon_bone', chance: 0.15, amount: [1, 1] }], equipment: [{ pool: ['knight_sword', 'elven_bow', 'steel_plate', 'gold_ring'], chance: 0.1 }] },
-  alphaWolf: { items: [{ id: 'wolf_fang', chance: 0.3, amount: [3, 6] }, { id: 'beast_blood', chance: 0.3, amount: [2, 5] }], equipment: [{ pool: ['steel_dagger', 'shadow_cloak', 'shadow_boots', 'silver_ring'], chance: 0.15 }] },
-  darkMage: { items: [{ id: 'magic_powder', chance: 0.2, amount: [3, 5] }, { id: 'crystal_fragment', chance: 0.2, amount: [2, 4] }], equipment: [{ pool: ['archmage_staff', 'arcane_robe', 'arcane_circlet', 'ruby_ring'], chance: 0.1 }] },
-  devilBone: { items: [{ id: 'steel_ingot', chance: 0.2, amount: [3, 5] }, { id: 'mithril_ore', chance: 0.15, amount: [1, 2] }], equipment: [{ pool: ['warhammer', 'blade_of_doom', 'knight_armor', 'knight_helm'], chance: 0.1 }] },
-  deathKnight: { items: [{ id: 'mithril_ore', chance: 0.3, amount: [2, 4] }, { id: 'oriharukon', chance: 0.2, amount: [1, 2] }], equipment: [{ pool: ['soul_seeker', 'blade_of_doom', 'titan_hammer', 'knight_armor', 'diamond_ring'], chance: 0.25, rarityBoost: 1 }] },
-  voidCreature: { items: [{ id: 'ancient_relic', chance: 0.2, amount: [1, 2] }, { id: 'oriharukon', chance: 0.2, amount: [1, 3] }], equipment: [{ pool: ['staff_of_magic', 'dragon_bow', 'arcane_robe', 'onyx_ring'], chance: 0.25, rarityBoost: 1 }] },
-  emeraldDragon: { items: [{ id: 'dragon_scale', chance: 0.4, amount: [3, 5] }, { id: 'dragon_bone', chance: 0.3, amount: [2, 4] }], equipment: [{ pool: ['divine_sword', 'bow_of_silence', 'dragon_scale_armor', 'dragon_eye_ring'], chance: 0.3, rarityBoost: 2 }] },
-  cerberus: { items: [{ id: 'ancient_relic', chance: 0.3, amount: [2, 4] }, { id: 'dragon_bone', chance: 0.3, amount: [3, 5] }], equipment: [{ pool: ['chaos_blade', 'dragon_slayer', 'divine_robe', 'eternity_ring'], chance: 0.35, rarityBoost: 3 }] }
+  goblinThief: { items: [{ id: 'iron_ore', chance: 0.15, amount: [1, 3] }, { id: 'cloth', chance: 0.15, amount: [1, 2] }], equipment: [{ pool: ['wooden_sword', 'training_dagger', 'short_bow', 'leather_vest', 'cloth_pants', 'wooden_shield', 'cloth_boots', 'oak_necklace', 'oak_earring', 'novice_belt', 'adventurer_cloak'], chance: 0.10 }] },
+  koboldLeader: { items: [{ id: 'steel_ingot', chance: 0.2, amount: [1, 2] }, { id: 'iron_ore', chance: 0.2, amount: [2, 4] }], equipment: [{ pool: ['iron_sword', 'composite_bow', 'iron_armor', 'iron_gaiters', 'bronze_shield', 'iron_boots', 'elven_necklace', 'mithril_belt'], chance: 0.15 }] },
+  direWolf: { items: [{ id: 'beast_blood', chance: 0.2, amount: [2, 4] }, { id: 'wolf_fang', chance: 0.2, amount: [2, 4] }], equipment: [{ pool: ['steel_dagger', 'composite_bow', 'shadow_pants', 'cloak_of_valor', 'shadow_boots'], chance: 0.10 }] },
+  crimsonBabyDragon: { items: [{ id: 'dragon_scale', chance: 0.15, amount: [1, 1] }, { id: 'dragon_bone', chance: 0.15, amount: [1, 1] }], equipment: [{ pool: ['knight_sword', 'elven_bow', 'steel_plate', 'steel_gaiters', 'steel_shield', 'gold_ring', 'necklace_of_grace'], chance: 0.12 }] },
+  alphaWolf: { items: [{ id: 'wolf_fang', chance: 0.3, amount: [3, 6] }, { id: 'beast_blood', chance: 0.3, amount: [2, 5] }], equipment: [{ pool: ['steel_dagger', 'cloak_of_valor', 'shadow_boots', 'silver_ring', 'elven_earring'], chance: 0.15 }] },
+  darkMage: { items: [{ id: 'magic_powder', chance: 0.2, amount: [3, 5] }, { id: 'crystal_fragment', chance: 0.2, amount: [2, 4] }], equipment: [{ pool: ['archmage_staff', 'arcane_robe', 'arcane_stockings', 'sigil_of_mastery', 'arcane_circlet', 'ruby_ring'], chance: 0.12 }] },
+  devilBone: { items: [{ id: 'steel_ingot', chance: 0.2, amount: [3, 5] }, { id: 'mithril_ore', chance: 0.15, amount: [1, 2] }], equipment: [{ pool: ['warhammer', 'blade_of_doom', 'knight_armor', 'knight_gaiters', 'knight_shield', 'knight_helm'], chance: 0.12 }] },
+  deathKnight: { items: [{ id: 'mithril_ore', chance: 0.3, amount: [2, 4] }, { id: 'oriharukon', chance: 0.2, amount: [1, 2] }], equipment: [{ pool: ['soul_seeker', 'blade_of_doom', 'titan_hammer', 'knight_armor', 'knight_gaiters', 'knight_shield', 'diamond_ring', 'black_ore_necklace'], chance: 0.25, rarityBoost: 1 }] },
+  voidCreature: { items: [{ id: 'ancient_relic', chance: 0.2, amount: [1, 2] }, { id: 'oriharukon', chance: 0.2, amount: [1, 3] }], equipment: [{ pool: ['staff_of_magic', 'dragon_bow', 'arcane_robe', 'arcane_stockings', 'sigil_of_mastery', 'onyx_ring'], chance: 0.25, rarityBoost: 1 }] },
+  emeraldDragon: { items: [{ id: 'dragon_scale', chance: 0.4, amount: [3, 5] }, { id: 'dragon_bone', chance: 0.3, amount: [2, 4] }], equipment: [{ pool: ['divine_sword', 'bow_of_silence', 'dragon_scale_armor', 'dragon_scale_gaiters', 'imperial_shield', 'dragon_eye_ring', 'necklace_of_valakas'], chance: 0.30, rarityBoost: 2 }] },
+  cerberus: { items: [{ id: 'ancient_relic', chance: 0.3, amount: [2, 4] }, { id: 'dragon_bone', chance: 0.3, amount: [3, 5] }], equipment: [{ pool: ['chaos_blade', 'dragon_slayer', 'divine_robe', 'divine_gaiters', 'sigil_of_arcana', 'eternity_ring', 'venir_talisman'], chance: 0.35, rarityBoost: 3 }] }
 };
 
 // ======================================
@@ -433,29 +485,75 @@ const SHOP_INVENTORY = {
 };
 
 const CRAFTING_RECIPES = {
+  // Weapons
   iron_sword: { id: 'iron_sword', materials: { iron_ore: 5, cloth: 2 }, level: 1 },
   steel_dagger: { id: 'steel_dagger', materials: { iron_ore: 4, leather: 2 }, level: 1 },
   crystal_staff: { id: 'crystal_staff', materials: { iron_ore: 3, crystal_fragment: 5, magic_powder: 2 }, level: 1 },
   composite_bow: { id: 'composite_bow', materials: { iron_ore: 3, leather: 4, beast_blood: 2 }, level: 1 },
   bronze_mace: { id: 'bronze_mace', materials: { iron_ore: 6 }, level: 1 },
   orcish_axe: { id: 'orcish_axe', materials: { iron_ore: 8, steel_ingot: 2 }, level: 1 },
+  
+  // Armors & Legs
   iron_armor: { id: 'iron_armor', materials: { iron_ore: 10, leather: 5 }, level: 1 },
   mage_robe: { id: 'mage_robe', materials: { cloth: 15, magic_powder: 5 }, level: 1 },
+  cloth_pants: { id: 'cloth_pants', materials: { cloth: 4 }, level: 1 },
+  leather_gaiters: { id: 'leather_gaiters', materials: { leather: 4, iron_ore: 2 }, level: 1 },
+  iron_gaiters: { id: 'iron_gaiters', materials: { iron_ore: 8, leather: 3 }, level: 10 },
+  mage_stockings: { id: 'mage_stockings', materials: { cloth: 10, magic_powder: 3 }, level: 12 },
+
+  // Shields & Sigils
+  wooden_shield: { id: 'wooden_shield', materials: { iron_ore: 3, cloth: 2 }, level: 1 },
+  bronze_shield: { id: 'bronze_shield', materials: { iron_ore: 6 }, level: 10 },
+  sigil_of_devotion: { id: 'sigil_of_devotion', materials: { cloth: 8, magic_powder: 4 }, level: 12 },
+
+  // Accessories (Necklace, Earring, Belt, Cloak, Talisman, Hair, Mask)
+  oak_necklace: { id: 'oak_necklace', materials: { cloth: 3, magic_powder: 1 }, level: 1 },
+  oak_earring: { id: 'oak_earring', materials: { iron_ore: 2, cloth: 2 }, level: 1 },
+  novice_belt: { id: 'novice_belt', materials: { leather: 3, iron_ore: 1 }, level: 1 },
+  adventurer_cloak: { id: 'adventurer_cloak', materials: { cloth: 5 }, level: 1 },
+  talisman_novice: { id: 'talisman_novice', materials: { magic_powder: 2, cloth: 2 }, level: 1 },
+  apprentice_circlet: { id: 'apprentice_circlet', materials: { cloth: 3 }, level: 1 },
+  novice_mask: { id: 'novice_mask', materials: { leather: 2, cloth: 2 }, level: 1 },
   
+  // Mid Tier Gear (Lv. 20-40)
   knight_sword: { id: 'knight_sword', materials: { steel_ingot: 8, mithril_ore: 2, crystal_d: 15 }, level: 20 },
   steel_plate: { id: 'steel_plate', materials: { steel_ingot: 15, mithril_ore: 3, leather: 8, crystal_d: 20 }, level: 20 },
+  steel_gaiters: { id: 'steel_gaiters', materials: { steel_ingot: 10, mithril_ore: 2, crystal_d: 15 }, level: 20 },
+  steel_shield: { id: 'steel_shield', materials: { steel_ingot: 10, crystal_d: 15 }, level: 20 },
   shadow_cloak: { id: 'shadow_cloak', materials: { cloth: 20, beast_blood: 10, magic_powder: 5, crystal_d: 20 }, level: 20 },
   archmage_staff: { id: 'archmage_staff', materials: { steel_ingot: 5, crystal_fragment: 15, magic_powder: 10, crystal_d: 25 }, level: 22 },
+  elven_necklace: { id: 'elven_necklace', materials: { magic_powder: 6, crystal_d: 10 }, level: 20 },
+  elven_earring: { id: 'elven_earring', materials: { magic_powder: 4, crystal_d: 10 }, level: 20 },
+  mithril_belt: { id: 'mithril_belt', materials: { mithril_ore: 3, leather: 8, crystal_d: 10 }, level: 20 },
+  cloak_of_valor: { id: 'cloak_of_valor', materials: { cloth: 15, beast_blood: 5, crystal_d: 10 }, level: 20 },
+  talisman_protection: { id: 'talisman_protection', materials: { magic_powder: 10, crystal_d: 10 }, level: 20 },
   
+  // High Tier Gear (Lv. 40-76)
   blade_of_doom: { id: 'blade_of_doom', materials: { steel_ingot: 20, mithril_ore: 8, oriharukon: 2, crystal_c: 30 }, level: 40 },
   knight_armor: { id: 'knight_armor', materials: { steel_ingot: 25, mithril_ore: 10, oriharukon: 3, crystal_c: 40 }, level: 40 },
+  knight_gaiters: { id: 'knight_gaiters', materials: { steel_ingot: 18, mithril_ore: 6, crystal_c: 30 }, level: 40 },
+  knight_shield: { id: 'knight_shield', materials: { steel_ingot: 18, mithril_ore: 5, crystal_c: 25 }, level: 40 },
   arcane_robe: { id: 'arcane_robe', materials: { cloth: 30, crystal_fragment: 25, magic_powder: 20, crystal_c: 40 }, level: 40 },
+  arcane_stockings: { id: 'arcane_stockings', materials: { cloth: 25, magic_powder: 15, crystal_c: 30 }, level: 42 },
+  sigil_of_mastery: { id: 'sigil_of_mastery', materials: { cloth: 20, magic_powder: 15, crystal_c: 25 }, level: 42 },
+  black_ore_necklace: { id: 'black_ore_necklace', materials: { mithril_ore: 5, magic_powder: 15, crystal_c: 20 }, level: 60 },
+  black_ore_earring: { id: 'black_ore_earring', materials: { mithril_ore: 4, magic_powder: 10, crystal_c: 20 }, level: 60 },
+  champion_belt: { id: 'champion_belt', materials: { leather: 20, steel_ingot: 10, crystal_c: 20 }, level: 60 },
+  cloak_of_shadows_gear: { id: 'cloak_of_shadows_gear', materials: { cloth: 25, beast_blood: 15, crystal_c: 20 }, level: 60 },
+  talisman_of_eva: { id: 'talisman_of_eva', materials: { magic_powder: 25, crystal_fragment: 15, crystal_c: 20 }, level: 60 },
+  noble_gold_crown: { id: 'noble_gold_crown', materials: { steel_ingot: 15, mithril_ore: 5, crystal_c: 20 }, level: 60 },
+  executioner_mask: { id: 'executioner_mask', materials: { leather: 20, beast_blood: 10, crystal_c: 20 }, level: 60 },
   
   titan_hammer: { id: 'titan_hammer', materials: { steel_ingot: 30, mithril_ore: 15, oriharukon: 5, crystal_b: 20 }, level: 48 },
   dual_swords: { id: 'dual_swords', materials: { steel_ingot: 35, mithril_ore: 15, oriharukon: 5, crystal_b: 40 }, level: 50 },
 
   divine_sword: { id: 'divine_sword', materials: { steel_ingot: 40, oriharukon: 8, dragon_scale: 5, ancient_relic: 1, crystal_a: 50, crystal_s: 10 }, level: 76 },
-  dragon_scale_armor: { id: 'dragon_scale_armor', materials: { steel_ingot: 50, oriharukon: 10, dragon_scale: 15, dragon_bone: 5, crystal_a: 60, crystal_s: 20 }, level: 76 }
+  dragon_scale_armor: { id: 'dragon_scale_armor', materials: { steel_ingot: 50, oriharukon: 10, dragon_scale: 15, dragon_bone: 5, crystal_a: 60, crystal_s: 20 }, level: 76 },
+  divine_gaiters: { id: 'divine_gaiters', materials: { steel_ingot: 35, oriharukon: 6, dragon_scale: 10, crystal_a: 40, crystal_s: 15 }, level: 76 },
+  imperial_shield: { id: 'imperial_shield', materials: { steel_ingot: 35, dragon_scale: 8, crystal_a: 35, crystal_s: 10 }, level: 76 },
+  sigil_of_arcana: { id: 'sigil_of_arcana', materials: { cloth: 35, magic_powder: 25, crystal_a: 35, crystal_s: 10 }, level: 76 },
+  necklace_of_valakas: { id: 'necklace_of_valakas', materials: { oriharukon: 10, dragon_scale: 15, ancient_relic: 2, crystal_s: 30 }, level: 76 },
+  earring_of_antharas: { id: 'earring_of_antharas', materials: { oriharukon: 8, dragon_bone: 10, crystal_s: 25 }, level: 76 }
 };
 
 // ROLETA DE RARIDADE HARDCORE: 

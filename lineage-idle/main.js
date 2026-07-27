@@ -1580,7 +1580,12 @@ function renderShopGear(list) {
   const zone = ZONES[state.zone], shopId = zone?.shop, items = shopId ? D().SHOP_INVENTORY[shopId] : null;
   if (!items) { list.innerHTML = '<p class="shop-empty">No gear merchant in this area.</p>'; return; }
   let count = 0;
-  for (const shopItem of items) { const def = D().ALL_ITEMS[shopItem.id]; if (!def || def.slot === 'consumable' || def.slot === 'scroll' || def.slot === 'powerup' || def.classReq || (def.req && def.req.level > state.level + 5)) continue; list.appendChild(shopRow(def, shopItem.id, def.price)); count++; }
+  for (const shopItem of items) { 
+    const def = D().ALL_ITEMS[shopItem.id]; 
+    if (!def || def.slot === 'consumable' || def.slot === 'scroll' || def.slot === 'powerup' || def.classReq) continue; 
+    list.appendChild(shopRow(def, shopItem.id, def.price)); 
+    count++; 
+  }
   if (!count) list.innerHTML = '<p class="shop-empty">The merchant has no gear for you yet.</p>';
 }
 function renderShopPotions(list) {
