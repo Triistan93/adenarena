@@ -10,6 +10,7 @@ Este documento compila a lista completa de todos os sistemas, mecânicas, zonas,
   - Sistema de combate automático baseado em ticks de relógio.
   - Leitura de estatísticas em tempo real: HP, MP, ATK, DEF, MATK, MDEF, EVA, Taxa Crítica, Boost de XP/Gold, Lifesteal e Regen.
   - Palco visual com artes em SVG estilizadas para heróis e monstros.
+  - **Juice de Combate & Animações Visual**: Efeito squash/stretch no golpe do herói (`heroSquashAtk`), trepidação no palco ao sofrer dano (`stageHeroHurtShake`) e efeito flash no abate de monstro (`stageKillFlash`).
   - Textos flutuantes de dano, cura, bloqueio e esquiva.
   - Sistema de áudio e efeitos sonoros imersivos.
 - **⚔️ 3D Arena (Ação Survival RPG)**:
@@ -36,93 +37,71 @@ Este documento compila a lista completa de todos os sistemas, mecânicas, zonas,
 
 ---
 
-## 🗺️ 3. Zonas de Caça, Sagas & Chefes de Raid Mundiais
+## 🧭 3. Recursos de Interface (UI/UX) & Qualidade de Vida (QoL)
+
+- **🔴 Badges de Notificação Dinâmicos nas Abas (`.tab-badge`)**:
+  - Badges pulsantes em vermelho indicando upgrades disponíveis no Inventário, SP para distribuir em Habilidades, receitas para criar na Forja e recompensas de Missões a resgatar.
+- **🛡️ Confirmação ao Vender/Sucatear Itens Valiosos**:
+  - Diálogo de proteção para vendas ou sucateamentos individuais e em lote de itens de raridade `Rare`, `Epic`, `Legendary`, `Mythic` e `S-Grade`.
+- **⌨️ Atalhos Globais de Teclado**:
+  - Teclas `1–9`: Troca instantânea entre as abas principais.
+  - Tecla `Espaço`: Alternador rápido de velocidade de combate (`1x`, `2x`, `4x`).
+  - Tecla `S` / `Ctrl+S`: Salvamento instantâneo do jogo.
+- **🔄 Persistência de Scroll entre Abas**:
+  - Posições de navegação em listas longas mantidas ao alternar entre abas.
+- **📦 Auto-Venda Inteligente por Raridade**:
+  - Filtro para auto-vender loots recebidos abaixo de raridade configurada (Common, Uncommon, Rare) concedendo Gold direto.
+- **🎨 Aura Dinâmica de Poder no Portrait**:
+  - Contorno e iluminação do portrait do personagem derivados da raridade do melhor equipamento equipado (`topEquipRarityColor`).
+- **📱 Responsividade & Layout Adaptativo**:
+  - Adaptadores CSS para telas de tablet e mobile sem sobreposição de colunas ou quebra de drag.
+
+---
+
+## 🗺️ 4. Zonas de Caça, Sagas & Chefes de Raid Mundiais
 
 - **Sagas de Progressão (Sagas I, II e III)**:
-  - *Talking Island* (Lv 1-15)
-  - *Elven Ruins* (Lv 15-30)
-  - *Ant Nest* (Lv 30-45)
-  - *Cruma Tower* (Lv 45-60)
-  - *Dragon Valley* (Lv 60-75)
-  - *Tower of Insolence* (Lv 75-85)
-  - *Imperial Tomb* (Lv 85-90)
-  - *Antharas' Lair* (Lv 90-95)
-  - *Forge of the Gods* (Lv 95-100)
+  - *Talking Island* (Lv 1-15), *Elven Ruins* (Lv 15-30), *Ant Nest* (Lv 30-45), *Cruma Tower* (Lv 45-60), *Dragon Valley* (Lv 60-75), *Tower of Insolence* (Lv 75-85), *Imperial Tomb* (Lv 85-90), *Antharas' Lair* (Lv 90-95), *Forge of the Gods* (Lv 95-100).
 - **Chefes Globais (World Bosses)**:
-  - **Queen Ant** (Lv 40) ➔ Drop: *Ring of Queen Ant* (Crit Rate & Atk)
-  - **Zaken** (Lv 60) ➔ Drop: *Zaken's Earring* (Lifesteal & Resistências)
-  - **Baium** (Lv 80) ➔ Drop: *Baium's Ring* (Cast Speed & Atk Speed)
-  - **Antharas** (Lv 95) ➔ Drop: *Antharas' Earring & Dragon Slayer Blade*
-  - **Valakas** (Lv 100) ➔ Drop: *Necklace of Valakas*
+  - **Queen Ant** (Lv 40), **Zaken** (Lv 60), **Baium** (Lv 80), **Antharas** (Lv 95), **Valakas** (Lv 100).
 
 ---
 
-## 🏰 4. Torre da Insolência (End-Game Tower of Insolence)
+## 🏰 5. Torre da Insolência (End-Game Tower of Insolence)
 
-- **Desafio de 100 Andares**:
-  - Monstruosidades e Guardiões de Torre com escalonamento de vida e dano.
-  - Chefes Especiais da Torre a cada 5 andares.
-- **Bônus Passivo Multiplicativo**:
-  - Concede +1% de ATK, DEF, MATK e MDEF para cada andar conquistado na Torre.
-- **Varredura Diária (Sweep)**:
-  - Função `sweepTowerDaily()` concedendo 50% de recompensas diárias para todos os andares desbloqueados.
+- **Desafio de 100 Andares**: Monstruosidades e Guardiões de Torre com escalonamento de vida e dano.
+- **Bônus Passivo Multiplicativo**: +1% de ATK, DEF, MATK e MDEF por andar conquistado.
+- **Varredura Diária (Sweep)**: `sweepTowerDaily()` concedendo 50% de recompensas diárias para todos os andares desbloqueados.
 
 ---
 
-## 📜 5. Missões, Diárias/Semanais & Passe de Batalha
+## 📜 6. Missões, Diárias/Semanais & Passe de Batalha
 
-- **Sistema de Missões Automáticas**:
-  - Resetação automática a cada 24 horas (Diárias) e 7 dias (Semanais).
-  - Objetivos de abate de monstros, chefes de raid, acúmulo de gold e andares da torre.
-- **Passe de Batalha (Battle Pass)**:
-  - Trilha Gratuita e Trilha Premium com XP progressivo.
-  - Recompensas em Gold, SP, Mats Raros e Scroll de Encantamento.
+- Resetação automática a cada 24 horas (Diárias) e 7 dias (Semanais).
+- Passe de Batalha (Trilha Gratuita e Trilha Premium) com XP progressivo.
 
 ---
 
-## 🛡️ 6. Equipamentos, Crafting Avançado & Magic Dolls
+## 🛡️ 7. Equipamentos, Crafting Avançado & Magic Dolls
 
-- **Sistema de Equipamentos & Graus**:
-  - Slots completos: Arma, Escudo, Elmo, Peitoral, Calça, Luvas, Botas, Acessórios Épicos, Cinto, Capa, Talismã, Agathion.
-  - Graus de Raridade: Common, Uncommon, Rare, Epic, Legendary, Mythic, S-Grade.
-  - **Armaduras S-Grade**: Imperial Crusader Set (Heavy), Draconic Leather Set (Light), Major Arcana Set (Robe).
-  - **Armas S-Grade**: Dragon Slayer, Angel Slayer, Arcana Mace, Draconic Bow.
-- **Receitas de Crafting Avançado**:
-  - Criação de armas/armaduras S-Grade consumindo Cristais S, Oriharukon, Escamas/Ossos de Dragão e Relíquias Antigas.
-- **Roda de Craft Aleatório (Random Craft Wheel)**:
-  - Roleta de prêmios com acúmulo de pontos de craft.
-- **Sintetização de Agathions (Magic Dolls)**:
-  - Coleção de mascotes/dolls com roleta de fusão 2 para 1 para upgrade de raridade.
+- Equips S-Grade (Imperial Crusader, Draconic, Major Arcana) e Armas Épicas.
+- Crafting de receitas, Roda de Craft Aleatório e Sintetização 2:1 de Agathions (Dolls).
 
 ---
 
-## ☁️ 7. Autenticação, Banco de Dados NoSQL & Cloud Save (Firebase)
+## ☁️ 8. Autenticação, Banco NoSQL & Cloud Save (Firebase)
 
-- **Integração Firebase (`src/firebase.ts`)**:
-  - Conexão configurada para o projeto `adenarena-6e448`.
-  - **Firebase Auth**: Login por E-mail/Senha e marca oficial do Google OAuth (4 cores).
-  - **Firestore NoSQL Database**: Coleção `users/{userId}` para armazenamento de progresso.
-- **Portal de Login Inicial (`src/components/LoginScreen.tsx`)**:
-  - Tela de entrada temática que bloqueia o acesso direto ao jogo até que o jogador entre na sua conta ou escolha "Jogar como Convidado".
-  - Exibe resumo do personagem (Nível, Classe, Gold, Torre e Privilégio) ao reconectar.
-- **Sincronização & Sanitização**:
-  - Sanitização de dados com `JSON.parse(JSON.stringify(state))` para impedir falhas de gravação.
-  - Botões de controle no topo do jogo: **`☁️ Salvar`** e **`📥 Carregar`**.
+- **Firebase Auth** (E-mail/Senha + Marca Oficial Google OAuth 4 cores).
+- **Firestore Database** (`users/{userId}`).
+- **Portal de Login Inicial** (`LoginScreen.tsx`).
 
 ---
 
-## 👑 8. Sistema de Privilégios & Segurança GM
+## 👑 9. Sistema de Privilégios & Segurança GM
 
-- **Níveis de Acesso**:
-  - **`0` (Jogador Normal)**: Acesso padrão. Comandos iniciados por `//` são bloqueados com mensagem **`⛔ Acesso Negado`**.
-  - **`1` (Administrador / GM)**: Acesso concedido ao Painel de Administrador (`//admin`) e comandos de chat GM.
-- **Controle de Autorização Servidor/Banco**:
-  - O `privilegeLevel` é verificado diretamente na raiz do documento Firestore (`users/{userId}` ➔ `privilegeLevel: 1`).
-  - Remoção de qualquer comando não autenticado de elevação de privilégios no cliente.
-- **Segurança de Infraestrutura & Rede**:
-  - `.env.example` e `import.meta.env.VITE_FIREBASE_*` para isolamento de credenciais.
-  - Proteção de segredos no `.gitignore`.
-  - Proteção contra DDoS e balanceamento de carga global via Vercel Cloudflare Edge CDN.
+- Nível `0` (Jogador Normal) vs Nível `1` (Administrador GM).
+- Controle de Autorização Servidor/Banco direto na raiz do Firestore (`users/{userId}` ➔ `privilegeLevel: 1`).
+- Sanitização de salvamento sem aceitação de elevação de privilégio vinda do cliente.
 
 ---
 
