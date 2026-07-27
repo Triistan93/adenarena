@@ -3264,10 +3264,9 @@ export function init() {
     window.selectDollForSynth = selectDollForSynth;
     window.synthesizeDolls = synthesizeDolls;
     window.craftSpecialRecipe = craftSpecialRecipe;
-    window.drawMagicLamps = drawMagicLamps;
-    window.rerollSpecialCraftWheel = rerollSpecialCraftWheel;
-    window.craftSelectedWheelSlot = craftSelectedWheelSlot;
-    window.claimOfflineRewards = claimOfflineRewards;
+    window.useMagicLamp = useMagicLamp;
+    window.refreshRandomCraftWheel = refreshRandomCraftWheel;
+    window.executeRandomCraft = executeRandomCraft;
     window.selectZone = selectZone;
     window.startRaidBoss = startRaidBoss;
 
