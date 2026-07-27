@@ -66,6 +66,8 @@ export const IDLE_MARKUP = `
       <!-- Center: live battle stage + combat ticker (compact & centered) -->
       <section class="panel log-panel center-panel" id="center-panel">
         <div class="stage" id="stage" data-state="idle">
+          <div class="stage-bg stage-bg-a" id="stage-bg-a"></div>
+          <div class="stage-bg stage-bg-b" id="stage-bg-b"></div>
           <div class="stage-zone" id="stage-zone">—</div>
           <div class="combat-controls-bar">
             <button id="soulshot-toggle-btn" class="combat-ctrl-btn" title="Ativar Soulshot no combate (+100% dano físico/mágico por golpe)">⚡ Soulshot: OFF</button>
@@ -362,6 +364,7 @@ export const IDLE_MARKUP = `
                       <option value="rare">≤ Raro</option>
                     </select>
                   </div>
+                  <input type="text" id="inv-search-input" placeholder="🔍 Buscar..." style="background:#090b10; color:#fff; border:1px solid rgba(212,167,68,0.3); border-radius:4px; padding:2px 6px; font-size:10px; width:80px;" title="Filtrar por nome de item" />
                   <div class="l2inv-batch-pills">
                     <button id="select-commons-btn" class="l2inv-pill-btn" title="Selecionar comuns">✓ Comum</button>
                     <button id="select-uncommons-btn" class="l2inv-pill-btn" title="Selecionar incomuns">✓ Incomum</button>

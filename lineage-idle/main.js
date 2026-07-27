@@ -1504,6 +1504,12 @@ function updateInventoryUI() {
     };
   }
 
+  const searchInput = el('inv-search-input');
+  const searchTerm = (searchInput?.value || '').trim().toLowerCase();
+  if (searchInput) {
+    searchInput.oninput = () => safeUiUpdate('inventory', updateInventoryUI);
+  }
+
   const sorted = [...state.inventory]
     .filter(i => i && i.itemId && D().ALL_ITEMS[i.itemId])
     .sort((a, b) => { const da = D().ALL_ITEMS[a.itemId], db = D().ALL_ITEMS[b.itemId]; if (!da || !db) return 0; return (db.tier || 0) - (da.tier || 0); });
@@ -1514,6 +1520,7 @@ function updateInventoryUI() {
 
   for (const item of sorted) {
     const def = D().ALL_ITEMS[item.itemId]; if (!def) continue;
+    if (searchTerm && !def.name.toLowerCase().includes(searchTerm)) continue;
     
     // Category Filter matching L2 Tabs
     if (filter !== 'all') {
@@ -1645,6 +1652,32 @@ function showItemTooltip(item, e) {
   if (def.lootBonus) html += `<div class="tt-stat"><span>LOOT</span><span class="v">+${Math.round(def.lootBonus*mult*100)}%</span></div>`;
   if (def.stack) html += `<div class="tt-stat"><span>Stack</span><span class="v">${item.count || 1}</span></div>`;
   if (item.equipped) html += `<div class="tt-equipped">[ EQUIPPED ]</div>`;
+  
+  if (!item.equipped) {
+    const targetSlot = resolveEquipSlot(def.slot);
+    if (targetSlot && ALL_EQUIP_SLOTS.includes(targetSlot)) {
+      const eqUid = state.equipment[targetSlot];
+      const eqItem = eqUid ? state.inventory.find(i => i.uid === eqUid) : null;
+      const eqDef = eqItem ? D().ALL_ITEMS[eqItem.itemId] : null;
+      const eqMult = eqItem && eqItem.rarity ? (D().RARITY[eqItem.rarity]?.mult || 1) : 1;
+      
+      let compHtml = `<div class="tt-compare-title" style="margin-top:6px; font-size:10px; color:var(--gilt-bright); font-weight:bold; border-top:1px solid rgba(255,255,255,0.1); padding-top:4px;">VS EQUIPPED:</div>`;
+      let hasComp = false;
+      
+      for (const s of stats) {
+        const itemVal = def[s] ? Math.floor(def[s] * mult) : 0;
+        const eqVal = (eqDef && eqDef[s]) ? Math.floor(eqDef[s] * eqMult) : 0;
+        const diff = itemVal - eqVal;
+        if (diff !== 0) {
+          hasComp = true;
+          const diffStr = diff > 0 ? `+${diff}` : `${diff}`;
+          const color = diff > 0 ? '#10b981' : '#ef4444';
+          compHtml += `<div class="tt-stat" style="font-size:10px;"><span>${s.toUpperCase()}</span><span style="color:${color}; font-weight:bold;">${diffStr}${s === 'crit' ? '%' : ''}</span></div>`;
+        }
+      }
+      if (hasComp) html += compHtml;
+    }
+  }
   
   const canEquipLvl = !def.req || state.level >= def.req.level;
   const canEquipCls = classSatisfies(state.class, def.classReq);
@@ -3150,16 +3183,34 @@ const ZONE_BACKGROUNDS = {
   valakas: '/img/valakas.png'
 };
 
+let currentBgPath = '';
+let activeBgLayer = 'a';
+
 function updateZoneBackground() {
   const currentKey = state.target && RAID_BOSSES[state.target] ? state.target : (state.zone || 'orcVillage');
   const bgPath = ZONE_BACKGROUNDS[currentKey] || '/img/' + currentKey + '.png';
 
-  const stageEl = el('stage');
   const logEl = el('log');
   const stageZone = el('stage-zone');
+  const bgA = el('stage-bg-a');
+  const bgB = el('stage-bg-b');
 
-  if (stageEl) {
-    stageEl.style.backgroundImage = `linear-gradient(180deg, rgba(8,10,16,0.15) 0%, rgba(8,10,16,0.60) 100%), url('${bgPath}')`;
+  if (bgPath !== currentBgPath) {
+    currentBgPath = bgPath;
+    const bgUrl = `linear-gradient(180deg, rgba(8,10,16,0.15) 0%, rgba(8,10,16,0.60) 100%), url('${bgPath}')`;
+    if (bgA && bgB) {
+      if (activeBgLayer === 'a') {
+        bgB.style.backgroundImage = bgUrl;
+        bgB.classList.add('active');
+        bgA.classList.remove('active');
+        activeBgLayer = 'b';
+      } else {
+        bgA.style.backgroundImage = bgUrl;
+        bgA.classList.add('active');
+        bgB.classList.remove('active');
+        activeBgLayer = 'a';
+      }
+    }
   }
 
   if (logEl) {
@@ -3368,6 +3419,11 @@ function attackMonster() {
   if (monster.hp <= 0 && !castedSkillThisTick) stageMonsterDie(); else if (!castedSkillThisTick) stageMonsterHurt(damage, wasCrit);
   
   if (monster.hp <= 0) {
+    state.killStreak = (state.killStreak || 0) + 1;
+    if (state.killStreak % 5 === 0 && state.killStreak >= 5) {
+      stageFloat(`🔥 STREAK x${state.killStreak}!`, 'sf-crit', 'right');
+    }
+
     const zoneMult = D().ZONE_GOLD_MULT[state.zone] || 1, xpMult = 1 + (stats.xpBoost || 0);
     const xpGain = Math.floor(monster.xp * xpMult), spGain = monster.sp + (monster.boss ? 2 : 0);
     state.xp += xpGain; state.sp += spGain;
