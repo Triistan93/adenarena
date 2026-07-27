@@ -2808,10 +2808,208 @@ select:focus-visible {
   border-radius: 3px;
 }
 
-/* ============ RESPONSIVE ============ */
+/* ============ MOBILE BOTTOM DOCK (HIDDEN ON DESKTOP) ============ */
+.mobile-bottom-nav {
+  display: none;
+}
+
+/* ============ ADVANCED RESPONSIVE DESIGN ============ */
 @media (max-width: 980px) {
-  .main-grid { grid-template-columns: 1fr; grid-template-rows: auto 1fr auto; }
-  .stats-panel { border-right: none; border-bottom: 1px solid var(--line); max-height: 220px; }
-  .log-panel { min-height: 220px; }
-  .tabs-panel { border-left: none; border-top: 1px solid var(--line); max-height: 55vh; }
+  .main-grid { 
+    grid-template-columns: 1fr !important; 
+    grid-template-rows: auto auto auto !important; 
+    overflow-y: auto !important;
+  }
+  .stats-panel { border-right: none; border-bottom: 1px solid var(--line); max-height: none; }
+  .log-panel { min-height: 240px; }
+  .tabs-panel { border-left: none; border-top: 1px solid var(--line); max-height: none; }
+}
+
+@media (max-width: 768px) {
+  /* Resizers hidden on mobile touch devices */
+  .grid-resizer-v, .grid-resizer-h {
+    display: none !important;
+  }
+
+  /* Top Bar Adaptation to avoid overlapping top-left hamburger menu */
+  .top-bar {
+    padding: 8px 12px 8px 135px !important;
+    gap: 6px !important;
+  }
+  #game-title {
+    font-size: 13px !important;
+    letter-spacing: 0.12em !important;
+  }
+  .top-stats {
+    gap: 6px !important;
+  }
+  .top-stats > span {
+    padding: 4px 6px !important;
+    font-size: 10px !important;
+  }
+  .ts-label { font-size: 8px !important; }
+
+  /* Main Grid Stack */
+  .main-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 60px !important; /* Clears floating bottom nav */
+  }
+
+  /* Panel Ordering & Layout */
+  .center-panel {
+    order: 1;
+    min-height: 300px;
+    flex: none;
+    border-bottom: 2px solid var(--gilt-deep);
+  }
+
+  .stage {
+    min-height: 150px !important;
+    max-height: 200px !important;
+  }
+
+  .tabs-panel {
+    order: 2;
+    flex: 1;
+    min-height: 420px;
+    border: none !important;
+  }
+
+  .stats-panel {
+    order: 3;
+    flex: none;
+    max-height: none !important;
+    border-top: 2px solid var(--line);
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 4px 12px;
+    padding: 12px;
+  }
+  .stats-panel .stat-divider {
+    grid-column: 1 / -1;
+  }
+
+  /* Touch Scrollable Horizontal Tab Buttons */
+  .tab-buttons {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    gap: 6px !important;
+    padding: 6px 4px !important;
+    border-bottom: 1px solid var(--line);
+  }
+  .tab-btn {
+    flex: 0 0 auto !important;
+    min-width: max-content !important;
+    padding: 8px 14px !important;
+    font-size: 11px !important;
+    touch-action: manipulation;
+  }
+
+  /* Inventory & Paperdoll Auto-Grids */
+  .inventory-grid {
+    grid-template-columns: repeat(auto-fill, minmax(50px, 1fr)) !important;
+    gap: 6px !important;
+  }
+  .inv-slot {
+    width: 50px !important;
+    height: 50px !important;
+  }
+
+  .l2inv-paperdoll-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 6px !important;
+  }
+
+  /* Cards Grids Adaptation */
+  #codex-grid, #dolls-grid, #special-craft-grid, .admin-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Skill Tree Touch Scroll Canvas */
+  .skill-tree-scroll {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 12px;
+  }
+  .skill-tree-grid {
+    min-width: 580px;
+  }
+
+  /* Mobile Bottom Glass Navigation Dock */
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    background: rgba(10, 13, 20, 0.96);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-top: 1px solid var(--gilt-deep);
+    z-index: 999;
+    justify-content: space-around;
+    align-items: center;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.85);
+  }
+  .mobile-nav-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    background: transparent;
+    border: none;
+    color: var(--ink-dim);
+    font-size: 9.5px;
+    gap: 2px;
+    cursor: pointer;
+    touch-action: manipulation;
+    transition: color 0.15s ease;
+  }
+  .mobile-nav-btn span.icon {
+    font-size: 16px;
+  }
+  .mobile-nav-btn.active {
+    color: var(--gilt-bright);
+    font-weight: bold;
+  }
+
+  /* Touch Target Sizing (Min 38px) */
+  .combat-ctrl-btn, .action-btn, .item-action, .log-filter-btn {
+    min-height: 38px;
+    touch-action: manipulation;
+  }
+
+  .modal-content {
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .top-bar {
+    padding: 6px 8px 6px 110px !important;
+  }
+  #game-title {
+    font-size: 11px !important;
+    letter-spacing: 0.05em !important;
+  }
+  .top-stats {
+    display: none !important; /* Hide secondary top clock on tiny screens to preserve space */
+  }
+  .stage-hero, .stage-monster {
+    transform: scale(0.85);
+  }
+  .stage-vs {
+    font-size: 16px !important;
+  }
 }

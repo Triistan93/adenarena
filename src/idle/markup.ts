@@ -615,6 +615,17 @@ export const IDLE_MARKUP = `
 
     <!-- Item Tooltip -->
     <div id="item-tooltip" class="item-tooltip"></div>
+
+    <!-- Mobile Bottom Dock Navigation -->
+    <nav class="mobile-bottom-nav">
+      <button class="mobile-nav-btn active" data-tab="character"><span class="icon">👤</span><span>Hero</span></button>
+      <button class="mobile-nav-btn" data-tab="inventory"><span class="icon">🎒</span><span>Mochila</span></button>
+      <button class="mobile-nav-btn" data-tab="skills"><span class="icon">✦</span><span>Skills</span></button>
+      <button class="mobile-nav-btn" data-tab="codex"><span class="icon">📜</span><span>Codex</span></button>
+      <button class="mobile-nav-btn" data-tab="dolls"><span class="icon">🧸</span><span>Dolls</span></button>
+      <button class="mobile-nav-btn" data-tab="magiclamp"><span class="icon">🪔</span><span>Lâmpada</span></button>
+      <button class="mobile-nav-btn" data-tab="shop"><span class="icon">🛒</span><span>Loja</span></button>
+    </nav>
   </div>
 `;
 

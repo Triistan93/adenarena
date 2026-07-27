@@ -3019,6 +3019,22 @@ function bindEvents() {
       };
     });
 
+    qsa('.mobile-nav-btn').forEach(btn => {
+      btn.onclick = () => {
+        const tabName = btn.dataset.tab;
+        qsa('.mobile-nav-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        const desktopTabBtn = qs(`.tab-btn[data-tab="${tabName}"]`);
+        if (desktopTabBtn) desktopTabBtn.click();
+
+        const tabsPane = el('tab-' + tabName);
+        if (tabsPane && tabsPane.scrollIntoView) {
+          tabsPane.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      };
+    });
+
     qsa('.race-btn').forEach(btn => btn.onclick = () => setRace(btn.dataset.race));
     qsa('.class-btn').forEach(btn => btn.onclick = () => setClass(btn.dataset.class));
     qsa('.filter-btn').forEach(btn => { btn.onclick = () => { state.filter = btn.dataset.filter; qsa('.filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); updateInventoryUI(); }; });
