@@ -727,6 +727,8 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { hasError: boole
   }
 }
 
+import { AuthModal } from "./components/AuthModal";
+
 // ---------- Shell: picks which experience is on screen ----------
 export default function Shell() {
   const [mode, setMode] = useState<Mode>("idle");
@@ -734,6 +736,21 @@ export default function Shell() {
     <ErrorBoundary>
       {mode === "arena" ? <ArenaApp /> : <IdleGame />}
       <ModeSwitch mode={mode} setMode={setMode} />
+      <div className="fixed top-4 right-4 z-40">
+        <AuthModal 
+          onCloudDataLoaded={(cloudState) => {
+            if (typeof window !== 'undefined' && (window as any).loadGameState) {
+              (window as any).loadGameState(cloudState);
+            }
+          }}
+          getCurrentState={() => {
+            if (typeof window !== 'undefined' && (window as any).getGameState) {
+              return (window as any).getGameState();
+            }
+            return null;
+          }}
+        />
+      </div>
     </ErrorBoundary>
   );
 }

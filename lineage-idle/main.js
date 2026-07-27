@@ -4300,6 +4300,14 @@ export function init() {
     window.sweepTowerDaily = sweepTowerDaily;
     window.checkDailyReset = checkDailyReset;
     window.checkQuestProgress = checkQuestProgress;
+    window.getGameState = () => state;
+    window.loadGameState = (cloudState) => {
+      if (!cloudState) return;
+      Object.assign(state, cloudState);
+      updateAllUI();
+      save();
+      log('☁️ Progresso carregado da nuvem Firebase!', 'rarity-legendary');
+    };
     window.toggleMuteAudio = () => {
       if (typeof window !== 'undefined' && window.idleAudio) {
         const isMuted = window.idleAudio.toggleMute();
