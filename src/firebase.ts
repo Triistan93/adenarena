@@ -39,10 +39,17 @@ export async function savePlayerStateToCloud(userId: string, stateData: any) {
   try {
     const userRef = doc(db, 'users', userId);
     const cleanState = JSON.parse(JSON.stringify(stateData));
-    await setDoc(userRef, {
+    
+    const payload: any = {
       state: cleanState,
       updatedAt: serverTimestamp()
-    }, { merge: true });
+    };
+    
+    if (cleanState && cleanState.privilegeLevel !== undefined) {
+      payload.privilegeLevel = Number(cleanState.privilegeLevel) || 0;
+    }
+
+    await setDoc(userRef, payload, { merge: true });
     return true;
   } catch (err) {
     console.error('Cloud Save Error:', err);
@@ -54,8 +61,14 @@ export async function loadPlayerStateFromCloud(userId: string) {
   try {
     const userRef = doc(db, 'users', userId);
     const snap = await getDoc(userRef);
-    if (snap.exists() && snap.data()?.state) {
-      return snap.data().state;
+    if (snap.exists()) {
+      const docData = snap.data();
+      if (docData && docData.state) {
+        const stateObj = docData.state;
+        const rootPrivilege = Number(docData.privilegeLevel) || (docData.role === 'admin' ? 1 : 0);
+        stateObj.privilegeLevel = rootPrivilege || Number(stateObj.privilegeLevel) || 0;
+        return stateObj;
+      }
     }
     return null;
   } catch (err) {
