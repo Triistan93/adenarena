@@ -2584,7 +2584,6 @@ function challengeTowerFloor() {
   }
 
   const fDef = getTowerFloorDef(targetFloor);
-  const stats = getStats();
 
   if (state.level < fDef.reqLvl) {
     log(`⚠️ Nível insuficiente! O Andar ${targetFloor} requer Nível ${fDef.reqLvl}.`, 'system');
@@ -2594,9 +2593,12 @@ function challengeTowerFloor() {
   log(`🏰 Desafiando Andar ${targetFloor}: **${fDef.name}**!`, 'rarity-legendary');
   floatText(`ANDAR ${targetFloor}!`, 'float-jackpot');
 
-  state.target = {
+  const towerMonsterId = `tower_floor_${targetFloor}`;
+  const monsterObj = {
+    id: towerMonsterId,
     name: fDef.name,
     hp: fDef.hp,
+    _maxHp: fDef.hp,
     maxHp: fDef.hp,
     atk: fDef.atk,
     def: fDef.def,
@@ -2606,10 +2608,24 @@ function challengeTowerFloor() {
     gold: [fDef.gold, Math.floor(fDef.gold * 1.3)],
     boss: fDef.isBoss,
     isTower: true,
-    towerFloor: targetFloor
+    towerFloor: targetFloor,
+    _stunnedUntil: 0
   };
 
-  startCombat();
+  MONSTERS[towerMonsterId] = monsterObj;
+  state.target = towerMonsterId;
+  state.activeMonster = monsterObj;
+  if (!state.zone) state.zone = 'talkingIsland';
+
+  const sz = el('stage-zone');
+  if (sz) sz.textContent = `🏰 TORRE · Andar ${targetFloor}`;
+
+  state.combatActive = true;
+  renderStageMonster();
+  combatTick = 0;
+  state._cds = {};
+  if (combatInterval) clearInterval(combatInterval);
+  combatInterval = setInterval(attackMonster, Math.round(200 / (state.combatSpeed || 1)));
 }
 
 function onTowerFloorVictory(floorNum) {
@@ -3031,7 +3047,11 @@ function renderStageMonster() {
   if (box) box.classList.remove('hurt', 'lunge');
   if (!mon) { if (art) art.innerHTML = ''; if (nm) nm.textContent = ''; return; }
   if (box) box.setAttribute('data-label', (mon.name || '').toUpperCase());
-  if (art) { art.innerHTML = ART.monsterSVG(state.target, { crown: !!mon.boss }); art.classList.remove('swap'); void art.offsetWidth; art.classList.add('swap'); }
+  if (art) { 
+    const artKey = (mon.isTower) ? (mon.boss ? 'dragon' : 'knight') : state.target;
+    art.innerHTML = ART.monsterSVG(artKey, { crown: !!mon.boss }); 
+    art.classList.remove('swap'); void art.offsetWidth; art.classList.add('swap'); 
+  }
   if (nm) nm.textContent = mon.name + (mon.boss ? ' ★' : ''); updateMonsterHP();
   updateZoneBackground();
 }
@@ -3366,7 +3386,14 @@ function executeAdminCmd(cmd) {
 
 function startCombat() { if (state.combatActive) return; if (!state.zone) return; state.combatActive = true; log(`Entering ${ZONES[state.zone].name}...`, 'system'); pickRandomMonster(); combatTick = 0; state._cds = {}; if (combatInterval) clearInterval(combatInterval); combatInterval = setInterval(attackMonster, 200); }
 function stopCombat() { state.combatActive = false; if (combatInterval) { clearInterval(combatInterval); combatInterval = null; } }
-function pickRandomMonster() { const zone = ZONES[state.zone], available = zone.monsters.filter(m => { const mon = MONSTERS[m]; return mon && (mon.xp / 10) <= state.level + 5; }); if (available.length === 0) { state.target = zone.monsters[0]; } else { state.target = available[Math.floor(Math.random() * available.length)]; } const template = MONSTERS[state.target]; if (template) { state.activeMonster = { ...template, _maxHp: template.hp, hp: template.hp, _stunnedUntil: 0 }; log(`A wild ${template.name} appears!`, 'combat'); renderStageMonster(); } }
+function pickRandomMonster() {
+  if (state.activeMonster && state.activeMonster.isTower && state.activeMonster.hp > 0) return;
+  if (!state.zone || !ZONES[state.zone]) return;
+  const zone = ZONES[state.zone], available = zone.monsters.filter(m => { const mon = MONSTERS[m]; return mon && (mon.xp / 10) <= state.level + 5; });
+  if (available.length === 0) { state.target = zone.monsters[0]; } else { state.target = available[Math.floor(Math.random() * available.length)]; }
+  const template = MONSTERS[state.target];
+  if (template) { state.activeMonster = { ...template, _maxHp: template.hp, hp: template.hp, _stunnedUntil: 0 }; log(`A wild ${template.name} appears!`, 'combat'); renderStageMonster(); }
+}
 function selectZone(zoneId) { const zone = ZONES[zoneId]; if (zone.level > state.level) { log(`Level ${zone.level} required.`, 'system'); return; } state.zone = zoneId; el('zone-name').textContent = zone.name; stopCombat(); startCombat(); updateAllUI(); save(); }
 
 function updateSagaProgress(silent = true) {
