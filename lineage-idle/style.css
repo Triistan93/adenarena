@@ -1933,15 +1933,20 @@ select:focus-visible {
 .center-panel #log {
   flex: 1 1 auto; min-height: 0;
   border-top: 1px solid var(--line);
-  background: linear-gradient(180deg, rgba(8,10,14,0.55), rgba(8,10,14,0.82));
+  background-size: cover !important;
+  background-position: center bottom !important;
+  background-repeat: no-repeat !important;
+  transition: background-image 0.4s ease-in-out;
 }
 
 /* ---- the diorama ---- */
 .stage {
   position: relative; overflow: hidden;
-  background: linear-gradient(180deg, #243056 0%, #2c3a64 36%, #6a4f34 70%, #2a1d12 100%);
-  box-shadow: inset 0 -40px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04);
-  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  background-size: cover !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+  transition: background-image 0.4s ease-in-out, box-shadow 0.3s ease;
+  box-shadow: inset 0 -40px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.06);
 }
 #game.mode-arena .stage {
   box-shadow: inset 0 -45px 70px rgba(0,0,0,0.58), inset 0 0 0 1px rgba(212,167,68,0.16), 0 0 24px rgba(212,167,68,0.16);
@@ -1953,19 +1958,19 @@ select:focus-visible {
 .stage::before {
   content: '';
   position: absolute; inset: 0;
-  background: linear-gradient(180deg, rgba(255,255,255,0.06), transparent 28%, transparent 72%, rgba(0,0,0,0.22));
+  background: linear-gradient(180deg, rgba(255,255,255,0.04), transparent 30%, transparent 70%, rgba(0,0,0,0.28));
   pointer-events: none;
 }
 .stage::after {
   content: '';
   position: absolute; inset: 0;
-  background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
   background-size: 24px 24px;
   mix-blend-mode: screen;
-  opacity: 0.16;
+  opacity: 0.10;
   pointer-events: none;
 }
-.st-layer { position: absolute; inset: 0; pointer-events: none; }
+.st-layer { position: absolute; inset: 0; pointer-events: none; display: none; }
 .st-sky {
   background:
     radial-gradient(ellipse at 78% 18%, rgba(255,210,140,0.35), transparent 42%),
@@ -1997,32 +2002,50 @@ select:focus-visible {
   background: linear-gradient(180deg, #3a2c18 0%, #241808 60%, #140c04 100%);
   box-shadow: inset 0 1px 0 rgba(212,167,68,0.18);
 }
-.st-fog {
-  bottom: 14%; height: 30%;
-  background: linear-gradient(90deg, transparent, rgba(210,220,235,0.10), transparent);
-  background-size: 220% 100%;
-  animation: fogDrift 26s linear infinite;
-}
+.st-fog { opacity: 0.15; }
 @keyframes fogDrift { from { background-position: 120% 0; } to { background-position: -120% 0; } }
-.st-embers {
-  background-image:
-    radial-gradient(1.5px 1.5px at 18% 70%, rgba(255,190,110,0.9), transparent 60%),
-    radial-gradient(1px 1px at 42% 82%, rgba(255,210,140,0.8), transparent 60%),
-    radial-gradient(1.5px 1.5px at 66% 64%, rgba(255,170,90,0.8), transparent 60%),
-    radial-gradient(1px 1px at 84% 78%, rgba(255,200,120,0.7), transparent 60%);
-  animation: emberRise 11s linear infinite;
-}
 @keyframes emberRise { from { transform: translateY(8px); opacity: 0.4; } 50% { opacity: 1; } to { transform: translateY(-40px); opacity: 0; } }
 
 /* ---- stage chrome ---- */
 .stage-zone {
-  position: absolute; left: 10px; top: 10px; z-index: 5;
-  padding: 3px 10px; background: rgba(10,12,18,0.62);
-  border: 1px solid var(--gilt-deep);
-  font-family: "Cinzel", serif; font-size: 11px; letter-spacing: 0.14em;
+  position: absolute; left: 12px; top: 12px; z-index: 5;
+  padding: 5px 14px; background: rgba(12, 16, 24, 0.85);
+  border: 1px solid var(--gilt-bright);
+  border-radius: 4px;
+  font-family: "Cinzel", serif; font-size: 11px; font-weight: 700; letter-spacing: 0.15em;
   color: var(--gilt-bright); text-transform: uppercase;
-  text-shadow: 0 1px 2px #000;
+  text-shadow: 0 1px 3px #000;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.7), inset 0 0 8px rgba(212,167,68,0.15);
+  backdrop-filter: blur(4px);
 }
+
+.stage .combat-controls-bar {
+  position: absolute; top: 12px; right: 12px; z-index: 5;
+  display: flex; gap: 8px;
+}
+
+.combat-ctrl-btn {
+  background: rgba(22, 18, 10, 0.85);
+  border: 1px solid var(--gilt-bright);
+  color: var(--gilt-bright);
+  padding: 4px 10px; border-radius: 4px;
+  font-family: "IBM Plex Sans", sans-serif; font-size: 11px; font-weight: 600;
+  cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+  backdrop-filter: blur(4px); transition: all 0.2s ease;
+}
+
+.combat-ctrl-btn:hover {
+  background: rgba(45, 36, 16, 0.95);
+  box-shadow: 0 0 12px rgba(212,167,68,0.5);
+  transform: translateY(-1px);
+}
+
+.combat-ctrl-btn.active {
+  background: linear-gradient(180deg, #d4a744, #8a6a24);
+  color: #0d0e12; border-color: #ffe89e;
+  box-shadow: 0 0 10px rgba(212,167,68,0.6);
+}
+
 .stage-vs {
   position: absolute; left: 50%; top: 40%; transform: translate(-50%, -50%);
   font-size: 26px; color: var(--gilt); opacity: 0.45; z-index: 2;
@@ -2032,7 +2055,21 @@ select:focus-visible {
 @keyframes vsPulse { 0%,100% { opacity: 0.3; transform: translate(-50%,-50%) scale(0.92); } 50% { opacity: 0.6; transform: translate(-50%,-50%) scale(1.06); } }
 
 /* ---- combatants ---- */
-.stage-hero { position: absolute; left: 4%; bottom: 4%; width: 140px; height: 200px; z-index: 3; }
+.stage-hero {
+  position: absolute; left: 4%; bottom: 6%; width: 135px; height: 170px; z-index: 3;
+  border: 2px solid var(--gilt-bright);
+  background: rgba(10, 14, 22, 0.75);
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.85), inset 0 0 12px rgba(212,167,68,0.25);
+  padding: 6px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+  backdrop-filter: blur(2px);
+}
+.stage-hero::before {
+  content: attr(data-label);
+  position: absolute; top: -20px;
+  font-family: "Cinzel", serif; font-size: 10px; font-weight: bold; letter-spacing: 0.12em;
+  color: var(--gilt-bright); text-shadow: 0 1px 3px #000;
+}
 .stage-hero .hero-full, .stage-hero .hero-full img {
   width: 100%; height: 100%;
   animation: heroBob 2.4s ease-in-out infinite;
@@ -2064,7 +2101,21 @@ select:focus-visible {
   100% { filter: none; transform: translateX(0) scale(1); }
 }
 
-.stage-monster { position: absolute; right: 4%; bottom: 4%; width: 150px; height: 195px; z-index: 3; }
+.stage-monster {
+  position: absolute; right: 4%; bottom: 6%; width: 135px; height: 170px; z-index: 3;
+  border: 2px solid var(--gilt-bright);
+  background: rgba(10, 14, 22, 0.75);
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.85), inset 0 0 12px rgba(212,167,68,0.25);
+  padding: 6px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+  backdrop-filter: blur(2px);
+}
+.stage-monster::before {
+  content: attr(data-label);
+  position: absolute; top: -20px;
+  font-family: "Cinzel", serif; font-size: 10px; font-weight: bold; letter-spacing: 0.12em;
+  color: var(--gilt-bright); text-shadow: 0 1px 3px #000;
+}
 .stage-monster .mon-svg, .stage-monster .mon-svg img {
   width: 100%; height: 100%;
   animation: monIdle 2.6s ease-in-out infinite;

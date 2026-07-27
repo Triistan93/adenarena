@@ -2092,6 +2092,7 @@ function toggleGameModeMenu() {
 
 function updateAllUI() {
   updateGameModeUI();
+  safeUiUpdate('zone-bg', updateZoneBackground);
   safeUiUpdate('stats', updateStatsUI);
   safeUiUpdate('equipment', updateEquipmentUI);
   safeUiUpdate('skills', updateSkillUI);
@@ -2290,22 +2291,91 @@ function claimCert(subId, certType, subIndex) {
 }
 
 // --------------------------- VISUALS / STAGE ---------------------------
+const ZONE_BACKGROUNDS = {
+  orcVillage: '/img/orcVillage.png',
+  dwarvenMine: '/img/dwarvenMine.png',
+  kamaelLair: '/img/kamaelLair.png',
+
+  // Zone Mappings
+  talkingIsland: '/img/orcVillage.png',
+  elvenForest: '/img/kamaelLair.png',
+  darkForest: '/img/dwarvenMine.png',
+  ruinedOutpost: '/img/orcVillage.png',
+  howlingMoor: '/img/orcVillage.png',
+  giranOutskirts: '/img/orcVillage.png',
+  orcenRuins: '/img/orcVillage.png',
+  forsakenCrypt: '/img/dwarvenMine.png',
+  blackCitadel: '/img/kamaelLair.png',
+  gludioCastle: '/img/kamaelLair.png',
+  wolfMountain: '/img/orcVillage.png',
+  riftOfTheVoid: '/img/kamaelLair.png',
+  emeraldGrove: '/img/kamaelLair.png',
+  underworldGate: '/img/dwarvenMine.png',
+  adenCity: '/img/kamaelLair.png',
+  dragonValley: '/img/dwarvenMine.png',
+
+  // Raid Bosses
+  queen_ant: '/img/orcVillage.png',
+  zaken: '/img/dwarvenMine.png',
+  frintezza: '/img/kamaelLair.png',
+  baium: '/img/kamaelLair.png',
+  antharas: '/img/dwarvenMine.png',
+  valakas: '/img/dwarvenMine.png'
+};
+
+function updateZoneBackground() {
+  const currentKey = state.target && RAID_BOSSES[state.target] ? state.target : (state.zone || 'orcVillage');
+  const bgPath = ZONE_BACKGROUNDS[currentKey] || '/img/' + currentKey + '.png';
+
+  const stageEl = el('stage');
+  const logEl = el('log');
+  const stageZone = el('stage-zone');
+
+  if (stageEl) {
+    stageEl.style.backgroundImage = `linear-gradient(180deg, rgba(8,10,16,0.15) 0%, rgba(8,10,16,0.60) 100%), url('${bgPath}')`;
+  }
+
+  if (logEl) {
+    logEl.style.backgroundImage = `linear-gradient(180deg, rgba(10,13,20,0.85), rgba(10,13,20,0.95)), url('${bgPath}')`;
+  }
+
+  if (stageZone) {
+    let name = '';
+    if (state.target && RAID_BOSSES[state.target]) {
+      name = RAID_BOSSES[state.target].name;
+    } else if (state.zone && ZONES[state.zone]) {
+      name = ZONES[state.zone].name;
+    }
+    if (name) stageZone.textContent = name.toUpperCase();
+  }
+}
+
 function topEquipRarityColor() { const rank = { common: 0, uncommon: 1, rare: 2, epic: 3, legendary: 4 }; let best = -1, col = ''; for (const s of Object.keys(state.equipment)) { const uid = state.equipment[s]; if (!uid) continue; const it = state.inventory.find(i => i.uid === uid); if (!it || !it.rarity) continue; const r = rank[it.rarity] ?? -1; if (r > best) { best = r; col = D().RARITY[it.rarity].color; } } return col; }
 function renderStageHero() {
   const hero = el('stage-hero'), pArt = el('portrait-art'), dArt = el('doll-art');
   if (!state.race || !state.class) { if (hero) hero.innerHTML = ''; if (pArt) pArt.innerHTML = ''; if (dArt) dArt.innerHTML = ''; return; }
   const aura = topEquipRarityColor();
-  if (hero) hero.innerHTML = ART.heroSVG(state.race, state.class, aura); if (dArt) dArt.innerHTML = ART.heroSVG(state.race, state.class, aura); if (pArt) pArt.innerHTML = ART.heroSVG(state.race, state.class, aura, 'bust');
+  if (hero) {
+    hero.innerHTML = ART.heroSVG(state.race, state.class, aura);
+    hero.setAttribute('data-label', (getClass(state.class)?.name || state.class).toUpperCase());
+  }
+  if (dArt) dArt.innerHTML = ART.heroSVG(state.race, state.class, aura);
+  if (pArt) pArt.innerHTML = ART.heroSVG(state.race, state.class, aura, 'bust');
   const pn = el('portrait-name'), ps = el('portrait-sub'), pau = el('portrait-aura');
-  if (pn) pn.textContent = ((RACES[state.race]?.name || '') + ' ' + (getClass(state.class)?.name || '')).trim(); if (ps) ps.textContent = state.zone ? ('Hunting · ' + ZONES[state.zone].name) : 'Awaiting the road'; if (pau) pau.style.setProperty('--aura', aura ? aura + '55' : 'rgba(212,167,68,0.0)');
+  if (pn) pn.textContent = ((RACES[state.race]?.name || '') + ' ' + (getClass(state.class)?.name || '')).trim();
+  if (ps) ps.textContent = state.zone ? ('Hunting · ' + ZONES[state.zone].name) : 'Awaiting the road';
+  if (pau) pau.style.setProperty('--aura', aura ? aura + '55' : 'rgba(212,167,68,0.0)');
+  updateZoneBackground();
 }
 function updateMonsterHP() { const fill = el('m-hp-fill'), mon = state.activeMonster; if (!fill) return; if (!mon || !mon._maxHp) { fill.style.width = '100%'; return; } fill.style.width = Math.max(0, (mon.hp / mon._maxHp) * 100) + '%'; }
 function renderStageMonster() {
   const art = el('m-art'), nm = el('m-name'), box = el('stage-monster'), mon = state.activeMonster;
   if (box) box.classList.remove('hurt', 'lunge');
   if (!mon) { if (art) art.innerHTML = ''; if (nm) nm.textContent = ''; return; }
+  if (box) box.setAttribute('data-label', (mon.name || '').toUpperCase());
   if (art) { art.innerHTML = ART.monsterSVG(state.target, { crown: !!mon.boss }); art.classList.remove('swap'); void art.offsetWidth; art.classList.add('swap'); }
   if (nm) nm.textContent = mon.name + (mon.boss ? ' ★' : ''); updateMonsterHP();
+  updateZoneBackground();
 }
 function reflow(n) { void n.offsetWidth; }
 function stageHeroAttack() { const st = el('stage'); if (!st) return; st.classList.remove('is-hero-atk'); reflow(st); st.classList.add('is-hero-atk'); }

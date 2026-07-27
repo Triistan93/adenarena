@@ -63,21 +63,14 @@ export const IDLE_MARKUP = `
       <div class="grid-resizer grid-resizer-v" id="resizer-col-1" title="Arrastre para redimensionar painel de atributos"></div>
 
       <!-- Center: live battle stage + combat ticker (compact & centered) -->
-      <section class="panel log-panel center-panel">
-        <div class="combat-controls-bar">
-          <button id="soulshot-toggle-btn" class="combat-ctrl-btn" title="Ativar Soulshot no combate (+100% dano físico/mágico por golpe)">⚡ Soulshot: OFF</button>
-          <button id="autopotion-toggle-btn" class="combat-ctrl-btn" title="Usar poções de HP automaticamente quando HP < 50%">🧪 Auto-Poção: OFF</button>
-          <button id="speed-toggle-btn" class="combat-ctrl-btn" title="Velocidade do combate (1x Normal ou 2x Turbo)">⏩ Velocidade: 1x</button>
-        </div>
+      <section class="panel log-panel center-panel" id="center-panel">
         <div class="stage" id="stage" data-state="idle">
-          <div class="st-layer st-sky"></div>
-          <div class="st-layer st-sun"></div>
-          <div class="st-layer st-mountains"></div>
-          <div class="st-layer st-trees"></div>
-          <div class="st-layer st-ground"></div>
-          <div class="st-layer st-embers" aria-hidden="true"></div>
-          <div class="st-layer st-fog"></div>
           <div class="stage-zone" id="stage-zone">—</div>
+          <div class="combat-controls-bar">
+            <button id="soulshot-toggle-btn" class="combat-ctrl-btn" title="Ativar Soulshot no combate (+100% dano físico/mágico por golpe)">⚡ Soulshot: OFF</button>
+            <button id="autopotion-toggle-btn" class="combat-ctrl-btn" title="Usar poções de HP automaticamente quando HP < 50%">🧪 Auto-Poção: OFF</button>
+            <button id="speed-toggle-btn" class="combat-ctrl-btn" title="Velocidade do combate (1x Normal ou 2x Turbo)">⏩ Velocidade: 1x</button>
+          </div>
           <div class="stage-vs" aria-hidden="true">&#9876;</div>
           <div class="stage-hero" id="stage-hero"></div>
           <div class="stage-monster" id="stage-monster">
