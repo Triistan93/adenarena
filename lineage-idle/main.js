@@ -2297,30 +2297,30 @@ const ZONE_BACKGROUNDS = {
   kamaelLair: '/img/kamaelLair.png',
 
   // Zone Mappings
-  talkingIsland: '/img/orcVillage.png',
-  elvenForest: '/img/kamaelLair.png',
-  darkForest: '/img/dwarvenMine.png',
-  ruinedOutpost: '/img/orcVillage.png',
-  howlingMoor: '/img/orcVillage.png',
-  giranOutskirts: '/img/orcVillage.png',
-  orcenRuins: '/img/orcVillage.png',
-  forsakenCrypt: '/img/dwarvenMine.png',
-  blackCitadel: '/img/kamaelLair.png',
-  gludioCastle: '/img/kamaelLair.png',
-  wolfMountain: '/img/orcVillage.png',
-  riftOfTheVoid: '/img/kamaelLair.png',
-  emeraldGrove: '/img/kamaelLair.png',
-  underworldGate: '/img/dwarvenMine.png',
-  adenCity: '/img/kamaelLair.png',
-  dragonValley: '/img/dwarvenMine.png',
+  talkingIsland: '/img/talkingIsland.png',
+  elvenForest: '/img/elvenForest.png',
+  darkForest: '/img/darkForest.png',
+  ruinedOutpost: '/img/ruinedOutpost.png',
+  howlingMoor: '/img/howlingMoor.png',
+  giranOutskirts: '/img/giranOutskirts.png',
+  orcenRuins: '/img/orcenRuins.png',
+  forsakenCrypt: '/img/forsakenCrypt.png',
+  blackCitadel: '/img/blackCitadel.png',
+  gludioCastle: '/img/gludioCastle.png',
+  wolfMountain: '/img/wolfMountain.png',
+  riftOfTheVoid: '/img/riftOfTheVoid.png',
+  emeraldGrove: '/img/emeraldGrove.png',
+  underworldGate: '/img/underworldGate.png',
+  adenCity: '/img/adenCity.png',
+  dragonValley: '/img/dragonValley.png',
 
   // Raid Bosses
-  queen_ant: '/img/orcVillage.png',
-  zaken: '/img/dwarvenMine.png',
-  frintezza: '/img/kamaelLair.png',
-  baium: '/img/kamaelLair.png',
-  antharas: '/img/dwarvenMine.png',
-  valakas: '/img/dwarvenMine.png'
+  queen_ant: '/img/queen_ant.png',
+  zaken: '/img/zaken.png',
+  frintezza: '/img/frintezza.png',
+  baium: '/img/baium.png',
+  antharas: '/img/antharas.png',
+  valakas: '/img/valakas.png'
 };
 
 function updateZoneBackground() {
