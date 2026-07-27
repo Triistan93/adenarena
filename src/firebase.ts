@@ -38,8 +38,9 @@ export {
 export async function savePlayerStateToCloud(userId: string, stateData: any) {
   try {
     const userRef = doc(db, 'users', userId);
+    const cleanState = JSON.parse(JSON.stringify(stateData));
     await setDoc(userRef, {
-      state: stateData,
+      state: cleanState,
       updatedAt: serverTimestamp()
     }, { merge: true });
     return true;

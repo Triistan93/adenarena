@@ -4300,13 +4300,46 @@ export function init() {
     window.sweepTowerDaily = sweepTowerDaily;
     window.checkDailyReset = checkDailyReset;
     window.checkQuestProgress = checkQuestProgress;
-    window.getGameState = () => state;
-    window.loadGameState = (cloudState) => {
-      if (!cloudState) return;
-      Object.assign(state, cloudState);
+    window.getGameState = () => {
+      const data = { 
+        ...state, 
+        totalPlaytime: state.totalPlaytime + (Date.now() - (state.startTime || Date.now())), 
+        lastSaveTime: Date.now(),
+        selectedUids: Array.from(getSelectedSet())
+      };
+      delete data.startTime;
+      delete data.activeMonster;
+      delete data._cds;
+      delete data._regenAcc;
+      delete data._mpRegenAcc;
+      return JSON.parse(JSON.stringify(data));
+    };
+
+    window.loadGameState = (cloudData) => {
+      if (!cloudData || typeof cloudData !== 'object') return;
+      const def = DEFAULT_STATE();
+      const safeInventory = Array.isArray(cloudData.inventory)
+        ? cloudData.inventory.filter(item => item && item.itemId && D().ALL_ITEMS[item.itemId])
+        : [];
+      
+      state = { ...def, ...cloudData };
+      state.skills = { ...def.skills, ...(cloudData.skills || {}) };
+      state.equipment = { ...def.equipment, ...(cloudData.equipment || {}) };
+      state.base = { ...def.base, ...(cloudData.base || {}) };
+      state.inventory = safeInventory;
+      state.selectedUids = new Set(Array.isArray(cloudData.selectedUids) ? cloudData.selectedUids : []);
+      
+      state.codex = cloudData.codex && typeof cloudData.codex === 'object' ? cloudData.codex : {};
+      state.dolls = Array.isArray(cloudData.dolls) ? cloudData.dolls : [];
+      state.subclasses = Array.isArray(cloudData.subclasses) ? cloudData.subclasses : [];
+      state.activeSubclassIndex = cloudData.activeSubclassIndex !== undefined ? cloudData.activeSubclassIndex : null;
+      state.tower = cloudData.tower && typeof cloudData.tower === 'object' ? cloudData.tower : { highestFloor: 0, currentFloor: 1 };
+      state.quests = cloudData.quests && typeof cloudData.quests === 'object' ? cloudData.quests : {};
+      state.battlePass = cloudData.battlePass && typeof cloudData.battlePass === 'object' ? cloudData.battlePass : {};
+      
       updateAllUI();
       save();
-      log('☁️ Progresso carregado da nuvem Firebase!', 'rarity-legendary');
+      log(`☁️ Progresso de Nível ${state.level} carregado da nuvem com sucesso!`, 'rarity-legendary');
     };
     window.toggleMuteAudio = () => {
       if (typeof window !== 'undefined' && window.idleAudio) {

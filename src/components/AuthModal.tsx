@@ -33,21 +33,26 @@ export function AuthModal({ onCloudDataLoaded, getCurrentState }: AuthModalProps
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
       if (currentUser) {
-        // Auto Cloud Load on login
         setSyncing(true);
-        const cloudState = await loadPlayerStateFromCloud(currentUser.uid);
-        if (cloudState && onCloudDataLoaded) {
-          onCloudDataLoaded(cloudState);
-          setMsg('💾 Progresso carregado da nuvem com sucesso!');
-        } else if (getCurrentState) {
-          // Push current state to cloud if no cloud save exists
-          const currentState = getCurrentState();
-          if (currentState) {
-            await savePlayerStateToCloud(currentUser.uid, currentState);
-            setMsg('☁️ Progresso sincronizado com a nuvem!');
+        try {
+          const cloudState = await loadPlayerStateFromCloud(currentUser.uid);
+          if (cloudState && typeof cloudState === 'object' && cloudState.level !== undefined && onCloudDataLoaded) {
+            onCloudDataLoaded(cloudState);
+            setMsg(`💾 Progresso de Nível ${cloudState.level} carregado da nuvem!`);
+            setTimeout(() => setMsg(null), 5000);
+          } else if (getCurrentState) {
+            const currentState = getCurrentState();
+            if (currentState && currentState.level > 1) {
+              await savePlayerStateToCloud(currentUser.uid, currentState);
+              setMsg('☁️ Novo progresso sincronizado com a nuvem!');
+              setTimeout(() => setMsg(null), 5000);
+            }
           }
+        } catch (err) {
+          console.error("Error auto-loading cloud save:", err);
+        } finally {
+          setSyncing(false);
         }
-        setSyncing(false);
       }
     });
     return () => unsubscribe();
@@ -123,6 +128,7 @@ export function AuthModal({ onCloudDataLoaded, getCurrentState }: AuthModalProps
     await signOut(auth);
     setUser(null);
     setMsg('Sessão encerrada.');
+    setTimeout(() => setMsg(null), 3000);
   };
 
   const handleManualSync = async () => {
@@ -139,6 +145,21 @@ export function AuthModal({ onCloudDataLoaded, getCurrentState }: AuthModalProps
     }
   };
 
+  const handleManualLoad = async () => {
+    if (!user || !onCloudDataLoaded) return;
+    setSyncing(true);
+    const cloudState = await loadPlayerStateFromCloud(user.uid);
+    setSyncing(false);
+    if (cloudState && cloudState.level !== undefined) {
+      onCloudDataLoaded(cloudState);
+      setMsg(`💾 Progresso de Nível ${cloudState.level} carregado da nuvem!`);
+      setTimeout(() => setMsg(null), 4000);
+    } else {
+      setError('Nenhum save encontrado na nuvem para este e-mail.');
+      setTimeout(() => setError(null), 4000);
+    }
+  };
+
   return (
     <div className="relative inline-block text-left">
       {/* Header Account Badge */}
@@ -151,9 +172,17 @@ export function AuthModal({ onCloudDataLoaded, getCurrentState }: AuthModalProps
               onClick={handleManualSync} 
               disabled={syncing}
               className="px-2 py-0.5 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 rounded border border-amber-500/40 text-[10px] font-bold transition"
-              title="Salvar progresso no Firebase"
+              title="Salvar progresso atual no Firebase"
             >
-              {syncing ? '⌛ Sync...' : '☁️ Salvar'}
+              {syncing ? '⌛...' : '☁️ Salvar'}
+            </button>
+            <button 
+              onClick={handleManualLoad} 
+              disabled={syncing}
+              className="px-2 py-0.5 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 rounded border border-blue-500/40 text-[10px] font-bold transition"
+              title="Carregar progresso salvo da nuvem"
+            >
+              {syncing ? '⌛...' : '📥 Carregar'}
             </button>
             <button 
               onClick={handleLogout} 
