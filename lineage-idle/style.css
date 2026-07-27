@@ -3064,3 +3064,205 @@ select:focus-visible {
     font-size: 16px !important;
   }
 }
+
+/* ============ QUESTS & BATTLE PASS STYLES ============ */
+.quests-header-frame {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  background: linear-gradient(180deg, rgba(30, 20, 10, 0.9), rgba(15, 10, 5, 0.95));
+  border: 1px solid var(--gilt-deep);
+  border-radius: 6px;
+  margin-bottom: 12px;
+}
+.quests-window-title {
+  font-family: "Cinzel", serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--gilt-bright);
+  letter-spacing: 0.1em;
+}
+.reset-badge {
+  font-size: 11px;
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.12);
+  padding: 3px 8px;
+  border-radius: 12px;
+  border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+.pass-banner-container {
+  background: linear-gradient(135deg, rgba(20, 25, 40, 0.9), rgba(10, 15, 25, 0.95));
+  border: 1px solid rgba(96, 165, 250, 0.3);
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+.pass-header-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.pass-level-badge {
+  display: flex;
+  flex-direction: column;
+}
+.pass-lvl-num {
+  font-family: "Cinzel", serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #60a5fa;
+  text-shadow: 0 0 8px rgba(96, 165, 250, 0.5);
+}
+.pass-title {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.pass-xp-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  color: var(--gilt);
+}
+.gold-glow-btn {
+  background: linear-gradient(180deg, #d4a744, #997322) !important;
+  color: #000 !important;
+  font-weight: bold !important;
+  border: 1px solid #fef08a !important;
+  box-shadow: 0 0 10px rgba(212,167,68,0.4);
+  cursor: pointer;
+}
+.gold-glow-btn:hover {
+  background: linear-gradient(180deg, #fef08a, #d4a744) !important;
+}
+
+.pass-track-list {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 6px 2px;
+  scrollbar-width: thin;
+}
+.pass-tier-card {
+  flex: 0 0 130px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+  position: relative;
+}
+.pass-tier-card.unlocked {
+  border-color: #60a5fa;
+  background: rgba(96, 165, 250, 0.08);
+}
+.pass-tier-lvl {
+  font-size: 11px;
+  font-weight: bold;
+  color: var(--gilt-bright);
+}
+.pass-reward-box {
+  width: 100%;
+  padding: 4px;
+  border-radius: 4px;
+  font-size: 10px;
+  background: rgba(255,255,255,0.04);
+}
+.pass-reward-box.premium {
+  background: rgba(212, 167, 68, 0.15);
+  border: 1px dashed var(--gilt-bright);
+}
+
+.quests-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.quest-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+.quest-card.can-claim {
+  border-color: #4ade80;
+  box-shadow: 0 0 10px rgba(74, 222, 128, 0.2);
+  background: rgba(74, 222, 128, 0.05);
+}
+.quest-card.completed {
+  opacity: 0.6;
+  filter: grayscale(0.6);
+}
+.quest-info-group {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex: 1;
+}
+.quest-icon {
+  font-size: 22px;
+}
+.quest-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+.quest-name {
+  font-size: 12px;
+  font-weight: bold;
+  color: var(--ink);
+}
+.quest-desc {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+.quest-rewards-line {
+  display: flex;
+  gap: 6px;
+  font-size: 10px;
+  color: var(--gilt);
+  margin-top: 2px;
+}
+.quest-action-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  min-width: 100px;
+}
+.quest-progress-num {
+  font-size: 11px;
+  font-weight: bold;
+  color: #60a5fa;
+}
+.claim-quest-btn {
+  padding: 4px 12px;
+  font-size: 11px;
+  font-weight: bold;
+  border-radius: 4px;
+  background: linear-gradient(180deg, #22c55e, #15803d);
+  color: #fff;
+  border: 1px solid #86efac;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+.claim-quest-btn:disabled {
+  background: #374151;
+  color: #9ca3af;
+  border-color: #4b5563;
+  cursor: not-allowed;
+  box-shadow: none;
+}

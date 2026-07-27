@@ -116,6 +116,7 @@ export const IDLE_MARKUP = `
           <button class="tab-btn" data-tab="codex">📜 Codex</button>
           <button class="tab-btn" data-tab="dolls">🧸 Dolls</button>
           <button class="tab-btn" data-tab="magiclamp">🪔 Lâmpada &amp; Craft</button>
+          <button class="tab-btn" data-tab="quests">🎯 Missões &amp; Passe</button>
         </div>
         <div class="tab-content">
           <!-- Character Tab -->
@@ -509,6 +510,60 @@ export const IDLE_MARKUP = `
                 <h4>✨ Special Crafting Recipes</h4>
                 <div class="special-craft-grid" id="special-craft-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-top: 10px;"></div>
               </div>
+            </div>
+          </div>
+
+          <!-- Quests & Battle Pass Tab -->
+          <div id="tab-quests" class="tab-pane">
+            <div class="quests-header-frame">
+              <div class="quests-title-group">
+                <span class="quests-window-icon">🎯</span>
+                <span class="quests-window-title">Quadro de Missões &amp; Passe de Adena</span>
+              </div>
+              <div class="quests-reset-info">
+                <span id="daily-quest-timer" class="reset-badge">⏰ Renovação Diária</span>
+              </div>
+            </div>
+
+            <!-- Battle Pass Banner & XP Bar -->
+            <div class="pass-banner-container">
+              <div class="pass-header-info">
+                <div class="pass-level-badge">
+                  <span class="pass-lvl-num" id="pass-level-text">Nível 1</span>
+                  <span class="pass-title" id="pass-status-text">Passe de Batalha Grátis</span>
+                </div>
+                <div class="pass-xp-info">
+                  <span id="pass-xp-text">0 / 100 XP do Passe</span>
+                  <button id="unlock-premium-pass-btn" class="inv-batch-btn gold-glow-btn" title="Ativar o Passe Premium com Gold do Jogo">👑 Ativar Passe Premium (100.000g)</button>
+                </div>
+              </div>
+              <div class="bar-container pass-bar-container">
+                <div id="pass-xp-bar" class="bar xp" style="width:0%"></div>
+              </div>
+            </div>
+
+            <!-- Battle Pass Rewards Track -->
+            <div class="pane-section" style="margin-top: 10px;">
+              <h3>🎟️ Trilha de Recompensas da Temporada</h3>
+              <div id="pass-track-list" class="pass-track-list"></div>
+            </div>
+
+            <!-- Daily Quests Section -->
+            <div class="pane-section">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h3>📜 Missões Diárias (Renovação a cada 24h)</h3>
+                <span id="daily-progress-badge" class="sp-pill" style="font-size:11px;">0/4 Concluídas</span>
+              </div>
+              <div id="daily-quests-list" class="quests-list" style="margin-top:10px;"></div>
+            </div>
+
+            <!-- Weekly Quests Section -->
+            <div class="pane-section">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h3>📅 Missões Semanais (Renovação às Segundas)</h3>
+                <span id="weekly-progress-badge" class="sp-pill" style="font-size:11px;">0/3 Concluídas</span>
+              </div>
+              <div id="weekly-quests-list" class="quests-list" style="margin-top:10px;"></div>
             </div>
           </div>
         </div>

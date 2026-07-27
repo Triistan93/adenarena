@@ -383,6 +383,8 @@ const DEFAULT_STATE = () => ({
     higherMana: 0, blaze: 0, greaterHeal: 0, prominence: 0, boostMana: 0, quickRecycle: 0,
     vampiric: 0, flameStrike: 0, solarFlare: 0, deathSpike: 0, hurricane: 0
   },
+  quests: { progress: {}, claimed: [], lastDailyReset: 0, lastWeeklyReset: 0 },
+  battlePass: { xp: 0, claimedFree: [], claimedPremium: [], unlockedPremium: false },
   zone: 'talkingIsland', currentSaga: 0, gold: 1000, inventory: [], 
   equipment: {
     weapon: null, shield: null, helmet: null, armor: null, legs: null, gloves: null, boots: null,
@@ -448,6 +450,10 @@ function load() {
     state.activeSubclassIndex = data.activeSubclassIndex !== undefined ? data.activeSubclassIndex : null;
     state.certifications = data.certifications && typeof data.certifications === 'object' ? data.certifications : {};
     state.mainClassData = data.mainClassData || null;
+
+    state.quests = data.quests && typeof data.quests === 'object' ? data.quests : { progress: {}, claimed: [], lastDailyReset: 0, lastWeeklyReset: 0 };
+    state.battlePass = data.battlePass && typeof data.battlePass === 'object' ? data.battlePass : { xp: 0, claimedFree: [], claimedPremium: [], unlockedPremium: false };
+    checkQuestResets();
 
     state.buffs = data.buffs || {};
     state.filter = data.filter || 'all';
@@ -2148,6 +2154,363 @@ function toggleGameModeMenu() {
   switchEl.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
 }
 
+// --------------------------- QUESTS & BATTLE PASS ---------------------------
+const QUEST_DEFS = {
+  daily: [
+    { id: 'd_kills', name: 'Caçador de Monstros', desc: 'Derrote 50 monstros nas zonas de caça', target: 50, type: 'kill', reward: { gold: 5000, sp: 25, passXp: 100 }, icon: '⚔️' },
+    { id: 'd_boss', name: 'Desafiador de Elites', desc: 'Derrote 1 Chefe ou Monstro de Elite', target: 1, type: 'boss', reward: { gold: 10000, sp: 50, passXp: 150 }, icon: '🐉' },
+    { id: 'd_craft', name: 'Mestre da Forja', desc: 'Realize 1 criação no Craft ou roleta', target: 1, type: 'craft', reward: { gold: 3000, craftPoints: 15, passXp: 100 }, icon: '🔨' },
+    { id: 'd_codex', name: 'Relíquia de Aden', desc: 'Obtenha 1 Doll ou registre item no Codex', target: 1, type: 'codex', reward: { gold: 5000, magicLamps: 1, passXp: 100 }, icon: '📜' }
+  ],
+  weekly: [
+    { id: 'w_kills', name: 'Exterminador de Aden', desc: 'Derrote 400 monstros', target: 400, type: 'kill', reward: { gold: 40000, sp: 250, passXp: 500 }, icon: '☠️' },
+    { id: 'w_bosses', name: 'Caçador de Lendas', desc: 'Derrote 8 Chefes de Raid ou Elites', target: 8, type: 'boss', reward: { gold: 75000, sp: 500, passXp: 600 }, icon: '👑' },
+    { id: 'w_gold', name: 'Acumulador de Fortunas', desc: 'Ganhe 100.000 de Gold', target: 100000, type: 'gold', reward: { gold: 50000, magicLamps: 3, passXp: 500 }, icon: '💰' }
+  ]
+};
+
+const BATTLE_PASS_TIERS = [
+  { level: 1, reqXp: 100, free: { gold: 5000 }, premium: { magicLamps: 2 } },
+  { level: 2, reqXp: 250, free: { sp: 50 }, premium: { gold: 20000 } },
+  { level: 3, reqXp: 450, free: { craftPoints: 20 }, premium: { magicLamps: 3 } },
+  { level: 4, reqXp: 700, free: { gold: 15000 }, premium: { sp: 150 } },
+  { level: 5, reqXp: 1000, free: { magicLamps: 2 }, premium: { gold: 50000, title: 'Barão de Aden' } },
+  { level: 6, reqXp: 1350, free: { sp: 100 }, premium: { magicLamps: 3 } },
+  { level: 7, reqXp: 1750, free: { gold: 25000 }, premium: { craftPoints: 100 } },
+  { level: 8, reqXp: 2200, free: { magicLamps: 3 }, premium: { gold: 100000 } },
+  { level: 9, reqXp: 2700, free: { sp: 250 }, premium: { magicLamps: 5 } },
+  { level: 10, reqXp: 3300, free: { gold: 50000, magicLamps: 5 }, premium: { title: 'Lorde de Aden', gold: 200000 } }
+];
+
+function checkQuestResets() {
+  const now = Date.now();
+  const ONE_DAY = 24 * 60 * 60 * 1000;
+  const ONE_WEEK = 7 * ONE_DAY;
+
+  if (!state.quests) {
+    state.quests = { progress: {}, claimed: [], lastDailyReset: now, lastWeeklyReset: now };
+  }
+  if (!state.quests.progress) state.quests.progress = {};
+  if (!state.quests.claimed) state.quests.claimed = [];
+
+  if (!state.quests.lastDailyReset || (now - state.quests.lastDailyReset) >= ONE_DAY) {
+    state.quests.lastDailyReset = now;
+    QUEST_DEFS.daily.forEach(q => {
+      delete state.quests.progress[q.id];
+      state.quests.claimed = state.quests.claimed.filter(id => id !== q.id);
+    });
+    log('📜 Missões Diárias foram renovadas!', 'rarity-legendary');
+  }
+
+  if (!state.quests.lastWeeklyReset || (now - state.quests.lastWeeklyReset) >= ONE_WEEK) {
+    state.quests.lastWeeklyReset = now;
+    QUEST_DEFS.weekly.forEach(q => {
+      delete state.quests.progress[q.id];
+      state.quests.claimed = state.quests.claimed.filter(id => id !== q.id);
+    });
+    log('📅 Missões Semanais foram renovadas!', 'rarity-legendary');
+  }
+}
+
+function triggerQuestEvent(type, amount = 1) {
+  if (!state.quests) checkQuestResets();
+  let updated = false;
+
+  const allQuests = [...QUEST_DEFS.daily, ...QUEST_DEFS.weekly];
+  for (const q of allQuests) {
+    if (q.type === type) {
+      if (state.quests.claimed && state.quests.claimed.includes(q.id)) continue;
+      const current = state.quests.progress[q.id] || 0;
+      if (current < q.target) {
+        state.quests.progress[q.id] = Math.min(q.target, current + amount);
+        updated = true;
+        if (state.quests.progress[q.id] === q.target) {
+          log(`🎯 Missão Concluída: **${q.name}**! Reclame sua recompensa.`, 'rarity-rare');
+          floatText('MISSAO CONCLUIDA!', 'float-jackpot');
+        }
+      }
+    }
+  }
+  if (updated) {
+    safeUiUpdate('quests', updateQuestsUI);
+  }
+}
+
+function claimQuestReward(questId) {
+  if (!state.quests) return;
+  const allQuests = [...QUEST_DEFS.daily, ...QUEST_DEFS.weekly];
+  const q = allQuests.find(item => item.id === questId);
+  if (!q) return;
+
+  const progress = state.quests.progress[q.id] || 0;
+  if (progress < q.target) {
+    log('Esta missão ainda não foi concluída!', 'system');
+    return;
+  }
+
+  if (state.quests.claimed.includes(q.id)) {
+    log('Você já reclamou esta recompensa!', 'system');
+    return;
+  }
+
+  state.quests.claimed.push(q.id);
+
+  if (q.reward.gold) { state.gold += q.reward.gold; }
+  if (q.reward.sp) { state.sp += q.reward.sp; }
+  if (q.reward.craftPoints) { state.craftPoints = (state.craftPoints || 0) + q.reward.craftPoints; }
+  if (q.reward.magicLamps) { state.magicLamps = (state.magicLamps || 0) + q.reward.magicLamps; }
+
+  if (q.reward.passXp) {
+    if (!state.battlePass) state.battlePass = { xp: 0, claimedFree: [], claimedPremium: [], unlockedPremium: false };
+    state.battlePass.xp = (state.battlePass.xp || 0) + q.reward.passXp;
+    log(`🎫 +${q.reward.passXp} XP do Passe de Batalha!`, 'rarity-legendary');
+  }
+
+  log(`🎁 Recompensa da missão **${q.name}** recebida!`, 'rarity-epic');
+  floatText('RECOMPENSA!', 'float-gold');
+  updateAllUI();
+  save();
+}
+
+function claimPassReward(level, type = 'free') {
+  if (!state.battlePass) state.battlePass = { xp: 0, claimedFree: [], claimedPremium: [], unlockedPremium: false };
+  const tier = BATTLE_PASS_TIERS.find(t => t.level === level);
+  if (!tier) return;
+
+  if (state.battlePass.xp < tier.reqXp) {
+    log('XP do Passe insuficiente para este nível!', 'system');
+    return;
+  }
+
+  if (type === 'premium' && !state.battlePass.unlockedPremium) {
+    log('Ative o Passe Premium para desbloquear estas recompensas!', 'system');
+    return;
+  }
+
+  const claimedArr = type === 'free' ? state.battlePass.claimedFree : state.battlePass.claimedPremium;
+  if (claimedArr.includes(level)) {
+    log('Recompensa já coletada!', 'system');
+    return;
+  }
+
+  claimedArr.push(level);
+
+  const reward = type === 'free' ? tier.free : tier.premium;
+  if (reward.gold) state.gold += reward.gold;
+  if (reward.sp) state.sp += reward.sp;
+  if (reward.craftPoints) state.craftPoints = (state.craftPoints || 0) + reward.craftPoints;
+  if (reward.magicLamps) state.magicLamps = (state.magicLamps || 0) + reward.magicLamps;
+
+  log(`🎁 Recompensa do Passe Nível ${level} recebida!`, 'rarity-legendary');
+  floatText('PASSE RECOMPENSA!', 'float-jackpot');
+  updateAllUI();
+  save();
+}
+
+function unlockPremiumPass() {
+  if (!state.battlePass) state.battlePass = { xp: 0, claimedFree: [], claimedPremium: [], unlockedPremium: false };
+  if (state.battlePass.unlockedPremium) {
+    log('Passe Premium já está ativo!', 'system');
+    return;
+  }
+  const COST = 100000;
+  if (state.gold < COST) {
+    log(`O Passe Premium custa ${COST.toLocaleString()} Gold. Gold insuficiente!`, 'system');
+    return;
+  }
+  state.gold -= COST;
+  state.battlePass.unlockedPremium = true;
+  log('✨ PASSE PREMIUM DE ADENA ATIVADO COM SUCESSO!', 'rarity-legendary');
+  floatText('PREMIUM ATIVO!', 'float-jackpot');
+  updateAllUI();
+  save();
+}
+
+function updateQuestsUI() {
+  checkQuestResets();
+
+  const dailyContainer = el('daily-quests-list');
+  const weeklyContainer = el('weekly-quests-list');
+  const dailyBadge = el('daily-progress-badge');
+  const weeklyBadge = el('weekly-progress-badge');
+
+  if (dailyContainer) {
+    let dailyClaimedCount = 0;
+    dailyContainer.innerHTML = QUEST_DEFS.daily.map(q => {
+      const progress = Math.min(q.target, state.quests.progress[q.id] || 0);
+      const isCompleted = progress >= q.target;
+      const isClaimed = state.quests.claimed.includes(q.id);
+      if (isClaimed) dailyClaimedCount++;
+
+      const pct = Math.floor((progress / q.target) * 100);
+      const cardClass = isClaimed ? 'quest-card completed' : (isCompleted ? 'quest-card can-claim' : 'quest-card');
+
+      const rewardsText = [];
+      if (q.reward.gold) rewardsText.push(`💰 +${q.reward.gold.toLocaleString()}g`);
+      if (q.reward.sp) rewardsText.push(`✦ +${q.reward.sp} SP`);
+      if (q.reward.craftPoints) rewardsText.push(`⚒️ +${q.reward.craftPoints} Craft`);
+      if (q.reward.magicLamps) rewardsText.push(`🪔 +${q.reward.magicLamps} Lâmpada`);
+      if (q.reward.passXp) rewardsText.push(`🎫 +${q.reward.passXp} XP Passe`);
+
+      const btnLabel = isClaimed ? '✓ Reclamado' : (isCompleted ? '🎁 Reclamar' : 'Em Progresso');
+      const btnDisabled = !isCompleted || isClaimed ? 'disabled' : '';
+
+      return `
+        <div class="${cardClass}">
+          <div class="quest-info-group">
+            <span class="quest-icon">${q.icon}</span>
+            <div class="quest-details">
+              <span class="quest-name">${q.name}</span>
+              <span class="quest-desc">${q.desc}</span>
+              <div class="quest-rewards-line">${rewardsText.join(' · ')}</div>
+            </div>
+          </div>
+          <div class="quest-action-group">
+            <span class="quest-progress-num">${progress.toLocaleString()} / ${q.target.toLocaleString()} (${pct}%)</span>
+            <button class="claim-quest-btn" data-quest="${q.id}" ${btnDisabled}>${btnLabel}</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    if (dailyBadge) dailyBadge.textContent = `${dailyClaimedCount}/${QUEST_DEFS.daily.length} Concluídas`;
+
+    dailyContainer.querySelectorAll('[data-quest]').forEach(btn => {
+      btn.onclick = () => claimQuestReward(btn.dataset.quest);
+    });
+  }
+
+  if (weeklyContainer) {
+    let weeklyClaimedCount = 0;
+    weeklyContainer.innerHTML = QUEST_DEFS.weekly.map(q => {
+      const progress = Math.min(q.target, state.quests.progress[q.id] || 0);
+      const isCompleted = progress >= q.target;
+      const isClaimed = state.quests.claimed.includes(q.id);
+      if (isClaimed) weeklyClaimedCount++;
+
+      const pct = Math.floor((progress / q.target) * 100);
+      const cardClass = isClaimed ? 'quest-card completed' : (isCompleted ? 'quest-card can-claim' : 'quest-card');
+
+      const rewardsText = [];
+      if (q.reward.gold) rewardsText.push(`💰 +${q.reward.gold.toLocaleString()}g`);
+      if (q.reward.sp) rewardsText.push(`✦ +${q.reward.sp} SP`);
+      if (q.reward.magicLamps) rewardsText.push(`🪔 +${q.reward.magicLamps} Lâmpadas`);
+      if (q.reward.passXp) rewardsText.push(`🎫 +${q.reward.passXp} XP Passe`);
+
+      const btnLabel = isClaimed ? '✓ Reclamado' : (isCompleted ? '🎁 Reclamar' : 'Em Progresso');
+      const btnDisabled = !isCompleted || isClaimed ? 'disabled' : '';
+
+      return `
+        <div class="${cardClass}">
+          <div class="quest-info-group">
+            <span class="quest-icon">${q.icon}</span>
+            <div class="quest-details">
+              <span class="quest-name">${q.name}</span>
+              <span class="quest-desc">${q.desc}</span>
+              <div class="quest-rewards-line">${rewardsText.join(' · ')}</div>
+            </div>
+          </div>
+          <div class="quest-action-group">
+            <span class="quest-progress-num">${progress.toLocaleString()} / ${q.target.toLocaleString()} (${pct}%)</span>
+            <button class="claim-quest-btn" data-quest="${q.id}" ${btnDisabled}>${btnLabel}</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    if (weeklyBadge) weeklyBadge.textContent = `${weeklyClaimedCount}/${QUEST_DEFS.weekly.length} Concluídas`;
+
+    weeklyContainer.querySelectorAll('[data-quest]').forEach(btn => {
+      btn.onclick = () => claimQuestReward(btn.dataset.quest);
+    });
+  }
+
+  renderBattlePassUI();
+}
+
+function renderBattlePassUI() {
+  if (!state.battlePass) state.battlePass = { xp: 0, claimedFree: [], claimedPremium: [], unlockedPremium: false };
+
+  const currentXp = state.battlePass.xp || 0;
+  let currentLvl = 1;
+  let currentTier = BATTLE_PASS_TIERS[0];
+  for (let i = BATTLE_PASS_TIERS.length - 1; i >= 0; i--) {
+    if (currentXp >= BATTLE_PASS_TIERS[i].reqXp) {
+      currentLvl = BATTLE_PASS_TIERS[i].level;
+      currentTier = BATTLE_PASS_TIERS[i];
+      break;
+    }
+  }
+
+  const nextTierIndex = BATTLE_PASS_TIERS.findIndex(t => t.level === currentLvl + 1);
+  const nextReqXp = nextTierIndex !== -1 ? BATTLE_PASS_TIERS[nextTierIndex].reqXp : currentTier.reqXp;
+  const prevReqXp = currentTier.reqXp;
+  const pct = nextTierIndex !== -1 ? Math.min(100, Math.floor(((currentXp - prevReqXp) / Math.max(1, nextReqXp - prevReqXp)) * 100)) : 100;
+
+  const lvlText = el('pass-level-text');
+  if (lvlText) lvlText.textContent = `Nível ${currentLvl}`;
+
+  const statusText = el('pass-status-text');
+  if (statusText) statusText.textContent = state.battlePass.unlockedPremium ? '👑 Passe Premium Ativo' : 'Passe de Batalha Grátis';
+
+  const xpText = el('pass-xp-text');
+  if (xpText) xpText.textContent = `${currentXp.toLocaleString()} / ${nextReqXp.toLocaleString()} XP do Passe`;
+
+  const xpBar = el('pass-xp-bar');
+  if (xpBar) xpBar.style.width = `${pct}%`;
+
+  const unlockBtn = el('unlock-premium-pass-btn');
+  if (unlockBtn) {
+    if (state.battlePass.unlockedPremium) {
+      unlockBtn.textContent = '👑 Passe Premium Ativo';
+      unlockBtn.disabled = true;
+      unlockBtn.style.opacity = '0.7';
+    } else {
+      unlockBtn.textContent = '👑 Ativar Passe Premium (100.000g)';
+      unlockBtn.disabled = false;
+      unlockBtn.onclick = () => unlockPremiumPass();
+    }
+  }
+
+  const trackList = el('pass-track-list');
+  if (trackList) {
+    trackList.innerHTML = BATTLE_PASS_TIERS.map(tier => {
+      const isUnlocked = currentXp >= tier.reqXp;
+      const freeClaimed = state.battlePass.claimedFree.includes(tier.level);
+      const premClaimed = state.battlePass.claimedPremium.includes(tier.level);
+
+      const freeLabel = freeClaimed ? '✓' : (isUnlocked ? 'Reclamar' : 'Tranca');
+      const premLabel = premClaimed ? '✓' : (isUnlocked && state.battlePass.unlockedPremium ? 'Reclamar' : (state.battlePass.unlockedPremium ? 'Tranca' : '👑 Premium'));
+
+      const freeRewardStr = Object.entries(tier.free).map(([k, v]) => `${k === 'gold' ? '💰 ' + v : k === 'sp' ? '✦ ' + v : v}`).join(', ');
+      const premRewardStr = Object.entries(tier.premium).map(([k, v]) => `${k === 'gold' ? '💰 ' + v : k === 'title' ? '🏷️ ' + v : v}`).join(', ');
+
+      return `
+        <div class="pass-tier-card ${isUnlocked ? 'unlocked' : ''}">
+          <span class="pass-tier-lvl">Nv. ${tier.level}</span>
+          <div class="pass-reward-box">
+            <span style="font-weight:bold;color:var(--gilt);">Grátis</span><br/>
+            <span>${freeRewardStr}</span><br/>
+            <button class="inv-batch-btn" data-pass-free="${tier.level}" ${!isUnlocked || freeClaimed ? 'disabled' : ''} style="margin-top:4px;font-size:9px;">${freeLabel}</button>
+          </div>
+          <div class="pass-reward-box premium">
+            <span style="font-weight:bold;color:#fef08a;">👑 Premium</span><br/>
+            <span>${premRewardStr}</span><br/>
+            <button class="inv-batch-btn gold-glow-btn" data-pass-prem="${tier.level}" ${!isUnlocked || !state.battlePass.unlockedPremium || premClaimed ? 'disabled' : ''} style="margin-top:4px;font-size:9px;">${premLabel}</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    trackList.querySelectorAll('[data-pass-free]').forEach(btn => {
+      btn.onclick = () => claimPassReward(Number(btn.dataset.passFree), 'free');
+    });
+    trackList.querySelectorAll('[data-pass-prem]').forEach(btn => {
+      btn.onclick = () => claimPassReward(Number(btn.dataset.passPrem), 'premium');
+    });
+  }
+}
+
 function updateAllUI() {
   updateGameModeUI();
   safeUiUpdate('zone-bg', updateZoneBackground);
@@ -2161,6 +2524,7 @@ function updateAllUI() {
   safeUiUpdate('race-class', updateRaceClassUI);
   safeUiUpdate('combat-controls', updateCombatControlsUI);
   safeUiUpdate('subclasses', renderSubclassesUI);
+  safeUiUpdate('quests', updateQuestsUI);
 }
 
 function renderSubclassesUI() {
@@ -2600,6 +2964,10 @@ function attackMonster() {
       if (drop.isEquipment) { addToInventory(drop.id, 1, drop.rarity); log(`✦ ${D().ALL_ITEMS[drop.id].name} [${D().RARITY[drop.rarity].name}]`, 'rarity-' + drop.rarity); floatText(`✦ ${D().RARITY[drop.rarity].name}!`, 'float-' + drop.rarity); } 
       else { addToInventory(drop.id, drop.amount); log(`+ ${drop.amount}× ${D().ALL_ITEMS[drop.id].name}`, 'loot'); }
     }
+    triggerQuestEvent('kill', 1);
+    if (monster.boss || monster.elite) triggerQuestEvent('boss', 1);
+    triggerQuestEvent('gold', gold);
+
     checkLevelUp(); pickRandomMonster();
   } else { setTimeout(() => monsterAttack(monster), 500); }
   updateStatsUI();
@@ -3087,6 +3455,7 @@ function registerCodexItem(setId, itemId) {
   const itemDef = D().ALL_ITEMS[itemId];
   log(`📜 Item **${itemDef?.name || itemId}** registrado com sucesso no Codex!`, 'rarity-rare');
   floatText('📜 CODEX REGISTRADO!', 'float-jackpot');
+  triggerQuestEvent('codex', 1);
 
   const setDef = CODEX_SETS[setId];
   if (setDef && setDef.items.every(i => state.codex[setId].includes(i))) {
@@ -3351,6 +3720,7 @@ function spinRandomCraft() {
 
   log(`🎰 RANDOM CRAFT! Você criou com sucesso: **${def?.name || wonId}**!`, 'rarity-legendary');
   floatText(`🎰 ${def?.name || wonId}!`, 'float-jackpot');
+  triggerQuestEvent('craft', 1);
   refreshRandomCraftWheel();
   updateAllUI(); save();
 }
@@ -3420,6 +3790,7 @@ function craftSpecialRecipe(recipeId) {
     addToInventory('crystal_s', 2);
     log('✨ SPECIAL CRAFT! Forjou 2x Crystal S!', 'rarity-rare');
   }
+  triggerQuestEvent('craft', 1);
   updateAllUI(); save();
 }
 
@@ -3458,6 +3829,7 @@ function bindEvents() {
         else if (tabName === 'codex') safeUiUpdate('codex', updateCodexUI);
         else if (tabName === 'dolls') safeUiUpdate('dolls', updateDollsUI);
         else if (tabName === 'magiclamp') safeUiUpdate('magiclamp', updateMagicLampUI);
+        else if (tabName === 'quests') safeUiUpdate('quests', updateQuestsUI);
       };
     });
 
@@ -3653,6 +4025,9 @@ export function init() {
     window.openAddSubclassModal = openAddSubclassModal;
     window.switchSubclass = switchSubclass;
     window.claimCert = claimCert;
+    window.claimQuestReward = claimQuestReward;
+    window.claimPassReward = claimPassReward;
+    window.unlockPremiumPass = unlockPremiumPass;
     window.toggleMuteAudio = () => {
       if (typeof window !== 'undefined' && window.idleAudio) {
         const isMuted = window.idleAudio.toggleMute();
