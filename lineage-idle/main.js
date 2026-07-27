@@ -362,10 +362,11 @@ const DEFAULT_STATE = () => ({
   equipment: {
     weapon: null, shield: null, helmet: null, armor: null, legs: null, gloves: null, boots: null,
     hair: null, hair2: null, necklace: null, earring1: null, earring2: null, ring: null, ring2: null,
-    belt: null, cloak: null, talisman: null
+    belt: null, cloak: null, talisman: null, agathion: null
   },
   codex: {}, dolls: [], synthSelected: [null, null],
   magicLampExp: 0, magicLamps: 0, craftPoints: 0, craftCharges: 0, randomCraftWheel: [],
+  subclasses: [], activeSubclassIndex: null, certifications: {}, mainClassData: null,
   craftLevel: 1, craftXp: 0, shopTab: 'gear', selectedSkill: null, filter: 'all',
   craftTab: 'recipes', zoneTab: 'map', soulshotActive: false, combatSpeed: 1,
   totalPlaytime: 0, buffs: {}, _cds: {}, gameMode: 'idle'
@@ -417,6 +418,11 @@ function load() {
     state.craftPoints = Number(data.craftPoints) || 0;
     state.craftCharges = Number(data.craftCharges) || 0;
     state.randomCraftWheel = Array.isArray(data.randomCraftWheel) ? data.randomCraftWheel : [];
+
+    state.subclasses = Array.isArray(data.subclasses) ? data.subclasses : [];
+    state.activeSubclassIndex = data.activeSubclassIndex !== undefined ? data.activeSubclassIndex : null;
+    state.certifications = data.certifications && typeof data.certifications === 'object' ? data.certifications : {};
+    state.mainClassData = data.mainClassData || null;
 
     state.buffs = data.buffs || {};
     state.filter = data.filter || 'all';
@@ -483,6 +489,18 @@ function getTotalEquipBonuses() {
   return totals;
 }
 
+function getCertificationsBonuses() {
+  const certs = state.certifications || {};
+  return {
+    atk: (certs.emergent_atk || 0) * 20,
+    def: (certs.emergent_def || 0) * 20,
+    matk: (certs.emergent_matk || 0) * 25,
+    mdef: (certs.emergent_mdef || 0) * 25,
+    crit: (certs.master_crit || 0) * 5,
+    celestial: certs.celestial_shield ? true : false
+  };
+}
+
 function getStats() {
   const race = state.race ? RACES[state.race] : null;
   const cls = getClass(state.class);
@@ -539,19 +557,33 @@ function getStats() {
     else if (k === 'autoPotion') autoPotion = true;
   }
 
+  // Agathion Passive Companions Boosts
+  const agathionUid = state.equipment.agathion;
+  const agathionItem = agathionUid ? state.inventory.find(i => i.uid === agathionUid) : null;
+  const agathionDef = agathionItem ? D().ALL_ITEMS[agathionItem.itemId] : null;
+
+  if (agathionDef) {
+    if (agathionItem.itemId === 'agathion_pegasus') { xpBoost += 0.10; buffSpd += 10; }
+    else if (agathionItem.itemId === 'agathion_valakas_mini') { buffAtk += Math.floor(baseAtk * 0.15); buffMatk += Math.floor(baseMatk * 0.15); }
+    else if (agathionItem.itemId === 'agathion_rudolph') { goldBoost += 0.20; }
+    else if (agathionItem.itemId === 'agathion_angel') { buffDef += Math.floor(baseDef * 0.20); }
+    else if (agathionItem.itemId === 'agathion_dragon_child') { buffAtkMult += 0.25; }
+  }
+
   const atkMult = 1 + buffAtkMult;
   const defMult = 1 + sk('heavyArmor') * 0.05;
   const cdr = sk('quickRecycle') * 0.10;
 
   const codexB = getCodexBonuses();
   const dollsB = getDollsBonuses();
+  const certB = getCertificationsBonuses();
 
-  const finalAtk  = Math.floor((baseAtk + (Number(eb.atk) || 0) + buffAtk + codexB.atk + dollsB.atk) * atkMult);
-  const finalDef  = Math.floor((baseDef + (Number(eb.def) || 0) + buffDef + codexB.def + dollsB.def) * defMult);
+  const finalAtk  = Math.floor((baseAtk + (Number(eb.atk) || 0) + buffAtk + codexB.atk + dollsB.atk + certB.atk) * atkMult);
+  const finalDef  = Math.floor((baseDef + (Number(eb.def) || 0) + buffDef + codexB.def + dollsB.def + certB.def) * defMult);
   const finalEva  = Math.floor(baseEva + (Number(eb.eva) || 0) + codexB.eva + dollsB.eva);
-  const finalMatk = Math.floor(baseMatk + (Number(eb.matk) || 0) + buffMatk + codexB.matk + dollsB.matk);
-  const finalMdef = Math.floor(baseMdef + (Number(eb.mdef) || 0) + codexB.mdef + dollsB.mdef);
-  const finalCrit = (Number(eb.crit) || 0) + codexB.crit + dollsB.crit;
+  const finalMatk = Math.floor(baseMatk + (Number(eb.matk) || 0) + buffMatk + codexB.matk + dollsB.matk + certB.matk);
+  const finalMdef = Math.floor(baseMdef + (Number(eb.mdef) || 0) + codexB.mdef + dollsB.mdef + certB.mdef);
+  const finalCrit = (Number(eb.crit) || 0) + codexB.crit + dollsB.crit + certB.crit;
   
   const lootBonus = (Number(race?.stats?.lootBonus) || 0) + (Number(cls?.base?.lootBonus) || 0) + itemLootBonus + luckBoost;
   const atkSpd    = (buffSpd + (dollsB.speed || 0)) / 100;
@@ -765,10 +797,11 @@ function removeFromInventory(uid, amount = 1) {
 const ALL_EQUIP_SLOTS = [
   'weapon', 'shield', 'helmet', 'armor', 'legs', 'gloves', 'boots',
   'hair', 'hair2', 'necklace', 'earring1', 'earring2', 'ring', 'ring2',
-  'belt', 'cloak', 'talisman'
+  'belt', 'cloak', 'talisman', 'agathion'
 ];
 
 function resolveEquipSlot(slot) {
+  if (slot === 'agathion') return 'agathion';
   if (['shield', 'offhand', 'sigil'].includes(slot)) return 'shield';
   if (['legs', 'gaiters', 'pants'].includes(slot)) return 'legs';
   if (['hair', 'headgear'].includes(slot)) return 'hair';
@@ -2068,6 +2101,192 @@ function updateAllUI() {
   safeUiUpdate('zone', updateZoneUI);
   safeUiUpdate('race-class', updateRaceClassUI);
   safeUiUpdate('combat-controls', updateCombatControlsUI);
+  safeUiUpdate('subclasses', renderSubclassesUI);
+}
+
+function renderSubclassesUI() {
+  const container = el('subclass-list-container'); if (!container) return;
+  const summaryEl = el('certifications-summary');
+  const countBadge = el('subclass-count-badge');
+  const addBtn = el('add-subclass-btn');
+
+  const activeMainLevel = state.activeSubclassIndex === null ? state.level : (state.mainClassData?.level || 1);
+  if (countBadge) {
+    countBadge.textContent = `Subclasses (${(state.subclasses || []).length}/3)`;
+  }
+
+  if (addBtn) {
+    const isMain75 = activeMainLevel >= 75;
+    const isMax = (state.subclasses || []).length >= 3;
+    addBtn.disabled = !isMain75 || isMax;
+    addBtn.textContent = isMax ? '🔒 Limite Máximo Atingido (3/3 Subclasses)' : (!isMain75 ? '🔒 Nível 75 Requerido na Classe Principal' : '➕ Adicionar Nova Subclasse');
+    addBtn.onclick = openAddSubclassModal;
+  }
+
+  container.innerHTML = '';
+
+  // Main Class Card
+  const mainClassId = state.activeSubclassIndex === null ? state.class : (state.mainClassData?.class || 'fighter');
+  const isMainActive = state.activeSubclassIndex === null;
+
+  const mainCard = mkEl('div');
+  mainCard.style.cssText = `border: 1px solid ${isMainActive ? 'var(--gilt-bright)' : 'var(--line)'}; padding: 10px; border-radius: 8px; background: ${isMainActive ? 'rgba(138,106,36,0.3)' : 'rgba(15,20,30,0.8)'}; display:flex; justify-content:space-between; align-items:center;`;
+  mainCard.innerHTML = `
+    <div>
+      <div style="font-weight:bold; color:${isMainActive ? 'var(--gilt-bright)' : 'var(--bone)'}; font-size:12px;">
+        👑 Classe Principal: ${getClass(mainClassId)?.name || mainClassId} <span style="color:#60a5fa;">Lv.${activeMainLevel}</span>
+      </div>
+      <div style="font-size:10px; color:var(--text-muted);">Sua ordem de origem primária</div>
+    </div>
+    <button class="action-btn" style="padding:4px 10px; font-size:11px;" ${isMainActive ? 'disabled' : ''} onclick="switchSubclass(null)">
+      ${isMainActive ? '✓ Ativa' : 'Alternar 👑'}
+    </button>
+  `;
+  container.appendChild(mainCard);
+
+  // Subclasses Cards
+  (state.subclasses || []).forEach((sub, idx) => {
+    const isSubActive = state.activeSubclassIndex === idx;
+    const subClassDef = getClass(sub.classId);
+    
+    const cert65 = sub.level >= 65;
+    const cert70 = sub.level >= 70;
+    const cert75 = sub.level >= 75;
+
+    const card = mkEl('div');
+    card.style.cssText = `border: 1px solid ${isSubActive ? 'var(--gilt-bright)' : 'var(--line)'}; padding: 10px; border-radius: 8px; background: ${isSubActive ? 'rgba(138,106,36,0.3)' : 'rgba(15,20,30,0.8)'}; display:flex; flex-direction:column; gap:6px;`;
+    card.innerHTML = `
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <div style="font-weight:bold; color:${isSubActive ? 'var(--gilt-bright)' : '#10b981'}; font-size:12px;">
+            ⚔️ Subclasse ${idx + 1}: ${subClassDef?.name || sub.classId} <span style="color:#60a5fa;">Lv.${sub.level}</span>
+          </div>
+          <div style="font-size:10px; color:var(--text-muted);">Progresso independente &amp; Certificações</div>
+        </div>
+        <button class="action-btn" style="padding:4px 10px; font-size:11px;" ${isSubActive ? 'disabled' : ''} onclick="switchSubclass(${idx})">
+          ${isSubActive ? '✓ Ativa' : 'Alternar ⚔️'}
+        </button>
+      </div>
+      <div style="display:flex; gap:6px; font-size:10px;">
+        <button class="action-btn" style="padding:2px 6px; font-size:9.5px;" ${!cert65 ? 'disabled' : ''} onclick="claimCert('${sub.id}', 'emergent', ${idx})">${cert65 ? (state.certifications[sub.id + '_emergent'] ? '✓ Cert. Lv 65' : 'Obter Cert. Lv 65 📜') : '🔒 Lv 65 Req'}</button>
+        <button class="action-btn" style="padding:2px 6px; font-size:9.5px;" ${!cert70 ? 'disabled' : ''} onclick="claimCert('${sub.id}', 'master', ${idx})">${cert70 ? (state.certifications[sub.id + '_master'] ? '✓ Cert. Lv 70' : 'Obter Cert. Lv 70 📜') : '🔒 Lv 70 Req'}</button>
+        <button class="action-btn" style="padding:2px 6px; font-size:9.5px;" ${!cert75 ? 'disabled' : ''} onclick="claimCert('${sub.id}', 'celestial', ${idx})">${cert75 ? (state.certifications[sub.id + '_celestial'] ? '✓ Cert. Lv 75' : 'Obter Cert. Lv 75 🛡️') : '🔒 Lv 75 Req'}</button>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+
+  if (summaryEl) {
+    const certB = getCertificationsBonuses();
+    summaryEl.innerHTML = `Bônus Acumulados: <strong style="color:var(--gilt-bright);">+${certB.atk} P.Atk, +${certB.def} P.Def, +${certB.matk} M.Atk, +${certB.mdef} M.Def, +${certB.crit}% Crit Rate</strong> ${certB.celestial ? '· 🛡️ <span style="color:#60a5fa;">Escudo Celestial Ativo!</span>' : ''}`;
+  }
+}
+
+function openAddSubclassModal() {
+  const currentClass = state.class;
+  const availableClasses = Object.keys(CLASSES).filter(cId => cId !== currentClass && !(state.subclasses || []).some(s => s.classId === cId));
+  
+  if (availableClasses.length === 0) return;
+  const choice = prompt(`Escolha sua Subclasse:\n\nOpções disponíveis:\n${availableClasses.map((c, i) => `${i + 1}. ${CLASSES[c].name}`).join('\n')}\n\nDigite o número da classe desejada:`);
+  
+  if (!choice) return;
+  const selectedIdx = parseInt(choice, 10) - 1;
+  if (isNaN(selectedIdx) || selectedIdx < 0 || selectedIdx >= availableClasses.length) {
+    log('Opção de subclasse inválida.', 'system');
+    return;
+  }
+  
+  const chosenClassId = availableClasses[selectedIdx];
+  state.subclasses = state.subclasses || [];
+  state.subclasses.push({
+    id: 'sub_' + Date.now(),
+    classId: chosenClassId,
+    level: 40,
+    xp: 0,
+    sp: 50,
+    skills: {}
+  });
+
+  log(`🌟 Parabéns! Você aprendeu a Subclasse **${CLASSES[chosenClassId].name}** (Nível 40)!`, 'rarity-legendary');
+  floatText(`🌟 SUBCLASSE APRENDIDA!`, 'float-jackpot');
+  updateAllUI(); save();
+}
+
+function switchSubclass(targetIndex) {
+  if (state.activeSubclassIndex === targetIndex) return;
+
+  if (state.activeSubclassIndex === null) {
+    state.mainClassData = {
+      level: state.level,
+      xp: state.xp,
+      sp: state.sp,
+      class: state.class,
+      skills: { ...state.skills }
+    };
+  } else {
+    const activeSub = state.subclasses[state.activeSubclassIndex];
+    if (activeSub) {
+      activeSub.level = state.level;
+      activeSub.xp = state.xp;
+      activeSub.sp = state.sp;
+      activeSub.skills = { ...state.skills };
+    }
+  }
+
+  if (targetIndex === null) {
+    state.activeSubclassIndex = null;
+    const main = state.mainClassData || { level: 75, xp: 0, sp: 50, class: 'fighter', skills: {} };
+    state.level = main.level;
+    state.xp = main.xp;
+    state.sp = main.sp;
+    state.class = main.class;
+    state.skills = { ...(main.skills || {}) };
+    log(`👑 Alternado para a Classe Principal (**${getClass(state.class).name}**)!`, 'system');
+  } else {
+    const targetSub = state.subclasses[targetIndex];
+    if (targetSub) {
+      state.activeSubclassIndex = targetIndex;
+      state.level = targetSub.level;
+      state.xp = targetSub.xp;
+      state.sp = targetSub.sp;
+      state.class = targetSub.classId;
+      state.skills = { ...(targetSub.skills || {}) };
+      log(`⚔️ Alternado para a Subclasse **${getClass(state.class).name}** (Lv.${state.level})!`, 'rarity-rare');
+    }
+  }
+
+  const race = state.race ? RACES[state.race] : RACES.human;
+  const cls = getClass(state.class);
+  state.base = { atk: 0, def: 0, eva: 0, matk: 0, mdef: 0 };
+  for (const k of ['atk','def','eva','matk','mdef']) {
+    state.base[k] = (race?.stats[k] || 0) + (cls?.base[k] || 0);
+  }
+
+  updateAllUI(); save();
+}
+
+function claimCert(subId, certType, subIndex) {
+  state.certifications = state.certifications || {};
+  const certKey = subId + '_' + certType;
+  if (state.certifications[certKey]) {
+    log('Você já adquiriu esta Certificação de Subclasse.', 'system');
+    return;
+  }
+  state.certifications[certKey] = true;
+  if (certType === 'emergent') {
+    state.certifications['emergent_atk'] = (state.certifications['emergent_atk'] || 0) + 1;
+    state.certifications['emergent_def'] = (state.certifications['emergent_def'] || 0) + 1;
+    log('📜 Certificação Nível 65 Adquirida! (+20 P.Atk, +20 P.Def permanente)', 'rarity-legendary');
+  } else if (certType === 'master') {
+    state.certifications['master_crit'] = (state.certifications['master_crit'] || 0) + 1;
+    state.certifications['master_matk'] = (state.certifications['master_matk'] || 0) + 1;
+    log('📜 Certificação Nível 70 Adquirida! (+5% Crit Rate, +25 M.Atk permanente)', 'rarity-legendary');
+  } else if (certType === 'celestial') {
+    state.certifications['celestial_shield'] = (state.certifications['celestial_shield'] || 0) + 1;
+    log('🛡️ Certificação Nível 75 Adquirida! (Escudo Celestial ativado permanente!)', 'rarity-legendary');
+  }
+  floatText('✨ CERTIFICAÇÃO ADQUIRIDA!', 'float-jackpot');
+  updateAllUI(); save();
 }
 
 // --------------------------- VISUALS / STAGE ---------------------------
@@ -3269,6 +3488,9 @@ export function init() {
     window.spinRandomCraft = spinRandomCraft;
     window.selectZone = selectZone;
     window.startRaidBoss = startRaidBoss;
+    window.openAddSubclassModal = openAddSubclassModal;
+    window.switchSubclass = switchSubclass;
+    window.claimCert = claimCert;
 
     attachGlobalErrorHandlers();
     bindEvents();

@@ -165,6 +165,28 @@ export const IDLE_MARKUP = `
               </div>
               <p class="class-desc">Select a class.</p>
             </div>
+
+            <!-- Subclass & Certification Management Panel -->
+            <div class="pane-section subclass-section" style="margin-top: 14px;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h3>📜 Subclasses &amp; Certificações de Aden</h3>
+                <span id="subclass-count-badge" style="font-size:11px; background:rgba(212,167,68,0.2); padding:2px 8px; border-radius:10px; color:var(--gilt-bright);">Lv. 75 Requerido</span>
+              </div>
+              <p style="font-size:11px; color:var(--text-muted); margin:4px 0 10px 0;">Alterne livremente entre sua Classe Principal e até 3 Subclasses para acumular bônus de Certificação passivos!</p>
+              
+              <div id="subclass-list-container" class="subclass-list-container" style="display:flex; flex-direction:column; gap:8px;"></div>
+              
+              <div style="display:flex; gap:8px; margin-top:10px;">
+                <button id="add-subclass-btn" class="action-btn action-btn--primary" style="flex:1; font-size:11px;">➕ Adicionar Subclasse (Lv 75+)</button>
+              </div>
+
+              <!-- Certifications Tree -->
+              <div style="margin-top: 14px; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 6px; border: 1px solid var(--line);">
+                <h4 style="margin:0 0 6px 0; font-size:12px; color:var(--gilt-bright);">✨ Certificações Passivas Adquiridas</h4>
+                <div id="certifications-summary" style="font-size:11px; color:var(--ink-dim);">Nenhuma certificação aprendida ainda. Suba suas subclasses aos Lvs. 65, 70 e 75!</div>
+              </div>
+            </div>
+
             <div class="char-actions">
               <button id="save-btn" class="action-btn">Salvar Jogo</button>
               <button id="start-btn" class="action-btn action-btn--primary">Iniciar Saga</button>
@@ -288,6 +310,10 @@ export const IDLE_MARKUP = `
                     <div class="l2inv-pd-slot equip-slot" data-slot="talisman" title="Talismã">
                       <span class="l2inv-pd-icon">🔮</span>
                       <span class="l2inv-pd-item" id="pd-item-talisman"></span>
+                    </div>
+                    <div class="l2inv-pd-slot equip-slot" data-slot="agathion" title="Agathion / Mascot">
+                      <span class="l2inv-pd-icon">🧚‍♂️</span>
+                      <span class="l2inv-pd-item" id="pd-item-agathion"></span>
                     </div>
                   </div>
                 </div>

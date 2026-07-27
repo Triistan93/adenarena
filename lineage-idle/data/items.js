@@ -43,7 +43,15 @@ const WEAPONS = {
   staff_of_eternity: { name: 'Staff of Eternity', slot: 'weapon', tier: 5, atk: 8, matk: 95, mdef: 20, req: { level: 76 }, price: 28000 },
   bow_of_silence: { name: 'Bow of Silence', slot: 'weapon', tier: 5, atk: 85, matk: 0, eva: 10, crit: 15, range: 'ranged', req: { level: 80 }, price: 32000 },
   dragon_slayer: { name: 'Dragon Slayer', slot: 'weapon', tier: 5, atk: 120, matk: 0, speed: -5, req: { level: 76 }, price: 35000 },
-  chaos_blade: { name: 'Chaos Blade', slot: 'weapon', tier: 5, atk: 90, matk: 30, crit: 8, lifesteal: 5, req: { level: 80 }, price: 40000 }
+  chaos_blade: { name: 'Chaos Blade', slot: 'weapon', tier: 5, atk: 90, matk: 30, crit: 8, lifesteal: 5, req: { level: 80 }, price: 40000 },
+  dynasty_blade: { name: 'Dynasty Blade', slot: 'weapon', tier: 6, atk: 140, matk: 0, crit: 15, req: { level: 80 }, price: 60000 },
+  dynasty_bow: { name: 'Dynasty Bow', slot: 'weapon', tier: 6, atk: 155, matk: 0, crit: 20, range: 'ranged', req: { level: 80 }, price: 65000 },
+  dynasty_phantom: { name: 'Dynasty Phantom Staff', slot: 'weapon', tier: 6, atk: 12, matk: 135, mdef: 25, req: { level: 80 }, price: 70000 },
+  vesper_cutter: { name: 'Vesper Cutter', slot: 'weapon', tier: 7, atk: 185, matk: 0, crit: 20, speed: 10, req: { level: 84 }, price: 120000 },
+  vesper_thrower: { name: 'Vesper Thrower', slot: 'weapon', tier: 7, atk: 200, matk: 0, crit: 25, range: 'ranged', req: { level: 84 }, price: 130000 },
+  vesper_buster: { name: 'Vesper Buster', slot: 'weapon', tier: 7, atk: 15, matk: 165, mdef: 35, req: { level: 84 }, price: 140000 },
+  elegia_cutters: { name: 'Elegia Dual Cutters', slot: 'weapon', tier: 8, atk: 240, matk: 0, crit: 30, lifesteal: 8, req: { level: 85 }, price: 250000 },
+  elegia_bow: { name: 'Elegia Bow', slot: 'weapon', tier: 8, atk: 260, matk: 0, crit: 35, range: 'ranged', req: { level: 85 }, price: 280000 }
 };
 
 const ARMORS = {
@@ -58,7 +66,15 @@ const ARMORS = {
   knight_armor: { name: 'Knight Armor', slot: 'armor', tier: 4, def: 50, mdef: 25, hp: 50, req: { level: 40 }, price: 8000 },
   arcane_robe: { name: 'Arcane Robe', slot: 'armor', tier: 4, def: 20, mdef: 55, matk: 20, req: { level: 40 }, price: 9000 },
   divine_robe: { name: 'Divine Robe', slot: 'armor', tier: 5, def: 80, mdef: 90, matk: 35, req: { level: 76 }, price: 30000 },
-  dragon_scale_armor: { name: 'Dragon Scale Armor', slot: 'armor', tier: 5, def: 110, mdef: 50, hp: 200, req: { level: 76 }, price: 35000 }
+  dragon_scale_armor: { name: 'Dragon Scale Armor', slot: 'armor', tier: 5, def: 110, mdef: 50, hp: 200, req: { level: 76 }, price: 35000 },
+  dynasty_breastplate: { name: 'Dynasty Breastplate', slot: 'armor', tier: 6, def: 140, mdef: 70, hp: 350, req: { level: 80 }, price: 60000 },
+  dynasty_leather: { name: 'Dynasty Leather Armor', slot: 'armor', tier: 6, def: 100, mdef: 90, eva: 15, req: { level: 80 }, price: 60000 },
+  dynasty_tunic: { name: 'Dynasty Tunic', slot: 'armor', tier: 6, def: 70, mdef: 140, matk: 50, req: { level: 80 }, price: 60000 },
+  vesper_breastplate: { name: 'Vesper Noble Breastplate', slot: 'armor', tier: 7, def: 180, mdef: 90, hp: 500, req: { level: 84 }, price: 120000 },
+  vesper_leather: { name: 'Vesper Noble Leather Armor', slot: 'armor', tier: 7, def: 140, mdef: 120, eva: 20, req: { level: 84 }, price: 120000 },
+  vesper_robe: { name: 'Vesper Noble Robe', slot: 'armor', tier: 7, def: 90, mdef: 180, matk: 75, req: { level: 84 }, price: 120000 },
+  elegia_breastplate: { name: 'Elegia Breastplate', slot: 'armor', tier: 8, def: 240, mdef: 120, hp: 750, req: { level: 85 }, price: 250000 },
+  elegia_robe: { name: 'Elegia Robe', slot: 'armor', tier: 8, def: 120, mdef: 240, matk: 110, req: { level: 85 }, price: 250000 }
 };
 
 const HELMETS = {
@@ -111,7 +127,9 @@ const RINGS = {
   onyx_ring: { name: 'Onyx Ring', slot: 'ring', tier: 4, hp: 100, mp: 100, matk: 8, crit: 3, req: { level: 45 }, price: 10000 },
   amethyst_ring: { name: 'Amethyst Ring', slot: 'ring', tier: 4, hp: 150, mp: 50, def: 6, mdef: 6, req: { level: 45 }, price: 10000 },
   dragon_eye_ring: { name: 'Dragon Eye Ring', slot: 'ring', tier: 5, hp: 250, mp: 150, atk: 8, matk: 8, crit: 5, req: { level: 76 }, price: 25000 },
-  eternity_ring: { name: 'Ring of Eternity', slot: 'ring', tier: 5, hp: 200, mp: 200, atk: 5, matk: 5, def: 10, mdef: 10, req: { level: 80 }, price: 30000 }
+  eternity_ring: { name: 'Ring of Eternity', slot: 'ring', tier: 5, hp: 200, mp: 200, atk: 5, matk: 5, def: 10, mdef: 10, req: { level: 80 }, price: 30000 },
+  ring_of_baium: { name: 'Ring of Baium', slot: 'ring', tier: 5, hp: 300, mp: 150, atk: 25, matk: 25, speed: 10, crit: 10, req: { level: 80 }, price: 100000 },
+  ring_of_queen_ant: { name: 'Ring of Queen Ant', slot: 'ring', tier: 4, hp: 150, mp: 80, atk: 15, crit: 8, req: { level: 60 }, price: 40000 }
 };
 
 const CONSUMABLES = {
@@ -169,7 +187,9 @@ const NECKLACES = {
   elven_necklace: { name: 'Elven Necklace', slot: 'necklace', tier: 2, mdef: 10, mp: 30, speed: 2, req: { level: 20 }, price: 800 },
   necklace_of_grace: { name: 'Necklace of Grace', slot: 'necklace', tier: 3, mdef: 25, matk: 10, crit: 3, req: { level: 40 }, price: 3500 },
   black_ore_necklace: { name: 'Black Ore Necklace', slot: 'necklace', tier: 4, mdef: 45, hp: 80, matk: 20, req: { level: 60 }, price: 12000 },
-  necklace_of_valakas: { name: 'Necklace of Valakas', slot: 'necklace', tier: 5, mdef: 80, atk: 30, matk: 45, crit: 10, req: { level: 76 }, price: 35000 }
+  necklace_of_valakas: { name: 'Necklace of Valakas', slot: 'necklace', tier: 5, mdef: 90, atk: 50, matk: 50, crit: 15, req: { level: 85 }, price: 150000 },
+  necklace_of_antharas: { name: 'Necklace of Antharas', slot: 'necklace', tier: 5, mdef: 85, hp: 350, def: 40, lifesteal: 6, req: { level: 85 }, price: 150000 },
+  necklace_of_frintezza: { name: 'Necklace of Frintezza', slot: 'necklace', tier: 5, mdef: 70, speed: 12, matk: 35, req: { level: 82 }, price: 90000 }
 };
 
 const EARRINGS = {
@@ -177,8 +197,8 @@ const EARRINGS = {
   elven_earring: { name: 'Elven Earring', slot: 'earring', tier: 2, mdef: 8, mp: 20, eva: 2, req: { level: 20 }, price: 600 },
   earring_of_grace: { name: 'Earring of Grace', slot: 'earring', tier: 3, mdef: 20, matk: 8, req: { level: 40 }, price: 2500 },
   black_ore_earring: { name: 'Black Ore Earring', slot: 'earring', tier: 4, mdef: 35, mp: 50, eva: 5, req: { level: 60 }, price: 8000 },
-  earring_of_antharas: { name: 'Earring of Antharas', slot: 'earring', tier: 5, mdef: 65, hp: 120, lifesteal: 5, req: { level: 76 }, price: 25000 },
-  earring_of_zaken: { name: 'Earring of Zaken', slot: 'earring', tier: 5, mdef: 60, lifesteal: 7, atk: 15, req: { level: 76 }, price: 25000 }
+  earring_of_antharas: { name: 'Earring of Antharas', slot: 'earring', tier: 5, mdef: 75, hp: 200, lifesteal: 6, req: { level: 85 }, price: 120000 },
+  earring_of_zaken: { name: 'Earring of Zaken', slot: 'earring', tier: 5, mdef: 60, lifesteal: 7, atk: 25, req: { level: 75 }, price: 80000 }
 };
 
 const BELTS = {
@@ -243,10 +263,18 @@ const MATERIALS = {
   ancient_relic: { name: 'Ancient Relic', slot: 'material', price: 5000, stack: 999, desc: 'Mysterious artifact' }
 };
 
+const AGATHIONS = {
+  agathion_pegasus: { name: 'Agathion Pegasus', slot: 'agathion', tier: 5, price: 50000, desc: 'Companheiro celestial (+10% EXP, +10% Speed)' },
+  agathion_valakas_mini: { name: 'Agathion Baby Valakas', slot: 'agathion', tier: 5, price: 100000, desc: 'Dragão de fogo miniatura (+15% PAtk, +15% MAtk)' },
+  agathion_rudolph: { name: 'Agathion Rudolph', slot: 'agathion', tier: 5, price: 50000, desc: 'Servo festivo (+20% Ouro, +10% Regen HP)' },
+  agathion_angel: { name: 'Agathion Holy Angel', slot: 'agathion', tier: 5, price: 75000, desc: 'Anjo da luz (+20% Def, +20% MDef)' },
+  agathion_dragon_child: { name: 'Agathion Sovereign Dragon', slot: 'agathion', tier: 5, price: 150000, desc: 'Dragão soberano (+25% Dano Total)' }
+};
+
 const ALL_ITEMS = {
   ...WEAPONS, ...ARMORS, ...LEGS, ...HELMETS, ...BOOTS, ...GLOVES,
   ...SHIELDS, ...NECKLACES, ...EARRINGS, ...BELTS, ...CLOAKS, ...TALISMANS,
-  ...HAIR, ...HAIR2, ...RINGS, ...CONSUMABLES, ...MATERIALS
+  ...HAIR, ...HAIR2, ...RINGS, ...CONSUMABLES, ...MATERIALS, ...AGATHIONS
 };
 
 // Key aliases mapping to guarantee item lookups never return undefined
