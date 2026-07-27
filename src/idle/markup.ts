@@ -10,6 +10,7 @@ export const IDLE_MARKUP = `
       <div class="top-stats">
         <span class="ts-zone"><span class="ts-label">Zone</span><span id="zone-name">Talking Island</span></span>
         <span class="ts-clock"><span class="ts-label">Session</span><span id="clock">00:00:00</span></span>
+        <button id="audio-mute-btn" onclick="window.toggleMuteAudio && window.toggleMuteAudio()" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:#fff;border-radius:6px;padding:3px 10px;font-size:11px;font-weight:600;cursor:pointer;margin-left:8px;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background='rgba(255,255,255,0.08)'">🔊 Audio</button>
       </div>
     </header>
 

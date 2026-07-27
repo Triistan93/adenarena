@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { Component, useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { Game, type GameResult } from "./game/Game";
 import {
   RACES,
@@ -635,6 +635,7 @@ function ModeSwitch({
     }
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key === "Escape") {
+        e.stopPropagation();
         setIsOpen(false);
       }
     }
@@ -658,26 +659,18 @@ function ModeSwitch({
       <button
         type="button"
         aria-label="Toggle game mode menu"
-        aria-expanded={isOpen}
         className={cn("hamburger-btn", isOpen && "is-active")}
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => setIsOpen((prev) => !prev)}
       >
-        <div className="hamburger-icon">
-          <span />
-          <span />
-          <span />
-        </div>
+        <span className="hamburger-icon" />
         <span className="hamburger-mode-badge">
           {mode === "idle" ? "📜 Idle Chronicle" : "⚔ 3D Arena"}
         </span>
-        <span className="hamburger-chevron">▾</span>
       </button>
 
       {isOpen && (
         <div className="mode-dropdown">
-          <div className="mode-dropdown__header">
-            <span>MODO DE JOGO</span>
-          </div>
+          <div className="mode-dropdown__header">Modo de Jogo</div>
           <button
             type="button"
             className={cn("mode-dropdown__item", mode === "idle" && "is-active")}
@@ -708,14 +701,39 @@ function ModeSwitch({
   );
 }
 
+class ErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean; error: Error | null }> {
+  state = { hasError: false, error: null as Error | null };
+
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, error };
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="fixed inset-0 flex flex-col items-center justify-center bg-[#06080f] text-white p-6 text-center z-50">
+          <h2 className="text-2xl font-bold text-amber-300 mb-2">Ops! Ocorreu um erro inesperado.</h2>
+          <p className="text-sm text-white/60 mb-4">{this.state.error?.message || "Erro de execução."}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-4 py-2 bg-amber-500 text-black font-bold rounded-xl hover:bg-amber-400 transition"
+          >
+            Recarregar Jogo
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 // ---------- Shell: picks which experience is on screen ----------
 export default function Shell() {
   const [mode, setMode] = useState<Mode>("idle");
   return (
-    <>
+    <ErrorBoundary>
       {mode === "arena" ? <ArenaApp /> : <IdleGame />}
       <ModeSwitch mode={mode} setMode={setMode} />
-    </>
+    </ErrorBoundary>
   );
 }
-

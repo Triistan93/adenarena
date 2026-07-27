@@ -1061,9 +1061,36 @@ function craftItem(recipeId) {
 }
 
 // --------------------------- UI HELPERS ---------------------------
-let ROOT = document; let _intervals = [];
+let ROOT = document; let _intervals = []; let _listeners = [];
 export function setRoot(r) { ROOT = r || document; }
-export function destroy() { try { stopCombat(); } catch (e) {} _intervals.forEach(id => clearInterval(id)); _intervals = []; }
+export function addTrackedListener(target, event, handler, opts) {
+  if (target && target.addEventListener) {
+    target.addEventListener(event, handler, opts);
+    _listeners.push({ target, event, handler, opts });
+  }
+}
+export function destroy() {
+  try { stopCombat(); } catch (e) {}
+  _intervals.forEach(id => clearInterval(id));
+  _intervals = [];
+  _listeners.forEach(({ target, event, handler, opts }) => {
+    try { target.removeEventListener(event, handler, opts); } catch(e) {}
+  });
+  _listeners = [];
+}
+
+function playSfx(type, arg) {
+  try {
+    if (typeof window !== 'undefined' && window.idleAudio) {
+      if (type === 'click') window.idleAudio.playClick();
+      else if (type === 'upgrade') window.idleAudio.playUpgrade();
+      else if (type === 'hit') window.idleAudio.playHit();
+      else if (type === 'critical') window.idleAudio.playCritical();
+      else if (type === 'drop') window.idleAudio.playDrop(arg);
+      else if (type === 'levelUp') window.idleAudio.playLevelUp();
+    }
+  } catch(e) {}
+}
 const el = id => (ROOT && ROOT.getElementById ? ROOT.getElementById(id) : null) || (ROOT && ROOT.querySelector ? ROOT.querySelector('#' + id) : null) || (document.getElementById(id));
 const qs = sel => (ROOT && ROOT.querySelector ? ROOT.querySelector(sel) : null) || (document.querySelector(sel));
 const qsa = sel => (ROOT && ROOT.querySelectorAll ? ROOT.querySelectorAll(sel) : []) || (document.querySelectorAll(sel));
@@ -2727,6 +2754,7 @@ function checkLevelUp() {
     
     const spReward = Math.min(10, Math.floor(state.level * 0.8 + 1));
     state.sp += spReward;
+    playSfx('levelUp');
     log(`🎉 LEVEL UP! Nível ${state.level} Alcançado! (+${spReward} SP)`, 'rarity-legendary');
     floatText(`🎉 LEVEL UP! Nível ${state.level}`, 'float-jackpot');
     
@@ -3328,10 +3356,10 @@ function craftSpecialRecipe(recipeId) {
 }
 
 function attachGlobalErrorHandlers() {
-  window.addEventListener('error', (event) => {
+  addTrackedListener(window, 'error', (event) => {
     console.warn('Global runtime notice:', event.error || event.message);
   });
-  window.addEventListener('unhandledrejection', (event) => {
+  addTrackedListener(window, 'unhandledrejection', (event) => {
     console.warn('Unhandled promise rejection:', event.reason);
     event.preventDefault();
   });
@@ -3340,8 +3368,8 @@ function attachGlobalErrorHandlers() {
 function bindEvents() {
   try {
     if (ROOT && ROOT.addEventListener) {
-      ROOT.addEventListener('click', hideItemTooltip);
-      ROOT.addEventListener('click', () => closeGameModeMenu());
+      addTrackedListener(ROOT, 'click', hideItemTooltip);
+      addTrackedListener(ROOT, 'click', () => closeGameModeMenu());
     }
 
     qsa('.tab-btn').forEach(btn => {
@@ -3536,14 +3564,10 @@ function initPanelResizers() {
     }
   };
 
-  window.removeEventListener('mousemove', onMove);
-  window.addEventListener('mousemove', onMove);
-  window.removeEventListener('mouseup', onEnd);
-  window.addEventListener('mouseup', onEnd);
-  window.removeEventListener('touchmove', onMove);
-  window.addEventListener('touchmove', onMove);
-  window.removeEventListener('touchend', onEnd);
-  window.addEventListener('touchend', onEnd);
+  addTrackedListener(window, 'mousemove', onMove);
+  addTrackedListener(window, 'mouseup', onEnd);
+  addTrackedListener(window, 'touchmove', onMove);
+  addTrackedListener(window, 'touchend', onEnd);
 }
 
 export function init() {
@@ -3561,6 +3585,13 @@ export function init() {
     window.openAddSubclassModal = openAddSubclassModal;
     window.switchSubclass = switchSubclass;
     window.claimCert = claimCert;
+    window.toggleMuteAudio = () => {
+      if (typeof window !== 'undefined' && window.idleAudio) {
+        const isMuted = window.idleAudio.toggleMute();
+        const btn = el('audio-mute-btn');
+        if (btn) btn.textContent = isMuted ? '🔇 Muted' : '🔊 Audio';
+      }
+    };
 
     attachGlobalErrorHandlers();
     bindEvents();

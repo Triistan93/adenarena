@@ -156,14 +156,14 @@ export function heroSVG(race, cls, aura, mode) {
 
   if (mode === "bust") {
     return `<div class="hero-svg hero-bust" style="position:relative;width:100%;height:100%;overflow:hidden;border-radius:50%;">
-      <img src="${src}" alt="${race} ${cls}" draggable="false"
+      <img src="${src}" alt="${race} ${cls}" draggable="false" onerror="this.onerror=null;this.src='/img/human_fighter.png';"
         style="width:100%;height:100%;object-fit:cover;object-position:center 15%;filter:drop-shadow(0 0 6px ${border});" />
       <div style="position:absolute;inset:0;border-radius:50%;border:2px solid ${border};box-shadow:inset 0 0 20px rgba(0,0,0,0.6);pointer-events:none;"></div>
     </div>`;
   }
 
   return `<div class="hero-svg hero-full" style="width:100%;height:100%;position:relative;">
-    <img src="${src}" alt="${race} ${cls}" draggable="false"
+    <img src="${src}" alt="${race} ${cls}" draggable="false" onerror="this.onerror=null;this.src='/img/human_fighter.png';"
       style="width:100%;height:100%;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 8px 16px rgba(0,0,0,0.7)) drop-shadow(0 0 4px ${border || 'transparent'});" />
   </div>`;
 }
@@ -182,7 +182,7 @@ export function monsterSVG(id, opts) {
     const glow = opts?.crown ? "drop-shadow(0 0 10px rgba(240,200,64,0.5))" : "drop-shadow(0 6px 12px rgba(0,0,0,0.6))";
     return `<div class="mon-svg" style="width:100%;height:100%;position:relative;">
       ${crown}
-      <img src="${resolvedSrc}" alt="${id}" draggable="false"
+      <img src="${resolvedSrc}" alt="${id}" draggable="false" onerror="this.onerror=null;this.src='/img/mon_direwolf.png';"
         style="width:100%;height:100%;object-fit:contain;object-position:center bottom;filter:${glow};" />
     </div>`;
   }

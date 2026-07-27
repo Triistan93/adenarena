@@ -11,7 +11,8 @@ import { init, setRoot, destroy } from "../../lineage-idle/main.js";
 import idleCss from "../../lineage-idle/style.css?raw";
 
 import { IDLE_MARKUP } from "./markup";
-import "../../src/idle/heroImages";
+import "./heroImages";
+import "../utils/idleAudio";
 
 /**
  * Mounts the Lineage Idle game inside a Shadow DOM so its global-looking
