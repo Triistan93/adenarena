@@ -3211,7 +3211,18 @@ function renderStageMonster() {
 function reflow(n) { void n.offsetWidth; }
 function stageHeroAttack() { const st = el('stage'); if (!st) return; st.classList.remove('is-hero-atk'); reflow(st); st.classList.add('is-hero-atk'); }
 function stageMonsterHurt(dmg, crit) { updateMonsterHP(); const m = el('stage-monster'); if (m) { m.classList.remove('hurt'); reflow(m); m.classList.add('hurt'); setTimeout(() => m.classList.remove('hurt'), 420); } stageFloat((crit ? 'CRIT ' : '') + Math.round(dmg), crit ? 'sf-crit' : 'sf-dmg', 'right'); }
-function stageMonsterDie() { const fill = el('m-hp-fill'); if (fill) fill.style.width = '0%'; const st = el('stage'); if (st) { st.classList.remove('kill-flash'); reflow(st); st.classList.add('kill-flash'); } stageFloat('SLAIN', 'sf-slain', 'right'); }
+function stageMonsterDie() { 
+  const fill = el('m-hp-fill'); 
+  if (fill) fill.style.width = '0%'; 
+  const m = el('stage-monster'); 
+  if (m) { 
+    m.classList.remove('is-dying'); 
+    reflow(m); 
+    m.classList.add('is-dying'); 
+    setTimeout(() => m.classList.remove('is-dying'), 350); 
+  } 
+  stageFloat('SLAIN', 'sf-slain', 'right'); 
+}
 function stageMonsterLunge() { const m = el('stage-monster'); if (!m) return; m.classList.remove('lunge'); reflow(m); m.classList.add('lunge'); setTimeout(() => m.classList.remove('lunge'), 440); }
 function stageHeroHurt(dmg) { const h = el('stage-hero'); if (h) { h.classList.remove('hurt'); reflow(h); h.classList.add('hurt'); setTimeout(() => h.classList.remove('hurt'), 420); } stageFloat('-' + Math.round(dmg), 'sf-hurt', 'left'); }
 function stageHeroBlock() { stageFloat('BLOCK', 'sf-block', 'left'); }
