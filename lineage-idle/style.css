@@ -476,6 +476,28 @@ select:focus-visible {
   justify-content: flex-end;
 }
 
+.tab-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1;
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.6);
+  margin-left: 4px;
+  animation: tabBadgePulse 1.8s infinite ease-in-out;
+}
+@keyframes tabBadgePulse {
+  0%, 100% { transform: scale(1); opacity: 0.95; }
+  50% { transform: scale(1.15); opacity: 1; box-shadow: 0 0 12px rgba(239, 68, 68, 0.9); }
+}
+
 .combat-ctrl-btn {
   background: linear-gradient(180deg, rgba(35,30,22,0.9), rgba(18,15,10,0.95));
   border: 1px solid rgba(212,167,68,0.3);
@@ -498,6 +520,50 @@ select:focus-visible {
   border-color: var(--gilt-bright);
   box-shadow: 0 0 8px rgba(212,167,68,0.4);
 }
+
+/* Combat Juice Animations */
+.stage.is-hero-atk .h-art {
+  animation: heroSquashAtk 0.22s ease-out;
+}
+@keyframes heroSquashAtk {
+  0% { transform: scale(1, 1) translateX(0); }
+  35% { transform: scale(1.2, 0.85) translateX(18px); }
+  70% { transform: scale(0.9, 1.1) translateX(6px); }
+  100% { transform: scale(1, 1) translateX(0); }
+}
+
+.stage.is-hero-hurt {
+  animation: stageHeroHurtShake 0.25s ease-out;
+}
+@keyframes stageHeroHurtShake {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(-4px, 2px); }
+  50% { transform: translate(4px, -2px); }
+  75% { transform: translate(-2px, -1px); }
+}
+
+.stage.is-monster-kill {
+  animation: stageKillFlash 0.35s ease-out;
+}
+@keyframes stageKillFlash {
+  0% { filter: brightness(1.8) contrast(1.2); }
+  100% { filter: brightness(1) contrast(1); }
+}
+
+/* Responsive Grid Fallbacks (Tablet & Mobile) */
+@media (max-width: 1024px) {
+  .main-grid {
+    grid-template-columns: 240px 1fr !important;
+  }
+  .grid-resizer-v { display: none !important; }
+}
+
+@media (max-width: 768px) {
+  .main-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
 .tabs-panel {
   background:
     linear-gradient(180deg, rgba(18, 21, 28, 0.96) 0%, rgba(10, 12, 18, 0.98) 100%),

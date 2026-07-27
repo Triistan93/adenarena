@@ -823,6 +823,20 @@ function addToInventory(itemId, amount = 1, rarity = null) {
     return true;
   }
 
+  const RARITY_RANK = { 'common': 1, 'uncommon': 2, 'rare': 3, 'epic': 4, 'legendary': 5, 'mythic': 6, 's': 7 };
+  if (rarity && state.autoSellRarity && state.autoSellRarity !== 'off') {
+    const itemRarity = rarity.toLowerCase();
+    const targetRank = RARITY_RANK[state.autoSellRarity.toLowerCase()] || 0;
+    const itemRank = RARITY_RANK[itemRarity] || 1;
+    if (itemRank <= targetRank) {
+      const mult = D().RARITY[itemRarity] ? D().RARITY[itemRarity].mult : 1;
+      const price = Math.max(1, Math.floor((def.price || 10) * 0.4 * mult)) * amount;
+      state.gold += price;
+      log(`🪙 [Auto-Sell] ${amount}x ${def.name} [${itemRarity.toUpperCase()}] vendido por +${price.toLocaleString()}g`, 'loot');
+      return true;
+    }
+  }
+
   for (let i = 0; i < amount; i++) {
     if (state.inventory.length >= 50) { log('Inventory full!', 'system'); return false; }
     state.inventory.push({ uid: Date.now() + '_' + Math.random().toString(36).slice(2, 8), itemId, count: 1, rarity, equipped: false });
@@ -899,12 +913,25 @@ function unequipItem(slot) {
   updateAllUI(); save();
 }
 
+const HIGH_RARITIES = ['rare', 'epic', 'legendary', 'mythic', 's'];
+
+function isHighValueItem(item) {
+  if (!item || !item.rarity) return false;
+  return HIGH_RARITIES.includes(item.rarity.toLowerCase());
+}
+
 function sellItem(uid) {
   const idx = state.inventory.findIndex(i => i.uid === uid);
   if (idx < 0) return;
   const item = state.inventory[idx];
   if (item.equipped) { log('Unequip first!', 'system'); return; }
   const def = D().ALL_ITEMS[item.itemId];
+  if (isHighValueItem(item)) {
+    const rarityName = D().RARITY[item.rarity]?.name || item.rarity;
+    if (!confirm(`⚠️ Deseja realmente VENDER o item valioso "${def.name}" [${rarityName}]?`)) {
+      return;
+    }
+  }
   const mult = item.rarity ? D().RARITY[item.rarity].mult : 1;
   const price = Math.floor((def.price || 10) * 0.4 * mult);
   state.gold += price * (item.count || 1);
@@ -929,6 +956,12 @@ function salvageItem(uid) {
   if (item.equipped) { log('Unequip first!', 'system'); return; }
   const def = D().ALL_ITEMS[item.itemId];
   if (!def || !ALL_EQUIP_SLOTS.includes(resolveEquipSlot(def.slot))) return;
+  if (isHighValueItem(item)) {
+    const rarityName = D().RARITY[item.rarity]?.name || item.rarity;
+    if (!confirm(`⚠️ Deseja realmente SUCATEAR o item valioso "${def.name}" [${rarityName}]?`)) {
+      return;
+    }
+  }
 
   const reqLvl = def.req ? def.req.level : 1;
   const grade = getItemGrade(reqLvl);
@@ -986,9 +1019,19 @@ function clearItemSelection() {
 function sellSelectedItems() {
   const set = getSelectedSet();
   if (set.size === 0) return;
-  let totalGold = 0, count = 0;
   const toDelete = Array.from(set);
   
+  const hasHighValue = toDelete.some(uid => {
+    const item = state.inventory.find(i => i.uid === uid);
+    return isHighValueItem(item);
+  });
+  if (hasHighValue) {
+    if (!confirm(`⚠️ A seleção contém itens de alta raridade (Raro ou superior). Deseja realmente vender?`)) {
+      return;
+    }
+  }
+
+  let totalGold = 0, count = 0;
   for (const uid of toDelete) {
     const item = state.inventory.find(i => i.uid === uid);
     if (!item || item.equipped) continue;
@@ -1015,8 +1058,17 @@ function sellSelectedItems() {
 function salvageSelectedItems() {
   const set = getSelectedSet();
   if (set.size === 0) return;
-  let count = 0;
   const toDelete = Array.from(set);
+
+  const hasHighValue = toDelete.some(uid => {
+    const item = state.inventory.find(i => i.uid === uid);
+    return isHighValueItem(item);
+  });
+  if (hasHighValue) {
+    if (!confirm(`⚠️ A seleção contém itens de alta raridade (Raro ou superior). Deseja realmente sucatear?`)) {
+      return;
+    }
+  }
   
   for (const uid of toDelete) {
     const item = state.inventory.find(i => i.uid === uid);
@@ -2762,6 +2814,77 @@ function updateTowerUI() {
   }
 }
 
+function hasEquipmentUpgradeAvailable() {
+  if (!state.inventory) return false;
+  for (const item of state.inventory) {
+    if (item.equipped) continue;
+    const def = D().ALL_ITEMS[item.itemId];
+    if (!def) continue;
+    const slot = resolveEquipSlot(def.slot);
+    if (!slot || !ALL_EQUIP_SLOTS.includes(slot)) continue;
+    const equippedUid = state.equipment[slot];
+    const equippedItem = equippedUid ? state.inventory.find(i => i.uid === equippedUid) : null;
+    const equippedDef = equippedItem ? D().ALL_ITEMS[equippedItem.itemId] : null;
+    const itemPower = (def.stats?.atk || 0) + (def.stats?.def || 0) + (def.stats?.matk || 0) + (def.stats?.mdef || 0);
+    const eqPower = equippedDef ? ((equippedDef.stats?.atk || 0) + (equippedDef.stats?.def || 0) + (equippedDef.stats?.matk || 0) + (equippedDef.stats?.mdef || 0)) : 0;
+    if (itemPower > eqPower) return true;
+  }
+  return false;
+}
+
+function hasSkillUpgradeAvailable() {
+  if (state.sp < 10) return false;
+  for (const [sId, def] of Object.entries(SKILL_DEFS)) {
+    if (!classSatisfies(state.class, def.classReq)) continue;
+    const lvl = state.skills[sId] || 0;
+    if (lvl >= def.maxLevel) continue;
+    const cost = getSkillCost(def, lvl);
+    if (state.sp >= cost) return true;
+  }
+  return false;
+}
+
+function hasCraftAvailable() {
+  if (typeof CRAFTING_RECIPES === 'undefined') return false;
+  for (const recipe of CRAFTING_RECIPES) {
+    let canCraft = true;
+    for (const mat of recipe.materials) {
+      const invItem = state.inventory.find(i => i.itemId === mat.itemId);
+      if (!invItem || (invItem.count || 1) < mat.count) {
+        canCraft = false;
+        break;
+      }
+    }
+    if (canCraft) return true;
+  }
+  return false;
+}
+
+function hasQuestsClaimable() {
+  if (!state.quests || !state.quests.progress) return false;
+  if (typeof QUEST_DEFS === 'undefined') return false;
+  for (const qDef of QUEST_DEFS) {
+    if (state.quests.claimed && state.quests.claimed.includes(qDef.id)) continue;
+    const current = state.quests.progress[qDef.id] || 0;
+    if (current >= qDef.target) return true;
+  }
+  return false;
+}
+
+function updateTabBadgesUI() {
+  const invBadge = el('tab-badge-inventory');
+  if (invBadge) invBadge.style.display = hasEquipmentUpgradeAvailable() ? 'inline-flex' : 'none';
+  
+  const skillBadge = el('tab-badge-skills');
+  if (skillBadge) skillBadge.style.display = hasSkillUpgradeAvailable() ? 'inline-flex' : 'none';
+  
+  const craftBadge = el('tab-badge-craft');
+  if (craftBadge) craftBadge.style.display = hasCraftAvailable() ? 'inline-flex' : 'none';
+  
+  const questBadge = el('tab-badge-quests');
+  if (questBadge) questBadge.style.display = hasQuestsClaimable() ? 'inline-flex' : 'none';
+}
+
 function updateAllUI() {
   updateGameModeUI();
   safeUiUpdate('zone-bg', updateZoneBackground);
@@ -2777,6 +2900,7 @@ function updateAllUI() {
   safeUiUpdate('subclasses', renderSubclassesUI);
   safeUiUpdate('quests', updateQuestsUI);
   safeUiUpdate('tower', updateTowerUI);
+  safeUiUpdate('tab-badges', updateTabBadgesUI);
 }
 
 function renderSubclassesUI() {
@@ -4093,6 +4217,8 @@ function attachGlobalErrorHandlers() {
   });
 }
 
+const tabScrollMap = {};
+
 function bindEvents() {
   try {
     if (ROOT && ROOT.addEventListener) {
@@ -4100,14 +4226,49 @@ function bindEvents() {
       addTrackedListener(ROOT, 'click', () => closeGameModeMenu());
     }
 
+    // Keyboard shortcuts (1-9: Tab switch, Space: Speed, S: Save)
+    addTrackedListener(window, 'keydown', (e) => {
+      const activeEl = document.activeElement;
+      if (activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA' || activeEl.isContentEditable)) {
+        return;
+      }
+
+      const tabs = ['character', 'inventory', 'skills', 'shop', 'craft', 'enchant', 'zones', 'quests', 'tower'];
+      if (e.key >= '1' && e.key <= '9') {
+        const idx = parseInt(e.key) - 1;
+        if (tabs[idx]) {
+          const tabBtn = qs(`.tab-btn[data-tab="${tabs[idx]}"]`);
+          if (tabBtn) tabBtn.click();
+        }
+      } else if (e.key === ' ' || e.code === 'Space') {
+        e.preventDefault();
+        state.combatSpeed = state.combatSpeed === 1 ? 2 : (state.combatSpeed === 2 ? 4 : 1);
+        log(`⚡ Velocidade de Combate: ${state.combatSpeed}x`, 'system');
+        updateAllUI();
+      } else if (e.key === 's' || e.key === 'S') {
+        if (e.ctrlKey || e.metaKey) e.preventDefault();
+        save(true);
+      }
+    });
+
     qsa('.tab-btn').forEach(btn => {
       btn.onclick = () => {
+        const currentActivePane = qs('.tab-pane.active');
+        if (currentActivePane) {
+          tabScrollMap[currentActivePane.id] = currentActivePane.scrollTop;
+        }
+
         const tabName = btn.dataset.tab;
         qsa('.tab-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         qsa('.tab-pane').forEach(p => p.classList.remove('active'));
         const pane = el(`tab-${tabName}`);
-        if (pane) pane.classList.add('active');
+        if (pane) {
+          pane.classList.add('active');
+          if (tabScrollMap[pane.id] !== undefined) {
+            pane.scrollTop = tabScrollMap[pane.id];
+          }
+        }
 
         if (tabName === 'inventory') safeUiUpdate('inventory', updateInventoryUI);
         else if (tabName === 'skills') safeUiUpdate('skills', updateSkillUI);
