@@ -375,11 +375,11 @@ const DEFAULT_STATE = () => ({
   base: { atk: 0, def: 0, eva: 0, matk: 0, mdef: 0 },
   skills: {
     // Generic Fighter skills
-    armorMast: 0, mortalBlow: 1, wpnMastF: 0, powerSmash: 0, lightArmor: 0, stunAttack: 0,
+    armorMast: 0, mortalBlow: 0, wpnMastF: 0, powerSmash: 0, lightArmor: 0, stunAttack: 0,
     heavyArmor: 0, shieldStun: 0, wildSweep: 0, tripleSlash: 0, boostHp: 0, warCry: 0,
     frenzy: 0, bisonPummel: 0, danceOfFire: 0, lethalBlow: 0, fatalStrike: 0, powerCrush: 0,
     // Generic Mage skills
-    weaponMastM: 0, energyBolt: 1, robeMast: 0, iceBolt: 0, antiMagic: 0, auraBurn: 0,
+    weaponMastM: 0, energyBolt: 0, robeMast: 0, iceBolt: 0, antiMagic: 0, auraBurn: 0,
     higherMana: 0, blaze: 0, greaterHeal: 0, prominence: 0, boostMana: 0, quickRecycle: 0,
     vampiric: 0, flameStrike: 0, solarFlare: 0, deathSpike: 0, hurricane: 0
   },
@@ -629,19 +629,22 @@ function getStats() {
 }
 
 function getClass(c) {
-  if (!c) return CLASSES.fighter;
-  return CLASSES[c] || CLASSES.fighter;
+  if (!c) return null;
+  return CLASSES[c] || null;
 }
 
 function classSatisfies(playerClass, reqClass) {
   if (!reqClass) return true;
+  if (!playerClass) return false;
   if (playerClass === reqClass) return true;
   const pDef = getClass(playerClass);
   if (!pDef) return false;
   if (pDef.archetype === reqClass) return true;
   if (pDef.parent === reqClass) return true;
-  const parentDef = getClass(pDef.parent);
-  if (parentDef && (parentDef.archetype === reqClass || parentDef.parent === reqClass)) return true;
+  if (pDef.parent) {
+    const parentDef = getClass(pDef.parent);
+    if (parentDef && (parentDef.archetype === reqClass || parentDef.parent === reqClass)) return true;
+  }
   return false;
 }
 
@@ -2907,8 +2910,43 @@ function autoEquipBest() {
   }
 }
 
-function setRace(raceId) { state.race = raceId; if (raceId === 'dwarf') state.class = 'artisan'; else if (raceId === 'kamael') state.class = 'soulbreaker'; else if (state.class === 'artisan' || state.class === 'soulbreaker') state.class = 'fighter'; const race = RACES[raceId]; state.base = { ...race.stats }; const cls = getClass(state.class); if (cls) { for (const k of ['atk','def','eva','matk','mdef']) { state.base[k] = (state.base[k] || 0) + (cls.base[k] || 0); } } updateRaceClassUI(); updateStatsUI(); }
-function setClass(classId) { if (state.race === 'dwarf' || state.race === 'kamael') return; state.class = classId; const race = RACES[state.race]; if (race) state.base = { ...race.stats }; const cls = getClass(classId); if (cls && race) { for (const k of ['atk','def','eva','matk','mdef']) { state.base[k] = (state.base[k] || 0) + (cls.base[k] || 0); } } updateRaceClassUI(); updateStatsUI(); }
+function setRace(raceId) {
+  state.race = raceId;
+  if (raceId === 'dwarf') state.class = 'artisan';
+  else if (raceId === 'kamael') state.class = 'soulbreaker';
+  else if (state.class === 'artisan' || state.class === 'soulbreaker') state.class = 'fighter';
+  const race = RACES[raceId];
+  state.base = { ...race.stats };
+  const cls = getClass(state.class);
+  if (cls) {
+    for (const k of ['atk','def','eva','matk','mdef']) {
+      state.base[k] = (state.base[k] || 0) + (cls.base[k] || 0);
+    }
+  }
+  const arch = cls?.archetype || 'fighter';
+  if (arch === 'mage') { state.skills.energyBolt = Math.max(1, state.skills.energyBolt || 0); }
+  else { state.skills.mortalBlow = Math.max(1, state.skills.mortalBlow || 0); }
+  updateRaceClassUI();
+  updateStatsUI();
+}
+
+function setClass(classId) {
+  if (state.race === 'dwarf' || state.race === 'kamael') return;
+  state.class = classId;
+  const race = RACES[state.race];
+  if (race) state.base = { ...race.stats };
+  const cls = getClass(classId);
+  if (cls && race) {
+    for (const k of ['atk','def','eva','matk','mdef']) {
+      state.base[k] = (state.base[k] || 0) + (cls.base[k] || 0);
+    }
+  }
+  const arch = cls?.archetype || 'fighter';
+  if (arch === 'mage') { state.skills.energyBolt = Math.max(1, state.skills.energyBolt || 0); }
+  else { state.skills.mortalBlow = Math.max(1, state.skills.mortalBlow || 0); }
+  updateRaceClassUI();
+  updateStatsUI();
+}
 function startGame() {
   if (!state.race || !state.class) {
     log('Select race and class before beginning the saga.', 'system');
