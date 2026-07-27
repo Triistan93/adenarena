@@ -191,6 +191,12 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
                       <span className="text-purple-300 font-bold">🏰 Andar {cloudState.tower.highestFloor}</span>
                     </div>
                   )}
+                  <div className="flex justify-between text-[11px]">
+                    <span className="text-white/40">Privilégio:</span>
+                    <span className={cloudState.privilegeLevel >= 1 ? "text-red-400 font-bold" : "text-slate-400 font-semibold"}>
+                      {cloudState.privilegeLevel >= 1 ? "👑 Admin (Nv. 1)" : "👤 Jogador (Nv. 0)"}
+                    </span>
+                  </div>
                 </div>
               ) : (
                 <p className="text-[11px] text-amber-200/60 mt-2">Nenhum save prévio encontrado. Um novo save será criado!</p>

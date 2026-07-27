@@ -410,7 +410,7 @@ const DEFAULT_STATE = () => ({
   subclasses: [], activeSubclassIndex: null, certifications: {}, mainClassData: null,
   craftLevel: 1, craftXp: 0, shopTab: 'gear', selectedSkill: null, filter: 'all',
   craftTab: 'recipes', zoneTab: 'map', soulshotActive: false, combatSpeed: 1,
-  totalPlaytime: 0, buffs: {}, _cds: {}, gameMode: 'idle'
+  totalPlaytime: 0, buffs: {}, _cds: {}, gameMode: 'idle', privilegeLevel: 0
 });
 
 let state = DEFAULT_STATE();
@@ -3282,6 +3282,15 @@ function handleChatSubmit(inputStr) {
   const raw = inputStr.trim();
   const lower = raw.toLowerCase();
 
+  const isAdminCmd = lower.startsWith('//') || lower === '/admin' || lower === 'admin' || lower === 'gm' || lower === '//gm';
+  if (isAdminCmd) {
+    if ((state.privilegeLevel || 0) < 1) {
+      log('⛔ [Acesso Negado] Você precisa ter privilégio de Administrador (Nível 1) para usar comandos GM!', 'damage');
+      floatText('⛔ ACESSO NEGADO', 'sf-hurt');
+      return;
+    }
+  }
+
   // Open Admin Console secret commands
   if (lower === '//admin' || lower === '/admin' || lower === '//gm' || lower === 'admin' || lower === 'gm') {
     openAdminModal();
@@ -3346,6 +3355,11 @@ function handleChatSubmit(inputStr) {
 }
 
 function openAdminModal() {
+  if ((state.privilegeLevel || 0) < 1) {
+    log('⛔ [Acesso Negado] Painel de Administrador restrito a usuários com Privilégio Nível 1!', 'damage');
+    floatText('⛔ ACESSO NEGADO', 'sf-hurt');
+    return;
+  }
   const modal = el('admin-modal');
   if (!modal) return;
   populateAdminItemSelect();
@@ -4323,6 +4337,7 @@ export function init() {
         : [];
       
       state = { ...def, ...cloudData };
+      state.privilegeLevel = Number(cloudData.privilegeLevel) || (cloudData.role === 'admin' ? 1 : 0);
       state.skills = { ...def.skills, ...(cloudData.skills || {}) };
       state.equipment = { ...def.equipment, ...(cloudData.equipment || {}) };
       state.base = { ...def.base, ...(cloudData.base || {}) };
