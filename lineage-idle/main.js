@@ -385,6 +385,7 @@ const DEFAULT_STATE = () => ({
   },
   quests: { progress: {}, claimed: [], lastDailyReset: 0, lastWeeklyReset: 0 },
   battlePass: { xp: 0, claimedFree: [], claimedPremium: [], unlockedPremium: false },
+  tower: { highestFloor: 0, currentFloor: 1, lastSweepTime: 0 },
   zone: 'talkingIsland', currentSaga: 0, gold: 1000, inventory: [], 
   equipment: {
     weapon: null, shield: null, helmet: null, armor: null, legs: null, gloves: null, boots: null,
@@ -453,6 +454,7 @@ function load() {
 
     state.quests = data.quests && typeof data.quests === 'object' ? data.quests : { progress: {}, claimed: [], lastDailyReset: 0, lastWeeklyReset: 0 };
     state.battlePass = data.battlePass && typeof data.battlePass === 'object' ? data.battlePass : { xp: 0, claimedFree: [], claimedPremium: [], unlockedPremium: false };
+    state.tower = data.tower && typeof data.tower === 'object' ? data.tower : { highestFloor: 0, currentFloor: 1, lastSweepTime: 0 };
     checkQuestResets();
 
     state.buffs = data.buffs || {};
@@ -603,12 +605,13 @@ function getStats() {
   const codexB = getCodexBonuses();
   const dollsB = getDollsBonuses();
   const certB = getCertificationsBonuses();
+  const towerMult = 1 + ((state.tower?.highestFloor || 0) * 0.01);
 
-  const finalAtk  = Math.floor((baseAtk + (Number(eb.atk) || 0) + buffAtk + codexB.atk + dollsB.atk + certB.atk) * atkMult);
-  const finalDef  = Math.floor((baseDef + (Number(eb.def) || 0) + buffDef + codexB.def + dollsB.def + certB.def) * defMult);
+  const finalAtk  = Math.floor((baseAtk + (Number(eb.atk) || 0) + buffAtk + codexB.atk + dollsB.atk + certB.atk) * atkMult * towerMult);
+  const finalDef  = Math.floor((baseDef + (Number(eb.def) || 0) + buffDef + codexB.def + dollsB.def + certB.def) * defMult * towerMult);
   const finalEva  = Math.floor(baseEva + (Number(eb.eva) || 0) + codexB.eva + dollsB.eva);
-  const finalMatk = Math.floor(baseMatk + (Number(eb.matk) || 0) + buffMatk + codexB.matk + dollsB.matk + certB.matk);
-  const finalMdef = Math.floor(baseMdef + (Number(eb.mdef) || 0) + codexB.mdef + dollsB.mdef + certB.mdef);
+  const finalMatk = Math.floor((baseMatk + (Number(eb.matk) || 0) + buffMatk + codexB.matk + dollsB.matk + certB.matk) * towerMult);
+  const finalMdef = Math.floor((baseMdef + (Number(eb.mdef) || 0) + codexB.mdef + dollsB.mdef + certB.mdef) * towerMult);
   const finalCrit = (Number(eb.crit) || 0) + codexB.crit + dollsB.crit + certB.crit;
   
   const lootBonus = (Number(race?.stats?.lootBonus) || 0) + (Number(cls?.base?.lootBonus) || 0) + itemLootBonus + luckBoost;
@@ -2511,6 +2514,221 @@ function renderBattlePassUI() {
   }
 }
 
+// --------------------------- TOWER OF INSOLENCE ---------------------------
+function getTowerFloorDef(floorNum) {
+  const f = Math.max(1, Math.min(100, Number(floorNum) || 1));
+  const isBoss = f % 10 === 0;
+
+  const names = {
+    10: 'Hallate, o Guardião da Torre (Boss)',
+    20: 'Kernea, a Imperatriz de Sangue (Boss)',
+    30: 'Varan, o Arquiduque Sombrio (Boss)',
+    40: 'Kavatan, o Guardião de Elmore (Boss)',
+    50: 'Baium, o Imperador Imortal (Boss)',
+    60: 'Galaxia, a Primordial (Boss)',
+    70: 'Shielhead, o Titã de Aço (Boss)',
+    80: 'Golkonda, o Destruidor de Reinos (Boss)',
+    90: 'Verdelet, o Demônio Guardião (Boss)',
+    100: 'Arcanjo da Insolência (Final Boss)'
+  };
+
+  const name = names[f] || (isBoss ? `Guardião do Andar ${f} (Boss)` : `Guerreiro de Insolência Nv.${f}`);
+  const reqLvl = Math.min(100, Math.floor(f * 0.95) + 1);
+
+  const baseHp = Math.floor(120 * Math.pow(1.12, f - 1) * (isBoss ? 2.5 : 1));
+  const baseAtk = Math.floor(18 * Math.pow(1.09, f - 1) * (isBoss ? 1.4 : 1));
+  const baseDef = Math.floor(10 * Math.pow(1.08, f - 1));
+
+  const goldReward = Math.floor(300 * Math.pow(1.10, f - 1) * (isBoss ? 3 : 1));
+  const spReward = Math.floor(12 * f * (isBoss ? 2 : 1));
+
+  return {
+    floor: f,
+    name,
+    isBoss,
+    reqLvl,
+    hp: baseHp,
+    atk: baseAtk,
+    def: baseDef,
+    xp: Math.floor(120 * f * 1.5),
+    sp: spReward,
+    gold: goldReward,
+    rewardLamps: isBoss ? Math.floor(f / 10) : 0,
+    rewardCrystals: isBoss ? (f >= 50 ? 'crystal_s' : 'crystal_a') : null
+  };
+}
+
+function challengeTowerFloor() {
+  if (!state.tower) state.tower = { highestFloor: 0, currentFloor: 1, lastSweepTime: 0 };
+  const targetFloor = (state.tower.highestFloor || 0) + 1;
+  if (targetFloor > 100) {
+    log('🏆 Você já conquistou todos os 100 Andares da Torre da Insolência!', 'rarity-legendary');
+    return;
+  }
+
+  const fDef = getTowerFloorDef(targetFloor);
+  const stats = getStats();
+
+  if (state.level < fDef.reqLvl) {
+    log(`⚠️ Nível insuficiente! O Andar ${targetFloor} requer Nível ${fDef.reqLvl}.`, 'system');
+    return;
+  }
+
+  log(`🏰 Desafiando Andar ${targetFloor}: **${fDef.name}**!`, 'rarity-legendary');
+  floatText(`ANDAR ${targetFloor}!`, 'float-jackpot');
+
+  state.target = {
+    name: fDef.name,
+    hp: fDef.hp,
+    maxHp: fDef.hp,
+    atk: fDef.atk,
+    def: fDef.def,
+    eva: Math.min(20, Math.floor(fDef.floor / 5)),
+    xp: fDef.xp,
+    sp: fDef.sp,
+    gold: [fDef.gold, Math.floor(fDef.gold * 1.3)],
+    boss: fDef.isBoss,
+    isTower: true,
+    towerFloor: targetFloor
+  };
+
+  startCombat();
+}
+
+function onTowerFloorVictory(floorNum) {
+  if (!state.tower) state.tower = { highestFloor: 0, currentFloor: 1, lastSweepTime: 0 };
+  if (floorNum > state.tower.highestFloor) {
+    state.tower.highestFloor = floorNum;
+    state.tower.currentFloor = Math.min(100, floorNum + 1);
+
+    const fDef = getTowerFloorDef(floorNum);
+    log(`🏆 VITORIA! Andar ${floorNum} Conquistado! Bônus Permanente ATK/DEF +${floorNum}%!`, 'rarity-legendary');
+    floatText(`ANDAR ${floorNum} CONQUISTADO!`, 'float-jackpot');
+
+    if (fDef.rewardLamps > 0) {
+      state.magicLamps = (state.magicLamps || 0) + fDef.rewardLamps;
+      log(`🪔 Recompensa de Primeiro Abate: +${fDef.rewardLamps} Lâmpadas Mágicas!`, 'rarity-epic');
+    }
+    if (fDef.rewardCrystals) {
+      addToInventory(fDef.rewardCrystals, 3);
+      log(`✨ Recompensa de Primeiro Abate: +3x ${D().ALL_ITEMS[fDef.rewardCrystals]?.name || fDef.rewardCrystals}!`, 'rarity-legendary');
+    }
+
+    triggerQuestEvent('boss', 1);
+  }
+  updateAllUI();
+  save();
+}
+
+function sweepTowerDaily() {
+  if (!state.tower) state.tower = { highestFloor: 0, currentFloor: 1, lastSweepTime: 0 };
+  const highest = state.tower.highestFloor || 0;
+  if (highest < 1) {
+    log('Conquiste ao menos 1 Andar da Torre para realizar a Varredura Diária!', 'system');
+    return;
+  }
+
+  const now = Date.now();
+  const ONE_DAY = 24 * 60 * 60 * 1000;
+  if (state.tower.lastSweepTime && (now - state.tower.lastSweepTime) < ONE_DAY) {
+    log('A Varredura Diária já foi realizada hoje! Tente novamente amanhã.', 'system');
+    return;
+  }
+
+  state.tower.lastSweepTime = now;
+
+  let totalGold = 0;
+  let totalSp = 0;
+  for (let i = 1; i <= highest; i++) {
+    const fDef = getTowerFloorDef(i);
+    totalGold += Math.floor(fDef.gold * 0.5);
+    totalSp += Math.floor(fDef.sp * 0.5);
+  }
+
+  state.gold += totalGold;
+  state.sp += totalSp;
+
+  log(`🧹 VARREDURA DA TORRE! Reclamou recompensas de ${highest} andares: +${totalGold.toLocaleString()} Gold, +${totalSp.toLocaleString()} SP!`, 'rarity-legendary');
+  floatText(`+${totalGold.toLocaleString()}g VARREDURA!`, 'float-jackpot');
+
+  updateAllUI();
+  save();
+}
+
+function updateTowerUI() {
+  if (!state.tower) state.tower = { highestFloor: 0, currentFloor: 1, lastSweepTime: 0 };
+  const highest = state.tower.highestFloor || 0;
+  const nextFloor = Math.min(100, highest + 1);
+
+  const highestText = el('tower-highest-floor-text');
+  if (highestText) highestText.textContent = `Andar Atual: ${highest} / 100`;
+
+  const bonusText = el('tower-bonus-text');
+  if (bonusText) bonusText.textContent = `Bônus Passivo Ativo: +${highest}% ATK, DEF & MATK`;
+
+  const nextNumText = el('tower-next-floor-num');
+  if (nextNumText) nextNumText.textContent = `${nextFloor}`;
+
+  const challengeBtn = el('tower-challenge-btn');
+  if (challengeBtn) {
+    if (highest >= 100) {
+      challengeBtn.textContent = '🏆 Torre 100% Concluída';
+      challengeBtn.disabled = true;
+    } else {
+      challengeBtn.textContent = `⚔️ Desafiar Andar ${nextFloor}`;
+      challengeBtn.disabled = false;
+      challengeBtn.onclick = () => challengeTowerFloor();
+    }
+  }
+
+  const sweepBtn = el('tower-sweep-btn');
+  if (sweepBtn) {
+    const now = Date.now();
+    const isSweepAvailable = highest >= 1 && (!state.tower.lastSweepTime || (now - state.tower.lastSweepTime) >= (24 * 60 * 60 * 1000));
+    sweepBtn.disabled = !isSweepAvailable;
+    sweepBtn.onclick = () => sweepTowerDaily();
+  }
+
+  const nextDef = getTowerFloorDef(nextFloor);
+  const recommendEl = el('tower-floor-recommend');
+  if (recommendEl) recommendEl.textContent = `Lv. Requerido: ${nextDef.reqLvl}`;
+
+  const detailsCard = el('tower-floor-details-card');
+  if (detailsCard) {
+    const rewardsStr = [];
+    rewardsStr.push(`💰 +${nextDef.gold.toLocaleString()}g`);
+    rewardsStr.push(`✦ +${nextDef.sp} SP`);
+    if (nextDef.rewardLamps > 0) rewardsStr.push(`🪔 +${nextDef.rewardLamps} Lâmpadas`);
+    if (nextDef.rewardCrystals) rewardsStr.push(`✨ +3x ${D().ALL_ITEMS[nextDef.rewardCrystals]?.name || nextDef.rewardCrystals}`);
+
+    detailsCard.innerHTML = `
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-weight:bold; font-size:13px; color:var(--gilt-bright);">${nextDef.name}</span>
+        <span style="font-size:11px; color:#fb7185;">HP: ${nextDef.hp.toLocaleString()} · ATK: ${nextDef.atk.toLocaleString()}</span>
+      </div>
+      <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">Recompensas de Primeiro Abate: ${rewardsStr.join(' · ')}</div>
+    `;
+  }
+
+  const grid = el('tower-floors-grid');
+  if (grid) {
+    let html = '';
+    for (let f = 1; f <= 100; f++) {
+      const isCleared = f <= highest;
+      const isCurrent = f === nextFloor;
+      const isBoss = f % 10 === 0;
+
+      let cls = 'tower-floor-pill';
+      if (isCleared) cls += ' cleared';
+      else if (isCurrent) cls += ' current';
+      if (isBoss) cls += ' boss-floor';
+
+      html += `<div class="${cls}"><span>${isBoss ? '👑' : '🏰'} Andar ${f}</span><span style="font-size:9px;opacity:0.8;">${isCleared ? '✓ Cleared' : (isCurrent ? '★ Desafio' : `Nv.${getTowerFloorDef(f).reqLvl}`)}</span></div>`;
+    }
+    grid.innerHTML = html;
+  }
+}
+
 function updateAllUI() {
   updateGameModeUI();
   safeUiUpdate('zone-bg', updateZoneBackground);
@@ -2525,6 +2743,7 @@ function updateAllUI() {
   safeUiUpdate('combat-controls', updateCombatControlsUI);
   safeUiUpdate('subclasses', renderSubclassesUI);
   safeUiUpdate('quests', updateQuestsUI);
+  safeUiUpdate('tower', updateTowerUI);
 }
 
 function renderSubclassesUI() {
@@ -2967,6 +3186,10 @@ function attackMonster() {
     triggerQuestEvent('kill', 1);
     if (monster.boss || monster.elite) triggerQuestEvent('boss', 1);
     triggerQuestEvent('gold', gold);
+
+    if (monster.isTower) {
+      onTowerFloorVictory(monster.towerFloor);
+    }
 
     checkLevelUp(); pickRandomMonster();
   } else { setTimeout(() => monsterAttack(monster), 500); }
@@ -3830,6 +4053,7 @@ function bindEvents() {
         else if (tabName === 'dolls') safeUiUpdate('dolls', updateDollsUI);
         else if (tabName === 'magiclamp') safeUiUpdate('magiclamp', updateMagicLampUI);
         else if (tabName === 'quests') safeUiUpdate('quests', updateQuestsUI);
+        else if (tabName === 'tower') safeUiUpdate('tower', updateTowerUI);
       };
     });
 
@@ -4028,6 +4252,8 @@ export function init() {
     window.claimQuestReward = claimQuestReward;
     window.claimPassReward = claimPassReward;
     window.unlockPremiumPass = unlockPremiumPass;
+    window.challengeTowerFloor = challengeTowerFloor;
+    window.sweepTowerDaily = sweepTowerDaily;
     window.toggleMuteAudio = () => {
       if (typeof window !== 'undefined' && window.idleAudio) {
         const isMuted = window.idleAudio.toggleMute();

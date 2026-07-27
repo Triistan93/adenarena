@@ -117,6 +117,7 @@ export const IDLE_MARKUP = `
           <button class="tab-btn" data-tab="dolls">🧸 Dolls</button>
           <button class="tab-btn" data-tab="magiclamp">🪔 Lâmpada &amp; Craft</button>
           <button class="tab-btn" data-tab="quests">🎯 Missões &amp; Passe</button>
+          <button class="tab-btn" data-tab="tower">🏰 Torre Insolência</button>
         </div>
         <div class="tab-content">
           <!-- Character Tab -->
@@ -564,6 +565,47 @@ export const IDLE_MARKUP = `
                 <span id="weekly-progress-badge" class="sp-pill" style="font-size:11px;">0/3 Concluídas</span>
               </div>
               <div id="weekly-quests-list" class="quests-list" style="margin-top:10px;"></div>
+            </div>
+          </div>
+
+          <!-- Tower of Insolence Tab -->
+          <div id="tab-tower" class="tab-pane">
+            <div class="tower-header-frame">
+              <div class="tower-title-group">
+                <span class="tower-window-icon">🏰</span>
+                <span class="tower-window-title">Torre da Insolência (Tower of Insolence)</span>
+              </div>
+              <div class="tower-reset-info">
+                <button id="tower-sweep-btn" class="inv-batch-btn gold-glow-btn" title="Reclamar 50% de todas as recompensas dos andares conquistados">🧹 Varredura Diária</button>
+              </div>
+            </div>
+
+            <!-- Tower Stats & Passive Bonus Banner -->
+            <div class="tower-banner-container">
+              <div class="tower-header-info">
+                <div class="tower-level-badge">
+                  <span class="tower-lvl-num" id="tower-highest-floor-text">Andar Atual: 0 / 100</span>
+                  <span class="tower-title" id="tower-bonus-text">Bônus Passivo: +0% ATK, DEF &amp; MATK</span>
+                </div>
+                <div class="tower-action-group">
+                  <button id="tower-challenge-btn" class="action-btn action-btn--primary" style="font-size:12px; font-weight:bold;">⚔️ Desafiar Andar <span id="tower-next-floor-num">1</span></button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Current Floor Challenge Preview Card -->
+            <div class="pane-section">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h3>🗡️ Detalhes do Próximo Desafio</h3>
+                <span id="tower-floor-recommend" class="sp-pill" style="font-size:11px;">Lv. Requerido: 10</span>
+              </div>
+              <div id="tower-floor-details-card" class="tower-details-card" style="margin-top:10px;"></div>
+            </div>
+
+            <!-- Floors Map Grid (1 to 100) -->
+            <div class="pane-section" style="margin-top: 10px;">
+              <h3>🏰 Progresso da Escalada (1 a 100 Andares)</h3>
+              <div id="tower-floors-grid" class="tower-floors-grid" style="margin-top:10px;"></div>
             </div>
           </div>
         </div>

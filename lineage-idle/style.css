@@ -3266,3 +3266,90 @@ select:focus-visible {
   cursor: not-allowed;
   box-shadow: none;
 }
+
+/* ============ TOWER OF INSOLENCE STYLES ============ */
+.tower-header-frame {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  background: linear-gradient(180deg, rgba(40, 15, 20, 0.9), rgba(20, 5, 10, 0.95));
+  border: 1px solid rgba(225, 29, 72, 0.4);
+  border-radius: 6px;
+  margin-bottom: 12px;
+}
+.tower-window-title {
+  font-family: "Cinzel", serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fecdd3;
+  letter-spacing: 0.1em;
+}
+.tower-banner-container {
+  background: linear-gradient(135deg, rgba(30, 10, 20, 0.9), rgba(15, 5, 10, 0.95));
+  border: 1px solid rgba(244, 63, 94, 0.4);
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.5);
+}
+.tower-header-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.tower-lvl-num {
+  font-family: "Cinzel", serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fb7185;
+  text-shadow: 0 0 10px rgba(251, 113, 133, 0.5);
+}
+.tower-title {
+  font-size: 11px;
+  color: #f43f5e;
+}
+.tower-details-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+.tower-floors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(75px, 1fr));
+  gap: 6px;
+  max-height: 280px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+.tower-floor-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 4px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.tower-floor-pill.cleared {
+  border-color: #22c55e;
+  background: rgba(34, 197, 94, 0.1);
+  color: #86efac;
+}
+.tower-floor-pill.current {
+  border-color: #fb7185;
+  background: rgba(251, 113, 133, 0.2);
+  box-shadow: 0 0 10px rgba(251, 113, 133, 0.3);
+  font-weight: bold;
+}
+.tower-floor-pill.boss-floor {
+  border-color: #f59e0b;
+}
