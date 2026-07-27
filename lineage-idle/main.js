@@ -2664,7 +2664,7 @@ function updateCodexUI() {
       const inInv = getInventoryCount(itemId) > 0;
       let btn = '';
       if (isReg) btn = '<span style="color:#10b981; font-weight:bold;">✓ Registrado</span>';
-      else if (inInv) btn = `<button class="action-btn action-btn--primary" style="padding: 2px 8px; font-size: 11px;" onclick="registerCodexItem('${setId}', '${itemId}')">Registrar 📥</button>`;
+      else if (inInv) btn = `<button class="action-btn action-btn--primary codex-reg-btn" style="padding: 2px 8px; font-size: 11px;" data-set="${setId}" data-item="${itemId}" onclick="registerCodexItem('${setId}', '${itemId}')">Registrar 📥</button>`;
       else btn = '<span style="color:var(--text-muted); font-size: 11px;">Não possui</span>';
 
       return `<div style="display:flex; justify-content:space-between; align-items:center; margin: 4px 0; font-size: 12px;"><span>${itemDef.name}</span>${btn}</div>`;
@@ -2678,6 +2678,9 @@ function updateCodexUI() {
       <p style="font-size:11px; color:var(--text-muted); margin: 4px 0 8px 0;">${setDef.desc}</p>
       <div style="background:rgba(0,0,0,0.3); padding:8px; border-radius:6px;">${itemsHtml}</div>
     `;
+    card.querySelectorAll('.codex-reg-btn').forEach(b => {
+      b.onclick = () => registerCodexItem(b.dataset.set, b.dataset.item);
+    });
     grid.appendChild(card);
   }
 
@@ -2803,8 +2806,11 @@ function updateDollsUI() {
           <div style="font-size:11px; color:#10b981;">${lvlInfo?.label || ''}</div>
         </div>
       </div>
-      <button class="action-btn" style="padding: 4px 8px; font-size: 11px;" onclick="selectDollForSynth('${d.uid}')">${isSel1 ? 'Slot 1' : isSel2 ? 'Slot 2' : 'Selecionar 🔮'}</button>
+      <button class="action-btn synth-doll-btn" style="padding: 4px 8px; font-size: 11px;" data-uid="${d.uid}" onclick="selectDollForSynth('${d.uid}')">${isSel1 ? 'Slot 1' : isSel2 ? 'Slot 2' : 'Selecionar 🔮'}</button>
     `;
+    item.querySelectorAll('.synth-doll-btn').forEach(b => {
+      b.onclick = () => selectDollForSynth(b.dataset.uid);
+    });
     grid.appendChild(item);
   }
 
@@ -2981,8 +2987,11 @@ function renderSpecialCraftRecipes() {
     card.innerHTML = `
       <div style="font-weight:bold; color:var(--gilt-bright); font-size:12px;">${r.name}</div>
       <div style="font-size:11px; color:var(--text-muted); margin:4px 0;">Custo: ${r.costCharges} Cargas + ${r.crystalQty}x ${D().ALL_ITEMS[r.crystalId]?.name || r.crystalId}</div>
-      <button class="action-btn action-btn--primary" style="padding:2px 8px; font-size:11px; width:100%; margin-top:6px;" onclick="craftSpecialRecipe('${r.id}')">Forjar ✨</button>
+      <button class="action-btn action-btn--primary special-craft-btn" style="padding:2px 8px; font-size:11px; width:100%; margin-top:6px;" data-recipe="${r.id}" onclick="craftSpecialRecipe('${r.id}')">Forjar ✨</button>
     `;
+    card.querySelectorAll('.special-craft-btn').forEach(b => {
+      b.onclick = () => craftSpecialRecipe(b.dataset.recipe);
+    });
     grid.appendChild(card);
   });
 }
@@ -3250,6 +3259,18 @@ function initPanelResizers() {
 
 export function init() {
   try {
+    // Expose global action handlers to window for inline HTML handlers & global events
+    window.registerCodexItem = registerCodexItem;
+    window.selectDollForSynth = selectDollForSynth;
+    window.synthesizeDolls = synthesizeDolls;
+    window.craftSpecialRecipe = craftSpecialRecipe;
+    window.drawMagicLamps = drawMagicLamps;
+    window.rerollSpecialCraftWheel = rerollSpecialCraftWheel;
+    window.craftSelectedWheelSlot = craftSelectedWheelSlot;
+    window.claimOfflineRewards = claimOfflineRewards;
+    window.selectZone = selectZone;
+    window.startRaidBoss = startRaidBoss;
+
     attachGlobalErrorHandlers();
     bindEvents();
 
