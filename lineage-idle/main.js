@@ -1624,7 +1624,13 @@ function updateInventoryUI() {
   if (shown === 0) grid.innerHTML = '<div class="inv-empty-msg">Nenhum item encontrado nesta categoria</div>';
 }
 
-function getItemIcon(def) { const icons = { weapon: '⚔️', armor: '🛡️', helmet: '⛑️', gloves: '🧤', boots: '👢', ring: '💍', consumable: '🧪', material: '💎', scroll: '📜' }; return icons[def.slot] || '📦'; }
+function getItemIcon(def) { 
+  const fallbackIcons = { weapon: '⚔️', armor: '🛡️', helmet: '⛑️', gloves: '🧤', boots: '👢', ring: '💍', consumable: '🧪', material: '💎', scroll: '📜' }; 
+  const emoji = fallbackIcons[def.slot] || '📦'; 
+  const iconName = def.icon || def.id; 
+  if (!iconName) return emoji; 
+  return `<img src="/img/icons/${iconName}.png" alt="${def.name}" class="item-icon-img" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='inline-block';" style="width:28px; height:28px; object-fit:contain; vertical-align:middle;" /><span class="item-icon-fallback" style="display:none; font-size:18px;">${emoji}</span>`; 
+}
 
 let tooltipTimer = null;
 
