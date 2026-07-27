@@ -140,53 +140,53 @@ const RINGS = {
 };
 
 const NEW_ARMORS = {
-  // Dark Crystal Armor Set
-  dark_crystal_heavy_armor: { name: 'Dark Crystal Heavy Armor', slot: 'armor', tier: 5, def: 180, mdef: 90, hp: 450, req: { level: 76 }, price: 40000, icon: 'dark_crystal_light_armor' },
-  dark_crystal_heavy_pants: { name: 'Dark Crystal Heavy Pants', slot: 'legs', tier: 5, def: 110, mdef: 55, hp: 250, req: { level: 76 }, price: 25000, icon: 'dark_crystal_heavy_pants' },
-  dark_crystal_heavy_glove: { name: 'Dark Crystal Heavy Gloves', slot: 'gloves', tier: 5, def: 40, mdef: 20, atk: 25, req: { level: 76 }, price: 15000, icon: 'dark_crystal_heavy_glove' },
-  dark_crystal_heavy_boots: { name: 'Dark Crystal Heavy Boots', slot: 'boots', tier: 5, def: 40, mdef: 20, speed: 5, req: { level: 76 }, price: 15000, icon: 'dark_crystal_heavy_boots' },
+  // Dark Crystal Armor Set (Grade A - Req Lv.60)
+  dark_crystal_heavy_armor: { name: 'Dark Crystal Heavy Armor', slot: 'armor', tier: 4, def: 110, mdef: 60, hp: 250, req: { level: 60 }, price: 25000, icon: 'dark_crystal_light_armor' },
+  dark_crystal_heavy_pants: { name: 'Dark Crystal Heavy Pants', slot: 'legs', tier: 4, def: 65, mdef: 35, hp: 150, req: { level: 60 }, price: 15000, icon: 'dark_crystal_heavy_pants' },
+  dark_crystal_heavy_glove: { name: 'Dark Crystal Heavy Gloves', slot: 'gloves', tier: 4, def: 25, mdef: 12, atk: 15, req: { level: 60 }, price: 10000, icon: 'dark_crystal_heavy_glove' },
+  dark_crystal_heavy_boots: { name: 'Dark Crystal Heavy Boots', slot: 'boots', tier: 4, def: 25, mdef: 12, speed: 5, req: { level: 60 }, price: 10000, icon: 'dark_crystal_heavy_boots' },
   
-  dark_crystal_light_armor: { name: 'Dark Crystal Light Armor', slot: 'armor', tier: 5, def: 140, mdef: 110, eva: 20, req: { level: 76 }, price: 40000, icon: 'dark_crystal_light_armor' },
-  dark_crystal_light_pants: { name: 'Dark Crystal Light Pants', slot: 'legs', tier: 5, def: 85, mdef: 70, eva: 12, req: { level: 76 }, price: 25000, icon: 'dark_crystal_light_pants' },
-  dark_crystal_light_glove: { name: 'Dark Crystal Light Gloves', slot: 'gloves', tier: 5, def: 30, mdef: 25, atk: 20, req: { level: 76 }, price: 15000, icon: 'dark_crystal_light_glove' },
-  dark_crystal_light_boots: { name: 'Dark Crystal Light Boots', slot: 'boots', tier: 5, def: 30, mdef: 25, speed: 8, req: { level: 76 }, price: 15000, icon: 'dark_crystal_light_boots' },
+  dark_crystal_light_armor: { name: 'Dark Crystal Light Armor', slot: 'armor', tier: 4, def: 85, mdef: 75, eva: 15, req: { level: 60 }, price: 25000, icon: 'dark_crystal_light_armor' },
+  dark_crystal_light_pants: { name: 'Dark Crystal Light Pants', slot: 'legs', tier: 4, def: 55, mdef: 45, eva: 10, req: { level: 60 }, price: 15000, icon: 'dark_crystal_light_pants' },
+  dark_crystal_light_glove: { name: 'Dark Crystal Light Gloves', slot: 'gloves', tier: 4, def: 20, mdef: 16, atk: 12, req: { level: 60 }, price: 10000, icon: 'dark_crystal_light_glove' },
+  dark_crystal_light_boots: { name: 'Dark Crystal Light Boots', slot: 'boots', tier: 4, def: 20, mdef: 16, speed: 6, req: { level: 60 }, price: 10000, icon: 'dark_crystal_light_boots' },
 
-  dark_crystal_robe_armor: { name: 'Dark Crystal Robe', slot: 'armor', tier: 5, def: 95, mdef: 190, matk: 75, req: { level: 76 }, price: 40000, icon: 'dark_crystal_robe_armor' },
-  dark_crystal_robe_glove: { name: 'Dark Crystal Robe Gloves', slot: 'gloves', tier: 5, def: 20, mdef: 45, matk: 20, req: { level: 76 }, price: 15000, icon: 'dark_crystal_robe_glove' },
-  dark_crystal_robe_boots: { name: 'Dark Crystal Robe Boots', slot: 'boots', tier: 5, def: 20, mdef: 45, matk: 15, req: { level: 76 }, price: 15000, icon: 'dark_crystal_robe_boots' },
+  dark_crystal_robe_armor: { name: 'Dark Crystal Robe', slot: 'armor', tier: 4, def: 60, mdef: 120, matk: 45, req: { level: 60 }, price: 25000, icon: 'dark_crystal_robe_armor' },
+  dark_crystal_robe_glove: { name: 'Dark Crystal Robe Gloves', slot: 'gloves', tier: 4, def: 15, mdef: 30, matk: 12, req: { level: 60 }, price: 10000, icon: 'dark_crystal_robe_glove' },
+  dark_crystal_robe_boots: { name: 'Dark Crystal Robe Boots', slot: 'boots', tier: 4, def: 15, mdef: 30, matk: 10, req: { level: 60 }, price: 10000, icon: 'dark_crystal_robe_boots' },
 
-  // Tallum Armor Set
-  tallum_heavy_armor: { name: 'Tallum Heavy Armor', slot: 'armor', tier: 5, def: 190, mdef: 85, hp: 500, req: { level: 76 }, price: 42000, icon: 'tallum_heavy_armor' },
-  tallum_heavy_glove: { name: 'Tallum Heavy Gloves', slot: 'gloves', tier: 5, def: 42, mdef: 18, atk: 28, req: { level: 76 }, price: 16000, icon: 'tallum_heavy_glove' },
-  tallum_heavy_boots: { name: 'Tallum Heavy Boots', slot: 'boots', tier: 5, def: 42, mdef: 18, speed: 6, req: { level: 76 }, price: 16000, icon: 'tallum_heavy_boots' },
-  tallum_light_armor: { name: 'Tallum Light Armor', slot: 'armor', tier: 5, def: 145, mdef: 115, eva: 22, req: { level: 76 }, price: 42000, icon: 'tallum_light_armor' },
-  tallum_light_glove: { name: 'Tallum Light Gloves', slot: 'gloves', tier: 5, def: 32, mdef: 26, atk: 22, req: { level: 76 }, price: 16000, icon: 'tallum_light_glove' },
-  tallum_light_boots: { name: 'Tallum Light Boots', slot: 'boots', tier: 5, def: 32, mdef: 26, speed: 9, req: { level: 76 }, price: 16000, icon: 'tallum_light_boots' },
-  tallum_robe_armor: { name: 'Tallum Robe', slot: 'armor', tier: 5, def: 100, mdef: 200, matk: 80, req: { level: 76 }, price: 42000, icon: 'tallum_robe_armor' },
-  tallum_robe_glove: { name: 'Tallum Robe Gloves', slot: 'gloves', tier: 5, def: 22, mdef: 48, matk: 22, req: { level: 76 }, price: 16000, icon: 'tallum_robe_glove' },
-  tallum_robe_boots: { name: 'Tallum Robe Boots', slot: 'boots', tier: 5, def: 22, mdef: 48, matk: 18, req: { level: 76 }, price: 16000, icon: 'tallum_robe_boots' },
+  // Tallum Armor Set (Grade A - Req Lv.60)
+  tallum_heavy_armor: { name: 'Tallum Heavy Armor', slot: 'armor', tier: 4, def: 115, mdef: 62, hp: 280, req: { level: 60 }, price: 26000, icon: 'tallum_heavy_armor' },
+  tallum_heavy_glove: { name: 'Tallum Heavy Gloves', slot: 'gloves', tier: 4, def: 26, mdef: 14, atk: 16, req: { level: 60 }, price: 11000, icon: 'tallum_heavy_glove' },
+  tallum_heavy_boots: { name: 'Tallum Heavy Boots', slot: 'boots', tier: 4, def: 26, mdef: 14, speed: 5, req: { level: 60 }, price: 11000, icon: 'tallum_heavy_boots' },
+  tallum_light_armor: { name: 'Tallum Light Armor', slot: 'armor', tier: 4, def: 90, mdef: 78, eva: 16, req: { level: 60 }, price: 26000, icon: 'tallum_light_armor' },
+  tallum_light_glove: { name: 'Tallum Light Gloves', slot: 'gloves', tier: 4, def: 22, mdef: 18, atk: 14, req: { level: 60 }, price: 11000, icon: 'tallum_light_glove' },
+  tallum_light_boots: { name: 'Tallum Light Boots', slot: 'boots', tier: 4, def: 22, mdef: 18, speed: 7, req: { level: 60 }, price: 11000, icon: 'tallum_light_boots' },
+  tallum_robe_armor: { name: 'Tallum Robe', slot: 'armor', tier: 4, def: 65, mdef: 125, matk: 50, req: { level: 60 }, price: 26000, icon: 'tallum_robe_armor' },
+  tallum_robe_glove: { name: 'Tallum Robe Gloves', slot: 'gloves', tier: 4, def: 16, mdef: 32, matk: 14, req: { level: 60 }, price: 11000, icon: 'tallum_robe_glove' },
+  tallum_robe_boots: { name: 'Tallum Robe Boots', slot: 'boots', tier: 4, def: 16, mdef: 32, matk: 12, req: { level: 60 }, price: 11000, icon: 'tallum_robe_boots' },
 
-  // Majestic Armor Set
-  majestic_heavy_armor: { name: 'Majestic Heavy Armor', slot: 'armor', tier: 5, def: 200, mdef: 95, hp: 550, req: { level: 76 }, price: 44000, icon: 'majestic_heavy_armor' },
-  majestic_heavy_glove: { name: 'Majestic Heavy Gloves', slot: 'gloves', tier: 5, def: 45, mdef: 20, atk: 30, req: { level: 76 }, price: 17000, icon: 'majestic_heavy_glove' },
-  majestic_heavy_boots: { name: 'Majestic Heavy Boots', slot: 'boots', tier: 5, def: 45, mdef: 20, speed: 7, req: { level: 76 }, price: 17000, icon: 'majestic_heavy_boots' },
-  majestic_light_armor: { name: 'Majestic Light Armor', slot: 'armor', tier: 5, def: 150, mdef: 125, eva: 24, req: { level: 76 }, price: 44000, icon: 'majestic_light_armor' },
-  majestic_light_glove: { name: 'Majestic Light Gloves', slot: 'gloves', tier: 5, def: 35, mdef: 28, atk: 25, req: { level: 76 }, price: 17000, icon: 'majestic_light_glove' },
-  majestic_light_boots: { name: 'Majestic Light Boots', slot: 'boots', tier: 5, def: 35, mdef: 28, speed: 10, req: { level: 76 }, price: 17000, icon: 'majestic_light_boots' },
-  majestic_robe_armor: { name: 'Majestic Robe', slot: 'armor', tier: 5, def: 105, mdef: 210, matk: 85, req: { level: 76 }, price: 44000, icon: 'majestic_robe_armor' },
-  majestic_robe_glove: { name: 'Majestic Robe Gloves', slot: 'gloves', tier: 5, def: 24, mdef: 50, matk: 24, req: { level: 76 }, price: 17000, icon: 'majestic_robe_glove' },
-  majestic_robe_boots: { name: 'Majestic Robe Boots', slot: 'boots', tier: 5, def: 24, mdef: 50, matk: 20, req: { level: 76 }, price: 17000, icon: 'majestic_robe_boots' },
+  // Majestic Armor Set (Grade A - Req Lv.60)
+  majestic_heavy_armor: { name: 'Majestic Heavy Armor', slot: 'armor', tier: 4, def: 120, mdef: 65, hp: 300, req: { level: 60 }, price: 28000, icon: 'majestic_heavy_armor' },
+  majestic_heavy_glove: { name: 'Majestic Heavy Gloves', slot: 'gloves', tier: 4, def: 28, mdef: 15, atk: 18, req: { level: 60 }, price: 12000, icon: 'majestic_heavy_glove' },
+  majestic_heavy_boots: { name: 'Majestic Heavy Boots', slot: 'boots', tier: 4, def: 28, mdef: 15, speed: 6, req: { level: 60 }, price: 12000, icon: 'majestic_heavy_boots' },
+  majestic_light_armor: { name: 'Majestic Light Armor', slot: 'armor', tier: 4, def: 95, mdef: 82, eva: 18, req: { level: 60 }, price: 28000, icon: 'majestic_light_armor' },
+  majestic_light_glove: { name: 'Majestic Light Gloves', slot: 'gloves', tier: 4, def: 24, mdef: 20, atk: 16, req: { level: 60 }, price: 12000, icon: 'majestic_light_glove' },
+  majestic_light_boots: { name: 'Majestic Light Boots', slot: 'boots', tier: 4, def: 24, mdef: 20, speed: 8, req: { level: 60 }, price: 12000, icon: 'majestic_light_boots' },
+  majestic_robe_armor: { name: 'Majestic Robe', slot: 'armor', tier: 4, def: 70, mdef: 130, matk: 55, req: { level: 60 }, price: 28000, icon: 'majestic_robe_armor' },
+  majestic_robe_glove: { name: 'Majestic Robe Gloves', slot: 'gloves', tier: 4, def: 18, mdef: 34, matk: 16, req: { level: 60 }, price: 12000, icon: 'majestic_robe_glove' },
+  majestic_robe_boots: { name: 'Majestic Robe Boots', slot: 'boots', tier: 4, def: 18, mdef: 34, matk: 14, req: { level: 60 }, price: 12000, icon: 'majestic_robe_boots' },
 
-  // Nightmare Armor Set
-  nightmare_heavy_armor: { name: 'Nightmare Heavy Armor', slot: 'armor', tier: 5, def: 210, mdef: 100, hp: 600, req: { level: 76 }, price: 46000, icon: 'nightmare_heavy_armor' },
-  nightmare_heavy_glove: { name: 'Nightmare Heavy Gloves', slot: 'gloves', tier: 5, def: 48, mdef: 22, atk: 32, req: { level: 76 }, price: 18000, icon: 'nightmare_heavy_glove' },
-  nightmare_heavy_boots: { name: 'Nightmare Heavy Boots', slot: 'boots', tier: 5, def: 48, mdef: 22, speed: 8, req: { level: 76 }, price: 18000, icon: 'nightmare_heavy_boots' },
-  nightmare_light_armor: { name: 'Nightmare Light Armor', slot: 'armor', tier: 5, def: 155, mdef: 130, eva: 25, req: { level: 76 }, price: 46000, icon: 'nightmare_light_armor' },
-  nightmare_light_glove: { name: 'Nightmare Light Gloves', slot: 'gloves', tier: 5, def: 38, mdef: 30, atk: 28, req: { level: 76 }, price: 18000, icon: 'nightmare_light_glove' },
-  nightmare_light_boots: { name: 'Nightmare Light Boots', slot: 'boots', tier: 5, def: 38, mdef: 30, speed: 11, req: { level: 76 }, price: 18000, icon: 'nightmare_light_boots' },
-  nightmare_robe_armor: { name: 'Nightmare Robe', slot: 'armor', tier: 5, def: 110, mdef: 220, matk: 90, req: { level: 76 }, price: 46000, icon: 'nightmare_robe_armor' },
-  nightmare_robe_glove: { name: 'Nightmare Robe Gloves', slot: 'gloves', tier: 5, def: 26, mdef: 52, matk: 26, req: { level: 76 }, price: 18000, icon: 'nightmare_robe_glove' },
-  nightmare_robe_boots: { name: 'Nightmare Robe Boots', slot: 'boots', tier: 5, def: 26, mdef: 52, matk: 22, req: { level: 76 }, price: 18000, icon: 'nightmare_robe_boots' },
+  // Nightmare Armor Set (Grade A - Req Lv.60)
+  nightmare_heavy_armor: { name: 'Nightmare Heavy Armor', slot: 'armor', tier: 4, def: 125, mdef: 68, hp: 320, req: { level: 60 }, price: 30000, icon: 'nightmare_heavy_armor' },
+  nightmare_heavy_glove: { name: 'Nightmare Heavy Gloves', slot: 'gloves', tier: 4, def: 30, mdef: 16, atk: 20, req: { level: 60 }, price: 13000, icon: 'nightmare_heavy_glove' },
+  nightmare_heavy_boots: { name: 'Nightmare Heavy Boots', slot: 'boots', tier: 4, def: 30, mdef: 16, speed: 6, req: { level: 60 }, price: 13000, icon: 'nightmare_heavy_boots' },
+  nightmare_light_armor: { name: 'Nightmare Light Armor', slot: 'armor', tier: 4, def: 100, mdef: 85, eva: 20, req: { level: 60 }, price: 30000, icon: 'nightmare_light_armor' },
+  nightmare_light_glove: { name: 'Nightmare Light Gloves', slot: 'gloves', tier: 4, def: 26, mdef: 22, atk: 18, req: { level: 60 }, price: 13000, icon: 'nightmare_light_glove' },
+  nightmare_light_boots: { name: 'Nightmare Light Boots', slot: 'boots', tier: 4, def: 26, mdef: 22, speed: 9, req: { level: 60 }, price: 13000, icon: 'nightmare_light_boots' },
+  nightmare_robe_armor: { name: 'Nightmare Robe', slot: 'armor', tier: 4, def: 75, mdef: 135, matk: 60, req: { level: 60 }, price: 30000, icon: 'nightmare_robe_armor' },
+  nightmare_robe_glove: { name: 'Nightmare Robe Gloves', slot: 'gloves', tier: 4, def: 20, mdef: 36, matk: 18, req: { level: 60 }, price: 13000, icon: 'nightmare_robe_glove' },
+  nightmare_robe_boots: { name: 'Nightmare Robe Boots', slot: 'boots', tier: 4, def: 20, mdef: 36, matk: 16, req: { level: 60 }, price: 13000, icon: 'nightmare_robe_boots' },
 
   // Elemental Armor Sets
   flame_armor: { name: 'Flame Breastplate', slot: 'armor', tier: 6, def: 160, mdef: 80, hp: 400, req: { level: 80 }, price: 55000, icon: 'flame_armor' },
