@@ -4,7 +4,16 @@ Este documento compila a lista completa de todos os sistemas, mecânicas, zonas,
 
 ---
 
-## 🎮 1. Motores de Jogo & Modos de Batalha
+## 🖼️ 1. Suporte a Ícones PNG Oficiais de Itens (`/public/img/icons/`)
+
+- **🖼️ Carregamento de Ícones PNG de Materiais, Armaduras e Armas**:
+  - Diretório configurado em `public/img/icons/`.
+  - A função `getItemIcon(def)` agora busca automaticamente ícones PNG nomeados pelo ID ou campo de ícone do item (ex.: `iron_ore.png`, `steel_ingot.png`, `draconic_leather_armor.png`).
+  - **Fallback Automático Resiliente em Emojis**: Caso o arquivo PNG de um item ainda não exista no diretório, o tratamento de erro em tempo real (`onerror`) oculta a tag da imagem e exibe o emoji padrão sem interromper o layout ou quebrar o inventário.
+
+---
+
+## 🎮 2. Motores de Jogo & Modos de Batalha
 
 - **📜 Idle Chronicle (RPG de Texto e Cartas Autônomo)**:
   - Sistema de combate automático baseado em ticks de relógio.
@@ -19,7 +28,7 @@ Este documento compila a lista completa de todos os sistemas, mecânicas, zonas,
 
 ---
 
-## 🎒 2. Capacidade do Inventário & Rebalanço de Drops (Foco no Craft)
+## 🎒 3. Capacidade do Inventário & Rebalanço de Drops (Foco no Craft)
 
 - **🎒 Capacidade Racional Expandida do Inventário (`getMaxInventorySlots()`)**:
   - **Raça Anão (Dwarf)**: **250 Slots** de inventário (Bônus racial clássico de carga de Aden).
@@ -34,7 +43,7 @@ Este documento compila a lista completa de todos os sistemas, mecânicas, zonas,
 
 ---
 
-## 🧭 3. Recursos de Interface (UI/UX) & Qualidade de Vida (QoL)
+## 🧭 4. Recursos de Interface (UI/UX) & Qualidade de Vida (QoL)
 
 - **🔍 Comparação Direta de Atributos no Tooltip (Delta vs Equipado)**:
   - Ao passar o mouse ou tocar em qualquer equipamento no inventário, o tooltip exibe a seção **VS EQUIPPED** destacando em verde (`+15 ATK`) ou vermelho (`-5 DEF`) a diferença de atributos contra o item equipado no mesmo slot.
@@ -52,32 +61,28 @@ Este documento compila a lista completa de todos os sistemas, mecânicas, zonas,
   - Teclas `1–9`: Troca instantânea entre as abas principais.
   - Tecla `Espaço`: Alternador rápido de velocidade de combate (`1x`, `2x`, `4x`).
   - Tecla `S` / `Ctrl+S`: Salvamento instantâneo do jogo.
-- **🔄 Persistência de Scroll entre Abas**:
-  - Posições de navegação em listas longas mantidas ao alternar entre abas.
 
 ---
 
-## 🧙‍♂️ 4. Raças, Classes & Subclasses
+## 🧙‍♂️ 5. Raças, Classes & Subclasses
 
 - **6 Raças Jogáveis**: Humano, Elfo, Elfo Negro, Orc, Anão e Kamael.
 - **Mais de 18 Classes Especiais**:
   - *Fighters*: Paladin, Warlord, Treasure Hunter, Berserker, Tyrant, Fortune Seeker, etc.
   - *Mages*: Sorcerer, Spellhowler, Necromancer, Spellsinger, Male Soulbreaker, etc.
-- **Árvore de Habilidades (Skill Tree)**:
-  - Dezenas de habilidades ativas e passivas exclusivas para cada classe.
-- **Sistema de Subclasses & Certificações**:
-  - Possibilidade de adicionar até 3 subclasses ao mesmo personagem.
+- **Árvore de Habilidades (Skill Tree)**: Dezenas de habilidades ativas e passivas exclusivas para cada classe.
+- **Sistema de Subclasses & Certificações**: Possibilidade de adicionar até 3 subclasses ao mesmo personagem.
 
 ---
 
-## 🗺️ 5. Zonas de Caça, Sagas & Chefes de Raid Mundiais
+## 🗺️ 6. Zonas de Caça, Sagas & Chefes de Raid Mundiais
 
 - **Sagas de Progressão (Sagas I, II e III)**: De Talking Island (Lv 1) a Imperial Tomb, Antharas' Lair e Forge of the Gods (Lv 100).
 - **Chefes Globais (World Bosses)**: Queen Ant (Lv 40), Zaken (Lv 60), Baium (Lv 80), Antharas (Lv 95), Valakas (Lv 100).
 
 ---
 
-## 🏰 6. Torre da Insolência (End-Game Tower of Insolence)
+## 🏰 7. Torre da Insolência (End-Game Tower of Insolence)
 
 - **Desafio de 100 Andares**: Monstruosidades e Guardiões de Torre com escalonamento de vida e dano.
 - **Bônus Passivo Multiplicativo**: +1% de ATK, DEF, MATK e MDEF por andar conquistado.
@@ -85,32 +90,30 @@ Este documento compila a lista completa de todos os sistemas, mecânicas, zonas,
 
 ---
 
-## 📜 7. Missões, Diárias/Semanais & Passe de Batalha
+## 📜 8. Missões, Diárias/Semanais & Passe de Batalha
 
 - Resetação automática a cada 24 horas (Diárias) e 7 dias (Semanais).
 - Passe de Batalha (Trilha Gratuita e Trilha Premium) com XP progressivo.
 
 ---
 
-## 🛡️ 8. Equipamentos, Crafting Avançado & Magic Dolls
+## 🛡️ 9. Equipamentos, Crafting Avançado & Magic Dolls
 
 - Equips S-Grade (Imperial Crusader, Draconic, Major Arcana) e Armas Épicas.
 - Crafting de receitas, Roda de Craft Aleatório e Sintetização 2:1 de Agathions (Dolls).
 
 ---
 
-## ☁️ 9. Autenticação, Banco NoSQL & Cloud Save (Firebase)
+## ☁️ 10. Autenticação, Banco NoSQL & Cloud Save (Firebase)
 
 - **Firebase Auth** (E-mail/Senha + Marca Oficial Google OAuth 4 cores).
 - **Firestore Database** (`users/{userId}`).
 - **Portal de Login Inicial** (`LoginScreen.tsx`).
-- **Auto-Save Triplo Resiliente**:
-  - Salvamento local a cada 10 segundos + ao fechar/ocultar a aba (`beforeunload`).
-  - Sincronização automática em segundo plano na nuvem Firebase a cada 15 segundos.
+- **Auto-Save Triplo Resiliente**: Salvamento local (10s) + ao fechar aba + Nuvem Firebase (15s).
 
 ---
 
-## 👑 10. Sistema de Privilégios & Segurança GM
+## 👑 11. Sistema de Privilégios & Segurança GM
 
 - Nível `0` (Jogador Normal) vs Nível `1` (Administrador GM).
 - Controle de Autorização Servidor/Banco direto na raiz do Firestore (`users/{userId}` ➔ `privilegeLevel: 1`).
