@@ -430,6 +430,7 @@ function load() {
     state.selectedSkill = data.selectedSkill || null;
     state.startTime = Date.now();
     
+    updateSagaProgress(true);
     log('✨ Atualização de versão carregada com sucesso! Seu progresso e itens foram 100% mantidos.', 'rarity-legendary');
 
     if (data.lastSaveTime) {
@@ -1933,16 +1934,30 @@ function updateZoneUI() {
 
 function renderZoneMap() {
   const list = el('zone-list'); if (!list) return;
+  updateSagaProgress(true);
   const coords = ART.ZONE_COORDS, order = ART.ZONE_ORDER, unlocked = {};
-  SAGAS.slice(0, state.currentSaga + 1).forEach(s => s.zones.forEach(z => { unlocked[z] = true; }));
+  SAGAS.slice(0, (state.currentSaga || 0) + 1).forEach(s => s.zones.forEach(z => { unlocked[z] = true; }));
   let routes = '', nodes = '';
-  for (let i = 1; i < order.length; i++) { const a = coords[order[i - 1]], b = coords[order[i]]; if (!a || !b) continue; const open = unlocked[order[i - 1]] && unlocked[order[i]]; routes += `<line class="zm-route ${open ? 'open' : ''}" x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}"/>`; }
+  for (let i = 1; i < order.length; i++) { 
+    const prevId = order[i - 1], currId = order[i];
+    const a = coords[prevId], b = coords[currId]; 
+    if (!a || !b) continue; 
+    const open = (unlocked[prevId] || ZONES[prevId]?.level <= state.level) && (unlocked[currId] || ZONES[currId]?.level <= state.level); 
+    routes += `<line class="zm-route ${open ? 'open' : ''}" x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}"/>`; 
+  }
   for (const id of order) {
-    const z = ZONES[id], c = coords[id]; if (!z || !c) continue; const reachable = unlocked[id] && z.level <= state.level, cls = state.zone === id ? 'current' : (reachable ? 'open' : 'locked');
+    const z = ZONES[id], c = coords[id]; if (!z || !c) continue; 
+    const reachable = (unlocked[id] || z.level <= state.level) && z.level <= state.level;
+    const cls = state.zone === id ? 'current' : (reachable ? 'open' : 'locked');
     nodes += `<g class="zm-node ${cls}" data-zone="${id}" transform="translate(${c.x},${c.y})"><title>${z.name} — Lv.${z.level}+${z.town ? ' (town)' : ''}</title><circle class="zm-ring" r="11"/><circle class="zm-dot" r="5"/>${z.town ? '<text class="zm-town" y="1">⌂</text>' : ''}${!reachable ? '<text class="zm-lock" y="3">🔒</text>' : ''}<text class="zm-label" y="23">${z.name}</text></g>`;
   }
   list.innerHTML = `<svg class="zone-map" viewBox="0 0 360 240" preserveAspectRatio="xMidYMid meet">${ART.mapBackdrop()}<g class="zm-routes">${routes}</g><g class="zm-nodes">${nodes}</g></svg>`;
-  list.querySelectorAll('.zm-node').forEach(n => { n.onclick = () => { const id = n.dataset.zone, z = ZONES[id]; if (unlocked[id] && z.level <= state.level) selectZone(id); }; });
+  list.querySelectorAll('.zm-node').forEach(n => { 
+    n.onclick = () => { 
+      const id = n.dataset.zone, z = ZONES[id]; 
+      if ((unlocked[id] || z.level <= state.level) && z.level <= state.level) selectZone(id); 
+    }; 
+  });
 }
 
 function updateRaidUI() {
@@ -2399,6 +2414,24 @@ function stopCombat() { state.combatActive = false; if (combatInterval) { clearI
 function pickRandomMonster() { const zone = ZONES[state.zone], available = zone.monsters.filter(m => { const mon = MONSTERS[m]; return mon && (mon.xp / 10) <= state.level + 5; }); if (available.length === 0) { state.target = zone.monsters[0]; } else { state.target = available[Math.floor(Math.random() * available.length)]; } const template = MONSTERS[state.target]; if (template) { state.activeMonster = { ...template, _maxHp: template.hp, hp: template.hp, _stunnedUntil: 0 }; log(`A wild ${template.name} appears!`, 'combat'); renderStageMonster(); } }
 function selectZone(zoneId) { const zone = ZONES[zoneId]; if (zone.level > state.level) { log(`Level ${zone.level} required.`, 'system'); return; } state.zone = zoneId; el('zone-name').textContent = zone.name; stopCombat(); startCombat(); updateAllUI(); save(); }
 
+function updateSagaProgress(silent = true) {
+  let highestSaga = 0;
+  for (let i = 0; i < SAGAS.length; i++) {
+    if (state.level >= SAGAS[i].unlocksAt) {
+      highestSaga = i;
+    }
+  }
+  if (highestSaga > (state.currentSaga || 0)) {
+    const newSaga = SAGAS[highestSaga];
+    state.currentSaga = highestSaga;
+    if (!silent) showSagaModal(newSaga);
+    log(`🗺️ NOVA SAGA DESBLOQUEADA: **${newSaga.name}**! Novas áreas de caça Lv.${newSaga.unlocksAt}+ disponíveis!`, 'rarity-legendary');
+    floatText(`🗺️ SAGA DESBLOQUEADA!`, 'float-jackpot');
+  } else if (state.currentSaga === undefined || state.currentSaga === null) {
+    state.currentSaga = highestSaga;
+  }
+}
+
 function checkLevelUp() {
   while (state.xp >= getTotalXP(state.level)) {
     state.level++; const stats = getStats(); state.maxHp = stats.maxHp; state.maxMp = stats.maxMp; state.hp = state.maxHp; state.mp = state.maxMp; 
@@ -2408,7 +2441,7 @@ function checkLevelUp() {
     log(`🎉 LEVEL UP! Nível ${state.level} Alcançado! (+${spReward} SP)`, 'rarity-legendary');
     floatText(`🎉 LEVEL UP! Nível ${state.level}`, 'float-jackpot');
     
-    for (const saga of SAGAS) { if (saga.unlocksAt === state.level && !SAGAS.slice(0, saga.level).includes(saga)) { state.currentSaga = saga.level; showSagaModal(saga); break; } }
+    updateSagaProgress(false);
     updateAllUI(); save();
   }
 }
