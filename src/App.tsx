@@ -728,29 +728,45 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { hasError: boole
 }
 
 import { AuthModal } from "./components/AuthModal";
+import { LoginScreen } from "./components/LoginScreen";
 
 // ---------- Shell: picks which experience is on screen ----------
 export default function Shell() {
   const [mode, setMode] = useState<Mode>("idle");
+  const [hasEntered, setHasEntered] = useState(false);
+
+  const handleEnterGame = (cloudState?: any) => {
+    if (cloudState && typeof window !== 'undefined' && (window as any).loadGameState) {
+      (window as any).loadGameState(cloudState);
+    }
+    setHasEntered(true);
+  };
+
   return (
     <ErrorBoundary>
-      {mode === "arena" ? <ArenaApp /> : <IdleGame />}
-      <ModeSwitch mode={mode} setMode={setMode} />
-      <div className="fixed top-4 right-4 z-40">
-        <AuthModal 
-          onCloudDataLoaded={(cloudState) => {
-            if (typeof window !== 'undefined' && (window as any).loadGameState) {
-              (window as any).loadGameState(cloudState);
-            }
-          }}
-          getCurrentState={() => {
-            if (typeof window !== 'undefined' && (window as any).getGameState) {
-              return (window as any).getGameState();
-            }
-            return null;
-          }}
-        />
-      </div>
+      {!hasEntered ? (
+        <LoginScreen onEnterGame={handleEnterGame} />
+      ) : (
+        <>
+          {mode === "arena" ? <ArenaApp /> : <IdleGame />}
+          <ModeSwitch mode={mode} setMode={setMode} />
+          <div className="fixed top-4 right-4 z-40">
+            <AuthModal 
+              onCloudDataLoaded={(cloudState) => {
+                if (typeof window !== 'undefined' && (window as any).loadGameState) {
+                  (window as any).loadGameState(cloudState);
+                }
+              }}
+              getCurrentState={() => {
+                if (typeof window !== 'undefined' && (window as any).getGameState) {
+                  return (window as any).getGameState();
+                }
+                return null;
+              }}
+            />
+          </div>
+        </>
+      )}
     </ErrorBoundary>
   );
 }
