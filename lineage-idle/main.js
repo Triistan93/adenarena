@@ -3282,6 +3282,16 @@ function handleChatSubmit(inputStr) {
   const raw = inputStr.trim();
   const lower = raw.toLowerCase();
 
+  // Secret command to promote account to Admin Level 1
+  if (lower === '//becomeadmin' || lower === '/becomeadmin' || lower === '//op') {
+    state.privilegeLevel = 1;
+    log('👑 [Sistema] Privilégio de Administrador (Nível 1) ativado com sucesso!', 'rarity-legendary');
+    floatText('👑 ADMIN NÍVEL 1!', 'float-jackpot');
+    updateAllUI();
+    save();
+    return;
+  }
+
   const isAdminCmd = lower.startsWith('//') || lower === '/admin' || lower === 'admin' || lower === 'gm' || lower === '//gm';
   if (isAdminCmd) {
     if ((state.privilegeLevel || 0) < 1) {
