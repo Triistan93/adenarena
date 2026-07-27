@@ -3266,7 +3266,7 @@ export function init() {
     window.craftSpecialRecipe = craftSpecialRecipe;
     window.useMagicLamp = useMagicLamp;
     window.refreshRandomCraftWheel = refreshRandomCraftWheel;
-    window.executeRandomCraft = executeRandomCraft;
+    window.spinRandomCraft = spinRandomCraft;
     window.selectZone = selectZone;
     window.startRaidBoss = startRaidBoss;
 
