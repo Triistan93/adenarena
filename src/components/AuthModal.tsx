@@ -58,6 +58,22 @@ export function AuthModal({ onCloudDataLoaded, getCurrentState }: AuthModalProps
     return () => unsubscribe();
   }, []);
 
+  // Background Auto Cloud Save every 15 seconds for logged in users
+  useEffect(() => {
+    if (!user || !getCurrentState) return;
+    const interval = setInterval(async () => {
+      try {
+        const currentState = getCurrentState();
+        if (currentState && currentState.level) {
+          await savePlayerStateToCloud(user.uid, currentState);
+        }
+      } catch (err) {
+        console.warn("Auto cloud save background sync notice:", err);
+      }
+    }, 15000);
+    return () => clearInterval(interval);
+  }, [user, getCurrentState]);
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);

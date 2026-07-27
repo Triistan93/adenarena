@@ -4556,8 +4556,13 @@ export function init() {
     }
 
     _intervals.push(setInterval(updateClock, 1000)); 
-    _intervals.push(setInterval(save, 30000)); 
+    _intervals.push(setInterval(save, 10000)); 
     _intervals.push(setInterval(tickUI, 1000));
+
+    addTrackedListener(window, 'beforeunload', () => save());
+    addTrackedListener(document, 'visibilitychange', () => {
+      if (document.visibilityState === 'hidden') save();
+    });
   } catch (err) {
     console.warn('Game init warning:', err);
   }
