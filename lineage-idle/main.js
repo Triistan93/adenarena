@@ -585,7 +585,7 @@ function getStats() {
   let xpBoost = 0, goldBoost = 0, luckBoost = 0, autoPotion = false;
   state.buffs = state.buffs || {};
   for (const k of Object.keys(state.buffs)) {
-    if (state.buffs[k].until < now) { delete state.buffs[k]; continue; }
+    if (state.buffs[k].until < now) continue;
     const b = state.buffs[k];
     if (k === 'atk') buffAtk += Number(b.amount) || 0;
     else if (k === 'def') buffDef += Number(b.amount) || 0;
@@ -3065,7 +3065,7 @@ function stageHeroBlock() { stageFloat('BLOCK', 'sf-block', 'left'); }
 function stageFloat(text, cls, side) { const c = el('stage-floats'); if (!c) return; const s = mkEl('span'); s.className = 'sf ' + cls; s.textContent = text; s.style.left = (side === 'left' ? (16 + Math.random() * 8) : (68 + Math.random() * 12)) + '%'; c.appendChild(s); setTimeout(() => s.remove(), 1100); }
 
 // --------------------------- COMBAT ---------------------------
-let combatInterval = null; let combatTick = 0;
+let combatInterval = null; let combatTick = 0; let monsterAttackTimeout = null;
 
 function dealDamage(target, amount, type = 'physical') { 
   const rawAmount = Number(amount) || 0;
@@ -3078,8 +3078,17 @@ function trackGold(amount) { goldEvents.push({ t: Date.now(), v: amount }); }
 function getGoldPerSec() { const now = Date.now(); while (goldEvents.length && now - goldEvents[0].t > 30000) goldEvents.shift(); if (!goldEvents.length) return 0; return goldEvents.reduce((s, e) => s + e.v, 0) / 30; }
 function floatText(text, cls = 'float-gold') { const layer = el('float-layer'); if (!layer) return; const span = mkEl('span'); span.className = 'float-text ' + cls; span.textContent = text; const rect = layer.getBoundingClientRect(); span.style.left = (rect.width * (0.35 + Math.random() * 0.3)) + 'px'; span.style.top = (rect.height * 0.55 + (Math.random() * 60 - 30)) + 'px'; layer.appendChild(span); setTimeout(() => span.remove(), 1400); }
 
+function checkBuffsExpire() {
+  if (!state.buffs) return;
+  const now = Date.now();
+  for (const k of Object.keys(state.buffs)) {
+    if (state.buffs[k].until < now) delete state.buffs[k];
+  }
+}
+
 function attackMonster() {
   if (!state.zone || !state.target) return;
+  checkBuffsExpire();
   const stats = getStats(), monster = state.activeMonster || MONSTERS[state.target]; if (!monster) return;
   combatTick++;
 
@@ -3091,21 +3100,12 @@ function attackMonster() {
     state._mpRegenAcc = (state._mpRegenAcc || 0) + 0.2;
     if (state._mpRegenAcc >= 5) { state._mpRegenAcc = 0; if (state.mp < state.maxMp) { state.mp = Math.min(state.maxMp, state.mp + stats.mpRegen); } }
   }
-  if (stats.autoPotion && state.hp < state.maxHp * 0.3) {
+  const shouldAutoPot = stats.autoPotion || state.autoPotionActive;
+  if (shouldAutoPot && state.hp < state.maxHp * 0.5) {
     const potIds = ['hp_potion_xl','hp_potion_l','hp_potion_m','hp_potion_s'];
-    for (const pid of potIds) { const it = state.inventory.find(i => i.itemId === pid && (i.count || 1) > 0); if (it) { useItem(it.uid); break; } }
-  }
-
-  const isMage = state.class === 'mage' || state.class === 'soulbreaker';
-  
-  if (state.autoPotionActive && state.hp < state.maxHp * 0.5) {
-    const pots = ['hp_potion_xl','hp_potion_l','hp_potion_m','hp_potion_s'];
-    for (const pId of pots) {
-      const item = state.inventory.find(i => i.itemId === pId && (i.count || 1) > 0);
-      if (item) {
-        useItem(item.uid);
-        break;
-      }
+    for (const pid of potIds) { 
+      const it = state.inventory.find(i => i.itemId === pid && (i.count || 1) > 0); 
+      if (it) { useItem(it.uid); break; } 
     }
   }
   
@@ -3229,7 +3229,10 @@ function attackMonster() {
     }
 
     checkLevelUp(); pickRandomMonster();
-  } else { setTimeout(() => monsterAttack(monster), 500); }
+  } else { 
+    if (monsterAttackTimeout) clearTimeout(monsterAttackTimeout);
+    monsterAttackTimeout = setTimeout(() => monsterAttack(monster), 500); 
+  }
   updateStatsUI();
 }
 
@@ -3241,7 +3244,8 @@ function monsterAttack(monster) {
   const stats = getStats(); stageMonsterLunge();
   if (Math.random() < stats.eva / 100) { log(`${monster.name} missed!`, 'combat'); stageFloat('DODGE', 'sf-miss', 'left'); return; }
   
-  let damage = dealDamage({ atk: 0, def: 0 }, monster.atk);
+  const type = (monster.isMage || monster.boss) ? 'magical' : 'physical';
+  let damage = dealDamage({ def: stats.def, mdef: stats.mdef }, monster.atk, type);
   if (state.godMode) damage = 0;
   if (damage > 0) { state.hp -= damage; log(`${monster.name} hits for ${damage}`, 'damage'); stageHeroHurt(damage); }
   if (state.hp <= 0) { state.hp = 0; playerDeath(monster); }
@@ -3399,7 +3403,11 @@ function executeAdminCmd(cmd) {
 }
 
 function startCombat() { if (state.combatActive) return; if (!state.zone) return; state.combatActive = true; log(`Entering ${ZONES[state.zone].name}...`, 'system'); pickRandomMonster(); combatTick = 0; state._cds = {}; if (combatInterval) clearInterval(combatInterval); combatInterval = setInterval(attackMonster, 200); }
-function stopCombat() { state.combatActive = false; if (combatInterval) { clearInterval(combatInterval); combatInterval = null; } }
+function stopCombat() { 
+  state.combatActive = false; 
+  if (combatInterval) { clearInterval(combatInterval); combatInterval = null; } 
+  if (monsterAttackTimeout) { clearTimeout(monsterAttackTimeout); monsterAttackTimeout = null; }
+}
 function pickRandomMonster() {
   if (state.activeMonster && state.activeMonster.isTower && state.activeMonster.hp > 0) return;
   if (!state.zone || !ZONES[state.zone]) return;

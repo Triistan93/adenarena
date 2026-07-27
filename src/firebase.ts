@@ -40,14 +40,13 @@ export async function savePlayerStateToCloud(userId: string, stateData: any) {
     const userRef = doc(db, 'users', userId);
     const cleanState = JSON.parse(JSON.stringify(stateData));
     
+    // SECURITY: Never allow client-sent privilegeLevel to be written to Firestore!
+    delete cleanState.privilegeLevel;
+    
     const payload: any = {
       state: cleanState,
       updatedAt: serverTimestamp()
     };
-    
-    if (cleanState && cleanState.privilegeLevel !== undefined) {
-      payload.privilegeLevel = Number(cleanState.privilegeLevel) || 0;
-    }
 
     await setDoc(userRef, payload, { merge: true });
     return true;
@@ -65,8 +64,9 @@ export async function loadPlayerStateFromCloud(userId: string) {
       const docData = snap.data();
       if (docData && docData.state) {
         const stateObj = docData.state;
+        // SECURITY: privilegeLevel is strictly authorized from root document in Firestore
         const rootPrivilege = Number(docData.privilegeLevel) || (docData.role === 'admin' ? 1 : 0);
-        stateObj.privilegeLevel = rootPrivilege || Number(stateObj.privilegeLevel) || 0;
+        stateObj.privilegeLevel = rootPrivilege;
         return stateObj;
       }
     }
