@@ -135,7 +135,111 @@ const RINGS = {
   dragon_eye_ring: { name: 'Dragon Eye Ring', slot: 'ring', tier: 5, hp: 250, mp: 150, atk: 8, matk: 8, crit: 5, req: { level: 76 }, price: 25000 },
   eternity_ring: { name: 'Ring of Eternity', slot: 'ring', tier: 5, hp: 200, mp: 200, atk: 5, matk: 5, def: 10, mdef: 10, req: { level: 80 }, price: 30000 },
   ring_of_baium: { name: 'Ring of Baium', slot: 'ring', tier: 5, hp: 300, mp: 150, atk: 25, matk: 25, speed: 10, crit: 10, req: { level: 80 }, price: 100000 },
-  ring_of_queen_ant: { name: 'Ring of Queen Ant', slot: 'ring', tier: 4, hp: 150, mp: 80, atk: 15, crit: 8, req: { level: 60 }, price: 40000 }
+  ring_of_queen_ant: { name: 'Ring of Queen Ant', slot: 'ring', tier: 4, hp: 150, mp: 80, atk: 15, crit: 8, req: { level: 60 }, price: 40000, icon: 'accessory_ring_of_queen_ant_i03' },
+  ring_of_core: { name: 'Ring of Core', slot: 'ring', tier: 5, hp: 180, mp: 90, def: 20, req: { level: 76 }, price: 65000, icon: 'accessory_ring_of_core_i03' }
+};
+
+const NEW_ARMORS = {
+  // Dark Crystal Armor Set
+  dark_crystal_heavy_armor: { name: 'Dark Crystal Heavy Armor', slot: 'armor', tier: 5, def: 180, mdef: 90, hp: 450, req: { level: 76 }, price: 40000, icon: 'dark_crystal_light_armor' },
+  dark_crystal_heavy_pants: { name: 'Dark Crystal Heavy Pants', slot: 'legs', tier: 5, def: 110, mdef: 55, hp: 250, req: { level: 76 }, price: 25000, icon: 'dark_crystal_heavy_pants' },
+  dark_crystal_heavy_glove: { name: 'Dark Crystal Heavy Gloves', slot: 'gloves', tier: 5, def: 40, mdef: 20, atk: 25, req: { level: 76 }, price: 15000, icon: 'dark_crystal_heavy_glove' },
+  dark_crystal_heavy_boots: { name: 'Dark Crystal Heavy Boots', slot: 'boots', tier: 5, def: 40, mdef: 20, speed: 5, req: { level: 76 }, price: 15000, icon: 'dark_crystal_heavy_boots' },
+  
+  dark_crystal_light_armor: { name: 'Dark Crystal Light Armor', slot: 'armor', tier: 5, def: 140, mdef: 110, eva: 20, req: { level: 76 }, price: 40000, icon: 'dark_crystal_light_armor' },
+  dark_crystal_light_pants: { name: 'Dark Crystal Light Pants', slot: 'legs', tier: 5, def: 85, mdef: 70, eva: 12, req: { level: 76 }, price: 25000, icon: 'dark_crystal_light_pants' },
+  dark_crystal_light_glove: { name: 'Dark Crystal Light Gloves', slot: 'gloves', tier: 5, def: 30, mdef: 25, atk: 20, req: { level: 76 }, price: 15000, icon: 'dark_crystal_light_glove' },
+  dark_crystal_light_boots: { name: 'Dark Crystal Light Boots', slot: 'boots', tier: 5, def: 30, mdef: 25, speed: 8, req: { level: 76 }, price: 15000, icon: 'dark_crystal_light_boots' },
+
+  dark_crystal_robe_armor: { name: 'Dark Crystal Robe', slot: 'armor', tier: 5, def: 95, mdef: 190, matk: 75, req: { level: 76 }, price: 40000, icon: 'dark_crystal_robe_armor' },
+  dark_crystal_robe_glove: { name: 'Dark Crystal Robe Gloves', slot: 'gloves', tier: 5, def: 20, mdef: 45, matk: 20, req: { level: 76 }, price: 15000, icon: 'dark_crystal_robe_glove' },
+  dark_crystal_robe_boots: { name: 'Dark Crystal Robe Boots', slot: 'boots', tier: 5, def: 20, mdef: 45, matk: 15, req: { level: 76 }, price: 15000, icon: 'dark_crystal_robe_boots' },
+
+  // Tallum Armor Set
+  tallum_heavy_armor: { name: 'Tallum Heavy Armor', slot: 'armor', tier: 5, def: 190, mdef: 85, hp: 500, req: { level: 76 }, price: 42000, icon: 'tallum_heavy_armor' },
+  tallum_heavy_glove: { name: 'Tallum Heavy Gloves', slot: 'gloves', tier: 5, def: 42, mdef: 18, atk: 28, req: { level: 76 }, price: 16000, icon: 'tallum_heavy_glove' },
+  tallum_heavy_boots: { name: 'Tallum Heavy Boots', slot: 'boots', tier: 5, def: 42, mdef: 18, speed: 6, req: { level: 76 }, price: 16000, icon: 'tallum_heavy_boots' },
+  tallum_light_armor: { name: 'Tallum Light Armor', slot: 'armor', tier: 5, def: 145, mdef: 115, eva: 22, req: { level: 76 }, price: 42000, icon: 'tallum_light_armor' },
+  tallum_light_glove: { name: 'Tallum Light Gloves', slot: 'gloves', tier: 5, def: 32, mdef: 26, atk: 22, req: { level: 76 }, price: 16000, icon: 'tallum_light_glove' },
+  tallum_light_boots: { name: 'Tallum Light Boots', slot: 'boots', tier: 5, def: 32, mdef: 26, speed: 9, req: { level: 76 }, price: 16000, icon: 'tallum_light_boots' },
+  tallum_robe_armor: { name: 'Tallum Robe', slot: 'armor', tier: 5, def: 100, mdef: 200, matk: 80, req: { level: 76 }, price: 42000, icon: 'tallum_robe_armor' },
+  tallum_robe_glove: { name: 'Tallum Robe Gloves', slot: 'gloves', tier: 5, def: 22, mdef: 48, matk: 22, req: { level: 76 }, price: 16000, icon: 'tallum_robe_glove' },
+  tallum_robe_boots: { name: 'Tallum Robe Boots', slot: 'boots', tier: 5, def: 22, mdef: 48, matk: 18, req: { level: 76 }, price: 16000, icon: 'tallum_robe_boots' },
+
+  // Majestic Armor Set
+  majestic_heavy_armor: { name: 'Majestic Heavy Armor', slot: 'armor', tier: 5, def: 200, mdef: 95, hp: 550, req: { level: 76 }, price: 44000, icon: 'majestic_heavy_armor' },
+  majestic_heavy_glove: { name: 'Majestic Heavy Gloves', slot: 'gloves', tier: 5, def: 45, mdef: 20, atk: 30, req: { level: 76 }, price: 17000, icon: 'majestic_heavy_glove' },
+  majestic_heavy_boots: { name: 'Majestic Heavy Boots', slot: 'boots', tier: 5, def: 45, mdef: 20, speed: 7, req: { level: 76 }, price: 17000, icon: 'majestic_heavy_boots' },
+  majestic_light_armor: { name: 'Majestic Light Armor', slot: 'armor', tier: 5, def: 150, mdef: 125, eva: 24, req: { level: 76 }, price: 44000, icon: 'majestic_light_armor' },
+  majestic_light_glove: { name: 'Majestic Light Gloves', slot: 'gloves', tier: 5, def: 35, mdef: 28, atk: 25, req: { level: 76 }, price: 17000, icon: 'majestic_light_glove' },
+  majestic_light_boots: { name: 'Majestic Light Boots', slot: 'boots', tier: 5, def: 35, mdef: 28, speed: 10, req: { level: 76 }, price: 17000, icon: 'majestic_light_boots' },
+  majestic_robe_armor: { name: 'Majestic Robe', slot: 'armor', tier: 5, def: 105, mdef: 210, matk: 85, req: { level: 76 }, price: 44000, icon: 'majestic_robe_armor' },
+  majestic_robe_glove: { name: 'Majestic Robe Gloves', slot: 'gloves', tier: 5, def: 24, mdef: 50, matk: 24, req: { level: 76 }, price: 17000, icon: 'majestic_robe_glove' },
+  majestic_robe_boots: { name: 'Majestic Robe Boots', slot: 'boots', tier: 5, def: 24, mdef: 50, matk: 20, req: { level: 76 }, price: 17000, icon: 'majestic_robe_boots' },
+
+  // Nightmare Armor Set
+  nightmare_heavy_armor: { name: 'Nightmare Heavy Armor', slot: 'armor', tier: 5, def: 210, mdef: 100, hp: 600, req: { level: 76 }, price: 46000, icon: 'nightmare_heavy_armor' },
+  nightmare_heavy_glove: { name: 'Nightmare Heavy Gloves', slot: 'gloves', tier: 5, def: 48, mdef: 22, atk: 32, req: { level: 76 }, price: 18000, icon: 'nightmare_heavy_glove' },
+  nightmare_heavy_boots: { name: 'Nightmare Heavy Boots', slot: 'boots', tier: 5, def: 48, mdef: 22, speed: 8, req: { level: 76 }, price: 18000, icon: 'nightmare_heavy_boots' },
+  nightmare_light_armor: { name: 'Nightmare Light Armor', slot: 'armor', tier: 5, def: 155, mdef: 130, eva: 25, req: { level: 76 }, price: 46000, icon: 'nightmare_light_armor' },
+  nightmare_light_glove: { name: 'Nightmare Light Gloves', slot: 'gloves', tier: 5, def: 38, mdef: 30, atk: 28, req: { level: 76 }, price: 18000, icon: 'nightmare_light_glove' },
+  nightmare_light_boots: { name: 'Nightmare Light Boots', slot: 'boots', tier: 5, def: 38, mdef: 30, speed: 11, req: { level: 76 }, price: 18000, icon: 'nightmare_light_boots' },
+  nightmare_robe_armor: { name: 'Nightmare Robe', slot: 'armor', tier: 5, def: 110, mdef: 220, matk: 90, req: { level: 76 }, price: 46000, icon: 'nightmare_robe_armor' },
+  nightmare_robe_glove: { name: 'Nightmare Robe Gloves', slot: 'gloves', tier: 5, def: 26, mdef: 52, matk: 26, req: { level: 76 }, price: 18000, icon: 'nightmare_robe_glove' },
+  nightmare_robe_boots: { name: 'Nightmare Robe Boots', slot: 'boots', tier: 5, def: 26, mdef: 52, matk: 22, req: { level: 76 }, price: 18000, icon: 'nightmare_robe_boots' },
+
+  // Elemental Armor Sets
+  flame_armor: { name: 'Flame Breastplate', slot: 'armor', tier: 6, def: 160, mdef: 80, hp: 400, req: { level: 80 }, price: 55000, icon: 'flame_armor' },
+  flame_pants: { name: 'Flame Gaiters', slot: 'legs', tier: 6, def: 95, mdef: 50, hp: 200, req: { level: 80 }, price: 35000, icon: 'flame_pants' },
+  flame_gloves: { name: 'Flame Gloves', slot: 'gloves', tier: 6, def: 40, mdef: 25, atk: 25, req: { level: 80 }, price: 20000, icon: 'flame_gloves' },
+  icy_armor: { name: 'Icy Robe', slot: 'armor', tier: 6, def: 85, mdef: 170, matk: 65, req: { level: 80 }, price: 55000, icon: 'icy_armor' },
+  icy_gaiters: { name: 'Icy Stockings', slot: 'legs', tier: 6, def: 50, mdef: 100, matk: 35, req: { level: 80 }, price: 35000, icon: 'icy_gaiters' },
+  lightning_armor: { name: 'Lightning Armor', slot: 'armor', tier: 6, def: 120, mdef: 110, eva: 18, req: { level: 80 }, price: 55000, icon: 'lightning_armor' },
+  lightning_pants: { name: 'Lightning Pants', slot: 'legs', tier: 6, def: 75, mdef: 70, eva: 10, req: { level: 80 }, price: 35000, icon: 'lightning_pants' },
+
+  protection_heavy_armor: { name: 'Protection Heavy Armor', slot: 'armor', tier: 6, def: 175, mdef: 85, hp: 450, req: { level: 82 }, price: 65000, icon: 'protection_heavy_armor' },
+  protection_heavy_pants: { name: 'Protection Heavy Pants', slot: 'legs', tier: 6, def: 105, mdef: 55, hp: 250, req: { level: 82 }, price: 40000, icon: 'protection_heavy_pants' },
+  protection_light_armor: { name: 'Protection Light Armor', slot: 'armor', tier: 6, def: 135, mdef: 115, eva: 20, req: { level: 82 }, price: 65000, icon: 'protection_light_armor' },
+  protection_light_pants: { name: 'Protection Light Pants', slot: 'legs', tier: 6, def: 85, mdef: 75, eva: 12, req: { level: 82 }, price: 40000, icon: 'protection_light_pants' },
+  protection_robe_armor: { name: 'Protection Robe', slot: 'armor', tier: 6, def: 90, mdef: 180, matk: 70, req: { level: 82 }, price: 65000, icon: 'protection_robe_armor' },
+  protection_robe_pants: { name: 'Protection Robe Pants', slot: 'legs', tier: 6, def: 55, mdef: 110, matk: 40, req: { level: 82 }, price: 40000, icon: 'protection_robe_pants' },
+  protection_boots: { name: 'Protection Boots', slot: 'boots', tier: 6, def: 42, mdef: 30, speed: 6, req: { level: 82 }, price: 22000, icon: 'protection_boots' },
+  protection_gloves: { name: 'Protection Gloves', slot: 'gloves', tier: 6, def: 42, mdef: 30, atk: 20, req: { level: 82 }, price: 22000, icon: 'protection_gloves' },
+
+  red_dragon_glove: { name: 'Red Dragon Gauntlets', slot: 'gloves', tier: 7, def: 55, atk: 45, crit: 5, req: { level: 84 }, price: 45000, icon: 'red_dragon_glove' },
+  sea_boots: { name: 'Sea Dragon Boots', slot: 'boots', tier: 7, def: 50, speed: 12, eva: 10, req: { level: 84 }, price: 45000, icon: 'sea_boots' },
+  silence_gloves: { name: 'Gloves of Silence', slot: 'gloves', tier: 7, def: 35, matk: 50, mp: 100, req: { level: 84 }, price: 45000, icon: 'silence_gloves' },
+  boots_evasion: { name: 'Boots of Evasion', slot: 'boots', tier: 6, def: 30, eva: 15, speed: 8, req: { level: 80 }, price: 28000, icon: 'boots_evasion' },
+
+  // Boss & Epic Weapons
+  zaken_sword: { name: 'Zaken Blood Sword', slot: 'weapon', tier: 6, atk: 150, crit: 18, lifesteal: 10, req: { level: 80 }, price: 85000, icon: 'zaken_sword' },
+  orfen_twohanded_sword: { name: 'Orfen Greatsword', slot: 'weapon', tier: 6, atk: 170, crit: 15, def: 20, req: { level: 80 }, price: 90000, icon: 'orfen_twohanded_sword' },
+  queenant_twohanded_blunt: { name: 'Queen Ant Smasher', slot: 'weapon', tier: 5, atk: 125, crit: 12, hp: 300, req: { level: 76 }, price: 60000, icon: 'queenant_twohanded_blunt' },
+  core_bow: { name: 'Core Sentinel Bow', slot: 'weapon', tier: 6, atk: 160, crit: 22, range: 'ranged', req: { level: 80 }, price: 90000, icon: 'core_bow' },
+  beleth_staff: { name: 'Beleth Archon Staff', slot: 'weapon', tier: 7, atk: 20, matk: 180, mdef: 50, req: { level: 84 }, price: 150000, icon: 'beleth_staff' },
+  anakim_pistols: { name: 'Anakim Divine Dual Pistols', slot: 'weapon', tier: 7, atk: 175, crit: 25, speed: 15, req: { level: 84 }, price: 160000, icon: 'anakim_pistols' },
+  anais_first: { name: 'Anais Holy Fist', slot: 'weapon', tier: 7, atk: 165, crit: 20, speed: 18, req: { level: 84 }, price: 140000, icon: 'anais_first' },
+  galaxias_ancient_sword: { name: 'Galaxias Ancient Sword', slot: 'weapon', tier: 7, atk: 190, crit: 22, lifesteal: 8, req: { level: 84 }, price: 170000, icon: 'galaxias_ancient_sword' },
+  gorde_spear: { name: 'Gorde Demonic Spear', slot: 'weapon', tier: 6, atk: 155, crit: 15, range: 'ranged', req: { level: 80 }, price: 85000, icon: 'gorde_spear' },
+  juriel_dual_sword: { name: 'Juriel Dual Blades', slot: 'weapon', tier: 7, atk: 180, crit: 25, speed: 12, req: { level: 84 }, price: 160000, icon: 'juriel_dual_sword' },
+  phiriel_rapier: { name: 'Phiriel Silver Rapier', slot: 'weapon', tier: 6, atk: 145, eva: 15, speed: 15, req: { level: 80 }, price: 80000, icon: 'phiriel_rapier' },
+
+  // Epic Accessories & Boss Jewels
+  earring_of_orfen: { name: 'Earring of Orfen', slot: 'earring', tier: 5, mdef: 75, mp: 100, healBonus: 0.15, req: { level: 76 }, price: 65000, icon: 'accessory_earring_of_orfen_i03' },
+  cat_ears: { name: 'Cute Cat Ears', slot: 'hair', tier: 3, eva: 5, speed: 3, req: { level: 20 }, price: 5000, icon: 'accessory_cat_ear_i00' },
+  golden_crown: { name: 'Golden Sovereign Crown', slot: 'hair', tier: 5, atk: 25, matk: 25, def: 25, req: { level: 76 }, price: 45000, icon: 'accessory_crown_i00' },
+
+  // Shields & Sigils
+  shield_of_protection: { name: 'Shield of Protection', slot: 'shield', tier: 5, def: 55, mdef: 25, hp: 200, req: { level: 76 }, price: 22000, icon: 'imgi_23_shield_of_protection' },
+  shield_of_revenge: { name: 'Shield of Revenge', slot: 'shield', tier: 6, def: 75, mdef: 35, hp: 350, req: { level: 80 }, price: 45000, icon: 'imgi_25_shield_of_revenge' },
+  sigil_of_protection: { name: 'Sigil of Protection', slot: 'shield', tier: 5, def: 20, mdef: 50, matk: 35, req: { level: 76 }, price: 22000, icon: 'imgi_27_sigil_of_protection' },
+  sigil_of_immortal: { name: 'Sigil of Immortal', slot: 'shield', tier: 7, def: 35, mdef: 80, matk: 60, req: { level: 84 }, price: 90000, icon: 'imgi_41_sigil_of_immortal' },
+  shield_of_immortal: { name: 'Shield of Immortal', slot: 'shield', tier: 7, def: 95, mdef: 45, hp: 500, req: { level: 84 }, price: 90000, icon: 'imgi_42_shield_of_immortal' },
+  nightmare_shield: { name: 'Nightmare Shield', slot: 'shield', tier: 6, def: 70, mdef: 30, hp: 300, req: { level: 80 }, price: 40000, icon: 'imgi_2_shield_shield_of_nightmare_i00' },
+  dark_crystal_shield: { name: 'Dark Crystal Shield', slot: 'shield', tier: 5, def: 50, mdef: 20, hp: 180, req: { level: 76 }, price: 20000, icon: 'imgi_5_shield_dark_crystal_shield_i00' },
+
+  // Boss Box
+  bossweapon_box: { name: 'Boss Weapon Chest', slot: 'consumable', type: 'box', price: 100000, stack: 99, desc: 'Unlocks a random S-Grade Boss Weapon', icon: 'bossweapon_box' }
 };
 
 const CONSUMABLES = {
@@ -255,20 +359,25 @@ const MATERIALS = {
   crystal_b: { name: 'Crystal: B Grade', slot: 'material', price: 450, stack: 999, desc: 'Used for B Grade crafting' },
   crystal_a: { name: 'Crystal: A Grade', slot: 'material', price: 1350, stack: 999, desc: 'Used for A Grade crafting' },
   crystal_s: { name: 'Crystal: S Grade', slot: 'material', price: 4000, stack: 999, desc: 'Used for S Grade crafting' },
-  iron_ore: { name: 'Iron Ore', slot: 'material', price: 15, stack: 999, desc: 'Common crafting material' },
+  iron_ore: { name: 'Iron Ore', slot: 'material', price: 15, stack: 999, desc: 'Common crafting material', icon: 'ironore' },
   steel_ingot: { name: 'Steel Ingot', slot: 'material', price: 80, stack: 999, desc: 'Used in tier 3+ crafting' },
   mithril_ore: { name: 'Mithril Ore', slot: 'material', price: 300, stack: 999, desc: 'Rare crafting material' },
   oriharukon: { name: 'Oriharukon', slot: 'material', price: 1500, stack: 999, desc: 'Legendary crafting material' },
   magic_powder: { name: 'Magic Powder', slot: 'material', price: 50, stack: 999, desc: 'Used in magical crafting' },
   crystal_fragment: { name: 'Crystal Fragment', slot: 'material', price: 200, stack: 999, desc: 'Required for staves' },
-  leather: { name: 'Leather', slot: 'material', price: 25, stack: 999, desc: 'Basic leather material' },
-  cloth: { name: 'Cloth', slot: 'material', price: 10, stack: 999, desc: 'Basic cloth material' },
+  leather: { name: 'Leather', slot: 'material', price: 25, stack: 999, desc: 'Basic leather material', icon: 'leather' },
+  cloth: { name: 'Cloth', slot: 'material', price: 10, stack: 999, desc: 'Basic cloth material', icon: 'cloth' },
+  suede: { name: 'Suede', slot: 'material', price: 30, stack: 999, desc: 'Soft processed leather material', icon: 'suede' },
+  branch: { name: 'Wood Branch', slot: 'material', price: 12, stack: 999, desc: 'Sturdy wooden branch', icon: 'branch' },
+  ancient_adena: { name: 'Ancient Adena', slot: 'material', price: 100, stack: 9999, desc: 'Currency from ancient catacombs', icon: 'ancient_adena' },
+  material_pouch: { name: 'Material Pouch', slot: 'material', price: 250, stack: 99, desc: 'Contains random crafting supplies', icon: 'material_pouch' },
   beast_blood: { name: 'Beast Blood', slot: 'material', price: 40, stack: 999, desc: 'Dropped by beasts' },
   goblin_ear: { name: 'Goblin Ear', slot: 'material', price: 20, stack: 999, desc: 'Quest item / trophy' },
   wolf_fang: { name: 'Wolf Fang', slot: 'material', price: 60, stack: 999, desc: 'Sharp material' },
   dragon_scale: { name: 'Dragon Scale', slot: 'material', price: 1000, stack: 999, desc: 'Legendary scale' },
   dragon_bone: { name: 'Dragon Bone', slot: 'material', price: 1500, stack: 999, desc: 'Precious crafting material' },
-  ancient_relic: { name: 'Ancient Relic', slot: 'material', price: 5000, stack: 999, desc: 'Mysterious artifact' }
+  ancient_relic: { name: 'Ancient Relic', slot: 'material', price: 5000, stack: 999, desc: 'Mysterious artifact' },
+  report_piece: { name: 'Report Piece', slot: 'material', price: 300, stack: 99, desc: 'Fragment of ancient reports', icon: 'report_piece' }
 };
 
 const AGATHIONS = {
@@ -282,7 +391,8 @@ const AGATHIONS = {
 const ALL_ITEMS = {
   ...WEAPONS, ...ARMORS, ...LEGS, ...HELMETS, ...BOOTS, ...GLOVES,
   ...SHIELDS, ...NECKLACES, ...EARRINGS, ...BELTS, ...CLOAKS, ...TALISMANS,
-  ...HAIR, ...HAIR2, ...RINGS, ...CONSUMABLES, ...MATERIALS, ...AGATHIONS
+  ...HAIR, ...HAIR2, ...RINGS, ...CONSUMABLES, ...MATERIALS, ...AGATHIONS,
+  ...NEW_ARMORS
 };
 
 // Key aliases mapping to guarantee item lookups never return undefined
@@ -297,6 +407,21 @@ ALL_ITEMS.phantom_mask_item = ALL_ITEMS.phantom_mask_gear;
 ALL_ITEMS.valakas_mask = ALL_ITEMS.boss_facemask_valakas;
 ALL_ITEMS.noble_crown = ALL_ITEMS.noble_gold_crown;
 ALL_ITEMS.essence_crown = ALL_ITEMS.essence_crown_of_aden;
+
+// Explicit PNG Icon File Mappings
+if (ALL_ITEMS.dynasty_breastplate) ALL_ITEMS.dynasty_breastplate.icon = 'dynasti_heavey_armor';
+if (ALL_ITEMS.dynasty_leather) ALL_ITEMS.dynasty_leather.icon = 'dynasti_light_armor';
+if (ALL_ITEMS.dynasty_tunic) ALL_ITEMS.dynasty_tunic.icon = 'dynasti_robe_armor';
+if (ALL_ITEMS.enchant_weapon_scroll) ALL_ITEMS.enchant_weapon_scroll.icon = 'scroll_of_enchant_weapon_';
+if (ALL_ITEMS.enchant_armor_scroll) ALL_ITEMS.enchant_armor_scroll.icon = 'scroll_of_enchant_armor';
+if (ALL_ITEMS.novice_belt) ALL_ITEMS.novice_belt.icon = 'belt';
+if (ALL_ITEMS.champion_belt) ALL_ITEMS.champion_belt.icon = 'blessed_belt';
+if (ALL_ITEMS.adventurer_cloak) ALL_ITEMS.adventurer_cloak.icon = 'capared';
+if (ALL_ITEMS.cloak_of_valor) ALL_ITEMS.cloak_of_valor.icon = 'capawhite';
+if (ALL_ITEMS.mage_hood) ALL_ITEMS.mage_hood.icon = 'helmet_of_mana';
+if (ALL_ITEMS.ring_of_queen_ant) ALL_ITEMS.ring_of_queen_ant.icon = 'accessory_ring_of_queen_ant_i03';
+if (ALL_ITEMS.ring_queen_ant) ALL_ITEMS.ring_queen_ant.icon = 'accessory_ring_of_queen_ant_i03';
+if (ALL_ITEMS.necklace_of_valakas) ALL_ITEMS.necklace_of_valakas.icon = 'ring_of_valakas';
 
 // ======================================
 // MONSTER DROPS (Loot rebalanceado)
