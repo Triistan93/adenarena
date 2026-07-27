@@ -2228,6 +2228,10 @@ function checkQuestResets() {
   }
 }
 
+const PASS_DEFS = BATTLE_PASS_TIERS;
+function checkDailyReset() { checkQuestResets(); }
+function checkQuestProgress(type, count = 1) { triggerQuestEvent(type, count); }
+
 function triggerQuestEvent(type, amount = 1) {
   if (!state.quests) checkQuestResets();
   let updated = false;
@@ -4267,6 +4271,8 @@ export function init() {
     window.unlockPremiumPass = unlockPremiumPass;
     window.challengeTowerFloor = challengeTowerFloor;
     window.sweepTowerDaily = sweepTowerDaily;
+    window.checkDailyReset = checkDailyReset;
+    window.checkQuestProgress = checkQuestProgress;
     window.toggleMuteAudio = () => {
       if (typeof window !== 'undefined' && window.idleAudio) {
         const isMuted = window.idleAudio.toggleMute();
