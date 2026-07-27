@@ -9,20 +9,41 @@ Este documento compila a lista completa de todos os sistemas, mecânicas, zonas,
 - **📜 Idle Chronicle (RPG de Texto e Cartas Autônomo)**:
   - Sistema de combate automático baseado em ticks de relógio.
   - Leitura de estatísticas em tempo real: HP, MP, ATK, DEF, MATK, MDEF, EVA, Taxa Crítica, Boost de XP/Gold, Lifesteal e Regen.
-  - Palco visual com artes em SVG estilizadas para heróis e monstros.
-  - **Juice de Combate & Animações Visual**: Efeito squash/stretch no golpe do herói (`heroSquashAtk`), trepidação no palco ao sofrer dano (`stageHeroHurtShake`) e efeito flash no abate de monstro (`stageKillFlash`).
-  - Textos flutuantes de dano, cura, bloqueio e esquiva.
-  - Sistema de áudio e efeitos sonoros imersivos.
-- **⚔️ 3D Arena (Ação Survival RPG)**:
-  - Renderizador 3D em HTML5 Canvas de alto desempenho (60 FPS).
-  - Controles WASD / Direcionais / Thumbstick para dispositivos móveis.
-  - Mira automática no inimigo mais próximo, hordas de monstros graduais e tabela de melhores pontuações (*Hall of Legends*).
-- **🔄 Alternador de Modos (ModeSwitch)**:
-  - Menu hambúrguer colapsável no topo permitindo transição fluida entre Idle Chronicle e 3D Arena.
+  - **Transição de Fundo de Zona (Crossfade Real)**: Duas camadas de fundo sobrepostas (`#stage-bg-a` e `#stage-bg-b`) com transição suave de opacidade em `0.4s` ao trocar de zona ou entrar em Raid Boss.
+  - **Juice de Combate & Efeitos Confortáveis**:
+    - Animação elástica squash/stretch no ataque do herói (`#stage-hero.lunge`).
+    - Trepidação suave do personagem ao levar dano (`#stage-hero.hurt`).
+    - Efeito visual de dissolução/desvanecimento no monstro derrotado (`#stage-monster.is-dying`).
+    - **Zero Flashes Brancos**: Remoção completa de flashes de tela que incomodavam a visão.
+  - **🔥 Contador de Combo / Kill Streak**:
+    - Rastreamento de abates consecutivos com aviso flutuante de marcos a cada 5 abates (`🔥 STREAK x10!`).
 
 ---
 
-## 🧙‍♂️ 2. Raças, Classes & Subclasses
+## 🧭 2. Recursos de Interface (UI/UX) & Qualidade de Vida (QoL)
+
+- **🔍 Comparação Direta de Atributos no Tooltip (Delta vs Equipado)**:
+  - Ao passar o mouse ou tocar em qualquer equipamento no inventário, o tooltip exibe a seção **VS EQUIPPED** destacando em verde (`+15 ATK`) ou vermelho (`-5 DEF`) a diferença de atributos contra o item equipado no mesmo slot.
+- **🔍 Caixa de Busca por Nome no Inventário**:
+  - Campo de busca instantânea (`🔍 Buscar...`) na sub-barra do inventário para filtrar itens por nome em tempo real.
+- **✨ Anel de Brilho de Raridade (Rim-Light Glow)**:
+  - Iluminação de borda e sombra externa exclusiva para cada raridade de item nos slots (`Raro`, `Épico`, `Lendário`, `Mítico`, `S-Grade`).
+- **🔴 Badges de Notificação Dinâmicos nas Abas (`.tab-badge`)**:
+  - Badges pulsantes em vermelho indicando upgrades disponíveis no Inventário, SP para distribuir em Habilidades, receitas para criar na Forja e recompensas de Missões a resgatar.
+- **📦 Auto-Venda Inteligente por Raridade**:
+  - Seletor visual no inventário (`Desativado`, `≤ Comum`, `≤ Incomum`, `≤ Raro`) com salvamento no estado e venda automática na nuvem.
+- **🛡️ Confirmação ao Vender/Sucatear Itens Valiosos**:
+  - Diálogo de proteção para vendas ou sucateamentos individuais e em lote de itens de raridade `Rare`, `Epic`, `Legendary`, `Mythic` e `S-Grade`.
+- **⌨️ Atalhos Globais de Teclado**:
+  - Teclas `1–9`: Troca instantânea entre as abas principais.
+  - Tecla `Espaço`: Alternador rápido de velocidade de combate (`1x`, `2x`, `4x`).
+  - Tecla `S` / `Ctrl+S`: Salvamento instantâneo do jogo.
+- **🔄 Persistência de Scroll entre Abas**:
+  - Posições de navegação em listas longas mantidas ao alternar entre abas.
+
+---
+
+## 🧙‍♂️ 3. Raças, Classes & Subclasses
 
 - **6 Raças Jogáveis**: Humano, Elfo, Elfo Negro, Orc, Anão e Kamael.
 - **Mais de 18 Classes Especiais**:
@@ -34,27 +55,6 @@ Este documento compila a lista completa de todos os sistemas, mecânicas, zonas,
 - **Sistema de Subclasses & Certificações**:
   - Possibilidade de adicionar até 3 subclasses ao mesmo personagem.
   - **Certificados de Subclasse**: Bônus passivos permanentes de HP, ATK, DEF e Crit acumuláveis para a classe principal.
-
----
-
-## 🧭 3. Recursos de Interface (UI/UX) & Qualidade de Vida (QoL)
-
-- **🔴 Badges de Notificação Dinâmicos nas Abas (`.tab-badge`)**:
-  - Badges pulsantes em vermelho indicando upgrades disponíveis no Inventário, SP para distribuir em Habilidades, receitas para criar na Forja e recompensas de Missões a resgatar.
-- **🛡️ Confirmação ao Vender/Sucatear Itens Valiosos**:
-  - Diálogo de proteção para vendas ou sucateamentos individuais e em lote de itens de raridade `Rare`, `Epic`, `Legendary`, `Mythic` e `S-Grade`.
-- **⌨️ Atalhos Globais de Teclado**:
-  - Teclas `1–9`: Troca instantânea entre as abas principais.
-  - Tecla `Espaço`: Alternador rápido de velocidade de combate (`1x`, `2x`, `4x`).
-  - Tecla `S` / `Ctrl+S`: Salvamento instantâneo do jogo.
-- **🔄 Persistência de Scroll entre Abas**:
-  - Posições de navegação em listas longas mantidas ao alternar entre abas.
-- **📦 Auto-Venda Inteligente por Raridade**:
-  - Filtro para auto-vender loots recebidos abaixo de raridade configurada (Common, Uncommon, Rare) concedendo Gold direto.
-- **🎨 Aura Dinâmica de Poder no Portrait**:
-  - Contorno e iluminação do portrait do personagem derivados da raridade do melhor equipamento equipado (`topEquipRarityColor`).
-- **📱 Responsividade & Layout Adaptativo**:
-  - Adaptadores CSS para telas de tablet e mobile sem sobreposição de colunas ou quebra de drag.
 
 ---
 
@@ -94,6 +94,9 @@ Este documento compila a lista completa de todos os sistemas, mecânicas, zonas,
 - **Firebase Auth** (E-mail/Senha + Marca Oficial Google OAuth 4 cores).
 - **Firestore Database** (`users/{userId}`).
 - **Portal de Login Inicial** (`LoginScreen.tsx`).
+- **Auto-Save Triplo Resiliente**:
+  - Salvamento local a cada 10 segundos + ao fechar/ocultar a aba (`beforeunload`).
+  - Sincronização automática em segundo plano na nuvem Firebase a cada 15 segundos.
 
 ---
 
