@@ -312,7 +312,8 @@ const SAGAS = [
   { id: 'interlude', name: 'Interlude', level: 0, unlocksAt: 0, zones: ['talkingIsland', 'elvenForest', 'darkForest', 'orcVillage', 'dwarvenMine', 'kamaelLair', 'ruinedOutpost', 'howlingMoor'] },
   { id: 'prelude', name: 'Prelude of War', level: 1, unlocksAt: 20, zones: ['giranOutskirts', 'orcenRuins', 'forsakenCrypt', 'blackCitadel'] },
   { id: 'saga1', name: 'Saga I: The Awakening', level: 2, unlocksAt: 40, zones: ['gludioCastle', 'wolfMountain', 'riftOfTheVoid', 'emeraldGrove', 'underworldGate'] },
-  { id: 'saga2', name: 'Saga II: The Shadow', level: 3, unlocksAt: 76, zones: ['adenCity', 'dragonValley'] }
+  { id: 'saga2', name: 'Saga II: The Shadow', level: 3, unlocksAt: 76, zones: ['adenCity', 'dragonValley'] },
+  { id: 'saga3', name: 'Saga III: Realm of the Gods', level: 4, unlocksAt: 85, zones: ['imperialTomb', 'antharasLair', 'forgeOfGods'] }
 ];
 
 const ZONES = {
@@ -334,7 +335,10 @@ const ZONES = {
   blackCitadel:    { name: 'Black Citadel', level: 35, monsters: ['devilBone', 'darkMage', 'deathKnight'], shop: 'dragonValley', town: true },
   riftOfTheVoid:   { name: 'Rift of the Void', level: 42, monsters: ['voidCreature', 'deathKnight'], shop: 'dragonValley', town: false },
   emeraldGrove:    { name: 'Emerald Grove', level: 48, monsters: ['emeraldDragon', 'voidCreature'], shop: 'dragonValley', town: false },
-  underworldGate:  { name: 'Gates of the Underworld', level: 50, monsters: ['cerberus'], shop: 'dragonValley', town: false }
+  underworldGate:  { name: 'Gates of the Underworld', level: 50, monsters: ['cerberus'], shop: 'dragonValley', town: false },
+  imperialTomb:    { name: 'Imperial Tomb', level: 85, monsters: ['tombGuardian', 'sepulcherArchon', 'undeadKnight'], shop: 'adenCity', town: false },
+  antharasLair:    { name: 'Antharas\' Lair', level: 90, monsters: ['caveDrake', 'magmaBeast', 'earthDrake'], shop: 'dragonValley', town: false },
+  forgeOfGods:     { name: 'Forge of the Gods', level: 95, monsters: ['lavaGolem', 'flameArchon', 'vulcanLord'], shop: 'dragonValley', town: false }
 };
 
 const MONSTERS = {
@@ -361,7 +365,16 @@ const MONSTERS = {
   deathKnight: { name: 'Death Knight', lvl: 35, boss: true, hp: 4200, atk: 210, def: 90, eva: 12, xp: 3200, sp: 15, gold: [900, 1800], element: 'dark', resist: { dark: 0.3, holy: 1.6 }, traits: ['lifesteal', 'deathCoil', 'enrage'] },
   voidCreature: { name: 'Void Creature', lvl: 42, boss: true, hp: 5600, atk: 280, def: 60, eva: 30, xp: 5200, sp: 18, gold: [1200, 2400], element: 'void', resist: { physical: 0.85, magic: 0.85 }, traits: ['voidPierce', 'phaseShift', 'distort'] },
   emeraldDragon: { name: 'Emerald Dragon', lvl: 48, boss: true, hp: 9800, atk: 330, def: 120, eva: 8, xp: 9000, sp: 22, gold: [2500, 5000], element: 'earth', resist: { poison: 0.0, fire: 1.2 }, traits: ['poison', 'wingBuffet', 'regen'] },
-  cerberus: { name: 'Cerberus', lvl: 50, boss: true, finalBoss: true, hp: 15000, atk: 400, def: 140, eva: 14, xp: 15000, sp: 30, gold: [5000, 10000], element: 'chaos', resist: { fire: 0.5, dark: 0.5, holy: 1.25 }, traits: ['multiHead', 'lifesteal', 'enrage', 'hellChain'] }
+  cerberus: { name: 'Cerberus', lvl: 50, boss: true, finalBoss: true, hp: 15000, atk: 400, def: 140, eva: 14, xp: 15000, sp: 30, gold: [5000, 10000], element: 'chaos', resist: { fire: 0.5, dark: 0.5, holy: 1.25 }, traits: ['multiHead', 'lifesteal', 'enrage', 'hellChain'] },
+  tombGuardian:    { name: 'Tomb Guardian', lvl: 85, hp: 12000, atk: 450, def: 180, eva: 10, xp: 8500, sp: 25, gold: [1500, 3000], element: 'dark', traits: ['boneArmor'] },
+  sepulcherArchon: { name: 'Sepulcher Archon', lvl: 88, hp: 16000, atk: 520, def: 210, eva: 12, xp: 11000, sp: 30, gold: [2000, 4000], element: 'dark', magic: true, traits: ['curse'] },
+  undeadKnight:    { name: 'Undead Knight', lvl: 90, hp: 22000, atk: 600, def: 260, eva: 8, xp: 14000, sp: 35, gold: [2500, 5000], element: 'dark', traits: ['shieldBlock'] },
+  caveDrake:       { name: 'Cave Drake', lvl: 91, hp: 25000, atk: 680, def: 280, eva: 15, xp: 16000, sp: 40, gold: [3000, 6000], element: 'earth', traits: ['tailWhip'] },
+  magmaBeast:      { name: 'Magma Beast', lvl: 93, hp: 30000, atk: 750, def: 310, eva: 10, xp: 19000, sp: 45, gold: [3500, 7000], element: 'fire', traits: ['burn'] },
+  earthDrake:      { name: 'Earth Drake', lvl: 95, hp: 38000, atk: 850, def: 350, eva: 12, xp: 23000, sp: 50, gold: [4200, 8500], element: 'earth', boss: true, traits: ['earthquake'] },
+  lavaGolem:       { name: 'Lava Golem', lvl: 96, hp: 45000, atk: 920, def: 400, eva: 5, xp: 27000, sp: 55, gold: [5000, 10000], element: 'fire', traits: ['ironBody'] },
+  flameArchon:     { name: 'Flame Archon', lvl: 98, hp: 55000, atk: 1050, def: 450, eva: 14, xp: 32000, sp: 60, gold: [6000, 12000], element: 'fire', magic: true, traits: ['meteor'] },
+  vulcanLord:      { name: 'Vulcan Lord', lvl: 100, hp: 75000, atk: 1250, def: 520, eva: 18, xp: 45000, sp: 80, gold: [8000, 16000], element: 'fire', boss: true, traits: ['cataclysm'] }
 };
 
 function getXPForLevel(lvl) { return Math.floor(100 * Math.pow(1.8, lvl - 1)); }
@@ -1801,11 +1814,11 @@ function buyMysticItem(itemId, rarity) {
 }
 
 const RAID_BOSSES = {
-  queen_ant: { id: 'queen_ant', name: 'Queen Ant ★★★', lvl: 30, hp: 8000, atk: 120, def: 45, eva: 10, xp: 5000, sp: 50, gold: [2000, 5000], boss: true, raid: true, reqLvl: 20, desc: 'Rainha Formiga dos Ermos de Gludio.' },
-  zaken: { id: 'zaken', name: 'Zaken o Pirata ★★★★', lvl: 50, hp: 22000, atk: 250, def: 85, eva: 15, xp: 18000, sp: 120, gold: [8000, 15000], boss: true, raid: true, reqLvl: 40, desc: 'Capitão pirata fantasma da Ilha do Diabo.' },
-  baium: { id: 'baium', name: 'Imperador Baium ★★★★★', lvl: 70, hp: 60000, atk: 420, def: 140, eva: 12, xp: 60000, sp: 350, gold: [25000, 50000], boss: true, raid: true, reqLvl: 60, desc: 'O Imperador Imortal aprisionado na Torre da Insolência.' },
-  antharas: { id: 'antharas', name: 'Dragão Antharas 🐉', lvl: 85, hp: 150000, atk: 650, def: 220, eva: 10, xp: 200000, sp: 1000, gold: [100000, 250000], boss: true, raid: true, reqLvl: 75, desc: 'Dragão da Terra adormecido no Vale dos Dragões.' },
-  valakas: { id: 'valakas', name: 'Dragão Valakas 🔥', lvl: 90, hp: 300000, atk: 950, def: 300, eva: 8, xp: 500000, sp: 2500, gold: [300000, 600000], boss: true, raid: true, reqLvl: 80, desc: 'Senhor do Vulcão de Goddard.' }
+  queen_ant: { id: 'queen_ant', name: 'Queen Ant 👑', lvl: 40, hp: 12000, atk: 180, def: 60, eva: 10, xp: 8000, sp: 80, gold: [4000, 8000], boss: true, raid: true, reqLvl: 30, desc: 'Rainha Formiga dos Ermos de Gludio. Drop: Ring of Queen Ant' },
+  zaken: { id: 'zaken', name: 'Zaken o Pirata 🏴‍☠️', lvl: 60, hp: 35000, atk: 320, def: 110, eva: 15, xp: 25000, sp: 200, gold: [15000, 30000], boss: true, raid: true, reqLvl: 50, desc: 'Capitão pirata da Ilha do Diabo. Drop: Earring of Zaken' },
+  baium: { id: 'baium', name: 'Imperador Baium ⚡', lvl: 80, hp: 90000, atk: 580, def: 180, eva: 12, xp: 90000, sp: 500, gold: [40000, 80000], boss: true, raid: true, reqLvl: 70, desc: 'Imperador aprisionado na Torre. Drop: Ring of Baium' },
+  antharas: { id: 'antharas', name: 'Dragão Antharas 🐉', lvl: 95, hp: 220000, atk: 850, def: 280, eva: 10, xp: 300000, sp: 1500, gold: [150000, 350000], boss: true, raid: true, reqLvl: 85, desc: 'Dragão da Terra. Drops: Earring of Antharas & Dragon Slayer' },
+  valakas: { id: 'valakas', name: 'Dragão Valakas 🔥', lvl: 100, hp: 450000, atk: 1200, def: 380, eva: 8, xp: 750000, sp: 3500, gold: [400000, 800000], boss: true, raid: true, reqLvl: 90, desc: 'Senhor do Vulcão. Drops: Facemask & Necklace of Valakas' }
 };
 
 function toggleSoulshot() {

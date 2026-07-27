@@ -197,8 +197,10 @@ const EARRINGS = {
   elven_earring: { name: 'Elven Earring', slot: 'earring', tier: 2, mdef: 8, mp: 20, eva: 2, req: { level: 20 }, price: 600 },
   earring_of_grace: { name: 'Earring of Grace', slot: 'earring', tier: 3, mdef: 20, matk: 8, req: { level: 40 }, price: 2500 },
   black_ore_earring: { name: 'Black Ore Earring', slot: 'earring', tier: 4, mdef: 35, mp: 50, eva: 5, req: { level: 60 }, price: 8000 },
-  earring_of_antharas: { name: 'Earring of Antharas', slot: 'earring', tier: 5, mdef: 75, hp: 200, lifesteal: 6, req: { level: 85 }, price: 120000 },
-  earring_of_zaken: { name: 'Earring of Zaken', slot: 'earring', tier: 5, mdef: 60, lifesteal: 7, atk: 25, req: { level: 75 }, price: 80000 }
+  earring_of_antharas: { name: 'Earring of Antharas', slot: 'earring', tier: 5, mdef: 150, def: 150, hp: 300, lifesteal: 8, req: { level: 85 }, price: 200000, desc: 'Brinco lendário do Dragão Antharas. (+150 DEF/MDEF, +300 HP)' },
+  earring_of_zaken: { name: 'Earring of Zaken', slot: 'earring', tier: 5, mdef: 60, lifesteal: 12, hp: 150, req: { level: 60 }, price: 80000, desc: 'Brinco épico de Zaken. (+12% Lifesteal, +150 HP)' },
+  ring_queen_ant: { name: 'Ring of Queen Ant', slot: 'ring', tier: 5, crit: 15, atk: 50, req: { level: 40 }, price: 50000, desc: 'Anel épico da Rainha Formiga. (+15% Crit Rate, +50 ATK)' },
+  ring_baium: { name: 'Ring of Baium', slot: 'ring', tier: 5, speed: 15, matk: 100, req: { level: 80 }, price: 120000, desc: 'Anel épico do Imperador Baium. (+15% Atk Speed, +100 MATK)' }
 };
 
 const BELTS = {
@@ -357,7 +359,25 @@ const MONSTER_DROPS = {
   deathKnight: { items: [{ id: 'mithril_ore', chance: 0.3, amount: [2, 4] }, { id: 'oriharukon', chance: 0.2, amount: [1, 2] }], equipment: [{ pool: ['soul_seeker', 'blade_of_doom', 'titan_hammer', 'knight_armor', 'knight_gaiters', 'knight_shield', 'diamond_ring', 'black_ore_necklace'], chance: 0.25, rarityBoost: 1 }] },
   voidCreature: { items: [{ id: 'ancient_relic', chance: 0.2, amount: [1, 2] }, { id: 'oriharukon', chance: 0.2, amount: [1, 3] }], equipment: [{ pool: ['staff_of_magic', 'dragon_bow', 'arcane_robe', 'arcane_stockings', 'sigil_of_mastery', 'onyx_ring'], chance: 0.25, rarityBoost: 1 }] },
   emeraldDragon: { items: [{ id: 'dragon_scale', chance: 0.4, amount: [3, 5] }, { id: 'dragon_bone', chance: 0.3, amount: [2, 4] }], equipment: [{ pool: ['divine_sword', 'bow_of_silence', 'dragon_scale_armor', 'dragon_scale_gaiters', 'imperial_shield', 'dragon_eye_ring', 'necklace_of_valakas'], chance: 0.30, rarityBoost: 2 }] },
-  cerberus: { items: [{ id: 'ancient_relic', chance: 0.3, amount: [2, 4] }, { id: 'dragon_bone', chance: 0.3, amount: [3, 5] }], equipment: [{ pool: ['chaos_blade', 'dragon_slayer', 'divine_robe', 'divine_gaiters', 'sigil_of_arcana', 'eternity_ring', 'venir_talisman'], chance: 0.35, rarityBoost: 3 }] }
+  cerberus: { items: [{ id: 'ancient_relic', chance: 0.3, amount: [2, 4] }, { id: 'dragon_bone', chance: 0.3, amount: [3, 5] }], equipment: [{ pool: ['chaos_blade', 'dragon_slayer', 'divine_robe', 'divine_gaiters', 'sigil_of_arcana', 'eternity_ring', 'venir_talisman'], chance: 0.35, rarityBoost: 3 }] },
+
+  // World Bosses
+  queen_ant: { items: [{ id: 'crystal_c', chance: 1.0, amount: [3, 5] }], equipment: [{ pool: ['ring_queen_ant'], chance: 1.0, rarityBoost: 3 }] },
+  zaken: { items: [{ id: 'crystal_b', chance: 1.0, amount: [3, 5] }], equipment: [{ pool: ['earring_of_zaken'], chance: 1.0, rarityBoost: 3 }] },
+  baium: { items: [{ id: 'crystal_a', chance: 1.0, amount: [3, 5] }], equipment: [{ pool: ['ring_baium'], chance: 1.0, rarityBoost: 3 }] },
+  antharas: { items: [{ id: 'crystal_s', chance: 1.0, amount: [5, 10] }, { id: 'dragon_scale', chance: 1.0, amount: [3, 5] }], equipment: [{ pool: ['earring_of_antharas', 'dragon_slayer'], chance: 1.0, rarityBoost: 4 }] },
+  valakas: { items: [{ id: 'crystal_s', chance: 1.0, amount: [8, 15] }, { id: 'dragon_bone', chance: 1.0, amount: [5, 10] }], equipment: [{ pool: ['boss_facemask_valakas', 'necklace_of_valakas'], chance: 1.0, rarityBoost: 4 }] },
+
+  // End-Game Hunting Zones (Imperial Tomb, Antharas Lair, Forge of Gods)
+  tombGuardian: { items: [{ id: 'mithril_ore', chance: 0.3, amount: [2, 4] }], equipment: [{ pool: ['knight_armor', 'knight_gaiters', 'black_ore_earring'], chance: 0.20 }] },
+  sepulcherArchon: { items: [{ id: 'magic_powder', chance: 0.4, amount: [5, 10] }, { id: 'crystal_c', chance: 0.3, amount: [1, 3] }], equipment: [{ pool: ['arcane_robe', 'arcane_stockings', 'sigil_of_mastery'], chance: 0.22 }] },
+  undeadKnight: { items: [{ id: 'oriharukon', chance: 0.25, amount: [1, 2] }, { id: 'crystal_b', chance: 0.2, amount: [1, 2] }], equipment: [{ pool: ['blade_of_doom', 'titan_hammer', 'knight_shield'], chance: 0.25 }] },
+  caveDrake: { items: [{ id: 'dragon_scale', chance: 0.3, amount: [1, 3] }], equipment: [{ pool: ['dragon_bow', 'steel_plate'], chance: 0.25 }] },
+  magmaBeast: { items: [{ id: 'dragon_bone', chance: 0.3, amount: [1, 2] }, { id: 'crystal_b', chance: 0.3, amount: [2, 4] }], equipment: [{ pool: ['staff_of_magic', 'dragon_scale_armor'], chance: 0.28 }] },
+  earthDrake: { items: [{ id: 'dragon_scale', chance: 0.5, amount: [3, 5] }, { id: 'crystal_a', chance: 0.4, amount: [2, 4] }], equipment: [{ pool: ['divine_sword', 'dragon_scale_armor', 'imperial_shield'], chance: 0.35, rarityBoost: 2 }] },
+  lavaGolem: { items: [{ id: 'oriharukon', chance: 0.4, amount: [2, 4] }, { id: 'crystal_a', chance: 0.3, amount: [3, 5] }], equipment: [{ pool: ['divine_gaiters', 'dragon_circlet'], chance: 0.30 }] },
+  flameArchon: { items: [{ id: 'ancient_relic', chance: 0.3, amount: [1, 3] }, { id: 'crystal_s', chance: 0.2, amount: [1, 2] }], equipment: [{ pool: ['staff_of_eternity', 'divine_robe'], chance: 0.32 }] },
+  vulcanLord: { items: [{ id: 'ancient_relic', chance: 0.5, amount: [3, 6] }, { id: 'crystal_s', chance: 0.4, amount: [3, 6] }], equipment: [{ pool: ['dragon_slayer', 'chaos_blade', 'venir_talisman'], chance: 0.45, rarityBoost: 3 }] }
 };
 
 // ======================================
