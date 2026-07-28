@@ -76,3 +76,14 @@ export async function loadPlayerStateFromCloud(userId: string) {
     return null;
   }
 }
+
+export async function deletePlayerStateFromCloud(userId: string) {
+  try {
+    const userRef = doc(db, 'users', userId);
+    await setDoc(userRef, { state: null, updatedAt: serverTimestamp() }, { merge: true });
+    return true;
+  } catch (err) {
+    console.error('Cloud Reset Error:', err);
+    return false;
+  }
+}

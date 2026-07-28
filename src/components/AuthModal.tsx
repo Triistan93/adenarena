@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import { 
   auth, 
   googleProvider, 
@@ -9,6 +8,7 @@ import {
   onAuthStateChanged,
   savePlayerStateToCloud,
   loadPlayerStateFromCloud,
+  deletePlayerStateFromCloud,
   type User 
 } from '../firebase';
 
@@ -57,6 +57,24 @@ export function AuthModal({ onCloudDataLoaded, getCurrentState }: AuthModalProps
     });
     return () => unsubscribe();
   }, []);
+
+  // Expose global window helpers for cloud reset and unload save
+  useEffect(() => {
+    (window as any).resetCloudSave = async () => {
+      if (user) {
+        await deletePlayerStateFromCloud(user.uid);
+      }
+    };
+    (window as any).saveCloudOnUnload = async () => {
+      if (user && getCurrentState) {
+        const currentState = getCurrentState();
+        if (currentState && currentState.level) {
+          currentState.lastSaveTime = Date.now();
+          await savePlayerStateToCloud(user.uid, currentState);
+        }
+      }
+    };
+  }, [user, getCurrentState]);
 
   // Background Auto Cloud Save every 15 seconds for logged in users
   useEffect(() => {

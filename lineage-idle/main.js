@@ -418,10 +418,10 @@ let state = DEFAULT_STATE();
 
 // FUNÇÃO DE SAVE/LOAD COM DEEP MERGE PARA IMPEDIR RESET DE SKILLS
 function save(manual = false) {
+  state.lastSaveTime = Date.now();
   const data = { 
     ...state, 
     totalPlaytime: state.totalPlaytime + (Date.now() - state.startTime), 
-    lastSaveTime: Date.now(),
     selectedUids: Array.from(getSelectedSet())
   };
   delete data.startTime;
@@ -501,6 +501,9 @@ function load() {
 function resetSave() {
   if (confirm('Reset all progress? This cannot be undone.')) {
     localStorage.removeItem(SAVE_KEY);
+    if (typeof window !== 'undefined' && typeof window.resetCloudSave === 'function') {
+      window.resetCloudSave();
+    }
     state = DEFAULT_STATE();
     state.startTime = Date.now();
     location.reload();
@@ -4633,6 +4636,9 @@ export function init() {
       
       updateAllUI();
       save();
+      if (cloudData.lastSaveTime) {
+        setTimeout(() => checkOfflineProgress(cloudData.lastSaveTime), 600);
+      }
       log(`☁️ Progresso de Nível ${state.level} carregado da nuvem com sucesso!`, 'rarity-legendary');
     };
     window.toggleMuteAudio = () => {
@@ -4669,9 +4675,17 @@ export function init() {
     _intervals.push(setInterval(save, 10000)); 
     _intervals.push(setInterval(tickUI, 1000));
 
-    addTrackedListener(window, 'beforeunload', () => save());
+    const saveAndCloudSyncOnUnload = () => {
+      save();
+      if (typeof window !== 'undefined' && typeof window.saveCloudOnUnload === 'function') {
+        window.saveCloudOnUnload();
+      }
+    };
+
+    addTrackedListener(window, 'beforeunload', saveAndCloudSyncOnUnload);
+    addTrackedListener(window, 'pagehide', saveAndCloudSyncOnUnload);
     addTrackedListener(document, 'visibilitychange', () => {
-      if (document.visibilityState === 'hidden') save();
+      if (document.visibilityState === 'hidden') saveAndCloudSyncOnUnload();
     });
   } catch (err) {
     console.warn('Game init warning:', err);
