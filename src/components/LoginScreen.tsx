@@ -198,6 +198,15 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
     );
   }
 
+  if (showCreation) {
+    return (
+      <CharacterCreation
+        onComplete={handleCharacterCreated}
+        onCancel={cloudState ? () => setShowCreation(false) : undefined}
+      />
+    );
+  }
+
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-[#06080f] text-white flex items-center justify-center p-4">
       {/* Background Glow */}
@@ -236,8 +245,10 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
               {cloudState ? (
                 <div className="mt-3 bg-white/5 rounded-xl p-2.5 text-xs text-left space-y-1 border border-white/10">
                   <div className="flex justify-between font-bold">
-                    <span className="text-white/60">Personagem:</span>
-                    <span className="text-amber-200">Nv. {cloudState.level || 1} {(cloudState.class || '').toUpperCase()}</span>
+                    <span className="text-white/60">Herói:</span>
+                    <span className="text-amber-200">
+                      {cloudState.charName || 'Aventureiro'} · Nv. {cloudState.level || 1} ({(cloudState.class || '').toUpperCase()})
+                    </span>
                   </div>
                   <div className="flex justify-between text-[11px]">
                     <span className="text-white/40">Gold:</span>
@@ -257,7 +268,7 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
                   </div>
                 </div>
               ) : (
-                <p className="text-[11px] text-amber-200/60 mt-2">Nenhum save prévio encontrado. Um novo save será criado!</p>
+                <p className="text-[11px] text-amber-200/60 mt-2">Nenhum save prévio encontrado. Um novo personagem será criado!</p>
               )}
             </div>
 
@@ -266,6 +277,13 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
               className="w-full bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-black font-display font-black text-lg rounded-2xl py-3 shadow-lg shadow-amber-500/25 transition active:scale-95"
             >
               ⚔ ENTRAR NO JOGO ▶
+            </button>
+
+            <button
+              onClick={() => setShowCreation(true)}
+              className="w-full bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 font-semibold text-xs rounded-xl py-2.5 transition"
+            >
+              ✨ Criar Novo Personagem / Recustomizar
             </button>
 
             <button

@@ -736,8 +736,15 @@ export default function Shell() {
   const [hasEntered, setHasEntered] = useState(false);
 
   const handleEnterGame = (cloudState?: any) => {
-    if (cloudState && typeof window !== 'undefined' && (window as any).loadGameState) {
-      (window as any).loadGameState(cloudState);
+    if (cloudState && typeof cloudState === 'object') {
+      try {
+        localStorage.setItem('lineageIdleSave_v2', JSON.stringify(cloudState));
+      } catch (e) {
+        console.error('Error saving cloudState to localStorage:', e);
+      }
+      if (typeof window !== 'undefined' && typeof (window as any).loadGameState === 'function') {
+        (window as any).loadGameState(cloudState);
+      }
     }
     setHasEntered(true);
   };
