@@ -8,8 +8,10 @@ import {
   signOut, 
   onAuthStateChanged,
   loadPlayerStateFromCloud,
+  savePlayerStateToCloud,
   type User 
 } from '../firebase';
+import { CharacterCreation, CharacterCreationData } from './CharacterCreation';
 
 interface LoginScreenProps {
   onEnterGame: (cloudState?: any) => void;
@@ -25,6 +27,7 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
   const [loading, setLoading] = useState(false);
   const [cloudState, setCloudState] = useState<any | null>(null);
   const [checkingAuth, setCheckingAuth] = useState(true);
+  const [showCreation, setShowCreation] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -35,6 +38,8 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
           const stateData = await loadPlayerStateFromCloud(currentUser.uid);
           if (stateData) {
             setCloudState(stateData);
+          } else {
+            setShowCreation(true);
           }
         } catch (err) {
           console.error('Error fetching cloud state on login screen:', err);
@@ -49,6 +54,47 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
     return () => unsubscribe();
   }, []);
 
+  const handleCharacterCreated = async (data: CharacterCreationData) => {
+    const startZoneMap: Record<string, string> = {
+      human: 'talkingIsland',
+      elf: 'elvenForest',
+      darkelf: 'darkForest',
+      orc: 'orcVillage',
+      dwarf: 'dwarvenMine',
+      kamael: 'kamaelLair'
+    };
+    const startZone = startZoneMap[data.race] || 'talkingIsland';
+
+    const startWeapon = data.className === 'mage' ? 'oak_staff' : data.className === 'artisan' ? 'bronze_mace' : data.className === 'soulbreaker' ? 'training_dagger' : 'wooden_sword';
+    const startArmor = data.className === 'mage' ? 'cloth_robe' : 'leather_vest';
+
+    const newCharState: any = {
+      charName: data.charName,
+      race: data.race,
+      class: data.className,
+      level: 1,
+      xp: 0,
+      sp: 0,
+      gold: 1000,
+      zone: startZone,
+      inventory: [
+        { uid: 'init_w', itemId: startWeapon, count: 1, rarity: 'common', enchant: 0 },
+        { uid: 'init_a', itemId: startArmor, count: 1, rarity: 'common', enchant: 0 },
+        { uid: 'init_pot', itemId: 'hp_potion_s', count: 15 }
+      ],
+      equipment: {
+        weapon: 'init_w',
+        armor: 'init_a'
+      },
+      lastSaveTime: Date.now()
+    };
+
+    if (user) {
+      await savePlayerStateToCloud(user.uid, newCharState);
+    }
+    onEnterGame(newCharState);
+  };
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -56,7 +102,11 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
     try {
       const cred = await signInWithEmailAndPassword(auth, email, password);
       const stateData = await loadPlayerStateFromCloud(cred.user.uid);
-      onEnterGame(stateData);
+      if (stateData && stateData.level) {
+        onEnterGame(stateData);
+      } else {
+        setShowCreation(true);
+      }
     } catch (err: any) {
       if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
         setError('E-mail ou senha incorretos.');
@@ -85,9 +135,8 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
 
     setLoading(true);
     try {
-      const cred = await createUserWithEmailAndPassword(auth, email, password);
-      const stateData = await loadPlayerStateFromCloud(cred.user.uid);
-      onEnterGame(stateData);
+      await createUserWithEmailAndPassword(auth, email, password);
+      setShowCreation(true);
     } catch (err: any) {
       if (err.code === 'auth/email-already-in-use') {
         setError('Este e-mail já está cadastrado.');
@@ -107,7 +156,11 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
     try {
       const cred = await signInWithPopup(auth, googleProvider);
       const stateData = await loadPlayerStateFromCloud(cred.user.uid);
-      onEnterGame(stateData);
+      if (stateData && stateData.level) {
+        onEnterGame(stateData);
+      } else {
+        setShowCreation(true);
+      }
     } catch (err: any) {
       setError(err.message || 'Erro ao entrar com Google.');
     } finally {
@@ -119,14 +172,19 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
     await signOut(auth);
     setUser(null);
     setCloudState(null);
+    setShowCreation(false);
   };
 
   const handleStartLoggedGame = () => {
-    onEnterGame(cloudState);
+    if (cloudState) {
+      onEnterGame(cloudState);
+    } else {
+      setShowCreation(true);
+    }
   };
 
   const handlePlayGuest = () => {
-    onEnterGame(null);
+    setShowCreation(true);
   };
 
   if (checkingAuth) {

@@ -3257,7 +3257,10 @@ function renderStageHero() {
   if (dArt) dArt.innerHTML = ART.heroSVG(state.race, state.class, aura);
   if (pArt) pArt.innerHTML = ART.heroSVG(state.race, state.class, aura, 'bust');
   const pn = el('portrait-name'), ps = el('portrait-sub'), pau = el('portrait-aura');
-  if (pn) pn.textContent = ((RACES[state.race]?.name || '') + ' ' + (getClass(state.class)?.name || '')).trim();
+  if (pn) {
+    const className = getClass(state.class)?.name || '';
+    pn.textContent = state.charName ? `${state.charName} (${className})` : `${RACES[state.race]?.name || ''} ${className}`.trim();
+  }
   if (ps) ps.textContent = state.zone ? ('Hunting · ' + ZONES[state.zone].name) : 'Awaiting the road';
   if (pau) pau.style.setProperty('--aura', aura ? aura + '55' : 'rgba(212,167,68,0.0)');
   updateZoneBackground();
