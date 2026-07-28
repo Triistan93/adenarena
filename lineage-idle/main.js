@@ -258,20 +258,10 @@ const SKILL_DEFS = {
   weaponMastM:  { name: 'Magical Weapon Mastery', info: '+1.5 ATK, +2.5 MATK / lvl', cost: 5, max: 10, type: 'stat', classReq: 'mage', reqLvl: 1, icon: '🔮', tier: 0, desc: 'Increases magical and physical attack through staff training.' },
   energyBolt:   { name: 'Energy Bolt', info: 'Auto-cast: 20 Pwr magic bolt', cost: 5, max: 5, type: 'proc', baseCd: 3000, pwr: 20, effect: 'dmg', classReq: 'mage', reqLvl: 1, icon: '⚡🔮', tier: 0, desc: 'Fires a bolt of pure magical energy.' },
   robeMast:     { name: 'Robe Mastery', info: '+1.7 DEF / lvl', cost: 10, max: 5, type: 'stat', classReq: 'mage', reqLvl: 5, icon: '👘', tier: 0, desc: 'Increases physical defense when wearing robes.' },
-  iceBolt:      { name: 'Ice Bolt', info: 'Auto-cast: 18 Pwr Ice bolt + slow', cost: 10, max: 5, type: 'proc', baseCd: 3500, pwr: 18, effect: 'dmg', classReq: 'mage', reqLvl: 5, icon: '❄️⚡', tier: 0, desc: 'Fires an ice bolt that slows the target.' },
   antiMagic:    { name: 'Anti Magic', info: '+18 MDEF, +5% Magic Resist / lvl', cost: 15, max: 5, type: 'stat', classReq: 'mage', reqLvl: 10, icon: '🛡️✨', tier: 1, desc: 'Resistance to magic attacks increases.' },
-  auraBurn:     { name: 'Aura Burn', info: 'Auto-cast: 30 Pwr fire aura burst', cost: 15, max: 5, type: 'proc', baseCd: 5000, pwr: 30, effect: 'dmg', classReq: 'mage', reqLvl: 10, icon: '🔥✨', tier: 1, desc: 'Ignites target in magical flames.' },
   higherMana:   { name: 'Higher Mana', info: '+2 MP regen / lvl', cost: 15, max: 5, type: 'stat', classReq: 'mage', reqLvl: 15, icon: '💧', tier: 1, desc: 'Increases mana regeneration rate.' },
-  blaze:        { name: 'Blaze', info: 'Auto-cast: 23 Pwr fire damage burst', cost: 15, max: 5, type: 'proc', baseCd: 4000, pwr: 23, effect: 'dmg', classReq: 'mage', reqLvl: 15, icon: '🔥💥', tier: 1, desc: 'Erupts intense flames at the target.' },
-  greaterHeal:  { name: 'Greater Heal', info: 'Heals 15% Max HP every 30s', cost: 20, max: 5, type: 'proc', baseCd: 30000, pwr: 0, effect: 'warcry', classReq: 'mage', reqLvl: 20, icon: '💚', tier: 2, desc: 'Channels healing light to restore HP.' },
-  prominence:   { name: 'Prominence', info: 'Auto-cast: 55 Pwr fire pillar', cost: 20, max: 5, type: 'proc', baseCd: 6000, pwr: 55, effect: 'dmg', classReq: 'mage', reqLvl: 20, icon: '☀️🔥', tier: 2, desc: 'Summons a pillar of intense solar fire.' },
   boostMana:    { name: 'Boost Mana', info: '+40 Max MP / lvl', cost: 10, max: 5, type: 'stat', classReq: 'mage', reqLvl: 15, icon: '🌊', tier: 1, desc: 'Increases maximum mana capacity.' },
-  quickRecycle: { name: 'Quick Recharge', info: '-15% Skill cooldowns / lvl', cost: 25, max: 5, type: 'stat', classReq: 'mage', reqLvl: 25, icon: '⏩', tier: 2, desc: 'Reduces cooldown time for magical skills.' },
-  vampiric:     { name: 'Vampiric Aura', info: 'Auto-cast: 28 Pwr magic + 10% lifesteal', cost: 25, max: 5, type: 'proc', baseCd: 7000, pwr: 28, effect: 'vampiric', classReq: 'mage', reqLvl: 25, icon: '🧛', tier: 2, desc: 'Drains life force from the target.' },
-  flameStrike:  { name: 'Flame Strike', info: 'Auto-cast: 28 Pwr fire AoE fireball', cost: 30, max: 5, type: 'proc', baseCd: 8000, pwr: 28, effect: 'dmg', classReq: 'mage', reqLvl: 30, icon: '☄️', tier: 2, desc: 'Launches a fireball covering a wide area.' },
-  solarFlare:   { name: 'Solar Flare', info: 'Auto-cast: 64 Pwr Holy light beam', cost: 30, max: 5, type: 'proc', baseCd: 8000, pwr: 64, effect: 'dmg', classReq: 'mage', reqLvl: 30, icon: '🌞', tier: 2, desc: 'Unleashes intense holy light radiation.' },
-  deathSpike:   { name: 'Death Spike', info: 'Auto-cast: 60 Pwr dark bone missile', cost: 30, max: 5, type: 'proc', baseCd: 7000, pwr: 60, effect: 'dmg', classReq: 'mage', reqLvl: 35, icon: '💀', tier: 2, desc: 'Fires a bone missile imbued with dark curses.' },
-  hurricane:    { name: 'Hurricane', info: 'Auto-cast: 70 Pwr windstorm', cost: 35, max: 5, type: 'proc', baseCd: 6000, pwr: 70, effect: 'dmg', classReq: 'mage', reqLvl: 35, icon: '🌪️⚡', tier: 2, desc: 'Summons a devastating windstorm.' }
+  quickRecycle: { name: 'Quick Recharge', info: '-15% Skill cooldowns / lvl', cost: 25, max: 5, type: 'stat', classReq: 'mage', reqLvl: 25, icon: '⏩', tier: 2, desc: 'Reduces cooldown time for magical skills.' }
 };
 
 const SKILL_REQS = {
@@ -3513,8 +3503,9 @@ function attackMonster() {
       
       if (skill.def.effect === 'warcry') {
         state.buffs = state.buffs || {};
-        state.buffs['warcry'] = { amount: 0.2, until: Date.now() + 60000 };
-        log(`🗣 War Cry! ATK +20% for 60s`, 'rarity-rare');
+        state.buffs[skill.id] = { amount: 0.2, until: Date.now() + 60000 };
+        log(`🗣 ${skill.def.name}! ${skill.def.info || 'Buff Ativo'}`, 'rarity-rare');
+        floatText(skill.def.name, 'float-epic');
       } else if (skill.def.effect === 'heal') {
         const healAmt = Math.floor(stats.maxHp * (0.35 + skill.lvl * 0.05));
         state.hp = Math.min(stats.maxHp, state.hp + healAmt);
