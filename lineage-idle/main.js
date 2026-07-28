@@ -1634,9 +1634,11 @@ function updateInventoryUI() {
 function getItemIcon(def) { 
   const fallbackIcons = { weapon: '⚔️', armor: '🛡️', helmet: '⛑️', gloves: '🧤', boots: '👢', ring: '💍', consumable: '🧪', material: '💎', scroll: '📜' }; 
   const emoji = fallbackIcons[def.slot] || '📦'; 
-  const iconName = def.icon || def.id; 
-  if (!iconName) return emoji; 
-  return `<img src="/img/icons/${iconName}.png" alt="${def.name}" class="item-icon-img" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='inline-block';" style="width:28px; height:28px; object-fit:contain; vertical-align:middle;" /><span class="item-icon-fallback" style="display:none; font-size:18px;">${emoji}</span>`; 
+  const rawKey = (def.icon || def.id || '').toLowerCase(); 
+  if (!rawKey) return emoji; 
+  const iconMap = D() && D().ICON_MAP ? D().ICON_MAP : {};
+  const relPath = iconMap[rawKey] || `${rawKey}.png`;
+  return `<img src="/img/icons/${relPath}" alt="${def.name}" class="item-icon-img" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='inline-block';" style="width:28px; height:28px; object-fit:contain; vertical-align:middle;" /><span class="item-icon-fallback" style="display:none; font-size:18px;">${emoji}</span>`; 
 }
 
 let tooltipTimer = null;
