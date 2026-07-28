@@ -1,49 +1,71 @@
-// Map the art module's path keys to the actual URLs where the
-// images are served from public/img/. In dev these are served
-// directly; in production the singlefile plugin doesn't inline
-// public/ assets, but they'll be available at the same paths.
-// For a true single-file build we'd need to move them into src/
-// and import them — but the public/ approach works for any
-// server that serves the dist folder.
+// Map hero, monster, and zone background assets to their categorized paths in public/img/
 
 export const HERO_IMAGES: Record<string, string> = {
-  "/img/human_fighter.png": "/img/human_fighter.png",
-  "/img/human_mage.png": "/img/human_mage.png",
-  "/img/human_mageb.png": "/img/human_mageb.png",
-  "/img/elf_fighter.png": "/img/elf_fighter.png",
-  "/img/elf_mage.png": "/img/elf_mage.png",
-  "/img/darkelf_fighter.png": "/img/darkelf_fighter.png",
-  "/img/darkelf_mage.png": "/img/darkelf_mage.png",
-  "/img/orc_fighter.png": "/img/orc_fighter.png",
-  "/img/orc_mage.png": "/img/orc_mage.png",
-  "/img/dwarf_artisan.png": "/img/dwarf_artisan.png",
-  "/img/kamael_soulbreaker.png": "/img/kamael_soulbreaker.png",
-  "/img/mon_goblin.png": "/img/mon_goblin.png",
-  "/img/mon_dragon.png": "/img/mon_dragon.png",
-  "/img/mon_skeleton.png": "/img/mon_skeleton.png",
-  "/img/mon_alphawolf.png": "/img/mon_alphawolf.png",
-  "/img/mon_armoredgoblin.png": "/img/mon_armoredgoblin.png",
-  "/img/mon_cerberus.png": "/img/mon_cerberus.png",
-  "/img/mon_crimsombabydragon.png": "/img/mon_crimsombabydragon.png",
-  "/img/mon_darkmage.png": "/img/mon_darkmage.png",
-  "/img/mon_deathknight.png": "/img/mon_deathknight.png",
-  "/img/mon_deathwizard.png": "/img/mon_deathwizard.png",
-  "/img/mon_direwolf.png": "/img/mon_direwolf.png",
-  "/img/mon_dragonknight.png": "/img/mon_dragonknight.png",
-  "/img/mon_emereldadragon.png": "/img/mon_emereldadragon.png",
-  "/img/mon_frostknight.png": "/img/mon_frostknight.png",
-  "/img/mon_goblinmage.png": "/img/mon_goblinmage.png",
-  "/img/mon_goblinthief.png": "/img/mon_goblinthief.png",
-  "/img/mon_knight.png": "/img/mon_knight.png",
-  "/img/mon_kobold.png": "/img/mon_kobold.png",
-  "/img/mon_koboldleader.png": "/img/mon_koboldleader.png",
-  "/img/mon_mage.png": "/img/mon_mage.png",
-  "/img/mon_orc.png": "/img/mon_orc.png",
-  "/img/mon_scout.png": "/img/mon_scout.png",
-  "/img/mon_spider.png": "/img/mon_spider.png",
-  "/img/mon_voidcreature.png": "/img/mon_voidcreature.png",
-  "/img/devilbone.png": "/img/devilbone.png",
-  "/img/map.png": "/img/map.png",
+  // Hero Races
+  "/img/human_fighter.png": "/img/Races/Human/Fighter/human_fighter.png",
+  "/img/Races/Human/Fighter/human_fighter.png": "/img/Races/Human/Fighter/human_fighter.png",
+  "/img/human_mage.png": "/img/Races/Human/Mage/human_mage.png",
+  "/img/Races/Human/Mage/human_mage.png": "/img/Races/Human/Mage/human_mage.png",
+  "/img/human_mageb.png": "/img/Races/Human/Mage/human_mageb.png",
+  "/img/Races/Human/Mage/human_mageb.png": "/img/Races/Human/Mage/human_mageb.png",
+
+  "/img/elf_fighter.png": "/img/Races/Elf/Fighter/elf_fighter.png",
+  "/img/Races/Elf/Fighter/elf_fighter.png": "/img/Races/Elf/Fighter/elf_fighter.png",
+  "/img/elf_mage.png": "/img/Races/Elf/Mage/elf_mage.png",
+  "/img/Races/Elf/Mage/elf_mage.png": "/img/Races/Elf/Mage/elf_mage.png",
+
+  "/img/darkelf_fighter.png": "/img/Races/DarkElf/Fighter/darkelf_fighter.png",
+  "/img/Races/DarkElf/Fighter/darkelf_fighter.png": "/img/Races/DarkElf/Fighter/darkelf_fighter.png",
+  "/img/darkelf_mage.png": "/img/Races/DarkElf/Mage/darkelf_mage.png",
+  "/img/Races/DarkElf/Mage/darkelf_mage.png": "/img/Races/DarkElf/Mage/darkelf_mage.png",
+
+  "/img/orc_fighter.png": "/img/Races/Orcs/Fighter/orc_fighter.png",
+  "/img/Races/Orcs/Fighter/orc_fighter.png": "/img/Races/Orcs/Fighter/orc_fighter.png",
+  "/img/orc_mage.png": "/img/Races/Orcs/Mage/orc_mage.png",
+  "/img/Races/Orcs/Mage/orc_mage.png": "/img/Races/Orcs/Mage/orc_mage.png",
+
+  "/img/dwarf_artisan.png": "/img/Races/Dwarfs/Fighter/dwarf_artisan.png",
+  "/img/Races/Dwarfs/Fighter/dwarf_artisan.png": "/img/Races/Dwarfs/Fighter/dwarf_artisan.png",
+
+  "/img/kamael_soulbreaker.png": "/img/Races/Kamael/Fighter/kamael_soulbreaker.png",
+  "/img/Races/Kamael/Fighter/kamael_soulbreaker.png": "/img/Races/Kamael/Fighter/kamael_soulbreaker.png",
+
+  // Monsters per Zone
+  "/img/mon_goblin.png": "/img/Monsters/TalkingIsland/mon_goblin.png",
+  "/img/mon_goblinthief.png": "/img/Monsters/TalkingIsland/mon_goblinthief.png",
+  "/img/mon_armoredgoblin.png": "/img/Monsters/TalkingIsland/mon_armoredgoblin.png",
+  "/img/mon_goblinmage.png": "/img/Monsters/TalkingIsland/mon_goblinmage.png",
+
+  "/img/mon_direwolf.png": "/img/Monsters/ElvenForest/mon_direwolf.png",
+  "/img/mon_spider.png": "/img/Monsters/DarkForest/mon_spider.png",
+  "/img/mon_orc.png": "/img/Monsters/OrcVillage/mon_orc.png",
+  "/img/mon_kobold.png": "/img/Monsters/DwarvenMine/mon_kobold.png",
+  "/img/mon_koboldleader.png": "/img/Monsters/DwarvenMine/mon_koboldleader.png",
+  "/img/mon_scout.png": "/img/Monsters/KamaelLair/mon_scout.png",
+  "/img/mon_crimsombabydragon.png": "/img/Monsters/HowlingMoor/mon_crimsombabydragon.png",
+  "/img/mon_alphawolf.png": "/img/Monsters/HowlingMoor/mon_alphawolf.png",
+  "/img/mon_skeleton.png": "/img/Monsters/GiranOutskirts/mon_skeleton.png",
+  "/img/mon_darkmage.png": "/img/Monsters/ForsakenCrypt/mon_darkmage.png",
+  "/img/devilbone.png": "/img/Monsters/ForsakenCrypt/devilbone.png",
+  "/img/mon_deathknight.png": "/img/Monsters/BlackCitadel/mon_deathknight.png",
+  "/img/mon_deathwizard.png": "/img/Monsters/BlackCitadel/mon_deathwizard.png",
+  "/img/mon_knight.png": "/img/Monsters/GludioCastle/mon_knight.png",
+  "/img/mon_voidcreature.png": "/img/Monsters/RiftOfTheVoid/mon_voidcreature.png",
+  "/img/mon_emereldadragon.png": "/img/Monsters/EmeraldGrove/mon_emereldadragon.png",
+  "/img/mon_cerberus.png": "/img/Monsters/UnderworldGate/mon_cerberus.png",
+  "/img/mon_mage.png": "/img/Monsters/AdenCity/mon_mage.png",
+  "/img/mon_dragon.png": "/img/Monsters/DragonValley/mon_dragon.png",
+  "/img/mon_dragonknight.png": "/img/Monsters/DragonValley/mon_dragonknight.png",
+  "/img/mon_frostknight.png": "/img/Monsters/DragonValley/mon_frostknight.png",
+
+  // Zones Backgrounds
+  "/img/talkingIsland.png": "/img/Monsters/TalkingIsland/talkingIsland.png",
+  "/img/orcVillage.png": "/img/Monsters/OrcVillage/orcVillage.png",
+  "/img/dwarvenMine.png": "/img/Monsters/DwarvenMine/dwarvenMine.png",
+  "/img/kamaelLair.png": "/img/Monsters/KamaelLair/kamaelLair.png",
+  "/img/howlingMoor.png": "/img/Monsters/HowlingMoor/howlingMoor.png",
+  "/img/giranOutskirts.png": "/img/Monsters/GiranOutskirts/giranOutskirts.png",
+  "/img/orcenRuins.png": "/img/Monsters/OrcenRuins/orcenRuins.png"
 };
 
 // Expose to the vanilla JS art module running inside the shadow DOM
