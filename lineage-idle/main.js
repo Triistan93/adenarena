@@ -383,7 +383,7 @@ function getTotalXP(lvl) { let total = 0; for (let i = 1; i <= lvl; i++) total +
 // --------------------------- STATE ---------------------------
 const DEFAULT_STATE = () => ({
   race: null, class: null,
-  level: 1, xp: 0, sp: 0,
+  level: 1, xp: 0, sp: 10,
   maxHp: 100, hp: 100, maxMp: 50, mp: 50,
   base: { atk: 0, def: 0, eva: 0, matk: 0, mdef: 0 },
   skills: {
@@ -552,7 +552,8 @@ function getCertificationsBonuses() {
 }
 
 function getStats() {
-  const race = state.race ? RACES[state.race] : null;
+  const raceKey = state.race ? String(state.race).toLowerCase() : 'human';
+  const race = RACES[raceKey] || RACES.human;
   const cls = getClass(state.class);
   const skills = state.skills || {};
 
@@ -659,7 +660,7 @@ function getStats() {
 
 function getClass(c) {
   if (!c) return null;
-  return CLASSES[c] || null;
+  return CLASSES[c] || CLASSES[String(c).toLowerCase()] || null;
 }
 
 function classSatisfies(playerClass, reqClass) {
@@ -4627,6 +4628,11 @@ export function init() {
       state = { ...def, ...cloudData };
       state.privilegeLevel = Number(cloudData.privilegeLevel) || (cloudData.role === 'admin' ? 1 : 0);
       state.skills = { ...def.skills, ...(cloudData.skills || {}) };
+      const clsObj = getClass(state.class);
+      if (clsObj && clsObj.archetype === 'mage') {
+        state.skills.energyBolt = Math.max(1, state.skills.energyBolt || 0);
+        if (!state.selectedSkill) state.selectedSkill = 'energyBolt';
+      }
       state.equipment = { ...def.equipment, ...(cloudData.equipment || {}) };
       state.base = { ...def.base, ...(cloudData.base || {}) };
       state.inventory = safeInventory;

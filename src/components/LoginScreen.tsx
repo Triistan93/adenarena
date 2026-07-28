@@ -76,22 +76,27 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
     let starterGloves = 'iron_gauntlets';
     let starterBoots = 'iron_boots';
 
+    let starterSkill = 'powerSmash';
+
     if (isMage) {
       starterWeapon = 'oak_staff';
-      starterHelm = 'apprentice_circlet';
+      starterHelm = 'cloth_cap';
       starterArmor = 'cloth_robe';
       starterLegs = 'cloth_pants';
       starterGloves = 'cloth_gloves';
       starterBoots = 'cloth_boots';
+      starterSkill = 'energyBolt';
     } else if (isLight) {
       starterWeapon = isKamael ? 'training_dagger' : 'short_bow';
-      starterHelm = 'novice_mask';
+      starterHelm = 'leather_helm';
       starterArmor = 'leather_vest';
       starterLegs = 'leather_gaiters';
       starterGloves = 'leather_gloves';
       starterBoots = 'leather_boots';
+      starterSkill = isKamael ? 'fatalStrike' : 'mortalBlow';
     } else if (data.className === 'artisan') {
       starterWeapon = 'bronze_mace';
+      starterSkill = 'wildSweep';
     }
 
     const inventoryItems = [
@@ -110,7 +115,7 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
       class: data.className,
       level: 1,
       xp: 0,
-      sp: 0,
+      sp: 10,
       gold: 1000,
       zone: startZone,
       inventory: inventoryItems,
@@ -122,6 +127,10 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
         gloves: 'init_g',
         boots: 'init_b'
       },
+      skills: {
+        [starterSkill]: 1
+      },
+      selectedSkill: starterSkill,
       lastSaveTime: Date.now()
     };
 
