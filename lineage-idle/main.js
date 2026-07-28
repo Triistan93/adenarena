@@ -644,7 +644,7 @@ function getStats() {
     else if (k === 'def') buffDef += Number(b.amount) || 0;
     else if (k === 'speed') buffSpd += Number(b.amount) || 0;
     else if (k === 'matk') buffMatk += Number(b.amount) || 0;
-    else if (k === 'warcry') buffAtkMult = Math.max(buffAtkMult, Number(b.amount) || 0);
+    else if (k === 'warcry' || b.effect === 'warcry' || b.type === 'warcry') buffAtkMult = Math.max(buffAtkMult, Number(b.amount) || 0);
     else if (k === 'xpBoost') xpBoost = Math.max(xpBoost, Number(b.amount) || 0);
     else if (k === 'goldBoost') goldBoost = Math.max(goldBoost, Number(b.amount) || 0);
     else if (k === 'luckBoost') luckBoost = Math.max(luckBoost, Number(b.amount) || 0);
@@ -3495,16 +3495,31 @@ function attackMonster() {
 
   activeSkills.sort((a, b) => b.def.tier - a.def.tier);
 
+  const realNow = Date.now();
   let castedSkillThisTick = false;
   for(const skill of activeSkills) {
-    const cd = skill.def.baseCd * (1 - stats.cdr); 
-    if ((now - (state._cds[skill.id] || -99999)) >= cd) {
-      state._cds[skill.id] = now;
+    // 1. Se a habilidade é um Buff/Warcry, verifica se o efeito ainda está ativo!
+    if (skill.def.effect === 'warcry') {
+      const activeBuff = state.buffs && (state.buffs[skill.id] || state.buffs['warcry']);
+      if (activeBuff && activeBuff.until > realNow) {
+        // Buff ainda ativo no personagem, não reconvoca nem solta novamente!
+        continue;
+      }
+    }
+
+    const cd = (skill.def.baseCd || 5000) * (1 - (stats.cdr || 0)); 
+    const lastCast = state._cds[skill.id] || 0;
+    if ((realNow - lastCast) >= cd) {
+      state._cds[skill.id] = realNow;
       
       if (skill.def.effect === 'warcry') {
         state.buffs = state.buffs || {};
-        state.buffs[skill.id] = { amount: 0.2, until: Date.now() + 60000 };
-        log(`🗣 ${skill.def.name}! ${skill.def.info || 'Buff Ativo'}`, 'rarity-rare');
+        const buffDuration = 60000; // 60 segundos de efeito
+        const buffAmt = 0.20 + (skill.lvl * 0.05); // +20% a +45% de bônus
+        const buffObj = { amount: buffAmt, until: realNow + buffDuration, effect: 'warcry' };
+        state.buffs[skill.id] = buffObj;
+        state.buffs['warcry'] = buffObj;
+        log(`🗣 ${skill.def.name}! ${skill.def.info || 'Buff Ativo por 60s'}`, 'rarity-rare');
         floatText(skill.def.name, 'float-epic');
       } else if (skill.def.effect === 'heal') {
         const healAmt = Math.floor(stats.maxHp * (0.35 + skill.lvl * 0.05));
