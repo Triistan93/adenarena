@@ -65,8 +65,44 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
     };
     const startZone = startZoneMap[data.race] || 'talkingIsland';
 
-    const startWeapon = data.className === 'mage' ? 'oak_staff' : data.className === 'artisan' ? 'bronze_mace' : data.className === 'soulbreaker' ? 'training_dagger' : 'wooden_sword';
-    const startArmor = data.className === 'mage' ? 'cloth_robe' : 'leather_vest';
+    const isMage = data.className === 'mage' || data.className === 'wizard' || data.className === 'cleric' || data.className === 'darkWizard' || data.className === 'shaman';
+    const isKamael = data.race === 'kamael';
+    const isLight = isKamael || data.className === 'rogue' || data.className === 'scout' || data.className === 'assassin' || data.className === 'warder' || data.className === 'soulbreaker';
+
+    let starterWeapon = 'wooden_sword';
+    let starterHelm = 'iron_helm';
+    let starterArmor = 'iron_armor';
+    let starterLegs = 'iron_gaiters';
+    let starterGloves = 'iron_gauntlets';
+    let starterBoots = 'iron_boots';
+
+    if (isMage) {
+      starterWeapon = 'oak_staff';
+      starterHelm = 'apprentice_circlet';
+      starterArmor = 'cloth_robe';
+      starterLegs = 'cloth_pants';
+      starterGloves = 'cloth_gloves';
+      starterBoots = 'cloth_boots';
+    } else if (isLight) {
+      starterWeapon = isKamael ? 'training_dagger' : 'short_bow';
+      starterHelm = 'novice_mask';
+      starterArmor = 'leather_vest';
+      starterLegs = 'leather_gaiters';
+      starterGloves = 'leather_gloves';
+      starterBoots = 'leather_boots';
+    } else if (data.className === 'artisan') {
+      starterWeapon = 'bronze_mace';
+    }
+
+    const inventoryItems = [
+      { uid: 'init_w', itemId: starterWeapon, count: 1, rarity: 'common', enchant: 0 },
+      { uid: 'init_h', itemId: starterHelm, count: 1, rarity: 'common', enchant: 0 },
+      { uid: 'init_a', itemId: starterArmor, count: 1, rarity: 'common', enchant: 0 },
+      { uid: 'init_l', itemId: starterLegs, count: 1, rarity: 'common', enchant: 0 },
+      { uid: 'init_g', itemId: starterGloves, count: 1, rarity: 'common', enchant: 0 },
+      { uid: 'init_b', itemId: starterBoots, count: 1, rarity: 'common', enchant: 0 },
+      { uid: 'init_pot', itemId: 'hp_potion_s', count: 30 }
+    ];
 
     const newCharState: any = {
       charName: data.charName,
@@ -77,14 +113,14 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
       sp: 0,
       gold: 1000,
       zone: startZone,
-      inventory: [
-        { uid: 'init_w', itemId: startWeapon, count: 1, rarity: 'common', enchant: 0 },
-        { uid: 'init_a', itemId: startArmor, count: 1, rarity: 'common', enchant: 0 },
-        { uid: 'init_pot', itemId: 'hp_potion_s', count: 15 }
-      ],
+      inventory: inventoryItems,
       equipment: {
         weapon: 'init_w',
-        armor: 'init_a'
+        helmet: 'init_h',
+        armor: 'init_a',
+        legs: 'init_l',
+        gloves: 'init_g',
+        boots: 'init_b'
       },
       lastSaveTime: Date.now()
     };

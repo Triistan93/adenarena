@@ -559,11 +559,14 @@ function getStats() {
   // sk() reads skill level; works for both legacy generic and new class-specific skills
   const sk = (id) => Number(skills[id]) || 0;
   
-  let baseAtk = Number(state.base.atk) || 0;
-  let baseDef = Number(state.base.def) || 0;
-  let baseEva = Number(state.base.eva) || 0;
-  let baseMatk = Number(state.base.matk) || 0;
-  let baseMdef = Number(state.base.mdef) || 0;
+  const raceStats = race?.stats || {};
+  const clsBase = cls?.base || {};
+
+  let baseAtk = (Number(state.base.atk) || 0) + (Number(raceStats.atk) || 0) + (Number(clsBase.atk) || 0) + (state.level * 3) + 15;
+  let baseDef = (Number(state.base.def) || 0) + (Number(raceStats.def) || 0) + (Number(clsBase.def) || 0) + (state.level * 2) + 10;
+  let baseEva = (Number(state.base.eva) || 0) + (Number(raceStats.eva) || 0) + (Number(clsBase.eva) || 0);
+  let baseMatk = (Number(state.base.matk) || 0) + (Number(raceStats.matk) || 0) + (Number(clsBase.matk) || 0) + (state.level * 3) + 15;
+  let baseMdef = (Number(state.base.mdef) || 0) + (Number(raceStats.mdef) || 0) + (Number(clsBase.mdef) || 0) + (state.level * 2) + 8;
 
   baseAtk += sk('wpnMastF') * 4.5;
   baseAtk += sk('weaponMastM') * 1.5;
