@@ -264,7 +264,8 @@ const CONSUMABLES = {
   spellbook_1star: { name: 'Spellbook: 1-Star ⭐', slot: 'scroll', type: 'spellbook', price: 5000, stack: 99, desc: 'Ancient L-Coin spellbook required to learn 1-Star ⭐ Essence skills.' },
   spellbook_2star: { name: 'Spellbook: 2-Star ⭐⭐', slot: 'scroll', type: 'spellbook', price: 25000, stack: 99, desc: 'Mastery spellbook required to learn 2-Star ⭐⭐ Essence mastery skills.' },
   spellbook_3star: { name: 'Spellbook: 3-Star ⭐⭐⭐', slot: 'scroll', type: 'spellbook', price: 100000, stack: 99, desc: 'High-rank spellbook required to learn 3-Star ⭐⭐⭐ Essence ultimate skills.' },
-  spellbook_4star: { name: 'Spellbook: 4-Star ⭐⭐⭐⭐', slot: 'scroll', type: 'spellbook', price: 500000, stack: 99, desc: 'Mythic 4-Star ⭐⭐⭐⭐ spellbook unlocking supreme class aura transformations.' }
+  spellbook_4star: { name: 'Spellbook: 4-Star ⭐⭐⭐⭐', slot: 'scroll', type: 'spellbook', price: 500000, stack: 99, desc: 'Mythic 4-Star ⭐⭐⭐⭐ spellbook unlocking supreme class aura transformations.' },
+  scroll_race_class_change: { name: 'Scroll of Race & Class Change', slot: 'scroll', type: 'raceClassChange', price: 10000, stack: 99, desc: 'Permite trocar a Raça e Classe do personagem. Reseta todas as habilidades, devolve todo o SP e desequipa os itens para o inventário.', icon: 'exp_scroll' }
 };
 
 const LEGS = {
@@ -587,7 +588,8 @@ const SHOP_INVENTORY = {
     { id: 'copper_ring', stock: 1 }, { id: 'novice_belt', stock: 1 },
     { id: 'adventurer_cloak', stock: 1 }, { id: 'talisman_novice', stock: 1 },
     { id: 'apprentice_circlet', stock: 1 }, { id: 'novice_mask', stock: 1 },
-    { id: 'scroll_of_resurrection', stock: 99 }
+    { id: 'scroll_of_resurrection', stock: 99 },
+    { id: 'scroll_race_class_change', stock: 99 }
   ],
   giranOutskirts: [
     { id: 'hp_potion_m', stock: 99 }, { id: 'mp_potion_m', stock: 99 },

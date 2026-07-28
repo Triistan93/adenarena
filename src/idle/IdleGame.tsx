@@ -1,8 +1,6 @@
-import { useLayoutEffect, useRef } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 
 // Side-effect import FIRST so window.GameData exists before main.js evaluates.
-// These live outside src/ on purpose: the idle game is a self-contained
-// vanilla-JS app that we mount into a Shadow DOM for style isolation.
 // @ts-ignore -- plain JS module, no type declarations
 import "../../lineage-idle/data/items.js";
 // @ts-ignore
@@ -13,6 +11,7 @@ import idleCss from "../../lineage-idle/style.css?raw";
 import { IDLE_MARKUP } from "./markup";
 import "./heroImages";
 import "../utils/idleAudio";
+import { CharacterCreation, CharacterCreationData } from "../components/CharacterCreation";
 
 /**
  * Mounts the Lineage Idle game inside a Shadow DOM so its global-looking
@@ -21,6 +20,12 @@ import "../utils/idleAudio";
  */
 export default function IdleGame() {
   const hostRef = useRef<HTMLDivElement>(null);
+  const [changeScrollData, setChangeScrollData] = useState<{
+    scrollUid: string;
+    charName: string;
+    race: string;
+    class: string;
+  } | null>(null);
 
   useLayoutEffect(() => {
     const host = hostRef.current;
@@ -31,7 +36,12 @@ export default function IdleGame() {
     setRoot(shadow as unknown as Document);
     init();
 
+    (window as any).onOpenRaceClassChangeModal = (data: any) => {
+      setChangeScrollData(data);
+    };
+
     return () => {
+      delete (window as any).onOpenRaceClassChangeModal;
       destroy();
       if (host.shadowRoot) {
         host.shadowRoot.innerHTML = "";
@@ -39,5 +49,26 @@ export default function IdleGame() {
     };
   }, []);
 
-  return <div ref={hostRef} id="idle-host" />;
+  const handleConfirmChange = (data: CharacterCreationData) => {
+    if (changeScrollData && (window as any).executeRaceClassChange) {
+      (window as any).executeRaceClassChange(changeScrollData.scrollUid, data.race, data.className);
+    }
+    setChangeScrollData(null);
+  };
+
+  return (
+    <>
+      <div ref={hostRef} id="idle-host" />
+      {changeScrollData && (
+        <CharacterCreation
+          isChangeScroll={true}
+          initialCharName={changeScrollData.charName}
+          initialRace={changeScrollData.race}
+          initialClass={changeScrollData.class}
+          onComplete={handleConfirmChange}
+          onCancel={() => setChangeScrollData(null)}
+        />
+      )}
+    </>
+  );
 }

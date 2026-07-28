@@ -1134,12 +1134,95 @@ function useItem(uid) {
     const town = state.race ? RACES[state.race].startZone : 'talkingIsland';
     if (state.zone !== town) { state.zone = town; el('zone-name').textContent = ZONES[state.zone].name; stopCombat(); setTimeout(startCombat, 300); }
     log(`Used ${def.name}: returned to ${ZONES[town].name}, fully healed.`, 'heal');
+  } else if (def.type === 'raceClassChange' || item.itemId === 'scroll_race_class_change') {
+    if (typeof window !== 'undefined' && typeof window.onOpenRaceClassChangeModal === 'function') {
+      window.onOpenRaceClassChangeModal({
+        scrollUid: uid,
+        charName: state.charName || 'Aventureiro',
+        race: state.race || 'human',
+        class: state.class || 'fighter'
+      });
+    } else {
+      log('Abra o menu de Reespecialização para utilizar o Scroll of Race & Class Change.', 'system');
+    }
+    return;
   } else if (def.type === 'resurrect') { log('Scrolls auto-use on death.', 'system'); return; } 
   else { log(`Used ${def.name}`, 'heal'); }
   
   if (item.count > 1) item.count--; else state.inventory.splice(idx, 1);
   updateAllUI(); save();
 }
+
+window.executeRaceClassChange = (scrollUid, newRace, newClass) => {
+  if (scrollUid) {
+    const idx = state.inventory.findIndex(i => i.uid === scrollUid);
+    if (idx >= 0) {
+      if (state.inventory[idx].count > 1) state.inventory[idx].count--;
+      else state.inventory.splice(idx, 1);
+    }
+  }
+
+  // 1. Unequip all equipped items safely back to inventory
+  const ALL_SLOTS = ['weapon', 'shield', 'helmet', 'armor', 'legs', 'gloves', 'boots', 'necklace', 'earring1', 'earring2', 'ring', 'ring2', 'belt', 'cloak', 'talisman', 'agathion', 'hair', 'hair2'];
+  if (state.equipment) {
+    for (const slot of ALL_SLOTS) {
+      state.equipment[slot] = null;
+    }
+  }
+
+  // 2. Refund all spent SP
+  let refundedSp = 0;
+  if (state.skills) {
+    for (const [skillId, lvl] of Object.entries(state.skills)) {
+      const level = Number(lvl) || 0;
+      for (let l = 1; l <= level; l++) {
+        const sDef = (typeof SKILL_DEFS !== 'undefined') ? SKILL_DEFS[skillId] : null;
+        const cost = sDef ? (sDef.cost * l) : (5 * l);
+        refundedSp += cost;
+      }
+    }
+  }
+  state.sp = (Number(state.sp) || 0) + refundedSp;
+
+  // 3. Reset all skills
+  const resetSkills = {};
+  if (typeof SKILL_DEFS !== 'undefined') {
+    for (const k of Object.keys(SKILL_DEFS)) {
+      resetSkills[k] = 0;
+    }
+  }
+  state.skills = resetSkills;
+
+  // 4. Update Race and Class
+  state.race = newRace;
+  state.class = newClass;
+
+  // 5. Grant initial class skill
+  const clsObj = getClass(newClass);
+  const arch = clsObj?.archetype || 'fighter';
+  let starterSkill = 'powerSmash';
+  if (arch === 'mage') starterSkill = 'energyBolt';
+  else if (newRace === 'kamael') starterSkill = 'fatalStrike';
+  else if (newClass === 'artisan') starterSkill = 'wildSweep';
+  else if (newClass === 'rogue' || newClass === 'scout' || newClass === 'assassin') starterSkill = 'mortalBlow';
+
+  state.skills[starterSkill] = 1;
+  state.selectedSkill = starterSkill;
+
+  // 6. Recalculate base stats
+  const raceObj = RACES[newRace] || RACES.human;
+  state.base = { ...(raceObj.stats || {}) };
+  if (clsObj && clsObj.base) {
+    for (const k of ['atk', 'def', 'eva', 'matk', 'mdef']) {
+      state.base[k] = (state.base[k] || 0) + (clsObj.base[k] || 0);
+    }
+  }
+
+  // 7. Save & Update UI
+  updateAllUI();
+  save();
+  log(`✨ Troca de Raça & Classe realizada com sucesso para ${(raceObj.name || newRace).toUpperCase()} ${(clsObj?.name || newClass).toUpperCase()}! ${refundedSp} SP devolvidos e equipamentos guardados no inventário.`, 'rarity-legendary');
+};
 
 // --------------------------- CRAFTING ---------------------------
 function getCraftLevelReq(recipeLevel) { return Math.max(1, Math.floor(recipeLevel / 10) + 1); }
@@ -2253,10 +2336,14 @@ function startRaidBoss(raidId) {
 }
 
 function updateRaceClassUI() {
-  qsa('.race-btn').forEach(btn => { const r = btn.dataset.race; btn.disabled = (r === 'ertheia' && state.level < 10); btn.classList.toggle('selected', r === state.race); });
-  qsa('.class-btn').forEach(btn => { const c = btn.dataset.class; btn.disabled = (state.race === 'dwarf' || state.race === 'kamael'); btn.classList.toggle('selected', c === state.class); });
-  const rd = qs('.race-desc'); if (rd) rd.textContent = state.race ? (RACES[state.race]?.desc || '') : 'Select a race.';
-  const cd = qs('.class-desc'); if (cd) cd.textContent = state.class ? (getClass(state.class)?.desc || '') : 'Select a class.';
+  const display = el('hero-race-class-display');
+  if (display) {
+    const raceObj = RACES[state.race];
+    const clsObj = getClass(state.class);
+    const rName = raceObj ? raceObj.name : (state.race || 'Humano');
+    const cName = clsObj ? clsObj.name : (state.class || 'Guerreiro');
+    display.textContent = `${rName} · ${cName} (Nv. ${state.level})`;
+  }
   renderStageHero(); updateSkillUI(); checkClassAdvancement();
 }
 

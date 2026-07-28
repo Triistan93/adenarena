@@ -9,6 +9,10 @@ export interface CharacterCreationData {
 interface CharacterCreationProps {
   onComplete: (data: CharacterCreationData) => void;
   onCancel?: () => void;
+  isChangeScroll?: boolean;
+  initialCharName?: string;
+  initialRace?: string;
+  initialClass?: string;
 }
 
 const RACES_INFO: Record<string, {
@@ -51,96 +55,104 @@ const RACES_INFO: Record<string, {
       fighter: '/img/elf_fighter.png',
       mage: '/img/elf_mage.png'
     },
-    startZoneName: 'Floresta dos Elfos (Elven Forest)'
+    startZoneName: 'Floresta Elfica (Elven Forest)'
   },
   darkelf: {
     id: 'darkelf',
     name: 'Elfo Negro',
     icon: '🧝‍♀️',
-    desc: 'Seguidores de Shillien, mestres do dano crítico e feitiços sombrios.',
-    perks: ['🔥 +6 Ataque Mágico & +2 Atq. Físico', '💥 Alta Taxa de Dano Crítico', '🌑 Inicia na Floresta Sombria'],
+    desc: 'Mestres de magia negra e ataques críticos devastadores de Shilien.',
+    perks: ['🔥 +15 Poder de Ataque & Magia', '🗡️ Alto Poder Crítico', '🌑 Inicia na Floresta Negra'],
     allowedClasses: [
-      { id: 'fighter', name: 'Guerreiro Sombrio (Fighter)', desc: 'Assassino mortal e cavaleiro sombrio.', icon: '🗡️' },
-      { id: 'mage', name: 'Mago Negro (Dark Mage)', desc: 'Feiticeiro devastador do vento e maldições.', icon: '💀' }
+      { id: 'fighter', name: 'Guerreiro Negro (Fighter)', desc: 'Assassino mortal e cavaleiro sombrio.', icon: '🗡️' },
+      { id: 'mage', name: 'Mago Negro (Mage)', desc: 'Invocador de maldições e magia de fogo/trevas.', icon: '🔮' }
     ],
     image: {
       fighter: '/img/darkelf_fighter.png',
       mage: '/img/darkelf_mage.png'
     },
-    startZoneName: 'Floresta Sombria (Dark Forest)'
+    startZoneName: 'Floresta Negra (Dark Forest)'
   },
   orc: {
     id: 'orc',
     name: 'Orc',
     icon: '👹',
-    desc: 'Guerreiros de força física incomparável e resistência implacável.',
-    perks: ['💪 +6 Defesa & +4 Ataque Físico', '❤️ Vida (HP) e Tenacidade Elevados', '🌋 Inicia na Vila dos Orcs'],
+    desc: 'Guerreiros de força bruta descomunal e constituição vital superior.',
+    perks: ['💪 +100 Vida Máxima (HP)', '🛡️ Resiciência em Batalha Prolongada', '🌋 Inicia na Vila Orc'],
     allowedClasses: [
-      { id: 'fighter', name: 'Guerreiro Orc (Fighter)', desc: 'Lutador com armas de duas mãos e garras.', icon: '🪓' },
-      { id: 'mage', name: 'Xamã Orc (Shaman)', desc: 'Místico tribal que evoca totens e maldições.', icon: '🔥' }
+      { id: 'fighter', name: 'Guerreiro Orc (Fighter)', desc: 'Destruidor com armas de duas mãos e garras.', icon: '🪓' },
+      { id: 'mage', name: 'Xamã Orc (Shaman)', desc: 'Mago de combate e buffs tribais de sangue.', icon: '🔥' }
     ],
     image: {
       fighter: '/img/orc_fighter.png',
       mage: '/img/orc_mage.png'
     },
-    startZoneName: 'Vila dos Orcs (Orc Village)'
+    startZoneName: 'Vila Orc (Orc Village)'
   },
   dwarf: {
     id: 'dwarf',
     name: 'Anão',
-    icon: '🧔',
-    desc: 'Mestres forjadores de Aden com grande capacidade de armazenamento.',
-    perks: ['🎒 +100 Slots de Inventário (250 Slots Cap.)', '💎 +15% Bônus de Drop de Materiais', '⛏️ Inicia na Mina dos Anões'],
+    icon: '⚒️',
+    desc: 'Mestres da forja, especialistas em mineração e criação de itens.',
+    perks: ['🎒 +100 Espaços de Inventário (Total 250)', '⚒️ Bônus de Craft & Drop de Materiais', '⛏️ Inicia nas Minas dos Anões'],
     allowedClasses: [
-      { id: 'artisan', name: 'Artesão (Artisan)', desc: 'Especialista em manufatura e forja de armaduras.', icon: '⚒️' },
-      { id: 'fighter', name: 'Guerreiro Anão (Fighter)', desc: 'Combatente resistente com marretas e machados.', icon: '🔨' }
+      { id: 'artisan', name: 'Artesão (Artisan)', desc: 'Especialista em forja de armas e armaduras.', icon: '⚒️' }
     ],
     image: {
       artisan: '/img/dwarf_artisan.png',
       fighter: '/img/dwarf_artisan.png'
     },
-    startZoneName: 'Mina dos Anões (Dwarven Mine)'
+    startZoneName: 'Minas dos Anões (Dwarven Mine)'
   },
   kamael: {
     id: 'kamael',
     name: 'Kamael',
     icon: '🪶',
-    desc: 'Guerreiros de uma asa só, especializados em lâminas duplas e almas.',
-    perks: ['🦅 +6 Ataque & +6 Esquiva', '🗡️ Especialista em Lâminas e Bestas', '🏛️ Inicia no Refúgio Kamael'],
+    desc: 'Raça de uma asa só com maestria lendária em estocadas de rapieira.',
+    perks: ['⚡ Usam Armaduras LEVES por Lore', '🗡️ Ataques Físicos Ultrarrápidos', '🏰 Inicia na Lair dos Kamael'],
     allowedClasses: [
-      { id: 'soulbreaker', name: 'Soulbreaker', desc: 'Mestre em lâminas duplas e absorção de almas.', icon: '⚡' },
-      { id: 'fighter', name: 'Guerreiro Kamael (Fighter)', desc: 'Combatente veloz de espadas de uma mão.', icon: '🗡️' }
+      { id: 'soulbreaker', name: 'Soulbreaker', desc: 'Espadachim das sombras especializado em rapieiras.', icon: '🗡️' }
     ],
     image: {
       soulbreaker: '/img/kamael_soulbreaker.png',
       fighter: '/img/kamael_soulbreaker.png'
     },
-    startZoneName: 'Refúgio Kamael (Kamael Village)'
+    startZoneName: 'Lair dos Kamael (Kamael Lair)'
   }
 };
 
 const RANDOM_NAMES = [
-  'Aethelgard', 'Sylvana', 'Varian', 'Kaela', 'Thorin', 'Elyndra', 'Bronn', 
-  'Malakor', 'Zarek', 'Valerius', 'Sylas', 'Aerith', 'Durgrim', 'Kaelen', 
-  'Lucian', 'Morgana', 'Garrick', 'Freya', 'Darian', 'Valerya', 'Oberon'
+  'Astaroth', 'Valerius', 'Kaelen', 'Sylas', 'Lyrion',
+  'Ignis', 'Morgana', 'Vaelin', 'Darian', 'Balthazar',
+  'Thorne', 'Elysia', 'Gideon', 'Zephyr', 'Orion'
 ];
 
-export function CharacterCreation({ onComplete, onCancel }: CharacterCreationProps) {
-  const [charName, setCharName] = useState('SirVarian');
-  const [selectedRace, setSelectedRace] = useState('human');
-  const [selectedClass, setSelectedClass] = useState('fighter');
+export const CharacterCreation: React.FC<CharacterCreationProps> = ({
+  onComplete,
+  onCancel,
+  isChangeScroll = false,
+  initialCharName = '',
+  initialRace = 'human',
+  initialClass = 'fighter'
+}) => {
+  const [charName, setCharName] = useState(initialCharName);
+  const [selectedRace, setSelectedRace] = useState(initialRace);
+  const [selectedClass, setSelectedClass] = useState(initialClass);
 
   const currentRaceObj = RACES_INFO[selectedRace] || RACES_INFO.human;
 
   const handleSelectRace = (raceId: string) => {
     setSelectedRace(raceId);
-    const raceData = RACES_INFO[raceId];
-    if (raceData && raceData.allowedClasses.length > 0) {
-      setSelectedClass(raceData.allowedClasses[0].id);
+    const rInfo = RACES_INFO[raceId];
+    if (rInfo && rInfo.allowedClasses.length > 0) {
+      if (!rInfo.allowedClasses.some(c => c.id === selectedClass)) {
+        setSelectedClass(rInfo.allowedClasses[0].id);
+      }
     }
   };
 
   const handleGenerateRandomName = () => {
+    if (isChangeScroll) return;
     const idx = Math.floor(Math.random() * RANDOM_NAMES.length);
     setCharName(RANDOM_NAMES[idx]);
   };
@@ -164,15 +176,29 @@ export function CharacterCreation({ onComplete, onCancel }: CharacterCreationPro
         {/* Banner Header */}
         <div className="mb-6 text-center border-b border-amber-500/20 pb-4">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-bold uppercase tracking-widest mb-1">
-            ✨ Lineage II · Aden Arena
+            {isChangeScroll ? '📜 Scroll of Race & Class Change' : '✨ Lineage II · Aden Arena'}
           </div>
           <h2 className="font-display text-2xl font-bold tracking-wide text-amber-100">
-            Criação & Customização de Personagem
+            {isChangeScroll ? 'Troca de Raça & Classe' : 'Criação & Customização de Personagem'}
           </h2>
           <p className="text-xs text-slate-400 mt-1">
-            Escolha seu nome, raça e classe inicial para iniciar sua jornada no mundo de Aden.
+            {isChangeScroll
+              ? 'Selecione a nova raça e classe. O nome do personagem permanece inalterado.'
+              : 'Escolha seu nome, raça e classe inicial para iniciar sua jornada no mundo de Aden.'}
           </p>
         </div>
+
+        {isChangeScroll && (
+          <div className="mb-6 rounded-xl border border-amber-500/40 bg-amber-500/10 p-3.5 text-xs text-amber-200 flex items-start gap-3">
+            <span className="text-xl">⚠️</span>
+            <div>
+              <p className="font-bold text-amber-300">AVISO DE REESPECIALIZAÇÃO:</p>
+              <p className="mt-0.5 text-amber-200/90 leading-relaxed">
+                Ao confirmar a troca de Raça &amp; Classe, <strong>todas as suas habilidades serão resetadas</strong>, todo o <strong>SP gasto será totalmente devolvido</strong> e seus <strong>equipamentos atuais serão desequipados</strong> com segurança para o seu inventário.
+              </p>
+            </div>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
@@ -182,26 +208,33 @@ export function CharacterCreation({ onComplete, onCancel }: CharacterCreationPro
             {/* 1. Nome do Personagem */}
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-amber-300 mb-2">
-                1. Nome do Personagem
+                1. Nome do Personagem {isChangeScroll && '(🔒 Fixo)'}
               </label>
               <div className="flex gap-2">
                 <input
                   type="text"
                   maxLength={16}
                   value={charName}
-                  onChange={(e) => setCharName(e.target.value)}
+                  onChange={(e) => !isChangeScroll && setCharName(e.target.value)}
+                  disabled={isChangeScroll}
                   placeholder="Digite o nome do seu herói..."
-                  className="flex-1 rounded-xl border border-amber-500/30 bg-black/50 px-4 py-2.5 text-sm font-semibold text-amber-100 placeholder-slate-500 focus:border-amber-400 focus:outline-none focus:ring-1 focus:ring-amber-400"
+                  className={`flex-1 rounded-xl border px-4 py-2.5 text-sm font-semibold ${
+                    isChangeScroll
+                      ? 'bg-slate-900/90 border-slate-700 text-amber-300/80 cursor-not-allowed'
+                      : 'bg-black/50 border-amber-500/30 text-amber-100 placeholder-slate-500 focus:border-amber-400 focus:outline-none focus:ring-1 focus:ring-amber-400'
+                  }`}
                   required
                 />
-                <button
-                  type="button"
-                  onClick={handleGenerateRandomName}
-                  className="rounded-xl border border-amber-500/40 bg-amber-500/20 px-3 py-2.5 text-xs font-bold text-amber-300 hover:bg-amber-500/30 transition flex items-center gap-1.5"
-                  title="Gerar nome aleatório"
-                >
-                  🎲 Aleatório
-                </button>
+                {!isChangeScroll && (
+                  <button
+                    type="button"
+                    onClick={handleGenerateRandomName}
+                    className="rounded-xl border border-amber-500/40 bg-amber-500/20 px-3 py-2.5 text-xs font-bold text-amber-300 hover:bg-amber-500/30 transition flex items-center gap-1.5"
+                    title="Gerar nome aleatório"
+                  >
+                    🎲 Aleatório
+                  </button>
+                )}
               </div>
             </div>
 

@@ -143,25 +143,14 @@ export const IDLE_MARKUP = `
               <button id="class-advancement-btn" class="class-adv-action-btn">🎖️ Avançar Classe</button>
             </div>
             <div class="pane-section">
-              <h3>Raça (Race)</h3>
-              <div class="race-grid">
-                <button class="race-btn" data-race="human">Human</button>
-                <button class="race-btn" data-race="elf">Elf</button>
-                <button class="race-btn" data-race="darkelf">Dark Elf</button>
-                <button class="race-btn" data-race="orc">Orc</button>
-                <button class="race-btn" data-race="dwarf">Dwarf</button>
-                <button class="race-btn" data-race="kamael">Kamael</button>
-                <button class="race-btn" data-race="ertheia">Ertheia</button>
+              <h3>Raça &amp; Classe Atual</h3>
+              <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(212,167,68,0.25); border-radius: 14px; padding: 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+                <div>
+                  <div id="hero-race-class-display" style="font-weight: 800; color: var(--gilt-bright); font-size: 15px; text-transform: uppercase; letter-spacing: 0.05em;">Aventureiro de Aden</div>
+                  <p style="font-size: 11px; color: var(--text-muted); margin-top: 4px; line-height: 1.4;">Para trocar sua Raça e Classe, adquira e utilize o <strong>Scroll of Race &amp; Class Change</strong> no Inventário.</p>
+                </div>
+                <div style="font-size: 28px; background: rgba(212,167,68,0.1); padding: 8px 12px; border-radius: 12px; border: 1px solid rgba(212,167,68,0.2);">📜</div>
               </div>
-              <p class="race-desc">Select a race.</p>
-            </div>
-            <div class="pane-section">
-              <h3>Classe (Class)</h3>
-              <div class="class-grid" id="class-grid">
-                <button class="class-btn" data-class="fighter">Fighter</button>
-                <button class="class-btn" data-class="mage">Mage</button>
-              </div>
-              <p class="class-desc">Select a class.</p>
             </div>
 
             <!-- Subclass & Certification Management Panel -->
