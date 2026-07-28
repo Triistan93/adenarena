@@ -68,35 +68,99 @@ function heroImgPath(race, cls) {
 
 // ---- Monster image map ----
 const MON_IMG = {
-  wolf: "/img/mon_direwolf.png",
-  spider: "/img/mon_spider.png",      
-  kamaelScout: "/img/mon_scout.png",
-  knight: "/img/mon_knight.png",     
-  mage: "/img/mon_mage.png",      
-  goblin: "/img/mon_goblin.png",
-  kobold: "/img/mon_kobold.png",
-  goblinKing: "/img/mon_armoredgoblin.png",
-  skeleton: "/img/mon_skeleton.png",
-  dragon: "/img/mon_dragon.png",
-  dragonKnight: "/img/mon_dragonknight.png",
-  orc: "/img/mon_orc.png",
-  goblinThief: "/img/mon_goblinthief.png",
-  koboldLeader: "/img/mon_koboldleader.png",
-  direWolf: "/img/mon_direwolf.png",
-  crimsonBabyDragon: "/img/mon_crimsombabydragon.png",
-  alphaWolf: "/img/mon_alphawolf.png",
-  wolfAlpha: "/img/mon_alphawolf.png",
-  darkMage: "/img/mon_darkmage.png",
-  devilBone: "/img/devilbone.png",
-  deathKnight: "/img/mon_deathknight.png",
-  voidCreature: "/img/mon_voidcreature.png",
-  emeraldDragon: "/img/mon_emereldadragon.png",
-  cerberus: "/img/mon_cerberus.png",
-  queen_ant: "/img/mon_spider.png",
-  zaken: "/img/mon_deathwizard.png",
-  baium: "/img/mon_frostknight.png",
-  antharas: "/img/mon_dragon.png",
-  valakas: "/img/mon_dragon.png"
+  goblin: "/img/Monsters/TalkingIsland/mon_goblin.png",
+  goblinThief: "/img/Monsters/TalkingIsland/mon_goblinthief.png",
+  armoredGoblin: "/img/Monsters/TalkingIsland/mon_armoredgoblin.png",
+  goblinMage: "/img/Monsters/TalkingIsland/mon_goblinmage.png",
+  goblinKing: "/img/Monsters/TalkingIsland/mon_armoredgoblin.png",
+
+  wolf: "/img/Monsters/ElvenForest/mon_direwolf.png",
+  rootWitch: "/img/Monsters/ElvenForest/mon_rootwitch.png",
+  deathTrent: "/img/Monsters/ElvenForest/mon_deathtrent.png",
+
+  spider: "/img/Monsters/DarkForest/mon_spider.png",
+  swampWalker: "/img/Monsters/DarkForest/mon_swampwalker.png",
+
+  orc: "/img/Monsters/OrcVillage/mon_orc.png",
+
+  kobold: "/img/Monsters/DwarvenMine/mon_kobold.png",
+  koboldLeader: "/img/Monsters/DwarvenMine/mon_koboldleader.png",
+
+  kamaelScout: "/img/Monsters/KamaelLair/mon_scout.png",
+
+  shadowMercenary: "/img/Monsters/RuinedOutpost/mon_shadowmercenary.png",
+
+  direWolf: "/img/Monsters/HowlingMoor/mon_direwolf.png",
+  babyTiamat: "/img/Monsters/HowlingMoor/mon_babytiamat.png",
+  ancientSatyr: "/img/Monsters/HowlingMoor/mon_ancientsathyr.png",
+  crimsonBabyDragon: "/img/Monsters/HowlingMoor/mon_crimsombabydragon.png",
+  alphaWolf: "/img/Monsters/HowlingMoor/mon_alphawolf.png",
+  wolfAlpha: "/img/Monsters/HowlingMoor/mon_alphawolf.png",
+
+  skeleton: "/img/Monsters/GiranOutskirts/mon_skeleton.png",
+  deathRider: "/img/Monsters/GiranOutskirts/mon_deathrider.png",
+  minotaurKnight: "/img/Monsters/GiranOutskirts/mon_minotaurknight.png",
+
+  cursedWarrior: "/img/Monsters/orcenRuins/mon_cursedwarior.png",
+
+  darkMage: "/img/Monsters/forsakenCrypt/mon_darkmage.png",
+  corpseWorm: "/img/Monsters/forsakenCrypt/mon_corpseworm.png",
+  furiousSouls: "/img/Monsters/forsakenCrypt/mon_furioussouls.png",
+  cryptVampire: "/img/Monsters/forsakenCrypt/mon_cryptvampire.png",
+  devilBone: "/img/Monsters/forsakenCrypt/devilbone.png",
+  cryptLord: "/img/Monsters/forsakenCrypt/mon_cryptLord.png",
+
+  deathKnight: "/img/Monsters/blackCitadel/mon_deathknight.png",
+  deathWizard: "/img/Monsters/blackCitadel/mon_deathwizard.png",
+  blackDragon: "/img/Monsters/blackCitadel/mon_blackdragon.png",
+  flamingDemonLord: "/img/Monsters/blackCitadel/mon_flamingdemonglord.png",
+
+  knight: "/img/Monsters/gludioCastle/mon_knight.png",
+  cursedKnight: "/img/Monsters/gludioCastle/mon_cursedknight.png",
+
+  voidCreature: "/img/Monsters/riftOfTheVoid/mon_voidcreature.png",
+  voidBrute: "/img/Monsters/riftOfTheVoid/mon_voidbrute.png",
+  voidStalker: "/img/Monsters/riftOfTheVoid/mon_voidstalker.png",
+  beholder: "/img/Monsters/riftOfTheVoid/mon_beholder.png",
+  voidDragonLord: "/img/Monsters/riftOfTheVoid/mon_voiddragonlord.png",
+
+  emeraldSnake: "/img/Monsters/emeraldGrove/mon_emeraldsnake.png",
+  emeraldDragon: "/img/Monsters/emeraldGrove/mon_emereldadragon.png",
+  fafurion: "/img/Monsters/emeraldGrove/mon_fafurion.png",
+
+  blazingWerewolf: "/img/Monsters/underworldGate/mon_blazingwerefolf.png",
+  swiftBlaze: "/img/Monsters/underworldGate/mon_swiftblaze.png",
+  cerberus: "/img/Monsters/underworldGate/mon_cerberus.png",
+
+  mage: "/img/Monsters/adenCity/mon_mage.png",
+
+  dragon: "/img/Monsters/dragonValley/mon_dragon.png",
+  dragonKnight: "/img/Monsters/dragonValley/mon_dragonknight.png",
+  frostKnight: "/img/Monsters/dragonValley/mon_frostknight.png",
+  frostLordDragon: "/img/Monsters/dragonValley/mon_frostlorddragon.png",
+  lindvior: "/img/Monsters/dragonValley/mon_lidivior.png",
+
+  tombGuardian: "/img/Monsters/imperialTomb/mon_skeleton.png",
+  sepulcherArchon: "/img/Monsters/imperialTomb/mon_darkmage.png",
+  undeadKnight: "/img/Monsters/imperialTomb/mon_deathknight.png",
+  lichLord: "/img/Monsters/imperialTomb/mon_lichlord.png",
+  deathKing: "/img/Monsters/imperialTomb/mon_deathking.png",
+
+  caveDrake: "/img/Monsters/antharasLair/mon_dragonknight.png",
+  magmaBeast: "/img/Monsters/antharasLair/mon_dragon.png",
+  earthDrake: "/img/Monsters/antharasLair/mon_dragon.png",
+  antharas: "/img/Monsters/antharasLair/mon_antharas.png",
+
+  valakasMinion: "/img/Monsters/forgeOfGods/mon_valakasminion.png",
+  lavaGolem: "/img/Monsters/forgeOfGods/mon_flamegiantdragom.png",
+  flameArchon: "/img/Monsters/forgeOfGods/mon_flamegiantdragom.png",
+  flameGiantDragon: "/img/Monsters/forgeOfGods/mon_flamegiantdragom.png",
+  vulcanLord: "/img/Monsters/forgeOfGods/mon_valakas.png",
+  valakas: "/img/Monsters/forgeOfGods/mon_valakas.png",
+
+  queen_ant: "/img/Monsters/DarkForest/mon_spider.png",
+  zaken: "/img/Monsters/blackCitadel/mon_deathwizard.png",
+  baium: "/img/Monsters/dragonValley/mon_frostknight.png"
 };
 
 // Monsters without painted art get a tinted SVG silhouette

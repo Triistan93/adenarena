@@ -317,64 +317,119 @@ const SAGAS = [
 ];
 
 const ZONES = {
-  talkingIsland: { name: 'Talking Island', level: 1, monsters: ['goblin'], shop: 'talkingIsland', town: true },
-  elvenForest: { name: 'Elven Forest', level: 3, monsters: ['goblin', 'wolf'], shop: 'talkingIsland' },
-  darkForest: { name: 'Dark Forest', level: 5, monsters: ['goblin', 'spider'], shop: 'talkingIsland' },
-  orcVillage: { name: 'Orc Village', level: 7, monsters: ['goblin', 'orc'], shop: 'talkingIsland' },
-  dwarvenMine: { name: 'Dwarven Mine', level: 9, monsters: ['goblin', 'kobold'], shop: 'talkingIsland' },
-  kamaelLair: { name: 'Kamael Lair', level: 11, monsters: ['goblin', 'kamaelScout'], shop: 'talkingIsland' },
-  giranOutskirts: { name: 'Giran Outskirts', level: 20, monsters: ['goblin', 'wolf', 'skeleton'], shop: 'giranOutskirts', town: true },
-  orcenRuins: { name: 'Orcen Ruins', level: 25, monsters: ['orc', 'skeleton', 'goblinKing'], shop: 'giranOutskirts' },
-  gludioCastle: { name: 'Gludio Castle', level: 40, monsters: ['knight', 'skeleton', 'wolf'], shop: 'gludioCastle', town: true },
-  wolfMountain: { name: 'Wolf Mountain', level: 45, monsters: ['wolf', 'wolfAlpha', 'goblin'], shop: 'gludioCastle' },
-  adenCity: { name: 'Aden City', level: 76, monsters: ['knight', 'mage', 'dragon'], shop: 'adenCity', town: true },
-  dragonValley: { name: 'Dragon Valley', level: 80, monsters: ['dragon', 'dragonKnight'], shop: 'dragonValley', town: true },
-  ruinedOutpost:   { name: 'Ruined Outpost', level: 5, monsters: ['goblinThief', 'orc', 'koboldLeader'], shop: 'talkingIsland', town: false },
-  howlingMoor:     { name: 'Howling Moor', level: 15, monsters: ['direWolf', 'crimsonBabyDragon', 'alphaWolf'], shop: 'gludioCastle', town: false },
-  forsakenCrypt:   { name: 'Forsaken Crypt', level: 27, monsters: ['darkMage', 'devilBone', 'skeleton'], shop: 'gludioCastle', town: false },
-  blackCitadel:    { name: 'Black Citadel', level: 35, monsters: ['devilBone', 'darkMage', 'deathKnight'], shop: 'dragonValley', town: true },
-  riftOfTheVoid:   { name: 'Rift of the Void', level: 42, monsters: ['voidCreature', 'deathKnight'], shop: 'dragonValley', town: false },
-  emeraldGrove:    { name: 'Emerald Grove', level: 48, monsters: ['emeraldDragon', 'voidCreature'], shop: 'dragonValley', town: false },
-  underworldGate:  { name: 'Gates of the Underworld', level: 50, monsters: ['cerberus'], shop: 'dragonValley', town: false },
-  imperialTomb:    { name: 'Imperial Tomb', level: 85, monsters: ['tombGuardian', 'sepulcherArchon', 'undeadKnight'], shop: 'adenCity', town: false },
-  antharasLair:    { name: 'Antharas\' Lair', level: 90, monsters: ['caveDrake', 'magmaBeast', 'earthDrake'], shop: 'dragonValley', town: false },
-  forgeOfGods:     { name: 'Forge of the Gods', level: 95, monsters: ['lavaGolem', 'flameArchon', 'vulcanLord'], shop: 'dragonValley', town: false }
+  talkingIsland: { name: 'Talking Island', level: 1, monsters: ['goblin', 'goblinThief', 'armoredGoblin', 'goblinMage'], boss: 'goblinKing', shop: 'talkingIsland', town: true },
+  elvenForest: { name: 'Elven Forest', level: 3, monsters: ['wolf', 'rootWitch'], boss: 'deathTrent', shop: 'talkingIsland' },
+  darkForest: { name: 'Dark Forest', level: 5, monsters: ['spider', 'swampWalker'], boss: 'spider', shop: 'talkingIsland' },
+  orcVillage: { name: 'Orc Village', level: 7, monsters: ['goblin', 'orc'], boss: 'orc', shop: 'talkingIsland' },
+  dwarvenMine: { name: 'Dwarven Mine', level: 9, monsters: ['kobold'], boss: 'koboldLeader', shop: 'talkingIsland' },
+  kamaelLair: { name: 'Kamael Lair', level: 11, monsters: ['kamaelScout'], boss: 'kamaelScout', shop: 'talkingIsland' },
+  ruinedOutpost:   { name: 'Ruined Outpost', level: 15, monsters: ['goblinThief', 'orc', 'shadowMercenary'], boss: 'shadowMercenary', shop: 'talkingIsland', town: false },
+  howlingMoor:     { name: 'Howling Moor', level: 20, monsters: ['direWolf', 'babyTiamat', 'crimsonBabyDragon', 'ancientSatyr'], boss: 'alphaWolf', shop: 'gludioCastle', town: false },
+  giranOutskirts: { name: 'Giran Outskirts', level: 25, monsters: ['skeleton', 'deathRider'], boss: 'minotaurKnight', shop: 'giranOutskirts', town: true },
+  orcenRuins: { name: 'Orcen Ruins', level: 30, monsters: ['orc', 'cursedWarrior'], boss: 'goblinKing', shop: 'giranOutskirts' },
+  forsakenCrypt:   { name: 'Forsaken Crypt', level: 35, monsters: ['darkMage', 'corpseWorm', 'furiousSouls', 'cryptVampire', 'devilBone'], boss: 'cryptLord', shop: 'gludioCastle', town: false },
+  blackCitadel:    { name: 'Black Citadel', level: 40, monsters: ['deathKnight', 'deathWizard', 'blackDragon'], boss: 'flamingDemonLord', shop: 'dragonValley', town: true },
+  gludioCastle: { name: 'Gludio Castle', level: 45, monsters: ['knight', 'cursedKnight'], boss: 'cursedKnight', shop: 'gludioCastle', town: true },
+  wolfMountain: { name: 'Wolf Mountain', level: 48, monsters: ['wolf', 'direWolf'], boss: 'alphaWolf', shop: 'gludioCastle' },
+  riftOfTheVoid:   { name: 'Rift of the Void', level: 50, monsters: ['voidCreature', 'voidBrute', 'voidStalker', 'beholder'], boss: 'voidDragonLord', shop: 'dragonValley', town: false },
+  emeraldGrove:    { name: 'Emerald Grove', level: 60, monsters: ['emeraldSnake', 'emeraldDragon'], boss: 'fafurion', shop: 'dragonValley', town: false },
+  underworldGate:  { name: 'Gates of the Underworld', level: 70, monsters: ['blazingWerewolf', 'swiftBlaze'], boss: 'cerberus', shop: 'dragonValley', town: false },
+  adenCity: { name: 'Aden City', level: 76, monsters: ['knight', 'mage'], boss: 'knight', shop: 'adenCity', town: true },
+  dragonValley: { name: 'Dragon Valley', level: 80, monsters: ['dragon', 'dragonKnight', 'frostKnight', 'frostLordDragon'], boss: 'lindvior', shop: 'dragonValley', town: true },
+  imperialTomb:    { name: 'Imperial Tomb', level: 85, monsters: ['tombGuardian', 'sepulcherArchon', 'undeadKnight', 'lichLord'], boss: 'deathKing', shop: 'adenCity', town: false },
+  antharasLair:    { name: 'Antharas\' Lair', level: 90, monsters: ['caveDrake', 'magmaBeast', 'earthDrake'], boss: 'antharas', shop: 'dragonValley', town: false },
+  forgeOfGods:     { name: 'Forge of the Gods', level: 95, monsters: ['valakasMinion', 'lavaGolem', 'flameArchon', 'flameGiantDragon', 'vulcanLord'], boss: 'valakas', shop: 'dragonValley', town: false }
 };
 
 const MONSTERS = {
   goblin: { name: 'Goblin', hp: 30, atk: 5, def: 2, eva: 2, matk: 0, mdef: 0, xp: 10, sp: 1, gold: [5, 15] },
-  wolf: { name: 'Wolf', hp: 45, atk: 8, def: 1, eva: 5, matk: 0, mdef: 0, xp: 15, sp: 1, gold: [8, 20] },
-  spider: { name: 'Spider', hp: 35, atk: 6, def: 1, eva: 8, matk: 0, mdef: 0, xp: 12, sp: 1, gold: [6, 18] },
-  kobold: { name: 'Kobold', hp: 25, atk: 4, def: 3, eva: 3, matk: 0, mdef: 0, xp: 8, sp: 1, gold: [4, 12] },
-  kamaelScout: { name: 'Kamael Scout', hp: 55, atk: 12, def: 2, eva: 8, matk: 0, mdef: 0, xp: 25, sp: 2, gold: [12, 30] },
-  skeleton: { name: 'Skeleton', hp: 50, atk: 9, def: 5, eva: 1, matk: 0, mdef: 0, xp: 18, sp: 2, gold: [8, 22] },
-  goblinKing: { name: 'Goblin King', hp: 120, atk: 15, def: 8, eva: 3, matk: 0, mdef: 0, xp: 50, sp: 5, gold: [25, 50], boss: true },
-  wolfAlpha: { name: 'Wolf Alpha', hp: 100, atk: 18, def: 3, eva: 10, matk: 0, mdef: 0, xp: 40, sp: 4, gold: [20, 40], boss: true },
-  knight: { name: 'Knight', hp: 150, atk: 20, def: 12, eva: 2, matk: 0, mdef: 5, xp: 60, sp: 3, gold: [30, 60] },
-  mage: { name: 'Mage', hp: 80, atk: 5, def: 2, eva: 3, matk: 25, mdef: 8, xp: 55, sp: 3, gold: [25, 55] },
-  dragon: { name: 'Dragon', hp: 300, atk: 30, def: 15, eva: 5, matk: 20, mdef: 10, xp: 120, sp: 8, gold: [80, 150], boss: true },
-  dragonKnight: { name: 'Dragon Knight', hp: 500, atk: 40, def: 25, eva: 8, matk: 15, mdef: 15, xp: 200, sp: 10, gold: [150, 300], boss: true },
+  armoredGoblin: { name: 'Armored Goblin', hp: 45, atk: 7, def: 5, eva: 2, matk: 0, mdef: 1, xp: 14, sp: 1, gold: [7, 18] },
+  goblinMage: { name: 'Goblin Mage', hp: 35, atk: 4, def: 2, eva: 3, matk: 12, mdef: 5, xp: 15, sp: 1, gold: [8, 20] },
   goblinThief: { name: 'Goblin Thief', lvl: 2, hp: 45, atk: 9, def: 3, eva: 12, xp: 18, sp: 1, gold: [8, 20], element: 'none', traits: ['ambush', 'packTactics'], stealsGold: 0.15 },
+  goblinKing: { name: 'Goblin King', hp: 120, atk: 15, def: 8, eva: 3, matk: 0, mdef: 0, xp: 50, sp: 5, gold: [25, 50], boss: true },
+
+  wolf: { name: 'Wolf', hp: 45, atk: 8, def: 1, eva: 5, matk: 0, mdef: 0, xp: 15, sp: 1, gold: [8, 20] },
+  rootWitch: { name: 'Root Witch', hp: 55, atk: 10, def: 3, eva: 4, matk: 15, mdef: 8, xp: 22, sp: 2, gold: [12, 25] },
+  deathTrent: { name: 'Death Treant', hp: 200, atk: 22, def: 12, eva: 2, matk: 10, mdef: 10, xp: 80, sp: 6, gold: [40, 85], boss: true },
+
+  spider: { name: 'Spider', hp: 35, atk: 6, def: 1, eva: 8, matk: 0, mdef: 0, xp: 12, sp: 1, gold: [6, 18] },
+  swampWalker: { name: 'Swamp Walker', hp: 85, atk: 14, def: 6, eva: 5, matk: 8, mdef: 6, xp: 32, sp: 2, gold: [15, 32] },
+
   orc: { name: 'Orc', lvl: 5, hp: 140, atk: 20, def: 10, eva: 4, xp: 45, sp: 2, gold: [20, 45], element: 'none', traits: ['enrage'] },
+
+  kobold: { name: 'Kobold', hp: 25, atk: 4, def: 3, eva: 3, matk: 0, mdef: 0, xp: 8, sp: 1, gold: [4, 12] },
   koboldLeader: { name: 'Kobold Leader', lvl: 8, hp: 260, atk: 30, def: 14, eva: 8, xp: 110, sp: 4, gold: [60, 120], element: 'none', traits: ['packLeader', 'trap'], elite: true },
+
+  kamaelScout: { name: 'Kamael Scout', hp: 55, atk: 12, def: 2, eva: 8, matk: 0, mdef: 0, xp: 25, sp: 2, gold: [12, 30] },
+
+  shadowMercenary: { name: 'Shadow Mercenary', hp: 280, atk: 32, def: 15, eva: 10, xp: 130, sp: 4, gold: [70, 140], elite: true },
+
   direWolf: { name: 'Dire Wolf', lvl: 12, hp: 420, atk: 52, def: 18, eva: 18, xp: 220, sp: 3, gold: [80, 160], element: 'none', traits: ['bleed', 'firstStrike'], atkSpd: 1.35 },
+  babyTiamat: { name: 'Baby Tiamat', hp: 500, atk: 58, def: 22, eva: 10, matk: 35, mdef: 20, xp: 280, sp: 4, gold: [100, 200] },
+  ancientSatyr: { name: 'Ancient Satyr', hp: 550, atk: 62, def: 24, eva: 12, xp: 300, sp: 5, gold: [110, 220] },
   crimsonBabyDragon: { name: 'Crimson Baby Dragon', lvl: 15, hp: 620, atk: 70, def: 26, eva: 10, xp: 340, sp: 5, gold: [120, 240], element: 'fire', resist: { fire: 0.75, water: 1.3 }, traits: ['fireBreath'] },
   alphaWolf: { name: 'Alpha Wolf', lvl: 18, hp: 900, atk: 85, def: 30, eva: 20, xp: 520, sp: 6, gold: [180, 340], element: 'none', traits: ['packLeader', 'bleed', 'howl'], elite: true },
+
+  skeleton: { name: 'Skeleton', hp: 50, atk: 9, def: 5, eva: 1, matk: 0, mdef: 0, xp: 18, sp: 2, gold: [8, 22] },
+  deathRider: { name: 'Death Rider', hp: 750, atk: 95, def: 35, eva: 12, xp: 600, sp: 7, gold: [200, 400] },
+  minotaurKnight: { name: 'Minotaur Knight', hp: 1400, atk: 120, def: 48, eva: 6, xp: 950, sp: 9, gold: [300, 600], boss: true },
+
+  cursedWarrior: { name: 'Cursed Warrior', hp: 850, atk: 105, def: 40, eva: 8, xp: 750, sp: 8, gold: [220, 450] },
+
   darkMage: { name: 'Dark Mage', lvl: 25, hp: 1150, atk: 145, def: 28, eva: 14, xp: 1100, sp: 8, gold: [300, 600], element: 'dark', magic: true, resist: { dark: 0.5, holy: 1.5 }, traits: ['curse', 'manaBurn'], atkSpd: 0.75 },
+  corpseWorm: { name: 'Corpse Worm', hp: 1300, atk: 110, def: 50, eva: 4, xp: 1200, sp: 8, gold: [280, 550] },
+  furiousSouls: { name: 'Furious Souls', hp: 1000, atk: 130, def: 30, eva: 16, matk: 90, mdef: 45, xp: 1150, sp: 8, gold: [300, 580] },
+  cryptVampire: { name: 'Crypt Vampire', hp: 1800, atk: 160, def: 45, eva: 18, xp: 1600, sp: 11, gold: [400, 800], traits: ['lifesteal'] },
   devilBone: { name: 'Devil Bone', lvl: 28, hp: 2400, atk: 120, def: 78, eva: 3, xp: 1400, sp: 10, gold: [350, 700], element: 'dark', resist: { physical: 0.7, magic: 1.25 }, traits: ['boneArmor', 'reassemble'] },
+  cryptLord: { name: 'Crypt Lord', hp: 3800, atk: 210, def: 85, eva: 8, xp: 3000, sp: 16, gold: [800, 1600], boss: true },
+
   deathKnight: { name: 'Death Knight', lvl: 35, boss: true, hp: 4200, atk: 210, def: 90, eva: 12, xp: 3200, sp: 15, gold: [900, 1800], element: 'dark', resist: { dark: 0.3, holy: 1.6 }, traits: ['lifesteal', 'deathCoil', 'enrage'] },
+  deathWizard: { name: 'Death Wizard', hp: 3200, atk: 90, def: 40, eva: 10, matk: 240, mdef: 95, xp: 3100, sp: 15, gold: [850, 1700] },
+  blackDragon: { name: 'Black Dragon', hp: 5500, atk: 290, def: 110, eva: 10, xp: 5000, sp: 20, gold: [1500, 3000], boss: true },
+  flamingDemonLord: { name: 'Flaming Demon Lord', hp: 8500, atk: 350, def: 130, eva: 12, xp: 7500, sp: 25, gold: [2200, 4500], boss: true },
+
+  knight: { name: 'Knight', hp: 150, atk: 20, def: 12, eva: 2, matk: 0, mdef: 5, xp: 60, sp: 3, gold: [30, 60] },
+  cursedKnight: { name: 'Cursed Knight', hp: 2800, atk: 180, def: 95, eva: 6, xp: 2500, sp: 14, gold: [700, 1400] },
+
   voidCreature: { name: 'Void Creature', lvl: 42, boss: true, hp: 5600, atk: 280, def: 60, eva: 30, xp: 5200, sp: 18, gold: [1200, 2400], element: 'void', resist: { physical: 0.85, magic: 0.85 }, traits: ['voidPierce', 'phaseShift', 'distort'] },
+  voidBrute: { name: 'Void Brute', hp: 6200, atk: 310, def: 100, eva: 10, xp: 6000, sp: 20, gold: [1400, 2800] },
+  voidStalker: { name: 'Void Stalker', hp: 4800, atk: 340, def: 50, eva: 35, xp: 5800, sp: 19, gold: [1350, 2700] },
+  beholder: { name: 'Beholder', hp: 5000, atk: 150, def: 60, eva: 15, matk: 320, mdef: 120, xp: 6200, sp: 21, gold: [1500, 3000] },
+  voidDragonLord: { name: 'Void Dragon Lord', hp: 12000, atk: 420, def: 140, eva: 15, xp: 12000, sp: 30, gold: [3500, 7000], boss: true },
+
+  emeraldSnake: { name: 'Emerald Snake', hp: 6000, atk: 320, def: 80, eva: 25, xp: 6500, sp: 20, gold: [1600, 3200] },
   emeraldDragon: { name: 'Emerald Dragon', lvl: 48, boss: true, hp: 9800, atk: 330, def: 120, eva: 8, xp: 9000, sp: 22, gold: [2500, 5000], element: 'earth', resist: { poison: 0.0, fire: 1.2 }, traits: ['poison', 'wingBuffet', 'regen'] },
+  fafurion: { name: 'Fafurion Water Dragon', hp: 22000, atk: 520, def: 180, eva: 12, xp: 20000, sp: 40, gold: [6000, 12000], boss: true },
+
+  blazingWerewolf: { name: 'Blazing Werewolf', hp: 8500, atk: 410, def: 110, eva: 22, xp: 9000, sp: 25, gold: [2200, 4400] },
+  swiftBlaze: { name: 'Swift Blaze', hp: 7500, atk: 450, def: 90, eva: 30, xp: 8800, sp: 24, gold: [2100, 4200] },
   cerberus: { name: 'Cerberus', lvl: 50, boss: true, finalBoss: true, hp: 15000, atk: 400, def: 140, eva: 14, xp: 15000, sp: 30, gold: [5000, 10000], element: 'chaos', resist: { fire: 0.5, dark: 0.5, holy: 1.25 }, traits: ['multiHead', 'lifesteal', 'enrage', 'hellChain'] },
+
+  mage: { name: 'Mage', hp: 80, atk: 5, def: 2, eva: 3, matk: 25, mdef: 8, xp: 55, sp: 3, gold: [25, 55] },
+
+  dragon: { name: 'Dragon', hp: 300, atk: 30, def: 15, eva: 5, matk: 20, mdef: 10, xp: 120, sp: 8, gold: [80, 150], boss: true },
+  dragonKnight: { name: 'Dragon Knight', hp: 500, atk: 40, def: 25, eva: 8, matk: 15, mdef: 15, xp: 200, sp: 10, gold: [150, 300], boss: true },
+  frostKnight: { name: 'Frost Knight', hp: 14000, atk: 550, def: 220, eva: 10, xp: 15000, sp: 35, gold: [3500, 7000] },
+  frostLordDragon: { name: 'Frost Lord Dragon', hp: 28000, atk: 650, def: 250, eva: 12, xp: 25000, sp: 45, gold: [6500, 13000], boss: true },
+  lindvior: { name: 'Lindvior Wind Dragon', hp: 45000, atk: 850, def: 320, eva: 25, xp: 40000, sp: 60, gold: [10000, 20000], boss: true },
+
   tombGuardian:    { name: 'Tomb Guardian', lvl: 85, hp: 12000, atk: 450, def: 180, eva: 10, xp: 8500, sp: 25, gold: [1500, 3000], element: 'dark', traits: ['boneArmor'] },
   sepulcherArchon: { name: 'Sepulcher Archon', lvl: 88, hp: 16000, atk: 520, def: 210, eva: 12, xp: 11000, sp: 30, gold: [2000, 4000], element: 'dark', magic: true, traits: ['curse'] },
   undeadKnight:    { name: 'Undead Knight', lvl: 90, hp: 22000, atk: 600, def: 260, eva: 8, xp: 14000, sp: 35, gold: [2500, 5000], element: 'dark', traits: ['shieldBlock'] },
+  lichLord: { name: 'Lich Lord Archmage', hp: 35000, atk: 300, def: 180, eva: 15, matk: 800, mdef: 400, xp: 32000, sp: 50, gold: [8000, 16000], boss: true },
+  deathKing: { name: 'Death King Supreme', hp: 60000, atk: 980, def: 420, eva: 15, xp: 55000, sp: 75, gold: [15000, 30000], boss: true },
+
   caveDrake:       { name: 'Cave Drake', lvl: 91, hp: 25000, atk: 680, def: 280, eva: 15, xp: 16000, sp: 40, gold: [3000, 6000], element: 'earth', traits: ['tailWhip'] },
   magmaBeast:      { name: 'Magma Beast', lvl: 93, hp: 30000, atk: 750, def: 310, eva: 10, xp: 19000, sp: 45, gold: [3500, 7000], element: 'fire', traits: ['burn'] },
   earthDrake:      { name: 'Earth Drake', lvl: 95, hp: 38000, atk: 850, def: 350, eva: 12, xp: 23000, sp: 50, gold: [4200, 8500], element: 'earth', boss: true, traits: ['earthquake'] },
+  antharas: { name: 'Antharas Earth Dragon Lord', hp: 120000, atk: 1400, def: 600, eva: 15, xp: 100000, sp: 120, gold: [25000, 50000], boss: true },
+
+  valakasMinion: { name: 'Valakas Minion', hp: 28000, atk: 700, def: 280, eva: 12, matk: 450, mdef: 250, xp: 22000, sp: 45, gold: [4000, 8000] },
   lavaGolem:       { name: 'Lava Golem', lvl: 96, hp: 45000, atk: 920, def: 400, eva: 5, xp: 27000, sp: 55, gold: [5000, 10000], element: 'fire', traits: ['ironBody'] },
   flameArchon:     { name: 'Flame Archon', lvl: 98, hp: 55000, atk: 1050, def: 450, eva: 14, xp: 32000, sp: 60, gold: [6000, 12000], element: 'fire', magic: true, traits: ['meteor'] },
-  vulcanLord:      { name: 'Vulcan Lord', lvl: 100, hp: 75000, atk: 1250, def: 520, eva: 18, xp: 45000, sp: 80, gold: [8000, 16000], element: 'fire', boss: true, traits: ['cataclysm'] }
+  flameGiantDragon: { name: 'Flame Giant Dragon', hp: 80000, atk: 1200, def: 500, eva: 15, xp: 60000, sp: 80, gold: [12000, 24000], boss: true },
+  vulcanLord:      { name: 'Vulcan Lord', lvl: 100, hp: 75000, atk: 1250, def: 520, eva: 18, xp: 45000, sp: 80, gold: [8000, 16000], element: 'fire', boss: true, traits: ['cataclysm'] },
+  valakas: { name: 'Valakas Fire Sovereign Dragon', hp: 200000, atk: 1800, def: 850, eva: 20, xp: 200000, sp: 200, gold: [50000, 100000], boss: true }
 };
 
 function getXPForLevel(lvl) { return Math.floor(100 * Math.pow(1.8, lvl - 1)); }
@@ -3532,6 +3587,12 @@ function attackMonster() {
   if (monster.hp <= 0 && !castedSkillThisTick) stageMonsterDie(); else if (!castedSkillThisTick) stageMonsterHurt(damage, wasCrit);
   
   if (monster.hp <= 0) {
+    if (!monster.boss && !monster.isTower && state.zone) {
+      state.zoneKills = state.zoneKills || {};
+      state.zoneKills[state.zone] = (state.zoneKills[state.zone] || 0) + 1;
+      updateZoneKillProgressUI();
+    }
+
     state.killStreak = (state.killStreak || 0) + 1;
     if (state.killStreak % 5 === 0 && state.killStreak >= 5) {
       stageFloat(`🔥 STREAK x${state.killStreak}!`, 'sf-crit', 'right');
@@ -3741,13 +3802,90 @@ function stopCombat() {
   if (combatInterval) { clearInterval(combatInterval); combatInterval = null; } 
   if (monsterAttackTimeout) { clearTimeout(monsterAttackTimeout); monsterAttackTimeout = null; }
 }
+function updateZoneKillProgressUI() {
+  const killEl = el('zone-kill-progress');
+  if (killEl && state.zone) {
+    state.zoneKills = state.zoneKills || {};
+    const count = state.zoneKills[state.zone] || 0;
+    const req = 15;
+    killEl.textContent = `⚔️ ${count}/${req} Caçados`;
+    if (count >= req) {
+      killEl.style.color = '#ef4444';
+      killEl.style.borderColor = 'rgba(239,68,68,0.5)';
+      killEl.textContent = `🚨 CHEFÃO DISPONÍVEL!`;
+    } else {
+      killEl.style.color = '#f59e0b';
+      killEl.style.borderColor = 'rgba(245,158,11,0.3)';
+    }
+  }
+}
+
 function pickRandomMonster() {
   if (state.activeMonster && state.activeMonster.isTower && state.activeMonster.hp > 0) return;
   if (!state.zone || !ZONES[state.zone]) return;
-  const zone = ZONES[state.zone], available = zone.monsters.filter(m => { const mon = MONSTERS[m]; return mon && (mon.xp / 10) <= state.level + 5; });
-  if (available.length === 0) { state.target = zone.monsters[0]; } else { state.target = available[Math.floor(Math.random() * available.length)]; }
-  const template = MONSTERS[state.target];
-  if (template) { state.activeMonster = { ...template, _maxHp: template.hp, hp: template.hp, _stunnedUntil: 0 }; log(`A wild ${template.name} appears!`, 'combat'); renderStageMonster(); }
+  const zone = ZONES[state.zone];
+  state.zoneKills = state.zoneKills || {};
+  const currentKills = state.zoneKills[state.zone] || 0;
+  const KILL_GOAL = 15;
+
+  let targetId = null;
+  let isBossSpawn = false;
+
+  // Check if Zone Boss Goal reached (15/15 kills)
+  if (currentKills >= KILL_GOAL && zone.boss && MONSTERS[zone.boss]) {
+    targetId = zone.boss;
+    isBossSpawn = true;
+    state.zoneKills[state.zone] = 0; // Reset counter for next cycle
+  } else {
+    const available = zone.monsters.filter(m => { const mon = MONSTERS[m]; return mon; });
+    targetId = (available.length > 0) ? available[Math.floor(Math.random() * available.length)] : zone.monsters[0];
+  }
+
+  state.target = targetId;
+  const template = MONSTERS[targetId];
+  if (template) {
+    let hpMult = 1, atkMult = 1, xpMult = 1, goldMult = 1;
+    let isElite = false;
+
+    if (isBossSpawn || template.boss) {
+      hpMult = 3.5;
+      atkMult = 1.5;
+      xpMult = 5.0;
+      goldMult = 5.0;
+      isBossSpawn = true;
+    } else if (Math.random() < 0.08) { // 8% chance for Miniboss / Elite
+      hpMult = 1.6;
+      atkMult = 1.2;
+      xpMult = 2.0;
+      goldMult = 2.5;
+      isElite = true;
+    }
+
+    const finalHp = Math.floor(template.hp * hpMult);
+    state.activeMonster = {
+      ...template,
+      _maxHp: finalHp,
+      hp: finalHp,
+      atk: Math.floor(template.atk * atkMult),
+      xp: Math.floor(template.xp * xpMult),
+      gold: [Math.floor((template.gold[0] || 5) * goldMult), Math.floor((template.gold[1] || 15) * goldMult)],
+      boss: isBossSpawn || !!template.boss,
+      isElite: isElite,
+      _stunnedUntil: 0
+    };
+
+    if (isBossSpawn) {
+      log(`🚨 CHEFÃO DA ZONA DESPERTADO! 👑 ${template.name} apareceu!`, 'rarity-legendary');
+      floatText(`🚨 CHEFÃO APARECEU!`, 'float-jackpot');
+    } else if (isElite) {
+      log(`⚡ Monstro Élite ${template.name} (Miniboss) surgiu!`, 'loot');
+    } else {
+      log(`Um ${template.name} selvagem apareceu!`, 'combat');
+    }
+
+    renderStageMonster();
+    updateZoneKillProgressUI();
+  }
 }
 function selectZone(zoneId) { const zone = ZONES[zoneId]; if (zone.level > state.level) { log(`Level ${zone.level} required.`, 'system'); return; } state.zone = zoneId; el('zone-name').textContent = zone.name; stopCombat(); startCombat(); updateAllUI(); save(); }
 
