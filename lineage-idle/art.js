@@ -307,23 +307,40 @@ export const CLASS_LIGHT = {
   warrior: "#f0d878", archer: "#8ae0a8", mystic: "#98e0cc", rogue: "#e0d078",
 };
 
+function getAssetUrl(p) {
+  if (!p) return '';
+  if (p.startsWith('http://') || p.startsWith('https://') || p.startsWith('data:')) return p;
+  const cleanPath = p.replace(/^\//, '');
+  let baseUrl = '';
+  if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.BASE_URL) {
+    baseUrl = import.meta.env.BASE_URL;
+  } else if (typeof window !== 'undefined' && window.__BASE_URL__) {
+    baseUrl = window.__BASE_URL__;
+  }
+  if (baseUrl) {
+    if (!baseUrl.endsWith('/')) baseUrl += '/';
+    return baseUrl + cleanPath;
+  }
+  return '/' + cleanPath;
+}
+
 // ================================================================
 //  heroSVG(race, cls, aura, mode)
 // ================================================================
 export function heroSVG(race, cls, aura, mode) {
-  const src = heroImgPath(race, cls);
+  const src = getAssetUrl(heroImgPath(race, cls));
   const border = aura || "#8a6a24";
 
   if (mode === "bust") {
     return `<div class="hero-svg hero-bust" style="position:relative;width:100%;height:100%;overflow:hidden;border-radius:50%;">
-      <img src="${src}" alt="${race} ${cls}" draggable="false" onerror="this.onerror=null; this.src='/img/Races/${race}_${cls}.png'; if(!this.naturalWidth) this.src='/img/${race}_${cls}.png';"
+      <img src="${src}" alt="${race} ${cls}" draggable="false" onerror="this.onerror=null; this.src='${getAssetUrl(`img/Races/${race}_${cls}.png`)}'; if(!this.naturalWidth) this.src='${getAssetUrl(`img/${race}_${cls}.png`)}';"
         style="width:100%;height:100%;object-fit:cover;object-position:center 15%;filter:drop-shadow(0 0 6px ${border});" />
       <div style="position:absolute;inset:0;border-radius:50%;border:2px solid ${border};box-shadow:inset 0 0 20px rgba(0,0,0,0.6);pointer-events:none;"></div>
     </div>`;
   }
 
   return `<div class="hero-svg hero-full" style="width:100%;height:100%;position:relative;">
-    <img src="${src}" alt="${race} ${cls}" draggable="false" onerror="this.onerror=null; this.src='/img/Races/${race}_${cls}.png'; if(!this.naturalWidth) this.src='/img/${race}_${cls}.png';"
+    <img src="${src}" alt="${race} ${cls}" draggable="false" onerror="this.onerror=null; this.src='${getAssetUrl(`img/Races/${race}_${cls}.png`)}'; if(!this.naturalWidth) this.src='${getAssetUrl(`img/${race}_${cls}.png`)}';"
       style="width:100%;height:100%;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 8px 16px rgba(0,0,0,0.7)) drop-shadow(0 0 4px ${border || 'transparent'});" />
   </div>`;
 }
@@ -332,16 +349,16 @@ export function heroSVG(race, cls, aura, mode) {
 //  monsterSVG(id, opts)
 // ================================================================
 export function monsterSVG(id, opts) {
-  const imgSrc = MON_IMG[id] || `/img/Monsters/${id}.png`;
+  const imgSrc = MON_IMG[id] || MON_IMG[id.toLowerCase()] || `/img/Monsters/${id}.png`;
   const crown = opts?.crown
     ? `<div style="position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-size:22px;filter:drop-shadow(0 0 6px #f0c840);z-index:2;">👑</div>`
     : "";
 
-  const resolvedSrc = resolveImg(imgSrc);
+  const resolvedSrc = getAssetUrl(resolveImg(imgSrc));
   const glow = opts?.crown ? "drop-shadow(0 0 10px rgba(240,200,64,0.5))" : "drop-shadow(0 6px 12px rgba(0,0,0,0.6))";
   return `<div class="mon-svg" style="width:100%;height:100%;position:relative;">
     ${crown}
-    <img src="${resolvedSrc}" alt="${id}" draggable="false" onerror="this.onerror=null; this.src='/img/Monsters/${id}.png'; if(!this.naturalWidth) this.src='/img/${id}.png';"
+    <img src="${resolvedSrc}" alt="${id}" draggable="false" onerror="this.onerror=null; this.src='${getAssetUrl(`img/Monsters/${id}.png`)}'; if(!this.naturalWidth) this.src='${getAssetUrl(`img/${id}.png`)}';"
       style="width:100%;height:100%;object-fit:contain;object-position:center bottom;filter:${glow};" />
   </div>`;
 }

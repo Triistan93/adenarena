@@ -1860,6 +1860,23 @@ function updateInventoryUI() {
   if (shown === 0) grid.innerHTML = '<div class="inv-empty-msg">Nenhum item encontrado nesta categoria</div>';
 }
 
+function getAssetUrl(p) {
+  if (!p) return '';
+  if (p.startsWith('http://') || p.startsWith('https://') || p.startsWith('data:')) return p;
+  const cleanPath = p.replace(/^\//, '');
+  let baseUrl = '';
+  if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.BASE_URL) {
+    baseUrl = import.meta.env.BASE_URL;
+  } else if (typeof window !== 'undefined' && window.__BASE_URL__) {
+    baseUrl = window.__BASE_URL__;
+  }
+  if (baseUrl) {
+    if (!baseUrl.endsWith('/')) baseUrl += '/';
+    return baseUrl + cleanPath;
+  }
+  return '/' + cleanPath;
+}
+
 function getItemIcon(def) { 
   if (!def) return '📦';
   const fallbackIcons = { weapon: '⚔️', armor: '🛡️', helmet: '⛑️', gloves: '🧤', boots: '👢', ring: '💍', consumable: '🧪', material: '💎', scroll: '📜' }; 
@@ -1867,14 +1884,17 @@ function getItemIcon(def) {
   const id = def.id || '';
   const rawKey = (def.icon || id || '').toLowerCase(); 
   if (!rawKey) return emoji; 
-  const iconMap = (D() && D().ICON_MAP) ? D().ICON_MAP : {};
-  let relPath = iconMap[id] || iconMap[rawKey] || iconMap[rawKey.replace(/_/g, '')] || iconMap[rawKey.replace(/\s+/g, '')];
+  
+  const iconIndex = (typeof window !== 'undefined' && window.IconIndex) ? window.IconIndex : ((D() && D().ICON_MAP) ? D().ICON_MAP : {});
+  const cleanKey = rawKey.replace(/_/g, '').replace(/\s+/g, '');
+  
+  let relPath = iconIndex[id] || iconIndex[rawKey] || iconIndex[cleanKey];
 
   if (!relPath) {
     const cleanId = id.toLowerCase().replace(/_/g, '');
-    for (const [k, v] of Object.entries(iconMap)) {
-      const cleanK = k.toLowerCase().replace(/_/g, '');
-      if (cleanId.includes(cleanK) || cleanK.includes(cleanId)) {
+    for (const [k, v] of Object.entries(iconIndex)) {
+      const cleanK = k.toLowerCase().replace(/_/g, '').replace(/\s+/g, '');
+      if (cleanId === cleanK || (cleanK.length > 4 && cleanId.includes(cleanK))) {
         relPath = v;
         break;
       }
@@ -1882,16 +1902,11 @@ function getItemIcon(def) {
   }
 
   if (!relPath) {
-    const slot = def.slot;
-    if (slot === 'weapon') relPath = 'Weapons/GradeS/dragon_slayer.png';
-    else if (['armor','legs','helmet','boots','gloves','shield'].includes(slot)) relPath = 'Armors/GradeS/imperial_crusader_armor.png';
-    else if (['ring','earring','necklace'].includes(slot)) relPath = 'Jewels/GradeS/accessory_ring_of_core_i03.png';
-    else if (['scroll','consumable'].includes(slot)) relPath = 'Items/Scrolls/exp_scroll.png';
-    else if (slot === 'material') relPath = 'Items/Materials/ironore.png';
-    else relPath = `${rawKey}.png`;
+    relPath = `${rawKey}.png`;
   }
 
-  const fullUrl = relPath.startsWith('/') ? relPath : `/img/icons/${relPath}`;
+  const subPath = relPath.startsWith('img/') ? relPath : `img/icons/${relPath}`;
+  const fullUrl = getAssetUrl(subPath);
   return `<img src="${fullUrl}" alt="${def.name || ''}" class="item-icon-img" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='inline-block';" style="width:28px; height:28px; object-fit:contain; vertical-align:middle;" /><span class="item-icon-fallback" style="display:none; font-size:18px;">${emoji}</span>`; 
 }
 
@@ -5022,6 +5037,18 @@ export function init() {
 
     attachGlobalErrorHandlers();
     bindEvents();
+
+    try {
+      fetch(getAssetUrl('img/icons/icon_index.json'))
+        .then(res => res.ok ? res.json() : null)
+        .then(data => {
+          if (data) {
+            window.IconIndex = { ...(window.IconIndex || {}), ...data };
+            updateAllUI();
+          }
+        })
+        .catch(() => {});
+    } catch (e) {}
 
     state.startTime = Date.now(); 
     const hasSave = load();
