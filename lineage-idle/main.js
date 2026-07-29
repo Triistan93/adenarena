@@ -1846,13 +1846,27 @@ function updateInventoryUI() {
 }
 
 function getItemIcon(def) { 
+  if (!def) return '📦';
   const fallbackIcons = { weapon: '⚔️', armor: '🛡️', helmet: '⛑️', gloves: '🧤', boots: '👢', ring: '💍', consumable: '🧪', material: '💎', scroll: '📜' }; 
   const emoji = fallbackIcons[def.slot] || '📦'; 
-  const rawKey = (def.icon || def.id || '').toLowerCase(); 
+  const id = def.id || '';
+  const rawKey = (def.icon || id || '').toLowerCase(); 
   if (!rawKey) return emoji; 
-  const iconMap = D() && D().ICON_MAP ? D().ICON_MAP : {};
-  const relPath = iconMap[rawKey] || `${rawKey}.png`;
-  return `<img src="/img/icons/${relPath}" alt="${def.name}" class="item-icon-img" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='inline-block';" style="width:28px; height:28px; object-fit:contain; vertical-align:middle;" /><span class="item-icon-fallback" style="display:none; font-size:18px;">${emoji}</span>`; 
+  const iconMap = (D() && D().ICON_MAP) ? D().ICON_MAP : {};
+  let relPath = iconMap[id] || iconMap[rawKey] || iconMap[rawKey.replace(/_/g, '')];
+
+  if (!relPath) {
+    const slot = def.slot;
+    if (slot === 'weapon') relPath = 'Weapons/woodensword.png';
+    else if (['armor','legs','helmet','boots','gloves','shield'].includes(slot)) relPath = 'Armors/dark_crystal_heavy_boots.png';
+    else if (['ring','earring','necklace'].includes(slot)) relPath = 'Jewels/accessory_ring_of_core_i03.png';
+    else if (['scroll','consumable'].includes(slot)) relPath = 'Misc/exp_scroll.png';
+    else if (slot === 'material') relPath = 'Materials/ironore.png';
+    else relPath = `${rawKey}.png`;
+  }
+
+  const fullUrl = relPath.startsWith('/') ? relPath : `/img/icons/${relPath}`;
+  return `<img src="${fullUrl}" alt="${def.name || ''}" class="item-icon-img" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='inline-block';" style="width:28px; height:28px; object-fit:contain; vertical-align:middle;" /><span class="item-icon-fallback" style="display:none; font-size:18px;">${emoji}</span>`; 
 }
 
 let tooltipTimer = null;
