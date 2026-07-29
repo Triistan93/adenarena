@@ -399,7 +399,7 @@ Object.assign(ALL_ITEMS, CLASS_WEAPONS, CLASS_ARMORS, POWERUPS);
 
 for (const [key, def] of Object.entries(ALL_ITEMS)) {
   if (def && !def.id) def.id = key;
-}
+};
 // Key aliases mapping to guarantee item lookups never return undefined
 ALL_ITEMS.novice_cloak = ALL_ITEMS.adventurer_cloak;
 ALL_ITEMS.novice_talisman = ALL_ITEMS.talisman_novice;
