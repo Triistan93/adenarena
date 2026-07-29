@@ -1190,7 +1190,12 @@ const ICON_MAP = {
   "oak_staff": "Weapons/NoGrade/oak_staff.png",
   "short_bow": "Weapons/NoGrade/short_bow.png",
   "training_dagger": "Weapons/NoGrade/training_dagger.png",
-  "wooden_sword": "Weapons/NoGrade/wooden_sword.png"
+  "wooden_sword": "Weapons/NoGrade/wooden_sword.png",
+  "chaos_blade": "Weapons/GradeS/dragon_slayer.png",
+  "dragon_scale_armor": "Armors/GradeS/draconic_armor.png",
+  "zaken_blood_sword": "Weapons/GradeS/zaken_sword.png",
+  "dark_crystal_shield": "Armors/GradeA/dark_crystal_light_armor.png",
+  "venir_talisman": "Agathions/agathion_pegasus.png"
 };
 
 if (typeof window !== 'undefined') {

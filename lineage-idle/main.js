@@ -1867,15 +1867,26 @@ function getItemIcon(def) {
   const rawKey = (def.icon || id || '').toLowerCase(); 
   if (!rawKey) return emoji; 
   const iconMap = (D() && D().ICON_MAP) ? D().ICON_MAP : {};
-  let relPath = iconMap[id] || iconMap[rawKey] || iconMap[rawKey.replace(/_/g, '')];
+  let relPath = iconMap[id] || iconMap[rawKey] || iconMap[rawKey.replace(/_/g, '')] || iconMap[rawKey.replace(/\s+/g, '')];
+
+  if (!relPath) {
+    const cleanId = id.toLowerCase().replace(/_/g, '');
+    for (const [k, v] of Object.entries(iconMap)) {
+      const cleanK = k.toLowerCase().replace(/_/g, '');
+      if (cleanId.includes(cleanK) || cleanK.includes(cleanId)) {
+        relPath = v;
+        break;
+      }
+    }
+  }
 
   if (!relPath) {
     const slot = def.slot;
-    if (slot === 'weapon') relPath = 'Weapons/woodensword.png';
-    else if (['armor','legs','helmet','boots','gloves','shield'].includes(slot)) relPath = 'Armors/dark_crystal_heavy_boots.png';
-    else if (['ring','earring','necklace'].includes(slot)) relPath = 'Jewels/accessory_ring_of_core_i03.png';
-    else if (['scroll','consumable'].includes(slot)) relPath = 'Misc/exp_scroll.png';
-    else if (slot === 'material') relPath = 'Materials/ironore.png';
+    if (slot === 'weapon') relPath = 'Weapons/GradeS/dragon_slayer.png';
+    else if (['armor','legs','helmet','boots','gloves','shield'].includes(slot)) relPath = 'Armors/GradeS/imperial_crusader_armor.png';
+    else if (['ring','earring','necklace'].includes(slot)) relPath = 'Jewels/GradeS/accessory_ring_of_core_i03.png';
+    else if (['scroll','consumable'].includes(slot)) relPath = 'Items/Scrolls/exp_scroll.png';
+    else if (slot === 'material') relPath = 'Items/Materials/ironore.png';
     else relPath = `${rawKey}.png`;
   }
 
