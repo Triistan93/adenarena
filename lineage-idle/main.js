@@ -1,4 +1,5 @@
 import * as ART from "./art.js";
+import { loadIconIndex } from "./iconLoader.js";
 
 // ========================================
 // Lineage Idle - Main Game Logic
