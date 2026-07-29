@@ -191,14 +191,14 @@ export function heroSVG(race, cls, aura, mode) {
 
   if (mode === "bust") {
     return `<div class="hero-svg hero-bust" style="position:relative;width:100%;height:100%;overflow:hidden;border-radius:50%;">
-      <img src="${src}" alt="${race} ${cls}" draggable="false" onerror="this.onerror=null;this.src='/img/human_fighter.png';"
+      <img src="${src}" alt="${race} ${cls}" draggable="false" onerror="this.onerror=null; this.src='/img/Races/${race}_${cls}.png'; if(!this.naturalWidth) this.src='/img/${race}_${cls}.png';"
         style="width:100%;height:100%;object-fit:cover;object-position:center 15%;filter:drop-shadow(0 0 6px ${border});" />
       <div style="position:absolute;inset:0;border-radius:50%;border:2px solid ${border};box-shadow:inset 0 0 20px rgba(0,0,0,0.6);pointer-events:none;"></div>
     </div>`;
   }
 
   return `<div class="hero-svg hero-full" style="width:100%;height:100%;position:relative;">
-    <img src="${src}" alt="${race} ${cls}" draggable="false" onerror="this.onerror=null;this.src='/img/human_fighter.png';"
+    <img src="${src}" alt="${race} ${cls}" draggable="false" onerror="this.onerror=null; this.src='/img/Races/${race}_${cls}.png'; if(!this.naturalWidth) this.src='/img/${race}_${cls}.png';"
       style="width:100%;height:100%;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 8px 16px rgba(0,0,0,0.7)) drop-shadow(0 0 4px ${border || 'transparent'});" />
   </div>`;
 }
@@ -207,86 +207,18 @@ export function heroSVG(race, cls, aura, mode) {
 //  monsterSVG(id, opts)
 // ================================================================
 export function monsterSVG(id, opts) {
-  const imgSrc = MON_IMG[id];
+  const imgSrc = MON_IMG[id] || `/img/Monsters/${id}.png`;
   const crown = opts?.crown
     ? `<div style="position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-size:22px;filter:drop-shadow(0 0 6px #f0c840);z-index:2;">👑</div>`
     : "";
 
-  const resolvedSrc = imgSrc ? resolveImg(imgSrc) : null;
-  if (resolvedSrc) {
-    const glow = opts?.crown ? "drop-shadow(0 0 10px rgba(240,200,64,0.5))" : "drop-shadow(0 6px 12px rgba(0,0,0,0.6))";
-    return `<div class="mon-svg" style="width:100%;height:100%;position:relative;">
-      ${crown}
-      <img src="${resolvedSrc}" alt="${id}" draggable="false" onerror="this.onerror=null;this.src='/img/mon_direwolf.png';"
-        style="width:100%;height:100%;object-fit:contain;object-position:center bottom;filter:${glow};" />
-    </div>`;
-  }
-
-  const fb = MON_SVG_FALLBACK[id];
-  const c = fb?.c || "#888";
-  const cd = darken(c);
-  const cl = lighten(c);
-
-  let fig = "";
-  switch (fb?.shape) {
-    case "beast":
-      fig = `<ellipse cx="76" cy="112" rx="38" ry="22" fill="${c}"/>
-        <circle cx="44" cy="92" r="18" fill="${c}"/>
-        <path d="M32 82 L24 68 L38 80Z" fill="${c}"/><path d="M38 80 L32 66 L44 80Z" fill="${c}"/>
-        <ellipse cx="38" cy="90" rx="3.5" ry="4" fill="${cl}"/>
-        <circle cx="39" cy="90" r="2" fill="#2a0808"/>
-        <path d="M58 130 L54 150 L62 150 L60 130" fill="${cd}"/>
-        <path d="M90 130 L86 150 L94 150 L92 130" fill="${cd}"/>
-        <path d="M106 108 Q116 106 118 118 Q110 114 104 116Z" fill="${c}" opacity="0.7"/>`;
-      break;
-    case "spider":
-      fig = `<ellipse cx="70" cy="102" rx="28" ry="20" fill="${c}"/>
-        ${[-1,1].map(s=>[0,1,2,3].map(i=>{
-          const ang=0.4+i*0.4; const x2=70+s*Math.cos(ang)*50; const y2=102+Math.sin(ang)*32-14;
-          return `<line x1="70" y1="102" x2="${x2}" y2="${y2}" stroke="${cd}" stroke-width="3" stroke-linecap="round"/>`;
-        }).join("")).join("")}
-        <circle cx="62" cy="96" r="4.5" fill="${cl}"/><circle cx="78" cy="96" r="4.5" fill="${cl}"/>
-        <circle cx="62" cy="96" r="2" fill="#1a0818"/><circle cx="78" cy="96" r="2" fill="#1a0818"/>`;
-      break;
-    case "brute":
-      fig = `<ellipse cx="70" cy="100" rx="34" ry="38" fill="${c}"/>
-        <circle cx="70" cy="52" r="22" fill="${c}"/>
-        <path d="M38 72 Q22 82 26 124 L42 118" fill="${c}"/>
-        <path d="M102 72 Q118 82 114 124 L98 118" fill="${c}"/>
-        <circle cx="24" cy="126" r="8" fill="${c}"/><circle cx="116" cy="126" r="8" fill="${c}"/>
-        <path d="M60 62 L56 72 L64 66Z" fill="#e8e0c8"/><path d="M80 62 L84 72 L76 66Z" fill="#e8e0c8"/>
-        <ellipse cx="62" cy="50" rx="4" ry="4.5" fill="#fff"/><ellipse cx="78" cy="50" rx="4" ry="4.5" fill="#fff"/>
-        <circle cx="63" cy="50" r="2.5" fill="#2a0808"/><circle cx="79" cy="50" r="2.5" fill="#2a0808"/>`;
-      break;
-    case "armored":
-      fig = `<path d="M46 68 Q70 58 94 68 L92 124 Q70 132 48 124Z" fill="#6a7080" stroke="#3a4050" stroke-width="1"/>
-        <circle cx="70" cy="48" r="18" fill="#7a8290" stroke="#3a4050" stroke-width="1"/>
-        <rect x="54" y="44" width="32" height="5" rx="1.5" fill="#2a2a38"/>
-        <rect x="96" y="70" width="8" height="48" rx="3" fill="${cl}" stroke="#3a4050" stroke-width="0.8"/>
-        <path d="M50 124 L46 152 L58 152 L56 124" fill="#4a5060"/>
-        <path d="M84 124 L80 152 L92 152 L90 124" fill="#4a5060"/>`;
-      break;
-    case "caster":
-      fig = `<path d="M48 74 Q70 66 92 74 L88 138 Q70 146 52 138Z" fill="${c}"/>
-        <circle cx="70" cy="52" r="18" fill="${c}"/>
-        <path d="M52 42 Q60 18 70 16 Q80 18 88 42 L84 36 Q70 22 56 36Z" fill="${c}"/>
-        <ellipse cx="63" cy="52" rx="3.5" ry="3.5" fill="#fff"/><ellipse cx="77" cy="52" rx="3.5" ry="3.5" fill="#fff"/>
-        <circle cx="64" cy="52" r="2" fill="${cd}"/><circle cx="78" cy="52" r="2" fill="${cd}"/>
-        <line x1="34" y1="122" x2="28" y2="68" stroke="#4a3018" stroke-width="3" stroke-linecap="round"/>
-        <circle cx="27" cy="64" r="6.5" fill="${cl}"/>`;
-      break;
-    default:
-      fig = `<ellipse cx="70" cy="108" rx="22" ry="30" fill="${c}"/>
-        <circle cx="70" cy="58" r="18" fill="${c}"/>
-        <ellipse cx="63" cy="56" rx="3" ry="3.5" fill="#fff"/><ellipse cx="77" cy="56" rx="3" ry="3.5" fill="#fff"/>
-        <circle cx="64" cy="56" r="1.8" fill="#1a1820"/><circle cx="78" cy="56" r="1.8" fill="#1a1820"/>`;
-  }
-
-  const sha = `<ellipse cx="70" cy="154" rx="42" ry="8" fill="#000" opacity="0.35"/>`;
-  const crownSvg = opts?.crown
-    ? `<path d="M48 16 L54 4 L60 14 L66 2 L72 14 L78 4 L84 16Z" fill="#f0c840" stroke="#8a6818" stroke-width="1"/>` : "";
-
-  return `<svg viewBox="0 0 140 160" class="mon-svg" preserveAspectRatio="xMidYMid meet">${sha}${crownSvg}${fig}</svg>`;
+  const resolvedSrc = resolveImg(imgSrc);
+  const glow = opts?.crown ? "drop-shadow(0 0 10px rgba(240,200,64,0.5))" : "drop-shadow(0 6px 12px rgba(0,0,0,0.6))";
+  return `<div class="mon-svg" style="width:100%;height:100%;position:relative;">
+    ${crown}
+    <img src="${resolvedSrc}" alt="${id}" draggable="false" onerror="this.onerror=null; this.src='/img/Monsters/${id}.png'; if(!this.naturalWidth) this.src='/img/${id}.png';"
+      style="width:100%;height:100%;object-fit:contain;object-position:center bottom;filter:${glow};" />
+  </div>`;
 }
 
 function darken(hex, f = 0.6) {
