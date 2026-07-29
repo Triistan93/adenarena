@@ -129,7 +129,55 @@ const CLASSES = {
 
   // Ertheia 2nd Transfer (Lv 40)
   ertheiaWarrior: { name: 'Eviscerator', archetype: 'fighter', stage: 2, parent: 'marauder', desc: 'Wind dancer executing airborne hurricane combos.', base: { atk: 62, def: 22, eva: 28, crit: 18 } },
-  windRider: { name: 'Sayha Seeker', archetype: 'mage', stage: 2, parent: 'sayhaSeer', desc: 'Archon of wind unleashing elemental tornadoes.', base: { matk: 74, mdef: 40, mp: 185 } }
+  windRider: { name: 'Sayha Seeker', archetype: 'mage', stage: 2, parent: 'sayhaSeer', desc: 'Archon of wind unleashing elemental tornadoes.', base: { matk: 74, mdef: 40, mp: 185 } },
+
+  // === 3RD JOB CLASS TRANSFERS (Level 76) ===
+  // Humans (3rd)
+  duelist:          { name: 'Duelist', archetype: 'fighter', stage: 3, parent: 'gladiator', race: 'human', desc: 'Master of dual swords unleashing sonic energy and maximum burst.', base: { atk: 110, def: 45, hp: 300, crit: 20 } },
+  dreadnought:      { name: 'Dreadnought', archetype: 'fighter', stage: 3, parent: 'warlord', race: 'human', desc: 'Titan of spear combat sweeping entire battlefields.', base: { atk: 95, def: 60, hp: 380, mdef: 35 } },
+  phoenixKnight:    { name: 'Phoenix Knight', archetype: 'fighter', stage: 3, parent: 'paladin', race: 'human', desc: 'Supreme holy knight resurrected in divine flames.', base: { atk: 65, def: 110, hp: 550, mdef: 70 } },
+  hellKnight:       { name: 'Hell Knight', archetype: 'fighter', stage: 3, parent: 'darkAvenger', race: 'human', desc: 'Dread knight commanding dark panther and abyssal judgment.', base: { atk: 90, def: 95, hp: 450, mdef: 60 } },
+  adventurer:       { name: 'Adventurer', archetype: 'fighter', stage: 3, parent: 'treasureHunter', race: 'human', desc: 'Master assassin utilizing Mirage posture and fatal backstabs.', base: { atk: 100, def: 35, eva: 48, crit: 35 } },
+  sagittarius:      { name: 'Sagittarius', archetype: 'fighter', stage: 3, parent: 'hawkeye', race: 'human', desc: 'Sniper of the realm striking targets from extreme distance with 100% crit.', base: { atk: 115, def: 30, eva: 32, crit: 30 } },
+  archmage:         { name: 'Archmage', archetype: 'mage', stage: 3, parent: 'sorcerer', race: 'human', desc: 'Archon of fire unleashing apocalyptic meteor storms.', base: { matk: 140, mdef: 80, mp: 350 } },
+  soultaker:        { name: 'Soultaker', archetype: 'mage', stage: 3, parent: 'necromancer', race: 'human', desc: 'Master of necro-summons, Day of Doom curses and life drain.', base: { matk: 130, mdef: 70, mp: 300, hp: 160 } },
+  arcanaLord:       { name: 'Arcana Lord', archetype: 'mage', stage: 3, parent: 'warlock', race: 'human', desc: 'Master summoner channeling feline spirits and party buffs.', base: { matk: 115, mdef: 75, mp: 320 } },
+  cardinal:         { name: 'Cardinal', archetype: 'mage', stage: 3, parent: 'bishop', race: 'human', desc: 'Supreme high priest casting Balance Life and instant Mass Resurrection.', base: { matk: 90, mdef: 110, def: 60, mp: 340 } },
+  hierophant:       { name: 'Hierophant', archetype: 'mage', stage: 3, parent: 'prophet', race: 'human', desc: 'Grand enchanter providing supreme physical and magic buffs.', base: { matk: 80, mdef: 90, def: 80, hp: 200 } },
+
+  // Elves (3rd)
+  evasTemplar:      { name: 'Eva\'s Templar', archetype: 'fighter', stage: 3, parent: 'templeKnight', race: 'elf', desc: 'Divine elven defender with supreme evasion and water shields.', base: { atk: 70, def: 105, hp: 480, eva: 30, mdef: 65 } },
+  swordMuse:        { name: 'Sword Muse', archetype: 'fighter', stage: 3, parent: 'swordsinger', race: 'elf', desc: 'Master bard chanting songs of warding, storm, and divine defense.', base: { atk: 90, def: 80, hp: 400, eva: 24, crit: 20 } },
+  windRiderElven:   { name: 'Wind Rider', archetype: 'fighter', stage: 3, parent: 'plainsWalker', race: 'elf', desc: 'Ethereal assassin moving like the wind with ultimate dodge.', base: { atk: 104, def: 32, eva: 60, crit: 40 } },
+  moonlightSentinel:{ name: 'Moonlight Sentinel', archetype: 'fighter', stage: 3, parent: 'silverRanger', race: 'elf', desc: 'Agile lunar sniper with maximum attack speed and starlight rain.', base: { atk: 118, def: 28, eva: 42, crit: 35 } },
+  mysticMuse:       { name: 'Mystic Muse', archetype: 'mage', stage: 3, parent: 'spellsinger', race: 'elf', desc: 'Fastest archmage in Aden casting water torrents and Blizzard.', base: { matk: 145, mdef: 85, mp: 380, eva: 16 } },
+  elementalMaster:  { name: 'Elemental Master', archetype: 'mage', stage: 3, parent: 'elementalSummoner', race: 'elf', desc: 'Supreme summoner of spirit unicorns and elemental power.', base: { matk: 120, mdef: 76, mp: 340 } },
+  evasSaint:        { name: 'Eva\'s Saint', archetype: 'mage', stage: 3, parent: 'elder', race: 'elf', desc: 'High priestess of Eva providing Recharge, Wild Magic, and mass cleanse.', base: { matk: 95, mdef: 115, def: 55, mp: 400 } },
+
+  // Dark Elves (3rd)
+  shillienTemplar:  { name: 'Shillien Templar', archetype: 'fighter', stage: 3, parent: 'shillienKnight', race: 'darkelf', desc: 'Dark knight of Shillien summoning cubics and vampiric shield burst.', base: { atk: 96, def: 98, hp: 420, mdef: 70 } },
+  spectralDancer:   { name: 'Spectral Dancer', archetype: 'fighter', stage: 3, parent: 'bladedancer', race: 'darkelf', desc: 'Shadow dancer granting Dance of Warrior, Fire, and Fury.', base: { atk: 112, def: 64, hp: 380, crit: 28 } },
+  ghostHunter:      { name: 'Ghost Hunter', archetype: 'fighter', stage: 3, parent: 'abyssWalker', race: 'darkelf', desc: 'Lethal dark assassin with unmatched critical blow multiplier.', base: { atk: 124, def: 28, eva: 40, crit: 50 } },
+  ghostSentinel:    { name: 'Ghost Sentinel', archetype: 'fighter', stage: 3, parent: 'phantomRanger', race: 'darkelf', desc: 'Dark archer with supreme STR 41 dealing devastating single-target damage.', base: { atk: 132, def: 24, eva: 32, crit: 45 } },
+  stormScreamer:    { name: 'Storm Screamer', archetype: 'mage', stage: 3, parent: 'spellhowler', race: 'darkelf', desc: 'Archmage of wind and darkness boasting highest M.Atk (INT 44).', base: { matk: 170, mdef: 76, mp: 350 } },
+  spectralMaster:   { name: 'Spectral Master', archetype: 'mage', stage: 3, parent: 'phantomSummoner', race: 'darkelf', desc: 'Summoner of shadow demons and spectral reapers.', base: { matk: 132, mdef: 72, mp: 320 } },
+  shillienSaint:    { name: 'Shillien Saint', archetype: 'mage', stage: 3, parent: 'shillienElder', race: 'darkelf', desc: 'Priestess of Shillien granting Empress Magic, Empower, and Lord of Vampires.', base: { matk: 104, mdef: 100, def: 52, mp: 360 } },
+
+  // Orcs (3rd)
+  titan:            { name: 'Titan', archetype: 'fighter', stage: 3, parent: 'destroyer', race: 'orc', desc: 'Colossal berserker executing Frenzy, Guts, and Zealot for apocalyptic damage.', base: { atk: 136, def: 70, hp: 640, mdef: 30 } },
+  grandKhavatari:   { name: 'Grand Khavatari', archetype: 'fighter', stage: 3, parent: 'tyrant', race: 'orc', desc: 'Martial titan channeling Bison, Puma, and Ogre totems.', base: { atk: 120, def: 56, eva: 28, hp: 520, crit: 24 } },
+  dominator:        { name: 'Dominator', archetype: 'mage', stage: 3, parent: 'overlord', race: 'orc', desc: 'Ruler of clans casting mass Seal of Suspension, Despair, and clan buffs.', base: { matk: 100, mdef: 96, def: 90, hp: 360, mp: 280 } },
+  doomcryer:        { name: 'Doomcryer', archetype: 'mage', stage: 3, parent: 'warcryer', race: 'orc', desc: 'Chanter empowering entire party with Chant of Victory and Magnus.', base: { matk: 92, mdef: 88, def: 80, hp: 320, mp: 300 } },
+
+  // Dwarves (3rd)
+  fortuneSeeker:    { name: 'Fortune Seeker', archetype: 'artisan', stage: 3, parent: 'bountyHunter', race: 'dwarf', desc: 'Master fortune seeker with Spoil Crush and highest drop rates.', base: { atk: 80, def: 80, hp: 380, lootBonus: 1.0 } },
+  maestro:          { name: 'Maestro', archetype: 'artisan', stage: 3, parent: 'warsmith', race: 'dwarf', desc: 'Grand craftsman forging Siege Golems, Masterwork gear, and automatons.', base: { atk: 88, def: 96, hp: 420, lootBonus: 0.7 } },
+
+  // Kamael (3rd)
+  doombringer:      { name: 'Doombringer', archetype: 'soulbreaker', stage: 3, parent: 'berserker', race: 'kamael', desc: 'Two-handed ancient sword master executing Disarm and Rush Impact.', base: { atk: 128, def: 40, eva: 32, crit: 32 } },
+  soulHound:        { name: 'Soul Hound', archetype: 'soulbreaker', stage: 3, parent: 'soulhound', race: 'kamael', desc: 'Master of rapier and soul magic executing Leopold and Soul Vortex.', base: { atk: 124, eva: 40, crit: 36, matk: 100 } },
+  trickster:        { name: 'Trickster', archetype: 'soulbreaker', stage: 3, parent: 'arbalester', race: 'kamael', desc: 'Master of heavy crossbow, Decoy, and Purgatory Traps.', base: { atk: 120, def: 32, eva: 44, crit: 40 } },
+  judicator:        { name: 'Judicator', archetype: 'soulbreaker', stage: 3, parent: 'inspector', race: 'kamael', desc: 'Supreme hybrid buffer/debuffer unleashing Instinct and Appetite for Destruction.', base: { atk: 110, def: 50, eva: 36, matk: 90 } }
 };
 
 const DWARF_CLASS = CLASSES.artisan;
@@ -773,7 +821,11 @@ function checkClassAdvancement() {
   } else if (state.level >= 40 && currentStage === 1) {
     canAdvance = true;
     advTitle = '⚔️ 2ª Troca de Classe Disponível!';
-    advSub = `Atingiu o Nível ${state.level}! Escolha a sua Classe Épica de Noblesses.`;
+    advSub = `Atingiu o Nível ${state.level}! Escolha a sua Classe Épica de Especialista.`;
+  } else if (state.level >= 76 && currentStage === 2) {
+    canAdvance = true;
+    advTitle = '👑 3ª Troca de Classe Disponível (3rd Job)!';
+    advSub = `Atingiu o Nível ${state.level}! Torne-se um Mestre Sagrado da 3ª Transferência e alcance o poder dos Noblesses!`;
   }
 
   if (canAdvance) {
@@ -804,6 +856,7 @@ function openClassTransferModal() {
     if (def.race && def.race !== state.race) return false;
     if (targetStage === 1) return (def.parent === state.class || def.archetype === state.class);
     if (targetStage === 2) return (def.parent === state.class);
+    if (targetStage === 3) return (def.parent === state.class);
     return false;
   });
 
