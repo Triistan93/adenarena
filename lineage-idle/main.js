@@ -11,14 +11,31 @@ const SAVE_KEY = 'lineageIdleSave_v2';
 const D = () => window.GameData;
 
 // --------------------------- RACES & CLASSES ---------------------------
+const RACE_BASE_ATTRIBUTES = {
+  // Fighters
+  darkelf_fighter: { str: 41, con: 32, dex: 34, wit: 12, int: 25, men: 26 },
+  human_fighter:   { str: 40, con: 43, dex: 30, wit: 11, int: 21, men: 25 },
+  elf_fighter:     { str: 36, con: 36, dex: 35, wit: 14, int: 23, men: 26 },
+  orc_fighter:     { str: 40, con: 47, dex: 26, wit: 12, int: 18, men: 27 },
+  dwarf_fighter:   { str: 39, con: 45, dex: 29, wit: 10, int: 20, men: 27 },
+  kamael_male:     { str: 41, con: 31, dex: 33, wit: 11, int: 29, men: 25 },
+  kamael_female:   { str: 39, con: 30, dex: 35, wit: 11, int: 28, men: 27 },
+
+  // Mages
+  darkelf_mage:    { str: 23, con: 24, dex: 23, wit: 19, int: 44, men: 37 },
+  human_mage:      { str: 22, con: 27, dex: 21, wit: 20, int: 41, men: 39 },
+  elf_mage:        { str: 21, con: 25, dex: 24, wit: 23, int: 37, men: 40 },
+  orc_mage:        { str: 25, con: 31, dex: 20, wit: 21, int: 31, men: 42 }
+};
+
 const RACES = {
-  human: { name: 'Human', desc: 'Balanced in all disciplines.', stats: { atk: 0, def: 0, eva: 0, matk: 0, mdef: 0 }, startZone: 'talkingIsland' },
-  elf: { name: 'Elf', desc: 'Graceful and evasive.', stats: { atk: 0, def: -2, eva: 8, matk: 0, mdef: 0 }, startZone: 'elvenForest' },
-  darkelf: { name: 'Dark Elf', desc: 'Deadly spellcasters.', stats: { atk: 2, def: -2, eva: 4, matk: 6, mdef: 2 }, startZone: 'darkForest' },
-  orc: { name: 'Orc', desc: 'Tough and resilient.', stats: { atk: 4, def: 6, eva: -4, matk: -2, mdef: -2 }, startZone: 'orcVillage' },
-  dwarf: { name: 'Dwarf', desc: 'Masters of craft and loot.', stats: { atk: 0, def: 4, eva: -2, matk: 0, mdef: 0, lootBonus: 0.15 }, startZone: 'dwarvenMine' },
-  kamael: { name: 'Kamael', desc: 'Swift and deadly.', stats: { atk: 6, def: -2, eva: 6, matk: 0, mdef: 0 }, startZone: 'kamaelLair' },
-  ertheia: { name: 'Ertheia', desc: 'Agile dragon-touched warriors.', stats: { atk: 2, def: 0, eva: 10, matk: 4, mdef: 0 }, startZone: 'talkingIsland' }
+  human: { name: 'Human', desc: 'Versáteis e equilibrados em todas as disciplinas.', stats: { atk: 0, def: 0, eva: 0, matk: 0, mdef: 0 }, startZone: 'talkingIsland' },
+  elf: { name: 'Elf', desc: 'Graciosos, velozes e de alta esquiva.', stats: { atk: 0, def: -2, eva: 8, matk: 0, mdef: 0 }, startZone: 'elvenForest' },
+  darkelf: { name: 'Dark Elf', desc: 'Conjuradores sombrios e dano crítico devastador.', stats: { atk: 2, def: -2, eva: 4, matk: 6, mdef: 2 }, startZone: 'darkForest' },
+  orc: { name: 'Orc', desc: 'Resistentes, com vitalidade e força bruta elevadas.', stats: { atk: 4, def: 6, eva: -4, matk: -2, mdef: -2 }, startZone: 'orcVillage' },
+  dwarf: { name: 'Dwarf', desc: 'Mestres da forja, artesãos e bônus de loot.', stats: { atk: 0, def: 4, eva: -2, matk: 0, mdef: 0, lootBonus: 0.15 }, startZone: 'dwarvenMine' },
+  kamael: { name: 'Kamael', desc: 'Rápidos, mortais e especialistas em estocadas.', stats: { atk: 6, def: -2, eva: 6, matk: 0, mdef: 0 }, startZone: 'kamaelLair' },
+  ertheia: { name: 'Ertheia', desc: 'Guerreiros ágeis tocados pelos ventos.', stats: { atk: 2, def: 0, eva: 10, matk: 4, mdef: 0 }, startZone: 'talkingIsland' }
 };
 
 const CLASSES = {
@@ -701,6 +718,22 @@ function getStats() {
     xpBoost, goldBoost, luckBoost, autoPotion, maxHp, maxMp,
     regenHp, meteorLvl, execute, block
   };
+}
+
+function getBaseAttributes(raceKey, classKey) {
+  const r = String(raceKey || 'human').toLowerCase();
+  const c = getClass(classKey);
+  const isMage = c?.archetype === 'mage';
+
+  let key = 'human_fighter';
+  if (r === 'darkelf') key = isMage ? 'darkelf_mage' : 'darkelf_fighter';
+  else if (r === 'elf') key = isMage ? 'elf_mage' : 'elf_fighter';
+  else if (r === 'orc') key = isMage ? 'orc_mage' : 'orc_fighter';
+  else if (r === 'dwarf') key = 'dwarf_fighter';
+  else if (r === 'kamael') key = 'kamael_male';
+  else if (r === 'human') key = isMage ? 'human_mage' : 'human_fighter';
+
+  return { ...(RACE_BASE_ATTRIBUTES[key] || RACE_BASE_ATTRIBUTES.human_fighter) };
 }
 
 function getClass(c) {
