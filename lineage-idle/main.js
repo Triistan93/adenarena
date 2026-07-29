@@ -1518,17 +1518,26 @@ function updateEquipmentUI() {
   const critEl = el('l2stat-crit'); if (critEl) critEl.textContent = `${stats.crit}%`;
   const spdEl = el('l2stat-speed'); if (spdEl) spdEl.textContent = stats.speed;
 
+  const defaultSlotIcons = {
+    hair: '👒', gloves: '🧤', weapon: '⚔️', necklace: '📿', ring: '💍', belt: '🪢',
+    helmet: '⛑️', armor: '🛡️', legs: '👖', shield: '🛡️', boots: '👢',
+    hair2: '🎭', earring1: '💎', earring2: '💎', ring2: '💍', cloak: '🧥', talisman: '🔮', agathion: '🧚‍♂️'
+  };
+
   for (const slot of ALL_EQUIP_SLOTS) {
     const uid = state.equipment[slot];
-    const itemLabel = el(`pd-item-${slot}`);
     const pdSlots = qsa(`.l2inv-pd-slot[data-slot="${slot}"]`);
     const pdSlot = pdSlots && pdSlots.length ? pdSlots[0] : null;
     const elem = el(`equip-${slot}`);
     const wrap = elem && elem.closest ? elem.closest('.equip-slot') : null;
+    const defaultEmoji = defaultSlotIcons[slot] || '📦';
     
     if (!uid) {
-      if (itemLabel) itemLabel.textContent = '';
-      if (pdSlot) { pdSlot.classList.remove('has-item', 'rarity-common', 'rarity-uncommon', 'rarity-rare', 'rarity-epic', 'rarity-legendary'); pdSlot.title = `${slot} · vazio`; }
+      if (pdSlot) { 
+        pdSlot.className = `l2inv-pd-slot equip-slot`; 
+        pdSlot.title = `${slot} · vazio`; 
+        pdSlot.innerHTML = `<span class="l2inv-pd-icon">${defaultEmoji}</span><span class="l2inv-pd-item" id="pd-item-${slot}"></span>`;
+      }
       if (elem) { elem.textContent = 'Empty'; elem.style.color = ''; elem.title = ''; }
       if (wrap) { wrap.style.borderColor = ''; wrap.title = slot + ' · empty'; }
       continue;
@@ -1537,8 +1546,11 @@ function updateEquipmentUI() {
     const item = state.inventory.find(i => i.uid === uid);
     if (!item) {
       state.equipment[slot] = null;
-      if (itemLabel) itemLabel.textContent = '';
-      if (pdSlot) { pdSlot.classList.remove('has-item', 'rarity-common', 'rarity-uncommon', 'rarity-rare', 'rarity-epic', 'rarity-legendary'); pdSlot.title = `${slot} · vazio`; }
+      if (pdSlot) { 
+        pdSlot.className = `l2inv-pd-slot equip-slot`; 
+        pdSlot.title = `${slot} · vazio`; 
+        pdSlot.innerHTML = `<span class="l2inv-pd-icon">${defaultEmoji}</span><span class="l2inv-pd-item" id="pd-item-${slot}"></span>`;
+      }
       if (elem) { elem.textContent = 'Empty'; elem.style.color = ''; elem.title = ''; }
       if (wrap) { wrap.style.borderColor = ''; wrap.title = slot + ' · empty'; }
       continue;
@@ -1550,12 +1562,14 @@ function updateEquipmentUI() {
     const full = (enchantStr ? enchantStr + ' ' : '') + def.name + (item.rarity ? ' [' + D().RARITY[item.rarity].name + ']' : '');
     const col = item.rarity ? D().RARITY[rarity]?.color : 'var(--gilt)';
 
-    if (itemLabel) itemLabel.textContent = enchantStr;
     if (pdSlot) {
       pdSlot.className = `l2inv-pd-slot equip-slot has-item rarity-${rarity}`;
       pdSlot.title = `${enchantStr ? enchantStr + ' ' : ''}${def.name} (${slot})`;
+      pdSlot.innerHTML = `${getItemIcon(def)}<span class="l2inv-pd-item" id="pd-item-${slot}">${enchantStr}</span>`;
       pdSlot.onmouseenter = (e) => { cancelHideTooltip(); showItemTooltip(item, e); };
       pdSlot.onmouseleave = scheduleHideTooltip;
+      pdSlot.onclick = (e) => { e.stopPropagation(); cancelHideTooltip(); showItemTooltip(item, e); };
+      pdSlot.ondblclick = (e) => { e.stopPropagation(); unequipItem(slot); };
     }
     if (elem) {
       elem.textContent = (enchantStr ? enchantStr + ' ' : '') + def.name;
@@ -1810,7 +1824,7 @@ function updateInventoryUI() {
 
     slot.ondblclick = (e) => {
       e.stopPropagation();
-      if (['weapon','armor','helmet','gloves','boots','ring'].includes(def.slot)) {
+      if (ALL_EQUIP_SLOTS.includes(resolveEquipSlot(def.slot))) {
         equipItem(item.uid);
       } else if (['consumable','scroll','powerup'].includes(def.slot)) {
         useItem(item.uid);
