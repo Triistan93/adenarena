@@ -1888,36 +1888,21 @@ function getItemIcon(def) {
   const fallbackIcons = { weapon: '⚔️', armor: '🛡️', helmet: '⛑️', gloves: '🧤', boots: '👢', ring: '💍', consumable: '🧪', material: '💎', scroll: '📜' }; 
   const emoji = fallbackIcons[def.slot] || '📦'; 
   const id = def.id || '';
-  const rawKey = (def.icon || id || '').toLowerCase(); 
+  const rawKey = String(def.icon || id || '').toLowerCase().replace(/\\/g, '/'); 
   if (!rawKey) return emoji; 
   
   const iconIndex = (typeof window !== 'undefined' && window.IconIndex) ? window.IconIndex : ((D() && D().ICON_MAP) ? D().ICON_MAP : {});
-  const cleanKey = rawKey.replace(/_/g, '').replace(/\s+/g, '');
+  const cleanKey = rawKey.split('/').pop().replace(/\.png$/, '');
   
   let relPath = iconIndex[id] || iconIndex[rawKey] || iconIndex[cleanKey];
-
-  if (!relPath) {
-    const cleanId = id.toLowerCase().replace(/_/g, '');
-    for (const [k, v] of Object.entries(iconIndex)) {
-      const cleanK = k.toLowerCase().replace(/_/g, '').replace(/\s+/g, '');
-      if (cleanId === cleanK || (cleanK.length > 4 && cleanId.includes(cleanK))) {
-        relPath = v;
-        break;
-      }
-    }
+  if (relPath) {
+    relPath = relPath.split('/').pop();
+  } else {
+    relPath = `${cleanKey}.png`;
   }
 
-  if (!relPath) {
-    relPath = `${rawKey}.png`;
-  }
-
-  const subPath = relPath.startsWith('img/') ? relPath : `img/icons/${relPath}`;
-  const fullUrl = getAssetUrl(subPath);
-  const fb1 = getAssetUrl(`img/icons/${rawKey}.png`);
-  const fb2 = getAssetUrl(`img/icons/Weapons/${rawKey}.png`);
-  const fb3 = getAssetUrl(`img/icons/Armors/${rawKey}.png`);
-
-  return `<img src="${fullUrl}" alt="${def.name || ''}" class="item-icon-img" onerror="this.onerror=null; this.src='${fb1}'; if(!this.naturalWidth) this.src='${fb2}'; if(!this.naturalWidth) this.src='${fb3}';" style="width:28px; height:28px; object-fit:contain; vertical-align:middle;" /><span class="item-icon-fallback" style="display:none; font-size:18px;">${emoji}</span>`; 
+  const fullUrl = getAssetUrl(`img/icons/${relPath}`);
+  return `<img src="${fullUrl}" alt="${def.name || ''}" class="item-icon-img" onerror="this.onerror=function(){this.style.display='none';if(this.nextElementSibling)this.nextElementSibling.style.display='inline-block';}; this.src='${getAssetUrl(`img/icons/Weapons/${relPath}`)}';" style="width:28px; height:28px; object-fit:contain; vertical-align:middle;" /><span class="item-icon-fallback" style="display:none; font-size:18px;">${emoji}</span>`; 
 }
 
 let tooltipTimer = null;
