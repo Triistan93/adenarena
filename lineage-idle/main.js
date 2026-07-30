@@ -1867,6 +1867,7 @@ function updateInventoryUI() {
 
 function getAssetUrl(p) {
   if (!p) return '';
+  p = String(p).replace(/\\/g, '/');
   if (p.startsWith('http://') || p.startsWith('https://') || p.startsWith('data:')) return p;
   const cleanPath = p.replace(/^\//, '');
   let baseUrl = '';
