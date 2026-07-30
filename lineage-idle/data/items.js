@@ -1452,6 +1452,97 @@ const ICON_MAP = {
   // "full plate_*.png") normalizados para underscore — as chaves-alias
   // foram mantidas para retrocompatibilidade.
 };
+// ================================================================
+//  PATCH DE ÍCONES — cole ao final do data/items.js, antes de
+//  Object.assign(ALL_ITEMS, CLASS_WEAPONS, CLASS_ARMORS, POWERUPS);
+//
+//  resolve blue_wolf_*, major_arcana_robe e todos os outros
+//  itens clássicos que não tinham icon: explícito e por isso
+//  o jogo mostrava o default.png.
+// ================================================================
+
+// ---- Blue Wolf set (B-grade) ----------------------------------
+if (ALL_ITEMS.blue_wolf_breastplate)       ALL_ITEMS.blue_wolf_breastplate.icon       = 'blue_wolf_heavy_armor';
+if (ALL_ITEMS.blue_wolf_leather_armor)     ALL_ITEMS.blue_wolf_leather_armor.icon     = 'blue_wolf_leather_armor';
+if (ALL_ITEMS.blue_wolf_tunic)             ALL_ITEMS.blue_wolf_tunic.icon             = 'blue_wolf_tunic';
+
+// ---- S-grade robes / heavy / draconic -------------------------
+if (ALL_ITEMS.divine_robe)                 ALL_ITEMS.divine_robe.icon                 = 'divine_robe';
+if (ALL_ITEMS.dragon_scale_armor)          ALL_ITEMS.dragon_scale_armor.icon          = 'dragon_scale_armor';
+if (ALL_ITEMS.draconic_leather_armor)      ALL_ITEMS.draconic_leather_armor.icon      = 'draconic_leather_armor';
+// major_arcana_robe era o que você citou. O arquivo na pasta se chama
+// major_arcana_robe_armor.png (é o asset do robe de S-grade arcano).
+if (ALL_ITEMS.major_arcana_robe)           ALL_ITEMS.major_arcana_robe.icon           = 'major_arcana_robe_armor';
+if (ALL_ITEMS.imperial_crusader_breastplate) ALL_ITEMS.imperial_crusader_breastplate.icon = 'imperial_crusader_armor';
+
+// ---- Low/mid tier armors --------------------------------------
+if (ALL_ITEMS.cloth_robe)                  ALL_ITEMS.cloth_robe.icon                  = 'cloth_robe';
+if (ALL_ITEMS.leather_vest)                ALL_ITEMS.leather_vest.icon                = 'leather_vest';
+if (ALL_ITEMS.bronze_chest)                ALL_ITEMS.bronze_chest.icon                = 'bronze_chest';
+if (ALL_ITEMS.iron_armor)                  ALL_ITEMS.iron_armor.icon                  = 'iron_armor';
+if (ALL_ITEMS.mage_robe)                   ALL_ITEMS.mage_robe.icon                   = 'karmian_robe_armor';
+if (ALL_ITEMS.steel_plate)                 ALL_ITEMS.steel_plate.icon                 = 'full plate_heavy_armor';
+if (ALL_ITEMS.shadow_cloak)                ALL_ITEMS.shadow_cloak.icon                = 'demon_cloack';
+if (ALL_ITEMS.elven_garb)                  ALL_ITEMS.elven_garb.icon                  = 'avadon_light_armor';
+if (ALL_ITEMS.knight_armor)                ALL_ITEMS.knight_armor.icon                = 'doom_light_armor';
+if (ALL_ITEMS.arcane_robe)                 ALL_ITEMS.arcane_robe.icon                 = 'devotion_armor_robe';
+
+// ---- S-grade boots/gloves/helm/legs/shields -------------------
+if (ALL_ITEMS.divine_gaiters)              ALL_ITEMS.divine_gaiters.icon              = 'divine_gaiters';
+if (ALL_ITEMS.dragon_scale_gaiters)        ALL_ITEMS.dragon_scale_gaiters.icon        = 'dragon_scale_gaiters';
+if (ALL_ITEMS.divine_boots)                ALL_ITEMS.divine_boots.icon                = 'divine_boots';
+if (ALL_ITEMS.dragon_boots)                ALL_ITEMS.dragon_boots.icon                = 'dragon_boots';
+if (ALL_ITEMS.divine_gloves)               ALL_ITEMS.divine_gloves.icon               = 'divine_gloves';
+if (ALL_ITEMS.dragon_gauntlets)            ALL_ITEMS.dragon_gauntlets.icon            = 'dragon_gauntlets';
+if (ALL_ITEMS.divine_crown)                ALL_ITEMS.divine_crown.icon                = 'divine_crown';
+if (ALL_ITEMS.dragon_circlet)              ALL_ITEMS.dragon_circlet.icon              = 'dragon_circlet';
+if (ALL_ITEMS.imperial_shield)             ALL_ITEMS.imperial_shield.icon             = 'imperial_crusader_shield';
+if (ALL_ITEMS.sigil_of_arcana)             ALL_ITEMS.sigil_of_arcana.icon             = 'sigil_of_arcana';
+
+// ---- Low tier legs / helms / boots / gloves / shields --------
+if (ALL_ITEMS.cloth_pants)                 ALL_ITEMS.cloth_pants.icon                 = 'cloth_pants';
+if (ALL_ITEMS.leather_gaiters)             ALL_ITEMS.leather_gaiters.icon             = 'leather_gaiters';
+if (ALL_ITEMS.iron_gaiters)                ALL_ITEMS.iron_gaiters.icon                = 'iron_gaiters';
+if (ALL_ITEMS.mage_stockings)              ALL_ITEMS.mage_stockings.icon              = 'karmian_robe_pants';
+if (ALL_ITEMS.steel_gaiters)               ALL_ITEMS.steel_gaiters.icon               = 'full_plate_heavy_pants';
+if (ALL_ITEMS.shadow_pants)                ALL_ITEMS.shadow_pants.icon                = 'doom_light_pants';
+if (ALL_ITEMS.knight_gaiters)              ALL_ITEMS.knight_gaiters.icon              = 'doom_light_pants';
+if (ALL_ITEMS.arcane_stockings)            ALL_ITEMS.arcane_stockings.icon            = 'devotion_pants_robe';
+
+if (ALL_ITEMS.cloth_cap)                   ALL_ITEMS.cloth_cap.icon                   = 'cloth_cap';
+if (ALL_ITEMS.leather_helm)                ALL_ITEMS.leather_helm.icon                = 'leather_helm';
+if (ALL_ITEMS.iron_helm)                   ALL_ITEMS.iron_helm.icon                   = 'iron_helm';
+if (ALL_ITEMS.mage_hood)                   ALL_ITEMS.mage_hood.icon                   = 'helmet_of_mana';  // já era setado via if no final, reforçado aqui
+if (ALL_ITEMS.steel_helm)                  ALL_ITEMS.steel_helm.icon                  = 'full_plate_heavy_helmet';
+if (ALL_ITEMS.shadow_mask)                 ALL_ITEMS.shadow_mask.icon                 = 'avadon_light_helmet';
+if (ALL_ITEMS.knight_helm)                 ALL_ITEMS.knight_helm.icon                 = 'doom_light_helmet';
+if (ALL_ITEMS.arcane_circlet)              ALL_ITEMS.arcane_circlet.icon              = 'divine_crown';
+
+if (ALL_ITEMS.cloth_boots)                 ALL_ITEMS.cloth_boots.icon                 = 'cloth_boots';
+if (ALL_ITEMS.leather_boots)               ALL_ITEMS.leather_boots.icon               = 'leather_boots';
+if (ALL_ITEMS.iron_boots)                  ALL_ITEMS.iron_boots.icon                  = 'iron_boots';
+if (ALL_ITEMS.mage_sandals)                ALL_ITEMS.mage_sandals.icon                = 'karmian_robe_boots';
+if (ALL_ITEMS.steel_boots)                 ALL_ITEMS.steel_boots.icon                 = 'full_plate_heavy_boots';
+if (ALL_ITEMS.shadow_boots)                ALL_ITEMS.shadow_boots.icon                = 'doom_light_boots';
+if (ALL_ITEMS.knight_boots)                ALL_ITEMS.knight_boots.icon                = 'doom_light_boots';
+if (ALL_ITEMS.arcane_boots)                ALL_ITEMS.arcane_boots.icon                = 'karmian_robe_boots';
+
+if (ALL_ITEMS.cloth_gloves)                ALL_ITEMS.cloth_gloves.icon                = 'cloth_gloves';
+if (ALL_ITEMS.leather_gloves)              ALL_ITEMS.leather_gloves.icon              = 'leather_gloves';
+if (ALL_ITEMS.iron_gauntlets)              ALL_ITEMS.iron_gauntlets.icon              = 'iron_gauntlets';
+if (ALL_ITEMS.mage_gloves)                 ALL_ITEMS.mage_gloves.icon                 = 'karmian_robe_gloves';
+if (ALL_ITEMS.steel_gauntlets)             ALL_ITEMS.steel_gauntlets.icon             = 'full_plate_heavy_gloves';
+if (ALL_ITEMS.shadow_gloves)               ALL_ITEMS.shadow_gloves.icon               = 'doom_light_gloves';
+if (ALL_ITEMS.knight_gauntlets)            ALL_ITEMS.knight_gauntlets.icon            = 'doom_light_gloves';
+if (ALL_ITEMS.arcane_gloves)               ALL_ITEMS.arcane_gloves.icon               = 'karmian_robe_gloves';
+
+if (ALL_ITEMS.wooden_shield)               ALL_ITEMS.wooden_shield.icon               = 'wooden_shield';
+if (ALL_ITEMS.bronze_shield)               ALL_ITEMS.bronze_shield.icon               = 'bronze_shield';
+if (ALL_ITEMS.sigil_of_devotion)           ALL_ITEMS.sigil_of_devotion.icon           = 'sigil_of_devotion';
+if (ALL_ITEMS.steel_shield)                ALL_ITEMS.steel_shield.icon                = 'full_plate_shield';
+if (ALL_ITEMS.sigil_of_grace)              ALL_ITEMS.sigil_of_grace.icon              = 'sigil_of_grace';
+if (ALL_ITEMS.knight_shield)               ALL_ITEMS.knight_shield.icon               = 'doom_shield';
+if (ALL_ITEMS.sigil_of_mastery)            ALL_ITEMS.sigil_of_mastery.icon            = 'sigil_of_mastery';
 
 if (typeof window !== 'undefined') {
   window.GameData = {
