@@ -484,9 +484,12 @@ function getStarterSkillForClass(classId) {
     case 'warg': return 'warg_will';
     case 'assassin': return 'assassin_harmony';
     case 'gunner': return 'burst_fire';
+    case 'divinetemplar': return 'divine_templar_harmony';
+    case 'elementweaver': return 'element_weaver_harmony';
     case 'highelf': return 'divine_templar_harmony';
     case 'bloodrose': return 'blood_rose_harmony';
     case 'soulbreaker': return 'samurai_harmony';
+    case 'shinemaker': return 'shinemaker_harmony';
     case 'artisan': return 'shinemaker_harmony';
     case 'mage': return 'energy_bolt_m';
     default: return 'power_strike_f';

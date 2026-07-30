@@ -52,9 +52,9 @@ const CLASSES_ECHO = {
   wargS1: { name: 'Warg', parent: 'wargBase', archetype: 'warg', stage: 1, base: { atk: 30, def: 8, eva: 10, crit: 8 } },
   assassinS1: { name: 'Assassin', parent: 'assassinBase', archetype: 'assassin', stage: 1, base: { atk: 32, def: 6, eva: 16, crit: 14 } },
   sharpshooter: { name: 'Sharpshooter', parent: 'sylphGunner', race: 'sylph', archetype: 'gunner', stage: 1, base: { atk: 28, def: 8, eva: 18, crit: 10 } },
-  divineTemplarS1: { name: 'Divine Templar', parent: 'highElfBase', race: 'highelf', archetype: 'highelf', stage: 1, base: { atk: 20, def: 30, hp: 120, mdef: 20 } },
-  elementWeaverS1: { name: 'Element Weaver', parent: 'highElfBase', race: 'highelf', archetype: 'highelf', stage: 1, base: { matk: 36, mdef: 22, mp: 100, eva: 6 } },
-  shinemakerS1: { name: 'ShineMaker', parent: 'artisan', race: 'dwarf', archetype: 'artisan', stage: 1, base: { matk: 24, def: 20, hp: 80, lootBonus: 0.2 } },
+  divineTemplarS1: { name: 'Divine Templar', parent: 'highElfBase', race: 'highelf', archetype: 'divinetemplar', stage: 1, base: { atk: 20, def: 30, hp: 120, mdef: 20 } },
+  elementWeaverS1: { name: 'Element Weaver', parent: 'highElfBase', race: 'highelf', archetype: 'elementweaver', stage: 1, base: { matk: 36, mdef: 22, mp: 100, eva: 6 } },
+  shinemakerS1: { name: 'ShineMaker', parent: 'artisan', race: 'dwarf', archetype: 'shinemaker', stage: 1, base: { matk: 24, def: 20, hp: 80, lootBonus: 0.2 } },
   bloodRoseS1: { name: 'Blood Rose', parent: 'bloodRoseBase', race: 'ertheia', archetype: 'bloodrose', stage: 1, base: { matk: 28, def: 14, eva: 12, hp: 60, mp: 80 } },
 
   // Stage 2 (2nd Transfer lv40)
@@ -100,9 +100,9 @@ const CLASSES_ECHO = {
   wargS2: { name: 'Warg', parent: 'wargS1', archetype: 'warg', stage: 2, base: { atk: 68, def: 20, eva: 18, crit: 20 } },
   assassinS2: { name: 'Assassin', parent: 'assassinS1', archetype: 'assassin', stage: 2, base: { atk: 72, def: 14, eva: 28, crit: 28 } },
   windSniper: { name: 'Wind Sniper', parent: 'sharpshooter', race: 'sylph', archetype: 'gunner', stage: 2, base: { atk: 66, def: 12, eva: 26, crit: 22 } },
-  divineTemplarS2: { name: 'Divine Templar', parent: 'divineTemplarS1', race: 'highelf', archetype: 'highelf', stage: 2, base: { atk: 55, def: 90, hp: 380, mdef: 55 } },
-  elementWeaverS2: { name: 'Element Weaver', parent: 'elementWeaverS1', race: 'highelf', archetype: 'highelf', stage: 2, base: { matk: 85, mdef: 50, mp: 240, eva: 10 } },
-  shinemakerS2: { name: 'ShineMaker', parent: 'shinemakerS1', race: 'dwarf', archetype: 'artisan', stage: 2, base: { matk: 55, def: 45, hp: 180, lootBonus: 0.4 } },
+  divineTemplarS2: { name: 'Divine Templar', parent: 'divineTemplarS1', race: 'highelf', archetype: 'divinetemplar', stage: 2, base: { atk: 55, def: 90, hp: 380, mdef: 55 } },
+  elementWeaverS2: { name: 'Element Weaver', parent: 'elementWeaverS1', race: 'highelf', archetype: 'elementweaver', stage: 2, base: { matk: 85, mdef: 50, mp: 240, eva: 10 } },
+  shinemakerS2: { name: 'ShineMaker', parent: 'shinemakerS1', race: 'dwarf', archetype: 'shinemaker', stage: 2, base: { matk: 55, def: 45, hp: 180, lootBonus: 0.4 } },
   bloodRoseS2: { name: 'Blood Rose', parent: 'bloodRoseS1', race: 'ertheia', archetype: 'bloodrose', stage: 2, base: { matk: 65, def: 28, eva: 20, hp: 120, mp: 160 } },
   // Elf Death Knight line (new)
   elfDeathPilgrim: { name: 'Dark Elf Death Pilgrim', archetype: 'deathknight', stage: 0, race: 'darkelf', desc: 'Peregrino das trevas Dark Elf, futuro Death Knight das sombras', base: {} },
@@ -153,9 +153,9 @@ const CLASSES_ECHO = {
   warg: { name: 'Warg', parent: 'wargS2', race: 'human', archetype: 'warg', stage: 3, desc: 'Forma final do Warg - transformação em lobo ancestral devastador', base: { atk: 148, def: 35, eva: 30, crit: 40 } },
   assassinFinal: { name: 'Assassin', parent: 'assassinS2', race: 'human', archetype: 'assassin', stage: 3, desc: 'Assassino supremo com sistema de sombras e Assassin Daggers', base: { atk: 145, def: 22, eva: 50, crit: 55 } },
   stormBlaster: { name: 'Storm Blaster', parent: 'windSniper', race: 'sylph', archetype: 'gunner', stage: 3, desc: 'Atirador supremo Sylph com armas de vento elementais e Storm Shot', base: { atk: 140, def: 28, eva: 45, crit: 38 } },
-  divineTemplar: { name: 'Divine Templar', parent: 'divineTemplarS2', race: 'highelf', archetype: 'highelf', stage: 3, desc: 'Tanque supremo High Elf com poder divino e Sacred Aegis', base: { atk: 90, def: 140, hp: 680, mdef: 100 } },
-  elementWeaver: { name: 'Element Weaver', parent: 'elementWeaverS2', race: 'highelf', archetype: 'highelf', stage: 3, desc: 'Mago elemental supremo High Elf combinando Fogo, Água e Vento', base: { matk: 175, mdef: 95, mp: 420, eva: 14 } },
-  shinemaker: { name: 'ShineMaker', parent: 'shinemakerS2', race: 'dwarf', archetype: 'artisan', stage: 3, desc: 'Mestre da luz cristalina - DPS/Suporte supremo Dwarf', base: { matk: 130, def: 70, hp: 380, lootBonus: 0.8 } },
+  divineTemplar: { name: 'Divine Templar', parent: 'divineTemplarS2', race: 'highelf', archetype: 'divinetemplar', stage: 3, desc: 'Tanque supremo High Elf com poder divino e Sacred Aegis', base: { atk: 90, def: 140, hp: 680, mdef: 100 } },
+  elementWeaver: { name: 'Element Weaver', parent: 'elementWeaverS2', race: 'highelf', archetype: 'elementweaver', stage: 3, desc: 'Mago elemental supremo High Elf combinando Fogo, Água e Vento', base: { matk: 175, mdef: 95, mp: 420, eva: 14 } },
+  shinemaker: { name: 'ShineMaker', parent: 'shinemakerS2', race: 'dwarf', archetype: 'shinemaker', stage: 3, desc: 'Mestre da luz cristalina - DPS/Suporte supremo Dwarf', base: { matk: 130, def: 70, hp: 380, lootBonus: 0.8 } },
   bloodRose: { name: 'Blood Rose', parent: 'bloodRoseS2', race: 'ertheia', archetype: 'bloodrose', stage: 3, desc: 'Mística Ertheia com ataques híbridos de espinhos e roubo de vida', base: { matk: 160, def: 55, eva: 35, hp: 320, mp: 380 } }
 };
 
@@ -293,20 +293,20 @@ const SKILL_DEFS_ECHO = {
   wind_barrage: { name: 'Wind Barrage', info: 'Auto-cast: 750% P.Atk Wind AoE cone', cost: 25, max: 5, type: 'proc', classReq: 'gunner', reqLvl: 1, icon: '💨💥', tier: 2, desc: '', baseCd: 12000, pwr: 75, effect: 'dmg' },
   transcendent_storm: { name: 'Transcendent Storm Shot', info: '1350% P.Atk Wind ranged + all hit -25% DEF/MDEF 10s (4★)', cost: 500, max: 5, type: 'proc', classReq: 'stormBlaster', reqLvl: 1, icon: '🔫🌪️👑', tier: 4, starRank: 4, desc: '', baseCd: 100000, pwr: 135, effect: 'dmg' },
 
-  divine_templar_harmony: { name: 'Divine Templar Harmony', info: 'P.Def +35%, M.Def +35%, Holy Dmg +20% (20min)', cost: 5, max: 5, type: 'harmony', classReq: 'highelf', reqLvl: 1, icon: '🛡️✝️', tier: 0, desc: '' },
-  lord_knight: { name: 'Lord Knight', info: 'P.Def +40%, M.Def +40%, MP Regen 15% each 10s (3min)', cost: 10, max: 5, type: 'proc', classReq: 'highelf', reqLvl: 1, icon: '🏰', tier: 1, desc: '', baseCd: 300000, pwr: 0, effect: 'warcry' },
-  sacred_aegis: { name: 'Sacred Aegis', info: 'Absorbs 5000 dmg shield + reflects 20% to attackers 15s', cost: 25, max: 5, type: 'proc', classReq: 'highelf', reqLvl: 1, icon: '🛡️💫', tier: 2, desc: '', baseCd: 90000, pwr: 0, effect: 'warcry' },
+  divine_templar_harmony: { name: 'Divine Templar Harmony', info: 'P.Def +35%, M.Def +35%, Holy Dmg +20% (20min)', cost: 5, max: 5, type: 'harmony', classReq: 'divinetemplar', reqLvl: 1, icon: '🛡️✝️', tier: 0, desc: '' },
+  lord_knight: { name: 'Lord Knight', info: 'P.Def +40%, M.Def +40%, MP Regen 15% each 10s (3min)', cost: 10, max: 5, type: 'proc', classReq: 'divinetemplar', reqLvl: 1, icon: '🏰', tier: 1, desc: '', baseCd: 300000, pwr: 0, effect: 'warcry' },
+  sacred_aegis: { name: 'Sacred Aegis', info: 'Absorbs 5000 dmg shield + reflects 20% to attackers 15s', cost: 25, max: 5, type: 'proc', classReq: 'divinetemplar', reqLvl: 1, icon: '🛡️💫', tier: 2, desc: '', baseCd: 90000, pwr: 0, effect: 'warcry' },
   transcendent_divine: { name: 'Transcendent Divine Charge', info: '1200% Holy P.Atk + 5s Stun + grants 3s invulnerability (4★)', cost: 500, max: 5, type: 'proc', classReq: 'divineTemplar', reqLvl: 1, icon: '🛡️✝️👑', tier: 4, starRank: 4, desc: '', baseCd: 90000, pwr: 120, effect: 'stun' },
 
-  element_weaver_harmony: { name: 'Element Weaver Harmony', info: 'M.Atk +30%, All Element Dmg +20%, Cast Speed +15% (20min)', cost: 5, max: 5, type: 'harmony', classReq: 'highelf', reqLvl: 1, icon: '🌀', tier: 0, desc: '' },
-  fire_weave: { name: 'Fire Weave', info: 'Auto-cast: 55 Pwr Fire elemental magic', cost: 10, max: 5, type: 'proc', classReq: 'highelf', reqLvl: 1, icon: '🌀🔥', tier: 1, desc: '', baseCd: 4000, pwr: 55, effect: 'dmg' },
-  ice_weave: { name: 'Ice Weave', info: 'Auto-cast: 52 Pwr Ice + 2s Freeze', cost: 10, max: 5, type: 'proc', classReq: 'highelf', reqLvl: 1, icon: '🌀❄️', tier: 1, desc: '', baseCd: 4000, pwr: 52, effect: 'stun' },
-  elemental_convergence: { name: 'Elemental Convergence', info: 'Auto-cast: 850% M.Atk trifold (Fire+Water+Wind) AoE', cost: 25, max: 5, type: 'proc', classReq: 'highelf', reqLvl: 1, icon: '🌀⚡', tier: 2, desc: '', baseCd: 8000, pwr: 85, effect: 'dmg' },
+  element_weaver_harmony: { name: 'Element Weaver Harmony', info: 'M.Atk +30%, All Element Dmg +20%, Cast Speed +15% (20min)', cost: 5, max: 5, type: 'harmony', classReq: 'elementweaver', reqLvl: 1, icon: '🌀', tier: 0, desc: '' },
+  fire_weave: { name: 'Fire Weave', info: 'Auto-cast: 55 Pwr Fire elemental magic', cost: 10, max: 5, type: 'proc', classReq: 'elementweaver', reqLvl: 1, icon: '🌀🔥', tier: 1, desc: '', baseCd: 4000, pwr: 55, effect: 'dmg' },
+  ice_weave: { name: 'Ice Weave', info: 'Auto-cast: 52 Pwr Ice + 2s Freeze', cost: 10, max: 5, type: 'proc', classReq: 'elementweaver', reqLvl: 1, icon: '🌀❄️', tier: 1, desc: '', baseCd: 4000, pwr: 52, effect: 'stun' },
+  elemental_convergence: { name: 'Elemental Convergence', info: 'Auto-cast: 850% M.Atk trifold (Fire+Water+Wind) AoE', cost: 25, max: 5, type: 'proc', classReq: 'elementweaver', reqLvl: 1, icon: '🌀⚡', tier: 2, desc: '', baseCd: 8000, pwr: 85, effect: 'dmg' },
   transcendent_weave: { name: 'Transcendent Elemental Overload', info: '1750% M.Atk all elements + all hit M.Def -35% 15s (4★)', cost: 500, max: 5, type: 'proc', classReq: 'elementWeaver', reqLvl: 1, icon: '🌀👑', tier: 4, starRank: 4, desc: '', baseCd: 90000, pwr: 175, effect: 'dmg' },
 
-  shinemaker_harmony: { name: 'ShineMaker Harmony', info: 'M.Atk +25%, Light Dmg +20%, Loot Bonus +20% (20min)', cost: 10, max: 5, type: 'harmony', classReq: 'shinemakerS1', reqLvl: 1, icon: '✨', tier: 1, desc: '' },
-  light_burst: { name: 'Light Burst', info: 'Auto-cast: 55 Pwr Light magic', cost: 10, max: 5, type: 'proc', classReq: 'shinemakerS1', reqLvl: 1, icon: '💡', tier: 1, desc: '', baseCd: 4000, pwr: 55, effect: 'dmg' },
-  shining_nova: { name: 'Shining Nova', info: 'Auto-cast: 720% M.Atk Light AoE + Accuracy -20 5s', cost: 25, max: 5, type: 'proc', classReq: 'shinemakerS2', reqLvl: 1, icon: '✨💥', tier: 2, desc: '', baseCd: 7000, pwr: 72, effect: 'stun' },
+  shinemaker_harmony: { name: 'ShineMaker Harmony', info: 'M.Atk +25%, Light Dmg +20%, Loot Bonus +20% (20min)', cost: 10, max: 5, type: 'harmony', classReq: 'shinemaker', reqLvl: 1, icon: '✨', tier: 1, desc: '' },
+  light_burst: { name: 'Light Burst', info: 'Auto-cast: 55 Pwr Light magic', cost: 10, max: 5, type: 'proc', classReq: 'shinemaker', reqLvl: 1, icon: '💡', tier: 1, desc: '', baseCd: 4000, pwr: 55, effect: 'dmg' },
+  shining_nova: { name: 'Shining Nova', info: 'Auto-cast: 720% M.Atk Light AoE + Accuracy -20 5s', cost: 25, max: 5, type: 'proc', classReq: 'shinemaker', reqLvl: 1, icon: '✨💥', tier: 2, desc: '', baseCd: 7000, pwr: 72, effect: 'stun' },
   transcendent_shine: { name: 'Transcendent Shining Bloom', info: '1500% M.Atk Light AoE + heals party 30% HP + Loot Bonus +100% 60s (4★)', cost: 500, max: 5, type: 'proc', classReq: 'shinemaker', reqLvl: 1, icon: '✨👑', tier: 4, starRank: 4, desc: '', baseCd: 90000, pwr: 150, effect: 'dmg' },
 
   blood_rose_harmony: { name: 'Blood Rose Harmony', info: 'M.Atk +20%, Lifesteal +15%, Thorn Reflect 10% (20min)', cost: 5, max: 5, type: 'harmony', classReq: 'bloodrose', reqLvl: 1, icon: '🌹', tier: 0, desc: '' },

@@ -89,10 +89,11 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
       wargBase: 'warg_will',
       assassinBase: 'assassin_harmony',
       sylphGunner: 'burst_fire',
-      highElfBase: 'divine_templar_harmony', divineTemplarS1: 'divine_templar_harmony',
-      elementWeaverS1: 'element_weaver_harmony',
-      bloodRoseBase: 'blood_rose_harmony', bloodRoseS1: 'blood_rose_harmony',
-      shinemakerS1: 'shinemaker_harmony',
+      highElfBase: 'divine_templar_harmony',
+      divineTemplarS1: 'divine_templar_harmony', divineTemplarS2: 'divine_templar_harmony', divineTemplar: 'divine_templar_harmony',
+      elementWeaverS1: 'element_weaver_harmony', elementWeaverS2: 'element_weaver_harmony', elementWeaver: 'element_weaver_harmony',
+      bloodRoseBase: 'blood_rose_harmony', bloodRoseS1: 'blood_rose_harmony', bloodRoseS2: 'blood_rose_harmony', bloodRose: 'blood_rose_harmony',
+      shinemakerS1: 'shinemaker_harmony', shinemakerS2: 'shinemaker_harmony', shinemaker: 'shinemaker_harmony',
       // Kamael
       soulbreaker: 'samurai_harmony', hatamoto: 'samurai_harmony',
       // Artisan/Dwarf
