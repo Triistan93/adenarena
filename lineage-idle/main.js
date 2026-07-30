@@ -3394,23 +3394,33 @@ function attackMonster() {
   const now = combatTick * 200; 
   
   const activeSkills = [];
+  const classSkillIds = getClassSkills(state.class);
   for(const [sId, lvl] of Object.entries(state.skills)) {
     const def = SKILL_DEFS[sId];
-    if(lvl > 0 && def && def.type === 'proc' && classSatisfies(state.class, def.classReq)) {
-      activeSkills.push({ id: sId, lvl, def });
+    if(lvl > 0 && def) {
+      const isPassive = def.type === 'passive' || def.type === 'stat';
+      if (!isPassive) {
+        const belongsToClass = (classSkillIds && classSkillIds.includes(sId)) || classSatisfies(state.class, def.classReq);
+        if (belongsToClass) {
+          activeSkills.push({ id: sId, lvl, def });
+        }
+      }
     }
   }
 
-  activeSkills.sort((a, b) => b.def.tier - a.def.tier);
+  activeSkills.sort((a, b) => (b.def.tier || 0) - (a.def.tier || 0));
 
   const realNow = Date.now();
   let castedSkillThisTick = false;
   for(const skill of activeSkills) {
+    const isBuff = skill.def.type === 'buff' || skill.def.type === 'harmony' || skill.def.type === 'toggle' || skill.def.effect === 'warcry';
+    const isHeal = skill.def.effect === 'heal' || skill.def.type === 'heal' || skill.id.includes('heal') || skill.id.includes('curation');
+
     // 1. Se a habilidade é um Buff/Warcry, verifica se o efeito ainda está ativo!
-    if (skill.def.effect === 'warcry') {
+    if (isBuff) {
       const activeBuff = state.buffs && (state.buffs[skill.id] || state.buffs['warcry']);
       if (activeBuff && activeBuff.until > realNow) {
-        // Buff ainda ativo no personagem, não reconvoca nem solta novamente!
+        // Buff ainda ativo no personagem, não re-convoque nem solte novamente!
         continue;
       }
     }
@@ -3420,7 +3430,7 @@ function attackMonster() {
     if ((realNow - lastCast) >= cd) {
       state._cds[skill.id] = realNow;
       
-      if (skill.def.effect === 'warcry') {
+      if (isBuff) {
         state.buffs = state.buffs || {};
         const buffDuration = 60000; // 60 segundos de efeito
         const buffAmt = 0.20 + (skill.lvl * 0.05); // +20% a +45% de bônus
@@ -3429,15 +3439,15 @@ function attackMonster() {
         state.buffs['warcry'] = buffObj;
         log(`🗣 ${skill.def.name}! ${skill.def.info || 'Buff Ativo por 60s'}`, 'rarity-rare');
         floatText(skill.def.name, 'float-epic');
-      } else if (skill.def.effect === 'heal') {
-        const healAmt = Math.floor(stats.maxHp * (0.35 + skill.lvl * 0.05));
+      } else if (isHeal) {
+        const healAmt = Math.floor(stats.maxHp * (0.25 + skill.lvl * 0.05));
         state.hp = Math.min(stats.maxHp, state.hp + healAmt);
         log(`✨ ${skill.def.name}! Curou ${healAmt} HP`, 'heal');
         floatText(`+${healAmt} HP`, 'sf-heal');
       } else {
         const type = isMage ? 'magic' : 'physical';
         const baseSkillDmg = isMage ? stats.matk : stats.atk;
-        const skillPwr = Number(skill.def.pwr) || 0;
+        const skillPwr = Number(skill.def.pwr) || 30;
         const sDmg = dealDamage(monster, baseSkillDmg * (skillPwr / 10), type);
         
         monster.hp -= sDmg;
