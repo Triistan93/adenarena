@@ -175,16 +175,7 @@ const DEFAULT_STATE = () => ({
   level: 1, xp: 0, sp: 10,
   maxHp: 100, hp: 100, maxMp: 50, mp: 50,
   base: { atk: 0, def: 0, eva: 0, matk: 0, mdef: 0 },
-  skills: {
-    // Generic Fighter skills
-    armorMast: 0, mortalBlow: 0, wpnMastF: 0, powerSmash: 0, lightArmor: 0, stunAttack: 0,
-    heavyArmor: 0, shieldStun: 0, wildSweep: 0, tripleSlash: 0, boostHp: 0, warCry: 0,
-    frenzy: 0, bisonPummel: 0, danceOfFire: 0, lethalBlow: 0, fatalStrike: 0, powerCrush: 0,
-    // Generic Mage skills
-    weaponMastM: 0, energyBolt: 0, robeMast: 0, iceBolt: 0, antiMagic: 0, auraBurn: 0,
-    higherMana: 0, blaze: 0, greaterHeal: 0, prominence: 0, boostMana: 0, quickRecycle: 0,
-    vampiric: 0, flameStrike: 0, solarFlare: 0, deathSpike: 0, hurricane: 0
-  },
+  skills: {},
   quests: { progress: {}, claimed: [], lastDailyReset: 0, lastWeeklyReset: 0 },
   battlePass: { xp: 0, claimedFree: [], claimedPremium: [], unlockedPremium: false },
   tower: { highestFloor: 0, currentFloor: 1, lastSweepTime: 0 },
@@ -483,6 +474,23 @@ function classSatisfies(playerClass, reqClass) {
     current = def.parent;
   }
   return false;
+}
+
+function getStarterSkillForClass(classId) {
+  const cls = getClass(classId);
+  const arch = cls?.archetype || 'fighter';
+  switch (arch) {
+    case 'deathknight': return 'death_spike_dk';
+    case 'warg': return 'warg_will';
+    case 'assassin': return 'assassin_harmony';
+    case 'gunner': return 'burst_fire';
+    case 'highelf': return 'divine_templar_harmony';
+    case 'bloodrose': return 'blood_rose_harmony';
+    case 'soulbreaker': return 'samurai_harmony';
+    case 'artisan': return 'shinemaker_harmony';
+    case 'mage': return 'energy_bolt_m';
+    default: return 'power_strike_f';
+  }
 }
 
 function checkClassAdvancement() {
@@ -1010,14 +1018,7 @@ window.executeRaceClassChange = (scrollUid, newRace, newClass) => {
   state.class = newClass;
 
   // 5. Grant initial class skill
-  const clsObj = getClass(newClass);
-  const arch = clsObj?.archetype || 'fighter';
-  let starterSkill = 'powerSmash';
-  if (arch === 'mage') starterSkill = 'energyBolt';
-  else if (newRace === 'kamael') starterSkill = 'fatalStrike';
-  else if (newClass === 'artisan') starterSkill = 'wildSweep';
-  else if (newClass === 'rogue' || newClass === 'scout' || newClass === 'assassin') starterSkill = 'mortalBlow';
-
+  const starterSkill = getStarterSkillForClass(newClass);
   state.skills[starterSkill] = 1;
   state.selectedSkill = starterSkill;
 
@@ -3809,9 +3810,7 @@ function spendSP(skillId) {
 function resetSP() {
   let totalRefunded = 0;
   // Determine the starter skill based on player archetype
-  const clsDef = getClass(state.class);
-  const archetype = clsDef?.archetype || 'fighter';
-  const starterSkill = (archetype === 'mage') ? 'energyBolt' : 'mortalBlow';
+  const starterSkill = getStarterSkillForClass(state.class);
 
   for (const [sId, lvl] of Object.entries(state.skills)) {
     if (lvl > 0) {
@@ -3898,9 +3897,8 @@ function setRace(raceId) {
       state.base[k] = (state.base[k] || 0) + (cls.base[k] || 0);
     }
   }
-  const arch = cls?.archetype || 'fighter';
-  if (arch === 'mage') { state.skills.energyBolt = Math.max(1, state.skills.energyBolt || 0); }
-  else { state.skills.mortalBlow = Math.max(1, state.skills.mortalBlow || 0); }
+  const starterSkill = getStarterSkillForClass(state.class);
+  if (starterSkill) { state.skills[starterSkill] = Math.max(1, state.skills[starterSkill] || 0); }
   updateRaceClassUI();
   updateStatsUI();
 }
@@ -3916,9 +3914,8 @@ function setClass(classId) {
       state.base[k] = (state.base[k] || 0) + (cls.base[k] || 0);
     }
   }
-  const arch = cls?.archetype || 'fighter';
-  if (arch === 'mage') { state.skills.energyBolt = Math.max(1, state.skills.energyBolt || 0); }
-  else { state.skills.mortalBlow = Math.max(1, state.skills.mortalBlow || 0); }
+  const starterSkill = getStarterSkillForClass(classId);
+  if (starterSkill) { state.skills[starterSkill] = Math.max(1, state.skills[starterSkill] || 0); }
   updateRaceClassUI();
   updateStatsUI();
 }
@@ -4702,11 +4699,8 @@ export function init() {
       state = { ...def, ...cloudData };
       state.privilegeLevel = Number(cloudData.privilegeLevel) || (cloudData.role === 'admin' ? 1 : 0);
       state.skills = { ...def.skills, ...(cloudData.skills || {}) };
-      const clsObj = getClass(state.class);
-      if (clsObj && clsObj.archetype === 'mage') {
-        state.skills.energyBolt = Math.max(1, state.skills.energyBolt || 0);
-        if (!state.selectedSkill) state.selectedSkill = 'energyBolt';
-      }
+      const _sk = getStarterSkillForClass(state.class);
+      if (_sk) { state.skills[_sk] = Math.max(1, state.skills[_sk] || 0); if (!state.selectedSkill) state.selectedSkill = _sk; }
       state.equipment = { ...def.equipment, ...(cloudData.equipment || {}) };
       state.base = { ...def.base, ...(cloudData.base || {}) };
       state.inventory = safeInventory;

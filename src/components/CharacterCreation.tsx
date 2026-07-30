@@ -72,13 +72,13 @@ const RACES_INFO: Record<string, {
     allowedClasses: [
       { id: 'fighter', name: 'Guerreiro Negro (Fighter)', desc: 'Assassino mortal e cavaleiro sombrio.', icon: '🗡️' },
       { id: 'mage', name: 'Mago Negro (Mage)', desc: 'Invocador de maldições e magia de fogo/trevas.', icon: '🔮' },
-      { id: 'deathPilgrim', name: 'Death Knight 💀', desc: 'Cavaleiro da Morte das sombras.', icon: '💀' },
+      { id: 'elfDeathPilgrim', name: 'Death Knight 💀', desc: 'Cavaleiro da Morte Dark Elf com Dark Points e magia sombria.', icon: '💀' },
       { id: 'assassinBase', name: 'Assassin 🗡️', desc: 'Assassina mortal das sombras de Shillien.', icon: '🗡️' }
     ],
     image: {
       fighter: '/img/darkelf_fighter.png',
       mage: '/img/darkelf_mage.png',
-      deathPilgrim: '/img/darkelf_fighter.png',
+      elfDeathPilgrim: '/img/darkelf_fighter.png',
       assassinBase: '/img/darkelf_fighter.png'
     },
     startZoneName: 'Floresta Negra (Dark Forest)'

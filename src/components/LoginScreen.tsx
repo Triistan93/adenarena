@@ -79,7 +79,27 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
     let starterGloves = 'iron_gauntlets';
     let starterBoots = 'iron_boots';
 
-    let starterSkill = 'powerSmash';
+    // Map class → starter skill using Echo archetype system
+    const ECHO_STARTER_SKILLS: Record<string, string> = {
+      // Mage archetypes
+      mage: 'energy_bolt_m', wizard: 'energy_bolt_m', cleric: 'energy_bolt_m',
+      darkWizard: 'energy_bolt_m', shaman: 'energy_bolt_m',
+      // Exclusive archetypes
+      deathPilgrim: 'death_spike_dk', elfDeathPilgrim: 'death_spike_dk',
+      wargBase: 'warg_will',
+      assassinBase: 'assassin_harmony',
+      sylphGunner: 'burst_fire',
+      highElfBase: 'divine_templar_harmony', divineTemplarS1: 'divine_templar_harmony',
+      elementWeaverS1: 'element_weaver_harmony',
+      bloodRoseBase: 'blood_rose_harmony', bloodRoseS1: 'blood_rose_harmony',
+      shinemakerS1: 'shinemaker_harmony',
+      // Kamael
+      soulbreaker: 'samurai_harmony', hatamoto: 'samurai_harmony',
+      // Artisan/Dwarf
+      artisan: 'shinemaker_harmony',
+      // Default fighter
+    };
+    let starterSkill = ECHO_STARTER_SKILLS[data.className] || 'power_strike_f';
 
     if (isMage) {
       starterWeapon = 'oak_staff';
@@ -88,7 +108,6 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
       starterLegs = 'cloth_pants';
       starterGloves = 'cloth_gloves';
       starterBoots = 'cloth_boots';
-      starterSkill = 'energyBolt';
     } else if (isLight) {
       starterWeapon = isKamael ? 'training_dagger' : 'short_bow';
       starterHelm = 'leather_helm';
@@ -96,10 +115,8 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
       starterLegs = 'leather_gaiters';
       starterGloves = 'leather_gloves';
       starterBoots = 'leather_boots';
-      starterSkill = isKamael ? 'fatalStrike' : 'mortalBlow';
-    } else if (data.className === 'artisan') {
+    } else if (data.className === 'artisan' || data.className === 'shinemakerS1') {
       starterWeapon = 'bronze_mace';
-      starterSkill = 'wildSweep';
     }
 
     const inventoryItems = [
