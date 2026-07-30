@@ -68,7 +68,7 @@ const ARMORS = {
   elven_garb: { name: 'Elven Garb', slot: 'armor', tier: 3, def: 15, mdef: 20, matk: 10, req: { level: 22 }, price: 2500 },
   knight_armor: { name: 'Knight Armor', slot: 'armor', tier: 4, def: 50, mdef: 25, hp: 50, req: { level: 40 }, price: 8000 },
   arcane_robe: { name: 'Arcane Robe', slot: 'armor', tier: 4, def: 20, mdef: 55, matk: 20, req: { level: 40 }, price: 9000 },
-  blue_wolf_breastplate: { name: 'Blue Wolf Breastplate', slot: 'armor', tier: 4, def: 65, mdef: 30, hp: 120, req: { level: 52 }, price: 15000, desc: 'Peitoral da armadura pesada Blue Wolf (B-Grade).' },
+  blue_wolf_breastplate.png: { name: 'Blue Wolf Breastplate', slot: 'armor', tier: 4, def: 65, mdef: 30, hp: 120, req: { level: 52 }, price: 15000, desc: 'Peitoral da armadura pesada Blue Wolf (B-Grade).' },
   blue_wolf_leather_armor: { name: 'Blue Wolf Leather Armor', slot: 'armor', tier: 4, def: 52, mdef: 40, eva: 10, speed: 5, req: { level: 52 }, price: 15000, desc: 'Armadura leve Blue Wolf (B-Grade).' },
   blue_wolf_tunic: { name: 'Blue Wolf Tunic', slot: 'armor', tier: 4, def: 35, mdef: 70, matk: 25, mp: 100, req: { level: 52 }, price: 15000, desc: 'Túnica mística Blue Wolf (B-Grade).' },
   divine_robe: { name: 'Divine Robe', slot: 'armor', tier: 5, def: 80, mdef: 90, matk: 35, req: { level: 76 }, price: 30000 },
