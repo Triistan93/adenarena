@@ -471,9 +471,55 @@ function classSatisfies(playerClass, reqClass) {
     const def = getClass(current);
     if (!def) break;
     if (def.archetype === reqClass) return true;
+    if (def.skillTree === reqClass) return true;
     current = def.parent;
   }
   return false;
+}
+
+// ── Skill Tree Resolver (Essence 547) ─────────────────────────────────────
+// Resolve a chave de árvore correta: classId exato → skillTree explícito
+// → cadeia de pais → archetype. NUNCA faz fallback silencioso.
+function getSkillTreeKey(classId) {
+  const E = typeof window !== 'undefined' ? window.EchoData : null;
+  const ST = E ? E.SKILL_TREE_LAYOUT_ECHO : SKILL_TREE_LAYOUT;
+  if (!classId) return null;
+  if (ST && ST[classId]) return classId;
+  const visited = new Set();
+  let current = classId;
+  while (current && !visited.has(current)) {
+    visited.add(current);
+    const def = getClass(current);
+    if (!def) break;
+    if (def.skillTree && ST && ST[def.skillTree]) return def.skillTree;
+    if (ST && ST[current]) return current;
+    current = def.parent;
+  }
+  const rootDef = getClass(classId);
+  if (rootDef?.archetype && ST && ST[rootDef.archetype]) return rootDef.archetype;
+  return null;
+}
+
+// Retorna lista de skill IDs para a classe a partir de CLASS_SKILLS_ECHO.
+// Se não existe, retorna null (sinal para usar classSatisfies como fallback).
+function getClassSkills(classId) {
+  const E = typeof window !== 'undefined' ? window.EchoData : null;
+  const CS = E?.CLASS_SKILLS_ECHO;
+  if (!CS) return null;
+  // tenta classId direto, depois skillTree, depois pais
+  if (CS[classId]) return CS[classId];
+  const def = getClass(classId);
+  if (def?.skillTree && CS[def.skillTree]) return CS[def.skillTree];
+  let current = def?.parent;
+  const visited = new Set([classId]);
+  while (current && !visited.has(current)) {
+    visited.add(current);
+    if (CS[current]) return CS[current];
+    const pd = getClass(current);
+    if (pd?.skillTree && CS[pd.skillTree]) return CS[pd.skillTree];
+    current = pd?.parent;
+  }
+  return null;
 }
 
 function getStarterSkillForClass(classId) {
@@ -1285,10 +1331,24 @@ function updateSkillUI() {
   const cols = 5;
 
   const pDef = getClass(state.class);
-  const activeTreeClass = pDef?.archetype || 'fighter';
+  const activeTreeClass = pDef?.skillTree || pDef?.archetype || 'fighter';
 
   const pos = {};
-  const classSkills = Object.entries(SKILL_DEFS).filter(([id, def]) => classSatisfies(state.class, def.classReq));
+
+  // Use CLASS_SKILLS_ECHO (Essence 547 skill pack) when available for this class.
+  // Fallback to legacy classSatisfies filter for classes not covered by the pack.
+  const classSkillIds = getClassSkills(state.class);
+  let classSkills;
+  if (classSkillIds && classSkillIds.length > 0) {
+    // Skill pack path: show exactly the skills defined for this class
+    classSkills = classSkillIds
+      .map(id => [id, SKILL_DEFS[id]])
+      .filter(([id, def]) => def != null);
+  } else {
+    // Legacy fallback path
+    classSkills = Object.entries(SKILL_DEFS).filter(([id, def]) => classSatisfies(state.class, def.classReq));
+  }
+
   const skillsByTier = { 0: [], 1: [], 2: [], 3: [], 4: [] };
   for (const [id, def] of classSkills) {
     const t = def.tier !== undefined ? def.tier : 0;
@@ -1365,8 +1425,8 @@ function updateSkillUI() {
   if (!nodesLayer) { nodesLayer = mkEl('div'); nodesLayer.className = 'skill-tree-nodes'; wrap.appendChild(nodesLayer); }
   nodesLayer.innerHTML = '';
   
-  for (const [id, def] of Object.entries(SKILL_DEFS)) {
-    if (!classSatisfies(state.class, def.classReq)) continue;
+  for (const [id, def] of classSkills) {
+    if (!def) continue;
     const p = pos[id]; if (!p) continue;
     const lvl = state.skills[id] || 0, max = def.max;
     const node = mkEl('div'); node.className = `skill-node tier-${def.tier}` + (lvl > 0 ? ' owned' : '') + (lvl === max ? ' maxed' : '');

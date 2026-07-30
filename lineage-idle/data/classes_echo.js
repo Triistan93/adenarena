@@ -562,3 +562,689 @@ const SKILL_TREE_LAYOUT_ECHO = {
 if (typeof window !== 'undefined') {
   window.EchoData = { RACES_ECHO, CLASSES_ECHO, SKILL_DEFS_ECHO, SKILL_REQS_ECHO, SKILL_TREE_LAYOUT_ECHO };
 }
+
+// ================================================================
+// Lineage 2 Essence 547 - Echo of Elements Skill Pack
+// Instalado automaticamente no final de classes_echo.js
+// ================================================================
+(function installEssence547EchoSkills(root) {
+  const E = root.EchoData || (root.EchoData = {});
+  const CLASSES  = E.CLASSES_ECHO       || {};
+  const SKILL_DEFS  = E.SKILL_DEFS_ECHO    || (E.SKILL_DEFS_ECHO = {});
+  const SKILL_REQS  = E.SKILL_REQS_ECHO    || (E.SKILL_REQS_ECHO = {});
+  const SKILL_TREE  = E.SKILL_TREE_LAYOUT_ECHO || (E.SKILL_TREE_LAYOUT_ECHO = {});
+  const CLASS_SKILLS = E.CLASS_SKILLS_ECHO  || (E.CLASS_SKILLS_ECHO = {});
+
+  const T = { active:'active', passive:'passive', buff:'buff', toggle:'toggle', debuff:'debuff', trigger:'trigger' };
+
+  function slug(s) {
+    return String(s).normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+      .replace(/['']/g,'').replace(/[^a-zA-Z0-9]+/g,'_').replace(/^_+|_+$/g,'').toLowerCase();
+  }
+
+  function skill(name, type, note) {
+    const id = slug(name);
+    if (!SKILL_DEFS[id]) {
+      SKILL_DEFS[id] = { id, name, type: type||T.active, note: note||'', maxLevel:1, essence547:true };
+    }
+    if (!SKILL_REQS[id]) SKILL_REQS[id] = { level:1, sp:0 };
+    return id;
+  }
+
+  const A = (list) => list.map(([n,t,note]) => skill(n,t,note));
+
+  // CLASS → aliases (todas as chaves que um classId pode ter no save)
+  const CLASS_ALIASES = {
+    humanFighter:['fighter'],
+    warrior:['warrior'], gladiator:['gladiator'], duelist:['duelist'],
+    warlord:['warlord'], dreadnought:['dreadnought'],
+    knight:['knight'], paladin:['paladin'],
+    phoenixKnight:['phoenixKnight','phoenix_knight'],
+    darkAvenger:['darkAvenger','dark_avenger'],
+    hellKnight:['hellKnight','hell_knight'],
+    rogue:['rogue'],
+    treasureHunter:['treasureHunter','treasure_hunter'],
+    adventurer:['adventurer'],
+    hawkeye:['hawkeye'], sagittarius:['sagittarius'],
+
+    humanMage:['mage'], wizard:['wizard'], sorcerer:['sorcerer'],
+    archmage:['archmage'], necromancer:['necromancer'], soultaker:['soultaker'],
+    warlock:['warlock'], arcanaLord:['arcanaLord','arcana_lord'],
+    cleric:['cleric'], bishop:['bishop'], cardinal:['cardinal'],
+    prophet:['prophet'], hierophant:['hierophant'],
+
+    elfFighter:['elfFighter','elf_fighter'],
+    elvenKnight:['elvenKnight'], templeKnight:['templeKnight','temple_knight'],
+    evaTemplar:['evaTemplar','evasTemplar','eva_templar'],
+    swordSinger:['swordSinger','swordSinger_','sword_singer'],
+    swordMuse:['swordMuse','sword_muse'],
+    elvenScout:['elvenScout'], plainsWalker:['plainsWalker','plains_walker'],
+    windRider:['windRider','windRiderElven','wind_rider'],
+    silverRanger:['silverRanger','silver_ranger'],
+    moonlightSentinel:['moonlightSentinel','moonlight_sentinel'],
+
+    elfMage:['elfMage','elf_mage'],
+    elvenWizard:['elvenWizard'], spellsinger:['spellsinger'],
+    mysticMuse:['mysticMuse','mystic_muse'],
+    elementalSummoner:['elementalSummoner','elemental_summoner'],
+    elementalMaster:['elementalMaster','elemental_master'],
+    oracle:['oracle'], elder:['elder'],
+    evasSaint:['evasSaint','evaSaint','evas_saint'],
+
+    darkElfFighter:['darkElfFighter','darkelf_fighter'],
+    palusKnight:['palusKnight'],
+    shillienKnight:['shillienKnight','shillien_knight'],
+    shillienTemplar:['shillienTemplar','shillien_templar'],
+    bladeDancer:['bladeDancer','bladedancer','blade_dancer'],
+    spectralDancer:['spectralDancer','spectral_dancer'],
+    deAssassin:['deAssassin','abyssWalker','abyss_walker'],
+    ghostHunter:['ghostHunter','ghost_hunter'],
+    phantomRanger:['phantomRanger','phantom_ranger'],
+    ghostSentinel:['ghostSentinel','ghost_sentinel'],
+
+    darkWizard:['darkWizard'], spellhowler:['spellhowler'],
+    stormScreamer:['stormScreamer','storm_screamer'],
+    phantomSummoner:['phantomSummoner','phantom_summoner'],
+    spectralMaster:['spectralMaster','spectral_master'],
+    shillienOracle:['shillienOracle'],
+    shillienElder:['shillienElder','shillien_elder'],
+    shillienSaint:['shillienSaint','shillien_saint'],
+
+    orcFighter:['orcFighter','orc_fighter'],
+    orcRaider:['orcRaider'], destroyer:['destroyer'],
+    titan:['titan'], monk:['monk'], tyrant:['tyrant'],
+    grandKhavatari:['grandKhavatari','grand_khavatari'],
+    orcShaman:['orcShaman'],
+    overlord:['overlord'], dominator:['dominator'],
+    warcryer:['warcryer'], doomcryer:['doomcryer'],
+
+    scavenger:['scavenger'], bountyHunter:['bountyHunter','bounty_hunter'],
+    fortuneSeeker:['fortuneSeeker','fortune_seeker'],
+    artisanClass:['artisanClass'],
+    warsmith:['warsmith'], maestro:['maestro'],
+
+    kamaelSoldier:['soulbreaker'], trooper:['trooper'],
+    doombringer:['doombringer'], soulHound:['soulHound','soulhound','soul_hound'],
+    warder:['warder'], trickster:['trickster'],
+
+    deathKnight:['deathPilgrim','elfDeathPilgrim','deathBlade','elfDeathBlade','deathMessenger','elfDeathMessenger','deathKnight','elfDeathKnight'],
+    warg:['wargBase','wargS1','wargS2','warg'],
+    assassin:['assassinBase','assassinS1','assassinS2','assassinFinal'],
+    vanguardRider:['orcRider','dragoon','vanguardRider'],
+    samurai:['hatamoto','ronin','samurai'],
+    stormBlaster:['sylphGunner','sharpshooter','windSniper','stormBlaster'],
+    shinemaker:['shinemakerS1','shinemakerS2','shinemaker'],
+    divineTemplar:['highElfBase','divineTemplarS1','divineTemplarS2','divineTemplar'],
+    bloodRose:['bloodRoseBase','bloodRoseS1','bloodRoseS2','bloodRose'],
+    elementWeaver:['elementWeaverS1','elementWeaverS2','elementWeaver'],
+  };
+
+  const DATA = {
+    humanFighter: A([
+      ['Power Strike',T.active,''],['Mortal Blow',T.active,''],['Power Shot',T.active,''],['Rush',T.active,''],['Bandage',T.active,''],
+      ['HP Increase',T.passive,''],['Light Armor Mastery',T.passive,''],["Fighter's Will",T.buff,'Self-buff'],
+    ]),
+    warrior: A([
+      ['Power Smash',T.active,''],['Spinning Slash',T.active,''],['Iron Will',T.active,''],
+      ['Sword Blunt Mastery',T.passive,''],['Polearm Mastery',T.passive,''],['Heavy Armor Mastery',T.passive,''],
+      ['HP Increase II',T.passive,''],['Weight Limit',T.passive,''],['Battle Roar',T.buff,''],
+    ]),
+    gladiator: A([
+      ['Triple Slash',T.active,''],['Sonic Blaster',T.active,''],['Sonic Storm',T.active,''],['Sonic Buster',T.active,''],
+      ['Double Sonic Slash',T.active,''],['Hammer Crush',T.active,''],['Tribunal',T.active,''],['Lionheart',T.active,''],
+      ['War Frenzy',T.active,''],['Dual Weapon Mastery',T.passive,''],['Focus',T.passive,''],['Critical Power',T.passive,''],
+      ['Boost HP',T.passive,''],['Vicious Stance',T.toggle,''],['Sonic Move',T.active,''],["Gladiator's Harmony",T.buff,''],
+    ]),
+    duelist: A([
+      ['Sonic Focus',T.active,''],['Force Blaster',T.active,''],['Dual Blow',T.active,''],['Rushing Force',T.active,''],
+      ['Long Blow',T.active,''],['Dual Dagger Blow',T.active,''],['Force Buster',T.active,''],['Earthquake',T.active,''],
+      ['Real Target',T.active,''],['Thrill Fight',T.active,''],['Duelist Spirit',T.passive,''],['Blade of the Duelist',T.passive,''],
+      ['Sonic Rage',T.active,'Echo'],['Master of Combat',T.passive,'Essence'],["Duelist's Harmony",T.buff,''],
+      ['Transcendent Dual Blow',T.active,'Transcendent'],
+    ]),
+    warlord: A([
+      ['Whirlwind',T.active,''],['Thunder Storm',T.active,''],['Howl',T.active,''],['Provoke',T.active,''],
+      ['Fellswoop',T.active,''],['War Cry',T.active,''],['Freezing Strike',T.active,''],['Burning Chop',T.active,''],
+      ['Shock Stomp',T.active,''],['Polearm Mastery',T.passive,''],['Vital Force',T.passive,''],['Focus',T.passive,''],
+      ['Boost HP',T.passive,''],['Heavy Armor Mastery',T.passive,''],["Warlord's Harmony",T.buff,''],
+    ]),
+    dreadnought: A([
+      ['Rush Impact',T.active,''],['War Frenzy',T.active,''],['Dread Pool',T.active,''],['Lionheart',T.active,''],
+      ['Anti-Magic Armor',T.active,''],['Weapon Blockade',T.active,''],['Spike',T.active,''],
+      ['Dreadnought Spirit',T.passive,''],['Body of the Dreadnought',T.passive,''],['Master of Combat',T.passive,'Essence'],
+      ["Dreadnought's Harmony",T.buff,''],['Transcendent Whirlwind',T.active,'Transcendent'],
+    ]),
+    knight: A([
+      ['Shield Strike',T.active,''],['Hate',T.active,''],['Aura of Hate',T.active,''],
+      ['Shield Mastery',T.passive,''],['Heavy Armor Mastery',T.passive,''],['Sword Blunt Mastery',T.passive,''],
+      ['HP Increase II',T.passive,''],['Deflect Arrow',T.passive,''],["Knight's Harmony",T.buff,''],
+    ]),
+    paladin: A([
+      ['Majesty',T.active,''],['Holy Blade',T.active,''],['Shield Stun',T.active,''],['Angelic Icon',T.active,''],
+      ['Sacrifice',T.active,''],['Aegis',T.active,''],['Vengeance',T.active,''],['Provoke',T.active,''],
+      ['Ultimate Defense',T.active,''],['Holy Blessing',T.active,''],['Summon Storm Cubic',T.active,''],
+      ['Heavy Armor Mastery',T.passive,''],['Shield Mastery',T.passive,''],['Boost HP',T.passive,''],
+      ['Resist Holy Dark',T.passive,''],["Paladin's Harmony",T.buff,''],
+    ]),
+    phoenixKnight: A([
+      ['Touch of Life',T.active,''],['Phoenix Aura',T.active,''],['Shield of Faith',T.active,''],['Flame Icon',T.active,''],
+      ['Celestial Shield',T.active,''],['Summon Imperial Phoenix',T.active,''],['Phoenix Knight Spirit',T.passive,''],
+      ['Body of the Phoenix',T.passive,''],['Protection of Faith',T.passive,''],['Master of Combat',T.passive,'Essence'],
+      ["Phoenix Knight's Harmony",T.buff,''],['Transcendent Shield Charge',T.active,'Transcendent'],
+    ]),
+    darkAvenger: A([
+      ['Summon Dark Panther',T.active,''],['Horror',T.active,''],['Drain Health',T.active,''],['Shield Stun',T.active,''],
+      ['Judgment',T.active,''],['Doom Shield',T.active,''],['Seed of Revenge',T.active,''],['Touch of Death',T.active,''],
+      ['Dark Flame',T.active,''],['Provoke',T.active,''],['Heavy Armor Mastery',T.passive,''],
+      ['Shield Mastery',T.passive,''],['Boost HP',T.passive,''],['Reflect Damage',T.passive,''],["Dark Avenger's Harmony",T.buff,''],
+    ]),
+    hellKnight: A([
+      ['Insane Crusher',T.active,''],['Panther Cancel',T.active,''],['Anthem of Hell',T.active,''],['Gehenna',T.active,''],
+      ['Touch of Darkness',T.active,''],['Summon Dark Panther Enhanced',T.active,''],['Hell Knight Spirit',T.passive,''],
+      ['Body of the Hell Knight',T.passive,''],['Protection of Darkness',T.passive,''],['Master of Combat',T.passive,'Essence'],
+      ["Hell Knight's Harmony",T.buff,''],['Transcendent Dark Strike',T.active,'Transcendent'],
+    ]),
+    rogue: A([
+      ['Double Shot',T.active,''],['Backstab',T.active,''],['Dash',T.active,''],['Unlock',T.active,''],
+      ['Light Armor Mastery',T.passive,''],['Dagger Mastery',T.passive,''],['Bow Mastery',T.passive,''],
+      ['Critical Chance',T.passive,''],["Rogue's Harmony",T.buff,''],
+    ]),
+    treasureHunter: A([
+      ['Deadly Blow',T.active,''],['Lethal Blow',T.active,''],['Sand Bomb',T.active,''],['Fake Death',T.active,''],
+      ['Trick',T.active,''],['Lure',T.active,''],['Blinding Blow',T.active,''],['Mirage',T.active,''],
+      ['Shadow Step',T.active,''],['Switch',T.active,''],['Detect Remove Trap',T.active,''],
+      ['Evasion',T.passive,''],['Critical Power',T.passive,''],['Dagger Mastery',T.passive,''],
+      ['Light Armor Mastery',T.passive,''],['Focus',T.passive,''],["Treasure Hunter's Harmony",T.buff,''],
+    ]),
+    adventurer: A([
+      ['Exciting Adventure',T.active,''],['Shadow Sense',T.passive,''],['Wind Riding',T.active,''],
+      ['Lucky Strike',T.active,''],['Detection',T.active,''],['Adventurer Spirit',T.passive,''],
+      ['Body of the Adventurer',T.passive,''],['Final Frenzy',T.passive,''],['Master of Combat',T.passive,'Essence'],
+      ["Adventurer's Harmony",T.buff,''],['Transcendent Deadly Blow',T.active,'Transcendent'],
+    ]),
+    hawkeye: A([
+      ['Double Shot',T.active,''],['Burst Shot',T.active,''],['Stun Shot',T.active,''],['Rapid Fire',T.active,''],
+      ['Arrow Rain',T.active,''],['Cheap Shot',T.active,''],['Bow Mastery',T.passive,''],['Long Shot',T.passive,''],
+      ['Focus',T.passive,''],['Critical Power',T.passive,''],['Light Armor Mastery',T.passive,''],
+      ['Evasion',T.passive,''],["Hawkeye's Harmony",T.buff,''],
+    ]),
+    sagittarius: A([
+      ['Seven Arrow',T.active,''],['Arrow Flare',T.active,''],['Dead Eye',T.active,''],['Pinpoint Shot',T.active,''],
+      ['Triple Shot',T.active,'Echo'],['Thorn Shot',T.active,'Echo'],['Binding Shot',T.active,'Echo'],
+      ['Incendiary Shot',T.active,'Echo'],['Freezing Shot',T.active,'Echo'],['Wind Shot',T.active,'Echo'],
+      ['Flame Arrow Rain',T.active,'Echo'],['Water Arrow Rain',T.active,'Echo'],['Storm Arrow Rain',T.active,'Echo'],
+      ['Spiral Shot',T.active,'Echo'],['Target Lock',T.active,'Echo'],['Sagittarius Spirit',T.passive,''],
+      ['Body of the Sagittarius',T.passive,''],['Master of Combat',T.passive,'Essence'],
+      ["Sagittarius Harmony",T.buff,''],['Transcendent Seven Arrow',T.active,'Transcendent'],
+    ]),
+
+    humanMage: A([
+      ['Wind Strike',T.active,''],['Self Heal',T.active,''],['Group Heal',T.active,''],['Flame Strike',T.active,''],
+      ['Sleep',T.active,''],['Ice Bolt',T.active,''],['Robe Mastery',T.passive,''],['MP Increase',T.passive,''],
+      ["Mage's Will",T.buff,''],
+    ]),
+    wizard: A([
+      ['Blaze',T.active,''],['Aqua Swirl',T.active,''],['Twister',T.active,''],['Flame Strike',T.active,''],
+      ['Surrender to Fire',T.active,''],['Surrender to Water',T.active,''],['Surrender to Wind',T.active,''],
+      ['Aura Burn',T.active,''],['Life Drain',T.active,''],['Robe Mastery',T.passive,''],['Boost Mana',T.passive,''],
+      ["Wizard's Harmony",T.buff,''],
+    ]),
+    sorcerer: A([
+      ['Solar Flare',T.active,''],['Freezing Skin',T.active,''],['Arcane Power',T.active,''],['Blizzard',T.active,''],
+      ['Hurricane',T.active,''],['Prominence',T.active,''],['Hydro Blast',T.active,''],['Aura Flash',T.active,''],
+      ['Tempest',T.active,''],['Body to Mind',T.active,''],['Cancel',T.active,''],['Anti-Magic',T.active,''],
+      ['Elemental Assault',T.passive,''],['Boost Mana',T.passive,''],['Robe Mastery',T.passive,''],["Sorcerer's Harmony",T.buff,''],
+    ]),
+    archmage: A([
+      ['Hell Inferno',T.active,''],['Seed of Fire',T.active,''],['Seed of Water',T.active,''],['Seed of Wind',T.active,''],
+      ['Elemental Burst',T.active,''],['Elemental Storm',T.active,''],['Mana Burn',T.active,''],
+      ['Mystic Immunity',T.active,''],['Empowering Echo',T.active,''],['Fire Spiral',T.active,'Echo'],
+      ['Flame Explosion',T.active,'Echo'],['Spell Mastery',T.passive,'Echo'],['Magic Focus',T.passive,'Echo'],
+      ['Archmage Spirit',T.passive,''],['Body of the Archmage',T.passive,''],["Archmage's Harmony",T.buff,''],
+      ['Transcendent Hell Inferno',T.active,'Transcendent'],
+    ]),
+    necromancer: A([
+      ['Corpse Plague',T.active,''],['Death Spike',T.active,''],['Vampiric Claw',T.active,''],['Anchor',T.active,''],
+      ['Curse Gloom',T.active,''],['Corpse Burst',T.active,''],['Summon Reanimated Man',T.active,''],
+      ['Summon Cursed Bone',T.active,''],['Surrender to Unholy',T.active,''],['Curse Fear',T.active,''],
+      ['Bone Armor',T.passive,''],['Boost Mana',T.passive,''],['Robe Mastery',T.passive,''],["Necromancer's Harmony",T.buff,''],
+    ]),
+    soultaker: A([
+      ['Soul Vortex',T.active,''],['Soul Vortex Destruction',T.active,''],['Mass Curse Gloom',T.active,''],
+      ['Soul Absorption',T.active,''],['Summon Dark Curse',T.active,''],['Dark Burden',T.active,''],
+      ['Void Explosion',T.active,'Echo'],['Spell Mastery',T.passive,'Echo'],['Magic Focus',T.passive,'Echo'],
+      ['Soultaker Spirit',T.passive,''],['Body of the Soultaker',T.passive,''],["Soultaker's Harmony",T.buff,''],
+      ['Transcendent Soul Vortex',T.active,'Transcendent'],
+    ]),
+    warlock: A([
+      ['Summon Shadow',T.active,''],['Summon Silhouette',T.active,''],['Summon Soulless',T.active,''],
+      ['Summon Binding Cubic',T.active,''],['Summon Phantom Cubic',T.active,''],['Servitor Heal',T.active,''],
+      ['Servitor Recharge',T.active,''],['Transfer Pain',T.active,''],['Life Cubic',T.active,''],
+      ['Servitor Physical Attack',T.passive,''],['Boost Mana',T.passive,''],['Robe Mastery',T.passive,''],["Warlock's Harmony",T.buff,''],
+    ]),
+    arcanaLord: A([
+      ['Summon Feline King',T.active,''],['Summon Magnus',T.active,''],['Servitor Barrier',T.active,''],
+      ['Mass Servitor Heal',T.active,''],['Final Servitor',T.active,''],['Servitor Empowerment',T.active,''],
+      ['Arcana Lord Spirit',T.passive,''],['Body of the Arcana Lord',T.passive,''],["Arcana Lord's Harmony",T.buff,''],
+      ['Transcendent Summon Burst',T.active,'Transcendent'],
+    ]),
+    cleric: A([
+      ['Heal',T.active,''],['Battle Heal',T.active,''],['Might',T.active,''],['Shield',T.buff,''],
+      ['Wind Walk',T.active,''],['Cure Poison',T.active,''],['Cure Bleed',T.active,''],['Turn Undead',T.active,''],
+      ['Recharge',T.active,''],['Robe Mastery',T.passive,''],["Cleric's Harmony",T.buff,''],
+    ]),
+    bishop: A([
+      ['Greater Heal',T.active,''],['Greater Group Heal',T.active,''],['Resurrection',T.active,''],
+      ['Greater Might',T.active,''],['Greater Shield',T.active,''],['Purify',T.active,''],['Cleanse',T.active,''],
+      ['Blessed Body',T.active,''],['Blessed Soul',T.active,''],['Mental Shield',T.active,''],['Inquisitor',T.active,''],
+      ['Major Heal',T.active,''],['Holy Weapon',T.active,''],['Party Recall',T.active,''],
+      ['Mana Regeneration',T.passive,''],['Boost Mana',T.passive,''],['Robe Mastery',T.passive,''],
+      ["Bishop's Harmony",T.buff,''],['Holy Strike',T.active,'Essence'],['Divine Punishment',T.active,'Essence'],
+    ]),
+    cardinal: A([
+      ['Sublime Self-Sacrifice',T.active,''],['Balance Life',T.active,''],['Mass Resurrection',T.active,''],
+      ['Miracle',T.active,''],['Lord of Vampire',T.active,''],['Blessing of Eva',T.active,''],['Trance',T.active,''],
+      ['Cardinal Spirit',T.passive,''],['Body of the Cardinal',T.passive,''],["Cardinal's Harmony",T.buff,''],
+      ['Dark Side',T.toggle,'Echo'],['Holy Burst',T.active,'Essence'],['Divine Nova',T.active,'Essence'],
+      ['Transcendent Holy Strike',T.active,'Transcendent'],
+    ]),
+    prophet: A([
+      ['Haste',T.buff,''],['Berserker Spirit',T.buff,''],['Bless Shield',T.active,''],
+      ['Prophecy of Water',T.active,''],['Resist Fire',T.active,''],['Resist Water',T.active,''],
+      ['Resist Wind',T.active,''],['Vampiric Rage',T.buff,''],['Empower',T.buff,''],['Acumen',T.buff,''],
+      ['Concentration',T.buff,''],['Focus',T.buff,''],['Death Whisper',T.buff,''],['Guidance',T.buff,''],
+      ['Mental Shield',T.active,''],['Heal',T.active,''],['Robe Mastery',T.passive,''],['Boost Mana',T.passive,''],
+      ["Prophet's Harmony",T.buff,''],['Holy Strike',T.active,'Essence'],
+    ]),
+    hierophant: A([
+      ['Prophecy of Fire',T.buff,''],['Prophecy of Wind',T.buff,''],['Prophecy of Water',T.buff,''],
+      ['Cleanse',T.active,''],['Mystic Immunity',T.active,''],['Blessing of Nobility',T.active,''],
+      ['Hierophant Spirit',T.passive,''],['Body of the Hierophant',T.passive,''],["Hierophant's Harmony",T.buff,''],
+      ['Mass Prophecy',T.active,'Essence'],['Holy Punishment',T.active,'Essence'],['Transcendent Holy Burst',T.active,'Transcendent'],
+    ]),
+
+    elfFighter: A([
+      ['Power Strike',T.active,''],['Mortal Blow',T.active,''],['Power Shot',T.active,''],['Bandage',T.active,''],
+      ['HP Increase',T.passive,''],['Light Armor Mastery',T.passive,''],['Elven Spirit',T.buff,''],
+    ]),
+    elvenKnight: A([
+      ['Shield Strike',T.active,''],['Hate',T.active,''],['Shield Mastery',T.passive,''],
+      ['Heavy Armor Mastery',T.passive,''],['Sword Blunt Mastery',T.passive,''],
+      ['HP Increase II',T.passive,''],['Deflect Arrow',T.passive,''],['Power Break',T.active,''],
+    ]),
+    templeKnight: A([
+      ['Shield Stun',T.active,''],['Tribunal',T.active,''],['Sacrifice',T.active,''],['Aegis',T.active,''],
+      ["Eva's Will",T.active,''],['Ultimate Defense',T.active,''],['Holy Blade',T.active,''],
+      ['Provoke',T.active,''],['Summon Life Cubic',T.active,''],['Summon Binding Cubic',T.active,''],
+      ['Summon Storm Cubic',T.active,''],['Heavy Armor Mastery',T.passive,''],
+      ['Shield Mastery',T.passive,''],['Boost HP',T.passive,''],["Temple Knight's Harmony",T.buff,''],
+    ]),
+    evaTemplar: A([
+      ["Touch of Eva",T.active,''],["Shield of Eva",T.active,''],['Celestial Shield',T.active,''],
+      ['Summon Guardian Agathion',T.active,''],["Eva's Templar Spirit",T.passive,''],
+      ["Body of Eva's Templar",T.passive,''],['Protection of Eva',T.passive,''],['Master of Combat',T.passive,'Essence'],
+      ["Eva's Templar Harmony",T.buff,''],['Aqua Strike',T.active,'Essence'],["Eva's Help",T.trigger,'Trigger'],
+      ['Transcendent Shield Charge',T.active,'Transcendent'],
+    ]),
+    swordSinger: A([
+      ['Song of Earth',T.buff,''],['Song of Life',T.buff,''],['Song of Water',T.buff,''],['Song of Warding',T.buff,''],
+      ['Song of Wind',T.buff,''],['Song of Hunter',T.buff,''],['Song of Invocation',T.buff,''],
+      ['Song of Vitality',T.buff,''],['Song of Vengeance',T.buff,''],['Song of Flame Guard',T.buff,''],
+      ['Song of Champion',T.buff,''],['Song of Renewal',T.buff,''],
+      ['Sword Blunt Mastery',T.passive,''],['Heavy Armor Mastery',T.passive,''],['Boost HP',T.passive,''],
+    ]),
+    swordMuse: A([
+      ['Song of Purification',T.buff,''],['Song of Elemental',T.buff,''],['Song of Storm Guard',T.buff,''],
+      ['Mass Song',T.active,''],['Final Song',T.active,''],['Sword Muse Spirit',T.passive,''],
+      ['Body of Sword Muse',T.passive,''],['Sword Muse Harmony',T.buff,''],
+      ['Sonic Slash',T.active,'Echo'],['Melody Strike',T.active,'Echo'],['Transcendent Melody',T.active,'Transcendent'],
+    ]),
+    elvenScout: A([
+      ['Double Shot',T.active,''],['Backstab',T.active,''],['Dash',T.active,''],
+      ['Light Armor Mastery',T.passive,''],['Dagger Mastery',T.passive,''],['Bow Mastery',T.passive,''],
+      ['Critical Chance',T.passive,''],
+    ]),
+    plainsWalker: A([
+      ['Deadly Blow',T.active,''],['Lethal Blow',T.active,''],['Sand Bomb',T.active,''],
+      ['Blinding Blow',T.active,''],['Switch',T.active,''],['Shadow Step',T.active,''],
+      ['Fake Death',T.active,''],['Trick',T.active,''],
+      ['Evasion',T.passive,''],['Critical Power',T.passive,''],['Dagger Mastery',T.passive,''],['Focus',T.passive,''],
+    ]),
+    windRider: A([
+      ['Wind Riding',T.active,''],['Exciting Adventure',T.active,''],['Lucky Strike',T.active,''],
+      ['Shadow Sense',T.passive,''],['Final Frenzy',T.passive,''],['Wind Rider Spirit',T.passive,''],
+      ['Body of Wind Rider',T.passive,''],['Master of Combat',T.passive,'Essence'],
+      ['Wind Rider Harmony',T.buff,''],['Transcendent Deadly Blow',T.active,'Transcendent'],
+    ]),
+    silverRanger: A([
+      ['Double Shot',T.active,''],['Burst Shot',T.active,''],['Stun Shot',T.active,''],['Rapid Fire',T.active,''],
+      ['Arrow Rain',T.active,''],['Bow Mastery',T.passive,''],['Long Shot',T.passive,''],
+      ['Focus',T.passive,''],['Critical Power',T.passive,''],['Evasion',T.passive,''],
+    ]),
+    moonlightSentinel: A([
+      ['Seven Arrow',T.active,''],['Dead Eye',T.active,''],['Pinpoint Shot',T.active,''],
+      ['Triple Shot',T.active,'Echo'],['Thorn Shot',T.active,'Echo'],['Binding Shot',T.active,'Echo'],
+      ['Incendiary Shot',T.active,'Echo'],['Freezing Shot',T.active,'Echo'],['Wind Shot',T.active,'Echo'],
+      ['Elemental Arrow Rain',T.active,'Echo'],['Spiral Shot',T.active,'Echo'],['Target Lock',T.active,'Echo'],
+      ['Moonlight Sentinel Spirit',T.passive,''],['Body of Moonlight Sentinel',T.passive,''],
+      ['Moonlight Harmony',T.buff,''],['Transcendent Seven Arrow',T.active,'Transcendent'],
+    ]),
+
+    elfMage: A([
+      ['Wind Strike',T.active,''],['Self Heal',T.active,''],['Ice Bolt',T.active,''],['Sleep',T.active,''],
+      ['Robe Mastery',T.passive,''],['MP Increase',T.passive,''],
+    ]),
+    elvenWizard: A([
+      ['Blaze',T.active,''],['Aqua Swirl',T.active,''],['Twister',T.active,''],['Aura Burn',T.active,''],
+      ['Surrender to Water',T.active,''],['Surrender to Wind',T.active,''],["Elven Wizard's Harmony",T.buff,''],
+    ]),
+    spellsinger: A([
+      ['Aqua Splash',T.active,''],['Hydro Blast',T.active,''],['Blizzard',T.active,''],['Aura Flash',T.active,''],
+      ['Arcane Power',T.active,''],['Boost Mana',T.passive,''],['Robe Mastery',T.passive,''],["Spellsinger's Harmony",T.buff,''],
+    ]),
+    mysticMuse: A([
+      ['Aqua Splash',T.active,''],['Elemental Burst',T.active,''],['Elemental Storm',T.active,''],
+      ['Seed of Water',T.active,''],['Mystic Immunity',T.active,''],['Empowering Echo',T.active,''],
+      ['Water Spiral',T.active,'Echo'],['Aqua Explosion',T.active,'Echo'],
+      ['Spell Mastery',T.passive,'Echo'],['Magic Focus',T.passive,'Echo'],
+      ['Mystic Muse Spirit',T.passive,''],['Body of the Mystic Muse',T.passive,''],['Mystic Muse Harmony',T.buff,''],
+    ]),
+    elementalSummoner: A([
+      ['Summon Unicorn Boxer',T.active,''],['Summon Unicorn Mirage',T.active,''],['Summon Unicorn Merrow',T.active,''],
+      ['Servitor Heal',T.active,''],['Servitor Recharge',T.active,''],['Transfer Pain',T.active,''],
+      ['Binding Cubic',T.active,''],['Life Cubic',T.active,''],['Boost Mana',T.passive,''],
+    ]),
+    elementalMaster: A([
+      ['Summon Feline Queen',T.active,''],['Summon Seraphim',T.active,''],['Servitor Barrier',T.active,''],
+      ['Mass Servitor Heal',T.active,''],['Final Servitor',T.active,''],["Unicorn's Friendship",T.passive,'Essence'],
+      ['Elemental Concentration',T.passive,'Essence'],['Elemental Master Spirit',T.passive,''],
+      ['Body of the Elemental Master',T.passive,''],['Elemental Master Harmony',T.buff,''],
+    ]),
+    oracle: A([
+      ['Heal',T.active,''],['Battle Heal',T.active,''],['Recharge',T.active,''],['Cure Poison',T.active,''],
+      ['Wind Walk',T.active,''],["Oracle's Harmony",T.buff,''],
+    ]),
+    elder: A([
+      ['Greater Heal',T.active,''],['Greater Group Heal',T.active,''],['Resurrection',T.active,''],
+      ['Purify',T.active,''],['Cleanse',T.active,''],['Blessing of Eva',T.active,''],
+      ['Robe Mastery',T.passive,''],['Boost Mana',T.passive,''],
+    ]),
+    evasSaint: A([
+      ['Sublime Self-Sacrifice',T.active,''],['Balance Life',T.active,''],['Mass Resurrection',T.active,''],
+      ['Blessing of Eva',T.active,''],['Miracle',T.active,''],["Eva's Saint Spirit",T.passive,''],
+      ["Body of Eva's Saint",T.passive,''],["Eva's Saint Harmony",T.buff,''],
+      ['Dark Side',T.toggle,'Echo'],['Aqua Strike',T.active,'Essence'],["Eva's Help",T.trigger,'Trigger'],
+      ['Divine Nova',T.active,'Essence'],
+    ]),
+
+    darkElfFighter: A([
+      ['Power Strike',T.active,''],['Mortal Blow',T.active,''],['Power Shot',T.active,''],['Bandage',T.active,''],
+      ['HP Increase',T.passive,''],['Light Armor Mastery',T.passive,''],['Dark Elven Spirit',T.buff,''],
+    ]),
+    shillienKnight: A([
+      ['Shield Stun',T.active,''],['Judgment',T.active,''],['Dark Flame',T.active,''],['Sacrifice',T.active,''],
+      ['Aegis',T.active,''],['Ultimate Defense',T.active,''],['Drain Health',T.active,''],['Horror',T.active,''],
+      ['Lightning Strike',T.active,''],['Touch of Death',T.active,''],['Provoke',T.active,''],
+      ['Summon Dark Cubic',T.active,''],['Heavy Armor Mastery',T.passive,''],
+      ['Shield Mastery',T.passive,''],['Boost HP',T.passive,''],
+    ]),
+    shillienTemplar: A([
+      ['Touch of Shillien',T.active,''],['Shield of Shillien',T.active,''],['Celestial Shield',T.active,''],
+      ['Summon Guardian Agathion',T.active,''],["Shillien's Curse",T.active,'Echo'],['Abyss Strike',T.active,'Essence'],
+      ["Shillien's Help",T.trigger,'Trigger'],['Shillien Templar Spirit',T.passive,''],
+      ['Body of Shillien Templar',T.passive,''],['Protection of Shillien',T.passive,''],
+      ['Master of Combat',T.passive,'Essence'],['Shillien Templar Harmony',T.buff,''],
+      ['Transcendent Abyss Strike',T.active,'Transcendent'],
+    ]),
+    bladeDancer: A([
+      ['Dance of Fire',T.buff,''],['Dance of Fury',T.buff,''],['Dance of Concentration',T.buff,''],
+      ['Dance of Light',T.buff,''],['Dance of Mystic',T.buff,''],['Dance of Warrior',T.buff,''],
+      ['Dance of Aqua Guard',T.buff,''],['Dance of Inspiration',T.buff,''],['Dance of Vampire',T.buff,''],
+      ['Dance of Protection',T.buff,''],['Dance of Shadow',T.buff,''],['Dance of Siren',T.buff,''],
+      ['Dual Weapon Mastery',T.passive,''],['Heavy Armor Mastery',T.passive,''],['Boost HP',T.passive,''],
+    ]),
+    spectralDancer: A([
+      ['Dance of Berserker',T.buff,''],['Dance of Blade Storm',T.buff,''],['Mass Dance',T.active,''],
+      ['Final Dance',T.active,''],['Spectral Dancer Spirit',T.passive,''],['Body of Spectral Dancer',T.passive,''],
+      ['Spectral Dancer Harmony',T.buff,''],['Shadow Slash',T.active,'Echo'],['Dark Dance Strike',T.active,'Echo'],
+      ['Transcendent Dance',T.active,'Transcendent'],
+    ]),
+    ghostHunter: A([
+      ['Exciting Adventure',T.active,''],['Shadow Sense',T.passive,''],['Wind Riding',T.active,''],
+      ['Lucky Strike',T.active,''],['Ghost Hunter Spirit',T.passive,''],['Body of Ghost Hunter',T.passive,''],
+      ['Final Frenzy',T.passive,''],['Master of Combat',T.passive,'Essence'],['Ghost Hunter Harmony',T.buff,''],
+    ]),
+    ghostSentinel: A([
+      ['Seven Arrow',T.active,''],['Dead Eye',T.active,''],['Pinpoint Shot',T.active,''],
+      ['Triple Shot',T.active,'Echo'],['Thorn Shot',T.active,'Echo'],['Binding Shot',T.active,'Echo'],
+      ['Incendiary Shot',T.active,'Echo'],['Freezing Shot',T.active,'Echo'],['Wind Shot',T.active,'Echo'],
+      ['Target Lock',T.active,'Echo'],['Ghost Sentinel Spirit',T.passive,''],['Body of Ghost Sentinel',T.passive,''],
+      ['Ghost Sentinel Harmony',T.buff,''],['Transcendent Seven Arrow',T.active,'Transcendent'],
+    ]),
+    stormScreamer: A([
+      ['Demon Wind',T.active,''],['Elemental Burst',T.active,''],['Elemental Storm',T.active,''],
+      ['Seed of Wind',T.active,''],['Mystic Immunity',T.active,''],['Empowering Echo',T.active,''],
+      ['Wind Spiral',T.active,'Echo'],['Thunder Explosion',T.active,'Echo'],
+      ['Spell Mastery',T.passive,'Echo'],['Magic Focus',T.passive,'Echo'],
+      ['Storm Screamer Spirit',T.passive,''],['Body of Storm Screamer',T.passive,''],['Storm Screamer Harmony',T.buff,''],
+    ]),
+    spectralMaster: A([
+      ['Summon Spectral Lord',T.active,''],['Servitor Barrier',T.active,''],['Mass Servitor Heal',T.active,''],
+      ['Final Servitor',T.active,''],['Spectral Master Spirit',T.passive,''],['Body of Spectral Master',T.passive,''],
+      ['Spectral Master Harmony',T.buff,''],
+    ]),
+    shillienSaint: A([
+      ['Dark Disruption',T.active,'Essence'],["Shillien's Help",T.trigger,'Trigger'],['Dark Side',T.toggle,'Echo'],
+      ['Shillien Saint Spirit',T.passive,''],['Body of Shillien Saint',T.passive,''],['Shillien Saint Harmony',T.buff,''],
+      ['Sublime Self-Sacrifice',T.active,''],['Balance Life',T.active,''],['Mass Resurrection',T.active,''],
+      ['Divine Nova',T.active,'Essence'],
+    ]),
+
+    orcFighter: A([
+      ['Power Strike',T.active,''],['Iron Punch',T.active,''],['Bandage',T.active,''],
+      ['HP Increase',T.passive,''],['Light Armor Mastery',T.passive,''],
+    ]),
+    titan: A([
+      ['Earthquake',T.active,''],['Real Target',T.active,''],['Frenzy',T.active,''],['Guts',T.active,''],
+      ['Zealot',T.active,''],['Anti-Magic Armor',T.active,''],['Fists of Fury',T.active,''],['Soul Breaker',T.active,''],
+      ['Titan Spirit',T.passive,''],['Body of the Titan',T.passive,''],['Pride of Titan',T.passive,''],
+      ['Master of Combat Orc',T.passive,'Echo'],["Titan's Harmony",T.buff,''],
+      ['Blazing Strike',T.active,'Echo'],['Transcendent Earthquake',T.active,'Transcendent'],
+    ]),
+    grandKhavatari: A([
+      ['Force Focus',T.active,''],['Soul of the Phoenix',T.active,''],['Rapid Attack',T.active,''],
+      ['Hurricane Assault',T.active,''],['Fist Fury',T.active,''],['Totem Spirits',T.active,''],
+      ['Grand Khavatari Spirit',T.passive,''],['Body of Grand Khavatari',T.passive,''],
+      ['Master of Combat Orc',T.passive,'Echo'],['Grand Khavatari Harmony',T.buff,''],
+      ["Ogre's Essence",T.buff,'Echo'],['Rabbit Spirit Totem',T.active,'Echo'],
+      ['Transcendent Hurricane',T.active,'Transcendent'],
+    ]),
+    dominator: A([
+      ['Seal of Limit',T.active,''],['Clan Imperium',T.active,''],["Victoria of Pa_agrio",T.active,''],
+      ["Glory of Pa_agrio",T.active,''],["Blessing of Pa_agrio",T.active,''],['Mass Seal of Gloom',T.active,''],
+      ['Flame Burst',T.active,'Echo'],["Prophecy of Pa_agrio",T.buff,'Echo'],
+      ['Dominator Spirit',T.passive,''],['Body of the Dominator',T.passive,''],['Dominator Harmony',T.buff,''],
+      ['Transcendent Flame Burst',T.active,'Transcendent'],
+    ]),
+    doomcryer: A([
+      ['Chant of Magnus',T.buff,''],['Chant of Berserker',T.buff,''],['Mass Chant',T.active,''],
+      ['Final Chant',T.active,''],['War Chant',T.active,''],['Blood Bond',T.active,'Echo'],
+      ['Prophecy of Victory',T.buff,'Echo'],['Cacophony of War',T.active,'Echo'],
+      ['Doomcryer Spirit',T.passive,''],['Body of the Doomcryer',T.passive,''],['Doomcryer Harmony',T.buff,''],
+    ]),
+    bountyHunter: A([
+      ['Spoil',T.active,''],['Sweeper',T.active,''],['Lucky Strike',T.active,''],
+      ['Bounty Hunter Spirit',T.passive,''],['Body of the Bounty Hunter',T.passive,''],
+      ['Bounty Hunter Harmony',T.buff,''],['Transcendent Spoil Crush',T.active,'Transcendent'],
+    ]),
+    fortuneSeeker: A([
+      ['Spoil Crush',T.active,''],['Lucky Strike',T.active,''],
+      ['Fortune Seeker Spirit',T.passive,''],['Body of the Fortune Seeker',T.passive,''],
+      ['Fortune Seeker Harmony',T.buff,''],['Transcendent Spoil Crush',T.active,'Transcendent'],
+    ]),
+    artisanClass: A([
+      ['Craft Mastery',T.passive,''],['Summon Mechanic Golem',T.active,''],['Repair Golem',T.active,''],
+      ['Artisan Spirit',T.passive,''],['Artisan Harmony',T.buff,''],
+    ]),
+    warsmith: A([
+      ['Craft Mastery',T.passive,''],['Summon Siege Golem',T.active,''],['Summon Mechanic Golem',T.active,''],
+      ['Repair Golem',T.active,''],['Warsmith Spirit',T.passive,''],['Warsmith Harmony',T.buff,''],
+    ]),
+    maestro: A([
+      ['Summon Merchant Golem',T.active,''],['Golem Armor',T.active,''],
+      ['Maestro Spirit',T.passive,''],['Body of the Maestro',T.passive,''],['Maestro Harmony',T.buff,''],
+      ['Transcendent Hammer Crush',T.active,'Transcendent'],
+    ]),
+
+    kamaelSoldier: A([
+      ['Soul Thrust',T.active,''],['Soul Absorb',T.active,''],['Light Armor Mastery',T.passive,''],
+      ['Kamael Spirit',T.buff,''],
+    ]),
+    trooper: A([
+      ['Soul Crush',T.active,''],['Berserker',T.active,''],['Critical Power',T.passive,''],
+      ['Dagger Mastery',T.passive,''],
+    ]),
+    doombringer: A([
+      ['Doom Blade',T.active,''],['Soul Explosion',T.active,''],['Soul Rage',T.active,''],
+      ['Dissonance',T.active,''],['Betrayal Mark',T.active,''],['Doombringer Spirit',T.passive,''],
+      ['Body of Doombringer',T.passive,''],['Pride of Kamael',T.passive,''],['Master of Combat',T.passive,'Essence'],
+      ['Doombringer Harmony',T.buff,''],
+    ]),
+    soulHound: A([
+      ['Lightning Barrier',T.active,''],['Soul Vortex Destruction',T.active,''],['Soul Ignition',T.active,''],
+      ['Dark Smash',T.active,''],['Soul Hound Spirit',T.passive,''],['Body of Soul Hound',T.passive,''],
+      ['Soul Hound Harmony',T.buff,''],
+    ]),
+    warder: A([
+      ['Crossbow Mastery',T.passive,''],['Install Trap',T.active,''],['Pinpoint Shot',T.active,''],
+      ['Stun Shot',T.active,''],
+    ]),
+    trickster: A([
+      ['Seven Arrow Crossbow',T.active,''],['Install Trap',T.active,''],['Dead Eye',T.active,''],
+      ['Pinpoint Shot',T.active,''],['Trickster Spirit',T.passive,''],['Body of Trickster',T.passive,''],
+      ['Trickster Harmony',T.buff,''],
+    ]),
+
+    deathKnight: A([
+      ['Death Spike',T.active,''],['Death Raid',T.active,''],['Dark Explosion',T.active,''],
+      ['Death Mark',T.active,''],['Soul Drain',T.active,''],['Dark Shield',T.active,''],
+      ['Abyss Gaze',T.active,''],['Death Storm',T.active,'AoE'],['Deadly Counter',T.active,''],
+      ['Dark Weapon',T.buff,''],['Dark Armor',T.buff,''],['Ultimate Death Knight',T.passive,''],
+      ["Death Knight's Will",T.passive,''],['DP Mastery',T.passive,'Death Points'],
+      ['Transcendent Death Spike',T.active,'Transcendent'],
+    ]),
+    warg: A([
+      ['Upward Strike',T.active,'Human'],['Devastating Assault',T.active,'Human'],
+      ['Powerful Fists',T.active,'Human'],['Rush',T.active,''],['Fist Mastery',T.passive,''],
+      ['Light Armor Mastery',T.passive,''],["Warg's Will",T.buff,''],
+      ['Double Claw Strike',T.active,'Wolf'],['Vortex of Claws',T.active,'Wolf'],
+      ['Transcendent Double Claw Strike',T.active,'Transcendent'],['Wild Rush',T.active,'Wolf'],
+      ['Primal Howl',T.active,'Wolf'],["Moon's Grace",T.buff,''],['Wolf Transformation',T.toggle,''],
+      ['Warg Spirit',T.passive,''],['Warg Mastery',T.passive,''],
+    ]),
+    assassin: A([
+      ['Assassination',T.active,''],['Shadow Strike',T.active,''],['Shadow Dash',T.active,''],
+      ['Blade Rush',T.active,''],['Shadow Blast',T.active,''],['Phantom Strike',T.active,''],
+      ['Lethal Shadow',T.active,''],['Resolve to Kill',T.active,''],["Assassin's Mark",T.debuff,''],
+      ['Chain Kill',T.active,''],['Shadow Step',T.active,''],['Path of the Assassin',T.passive,''],
+      ['Brutality',T.buff,''],["Assassin's Focus",T.passive,''],["Assassin's Evasion",T.passive,''],
+      ['Light Armor Mastery',T.passive,''],['Dagger Mastery',T.passive,''],["Assassin's Harmony",T.buff,''],
+    ]),
+    vanguardRider: A([
+      ['Lance Charge',T.active,''],['Mounted Thrust',T.active,''],['Trample',T.active,'AoE'],
+      ['Battle Rush',T.active,''],['Mounted Whirlwind',T.active,'AoE'],['Devastating Charge',T.active,''],
+      ['War Banner',T.active,''],['Beast Roar',T.active,''],['Thunder Crash',T.active,''],
+      ['Mounted Slam',T.active,''],["Rider's Mastery",T.passive,''],['Lance Mastery',T.passive,''],
+      ['Heavy Armor Mastery',T.passive,''],['Mounted Combat',T.passive,''],['BP Mastery',T.passive,''],
+      ['Vanguard Spirit',T.passive,''],['Body of the Vanguard',T.passive,''],["Vanguard's Harmony",T.buff,''],
+      ['Battle Mount',T.toggle,''],["Rider's Will",T.buff,''],
+    ]),
+    samurai: A([
+      ['Iaijutsu',T.active,''],['Crescent Slash',T.active,''],['Whirlwind Cut',T.active,'AoE'],
+      ['Katana Mastery',T.passive,''],['Piercing Strike',T.active,''],['Focused Strike',T.active,''],
+      ['Wind Blade',T.active,''],['Sakura Storm',T.active,'AoE'],['Bushido Stance',T.toggle,''],
+      ['Counter Slash',T.active,''],['Rising Dragon',T.active,''],['Final Cut',T.active,''],
+      ['Samurai Spirit',T.passive,''],['Way of the Blade',T.passive,''],['Body of the Samurai',T.passive,''],
+      ['Honor Code',T.buff,''],["Samurai's Harmony",T.buff,''],['Katana Focus',T.passive,''],
+      ['Light Armor Mastery',T.passive,''],['Transcendent Iaijutsu',T.active,'Transcendent'],
+    ]),
+    stormBlaster: A([
+      ['Quick Shot',T.active,''],['Burst Fire',T.active,''],['Snipe',T.active,''],['Rapid Fire',T.active,''],
+      ['Piercing Shot',T.active,''],['Explosive Shot',T.active,'AoE'],['Chain Shot',T.active,''],
+      ['Storm Shot',T.active,''],['Wind Barrage',T.active,'AoE'],['Aimed Shot',T.active,''],
+      ['Evasive Shot',T.active,''],['Gun Mastery',T.passive,''],['Light Armor Mastery',T.passive,''],
+      ["Sylph's Grace",T.passive,''],['Wind Walker',T.passive,''],['Storm Blaster Spirit',T.passive,''],
+      ['Body of the Storm Blaster',T.passive,''],['Storm Blaster Harmony',T.buff,''],
+      ['Transcendent Storm Shot',T.active,'Transcendent'],
+    ]),
+    shinemaker: A([
+      ['Light Burst',T.active,''],['Radiant Strike',T.active,''],['Prismatic Ray',T.active,''],
+      ['Shining Nova',T.active,'AoE'],['Crystal Arrow',T.active,''],['Luminous Wave',T.active,'AoE'],
+      ['Star Fall',T.active,''],['Shining Barrier',T.buff,''],['Light of Creation',T.buff,''],
+      ['Brilliant Aura',T.buff,''],['Purifying Light',T.active,''],
+      ['ShineMaker Spirit',T.passive,''],['Body of the ShineMaker',T.passive,''],["ShineMaker's Harmony",T.buff,''],
+    ]),
+    divineTemplar: A([
+      ['Holy Strike',T.active,''],['Shield of Light',T.active,''],['Divine Charge',T.active,''],
+      ['Lord Knight',T.active,'Echo'],['Sacred Aegis',T.active,''],['Celestial Punishment',T.active,''],
+      ['Holy Chain',T.active,''],['Divine Shield',T.active,''],['Ultimate Divine Defense',T.active,''],
+      ['Divine Templar Spirit',T.passive,''],['Body of Divine Templar',T.passive,''],
+      ['Holy Shield Mastery',T.passive,''],['Heavy Armor Mastery',T.passive,''],
+      ['Divine Templar Harmony',T.buff,''],["Lord Knight's Aura",T.buff,''],
+    ]),
+    bloodRose: A([
+      ['Thorn Whip',T.active,''],['Rose Tempest',T.active,'AoE'],['Blood Drain',T.active,''],
+      ['Crimson Spike',T.active,''],['Vine Bind',T.active,'CC'],['Bloom of Destruction',T.active,''],
+      ['Blood Rose Spirit',T.passive,''],['Body of the Blood Rose',T.passive,''],['Thorn Armor',T.passive,''],
+      ['Blood Rose Harmony',T.buff,''],["Rose's Blessing",T.buff,''],
+    ]),
+    elementWeaver: A([
+      ['Elemental Blast',T.active,''],['Fire Weave',T.active,''],['Ice Weave',T.active,''],
+      ['Wind Weave',T.active,''],['Elemental Convergence',T.active,'AoE'],['Ultimate Dispel',T.active,''],
+      ['Elemental Overload',T.active,''],['Element Weaver Spirit',T.passive,''],
+      ['Body of Element Weaver',T.passive,''],['Elemental Mastery',T.passive,''],
+      ['Robe Mastery',T.passive,''],['Element Weaver Harmony',T.buff,''],
+    ]),
+  };
+
+  function uniq(arr) { return [...new Set(arr.filter(Boolean))]; }
+
+  function installClassSkills(canonical, ids) {
+    const aliases = CLASS_ALIASES[canonical] || [canonical];
+    const merged = uniq(ids);
+
+    CLASS_SKILLS[canonical] = uniq([...(CLASS_SKILLS[canonical]||[]), ...merged]);
+    if (!SKILL_TREE[canonical]) {
+      SKILL_TREE[canonical] = merged.map((id, i) => ({ id, tier: Math.floor(i/5), x: i%5, y: Math.floor(i/5) }));
+    }
+
+    aliases.forEach(classId => {
+      CLASS_SKILLS[classId] = uniq([...(CLASS_SKILLS[classId]||[]), ...merged]);
+      if (!SKILL_TREE[classId]) SKILL_TREE[classId] = SKILL_TREE[canonical];
+      if (CLASSES[classId]) {
+        CLASSES[classId].skillTree = CLASSES[classId].skillTree || canonical;
+        CLASSES[classId].essence547 = true;
+      }
+    });
+  }
+
+  Object.entries(DATA).forEach(([canonical, ids]) => installClassSkills(canonical, ids));
+
+  E.CLASS_NAME_TO_ID_ECHO = {
+    ...(E.CLASS_NAME_TO_ID_ECHO||{}),
+    'Element Weaver':'elementWeaverS1', 'Elemental Weaver':'elementWeaverS1',
+    'Divine Templar':'divineTemplarS1', 'Divine Knight':'divineTemplarS1',
+    'Storm Blaster':'stormBlaster', 'Vanguard Rider':'vanguardRider',
+    'Blood Rose':'bloodRoseS1', 'Samurai':'samurai',
+    'Assassin':'assassinBase', 'Warg':'wargBase', 'Death Knight':'deathKnight',
+  };
+
+  E.__ESSENCE_547_SKILL_PACK__ = {
+    installed: true, classes: Object.keys(DATA).length,
+    skills: Object.keys(SKILL_DEFS).length,
+    generatedAt: 'Echo of Elements 547',
+  };
+  console.info('[Echo Skills] Essence 547 instalado:', E.__ESSENCE_547_SKILL_PACK__);
+
+})(typeof window !== 'undefined' ? window : globalThis);
+
