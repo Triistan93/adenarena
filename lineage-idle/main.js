@@ -471,14 +471,16 @@ function getClass(c) {
 function classSatisfies(playerClass, reqClass) {
   if (!reqClass) return true;
   if (!playerClass) return false;
-  if (playerClass === reqClass) return true;
-  const pDef = getClass(playerClass);
-  if (!pDef) return false;
-  if (pDef.archetype === reqClass) return true;
-  if (pDef.parent === reqClass) return true;
-  if (pDef.parent) {
-    const parentDef = getClass(pDef.parent);
-    if (parentDef && (parentDef.archetype === reqClass || parentDef.parent === reqClass)) return true;
+  // Walk the full ancestor chain (up to 6 levels for 4-stage system)
+  let current = playerClass;
+  const visited = new Set();
+  while (current && !visited.has(current)) {
+    visited.add(current);
+    if (current === reqClass) return true;
+    const def = getClass(current);
+    if (!def) break;
+    if (def.archetype === reqClass) return true;
+    current = def.parent;
   }
   return false;
 }
@@ -1276,10 +1278,7 @@ const TREE_NODE_W = 110; const TREE_NODE_H = 78; const TREE_PAD_X = 14; const TR
 function updateSkillUI() {
   const wrap = el('skill-tree');
   if (!wrap) return;
-  const cols = 5, rows = 7;
-  const W = cols * TREE_NODE_W + TREE_PAD_X * 2;
-  const H = rows * TREE_NODE_H + TREE_PAD_Y * 2;
-  wrap.style.width = W + 'px'; wrap.style.height = H + 'px';
+  const cols = 5;
 
   const pDef = getClass(state.class);
   const activeTreeClass = pDef?.archetype || 'fighter';
@@ -1292,18 +1291,49 @@ function updateSkillUI() {
     if (skillsByTier[t]) skillsByTier[t].push([id, def]);
   }
 
+  // First pass: assign positions from explicit layout
+  const usedPositions = new Set();
   for (let c = 0; c < 5; c++) {
     const list = skillsByTier[c] || [];
-    list.forEach(([id, def], idx) => {
+    list.forEach(([id, def]) => {
       const explicit = SKILL_TREE_LAYOUT[id];
-      const col = (explicit && explicit.col !== undefined) ? explicit.col : c;
-      const row = (explicit && explicit.row !== undefined) ? explicit.row : idx;
+      if (explicit && explicit.col !== undefined && explicit.row !== undefined) {
+        const col = explicit.col;
+        const row = explicit.row;
+        pos[id] = {
+          x: TREE_PAD_X + col * TREE_NODE_W + TREE_NODE_W / 2,
+          y: TREE_PAD_Y + row * TREE_NODE_H + TREE_NODE_H / 2
+        };
+        usedPositions.add(`${col},${row}`);
+      }
+    });
+  }
+  // Second pass: auto-assign positions for skills without explicit layout
+  const colCounters = [0, 0, 0, 0, 0];
+  for (let c = 0; c < 5; c++) {
+    const list = skillsByTier[c] || [];
+    list.forEach(([id, def]) => {
+      if (pos[id]) return; // already assigned
+      let row = colCounters[c];
+      // Find next non-colliding row in this column
+      while (usedPositions.has(`${c},${row}`)) row++;
+      colCounters[c] = row + 1;
+      usedPositions.add(`${c},${row}`);
       pos[id] = {
-        x: TREE_PAD_X + col * TREE_NODE_W + TREE_NODE_W / 2,
+        x: TREE_PAD_X + c * TREE_NODE_W + TREE_NODE_W / 2,
         y: TREE_PAD_Y + row * TREE_NODE_H + TREE_NODE_H / 2
       };
     });
   }
+
+  const maxRow = Object.values(pos).reduce((m, p) => {
+    const row = Math.round((p.y - TREE_PAD_Y - TREE_NODE_H / 2) / TREE_NODE_H);
+    return Math.max(m, row);
+  }, 6);
+  const rows = maxRow + 2;
+  const W = cols * TREE_NODE_W + TREE_PAD_X * 2;
+  const H = rows * TREE_NODE_H + TREE_PAD_Y * 2;
+  wrap.style.width = W + 'px'; wrap.style.height = H + 'px';
 
   let lines = '';
   for (const [id, reqs] of Object.entries(SKILL_REQS)) {
