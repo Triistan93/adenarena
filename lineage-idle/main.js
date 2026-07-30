@@ -1599,14 +1599,15 @@ function getItemIcon(def) {
 
   const iconIndex = (typeof window !== 'undefined' && window.IconIndex) ? window.IconIndex : ((D() && D().ICON_MAP) ? D().ICON_MAP : {});
   let mappedPath = iconIndex[id] || iconIndex[rawKey] || iconIndex[baseName] || fileName;
-  if (mappedPath) mappedPath = mappedPath.split('/').pop();
-  else mappedPath = fileName;
+  if (!mappedPath) mappedPath = fileName;
 
+  const fileOnly = mappedPath.split('/').pop();
   const urlPrimary = getAssetUrl(`img/icons/${mappedPath}`);
-  const urlArmors = getAssetUrl(`img/icons/Armors/${mappedPath}`);
-  const urlWeapons = getAssetUrl(`img/icons/Weapons/${mappedPath}`);
+  const urlWeapons = getAssetUrl(`img/icons/Weapons/${fileOnly}`);
+  const urlArmors = getAssetUrl(`img/icons/Armors/${fileOnly}`);
+  const urlBase = getAssetUrl(`img/icons/${fileOnly}`);
 
-  return `<img src="${urlPrimary}" alt="${def.name || ''}" class="item-icon-img" onerror="this.onerror=function(){this.onerror=function(){this.style.display='none';if(this.nextElementSibling)this.nextElementSibling.style.display='inline-block';}; this.src='${urlWeapons}';}; this.src='${urlArmors}';" style="width:28px; height:28px; object-fit:contain; vertical-align:middle;" /><span class="item-icon-fallback" style="display:none; font-size:18px;">${emoji}</span>`; 
+  return `<img src="${urlPrimary}" alt="${def.name || ''}" class="item-icon-img" onerror="this.onerror=function(){this.onerror=function(){this.onerror=function(){this.style.display='none';if(this.nextElementSibling)this.nextElementSibling.style.display='inline-block';}; this.src='${urlBase}';}; this.src='${urlArmors}';}; this.src='${urlWeapons}';" style="width:28px; height:28px; object-fit:contain; vertical-align:middle;" /><span class="item-icon-fallback" style="display:none; font-size:18px;">${emoji}</span>`; 
 }
 
 let tooltipTimer = null;
