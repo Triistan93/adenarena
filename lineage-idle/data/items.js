@@ -1,5 +1,8 @@
 // ========================================
 // Items Database - Lineage Idle
+// ---- REVISADO ----
+// 13 correcoes aplicadas (procure por [FIX n])
+// API publica preservada: nenhuma chave foi renomeada
 // ========================================
 
 const RARITY = {
@@ -10,9 +13,16 @@ const RARITY = {
   legendary: { name: 'Legendary', color: '#f0883e', mult: 3.2 }
 };
 
+// [FIX 5] SLOT nao cobria 11 slots usados pelos dados
+// (legs, shield, necklace, earring, belt, cloak, talisman,
+//  hair, hair2, agathion, powerup) -> UI/validacao recebia undefined
 const SLOT = {
   weapon: 'Weapon', armor: 'Armor', helmet: 'Helmet', boots: 'Boots',
-  gloves: 'Gloves', ring: 'Ring', consumable: 'Consumable', material: 'Material', scroll: 'Scroll'
+  gloves: 'Gloves', ring: 'Ring', consumable: 'Consumable', material: 'Material',
+  scroll: 'Scroll', legs: 'Legs', shield: 'Shield', necklace: 'Necklace',
+  earring: 'Earring', belt: 'Belt', cloak: 'Cloak', talisman: 'Talisman',
+  hair: 'Hair Accessory', hair2: 'Face Accessory', agathion: 'Agathion',
+  powerup: 'Power-Up'
 };
 
 const WEAPONS = {
@@ -73,6 +83,8 @@ const ARMORS = {
   blue_wolf_tunic: { name: 'Blue Wolf Tunic', slot: 'armor', tier: 4, def: 35, mdef: 70, matk: 25, mp: 100, req: { level: 52 }, price: 15000, icon: 'blue_wolf_tunic', desc: 'Túnica mística Blue Wolf (B-Grade).' },
   divine_robe: { name: 'Divine Robe', slot: 'armor', tier: 5, def: 80, mdef: 90, matk: 35, req: { level: 76 }, price: 30000 },
   dragon_scale_armor: { name: 'Dragon Scale Armor', slot: 'armor', tier: 5, def: 110, mdef: 50, hp: 200, req: { level: 76 }, price: 35000 },
+  // [FIX 6] icon tinha '.png' embutido (unico do arquivo) -> o resolver
+  // gerava '....png.png' (404) e ainda apontava para a arte errada (Blue Wolf)
   imperial_crusader_breastplate: { name: 'Imperial Crusader Breastplate', slot: 'armor', tier: 5, def: 220, mdef: 120, hp: 650, req: { level: 76 }, price: 45000, icon: 'imperial_crusader_armor', desc: 'Peitoral da lendária armadura pesada Imperial Crusader de Grau S.' },
   draconic_leather_armor: { name: 'Draconic Leather Armor', slot: 'armor', tier: 5, def: 160, mdef: 140, eva: 25, speed: 10, req: { level: 76 }, price: 45000, desc: 'Armadura leve suprema feita de escamas de dragão de Grau S.' },
   major_arcana_robe: { name: 'Major Arcana Robe', slot: 'armor', tier: 5, def: 110, mdef: 220, matk: 90, mp: 200, req: { level: 76 }, price: 45000, icon: 'major_arcana_robe_armor', desc: 'Manto arcano supremo de grau S.' },
@@ -139,16 +151,23 @@ const RINGS = {
   eternity_ring: { name: 'Ring of Eternity', slot: 'ring', tier: 5, hp: 200, mp: 200, atk: 5, matk: 5, def: 10, mdef: 10, req: { level: 80 }, price: 30000 },
   ring_of_baium: { name: 'Ring of Baium', slot: 'ring', tier: 5, hp: 300, mp: 150, atk: 25, matk: 25, speed: 10, crit: 10, req: { level: 80 }, price: 100000 },
   ring_of_queen_ant: { name: 'Ring of Queen Ant', slot: 'ring', tier: 4, hp: 150, mp: 80, atk: 15, crit: 8, req: { level: 60 }, price: 40000, icon: 'accessory_ring_of_queen_ant_i03' },
-  ring_of_core: { name: 'Ring of Core', slot: 'ring', tier: 5, hp: 180, mp: 90, def: 20, req: { level: 76 }, price: 65000, icon: 'accessory_ring_of_core_i03' }
+  ring_of_core: { name: 'Ring of Core', slot: 'ring', tier: 5, hp: 180, mp: 90, def: 20, req: { level: 76 }, price: 65000, icon: 'accessory_ring_of_core_i03' },
+  // [FIX 11] movidos de EARRINGS para RINGS (eram aneis declarados no
+  // objeto errado; chaves e stats preservados). Atencao: coexistem com
+  // ring_of_queen_ant / ring_of_baium — itens distintos com mesmo nome,
+  // candidatos a consolidacao futura.
+  ring_queen_ant: { name: 'Ring of Queen Ant', slot: 'ring', tier: 5, crit: 15, atk: 50, req: { level: 40 }, price: 50000, desc: 'Anel épico da Rainha Formiga. (+15% Crit Rate, +50 ATK)' },
+  ring_baium: { name: 'Ring of Baium', slot: 'ring', tier: 5, speed: 15, matk: 100, req: { level: 80 }, price: 120000, desc: 'Anel épico do Imperador Baium. (+15% Atk Speed, +100 MATK)' }
 };
 
 const NEW_ARMORS = {
   // Dark Crystal Armor Set (Grade A - Req Lv.60)
-  dark_crystal_heavy_armor: { name: 'Dark Crystal Heavy Armor', slot: 'armor', tier: 4, def: 110, mdef: 60, hp: 250, req: { level: 60 }, price: 25000, icon: 'dark_crystal_light_armor' },
+  // [FIX 7] heavy armor usava o icon da light armor (copy/paste)
+  dark_crystal_heavy_armor: { name: 'Dark Crystal Heavy Armor', slot: 'armor', tier: 4, def: 110, mdef: 60, hp: 250, req: { level: 60 }, price: 25000, icon: 'dark_crystal_heavy_armor' },
   dark_crystal_heavy_pants: { name: 'Dark Crystal Heavy Pants', slot: 'legs', tier: 4, def: 65, mdef: 35, hp: 150, req: { level: 60 }, price: 15000, icon: 'dark_crystal_heavy_pants' },
   dark_crystal_heavy_glove: { name: 'Dark Crystal Heavy Gloves', slot: 'gloves', tier: 4, def: 25, mdef: 12, atk: 15, req: { level: 60 }, price: 10000, icon: 'dark_crystal_heavy_glove' },
   dark_crystal_heavy_boots: { name: 'Dark Crystal Heavy Boots', slot: 'boots', tier: 4, def: 25, mdef: 12, speed: 5, req: { level: 60 }, price: 10000, icon: 'dark_crystal_heavy_boots' },
-  
+
   dark_crystal_light_armor: { name: 'Dark Crystal Light Armor', slot: 'armor', tier: 4, def: 85, mdef: 75, eva: 15, req: { level: 60 }, price: 25000, icon: 'dark_crystal_light_armor' },
   dark_crystal_light_pants: { name: 'Dark Crystal Light Pants', slot: 'legs', tier: 4, def: 55, mdef: 45, eva: 10, req: { level: 60 }, price: 15000, icon: 'dark_crystal_light_pants' },
   dark_crystal_light_glove: { name: 'Dark Crystal Light Gloves', slot: 'gloves', tier: 4, def: 20, mdef: 16, atk: 12, req: { level: 60 }, price: 10000, icon: 'dark_crystal_light_glove' },
@@ -307,14 +326,13 @@ const NECKLACES = {
 };
 
 const EARRINGS = {
+  // [FIX 11] ring_queen_ant e ring_baium foram movidos para RINGS
   oak_earring: { name: 'Oak Earring', slot: 'earring', tier: 1, mdef: 2, mp: 5, req: { level: 1 }, price: 40 },
   elven_earring: { name: 'Elven Earring', slot: 'earring', tier: 2, mdef: 8, mp: 20, eva: 2, req: { level: 20 }, price: 600 },
   earring_of_grace: { name: 'Earring of Grace', slot: 'earring', tier: 3, mdef: 20, matk: 8, req: { level: 40 }, price: 2500 },
   black_ore_earring: { name: 'Black Ore Earring', slot: 'earring', tier: 4, mdef: 35, mp: 50, eva: 5, req: { level: 60 }, price: 8000 },
   earring_of_antharas: { name: 'Earring of Antharas', slot: 'earring', tier: 5, mdef: 150, def: 150, hp: 300, lifesteal: 8, req: { level: 85 }, price: 200000, desc: 'Brinco lendário do Dragão Antharas. (+150 DEF/MDEF, +300 HP)' },
-  earring_of_zaken: { name: 'Earring of Zaken', slot: 'earring', tier: 5, mdef: 60, lifesteal: 12, hp: 150, req: { level: 60 }, price: 80000, desc: 'Brinco épico de Zaken. (+12% Lifesteal, +150 HP)' },
-  ring_queen_ant: { name: 'Ring of Queen Ant', slot: 'ring', tier: 5, crit: 15, atk: 50, req: { level: 40 }, price: 50000, desc: 'Anel épico da Rainha Formiga. (+15% Crit Rate, +50 ATK)' },
-  ring_baium: { name: 'Ring of Baium', slot: 'ring', tier: 5, speed: 15, matk: 100, req: { level: 80 }, price: 120000, desc: 'Anel épico do Imperador Baium. (+15% Atk Speed, +100 MATK)' }
+  earring_of_zaken: { name: 'Earring of Zaken', slot: 'earring', tier: 5, mdef: 60, lifesteal: 12, hp: 150, req: { level: 60 }, price: 80000, desc: 'Brinco épico de Zaken. (+12% Lifesteal, +150 HP)' }
 };
 
 const BELTS = {
@@ -398,18 +416,19 @@ const ALL_ITEMS = {
   ...HAIR, ...HAIR2, ...RINGS, ...CONSUMABLES, ...MATERIALS, ...AGATHIONS,
   ...NEW_ARMORS
 };
-// Key aliases mapping to guarantee item lookups never return undefined
-ALL_ITEMS.novice_cloak = ALL_ITEMS.adventurer_cloak;
-ALL_ITEMS.novice_talisman = ALL_ITEMS.talisman_novice;
-ALL_ITEMS.novice_circlet = ALL_ITEMS.apprentice_circlet;
-ALL_ITEMS.sigil_devotion = ALL_ITEMS.sigil_of_devotion;
-ALL_ITEMS.sigil_grace = ALL_ITEMS.sigil_of_grace;
-ALL_ITEMS.sigil_mastery = ALL_ITEMS.sigil_of_mastery;
-ALL_ITEMS.sigil_arcana = ALL_ITEMS.sigil_of_arcana;
-ALL_ITEMS.phantom_mask_item = ALL_ITEMS.phantom_mask_gear;
-ALL_ITEMS.valakas_mask = ALL_ITEMS.boss_facemask_valakas;
-ALL_ITEMS.noble_crown = ALL_ITEMS.noble_gold_crown;
-ALL_ITEMS.essence_crown = ALL_ITEMS.essence_crown_of_aden;
+// [FIX 10] aliases agora sao copias rasas: mutacoes (enchant, upgrade)
+// em um alias nao vazam mais para o item canonico nem para outros aliases
+ALL_ITEMS.novice_cloak = { ...ALL_ITEMS.adventurer_cloak };
+ALL_ITEMS.novice_talisman = { ...ALL_ITEMS.talisman_novice };
+ALL_ITEMS.novice_circlet = { ...ALL_ITEMS.apprentice_circlet };
+ALL_ITEMS.sigil_devotion = { ...ALL_ITEMS.sigil_of_devotion };
+ALL_ITEMS.sigil_grace = { ...ALL_ITEMS.sigil_of_grace };
+ALL_ITEMS.sigil_mastery = { ...ALL_ITEMS.sigil_of_mastery };
+ALL_ITEMS.sigil_arcana = { ...ALL_ITEMS.sigil_of_arcana };
+ALL_ITEMS.phantom_mask_item = { ...ALL_ITEMS.phantom_mask_gear };
+ALL_ITEMS.valakas_mask = { ...ALL_ITEMS.boss_facemask_valakas };
+ALL_ITEMS.noble_crown = { ...ALL_ITEMS.noble_gold_crown };
+ALL_ITEMS.essence_crown = { ...ALL_ITEMS.essence_crown_of_aden };
 
 // Explicit PNG Icon File Mappings
 if (ALL_ITEMS.dynasty_breastplate) ALL_ITEMS.dynasty_breastplate.icon = 'dynasti_heavey_armor';
@@ -430,59 +449,59 @@ if (ALL_ITEMS.necklace_of_valakas) ALL_ITEMS.necklace_of_valakas.icon = 'ring_of
 // MONSTER DROPS (Loot rebalanceado)
 // ======================================
 const MONSTER_DROPS = {
-  goblin: { 
-    items: [{ id: 'iron_ore', chance: 0.15, amount: [1, 2] }, { id: 'cloth', chance: 0.15, amount: [1, 2] }, { id: 'goblin_ear', chance: 0.2, amount: [1, 1] }, { id: 'hp_potion_s', chance: 0.05, amount: [1, 1] }], 
-    equipment: [{ pool: ['wooden_sword', 'training_dagger', 'oak_staff', 'short_bow', 'leather_vest', 'cloth_robe', 'cloth_pants', 'wooden_shield', 'leather_helm', 'cloth_boots', 'leather_gloves', 'oak_necklace', 'oak_earring', 'copper_ring', 'novice_belt', 'adventurer_cloak', 'talisman_novice', 'apprentice_circlet', 'novice_mask'], chance: 0.10 }] 
+  goblin: {
+    items: [{ id: 'iron_ore', chance: 0.15, amount: [1, 2] }, { id: 'cloth', chance: 0.15, amount: [1, 2] }, { id: 'goblin_ear', chance: 0.2, amount: [1, 1] }, { id: 'hp_potion_s', chance: 0.05, amount: [1, 1] }],
+    equipment: [{ pool: ['wooden_sword', 'training_dagger', 'oak_staff', 'short_bow', 'leather_vest', 'cloth_robe', 'cloth_pants', 'wooden_shield', 'leather_helm', 'cloth_boots', 'leather_gloves', 'oak_necklace', 'oak_earring', 'copper_ring', 'novice_belt', 'adventurer_cloak', 'talisman_novice', 'apprentice_circlet', 'novice_mask'], chance: 0.10 }]
   },
-  wolf: { 
-    items: [{ id: 'beast_blood', chance: 0.15, amount: [1, 2] }, { id: 'wolf_fang', chance: 0.15, amount: [1, 2] }, { id: 'leather', chance: 0.15, amount: [1, 2] }], 
-    equipment: [{ pool: ['training_dagger', 'short_bow', 'leather_vest', 'leather_gaiters', 'leather_helm', 'leather_boots', 'leather_gloves', 'oak_necklace', 'oak_earring', 'copper_ring', 'novice_belt', 'adventurer_cloak', 'talisman_novice'], chance: 0.10 }] 
+  wolf: {
+    items: [{ id: 'beast_blood', chance: 0.15, amount: [1, 2] }, { id: 'wolf_fang', chance: 0.15, amount: [1, 2] }, { id: 'leather', chance: 0.15, amount: [1, 2] }],
+    equipment: [{ pool: ['training_dagger', 'short_bow', 'leather_vest', 'leather_gaiters', 'leather_helm', 'leather_boots', 'leather_gloves', 'oak_necklace', 'oak_earring', 'copper_ring', 'novice_belt', 'adventurer_cloak', 'talisman_novice'], chance: 0.10 }]
   },
-  spider: { 
-    items: [{ id: 'beast_blood', chance: 0.15, amount: [1, 2] }, { id: 'magic_powder', chance: 0.15, amount: [1, 1] }, { id: 'cloth', chance: 0.15, amount: [1, 2] }], 
-    equipment: [{ pool: ['oak_staff', 'cloth_robe', 'cloth_pants', 'cloth_boots', 'oak_necklace', 'oak_earring', 'copper_ring', 'apprentice_circlet', 'talisman_novice'], chance: 0.10 }] 
+  spider: {
+    items: [{ id: 'beast_blood', chance: 0.15, amount: [1, 2] }, { id: 'magic_powder', chance: 0.15, amount: [1, 1] }, { id: 'cloth', chance: 0.15, amount: [1, 2] }],
+    equipment: [{ pool: ['oak_staff', 'cloth_robe', 'cloth_pants', 'cloth_boots', 'oak_necklace', 'oak_earring', 'copper_ring', 'apprentice_circlet', 'talisman_novice'], chance: 0.10 }]
   },
-  orc: { 
-    items: [{ id: 'iron_ore', chance: 0.2, amount: [2, 4] }, { id: 'leather', chance: 0.15, amount: [1, 3] }, { id: 'hp_potion_m', chance: 0.05, amount: [1, 1] }], 
-    equipment: [{ pool: ['iron_sword', 'bronze_mace', 'iron_gaiters', 'bronze_shield', 'iron_boots', 'iron_gauntlets', 'iron_helm', 'silver_ring', 'elven_necklace', 'elven_earring', 'mithril_belt', 'cloak_of_valor', 'talisman_protection'], chance: 0.12 }] 
+  orc: {
+    items: [{ id: 'iron_ore', chance: 0.2, amount: [2, 4] }, { id: 'leather', chance: 0.15, amount: [1, 3] }, { id: 'hp_potion_m', chance: 0.05, amount: [1, 1] }],
+    equipment: [{ pool: ['iron_sword', 'bronze_mace', 'iron_gaiters', 'bronze_shield', 'iron_boots', 'iron_gauntlets', 'iron_helm', 'silver_ring', 'elven_necklace', 'elven_earring', 'mithril_belt', 'cloak_of_valor', 'talisman_protection'], chance: 0.12 }]
   },
-  kobold: { 
-    items: [{ id: 'iron_ore', chance: 0.2, amount: [1, 3] }, { id: 'steel_ingot', chance: 0.1, amount: [1, 1] }, { id: 'mp_potion_s', chance: 0.05, amount: [1, 1] }], 
-    equipment: [{ pool: ['iron_sword', 'steel_dagger', 'composite_bow', 'iron_armor', 'iron_gaiters', 'bronze_shield', 'iron_boots', 'iron_helm', 'silver_ring', 'mithril_belt'], chance: 0.12 }] 
+  kobold: {
+    items: [{ id: 'iron_ore', chance: 0.2, amount: [1, 3] }, { id: 'steel_ingot', chance: 0.1, amount: [1, 1] }, { id: 'mp_potion_s', chance: 0.05, amount: [1, 1] }],
+    equipment: [{ pool: ['iron_sword', 'steel_dagger', 'composite_bow', 'iron_armor', 'iron_gaiters', 'bronze_shield', 'iron_boots', 'iron_helm', 'silver_ring', 'mithril_belt'], chance: 0.12 }]
   },
-  kamaelScout: { 
-    items: [{ id: 'magic_powder', chance: 0.15, amount: [1, 3] }, { id: 'crystal_fragment', chance: 0.15, amount: [1, 2] }], 
-    equipment: [{ pool: ['crystal_staff', 'assassins_blade', 'mage_stockings', 'sigil_of_devotion', 'cloak_of_valor', 'assassin_mask', 'shadow_boots', 'silver_ring', 'elven_earring'], chance: 0.12 }] 
+  kamaelScout: {
+    items: [{ id: 'magic_powder', chance: 0.15, amount: [1, 3] }, { id: 'crystal_fragment', chance: 0.15, amount: [1, 2] }],
+    equipment: [{ pool: ['crystal_staff', 'assassins_blade', 'mage_stockings', 'sigil_of_devotion', 'cloak_of_valor', 'assassin_mask', 'shadow_boots', 'silver_ring', 'elven_earring'], chance: 0.12 }]
   },
-  skeleton: { 
-    items: [{ id: 'iron_ore', chance: 0.2, amount: [1, 2] }, { id: 'steel_ingot', chance: 0.1, amount: [1, 1] }], 
-    equipment: [{ pool: ['iron_sword', 'crystal_staff', 'iron_armor', 'mage_robe', 'mage_stockings', 'iron_gaiters', 'bronze_shield', 'mage_hood', 'iron_helm', 'talisman_protection'], chance: 0.12 }] 
+  skeleton: {
+    items: [{ id: 'iron_ore', chance: 0.2, amount: [1, 2] }, { id: 'steel_ingot', chance: 0.1, amount: [1, 1] }],
+    equipment: [{ pool: ['iron_sword', 'crystal_staff', 'iron_armor', 'mage_robe', 'mage_stockings', 'iron_gaiters', 'bronze_shield', 'mage_hood', 'iron_helm', 'talisman_protection'], chance: 0.12 }]
   },
-  goblinKing: { 
-    items: [{ id: 'steel_ingot', chance: 0.3, amount: [2, 4] }, { id: 'mithril_ore', chance: 0.15, amount: [1, 2] }, { id: 'scroll_of_resurrection', chance: 0.2, amount: [1, 1] }], 
-    equipment: [{ pool: ['knight_sword', 'archmage_staff', 'elven_bow', 'warhammer', 'dark_katana', 'steel_plate', 'steel_gaiters', 'steel_shield', 'sigil_of_grace', 'steel_helm', 'steel_boots', 'gold_ring', 'necklace_of_grace', 'earring_of_grace', 'belt_of_power', 'cloak_of_freedom', 'talisman_of_power', 'silver_tiara'], chance: 0.22, rarityBoost: 1 }] 
+  goblinKing: {
+    items: [{ id: 'steel_ingot', chance: 0.3, amount: [2, 4] }, { id: 'mithril_ore', chance: 0.15, amount: [1, 2] }, { id: 'scroll_of_resurrection', chance: 0.2, amount: [1, 1] }],
+    equipment: [{ pool: ['knight_sword', 'archmage_staff', 'elven_bow', 'warhammer', 'dark_katana', 'steel_plate', 'steel_gaiters', 'steel_shield', 'sigil_of_grace', 'steel_helm', 'steel_boots', 'gold_ring', 'necklace_of_grace', 'earring_of_grace', 'belt_of_power', 'cloak_of_freedom', 'talisman_of_power', 'silver_tiara'], chance: 0.22, rarityBoost: 1 }]
   },
-  wolfAlpha: { 
-    items: [{ id: 'wolf_fang', chance: 0.3, amount: [3, 6] }, { id: 'beast_blood', chance: 0.3, amount: [2, 4] }, { id: 'leather', chance: 0.3, amount: [3, 5] }], 
-    equipment: [{ pool: ['steel_dagger', 'composite_bow', 'iron_armor', 'shadow_pants', 'cloak_of_valor', 'steel_boots', 'silver_ring', 'mithril_belt'], chance: 0.20 }] 
+  wolfAlpha: {
+    items: [{ id: 'wolf_fang', chance: 0.3, amount: [3, 6] }, { id: 'beast_blood', chance: 0.3, amount: [2, 4] }, { id: 'leather', chance: 0.3, amount: [3, 5] }],
+    equipment: [{ pool: ['steel_dagger', 'composite_bow', 'iron_armor', 'shadow_pants', 'cloak_of_valor', 'steel_boots', 'silver_ring', 'mithril_belt'], chance: 0.20 }]
   },
-  knight: { 
-    items: [{ id: 'steel_ingot', chance: 0.2, amount: [2, 4] }, { id: 'mithril_ore', chance: 0.15, amount: [1, 2] }], 
-    equipment: [{ pool: ['blade_of_doom', 'soul_seeker', 'staff_of_magic', 'dragon_bow', 'titan_hammer', 'dual_swords', 'knight_armor', 'arcane_robe', 'knight_gaiters', 'arcane_stockings', 'knight_shield', 'sigil_of_mastery', 'knight_helm', 'arcane_circlet', 'diamond_ring', 'onyx_ring', 'amethyst_ring', 'black_ore_necklace', 'black_ore_earring', 'champion_belt', 'cloak_of_shadows_gear', 'talisman_of_eva', 'noble_gold_crown', 'executioner_mask'], chance: 0.15, rarityBoost: 1 }] 
+  knight: {
+    items: [{ id: 'steel_ingot', chance: 0.2, amount: [2, 4] }, { id: 'mithril_ore', chance: 0.15, amount: [1, 2] }],
+    equipment: [{ pool: ['blade_of_doom', 'soul_seeker', 'staff_of_magic', 'dragon_bow', 'titan_hammer', 'dual_swords', 'knight_armor', 'arcane_robe', 'knight_gaiters', 'arcane_stockings', 'knight_shield', 'sigil_of_mastery', 'knight_helm', 'arcane_circlet', 'diamond_ring', 'onyx_ring', 'amethyst_ring', 'black_ore_necklace', 'black_ore_earring', 'champion_belt', 'cloak_of_shadows_gear', 'talisman_of_eva', 'noble_gold_crown', 'executioner_mask'], chance: 0.15, rarityBoost: 1 }]
   },
-  mage: { 
-    items: [{ id: 'magic_powder', chance: 0.2, amount: [2, 4] }, { id: 'crystal_fragment', chance: 0.2, amount: [2, 3] }, { id: 'mithril_ore', chance: 0.1, amount: [1, 2] }], 
-    equipment: [{ pool: ['archmage_staff', 'staff_of_magic', 'arcane_robe', 'arcane_stockings', 'sigil_of_mastery', 'arcane_circlet', 'arcane_boots', 'arcane_gloves', 'ruby_ring', 'sapphire_ring', 'black_ore_necklace', 'black_ore_earring', 'talisman_of_eva'], chance: 0.15, rarityBoost: 1 }] 
+  mage: {
+    items: [{ id: 'magic_powder', chance: 0.2, amount: [2, 4] }, { id: 'crystal_fragment', chance: 0.2, amount: [2, 3] }, { id: 'mithril_ore', chance: 0.1, amount: [1, 2] }],
+    equipment: [{ pool: ['archmage_staff', 'staff_of_magic', 'arcane_robe', 'arcane_stockings', 'sigil_of_mastery', 'arcane_circlet', 'arcane_boots', 'arcane_gloves', 'ruby_ring', 'sapphire_ring', 'black_ore_necklace', 'black_ore_earring', 'talisman_of_eva'], chance: 0.15, rarityBoost: 1 }]
   },
-  dragon: { 
-    items: [{ id: 'dragon_scale', chance: 0.4, amount: [2, 4] }, { id: 'dragon_bone', chance: 0.3, amount: [1, 3] }, { id: 'oriharukon', chance: 0.2, amount: [1, 2] }, { id: 'ancient_relic', chance: 0.1, amount: [1, 1] }, { id: 'scroll_of_rebirth', chance: 0.3, amount: [1, 1] }], 
-    equipment: [{ pool: ['divine_sword', 'staff_of_eternity', 'bow_of_silence', 'dragon_slayer', 'chaos_blade', 'divine_robe', 'dragon_scale_armor', 'divine_gaiters', 'dragon_scale_gaiters', 'imperial_shield', 'sigil_of_arcana', 'divine_crown', 'dragon_circlet', 'divine_boots', 'divine_gloves', 'dragon_boots', 'dragon_gauntlets', 'necklace_of_valakas', 'earring_of_antharas', 'earring_of_zaken', 'dragon_eye_ring', 'eternity_ring', 'dragon_belt', 'ancient_cloak_of_aden', 'venir_talisman', 'essence_crown_of_aden', 'boss_facemask_valakas'], chance: 0.30, rarityBoost: 2 }] 
+  dragon: {
+    items: [{ id: 'dragon_scale', chance: 0.4, amount: [2, 4] }, { id: 'dragon_bone', chance: 0.3, amount: [1, 3] }, { id: 'oriharukon', chance: 0.2, amount: [1, 2] }, { id: 'ancient_relic', chance: 0.1, amount: [1, 1] }, { id: 'scroll_of_rebirth', chance: 0.3, amount: [1, 1] }],
+    equipment: [{ pool: ['divine_sword', 'staff_of_eternity', 'bow_of_silence', 'dragon_slayer', 'chaos_blade', 'divine_robe', 'dragon_scale_armor', 'divine_gaiters', 'dragon_scale_gaiters', 'imperial_shield', 'sigil_of_arcana', 'divine_crown', 'dragon_circlet', 'divine_boots', 'divine_gloves', 'dragon_boots', 'dragon_gauntlets', 'necklace_of_valakas', 'earring_of_antharas', 'earring_of_zaken', 'dragon_eye_ring', 'eternity_ring', 'dragon_belt', 'ancient_cloak_of_aden', 'venir_talisman', 'essence_crown_of_aden', 'boss_facemask_valakas'], chance: 0.30, rarityBoost: 2 }]
   },
-  dragonKnight: { 
-    items: [{ id: 'dragon_scale', chance: 0.5, amount: [3, 5] }, { id: 'dragon_bone', chance: 0.4, amount: [2, 4] }, { id: 'oriharukon', chance: 0.3, amount: [2, 3] }, { id: 'ancient_relic', chance: 0.15, amount: [1, 2] }], 
-    equipment: [{ pool: ['divine_sword', 'staff_of_eternity', 'bow_of_silence', 'dragon_slayer', 'chaos_blade', 'divine_robe', 'dragon_scale_armor', 'divine_gaiters', 'dragon_scale_gaiters', 'imperial_shield', 'sigil_of_arcana', 'divine_crown', 'dragon_eye_ring', 'eternity_ring', 'dragon_belt', 'ancient_cloak_of_aden', 'venir_talisman'], chance: 0.35, rarityBoost: 3 }] 
+  dragonKnight: {
+    items: [{ id: 'dragon_scale', chance: 0.5, amount: [3, 5] }, { id: 'dragon_bone', chance: 0.4, amount: [2, 4] }, { id: 'oriharukon', chance: 0.3, amount: [2, 3] }, { id: 'ancient_relic', chance: 0.15, amount: [1, 2] }],
+    equipment: [{ pool: ['divine_sword', 'staff_of_eternity', 'bow_of_silence', 'dragon_slayer', 'chaos_blade', 'divine_robe', 'dragon_scale_armor', 'divine_gaiters', 'dragon_scale_gaiters', 'imperial_shield', 'sigil_of_arcana', 'divine_crown', 'dragon_eye_ring', 'eternity_ring', 'dragon_belt', 'ancient_cloak_of_aden', 'venir_talisman'], chance: 0.35, rarityBoost: 3 }]
   },
-  
+
   goblinThief: { items: [{ id: 'iron_ore', chance: 0.15, amount: [1, 3] }, { id: 'cloth', chance: 0.15, amount: [1, 2] }], equipment: [{ pool: ['wooden_sword', 'training_dagger', 'short_bow', 'leather_vest', 'cloth_pants', 'wooden_shield', 'cloth_boots', 'oak_necklace', 'oak_earring', 'novice_belt', 'adventurer_cloak'], chance: 0.10 }] },
   koboldLeader: { items: [{ id: 'steel_ingot', chance: 0.2, amount: [1, 2] }, { id: 'iron_ore', chance: 0.2, amount: [2, 4] }], equipment: [{ pool: ['iron_sword', 'composite_bow', 'iron_armor', 'iron_gaiters', 'bronze_shield', 'iron_boots', 'elven_necklace', 'mithril_belt'], chance: 0.15 }] },
   direWolf: { items: [{ id: 'beast_blood', chance: 0.2, amount: [2, 4] }, { id: 'wolf_fang', chance: 0.2, amount: [2, 4] }], equipment: [{ pool: ['steel_dagger', 'composite_bow', 'shadow_pants', 'cloak_of_valor', 'shadow_boots'], chance: 0.10 }] },
@@ -496,6 +515,7 @@ const MONSTER_DROPS = {
   cerberus: { items: [{ id: 'ancient_relic', chance: 0.3, amount: [2, 4] }, { id: 'dragon_bone', chance: 0.3, amount: [3, 5] }], equipment: [{ pool: ['chaos_blade', 'dragon_slayer', 'divine_robe', 'divine_gaiters', 'sigil_of_arcana', 'eternity_ring', 'venir_talisman'], chance: 0.35, rarityBoost: 3 }] },
 
   // World Bosses
+  // [FIX 1] chance: 1.0 aqui era reduzida para 3% pelo cap antigo em rollDrop()
   queen_ant: { items: [{ id: 'crystal_c', chance: 1.0, amount: [3, 5] }], equipment: [{ pool: ['ring_queen_ant'], chance: 1.0, rarityBoost: 3 }] },
   zaken: { items: [{ id: 'crystal_b', chance: 1.0, amount: [3, 5] }], equipment: [{ pool: ['earring_of_zaken'], chance: 1.0, rarityBoost: 3 }] },
   baium: { items: [{ id: 'crystal_a', chance: 1.0, amount: [3, 5] }], equipment: [{ pool: ['ring_baium'], chance: 1.0, rarityBoost: 3 }] },
@@ -675,7 +695,7 @@ const CRAFTING_RECIPES = {
   composite_bow: { id: 'composite_bow', materials: { iron_ore: 3, leather: 4, beast_blood: 2 }, level: 1 },
   bronze_mace: { id: 'bronze_mace', materials: { iron_ore: 6 }, level: 1 },
   orcish_axe: { id: 'orcish_axe', materials: { iron_ore: 8, steel_ingot: 2 }, level: 1 },
-  
+
   // Armors & Legs
   iron_armor: { id: 'iron_armor', materials: { iron_ore: 10, leather: 5 }, level: 1 },
   mage_robe: { id: 'mage_robe', materials: { cloth: 15, magic_powder: 5 }, level: 1 },
@@ -697,7 +717,7 @@ const CRAFTING_RECIPES = {
   talisman_novice: { id: 'talisman_novice', materials: { magic_powder: 2, cloth: 2 }, level: 1 },
   apprentice_circlet: { id: 'apprentice_circlet', materials: { cloth: 3 }, level: 1 },
   novice_mask: { id: 'novice_mask', materials: { leather: 2, cloth: 2 }, level: 1 },
-  
+
   // Mid Tier Gear (Lv. 20-40)
   knight_sword: { id: 'knight_sword', materials: { steel_ingot: 8, mithril_ore: 2, crystal_d: 15 }, level: 20 },
   steel_plate: { id: 'steel_plate', materials: { steel_ingot: 15, mithril_ore: 3, leather: 8, crystal_d: 20 }, level: 20 },
@@ -710,7 +730,7 @@ const CRAFTING_RECIPES = {
   mithril_belt: { id: 'mithril_belt', materials: { mithril_ore: 3, leather: 8, crystal_d: 10 }, level: 20 },
   cloak_of_valor: { id: 'cloak_of_valor', materials: { cloth: 15, beast_blood: 5, crystal_d: 10 }, level: 20 },
   talisman_protection: { id: 'talisman_protection', materials: { magic_powder: 10, crystal_d: 10 }, level: 20 },
-  
+
   // High Tier Gear (Lv. 40-76)
   blade_of_doom: { id: 'blade_of_doom', materials: { steel_ingot: 20, mithril_ore: 8, oriharukon: 2, crystal_c: 30 }, level: 40 },
   knight_armor: { id: 'knight_armor', materials: { steel_ingot: 25, mithril_ore: 10, oriharukon: 3, crystal_c: 40 }, level: 40 },
@@ -726,7 +746,7 @@ const CRAFTING_RECIPES = {
   talisman_of_eva: { id: 'talisman_of_eva', materials: { magic_powder: 25, crystal_fragment: 15, crystal_c: 20 }, level: 60 },
   noble_gold_crown: { id: 'noble_gold_crown', materials: { steel_ingot: 15, mithril_ore: 5, crystal_c: 20 }, level: 60 },
   executioner_mask: { id: 'executioner_mask', materials: { leather: 20, beast_blood: 10, crystal_c: 20 }, level: 60 },
-  
+
   titan_hammer: { id: 'titan_hammer', materials: { steel_ingot: 30, mithril_ore: 15, oriharukon: 5, crystal_b: 20 }, level: 48 },
   dual_swords: { id: 'dual_swords', materials: { steel_ingot: 35, mithril_ore: 15, oriharukon: 5, crystal_b: 40 }, level: 50 },
 
@@ -747,9 +767,10 @@ const CRAFTING_RECIPES = {
 };
 
 // ROLETA DE RARIDADE E REBALANÇO DE DROPS:
-// Equipamentos completos tem apenas 3% de chance de drop direto.
+// Equipamentos completos tem apenas 3% de chance de drop direto (mobs comuns).
 // Dentro desses 3%, a chance de ser Lendário é de apenas 0.5% (0.005).
 // 97% do foco dos drops é em Materiais de Craft para alimentar a Forja.
+// World bosses com chance >= 1.0 continuam com drop garantido. [FIX 1]
 function rollRarity(bonus = 0) {
   const r = Math.random();
   if (r < 0.005 + bonus * 0.005) return 'legendary'; // 0.5% Lendário
@@ -768,7 +789,8 @@ function rollDrop(target, lootBonus = 1) {
 
   // 1. Materiais de Craft e Consumíveis (Foco Principal ~97%)
   for (const itemDrop of monsterDrops.items || []) {
-    const boostedChance = Math.min(0.95, (itemDrop.chance || 0.2) * 1.8) * chanceMultiplier;
+    // [FIX 12] chance nunca passa de 100% mesmo com lootBonus alto
+    const boostedChance = Math.min(1, Math.min(0.95, (itemDrop.chance || 0.2) * 1.8) * chanceMultiplier);
     if (Math.random() < boostedChance) {
       const baseAmount = Array.isArray(itemDrop.amount) && itemDrop.amount.length === 2
         ? itemDrop.amount[0] + Math.floor(Math.random() * (itemDrop.amount[1] - itemDrop.amount[0] + 1))
@@ -778,14 +800,20 @@ function rollDrop(target, lootBonus = 1) {
     }
   }
 
-  // 2. Equipamentos Completos (Armas, Armaduras, Joias) — Capped em 3% de chance max
+  // 2. Equipamentos Completos (Armas, Armaduras, Joias)
   for (const equipmentDrop of monsterDrops.equipment || []) {
     const rawChance = equipmentDrop.chance || 0.03;
-    const cappedChance = Math.min(0.03, rawChance) * chanceMultiplier; // Capped em 3%
+    // [FIX 1] cap de 3% valia só para mobs comuns no design original;
+    // o Math.min(0.03, ...) antigo esmagava drops garantidos de world
+    // bosses (chance: 1.0 virava 3%). Agora: mobs comuns seguem capped
+    // em 3%, chance >= 1 (boss) permanece garantida.
+    const cap = rawChance >= 1 ? 1 : 0.03;
+    const cappedChance = Math.min(cap, rawChance) * chanceMultiplier;
     if (Math.random() < cappedChance) {
       const pool = equipmentDrop.pool || [];
       if (!pool.length) continue;
       const id = pool[Math.floor(Math.random() * pool.length)];
+      if (!ALL_ITEMS[id]) continue; // [FIX 12] id inválido no pool não vira drop fantasma
       const rarity = rollRarity(equipmentDrop.rarityBoost || 0);
       drops.push({ id, rarity, isEquipment: true });
     }
@@ -795,10 +823,13 @@ function rollDrop(target, lootBonus = 1) {
 }
 
 function getMysticRotation() {
-  const cycleMs = 5 * 60 * 1000; 
+  const cycleMs = 5 * 60 * 1000;
   const cycle = Math.floor(Date.now() / cycleMs);
   const msLeft = cycleMs - (Date.now() % cycleMs);
-  let seed = cycle * 2654435761 >>> 0;
+  // [FIX 2] cycle * 2654435761 estoura 2^53 em float64 e perde os bits
+  // baixos -> ciclos vizinhos geravam seeds iguais. Math.imul multiplica
+  // em 32 bits exatos.
+  let seed = Math.imul(cycle, 2654435761) >>> 0;
   const rnd = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; };
   const picks = [];
   const pool = [...MYSTIC_POOL];
@@ -813,11 +844,25 @@ function getMysticRotation() {
 }
 
 function rollItemWithRarity(itemId, rarity) {
-  const base = JSON.parse(JSON.stringify(ALL_ITEMS[itemId]));
-  base.rarity = rarity;
-  const mult = RARITY[rarity].mult;
+  // [FIX 4] ALL_ITEMS[itemId] undefined -> JSON.parse("undefined") lançava
+  // SyntaxError e derrubava o loop de loot inteiro. Agora valida antes.
+  const source = ALL_ITEMS[itemId];
+  if (!source) {
+    console.warn('[items] rollItemWithRarity: id desconhecido ignorado ->', itemId);
+    return null;
+  }
+  const base = JSON.parse(JSON.stringify(source));
+  base.rarity = RARITY[rarity] ? rarity : 'common'; // [FIX 4] raridade inválida vira common
+  const mult = RARITY[base.rarity].mult;
   ['atk','def','matk','mdef','hp','mp','eva','crit','speed','lifesteal'].forEach(k => {
-    if (base[k]) base[k] = Math.floor(base[k] * mult);
+    if (base[k]) {
+      // [FIX 3] Math.floor em negativo piorava penalidades:
+      // floor(-3 * 2.4) = -8 (e não -7). Round simétrico preserva o tamanho
+      // real da penalidade de speed (warhammer, titan_hammer, dragon_slayer...)
+      base[k] = base[k] < 0
+        ? -Math.round(Math.abs(base[k]) * mult)
+        : Math.floor(base[k] * mult);
+    }
   });
   return base;
 }
@@ -888,32 +933,29 @@ const ICON_MAP = {
   "black_ore_necklace": "black_ore_necklace.png",
   "blade_of_doom": "blade_of_doom.png",
   "blessed_belt": "blessed_belt.png",
-  "blue wolf_heavy_armor": "blue wolf_heavy_armor.png",
-  "bluewolf_heavy_armor": "blue wolf_heavy_armor.png",
-  "blue wolf_heavy_boots": "blue wolf_heavy_boots.png",
-  "bluewolf_heavy_boots": "blue wolf_heavy_boots.png",
-  "blue wolf_heavy_gloves": "blue wolf_heavy_gloves.png",
-  "bluewolf_heavy_gloves": "blue wolf_heavy_gloves.png",
-  "blue wolf_heavy_pants": "blue wolf_heavy_pants.png",
-  "bluewolf_heavy_pants": "blue wolf_heavy_pants.png",
-  "blue wolf_helmet": "blue wolf_helmet.png",
-  "bluewolf_helmet": "blue wolf_helmet.png",
-  "blue wolf_light_armor": "blue wolf_light_armor.png",
-  "bluewolf_light_armor": "blue wolf_light_armor.png",
-  "blue wolf_light_boots": "blue wolf_light_boots.png",
-  "bluewolf_light_boots": "blue wolf_light_boots.png",
-  "blue wolf_light_gloves": "blue wolf_light_gloves.png",
-  "bluewolf_light_gloves": "blue wolf_light_gloves.png",
-  "blue wolf_robe_armor": "blue wolf_robe_armor.png",
-  "bluewolf_robe_armor": "blue wolf_robe_armor.png",
-  "blue wolf_robe_boots": "blue wolf_robe_boots.png",
-  "bluewolf_robe_boots": "blue wolf_robe_boots.png",
-  "blue wolf_robe_gloves": "blue wolf_robe_gloves.png",
-  "bluewolf_robe_gloves": "blue wolf_robe_gloves.png",
-  "blue wolf_robe_pants": "blue wolf_robe_pants.png",
-  "bluewolf_robe_pants": "blue wolf_robe_pants.png",
+  "blue wolf_heavy_boots": "blue_wolf_heavy_boots.png",
+  "bluewolf_heavy_boots": "blue_wolf_heavy_boots.png",
+  "blue wolf_heavy_gloves": "blue_wolf_heavy_gloves.png",
+  "bluewolf_heavy_gloves": "blue_wolf_heavy_gloves.png",
+  "blue wolf_heavy_pants": "blue_wolf_heavy_pants.png",
+  "bluewolf_heavy_pants": "blue_wolf_heavy_pants.png",
+  "blue wolf_helmet": "blue_wolf_helmet.png",
+  "bluewolf_helmet": "blue_wolf_helmet.png",
+  "blue wolf_light_armor": "blue_wolf_light_armor.png",
+  "bluewolf_light_armor": "blue_wolf_light_armor.png",
+  "blue wolf_light_boots": "blue_wolf_light_boots.png",
+  "bluewolf_light_boots": "blue_wolf_light_boots.png",
+  "blue wolf_light_gloves": "blue_wolf_light_gloves.png",
+  "bluewolf_light_gloves": "blue_wolf_light_gloves.png",
+  "blue wolf_robe_armor": "blue_wolf_robe_armor.png",
+  "bluewolf_robe_armor": "blue_wolf_robe_armor.png",
+  "blue wolf_robe_boots": "blue_wolf_robe_boots.png",
+  "bluewolf_robe_boots": "blue_wolf_robe_boots.png",
+  "blue wolf_robe_gloves": "blue_wolf_robe_gloves.png",
+  "bluewolf_robe_gloves": "blue_wolf_robe_gloves.png",
+  "blue wolf_robe_pants": "blue_wolf_robe_pants.png",
+  "bluewolf_robe_pants": "blue_wolf_robe_pants.png",
   "blue_wolf_boots": "blue_wolf_boots.png",
-  "blue_wolf_breastplate": "blue_wolf_breastplate.png",
   "blue_wolf_gaiters": "blue_wolf_gaiters.png",
   "blue_wolf_gloves": "blue_wolf_gloves.png",
   "blue_wolf_heavy_armor": "blue_wolf_heavy_armor.png",
@@ -963,6 +1005,7 @@ const ICON_MAP = {
   "crystal_fragment": "crystal_fragment.png",
   "crystal_s": "crystal_s.png",
   "crystal_staff": "crystal_staff.png",
+  "dark_crystal_heavy_armor": "dark_crystal_heavy_armor.png",
   "dark_crystal_heavy_boots": "dark_crystal_heavy_boots.png",
   "dark_crystal_heavy_glove": "dark_crystal_heavy_glove.png",
   "dark_crystal_heavy_pants": "dark_crystal_heavy_pants.png",
@@ -1047,16 +1090,16 @@ const ICON_MAP = {
   "flame_gloves": "flame_gloves.png",
   "flame_pants": "flame_pants.png",
   "forge_apron": "forge_apron.png",
-  "full plate_heavy_armor": "full plate_heavy_armor.png",
-  "fullplate_heavy_armor": "full plate_heavy_armor.png",
-  "full plate_heavy_boots": "full plate_heavy_boots.png",
-  "fullplate_heavy_boots": "full plate_heavy_boots.png",
-  "full plate_heavy_gloves": "full plate_heavy_gloves.png",
-  "fullplate_heavy_gloves": "full plate_heavy_gloves.png",
-  "full plate_heavy_helmet": "full plate_heavy_helmet.png",
-  "fullplate_heavy_helmet": "full plate_heavy_helmet.png",
-  "full plate_shield": "full plate_shield.png",
-  "fullplate_shield": "full plate_shield.png",
+  "full plate_heavy_armor": "full_plate_heavy_armor.png",
+  "fullplate_heavy_armor": "full_plate_heavy_armor.png",
+  "full plate_heavy_boots": "full_plate_heavy_boots.png",
+  "fullplate_heavy_boots": "full_plate_heavy_boots.png",
+  "full plate_heavy_gloves": "full_plate_heavy_gloves.png",
+  "fullplate_heavy_gloves": "full_plate_heavy_gloves.png",
+  "full plate_heavy_helmet": "full_plate_heavy_helmet.png",
+  "fullplate_heavy_helmet": "full_plate_heavy_helmet.png",
+  "full plate_shield": "full_plate_shield.png",
+  "fullplate_shield": "full_plate_shield.png",
   "full_plate_heavy_armor": "full_plate_heavy_armor.png",
   "full_plate_heavy_boots": "full_plate_heavy_boots.png",
   "full_plate_heavy_gloves": "full_plate_heavy_gloves.png",
@@ -1261,13 +1304,9 @@ const ICON_MAP = {
   "nightmare_heavy_glove": "nightmare_heavy_glove.png",
   "nightmare_light_armor": "nightmare_light_armor.png",
   "nightmare_light_boots": "nightmare_light_boots.png",
-  "nightmare_light_boots.png": "nightmare_light_boots.png.png",
-  "nightmare_light_bootspng": "nightmare_light_boots.png.png",
   "nightmare_light_glove": "nightmare_light_glove.png",
   "nightmare_robe_armor": "nightmare_robe_armor.png",
   "nightmare_robe_boots": "nightmare_robe_boots.png",
-  "nightmare_robe_boots.png": "nightmare_robe_boots.png.png",
-  "nightmare_robe_bootspng": "nightmare_robe_boots.png.png",
   "nightmare_robe_glove": "nightmare_robe_glove.png",
   "nobless_belt": "nobless_belt.png",
   "noble_crown": "noble_crown.png",
@@ -1371,8 +1410,6 @@ const ICON_MAP = {
   "tallum_light_glove": "tallum_light_glove.png",
   "tallum_robe_armor": "tallum_robe_armor.png",
   "tallum_robe_boots": "tallum_robe_boots.png",
-  "tallum_robe_boots.png": "tallum_robe_boots.png.png",
-  "tallum_robe_bootspng": "tallum_robe_boots.png.png",
   "tallum_robe_glove": "tallum_robe_glove.png",
   "tallum_robe_pants": "tallum_robe_pants.png",
   "teleport_scroll": "teleport_scroll.png",
@@ -1405,12 +1442,115 @@ const ICON_MAP = {
   "xp_boost_1h": "xp_boost_1h.png",
   "xp_boost_4h": "xp_boost_4h.png",
   "zaken_sword": "zaken_sword.png"
+  // [FIX 8] removidas 6 entradas corrompidas cujas chaves continham
+  // ".png"/"png" e geravam valores "....png.png" (404 certo):
+  //   nightmare_light_boots.png / nightmare_light_bootspng
+  //   nightmare_robe_boots.png  / nightmare_robe_bootspng
+  //   tallum_robe_boots.png     / tallum_robe_bootspng
+  // As chaves limpas equivalentes já existem acima.
+  // [FIX 9] 16 valores com espaço no nome de arquivo ("blue wolf_*.png",
+  // "full plate_*.png") normalizados para underscore — as chaves-alias
+  // foram mantidas para retrocompatibilidade.
 };
+// ================================================================
+//  PATCH DE ÍCONES — cole ao final do data/items.js, antes de
+//  Object.assign(ALL_ITEMS, CLASS_WEAPONS, CLASS_ARMORS, POWERUPS);
+//
+//  resolve blue_wolf_*, major_arcana_robe e todos os outros
+//  itens clássicos que não tinham icon: explícito e por isso
+//  o jogo mostrava o default.png.
+// ================================================================
+
+// ---- Blue Wolf set (B-grade) ----------------------------------
+if (ALL_ITEMS.blue_wolf_breastplate)       ALL_ITEMS.blue_wolf_breastplate.icon       = 'blue_wolf_heavy_armor';
+if (ALL_ITEMS.blue_wolf_leather_armor)     ALL_ITEMS.blue_wolf_leather_armor.icon     = 'blue_wolf_leather_armor';
+if (ALL_ITEMS.blue_wolf_tunic)             ALL_ITEMS.blue_wolf_tunic.icon             = 'blue_wolf_tunic';
+
+// ---- S-grade robes / heavy / draconic -------------------------
+if (ALL_ITEMS.divine_robe)                 ALL_ITEMS.divine_robe.icon                 = 'divine_robe';
+if (ALL_ITEMS.dragon_scale_armor)          ALL_ITEMS.dragon_scale_armor.icon          = 'dragon_scale_armor';
+if (ALL_ITEMS.draconic_leather_armor)      ALL_ITEMS.draconic_leather_armor.icon      = 'draconic_leather_armor';
+// major_arcana_robe era o que você citou. O arquivo na pasta se chama
+// major_arcana_robe_armor.png (é o asset do robe de S-grade arcano).
+if (ALL_ITEMS.major_arcana_robe)           ALL_ITEMS.major_arcana_robe.icon           = 'major_arcana_robe_armor';
+if (ALL_ITEMS.imperial_crusader_breastplate) ALL_ITEMS.imperial_crusader_breastplate.icon = 'imperial_crusader_armor';
+
+// ---- Low/mid tier armors --------------------------------------
+if (ALL_ITEMS.cloth_robe)                  ALL_ITEMS.cloth_robe.icon                  = 'cloth_robe';
+if (ALL_ITEMS.leather_vest)                ALL_ITEMS.leather_vest.icon                = 'leather_vest';
+if (ALL_ITEMS.bronze_chest)                ALL_ITEMS.bronze_chest.icon                = 'bronze_chest';
+if (ALL_ITEMS.iron_armor)                  ALL_ITEMS.iron_armor.icon                  = 'iron_armor';
+if (ALL_ITEMS.mage_robe)                   ALL_ITEMS.mage_robe.icon                   = 'karmian_robe_armor';
+if (ALL_ITEMS.steel_plate)                 ALL_ITEMS.steel_plate.icon                 = 'full plate_heavy_armor';
+if (ALL_ITEMS.shadow_cloak)                ALL_ITEMS.shadow_cloak.icon                = 'demon_cloack';
+if (ALL_ITEMS.elven_garb)                  ALL_ITEMS.elven_garb.icon                  = 'avadon_light_armor';
+if (ALL_ITEMS.knight_armor)                ALL_ITEMS.knight_armor.icon                = 'doom_light_armor';
+if (ALL_ITEMS.arcane_robe)                 ALL_ITEMS.arcane_robe.icon                 = 'devotion_armor_robe';
+
+// ---- S-grade boots/gloves/helm/legs/shields -------------------
+if (ALL_ITEMS.divine_gaiters)              ALL_ITEMS.divine_gaiters.icon              = 'divine_gaiters';
+if (ALL_ITEMS.dragon_scale_gaiters)        ALL_ITEMS.dragon_scale_gaiters.icon        = 'dragon_scale_gaiters';
+if (ALL_ITEMS.divine_boots)                ALL_ITEMS.divine_boots.icon                = 'divine_boots';
+if (ALL_ITEMS.dragon_boots)                ALL_ITEMS.dragon_boots.icon                = 'dragon_boots';
+if (ALL_ITEMS.divine_gloves)               ALL_ITEMS.divine_gloves.icon               = 'divine_gloves';
+if (ALL_ITEMS.dragon_gauntlets)            ALL_ITEMS.dragon_gauntlets.icon            = 'dragon_gauntlets';
+if (ALL_ITEMS.divine_crown)                ALL_ITEMS.divine_crown.icon                = 'divine_crown';
+if (ALL_ITEMS.dragon_circlet)              ALL_ITEMS.dragon_circlet.icon              = 'dragon_circlet';
+if (ALL_ITEMS.imperial_shield)             ALL_ITEMS.imperial_shield.icon             = 'imperial_crusader_shield';
+if (ALL_ITEMS.sigil_of_arcana)             ALL_ITEMS.sigil_of_arcana.icon             = 'sigil_of_arcana';
+
+// ---- Low tier legs / helms / boots / gloves / shields --------
+if (ALL_ITEMS.cloth_pants)                 ALL_ITEMS.cloth_pants.icon                 = 'cloth_pants';
+if (ALL_ITEMS.leather_gaiters)             ALL_ITEMS.leather_gaiters.icon             = 'leather_gaiters';
+if (ALL_ITEMS.iron_gaiters)                ALL_ITEMS.iron_gaiters.icon                = 'iron_gaiters';
+if (ALL_ITEMS.mage_stockings)              ALL_ITEMS.mage_stockings.icon              = 'karmian_robe_pants';
+if (ALL_ITEMS.steel_gaiters)               ALL_ITEMS.steel_gaiters.icon               = 'full_plate_heavy_pants';
+if (ALL_ITEMS.shadow_pants)                ALL_ITEMS.shadow_pants.icon                = 'doom_light_pants';
+if (ALL_ITEMS.knight_gaiters)              ALL_ITEMS.knight_gaiters.icon              = 'doom_light_pants';
+if (ALL_ITEMS.arcane_stockings)            ALL_ITEMS.arcane_stockings.icon            = 'devotion_pants_robe';
+
+if (ALL_ITEMS.cloth_cap)                   ALL_ITEMS.cloth_cap.icon                   = 'cloth_cap';
+if (ALL_ITEMS.leather_helm)                ALL_ITEMS.leather_helm.icon                = 'leather_helm';
+if (ALL_ITEMS.iron_helm)                   ALL_ITEMS.iron_helm.icon                   = 'iron_helm';
+if (ALL_ITEMS.mage_hood)                   ALL_ITEMS.mage_hood.icon                   = 'helmet_of_mana';  // já era setado via if no final, reforçado aqui
+if (ALL_ITEMS.steel_helm)                  ALL_ITEMS.steel_helm.icon                  = 'full_plate_heavy_helmet';
+if (ALL_ITEMS.shadow_mask)                 ALL_ITEMS.shadow_mask.icon                 = 'avadon_light_helmet';
+if (ALL_ITEMS.knight_helm)                 ALL_ITEMS.knight_helm.icon                 = 'doom_light_helmet';
+if (ALL_ITEMS.arcane_circlet)              ALL_ITEMS.arcane_circlet.icon              = 'divine_crown';
+
+if (ALL_ITEMS.cloth_boots)                 ALL_ITEMS.cloth_boots.icon                 = 'cloth_boots';
+if (ALL_ITEMS.leather_boots)               ALL_ITEMS.leather_boots.icon               = 'leather_boots';
+if (ALL_ITEMS.iron_boots)                  ALL_ITEMS.iron_boots.icon                  = 'iron_boots';
+if (ALL_ITEMS.mage_sandals)                ALL_ITEMS.mage_sandals.icon                = 'karmian_robe_boots';
+if (ALL_ITEMS.steel_boots)                 ALL_ITEMS.steel_boots.icon                 = 'full_plate_heavy_boots';
+if (ALL_ITEMS.shadow_boots)                ALL_ITEMS.shadow_boots.icon                = 'doom_light_boots';
+if (ALL_ITEMS.knight_boots)                ALL_ITEMS.knight_boots.icon                = 'doom_light_boots';
+if (ALL_ITEMS.arcane_boots)                ALL_ITEMS.arcane_boots.icon                = 'karmian_robe_boots';
+
+if (ALL_ITEMS.cloth_gloves)                ALL_ITEMS.cloth_gloves.icon                = 'cloth_gloves';
+if (ALL_ITEMS.leather_gloves)              ALL_ITEMS.leather_gloves.icon              = 'leather_gloves';
+if (ALL_ITEMS.iron_gauntlets)              ALL_ITEMS.iron_gauntlets.icon              = 'iron_gauntlets';
+if (ALL_ITEMS.mage_gloves)                 ALL_ITEMS.mage_gloves.icon                 = 'karmian_robe_gloves';
+if (ALL_ITEMS.steel_gauntlets)             ALL_ITEMS.steel_gauntlets.icon             = 'full_plate_heavy_gloves';
+if (ALL_ITEMS.shadow_gloves)               ALL_ITEMS.shadow_gloves.icon               = 'doom_light_gloves';
+if (ALL_ITEMS.knight_gauntlets)            ALL_ITEMS.knight_gauntlets.icon            = 'doom_light_gloves';
+if (ALL_ITEMS.arcane_gloves)               ALL_ITEMS.arcane_gloves.icon               = 'karmian_robe_gloves';
+
+if (ALL_ITEMS.wooden_shield)               ALL_ITEMS.wooden_shield.icon               = 'wooden_shield';
+if (ALL_ITEMS.bronze_shield)               ALL_ITEMS.bronze_shield.icon               = 'bronze_shield';
+if (ALL_ITEMS.sigil_of_devotion)           ALL_ITEMS.sigil_of_devotion.icon           = 'sigil_of_devotion';
+if (ALL_ITEMS.steel_shield)                ALL_ITEMS.steel_shield.icon                = 'full_plate_shield';
+if (ALL_ITEMS.sigil_of_grace)              ALL_ITEMS.sigil_of_grace.icon              = 'sigil_of_grace';
+if (ALL_ITEMS.knight_shield)               ALL_ITEMS.knight_shield.icon               = 'doom_shield';
+if (ALL_ITEMS.sigil_of_mastery)            ALL_ITEMS.sigil_of_mastery.icon            = 'sigil_of_mastery';
 
 if (typeof window !== 'undefined') {
   window.GameData = {
     ICON_MAP,
     RARITY, SLOT, WEAPONS, ARMORS, HELMETS, BOOTS, GLOVES, RINGS,
+    // [FIX 13] coleções que faltavam no export (antes só via ALL_ITEMS)
+    LEGS, SHIELDS, NECKLACES, EARRINGS, BELTS, CLOAKS, TALISMANS,
+    HAIR, HAIR2, AGATHIONS, NEW_ARMORS,
     CONSUMABLES, MATERIALS, POWERUPS, CLASS_WEAPONS, CLASS_ARMORS,
     ALL_ITEMS, MONSTER_DROPS, SHOP_INVENTORY, CRAFTING_RECIPES,
     ZONE_GOLD_MULT, MYSTIC_POOL,
