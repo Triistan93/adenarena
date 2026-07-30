@@ -3,6 +3,8 @@ import { useLayoutEffect, useRef, useState } from "react";
 // Side-effect import FIRST so window.GameData exists before main.js evaluates.
 // @ts-ignore -- plain JS module, no type declarations
 import "../../lineage-idle/data/items.js";
+// @ts-ignore -- Echo of Elements class/skill data — must load BEFORE main.js
+import "../../lineage-idle/data/classes_echo.js";
 // @ts-ignore
 import { init, setRoot, destroy } from "../../lineage-idle/main.js";
 // @ts-ignore -- Vite ?raw import returns the CSS source as a string
