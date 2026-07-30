@@ -178,7 +178,12 @@ const CLASSES = {
   doombringer:      { name: 'Doombringer', archetype: 'soulbreaker', stage: 3, parent: 'berserker', race: 'kamael', desc: 'Two-handed ancient sword master executing Disarm and Rush Impact.', base: { atk: 128, def: 40, eva: 32, crit: 32 } },
   soulHound:        { name: 'Soul Hound', archetype: 'soulbreaker', stage: 3, parent: 'soulhound', race: 'kamael', desc: 'Master of rapier and soul magic executing Leopold and Soul Vortex.', base: { atk: 124, eva: 40, crit: 36, matk: 100 } },
   trickster:        { name: 'Trickster', archetype: 'soulbreaker', stage: 3, parent: 'arbalester', race: 'kamael', desc: 'Master of heavy crossbow, Decoy, and Purgatory Traps.', base: { atk: 120, def: 32, eva: 44, crit: 40 } },
-  judicator:        { name: 'Judicator', archetype: 'soulbreaker', stage: 3, parent: 'inspector', race: 'kamael', desc: 'Supreme hybrid buffer/debuffer unleashing Instinct and Appetite for Destruction.', base: { atk: 110, def: 50, eva: 36, matk: 90 } }
+  judicator:        { name: 'Judicator', archetype: 'soulbreaker', stage: 3, parent: 'inspector', race: 'kamael', desc: 'Supreme hybrid buffer/debuffer unleashing Instinct and Appetite for Destruction.', base: { atk: 110, def: 50, eva: 36, matk: 90 } },
+
+  // Special & Ertheia (3rd)
+  deathKnightLord:  { name: 'Death Sovereign', archetype: 'fighter', stage: 3, parent: 'deathKnight', race: 'human', desc: 'Supreme Death Knight Sovereign executing Hellfire, Death Execution, and Dragon Curse.', base: { atk: 138, def: 80, hp: 580, mdef: 50, crit: 30 } },
+  eviscerator:      { name: 'Eviscerator Master', archetype: 'fighter', stage: 3, parent: 'ertheiaWarrior', race: 'ertheia', desc: 'Supreme martial artist unleashing Gravity Shock, Impact Punch, and Storm Combo.', base: { atk: 125, def: 60, eva: 42, hp: 460, crit: 35 } },
+  sayhaSeeker:      { name: 'Sayha Seeker', archetype: 'fighter', stage: 3, parent: 'windRider', race: 'ertheia', desc: 'Supreme wind assassin wielding Sayha Gale and Ethereal Dash.', base: { atk: 122, def: 35, eva: 58, crit: 42 } }
 };
 
 const DWARF_CLASS = CLASSES.artisan;
