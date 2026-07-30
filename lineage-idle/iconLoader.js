@@ -17,8 +17,10 @@ let iconIndex = {};
 const ALIASES = {
   // Blue Wolf set
   blue_wolf_breastplate:        'blue_wolf_heavy_armor',
-  blue_wolf_leather_armor:      'blue_wolf_leather_armor',
+  blue_wolf_leather_armor:      'blue_wolf_light_armor',
+  blue_wolf_light_armor:        'blue_wolf_light_armor',
   blue_wolf_tunic:              'blue_wolf_tunic',
+  dark_crystal_heavy_armor:     'dark_crystal_heavy_armor',
   // S-grade arcane set
   major_arcana_robe:            'major_arcana_robe_armor',
   imperial_crusader_breastplate: 'imperial_crusader_armor',
