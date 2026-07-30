@@ -1913,7 +1913,11 @@ function getItemIcon(def) {
 
   const subPath = relPath.startsWith('img/') ? relPath : `img/icons/${relPath}`;
   const fullUrl = getAssetUrl(subPath);
-  return `<img src="${fullUrl}" alt="${def.name || ''}" class="item-icon-img" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='inline-block';" style="width:28px; height:28px; object-fit:contain; vertical-align:middle;" /><span class="item-icon-fallback" style="display:none; font-size:18px;">${emoji}</span>`; 
+  const fb1 = getAssetUrl(`img/icons/${rawKey}.png`);
+  const fb2 = getAssetUrl(`img/icons/Weapons/${rawKey}.png`);
+  const fb3 = getAssetUrl(`img/icons/Armors/${rawKey}.png`);
+
+  return `<img src="${fullUrl}" alt="${def.name || ''}" class="item-icon-img" onerror="this.onerror=null; this.src='${fb1}'; if(!this.naturalWidth) this.src='${fb2}'; if(!this.naturalWidth) this.src='${fb3}';" style="width:28px; height:28px; object-fit:contain; vertical-align:middle;" /><span class="item-icon-fallback" style="display:none; font-size:18px;">${emoji}</span>`; 
 }
 
 let tooltipTimer = null;
