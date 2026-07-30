@@ -33,11 +33,17 @@ const RACES_INFO: Record<string, {
     perks: ['⚔️ Status Físicos Equilibrados', '🛡️ Excelente Adaptabilidade', '🏰 Inicia na Ilha de Falar'],
     allowedClasses: [
       { id: 'fighter', name: 'Guerreiro (Fighter)', desc: 'Combate corpo a corpo com espada e escudo.', icon: '⚔️' },
-      { id: 'mage', name: 'Mago (Mage)', desc: 'Dominador de magia elemental e mana elevado.', icon: '🔮' }
+      { id: 'mage', name: 'Mago (Mage)', desc: 'Dominador de magia elemental e mana elevado.', icon: '🔮' },
+      { id: 'deathPilgrim', name: 'Death Knight 💀', desc: 'Peregrino das trevas futuro Cavaleiro da Morte com DP.', icon: '💀' },
+      { id: 'wargBase', name: 'Warg 🐺', desc: 'Lutador primitivo que se transforma em Lobo guerreiro.', icon: '🐺' },
+      { id: 'assassinBase', name: 'Assassin 🗡️', desc: 'Caçador das sombras com adagas e clones sombrios.', icon: '🗡️' }
     ],
     image: {
       fighter: '/img/human_fighter.png',
-      mage: '/img/human_mage.png'
+      mage: '/img/human_mage.png',
+      deathPilgrim: '/img/human_fighter.png',
+      wargBase: '/img/human_fighter.png',
+      assassinBase: '/img/human_fighter.png'
     },
     startZoneName: 'Ilha de Falar (Talking Island)'
   },
@@ -46,7 +52,7 @@ const RACES_INFO: Record<string, {
     name: 'Elfo',
     icon: '🧝‍♂️',
     desc: 'Graciosos e extremamente ágeis, abençoados pela deusa Eva.',
-    perks: ['🍃 +8 Esquiva Nativa', '⚡ Alta Velocidade de Movimento', '🌲 Inicia na Floresta Elfica'],
+    perks: ['🍃 +8 Esquiva Nativa', '⚡ Alta Velocidade de Movimento', '🌲 Inicia na Floresta Élfica'],
     allowedClasses: [
       { id: 'fighter', name: 'Guerreiro Elfo (Fighter)', desc: 'Defensor gracioso e arqueiro veloz.', icon: '🏹' },
       { id: 'mage', name: 'Mago Elfo (Mage)', desc: 'Dominador de magia de água e cura sagrada.', icon: '🌊' }
@@ -55,21 +61,25 @@ const RACES_INFO: Record<string, {
       fighter: '/img/elf_fighter.png',
       mage: '/img/elf_mage.png'
     },
-    startZoneName: 'Floresta Elfica (Elven Forest)'
+    startZoneName: 'Floresta Élfica (Elven Forest)'
   },
   darkelf: {
     id: 'darkelf',
     name: 'Elfo Negro',
     icon: '🧝‍♀️',
-    desc: 'Mestres de magia negra e ataques críticos devastadores de Shilien.',
+    desc: 'Mestres de magia negra e ataques críticos devastadores de Shillien.',
     perks: ['🔥 +15 Poder de Ataque & Magia', '🗡️ Alto Poder Crítico', '🌑 Inicia na Floresta Negra'],
     allowedClasses: [
       { id: 'fighter', name: 'Guerreiro Negro (Fighter)', desc: 'Assassino mortal e cavaleiro sombrio.', icon: '🗡️' },
-      { id: 'mage', name: 'Mago Negro (Mage)', desc: 'Invocador de maldições e magia de fogo/trevas.', icon: '🔮' }
+      { id: 'mage', name: 'Mago Negro (Mage)', desc: 'Invocador de maldições e magia de fogo/trevas.', icon: '🔮' },
+      { id: 'deathPilgrim', name: 'Death Knight 💀', desc: 'Cavaleiro da Morte das sombras.', icon: '💀' },
+      { id: 'assassinBase', name: 'Assassin 🗡️', desc: 'Assassina mortal das sombras de Shillien.', icon: '🗡️' }
     ],
     image: {
       fighter: '/img/darkelf_fighter.png',
-      mage: '/img/darkelf_mage.png'
+      mage: '/img/darkelf_mage.png',
+      deathPilgrim: '/img/darkelf_fighter.png',
+      assassinBase: '/img/darkelf_fighter.png'
     },
     startZoneName: 'Floresta Negra (Dark Forest)'
   },
@@ -78,14 +88,16 @@ const RACES_INFO: Record<string, {
     name: 'Orc',
     icon: '👹',
     desc: 'Guerreiros de força bruta descomunal e constituição vital superior.',
-    perks: ['💪 +100 Vida Máxima (HP)', '🛡️ Resiciência em Batalha Prolongada', '🌋 Inicia na Vila Orc'],
+    perks: ['💪 +100 Vida Máxima (HP)', '🛡️ Resiliência em Batalha Prolongada', '🌋 Inicia na Vila Orc'],
     allowedClasses: [
       { id: 'fighter', name: 'Guerreiro Orc (Fighter)', desc: 'Destruidor com armas de duas mãos e garras.', icon: '🪓' },
-      { id: 'mage', name: 'Xamã Orc (Shaman)', desc: 'Mago de combate e buffs tribais de sangue.', icon: '🔥' }
+      { id: 'mage', name: 'Xamã Orc (Shaman)', desc: 'Mago de combate e buffs tribais de sangue.', icon: '🔥' },
+      { id: 'orcRider', name: 'Vanguard Rider 🐉', desc: 'Cavaleiro Orc montado especialista em lança de guerra.', icon: '🐉' }
     ],
     image: {
       fighter: '/img/orc_fighter.png',
-      mage: '/img/orc_mage.png'
+      mage: '/img/orc_mage.png',
+      orcRider: '/img/orc_fighter.png'
     },
     startZoneName: 'Vila Orc (Orc Village)'
   },
@@ -96,11 +108,13 @@ const RACES_INFO: Record<string, {
     desc: 'Mestres da forja, especialistas em mineração e criação de itens.',
     perks: ['🎒 +100 Espaços de Inventário (Total 250)', '⚒️ Bônus de Craft & Drop de Materiais', '⛏️ Inicia nas Minas dos Anões'],
     allowedClasses: [
-      { id: 'artisan', name: 'Artesão (Artisan)', desc: 'Especialista em forja de armas e armaduras.', icon: '⚒️' }
+      { id: 'artisan', name: 'Artesão (Artisan)', desc: 'Especialista em forja de armas e armaduras.', icon: '⚒️' },
+      { id: 'shinemakerS1', name: 'ShineMaker ✨', desc: 'Mestre da luz cristalina, suporte e dano cristalino.', icon: '✨' }
     ],
     image: {
       artisan: '/img/dwarf_artisan.png',
-      fighter: '/img/dwarf_artisan.png'
+      fighter: '/img/dwarf_artisan.png',
+      shinemakerS1: '/img/dwarf_artisan.png'
     },
     startZoneName: 'Minas dos Anões (Dwarven Mine)'
   },
@@ -111,13 +125,68 @@ const RACES_INFO: Record<string, {
     desc: 'Raça de uma asa só com maestria lendária em estocadas de rapieira.',
     perks: ['⚡ Usam Armaduras LEVES por Lore', '🗡️ Ataques Físicos Ultrarrápidos', '🏰 Inicia na Lair dos Kamael'],
     allowedClasses: [
-      { id: 'soulbreaker', name: 'Soulbreaker', desc: 'Espadachim das sombras especializado em rapieiras.', icon: '🗡️' }
+      { id: 'soulbreaker', name: 'Soulbreaker', desc: 'Espadachim das sombras especializado em rapieiras.', icon: '🗡️' },
+      { id: 'hatamoto', name: 'Samurai ⛩️', desc: 'Mestre da katana ancestral e técnica Iaijutsu.', icon: '⛩️' }
     ],
     image: {
       soulbreaker: '/img/kamael_soulbreaker.png',
-      fighter: '/img/kamael_soulbreaker.png'
+      fighter: '/img/kamael_soulbreaker.png',
+      hatamoto: '/img/kamael_soulbreaker.png'
     },
     startZoneName: 'Lair dos Kamael (Kamael Lair)'
+  },
+  sylph: {
+    id: 'sylph',
+    name: 'Sylph',
+    icon: '🔫',
+    desc: 'Atiradores elementais dos ventos com armas de fogo.',
+    perks: ['💨 +12 Esquiva & Velocidade', '🔫 Atiradores Elementais Ranged', '🌪️ Inicia na Ilha de Falar'],
+    allowedClasses: [
+      { id: 'sylphGunner', name: 'Storm Blaster 🔫', desc: 'Atirador elemental com armas de fogo e tiros de vento.', icon: '🔫' }
+    ],
+    image: {
+      sylphGunner: '/img/human_fighter.png',
+      fighter: '/img/human_fighter.png'
+    },
+    startZoneName: 'Ilha de Falar (Talking Island)'
+  },
+  highelf: {
+    id: 'highelf',
+    name: 'High Elf',
+    icon: '✨',
+    desc: 'Elfos supremos detentores da luz divina e maestria elemental.',
+    perks: ['🌟 +8 Magia & Defesa Divina', '🛡️ Guardiões Sagrados de Aden', '🌲 Inicia na Floresta Élfica'],
+    allowedClasses: [
+      { id: 'divineTemplarS1', name: 'Divine Templar 🛡️', desc: 'Guardião sagrado supremo e tanque com Sacred Aegis.', icon: '🛡️' },
+      { id: 'elementWeaverS1', name: 'Element Weaver 🌀', desc: 'Mago supremo combinando Fogo, Água e Vento.', icon: '🌀' },
+      { id: 'shinemakerS1', name: 'ShineMaker ✨', desc: 'Invocador de luz sagrada e suporte cristalino.', icon: '✨' }
+    ],
+    image: {
+      divineTemplarS1: '/img/elf_fighter.png',
+      elementWeaverS1: '/img/elf_mage.png',
+      shinemakerS1: '/img/elf_mage.png',
+      fighter: '/img/elf_fighter.png'
+    },
+    startZoneName: 'Floresta Élfica (Elven Forest)'
+  },
+  ertheia: {
+    id: 'ertheia',
+    name: 'Ertheia',
+    icon: '🌹',
+    desc: 'Guerreiros e místicas tocados pelos ventos e espíritos da natureza.',
+    perks: ['🌪️ +10 Esquiva Nativa', '🌹 Combate Híbrido com Roubo de Vida', '🏰 Inicia na Ilha de Falar'],
+    allowedClasses: [
+      { id: 'bloodRoseS1', name: 'Blood Rose 🌹', desc: 'Mística dos ventos e espinhos com roubo de vida.', icon: '🌹' },
+      { id: 'marauder', name: 'Marauder / Eviscerator 🌪️', desc: 'Lutadora com garras e combos de furacão.', icon: '🥊' },
+      { id: 'sayhaSeer', name: 'Sayha Seeker 🌀', desc: 'Invocadora de vendavais e espíritos de Sayha.', icon: '🌀' }
+    ],
+    image: {
+      bloodRoseS1: '/img/elf_mage.png',
+      marauder: '/img/elf_fighter.png',
+      sayhaSeer: '/img/elf_mage.png',
+      fighter: '/img/elf_fighter.png'
+    },
+    startZoneName: 'Ilha de Falar (Talking Island)'
   }
 };
 

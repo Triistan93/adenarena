@@ -61,7 +61,10 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
       darkelf: 'darkForest',
       orc: 'orcVillage',
       dwarf: 'dwarvenMine',
-      kamael: 'kamaelLair'
+      kamael: 'kamaelLair',
+      sylph: 'talkingIsland',
+      highelf: 'elvenForest',
+      ertheia: 'talkingIsland'
     };
     const startZone = startZoneMap[data.race] || 'talkingIsland';
 
