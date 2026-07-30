@@ -585,9 +585,31 @@ if (typeof window !== 'undefined') {
   function skill(name, type, note) {
     const id = slug(name);
     if (!SKILL_DEFS[id]) {
-      SKILL_DEFS[id] = { id, name, type: type||T.active, note: note||'', maxLevel:1, essence547:true };
+      SKILL_DEFS[id] = {
+        id,
+        name,
+        type: type || T.active,
+        note: note || '',
+        max: 5,
+        maxLevel: 5,
+        cost: 5,
+        reqLvl: 1,
+        tier: 0,
+        icon: type === T.passive ? '📘' : (type === T.buff ? '✨' : (type === T.toggle ? '🔄' : (type === T.debuff ? '💀' : '⚔️'))),
+        essence547: true
+      };
+    } else {
+      if (!SKILL_DEFS[id].max) SKILL_DEFS[id].max = SKILL_DEFS[id].maxLevel || 5;
+      if (!SKILL_DEFS[id].maxLevel) SKILL_DEFS[id].maxLevel = SKILL_DEFS[id].max || 5;
+      if (!SKILL_DEFS[id].cost) SKILL_DEFS[id].cost = 5;
+      if (SKILL_DEFS[id].tier === undefined) SKILL_DEFS[id].tier = 0;
     }
-    if (!SKILL_REQS[id]) SKILL_REQS[id] = { level:1, sp:0 };
+    if (SKILL_REQS[id]) {
+      delete SKILL_REQS[id].level;
+      delete SKILL_REQS[id].sp;
+    } else {
+      SKILL_REQS[id] = {};
+    }
     return id;
   }
 
@@ -1229,6 +1251,23 @@ if (typeof window !== 'undefined') {
   }
 
   Object.entries(DATA).forEach(([canonical, ids]) => installClassSkills(canonical, ids));
+
+  // Post-processing cleanup for all SKILL_DEFS and SKILL_REQS
+  Object.keys(SKILL_DEFS).forEach(id => {
+    const def = SKILL_DEFS[id];
+    if (!def.max) def.max = def.maxLevel || 5;
+    if (!def.maxLevel) def.maxLevel = def.max || 5;
+    if (!def.cost) def.cost = 5;
+    if (def.tier === undefined) def.tier = 0;
+    if (!def.icon) def.icon = '✦';
+  });
+
+  Object.keys(SKILL_REQS).forEach(id => {
+    if (SKILL_REQS[id]) {
+      delete SKILL_REQS[id].level;
+      delete SKILL_REQS[id].sp;
+    }
+  });
 
   E.CLASS_NAME_TO_ID_ECHO = {
     ...(E.CLASS_NAME_TO_ID_ECHO||{}),

@@ -1428,11 +1428,11 @@ function updateSkillUI() {
   for (const [id, def] of classSkills) {
     if (!def) continue;
     const p = pos[id]; if (!p) continue;
-    const lvl = state.skills[id] || 0, max = def.max;
-    const node = mkEl('div'); node.className = `skill-node tier-${def.tier}` + (lvl > 0 ? ' owned' : '') + (lvl === max ? ' maxed' : '');
+    const lvl = state.skills[id] || 0, max = def.max || def.maxLevel || 5;
+    const node = mkEl('div'); node.className = `skill-node tier-${def.tier || 0}` + (lvl > 0 ? ' owned' : '') + (lvl === max ? ' maxed' : '');
     node.style.left = (p.x - TREE_NODE_W / 2) + 'px'; node.style.top = (p.y - TREE_NODE_H / 2) + 'px';
     node.style.width = TREE_NODE_W + 'px'; node.style.height = TREE_NODE_H + 'px';
-    const reqs = SKILL_REQS[id], reqOk = !reqs || Object.entries(reqs).every(([s, v]) => (state.skills[s] || 0) >= v);
+    const reqs = SKILL_REQS[id], reqOk = !reqs || Object.entries(reqs).every(([s, v]) => s === 'level' || s === 'sp' || (state.skills[s] || 0) >= v);
     const lvlOk = state.level >= (def.reqLvl || 1), canBuy = reqOk && lvlOk && state.sp >= getSkillCost(id, lvl) && lvl < max;
     const btnClass = canBuy ? 'skill-btn can-buy' : 'skill-btn';
     node.innerHTML = `
@@ -1479,20 +1479,23 @@ function updateSkillInfoPanel() {
   const def = id ? SKILL_DEFS[id] : null;
   if (!def) { panel.innerHTML = '<p style="color:var(--text-muted);padding:12px">Select a skill to view details.</p>'; return; }
   const lvl = state.skills[id] || 0;
-  const maxed = lvl >= def.max;
+  const max = def.max || def.maxLevel || 5;
+  const maxed = lvl >= max;
   const cost = getSkillCost(id, lvl);
   const reqs = SKILL_REQS[id];
-  const meetsReqs = !reqs || Object.entries(reqs).every(([s, v]) => (state.skills[s] || 0) >= v);
-  const lvlOk = state.level >= def.reqLvl;
+  const meetsReqs = !reqs || Object.entries(reqs).every(([s, v]) => s === 'level' || s === 'sp' || (state.skills[s] || 0) >= v);
+  const lvlOk = state.level >= (def.reqLvl || 1);
   const canAfford = state.sp >= cost && !maxed;
   
-  let reqHtml = reqs ? Object.entries(reqs).map(([s, v]) => { const ok = (state.skills[s] || 0) >= v; return `<span class="req ${ok ? 'ok' : 'no'}">${SKILL_DEFS[s]?.name || s} ${v}</span>`; }).join('') : '';
-  reqHtml += `<span class="req ${lvlOk ? 'ok' : 'no'}">Level ${def.reqLvl}</span>`;
+  let reqHtml = (reqs && Object.keys(reqs).filter(s => s !== 'level' && s !== 'sp').length > 0)
+    ? Object.entries(reqs).filter(([s]) => s !== 'level' && s !== 'sp').map(([s, v]) => { const ok = (state.skills[s] || 0) >= v; return `<span class="req ${ok ? 'ok' : 'no'}">${SKILL_DEFS[s]?.name || s} ${v}</span>`; }).join('')
+    : '';
+  reqHtml += `<span class="req ${lvlOk ? 'ok' : 'no'}">Level ${def.reqLvl || 1}</span>`;
 
-  const tier = TIER_NAMES[def.tier] || '';
+  const tier = TIER_NAMES[def.tier || 0] || '';
   panel.innerHTML = `
-    <div class="si-head"><span class="si-icon">${def.icon || '✦'}</span><div class="si-title"><h3>${def.name}</h3><p class="si-tier">${tier} · Lv.${lvl}/${def.max}</p></div></div>
-    <p class="si-desc">${def.desc}</p><div class="si-effect">${def.info}</div>
+    <div class="si-head"><span class="si-icon">${def.icon || '✦'}</span><div class="si-title"><h3>${def.name}</h3><p class="si-tier">${tier} · Lv.${lvl}/${max}</p></div></div>
+    <p class="si-desc">${def.desc || def.note || ''}</p><div class="si-effect">${def.info || ''}</div>
     <div class="si-reqs"><span class="si-label">Requires</span>${reqHtml}</div>
     <button class="si-btn" data-skillup="${id}" ${(!canAfford || !meetsReqs || !lvlOk) ? 'disabled' : ''}>${maxed ? '✦ MAXED' : `Invest ${cost.toLocaleString()} SP`}</button>
     <p class="si-sp">SP available: <strong>${state.sp.toLocaleString()}</strong></p>
@@ -3846,10 +3849,11 @@ function showSagaModal(saga) { el('saga-title').textContent = saga.name + ' Unlo
 // --------------------------- CHARACTER ---------------------------
 function spendSP(skillId) {
   const def = SKILL_DEFS[skillId]; if (!def) return; const lvl = state.skills[skillId] || 0;
-  if (lvl >= def.max) { log(`${def.name} já atingiu o nível máximo.`, 'system'); return; }
+  const max = def.max || def.maxLevel || 5;
+  if (lvl >= max) { log(`${def.name} já atingiu o nível máximo.`, 'system'); return; }
   const cost = getSkillCost(skillId, lvl);
   if (state.sp < cost) { log(`SP insuficiente (${cost} SP necessário).`, 'system'); return; }
-  if (state.level < def.reqLvl) { log(`Nível ${def.reqLvl} necessário para esta habilidade.`, 'system'); return; }
+  if (state.level < (def.reqLvl || 1)) { log(`Nível ${def.reqLvl || 1} necessário para esta habilidade.`, 'system'); return; }
 
   // Essence Star Rank Spellbook Requirement (1-Star to 4-Star)
   if (def.starRank && def.starRank > 0 && lvl === 0) {
@@ -3863,9 +3867,12 @@ function spendSP(skillId) {
     log(`📖 Livro Spellbook: ${def.starRank}-Star ⭐ consumido com sucesso!`, 'rarity-legendary');
   }
 
-  const reqs = SKILL_REQS[skillId]; if (reqs && !Object.entries(reqs).every(([s, v]) => (state.skills[s] || 0) >= v)) { log('Pré-requisitos de habilidades não preenchidos.', 'system'); return; }
+  const reqs = SKILL_REQS[skillId];
+  if (reqs && !Object.entries(reqs).every(([s, v]) => s === 'level' || s === 'sp' || (state.skills[s] || 0) >= v)) {
+    log('Pré-requisitos de habilidades não preenchidos.', 'system'); return;
+  }
   state.sp -= cost; state.skills[skillId] = lvl + 1; const newLvl = state.skills[skillId], tier = TIER_NAMES[def.tier] || '';
-  log(`✦ ${def.name} → Lv.${newLvl} [${tier}] (-${cost} SP)`, newLvl === def.max ? 'saga' : 'xp');
+  log(`✦ ${def.name} → Lv.${newLvl} [${tier}] (-${cost} SP)`, newLvl === max ? 'saga' : 'xp');
   const stats = getStats(); state.maxHp = stats.maxHp; state.maxMp = stats.maxMp; state.hp = Math.min(state.hp + 20, state.maxHp); state.mp = Math.min(state.mp + 10, state.maxMp);
   updateAllUI(); save();
 }
