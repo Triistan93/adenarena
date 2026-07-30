@@ -1890,19 +1890,20 @@ function getItemIcon(def) {
   const id = def.id || '';
   const rawKey = String(def.icon || id || '').toLowerCase().replace(/\\/g, '/'); 
   if (!rawKey) return emoji; 
-  
-  const iconIndex = (typeof window !== 'undefined' && window.IconIndex) ? window.IconIndex : ((D() && D().ICON_MAP) ? D().ICON_MAP : {});
-  const cleanKey = rawKey.split('/').pop().replace(/\.png$/, '');
-  
-  let relPath = iconIndex[id] || iconIndex[rawKey] || iconIndex[cleanKey];
-  if (relPath) {
-    relPath = relPath.split('/').pop();
-  } else {
-    relPath = `${cleanKey}.png`;
-  }
 
-  const fullUrl = getAssetUrl(`img/icons/${relPath}`);
-  return `<img src="${fullUrl}" alt="${def.name || ''}" class="item-icon-img" onerror="this.onerror=function(){this.style.display='none';if(this.nextElementSibling)this.nextElementSibling.style.display='inline-block';}; this.src='${getAssetUrl(`img/icons/Weapons/${relPath}`)}';" style="width:28px; height:28px; object-fit:contain; vertical-align:middle;" /><span class="item-icon-fallback" style="display:none; font-size:18px;">${emoji}</span>`; 
+  const baseName = rawKey.split('/').pop().replace(/\.png$/, '');
+  const fileName = `${baseName}.png`;
+
+  const iconIndex = (typeof window !== 'undefined' && window.IconIndex) ? window.IconIndex : ((D() && D().ICON_MAP) ? D().ICON_MAP : {});
+  let mappedPath = iconIndex[id] || iconIndex[rawKey] || iconIndex[baseName] || fileName;
+  if (mappedPath) mappedPath = mappedPath.split('/').pop();
+  else mappedPath = fileName;
+
+  const urlPrimary = getAssetUrl(`img/icons/${mappedPath}`);
+  const urlArmors = getAssetUrl(`img/icons/Armors/${mappedPath}`);
+  const urlWeapons = getAssetUrl(`img/icons/Weapons/${mappedPath}`);
+
+  return `<img src="${urlPrimary}" alt="${def.name || ''}" class="item-icon-img" onerror="this.onerror=function(){this.onerror=function(){this.style.display='none';if(this.nextElementSibling)this.nextElementSibling.style.display='inline-block';}; this.src='${urlWeapons}';}; this.src='${urlArmors}';" style="width:28px; height:28px; object-fit:contain; vertical-align:middle;" /><span class="item-icon-fallback" style="display:none; font-size:18px;">${emoji}</span>`; 
 }
 
 let tooltipTimer = null;
