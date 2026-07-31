@@ -119,21 +119,22 @@ anel de runas, reveal on scroll, code tokens.
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
 }
 
-/* ---------- embers / sparks subindo — tela cheia fixa ---------- */
+/* ---------- embers / brasas de fogo subindo --- */
 @keyframes g-ember-rise {
-  0% { transform: translate3d(0, 0, 0) scale(1); opacity: 0; }
-  10% { opacity: var(--eo, 0.7); }
-  90% { opacity: calc(var(--eo, 0.7) * 0.4); }
-  100% { transform: translate3d(var(--ex, 20px), -100vh, 0) scale(0.3); opacity: 0; }
+  0%   { transform: translate3d(0, 0, 0) scale(1); opacity: 0; }
+  8%   { opacity: var(--eo, 0.85); }
+  85%  { opacity: calc(var(--eo, 0.85) * 0.5); }
+  100% { transform: translate3d(var(--ex, 30px), -110vh, 0) scale(0.2); opacity: 0; }
 }
 
-/* Container de embers fixo que cobre a tela inteira do jogo */
+/* Container de embers — absolute no #game que já cobre 100% da tela */
+/* Em Shadow DOM, position:fixed fica confinado ao shadow host; usar absolute é mais confiável */
 .g-ember-global {
-  position: fixed;
+  position: absolute;
   inset: 0;
   overflow: hidden;
   pointer-events: none;
-  z-index: 0;
+  z-index: 5;  /* acima do fundo, abaixo da UI (panels começam em z-index: 20+) */
 }
 
 /* Container local (dentro de um elemento específico) */
@@ -142,16 +143,18 @@ anel de runas, reveal on scroll, code tokens.
   inset: 0;
   overflow: hidden;
   pointer-events: none;
+  z-index: 5;
 }
 
 .ember {
   position: absolute;
-  bottom: -4px;
-  width: var(--es, 3px);
-  height: var(--es, 3px);
+  bottom: 0;
+  width: var(--es, 4px);
+  height: var(--es, 4px);
   border-radius: 9999px;
   background: var(--ec, #f0cd7e);
-  box-shadow: 0 0 calc(var(--es, 3px) * 3) var(--ec, #f0cd7e);
+  box-shadow: 0 0 calc(var(--es, 4px) * 4) var(--ec, #f0cd7e),
+              0 0 calc(var(--es, 4px) * 8) var(--ec, #f0cd7e);
   animation: g-ember-rise var(--ed, 12s) linear infinite;
   animation-delay: var(--edel, 0s);
   will-change: transform, opacity;

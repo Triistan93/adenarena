@@ -42,23 +42,23 @@ export default function IdleGame() {
     setRoot(shadow as unknown as Document);
     init();
 
+    // ---- Embers / brasas de fogo — montagem correta no Shadow DOM ----
+    // ShadowRoot NÃO tem createElement; sempre usar document.createElement
+    // e depois inserir no #game do shadow.
     if ((window as any).GrimoireFX) {
-      // Cria div fixed que cobre a tela inteira — embers sempre visíveis
-      const emberGlobal = shadow.createElement
-        ? (shadow as any).createElement('div')
-        : document.createElement('div');
-      emberGlobal.className = 'g-ember-global';
-      // Insere como primeiro filho do #game para ficar abaixo de tudo
-      const gameDiv = shadow.getElementById('game') ?? shadow.querySelector('#game');
-      if (gameDiv) {
-        gameDiv.insertBefore(emberGlobal, gameDiv.firstChild);
-      } else {
-        shadow.appendChild(emberGlobal);
+      const gameDiv = shadow.getElementById
+        ? shadow.getElementById('game')
+        : (shadow as any).querySelector?.('#game');
+      if (gameDiv && !gameDiv.querySelector('.g-ember-global')) {
+        const emberDiv = document.createElement('div');
+        emberDiv.className = 'g-ember-global';
+        // Primeiro filho do #game → fica atrás da UI mas na frente do fundo
+        gameDiv.insertBefore(emberDiv, gameDiv.firstChild);
+        (window as any).GrimoireFX.mountEmbers(emberDiv, {
+          count: 60,
+          colors: ['#f0883e', '#f0cd7e', '#e87d2e', '#ffd166', '#ff9b42', '#ffb347']
+        });
       }
-      (window as any).GrimoireFX.mountEmbers(emberGlobal, {
-        count: 45,
-        colors: ['#f0883e', '#f0cd7e', '#e87d2e', '#ffd166', '#ff9b42']
-      });
     }
 
     (window as any).onOpenRaceClassChangeModal = (data: any) => {

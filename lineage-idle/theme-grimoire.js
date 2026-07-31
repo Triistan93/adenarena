@@ -10,21 +10,30 @@
   // Uso: GrimoireFX.mountEmbers(document.getElementById('emberField'))
   GrimoireFX.mountEmbers = function (container, opts = {}) {
     if (!container) return () => {};
-    const count = opts.count ?? 22;
-    const colors = opts.colors ?? ['#f0883e', '#539bf5', '#f0cd7e'];
+    const count = opts.count ?? 30;
+    const colors = opts.colors ?? ['#f0883e', '#f0cd7e', '#e87d2e', '#ffd166', '#ff9b42'];
 
     const frag = document.createDocumentFragment();
     for (let i = 0; i < count; i++) {
       const span = document.createElement('span');
       span.className = 'ember';
-      const size = 2 + ((i * 7) % 4);
-      const dur = 8 + ((i * 13) % 9);
-      const delay = -((i * 17) % 12);
-      const drift = ((i % 5) - 2) * 26;
-      const opacity = 0.25 + ((i * 11) % 50) / 100;
+      // Tamanho: 2px a 7px (brasas menores e maiores)
+      const size = 2 + ((i * 11) % 6);
+      // Duração: 7s a 18s (brasas lentas e rápidas)
+      const dur = 7 + ((i * 13) % 12);
+      // Delay negativo p/ começar em pontos aleatórios do ciclo
+      const delay = -((i * 23) % Math.floor(dur));
+      // Drift horizontal: mais amplo para parecer natural
+      const drift = ((i % 7) - 3) * 40;
+      // Opacidade: 0.4 a 0.9
+      const opacity = 0.4 + ((i * 7) % 50) / 100;
       const color = colors[i % colors.length];
 
-      span.style.left = ((i * 37 + 13) % 100) + '%';
+      // Posição horizontal distribuída por toda a tela
+      span.style.left = ((i * 31 + 7) % 97) + '%';
+      // Altura de início aleatória (não apenas bottom)
+      const startBottom = ((i * 43) % 30);
+      span.style.bottom = startBottom + '%';
       span.style.setProperty('--es', size + 'px');
       span.style.setProperty('--ed', dur + 's');
       span.style.setProperty('--edel', delay + 's');
@@ -33,7 +42,10 @@
       span.style.setProperty('--ec', color);
       frag.appendChild(span);
     }
-    container.classList.add('ember-field');
+    // Se já é um global container, mantém a classe; senão adiciona ember-field
+    if (!container.classList.contains('g-ember-global')) {
+      container.classList.add('ember-field');
+    }
     container.appendChild(frag);
     return () => { container.innerHTML = ''; };
   };
