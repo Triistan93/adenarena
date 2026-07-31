@@ -1,6 +1,3 @@
-PARTE 1: RACES + HUMAN FIGHTER + HUMAN MAGE (completo)
-JavaScript
-
 // ============================================================
 // LINEAGE 2 ESSENCE 547 - ECHO OF ELEMENTS
 // classes_echo.js - VERSÃO COMPLETA
@@ -2419,97 +2416,10 @@ skills: [
       { name: "ShineMaker Spirit",            type: "Passivo",   rarity: "3★", effect: "+25% M.ATK, +20% Heal Power, +15% Holy Damage", cooldown: null, duration: null, note: "Skill permanece após trocar de classe" },
       { name: "Body of the ShineMaker",       type: "Passivo",   rarity: "3★", effect: "+15% Max MP, +15% MP Regen, +10% Max HP", cooldown: null, duration: null, note: "Skill permanece após trocar de classe" },
       { name: "Master of Combat",             type: "Passivo",   rarity: "4★", effect: "+10% All Stats, +15% PvE Damage", cooldown: null, duration: null, note: "Skill permanece após trocar de classe" },
-      { name: "ShineMaker's Harmony",         type: "Self-Buff", rarity: "4★", effect: "+55% M.ATK, +45% Heal Power, +35% Holy Damage por 30 min", cooldown: "90 min", duration: "30 }, 
-
-
-	    // ===================== NOVAS CLASSES ESSENCE =====================
-  deathKnight: { 
-    name: 'Death Knight', 
-    archetype: 'deathknight', 
-    stage: 3, 
-    race: 'human', 
-    base: { atk: 110, def: 65, hp: 650, matk: 95 },
-    skills: [
-      { name: "Death Spike", type: "Ativo", rarity: "3★", effect: "Dano Dark 420%", cooldown: "18s", note: "Skill permanece após trocar de classe" },
-      { name: "Death Storm", type: "Ativo", rarity: "4★", effect: "Explosão Dark AoE 750%", cooldown: "140s", note: "Skill permanece após trocar de classe" }
+      { name: "ShineMaker's Harmony", type: "Self-Buff", rarity: "4★", effect: "+55% M.ATK, +45% Heal Power, +35% Holy Damage por 30 min", cooldown: "90 min", duration: "30 min", note: "Skill permanece após trocar de classe" }
     ]
   },
 
-  warg: { 
-    name: 'Warg', 
-    archetype: 'warg', 
-    stage: 3, 
-    race: 'human', 
-    base: { atk: 105, def: 45, eva: 25, crit: 35 },
-    skills: [
-      { name: "Double Claw Strike", type: "Ativo", rarity: "3★", effect: "Dano 380% (forma lobo)", cooldown: "16s", note: "Skill permanece após trocar de classe" },
-      { name: "Vortex of Claws", type: "Ativo", rarity: "4★", effect: "Pull + Dano 520%", cooldown: "28s", note: "Skill permanece após trocar de classe" }
-    ]
-  },
+export { RACES_ECHO, CLASSES_ECHO };
 
-  assassin: { 
-    name: 'Assassin', 
-    archetype: 'assassin', 
-    stage: 3, 
-    race: 'human', 
-    base: { atk: 118, def: 32, eva: 55, crit: 52 },
-    skills: [
-      { name: "Assassination", type: "Ativo", rarity: "4★", effect: "Dano crítico massivo 680%", cooldown: "35s", note: "Skill permanece após trocar de classe" },
-      { name: "Shadow Blast", type: "Ativo", rarity: "4★", effect: "Dano de sombra AoE 520%", cooldown: "45s", note: "Skill permanece após trocar de classe" }
-    ]
-  },
 
-  stormBlaster: { 
-    name: 'Storm Blaster', 
-    archetype: 'gunner', 
-    stage: 3, 
-    race: 'sylph', 
-    base: { atk: 125, def: 28, eva: 48 },
-    skills: [
-      { name: "Storm Shot", type: "Ativo", rarity: "4★", effect: "Dano de rajada 620%", cooldown: "24s", note: "Skill permanece após trocar de classe" },
-      { name: "Wind Barrage", type: "Ativo", rarity: "4★", effect: "Dano AoE com arma de fogo 580%", cooldown: "32s", note: "Skill permanece após trocar de classe" }
-    ]
-  },
-
-  divineTemplar: { 
-    name: 'Divine Templar', 
-    archetype: 'tank', 
-    stage: 3, 
-    race: 'highelf', 
-    base: { atk: 72, def: 135, hp: 720, mdef: 95 },
-    skills: [{ name: "Sacred Aegis", type: "Self-Buff", rarity: "4★", effect: "+70% DEF por 20 min", cooldown: "65 min", note: "Skill permanece após trocar de classe" }]
-  },
-
-  elementWeaver: { 
-    name: 'Element Weaver', 
-    archetype: 'mage', 
-    stage: 3, 
-    race: 'highelf', 
-    base: { matk: 152, mdef: 85, mp: 480 },
-    skills: [{ name: "Elemental Convergence", type: "Ativo", rarity: "4★", effect: "Dano elemental combinado 780%", cooldown: "170s", note: "Skill permanece após trocar de classe" }]
-  },
-
-  shineMaker: { 
-    name: 'ShineMaker', 
-    archetype: 'support', 
-    stage: 3, 
-    race: 'highelf', 
-    base: { matk: 98, mdef: 92, mp: 420 },
-    skills: [{ name: "Radiant Strike", type: "Ativo", rarity: "4★", effect: "Dano Luz 520% + cura aliada", cooldown: "26s", note: "Skill permanece após trocar de classe" }]
-  },
-
-  bloodRose: { 
-    name: 'Blood Rose', 
-    archetype: 'hybrid', 
-    stage: 3, 
-    race: 'ertheia', 
-    base: { atk: 95, def: 55, matk: 95, hp: 520 },
-    skills: [{ name: "Rose Tempest", type: "Ativo", rarity: "4★", effect: "Dano místico AoE 620%", cooldown: "28s", note: "Skill permanece após trocar de classe" }]
-  }
-};
-
-// ===================== EXPORT =====================
-if (typeof window !== 'undefined') window.CLASSES_ECHO = CLASSES_ECHO;
-if (typeof module !== 'undefined') module.exports = { RACES_ECHO, CLASSES_ECHO };
-
-console.log("✅ CLASSES_ECHO carregado com sucesso - Todas as raças e novas classes incluídas.");
