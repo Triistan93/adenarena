@@ -2416,7 +2416,15 @@ skills: [
       { name: "Master of Combat",             type: "Passivo",   rarity: "4★", effect: "+10% All Stats, +15% PvE Damage", cooldown: null, duration: null, note: "Skill permanece após trocar de classe" },
       { name: "ShineMaker's Harmony", type: "Self-Buff", rarity: "4★", effect: "+55% M.ATK, +45% Heal Power, +35% Holy Damage por 30 min", cooldown: "90 min", duration: "30 min", note: "Skill permanece após trocar de classe" }
     ]
-  },
+  }
+};
+
+if (typeof window !== 'undefined') {
+  window.EchoData = { RACES_ECHO, CLASSES_ECHO };
+  window.GameData = window.GameData || {};
+  window.GameData.RACES_ECHO = RACES_ECHO;
+  window.GameData.CLASSES_ECHO = CLASSES_ECHO;
+}
 
 export { RACES_ECHO, CLASSES_ECHO };
 
