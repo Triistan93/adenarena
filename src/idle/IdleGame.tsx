@@ -5,10 +5,14 @@ import { useLayoutEffect, useRef, useState } from "react";
 import "../../lineage-idle/data/items.js";
 // @ts-ignore -- Echo of Elements class/skill data — must load BEFORE main.js
 import "../../lineage-idle/data/classes_echo.js";
+// @ts-ignore -- Grimoire theme FX helpers
+import "../../lineage-idle/theme-grimoire.js";
 // @ts-ignore
 import { init, setRoot, destroy } from "../../lineage-idle/main.js";
 // @ts-ignore -- Vite ?raw import returns the CSS source as a string
 import idleCss from "../../lineage-idle/style.css?raw";
+// @ts-ignore -- Grimoire theme CSS
+import grimoireCss from "../../lineage-idle/theme-grimoire.css?raw";
 
 import { IDLE_MARKUP } from "./markup";
 import "./heroImages";
@@ -34,9 +38,16 @@ export default function IdleGame() {
     if (!host) return;
 
     const shadow = host.shadowRoot ?? host.attachShadow({ mode: "open" });
-    shadow.innerHTML = `<style>${idleCss}</style>${IDLE_MARKUP}`;
+    shadow.innerHTML = `<style>${idleCss}\n${grimoireCss}</style>${IDLE_MARKUP}`;
     setRoot(shadow as unknown as Document);
     init();
+
+    if ((window as any).GrimoireFX) {
+      const ambient = shadow.querySelector('.ambient-layer');
+      if (ambient) {
+        (window as any).GrimoireFX.mountEmbers(ambient, { count: 25 });
+      }
+    }
 
     (window as any).onOpenRaceClassChangeModal = (data: any) => {
       setChangeScrollData(data);

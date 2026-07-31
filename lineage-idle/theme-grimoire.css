@@ -1,0 +1,244 @@
+/* ================================================================
+GRIMOIRE THEME — "O Grimório"
+Tema visual extraído do painel de auditoria: fonte display,
+paleta de cores, sparks/embers subindo, carimbo "CORRIGIDO",
+anel de runas, reveal on scroll, code tokens.
+================================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root {
+  --g-font-display: 'Cinzel', serif;
+  --g-font-body: 'IBM Plex Sans', sans-serif;
+  --g-font-mono: 'IBM Plex Mono', monospace;
+
+  --g-bg0: #0e0c09;
+  --g-bg1: #14110d;
+  --g-panel: #1a1611;
+  --g-panel2: #211b14;
+  --g-line: #2e2820;
+  --g-line2: #3d3427;
+  --g-ink: #ece2cd;
+  --g-mut: #a5977c;
+  --g-faint: #736753;
+  --g-gold: #d4a94e;
+  --g-goldhi: #f0cd7e;
+
+  /* raridades — use pra tint de bordas/textos de itens */
+  --g-common: #b0b0b0;
+  --g-uncommon: #48bb78;
+  --g-rare: #539bf5;
+  --g-epic: #b180f8;
+  --g-legendary: #f0883e;
+}
+
+/* ---------- fundo geral do jogo ---------- */
+.grimoire-bg {
+  background-color: var(--g-bg0);
+  color: var(--g-ink);
+  font-family: var(--g-font-body);
+  background-image:
+    radial-gradient(1100px 700px at 85% -10%, rgba(212, 169, 78, 0.09), transparent 60%),
+    radial-gradient(900px 600px at -10% 30%, rgba(83, 155, 245, 0.05), transparent 55%),
+    radial-gradient(1000px 800px at 60% 110%, rgba(240, 136, 62, 0.06), transparent 60%);
+  background-attachment: fixed;
+}
+
+.grimoire-bg ::selection { background: rgba(212, 169, 78, 0.35); color: #fff8e6; }
+
+/* ---------- scrollbar tema ---------- */
+.grimoire-bg, .grimoire-scope {
+  scrollbar-width: thin;
+  scrollbar-color: var(--g-line2) transparent;
+}
+.grimoire-bg::-webkit-scrollbar, .grimoire-scope::-webkit-scrollbar { width: 8px; height: 8px; }
+.grimoire-bg::-webkit-scrollbar-thumb, .grimoire-scope::-webkit-scrollbar-thumb {
+  background: var(--g-line2);
+  border-radius: 8px;
+}
+
+/* ---------- tipografia ---------- */
+.grimoire-title {
+  font-family: var(--g-font-display);
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+  color: var(--g-ink);
+}
+.grimoire-subtitle {
+  font-family: var(--g-font-display);
+  font-weight: 700;
+  color: var(--g-mut);
+}
+.grimoire-overline {
+  font-family: var(--g-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--g-gold);
+}
+.text-gold { color: var(--g-gold); }
+.text-goldhi { color: var(--g-goldhi); }
+.text-mut { color: var(--g-mut); }
+.text-faint { color: var(--g-faint); }
+
+/* paineis / cards no estilo do grimorio */
+.grimoire-panel {
+  background: var(--g-panel);
+  border: 1px solid var(--g-line);
+}
+.grimoire-panel-head {
+  background: var(--g-panel2);
+  border-bottom: 1px solid var(--g-line);
+}
+.grimoire-btn {
+  font-family: var(--g-font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  border: 1px solid rgba(212, 169, 78, 0.7);
+  background: rgba(212, 169, 78, 0.1);
+  color: var(--g-goldhi);
+  padding: 10px 20px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+.grimoire-btn:hover {
+  background: rgba(212, 169, 78, 0.2);
+  box-shadow: 0 0 34px -8px rgba(212, 169, 78, 0.6);
+}
+
+/* ---------- noise overlay (grao de pergaminho) ---------- */
+.grimoire-noise::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+}
+
+/* ---------- embers / sparks subindo ---------- */
+@keyframes g-ember-rise {
+  0% { transform: translate3d(0, 0, 0) scale(1); opacity: 0; }
+  10% { opacity: var(--eo, 0.7); }
+  90% { opacity: calc(var(--eo, 0.7) * 0.4); }
+  100% { transform: translate3d(var(--ex, 20px), -46vh, 0) scale(0.4); opacity: 0; }
+}
+.ember-field {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.ember {
+  position: absolute;
+  bottom: -2vh;
+  width: var(--es, 4px);
+  height: var(--es, 4px);
+  border-radius: 9999px;
+  background: var(--ec, #f0cd7e);
+  box-shadow: 0 0 calc(var(--es, 4px) * 2.4) var(--ec, #f0cd7e);
+  animation: g-ember-rise var(--ed, 11s) linear infinite;
+  animation-delay: var(--edel, 0s);
+  will-change: transform, opacity;
+}
+
+/* ---------- anel de runas giratorio (decorativo) ---------- */
+@keyframes g-spin-slow { to { transform: rotate(360deg); } }
+.rune-ring { animation: g-spin-slow 140s linear infinite; }
+.rune-ring-rev { animation: g-spin-slow 90s linear infinite reverse; }
+
+/* ---------- ticker infinito (ex: feed de drops) ---------- */
+@keyframes g-ticker-x { to { transform: translateX(-50%); } }
+.ticker-track { display: flex; width: max-content; animation: g-ticker-x 46s linear infinite; }
+.ticker-track:hover { animation-play-state: paused; }
+
+/* ---------- reveal ao rolar a tela ---------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.7s cubic-bezier(0.2, 0.65, 0.25, 1), transform 0.7s cubic-bezier(0.2, 0.65, 0.25, 1);
+}
+.reveal.is-in { opacity: 1; transform: none; }
+
+.mask-line { display: block; overflow: hidden; }
+.mask-line > span {
+  display: block;
+  transform: translateY(110%);
+  transition: transform 0.9s cubic-bezier(0.16, 0.8, 0.24, 1);
+}
+.mask-line.is-in > span { transform: translateY(0); }
+
+/* ---------- carimbo "CORRIGIDO" / "LENDÁRIO" / "NOVO" ---------- */
+@keyframes g-stamp-in {
+  0% { opacity: 0; transform: rotate(-14deg) scale(1.9); }
+  60% { opacity: 1; transform: rotate(-8deg) scale(0.94); }
+  100% { opacity: 1; transform: rotate(-8deg) scale(1); }
+}
+.stamp {
+  display: inline-block;
+  pointer-events: none;
+  user-select: none;
+  border: 3px double var(--stamp-color, var(--g-uncommon));
+  padding: 8px 20px;
+  animation: g-stamp-in 0.7s cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
+}
+.stamp-text {
+  font-family: var(--g-font-display);
+  font-weight: 900;
+  font-size: 24px;
+  letter-spacing: 0.18em;
+  text-align: center;
+  color: var(--stamp-color, var(--g-uncommon));
+  margin: 0;
+}
+.stamp-sub {
+  font-family: var(--g-font-mono);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  text-align: center;
+  color: var(--stamp-color, var(--g-uncommon));
+  opacity: 0.7;
+  margin: 0;
+}
+/* variantes de cor prontas: <div class="stamp stamp-legendary"> */
+.stamp-legendary { --stamp-color: var(--g-legendary); }
+.stamp-epic { --stamp-color: var(--g-epic); }
+.stamp-rare { --stamp-color: var(--g-rare); }
+.stamp-uncommon { --stamp-color: var(--g-uncommon); }
+.stamp-common { --stamp-color: var(--g-common); }
+
+/* ---------- gemas / icones com pulso de brilho ---------- */
+@keyframes g-gem-pulse {
+  0%, 100% { filter: drop-shadow(0 0 3px currentColor); }
+  50% { filter: drop-shadow(0 0 10px currentColor); }
+}
+.gem-live { animation: g-gem-pulse 3.2s ease-in-out infinite; }
+
+/* ---------- hover lift em cards de item ---------- */
+.lift {
+  transition: transform 0.35s cubic-bezier(0.2, 0.65, 0.25, 1), border-color 0.35s, box-shadow 0.35s;
+}
+.lift:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 44px -18px rgba(0, 0, 0, 0.65);
+}
+
+/* ---------- syntax tokens (se voce mostrar codigo/log no jogo) ---------- */
+.tk-c { color: #7d7159; font-style: italic; }
+.tk-s { color: #b8cc8e; }
+.tk-n { color: #e0b06a; }
+.tk-k { color: #e0917f; }
+.tk-p { color: #c9b8e8; }
+
+/* ---------- respeita usuarios com reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .ember, .ticker-track, .rune-ring, .rune-ring-rev, .gem-live { animation: none !important; }
+  .ember { display: none; }
+  .reveal, .mask-line > span { opacity: 1 !important; transform: none !important; transition: none !important; }
+  .stamp { animation: none !important; opacity: 1; transform: rotate(-8deg); }
+  .lift, .lift:hover { transform: none; transition: none; }
+}
