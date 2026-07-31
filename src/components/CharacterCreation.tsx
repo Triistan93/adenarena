@@ -92,7 +92,7 @@ const RACES_INFO: Record<string, {
     allowedClasses: [
       { id: 'fighter', name: 'Guerreiro Orc (Fighter)', desc: 'Destruidor com armas de duas mãos e garras.', icon: '🪓' },
       { id: 'mage', name: 'Xamã Orc (Shaman)', desc: 'Mago de combate e buffs tribais de sangue.', icon: '🔥' },
-      { id: 'orcRider', name: 'Vanguard Rider 🐉', desc: 'Cavaleiro Orc montado especialista em lança de guerra.', icon: '🐉' }
+      { id: 'orcRider', name: 'Vanguard Rider EM DESENVOLVIMENTO, CONTEM BUGS🐉', desc: 'Cavaleiro Orc montado especialista em lança de guerra.', icon: '🐉' }
     ],
     image: {
       fighter: '/img/orc_fighter.png',
@@ -109,7 +109,7 @@ const RACES_INFO: Record<string, {
     perks: ['🎒 +100 Espaços de Inventário (Total 250)', '⚒️ Bônus de Craft & Drop de Materiais', '⛏️ Inicia nas Minas dos Anões'],
     allowedClasses: [
       { id: 'artisan', name: 'Artesão (Artisan)', desc: 'Especialista em forja de armas e armaduras.', icon: '⚒️' },
-      { id: 'shinemakerS1', name: 'ShineMaker ✨', desc: 'Mestre da luz cristalina, suporte e dano cristalino.', icon: '✨' }
+      { id: 'shinemakerS1', name: 'ShineMaker EM DESENVOLVIMENTO, CONTEM BUGS ✨', desc: 'Mestre da luz cristalina, suporte e dano cristalino.', icon: '✨' }
     ],
     image: {
       artisan: '/img/dwarf_artisan.png',
@@ -126,7 +126,7 @@ const RACES_INFO: Record<string, {
     perks: ['⚡ Usam Armaduras LEVES por Lore', '🗡️ Ataques Físicos Ultrarrápidos', '🏰 Inicia na Lair dos Kamael'],
     allowedClasses: [
       { id: 'soulbreaker', name: 'Soulbreaker', desc: 'Espadachim das sombras especializado em rapieiras.', icon: '🗡️' },
-      { id: 'hatamoto', name: 'Samurai ⛩️', desc: 'Mestre da katana ancestral e técnica Iaijutsu.', icon: '⛩️' }
+      { id: 'hatamoto', name: 'Samurai EM DESENVOLVIMENTO, CONTEM BUGS⛩️', desc: 'Mestre da katana ancestral e técnica Iaijutsu.', icon: '⛩️' }
     ],
     image: {
       soulbreaker: '/img/kamael_soulbreaker.png',
@@ -142,7 +142,7 @@ const RACES_INFO: Record<string, {
     desc: 'Atiradores elementais dos ventos com armas de fogo.',
     perks: ['💨 +12 Esquiva & Velocidade', '🔫 Atiradores Elementais Ranged', '🌪️ Inicia na Ilha de Falar'],
     allowedClasses: [
-      { id: 'sylphGunner', name: 'Storm Blaster 🔫', desc: 'Atirador elemental com armas de fogo e tiros de vento.', icon: '🔫' }
+      { id: 'sylphGunner', name: 'Storm Blaster EM DESENVOLVIMENTO, CONTEM BUGS🔫', desc: 'Atirador elemental com armas de fogo e tiros de vento.', icon: '🔫' }
     ],
     image: {
       sylphGunner: '/img/human_fighter.png',
@@ -157,9 +157,9 @@ const RACES_INFO: Record<string, {
     desc: 'Elfos supremos detentores da luz divina e maestria elemental.',
     perks: ['🌟 +8 Magia & Defesa Divina', '🛡️ Guardiões Sagrados de Aden', '🌲 Inicia na Floresta Élfica'],
     allowedClasses: [
-      { id: 'divineTemplarS1', name: 'Divine Templar 🛡️', desc: 'Guardião sagrado supremo e tanque com Sacred Aegis.', icon: '🛡️' },
-      { id: 'elementWeaverS1', name: 'Element Weaver 🌀', desc: 'Mago supremo combinando Fogo, Água e Vento.', icon: '🌀' },
-      { id: 'shinemakerS1', name: 'ShineMaker ✨', desc: 'Invocador de luz sagrada e suporte cristalino.', icon: '✨' }
+      { id: 'divineTemplarS1', name: 'Divine Templar EM DESENVOLVIMENTO, CONTEM BUGS🛡️', desc: 'Guardião sagrado supremo e tanque com Sacred Aegis.', icon: '🛡️' },
+      { id: 'elementWeaverS1', name: 'Element Weaver EM DESENVOLVIMENTO, CONTEM BUGS🌀', desc: 'Mago supremo combinando Fogo, Água e Vento.', icon: '🌀' },
+      { id: 'shinemakerS1', name: 'ShineMakerEM DESENVOLVIMENTO, CONTEM BUGS ✨', desc: 'Invocador de luz sagrada e suporte cristalino.', icon: '✨' }
     ],
     image: {
       divineTemplarS1: '/img/elf_fighter.png',
@@ -176,9 +176,9 @@ const RACES_INFO: Record<string, {
     desc: 'Guerreiros e místicas tocados pelos ventos e espíritos da natureza.',
     perks: ['🌪️ +10 Esquiva Nativa', '🌹 Combate Híbrido com Roubo de Vida', '🏰 Inicia na Ilha de Falar'],
     allowedClasses: [
-      { id: 'bloodRoseS1', name: 'Blood Rose 🌹', desc: 'Mística dos ventos e espinhos com roubo de vida.', icon: '🌹' },
-      { id: 'marauder', name: 'Marauder / Eviscerator 🌪️', desc: 'Lutadora com garras e combos de furacão.', icon: '🥊' },
-      { id: 'sayhaSeer', name: 'Sayha Seeker 🌀', desc: 'Invocadora de vendavais e espíritos de Sayha.', icon: '🌀' }
+      { id: 'bloodRoseS1', name: 'Blood Rose EM DESENVOLVIMENTO, CONTEM BUGS🌹', desc: 'Mística dos ventos e espinhos com roubo de vida.', icon: '🌹' },
+      { id: 'marauder', name: 'MarauderEM DESENVOLVIMENTO, CONTEM BUGS / Eviscerator 🌪️', desc: 'Lutadora com garras e combos de furacão.', icon: '🥊' },
+      { id: 'sayhaSeer', name: 'Sayha Seeker EM DESENVOLVIMENTO, CONTEM BUGS🌀', desc: 'Invocadora de vendavais e espíritos de Sayha.', icon: '🌀' }
     ],
     image: {
       bloodRoseS1: '/img/elf_mage.png',
@@ -191,9 +191,26 @@ const RACES_INFO: Record<string, {
 };
 
 const RANDOM_NAMES = [
+  // Sua lista original
   'Astaroth', 'Valerius', 'Kaelen', 'Sylas', 'Lyrion',
   'Ignis', 'Morgana', 'Vaelin', 'Darian', 'Balthazar',
-  'Thorne', 'Elysia', 'Gideon', 'Zephyr', 'Orion'
+  'Thorne', 'Elysia', 'Gideon', 'Zephyr', 'Orion',
+
+  // Novos nomes (Fantasia Clássica & Elfica)
+  'Aethelgard', 'Aerion', 'Caelum', 'Elowen', 'Fenris',
+  'Galadriel', 'Isolden', 'Malakor', 'Naelis', 'Thalor',
+
+  // Sombrios & Arcanos
+  'Azrael', 'Belial', 'Kaelen', 'Malakor', 'Moros',
+  'Nocturna', 'Oberon', 'Ravena', 'Soren', 'Vesper',
+
+  // Guerreiros & Nobres
+  'Aethelstan', 'Boran', 'Cassian', 'Draven', 'Eldrin',
+  'Garrick', 'Kaelith', 'Ragnar', 'Valen', 'Varian',
+
+  // Cósmicos & Místicos
+  'Astraea', 'Celestia', 'Eridanus', 'Hesperos', 'Lyra',
+  'Nebula', 'Solon', 'Tenebris', 'Vael', 'Zorion'
 ];
 
 export const CharacterCreation: React.FC<CharacterCreationProps> = ({
