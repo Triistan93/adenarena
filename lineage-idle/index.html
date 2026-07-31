@@ -288,9 +288,10 @@
   </div>
 
   <script src="data/items.js"></script>
-  <script src="data/classes_echo.js"></script>
+  <!-- echo-adapter importa classes_echo.js internamente (ES module), garantindo ordem correta -->
+  <script type="module" src="data/echo-adapter.js"></script>
   <script src="theme-grimoire.js"></script>
-  <!-- === ADICIONADO: O type="module" para evitar quebra com imports === -->
+  <!-- main.js carregado como module APÓS os dados -->
   <script type="module" src="main.js"></script>
 </body>
 </html>

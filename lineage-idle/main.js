@@ -1,5 +1,8 @@
 import * as ART from "./art.js";
 import { loadIconIndex } from "./iconLoader.js";
+// echo-adapter garante que SKILL_DEFS_ECHO, CLASS_SKILLS_ECHO e SKILL_TREE_LAYOUT_ECHO
+// existam em window.EchoData antes das constantes globais serem lidas abaixo.
+import "./data/echo-adapter.js";
 await loadIconIndex();
 // ========================================
 // Lineage Idle - Main Game Logic
