@@ -34,9 +34,9 @@ const RACES_INFO: Record<string, {
     allowedClasses: [
       { id: 'fighter', name: 'Guerreiro (Fighter)', desc: 'Combate corpo a corpo com espada e escudo.', icon: '⚔️' },
       { id: 'mage', name: 'Mago (Mage)', desc: 'Dominador de magia elemental e mana elevado.', icon: '🔮' },
-      { id: 'deathPilgrim', name: 'Death Knight 💀', desc: 'Peregrino das trevas futuro Cavaleiro da Morte com DP.', icon: '💀' },
-      { id: 'wargBase', name: 'Warg 🐺', desc: 'Lutador primitivo que se transforma em Lobo guerreiro.', icon: '🐺' },
-      { id: 'assassinBase', name: 'Assassin 🗡️', desc: 'Caçador das sombras com adagas e clones sombrios.', icon: '🗡️' }
+      { id: 'deathPilgrim', name: 'Death Knight EM DESENVOLVIMENTO, CONTEM BUGS💀', desc: 'Peregrino das trevas futuro Cavaleiro da Morte com DP.', icon: '💀' },
+      { id: 'wargBase', name: 'Warg EM DESENVOLVIMENTO, CONTEM BUGS🐺', desc: 'Lutador primitivo que se transforma em Lobo guerreiro.', icon: '🐺' },
+      { id: 'assassinBase', name: 'Assassin EM DESENVOLVIMENTO, CONTEM BUGS🗡️', desc: 'Caçador das sombras com adagas e clones sombrios.', icon: '🗡️' }
     ],
     image: {
       fighter: '/img/human_fighter.png',
@@ -72,8 +72,8 @@ const RACES_INFO: Record<string, {
     allowedClasses: [
       { id: 'fighter', name: 'Guerreiro Negro (Fighter)', desc: 'Assassino mortal e cavaleiro sombrio.', icon: '🗡️' },
       { id: 'mage', name: 'Mago Negro (Mage)', desc: 'Invocador de maldições e magia de fogo/trevas.', icon: '🔮' },
-      { id: 'elfDeathPilgrim', name: 'Death Knight 💀', desc: 'Cavaleiro da Morte Dark Elf com Dark Points e magia sombria.', icon: '💀' },
-      { id: 'assassinBase', name: 'Assassin 🗡️', desc: 'Assassina mortal das sombras de Shillien.', icon: '🗡️' }
+      { id: 'elfDeathPilgrim', name: 'Death Knight EM DESENVOLVIMENTO, CONTEM BUGS💀', desc: 'Cavaleiro da Morte Dark Elf com Dark Points e magia sombria.', icon: '💀' },
+      { id: 'assassinBase', name: 'Assassin EM DESENVOLVIMENTO, CONTEM BUGS🗡️', desc: 'Assassina mortal das sombras de Shillien.', icon: '🗡️' }
     ],
     image: {
       fighter: '/img/darkelf_fighter.png',
