@@ -1,1289 +1,1114 @@
+// ============================================================
+// LINEAGE 2 ESSENCE 547 - ECHO OF ELEMENTS
+// classes_echo.js - VERSÃO COMPLETA
+// Regra: Skills aprendidas nas classes anteriores PERMANECEM
+// ============================================================
+
 const RACES_ECHO = {
-  human:   { name: 'Human',    desc: 'Versáteis, equilibrados em combate e magia.',     stats: { atk: 0,  def: 0,  eva: 0,  matk: 0,  mdef: 0  }, startZone: 'talkingIsland' },
-  elf:     { name: 'Elf',      desc: 'Graciosos, alta esquiva e velocidade de ataque.',  stats: { atk: 0,  def: -2, eva: 8,  matk: 0,  mdef: 0  }, startZone: 'elvenForest' },
-  darkelf: { name: 'Dark Elf', desc: 'Sombrios, dano crítico e magia negra devastadora.',stats: { atk: 2,  def: -2, eva: 4,  matk: 6,  mdef: 2  }, startZone: 'darkForest' },
-  orc:     { name: 'Orc',      desc: 'Resistentes, força bruta e HP elevado.',           stats: { atk: 4,  def: 6,  eva: -4, matk: -2, mdef: -2 }, startZone: 'orcVillage' },
-  dwarf:   { name: 'Dwarf',    desc: 'Mestres artesãos com bônus de loot e craft.',      stats: { atk: 0,  def: 4,  eva: -2, matk: 0,  mdef: 0, lootBonus: 0.15 }, startZone: 'dwarvenMine' },
-  kamael:  { name: 'Kamael',   desc: 'Ágeis e mortais, especialistas em alma e espada.', stats: { atk: 6,  def: -2, eva: 6,  matk: 0,  mdef: 0  }, startZone: 'kamaelLair' },
-  ertheia: { name: 'Ertheia',  desc: 'Guerreiros do vento com alto potencial mágico.',   stats: { atk: 2,  def: 0,  eva: 10, matk: 4,  mdef: 0  }, startZone: 'talkingIsland' },
-  sylph:   { name: 'Sylph',    desc: 'Atiradores elementais do vento com armas de fogo.',stats: { atk: 4,  def: -2, eva: 12, matk: 2,  mdef: 0  }, startZone: 'talkingIsland' },
-  highelf: { name: 'High Elf', desc: 'Elfos supremos com magia sagrada e defesa divina.',stats: { atk: 0,  def: 2,  eva: 4,  matk: 8,  mdef: 4  }, startZone: 'elvenForest' }
+  human:    { name: 'Human',     desc: 'Versáteis, equilibrados em combate e magia.',       stats: { atk: 0,  def: 0,  eva: 0,  matk: 0,  mdef: 0  }, startZone: 'talkingIsland' },
+  elf:      { name: 'Elf',       desc: 'Graciosos, alta esquiva e velocidade de ataque.',    stats: { atk: 0,  def:-2,  eva: 8,  matk: 0,  mdef: 0  }, startZone: 'elvenForest' },
+  darkelf:  { name: 'Dark Elf',  desc: 'Sombrios, dano crítico e magia negra devastadora.', stats: { atk: 2,  def:-2,  eva: 4,  matk: 6,  mdef: 2  }, startZone: 'darkForest' },
+  orc:      { name: 'Orc',       desc: 'Resistentes, força bruta e HP elevado.',             stats: { atk: 4,  def: 6,  eva:-4,  matk:-2,  mdef:-2 }, startZone: 'orcVillage' },
+  dwarf:    { name: 'Dwarf',     desc: 'Mestres artesãos com bônus de loot e craft.',        stats: { atk: 0,  def: 4,  eva:-2,  matk: 0,  mdef: 0, lootBonus: 0.15 }, startZone: 'dwarvenMine' },
+  kamael:   { name: 'Kamael',    desc: 'Ágeis e mortais, especialistas em alma e espada.',   stats: { atk: 6,  def:-2,  eva: 6,  matk: 0,  mdef: 0  }, startZone: 'kamaelLair' },
+  sylph:    { name: 'Sylph',     desc: 'Atiradores elementais do vento com armas de fogo.', stats: { atk: 4,  def:-2,  eva:12,  matk: 2,  mdef: 0  }, startZone: 'talkingIsland' },
+  highelf:  { name: 'High Elf',  desc: 'Elfos supremos com magia sagrada e defesa divina.', stats: { atk: 0,  def: 2,  eva: 4,  matk: 8,  mdef: 4  }, startZone: 'elvenForest' },
+  ertheia:  { name: 'Ertheia',   desc: 'Guerreiros do vento com alto potencial mágico.',    stats: { atk: 2,  def: 0,  eva:10,  matk: 4,  mdef: 0  }, startZone: 'talkingIsland' }
 };
+
+// ============================================================
+//  FORMATO DE SKILL:
+//  { name, type, rarity, effect, duration, cooldown, desc }
+//  type: "Ativo" | "Passivo" | "Toggle" | "Self-Buff" | "Party-Buff"
+//  rarity: "1★" | "2★" | "3★" | "4★"
+//  Regra: Skills aprendidas em classes anteriores PERMANECEM
+// ============================================================
 
 const CLASSES_ECHO = {
-  // Stage 0 (Base classes - no parent)
-  fighter: { name: 'Fighter', archetype: 'fighter', stage: 0, desc: 'Lutador basico', base: {} },
-  mage: { name: 'Mage', archetype: 'mage', stage: 0, desc: 'Mago basico', base: {} },
-  artisan: { name: 'Artisan', archetype: 'artisan', stage: 0, race: 'dwarf', desc: 'Artesao anao', base: {} },
-  soulbreaker: { name: 'Soulbreaker', archetype: 'soulbreaker', stage: 0, race: 'kamael', desc: 'Lutador kamael', base: {} },
-  deathPilgrim: { name: 'Death Pilgrim', archetype: 'deathknight', stage: 0, desc: 'Peregrino das trevas, futuro Death Knight', base: {} },
-  wargBase: { name: 'Warg Base', archetype: 'warg', stage: 0, race: 'human', desc: 'Lutador primitivo que desperta como Warg', base: {} },
-  assassinBase: { name: 'Assassin Hunter', archetype: 'assassin', stage: 0, race: 'human', desc: 'Caçador das sombras, Assassin Hunter', base: {} },
-  sylphGunner: { name: 'Sylph Gunner', archetype: 'gunner', stage: 0, race: 'sylph', desc: 'Atirador Sylph com armas de fogo elementais', base: {} },
-  highElfBase: { name: 'High Elf', archetype: 'highelf', stage: 0, race: 'highelf', desc: 'Alto Elfo de poder divino', base: {} },
-  bloodRoseBase: { name: 'Blood Rose', archetype: 'bloodrose', stage: 0, race: 'ertheia', desc: 'Lutadora mística Ertheia Blood Rose', base: {} },
-
-  // Stage 1 (1st Transfer lv20)
-  warrior: { name: 'Warrior', parent: 'fighter', race: 'human', archetype: 'fighter', stage: 1, base: { atk: 25, def: 12, hp: 50, mdef: 5 } },
-  knight: { name: 'Knight', parent: 'fighter', race: 'human', archetype: 'fighter', stage: 1, base: { atk: 15, def: 28, hp: 120, mdef: 15 } },
-  rogue: { name: 'Rogue', parent: 'fighter', race: 'human', archetype: 'fighter', stage: 1, base: { atk: 22, def: 10, eva: 12, crit: 8, mdef: 5 } },
-  wizard: { name: 'Wizard', parent: 'mage', race: 'human', archetype: 'mage', stage: 1, base: { matk: 32, mdef: 18, mp: 80, atk: 5 } },
-  cleric: { name: 'Cleric', parent: 'mage', race: 'human', archetype: 'mage', stage: 1, base: { matk: 20, mdef: 25, def: 18, hp: 40, mp: 60 } },
-  elvenKnight: { name: 'Elven Knight', parent: 'fighter', race: 'elf', archetype: 'fighter', stage: 1, base: { atk: 18, def: 25, eva: 10, hp: 100, mdef: 12 } },
-  elvenScout: { name: 'Elven Scout', parent: 'fighter', race: 'elf', archetype: 'fighter', stage: 1, base: { atk: 24, def: 8, eva: 18, crit: 10 } },
-  elvenWizard: { name: 'Elven Wizard', parent: 'mage', race: 'elf', archetype: 'mage', stage: 1, base: { matk: 34, mdef: 20, mp: 90, eva: 5 } },
-  oracle: { name: 'Oracle', parent: 'mage', race: 'elf', archetype: 'mage', stage: 1, base: { matk: 22, mdef: 28, def: 16, hp: 50, mp: 80 } },
-  palusKnight: { name: 'Palus Knight', parent: 'fighter', race: 'darkelf', archetype: 'fighter', stage: 1, base: { atk: 24, def: 22, hp: 90, mdef: 14 } },
-  deAssassin: { name: 'Assassin', parent: 'fighter', race: 'darkelf', archetype: 'fighter', stage: 1, base: { atk: 30, def: 6, eva: 14, crit: 15 } },
-  darkWizard: { name: 'Dark Wizard', parent: 'mage', race: 'darkelf', archetype: 'mage', stage: 1, base: { matk: 40, mdef: 15, mp: 75, atk: 8 } },
-  shillienOracle: { name: 'Shillien Oracle', parent: 'mage', race: 'darkelf', archetype: 'mage', stage: 1, base: { matk: 26, mdef: 24, def: 14, hp: 45, mp: 70 } },
-  orcRaider: { name: 'Orc Raider', parent: 'fighter', race: 'orc', archetype: 'fighter', stage: 1, base: { atk: 32, def: 18, hp: 140, mdef: 4 } },
-  monk: { name: 'Monk', parent: 'fighter', race: 'orc', archetype: 'fighter', stage: 1, base: { atk: 28, def: 14, eva: 8, hp: 120, crit: 6 } },
-  orcRider: { name: 'Rider', parent: 'fighter', race: 'orc', archetype: 'fighter', stage: 1, desc: 'Orc montado com lanças de guerra', base: { atk: 26, def: 20, hp: 130 } },
-  orcShaman: { name: 'Orc Shaman', parent: 'mage', race: 'orc', archetype: 'mage', stage: 1, base: { matk: 24, mdef: 22, def: 20, hp: 90, mp: 60 } },
-  scavenger: { name: 'Scavenger', parent: 'artisan', race: 'dwarf', archetype: 'artisan', stage: 1, base: { atk: 18, def: 18, lootBonus: 0.35 } },
-  artisanClass: { name: 'Artisan Master', parent: 'artisan', race: 'dwarf', archetype: 'artisan', stage: 1, base: { atk: 20, def: 22, hp: 60, lootBonus: 0.25 } },
-  trooper: { name: 'Trooper', parent: 'soulbreaker', race: 'kamael', archetype: 'soulbreaker', stage: 1, base: { atk: 30, eva: 12, crit: 10 } },
-  warder: { name: 'Warder', parent: 'soulbreaker', race: 'kamael', archetype: 'soulbreaker', stage: 1, base: { atk: 28, def: 8, eva: 14, crit: 12 } },
-  hatamoto: { name: 'Hatamoto', parent: 'soulbreaker', race: 'kamael', archetype: 'soulbreaker', stage: 1, desc: 'Guerreiro Kamael ancestral do caminho da katana', base: { atk: 26, def: 10, eva: 10 } },
-  marauder: { name: 'Marauder', parent: 'fighter', race: 'ertheia', archetype: 'fighter', stage: 1, base: { atk: 26, def: 10, eva: 16, crit: 10 } },
-  sayhaSeer: { name: 'Sayha Seer', parent: 'mage', race: 'ertheia', archetype: 'mage', stage: 1, base: { matk: 36, mdef: 18, mp: 85 } },
-  deathBlade: { name: 'Death Blade', parent: 'deathPilgrim', archetype: 'deathknight', stage: 1, base: { atk: 28, def: 20, hp: 100, mdef: 10 } },
-  wargS1: { name: 'Warg', parent: 'wargBase', archetype: 'warg', stage: 1, base: { atk: 30, def: 8, eva: 10, crit: 8 } },
-  assassinS1: { name: 'Assassin', parent: 'assassinBase', archetype: 'assassin', stage: 1, base: { atk: 32, def: 6, eva: 16, crit: 14 } },
-  sharpshooter: { name: 'Sharpshooter', parent: 'sylphGunner', race: 'sylph', archetype: 'gunner', stage: 1, base: { atk: 28, def: 8, eva: 18, crit: 10 } },
-  divineTemplarS1: { name: 'Divine Templar', parent: 'highElfBase', race: 'highelf', archetype: 'divinetemplar', stage: 1, base: { atk: 20, def: 30, hp: 120, mdef: 20 } },
-  elementWeaverS1: { name: 'Element Weaver', parent: 'highElfBase', race: 'highelf', archetype: 'elementweaver', stage: 1, base: { matk: 36, mdef: 22, mp: 100, eva: 6 } },
-  shinemakerS1: { name: 'ShineMaker', parent: 'artisan', race: 'dwarf', archetype: 'shinemaker', stage: 1, base: { matk: 24, def: 20, hp: 80, lootBonus: 0.2 } },
-  bloodRoseS1: { name: 'Blood Rose', parent: 'bloodRoseBase', race: 'ertheia', archetype: 'bloodrose', stage: 1, base: { matk: 28, def: 14, eva: 12, hp: 60, mp: 80 } },
-
-  // Stage 2 (2nd Transfer lv40)
-  gladiator: { name: 'Gladiator', parent: 'warrior', stage: 2, base: { atk: 55, def: 25, hp: 150, crit: 12 } },
-  warlord: { name: 'Warlord', parent: 'warrior', stage: 2, base: { atk: 48, def: 35, hp: 180, mdef: 20 } },
-  paladin: { name: 'Paladin', parent: 'knight', stage: 2, base: { atk: 32, def: 60, hp: 280, mdef: 35 } },
-  darkAvenger: { name: 'Dark Avenger', parent: 'knight', stage: 2, base: { atk: 45, def: 50, hp: 220, mdef: 30 } },
-  treasureHunter: { name: 'Treasure Hunter', parent: 'rogue', stage: 2, base: { atk: 50, def: 18, eva: 25, crit: 20 } },
-  hawkeye: { name: 'Hawkeye', parent: 'rogue', stage: 2, base: { atk: 58, def: 15, eva: 18, crit: 18 } },
-  sorcerer: { name: 'Sorcerer', parent: 'wizard', stage: 2, base: { matk: 70, mdef: 40, mp: 180 } },
-  necromancer: { name: 'Necromancer', parent: 'wizard', stage: 2, base: { matk: 65, mdef: 35, mp: 150, hp: 80 } },
-  warlock: { name: 'Warlock', parent: 'wizard', stage: 2, desc: 'Summoner of shadow spirits', base: { matk: 60, mdef: 38, mp: 170, hp: 60 } },
-  bishop: { name: 'Bishop', parent: 'cleric', stage: 2, base: { matk: 45, mdef: 55, def: 30, mp: 160 } },
-  prophet: { name: 'Prophet', parent: 'cleric', stage: 2, base: { matk: 40, mdef: 45, def: 40, hp: 100 } },
-  templeKnight: { name: 'Temple Knight', parent: 'elvenKnight', stage: 2, base: { atk: 35, def: 58, hp: 240, eva: 15, mdef: 32 } },
-  swordsinger: { name: 'Swordsinger', parent: 'elvenKnight', stage: 2, base: { atk: 45, def: 40, hp: 200, eva: 12, crit: 10 } },
-  plainsWalker: { name: 'PlainsWalker', parent: 'elvenScout', stage: 2, base: { atk: 52, def: 16, eva: 30, crit: 22 } },
-  silverRanger: { name: 'Silver Ranger', parent: 'elvenScout', stage: 2, base: { atk: 60, def: 14, eva: 22, crit: 20 } },
-  spellsinger: { name: 'Spellsinger', parent: 'elvenWizard', stage: 2, base: { matk: 72, mdef: 42, mp: 190, eva: 8 } },
-  elementalSummoner: { name: 'Elemental Summoner', parent: 'elvenWizard', stage: 2, base: { matk: 62, mdef: 38, mp: 170, hp: 60 } },
-  elder: { name: 'Elven Elder', parent: 'oracle', stage: 2, base: { matk: 48, mdef: 58, def: 28, mp: 200 } },
-  shillienKnight: { name: 'Shillien Knight', parent: 'palusKnight', stage: 2, base: { atk: 48, def: 52, hp: 210, mdef: 35 } },
-  bladedancer: { name: 'Bladedancer', parent: 'palusKnight', stage: 2, base: { atk: 56, def: 32, hp: 190, crit: 14 } },
-  abyssWalker: { name: 'Abyss Walker', parent: 'deAssassin', stage: 2, base: { atk: 62, def: 14, eva: 20, crit: 26 } },
-  phantomRanger: { name: 'Phantom Ranger', parent: 'deAssassin', stage: 2, base: { atk: 66, def: 12, eva: 16, crit: 24 } },
-  spellhowler: { name: 'Spellhowler', parent: 'darkWizard', stage: 2, base: { matk: 85, mdef: 38, mp: 175 } },
-  phantomSummoner: { name: 'Phantom Summoner', parent: 'darkWizard', stage: 2, base: { matk: 66, mdef: 36, mp: 160, hp: 70 } },
-  shillienElder: { name: 'Shillien Elder', parent: 'shillienOracle', stage: 2, base: { matk: 52, mdef: 50, def: 26, mp: 180 } },
-  destroyer: { name: 'Destroyer', parent: 'orcRaider', stage: 2, base: { atk: 68, def: 35, hp: 320, mdef: 15 } },
-  tyrant: { name: 'Tyrant', parent: 'monk', stage: 2, base: { atk: 60, def: 28, eva: 14, hp: 260, crit: 12 } },
-  dragoon: { name: 'Dragoon', parent: 'orcRider', stage: 2, desc: 'Orc cavaleiro de batalha com lanças de guerra pesadas', base: { atk: 72, def: 40, hp: 300, mdef: 10 } },
-  overlord: { name: 'Overlord', parent: 'orcShaman', stage: 2, base: { matk: 50, mdef: 48, def: 45, hp: 180, mp: 140 } },
-  warcryer: { name: 'Warcryer', parent: 'orcShaman', stage: 2, base: { matk: 46, mdef: 44, def: 40, hp: 160, mp: 150 } },
-  bountyHunter: { name: 'Bounty Hunter', parent: 'scavenger', stage: 2, base: { atk: 40, def: 40, lootBonus: 0.5 } },
-  warsmith: { name: 'Warsmith', parent: 'artisanClass', stage: 2, base: { atk: 44, def: 48, hp: 160, lootBonus: 0.35 } },
-  berserker: { name: 'Berserker', parent: 'trooper', stage: 2, base: { atk: 64, def: 20, eva: 16, crit: 16 } },
-  soulhound: { name: 'Soulhound', parent: 'trooper', stage: 2, base: { atk: 62, eva: 20, crit: 18 } },
-  arbalester: { name: 'Arbalester', parent: 'warder', stage: 2, base: { atk: 60, def: 16, eva: 22, crit: 20 } },
-  ronin: { name: 'Ronin', parent: 'hatamoto', stage: 2, desc: 'Espadachim Kamael do caminho do bushido', base: { atk: 58, def: 18, eva: 14, crit: 14 } },
-  ertheiaWarrior: { name: 'Eviscerator', parent: 'marauder', stage: 2, base: { atk: 62, def: 22, eva: 28, crit: 18 } },
-  windRiderErth: { name: 'Sayha Seeker', parent: 'sayhaSeer', stage: 2, base: { matk: 74, mdef: 40, mp: 185 } },
-  deathMessenger: { name: 'Death Messenger', parent: 'deathBlade', archetype: 'deathknight', stage: 2, base: { atk: 65, def: 45, hp: 220, mdef: 25 } },
-  wargS2: { name: 'Warg', parent: 'wargS1', archetype: 'warg', stage: 2, base: { atk: 68, def: 20, eva: 18, crit: 20 } },
-  assassinS2: { name: 'Assassin', parent: 'assassinS1', archetype: 'assassin', stage: 2, base: { atk: 72, def: 14, eva: 28, crit: 28 } },
-  windSniper: { name: 'Wind Sniper', parent: 'sharpshooter', race: 'sylph', archetype: 'gunner', stage: 2, base: { atk: 66, def: 12, eva: 26, crit: 22 } },
-  divineTemplarS2: { name: 'Divine Templar', parent: 'divineTemplarS1', race: 'highelf', archetype: 'divinetemplar', stage: 2, base: { atk: 55, def: 90, hp: 380, mdef: 55 } },
-  elementWeaverS2: { name: 'Element Weaver', parent: 'elementWeaverS1', race: 'highelf', archetype: 'elementweaver', stage: 2, base: { matk: 85, mdef: 50, mp: 240, eva: 10 } },
-  shinemakerS2: { name: 'ShineMaker', parent: 'shinemakerS1', race: 'dwarf', archetype: 'shinemaker', stage: 2, base: { matk: 55, def: 45, hp: 180, lootBonus: 0.4 } },
-  bloodRoseS2: { name: 'Blood Rose', parent: 'bloodRoseS1', race: 'ertheia', archetype: 'bloodrose', stage: 2, base: { matk: 65, def: 28, eva: 20, hp: 120, mp: 160 } },
-  // Elf Death Knight line (new)
-  elfDeathPilgrim: { name: 'Dark Elf Death Pilgrim', archetype: 'deathknight', stage: 0, race: 'darkelf', desc: 'Peregrino das trevas Dark Elf, futuro Death Knight das sombras', base: {} },
-  elfDeathBlade: { name: 'Dark Death Blade', parent: 'elfDeathPilgrim', archetype: 'deathknight', stage: 1, race: 'darkelf', base: { atk: 30, def: 18, hp: 95, mdef: 12 } },
-  elfDeathMessenger: { name: 'Dark Death Messenger', parent: 'elfDeathBlade', archetype: 'deathknight', stage: 2, race: 'darkelf', base: { atk: 68, def: 42, hp: 210, mdef: 28 } },
-
-  // Stage 3 (3rd Transfer lv76)
-  duelist: { name: 'Duelist', parent: 'gladiator', race: 'human', stage: 3, base: { atk: 110, def: 45, hp: 300, crit: 20 } },
-  dreadnought: { name: 'Dreadnought', parent: 'warlord', race: 'human', stage: 3, base: { atk: 95, def: 60, hp: 380, mdef: 35 } },
-  phoenixKnight: { name: 'Phoenix Knight', parent: 'paladin', race: 'human', stage: 3, base: { atk: 65, def: 110, hp: 550, mdef: 70 } },
-  hellKnight: { name: 'Hell Knight', parent: 'darkAvenger', race: 'human', stage: 3, base: { atk: 90, def: 95, hp: 450, mdef: 60 } },
-  adventurer: { name: 'Adventurer', parent: 'treasureHunter', race: 'human', stage: 3, base: { atk: 100, def: 35, eva: 48, crit: 35 } },
-  sagittarius: { name: 'Sagittarius', parent: 'hawkeye', race: 'human', stage: 3, base: { atk: 115, def: 30, eva: 32, crit: 30 } },
-  archmage: { name: 'Archmage', parent: 'sorcerer', race: 'human', stage: 3, base: { matk: 140, mdef: 80, mp: 350 } },
-  soultaker: { name: 'Soultaker', parent: 'necromancer', race: 'human', stage: 3, base: { matk: 130, mdef: 70, mp: 300, hp: 160 } },
-  arcanaLord: { name: 'Arcana Lord', parent: 'warlock', race: 'human', stage: 3, base: { matk: 115, mdef: 75, mp: 320 } },
-  cardinal: { name: 'Cardinal', parent: 'bishop', race: 'human', stage: 3, base: { matk: 90, mdef: 110, def: 60, mp: 340 } },
-  hierophant: { name: 'Hierophant', parent: 'prophet', race: 'human', stage: 3, base: { matk: 80, mdef: 90, def: 80, hp: 200 } },
-  evasTemplar: { name: 'Evas Templar', parent: 'templeKnight', race: 'elf', stage: 3, base: { atk: 70, def: 105, hp: 480, eva: 30, mdef: 65 } },
-  swordMuse: { name: 'Sword Muse', parent: 'swordsinger', race: 'elf', stage: 3, base: { atk: 90, def: 80, hp: 400, eva: 24, crit: 20 } },
-  windRiderElven: { name: 'Wind Rider', parent: 'plainsWalker', race: 'elf', stage: 3, base: { atk: 104, def: 32, eva: 60, crit: 40 } },
-  moonlightSentinel: { name: 'Moonlight Sentinel', parent: 'silverRanger', race: 'elf', stage: 3, base: { atk: 118, def: 28, eva: 42, crit: 35 } },
-  mysticMuse: { name: 'Mystic Muse', parent: 'spellsinger', race: 'elf', stage: 3, base: { matk: 145, mdef: 85, mp: 380, eva: 16 } },
-  elementalMaster: { name: 'Elemental Master', parent: 'elementalSummoner', race: 'elf', stage: 3, base: { matk: 120, mdef: 76, mp: 340 } },
-  evasSaint: { name: 'Evas Saint', parent: 'elder', race: 'elf', stage: 3, base: { matk: 95, mdef: 115, def: 55, mp: 400 } },
-  shillienTemplar: { name: 'Shillien Templar', parent: 'shillienKnight', race: 'darkelf', stage: 3, base: { atk: 96, def: 98, hp: 420, mdef: 70 } },
-  spectralDancer: { name: 'Spectral Dancer', parent: 'bladedancer', race: 'darkelf', stage: 3, base: { atk: 112, def: 64, hp: 380, crit: 28 } },
-  ghostHunter: { name: 'Ghost Hunter', parent: 'abyssWalker', race: 'darkelf', stage: 3, base: { atk: 124, def: 28, eva: 40, crit: 50 } },
-  ghostSentinel: { name: 'Ghost Sentinel', parent: 'phantomRanger', race: 'darkelf', stage: 3, base: { atk: 132, def: 24, eva: 32, crit: 45 } },
-  stormScreamer: { name: 'Storm Screamer', parent: 'spellhowler', race: 'darkelf', stage: 3, base: { matk: 170, mdef: 76, mp: 350 } },
-  spectralMaster: { name: 'Spectral Master', parent: 'phantomSummoner', race: 'darkelf', stage: 3, base: { matk: 132, mdef: 72, mp: 320 } },
-  shillienSaint: { name: 'Shillien Saint', parent: 'shillienElder', race: 'darkelf', stage: 3, base: { matk: 104, mdef: 100, def: 52, mp: 360 } },
-  titan: { name: 'Titan', parent: 'destroyer', race: 'orc', stage: 3, base: { atk: 136, def: 70, hp: 640, mdef: 30 } },
-  grandKhavatari: { name: 'Grand Khavatari', parent: 'tyrant', race: 'orc', stage: 3, base: { atk: 120, def: 56, eva: 28, hp: 520, crit: 24 } },
-  vanguardRider: { name: 'Vanguard Rider', parent: 'dragoon', race: 'orc', stage: 3, desc: 'Cavaleiro Orc supremo com lanças de guerra e armadura pesada montada', base: { atk: 130, def: 80, hp: 580, mdef: 20 } },
-  dominator: { name: 'Dominator', parent: 'overlord', race: 'orc', stage: 3, base: { matk: 100, mdef: 96, def: 90, hp: 360, mp: 280 } },
-  doomcryer: { name: 'Doomcryer', parent: 'warcryer', race: 'orc', stage: 3, base: { matk: 92, mdef: 88, def: 80, hp: 320, mp: 300 } },
-  fortuneSeeker: { name: 'Fortune Seeker', parent: 'bountyHunter', race: 'dwarf', stage: 3, base: { atk: 80, def: 80, hp: 380, lootBonus: 1.0 } },
-  maestro: { name: 'Maestro', parent: 'warsmith', race: 'dwarf', stage: 3, base: { atk: 88, def: 96, hp: 420, lootBonus: 0.7 } },
-  doombringer: { name: 'Doombringer', parent: 'berserker', race: 'kamael', stage: 3, base: { atk: 128, def: 40, eva: 32, crit: 32 } },
-  soulHound: { name: 'Soul Hound', parent: 'soulhound', race: 'kamael', stage: 3, base: { atk: 124, eva: 40, crit: 36, matk: 100 } },
-  trickster: { name: 'Trickster', parent: 'arbalester', race: 'kamael', stage: 3, base: { atk: 120, def: 32, eva: 44, crit: 40 } },
-  samurai: { name: 'Samurai', parent: 'ronin', race: 'kamael', stage: 3, desc: 'Mestre Kamael da katana, bushido e do espírito do corte supremo', base: { atk: 126, def: 35, eva: 36, crit: 38 } },
-  eviscerator: { name: 'Eviscerator Master', parent: 'ertheiaWarrior', race: 'ertheia', stage: 3, base: { atk: 125, def: 60, eva: 42, hp: 460, crit: 35 } },
-  sayhaSeeker: { name: 'Sayha Seeker', parent: 'windRiderErth', race: 'ertheia', stage: 3, base: { atk: 122, def: 35, eva: 58, crit: 42 } },
-  deathKnight: { name: 'Death Knight', parent: 'deathMessenger', race: 'human', archetype: 'deathknight', stage: 3, desc: 'Cavaleiro da Morte supremo com Death Points e poderes das trevas', base: { atk: 138, def: 85, hp: 580, mdef: 50, crit: 30 } },
-  elfDeathKnight: { name: 'Dark Elf Death Knight', parent: 'elfDeathMessenger', race: 'darkelf', archetype: 'deathknight', stage: 3, desc: 'Cavaleiro da Morte Dark Elf com Dark Points e magia de sombras', base: { atk: 135, def: 82, hp: 560, mdef: 55, crit: 35 } },
-  warg: { name: 'Warg', parent: 'wargS2', race: 'human', archetype: 'warg', stage: 3, desc: 'Forma final do Warg - transformação em lobo ancestral devastador', base: { atk: 148, def: 35, eva: 30, crit: 40 } },
-  assassinFinal: { name: 'Assassin', parent: 'assassinS2', race: 'human', archetype: 'assassin', stage: 3, desc: 'Assassino supremo com sistema de sombras e Assassin Daggers', base: { atk: 145, def: 22, eva: 50, crit: 55 } },
-  stormBlaster: { name: 'Storm Blaster', parent: 'windSniper', race: 'sylph', archetype: 'gunner', stage: 3, desc: 'Atirador supremo Sylph com armas de vento elementais e Storm Shot', base: { atk: 140, def: 28, eva: 45, crit: 38 } },
-  divineTemplar: { name: 'Divine Templar', parent: 'divineTemplarS2', race: 'highelf', archetype: 'divinetemplar', stage: 3, desc: 'Tanque supremo High Elf com poder divino e Sacred Aegis', base: { atk: 90, def: 140, hp: 680, mdef: 100 } },
-  elementWeaver: { name: 'Element Weaver', parent: 'elementWeaverS2', race: 'highelf', archetype: 'elementweaver', stage: 3, desc: 'Mago elemental supremo High Elf combinando Fogo, Água e Vento', base: { matk: 175, mdef: 95, mp: 420, eva: 14 } },
-  shinemaker: { name: 'ShineMaker', parent: 'shinemakerS2', race: 'dwarf', archetype: 'shinemaker', stage: 3, desc: 'Mestre da luz cristalina - DPS/Suporte supremo Dwarf', base: { matk: 130, def: 70, hp: 380, lootBonus: 0.8 } },
-  bloodRose: { name: 'Blood Rose', parent: 'bloodRoseS2', race: 'ertheia', archetype: 'bloodrose', stage: 3, desc: 'Mística Ertheia com ataques híbridos de espinhos e roubo de vida', base: { matk: 160, def: 55, eva: 35, hp: 320, mp: 380 } }
-};
-
-const SKILL_DEFS_ECHO = {
-  // GROUP A
-  fighter_will: { name: 'Fighter\'s Will Harmony', info: '+15% P.Atk, +10% Atk Speed, +15 Move Speed (20min)', cost: 5, max: 5, type: 'harmony', classReq: 'fighter', reqLvl: 1, icon: '⚔️', tier: 0, desc: '' },
-  battle_roar: { name: 'Battle Roar', info: '+20% Max HP Heal burst (60s cd)', cost: 5, max: 5, type: 'proc', classReq: 'fighter', reqLvl: 1, icon: '📯', tier: 0, desc: '', baseCd: 60000, pwr: 0, effect: 'warcry' },
-  power_strike_f: { name: 'Power Strike', info: 'Auto-cast: 30 Pwr Physical strike', cost: 5, max: 5, type: 'proc', classReq: 'fighter', reqLvl: 1, icon: '⚔️💥', tier: 0, desc: '', baseCd: 5000, pwr: 30, effect: 'dmg' },
-  weapon_mastery_f: { name: 'Weapon Mastery', info: '+2.5 ATK / lvl', cost: 5, max: 10, type: 'stat', classReq: 'fighter', reqLvl: 1, icon: '🗡️', tier: 0, desc: '' },
-  light_armor_f: { name: 'Light Armor Mastery', info: '+1.5 DEF / lvl', cost: 10, max: 5, type: 'stat', classReq: 'fighter', reqLvl: 1, icon: '🥋', tier: 1, desc: '' },
-  heavy_armor_f: { name: 'Heavy Armor Mastery', info: '+2.5 DEF / lvl', cost: 10, max: 5, type: 'stat', classReq: 'fighter', reqLvl: 1, icon: '🛡️', tier: 1, desc: '' },
-  boost_hp_f: { name: 'Boost HP', info: '+40 Max HP / lvl', cost: 10, max: 5, type: 'stat', classReq: 'fighter', reqLvl: 1, icon: '❤️', tier: 1, desc: '' },
-  stun_attack: { name: 'Stun Attack', info: 'Auto-cast: 28 Pwr + 3s Stun', cost: 15, max: 5, type: 'proc', classReq: 'fighter', reqLvl: 1, icon: '💫', tier: 1, desc: '', baseCd: 8000, pwr: 28, effect: 'stun' },
-  war_cry: { name: 'War Cry', info: '+20% ATK for 30s burst', cost: 25, max: 5, type: 'proc', classReq: 'fighter', reqLvl: 1, icon: '📯', tier: 2, desc: '', baseCd: 30000, pwr: 0, effect: 'warcry' },
-  lethal_blow_f: { name: 'Lethal Blow', info: 'Auto-cast: 45 Pwr critical thrust', cost: 30, max: 5, type: 'proc', classReq: 'fighter', reqLvl: 1, icon: '🩸', tier: 2, desc: '', baseCd: 9000, pwr: 45, effect: 'dmg' },
-  frenzy_f: { name: 'Frenzy', info: '+30% ATK when below 40% HP', cost: 25, max: 5, type: 'proc', classReq: 'fighter', reqLvl: 1, icon: '🔥💢', tier: 2, desc: '', baseCd: 60000, pwr: 0, effect: 'warcry' },
-
-  mage_will: { name: 'Mage\'s Will Harmony', info: '+15% M.Atk, +10% Cast Speed, +50 Max MP (20min)', cost: 5, max: 5, type: 'harmony', classReq: 'mage', reqLvl: 1, icon: '🔮', tier: 0, desc: '' },
-  energy_bolt_m: { name: 'Energy Bolt', info: 'Auto-cast: 22 Pwr magic bolt', cost: 5, max: 5, type: 'proc', classReq: 'mage', reqLvl: 1, icon: '⚡🔮', tier: 0, desc: '', baseCd: 3000, pwr: 22, effect: 'dmg' },
-  weapon_mastery_m: { name: 'Magical Weapon Mastery', info: '+2.5 MATK / lvl', cost: 5, max: 10, type: 'stat', classReq: 'mage', reqLvl: 1, icon: '🔮', tier: 0, desc: '' },
-  robe_mast_m: { name: 'Robe Mastery', info: '+1.7 DEF / lvl in robes', cost: 10, max: 5, type: 'stat', classReq: 'mage', reqLvl: 1, icon: '👘', tier: 0, desc: '' },
-  boost_mana_m: { name: 'Boost Mana', info: '+40 Max MP / lvl', cost: 10, max: 5, type: 'stat', classReq: 'mage', reqLvl: 1, icon: '🌊', tier: 1, desc: '' },
-  anti_magic_m: { name: 'Anti Magic', info: '+18 MDEF, +5% Magic Resist / lvl', cost: 15, max: 5, type: 'stat', classReq: 'mage', reqLvl: 1, icon: '🛡️✨', tier: 1, desc: '' },
-  higher_mana_m: { name: 'Higher Mana', info: '+2 MP regen / lvl', cost: 15, max: 5, type: 'stat', classReq: 'mage', reqLvl: 1, icon: '💧', tier: 1, desc: '' },
-  quick_recycle: { name: 'Quick Recharge', info: '-15% Skill cooldowns / lvl', cost: 25, max: 5, type: 'stat', classReq: 'mage', reqLvl: 1, icon: '⏩', tier: 2, desc: '' },
-
-  // GROUP B
-  warriors_harmony: { name: 'Warrior\'s Harmony', info: 'P.Atk +20%, Atk Speed +15%, HP Regen +30% (20min)', cost: 5, max: 5, type: 'harmony', classReq: 'warrior', reqLvl: 1, icon: '⚔️', tier: 0, desc: '' },
-  triple_slash: { name: 'Triple Slash', info: 'Auto-cast: 35 Pwr triple dagger slash', cost: 15, max: 5, type: 'proc', classReq: 'gladiator', reqLvl: 1, icon: '🗡️🗡️🗡️', tier: 1, desc: '', baseCd: 4000, pwr: 35, effect: 'dmg' },
-  sonicBlasterG: { name: 'Sonic Blaster', info: 'Auto-cast: 55 Pwr sonic wave', cost: 20, max: 5, type: 'proc', classReq: 'gladiator', reqLvl: 1, icon: '🔊', tier: 1, desc: '', baseCd: 6000, pwr: 55, effect: 'dmg' },
-  gladiators_harmony: { name: 'Gladiator\'s Harmony', info: 'Dual P.Atk +25%, Crit Dmg +20%, Atk Speed +15% (20min)', cost: 10, max: 5, type: 'harmony', classReq: 'gladiator', reqLvl: 1, icon: '⚔️⚔️', tier: 1, desc: '' },
-  dual_weapon_mast: { name: 'Dual Weapon Mastery', info: '+15% P.Atk dual weapons / lvl', cost: 20, max: 5, type: 'stat', classReq: 'gladiator', reqLvl: 1, icon: '⚔️', tier: 2, desc: '' },
-  sonicRage: { name: 'Sonic Rage', info: 'Auto-cast: 55 Pwr + -15% DEF debuff 6s', cost: 25, max: 5, type: 'proc', classReq: 'gladiator', reqLvl: 1, icon: '🔊💥', tier: 2, desc: '', baseCd: 6000, pwr: 55, effect: 'dmg' },
-  duelist_harmony: { name: 'Duelist\'s Harmony', info: 'Dual P.Atk +35%, 100% Crit Rate 5min (1★)', cost: 20, max: 5, type: 'harmony', classReq: 'duelist', reqLvl: 1, icon: '🌟⚔️', tier: 3, starRank: 1, desc: '' },
-  transcendent_dual_blow: { name: 'Transcendent Dual Blow', info: '1500% P.Atk Crit guaranteed, resets Sonic Rage on kill (4★)', cost: 500, max: 5, type: 'proc', classReq: 'duelist', reqLvl: 1, icon: '💥💥', tier: 4, starRank: 4, desc: '', baseCd: 90000, pwr: 150, effect: 'dmg' },
-
-  // GROUP C
-  knights_harmony: { name: 'Knight\'s Harmony', info: 'P.Def +25%, Shield Block +30%, Max HP +15% (20min)', cost: 5, max: 5, type: 'harmony', classReq: 'knight', reqLvl: 1, icon: '🛡️', tier: 0, desc: '' },
-  shield_bash_k: { name: 'Shield Bash', info: 'Auto-cast: 25 Pwr + 3s Stun', cost: 5, max: 5, type: 'proc', classReq: 'knight', reqLvl: 1, icon: '🛡️💥', tier: 0, desc: '', baseCd: 7500, pwr: 25, effect: 'stun' },
-  paladins_harmony: { name: 'Paladin\'s Harmony', info: 'P.Def +30%, M.Def +30%, Shield Block +40%, Max HP +25% (20min)', cost: 10, max: 5, type: 'harmony', classReq: 'paladin', reqLvl: 1, icon: '🛡️✨', tier: 1, desc: '' },
-  holy_blade: { name: 'Holy Blade', info: 'Auto-cast: 30 Pwr Holy strike', cost: 15, max: 5, type: 'proc', classReq: 'paladin', reqLvl: 1, icon: '⚔️✨', tier: 1, desc: '', baseCd: 6000, pwr: 30, effect: 'dmg' },
-  touch_of_life: { name: 'Touch of Life', info: 'Heals 50% Max HP + Debuff immunity 15s', cost: 30, max: 5, type: 'proc', classReq: 'paladin', reqLvl: 1, icon: '💚', tier: 2, desc: '', baseCd: 120000, pwr: 0, effect: 'warcry' },
-  phoenix_harmony: { name: 'Phoenix Knight Harmony', info: 'P.Def +50%, M.Def +50%, 10% HP regen each 30s (1★)', cost: 20, max: 5, type: 'harmony', classReq: 'phoenixKnight', reqLvl: 1, icon: '🦅✨', tier: 3, starRank: 1, desc: '' },
-  transcendent_shield: { name: 'Transcendent Shield Charge', info: 'Absorbs 5000 dmg + reflects 20% to attackers 15s (4★)', cost: 500, max: 5, type: 'proc', classReq: 'phoenixKnight', reqLvl: 1, icon: '🛡️👑', tier: 4, starRank: 4, desc: '', baseCd: 90000, pwr: 95, effect: 'stun' },
-
-  // GROUP D
-  dark_avengers_harmony: { name: 'Dark Avenger Harmony', info: 'P.Atk +25%, P.Def +20%, Reflect Dmg +15% (20min)', cost: 10, max: 5, type: 'harmony', classReq: 'darkAvenger', reqLvl: 1, icon: '😈🛡️', tier: 1, desc: '' },
-  insane_crusher: { name: 'Insane Crusher', info: 'Auto-cast: 60 Pwr Dark AoE + removes 2 enemy buffs', cost: 25, max: 5, type: 'proc', classReq: 'darkAvenger', reqLvl: 1, icon: '😈💥', tier: 2, desc: '', baseCd: 8000, pwr: 60, effect: 'dmg' },
-  hell_knights_harmony: { name: 'Hell Knight Harmony', info: 'P.Atk +40%, Reflect Dmg +25%, Lifesteal +10% (1★)', cost: 20, max: 5, type: 'harmony', classReq: 'hellKnight', reqLvl: 1, icon: '😈👑', tier: 3, starRank: 1, desc: '' },
-  transcendent_dark: { name: 'Transcendent Dark Strike', info: '1400% P.Atk Dark AoE + 4s Stun (4★)', cost: 500, max: 5, type: 'proc', classReq: 'hellKnight', reqLvl: 1, icon: '💀👑', tier: 4, starRank: 4, desc: '', baseCd: 90000, pwr: 140, effect: 'dmg' },
-
-  // GROUP E
-  rogues_harmony: { name: 'Rogue\'s Harmony', info: 'Crit Rate +25%, Eva +15, Move Speed +20 (20min)', cost: 5, max: 5, type: 'harmony', classReq: 'rogue', reqLvl: 1, icon: '🗡️', tier: 0, desc: '' },
-  dagger_mastery_r: { name: 'Dagger Mastery', info: '+20% P.Atk & +25% Blow Rate / lvl', cost: 5, max: 10, type: 'stat', classReq: 'rogue', reqLvl: 1, icon: '🗡️', tier: 0, desc: '' },
-  backstab_r: { name: 'Backstab', info: 'Auto-cast: 40 Pwr (+50% from behind)', cost: 15, max: 5, type: 'proc', classReq: 'rogue', reqLvl: 1, icon: '🩸', tier: 1, desc: '', baseCd: 5000, pwr: 40, effect: 'dmg' },
-  treasure_hunters_harmony: { name: 'Treasure Hunter Harmony', info: 'Crit Dmg +30%, Blow Rate +20%, Eva +20 (20min)', cost: 10, max: 5, type: 'harmony', classReq: 'treasureHunter', reqLvl: 1, icon: '🗡️✨', tier: 1, desc: '' },
-  shadow_step: { name: 'Shadow Step', info: 'Teleport behind target + next Backstab +30%', cost: 20, max: 5, type: 'proc', classReq: 'treasureHunter', reqLvl: 1, icon: '👤', tier: 2, desc: '', baseCd: 6000, pwr: 15, effect: 'dmg' },
-  exciting_adventure: { name: 'Exciting Adventure', info: 'Eva +25, Move Speed +30, Lethal Rate +20% for 60s', cost: 25, max: 5, type: 'proc', classReq: 'treasureHunter', reqLvl: 1, icon: '💨', tier: 2, desc: '', baseCd: 180000, pwr: 0, effect: 'warcry' },
-  adventurers_harmony: { name: 'Adventurer Harmony', info: 'Crit Dmg +50%, 80% Mirage dodge chance 5min (1★)', cost: 20, max: 5, type: 'harmony', classReq: 'adventurer', reqLvl: 1, icon: '🌌', tier: 3, starRank: 1, desc: '' },
-  transcendent_deadly: { name: 'Transcendent Deadly Blow', info: '1400% P.Atk Crit + lifesteal, Crit resets Shadow Step (4★)', cost: 500, max: 5, type: 'proc', classReq: 'adventurer', reqLvl: 1, icon: '🩸👑', tier: 4, starRank: 4, desc: '', baseCd: 90000, pwr: 140, effect: 'vampiric' },
-
-  // GROUP F
-  bow_mastery_h: { name: 'Bow Mastery', info: '+18% P.Atk & +15 Accuracy with bows / lvl', cost: 5, max: 10, type: 'stat', classReq: 'rogue', reqLvl: 1, icon: '🏹', tier: 0, desc: '' },
-  double_shot_h: { name: 'Double Shot', info: 'Auto-cast: 24 Pwr 2-arrow burst', cost: 5, max: 5, type: 'proc', classReq: 'rogue', reqLvl: 1, icon: '🎯', tier: 0, desc: '', baseCd: 2500, pwr: 24, effect: 'dmg' },
-  hawkeyes_harmony: { name: 'Hawkeye\'s Harmony', info: 'P.Atk +20%, Bow Range +150, Crit Rate +15% (20min)', cost: 10, max: 5, type: 'harmony', classReq: 'hawkeye', reqLvl: 1, icon: '🏹✨', tier: 1, desc: '' },
-  stun_shot_h: { name: 'Stun Shot', info: 'Auto-cast: 32 Pwr + 3s Stun arrow', cost: 15, max: 5, type: 'proc', classReq: 'hawkeye', reqLvl: 1, icon: '💫🏹', tier: 1, desc: '', baseCd: 10000, pwr: 32, effect: 'stun' },
-  arrow_rain_h: { name: 'Arrow Rain', info: 'Auto-cast: 42 Pwr AoE arrow rain 5 targets', cost: 25, max: 5, type: 'proc', classReq: 'hawkeye', reqLvl: 1, icon: '🌧️🏹', tier: 2, desc: '', baseCd: 5000, pwr: 42, effect: 'dmg' },
-  target_lock: { name: 'Target Lock', info: 'Bow Range +200, Crit Dmg +35%, skill cast 2.0s (3min)', cost: 30, max: 5, type: 'proc', classReq: 'sagittarius', reqLvl: 1, icon: '🔭', tier: 2, desc: '', baseCd: 300000, pwr: 0, effect: 'warcry' },
-  sagittarius_harmony: { name: 'Sagittarius Harmony', info: 'P.Atk +40%, Range +200, Crit Rate +25% (1★)', cost: 20, max: 5, type: 'harmony', classReq: 'sagittarius', reqLvl: 1, icon: '🌟🏹', tier: 3, starRank: 1, desc: '' },
-  transcendent_seven: { name: 'Transcendent Seven Arrow', info: '1350% P.Atk Ranged + 25% DEF/MDEF debuff 10s (4★)', cost: 500, max: 5, type: 'proc', classReq: 'sagittarius', reqLvl: 1, icon: '🌟🏹👑', tier: 4, starRank: 4, desc: '', baseCd: 90000, pwr: 135, effect: 'dmg' },
-
-  // GROUP G
-  wizards_harmony: { name: 'Wizard\'s Harmony', info: 'M.Atk +20%, Cast Speed +15%, Max MP +50 (20min)', cost: 5, max: 5, type: 'harmony', classReq: 'wizard', reqLvl: 1, icon: '🔮', tier: 0, desc: '' },
-  blaze_sorc: { name: 'Blaze', info: 'Auto-cast: 23 Pwr Fire blast', cost: 5, max: 5, type: 'proc', classReq: 'wizard', reqLvl: 1, icon: '🔥', tier: 0, desc: '', baseCd: 4000, pwr: 23, effect: 'dmg' },
-  fire_mastery_s: { name: 'Fire Spell Mastery', info: '+25% M.Atk & +15% Cast Speed Fire / lvl', cost: 5, max: 10, type: 'stat', classReq: 'wizard', reqLvl: 1, icon: '🔥', tier: 0, desc: '' },
-  sorcerers_harmony: { name: 'Sorcerer\'s Harmony', info: 'M.Atk +30%, M.Crit Rate +20%, Cast Speed +20% (20min)', cost: 10, max: 5, type: 'harmony', classReq: 'sorcerer', reqLvl: 1, icon: '🔥✨', tier: 1, desc: '' },
-  prominence: { name: 'Prominence', info: 'Auto-cast: 55 Pwr Solar Fire pillar', cost: 15, max: 5, type: 'proc', classReq: 'sorcerer', reqLvl: 1, icon: '☀️🔥', tier: 1, desc: '', baseCd: 6000, pwr: 55, effect: 'dmg' },
-  flame_explosion: { name: 'Flame Explosion', info: 'Auto-cast: 2x48 Pwr Fire double hit (960% total)', cost: 25, max: 5, type: 'proc', classReq: 'sorcerer', reqLvl: 1, icon: '☄️💥', tier: 2, desc: '', baseCd: 5000, pwr: 48, effect: 'dmg' },
-  magic_focus_s: { name: 'Magic Focus', info: 'M.Skill Power +5%, PvE Dmg +10%', cost: 25, max: 5, type: 'stat', classReq: 'sorcerer', reqLvl: 1, icon: '✨', tier: 2, desc: '' },
-  archmages_harmony: { name: 'Archmage Harmony', info: 'M.Atk +45%, M.Crit Rate 100%, PvE Dmg +15% (1★)', cost: 20, max: 5, type: 'harmony', classReq: 'archmage', reqLvl: 1, icon: '🔥👑', tier: 3, starRank: 1, desc: '' },
-  transcendent_inferno: { name: 'Transcendent Hell Inferno', info: '2x480 Pwr Fire + all targets DEF -25% 10s (4★)', cost: 500, max: 5, type: 'proc', classReq: 'archmage', reqLvl: 1, icon: '🌋👑', tier: 4, starRank: 4, desc: '', baseCd: 90000, pwr: 200, effect: 'dmg' },
-
-  // GROUP H
-  necros_harmony: { name: 'Necromancer\'s Harmony', info: 'M.Atk +25%, Undead Dmg +20%, HP Drain +15% (20min)', cost: 10, max: 5, type: 'harmony', classReq: 'necromancer', reqLvl: 1, icon: '💀', tier: 1, desc: '' },
-  death_spike_n: { name: 'Death Spike', info: 'Auto-cast: 60 Pwr Dark bone missile', cost: 15, max: 5, type: 'proc', classReq: 'necromancer', reqLvl: 1, icon: '💀🦴', tier: 1, desc: '', baseCd: 7000, pwr: 60, effect: 'dmg' },
-  void_explosion: { name: 'Void Explosion', info: 'Auto-cast: 2x50 Pwr Dark double hit + Atk Speed -20% 8s', cost: 25, max: 5, type: 'proc', classReq: 'necromancer', reqLvl: 1, icon: '🌀💀', tier: 2, desc: '', baseCd: 6000, pwr: 50, effect: 'dmg' },
-  soultakers_harmony: { name: 'Soultaker Harmony', info: 'M.Atk +40%, Lifesteal +15%, PvE Dmg +15% (1★)', cost: 20, max: 5, type: 'harmony', classReq: 'soultaker', reqLvl: 1, icon: '💀👑', tier: 3, starRank: 1, desc: '' },
-  transcendent_soul: { name: 'Transcendent Soul Vortex', info: '1800% M.Atk Dark + 40% HP drain from all targets hit (4★)', cost: 500, max: 5, type: 'proc', classReq: 'soultaker', reqLvl: 1, icon: '🌀👑', tier: 4, starRank: 4, desc: '', baseCd: 90000, pwr: 180, effect: 'vampiric' },
-
-  // GROUP I
-  bishops_harmony: { name: 'Bishop\'s Harmony', info: 'M.Def +35%, Heal Power +30%, MP Regen +50% (20min)', cost: 10, max: 5, type: 'harmony', classReq: 'bishop', reqLvl: 1, icon: '✝️', tier: 1, desc: '' },
-  greater_heal: { name: 'Greater Heal', info: 'Auto-heals self: restores 25% Max HP', cost: 15, max: 5, type: 'proc', classReq: 'bishop', reqLvl: 1, icon: '💚', tier: 1, desc: '', baseCd: 8000, pwr: 0, effect: 'warcry' },
-  holy_strike_b: { name: 'Holy Strike', info: 'Auto-cast: 45 Pwr Holy magic damage', cost: 20, max: 5, type: 'proc', classReq: 'bishop', reqLvl: 1, icon: '✨⚔️', tier: 2, desc: '', baseCd: 5000, pwr: 45, effect: 'dmg' },
-  dark_side: { name: 'Dark Side', info: 'Toggle: M.Atk +40%, Cast Speed +25%, Healing -50%', cost: 25, max: 5, type: 'proc', classReq: 'bishop', reqLvl: 1, icon: '🌑', tier: 2, desc: '', baseCd: 3000, pwr: 0, effect: 'warcry' },
-  cardinals_harmony: { name: 'Cardinal Harmony', info: 'M.Atk +50% OR Heal +60% (based on Dark Side toggle) (1★)', cost: 20, max: 5, type: 'harmony', classReq: 'cardinal', reqLvl: 1, icon: '✝️👑', tier: 3, starRank: 1, desc: '' },
-  transcendent_holy: { name: 'Transcendent Holy Strike', info: '1600% M.Atk Holy AoE + Mass Resurrection all dead allies (4★)', cost: 500, max: 5, type: 'proc', classReq: 'cardinal', reqLvl: 1, icon: '✝️👑💫', tier: 4, starRank: 4, desc: '', baseCd: 90000, pwr: 160, effect: 'dmg' },
-
-  // GROUP J
-  prophets_harmony: { name: 'Prophet\'s Harmony', info: 'All stats +15%, MP Regen +30% (20min)', cost: 10, max: 5, type: 'harmony', classReq: 'prophet', reqLvl: 1, icon: '📜', tier: 1, desc: '' },
-  haste_buff: { name: 'Haste', info: 'Party Atk Speed +30% for 10min', cost: 15, max: 5, type: 'proc', classReq: 'prophet', reqLvl: 1, icon: '⚡', tier: 1, desc: '', baseCd: 600000, pwr: 0, effect: 'warcry' },
-  might_buff: { name: 'Might', info: 'Party P.Atk +20% for 10min', cost: 15, max: 5, type: 'proc', classReq: 'prophet', reqLvl: 1, icon: '💪', tier: 1, desc: '', baseCd: 600000, pwr: 0, effect: 'warcry' },
-  hierophants_harmony: { name: 'Hierophant Harmony', info: 'Party All Stats +25% (15min party buff) (1★)', cost: 20, max: 5, type: 'harmony', classReq: 'hierophant', reqLvl: 1, icon: '📜👑', tier: 3, starRank: 1, desc: '' },
-  transcendent_prophecy: { name: 'Mass Prophecy', info: 'Party all stats +40%, elemental immunity 30s (4★)', cost: 500, max: 5, type: 'proc', classReq: 'hierophant', reqLvl: 1, icon: '📜👑💫', tier: 4, starRank: 4, desc: '', baseCd: 90000, pwr: 0, effect: 'warcry' },
-
-  // GROUP K
-  orc_will: { name: 'Orc\'s Will Harmony', info: 'P.Atk +20%, Max HP +20%, P.Def +15% (20min)', cost: 5, max: 5, type: 'harmony', classReq: 'orcRaider', reqLvl: 1, icon: '💪', tier: 0, desc: '' },
-  titans_harmony: { name: 'Titan\'s Harmony', info: 'P.Atk +30%, HP Regen +40%, Frenzy trigger at 50% HP (20min)', cost: 10, max: 5, type: 'harmony', classReq: 'destroyer', reqLvl: 1, icon: '🪓', tier: 1, desc: '' },
-  earthquake_t: { name: 'Earthquake', info: 'Auto-cast: 50 Pwr AoE + 2s Stun all nearby', cost: 15, max: 5, type: 'proc', classReq: 'destroyer', reqLvl: 1, icon: '🌍💥', tier: 1, desc: '', baseCd: 5000, pwr: 50, effect: 'stun' },
-  blazing_strike: { name: 'Blazing Strike', info: 'Auto-cast: 850% P.Atk single target +30% Crit Rate', cost: 25, max: 5, type: 'proc', classReq: 'destroyer', reqLvl: 1, icon: '🔥⚔️', tier: 2, desc: '', baseCd: 7000, pwr: 85, effect: 'dmg' },
-  titan_harmony_3: { name: 'Titan\'s Supreme Harmony', info: 'P.Atk +50%, 2H weapon range +100%, Frenzy at 60% HP (1★)', cost: 20, max: 5, type: 'harmony', classReq: 'titan', reqLvl: 1, icon: '🪓👑', tier: 3, starRank: 1, desc: '' },
-  transcendent_quake: { name: 'Transcendent Earthquake', info: 'Pulls 12 enemies + 1200% P.Atk AoE (4★)', cost: 500, max: 5, type: 'proc', classReq: 'titan', reqLvl: 1, icon: '🌍👑', tier: 4, starRank: 4, desc: '', baseCd: 120000, pwr: 160, effect: 'stun' },
-
-  // GROUP L – Death Knight (Human + Dark Elf)
-  death_knight_mastery: { name: 'Death Knight Mastery', info: '+25% P.Atk, +20% P.Def Death Knight / lvl', cost: 5, max: 10, type: 'stat', classReq: 'deathknight', reqLvl: 1, icon: '💀⚔️', tier: 0, desc: '' },
-  death_spike_dk: { name: 'Death Spike', info: 'Auto-cast: 650% P.Atk Dark + gain 20 Death Points', cost: 5, max: 5, type: 'proc', classReq: 'deathknight', reqLvl: 1, icon: '💀🦴', tier: 0, desc: '', baseCd: 5000, pwr: 65, effect: 'dmg' },
-  dark_armor_dk: { name: 'Dark Armor', info: 'P.Def +25%, M.Def +25%, Reflect 15% dmg (20min)', cost: 10, max: 5, type: 'harmony', classReq: 'deathknight', reqLvl: 1, icon: '🛡️💀', tier: 1, desc: '' },
-  death_storm: { name: 'Death Storm', info: 'Auto-cast: 900% Dark AoE + 4s Stun (costs 50 DP)', cost: 25, max: 5, type: 'proc', classReq: 'deathknight', reqLvl: 1, icon: '🌪️💀', tier: 2, desc: '', baseCd: 12000, pwr: 90, effect: 'stun' },
-  transcendent_death: { name: 'Transcendent Death Spike', info: 'Consumes 100DP: 1400% P.Atk Dark AoE + 4s Stun (4★)', cost: 500, max: 5, type: 'proc', classReq: 'deathknight', reqLvl: 1, icon: '💀👑', tier: 4, starRank: 4, desc: '', baseCd: 90000, pwr: 140, effect: 'stun' },
-
-  warg_will: { name: 'Warg\'s Will Harmony', info: 'P.Atk +15%, Eva +10, Move Speed +20 Human Form (20min)', cost: 5, max: 5, type: 'harmony', classReq: 'warg', reqLvl: 1, icon: '🐺', tier: 0, desc: '' },
-  wolf_transformation: { name: 'Wolf Transformation', info: 'Toggle Wolf Form: Speed +40, P.Atk +20%, Atk Speed +25%', cost: 10, max: 5, type: 'proc', classReq: 'warg', reqLvl: 1, icon: '🐺🔄', tier: 1, desc: '', baseCd: 10000, pwr: 0, effect: 'warcry' },
-  double_claw: { name: 'Double Claw Strike', info: 'Wolf Form: 700% P.Atk + Bleed 50 dmg/s 6s', cost: 15, max: 5, type: 'proc', classReq: 'warg', reqLvl: 1, icon: '🐾💥', tier: 1, desc: '', baseCd: 4000, pwr: 70, effect: 'dmg' },
-  vortex_claws: { name: 'Vortex of Claws', info: 'Wolf Form: Charge pulls 6 enemies + 1100% P.Atk AoE', cost: 25, max: 5, type: 'proc', classReq: 'warg', reqLvl: 1, icon: '🌀🐾', tier: 2, desc: '', baseCd: 60000, pwr: 110, effect: 'stun' },
-  transcendent_claw: { name: 'Transcendent Double Claw', info: 'Wolf Form: 1600% P.Atk + Bleed + 30% lifesteal (4★)', cost: 500, max: 5, type: 'proc', classReq: 'warg', reqLvl: 1, icon: '🐺👑', tier: 4, starRank: 4, desc: '', baseCd: 90000, pwr: 160, effect: 'vampiric' },
-
-  assassin_harmony: { name: 'Assassin\'s Harmony', info: 'Crit Dmg +30%, Eva +20, Shadow Spawn Rate +50% (20min)', cost: 5, max: 5, type: 'harmony', classReq: 'assassin', reqLvl: 1, icon: '🗡️🌑', tier: 0, desc: '' },
-  assassination: { name: 'Assassination', info: 'Auto-cast: 600% P.Atk (+50% from behind)', cost: 5, max: 5, type: 'proc', classReq: 'assassin', reqLvl: 1, icon: '🗡️💀', tier: 0, desc: '', baseCd: 5000, pwr: 60, effect: 'dmg' },
-  brutality_passive: { name: 'Brutality', info: 'Each kill grants 1 Assassin Dagger charge (max 3): Crit +10% each', cost: 10, max: 5, type: 'stat', classReq: 'assassin', reqLvl: 1, icon: '🗡️', tier: 1, desc: '' },
-  shadow_blast: { name: 'Shadow Blast', info: 'All 3 Shadow clones explode: 3x500% P.Atk AoE', cost: 25, max: 5, type: 'proc', classReq: 'assassin', reqLvl: 1, icon: '👥💥', tier: 2, desc: '', baseCd: 75000, pwr: 50, effect: 'dmg' },
-  transcendent_assassination: { name: 'Transcendent Assassination', info: '1450% P.Atk from shadows + 55% lifesteal (4★)', cost: 500, max: 5, type: 'proc', classReq: 'assassin', reqLvl: 1, icon: '🗡️👑', tier: 4, starRank: 4, desc: '', baseCd: 90000, pwr: 145, effect: 'vampiric' },
-
-  burst_fire: { name: 'Burst Fire', info: 'Auto-cast: 3x220% P.Atk ranged burst', cost: 5, max: 5, type: 'proc', classReq: 'gunner', reqLvl: 1, icon: '🔫💨', tier: 0, desc: '', baseCd: 4000, pwr: 22, effect: 'dmg' },
-  gun_mastery_sb: { name: 'Gun Mastery', info: '+20% P.Atk & +15% Atk Speed with guns / lvl', cost: 5, max: 10, type: 'stat', classReq: 'gunner', reqLvl: 1, icon: '🔫', tier: 0, desc: '' },
-  storm_blaster_harmony: { name: 'Storm Blaster Harmony', info: 'P.Atk +25%, Range +200, Wind Dmg +20% (20min)', cost: 10, max: 5, type: 'harmony', classReq: 'gunner', reqLvl: 1, icon: '🔫🌪️', tier: 1, desc: '' },
-  wind_barrage: { name: 'Wind Barrage', info: 'Auto-cast: 750% P.Atk Wind AoE cone', cost: 25, max: 5, type: 'proc', classReq: 'gunner', reqLvl: 1, icon: '💨💥', tier: 2, desc: '', baseCd: 12000, pwr: 75, effect: 'dmg' },
-  transcendent_storm: { name: 'Transcendent Storm Shot', info: '1350% P.Atk Wind ranged + all hit -25% DEF/MDEF 10s (4★)', cost: 500, max: 5, type: 'proc', classReq: 'stormBlaster', reqLvl: 1, icon: '🔫🌪️👑', tier: 4, starRank: 4, desc: '', baseCd: 100000, pwr: 135, effect: 'dmg' },
-
-  divine_templar_harmony: { name: 'Divine Templar Harmony', info: 'P.Def +35%, M.Def +35%, Holy Dmg +20% (20min)', cost: 5, max: 5, type: 'harmony', classReq: 'divinetemplar', reqLvl: 1, icon: '🛡️✝️', tier: 0, desc: '' },
-  lord_knight: { name: 'Lord Knight', info: 'P.Def +40%, M.Def +40%, MP Regen 15% each 10s (3min)', cost: 10, max: 5, type: 'proc', classReq: 'divinetemplar', reqLvl: 1, icon: '🏰', tier: 1, desc: '', baseCd: 300000, pwr: 0, effect: 'warcry' },
-  sacred_aegis: { name: 'Sacred Aegis', info: 'Absorbs 5000 dmg shield + reflects 20% to attackers 15s', cost: 25, max: 5, type: 'proc', classReq: 'divinetemplar', reqLvl: 1, icon: '🛡️💫', tier: 2, desc: '', baseCd: 90000, pwr: 0, effect: 'warcry' },
-  transcendent_divine: { name: 'Transcendent Divine Charge', info: '1200% Holy P.Atk + 5s Stun + grants 3s invulnerability (4★)', cost: 500, max: 5, type: 'proc', classReq: 'divineTemplar', reqLvl: 1, icon: '🛡️✝️👑', tier: 4, starRank: 4, desc: '', baseCd: 90000, pwr: 120, effect: 'stun' },
-
-  element_weaver_harmony: { name: 'Element Weaver Harmony', info: 'M.Atk +30%, All Element Dmg +20%, Cast Speed +15% (20min)', cost: 5, max: 5, type: 'harmony', classReq: 'elementweaver', reqLvl: 1, icon: '🌀', tier: 0, desc: '' },
-  fire_weave: { name: 'Fire Weave', info: 'Auto-cast: 55 Pwr Fire elemental magic', cost: 10, max: 5, type: 'proc', classReq: 'elementweaver', reqLvl: 1, icon: '🌀🔥', tier: 1, desc: '', baseCd: 4000, pwr: 55, effect: 'dmg' },
-  ice_weave: { name: 'Ice Weave', info: 'Auto-cast: 52 Pwr Ice + 2s Freeze', cost: 10, max: 5, type: 'proc', classReq: 'elementweaver', reqLvl: 1, icon: '🌀❄️', tier: 1, desc: '', baseCd: 4000, pwr: 52, effect: 'stun' },
-  elemental_convergence: { name: 'Elemental Convergence', info: 'Auto-cast: 850% M.Atk trifold (Fire+Water+Wind) AoE', cost: 25, max: 5, type: 'proc', classReq: 'elementweaver', reqLvl: 1, icon: '🌀⚡', tier: 2, desc: '', baseCd: 8000, pwr: 85, effect: 'dmg' },
-  transcendent_weave: { name: 'Transcendent Elemental Overload', info: '1750% M.Atk all elements + all hit M.Def -35% 15s (4★)', cost: 500, max: 5, type: 'proc', classReq: 'elementWeaver', reqLvl: 1, icon: '🌀👑', tier: 4, starRank: 4, desc: '', baseCd: 90000, pwr: 175, effect: 'dmg' },
-
-  shinemaker_harmony: { name: 'ShineMaker Harmony', info: 'M.Atk +25%, Light Dmg +20%, Loot Bonus +20% (20min)', cost: 10, max: 5, type: 'harmony', classReq: 'shinemaker', reqLvl: 1, icon: '✨', tier: 1, desc: '' },
-  light_burst: { name: 'Light Burst', info: 'Auto-cast: 55 Pwr Light magic', cost: 10, max: 5, type: 'proc', classReq: 'shinemaker', reqLvl: 1, icon: '💡', tier: 1, desc: '', baseCd: 4000, pwr: 55, effect: 'dmg' },
-  shining_nova: { name: 'Shining Nova', info: 'Auto-cast: 720% M.Atk Light AoE + Accuracy -20 5s', cost: 25, max: 5, type: 'proc', classReq: 'shinemaker', reqLvl: 1, icon: '✨💥', tier: 2, desc: '', baseCd: 7000, pwr: 72, effect: 'stun' },
-  transcendent_shine: { name: 'Transcendent Shining Bloom', info: '1500% M.Atk Light AoE + heals party 30% HP + Loot Bonus +100% 60s (4★)', cost: 500, max: 5, type: 'proc', classReq: 'shinemaker', reqLvl: 1, icon: '✨👑', tier: 4, starRank: 4, desc: '', baseCd: 90000, pwr: 150, effect: 'dmg' },
-
-  blood_rose_harmony: { name: 'Blood Rose Harmony', info: 'M.Atk +20%, Lifesteal +15%, Thorn Reflect 10% (20min)', cost: 5, max: 5, type: 'harmony', classReq: 'bloodrose', reqLvl: 1, icon: '🌹', tier: 0, desc: '' },
-  thorn_whip: { name: 'Thorn Whip', info: 'Auto-cast: 450% Hybrid dmg + 10% lifesteal', cost: 5, max: 5, type: 'proc', classReq: 'bloodrose', reqLvl: 1, icon: '🌹⚔️', tier: 0, desc: '', baseCd: 4000, pwr: 45, effect: 'vampiric' },
-  rose_tempest: { name: 'Rose Tempest', info: 'Auto-cast: 680% Hybrid AoE + steals 10% HP dealt', cost: 10, max: 5, type: 'proc', classReq: 'bloodrose', reqLvl: 1, icon: '🌹🌪️', tier: 1, desc: '', baseCd: 6000, pwr: 68, effect: 'vampiric' },
-  vine_bind: { name: 'Vine Bind', info: 'Auto-cast: CC root + 400% hybrid + 3s root all targets AoE', cost: 25, max: 5, type: 'proc', classReq: 'bloodrose', reqLvl: 1, icon: '🌿🌹', tier: 2, desc: '', baseCd: 20000, pwr: 40, effect: 'stun' },
-  transcendent_rose: { name: 'Transcendent Bloom of Destruction', info: '1600% Hybrid AoE + 40% HP drain + Thorn Armor +50% 30s (4★)', cost: 500, max: 5, type: 'proc', classReq: 'bloodRose', reqLvl: 1, icon: '🌹👑', tier: 4, starRank: 4, desc: '', baseCd: 90000, pwr: 160, effect: 'vampiric' },
-
-  samurai_harmony: { name: 'Samurai\'s Harmony', info: 'Katana P.Atk +25%, Crit Dmg +20%, Atk Speed +15% (20min)', cost: 5, max: 5, type: 'harmony', classReq: 'hatamoto', reqLvl: 1, icon: '⛩️', tier: 0, desc: '' },
-  iaijutsu: { name: 'Iaijutsu', info: 'Auto-cast: 750% P.Atk, ignores 20% P.Def', cost: 5, max: 5, type: 'proc', classReq: 'hatamoto', reqLvl: 1, icon: '⚔️🌸', tier: 0, desc: '', baseCd: 5000, pwr: 75, effect: 'dmg' },
-  crescent_slash: { name: 'Crescent Slash', info: 'Auto-cast: 800% P.Atk + 15% DEF debuff 6s', cost: 15, max: 5, type: 'proc', classReq: 'ronin', reqLvl: 1, icon: '🌙⚔️', tier: 1, desc: '', baseCd: 6000, pwr: 80, effect: 'dmg' },
-  bushido_stance: { name: 'Bushido Stance', info: 'Toggle: Crit Dmg +40%, Counter chance 30% on hit taken', cost: 20, max: 5, type: 'proc', classReq: 'ronin', reqLvl: 1, icon: '⛩️', tier: 2, desc: '', baseCd: 30000, pwr: 0, effect: 'warcry' },
-  transcendent_iai: { name: 'Transcendent Final Cut', info: '1500% P.Atk execute ignoring all DEF + Bushido resets on kill (4★)', cost: 500, max: 5, type: 'proc', classReq: 'samurai', reqLvl: 1, icon: '⛩️👑', tier: 4, starRank: 4, desc: '', baseCd: 90000, pwr: 150, effect: 'dmg' },
-
-  rider_will: { name: 'Rider\'s Will Harmony', info: 'P.Atk +20%, Max HP +25%, Move Speed +30 mounted (20min)', cost: 5, max: 5, type: 'harmony', classReq: 'orcRider', reqLvl: 1, icon: '🐉', tier: 0, desc: '' },
-  battle_mount: { name: 'Battle Mount', info: 'Toggle Mounted Form: HP +30%, P.Def +20%, Speed +35', cost: 5, max: 5, type: 'proc', classReq: 'orcRider', reqLvl: 1, icon: '🐉⚔️', tier: 0, desc: '', baseCd: 5000, pwr: 0, effect: 'warcry' },
-  lance_charge: { name: 'Lance Charge', info: 'Auto-cast: 600% P.Atk lance thrust ignoring 15% P.Def', cost: 15, max: 5, type: 'proc', classReq: 'dragoon', reqLvl: 1, icon: '🏇', tier: 1, desc: '', baseCd: 8000, pwr: 60, effect: 'dmg' },
-  devastating_charge: { name: 'Devastating Charge', info: 'Mounted: Charge line 800% P.Atk + 2.5s Knockdown all hit', cost: 25, max: 5, type: 'proc', classReq: 'dragoon', reqLvl: 1, icon: '🐉💥', tier: 2, desc: '', baseCd: 25000, pwr: 80, effect: 'stun' },
-  transcendent_vanguard: { name: 'Transcendent War Charge', info: 'Mounted: 1500% P.Atk charge pulls 10 enemies + 5s stun + War Banner buff (4★)', cost: 500, max: 5, type: 'proc', classReq: 'vanguardRider', reqLvl: 1, icon: '🐉👑', tier: 4, starRank: 4, desc: '', baseCd: 90000, pwr: 150, effect: 'stun' },
-
-  elvenKnight_harmony: { name: 'Elven Knight Harmony', info: 'P.Def +20%, Eva +10, Shield Block +25% (20min)', cost: 5, max: 5, type: 'harmony', classReq: 'elvenKnight', reqLvl: 1, icon: '🧝🛡️', tier: 0, desc: '' },
-  templeKnight_harmony: { name: 'Temple Knight Harmony', info: 'P.Def +30%, M.Def +25%, Eva +15, Holy Resist +20% (20min)', cost: 10, max: 5, type: 'harmony', classReq: 'templeKnight', reqLvl: 1, icon: '🧝✝️', tier: 1, desc: '' },
-  eva_templar_harmony: { name: 'Eva Templar Harmony', info: 'P.Def +50%, Eva +30, Water Shield absorbs 3000 dmg (1★)', cost: 20, max: 5, type: 'harmony', classReq: 'evasTemplar', reqLvl: 1, icon: '🧝🌊👑', tier: 3, starRank: 1, desc: '' },
-
-  swingsong_harmony: { name: 'Sword Singer Harmony', info: 'All Songs active, P.Atk +20%, Eva +15% (20min)', cost: 10, max: 5, type: 'harmony', classReq: 'swordsinger', reqLvl: 1, icon: '🎵', tier: 1, desc: '' },
-  song_of_hunter: { name: 'Song of Hunter', info: 'Crit Rate +100%, Crit Dmg +20% (10min)', cost: 15, max: 5, type: 'proc', classReq: 'swordsinger', reqLvl: 1, icon: '🎵🏹', tier: 1, desc: '', baseCd: 600000, pwr: 0, effect: 'warcry' },
-  sword_muse_harmony: { name: 'Sword Muse Harmony', info: 'All Songs Power +30%, AoE party benefit (1★)', cost: 20, max: 5, type: 'harmony', classReq: 'swordMuse', reqLvl: 1, icon: '🎵👑', tier: 3, starRank: 1, desc: '' },
-
-  scout_harmony: { name: 'Scout\'s Harmony', info: 'Crit Rate +20%, Eva +12, Move Speed +15 (20min)', cost: 5, max: 5, type: 'harmony', classReq: 'elvenScout', reqLvl: 1, icon: '🧝🏹', tier: 0, desc: '' },
-  wind_rider_harmony: { name: 'Wind Rider Harmony', info: 'Eva +40, Crit Dmg +50%, Lethal Strike Rate +25% (1★)', cost: 20, max: 5, type: 'harmony', classReq: 'windRiderElven', reqLvl: 1, icon: '💨👑', tier: 3, starRank: 1, desc: '' },
-
-  shillienKnight_harmony: { name: 'Shillien Knight Harmony', info: 'P.Def +25%, Dark Dmg +20%, Vampiric Shield 10% (20min)', cost: 10, max: 5, type: 'harmony', classReq: 'shillienKnight', reqLvl: 1, icon: '🧝♀️🛡️', tier: 1, desc: '' },
-  spectralDancer_harmony: { name: 'Spectral Dancer Harmony', info: 'All Dances Power +30%, Dual P.Atk +35%, Crit Dmg +30% (1★)', cost: 20, max: 5, type: 'harmony', classReq: 'spectralDancer', reqLvl: 1, icon: '💃👑', tier: 3, starRank: 1, desc: '' },
-  dance_of_fire: { name: 'Dance of Fire', info: 'Crit Dmg +35% (10min self-buff)', cost: 15, max: 5, type: 'proc', classReq: 'bladedancer', reqLvl: 1, icon: '🔥💃', tier: 1, desc: '', baseCd: 600000, pwr: 0, effect: 'warcry' },
-
-  storm_screamer_harmony: { name: 'Storm Screamer Harmony', info: 'M.Atk +50%, Wind/Dark Dmg +25%, PvE Dmg +15% (1★)', cost: 20, max: 5, type: 'harmony', classReq: 'stormScreamer', reqLvl: 1, icon: '🌪️👑', tier: 3, starRank: 1, desc: '' },
-  thunder_explosion: { name: 'Thunder Explosion', info: 'Auto-cast: 2x550% M.Atk Wind double hit (1100% total)', cost: 25, max: 5, type: 'proc', classReq: 'spellhowler', reqLvl: 1, icon: '⚡💥', tier: 2, desc: '', baseCd: 5000, pwr: 55, effect: 'dmg' },
-
-  shillienSaint_harmony: { name: 'Shillien Saint Harmony', info: 'M.Def +50%, Dark Heal +60% OR Dark Side M.Atk +50% (1★)', cost: 20, max: 5, type: 'harmony', classReq: 'shillienSaint', reqLvl: 1, icon: '✝️🖤👑', tier: 3, starRank: 1, desc: '' },
-
-  grand_khavatari_harmony: { name: 'Grand Khavatari Harmony', info: 'P.Atk +45%, All Totem Spirits active, Fist Dmg +35% (1★)', cost: 20, max: 5, type: 'harmony', classReq: 'grandKhavatari', reqLvl: 1, icon: '🥊👑', tier: 3, starRank: 1, desc: '' },
-  ogres_essence: { name: 'Ogre Essence', info: 'P.Atk +20%, P.Def +30%, M.Def +30%, Crit Dmg +20% (no penalties, 20min)', cost: 20, max: 5, type: 'harmony', classReq: 'tyrant', reqLvl: 1, icon: '🐗', tier: 2, desc: '' },
-
-  dominator_harmony: { name: 'Dominator Harmony', info: 'Clan Buffs power +50%, Seal Curses AoE +50% range (1★)', cost: 20, max: 5, type: 'harmony', classReq: 'dominator', reqLvl: 1, icon: '👑🔥', tier: 3, starRank: 1, desc: '' },
-  flame_burst_dom: { name: 'Flame Burst', info: 'Auto-cast: 600% M.Atk Fire 10 targets + 30% double hit chance', cost: 25, max: 5, type: 'proc', classReq: 'overlord', reqLvl: 1, icon: '🔥💥', tier: 2, desc: '', baseCd: 12000, pwr: 60, effect: 'dmg' },
-
-  doomcryer_harmony: { name: 'Doomcryer Harmony', info: 'Chant of Magnus active +30%, War Chant Party Buff enhanced (1★)', cost: 20, max: 5, type: 'harmony', classReq: 'doomcryer', reqLvl: 1, icon: '📯👑', tier: 3, starRank: 1, desc: '' },
-
-  doombringer_harmony: { name: 'Doombringer Harmony', info: 'P.Atk +40%, Soul Explosion Dmg +50%, Crit Dmg +30% (1★)', cost: 20, max: 5, type: 'harmony', classReq: 'doombringer', reqLvl: 1, icon: '😈👑', tier: 3, starRank: 1, desc: '' },
-  trickster_harmony: { name: 'Trickster Harmony', info: 'Crossbow P.Atk +40%, Trap Dmg +50%, Eva +30 (1★)', cost: 20, max: 5, type: 'harmony', classReq: 'trickster', reqLvl: 1, icon: '🎯👑', tier: 3, starRank: 1, desc: '' },
-
-  fortune_seekers_harmony: { name: 'Fortune Seeker Harmony', info: 'Loot Bonus +100%, Spoil Rate +200%, P.Atk +30% (1★)', cost: 20, max: 5, type: 'harmony', classReq: 'fortuneSeeker', reqLvl: 1, icon: '💰👑', tier: 3, starRank: 1, desc: '' },
-  maestros_harmony: { name: 'Maestro Harmony', info: 'Craft Speed +100%, Golem P.Atk +50%, P.Def +40% (1★)', cost: 20, max: 5, type: 'harmony', classReq: 'maestro', reqLvl: 1, icon: '🔨👑', tier: 3, starRank: 1, desc: '' },
-
-  moonlight_harmony: { name: 'Moonlight Sentinel Harmony', info: 'P.Atk +40%, Range +200, Crit Rate +30%, Atk Speed Max (1★)', cost: 20, max: 5, type: 'harmony', classReq: 'moonlightSentinel', reqLvl: 1, icon: '🌙👑', tier: 3, starRank: 1, desc: '' },
-  ghost_sentinel_harmony: { name: 'Ghost Sentinel Harmony', info: 'P.Atk +50%, Crit Dmg +50%, Bow Range +300 (1★)', cost: 20, max: 5, type: 'harmony', classReq: 'ghostSentinel', reqLvl: 1, icon: '💀🏹👑', tier: 3, starRank: 1, desc: '' },
-  water_spiral: { name: 'Water Spiral', info: 'Auto-cast: 520% M.Atk Water + M.Def -15% 6s', cost: 25, max: 5, type: 'proc', classReq: 'spellsinger', reqLvl: 1, icon: '🌊🌀', tier: 2, desc: '', baseCd: 4000, pwr: 52, effect: 'dmg' },
-
-  eviscerator_harmony: { name: 'Eviscerator Harmony', info: 'P.Atk +40%, Wind Combo Dmg +40%, Eva +35 (1★)', cost: 20, max: 5, type: 'harmony', classReq: 'eviscerator', reqLvl: 1, icon: '🌪️👑', tier: 3, starRank: 1, desc: '' },
-  sayha_seeker_harmony: { name: 'Sayha Seeker Harmony', info: 'M.Atk +45%, Wind Dmg +35%, Move Speed +30 (1★)', cost: 20, max: 5, type: 'harmony', classReq: 'sayhaSeeker', reqLvl: 1, icon: '🌀👑', tier: 3, starRank: 1, desc: '' }
-};
-
-const SKILL_REQS_ECHO = {
-  battle_roar: { fighter_will: 1 },
-  power_strike_f: { fighter_will: 1 },
-  weapon_mastery_f: { fighter_will: 1 },
-  light_armor_f: { weapon_mastery_f: 1 },
-  heavy_armor_f: { light_armor_f: 1 },
-  boost_hp_f: { weapon_mastery_f: 1 },
-  stun_attack: { power_strike_f: 1 },
-  war_cry: { heavy_armor_f: 1 },
-  lethal_blow_f: { stun_attack: 1 },
-  frenzy_f: { war_cry: 1 },
-  
-  energy_bolt_m: { mage_will: 1 },
-  weapon_mastery_m: { mage_will: 1 },
-  robe_mast_m: { weapon_mastery_m: 1 },
-  boost_mana_m: { robe_mast_m: 1 },
-  anti_magic_m: { robe_mast_m: 1 },
-  higher_mana_m: { anti_magic_m: 1 },
-  quick_recycle: { higher_mana_m: 1 },
-
-  triple_slash: { warriors_harmony: 1 },
-  sonicBlasterG: { triple_slash: 1 },
-  gladiators_harmony: { warriors_harmony: 1 },
-  dual_weapon_mast: { gladiators_harmony: 1 },
-  sonicRage: { sonicBlasterG: 1 },
-  duelist_harmony: { gladiators_harmony: 1 },
-  transcendent_dual_blow: { duelist_harmony: 1 },
-
-  shield_bash_k: { knights_harmony: 1 },
-  paladins_harmony: { knights_harmony: 1 },
-  holy_blade: { paladins_harmony: 1 },
-  touch_of_life: { paladins_harmony: 1 },
-  phoenix_harmony: { paladins_harmony: 1 },
-  transcendent_shield: { phoenix_harmony: 1 },
-
-  dark_avengers_harmony: { knights_harmony: 1 },
-  insane_crusher: { dark_avengers_harmony: 1 },
-  hell_knights_harmony: { dark_avengers_harmony: 1 },
-  transcendent_dark: { hell_knights_harmony: 1 },
-
-  dagger_mastery_r: { rogues_harmony: 1 },
-  backstab_r: { dagger_mastery_r: 1 },
-  treasure_hunters_harmony: { rogues_harmony: 1 },
-  shadow_step: { backstab_r: 1 },
-  exciting_adventure: { treasure_hunters_harmony: 1 },
-  adventurers_harmony: { treasure_hunters_harmony: 1 },
-  transcendent_deadly: { adventurers_harmony: 1 },
-
-  bow_mastery_h: { rogues_harmony: 1 },
-  double_shot_h: { bow_mastery_h: 1 },
-  hawkeyes_harmony: { rogues_harmony: 1 },
-  stun_shot_h: { double_shot_h: 1 },
-  arrow_rain_h: { stun_shot_h: 1 },
-  target_lock: { hawkeyes_harmony: 1 },
-  sagittarius_harmony: { hawkeyes_harmony: 1 },
-  transcendent_seven: { sagittarius_harmony: 1 },
-
-  blaze_sorc: { wizards_harmony: 1 },
-  fire_mastery_s: { wizards_harmony: 1 },
-  sorcerers_harmony: { wizards_harmony: 1 },
-  prominence: { blaze_sorc: 1 },
-  flame_explosion: { prominence: 1 },
-  magic_focus_s: { sorcerers_harmony: 1 },
-  archmages_harmony: { sorcerers_harmony: 1 },
-  transcendent_inferno: { archmages_harmony: 1 },
-
-  necros_harmony: { wizards_harmony: 1 },
-  death_spike_n: { necros_harmony: 1 },
-  void_explosion: { death_spike_n: 1 },
-  soultakers_harmony: { necros_harmony: 1 },
-  transcendent_soul: { soultakers_harmony: 1 },
-
-  bishops_harmony: { wizards_harmony: 1 },
-  greater_heal: { bishops_harmony: 1 },
-  holy_strike_b: { bishops_harmony: 1 },
-  dark_side: { greater_heal: 1 },
-  cardinals_harmony: { bishops_harmony: 1 },
-  transcendent_holy: { cardinals_harmony: 1 },
-
-  prophets_harmony: { wizards_harmony: 1 },
-  haste_buff: { prophets_harmony: 1 },
-  might_buff: { prophets_harmony: 1 },
-  hierophants_harmony: { prophets_harmony: 1 },
-  transcendent_prophecy: { hierophants_harmony: 1 },
-  
-  titans_harmony: { orc_will: 1 },
-  earthquake_t: { titans_harmony: 1 },
-  blazing_strike: { earthquake_t: 1 },
-  titan_harmony_3: { titans_harmony: 1 },
-  transcendent_quake: { titan_harmony_3: 1 },
-
-  death_spike_dk: { death_knight_mastery: 1 },
-  dark_armor_dk: { death_knight_mastery: 1 },
-  death_storm: { dark_armor_dk: 1 },
-  transcendent_death: { dark_armor_dk: 1 },
-  
-  wolf_transformation: { warg_will: 1 },
-  double_claw: { wolf_transformation: 1 },
-  vortex_claws: { double_claw: 1 },
-  transcendent_claw: { warg_will: 1 },
-
-  assassination: { assassin_harmony: 1 },
-  brutality_passive: { assassination: 1 },
-  shadow_blast: { brutality_passive: 1 },
-  transcendent_assassination: { assassin_harmony: 1 },
-
-  gun_mastery_sb: { burst_fire: 1 },
-  storm_blaster_harmony: { gun_mastery_sb: 1 },
-  wind_barrage: { storm_blaster_harmony: 1 },
-  transcendent_storm: { storm_blaster_harmony: 1 },
-
-  lord_knight: { divine_templar_harmony: 1 },
-  sacred_aegis: { lord_knight: 1 },
-  transcendent_divine: { divine_templar_harmony: 1 },
-
-  fire_weave: { element_weaver_harmony: 1 },
-  ice_weave: { element_weaver_harmony: 1 },
-  elemental_convergence: { fire_weave: 1 },
-  transcendent_weave: { element_weaver_harmony: 1 },
-
-  light_burst: { shinemaker_harmony: 1 },
-  shining_nova: { light_burst: 1 },
-  transcendent_shine: { shinemaker_harmony: 1 },
-
-  thorn_whip: { blood_rose_harmony: 1 },
-  rose_tempest: { thorn_whip: 1 },
-  vine_bind: { rose_tempest: 1 },
-  transcendent_rose: { blood_rose_harmony: 1 },
-
-  iaijutsu: { samurai_harmony: 1 },
-  crescent_slash: { iaijutsu: 1 },
-  bushido_stance: { crescent_slash: 1 },
-  transcendent_iai: { samurai_harmony: 1 },
-
-  battle_mount: { rider_will: 1 },
-  lance_charge: { battle_mount: 1 },
-  devastating_charge: { lance_charge: 1 },
-  transcendent_vanguard: { rider_will: 1 },
-
-  templeKnight_harmony: { elvenKnight_harmony: 1 },
-  eva_templar_harmony: { templeKnight_harmony: 1 },
-
-  song_of_hunter: { swingsong_harmony: 1 },
-  sword_muse_harmony: { swingsong_harmony: 1 },
-  
-  wind_rider_harmony: { scout_harmony: 1 },
-  
-  dance_of_fire: { spectralDancer_harmony: 1 },
-  
-  thunder_explosion: { storm_screamer_harmony: 1 },
-  
-  ogres_essence: { grand_khavatari_harmony: 1 },
-  
-  flame_burst_dom: { dominator_harmony: 1 },
-  
-  water_spiral: { ghost_sentinel_harmony: 1 }
-};
-
-const SKILL_TREE_LAYOUT_ECHO = {
-  fighter_will: { row: 0, col: 0 },
-  power_strike_f: { row: 1, col: 0 },
-  weapon_mastery_f: { row: 2, col: 0 },
-  battle_roar: { row: 3, col: 0 },
-  light_armor_f: { row: 0, col: 1 },
-  heavy_armor_f: { row: 1, col: 1 },
-  boost_hp_f: { row: 2, col: 1 },
-  stun_attack: { row: 3, col: 1 },
-  war_cry: { row: 1, col: 2 },
-  lethal_blow_f: { row: 3, col: 2 },
-  frenzy_f: { row: 2, col: 2 },
-
-  mage_will: { row: 0, col: 0 },
-  energy_bolt_m: { row: 1, col: 0 },
-  weapon_mastery_m: { row: 2, col: 0 },
-  robe_mast_m: { row: 3, col: 0 },
-  boost_mana_m: { row: 0, col: 1 },
-  anti_magic_m: { row: 1, col: 1 },
-  higher_mana_m: { row: 2, col: 1 },
-  quick_recycle: { row: 3, col: 1 },
-  
-  warriors_harmony: { row: 0, col: 0 },
-  triple_slash: { row: 1, col: 1 },
-  sonicBlasterG: { row: 2, col: 1 },
-  gladiators_harmony: { row: 0, col: 1 },
-  dual_weapon_mast: { row: 1, col: 2 },
-  sonicRage: { row: 2, col: 2 },
-  duelist_harmony: { row: 0, col: 3 },
-  transcendent_dual_blow: { row: 1, col: 4 }
-};
-
-if (typeof window !== 'undefined') {
-  window.EchoData = { RACES_ECHO, CLASSES_ECHO, SKILL_DEFS_ECHO, SKILL_REQS_ECHO, SKILL_TREE_LAYOUT_ECHO };
-}
-
-// ================================================================
-// Lineage 2 Essence 547 - Echo of Elements Skill Pack
-// Instalado automaticamente no final de classes_echo.js
-// ================================================================
-(function installEssence547EchoSkills(root) {
-  const E = root.EchoData || (root.EchoData = {});
-  const CLASSES  = E.CLASSES_ECHO       || {};
-  const SKILL_DEFS  = E.SKILL_DEFS_ECHO    || (E.SKILL_DEFS_ECHO = {});
-  const SKILL_REQS  = E.SKILL_REQS_ECHO    || (E.SKILL_REQS_ECHO = {});
-  const SKILL_TREE  = E.SKILL_TREE_LAYOUT_ECHO || (E.SKILL_TREE_LAYOUT_ECHO = {});
-  const CLASS_SKILLS = E.CLASS_SKILLS_ECHO  || (E.CLASS_SKILLS_ECHO = {});
-
-  const T = { active:'active', passive:'passive', buff:'buff', toggle:'toggle', debuff:'debuff', trigger:'trigger' };
-
-  function slug(s) {
-    return String(s).normalize('NFD').replace(/[\u0300-\u036f]/g,'')
-      .replace(/['']/g,'').replace(/[^a-zA-Z0-9]+/g,'_').replace(/^_+|_+$/g,'').toLowerCase();
-  }
-
-  function skill(name, type, note) {
-    const id = slug(name);
-    if (!SKILL_DEFS[id]) {
-      SKILL_DEFS[id] = {
-        id,
-        name,
-        type: type || T.active,
-        note: note || '',
-        max: 5,
-        maxLevel: 5,
-        cost: 5,
-        reqLvl: 1,
-        tier: 0,
-        icon: type === T.passive ? '📘' : (type === T.buff ? '✨' : (type === T.toggle ? '🔄' : (type === T.debuff ? '💀' : '⚔️'))),
-        essence547: true
-      };
-    } else {
-      if (!SKILL_DEFS[id].max) SKILL_DEFS[id].max = SKILL_DEFS[id].maxLevel || 5;
-      if (!SKILL_DEFS[id].maxLevel) SKILL_DEFS[id].maxLevel = SKILL_DEFS[id].max || 5;
-      if (!SKILL_DEFS[id].cost) SKILL_DEFS[id].cost = 5;
-      if (SKILL_DEFS[id].tier === undefined) SKILL_DEFS[id].tier = 0;
-    }
-    if (SKILL_REQS[id]) {
-      delete SKILL_REQS[id].level;
-      delete SKILL_REQS[id].sp;
-    } else {
-      SKILL_REQS[id] = {};
-    }
-    return id;
-  }
-
-  const A = (list) => list.map(([n,t,note]) => skill(n,t,note));
-
-  // CLASS → aliases (todas as chaves que um classId pode ter no save)
-  const CLASS_ALIASES = {
-    humanFighter:['fighter'],
-    warrior:['warrior'], gladiator:['gladiator'], duelist:['duelist'],
-    warlord:['warlord'], dreadnought:['dreadnought'],
-    knight:['knight'], paladin:['paladin'],
-    phoenixKnight:['phoenixKnight','phoenix_knight'],
-    darkAvenger:['darkAvenger','dark_avenger'],
-    hellKnight:['hellKnight','hell_knight'],
-    rogue:['rogue'],
-    treasureHunter:['treasureHunter','treasure_hunter'],
-    adventurer:['adventurer'],
-    hawkeye:['hawkeye'], sagittarius:['sagittarius'],
-
-    humanMage:['mage'], wizard:['wizard'], sorcerer:['sorcerer'],
-    archmage:['archmage'], necromancer:['necromancer'], soultaker:['soultaker'],
-    warlock:['warlock'], arcanaLord:['arcanaLord','arcana_lord'],
-    cleric:['cleric'], bishop:['bishop'], cardinal:['cardinal'],
-    prophet:['prophet'], hierophant:['hierophant'],
-
-    elfFighter:['elfFighter','elf_fighter'],
-    elvenKnight:['elvenKnight'], templeKnight:['templeKnight','temple_knight'],
-    evaTemplar:['evaTemplar','evasTemplar','eva_templar'],
-    swordSinger:['swordSinger','swordSinger_','sword_singer'],
-    swordMuse:['swordMuse','sword_muse'],
-    elvenScout:['elvenScout'], plainsWalker:['plainsWalker','plains_walker'],
-    windRider:['windRider','windRiderElven','wind_rider'],
-    silverRanger:['silverRanger','silver_ranger'],
-    moonlightSentinel:['moonlightSentinel','moonlight_sentinel'],
-
-    elfMage:['elfMage','elf_mage'],
-    elvenWizard:['elvenWizard'], spellsinger:['spellsinger'],
-    mysticMuse:['mysticMuse','mystic_muse'],
-    elementalSummoner:['elementalSummoner','elemental_summoner'],
-    elementalMaster:['elementalMaster','elemental_master'],
-    oracle:['oracle'], elder:['elder'],
-    evasSaint:['evasSaint','evaSaint','evas_saint'],
-
-    darkElfFighter:['darkElfFighter','darkelf_fighter'],
-    palusKnight:['palusKnight'],
-    shillienKnight:['shillienKnight','shillien_knight'],
-    shillienTemplar:['shillienTemplar','shillien_templar'],
-    bladeDancer:['bladeDancer','bladedancer','blade_dancer'],
-    spectralDancer:['spectralDancer','spectral_dancer'],
-    deAssassin:['deAssassin','abyssWalker','abyss_walker'],
-    ghostHunter:['ghostHunter','ghost_hunter'],
-    phantomRanger:['phantomRanger','phantom_ranger'],
-    ghostSentinel:['ghostSentinel','ghost_sentinel'],
-
-    darkWizard:['darkWizard'], spellhowler:['spellhowler'],
-    stormScreamer:['stormScreamer','storm_screamer'],
-    phantomSummoner:['phantomSummoner','phantom_summoner'],
-    spectralMaster:['spectralMaster','spectral_master'],
-    shillienOracle:['shillienOracle'],
-    shillienElder:['shillienElder','shillien_elder'],
-    shillienSaint:['shillienSaint','shillien_saint'],
-
-    orcFighter:['orcFighter','orc_fighter'],
-    orcRaider:['orcRaider'], destroyer:['destroyer'],
-    titan:['titan'], monk:['monk'], tyrant:['tyrant'],
-    grandKhavatari:['grandKhavatari','grand_khavatari'],
-    orcShaman:['orcShaman'],
-    overlord:['overlord'], dominator:['dominator'],
-    warcryer:['warcryer'], doomcryer:['doomcryer'],
-
-    scavenger:['scavenger'], bountyHunter:['bountyHunter','bounty_hunter'],
-    fortuneSeeker:['fortuneSeeker','fortune_seeker'],
-    artisanClass:['artisanClass'],
-    warsmith:['warsmith'], maestro:['maestro'],
-
-    kamaelSoldier:['soulbreaker'], trooper:['trooper'],
-    doombringer:['doombringer'], soulHound:['soulHound','soulhound','soul_hound'],
-    warder:['warder'], trickster:['trickster'],
-
-    deathKnight:['deathPilgrim','elfDeathPilgrim','deathBlade','elfDeathBlade','deathMessenger','elfDeathMessenger','deathKnight','elfDeathKnight'],
-    warg:['wargBase','wargS1','wargS2','warg'],
-    assassin:['assassinBase','assassinS1','assassinS2','assassinFinal'],
-    vanguardRider:['orcRider','dragoon','vanguardRider'],
-    samurai:['hatamoto','ronin','samurai'],
-    stormBlaster:['sylphGunner','sharpshooter','windSniper','stormBlaster'],
-    shinemaker:['shinemakerS1','shinemakerS2','shinemaker'],
-    divineTemplar:['highElfBase','divineTemplarS1','divineTemplarS2','divineTemplar'],
-    bloodRose:['bloodRoseBase','bloodRoseS1','bloodRoseS2','bloodRose'],
-    elementWeaver:['elementWeaverS1','elementWeaverS2','elementWeaver'],
-  };
-
-  const DATA = {
-    humanFighter: A([
-      ['Power Strike',T.active,''],['Mortal Blow',T.active,''],['Power Shot',T.active,''],['Rush',T.active,''],['Bandage',T.active,''],
-      ['HP Increase',T.passive,''],['Light Armor Mastery',T.passive,''],["Fighter's Will",T.buff,'Self-buff'],
-    ]),
-    warrior: A([
-      ['Power Smash',T.active,''],['Spinning Slash',T.active,''],['Iron Will',T.active,''],
-      ['Sword Blunt Mastery',T.passive,''],['Polearm Mastery',T.passive,''],['Heavy Armor Mastery',T.passive,''],
-      ['HP Increase II',T.passive,''],['Weight Limit',T.passive,''],['Battle Roar',T.buff,''],
-    ]),
-    gladiator: A([
-      ['Triple Slash',T.active,''],['Sonic Blaster',T.active,''],['Sonic Storm',T.active,''],['Sonic Buster',T.active,''],
-      ['Double Sonic Slash',T.active,''],['Hammer Crush',T.active,''],['Tribunal',T.active,''],['Lionheart',T.active,''],
-      ['War Frenzy',T.active,''],['Dual Weapon Mastery',T.passive,''],['Focus',T.passive,''],['Critical Power',T.passive,''],
-      ['Boost HP',T.passive,''],['Vicious Stance',T.toggle,''],['Sonic Move',T.active,''],["Gladiator's Harmony",T.buff,''],
-    ]),
-    duelist: A([
-      ['Sonic Focus',T.active,''],['Force Blaster',T.active,''],['Dual Blow',T.active,''],['Rushing Force',T.active,''],
-      ['Long Blow',T.active,''],['Dual Dagger Blow',T.active,''],['Force Buster',T.active,''],['Earthquake',T.active,''],
-      ['Real Target',T.active,''],['Thrill Fight',T.active,''],['Duelist Spirit',T.passive,''],['Blade of the Duelist',T.passive,''],
-      ['Sonic Rage',T.active,'Echo'],['Master of Combat',T.passive,'Essence'],["Duelist's Harmony",T.buff,''],
-      ['Transcendent Dual Blow',T.active,'Transcendent'],
-    ]),
-    warlord: A([
-      ['Whirlwind',T.active,''],['Thunder Storm',T.active,''],['Howl',T.active,''],['Provoke',T.active,''],
-      ['Fellswoop',T.active,''],['War Cry',T.active,''],['Freezing Strike',T.active,''],['Burning Chop',T.active,''],
-      ['Shock Stomp',T.active,''],['Polearm Mastery',T.passive,''],['Vital Force',T.passive,''],['Focus',T.passive,''],
-      ['Boost HP',T.passive,''],['Heavy Armor Mastery',T.passive,''],["Warlord's Harmony",T.buff,''],
-    ]),
-    dreadnought: A([
-      ['Rush Impact',T.active,''],['War Frenzy',T.active,''],['Dread Pool',T.active,''],['Lionheart',T.active,''],
-      ['Anti-Magic Armor',T.active,''],['Weapon Blockade',T.active,''],['Spike',T.active,''],
-      ['Dreadnought Spirit',T.passive,''],['Body of the Dreadnought',T.passive,''],['Master of Combat',T.passive,'Essence'],
-      ["Dreadnought's Harmony",T.buff,''],['Transcendent Whirlwind',T.active,'Transcendent'],
-    ]),
-    knight: A([
-      ['Shield Strike',T.active,''],['Hate',T.active,''],['Aura of Hate',T.active,''],
-      ['Shield Mastery',T.passive,''],['Heavy Armor Mastery',T.passive,''],['Sword Blunt Mastery',T.passive,''],
-      ['HP Increase II',T.passive,''],['Deflect Arrow',T.passive,''],["Knight's Harmony",T.buff,''],
-    ]),
-    paladin: A([
-      ['Majesty',T.active,''],['Holy Blade',T.active,''],['Shield Stun',T.active,''],['Angelic Icon',T.active,''],
-      ['Sacrifice',T.active,''],['Aegis',T.active,''],['Vengeance',T.active,''],['Provoke',T.active,''],
-      ['Ultimate Defense',T.active,''],['Holy Blessing',T.active,''],['Summon Storm Cubic',T.active,''],
-      ['Heavy Armor Mastery',T.passive,''],['Shield Mastery',T.passive,''],['Boost HP',T.passive,''],
-      ['Resist Holy Dark',T.passive,''],["Paladin's Harmony",T.buff,''],
-    ]),
-    phoenixKnight: A([
-      ['Touch of Life',T.active,''],['Phoenix Aura',T.active,''],['Shield of Faith',T.active,''],['Flame Icon',T.active,''],
-      ['Celestial Shield',T.active,''],['Summon Imperial Phoenix',T.active,''],['Phoenix Knight Spirit',T.passive,''],
-      ['Body of the Phoenix',T.passive,''],['Protection of Faith',T.passive,''],['Master of Combat',T.passive,'Essence'],
-      ["Phoenix Knight's Harmony",T.buff,''],['Transcendent Shield Charge',T.active,'Transcendent'],
-    ]),
-    darkAvenger: A([
-      ['Summon Dark Panther',T.active,''],['Horror',T.active,''],['Drain Health',T.active,''],['Shield Stun',T.active,''],
-      ['Judgment',T.active,''],['Doom Shield',T.active,''],['Seed of Revenge',T.active,''],['Touch of Death',T.active,''],
-      ['Dark Flame',T.active,''],['Provoke',T.active,''],['Heavy Armor Mastery',T.passive,''],
-      ['Shield Mastery',T.passive,''],['Boost HP',T.passive,''],['Reflect Damage',T.passive,''],["Dark Avenger's Harmony",T.buff,''],
-    ]),
-    hellKnight: A([
-      ['Insane Crusher',T.active,''],['Panther Cancel',T.active,''],['Anthem of Hell',T.active,''],['Gehenna',T.active,''],
-      ['Touch of Darkness',T.active,''],['Summon Dark Panther Enhanced',T.active,''],['Hell Knight Spirit',T.passive,''],
-      ['Body of the Hell Knight',T.passive,''],['Protection of Darkness',T.passive,''],['Master of Combat',T.passive,'Essence'],
-      ["Hell Knight's Harmony",T.buff,''],['Transcendent Dark Strike',T.active,'Transcendent'],
-    ]),
-    rogue: A([
-      ['Double Shot',T.active,''],['Backstab',T.active,''],['Dash',T.active,''],['Unlock',T.active,''],
-      ['Light Armor Mastery',T.passive,''],['Dagger Mastery',T.passive,''],['Bow Mastery',T.passive,''],
-      ['Critical Chance',T.passive,''],["Rogue's Harmony",T.buff,''],
-    ]),
-    treasureHunter: A([
-      ['Deadly Blow',T.active,''],['Lethal Blow',T.active,''],['Sand Bomb',T.active,''],['Fake Death',T.active,''],
-      ['Trick',T.active,''],['Lure',T.active,''],['Blinding Blow',T.active,''],['Mirage',T.active,''],
-      ['Shadow Step',T.active,''],['Switch',T.active,''],['Detect Remove Trap',T.active,''],
-      ['Evasion',T.passive,''],['Critical Power',T.passive,''],['Dagger Mastery',T.passive,''],
-      ['Light Armor Mastery',T.passive,''],['Focus',T.passive,''],["Treasure Hunter's Harmony",T.buff,''],
-    ]),
-    adventurer: A([
-      ['Exciting Adventure',T.active,''],['Shadow Sense',T.passive,''],['Wind Riding',T.active,''],
-      ['Lucky Strike',T.active,''],['Detection',T.active,''],['Adventurer Spirit',T.passive,''],
-      ['Body of the Adventurer',T.passive,''],['Final Frenzy',T.passive,''],['Master of Combat',T.passive,'Essence'],
-      ["Adventurer's Harmony",T.buff,''],['Transcendent Deadly Blow',T.active,'Transcendent'],
-    ]),
-    hawkeye: A([
-      ['Double Shot',T.active,''],['Burst Shot',T.active,''],['Stun Shot',T.active,''],['Rapid Fire',T.active,''],
-      ['Arrow Rain',T.active,''],['Cheap Shot',T.active,''],['Bow Mastery',T.passive,''],['Long Shot',T.passive,''],
-      ['Focus',T.passive,''],['Critical Power',T.passive,''],['Light Armor Mastery',T.passive,''],
-      ['Evasion',T.passive,''],["Hawkeye's Harmony",T.buff,''],
-    ]),
-    sagittarius: A([
-      ['Seven Arrow',T.active,''],['Arrow Flare',T.active,''],['Dead Eye',T.active,''],['Pinpoint Shot',T.active,''],
-      ['Triple Shot',T.active,'Echo'],['Thorn Shot',T.active,'Echo'],['Binding Shot',T.active,'Echo'],
-      ['Incendiary Shot',T.active,'Echo'],['Freezing Shot',T.active,'Echo'],['Wind Shot',T.active,'Echo'],
-      ['Flame Arrow Rain',T.active,'Echo'],['Water Arrow Rain',T.active,'Echo'],['Storm Arrow Rain',T.active,'Echo'],
-      ['Spiral Shot',T.active,'Echo'],['Target Lock',T.active,'Echo'],['Sagittarius Spirit',T.passive,''],
-      ['Body of the Sagittarius',T.passive,''],['Master of Combat',T.passive,'Essence'],
-      ["Sagittarius Harmony",T.buff,''],['Transcendent Seven Arrow',T.active,'Transcendent'],
-    ]),
-
-    humanMage: A([
-      ['Wind Strike',T.active,''],['Self Heal',T.active,''],['Group Heal',T.active,''],['Flame Strike',T.active,''],
-      ['Sleep',T.active,''],['Ice Bolt',T.active,''],['Robe Mastery',T.passive,''],['MP Increase',T.passive,''],
-      ["Mage's Will",T.buff,''],
-    ]),
-    wizard: A([
-      ['Blaze',T.active,''],['Aqua Swirl',T.active,''],['Twister',T.active,''],['Flame Strike',T.active,''],
-      ['Surrender to Fire',T.active,''],['Surrender to Water',T.active,''],['Surrender to Wind',T.active,''],
-      ['Aura Burn',T.active,''],['Life Drain',T.active,''],['Robe Mastery',T.passive,''],['Boost Mana',T.passive,''],
-      ["Wizard's Harmony",T.buff,''],
-    ]),
-    sorcerer: A([
-      ['Solar Flare',T.active,''],['Freezing Skin',T.active,''],['Arcane Power',T.active,''],['Blizzard',T.active,''],
-      ['Hurricane',T.active,''],['Prominence',T.active,''],['Hydro Blast',T.active,''],['Aura Flash',T.active,''],
-      ['Tempest',T.active,''],['Body to Mind',T.active,''],['Cancel',T.active,''],['Anti-Magic',T.active,''],
-      ['Elemental Assault',T.passive,''],['Boost Mana',T.passive,''],['Robe Mastery',T.passive,''],["Sorcerer's Harmony",T.buff,''],
-    ]),
-    archmage: A([
-      ['Hell Inferno',T.active,''],['Seed of Fire',T.active,''],['Seed of Water',T.active,''],['Seed of Wind',T.active,''],
-      ['Elemental Burst',T.active,''],['Elemental Storm',T.active,''],['Mana Burn',T.active,''],
-      ['Mystic Immunity',T.active,''],['Empowering Echo',T.active,''],['Fire Spiral',T.active,'Echo'],
-      ['Flame Explosion',T.active,'Echo'],['Spell Mastery',T.passive,'Echo'],['Magic Focus',T.passive,'Echo'],
-      ['Archmage Spirit',T.passive,''],['Body of the Archmage',T.passive,''],["Archmage's Harmony",T.buff,''],
-      ['Transcendent Hell Inferno',T.active,'Transcendent'],
-    ]),
-    necromancer: A([
-      ['Corpse Plague',T.active,''],['Death Spike',T.active,''],['Vampiric Claw',T.active,''],['Anchor',T.active,''],
-      ['Curse Gloom',T.active,''],['Corpse Burst',T.active,''],['Summon Reanimated Man',T.active,''],
-      ['Summon Cursed Bone',T.active,''],['Surrender to Unholy',T.active,''],['Curse Fear',T.active,''],
-      ['Bone Armor',T.passive,''],['Boost Mana',T.passive,''],['Robe Mastery',T.passive,''],["Necromancer's Harmony",T.buff,''],
-    ]),
-    soultaker: A([
-      ['Soul Vortex',T.active,''],['Soul Vortex Destruction',T.active,''],['Mass Curse Gloom',T.active,''],
-      ['Soul Absorption',T.active,''],['Summon Dark Curse',T.active,''],['Dark Burden',T.active,''],
-      ['Void Explosion',T.active,'Echo'],['Spell Mastery',T.passive,'Echo'],['Magic Focus',T.passive,'Echo'],
-      ['Soultaker Spirit',T.passive,''],['Body of the Soultaker',T.passive,''],["Soultaker's Harmony",T.buff,''],
-      ['Transcendent Soul Vortex',T.active,'Transcendent'],
-    ]),
-    warlock: A([
-      ['Summon Shadow',T.active,''],['Summon Silhouette',T.active,''],['Summon Soulless',T.active,''],
-      ['Summon Binding Cubic',T.active,''],['Summon Phantom Cubic',T.active,''],['Servitor Heal',T.active,''],
-      ['Servitor Recharge',T.active,''],['Transfer Pain',T.active,''],['Life Cubic',T.active,''],
-      ['Servitor Physical Attack',T.passive,''],['Boost Mana',T.passive,''],['Robe Mastery',T.passive,''],["Warlock's Harmony",T.buff,''],
-    ]),
-    arcanaLord: A([
-      ['Summon Feline King',T.active,''],['Summon Magnus',T.active,''],['Servitor Barrier',T.active,''],
-      ['Mass Servitor Heal',T.active,''],['Final Servitor',T.active,''],['Servitor Empowerment',T.active,''],
-      ['Arcana Lord Spirit',T.passive,''],['Body of the Arcana Lord',T.passive,''],["Arcana Lord's Harmony",T.buff,''],
-      ['Transcendent Summon Burst',T.active,'Transcendent'],
-    ]),
-    cleric: A([
-      ['Heal',T.active,''],['Battle Heal',T.active,''],['Might',T.active,''],['Shield',T.buff,''],
-      ['Wind Walk',T.active,''],['Cure Poison',T.active,''],['Cure Bleed',T.active,''],['Turn Undead',T.active,''],
-      ['Recharge',T.active,''],['Robe Mastery',T.passive,''],["Cleric's Harmony",T.buff,''],
-    ]),
-    bishop: A([
-      ['Greater Heal',T.active,''],['Greater Group Heal',T.active,''],['Resurrection',T.active,''],
-      ['Greater Might',T.active,''],['Greater Shield',T.active,''],['Purify',T.active,''],['Cleanse',T.active,''],
-      ['Blessed Body',T.active,''],['Blessed Soul',T.active,''],['Mental Shield',T.active,''],['Inquisitor',T.active,''],
-      ['Major Heal',T.active,''],['Holy Weapon',T.active,''],['Party Recall',T.active,''],
-      ['Mana Regeneration',T.passive,''],['Boost Mana',T.passive,''],['Robe Mastery',T.passive,''],
-      ["Bishop's Harmony",T.buff,''],['Holy Strike',T.active,'Essence'],['Divine Punishment',T.active,'Essence'],
-    ]),
-    cardinal: A([
-      ['Sublime Self-Sacrifice',T.active,''],['Balance Life',T.active,''],['Mass Resurrection',T.active,''],
-      ['Miracle',T.active,''],['Lord of Vampire',T.active,''],['Blessing of Eva',T.active,''],['Trance',T.active,''],
-      ['Cardinal Spirit',T.passive,''],['Body of the Cardinal',T.passive,''],["Cardinal's Harmony",T.buff,''],
-      ['Dark Side',T.toggle,'Echo'],['Holy Burst',T.active,'Essence'],['Divine Nova',T.active,'Essence'],
-      ['Transcendent Holy Strike',T.active,'Transcendent'],
-    ]),
-    prophet: A([
-      ['Haste',T.buff,''],['Berserker Spirit',T.buff,''],['Bless Shield',T.active,''],
-      ['Prophecy of Water',T.active,''],['Resist Fire',T.active,''],['Resist Water',T.active,''],
-      ['Resist Wind',T.active,''],['Vampiric Rage',T.buff,''],['Empower',T.buff,''],['Acumen',T.buff,''],
-      ['Concentration',T.buff,''],['Focus',T.buff,''],['Death Whisper',T.buff,''],['Guidance',T.buff,''],
-      ['Mental Shield',T.active,''],['Heal',T.active,''],['Robe Mastery',T.passive,''],['Boost Mana',T.passive,''],
-      ["Prophet's Harmony",T.buff,''],['Holy Strike',T.active,'Essence'],
-    ]),
-    hierophant: A([
-      ['Prophecy of Fire',T.buff,''],['Prophecy of Wind',T.buff,''],['Prophecy of Water',T.buff,''],
-      ['Cleanse',T.active,''],['Mystic Immunity',T.active,''],['Blessing of Nobility',T.active,''],
-      ['Hierophant Spirit',T.passive,''],['Body of the Hierophant',T.passive,''],["Hierophant's Harmony",T.buff,''],
-      ['Mass Prophecy',T.active,'Essence'],['Holy Punishment',T.active,'Essence'],['Transcendent Holy Burst',T.active,'Transcendent'],
-    ]),
-
-    elfFighter: A([
-      ['Power Strike',T.active,''],['Mortal Blow',T.active,''],['Power Shot',T.active,''],['Bandage',T.active,''],
-      ['HP Increase',T.passive,''],['Light Armor Mastery',T.passive,''],['Elven Spirit',T.buff,''],
-    ]),
-    elvenKnight: A([
-      ['Shield Strike',T.active,''],['Hate',T.active,''],['Shield Mastery',T.passive,''],
-      ['Heavy Armor Mastery',T.passive,''],['Sword Blunt Mastery',T.passive,''],
-      ['HP Increase II',T.passive,''],['Deflect Arrow',T.passive,''],['Power Break',T.active,''],
-    ]),
-    templeKnight: A([
-      ['Shield Stun',T.active,''],['Tribunal',T.active,''],['Sacrifice',T.active,''],['Aegis',T.active,''],
-      ["Eva's Will",T.active,''],['Ultimate Defense',T.active,''],['Holy Blade',T.active,''],
-      ['Provoke',T.active,''],['Summon Life Cubic',T.active,''],['Summon Binding Cubic',T.active,''],
-      ['Summon Storm Cubic',T.active,''],['Heavy Armor Mastery',T.passive,''],
-      ['Shield Mastery',T.passive,''],['Boost HP',T.passive,''],["Temple Knight's Harmony",T.buff,''],
-    ]),
-    evaTemplar: A([
-      ["Touch of Eva",T.active,''],["Shield of Eva",T.active,''],['Celestial Shield',T.active,''],
-      ['Summon Guardian Agathion',T.active,''],["Eva's Templar Spirit",T.passive,''],
-      ["Body of Eva's Templar",T.passive,''],['Protection of Eva',T.passive,''],['Master of Combat',T.passive,'Essence'],
-      ["Eva's Templar Harmony",T.buff,''],['Aqua Strike',T.active,'Essence'],["Eva's Help",T.trigger,'Trigger'],
-      ['Transcendent Shield Charge',T.active,'Transcendent'],
-    ]),
-    swordSinger: A([
-      ['Song of Earth',T.buff,''],['Song of Life',T.buff,''],['Song of Water',T.buff,''],['Song of Warding',T.buff,''],
-      ['Song of Wind',T.buff,''],['Song of Hunter',T.buff,''],['Song of Invocation',T.buff,''],
-      ['Song of Vitality',T.buff,''],['Song of Vengeance',T.buff,''],['Song of Flame Guard',T.buff,''],
-      ['Song of Champion',T.buff,''],['Song of Renewal',T.buff,''],
-      ['Sword Blunt Mastery',T.passive,''],['Heavy Armor Mastery',T.passive,''],['Boost HP',T.passive,''],
-    ]),
-    swordMuse: A([
-      ['Song of Purification',T.buff,''],['Song of Elemental',T.buff,''],['Song of Storm Guard',T.buff,''],
-      ['Mass Song',T.active,''],['Final Song',T.active,''],['Sword Muse Spirit',T.passive,''],
-      ['Body of Sword Muse',T.passive,''],['Sword Muse Harmony',T.buff,''],
-      ['Sonic Slash',T.active,'Echo'],['Melody Strike',T.active,'Echo'],['Transcendent Melody',T.active,'Transcendent'],
-    ]),
-    elvenScout: A([
-      ['Double Shot',T.active,''],['Backstab',T.active,''],['Dash',T.active,''],
-      ['Light Armor Mastery',T.passive,''],['Dagger Mastery',T.passive,''],['Bow Mastery',T.passive,''],
-      ['Critical Chance',T.passive,''],
-    ]),
-    plainsWalker: A([
-      ['Deadly Blow',T.active,''],['Lethal Blow',T.active,''],['Sand Bomb',T.active,''],
-      ['Blinding Blow',T.active,''],['Switch',T.active,''],['Shadow Step',T.active,''],
-      ['Fake Death',T.active,''],['Trick',T.active,''],
-      ['Evasion',T.passive,''],['Critical Power',T.passive,''],['Dagger Mastery',T.passive,''],['Focus',T.passive,''],
-    ]),
-    windRider: A([
-      ['Wind Riding',T.active,''],['Exciting Adventure',T.active,''],['Lucky Strike',T.active,''],
-      ['Shadow Sense',T.passive,''],['Final Frenzy',T.passive,''],['Wind Rider Spirit',T.passive,''],
-      ['Body of Wind Rider',T.passive,''],['Master of Combat',T.passive,'Essence'],
-      ['Wind Rider Harmony',T.buff,''],['Transcendent Deadly Blow',T.active,'Transcendent'],
-    ]),
-    silverRanger: A([
-      ['Double Shot',T.active,''],['Burst Shot',T.active,''],['Stun Shot',T.active,''],['Rapid Fire',T.active,''],
-      ['Arrow Rain',T.active,''],['Bow Mastery',T.passive,''],['Long Shot',T.passive,''],
-      ['Focus',T.passive,''],['Critical Power',T.passive,''],['Evasion',T.passive,''],
-    ]),
-    moonlightSentinel: A([
-      ['Seven Arrow',T.active,''],['Dead Eye',T.active,''],['Pinpoint Shot',T.active,''],
-      ['Triple Shot',T.active,'Echo'],['Thorn Shot',T.active,'Echo'],['Binding Shot',T.active,'Echo'],
-      ['Incendiary Shot',T.active,'Echo'],['Freezing Shot',T.active,'Echo'],['Wind Shot',T.active,'Echo'],
-      ['Elemental Arrow Rain',T.active,'Echo'],['Spiral Shot',T.active,'Echo'],['Target Lock',T.active,'Echo'],
-      ['Moonlight Sentinel Spirit',T.passive,''],['Body of Moonlight Sentinel',T.passive,''],
-      ['Moonlight Harmony',T.buff,''],['Transcendent Seven Arrow',T.active,'Transcendent'],
-    ]),
-
-    elfMage: A([
-      ['Wind Strike',T.active,''],['Self Heal',T.active,''],['Ice Bolt',T.active,''],['Sleep',T.active,''],
-      ['Robe Mastery',T.passive,''],['MP Increase',T.passive,''],
-    ]),
-    elvenWizard: A([
-      ['Blaze',T.active,''],['Aqua Swirl',T.active,''],['Twister',T.active,''],['Aura Burn',T.active,''],
-      ['Surrender to Water',T.active,''],['Surrender to Wind',T.active,''],["Elven Wizard's Harmony",T.buff,''],
-    ]),
-    spellsinger: A([
-      ['Aqua Splash',T.active,''],['Hydro Blast',T.active,''],['Blizzard',T.active,''],['Aura Flash',T.active,''],
-      ['Arcane Power',T.active,''],['Boost Mana',T.passive,''],['Robe Mastery',T.passive,''],["Spellsinger's Harmony",T.buff,''],
-    ]),
-    mysticMuse: A([
-      ['Aqua Splash',T.active,''],['Elemental Burst',T.active,''],['Elemental Storm',T.active,''],
-      ['Seed of Water',T.active,''],['Mystic Immunity',T.active,''],['Empowering Echo',T.active,''],
-      ['Water Spiral',T.active,'Echo'],['Aqua Explosion',T.active,'Echo'],
-      ['Spell Mastery',T.passive,'Echo'],['Magic Focus',T.passive,'Echo'],
-      ['Mystic Muse Spirit',T.passive,''],['Body of the Mystic Muse',T.passive,''],['Mystic Muse Harmony',T.buff,''],
-    ]),
-    elementalSummoner: A([
-      ['Summon Unicorn Boxer',T.active,''],['Summon Unicorn Mirage',T.active,''],['Summon Unicorn Merrow',T.active,''],
-      ['Servitor Heal',T.active,''],['Servitor Recharge',T.active,''],['Transfer Pain',T.active,''],
-      ['Binding Cubic',T.active,''],['Life Cubic',T.active,''],['Boost Mana',T.passive,''],
-    ]),
-    elementalMaster: A([
-      ['Summon Feline Queen',T.active,''],['Summon Seraphim',T.active,''],['Servitor Barrier',T.active,''],
-      ['Mass Servitor Heal',T.active,''],['Final Servitor',T.active,''],["Unicorn's Friendship",T.passive,'Essence'],
-      ['Elemental Concentration',T.passive,'Essence'],['Elemental Master Spirit',T.passive,''],
-      ['Body of the Elemental Master',T.passive,''],['Elemental Master Harmony',T.buff,''],
-    ]),
-    oracle: A([
-      ['Heal',T.active,''],['Battle Heal',T.active,''],['Recharge',T.active,''],['Cure Poison',T.active,''],
-      ['Wind Walk',T.active,''],["Oracle's Harmony",T.buff,''],
-    ]),
-    elder: A([
-      ['Greater Heal',T.active,''],['Greater Group Heal',T.active,''],['Resurrection',T.active,''],
-      ['Purify',T.active,''],['Cleanse',T.active,''],['Blessing of Eva',T.active,''],
-      ['Robe Mastery',T.passive,''],['Boost Mana',T.passive,''],
-    ]),
-    evasSaint: A([
-      ['Sublime Self-Sacrifice',T.active,''],['Balance Life',T.active,''],['Mass Resurrection',T.active,''],
-      ['Blessing of Eva',T.active,''],['Miracle',T.active,''],["Eva's Saint Spirit",T.passive,''],
-      ["Body of Eva's Saint",T.passive,''],["Eva's Saint Harmony",T.buff,''],
-      ['Dark Side',T.toggle,'Echo'],['Aqua Strike',T.active,'Essence'],["Eva's Help",T.trigger,'Trigger'],
-      ['Divine Nova',T.active,'Essence'],
-    ]),
-
-    darkElfFighter: A([
-      ['Power Strike',T.active,''],['Mortal Blow',T.active,''],['Power Shot',T.active,''],['Bandage',T.active,''],
-      ['HP Increase',T.passive,''],['Light Armor Mastery',T.passive,''],['Dark Elven Spirit',T.buff,''],
-    ]),
-    shillienKnight: A([
-      ['Shield Stun',T.active,''],['Judgment',T.active,''],['Dark Flame',T.active,''],['Sacrifice',T.active,''],
-      ['Aegis',T.active,''],['Ultimate Defense',T.active,''],['Drain Health',T.active,''],['Horror',T.active,''],
-      ['Lightning Strike',T.active,''],['Touch of Death',T.active,''],['Provoke',T.active,''],
-      ['Summon Dark Cubic',T.active,''],['Heavy Armor Mastery',T.passive,''],
-      ['Shield Mastery',T.passive,''],['Boost HP',T.passive,''],
-    ]),
-    shillienTemplar: A([
-      ['Touch of Shillien',T.active,''],['Shield of Shillien',T.active,''],['Celestial Shield',T.active,''],
-      ['Summon Guardian Agathion',T.active,''],["Shillien's Curse",T.active,'Echo'],['Abyss Strike',T.active,'Essence'],
-      ["Shillien's Help",T.trigger,'Trigger'],['Shillien Templar Spirit',T.passive,''],
-      ['Body of Shillien Templar',T.passive,''],['Protection of Shillien',T.passive,''],
-      ['Master of Combat',T.passive,'Essence'],['Shillien Templar Harmony',T.buff,''],
-      ['Transcendent Abyss Strike',T.active,'Transcendent'],
-    ]),
-    bladeDancer: A([
-      ['Dance of Fire',T.buff,''],['Dance of Fury',T.buff,''],['Dance of Concentration',T.buff,''],
-      ['Dance of Light',T.buff,''],['Dance of Mystic',T.buff,''],['Dance of Warrior',T.buff,''],
-      ['Dance of Aqua Guard',T.buff,''],['Dance of Inspiration',T.buff,''],['Dance of Vampire',T.buff,''],
-      ['Dance of Protection',T.buff,''],['Dance of Shadow',T.buff,''],['Dance of Siren',T.buff,''],
-      ['Dual Weapon Mastery',T.passive,''],['Heavy Armor Mastery',T.passive,''],['Boost HP',T.passive,''],
-    ]),
-    spectralDancer: A([
-      ['Dance of Berserker',T.buff,''],['Dance of Blade Storm',T.buff,''],['Mass Dance',T.active,''],
-      ['Final Dance',T.active,''],['Spectral Dancer Spirit',T.passive,''],['Body of Spectral Dancer',T.passive,''],
-      ['Spectral Dancer Harmony',T.buff,''],['Shadow Slash',T.active,'Echo'],['Dark Dance Strike',T.active,'Echo'],
-      ['Transcendent Dance',T.active,'Transcendent'],
-    ]),
-    ghostHunter: A([
-      ['Exciting Adventure',T.active,''],['Shadow Sense',T.passive,''],['Wind Riding',T.active,''],
-      ['Lucky Strike',T.active,''],['Ghost Hunter Spirit',T.passive,''],['Body of Ghost Hunter',T.passive,''],
-      ['Final Frenzy',T.passive,''],['Master of Combat',T.passive,'Essence'],['Ghost Hunter Harmony',T.buff,''],
-    ]),
-    ghostSentinel: A([
-      ['Seven Arrow',T.active,''],['Dead Eye',T.active,''],['Pinpoint Shot',T.active,''],
-      ['Triple Shot',T.active,'Echo'],['Thorn Shot',T.active,'Echo'],['Binding Shot',T.active,'Echo'],
-      ['Incendiary Shot',T.active,'Echo'],['Freezing Shot',T.active,'Echo'],['Wind Shot',T.active,'Echo'],
-      ['Target Lock',T.active,'Echo'],['Ghost Sentinel Spirit',T.passive,''],['Body of Ghost Sentinel',T.passive,''],
-      ['Ghost Sentinel Harmony',T.buff,''],['Transcendent Seven Arrow',T.active,'Transcendent'],
-    ]),
-    stormScreamer: A([
-      ['Demon Wind',T.active,''],['Elemental Burst',T.active,''],['Elemental Storm',T.active,''],
-      ['Seed of Wind',T.active,''],['Mystic Immunity',T.active,''],['Empowering Echo',T.active,''],
-      ['Wind Spiral',T.active,'Echo'],['Thunder Explosion',T.active,'Echo'],
-      ['Spell Mastery',T.passive,'Echo'],['Magic Focus',T.passive,'Echo'],
-      ['Storm Screamer Spirit',T.passive,''],['Body of Storm Screamer',T.passive,''],['Storm Screamer Harmony',T.buff,''],
-    ]),
-    spectralMaster: A([
-      ['Summon Spectral Lord',T.active,''],['Servitor Barrier',T.active,''],['Mass Servitor Heal',T.active,''],
-      ['Final Servitor',T.active,''],['Spectral Master Spirit',T.passive,''],['Body of Spectral Master',T.passive,''],
-      ['Spectral Master Harmony',T.buff,''],
-    ]),
-    shillienSaint: A([
-      ['Dark Disruption',T.active,'Essence'],["Shillien's Help",T.trigger,'Trigger'],['Dark Side',T.toggle,'Echo'],
-      ['Shillien Saint Spirit',T.passive,''],['Body of Shillien Saint',T.passive,''],['Shillien Saint Harmony',T.buff,''],
-      ['Sublime Self-Sacrifice',T.active,''],['Balance Life',T.active,''],['Mass Resurrection',T.active,''],
-      ['Divine Nova',T.active,'Essence'],
-    ]),
-
-    orcFighter: A([
-      ['Power Strike',T.active,''],['Iron Punch',T.active,''],['Bandage',T.active,''],
-      ['HP Increase',T.passive,''],['Light Armor Mastery',T.passive,''],
-    ]),
-    titan: A([
-      ['Earthquake',T.active,''],['Real Target',T.active,''],['Frenzy',T.active,''],['Guts',T.active,''],
-      ['Zealot',T.active,''],['Anti-Magic Armor',T.active,''],['Fists of Fury',T.active,''],['Soul Breaker',T.active,''],
-      ['Titan Spirit',T.passive,''],['Body of the Titan',T.passive,''],['Pride of Titan',T.passive,''],
-      ['Master of Combat Orc',T.passive,'Echo'],["Titan's Harmony",T.buff,''],
-      ['Blazing Strike',T.active,'Echo'],['Transcendent Earthquake',T.active,'Transcendent'],
-    ]),
-    grandKhavatari: A([
-      ['Force Focus',T.active,''],['Soul of the Phoenix',T.active,''],['Rapid Attack',T.active,''],
-      ['Hurricane Assault',T.active,''],['Fist Fury',T.active,''],['Totem Spirits',T.active,''],
-      ['Grand Khavatari Spirit',T.passive,''],['Body of Grand Khavatari',T.passive,''],
-      ['Master of Combat Orc',T.passive,'Echo'],['Grand Khavatari Harmony',T.buff,''],
-      ["Ogre's Essence",T.buff,'Echo'],['Rabbit Spirit Totem',T.active,'Echo'],
-      ['Transcendent Hurricane',T.active,'Transcendent'],
-    ]),
-    dominator: A([
-      ['Seal of Limit',T.active,''],['Clan Imperium',T.active,''],["Victoria of Pa_agrio",T.active,''],
-      ["Glory of Pa_agrio",T.active,''],["Blessing of Pa_agrio",T.active,''],['Mass Seal of Gloom',T.active,''],
-      ['Flame Burst',T.active,'Echo'],["Prophecy of Pa_agrio",T.buff,'Echo'],
-      ['Dominator Spirit',T.passive,''],['Body of the Dominator',T.passive,''],['Dominator Harmony',T.buff,''],
-      ['Transcendent Flame Burst',T.active,'Transcendent'],
-    ]),
-    doomcryer: A([
-      ['Chant of Magnus',T.buff,''],['Chant of Berserker',T.buff,''],['Mass Chant',T.active,''],
-      ['Final Chant',T.active,''],['War Chant',T.active,''],['Blood Bond',T.active,'Echo'],
-      ['Prophecy of Victory',T.buff,'Echo'],['Cacophony of War',T.active,'Echo'],
-      ['Doomcryer Spirit',T.passive,''],['Body of the Doomcryer',T.passive,''],['Doomcryer Harmony',T.buff,''],
-    ]),
-    bountyHunter: A([
-      ['Spoil',T.active,''],['Sweeper',T.active,''],['Lucky Strike',T.active,''],
-      ['Bounty Hunter Spirit',T.passive,''],['Body of the Bounty Hunter',T.passive,''],
-      ['Bounty Hunter Harmony',T.buff,''],['Transcendent Spoil Crush',T.active,'Transcendent'],
-    ]),
-    fortuneSeeker: A([
-      ['Spoil Crush',T.active,''],['Lucky Strike',T.active,''],
-      ['Fortune Seeker Spirit',T.passive,''],['Body of the Fortune Seeker',T.passive,''],
-      ['Fortune Seeker Harmony',T.buff,''],['Transcendent Spoil Crush',T.active,'Transcendent'],
-    ]),
-    artisanClass: A([
-      ['Craft Mastery',T.passive,''],['Summon Mechanic Golem',T.active,''],['Repair Golem',T.active,''],
-      ['Artisan Spirit',T.passive,''],['Artisan Harmony',T.buff,''],
-    ]),
-    warsmith: A([
-      ['Craft Mastery',T.passive,''],['Summon Siege Golem',T.active,''],['Summon Mechanic Golem',T.active,''],
-      ['Repair Golem',T.active,''],['Warsmith Spirit',T.passive,''],['Warsmith Harmony',T.buff,''],
-    ]),
-    maestro: A([
-      ['Summon Merchant Golem',T.active,''],['Golem Armor',T.active,''],
-      ['Maestro Spirit',T.passive,''],['Body of the Maestro',T.passive,''],['Maestro Harmony',T.buff,''],
-      ['Transcendent Hammer Crush',T.active,'Transcendent'],
-    ]),
-
-    kamaelSoldier: A([
-      ['Soul Thrust',T.active,''],['Soul Absorb',T.active,''],['Light Armor Mastery',T.passive,''],
-      ['Kamael Spirit',T.buff,''],
-    ]),
-    trooper: A([
-      ['Soul Crush',T.active,''],['Berserker',T.active,''],['Critical Power',T.passive,''],
-      ['Dagger Mastery',T.passive,''],
-    ]),
-    doombringer: A([
-      ['Doom Blade',T.active,''],['Soul Explosion',T.active,''],['Soul Rage',T.active,''],
-      ['Dissonance',T.active,''],['Betrayal Mark',T.active,''],['Doombringer Spirit',T.passive,''],
-      ['Body of Doombringer',T.passive,''],['Pride of Kamael',T.passive,''],['Master of Combat',T.passive,'Essence'],
-      ['Doombringer Harmony',T.buff,''],
-    ]),
-    soulHound: A([
-      ['Lightning Barrier',T.active,''],['Soul Vortex Destruction',T.active,''],['Soul Ignition',T.active,''],
-      ['Dark Smash',T.active,''],['Soul Hound Spirit',T.passive,''],['Body of Soul Hound',T.passive,''],
-      ['Soul Hound Harmony',T.buff,''],
-    ]),
-    warder: A([
-      ['Crossbow Mastery',T.passive,''],['Install Trap',T.active,''],['Pinpoint Shot',T.active,''],
-      ['Stun Shot',T.active,''],
-    ]),
-    trickster: A([
-      ['Seven Arrow Crossbow',T.active,''],['Install Trap',T.active,''],['Dead Eye',T.active,''],
-      ['Pinpoint Shot',T.active,''],['Trickster Spirit',T.passive,''],['Body of Trickster',T.passive,''],
-      ['Trickster Harmony',T.buff,''],
-    ]),
-
-    deathKnight: A([
-      ['Death Spike',T.active,''],['Death Raid',T.active,''],['Dark Explosion',T.active,''],
-      ['Death Mark',T.active,''],['Soul Drain',T.active,''],['Dark Shield',T.active,''],
-      ['Abyss Gaze',T.active,''],['Death Storm',T.active,'AoE'],['Deadly Counter',T.active,''],
-      ['Dark Weapon',T.buff,''],['Dark Armor',T.buff,''],['Ultimate Death Knight',T.passive,''],
-      ["Death Knight's Will",T.passive,''],['DP Mastery',T.passive,'Death Points'],
-      ['Transcendent Death Spike',T.active,'Transcendent'],
-    ]),
-    warg: A([
-      ['Upward Strike',T.active,'Human'],['Devastating Assault',T.active,'Human'],
-      ['Powerful Fists',T.active,'Human'],['Rush',T.active,''],['Fist Mastery',T.passive,''],
-      ['Light Armor Mastery',T.passive,''],["Warg's Will",T.buff,''],
-      ['Double Claw Strike',T.active,'Wolf'],['Vortex of Claws',T.active,'Wolf'],
-      ['Transcendent Double Claw Strike',T.active,'Transcendent'],['Wild Rush',T.active,'Wolf'],
-      ['Primal Howl',T.active,'Wolf'],["Moon's Grace",T.buff,''],['Wolf Transformation',T.toggle,''],
-      ['Warg Spirit',T.passive,''],['Warg Mastery',T.passive,''],
-    ]),
-    assassin: A([
-      ['Assassination',T.active,''],['Shadow Strike',T.active,''],['Shadow Dash',T.active,''],
-      ['Blade Rush',T.active,''],['Shadow Blast',T.active,''],['Phantom Strike',T.active,''],
-      ['Lethal Shadow',T.active,''],['Resolve to Kill',T.active,''],["Assassin's Mark",T.debuff,''],
-      ['Chain Kill',T.active,''],['Shadow Step',T.active,''],['Path of the Assassin',T.passive,''],
-      ['Brutality',T.buff,''],["Assassin's Focus",T.passive,''],["Assassin's Evasion",T.passive,''],
-      ['Light Armor Mastery',T.passive,''],['Dagger Mastery',T.passive,''],["Assassin's Harmony",T.buff,''],
-    ]),
-    vanguardRider: A([
-      ['Lance Charge',T.active,''],['Mounted Thrust',T.active,''],['Trample',T.active,'AoE'],
-      ['Battle Rush',T.active,''],['Mounted Whirlwind',T.active,'AoE'],['Devastating Charge',T.active,''],
-      ['War Banner',T.active,''],['Beast Roar',T.active,''],['Thunder Crash',T.active,''],
-      ['Mounted Slam',T.active,''],["Rider's Mastery",T.passive,''],['Lance Mastery',T.passive,''],
-      ['Heavy Armor Mastery',T.passive,''],['Mounted Combat',T.passive,''],['BP Mastery',T.passive,''],
-      ['Vanguard Spirit',T.passive,''],['Body of the Vanguard',T.passive,''],["Vanguard's Harmony",T.buff,''],
-      ['Battle Mount',T.toggle,''],["Rider's Will",T.buff,''],
-    ]),
-    samurai: A([
-      ['Iaijutsu',T.active,''],['Crescent Slash',T.active,''],['Whirlwind Cut',T.active,'AoE'],
-      ['Katana Mastery',T.passive,''],['Piercing Strike',T.active,''],['Focused Strike',T.active,''],
-      ['Wind Blade',T.active,''],['Sakura Storm',T.active,'AoE'],['Bushido Stance',T.toggle,''],
-      ['Counter Slash',T.active,''],['Rising Dragon',T.active,''],['Final Cut',T.active,''],
-      ['Samurai Spirit',T.passive,''],['Way of the Blade',T.passive,''],['Body of the Samurai',T.passive,''],
-      ['Honor Code',T.buff,''],["Samurai's Harmony",T.buff,''],['Katana Focus',T.passive,''],
-      ['Light Armor Mastery',T.passive,''],['Transcendent Iaijutsu',T.active,'Transcendent'],
-    ]),
-    stormBlaster: A([
-      ['Quick Shot',T.active,''],['Burst Fire',T.active,''],['Snipe',T.active,''],['Rapid Fire',T.active,''],
-      ['Piercing Shot',T.active,''],['Explosive Shot',T.active,'AoE'],['Chain Shot',T.active,''],
-      ['Storm Shot',T.active,''],['Wind Barrage',T.active,'AoE'],['Aimed Shot',T.active,''],
-      ['Evasive Shot',T.active,''],['Gun Mastery',T.passive,''],['Light Armor Mastery',T.passive,''],
-      ["Sylph's Grace",T.passive,''],['Wind Walker',T.passive,''],['Storm Blaster Spirit',T.passive,''],
-      ['Body of the Storm Blaster',T.passive,''],['Storm Blaster Harmony',T.buff,''],
-      ['Transcendent Storm Shot',T.active,'Transcendent'],
-    ]),
-    shinemaker: A([
-      ['Light Burst',T.active,''],['Radiant Strike',T.active,''],['Prismatic Ray',T.active,''],
-      ['Shining Nova',T.active,'AoE'],['Crystal Arrow',T.active,''],['Luminous Wave',T.active,'AoE'],
-      ['Star Fall',T.active,''],['Shining Barrier',T.buff,''],['Light of Creation',T.buff,''],
-      ['Brilliant Aura',T.buff,''],['Purifying Light',T.active,''],
-      ['ShineMaker Spirit',T.passive,''],['Body of the ShineMaker',T.passive,''],["ShineMaker's Harmony",T.buff,''],
-    ]),
-    divineTemplar: A([
-      ['Holy Strike',T.active,''],['Shield of Light',T.active,''],['Divine Charge',T.active,''],
-      ['Lord Knight',T.active,'Echo'],['Sacred Aegis',T.active,''],['Celestial Punishment',T.active,''],
-      ['Holy Chain',T.active,''],['Divine Shield',T.active,''],['Ultimate Divine Defense',T.active,''],
-      ['Divine Templar Spirit',T.passive,''],['Body of Divine Templar',T.passive,''],
-      ['Holy Shield Mastery',T.passive,''],['Heavy Armor Mastery',T.passive,''],
-      ['Divine Templar Harmony',T.buff,''],["Lord Knight's Aura",T.buff,''],
-    ]),
-    bloodRose: A([
-      ['Thorn Whip',T.active,''],['Rose Tempest',T.active,'AoE'],['Blood Drain',T.active,''],
-      ['Crimson Spike',T.active,''],['Vine Bind',T.active,'CC'],['Bloom of Destruction',T.active,''],
-      ['Blood Rose Spirit',T.passive,''],['Body of the Blood Rose',T.passive,''],['Thorn Armor',T.passive,''],
-      ['Blood Rose Harmony',T.buff,''],["Rose's Blessing",T.buff,''],
-    ]),
-    elementWeaver: A([
-      ['Elemental Blast',T.active,''],['Fire Weave',T.active,''],['Ice Weave',T.active,''],
-      ['Wind Weave',T.active,''],['Elemental Convergence',T.active,'AoE'],['Ultimate Dispel',T.active,''],
-      ['Elemental Overload',T.active,''],['Element Weaver Spirit',T.passive,''],
-      ['Body of Element Weaver',T.passive,''],['Elemental Mastery',T.passive,''],
-      ['Robe Mastery',T.passive,''],['Element Weaver Harmony',T.buff,''],
-    ]),
-  };
-
-  function uniq(arr) { return [...new Set(arr.filter(Boolean))]; }
-
-  function installClassSkills(canonical, ids) {
-    const aliases = CLASS_ALIASES[canonical] || [canonical];
-    const merged = uniq(ids);
-
-    CLASS_SKILLS[canonical] = uniq([...(CLASS_SKILLS[canonical]||[]), ...merged]);
-    if (!SKILL_TREE[canonical]) {
-      SKILL_TREE[canonical] = merged.map((id, i) => ({ id, tier: Math.floor(i/5), x: i%5, y: Math.floor(i/5) }));
-    }
-
-    aliases.forEach(classId => {
-      CLASS_SKILLS[classId] = uniq([...(CLASS_SKILLS[classId]||[]), ...merged]);
-      if (!SKILL_TREE[classId]) SKILL_TREE[classId] = SKILL_TREE[canonical];
-      if (CLASSES[classId]) {
-        CLASSES[classId].skillTree = CLASSES[classId].skillTree || canonical;
-        CLASSES[classId].essence547 = true;
-      }
-    });
-  }
-
-  Object.entries(DATA).forEach(([canonical, ids]) => installClassSkills(canonical, ids));
-
-  // Post-processing cleanup for all SKILL_DEFS and SKILL_REQS
-  Object.keys(SKILL_DEFS).forEach(id => {
-    const def = SKILL_DEFS[id];
-    if (!def.max) def.max = def.maxLevel || 5;
-    if (!def.maxLevel) def.maxLevel = def.max || 5;
-    if (!def.cost) def.cost = 5;
-    if (def.tier === undefined) def.tier = 0;
-    if (!def.icon) def.icon = '✦';
-  });
-
-  Object.keys(SKILL_REQS).forEach(id => {
-    if (SKILL_REQS[id]) {
-      delete SKILL_REQS[id].level;
-      delete SKILL_REQS[id].sp;
-    }
-  });
-
-  E.CLASS_NAME_TO_ID_ECHO = {
-    ...(E.CLASS_NAME_TO_ID_ECHO||{}),
-    'Element Weaver':'elementWeaverS1', 'Elemental Weaver':'elementWeaverS1',
-    'Divine Templar':'divineTemplarS1', 'Divine Knight':'divineTemplarS1',
-    'Storm Blaster':'stormBlaster', 'Vanguard Rider':'vanguardRider',
-    'Blood Rose':'bloodRoseS1', 'Samurai':'samurai',
-    'Assassin':'assassinBase', 'Warg':'wargBase', 'Death Knight':'deathKnight',
-  };
-
-  E.__ESSENCE_547_SKILL_PACK__ = {
-    installed: true, classes: Object.keys(DATA).length,
-    skills: Object.keys(SKILL_DEFS).length,
-    generatedAt: 'Echo of Elements 547',
-  };
-  console.info('[Echo Skills] Essence 547 instalado:', E.__ESSENCE_547_SKILL_PACK__);
-
-})(typeof window !== 'undefined' ? window : globalThis);
 
+  // ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+  //  HUMAN FIGHTER
+  // ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+
+  fighter: {
+    name: 'Human Fighter', archetype: 'fighter', race: 'human', stage: 0,
+    desc: 'Classe base de combate humana.',
+    base: { atk: 12, def: 10, hp: 100, mp: 30, eva: 5, crit: 5, matk: 0, mdef: 5 },
+    skills: [
+      { name: "Power Strike",       type: "Ativo",    rarity: "1★", effect: "Dano físico 150%",              cooldown: "8s",     desc: "Golpe concentrado no alvo." },
+      { name: "Mortal Blow",         type: "Ativo",    rarity: "1★", effect: "Dano 170% + chance crit 20%",   cooldown: "10s",    desc: "Golpe com chance de crítico elevada." },
+      { name: "Power Shot",          type: "Ativo",    rarity: "1★", effect: "Dano à distância 140%",         cooldown: "9s",     desc: "Disparo concentrado." },
+      { name: "Rush",                type: "Ativo",    rarity: "1★", effect: "Avança ao alvo + dano 120%",    cooldown: "15s",    desc: "Investida rápida contra o inimigo." },
+      { name: "Bandage",             type: "Ativo",    rarity: "1★", effect: "Cura 15% HP",                   cooldown: "30s",    desc: "Curativo de emergência." },
+      { name: "Fighter's Will",      type: "Self-Buff",rarity: "1★", effect: "+10% ATK e +10% DEF por 15 min",cooldown: "30 min", desc: "Determinação do guerreiro." },
+      { name: "HP Increase Lv1",     type: "Passivo",  rarity: "1★", effect: "+5% Max HP",                    cooldown: "N/A",    desc: "Constituição reforçada." },
+      { name: "Light Armor Mastery", type: "Passivo",  rarity: "1★", effect: "+8% DEF com armadura leve",     cooldown: "N/A",    desc: "Maestria em armaduras leves." }
+    ]
+  },
+
+  // ─── WARRIOR (1ª classe) ───
+  warrior: {
+    name: 'Warrior', parent: 'fighter', race: 'human', archetype: 'fighter', stage: 1,
+    desc: 'Guerreiro corpo-a-corpo especializado em espadas e polearms. Skills anteriores permanecem.',
+    base: { atk: 28, def: 18, hp: 180, mp: 45, eva: 6, crit: 8, mdef: 8 },
+    skills: [
+      { name: "Power Smash",           type: "Ativo",    rarity: "1★", effect: "Dano 190% + knockback",               cooldown: "10s",    desc: "Golpe esmagador." },
+      { name: "Spinning Slash",        type: "Ativo",    rarity: "1★", effect: "Dano AoE 160% ao redor",              cooldown: "12s",    desc: "Giro cortante ao redor." },
+      { name: "Stun Attack",           type: "Ativo",    rarity: "2★", effect: "Dano 175% + stun 2s",                 cooldown: "18s",    desc: "Golpe atordoante." },
+      { name: "Iron Will",             type: "Ativo",    rarity: "2★", effect: "+30% DEF por 30s",                    cooldown: "45s",    desc: "Vontade de ferro temporária." },
+      { name: "War Cry",               type: "Ativo",    rarity: "2★", effect: "+20% ATK para si por 60s",            cooldown: "60s",    desc: "Grito de guerra que inspira força." },
+      { name: "Battle Roar",           type: "Self-Buff",rarity: "2★", effect: "+25% ATK e +15% HP por 20 min",       cooldown: "45 min", desc: "Rugido de batalha." },
+      { name: "Sword/Blunt Mastery",   type: "Passivo",  rarity: "1★", effect: "+12% ATK com espada/blunt",           cooldown: "N/A",    desc: "Maestria em espadas e maças." },
+      { name: "Polearm Mastery",       type: "Passivo",  rarity: "1★", effect: "+12% ATK com polearm",                cooldown: "N/A",    desc: "Maestria em lanças." },
+      { name: "Heavy Armor Mastery",   type: "Passivo",  rarity: "1★", effect: "+12% DEF com armadura pesada",        cooldown: "N/A",    desc: "Maestria em armaduras pesadas." },
+      { name: "HP Increase Lv2",       type: "Passivo",  rarity: "1★", effect: "+10% Max HP",                         cooldown: "N/A",    desc: "Constituição de guerreiro." },
+      { name: "Weight Limit",          type: "Passivo",  rarity: "1★", effect: "+15% capacidade de carga",            cooldown: "N/A",    desc: "Corpo treinado para suportar peso." }
+    ]
+  },
+
+  // ─── GLADIATOR (2ª classe) ───
+  gladiator: {
+    name: 'Gladiator', parent: 'warrior', stage: 2,
+    desc: 'Mestre em dual wield e combos devastadores. Skills anteriores permanecem.',
+    base: { atk: 58, def: 28, hp: 320, mp: 65, eva: 8, crit: 18, mdef: 12 },
+    skills: [
+      { name: "Triple Slash",           type: "Ativo",    rarity: "2★", effect: "3 golpes, dano total 300%",           cooldown: "14s",    desc: "Três cortes rápidos consecutivos." },
+      { name: "Sonic Blaster",          type: "Ativo",    rarity: "2★", effect: "Dano 240% + stun 2s",                cooldown: "16s",    desc: "Onda sônica que atordoa." },
+      { name: "Sonic Storm",            type: "Ativo",    rarity: "3★", effect: "Dano AoE 320% (8 alvos)",            cooldown: "25s",    desc: "Tempestade sônica devastadora." },
+      { name: "Sonic Buster",           type: "Ativo",    rarity: "2★", effect: "Dano 260% + pushback",               cooldown: "18s",    desc: "Explosão sônica frontal." },
+      { name: "Double Sonic Slash",     type: "Ativo",    rarity: "3★", effect: "Dano 350% em 2 hits",                cooldown: "22s",    desc: "Duplo corte sônico." },
+      { name: "Hammer Crush",           type: "Ativo",    rarity: "2★", effect: "Dano 230% + stun 3s",                cooldown: "20s",    desc: "Esmagamento com martelo." },
+      { name: "Sonic Move",             type: "Ativo",    rarity: "2★", effect: "Teleporte curto + 180% dano",        cooldown: "20s",    desc: "Movimento sônico instantâneo." },
+      { name: "Lionheart",              type: "Ativo",    rarity: "3★", effect: "Imune a medo/stun por 15s",          cooldown: "120s",   desc: "Coração de leão — coragem inabalável." },
+      { name: "War Frenzy",             type: "Self-Buff",rarity: "2★", effect: "+20% ATK Speed por 60s",             cooldown: "90s",    desc: "Frenesi de combate." },
+      { name: "Vicious Stance",         type: "Toggle",   rarity: "2★", effect: "+25% Crit Rate, -10% DEF",           cooldown: "N/A",    desc: "Postura agressiva permanente." },
+      { name: "Gladiator's Harmony",    type: "Self-Buff",rarity: "3★", effect: "+35% ATK e +20% Crit por 25 min",    cooldown: "60 min", desc: "Harmonia do gladiador." },
+      { name: "Dual Weapon Mastery",    type: "Passivo",  rarity: "2★", effect: "+18% ATK com dual weapons",          cooldown: "N/A",    desc: "Maestria em armas duplas." },
+      { name: "Focus",                  type: "Passivo",  rarity: "1★", effect: "+8% Crit Rate",                      cooldown: "N/A",    desc: "Concentração em pontos vitais." },
+      { name: "Critical Power",         type: "Passivo",  rarity: "2★", effect: "+15% Crit Damage",                   cooldown: "N/A",    desc: "Poder crítico aumentado." },
+      { name: "Boost HP",               type: "Passivo",  rarity: "1★", effect: "+12% Max HP",                        cooldown: "N/A",    desc: "HP reforçado do gladiador." }
+    ]
+  },
+
+  // ─── DUELIST (3ª classe) ───
+  duelist: {
+    name: 'Duelist', parent: 'gladiator', stage: 3,
+    desc: 'Duelista supremo, mestre do dual wield. Skills anteriores permanecem.',
+    base: { atk: 105, def: 42, hp: 580, mp: 95, eva: 12, crit: 30, mdef: 18 },
+    skills: [
+      { name: "Sonic Focus",               type: "Ativo",    rarity: "3★", effect: "Dano 380% + ignora 30% DEF",           cooldown: "28s",    desc: "Foco sônico devastador." },
+      { name: "Force Blaster",             type: "Ativo",    rarity: "3★", effect: "Dano 340% à distância",                cooldown: "20s",    desc: "Projétil de força sônica." },
+      { name: "Dual Blow",                 type: "Ativo",    rarity: "3★", effect: "Dano 400% + bleed 8s",                 cooldown: "24s",    desc: "Golpe duplo sangrento." },
+      { name: "Rushing Force",             type: "Ativo",    rarity: "3★", effect: "Rush + 320% dano + stun 2s",           cooldown: "22s",    desc: "Avanço forçado." },
+      { name: "Long Blow",                 type: "Ativo",    rarity: "2★", effect: "Dano 280% alcance estendido",          cooldown: "16s",    desc: "Golpe de longo alcance." },
+      { name: "Force Buster",              type: "Ativo",    rarity: "3★", effect: "Dano AoE 360% frontal",               cooldown: "26s",    desc: "Explosão de força frontal." },
+      { name: "Earthquake",                type: "Ativo",    rarity: "3★", effect: "Dano AoE 420% + knockdown 3s",         cooldown: "35s",    desc: "Terremoto devastador." },
+      { name: "Real Target",               type: "Ativo",    rarity: "2★", effect: "Marca alvo: +30% dano contra ele 10s", cooldown: "30s",    desc: "Identifica ponto fraco." },
+      { name: "Thrill Fight",              type: "Ativo",    rarity: "3★", effect: "+40% ATK por 30s quando HP < 30%",     cooldown: "120s",   desc: "Adrenalina em estado crítico." },
+      { name: "Sonic Rage",                type: "Ativo",    rarity: "3★", effect: "Dano 450% + AoE 5 alvos",             cooldown: "30s",    desc: "Fúria sônica descontrolada." },
+      { name: "Transcendent Dual Blow",    type: "Ativo",    rarity: "4★", effect: "Dano 620% + bleed 12s + ignora DEF",   cooldown: "150s",   desc: "Golpe duplo transcendente." },
+      { name: "Duelist's Harmony",         type: "Self-Buff",rarity: "4★", effect: "+55% ATK, +40% Crit, +20% Speed 30min",cooldown: "90 min", desc: "Harmonia suprema do duelista." },
+      { name: "Master of Combat",          type: "Passivo",  rarity: "3★", effect: "+10% ATK, +10% Crit, +5% PvE dmg",    cooldown: "N/A",    desc: "Mestre do combate." },
+      { name: "Duelist Spirit",            type: "Passivo",  rarity: "3★", effect: "+15% dual weapon ATK",                 cooldown: "N/A",    desc: "Espírito do duelista." },
+      { name: "Blade of the Duelist",      type: "Passivo",  rarity: "3★", effect: "+12% P.Skill Power",                   cooldown: "N/A",    desc: "Lâmina imbuída de poder." }
+    ]
+  },
+
+  // ─── WARLORD (2ª classe) ───
+  warlord: {
+    name: 'Warlord', parent: 'warrior', stage: 2,
+    desc: 'Senhor da guerra com polearms e AoE devastador. Skills anteriores permanecem.',
+    base: { atk: 52, def: 38, hp: 380, mp: 60, eva: 5, crit: 10, mdef: 18 },
+    skills: [
+      { name: "Whirlwind",              type: "Ativo",    rarity: "2★", effect: "Dano AoE 280% (10 alvos)",           cooldown: "18s",    desc: "Redemoinho de lança." },
+      { name: "Thunder Storm",          type: "Ativo",    rarity: "3★", effect: "Dano AoE 340% + stun 2s",           cooldown: "25s",    desc: "Tempestade trovejante." },
+      { name: "Howl",                   type: "Ativo",    rarity: "2★", effect: "AoE taunt + -15% ATK inimigos 10s",  cooldown: "20s",    desc: "Uivo ameaçador." },
+      { name: "Provoke",               type: "Ativo",    rarity: "1★", effect: "Taunt single + dano 120%",           cooldown: "10s",    desc: "Provocação direta." },
+      { name: "Fellswoop",             type: "Ativo",    rarity: "2★", effect: "Dano 250% + knockdown 2s",            cooldown: "20s",    desc: "Golpe varredor." },
+      { name: "Freezing Strike",       type: "Ativo",    rarity: "2★", effect: "Dano 220% + slow 30% por 8s",         cooldown: "18s",    desc: "Golpe congelante." },
+      { name: "Burning Chop",          type: "Ativo",    rarity: "2★", effect: "Dano 240% + burn 8s",                 cooldown: "18s",    desc: "Golpe flamejante." },
+      { name: "Shock Stomp",           type: "Ativo",    rarity: "2★", effect: "AoE 200% + stun 2s (perto)",          cooldown: "22s",    desc: "Pisão sísmico." },
+      { name: "War Cry",               type: "Self-Buff",rarity: "2★", effect: "+25% ATK por 60s",                    cooldown: "90s",    desc: "Grito de guerra do senhor." },
+      { name: "Warlord's Harmony",     type: "Self-Buff",rarity: "3★", effect: "+30% ATK, +25% HP por 25 min",        cooldown: "60 min", desc: "Harmonia do senhor da guerra." },
+      { name: "Vital Force",           type: "Passivo",  rarity: "1★", effect: "+10% HP Regen",                       cooldown: "N/A",    desc: "Força vital." },
+      { name: "Focus",                 type: "Passivo",  rarity: "1★", effect: "+8% Crit Rate",                       cooldown: "N/A",    desc: "Concentração." },
+      { name: "Boost HP",              type: "Passivo",  rarity: "1★", effect: "+15% Max HP",                         cooldown: "N/A",    desc: "HP reforçado." }
+    ]
+  },
+
+  // ─── DREADNOUGHT (3ª classe) ───
+  dreadnought: {
+    name: 'Dreadnought', parent: 'warlord', stage: 3,
+    desc: 'Encouraçado vivo, AoE massivo com polearm. Skills anteriores permanecem.',
+    base: { atk: 95, def: 62, hp: 650, mp: 85, eva: 6, crit: 14, mdef: 32 },
+    skills: [
+      { name: "Rush Impact",               type: "Ativo",    rarity: "3★", effect: "Rush + 350% dano + stun 3s",              cooldown: "25s",    desc: "Investida devastadora." },
+      { name: "Dread Pool",                type: "Ativo",    rarity: "3★", effect: "AoE contínuo 200%/s por 5s (8 alvos)",    cooldown: "35s",    desc: "Área de terror." },
+      { name: "Spike",                     type: "Ativo",    rarity: "3★", effect: "Dano 380% + penetra DEF 40%",             cooldown: "28s",    desc: "Estocada penetrante." },
+      { name: "Anti-Magic Armor",          type: "Ativo",    rarity: "3★", effect: "+50% M.DEF por 20s",                      cooldown: "60s",    desc: "Armadura anti-mágica." },
+      { name: "Weapon Blockade",           type: "Ativo",    rarity: "3★", effect: "Desarma inimigo por 5s",                  cooldown: "45s",    desc: "Bloqueio de arma." },
+      { name: "Lionheart",                 type: "Ativo",    rarity: "3★", effect: "Imune a medo/stun 15s",                   cooldown: "120s",   desc: "Coração de leão." },
+      { name: "War Frenzy",                type: "Self-Buff",rarity: "3★", effect: "+30% ATK Speed por 45s",                  cooldown: "90s",    desc: "Frenesi total." },
+      { name: "Transcendent Whirlwind",    type: "Ativo",    rarity: "4★", effect: "Dano AoE 600% + knockdown (12 alvos)",    cooldown: "160s",   desc: "Redemoinho transcendente." },
+      { name: "Dreadnought's Harmony",     type: "Self-Buff",rarity: "4★", effect: "+50% ATK, +35% HP, +20% DEF 30min",      cooldown: "90 min", desc: "Harmonia do encouraçado." },
+      { name: "Master of Combat",          type: "Passivo",  rarity: "3★", effect: "+10% ATK, +10% AoE dmg, +5% PvE",        cooldown: "N/A",    desc: "Mestre do combate." },
+      { name: "Dreadnought Spirit",        type: "Passivo",  rarity: "3★", effect: "+15% Polearm ATK",                        cooldown: "N/A",    desc: "Espírito do encouraçado." },
+      { name: "Body of the Dreadnought",   type: "Passivo",  rarity: "3★", effect: "+10% Max HP, +10% DEF",                  cooldown: "N/A",    desc: "Corpo indestrutível." }
+    ]
+  },
+
+  // ─── KNIGHT (1ª classe) ───
+  knight: {
+    name: 'Knight', parent: 'fighter', race: 'human', archetype: 'tank', stage: 1,
+    desc: 'Cavaleiro tanque com escudo. Skills anteriores permanecem.',
+    base: { atk: 18, def: 32, hp: 250, mp: 50, eva: 4, crit: 4, mdef: 18 },
+    skills: [
+      { name: "Shield Strike",         type: "Ativo",    rarity: "1★", effect: "Dano 170% + taunt 5s",             cooldown: "10s",    desc: "Golpe de escudo." },
+      { name: "Hate",                  type: "Ativo",    rarity: "1★", effect: "Taunt alvo + aggro máximo",        cooldown: "8s",     desc: "Gera ódio no alvo." },
+      { name: "Aura of Hate",          type: "Ativo",    rarity: "2★", effect: "AoE taunt (5 alvos) 8s",           cooldown: "18s",    desc: "Aura de ódio." },
+      { name: "Power Break",           type: "Ativo",    rarity: "1★", effect: "Dano 150% + -20% ATK inimigo 8s",  cooldown: "14s",    desc: "Quebra de poder." },
+      { name: "Divine Heal",           type: "Ativo",    rarity: "2★", effect: "Cura 20% HP próprio",              cooldown: "25s",    desc: "Cura divina." },
+      { name: "Knight's Harmony",      type: "Self-Buff",rarity: "2★", effect: "+25% DEF e +20% HP por 20 min",    cooldown: "45 min", desc: "Harmonia do cavaleiro." },
+      { name: "Heavy Armor Mastery",   type: "Passivo",  rarity: "1★", effect: "+15% DEF com armadura pesada",     cooldown: "N/A",    desc: "Maestria em armaduras pesadas." },
+      { name: "Shield Mastery",        type: "Passivo",  rarity: "1★", effect: "+15% Block Rate",                  cooldown: "N/A",    desc: "Maestria em escudos." },
+      { name: "Sword/Blunt Mastery",   type: "Passivo",  rarity: "1★", effect: "+10% ATK espada/blunt",            cooldown: "N/A",    desc: "Maestria em espadas." },
+      { name: "HP Increase Lv2",       type: "Passivo",  rarity: "1★", effect: "+12% Max HP",                      cooldown: "N/A",    desc: "Constituição reforçada." },
+      { name: "Deflect Arrow",         type: "Passivo",  rarity: "1★", effect: "+10% chance desviar projéteis",    cooldown: "N/A",    desc: "Desvio de projéteis." }
+    ]
+  },
+
+  // ─── PALADIN (2ª classe) ───
+  paladin: {
+    name: 'Paladin', parent: 'knight', stage: 2,
+    desc: 'Cavaleiro sagrado, tank com cura e proteção. Skills anteriores permanecem.',
+    base: { atk: 38, def: 65, hp: 520, mp: 100, eva: 5, crit: 6, mdef: 42 },
+    skills: [
+      { name: "Shield Stun",           type: "Ativo",    rarity: "2★", effect: "Dano 210% + stun 3s",             cooldown: "18s",    desc: "Escudada atordoante." },
+      { name: "Holy Blade",            type: "Ativo",    rarity: "2★", effect: "Dano sagrado 260%",               cooldown: "16s",    desc: "Lâmina sagrada." },
+      { name: "Holy Strike",           type: "Ativo",    rarity: "3★", effect: "Dano sagrado 320% + undead 2x",   cooldown: "20s",    desc: "Golpe sagrado devastador." },
+      { name: "Majesty",               type: "Ativo",    rarity: "3★", effect: "Não pode morrer por 7s (HP min 1)",cooldown: "180s",  desc: "Majestade divina." },
+      { name: "Angelic Icon",          type: "Self-Buff",rarity: "3★", effect: "+30% DEF, +30% M.DEF por 30s",    cooldown: "120s",   desc: "Ícone angelical." },
+      { name: "Sacrifice",             type: "Ativo",    rarity: "2★", effect: "Cura aliado 30% HP (gasta 10% próprio)",cooldown: "25s",desc: "Sacrifício pelo aliado." },
+      { name: "Aegis",                 type: "Ativo",    rarity: "2★", effect: "+60% Block Rate por 15s",         cooldown: "45s",    desc: "Aegis defensivo." },
+      { name: "Vengeance",             type: "Ativo",    rarity: "3★", effect: "Reflete 30% dano recebido por 15s",cooldown: "60s",   desc: "Vingança sagrada." },
+      { name: "Ultimate Defense",      type: "Ativo",    rarity: "3★", effect: "+80% DEF, -50% ATK por 15s",      cooldown: "120s",   desc: "Defesa absoluta." },
+      { name: "Holy Blessing",         type: "Ativo",    rarity: "2★", effect: "Remove 2 debuffs",                cooldown: "30s",    desc: "Bênção purificadora." },
+      { name: "Summon Storm Cubic",    type: "Ativo",    rarity: "2★", effect: "Invoca cubic de dano lightning",   cooldown: "60s",    desc: "Cubic de tempestade." },
+      { name: "Provoke",               type: "Ativo",    rarity: "1★", effect: "Taunt + aggro forte",             cooldown: "8s",     desc: "Provocação." },
+      { name: "Paladin's Harmony",     type: "Self-Buff",rarity: "3★", effect: "+40% DEF, +30% HP, +20% M.DEF 25min",cooldown: "60 min",desc: "Harmonia do paladino." },
+      { name: "Resist Holy/Dark",      type: "Passivo",  rarity: "2★", effect: "+15% resist holy/dark",           cooldown: "N/A",    desc: "Resistência sagrada." },
+      { name: "Boost HP",              type: "Passivo",  rarity: "2★", effect: "+18% Max HP",                     cooldown: "N/A",    desc: "HP expandido." }
+    ]
+  },
+
+  // ─── PHOENIX KNIGHT (3ª classe) ───
+  phoenixKnight: {
+    name: 'Phoenix Knight', parent: 'paladin', stage: 3,
+    desc: 'Cavaleiro da Fênix, tank supremo com ressurreição. Skills anteriores permanecem.',
+    base: { atk: 72, def: 105, hp: 850, mp: 140, eva: 6, crit: 8, mdef: 68 },
+    skills: [
+      { name: "Touch of Life",                type: "Ativo",    rarity: "3★", effect: "Cura AoE 25% HP (party)",               cooldown: "35s",    desc: "Toque vital da fênix." },
+      { name: "Phoenix Aura",                 type: "Self-Buff",rarity: "3★", effect: "+45% DEF, +HP Regen 3%/s por 25min",    cooldown: "60 min", desc: "Aura da fênix." },
+      { name: "Shield of Faith",              type: "Ativo",    rarity: "3★", effect: "Absorve 5000 dano por 15s",             cooldown: "90s",    desc: "Escudo de fé." },
+      { name: "Flame Icon",                   type: "Ativo",    rarity: "3★", effect: "+35% ATK para party por 30s",           cooldown: "120s",   desc: "Ícone de chamas." },
+      { name: "Celestial Shield",             type: "Ativo",    rarity: "4★", effect: "Party imune a dano por 5s",             cooldown: "300s",   desc: "Escudo celestial absoluto." },
+      { name: "Summon Imperial Phoenix",      type: "Ativo",    rarity: "4★", effect: "Invoca fênix (dano+cura contínua 30s)", cooldown: "180s",   desc: "Fênix Imperial." },
+      { name: "Transcendent Shield Charge",   type: "Ativo",    rarity: "4★", effect: "Rush + 500% dano + AoE taunt 10s",     cooldown: "160s",   desc: "Investida transcendente." },
+      { name: "Phoenix Knight's Harmony",     type: "Self-Buff",rarity: "4★", effect: "+60% DEF, +40% HP, +30% M.DEF 30min",  cooldown: "90 min", desc: "Harmonia suprema." },
+      { name: "Spirit of Phoenix",            type: "Passivo",  rarity: "4★", effect: "Ao morrer: revive com 30% HP (1x/30min)",cooldown: "N/A",   desc: "Espírito da fênix — auto-ressurreição." },
+      { name: "Master of Combat",             type: "Passivo",  rarity: "3★", effect: "+10% ATK, +15% aggro, +5% PvE",        cooldown: "N/A",    desc: "Mestre do combate." },
+      { name: "Protection of Faith",          type: "Passivo",  rarity: "3★", effect: "+12% resist all",                      cooldown: "N/A",    desc: "Proteção da fé." },
+      { name: "Body of the Phoenix",          type: "Passivo",  rarity: "3★", effect: "+15% Max HP, +10% DEF",                cooldown: "N/A",    desc: "Corpo da fênix." }
+    ]
+  },
+
+  // ─── DARK AVENGER (2ª classe) ───
+  darkAvenger: {
+    name: 'Dark Avenger', parent: 'knight', stage: 2,
+    desc: 'Cavaleiro sombrio com pantera e drain. Skills anteriores permanecem.',
+    base: { atk: 45, def: 55, hp: 480, mp: 90, eva: 5, crit: 8, mdef: 35 },
+    skills: [
+      { name: "Summon Dark Panther",    type: "Ativo",    rarity: "3★", effect: "Invoca pantera (ATK 60% do dono)",    cooldown: "90s",    desc: "Pantera das trevas." },
+      { name: "Drain Health",           type: "Ativo",    rarity: "2★", effect: "Dano 220% + drena 30% como HP",      cooldown: "15s",    desc: "Drena vida do inimigo." },
+      { name: "Horror",                 type: "Ativo",    rarity: "2★", effect: "Medo no alvo por 5s",                cooldown: "30s",    desc: "Terror sombrio." },
+      { name: "Shield Stun",            type: "Ativo",    rarity: "2★", effect: "Dano 200% + stun 3s",               cooldown: "18s",    desc: "Escudada atordoante." },
+      { name: "Judgment",               type: "Ativo",    rarity: "3★", effect: "Dano dark 300% + -20% DEF 10s",     cooldown: "22s",    desc: "Julgamento sombrio." },
+      { name: "Touch of Death",         type: "Ativo",    rarity: "3★", effect: "Dano 280% + poison 10s",            cooldown: "20s",    desc: "Toque mortal." },
+      { name: "Dark Flame",             type: "Ativo",    rarity: "2★", effect: "Dano AoE dark 240%",                cooldown: "18s",    desc: "Chamas sombrias." },
+      { name: "Doom Shield",            type: "Ativo",    rarity: "3★", effect: "Absorve 3000 dano + reflete 15%",   cooldown: "60s",    desc: "Escudo da perdição." },
+      { name: "Seed of Revenge",        type: "Ativo",    rarity: "2★", effect: "Marca: ao morrer causa 500% dano",  cooldown: "120s",   desc: "Semente da vingança." },
+      { name: "Dark Avenger's Harmony", type: "Self-Buff",rarity: "3★", effect: "+35% ATK, +30% DEF, +20% drain 25min",cooldown: "60 min",desc: "Harmonia sombria." },
+      { name: "Reflect Damage",         type: "Passivo",  rarity: "2★", effect: "Reflete 8% dano recebido",          cooldown: "N/A",    desc: "Reflexo de dano." },
+      { name: "Boost HP",               type: "Passivo",  rarity: "2★", effect: "+16% Max HP",                       cooldown: "N/A",    desc: "HP reforçado." }
+    ]
+  },
+
+  // ─── HELL KNIGHT (3ª classe) ───
+  hellKnight: {
+    name: 'Hell Knight', parent: 'darkAvenger', stage: 3,
+    desc: 'Cavaleiro infernal com aura de trevas. Skills anteriores permanecem.',
+    base: { atk: 82, def: 88, hp: 780, mp: 130, eva: 6, crit: 12, mdef: 55 },
+    skills: [
+      { name: "Insane Crusher",               type: "Ativo",    rarity: "3★", effect: "Dano 420% + stun 4s",                    cooldown: "28s",    desc: "Esmagamento insano." },
+      { name: "Panther Cancel",               type: "Ativo",    rarity: "3★", effect: "Pantera explode: AoE 350% + fear 3s",    cooldown: "60s",    desc: "Explosão da pantera." },
+      { name: "Anthem of Hell",               type: "Self-Buff",rarity: "3★", effect: "+40% ATK, +20% drain HP por 30s",        cooldown: "90s",    desc: "Hino infernal." },
+      { name: "Gehenna",                      type: "Ativo",    rarity: "4★", effect: "AoE dark 500% + -30% heal recebida 10s", cooldown: "120s",   desc: "Portão do inferno." },
+      { name: "Touch of Darkness",            type: "Ativo",    rarity: "3★", effect: "Dano 380% + silence 5s",                 cooldown: "30s",    desc: "Toque das trevas." },
+      { name: "Summon Dark Panther Enhanced",  type: "Ativo",    rarity: "4★", effect: "Pantera aprimorada (ATK 80% do dono)",   cooldown: "120s",   desc: "Pantera das trevas aprimorada." },
+      { name: "Transcendent Dark Strike",     type: "Ativo",    rarity: "4★", effect: "Dano 580% dark + drain 40% como HP",     cooldown: "150s",   desc: "Golpe sombrio transcendente." },
+      { name: "Hell Knight's Harmony",        type: "Self-Buff",rarity: "4★", effect: "+55% ATK, +40% DEF, +30% drain 30min",   cooldown: "90 min", desc: "Harmonia infernal." },
+      { name: "Master of Combat",             type: "Passivo",  rarity: "3★", effect: "+10% ATK, +10% drain, +5% PvE",         cooldown: "N/A",    desc: "Mestre do combate." },
+      { name: "Hell Knight Spirit",           type: "Passivo",  rarity: "3★", effect: "+15% dark ATK",                          cooldown: "N/A",    desc: "Espírito do cavaleiro infernal." },
+      { name: "Body of the Hell Knight",      type: "Passivo",  rarity: "3★", effect: "+12% Max HP, +10% DEF",                 cooldown: "N/A",    desc: "Corpo infernal." },
+      { name: "Protection of Darkness",       type: "Passivo",  rarity: "3★", effect: "+15% dark resist",                       cooldown: "N/A",    desc: "Proteção das trevas." }
+    ]
+  },
+
+  // ─── ROGUE (1ª classe) ───
+  rogue: {
+    name: 'Rogue', parent: 'fighter', race: 'human', archetype: 'fighter', stage: 1,
+    desc: 'Ladino ágil, especialista em dagger e bow. Skills anteriores permanecem.',
+    base: { atk: 22, def: 12, hp: 150, mp: 40, eva: 15, crit: 12, mdef: 8 },
+    skills: [
+      { name: "Double Shot",          type: "Ativo",    rarity: "1★", effect: "2 disparos, dano total 200%",      cooldown: "10s",    desc: "Duplo disparo." },
+      { name: "Backstab",             type: "Ativo",    rarity: "2★", effect: "Dano 250% por trás + crit garantido",cooldown: "14s",  desc: "Punhalada nas costas." },
+      { name: "Dash",                 type: "Ativo",    rarity: "1★", effect: "+50% Speed por 8s",                cooldown: "20s",    desc: "Corrida rápida." },
+      { name: "Unlock",               type: "Ativo",    rarity: "1★", effect: "Abre baús/portas",                 cooldown: "5s",     desc: "Destravar." },
+      { name: "Rogue's Harmony",      type: "Self-Buff",rarity: "2★", effect: "+20% EVA, +15% Crit por 20 min",   cooldown: "45 min", desc: "Harmonia do ladino." },
+      { name: "Light Armor Mastery",  type: "Passivo",  rarity: "1★", effect: "+12% EVA com armadura leve",       cooldown: "N/A",    desc: "Maestria leve." },
+      { name: "Dagger Mastery",       type: "Passivo",  rarity: "1★", effect: "+12% ATK com dagger",              cooldown: "N/A",    desc: "Maestria em adagas." },
+      { name: "Bow Mastery",          type: "Passivo",  rarity: "1★", effect: "+12% ATK com arco",                cooldown: "N/A",    desc: "Maestria em arcos." },
+      { name: "Critical Chance",      type: "Passivo",  rarity: "1★", effect: "+8% Crit Rate",                    cooldown: "N/A",    desc: "Senso para pontos vitais." }
+    ]
+  },
+
+  // ─── TREASURE HUNTER (2ª classe) ───
+  treasureHunter: {
+    name: 'Treasure Hunter', parent: 'rogue', stage: 2,
+    desc: 'Caçador de tesouros, mestre em adagas. Skills anteriores permanecem.',
+    base: { atk: 55, def: 20, hp: 300, mp: 60, eva: 28, crit: 24, mdef: 14 },
+    skills: [
+      { name: "Deadly Blow",           type: "Ativo",    rarity: "2★", effect: "Dano 280% + crit garantido",          cooldown: "14s",    desc: "Golpe mortal." },
+      { name: "Lethal Blow",           type: "Ativo",    rarity: "3★", effect: "Dano 350% + chance kill 5%",          cooldown: "22s",    desc: "Golpe letal." },
+      { name: "Sand Bomb",             type: "Ativo",    rarity: "2★", effect: "AoE blind 5s + dano 150%",            cooldown: "20s",    desc: "Bomba de areia." },
+      { name: "Blinding Blow",         type: "Ativo",    rarity: "2★", effect: "Dano 240% + blind 4s",                cooldown: "18s",    desc: "Golpe cegante." },
+      { name: "Shadow Step",           type: "Ativo",    rarity: "2★", effect: "Teleporta atrás do alvo",             cooldown: "15s",    desc: "Passo sombrio." },
+      { name: "Switch",                type: "Ativo",    rarity: "2★", effect: "Troca posição com alvo",              cooldown: "25s",    desc: "Troca de posição." },
+      { name: "Fake Death",            type: "Ativo",    rarity: "2★", effect: "Finge morte, perde aggro",            cooldown: "60s",    desc: "Morte falsa." },
+      { name: "Trick",                 type: "Ativo",    rarity: "2★", effect: "Remove alvo do inimigo",              cooldown: "20s",    desc: "Truque evasivo." },
+      { name: "Mirage",                type: "Ativo",    rarity: "3★", effect: "+80% EVA por 8s",                     cooldown: "45s",    desc: "Ilusão de espelhos." },
+      { name: "Detect/Remove Trap",    type: "Ativo",    rarity: "1★", effect: "Detecta e remove armadilhas",         cooldown: "10s",    desc: "Detectar armadilhas." },
+      { name: "TH's Harmony",          type: "Self-Buff",rarity: "3★", effect: "+35% Crit, +25% EVA, +20% ATK 25min", cooldown: "60 min", desc: "Harmonia do caçador." },
+      { name: "Evasion",               type: "Passivo",  rarity: "2★", effect: "+12% EVA",                            cooldown: "N/A",    desc: "Evasão aprimorada." },
+      { name: "Critical Power",        type: "Passivo",  rarity: "2★", effect: "+18% Crit Damage",                    cooldown: "N/A",    desc: "Poder crítico." },
+      { name: "Focus",                 type: "Passivo",  rarity: "1★", effect: "+10% Crit Rate",                      cooldown: "N/A",    desc: "Foco em pontos vitais." }
+    ]
+  },
+
+  // ─── ADVENTURER (3ª classe) ───
+  adventurer: {
+    name: 'Adventurer', parent: 'treasureHunter', stage: 3,
+    desc: 'Aventureiro supremo, mestre da evasão e dano furtivo. Skills anteriores permanecem.',
+    base: { atk: 98, def: 32, hp: 500, mp: 85, eva: 52, crit: 42, mdef: 22 },
+    skills: [
+      { name: "Exciting Adventure",          type: "Self-Buff",rarity: "3★", effect: "+45% EVA, +30% Crit, +20% ATK 20min",  cooldown: "55 min", desc: "Aventura emocionante." },
+      { name: "Wind Riding",                 type: "Ativo",    rarity: "3★", effect: "+80% Speed + invisível por 10s",        cooldown: "60s",    desc: "Cavalgando o vento." },
+      { name: "Lucky Strike",                type: "Ativo",    rarity: "3★", effect: "Dano 420% + chance loot 2x",            cooldown: "30s",    desc: "Golpe de sorte." },
+      { name: "Detection",                   type: "Ativo",    rarity: "2★", effect: "Revela invisíveis em área",             cooldown: "20s",    desc: "Detecção de ocultos." },
+      { name: "Transcendent Deadly Blow",    type: "Ativo",    rarity: "4★", effect: "Dano 650% + ignora EVA + bleed 12s",    cooldown: "150s",   desc: "Golpe mortal transcendente." },
+      { name: "Adventurer's Harmony",        type: "Self-Buff",rarity: "4★", effect: "+55% Crit, +45% EVA, +35% ATK 30min",  cooldown: "90 min", desc: "Harmonia suprema." },
+      { name: "Master of Combat",            type: "Passivo",  rarity: "3★", effect: "+10% ATK, +10% Crit, +5% PvE",         cooldown: "N/A",    desc: "Mestre do combate." },
+      { name: "Shadow Sense",                type: "Passivo",  rarity: "3★", effect: "+15% EVA à noite / dungeon",            cooldown: "N/A",    desc: "Sentido das sombras." },
+      { name: "Adventurer Spirit",           type: "Passivo",  rarity: "3★", effect: "+12% dagger ATK",                       cooldown: "N/A",    desc: "Espírito aventureiro." },
+      { name: "Body of the Adventurer",      type: "Passivo",  rarity: "3★", effect: "+10% Max HP, +8% EVA",                 cooldown: "N/A",    desc: "Corpo ágil." },
+      { name: "Final Frenzy",                type: "Passivo",  rarity: "3★", effect: "+25% ATK quando HP < 30%",              cooldown: "N/A",    desc: "Frenesi final." }
+    ]
+  },
+
+  // ─── HAWKEYE (2ª classe) ───
+  hawkeye: {
+    name: 'Hawkeye', parent: 'rogue', stage: 2,
+    desc: 'Arqueiro de elite com dano à distância. Skills anteriores permanecem.',
+    base: { atk: 60, def: 18, hp: 280, mp: 65, eva: 20, crit: 22, mdef: 12 },
+    skills: [
+      { name: "Double Shot",           type: "Ativo",    rarity: "2★", effect: "2 disparos, dano total 260%",         cooldown: "10s",    desc: "Duplo disparo aprimorado." },
+      { name: "Burst Shot",            type: "Ativo",    rarity: "2★", effect: "Dano 280% + knockback",               cooldown: "14s",    desc: "Disparo explosivo." },
+      { name: "Stun Shot",             type: "Ativo",    rarity: "2★", effect: "Dano 220% + stun 3s",                cooldown: "18s",    desc: "Disparo atordoante." },
+      { name: "Arrow Rain",            type: "Ativo",    rarity: "3★", effect: "Dano AoE 320% (8 alvos)",            cooldown: "22s",    desc: "Chuva de flechas." },
+      { name: "Rapid Fire",            type: "Ativo",    rarity: "2★", effect: "+50% ATK Speed arco por 15s",        cooldown: "45s",    desc: "Disparo rápido." },
+      { name: "Cheap Shot",            type: "Ativo",    rarity: "2★", effect: "Dano 200% + slow 30% por 8s",        cooldown: "16s",    desc: "Disparo sujo." },
+      { name: "Hawkeye's Harmony",     type: "Self-Buff",rarity: "3★", effect: "+35% ATK, +25% Crit, +15% Range 25min",cooldown: "60 min",desc: "Harmonia do olho de falcão." },
+      { name: "Bow Mastery",           type: "Passivo",  rarity: "2★", effect: "+18% ATK com arco",                  cooldown: "N/A",    desc: "Maestria em arcos." },
+      { name: "Long Shot",             type: "Passivo",  rarity: "2★", effect: "+30% Range",                          cooldown: "N/A",    desc: "Tiro de longo alcance." },
+      { name: "Focus",                 type: "Passivo",  rarity: "1★", effect: "+10% Crit Rate",                      cooldown: "N/A",    desc: "Concentração." },
+      { name: "Critical Power",        type: "Passivo",  rarity: "2★", effect: "+18% Crit Damage",                    cooldown: "N/A",    desc: "Poder crítico." },
+      { name: "Evasion",               type: "Passivo",  rarity: "1★", effect: "+10% EVA",                            cooldown: "N/A",    desc: "Evasão." }
+    ]
+  },
+
+  // ─── SAGITTARIUS (3ª classe) ───
+  sagittarius: {
+    name: 'Sagittarius', parent: 'hawkeye', stage: 3,
+    desc: 'Atirador lendário, mestre do arco. Skills anteriores permanecem.',
+    base: { atk: 112, def: 25, hp: 460, mp: 95, eva: 35, crit: 45, mdef: 18 },
+    skills: [
+      { name: "Seven Arrow",                  type: "Ativo",    rarity: "3★", effect: "7 flechas, dano total 480%",              cooldown: "25s",    desc: "Sete flechas consecutivas." },
+      { name: "Arrow Flare",                  type: "Ativo",    rarity: "3★", effect: "Dano AoE 380% + burn 8s",                cooldown: "22s",    desc: "Explosão de flechas." },
+      { name: "Dead Eye",                     type: "Self-Buff",rarity: "3★", effect: "+50% ATK, +40% Range por 20min",         cooldown: "55 min", desc: "Olho mortal — mira perfeita." },
+      { name: "Pinpoint Shot",                type: "Ativo",    rarity: "3★", effect: "Dano 400% + ignora 50% DEF",             cooldown: "28s",    desc: "Tiro preciso." },
+      { name: "Triple Shot",                  type: "Ativo",    rarity: "3★", effect: "3 disparos, dano total 360%",             cooldown: "14s",    desc: "Tiro triplo." },
+      { name: "Thorn Shot",                   type: "Ativo",    rarity: "2★", effect: "Dano 260% + bleed 10s",                  cooldown: "12s",    desc: "Flecha de espinhos." },
+      { name: "Binding Shot",                 type: "Ativo",    rarity: "2★", effect: "Dano 220% + root 4s",                    cooldown: "18s",    desc: "Flecha aprisionadora." },
+      { name: "Incendiary Shot",              type: "Ativo",    rarity: "2★", effect: "Dano fogo 280% + burn 8s",               cooldown: "16s",    desc: "Flecha incendiária." },
+      { name: "Freezing Shot",                type: "Ativo",    rarity: "2★", effect: "Dano gelo 260% + slow 40% 6s",           cooldown: "16s",    desc: "Flecha congelante." },
+      { name: "Wind Shot",                    type: "Ativo",    rarity: "2★", effect: "Dano vento 270% + knockback",            cooldown: "16s",    desc: "Flecha do vento." },
+      { name: "Flame Arrow Rain",             type: "Ativo",    rarity: "3★", effect: "AoE fogo 380% (10 alvos) + burn",        cooldown: "28s",    desc: "Chuva de flechas flamejantes." },
+      { name: "Water Arrow Rain",             type: "Ativo",    rarity: "3★", effect: "AoE gelo 360% (10 alvos) + slow",        cooldown: "28s",    desc: "Chuva de flechas gélidas." },
+      { name: "Storm Arrow Rain",             type: "Ativo",    rarity: "3★", effect: "AoE vento 370% (10 alvos) + stun 2s",    cooldown: "28s",    desc: "Chuva de flechas tempestuosas." },
+      { name: "Spiral Shot",                  type: "Ativo",    rarity: "3★", effect: "Dano 420% + penetra múltiplos alvos",    cooldown: "24s",    desc: "Tiro espiral perfurante." },
+      { name: "Target Lock",                  type: "Ativo",    rarity: "3★", effect: "Marca alvo: +40% dano contra ele 12s",   cooldown: "30s",    desc: "Trava de mira." },
+      { name: "Transcendent Seven Arrow",     type: "Ativo",    rarity: "4★", effect: "Dano 700% + elemental + ignora DEF",     cooldown: "180s",   desc: "Sete flechas transcendentes." },
+      { name: "Sagittarius' Harmony",         type: "Self-Buff",rarity: "4★", effect: "+60% ATK, +50% Crit, +40% Range 30min",  cooldown: "90 min", desc: "Harmonia do sagitário." },
+      { name: "Master of Combat",             type: "Passivo",  rarity: "3★", effect: "+10% ATK, +10% Range, +5% PvE",         cooldown: "N/A",    desc: "Mestre do combate." },
+      { name: "Sagittarius Spirit",            type: "Passivo",  rarity: "3★", effect: "+15% Bow ATK",                           cooldown: "N/A",    desc: "Espírito do sagitário." },
+      { name: "Body of the Sagittarius",       type: "Passivo",  rarity: "3★", effect: "+10% Max HP, +8% EVA",                  cooldown: "N/A",    desc: "Corpo do sagitário." }
+    ]
+  },
+
+  // ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+  //  HUMAN MAGE (skills DISTINTAS por subclasse)
+  // ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+
+  mage: {
+    name: 'Human Mage', archetype: 'mage', race: 'human', stage: 0,
+    desc: 'Classe base mágica humana.',
+    base: { atk: 5, def: 6, hp: 70, mp: 80, eva: 4, crit: 3, matk: 15, mdef: 12 },
+    skills: [
+      { name: "Wind Strike",       type: "Ativo",    rarity: "1★", effect: "Dano vento 160%",              cooldown: "8s",     desc: "Rajada de vento." },
+      { name: "Flame Strike",      type: "Ativo",    rarity: "1★", effect: "Dano fogo 170%",               cooldown: "9s",     desc: "Chama ardente." },
+      { name: "Ice Bolt",          type: "Ativo",    rarity: "1★", effect: "Dano gelo 155% + slow 15% 4s", cooldown: "8s",     desc: "Projétil de gelo." },
+      { name: "Self Heal",         type: "Ativo",    rarity: "1★", effect: "Cura 20% HP",                  cooldown: "25s",    desc: "Autocura básica." },
+      { name: "Sleep",             type: "Ativo",    rarity: "1★", effect: "Adormece alvo 8s (cancela dano)",cooldown: "30s",   desc: "Sono mágico." },
+      { name: "Mage's Will",       type: "Self-Buff",rarity: "1★", effect: "+10% M.ATK, +10% M.DEF 15min", cooldown: "30 min", desc: "Vontade do mago." },
+      { name: "Robe Mastery",      type: "Passivo",  rarity: "1★", effect: "+10% M.DEF, +8% Cast Speed com robe",cooldown: "N/A",desc: "Maestria em vestes." },
+      { name: "MP Increase",       type: "Passivo",  rarity: "1★", effect: "+8% Max MP",                   cooldown: "N/A",    desc: "Reserva mágica." }
+    ]
+  },
+
+  // ─── WIZARD (1ª classe) ───
+  wizard: {
+    name: 'Wizard', parent: 'mage', race: 'human', archetype: 'mage', stage: 1,
+    desc: 'Mago elemental versátil. Skills anteriores permanecem.',
+    base: { atk: 6, def: 8, hp: 100, mp: 140, eva: 4, crit: 4, matk: 35, mdef: 22 },
+    skills: [
+      { name: "Blaze",                 type: "Ativo",    rarity: "1★", effect: "Dano fogo 210%",                    cooldown: "10s",    desc: "Chamas ardentes." },
+      { name: "Aqua Swirl",            type: "Ativo",    rarity: "1★", effect: "Dano água 200% + slow 20% 5s",      cooldown: "10s",    desc: "Turbilhão aquático." },
+      { name: "Twister",               type: "Ativo",    rarity: "1★", effect: "Dano vento 195%",                   cooldown: "10s",    desc: "Tornado menor." },
+      { name: "Aura Burn",             type: "Ativo",    rarity: "2★", effect: "AoE fogo 180% ao redor",            cooldown: "14s",    desc: "Queimadura áurica." },
+      { name: "Life Drain",            type: "Ativo",    rarity: "2★", effect: "Dano dark 190% + drena 25% como HP",cooldown: "15s",    desc: "Dreno vital." },
+      { name: "Surrender to Fire",     type: "Ativo",    rarity: "2★", effect: "-20% Fire Resist no alvo 15s",      cooldown: "25s",    desc: "Vulnerabilidade ao fogo." },
+      { name: "Surrender to Water",    type: "Ativo",    rarity: "2★", effect: "-20% Water Resist no alvo 15s",     cooldown: "25s",    desc: "Vulnerabilidade à água." },
+      { name: "Surrender to Wind",     type: "Ativo",    rarity: "2★", effect: "-20% Wind Resist no alvo 15s",      cooldown: "25s",    desc: "Vulnerabilidade ao vento." },
+      { name: "Wizard's Harmony",      type: "Self-Buff",rarity: "2★", effect: "+25% M.ATK, +15% Cast Speed 20min", cooldown: "45 min", desc: "Harmonia do mago." },
+      { name: "Boost Mana",            type: "Passivo",  rarity: "1★", effect: "+12% Max MP",                       cooldown: "N/A",    desc: "Reserva mágica aprimorada." }
+    ]
+  },
+
+  // ─── SORCERER (2ª classe — FOGO+GELO+VENTO) ───
+  sorcerer: {
+    name: 'Sorcerer', parent: 'wizard', stage: 2,
+    desc: 'Mestre da magia elemental ofensiva. Skills anteriores permanecem.',
+    base: { atk: 8, def: 14, hp: 180, mp: 260, eva: 5, crit: 6, matk: 75, mdef: 45 },
+    skills: [
+      { name: "Prominence",            type: "Ativo",    rarity: "2★", effect: "Dano fogo 300%",                      cooldown: "16s",    desc: "Coluna de fogo." },
+      { name: "Blizzard",              type: "Ativo",    rarity: "3★", effect: "Dano gelo AoE 340% + slow 30% 6s",    cooldown: "22s",    desc: "Nevasca arrasadora." },
+      { name: "Hurricane",             type: "Ativo",    rarity: "2★", effect: "Dano vento 290%",                     cooldown: "16s",    desc: "Furacão devastador." },
+      { name: "Hydro Blast",           type: "Ativo",    rarity: "2★", effect: "Dano água 280% + knockback",          cooldown: "15s",    desc: "Explosão hídrica." },
+      { name: "Solar Flare",           type: "Ativo",    rarity: "3★", effect: "Dano fogo 360% + blind 4s",           cooldown: "25s",    desc: "Explosão solar." },
+      { name: "Tempest",               type: "Ativo",    rarity: "3★", effect: "Dano vento AoE 350% (8 alvos)",       cooldown: "25s",    desc: "Tempestade elemental." },
+      { name: "Aura Flash",            type: "Ativo",    rarity: "2★", effect: "AoE 240% + knockback ao redor",       cooldown: "18s",    desc: "Flash áurico." },
+      { name: "Arcane Power",          type: "Self-Buff",rarity: "3★", effect: "+40% M.ATK por 30s",                  cooldown: "90s",    desc: "Poder arcano concentrado." },
+      { name: "Freezing Skin",         type: "Self-Buff",rarity: "2★", effect: "Quem ataca recebe slow 20% por 15s",  cooldown: "45s",    desc: "Pele congelante." },
+      { name: "Cancel",                type: "Ativo",    rarity: "3★", effect: "Remove 3 buffs do alvo",              cooldown: "40s",    desc: "Cancelamento mágico." },
+      { name: "Body to Mind",          type: "Ativo",    rarity: "2★", effect: "Converte 15% HP em 30% MP",           cooldown: "30s",    desc: "Corpo em mente." },
+      { name: "Anti-Magic",            type: "Ativo",    rarity: "3★", effect: "Silence no alvo por 8s",              cooldown: "45s",    desc: "Anti-magia." },
+      { name: "Sorcerer's Harmony",    type: "Self-Buff",rarity: "3★", effect: "+35% M.ATK, +20% Cast Speed 25min",   cooldown: "60 min", desc: "Harmonia do feiticeiro." },
+      { name: "Elemental Assault",     type: "Passivo",  rarity: "2★", effect: "+12% elemental damage",               cooldown: "N/A",    desc: "Assalto elemental." }
+    ]
+  },
+
+  // ─── ARCHMAGE (3ª classe — FOCO EM FOGO) ───
+  archmage: {
+    name: 'Archmage', parent: 'sorcerer', stage: 3,
+    desc: 'Arquimago do fogo, dano massivo. Skills anteriores permanecem. Foco: FOGO.',
+    base: { atk: 10, def: 20, hp: 300, mp: 450, eva: 6, crit: 8, matk: 135, mdef: 72 },
+    skills: [
+      { name: "Meteor",                       type: "Ativo",    rarity: "4★", effect: "Dano fogo AoE 750% + burn 12s + knockdown",  cooldown: "180s",   desc: "METEORO — devastação absoluta." },
+      { name: "Hell Inferno",                  type: "Ativo",    rarity: "3★", effect: "Dano fogo 450% + burn 10s",                 cooldown: "30s",    desc: "Inferno ardente." },
+      { name: "Flame Explosion",               type: "Ativo",    rarity: "3★", effect: "Dano fogo 420% + 2 hits",                  cooldown: "25s",    desc: "Explosão flamejante (2 hits)." },
+      { name: "Fire Spiral",                   type: "Ativo",    rarity: "3★", effect: "Dano fogo 380% + penetra alvos",           cooldown: "22s",    desc: "Espiral de fogo perfurante." },
+      { name: "Blazing Circle",                type: "Ativo",    rarity: "3★", effect: "AoE fogo 400% ao redor (10 alvos)",        cooldown: "28s",    desc: "Círculo flamejante." },
+      { name: "Seed of Fire",                  type: "Ativo",    rarity: "2★", effect: "Planta semente: explode 300% após 5s",     cooldown: "20s",    desc: "Semente de fogo." },
+      { name: "Elemental Burst",               type: "Ativo",    rarity: "3★", effect: "Explode Seeds: dano 500%",                 cooldown: "18s",    desc: "Explosão elemental (combo com Seeds)." },
+      { name: "Elemental Storm",               type: "Ativo",    rarity: "3★", effect: "AoE multi-element 440% (8 alvos)",         cooldown: "30s",    desc: "Tempestade elemental." },
+      { name: "Mana Burn",                     type: "Ativo",    rarity: "2★", effect: "Drena 30% MP do alvo + dano = MP drenado", cooldown: "25s",    desc: "Queima de mana." },
+      { name: "Mystic Immunity",               type: "Ativo",    rarity: "4★", effect: "Imune a magia por 8s, não pode atacar",    cooldown: "180s",   desc: "Imunidade mística." },
+      { name: "Empowering Echo",               type: "Ativo",    rarity: "3★", effect: "Próxima skill: +50% dano",                 cooldown: "45s",    desc: "Eco potencializador." },
+      { name: "Transcendent Hell Inferno",     type: "Ativo",    rarity: "4★", effect: "Dano fogo 800% + ignora M.DEF + burn 15s", cooldown: "200s",   desc: "Inferno transcendente." },
+      { name: "Archmage's Harmony",            type: "Self-Buff",rarity: "4★", effect: "+55% M.ATK, +35% Cast Speed, +20% MP 30min",cooldown: "90 min",desc: "Harmonia do arquimago." },
+      { name: "Master of Magic",               type: "Passivo",  rarity: "3★", effect: "+10% M.ATK, +10% fire dmg, +5% PvE",      cooldown: "N/A",    desc: "Mestre da magia." },
+      { name: "Spell Mastery",                  type: "Passivo",  rarity: "3★", effect: "+12% M. Skill Power",                     cooldown: "N/A",    desc: "Maestria em feitiços." },
+      { name: "Magic Focus",                    type: "Passivo",  rarity: "3★", effect: "+8% M. Crit Rate",                        cooldown: "N/A",    desc: "Foco mágico." },
+      { name: "Archmage Spirit",                type: "Passivo",  rarity: "3★", effect: "+15% fire magic ATK",                     cooldown: "N/A",    desc: "Espírito do arquimago." },
+      { name: "Body of the Archmage",           type: "Passivo",  rarity: "3★", effect: "+10% Max MP, +8% M.DEF",                 cooldown: "N/A",    desc: "Corpo arcano." }
+    ]
+  },
+
+  // ─── NECROMANCER (2ª classe — DARK/UNHOLY — skills DIFERENTES do Sorcerer) ───
+  necromancer: {
+    name: 'Necromancer', parent: 'wizard', stage: 2,
+    desc: 'Mago das trevas e mortos-vivos. Skills anteriores permanecem. Foco: DARK/UNDEAD.',
+    base: { atk: 8, def: 16, hp: 200, mp: 240, eva: 4, crit: 5, matk: 68, mdef: 40 },
+    skills: [
+      { name: "Death Spike",           type: "Ativo",    rarity: "2★", effect: "Dano dark 260% + drain 25% HP",       cooldown: "12s",    desc: "Estaca mortal." },
+      { name: "Corpse Plague",          type: "Ativo",    rarity: "2★", effect: "AoE dark 280% + poison 10s",          cooldown: "20s",    desc: "Praga cadavérica." },
+      { name: "Vampiric Claw",         type: "Ativo",    rarity: "2★", effect: "Dano 240% + drain 35% HP",            cooldown: "14s",    desc: "Garra vampírica." },
+      { name: "Anchor",                type: "Ativo",    rarity: "2★", effect: "Root no alvo 6s + dano 180%",         cooldown: "22s",    desc: "Âncora sombria." },
+      { name: "Curse: Gloom",          type: "Ativo",    rarity: "2★", effect: "-25% ATK e M.ATK do alvo 12s",        cooldown: "25s",    desc: "Maldição da melancolia." },
+      { name: "Corpse Burst",          type: "Ativo",    rarity: "3★", effect: "Explode cadáver: AoE 350% dark",      cooldown: "25s",    desc: "Explosão de cadáver." },
+      { name: "Summon Reanimated Man", type: "Ativo",    rarity: "2★", effect: "Invoca morto-vivo (ATK 50% do dono)", cooldown: "60s",    desc: "Reanimar morto." },
+      { name: "Summon Cursed Bone",    type: "Ativo",    rarity: "2★", effect: "Invoca esqueleto (ATK 40% do dono)",  cooldown: "45s",    desc: "Esqueleto amaldiçoado." },
+      { name: "Dark Flame",            type: "Ativo",    rarity: "2★", effect: "AoE dark 250% ao redor",              cooldown: "18s",    desc: "Chamas sombrias." },
+      { name: "Surrender to Unholy",   type: "Ativo",    rarity: "2★", effect: "-25% Dark Resist no alvo 15s",        cooldown: "25s",    desc: "Vulnerabilidade ao dark." },
+      { name: "Curse Fear",            type: "Ativo",    rarity: "3★", effect: "Medo AoE 5s (3 alvos)",               cooldown: "40s",    desc: "Medo amaldiçoado." },
+      { name: "Necro's Harmony",       type: "Self-Buff",rarity: "3★", effect: "+30% M.ATK, +20% drain, +15% HP 25min",cooldown: "60 min",desc: "Harmonia do necromante." },
+      { name: "Bone Armor",            type: "Passivo",  rarity: "2★", effect: "+15% DEF, +10% dark resist",          cooldown: "N/A",    desc: "Armadura de ossos." }
+    ]
+  },
+
+  // ─── SOULTAKER (3ª classe — DARK MEGA NUKE) ───
+  soultaker: {
+    name: 'Soultaker', parent: 'necromancer', stage: 3,
+    desc: 'Ceifador de almas, dano dark massivo. Skills anteriores permanecem. Foco: DARK.',
+    base: { atk: 10, def: 22, hp: 320, mp: 420, eva: 5, crit: 7, matk: 125, mdef: 62 },
+    skills: [
+      { name: "Soul Vortex",                  type: "Ativo",    rarity: "3★", effect: "Dano dark 420% + soul drain",               cooldown: "25s",    desc: "Vórtice de almas." },
+      { name: "Soul Vortex Destruction",       type: "Ativo",    rarity: "4★", effect: "Dano dark AoE 650% + drain 30% HP",        cooldown: "160s",   desc: "Destruição do vórtice de almas." },
+      { name: "Void Explosion",                type: "Ativo",    rarity: "4★", effect: "Dano dark 700% + 2 hits + silence 5s",     cooldown: "180s",   desc: "Explosão do vazio." },
+      { name: "Mass Curse: Gloom",             type: "Ativo",    rarity: "3★", effect: "AoE -30% ATK/M.ATK (8 alvos) 12s",         cooldown: "35s",    desc: "Maldição em massa." },
+      { name: "Soul Absorption",               type: "Ativo",    rarity: "3★", effect: "Drena 40% MP do alvo como MP próprio",     cooldown: "30s",    desc: "Absorção de almas." },
+      { name: "Summon Dark Curse",             type: "Ativo",    rarity: "3★", effect: "Invoca entidade dark (ATK 70% do dono)",    cooldown: "90s",    desc: "Maldição sombria viva." },
+      { name: "Dark Burden",                   type: "Ativo",    rarity: "3★", effect: "-40% Speed no alvo 10s + dano 300%",       cooldown: "28s",    desc: "Fardo das trevas." },
+      { name: "Transcendent Soul Vortex",      type: "Ativo",    rarity: "4★", effect: "Dano dark 850% + drain todo MP + stun 4s", cooldown: "200s",   desc: "Vórtice de almas transcendente." },
+      { name: "Soultaker's Harmony",           type: "Self-Buff",rarity: "4★", effect: "+55% M.ATK, +40% drain, +25% HP 30min",    cooldown: "90 min", desc: "Harmonia do ceifador." },
+      { name: "Master of Dark Magic",          type: "Passivo",  rarity: "3★", effect: "+10% M.ATK, +10% dark dmg, +5% PvE",      cooldown: "N/A",    desc: "Mestre da magia negra." },
+      { name: "Spell Mastery",                  type: "Passivo",  rarity: "3★", effect: "+12% M. Skill Power",                     cooldown: "N/A",    desc: "Maestria em feitiços." },
+      { name: "Soultaker Spirit",              type: "Passivo",  rarity: "3★", effect: "+15% dark magic ATK",                      cooldown: "N/A",    desc: "Espírito do ceifador." },
+      { name: "Body of the Soultaker",         type: "Passivo",  rarity: "3★", effect: "+12% Max MP, +10% HP",                    cooldown: "N/A",    desc: "Corpo do ceifador." }
+    ]
+  },
+
+  // ─── WARLOCK (2ª classe — SUMMONER — skills DIFERENTES) ───
+  warlock: {
+    name: 'Warlock', parent: 'wizard', stage: 2,
+    desc: 'Invocador de criaturas das trevas. Skills anteriores permanecem. Foco: SUMMON.',
+    base: { atk: 7, def: 15, hp: 190, mp: 250, eva: 4, crit: 4, matk: 62, mdef: 42 },
+    skills: [
+      { name: "Summon Shadow",          type: "Ativo",    rarity: "2★", effect: "Invoca sombra (ATK 45% do dono)",     cooldown: "60s",    desc: "Sombra combatente." },
+      { name: "Summon Silhouette",      type: "Ativo",    rarity: "2★", effect: "Invoca silhueta (tank, DEF 60%)",     cooldown: "60s",    desc: "Silhueta defensiva." },
+      { name: "Summon Soulless",        type: "Ativo",    rarity: "3★", effect: "Invoca sem-alma (ATK 65% do dono)",   cooldown: "90s",    desc: "Criatura sem alma — forte." },
+      { name: "Servitor Heal",          type: "Ativo",    rarity: "2★", effect: "Cura summon 35% HP",                  cooldown: "12s",    desc: "Cura do servitor." },
+      { name: "Servitor Recharge",      type: "Ativo",    rarity: "2★", effect: "Restaura 30% MP do summon",           cooldown: "15s",    desc: "Recarga do servitor." },
+      { name: "Transfer Pain",          type: "Toggle",   rarity: "2★", effect: "50% dano recebido vai pro summon",    cooldown: "N/A",    desc: "Transferência de dor." },
+      { name: "Summon Binding Cubic",   type: "Ativo",    rarity: "2★", effect: "Cubic que causa root em inimigos",    cooldown: "45s",    desc: "Cubic aprisionador." },
+      { name: "Summon Phantom Cubic",   type: "Ativo",    rarity: "2★", effect: "Cubic que causa dano dark contínuo",  cooldown: "45s",    desc: "Cubic fantasma." },
+      { name: "Life Cubic",             type: "Ativo",    rarity: "2★", effect: "Cubic que cura dono 5%/5s",           cooldown: "45s",    desc: "Cubic vital." },
+      { name: "Warlock's Harmony",      type: "Self-Buff",rarity: "3★", effect: "+30% M.ATK, +25% Summon ATK 25min",   cooldown: "60 min", desc: "Harmonia do warlock." },
+      { name: "Servitor Physical ATK",  type: "Passivo",  rarity: "2★", effect: "+15% Summon ATK",                     cooldown: "N/A",    desc: "Poder do servitor." }
+    ]
+  },
+
+  // ─── ARCANA LORD (3ª classe — MEGA SUMMONER) ───
+  arcanaLord: {
+    name: 'Arcana Lord', parent: 'warlock', stage: 3,
+    desc: 'Senhor arcano dos invocadores. Skills anteriores permanecem. Foco: SUMMON.',
+    base: { atk: 10, def: 22, hp: 310, mp: 430, eva: 5, crit: 5, matk: 118, mdef: 65 },
+    skills: [
+      { name: "Summon Feline King",            type: "Ativo",    rarity: "4★", effect: "Invoca Rei Felino (ATK 90% do dono)",       cooldown: "120s",   desc: "Rei dos felinos — summon supremo." },
+      { name: "Summon Magnus",                 type: "Ativo",    rarity: "3★", effect: "Invoca Magnus (AoE ATK 70% do dono)",       cooldown: "90s",    desc: "Magnus elemental." },
+      { name: "Servitor Barrier",              type: "Ativo",    rarity: "3★", effect: "Summon ganha escudo 5000 HP por 15s",       cooldown: "60s",    desc: "Barreira do servitor." },
+      { name: "Mass Servitor Heal",            type: "Ativo",    rarity: "3★", effect: "Cura todos summons 40% HP",                cooldown: "25s",    desc: "Cura em massa dos servitors." },
+      { name: "Servitor Empowerment",          type: "Self-Buff",rarity: "3★", effect: "+50% Summon ATK/DEF por 30s",               cooldown: "90s",    desc: "Empoderamento do servitor." },
+      { name: "Final Servitor",                type: "Ativo",    rarity: "4★", effect: "Summon sacrifica: AoE 600% + cura 50% HP",  cooldown: "180s",   desc: "Sacrifício final do servitor." },
+      { name: "Transcendent Summon Burst",     type: "Ativo",    rarity: "4★", effect: "Todos summons atacam: dano 800% total",     cooldown: "200s",   desc: "Explosão de invocações." },
+      { name: "Arcana Lord's Harmony",         type: "Self-Buff",rarity: "4★", effect: "+50% M.ATK, +60% Summon Power 30min",       cooldown: "90 min", desc: "Harmonia do senhor arcano." },
+      { name: "Master of Summoning",           type: "Passivo",  rarity: "3★", effect: "+15% Summon ATK/DEF, +5% PvE",             cooldown: "N/A",    desc: "Mestre da invocação." },
+      { name: "Arcana Lord Spirit",            type: "Passivo",  rarity: "3★", effect: "+12% M.ATK, +10% Summon HP",                cooldown: "N/A",    desc: "Espírito do senhor arcano." },
+      { name: "Body of the Arcana Lord",       type: "Passivo",  rarity: "3★", effect: "+10% Max MP, +8% Max HP",                  cooldown: "N/A",    desc: "Corpo arcano reforçado." }
+    ]
+  },
+
+  // ─── CLERIC (1ª classe) ───
+  cleric: {
+    name: 'Cleric', parent: 'mage', race: 'human', archetype: 'healer', stage: 1,
+    desc: 'Clérigo curador e suporte. Skills anteriores permanecem.',
+    base: { atk: 8, def: 15, hp: 130, mp: 120, eva: 4, crit: 3, matk: 22, mdef: 28 },
+    skills: [
+      { name: "Heal",             type: "Ativo",    rarity: "1★", effect: "Cura 25% HP alvo",                 cooldown: "8s",     desc: "Cura básica." },
+      { name: "Battle Heal",      type: "Ativo",    rarity: "1★", effect: "Cura 20% HP + remove 1 debuff",    cooldown: "10s",    desc: "Cura de combate." },
+      { name: "Might",            type: "Party-Buff",rarity: "1★", effect: "+15% ATK para party 10 min",      cooldown: "25 min", desc: "Bênção de força." },
+      { name: "Shield (Buff)",    type: "Party-Buff",rarity: "1★", effect: "+15% DEF para party 10 min",      cooldown: "25 min", desc: "Bênção de proteção." },
+      { name: "Wind Walk",        type: "Party-Buff",rarity: "1★", effect: "+20% Speed para party 10 min",    cooldown: "25 min", desc: "Caminhada do vento." },
+      { name: "Cure Poison",      type: "Ativo",    rarity: "1★", effect: "Remove poison",                    cooldown: "5s",     desc: "Cura veneno." },
+      { name: "Cure Bleed",       type: "Ativo",    rarity: "1★", effect: "Remove bleed",                     cooldown: "5s",     desc: "Estanca sangramento." },
+      { name: "Turn Undead",      type: "Ativo",    rarity: "2★", effect: "Dano holy 200% vs undead",         cooldown: "12s",    desc: "Repelir mortos-vivos." },
+      { name: "Recharge",         type: "Ativo",    rarity: "1★", effect: "Restaura 20% MP do alvo",          cooldown: "12s",    desc: "Recarrega mana." },
+      { name: "Cleric's Harmony", type: "Self-Buff",rarity: "2★", effect: "+20% M.ATK, +20% Heal Power 20min",cooldown: "45 min", desc: "Harmonia do clérigo." }
+    ]
+  },
+
+  // ─── BISHOP (2ª classe — HEALER) ───
+  bishop: {
+    name: 'Bishop', parent: 'cleric', stage: 2,
+    desc: 'Bispo curador poderoso. Skills anteriores permanecem.',
+    base: { atk: 10, def: 28, hp: 250, mp: 220, eva: 4, crit: 4, matk: 50, mdef: 60 },
+    skills: [
+      { name: "Greater Heal",          type: "Ativo",      rarity: "2★", effect: "Cura 40% HP alvo",                    cooldown: "10s",    desc: "Cura avançada." },
+      { name: "Greater Group Heal",    type: "Ativo",      rarity: "3★", effect: "Cura 30% HP party",                   cooldown: "18s",    desc: "Cura em grupo." },
+      { name: "Resurrection",          type: "Ativo",      rarity: "3★", effect: "Ressuscita aliado com 30% HP",        cooldown: "120s",   desc: "Ressurreição." },
+      { name: "Greater Might",         type: "Party-Buff", rarity: "2★", effect: "+25% ATK party 12 min",               cooldown: "30 min", desc: "Bênção de força maior." },
+      { name: "Greater Shield",        type: "Party-Buff", rarity: "2★", effect: "+25% DEF party 12 min",               cooldown: "30 min", desc: "Bênção de proteção maior." },
+      { name: "Blessed Body",          type: "Party-Buff", rarity: "2★", effect: "+20% Max HP party 12 min",            cooldown: "30 min", desc: "Corpo abençoado." },
+      { name: "Blessed Soul",          type: "Party-Buff", rarity: "2★", effect: "+20% Max MP party 12 min",            cooldown: "30 min", desc: "Alma abençoada." },
+      { name: "Holy Weapon",           type: "Party-Buff", rarity: "2★", effect: "+15% Holy ATK party 12 min",          cooldown: "30 min", desc: "Arma sagrada." },
+      { name: "Purify",                type: "Ativo",      rarity: "2★", effect: "Remove 3 debuffs do alvo",            cooldown: "20s",    desc: "Purificação." },
+      { name: "Cleanse",               type: "Ativo",      rarity: "3★", effect: "Remove TODOS debuffs do alvo",        cooldown: "45s",    desc: "Limpeza total." },
+      { name: "Mental Shield",         type: "Party-Buff", rarity: "2★", effect: "+20% M.DEF party 12 min",             cooldown: "30 min", desc: "Escudo mental." },
+      { name: "Inquisitor",            type: "Ativo",      rarity: "2★", effect: "Dano holy 250%",                      cooldown: "14s",    desc: "Poder inquisitorial." },
+      { name: "Holy Strike",           type: "Ativo",      rarity: "3★", effect: "Dano holy 320% + undead 2x",          cooldown: "18s",    desc: "Golpe sagrado." },
+      { name: "Divine Punishment",     type: "Ativo",      rarity: "3★", effect: "Dano holy 360% + stun 3s",            cooldown: "22s",    desc: "Punição divina." },
+      { name: "Major Heal",            type: "Ativo",      rarity: "3★", effect: "Cura 55% HP alvo",                    cooldown: "15s",    desc: "Cura maior." },
+      { name: "Party Recall",          type: "Ativo",      rarity: "2★", effect: "Teleporta party para cidade",         cooldown: "300s",   desc: "Recall do grupo." },
+      { name: "Bishop's Harmony",      type: "Self-Buff",  rarity: "3★", effect: "+35% Heal, +25% M.ATK, +20% M.DEF 25min",cooldown: "60 min",desc: "Harmonia do bispo." },
+      { name: "Mana Regeneration",     type: "Passivo",    rarity: "2★", effect: "+15% MP Regen",                       cooldown: "N/A",    desc: "Regeneração de mana." }
+    ]
+  },
+
+  // ─── CARDINAL (3ª classe — MEGA HEALER + DARK SIDE) ───
+  cardinal: {
+    name: 'Cardinal', parent: 'bishop', stage: 3,
+    desc: 'Cardeal supremo, mestre da cura E do dano sagrado (Dark Side). Skills anteriores permanecem.',
+    base: { atk: 12, def: 42, hp: 420, mp: 480, eva: 5, crit: 5, matk: 95, mdef: 98 },
+    skills: [
+      { name: "Miracle",                      type: "Ativo",      rarity: "4★", effect: "Cura party 80% HP + ressurge mortos",      cooldown: "300s",   desc: "MILAGRE — cura suprema + ressurreição." },
+      { name: "Sublime Self-Sacrifice",        type: "Ativo",      rarity: "4★", effect: "Morre para curar party 100% HP+MP",       cooldown: "300s",   desc: "Auto-sacrifício sublime." },
+      { name: "Balance Life",                  type: "Ativo",      rarity: "3★", effect: "Equaliza HP de toda party",                cooldown: "60s",    desc: "Equilíbrio vital." },
+      { name: "Mass Resurrection",             type: "Ativo",      rarity: "4★", effect: "Ressuscita toda party com 40% HP",        cooldown: "300s",   desc: "Ressurreição em massa." },
+      { name: "Lord of Vampire",               type: "Party-Buff", rarity: "3★", effect: "+10% lifesteal para party 12 min",        cooldown: "30 min", desc: "Senhor dos vampiros." },
+      { name: "Blessing of Eva",               type: "Party-Buff", rarity: "3★", effect: "+25% M.DEF e resist debuff party 12min",  cooldown: "30 min", desc: "Bênção de Eva." },
+      { name: "Trance",                        type: "Ativo",      rarity: "3★", effect: "Channeling: cura 8%/s por 10s",           cooldown: "45s",    desc: "Transe curativo." },
+      { name: "Dark Side",                     type: "Toggle",     rarity: "3★", effect: "Troca: -60% Heal, +80% M.ATK holy",       cooldown: "N/A",    desc: "LADO SOMBRIO — transforma healer em DPS." },
+      { name: "Holy Burst",                    type: "Ativo",      rarity: "3★", effect: "Dano holy AoE 400% (Dark Side only)",     cooldown: "20s",    desc: "Explosão sagrada (apenas Dark Side)." },
+      { name: "Divine Nova",                   type: "Ativo",      rarity: "3★", effect: "Dano holy AoE 450% + blind 5s",           cooldown: "25s",    desc: "Nova divina (Dark Side amplifica)." },
+      { name: "Transcendent Holy Strike",      type: "Ativo",      rarity: "4★", effect: "Dano holy 750% + stun 5s",                cooldown: "180s",   desc: "Golpe sagrado transcendente." },
+      { name: "Cardinal's Harmony",            type: "Self-Buff",  rarity: "4★", effect: "+55% Heal, +40% M.ATK, +30% M.DEF 30min",cooldown: "90 min", desc: "Harmonia do cardeal." },
+      { name: "Master of Healing",             type: "Passivo",    rarity: "3★", effect: "+15% Heal Power, +5% PvE",               cooldown: "N/A",    desc: "Mestre da cura." },
+      { name: "Cardinal Spirit",               type: "Passivo",    rarity: "3★", effect: "+12% holy magic ATK",                     cooldown: "N/A",    desc: "Espírito do cardeal." },
+      { name: "Body of the Cardinal",          type: "Passivo",    rarity: "3★", effect: "+12% Max MP, +10% M.DEF",                cooldown: "N/A",    desc: "Corpo sagrado." }
+    ]
+  },
+
+  // ─── PROPHET (2ª classe — BUFFER) ───
+  prophet: {
+    name: 'Prophet', parent: 'cleric', stage: 2,
+    desc: 'Profeta, mestre dos buffs. Skills anteriores permanecem.',
+    base: { atk: 12, def: 25, hp: 280, mp: 200, eva: 4, crit: 4, matk: 42, mdef: 52 },
+    skills: [
+      { name: "Haste",              type: "Self-Buff",  rarity: "2★", effect: "+30% ATK Speed por 20 min",            cooldown: "50 min", desc: "Aceleração." },
+      { name: "Berserker Spirit",    type: "Self-Buff",  rarity: "2★", effect: "+20% ATK, +20% M.ATK, -10% DEF 20min",cooldown: "50 min", desc: "Espírito berserker." },
+      { name: "Vampiric Rage",      type: "Self-Buff",  rarity: "2★", effect: "+10% lifesteal por 20 min",            cooldown: "50 min", desc: "Fúria vampírica." },
+      { name: "Empower",            type: "Self-Buff",  rarity: "2★", effect: "+25% M.ATK por 20 min",                cooldown: "50 min", desc: "Empoderamento mágico." },
+      { name: "Acumen",             type: "Self-Buff",  rarity: "2★", effect: "+25% Cast Speed por 20 min",           cooldown: "50 min", desc: "Acuidade mágica." },
+      { name: "Concentration",      type: "Self-Buff",  rarity: "2★", effect: "+20% M.DEF por 20 min",                cooldown: "50 min", desc: "Concentração mágica." },
+      { name: "Death Whisper",      type: "Self-Buff",  rarity: "2★", effect: "+20% Crit Damage por 20 min",          cooldown: "50 min", desc: "Sussurro da morte." },
+      { name: "Guidance",           type: "Self-Buff",  rarity: "2★", effect: "+15% Accuracy por 20 min",             cooldown: "50 min", desc: "Guia divina." },
+      { name: "Focus",              type: "Self-Buff",  rarity: "2★", effect: "+15% Crit Rate por 20 min",            cooldown: "50 min", desc: "Foco bélico." },
+      { name: "Bless Shield",       type: "Self-Buff",  rarity: "2★", effect: "+25% Block Rate por 20 min",           cooldown: "50 min", desc: "Escudo abençoado." },
+      { name: "Resist Fire",        type: "Self-Buff",  rarity: "2★", effect: "+20% Fire Resist por 20 min",          cooldown: "50 min", desc: "Resistência ao fogo." },
+      { name: "Resist Water",       type: "Self-Buff",  rarity: "2★", effect: "+20% Water Resist por 20 min",         cooldown: "50 min", desc: "Resistência à água." },
+      { name: "Resist Wind",        type: "Self-Buff",  rarity: "2★", effect: "+20% Wind Resist por 20 min",          cooldown: "50 min", desc: "Resistência ao vento." },
+      { name: "Holy Strike",        type: "Ativo",      rarity: "2★", effect: "Dano holy 280%",                       cooldown: "14s",    desc: "Golpe sagrado." },
+      { name: "Prophet's Harmony",  type: "Self-Buff",  rarity: "3★", effect: "+30% ATK, +25% M.ATK, +20% DEF 25min", cooldown: "60 min", desc: "Harmonia do profeta." }
+    ]
+  },
+
+  // ─── HIEROPHANT (3ª classe — MEGA BUFFER + DPS) ───
+  hierophant: {
+    name: 'Hierophant', parent: 'prophet', stage: 3,
+    desc: 'Hierofante, profeta supremo com profecias e dano. Skills anteriores permanecem.',
+    base: { atk: 15, def: 38, hp: 420, mp: 380, eva: 5, crit: 5, matk: 82, mdef: 82 },
+    skills: [
+      { name: "Prophecy of Fire",             type: "Party-Buff", rarity: "3★", effect: "+30% ATK, +15% Crit party 12 min",        cooldown: "30 min", desc: "Profecia do fogo." },
+      { name: "Prophecy of Wind",             type: "Party-Buff", rarity: "3★", effect: "+25% Speed, +20% EVA party 12 min",       cooldown: "30 min", desc: "Profecia do vento." },
+      { name: "Prophecy of Water",            type: "Party-Buff", rarity: "3★", effect: "+30% M.ATK, +20% M.DEF party 12 min",     cooldown: "30 min", desc: "Profecia da água." },
+      { name: "Mass Prophecy",                type: "Party-Buff", rarity: "4★", effect: "Todas profecias de uma vez 8 min",        cooldown: "60 min", desc: "Profecia em massa." },
+      { name: "Holy Punishment",              type: "Ativo",      rarity: "3★", effect: "Dano holy 400% + silence 5s",              cooldown: "22s",    desc: "Punição sagrada." },
+      { name: "Mystic Immunity",              type: "Ativo",      rarity: "4★", effect: "Imune a magia 8s, não pode atacar",        cooldown: "180s",   desc: "Imunidade mística." },
+      { name: "Blessing of Nobility",         type: "Party-Buff", rarity: "3★", effect: "+15% all stats party 10 min",             cooldown: "30 min", desc: "Bênção da nobreza." },
+      { name: "Transcendent Holy Burst",      type: "Ativo",      rarity: "4★", effect: "Dano holy AoE 650% + stun 4s + purge",    cooldown: "180s",   desc: "Explosão sagrada transcendente." },
+      { name: "Hierophant's Harmony",         type: "Self-Buff",  rarity: "4★", effect: "+50% ATK, +45% M.ATK, +35% DEF 30min",    cooldown: "90 min", desc: "Harmonia do hierofante." },
+      { name: "Master of Prophecy",           type: "Passivo",    rarity: "3★", effect: "+15% buff duration, +5% PvE",             cooldown: "N/A",    desc: "Mestre das profecias." },
+      { name: "Hierophant Spirit",            type: "Passivo",    rarity: "3★", effect: "+12% holy ATK, +8% Heal",                  cooldown: "N/A",    desc: "Espírito do hierofante." },
+      { name: "Body of the Hierophant",       type: "Passivo",    rarity: "3★", effect: "+10% Max HP, +10% Max MP",                cooldown: "N/A",    desc: "Corpo do hierofante." }
+    ]
+  },
+
+    // ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+  //  ELF FIGHTER
+  // ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+
+  elfFighter: {
+    name: 'Elf Fighter', archetype: 'fighter', race: 'elf', stage: 0,
+    desc: 'Guerreiro élfico ágil.',
+    base: { atk: 10, def: 8, hp: 90, mp: 35, eva: 10, crit: 6, matk: 0, mdef: 6 },
+    skills: [
+      { name: "Power Strike",       type: "Ativo",    rarity: "1★", effect: "Dano físico 150%",               cooldown: "8s",     desc: "Golpe concentrado." },
+      { name: "Mortal Blow",         type: "Ativo",    rarity: "1★", effect: "Dano 170% + chance crit 20%",    cooldown: "10s",    desc: "Golpe mortal." },
+      { name: "Power Shot",          type: "Ativo",    rarity: "1★", effect: "Dano à distância 140%",          cooldown: "9s",     desc: "Disparo concentrado." },
+      { name: "Elven Spirit",        type: "Self-Buff",rarity: "1★", effect: "+10% EVA, +10% Speed por 15 min",cooldown: "30 min", desc: "Espírito élfico." },
+      { name: "HP Increase Lv1",     type: "Passivo",  rarity: "1★", effect: "+5% Max HP",                     cooldown: "N/A",    desc: "Constituição élfica." },
+      { name: "Light Armor Mastery", type: "Passivo",  rarity: "1★", effect: "+8% DEF com armadura leve",      cooldown: "N/A",    desc: "Maestria em armaduras leves." }
+    ]
+  },
+
+  // ─── ELVEN KNIGHT (1ª classe) ───
+  elvenKnight: {
+    name: 'Elven Knight', parent: 'elfFighter', race: 'elf', archetype: 'tank', stage: 1,
+    desc: 'Cavaleiro élfico com escudo. Skills anteriores permanecem.',
+    base: { atk: 16, def: 30, hp: 230, mp: 55, eva: 8, crit: 4, mdef: 18 },
+    skills: [
+      { name: "Shield Strike",         type: "Ativo",    rarity: "1★", effect: "Dano 160% + taunt 5s",         cooldown: "10s",    desc: "Golpe de escudo." },
+      { name: "Hate",                  type: "Ativo",    rarity: "1★", effect: "Taunt + aggro forte",          cooldown: "8s",     desc: "Gera ódio." },
+      { name: "Power Break",           type: "Ativo",    rarity: "1★", effect: "Dano 150% + -20% ATK 8s",      cooldown: "14s",    desc: "Quebra de poder." },
+      { name: "Heavy Armor Mastery",   type: "Passivo",  rarity: "1★", effect: "+15% DEF armadura pesada",     cooldown: "N/A",    desc: "Maestria pesada." },
+      { name: "Shield Mastery",        type: "Passivo",  rarity: "1★", effect: "+15% Block Rate",              cooldown: "N/A",    desc: "Maestria em escudos." },
+      { name: "Sword/Blunt Mastery",   type: "Passivo",  rarity: "1★", effect: "+10% ATK espada/blunt",        cooldown: "N/A",    desc: "Maestria em espadas." },
+      { name: "HP Increase Lv2",       type: "Passivo",  rarity: "1★", effect: "+10% Max HP",                  cooldown: "N/A",    desc: "Constituição reforçada." },
+      { name: "Deflect Arrow",         type: "Passivo",  rarity: "1★", effect: "+10% desviar projéteis",       cooldown: "N/A",    desc: "Desvio de projéteis." }
+    ]
+  },
+
+  // ─── TEMPLE KNIGHT (2ª classe) ───
+  templeKnight: {
+    name: 'Temple Knight', parent: 'elvenKnight', stage: 2,
+    desc: 'Cavaleiro do templo de Eva. Skills anteriores permanecem.',
+    base: { atk: 35, def: 62, hp: 500, mp: 100, eva: 8, crit: 5, mdef: 40 },
+    skills: [
+      { name: "Shield Stun",           type: "Ativo",    rarity: "2★", effect: "Dano 200% + stun 3s",           cooldown: "18s",    desc: "Escudada atordoante." },
+      { name: "Tribunal",              type: "Ativo",    rarity: "2★", effect: "Dano 240% + -20% DEF 10s",      cooldown: "20s",    desc: "Julgamento do templo." },
+      { name: "Eva's Will",            type: "Ativo",    rarity: "3★", effect: "+30% water resist + cura 15% HP",cooldown: "45s",   desc: "Vontade de Eva." },
+      { name: "Sacrifice",             type: "Ativo",    rarity: "2★", effect: "Cura aliado 30% (gasta 10%)",    cooldown: "25s",    desc: "Sacrifício pelo aliado." },
+      { name: "Aegis",                 type: "Ativo",    rarity: "2★", effect: "+60% Block Rate por 15s",        cooldown: "45s",    desc: "Aegis defensivo." },
+      { name: "Holy Blade",            type: "Ativo",    rarity: "2★", effect: "Dano sagrado 250%",              cooldown: "16s",    desc: "Lâmina sagrada." },
+      { name: "Ultimate Defense",      type: "Ativo",    rarity: "3★", effect: "+80% DEF, -50% ATK por 15s",     cooldown: "120s",   desc: "Defesa absoluta." },
+      { name: "Provoke",               type: "Ativo",    rarity: "1★", effect: "Taunt + aggro",                  cooldown: "8s",     desc: "Provocação." },
+      { name: "Summon Life Cubic",     type: "Ativo",    rarity: "2★", effect: "Cubic que cura 5%/5s",           cooldown: "45s",    desc: "Cubic vital." },
+      { name: "Summon Storm Cubic",    type: "Ativo",    rarity: "2★", effect: "Cubic de dano lightning",        cooldown: "45s",    desc: "Cubic de tempestade." },
+      { name: "TK's Harmony",          type: "Self-Buff",rarity: "3★", effect: "+35% DEF, +25% HP, +15% EVA 25min",cooldown: "60 min",desc: "Harmonia do cavaleiro do templo." },
+      { name: "Boost HP",              type: "Passivo",  rarity: "2★", effect: "+15% Max HP",                    cooldown: "N/A",    desc: "HP reforçado." },
+      { name: "Resist Aqua",           type: "Passivo",  rarity: "1★", effect: "+10% Water Resist",              cooldown: "N/A",    desc: "Resistência aquática." }
+    ]
+  },
+
+  // ─── EVA'S TEMPLAR (3ª classe) ───
+  evaTemplar: {
+    name: "Eva's Templar", parent: 'templeKnight', stage: 3,
+    desc: 'Templário de Eva, tank divino aquático. Skills anteriores permanecem.',
+    base: { atk: 68, def: 100, hp: 820, mp: 145, eva: 10, crit: 6, mdef: 65 },
+    skills: [
+      { name: "Touch of Eva",                  type: "Ativo",    rarity: "3★", effect: "Cura AoE 25% HP party + cleanse 1 debuff", cooldown: "35s",    desc: "Toque de Eva." },
+      { name: "Shield of Eva",                 type: "Ativo",    rarity: "3★", effect: "Absorve 5000 dano por 15s",               cooldown: "90s",    desc: "Escudo de Eva." },
+      { name: "Celestial Shield",              type: "Ativo",    rarity: "4★", effect: "Party imune a dano por 5s",               cooldown: "300s",   desc: "Escudo celestial." },
+      { name: "Aqua Strike",                   type: "Ativo",    rarity: "3★", effect: "Dano water 380% + slow 40% 6s",           cooldown: "22s",    desc: "Golpe aquático." },
+      { name: "Summon Guardian Agathion",       type: "Ativo",    rarity: "3★", effect: "Invoca agathion protetor (+15% DEF)",     cooldown: "120s",   desc: "Agathion guardião." },
+      { name: "Transcendent Shield Charge",    type: "Ativo",    rarity: "4★", effect: "Rush + 480% dano + AoE taunt 10s",        cooldown: "160s",   desc: "Investida transcendente." },
+      { name: "Eva's Templar Harmony",         type: "Self-Buff",rarity: "4★", effect: "+55% DEF, +40% HP, +25% M.DEF 30min",     cooldown: "90 min", desc: "Harmonia suprema." },
+      { name: "Master of Combat",              type: "Passivo",  rarity: "3★", effect: "+10% ATK, +15% aggro, +5% PvE",           cooldown: "N/A",    desc: "Mestre do combate." },
+      { name: "Eva's Templar Spirit",          type: "Passivo",  rarity: "3★", effect: "+15% water ATK, +10% Block",              cooldown: "N/A",    desc: "Espírito do templário." },
+      { name: "Body of Eva's Templar",         type: "Passivo",  rarity: "3★", effect: "+15% Max HP, +10% DEF",                  cooldown: "N/A",    desc: "Corpo do templário." },
+      { name: "Protection of Eva",             type: "Passivo",  rarity: "3★", effect: "+15% water resist",                       cooldown: "N/A",    desc: "Proteção de Eva." },
+      { name: "Eva's Help",                    type: "Passivo",  rarity: "3★", effect: "10% chance ao ser atacado: cura 5% HP",   cooldown: "N/A",    desc: "Ajuda de Eva (trigger)." }
+    ]
+  },
+
+  // ─── SWORD SINGER (2ª classe — BARD) ───
+  swordSinger: {
+    name: 'Sword Singer', parent: 'elvenKnight', stage: 2,
+    desc: 'Bardo élfico com canções de buff. Skills anteriores permanecem.',
+    base: { atk: 38, def: 45, hp: 400, mp: 120, eva: 10, crit: 8, mdef: 35 },
+    skills: [
+      { name: "Song of Earth",         type: "Self-Buff", rarity: "2★", effect: "+20% DEF por 20 min",            cooldown: "50 min", desc: "Canção da terra." },
+      { name: "Song of Life",          type: "Self-Buff", rarity: "2★", effect: "+15% HP Regen por 20 min",       cooldown: "50 min", desc: "Canção da vida." },
+      { name: "Song of Water",         type: "Self-Buff", rarity: "2★", effect: "+20% Water Resist por 20 min",   cooldown: "50 min", desc: "Canção da água." },
+      { name: "Song of Warding",       type: "Self-Buff", rarity: "2★", effect: "+20% M.DEF por 20 min",          cooldown: "50 min", desc: "Canção de proteção." },
+      { name: "Song of Wind",          type: "Self-Buff", rarity: "2★", effect: "+20% ATK Speed por 20 min",      cooldown: "50 min", desc: "Canção do vento." },
+      { name: "Song of Hunter",        type: "Self-Buff", rarity: "2★", effect: "+15% Crit Rate por 20 min",      cooldown: "50 min", desc: "Canção do caçador." },
+      { name: "Song of Invocation",    type: "Self-Buff", rarity: "2★", effect: "+15% MP Regen por 20 min",       cooldown: "50 min", desc: "Canção da invocação." },
+      { name: "Song of Vitality",      type: "Self-Buff", rarity: "2★", effect: "+15% Max HP por 20 min",         cooldown: "50 min", desc: "Canção da vitalidade." },
+      { name: "Song of Vengeance",     type: "Self-Buff", rarity: "2★", effect: "+8% reflect damage por 20 min",  cooldown: "50 min", desc: "Canção da vingança." },
+      { name: "Song of Flame Guard",   type: "Self-Buff", rarity: "2★", effect: "+20% Fire Resist por 20 min",    cooldown: "50 min", desc: "Canção da chama." },
+      { name: "Song of Champion",      type: "Self-Buff", rarity: "3★", effect: "+20% ATK por 20 min",            cooldown: "50 min", desc: "Canção do campeão." },
+      { name: "Song of Renewal",       type: "Self-Buff", rarity: "3★", effect: "+10% HP+MP Regen por 20 min",    cooldown: "50 min", desc: "Canção da renovação." },
+      { name: "SS's Harmony",          type: "Self-Buff", rarity: "3★", effect: "+30% ATK, +20% DEF, +15% Speed 25min",cooldown: "60 min",desc: "Harmonia do bardo." },
+      { name: "Heavy Armor Mastery",   type: "Passivo",  rarity: "1★", effect: "+12% DEF armadura pesada",        cooldown: "N/A",    desc: "Maestria pesada." },
+      { name: "Boost HP",              type: "Passivo",  rarity: "1★", effect: "+12% Max HP",                     cooldown: "N/A",    desc: "HP reforçado." }
+    ]
+  },
+
+  // ─── SWORD MUSE (3ª classe — MEGA BARD + DPS) ───
+  swordMuse: {
+    name: 'Sword Muse', parent: 'swordSinger', stage: 3,
+    desc: 'Musa da espada, bardo supremo com DPS. Skills anteriores permanecem.',
+    base: { atk: 72, def: 58, hp: 580, mp: 160, eva: 14, crit: 12, mdef: 48 },
+    skills: [
+      { name: "Song of Purification",    type: "Self-Buff", rarity: "3★", effect: "+25% Debuff Resist por 20 min",     cooldown: "50 min", desc: "Canção de purificação." },
+      { name: "Song of Elemental",       type: "Self-Buff", rarity: "3★", effect: "+20% all elemental ATK por 20 min", cooldown: "50 min", desc: "Canção elemental." },
+      { name: "Song of Storm Guard",     type: "Self-Buff", rarity: "3★", effect: "+20% Wind Resist por 20 min",       cooldown: "50 min", desc: "Canção da tempestade." },
+      { name: "Mass Song",               type: "Party-Buff",rarity: "3★", effect: "Aplica todas Songs na party 8 min", cooldown: "60 min", desc: "Canção em massa." },
+      { name: "Final Song",              type: "Ativo",     rarity: "4★", effect: "Party +50% all stats por 20s",       cooldown: "300s",   desc: "Canção final — buff supremo." },
+      { name: "Sonic Slash",             type: "Ativo",     rarity: "3★", effect: "Dano 380% + AoE 5 alvos",           cooldown: "20s",    desc: "Corte sônico." },
+      { name: "Melody Strike",           type: "Ativo",     rarity: "3★", effect: "Dano 350% + stun 2s",               cooldown: "18s",    desc: "Golpe melódico." },
+      { name: "Transcendent Melody",     type: "Ativo",     rarity: "4★", effect: "Dano AoE 550% + all songs refreshed",cooldown: "180s",  desc: "Melodia transcendente." },
+      { name: "Sword Muse Harmony",      type: "Self-Buff", rarity: "4★", effect: "+50% ATK, +40% DEF, +30% Song Power 30min",cooldown: "90 min",desc: "Harmonia da musa." },
+      { name: "Sword Muse Spirit",       type: "Passivo",   rarity: "3★", effect: "+15% Song effectiveness",           cooldown: "N/A",    desc: "Espírito da musa." },
+      { name: "Body of Sword Muse",      type: "Passivo",   rarity: "3★", effect: "+10% Max HP, +10% Max MP",         cooldown: "N/A",    desc: "Corpo da musa." }
+    ]
+  },
+
+  // ─── SCOUT (1ª classe — Elf) ───
+  elfScout: {
+    name: 'Scout', parent: 'elfFighter', race: 'elf', archetype: 'fighter', stage: 1,
+    desc: 'Batedor élfico, dagger e bow. Skills anteriores permanecem.',
+    base: { atk: 20, def: 10, hp: 140, mp: 40, eva: 18, crit: 12, mdef: 8 },
+    skills: [
+      { name: "Double Shot",          type: "Ativo",    rarity: "1★", effect: "2 disparos, dano total 200%",   cooldown: "10s",    desc: "Duplo disparo." },
+      { name: "Backstab",             type: "Ativo",    rarity: "2★", effect: "Dano 250% por trás + crit",     cooldown: "14s",    desc: "Punhalada nas costas." },
+      { name: "Dash",                 type: "Ativo",    rarity: "1★", effect: "+50% Speed por 8s",             cooldown: "20s",    desc: "Corrida rápida." },
+      { name: "Light Armor Mastery",  type: "Passivo",  rarity: "1★", effect: "+12% EVA com armadura leve",    cooldown: "N/A",    desc: "Maestria leve." },
+      { name: "Dagger Mastery",       type: "Passivo",  rarity: "1★", effect: "+12% ATK com dagger",           cooldown: "N/A",    desc: "Maestria em adagas." },
+      { name: "Bow Mastery",          type: "Passivo",  rarity: "1★", effect: "+12% ATK com arco",             cooldown: "N/A",    desc: "Maestria em arcos." },
+      { name: "Critical Chance",      type: "Passivo",  rarity: "1★", effect: "+8% Crit Rate",                 cooldown: "N/A",    desc: "Senso crítico." }
+    ]
+  },
+
+  // ─── PLAINS WALKER (2ª classe — dagger) ───
+  plainsWalker: {
+    name: 'Plains Walker', parent: 'elfScout', stage: 2,
+    desc: 'Caminhante das planícies, dagger stealth. Skills anteriores permanecem.',
+    base: { atk: 52, def: 18, hp: 290, mp: 60, eva: 30, crit: 26, mdef: 14 },
+    skills: [
+      { name: "Deadly Blow",       type: "Ativo",    rarity: "2★", effect: "Dano 280% + crit garantido",       cooldown: "14s",    desc: "Golpe mortal." },
+      { name: "Lethal Blow",       type: "Ativo",    rarity: "3★", effect: "Dano 350% + chance kill 5%",       cooldown: "22s",    desc: "Golpe letal." },
+      { name: "Sand Bomb",         type: "Ativo",    rarity: "2★", effect: "AoE blind 5s + dano 150%",         cooldown: "20s",    desc: "Bomba de areia." },
+      { name: "Blinding Blow",     type: "Ativo",    rarity: "2★", effect: "Dano 240% + blind 4s",             cooldown: "18s",    desc: "Golpe cegante." },
+      { name: "Shadow Step",       type: "Ativo",    rarity: "2★", effect: "Teleporta atrás do alvo",          cooldown: "15s",    desc: "Passo sombrio." },
+      { name: "Switch",            type: "Ativo",    rarity: "2★", effect: "Troca posição com alvo",           cooldown: "25s",    desc: "Troca de posição." },
+      { name: "Fake Death",        type: "Ativo",    rarity: "2★", effect: "Finge morte, perde aggro",         cooldown: "60s",    desc: "Morte falsa." },
+      { name: "Trick",             type: "Ativo",    rarity: "2★", effect: "Remove alvo do inimigo",           cooldown: "20s",    desc: "Truque evasivo." },
+      { name: "PW's Harmony",      type: "Self-Buff",rarity: "3★", effect: "+35% Crit, +25% EVA, +20% ATK 25min",cooldown: "60 min",desc: "Harmonia do caminhante." },
+      { name: "Evasion",           type: "Passivo",  rarity: "2★", effect: "+12% EVA",                         cooldown: "N/A",    desc: "Evasão aprimorada." },
+      { name: "Critical Power",    type: "Passivo",  rarity: "2★", effect: "+18% Crit Damage",                 cooldown: "N/A",    desc: "Poder crítico." },
+      { name: "Focus",             type: "Passivo",  rarity: "1★", effect: "+10% Crit Rate",                   cooldown: "N/A",    desc: "Concentração." }
+    ]
+  },
+
+  // ─── WIND RIDER (3ª classe) ───
+  windRider: {
+    name: 'Wind Rider', parent: 'plainsWalker', stage: 3,
+    desc: 'Cavaleiro do vento, dagger supremo. Skills anteriores permanecem.',
+    base: { atk: 95, def: 30, hp: 480, mp: 85, eva: 55, crit: 44, mdef: 20 },
+    skills: [
+      { name: "Wind Riding",                type: "Ativo",    rarity: "3★", effect: "+80% Speed + invisível 10s",         cooldown: "60s",    desc: "Cavalgando o vento." },
+      { name: "Exciting Adventure",          type: "Self-Buff",rarity: "3★", effect: "+45% EVA, +30% Crit, +20% ATK 20min",cooldown: "55 min",desc: "Aventura élfica." },
+      { name: "Lucky Strike",               type: "Ativo",    rarity: "3★", effect: "Dano 420% + chance loot 2x",         cooldown: "30s",    desc: "Golpe de sorte." },
+      { name: "Transcendent Deadly Blow",    type: "Ativo",    rarity: "4★", effect: "Dano 650% + ignora EVA + bleed 12s", cooldown: "150s",   desc: "Golpe mortal transcendente." },
+      { name: "Wind Rider Harmony",          type: "Self-Buff",rarity: "4★", effect: "+55% Crit, +45% EVA, +35% ATK 30min",cooldown: "90 min",desc: "Harmonia suprema." },
+      { name: "Master of Combat",            type: "Passivo",  rarity: "3★", effect: "+10% ATK, +10% Crit, +5% PvE",      cooldown: "N/A",    desc: "Mestre do combate." },
+      { name: "Shadow Sense",                type: "Passivo",  rarity: "3★", effect: "+15% EVA à noite/dungeon",           cooldown: "N/A",    desc: "Sentido das sombras." },
+      { name: "Wind Rider Spirit",           type: "Passivo",  rarity: "3★", effect: "+12% dagger ATK",                    cooldown: "N/A",    desc: "Espírito do cavaleiro do vento." },
+      { name: "Body of Wind Rider",          type: "Passivo",  rarity: "3★", effect: "+10% Max HP, +8% EVA",              cooldown: "N/A",    desc: "Corpo do vento." },
+      { name: "Final Frenzy",                type: "Passivo",  rarity: "3★", effect: "+25% ATK quando HP < 30%",           cooldown: "N/A",    desc: "Frenesi final." }
+    ]
+  },
+
+  // ─── SILVER RANGER (2ª classe — archer) ───
+  silverRanger: {
+    name: 'Silver Ranger', parent: 'elfScout', stage: 2,
+    desc: 'Arqueiro prateado élfico. Skills anteriores permanecem.',
+    base: { atk: 58, def: 16, hp: 270, mp: 60, eva: 22, crit: 24, mdef: 12 },
+    skills: [
+      { name: "Double Shot",       type: "Ativo",    rarity: "2★", effect: "2 disparos, dano total 260%",     cooldown: "10s",    desc: "Duplo disparo aprimorado." },
+      { name: "Burst Shot",        type: "Ativo",    rarity: "2★", effect: "Dano 280% + knockback",           cooldown: "14s",    desc: "Disparo explosivo." },
+      { name: "Stun Shot",         type: "Ativo",    rarity: "2★", effect: "Dano 220% + stun 3s",            cooldown: "18s",    desc: "Disparo atordoante." },
+      { name: "Arrow Rain",        type: "Ativo",    rarity: "3★", effect: "AoE 320% (8 alvos)",             cooldown: "22s",    desc: "Chuva de flechas." },
+      { name: "Rapid Fire",        type: "Ativo",    rarity: "2★", effect: "+50% ATK Speed arco 15s",        cooldown: "45s",    desc: "Disparo rápido." },
+      { name: "SR's Harmony",      type: "Self-Buff",rarity: "3★", effect: "+35% ATK, +25% Crit, +15% Range 25min",cooldown: "60 min",desc: "Harmonia do ranger." },
+      { name: "Bow Mastery",       type: "Passivo",  rarity: "2★", effect: "+18% ATK com arco",              cooldown: "N/A",    desc: "Maestria em arcos." },
+      { name: "Long Shot",         type: "Passivo",  rarity: "2★", effect: "+30% Range",                      cooldown: "N/A",    desc: "Longo alcance." },
+      { name: "Focus",             type: "Passivo",  rarity: "1★", effect: "+10% Crit Rate",                  cooldown: "N/A",    desc: "Concentração." },
+      { name: "Critical Power",    type: "Passivo",  rarity: "2★", effect: "+18% Crit Damage",                cooldown: "N/A",    desc: "Poder crítico." },
+      { name: "Evasion",           type: "Passivo",  rarity: "1★", effect: "+10% EVA",                        cooldown: "N/A",    desc: "Evasão." }
+    ]
+  },
+
+  // ─── MOONLIGHT SENTINEL (3ª classe) ───
+  moonlightSentinel: {
+    name: 'Moonlight Sentinel', parent: 'silverRanger', stage: 3,
+    desc: 'Sentinela do luar, arqueiro supremo élfico. Skills anteriores permanecem.',
+    base: { atk: 108, def: 24, hp: 450, mp: 95, eva: 38, crit: 46, mdef: 18 },
+    skills: [
+      { name: "Seven Arrow",                  type: "Ativo",    rarity: "3★", effect: "7 flechas, dano total 480%",               cooldown: "25s",    desc: "Sete flechas." },
+      { name: "Dead Eye",                     type: "Self-Buff",rarity: "3★", effect: "+50% ATK, +40% Range 20min",              cooldown: "55 min", desc: "Olho mortal." },
+      { name: "Pinpoint Shot",                type: "Ativo",    rarity: "3★", effect: "Dano 400% + ignora 50% DEF",              cooldown: "28s",    desc: "Tiro preciso." },
+      { name: "Triple Shot",                  type: "Ativo",    rarity: "3★", effect: "3 disparos, dano total 360%",              cooldown: "14s",    desc: "Tiro triplo." },
+      { name: "Thorn Shot",                   type: "Ativo",    rarity: "2★", effect: "Dano 260% + bleed 10s",                   cooldown: "12s",    desc: "Flecha de espinhos." },
+      { name: "Binding Shot",                 type: "Ativo",    rarity: "2★", effect: "Dano 220% + root 4s",                     cooldown: "18s",    desc: "Flecha aprisionadora." },
+      { name: "Incendiary Shot",              type: "Ativo",    rarity: "2★", effect: "Dano fogo 280% + burn 8s",                cooldown: "16s",    desc: "Flecha incendiária." },
+      { name: "Freezing Shot",                type: "Ativo",    rarity: "2★", effect: "Dano gelo 260% + slow 40% 6s",            cooldown: "16s",    desc: "Flecha congelante." },
+      { name: "Wind Shot",                    type: "Ativo",    rarity: "2★", effect: "Dano vento 270% + knockback",             cooldown: "16s",    desc: "Flecha do vento." },
+      { name: "Flame Arrow Rain",             type: "Ativo",    rarity: "3★", effect: "AoE fogo 380% (10 alvos) + burn",         cooldown: "28s",    desc: "Chuva de flechas flamejantes." },
+      { name: "Spiral Shot",                  type: "Ativo",    rarity: "3★", effect: "Dano 420% + penetra alvos",               cooldown: "24s",    desc: "Tiro espiral." },
+      { name: "Target Lock",                  type: "Ativo",    rarity: "3★", effect: "Marca alvo: +40% dano 12s",                cooldown: "30s",    desc: "Trava de mira." },
+      { name: "Transcendent Seven Arrow",     type: "Ativo",    rarity: "4★", effect: "Dano 700% + elemental + ignora DEF",      cooldown: "180s",   desc: "Sete flechas transcendentes." },
+      { name: "Moonlight Harmony",            type: "Self-Buff",rarity: "4★", effect: "+60% ATK, +50% Crit, +40% Range 30min",   cooldown: "90 min", desc: "Harmonia do luar." },
+      { name: "Master of Combat",             type: "Passivo",  rarity: "3★", effect: "+10% ATK, +10% Range, +5% PvE",          cooldown: "N/A",    desc: "Mestre do combate." },
+      { name: "Moonlight Sentinel Spirit",    type: "Passivo",  rarity: "3★", effect: "+15% Bow ATK",                            cooldown: "N/A",    desc: "Espírito do sentinela." },
+      { name: "Body of Moonlight Sentinel",   type: "Passivo",  rarity: "3★", effect: "+10% Max HP, +8% EVA",                   cooldown: "N/A",    desc: "Corpo do sentinela." }
+    ]
+  },
+
+  // ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+  //  ELF MAGE
+  // ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+
+  elfMage: {
+    name: 'Elf Mage', archetype: 'mage', race: 'elf', stage: 0,
+    desc: 'Mago élfico da natureza.',
+    base: { atk: 4, def: 5, hp: 65, mp: 85, eva: 8, crit: 3, matk: 14, mdef: 10 },
+    skills: [
+      { name: "Wind Strike",   type: "Ativo",    rarity: "1★", effect: "Dano vento 160%",             cooldown: "8s",     desc: "Rajada de vento." },
+      { name: "Ice Bolt",      type: "Ativo",    rarity: "1★", effect: "Dano gelo 155% + slow 15% 4s",cooldown: "8s",     desc: "Projétil de gelo." },
+      { name: "Self Heal",     type: "Ativo",    rarity: "1★", effect: "Cura 20% HP",                 cooldown: "25s",    desc: "Autocura." },
+      { name: "Sleep",         type: "Ativo",    rarity: "1★", effect: "Adormece alvo 8s",             cooldown: "30s",    desc: "Sono mágico." },
+      { name: "Robe Mastery",  type: "Passivo",  rarity: "1★", effect: "+10% M.DEF, +8% Cast Speed",   cooldown: "N/A",    desc: "Maestria em vestes." },
+      { name: "MP Increase",   type: "Passivo",  rarity: "1★", effect: "+8% Max MP",                   cooldown: "N/A",    desc: "Reserva mágica." }
+    ]
+  },
+
+  // ─── ELVEN WIZARD (1ª classe) ───
+  elvenWizard: {
+    name: 'Elven Wizard', parent: 'elfMage', race: 'elf', archetype: 'mage', stage: 1,
+    desc: 'Mago élfico elemental. Skills anteriores permanecem.',
+    base: { atk: 5, def: 7, hp: 95, mp: 135, eva: 6, crit: 4, matk: 33, mdef: 20 },
+    skills: [
+      { name: "Blaze",              type: "Ativo",    rarity: "1★", effect: "Dano fogo 210%",                 cooldown: "10s",    desc: "Chamas." },
+      { name: "Aqua Swirl",         type: "Ativo",    rarity: "1★", effect: "Dano água 200% + slow 20% 5s",   cooldown: "10s",    desc: "Turbilhão aquático." },
+      { name: "Twister",            type: "Ativo",    rarity: "1★", effect: "Dano vento 195%",                cooldown: "10s",    desc: "Tornado menor." },
+      { name: "Aura Burn",          type: "Ativo",    rarity: "2★", effect: "AoE fogo 180% ao redor",         cooldown: "14s",    desc: "Queimadura áurica." },
+      { name: "Life Drain",         type: "Ativo",    rarity: "2★", effect: "Dano 190% + drena 25% HP",       cooldown: "15s",    desc: "Dreno vital." },
+      { name: "Wizard's Harmony",   type: "Self-Buff",rarity: "2★", effect: "+25% M.ATK, +15% Cast Speed 20min",cooldown: "45 min",desc: "Harmonia do mago élfico." },
+      { name: "Boost Mana",         type: "Passivo",  rarity: "1★", effect: "+12% Max MP",                    cooldown: "N/A",    desc: "Reserva mágica." }
+    ]
+  },
+
+  // ─── SPELLSINGER (2ª classe — WATER/WIND) ───
+  spellsinger: {
+    name: 'Spellsinger', parent: 'elvenWizard', stage: 2,
+    desc: 'Cantor de magias, foco em água e vento. Skills anteriores permanecem.',
+    base: { atk: 7, def: 13, hp: 170, mp: 250, eva: 7, crit: 5, matk: 72, mdef: 42 },
+    skills: [
+      { name: "Hydro Blast",          type: "Ativo",    rarity: "2★", effect: "Dano água 300% + knockback",       cooldown: "15s",    desc: "Explosão hídrica." },
+      { name: "Hurricane",            type: "Ativo",    rarity: "2★", effect: "Dano vento 290%",                  cooldown: "16s",    desc: "Furacão." },
+      { name: "Blizzard",             type: "Ativo",    rarity: "3★", effect: "AoE gelo 340% + slow 30% 6s",      cooldown: "22s",    desc: "Nevasca." },
+      { name: "Tempest",              type: "Ativo",    rarity: "3★", effect: "AoE vento 350% (8 alvos)",         cooldown: "25s",    desc: "Tempestade." },
+      { name: "Solar Flare",          type: "Ativo",    rarity: "3★", effect: "Dano fogo 360% + blind 4s",        cooldown: "25s",    desc: "Explosão solar." },
+      { name: "Elemental Symphony",   type: "Ativo",    rarity: "3★", effect: "Dano multi-element 380%",          cooldown: "24s",    desc: "Sinfonia elemental." },
+      { name: "Arcane Power",         type: "Self-Buff",rarity: "3★", effect: "+40% M.ATK por 30s",               cooldown: "90s",    desc: "Poder arcano." },
+      { name: "Freezing Skin",        type: "Self-Buff",rarity: "2★", effect: "Atacantes recebem slow 20% 15s",   cooldown: "45s",    desc: "Pele congelante." },
+      { name: "Cancel",               type: "Ativo",    rarity: "3★", effect: "Remove 3 buffs do alvo",           cooldown: "40s",    desc: "Cancelamento." },
+      { name: "Body to Mind",         type: "Ativo",    rarity: "2★", effect: "Converte 15% HP em 30% MP",        cooldown: "30s",    desc: "Corpo em mente." },
+      { name: "SS's Harmony",         type: "Self-Buff",rarity: "3★", effect: "+35% M.ATK, +20% Cast Speed 25min",cooldown: "60 min", desc: "Harmonia do cantor." },
+      { name: "Elemental Assault",    type: "Passivo",  rarity: "2★", effect: "+12% elemental damage",            cooldown: "N/A",    desc: "Assalto elemental." }
+    ]
+  },
+
+  // ─── MYSTIC MUSE (3ª classe — FOCO WATER) ───
+  mysticMuse: {
+    name: 'Mystic Muse', parent: 'spellsinger', stage: 3,
+    desc: 'Musa mística, mestre da magia aquática. Skills anteriores permanecem. Foco: WATER.',
+    base: { atk: 9, def: 18, hp: 280, mp: 440, eva: 8, crit: 7, matk: 130, mdef: 68 },
+    skills: [
+      { name: "Aqua Splash",                  type: "Ativo",    rarity: "3★", effect: "Dano water 420% + AoE splash",             cooldown: "22s",    desc: "Respingo aquático massivo." },
+      { name: "Water Spiral",                  type: "Ativo",    rarity: "3★", effect: "Dano water 400% + penetra alvos",         cooldown: "20s",    desc: "Espiral de água perfurante." },
+      { name: "Aqua Explosion",                type: "Ativo",    rarity: "4★", effect: "Dano water AoE 680% + freeze 4s",         cooldown: "160s",   desc: "EXPLOSÃO AQUÁTICA — devastação total." },
+      { name: "Seed of Water",                 type: "Ativo",    rarity: "2★", effect: "Planta semente: explode 300% água após 5s",cooldown: "20s",   desc: "Semente de água." },
+      { name: "Elemental Burst",               type: "Ativo",    rarity: "3★", effect: "Explode Seeds: dano 500%",                cooldown: "18s",    desc: "Explosão elemental (combo Seeds)." },
+      { name: "Elemental Storm",               type: "Ativo",    rarity: "3★", effect: "AoE multi-element 440% (8 alvos)",        cooldown: "30s",    desc: "Tempestade elemental." },
+      { name: "Mystic Immunity",               type: "Ativo",    rarity: "4★", effect: "Imune a magia 8s",                        cooldown: "180s",   desc: "Imunidade mística." },
+      { name: "Empowering Echo",               type: "Ativo",    rarity: "3★", effect: "Próxima skill: +50% dano",                cooldown: "45s",    desc: "Eco potencializador." },
+      { name: "Transcendent Aqua Explosion",   type: "Ativo",    rarity: "4★", effect: "Dano water 850% + freeze 6s + AoE",       cooldown: "200s",   desc: "Explosão aquática transcendente." },
+      { name: "Mystic Muse Harmony",           type: "Self-Buff",rarity: "4★", effect: "+55% M.ATK, +35% Cast Speed, +20% MP 30min",cooldown: "90 min",desc: "Harmonia da musa." },
+      { name: "Master of Magic",               type: "Passivo",  rarity: "3★", effect: "+10% M.ATK, +10% water dmg, +5% PvE",    cooldown: "N/A",    desc: "Mestre da magia." },
+      { name: "Spell Mastery",                  type: "Passivo",  rarity: "3★", effect: "+12% M. Skill Power",                    cooldown: "N/A",    desc: "Maestria em feitiços." },
+      { name: "Magic Focus",                    type: "Passivo",  rarity: "3★", effect: "+8% M. Crit Rate",                       cooldown: "N/A",    desc: "Foco mágico." },
+      { name: "Mystic Muse Spirit",            type: "Passivo",  rarity: "3★", effect: "+15% water magic ATK",                    cooldown: "N/A",    desc: "Espírito da musa." },
+      { name: "Body of the Mystic Muse",       type: "Passivo",  rarity: "3★", effect: "+10% Max MP, +8% M.DEF",                 cooldown: "N/A",    desc: "Corpo da musa." }
+    ]
+  },
+
+  // ─── ELEMENTAL SUMMONER → ELEMENTAL MASTER ───
+  elementalSummoner: {
+    name: 'Elemental Summoner', parent: 'elvenWizard', stage: 2,
+    desc: 'Invocador elemental élfico. Skills anteriores permanecem. Foco: SUMMON.',
+    base: { atk: 6, def: 14, hp: 185, mp: 245, eva: 6, crit: 4, matk: 60, mdef: 40 },
+    skills: [
+      { name: "Summon Unicorn Boxer",   type: "Ativo",    rarity: "2★", effect: "Invoca unicórnio fighter (ATK 50%)",  cooldown: "60s",    desc: "Unicórnio lutador." },
+      { name: "Summon Unicorn Mirage",  type: "Ativo",    rarity: "2★", effect: "Invoca unicórnio mago (M.ATK 50%)",  cooldown: "60s",    desc: "Unicórnio ilusório." },
+      { name: "Summon Unicorn Merrow",  type: "Ativo",    rarity: "3★", effect: "Invoca merrow (ATK 65%, tank)",      cooldown: "90s",    desc: "Merrow aquático." },
+      { name: "Servitor Heal",          type: "Ativo",    rarity: "2★", effect: "Cura summon 35% HP",                 cooldown: "12s",    desc: "Cura do servitor." },
+      { name: "Servitor Recharge",      type: "Ativo",    rarity: "2★", effect: "Restaura 30% MP do summon",          cooldown: "15s",    desc: "Recarga do servitor." },
+      { name: "Transfer Pain",          type: "Toggle",   rarity: "2★", effect: "50% dano recebido vai pro summon",   cooldown: "N/A",    desc: "Transferência de dor." },
+      { name: "Summon Life Cubic",      type: "Ativo",    rarity: "2★", effect: "Cubic que cura 5%/5s",               cooldown: "45s",    desc: "Cubic vital." },
+      { name: "ES's Harmony",           type: "Self-Buff",rarity: "3★", effect: "+30% M.ATK, +25% Summon ATK 25min",  cooldown: "60 min", desc: "Harmonia do invocador." },
+      { name: "Servitor Physical ATK",  type: "Passivo",  rarity: "2★", effect: "+15% Summon ATK",                    cooldown: "N/A",    desc: "Poder do servitor." }
+    ]
+  },
+
+  elementalMaster: {
+    name: 'Elemental Master', parent: 'elementalSummoner', stage: 3,
+    desc: 'Mestre elemental, invocador supremo élfico. Skills anteriores permanecem.',
+    base: { atk: 9, def: 20, hp: 300, mp: 420, eva: 7, crit: 5, matk: 115, mdef: 62 },
+    skills: [
+      { name: "Summon Feline Queen",            type: "Ativo",    rarity: "4★", effect: "Invoca Rainha Felina (ATK 90% do dono)",    cooldown: "120s",   desc: "Rainha felina — summon supremo." },
+      { name: "Summon Seraphim",                type: "Ativo",    rarity: "3★", effect: "Invoca Serafim (cura+suporte 60%)",        cooldown: "90s",    desc: "Serafim celestial." },
+      { name: "Servitor Barrier",               type: "Ativo",    rarity: "3★", effect: "Summon ganha escudo 5000 HP 15s",          cooldown: "60s",    desc: "Barreira do servitor." },
+      { name: "Mass Servitor Heal",             type: "Ativo",    rarity: "3★", effect: "Cura todos summons 40% HP",               cooldown: "25s",    desc: "Cura em massa." },
+      { name: "Final Servitor",                 type: "Ativo",    rarity: "4★", effect: "Summon sacrifica: AoE 600% + cura 50%",    cooldown: "180s",   desc: "Sacrifício final." },
+      { name: "Transcendent Summon Burst",      type: "Ativo",    rarity: "4★", effect: "Todos summons atacam: 800% total",        cooldown: "200s",   desc: "Explosão de invocações." },
+      { name: "Elemental Master Harmony",       type: "Self-Buff",rarity: "4★", effect: "+50% M.ATK, +60% Summon Power 30min",     cooldown: "90 min", desc: "Harmonia suprema." },
+      { name: "Unicorn's Friendship",           type: "Passivo",  rarity: "3★", effect: "+20% Summon ATK/DEF",                     cooldown: "N/A",    desc: "Amizade dos unicórnios." },
+      { name: "Elemental Concentration",        type: "Passivo",  rarity: "3★", effect: "+10% M.ATK, +10% Summon HP",              cooldown: "N/A",    desc: "Concentração elemental." },
+      { name: "Elemental Master Spirit",        type: "Passivo",  rarity: "3★", effect: "+12% M.ATK, +8% Summon Speed",            cooldown: "N/A",    desc: "Espírito do mestre elemental." },
+      { name: "Body of the Elemental Master",   type: "Passivo",  rarity: "3★", effect: "+10% Max MP, +8% Max HP",                cooldown: "N/A",    desc: "Corpo do mestre." }
+    ]
+  },
+
+  // ─── ORACLE → ELDER → EVA'S SAINT ───
+  elfOracle: {
+    name: 'Oracle', parent: 'elfMage', race: 'elf', archetype: 'healer', stage: 1,
+    desc: 'Oráculo élfico curador. Skills anteriores permanecem.',
+    base: { atk: 6, def: 12, hp: 110, mp: 115, eva: 5, crit: 3, matk: 20, mdef: 25 },
+    skills: [
+      { name: "Heal",          type: "Ativo",      rarity: "1★", effect: "Cura 25% HP alvo",              cooldown: "8s",     desc: "Cura básica." },
+      { name: "Battle Heal",   type: "Ativo",      rarity: "1★", effect: "Cura 20% HP + remove 1 debuff", cooldown: "10s",    desc: "Cura de combate." },
+      { name: "Might",         type: "Party-Buff", rarity: "1★", effect: "+15% ATK party 10 min",         cooldown: "25 min", desc: "Bênção de força." },
+      { name: "Shield (Buff)", type: "Party-Buff", rarity: "1★", effect: "+15% DEF party 10 min",         cooldown: "25 min", desc: "Bênção de proteção." },
+      { name: "Cure Poison",   type: "Ativo",      rarity: "1★", effect: "Remove poison",                 cooldown: "5s",     desc: "Cura veneno." },
+      { name: "Cure Bleed",    type: "Ativo",      rarity: "1★", effect: "Remove bleed",                  cooldown: "5s",     desc: "Estanca sangramento." },
+      { name: "Recharge",      type: "Ativo",      rarity: "1★", effect: "Restaura 20% MP alvo",          cooldown: "12s",    desc: "Recarga de mana." }
+    ]
+  },
+
+  elfElder: {
+    name: 'Elder', parent: 'elfOracle', stage: 2,
+    desc: 'Ancião élfico, curador e buffer. Skills anteriores permanecem.',
+    base: { atk: 8, def: 25, hp: 240, mp: 210, eva: 5, crit: 3, matk: 45, mdef: 55 },
+    skills: [
+      { name: "Greater Heal",       type: "Ativo",      rarity: "2★", effect: "Cura 40% HP alvo",                    cooldown: "10s",    desc: "Cura avançada." },
+      { name: "Greater Group Heal", type: "Ativo",      rarity: "3★", effect: "Cura 30% HP party",                   cooldown: "18s",    desc: "Cura em grupo." },
+      { name: "Resurrection",       type: "Ativo",      rarity: "3★", effect: "Ressuscita aliado 30% HP",            cooldown: "120s",   desc: "Ressurreição." },
+      { name: "Purify",             type: "Ativo",      rarity: "2★", effect: "Remove 3 debuffs",                    cooldown: "20s",    desc: "Purificação." },
+      { name: "Cleanse",            type: "Ativo",      rarity: "3★", effect: "Remove TODOS debuffs",                cooldown: "45s",    desc: "Limpeza total." },
+      { name: "Empower",            type: "Self-Buff",  rarity: "2★", effect: "+25% M.ATK por 20 min",               cooldown: "50 min", desc: "Empoderamento." },
+      { name: "Acumen",             type: "Self-Buff",  rarity: "2★", effect: "+25% Cast Speed por 20 min",          cooldown: "50 min", desc: "Acuidade." },
+      { name: "Haste",              type: "Self-Buff",  rarity: "2★", effect: "+30% ATK Speed por 20 min",           cooldown: "50 min", desc: "Aceleração." },
+      { name: "Clarity",            type: "Self-Buff",  rarity: "2★", effect: "+20% MP Regen por 20 min",            cooldown: "50 min", desc: "Clareza mágica." },
+      { name: "Prophecy of Water",  type: "Party-Buff", rarity: "3★", effect: "+30% M.ATK, +20% M.DEF party 12min",  cooldown: "30 min", desc: "Profecia da água." },
+      { name: "Mental Shield",      type: "Party-Buff", rarity: "2★", effect: "+20% M.DEF party 12 min",            cooldown: "30 min", desc: "Escudo mental." },
+      { name: "Elder's Harmony",    type: "Self-Buff",  rarity: "3★", effect: "+35% Heal, +25% M.ATK 25min",        cooldown: "60 min", desc: "Harmonia do ancião." },
+      { name: "Resist Aqua",        type: "Passivo",    rarity: "1★", effect: "+10% Water Resist",                   cooldown: "N/A",    desc: "Resistência aquática." }
+    ]
+  },
+
+  evaSaint: {
+    name: "Eva's Saint", parent: 'elfElder', stage: 3,
+    desc: 'Santa de Eva, curadora suprema élfica. Skills anteriores permanecem.',
+    base: { atk: 10, def: 40, hp: 400, mp: 470, eva: 6, crit: 4, matk: 90, mdef: 95 },
+    skills: [
+      { name: "Sublime Self-Sacrifice",        type: "Ativo",      rarity: "4★", effect: "Morre para curar party 100% HP+MP",    cooldown: "300s",   desc: "Auto-sacrifício." },
+      { name: "Balance Life",                  type: "Ativo",      rarity: "3★", effect: "Equaliza HP de toda party",             cooldown: "60s",    desc: "Equilíbrio vital." },
+      { name: "Mass Resurrection",             type: "Ativo",      rarity: "4★", effect: "Ressuscita toda party 40% HP",         cooldown: "300s",   desc: "Ressurreição em massa." },
+      { name: "Miracle",                       type: "Ativo",      rarity: "4★", effect: "Cura party 80% HP + ressurge mortos",  cooldown: "300s",   desc: "Milagre." },
+      { name: "Blessing of Eva",               type: "Party-Buff", rarity: "3★", effect: "+25% M.DEF + resist debuff 12min",     cooldown: "30 min", desc: "Bênção de Eva." },
+      { name: "Dark Side",                     type: "Toggle",     rarity: "3★", effect: "Troca: -60% Heal, +80% M.ATK holy",    cooldown: "N/A",    desc: "Lado sombrio." },
+      { name: "Aqua Strike",                   type: "Ativo",      rarity: "3★", effect: "Dano water 380% + slow 40% 6s",        cooldown: "22s",    desc: "Golpe aquático." },
+      { name: "Divine Nova",                   type: "Ativo",      rarity: "3★", effect: "Dano holy AoE 450% + blind 5s",        cooldown: "25s",    desc: "Nova divina." },
+      { name: "Eva's Saint Harmony",           type: "Self-Buff",  rarity: "4★", effect: "+55% Heal, +40% M.ATK, +30% M.DEF 30min",cooldown: "90 min",desc: "Harmonia suprema." },
+      { name: "Master of Healing",             type: "Passivo",    rarity: "3★", effect: "+15% Heal Power, +5% PvE",            cooldown: "N/A",    desc: "Mestre da cura." },
+      { name: "Eva's Saint Spirit",            type: "Passivo",    rarity: "3★", effect: "+12% holy magic ATK",                  cooldown: "N/A",    desc: "Espírito da santa." },
+      { name: "Body of Eva's Saint",           type: "Passivo",    rarity: "3★", effect: "+12% Max MP, +10% M.DEF",             cooldown: "N/A",    desc: "Corpo da santa." },
+      { name: "Eva's Help",                    type: "Passivo",    rarity: "3★", effect: "10% chance ao ser atacado: cura 5% HP",cooldown: "N/A",    desc: "Ajuda de Eva (trigger)." }
+    ]
+  },
+    // ===================== DARK ELF =====================
+  darkElfFighter: { name: 'Dark Elf Fighter', archetype: 'fighter', stage: 0, race: 'darkelf' },
+
+  palusKnight: { name: 'Palus Knight', parent: 'darkElfFighter', stage: 1, base: { atk: 25, def: 28, hp: 130 } },
+  shillienKnight: { name: 'Shillien Knight', parent: 'palusKnight', stage: 2, base: { atk: 52, def: 65, hp: 310 } },
+  shillienTemplar: { name: 'Shillien Templar', parent: 'shillienKnight', stage: 3, base: { atk: 92, def: 108, hp: 590 },
+    skills: [
+      { name: "Touch of Shillien", type: "Ativo", rarity: "3★", effect: "Dano Dark 480% + Weaken", cooldown: "26s", note: "Skill permanece após trocar de classe" },
+      { name: "Shillien Templar Harmony", type: "Self-Buff", rarity: "4★", effect: "+48% ATK e +40% Dark Damage por 25 min", cooldown: "70 min", note: "Skill permanece após trocar de classe" }
+    ]
+  },
+
+  bladeDancer: { name: 'Blade Dancer', parent: 'palusKnight', stage: 2, base: { atk: 62, def: 52, hp: 300 } },
+  spectralDancer: { name: 'Spectral Dancer', parent: 'bladeDancer', stage: 3, base: { atk: 112, def: 70, hp: 480 },
+    skills: [
+      { name: "Dance of Berserker", type: "Self-Buff", rarity: "4★", effect: "+55% ATK mas -15% DEF por 15 min", cooldown: "65 min", note: "Skill permanece após trocar de classe" },
+      { name: "Shadow Slash", type: "Ativo", rarity: "3★", effect: "Dano Dark 420%", cooldown: "20s", note: "Skill permanece após trocar de classe" }
+    ]
+  },
+
+  abyssWalker: { name: 'Abyss Walker', parent: 'darkElfFighter', stage: 2, base: { atk: 68, def: 28, eva: 42, crit: 30 } },
+  ghostHunter: { name: 'Ghost Hunter', parent: 'abyssWalker', stage: 3, base: { atk: 118, def: 42, eva: 65, crit: 48 } },
+
+  phantomRanger: { name: 'Phantom Ranger', parent: 'darkElfFighter', stage: 2, base: { atk: 72, def: 25, eva: 32, crit: 28 } },
+  ghostSentinel: { name: 'Ghost Sentinel', parent: 'phantomRanger', stage: 3, base: { atk: 128, def: 35, eva: 48, crit: 52 },
+    skills: [
+      { name: "Seven Arrow", type: "Ativo", rarity: "3★", effect: "7 disparos sombrios 490%", cooldown: "26s", note: "Skill permanece após trocar de classe" }
+    ]
+  },
+
+  darkWizard: { name: 'Dark Wizard', parent: 'mage', race: 'darkelf', stage: 1, base: { matk: 40, mdef: 22, mp: 100 } },
+  spellhowler: { name: 'Spellhowler', parent: 'darkWizard', stage: 2, base: { matk: 82, mdef: 48, mp: 210 } },
+  stormScreamer: { name: 'Storm Screamer', parent: 'spellhowler', stage: 3, base: { matk: 145, mdef: 75, mp: 430 },
+    skills: [
+      { name: "Demon Wind", type: "Ativo", rarity: "4★", effect: "Dano Vento sombrio 720%", cooldown: "160s", note: "Skill permanece após trocar de classe" },
+      { name: "Storm Screamer Harmony", type: "Self-Buff", rarity: "4★", effect: "+58% M.ATK por 25 min", cooldown: "75 min", note: "Skill permanece após trocar de classe" }
+    ]
+  },
+
+  shillienOracle: { name: 'Shillien Oracle', parent: 'mage', race: 'darkelf', stage: 1, base: { matk: 25, mdef: 30, mp: 75 } },
+  shillienElder: { name: 'Shillien Elder', parent: 'shillienOracle', stage: 2, base: { matk: 55, mdef: 60, mp: 190 } },
+  shillienSaint: { name: 'Shillien Saint', parent: 'shillienElder', stage: 3, base: { matk: 98, mdef: 98, mp: 410 },
+    skills: [
+      { name: "Dark Side", type: "Toggle", rarity: "3★", effect: "Modo DPS (aumenta dano mágico)", cooldown: "N/A", note: "Skill permanece após trocar de classe" }
+    ]
+  },
+
+  // Export (mantenha no final do arquivo)
+if (typeof window !== 'undefined') window.CLASSES_ECHO = CLASSES_ECHO;
+if (typeof module !== 'undefined') module.exports = CLASSES_ECHO;
+
+console.log("✅ Carregada com sucesso.");
