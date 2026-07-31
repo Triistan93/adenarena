@@ -662,8 +662,6 @@ const CLASSES_ECHO = {
       { name: "Body of the Hierophant",       type: "Passivo",    rarity: "3★", effect: "+10% Max HP, +10% Max MP",                cooldown: "N/A",    desc: "Corpo do hierofante." }
     ]
   },
-PARTE 2: ELF FIGHTER + ELF MAGE
-JavaScript
 
   // ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
   //  ELF FIGHTER
