@@ -119,28 +119,40 @@ anel de runas, reveal on scroll, code tokens.
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
 }
 
-/* ---------- embers / sparks subindo ---------- */
+/* ---------- embers / sparks subindo — tela cheia fixa ---------- */
 @keyframes g-ember-rise {
   0% { transform: translate3d(0, 0, 0) scale(1); opacity: 0; }
   10% { opacity: var(--eo, 0.7); }
   90% { opacity: calc(var(--eo, 0.7) * 0.4); }
-  100% { transform: translate3d(var(--ex, 20px), -46vh, 0) scale(0.4); opacity: 0; }
+  100% { transform: translate3d(var(--ex, 20px), -100vh, 0) scale(0.3); opacity: 0; }
 }
+
+/* Container de embers fixo que cobre a tela inteira do jogo */
+.g-ember-global {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Container local (dentro de um elemento específico) */
 .ember-field {
   position: absolute;
   inset: 0;
   overflow: hidden;
   pointer-events: none;
 }
+
 .ember {
   position: absolute;
-  bottom: -2vh;
-  width: var(--es, 4px);
-  height: var(--es, 4px);
+  bottom: -4px;
+  width: var(--es, 3px);
+  height: var(--es, 3px);
   border-radius: 9999px;
   background: var(--ec, #f0cd7e);
-  box-shadow: 0 0 calc(var(--es, 4px) * 2.4) var(--ec, #f0cd7e);
-  animation: g-ember-rise var(--ed, 11s) linear infinite;
+  box-shadow: 0 0 calc(var(--es, 3px) * 3) var(--ec, #f0cd7e);
+  animation: g-ember-rise var(--ed, 12s) linear infinite;
   animation-delay: var(--edel, 0s);
   will-change: transform, opacity;
 }
@@ -210,6 +222,42 @@ anel de runas, reveal on scroll, code tokens.
 .stamp-rare { --stamp-color: var(--g-rare); }
 .stamp-uncommon { --stamp-color: var(--g-uncommon); }
 .stamp-common { --stamp-color: var(--g-common); }
+
+/* ---------- carimbo IDLE no título do jogo ---------- */
+#game-title .title-idle-stamp {
+  display: inline-block;
+  position: relative;
+  vertical-align: middle;
+  margin-left: 10px;
+}
+#game-title .title-idle-stamp .stamp-idle {
+  display: inline-block;
+  border: 2.5px double var(--g-legendary, #f0883e);
+  padding: 2px 9px;
+  transform: rotate(-6deg);
+  animation: g-stamp-in 0.8s cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
+  animation-delay: 0.4s;
+  background: rgba(240, 136, 62, 0.06);
+}
+#game-title .stamp-idle-text {
+  font-family: 'Cinzel', 'IBM Plex Mono', monospace;
+  font-weight: 900;
+  font-size: 13px;
+  letter-spacing: 0.3em;
+  color: var(--g-legendary, #f0883e);
+  display: block;
+  line-height: 1;
+}
+#game-title .stamp-idle-sub {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.25em;
+  color: var(--g-legendary, #f0883e);
+  opacity: 0.7;
+  display: block;
+  text-align: center;
+  line-height: 1.2;
+}
 
 /* ---------- gemas / icones com pulso de brilho ---------- */
 @keyframes g-gem-pulse {

@@ -43,10 +43,22 @@ export default function IdleGame() {
     init();
 
     if ((window as any).GrimoireFX) {
-      const ambient = shadow.querySelector('.ambient-layer');
-      if (ambient) {
-        (window as any).GrimoireFX.mountEmbers(ambient, { count: 25 });
+      // Cria div fixed que cobre a tela inteira — embers sempre visíveis
+      const emberGlobal = shadow.createElement
+        ? (shadow as any).createElement('div')
+        : document.createElement('div');
+      emberGlobal.className = 'g-ember-global';
+      // Insere como primeiro filho do #game para ficar abaixo de tudo
+      const gameDiv = shadow.getElementById('game') ?? shadow.querySelector('#game');
+      if (gameDiv) {
+        gameDiv.insertBefore(emberGlobal, gameDiv.firstChild);
+      } else {
+        shadow.appendChild(emberGlobal);
       }
+      (window as any).GrimoireFX.mountEmbers(emberGlobal, {
+        count: 45,
+        colors: ['#f0883e', '#f0cd7e', '#e87d2e', '#ffd166', '#ff9b42']
+      });
     }
 
     (window as any).onOpenRaceClassChangeModal = (data: any) => {

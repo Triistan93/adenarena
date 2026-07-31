@@ -4859,6 +4859,22 @@ export function init() {
     addTrackedListener(document, 'visibilitychange', () => {
       if (document.visibilityState === 'hidden') saveAndCloudSyncOnUnload();
     });
+
+    // ---- Embers / brasas globais (GrimoireFX) ----
+    // Monta automaticamente em modo standalone (index.html direto)
+    // No modo Shadow DOM (React), o IdleGame.tsx já monta via shadow.getElementById
+    if (typeof window !== 'undefined' && window.GrimoireFX) {
+      const gameRoot = _root !== document ? _root.getElementById?.('game') || _root.querySelector?.('#game') : document.getElementById('game');
+      if (gameRoot && !gameRoot.querySelector('.g-ember-global')) {
+        const emberDiv = document.createElement('div');
+        emberDiv.className = 'g-ember-global';
+        gameRoot.insertBefore(emberDiv, gameRoot.firstChild);
+        window.GrimoireFX.mountEmbers(emberDiv, {
+          count: 45,
+          colors: ['#f0883e', '#f0cd7e', '#e87d2e', '#ffd166', '#ff9b42']
+        });
+      }
+    }
   } catch (err) {
     console.warn('Game init warning:', err);
   }

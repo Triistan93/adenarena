@@ -6,7 +6,7 @@ export const IDLE_MARKUP = `
     <div id="float-layer" class="float-layer" aria-hidden="true"></div>
     <!-- Top Bar -->
     <header class="top-bar">
-      <span id="game-title">LINEAGE <em>IDLE</em></span>
+      <span id="game-title">LINEAGE <span class="title-idle-stamp"><span class="stamp-idle"><span class="stamp-idle-text">IDLE</span><span class="stamp-idle-sub">CHRONICLE</span></span></span></span>
       <div class="top-stats">
         <span class="ts-zone">
           <span class="ts-label">Zone</span>
