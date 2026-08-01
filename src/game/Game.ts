@@ -1628,7 +1628,6 @@ export class Game {
       ky: 0,
       hp: maxHp,
       maxHp,
-      maxHp,
       r,
       hitFlash: 0,
       attackTimer: rand(0, 0.5),
