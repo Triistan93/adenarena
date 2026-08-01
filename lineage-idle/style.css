@@ -3468,3 +3468,108 @@ select:focus-visible {
 .tower-floor-pill.boss-floor {
   border-color: #f59e0b;
 }
+/* =========================================================
+   GAME ASSETS & CHARACTER RENDERING
+   ========================================================= */
+
+/* Containers Gerais de Imagem */
+.portrait-art, 
+.stage-hero, 
+.doll-art {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-end; /* Alinha a imagem na parte inferior (pés no chão) */
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* A Tag IMG injetada via JS */
+.portrait-art img, 
+.stage-hero img, 
+.doll-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Garante que a imagem inteira apareça sem cortar */
+  object-position: center bottom; /* Garante que os pés fiquem no chão */
+  filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.6)); /* Sombra suave para destacar do fundo */
+  transition: transform 0.3s ease;
+}
+
+/* Efeito de Hover no Stage (Opcional) */
+.stage-hero:hover img {
+  transform: scale(1.05);
+}
+
+/* =========================================================
+   DIMENSIONAMENTO DOS CONTAINERS (Layout)
+   ========================================================= */
+
+/* 1. Retrato (Tab Character) */
+.portrait {
+  width: 100%;
+  height: 220px; /* Altura fixa para o retrato */
+  margin-bottom: 20px;
+  position: relative;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.portrait-aura {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(212, 167, 68, 0.15) 0%, transparent 70%);
+  z-index: 0;
+  pointer-events: none;
+}
+.portrait-art {
+  z-index: 1;
+  height: 100%; /* Ocupa a altura do .portrait */
+}
+
+/* 2. Stage de Combate (Centro) */
+.stage {
+  position: relative;
+  width: 100%;
+  height: 400px; /* Altura da área de combate */
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  overflow: hidden;
+}
+.stage-hero {
+  position: absolute;
+  left: 20%; /* Posiciona o herói à esquerda */
+  bottom: 20px;
+  width: 280px; /* Largura máxima do herói no stage */
+  height: 320px; /* Altura máxima */
+  z-index: 10;
+}
+.stage-monster {
+  position: absolute;
+  right: 20%; /* Posiciona o monstro à direita */
+  bottom: 20px;
+  width: 280px;
+  height: 320px;
+  z-index: 10;
+}
+
+/* 3. Paper Doll (Tab Equipment) */
+.paperdoll {
+  width: 100%;
+  height: 300px;
+  position: relative;
+  margin-bottom: 20px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+.doll-art {
+  width: 100%;
+  height: 100%;
+  opacity: 0.8; /* Um pouco mais escuro para destacar os slots de equipamento */
+}
+/* Os slots de equipamento ficam sobre a imagem */
+.doll-slots {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  /* Seu grid de slots existente cuida do posicionamento */
+}
