@@ -404,11 +404,13 @@ export const CharacterCreation: React.FC<CharacterCreationProps> = ({
               </div>
 
               {/* Character Card / Artwork */}
-              <div className="relative mx-auto w-48 h-56 rounded-xl border border-amber-500/40 bg-gradient-to-b from-amber-500/10 via-black/60 to-black p-2 flex flex-col items-center justify-center shadow-xl overflow-hidden group">
+              {/* Ajuste principal aqui: Container com tamanho fixo e flex-shrink-0 */}
+              <div className="relative mx-auto w-48 h-56 flex-shrink-0 rounded-xl border border-amber-500/40 bg-gradient-to-b from-amber-500/10 via-black/60 to-black p-2 flex flex-col items-center justify-center shadow-xl overflow-hidden group">
                 <img
                   src={currentImg}
                   alt={currentRaceObj.name}
-                  className="w-full h-full object-contain filter drop-shadow-[0_0_12px_rgba(245,158,11,0.4)] transition-transform duration-300 group-hover:scale-105"
+                  /* Ajuste principal aqui: object-contain + object-center garantem uniformidade sem distorção */
+                  className="w-full h-full object-contain object-center filter drop-shadow-[0_0_12px_rgba(245,158,11,0.4)] transition-transform duration-300 group-hover:scale-105"
                   onError={(e) => {
                     (e.target as HTMLElement).style.display = 'none';
                   }}
