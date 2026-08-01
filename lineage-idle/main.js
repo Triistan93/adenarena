@@ -334,111 +334,55 @@ function getCertificationsBonuses() {
   };
 }
 
-function getStats() {
-  const raceKey = state.race ? String(state.race).toLowerCase() : 'human';
-  const race = RACES[raceKey] || RACES.human;
-  const cls = getClass(state.class);
-  const skills = state.skills || {};
-
-  // sk() reads skill level; works for both legacy generic and new class-specific skills
-  const sk = (id) => Number(skills[id]) || 0;
+function showSkillTooltip(skillId, e) {
+  state.selectedSkill = skillId;
+  updateSkillInfoPanel();
+  cancelHideTooltip();
+  const def = SKILL_DEFS[skillId];
+  if (!def) return;
   
-  const raceStats = race?.stats || {};
-  const clsBase = cls?.base || {};
+  const tt = el('item-tooltip');
+  if (!tt) return;
 
-  let baseAtk = (Number(state.base.atk) || 0) + (Number(raceStats.atk) || 0) + (Number(clsBase.atk) || 0) + (state.level * 3) + 15;
-  let baseDef = (Number(state.base.def) || 0) + (Number(raceStats.def) || 0) + (Number(clsBase.def) || 0) + (state.level * 2) + 10;
-  let baseEva = (Number(state.base.eva) || 0) + (Number(raceStats.eva) || 0) + (Number(clsBase.eva) || 0);
-  let baseMatk = (Number(state.base.matk) || 0) + (Number(raceStats.matk) || 0) + (Number(clsBase.matk) || 0) + (state.level * 3) + 15;
-  let baseMdef = (Number(state.base.mdef) || 0) + (Number(raceStats.mdef) || 0) + (Number(clsBase.mdef) || 0) + (state.level * 2) + 8;
+  const lvl = state.skills[skillId] || 0;
+  const max = def.max || 5;
+  const reqs = SKILL_REQS[skillId];
+  const reqText = reqs ? Object.entries(reqs).map(([s, v]) => `${SKILL_DEFS[s]?.name || s} ${v}`).join(', ') : 'Nenhum';
+  const tier = TIER_NAMES[def.tier] || '';
 
-  baseAtk += sk('wpnMastF') * 4.5;
-  baseAtk += sk('weaponMastM') * 1.5;
-  baseMatk += sk('weaponMastM') * 2.5;
-  baseDef += sk('armorMast') * 11;
-  baseDef += sk('robeMast') * 1.7;
-  baseDef += sk('lightArmor') * 4.2;
-  baseEva += sk('lightArmor') * 3;
-  baseMdef += sk('antiMagic') * 18;
-  const mpRegenBonus = sk('higherMana') * 2;
+  // ---------- NOVO: Tooltip com Matemática da Skill ----------
+  let currentBonusStr = '';
+  let nextBonusStr = '';
 
-  const eb = getTotalEquipBonuses();
-  let itemCraftBonus = 0, itemLootBonus = 0;
-  for (const slot of Object.keys(state.equipment)) {
-    const it = getEquipBonus(slot);
-    if (!it) continue;
-    if (it.craftBonus) itemCraftBonus += Number(it.craftBonus) || 0;
-    if (it.lootBonus) itemLootBonus += Number(it.lootBonus) || 0;
+  const pwr = def.pwr || 5;
+  if (def.type === 'passive' || def.effect === 'stat') {
+      if (lvl > 0) currentBonusStr = `<div style="margin-top:6px; font-size:11px;">Bônus Atual: <span style="color:#10b981;">+${pwr * lvl}</span></div>`;
+      if (lvl < max) nextBonusStr = `<div style="margin-top:2px; font-size:11px;">Próximo Nível: <span style="color:#60a5fa;">+${pwr * (lvl + 1)}</span></div>`;
+  } else {
+      if (lvl > 0) currentBonusStr = `<div style="margin-top:6px; font-size:11px;">Poder Atual: <span style="color:#10b981;">${pwr * lvl}</span></div>`;
+      if (lvl < max) nextBonusStr = `<div style="margin-top:2px; font-size:11px;">Poder Próximo: <span style="color:#60a5fa;">${pwr * (lvl + 1)}</span></div>`;
   }
 
-  const now = Date.now();
-  let buffAtk = 0, buffDef = 0, buffSpd = 0, buffMatk = 0, buffAtkMult = 0;
-  let xpBoost = 0, goldBoost = 0, luckBoost = 0, autoPotion = false;
-  state.buffs = state.buffs || {};
-  for (const k of Object.keys(state.buffs)) {
-    if (state.buffs[k].until < now) continue;
-    const b = state.buffs[k];
-    if (k === 'atk') buffAtk += Number(b.amount) || 0;
-    else if (k === 'def') buffDef += Number(b.amount) || 0;
-    else if (k === 'speed') buffSpd += Number(b.amount) || 0;
-    else if (k === 'matk') buffMatk += Number(b.amount) || 0;
-    else if (k === 'warcry' || b.effect === 'warcry' || b.type === 'warcry') buffAtkMult = Math.max(buffAtkMult, Number(b.amount) || 0);
-    else if (k === 'xpBoost') xpBoost = Math.max(xpBoost, Number(b.amount) || 0);
-    else if (k === 'goldBoost') goldBoost = Math.max(goldBoost, Number(b.amount) || 0);
-    else if (k === 'luckBoost') luckBoost = Math.max(luckBoost, Number(b.amount) || 0);
-    else if (k === 'autoPotion') autoPotion = true;
-  }
+  tt.innerHTML = `
+    <div class="tt-header rarity-epic">
+      <span class="tt-icon">${def.icon || '✦'}</span>
+      <div class="tt-title">
+        <div class="tt-name" style="color:var(--gilt); font-weight:700;">${def.name}</div>
+        <div class="tt-slot">${tier} · Lv.${lvl}/${max}</div>
+      </div>
+    </div>
+    <div class="tt-body" style="padding-top:6px;">
+      <p class="tt-desc" style="color:#ddd; margin:0 0 6px 0;">${def.desc || def.info || ''}</p>
+      ${currentBonusStr}
+      ${nextBonusStr}
+      <div style="margin-top:8px; font-size:10px; color:#888; border-top:1px solid rgba(255,255,255,0.1); padding-top:4px;">Requisitos: ${reqText} (Lv.${def.reqLvl || 1})</div>
+    </div>
+  `;
 
-  // Agathion Passive Companions Boosts
-  const agathionUid = state.equipment.agathion;
-  const agathionItem = agathionUid ? state.inventory.find(i => i.uid === agathionUid) : null;
-  const agathionDef = agathionItem ? D().ALL_ITEMS[agathionItem.itemId] : null;
-
-  if (agathionDef) {
-    if (agathionItem.itemId === 'agathion_pegasus') { xpBoost += 0.10; buffSpd += 10; }
-    else if (agathionItem.itemId === 'agathion_valakas_mini') { buffAtk += Math.floor(baseAtk * 0.15); buffMatk += Math.floor(baseMatk * 0.15); }
-    else if (agathionItem.itemId === 'agathion_rudolph') { goldBoost += 0.20; }
-    else if (agathionItem.itemId === 'agathion_angel') { buffDef += Math.floor(baseDef * 0.20); }
-    else if (agathionItem.itemId === 'agathion_dragon_child') { buffAtkMult += 0.25; }
-  }
-
-  const atkMult = 1 + buffAtkMult;
-  const defMult = 1 + sk('heavyArmor') * 0.05;
-  const cdr = sk('quickRecycle') * 0.10;
-
-  const codexB = getCodexBonuses();
-  const dollsB = getDollsBonuses();
-  const certB = getCertificationsBonuses();
-  const towerMult = 1 + ((state.tower?.highestFloor || 0) * 0.01);
-
-  const finalAtk  = Math.floor((baseAtk + (Number(eb.atk) || 0) + buffAtk + codexB.atk + dollsB.atk + certB.atk) * atkMult * towerMult);
-  const finalDef  = Math.floor((baseDef + (Number(eb.def) || 0) + buffDef + codexB.def + dollsB.def + certB.def) * defMult * towerMult);
-  const finalEva  = Math.floor(baseEva + (Number(eb.eva) || 0) + codexB.eva + dollsB.eva);
-  const finalMatk = Math.floor((baseMatk + (Number(eb.matk) || 0) + buffMatk + codexB.matk + dollsB.matk + certB.matk) * towerMult);
-  const finalMdef = Math.floor((baseMdef + (Number(eb.mdef) || 0) + codexB.mdef + dollsB.mdef + certB.mdef) * towerMult);
-  const finalCrit = (Number(eb.crit) || 0) + codexB.crit + dollsB.crit + certB.crit;
-  
-  const lootBonus = (Number(race?.stats?.lootBonus) || 0) + (Number(cls?.base?.lootBonus) || 0) + itemLootBonus + luckBoost;
-  const atkSpd    = (buffSpd + (dollsB.speed || 0)) / 100;
-  const lifeDrain = ((Number(eb.lifesteal) || 0) + (dollsB.lifesteal || 0)) / 100;
-  const craftBonus = itemCraftBonus;
-
-  const critDmg = 1 + sk('executioner') * 0.15;
-  const regenHp = sk('holylight') * 0.01;
-  const meteorLvl = sk('meteor');
-  const execute = sk('assassinate') * 0.02;
-  const block = sk('divineshield') * 0.05;
-
-  const maxHp = Math.floor(100 + state.level * 10 + sk('boostHp') * 60 + (Number(eb.hp) || 0) + codexB.hp + dollsB.hp);
-  const maxMp = Math.floor(50 + state.level * 5 + sk('boostMana') * 30 + (Number(eb.mp) || 0) + codexB.mp + dollsB.mp);
-  
-  return {
-    atk: finalAtk || 1, def: finalDef || 0, eva: finalEva || 0, matk: finalMatk || 1, mdef: finalMdef || 0,
-    crit: finalCrit, critDmg, loot: 1 + lootBonus, speed: 1 + buffSpd / 100, cdr,
-    atkSpd, lifeDrain, craftBonus, mpRegen: mpRegenBonus,
-    xpBoost, goldBoost, luckBoost, autoPotion, maxHp, maxMp,
-    regenHp, meteorLvl, execute, block
-  };
+  tt.style.display = 'block';
+  tt.style.zIndex = '999999';
+  tt.onmouseenter = cancelHideTooltip;
+  tt.onmouseleave = scheduleHideTooltip;
 }
 
 function getBaseAttributes(raceKey, classKey) {
