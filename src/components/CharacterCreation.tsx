@@ -39,8 +39,8 @@ const RACES_INFO: Record<string, {
       { id: 'assassinBase', name: 'Assassin EM DESENVOLVIMENTO, CONTEM BUGS🗡️', desc: 'Caçador das sombras com adagas e clones sombrios.', icon: '🗡️' }
     ],
     image: {
-      fighter: '/img/human_fighter.png',
-      mage: '/img/human_mage.png',
+      fighter: '/img/humanpalaM.png',
+      mage: '/img/humanmageF.png',
       deathPilgrim: '/img/human_fighter.png',
       wargBase: '/img/human_fighter.png',
       assassinBase: '/img/human_fighter.png'
@@ -58,8 +58,8 @@ const RACES_INFO: Record<string, {
       { id: 'mage', name: 'Mago Elfo (Mage)', desc: 'Dominador de magia de água e cura sagrada.', icon: '🌊' }
     ],
     image: {
-      fighter: '/img/elf_fighter.png',
-      mage: '/img/elf_mage.png'
+      fighter: '/img/elfwswM.png',
+      mage: '/img/elfmageF.png'
     },
     startZoneName: 'Floresta Élfica (Elven Forest)'
   },
@@ -76,8 +76,8 @@ const RACES_INFO: Record<string, {
       { id: 'assassinBase', name: 'Assassin EM DESENVOLVIMENTO, CONTEM BUGS🗡️', desc: 'Assassina mortal das sombras de Shillien.', icon: '🗡️' }
     ],
     image: {
-      fighter: '/img/darkelf_fighter.png',
-      mage: '/img/darkelf_mage.png',
+      fighter: '/img/darkelfskM.png',
+      mage: '/img/darkelfmageF.png',
       elfDeathPilgrim: '/img/darkelf_fighter.png',
       assassinBase: '/img/darkelf_fighter.png'
     },
@@ -95,9 +95,9 @@ const RACES_INFO: Record<string, {
       { id: 'orcRider', name: 'Vanguard Rider EM DESENVOLVIMENTO, CONTEM BUGS🐉', desc: 'Cavaleiro Orc montado especialista em lança de guerra.', icon: '🐉' }
     ],
     image: {
-      fighter: '/img/orc_fighter.png',
+      fighter: '/img/orcfighterM.png',
       mage: '/img/orc_mage.png',
-      orcRider: '/img/orc_fighter.png'
+      orcRider: '/img/orcfighterF.png'
     },
     startZoneName: 'Vila Orc (Orc Village)'
   },
@@ -112,8 +112,8 @@ const RACES_INFO: Record<string, {
       { id: 'shinemakerS1', name: 'ShineMaker EM DESENVOLVIMENTO, CONTEM BUGS ✨', desc: 'Mestre da luz cristalina, suporte e dano cristalino.', icon: '✨' }
     ],
     image: {
-      artisan: '/img/dwarf_artisan.png',
-      fighter: '/img/dwarf_artisan.png',
+      artisan: '/img/dwarfmaestroM.png',
+      fighter: '/img/dwarfmaestroF.png',
       shinemakerS1: '/img/dwarf_artisan.png'
     },
     startZoneName: 'Minas dos Anões (Dwarven Mine)'
@@ -129,8 +129,8 @@ const RACES_INFO: Record<string, {
       { id: 'hatamoto', name: 'Samurai EM DESENVOLVIMENTO, CONTEM BUGS⛩️', desc: 'Mestre da katana ancestral e técnica Iaijutsu.', icon: '⛩️' }
     ],
     image: {
-      soulbreaker: '/img/kamael_soulbreaker.png',
-      fighter: '/img/kamael_soulbreaker.png',
+      soulbreaker: '/img/kamaelshF.png',
+      fighter: '/img/kamaelDM.png',
       hatamoto: '/img/kamael_soulbreaker.png'
     },
     startZoneName: 'Lair dos Kamael (Kamael Lair)'
@@ -145,8 +145,8 @@ const RACES_INFO: Record<string, {
       { id: 'sylphGunner', name: 'Storm Blaster EM DESENVOLVIMENTO, CONTEM BUGS🔫', desc: 'Atirador elemental com armas de fogo e tiros de vento.', icon: '🔫' }
     ],
     image: {
-      sylphGunner: '/img/human_fighter.png',
-      fighter: '/img/human_fighter.png'
+      sylphGunner: '/img/sylphM.png',
+      fighter: '/img/sylphF.png'
     },
     startZoneName: 'Ilha de Falar (Talking Island)'
   },
@@ -162,10 +162,10 @@ const RACES_INFO: Record<string, {
       { id: 'shinemakerS1', name: 'ShineMakerEM DESENVOLVIMENTO, CONTEM BUGS ✨', desc: 'Invocador de luz sagrada e suporte cristalino.', icon: '✨' }
     ],
     image: {
-      divineTemplarS1: '/img/elf_fighter.png',
-      elementWeaverS1: '/img/elf_mage.png',
+      divineTemplarS1: '/img/elfwswM.png',
+      elementWeaverS1: '/img/elfmageM.png',
       shinemakerS1: '/img/elf_mage.png',
-      fighter: '/img/elf_fighter.png'
+      fighter: '/img/elfswsF.png'
     },
     startZoneName: 'Floresta Élfica (Elven Forest)'
   },
