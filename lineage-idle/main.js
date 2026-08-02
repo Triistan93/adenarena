@@ -1696,6 +1696,7 @@ function updateEquipmentUI() {
 
     const def = D().ALL_ITEMS[item.itemId]; if (!def) continue;
     const rarity = item.rarity || 'common';
+    const enchantStr = item.enchant ? `+${item.enchant}` : '';
     const full = formatItemDisplayName(item, def);
     const col = item.rarity ? D().RARITY[rarity]?.color : 'var(--gilt)';
 
@@ -5133,7 +5134,7 @@ function attachGlobalErrorHandlers() {
 const tabScrollMap = {};
 
 function openPanel(tabName) {
-  const targetTab = tabName || 'zones';
+  const targetTab = (!tabName || tabName === 'zones' || tabName === 'combat' || tabName === 'close') ? 'zones' : tabName;
   const tabsPanel = qs('.tabs-panel');
 
   const currentActivePane = qs('.tab-pane.active');
@@ -5155,23 +5156,27 @@ function openPanel(tabName) {
     }
   }
 
+  let floatingCloseBtn = el('full-window-close-btn');
+
   if (tabsPanel) {
     if (targetTab !== 'zones') {
       tabsPanel.classList.add('full-window-active');
-      let closeBtn = el('full-window-close-btn');
-      if (!closeBtn) {
-        closeBtn = mkEl('button');
-        closeBtn.id = 'full-window-close-btn';
-        closeBtn.className = 'full-window-close-btn';
-        closeBtn.innerHTML = '⚔️ Voltar ao Combate ✖';
-        closeBtn.onclick = () => openPanel('zones');
-        document.body.appendChild(closeBtn);
+      if (!floatingCloseBtn) {
+        floatingCloseBtn = mkEl('button');
+        floatingCloseBtn.id = 'full-window-close-btn';
+        floatingCloseBtn.className = 'full-window-close-btn';
+        floatingCloseBtn.innerHTML = '⚔️ Combate ✖';
+        floatingCloseBtn.title = 'Voltar para a tela de combate';
+        document.body.appendChild(floatingCloseBtn);
       }
-      closeBtn.style.display = 'block';
+      floatingCloseBtn.onclick = (ev) => {
+        if (ev) ev.stopPropagation();
+        openPanel('zones');
+      };
+      floatingCloseBtn.style.display = 'flex';
     } else {
       tabsPanel.classList.remove('full-window-active');
-      const closeBtn = el('full-window-close-btn');
-      if (closeBtn) closeBtn.style.display = 'none';
+      if (floatingCloseBtn) floatingCloseBtn.style.display = 'none';
     }
   }
 

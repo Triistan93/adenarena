@@ -112,19 +112,19 @@ export const IDLE_MARKUP = `
       <!-- Right: Main Menu Workspace (Expanded) -->
       <aside class="panel tabs-panel">
         <div class="tab-buttons">
-          <button class="tab-btn active" data-tab="character">👤 Personagem</button>
+          <button class="tab-btn active" data-tab="zones">⚔️ Combate &amp; Caça</button>
+          <button class="tab-btn" data-tab="character">👤 Personagem</button>
           <button class="tab-btn" data-tab="inventory">🎒 Inventário <span id="tab-badge-inventory" class="tab-badge" style="display:none">!</span></button>
+          <button class="tab-btn" data-tab="warehouse">📦 Baú</button>
           <button class="tab-btn" data-tab="skills">✦ Habilidades <span id="tab-badge-skills" class="tab-badge" style="display:none">!</span></button>
           <button class="tab-btn" data-tab="shop">🛒 Mercador</button>
           <button class="tab-btn" data-tab="craft">⚒️ Forja <span id="tab-badge-craft" class="tab-badge" style="display:none">!</span></button>
           <button class="tab-btn" data-tab="enchant">✨ Encantamento</button>
-          <button class="tab-btn" data-tab="zones">🗺️ Caça &amp; Raids</button>
           <button class="tab-btn" data-tab="codex">📜 Codex</button>
           <button class="tab-btn" data-tab="dolls">🧸 Dolls</button>
           <button class="tab-btn" data-tab="magiclamp">🪔 Lâmpada &amp; Craft</button>
           <button class="tab-btn" data-tab="quests">🎯 Missões <span id="tab-badge-quests" class="tab-badge" style="display:none">!</span></button>
           <button class="tab-btn" data-tab="tower">🏰 Torre Insolência</button>
-          <button class="tab-btn" data-tab="warehouse">📦 Baú</button>
         </div>
         <div class="tab-content">
           <!-- Character Tab -->
