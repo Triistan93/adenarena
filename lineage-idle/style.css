@@ -3469,111 +3469,141 @@ select:focus-visible {
   border-color: #f59e0b;
 }
 /* =========================================================
-   GAME ASSETS & CHARACTER RENDERING — UNIFICADO
-   Força heróis E monstros a se adaptarem ao mesmo portrait,
-   independente do tamanho original da imagem (sem vazar).
+   GAME ASSETS & CHARACTER RENDERING
    ========================================================= */
 
-/* ---- MOLDURA/CARD (Herói e Monstro IGUAIS) ---- */
-.stage-hero,
+/* Containers Gerais de Imagem */
+.portrait-art, 
+.stage-hero, 
+.doll-art {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-end; /* Alinha a imagem na parte inferior (pés no chão) */
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* A Tag IMG injetada via JS */
+.portrait-art img, 
+.stage-hero img, 
+.doll-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Garante que a imagem inteira apareça sem cortar */
+  object-position: center bottom; /* Garante que os pés fiquem no chão */
+  filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.6)); /* Sombra suave para destacar do fundo */
+  transition: transform 0.3s ease;
+}
+
+/* Efeito de Hover no Stage (Opcional) */
+.stage-hero:hover img {
+  transform: scale(1.05);
+}
+
+/* =========================================================
+   GAME ASSETS & CHARACTER RENDERING
+   ========================================================= */
+
+/* Containers Gerais de Imagem */
+.portrait-art, 
+.stage-hero, 
+.doll-art {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-end; /* Alinha a imagem na parte inferior (pés no chão) */
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* A Tag IMG injetada via JS */
+.portrait-art img, 
+.stage-hero img, 
+.doll-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Garante que a imagem inteira apareça sem cortar */
+  object-position: center bottom; /* Garante que os pés fiquem no chão */
+  filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.6)); /* Sombra suave para destacar do fundo */
+  transition: transform 0.3s ease;
+}
+
+/* Efeito de Hover no Stage (Opcional) */
+.stage-hero:hover img {
+  transform: scale(1.05);
+}
+
+/* =========================================================
+   DIMENSIONAMENTO DOS CONTAINERS (Layout)
+   ========================================================= */
+
+/* 1. Retrato (Tab Character) */
+.portrait {
+  width: 100%;
+  height: 154px; /* Reduzido em 30% (Era 220px) */
+  margin-bottom: 20px;
+  position: relative;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.portrait-aura {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(212, 167, 68, 0.15) 0%, transparent 70%);
+  z-index: 0;
+  pointer-events: none;
+}
+.portrait-art {
+  z-index: 1;
+  height: 100%; /* Ocupa a altura do .portrait */
+}
+
+/* 2. Stage de Combate (Centro) */
+.stage {
+  position: relative;
+  width: 100%;
+  height: 400px; /* Mantido igual para não afetar o tamanho geral do cenário */
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  overflow: hidden;
+}
+.stage-hero {
+  position: absolute;
+  left: 20%; /* Posiciona o herói à esquerda */
+  bottom: 20px;
+  width: 196px; /* Reduzido em 30% (Era 280px) */
+  height: 224px; /* Reduzido em 30% (Era 320px) */
+  z-index: 10;
+}
 .stage-monster {
   position: absolute;
-  bottom: 6%;
-  width: 135px;   /* Tamanho idêntico para os dois */
-  height: 170px;
-  z-index: 3;
-
-  border: 2px solid var(--gilt-bright);
-  background: rgba(10, 14, 22, 0.75);
-  border-radius: 6px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.85), inset 0 0 12px rgba(212,167,68,0.25);
-  padding: 6px;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  backdrop-filter: blur(2px);
-  overflow: hidden; /* Garante que a imagem NUNCA vaze da moldura */
+  right: 20%; /* Posiciona o monstro à direita */
+  bottom: 20px;
+  width: 196px; /* Reduzido em 30% (Era 280px) */
+  height: 224px; /* Reduzido em 30% (Era 320px) */
+  z-index: 10;
 }
 
-.stage-hero   { left: 4%; }
-.stage-monster { right: 4%; }
-
-/* ---- IMAGEM DO HERÓI (força adaptação) ---- */
-.stage-hero .hero-full,
-.stage-hero .hero-full img,
-.stage-hero img {
+/* 3. Paper Doll (Tab Equipment) */
+.paperdoll {
+  width: 100%;
+  height: 210px; /* Reduzido em 30% (Era 300px) */
+  position: relative;
+  margin-bottom: 20px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+.doll-art {
   width: 100%;
   height: 100%;
-  object-fit: contain;            /* Nunca corta, sempre cabe inteiro */
-  object-position: center bottom; /* Pés no chão da moldura */
-  animation: heroBob 2.4s ease-in-out infinite;
-  filter: drop-shadow(0 7px 12px rgba(0,0,0,0.7)) drop-shadow(0 0 6px rgba(232,200,96,0.2));
-  transform-origin: 50% 100%;
-  user-select: none;
-  -webkit-user-drag: none;
+  opacity: 0.8; /* Um pouco mais escuro para destacar os slots de equipamento */
 }
-
-/* ---- IMAGEM DO MONSTRO (força adaptação IGUAL ao herói) ---- */
-.stage-monster .mon-svg,
-.stage-monster .mon-svg img,
-.stage-monster img,
-#m-art,
-#m-art img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;            /* AQUI ESTÁ A MÁGICA: adapta qualquer tamanho */
-  object-position: center bottom; /* Pés no chão, alinhado ao herói */
-  animation: monIdle 2.6s ease-in-out infinite;
-  filter: drop-shadow(0 7px 12px rgba(0,0,0,0.65)) drop-shadow(0 0 4px rgba(200,60,30,0.12));
-  transform-origin: 50% 100%;
-  user-select: none;
-  -webkit-user-drag: none;
-}
-
-/* Wrapper do monstro ocupa toda a moldura */
-#m-art {
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-}
-
-/* ---- Efeitos de combate (mantidos) ---- */
-.stage.is-hero-atk .stage-hero { animation: heroSwing 0.42s cubic-bezier(0.3,0.8,0.3,1); }
-.stage-hero.hurt { animation: heroHurt 0.4s ease; }
-.stage-monster.hurt .mon-svg,
-.stage-monster.hurt img { animation: monHurt 0.4s ease; }
-.stage-monster.lunge { animation: monLunge 0.42s cubic-bezier(0.3,0.8,0.3,1); }
-#m-art.swap { animation: monIn 0.4s ease; }
-
-/* =========================================================
-   PORTRAIT (Tab Character) — Retrato circular do herói
-   ========================================================= */
-.portrait-art .hero-bust,
-.portrait-art .hero-bust img,
-.portrait-art img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;              /* Retrato preenche o círculo */
-  object-position: center top;    /* Foco no rosto/busto */
-}
-
-/* =========================================================
-   PAPERDOLL (Tab Equipment) — Boneco central de equipamento
-   ========================================================= */
-.paperdoll-center .doll-art img,
-.paperdoll-center .hero-full,
-.paperdoll-center .hero-full img,
-.paperdoll-center svg {
-  height: 200px;
-  width: auto;
-  max-width: 100%;
-  object-fit: contain;
-  object-position: center bottom;
-  filter: drop-shadow(0 6px 16px rgba(0,0,0,0.7));
-  user-select: none;
-  -webkit-user-drag: none;
-}
+/* Os slots de equipamento ficam sobre a imagem */
+.doll-slots {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
   /* Seu grid de slots existente cuida do posicionamento */
 }

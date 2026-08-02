@@ -1496,9 +1496,10 @@ function updateSkillInfoPanel() {
   reqHtml += `<span class="req ${lvlOk ? 'ok' : 'no'}">Level ${def.reqLvl || 1}</span>`;
 
   const tier = TIER_NAMES[def.tier || 0] || '';
+  const _effectText = window.SkillScaling ? window.SkillScaling.buildSkillEffectText(def, lvl) : (def.info || '');
   panel.innerHTML = `
     <div class="si-head"><span class="si-icon">${def.icon || '✦'}</span><div class="si-title"><h3>${def.name}</h3><p class="si-tier">${tier} · Lv.${lvl}/${max}</p></div></div>
-    <p class="si-desc">${def.desc || def.note || ''}</p><div class="si-effect">${def.info || ''}</div>
+    <p class="si-desc">${def.desc || def.note || ''}</p><div class="si-effect">${_effectText}</div>
     <div class="si-reqs"><span class="si-label">Requires</span>${reqHtml}</div>
     <button class="si-btn" data-skillup="${id}" ${(!canAfford || !meetsReqs || !lvlOk) ? 'disabled' : ''}>${maxed ? '✦ MAXED' : `Invest ${cost.toLocaleString()} SP`}</button>
     <p class="si-sp">SP available: <strong>${state.sp.toLocaleString()}</strong></p>
@@ -1822,7 +1823,7 @@ function showSkillTooltip(skillId, e) {
     </div>
     <div class="tt-body" style="padding-top:6px;">
       <p class="tt-desc">${def.desc || ''}</p>
-      <div class="tt-effect" style="margin-top:6px; color:#f0d080; font-weight:600;">${def.info || ''}</div>
+      <div class="tt-effect" style="margin-top:6px; color:#f0d080; font-weight:600;">${window.SkillScaling ? window.SkillScaling.buildSkillEffectText(def, lvl) : (def.info || '')}</div>
       <div style="margin-top:6px; font-size:10px; color:#888;">Requisitos: ${reqText} (Lv.${def.reqLvl || 1})</div>
     </div>
   `;
@@ -3436,21 +3437,21 @@ function attackMonster() {
       if (isBuff) {
         state.buffs = state.buffs || {};
         const buffDuration = 60000; // 60 segundos de efeito
-        const buffAmt = 0.20 + (skill.lvl * 0.05); // +20% a +45% de bônus
+        const buffAmt = window.SkillScaling ? window.SkillScaling.getSkillBuffAtLevel(skill.lvl) : (0.20 + (skill.lvl * 0.05));
         const buffObj = { amount: buffAmt, until: realNow + buffDuration, effect: 'warcry' };
         state.buffs[skill.id] = buffObj;
         state.buffs['warcry'] = buffObj;
         log(`🗣 ${skill.def.name}! ${skill.def.info || 'Buff Ativo por 60s'}`, 'rarity-rare');
         floatText(skill.def.name, 'float-epic');
       } else if (isHeal) {
-        const healAmt = Math.floor(stats.maxHp * (0.25 + skill.lvl * 0.05));
+        const healAmt = window.SkillScaling ? window.SkillScaling.getSkillHealAtLevel(stats.maxHp, skill.lvl) : Math.floor(stats.maxHp * (0.25 + skill.lvl * 0.05));
         state.hp = Math.min(stats.maxHp, state.hp + healAmt);
         log(`✨ ${skill.def.name}! Curou ${healAmt} HP`, 'heal');
         floatText(`+${healAmt} HP`, 'sf-heal');
       } else {
         const type = isMage ? 'magic' : 'physical';
         const baseSkillDmg = isMage ? stats.matk : stats.atk;
-        const skillPwr = Number(skill.def.pwr) || 30;
+        const skillPwr = window.SkillScaling ? window.SkillScaling.getSkillPwrAtLevel(skill.def, skill.lvl) : (Number(skill.def.pwr) || 30);
         const sDmg = dealDamage(monster, baseSkillDmg * (skillPwr / 10), type);
         
         monster.hp -= sDmg;
