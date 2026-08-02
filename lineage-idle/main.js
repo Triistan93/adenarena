@@ -5194,78 +5194,107 @@ function openPanel(tabName) {
   else if (targetTab === 'warehouse') safeUiUpdate('warehouse', updateWarehouseUI);
 }
 
-let whFilter = 'all';
-let whSearchQuery = '';
-
-function updateWarehouseUI() {
-  const capEl = el('warehouse-capacity');
-  if (capEl) capEl.textContent = `${(state.warehouse || []).length}/${getMaxWarehouseSlots()}`;
-
-  const searchInput = el('wh-search-input');
-  if (searchInput && !searchInput.dataset.bound) {
-    searchInput.dataset.bound = 'true';
-    searchInput.oninput = (e) => {
-      whSearchQuery = (e.target.value || '').trim();
-      updateWarehouseUI();
-    };
-  }
-
-  qsa('.wh-filter-btn').forEach(btn => {
-    if (!btn.dataset.bound) {
-      btn.dataset.bound = 'true';
-      btn.onclick = () => {
-        whFilter = btn.dataset.whFilter;
-        qsa('.wh-filter-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        updateWarehouseUI();
-      };
-    }
-  });
-
-  const grid = el('warehouse-grid');
-  if (!grid) return;
-  grid.innerHTML = '';
-
-  const items = state.warehouse || [];
-  const filtered = items.filter(item => {
-    const def = getItemDef(item.itemId);
-    if (!def) return false;
-
-    if (whSearchQuery) {
-      const q = whSearchQuery.toLowerCase();
-      if (!def.name.toLowerCase().includes(q)) return false;
-    }
-
-    if (whFilter === 'all') return true;
-    if (whFilter === 'gear') return ['weapon','shield','helmet','armor','legs','gloves','boots','necklace','earring','ring','belt','cloak','talisman','hair','hair2','agathion'].includes(def.slot);
-    if (whFilter === 'consumable') return def.slot === 'consumable' || def.slot === 'potion';
-    if (whFilter === 'material') return def.slot === 'material' || def.slot === 'scroll' || def.slot === 'powerup' || def.slot === 'gem';
-    return true;
-  });
-
-  if (filtered.length === 0) {
-    grid.innerHTML = `<div style="grid-column: 1 / -1; text-align:center; padding:35px; color:var(--text-muted); font-size:12px;">O Baú está vazio ou nenhum item atende aos filtros.</div>`;
+function depositAllToWarehouse() {
+  const unequipped = state.inventory.filter(i => !i.equipped);
+  if (unequipped.length === 0) {
+    log('Nenhum item desequipado na mochila para guardar.', 'system');
     return;
   }
+  let movedCount = 0;
+  for (const item of [...unequipped]) {
+    if (depositToWarehouse(item.uid, item.count || 1)) {
+      movedCount++;
+    } else {
+      break;
+    }
+  }
+  if (movedCount > 0) {
+    log(`📦 ${movedCount} item(ns) guardado(s) no Baú.`, 'loot');
+    updateAllUI(); save();
+  }
+}
 
-  filtered.forEach(item => {
-    const def = getItemDef(item.itemId);
-    if (!def) return;
-    const rarity = item.rarity || 'common';
-    const slot = mkEl('div');
-    slot.className = `inv-slot rarity-${rarity}` + (item.foundation ? ' is-foundation' : '');
-    const countBadge = (item.count && item.count > 1) ? `<span class="qty">${item.count}</span>` : '';
-    const enchantBadge = item.enchant ? `<span class="slot-enchant" style="position:absolute; top:2px; right:2px; font-weight:bold; color:var(--gilt); font-size:10px;">+${item.enchant}</span>` : '';
-    const foundationBadge = item.foundation ? `<span style="position:absolute; top:2px; left:2px; font-size:9px;">✨</span>` : '';
+function withdrawAllFromWarehouse() {
+  if (!state.warehouse || state.warehouse.length === 0) {
+    log('O Baú está vazio.', 'system');
+    return;
+  }
+  let movedCount = 0;
+  for (const item of [...state.warehouse]) {
+    if (withdrawFromWarehouse(item.uid, item.count || 1)) {
+      movedCount++;
+    } else {
+      break;
+    }
+  }
+  if (movedCount > 0) {
+    log(`🎒 ${movedCount} item(ns) retirado(s) do Baú.`, 'loot');
+    updateAllUI(); save();
+  }
+}
 
-    slot.innerHTML = `<span style="font-size:18px">${getItemIcon(def)}</span><span class="name">${def.name}</span>${countBadge}${enchantBadge}${foundationBadge}`;
-    slot.onmouseenter = (e) => { cancelHideTooltip(); showItemTooltip(item, e); };
-    slot.onmouseleave = scheduleHideTooltip;
-    slot.onclick = (e) => { e.stopPropagation(); cancelHideTooltip(); showItemTooltip(item, e); };
-    slot.ondblclick = (e) => { e.stopPropagation(); withdrawFromWarehouse(item.uid); };
+function updateWarehouseUI() {
+  const invCapEl = el('wh-inv-count');
+  if (invCapEl) invCapEl.textContent = `${state.inventory.length}/${getMaxInventorySlots()} slots`;
 
-    grid.appendChild(slot);
-  });
+  const whCapEl = el('wh-storage-count');
+  if (whCapEl) whCapEl.textContent = `${(state.warehouse || []).length}/${getMaxWarehouseSlots()} slots`;
+
+  const invGrid = el('wh-inventory-grid');
+  if (invGrid) {
+    invGrid.innerHTML = '';
+    const unequippedItems = state.inventory.filter(i => i && i.itemId && D().ALL_ITEMS[i.itemId]);
+    if (unequippedItems.length === 0) {
+      invGrid.innerHTML = `<div style="grid-column: 1 / -1; text-align:center; padding:30px; color:var(--text-muted); font-size:11px;">Mochila vazia.</div>`;
+    } else {
+      unequippedItems.forEach(item => {
+        const def = getItemDef(item.itemId);
+        if (!def) return;
+        const rarity = item.rarity || 'common';
+        const slot = mkEl('div');
+        slot.className = `inv-slot rarity-${rarity}` + (item.equipped ? ' is-equipped' : '') + (item.foundation ? ' is-foundation' : '');
+        const countBadge = (item.count && item.count > 1) ? `<span class="qty">${item.count}</span>` : '';
+        const enchantBadge = item.enchant ? `<span class="slot-enchant" style="position:absolute; top:2px; right:2px; font-weight:bold; color:var(--gilt); font-size:10px;">+${item.enchant}</span>` : '';
+        const tag = item.equipped ? `<span class="equipped-badge">E</span>` : '';
+
+        slot.innerHTML = `<span style="font-size:18px">${getItemIcon(def)}</span><span class="name">${def.name}</span>${countBadge}${enchantBadge}${tag}`;
+        slot.onmouseenter = (e) => { cancelHideTooltip(); showItemTooltip(item, e); };
+        slot.onmouseleave = scheduleHideTooltip;
+        slot.onclick = (e) => { e.stopPropagation(); cancelHideTooltip(); showItemTooltip(item, e); };
+        slot.ondblclick = (e) => { e.stopPropagation(); depositToWarehouse(item.uid); };
+
+        invGrid.appendChild(slot);
+      });
+    }
+  }
+
+  const whGrid = el('wh-storage-grid');
+  if (whGrid) {
+    whGrid.innerHTML = '';
+    const storageItems = state.warehouse || [];
+    if (storageItems.length === 0) {
+      whGrid.innerHTML = `<div style="grid-column: 1 / -1; text-align:center; padding:30px; color:var(--text-muted); font-size:11px;">O Baú está vazio.</div>`;
+    } else {
+      storageItems.forEach(item => {
+        const def = getItemDef(item.itemId);
+        if (!def) return;
+        const rarity = item.rarity || 'common';
+        const slot = mkEl('div');
+        slot.className = `inv-slot rarity-${rarity}` + (item.foundation ? ' is-foundation' : '');
+        const countBadge = (item.count && item.count > 1) ? `<span class="qty">${item.count}</span>` : '';
+        const enchantBadge = item.enchant ? `<span class="slot-enchant" style="position:absolute; top:2px; right:2px; font-weight:bold; color:var(--gilt); font-size:10px;">+${item.enchant}</span>` : '';
+        const foundationBadge = item.foundation ? `<span style="position:absolute; top:2px; left:2px; font-size:9px;">✨</span>` : '';
+
+        slot.innerHTML = `<span style="font-size:18px">${getItemIcon(def)}</span><span class="name">${def.name}</span>${countBadge}${enchantBadge}${foundationBadge}`;
+        slot.onmouseenter = (e) => { cancelHideTooltip(); showItemTooltip(item, e); };
+        slot.onmouseleave = scheduleHideTooltip;
+        slot.onclick = (e) => { e.stopPropagation(); cancelHideTooltip(); showItemTooltip(item, e); };
+        slot.ondblclick = (e) => { e.stopPropagation(); withdrawFromWarehouse(item.uid); };
+
+        whGrid.appendChild(slot);
+      });
+    }
+  }
 }
 
 function bindEvents() {
@@ -5505,6 +5534,8 @@ export function init() {
     window.registerCodexItem = registerCodexItem;
     window.depositToWarehouse = depositToWarehouse;
     window.withdrawFromWarehouse = withdrawFromWarehouse;
+    window.depositAllToWarehouse = depositAllToWarehouse;
+    window.withdrawAllFromWarehouse = withdrawAllFromWarehouse;
     window.selectDollForSynth = selectDollForSynth;
     window.synthesizeDolls = synthesizeDolls;
     window.craftSpecialRecipe = craftSpecialRecipe;

@@ -630,31 +630,32 @@ export const IDLE_MARKUP = `
             </div>
           </div>
 
-          <!-- Warehouse Tab Pane -->
+          <!-- Warehouse Tab Pane (50/50 Split View: Mochila ↔ Baú) -->
           <div id="tab-warehouse" class="tab-pane">
-            <div class="warehouse-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; padding:10px 14px; background:rgba(0,0,0,0.5); border:1px solid rgba(212,167,68,0.3); border-radius:6px;">
-              <div>
-                <h3 style="margin:0; color:var(--gilt-bright); font-size:16px;">📦 Baú do Personagem</h3>
-                <span style="font-size:11px; color:var(--text-muted);">Armazenamento seguro compartilhado entre todas as subclasse do seu herói.</span>
+            <div class="warehouse-split-view" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; width: 100%; max-width: 1200px; margin: 0 auto;">
+              <!-- Left Side: Inventory (Mochila) -->
+              <div class="wh-side-panel" style="background: rgba(18, 22, 32, 0.95); border: 1px solid rgba(212,167,68,0.4); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; box-shadow: 0 4px 20px rgba(0,0,0,0.6);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid rgba(212,167,68,0.25);">
+                  <div>
+                    <h4 style="margin: 0; color: var(--gilt-bright); font-size: 14px; font-weight: bold;">🎒 Mochila (Inventário)</h4>
+                    <span id="wh-inv-count" style="font-size: 11px; color: var(--text-muted);">0/150 slots</span>
+                  </div>
+                  <button id="deposit-all-btn" class="action-btn action-btn--primary" style="font-size: 11px; padding: 4px 12px; font-weight: bold;" onclick="depositAllToWarehouse()">📥 Guardar Tudo</button>
+                </div>
+                <div id="wh-inventory-grid" class="l2inv-slots-grid" style="flex: 1; max-height: 480px; min-height: 320px; overflow-y: auto;"></div>
               </div>
-              <div style="font-size:12px; font-weight:bold; color:var(--gilt);">
-                Capacidade: <span id="warehouse-capacity">0/100</span>
-              </div>
-            </div>
 
-            <!-- Warehouse Controls & Filters -->
-            <div class="warehouse-controls" style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:12px; flex-wrap:wrap;">
-              <div class="l2inv-tabs-header" style="margin:0;">
-                <button class="l2inv-tab-btn wh-filter-btn active" data-wh-filter="all">Todos</button>
-                <button class="l2inv-tab-btn wh-filter-btn" data-wh-filter="gear">Equipamentos</button>
-                <button class="l2inv-tab-btn wh-filter-btn" data-wh-filter="consumable">Consumíveis</button>
-                <button class="l2inv-tab-btn wh-filter-btn" data-wh-filter="material">Materiais</button>
+              <!-- Right Side: Warehouse (Baú) -->
+              <div class="wh-side-panel" style="background: rgba(18, 22, 32, 0.95); border: 1px solid rgba(212,167,68,0.4); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; box-shadow: 0 4px 20px rgba(0,0,0,0.6);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid rgba(212,167,68,0.25);">
+                  <div>
+                    <h4 style="margin: 0; color: var(--gilt-bright); font-size: 14px; font-weight: bold;">📦 Baú do Personagem</h4>
+                    <span id="wh-storage-count" style="font-size: 11px; color: var(--text-muted);">0/100 slots</span>
+                  </div>
+                  <button id="withdraw-all-btn" class="action-btn action-btn--primary" style="font-size: 11px; padding: 4px 12px; font-weight: bold;" onclick="withdrawAllFromWarehouse()">📤 Retirar Tudo</button>
+                </div>
+                <div id="wh-storage-grid" class="l2inv-slots-grid" style="flex: 1; max-height: 480px; min-height: 320px; overflow-y: auto;"></div>
               </div>
-              <input type="text" id="wh-search-input" placeholder="🔍 Buscar no Baú..." style="padding:5px 10px; font-size:11px; background:rgba(0,0,0,0.6); border:1px solid rgba(212,167,68,0.3); color:#fff; border-radius:4px; width:160px;" />
-            </div>
-
-            <!-- Warehouse Grid Container -->
-            <div class="wh-grid-area" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(56px, 1fr)); gap:6px; min-height:260px; max-height:480px; overflow-y:auto; padding:10px; background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.1); border-radius:6px;" id="warehouse-grid">
             </div>
           </div>
         </div>
