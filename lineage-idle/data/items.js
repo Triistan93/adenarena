@@ -2972,11 +2972,26 @@ function rollRarity(bonus = 0) {
   return 'common';
 }
 
+function getZoneDropTier(zoneLevel) {
+  if (zoneLevel < 15) return 'zone1';
+  if (zoneLevel < 35) return 'zone2';
+  if (zoneLevel < 55) return 'zone3';
+  if (zoneLevel < 75) return 'zone4';
+  if (zoneLevel < 90) return 'zone5';
+  return 'zone6';
+}
+
 function rollDrop(zoneId = 'zone1', rarityBonus = 0) {
   const pool = MONSTER_DROPS[zoneId] || MONSTER_DROPS.zone1;
   const itemId = pool[Math.floor(Math.random() * pool.length)];
   const rarity = rollRarity(rarityBonus);
-  return { itemId, rarity };
+  const def = ALL_ITEMS[itemId];
+  const isEquipment = def ? ['weapon','armor','helmet','gloves','boots','ring','necklace','earring','shield','legs','belt','cloak','talisman','hair','hair2','agathion'].includes(def.slot) : true;
+  const dropObj = { id: itemId, itemId, rarity, isEquipment, amount: 1 };
+  const res = [dropObj];
+  res.itemId = itemId;
+  res.rarity = rarity;
+  return res;
 }
 
 function getMysticRotation() {
@@ -2994,6 +3009,6 @@ if (typeof window !== 'undefined') {
     ARMOR_SETS, ICON_MAP, RARITY, SLOT, WEAPONS, ARMORS, HELMETS, BOOTS, GLOVES, RINGS,
     LEGS, SHIELDS, BELTS, CLOAKS, SIGILS, NECKLACES, EARRINGS, HAIR, AGATHIONS,
     CONSUMABLES, MATERIALS, ALL_ITEMS, MONSTER_DROPS, SHOP_INVENTORY, CRAFTING_RECIPES,
-    ZONE_GOLD_MULT, MYSTIC_POOL, rollRarity, rollDrop, getMysticRotation, rollItemWithRarity
+    ZONE_GOLD_MULT, MYSTIC_POOL, getZoneDropTier, rollRarity, rollDrop, getMysticRotation, rollItemWithRarity
   };
 }

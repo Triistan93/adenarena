@@ -102,7 +102,7 @@ export const IDLE_MARKUP = `
           <p class="log-entry system">Select your Race &amp; Class to begin.</p>
         </div>
         <form id="chat-form" class="chat-input-bar">
-          <input type="text" id="chat-input" class="chat-input" placeholder="Digite uma mensagem ou comando (ex: //admin)..." autocomplete="off" />
+          <input type="text" id="chat-input" class="chat-input" placeholder="Digite uma mensagem..." autocomplete="off" />
           <button type="submit" class="chat-send-btn">Enviar</button>
         </form>
       </section>

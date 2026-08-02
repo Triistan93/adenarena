@@ -19,7 +19,7 @@ const HERO_IMG = {
   darkelf_assassin: "/img/darkelf_fighter.png",
   darkelf_shillien: "/img/darkelf_mage.png",
   darkelf_sorcerer: "/img/darkelf_mage.png",
-  orc_fighter: "public/img/Races/Orcs/Fighter/orcfighterM.png",
+  orc_fighter: "/img/Races/Orcs/Fighter/orcfighterM.png",
   orc_mage: "/img/orc_mage.png",
   orc_destroyer: "/img/orcfighterM.png",
   orc_monk: "/img/orcfighterM.png",
@@ -39,7 +39,7 @@ const RACE_FALLBACK = {
   human: "/img/humanpalaM.png",
   elf: "/img/elfwswM.png",
   darkelf: "/img/darkelfskM.png",
-  orc: "public/img/Races/Orcs/Fighter/orcfighterM.png",
+  orc: "/img/Races/Orcs/Fighter/orcfighterM.png",
   dwarf: "/img/dwarfmaestroM.png",
   kamael: "/img/kamaelDM.png",
   ertheia: "/img/sylphM.png",
@@ -349,7 +349,8 @@ export function heroSVG(race, cls, aura, mode) {
 //  monsterSVG(id, opts)
 // ================================================================
 export function monsterSVG(id, opts) {
-  const imgSrc = MON_IMG[id] || MON_IMG[id.toLowerCase()] || `/img/Monsters/${id}.png`;
+  const safeId = id || '';
+  const imgSrc = MON_IMG[safeId] || (safeId ? MON_IMG[safeId.toLowerCase()] : null) || `/img/Monsters/${safeId}.png`;
   const crown = opts?.crown
     ? `<div style="position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-size:22px;filter:drop-shadow(0 0 6px #f0c840);z-index:2;">👑</div>`
     : "";
@@ -358,7 +359,7 @@ export function monsterSVG(id, opts) {
   const glow = opts?.crown ? "drop-shadow(0 0 10px rgba(240,200,64,0.5))" : "drop-shadow(0 6px 12px rgba(0,0,0,0.6))";
   return `<div class="mon-svg" style="width:100%;height:100%;position:relative;">
     ${crown}
-    <img src="${resolvedSrc}" alt="${id}" draggable="false" onerror="this.onerror=null; this.src='${getAssetUrl(`img/Monsters/${id}.png`)}'; if(!this.naturalWidth) this.src='${getAssetUrl(`img/${id}.png`)}';"
+    <img src="${resolvedSrc}" alt="${safeId}" draggable="false" onerror="this.onerror=null; this.src='${getAssetUrl(`img/Monsters/${safeId}.png`)}'; if(!this.naturalWidth) this.src='${getAssetUrl(`img/${safeId}.png`)}';"
       style="width:100%;height:100%;object-fit:contain;object-position:center bottom;filter:${glow};" />
   </div>`;
 }

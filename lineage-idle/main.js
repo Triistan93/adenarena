@@ -648,9 +648,33 @@ function getBaseAttributes(raceKey, classKey) {
   return { ...(RACE_BASE_ATTRIBUTES[key] || RACE_BASE_ATTRIBUTES.human_fighter) };
 }
 
+function getZoneDropTier(zoneLevel) {
+  if (zoneLevel < 15) return 'zone1';
+  if (zoneLevel < 35) return 'zone2';
+  if (zoneLevel < 55) return 'zone3';
+  if (zoneLevel < 75) return 'zone4';
+  if (zoneLevel < 90) return 'zone5';
+  return 'zone6';
+}
+
 function getClass(c) {
   if (!c) return null;
-  return CLASSES[c] || CLASSES[String(c).toLowerCase()] || null;
+  let def = CLASSES[c] || CLASSES[String(c).toLowerCase()] || null;
+  if (!def) return null;
+  if (def.archetype === undefined && def.parent) {
+    let current = def.parent;
+    const visited = new Set([c]);
+    while (current && !visited.has(current)) {
+      visited.add(current);
+      const parentDef = CLASSES[current] || CLASSES[String(current).toLowerCase()];
+      if (!parentDef) break;
+      if (parentDef.archetype !== undefined) {
+        return { ...def, archetype: parentDef.archetype };
+      }
+      current = parentDef.parent;
+    }
+  }
+  return def;
 }
 
 function classSatisfies(playerClass, reqClass) {
@@ -4024,8 +4048,9 @@ function attackMonster() {
         log(`✨ ${skill.def.name}! Curou ${healAmt} HP`, 'heal');
         floatText(`+${healAmt} HP`, 'sf-heal');
       } else {
-        const type = isMage ? 'magic' : 'physical';
-        const baseSkillDmg = isMage ? stats.matk : stats.atk;
+        const useMagicSkill = stats.matk > stats.atk;
+        const type = useMagicSkill ? 'magic' : 'physical';
+        const baseSkillDmg = useMagicSkill ? stats.matk : stats.atk;
         const skillPwr = window.SkillScaling ? window.SkillScaling.getSkillPwrAtLevel(skill.def, skill.lvl) : (Number(skill.def.pwr) || 30);
         const sDmg = dealDamage(monster, baseSkillDmg * (skillPwr / 10), type);
         
@@ -4128,7 +4153,10 @@ function attackMonster() {
       stageFloat(`🔥 STREAK x${state.killStreak}!`, 'sf-crit', 'right');
     }
 
-    const zoneMult = D().ZONE_GOLD_MULT[state.zone] || 1, xpMult = 1 + (stats.xpBoost || 0);
+    const zoneLevel = ZONES[state.zone]?.level || 1;
+    const zoneTier = getZoneDropTier(zoneLevel);
+    const zoneMult = (D().ZONE_GOLD_MULT && D().ZONE_GOLD_MULT[zoneTier]) || 1;
+    const xpMult = 1 + (stats.xpBoost || 0);
     const xpGain = Math.floor(monster.xp * xpMult), spGain = monster.sp + (monster.boss ? 2 : 0);
     state.xp += xpGain; state.sp += spGain;
     log(`Defeated ${monster.name}! +${xpGain} XP, +${spGain} SP`, 'xp');
@@ -4139,10 +4167,20 @@ function attackMonster() {
     state.gold += gold; trackGold(gold);
     if (jackpot) { log(`💰 JACKPOT! +${gold} Gold (×10)`, 'rarity-legendary'); floatText(`💰 +${gold}g`, 'float-jackpot'); } else { log(`+${gold} Gold`, 'loot'); if (gold >= 20) floatText(`+${gold}g`, 'float-gold'); }
 
-    const drops = D().rollDrop(state.target, stats.loot);
+    const rawDrop = D().rollDrop(zoneTier, stats.loot);
+    const drops = Array.isArray(rawDrop) ? rawDrop : (rawDrop && rawDrop.itemId ? [ { id: rawDrop.itemId, rarity: rawDrop.rarity, isEquipment: true, amount: 1 } ] : []);
     for (const drop of drops) {
-      if (drop.isEquipment) { addToInventory(drop.id, 1, drop.rarity); log(`✦ ${D().ALL_ITEMS[drop.id].name} [${D().RARITY[drop.rarity].name}]`, 'rarity-' + drop.rarity); floatText(`✦ ${D().RARITY[drop.rarity].name}!`, 'float-' + drop.rarity); } 
-      else { addToInventory(drop.id, drop.amount); log(`+ ${drop.amount}× ${D().ALL_ITEMS[drop.id].name}`, 'loot'); }
+      const dropId = drop.id || drop.itemId;
+      if (dropId && D().ALL_ITEMS[dropId]) {
+        if (drop.isEquipment || D().ALL_ITEMS[dropId].slot !== 'material') {
+          addToInventory(dropId, 1, drop.rarity);
+          log(`✦ ${D().ALL_ITEMS[dropId].name} [${D().RARITY[drop.rarity || 'common']?.name || drop.rarity}]`, 'rarity-' + (drop.rarity || 'common'));
+          floatText(`✦ ${D().RARITY[drop.rarity || 'common']?.name || drop.rarity}!`, 'float-' + (drop.rarity || 'common'));
+        } else {
+          addToInventory(dropId, drop.amount || 1);
+          log(`+ ${drop.amount || 1}× ${D().ALL_ITEMS[dropId].name}`, 'loot');
+        }
+      }
     }
     triggerQuestEvent('kill', 1);
     if (monster.boss || monster.elite) triggerQuestEvent('boss', 1);
@@ -5584,6 +5622,10 @@ export function init() {
         : [];
       
       state = { ...def, ...cloudData };
+      // ⚠️ SEGURANÇA: privilegeLevel é confiável apenas para gate de UI local.
+      // Qualquer efeito de comando GM (gold, level, sp, itens) que seja
+      // persistido/sincronizado em backend DEVE ser revalidado no servidor,
+      // pois este valor é 100% controlável pelo cliente via DevTools.
       state.privilegeLevel = Number(cloudData.privilegeLevel) || (cloudData.role === 'admin' ? 1 : 0);
       state.skills = { ...def.skills, ...(cloudData.skills || {}) };
       const _sk = getStarterSkillForClass(state.class);
