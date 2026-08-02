@@ -354,13 +354,149 @@ function getCertificationsBonuses() {
   };
 }
 
+// ── ARMOR SETS & PRIMARY ATTRIBUTES SYSTEM ──
+function getEquippedSetCount(setDef) {
+  if (!setDef) return { count: 0, hasShield: false, totalPieceCount: 5 };
+  let count = 0;
+  const slots = ['armor', 'helmet', 'boots', 'gloves', 'legs'];
+
+  for (const slot of slots) {
+    const uid = state.equipment[slot];
+    if (!uid) continue;
+    const item = state.inventory.find(i => i.uid === uid);
+    if (!item) continue;
+    const def = getItemDef(item.itemId);
+    if (!def) continue;
+    const itemId = def.id;
+
+    let matched = false;
+    if (setDef.pieces && setDef.pieces[slot]) {
+      const targetId = getItemDef(setDef.pieces[slot])?.id || setDef.pieces[slot];
+      if (itemId === targetId) matched = true;
+    }
+    if (!matched && setDef.variantPieces && setDef.variantPieces[slot]) {
+      const targetVariants = setDef.variantPieces[slot].map(v => getItemDef(v)?.id || v);
+      if (targetVariants.includes(itemId)) matched = true;
+    }
+    if (matched) count++;
+  }
+
+  let hasShield = false;
+  if (setDef.shieldPiece) {
+    const shieldUid = state.equipment.shield;
+    if (shieldUid) {
+      const shieldItem = state.inventory.find(i => i.uid === shieldUid);
+      if (shieldItem) {
+        const def = getItemDef(shieldItem.itemId);
+        if (def) {
+          const targetShieldId = getItemDef(setDef.shieldPiece)?.id || setDef.shieldPiece;
+          if (def.id === targetShieldId) hasShield = true;
+        }
+      }
+    }
+  }
+
+  return { count, hasShield, totalPieceCount: setDef.fullPieceCount || 5 };
+}
+
+function getActiveSetBonuses() {
+  const activeBonuses = [];
+  const primaryStats = { str: 0, dex: 0, con: 0, int: 0, wit: 0, men: 0 };
+  const statTotals = { atk: 0, def: 0, matk: 0, mdef: 0, hp: 0, mp: 0, eva: 0, crit: 0, speed: 0, lifesteal: 0, block: 0 };
+
+  const armorSets = (typeof window !== 'undefined' && window.GameData && window.GameData.ARMOR_SETS) ? window.GameData.ARMOR_SETS : (typeof ARMOR_SETS !== 'undefined' ? ARMOR_SETS : {});
+
+  for (const [setId, setDef] of Object.entries(armorSets)) {
+    const { count, hasShield, totalPieceCount } = getEquippedSetCount(setDef);
+    if (count < 2) continue;
+
+    const thresholds = [2, 3, totalPieceCount];
+    if (setDef.shieldPiece && count >= totalPieceCount && hasShield) {
+      thresholds.push(totalPieceCount + 1);
+    }
+
+    const setBonusInfo = {
+      setId,
+      setName: setDef.name,
+      equippedCount: count,
+      hasShield,
+      fullPieceCount: totalPieceCount,
+      activeThresholds: []
+    };
+
+    for (const t of thresholds) {
+      let reached = false;
+      if (t <= 3 && count >= t) reached = true;
+      else if (t === totalPieceCount && count >= totalPieceCount) reached = true;
+      else if (t === totalPieceCount + 1 && count >= totalPieceCount && hasShield) reached = true;
+
+      if (reached && setDef.bonuses && setDef.bonuses[t]) {
+        const b = setDef.bonuses[t];
+        setBonusInfo.activeThresholds.push({ threshold: t, bonus: b });
+
+        for (const [k, v] of Object.entries(b)) {
+          if (k === 'primary') {
+            for (const [pk, pv] of Object.entries(v)) {
+              if (primaryStats[pk] !== undefined) primaryStats[pk] += Number(pv) || 0;
+            }
+          } else if (statTotals[k] !== undefined) {
+            statTotals[k] += Number(v) || 0;
+          }
+        }
+      }
+    }
+
+    if (setBonusInfo.activeThresholds.length > 0) {
+      activeBonuses.push(setBonusInfo);
+    }
+  }
+
+  return { activeBonuses, primaryStats, statTotals };
+}
+
+function applyPrimaryStats(stats, primary) {
+  if (!primary) return stats;
+  const str = Number(primary.str) || 0;
+  const con = Number(primary.con) || 0;
+  const dex = Number(primary.dex) || 0;
+  const int = Number(primary.int) || 0;
+  const wit = Number(primary.wit) || 0;
+  const men = Number(primary.men) || 0;
+
+  // STR: +0.5% P.Atk (atk) por ponto
+  if (str > 0) stats.atk = Math.floor(stats.atk * (1 + str * 0.005));
+
+  // CON: +1% HP máximo por ponto
+  if (con > 0) stats.maxHp = Math.floor(stats.maxHp * (1 + con * 0.01));
+
+  // DEX: +0.3% Crit Rate + 0.2% Evasão + 0.1 Speed por ponto
+  if (dex > 0) {
+    stats.crit = Math.round(((stats.crit || 0) + dex * 0.3) * 10) / 10;
+    stats.eva = (stats.eva || 0) + Math.floor(dex * 0.2);
+    stats.speed = Math.round(((stats.speed || 1) + (dex * 0.1) / 100) * 100) / 100;
+  }
+
+  // INT: +0.5% M.Atk (matk) por ponto
+  if (int > 0) stats.matk = Math.floor(stats.matk * (1 + int * 0.005));
+
+  // WIT: +0.3% MP máximo por ponto
+  if (wit > 0) stats.maxMp = Math.floor(stats.maxMp * (1 + wit * 0.003));
+
+  // MEN: +0.5% M.Def (mdef) + 0.2% MP máximo por ponto
+  if (men > 0) {
+    stats.mdef = Math.floor(stats.mdef * (1 + men * 0.005));
+    stats.maxMp = Math.floor(stats.maxMp * (1 + men * 0.002));
+  }
+
+  return stats;
+}
+
 function getStats() {
   const raceKey = state.race ? String(state.race).toLowerCase() : 'human';
   const race = RACES[raceKey] || RACES.human;
   const cls = getClass(state.class);
   const skills = state.skills || {};
 
-  // sk() reads skill level; works for both legacy generic and new class-specific skills
   const sk = (id) => Number(skills[id]) || 0;
   
   const raceStats = race?.stats || {};
@@ -383,6 +519,12 @@ function getStats() {
   const mpRegenBonus = sk('higherMana') * 2;
 
   const eb = getTotalEquipBonuses();
+  const setRes = getActiveSetBonuses();
+  const setB = setRes.statTotals;
+  const primaryStats = setRes.primaryStats;
+
+  state.primaryStats = primaryStats;
+
   let itemCraftBonus = 0, itemLootBonus = 0;
   for (const slot of Object.keys(state.equipment)) {
     const it = getEquipBonus(slot);
@@ -409,7 +551,6 @@ function getStats() {
     else if (k === 'autoPotion') autoPotion = true;
   }
 
-  // Agathion Passive Companions Boosts
   const agathionUid = state.equipment.agathion;
   const agathionItem = agathionUid ? state.inventory.find(i => i.uid === agathionUid) : null;
   const agathionDef = agathionItem ? D().ALL_ITEMS[agathionItem.itemId] : null;
@@ -431,34 +572,36 @@ function getStats() {
   const certB = getCertificationsBonuses();
   const towerMult = 1 + ((state.tower?.highestFloor || 0) * 0.01);
 
-  const finalAtk  = Math.floor((baseAtk + (Number(eb.atk) || 0) + buffAtk + codexB.atk + dollsB.atk + certB.atk) * atkMult * towerMult);
-  const finalDef  = Math.floor((baseDef + (Number(eb.def) || 0) + buffDef + codexB.def + dollsB.def + certB.def) * defMult * towerMult);
-  const finalEva  = Math.floor(baseEva + (Number(eb.eva) || 0) + codexB.eva + dollsB.eva);
-  const finalMatk = Math.floor((baseMatk + (Number(eb.matk) || 0) + buffMatk + codexB.matk + dollsB.matk + certB.matk) * towerMult);
-  const finalMdef = Math.floor((baseMdef + (Number(eb.mdef) || 0) + codexB.mdef + dollsB.mdef + certB.mdef) * towerMult);
-  const finalCrit = (Number(eb.crit) || 0) + codexB.crit + dollsB.crit + certB.crit;
+  const finalAtk  = Math.floor((baseAtk + (Number(eb.atk) || 0) + (Number(setB.atk) || 0) + buffAtk + codexB.atk + dollsB.atk + certB.atk) * atkMult * towerMult);
+  const finalDef  = Math.floor((baseDef + (Number(eb.def) || 0) + (Number(setB.def) || 0) + buffDef + codexB.def + dollsB.def + certB.def) * defMult * towerMult);
+  const finalEva  = Math.floor(baseEva + (Number(eb.eva) || 0) + (Number(setB.eva) || 0) + codexB.eva + dollsB.eva);
+  const finalMatk = Math.floor((baseMatk + (Number(eb.matk) || 0) + (Number(setB.matk) || 0) + buffMatk + codexB.matk + dollsB.matk + certB.matk) * towerMult);
+  const finalMdef = Math.floor((baseMdef + (Number(eb.mdef) || 0) + (Number(setB.mdef) || 0) + codexB.mdef + dollsB.mdef + certB.mdef) * towerMult);
+  const finalCrit = (Number(eb.crit) || 0) + (Number(setB.crit) || 0) + codexB.crit + dollsB.crit + certB.crit;
   
   const lootBonus = (Number(race?.stats?.lootBonus) || 0) + (Number(cls?.base?.lootBonus) || 0) + itemLootBonus + luckBoost;
   const atkSpd    = (buffSpd + (dollsB.speed || 0)) / 100;
-  const lifeDrain = ((Number(eb.lifesteal) || 0) + (dollsB.lifesteal || 0)) / 100;
+  const lifeDrain = ((Number(eb.lifesteal) || 0) + (dollsB.lifesteal || 0) + ((setB.lifesteal || 0) / 100));
   const craftBonus = itemCraftBonus;
 
   const critDmg = 1 + sk('executioner') * 0.15;
   const regenHp = sk('holylight') * 0.01;
   const meteorLvl = sk('meteor');
   const execute = sk('assassinate') * 0.02;
-  const block = sk('divineshield') * 0.05;
+  const block = sk('divineshield') * 0.05 + (setB.block || 0);
 
-  const maxHp = Math.floor(100 + state.level * 10 + sk('boostHp') * 60 + (Number(eb.hp) || 0) + codexB.hp + dollsB.hp);
-  const maxMp = Math.floor(50 + state.level * 5 + sk('boostMana') * 30 + (Number(eb.mp) || 0) + codexB.mp + dollsB.mp);
+  const maxHp = Math.floor(100 + state.level * 10 + sk('boostHp') * 60 + (Number(eb.hp) || 0) + (Number(setB.hp) || 0) + codexB.hp + dollsB.hp);
+  const maxMp = Math.floor(50 + state.level * 5 + sk('boostMana') * 30 + (Number(eb.mp) || 0) + (Number(setB.mp) || 0) + codexB.mp + dollsB.mp);
   
-  return {
+  const rawStats = {
     atk: finalAtk || 1, def: finalDef || 0, eva: finalEva || 0, matk: finalMatk || 1, mdef: finalMdef || 0,
-    crit: finalCrit, critDmg, loot: 1 + lootBonus, speed: 1 + buffSpd / 100, cdr,
+    crit: finalCrit, critDmg, loot: 1 + lootBonus, speed: 1 + (buffSpd + (setB.speed || 0)) / 100, cdr,
     atkSpd, lifeDrain, craftBonus, mpRegen: mpRegenBonus,
     xpBoost, goldBoost, luckBoost, autoPotion, maxHp, maxMp,
     regenHp, meteorLvl, execute, block
   };
+
+  return applyPrimaryStats(rawStats, primaryStats);
 }
 
 function getBaseAttributes(raceKey, classKey) {
@@ -1303,6 +1446,21 @@ function updateEquipmentUI() {
   const critEl = el('l2stat-crit'); if (critEl) critEl.textContent = `${stats.crit}%`;
   const spdEl = el('l2stat-speed'); if (spdEl) spdEl.textContent = stats.speed;
 
+  const pStats = state.primaryStats || {};
+  const hasPrimary = (pStats.str > 0 || pStats.dex > 0 || pStats.con > 0 || pStats.int > 0 || pStats.wit > 0 || pStats.men > 0);
+  const primBox = el('l2inv-primary-box');
+  if (primBox) {
+    primBox.style.display = hasPrimary ? 'block' : 'none';
+    if (hasPrimary) {
+      const strEl = el('l2stat-str'); if (strEl) strEl.textContent = pStats.str || 0;
+      const dexEl = el('l2stat-dex'); if (dexEl) dexEl.textContent = pStats.dex || 0;
+      const conEl = el('l2stat-con'); if (conEl) conEl.textContent = pStats.con || 0;
+      const intEl = el('l2stat-int'); if (intEl) intEl.textContent = pStats.int || 0;
+      const witEl = el('l2stat-wit'); if (witEl) witEl.textContent = pStats.wit || 0;
+      const menEl = el('l2stat-men'); if (menEl) menEl.textContent = pStats.men || 0;
+    }
+  }
+
   const defaultSlotIcons = {
     hair: '👒', gloves: '🧤', weapon: '⚔️', necklace: '📿', ring: '💍', belt: '🪢',
     helmet: '⛑️', armor: '🛡️', legs: '👖', shield: '🛡️', boots: '👢',
@@ -1807,6 +1965,53 @@ function showItemTooltip(item, e) {
     });
     html += `</div>`;
   }
+
+  // ── SEPARADOR CLARO PARA BÔNUS DE SET ──
+  const setKey = def.set || (typeof getSetIdForItem === 'function' ? getSetIdForItem(def.id) : null);
+  const armorSets = (typeof window !== 'undefined' && window.GameData && window.GameData.ARMOR_SETS) ? window.GameData.ARMOR_SETS : (typeof ARMOR_SETS !== 'undefined' ? ARMOR_SETS : {});
+  if (setKey && armorSets[setKey]) {
+    const setDef = armorSets[setKey];
+    const { count, hasShield, totalPieceCount } = getEquippedSetCount(setDef);
+
+    let setHtml = `<div class="tt-set-section" style="margin-top:8px; padding-top:6px; border-top:1px dashed #d4a744;">`;
+    setHtml += `<div style="font-size:10px; font-weight:bold; color:var(--gilt-bright); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:3px; display:flex; justify-content:space-between;">`;
+    setHtml += `<span>✦ Set: ${setDef.name}</span>`;
+    setHtml += `<span style="color:${count >= totalPieceCount ? '#10b981' : '#a1a1aa'};">(${count}/${totalPieceCount})</span>`;
+    setHtml += `</div>`;
+
+    const thresholds = [2, 3, totalPieceCount];
+    if (setDef.shieldPiece) thresholds.push(totalPieceCount + 1);
+
+    for (const t of thresholds) {
+      let isUnlocked = false;
+      if (t <= 3) isUnlocked = (count >= t);
+      else if (t === totalPieceCount) isUnlocked = (count >= totalPieceCount);
+      else if (t === totalPieceCount + 1) isUnlocked = (count >= totalPieceCount && hasShield);
+
+      const b = setDef.bonuses ? setDef.bonuses[t] : null;
+      if (!b) continue;
+
+      const color = isUnlocked ? '#10b981' : '#71717a';
+      const label = t === totalPieceCount + 1 ? `${totalPieceCount}+Escudo` : `${t} Pçs`;
+
+      const bonusParts = [];
+      for (const [k, v] of Object.entries(b)) {
+        if (k === 'primary') {
+          const primParts = Object.entries(v).map(([pk, pv]) => `+${pv} ${pk.toUpperCase()}`);
+          bonusParts.push(primParts.join(', '));
+        } else {
+          bonusParts.push(`+${v}${k === 'crit' ? '%' : ''} ${k.toUpperCase()}`);
+        }
+      }
+
+      setHtml += `<div style="font-size:10px; color:${color}; margin-bottom:2px; font-weight:${isUnlocked ? '600' : '400'};">`;
+      setHtml += `${isUnlocked ? '✓' : '○'} ${label}: ${bonusParts.join(', ')}`;
+      setHtml += `</div>`;
+    }
+    setHtml += `</div>`;
+    html += setHtml;
+  }
+
   if (item.equipped) html += `<div class="tt-equipped">[ EQUIPPED ]</div>`;
   
   if (!item.equipped) {

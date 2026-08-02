@@ -2,7 +2,7 @@
  * rebuild-from-folders.mjs
  * 
  * Scans public/img/icons/ subfolders and generates:
- *   1. lineage-idle/data/items.js  -- full item database + ICON_MAP (with exact IDs + aliases)
+ *   1. lineage-idle/data/items.js -- full item database + ICON_MAP + ARMOR_SETS
  *   2. public/img/icons/icon_index.json -- canonical path map
  */
 
@@ -23,6 +23,41 @@ const GRADE_MAP = {
   'gradea':       { tier: 4.5, grade: 'A Grade',  level: 61 },
   'gradespecial': { tier: 5,   grade: 'S Grade',  level: 76 },
 };
+
+// ── Filename -> exact item ID (without extension) ──
+function toExactId(filename) {
+  return filename.replace(/\.png$/i, '').replace(/\.png$/i, '').toLowerCase();
+}
+
+// ── Stripped alias ID (without armor_/jewel_/weapon_/shield_/wepoan_ prefix) ──
+function toStrippedId(filename) {
+  let id = toExactId(filename);
+  return id.replace(/^(armor_|weapon_|jewel_|shield_|wepoan_)/, '');
+}
+
+// ── Detect slot from armor filename ──
+function detectArmorSlot(filename) {
+  const fn = filename.toLowerCase();
+  if (/shield|buckler/.test(fn)) return 'shield';
+  if (/sigil/.test(fn)) return 'sigil';
+  if (/belt/.test(fn)) return 'belt';
+  if (/cloa[ck]k?/.test(fn)) return 'cloak';
+  if (/helmet|helm|circlet|hat|cap|mask/.test(fn)) return 'helmet';
+  if (/boot/.test(fn)) return 'boots';
+  if (/glove/.test(fn)) return 'gloves';
+  if (/pants|gaiter/.test(fn)) return 'legs';
+  if (/armor|breastplate|vest|tunic|robe/.test(fn)) return 'armor';
+  return 'armor';
+}
+
+// ── Detect jewel slot ──
+function detectJewelSlot(filename) {
+  const fn = filename.toLowerCase();
+  if (/ear/.test(fn)) return 'earring';
+  if (/necklace/.test(fn)) return 'necklace';
+  if (/ring/.test(fn)) return 'ring';
+  return 'ring';
+}
 
 // ── Stat formulas (scale by tier) ──
 function weaponStats(id, tier, filename) {
@@ -99,7 +134,6 @@ function price(tier) {
   return Math.round(200 + Math.pow(tier, 2.2) * 1200);
 }
 
-// ── Filename -> human-readable name ──
 function toDisplayName(filename) {
   let name = filename.replace(/\.png$/i, '').replace(/\.png$/i, '');
   name = name.replace(/^(armor_|weapon_|jewel_|shield_|wepoan_)/i, '');
@@ -107,46 +141,297 @@ function toDisplayName(filename) {
   return name.split('_').filter(Boolean).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 }
 
-// ── Filename -> exact item ID (without extension) ──
-function toExactId(filename) {
-  return filename.replace(/\.png$/i, '').replace(/\.png$/i, '').toLowerCase();
-}
-
-// ── Stripped alias ID (without armor_/jewel_/weapon_/shield_/wepoan_ prefix) ──
-function toStrippedId(filename) {
-  let id = toExactId(filename);
-  return id.replace(/^(armor_|weapon_|jewel_|shield_|wepoan_)/, '');
-}
-
-// ── Detect slot from armor filename ──
-function detectArmorSlot(filename) {
-  const fn = filename.toLowerCase();
-  if (/shield|buckler/.test(fn)) return 'shield';
-  if (/sigil/.test(fn)) return 'sigil';
-  if (/belt/.test(fn)) return 'belt';
-  if (/cloa[ck]k?/.test(fn)) return 'cloak';
-  if (/helmet|helm|circlet|hat|cap|mask/.test(fn)) return 'helmet';
-  if (/boot/.test(fn)) return 'boots';
-  if (/glove/.test(fn)) return 'gloves';
-  if (/pants|gaiter/.test(fn)) return 'legs';
-  if (/armor|breastplate|vest|tunic|robe/.test(fn)) return 'armor';
-  return 'armor';
-}
-
-// ── Detect jewel slot ──
-function detectJewelSlot(filename) {
-  const fn = filename.toLowerCase();
-  if (/ear/.test(fn)) return 'earring';      // check before ring
-  if (/necklace/.test(fn)) return 'necklace';
-  if (/ring/.test(fn)) return 'ring';
-  return 'ring';
-}
-
 function scanDir(dir) {
   if (!existsSync(dir)) return [];
   return readdirSync(dir)
     .filter(f => f.endsWith('.png') && !f.endsWith('.png.png'))
     .sort();
+}
+
+// ── Armor Sets Definition ──
+const ARMOR_SETS = {
+  devotion_set: {
+    name: 'Devotion',
+    fullPieceCount: 5,
+    pieces: {
+      armor: 'armor_devotion_armor_robe', helmet: 'armor_devotion_helmet',
+      boots: 'armor_devotion_boots', gloves: 'armor_devotion_gloves', legs: 'armor_devotion_pants_robe'
+    },
+    bonuses: {
+      2: { matk: 15, mp: 20 },
+      3: { mdef: 15, mp: 30 },
+      5: { matk: 35, mdef: 25, mp: 50, primary: { wit: 3, int: 2 } }
+    }
+  },
+  brigandine_set: {
+    name: 'Brigandine',
+    fullPieceCount: 5,
+    pieces: {
+      armor: 'armor_brigandine_armor_heavy', helmet: 'armor_brigandine_helmet_heavy',
+      boots: 'armor_brigandine_boots_heavy', gloves: 'armor_brigandine_gloves_heavy',
+      legs: 'armor_brigandine_pants_heavy'
+    },
+    shieldPiece: 'armor_brigandine_shield',
+    bonuses: {
+      2: { def: 20, hp: 40 },
+      3: { def: 30, hp: 60 },
+      5: { def: 50, mdef: 30, hp: 100, primary: { con: 3, str: 2 } },
+      6: { def: 25, hp: 50, primary: { con: 1 } }
+    }
+  },
+  manticore_set: {
+    name: 'Manticore',
+    fullPieceCount: 5,
+    pieces: {
+      armor: 'armor_manticore_armor_light', helmet: 'armor_manticore_helmet_light',
+      boots: 'armor_manticore_boots_light', gloves: 'armor_manticore_gloves_light',
+      legs: 'armor_manticore_pants_light'
+    },
+    bonuses: {
+      2: { atk: 18, eva: 4 },
+      3: { crit: 3, hp: 40 },
+      5: { atk: 40, crit: 5, eva: 8, primary: { dex: 3, str: 2 } }
+    }
+  },
+  mithril_set: {
+    name: 'Mithril',
+    fullPieceCount: 5,
+    pieces: {
+      armor: 'armor_mithril_tunic_robe', helmet: 'armor_mithril_helmet_robe',
+      boots: 'armor_mithril_boots_robe', gloves: 'armor_mithril_gloves_robe',
+      legs: 'armor_mithril_pants_robe'
+    },
+    bonuses: {
+      2: { matk: 25, mp: 40 },
+      3: { mdef: 25, mp: 60 },
+      5: { matk: 55, mdef: 45, mp: 100, primary: { wit: 3, men: 2 } }
+    }
+  },
+  karmian_set: {
+    name: 'Karmian',
+    fullPieceCount: 5,
+    pieces: {
+      armor: 'armor_karmian_robe_armor', helmet: 'armor_karmian_helmet',
+      boots: 'armor_karmian_robe_boots', gloves: 'armor_karmian_robe_gloves',
+      legs: 'armor_karmian_robe_pants'
+    },
+    bonuses: {
+      2: { matk: 40, mdef: 30 },
+      3: { mp: 100, speed: 5 },
+      5: { matk: 90, mdef: 70, mp: 150, primary: { wit: 4, int: 3 } }
+    }
+  },
+  theca_set: {
+    name: 'Theca',
+    fullPieceCount: 5,
+    pieces: {
+      armor: 'armor_theca_light_armor', helmet: 'armor_theca_light_helmet',
+      boots: 'armor_theca_light_boots', gloves: 'armor_theca_light_gloves',
+      legs: 'armor_theca_light_pants'
+    },
+    bonuses: {
+      2: { def: 35, atk: 30 },
+      3: { eva: 6, crit: 4 },
+      5: { def: 80, atk: 70, eva: 12, primary: { dex: 4, str: 3 } }
+    }
+  },
+  avadon_set: {
+    name: 'Avadon',
+    fullPieceCount: 5,
+    variantPieces: {
+      armor: ['armor_avadon_heavy_armor', 'armor_avadon_light_armor', 'armor_avadon_robe_armor'],
+      helmet: ['armor_avadon_heavy_helmet', 'armor_avadon_helmet'],
+      boots: ['armor_avadon_heavy_boots', 'armor_avadon_light_boots'],
+      gloves: ['armor_avadon_heavy_gloves', 'armor_avadon_light_gloves', 'armor_avadon_robe_gloves']
+    },
+    pieces: { legs: 'armor_avadon_heavy_pants' },
+    shieldPiece: 'armor_avadon_shield',
+    bonuses: {
+      2: { def: 50, mdef: 40 },
+      3: { hp: 150, mp: 100 },
+      5: { def: 110, mdef: 90, hp: 250, primary: { con: 4, wit: 3 } },
+      6: { def: 40, mdef: 30, primary: { con: 2 } }
+    }
+  },
+  blue_wolf_set: {
+    name: 'Blue Wolf',
+    fullPieceCount: 5,
+    variantPieces: {
+      armor: ['armor_blue_wolf_heavy_armor', 'armor_blue_wolf_light_armor', 'armor_blue_wolf_robe_armor'],
+      boots: ['armor_blue_wolf_heavy_boots', 'armor_blue_wolf_light_boots', 'armor_blue_wolf_robe_boots'],
+      gloves: ['armor_blue_wolf_heavy_gloves', 'armor_blue_wolf_light_gloves', 'armor_blue_wolf_robe_gloves'],
+      legs: ['armor_blue_wolf_heavy_pants', 'armor_blue_wolf_robe_pants']
+    },
+    pieces: { helmet: 'armor_blue_wolf_helmet' },
+    shieldPiece: 'armor_blue_wolf_shield',
+    bonuses: {
+      2: { atk: 50, matk: 50 },
+      3: { def: 50, speed: 8 },
+      5: { atk: 110, matk: 110, def: 100, primary: { str: 4, int: 3 } },
+      6: { def: 45, hp: 150, primary: { str: 2 } }
+    }
+  },
+  dark_crystal_set: {
+    name: 'Dark Crystal',
+    fullPieceCount: 5,
+    variantPieces: {
+      armor: ['armor_dark_crystal_heavy_armor', 'armor_dark_crystal_light_armor', 'armor_dark_crystal_robe_armor'],
+      helmet: ['armor_dark_crystal_heavy_helmet', 'armor_dark_crystal_light_helmet', 'armor_dark_crystal_robe_helmet'],
+      boots: ['armor_dark_crystal_heavy_boots', 'armor_dark_crystal_light_boots', 'armor_dark_crystal_robe_boots'],
+      gloves: ['armor_dark_crystal_heavy_glove', 'armor_dark_crystal_light_glove', 'armor_dark_crystal_robe_glove'],
+      legs: ['armor_dark_crystal_heavy_pants', 'armor_dark_crystal_light_pants']
+    },
+    shieldPiece: 'armor_dark_crystal_shield',
+    bonuses: {
+      2: { matk: 80, atk: 70 },
+      3: { mdef: 80, speed: 10 },
+      5: { matk: 180, mdef: 150, speed: 15, primary: { wit: 5, int: 4 } },
+      6: { mdef: 60, def: 50, primary: { men: 2 } }
+    }
+  },
+  tallum_set: {
+    name: 'Tallum',
+    fullPieceCount: 5,
+    variantPieces: {
+      armor: ['armor_tallum_heavy_armor', 'armor_tallum_light_armor', 'armor_tallum_robe_armor'],
+      helmet: ['armor_tallum_heavy_helmet', 'armor_tallum_light_helmet', 'armor_tallum_robe_helmet'],
+      boots: ['armor_tallum_heavy_boots', 'armor_tallum_light_boots', 'armor_tallum_robe_boots'],
+      gloves: ['armor_tallum_heavy_glove', 'armor_tallum_light_glove', 'armor_tallum_robe_glove']
+    },
+    pieces: { legs: 'armor_tallum_robe_pants' },
+    bonuses: {
+      2: { atk: 85, def: 75 },
+      3: { hp: 300, crit: 6 },
+      5: { atk: 190, def: 160, hp: 500, primary: { str: 5, dex: 4 } }
+    }
+  },
+  imperial_crusader_set: {
+    name: 'Imperial Crusader',
+    fullPieceCount: 5,
+    pieces: {
+      armor: 'armor_imperial_crusader_breastplate', helmet: 'armor_imperial_crusader_helmet',
+      boots: 'armor_imperial_crusader_boots', gloves: 'armor_imperial_crusader_gloves',
+      legs: 'armor_imperial_crusader_pants'
+    },
+    shieldPiece: 'armor_imperial_crusader_shield',
+    bonuses: {
+      2: { def: 120, mdef: 100 },
+      3: { hp: 500, def: 150 },
+      5: { def: 320, mdef: 240, hp: 900, primary: { con: 6, str: 5 } },
+      6: { def: 100, mdef: 80, primary: { con: 3 } }
+    }
+  },
+
+  // ---- Formato "fullbody" (4 peças — armor já é peito+perna, sem legs separado) ----
+  full_plate_set: {
+    name: 'Full Plate',
+    fullPieceCount: 4,
+    pieces: {
+      armor: 'armor_full_plate_heavy_armor', helmet: 'armor_full_plate_heavy_helmet',
+      boots: 'armor_full_plate_heavy_boots', gloves: 'armor_full_plate_heavy_gloves'
+    },
+    shieldPiece: 'armor_full_plate_shield',
+    bonuses: {
+      2: { def: 40, hp: 100 },
+      3: { def: 60, hp: 150 },
+      4: { def: 120, mdef: 80, hp: 300, primary: { con: 4, str: 3 } },
+      5: { def: 35, hp: 100, primary: { con: 2 } }
+    }
+  },
+  doom_set: {
+    name: 'Doom',
+    fullPieceCount: 4,
+    pieces: {
+      armor: 'armor_doom_light_armor', helmet: 'armor_doom_light_helmet',
+      boots: 'armor_doom_light_boots', gloves: 'armor_doom_light_gloves'
+    },
+    shieldPiece: 'armor_doom_shield',
+    bonuses: {
+      2: { atk: 55, eva: 8 },
+      3: { crit: 6, hp: 200 },
+      4: { atk: 130, eva: 16, crit: 10, primary: { dex: 4, str: 3 } },
+      5: { def: 40, block: 0.05, primary: { dex: 2 } }
+    }
+  },
+  majestic_set: {
+    name: 'Majestic',
+    fullPieceCount: 4,
+    variantPieces: {
+      armor: ['armor_majestic_heavy_armor', 'armor_majestic_light_armor', 'armor_majestic_robe_armor'],
+      helmet: ['armor_majestic_heavy_helmet', 'armor_majestic_light_helmet', 'armor_majestic_robe_helmet'],
+      boots: ['armor_majestic_heavy_boots', 'armor_majestic_light_boots', 'armor_majestic_robe_boots'],
+      gloves: ['armor_majestic_heavy_glove', 'armor_majestic_light_glove', 'armor_majestic_robe_glove']
+    },
+    bonuses: {
+      2: { atk: 80, matk: 80 },
+      3: { mdef: 90, mp: 250 },
+      4: { atk: 180, matk: 180, mdef: 180, primary: { int: 5, str: 4 } }
+    }
+  },
+  nightmare_set: {
+    name: 'Nightmare',
+    fullPieceCount: 4,
+    variantPieces: {
+      armor: ['armor_nightmare_heavy_armor', 'armor_nightmare_light_armor', 'armor_nightmare_robe_armor'],
+      helmet: ['armor_nightmare_heavy_helmet', 'armor_nightmare_light_helmet', 'armor_nightmare_robe_helmet'],
+      boots: ['armor_nightmare_heavy_boots', 'armor_nightmare_light_boots', 'armor_nightmare_robe_boots'],
+      gloves: ['armor_nightmare_heavy_glove', 'armor_nightmare_light_glove', 'armor_nightmare_robe_glove']
+    },
+    shieldPiece: 'armor_nightmare_shield',
+    bonuses: {
+      2: { def: 90, mdef: 90 },
+      3: { hp: 400, lifesteal: 3 },
+      4: { def: 200, mdef: 200, hp: 700, primary: { con: 5, wit: 4 } },
+      5: { def: 60, mdef: 50, primary: { con: 2 } }
+    }
+  },
+  draconic_set: {
+    name: 'Draconic',
+    fullPieceCount: 4,
+    pieces: {
+      armor: 'armor_draconic_armor', helmet: 'armor_draconic_helmet',
+      boots: 'armor_draconic_boots', gloves: 'armor_draconic_gloves'
+    },
+    bonuses: {
+      2: { atk: 130, crit: 8 },
+      3: { speed: 15, eva: 12 },
+      4: { atk: 300, crit: 15, eva: 25, speed: 25, primary: { dex: 6, str: 5 } }
+    }
+  },
+  major_arcana_set: {
+    name: 'Major Arcana',
+    fullPieceCount: 4,
+    pieces: {
+      armor: 'armor_major_arcana_robe', helmet: 'armor_major_arcana_robe_helmet',
+      boots: 'armor_major_arcana_robe_boots', gloves: 'armor_major_arcana_robe_gloves'
+    },
+    bonuses: {
+      2: { matk: 140, mdef: 120 },
+      3: { mp: 500, speed: 12 },
+      4: { matk: 320, mdef: 280, mp: 800, primary: { wit: 6, int: 5 } }
+    }
+  }
+};
+
+function getSetIdForItem(filename) {
+  const id = toExactId(filename);
+  const stripped = toStrippedId(filename);
+  for (const [setId, setDef] of Object.entries(ARMOR_SETS)) {
+    if (setDef.pieces) {
+      for (const pId of Object.values(setDef.pieces)) {
+        if (pId === id || pId === 'armor_' + stripped || pId === stripped) return setId;
+      }
+    }
+    if (setDef.variantPieces) {
+      for (const varList of Object.values(setDef.variantPieces)) {
+        if (varList.includes(id) || varList.includes('armor_' + stripped) || varList.includes(stripped)) return setId;
+      }
+    }
+    if (setDef.shieldPiece && (setDef.shieldPiece === id || setDef.shieldPiece === 'armor_' + stripped || setDef.shieldPiece === stripped)) {
+      return setId;
+    }
+  }
+  return null;
 }
 
 // Data structures
@@ -175,6 +460,8 @@ const ALIAS_MAP = {};
 function registerItem(targetCategory, itemDef, iconPath, filename) {
   const exactId = toExactId(filename);
   const strippedId = toStrippedId(filename);
+  const setId = getSetIdForItem(filename);
+  if (setId) itemDef.set = setId;
   
   // Set primary item
   targetCategory[exactId] = itemDef;
@@ -462,6 +749,8 @@ const SLOT = {
   sigil: 'Sigil', hair: 'Acessório', agathion: 'Agathion', consumable: 'Consumível', material: 'Material'
 };
 
+const ARMOR_SETS = ${serializeObj(ARMOR_SETS)};
+
 `;
 
 const categories = [
@@ -513,7 +802,7 @@ function rollItemWithRarity(itemId, bonus = 0) {
 if (typeof window !== 'undefined') {
   window.GameData = {
     ...(window.GameData || {}),
-    ICON_MAP, RARITY, SLOT, WEAPONS, ARMORS, HELMETS, BOOTS, GLOVES, RINGS,
+    ARMOR_SETS, ICON_MAP, RARITY, SLOT, WEAPONS, ARMORS, HELMETS, BOOTS, GLOVES, RINGS,
     LEGS, SHIELDS, BELTS, CLOAKS, SIGILS, NECKLACES, EARRINGS, HAIR, AGATHIONS,
     CONSUMABLES, MATERIALS, ALL_ITEMS, MONSTER_DROPS, SHOP_INVENTORY, CRAFTING_RECIPES,
     ZONE_GOLD_MULT, MYSTIC_POOL, rollRarity, rollDrop, getMysticRotation, rollItemWithRarity
@@ -525,6 +814,5 @@ writeFileSync(ITEMS_OUT, js, 'utf8');
 writeFileSync(INDEX_OUT, JSON.stringify(ICON_MAP, null, 2), 'utf8');
 
 console.log('\n=== REBUILD COMPLETE ===');
-console.log(`ALL_ITEMS total keys (with aliases): ${Object.keys(ALL_ITEMS).length}`);
-console.log(`ICON_MAP total keys (with aliases):  ${Object.keys(ICON_MAP).length}`);
-console.log(`Aliases registered:                 ${Object.keys(ALIAS_MAP).length}`);
+console.log(`ALL_ITEMS total keys: ${Object.keys(ALL_ITEMS).length}`);
+console.log(`ARMOR_SETS defined:   ${Object.keys(ARMOR_SETS).length}`);

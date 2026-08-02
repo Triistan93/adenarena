@@ -325,6 +325,21 @@ export const IDLE_MARKUP = `
                   </div>
                   <button class="l2inv-unequip-all" id="unequip-all-btn" title="Desequipar todos os itens">Desequipar Tudo</button>
                 </div>
+
+                <!-- Primary Attributes Section (STR/DEX/CON/INT/WIT/MEN) -->
+                <div class="l2inv-primary-box" id="l2inv-primary-box" style="display:none; margin-top:6px; padding:6px 8px; background:rgba(0,0,0,0.5); border:1px solid rgba(212,167,68,0.3); border-radius:4px;">
+                  <div style="font-size:10px; font-weight:bold; color:var(--gilt-bright); text-transform:uppercase; margin-bottom:4px; letter-spacing:0.5px;">Atributos Primários</div>
+                  <div class="l2inv-stat-row" style="font-size:10px;">
+                    <span>STR: <strong id="l2stat-str" style="color:#10b981;">0</strong></span>
+                    <span>DEX: <strong id="l2stat-dex" style="color:#10b981;">0</strong></span>
+                    <span>CON: <strong id="l2stat-con" style="color:#10b981;">0</strong></span>
+                  </div>
+                  <div class="l2inv-stat-row" style="font-size:10px; margin-top:2px;">
+                    <span>INT: <strong id="l2stat-int" style="color:#3b82f6;">0</strong></span>
+                    <span>WIT: <strong id="l2stat-wit" style="color:#3b82f6;">0</strong></span>
+                    <span>MEN: <strong id="l2stat-men" style="color:#3b82f6;">0</strong></span>
+                  </div>
+                </div>
               </div>
 
               <!-- Right Panel: Items Grid and Tabs -->
