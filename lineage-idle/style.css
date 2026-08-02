@@ -839,53 +839,65 @@ select:focus-visible {
   text-shadow: 0 0 8px rgba(212,167,68,0.4);
 }
 
-/* Dedicated Full-Screen Menu Windows (Fluid & Proportionate) */
+/* Dedicated Full-Screen Menu Windows (Pure Flex Layout - Zero Overlap) */
 .tabs-panel.full-window-active {
-  position: relative;
+  position: fixed !important;
+  top: 44px !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  z-index: 10000 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  background: rgba(8, 10, 16, 0.94) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
 }
 
 .tabs-panel.full-window-active .tab-buttons {
-  position: fixed;
-  top: 48px;
-  left: 0;
-  right: 0;
-  z-index: 10001;
-  background: rgba(12, 15, 24, 0.96);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  padding: 8px 280px 8px 180px;
-  border-bottom: 2px solid var(--gilt, #d4a744);
-  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.85);
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  flex-shrink: 0 !important;
+  width: 100% !important;
+  z-index: 10001 !important;
+  background: rgba(12, 15, 24, 0.98) !important;
+  padding: 8px 16px !important;
+  border-bottom: 2px solid var(--gilt, #d4a744) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.85) !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  box-sizing: border-box !important;
 }
 
 .tabs-panel.full-window-active .tab-pane.active {
-  position: fixed;
-  top: 102px;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 10000;
-  background: rgba(8, 10, 16, 0.92);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  padding: 20px 16px 40px 16px;
-  overflow-y: auto;
-  box-sizing: border-box;
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  flex: 1 !important;
+  width: 100% !important;
+  min-height: 0 !important;
+  z-index: 10000 !important;
+  background: transparent !important;
+  padding: 16px 16px 30px 16px !important;
+  overflow-y: auto !important;
+  box-sizing: border-box !important;
   display: flex !important;
-  flex-direction: column;
-  align-items: center;
-  animation: windowFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  flex-direction: column !important;
+  align-items: center !important;
+  animation: windowFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 /* Inner Container Proportions - Centered max-width for modern RPG layout */
 .tabs-panel.full-window-active .tab-pane.active > * {
   width: 100%;
-  max-width: 1150px;
+  max-width: 1200px;
   box-sizing: border-box;
 }
 
@@ -896,13 +908,13 @@ select:focus-visible {
 
 .full-window-close-btn {
   position: fixed;
-  top: 56px;
-  right: 20px;
+  top: 52px;
+  right: 14px;
   z-index: 10005;
   background: linear-gradient(135deg, #dc2626, #991b1b);
   color: #ffffff;
   border: 1px solid #f87171;
-  padding: 5px 14px;
+  padding: 4px 12px;
   border-radius: 4px;
   font-weight: 700;
   font-size: 11px;
