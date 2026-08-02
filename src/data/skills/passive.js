@@ -13,7 +13,9 @@ export const PASSIVE_SKILLS = {
     reqLvl: 1,
     tier: 0,
     icon: "🗡️",
-    info: "Aumenta o P.Atk base em +2.5 por nível."
+    desc: "Aumenta o P.Atk base em +2.5 por nível.",
+    // NOVO: Valores reais para o motor calcular
+    bonuses: { atk: 2.5 } 
   },
   light_armor_f: {
     id: "light_armor_f",
@@ -25,7 +27,8 @@ export const PASSIVE_SKILLS = {
     reqLvl: 20,
     tier: 1,
     icon: "🥋",
-    info: "Aumenta a P.Def e Esquiva com armadura leve."
+    desc: "Aumenta a P.Def e Esquiva com armadura leve.",
+    bonuses: { def: 2.0, eva: 1.0 }
   },
   heavy_armor_f: {
     id: "heavy_armor_f",
@@ -37,7 +40,8 @@ export const PASSIVE_SKILLS = {
     reqLvl: 20,
     tier: 1,
     icon: "🛡️",
-    info: "Aumenta a P.Def em +2.5 por nível ao usar armadura pesada."
+    desc: "Aumenta a P.Def em +2.5 por nível ao usar armadura pesada.",
+    bonuses: { def: 2.5 }
   },
   boost_hp_f: {
     id: "boost_hp_f",
@@ -49,7 +53,8 @@ export const PASSIVE_SKILLS = {
     reqLvl: 20,
     tier: 1,
     icon: "❤️",
-    info: "Aumenta o HP Máximo em +40 por nível."
+    desc: "Aumenta o HP Máximo em +40 por nível.",
+    bonuses: { hp: 40 }
   },
   weapon_mastery_m: {
     id: "weapon_mastery_m",
@@ -61,7 +66,8 @@ export const PASSIVE_SKILLS = {
     reqLvl: 1,
     tier: 0,
     icon: "🔮",
-    info: "Aumenta o M.Atk em +2.5 por nível."
+    desc: "Aumenta o M.Atk em +2.5 por nível.",
+    bonuses: { matk: 2.5 }
   },
   robe_mast_m: {
     id: "robe_mast_m",
@@ -73,7 +79,8 @@ export const PASSIVE_SKILLS = {
     reqLvl: 1,
     tier: 0,
     icon: "👘",
-    info: "Aumenta a P.Def em robes e acelera regeneração de MP."
+    desc: "Aumenta a P.Def em robes e acelera regeneração de MP.",
+    bonuses: { def: 1.5, mpRegen: 2.0 }
   },
   boost_mana_m: {
     id: "boost_mana_m",
@@ -85,7 +92,8 @@ export const PASSIVE_SKILLS = {
     reqLvl: 20,
     tier: 1,
     icon: "🌊",
-    info: "Aumenta o MP Máximo em +40 por nível."
+    desc: "Aumenta o MP Máximo em +40 por nível.",
+    bonuses: { mp: 40 }
   },
   anti_magic_m: {
     id: "anti_magic_m",
@@ -97,7 +105,8 @@ export const PASSIVE_SKILLS = {
     reqLvl: 20,
     tier: 1,
     icon: "🛡️✨",
-    info: "Aumenta a M.Def em +18 e resistência mágica."
+    desc: "Aumenta a M.Def em +18 e resistência mágica.",
+    bonuses: { mdef: 18 }
   },
   dual_weapon_mast: {
     id: "dual_weapon_mast",
@@ -109,6 +118,7 @@ export const PASSIVE_SKILLS = {
     reqLvl: 40,
     tier: 2,
     icon: "⚔️",
-    info: "Aumenta em +15% o P.Atk ao empunhar espadas duplas."
+    desc: "Aumenta em +15% o P.Atk ao empunhar espadas duplas.",
+    bonuses: { atkPct: 15 } // Porcentagem
   }
 };
