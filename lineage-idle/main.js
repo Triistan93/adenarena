@@ -4864,7 +4864,8 @@ export function init() {
     // Monta automaticamente em modo standalone (index.html direto)
     // No modo Shadow DOM (React), o IdleGame.tsx já monta via shadow.getElementById
     if (typeof window !== 'undefined' && window.GrimoireFX) {
-      const gameRoot = _root !== document ? _root.getElementById?.('game') || _root.querySelector?.('#game') : document.getElementById('game');
+      const rootObj = typeof _root !== 'undefined' ? _root : document;
+      const gameRoot = rootObj.getElementById?.('game') || rootObj.querySelector?.('#game') || document.getElementById('game');
       if (gameRoot && !gameRoot.querySelector('.g-ember-global')) {
         const emberDiv = document.createElement('div');
         emberDiv.className = 'g-ember-global';
