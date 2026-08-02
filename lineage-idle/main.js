@@ -310,8 +310,9 @@ function getEquipBonus(slot) {
   if (!inv) return null;
   const def = D().ALL_ITEMS[inv.itemId];
   if (!def) return null;
-  const rarityMult = inv.rarity ? D().RARITY[inv.rarity].mult : 1;
-  const enchantMult = 1 + (inv.enchant || 0) * 0.10;
+  const rarityMult = inv.rarity ? (D().RARITY[inv.rarity]?.mult || 1) : 1;
+  const enchant = inv.enchant || 0;
+  const enchantMult = 1 + (enchant <= 3 ? enchant * 0.12 : (0.36 + (enchant - 3) * 0.15));
   const out = { ...def };
   ['atk','def','matk','mdef','hp','mp','eva','crit','speed','lifesteal'].forEach(k => {
     if (out[k]) out[k] = Math.floor(Number(out[k]) * rarityMult * enchantMult);
@@ -862,7 +863,11 @@ function salvageItem(uid) {
   const item = state.inventory[idx];
   if (item.equipped) { log('Unequip first!', 'system'); return; }
   const def = D().ALL_ITEMS[item.itemId];
-  if (!def || !ALL_EQUIP_SLOTS.includes(resolveEquipSlot(def.slot))) return;
+  if (!def) return;
+  const targetSlot = resolveEquipSlot(def.slot);
+  const isEquip = (def.slot && def.slot !== 'consumable' && def.slot !== 'material' && def.slot !== 'scroll' && def.slot !== 'powerup') || ALL_EQUIP_SLOTS.includes(targetSlot);
+  if (!isEquip) return;
+
   if (isHighValueItem(item)) {
     const rarityName = D().RARITY[item.rarity]?.name || item.rarity;
     if (!confirm(`⚠️ Deseja realmente SUCATEAR o item valioso "${def.name}" [${rarityName}]?`)) {
@@ -872,7 +877,7 @@ function salvageItem(uid) {
 
   const reqLvl = def.req ? def.req.level : 1;
   const grade = getItemGrade(reqLvl);
-  const rarityMult = item.rarity ? D().RARITY[item.rarity].mult : 1;
+  const rarityMult = item.rarity ? (D().RARITY[item.rarity]?.mult || 1) : 1;
 
   let matId = 'iron_ore';
   if (grade === 'S Grade') matId = 'crystal_s';
@@ -885,7 +890,7 @@ function salvageItem(uid) {
   const amount = Math.max(1, Math.floor((reqLvl / 5 + 1) * rarityMult));
   state.inventory.splice(idx, 1);
   addToInventory(matId, amount);
-  log(`Broke ${def.name} into ${amount}x ${D().ALL_ITEMS[matId].name}`, 'loot');
+  log(`🔨 Desmontou ${def.name} em ${amount}x ${D().ALL_ITEMS[matId]?.name || matId}`, 'loot');
   updateAllUI(); save();
 }
 
@@ -977,20 +982,45 @@ function salvageSelectedItems() {
     }
   }
   
+  let count = 0;
+  const yieldSummary = {};
+
   for (const uid of toDelete) {
     const item = state.inventory.find(i => i.uid === uid);
     if (!item || item.equipped) continue;
     const def = D().ALL_ITEMS[item.itemId];
-    if (!def || !['weapon','armor','helmet','gloves','boots','ring'].includes(def.slot)) continue;
+    if (!def) continue;
     
-    const matYield = Math.max(1, Math.floor((item.rarity ? D().RARITY[item.rarity].mult : 1) * 2));
-    addToInventory('iron_ore', matYield, null);
-    removeFromInventory(uid, item.count || 1);
-    count++;
+    const targetSlot = resolveEquipSlot(def.slot);
+    const isEquip = (def.slot && def.slot !== 'consumable' && def.slot !== 'material' && def.slot !== 'scroll' && def.slot !== 'powerup') || ALL_EQUIP_SLOTS.includes(targetSlot);
+    if (!isEquip) continue;
+    
+    const reqLvl = def.req ? def.req.level : 1;
+    const grade = getItemGrade(reqLvl);
+    const rarityMult = item.rarity ? (D().RARITY[item.rarity]?.mult || 1) : 1;
+
+    let matId = 'iron_ore';
+    if (grade === 'S Grade') matId = 'crystal_s';
+    else if (grade === 'A Grade') matId = 'crystal_a';
+    else if (grade === 'B Grade') matId = 'crystal_b';
+    else if (grade === 'C Grade') matId = 'crystal_c';
+    else if (grade === 'D Grade') matId = 'crystal_d';
+    else matId = (def.slot === 'weapon') ? 'iron_ore' : 'cloth';
+
+    const matYield = Math.max(1, Math.floor((reqLvl / 5 + 1) * rarityMult));
+    yieldSummary[matId] = (yieldSummary[matId] || 0) + matYield;
+    
+    const qty = item.count || 1;
+    removeFromInventory(uid, qty);
+    count += qty;
+  }
+
+  for (const [mId, qty] of Object.entries(yieldSummary)) {
+    addToInventory(mId, qty, null);
   }
   
   set.clear();
-  log(`🔨 Salvaged ${count} selected equipment(s) into Iron Ore!`, 'loot');
+  log(`🔨 Desmontou ${count} equipamento(s) selecionado(s)!`, 'loot');
   updateAllUI();
   save();
 }
@@ -1599,7 +1629,8 @@ function updateInventoryUI() {
       const mult = rarityDef ? rarityDef.mult : 1;
       const enchantMult = 1 + (item.enchant || 0) * 0.1;
       selectedValue += Math.floor(basePrice * mult * enchantMult * 0.4) * qty;
-      if (['weapon','armor','helmet','gloves','boots','ring'].includes(def.slot)) {
+      const isEquipItem = (def.slot && def.slot !== 'consumable' && def.slot !== 'material' && def.slot !== 'scroll' && def.slot !== 'powerup') || ALL_EQUIP_SLOTS.includes(resolveEquipSlot(def.slot));
+      if (isEquipItem) {
         salvageableCount += qty;
       }
     }
@@ -1730,18 +1761,35 @@ function showItemTooltip(item, e) {
   if (def.req) html += `<div class="tt-req">Req: Lv.${def.req.level}</div>`;
   if (def.classReq) { const cls = getClass(def.classReq); const ok = classSatisfies(state.class, def.classReq); html += `<div class="tt-req ${ok?'ok':'no'}">Class: ${cls?.name || def.classReq}${ok?' ✓':''}</div>`; }
   if (def.desc) html += `<div class="tt-desc">${def.desc}</div>`;
+  const enchant = item.enchant || 0;
+  const enchantMult = 1 + (enchant <= 3 ? enchant * 0.12 : (0.36 + (enchant - 3) * 0.15));
+
   const stats = ['atk','def','matk','mdef','hp','mp','eva','crit','speed','lifesteal'];
-  for (const s of stats) { if (def[s]) { const v = Math.floor(def[s] * mult); html += `<div class="tt-stat"><span>${s.toUpperCase()}</span><span class="v">+${v}${s === 'crit' ? '%' : ''}</span></div>`; } }
+  let hasBaseStats = false;
+  let baseStatsHtml = `<div style="margin-top:6px; padding-top:4px; border-top:1px solid rgba(255,255,255,0.15); font-size:10px; font-weight:bold; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px;">── Status Base ──</div>`;
+
+  for (const s of stats) {
+    if (def[s]) {
+      hasBaseStats = true;
+      const v = Math.floor(Number(def[s]) * mult * enchantMult);
+      baseStatsHtml += `<div class="tt-stat"><span>${s.toUpperCase()}</span><span class="v">+${v}${s === 'crit' ? '%' : ''}</span></div>`;
+    }
+  }
+  if (hasBaseStats) html += baseStatsHtml;
+
   if (def.craftBonus) html += `<div class="tt-stat"><span>CRAFT XP</span><span class="v">+${Math.round(def.craftBonus*mult*100)}%</span></div>`;
   if (def.lootBonus) html += `<div class="tt-stat"><span>LOOT</span><span class="v">+${Math.round(def.lootBonus*mult*100)}%</span></div>`;
   if (def.stack) html += `<div class="tt-stat"><span>Stack</span><span class="v">${item.count || 1}</span></div>`;
+
+  // ── SEPARADOR CLARO PARA AFIXOS ESPECIAIS ──
   if (Array.isArray(item.affixes) && item.affixes.length > 0) {
-    html += `<div class="tt-affixes" style="margin-top:6px; padding-top:4px; border-top:1px dashed rgba(240,208,128,0.3);">`;
+    html += `<div class="tt-affixes-section" style="margin-top:8px; padding-top:6px; border-top:1px dashed #f0cd7e;">`;
+    html += `<div style="font-size:10px; font-weight:bold; color:#f0cd7e; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:3px;">✦ Afixos Especiais</div>`;
     item.affixes.forEach(aff => {
       const defAff = D().AFFIX_MAP ? D().AFFIX_MAP[aff.id] : null;
       if (defAff) {
         const label = defAff.name.replace('{value}', aff.value);
-        html += `<div class="tt-affix" style="color:#f0cd7e; font-size:11px; font-weight:600;">✦ ${label}</div>`;
+        html += `<div class="tt-affix" style="color:#f0cd7e; font-size:11px; font-weight:600; margin-bottom:2px;">✦ ${label}</div>`;
       }
     });
     html += `</div>`;
@@ -3679,7 +3727,7 @@ function monsterAttack(monster) {
 // --------------------------- GM ADMIN & CHAT CONSOLE ---------------------------
 function generateUid() { return 'item_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9); }
 
-function spawnAdminItem(itemId, qty = 1, rarity = 'common', enchant = 0) {
+function spawnAdminItem(itemId, qty = 1, rarity = 'common', enchant = 0, affixChoice = 'roll') {
   const def = D().ALL_ITEMS[itemId];
   if (!def) { log(`[Admin] Item '${itemId}' não encontrado.`, 'system'); return; }
   
@@ -3687,11 +3735,25 @@ function spawnAdminItem(itemId, qty = 1, rarity = 'common', enchant = 0) {
     addToInventory(itemId, qty, null);
   } else {
     for (let i = 0; i < qty; i++) {
+      const isEquip = def.slot && def.slot !== 'consumable' && def.slot !== 'material' && def.slot !== 'scroll' && def.slot !== 'powerup';
+      let affixes = [];
+      if (isEquip) {
+        if (affixChoice === 'roll' || !affixChoice) {
+          affixes = D().rollAffixes ? D().rollAffixes(rarity) : [];
+        } else if (affixChoice && affixChoice !== 'none') {
+          const defAff = D().AFFIX_MAP ? D().AFFIX_MAP[affixChoice] : null;
+          if (defAff) {
+            const val = defAff.min + Math.floor(Math.random() * (defAff.max - defAff.min + 1));
+            affixes = [{ id: affixChoice, value: val }];
+          }
+        }
+      }
       state.inventory.push({
         uid: generateUid(),
         itemId: itemId,
         rarity: rarity,
         enchant: enchant,
+        affixes: affixes,
         equipped: false,
         count: 1
       });
@@ -4738,9 +4800,16 @@ function bindEvents() {
         const qtyInput = el('admin-item-qty');
         const raritySel = el('admin-item-rarity');
         const enchantSel = el('admin-item-enchant');
+        const affixSel = el('admin-item-affix');
         if (itemSel && itemSel.value) {
           const qty = parseInt(qtyInput?.value || 1) || 1;
-          spawnAdminItem(itemSel.value, qty, raritySel?.value || 'common', parseInt(enchantSel?.value || 0) || 0);
+          spawnAdminItem(
+            itemSel.value,
+            qty,
+            raritySel?.value || 'common',
+            parseInt(enchantSel?.value || 0) || 0,
+            affixSel?.value || 'roll'
+          );
         }
       };
     }

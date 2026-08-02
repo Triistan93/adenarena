@@ -716,6 +716,25 @@ export const IDLE_MARKUP = `
                     <option value="16">+16 (Máx)</option>
                   </select>
                 </label>
+                <label>Afixo: 
+                  <select id="admin-item-affix" class="admin-select">
+                    <option value="roll">🎲 Sortear da Raridade</option>
+                    <option value="none">Nenhum Afixo</option>
+                    <option value="crit_boost">✦ +% Crítico</option>
+                    <option value="eva_boost">✦ +% Evasão</option>
+                    <option value="lifesteal_boost">✦ +% Roubo de Vida</option>
+                    <option value="atk_boost">✦ +% Ataque</option>
+                    <option value="speed_boost">✦ +% Vel. de Ataque</option>
+                    <option value="boss_dmg">✦ +% Dano vs Chefes</option>
+                    <option value="on_kill_heal">✦ +% Cura ao Matar</option>
+                    <option value="stun_chance">✦ % Chance de Stun</option>
+                    <option value="undead_dmg">✦ +% Dano vs Mortos-Vivos</option>
+                    <option value="dragon_dmg">✦ +% Dano vs Dragões</option>
+                    <option value="beast_dmg">✦ +% Dano vs Bestas</option>
+                    <option value="demon_dmg">✦ +% Dano vs Demônios</option>
+                    <option value="humanoid_dmg">✦ +% Dano vs Humanoides</option>
+                  </select>
+                </label>
               </div>
               <button id="admin-spawn-btn" class="admin-btn primary">✨ Gerar Item na Mochila</button>
             </div>
