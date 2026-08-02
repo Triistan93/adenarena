@@ -1709,21 +1709,42 @@ function getAssetUrl(p) {
   return '/' + cleanPath;
 }
 
-function getItemIcon(def) {
-  if (!def) return '📦';
-  const fallbackIcons = { weapon: '⚔️', armor: '🛡️', helmet: '⛑️', gloves: '🧤', boots: '👢', ring: '💍', earring: '💎', necklace: '📿', consumable: '🧪', material: '💎', scroll: '📜', cloak: '🧣', belt: '🎗️', hair: '👑', agathion: '🐾' };
-  const emoji = fallbackIcons[def.slot] || '📦';
-  const id = def.id || '';
-  let iconPath = def.icon || '';
+function getItemDef(itemId) {
+  if (!itemId) return null;
+  const all = (typeof window !== 'undefined' && window.GameData && window.GameData.ALL_ITEMS) ? window.GameData.ALL_ITEMS : ((typeof D === 'function' && D()) ? D().ALL_ITEMS : {});
+  if (!all) return null;
+  if (all[itemId]) return all[itemId];
+  const s = String(itemId);
+  if (all['armor_' + s]) return all['armor_' + s];
+  if (all['jewel_' + s]) return all['jewel_' + s];
+  if (all['weapon_' + s]) return all['weapon_' + s];
+  const stripped = s.replace(/^(armor_|jewel_|weapon_|shield_|wepoan_)/, '');
+  if (all[stripped]) return all[stripped];
+  if (all['armor_' + stripped]) return all['armor_' + stripped];
+  if (all['jewel_' + stripped]) return all['jewel_' + stripped];
+  if (all['weapon_' + stripped]) return all['weapon_' + stripped];
+  return null;
+}
+
+function getItemIcon(defOrId) { 
+  if (!defOrId) return '📦';
+  const def = (typeof defOrId === 'string') ? getItemDef(defOrId) : (defOrId.itemId ? getItemDef(defOrId.itemId) : defOrId);
+  const slot = def?.slot || (typeof defOrId === 'object' ? defOrId.slot : '') || '';
+  const fallbackIcons = { weapon: '⚔️', armor: '🛡️', helmet: '⛑️', gloves: '🧤', boots: '👢', ring: '💍', earring: '💎', necklace: '📿', consumable: '🧪', material: '💎', scroll: '📜', cloak: '🧣', belt: '🎗️', hair: '👑', agathion: '🐾' }; 
+  const emoji = fallbackIcons[slot] || '📦'; 
+
+  let iconPath = def?.icon || '';
   if (!iconPath) {
+    const id = typeof defOrId === 'string' ? defOrId : (def?.id || defOrId.itemId || '');
     const iconIndex = (typeof window !== 'undefined' && window.IconIndex) ? window.IconIndex : ((D() && D().ICON_MAP) ? D().ICON_MAP : {});
-    iconPath = iconIndex[id] || '';
+    iconPath = iconIndex[id] || iconIndex['armor_' + id] || iconIndex['jewel_' + id] || iconIndex['weapon_' + id] || iconIndex[String(id).replace(/^(armor_|jewel_|weapon_|shield_|wepoan_)/, '')] || '';
   }
   if (!iconPath) return emoji;
   if (!iconPath.endsWith('.png')) iconPath += '.png';
   const iconUrl = getAssetUrl(`img/icons/${iconPath}`);
-  return `<img src="${iconUrl}" alt="${def.name || ''}" class="item-icon-img" onerror="this.style.display='none';if(this.nextElementSibling)this.nextElementSibling.style.display='inline-block';" style="width:28px; height:28px; object-fit:contain; vertical-align:middle;" /><span class="item-icon-fallback" style="display:none; font-size:18px;">${emoji}</span>`;
+  return `<img src="${iconUrl}" alt="${def?.name || ''}" class="item-icon-img" onerror="this.style.display='none';if(this.nextElementSibling)this.nextElementSibling.style.display='inline-block';" style="width:28px; height:28px; object-fit:contain; vertical-align:middle;" /><span class="item-icon-fallback" style="display:none; font-size:18px;">${emoji}</span>`; 
 }
+
 
 let tooltipTimer = null;
 
@@ -1743,7 +1764,7 @@ function cancelHideTooltip() {
 
 function showItemTooltip(item, e) {
   cancelHideTooltip();
-  const def = D().ALL_ITEMS[item.itemId]; if (!def) return;
+  const def = getItemDef(item.itemId); if (!def) return;
   const tt = el('item-tooltip'), rarity = item.rarity || 'common', mult = D().RARITY[rarity]?.mult || 1, rc = D().RARITY[rarity]?.color || '#c8a84e';
   const enchantStr = item.enchant ? `+${item.enchant} ` : '';
   let html = `<div class="tt-name" style="color:${rc}">${enchantStr}${def.name}</div>`;
@@ -3720,11 +3741,12 @@ function monsterAttack(monster) {
 function generateUid() { return 'item_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9); }
 
 function spawnAdminItem(itemId, qty = 1, rarity = 'common', enchant = 0, affixChoice = 'roll') {
-  const def = D().ALL_ITEMS[itemId];
+  const def = getItemDef(itemId);
   if (!def) { log(`[Admin] Item '${itemId}' não encontrado.`, 'system'); return; }
+  const realId = def.id || itemId;
   
   if (def.stack && (def.slot === 'consumable' || def.slot === 'material' || def.slot === 'scroll' || def.slot === 'powerup') && rarity === 'common') {
-    addToInventory(itemId, qty, null);
+    addToInventory(realId, qty, null);
   } else {
     for (let i = 0; i < qty; i++) {
       const isEquip = def.slot && def.slot !== 'consumable' && def.slot !== 'material' && def.slot !== 'scroll' && def.slot !== 'powerup';
@@ -3742,7 +3764,7 @@ function spawnAdminItem(itemId, qty = 1, rarity = 'common', enchant = 0, affixCh
       }
       state.inventory.push({
         uid: generateUid(),
-        itemId: itemId,
+        itemId: realId,
         rarity: rarity,
         enchant: enchant,
         affixes: affixes,
@@ -3850,13 +3872,28 @@ function openAdminModal() {
 
 function populateAdminItemSelect() {
   const sel = el('admin-item-select');
-  if (!sel || sel.children.length > 0) return;
+  if (!sel) return;
+  sel.innerHTML = '';
   
-  const sorted = Object.entries(D().ALL_ITEMS).sort((a, b) => a[1].name.localeCompare(b[1].name));
-  for (const [id, def] of sorted) {
+  const seen = new Set();
+  const list = [];
+  const all = D().ALL_ITEMS || {};
+  
+  for (const [id, def] of Object.entries(all)) {
+    if (!def || !def.name) continue;
+    const primaryId = def.id || id;
+    if (seen.has(primaryId)) continue;
+    seen.add(primaryId);
+    list.push({ id: primaryId, def });
+  }
+  
+  list.sort((a, b) => (b.def.tier || 1) - (a.def.tier || 1) || a.def.name.localeCompare(b.def.name));
+  
+  for (const { id, def } of list) {
     const opt = mkEl('option');
     opt.value = id;
-    opt.textContent = `${def.name} (${def.slot} · Lv.${def.req?.level || 1})`;
+    const grade = getItemGrade(def.req?.level || 1);
+    opt.textContent = `${def.name} [${grade}] (${def.slot} · Lv.${def.req?.level || 1})`;
     sel.appendChild(opt);
   }
 }
