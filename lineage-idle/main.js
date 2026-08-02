@@ -1725,12 +1725,9 @@ function getItemIcon(def) {
   if (!mappedPath) mappedPath = fileName;
 
   const fileOnly = mappedPath.split('/').pop();
-  const urlPrimary = getAssetUrl(`img/icons/${mappedPath}`);
-  const urlWeapons = getAssetUrl(`img/icons/Weapons/${fileOnly}`);
-  const urlArmors = getAssetUrl(`img/icons/Armors/${fileOnly}`);
-  const urlBase = getAssetUrl(`img/icons/${fileOnly}`);
+  const iconUrl = getAssetUrl(`img/icons/${fileOnly}`);
 
-  return `<img src="${urlPrimary}" alt="${def.name || ''}" class="item-icon-img" onerror="this.onerror=function(){this.onerror=function(){this.onerror=function(){this.style.display='none';if(this.nextElementSibling)this.nextElementSibling.style.display='inline-block';}; this.src='${urlBase}';}; this.src='${urlArmors}';}; this.src='${urlWeapons}';" style="width:28px; height:28px; object-fit:contain; vertical-align:middle;" /><span class="item-icon-fallback" style="display:none; font-size:18px;">${emoji}</span>`; 
+  return `<img src="${iconUrl}" alt="${def.name || ''}" class="item-icon-img" onerror="this.style.display='none';if(this.nextElementSibling)this.nextElementSibling.style.display='inline-block';" style="width:28px; height:28px; object-fit:contain; vertical-align:middle;" /><span class="item-icon-fallback" style="display:none; font-size:18px;">${emoji}</span>`; 
 }
 
 let tooltipTimer = null;
