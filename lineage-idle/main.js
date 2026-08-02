@@ -312,7 +312,7 @@ function getEquipBonus(slot) {
   if (!def) return null;
   const rarityMult = inv.rarity ? (D().RARITY[inv.rarity]?.mult || 1) : 1;
   const enchant = inv.enchant || 0;
-  const enchantMult = 1 + (enchant <= 3 ? enchant * 0.12 : (0.36 + (enchant - 3) * 0.15));
+  const enchantMult = 1 + (enchant <= 3 ? enchant * 0.3 : (0.36 + (enchant - 3) * 0.5));
   const out = { ...def };
   ['atk','def','matk','mdef','hp','mp','eva','crit','speed','lifesteal'].forEach(k => {
     if (out[k]) out[k] = Math.floor(Number(out[k]) * rarityMult * enchantMult);
