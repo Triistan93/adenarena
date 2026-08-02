@@ -203,10 +203,28 @@ const DEFAULT_STATE = () => ({
   craftLevel: 1, craftXp: 0, shopTab: 'gear', selectedSkill: null, filter: 'all',
   craftTab: 'recipes', zoneTab: 'map', soulshotActive: false, combatSpeed: 1,
   totalPlaytime: 0, buffs: {}, _cds: {}, gameMode: 'idle', privilegeLevel: 0,
-  autoSellRarity: 'off'
+  autoSellRarity: 'off', craftFoundationPity: 0
 });
 
 let state = DEFAULT_STATE();
+
+function formatItemDisplayName(item, def) {
+  if (!item) return '';
+  const itemObj = (typeof item === 'string') ? { itemId: item } : item;
+  const itemDef = def || (typeof getItemDef === 'function' ? getItemDef(itemObj.itemId || itemObj.id) : (D().ALL_ITEMS ? D().ALL_ITEMS[itemObj.itemId || itemObj.id] : null));
+  const baseName = itemDef ? itemDef.name : (itemObj.itemId || itemObj.id || 'Item');
+
+  const enchant = Number(itemObj.enchant) || 0;
+  const enchantStr = enchant > 0 ? `+${enchant} ` : '';
+  const foundationStr = itemObj.foundation ? ' Foundation' : '';
+  const rarity = itemObj.rarity;
+  let rarityStr = '';
+  if (rarity && rarity !== 'common' && D().RARITY && D().RARITY[rarity]) {
+    rarityStr = ` [${D().RARITY[rarity].name}]`;
+  }
+
+  return `${enchantStr}${baseName}${foundationStr}${rarityStr}`;
+}
 
 // FUNÇÃO DE SAVE/LOAD COM DEEP MERGE PARA IMPEDIR RESET DE SKILLS
 function save(manual = false) {
@@ -252,6 +270,7 @@ function load() {
     state.craftPoints = Number(data.craftPoints) || 0;
     state.craftCharges = Number(data.craftCharges) || 0;
     state.randomCraftWheel = Array.isArray(data.randomCraftWheel) ? data.randomCraftWheel : [];
+    state.craftFoundationPity = Number(data.craftFoundationPity) || 0;
 
     state.subclasses = Array.isArray(data.subclasses) ? data.subclasses : [];
     state.activeSubclassIndex = data.activeSubclassIndex !== undefined ? data.activeSubclassIndex : null;
@@ -313,9 +332,10 @@ function getEquipBonus(slot) {
   const rarityMult = inv.rarity ? (D().RARITY[inv.rarity]?.mult || 1) : 1;
   const enchant = inv.enchant || 0;
   const enchantMult = 1 + (enchant <= 3 ? enchant * 0.3 : (0.36 + (enchant - 3) * 0.5));
+  const foundationMult = inv.foundation ? 1.3 : 1;
   const out = { ...def };
   ['atk','def','matk','mdef','hp','mp','eva','crit','speed','lifesteal'].forEach(k => {
-    if (out[k]) out[k] = Math.floor(Number(out[k]) * rarityMult * enchantMult);
+    if (out[k]) out[k] = Math.floor(Number(out[k]) * rarityMult * enchantMult * foundationMult);
   });
   // Aplicação aditiva de afixos do tipo 'stat' por cima dos multiplicadores base
   if (Array.isArray(inv.affixes)) {
@@ -847,7 +867,7 @@ function getMaxInventorySlots() {
   return (state.race === 'dwarf') ? 250 : 150;
 }
 
-function addToInventory(itemId, amount = 1, rarity = null) {
+function addToInventory(itemId, amount = 1, rarity = null, foundation = false) {
   const def = D().ALL_ITEMS[itemId];
   if (!def) return false;
 
@@ -865,7 +885,7 @@ function addToInventory(itemId, amount = 1, rarity = null) {
       } else {
         if (state.inventory.length >= maxSlots) { log('Inventory full!', 'system'); return false; }
         const add = Math.min(def.stack, remaining);
-        state.inventory.push({ uid: Date.now() + '_' + Math.random().toString(36).slice(2, 8), itemId, count: add, rarity: null, equipped: false });
+        state.inventory.push({ uid: Date.now() + '_' + Math.random().toString(36).slice(2, 8), itemId, count: add, rarity: null, equipped: false, foundation: false });
         remaining -= add;
       }
     }
@@ -873,7 +893,7 @@ function addToInventory(itemId, amount = 1, rarity = null) {
   }
 
   const RARITY_RANK = { 'common': 1, 'uncommon': 2, 'rare': 3, 'epic': 4, 'legendary': 5, 'mythic': 6, 's': 7 };
-  if (rarity && state.autoSellRarity && state.autoSellRarity !== 'off') {
+  if (rarity && !foundation && state.autoSellRarity && state.autoSellRarity !== 'off') {
     const itemRarity = rarity.toLowerCase();
     const targetRank = RARITY_RANK[state.autoSellRarity.toLowerCase()] || 0;
     const itemRank = RARITY_RANK[itemRarity] || 1;
@@ -890,7 +910,7 @@ function addToInventory(itemId, amount = 1, rarity = null) {
     if (state.inventory.length >= maxSlots) { log('Inventory full!', 'system'); return false; }
     const isEquip = def.slot && def.slot !== 'consumable' && def.slot !== 'material' && def.slot !== 'scroll' && def.slot !== 'powerup';
     const affixes = isEquip ? (D().rollAffixes ? D().rollAffixes(rarity || 'common') : []) : [];
-    state.inventory.push({ uid: Date.now() + '_' + Math.random().toString(36).slice(2, 8), itemId, count: 1, rarity, affixes, equipped: false });
+    state.inventory.push({ uid: Date.now() + '_' + Math.random().toString(36).slice(2, 8), itemId, count: 1, rarity, affixes, equipped: false, foundation: !!foundation });
   }
   return true;
 }
@@ -943,7 +963,7 @@ function equipItem(uid) {
   const currentUid = state.equipment[targetSlot];
   if (currentUid) { const current = state.inventory.find(i => i.uid === currentUid); if (current) current.equipped = false; }
   state.equipment[targetSlot] = uid; item.equipped = true;
-  log(`Equipou ${def.name}${item.rarity ? ' [' + D().RARITY[item.rarity].name + ']' : ''}`, 'loot');
+  log(`Equipou ${formatItemDisplayName(item, def)}`, 'loot');
   
   const stats = getStats();
   state.maxHp = stats.maxHp; state.maxMp = stats.maxMp;
@@ -1340,10 +1360,30 @@ function craftItem(recipeId) {
   }
   const rarityBoost = state.race === 'dwarf' ? 1 : 0;
   const rarity = D().rollRarity(rarityBoost);
-  addToInventory(recipeId, 1, rarity);
+
+  const pityBonus = (state.craftFoundationPity || 0) * 0.001;
+  const foundationChance = 0.05 + pityBonus;
+  const isFoundation = Math.random() < foundationChance;
+
+  if (isFoundation) {
+    state.craftFoundationPity = 0;
+  } else {
+    state.craftFoundationPity = (state.craftFoundationPity || 0) + 1;
+  }
+
+  addToInventory(recipeId, 1, rarity, isFoundation);
   const itemDef = getItemDef(recipeId);
-  const name = itemDef ? itemDef.name : recipeId;
-  log(`Crafted ${name} [${D().RARITY[rarity].name}]!`, 'rarity-' + rarity);
+  const formattedName = formatItemDisplayName({ itemId: recipeId, rarity, foundation: isFoundation }, itemDef);
+
+  if (isFoundation) {
+    log(`✨ FOUNDATION! Você forjou um ${formattedName}!`, 'rarity-foundation');
+    if (typeof floatText === 'function') {
+      floatText(`✨ FOUNDATION!`, 'float-jackpot');
+    }
+  } else {
+    log(`Crafted ${formattedName}!`, 'rarity-' + rarity);
+  }
+
   state.craftXp += 10 + (itemDef?.tier || 1) * 5;
   while (state.craftXp >= state.craftLevel * 50) { state.craftXp -= state.craftLevel * 50; state.craftLevel++; log(`Crafting Level Up! Now Lv.${state.craftLevel}`, 'xp'); }
   updateAllUI(); save();
@@ -1537,8 +1577,7 @@ function updateEquipmentUI() {
 
     const def = D().ALL_ITEMS[item.itemId]; if (!def) continue;
     const rarity = item.rarity || 'common';
-    const enchantStr = item.enchant ? `+${item.enchant}` : '';
-    const full = (enchantStr ? enchantStr + ' ' : '') + def.name + (item.rarity ? ' [' + D().RARITY[item.rarity].name + ']' : '');
+    const full = formatItemDisplayName(item, def);
     const col = item.rarity ? D().RARITY[rarity]?.color : 'var(--gilt)';
 
     if (pdSlot) {
@@ -1960,8 +1999,11 @@ function showItemTooltip(item, e) {
   cancelHideTooltip();
   const def = getItemDef(item.itemId); if (!def) return;
   const tt = el('item-tooltip'), rarity = item.rarity || 'common', mult = D().RARITY[rarity]?.mult || 1, rc = D().RARITY[rarity]?.color || '#c8a84e';
-  const enchantStr = item.enchant ? `+${item.enchant} ` : '';
-  let html = `<div class="tt-name" style="color:${rc}">${enchantStr}${def.name}</div>`;
+  const formattedTitle = formatItemDisplayName(item, def);
+  let html = `<div class="tt-name" style="color:${rc}">${formattedTitle}</div>`;
+  if (item.foundation) {
+    html += `<div class="tt-foundation-badge" style="background: linear-gradient(90deg, rgba(245,158,11,0.25), rgba(217,119,6,0.35)); border: 1px solid #f59e0b; color: #fbbf24; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; margin-top: 4px; margin-bottom: 4px; display: inline-block; box-shadow: 0 0 8px rgba(245, 158, 11, 0.4);">✨ FOUNDATION (+30% Status Base)</div>`;
+  }
   if (item.rarity) html += `<div class="tt-rarity" style="color:${rc}">${D().RARITY[rarity]?.name || rarity}</div>`;
   const reqLvl = def.req ? def.req.level : 1; const grade = getItemGrade(reqLvl);
   html += `<div style="color:var(--text-muted);font-size:10px;text-transform:capitalize;">${def.slot} · <span style="font-weight:bold; color:var(--gilt);">${grade}</span></div>`;
@@ -1970,6 +2012,7 @@ function showItemTooltip(item, e) {
   if (def.desc) html += `<div class="tt-desc">${def.desc}</div>`;
   const enchant = item.enchant || 0;
   const enchantMult = 1 + (enchant <= 3 ? enchant * 0.12 : (0.36 + (enchant - 3) * 0.15));
+  const foundationMult = item.foundation ? 1.3 : 1;
 
   const stats = ['atk','def','matk','mdef','hp','mp','eva','crit','speed','lifesteal'];
   let hasBaseStats = false;
@@ -1978,7 +2021,7 @@ function showItemTooltip(item, e) {
   for (const s of stats) {
     if (def[s]) {
       hasBaseStats = true;
-      const v = Math.floor(Number(def[s]) * mult * enchantMult);
+      const v = Math.floor(Number(def[s]) * mult * enchantMult * foundationMult);
       baseStatsHtml += `<div class="tt-stat"><span>${s.toUpperCase()}</span><span class="v">+${v}${s === 'crit' ? '%' : ''}</span></div>`;
     }
   }
@@ -4945,6 +4988,62 @@ function attachGlobalErrorHandlers() {
 
 const tabScrollMap = {};
 
+function openPanel(tabName) {
+  const targetTab = tabName || 'zones';
+  const tabsPanel = qs('.tabs-panel');
+
+  const currentActivePane = qs('.tab-pane.active');
+  if (currentActivePane) {
+    tabScrollMap[currentActivePane.id] = currentActivePane.scrollTop;
+  }
+
+  qsa('.tab-btn').forEach(b => b.classList.remove('active'));
+  qsa('.tab-pane').forEach(p => p.classList.remove('active'));
+
+  const btn = qs(`.tab-btn[data-tab="${targetTab}"]`);
+  if (btn) btn.classList.add('active');
+
+  const pane = el(`tab-${targetTab}`);
+  if (pane) {
+    pane.classList.add('active');
+    if (tabScrollMap[pane.id] !== undefined) {
+      pane.scrollTop = tabScrollMap[pane.id];
+    }
+  }
+
+  if (tabsPanel) {
+    if (targetTab !== 'zones') {
+      tabsPanel.classList.add('full-window-active');
+      let closeBtn = el('full-window-close-btn');
+      if (!closeBtn) {
+        closeBtn = mkEl('button');
+        closeBtn.id = 'full-window-close-btn';
+        closeBtn.className = 'full-window-close-btn';
+        closeBtn.innerHTML = '⚔️ Voltar ao Combate ✖';
+        closeBtn.onclick = () => openPanel('zones');
+        document.body.appendChild(closeBtn);
+      }
+      closeBtn.style.display = 'block';
+    } else {
+      tabsPanel.classList.remove('full-window-active');
+      const closeBtn = el('full-window-close-btn');
+      if (closeBtn) closeBtn.style.display = 'none';
+    }
+  }
+
+  if (targetTab === 'inventory') safeUiUpdate('inventory', updateInventoryUI);
+  else if (targetTab === 'skills') safeUiUpdate('skills', updateSkillUI);
+  else if (targetTab === 'shop') safeUiUpdate('shop', updateShopUI);
+  else if (targetTab === 'craft') safeUiUpdate('craft', updateCraftUI);
+  else if (targetTab === 'enchant') safeUiUpdate('enchant', updateEnchantUI);
+  else if (targetTab === 'zones') safeUiUpdate('zones', updateZoneUI);
+  else if (targetTab === 'codex') safeUiUpdate('codex', updateCodexUI);
+  else if (targetTab === 'dolls') safeUiUpdate('dolls', updateDollsUI);
+  else if (targetTab === 'magiclamp') safeUiUpdate('magiclamp', updateMagicLampUI);
+  else if (targetTab === 'quests') safeUiUpdate('quests', updateQuestsUI);
+  else if (targetTab === 'tower') safeUiUpdate('tower', updateTowerUI);
+}
+
 function bindEvents() {
   try {
     if (ROOT && ROOT.addEventListener) {
@@ -4979,34 +5078,16 @@ function bindEvents() {
 
     qsa('.tab-btn').forEach(btn => {
       btn.onclick = () => {
-        const currentActivePane = qs('.tab-pane.active');
-        if (currentActivePane) {
-          tabScrollMap[currentActivePane.id] = currentActivePane.scrollTop;
-        }
-
         const tabName = btn.dataset.tab;
-        qsa('.tab-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        qsa('.tab-pane').forEach(p => p.classList.remove('active'));
-        const pane = el(`tab-${tabName}`);
-        if (pane) {
-          pane.classList.add('active');
-          if (tabScrollMap[pane.id] !== undefined) {
-            pane.scrollTop = tabScrollMap[pane.id];
-          }
+        const isCurrentlyActive = btn.classList.contains('active');
+        const isFullWindowActive = qs('.tabs-panel')?.classList.contains('full-window-active');
+
+        if (isCurrentlyActive && isFullWindowActive && tabName !== 'zones') {
+          openPanel('zones');
+          return;
         }
 
-        if (tabName === 'inventory') safeUiUpdate('inventory', updateInventoryUI);
-        else if (tabName === 'skills') safeUiUpdate('skills', updateSkillUI);
-        else if (tabName === 'shop') safeUiUpdate('shop', updateShopUI);
-        else if (tabName === 'craft') safeUiUpdate('craft', updateCraftUI);
-        else if (tabName === 'enchant') safeUiUpdate('enchant', updateEnchantUI);
-        else if (tabName === 'zones') safeUiUpdate('zones', updateZoneUI);
-        else if (tabName === 'codex') safeUiUpdate('codex', updateCodexUI);
-        else if (tabName === 'dolls') safeUiUpdate('dolls', updateDollsUI);
-        else if (tabName === 'magiclamp') safeUiUpdate('magiclamp', updateMagicLampUI);
-        else if (tabName === 'quests') safeUiUpdate('quests', updateQuestsUI);
-        else if (tabName === 'tower') safeUiUpdate('tower', updateTowerUI);
+        openPanel(tabName);
       };
     });
 
