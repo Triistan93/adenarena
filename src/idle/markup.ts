@@ -124,6 +124,7 @@ export const IDLE_MARKUP = `
           <button class="tab-btn" data-tab="magiclamp">🪔 Lâmpada &amp; Craft</button>
           <button class="tab-btn" data-tab="quests">🎯 Missões <span id="tab-badge-quests" class="tab-badge" style="display:none">!</span></button>
           <button class="tab-btn" data-tab="tower">🏰 Torre Insolência</button>
+          <button class="tab-btn" data-tab="warehouse">📦 Baú</button>
         </div>
         <div class="tab-content">
           <!-- Character Tab -->
@@ -626,6 +627,34 @@ export const IDLE_MARKUP = `
             <div class="pane-section" style="margin-top: 10px;">
               <h3>🏰 Progresso da Escalada (1 a 100 Andares)</h3>
               <div id="tower-floors-grid" class="tower-floors-grid" style="margin-top:10px;"></div>
+            </div>
+          </div>
+
+          <!-- Warehouse Tab Pane -->
+          <div id="tab-warehouse" class="tab-pane">
+            <div class="warehouse-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; padding:10px 14px; background:rgba(0,0,0,0.5); border:1px solid rgba(212,167,68,0.3); border-radius:6px;">
+              <div>
+                <h3 style="margin:0; color:var(--gilt-bright); font-size:16px;">📦 Baú do Personagem</h3>
+                <span style="font-size:11px; color:var(--text-muted);">Armazenamento seguro compartilhado entre todas as subclasse do seu herói.</span>
+              </div>
+              <div style="font-size:12px; font-weight:bold; color:var(--gilt);">
+                Capacidade: <span id="warehouse-capacity">0/100</span>
+              </div>
+            </div>
+
+            <!-- Warehouse Controls & Filters -->
+            <div class="warehouse-controls" style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:12px; flex-wrap:wrap;">
+              <div class="l2inv-tabs-header" style="margin:0;">
+                <button class="l2inv-tab-btn wh-filter-btn active" data-wh-filter="all">Todos</button>
+                <button class="l2inv-tab-btn wh-filter-btn" data-wh-filter="gear">Equipamentos</button>
+                <button class="l2inv-tab-btn wh-filter-btn" data-wh-filter="consumable">Consumíveis</button>
+                <button class="l2inv-tab-btn wh-filter-btn" data-wh-filter="material">Materiais</button>
+              </div>
+              <input type="text" id="wh-search-input" placeholder="🔍 Buscar no Baú..." style="padding:5px 10px; font-size:11px; background:rgba(0,0,0,0.6); border:1px solid rgba(212,167,68,0.3); color:#fff; border-radius:4px; width:160px;" />
+            </div>
+
+            <!-- Warehouse Grid Container -->
+            <div class="wh-grid-area" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(56px, 1fr)); gap:6px; min-height:260px; max-height:480px; overflow-y:auto; padding:10px; background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.1); border-radius:6px;" id="warehouse-grid">
             </div>
           </div>
         </div>

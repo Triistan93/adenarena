@@ -203,10 +203,14 @@ const DEFAULT_STATE = () => ({
   craftLevel: 1, craftXp: 0, shopTab: 'gear', selectedSkill: null, filter: 'all',
   craftTab: 'recipes', zoneTab: 'map', soulshotActive: false, combatSpeed: 1,
   totalPlaytime: 0, buffs: {}, _cds: {}, gameMode: 'idle', privilegeLevel: 0,
-  autoSellRarity: 'off', craftFoundationPity: 0
+  autoSellRarity: 'off', craftFoundationPity: 0, warehouse: [], maxWarehouseSlots: 100
 });
 
 let state = DEFAULT_STATE();
+
+function getMaxWarehouseSlots() {
+  return Number(state.maxWarehouseSlots) || 100;
+}
 
 function formatItemDisplayName(item, def) {
   if (!item) return '';
@@ -271,6 +275,10 @@ function load() {
     state.craftCharges = Number(data.craftCharges) || 0;
     state.randomCraftWheel = Array.isArray(data.randomCraftWheel) ? data.randomCraftWheel : [];
     state.craftFoundationPity = Number(data.craftFoundationPity) || 0;
+    state.warehouse = Array.isArray(data.warehouse)
+      ? data.warehouse.filter(item => item && item.itemId && D().ALL_ITEMS[item.itemId])
+      : [];
+    state.maxWarehouseSlots = Number(data.maxWarehouseSlots) || 100;
 
     state.subclasses = Array.isArray(data.subclasses) ? data.subclasses : [];
     state.activeSubclassIndex = data.activeSubclassIndex !== undefined ? data.activeSubclassIndex : null;
@@ -921,6 +929,117 @@ function removeFromInventory(uid, amount = 1) {
   const item = state.inventory[idx];
   if (item.count > amount) { item.count -= amount; return true; }
   state.inventory.splice(idx, 1);
+  return true;
+}
+
+function getWarehouseCount(itemId) {
+  if (!state.warehouse || !Array.isArray(state.warehouse)) return 0;
+  return state.warehouse
+    .filter(i => (i.itemId === itemId || getItemDef(i.itemId)?.id === itemId))
+    .reduce((acc, i) => acc + (i.count || 1), 0);
+}
+
+function depositToWarehouse(uid, amount = 1) {
+  const invIdx = state.inventory.findIndex(i => i.uid === uid);
+  if (invIdx < 0) return false;
+  const item = state.inventory[invIdx];
+  if (item.equipped) {
+    log('Desequipe o item antes de guardá-lo no baú.', 'system');
+    return false;
+  }
+
+  const def = getItemDef(item.itemId);
+  if (!def) return false;
+
+  state.warehouse = state.warehouse || [];
+  const maxSlots = getMaxWarehouseSlots();
+
+  if (def.stack && (def.slot === 'consumable' || def.slot === 'material' || def.slot === 'scroll' || def.slot === 'powerup') && !item.rarity) {
+    let remaining = Math.min(amount, item.count || 1);
+    while (remaining > 0) {
+      const existing = state.warehouse.find(i => i.itemId === item.itemId && !i.rarity && (i.count || 1) < def.stack);
+      if (existing) {
+        const space = def.stack - (existing.count || 1);
+        const add = Math.min(space, remaining);
+        existing.count = (existing.count || 1) + add;
+        remaining -= add;
+      } else {
+        if (state.warehouse.length >= maxSlots) {
+          log('Baú cheio!', 'system');
+          return false;
+        }
+        const add = Math.min(def.stack, remaining);
+        state.warehouse.push({ ...item, uid: Date.now() + '_' + Math.random().toString(36).slice(2, 8), count: add, equipped: false });
+        remaining -= add;
+      }
+    }
+    if (item.count > amount) {
+      item.count -= amount;
+    } else {
+      state.inventory.splice(invIdx, 1);
+    }
+  } else {
+    if (state.warehouse.length >= maxSlots) {
+      log('Baú cheio!', 'system');
+      return false;
+    }
+    state.inventory.splice(invIdx, 1);
+    state.warehouse.push({ ...item, equipped: false });
+  }
+
+  const formattedName = formatItemDisplayName(item, def);
+  log(`📦 Guardou ${formattedName} no Baú.`, 'loot');
+  updateAllUI(); save();
+  return true;
+}
+
+function withdrawFromWarehouse(uid, amount = 1) {
+  state.warehouse = state.warehouse || [];
+  const whIdx = state.warehouse.findIndex(i => i.uid === uid);
+  if (whIdx < 0) return false;
+  const item = state.warehouse[whIdx];
+
+  const def = getItemDef(item.itemId);
+  if (!def) return false;
+
+  const maxInvSlots = getMaxInventorySlots();
+
+  if (def.stack && (def.slot === 'consumable' || def.slot === 'material' || def.slot === 'scroll' || def.slot === 'powerup') && !item.rarity) {
+    let remaining = Math.min(amount, item.count || 1);
+    while (remaining > 0) {
+      const existing = state.inventory.find(i => i.itemId === item.itemId && !i.rarity && (i.count || 1) < def.stack);
+      if (existing) {
+        const space = def.stack - (existing.count || 1);
+        const add = Math.min(space, remaining);
+        existing.count = (existing.count || 1) + add;
+        remaining -= add;
+      } else {
+        if (state.inventory.length >= maxInvSlots) {
+          log('Mochila cheia!', 'system');
+          return false;
+        }
+        const add = Math.min(def.stack, remaining);
+        state.inventory.push({ ...item, uid: Date.now() + '_' + Math.random().toString(36).slice(2, 8), count: add, equipped: false });
+        remaining -= add;
+      }
+    }
+    if (item.count > amount) {
+      item.count -= amount;
+    } else {
+      state.warehouse.splice(whIdx, 1);
+    }
+  } else {
+    if (state.inventory.length >= maxInvSlots) {
+      log('Mochila cheia!', 'system');
+      return false;
+    }
+    state.warehouse.splice(whIdx, 1);
+    state.inventory.push({ ...item, equipped: false });
+  }
+
+  const formattedName = formatItemDisplayName(item, def);
+  log(`🎒 Retirou ${formattedName} do Baú.`, 'loot');
+  updateAllUI(); save();
   return true;
 }
 
@@ -2123,15 +2242,24 @@ function showItemTooltip(item, e) {
   const canEquipCls = classSatisfies(state.class, def.classReq);
   const canEquip = canEquipLvl && canEquipCls;
   
+  const inWarehouse = (state.warehouse || []).some(i => i.uid === item.uid);
   html += `<div class="tt-actions">`;
-  if (item.equipped) html += `<button class="item-action" data-action="unequip" data-uid="${item.uid}">Unequip</button>`;
-  else if (['weapon','armor','helmet','gloves','boots','ring'].includes(def.slot)) {
-    html += `<button class="item-action" data-action="equip" data-uid="${item.uid}" ${!canEquip ? 'disabled title="Nível ou classe incompatível"' : ''}>Equip</button>`;
-    html += `<button class="item-action" data-action="salvage" data-uid="${item.uid}">Break</button>`;
+  if (inWarehouse) {
+    html += `<button class="item-action" data-action="withdraw-wh" data-uid="${item.uid}" style="background:linear-gradient(180deg,#8a6a24,#30230f); border-color:#d4a744;">🎒 Retirar do Baú</button>`;
+  } else {
+    if (item.equipped) html += `<button class="item-action" data-action="unequip" data-uid="${item.uid}">Unequip</button>`;
+    else if (['weapon','armor','helmet','gloves','boots','ring'].includes(def.slot)) {
+      html += `<button class="item-action" data-action="equip" data-uid="${item.uid}" ${!canEquip ? 'disabled title="Nível ou classe incompatível"' : ''}>Equip</button>`;
+      html += `<button class="item-action" data-action="salvage" data-uid="${item.uid}">Break</button>`;
+    }
+    if (def.slot === 'consumable' || def.slot === 'scroll' || def.slot === 'powerup') html += `<button class="item-action" data-action="use" data-uid="${item.uid}">Use</button>`;
+    const sellPrice = Math.floor((def.price||10)*0.4*(item.rarity?D().RARITY[item.rarity].mult:1));
+    html += `<button class="item-action sell" data-action="sell" data-uid="${item.uid}">Sell ${sellPrice}g</button>`;
+    if (!item.equipped) {
+      html += `<button class="item-action" data-action="deposit-wh" data-uid="${item.uid}">📦 Guardar no Baú</button>`;
+    }
   }
-  if (def.slot === 'consumable' || def.slot === 'scroll' || def.slot === 'powerup') html += `<button class="item-action" data-action="use" data-uid="${item.uid}">Use</button>`;
-  const sellPrice = Math.floor((def.price||10)*0.4*(item.rarity?D().RARITY[item.rarity].mult:1));
-  html += `<button class="item-action sell" data-action="sell" data-uid="${item.uid}">Sell ${sellPrice}g</button></div>`;
+  html += `</div>`;
   
   tt.innerHTML = html; tt.style.display = 'block'; 
   
@@ -2159,6 +2287,8 @@ function showItemTooltip(item, e) {
       else if (action === 'use') useItem(uid); 
       else if (action === 'sell') sellItem(uid); 
       else if (action === 'salvage') salvageItem(uid);
+      else if (action === 'deposit-wh') { depositToWarehouse(uid); hideItemTooltip(); }
+      else if (action === 'withdraw-wh') { withdrawFromWarehouse(uid); hideItemTooltip(); }
       hideItemTooltip();
     };
   });
@@ -4596,7 +4726,7 @@ function updateCodexUI() {
     const itemsHtml = setDef.items.map(itemId => {
       const itemDef = D().ALL_ITEMS[itemId] || { name: itemId };
       const isReg = regList.includes(itemId);
-      const inInv = getInventoryCount(itemId) > 0;
+      const inInv = getInventoryCount(itemId) > 0 || getWarehouseCount(itemId) > 0;
       let btn = '';
       if (isReg) btn = '<span style="color:#10b981; font-weight:bold;">✓ Registrado</span>';
       else if (inInv) btn = `<button class="action-btn action-btn--primary codex-reg-btn" style="padding: 2px 8px; font-size: 11px;" data-set="${setId}" data-item="${itemId}" onclick="registerCodexItem('${setId}', '${itemId}')">Registrar 📥</button>`;
@@ -4613,6 +4743,7 @@ function updateCodexUI() {
       <p style="font-size:11px; color:var(--text-muted); margin: 4px 0 8px 0;">${setDef.desc}</p>
       <div style="background:rgba(0,0,0,0.3); padding:8px; border-radius:6px;">${itemsHtml}</div>
     `;
+
     card.querySelectorAll('.codex-reg-btn').forEach(b => {
       b.onclick = () => registerCodexItem(b.dataset.set, b.dataset.item);
     });
@@ -4627,15 +4758,28 @@ function updateCodexUI() {
 
 function registerCodexItem(setId, itemId) {
   const invIdx = state.inventory.findIndex(i => i.itemId === itemId && !i.equipped);
-  if (invIdx < 0) { log('Você não possui este item para registrar no Codex.', 'system'); return; }
+  let foundInWarehouse = false;
+  let whIdx = -1;
 
-  state.inventory.splice(invIdx, 1);
+  if (invIdx >= 0) {
+    state.inventory.splice(invIdx, 1);
+  } else {
+    whIdx = (state.warehouse || []).findIndex(i => i.itemId === itemId && !i.equipped);
+    if (whIdx >= 0) {
+      state.warehouse.splice(whIdx, 1);
+      foundInWarehouse = true;
+    } else {
+      log('Você não possui este item para registrar no Codex.', 'system');
+      return;
+    }
+  }
+
   state.codex = state.codex || {};
   state.codex[setId] = state.codex[setId] || [];
   if (!state.codex[setId].includes(itemId)) state.codex[setId].push(itemId);
 
   const itemDef = D().ALL_ITEMS[itemId];
-  log(`📜 Item **${itemDef?.name || itemId}** registrado com sucesso no Codex!`, 'rarity-rare');
+  log(`📜 Item **${itemDef?.name || itemId}** registrado com sucesso no Codex!${foundInWarehouse ? ' (Retirado do Baú)' : ''}`, 'rarity-rare');
   floatText('📜 CODEX REGISTRADO!', 'float-jackpot');
   triggerQuestEvent('codex', 1);
 
@@ -5042,6 +5186,81 @@ function openPanel(tabName) {
   else if (targetTab === 'magiclamp') safeUiUpdate('magiclamp', updateMagicLampUI);
   else if (targetTab === 'quests') safeUiUpdate('quests', updateQuestsUI);
   else if (targetTab === 'tower') safeUiUpdate('tower', updateTowerUI);
+  else if (targetTab === 'warehouse') safeUiUpdate('warehouse', updateWarehouseUI);
+}
+
+let whFilter = 'all';
+let whSearchQuery = '';
+
+function updateWarehouseUI() {
+  const capEl = el('warehouse-capacity');
+  if (capEl) capEl.textContent = `${(state.warehouse || []).length}/${getMaxWarehouseSlots()}`;
+
+  const searchInput = el('wh-search-input');
+  if (searchInput && !searchInput.dataset.bound) {
+    searchInput.dataset.bound = 'true';
+    searchInput.oninput = (e) => {
+      whSearchQuery = (e.target.value || '').trim();
+      updateWarehouseUI();
+    };
+  }
+
+  qsa('.wh-filter-btn').forEach(btn => {
+    if (!btn.dataset.bound) {
+      btn.dataset.bound = 'true';
+      btn.onclick = () => {
+        whFilter = btn.dataset.whFilter;
+        qsa('.wh-filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        updateWarehouseUI();
+      };
+    }
+  });
+
+  const grid = el('warehouse-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+
+  const items = state.warehouse || [];
+  const filtered = items.filter(item => {
+    const def = getItemDef(item.itemId);
+    if (!def) return false;
+
+    if (whSearchQuery) {
+      const q = whSearchQuery.toLowerCase();
+      if (!def.name.toLowerCase().includes(q)) return false;
+    }
+
+    if (whFilter === 'all') return true;
+    if (whFilter === 'gear') return ['weapon','shield','helmet','armor','legs','gloves','boots','necklace','earring','ring','belt','cloak','talisman','hair','hair2','agathion'].includes(def.slot);
+    if (whFilter === 'consumable') return def.slot === 'consumable' || def.slot === 'potion';
+    if (whFilter === 'material') return def.slot === 'material' || def.slot === 'scroll' || def.slot === 'powerup' || def.slot === 'gem';
+    return true;
+  });
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `<div style="grid-column: 1 / -1; text-align:center; padding:35px; color:var(--text-muted); font-size:12px;">O Baú está vazio ou nenhum item atende aos filtros.</div>`;
+    return;
+  }
+
+  filtered.forEach(item => {
+    const def = getItemDef(item.itemId);
+    if (!def) return;
+    const rarity = item.rarity || 'common';
+    const slot = mkEl('div');
+    slot.className = `inv-slot rarity-${rarity}` + (item.foundation ? ' is-foundation' : '');
+    const countBadge = (item.count && item.count > 1) ? `<span class="qty">${item.count}</span>` : '';
+    const enchantBadge = item.enchant ? `<span class="slot-enchant" style="position:absolute; top:2px; right:2px; font-weight:bold; color:var(--gilt); font-size:10px;">+${item.enchant}</span>` : '';
+    const foundationBadge = item.foundation ? `<span style="position:absolute; top:2px; left:2px; font-size:9px;">✨</span>` : '';
+
+    slot.innerHTML = `<span style="font-size:18px">${getItemIcon(def)}</span><span class="name">${def.name}</span>${countBadge}${enchantBadge}${foundationBadge}`;
+    slot.onmouseenter = (e) => { cancelHideTooltip(); showItemTooltip(item, e); };
+    slot.onmouseleave = scheduleHideTooltip;
+    slot.onclick = (e) => { e.stopPropagation(); cancelHideTooltip(); showItemTooltip(item, e); };
+    slot.ondblclick = (e) => { e.stopPropagation(); withdrawFromWarehouse(item.uid); };
+
+    grid.appendChild(slot);
+  });
 }
 
 function bindEvents() {
@@ -5279,6 +5498,8 @@ export function init() {
   try {
     // Expose global action handlers to window for inline HTML handlers & global events
     window.registerCodexItem = registerCodexItem;
+    window.depositToWarehouse = depositToWarehouse;
+    window.withdrawFromWarehouse = withdrawFromWarehouse;
     window.selectDollForSynth = selectDollForSynth;
     window.synthesizeDolls = synthesizeDolls;
     window.craftSpecialRecipe = craftSpecialRecipe;
