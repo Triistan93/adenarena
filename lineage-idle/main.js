@@ -1,9 +1,16 @@
-import * as ART from "./art.js";
-import { loadIconIndex } from "./iconLoader.js";
 // echo-adapter garante que SKILL_DEFS_ECHO, CLASS_SKILLS_ECHO e SKILL_TREE_LAYOUT_ECHO
 // existam em window.EchoData antes das constantes globais serem lidas abaixo.
 import "./data/echo-adapter.js";
-await loadIconIndex();
+
+// Carregamento síncrono de icon_index.json antes de qualquer renderização de itens
+try {
+  const _res = await fetch("./img/icons/icon_index.json", { cache: "no-cache" });
+  if (_res.ok) {
+    window.IconIndex = await _res.json();
+  }
+} catch (e) {
+  console.warn("[main] Não foi possível carregar icon_index.json — usando fallback ICON_MAP:", e?.message || e);
+}
 // ========================================
 // Lineage Idle - Main Game Logic
 // ========================================
@@ -4815,18 +4822,6 @@ export function init() {
 
     attachGlobalErrorHandlers();
     bindEvents();
-
-    try {
-      fetch(getAssetUrl('img/icons/icon_index.json'))
-        .then(res => res.ok ? res.json() : null)
-        .then(data => {
-          if (data) {
-            window.IconIndex = { ...(window.IconIndex || {}), ...data };
-            updateAllUI();
-          }
-        })
-        .catch(() => {});
-    } catch (e) {}
 
     state.startTime = Date.now(); 
     const hasSave = load();

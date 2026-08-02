@@ -416,20 +416,6 @@ const ALL_ITEMS = {
   ...HAIR, ...HAIR2, ...RINGS, ...CONSUMABLES, ...MATERIALS, ...AGATHIONS,
   ...NEW_ARMORS
 };
-// [FIX 10] aliases agora sao copias rasas: mutacoes (enchant, upgrade)
-// em um alias nao vazam mais para o item canonico nem para outros aliases
-ALL_ITEMS.novice_cloak = { ...ALL_ITEMS.adventurer_cloak };
-ALL_ITEMS.novice_talisman = { ...ALL_ITEMS.talisman_novice };
-ALL_ITEMS.novice_circlet = { ...ALL_ITEMS.apprentice_circlet };
-ALL_ITEMS.sigil_devotion = { ...ALL_ITEMS.sigil_of_devotion };
-ALL_ITEMS.sigil_grace = { ...ALL_ITEMS.sigil_of_grace };
-ALL_ITEMS.sigil_mastery = { ...ALL_ITEMS.sigil_of_mastery };
-ALL_ITEMS.sigil_arcana = { ...ALL_ITEMS.sigil_of_arcana };
-ALL_ITEMS.phantom_mask_item = { ...ALL_ITEMS.phantom_mask_gear };
-ALL_ITEMS.valakas_mask = { ...ALL_ITEMS.boss_facemask_valakas };
-ALL_ITEMS.noble_crown = { ...ALL_ITEMS.noble_gold_crown };
-ALL_ITEMS.essence_crown = { ...ALL_ITEMS.essence_crown_of_aden };
-
 // Explicit PNG Icon File Mappings
 if (ALL_ITEMS.dynasty_breastplate) ALL_ITEMS.dynasty_breastplate.icon = 'dynasti_heavey_armor';
 if (ALL_ITEMS.dynasty_leather) ALL_ITEMS.dynasty_leather.icon = 'dynasti_light_armor';
@@ -444,6 +430,20 @@ if (ALL_ITEMS.mage_hood) ALL_ITEMS.mage_hood.icon = 'helmet_of_mana';
 if (ALL_ITEMS.ring_of_queen_ant) ALL_ITEMS.ring_of_queen_ant.icon = 'accessory_ring_of_queen_ant_i03';
 if (ALL_ITEMS.ring_queen_ant) ALL_ITEMS.ring_queen_ant.icon = 'accessory_ring_of_queen_ant_i03';
 if (ALL_ITEMS.necklace_of_valakas) ALL_ITEMS.necklace_of_valakas.icon = 'ring_of_valakas';
+
+// [FIX 10] aliases agora sao copias rasas: mutacoes (enchant, upgrade)
+// em um alias nao vazam mais para o item canonico nem para outros aliases
+ALL_ITEMS.novice_cloak = { ...ALL_ITEMS.adventurer_cloak };
+ALL_ITEMS.novice_talisman = { ...ALL_ITEMS.talisman_novice };
+ALL_ITEMS.novice_circlet = { ...ALL_ITEMS.apprentice_circlet };
+ALL_ITEMS.sigil_devotion = { ...ALL_ITEMS.sigil_of_devotion };
+ALL_ITEMS.sigil_grace = { ...ALL_ITEMS.sigil_of_grace };
+ALL_ITEMS.sigil_mastery = { ...ALL_ITEMS.sigil_of_mastery };
+ALL_ITEMS.sigil_arcana = { ...ALL_ITEMS.sigil_of_arcana };
+ALL_ITEMS.phantom_mask_item = { ...ALL_ITEMS.phantom_mask_gear };
+ALL_ITEMS.valakas_mask = { ...ALL_ITEMS.boss_facemask_valakas };
+ALL_ITEMS.noble_crown = { ...ALL_ITEMS.noble_gold_crown };
+ALL_ITEMS.essence_crown = { ...ALL_ITEMS.essence_crown_of_aden };
 
 // ======================================
 // MONSTER DROPS (Loot rebalanceado)
@@ -900,10 +900,10 @@ const ICON_MAP = {
   "apprentice_circlet": "apprentice_circlet.png",
   "arcana_mace": "arcana_mace.png",
   "arcane_boots": "arcane_boots.png",
-  "arcane_circlet": "arcane_circlet.png",
+  "arcane_circlet": "divine_crown.png",
   "arcane_gloves": "arcane_gloves.png",
   "arcane_robe": "arcane_robe.png",
-  "arcane_stockings": "arcane_stockings.png",
+  "arcane_stockings": "devotion_pants_robe.png",
   "arcane_vestments": "arcane_vestments.png",
   "arcane_wand": "arcane_wand.png",
   "archmage_staff": "archmage_staff.png",
@@ -966,7 +966,7 @@ const ICON_MAP = {
   "blue_wolf_heavy_gloves": "blue_wolf_heavy_gloves.png",
   "blue_wolf_heavy_pants": "blue_wolf_heavy_pants.png",
   "blue_wolf_helmet": "blue_wolf_helmet.png",
-  "blue_wolf_leather_armor": "blue_wolf_leather_armor.png",
+  "blue_wolf_leather_armor": "blue_wolf_light_armor.png",
   "blue_wolf_light_armor": "blue_wolf_light_armor.png",
   "blue_wolf_light_boots": "blue_wolf_light_boots.png",
   "blue_wolf_light_gloves": "blue_wolf_light_gloves.png",
@@ -1241,7 +1241,7 @@ const ICON_MAP = {
   "imperial_crusader_helmet": "imperial_crusader_helmet.png",
   "imperial_crusader_pants": "imperial_crusader_pants.png",
   "imperial_crusader_shield": "imperial_crusader_shield.png",
-  "imperial_shield": "imperial_shield.png",
+  "imperial_shield": "imperial_crusader_shield.png",
   "imperial_staff": "imperial_staff.png",
   "imperial_staff_sa": "imperial_staff_sa.png",
   "ironore": "ironore.png",
@@ -1259,11 +1259,11 @@ const ICON_MAP = {
   "karmian_robe_gloves": "karmian_robe_gloves.png",
   "karmian_robe_pants": "karmian_robe_pants.png",
   "knight_armor": "knight_armor.png",
-  "knight_boots": "knight_boots.png",
-  "knight_gaiters": "knight_gaiters.png",
-  "knight_gauntlets": "knight_gauntlets.png",
-  "knight_helm": "knight_helm.png",
-  "knight_shield": "knight_shield.png",
+  "knight_boots": "doom_light_boots.png",
+  "knight_gaiters": "doom_light_pants.png",
+  "knight_gauntlets": "doom_light_gloves.png",
+  "knight_helm": "doom_light_helmet.png",
+  "knight_shield": "doom_shield.png",
   "knight_sword": "knight_sword.png",
   "leather": "leather.png",
   "leather_armor_light": "leather_armor_light.png",
@@ -1278,10 +1278,10 @@ const ICON_MAP = {
   "lightning_armor": "lightning_armor.png",
   "lightning_pants": "lightning_pants.png",
   "luck_boost_1h": "luck_boost_1h.png",
-  "mage_gloves": "mage_gloves.png",
+  "mage_gloves": "karmian_robe_gloves.png",
   "mage_robe": "mage_robe.png",
-  "mage_sandals": "mage_sandals.png",
-  "mage_stockings": "mage_stockings.png",
+  "mage_sandals": "karmian_robe_boots.png",
+  "mage_stockings": "karmian_robe_pants.png",
   "magic_powder": "magic_powder.png",
   "majestic_heavy_armor": "majestic_heavy_armor.png",
   "majestic_heavy_boots": "majestic_heavy_boots.png",
@@ -1436,12 +1436,12 @@ const ICON_MAP = {
   "scroll_of_resurrection": "scroll_of_resurrection.png",
   "sea_boots": "sea_boots.png",
   "seers_circlet": "seers_circlet.png",
-  "shadow_boots": "shadow_boots.png",
+  "shadow_boots": "doom_light_boots.png",
   "shadow_cloak": "shadow_cloak.png",
   "shadow_fangs": "shadow_fangs.png",
-  "shadow_gloves": "shadow_gloves.png",
-  "shadow_mask": "shadow_mask.png",
-  "shadow_pants": "shadow_pants.png",
+  "shadow_gloves": "doom_light_gloves.png",
+  "shadow_mask": "doom_light_helmet.png",
+  "shadow_pants": "doom_light_pants.png",
   "shield_of_immortal": "shield_of_immortal.png",
   "shield_of_protection": "shield_of_protection.png",
   "shield_of_revenge": "shield_of_revenge.png",
@@ -1471,14 +1471,14 @@ const ICON_MAP = {
   "staff_of_eternity": "staff_of_eternity.png",
   "staff_of_magic": "staff_of_magic.png",
   "starfall_staff": "starfall_staff.png",
-  "steel_boots": "steel_boots.png",
+  "steel_boots": "full_plate_heavy_boots.png",
   "steel_dagger": "steel_dagger.png",
-  "steel_gaiters": "steel_gaiters.png",
-  "steel_gauntlets": "steel_gauntlets.png",
-  "steel_helm": "steel_helm.png",
+  "steel_gaiters": "full_plate_heavy_pants.png",
+  "steel_gauntlets": "full_plate_heavy_gloves.png",
+  "steel_helm": "full_plate_heavy_helmet.png",
   "steel_ingot": "steel_ingot.png",
   "steel_plate": "steel_plate.png",
-  "steel_shield": "steel_shield.png",
+  "steel_shield": "full_plate_shield.png",
   "suede": "suede.png",
   "talisman_novice": "talisman_novice.png",
   "talisman_of_eva": "talisman_of_eva.png",
@@ -1540,7 +1540,7 @@ if (ALL_ITEMS.training_dagger)             ALL_ITEMS.training_dagger.icon       
 if (ALL_ITEMS.wooden_sword)                ALL_ITEMS.wooden_sword.icon                = 'Weapons/wooden_sword';
 
 if (ALL_ITEMS.blue_wolf_breastplate)       ALL_ITEMS.blue_wolf_breastplate.icon       = 'blue_wolf_heavy_armor';
-if (ALL_ITEMS.blue_wolf_leather_armor)     ALL_ITEMS.blue_wolf_leather_armor.icon     = 'blue_wolf_leather_armor';
+if (ALL_ITEMS.blue_wolf_leather_armor)     ALL_ITEMS.blue_wolf_leather_armor.icon     = 'blue_wolf_light_armor';
 if (ALL_ITEMS.blue_wolf_tunic)             ALL_ITEMS.blue_wolf_tunic.icon             = 'blue_wolf_tunic';
 if (ALL_ITEMS.major_arcana_robe)           ALL_ITEMS.major_arcana_robe.icon           = 'major_arcana_robe_armor';
 
