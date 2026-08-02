@@ -706,11 +706,11 @@ const MONSTER_DROPS = {
   zone6: [...pickByTier(WEAPONS, 5, 3), ...pickByTier(ARMORS, 5, 2), 'hp_potion_xl'],
 };
 
-const CRAFTING_RECIPES = [
-  { id: 'weapon_composition_bow', reqs: [{ id: 'iron_ore', count: 10 }, { id: 'suede', count: 5 }], gold: 500 },
-  { id: 'armor_full_plate_heavy_armor', reqs: [{ id: 'iron_ore', count: 50 }, { id: 'crafted_leather', count: 20 }], gold: 5000 },
-  { id: 'armor_draconic_armor', reqs: [{ id: 'oriharukon_ore', count: 100 }, { id: 'adamantite', count: 50 }], gold: 50000 }
-];
+const CRAFTING_RECIPES = {
+  weapon_composition_bow: { id: 'weapon_composition_bow', level: 1, gold: 500, materials: { iron_ore: 10, suede: 5 }, reqs: [{ id: 'iron_ore', count: 10 }, { id: 'suede', count: 5 }] },
+  armor_full_plate_heavy_armor: { id: 'armor_full_plate_heavy_armor', level: 40, gold: 5000, materials: { iron_ore: 50, crafted_leather: 20 }, reqs: [{ id: 'iron_ore', count: 50 }, { id: 'crafted_leather', count: 20 }] },
+  armor_draconic_armor: { id: 'armor_draconic_armor', level: 76, gold: 50000, materials: { oriharukon_ore: 100, adamantite: 50 }, reqs: [{ id: 'oriharukon_ore', count: 100 }, { id: 'adamantite', count: 50 }] }
+};
 
 const SHOP_INVENTORY = [
   'hp_potion_s', 'hp_potion_m', 'hp_potion_l', 'hp_potion_xl',

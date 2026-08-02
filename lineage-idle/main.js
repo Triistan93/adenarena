@@ -1285,16 +1285,50 @@ window.executeRaceClassChange = (scrollUid, newRace, newClass) => {
 
 // --------------------------- CRAFTING ---------------------------
 function getCraftLevelReq(recipeLevel) { return Math.max(1, Math.floor(recipeLevel / 10) + 1); }
+
+function getRecipeDef(recipeId) {
+  const recipesData = D().CRAFTING_RECIPES;
+  if (!recipesData) return null;
+  if (Array.isArray(recipesData)) {
+    return recipesData.find(r => r.id === recipeId || r.itemId === recipeId) || null;
+  }
+  return recipesData[recipeId] || null;
+}
+
+function getRecipeMaterials(recipe) {
+  if (!recipe) return [];
+  if (Array.isArray(recipe.materials)) {
+    return recipe.materials.map(r => ({ matId: r.itemId || r.id, qty: r.count || r.qty || 1 }));
+  }
+  if (Array.isArray(recipe.reqs)) {
+    return recipe.reqs.map(r => ({ matId: r.id || r.itemId, qty: r.count || r.qty || 1 }));
+  }
+  if (recipe.materials && typeof recipe.materials === 'object') {
+    return Object.entries(recipe.materials).map(([matId, qty]) => ({ matId, qty: Number(qty) || 1 }));
+  }
+  if (recipe.reqs && typeof recipe.reqs === 'object') {
+    return Object.entries(recipe.reqs).map(([matId, qty]) => ({ matId, qty: Number(qty) || 1 }));
+  }
+  return [];
+}
+
 function canCraft(recipeId) {
-  const recipe = D().CRAFTING_RECIPES[recipeId];
-  if (!recipe || getCraftLevelReq(recipe.level) > state.craftLevel) return false;
-  for (const [matId, qty] of Object.entries(recipe.materials)) { if (getInventoryCount(matId) < qty) return false; }
+  const recipe = getRecipeDef(recipeId);
+  if (!recipe) return false;
+  if (recipe.level && getCraftLevelReq(recipe.level) > state.craftLevel) return false;
+  const mats = getRecipeMaterials(recipe);
+  if (mats.length === 0) return false;
+  for (const { matId, qty } of mats) {
+    if (getInventoryCount(matId) < qty) return false;
+  }
   return true;
 }
+
 function craftItem(recipeId) {
-  const recipe = D().CRAFTING_RECIPES[recipeId];
+  const recipe = getRecipeDef(recipeId);
   if (!recipe || !canCraft(recipeId)) { log('Missing materials or craft level too low.', 'system'); return; }
-  for (const [matId, qty] of Object.entries(recipe.materials)) {
+  const mats = getRecipeMaterials(recipe);
+  for (const { matId, qty } of mats) {
     let remaining = qty;
     for (let i = state.inventory.length - 1; i >= 0 && remaining > 0; i--) {
       const it = state.inventory[i];
@@ -1307,8 +1341,10 @@ function craftItem(recipeId) {
   const rarityBoost = state.race === 'dwarf' ? 1 : 0;
   const rarity = D().rollRarity(rarityBoost);
   addToInventory(recipeId, 1, rarity);
-  log(`Crafted ${D().ALL_ITEMS[recipeId].name} [${D().RARITY[rarity].name}]!`, 'rarity-' + rarity);
-  state.craftXp += 10 + (D().ALL_ITEMS[recipeId].tier || 1) * 5;
+  const itemDef = getItemDef(recipeId);
+  const name = itemDef ? itemDef.name : recipeId;
+  log(`Crafted ${name} [${D().RARITY[rarity].name}]!`, 'rarity-' + rarity);
+  state.craftXp += 10 + (itemDef?.tier || 1) * 5;
   while (state.craftXp >= state.craftLevel * 50) { state.craftXp -= state.craftLevel * 50; state.craftLevel++; log(`Crafting Level Up! Now Lv.${state.craftLevel}`, 'xp'); }
   updateAllUI(); save();
 }
@@ -2420,11 +2456,25 @@ function updateCraftUI() {
 
 function renderCraftRecipes() {
   const list = el('craft-list'); if (!list) return; list.innerHTML = '';
-  for (const [recipeId, recipe] of Object.entries(D().CRAFTING_RECIPES)) {
-    const def = D().ALL_ITEMS[recipeId]; if (!def || (def.req && def.req.level > state.level)) continue;
-    const canCraft = canCraftRecipe(recipeId), item = mkEl('div'); item.className = 'craft-item' + (canCraft ? '' : ' locked'); const reqLevel = getCraftLevelReq(recipe.level);
-    const matHtml = Object.entries(recipe.materials).map(([matId, qty]) => { const have = getInventoryCount(matId), matDef = D().ALL_ITEMS[matId], cls = have >= qty ? 'have' : 'need'; return `<span class="${cls}">${matDef.name} ${have}/${qty}</span>`; }).join(', ');
-    item.innerHTML = `<div class="item-info"><div class="item-name">${def.name}</div><div class="item-mats">${matHtml}</div><div class="item-desc">Req: Craft Lv.${reqLevel}</div></div><button class="item-action" data-craft="${recipeId}" ${!canCraft ? 'disabled' : ''}>Craft</button>`; list.appendChild(item);
+  const recipesData = D().CRAFTING_RECIPES || {};
+  const recipesList = Array.isArray(recipesData) ? recipesData : Object.entries(recipesData).map(([k, v]) => ({ id: k, ...v }));
+  for (const recipe of recipesList) {
+    if (!recipe) continue;
+    const recipeId = recipe.id || recipe.itemId;
+    const def = getItemDef(recipeId); if (!def || (def.req && def.req.level > state.level)) continue;
+    const canCraftIt = canCraft(recipeId);
+    const item = mkEl('div'); item.className = 'craft-item' + (canCraftIt ? '' : ' locked');
+    const reqLevel = recipe.level ? getCraftLevelReq(recipe.level) : 1;
+    const mats = getRecipeMaterials(recipe);
+    const matHtml = mats.map(({ matId, qty }) => {
+      const have = getInventoryCount(matId);
+      const matDef = getItemDef(matId);
+      const matName = matDef ? matDef.name : matId;
+      const cls = have >= qty ? 'have' : 'need';
+      return `<span class="${cls}">${matName} ${have}/${qty}</span>`;
+    }).join(', ');
+    item.innerHTML = `<div class="item-info"><div class="item-name">${def.name}</div><div class="item-mats">${matHtml}</div><div class="item-desc">Req: Craft Lv.${reqLevel}</div></div><button class="item-action" data-craft="${recipeId}" ${!canCraftIt ? 'disabled' : ''}>Craft</button>`;
+    list.appendChild(item);
   }
   qsa('[data-craft]').forEach(btn => btn.onclick = () => craftItem(btn.dataset.craft));
 }
@@ -3270,18 +3320,21 @@ function hasSkillUpgradeAvailable() {
 }
 
 function hasCraftAvailable() {
-  const recipes = D().CRAFTING_RECIPES;
-  if (!recipes || !Array.isArray(recipes)) return false;
-  for (const recipe of recipes) {
-    let canCraft = true;
-    for (const mat of recipe.materials) {
-      const invItem = state.inventory.find(i => i.itemId === mat.itemId);
-      if (!invItem || (invItem.count || 1) < mat.count) {
-        canCraft = false;
+  const recipesData = D().CRAFTING_RECIPES;
+  if (!recipesData) return false;
+  const recipesList = Array.isArray(recipesData) ? recipesData : Object.values(recipesData);
+  for (const recipe of recipesList) {
+    if (!recipe) continue;
+    const mats = getRecipeMaterials(recipe);
+    if (mats.length === 0) continue;
+    let canCraftThis = true;
+    for (const { matId, qty } of mats) {
+      if (getInventoryCount(matId) < qty) {
+        canCraftThis = false;
         break;
       }
     }
-    if (canCraft) return true;
+    if (canCraftThis) return true;
   }
   return false;
 }

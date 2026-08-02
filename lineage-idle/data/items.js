@@ -1,5 +1,5 @@
 // items.js - System Data & Complete Item Catalog (Generated 100% from public/img/icons/ subfolders)
-// Generated: 2026-08-02T21:38:36.995Z
+// Generated: 2026-08-02T21:54:49.139Z
 // DO NOT EDIT MANUALLY - Run scratch/rebuild-from-folders.mjs to regenerate
 
 const RARITY = {
@@ -2887,9 +2887,15 @@ const MONSTER_DROPS = {
   ]
 };
 
-const CRAFTING_RECIPES = [
-  {
+const CRAFTING_RECIPES = {
+  "weapon_composition_bow": {
     "id": "weapon_composition_bow",
+    "level": 1,
+    "gold": 500,
+    "materials": {
+      "iron_ore": 10,
+      "suede": 5
+    },
     "reqs": [
       {
         "id": "iron_ore",
@@ -2899,11 +2905,16 @@ const CRAFTING_RECIPES = [
         "id": "suede",
         "count": 5
       }
-    ],
-    "gold": 500
+    ]
   },
-  {
+  "armor_full_plate_heavy_armor": {
     "id": "armor_full_plate_heavy_armor",
+    "level": 40,
+    "gold": 5000,
+    "materials": {
+      "iron_ore": 50,
+      "crafted_leather": 20
+    },
     "reqs": [
       {
         "id": "iron_ore",
@@ -2913,11 +2924,16 @@ const CRAFTING_RECIPES = [
         "id": "crafted_leather",
         "count": 20
       }
-    ],
-    "gold": 5000
+    ]
   },
-  {
+  "armor_draconic_armor": {
     "id": "armor_draconic_armor",
+    "level": 76,
+    "gold": 50000,
+    "materials": {
+      "oriharukon_ore": 100,
+      "adamantite": 50
+    },
     "reqs": [
       {
         "id": "oriharukon_ore",
@@ -2927,10 +2943,9 @@ const CRAFTING_RECIPES = [
         "id": "adamantite",
         "count": 50
       }
-    ],
-    "gold": 50000
+    ]
   }
-];
+};
 
 const SHOP_INVENTORY = [
   "hp_potion_s",
