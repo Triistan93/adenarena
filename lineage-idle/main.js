@@ -989,6 +989,9 @@ function depositToWarehouse(uid, amount = 1) {
 
   const formattedName = formatItemDisplayName(item, def);
   log(`📦 Guardou ${formattedName} no Baú.`, 'loot');
+  hideItemTooltip();
+  updateInventoryUI();
+  updateWarehouseUI();
   updateAllUI(); save();
   return true;
 }
@@ -1039,6 +1042,9 @@ function withdrawFromWarehouse(uid, amount = 1) {
 
   const formattedName = formatItemDisplayName(item, def);
   log(`🎒 Retirou ${formattedName} do Baú.`, 'loot');
+  hideItemTooltip();
+  updateInventoryUI();
+  updateWarehouseUI();
   updateAllUI(); save();
   return true;
 }
@@ -3554,6 +3560,7 @@ function updateAllUI() {
   safeUiUpdate('subclasses', renderSubclassesUI);
   safeUiUpdate('quests', updateQuestsUI);
   safeUiUpdate('tower', updateTowerUI);
+  safeUiUpdate('warehouse', updateWarehouseUI);
   safeUiUpdate('tab-badges', updateTabBadgesUI);
 }
 
