@@ -2,6 +2,7 @@ import * as ART from "./art.js";
 // echo-adapter garante que SKILL_DEFS_ECHO, CLASS_SKILLS_ECHO e SKILL_TREE_LAYOUT_ECHO
 // existam em window.EchoData antes das constantes globais serem lidas abaixo.
 import "./data/echo-adapter.js";
+import "./data/affixes.js";
 
 // Carregamento síncrono de icon_index.json antes de qualquer renderização de itens
 try {
@@ -315,6 +316,16 @@ function getEquipBonus(slot) {
   ['atk','def','matk','mdef','hp','mp','eva','crit','speed','lifesteal'].forEach(k => {
     if (out[k]) out[k] = Math.floor(Number(out[k]) * rarityMult * enchantMult);
   });
+  // Aplicação aditiva de afixos do tipo 'stat' por cima dos multiplicadores base
+  if (Array.isArray(inv.affixes)) {
+    inv.affixes.forEach(aff => {
+      const defAff = D().AFFIX_MAP ? D().AFFIX_MAP[aff.id] : null;
+      if (defAff && defAff.type === 'stat' && defAff.stat) {
+        const k = defAff.stat;
+        out[k] = (Number(out[k]) || 0) + Number(aff.value || 0);
+      }
+    });
+  }
   return out;
 }
 
@@ -733,7 +744,9 @@ function addToInventory(itemId, amount = 1, rarity = null) {
 
   for (let i = 0; i < amount; i++) {
     if (state.inventory.length >= maxSlots) { log('Inventory full!', 'system'); return false; }
-    state.inventory.push({ uid: Date.now() + '_' + Math.random().toString(36).slice(2, 8), itemId, count: 1, rarity, equipped: false });
+    const isEquip = def.slot && def.slot !== 'consumable' && def.slot !== 'material' && def.slot !== 'scroll' && def.slot !== 'powerup';
+    const affixes = isEquip ? (D().rollAffixes ? D().rollAffixes(rarity || 'common') : []) : [];
+    state.inventory.push({ uid: Date.now() + '_' + Math.random().toString(36).slice(2, 8), itemId, count: 1, rarity, affixes, equipped: false });
   }
   return true;
 }
@@ -1722,6 +1735,17 @@ function showItemTooltip(item, e) {
   if (def.craftBonus) html += `<div class="tt-stat"><span>CRAFT XP</span><span class="v">+${Math.round(def.craftBonus*mult*100)}%</span></div>`;
   if (def.lootBonus) html += `<div class="tt-stat"><span>LOOT</span><span class="v">+${Math.round(def.lootBonus*mult*100)}%</span></div>`;
   if (def.stack) html += `<div class="tt-stat"><span>Stack</span><span class="v">${item.count || 1}</span></div>`;
+  if (Array.isArray(item.affixes) && item.affixes.length > 0) {
+    html += `<div class="tt-affixes" style="margin-top:6px; padding-top:4px; border-top:1px dashed rgba(240,208,128,0.3);">`;
+    item.affixes.forEach(aff => {
+      const defAff = D().AFFIX_MAP ? D().AFFIX_MAP[aff.id] : null;
+      if (defAff) {
+        const label = defAff.name.replace('{value}', aff.value);
+        html += `<div class="tt-affix" style="color:#f0cd7e; font-size:11px; font-weight:600;">✦ ${label}</div>`;
+      }
+    });
+    html += `</div>`;
+  }
   if (item.equipped) html += `<div class="tt-equipped">[ EQUIPPED ]</div>`;
   
   if (!item.equipped) {
@@ -3360,6 +3384,49 @@ function stageFloat(text, cls, side) { const c = el('stage-floats'); if (!c) ret
 // --------------------------- COMBAT ---------------------------
 let combatInterval = null; let combatTick = 0; let monsterAttackTimeout = null;
 
+function getMonsterCategory(monster) {
+  if (!monster) return 'humanoid';
+  if (monster.category) return monster.category.toLowerCase();
+  const id = String(monster.id || '').toLowerCase();
+  if (id.includes('skeleton') || id.includes('death') || id.includes('crypt') || id.includes('vampire') || id.includes('lich') || id.includes('bone') || id.includes('cursed') || id.includes('corpse') || id.includes('soul')) return 'undead';
+  if (id.includes('dragon') || id.includes('fafurion') || id.includes('tiamat') || id.includes('lindvior')) return 'dragon';
+  if (id.includes('wolf') || id.includes('spider') || id.includes('satyr') || id.includes('snake') || id.includes('werewolf') || id.includes('cerberus') || id.includes('beast') || id.includes('trent') || id.includes('swamp')) return 'beast';
+  if (id.includes('demon') || id.includes('void') || id.includes('beholder') || id.includes('devil')) return 'demon';
+  return 'humanoid';
+}
+
+function getEquippedProcBonuses() {
+  const procs = {
+    boss_dmg: 0,
+    on_kill_heal: 0,
+    stun_chance: 0,
+    type_dmg: { undead: 0, dragon: 0, beast: 0, demon: 0, humanoid: 0 }
+  };
+
+  if (!state.equipment) return procs;
+
+  for (const slot of Object.keys(state.equipment)) {
+    const uid = state.equipment[slot];
+    if (!uid) continue;
+    const inv = state.inventory.find(i => i.uid === uid);
+    if (!inv || !Array.isArray(inv.affixes)) continue;
+
+    inv.affixes.forEach(aff => {
+      const defAff = D().AFFIX_MAP ? D().AFFIX_MAP[aff.id] : null;
+      if (defAff && defAff.type === 'proc') {
+        if (defAff.proc === 'boss_dmg') procs.boss_dmg += Number(aff.value) || 0;
+        if (defAff.proc === 'on_kill_heal') procs.on_kill_heal += Number(aff.value) || 0;
+        if (defAff.proc === 'stun_chance') procs.stun_chance += Number(aff.value) || 0;
+        if (defAff.proc === 'type_dmg' && defAff.category && procs.type_dmg[defAff.category] !== undefined) {
+          procs.type_dmg[defAff.category] += Number(aff.value) || 0;
+        }
+      }
+    });
+  }
+
+  return procs;
+}
+
 function dealDamage(target, amount, type = 'physical') { 
   const rawAmount = Number(amount) || 0;
   const def = type === 'physical' ? (Number(target.def) || 0) : (Number(target.mdef) || 0); 
@@ -3519,10 +3586,37 @@ function attackMonster() {
   
   if (stats.lifeDrain > 0) { const heal = Math.floor(damage * stats.lifeDrain); if (heal > 0) { state.hp = Math.min(state.maxHp, state.hp + heal); } }
   
+  const procBonuses = getEquippedProcBonuses();
+  let affixDmgMult = 1.0;
+  if (monster.boss && procBonuses.boss_dmg > 0) {
+    affixDmgMult += procBonuses.boss_dmg / 100;
+  }
+  const monCat = getMonsterCategory(monster);
+  if (procBonuses.type_dmg[monCat] > 0) {
+    affixDmgMult += procBonuses.type_dmg[monCat] / 100;
+  }
+
+  damage = Math.floor(damage * affixDmgMult);
+
+  if (procBonuses.stun_chance > 0 && Math.random() * 100 < procBonuses.stun_chance) {
+    const nowStun = combatTick * 200;
+    monster._stunnedUntil = nowStun + 1500;
+    log(`💫 Stun Proc! ${monster.name} foi Atordoado por 1.5s`, 'rarity-rare');
+    floatText('STUN!', 'float-epic');
+  }
+
   monster.hp -= damage;
   if (monster.hp <= 0 && !castedSkillThisTick) stageMonsterDie(); else if (!castedSkillThisTick) stageMonsterHurt(damage, wasCrit);
   
   if (monster.hp <= 0) {
+    if (procBonuses.on_kill_heal > 0) {
+      const killHeal = Math.floor(state.maxHp * (procBonuses.on_kill_heal / 100));
+      if (killHeal > 0) {
+        state.hp = Math.min(state.maxHp, state.hp + killHeal);
+        log(`🩸 Execução! Curou ${killHeal} HP ao derrotar ${monster.name}`, 'heal');
+        floatText(`+${killHeal} HP`, 'sf-heal');
+      }
+    }
     if (!monster.boss && !monster.isTower && state.zone) {
       state.zoneKills = state.zoneKills || {};
       state.zoneKills[state.zone] = (state.zoneKills[state.zone] || 0) + 1;

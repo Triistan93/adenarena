@@ -1546,6 +1546,7 @@ if (ALL_ITEMS.major_arcana_robe)           ALL_ITEMS.major_arcana_robe.icon     
 
 if (typeof window !== 'undefined') {
   window.GameData = {
+    ...(window.GameData || {}),
     ICON_MAP,
     RARITY, SLOT, WEAPONS, ARMORS, HELMETS, BOOTS, GLOVES, RINGS,
     LEGS, SHIELDS, NECKLACES, EARRINGS, BELTS, CLOAKS, TALISMANS,
