@@ -2963,12 +2963,22 @@ const SHOP_INVENTORY = [
 const ZONE_GOLD_MULT = { zone1: 1.0, zone2: 1.5, zone3: 2.2, zone4: 3.5, zone5: 5.5, zone6: 9.0 };
 const MYSTIC_POOL = ["anais_first","weapon_anais_first","anakim_pistols","weapon_anakim_pistols","jewel_ring_core","ring_core"];
 
+const ZONE_CONSUMABLES = {
+  zone1: ['hp_potion_s', 'iron_ore', 'suede', 'charcoal', 'animal_skin'],
+  zone2: ['hp_potion_m', 'crafted_leather', 'coarse_bone_powder', 'steel', 'iron_ore'],
+  zone3: ['hp_potion_l', 'oriharukon_ore', 'adamantite', 'silver_nugget', 'crafted_leather'],
+  zone4: ['mp_potion_s', 'mithril_ore', 'enchanted_stone', 'thread', 'adamantite'],
+  zone5: ['mp_potion_l', 'dread_shard', 'titanium_ore', 'elemental_stone', 'mithril_ore'],
+  zone6: ['hp_potion_xl', 'mp_potion_xl', 'dragon_bone', 'divine_crystal', 'titanium_ore']
+};
+
 function rollRarity(bonus = 0) {
-  const rand = Math.random() * 100 - bonus;
-  if (rand <= RARITY.legendary.dropWeight) return 'legendary';
-  if (rand <= RARITY.legendary.dropWeight + RARITY.epic.dropWeight) return 'epic';
-  if (rand <= RARITY.legendary.dropWeight + RARITY.epic.dropWeight + RARITY.rare.dropWeight) return 'rare';
-  if (rand <= RARITY.legendary.dropWeight + RARITY.epic.dropWeight + RARITY.rare.dropWeight + RARITY.uncommon.dropWeight) return 'uncommon';
+  const lootMod = 1 + Math.max(0, bonus);
+  const rand = Math.random() * 100;
+  if (rand <= 0.1 * lootMod) return 'legendary';
+  if (rand <= 0.7 * lootMod) return 'epic';
+  if (rand <= 4.5 * lootMod) return 'rare';
+  if (rand <= 15.0 * lootMod) return 'uncommon';
   return 'common';
 }
 
@@ -2981,17 +2991,44 @@ function getZoneDropTier(zoneLevel) {
   return 'zone6';
 }
 
-function rollDrop(zoneId = 'zone1', rarityBonus = 0) {
-  const pool = MONSTER_DROPS[zoneId] || MONSTER_DROPS.zone1;
-  const itemId = pool[Math.floor(Math.random() * pool.length)];
-  const rarity = rollRarity(rarityBonus);
-  const def = ALL_ITEMS[itemId];
-  const isEquipment = def ? ['weapon','armor','helmet','gloves','boots','ring','necklace','earring','shield','legs','belt','cloak','talisman','hair','hair2','agathion'].includes(def.slot) : true;
-  const dropObj = { id: itemId, itemId, rarity, isEquipment, amount: 1 };
-  const res = [dropObj];
-  res.itemId = itemId;
-  res.rarity = rarity;
-  return res;
+function rollDrop(zoneId = 'zone1', rarityBonus = 0, isBoss = false) {
+  const drops = [];
+  
+  // 1. Consumable/Material Drop (75% base chance)
+  const matChance = isBoss ? 1.0 : 0.75;
+  if (Math.random() < matChance) {
+    const matPool = ZONE_CONSUMABLES[zoneId] || ZONE_CONSUMABLES.zone1;
+    const matId = matPool[Math.floor(Math.random() * matPool.length)];
+    const def = ALL_ITEMS[matId];
+    if (def) {
+      const amount = (def.slot === 'potion' || def.slot === 'consumable') ? Math.floor(Math.random() * 2) + 1 : Math.floor(Math.random() * 3) + 1;
+      drops.push({ id: matId, itemId: matId, rarity: 'common', isEquipment: false, amount });
+    }
+  }
+
+  // 2. Equipment Drop (3% - 5% rare chance for normal monsters, 20% for bosses)
+  const baseEquipChance = isBoss ? 0.20 : 0.04;
+  const equipChance = baseEquipChance * (1 + Math.min(2, rarityBonus * 0.2));
+  
+  if (Math.random() < equipChance) {
+    const rawPool = MONSTER_DROPS[zoneId] || MONSTER_DROPS.zone1;
+    const equipPool = rawPool.filter(id => {
+      const def = ALL_ITEMS[id];
+      return def && ['weapon','armor','helmet','gloves','boots','ring','necklace','earring','shield','legs','belt','cloak','talisman','hair','hair2','agathion'].includes(def.slot);
+    });
+    
+    const targetPool = equipPool.length > 0 ? equipPool : rawPool;
+    const itemId = targetPool[Math.floor(Math.random() * targetPool.length)];
+    const rarity = rollRarity(rarityBonus);
+    const dropObj = { id: itemId, itemId, rarity, isEquipment: true, amount: 1 };
+    drops.push(dropObj);
+  }
+
+  if (drops.length > 0) {
+    drops.itemId = drops[0].itemId;
+    drops.rarity = drops[0].rarity;
+  }
+  return drops;
 }
 
 function getMysticRotation() {

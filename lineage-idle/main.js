@@ -4167,18 +4167,21 @@ function attackMonster() {
     state.gold += gold; trackGold(gold);
     if (jackpot) { log(`💰 JACKPOT! +${gold} Gold (×10)`, 'rarity-legendary'); floatText(`💰 +${gold}g`, 'float-jackpot'); } else { log(`+${gold} Gold`, 'loot'); if (gold >= 20) floatText(`+${gold}g`, 'float-gold'); }
 
-    const rawDrop = D().rollDrop(zoneTier, stats.loot);
-    const drops = Array.isArray(rawDrop) ? rawDrop : (rawDrop && rawDrop.itemId ? [ { id: rawDrop.itemId, rarity: rawDrop.rarity, isEquipment: true, amount: 1 } ] : []);
+    const rawDrop = D().rollDrop(zoneTier, stats.loot, !!(monster.boss || monster.elite));
+    const drops = Array.isArray(rawDrop) ? rawDrop : (rawDrop && rawDrop.itemId ? [ { id: rawDrop.itemId, itemId: rawDrop.itemId, rarity: rawDrop.rarity, isEquipment: true, amount: 1 } ] : []);
     for (const drop of drops) {
       const dropId = drop.id || drop.itemId;
-      if (dropId && D().ALL_ITEMS[dropId]) {
-        if (drop.isEquipment || D().ALL_ITEMS[dropId].slot !== 'material') {
-          addToInventory(dropId, 1, drop.rarity);
-          log(`✦ ${D().ALL_ITEMS[dropId].name} [${D().RARITY[drop.rarity || 'common']?.name || drop.rarity}]`, 'rarity-' + (drop.rarity || 'common'));
-          floatText(`✦ ${D().RARITY[drop.rarity || 'common']?.name || drop.rarity}!`, 'float-' + (drop.rarity || 'common'));
+      const def = D().ALL_ITEMS[dropId];
+      if (dropId && def) {
+        const isEquip = drop.isEquipment || !['material', 'potion', 'consumable', 'scroll', 'gem'].includes(def.slot);
+        if (isEquip) {
+          addToInventory(dropId, 1, drop.rarity || 'common');
+          const rName = D().RARITY[drop.rarity || 'common']?.name || (drop.rarity || 'common');
+          log(`✦ ${def.name} [${rName}]`, 'rarity-' + (drop.rarity || 'common'));
+          floatText(`✦ ${rName}!`, 'float-' + (drop.rarity || 'common'));
         } else {
           addToInventory(dropId, drop.amount || 1);
-          log(`+ ${drop.amount || 1}× ${D().ALL_ITEMS[dropId].name}`, 'loot');
+          log(`+ ${drop.amount || 1}× ${def.name}`, 'loot');
         }
       }
     }
