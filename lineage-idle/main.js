@@ -1709,25 +1709,20 @@ function getAssetUrl(p) {
   return '/' + cleanPath;
 }
 
-function getItemIcon(def) { 
+function getItemIcon(def) {
   if (!def) return '📦';
-  const fallbackIcons = { weapon: '⚔️', armor: '🛡️', helmet: '⛑️', gloves: '🧤', boots: '👢', ring: '💍', consumable: '🧪', material: '💎', scroll: '📜' }; 
-  const emoji = fallbackIcons[def.slot] || '📦'; 
+  const fallbackIcons = { weapon: '⚔️', armor: '🛡️', helmet: '⛑️', gloves: '🧤', boots: '👢', ring: '💍', earring: '💎', necklace: '📿', consumable: '🧪', material: '💎', scroll: '📜', cloak: '🧣', belt: '🎗️', hair: '👑', agathion: '🐾' };
+  const emoji = fallbackIcons[def.slot] || '📦';
   const id = def.id || '';
-  const rawKey = String(def.icon || id || '').toLowerCase().replace(/\\/g, '/'); 
-  if (!rawKey) return emoji; 
-
-  const baseName = rawKey.split('/').pop().replace(/\.png$/, '');
-  const fileName = `${baseName}.png`;
-
-  const iconIndex = (typeof window !== 'undefined' && window.IconIndex) ? window.IconIndex : ((D() && D().ICON_MAP) ? D().ICON_MAP : {});
-  let mappedPath = iconIndex[id] || iconIndex[rawKey] || iconIndex[baseName] || fileName;
-  if (!mappedPath) mappedPath = fileName;
-
-  const fileOnly = mappedPath.split('/').pop();
-  const iconUrl = getAssetUrl(`img/icons/${fileOnly}`);
-
-  return `<img src="${iconUrl}" alt="${def.name || ''}" class="item-icon-img" onerror="this.style.display='none';if(this.nextElementSibling)this.nextElementSibling.style.display='inline-block';" style="width:28px; height:28px; object-fit:contain; vertical-align:middle;" /><span class="item-icon-fallback" style="display:none; font-size:18px;">${emoji}</span>`; 
+  let iconPath = def.icon || '';
+  if (!iconPath) {
+    const iconIndex = (typeof window !== 'undefined' && window.IconIndex) ? window.IconIndex : ((D() && D().ICON_MAP) ? D().ICON_MAP : {});
+    iconPath = iconIndex[id] || '';
+  }
+  if (!iconPath) return emoji;
+  if (!iconPath.endsWith('.png')) iconPath += '.png';
+  const iconUrl = getAssetUrl(`img/icons/${iconPath}`);
+  return `<img src="${iconUrl}" alt="${def.name || ''}" class="item-icon-img" onerror="this.style.display='none';if(this.nextElementSibling)this.nextElementSibling.style.display='inline-block';" style="width:28px; height:28px; object-fit:contain; vertical-align:middle;" /><span class="item-icon-fallback" style="display:none; font-size:18px;">${emoji}</span>`;
 }
 
 let tooltipTimer = null;
