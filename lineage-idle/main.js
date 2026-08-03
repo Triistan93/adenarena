@@ -3629,6 +3629,12 @@ function handleChatSubmit(inputStr) {
     if (lvl > 0 && lvl <= 100) {
       state.level = lvl;
       state.xp = getTotalXP(lvl - 1);
+      const stats = getStats();
+      state.maxHp = stats.maxHp;
+      state.maxMp = stats.maxMp;
+      state.hp = state.maxHp;
+      state.mp = state.maxMp;
+      updateSagaProgress(false);
       log(`⚡ [Admin] Nível alterado para ${lvl}!`, 'rarity-legendary');
       updateAllUI();
       save();
@@ -3705,19 +3711,29 @@ function populateAdminItemSelect() {
 }
 
 function executeAdminCmd(cmd) {
-  if (cmd === 'level20') { state.level = 20; state.xp = getTotalXP(19); log('⚡ [Admin] Nível alterado para 20!', 'rarity-legendary'); }
-  else if (cmd === 'level40') { state.level = 40; state.xp = getTotalXP(39); log('⚡ [Admin] Nível alterado para 40!', 'rarity-legendary'); }
-  else if (cmd === 'level76') { state.level = 76; state.xp = getTotalXP(75); log('⚡ [Admin] Nível alterado para 76 (Noblesses)!', 'rarity-legendary'); }
-  else if (cmd === 'level85') { state.level = 85; state.xp = getTotalXP(84); log('⚡ [Admin] Nível alterado para 85 (Máximo)!', 'rarity-legendary'); }
-  else if (cmd === 'add5levels') { state.level += 5; state.xp = getTotalXP(state.level - 1); log(`⚡ [Admin] Nível +5 (Atual: Lv.${state.level})!`, 'rarity-legendary'); }
-  else if (cmd === 'gold1m') { state.gold += 1000000; log('🪙 [Admin] +1.000.000 Ouro concedido!', 'rarity-legendary'); }
-  else if (cmd === 'gold10m') { state.gold += 10000000; log('🪙 [Admin] +10.000.000 Ouro concedido!', 'rarity-legendary'); }
+  let lvlChanged = false;
+  if (cmd === 'level20') { state.level = 20; state.xp = getTotalXP(19); lvlChanged = true; log('⚡ [Admin] Nível alterado para 20!', 'rarity-legendary'); }
+  else if (cmd === 'level40') { state.level = 40; state.xp = getTotalXP(39); lvlChanged = true; log('⚡ [Admin] Nível alterado para 40!', 'rarity-legendary'); }
+  else if (cmd === 'level76') { state.level = 76; state.xp = getTotalXP(75); lvlChanged = true; log('⚡ [Admin] Nível alterado para 76 (Noblesses)!', 'rarity-legendary'); }
+  else if (cmd === 'level85') { state.level = 85; state.xp = getTotalXP(84); lvlChanged = true; log('⚡ [Admin] Nível alterado para 85 (Máximo)!', 'rarity-legendary'); }
+  else if (cmd === 'add5levels') { state.level += 5; state.xp = getTotalXP(state.level - 1); lvlChanged = true; log(`⚡ [Admin] Nível +5 (Atual: Lv.${state.level})!`, 'rarity-legendary'); }
+  else if (cmd === 'gold1m') { state.gold += 1000000; triggerQuestEvent('gold', 1000000); log('🪙 [Admin] +1.000.000 Ouro concedido!', 'rarity-legendary'); }
+  else if (cmd === 'gold10m') { state.gold += 10000000; triggerQuestEvent('gold', 10000000); log('🪙 [Admin] +10.000.000 Ouro concedido!', 'rarity-legendary'); }
   else if (cmd === 'sp5k') { state.sp += 5000; log('✦ [Admin] +5.000 SP concedido!', 'rarity-legendary'); }
   else if (cmd === 'sp50k') { state.sp += 50000; log('✦ [Admin] +50.000 SP concedido!', 'rarity-legendary'); }
   else if (cmd === 'godmode') { state.godMode = !state.godMode; log(`🛡️ [Admin] Invencibilidade: ${state.godMode ? 'ATIVADO' : 'DESATIVADO'}!`, 'rarity-legendary'); }
   else if (cmd === 'healfull') { const stats = getStats(); state.hp = stats.maxHp; state.mp = stats.maxMp; log('❤️ [Admin] HP/MP Restaurados 100%!', 'rarity-legendary'); }
   else if (cmd === 'autoequip') { autoEquipBest(); }
   else if (cmd === 'resetsave') { resetSave(); }
+
+  if (lvlChanged) {
+    const stats = getStats();
+    state.maxHp = stats.maxHp;
+    state.maxMp = stats.maxMp;
+    state.hp = state.maxHp;
+    state.mp = state.maxMp;
+    updateSagaProgress(false);
+  }
 
   updateAllUI();
   save();
