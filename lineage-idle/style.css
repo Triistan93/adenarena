@@ -838,6 +838,110 @@ select:focus-visible {
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 0 14px rgba(212,167,68,0.22);
   text-shadow: 0 0 8px rgba(212,167,68,0.4);
 }
+
+/* Dedicated Full-Screen Menu Windows (Pure Flex Layout - Zero Overlap) */
+.tabs-panel.full-window-active {
+  position: fixed !important;
+  top: 44px !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  z-index: 10000 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  background: rgba(8, 10, 16, 0.94) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+}
+
+.tabs-panel.full-window-active .tab-buttons {
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  flex-shrink: 0 !important;
+  width: 100% !important;
+  z-index: 10001 !important;
+  background: rgba(12, 15, 24, 0.98) !important;
+  padding: 8px 16px !important;
+  border-bottom: 2px solid var(--gilt, #d4a744) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.85) !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  box-sizing: border-box !important;
+}
+
+.tabs-panel.full-window-active .tab-pane.active {
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  flex: 1 !important;
+  width: 100% !important;
+  min-height: 0 !important;
+  z-index: 10000 !important;
+  background: transparent !important;
+  padding: 16px 16px 30px 16px !important;
+  overflow-y: auto !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  animation: windowFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+/* Inner Container Proportions - Centered max-width for modern RPG layout */
+.tabs-panel.full-window-active .tab-pane.active > * {
+  width: 100%;
+  max-width: 1200px;
+  box-sizing: border-box;
+}
+
+@keyframes windowFadeIn {
+  from { opacity: 0; transform: translateY(6px) scale(0.995); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.full-window-close-btn {
+  position: fixed;
+  top: 52px;
+  right: 14px;
+  z-index: 10005;
+  background: linear-gradient(135deg, #dc2626, #991b1b);
+  color: #ffffff;
+  border: 1px solid #f87171;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 11px;
+  font-family: "Cinzel", serif;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(220, 38, 38, 0.5), 0 0 8px rgba(0, 0, 0, 0.8);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.full-window-close-btn:hover {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  transform: translateY(-1px) scale(1.04);
+  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.6);
+}
+
+.full-window-close-btn:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+.rarity-foundation {
+  color: #fbbf24 !important;
+  text-shadow: 0 0 6px rgba(251, 191, 36, 0.6);
+  font-weight: bold;
+}
 .tab-content { flex: 1; min-height: 0; overflow-y: auto; }
 .tab-pane { display: none !important; }
 .tab-pane.active { display: flex !important; flex-direction: column; animation: tab-in .25s ease; }
@@ -1600,8 +1704,8 @@ select:focus-visible {
   flex: 1;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
-  grid-auto-rows: minmax(66px, auto);
-  gap: 4px;
+  grid-auto-rows: 72px;
+  gap: 6px;
   padding: 6px;
   background:
     repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.3) 35px, rgba(0,0,0,0.3) 36px),
@@ -1621,7 +1725,10 @@ select:focus-visible {
 
 /* Individual Slot inside grid */
 .l2inv-slots-grid .inv-slot {
-  min-height: 64px;
+  height: 72px;
+  min-height: 72px;
+  max-height: 72px;
+  box-sizing: border-box;
   background:
     linear-gradient(135deg, rgba(42,30,18,0.9) 0%, rgba(12,8,4,0.98) 100%);
   border: 1px solid #2e2012;
@@ -3467,4 +3574,143 @@ select:focus-visible {
 }
 .tower-floor-pill.boss-floor {
   border-color: #f59e0b;
+}
+/* =========================================================
+   GAME ASSETS & CHARACTER RENDERING
+   ========================================================= */
+
+/* Containers Gerais de Imagem */
+.portrait-art, 
+.stage-hero, 
+.doll-art {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-end; /* Alinha a imagem na parte inferior (pés no chão) */
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* A Tag IMG injetada via JS */
+.portrait-art img, 
+.stage-hero img, 
+.doll-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Garante que a imagem inteira apareça sem cortar */
+  object-position: center bottom; /* Garante que os pés fiquem no chão */
+  filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.6)); /* Sombra suave para destacar do fundo */
+  transition: transform 0.3s ease;
+}
+
+/* Efeito de Hover no Stage (Opcional) */
+.stage-hero:hover img {
+  transform: scale(1.05);
+}
+
+/* =========================================================
+   GAME ASSETS & CHARACTER RENDERING
+   ========================================================= */
+
+/* Containers Gerais de Imagem */
+.portrait-art, 
+.stage-hero, 
+.doll-art {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-end; /* Alinha a imagem na parte inferior (pés no chão) */
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* A Tag IMG injetada via JS */
+.portrait-art img, 
+.stage-hero img, 
+.doll-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Garante que a imagem inteira apareça sem cortar */
+  object-position: center bottom; /* Garante que os pés fiquem no chão */
+  filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.6)); /* Sombra suave para destacar do fundo */
+  transition: transform 0.3s ease;
+}
+
+/* Efeito de Hover no Stage (Opcional) */
+.stage-hero:hover img {
+  transform: scale(1.05);
+}
+
+/* =========================================================
+   DIMENSIONAMENTO DOS CONTAINERS (Layout)
+   ========================================================= */
+
+/* 1. Retrato (Tab Character) */
+.portrait {
+  width: 100%;
+  height: 154px; /* Reduzido em 30% (Era 220px) */
+  margin-bottom: 20px;
+  position: relative;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.portrait-aura {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(212, 167, 68, 0.15) 0%, transparent 70%);
+  z-index: 0;
+  pointer-events: none;
+}
+.portrait-art {
+  z-index: 1;
+  height: 100%; /* Ocupa a altura do .portrait */
+}
+
+/* 2. Stage de Combate (Centro) */
+.stage {
+  position: relative;
+  width: 100%;
+  height: 400px; /* Mantido igual para não afetar o tamanho geral do cenário */
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  overflow: hidden;
+}
+.stage-hero {
+  position: absolute;
+  left: 20%; /* Posiciona o herói à esquerda */
+  bottom: 20px;
+  width: 196px; /* Reduzido em 30% (Era 280px) */
+  height: 224px; /* Reduzido em 30% (Era 320px) */
+  z-index: 10;
+}
+.stage-monster {
+  position: absolute;
+  right: 20%; /* Posiciona o monstro à direita */
+  bottom: 20px;
+  width: 196px; /* Reduzido em 30% (Era 280px) */
+  height: 224px; /* Reduzido em 30% (Era 320px) */
+  z-index: 10;
+}
+
+/* 3. Paper Doll (Tab Equipment) */
+.paperdoll {
+  width: 100%;
+  height: 210px; /* Reduzido em 30% (Era 300px) */
+  position: relative;
+  margin-bottom: 20px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+.doll-art {
+  width: 100%;
+  height: 100%;
+  opacity: 0.8; /* Um pouco mais escuro para destacar os slots de equipamento */
+}
+/* Os slots de equipamento ficam sobre a imagem */
+.doll-slots {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  /* Seu grid de slots existente cuida do posicionamento */
 }

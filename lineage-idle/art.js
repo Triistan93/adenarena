@@ -7,42 +7,42 @@
 
 // ---- Hero image map: race_class → image path ----
 const HERO_IMG = {
-  human_fighter: "/img/human_fighter.png",
-  human_mage: "/img/human_mage.png",
+  human_fighter: "/img/humanpalaM.png",
+  human_mage: "/img/humanmageF.png",
   elf_fighter: "/img/elf_fighter.png",
-  elf_mage: "/img/elf_mage.png",         
-  elf_archer: "/img/elf_fighter.png",
+  elf_mage: "/img/elfmageM.png",         
+  elf_archer: "/img/elfswsF.png",
   elf_mystic: "/img/elf_mage.png",
-  elf_sentinel: "/img/elf_fighter.png",
-  darkelf_fighter: "/img/darkelf_fighter.png",
-  darkelf_mage: "/img/darkelf_mage.png",
+  elf_sentinel: "/img/elfswsFr.png",
+  darkelf_fighter: "/img/darkelfskM.png",
+  darkelf_mage: "/img/darkelfmageF.png",
   darkelf_assassin: "/img/darkelf_fighter.png",
   darkelf_shillien: "/img/darkelf_mage.png",
   darkelf_sorcerer: "/img/darkelf_mage.png",
-  orc_fighter: "public/img/Races/Orcs/Fighter/orc_fighter.png",
+  orc_fighter: "/img/Races/Orcs/Fighter/orcfighterM.png",
   orc_mage: "/img/orc_mage.png",
-  orc_destroyer: "/img/orc_fighter.png",
-  orc_monk: "/img/orc_fighter.png",
+  orc_destroyer: "/img/orcfighterM.png",
+  orc_monk: "/img/orcfighterM.png",
   orc_overlord: "/img/orc_mage.png",
-  dwarf_artisan: "/img/dwarf_artisan.png",
-  dwarf_fighter: "/img/dwarf_artisan.png",
-  dwarf_warsmith: "/img/dwarf_artisan.png",
-  kamael_soulbreaker: "/img/kamael_soulbreaker.png",
-  kamael_fighter: "/img/kamael_soulbreaker.png",
-  kamael_berserker: "/img/kamael_soulbreaker.png",
-  ertheia_fighter: "/img/elf_fighter.png",
-  ertheia_mage: "/img/elf_mage.png",
+  dwarf_artisan: "/img/dwarfmaestroM.png",
+  dwarf_fighter: "/img/dwarfmaestroM.png",
+  dwarf_warsmith: "/img/dwarfmaestroM.png",
+  kamael_soulbreaker: "/img/kamaelshF.png",
+  kamael_fighter: "/img/kamaelDM.png",
+  kamael_berserker: "/img/kamaelDM.png",
+  ertheia_fighter: "/img/sylphM.png",
+  ertheia_mage: "/img/sylphF.png",
 };
 
 // Fallback by race only
 const RACE_FALLBACK = {
-  human: "/img/human_fighter.png",
-  elf: "/img/elf_fighter.png",
-  darkelf: "/img/darkelf_fighter.png",
-  orc: "public/img/Races/Orcs/Fighter/orc_fighter.png",
-  dwarf: "/img/dwarf_artisan.png",
-  kamael: "/img/kamael_soulbreaker.png",
-  ertheia: "/img/elf_fighter.png",
+  human: "/img/humanpalaM.png",
+  elf: "/img/elfwswM.png",
+  darkelf: "/img/darkelfskM.png",
+  orc: "/img/Races/Orcs/Fighter/orcfighterM.png",
+  dwarf: "/img/dwarfmaestroM.png",
+  kamael: "/img/kamaelDM.png",
+  ertheia: "/img/sylphM.png",
 };
 
 function resolveImg(path) {
@@ -349,7 +349,8 @@ export function heroSVG(race, cls, aura, mode) {
 //  monsterSVG(id, opts)
 // ================================================================
 export function monsterSVG(id, opts) {
-  const imgSrc = MON_IMG[id] || MON_IMG[id.toLowerCase()] || `/img/Monsters/${id}.png`;
+  const safeId = id || '';
+  const imgSrc = MON_IMG[safeId] || (safeId ? MON_IMG[safeId.toLowerCase()] : null) || `/img/Monsters/${safeId}.png`;
   const crown = opts?.crown
     ? `<div style="position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-size:22px;filter:drop-shadow(0 0 6px #f0c840);z-index:2;">👑</div>`
     : "";
@@ -358,7 +359,7 @@ export function monsterSVG(id, opts) {
   const glow = opts?.crown ? "drop-shadow(0 0 10px rgba(240,200,64,0.5))" : "drop-shadow(0 6px 12px rgba(0,0,0,0.6))";
   return `<div class="mon-svg" style="width:100%;height:100%;position:relative;">
     ${crown}
-    <img src="${resolvedSrc}" alt="${id}" draggable="false" onerror="this.onerror=null; this.src='${getAssetUrl(`img/Monsters/${id}.png`)}'; if(!this.naturalWidth) this.src='${getAssetUrl(`img/${id}.png`)}';"
+    <img src="${resolvedSrc}" alt="${safeId}" draggable="false" onerror="this.onerror=null; this.src='${getAssetUrl(`img/Monsters/${safeId}.png`)}'; if(!this.naturalWidth) this.src='${getAssetUrl(`img/${safeId}.png`)}';"
       style="width:100%;height:100%;object-fit:contain;object-position:center bottom;filter:${glow};" />
   </div>`;
 }

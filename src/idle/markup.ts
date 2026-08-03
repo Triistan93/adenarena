@@ -102,7 +102,7 @@ export const IDLE_MARKUP = `
           <p class="log-entry system">Select your Race &amp; Class to begin.</p>
         </div>
         <form id="chat-form" class="chat-input-bar">
-          <input type="text" id="chat-input" class="chat-input" placeholder="Digite uma mensagem ou comando (ex: //admin)..." autocomplete="off" />
+          <input type="text" id="chat-input" class="chat-input" placeholder="Digite uma mensagem..." autocomplete="off" />
           <button type="submit" class="chat-send-btn">Enviar</button>
         </form>
       </section>
@@ -112,13 +112,14 @@ export const IDLE_MARKUP = `
       <!-- Right: Main Menu Workspace (Expanded) -->
       <aside class="panel tabs-panel">
         <div class="tab-buttons">
-          <button class="tab-btn active" data-tab="character">👤 Personagem</button>
+          <button class="tab-btn active" data-tab="zones">⚔️ Combate &amp; Caça</button>
+          <button class="tab-btn" data-tab="character">👤 Personagem</button>
           <button class="tab-btn" data-tab="inventory">🎒 Inventário <span id="tab-badge-inventory" class="tab-badge" style="display:none">!</span></button>
+          <button class="tab-btn" data-tab="warehouse">📦 Baú</button>
           <button class="tab-btn" data-tab="skills">✦ Habilidades <span id="tab-badge-skills" class="tab-badge" style="display:none">!</span></button>
           <button class="tab-btn" data-tab="shop">🛒 Mercador</button>
           <button class="tab-btn" data-tab="craft">⚒️ Forja <span id="tab-badge-craft" class="tab-badge" style="display:none">!</span></button>
           <button class="tab-btn" data-tab="enchant">✨ Encantamento</button>
-          <button class="tab-btn" data-tab="zones">🗺️ Caça &amp; Raids</button>
           <button class="tab-btn" data-tab="codex">📜 Codex</button>
           <button class="tab-btn" data-tab="dolls">🧸 Dolls</button>
           <button class="tab-btn" data-tab="magiclamp">🪔 Lâmpada &amp; Craft</button>
@@ -324,6 +325,21 @@ export const IDLE_MARKUP = `
                     <span>Speed: <strong id="l2stat-speed">0</strong></span>
                   </div>
                   <button class="l2inv-unequip-all" id="unequip-all-btn" title="Desequipar todos os itens">Desequipar Tudo</button>
+                </div>
+
+                <!-- Primary Attributes Section (STR/DEX/CON/INT/WIT/MEN) -->
+                <div class="l2inv-primary-box" id="l2inv-primary-box" style="display:none; margin-top:6px; padding:6px 8px; background:rgba(0,0,0,0.5); border:1px solid rgba(212,167,68,0.3); border-radius:4px;">
+                  <div style="font-size:10px; font-weight:bold; color:var(--gilt-bright); text-transform:uppercase; margin-bottom:4px; letter-spacing:0.5px;">Atributos Primários</div>
+                  <div class="l2inv-stat-row" style="font-size:10px;">
+                    <span>STR: <strong id="l2stat-str" style="color:#10b981;">0</strong></span>
+                    <span>DEX: <strong id="l2stat-dex" style="color:#10b981;">0</strong></span>
+                    <span>CON: <strong id="l2stat-con" style="color:#10b981;">0</strong></span>
+                  </div>
+                  <div class="l2inv-stat-row" style="font-size:10px; margin-top:2px;">
+                    <span>INT: <strong id="l2stat-int" style="color:#3b82f6;">0</strong></span>
+                    <span>WIT: <strong id="l2stat-wit" style="color:#3b82f6;">0</strong></span>
+                    <span>MEN: <strong id="l2stat-men" style="color:#3b82f6;">0</strong></span>
+                  </div>
                 </div>
               </div>
 
@@ -613,6 +629,35 @@ export const IDLE_MARKUP = `
               <div id="tower-floors-grid" class="tower-floors-grid" style="margin-top:10px;"></div>
             </div>
           </div>
+
+          <!-- Warehouse Tab Pane (50/50 Split View: Mochila ↔ Baú) -->
+          <div id="tab-warehouse" class="tab-pane">
+            <div class="warehouse-split-view" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; width: 100%; max-width: 1200px; margin: 0 auto;">
+              <!-- Left Side: Inventory (Mochila) -->
+              <div class="wh-side-panel" style="background: rgba(18, 22, 32, 0.95); border: 1px solid rgba(212,167,68,0.4); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; box-shadow: 0 4px 20px rgba(0,0,0,0.6);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid rgba(212,167,68,0.25);">
+                  <div>
+                    <h4 style="margin: 0; color: var(--gilt-bright); font-size: 14px; font-weight: bold;">🎒 Mochila (Inventário)</h4>
+                    <span id="wh-inv-count" style="font-size: 11px; color: var(--text-muted);">0/150 slots</span>
+                  </div>
+                  <button id="deposit-all-btn" class="action-btn action-btn--primary" style="font-size: 11px; padding: 4px 12px; font-weight: bold;" onclick="depositAllToWarehouse()">📥 Guardar Tudo</button>
+                </div>
+                <div id="wh-inventory-grid" class="l2inv-slots-grid" style="flex: 1; max-height: 480px; min-height: 320px; overflow-y: auto;"></div>
+              </div>
+
+              <!-- Right Side: Warehouse (Baú) -->
+              <div class="wh-side-panel" style="background: rgba(18, 22, 32, 0.95); border: 1px solid rgba(212,167,68,0.4); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; box-shadow: 0 4px 20px rgba(0,0,0,0.6);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid rgba(212,167,68,0.25);">
+                  <div>
+                    <h4 style="margin: 0; color: var(--gilt-bright); font-size: 14px; font-weight: bold;">📦 Baú do Personagem</h4>
+                    <span id="wh-storage-count" style="font-size: 11px; color: var(--text-muted);">0/100 slots</span>
+                  </div>
+                  <button id="withdraw-all-btn" class="action-btn action-btn--primary" style="font-size: 11px; padding: 4px 12px; font-weight: bold;" onclick="withdrawAllFromWarehouse()">📤 Retirar Tudo</button>
+                </div>
+                <div id="wh-storage-grid" class="l2inv-slots-grid" style="flex: 1; max-height: 480px; min-height: 320px; overflow-y: auto;"></div>
+              </div>
+            </div>
+          </div>
         </div>
       </aside>
     </main>
@@ -714,6 +759,25 @@ export const IDLE_MARKUP = `
                     <option value="7">+7</option>
                     <option value="10">+10</option>
                     <option value="16">+16 (Máx)</option>
+                  </select>
+                </label>
+                <label>Afixo: 
+                  <select id="admin-item-affix" class="admin-select">
+                    <option value="roll">🎲 Sortear da Raridade</option>
+                    <option value="none">Nenhum Afixo</option>
+                    <option value="crit_boost">✦ +% Crítico</option>
+                    <option value="eva_boost">✦ +% Evasão</option>
+                    <option value="lifesteal_boost">✦ +% Roubo de Vida</option>
+                    <option value="atk_boost">✦ +% Ataque</option>
+                    <option value="speed_boost">✦ +% Vel. de Ataque</option>
+                    <option value="boss_dmg">✦ +% Dano vs Chefes</option>
+                    <option value="on_kill_heal">✦ +% Cura ao Matar</option>
+                    <option value="stun_chance">✦ % Chance de Stun</option>
+                    <option value="undead_dmg">✦ +% Dano vs Mortos-Vivos</option>
+                    <option value="dragon_dmg">✦ +% Dano vs Dragões</option>
+                    <option value="beast_dmg">✦ +% Dano vs Bestas</option>
+                    <option value="demon_dmg">✦ +% Dano vs Demônios</option>
+                    <option value="humanoid_dmg">✦ +% Dano vs Humanoides</option>
                   </select>
                 </label>
               </div>

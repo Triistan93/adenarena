@@ -2,13 +2,13 @@ import * as THREE from "three";
 import { OutlineEffect } from "three/examples/jsm/effects/OutlineEffect.js";
 import {
   ENEMY_TYPES,
-  SKILLS,
   CLASS_META,
   type RaceDef,
   type ClassDef,
   type EnemyType,
   type SkillDef,
 } from "./data";
+import { SKILL_DEFS } from "../data/skills/index.js";
 import {
   SLOTS,
   RARITY_COLOR,
@@ -324,7 +324,12 @@ export class Game {
     this.maxHp = cfg.cls.hp;
     this.hp = cfg.cls.hp;
     this.speed = cfg.cls.speed;
-    this.skills = SKILLS[cfg.cls.id] ?? [];
+    
+    // NOVO: Linka as skills de acordo com os IDs configurados no arquivo da classe
+    this.skills = (cfg.cls.skills || [])
+      .map((skillId: string) => SKILL_DEFS[skillId as keyof typeof SKILL_DEFS] as SkillDef)
+      .filter(Boolean);
+      
     const meta = CLASS_META[cfg.cls.id] ?? { manaMax: 100, manaRegen: 14 };
     this.manaMax = meta.manaMax;
     this.manaRegen = meta.manaRegen;

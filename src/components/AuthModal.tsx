@@ -195,48 +195,69 @@ export function AuthModal({ onCloudDataLoaded, getCurrentState }: AuthModalProps
     }
   };
 
+  const [showPopover, setShowPopover] = useState(false);
+
   return (
     <div className="relative inline-block text-left">
-      {/* Header Account Badge */}
-      <div className="flex items-center gap-2">
-        {user ? (
-          <div className="flex items-center gap-2 bg-slate-900/90 border border-amber-500/30 rounded-xl px-3 py-1.5 text-xs text-white">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span className="font-semibold truncate max-w-[140px] text-amber-200">{user.email?.split('@')[0]}</span>
-            <button 
-              onClick={handleManualSync} 
-              disabled={syncing}
-              className="px-2 py-0.5 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 rounded border border-amber-500/40 text-[10px] font-bold transition"
-              title="Salvar progresso atual no Firebase"
-            >
-              {syncing ? '⌛...' : '☁️ Salvar'}
-            </button>
-            <button 
-              onClick={handleManualLoad} 
-              disabled={syncing}
-              className="px-2 py-0.5 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 rounded border border-blue-500/40 text-[10px] font-bold transition"
-              title="Carregar progresso salvo da nuvem"
-            >
-              {syncing ? '⌛...' : '📥 Carregar'}
-            </button>
-            <button 
-              onClick={handleLogout} 
-              className="px-1.5 py-0.5 bg-red-500/20 hover:bg-red-500/30 text-red-300 rounded text-[10px] transition"
-              title="Sair da conta"
-            >
-              🚪
-            </button>
-          </div>
-        ) : (
-          <button
-            onClick={() => setIsOpen(true)}
-            className="flex items-center gap-1.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-bold rounded-xl px-3 py-1.5 text-xs shadow-lg shadow-amber-500/20 transition"
-          >
-            <span>☁️</span>
-            <span>Entrar / Salvar na Nuvem</span>
-          </button>
-        )}
-      </div>
+      {/* Compact Floppy Disk Button */}
+      <button
+        onClick={() => setShowPopover(!showPopover)}
+        className="flex items-center gap-1.5 bg-slate-900/90 hover:bg-slate-800 border border-amber-500/40 rounded-xl px-2.5 py-1.5 text-xs text-amber-300 shadow-lg shadow-black/60 transition cursor-pointer"
+        title="Menu de Salvamento na Nuvem (Clique para expandir)"
+      >
+        <span className="text-base">💾</span>
+        {user && <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>}
+      </button>
+
+      {/* Popover Dropdown Menu */}
+      {showPopover && (
+        <div className="absolute right-0 mt-2 w-64 bg-[#0b0f1c] border border-amber-500/40 rounded-2xl p-3 shadow-2xl z-50 text-xs text-white space-y-2">
+          {user ? (
+            <>
+              <div className="flex items-center justify-between pb-2 border-b border-amber-500/20">
+                <span className="font-bold text-amber-300 truncate max-w-[170px]">{user.email?.split('@')[0]}</span>
+                <span className="w-2 h-2 rounded-full bg-emerald-400" title="Conectado"></span>
+              </div>
+              <button
+                onClick={() => { setShowPopover(false); handleManualSync(); }}
+                disabled={syncing}
+                className="w-full flex items-center justify-center gap-2 py-1.5 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 rounded-xl border border-amber-500/40 font-semibold transition cursor-pointer"
+              >
+                <span>☁️</span>
+                <span>{syncing ? 'Salvando...' : 'Salvar Progresso'}</span>
+              </button>
+              <button
+                onClick={() => { setShowPopover(false); handleManualLoad(); }}
+                disabled={syncing}
+                className="w-full flex items-center justify-center gap-2 py-1.5 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 rounded-xl border border-blue-500/40 font-semibold transition cursor-pointer"
+              >
+                <span>📥</span>
+                <span>{syncing ? 'Carregando...' : 'Carregar Save'}</span>
+              </button>
+              <button
+                onClick={() => { setShowPopover(false); handleLogout(); }}
+                className="w-full flex items-center justify-center gap-2 py-1.5 bg-red-500/20 hover:bg-red-500/30 text-red-300 rounded-xl border border-red-500/30 font-semibold transition cursor-pointer"
+              >
+                <span>🚪</span>
+                <span>Sair da Conta</span>
+              </button>
+            </>
+          ) : (
+            <>
+              <div className="text-amber-200 font-semibold text-center py-1">
+                Salvamento na Nuvem
+              </div>
+              <button
+                onClick={() => { setShowPopover(false); setIsOpen(true); }}
+                className="w-full flex items-center justify-center gap-2 py-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-bold rounded-xl shadow transition cursor-pointer"
+              >
+                <span>🔑</span>
+                <span>Entrar / Criar Conta</span>
+              </button>
+            </>
+          )}
+        </div>
+      )}
 
       {/* Cloud Status Toast Notification */}
       {msg && (

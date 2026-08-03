@@ -10,6 +10,8 @@
 //
 // Esse módulo gera esses objetos a partir do campo "skills: [...]" de cada
 // entrada em CLASSES_ECHO e os publica em window.EchoData.
+//
+// Funções de escalamento por nível são publicadas em window.SkillScaling.
 // ═══════════════════════════════════════════════════════════════════════════
 
 // Import garante que classes_echo.js já rodou antes (e populou window.EchoData)
@@ -64,6 +66,90 @@ function mapType(t) {
   return 'active';
 }
 
+// ─── Funções de Escalamento por Nível ──────────────────────────────────
+
+/**
+ * Calcula poder da skill no nível investido.
+ * Fórmula: basePwr * (1 + 0.10 * (lvl - 1))
+ * Nível 1 = 100%, Nível 5 = 140% do poder base.
+ * Crescimento moderado: +10% por nível.
+ */
+function getSkillPwrAtLevel(def, lvl) {
+  const basePwr = Number(def.pwr) || 30;
+  const level = Math.max(1, lvl);
+  return Math.round(basePwr * (1 + 0.10 * (level - 1)));
+}
+
+/**
+ * Calcula heal amount no nível investido.
+ * Fórmula mantida do original: maxHp * (0.25 + lvl * 0.05)
+ */
+function getSkillHealAtLevel(maxHp, lvl) {
+  return Math.floor(maxHp * (0.25 + Math.max(1, lvl) * 0.05));
+}
+
+/**
+ * Calcula buff amount no nível investido.
+ * Fórmula mantida do original: 0.20 + (lvl * 0.05)
+ */
+function getSkillBuffAtLevel(lvl) {
+  return 0.20 + (Math.max(1, lvl) * 0.05);
+}
+
+/**
+ * Gera texto dinâmico do efeito da skill baseado no nível atual.
+ * Mostra valor atual e prévia do próximo nível quando aplicável.
+ */
+function buildSkillEffectText(def, lvl) {
+  if (!def) return '';
+  const type = def.type;
+  const currentLvl = Math.max(1, lvl || 0);
+  const max = def.max || 5;
+  const effectBase = def.effectText || def.info || def.name;
+
+  // Passivas: mostrar texto estático original
+  if (type === 'passive' || type === 'stat') {
+    return effectBase;
+  }
+
+  // Buffs/Warcry
+  if (def.effect === 'warcry' || type === 'buff') {
+    const current = getSkillBuffAtLevel(currentLvl);
+    let text = `Buff: +${Math.round(current * 100)}% por 60s`;
+    if (currentLvl < max) {
+      const next = getSkillBuffAtLevel(currentLvl + 1);
+      text += ` (Lv.${currentLvl + 1} → +${Math.round(next * 100)}%)`;
+    }
+    return text;
+  }
+
+  // Heals
+  if (def.effect === 'heal' || type === 'heal') {
+    let text = `Cura: 25% + ${currentLvl * 5}% do HP máximo`;
+    if (currentLvl < max) {
+      text += ` (Lv.${currentLvl + 1} → ${25 + (currentLvl + 1) * 5}%)`;
+    }
+    return text;
+  }
+
+  // Skills de dano (active)
+  const currentPwr = getSkillPwrAtLevel(def, currentLvl);
+  let text = `${effectBase} — Poder: ${currentPwr}`;
+  if (currentLvl < max) {
+    const nextPwr = getSkillPwrAtLevel(def, currentLvl + 1);
+    text += ` (Lv.${currentLvl + 1} → ${nextPwr})`;
+  }
+  return text;
+}
+
+// Publica funções de escalamento globalmente
+window.SkillScaling = {
+  getSkillPwrAtLevel,
+  getSkillHealAtLevel,
+  getSkillBuffAtLevel,
+  buildSkillEffectText
+};
+
 // ─── Construção ─────────────────────────────────────────────────────────
 
 function buildEchoAdapter() {
@@ -78,7 +164,6 @@ function buildEchoAdapter() {
   const SKILL_DEFS_ECHO        = {};
   const SKILL_REQS_ECHO        = {};
   const CLASS_SKILLS_ECHO      = {};
-  const seenSkillNames         = {};
 
   for (const [classId, classDef] of Object.entries(CLASSES_ECHO)) {
     const skillList = classDef.skills;
@@ -90,39 +175,34 @@ function buildEchoAdapter() {
       const sk = skillList[i];
       const rawName = sk.name || ('skill_' + i);
 
-      // Reaproveita ID se a mesma skill já foi registrada por outra classe
-      let skillId = seenSkillNames[rawName];
-      if (!skillId) {
-        skillId = toSkillId(classId, rawName);
-        seenSkillNames[rawName] = skillId;
-      }
+      // Gera ID único por classe — sem cache/dedup
+      const skillId = toSkillId(classId, rawName);
 
-      // Só registra definição uma vez
-      if (!SKILL_DEFS_ECHO[skillId]) {
-        const tier = rarityToTier(sk.rarity);
-        const type = mapType(sk.type);
-        const pwr  = effectToPwr(sk.effect, sk.type);
-        const cd   = cdToMs(sk.cooldown);
+      const tier = rarityToTier(sk.rarity);
+      const type = mapType(sk.type);
+      const pwr  = effectToPwr(sk.effect, sk.type);
+      const cd   = cdToMs(sk.cooldown);
 
-        SKILL_DEFS_ECHO[skillId] = {
-          id:      skillId,
-          name:    rawName,
-          type:    type,
-          tier:    tier,
-          cost:    tier === 0 ? 5 : tier === 1 ? 15 : tier === 2 ? 25 : 35,
-          max:     5,
-          pwr:     pwr,
-          baseCd:  cd,
-          effect:  type === 'buff' ? 'warcry' : (type === 'passive' ? 'stat' : 'dmg'),
-          info:    sk.desc || sk.effect || rawName,
-          icon:    sk.icon || '',
-          classReq: classId
-        };
+      SKILL_DEFS_ECHO[skillId] = {
+        id:         skillId,
+        name:       rawName,
+        type:       type,
+        tier:       tier,
+        cost:       tier === 0 ? 5 : tier === 1 ? 15 : tier === 2 ? 25 : 35,
+        max:        5,
+        pwr:        pwr,
+        baseCd:     cd,
+        effect:     type === 'buff' ? 'warcry' : (type === 'passive' ? 'stat' : 'dmg'),
+        info:       sk.desc || sk.effect || rawName,
+        desc:       sk.desc || '',
+        effectText: sk.effect || '',
+        icon:       sk.icon || '',
+        classReq:   classId
+      };
 
-        // Skills tier > 0 exigem nível mínimo
-        if (tier > 0) {
-          SKILL_REQS_ECHO[skillId] = { reqLvl: tier * 20 };
-        }
+      // Skills tier > 0 exigem nível mínimo
+      if (tier > 0) {
+        SKILL_REQS_ECHO[skillId] = { reqLvl: tier * 20 };
       }
 
       if (!CLASS_SKILLS_ECHO[classId].includes(skillId)) {
