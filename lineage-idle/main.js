@@ -3599,7 +3599,7 @@ function withdrawAllFromWarehouse() {
 
 
 
-function bindEvents() {
+export function bindEvents() {
   try {
     if (ROOT && ROOT.addEventListener) {
       addTrackedListener(ROOT, 'click', hideItemTooltip);

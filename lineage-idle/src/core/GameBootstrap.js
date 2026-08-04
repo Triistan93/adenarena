@@ -11,7 +11,8 @@
  */
 
 import EventBus from './EventBus.js';
-import { setRoot, _intervals, addTrackedListener, cleanupTracked, el } from './DomHelpers.js';
+import { setRoot as setDomRoot, _intervals, addTrackedListener, cleanupTracked, el } from './DomHelpers.js';
+import { setRoot as setMainRoot, bindEvents } from '../../main.js';
 import { getState, setState, loadState, saveState, DEFAULT_STATE } from './StateManager.js';
 import { getStats, getClass } from '../engine/StatsEngine.js';
 import { RACES } from '../data/races.js';
@@ -26,10 +27,13 @@ let isBootstrapped = false;
  */
 export async function bootstrap(shadowRoot) {
   if (shadowRoot) {
-    setRoot(shadowRoot);
+    setDomRoot(shadowRoot);
+    setMainRoot(shadowRoot);
   }
 
   try {
+    // Vincula todos os event listeners aos botões do Shadow DOM
+    bindEvents();
     // 1. Carrega o estado salvo ou inicializa padrão
     const hasSave = loadState();
     let state = getState();
