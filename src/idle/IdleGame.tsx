@@ -2,9 +2,10 @@ import { useLayoutEffect, useRef, useState } from "react";
 
 // Side-effect import FIRST so window.GameData exists before main.js evaluates.
 // @ts-ignore -- plain JS module, no type declarations
-import "../../lineage-idle/data/items.js";
-// @ts-ignore -- Echo of Elements class/skill data — must load BEFORE main.js
-import "../../lineage-idle/data/classes_echo.js";
+import "../../lineage-idle/src/data/items/index.js";
+
+import "../../lineage-idle/src/data/classes/index.js";
+
 // @ts-ignore -- Adapta CLASSES_ECHO.skills[] para SKILL_DEFS_ECHO / CLASS_SKILLS_ECHO / SKILL_TREE_LAYOUT_ECHO
 //               que o engine (main.js) precisa. Deve vir DEPOIS de classes_echo.js e ANTES de main.js.
 import "../../lineage-idle/data/echo-adapter.js";

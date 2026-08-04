@@ -3,6 +3,8 @@ import * as ART from "./art.js";
 // existam em window.EchoData antes das constantes globais serem lidas abaixo.
 import "./data/echo-adapter.js";
 import "./data/affixes.js";
+import "./src/data/items/index.js";
+
 
 // ─── Sprint 1: Importa módulos de dados extraídos ───────────────────────────
 import { RACE_BASE_ATTRIBUTES, RACES, CLASSES, DWARF_CLASS, KAMAEL_CLASS } from './src/data/races.js';
