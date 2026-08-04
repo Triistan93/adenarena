@@ -82,7 +82,7 @@ export function loadState() {
   try {
     const data = JSON.parse(raw);
     const def = DEFAULT_STATE();
-    const allItems = gData?.ALL_ITEMS;
+    const allItems = D()?.ALL_ITEMS;
     const hasItemsDict = allItems && Object.keys(allItems).length > 0;
     const safeInventory = Array.isArray(data.inventory)
       ? data.inventory.filter(item => item && item.itemId && (!hasItemsDict || allItems[item.itemId]))
