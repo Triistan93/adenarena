@@ -252,6 +252,21 @@ function getStats() { return engineGetStats(state); }
 function classSatisfies(playerClass, reqClass) { return serviceClassSatisfies(playerClass, reqClass); }
 function getSkillTreeKey(classId) { return serviceGetSkillTreeKey(classId); }
 function getClassSkills(classId) { return serviceGetClassSkills(classId); }
+// Opens the Class Transfer modal — declared before checkClassAdvancement uses it
+function openClassTransferModal(classInfo) {
+  const modal = el('class-transfer-modal');
+  if (modal) {
+    const titleEl = el('class-transfer-title');
+    if (titleEl) titleEl.textContent = classInfo?.name || 'Transferência de Classe';
+    modal.classList.add('active');
+  } else {
+    // Fallback: expose via window so React layer can pick it up
+    if (typeof window !== 'undefined' && typeof window.onOpenClassTransferModal === 'function') {
+      window.onOpenClassTransferModal(classInfo);
+    }
+  }
+}
+
 function checkClassAdvancement() { return serviceCheckClassAdvancement(state, { el, openClassTransferModal }); }
 function promoteClass(newClassId) { return servicePromoteClass(state, newClassId, { log, floatText, el, updateAllUI, save }); }
 
@@ -681,6 +696,38 @@ window.executeRaceClassChange = (scrollUid, newRace, newClass) => {
   save();
   log(`✨ Troca de Raça & Classe realizada com sucesso para ${(raceObj.name || newRace).toUpperCase()} ${(clsObj?.name || newClass).toUpperCase()}! ${refundedSp} SP devolvidos e equipamentos guardados no inventário.`, 'rarity-legendary');
 };
+
+// --------------------------- LEVEL UP wrapper ---------------------------
+// engineCheckLevelUp is imported from LevelEngine.js — provide local wrapper that other code can call
+function checkLevelUp() { return engineCheckLevelUp(state, { log, floatText, updateAllUI, checkClassAdvancement }); }
+
+// --------------------------- SELL ITEM ---------------------------
+function sellItem(uid) {
+  const idx = state.inventory.findIndex(i => i.uid === uid);
+  if (idx < 0) return;
+  const item = state.inventory[idx];
+  if (item.equipped) { log('Desequipe o item antes de vender.', 'system'); return; }
+  const def = D()?.ALL_ITEMS?.[item.itemId];
+  if (!def) return;
+
+  if (isHighValueItem(item)) {
+    const rarityName = D().RARITY[item.rarity]?.name || item.rarity;
+    if (!confirm(`⚠️ Deseja realmente VENDER o item valioso "${def.name}" [${rarityName}]?`)) return;
+  }
+
+  const qty = item.count || 1;
+  const basePrice = def.price || 10;
+  const mult = item.rarity ? (D().RARITY[item.rarity]?.mult || 1) : 1;
+  const enchantMult = 1 + (item.enchant || 0) * 0.1;
+  const goldEarned = Math.floor(basePrice * mult * enchantMult * 0.4) * qty;
+  state.inventory.splice(idx, 1);
+  state.gold += goldEarned;
+  const name = formatItemDisplayName(item, def);
+  log(`💰 Vendeu ${name} por ${goldEarned.toLocaleString()}g!`, 'loot');
+  hideItemTooltip();
+  updateAllUI();
+  save();
+}
 
 // --------------------------- CRAFTING (Sprint 3: Delegados) ---------------------------
 function canCraft(recipeId) { return serviceCanCraft(state, recipeId); }
@@ -2907,6 +2954,17 @@ function startCombat() { return engineStartCombat(state, { log, attackMonster })
 function stopCombat() { return engineStopCombat(state); }
 function pickRandomMonster() { return enginePickRandomMonster(state, { log, floatText, renderStageMonster, updateZoneKillProgressUI }); }
 function selectZone(zoneId) { return engineSelectZone(state, zoneId, { log, updateAllUI, save, attackMonster }); }
+// Shows the Saga Unlock modal with saga name/description
+function showSagaModal(saga) {
+  const modal = el('saga-modal');
+  if (!modal) return;
+  const titleEl = el('saga-title');
+  const descEl  = el('saga-desc');
+  if (titleEl) titleEl.textContent = saga?.name || 'Nova Saga Desbloqueada!';
+  if (descEl)  descEl.textContent  = saga?.desc || 'Novas zonas aguardam.';
+  modal.classList.add('active');
+}
+
 function updateSagaProgress(silent = true) { return engineUpdateSagaProgress(state, silent, { log, floatText, showSagaModal }); }
 function playerDeath(monster) { return enginePlayerDeath(state, monster, { log, el }); }
 function resurrect(useScroll = false) { return engineResurrect(state, useScroll, { log, el, updateAllUI, save, attackMonster }); }

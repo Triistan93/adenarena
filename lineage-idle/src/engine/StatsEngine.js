@@ -367,7 +367,8 @@ export function getStats(state) {
   }
 
   const now = Date.now();
-  let buffAtk = 0, buffDef = 0, buffSpd = 0, buffMatk = 0, buffAtkMult = 0;
+  let buffAtk = 0, buffDef = 0, buffSpd = 0, buffMatk = 0, buffMdef = 0, buffAtkMult = 0;
+
   let xpBoost = 0, goldBoost = 0, luckBoost = 0, autoPotion = false;
   state.buffs = state.buffs || {};
   for (const k of Object.keys(state.buffs)) {
