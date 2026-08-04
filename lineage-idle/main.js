@@ -87,6 +87,34 @@ import {
   resetSP as engineResetSP,
   getStarterSkillForClass
 } from './src/engine/SkillEngine.js';
+// ─── Sprint 5: Importa serviços de Personagem, Quests, Torre e Raids ────────
+import {
+  classSatisfies as serviceClassSatisfies,
+  getSkillTreeKey as serviceGetSkillTreeKey,
+  getClassSkills as serviceGetClassSkills,
+  checkClassAdvancement as serviceCheckClassAdvancement,
+  promoteClass as servicePromoteClass
+} from './src/services/CharacterService.js';
+
+import {
+  checkQuestResets as serviceCheckQuestResets,
+  triggerQuestEvent as serviceTriggerQuestEvent,
+  claimQuestReward as serviceClaimQuestReward,
+  unlockPremiumPass as serviceUnlockPremiumPass,
+  claimPassReward as serviceClaimPassReward
+} from './src/services/QuestService.js';
+
+import {
+  getTowerFloorDef as serviceGetTowerFloorDef,
+  challengeTowerFloor as serviceChallengeTowerFloor,
+  completeTowerFloor as serviceCompleteTowerFloor,
+  sweepTowerDaily as serviceSweepTowerDaily
+} from './src/services/TowerService.js';
+
+import {
+  startRaidBoss as serviceStartRaidBoss
+} from './src/services/RaidService.js';
+// ────────────────────────────────────────────────────────────────────────────
 // ────────────────────────────────────────────────────────────────────────────
 // ────────────────────────────────────────────────────────────────────────────
 
@@ -288,201 +316,12 @@ function getStats() { return engineGetStats(state); }
 // (getBaseAttributes, getZoneDropTier, getClass estão importados no topo)
 
 
-function classSatisfies(playerClass, reqClass) {
-  if (!reqClass) return true;
-  if (!playerClass) return false;
-  // Walk the full ancestor chain (up to 6 levels for 4-stage system)
-  let current = playerClass;
-  const visited = new Set();
-  while (current && !visited.has(current)) {
-    visited.add(current);
-    if (current === reqClass) return true;
-    const def = getClass(current);
-    if (!def) break;
-    if (def.archetype === reqClass) return true;
-    if (def.skillTree === reqClass) return true;
-    current = def.parent;
-  }
-  return false;
-}
+function classSatisfies(playerClass, reqClass) { return serviceClassSatisfies(playerClass, reqClass); }
+function getSkillTreeKey(classId) { return serviceGetSkillTreeKey(classId); }
+function getClassSkills(classId) { return serviceGetClassSkills(classId); }
+function checkClassAdvancement() { return serviceCheckClassAdvancement(state, { el, openClassTransferModal }); }
+function promoteClass(newClassId) { return servicePromoteClass(state, newClassId, { log, floatText, el, updateAllUI, save }); }
 
-// ── Skill Tree Resolver (Essence 547) ─────────────────────────────────────
-// Resolve a chave de árvore correta: classId exato → skillTree explícito
-// → cadeia de pais → archetype. NUNCA faz fallback silencioso.
-function getSkillTreeKey(classId) {
-  const E = typeof window !== 'undefined' ? window.EchoData : null;
-  const ST = E ? E.SKILL_TREE_LAYOUT_ECHO : SKILL_TREE_LAYOUT;
-  if (!classId) return null;
-  if (ST && ST[classId]) return classId;
-  const visited = new Set();
-  let current = classId;
-  while (current && !visited.has(current)) {
-    visited.add(current);
-    const def = getClass(current);
-    if (!def) break;
-    if (def.skillTree && ST && ST[def.skillTree]) return def.skillTree;
-    if (ST && ST[current]) return current;
-    current = def.parent;
-  }
-  const rootDef = getClass(classId);
-  if (rootDef?.archetype && ST && ST[rootDef.archetype]) return rootDef.archetype;
-  return null;
-}
-
-// Retorna lista de skill IDs para a classe a partir de CLASS_SKILLS_ECHO.
-// Se não existe, retorna null (sinal para usar classSatisfies como fallback).
-function getClassSkills(classId) {
-  const E = typeof window !== 'undefined' ? window.EchoData : null;
-  const CS = E?.CLASS_SKILLS_ECHO;
-  if (!CS) return null;
-  // tenta classId direto, depois skillTree, depois pais
-  if (CS[classId]) return CS[classId];
-  const def = getClass(classId);
-  if (def?.skillTree && CS[def.skillTree]) return CS[def.skillTree];
-  let current = def?.parent;
-  const visited = new Set([classId]);
-  while (current && !visited.has(current)) {
-    visited.add(current);
-    if (CS[current]) return CS[current];
-    const pd = getClass(current);
-    if (pd?.skillTree && CS[pd.skillTree]) return CS[pd.skillTree];
-    current = pd?.parent;
-  }
-  return null;
-}
-
-// getStarterSkillForClass importado do SkillEngine.js (Sprint 4)
-
-
-function checkClassAdvancement() {
-  const currentClassDef = getClass(state.class);
-  const currentStage = currentClassDef?.stage || 0;
-  const banner = el('class-advancement-banner');
-  if (!banner) return;
-
-  let canAdvance = false;
-  let advTitle = '';
-  let advSub = '';
-
-  if (state.level >= 20 && currentStage === 0) {
-    canAdvance = true;
-    advTitle = '⚡ 1ª Troca de Classe Disponível!';
-    advSub = `Atingiu o Nível ${state.level}! Escolha o caminho de evolução para a Ordem de ${currentClassDef.name}.`;
-  } else if (state.level >= 40 && currentStage === 1) {
-    canAdvance = true;
-    advTitle = '⚔️ 2ª Troca de Classe Disponível!';
-    advSub = `Atingiu o Nível ${state.level}! Escolha a sua Classe Épica de Especialista.`;
-  } else if (state.level >= 76 && currentStage === 2) {
-    canAdvance = true;
-    advTitle = '👑 3ª Troca de Classe Disponível (3rd Job)!';
-    advSub = `Atingiu o Nível ${state.level}! Torne-se um Mestre Sagrado da 3ª Transferência e alcance o poder dos Noblesses!`;
-  }
-
-  if (canAdvance) {
-    banner.style.display = 'flex';
-    const titleEl = el('class-advancement-title');
-    const subEl = el('class-advancement-sub');
-    if (titleEl) titleEl.textContent = advTitle;
-    if (subEl) subEl.textContent = advSub;
-    const btn = el('class-advancement-btn');
-    if (btn) btn.onclick = openClassTransferModal;
-  } else {
-    banner.style.display = 'none';
-  }
-}
-
-function openClassTransferModal() {
-  const currentClassDef = getClass(state.class);
-  const currentStage = currentClassDef?.stage || 0;
-  const targetStage = currentStage + 1;
-  const modal = el('class-transfer-modal');
-  const container = el('class-options-container');
-  if (!modal || !container) return;
-
-  container.innerHTML = '';
-
-  const availableOptions = Object.entries(CLASSES).filter(([id, def]) => {
-    if (def.stage !== targetStage) return false;
-    if (def.race && def.race !== state.race) return false;
-    if (targetStage === 1) return (def.parent === state.class || def.archetype === state.class);
-    if (targetStage === 2) return (def.parent === state.class);
-    if (targetStage === 3) return (def.parent === state.class);
-    return false;
-  });
-
-  if (!availableOptions.length) {
-    container.innerHTML = '<p class="shop-empty">Nenhum caminho de promoção disponível.</p>';
-    modal.classList.add('active');
-    return;
-  }
-
-  for (const [classId, def] of availableOptions) {
-    const card = mkEl('div'); card.className = 'class-option-card';
-    const statsStr = Object.entries(def.base || {}).map(([k, v]) => `+${v} ${k.toUpperCase()}`).join(' · ');
-    card.innerHTML = `
-      <div class="class-opt-header">
-        <div class="class-opt-name">🎖️ ${def.name}</div>
-        <span class="rarity-tag" style="color:#ffe082;">${targetStage === 1 ? '1ª Classe' : '2ª Classe Épica'}</span>
-      </div>
-      <div class="class-opt-desc">${def.desc}</div>
-      <div class="class-opt-bonus">✨ Bônus de Atributos: ${statsStr}</div>
-      <button class="class-opt-promote-btn" data-promote="${classId}">Promover a ${def.name}</button>
-    `;
-    container.appendChild(card);
-  }
-
-  container.querySelectorAll('[data-promote]').forEach(btn => {
-    btn.onclick = () => promoteClass(btn.dataset.promote);
-  });
-
-  const closeBtn = el('close-class-modal-btn');
-  if (closeBtn) closeBtn.onclick = () => modal.classList.remove('active');
-
-  modal.classList.add('active');
-}
-
-function promoteClass(newClassId) {
-  const newClassDef = getClass(newClassId);
-  if (!newClassDef) return;
-
-  state.class = newClassId;
-  
-  const race = RACES[state.race];
-  state.base = { atk: 0, def: 0, eva: 0, matk: 0, mdef: 0 };
-  if (race) {
-    for (const k of ['atk','def','eva','matk','mdef']) {
-      state.base[k] = (race.stats[k] || 0) + (newClassDef.base[k] || 0);
-    }
-  }
-
-  // Reembolso automático de SP para redistribuição na nova árvore exclusiva
-  let totalRefunded = 0;
-  for (const [sId, lvl] of Object.entries(state.skills)) {
-    if (lvl > 0 && SKILL_DEFS[sId]) {
-      const def = SKILL_DEFS[sId];
-      if (!classSatisfies(newClassId, def.classReq)) {
-        for (let l = 0; l < lvl; l++) {
-          totalRefunded += getSkillCost(sId, l);
-        }
-        state.skills[sId] = 0;
-      }
-    }
-  }
-  if (totalRefunded > 0) {
-    state.sp += totalRefunded;
-    log(`🔄 ${totalRefunded.toLocaleString()} SP foram reembolsados para distribuição na nova árvore exclusiva de ${newClassDef.name}!`, 'rarity-legendary');
-    floatText(`+${totalRefunded.toLocaleString()} SP`, 'float-jackpot');
-  }
-
-  log(`🎉 PARABÉNS! Você concluiu a Cerimônia e agora é um **${newClassDef.name}**!`, 'rarity-legendary');
-  floatText(`🎉 ${newClassDef.name.toUpperCase()}!`, 'float-jackpot');
-
-  const modal = el('class-transfer-modal');
-  if (modal) modal.classList.remove('active');
-
-  updateAllUI();
-  save();
-}
 
 // --------------------------- INVENTORY / SALVAGE (Sprint 3: Delegados) ---------------------------
 function getInventoryCount(itemId) { return serviceGetInventoryCount(state, itemId); }
@@ -2177,30 +2016,9 @@ function updateRaidUI() {
 }
 
 function startRaidBoss(raidId) {
-  const bossTemplate = RAID_BOSSES[raidId]; if (!bossTemplate) return;
-  if (state.level < bossTemplate.reqLvl) { log(`Level ${bossTemplate.reqLvl} required for this Raid!`, 'system'); return; }
-  
-  state.zone = null;
-  state.target = raidId;
-  MONSTERS[raidId] = bossTemplate;
-  state.activeMonster = {
-    ...bossTemplate,
-    _maxHp: bossTemplate.hp,
-    hp: bossTemplate.hp,
-    _stunnedUntil: 0
-  };
-  
-  const sz = el('stage-zone');
-  if (sz) sz.textContent = `🐉 RAID · ${bossTemplate.name}`;
-  stopCombat();
-  state.combatActive = true;
-  log(`⚔️ EPIC RAID: Challenge against ${bossTemplate.name} initiated!`, 'rarity-legendary');
-  renderStageMonster();
-  combatTick = 0;
-  state._cds = {};
-  if (combatInterval) clearInterval(combatInterval);
-  combatInterval = setInterval(attackMonster, Math.round(200 / (state.combatSpeed || 1)));
+  return serviceStartRaidBoss(state, raidId, { log, el, renderStageMonster, attackMonster });
 }
+
 
 function updateRaceClassUI() {
   const display = el('hero-race-class-display');
@@ -2298,118 +2116,19 @@ function checkDailyReset() { checkQuestResets(); }
 function checkQuestProgress(type, count = 1) { triggerQuestEvent(type, count); }
 
 function triggerQuestEvent(type, amount = 1) {
-  if (!state.quests) checkQuestResets();
-  let updated = false;
-
-  const allQuests = [...QUEST_DEFS.daily, ...QUEST_DEFS.weekly];
-  for (const q of allQuests) {
-    if (q.type === type) {
-      if (state.quests.claimed && state.quests.claimed.includes(q.id)) continue;
-      const current = state.quests.progress[q.id] || 0;
-      if (current < q.target) {
-        state.quests.progress[q.id] = Math.min(q.target, current + amount);
-        updated = true;
-        if (state.quests.progress[q.id] === q.target) {
-          log(`🎯 Missão Concluída: **${q.name}**! Reclame sua recompensa.`, 'rarity-rare');
-          floatText('MISSAO CONCLUIDA!', 'float-jackpot');
-        }
-      }
-    }
-  }
-  if (updated) {
-    safeUiUpdate('quests', updateQuestsUI);
-  }
+  serviceTriggerQuestEvent(state, type, amount);
+  safeUiUpdate('quests', updateQuestsUI);
 }
-
 function claimQuestReward(questId) {
-  if (!state.quests) return;
-  const allQuests = [...QUEST_DEFS.daily, ...QUEST_DEFS.weekly];
-  const q = allQuests.find(item => item.id === questId);
-  if (!q) return;
-
-  const progress = state.quests.progress[q.id] || 0;
-  if (progress < q.target) {
-    log('Esta missão ainda não foi concluída!', 'system');
-    return;
-  }
-
-  if (state.quests.claimed.includes(q.id)) {
-    log('Você já reclamou esta recompensa!', 'system');
-    return;
-  }
-
-  state.quests.claimed.push(q.id);
-
-  if (q.reward.gold) { state.gold += q.reward.gold; }
-  if (q.reward.sp) { state.sp += q.reward.sp; }
-  if (q.reward.craftPoints) { state.craftPoints = (state.craftPoints || 0) + q.reward.craftPoints; }
-  if (q.reward.magicLamps) { state.magicLamps = (state.magicLamps || 0) + q.reward.magicLamps; }
-
-  if (q.reward.passXp) {
-    if (!state.battlePass) state.battlePass = { xp: 0, claimedFree: [], claimedPremium: [], unlockedPremium: false };
-    state.battlePass.xp = (state.battlePass.xp || 0) + q.reward.passXp;
-    log(`🎫 +${q.reward.passXp} XP do Passe de Batalha!`, 'rarity-legendary');
-  }
-
-  log(`🎁 Recompensa da missão **${q.name}** recebida!`, 'rarity-epic');
-  floatText('RECOMPENSA!', 'float-gold');
-  updateAllUI();
-  save();
+  return serviceClaimQuestReward(state, questId, { log, floatText, updateAllUI, save });
 }
-
 function claimPassReward(level, type = 'free') {
-  if (!state.battlePass) state.battlePass = { xp: 0, claimedFree: [], claimedPremium: [], unlockedPremium: false };
-  const tier = BATTLE_PASS_TIERS.find(t => t.level === level);
-  if (!tier) return;
-
-  if (state.battlePass.xp < tier.reqXp) {
-    log('XP do Passe insuficiente para este nível!', 'system');
-    return;
-  }
-
-  if (type === 'premium' && !state.battlePass.unlockedPremium) {
-    log('Ative o Passe Premium para desbloquear estas recompensas!', 'system');
-    return;
-  }
-
-  const claimedArr = type === 'free' ? state.battlePass.claimedFree : state.battlePass.claimedPremium;
-  if (claimedArr.includes(level)) {
-    log('Recompensa já coletada!', 'system');
-    return;
-  }
-
-  claimedArr.push(level);
-
-  const reward = type === 'free' ? tier.free : tier.premium;
-  if (reward.gold) state.gold += reward.gold;
-  if (reward.sp) state.sp += reward.sp;
-  if (reward.craftPoints) state.craftPoints = (state.craftPoints || 0) + reward.craftPoints;
-  if (reward.magicLamps) state.magicLamps = (state.magicLamps || 0) + reward.magicLamps;
-
-  log(`🎁 Recompensa do Passe Nível ${level} recebida!`, 'rarity-legendary');
-  floatText('PASSE RECOMPENSA!', 'float-jackpot');
-  updateAllUI();
-  save();
+  return serviceClaimPassReward(state, level, type, { log, floatText, updateAllUI, save });
 }
-
 function unlockPremiumPass() {
-  if (!state.battlePass) state.battlePass = { xp: 0, claimedFree: [], claimedPremium: [], unlockedPremium: false };
-  if (state.battlePass.unlockedPremium) {
-    log('Passe Premium já está ativo!', 'system');
-    return;
-  }
-  const COST = 100000;
-  if (state.gold < COST) {
-    log(`O Passe Premium custa ${COST.toLocaleString()} Gold. Gold insuficiente!`, 'system');
-    return;
-  }
-  state.gold -= COST;
-  state.battlePass.unlockedPremium = true;
-  log('✨ PASSE PREMIUM DE ADENA ATIVADO COM SUCESSO!', 'rarity-legendary');
-  floatText('PREMIUM ATIVO!', 'float-jackpot');
-  updateAllUI();
-  save();
+  return serviceUnlockPremiumPass(state, { log, floatText, updateAllUI, save });
 }
+
 
 function updateQuestsUI() {
   checkQuestResets();
@@ -2597,161 +2316,17 @@ function renderBattlePassUI() {
 }
 
 // --------------------------- TOWER OF INSOLENCE ---------------------------
-function getTowerFloorDef(floorNum) {
-  const f = Math.max(1, Math.min(100, Number(floorNum) || 1));
-  const isBoss = f % 10 === 0;
-
-  const names = {
-    10: 'Hallate, o Guardião da Torre (Boss)',
-    20: 'Kernea, a Imperatriz de Sangue (Boss)',
-    30: 'Varan, o Arquiduque Sombrio (Boss)',
-    40: 'Kavatan, o Guardião de Elmore (Boss)',
-    50: 'Baium, o Imperador Imortal (Boss)',
-    60: 'Galaxia, a Primordial (Boss)',
-    70: 'Shielhead, o Titã de Aço (Boss)',
-    80: 'Golkonda, o Destruidor de Reinos (Boss)',
-    90: 'Verdelet, o Demônio Guardião (Boss)',
-    100: 'Arcanjo da Insolência (Final Boss)'
-  };
-
-  const name = names[f] || (isBoss ? `Guardião do Andar ${f} (Boss)` : `Guerreiro de Insolência Nv.${f}`);
-  const reqLvl = Math.min(100, Math.floor(f * 0.95) + 1);
-
-  const baseHp = Math.floor(120 * Math.pow(1.12, f - 1) * (isBoss ? 2.5 : 1));
-  const baseAtk = Math.floor(18 * Math.pow(1.09, f - 1) * (isBoss ? 1.4 : 1));
-  const baseDef = Math.floor(10 * Math.pow(1.08, f - 1));
-
-  const goldReward = Math.floor(300 * Math.pow(1.10, f - 1) * (isBoss ? 3 : 1));
-  const spReward = Math.floor(12 * f * (isBoss ? 2 : 1));
-
-  return {
-    floor: f,
-    name,
-    isBoss,
-    reqLvl,
-    hp: baseHp,
-    atk: baseAtk,
-    def: baseDef,
-    xp: Math.floor(120 * f * 1.5),
-    sp: spReward,
-    gold: goldReward,
-    rewardLamps: isBoss ? Math.floor(f / 10) : 0,
-    rewardCrystals: isBoss ? (f >= 50 ? 'crystal_s' : 'crystal_a') : null
-  };
-}
-
+function getTowerFloorDef(floorNum) { return serviceGetTowerFloorDef(floorNum); }
 function challengeTowerFloor() {
-  if (!state.tower) state.tower = { highestFloor: 0, currentFloor: 1, lastSweepTime: 0 };
-  const targetFloor = (state.tower.highestFloor || 0) + 1;
-  if (targetFloor > 100) {
-    log('🏆 Você já conquistou todos os 100 Andares da Torre da Insolência!', 'rarity-legendary');
-    return;
-  }
-
-  const fDef = getTowerFloorDef(targetFloor);
-
-  if (state.level < fDef.reqLvl) {
-    log(`⚠️ Nível insuficiente! O Andar ${targetFloor} requer Nível ${fDef.reqLvl}.`, 'system');
-    return;
-  }
-
-  log(`🏰 Desafiando Andar ${targetFloor}: **${fDef.name}**!`, 'rarity-legendary');
-  floatText(`ANDAR ${targetFloor}!`, 'float-jackpot');
-
-  const towerMonsterId = `tower_floor_${targetFloor}`;
-  const monsterObj = {
-    id: towerMonsterId,
-    name: fDef.name,
-    hp: fDef.hp,
-    _maxHp: fDef.hp,
-    maxHp: fDef.hp,
-    atk: fDef.atk,
-    def: fDef.def,
-    eva: Math.min(20, Math.floor(fDef.floor / 5)),
-    xp: fDef.xp,
-    sp: fDef.sp,
-    gold: [fDef.gold, Math.floor(fDef.gold * 1.3)],
-    boss: fDef.isBoss,
-    isTower: true,
-    towerFloor: targetFloor,
-    _stunnedUntil: 0
-  };
-
-  MONSTERS[towerMonsterId] = monsterObj;
-  state.target = towerMonsterId;
-  state.activeMonster = monsterObj;
-  if (!state.zone) state.zone = 'talkingIsland';
-
-  const sz = el('stage-zone');
-  if (sz) sz.textContent = `🏰 TORRE · Andar ${targetFloor}`;
-
-  state.combatActive = true;
-  renderStageMonster();
-  combatTick = 0;
-  state._cds = {};
-  if (combatInterval) clearInterval(combatInterval);
-  combatInterval = setInterval(attackMonster, Math.round(200 / (state.combatSpeed || 1)));
+  return serviceChallengeTowerFloor(state, { log, floatText, el, renderStageMonster, attackMonster });
 }
-
 function onTowerFloorVictory(floorNum) {
-  if (!state.tower) state.tower = { highestFloor: 0, currentFloor: 1, lastSweepTime: 0 };
-  if (floorNum > state.tower.highestFloor) {
-    state.tower.highestFloor = floorNum;
-    state.tower.currentFloor = Math.min(100, floorNum + 1);
-
-    const fDef = getTowerFloorDef(floorNum);
-    log(`🏆 VITORIA! Andar ${floorNum} Conquistado! Bônus Permanente ATK/DEF +${floorNum}%!`, 'rarity-legendary');
-    floatText(`ANDAR ${floorNum} CONQUISTADO!`, 'float-jackpot');
-
-    if (fDef.rewardLamps > 0) {
-      state.magicLamps = (state.magicLamps || 0) + fDef.rewardLamps;
-      log(`🪔 Recompensa de Primeiro Abate: +${fDef.rewardLamps} Lâmpadas Mágicas!`, 'rarity-epic');
-    }
-    if (fDef.rewardCrystals) {
-      addToInventory(fDef.rewardCrystals, 3);
-      log(`✨ Recompensa de Primeiro Abate: +3x ${D().ALL_ITEMS[fDef.rewardCrystals]?.name || fDef.rewardCrystals}!`, 'rarity-legendary');
-    }
-
-    triggerQuestEvent('boss', 1);
-  }
-  updateAllUI();
-  save();
+  return serviceCompleteTowerFloor(state, floorNum, { log, floatText, updateAllUI, save });
 }
-
 function sweepTowerDaily() {
-  if (!state.tower) state.tower = { highestFloor: 0, currentFloor: 1, lastSweepTime: 0 };
-  const highest = state.tower.highestFloor || 0;
-  if (highest < 1) {
-    log('Conquiste ao menos 1 Andar da Torre para realizar a Varredura Diária!', 'system');
-    return;
-  }
-
-  const now = Date.now();
-  const ONE_DAY = 24 * 60 * 60 * 1000;
-  if (state.tower.lastSweepTime && (now - state.tower.lastSweepTime) < ONE_DAY) {
-    log('A Varredura Diária já foi realizada hoje! Tente novamente amanhã.', 'system');
-    return;
-  }
-
-  state.tower.lastSweepTime = now;
-
-  let totalGold = 0;
-  let totalSp = 0;
-  for (let i = 1; i <= highest; i++) {
-    const fDef = getTowerFloorDef(i);
-    totalGold += Math.floor(fDef.gold * 0.5);
-    totalSp += Math.floor(fDef.sp * 0.5);
-  }
-
-  state.gold += totalGold;
-  state.sp += totalSp;
-
-  log(`🧹 VARREDURA DA TORRE! Reclamou recompensas de ${highest} andares: +${totalGold.toLocaleString()} Gold, +${totalSp.toLocaleString()} SP!`, 'rarity-legendary');
-  floatText(`+${totalGold.toLocaleString()}g VARREDURA!`, 'float-jackpot');
-
-  updateAllUI();
-  save();
+  return serviceSweepTowerDaily(state, { log, floatText, updateAllUI, save });
 }
+
 
 function updateTowerUI() {
   if (!state.tower) state.tower = { highestFloor: 0, currentFloor: 1, lastSweepTime: 0 };
