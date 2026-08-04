@@ -56,7 +56,7 @@ export const ZONE_BACKGROUNDS = {
 
   // Zonas regulares
   talkingIsland:  '/img/talkingIsland.png',
-  elvenForest:    '/img/elvenForest.png',
+  elvenForest:    '/img/Maps/elvenForest.png',
   darkForest:     '/img/darkForest.png',
   ruinedOutpost:  '/img/ruinedOutpost.png',
   howlingMoor:    '/img/howlingMoor.png',

@@ -45,18 +45,18 @@ export const HERO_IMAGES: Record<string, string> = {
   "/img/mon_crimsombabydragon.png": "/img/Monsters/HowlingMoor/mon_crimsombabydragon.png",
   "/img/mon_alphawolf.png": "/img/Monsters/HowlingMoor/mon_alphawolf.png",
   "/img/mon_skeleton.png": "/img/Monsters/GiranOutskirts/mon_skeleton.png",
-  "/img/mon_darkmage.png": "/img/Monsters/ForsakenCrypt/mon_darkmage.png",
-  "/img/devilbone.png": "/img/Monsters/ForsakenCrypt/devilbone.png",
-  "/img/mon_deathknight.png": "/img/Monsters/BlackCitadel/mon_deathknight.png",
-  "/img/mon_deathwizard.png": "/img/Monsters/BlackCitadel/mon_deathwizard.png",
-  "/img/mon_knight.png": "/img/Monsters/GludioCastle/mon_knight.png",
-  "/img/mon_voidcreature.png": "/img/Monsters/RiftOfTheVoid/mon_voidcreature.png",
-  "/img/mon_emereldadragon.png": "/img/Monsters/EmeraldGrove/mon_emereldadragon.png",
-  "/img/mon_cerberus.png": "/img/Monsters/UnderworldGate/mon_cerberus.png",
-  "/img/mon_mage.png": "/img/Monsters/AdenCity/mon_mage.png",
-  "/img/mon_dragon.png": "/img/Monsters/DragonValley/mon_dragon.png",
-  "/img/mon_dragonknight.png": "/img/Monsters/DragonValley/mon_dragonknight.png",
-  "/img/mon_frostknight.png": "/img/Monsters/DragonValley/mon_frostknight.png",
+  "/img/mon_darkmage.png": "/img/Monsters/forsakenCrypt/mon_darkmage.png",
+  "/img/devilbone.png": "/img/Monsters/forsakenCrypt/devilbone.png",
+  "/img/mon_deathknight.png": "/img/Monsters/blackCitadel/mon_deathknight.png",
+  "/img/mon_deathwizard.png": "/img/Monsters/blackCitadel/mon_deathwizard.png",
+  "/img/mon_knight.png": "/img/Monsters/gludioCastle/mon_knight.png",
+  "/img/mon_voidcreature.png": "/img/Monsters/riftOfTheVoid/mon_voidcreature.png",
+  "/img/mon_emereldadragon.png": "/img/Monsters/emeraldGrove/mon_emereldadragon.png",
+  "/img/mon_cerberus.png": "/img/Monsters/underworldGate/mon_cerberus.png",
+  "/img/mon_mage.png": "/img/Monsters/adenCity/mon_mage.png",
+  "/img/mon_dragon.png": "/img/Monsters/dragonValley/mon_dragon.png",
+  "/img/mon_dragonknight.png": "/img/Monsters/dragonValley/mon_dragonknight.png",
+  "/img/mon_frostknight.png": "/img/Monsters/dragonValley/mon_frostknight.png",
 
   // Zones Backgrounds
   "/img/talkingIsland.png": "/img/Monsters/TalkingIsland/talkingIsland.png",
@@ -65,7 +65,7 @@ export const HERO_IMAGES: Record<string, string> = {
   "/img/kamaelLair.png": "/img/Monsters/KamaelLair/kamaelLair.png",
   "/img/howlingMoor.png": "/img/Monsters/HowlingMoor/howlingMoor.png",
   "/img/giranOutskirts.png": "/img/Monsters/GiranOutskirts/giranOutskirts.png",
-  "/img/orcenRuins.png": "/img/Monsters/OrcenRuins/orcenRuins.png"
+  "/img/orcenRuins.png": "/img/Monsters/orcenRuins/orcenRuins.png"
 };
 
 // Expose to the vanilla JS art module running inside the shadow DOM

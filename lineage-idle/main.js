@@ -3881,9 +3881,10 @@ export function init() {
 
     window.loadGameState = (cloudData) => {
       if (!cloudData || typeof cloudData !== 'object') return;
-      const def = DEFAULT_STATE();
+      const allItems = (typeof window !== 'undefined' && window.GameData) ? window.GameData.ALL_ITEMS : (D() ? D().ALL_ITEMS : null);
+      const hasItemsDict = allItems && Object.keys(allItems).length > 0;
       const safeInventory = Array.isArray(cloudData.inventory)
-        ? cloudData.inventory.filter(item => item && item.itemId && D().ALL_ITEMS[item.itemId])
+        ? cloudData.inventory.filter(item => item && item.itemId && (!hasItemsDict || allItems[item.itemId]))
         : [];
       
       state = { ...def, ...cloudData };

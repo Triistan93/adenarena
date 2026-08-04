@@ -19,7 +19,7 @@ const HERO_IMG = {
   darkelf_assassin: "/img/darkelf_fighter.png",
   darkelf_shillien: "/img/darkelf_mage.png",
   darkelf_sorcerer: "/img/darkelf_mage.png",
-  orc_fighter: "/img/Races/Orcs/Fighter/orcfighterM.png",
+  orc_fighter: "/img/orcfighterM.png",
   orc_mage: "/img/orc_mage.png",
   orc_destroyer: "/img/orcfighterM.png",
   orc_monk: "/img/orcfighterM.png",
@@ -39,7 +39,7 @@ const RACE_FALLBACK = {
   human: "/img/humanpalaM.png",
   elf: "/img/elfwswM.png",
   darkelf: "/img/darkelfskM.png",
-  orc: "/img/Races/Orcs/Fighter/orcfighterM.png",
+  orc: "/img/orcfighterM.png",
   dwarf: "/img/dwarfmaestroM.png",
   kamael: "/img/kamaelDM.png",
   ertheia: "/img/sylphM.png",
@@ -384,7 +384,7 @@ function lighten(hex, f = 0.35) {
 
 export function mapBackdrop() {
   // Substitui os vetores antigos pela imagem do mapa oficial
-  // Nota: Certifique-se de que "map.png" está na pasta public/img/
+  // Nota: Certifique-se de que "/img/map.png" está na pasta public/img/
   return `
     <image href="/img/map.png" x="0" y="0" width="360" height="240" preserveAspectRatio="none" opacity="0.9" />
     <rect width="360" height="240" fill="#1a1408" opacity="0.2" style="mix-blend-mode: multiply;" />

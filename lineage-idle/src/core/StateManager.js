@@ -82,10 +82,10 @@ export function loadState() {
   try {
     const data = JSON.parse(raw);
     const def = DEFAULT_STATE();
-    const gData = D();
-
+    const allItems = gData?.ALL_ITEMS;
+    const hasItemsDict = allItems && Object.keys(allItems).length > 0;
     const safeInventory = Array.isArray(data.inventory)
-      ? data.inventory.filter(item => item && item.itemId && (gData?.ALL_ITEMS ? gData.ALL_ITEMS[item.itemId] : true))
+      ? data.inventory.filter(item => item && item.itemId && (!hasItemsDict || allItems[item.itemId]))
       : [];
 
     currentState = { ...def, ...data };
@@ -105,7 +105,7 @@ export function loadState() {
     currentState.randomCraftWheel = Array.isArray(data.randomCraftWheel) ? data.randomCraftWheel : [];
     currentState.craftFoundationPity = Number(data.craftFoundationPity) || 0;
     currentState.warehouse = Array.isArray(data.warehouse)
-      ? data.warehouse.filter(item => item && item.itemId && (gData?.ALL_ITEMS ? gData.ALL_ITEMS[item.itemId] : true))
+      ? data.warehouse.filter(item => item && item.itemId && (!hasItemsDict || allItems[item.itemId]))
       : [];
     currentState.maxWarehouseSlots = Number(data.maxWarehouseSlots) || 100;
 
