@@ -1682,7 +1682,17 @@ function updateRaceClassUI() {
   renderStageHero(); updateSkillUI(); checkClassAdvancement();
 }
 
-function updateClock() { const now = Date.now(), elapsed = Math.floor((now - state.startTime + (state.totalPlaytime || 0)) / 1000), h = Math.floor(elapsed / 3600), m = Math.floor((elapsed % 3600) / 60), s = elapsed % 60; const _ck = el('clock'); if (_ck) _ck.textContent = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`; }
+function updateClock() {
+  const now = Date.now();
+  const startTime = Number(state.startTime) || now;
+  const totalPlaytime = Number(state.totalPlaytime) || 0;
+  const elapsed = Math.max(0, Math.floor((now - startTime + totalPlaytime) / 1000));
+  const h = Math.floor(elapsed / 3600);
+  const m = Math.floor((elapsed % 3600) / 60);
+  const s = elapsed % 60;
+  const _ck = el('clock');
+  if (_ck) _ck.textContent = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+}
 
 function updateGameModeUI() {
   const switchEl = el('game-mode-switch');

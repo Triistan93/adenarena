@@ -46,11 +46,14 @@ const RACE_FALLBACK = {
 };
 
 function resolveImg(path) {
+  if (!path) return '';
+  let clean = path.replace(/\/img\/Monsters\/[^\/]+\//i, '/img/').replace(/\/img\/Races\/[^\/]+\/([^\/]+\/)?/i, '/img/');
   if (typeof window !== 'undefined' && window.__HERO_IMGS && window.__HERO_IMGS[path]) {
     return window.__HERO_IMGS[path];
   }
-  return path;
+  return clean;
 }
+
 
 const MAGE_CLASSES = new Set(['mage', 'wizard', 'cleric', 'sorcerer', 'necromancer', 'bishop', 'prophet', 'spellsinger', 'spellhowler', 'shillien', 'overlord']);
 
@@ -350,7 +353,7 @@ export function heroSVG(race, cls, aura, mode) {
 // ================================================================
 export function monsterSVG(id, opts) {
   const safeId = id || '';
-  const imgSrc = MON_IMG[safeId] || (safeId ? MON_IMG[safeId.toLowerCase()] : null) || `/img/Monsters/${safeId}.png`;
+  const imgSrc = MON_IMG[safeId] || (safeId ? MON_IMG[safeId.toLowerCase()] : null) || `/img/mon_${safeId.toLowerCase()}.png`;
   const crown = opts?.crown
     ? `<div style="position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-size:22px;filter:drop-shadow(0 0 6px #f0c840);z-index:2;">👑</div>`
     : "";
@@ -359,10 +362,11 @@ export function monsterSVG(id, opts) {
   const glow = opts?.crown ? "drop-shadow(0 0 10px rgba(240,200,64,0.5))" : "drop-shadow(0 6px 12px rgba(0,0,0,0.6))";
   return `<div class="mon-svg" style="width:100%;height:100%;position:relative;">
     ${crown}
-    <img src="${resolvedSrc}" alt="${safeId}" draggable="false" onerror="this.onerror=null; this.src='${getAssetUrl(`img/Monsters/${safeId}.png`)}'; if(!this.naturalWidth) this.src='${getAssetUrl(`img/${safeId}.png`)}';"
+    <img src="${resolvedSrc}" alt="${safeId}" draggable="false" onerror="this.onerror=null; this.src='${getAssetUrl(`img/mon_${safeId.toLowerCase()}.png`)}'; if(!this.naturalWidth) this.src='${getAssetUrl(`img/${safeId}.png`)}';"
       style="width:100%;height:100%;object-fit:contain;object-position:center bottom;filter:${glow};" />
   </div>`;
 }
+
 
 function darken(hex, f = 0.6) {
   const m = hex.match(/[\da-f]{2}/gi);
