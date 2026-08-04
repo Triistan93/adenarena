@@ -143,6 +143,17 @@ import {
   updateShopUI as uiUpdateShopUI,
   updateCraftUI as uiUpdateCraftUI
 } from './src/ui/ShopUI.js';
+// ─── Sprint 7: Importa EventBus e StateManager (Wiring & State) ───────────
+import EventBus from './src/core/EventBus.js';
+import {
+  getState,
+  setState,
+  saveState as managerSaveState,
+  loadState as managerLoadState,
+  resetState as managerResetState,
+  DEFAULT_STATE
+} from './src/core/StateManager.js';
+// ────────────────────────────────────────────────────────────────────────────
 // ────────────────────────────────────────────────────────────────────────────
 // ────────────────────────────────────────────────────────────────────────────
 // ────────────────────────────────────────────────────────────────────────────
@@ -188,50 +199,10 @@ const TIER_NAMES        = ['Foundation', 'Discipline', 'Mastery', 'Ascendancy', 
 
 
 // --------------------------- STATE ---------------------------
-const DEFAULT_STATE = () => ({
-  race: null, class: null,
-  level: 1, xp: 0, sp: 10,
-  maxHp: 100, hp: 100, maxMp: 50, mp: 50,
-  base: { atk: 0, def: 0, eva: 0, matk: 0, mdef: 0 },
-  skills: {},
-  quests: { progress: {}, claimed: [], lastDailyReset: 0, lastWeeklyReset: 0 },
-  battlePass: { xp: 0, claimedFree: [], claimedPremium: [], unlockedPremium: false },
-  tower: { highestFloor: 0, currentFloor: 1, lastSweepTime: 0 },
-  zone: 'talkingIsland', currentSaga: 0, gold: 1000, inventory: [], 
-  equipment: {
-    weapon: null, shield: null, helmet: null, armor: null, legs: null, gloves: null, boots: null,
-    hair: null, hair2: null, necklace: null, earring1: null, earring2: null, ring: null, ring2: null,
-    belt: null, cloak: null, talisman: null, agathion: null
-  },
-  codex: {}, dolls: [], synthSelected: [null, null],
-  magicLampExp: 0, magicLamps: 0, craftPoints: 0, craftCharges: 0, randomCraftWheel: [],
-  subclasses: [], activeSubclassIndex: null, certifications: {}, mainClassData: null,
-  craftLevel: 1, craftXp: 0, shopTab: 'gear', selectedSkill: null, filter: 'all',
-  craftTab: 'recipes', zoneTab: 'map', soulshotActive: false, combatSpeed: 1,
-  totalPlaytime: 0, buffs: {}, _cds: {}, gameMode: 'idle', privilegeLevel: 0,
-  autoSellRarity: 'off', craftFoundationPity: 0, warehouse: [], maxWarehouseSlots: 100
-});
+let state = getState();
 
-let state = DEFAULT_STATE();
-
-// getMaxWarehouseSlots importado do InventoryService.js (Sprint 3)
-
-
-function formatItemDisplayName(item, def) {
-  return uiFormatItemDisplayName(item, def);
-}
-
-
-// FUNÇÃO DE SAVE/LOAD COM DEEP MERGE PARA IMPEDIR RESET DE SKILLS
 function save(manual = false) {
-  state.lastSaveTime = Date.now();
-  const data = { 
-    ...state, 
-    totalPlaytime: state.totalPlaytime + (Date.now() - state.startTime), 
-    selectedUids: Array.from(getSelectedSet())
-  };
-  delete data.startTime;
-  localStorage.setItem(SAVE_KEY, JSON.stringify(data));
+  managerSaveState(manual);
   if (manual) {
     log('Game saved successfully.', 'system');
     floatText('SAVED', 'float-gold');
@@ -239,87 +210,30 @@ function save(manual = false) {
 }
 
 function load() {
-  const raw = localStorage.getItem(SAVE_KEY);
-  if (!raw) return false;
-  try {
-    const data = JSON.parse(raw);
-    const def = DEFAULT_STATE();
-    const safeInventory = Array.isArray(data.inventory)
-      ? data.inventory.filter(item => item && item.itemId && D().ALL_ITEMS[item.itemId])
-      : [];
-    
-    // Deep merge to preserve ALL user progress while adding newly introduced state keys
-    state = { ...def, ...data };
-    
-    state.skills = { ...def.skills, ...(data.skills || {}) };
-    state.equipment = { ...def.equipment, ...(data.equipment || {}) };
-    state.base = { ...def.base, ...(data.base || {}) };
-    state.inventory = safeInventory;
-    state.selectedUids = new Set(Array.isArray(data.selectedUids) ? data.selectedUids : []);
-    
-    // Safely migrate progression modules if missing from older save
-    state.codex = data.codex && typeof data.codex === 'object' ? data.codex : {};
-    state.dolls = Array.isArray(data.dolls) ? data.dolls : [];
-    state.synthSelected = Array.isArray(data.synthSelected) ? data.synthSelected : [null, null];
-    state.magicLampExp = Number(data.magicLampExp) || 0;
-    state.magicLamps = Number(data.magicLamps) || 0;
-    state.craftPoints = Number(data.craftPoints) || 0;
-    state.craftCharges = Number(data.craftCharges) || 0;
-    state.randomCraftWheel = Array.isArray(data.randomCraftWheel) ? data.randomCraftWheel : [];
-    state.craftFoundationPity = Number(data.craftFoundationPity) || 0;
-    state.warehouse = Array.isArray(data.warehouse)
-      ? data.warehouse.filter(item => item && item.itemId && D().ALL_ITEMS[item.itemId])
-      : [];
-    state.maxWarehouseSlots = Number(data.maxWarehouseSlots) || 100;
-
-    state.subclasses = Array.isArray(data.subclasses) ? data.subclasses : [];
-    state.activeSubclassIndex = data.activeSubclassIndex !== undefined ? data.activeSubclassIndex : null;
-    state.certifications = data.certifications && typeof data.certifications === 'object' ? data.certifications : {};
-    state.mainClassData = data.mainClassData || null;
-
-    state.quests = data.quests && typeof data.quests === 'object' ? data.quests : { progress: {}, claimed: [], lastDailyReset: 0, lastWeeklyReset: 0 };
-    state.battlePass = data.battlePass && typeof data.battlePass === 'object' ? data.battlePass : { xp: 0, claimedFree: [], claimedPremium: [], unlockedPremium: false };
-    state.tower = data.tower && typeof data.tower === 'object' ? data.tower : { highestFloor: 0, currentFloor: 1, lastSweepTime: 0 };
+  const loaded = managerLoadState();
+  if (loaded) {
+    state = getState();
     checkQuestResets();
-
-    state.buffs = data.buffs || {};
-    state.filter = data.filter || 'all';
-    state.gameMode = data.gameMode === 'arena' ? 'arena' : 'idle';
-    state.shopTab = data.shopTab || 'gear';
-    state.craftTab = data.craftTab || 'recipes';
-    state.zoneTab = data.zoneTab || 'map';
-    state.soulshotActive = !!data.soulshotActive;
-    state.autoPotionActive = !!data.autoPotionActive;
-    state.combatSpeed = data.combatSpeed === 2 ? 2 : 1;
-    state.selectedSkill = data.selectedSkill || null;
-    state.startTime = Date.now();
-    
     updateSagaProgress(true);
     log('✨ Atualização de versão carregada com sucesso! Seu progresso e itens foram 100% mantidos.', 'rarity-legendary');
-
-    if (data.lastSaveTime) {
-      setTimeout(() => checkOfflineProgress(data.lastSaveTime), 600);
+    if (state.lastSaveTime) {
+      setTimeout(() => checkOfflineProgress(state.lastSaveTime), 600);
     }
-    return true;
-  } catch (err) {
-    console.error('Error loading save data:', err);
-    state = DEFAULT_STATE();
-    state.startTime = Date.now();
-    return false;
   }
+  return loaded;
 }
+
 
 function resetSave() {
   if (confirm('Reset all progress? This cannot be undone.')) {
-    localStorage.removeItem(SAVE_KEY);
+    managerResetState();
     if (typeof window !== 'undefined' && typeof window.resetCloudSave === 'function') {
       window.resetCloudSave();
     }
-    state = DEFAULT_STATE();
-    state.startTime = Date.now();
     location.reload();
   }
 }
+
 
 // --------------------------- STATS CALC (Sprint 2: Delegado para StatsEngine.js) ---------------------------
 function getEquipBonus(slot) { return engineGetEquipBonus(state, slot); }
@@ -3753,11 +3667,19 @@ function bindEvents() {
       };
     }
 
+    // ─── EventBus System Subscribers ────────────────────────────────────
+    EventBus.on('ui:update', () => updateAllUI());
+    EventBus.on('log', (data) => log(data.msg || data, data.type || 'system'));
+    EventBus.on('quest:trigger', (data) => triggerQuestEvent(data.type, data.count || 1));
+    EventBus.on('state:updated', () => updateAllUI());
+    // ───────────────────────────────────────────────────────────────────
+
     initPanelResizers();
   } catch (err) {
     console.error('Failed to bind UI events:', err);
   }
 }
+
 
 function initPanelResizers() {
   const grid = qs('.main-grid');
