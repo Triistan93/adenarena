@@ -30,6 +30,44 @@ import {
   calcSpForLevel,
   checkLevelUp as engineCheckLevelUp
 } from './src/engine/LevelEngine.js';
+// ─── Sprint 3: Importa serviços de Inventário, Equipamentos, Loja e Craft ──
+import {
+  getMaxInventorySlots,
+  getMaxWarehouseSlots,
+  isHighValueItem,
+  getItemGrade,
+  getInventoryCount as serviceGetInventoryCount,
+  addToInventory as serviceAddToInventory,
+  removeFromInventory as serviceRemoveFromInventory,
+  removeFromInventoryByItemId as serviceRemoveFromInventoryByItemId,
+  getWarehouseCount as serviceGetWarehouseCount,
+  depositToWarehouse as serviceDepositToWarehouse,
+  withdrawFromWarehouse as serviceWithdrawFromWarehouse,
+  getSelectedSet as serviceGetSelectedSet,
+  toggleSelectItem as serviceToggleSelectItem,
+  selectItemsByFilter as serviceSelectItemsByFilter,
+  clearItemSelection as serviceClearItemSelection
+} from './src/services/InventoryService.js';
+
+import {
+  resolveEquipSlot as serviceResolveEquipSlot,
+  equipItem as serviceEquipItem,
+  unequipItem as serviceUnequipItem
+} from './src/services/EquipmentService.js';
+
+import {
+  buyItem as serviceBuyItem,
+  buyMysticItem as serviceBuyMysticItem
+} from './src/services/ShopService.js';
+
+import {
+  getCraftLevelReq,
+  getRecipeDef,
+  getRecipeMaterials,
+  canCraft as serviceCanCraft,
+  canCraftRecipe as serviceCanCraftRecipe,
+  craftItem as serviceCraftItem
+} from './src/services/CraftService.js';
 // ────────────────────────────────────────────────────────────────────────────
 
 // Carregamento síncrono de icon_index.json antes de qualquer renderização de itens
@@ -98,9 +136,8 @@ const DEFAULT_STATE = () => ({
 
 let state = DEFAULT_STATE();
 
-function getMaxWarehouseSlots() {
-  return Number(state.maxWarehouseSlots) || 100;
-}
+// getMaxWarehouseSlots importado do InventoryService.js (Sprint 3)
+
 
 function formatItemDisplayName(item, def) {
   if (!item) return '';
@@ -444,71 +481,13 @@ function promoteClass(newClassId) {
   save();
 }
 
-// --------------------------- INVENTORY / SALVAGE ---------------------------
-function getInventoryCount(itemId) {
-  return state.inventory.filter(i => i.itemId === itemId && !i.equipped).reduce((s, i) => s + (i.count || 1), 0);
-}
-
-function getMaxInventorySlots() {
-  return (state.race === 'dwarf') ? 250 : 150;
-}
-
+// --------------------------- INVENTORY / SALVAGE (Sprint 3: Delegados) ---------------------------
+function getInventoryCount(itemId) { return serviceGetInventoryCount(state, itemId); }
 function addToInventory(itemId, amount = 1, rarity = null, foundation = false) {
-  const def = D().ALL_ITEMS[itemId];
-  if (!def) return false;
-
-  const maxSlots = getMaxInventorySlots();
-
-  if (def.stack && (def.slot === 'consumable' || def.slot === 'material' || def.slot === 'scroll' || def.slot === 'powerup') && !rarity) {
-    let remaining = amount;
-    while (remaining > 0) {
-      const existing = state.inventory.find(i => i.itemId === itemId && !i.rarity && (i.count || 1) < def.stack);
-      if (existing) {
-        const space = def.stack - (existing.count || 1);
-        const add = Math.min(space, remaining);
-        existing.count = (existing.count || 1) + add;
-        remaining -= add;
-      } else {
-        if (state.inventory.length >= maxSlots) { log('Inventory full!', 'system'); return false; }
-        const add = Math.min(def.stack, remaining);
-        state.inventory.push({ uid: Date.now() + '_' + Math.random().toString(36).slice(2, 8), itemId, count: add, rarity: null, equipped: false, foundation: false });
-        remaining -= add;
-      }
-    }
-    return true;
-  }
-
-  const RARITY_RANK = { 'common': 1, 'uncommon': 2, 'rare': 3, 'epic': 4, 'legendary': 5, 'mythic': 6, 's': 7 };
-  if (rarity && !foundation && state.autoSellRarity && state.autoSellRarity !== 'off') {
-    const itemRarity = rarity.toLowerCase();
-    const targetRank = RARITY_RANK[state.autoSellRarity.toLowerCase()] || 0;
-    const itemRank = RARITY_RANK[itemRarity] || 1;
-    if (itemRank <= targetRank) {
-      const mult = D().RARITY[itemRarity] ? D().RARITY[itemRarity].mult : 1;
-      const price = Math.max(1, Math.floor((def.price || 10) * 0.4 * mult)) * amount;
-      state.gold += price;
-      log(`🪙 [Auto-Sell] ${amount}x ${def.name} [${itemRarity.toUpperCase()}] vendido por +${price.toLocaleString()}g`, 'loot');
-      return true;
-    }
-  }
-
-  for (let i = 0; i < amount; i++) {
-    if (state.inventory.length >= maxSlots) { log('Inventory full!', 'system'); return false; }
-    const isEquip = def.slot && def.slot !== 'consumable' && def.slot !== 'material' && def.slot !== 'scroll' && def.slot !== 'powerup';
-    const affixes = isEquip ? (D().rollAffixes ? D().rollAffixes(rarity || 'common') : []) : [];
-    state.inventory.push({ uid: Date.now() + '_' + Math.random().toString(36).slice(2, 8), itemId, count: 1, rarity, affixes, equipped: false, foundation: !!foundation });
-  }
-  return true;
+  return serviceAddToInventory(state, itemId, amount, rarity, foundation, { log });
 }
+function removeFromInventory(uid, amount = 1) { return serviceRemoveFromInventory(state, uid, amount); }
 
-function removeFromInventory(uid, amount = 1) {
-  const idx = state.inventory.findIndex(i => i.uid === uid);
-  if (idx < 0) return false;
-  const item = state.inventory[idx];
-  if (item.count > amount) { item.count -= amount; return true; }
-  state.inventory.splice(idx, 1);
-  return true;
-}
 
 function getWarehouseCount(itemId) {
   if (!state.warehouse || !Array.isArray(state.warehouse)) return 0;
@@ -633,95 +612,17 @@ const ALL_EQUIP_SLOTS = [
   'belt', 'cloak', 'talisman', 'agathion'
 ];
 
-function resolveEquipSlot(slot) {
-  if (slot === 'agathion') return 'agathion';
-  if (['shield', 'offhand', 'sigil'].includes(slot)) return 'shield';
-  if (['legs', 'gaiters', 'pants'].includes(slot)) return 'legs';
-  if (['hair', 'headgear'].includes(slot)) return 'hair';
-  if (['hair2', 'mask'].includes(slot)) return 'hair2';
-  if (slot === 'earring') {
-    if (!state.equipment.earring1) return 'earring1';
-    if (!state.equipment.earring2) return 'earring2';
-    return 'earring1';
-  }
-  if (slot === 'ring') {
-    if (!state.equipment.ring) return 'ring';
-    if (!state.equipment.ring2) return 'ring2';
-    return 'ring';
-  }
-  if (slot === 'ring1') return 'ring';
-  return slot;
-}
-
+function resolveEquipSlot(slot) { return serviceResolveEquipSlot(slot, state.equipment); }
 function equipItem(uid) {
-  const item = state.inventory.find(i => i.uid === uid);
-  if (!item) return;
-  const def = D().ALL_ITEMS[item.itemId];
-  if (!def) return;
-  const targetSlot = resolveEquipSlot(def.slot);
-  if (!ALL_EQUIP_SLOTS.includes(targetSlot)) { log(`${def.name} não pode ser equipado.`, 'system'); return; }
-  if (def.req && def.req.level > state.level) { log(`Nível ${def.req.level} necessário para equipar ${def.name}`, 'system'); return; }
-  if (def.classReq && !classSatisfies(state.class, def.classReq)) { log(`${def.name} exige a classe: ${getClass(def.classReq)?.name || def.classReq}`, 'system'); return; }
-  
-  const currentUid = state.equipment[targetSlot];
-  if (currentUid) { const current = state.inventory.find(i => i.uid === currentUid); if (current) current.equipped = false; }
-  state.equipment[targetSlot] = uid; item.equipped = true;
-  log(`Equipou ${formatItemDisplayName(item, def)}`, 'loot');
-  
-  const stats = getStats();
-  state.maxHp = stats.maxHp; state.maxMp = stats.maxMp;
-  state.hp = Math.min(state.hp, state.maxHp); state.mp = Math.min(state.mp, state.maxMp);
-  updateAllUI(); save();
+  return serviceEquipItem(state, uid, { log, updateAllUI, save, classSatisfies, getClass });
 }
-
 function unequipItem(slot) {
-  const uid = state.equipment[slot];
-  if (!uid) return;
-  const item = state.inventory.find(i => i.uid === uid);
-  if (item) item.equipped = false;
-  state.equipment[slot] = null;
-  const stats = getStats();
-  state.maxHp = stats.maxHp; state.maxMp = stats.maxMp;
-  state.hp = Math.min(state.hp, state.maxHp); state.mp = Math.min(state.mp, state.maxMp);
-  log(`Unequipped ${D().ALL_ITEMS[item ? item.itemId : '']?.name || slot}`, 'system');
-  updateAllUI(); save();
+  return serviceUnequipItem(state, slot, { log, updateAllUI, save });
 }
 
-const HIGH_RARITIES = ['rare', 'epic', 'legendary', 'mythic', 's'];
 
-function isHighValueItem(item) {
-  if (!item || !item.rarity) return false;
-  return HIGH_RARITIES.includes(item.rarity.toLowerCase());
-}
+// isHighValueItem e getItemGrade importados do InventoryService.js (Sprint 3)
 
-function sellItem(uid) {
-  const idx = state.inventory.findIndex(i => i.uid === uid);
-  if (idx < 0) return;
-  const item = state.inventory[idx];
-  if (item.equipped) { log('Unequip first!', 'system'); return; }
-  const def = D().ALL_ITEMS[item.itemId];
-  if (isHighValueItem(item)) {
-    const rarityName = D().RARITY[item.rarity]?.name || item.rarity;
-    if (!confirm(`⚠️ Deseja realmente VENDER o item valioso "${def.name}" [${rarityName}]?`)) {
-      return;
-    }
-  }
-  const mult = item.rarity ? D().RARITY[item.rarity].mult : 1;
-  const price = Math.floor((def.price || 10) * 0.4 * mult);
-  state.gold += price * (item.count || 1);
-  log(`Sold ${def.name} for ${price}g`, 'loot');
-  state.inventory.splice(idx, 1);
-  updateAllUI(); save();
-}
-
-function getItemGrade(lvl) {
-  if (!lvl || lvl < 20) return 'No Grade';
-  if (lvl < 40) return 'D Grade';
-  if (lvl < 52) return 'C Grade';
-  if (lvl < 62) return 'B Grade';
-  if (lvl < 76) return 'A Grade';
-  return 'S Grade';
-}
 
 function salvageItem(uid) {
   const idx = state.inventory.findIndex(i => i.uid === uid);
@@ -1006,91 +907,13 @@ window.executeRaceClassChange = (scrollUid, newRace, newClass) => {
   log(`✨ Troca de Raça & Classe realizada com sucesso para ${(raceObj.name || newRace).toUpperCase()} ${(clsObj?.name || newClass).toUpperCase()}! ${refundedSp} SP devolvidos e equipamentos guardados no inventário.`, 'rarity-legendary');
 };
 
-// --------------------------- CRAFTING ---------------------------
-function getCraftLevelReq(recipeLevel) { return Math.max(1, Math.floor(recipeLevel / 10) + 1); }
-
-function getRecipeDef(recipeId) {
-  const recipesData = D().CRAFTING_RECIPES;
-  if (!recipesData) return null;
-  if (Array.isArray(recipesData)) {
-    return recipesData.find(r => r.id === recipeId || r.itemId === recipeId) || null;
-  }
-  return recipesData[recipeId] || null;
-}
-
-function getRecipeMaterials(recipe) {
-  if (!recipe) return [];
-  if (Array.isArray(recipe.materials)) {
-    return recipe.materials.map(r => ({ matId: r.itemId || r.id, qty: r.count || r.qty || 1 }));
-  }
-  if (Array.isArray(recipe.reqs)) {
-    return recipe.reqs.map(r => ({ matId: r.id || r.itemId, qty: r.count || r.qty || 1 }));
-  }
-  if (recipe.materials && typeof recipe.materials === 'object') {
-    return Object.entries(recipe.materials).map(([matId, qty]) => ({ matId, qty: Number(qty) || 1 }));
-  }
-  if (recipe.reqs && typeof recipe.reqs === 'object') {
-    return Object.entries(recipe.reqs).map(([matId, qty]) => ({ matId, qty: Number(qty) || 1 }));
-  }
-  return [];
-}
-
-function canCraft(recipeId) {
-  const recipe = getRecipeDef(recipeId);
-  if (!recipe) return false;
-  if (recipe.level && getCraftLevelReq(recipe.level) > state.craftLevel) return false;
-  const mats = getRecipeMaterials(recipe);
-  if (mats.length === 0) return false;
-  for (const { matId, qty } of mats) {
-    if (getInventoryCount(matId) < qty) return false;
-  }
-  return true;
-}
-
+// --------------------------- CRAFTING (Sprint 3: Delegados) ---------------------------
+function canCraft(recipeId) { return serviceCanCraft(state, recipeId); }
+function canCraftRecipe(id) { return serviceCanCraftRecipe(state, id); }
 function craftItem(recipeId) {
-  const recipe = getRecipeDef(recipeId);
-  if (!recipe || !canCraft(recipeId)) { log('Missing materials or craft level too low.', 'system'); return; }
-  const mats = getRecipeMaterials(recipe);
-  for (const { matId, qty } of mats) {
-    let remaining = qty;
-    for (let i = state.inventory.length - 1; i >= 0 && remaining > 0; i--) {
-      const it = state.inventory[i];
-      if (it.itemId === matId && !it.equipped && !it.rarity) {
-        const take = Math.min(it.count || 1, remaining);
-        if (it.count > take) { it.count -= take; remaining = 0; } else { state.inventory.splice(i, 1); remaining -= take; }
-      }
-    }
-  }
-  const rarityBoost = state.race === 'dwarf' ? 1 : 0;
-  const rarity = D().rollRarity(rarityBoost);
-
-  const pityBonus = (state.craftFoundationPity || 0) * 0.001;
-  const foundationChance = 0.05 + pityBonus;
-  const isFoundation = Math.random() < foundationChance;
-
-  if (isFoundation) {
-    state.craftFoundationPity = 0;
-  } else {
-    state.craftFoundationPity = (state.craftFoundationPity || 0) + 1;
-  }
-
-  addToInventory(recipeId, 1, rarity, isFoundation);
-  const itemDef = getItemDef(recipeId);
-  const formattedName = formatItemDisplayName({ itemId: recipeId, rarity, foundation: isFoundation }, itemDef);
-
-  if (isFoundation) {
-    log(`✨ FOUNDATION! Você forjou um ${formattedName}!`, 'rarity-foundation');
-    if (typeof floatText === 'function') {
-      floatText(`✨ FOUNDATION!`, 'float-jackpot');
-    }
-  } else {
-    log(`Crafted ${formattedName}!`, 'rarity-' + rarity);
-  }
-
-  state.craftXp += 10 + (itemDef?.tier || 1) * 5;
-  while (state.craftXp >= state.craftLevel * 50) { state.craftXp -= state.craftLevel * 50; state.craftLevel++; log(`Crafting Level Up! Now Lv.${state.craftLevel}`, 'xp'); }
-  updateAllUI(); save();
+  return serviceCraftItem(state, recipeId, { log, floatText, getItemDef, formatItemDisplayName, updateAllUI, save });
 }
+
 
 // --------------------------- UI HELPERS ---------------------------
 let ROOT = document; let _intervals = []; let _listeners = [];
@@ -2056,28 +1879,13 @@ function renderShopMystic(list) {
 function fmtCountdown(ms) { const s = Math.max(0, Math.floor(ms / 1000)), m = Math.floor(s / 60), ss = s % 60; return `${m}:${ss.toString().padStart(2,'0')}`; }
 
 function buyItem(itemId, qty = 1) {
-  const def = D().ALL_ITEMS[itemId]; if (!def) return;
-  const count = Math.max(1, parseInt(qty) || 1);
-  const totalPrice = (def.price || 10) * count;
-  if (state.gold < totalPrice) { log(`Ouro insuficiente (${totalPrice.toLocaleString()}g necessário).`, 'system'); return; }
-  if (def.req && def.req.level > state.level) { log('Level too low.', 'system'); return; }
-  if (def.classReq && !classSatisfies(state.class, def.classReq)) { log('Wrong class for this item.', 'system'); return; }
-  if (!addToInventory(itemId, count, null)) return;
-  state.gold -= totalPrice; 
-  log(`Comprado x${count} ${def.name} por ${totalPrice.toLocaleString()}g`, 'loot'); 
-  updateAllUI(); 
-  save();
+  return serviceBuyItem(state, itemId, qty, { log, updateAllUI, save, classSatisfies });
 }
 
 function buyMysticItem(itemId, rarity) {
-  const def = D().ALL_ITEMS[itemId]; if (!def) return;
-  const price = Math.floor((def.price || 500) * D().RARITY[rarity].mult * 2);
-  if (state.gold < price) { log('Not enough gold!', 'system'); return; }
-  if (def.req && def.req.level > state.level) { log('Level too low.', 'system'); return; }
-  if (def.classReq && !classSatisfies(state.class, def.classReq)) { log('Wrong class for this item.', 'system'); return; }
-  if (!addToInventory(itemId, 1, rarity)) return;
-  state.gold -= price; log(`Mystic purchase: ${def.name} [${D().RARITY[rarity].name}] for ${price}g`, 'rarity-' + rarity); updateAllUI(); save();
+  return serviceBuyMysticItem(state, itemId, rarity, { log, updateAllUI, save, classSatisfies });
 }
+
 
 // RAID_BOSSES foi movido para src/data/raids.js (Sprint 1)
 // Os imports estão no topo do arquivo.
@@ -2305,7 +2113,8 @@ function enchantItem(uid) {
   updateAllUI(); save();
 }
 
-function canCraftRecipe(id) { return canCraft(id); }
+// canCraftRecipe importado do CraftService.js (Sprint 3)
+
 
 function updateZoneUI() {
   qsa('.zone-subtab').forEach(b => {
