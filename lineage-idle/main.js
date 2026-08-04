@@ -68,6 +68,26 @@ import {
   canCraftRecipe as serviceCanCraftRecipe,
   craftItem as serviceCraftItem
 } from './src/services/CraftService.js';
+// ─── Sprint 4: Importa motores de Combate e Habilidades ────────────────────
+import {
+  startCombat as engineStartCombat,
+  stopCombat as engineStopCombat,
+  pickRandomMonster as enginePickRandomMonster,
+  selectZone as engineSelectZone,
+  updateSagaProgress as engineUpdateSagaProgress,
+  playerDeath as enginePlayerDeath,
+  resurrect as engineResurrect,
+  toggleSoulshot as engineToggleSoulshot,
+  toggleAutoPotion as engineToggleAutoPotion
+} from './src/engine/CombatEngine.js';
+
+import {
+  getSkillCost,
+  spendSP as engineSpendSP,
+  resetSP as engineResetSP,
+  getStarterSkillForClass
+} from './src/engine/SkillEngine.js';
+// ────────────────────────────────────────────────────────────────────────────
 // ────────────────────────────────────────────────────────────────────────────
 
 // Carregamento síncrono de icon_index.json antes de qualquer renderização de itens
@@ -331,25 +351,8 @@ function getClassSkills(classId) {
   return null;
 }
 
-function getStarterSkillForClass(classId) {
-  const cls = getClass(classId);
-  const arch = cls?.archetype || 'fighter';
-  switch (arch) {
-    case 'deathknight': return 'death_spike_dk';
-    case 'warg': return 'warg_will';
-    case 'assassin': return 'assassin_harmony';
-    case 'gunner': return 'burst_fire';
-    case 'divinetemplar': return 'divine_templar_harmony';
-    case 'elementweaver': return 'element_weaver_harmony';
-    case 'highelf': return 'divine_templar_harmony';
-    case 'bloodrose': return 'blood_rose_harmony';
-    case 'soulbreaker': return 'samurai_harmony';
-    case 'shinemaker': return 'shinemaker_harmony';
-    case 'artisan': return 'shinemaker_harmony';
-    case 'mage': return 'energy_bolt_m';
-    default: return 'power_strike_f';
-  }
-}
+// getStarterSkillForClass importado do SkillEngine.js (Sprint 4)
+
 
 function checkClassAdvancement() {
   const currentClassDef = getClass(state.class);
@@ -1271,12 +1274,8 @@ function buySkill(sId) {
   spendSP(sId);
 }
 
-function getSkillCost(skillId, currentLvl) {
-  const def = SKILL_DEFS[skillId];
-  if (!def) return 0;
-  const baseCost = def.cost || 5;
-  return Math.floor(baseCost * Math.pow(1.4, currentLvl || 0));
-}
+// getSkillCost importado do SkillEngine.js (Sprint 4)
+
 
 function updateSkillInfoPanel() {
   const panel = el('skill-info-panel'); if (!panel) return;
@@ -3748,184 +3747,18 @@ function executeAdminCmd(cmd) {
   save();
 }
 
-function startCombat() { if (state.combatActive) return; if (!state.zone) return; state.combatActive = true; log(`Entering ${ZONES[state.zone].name}...`, 'system'); pickRandomMonster(); combatTick = 0; state._cds = {}; if (combatInterval) clearInterval(combatInterval); combatInterval = setInterval(attackMonster, 200); }
-function stopCombat() { 
-  state.combatActive = false; 
-  if (combatInterval) { clearInterval(combatInterval); combatInterval = null; } 
-  if (monsterAttackTimeout) { clearTimeout(monsterAttackTimeout); monsterAttackTimeout = null; }
-}
-function updateZoneKillProgressUI() {
-  const killEl = el('zone-kill-progress');
-  if (killEl && state.zone) {
-    state.zoneKills = state.zoneKills || {};
-    const count = state.zoneKills[state.zone] || 0;
-    const req = 15;
-    killEl.textContent = `⚔️ ${count}/${req} Caçados`;
-    if (count >= req) {
-      killEl.style.color = '#ef4444';
-      killEl.style.borderColor = 'rgba(239,68,68,0.5)';
-      killEl.textContent = `🚨 CHEFÃO DISPONÍVEL!`;
-    } else {
-      killEl.style.color = '#f59e0b';
-      killEl.style.borderColor = 'rgba(245,158,11,0.3)';
-    }
-  }
-}
+// --------------------------- COMBAT & SKILLS (Sprint 4: Delegados) ---------------------------
+function startCombat() { return engineStartCombat(state, { log, attackMonster }); }
+function stopCombat() { return engineStopCombat(state); }
+function pickRandomMonster() { return enginePickRandomMonster(state, { log, floatText, renderStageMonster, updateZoneKillProgressUI }); }
+function selectZone(zoneId) { return engineSelectZone(state, zoneId, { log, updateAllUI, save, attackMonster }); }
+function updateSagaProgress(silent = true) { return engineUpdateSagaProgress(state, silent, { log, floatText, showSagaModal }); }
+function playerDeath(monster) { return enginePlayerDeath(state, monster, { log, el }); }
+function resurrect(useScroll = false) { return engineResurrect(state, useScroll, { log, el, updateAllUI, save, attackMonster }); }
 
-function pickRandomMonster() {
-  if (state.activeMonster && state.activeMonster.isTower && state.activeMonster.hp > 0) return;
-  if (!state.zone || !ZONES[state.zone]) return;
-  const zone = ZONES[state.zone];
-  state.zoneKills = state.zoneKills || {};
-  const currentKills = state.zoneKills[state.zone] || 0;
-  const KILL_GOAL = 15;
+function spendSP(skillId) { return engineSpendSP(state, skillId, { log, floatText, classSatisfies, removeFromInventory, updateAllUI, save }); }
+function resetSP() { return engineResetSP(state, { log, floatText, updateAllUI, save }); }
 
-  let targetId = null;
-  let isBossSpawn = false;
-
-  // Check if Zone Boss Goal reached (15/15 kills)
-  if (currentKills >= KILL_GOAL && zone.boss && MONSTERS[zone.boss]) {
-    targetId = zone.boss;
-    isBossSpawn = true;
-    state.zoneKills[state.zone] = 0; // Reset counter for next cycle
-  } else {
-    const available = zone.monsters.filter(m => { const mon = MONSTERS[m]; return mon; });
-    targetId = (available.length > 0) ? available[Math.floor(Math.random() * available.length)] : zone.monsters[0];
-  }
-
-  state.target = targetId;
-  const template = MONSTERS[targetId];
-  if (template) {
-    let hpMult = 1, atkMult = 1, xpMult = 1, goldMult = 1;
-    let isElite = false;
-
-    if (isBossSpawn || template.boss) {
-      hpMult = 3.5;
-      atkMult = 1.5;
-      xpMult = 5.0;
-      goldMult = 5.0;
-      isBossSpawn = true;
-    } else if (Math.random() < 0.08) { // 8% chance for Miniboss / Elite
-      hpMult = 1.6;
-      atkMult = 1.2;
-      xpMult = 2.0;
-      goldMult = 2.5;
-      isElite = true;
-    }
-
-    const finalHp = Math.floor(template.hp * hpMult);
-    state.activeMonster = {
-      ...template,
-      _maxHp: finalHp,
-      hp: finalHp,
-      atk: Math.floor(template.atk * atkMult),
-      xp: Math.floor(template.xp * xpMult),
-      gold: [Math.floor((template.gold[0] || 5) * goldMult), Math.floor((template.gold[1] || 15) * goldMult)],
-      boss: isBossSpawn || !!template.boss,
-      isElite: isElite,
-      _stunnedUntil: 0
-    };
-
-    if (isBossSpawn) {
-      log(`🚨 CHEFÃO DA ZONA DESPERTADO! 👑 ${template.name} apareceu!`, 'rarity-legendary');
-      floatText(`🚨 CHEFÃO APARECEU!`, 'float-jackpot');
-    } else if (isElite) {
-      log(`⚡ Monstro Élite ${template.name} (Miniboss) surgiu!`, 'loot');
-    } else {
-      log(`Um ${template.name} selvagem apareceu!`, 'combat');
-    }
-
-    renderStageMonster();
-    updateZoneKillProgressUI();
-  }
-}
-function selectZone(zoneId) { const zone = ZONES[zoneId]; if (zone.level > state.level) { log(`Level ${zone.level} required.`, 'system'); return; } state.zone = zoneId; el('zone-name').textContent = zone.name; stopCombat(); startCombat(); updateAllUI(); save(); }
-
-function updateSagaProgress(silent = true) {
-  let highestSaga = 0;
-  for (let i = 0; i < SAGAS.length; i++) {
-    if (state.level >= SAGAS[i].unlocksAt) {
-      highestSaga = i;
-    }
-  }
-  if (highestSaga > (state.currentSaga || 0)) {
-    const newSaga = SAGAS[highestSaga];
-    state.currentSaga = highestSaga;
-    if (!silent) showSagaModal(newSaga);
-    log(`🗺️ NOVA SAGA DESBLOQUEADA: **${newSaga.name}**! Novas áreas de caça Lv.${newSaga.unlocksAt}+ disponíveis!`, 'rarity-legendary');
-    floatText(`🗺️ SAGA DESBLOQUEADA!`, 'float-jackpot');
-  } else if (state.currentSaga === undefined || state.currentSaga === null) {
-    state.currentSaga = highestSaga;
-  }
-}
-
-function checkLevelUp() {
-  return engineCheckLevelUp(state, { getStats, playSfx, log, floatText, updateSagaProgress, updateAllUI, save });
-}
-
-
-function playerDeath(monster) {
-  stopCombat(); const scroll = state.inventory.find(i => i.itemId === 'scroll_of_rebirth' && (i.count || 1) > 0); let lossRate = 0.2;
-  if (scroll) { lossRate = 0.0; if (scroll.count > 1) scroll.count--; else { scroll.equipped = false; state.inventory.splice(state.inventory.indexOf(scroll), 1); } log('Scroll of Rebirth used! No XP loss!', 'loot'); } 
-  else { const resScroll = state.inventory.find(i => i.itemId === 'scroll_of_resurrection' && (i.count || 1) > 0); if (resScroll) { lossRate = 0.1; if (resScroll.count > 1) resScroll.count--; else { resScroll.equipped = false; state.inventory.splice(state.inventory.indexOf(resScroll), 1); } log('Scroll of Resurrection used! 10% XP loss.', 'loot'); } }
-  const xpLoss = Math.floor(state.xp * lossRate); el('xp-loss').textContent = xpLoss.toLocaleString(); el('death-modal').classList.add('active'); state._pendingLoss = lossRate;
-}
-
-function resurrect(useScroll = false) { el('death-modal').classList.remove('active'); const loss = state._pendingLoss || 0.2; state.xp = Math.max(0, state.xp - Math.floor(state.xp * loss)); const stats = getStats(); state.maxHp = stats.maxHp; state.maxMp = stats.maxMp; state.hp = state.maxHp; state.mp = state.maxMp; state.zone = state.race ? RACES[state.race].startZone : 'talkingIsland'; el('zone-name').textContent = ZONES[state.zone].name; log('Resurrected!', 'system'); updateAllUI(); save(); setTimeout(startCombat, 500); }
-function showSagaModal(saga) { el('saga-title').textContent = saga.name + ' Unlocked!'; const zoneNames = saga.zones.map(z => ZONES[z]?.name).filter(Boolean).join(', '); el('saga-desc').textContent = `New zones: ${zoneNames}`; el('saga-modal').classList.add('active'); }
-
-// --------------------------- CHARACTER ---------------------------
-function spendSP(skillId) {
-  const def = SKILL_DEFS[skillId]; if (!def) return; const lvl = state.skills[skillId] || 0;
-  const max = def.max || def.maxLevel || 5;
-  if (lvl >= max) { log(`${def.name} já atingiu o nível máximo.`, 'system'); return; }
-  const cost = getSkillCost(skillId, lvl);
-  if (state.sp < cost) { log(`SP insuficiente (${cost} SP necessário).`, 'system'); return; }
-  if (state.level < (def.reqLvl || 1)) { log(`Nível ${def.reqLvl || 1} necessário para esta habilidade.`, 'system'); return; }
-
-  // Essence Star Rank Spellbook Requirement (1-Star to 4-Star)
-  if (def.starRank && def.starRank > 0 && lvl === 0) {
-    const bookId = `spellbook_${def.starRank}star`;
-    const bookItem = state.inventory.find(i => i.itemId === bookId && (i.count || 1) > 0);
-    if (!bookItem) {
-      log(`⭐ Exige o livro de habilidade Spellbook: ${def.starRank}-Star ⭐ no mercador ou mochila para aprender!`, 'system');
-      return;
-    }
-    removeFromInventory(bookItem.uid, 1);
-    log(`📖 Livro Spellbook: ${def.starRank}-Star ⭐ consumido com sucesso!`, 'rarity-legendary');
-  }
-
-  const reqs = SKILL_REQS[skillId];
-  if (reqs && !Object.entries(reqs).every(([s, v]) => s === 'level' || s === 'sp' || (state.skills[s] || 0) >= v)) {
-    log('Pré-requisitos de habilidades não preenchidos.', 'system'); return;
-  }
-  state.sp -= cost; state.skills[skillId] = lvl + 1; const newLvl = state.skills[skillId], tier = TIER_NAMES[def.tier] || '';
-  log(`✦ ${def.name} → Lv.${newLvl} [${tier}] (-${cost} SP)`, newLvl === max ? 'saga' : 'xp');
-  const stats = getStats(); state.maxHp = stats.maxHp; state.maxMp = stats.maxMp; state.hp = Math.min(state.hp + 20, state.maxHp); state.mp = Math.min(state.mp + 10, state.maxMp);
-  updateAllUI(); save();
-}
-
-function resetSP() {
-  let totalRefunded = 0;
-  // Determine the starter skill based on player archetype
-  const starterSkill = getStarterSkillForClass(state.class);
-
-  for (const [sId, lvl] of Object.entries(state.skills)) {
-    if (lvl > 0) {
-      const baseLvl = (sId === starterSkill) ? 1 : 0;
-      for (let l = baseLvl; l < lvl; l++) {
-        totalRefunded += getSkillCost(sId, l);
-      }
-      state.skills[sId] = baseLvl;
-    }
-  }
-  
-  state.sp += totalRefunded;
-  log(`🔄 Skills reset! Refunded ${totalRefunded.toLocaleString()} SP.`, 'rarity-legendary');
-  floatText(`+${totalRefunded.toLocaleString()} SP`, 'float-jackpot');
-  updateAllUI();
-  save();
-}
 
 function autoEquipBest() {
   let equippedCount = 0;
