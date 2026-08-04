@@ -78,7 +78,7 @@ export function updateZoneUI(state, callbacks = {}) {
  * @param {Object} [callbacks] — { selectZone }
  */
 export function renderZoneMap(state, callbacks = {}) {
-  const container = el('zone-map-container');
+  const container = el('zone-map-container') || el('zone-list');
   if (!container) return;
 
   container.innerHTML = '';
@@ -121,6 +121,7 @@ export function renderZoneMap(state, callbacks = {}) {
       card.onclick = () => {
         const zId = card.dataset.zone;
         if (callbacks.selectZone) callbacks.selectZone(zId);
+        else if (typeof window !== 'undefined' && typeof window.setZone === 'function') window.setZone(zId);
       };
     });
 

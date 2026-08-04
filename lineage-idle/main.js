@@ -3668,6 +3668,23 @@ export function bindEvents() {
     qsa('.rarity-filter-btn').forEach(btn => { btn.onclick = () => { state.rarityFilter = btn.dataset.rarity; qsa('.rarity-filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); updateInventoryUI(); }; });
     qsa('.equip-filter-btn').forEach(btn => { btn.onclick = () => { state.equipFilter = btn.dataset.equipfilter; qsa('.equip-filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); updateInventoryUI(); }; });
     
+    qsa('.zone-subtab').forEach(btn => {
+      btn.onclick = () => {
+        qsa('.zone-subtab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const target = btn.dataset.zonetab;
+        qsa('.zone-view').forEach(v => v.classList.remove('active'));
+        const view = el(`zone-${target}-view`);
+        if (view) view.classList.add('active');
+      };
+    });
+
+    const towerChallengeBtn = el('tower-challenge-btn');
+    if (towerChallengeBtn) towerChallengeBtn.onclick = challengeTowerFloor;
+
+    const towerSweepBtn = el('tower-sweep-btn');
+    if (towerSweepBtn) towerSweepBtn.onclick = sweepTowerDaily;
+    
     const selCommonsBtn = el('select-commons-btn'); if (selCommonsBtn) selCommonsBtn.onclick = () => selectItemsByFilter(i => (i.rarity || 'common') === 'common');
     const selUncommonsBtn = el('select-uncommons-btn'); if (selUncommonsBtn) selUncommonsBtn.onclick = () => selectItemsByFilter(i => i.rarity === 'uncommon');
     const selAllBtn = el('select-all-btn'); if (selAllBtn) selAllBtn.onclick = () => selectItemsByFilter(() => true);
