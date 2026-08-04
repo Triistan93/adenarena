@@ -3697,6 +3697,15 @@ export function bindEvents() {
       };
     });
 
+    qsa('.shop-subtab').forEach(btn => {
+      btn.onclick = () => {
+        qsa('.shop-subtab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        state.shopCategory = btn.dataset.shoptab;
+        updateShopUI();
+      };
+    });
+
     const towerChallengeBtn = el('tower-challenge-btn');
     if (towerChallengeBtn) towerChallengeBtn.onclick = challengeTowerFloor;
 

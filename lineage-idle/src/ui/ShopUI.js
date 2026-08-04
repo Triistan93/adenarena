@@ -17,10 +17,10 @@ import { formatItemDisplayName } from './TooltipUI.js';
  * @param {Object} [callbacks] — { buyItem, buyMysticItem }
  */
 export function updateShopUI(state, callbacks = {}) {
-  const goldEl = el('gold-count');
+  const goldEl = el('gold-count') || el('shop-gold');
   if (goldEl) goldEl.textContent = (state.gold || 0).toLocaleString();
 
-  const container = el('shop-items-container');
+  const container = el('shop-items-container') || el('shop-list');
   if (!container) return;
 
   const gData = D();
@@ -51,6 +51,7 @@ export function updateShopUI(state, callbacks = {}) {
   container.querySelectorAll('[data-buy]').forEach(btn => {
     btn.onclick = () => {
       if (callbacks.buyItem) callbacks.buyItem(btn.dataset.buy, 1);
+      else if (typeof window !== 'undefined' && typeof window.buyItem === 'function') window.buyItem(btn.dataset.buy, 1);
     };
   });
 }
@@ -61,10 +62,10 @@ export function updateShopUI(state, callbacks = {}) {
  * @param {Object} [callbacks] — { craftItem }
  */
 export function updateCraftUI(state, callbacks = {}) {
-  const craftLvlEl = el('craft-level-num');
+  const craftLvlEl = el('craft-level-num') || el('craft-level');
   if (craftLvlEl) craftLvlEl.textContent = `Lv. ${state.craftLevel || 1}`;
 
-  const container = el('craft-recipes-container');
+  const container = el('craft-recipes-container') || el('craft-list');
   if (!container) return;
 
   const gData = D();
