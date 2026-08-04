@@ -4,6 +4,15 @@ import * as ART from "./art.js";
 import "./data/echo-adapter.js";
 import "./data/affixes.js";
 
+// ─── Sprint 1: Importa módulos de dados extraídos ───────────────────────────
+import { RACE_BASE_ATTRIBUTES, RACES, CLASSES, DWARF_CLASS, KAMAEL_CLASS } from './src/data/races.js';
+import { SAGAS, ZONES, ZONE_BACKGROUNDS }                                   from './src/data/zones.js';
+import { MONSTERS }                                                          from './src/data/monsters.js';
+import { RAID_BOSSES }                                                       from './src/data/raids.js';
+import { QUEST_DEFS, BATTLE_PASS_TIERS, PASS_DEFS }                        from './src/data/quests.js';
+import { CODEX_SETS, BOSS_DOLLS }                                           from './src/data/codex.js';
+// ────────────────────────────────────────────────────────────────────────────
+
 // Carregamento síncrono de icon_index.json antes de qualquer renderização de itens
 try {
   const _res = await fetch("./img/icons/icon_index.json", { cache: "no-cache" });
@@ -23,160 +32,22 @@ const SAVE_KEY = 'lineageIdleSave_v2';
 // always read the value AFTER all imports have been fully evaluated.
 const D = () => window.GameData;
 
-// --------------------------- RACES & CLASSES ---------------------------
-const RACE_BASE_ATTRIBUTES = {
-  // Fighters
-  darkelf_fighter: { str: 41, con: 32, dex: 34, wit: 12, int: 25, men: 26 },
-  human_fighter:   { str: 40, con: 43, dex: 30, wit: 11, int: 21, men: 25 },
-  elf_fighter:     { str: 36, con: 36, dex: 35, wit: 14, int: 23, men: 26 },
-  orc_fighter:     { str: 40, con: 47, dex: 26, wit: 12, int: 18, men: 27 },
-  dwarf_fighter:   { str: 39, con: 45, dex: 29, wit: 10, int: 20, men: 27 },
-  kamael_male:     { str: 41, con: 31, dex: 33, wit: 11, int: 29, men: 25 },
-  kamael_female:   { str: 39, con: 30, dex: 35, wit: 11, int: 28, men: 27 },
-
-  // Mages
-  darkelf_mage:    { str: 23, con: 24, dex: 23, wit: 19, int: 44, men: 37 },
-  human_mage:      { str: 22, con: 27, dex: 21, wit: 20, int: 41, men: 39 },
-  elf_mage:        { str: 21, con: 25, dex: 24, wit: 23, int: 37, men: 40 },
-  orc_mage:        { str: 25, con: 31, dex: 20, wit: 21, int: 31, men: 42 }
-};
-
-// ========== ECHO OF ELEMENTS UPDATE ==========
-// All class/skill data loaded from lineage-idle/data/classes_echo.js
-const RACES = (typeof window !== 'undefined' && window.EchoData) ? window.EchoData.RACES_ECHO : {};
-const CLASSES = (typeof window !== 'undefined' && window.EchoData) ? window.EchoData.CLASSES_ECHO : {};
-const SKILL_DEFS = (typeof window !== 'undefined' && window.EchoData) ? window.EchoData.SKILL_DEFS_ECHO : {};
-const SKILL_REQS = (typeof window !== 'undefined' && window.EchoData) ? window.EchoData.SKILL_REQS_ECHO : {};
+// ========== ECHO OF ELEMENTS — Skill bridges ==========
+// Skill data loaded from lineage-idle/data/classes_echo.js via echo-adapter.js
+const SKILL_DEFS        = (typeof window !== 'undefined' && window.EchoData) ? window.EchoData.SKILL_DEFS_ECHO        : {};
+const SKILL_REQS        = (typeof window !== 'undefined' && window.EchoData) ? window.EchoData.SKILL_REQS_ECHO        : {};
 const SKILL_TREE_LAYOUT = (typeof window !== 'undefined' && window.EchoData) ? window.EchoData.SKILL_TREE_LAYOUT_ECHO : {};
-const TIER_NAMES = ['Foundation', 'Discipline', 'Mastery', 'Ascendancy', 'Legend'];
-const DWARF_CLASS = CLASSES.artisan;
-const KAMAEL_CLASS = CLASSES.soulbreaker;
-// ==============================================
+const TIER_NAMES        = ['Foundation', 'Discipline', 'Mastery', 'Ascendancy', 'Legend'];
+// ======================================================
 
 // --------------------------- ZONES & MONSTERS ---------------------------
-const SAGAS = [
-  { id: 'interlude', name: 'Interlude', level: 0, unlocksAt: 0, zones: ['talkingIsland', 'elvenForest', 'darkForest', 'orcVillage', 'dwarvenMine', 'kamaelLair', 'ruinedOutpost', 'howlingMoor'] },
-  { id: 'prelude', name: 'Prelude of War', level: 1, unlocksAt: 20, zones: ['giranOutskirts', 'orcenRuins', 'forsakenCrypt', 'blackCitadel'] },
-  { id: 'saga1', name: 'Saga I: The Awakening', level: 2, unlocksAt: 40, zones: ['gludioCastle', 'wolfMountain', 'riftOfTheVoid', 'emeraldGrove', 'underworldGate'] },
-  { id: 'saga2', name: 'Saga II: The Shadow', level: 3, unlocksAt: 76, zones: ['adenCity', 'dragonValley'] },
-  { id: 'saga3', name: 'Saga III: Realm of the Gods', level: 4, unlocksAt: 85, zones: ['imperialTomb', 'antharasLair', 'forgeOfGods'] }
-];
+// SAGAS, ZONES e ZONE_BACKGROUNDS foram movidos para src/data/zones.js (Sprint 1)
+// Os imports estão no topo do arquivo.
 
-const ZONES = {
-  talkingIsland: { name: 'Talking Island', level: 1, monsters: ['goblin', 'goblinThief', 'armoredGoblin', 'goblinMage'], boss: 'goblinKing', shop: 'talkingIsland', town: true },
-  elvenForest: { name: 'Elven Forest', level: 3, monsters: ['wolf', 'rootWitch'], boss: 'deathTrent', shop: 'talkingIsland' },
-  darkForest: { name: 'Dark Forest', level: 5, monsters: ['spider', 'swampWalker'], boss: 'spider', shop: 'talkingIsland' },
-  orcVillage: { name: 'Orc Village', level: 7, monsters: ['goblin', 'orc'], boss: 'orc', shop: 'talkingIsland' },
-  dwarvenMine: { name: 'Dwarven Mine', level: 9, monsters: ['kobold'], boss: 'koboldLeader', shop: 'talkingIsland' },
-  kamaelLair: { name: 'Kamael Lair', level: 11, monsters: ['kamaelScout'], boss: 'kamaelScout', shop: 'talkingIsland' },
-  ruinedOutpost:   { name: 'Ruined Outpost', level: 15, monsters: ['goblinThief', 'orc', 'shadowMercenary'], boss: 'shadowMercenary', shop: 'talkingIsland', town: false },
-  howlingMoor:     { name: 'Howling Moor', level: 20, monsters: ['direWolf', 'babyTiamat', 'crimsonBabyDragon', 'ancientSatyr'], boss: 'alphaWolf', shop: 'gludioCastle', town: false },
-  giranOutskirts: { name: 'Giran Outskirts', level: 25, monsters: ['skeleton', 'deathRider'], boss: 'minotaurKnight', shop: 'giranOutskirts', town: true },
-  orcenRuins: { name: 'Orcen Ruins', level: 30, monsters: ['orc', 'cursedWarrior'], boss: 'goblinKing', shop: 'giranOutskirts' },
-  forsakenCrypt:   { name: 'Forsaken Crypt', level: 35, monsters: ['darkMage', 'corpseWorm', 'furiousSouls', 'cryptVampire', 'devilBone'], boss: 'cryptLord', shop: 'gludioCastle', town: false },
-  blackCitadel:    { name: 'Black Citadel', level: 40, monsters: ['deathKnight', 'deathWizard', 'blackDragon'], boss: 'flamingDemonLord', shop: 'dragonValley', town: true },
-  gludioCastle: { name: 'Gludio Castle', level: 45, monsters: ['knight', 'cursedKnight'], boss: 'cursedKnight', shop: 'gludioCastle', town: true },
-  wolfMountain: { name: 'Wolf Mountain', level: 48, monsters: ['wolf', 'direWolf'], boss: 'alphaWolf', shop: 'gludioCastle' },
-  riftOfTheVoid:   { name: 'Rift of the Void', level: 50, monsters: ['voidCreature', 'voidBrute', 'voidStalker', 'beholder'], boss: 'voidDragonLord', shop: 'dragonValley', town: false },
-  emeraldGrove:    { name: 'Emerald Grove', level: 60, monsters: ['emeraldSnake', 'emeraldDragon'], boss: 'fafurion', shop: 'dragonValley', town: false },
-  underworldGate:  { name: 'Gates of the Underworld', level: 70, monsters: ['blazingWerewolf', 'swiftBlaze'], boss: 'cerberus', shop: 'dragonValley', town: false },
-  adenCity: { name: 'Aden City', level: 76, monsters: ['knight', 'mage'], boss: 'knight', shop: 'adenCity', town: true },
-  dragonValley: { name: 'Dragon Valley', level: 80, monsters: ['dragon', 'dragonKnight', 'frostKnight', 'frostLordDragon'], boss: 'lindvior', shop: 'dragonValley', town: true },
-  imperialTomb:    { name: 'Imperial Tomb', level: 85, monsters: ['tombGuardian', 'sepulcherArchon', 'undeadKnight', 'lichLord'], boss: 'deathKing', shop: 'adenCity', town: false },
-  antharasLair:    { name: 'Antharas\' Lair', level: 90, monsters: ['caveDrake', 'magmaBeast', 'earthDrake'], boss: 'antharas', shop: 'dragonValley', town: false },
-  forgeOfGods:     { name: 'Forge of the Gods', level: 95, monsters: ['valakasMinion', 'lavaGolem', 'flameArchon', 'flameGiantDragon', 'vulcanLord'], boss: 'valakas', shop: 'dragonValley', town: false }
-};
+// MONSTERS foi movido para src/data/monsters.js (Sprint 1)
+// Os imports estão no topo do arquivo.
 
-const MONSTERS = {
-  goblin: { name: 'Goblin', hp: 30, atk: 5, def: 2, eva: 2, matk: 0, mdef: 0, xp: 10, sp: 1, gold: [5, 15] },
-  armoredGoblin: { name: 'Armored Goblin', hp: 45, atk: 7, def: 5, eva: 2, matk: 0, mdef: 1, xp: 14, sp: 1, gold: [7, 18] },
-  goblinMage: { name: 'Goblin Mage', hp: 35, atk: 4, def: 2, eva: 3, matk: 12, mdef: 5, xp: 15, sp: 1, gold: [8, 20] },
-  goblinThief: { name: 'Goblin Thief', lvl: 2, hp: 45, atk: 9, def: 3, eva: 12, xp: 18, sp: 1, gold: [8, 20], element: 'none', traits: ['ambush', 'packTactics'], stealsGold: 0.15 },
-  goblinKing: { name: 'Goblin King', hp: 120, atk: 15, def: 8, eva: 3, matk: 0, mdef: 0, xp: 50, sp: 5, gold: [25, 50], boss: true },
 
-  wolf: { name: 'Wolf', hp: 45, atk: 8, def: 1, eva: 5, matk: 0, mdef: 0, xp: 15, sp: 1, gold: [8, 20] },
-  rootWitch: { name: 'Root Witch', hp: 55, atk: 10, def: 3, eva: 4, matk: 15, mdef: 8, xp: 22, sp: 2, gold: [12, 25] },
-  deathTrent: { name: 'Death Treant', hp: 200, atk: 22, def: 12, eva: 2, matk: 10, mdef: 10, xp: 80, sp: 6, gold: [40, 85], boss: true },
-
-  spider: { name: 'Spider', hp: 35, atk: 6, def: 1, eva: 8, matk: 0, mdef: 0, xp: 12, sp: 1, gold: [6, 18] },
-  swampWalker: { name: 'Swamp Walker', hp: 85, atk: 14, def: 6, eva: 5, matk: 8, mdef: 6, xp: 32, sp: 2, gold: [15, 32] },
-
-  orc: { name: 'Orc', lvl: 5, hp: 140, atk: 20, def: 10, eva: 4, xp: 45, sp: 2, gold: [20, 45], element: 'none', traits: ['enrage'] },
-
-  kobold: { name: 'Kobold', hp: 25, atk: 4, def: 3, eva: 3, matk: 0, mdef: 0, xp: 8, sp: 1, gold: [4, 12] },
-  koboldLeader: { name: 'Kobold Leader', lvl: 8, hp: 260, atk: 30, def: 14, eva: 8, xp: 110, sp: 4, gold: [60, 120], element: 'none', traits: ['packLeader', 'trap'], elite: true },
-
-  kamaelScout: { name: 'Kamael Scout', hp: 55, atk: 12, def: 2, eva: 8, matk: 0, mdef: 0, xp: 25, sp: 2, gold: [12, 30] },
-
-  shadowMercenary: { name: 'Shadow Mercenary', hp: 280, atk: 32, def: 15, eva: 10, xp: 130, sp: 4, gold: [70, 140], elite: true },
-
-  direWolf: { name: 'Dire Wolf', lvl: 12, hp: 420, atk: 52, def: 18, eva: 18, xp: 220, sp: 3, gold: [80, 160], element: 'none', traits: ['bleed', 'firstStrike'], atkSpd: 1.35 },
-  babyTiamat: { name: 'Baby Tiamat', hp: 500, atk: 58, def: 22, eva: 10, matk: 35, mdef: 20, xp: 280, sp: 4, gold: [100, 200] },
-  ancientSatyr: { name: 'Ancient Satyr', hp: 550, atk: 62, def: 24, eva: 12, xp: 300, sp: 5, gold: [110, 220] },
-  crimsonBabyDragon: { name: 'Crimson Baby Dragon', lvl: 15, hp: 620, atk: 70, def: 26, eva: 10, xp: 340, sp: 5, gold: [120, 240], element: 'fire', resist: { fire: 0.75, water: 1.3 }, traits: ['fireBreath'] },
-  alphaWolf: { name: 'Alpha Wolf', lvl: 18, hp: 900, atk: 85, def: 30, eva: 20, xp: 520, sp: 6, gold: [180, 340], element: 'none', traits: ['packLeader', 'bleed', 'howl'], elite: true },
-
-  skeleton: { name: 'Skeleton', hp: 50, atk: 9, def: 5, eva: 1, matk: 0, mdef: 0, xp: 18, sp: 2, gold: [8, 22] },
-  deathRider: { name: 'Death Rider', hp: 750, atk: 95, def: 35, eva: 12, xp: 600, sp: 7, gold: [200, 400] },
-  minotaurKnight: { name: 'Minotaur Knight', hp: 1400, atk: 120, def: 48, eva: 6, xp: 950, sp: 9, gold: [300, 600], boss: true },
-
-  cursedWarrior: { name: 'Cursed Warrior', hp: 850, atk: 105, def: 40, eva: 8, xp: 750, sp: 8, gold: [220, 450] },
-
-  darkMage: { name: 'Dark Mage', lvl: 25, hp: 1150, atk: 145, def: 28, eva: 14, xp: 1100, sp: 8, gold: [300, 600], element: 'dark', magic: true, resist: { dark: 0.5, holy: 1.5 }, traits: ['curse', 'manaBurn'], atkSpd: 0.75 },
-  corpseWorm: { name: 'Corpse Worm', hp: 1300, atk: 110, def: 50, eva: 4, xp: 1200, sp: 8, gold: [280, 550] },
-  furiousSouls: { name: 'Furious Souls', hp: 1000, atk: 130, def: 30, eva: 16, matk: 90, mdef: 45, xp: 1150, sp: 8, gold: [300, 580] },
-  cryptVampire: { name: 'Crypt Vampire', hp: 1800, atk: 160, def: 45, eva: 18, xp: 1600, sp: 11, gold: [400, 800], traits: ['lifesteal'] },
-  devilBone: { name: 'Devil Bone', lvl: 28, hp: 2400, atk: 120, def: 78, eva: 3, xp: 1400, sp: 10, gold: [350, 700], element: 'dark', resist: { physical: 0.7, magic: 1.25 }, traits: ['boneArmor', 'reassemble'] },
-  cryptLord: { name: 'Crypt Lord', hp: 3800, atk: 210, def: 85, eva: 8, xp: 3000, sp: 16, gold: [800, 1600], boss: true },
-
-  deathKnight: { name: 'Death Knight', lvl: 35, boss: true, hp: 4200, atk: 210, def: 90, eva: 12, xp: 3200, sp: 15, gold: [900, 1800], element: 'dark', resist: { dark: 0.3, holy: 1.6 }, traits: ['lifesteal', 'deathCoil', 'enrage'] },
-  deathWizard: { name: 'Death Wizard', hp: 3200, atk: 90, def: 40, eva: 10, matk: 240, mdef: 95, xp: 3100, sp: 15, gold: [850, 1700] },
-  blackDragon: { name: 'Black Dragon', hp: 5500, atk: 290, def: 110, eva: 10, xp: 5000, sp: 20, gold: [1500, 3000], boss: true },
-  flamingDemonLord: { name: 'Flaming Demon Lord', hp: 8500, atk: 350, def: 130, eva: 12, xp: 7500, sp: 25, gold: [2200, 4500], boss: true },
-
-  knight: { name: 'Knight', hp: 150, atk: 20, def: 12, eva: 2, matk: 0, mdef: 5, xp: 60, sp: 3, gold: [30, 60] },
-  cursedKnight: { name: 'Cursed Knight', hp: 2800, atk: 180, def: 95, eva: 6, xp: 2500, sp: 14, gold: [700, 1400] },
-
-  voidCreature: { name: 'Void Creature', lvl: 42, boss: true, hp: 5600, atk: 280, def: 60, eva: 30, xp: 5200, sp: 18, gold: [1200, 2400], element: 'void', resist: { physical: 0.85, magic: 0.85 }, traits: ['voidPierce', 'phaseShift', 'distort'] },
-  voidBrute: { name: 'Void Brute', hp: 6200, atk: 310, def: 100, eva: 10, xp: 6000, sp: 20, gold: [1400, 2800] },
-  voidStalker: { name: 'Void Stalker', hp: 4800, atk: 340, def: 50, eva: 35, xp: 5800, sp: 19, gold: [1350, 2700] },
-  beholder: { name: 'Beholder', hp: 5000, atk: 150, def: 60, eva: 15, matk: 320, mdef: 120, xp: 6200, sp: 21, gold: [1500, 3000] },
-  voidDragonLord: { name: 'Void Dragon Lord', hp: 12000, atk: 420, def: 140, eva: 15, xp: 12000, sp: 30, gold: [3500, 7000], boss: true },
-
-  emeraldSnake: { name: 'Emerald Snake', hp: 6000, atk: 320, def: 80, eva: 25, xp: 6500, sp: 20, gold: [1600, 3200] },
-  emeraldDragon: { name: 'Emerald Dragon', lvl: 48, boss: true, hp: 9800, atk: 330, def: 120, eva: 8, xp: 9000, sp: 22, gold: [2500, 5000], element: 'earth', resist: { poison: 0.0, fire: 1.2 }, traits: ['poison', 'wingBuffet', 'regen'] },
-  fafurion: { name: 'Fafurion Water Dragon', hp: 22000, atk: 520, def: 180, eva: 12, xp: 20000, sp: 40, gold: [6000, 12000], boss: true },
-
-  blazingWerewolf: { name: 'Blazing Werewolf', hp: 8500, atk: 410, def: 110, eva: 22, xp: 9000, sp: 25, gold: [2200, 4400] },
-  swiftBlaze: { name: 'Swift Blaze', hp: 7500, atk: 450, def: 90, eva: 30, xp: 8800, sp: 24, gold: [2100, 4200] },
-  cerberus: { name: 'Cerberus', lvl: 50, boss: true, finalBoss: true, hp: 15000, atk: 400, def: 140, eva: 14, xp: 15000, sp: 30, gold: [5000, 10000], element: 'chaos', resist: { fire: 0.5, dark: 0.5, holy: 1.25 }, traits: ['multiHead', 'lifesteal', 'enrage', 'hellChain'] },
-
-  mage: { name: 'Mage', hp: 80, atk: 5, def: 2, eva: 3, matk: 25, mdef: 8, xp: 55, sp: 3, gold: [25, 55] },
-
-  dragon: { name: 'Dragon', hp: 300, atk: 30, def: 15, eva: 5, matk: 20, mdef: 10, xp: 120, sp: 8, gold: [80, 150], boss: true },
-  dragonKnight: { name: 'Dragon Knight', hp: 500, atk: 40, def: 25, eva: 8, matk: 15, mdef: 15, xp: 200, sp: 10, gold: [150, 300], boss: true },
-  frostKnight: { name: 'Frost Knight', hp: 14000, atk: 550, def: 220, eva: 10, xp: 15000, sp: 35, gold: [3500, 7000] },
-  frostLordDragon: { name: 'Frost Lord Dragon', hp: 28000, atk: 650, def: 250, eva: 12, xp: 25000, sp: 45, gold: [6500, 13000], boss: true },
-  lindvior: { name: 'Lindvior Wind Dragon', hp: 45000, atk: 850, def: 320, eva: 25, xp: 40000, sp: 60, gold: [10000, 20000], boss: true },
-
-  tombGuardian:    { name: 'Tomb Guardian', lvl: 85, hp: 12000, atk: 450, def: 180, eva: 10, xp: 8500, sp: 25, gold: [1500, 3000], element: 'dark', traits: ['boneArmor'] },
-  sepulcherArchon: { name: 'Sepulcher Archon', lvl: 88, hp: 16000, atk: 520, def: 210, eva: 12, xp: 11000, sp: 30, gold: [2000, 4000], element: 'dark', magic: true, traits: ['curse'] },
-  undeadKnight:    { name: 'Undead Knight', lvl: 90, hp: 22000, atk: 600, def: 260, eva: 8, xp: 14000, sp: 35, gold: [2500, 5000], element: 'dark', traits: ['shieldBlock'] },
-  lichLord: { name: 'Lich Lord Archmage', hp: 35000, atk: 300, def: 180, eva: 15, matk: 800, mdef: 400, xp: 32000, sp: 50, gold: [8000, 16000], boss: true },
-  deathKing: { name: 'Death King Supreme', hp: 60000, atk: 980, def: 420, eva: 15, xp: 55000, sp: 75, gold: [15000, 30000], boss: true },
-
-  caveDrake:       { name: 'Cave Drake', lvl: 91, hp: 25000, atk: 680, def: 280, eva: 15, xp: 16000, sp: 40, gold: [3000, 6000], element: 'earth', traits: ['tailWhip'] },
-  magmaBeast:      { name: 'Magma Beast', lvl: 93, hp: 30000, atk: 750, def: 310, eva: 10, xp: 19000, sp: 45, gold: [3500, 7000], element: 'fire', traits: ['burn'] },
-  earthDrake:      { name: 'Earth Drake', lvl: 95, hp: 38000, atk: 850, def: 350, eva: 12, xp: 23000, sp: 50, gold: [4200, 8500], element: 'earth', boss: true, traits: ['earthquake'] },
-  antharas: { name: 'Antharas Earth Dragon Lord', hp: 120000, atk: 1400, def: 600, eva: 15, xp: 100000, sp: 120, gold: [25000, 50000], boss: true },
-
-  valakasMinion: { name: 'Valakas Minion', hp: 28000, atk: 700, def: 280, eva: 12, matk: 450, mdef: 250, xp: 22000, sp: 45, gold: [4000, 8000] },
-  lavaGolem:       { name: 'Lava Golem', lvl: 96, hp: 45000, atk: 920, def: 400, eva: 5, xp: 27000, sp: 55, gold: [5000, 10000], element: 'fire', traits: ['ironBody'] },
-  flameArchon:     { name: 'Flame Archon', lvl: 98, hp: 55000, atk: 1050, def: 450, eva: 14, xp: 32000, sp: 60, gold: [6000, 12000], element: 'fire', magic: true, traits: ['meteor'] },
-  flameGiantDragon: { name: 'Flame Giant Dragon', hp: 80000, atk: 1200, def: 500, eva: 15, xp: 60000, sp: 80, gold: [12000, 24000], boss: true },
-  vulcanLord:      { name: 'Vulcan Lord', lvl: 100, hp: 75000, atk: 1250, def: 520, eva: 18, xp: 45000, sp: 80, gold: [8000, 16000], element: 'fire', boss: true, traits: ['cataclysm'] },
-  valakas: { name: 'Valakas Fire Sovereign Dragon', hp: 200000, atk: 1800, def: 850, eva: 20, xp: 200000, sp: 200, gold: [50000, 100000], boss: true }
-};
 
 function getXPForLevel(lvl) { return Math.floor(100 * Math.pow(1.8, lvl - 1)); }
 function getTotalXP(lvl) { let total = 0; for (let i = 1; i <= lvl; i++) total += getXPForLevel(i); return total; }
@@ -2525,13 +2396,9 @@ function buyMysticItem(itemId, rarity) {
   state.gold -= price; log(`Mystic purchase: ${def.name} [${D().RARITY[rarity].name}] for ${price}g`, 'rarity-' + rarity); updateAllUI(); save();
 }
 
-const RAID_BOSSES = {
-  queen_ant: { id: 'queen_ant', name: 'Queen Ant 👑', lvl: 40, hp: 12000, atk: 180, def: 60, eva: 10, xp: 8000, sp: 80, gold: [4000, 8000], boss: true, raid: true, reqLvl: 30, desc: 'Rainha Formiga dos Ermos de Gludio. Drop: Ring of Queen Ant' },
-  zaken: { id: 'zaken', name: 'Zaken o Pirata 🏴‍☠️', lvl: 60, hp: 35000, atk: 320, def: 110, eva: 15, xp: 25000, sp: 200, gold: [15000, 30000], boss: true, raid: true, reqLvl: 50, desc: 'Capitão pirata da Ilha do Diabo. Drop: Earring of Zaken' },
-  baium: { id: 'baium', name: 'Imperador Baium ⚡', lvl: 80, hp: 90000, atk: 580, def: 180, eva: 12, xp: 90000, sp: 500, gold: [40000, 80000], boss: true, raid: true, reqLvl: 70, desc: 'Imperador aprisionado na Torre. Drop: Ring of Baium' },
-  antharas: { id: 'antharas', name: 'Dragão Antharas 🐉', lvl: 95, hp: 220000, atk: 850, def: 280, eva: 10, xp: 300000, sp: 1500, gold: [150000, 350000], boss: true, raid: true, reqLvl: 85, desc: 'Dragão da Terra. Drops: Earring of Antharas & Dragon Slayer' },
-  valakas: { id: 'valakas', name: 'Dragão Valakas 🔥', lvl: 100, hp: 450000, atk: 1200, def: 380, eva: 8, xp: 750000, sp: 3500, gold: [400000, 800000], boss: true, raid: true, reqLvl: 90, desc: 'Senhor do Vulcão. Drops: Facemask & Necklace of Valakas' }
-};
+// RAID_BOSSES foi movido para src/data/raids.js (Sprint 1)
+// Os imports estão no topo do arquivo.
+
 
 function toggleSoulshot() {
   state.soulshotActive = !state.soulshotActive;
@@ -2900,33 +2767,9 @@ function toggleGameModeMenu() {
   switchEl.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
 }
 
-// --------------------------- QUESTS & BATTLE PASS ---------------------------
-const QUEST_DEFS = {
-  daily: [
-    { id: 'd_kills', name: 'Caçador de Monstros', desc: 'Derrote 50 monstros nas zonas de caça', target: 50, type: 'kill', reward: { gold: 5000, sp: 25, passXp: 100 }, icon: '⚔️' },
-    { id: 'd_boss', name: 'Desafiador de Elites', desc: 'Derrote 1 Chefe ou Monstro de Elite', target: 1, type: 'boss', reward: { gold: 10000, sp: 50, passXp: 150 }, icon: '🐉' },
-    { id: 'd_craft', name: 'Mestre da Forja', desc: 'Realize 1 criação no Craft ou roleta', target: 1, type: 'craft', reward: { gold: 3000, craftPoints: 15, passXp: 100 }, icon: '🔨' },
-    { id: 'd_codex', name: 'Relíquia de Aden', desc: 'Obtenha 1 Doll ou registre item no Codex', target: 1, type: 'codex', reward: { gold: 5000, magicLamps: 1, passXp: 100 }, icon: '📜' }
-  ],
-  weekly: [
-    { id: 'w_kills', name: 'Exterminador de Aden', desc: 'Derrote 400 monstros', target: 400, type: 'kill', reward: { gold: 40000, sp: 250, passXp: 500 }, icon: '☠️' },
-    { id: 'w_bosses', name: 'Caçador de Lendas', desc: 'Derrote 8 Chefes de Raid ou Elites', target: 8, type: 'boss', reward: { gold: 75000, sp: 500, passXp: 600 }, icon: '👑' },
-    { id: 'w_gold', name: 'Acumulador de Fortunas', desc: 'Ganhe 100.000 de Gold', target: 100000, type: 'gold', reward: { gold: 50000, magicLamps: 3, passXp: 500 }, icon: '💰' }
-  ]
-};
+// QUEST_DEFS, BATTLE_PASS_TIERS e PASS_DEFS foram movidos para src/data/quests.js (Sprint 1)
+// Os imports estão no topo do arquivo.
 
-const BATTLE_PASS_TIERS = [
-  { level: 1, reqXp: 100, free: { gold: 5000 }, premium: { magicLamps: 2 } },
-  { level: 2, reqXp: 250, free: { sp: 50 }, premium: { gold: 20000 } },
-  { level: 3, reqXp: 450, free: { craftPoints: 20 }, premium: { magicLamps: 3 } },
-  { level: 4, reqXp: 700, free: { gold: 15000 }, premium: { sp: 150 } },
-  { level: 5, reqXp: 1000, free: { magicLamps: 2 }, premium: { gold: 50000, title: 'Barão de Aden' } },
-  { level: 6, reqXp: 1350, free: { sp: 100 }, premium: { magicLamps: 3 } },
-  { level: 7, reqXp: 1750, free: { gold: 25000 }, premium: { craftPoints: 100 } },
-  { level: 8, reqXp: 2200, free: { magicLamps: 3 }, premium: { gold: 100000 } },
-  { level: 9, reqXp: 2700, free: { sp: 250 }, premium: { magicLamps: 5 } },
-  { level: 10, reqXp: 3300, free: { gold: 50000, magicLamps: 5 }, premium: { title: 'Lorde de Aden', gold: 200000 } }
-];
 
 function checkQuestResets() {
   const now = Date.now();
@@ -2958,7 +2801,8 @@ function checkQuestResets() {
   }
 }
 
-const PASS_DEFS = BATTLE_PASS_TIERS;
+// PASS_DEFS imported from src/data/quests.js
+
 function checkDailyReset() { checkQuestResets(); }
 function checkQuestProgress(type, count = 1) { triggerQuestEvent(type, count); }
 
@@ -3774,38 +3618,9 @@ function claimCert(subId, certType, subIndex) {
   updateAllUI(); save();
 }
 
-// --------------------------- VISUALS / STAGE ---------------------------
-const ZONE_BACKGROUNDS = {
-  orcVillage: '/img/orcVillage.png',
-  dwarvenMine: '/img/dwarvenMine.png',
-  kamaelLair: '/img/kamaelLair.png',
+// ZONE_BACKGROUNDS foi movido para src/data/zones.js (Sprint 1)
+// Os imports estão no topo do arquivo.
 
-  // Zone Mappings
-  talkingIsland: '/img/talkingIsland.png',
-  elvenForest: '/img/elvenForest.png',
-  darkForest: '/img/darkForest.png',
-  ruinedOutpost: '/img/ruinedOutpost.png',
-  howlingMoor: '/img/howlingMoor.png',
-  giranOutskirts: '/img/giranOutskirts.png',
-  orcenRuins: '/img/orcenRuins.png',
-  forsakenCrypt: '/img/forsakenCrypt.png',
-  blackCitadel: '/img/blackCitadel.png',
-  gludioCastle: '/img/gludioCastle.png',
-  wolfMountain: '/img/wolfMountain.png',
-  riftOfTheVoid: '/img/riftOfTheVoid.png',
-  emeraldGrove: '/img/emeraldGrove.png',
-  underworldGate: '/img/underworldGate.png',
-  adenCity: '/img/adenCity.png',
-  dragonValley: '/img/dragonValley.png',
-
-  // Raid Bosses
-  queen_ant: '/img/queen_ant.png',
-  zaken: '/img/zaken.png',
-  frintezza: '/img/frintezza.png',
-  baium: '/img/baium.png',
-  antharas: '/img/antharas.png',
-  valakas: '/img/valakas.png'
-};
 
 let currentBgPath = '';
 let activeBgLayer = 'a';
@@ -4744,51 +4559,9 @@ function startGame() {
   if (zonesPane) zonesPane.classList.add('active');
 }
 
-// --------------------------- CODEX / COLLECTIONS ---------------------------
-const CODEX_SETS = {
-  novice_weapons: {
-    name: '⚔️ Armamento de Recruta',
-    desc: 'Registre as armas iniciais de caça dos novatos.',
-    items: ['wooden_sword', 'apprentice_staff', 'short_bow'],
-    bonus: { atk: 25, matk: 25 },
-    label: '+25 P. Atk & +25 M. Atk'
-  },
-  novice_armors: {
-    name: '🛡️ Vestimentas de Tecido & Couro',
-    desc: 'Registre os trajes defensivos básicos de treino.',
-    items: ['cloth_shirt', 'leather_armor', 'cloth_pants'],
-    bonus: { def: 30, mdef: 30 },
-    label: '+30 P. Def & +30 M. Def'
-  },
-  novice_jewels: {
-    name: '📿 Joias de Carvalho de Elmore',
-    desc: 'Registre joias ancestrais de madeira mística.',
-    items: ['oak_necklace', 'oak_earring'],
-    bonus: { hp: 100, mp: 50 },
-    label: '+100 Max HP & +50 Max MP'
-  },
-  d_grade_champions: {
-    name: '🗡️ Equipamentos de Ordem D-Grade',
-    desc: 'Registre lâminas e vestes de guerreiros comprovados.',
-    items: ['bastard_sword', 'elven_bow', 'mithril_gaiters'],
-    bonus: { atk: 50, crit: 5 },
-    label: '+50 P. Atk & +5% P. Crit Rate'
-  },
-  crystal_masters: {
-    name: '💎 Cristais das Cavernas de Aden',
-    desc: 'Registre cristais extraídos do desmanche nobre.',
-    items: ['crystal_d', 'crystal_c', 'crystal_b'],
-    bonus: { atk: 60, matk: 60, hp: 150 },
-    label: '+60 P. Atk, +60 M. Atk, +150 HP'
-  },
-  spellbook_codex: {
-    name: '📖 Livros Sagrados dos Astros',
-    desc: 'Registre os grimórios das estrelas de Aden.',
-    items: ['spellbook_1star', 'spellbook_2star', 'spellbook_3star', 'spellbook_4star'],
-    bonus: { atk: 100, matk: 100, hp: 300, def: 50 },
-    label: '+100 P. Atk, +100 M. Atk, +300 HP, +50 Def'
-  }
-};
+// CODEX_SETS foi movido para src/data/codex.js (Sprint 1)
+// Os imports estão no topo do arquivo.
+
 
 function getCodexBonuses() {
   const totals = { atk: 0, def: 0, matk: 0, mdef: 0, hp: 0, mp: 0, eva: 0, crit: 0 };
@@ -4890,49 +4663,9 @@ function registerCodexItem(setId, itemId) {
   updateAllUI(); save();
 }
 
-// --------------------------- DOLLS COLLECTION & SYNTHESIS ---------------------------
-const BOSS_DOLLS = {
-  doll_queen_ant: {
-    name: '🐜 Queen Ant Doll', icon: '🐜',
-    statsByLvl: {
-      1: { atk: 15, crit: 3, label: '+15 P. Atk, +3% Crit' },
-      2: { atk: 35, crit: 6, label: '+35 P. Atk, +6% Crit' },
-      3: { atk: 60, crit: 10, label: '+60 P. Atk, +10% Crit' },
-      4: { atk: 100, crit: 15, label: '+100 P. Atk, +15% Crit' },
-      5: { atk: 160, crit: 25, label: '+160 P. Atk, +25% Crit' }
-    }
-  },
-  doll_baium: {
-    name: '⚡ Baium Doll', icon: '⚡',
-    statsByLvl: {
-      1: { speed: 5, label: '+5% Speed' },
-      2: { speed: 10, label: '+10% Speed' },
-      3: { speed: 15, label: '+15% Speed' },
-      4: { speed: 22, label: '+22% Speed' },
-      5: { speed: 30, label: '+30% Speed' }
-    }
-  },
-  doll_orfen: {
-    name: '🦋 Orfen Doll', icon: '🦋',
-    statsByLvl: {
-      1: { matk: 20, crit: 3, label: '+20 M. Atk, +3% M. Crit' },
-      2: { matk: 45, crit: 6, label: '+45 M. Atk, +6% M. Crit' },
-      3: { matk: 80, crit: 10, label: '+80 M. Atk, +10% M. Crit' },
-      4: { matk: 120, crit: 15, label: '+120 M. Atk, +15% M. Crit' },
-      5: { matk: 180, crit: 25, label: '+180 M. Atk, +25% M. Crit' }
-    }
-  },
-  doll_zaken: {
-    name: '🏴‍☠️ Zaken Doll', icon: '🏴‍☠️',
-    statsByLvl: {
-      1: { def: 25, lifesteal: 3, label: '+25 Def, +3% Lifesteal' },
-      2: { def: 50, lifesteal: 5, label: '+50 Def, +5% Lifesteal' },
-      3: { def: 85, lifesteal: 8, label: '+85 Def, +8% Lifesteal' },
-      4: { def: 130, lifesteal: 12, label: '+130 Def, +12% Lifesteal' },
-      5: { def: 200, lifesteal: 18, label: '+200 Def, +18% Lifesteal' }
-    }
-  }
-};
+// BOSS_DOLLS foi movido para src/data/codex.js (Sprint 1)
+// Os imports estão no topo do arquivo.
+
 
 function getDollsBonuses() {
   const totals = { atk: 0, def: 0, matk: 0, mdef: 0, hp: 0, mp: 0, eva: 0, crit: 0, speed: 0, lifesteal: 0 };
