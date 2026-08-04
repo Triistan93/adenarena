@@ -23,7 +23,8 @@ import {
   getActiveSetBonuses as engineGetActiveSetBonuses,
   applyPrimaryStats,
   getClass,
-  getZoneDropTier
+  getZoneDropTier,
+  getEquippedSetCount
 } from './src/engine/StatsEngine.js';
 
 import {
@@ -334,7 +335,7 @@ function depositToWarehouse(uid, amount = 1) {
     state.warehouse.push({ ...item, equipped: false });
   }
 
-  const formattedName = formatItemDisplayName(item, def);
+  const formattedName = uiFormatItemDisplayName(item, def);
   log(`📦 Guardou ${formattedName} no Baú.`, 'loot');
   hideItemTooltip();
   updateInventoryUI();
@@ -387,7 +388,7 @@ function withdrawFromWarehouse(uid, amount = 1) {
     state.inventory.push({ ...item, equipped: false });
   }
 
-  const formattedName = formatItemDisplayName(item, def);
+  const formattedName = uiFormatItemDisplayName(item, def);
   log(`🎒 Retirou ${formattedName} do Baú.`, 'loot');
   hideItemTooltip();
   updateInventoryUI();
@@ -722,7 +723,7 @@ function sellItem(uid) {
   const goldEarned = Math.floor(basePrice * mult * enchantMult * 0.4) * qty;
   state.inventory.splice(idx, 1);
   state.gold += goldEarned;
-  const name = formatItemDisplayName(item, def);
+  const name = uiFormatItemDisplayName(item, def);
   log(`💰 Vendeu ${name} por ${goldEarned.toLocaleString()}g!`, 'loot');
   hideItemTooltip();
   updateAllUI();
@@ -733,7 +734,7 @@ function sellItem(uid) {
 function canCraft(recipeId) { return serviceCanCraft(state, recipeId); }
 function canCraftRecipe(id) { return serviceCanCraftRecipe(state, id); }
 function craftItem(recipeId) {
-  return serviceCraftItem(state, recipeId, { log, floatText, getItemDef, formatItemDisplayName, updateAllUI, save });
+  return serviceCraftItem(state, recipeId, { log, floatText, getItemDef, formatItemDisplayName: uiFormatItemDisplayName, updateAllUI, save });
 }
 
 
@@ -928,7 +929,7 @@ function updateDetailedEquipStatsUI() {
     const def = D().ALL_ITEMS[item.itemId]; if (!def) continue;
     const rarity = item.rarity || 'common';
     const enchantStr = item.enchant ? `+${item.enchant}` : '';
-    const full = formatItemDisplayName(item, def);
+    const full = uiFormatItemDisplayName(item, def);
     const col = item.rarity ? D().RARITY[rarity]?.color : 'var(--gilt)';
 
     if (pdSlot) {
@@ -1059,7 +1060,7 @@ function showItemTooltip(item, e) {
   cancelHideTooltip();
   const def = getItemDef(item.itemId); if (!def) return;
   const tt = el('item-tooltip'), rarity = item.rarity || 'common', mult = D().RARITY[rarity]?.mult || 1, rc = D().RARITY[rarity]?.color || '#c8a84e';
-  const formattedTitle = formatItemDisplayName(item, def);
+  const formattedTitle = uiFormatItemDisplayName(item, def);
   let html = `<div class="tt-name" style="color:${rc}">${formattedTitle}</div>`;
   if (item.foundation) {
     html += `<div class="tt-foundation-badge" style="background: linear-gradient(90deg, rgba(245,158,11,0.25), rgba(217,119,6,0.35)); border: 1px solid #f59e0b; color: #fbbf24; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; margin-top: 4px; margin-bottom: 4px; display: inline-block; box-shadow: 0 0 8px rgba(245, 158, 11, 0.4);">✨ FOUNDATION (+30% Status Base)</div>`;
@@ -1110,7 +1111,7 @@ function showItemTooltip(item, e) {
   const armorSets = (typeof window !== 'undefined' && window.GameData && window.GameData.ARMOR_SETS) ? window.GameData.ARMOR_SETS : (typeof ARMOR_SETS !== 'undefined' ? ARMOR_SETS : {});
   if (setKey && armorSets[setKey]) {
     const setDef = armorSets[setKey];
-    const { count, hasShield, totalPieceCount } = getEquippedSetCount(setDef);
+    const { count, hasShield, totalPieceCount } = getEquippedSetCount(state, setDef);
 
     let setHtml = `<div class="tt-set-section" style="margin-top:8px; padding-top:6px; border-top:1px dashed #d4a744;">`;
     setHtml += `<div style="font-size:10px; font-weight:bold; color:var(--gilt-bright); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:3px; display:flex; justify-content:space-between;">`;
@@ -2959,7 +2960,24 @@ function executeAdminCmd(cmd) {
   save();
 }
 
-// --------------------------- COMBAT & SKILLS (Sprint 4: Delegados) ---------------------------
+function updateZoneKillProgressUI() {
+  const killEl = el('zone-kill-progress');
+  if (killEl && state.zone) {
+    state.zoneKills = state.zoneKills || {};
+    const count = state.zoneKills[state.zone] || 0;
+    const req = 15;
+    killEl.textContent = `⚔️ ${count}/${req} Caçados`;
+    if (count >= req) {
+      killEl.style.color = '#ef4444';
+      killEl.style.borderColor = 'rgba(239,68,68,0.5)';
+      killEl.textContent = `🚨 CHEFÃO DISPONÍVEL!`;
+    } else {
+      killEl.style.color = '#f59e0b';
+      killEl.style.borderColor = 'rgba(245,158,11,0.3)';
+    }
+  }
+}
+
 function startCombat() { return engineStartCombat(state, { log, attackMonster }); }
 function stopCombat() { return engineStopCombat(state); }
 function pickRandomMonster() { return enginePickRandomMonster(state, { log, floatText, renderStageMonster, updateZoneKillProgressUI }); }
