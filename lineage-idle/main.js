@@ -11,6 +11,25 @@ import { MONSTERS }                                                          fro
 import { RAID_BOSSES }                                                       from './src/data/raids.js';
 import { QUEST_DEFS, BATTLE_PASS_TIERS, PASS_DEFS }                        from './src/data/quests.js';
 import { CODEX_SETS, BOSS_DOLLS }                                           from './src/data/codex.js';
+// ─── Sprint 2: Importa motores de Stats e Nível ────────────────────────────
+import {
+  getStats as engineGetStats,
+  getBaseAttributes,
+  getEquipBonus as engineGetEquipBonus,
+  getTotalEquipBonuses as engineGetTotalEquipBonuses,
+  getCertificationsBonuses as engineGetCertificationsBonuses,
+  getActiveSetBonuses as engineGetActiveSetBonuses,
+  applyPrimaryStats,
+  getClass,
+  getZoneDropTier
+} from './src/engine/StatsEngine.js';
+
+import {
+  getXPForLevel,
+  getTotalXP,
+  calcSpForLevel,
+  checkLevelUp as engineCheckLevelUp
+} from './src/engine/LevelEngine.js';
 // ────────────────────────────────────────────────────────────────────────────
 
 // Carregamento síncrono de icon_index.json antes de qualquer renderização de itens
@@ -49,8 +68,8 @@ const TIER_NAMES        = ['Foundation', 'Discipline', 'Mastery', 'Ascendancy', 
 
 
 
-function getXPForLevel(lvl) { return Math.floor(100 * Math.pow(1.8, lvl - 1)); }
-function getTotalXP(lvl) { let total = 0; for (let i = 1; i <= lvl; i++) total += getXPForLevel(i); return total; }
+// getXPForLevel e getTotalXP importados do LevelEngine.js (Sprint 2)
+
 
 // --------------------------- STATE ---------------------------
 const DEFAULT_STATE = () => ({
@@ -200,353 +219,17 @@ function resetSave() {
   }
 }
 
-// --------------------------- STATS CALC ---------------------------
-function getEquipBonus(slot) {
-  const itemId = state.equipment[slot];
-  if (!itemId) return null;
-  const inv = state.inventory.find(i => i.uid === itemId);
-  if (!inv) return null;
-  const def = D().ALL_ITEMS[inv.itemId];
-  if (!def) return null;
-  const rarityMult = inv.rarity ? (D().RARITY[inv.rarity]?.mult || 1) : 1;
-  const enchant = inv.enchant || 0;
-  const enchantMult = 1 + (enchant <= 3 ? enchant * 0.3 : (0.36 + (enchant - 3) * 0.5));
-  const foundationMult = inv.foundation ? 1.3 : 1;
-  const out = { ...def };
-  ['atk','def','matk','mdef','hp','mp','eva','crit','speed','lifesteal'].forEach(k => {
-    if (out[k]) out[k] = Math.floor(Number(out[k]) * rarityMult * enchantMult * foundationMult);
-  });
-  // Aplicação aditiva de afixos do tipo 'stat' por cima dos multiplicadores base
-  if (Array.isArray(inv.affixes)) {
-    inv.affixes.forEach(aff => {
-      const defAff = D().AFFIX_MAP ? D().AFFIX_MAP[aff.id] : null;
-      if (defAff && defAff.type === 'stat' && defAff.stat) {
-        const k = defAff.stat;
-        out[k] = (Number(out[k]) || 0) + Number(aff.value || 0);
-      }
-    });
-  }
-  return out;
-}
+// --------------------------- STATS CALC (Sprint 2: Delegado para StatsEngine.js) ---------------------------
+function getEquipBonus(slot) { return engineGetEquipBonus(state, slot); }
+function getTotalEquipBonuses() { return engineGetTotalEquipBonuses(state); }
+function getCertificationsBonuses() { return engineGetCertificationsBonuses(state); }
+function getActiveSetBonuses() { return engineGetActiveSetBonuses(state); }
+function getStats() { return engineGetStats(state); }
 
-function getTotalEquipBonuses() {
-  const totals = { atk: 0, def: 0, matk: 0, mdef: 0, hp: 0, mp: 0, eva: 0, crit: 0, speed: 0, lifesteal: 0 };
-  for (const slot of Object.keys(state.equipment)) {
-    const b = getEquipBonus(slot);
-    if (!b) continue;
-    for (const k of Object.keys(totals)) { 
-      if (b[k] !== undefined && b[k] !== null) totals[k] += Number(b[k]) || 0; 
-    }
-  }
-  return totals;
-}
 
-function getCertificationsBonuses() {
-  const certs = state.certifications || {};
-  return {
-    atk: (certs.emergent_atk || 0) * 20,
-    def: (certs.emergent_def || 0) * 20,
-    matk: (certs.emergent_matk || 0) * 25,
-    mdef: (certs.emergent_mdef || 0) * 25,
-    crit: (certs.master_crit || 0) * 5,
-    celestial: certs.celestial_shield ? true : false
-  };
-}
+// Delegados para StatsEngine.js (Sprint 2)
+// (getBaseAttributes, getZoneDropTier, getClass estão importados no topo)
 
-// ── ARMOR SETS & PRIMARY ATTRIBUTES SYSTEM ──
-function getEquippedSetCount(setDef) {
-  if (!setDef) return { count: 0, hasShield: false, totalPieceCount: 5 };
-  let count = 0;
-  const slots = ['armor', 'helmet', 'boots', 'gloves', 'legs'];
-
-  for (const slot of slots) {
-    const uid = state.equipment[slot];
-    if (!uid) continue;
-    const item = state.inventory.find(i => i.uid === uid);
-    if (!item) continue;
-    const def = getItemDef(item.itemId);
-    if (!def) continue;
-    const itemId = def.id;
-
-    let matched = false;
-    if (setDef.pieces && setDef.pieces[slot]) {
-      const targetId = getItemDef(setDef.pieces[slot])?.id || setDef.pieces[slot];
-      if (itemId === targetId) matched = true;
-    }
-    if (!matched && setDef.variantPieces && setDef.variantPieces[slot]) {
-      const targetVariants = setDef.variantPieces[slot].map(v => getItemDef(v)?.id || v);
-      if (targetVariants.includes(itemId)) matched = true;
-    }
-    if (matched) count++;
-  }
-
-  let hasShield = false;
-  if (setDef.shieldPiece) {
-    const shieldUid = state.equipment.shield;
-    if (shieldUid) {
-      const shieldItem = state.inventory.find(i => i.uid === shieldUid);
-      if (shieldItem) {
-        const def = getItemDef(shieldItem.itemId);
-        if (def) {
-          const targetShieldId = getItemDef(setDef.shieldPiece)?.id || setDef.shieldPiece;
-          if (def.id === targetShieldId) hasShield = true;
-        }
-      }
-    }
-  }
-
-  return { count, hasShield, totalPieceCount: setDef.fullPieceCount || 5 };
-}
-
-function getActiveSetBonuses() {
-  const activeBonuses = [];
-  const primaryStats = { str: 0, dex: 0, con: 0, int: 0, wit: 0, men: 0 };
-  const statTotals = { atk: 0, def: 0, matk: 0, mdef: 0, hp: 0, mp: 0, eva: 0, crit: 0, speed: 0, lifesteal: 0, block: 0 };
-
-  const armorSets = (typeof window !== 'undefined' && window.GameData && window.GameData.ARMOR_SETS) ? window.GameData.ARMOR_SETS : (typeof ARMOR_SETS !== 'undefined' ? ARMOR_SETS : {});
-
-  for (const [setId, setDef] of Object.entries(armorSets)) {
-    const { count, hasShield, totalPieceCount } = getEquippedSetCount(setDef);
-    if (count < 2) continue;
-
-    const thresholds = [2, 3, totalPieceCount];
-    if (setDef.shieldPiece && count >= totalPieceCount && hasShield) {
-      thresholds.push(totalPieceCount + 1);
-    }
-
-    const setBonusInfo = {
-      setId,
-      setName: setDef.name,
-      equippedCount: count,
-      hasShield,
-      fullPieceCount: totalPieceCount,
-      activeThresholds: []
-    };
-
-    for (const t of thresholds) {
-      let reached = false;
-      if (t <= 3 && count >= t) reached = true;
-      else if (t === totalPieceCount && count >= totalPieceCount) reached = true;
-      else if (t === totalPieceCount + 1 && count >= totalPieceCount && hasShield) reached = true;
-
-      if (reached && setDef.bonuses && setDef.bonuses[t]) {
-        const b = setDef.bonuses[t];
-        setBonusInfo.activeThresholds.push({ threshold: t, bonus: b });
-
-        for (const [k, v] of Object.entries(b)) {
-          if (k === 'primary') {
-            for (const [pk, pv] of Object.entries(v)) {
-              if (primaryStats[pk] !== undefined) primaryStats[pk] += Number(pv) || 0;
-            }
-          } else if (statTotals[k] !== undefined) {
-            statTotals[k] += Number(v) || 0;
-          }
-        }
-      }
-    }
-
-    if (setBonusInfo.activeThresholds.length > 0) {
-      activeBonuses.push(setBonusInfo);
-    }
-  }
-
-  return { activeBonuses, primaryStats, statTotals };
-}
-
-function applyPrimaryStats(stats, primary) {
-  if (!primary) return stats;
-  const str = Number(primary.str) || 0;
-  const con = Number(primary.con) || 0;
-  const dex = Number(primary.dex) || 0;
-  const int = Number(primary.int) || 0;
-  const wit = Number(primary.wit) || 0;
-  const men = Number(primary.men) || 0;
-
-  // STR: +0.5% P.Atk (atk) por ponto
-  if (str > 0) stats.atk = Math.floor(stats.atk * (1 + str * 0.005));
-
-  // CON: +1% HP máximo por ponto
-  if (con > 0) stats.maxHp = Math.floor(stats.maxHp * (1 + con * 0.01));
-
-  // DEX: +0.3% Crit Rate + 0.2% Evasão + 0.1 Speed por ponto
-  if (dex > 0) {
-    stats.crit = Math.round(((stats.crit || 0) + dex * 0.3) * 10) / 10;
-    stats.eva = (stats.eva || 0) + Math.floor(dex * 0.2);
-    stats.speed = Math.round(((stats.speed || 1) + (dex * 0.1) / 100) * 100) / 100;
-  }
-
-  // INT: +0.5% M.Atk (matk) por ponto
-  if (int > 0) stats.matk = Math.floor(stats.matk * (1 + int * 0.005));
-
-  // WIT: +0.3% MP máximo por ponto
-  if (wit > 0) stats.maxMp = Math.floor(stats.maxMp * (1 + wit * 0.003));
-
-  // MEN: +0.5% M.Def (mdef) + 0.2% MP máximo por ponto
-  if (men > 0) {
-    stats.mdef = Math.floor(stats.mdef * (1 + men * 0.005));
-    stats.maxMp = Math.floor(stats.maxMp * (1 + men * 0.002));
-  }
-
-  return stats;
-}
-
-function getStats() {
-  const raceKey = state.race ? String(state.race).toLowerCase() : 'human';
-  const race = RACES[raceKey] || RACES.human;
-  const cls = getClass(state.class);
-  const skills = state.skills || {};
-
-  const sk = (id) => Number(skills[id]) || 0;
-  
-  const raceStats = race?.stats || {};
-  const clsBase = cls?.base || {};
-
-  let baseAtk = (Number(state.base.atk) || 0) + (Number(raceStats.atk) || 0) + (Number(clsBase.atk) || 0) + (state.level * 3) + 15;
-  let baseDef = (Number(state.base.def) || 0) + (Number(raceStats.def) || 0) + (Number(clsBase.def) || 0) + (state.level * 2) + 10;
-  let baseEva = (Number(state.base.eva) || 0) + (Number(raceStats.eva) || 0) + (Number(clsBase.eva) || 0);
-  let baseMatk = (Number(state.base.matk) || 0) + (Number(raceStats.matk) || 0) + (Number(clsBase.matk) || 0) + (state.level * 3) + 15;
-  let baseMdef = (Number(state.base.mdef) || 0) + (Number(raceStats.mdef) || 0) + (Number(clsBase.mdef) || 0) + (state.level * 2) + 8;
-
-  baseAtk += sk('wpnMastF') * 4.5;
-  baseAtk += sk('weaponMastM') * 1.5;
-  baseMatk += sk('weaponMastM') * 2.5;
-  baseDef += sk('armorMast') * 11;
-  baseDef += sk('robeMast') * 1.7;
-  baseDef += sk('lightArmor') * 4.2;
-  baseEva += sk('lightArmor') * 3;
-  baseMdef += sk('antiMagic') * 18;
-  const mpRegenBonus = sk('higherMana') * 2;
-
-  const eb = getTotalEquipBonuses();
-  const setRes = getActiveSetBonuses();
-  const setB = setRes.statTotals;
-  const primaryStats = setRes.primaryStats;
-
-  state.primaryStats = primaryStats;
-
-  let itemCraftBonus = 0, itemLootBonus = 0;
-  for (const slot of Object.keys(state.equipment)) {
-    const it = getEquipBonus(slot);
-    if (!it) continue;
-    if (it.craftBonus) itemCraftBonus += Number(it.craftBonus) || 0;
-    if (it.lootBonus) itemLootBonus += Number(it.lootBonus) || 0;
-  }
-
-  const now = Date.now();
-  let buffAtk = 0, buffDef = 0, buffSpd = 0, buffMatk = 0, buffAtkMult = 0;
-  let xpBoost = 0, goldBoost = 0, luckBoost = 0, autoPotion = false;
-  state.buffs = state.buffs || {};
-  for (const k of Object.keys(state.buffs)) {
-    if (state.buffs[k].until < now) continue;
-    const b = state.buffs[k];
-    if (k === 'atk') buffAtk += Number(b.amount) || 0;
-    else if (k === 'def') buffDef += Number(b.amount) || 0;
-    else if (k === 'speed') buffSpd += Number(b.amount) || 0;
-    else if (k === 'matk') buffMatk += Number(b.amount) || 0;
-    else if (k === 'warcry' || b.effect === 'warcry' || b.type === 'warcry') buffAtkMult = Math.max(buffAtkMult, Number(b.amount) || 0);
-    else if (k === 'xpBoost') xpBoost = Math.max(xpBoost, Number(b.amount) || 0);
-    else if (k === 'goldBoost') goldBoost = Math.max(goldBoost, Number(b.amount) || 0);
-    else if (k === 'luckBoost') luckBoost = Math.max(luckBoost, Number(b.amount) || 0);
-    else if (k === 'autoPotion') autoPotion = true;
-  }
-
-  const agathionUid = state.equipment.agathion;
-  const agathionItem = agathionUid ? state.inventory.find(i => i.uid === agathionUid) : null;
-  const agathionDef = agathionItem ? D().ALL_ITEMS[agathionItem.itemId] : null;
-
-  if (agathionDef) {
-    if (agathionItem.itemId === 'agathion_pegasus') { xpBoost += 0.10; buffSpd += 10; }
-    else if (agathionItem.itemId === 'agathion_valakas_mini') { buffAtk += Math.floor(baseAtk * 0.15); buffMatk += Math.floor(baseMatk * 0.15); }
-    else if (agathionItem.itemId === 'agathion_rudolph') { goldBoost += 0.20; }
-    else if (agathionItem.itemId === 'agathion_angel') { buffDef += Math.floor(baseDef * 0.20); }
-    else if (agathionItem.itemId === 'agathion_dragon_child') { buffAtkMult += 0.25; }
-  }
-
-  const atkMult = 1 + buffAtkMult;
-  const defMult = 1 + sk('heavyArmor') * 0.05;
-  const cdr = sk('quickRecycle') * 0.10;
-
-  const codexB = getCodexBonuses();
-  const dollsB = getDollsBonuses();
-  const certB = getCertificationsBonuses();
-  const towerMult = 1 + ((state.tower?.highestFloor || 0) * 0.01);
-
-  const finalAtk  = Math.floor((baseAtk + (Number(eb.atk) || 0) + (Number(setB.atk) || 0) + buffAtk + codexB.atk + dollsB.atk + certB.atk) * atkMult * towerMult);
-  const finalDef  = Math.floor((baseDef + (Number(eb.def) || 0) + (Number(setB.def) || 0) + buffDef + codexB.def + dollsB.def + certB.def) * defMult * towerMult);
-  const finalEva  = Math.floor(baseEva + (Number(eb.eva) || 0) + (Number(setB.eva) || 0) + codexB.eva + dollsB.eva);
-  const finalMatk = Math.floor((baseMatk + (Number(eb.matk) || 0) + (Number(setB.matk) || 0) + buffMatk + codexB.matk + dollsB.matk + certB.matk) * towerMult);
-  const finalMdef = Math.floor((baseMdef + (Number(eb.mdef) || 0) + (Number(setB.mdef) || 0) + codexB.mdef + dollsB.mdef + certB.mdef) * towerMult);
-  const finalCrit = (Number(eb.crit) || 0) + (Number(setB.crit) || 0) + codexB.crit + dollsB.crit + certB.crit;
-  
-  const lootBonus = (Number(race?.stats?.lootBonus) || 0) + (Number(cls?.base?.lootBonus) || 0) + itemLootBonus + luckBoost;
-  const atkSpd    = (buffSpd + (dollsB.speed || 0)) / 100;
-  const lifeDrain = ((Number(eb.lifesteal) || 0) + (dollsB.lifesteal || 0) + ((setB.lifesteal || 0) / 100));
-  const craftBonus = itemCraftBonus;
-
-  const critDmg = 1 + sk('executioner') * 0.15;
-  const regenHp = sk('holylight') * 0.01;
-  const meteorLvl = sk('meteor');
-  const execute = sk('assassinate') * 0.02;
-  const block = sk('divineshield') * 0.05 + (setB.block || 0);
-
-  const maxHp = Math.floor(100 + state.level * 10 + sk('boostHp') * 60 + (Number(eb.hp) || 0) + (Number(setB.hp) || 0) + codexB.hp + dollsB.hp);
-  const maxMp = Math.floor(50 + state.level * 5 + sk('boostMana') * 30 + (Number(eb.mp) || 0) + (Number(setB.mp) || 0) + codexB.mp + dollsB.mp);
-  
-  const rawStats = {
-    atk: finalAtk || 1, def: finalDef || 0, eva: finalEva || 0, matk: finalMatk || 1, mdef: finalMdef || 0,
-    crit: finalCrit, critDmg, loot: 1 + lootBonus, speed: 1 + (buffSpd + (setB.speed || 0)) / 100, cdr,
-    atkSpd, lifeDrain, craftBonus, mpRegen: mpRegenBonus,
-    xpBoost, goldBoost, luckBoost, autoPotion, maxHp, maxMp,
-    regenHp, meteorLvl, execute, block
-  };
-
-  return applyPrimaryStats(rawStats, primaryStats);
-}
-
-function getBaseAttributes(raceKey, classKey) {
-  const r = String(raceKey || 'human').toLowerCase();
-  const c = getClass(classKey);
-  const isMage = c?.archetype === 'mage';
-
-  let key = 'human_fighter';
-  if (r === 'darkelf') key = isMage ? 'darkelf_mage' : 'darkelf_fighter';
-  else if (r === 'elf') key = isMage ? 'elf_mage' : 'elf_fighter';
-  else if (r === 'orc') key = isMage ? 'orc_mage' : 'orc_fighter';
-  else if (r === 'dwarf') key = 'dwarf_fighter';
-  else if (r === 'kamael') key = 'kamael_male';
-  else if (r === 'human') key = isMage ? 'human_mage' : 'human_fighter';
-
-  return { ...(RACE_BASE_ATTRIBUTES[key] || RACE_BASE_ATTRIBUTES.human_fighter) };
-}
-
-function getZoneDropTier(zoneLevel) {
-  if (zoneLevel < 15) return 'zone1';
-  if (zoneLevel < 35) return 'zone2';
-  if (zoneLevel < 55) return 'zone3';
-  if (zoneLevel < 75) return 'zone4';
-  if (zoneLevel < 90) return 'zone5';
-  return 'zone6';
-}
-
-function getClass(c) {
-  if (!c) return null;
-  let def = CLASSES[c] || CLASSES[String(c).toLowerCase()] || null;
-  if (!def) return null;
-  if (def.archetype === undefined && def.parent) {
-    let current = def.parent;
-    const visited = new Set([c]);
-    while (current && !visited.has(current)) {
-      visited.add(current);
-      const parentDef = CLASSES[current] || CLASSES[String(current).toLowerCase()];
-      if (!parentDef) break;
-      if (parentDef.archetype !== undefined) {
-        return { ...def, archetype: parentDef.archetype };
-      }
-      current = parentDef.parent;
-    }
-  }
-  return def;
-}
 
 function classSatisfies(playerClass, reqClass) {
   if (!reqClass) return true;
@@ -4077,13 +3760,8 @@ function spawnAdminItem(itemId, qty = 1, rarity = 'common', enchant = 0, affixCh
   save();
 }
 
-function calcSpForLevel(lvl) {
-  let total = 0;
-  for (let l = 2; l <= lvl; l++) {
-    total += Math.min(10, Math.floor(l * 0.8 + 1));
-  }
-  return total;
-}
+// calcSpForLevel importado do LevelEngine.js (Sprint 2)
+
 
 function applyAdminLevelChange(targetLevel) {
   const newLvl = Math.max(1, Math.min(100, targetLevel));
@@ -4373,19 +4051,9 @@ function updateSagaProgress(silent = true) {
 }
 
 function checkLevelUp() {
-  while (state.xp >= getTotalXP(state.level)) {
-    state.level++; const stats = getStats(); state.maxHp = stats.maxHp; state.maxMp = stats.maxMp; state.hp = state.maxHp; state.mp = state.maxMp; 
-    
-    const spReward = Math.min(10, Math.floor(state.level * 0.8 + 1));
-    state.sp += spReward;
-    playSfx('levelUp');
-    log(`🎉 LEVEL UP! Nível ${state.level} Alcançado! (+${spReward} SP)`, 'rarity-legendary');
-    floatText(`🎉 LEVEL UP! Nível ${state.level}`, 'float-jackpot');
-    
-    updateSagaProgress(false);
-    updateAllUI(); save();
-  }
+  return engineCheckLevelUp(state, { getStats, playSfx, log, floatText, updateSagaProgress, updateAllUI, save });
 }
+
 
 function playerDeath(monster) {
   stopCombat(); const scroll = state.inventory.find(i => i.itemId === 'scroll_of_rebirth' && (i.count || 1) > 0); let lossRate = 0.2;
