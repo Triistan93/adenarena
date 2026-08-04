@@ -7,52 +7,50 @@
 
 // ---- Hero image map: race_class → image path ----
 const HERO_IMG = {
-  human_fighter: "/img/Races/human_fighter.png",
-  human_mage: "/img/Races/human_mage.png",
-  elf_fighter: "/img/Races/elf_fighter.png",
-  elf_mage: "/img/Races/elf_mage.png",
-  elf_archer: "/img/Races/elf_fighter.png",
-  elf_mystic: "/img/Races/elf_mage.png",
-  elf_sentinel: "/img/Races/elf_fighter.png",
-  darkelf_fighter: "/img/Races/darkelf_fighter.png",
-  darkelf_mage: "/img/Races/darkelf_mage.png",
-  darkelf_assassin: "/img/Races/darkelf_fighter.png",
-  darkelf_shillien: "/img/Races/darkelf_mage.png",
-  darkelf_sorcerer: "/img/Races/darkelf_mage.png",
-  orc_fighter: "/img/Races/orc_fighter.png",
-  orc_mage: "/img/Races/orc_mage.png",
-  orc_destroyer: "/img/Races/orc_fighter.png",
-  orc_monk: "/img/Races/orc_fighter.png",
-  orc_overlord: "/img/Races/orc_mage.png",
-  dwarf_artisan: "/img/Races/dwarf_artisan.png",
-  dwarf_fighter: "/img/Races/dwarf_artisan.png",
-  dwarf_warsmith: "/img/Races/dwarf_artisan.png",
-  kamael_soulbreaker: "/img/Races/kamael_soulbreaker.png",
-  kamael_fighter: "/img/Races/kamael_soulbreaker.png",
-  kamael_berserker: "/img/Races/kamael_soulbreaker.png",
-  ertheia_fighter: "/img/Races/human_fighter.png",
-  ertheia_mage: "/img/Races/human_mage.png",
+  human_fighter: "/img/humanpalaM.png",
+  human_mage: "/img/humanmageF.png",
+  elf_fighter: "/img/elf_fighter.png",
+  elf_mage: "/img/elfmageM.png",         
+  elf_archer: "/img/elfswsF.png",
+  elf_mystic: "/img/elf_mage.png",
+  elf_sentinel: "/img/elfswsF.png",
+  darkelf_fighter: "/img/darkelfskM.png",
+  darkelf_mage: "/img/darkelfmageF.png",
+  darkelf_assassin: "/img/darkelf_fighter.png",
+  darkelf_shillien: "/img/darkelf_mage.png",
+  darkelf_sorcerer: "/img/darkelf_mage.png",
+  orc_fighter: "/img/orcfighterM.png",
+  orc_mage: "/img/orc_mage.png",
+  orc_destroyer: "/img/orcfighterM.png",
+  orc_monk: "/img/orcfighterM.png",
+  orc_overlord: "/img/orc_mage.png",
+  dwarf_artisan: "/img/dwarfmaestroM.png",
+  dwarf_fighter: "/img/dwarfmaestroM.png",
+  dwarf_warsmith: "/img/dwarfmaestroM.png",
+  kamael_soulbreaker: "/img/kamaelshF.png",
+  kamael_fighter: "/img/kamaelDM.png",
+  kamael_berserker: "/img/kamaelDM.png",
+  ertheia_fighter: "/img/sylphM.png",
+  ertheia_mage: "/img/sylphF.png",
 };
 
+// Fallback by race only
 const RACE_FALLBACK = {
-  human: "/img/Races/human_fighter.png",
-  elf: "/img/Races/elf_fighter.png",
-  darkelf: "/img/Races/darkelf_fighter.png",
-  orc: "/img/Races/orc_fighter.png",
-  dwarf: "/img/Races/dwarf_artisan.png",
-  kamael: "/img/Races/kamael_soulbreaker.png",
-  ertheia: "/img/Races/human_fighter.png",
+  human: "/img/humanpalaM.png",
+  elf: "/img/elfwswM.png",
+  darkelf: "/img/darkelfskM.png",
+  orc: "/img/orcfighterM.png",
+  dwarf: "/img/dwarfmaestroM.png",
+  kamael: "/img/kamaelDM.png",
+  ertheia: "/img/sylphM.png",
 };
 
 function resolveImg(path) {
-  if (!path) return '';
   if (typeof window !== 'undefined' && window.__HERO_IMGS && window.__HERO_IMGS[path]) {
     return window.__HERO_IMGS[path];
   }
   return path;
 }
-
-
 
 const MAGE_CLASSES = new Set(['mage', 'wizard', 'cleric', 'sorcerer', 'necromancer', 'bishop', 'prophet', 'spellsinger', 'spellhowler', 'shillien', 'overlord']);
 
@@ -70,20 +68,20 @@ function heroImgPath(race, cls) {
 
 // ---- Monster image map ----
 const MON_IMG = {
-  "goblin": "public/img/mon_goblin.png",
-  "mon_goblin": "public/img/mon_goblin.png",
-  "armoredGoblin": "public/img/mon_armoredgoblin.png",
-  "armoredgoblin": "public/img/mon_armoredgoblin.png",
-  "mon_armoredgoblin": "public/img/mon_armoredgoblin.png",
-  "goblinMage": "public/img/mon_goblinmage.png",
-  "goblinmage": "public/img/mon_goblinmage.png",
-  "mon_goblinmage": "public/img/mon_goblinmage.png",
-  "goblinThief": "public/img/mon_goblinthief.png",
-  "goblinthief": "public/img/mon_goblinthief.png",
-  "mon_goblinthief": "public/img/mon_goblinthief.png",
-  "goblinKing": "public/img/mon_goblin.png",
-  "goblinking": "public/img/mon_goblin.png",
-  "mon_goblinking": "/img/mon_goblin.png",
+  "goblin": "/img/mon_goblin.png",
+  "mon_goblin": "/img/mon_goblin.png",
+  "armoredGoblin": "/img/mon_armoredgoblin.png",
+  "armoredgoblin": "/img/mon_armoredgoblin.png",
+  "mon_armoredgoblin": "/img/mon_armoredgoblin.png",
+  "goblinMage": "/img/mon_goblinmage.png",
+  "goblinmage": "/img/mon_goblinmage.png",
+  "mon_goblinmage": "/img/mon_goblinmage.png",
+  "goblinThief": "/img/mon_goblinthief.png",
+  "goblinthief": "/img/mon_goblinthief.png",
+  "mon_goblinthief": "/img/mon_goblinthief.png",
+  "goblinKing": "/img/mon_goblin.png", // TODO: falta arte própria para este monstro
+  "goblinking": "/img/mon_goblin.png", // TODO: falta arte própria para este monstro
+  "mon_goblinking": "/img/mon_goblin.png", // TODO: falta arte própria para este monstro
   "wolf": "/img/mon_direwolf.png",
   "mon_wolf": "/img/mon_direwolf.png",
   "rootWitch": "/img/mon_rootwitch.png",
@@ -202,6 +200,7 @@ const MON_IMG = {
   "cerberus": "/img/mon_cerberus.png",
   "mon_cerberus": "/img/mon_cerberus.png",
   "mage": "/img/mon_mage.png",
+  "mon_mage": "/img/mon_mage.png",
   "dragon": "/img/mon_dragon.png",
   "mon_dragon": "/img/mon_dragon.png",
   "dragonKnight": "/img/mon_dragonknight.png",
@@ -215,27 +214,27 @@ const MON_IMG = {
   "mon_frostlorddragon": "/img/mon_frostlorddragon.png",
   "lindvior": "/img/mon_lidivior.png",
   "mon_lindvior": "/img/mon_lidivior.png",
-  "tombGuardian": "/img/mon_deathknight.png",
-  "tombguardian": "/img/mon_deathknight.png",
-  "mon_tombguardian": "/img/mon_deathknight.png",
-  "sepulcherArchon": "/img/mon_darkmage.png",
-  "sepulcherarchon": "/img/mon_darkmage.png",
-  "mon_sepulcherarchon": "/img/mon_darkmage.png",
-  "undeadKnight": "/img/mon_knight.png",
-  "undeadknight": "/img/mon_knight.png",
-  "mon_undeadknight": "/img/mon_knight.png",
+  "tombGuardian": "/img/mon_deathknight.png", // TODO: falta arte própria para este monstro
+  "tombguardian": "/img/mon_deathknight.png", // TODO: falta arte própria para este monstro
+  "mon_tombguardian": "/img/mon_deathknight.png", // TODO: falta arte própria para este monstro
+  "sepulcherArchon": "/img/mon_darkmage.png", // TODO: falta arte própria para este monstro
+  "sepulcherarchon": "/img/mon_darkmage.png", // TODO: falta arte própria para este monstro
+  "mon_sepulcherarchon": "/img/mon_darkmage.png", // TODO: falta arte própria para este monstro
+  "undeadKnight": "/img/mon_knight.png", // TODO: falta arte própria para este monstro
+  "undeadknight": "/img/mon_knight.png", // TODO: falta arte própria para este monstro
+  "mon_undeadknight": "/img/mon_knight.png", // TODO: falta arte própria para este monstro
   "lichLord": "/img/mon_lichlord.png",
   "lichlord": "/img/mon_lichlord.png",
   "mon_lichlord": "/img/mon_lichlord.png",
   "deathKing": "/img/mon_deathking.png",
   "deathking": "/img/mon_deathking.png",
   "mon_deathking": "/img/mon_deathking.png",
-  "caveDrake": "/img/mon_dragon.png",
-  "cavedrake": "/img/mon_dragon.png",
-  "mon_cavedrake": "/img/mon_dragon.png",
-  "magmaBeast": "/img/mon_blackdragon.png",
-  "magmabeast": "/img/mon_blackdragon.png",
-  "mon_magmabeast": "/img/mon_blackdragon.png",
+  "caveDrake": "/img/mon_dragon.png", // TODO: falta arte própria para este monstro
+  "cavedrake": "/img/mon_dragon.png", // TODO: falta arte própria para este monstro
+  "mon_cavedrake": "/img/mon_dragon.png", // TODO: falta arte própria para este monstro
+  "magmaBeast": "/img/mon_blackdragon.png", // TODO: falta arte própria para este monstro
+  "magmabeast": "/img/mon_blackdragon.png", // TODO: falta arte própria para este monstro
+  "mon_magmabeast": "/img/mon_blackdragon.png", // TODO: falta arte própria para este monstro
   "earthDrake": "/img/mon_antharas.png",
   "earthdrake": "/img/mon_antharas.png",
   "mon_earthdrake": "/img/mon_antharas.png",
@@ -244,9 +243,9 @@ const MON_IMG = {
   "valakasMinion": "/img/mon_valakasminion.png",
   "valakasminion": "/img/mon_valakasminion.png",
   "mon_valakasminion": "/img/mon_valakasminion.png",
-  "lavaGolem": "/img/mon_flamingdemonglord.png",
-  "lavagolem": "/img/mon_flamingdemonglord.png",
-  "mon_lavagolem": "/img/mon_flamingdemonglord.png",
+  "lavaGolem": "/img/mon_flamingdemonglord.png", // TODO: falta arte própria para este monstro
+  "lavagolem": "/img/mon_flamingdemonglord.png", // TODO: falta arte própria para este monstro
+  "mon_lavagolem": "/img/mon_flamingdemonglord.png", // TODO: falta arte própria para este monstro
   "flameArchon": "/img/mon_flamegiantdragom.png",
   "flamearchon": "/img/mon_flamegiantdragom.png",
   "mon_flamearchon": "/img/mon_flamegiantdragom.png",
@@ -334,14 +333,14 @@ export function heroSVG(race, cls, aura, mode) {
 
   if (mode === "bust") {
     return `<div class="hero-svg hero-bust" style="position:relative;width:100%;height:100%;overflow:hidden;border-radius:50%;">
-      <img src="${src}" alt="${race} ${cls}" draggable="false" onerror="this.onerror=null; this.src='${getAssetUrl(`img/Races/${race}_${cls}.png`)}'; if(!this.naturalWidth) this.src='${getAssetUrl(`img/${race}_${cls}.png`)}';"
+      <img src="${src}" alt="${race} ${cls}" draggable="false" onerror="this.onerror=null; this.src='${getAssetUrl(`img/${race}_${cls}.png`)}';"
         style="width:100%;height:100%;object-fit:cover;object-position:center 15%;filter:drop-shadow(0 0 6px ${border});" />
       <div style="position:absolute;inset:0;border-radius:50%;border:2px solid ${border};box-shadow:inset 0 0 20px rgba(0,0,0,0.6);pointer-events:none;"></div>
     </div>`;
   }
 
   return `<div class="hero-svg hero-full" style="width:100%;height:100%;position:relative;">
-    <img src="${src}" alt="${race} ${cls}" draggable="false" onerror="this.onerror=null; this.src='${getAssetUrl(`img/Races/${race}_${cls}.png`)}'; if(!this.naturalWidth) this.src='${getAssetUrl(`img/${race}_${cls}.png`)}';"
+    <img src="${src}" alt="${race} ${cls}" draggable="false" onerror="this.onerror=null; this.src='${getAssetUrl(`img/${race}_${cls}.png`)}';"
       style="width:100%;height:100%;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 8px 16px rgba(0,0,0,0.7)) drop-shadow(0 0 4px ${border || 'transparent'});" />
   </div>`;
 }
@@ -351,7 +350,7 @@ export function heroSVG(race, cls, aura, mode) {
 // ================================================================
 export function monsterSVG(id, opts) {
   const safeId = id || '';
-  const imgSrc = MON_IMG[safeId] || (safeId ? MON_IMG[safeId.toLowerCase()] : null) || `/img/mon_${safeId.toLowerCase()}.png`;
+  const imgSrc = MON_IMG[safeId] || (safeId ? MON_IMG[safeId.toLowerCase()] : null) || '/img/mon_goblin.png';
   const crown = opts?.crown
     ? `<div style="position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-size:22px;filter:drop-shadow(0 0 6px #f0c840);z-index:2;">👑</div>`
     : "";
@@ -360,11 +359,10 @@ export function monsterSVG(id, opts) {
   const glow = opts?.crown ? "drop-shadow(0 0 10px rgba(240,200,64,0.5))" : "drop-shadow(0 6px 12px rgba(0,0,0,0.6))";
   return `<div class="mon-svg" style="width:100%;height:100%;position:relative;">
     ${crown}
-    <img src="${resolvedSrc}" alt="${safeId}" draggable="false" onerror="this.onerror=null; this.src='${getAssetUrl(`img/mon_${safeId.toLowerCase()}.png`)}'; if(!this.naturalWidth) this.src='${getAssetUrl(`img/${safeId}.png`)}';"
+    <img src="${resolvedSrc}" alt="${safeId}" draggable="false" onerror="this.onerror=null; this.src='${getAssetUrl('img/mon_goblin.png')}';"
       style="width:100%;height:100%;object-fit:contain;object-position:center bottom;filter:${glow};" />
   </div>`;
 }
-
 
 function darken(hex, f = 0.6) {
   const m = hex.match(/[\da-f]{2}/gi);
@@ -382,7 +380,7 @@ function lighten(hex, f = 0.35) {
 
 export function mapBackdrop() {
   // Substitui os vetores antigos pela imagem do mapa oficial
-  // Nota: Certifique-se de que "/img/map.png" está na pasta public/img/
+  // Nota: Certifique-se de que "map.png" está na pasta public/img/
   return `
     <image href="/img/map.png" x="0" y="0" width="360" height="240" preserveAspectRatio="none" opacity="0.9" />
     <rect width="360" height="240" fill="#1a1408" opacity="0.2" style="mix-blend-mode: multiply;" />

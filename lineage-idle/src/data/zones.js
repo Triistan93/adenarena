@@ -50,33 +50,36 @@ export const ZONES = {
  */
 export const ZONE_BACKGROUNDS = {
   // Vilas e bases
-  orcVillage:     '/img/orcVillage.png',
-  dwarvenMine:    '/img/dwarvenMine.png',
-  kamaelLair:     '/img/kamaelLair.png',
+  orcVillage:     '/img/Maps/orcVillage.png',
+  dwarvenMine:    '/img/Maps/dwarvenMine.png',
+  kamaelLair:     '/img/Maps/kamaelLair.png',
 
   // Zonas regulares
-  talkingIsland:  '/img/talkingIsland.png',
+  talkingIsland:  '/img/Maps/talkingIsland.png',
   elvenForest:    '/img/Maps/elvenForest.png',
-  darkForest:     '/img/darkForest.png',
+  darkForest:     '/img/Maps/DarkElvenForest.png',
   ruinedOutpost:  '/img/ruinedOutpost.png',
-  howlingMoor:    '/img/howlingMoor.png',
-  giranOutskirts: '/img/giranOutskirts.png',
-  orcenRuins:     '/img/orcenRuins.png',
-  forsakenCrypt:  '/img/forsakenCrypt.png',
-  blackCitadel:   '/img/blackCitadel.png',
-  gludioCastle:   '/img/gludioCastle.png',
-  wolfMountain:   '/img/wolfMountain.png',
-  riftOfTheVoid:  '/img/riftOfTheVoid.png',
-  emeraldGrove:   '/img/emeraldGrove.png',
-  underworldGate: '/img/underworldGate.png',
-  adenCity:       '/img/adenCity.png',
-  dragonValley:   '/img/dragonValley.png',
+  howlingMoor:    '/img/Maps/howlingMoor.png',
+  giranOutskirts: '/img/Maps/giranOutskirts.png',
+  orcenRuins:     '/img/Maps/orcenRuins.png',
+  forsakenCrypt:  '/img/Maps/gludioCastle.png',
+  blackCitadel:   '/img/Maps/gludioCastle.png',
+  gludioCastle:   '/img/Maps/gludioCastle.png',
+  wolfMountain:   '/img/Maps/howlingMoor.png',
+  riftOfTheVoid:  '/img/Maps/map.png',
+  emeraldGrove:   '/img/Maps/elvenForest.png',
+  underworldGate: '/img/Maps/map.png',
+  adenCity:       '/img/Maps/gludioCastle.png',
+  dragonValley:   '/img/Maps/map.png',
+  imperialTomb:   '/img/Maps/gludioCastle.png',
+  antharasLair:   '/img/Maps/map.png',
+  forgeOfGods:    '/img/Maps/map.png',
 
   // Raid Bosses
-  queen_ant:  '/img/queen_ant.png',
+  queen_ant:  '/img/Maps/map.png',
   zaken:      '/img/zaken.png',
-  frintezza:  '/img/frintezza.png',
-  baium:      '/img/baium.png',
-  antharas:   '/img/antharas.png',
-  valakas:    '/img/valakas.png'
+  frintezza:  '/img/Maps/gludioCastle.png',
+  baium:      '/img/Maps/gludioCastle.png',
+  antharas:   '/img/Maps/map.png',
+  valakas:    '/img/Maps/map.png'
 };

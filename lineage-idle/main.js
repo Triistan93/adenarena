@@ -2345,9 +2345,8 @@ function claimCert(subId, certType, subIndex) {
   updateAllUI(); save();
 }
 
-// ZONE_BACKGROUNDS foi movido para src/data/zones.js (Sprint 1)
-// Os imports estão no topo do arquivo.
-
+// --------------------------- VISUALS / STAGE ---------------------------
+// ZONE_BACKGROUNDS é importado de ./src/data/zones.js
 
 let currentBgPath = '';
 let activeBgLayer = 'a';
