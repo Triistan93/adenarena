@@ -9,7 +9,7 @@ import { D, ALL_EQUIP_SLOTS } from '../core/GameConfig.js';
 import { el, qs, qsa, mkEl } from '../core/DomHelpers.js';
 import { getMaxInventorySlots, getMaxWarehouseSlots, getSelectedSet } from '../services/InventoryService.js';
 import { resolveEquipSlot } from '../services/EquipmentService.js';
-import { showItemTooltip, hideItemTooltip } from './TooltipUI.js';
+import { showItemTooltip, hideItemTooltip, getItemIcon } from './TooltipUI.js';
 
 /**
  * Atualiza a interface da Mochila (Inventário) e contador de slots.
@@ -75,7 +75,7 @@ export function updateInventoryUI(state, callbacks = {}) {
     const enchantStr = item.enchant ? `+${item.enchant} ` : '';
     const checkHtml = `<div class="slot-select-checkbox">${isSelected ? '✓' : ''}</div>`;
 
-    slot.innerHTML = `${checkHtml}<span style="font-size:18px">${def.icon || '📦'}</span><span class="name">${enchantStr}${def.name}</span>${qty}${tag}`;
+    slot.innerHTML = `${checkHtml}<span style="font-size:18px">${getItemIcon(item)}</span><span class="name">${enchantStr}${def.name}</span>${qty}${tag}`;
 
     slot.onmouseenter = (e) => showItemTooltip(e, item, state, callbacks);
     slot.onmouseleave = () => hideItemTooltip();
@@ -124,7 +124,7 @@ export function updateWarehouseUI(state, callbacks = {}) {
     const countBadge = (item.count && item.count > 1) ? `<span class="qty">${item.count}</span>` : '';
 
     slotEl.innerHTML = `
-      <span style="font-size:18px">${def.icon || '📦'}</span>
+      <span style="font-size:18px">${getItemIcon(item)}</span>
       <span class="name">${def.name}</span>
       ${countBadge}
     `;
@@ -155,7 +155,7 @@ export function updateEquipmentUI(state, callbacks = {}) {
 
     if (item && def) {
       slotEl.className = `equip-slot active rarity-${item.rarity || 'common'}`;
-      slotEl.innerHTML = `<span class="equip-icon">${def.icon || '⚔️'}</span>`;
+      slotEl.innerHTML = `<span class="equip-icon">${getItemIcon(item)}</span>`;
       slotEl.onmouseenter = (e) => showItemTooltip(e, item, state, callbacks);
       slotEl.onmouseleave = () => hideItemTooltip();
       slotEl.onclick = () => {
@@ -170,3 +170,4 @@ export function updateEquipmentUI(state, callbacks = {}) {
     }
   }
 }
+

@@ -47,12 +47,12 @@ const RACE_FALLBACK = {
 
 function resolveImg(path) {
   if (!path) return '';
-  let clean = path.replace(/\/img\/Monsters\/[^\/]+\//i, '/img/').replace(/\/img\/Races\/[^\/]+\/([^\/]+\/)?/i, '/img/');
   if (typeof window !== 'undefined' && window.__HERO_IMGS && window.__HERO_IMGS[path]) {
     return window.__HERO_IMGS[path];
   }
-  return clean;
+  return path;
 }
+
 
 
 const MAGE_CLASSES = new Set(['mage', 'wizard', 'cleric', 'sorcerer', 'necromancer', 'bishop', 'prophet', 'spellsinger', 'spellhowler', 'shillien', 'overlord']);

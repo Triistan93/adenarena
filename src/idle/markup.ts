@@ -102,7 +102,8 @@ export const IDLE_MARKUP = `
           <p class="log-entry system">Select your Race &amp; Class to begin.</p>
         </div>
         <form id="chat-form" class="chat-input-bar">
-          <input type="text" id="chat-input" class="chat-input" placeholder="Digite uma mensagem..." autocomplete="off" />
+          <label for="chat-input" class="sr-only" style="display:none;">Mensagem do Chat</label>
+          <input type="text" id="chat-input" name="chatInput" class="chat-input" placeholder="Digite uma mensagem..." autocomplete="off" aria-label="Digite uma mensagem no chat" />
           <button type="submit" class="chat-send-btn">Enviar</button>
         </form>
       </section>
@@ -365,15 +366,16 @@ export const IDLE_MARKUP = `
                     <button class="rarity-filter-btn r-legendary" data-rarity="legendary">L</button>
                   </div>
                   <div style="display:flex; align-items:center; gap:4px; font-size:10px; color:var(--gilt-bright);">
-                    <span style="font-weight:600;">Auto-Venda:</span>
-                    <select id="auto-sell-rarity-select" style="background:#090b10; color:#fff; border:1px solid rgba(212,167,68,0.3); border-radius:4px; padding:2px 4px; font-size:10px; cursor:pointer;">
+                    <label for="auto-sell-rarity-select" style="font-weight:600; cursor:pointer;">Auto-Venda:</label>
+                    <select id="auto-sell-rarity-select" name="autoSellRarity" aria-label="Filtro de Auto-Venda por Raridade" style="background:#090b10; color:#fff; border:1px solid rgba(212,167,68,0.3); border-radius:4px; padding:2px 4px; font-size:10px; cursor:pointer;">
                       <option value="off">Desativado</option>
                       <option value="common">≤ Comum</option>
                       <option value="uncommon">≤ Incomum</option>
                       <option value="rare">≤ Raro</option>
                     </select>
                   </div>
-                  <input type="text" id="inv-search-input" placeholder="🔍 Buscar..." style="background:#090b10; color:#fff; border:1px solid rgba(212,167,68,0.3); border-radius:4px; padding:2px 6px; font-size:10px; width:80px;" title="Filtrar por nome de item" />
+                  <label for="inv-search-input" class="sr-only" style="display:none;">Buscar no inventário</label>
+                  <input type="text" id="inv-search-input" name="invSearch" aria-label="Filtrar inventário por nome de item" placeholder="🔍 Buscar..." style="background:#090b10; color:#fff; border:1px solid rgba(212,167,68,0.3); border-radius:4px; padding:2px 6px; font-size:10px; width:80px;" title="Filtrar por nome de item" />
                   <div class="l2inv-batch-pills">
                     <button id="select-commons-btn" class="l2inv-pill-btn" title="Selecionar comuns">✓ Comum</button>
                     <button id="select-uncommons-btn" class="l2inv-pill-btn" title="Selecionar incomuns">✓ Incomum</button>
@@ -740,11 +742,12 @@ export const IDLE_MARKUP = `
           <div class="admin-section admin-spawner">
             <h3>🎁 Spawner de Itens</h3>
             <div class="spawner-fields">
-              <select id="admin-item-select" class="admin-select"></select>
+              <label for="admin-item-select" class="sr-only" style="display:none;">Item para Gerar</label>
+              <select id="admin-item-select" name="adminItemSelect" class="admin-select" aria-label="Item para Gerar"></select>
               <div class="spawner-row">
-                <label>Qtd: <input type="number" id="admin-item-qty" value="1" min="1" max="999" class="admin-num-input" /></label>
-                <label>Raridade: 
-                  <select id="admin-item-rarity" class="admin-select">
+                <label for="admin-item-qty">Qtd: <input type="number" id="admin-item-qty" name="adminItemQty" value="1" min="1" max="999" class="admin-num-input" aria-label="Quantidade" /></label>
+                <label for="admin-item-rarity">Raridade: 
+                  <select id="admin-item-rarity" name="adminItemRarity" class="admin-select" aria-label="Raridade do Item">
                     <option value="common">Comum</option>
                     <option value="uncommon">Incomum</option>
                     <option value="rare">Raro</option>
@@ -752,8 +755,8 @@ export const IDLE_MARKUP = `
                     <option value="legendary">Lendário (Dourado)</option>
                   </select>
                 </label>
-                <label>Encanto: 
-                  <select id="admin-item-enchant" class="admin-select">
+                <label for="admin-item-enchant">Encanto: 
+                  <select id="admin-item-enchant" name="adminItemEnchant" class="admin-select" aria-label="Nível de Encanto">
                     <option value="0">+0</option>
                     <option value="3">+3</option>
                     <option value="7">+7</option>
@@ -761,8 +764,8 @@ export const IDLE_MARKUP = `
                     <option value="16">+16 (Máx)</option>
                   </select>
                 </label>
-                <label>Afixo: 
-                  <select id="admin-item-affix" class="admin-select">
+                <label for="admin-item-affix">Afixo: 
+                  <select id="admin-item-affix" name="adminItemAffix" class="admin-select" aria-label="Afixo do Item">
                     <option value="roll">🎲 Sortear da Raridade</option>
                     <option value="none">Nenhum Afixo</option>
                     <option value="crit_boost">✦ +% Crítico</option>

@@ -10,9 +10,10 @@ import { MONSTERS } from '../data/monsters.js';
 import { RACES, CLASSES } from '../data/races.js';
 import { el, qsa, updateBar } from '../core/DomHelpers.js';
 import { getClass } from '../engine/StatsEngine.js';
+import { heroSVG, monsterSVG } from '../../art.js';
 
 /**
- * Atualiza os componentes visuais do Herói no palco (nível, nome, HP/MP bars).
+ * Atualiza os componentes visuais do Herói no palco (nível, nome, HP/MP bars, ilustração 3D).
  * @param {Object} state
  */
 export function renderStageHero(state) {
@@ -21,6 +22,11 @@ export function renderStageHero(state) {
     const clsDef = getClass(state.class);
     const clsName = clsDef ? clsDef.name : (state.class || 'Aventureiro');
     heroNameEl.textContent = `${clsName} (Lv. ${state.level})`;
+  }
+
+  const heroContainer = el('stage-hero');
+  if (heroContainer) {
+    heroContainer.innerHTML = heroSVG(state.race || 'human', state.class || 'fighter');
   }
 
   updateBar('hero-hp-bar', state.hp, state.maxHp, 'hero-hp-text');
@@ -47,9 +53,10 @@ export function renderStageMonster(state) {
 
   const spriteContainer = el('monster-sprite-container');
   if (spriteContainer) {
-    spriteContainer.innerHTML = `<div class="stage-monster-icon" style="font-size:72px;">${m.icon || '👾'}</div>`;
+    spriteContainer.innerHTML = monsterSVG(m.id || m.itemId || m.name, { crown: m.boss || m.isTower });
   }
 }
+
 
 /**
  * Atualiza a interface da guia de Zonas de Caça.
