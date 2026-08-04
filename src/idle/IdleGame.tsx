@@ -13,6 +13,8 @@ import "../../lineage-idle/data/echo-adapter.js";
 import "../../lineage-idle/theme-grimoire.js";
 // @ts-ignore
 import { init, setRoot, destroy } from "../../lineage-idle/main.js";
+// @ts-ignore
+import { bootstrap, destroyBootstrap } from "../../lineage-idle/src/core/GameBootstrap.js";
 // @ts-ignore -- Vite ?raw import returns the CSS source as a string
 import idleCss from "../../lineage-idle/style.css?raw";
 // @ts-ignore -- Grimoire theme CSS
@@ -43,12 +45,12 @@ export default function IdleGame() {
 
     const shadow = host.shadowRoot ?? host.attachShadow({ mode: "open" });
     shadow.innerHTML = `<style>${idleCss}\n${grimoireCss}</style>${IDLE_MARKUP}`;
-    setRoot(shadow as unknown as Document);
+    
+    // Inicialização unificada via GameBootstrap
+    bootstrap(shadow as unknown as Document);
     init();
 
     // ---- Embers / brasas de fogo — montagem correta no Shadow DOM ----
-    // ShadowRoot NÃO tem createElement; sempre usar document.createElement
-    // e depois inserir no #game do shadow.
     if ((window as any).GrimoireFX) {
       const gameDiv = shadow.getElementById
         ? shadow.getElementById('game')
@@ -56,7 +58,6 @@ export default function IdleGame() {
       if (gameDiv && !gameDiv.querySelector('.g-ember-global')) {
         const emberDiv = document.createElement('div');
         emberDiv.className = 'g-ember-global';
-        // Primeiro filho do #game → fica atrás da UI mas na frente do fundo
         gameDiv.insertBefore(emberDiv, gameDiv.firstChild);
         (window as any).GrimoireFX.mountEmbers(emberDiv, {
           count: 60,
@@ -71,6 +72,7 @@ export default function IdleGame() {
 
     return () => {
       delete (window as any).onOpenRaceClassChangeModal;
+      destroyBootstrap();
       destroy();
       if (host.shadowRoot) {
         host.shadowRoot.innerHTML = "";
