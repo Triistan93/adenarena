@@ -114,6 +114,36 @@ import {
 import {
   startRaidBoss as serviceStartRaidBoss
 } from './src/services/RaidService.js';
+// ─── Sprint 6: Importa módulos de Interface gráfica (UI) ───────────────────
+import {
+  formatItemDisplayName as uiFormatItemDisplayName,
+  showItemTooltip as uiShowItemTooltip,
+  hideItemTooltip as uiHideItemTooltip
+} from './src/ui/TooltipUI.js';
+
+import {
+  updateInventoryUI as uiUpdateInventoryUI,
+  updateWarehouseUI as uiUpdateWarehouseUI,
+  updateEquipmentUI as uiUpdateEquipmentUI
+} from './src/ui/InventoryUI.js';
+
+import {
+  updateSkillUI as uiUpdateSkillUI,
+  updateSkillInfoPanel as uiUpdateSkillInfoPanel
+} from './src/ui/SkillsUI.js';
+
+import {
+  renderStageHero as uiRenderStageHero,
+  renderStageMonster as uiRenderStageMonster,
+  updateZoneUI as uiUpdateZoneUI,
+  renderZoneMap as uiRenderZoneMap
+} from './src/ui/StageUI.js';
+
+import {
+  updateShopUI as uiUpdateShopUI,
+  updateCraftUI as uiUpdateCraftUI
+} from './src/ui/ShopUI.js';
+// ────────────────────────────────────────────────────────────────────────────
 // ────────────────────────────────────────────────────────────────────────────
 // ────────────────────────────────────────────────────────────────────────────
 // ────────────────────────────────────────────────────────────────────────────
@@ -188,22 +218,9 @@ let state = DEFAULT_STATE();
 
 
 function formatItemDisplayName(item, def) {
-  if (!item) return '';
-  const itemObj = (typeof item === 'string') ? { itemId: item } : item;
-  const itemDef = def || (typeof getItemDef === 'function' ? getItemDef(itemObj.itemId || itemObj.id) : (D().ALL_ITEMS ? D().ALL_ITEMS[itemObj.itemId || itemObj.id] : null));
-  const baseName = itemDef ? itemDef.name : (itemObj.itemId || itemObj.id || 'Item');
-
-  const enchant = Number(itemObj.enchant) || 0;
-  const enchantStr = enchant > 0 ? `+${enchant} ` : '';
-  const foundationStr = itemObj.foundation ? ' Foundation' : '';
-  const rarity = itemObj.rarity;
-  let rarityStr = '';
-  if (rarity && rarity !== 'common' && D().RARITY && D().RARITY[rarity]) {
-    rarityStr = ` [${D().RARITY[rarity].name}]`;
-  }
-
-  return `${enchantStr}${baseName}${foundationStr}${rarityStr}`;
+  return uiFormatItemDisplayName(item, def);
 }
+
 
 // FUNÇÃO DE SAVE/LOAD COM DEEP MERGE PARA IMPEDIR RESET DE SKILLS
 function save(manual = false) {
@@ -881,7 +898,9 @@ function updateStatsUI() {
   }
 }
 
-function updateEquipmentUI() {
+function updateDetailedEquipStatsUI() {
+
+
   const stats = getStats();
   const atkEl = el('l2stat-atk'); if (atkEl) atkEl.textContent = stats.atk;
   const defEl = el('l2stat-def'); if (defEl) defEl.textContent = stats.def;
@@ -982,312 +1001,25 @@ function updateEquipmentUI() {
 const TREE_NODE_W = 110; const TREE_NODE_H = 78; const TREE_PAD_X = 14; const TREE_PAD_Y = 14;
 
 function updateSkillUI() {
-  const wrap = el('skill-tree');
-  if (!wrap) return;
-  const cols = 5;
-
-  const pDef = getClass(state.class);
-  const activeTreeClass = pDef?.skillTree || pDef?.archetype || 'fighter';
-
-  const pos = {};
-
-  // Use CLASS_SKILLS_ECHO (Essence 547 skill pack) when available for this class.
-  // Fallback to legacy classSatisfies filter for classes not covered by the pack.
-  const classSkillIds = getClassSkills(state.class);
-  let classSkills;
-  if (classSkillIds && classSkillIds.length > 0) {
-    // Skill pack path: show exactly the skills defined for this class
-    classSkills = classSkillIds
-      .map(id => [id, SKILL_DEFS[id]])
-      .filter(([id, def]) => def != null);
-  } else {
-    // Legacy fallback path
-    classSkills = Object.entries(SKILL_DEFS).filter(([id, def]) => classSatisfies(state.class, def.classReq));
-  }
-
-  const skillsByTier = { 0: [], 1: [], 2: [], 3: [], 4: [] };
-  for (const [id, def] of classSkills) {
-    const t = def.tier !== undefined ? def.tier : 0;
-    if (skillsByTier[t]) skillsByTier[t].push([id, def]);
-  }
-
-  // First pass: assign positions from explicit layout
-  const usedPositions = new Set();
-  for (let c = 0; c < 5; c++) {
-    const list = skillsByTier[c] || [];
-    list.forEach(([id, def]) => {
-      const explicit = SKILL_TREE_LAYOUT[id];
-      if (explicit && explicit.col !== undefined && explicit.row !== undefined) {
-        const col = explicit.col;
-        const row = explicit.row;
-        pos[id] = {
-          x: TREE_PAD_X + col * TREE_NODE_W + TREE_NODE_W / 2,
-          y: TREE_PAD_Y + row * TREE_NODE_H + TREE_NODE_H / 2
-        };
-        usedPositions.add(`${col},${row}`);
-      }
-    });
-  }
-  // Second pass: auto-assign positions for skills without explicit layout
-  const colCounters = [0, 0, 0, 0, 0];
-  for (let c = 0; c < 5; c++) {
-    const list = skillsByTier[c] || [];
-    list.forEach(([id, def]) => {
-      if (pos[id]) return; // already assigned
-      let row = colCounters[c];
-      // Find next non-colliding row in this column
-      while (usedPositions.has(`${c},${row}`)) row++;
-      colCounters[c] = row + 1;
-      usedPositions.add(`${c},${row}`);
-      pos[id] = {
-        x: TREE_PAD_X + c * TREE_NODE_W + TREE_NODE_W / 2,
-        y: TREE_PAD_Y + row * TREE_NODE_H + TREE_NODE_H / 2
-      };
-    });
-  }
-
-  const maxRow = Object.values(pos).reduce((m, p) => {
-    const row = Math.round((p.y - TREE_PAD_Y - TREE_NODE_H / 2) / TREE_NODE_H);
-    return Math.max(m, row);
-  }, 6);
-  const rows = maxRow + 2;
-  const W = cols * TREE_NODE_W + TREE_PAD_X * 2;
-  const H = rows * TREE_NODE_H + TREE_PAD_Y * 2;
-  wrap.style.width = W + 'px'; wrap.style.height = H + 'px';
-
-  let lines = '';
-  for (const [id, reqs] of Object.entries(SKILL_REQS)) {
-    const childPos = pos[id];
-    if (!childPos) continue;
-    for (const parentId of Object.keys(reqs)) {
-      const parentPos = pos[parentId];
-      if (!parentPos) continue;
-      const owned = (state.skills[parentId] || 0) >= reqs[parentId];
-      const cls = owned ? 'link link-owned' : 'link';
-      if (parentPos.y === childPos.y) {
-        const cy = parentPos.y - 26; lines += `<path class="${cls}" d="M ${parentPos.x} ${parentPos.y} Q ${(parentPos.x+childPos.x)/2} ${cy} ${childPos.x} ${childPos.y}" />`;
-      } else { lines += `<line class="${cls}" x1="${parentPos.x}" y1="${parentPos.y}" x2="${childPos.x}" y2="${childPos.y}" />`; }
-    }
-  }
-  
-  let tierLabels = '';
-  for (let c = 0; c < cols; c++) { const x = TREE_PAD_X + c * TREE_NODE_W + TREE_NODE_W / 2; tierLabels += `<text class="tier-label" x="${x}" y="${H - 4}">${TIER_NAMES[c] || ''}</text>`; }
-  wrap.querySelector('svg')?.remove();
-  const svg = mkNS('http://www.w3.org/2000/svg', 'svg');
-  svg.setAttribute('class', 'skill-tree-svg'); svg.setAttribute('width', W); svg.setAttribute('height', H); svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
-  svg.innerHTML = lines + tierLabels; wrap.insertBefore(svg, wrap.firstChild);
-
-  let nodesLayer = wrap.querySelector('.skill-tree-nodes');
-  if (!nodesLayer) { nodesLayer = mkEl('div'); nodesLayer.className = 'skill-tree-nodes'; wrap.appendChild(nodesLayer); }
-  nodesLayer.innerHTML = '';
-  
-  for (const [id, def] of classSkills) {
-    if (!def) continue;
-    const p = pos[id]; if (!p) continue;
-    const lvl = state.skills[id] || 0, max = def.max || def.maxLevel || 5;
-    const node = mkEl('div'); node.className = `skill-node tier-${def.tier || 0}` + (lvl > 0 ? ' owned' : '') + (lvl === max ? ' maxed' : '');
-    node.style.left = (p.x - TREE_NODE_W / 2) + 'px'; node.style.top = (p.y - TREE_NODE_H / 2) + 'px';
-    node.style.width = TREE_NODE_W + 'px'; node.style.height = TREE_NODE_H + 'px';
-    const reqs = SKILL_REQS[id], reqOk = !reqs || Object.entries(reqs).every(([s, v]) => s === 'level' || s === 'sp' || (state.skills[s] || 0) >= v);
-    const lvlOk = state.level >= (def.reqLvl || 1), canBuy = reqOk && lvlOk && state.sp >= getSkillCost(id, lvl) && lvl < max;
-    const btnClass = canBuy ? 'skill-btn can-buy' : 'skill-btn';
-    node.innerHTML = `
-      <button class="${btnClass}" data-skill="${id}">
-        <span class="skill-icon">${def.icon || '✦'}</span>
-        <span class="skill-name">${def.name}</span>
-        <span class="skill-lvl-num">${lvl}/${max}</span>
-      </button>
-    `;
-    nodesLayer.appendChild(node);
-  }
-
-  qsa('.skill-btn').forEach(btn => {
-    const sId = btn.dataset.skill, def = SKILL_DEFS[sId]; if (!def) return;
-    btn.onmouseenter = (e) => showSkillTooltip(sId, e); btn.onmouseleave = hideSkillTooltip;
-    btn.onclick = () => spendSP(sId);
-  });
-  updateSkillInfoPanel();
+  return uiUpdateSkillUI(state, { spendSP, showSkillTooltip, hideSkillTooltip });
 }
-
-function buySkill(sId) {
-  spendSP(sId);
-}
-
-// getSkillCost importado do SkillEngine.js (Sprint 4)
-
-
 function updateSkillInfoPanel() {
-  const panel = el('skill-info-panel'); if (!panel) return;
-  // Find the first applicable skill for the current class as fallback
-  let id = state.selectedSkill;
-  if (!id || !SKILL_DEFS[id]) {
-    const firstApplicable = Object.keys(SKILL_DEFS).find(sid =>
-      classSatisfies(state.class, SKILL_DEFS[sid].classReq) && (state.skills[sid] || 0) > 0
-    ) || Object.keys(SKILL_DEFS).find(sid =>
-      classSatisfies(state.class, SKILL_DEFS[sid].classReq)
-    );
-    id = firstApplicable || null;
-  }
-  const def = id ? SKILL_DEFS[id] : null;
-  if (!def) { panel.innerHTML = '<p style="color:var(--text-muted);padding:12px">Select a skill to view details.</p>'; return; }
-  const lvl = state.skills[id] || 0;
-  const max = def.max || def.maxLevel || 5;
-  const maxed = lvl >= max;
-  const cost = getSkillCost(id, lvl);
-  const reqs = SKILL_REQS[id];
-  const meetsReqs = !reqs || Object.entries(reqs).every(([s, v]) => s === 'level' || s === 'sp' || (state.skills[s] || 0) >= v);
-  const lvlOk = state.level >= (def.reqLvl || 1);
-  const canAfford = state.sp >= cost && !maxed;
-  
-  let reqHtml = (reqs && Object.keys(reqs).filter(s => s !== 'level' && s !== 'sp').length > 0)
-    ? Object.entries(reqs).filter(([s]) => s !== 'level' && s !== 'sp').map(([s, v]) => { const ok = (state.skills[s] || 0) >= v; return `<span class="req ${ok ? 'ok' : 'no'}">${SKILL_DEFS[s]?.name || s} ${v}</span>`; }).join('')
-    : '';
-  reqHtml += `<span class="req ${lvlOk ? 'ok' : 'no'}">Level ${def.reqLvl || 1}</span>`;
-
-  const tier = TIER_NAMES[def.tier || 0] || '';
-  const _effectText = window.SkillScaling ? window.SkillScaling.buildSkillEffectText(def, lvl) : (def.info || '');
-  panel.innerHTML = `
-    <div class="si-head"><span class="si-icon">${def.icon || '✦'}</span><div class="si-title"><h3>${def.name}</h3><p class="si-tier">${tier} · Lv.${lvl}/${max}</p></div></div>
-    <p class="si-desc">${def.desc || def.note || ''}</p><div class="si-effect">${_effectText}</div>
-    <div class="si-reqs"><span class="si-label">Requires</span>${reqHtml}</div>
-    <button class="si-btn" data-skillup="${id}" ${(!canAfford || !meetsReqs || !lvlOk) ? 'disabled' : ''}>${maxed ? '✦ MAXED' : `Invest ${cost.toLocaleString()} SP`}</button>
-    <p class="si-sp">SP available: <strong>${state.sp.toLocaleString()}</strong></p>
-  `;
-  const btn = panel.querySelector('[data-skillup]'); if (btn) btn.onclick = () => spendSP(btn.dataset.skillup);
+  return uiUpdateSkillInfoPanel(state, { spendSP });
 }
+
 
 function updateInventoryUI() {
-  updateEquipmentUI();
-  const grid = el('inventory-grid'); if (!grid) return; grid.innerHTML = '';
-  const selectedSet = getSelectedSet();
-  const filter = state.filter || 'all';
-  const rarityFilter = state.rarityFilter || 'all';
-  const equipFilter = state.equipFilter || 'all';
-
-  const autoSellSel = el('auto-sell-rarity-select');
-  if (autoSellSel) {
-    autoSellSel.value = state.autoSellRarity || 'off';
-    autoSellSel.onchange = (e) => {
-      state.autoSellRarity = e.target.value;
-      log(`⚙️ Auto-Venda configurado para: ${e.target.value.toUpperCase()}`, 'system');
-      save();
-    };
-  }
-
-  const searchInput = el('inv-search-input');
-  const searchTerm = (searchInput?.value || '').trim().toLowerCase();
-  if (searchInput) {
-    searchInput.oninput = () => safeUiUpdate('inventory', updateInventoryUI);
-  }
-
-  const sorted = [...state.inventory]
-    .filter(i => i && i.itemId && D().ALL_ITEMS[i.itemId])
-    .sort((a, b) => { const da = D().ALL_ITEMS[a.itemId], db = D().ALL_ITEMS[b.itemId]; if (!da || !db) return 0; return (db.tier || 0) - (da.tier || 0); });
-    
-  let shown = 0;
-  let selectedValue = 0;
-  let salvageableCount = 0;
-
-  for (const item of sorted) {
-    const def = D().ALL_ITEMS[item.itemId]; if (!def) continue;
-    if (searchTerm && !def.name.toLowerCase().includes(searchTerm)) continue;
-    
-    // Category Filter matching L2 Tabs
-    if (filter !== 'all') {
-      if (filter === 'gear' && !['weapon','armor','helmet','gloves','boots','ring'].includes(def.slot)) continue;
-      else if (filter === 'consumable' && !['consumable','potion','scroll','powerup'].includes(def.slot)) continue;
-      else if (filter === 'material' && !['material','gem','craft'].includes(def.slot)) continue;
-      else if (filter === 'scroll' && !['scroll','quest'].includes(def.slot)) continue;
-      else if (!['gear','consumable','material','scroll'].includes(filter) && def.slot !== filter) continue;
-    }
-
-    const rarity = item.rarity || 'common';
-    if (rarityFilter !== 'all' && rarity !== rarityFilter) continue;
-    if (equipFilter === 'equipped' && !item.equipped) continue;
-    if (equipFilter === 'bag' && item.equipped) continue;
-
-    let isUpgrade = false;
-    if (!item.equipped) {
-      const targetSlot = resolveEquipSlot(def.slot);
-      if (targetSlot && ALL_EQUIP_SLOTS.includes(targetSlot)) {
-        const currentEquipUid = state.equipment[targetSlot];
-        const currentEquipItem = currentEquipUid ? state.inventory.find(i => i.uid === currentEquipUid) : null;
-        const currentDef = currentEquipItem ? D().ALL_ITEMS[currentEquipItem.itemId] : null;
-        const itemPwr = (def.stats?.atk || 0) + (def.stats?.def || 0) + (def.stats?.matk || 0) + (def.stats?.mdef || 0);
-        const currPwr = currentDef ? ((currentDef.stats?.atk || 0) + (currentDef.stats?.def || 0) + (currentDef.stats?.matk || 0) + (currentDef.stats?.mdef || 0)) : 0;
-        if (itemPwr > currPwr) isUpgrade = true;
-      }
-    }
-
-    const isSelected = selectedSet.has(item.uid);
-    if (isSelected && !item.equipped) {
-      const qty = item.count || 1;
-      const basePrice = def.price || 10;
-      const rarityDef = item.rarity ? D().RARITY[item.rarity] : null;
-      const mult = rarityDef ? rarityDef.mult : 1;
-      const enchantMult = 1 + (item.enchant || 0) * 0.1;
-      selectedValue += Math.floor(basePrice * mult * enchantMult * 0.4) * qty;
-      const isEquipItem = (def.slot && def.slot !== 'consumable' && def.slot !== 'material' && def.slot !== 'scroll' && def.slot !== 'powerup') || ALL_EQUIP_SLOTS.includes(resolveEquipSlot(def.slot));
-      if (isEquipItem) {
-        salvageableCount += qty;
-      }
-    }
-
-    const slot = mkEl('div');
-    slot.className = `inv-slot rarity-${rarity}` + (item.equipped ? ' is-equipped' : '') + (isSelected ? ' is-selected' : '');
-    const qty = (item.count || 1) > 1 ? `<span class="qty">${item.count}</span>` : '';
-    const tag = item.equipped ? `<span class="equipped-badge">E</span>` : (isUpgrade ? `<span class="equipped-badge" style="background:#10b981; color:#fff;" title="Upgrade de Equipamento">↑</span>` : '');
-    const enchantStr = item.enchant ? `+${item.enchant} ` : '';
-    const checkHtml = `<div class="slot-select-checkbox">${isSelected ? '✓' : ''}</div>`;
-    slot.innerHTML = `${checkHtml}<span style="font-size:18px">${getItemIcon(def)}</span><span class="name">${enchantStr}${def.name}</span>${qty}${tag}`;
-    
-    // Hover tooltips for backpack items with smooth grace period
-    slot.onmouseenter = (e) => { cancelHideTooltip(); showItemTooltip(item, e); };
-    slot.onmouseleave = scheduleHideTooltip;
-
-    slot.onclick = (e) => {
-      e.stopPropagation();
-      cancelHideTooltip();
-      showItemTooltip(item, e);
-      toggleSelectItem(item.uid);
-    };
-
-    slot.ondblclick = (e) => {
-      e.stopPropagation();
-      if (ALL_EQUIP_SLOTS.includes(resolveEquipSlot(def.slot))) {
-        equipItem(item.uid);
-      } else if (['consumable','scroll','powerup'].includes(def.slot)) {
-        useItem(item.uid);
-      }
-    };
-
-    slot.oncontextmenu = (e) => {
-      e.preventDefault();
-      toggleSelectItem(item.uid);
-    };
-
-    grid.appendChild(slot); shown++;
-  }
-
-  const sellBtn = el('sell-selected-btn');
-  if (sellBtn) {
-    sellBtn.disabled = selectedSet.size === 0;
-    sellBtn.textContent = selectedSet.size > 0 ? `💰 Vender (${selectedValue.toLocaleString()}g)` : `💰 Vender`;
-  }
-  const salvageBtn = el('salvage-selected-btn');
-  if (salvageBtn) {
-    salvageBtn.disabled = selectedSet.size === 0 || salvageableCount === 0;
-    salvageBtn.textContent = salvageableCount > 0 ? `🔨 Desmontar (${salvageableCount})` : `🔨 Desmontar`;
-  }
-
-  const maxSlots = getMaxInventorySlots();
-  const slotCount = el('inv-slots'); if (slotCount) slotCount.textContent = `${state.inventory.length}/${maxSlots}`;
-  const slotCountVal = el('inv-slots-count'); if (slotCountVal) slotCountVal.textContent = state.inventory.length;
-  const slotCounterEl = el('l2inv-counter'); if (slotCounterEl) slotCounterEl.textContent = `(${state.inventory.length}/${maxSlots})`;
-  const goldCount = el('gold-text'); if (goldCount) goldCount.textContent = state.gold.toLocaleString();
-
-  if (shown === 0) grid.innerHTML = '<div class="inv-empty-msg">Nenhum item encontrado nesta categoria</div>';
+  return uiUpdateInventoryUI(state, { equipItem, sellItem, salvageItem, useItem, toggleSelectItem, depositToWarehouse, save, log });
 }
+function updateWarehouseUI() {
+  return uiUpdateWarehouseUI(state, { withdrawFromWarehouse });
+}
+function updateEquipmentUI() {
+  return uiUpdateEquipmentUI(state, { unequipItem });
+}
+
+
+
 
 function getAssetUrl(p) {
   if (!p) return '';
@@ -1588,14 +1320,12 @@ function showSkillTooltip(skillId, e) {
 }
 
 function updateShopUI() {
-  if (!state.zone && state.race && RACES[state.race]?.startZone) state.zone = RACES[state.race].startZone;
-  if (!state.zone) state.zone = 'talkingIsland';
-  qsa('.shop-subtab').forEach(b => { b.classList.toggle('active', b.dataset.shoptab === state.shopTab); b.onclick = () => { state.shopTab = b.dataset.shoptab; updateShopUI(); }; });
-  const list = el('shop-list'); if (!list) return; list.innerHTML = '';
-  if (state.shopTab === 'gear') renderShopGear(list); else if (state.shopTab === 'potions') renderShopPotions(list); else if (state.shopTab === 'powerups') renderShopPowerups(list); else if (state.shopTab === 'class') renderShopClass(list); else if (state.shopTab === 'mystic') renderShopMystic(list);
-  list.querySelectorAll('[data-buy]').forEach(btn => btn.onclick = () => buyItem(btn.dataset.buy, parseInt(btn.dataset.qty || 1)));
-  list.querySelectorAll('[data-buy-rarity]').forEach(btn => btn.onclick = () => buyMysticItem(btn.dataset.buyRarity, btn.dataset.rarity));
+  return uiUpdateShopUI(state, { buyItem, buyMysticItem });
 }
+function updateCraftUI() {
+  return uiUpdateCraftUI(state, { craftItem });
+}
+
 
 function shopRow(def, id, price, extra = '') {
   const canAfford = state.gold >= price; 
@@ -1840,19 +1570,8 @@ function checkOfflineProgress(lastTime) {
   }
 }
 
-function updateCraftUI() {
-  qsa('.craft-subtab').forEach(b => {
-    b.classList.toggle('active', b.dataset.crafttab === state.craftTab);
-    b.onclick = () => { state.craftTab = b.dataset.crafttab; updateCraftUI(); };
-  });
-  const recipesView = el('craft-recipes-view');
-  const enchantView = el('craft-enchant-view');
-  if (recipesView) recipesView.classList.toggle('active', state.craftTab === 'recipes');
-  if (enchantView) enchantView.classList.toggle('active', state.craftTab === 'enchant');
 
-  if (state.craftTab === 'recipes') renderCraftRecipes();
-  else if (state.craftTab === 'enchant') updateEnchantUI();
-}
+
 
 function renderCraftRecipes() {
   const list = el('craft-list'); if (!list) return; list.innerHTML = '';
@@ -1955,46 +1674,14 @@ function enchantItem(uid) {
 
 
 function updateZoneUI() {
-  qsa('.zone-subtab').forEach(b => {
-    b.classList.toggle('active', b.dataset.zonetab === state.zoneTab);
-    b.onclick = () => { state.zoneTab = b.dataset.zonetab; updateZoneUI(); };
-  });
-  const mapView = el('zone-map-view');
-  const raidsView = el('zone-raids-view');
-  if (mapView) mapView.classList.toggle('active', state.zoneTab === 'map');
-  if (raidsView) raidsView.classList.toggle('active', state.zoneTab === 'raids');
-
-  if (state.zoneTab === 'map') renderZoneMap();
-  else if (state.zoneTab === 'raids') updateRaidUI();
+  return uiUpdateZoneUI(state, { selectZone });
 }
-
 function renderZoneMap() {
-  const list = el('zone-list'); if (!list) return;
-  updateSagaProgress(true);
-  const coords = ART.ZONE_COORDS, order = ART.ZONE_ORDER, unlocked = {};
-  SAGAS.slice(0, (state.currentSaga || 0) + 1).forEach(s => s.zones.forEach(z => { unlocked[z] = true; }));
-  let routes = '', nodes = '';
-  for (let i = 1; i < order.length; i++) { 
-    const prevId = order[i - 1], currId = order[i];
-    const a = coords[prevId], b = coords[currId]; 
-    if (!a || !b) continue; 
-    const open = (unlocked[prevId] || ZONES[prevId]?.level <= state.level) && (unlocked[currId] || ZONES[currId]?.level <= state.level); 
-    routes += `<line class="zm-route ${open ? 'open' : ''}" x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}"/>`; 
-  }
-  for (const id of order) {
-    const z = ZONES[id], c = coords[id]; if (!z || !c) continue; 
-    const reachable = (unlocked[id] || z.level <= state.level) && z.level <= state.level;
-    const cls = state.zone === id ? 'current' : (reachable ? 'open' : 'locked');
-    nodes += `<g class="zm-node ${cls}" data-zone="${id}" transform="translate(${c.x},${c.y})"><title>${z.name} — Lv.${z.level}+${z.town ? ' (town)' : ''}</title><circle class="zm-ring" r="11"/><circle class="zm-dot" r="5"/>${z.town ? '<text class="zm-town" y="1">⌂</text>' : ''}${!reachable ? '<text class="zm-lock" y="3">🔒</text>' : ''}<text class="zm-label" y="23">${z.name}</text></g>`;
-  }
-  list.innerHTML = `<svg class="zone-map" viewBox="0 0 360 240" preserveAspectRatio="xMidYMid meet">${ART.mapBackdrop()}<g class="zm-routes">${routes}</g><g class="zm-nodes">${nodes}</g></svg>`;
-  list.querySelectorAll('.zm-node').forEach(n => { 
-    n.onclick = () => { 
-      const id = n.dataset.zone, z = ZONES[id]; 
-      if ((unlocked[id] || z.level <= state.level) && z.level <= state.level) selectZone(id); 
-    }; 
-  });
+  return uiRenderZoneMap(state, { selectZone });
 }
+
+
+
 
 function updateRaidUI() {
   const list = el('raid-boss-list'); if (!list) return; list.innerHTML = '';
@@ -2735,38 +2422,15 @@ function updateZoneBackground() {
 
 function topEquipRarityColor() { const rank = { common: 0, uncommon: 1, rare: 2, epic: 3, legendary: 4 }; let best = -1, col = ''; for (const s of Object.keys(state.equipment)) { const uid = state.equipment[s]; if (!uid) continue; const it = state.inventory.find(i => i.uid === uid); if (!it || !it.rarity) continue; const r = rank[it.rarity] ?? -1; if (r > best) { best = r; col = D().RARITY[it.rarity].color; } } return col; }
 function renderStageHero() {
-  const hero = el('stage-hero'), pArt = el('portrait-art'), dArt = el('doll-art');
-  if (!state.race || !state.class) { if (hero) hero.innerHTML = ''; if (pArt) pArt.innerHTML = ''; if (dArt) dArt.innerHTML = ''; return; }
-  const aura = topEquipRarityColor();
-  if (hero) {
-    hero.innerHTML = ART.heroSVG(state.race, state.class, aura);
-    hero.setAttribute('data-label', (getClass(state.class)?.name || state.class).toUpperCase());
-  }
-  if (dArt) dArt.innerHTML = ART.heroSVG(state.race, state.class, aura);
-  if (pArt) pArt.innerHTML = ART.heroSVG(state.race, state.class, aura, 'bust');
-  const pn = el('portrait-name'), ps = el('portrait-sub'), pau = el('portrait-aura');
-  if (pn) {
-    const className = getClass(state.class)?.name || '';
-    pn.textContent = state.charName ? `${state.charName} (${className})` : `${RACES[state.race]?.name || ''} ${className}`.trim();
-  }
-  if (ps) ps.textContent = state.zone ? ('Hunting · ' + ZONES[state.zone].name) : 'Awaiting the road';
-  if (pau) pau.style.setProperty('--aura', aura ? aura + '55' : 'rgba(212,167,68,0.0)');
-  updateZoneBackground();
+  return uiRenderStageHero(state);
 }
-function updateMonsterHP() { const fill = el('m-hp-fill'), mon = state.activeMonster; if (!fill) return; if (!mon || !mon._maxHp) { fill.style.width = '100%'; return; } fill.style.width = Math.max(0, (mon.hp / mon._maxHp) * 100) + '%'; }
 function renderStageMonster() {
-  const art = el('m-art'), nm = el('m-name'), box = el('stage-monster'), mon = state.activeMonster;
-  if (box) box.classList.remove('hurt', 'lunge');
-  if (!mon) { if (art) art.innerHTML = ''; if (nm) nm.textContent = ''; return; }
-  if (box) box.setAttribute('data-label', (mon.name || '').toUpperCase());
-  if (art) { 
-    const artKey = (mon.isTower) ? (mon.boss ? 'dragon' : 'knight') : state.target;
-    art.innerHTML = ART.monsterSVG(artKey, { crown: !!mon.boss }); 
-    art.classList.remove('swap'); void art.offsetWidth; art.classList.add('swap'); 
-  }
-  if (nm) nm.textContent = mon.name + (mon.boss ? ' ★' : ''); updateMonsterHP();
-  updateZoneBackground();
+  return uiRenderStageMonster(state);
 }
+
+function updateMonsterHP() { const fill = el('m-hp-fill'), mon = state.activeMonster; if (!fill) return; if (!mon || !mon._maxHp) { fill.style.width = '100%'; return; } fill.style.width = Math.max(0, (mon.hp / mon._maxHp) * 100) + '%'; }
+
+
 function reflow(n) { void n.offsetWidth; }
 function stageHeroAttack() { const st = el('stage'); if (!st) return; st.classList.remove('is-hero-atk'); reflow(st); st.classList.add('is-hero-atk'); }
 function stageMonsterHurt(dmg, crit) { updateMonsterHP(); const m = el('stage-monster'); if (m) { m.classList.remove('hurt'); reflow(m); m.classList.add('hurt'); setTimeout(() => m.classList.remove('hurt'), 420); } stageFloat((crit ? 'CRIT ' : '') + Math.round(dmg), crit ? 'sf-crit' : 'sf-dmg', 'right'); }
@@ -3948,69 +3612,8 @@ function withdrawAllFromWarehouse() {
   }
 }
 
-function updateWarehouseUI() {
-  const invCapEl = el('wh-inv-count');
-  if (invCapEl) invCapEl.textContent = `${state.inventory.length}/${getMaxInventorySlots()} slots`;
 
-  const whCapEl = el('wh-storage-count');
-  if (whCapEl) whCapEl.textContent = `${(state.warehouse || []).length}/${getMaxWarehouseSlots()} slots`;
 
-  const invGrid = el('wh-inventory-grid');
-  if (invGrid) {
-    invGrid.innerHTML = '';
-    const unequippedItems = state.inventory.filter(i => i && i.itemId && D().ALL_ITEMS[i.itemId]);
-    if (unequippedItems.length === 0) {
-      invGrid.innerHTML = `<div style="grid-column: 1 / -1; text-align:center; padding:30px; color:var(--text-muted); font-size:11px;">Mochila vazia.</div>`;
-    } else {
-      unequippedItems.forEach(item => {
-        const def = getItemDef(item.itemId);
-        if (!def) return;
-        const rarity = item.rarity || 'common';
-        const slot = mkEl('div');
-        slot.className = `inv-slot rarity-${rarity}` + (item.equipped ? ' is-equipped' : '') + (item.foundation ? ' is-foundation' : '');
-        const countBadge = (item.count && item.count > 1) ? `<span class="qty">${item.count}</span>` : '';
-        const enchantBadge = item.enchant ? `<span class="slot-enchant" style="position:absolute; top:2px; right:2px; font-weight:bold; color:var(--gilt); font-size:10px;">+${item.enchant}</span>` : '';
-        const tag = item.equipped ? `<span class="equipped-badge">E</span>` : '';
-
-        slot.innerHTML = `<span style="font-size:18px">${getItemIcon(def)}</span><span class="name">${def.name}</span>${countBadge}${enchantBadge}${tag}`;
-        slot.onmouseenter = (e) => { cancelHideTooltip(); showItemTooltip(item, e); };
-        slot.onmouseleave = scheduleHideTooltip;
-        slot.onclick = (e) => { e.stopPropagation(); cancelHideTooltip(); showItemTooltip(item, e); };
-        slot.ondblclick = (e) => { e.stopPropagation(); depositToWarehouse(item.uid); };
-
-        invGrid.appendChild(slot);
-      });
-    }
-  }
-
-  const whGrid = el('wh-storage-grid');
-  if (whGrid) {
-    whGrid.innerHTML = '';
-    const storageItems = state.warehouse || [];
-    if (storageItems.length === 0) {
-      whGrid.innerHTML = `<div style="grid-column: 1 / -1; text-align:center; padding:30px; color:var(--text-muted); font-size:11px;">O Baú está vazio.</div>`;
-    } else {
-      storageItems.forEach(item => {
-        const def = getItemDef(item.itemId);
-        if (!def) return;
-        const rarity = item.rarity || 'common';
-        const slot = mkEl('div');
-        slot.className = `inv-slot rarity-${rarity}` + (item.foundation ? ' is-foundation' : '');
-        const countBadge = (item.count && item.count > 1) ? `<span class="qty">${item.count}</span>` : '';
-        const enchantBadge = item.enchant ? `<span class="slot-enchant" style="position:absolute; top:2px; right:2px; font-weight:bold; color:var(--gilt); font-size:10px;">+${item.enchant}</span>` : '';
-        const foundationBadge = item.foundation ? `<span style="position:absolute; top:2px; left:2px; font-size:9px;">✨</span>` : '';
-
-        slot.innerHTML = `<span style="font-size:18px">${getItemIcon(def)}</span><span class="name">${def.name}</span>${countBadge}${enchantBadge}${foundationBadge}`;
-        slot.onmouseenter = (e) => { cancelHideTooltip(); showItemTooltip(item, e); };
-        slot.onmouseleave = scheduleHideTooltip;
-        slot.onclick = (e) => { e.stopPropagation(); cancelHideTooltip(); showItemTooltip(item, e); };
-        slot.ondblclick = (e) => { e.stopPropagation(); withdrawFromWarehouse(item.uid); };
-
-        whGrid.appendChild(slot);
-      });
-    }
-  }
-}
 
 function bindEvents() {
   try {
