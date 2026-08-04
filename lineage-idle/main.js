@@ -3579,6 +3579,7 @@ function updateAllUI() {
   safeUiUpdate('shop', updateShopUI);
   safeUiUpdate('craft', updateCraftUI);
   safeUiUpdate('zone', updateZoneUI);
+  safeUiUpdate('zone-map', renderZoneMap);
   safeUiUpdate('race-class', updateRaceClassUI);
   safeUiUpdate('combat-controls', updateCombatControlsUI);
   safeUiUpdate('subclasses', renderSubclassesUI);
@@ -4261,6 +4262,56 @@ function spawnAdminItem(itemId, qty = 1, rarity = 'common', enchant = 0, affixCh
   save();
 }
 
+function calcSpForLevel(lvl) {
+  let total = 0;
+  for (let l = 2; l <= lvl; l++) {
+    total += Math.min(10, Math.floor(l * 0.8 + 1));
+  }
+  return total;
+}
+
+function applyAdminLevelChange(targetLevel) {
+  const newLvl = Math.max(1, Math.min(100, targetLevel));
+  state.level = newLvl;
+  state.xp = getTotalXP(newLvl - 1);
+
+  // 1. Concede SP proporcional ao nível + 1000 SP de bônus para testes de habilidades
+  const cumulativeSp = calcSpForLevel(newLvl);
+  state.sp = Math.max(state.sp || 0, cumulativeSp + 1000);
+
+  // 2. Recalcula vida/mana e restaura ao máximo
+  const stats = getStats();
+  state.maxHp = stats.maxHp;
+  state.maxMp = stats.maxMp;
+  state.hp = state.maxHp;
+  state.mp = state.maxMp;
+
+  // 3. Atualiza Sagas e Zonas do Mapa
+  let highestSaga = 0;
+  for (let i = 0; i < SAGAS.length; i++) {
+    if (state.level >= SAGAS[i].unlocksAt) {
+      highestSaga = i;
+    }
+  }
+  state.currentSaga = highestSaga;
+
+  // 4. Log e feedback visual do nível
+  playSfx('levelUp');
+  log(`⚡ [Admin] Nível alterado para ${newLvl}! SP (+${cumulativeSp + 1000}), HP/MP, Sagas, Mapa de Caça e Habilidades sincronizados.`, 'rarity-legendary');
+  floatText(`⚡ NIVEL ${newLvl}!`, 'float-jackpot');
+
+  // 5. Atualiza todos os módulos visuais (Troca de classe, Árvore de Skills, Mapa, Subclasses, Raids, Missões)
+  checkClassAdvancement();
+  renderZoneMap();
+  updateSkillUI();
+  renderSubclassesUI();
+  updateRaidUI();
+  updateQuestsUI();
+  renderBattlePassUI();
+  updateAllUI();
+  save();
+}
+
 function handleChatSubmit(inputStr) {
   if (!inputStr || !inputStr.trim()) return;
   const raw = inputStr.trim();
@@ -4285,18 +4336,8 @@ function handleChatSubmit(inputStr) {
   // Direct Admin Cheats
   if (lower.startsWith('//level ')) {
     const lvl = parseInt(lower.replace('//level ', '').trim());
-    if (lvl > 0 && lvl <= 100) {
-      state.level = lvl;
-      state.xp = getTotalXP(lvl - 1);
-      const stats = getStats();
-      state.maxHp = stats.maxHp;
-      state.maxMp = stats.maxMp;
-      state.hp = state.maxHp;
-      state.mp = state.maxMp;
-      updateSagaProgress(false);
-      log(`⚡ [Admin] Nível alterado para ${lvl}!`, 'rarity-legendary');
-      updateAllUI();
-      save();
+    if (!isNaN(lvl) && lvl > 0 && lvl <= 100) {
+      applyAdminLevelChange(lvl);
     }
     return;
   }
@@ -4305,6 +4346,7 @@ function handleChatSubmit(inputStr) {
     const amt = parseInt(lower.replace('//gold ', '').trim());
     if (!isNaN(amt)) {
       state.gold += amt;
+      triggerQuestEvent('gold', amt);
       log(`🪙 [Admin] +${amt.toLocaleString()} Gold concedido!`, 'rarity-legendary');
       updateAllUI();
       save();
@@ -4317,6 +4359,7 @@ function handleChatSubmit(inputStr) {
     if (!isNaN(amt)) {
       state.sp += amt;
       log(`✦ [Admin] +${amt.toLocaleString()} SP concedido!`, 'rarity-legendary');
+      updateSkillUI();
       updateAllUI();
       save();
     }
@@ -4385,29 +4428,19 @@ function populateAdminItemSelect() {
 }
 
 function executeAdminCmd(cmd) {
-  let lvlChanged = false;
-  if (cmd === 'level20') { state.level = 20; state.xp = getTotalXP(19); lvlChanged = true; log('⚡ [Admin] Nível alterado para 20!', 'rarity-legendary'); }
-  else if (cmd === 'level40') { state.level = 40; state.xp = getTotalXP(39); lvlChanged = true; log('⚡ [Admin] Nível alterado para 40!', 'rarity-legendary'); }
-  else if (cmd === 'level76') { state.level = 76; state.xp = getTotalXP(75); lvlChanged = true; log('⚡ [Admin] Nível alterado para 76 (Noblesses)!', 'rarity-legendary'); }
-  else if (cmd === 'level85') { state.level = 85; state.xp = getTotalXP(84); lvlChanged = true; log('⚡ [Admin] Nível alterado para 85 (Máximo)!', 'rarity-legendary'); }
-  else if (cmd === 'add5levels') { state.level += 5; state.xp = getTotalXP(state.level - 1); lvlChanged = true; log(`⚡ [Admin] Nível +5 (Atual: Lv.${state.level})!`, 'rarity-legendary'); }
+  if (cmd === 'level20') { applyAdminLevelChange(20); }
+  else if (cmd === 'level40') { applyAdminLevelChange(40); }
+  else if (cmd === 'level76') { applyAdminLevelChange(76); }
+  else if (cmd === 'level85') { applyAdminLevelChange(85); }
+  else if (cmd === 'add5levels') { applyAdminLevelChange((state.level || 1) + 5); }
   else if (cmd === 'gold1m') { state.gold += 1000000; triggerQuestEvent('gold', 1000000); log('🪙 [Admin] +1.000.000 Ouro concedido!', 'rarity-legendary'); }
   else if (cmd === 'gold10m') { state.gold += 10000000; triggerQuestEvent('gold', 10000000); log('🪙 [Admin] +10.000.000 Ouro concedido!', 'rarity-legendary'); }
-  else if (cmd === 'sp5k') { state.sp += 5000; log('✦ [Admin] +5.000 SP concedido!', 'rarity-legendary'); }
-  else if (cmd === 'sp50k') { state.sp += 50000; log('✦ [Admin] +50.000 SP concedido!', 'rarity-legendary'); }
+  else if (cmd === 'sp5k') { state.sp += 5000; log('✦ [Admin] +5.000 SP concedido!', 'rarity-legendary'); updateSkillUI(); }
+  else if (cmd === 'sp50k') { state.sp += 50000; log('✦ [Admin] +50.000 SP concedido!', 'rarity-legendary'); updateSkillUI(); }
   else if (cmd === 'godmode') { state.godMode = !state.godMode; log(`🛡️ [Admin] Invencibilidade: ${state.godMode ? 'ATIVADO' : 'DESATIVADO'}!`, 'rarity-legendary'); }
   else if (cmd === 'healfull') { const stats = getStats(); state.hp = stats.maxHp; state.mp = stats.maxMp; log('❤️ [Admin] HP/MP Restaurados 100%!', 'rarity-legendary'); }
   else if (cmd === 'autoequip') { autoEquipBest(); }
   else if (cmd === 'resetsave') { resetSave(); }
-
-  if (lvlChanged) {
-    const stats = getStats();
-    state.maxHp = stats.maxHp;
-    state.maxMp = stats.maxMp;
-    state.hp = state.maxHp;
-    state.mp = state.maxMp;
-    updateSagaProgress(false);
-  }
 
   updateAllUI();
   save();
