@@ -1,49 +1,43 @@
 /**
- * InventoryUI.js — Renderização de Mochila, Baú e Equipamentos.
- * VERSÃO CORRIGIDA: Slots + Ícones + Tooltip
+ * InventoryUI.js — VERSÃO FINAL COM CORREÇÕES
  */
 
 import { D, ALL_EQUIP_SLOTS } from '../core/GameConfig.js';
 import { el, qs, qsa, mkEl } from '../core/DomHelpers.js';
 import { getMaxInventorySlots, getMaxWarehouseSlots, getSelectedSet } from '../services/InventoryService.js';
-import { resolveEquipSlot } from '../services/EquipmentService.js';
+import { resolveEquipSlot, equipItem } from '../services/EquipmentService.js';
 import { showItemTooltip, hideItemTooltip } from './TooltipUI.js';
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   HELPER: Ícone do item (EMOJI, não path de arquivo!)
+   HELPER: Ícone do item (APENAS EMOJI - sem paths de arquivo!)
 ═══════════════════════════════════════════════════════════════════════════ */
 
 function getItemIcon(item, def) {
   if (!def) return '📦';
 
-  // Se já for emoji, retorna
-  if (def.icon && def.icon.length <= 2) return def.icon;
-
-  // Mapeamento por slot/tipo
+  // NUNCA retorna path de arquivo - apenas emoji
   const slot = (def.slot || '').toLowerCase();
   
-  if (slot.includes('weapon') || slot.includes('sword') || slot.includes('bow') || slot.includes('staff')) {
-    if (slot.includes('bow')) return '🏹';
-    if (slot.includes('staff')) return '';
-    if (slot.includes('sword')) return '🗡️';
-    return '️';
-  }
-  
-  if (slot.includes('armor') || slot.includes('chest') || slot.includes('breastplate')) return '';
+  if (slot.includes('bow')) return '🏹';
+  if (slot.includes('sword') || slot.includes('blade')) return '🗡️';
+  if (slot.includes('staff') || slot.includes('wand')) return '';
+  if (slot.includes('dagger')) return '🗡️';
+  if (slot.includes('weapon')) return '⚔️';
+  if (slot.includes('armor') || slot.includes('chest') || slot.includes('breastplate')) return '🦺';
   if (slot.includes('helmet') || slot.includes('head') || slot.includes('cap')) return '🪖';
   if (slot.includes('gloves') || slot.includes('hand')) return '🧤';
-  if (slot.includes('boots') || slot.includes('shoes') || slot.includes('feet')) return '';
+  if (slot.includes('boots') || slot.includes('shoes') || slot.includes('feet')) return '👢';
   if (slot.includes('shield')) return '🛡️';
   if (slot.includes('ring')) return '💍';
-  if (slot.includes('necklace') || slot.includes('pendant')) return '📿';
+  if (slot.includes('necklace') || slot.includes('pendant')) return '';
   if (slot.includes('earring')) return '🎧';
   if (slot.includes('belt') || slot.includes('waist')) return '🎗️';
-  if (slot.includes('cloak') || slot.includes('cape')) return '🧥';
-  
-  if (slot.includes('potion') || slot.includes('consumable')) return '🧪';
+  if (slot.includes('cloak') || slot.includes('cape')) return '';
+  if (slot.includes('potion')) return '🧪';
   if (slot.includes('scroll')) return '📜';
-  if (slot.includes('material') || slot.includes('ore') || slot.includes('gem')) return '';
+  if (slot.includes('material') || slot.includes('ore') || slot.includes('gem')) return '💎';
   if (slot.includes('quest')) return '📯';
+  if (slot.includes('hair') || slot.includes('headgear')) return '👑';
   
   // Fallback por raridade
   const rarityIcons = {
@@ -57,31 +51,83 @@ function getItemIcon(item, def) {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   HELPER: Definição do item com fallback
+   HELPER: Busca definição do item (MÚLTIPLAS VARIAÇÕES DE ID)
 ═══════════════════════════════════════════════════════════════════════════ */
 
 function getItemDef(itemId) {
   const data = D();
   if (!data?.ALL_ITEMS) return null;
-  return data.ALL_ITEMS[itemId] || null;
+  
+  // Tenta ID exato primeiro
+  if (data.ALL_ITEMS[itemId]) return data.ALL_ITEMS[itemId];
+  
+  // Gera variações do ID
+  const variations = [
+    itemId,
+    itemId.toLowerCase(),
+    itemId.replace(/\s+/g, ''),
+    itemId.replace(/[-_]/g, '').toLowerCase(),
+    itemId.replace(/^mon_/, '').toLowerCase(),
+    // CamelCase para lowercase
+    itemId.replace(/([A-Z])/g, '_$1').toLowerCase().replace(/^_/, ''),
+    // lowercase para CamelCase
+    itemId.replace(/_([a-z])/g, (m, c) => c.toUpperCase())
+  ];
+  
+  for (const v of variations) {
+    if (data.ALL_ITEMS[v]) return data.ALL_ITEMS[v];
+  }
+  
+  // Busca por nome se tudo falhar
+  const byName = Object.values(data.ALL_ITEMS).find(
+    i => i.name?.toLowerCase().replace(/\s+/g, '') === itemId.toLowerCase().replace(/\s+/g, '')
+  );
+  
+  return byName || null;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   HELPER: Busca elemento (Shadow DOM + Document)
+   HELPER: Busca elemento (Shadow DOM + Document + Múltiplos IDs)
 ═══════════════════════════════════════════════════════════════════════════ */
 
 function findElement(id) {
   const host = document.getElementById('idle-host');
   const shadow = host?.shadowRoot;
   
-  // Tenta no Shadow DOM primeiro
   if (shadow) {
     const el = shadow.querySelector(`#${id}`);
     if (el) return el;
   }
   
-  // Tenta no document global
   return document.getElementById(id);
+}
+
+function findEquipmentSlot(slot) {
+  const host = document.getElementById('idle-host');
+  const shadow = host?.shadowRoot;
+  const root = shadow || document;
+  
+  // Tenta múltiplos padrões de ID
+  const patterns = [
+    `equip-slot-${slot}`,
+    `equipment-${slot}`,
+    `equip-${slot}`,
+    `slot-${slot}`,
+    `eq-${slot}`,
+    slot
+  ];
+  
+  for (const pattern of patterns) {
+    const el = root.querySelector(`#${pattern}`) || root.querySelector(`.${pattern}`);
+    if (el) return el;
+  }
+  
+  // Tenta por data attribute
+  const byData = root.querySelector(`[data-slot="${slot}"]`) || 
+                 root.querySelector(`[data-equip-slot="${slot}"]`);
+  if (byData) return byData;
+  
+  return null;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -89,21 +135,26 @@ function findElement(id) {
 ═══════════════════════════════════════════════════════════════════════════ */
 
 export function updateInventoryUI(state, callbacks = {}) {
+  const data = D();
+  
+  if (!data?.ALL_ITEMS) {
+    console.error('[InventoryUI] ALL_ITEMS não carregado!');
+    const grid = findElement('inventory-grid');
+    if (grid) {
+      grid.innerHTML = '<div style="padding:20px;color:#ef4444;text-align:center;">⚠️ Erro: Dados de itens não carregados</div>';
+    }
+    return;
+  }
+
   updateEquipmentUI(state, callbacks);
 
   const grid = findElement('inventory-grid');
   if (!grid) {
-    console.warn('[InventoryUI] Grid do inventário não encontrado');
+    console.error('[InventoryUI] Grid não encontrado');
     return;
   }
 
   grid.innerHTML = '';
-
-  const data = D();
-  if (!data?.ALL_ITEMS) {
-    grid.innerHTML = '<div style="padding:20px;color:#f59e0b;text-align:center;">⚠️ Carregando itens...</div>';
-    return;
-  }
 
   const selectedSet = getSelectedSet(state);
   const filter = state.inventoryFilter || state.filter || 'all';
@@ -113,6 +164,10 @@ export function updateInventoryUI(state, callbacks = {}) {
   const searchInput = findElement('inv-search-input');
   const searchTerm = (searchInput?.value || '').trim().toLowerCase();
 
+  // Debug: conta itens sem definição
+  let missingDefs = 0;
+  let totalItems = 0;
+  
   const sorted = [...(state.inventory || [])]
     .filter(i => i?.itemId)
     .sort((a, b) => {
@@ -122,10 +177,17 @@ export function updateInventoryUI(state, callbacks = {}) {
       return (db.tier || 0) - (da.tier || 0);
     });
 
-  let shown = 0;
   for (const item of sorted) {
+    totalItems++;
     const def = getItemDef(item.itemId);
-    if (!def) continue;
+    
+    if (!def) {
+      missingDefs++;
+      if (missingDefs <= 5) {
+        console.warn('[InventoryUI] Item sem definição:', item.itemId);
+      }
+      continue;
+    }
 
     if (searchTerm && !def.name.toLowerCase().includes(searchTerm)) continue;
 
@@ -175,14 +237,17 @@ export function updateInventoryUI(state, callbacks = {}) {
       e.preventDefault();
       e.stopPropagation();
       if (item.equipped) {
-        if (callbacks.unequipItem) callbacks.unequipItem(resolveEquipSlot(def.slot));
+        if (callbacks.unequipItem) callbacks.unequipItem(state, resolveEquipSlot(def.slot), callbacks);
       } else {
         if (callbacks.equipItem) callbacks.equipItem(state, item.uid, callbacks);
       }
     };
 
     grid.appendChild(slotEl);
-    shown++;
+  }
+
+  if (missingDefs > 0) {
+    console.warn(`[InventoryUI] ${missingDefs}/${totalItems} itens sem definição`);
   }
 
   const cnt = findElement('inv-count');
@@ -191,7 +256,7 @@ export function updateInventoryUI(state, callbacks = {}) {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   BAÚ (WAREHOUSE)
+   BAÚ
 ═══════════════════════════════════════════════════════════════════════════ */
 
 export function updateWarehouseUI(state, callbacks = {}) {
@@ -237,7 +302,7 @@ export function updateWarehouseUI(state, callbacks = {}) {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   EQUIPAMENTOS ATIVOS
+   EQUIPAMENTOS
 ═══════════════════════════════════════════════════════════════════════════ */
 
 export function updateEquipmentUI(state, callbacks = {}) {
@@ -257,35 +322,38 @@ export function updateEquipmentUI(state, callbacks = {}) {
     earring: 'Brinco',
     earring2: 'Brinco 2',
     belt: 'Cinto',
-    cloak: 'Capa'
+    cloak: 'Capa',
+    cape: 'Capa',
+    agathion: 'Agathion'
   };
 
   const slotIcons = {
     weapon: '⚔️',
-    armor: '',
-    helmet: '',
+    armor: '🦺',
+    helmet: '🪖',
     gloves: '🧤',
     boots: '👢',
-    shield: '🛡️',
-    ring: '💍',
+    shield: '️',
+    ring: '',
     necklace: '📿',
     earring: '🎧',
     belt: '🎗️',
-    cloak: '🧥'
+    cloak: '🧥',
+    agathion: '👼'
   };
 
+  let foundSlots = 0;
+  let missingSlots = [];
+
   for (const slot of ALL_EQUIP_SLOTS) {
-    // Tenta múltiplos padrões de ID
-    const slotEl = 
-      findElement(`equip-slot-${slot}`) ||
-      findElement(`equipment-${slot}`) ||
-      findElement(`equip-${slot}`) ||
-      findElement(`slot-${slot}`);
+    const slotEl = findEquipmentSlot(slot);
 
     if (!slotEl) {
-      // Silencioso - não spammar console se o slot não existir ainda
+      missingSlots.push(slot);
       continue;
     }
+
+    foundSlots++;
 
     const uid = state.equipment[slot];
     const item = uid ? (state.inventory || []).find(i => i.uid === uid) : null;
@@ -325,18 +393,30 @@ export function updateEquipmentUI(state, callbacks = {}) {
       slotEl.onclick = null;
     }
   }
+
+  if (missingSlots.length > 0) {
+    console.log(`[InventoryUI] Slots encontrados: ${foundSlots}/${ALL_EQUIP_SLOTS.length}`);
+    console.log(`[InventoryUI] Slots faltando:`, missingSlots);
+  }
 }
 
-/* ══════════════════════════════════════════════════════════════════════════
+/* ═══════════════════════════════════════════════════════════════════════════
    CSS
 ═══════════════════════════════════════════════════════════════════════════ */
 
-const STYLE_ID = 'inventory-ui-styles';
+const STYLE_ID = 'inventory-ui-styles-v3';
 
 export function ensureInventoryStyles() {
   const host = document.getElementById('idle-host');
   const target = host?.shadowRoot || document.head;
   if (!target) return;
+  
+  // Remove versões antigas
+  ['inventory-ui-styles', 'inventory-ui-styles-v2', 'inventory-ui-styles-v3'].forEach(id => {
+    const old = target.querySelector(`#${id}`);
+    if (old && id !== STYLE_ID) old.remove();
+  });
+  
   if (target.querySelector(`#${STYLE_ID}`)) return;
 
   const style = document.createElement('style');
@@ -383,17 +463,22 @@ const INVENTORY_CSS = `
 .rarity-epic { border-color: #a855f7; }
 .rarity-legendary { border-color: #f59e0b; box-shadow: 0 0 10px rgba(245, 158, 11, 0.4); }
 
-.item-icon { font-size: 28px; z-index: 2; }
+.item-icon {
+  font-size: 28px;
+  z-index: 2;
+  line-height: 1;
+}
 
 .item-name {
-  font-size: 8px;
+  font-size: 7px;
   color: #e5e7eb;
   text-align: center;
-  max-width: 90%;
+  max-width: 95%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   margin-top: 2px;
+  line-height: 1.1;
 }
 
 .qty {
@@ -451,7 +536,7 @@ const INVENTORY_CSS = `
   cursor: default;
 }
 
-.equip-icon { font-size: 28px; }
-.equip-label { font-size: 7px; color: #9ca3af; margin-top: 2px; }
-.equip-placeholder { font-size: 24px; opacity: 0.4; }
+.equip-icon { font-size: 24px; line-height: 1; }
+.equip-label { font-size: 6px; color: #9ca3af; margin-top: 2px; text-transform: uppercase; }
+.equip-placeholder { font-size: 20px; opacity: 0.4; }
 `;
