@@ -1,5 +1,5 @@
 /**
- * StageUI.js — Palco Principal (Hero vs Monster) e Mapa de Zonas.
+ * StageUI.js — Palco Principal (Hero vs Monster) e Mapa de Zonas no Lineage Idle.
  */
 
 import { ZONES, SAGAS, ZONE_BACKGROUNDS } from '../data/zones.js';
@@ -8,24 +8,20 @@ import { el, updateBar } from '../core/DomHelpers.js';
 import { getClass } from '../engine/StatsEngine.js';
 import { heroSVG, monsterSVG } from '../../art.js';
 
-/* ═══════════════════ RESOLUÇÃO DE CONTAINER & CHAVES ═══════════════════ */
+/* ═══════════════════ AUXILIARES DE SHADOW DOM / DOM ═══════════════════ */
 
-const MONSTER_HOST_IDS = [
-  'stage-monster', 'monster-sprite-container', 'monster-sprite',
-  'monster-art', 'mob-sprite', 'enemy-sprite'
-];
-
-function getMonsterHost() {
-  for (const id of MONSTER_HOST_IDS) {
-    const found = el(id);
-    if (found) return found;
-  }
-  return null;
+function getShadowRoot() {
+  return document.getElementById('idle-host')?.shadowRoot ?? document;
 }
+
+function findInStage(selector) {
+  return getShadowRoot().querySelector(selector);
+}
+
+/* ═══════════════════ RESOLUÇÃO DE CHAVES ═══════════════════ */
 
 const _slug = new Map();
 
-/** 'Goblin Mage' → 'goblinMage' */
 export function slugify(name = '') {
   const raw = String(name);
   if (_slug.has(raw)) return _slug.get(raw);
@@ -40,13 +36,12 @@ export function slugify(name = '') {
   return out;
 }
 
-/** Descobre a chave canônica do monstro, venha de onde vier. */
 export function resolveMonsterKey(m) {
   if (!m) return null;
   const cands = [m.id, m.key, m.monsterId, m.sprite, m.art, m.itemId];
 
-  for (const c of cands) if (c && MONSTERS[c]) return c;                       // hit direto
-  for (const c of cands) {                                                     // por nome
+  for (const c of cands) if (c && MONSTERS[c]) return c;
+  for (const c of cands) {
     const hit = c && MONSTER_BY_NAME?.[String(c).toLowerCase()];
     if (hit) return hit;
   }
@@ -55,57 +50,55 @@ export function resolveMonsterKey(m) {
     if (byName) return byName;
     const s = slugify(m.name);
     if (MONSTERS[s]) return s;
-    return s; // devolve o slug mesmo assim — art.js pode ter chave própria
+    return s;
   }
   return null;
 }
 
-/* ═══════════════════ ARTE SEGURA (nunca falha em silêncio) ═══════════════════ */
+/* ═══════════════════ RECUPERAÇÃO DE ESTRUTURA DO CARD ═══════════════════ */
 
-function placeholderArt(label = '?') {
-  const L = String(label || '?').charAt(0).toUpperCase();
-  const uid = 'ph' + Math.random().toString(36).slice(2, 7);
-  return `<svg viewBox="0 0 100 100" width="100%" height="100%" preserveAspectRatio="xMidYMid meet">
-    <defs><linearGradient id="${uid}" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#3a2a3f"/><stop offset="1" stop-color="#161020"/>
-    </linearGradient></defs>
-    <rect width="100" height="100" rx="10" fill="url(#${uid})"/>
-    <circle cx="50" cy="42" r="21" fill="#4c3557" stroke="#8b6bd6" stroke-width="1.5"/>
-    <circle cx="42" cy="40" r="3.6" fill="#ff6b6b"/><circle cx="58" cy="40" r="3.6" fill="#ff6b6b"/>
-    <path d="M39 57 Q50 66 61 57" stroke="#8b6bd6" stroke-width="2.4" fill="none" stroke-linecap="round"/>
-    <text x="50" y="88" text-anchor="middle" font-size="11"
-          fill="#c9a227" font-family="monospace">${L}</text>
-  </svg>`;
-}
+/**
+ * Garante que o card do monstro possui Nome, Barra de HP e Slot de Imagem.
+ * Se a estrutura original tiver sido apagada, ela é restaurada perfeitamente.
+ */
+function ensureMonsterCardStructure() {
+  const root = getShadowRoot();
+  const stageCard = root.querySelector('#stage-monster, .stage-monster');
+  if (!stageCard) return null;
 
-function safeArt(fn, key, opts, label) {
-  let html = '';
-  try { html = fn(key, opts) || ''; }
-  catch (e) { console.error('[StageUI] arte falhou:', key, e); }
-  if (!html.trim()) {
-    console.warn(`[StageUI] ⚠️ Sem arte para "${key}" — usando placeholder.`);
-    return placeholderArt(label ?? key);
+  let nameEl = root.querySelector('#monster-name');
+  let hpBarEl = root.querySelector('#monster-hp-bar');
+  let spriteSlot = root.querySelector('#monster-sprite-container, .monster-sprite-host');
+
+  // Se a estrutura foi destruída em execuções anteriores, reconstrói o HTML interno do card
+  if (!nameEl || !hpBarEl || !spriteSlot) {
+    stageCard.innerHTML = `
+      <div id="monster-name" class="monster-name-label" style="font-weight:bold; color:#e8c37a; text-align:center; margin-bottom:4px;">Monstro</div>
+      <div id="monster-hp-bar" class="progress-bar monster-hp-bar" style="width:100%; height:12px; background:#221111; border:1px solid #772222; border-radius:4px; overflow:hidden; position:relative; margin-bottom:8px;">
+        <div class="bar-fill" id="monster-hp-fill" style="width:100%; height:100%; background:linear-gradient(90deg, #990000, #ff4444); transition:width 0.2s;"></div>
+        <span class="bar-text" id="monster-hp-text" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:9px; color:#fff; text-shadow:1px 1px 2px #000;">100%</span>
+      </div>
+      <div id="monster-sprite-container" class="monster-sprite-host" style="width:100%; flex:1; min-height:140px; display:flex; align-items:center; justify-content:center; position:relative;"></div>
+    `;
+    spriteSlot = stageCard.querySelector('#monster-sprite-container');
   }
-  return html;
+
+  return spriteSlot;
 }
 
 /* ═══════════════════ HERÓI ═══════════════════ */
 
 export function renderStageHero(state) {
-  const nameEl = el('hero-name');
+  ensureStageStyles();
+  const nameEl = findInStage('#hero-name') || el('hero-name');
   if (nameEl) {
     const cls = getClass(state.class);
     nameEl.textContent = `${cls?.name ?? state.class ?? 'Aventureiro'} (Lv. ${state.level})`;
   }
 
-  const box = el('stage-hero');
+  const box = findInStage('#stage-hero') || el('stage-hero');
   if (box) {
-    box.innerHTML = safeArt(
-      heroSVG,
-      state.race || 'human',
-      state.class || 'fighter',
-      state.race
-    );
+    box.innerHTML = heroSVG(state.race || 'human', state.class || 'fighter');
   }
 
   updateBar('hero-hp-bar', state.hp, state.maxHp, 'hero-hp-text');
@@ -115,46 +108,54 @@ export function renderStageHero(state) {
 /* ═══════════════════ MONSTRO ═══════════════════ */
 
 export function renderStageMonster(state) {
-  const m = state?.activeMonster;
-  const box = getMonsterHost();
+  ensureStageStyles();
 
-  if (!box) return;
+  const spriteSlot = ensureMonsterCardStructure();
+  const m = state?.activeMonster;
+
+  if (!spriteSlot) return;
 
   if (!m) {
-    box.innerHTML = '';
-    box.classList.remove('is-boss', 'is-elite');
+    spriteSlot.innerHTML = '';
     return;
   }
 
-  const key   = resolveMonsterKey(m) || m.id || m.name;
-  const isBoss = !!(m.boss || m.isTower);
+  const key     = resolveMonsterKey(m);
+  const isBoss  = !!(m.boss || m.isTower);
   const isElite = !!(m.elite || m.isElite);
 
-  const nameEl = el('monster-name');
+  // 1. Atualizar Nome do Monstro
+  const nameEl = findInStage('#monster-name') || el('monster-name');
   if (nameEl) {
     const tag = isBoss ? '👑 CHEFÃO' : (isElite ? '⚡ ÉLITE' : '');
     const lvl = m.level ?? m.lvl ?? ZONES[state.zone]?.level ?? 1;
     nameEl.textContent = `${tag ? tag + ' · ' : ''}${m.name} (Nv. ${lvl})`;
   }
 
+  // 2. Atualizar Barra de Vida (HP)
   const maxHp = m._maxHp ?? m.maxHp ?? MONSTERS[key]?.hp ?? m.hp ?? 1;
   updateBar('monster-hp-bar', m.hp, maxHp, 'monster-hp-text');
 
-  box.classList.toggle('is-boss', isBoss);
-  box.classList.toggle('is-elite', isElite && !isBoss);
-  box.innerHTML = safeArt(monsterSVG, key, { crown: isBoss }, m.name);
+  // 3. Renderizar Imagem SVG/PNG no Slot Dedicado
+  spriteSlot.classList.toggle('is-boss', isBoss);
+  spriteSlot.classList.toggle('is-elite', isElite && !isBoss);
+
+  try {
+    spriteSlot.innerHTML = monsterSVG(key, { crown: isBoss });
+  } catch (e) {
+    console.error('[StageUI] Erro ao renderizar arte do monstro:', key, e);
+  }
 }
 
-/* ═══════════════════ ZONAS ═══════════════════ */
+/* ═══════════════════ ZONAS DE CAÇA ═══════════════════ */
 
 export function updateZoneUI(state, callbacks = {}) {
   const z = ZONES[state.zone];
-  const nameEl = el('zone-name');
+  const nameEl = findInStage('#zone-name') || el('zone-name');
   if (nameEl && z) nameEl.textContent = z.name;
   renderZoneMap(state, callbacks);
 }
 
-/** Última saga visível: respeita currentSaga OU o nível do jogador. */
 function maxVisibleSaga(state) {
   const byLevel = SAGAS.reduce(
     (acc, s, i) => ((state.level ?? 1) >= s.unlocksAt ? i : acc), 0);
@@ -162,8 +163,8 @@ function maxVisibleSaga(state) {
 }
 
 export function renderZoneMap(state, callbacks = {}) {
-  const container = el('zone-map-container') || el('zone-list');
-  if (!container) { console.warn('[StageUI] container de zonas não encontrado'); return; }
+  const container = findInStage('#zone-map-container') || findInStage('#zone-list') || el('zone-list');
+  if (!container) return;
 
   ensureStageStyles();
   container.innerHTML = '';
@@ -178,7 +179,7 @@ export function renderZoneMap(state, callbacks = {}) {
     let cards = '';
     for (const zId of saga.zones) {
       const z = ZONES[zId];
-      if (!z) { console.warn(`[StageUI] zona "${zId}" ausente em ZONES`); continue; }
+      if (!z) continue;
 
       const current = state.zone === zId;
       const locked  = (state.level ?? 1) < z.level;
@@ -188,8 +189,7 @@ export function renderZoneMap(state, callbacks = {}) {
 
       cards += `
         <div class="zone-card${current ? ' active' : ''}${locked ? ' locked' : ''}"
-             data-zone="${zId}" data-locked="${locked}" data-current="${current}"
-             role="button" tabindex="${locked || current ? -1 : 0}">
+             data-zone="${zId}" data-locked="${locked}" data-current="${current}">
           <div class="zone-card-thumb"${thumb ? ` style="background-image:url('${thumb}')"` : ''}>
             ${z.town ? '<span class="zone-flag town">🏠 Vila</span>' : ''}
             ${locked ? '<span class="zone-flag lock">🔒</span>' : ''}
@@ -219,88 +219,73 @@ export function renderZoneMap(state, callbacks = {}) {
     container.appendChild(block);
   }
 
-  // Delegação de evento: 1 listener, respeita locked/current
   container.onclick = (ev) => {
     const card = ev.target.closest?.('.zone-card');
     if (!card || card.dataset.locked === 'true' || card.dataset.current === 'true') return;
     const zId = card.dataset.zone;
     if (callbacks.selectZone) callbacks.selectZone(zId);
     else if (typeof window?.setZone === 'function') window.setZone(zId);
-    else console.warn('[StageUI] nenhum handler de selectZone registrado');
   };
 }
 
-/* ═══════════════════ CSS (injetado 1x no Shadow Root) ═══════════════════ */
+/* ═══════════════════ INJEÇÃO DE CSS ═══════════════════ */
 
 const STYLE_ID = 'stage-ui-styles';
 
-function styleTarget() {
-  const host = document.getElementById('idle-host');
-  return host?.shadowRoot || document.head;
-}
-
 export function ensureStageStyles() {
-  const root = styleTarget();
-  if (!root || root.getElementById?.(STYLE_ID) || root.querySelector?.(`#${STYLE_ID}`)) return;
+  const root = getShadowRoot();
+  if (!root || root.querySelector?.(`#${STYLE_ID}`)) return;
   const tag = document.createElement('style');
   tag.id = STYLE_ID;
   tag.textContent = STAGE_CSS;
-  root.appendChild(tag);
+  (root.head || root).appendChild(tag);
 }
 
 const STAGE_CSS = `
+#stage-monster {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  position: relative !important;
+  box-sizing: border-box !important;
+  padding: 8px !important;
+  min-height: 200px !important;
+}
+
+#monster-sprite-container, .monster-sprite-host {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 140px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: relative !important;
+}
+
+#monster-sprite-container .mon-svg,
+#monster-sprite-container img {
+  width: 100% !important;
+  height: 100% !important;
+  max-height: 180px !important;
+  object-fit: contain !important;
+  object-position: center bottom !important;
+}
+
 .zone-map-root { display:flex; flex-direction:column; gap:16px; }
-
-.saga-map-block { border:1px solid rgba(212,175,55,.18); border-radius:10px;
-  background:linear-gradient(180deg,rgba(28,34,48,.72),rgba(16,20,30,.72)); padding:10px 10px 12px; }
-
-.saga-header { display:flex; align-items:center; justify-content:space-between;
-  padding:2px 4px 9px; margin-bottom:9px; border-bottom:1px solid rgba(212,175,55,.16); }
+.saga-map-block { border:1px solid rgba(212,175,55,.18); border-radius:10px; background:linear-gradient(180deg,rgba(28,34,48,.72),rgba(16,20,30,.72)); padding:10px 10px 12px; }
+.saga-header { display:flex; align-items:center; justify-content:space-between; padding:2px 4px 9px; margin-bottom:9px; border-bottom:1px solid rgba(212,175,55,.16); }
 .saga-title { font-weight:700; font-size:.86rem; letter-spacing:.04em; color:#e8c37a; }
-.saga-req   { font-size:.68rem; color:#8b93a7; border:1px solid rgba(139,147,167,.28);
-  border-radius:999px; padding:2px 8px; }
-
-.saga-zones-grid { display:grid; gap:10px;
-  grid-template-columns:repeat(auto-fill,minmax(158px,1fr)); }
-
-.zone-card { position:relative; display:flex; flex-direction:column; overflow:hidden;
-  border:1px solid rgba(212,175,55,.22); border-radius:999px; background:#131824;
-  cursor:pointer; transition:transform .16s, border-color .16s, box-shadow .16s; }
-.zone-card:hover:not(.locked):not(.active) { transform:translateY(-3px);
-  border-color:rgba(232,195,122,.65); box-shadow:0 6px 18px rgba(0,0,0,.5); }
-
-.zone-card.active { border-color:#e8c37a; box-shadow:0 0 0 1px rgba(232,195,122,.45),0 0 18px rgba(232,195,122,.18); }
+.saga-req { font-size:.68rem; color:#8b93a7; border:1px solid rgba(139,147,167,.28); border-radius:999px; padding:2px 8px; }
+.saga-zones-grid { display:grid; gap:10px; grid-template-columns:repeat(auto-fill,minmax(158px,1fr)); }
+.zone-card { position:relative; display:flex; flex-direction:column; overflow:hidden; border:1px solid rgba(212,175,55,.22); border-radius:999px; border-radius:9px; background:#131824; cursor:pointer; }
+.zone-card.active { border-color:#e8c37a; box-shadow:0 0 12px rgba(232,195,122,.2); }
 .zone-card.locked { opacity:.45; filter:grayscale(.85); cursor:not-allowed; }
-
-.zone-card-thumb { position:relative; height:64px;
-  background-color:#0d1018; background-size:cover; background-position:center;
-  background-image:linear-gradient(135deg,#232b3d,#12161f); }
-.zone-card-thumb::after { content:''; position:absolute; inset:0;
-  background:linear-gradient(180deg,transparent 35%,rgba(10,13,20,.92)); }
-
-.zone-flag { position:absolute; top:5px; z-index:2; font-size:.6rem; line-height:1;
-  padding:3px 6px; border-radius:999px; background:rgba(8,10,16,.82); }
-.zone-flag.town { left:5px; color:#7fd4a8; border:1px solid rgba(127,212,168,.4); }
-.zone-flag.lock { right:5px; color:#ff8080; border:1px solid rgba(255,128,128,.4); }
-.zone-flag.here { right:5px; color:#0d1018; background:#e8c37a; font-weight:800; }
-
+.zone-card-thumb { position:relative; height:64px; background-size:cover; background-position:center; background-color:#0d1018; }
 .zone-card-body { padding:8px; display:flex; flex-direction:column; gap:6px; }
-.zone-card-header { display:flex; align-items:baseline; justify-content:space-between; gap:6px; }
-.zone-card-title { font-size:.76rem; font-weight:700; color:#e6e9f2; line-height:1.15; }
-.zone-card-lvl   { font-size:.62rem; color:#e8c37a; white-space:nowrap; }
-.zone-card-desc  { font-size:.62rem; color:#8b93a7; line-height:1.3; }
-
-.select-zone-btn { width:100%; padding:6px 8px; font-size:.66rem; font-weight:700;
-  font-family:inherit; letter-spacing:.02em; cursor:pointer; border-radius:6px;
-  border:1px solid rgba(212,175,55,.5); color:#e8c37a; background:rgba(212,175,55,.09);
-  transition:background .15s,color .15s; }
-.select-zone-btn:hover:not(:disabled) { background:#e8c37a; color:#12161f; }
-.select-zone-btn:disabled { cursor:default; opacity:.6;
-  border-color:rgba(139,147,167,.3); color:#8b93a7; background:transparent; }
-.zone-card.active .select-zone-btn { border-color:#e8c37a; color:#e8c37a; background:rgba(232,195,122,.14); opacity:1; }
-
-#stage-monster, #monster-sprite-container, .monster-sprite-host { position:relative; display:block; width:100%; height:100%; min-height:180px; pointer-events:none; }
-#stage-monster svg, #monster-sprite-container svg, .monster-sprite-host svg { width:100%; height:100%; }
-#stage-monster.is-boss, #monster-sprite-container.is-boss { filter:drop-shadow(0 0 12px rgba(255,80,80,.55)); }
-#stage-monster.is-elite, #monster-sprite-container.is-elite { filter:drop-shadow(0 0 10px rgba(150,120,255,.5)); }
+.zone-card-title { font-size:.76rem; font-weight:700; color:#e6e9f2; }
+.zone-card-lvl { font-size:.62rem; color:#e8c37a; }
+.zone-card-desc { font-size:.62rem; color:#8b93a7; }
+.select-zone-btn { width:100%; padding:6px; font-size:.66rem; font-weight:700; border-radius:6px; border:1px solid rgba(212,175,55,.5); color:#e8c37a; background:rgba(212,175,55,.09); cursor:pointer; }
+.select-zone-btn:disabled { opacity:.5; cursor:default; border-color:rgba(139,147,167,.3); color:#8b93a7; background:transparent; }
 `;
