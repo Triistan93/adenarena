@@ -32,42 +32,95 @@ export function getAssetUrl(p) {
 }
 
 /**
+ * Retorna a URL da imagem PNG de um item (sem HTML) resolvendo em ordem:
+ * 1. def.icon
+ * 2. IconIndex / ICON_MAP por itemId ou variantes (armor_*, weapon_*, jewel_*, etc.)
+ * 3. Convenção img/icons/${itemId}.png
+ * 4. null se nada resolver
+ *
+ * @param {Object|string} itemOrDef
+ * @param {Object} [defParam]
+ * @returns {string|null}
+ */
+export function getItemIconUrl(itemOrDef, defParam) {
+  if (!itemOrDef && !defParam) return null;
+  const gData = D();
+  const all = gData?.ALL_ITEMS || {};
+  let def = defParam;
+  let itemId = '';
+
+  if (typeof itemOrDef === 'string') {
+    itemId = itemOrDef;
+    if (!def) def = all[itemId];
+  } else if (itemOrDef) {
+    itemId = itemOrDef.itemId || itemOrDef.id || '';
+    if (!def) def = all[itemId] || itemOrDef;
+  }
+
+  const iconIndex = (typeof window !== 'undefined' && window.IconIndex)
+    ? window.IconIndex
+    : (gData?.ICON_MAP || {});
+
+  let rawPath = def?.icon || '';
+
+  if (!rawPath && itemId) {
+    const cleanId = String(itemId).trim();
+    rawPath = iconIndex[cleanId]
+      || iconIndex[`weapon_${cleanId}`]
+      || iconIndex[`armor_${cleanId}`]
+      || iconIndex[`jewel_${cleanId}`]
+      || iconIndex[`shield_${cleanId}`]
+      || iconIndex[cleanId.replace(/^(weapon_|armor_|jewel_|shield_|consumable_|material_|scroll_)/, '')]
+      || '';
+  }
+
+  if (!rawPath && itemId) {
+    rawPath = `${itemId}.png`;
+  }
+
+  if (rawPath) {
+    let p = String(rawPath).replace(/\\/g, '/').replace(/^\//, '');
+    if (p.startsWith('http://') || p.startsWith('https://') || p.startsWith('data:')) {
+      return p;
+    }
+    if (!p.endsWith('.png') && !p.endsWith('.jpg') && !p.endsWith('.webp') && !p.endsWith('.svg')) {
+      p += '.png';
+    }
+    if (!p.startsWith('img/icons/') && !p.startsWith('img/')) {
+      p = `img/icons/${p}`;
+    }
+    return getAssetUrl(p);
+  }
+
+  return null;
+}
+
+/**
  * Retorna o HTML de imagem ou emoji de fallback para um item.
  * @param {Object|string} defOrId
  * @returns {string}
  */
 export function getItemIcon(defOrId) {
-  if (!defOrId) return '';
-  
+  if (!defOrId) return '📦';
   const gData = D();
   const all = gData?.ALL_ITEMS || {};
   const def = (typeof defOrId === 'string') ? (all[defOrId] || null) : (defOrId.itemId ? all[defOrId.itemId] : defOrId);
   const slot = def?.slot || (typeof defOrId === 'object' ? defOrId.slot : '') || '';
-  
-  // Retorna APENAS emoji - sem HTML de imagem!
-  const fallbackIcons = { 
-    weapon: '⚔️', 
-    armor: '', 
-    helmet: '', 
-    gloves: '🧤', 
-    boots: '👢', 
-    ring: '💍', 
-    earring: '🎧', 
-    necklace: '📿', 
-    consumable: '🧪', 
-    material: '💎', 
-    scroll: '📜', 
-    cloak: '', 
-    belt: '️', 
-    hair: '👑', 
-    agathion: '👼'
+  const fallbackIcons = {
+    weapon: '⚔️', armor: '🛡️', helmet: '⛑️', gloves: '🧤', boots: '👢',
+    ring: '💍', earring: '💎', necklace: '📿', consumable: '🧪', material: '💎',
+    scroll: '📜', cloak: '🧣', cape: '🧣', belt: '🎗️', hair: '👑', agathion: '🐾'
   };
-  
-  return fallbackIcons[slot] || '📦';
+  const emoji = fallbackIcons[slot] || '📦';
+
+  const iconUrl = getItemIconUrl(defOrId, def);
+  if (!iconUrl) return emoji;
+
+  return `<img src="${iconUrl}" alt="${def?.name || ''}" class="item-icon-img" onerror="this.style.display='none';if(this.nextElementSibling)this.nextElementSibling.style.display='inline-block';" style="width:28px; height:28px; object-fit:contain; vertical-align:middle; pointer-events:none;" /><span class="item-icon-fallback" style="display:none; font-size:18px;">${emoji}</span>`;
 }
 
 /**
- * Formata o nome exibido de um item incluindo seu enchant, raridade e status foundation.
+ * Formata o nome exibido de um item incluindo seu encantamento (+X), raridade e status foundation.
  * @param {Object|string} item
  * @param {Object} [def]
  * @returns {string}
