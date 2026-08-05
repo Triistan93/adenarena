@@ -1,6 +1,14 @@
 /**
  * StageUI.js — Palco Principal (Hero vs Monster) e Mapa de Zonas.
- * Layout lado a lado: Herói (esq.) | Monstro (dir.)
+ *
+ * Layout real do projeto (confirmado via DevTools):
+ *   #stage
+ *     #stage-bg-a / #stage-bg-b
+ *     #stage-hero          (filho direto, lado ESQUERDO)
+ *     #stage-monster       (filho direto, lado DIREITO)
+ *       #monster-name
+ *       #monster-hp-bar
+ *       #monster-sprite-container
  */
 
 import { ZONES, SAGAS, ZONE_BACKGROUNDS } from '../data/zones.js';
@@ -9,133 +17,53 @@ import { el, updateBar } from '../core/DomHelpers.js';
 import { getClass } from '../engine/StatsEngine.js';
 import { heroSVG, monsterSVG, MON_IMG } from '../../art.js';
 
-/* ═══════════════════ DOM ROOT ═══════════════════ */
+/* ═══════════════════ DOM ═══════════════════ */
 
 function root() {
   return document.getElementById('idle-host')?.shadowRoot || document;
+}
+
+function qid(id) {
+  return root().querySelector('#' + id);
 }
 
 function qs(sel) {
   return root().querySelector(sel);
 }
 
-function qid(id) {
-  return root().querySelector('#' + id) || document.getElementById(id);
-}
-
-/* ═══════════════════ LAYOUT DO PALCO (Hero | Monster) ═══════════════════ */
+/* ═══════════════════ ESTRUTURA DO CARD DO MONSTRO ═══════════════════ */
 
 /**
- * Garante a estrutura:
- *   #stage-fighters
- *     #stage-hero
- *     #stage-monster
- *       #monster-name
- *       #monster-hp-bar (+ fill/text)
- *       #monster-sprite-container   ← só a arte vai aqui
+ * Garante nome + HP + slot de sprite DENTRO de #stage-monster.
+ * Nunca usa #stage-monster como se fosse só a imagem.
  */
-function ensureStageLayout() {
-  ensureStageStyles();
-
-  let hero = qid('stage-hero');
-  let mon  = qid('stage-monster');
-
-  // Se ambos existem e são irmãos, só garante o slot interno do monstro
-  if (hero && mon) {
-    ensureMonsterInternals(mon);
-    // Garante wrapper flex se ainda não houver
-    const parent = hero.parentElement;
-    if (parent && !parent.classList.contains('stage-fighters') && parent.id !== 'stage-fighters') {
-      // Se o pai já é o palco, marca como fighters
-      if (parent.children.length >= 2) {
-        parent.classList.add('stage-fighters');
-        if (!parent.id) parent.id = 'stage-fighters';
-      }
-    }
-    return { hero, mon, sprite: qid('monster-sprite-container') };
-  }
-
-  // Tenta achar o palco visual
-  const stage =
-    qs('#stage') ||
-    qs('#main-stage') ||
-    qs('.stage') ||
-    qs('.combat-stage') ||
-    qs('#battle-stage') ||
-    qs('.battle-area') ||
-    (hero && hero.parentElement) ||
-    (mon && mon.parentElement);
-
-  if (!stage) {
-    console.error('[StageUI] Palco não encontrado (#stage / .stage).');
+function ensureMonsterInternals() {
+  const mon = qid('stage-monster');
+  if (!mon) {
+    console.error('[StageUI] #stage-monster não existe no DOM');
     return null;
   }
 
-  // Wrapper dos lutadores
-  let fighters = qid('stage-fighters') || stage.querySelector('.stage-fighters');
-  if (!fighters) {
-    fighters = document.createElement('div');
-    fighters.id = 'stage-fighters';
-    fighters.className = 'stage-fighters';
+  let sprite = mon.querySelector('#monster-sprite-container');
+  let nameEl = mon.querySelector('#monster-name');
+  let hpBar  = mon.querySelector('#monster-hp-bar');
 
-    // Move hero/mon existentes para dentro, se houver
-    if (hero) fighters.appendChild(hero);
-    if (mon) fighters.appendChild(mon);
-
-    // Insere no topo do palco (antes do log, se houver)
-    stage.insertBefore(fighters, stage.firstChild);
-  }
-
-  if (!hero) {
-    hero = document.createElement('div');
-    hero.id = 'stage-hero';
-    hero.className = 'stage-card stage-hero';
-    fighters.appendChild(hero);
-  }
-
-  if (!mon) {
-    mon = document.createElement('div');
-    mon.id = 'stage-monster';
-    mon.className = 'stage-card stage-monster';
-    fighters.appendChild(mon);
-  }
-
-  // Garante ordem: herói à esquerda, monstro à direita
-  if (hero.nextElementSibling !== mon) {
-    fighters.appendChild(hero);
-    fighters.appendChild(mon);
-  }
-
-  ensureMonsterInternals(mon);
-  return { hero, mon, sprite: qid('monster-sprite-container') };
-}
-
-function ensureMonsterInternals(monCard) {
-  if (!monCard) return null;
-
-  let nameEl = monCard.querySelector('#monster-name') || qid('monster-name');
-  let hpBar  = monCard.querySelector('#monster-hp-bar') || qid('monster-hp-bar');
-  let sprite = monCard.querySelector('#monster-sprite-container');
-
-  // Se o sprite slot não está DENTRO do card do monstro, recria a estrutura interna
-  // (sem apagar se já estiver correta)
-  if (!sprite || !monCard.contains(sprite) || !nameEl || !hpBar) {
-    // Preserva arte atual se existir
+  // Se a estrutura interna sumiu, reconstrói só o miolo (mantém o #stage-monster)
+  if (!sprite || !nameEl || !hpBar) {
     const oldArt = sprite?.innerHTML || '';
-
-    monCard.innerHTML = `
+    mon.innerHTML = `
       <div id="monster-name" class="stage-entity-name">—</div>
-      <div id="monster-hp-bar" class="stage-hp-bar" role="progressbar">
+      <div id="monster-hp-bar" class="stage-hp-bar">
         <div id="monster-hp-fill" class="stage-hp-fill"></div>
         <span id="monster-hp-text" class="stage-hp-text">0 / 0</span>
       </div>
       <div id="monster-sprite-container" class="monster-sprite-host"></div>
     `;
-    sprite = monCard.querySelector('#monster-sprite-container');
+    sprite = mon.querySelector('#monster-sprite-container');
     if (oldArt) sprite.innerHTML = oldArt;
   }
 
-  return sprite;
+  return { mon, sprite: mon.querySelector('#monster-sprite-container') };
 }
 
 /* ═══════════════════ CHAVE DO MONSTRO ═══════════════════ */
@@ -149,30 +77,29 @@ export function resolveMonsterKey(m) {
     const s = String(raw).trim();
     const noSpace = s.replace(/\s+/g, '');
     const lower = noSpace.toLowerCase();
-    const camel = lower.charAt(0).toLowerCase() + noSpace.slice(1);
 
-    // MON_IMG direto
     if (MON_IMG) {
-      for (const k of [s, noSpace, lower, camel, `mon_${lower}`]) {
+      for (const k of [s, noSpace, lower, `mon_${lower}`]) {
         if (MON_IMG[k]) return k;
       }
     }
-    // MONSTERS dict
-    if (MONSTERS[s]) return s;
-    if (MONSTERS[noSpace]) return noSpace;
-    if (MONSTERS[lower]) return lower;
+    if (MONSTERS?.[s]) return s;
+    if (MONSTERS?.[noSpace]) return noSpace;
+    if (MONSTERS?.[lower]) return lower;
     if (MONSTER_BY_NAME) {
       const hit = MONSTER_BY_NAME[s.toLowerCase()] || MONSTER_BY_NAME[lower];
       if (hit) return hit;
     }
   }
 
-  // slug "Goblin Mage" -> "goblinMage"
   if (m.name) {
-    const parts = String(m.name).normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    const parts = String(m.name)
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
       .replace(/[^a-zA-Z0-9]+/g, ' ').trim().split(/\s+/);
-    const slug = parts.map((p, i) => i === 0 ? p.toLowerCase() : p.charAt(0).toUpperCase() + p.slice(1).toLowerCase()).join('');
-    if (MONSTERS[slug]) return slug;
+    const slug = parts
+      .map((p, i) => i === 0 ? p.toLowerCase() : p.charAt(0).toUpperCase() + p.slice(1).toLowerCase())
+      .join('');
+    if (MONSTERS?.[slug]) return slug;
     if (MON_IMG?.[slug]) return slug;
     if (MON_IMG?.[slug.toLowerCase()]) return slug.toLowerCase();
     return slug;
@@ -180,16 +107,15 @@ export function resolveMonsterKey(m) {
   return 'goblin';
 }
 
-/* ═══════════════════ RENDER: MONSTRO ═══════════════════ */
+/* ═══════════════════ RENDER MONSTRO ═══════════════════ */
 
 export function renderStageMonster(state) {
-  const layout = ensureStageLayout();
-  if (!layout?.sprite) {
-    console.error('[StageUI] Sem slot de sprite do monstro');
-    return;
-  }
+  ensureStageStyles();
 
-  const { mon, sprite } = layout;
+  const parts = ensureMonsterInternals();
+  if (!parts?.sprite) return;
+
+  const { mon, sprite } = parts;
   const m = state?.activeMonster;
 
   if (!m) {
@@ -197,7 +123,9 @@ export function renderStageMonster(state) {
     const nameEl = qid('monster-name');
     if (nameEl) nameEl.textContent = '—';
     updateBar('monster-hp-bar', 0, 1, 'monster-hp-text');
-    mon?.classList.remove('is-boss', 'is-elite');
+    const fill = qid('monster-hp-fill');
+    if (fill) fill.style.width = '0%';
+    mon.classList.remove('is-boss', 'is-elite');
     return;
   }
 
@@ -215,20 +143,15 @@ export function renderStageMonster(state) {
 
   // HP
   const maxHp = m._maxHp ?? m.maxHp ?? MONSTERS[key]?.hp ?? m.hp ?? 1;
-  const hp = Math.max(0, m.hp ?? 0);
+  const hp = Math.max(0, Number(m.hp) || 0);
   updateBar('monster-hp-bar', hp, maxHp, 'monster-hp-text');
-
-  // fallback manual da barra (caso updateBar use fill interno)
   const fill = qid('monster-hp-fill');
   if (fill) {
-    const pct = Math.max(0, Math.min(100, (hp / maxHp) * 100));
-    fill.style.width = pct + '%';
+    fill.style.width = `${Math.max(0, Math.min(100, (hp / maxHp) * 100))}%`;
   }
 
   mon.classList.toggle('is-boss', isBoss);
   mon.classList.toggle('is-elite', isElite && !isBoss);
-  sprite.classList.toggle('is-boss', isBoss);
-  sprite.classList.toggle('is-elite', isElite && !isBoss);
 
   // Arte SOMENTE no slot interno
   let html = '';
@@ -237,23 +160,20 @@ export function renderStageMonster(state) {
   } catch (e) {
     console.error('[StageUI] monsterSVG error:', key, e);
   }
-  sprite.innerHTML = html || placeholderMonster(m.name || key, isBoss);
-}
-
-function placeholderMonster(label, isBoss) {
-  return `
-    <div class="mon-placeholder" title="${label}">
-      <div class="mon-placeholder-icon">${isBoss ? '👑' : '👹'}</div>
-      <div class="mon-placeholder-name">${label}</div>
+  sprite.innerHTML = html || `
+    <div style="width:140px;height:150px;display:flex;align-items:center;justify-content:center;
+      flex-direction:column;color:#e8c37a;border:2px dashed #e8c37a;border-radius:10px;">
+      <div style="font-size:40px">${isBoss ? '👑' : '👹'}</div>
+      <div style="font-size:11px">${m.name || key}</div>
     </div>`;
 }
 
-/* ═══════════════════ RENDER: HERÓI ═══════════════════ */
+/* ═══════════════════ RENDER HERÓI ═══════════════════ */
 
 export function renderStageHero(state) {
-  const layout = ensureStageLayout();
-  const box = layout?.hero || qid('stage-hero') || el('stage-hero');
+  ensureStageStyles();
 
+  const box = qid('stage-hero') || el('stage-hero');
   const nameEl = qid('hero-name') || el('hero-name');
   if (nameEl) {
     const cls = getClass(state.class);
@@ -288,7 +208,7 @@ function maxVisibleSaga(state) {
 }
 
 export function renderZoneMap(state, callbacks = {}) {
-  const container = qid('zone-map-container') || qid('zone-list') || el('zone-map-container') || el('zone-list');
+  const container = qid('zone-map-container') || qid('zone-list') || el('zone-list');
   if (!container) return;
 
   ensureStageStyles();
@@ -356,13 +276,21 @@ export function renderZoneMap(state, callbacks = {}) {
 
 /* ═══════════════════ CSS ═══════════════════ */
 
-const STYLE_ID = 'stage-ui-styles';
+const STYLE_ID = 'stage-ui-styles-v4';
 
 export function ensureStageStyles() {
   const host = document.getElementById('idle-host');
   const target = host?.shadowRoot || document.head;
   if (!target) return;
-  if (target.querySelector?.('#' + STYLE_ID)) return;
+
+  // Remove versões antigas que brigavam com o layout
+  ['stage-ui-styles', 'stage-ui-styles-v4'].forEach((id) => {
+    // mantém só v4 no final
+  });
+  const old = target.querySelector('#stage-ui-styles');
+  if (old) old.remove();
+
+  if (target.querySelector('#' + STYLE_ID)) return;
 
   const tag = document.createElement('style');
   tag.id = STYLE_ID;
@@ -370,41 +298,81 @@ export function ensureStageStyles() {
   target.appendChild(tag);
 }
 
+/**
+ * IMPORTANTE:
+ * O HTML real tem #stage-hero e #stage-monster como FILHOS DIRETOS de #stage.
+ * O layout original é position:absolute (left / right).
+ * NÃO usar grid/flex no #stage inteiro — isso quebra o fundo e as animações (is-hero-atk).
+ */
 const STAGE_CSS = `
-/* ═══════════════ FIGHTERS: Herói | Monstro ═══════════════ */
-#stage-fighters,
-.stage-fighters {
-  display: grid !important;
-  grid-template-columns: 1fr 1fr !important;
-  gap: 12px !important;
-  align-items: stretch !important;
-  width: 100% !important;
-  max-width: 100% !important;
-  box-sizing: border-box !important;
-  padding: 8px !important;
-  pointer-events: none !important;
+/* ═══════════════ PALCO: posicionamento absoluto L | R ═══════════════ */
+
+#stage.stage,
+#stage {
+  position: relative !important;
+  overflow: hidden !important;
 }
 
-/* Cada card ocupa SÓ a sua coluna */
-#stage-hero,
-#stage-monster,
-.stage-card {
-  position: relative !important;
+/* HERÓI — coluna esquerda */
+#stage-hero {
+  position: absolute !important;
+  left: 6% !important;
+  right: auto !important;
+  bottom: 10% !important;
+  top: auto !important;
+
+  width: 170px !important;
+  max-width: 38% !important;
+  height: 210px !important;
+  max-height: 70% !important;
+
+  margin: 0 !important;
+  transform: none !important;          /* evita herdar translate quebrado */
+  inset: auto auto 10% 6% !important;  /* top right bottom left */
+
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
   justify-content: flex-end !important;
-  width: auto !important;           /* NÃO 100% do palco inteiro */
-  max-width: 100% !important;
-  min-width: 0 !important;          /* evita overflow no grid */
-  height: 240px !important;
-  max-height: 260px !important;
-  box-sizing: border-box !important;
-  overflow: hidden !important;
+
+  z-index: 3 !important;
   pointer-events: none !important;
+  overflow: visible !important;
+  box-sizing: border-box !important;
 }
 
-/* Slot da arte do monstro — interno ao card */
+/* MONSTRO — coluna direita */
+#stage-monster {
+  position: absolute !important;
+  right: 6% !important;
+  left: auto !important;               /* ← CRÍTICO: tira o monstro da esquerda */
+  bottom: 10% !important;
+  top: auto !important;
+
+  width: 170px !important;
+  max-width: 38% !important;
+  height: 210px !important;
+  max-height: 70% !important;
+
+  margin: 0 !important;
+  transform: none !important;
+  inset: auto 6% 10% auto !important;  /* top right bottom left */
+
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+
+  z-index: 3 !important;
+  pointer-events: none !important;
+  overflow: visible !important;
+  box-sizing: border-box !important;
+
+  /* NÃO esticar como se fosse o palco inteiro */
+  background: transparent !important;
+}
+
+/* Slot interno da arte */
 #monster-sprite-container,
 .monster-sprite-host {
   position: relative !important;
@@ -412,76 +380,88 @@ const STAGE_CSS = `
   align-items: flex-end !important;
   justify-content: center !important;
   width: 100% !important;
-  flex: 1 1 auto !important;
-  min-height: 140px !important;
-  max-height: 180px !important;
-  overflow: hidden !important;
+  height: 160px !important;
+  max-height: 160px !important;
+  overflow: visible !important;
+  flex: 0 0 auto !important;
 }
 
-/* Imagens contidas DENTRO do card */
+/* Imagens do herói e monstro — tamanho de figurinha */
 #stage-hero img,
 #stage-hero svg,
 #stage-hero .hero-svg,
 #stage-hero .hero-full,
+#stage-hero .hero-full img,
 #monster-sprite-container img,
 #monster-sprite-container svg,
 #monster-sprite-container .mon-svg,
-.monster-sprite-host img,
-.monster-sprite-host svg {
+#monster-sprite-container .mon-svg img {
   width: auto !important;
   height: auto !important;
-  max-width: min(160px, 100%) !important;
-  max-height: 170px !important;
+  max-width: 150px !important;
+  max-height: 160px !important;
   object-fit: contain !important;
   object-position: center bottom !important;
   display: block !important;
   margin: 0 auto !important;
-  flex-shrink: 1 !important;
 }
 
-/* Boss um pouco maior, ainda dentro do card */
-#stage-monster.is-boss #monster-sprite-container img,
-#stage-monster.is-boss #monster-sprite-container svg,
-#monster-sprite-container.is-boss img,
-#monster-sprite-container.is-boss svg {
-  max-width: min(180px, 100%) !important;
-  max-height: 190px !important;
+/* Wrapper que o art.js gera */
+#stage-hero .hero-svg,
+#stage-hero .hero-full,
+#monster-sprite-container .mon-svg {
+  width: 150px !important;
+  height: 160px !important;
+  max-width: 150px !important;
+  max-height: 160px !important;
+  position: relative !important;
+}
+
+/* Boss / elite um pouco maior, ainda no lado direito */
+#stage-monster.is-boss #monster-sprite-container .mon-svg,
+#stage-monster.is-boss #monster-sprite-container img {
+  max-width: 168px !important;
+  max-height: 178px !important;
+  width: 168px !important;
+  height: 178px !important;
 }
 
 #stage-monster.is-boss {
-  filter: drop-shadow(0 0 10px rgba(255, 80, 80, 0.45));
+  filter: drop-shadow(0 0 12px rgba(255, 80, 80, 0.5));
 }
 #stage-monster.is-elite {
-  filter: drop-shadow(0 0 8px rgba(150, 120, 255, 0.4));
+  filter: drop-shadow(0 0 10px rgba(150, 120, 255, 0.45));
 }
 
-/* Nome + HP do monstro (dentro do card) */
+/* Nome + HP do monstro (no card direito) */
 #monster-name,
 .stage-entity-name {
   flex: 0 0 auto !important;
   width: 100% !important;
   text-align: center !important;
-  font-size: 12px !important;
+  font-size: 11px !important;
   font-weight: 700 !important;
   color: #e8c37a !important;
+  text-shadow: 0 1px 3px #000 !important;
   white-space: nowrap !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
-  padding: 2px 6px !important;
-  box-sizing: border-box !important;
+  padding: 0 4px 2px !important;
+  order: -2 !important;
 }
 
 #monster-hp-bar,
 .stage-hp-bar {
   position: relative !important;
   flex: 0 0 auto !important;
-  width: calc(100% - 16px) !important;
-  height: 12px !important;
-  margin: 2px 8px 6px !important;
-  background: #2a1515 !important;
+  width: 100% !important;
+  height: 10px !important;
+  margin: 0 0 6px !important;
+  background: rgba(40, 12, 12, 0.9) !important;
   border: 1px solid #7a3030 !important;
-  border-radius: 4px !important;
+  border-radius: 3px !important;
   overflow: hidden !important;
+  order: -1 !important;
 }
 
 #monster-hp-fill,
@@ -489,7 +469,7 @@ const STAGE_CSS = `
   position: absolute !important;
   left: 0; top: 0; bottom: 0;
   width: 100%;
-  background: linear-gradient(90deg, #8b0000, #e11d48) !important;
+  background: linear-gradient(90deg, #7f1d1d, #ef4444) !important;
   transition: width 0.15s ease-out !important;
 }
 
@@ -500,21 +480,18 @@ const STAGE_CSS = `
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  font-size: 9px !important;
+  font-size: 8px !important;
   color: #fff !important;
   text-shadow: 0 1px 2px #000 !important;
   z-index: 1 !important;
 }
 
-.mon-placeholder {
-  width: 140px; height: 160px;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 6px; border-radius: 10px;
-  background: repeating-linear-gradient(45deg,#1f2937,#1f2937 10px,#374151 10px,#374151 20px);
-  border: 2px dashed #f59e0b; color: #fff;
+/* Animações de ataque do projeto: não zerar se o CSS global depender de translate no #stage,
+   só nos cards de lutador em estado idle. Durante atk o global pode sobrescrever. */
+#stage:not(.is-hero-atk):not(.is-mob-atk) #stage-hero,
+#stage:not(.is-hero-atk):not(.is-mob-atk) #stage-monster {
+  transform: none !important;
 }
-.mon-placeholder-icon { font-size: 42px; }
-.mon-placeholder-name { font-size: 12px; color: #fbbf24; text-align: center; padding: 0 6px; }
 
 /* ═══════════════ MAPA DE ZONAS ═══════════════ */
 .zone-map-root { display:flex; flex-direction:column; gap:16px; }
