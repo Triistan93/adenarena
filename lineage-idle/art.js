@@ -67,7 +67,7 @@ function heroImgPath(race, cls) {
 }
 
 // ---- Monster image map ----
-const MON_IMG = {
+export const MON_IMG = {
   "goblin": "/img/mon_goblin.png",
   "mon_goblin": "/img/mon_goblin.png",
   "armoredGoblin": "/img/mon_armoredgoblin.png",
