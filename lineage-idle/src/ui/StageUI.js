@@ -108,7 +108,209 @@ export function resolveMonsterKey(m) {
 }
 
 /* ═══════════════════ RENDER MONSTRO ═══════════════════ */
+/* ═══════════════════ HP DO MONSTRO ═══════════════════ */
 
+/**
+ * Retorna o primeiro número positivo encontrado.
+ * Diferente de ??, ignora valores 0 quando usados como HP máximo.
+ */
+function firstPositive(...values) {
+  for (const value of values) {
+    const number = Number(value);
+
+    if (Number.isFinite(number) && number > 0) {
+      return number;
+    }
+  }
+
+  return null;
+}
+
+/**
+ * Retorna o primeiro número válido maior ou igual a zero.
+ * Zero é válido para o HP atual.
+ */
+function firstNonNegative(...values) {
+  for (const value of values) {
+    const number = Number(value);
+
+    if (Number.isFinite(number) && number >= 0) {
+      return number;
+    }
+  }
+
+  return null;
+}
+
+function getMonsterDefinition(monster, monsterKey) {
+  const candidates = [
+    monsterKey,
+    String(monsterKey || '').replace(/^mon_/i, ''),
+    monster?.id,
+    monster?.key,
+    monster?.monsterId
+  ];
+
+  for (const candidate of candidates) {
+    if (candidate && MONSTERS[candidate]) {
+      return MONSTERS[candidate];
+    }
+  }
+
+  return null;
+}
+
+/**
+ * Resolve o HP atual e o HP máximo aceitando os nomes mais comuns
+ * usados pelo engine:
+ *
+ * hp, currentHp, currentHP, maxHp, maxHP, _maxHp etc.
+ */
+function getMonsterHpData(monster, monsterKey) {
+  const definition = getMonsterDefinition(monster, monsterKey);
+
+  const maxHp =
+    firstPositive(
+      monster?._maxHp,
+      monster?._maxHP,
+      monster?.maxHp,
+      monster?.maxHP,
+      monster?.hpMax,
+      monster?.maxHealth,
+      monster?.healthMax,
+      monster?.stats?.maxHp,
+      monster?.stats?.maxHP,
+      definition?.hp,
+      monster?.hp
+    ) || 1;
+
+  const currentHpRaw =
+    firstNonNegative(
+      monster?.currentHp,
+      monster?.currentHP,
+      monster?.hpCurrent,
+      monster?._currentHp,
+      monster?._currentHP,
+      monster?.currentHealth,
+      monster?.health,
+      monster?.stats?.hp,
+      monster?.hp
+    );
+
+  // Se o monstro ainda não recebeu HP atual, inicia cheio.
+  const currentHp = currentHpRaw === null
+    ? maxHp
+    : Math.min(maxHp, Math.max(0, currentHpRaw));
+
+  return {
+    currentHp,
+    maxHp,
+    definition
+  };
+}
+
+/**
+ * Garante que a barra possui:
+ *
+ * #monster-hp-bar
+ * ├── #monster-hp-fill
+ * └── #monster-hp-text
+ */
+function ensureMonsterHpElements(monsterCard) {
+  if (!monsterCard) return null;
+
+  const documentRoot =
+    document.getElementById('idle-host')?.shadowRoot || document;
+
+  let bar = monsterCard.querySelector('#monster-hp-bar');
+
+  if (!bar) {
+    bar = documentRoot.querySelector('#monster-hp-bar');
+  }
+
+  if (!bar) {
+    bar = document.createElement('div');
+    bar.id = 'monster-hp-bar';
+    bar.className = 'stage-hp-bar';
+
+    const sprite = monsterCard.querySelector('#monster-sprite-container');
+
+    if (sprite) {
+      monsterCard.insertBefore(bar, sprite);
+    } else {
+      monsterCard.appendChild(bar);
+    }
+  }
+
+  let fill = bar.querySelector('#monster-hp-fill');
+
+  if (!fill) {
+    fill = document.createElement('div');
+    fill.id = 'monster-hp-fill';
+    fill.className = 'stage-hp-fill';
+    bar.appendChild(fill);
+  }
+
+  let text = bar.querySelector('#monster-hp-text');
+
+  if (!text) {
+    text = monsterCard.querySelector('#monster-hp-text');
+  }
+
+  if (!text) {
+    text = document.createElement('span');
+    text.id = 'monster-hp-text';
+    text.className = 'stage-hp-text';
+    bar.appendChild(text);
+  }
+
+  return { bar, fill, text };
+}
+
+/**
+ * Atualiza a barra sem alterar a largura do container externo.
+ */
+function updateMonsterHPBar(monster, monsterKey, monsterCard) {
+  const hpData = getMonsterHpData(monster, monsterKey);
+  const elements = ensureMonsterHpElements(monsterCard);
+
+  if (!elements) return hpData;
+
+  const { bar, fill, text } = elements;
+  const percentage = Math.max(
+    0,
+    Math.min(100, (hpData.currentHp / hpData.maxHp) * 100)
+  );
+
+  // A barra externa sempre ocupa todo o card.
+  bar.style.setProperty('width', '100%', 'important');
+  bar.style.height = '10px';
+  bar.style.position = 'relative';
+  bar.style.overflow = 'hidden';
+
+  // Somente o preenchimento varia.
+  fill.style.setProperty('width', `${percentage}%`, 'important');
+  fill.style.height = '100%';
+  fill.style.position = 'absolute';
+  fill.style.left = '0';
+  fill.style.top = '0';
+  fill.style.bottom = '0';
+  fill.style.background =
+    'linear-gradient(90deg, #7f1d1d, #ef4444)';
+  fill.style.transition = 'width .15s ease-out';
+
+  text.textContent =
+    `${Math.ceil(hpData.currentHp)} / ${Math.ceil(hpData.maxHp)}`;
+
+  text.style.position = 'absolute';
+  text.style.inset = '0';
+  text.style.display = 'flex';
+  text.style.alignItems = 'center';
+  text.style.justifyContent = 'center';
+  text.style.zIndex = '2';
+
+  return hpData;
+}
 export function renderStageMonster(state) {
   ensureStageStyles();
 
