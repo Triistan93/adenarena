@@ -126,3 +126,21 @@ export const MONSTERS = {
   vulcanLord:       { name: 'Vulcan Lord',              lvl: 100, hp: 75000, atk: 1250, def: 520, eva: 18, xp: 45000, sp: 80, gold: [8000, 16000],  element: 'fire', boss: true, traits: ['cataclysm'] },
   valakas:          { name: 'Valakas Fire Sovereign Dragon', hp: 200000, atk: 1800, def: 850, eva: 20, xp: 200000, sp: 200, gold: [50000, 100000], boss: true }
 };
+
+/* ─── Normalização automática ────────────────────────────────────────────
+   Injeta `id` (a própria chave) e `level` em todos os monstros.
+   Resolve arte, drops, codex e tooltips de uma vez só.               */
+for (const [key, m] of Object.entries(MONSTERS)) {
+  m.id    = key;
+  m.level = m.level ?? m.lvl ?? 1;
+}
+
+/** Índice reverso: 'goblin mage' -> 'goblinMage' */
+export const MONSTER_BY_NAME = Object.freeze(
+  Object.fromEntries(
+    Object.entries(MONSTERS).flatMap(([k, v]) => [
+      [k.toLowerCase(), k],
+      [String(v.name).toLowerCase(), k],
+    ])
+  )
+);
