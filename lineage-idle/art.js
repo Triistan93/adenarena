@@ -349,8 +349,17 @@ export function heroSVG(race, cls, aura, mode) {
 //  monsterSVG(id, opts)
 // ================================================================
 export function monsterSVG(id, opts) {
-  const safeId = id || '';
-  const imgSrc = MON_IMG[safeId] || (safeId ? MON_IMG[safeId.toLowerCase()] : null) || '/img/mon_goblin.png';
+  const safeId = String(id || '').trim();
+  const cleanKey = safeId.replace(/\s+/g, '');
+  const lowerCleanKey = cleanKey.toLowerCase();
+
+  const imgSrc = MON_IMG[safeId]
+    || MON_IMG[cleanKey]
+    || MON_IMG[lowerCleanKey]
+    || MON_IMG['mon_' + lowerCleanKey]
+    || (safeId ? MON_IMG[safeId.toLowerCase()] : null)
+    || '/img/mon_goblin.png';
+
   const crown = opts?.crown
     ? `<div style="position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-size:22px;filter:drop-shadow(0 0 6px #f0c840);z-index:2;">👑</div>`
     : "";

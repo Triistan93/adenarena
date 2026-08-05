@@ -8,7 +8,20 @@ import { el, updateBar } from '../core/DomHelpers.js';
 import { getClass } from '../engine/StatsEngine.js';
 import { heroSVG, monsterSVG } from '../../art.js';
 
-/* ═══════════════════ RESOLUÇÃO DE CHAVES ═══════════════════ */
+/* ═══════════════════ RESOLUÇÃO DE CONTAINER & CHAVES ═══════════════════ */
+
+const MONSTER_HOST_IDS = [
+  'stage-monster', 'monster-sprite-container', 'monster-sprite',
+  'monster-art', 'mob-sprite', 'enemy-sprite'
+];
+
+function getMonsterHost() {
+  for (const id of MONSTER_HOST_IDS) {
+    const found = el(id);
+    if (found) return found;
+  }
+  return null;
+}
 
 const _slug = new Map();
 
@@ -102,12 +115,18 @@ export function renderStageHero(state) {
 /* ═══════════════════ MONSTRO ═══════════════════ */
 
 export function renderStageMonster(state) {
-  const m = state.activeMonster;
-  const box = el('monster-sprite-container');
+  const m = state?.activeMonster;
+  const box = getMonsterHost();
 
-  if (!m) { if (box) box.innerHTML = ''; return; }
+  if (!box) return;
 
-  const key   = resolveMonsterKey(m);
+  if (!m) {
+    box.innerHTML = '';
+    box.classList.remove('is-boss', 'is-elite');
+    return;
+  }
+
+  const key   = resolveMonsterKey(m) || m.id || m.name;
   const isBoss = !!(m.boss || m.isTower);
   const isElite = !!(m.elite || m.isElite);
 
@@ -118,15 +137,12 @@ export function renderStageMonster(state) {
     nameEl.textContent = `${tag ? tag + ' · ' : ''}${m.name} (Nv. ${lvl})`;
   }
 
-  // _maxHp precisa existir; senão a barra fica travada em 100%
   const maxHp = m._maxHp ?? m.maxHp ?? MONSTERS[key]?.hp ?? m.hp ?? 1;
   updateBar('monster-hp-bar', m.hp, maxHp, 'monster-hp-text');
 
-  if (box) {
-    box.classList.toggle('is-boss', isBoss);
-    box.classList.toggle('is-elite', isElite && !isBoss);
-    box.innerHTML = safeArt(monsterSVG, key, { crown: isBoss }, m.name);
-  }
+  box.classList.toggle('is-boss', isBoss);
+  box.classList.toggle('is-elite', isElite && !isBoss);
+  box.innerHTML = safeArt(monsterSVG, key, { crown: isBoss }, m.name);
 }
 
 /* ═══════════════════ ZONAS ═══════════════════ */
@@ -248,7 +264,7 @@ const STAGE_CSS = `
   grid-template-columns:repeat(auto-fill,minmax(158px,1fr)); }
 
 .zone-card { position:relative; display:flex; flex-direction:column; overflow:hidden;
-  border:1px solid rgba(212,175,55,.22); border-radius:9px; background:#131824;
+  border:1px solid rgba(212,175,55,.22); border-radius:999px; background:#131824;
   cursor:pointer; transition:transform .16s, border-color .16s, box-shadow .16s; }
 .zone-card:hover:not(.locked):not(.active) { transform:translateY(-3px);
   border-color:rgba(232,195,122,.65); box-shadow:0 6px 18px rgba(0,0,0,.5); }
@@ -283,8 +299,8 @@ const STAGE_CSS = `
   border-color:rgba(139,147,167,.3); color:#8b93a7; background:transparent; }
 .zone-card.active .select-zone-btn { border-color:#e8c37a; color:#e8c37a; background:rgba(232,195,122,.14); opacity:1; }
 
-#monster-sprite-container { display:flex; align-items:center; justify-content:center; }
-#monster-sprite-container svg { width:100%; height:100%; }
-#monster-sprite-container.is-boss  { filter:drop-shadow(0 0 12px rgba(255,80,80,.55)); }
-#monster-sprite-container.is-elite { filter:drop-shadow(0 0 10px rgba(150,120,255,.5)); }
+#stage-monster, #monster-sprite-container, .monster-sprite-host { position:relative; display:block; width:100%; height:100%; min-height:180px; pointer-events:none; }
+#stage-monster svg, #monster-sprite-container svg, .monster-sprite-host svg { width:100%; height:100%; }
+#stage-monster.is-boss, #monster-sprite-container.is-boss { filter:drop-shadow(0 0 12px rgba(255,80,80,.55)); }
+#stage-monster.is-elite, #monster-sprite-container.is-elite { filter:drop-shadow(0 0 10px rgba(150,120,255,.5)); }
 `;
