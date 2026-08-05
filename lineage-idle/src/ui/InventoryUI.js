@@ -1,94 +1,87 @@
 /**
  * InventoryUI.js — Renderização de Mochila, Baú e Equipamentos.
- * VERSÃO CORRIGIDA:装备系统修复 + 图标修复 + 属性计算修复
+ * VERSÃO CORRIGIDA: Slots + Ícones + Tooltip
  */
 
 import { D, ALL_EQUIP_SLOTS } from '../core/GameConfig.js';
 import { el, qs, qsa, mkEl } from '../core/DomHelpers.js';
 import { getMaxInventorySlots, getMaxWarehouseSlots, getSelectedSet } from '../services/InventoryService.js';
-import { resolveEquipSlot, equipItemToSlot } from '../services/EquipmentService.js';
-import { showItemTooltip, hideItemTooltip, getItemIcon } from './TooltipUI.js';
-import { calculateStats } from '../engine/StatsEngine.js';
+import { resolveEquipSlot } from '../services/EquipmentService.js';
+import { showItemTooltip, hideItemTooltip } from './TooltipUI.js';
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   HELPER: Obtém definição do item com fallback seguro
+   HELPER: Ícone do item (EMOJI, não path de arquivo!)
 ═══════════════════════════════════════════════════════════════════════════ */
 
-function getItemDef(itemId) {
-  const data = D();
-  if (!data || !data.ALL_ITEMS) {
-    console.warn('[InventoryUI] D() ou ALL_ITEMS não disponível');
-    return null;
-  }
-  return data.ALL_ITEMS[itemId] || null;
-}
+function getItemIcon(item, def) {
+  if (!def) return '📦';
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   HELPER: Ícone do item (prioridade: icon > sprite > fallback)
-═══════════════════════════════════════════════════════════════════════════ */
+  // Se já for emoji, retorna
+  if (def.icon && def.icon.length <= 2) return def.icon;
 
-function resolveItemIcon(item, def) {
-  if (!item || !def) return '📦';
-
-  // 1. Ícone explícito na definição
-  if (def.icon) return def.icon;
-
-  // 2. Ícone por tipo/slot
-  const iconMap = {
-    weapon: '️',
-    sword: '🗡️',
-    bow: '',
-    staff: '',
-    armor: '',
-    chest: '',
-    helmet: '',
-    gloves: '',
-    boots: '',
-    shield: '️',
-    ring: '💍',
-    necklace: '📿',
-    earring: '🎧',
-    belt: '🎗️',
-    cloak: '🧥',
-    consumable: '🧪',
-    potion: '🍶',
-    scroll: '📜',
-    material: '',
-    gem: '',
-    craft: '⚙️',
-    quest: '📯'
-  };
-
+  // Mapeamento por slot/tipo
   const slot = (def.slot || '').toLowerCase();
-  for (const [key, icon] of Object.entries(iconMap)) {
-    if (slot.includes(key)) return icon;
+  
+  if (slot.includes('weapon') || slot.includes('sword') || slot.includes('bow') || slot.includes('staff')) {
+    if (slot.includes('bow')) return '🏹';
+    if (slot.includes('staff')) return '';
+    if (slot.includes('sword')) return '🗡️';
+    return '️';
   }
-
-  // 3. Fallback por raridade
+  
+  if (slot.includes('armor') || slot.includes('chest') || slot.includes('breastplate')) return '';
+  if (slot.includes('helmet') || slot.includes('head') || slot.includes('cap')) return '🪖';
+  if (slot.includes('gloves') || slot.includes('hand')) return '🧤';
+  if (slot.includes('boots') || slot.includes('shoes') || slot.includes('feet')) return '';
+  if (slot.includes('shield')) return '🛡️';
+  if (slot.includes('ring')) return '💍';
+  if (slot.includes('necklace') || slot.includes('pendant')) return '📿';
+  if (slot.includes('earring')) return '🎧';
+  if (slot.includes('belt') || slot.includes('waist')) return '🎗️';
+  if (slot.includes('cloak') || slot.includes('cape')) return '🧥';
+  
+  if (slot.includes('potion') || slot.includes('consumable')) return '🧪';
+  if (slot.includes('scroll')) return '📜';
+  if (slot.includes('material') || slot.includes('ore') || slot.includes('gem')) return '';
+  if (slot.includes('quest')) return '📯';
+  
+  // Fallback por raridade
   const rarityIcons = {
     legendary: '',
     epic: '',
-    rare: '🟢',
-    uncommon: '🟡',
+    rare: '🔵',
+    uncommon: '🟢',
     common: '⚪'
   };
   return rarityIcons[item.rarity] || '📦';
 }
 
-/* ══════════════════════════════════════════════════════════════════════════
-   HELPER: Formata nome com enchant e raridade
+/* ═══════════════════════════════════════════════════════════════════════════
+   HELPER: Definição do item com fallback
 ═══════════════════════════════════════════════════════════════════════════ */
 
-function formatItemName(item, def) {
-  const enchant = item.enchant ? `+${item.enchant} ` : '';
-  const prefix = {
-    legendary: '【LEG】',
-    epic: '【EPIC】',
-    rare: '【RARE】',
-    uncommon: '【UNCOMMON】'
-  }[item.rarity] || '';
+function getItemDef(itemId) {
+  const data = D();
+  if (!data?.ALL_ITEMS) return null;
+  return data.ALL_ITEMS[itemId] || null;
+}
 
-  return `${enchant}${prefix}${def.name}`.trim();
+/* ═══════════════════════════════════════════════════════════════════════════
+   HELPER: Busca elemento (Shadow DOM + Document)
+═══════════════════════════════════════════════════════════════════════════ */
+
+function findElement(id) {
+  const host = document.getElementById('idle-host');
+  const shadow = host?.shadowRoot;
+  
+  // Tenta no Shadow DOM primeiro
+  if (shadow) {
+    const el = shadow.querySelector(`#${id}`);
+    if (el) return el;
+  }
+  
+  // Tenta no document global
+  return document.getElementById(id);
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -96,12 +89,11 @@ function formatItemName(item, def) {
 ═══════════════════════════════════════════════════════════════════════════ */
 
 export function updateInventoryUI(state, callbacks = {}) {
-  // Atualiza equipamentos primeiro (para stats)
   updateEquipmentUI(state, callbacks);
 
-  const grid = el('inventory-grid');
+  const grid = findElement('inventory-grid');
   if (!grid) {
-    console.error('[InventoryUI] Grid do inventário não encontrado');
+    console.warn('[InventoryUI] Grid do inventário não encontrado');
     return;
   }
 
@@ -109,7 +101,7 @@ export function updateInventoryUI(state, callbacks = {}) {
 
   const data = D();
   if (!data?.ALL_ITEMS) {
-    grid.innerHTML = '<div style="padding:20px;color:#f59e0b;text-align:center;">⚠️ Dados de itens não carregados</div>';
+    grid.innerHTML = '<div style="padding:20px;color:#f59e0b;text-align:center;">⚠️ Carregando itens...</div>';
     return;
   }
 
@@ -118,22 +110,9 @@ export function updateInventoryUI(state, callbacks = {}) {
   const rarityFilter = state.rarityFilter || 'all';
   const equipFilter = state.equipFilter || 'all';
 
-  // Auto-venda
-  const autoSellSel = el('auto-sell-rarity-select');
-  if (autoSellSel) {
-    autoSellSel.value = state.autoSellRarity || 'off';
-    autoSellSel.onchange = (e) => {
-      state.autoSellRarity = e.target.value;
-      if (callbacks.log) callbacks.log(`⚙️ Auto-Venda: ${e.target.value.toUpperCase()}`, 'system');
-      if (callbacks.save) callbacks.save();
-    };
-  }
-
-  // Busca
-  const searchInput = el('inv-search-input');
+  const searchInput = findElement('inv-search-input');
   const searchTerm = (searchInput?.value || '').trim().toLowerCase();
 
-  // Ordena por tier/raridade
   const sorted = [...(state.inventory || [])]
     .filter(i => i?.itemId)
     .sort((a, b) => {
@@ -146,34 +125,25 @@ export function updateInventoryUI(state, callbacks = {}) {
   let shown = 0;
   for (const item of sorted) {
     const def = getItemDef(item.itemId);
-    if (!def) {
-      console.warn('[InventoryUI] Item sem definição:', item.itemId);
-      continue;
-    }
+    if (!def) continue;
 
-    // Filtro de busca
     if (searchTerm && !def.name.toLowerCase().includes(searchTerm)) continue;
 
-    // Filtro por tipo
     if (filter !== 'all') {
       const slot = (def.slot || '').toLowerCase();
       if (filter === 'gear' && !['weapon', 'armor', 'helmet', 'gloves', 'boots', 'ring', 'necklace', 'shield'].includes(slot)) continue;
       if (filter === 'consumable' && !['consumable', 'potion', 'scroll', 'food'].includes(slot)) continue;
       if (filter === 'material' && !['material', 'gem', 'ore', 'craft'].includes(slot)) continue;
-      if (filter === 'scroll' && !['scroll', 'enchant', 'quest'].includes(slot)) continue;
     }
 
-    // Filtro por raridade
     const rarity = item.rarity || 'common';
     if (rarityFilter !== 'all' && rarity !== rarityFilter) continue;
-
-    // Filtro por equipado
     if (equipFilter === 'equipped' && !item.equipped) continue;
     if (equipFilter === 'bag' && item.equipped) continue;
 
     const isSelected = selectedSet.has(item.uid);
-    const icon = resolveItemIcon(item, def);
-    const name = formatItemName(item, def);
+    const icon = getItemIcon(item, def);
+    const enchant = item.enchant ? `+${item.enchant} ` : '';
     const qty = (item.count || 1) > 1 ? `<span class="qty">${item.count}</span>` : '';
     const equippedTag = item.equipped ? `<span class="equipped-badge">E</span>` : '';
     const checkbox = `<div class="slot-select-checkbox">${isSelected ? '✓' : ''}</div>`;
@@ -181,21 +151,18 @@ export function updateInventoryUI(state, callbacks = {}) {
     const slotEl = mkEl('div');
     slotEl.className = `inv-slot rarity-${rarity}` + (item.equipped ? ' is-equipped' : '') + (isSelected ? ' is-selected' : '');
     slotEl.dataset.uid = item.uid;
-    slotEl.dataset.itemId = item.itemId;
 
     slotEl.innerHTML = `
       ${checkbox}
-      <span class="item-icon" style="font-size:24px">${icon}</span>
-      <span class="item-name">${name}</span>
+      <span class="item-icon">${icon}</span>
+      <span class="item-name">${enchant}${def.name}</span>
       ${qty}
       ${equippedTag}
     `;
 
-    // Tooltip
     slotEl.onmouseenter = (e) => showItemTooltip(e, item, state, callbacks);
     slotEl.onmouseleave = () => hideItemTooltip();
 
-    // Clique esquerdo: selecionar
     slotEl.onclick = (e) => {
       e.stopPropagation();
       if (callbacks.toggleSelectItem) {
@@ -204,33 +171,13 @@ export function updateInventoryUI(state, callbacks = {}) {
       }
     };
 
-    // Clique direito / Context menu: equipar
     slotEl.oncontextmenu = (e) => {
       e.preventDefault();
       e.stopPropagation();
-
       if (item.equipped) {
-        // Já equipado → desequipar
-        if (callbacks.unequipItem) {
-          const slot = resolveEquipSlot(def);
-          callbacks.unequipItem(slot);
-        }
+        if (callbacks.unequipItem) callbacks.unequipItem(resolveEquipSlot(def.slot));
       } else {
-        // Não equipado → tentar equipar
-        const targetSlot = resolveEquipSlot(def);
-        if (targetSlot && callbacks.equipItem) {
-          callbacks.equipItem(item.uid, targetSlot);
-        } else {
-          console.warn('[InventoryUI] Slot inválido para:', def.slot);
-        }
-      }
-    };
-
-    // Duplo clique: usar (consumíveis)
-    slotEl.ondblclick = (e) => {
-      e.stopPropagation();
-      if (['consumable', 'potion', 'scroll', 'food'].includes((def.slot || '').toLowerCase())) {
-        if (callbacks.useItem) callbacks.useItem(item.uid);
+        if (callbacks.equipItem) callbacks.equipItem(state, item.uid, callbacks);
       }
     };
 
@@ -238,13 +185,9 @@ export function updateInventoryUI(state, callbacks = {}) {
     shown++;
   }
 
-  // Contador de slots
-  const cnt = el('inv-count');
+  const cnt = findElement('inv-count');
   const maxSlots = getMaxInventorySlots(state);
   if (cnt) cnt.textContent = `${state.inventory?.length || 0} / ${maxSlots}`;
-
-  // Atualiza stats após renderizar
-  if (callbacks.updateStats) callbacks.updateStats();
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -252,17 +195,13 @@ export function updateInventoryUI(state, callbacks = {}) {
 ═══════════════════════════════════════════════════════════════════════════ */
 
 export function updateWarehouseUI(state, callbacks = {}) {
-  const container = el('warehouse-grid');
-  const countEl = el('warehouse-slot-count');
+  const container = findElement('warehouse-grid');
+  const countEl = findElement('warehouse-slot-count');
 
-  if (!container) {
-    console.warn('[InventoryUI] Container do baú não encontrado');
-    return;
-  }
+  if (!container) return;
 
   state.warehouse = state.warehouse || [];
   const maxSlots = getMaxWarehouseSlots();
-
   if (countEl) countEl.textContent = `${state.warehouse.length} / ${maxSlots}`;
 
   container.innerHTML = '';
@@ -273,7 +212,7 @@ export function updateWarehouseUI(state, callbacks = {}) {
 
     const slotEl = mkEl('div');
     const rarity = item.rarity || 'common';
-    const icon = resolveItemIcon(item, def);
+    const icon = getItemIcon(item, def);
 
     slotEl.className = `inv-slot rarity-${rarity}`;
     slotEl.dataset.uid = item.uid;
@@ -281,7 +220,7 @@ export function updateWarehouseUI(state, callbacks = {}) {
     const countBadge = (item.count && item.count > 1) ? `<span class="qty">${item.count}</span>` : '';
 
     slotEl.innerHTML = `
-      <span class="item-icon" style="font-size:24px">${icon}</span>
+      <span class="item-icon">${icon}</span>
       <span class="item-name">${def.name}</span>
       ${countBadge}
     `;
@@ -290,86 +229,22 @@ export function updateWarehouseUI(state, callbacks = {}) {
     slotEl.onmouseleave = () => hideItemTooltip();
 
     slotEl.onclick = () => {
-      if (callbacks.withdrawFromWarehouse) {
-        callbacks.withdrawFromWarehouse(item.uid);
-      }
+      if (callbacks.withdrawFromWarehouse) callbacks.withdrawFromWarehouse(item.uid);
     };
 
     container.appendChild(slotEl);
   }
 }
 
-/* ══════════════════════════════════════════════════════════════════════════
+/* ═══════════════════════════════════════════════════════════════════════════
    EQUIPAMENTOS ATIVOS
 ═══════════════════════════════════════════════════════════════════════════ */
 
 export function updateEquipmentUI(state, callbacks = {}) {
   if (!state) return;
-
-  // Garante que equipment existe no state
   state.equipment = state.equipment || {};
 
-  for (const slot of ALL_EQUIP_SLOTS) {
-    const slotEl = el(`equip-slot-${slot}`);
-    if (!slotEl) {
-      console.warn(`[InventoryUI] Slot não encontrado: equip-slot-${slot}`);
-      continue;
-    }
-
-    const uid = state.equipment[slot];
-    const item = uid ? (state.inventory || []).find(i => i.uid === uid) : null;
-    const def = item ? getItemDef(item.itemId) : null;
-
-    if (item && def) {
-      const rarity = item.rarity || 'common';
-      const icon = resolveItemIcon(item, def);
-
-      slotEl.className = `equip-slot active rarity-${rarity}`;
-      slotEl.dataset.uid = uid;
-      slotEl.dataset.slot = slot;
-
-      slotEl.innerHTML = `
-        <span class="equip-icon" style="font-size:28px">${icon}</span>
-        <span class="equip-slot-label">${getSlotLabel(slot)}</span>
-      `;
-
-      slotEl.onmouseenter = (e) => showItemTooltip(e, item, state, callbacks);
-      slotEl.onmouseleave = () => hideItemTooltip();
-
-      slotEl.onclick = () => {
-        if (callbacks.unequipItem) {
-          callbacks.unequipItem(slot);
-        }
-      };
-
-      // Marca como equipado no inventário
-      item.equipped = true;
-      item.equippedSlot = slot;
-    } else {
-      slotEl.className = 'equip-slot empty';
-      slotEl.dataset.slot = slot;
-      slotEl.innerHTML = `
-        <span class="equip-placeholder">${getSlotIcon(slot)}</span>
-        <span class="equip-slot-label">${getSlotLabel(slot)}</span>
-      `;
-      slotEl.onmouseenter = null;
-      slotEl.onmouseleave = null;
-      slotEl.onclick = null;
-    }
-  }
-
-  // Recalcula stats após atualizar equipamentos
-  if (state && callbacks.recalcStats) {
-    callbacks.recalcStats(state);
-  }
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   HELPERS DE SLOT
-═══════════════════════════════════════════════════════════════════════════ */
-
-function getSlotLabel(slot) {
-  const labels = {
+  const slotLabels = {
     weapon: 'Arma',
     armor: 'Armadura',
     helmet: 'Elmo',
@@ -377,18 +252,17 @@ function getSlotLabel(slot) {
     boots: 'Botas',
     shield: 'Escudo',
     ring: 'Anel',
+    ring2: 'Anel 2',
     necklace: 'Colar',
     earring: 'Brinco',
+    earring2: 'Brinco 2',
     belt: 'Cinto',
     cloak: 'Capa'
   };
-  return labels[slot] || slot.toUpperCase();
-}
 
-function getSlotIcon(slot) {
-  const icons = {
+  const slotIcons = {
     weapon: '⚔️',
-    armor: '🦺',
+    armor: '',
     helmet: '',
     gloves: '🧤',
     boots: '👢',
@@ -399,11 +273,62 @@ function getSlotIcon(slot) {
     belt: '🎗️',
     cloak: '🧥'
   };
-  return icons[slot] || '';
+
+  for (const slot of ALL_EQUIP_SLOTS) {
+    // Tenta múltiplos padrões de ID
+    const slotEl = 
+      findElement(`equip-slot-${slot}`) ||
+      findElement(`equipment-${slot}`) ||
+      findElement(`equip-${slot}`) ||
+      findElement(`slot-${slot}`);
+
+    if (!slotEl) {
+      // Silencioso - não spammar console se o slot não existir ainda
+      continue;
+    }
+
+    const uid = state.equipment[slot];
+    const item = uid ? (state.inventory || []).find(i => i.uid === uid) : null;
+    const def = item ? getItemDef(item.itemId) : null;
+
+    if (item && def) {
+      const rarity = item.rarity || 'common';
+      const icon = getItemIcon(item, def);
+
+      slotEl.className = `equip-slot active rarity-${rarity}`;
+      slotEl.dataset.uid = uid;
+      slotEl.dataset.slot = slot;
+
+      slotEl.innerHTML = `
+        <span class="equip-icon">${icon}</span>
+        <span class="equip-label">${slotLabels[slot] || slot}</span>
+      `;
+
+      slotEl.onmouseenter = (e) => showItemTooltip(e, item, state, callbacks);
+      slotEl.onmouseleave = () => hideItemTooltip();
+
+      slotEl.onclick = () => {
+        if (callbacks.unequipItem) callbacks.unequipItem(state, slot, callbacks);
+      };
+
+      item.equipped = true;
+      item.equippedSlot = slot;
+    } else {
+      slotEl.className = 'equip-slot empty';
+      slotEl.dataset.slot = slot;
+      slotEl.innerHTML = `
+        <span class="equip-placeholder">${slotIcons[slot] || '📦'}</span>
+        <span class="equip-label">${slotLabels[slot] || slot}</span>
+      `;
+      slotEl.onmouseenter = null;
+      slotEl.onmouseleave = null;
+      slotEl.onclick = null;
+    }
+  }
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   CSS DINÂMICO (injeta se não existir)
+/* ══════════════════════════════════════════════════════════════════════════
+   CSS
 ═══════════════════════════════════════════════════════════════════════════ */
 
 const STYLE_ID = 'inventory-ui-styles';
@@ -411,7 +336,6 @@ const STYLE_ID = 'inventory-ui-styles';
 export function ensureInventoryStyles() {
   const host = document.getElementById('idle-host');
   const target = host?.shadowRoot || document.head;
-
   if (!target) return;
   if (target.querySelector(`#${STYLE_ID}`)) return;
 
@@ -453,17 +377,13 @@ const INVENTORY_CSS = `
   box-shadow: 0 0 12px rgba(59, 130, 246, 0.5);
 }
 
-/* Raridades */
 .rarity-common { border-color: #9ca3af; }
 .rarity-uncommon { border-color: #22c55e; }
 .rarity-rare { border-color: #3b82f6; }
 .rarity-epic { border-color: #a855f7; }
 .rarity-legendary { border-color: #f59e0b; box-shadow: 0 0 10px rgba(245, 158, 11, 0.4); }
 
-.item-icon {
-  font-size: 28px;
-  z-index: 2;
-}
+.item-icon { font-size: 28px; z-index: 2; }
 
 .item-name {
   font-size: 8px;
@@ -507,7 +427,6 @@ const INVENTORY_CSS = `
   font-weight: bold;
 }
 
-/* Equipamento */
 .equip-slot {
   width: 56px;
   height: 56px;
@@ -532,19 +451,7 @@ const INVENTORY_CSS = `
   cursor: default;
 }
 
-.equip-icon {
-  font-size: 28px;
-}
-
-.equip-slot-label {
-  font-size: 7px;
-  color: #9ca3af;
-  text-transform: uppercase;
-  margin-top: 2px;
-}
-
-.equip-placeholder {
-  font-size: 24px;
-  opacity: 0.4;
-}
+.equip-icon { font-size: 28px; }
+.equip-label { font-size: 7px; color: #9ca3af; margin-top: 2px; }
+.equip-placeholder { font-size: 24px; opacity: 0.4; }
 `;
