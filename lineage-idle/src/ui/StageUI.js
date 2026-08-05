@@ -1,5 +1,6 @@
 /**
  * StageUI.js — Palco Principal (Hero vs Monster) e Mapa de Zonas.
+ * Versão corrigida com controle de tamanho do sprite do monstro.
  */
 
 import { ZONES, SAGAS, ZONE_BACKGROUNDS } from '../data/zones.js';
@@ -11,7 +12,7 @@ import { heroSVG, monsterSVG, MON_IMG } from '../../art.js';
 /* ═══════════════════ DIAGNÓSTICO FORÇADO - renderStageMonster ═══════════════════ */
 
 export function renderStageMonster(state) {
-  console.group("🔍 [StageUI] renderStageMonster()");
+  console.group(" [StageUI] renderStageMonster()");
 
   const m = state?.activeMonster;
   console.log("Monster data received:", m);
@@ -20,7 +21,7 @@ export function renderStageMonster(state) {
   let container = getMonsterHost();
 
   if (!container) {
-    console.error("❌ Nenhum container encontrado com getMonsterHost(). Criando fallback...");
+    console.error(" Nenhum container encontrado com getMonsterHost(). Criando fallback...");
     container = createMonsterContainerFallback();
   }
 
@@ -113,6 +114,7 @@ function createMonsterContainerFallback() {
     container.id = 'stage-monster';
     container.style.cssText = `
       min-height: 180px; 
+      max-height: 200px;
       position: relative; 
       display: flex; 
       align-items: center; 
@@ -153,7 +155,7 @@ function getEmergencyPlaceholder(m, key) {
   const isBoss = m.boss || m.isTower;
   return `
     <div style="
-      width:100%; height:180px; display:flex; flex-direction:column; 
+      width:140px; height:160px; display:flex; flex-direction:column; 
       align-items:center; justify-content:center; gap:8px;
       background: repeating-linear-gradient(45deg, #1f2937, #1f2937 10px, #374151 10px, #374151 20px);
       border: 3px dashed ${isBoss ? '#eab308' : '#f97316'};
@@ -272,7 +274,7 @@ export function renderZoneMap(state, callbacks = {}) {
     block.className = 'saga-map-block';
     block.innerHTML = `
       <div class="saga-header">
-        <span class="saga-title">🗺️ ${saga.name}</span>
+        <span class="saga-title">️ ${saga.name}</span>
         <span class="saga-req">Lv. ${saga.unlocksAt}+</span>
       </div>
       <div class="saga-zones-grid">${cards}</div>`;
@@ -309,6 +311,7 @@ export function ensureStageStyles() {
 }
 
 const STAGE_CSS = `
+/* ═══════════════════ MAPA DE ZONAS ═══════════════════ */
 .zone-map-root { display:flex; flex-direction:column; gap:16px; }
 
 .saga-map-block { border:1px solid rgba(212,175,55,.18); border-radius:10px;
@@ -359,8 +362,117 @@ const STAGE_CSS = `
   border-color:rgba(139,147,167,.3); color:#8b93a7; background:transparent; }
 .zone-card.active .select-zone-btn { border-color:#e8c37a; color:#e8c37a; background:rgba(232,195,122,.14); opacity:1; }
 
-#stage-monster, #monster-sprite-container, .monster-sprite-host { position:relative; display:block; width:100%; height:100%; min-height:180px; pointer-events:none; }
-#stage-monster svg, #monster-sprite-container svg, .monster-sprite-host svg { width:100%; height:100%; }
-#stage-monster.is-boss, #monster-sprite-container.is-boss { filter:drop-shadow(0 0 12px rgba(255,80,80,.55)); }
-#stage-monster.is-elite, #monster-sprite-container.is-elite { filter:drop-shadow(0 0 10px rgba(150,120,255,.5)); }
+/* ═══════════════════ PALCO - MONSTRO (CORRIGIDO) ═══════════════════ */
+
+/* Container principal do monstro - ALTURA TRAVADA */
+#stage-monster, 
+#monster-sprite-container, 
+.monster-sprite-host {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: 180px !important;           /* ← ALTURA FIXA */
+  max-height: 200px !important;       /* ← LIMITE MÁXIMO */
+  min-height: 160px !important;       /* ← LIMITE MÍNIMO */
+  flex-shrink: 0 !important;          /* ← NÃO COMPRIME */
+  pointer-events: none !important;
+  overflow: hidden !important;        /* ← EVITA VAZAMENTO */
+}
+
+/* Imagem/SVG do monstro - DIMENSÕES CONTIDAS */
+#stage-monster img,
+#stage-monster svg,
+#monster-sprite-container img,
+#monster-sprite-container svg,
+.monster-sprite-host img,
+.monster-sprite-host svg {
+  width: auto !important;
+  height: auto !important;
+  max-width: 140px !important;        /* ← LARGURA MÁXIMA */
+  max-height: 160px !important;       /* ← ALTURA MÁXIMA */
+  object-fit: contain !important;
+  object-position: center bottom !important;
+  flex-shrink: 0 !important;
+}
+
+/* Boss e Elite recebem um pouco mais de espaço */
+#stage-monster.is-boss img,
+#stage-monster.is-boss svg,
+#monster-sprite-container.is-boss img,
+#monster-sprite-container.is-boss svg {
+  max-width: 170px !important;
+  max-height: 190px !important;
+}
+
+#stage-monster.is-elite img,
+#stage-monster.is-elite svg,
+#monster-sprite-container.is-elite img,
+#monster-sprite-container.is-elite svg {
+  max-width: 155px !important;
+  max-height: 175px !important;
+}
+
+/* Efeitos visuais de Boss/Elite */
+#stage-monster.is-boss, 
+#monster-sprite-container.is-boss {
+  filter: drop-shadow(0 0 12px rgba(255,80,80,.55)) !important;
+}
+
+#stage-monster.is-elite, 
+#monster-sprite-container.is-elite {
+  filter: drop-shadow(0 0 10px rgba(150,120,255,.5)) !important;
+}
+
+/* Barra de HP do monstro - NÃO COMPRIMIR */
+#monster-hp-bar, 
+.monster-hp-bar {
+  width: 100% !important;
+  height: 14px !important;
+  min-height: 14px !important;
+  max-height: 14px !important;
+  flex-shrink: 0 !important;
+  margin: 6px 0 !important;
+}
+
+/* Nome do monstro - NÃO COMPRIMIR */
+#monster-name, 
+.monster-name-label {
+  flex-shrink: 0 !important;
+  margin-bottom: 4px !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* ═══════════════════ PALCO - HERÓI ═══════════════════ */
+
+#stage-hero, 
+.hero-sprite-container {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: 180px !important;
+  max-height: 200px !important;
+  min-height: 160px !important;
+  flex-shrink: 0 !important;
+  overflow: hidden !important;
+}
+
+#stage-hero img,
+#stage-hero svg,
+.hero-sprite-container img,
+.hero-sprite-container svg {
+  width: auto !important;
+  height: auto !important;
+  max-width: 140px !important;
+  max-height: 160px !important;
+  object-fit: contain !important;
+  object-position: center bottom !important;
+}
 `;
