@@ -37,26 +37,34 @@ export function getAssetUrl(p) {
  * @returns {string}
  */
 export function getItemIcon(defOrId) {
-  if (!defOrId) return '📦';
+  if (!defOrId) return '';
+  
   const gData = D();
   const all = gData?.ALL_ITEMS || {};
   const def = (typeof defOrId === 'string') ? (all[defOrId] || null) : (defOrId.itemId ? all[defOrId.itemId] : defOrId);
   const slot = def?.slot || (typeof defOrId === 'object' ? defOrId.slot : '') || '';
-  const fallbackIcons = { weapon: '⚔️', armor: '🛡️', helmet: '⛑️', gloves: '🧤', boots: '👢', ring: '💍', earring: '💎', necklace: '📿', consumable: '🧪', material: '💎', scroll: '📜', cloak: '🧣', belt: '🎗️', hair: '👑', agathion: '🐾' };
-  const emoji = fallbackIcons[slot] || '📦';
-
-  let iconPath = def?.icon || '';
-  if (!iconPath) {
-    const id = typeof defOrId === 'string' ? defOrId : (def?.id || defOrId.itemId || '');
-    const iconIndex = (typeof window !== 'undefined' && window.IconIndex) ? window.IconIndex : (gData?.ICON_MAP || {});
-    iconPath = iconIndex[id] || iconIndex['armor_' + id] || iconIndex['jewel_' + id] || iconIndex['weapon_' + id] || iconIndex[String(id).replace(/^(armor_|jewel_|weapon_|shield_|wepoan_)/, '')] || '';
-  }
-  if (!iconPath) return emoji;
-  if (!iconPath.endsWith('.png') && !iconPath.endsWith('.jpg')) iconPath += '.png';
-  const iconUrl = getAssetUrl(`img/icons/${iconPath}`);
-  return `<img src="${iconUrl}" alt="${def?.name || ''}" class="item-icon-img" onerror="this.style.display='none';if(this.nextElementSibling)this.nextElementSibling.style.display='inline-block';" style="width:28px; height:28px; object-fit:contain; vertical-align:middle;" /><span class="item-icon-fallback" style="display:none; font-size:18px;">${emoji}</span>`;
+  
+  // Retorna APENAS emoji - sem HTML de imagem!
+  const fallbackIcons = { 
+    weapon: '⚔️', 
+    armor: '', 
+    helmet: '', 
+    gloves: '🧤', 
+    boots: '👢', 
+    ring: '💍', 
+    earring: '🎧', 
+    necklace: '📿', 
+    consumable: '🧪', 
+    material: '💎', 
+    scroll: '📜', 
+    cloak: '', 
+    belt: '️', 
+    hair: '👑', 
+    agathion: '👼'
+  };
+  
+  return fallbackIcons[slot] || '📦';
 }
-
 
 /**
  * Formata o nome exibido de um item incluindo seu enchant, raridade e status foundation.
