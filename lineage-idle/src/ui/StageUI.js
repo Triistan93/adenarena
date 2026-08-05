@@ -1,6 +1,6 @@
 /**
  * StageUI.js — Palco Principal (Hero vs Monster) e Mapa de Zonas.
- * Versão corrigida com controle de tamanho do sprite do monstro.
+ * Versão corrigid com controle de tamanho do sprite do monstro.
  */
 
 import { ZONES, SAGAS, ZONE_BACKGROUNDS } from '../data/zones.js';
