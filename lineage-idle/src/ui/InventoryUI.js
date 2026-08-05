@@ -21,7 +21,15 @@ export function updateInventoryUI(state, callbacks = {}) {
   const grid = el('inventory-grid');
   if (!grid) return;
   grid.innerHTML = '';
-
+if (typeof window !== 'undefined') {
+  window.__INVENTORY_DEBUG__ = {
+    state,
+    callbacks,
+    data: D(),
+    equipment: state?.equipment,
+    inventory: state?.inventory
+  };
+}
   const selectedSet = getSelectedSet(state);
   const filter = state.filter || 'all';
   const rarityFilter = state.rarityFilter || 'all';
