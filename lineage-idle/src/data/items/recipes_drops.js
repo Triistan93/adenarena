@@ -1070,18 +1070,24 @@ export function getZoneDropTier(zoneLevel) {
   return 'zone6';
 }
 
-export function rollDrop(zoneId = 'zone1', rarityBonus = 0, isBoss = false) {
+export function rollDrop(zoneId = 'zone1', rarityBonus = 0, isBoss = false, allItemsParam = null) {
+  const allItems = allItemsParam
+    || (typeof window !== 'undefined' && window.GameData?.ALL_ITEMS)
+    || (typeof window !== 'undefined' && window.ALL_ITEMS)
+    || {};
   const drops = [];
   
   // 1. Consumable/Material Drop (75% base chance)
   const matChance = isBoss ? 1.0 : 0.75;
   if (Math.random() < matChance) {
     const matPool = ZONE_CONSUMABLES[zoneId] || ZONE_CONSUMABLES.zone1;
-    const matId = matPool[Math.floor(Math.random() * matPool.length)];
-    const def = ALL_ITEMS[matId];
-    if (def) {
-      const amount = (def.slot === 'potion' || def.slot === 'consumable') ? Math.floor(Math.random() * 2) + 1 : Math.floor(Math.random() * 3) + 1;
-      drops.push({ id: matId, itemId: matId, rarity: 'common', isEquipment: false, amount });
+    if (matPool && matPool.length > 0) {
+      const matId = matPool[Math.floor(Math.random() * matPool.length)];
+      const def = allItems[matId];
+      if (def) {
+        const amount = (def.slot === 'potion' || def.slot === 'consumable') ? Math.floor(Math.random() * 2) + 1 : Math.floor(Math.random() * 3) + 1;
+        drops.push({ id: matId, itemId: matId, rarity: 'common', isEquipment: false, amount });
+      }
     }
   }
 
@@ -1091,16 +1097,18 @@ export function rollDrop(zoneId = 'zone1', rarityBonus = 0, isBoss = false) {
   
   if (Math.random() < equipChance) {
     const rawPool = MONSTER_DROPS[zoneId] || MONSTER_DROPS.zone1;
-    const equipPool = rawPool.filter(id => {
-      const def = ALL_ITEMS[id];
+    const equipPool = (rawPool || []).filter(id => {
+      const def = allItems[id];
       return def && ['weapon','armor','helmet','gloves','boots','ring','necklace','earring','shield','legs','belt','cloak','talisman','hair','hair2','agathion'].includes(def.slot);
     });
     
-    const targetPool = equipPool.length > 0 ? equipPool : rawPool;
-    const itemId = targetPool[Math.floor(Math.random() * targetPool.length)];
-    const rarity = rollRarity(rarityBonus);
-    const dropObj = { id: itemId, itemId, rarity, isEquipment: true, amount: 1 };
-    drops.push(dropObj);
+    const targetPool = (equipPool && equipPool.length > 0) ? equipPool : rawPool;
+    if (targetPool && targetPool.length > 0) {
+      const itemId = targetPool[Math.floor(Math.random() * targetPool.length)];
+      const rarity = rollRarity(rarityBonus);
+      const dropObj = { id: itemId, itemId, rarity, isEquipment: true, amount: 1 };
+      drops.push(dropObj);
+    }
   }
 
   if (drops.length > 0) {
@@ -1108,6 +1116,12 @@ export function rollDrop(zoneId = 'zone1', rarityBonus = 0, isBoss = false) {
     drops.rarity = drops[0].rarity;
   }
   return drops;
+}
+
+export function rollDropLegacy(monsterId, luckMultiplier = 1) {
+  const allItems = (typeof window !== 'undefined' && (window.GameData?.ALL_ITEMS || window.ALL_ITEMS)) || {};
+  const dropTable = (typeof window !== 'undefined' && (window.GameData?.MONSTER_DROPS || window.MONSTER_DROPS)) || {};
+  return rollDrop(monsterId, luckMultiplier, false, allItems);
 }
 
 export function getMysticRotation() {

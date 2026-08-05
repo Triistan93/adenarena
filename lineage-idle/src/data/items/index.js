@@ -13,7 +13,7 @@ import { CONSUMABLES, MATERIALS } from './consumables.js';
 import {
   ICON_MAP, MONSTER_DROPS, CRAFTING_RECIPES, SHOP_INVENTORY,
   ZONE_GOLD_MULT, MYSTIC_POOL, ZONE_CONSUMABLES,
-  getZoneDropTier, rollRarity, rollDrop, getMysticRotation, rollItemWithRarity
+  getZoneDropTier, rollRarity, rollDrop, rollDropLegacy, getMysticRotation, rollItemWithRarity
 } from './recipes_drops.js';
 
 export const ALL_ITEMS = {
@@ -29,8 +29,11 @@ if (typeof window !== 'undefined') {
     LEGS, SHIELDS, BELTS, CLOAKS, SIGILS, NECKLACES, EARRINGS, HAIR, AGATHIONS,
     CONSUMABLES, MATERIALS, ALL_ITEMS, MONSTER_DROPS, SHOP_INVENTORY, CRAFTING_RECIPES,
     ZONE_GOLD_MULT, MYSTIC_POOL, ZONE_CONSUMABLES, getZoneDropTier, rollRarity, rollDrop,
-    getMysticRotation, rollItemWithRarity
+    rollDropLegacy, getMysticRotation, rollItemWithRarity
   };
+
+  window.ALL_ITEMS = ALL_ITEMS;
+  window.MONSTER_DROPS = MONSTER_DROPS;
 }
 
 export {
@@ -38,5 +41,5 @@ export {
   LEGS, SHIELDS, BELTS, CLOAKS, SIGILS, NECKLACES, EARRINGS, HAIR, AGATHIONS,
   CONSUMABLES, MATERIALS, ICON_MAP, MONSTER_DROPS, CRAFTING_RECIPES, SHOP_INVENTORY,
   ZONE_GOLD_MULT, MYSTIC_POOL, ZONE_CONSUMABLES, getZoneDropTier, rollRarity,
-  rollDrop, getMysticRotation, rollItemWithRarity
+  rollDrop, rollDropLegacy, getMysticRotation, rollItemWithRarity
 };
