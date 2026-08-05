@@ -150,16 +150,28 @@ export function ensureInventoryStyles() {
       box-shadow: inset 0 0 0 1px #f59e0b, 0 0 8px rgba(245, 158, 11, 0.5) !important;
     }
 
-    /* Painel de Equipamentos (Paper-doll / Slots) */
-    .doll-slots, #equipment-grid, .equipment-grid, .l2inv-paperdoll-grid {
+    /* ═══════════════════════════════════════════════════════════════════
+       PAPERDOLL — Layout de Equipamentos (estilo Lineage Clássico)
+    ═══════════════════════════════════════════════════════════════════ */
+    .equipment-panel,
+    .paperdoll,
+    .doll-slots,
+    #equipment-grid,
+    .equipment-grid,
+    .l2inv-paperdoll-grid,
+    #equipment-slots,
+    [class*="equip-container"] {
       display: grid !important;
-      grid-template-columns: repeat(2, 56px) !important;
-      gap: 6px !important;
+      grid-template-columns: repeat(3, 56px) !important;
+      grid-template-rows: repeat(4, 56px) !important;
+      gap: 8px !important;
       justify-content: center !important;
-      padding: 4px !important;
+      align-content: start !important;
+      padding: 16px 12px !important;
+      position: relative !important;
     }
 
-    .equip-slot {
+    .equip-slot, .l2inv-pd-slot {
       width: 56px !important;
       height: 56px !important;
       min-width: 56px !important;
@@ -167,27 +179,46 @@ export function ensureInventoryStyles() {
       min-height: 56px !important;
       max-height: 56px !important;
       box-sizing: border-box !important;
-      position: relative !important;
+      border: 2px solid #3a3a4a !important;
+      border-radius: 8px !important;
+      background: linear-gradient(145deg, #1a1a2e, #16162a) !important;
       display: flex !important;
       flex-direction: column !important;
       align-items: center !important;
       justify-content: center !important;
-      overflow: hidden !important;
-      padding: 2px !important;
-      background: linear-gradient(135deg, rgba(30,22,14,0.9), rgba(10,7,4,0.95)) !important;
-      border: 1px solid #3e2e1c !important;
-      border-radius: 4px !important;
+      position: relative !important;
       cursor: pointer !important;
       transition: all 0.15s !important;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.5) !important;
     }
 
-    .equip-slot:hover {
-      border-color: #e8c37a !important;
-      transform: scale(1.03) !important;
+    .equip-slot:hover, .l2inv-pd-slot:hover {
+      border-color: #f59e0b !important;
+      transform: translateY(-2px) !important;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3) !important;
+    }
+
+    .equip-slot.active, .l2inv-pd-slot.has-item {
+      border-color: #f59e0b !important;
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.4), inset 0 2px 4px rgba(0,0,0,0.3) !important;
+    }
+
+    .equip-slot.empty {
+      opacity: 0.65 !important;
+    }
+
+    .equip-slot .equip-icon,
+    .equip-slot img,
+    .equip-slot .item-icon-img,
+    .l2inv-pd-slot img {
+      width: 36px !important;
+      height: 36px !important;
+      object-fit: contain !important;
+      pointer-events: none !important;
     }
 
     .equip-slot .equip-placeholder-icon {
-      font-size: 18px !important;
+      font-size: 20px !important;
       opacity: 0.5 !important;
     }
 
@@ -199,9 +230,28 @@ export function ensureInventoryStyles() {
       letter-spacing: 0.05em !important;
     }
 
-    .equip-slot .slot-item-name {
+    .equip-slot .slot-item-name,
+    .equip-slot .slot-item {
       display: none !important;
     }
+
+    /* Posicionamento humanoide no grid de 3 colunas x 4 linhas:
+       Linha 1:  [.]         [HELMET]   [.]
+       Linha 2:  [EARRING]   [ARMOR]    [NECKLACE]
+       Linha 3:  [WEAPON]    [GLOVES]   [RING]
+       Linha 4:  [BELT]      [BOOTS]    [CAPE/CLOAK]
+    */
+    [data-slot="helmet"], #equip-slot-helmet, #equip-helmet, [id*="helmet"] { grid-column: 2 !important; grid-row: 1 !important; }
+    [data-slot="earring"], #equip-slot-earring, #equip-earring, [id*="earring"] { grid-column: 1 !important; grid-row: 2 !important; }
+    [data-slot="armor"], #equip-slot-armor, #equip-armor, [id*="armor"] { grid-column: 2 !important; grid-row: 2 !important; }
+    [data-slot="necklace"], #equip-slot-necklace, #equip-necklace, [id*="necklace"] { grid-column: 3 !important; grid-row: 2 !important; }
+    [data-slot="weapon"], #equip-slot-weapon, #equip-weapon, [id*="weapon"] { grid-column: 1 !important; grid-row: 3 !important; }
+    [data-slot="gloves"], #equip-slot-gloves, #equip-gloves, [id*="gloves"] { grid-column: 2 !important; grid-row: 3 !important; }
+    [data-slot="ring"], #equip-slot-ring, #equip-ring, [id*="ring"] { grid-column: 3 !important; grid-row: 3 !important; }
+    [data-slot="belt"], #equip-slot-belt, #equip-belt, [id*="belt"] { grid-column: 1 !important; grid-row: 4 !important; }
+    [data-slot="boots"], #equip-slot-boots, #equip-boots, [id*="boots"] { grid-column: 2 !important; grid-row: 4 !important; }
+    [data-slot="cape"], #equip-slot-cape, #equip-cape, [id*="cape"],
+    [data-slot="cloak"], #equip-slot-cloak, #equip-cloak, [id*="cloak"] { grid-column: 3 !important; grid-row: 4 !important; }
   `;
   root.appendChild(tag);
 }
