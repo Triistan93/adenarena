@@ -91,11 +91,11 @@ function ensureLayoutStyles() {
 
     main.main-grid, .main-grid {
       display: grid !important;
-      grid-template-columns: 210px minmax(0, 1.35fr) minmax(340px, 440px) !important;
-      gap: 10px !important;
+      grid-template-columns: minmax(0, 1fr) 690px !important;
+      gap: 12px !important;
       width: 100% !important;
-      height: calc(100vh - 65px) !important;
-      padding: 10px !important;
+      height: calc(100vh - 60px) !important;
+      padding: 10px 12px !important;
       box-sizing: border-box !important;
       overflow: hidden !important;
     }

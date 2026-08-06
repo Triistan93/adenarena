@@ -375,17 +375,19 @@ select:focus-visible {
 #clock { color: var(--ink); font-family: "IBM Plex Mono", monospace; font-size: 12px; }
 
 /* ---- Main Grid & Resizable Panels ---- */
+.stats-panel {
+  display: none !important;
+}
+
 .main-grid {
-  --col1-w: 210px;
-  --col3-w: 440px;
-  display: grid;
-  grid-template-columns: var(--col1-w) minmax(0, 1.35fr) minmax(340px, var(--col3-w));
-  gap: 10px;
-  flex: 1;
-  overflow: hidden;
-  min-height: 0;
-  padding: 10px;
-  box-sizing: border-box;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 690px !important;
+  gap: 12px !important;
+  width: 100% !important;
+  height: calc(100vh - 60px) !important;
+  padding: 10px 12px !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
 }
 .grid-resizer-v {
   cursor: col-resize;
@@ -1706,7 +1708,7 @@ select:focus-visible {
 .l2inv-slots-grid {
   flex: 1;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+  grid-template-columns: repeat(auto-fill, 72px);
   grid-auto-rows: 72px;
   gap: 6px;
   padding: 6px;
@@ -1714,7 +1716,7 @@ select:focus-visible {
     repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,0.3) 35px, rgba(0,0,0,0.3) 36px),
     linear-gradient(180deg, #1a120a 0%, #100a05 100%);
   overflow-y: auto;
-  max-height: 62vh;
+  max-height: 100%;
   min-height: 240px;
 }
 
@@ -1728,10 +1730,14 @@ select:focus-visible {
 
 /* Individual Slot inside grid */
 .l2inv-slots-grid .inv-slot {
+  width: 72px;
   height: 72px;
+  min-width: 72px;
+  max-width: 72px;
   min-height: 72px;
   max-height: 72px;
   box-sizing: border-box;
+  overflow: hidden;
   background:
     linear-gradient(135deg, rgba(42,30,18,0.9) 0%, rgba(12,8,4,0.98) 100%);
   border: 1px solid #2e2012;

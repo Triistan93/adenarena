@@ -150,34 +150,76 @@ const INVENTORY_CSS = `
   background: radial-gradient(ellipse at center, #2a241c 0%, #17120e 100%) !important;
   border: 1px solid #3a2a1a !important; border-radius: 6px !important;
   padding: 6px !important; box-sizing: border-box !important;
+  position: relative !important;
 }
 #paperdoll-grid{
-  display:grid!important; grid-template-columns:repeat(3, 64px)!important;
-  grid-template-rows:repeat(6, 64px)!important; gap:6px!important;
-  justify-content:center!important; padding:10px!important;
+  display:grid!important; grid-template-columns:repeat(3, 60px)!important;
+  grid-template-rows:repeat(4, 60px)!important; gap:6px!important;
+  justify-content:center!important; padding:8px!important;
   background:radial-gradient(ellipse at center, #2a241c 0%, #17120e 100%)!important;
   border:1px solid #3a2a1a!important; border-radius:6px!important;
-  grid-template-areas: "earring1 helmet earring2" "necklace armor cloak" "hair legs hair2" "weapon gloves shield" "ring belt ring2" "boots talisman agathion"!important;
   width:fit-content!important; margin:0 auto!important;
 }
-.equip-slot{width:64px!important; height:64px!important; background:#1a1611!important; border:1px solid #4a3a2a!important; border-radius:3px!important;}
+.equip-slot{width:60px!important; height:60px!important; background:#1a1611!important; border:1px solid #4a3a2a!important; border-radius:3px!important;}
 .equip-slot.active{border-color:#c9a227!important;}
-/* GRID DA DIREITA - AGORA PREENCHE A COLUNA */
+
+/* STATS DO PERSONAGEM FIXOS ABAIXO DO PAPERDOLL */
+.l2inv-paperdoll-stats {
+  position: sticky !important;
+  bottom: 0 !important;
+  background: #140d07 !important;
+  padding: 6px 8px !important;
+  border-top: 1px solid #342412 !important;
+  z-index: 10 !important;
+  font-size: 11px !important;
+  color: #d4a744 !important;
+}
+
+/* GRID DE SLOTS DO INVENTÁRIO DO LADO DIREITO DO PAINEL */
 #inventory-grid, .inventory-grid {
   display: grid !important;
-  grid-template-columns: repeat(auto-fill, 42px) !important;
-  grid-auto-rows: 42px !important;
-  gap: 3px !important;
-  padding: 10px !important;
+  grid-template-columns: repeat(auto-fill, 72px) !important;
+  grid-auto-rows: 72px !important;
+  gap: 6px !important;
+  padding: 8px !important;
   background: rgba(0,0,0,0.4) !important;
   border: 1px solid #3a2a1a !important;
   border-radius: 4px !important;
   overflow-y: auto !important;
+  max-height: 100% !important;
   align-content: start !important;
   flex: 1 !important;
 }
-.inv-slot{width:42px!important; height:42px!important; background:#241e16!important; border:1px solid #3d2e1e!important;}
-.inventory-item-image{width:32px!important; height:32px!important;}
-.item-name{display:none!important;}
-.qty{font-size:9px!important; bottom:1px!important; right:2px!important;}
+.inv-slot{
+  width:72px!important; 
+  height:72px!important; 
+  min-width:72px!important; 
+  max-width:72px!important; 
+  min-height:72px!important; 
+  max-height:72px!important; 
+  background:#241e16!important; 
+  border:1px solid #3d2e1e!important; 
+  border-radius:4px!important; 
+  box-sizing:border-box!important; 
+  overflow:hidden!important; 
+  display:flex!important; 
+  flex-direction:column!important; 
+  align-items:center!important; 
+  justify-content:center!important; 
+  padding:2px!important;
+  position:relative!important;
+}
+.inventory-item-image{width:36px!important; height:36px!important; object-fit:contain!important;}
+.item-name{
+  display:block!important; 
+  font-size:8px!important; 
+  line-height:1.1!important; 
+  white-space:nowrap!important; 
+  text-overflow:ellipsis!important; 
+  overflow:hidden!important; 
+  max-width:100%!important; 
+  text-align:center!important; 
+  color:#e2c074!important;
+}
+.qty{font-size:9px!important; position:absolute!important; bottom:1px!important; right:2px!important;}
 `;
