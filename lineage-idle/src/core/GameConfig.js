@@ -1,3 +1,6 @@
+/**
+ * GameConfig — Constantes globais de configuração do jogo.
+ */
 export const SAVE_KEY = 'lineageIdleSave_v2';
 export const D = () => window.GameData;
 export const TIER_NAMES = ['Foundation', 'Discipline', 'Mastery', 'Ascendancy', 'Legend'];
