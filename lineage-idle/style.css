@@ -377,12 +377,15 @@ select:focus-visible {
 /* ---- Main Grid & Resizable Panels ---- */
 .main-grid {
   --col1-w: 210px;
-  --col3-w: 480px;
+  --col3-w: 440px;
   display: grid;
-  grid-template-columns: var(--col1-w) 6px 1fr 6px var(--col3-w);
+  grid-template-columns: var(--col1-w) minmax(0, 1.35fr) minmax(340px, var(--col3-w));
+  gap: 10px;
   flex: 1;
   overflow: hidden;
   min-height: 0;
+  padding: 10px;
+  box-sizing: border-box;
 }
 .grid-resizer-v {
   cursor: col-resize;

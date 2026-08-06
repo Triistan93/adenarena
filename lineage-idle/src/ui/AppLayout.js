@@ -84,19 +84,18 @@ function ensureLayoutStyles() {
   const style = document.createElement('style');
   style.id = LAYOUT_STYLE_ID;
   style.textContent = `
-    /* === PERSISTENT 3-COLUMN LAYOUT RECOVERY === */
+    /* === PERSISTENT 3-COLUMN LAYOUT === */
     .full-window-active, #full-window-close-btn {
       display: none !important;
     }
 
     main.main-grid, .main-grid {
       display: grid !important;
-      grid-template-columns: 220px minmax(0, 1.35fr) minmax(360px, 1fr) !important;
-      gap: 12px !important;
+      grid-template-columns: 210px minmax(0, 1.35fr) minmax(340px, 440px) !important;
+      gap: 10px !important;
       width: 100% !important;
-      height: calc(100vh - 120px) !important;
-      min-height: 540px !important;
-      padding: 10px 12px !important;
+      height: calc(100vh - 65px) !important;
+      padding: 10px !important;
       box-sizing: border-box !important;
       overflow: hidden !important;
     }
@@ -106,6 +105,7 @@ function ensureLayoutStyles() {
       flex-direction: column !important;
       visibility: visible !important;
       opacity: 1 !important;
+      overflow-y: auto !important;
     }
 
     .center-panel {
@@ -116,6 +116,8 @@ function ensureLayoutStyles() {
       min-width: 0 !important;
       height: 100% !important;
       gap: 10px !important;
+      padding: 0 !important;
+      overflow: hidden !important;
     }
 
     #stage, .stage {
@@ -124,7 +126,7 @@ function ensureLayoutStyles() {
       opacity: 1 !important;
       width: 100% !important;
       height: 380px !important;
-      min-height: 280px !important;
+      min-height: 260px !important;
       flex: 0 0 auto !important;
       position: relative !important;
       border-radius: 8px !important;
@@ -159,6 +161,7 @@ function ensureLayoutStyles() {
       border-radius: 8px !important;
       padding: 8px !important;
       box-sizing: border-box !important;
+      overflow: hidden !important;
     }
 
     .tabs-panel .tab-buttons {
