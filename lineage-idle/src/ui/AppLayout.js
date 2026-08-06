@@ -1,13 +1,20 @@
 /**
- * AppLayout.js — Persistente Split Layout (Batalha à Esquerda | Menus à Direita)
+ * AppLayout.js — Camada fina de controle de abas do menu direito.
  *
- * Mantém a estrutura de 3 colunas nativa (.stats-panel | .center-panel | .tabs-panel):
- * - Coluna Esquerda 1: Atributos e Stats do Personagem (.stats-panel)
- * - Coluna Esquerda 2: Palco de Batalha (#stage) e Log de Combate (#log) em .center-panel
- * - Coluna Direita: Painéis de Menu (Inventário, Baú, Skills, Loja, Zonas, etc.) em .tabs-panel
+ * IMPORTANTE: este arquivo NÃO deve injetar CSS de layout. O grid principal
+ * (.main-grid, .stats-panel, .center-panel, .tabs-panel, .grid-resizer-*)
+ * já é definido inteiramente por lineage-idle/style.css, incluindo:
+ *   - .stats-panel { display: none !important; } (intencional — stats
+ *     do personagem aparecem em outro lugar, não como coluna própria)
+ *   - .main-grid { grid-template-columns: minmax(0,1fr) 690px !important; }
+ *     (2 colunas: batalha+chat flexível | menus fixos em 690px)
+ *   - Sistema de resize arrastável (initPanelResizers em main.js)
+ *   - Breakpoints responsivos completos (1024px / 980px / 768px)
+ *
+ * Injetar um segundo <style> aqui (como a versão anterior deste arquivo
+ * fazia) entra em conflito com essas regras e quebra o layout. Este arquivo
+ * cuida apenas de trocar qual painel de aba (.tab-pane) está visível.
  */
-
-const LAYOUT_STYLE_ID = 'app-split-layout-styles';
 
 export const PANEL_SELECTORS = {
   character: ['#tab-character', '#character-panel', '[data-panel="character"]'],
@@ -46,14 +53,17 @@ export function getActivePanel() {
   return null;
 }
 
+/**
+ * Alterna qual .tab-pane está visível dentro da coluna de menus.
+ * Não mexe em display/visibility/grid do layout — apenas nas abas internas.
+ */
 export function showMenuPanel(panelId) {
   const root = getShadowRoot();
-  ensureAppLayout();
 
   const tabPanes = root.querySelectorAll('.tab-pane, [data-menu-panel]');
   tabPanes.forEach(pane => {
-    const isTarget = pane.id === `tab-${panelId}` 
-      || pane.dataset?.menuPanel === panelId 
+    const isTarget = pane.id === `tab-${panelId}`
+      || pane.dataset?.menuPanel === panelId
       || pane.dataset?.panel === panelId;
 
     if (isTarget) {
@@ -75,177 +85,13 @@ export function showMenuPanel(panelId) {
   });
 }
 
-function ensureLayoutStyles() {
-  const root = getShadowRoot();
-  const target = document.getElementById('idle-host')?.shadowRoot || document.head;
-  
-  if (root.querySelector?.(`#${LAYOUT_STYLE_ID}`)) return;
-
-  const style = document.createElement('style');
-  style.id = LAYOUT_STYLE_ID;
-  style.textContent = `
-    /* === PERSISTENT 3-COLUMN LAYOUT === */
-    .full-window-active, #full-window-close-btn {
-      display: none !important;
-    }
-
-    main.main-grid, .main-grid {
-      display: grid !important;
-      /* 3 colunas: stats-panel (fixa) | center-panel (flexível) | tabs-panel (fixa) */
-      grid-template-columns: 280px minmax(0, 1fr) 690px !important;
-      grid-template-rows: 1fr !important;
-      gap: 12px !important;
-      width: 100% !important;
-      height: calc(100vh - 60px) !important;
-      padding: 10px 12px !important;
-      box-sizing: border-box !important;
-      overflow: hidden !important;
-    }
-
-    .stats-panel {
-      display: flex !important;
-      flex-direction: column !important;
-      visibility: visible !important;
-      opacity: 1 !important;
-      min-width: 0 !important;
-      height: 100% !important;
-      background: rgba(18, 14, 10, 0.92) !important;
-      border: 1px solid #3c2e1e !important;
-      border-radius: 8px !important;
-      padding: 10px !important;
-      box-sizing: border-box !important;
-      overflow-y: auto !important;
-    }
-
-    .center-panel {
-      display: flex !important;
-      flex-direction: column !important;
-      visibility: visible !important;
-      opacity: 1 !important;
-      min-width: 0 !important;
-      height: 100% !important;
-      gap: 10px !important;
-      padding: 0 !important;
-      overflow: hidden !important;
-    }
-
-    #stage, .stage {
-      display: block !important;
-      visibility: visible !important;
-      opacity: 1 !important;
-      width: 100% !important;
-      height: 380px !important;
-      min-height: 260px !important;
-      flex: 0 0 auto !important;
-      position: relative !important;
-      border-radius: 8px !important;
-      overflow: hidden !important;
-      box-shadow: 0 4px 18px rgba(0,0,0,0.5) !important;
-    }
-
-    #log, .log {
-      display: block !important;
-      visibility: visible !important;
-      opacity: 1 !important;
-      flex: 1 1 auto !important;
-      min-height: 120px !important;
-      overflow-y: auto !important;
-      overflow-x: hidden !important;
-      background: rgba(12, 9, 6, 0.9) !important;
-      border: 1px solid #3c2e1e !important;
-      border-radius: 8px !important;
-      padding: 8px 12px !important;
-      box-sizing: border-box !important;
-    }
-
-    .tabs-panel {
-      display: flex !important;
-      flex-direction: column !important;
-      visibility: visible !important;
-      opacity: 1 !important;
-      min-width: 0 !important;
-      height: 100% !important;
-      background: rgba(18, 14, 10, 0.92) !important;
-      border: 1px solid #3c2e1e !important;
-      border-radius: 8px !important;
-      padding: 8px !important;
-      box-sizing: border-box !important;
-      overflow: hidden !important;
-    }
-
-    .tabs-panel .tab-buttons {
-      display: flex !important;
-      flex-wrap: wrap !important;
-      gap: 4px !important;
-      margin-bottom: 8px !important;
-      flex-shrink: 0 !important;
-    }
-
-    .tabs-panel .tab-content {
-      flex: 1 1 auto !important;
-      min-height: 0 !important;
-      overflow: hidden !important;
-      display: flex !important;
-      flex-direction: column !important;
-    }
-
-    .tabs-panel .tab-pane {
-      display: none !important;
-      width: 100% !important;
-      height: 100% !important;
-      min-height: 0 !important;
-      overflow-y: auto !important;
-      overflow-x: hidden !important;
-      box-sizing: border-box !important;
-    }
-
-    .tabs-panel .tab-pane.active {
-      display: block !important;
-      visibility: visible !important;
-      opacity: 1 !important;
-    }
-
-    @media (max-width: 900px) {
-      main.main-grid, .main-grid {
-        grid-template-columns: 1fr !important;
-        height: auto !important;
-        overflow: visible !important;
-      }
-    }
-  `;
-  target.appendChild(style);
-}
-
+/**
+ * Mantido por compatibilidade (main.js chama ensureAppLayout() antes de
+ * showMenuPanel()). Não injeta CSS nem força display/visibility — apenas
+ * marca os painéis com data-menu-panel para os seletores acima funcionarem.
+ */
 export function ensureAppLayout() {
   const root = getShadowRoot();
-  ensureLayoutStyles();
-
-  const centerPanel = root.querySelector('.center-panel, #center-panel');
-  const tabsPanel = root.querySelector('.tabs-panel, #tabs-panel');
-  const stage = root.querySelector('#stage, .stage');
-  const log = root.querySelector('#log, .log');
-
-  if (centerPanel) {
-    centerPanel.style.removeProperty('display');
-    centerPanel.style.visibility = 'visible';
-    centerPanel.style.opacity = '1';
-  }
-  if (tabsPanel) {
-    tabsPanel.style.removeProperty('display');
-    tabsPanel.style.visibility = 'visible';
-    tabsPanel.style.opacity = '1';
-    tabsPanel.classList.remove('full-window-active');
-  }
-  if (stage) {
-    stage.style.removeProperty('display');
-    stage.style.visibility = 'visible';
-    stage.style.opacity = '1';
-  }
-  if (log) {
-    log.style.removeProperty('display');
-    log.style.visibility = 'visible';
-    log.style.opacity = '1';
-  }
 
   for (const [panelId, selectors] of Object.entries(PANEL_SELECTORS)) {
     for (const sel of selectors) {
