@@ -4,10 +4,6 @@ import * as ART from "./art.js";
 import "./data/echo-adapter.js";
 import "./data/affixes.js";
 import "./src/data/items/index.js";
-import { ensureAppLayout } from './src/ui/AppLayout.js';
-// dentro do seu init / GameBootstrap, logo após renderizar:
-ensureAppLayout();
-setInterval(ensureAppLayout, 1000); // garante que continua splitado ao trocar de aba
 
 
 
