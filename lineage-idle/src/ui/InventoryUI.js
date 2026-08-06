@@ -1,340 +1,321 @@
 /**
- * InventoryUI.js — Renderização de Mochila, Baú e Equipamentos no Lineage Idle.
+ * InventoryUI.js — Renderização de Mochila, Baú e Paperdoll de Equipamentos.
  *
- * Responsável por desenhar os grids de itens da mochila e do baú (Warehouse),
- * atualizar slots de equipamentos ativos e gerenciar estados visuais de seleção.
+ * Paperdoll de 18 slots alinhado ao template real (.l2inv-doll-col):
+ * weapon, shield, helmet, armor, gloves, legs, boots, cloak, belt,
+ * necklace, earring1, earring2, ring, ring2, hair, hair2, agathion, talisman
+ *
+ * Interações:
+ *   Clique esquerdo no item  → selecionar
+ *   Clique direito no item   → equipar / desequipar
+ *   Duplo clique no item     → usar (consumíveis)
+ *   Clique no slot equipado  → desequipar
  */
 
 import { D, ALL_EQUIP_SLOTS } from '../core/GameConfig.js';
 import { el, qs, qsa, mkEl } from '../core/DomHelpers.js';
 import { getMaxInventorySlots, getMaxWarehouseSlots, getSelectedSet } from '../services/InventoryService.js';
-import { resolveEquipSlot } from '../services/EquipmentService.js';
-import { showItemTooltip, hideItemTooltip, getItemIcon, getItemIconUrl } from './TooltipUI.js';
+import { resolveEquipSlot, migrateEquipmentSlots } from '../services/EquipmentService.js';
+import { showItemTooltip, hideItemTooltip, getItemIcon } from './TooltipUI.js';
 
-const INVENTORY_STYLE_ID = 'inventory-ui-styles';
-const reportedMissingSlots = new Set();
+/* ═══════════════════════════════════════════════════════════════════════════
+   DOM HELPERS
+═══════════════════════════════════════════════════════════════════════════ */
 
-function styleTarget() {
-  const host = document.getElementById('idle-host');
-  return host?.shadowRoot || document.head;
+function invRoot() {
+  return document.getElementById('idle-host')?.shadowRoot || document;
 }
 
-export function ensureInventoryStyles() {
-  const root = styleTarget();
-  if (!root || root.getElementById?.(INVENTORY_STYLE_ID) || root.querySelector?.(`#${INVENTORY_STYLE_ID}`)) return;
-
-  const tag = document.createElement('style');
-  tag.id = INVENTORY_STYLE_ID;
-  tag.textContent = `
-    /* === INVENTORY & EQUIPMENT SHADOW DOM STYLES === */
-    #inventory-grid, .inventory-grid, .l2inv-slots-grid {
-      display: grid !important;
-      grid-template-columns: repeat(auto-fill, 64px) !important;
-      grid-auto-rows: 64px !important;
-      gap: 6px !important;
-      padding: 6px !important;
-      box-sizing: border-box !important;
-      overflow-y: auto !important;
-      max-height: 480px !important;
-    }
-
-    .inv-slot {
-      width: 64px !important;
-      height: 64px !important;
-      min-width: 64px !important;
-      max-width: 64px !important;
-      min-height: 64px !important;
-      max-height: 64px !important;
-      box-sizing: border-box !important;
-      position: relative !important;
-      display: flex !important;
-      flex-direction: column !important;
-      align-items: center !important;
-      justify-content: center !important;
-      overflow: hidden !important;
-      padding: 3px !important;
-      background: linear-gradient(135deg, rgba(28,22,16,0.95), rgba(12,8,5,0.98)) !important;
-      border: 1px solid #3c2e1e !important;
-      border-radius: 4px !important;
-      cursor: pointer !important;
-      user-select: none !important;
-      transition: border-color 0.15s, box-shadow 0.15s !important;
-    }
-
-    .inv-slot:hover {
-      border-color: #e8c37a !important;
-      box-shadow: 0 0 8px rgba(232, 195, 122, 0.4) !important;
-      z-index: 2 !important;
-    }
-
-    .inv-slot img, .inv-slot .item-icon-img, .equip-slot img, .equip-slot .item-icon-img {
-      width: 30px !important;
-      height: 30px !important;
-      max-width: 30px !important;
-      max-height: 30px !important;
-      object-fit: contain !important;
-      pointer-events: none !important;
-      display: block !important;
-      margin: 0 auto !important;
-    }
-
-    .inv-slot .item-icon-fallback, .equip-slot .item-icon-fallback {
-      font-size: 20px !important;
-      line-height: 1 !important;
-      pointer-events: none !important;
-    }
-
-    .inv-slot .name {
-      font-size: 8px !important;
-      line-height: 1.1 !important;
-      white-space: nowrap !important;
-      overflow: hidden !important;
-      text-overflow: ellipsis !important;
-      max-width: 58px !important;
-      text-align: center !important;
-      margin-top: 2px !important;
-      color: #d4c096 !important;
-      pointer-events: none !important;
-      display: block !important;
-    }
-
-    .inv-slot .qty {
-      position: absolute !important;
-      bottom: 2px !important;
-      right: 3px !important;
-      font-size: 9px !important;
-      font-weight: 700 !important;
-      color: #f59e0b !important;
-      text-shadow: 0 1px 2px #000 !important;
-      pointer-events: none !important;
-    }
-
-    .inv-slot .equipped-badge, .equip-slot .equipped-badge {
-      position: absolute !important;
-      top: 2px !important;
-      right: 2px !important;
-      background: #f59e0b !important;
-      color: #000 !important;
-      font-size: 8px !important;
-      font-weight: 800 !important;
-      padding: 1px 3px !important;
-      border-radius: 2px !important;
-      line-height: 1 !important;
-      pointer-events: none !important;
-    }
-
-    .inv-slot .slot-select-checkbox {
-      position: absolute !important;
-      top: 2px !important;
-      left: 2px !important;
-      font-size: 9px !important;
-      color: #10b981 !important;
-      font-weight: bold !important;
-      pointer-events: none !important;
-    }
-
-    /* Raridades de Borda */
-    .inv-slot.rarity-common, .equip-slot.rarity-common { border-color: #4b5563 !important; }
-    .inv-slot.rarity-uncommon, .equip-slot.rarity-uncommon { border-color: #10b981 !important; }
-    .inv-slot.rarity-rare, .equip-slot.rarity-rare { border-color: #3b82f6 !important; }
-    .inv-slot.rarity-epic, .equip-slot.rarity-epic { border-color: #8b5cf6 !important; }
-    .inv-slot.rarity-legendary, .equip-slot.rarity-legendary { border-color: #f59e0b !important; box-shadow: 0 0 6px rgba(245, 158, 11, 0.4) !important; }
-
-    .inv-slot.is-equipped {
-      border-color: #10b981 !important;
-      background: linear-gradient(135deg, rgba(16,185,129,0.15), rgba(12,8,5,0.98)) !important;
-    }
-
-    .inv-slot.is-selected {
-      border-color: #f59e0b !important;
-      box-shadow: inset 0 0 0 1px #f59e0b, 0 0 8px rgba(245, 158, 11, 0.5) !important;
-    }
-
-    /* ═══════════════════════════════════════════════════════════════════
-       PAPERDOLL — Layout de Equipamentos (estilo Lineage Clássico)
-    ═══════════════════════════════════════════════════════════════════ */
-    .equipment-panel,
-    .paperdoll,
-    .doll-slots,
-    #equipment-grid,
-    .equipment-grid,
-    .l2inv-paperdoll-grid,
-    #equipment-slots,
-    [class*="equip-container"] {
-      display: grid !important;
-      grid-template-columns: repeat(3, 56px) !important;
-      grid-template-rows: repeat(4, 56px) !important;
-      gap: 8px !important;
-      justify-content: center !important;
-      align-content: start !important;
-      padding: 16px 12px !important;
-      position: relative !important;
-    }
-
-    .equip-slot, .l2inv-pd-slot {
-      width: 56px !important;
-      height: 56px !important;
-      min-width: 56px !important;
-      max-width: 56px !important;
-      min-height: 56px !important;
-      max-height: 56px !important;
-      box-sizing: border-box !important;
-      border: 2px solid #3a3a4a !important;
-      border-radius: 8px !important;
-      background: linear-gradient(145deg, #1a1a2e, #16162a) !important;
-      display: flex !important;
-      flex-direction: column !important;
-      align-items: center !important;
-      justify-content: center !important;
-      position: relative !important;
-      cursor: pointer !important;
-      transition: all 0.15s !important;
-      box-shadow: inset 0 2px 4px rgba(0,0,0,0.5) !important;
-    }
-
-    .equip-slot:hover, .l2inv-pd-slot:hover {
-      border-color: #f59e0b !important;
-      transform: translateY(-2px) !important;
-      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3) !important;
-    }
-
-    .equip-slot.active, .l2inv-pd-slot.has-item {
-      border-color: #f59e0b !important;
-      box-shadow: 0 0 10px rgba(245, 158, 11, 0.4), inset 0 2px 4px rgba(0,0,0,0.3) !important;
-    }
-
-    .equip-slot.empty {
-      opacity: 0.65 !important;
-    }
-
-    .equip-slot .equip-icon,
-    .equip-slot img,
-    .equip-slot .item-icon-img,
-    .l2inv-pd-slot img {
-      width: 36px !important;
-      height: 36px !important;
-      object-fit: contain !important;
-      pointer-events: none !important;
-    }
-
-    .equip-slot .equip-placeholder-icon {
-      font-size: 20px !important;
-      opacity: 0.5 !important;
-    }
-
-    .equip-slot .equip-placeholder-label {
-      font-size: 7px !important;
-      color: #9ca3af !important;
-      margin-top: 1px !important;
-      text-transform: uppercase !important;
-      letter-spacing: 0.05em !important;
-    }
-
-    .equip-slot .slot-item-name,
-    .equip-slot .slot-item {
-      display: none !important;
-    }
-
-    /* Posicionamento humanoide no grid de 3 colunas x 4 linhas:
-       Linha 1:  [.]         [HELMET]   [.]
-       Linha 2:  [EARRING]   [ARMOR]    [NECKLACE]
-       Linha 3:  [WEAPON]    [GLOVES]   [RING]
-       Linha 4:  [BELT]      [BOOTS]    [CAPE/CLOAK]
-    */
-    [data-slot="helmet"], #equip-slot-helmet, #equip-helmet, [id*="helmet"] { grid-column: 2 !important; grid-row: 1 !important; }
-    [data-slot="earring"], #equip-slot-earring, #equip-earring, [id*="earring"] { grid-column: 1 !important; grid-row: 2 !important; }
-    [data-slot="armor"], #equip-slot-armor, #equip-armor, [id*="armor"] { grid-column: 2 !important; grid-row: 2 !important; }
-    [data-slot="necklace"], #equip-slot-necklace, #equip-necklace, [id*="necklace"] { grid-column: 3 !important; grid-row: 2 !important; }
-    [data-slot="weapon"], #equip-slot-weapon, #equip-weapon, [id*="weapon"] { grid-column: 1 !important; grid-row: 3 !important; }
-    [data-slot="gloves"], #equip-slot-gloves, #equip-gloves, [id*="gloves"] { grid-column: 2 !important; grid-row: 3 !important; }
-    [data-slot="ring"], #equip-slot-ring, #equip-ring, [id*="ring"] { grid-column: 3 !important; grid-row: 3 !important; }
-    [data-slot="belt"], #equip-slot-belt, #equip-belt, [id*="belt"] { grid-column: 1 !important; grid-row: 4 !important; }
-    [data-slot="boots"], #equip-slot-boots, #equip-boots, [id*="boots"] { grid-column: 2 !important; grid-row: 4 !important; }
-    [data-slot="cape"], #equip-slot-cape, #equip-cape, [id*="cape"],
-    [data-slot="cloak"], #equip-slot-cloak, #equip-cloak, [id*="cloak"] { grid-column: 3 !important; grid-row: 4 !important; }
-  `;
-  root.appendChild(tag);
+function findElement(id) {
+  return invRoot().querySelector(`#${id}`) || document.getElementById(id);
 }
 
-function findEquipSlotElement(slot) {
-  const root = styleTarget();
-  const aliases = [slot];
-  if (slot === 'cape') aliases.push('cloak');
-  if (slot === 'cloak') aliases.push('cape');
-  if (slot === 'earring') aliases.push('earring1', 'earring2');
+function escapeHTML(value) {
+  return String(value ?? '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+}
 
-  for (const s of aliases) {
-    const candidates = [
-      `#equip-slot-${s}`,
-      `#equip-${s}`,
-      `#pd-slot-${s}`,
-      `[data-slot="${s}"]`,
-      `.equip-slot[data-slot="${s}"]`,
-      `.l2inv-pd-slot[data-slot="${s}"]`
-    ];
-    for (const sel of candidates) {
-      const found = root.querySelector(sel);
-      if (found) return found;
-    }
+/* ═══════════════════════════════════════════════════════════════════════════
+   DEFINIÇÃO DO ITEM (com variações de ID)
+═══════════════════════════════════════════════════════════════════════════ */
+
+function getItemDef(itemId) {
+  const data = D();
+  if (!data?.ALL_ITEMS || !itemId) return null;
+
+  if (data.ALL_ITEMS[itemId]) return data.ALL_ITEMS[itemId];
+
+  const raw = String(itemId);
+  const variations = [
+    raw,
+    raw.toLowerCase(),
+    raw.replace(/\s+/g, ''),
+    raw.replace(/[-_]/g, '').toLowerCase(),
+    raw.replace(/([A-Z])/g, '_$1').toLowerCase().replace(/^_/, ''),
+    raw.replace(/_([a-z])/g, (m, c) => c.toUpperCase())
+  ];
+
+  for (const v of variations) {
+    if (data.ALL_ITEMS[v]) return data.ALL_ITEMS[v];
   }
 
-  if (!reportedMissingSlots.has(slot)) {
-    reportedMissingSlots.add(slot);
-    console.warn(`[InventoryUI] Slot element not found in Shadow DOM for equipment slot: "${slot}"`);
+  const normalized = raw.toLowerCase().replace(/\s+/g, '');
+  return Object.values(data.ALL_ITEMS).find(
+    i => i.name?.toLowerCase().replace(/\s+/g, '') === normalized
+  ) || null;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ÍCONE DO ITEM
+   Aceita getItemIcon retornando: HTML de <img>, URL/caminho, ou emoji.
+═══════════════════════════════════════════════════════════════════════════ */
+
+const EMOJI_BY_SLOT = {
+  weapon: '⚔️', shield: '🛡️', armor: '🦺', helmet: '🪖',
+  gloves: '🧤', legs: '👖', boots: '👢', cloak: '🧥', belt: '🎗️',
+  necklace: '📿', earring: '💎', earring1: '💎', earring2: '💎',
+  ring: '💍', ring2: '💍', hair: '👑', hair2: '🎭',
+  agathion: '👼', talisman: '🧿',
+  consumable: '🧪', potion: '🧪', scroll: '📜',
+  material: '💠', gem: '💠', quest: '📯'
+};
+
+function renderItemIcon(item, def) {
+  let icon = '';
+
+  try {
+    icon = getItemIcon(def || item) || '';
+  } catch (error) {
+    console.warn('[InventoryUI] Erro em getItemIcon:', item?.itemId, error);
+  }
+
+  if (icon instanceof HTMLElement) return icon.outerHTML;
+
+  const value = String(icon).trim();
+  const fallback = EMOJI_BY_SLOT[(def?.slot || '').toLowerCase()] || '📦';
+
+  if (!value) {
+    return `<span class="inventory-item-emoji">${fallback}</span>`;
+  }
+
+  // getItemIcon já retornou HTML (<img ...>)
+  if (value.startsWith('<')) return value;
+
+  // getItemIcon retornou caminho/URL
+  const isImagePath =
+    /^(?:https?:|data:image|blob:|\/|\.{1,2}\/|img\/)/i.test(value) ||
+    /\.(?:png|webp|jpe?g|gif|svg)(?:\?.*)?$/i.test(value);
+
+  if (isImagePath) {
+    const alt = escapeHTML(def?.name || item?.itemId || 'Item');
+    return `
+      <img class="inventory-item-image" src="${escapeHTML(value)}" alt="${alt}"
+           draggable="false" loading="lazy"
+           onerror="this.style.display='none';this.nextElementSibling&&(this.nextElementSibling.style.display='inline-block');" />
+      <span class="inventory-item-emoji" style="display:none;">${fallback}</span>
+    `;
+  }
+
+  // Emoji ou texto curto
+  return `<span class="inventory-item-emoji">${escapeHTML(value)}</span>`;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PAPERDOLL — mapa dos 18 slots reais do template
+═══════════════════════════════════════════════════════════════════════════ */
+
+const PAPERDOLL_AREAS = {
+  hair2: 'hair2',     helmet: 'helmet',   necklace: 'necklace', talisman: 'talisman',
+  shield: 'shield',   hair: 'hair',       earring1: 'earring1', agathion: 'agathion',
+  weapon: 'weapon',   armor: 'armor',     earring2: 'earring2', cloak: 'cloak',
+  gloves: 'gloves',   legs: 'legs',       ring: 'ring',         belt: 'belt',
+  boots: 'boots',                         ring2: 'ring2'
+};
+
+const SLOT_LABELS = {
+  weapon: 'Arma', shield: 'Escudo', armor: 'Armadura', helmet: 'Elmo',
+  gloves: 'Luvas', legs: 'Calças', boots: 'Botas', cloak: 'Capa', belt: 'Cinto',
+  necklace: 'Colar', earring1: 'Brinco', earring2: 'Brinco 2',
+  ring: 'Anel', ring2: 'Anel 2',
+  hair: 'Cabelo', hair2: 'Máscara', agathion: 'Agathion', talisman: 'Talismã'
+};
+
+const SLOT_ICONS = {
+  weapon: '⚔️', shield: '🛡️', armor: '🦺', helmet: '🪖',
+  gloves: '🧤', legs: '👖', boots: '👢', cloak: '🧥', belt: '🎗️',
+  necklace: '📿', earring1: '💎', earring2: '💎', ring: '💍', ring2: '💍',
+  hair: '👑', hair2: '🎭', agathion: '👼', talisman: '🧿'
+};
+
+const EQUIPMENT_SLOT_ALIASES = {
+  weapon:   ['weapon', 'mainhand'],
+  shield:   ['shield', 'offhand', 'sigil'],
+  armor:    ['armor', 'chest', 'body'],
+  helmet:   ['helmet', 'helm', 'head'],
+  gloves:   ['gloves', 'glove', 'hands'],
+  legs:     ['legs', 'pants', 'gaiters'],
+  boots:    ['boots', 'boot', 'feet'],
+  cloak:    ['cloak', 'cape', 'back'],
+  belt:     ['belt', 'waist'],
+  necklace: ['necklace', 'neck', 'pendant'],
+  earring1: ['earring1', 'earring'],
+  earring2: ['earring2'],
+  ring:     ['ring', 'ring1'],
+  ring2:    ['ring2'],
+  hair:     ['hair', 'headgear'],
+  hair2:    ['hair2', 'mask'],
+  agathion: ['agathion'],
+  talisman: ['talisman']
+};
+
+const _warnedMissingSlots = new Set();
+
+function findEquipmentSlot(slot) {
+  const root = invRoot();
+  const aliases = EQUIPMENT_SLOT_ALIASES[slot] || [slot];
+
+  for (const alias of aliases) {
+    const selectors = [
+      `#equip-slot-${alias}`,
+      `#equipment-slot-${alias}`,
+      `#equip-${alias}`,
+      `[data-slot="${alias}"]`,
+      `[data-equip-slot="${alias}"]`
+    ];
+    for (const sel of selectors) {
+      try {
+        const found = root.querySelector(sel);
+        if (found) return found;
+      } catch { /* seletor inválido */ }
+    }
   }
   return null;
 }
 
 /**
- * Atualiza a interface da Mochila (Inventário) e contador de slots.
- * @param {Object} state
- * @param {Object} [callbacks]
+ * Organiza os slots em grade 4x5 estilo paperdoll dentro de .l2inv-doll-col.
  */
+function ensurePaperdollLayout() {
+  const root = invRoot();
+
+  const anySlot = findEquipmentSlot('weapon') || findEquipmentSlot('helmet');
+  if (!anySlot) return null;
+
+  const panel = anySlot.closest('.l2inv-doll-col') || anySlot.parentElement;
+  if (!panel) return null;
+
+  let grid = root.querySelector('#paperdoll-grid');
+  if (!grid) {
+    grid = document.createElement('div');
+    grid.id = 'paperdoll-grid';
+    panel.insertBefore(grid, panel.firstChild);
+  }
+
+  // Move todos os slots soltos do painel para dentro da grade
+  const looseSlots = [...panel.querySelectorAll('[data-slot], [id^="equip-slot-"]')]
+    .filter(slotEl => slotEl.id !== 'paperdoll-grid' && !slotEl.closest('#paperdoll-grid'));
+
+  for (const slotEl of looseSlots) {
+    grid.appendChild(slotEl);
+  }
+
+  // Posiciona os 18 gerenciados; esconde qualquer coisa fora da lista
+  grid.querySelectorAll('[data-slot], [id^="equip-slot-"]').forEach(slotEl => {
+    const slotName = slotEl.dataset.slot || slotEl.id.replace('equip-slot-', '');
+    if (PAPERDOLL_AREAS[slotName]) {
+      slotEl.style.gridArea = PAPERDOLL_AREAS[slotName];
+      slotEl.style.display = '';
+    } else {
+      slotEl.style.display = 'none';
+    }
+  });
+
+  return grid;
+}
+
+function createEquipmentSlotDynamically(slot) {
+  const grid = ensurePaperdollLayout();
+  if (!grid) return null;
+
+  const slotEl = document.createElement('div');
+  slotEl.id = `equip-slot-${slot}`;
+  slotEl.className = 'equip-slot empty';
+  slotEl.dataset.slot = slot;
+  slotEl.style.gridArea = PAPERDOLL_AREAS[slot] || 'auto';
+  grid.appendChild(slotEl);
+  return slotEl;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   INVENTÁRIO PRINCIPAL
+═══════════════════════════════════════════════════════════════════════════ */
+
 export function updateInventoryUI(state, callbacks = {}) {
   ensureInventoryStyles();
   updateEquipmentUI(state, callbacks);
 
-  const grid = el('inventory-grid');
+  const grid = findElement('inventory-grid');
   if (!grid) return;
+
   grid.innerHTML = '';
 
+  const data = D();
+  if (!data?.ALL_ITEMS) {
+    grid.innerHTML = '<div style="padding:20px;color:#f59e0b;text-align:center;">⚠️ Dados de itens não carregados</div>';
+    return;
+  }
+
   const selectedSet = getSelectedSet(state);
-  const filter = state.filter || 'all';
+  const filter = state.inventoryFilter || state.filter || 'all';
   const rarityFilter = state.rarityFilter || 'all';
   const equipFilter = state.equipFilter || 'all';
 
-  const autoSellSel = el('auto-sell-rarity-select');
+  // Auto-venda
+  const autoSellSel = findElement('auto-sell-rarity-select');
   if (autoSellSel) {
     autoSellSel.value = state.autoSellRarity || 'off';
     autoSellSel.onchange = (e) => {
       state.autoSellRarity = e.target.value;
-      if (callbacks.log) callbacks.log(`⚙️ Auto-Venda configurado para: ${e.target.value.toUpperCase()}`, 'system');
+      if (callbacks.log) callbacks.log(`⚙️ Auto-Venda: ${e.target.value.toUpperCase()}`, 'system');
       if (callbacks.save) callbacks.save();
     };
   }
 
-  const searchInput = el('inv-search-input');
+  // Busca
+  const searchInput = findElement('inv-search-input');
   const searchTerm = (searchInput?.value || '').trim().toLowerCase();
 
-  const sorted = [...state.inventory]
-    .filter(i => i && i.itemId && D()?.ALL_ITEMS?.[i.itemId])
+  const GEAR_SLOTS = ['weapon', 'shield', 'armor', 'helmet', 'gloves', 'legs', 'boots', 'cloak', 'belt', 'necklace', 'earring', 'ring', 'hair', 'hair2', 'agathion', 'talisman'];
+  const CONSUMABLE_SLOTS = ['consumable', 'potion', 'scroll', 'food', 'powerup'];
+  const MATERIAL_SLOTS = ['material', 'gem', 'ore', 'craft'];
+
+  const sorted = [...(state.inventory || [])]
+    .filter(i => i?.itemId)
     .sort((a, b) => {
-      const da = D().ALL_ITEMS[a.itemId], db = D().ALL_ITEMS[b.itemId];
+      const da = getItemDef(a.itemId);
+      const db = getItemDef(b.itemId);
       if (!da || !db) return 0;
       return (db.tier || 0) - (da.tier || 0);
     });
 
   for (const item of sorted) {
-    const def = D()?.ALL_ITEMS?.[item.itemId];
+    const def = getItemDef(item.itemId);
     if (!def) continue;
+
     if (searchTerm && !def.name.toLowerCase().includes(searchTerm)) continue;
 
+    // Filtro por categoria (aceita nomes das abas PT e EN)
+    const defSlot = (def.slot || '').toLowerCase();
     if (filter !== 'all') {
-      if (filter === 'gear' && !['weapon', 'armor', 'helmet', 'gloves', 'boots', 'ring', 'earring', 'necklace', 'cloak', 'belt'].includes(def.slot)) continue;
-      else if (filter === 'consumable' && !['consumable', 'potion', 'scroll', 'powerup'].includes(def.slot)) continue;
-      else if (filter === 'material' && !['material', 'gem', 'craft'].includes(def.slot)) continue;
-      else if (filter === 'scroll' && !['scroll', 'quest'].includes(def.slot)) continue;
-      else if (!['gear', 'consumable', 'material', 'scroll'].includes(filter) && def.slot !== filter) continue;
+      const f = filter.toLowerCase();
+      if ((f === 'gear' || f === 'equip') && !GEAR_SLOTS.includes(defSlot)) continue;
+      if ((f === 'consumable' || f === 'supplies') && !CONSUMABLE_SLOTS.includes(defSlot)) continue;
+      if ((f === 'material' || f === 'crafting') && !MATERIAL_SLOTS.includes(defSlot)) continue;
+      if (f === 'quest' && defSlot !== 'quest' && defSlot !== 'scroll') continue;
     }
 
     const rarity = item.rarity || 'common';
@@ -343,57 +324,74 @@ export function updateInventoryUI(state, callbacks = {}) {
     if (equipFilter === 'bag' && item.equipped) continue;
 
     const isSelected = selectedSet.has(item.uid);
-    const slot = mkEl('div');
-    slot.className = `inv-slot rarity-${rarity}` + (item.equipped ? ' is-equipped' : '') + (isSelected ? ' is-selected' : '');
+    const enchant = item.enchant ? `+${item.enchant} ` : '';
     const qty = (item.count || 1) > 1 ? `<span class="qty">${item.count}</span>` : '';
-    const tag = item.equipped ? `<span class="equipped-badge">E</span>` : '';
-    const enchantStr = item.enchant ? `+${item.enchant} ` : '';
-    const checkHtml = `<div class="slot-select-checkbox">${isSelected ? '✓' : ''}</div>`;
+    const equippedTag = item.equipped ? `<span class="equipped-badge">E</span>` : '';
+    const checkbox = `<div class="slot-select-checkbox">${isSelected ? '✓' : ''}</div>`;
 
-    slot.innerHTML = `${checkHtml}${getItemIcon(item)}<span class="name">${enchantStr}${def.name}</span>${qty}${tag}`;
+    const slotEl = mkEl('div');
+    slotEl.className = `inv-slot rarity-${rarity}` + (item.equipped ? ' is-equipped' : '') + (isSelected ? ' is-selected' : '');
+    slotEl.dataset.uid = item.uid;
+    slotEl.dataset.itemId = item.itemId;
 
-    slot.onmouseenter = (e) => showItemTooltip(e, item, state, callbacks);
-    slot.onmouseleave = () => hideItemTooltip();
+    slotEl.innerHTML = `
+      ${checkbox}
+      <span class="item-icon">${renderItemIcon(item, def)}</span>
+      <span class="item-name" title="${escapeHTML(def.name)}">${enchant}${escapeHTML(def.name)}</span>
+      ${qty}
+      ${equippedTag}
+    `;
 
-    slot.onclick = (e) => {
+    slotEl.onmouseenter = (e) => showItemTooltip(e, item, state, callbacks);
+    slotEl.onmouseleave = () => hideItemTooltip();
+
+    // Clique esquerdo: selecionar
+    slotEl.onclick = (e) => {
       e.stopPropagation();
-      if (callbacks.toggleSelectItem) callbacks.toggleSelectItem(item.uid);
-      updateInventoryUI(state, callbacks);
-    };
-
-    slot.oncontextmenu = (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      hideItemTooltip();
-
-      if (callbacks.equipItem) {
-        if (callbacks.equipItem.length >= 2) {
-          callbacks.equipItem(state, item.uid, callbacks);
-        } else {
-          callbacks.equipItem(item.uid);
-        }
-      } else if (typeof window.equipItem === 'function') {
-        window.equipItem(item.uid);
+      if (callbacks.toggleSelectItem) {
+        callbacks.toggleSelectItem(item.uid);
+        updateInventoryUI(state, callbacks);
       }
     };
 
-    grid.appendChild(slot);
+    // Clique direito: equipar / desequipar
+    slotEl.oncontextmenu = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (item.equipped) {
+        if (callbacks.unequipItem) {
+          callbacks.unequipItem(state, item.equippedSlot || resolveEquipSlot(def.slot, state.equipment), callbacks);
+        }
+      } else if (callbacks.equipItem) {
+        callbacks.equipItem(state, item.uid, callbacks);
+      }
+    };
+
+    // Duplo clique: usar consumível
+    slotEl.ondblclick = (e) => {
+      e.stopPropagation();
+      if (CONSUMABLE_SLOTS.includes(defSlot) && callbacks.useItem) {
+        callbacks.useItem(item.uid);
+      }
+    };
+
+    grid.appendChild(slotEl);
   }
 
-  const cnt = el('inv-count') || el('inv-slots');
+  const cnt = findElement('inv-count');
   const maxSlots = getMaxInventorySlots(state);
-  if (cnt) cnt.textContent = `${state.inventory.length} / ${maxSlots}`;
+  if (cnt) cnt.textContent = `${state.inventory?.length || 0} / ${maxSlots}`;
 }
 
-/**
- * Atualiza a interface do Baú (Warehouse).
- * @param {Object} state
- * @param {Object} [callbacks]
- */
+/* ═══════════════════════════════════════════════════════════════════════════
+   BAÚ (WAREHOUSE)
+═══════════════════════════════════════════════════════════════════════════ */
+
 export function updateWarehouseUI(state, callbacks = {}) {
   ensureInventoryStyles();
-  const container = el('warehouse-grid');
-  const countEl = el('warehouse-slot-count');
+
+  const container = findElement('warehouse-grid');
+  const countEl = findElement('warehouse-slot-count');
   if (!container) return;
 
   state.warehouse = state.warehouse || [];
@@ -403,7 +401,7 @@ export function updateWarehouseUI(state, callbacks = {}) {
   container.innerHTML = '';
 
   for (const item of state.warehouse) {
-    const def = D()?.ALL_ITEMS?.[item.itemId];
+    const def = getItemDef(item.itemId);
     if (!def) continue;
 
     const slotEl = mkEl('div');
@@ -415,8 +413,8 @@ export function updateWarehouseUI(state, callbacks = {}) {
     const countBadge = (item.count && item.count > 1) ? `<span class="qty">${item.count}</span>` : '';
 
     slotEl.innerHTML = `
-      ${getItemIcon(item)}
-      <span class="name">${def.name}</span>
+      <span class="item-icon">${renderItemIcon(item, def)}</span>
+      <span class="item-name" title="${escapeHTML(def.name)}">${escapeHTML(def.name)}</span>
       ${countBadge}
     `;
 
@@ -430,59 +428,62 @@ export function updateWarehouseUI(state, callbacks = {}) {
   }
 }
 
-/**
- * Atualiza a interface de Equipamentos ativos do personagem.
- * @param {Object} state
- * @param {Object} [callbacks]
- */
-export function updateEquipmentUI(state, callbacks = {}) {
-  ensureInventoryStyles();
+/* ═══════════════════════════════════════════════════════════════════════════
+   EQUIPAMENTOS (PAPERDOLL)
+═══════════════════════════════════════════════════════════════════════════ */
 
-  const defaultSlotIcons = {
-    weapon: '⚔️', armor: '🛡️', helmet: '⛑️', gloves: '🧤', boots: '👢',
-    ring: '💍', earring: '💎', necklace: '📿', cape: '🧥', cloak: '🧥', belt: '🪢'
-  };
+export function updateEquipmentUI(state, callbacks = {}) {
+  if (!state) return;
+  state.equipment = state.equipment || {};
+
+  ensureInventoryStyles();
+  migrateEquipmentSlots(state);
+  ensurePaperdollLayout();
 
   for (const slot of ALL_EQUIP_SLOTS) {
-    const slotEl = findEquipSlotElement(slot);
-    if (!slotEl) continue;
+    let slotEl = findEquipmentSlot(slot);
+    if (!slotEl) slotEl = createEquipmentSlotDynamically(slot);
 
-    const uid = state.equipment ? state.equipment[slot] : null;
-    const item = uid ? state.inventory.find(i => i.uid === uid) : null;
-    const def = item ? D()?.ALL_ITEMS?.[item.itemId] : null;
+    if (!slotEl) {
+      if (!_warnedMissingSlots.has(slot)) {
+        console.warn(`[InventoryUI] Slot de equipamento não encontrado: ${slot}`);
+        _warnedMissingSlots.add(slot);
+      }
+      continue;
+    }
+
+    const uid = state.equipment[slot];
+    const item = uid ? (state.inventory || []).find(i => i.uid === uid) : null;
+    const def = item ? getItemDef(item.itemId) : null;
 
     if (item && def) {
       const rarity = item.rarity || 'common';
-      const enchantStr = item.enchant ? `+${item.enchant} ` : '';
 
-      slotEl.className = `equip-slot active has-item rarity-${rarity}`;
-      slotEl.title = `${enchantStr}${def.name} (${slot})`;
+      slotEl.className = `equip-slot active rarity-${rarity}`;
+      slotEl.dataset.uid = uid;
+      slotEl.dataset.slot = slot;
+
       slotEl.innerHTML = `
-        <span class="equip-icon">${getItemIcon(item)}</span>
-        <span class="equipped-badge">E</span>
+        <span class="equip-icon">${renderItemIcon(item, def)}</span>
+        <span class="equip-label">${SLOT_LABELS[slot] || slot}</span>
       `;
+
       slotEl.onmouseenter = (e) => showItemTooltip(e, item, state, callbacks);
       slotEl.onmouseleave = () => hideItemTooltip();
-      slotEl.onclick = (e) => {
-        e.stopPropagation();
-        hideItemTooltip();
-        if (callbacks.unequipItem) {
-          if (callbacks.unequipItem.length >= 2) {
-            callbacks.unequipItem(state, slot, callbacks);
-          } else {
-            callbacks.unequipItem(slot);
-          }
-        } else if (typeof window.unequipItem === 'function') {
-          window.unequipItem(slot);
-        }
+      slotEl.onclick = () => {
+        if (callbacks.unequipItem) callbacks.unequipItem(state, slot, callbacks);
       };
+
+      item.equipped = true;
+      item.equippedSlot = slot;
     } else {
-      const emoji = defaultSlotIcons[slot] || '📦';
       slotEl.className = 'equip-slot empty';
-      slotEl.title = `${slot} (vazio)`;
+      slotEl.dataset.slot = slot;
+      delete slotEl.dataset.uid;
+
       slotEl.innerHTML = `
-        <span class="equip-placeholder-icon">${emoji}</span>
-        <span class="equip-placeholder-label">${slot.toUpperCase()}</span>
+        <span class="equip-placeholder">${SLOT_ICONS[slot] || '📦'}</span>
+        <span class="equip-label">${SLOT_LABELS[slot] || slot}</span>
       `;
       slotEl.onmouseenter = null;
       slotEl.onmouseleave = null;
@@ -490,3 +491,234 @@ export function updateEquipmentUI(state, callbacks = {}) {
     }
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CSS
+═══════════════════════════════════════════════════════════════════════════ */
+
+const STYLE_ID = 'inventory-ui-styles-final';
+
+export function ensureInventoryStyles() {
+  const host = document.getElementById('idle-host');
+  const target = host?.shadowRoot || document.head;
+  if (!target) return;
+
+  // Remove versões antigas
+  for (const oldId of ['inventory-ui-styles', 'inventory-ui-styles-v2', 'inventory-ui-styles-v3', STYLE_ID]) {
+    const old = target.querySelector(`#${oldId}`);
+    if (old && oldId !== STYLE_ID) old.remove();
+  }
+
+  if (target.querySelector(`#${STYLE_ID}`)) return;
+
+  const style = document.createElement('style');
+  style.id = STYLE_ID;
+  style.textContent = INVENTORY_CSS;
+  target.appendChild(style);
+}
+
+const INVENTORY_CSS = `
+/* ═══════════════ PAPERDOLL (grade 4x5) ═══════════════ */
+
+#paperdoll-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 62px);
+  grid-template-rows: repeat(5, 62px);
+  gap: 8px;
+  justify-content: center;
+  padding: 12px 8px;
+  box-sizing: border-box;
+  grid-template-areas:
+    "hair2   helmet   necklace  talisman"
+    "shield  hair     earring1  agathion"
+    "weapon  armor    earring2  cloak"
+    "gloves  legs     ring      belt"
+    "boots   .        ring2     .";
+}
+
+.equip-slot {
+  position: relative;
+  width: 62px;
+  height: 62px;
+  border: 2px solid #3a3a4a;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #1e1e30, #14141f);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: border-color .15s, box-shadow .15s, transform .15s;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.equip-slot.empty {
+  cursor: default;
+  opacity: .75;
+}
+
+.equip-slot.empty:hover {
+  border-color: #5a5a6e;
+}
+
+.equip-slot.active {
+  opacity: 1;
+  border-color: #c9a227;
+  box-shadow: 0 0 10px rgba(201, 162, 39, .35);
+}
+
+.equip-slot.active:hover {
+  transform: scale(1.06);
+  border-color: #f59e0b;
+}
+
+.equip-slot.rarity-uncommon  { border-color: #22c55e; box-shadow: 0 0 8px rgba(34,197,94,.35); }
+.equip-slot.rarity-rare      { border-color: #3b82f6; box-shadow: 0 0 8px rgba(59,130,246,.35); }
+.equip-slot.rarity-epic      { border-color: #a855f7; box-shadow: 0 0 8px rgba(168,85,247,.4); }
+.equip-slot.rarity-legendary { border-color: #f59e0b; box-shadow: 0 0 12px rgba(245,158,11,.5); }
+
+.equip-icon {
+  font-size: 26px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,.6));
+}
+
+.equip-icon .inventory-item-image,
+.equip-icon img {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+}
+
+.equip-placeholder {
+  font-size: 22px;
+  opacity: .35;
+  filter: grayscale(1);
+  line-height: 1;
+}
+
+.equip-label {
+  position: absolute;
+  bottom: 2px;
+  left: 0;
+  right: 0;
+  font-size: 7px;
+  color: #8b93a7;
+  text-transform: uppercase;
+  text-align: center;
+  letter-spacing: .04em;
+  pointer-events: none;
+  line-height: 1;
+}
+
+.equip-slot.active .equip-label {
+  color: #c9a227;
+}
+
+/* ═══════════════ MOCHILA / BAÚ ═══════════════ */
+
+.inv-slot {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  border: 2px solid #444;
+  border-radius: 6px;
+  background: #1a1a2e;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: border-color .15s, transform .15s, box-shadow .15s;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.inv-slot:hover {
+  border-color: #f59e0b;
+  transform: scale(1.05);
+}
+
+.inv-slot.is-equipped {
+  border-color: #22c55e;
+  box-shadow: 0 0 8px rgba(34, 197, 94, .4);
+}
+
+.inv-slot.is-selected {
+  border-color: #3b82f6;
+  box-shadow: 0 0 12px rgba(59, 130, 246, .5);
+}
+
+.inv-slot.rarity-common    { border-color: #9ca3af; }
+.inv-slot.rarity-uncommon  { border-color: #22c55e; }
+.inv-slot.rarity-rare      { border-color: #3b82f6; }
+.inv-slot.rarity-epic      { border-color: #a855f7; }
+.inv-slot.rarity-legendary { border-color: #f59e0b; box-shadow: 0 0 10px rgba(245,158,11,.4); }
+
+.item-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  z-index: 1;
+}
+
+.inventory-item-image {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+}
+
+.inventory-item-emoji {
+  font-size: 26px;
+  line-height: 1;
+}
+
+.item-name {
+  font-size: 7px;
+  color: #e5e7eb;
+  text-align: center;
+  max-width: 95%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-top: 3px;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.qty {
+  position: absolute;
+  bottom: 2px;
+  right: 4px;
+  font-size: 10px;
+  color: #fbbf24;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px #000;
+}
+
+.equipped-badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  font-size: 9px;
+  color: #22c55e;
+  font-weight: bold;
+  background: rgba(0,0,0,.6);
+  padding: 1px 3px;
+  border-radius: 3px;
+}
+
+.slot-select-checkbox {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  font-size: 12px;
+  color: #3b82f6;
+  font-weight: bold;
+}
+`;
