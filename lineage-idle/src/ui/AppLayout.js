@@ -91,7 +91,9 @@ function ensureLayoutStyles() {
 
     main.main-grid, .main-grid {
       display: grid !important;
-      grid-template-columns: minmax(0, 1fr) 690px !important;
+      /* 3 colunas: stats-panel (fixa) | center-panel (flexível) | tabs-panel (fixa) */
+      grid-template-columns: 280px minmax(0, 1fr) 690px !important;
+      grid-template-rows: 1fr !important;
       gap: 12px !important;
       width: 100% !important;
       height: calc(100vh - 60px) !important;
@@ -105,6 +107,13 @@ function ensureLayoutStyles() {
       flex-direction: column !important;
       visibility: visible !important;
       opacity: 1 !important;
+      min-width: 0 !important;
+      height: 100% !important;
+      background: rgba(18, 14, 10, 0.92) !important;
+      border: 1px solid #3c2e1e !important;
+      border-radius: 8px !important;
+      padding: 10px !important;
+      box-sizing: border-box !important;
       overflow-y: auto !important;
     }
 
