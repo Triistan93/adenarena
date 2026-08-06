@@ -4,6 +4,11 @@ import * as ART from "./art.js";
 import "./data/echo-adapter.js";
 import "./data/affixes.js";
 import "./src/data/items/index.js";
+import { ensureAppLayout } from './src/ui/AppLayout.js';
+// dentro do seu init / GameBootstrap, logo após renderizar:
+ensureAppLayout();
+setInterval(ensureAppLayout, 1000); // garante que continua splitado ao trocar de aba
+
 
 
 // ─── Sprint 1: Importa módulos de dados extraídos ───────────────────────────
@@ -4036,7 +4041,3 @@ function tickUI() {
   const mt = el('mystic-timer'); if (mt) { mt.textContent = fmtCountdown(D().getMysticRotation()[0]?.msLeft || 0); }
   if (buffChanged) { safeUiUpdate('shop-tick', updateShopUI); }
 }
-import { ensureAppLayout } from './src/ui/AppLayout.js';
-// dentro do seu init / GameBootstrap, logo após renderizar:
-ensureAppLayout();
-setInterval(ensureAppLayout, 1000); // garante que continua splitado ao trocar de aba
