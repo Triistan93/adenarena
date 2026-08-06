@@ -125,6 +125,8 @@ import {
   hideItemTooltip as uiHideItemTooltip
 } from './src/ui/TooltipUI.js';
 
+import { ensureAppLayout, showMenuPanel } from './src/ui/AppLayout.js';
+
 import {
   updateInventoryUI as uiUpdateInventoryUI,
   updateWarehouseUI as uiUpdateWarehouseUI,
@@ -3514,51 +3516,21 @@ function attachGlobalErrorHandlers() {
 
 const tabScrollMap = {};
 
-function openPanel(tabName) {
+export function openPanel(tabName) {
   const targetTab = (!tabName || tabName === 'zones' || tabName === 'combat' || tabName === 'close') ? 'zones' : tabName;
-  const tabsPanel = qs('.tabs-panel');
 
-  const currentActivePane = qs('.tab-pane.active');
+  const root = document.getElementById('idle-host')?.shadowRoot || document;
+  const currentActivePane = root.querySelector('.tab-pane.active');
   if (currentActivePane) {
     tabScrollMap[currentActivePane.id] = currentActivePane.scrollTop;
   }
 
-  qsa('.tab-btn').forEach(b => b.classList.remove('active'));
-  qsa('.tab-pane').forEach(p => p.classList.remove('active'));
+  ensureAppLayout();
+  showMenuPanel(targetTab);
 
-  const btn = qs(`.tab-btn[data-tab="${targetTab}"]`);
-  if (btn) btn.classList.add('active');
-
-  const pane = el(`tab-${targetTab}`);
-  if (pane) {
-    pane.classList.add('active');
-    if (tabScrollMap[pane.id] !== undefined) {
-      pane.scrollTop = tabScrollMap[pane.id];
-    }
-  }
-
-  let floatingCloseBtn = el('full-window-close-btn');
-
-  if (tabsPanel) {
-    if (targetTab !== 'zones') {
-      tabsPanel.classList.add('full-window-active');
-      if (!floatingCloseBtn) {
-        floatingCloseBtn = mkEl('button');
-        floatingCloseBtn.id = 'full-window-close-btn';
-        floatingCloseBtn.className = 'full-window-close-btn';
-        floatingCloseBtn.innerHTML = '⚔️ Combate ✖';
-        floatingCloseBtn.title = 'Voltar para a tela de combate';
-        document.body.appendChild(floatingCloseBtn);
-      }
-      floatingCloseBtn.onclick = (ev) => {
-        if (ev) ev.stopPropagation();
-        openPanel('zones');
-      };
-      floatingCloseBtn.style.display = 'flex';
-    } else {
-      tabsPanel.classList.remove('full-window-active');
-      if (floatingCloseBtn) floatingCloseBtn.style.display = 'none';
-    }
+  const pane = root.querySelector(`#tab-${targetTab}`);
+  if (pane && tabScrollMap[pane.id] !== undefined) {
+    pane.scrollTop = tabScrollMap[pane.id];
   }
 
   if (targetTab === 'inventory') safeUiUpdate('inventory', updateInventoryUI);

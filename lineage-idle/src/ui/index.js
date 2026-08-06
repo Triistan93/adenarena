@@ -12,6 +12,7 @@ export * from './ShopUI.js';
 export * from './SkillsUI.js';
 export * from './StageUI.js';
 export * from './TooltipUI.js';
+export * from './AppLayout.js';
 
 /**
  * Atualiza todos os componentes da interface com base no estado atual do jogo.
