@@ -1400,16 +1400,7 @@ export function updateShopUI(state, callbacks = {}) {
 
   // Filter by Slot / Type
   if (currentShopSlot !== 'all') {
-    itemsToDisplay = itemsToDisplay.filter(({ def }) => {
-      const slot = def.slot || '';
-      if (currentShopSlot === 'weapon') return slot === 'weapon' && (def.atk > 0 && def.matk === 0);
-      if (currentShopSlot === 'mweapon') return slot === 'weapon' && def.matk > 0;
-      if (currentShopSlot === 'heavy') return slot === 'armor' && (def.desc || '').toLowerCase().includes('heavy');
-      if (currentShopSlot === 'light') return slot === 'armor' && (def.desc || '').toLowerCase().includes('light');
-      if (currentShopSlot === 'robe') return slot === 'armor' && (def.desc || '').toLowerCase().includes('robe');
-      if (currentShopSlot === 'jewel') return ['ring', 'necklace', 'earring'].includes(slot);
-      return true;
-    });
+    itemsToDisplay = itemsToDisplay.filter(({ def }) => matchesSlotFilter(def, currentShopSlot));
   }
 
   if (itemsToDisplay.length === 0) {
@@ -1531,6 +1522,48 @@ function rollMysticStock() {
   }
 
   return stock;
+}
+
+function matchesSlotFilter(def, filterKey) {
+  if (!def || !filterKey || filterKey === 'all') return true;
+  const slot = (def.slot || '').toLowerCase();
+  const id = (def.id || '').toLowerCase();
+  const name = (def.name || '').toLowerCase();
+  const desc = (def.desc || '').toLowerCase();
+  const text = `${id} ${name} ${desc}`;
+
+  if (filterKey === 'weapon') {
+    return slot === 'weapon' && (def.atk > 0 && (!def.matk || def.matk <= 0));
+  }
+  if (filterKey === 'mweapon') {
+    return slot === 'weapon' && (def.matk > 0);
+  }
+  if (filterKey === 'heavy') {
+    if (['armor', 'helmet', 'gloves', 'boots', 'legs', 'shield'].includes(slot)) {
+      return text.includes('heavy') || text.includes('plate') || text.includes('breastplate') || text.includes('shield') || text.includes('bronze') || text.includes('bone') || text.includes('iron') || text.includes('imperial') || text.includes('flame') || text.includes('icy');
+    }
+    return false;
+  }
+  if (filterKey === 'light') {
+    if (['armor', 'helmet', 'gloves', 'boots', 'legs'].includes(slot)) {
+      return text.includes('light') || text.includes('leather') || text.includes('manticore') || text.includes('theca') || text.includes('plated') || text.includes('draconic') || text.includes('doom') || text.includes('evasion') || text.includes('lightning');
+    }
+    return false;
+  }
+  if (filterKey === 'robe') {
+    if (['armor', 'helmet', 'gloves', 'boots', 'legs'].includes(slot)) {
+      return text.includes('robe') || text.includes('tunic') || text.includes('devotion') || text.includes('mithril') || text.includes('karmian') || text.includes('arcana') || text.includes('mana') || text.includes('seers');
+    }
+    return false;
+  }
+  if (filterKey === 'helmet') return slot === 'helmet';
+  if (filterKey === 'gloves') return slot === 'gloves';
+  if (filterKey === 'boots') return slot === 'boots';
+  if (filterKey === 'legs') return slot === 'legs';
+  if (filterKey === 'shield') return slot === 'shield' || slot === 'sigil';
+  if (filterKey === 'jewel') return ['ring', 'necklace', 'earring', 'belt', 'cloak', 'hair', 'agathion'].includes(slot);
+
+  return true;
 }
 
 export function updateCraftUI(state, callbacks = {}) {

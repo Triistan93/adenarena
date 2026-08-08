@@ -479,9 +479,14 @@ export const IDLE_MARKUP = `
                   <button class="shop-filter-btn active" data-shopslot="all">Todos os Tipos</button>
                   <button class="shop-filter-btn" data-shopslot="weapon">⚔️ Armas Físicas</button>
                   <button class="shop-filter-btn" data-shopslot="mweapon">🔮 Armas Mágicas</button>
-                  <button class="shop-filter-btn" data-shopslot="heavy">🛡️ Armadura Pesada</button>
-                  <button class="shop-filter-btn" data-shopslot="light">🥋 Armadura Leve</button>
+                  <button class="shop-filter-btn" data-shopslot="heavy">🛡️ Pesada</button>
+                  <button class="shop-filter-btn" data-shopslot="light">🥋 Leve</button>
                   <button class="shop-filter-btn" data-shopslot="robe">👘 Robe Mágico</button>
+                  <button class="shop-filter-btn" data-shopslot="helmet">🪖 Capacetes</button>
+                  <button class="shop-filter-btn" data-shopslot="gloves">🥊 Luvas</button>
+                  <button class="shop-filter-btn" data-shopslot="boots">🥾 Botas</button>
+                  <button class="shop-filter-btn" data-shopslot="legs">👖 Calças</button>
+                  <button class="shop-filter-btn" data-shopslot="shield">🛡️ Escudos</button>
                   <button class="shop-filter-btn" data-shopslot="jewel">📿 Joias &amp; Acessórios</button>
                 </div>
               </div>
