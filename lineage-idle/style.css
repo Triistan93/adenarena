@@ -2327,7 +2327,7 @@ select:focus-visible {
   display: none !important;
 }
 
-.m-name, .h-name {
+.stage-entity-name, .stage-hero-name, .m-name, .h-name {
   position: relative !important;
   top: auto !important;
   left: auto !important;
@@ -2335,40 +2335,79 @@ select:focus-visible {
   width: 100%;
   font-family: "Cinzel", serif;
   font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  color: var(--gilt-bright);
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: var(--gilt-bright, #f0c050);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   text-align: center;
   text-shadow: 0 1px 3px #000;
-  margin-bottom: 3px;
+  margin-bottom: 1px;
   flex-shrink: 0;
 }
 
-.m-hp, .h-hp {
+.stage-entity-level, .stage-hero-level, .stage-monster-level {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10px;
+  font-weight: 600;
+  color: #c8a87a;
+  text-align: center;
+  margin-bottom: 2px;
+  flex-shrink: 0;
+}
+
+.stage-hp-bar, .stage-mp-bar, .m-hp, .h-hp {
   position: relative !important;
   top: auto !important;
   left: auto !important;
   transform: none !important;
   width: 100%;
-  height: 7px;
-  background: rgba(0, 0, 0, 0.85);
-  border: 1px solid rgba(212,167,68,0.3);
-  border-radius: 4px;
+  height: 13px;
+  background: rgba(10, 8, 4, 0.9);
+  border: 1px solid rgba(212, 167, 68, 0.4);
+  border-radius: 3px;
   overflow: hidden;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
   flex-shrink: 0;
-  box-shadow: inset 0 1px 2px rgba(0,0,0,0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.8);
 }
 
-.m-hp-fill, .h-hp-fill {
+.stage-hp-fill, .stage-hp-fill-hero, .m-hp-fill, .h-hp-fill {
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
   height: 100%;
   width: 100%;
-  background: linear-gradient(90deg, #b91c1c, #ef4444);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.3);
+  background: linear-gradient(90deg, #991b1b, #ef4444);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
   transition: width 0.25s ease;
+  z-index: 1;
+}
+
+.stage-mp-fill, .stage-mp-fill-hero, .h-mp-fill {
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, #1e40af, #3b82f6);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transition: width 0.25s ease;
+  z-index: 1;
+}
+
+.stage-hp-text, .stage-mp-text {
+  position: relative;
+  z-index: 2;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 9px;
+  font-weight: 700;
+  color: #ffffff;
+  text-shadow: 0 1px 2px #000, 0 0 4px #000;
+  line-height: 1;
+  pointer-events: none;
 }
 
 .m-art, .hero-full {
