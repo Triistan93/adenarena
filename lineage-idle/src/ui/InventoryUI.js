@@ -120,106 +120,246 @@ export function ensureInventoryStyles(){
   const style=document.createElement('style'); style.id=STYLE_ID; style.textContent=INVENTORY_CSS; target.appendChild(style);
 }
 const INVENTORY_CSS = `
-/* PAINEL DO INVENTÁRIO DOCKADO NA COLUNA DIREITA - NÃO É MAIS MODAL */
+/* ═══════════ PAINEL DOCKADO NA COLUNA DIREITA ═══════════ */
 #inventory-panel, .inventory-panel, #inventory-window {
   width: 100% !important;
   height: 100% !important;
-  max-width: 100% !important;
-  max-height: 100% !important;
+  max-width: none !important;
   margin: 0 !important;
-  background: linear-gradient(180deg, #2a241c 0%, #1a1611 100%) !important;
-  border: 2px solid #4a3a2a !important;
-  border-radius: 8px !important;
   display: flex !important;
   flex-direction: column !important;
   overflow: hidden !important;
-  box-shadow: 0 0 20px rgba(0,0,0,0.6) !important;
+  box-sizing: border-box !important;
 }
-.inventory-body, #inventory-body {
+
+/* Corpo: paperdoll (esq) + grid (dir) */
+.inventory-body, #inventory-body, .l2inv-body {
   flex: 1 !important;
   display: flex !important;
   flex-direction: row !important;
-  overflow: hidden !important;
+  gap: 8px !important;
   padding: 8px !important;
-  gap: 10px !important;
+  overflow: hidden !important;
   min-height: 0 !important;
 }
+
+/* ═══════════ PAPERDOLL COMPACTO (esquerda) ═══════════ */
 .l2inv-doll-col {
-  width: 220px !important; min-width: 220px !important; flex: 0 0 220px !important;
-  display: flex !important; flex-direction: column !important; gap: 6px !important;
+  width: 176px !important;
+  min-width: 176px !important;
+  flex: 0 0 176px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+  background: #201a13 !important;
+  border: 1px solid #3a2a1a !important;
+  border-radius: 6px !important;
+  padding: 6px !important;
+  box-sizing: border-box !important;
+  overflow-y: auto !important;
+  min-height: 0 !important;
+}
+
+#doll-set-switcher { display: flex !important; gap: 4px !important; }
+#doll-set-switcher .set-btn {
+  flex: 1 !important; height: 24px !important;
+  background: #2a241c !important; border: 1px solid #5a4a32 !important;
+  color: #9c8a6a !important; font-size: 10px !important; font-weight: bold !important;
+  cursor: pointer !important; border-radius: 3px !important;
+}
+#doll-set-switcher .set-btn.active {
+  background: #4a3a24 !important; border-color: #c9a227 !important; color: #f5e6c8 !important;
+}
+
+#paperdoll-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, 50px) !important;
+  grid-template-rows: repeat(6, 50px) !important;
+  gap: 4px !important;
+  justify-content: center !important;
+  padding: 8px 4px !important;
   background: radial-gradient(ellipse at center, #2a241c 0%, #17120e 100%) !important;
-  border: 1px solid #3a2a1a !important; border-radius: 6px !important;
-  padding: 6px !important; box-sizing: border-box !important;
+  border: 1px solid #3a2a1a !important;
+  border-radius: 6px !important;
+  grid-template-areas:
+    "earring1 helmet   earring2"
+    "necklace armor    cloak"
+    "hair     legs     hair2"
+    "weapon   gloves   shield"
+    "ring     belt     ring2"
+    "boots    talisman agathion" !important;
+  width: fit-content !important;
+  margin: 0 auto !important;
+}
+
+.equip-slot {
   position: relative !important;
+  width: 50px !important; height: 50px !important;
+  background: #1a1611 !important;
+  border: 1px solid #4a3a2a !important;
+  border-radius: 3px !important;
+  display: flex !important; align-items: center !important; justify-content: center !important;
+  cursor: pointer !important; box-sizing: border-box !important; overflow: hidden !important;
 }
-#paperdoll-grid{
-  display:grid!important; grid-template-columns:repeat(3, 60px)!important;
-  grid-template-rows:repeat(4, 60px)!important; gap:6px!important;
-  justify-content:center!important; padding:8px!important;
-  background:radial-gradient(ellipse at center, #2a241c 0%, #17120e 100%)!important;
-  border:1px solid #3a2a1a!important; border-radius:6px!important;
-  width:fit-content!important; margin:0 auto!important;
+.equip-slot.active { border-color: #c9a227 !important; background: #2a241c !important; }
+.equip-slot.rarity-rare { border-color: #3b82f6 !important; }
+.equip-slot.rarity-epic { border-color: #a855f7 !important; }
+.equip-slot.rarity-legendary { border-color: #f59e0b !important; }
+.equip-icon .inventory-item-image, .equip-icon img {
+  width: 34px !important; height: 34px !important; object-fit: contain !important;
 }
-.equip-slot{width:60px!important; height:60px!important; background:#1a1611!important; border:1px solid #4a3a2a!important; border-radius:3px!important;}
-.equip-slot.active{border-color:#c9a227!important;}
+.equip-placeholder { font-size: 18px !important; opacity: .25 !important; }
+.equip-label { display: none !important; }
 
-/* STATS DO PERSONAGEM FIXOS ABAIXO DO PAPERDOLL */
-.l2inv-paperdoll-stats {
-  position: sticky !important;
-  bottom: 0 !important;
-  background: #140d07 !important;
-  padding: 6px 8px !important;
-  border-top: 1px solid #342412 !important;
-  z-index: 10 !important;
-  font-size: 11px !important;
-  color: #d4a744 !important;
+/* Stats compactos */
+.doll-stats, #doll-stats {
+  font-size: 10px !important; padding: 6px !important;
+  background: #17120e !important; border: 1px solid #3a2a1a !important;
+  border-radius: 4px !important; color: #b8a88a !important;
 }
 
-/* GRID DE SLOTS DO INVENTÁRIO DO LADO DIREITO DO PAINEL */
+/* ═══════════ ÁREA DIREITA: filtros + grid ═══════════ */
+.l2inv-main-col, .inventory-grid-container, #inventory-grid-container {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Abas e filtros — force visibilidade e quebra de linha */
+.l2inv-tabs, .inventory-tabs, .l2inv-filters, .inventory-filters {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 4px !important;
+  align-items: center !important;
+  padding: 4px 6px !important;
+  background: rgba(0,0,0,.35) !important;
+  border-radius: 4px !important;
+  flex: 0 0 auto !important;
+}
+.l2inv-tabs button, .inventory-tabs button,
+.l2inv-filters button, .inventory-filters button,
+.l2inv-filters select, .inventory-filters select {
+  height: 22px !important;
+  padding: 0 8px !important;
+  font-size: 10px !important;
+  background: #2a241c !important;
+  border: 1px solid #4a3a2a !important;
+  color: #b8a88a !important;
+  border-radius: 3px !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+}
+.l2inv-tabs button.active, .inventory-tabs button.active {
+  background: #4a3a24 !important; border-color: #c9a227 !important; color: #f5e6c8 !important;
+}
+.l2inv-filters input, .inventory-filters input, #inv-search-input {
+  height: 22px !important; font-size: 10px !important;
+  flex: 1 1 100px !important; min-width: 80px !important;
+  background: #1a1611 !important; border: 1px solid #4a3a2a !important;
+  color: #d8c8a8 !important; padding: 0 6px !important; border-radius: 3px !important;
+}
+
+/* ═══════════ GRID DE ITENS — auto-fill preenche a largura ═══════════ */
 #inventory-grid, .inventory-grid {
   display: grid !important;
-  grid-template-columns: repeat(auto-fill, 72px) !important;
-  grid-auto-rows: 72px !important;
-  gap: 6px !important;
-  padding: 8px !important;
-  background: rgba(0,0,0,0.4) !important;
+  grid-template-columns: repeat(auto-fill, 40px) !important;
+  grid-auto-rows: 40px !important;
+  gap: 3px !important;
+  padding: 6px !important;
+  background: #18130e !important;
   border: 1px solid #3a2a1a !important;
   border-radius: 4px !important;
-  overflow-y: auto !important;
-  max-height: 100% !important;
   align-content: start !important;
+  justify-content: start !important;
   flex: 1 !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: #4a3a2a #18130e !important;
 }
-.inv-slot{
-  width:72px!important; 
-  height:72px!important; 
-  min-width:72px!important; 
-  max-width:72px!important; 
-  min-height:72px!important; 
-  max-height:72px!important; 
-  background:#241e16!important; 
-  border:1px solid #3d2e1e!important; 
-  border-radius:4px!important; 
-  box-sizing:border-box!important; 
-  overflow:hidden!important; 
-  display:flex!important; 
-  flex-direction:column!important; 
-  align-items:center!important; 
-  justify-content:center!important; 
-  padding:2px!important;
-  position:relative!important;
+#inventory-grid::-webkit-scrollbar { width: 8px !important; }
+#inventory-grid::-webkit-scrollbar-track { background: #18130e !important; }
+#inventory-grid::-webkit-scrollbar-thumb {
+  background: #4a3a2a !important; border-radius: 4px !important;
 }
-.inventory-item-image{width:36px!important; height:36px!important; object-fit:contain!important;}
-.item-name{
-  display:block!important; 
-  font-size:8px!important; 
-  line-height:1.1!important; 
-  white-space:nowrap!important; 
-  text-overflow:ellipsis!important; 
-  overflow:hidden!important; 
-  max-width:100%!important; 
-  text-align:center!important; 
-  color:#e2c074!important;
+
+.inv-slot {
+  position: relative !important;
+  width: 40px !important; height: 40px !important;
+  background: #1e1a14 !important;
+  border: 1px solid #3d2e1e !important;
+  border-radius: 2px !important;
+  display: flex !important; align-items: center !important; justify-content: center !important;
+  cursor: pointer !important; box-sizing: border-box !important; overflow: hidden !important;
 }
-.qty{font-size:9px!important; position:absolute!important; bottom:1px!important; right:2px!important;}
+.inv-slot:hover {
+  border-color: #8a7a5a !important; background: #2a241c !important;
+  transform: scale(1.06) !important; z-index: 5 !important;
+}
+.inv-slot.is-equipped { border-color: #22c55e !important; }
+.inv-slot.is-selected { border-color: #3b82f6 !important; background: #1e2a3a !important; }
+.inv-slot.rarity-uncommon  { border-color: #22c55e !important; }
+.inv-slot.rarity-rare      { border-color: #3b82f6 !important; }
+.inv-slot.rarity-epic      { border-color: #a855f7 !important; }
+.inv-slot.rarity-legendary { border-color: #f59e0b !important; }
+
+.item-icon {
+  display: flex !important; align-items: center !important; justify-content: center !important;
+  width: 100% !important; height: 100% !important;
+}
+.inventory-item-image {
+  width: 32px !important; height: 32px !important; object-fit: contain !important;
+}
+.inventory-item-emoji { font-size: 20px !important; line-height: 1 !important; }
+.item-name { display: none !important; }
+
+.qty {
+  position: absolute !important; bottom: 0 !important; right: 2px !important;
+  font-size: 9px !important; color: #fff !important; font-weight: bold !important;
+  line-height: 1 !important; pointer-events: none !important;
+  text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000 !important;
+}
+.equipped-badge {
+  position: absolute !important; top: 1px !important; left: 1px !important;
+  font-size: 8px !important; background: #22c55e !important; color: #000 !important;
+  font-weight: bold !important; width: 11px !important; height: 11px !important;
+  display: flex !important; align-items: center !important; justify-content: center !important;
+  border-radius: 2px !important;
+}
+.slot-select-checkbox {
+  position: absolute !important; top: 1px !important; right: 1px !important;
+  font-size: 10px !important; color: #3b82f6 !important; pointer-events: none !important;
+}
+
+/* Footer */
+.inventory-footer, #inventory-footer, .l2inv-footer {
+  flex: 0 0 auto !important;
+  display: flex !important; align-items: center !important;
+  gap: 8px !important; padding: 6px 8px !important;
+  border-top: 1px solid #3a2a1a !important;
+  font-size: 11px !important;
+}
+
+/* ═══════════ RESPONSIVO: coluna estreita → paperdoll em cima ═══════════ */
+@media (max-width: 1500px) {
+  .l2inv-doll-col { width: 164px !important; min-width: 164px !important; flex: 0 0 164px !important; }
+  #paperdoll-grid { grid-template-columns: repeat(3, 46px) !important; grid-template-rows: repeat(6, 46px) !important; }
+  .equip-slot { width: 46px !important; height: 46px !important; }
+  .equip-icon .inventory-item-image { width: 30px !important; height: 30px !important; }
+}
+@media (max-width: 1250px) {
+  .inventory-body, #inventory-body, .l2inv-body { flex-direction: column !important; }
+  .l2inv-doll-col { width: 100% !important; min-width: 0 !important; flex: 0 0 auto !important; }
+  #paperdoll-grid { grid-template-columns: repeat(6, 46px) !important; grid-template-rows: repeat(3, 46px) !important;
+    grid-template-areas:
+      "earring1 helmet   earring2 necklace armor    cloak"
+      "hair     legs     hair2    weapon   gloves   shield"
+      "ring     belt     ring2    boots    talisman agathion" !important;
+  }
+}
 `;
