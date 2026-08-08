@@ -243,18 +243,118 @@ function createEquipmentSlotDynamically(slot) {
   return slotEl;
 }
 
-function ensurePaperdollLayout() {}
+const INJECTED_GAMEUI_CSS = `
+/* === CONFINAMENTO DO PAPERDOLL (175px FIXOS) === */
+.l2inv-left-paperdoll {
+  width: 175px !important;
+  min-width: 175px !important;
+  max-width: 175px !important;
+  flex: 0 0 175px !important;
+  padding: 6px !important;
+  box-sizing: border-box !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  border-right: 1px solid #3c2e1e !important;
+}
+
+.l2inv-paperdoll-grid {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 4px !important;
+  justify-content: center !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.l2inv-doll-col {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+  width: 50px !important;
+  min-width: 50px !important;
+  max-width: 50px !important;
+  flex: 0 0 50px !important;
+}
+
+.l2inv-pd-slot, .equip-slot {
+  width: 50px !important;
+  height: 50px !important;
+  min-width: 50px !important;
+  max-width: 50px !important;
+  min-height: 50px !important;
+  max-height: 50px !important;
+  box-sizing: border-box !important;
+  background: #1a1611 !important;
+  border: 1px solid #4a3a2a !important;
+  border-radius: 3px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: relative !important;
+}
+
+/* === DESATIVAR RESIZE MANUAL === */
+#inventory-panel, .inventory-panel, #inventory-window, #tab-inventory, .l2inv-header-frame {
+  resize: none !important;
+  user-select: none;
+}
+
+/* === GRID FIXO DE 8 COLUNAS COM SCROLL VERTICAL === */
+#inventory-grid, .inventory-grid, .l2inv-grid {
+  display: grid !important;
+  grid-template-columns: repeat(8, 48px) !important; /* EXACTLY 8 COLUMNS */
+  grid-auto-rows: 48px !important;
+  gap: 4px !important;
+  padding: 6px !important;
+  background: rgba(10, 7, 4, 0.6) !important;
+  border: 1px solid #3c2e1e !important;
+  border-radius: 4px !important;
+  overflow-y: auto !important; /* SCROLL VERTICAL PARA NOVOS ITENS */
+  overflow-x: hidden !important;
+  max-height: 100% !important;
+  align-content: start !important;
+  justify-content: start !important;
+  flex: 1 1 auto !important;
+  box-sizing: border-box !important;
+}
+
+.inv-slot, .l2inv-slot {
+  width: 48px !important;
+  height: 48px !important;
+  min-width: 48px !important;
+  max-width: 48px !important;
+  min-height: 48px !important;
+  max-height: 48px !important;
+  background: #241e16 !important;
+  border: 1px solid #3d2e1e !important;
+  border-radius: 4px !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: relative !important;
+}
+
+.inventory-item-image {
+  width: 34px !important;
+  height: 34px !important;
+  object-fit: contain !important;
+}
+`;
 
 export function ensureInventoryStyles() {
-  const target = getRoot() || document.head;
-  if (!target) return;
-  if (target.querySelector('#gameui-css-link')) return;
+  const root = getRoot();
+  const targets = [root, document.head].filter(Boolean);
 
-  const link = document.createElement('link');
-  link.id = 'gameui-css-link';
-  link.rel = 'stylesheet';
-  link.href = 'src/ui/GameUI.css';
-  target.appendChild(link);
+  for (const t of targets) {
+    if (!t.querySelector('#gameui-styles-direct')) {
+      const style = document.createElement('style');
+      style.id = 'gameui-styles-direct';
+      style.textContent = INJECTED_GAMEUI_CSS;
+      t.appendChild(style);
+    }
+  }
 }
 
 export function updateInventoryUI(state, callbacks = {}) {

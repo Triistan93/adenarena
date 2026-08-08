@@ -226,35 +226,35 @@ export const IDLE_MARKUP = `
               <!-- Left Panel: 3-column Paperdoll Equipment Grid + Stats -->
               <div class="l2inv-left-paperdoll">
                 <div class="l2inv-paperdoll-grid">
-                  <!-- Column 1 (Left) -->
+                  <!-- Column 1 (Left - 6 slots) -->
                   <div class="l2inv-doll-col">
-                    <div class="l2inv-pd-slot equip-slot" data-slot="hair" title="Acessório de Cabeça">
+                    <div class="l2inv-pd-slot equip-slot" data-slot="hair" title="Máscara 1 / Acessório">
                       <span class="l2inv-pd-icon">👒</span>
                       <span class="l2inv-pd-item" id="pd-item-hair"></span>
                     </div>
-                    <div class="l2inv-pd-slot equip-slot" data-slot="gloves" title="Luvas">
-                      <span class="l2inv-pd-icon">🧤</span>
-                      <span class="l2inv-pd-item" id="pd-item-gloves"></span>
-                    </div>
-                    <div class="l2inv-pd-slot equip-slot" data-slot="weapon" title="Arma Principal">
-                      <span class="l2inv-pd-icon">⚔️</span>
-                      <span class="l2inv-pd-item" id="pd-item-weapon"></span>
+                    <div class="l2inv-pd-slot equip-slot" data-slot="earring1" title="Brinco 1">
+                      <span class="l2inv-pd-icon">💎</span>
+                      <span class="l2inv-pd-item" id="pd-item-earring1"></span>
                     </div>
                     <div class="l2inv-pd-slot equip-slot" data-slot="necklace" title="Colar">
                       <span class="l2inv-pd-icon">📿</span>
                       <span class="l2inv-pd-item" id="pd-item-necklace"></span>
                     </div>
+                    <div class="l2inv-pd-slot equip-slot" data-slot="weapon" title="Arma Principal">
+                      <span class="l2inv-pd-icon">⚔️</span>
+                      <span class="l2inv-pd-item" id="pd-item-weapon"></span>
+                    </div>
                     <div class="l2inv-pd-slot equip-slot" data-slot="ring" title="Anel 1">
                       <span class="l2inv-pd-icon">💍</span>
                       <span class="l2inv-pd-item" id="pd-item-ring"></span>
                     </div>
-                    <div class="l2inv-pd-slot equip-slot" data-slot="belt" title="Cinto">
-                      <span class="l2inv-pd-icon">🪢</span>
-                      <span class="l2inv-pd-item" id="pd-item-belt"></span>
+                    <div class="l2inv-pd-slot equip-slot" data-slot="talisman" title="Talismã">
+                      <span class="l2inv-pd-icon">🔮</span>
+                      <span class="l2inv-pd-item" id="pd-item-talisman"></span>
                     </div>
                   </div>
 
-                  <!-- Column 2 (Center) -->
+                  <!-- Column 2 (Center - 6 slots) -->
                   <div class="l2inv-doll-col">
                     <div class="l2inv-pd-slot equip-slot" data-slot="helmet" title="Capacete">
                       <span class="l2inv-pd-icon">⛑️</span>
@@ -264,49 +264,49 @@ export const IDLE_MARKUP = `
                       <span class="l2inv-pd-icon">🛡️</span>
                       <span class="l2inv-pd-item" id="pd-item-armor"></span>
                     </div>
-                    <div class="l2inv-pd-slot equip-slot" data-slot="legs" title="Perneiras">
+                    <div class="l2inv-pd-slot equip-slot" data-slot="legs" title="Calças / Perneiras">
                       <span class="l2inv-pd-icon">👖</span>
                       <span class="l2inv-pd-item" id="pd-item-legs"></span>
                     </div>
-                    <div class="l2inv-pd-slot equip-slot" data-slot="shield" title="Escudo / Secundária">
-                      <span class="l2inv-pd-icon">🛡️</span>
-                      <span class="l2inv-pd-item" id="pd-item-shield"></span>
+                    <div class="l2inv-pd-slot equip-slot" data-slot="gloves" title="Luvas">
+                      <span class="l2inv-pd-icon">🧤</span>
+                      <span class="l2inv-pd-item" id="pd-item-gloves"></span>
                     </div>
                     <div class="l2inv-pd-slot equip-slot" data-slot="boots" title="Botas">
                       <span class="l2inv-pd-icon">👢</span>
                       <span class="l2inv-pd-item" id="pd-item-boots"></span>
                     </div>
+                    <div class="l2inv-pd-slot equip-slot" data-slot="agathion" title="Agathion">
+                      <span class="l2inv-pd-icon">🧚‍♂️</span>
+                      <span class="l2inv-pd-item" id="pd-item-agathion"></span>
+                    </div>
                   </div>
 
-                  <!-- Column 3 (Right) -->
+                  <!-- Column 3 (Right - 6 slots) -->
                   <div class="l2inv-doll-col">
-                    <div class="l2inv-pd-slot equip-slot" data-slot="hair2" title="Máscara">
+                    <div class="l2inv-pd-slot equip-slot" data-slot="hair2" title="Máscara 2">
                       <span class="l2inv-pd-icon">🎭</span>
                       <span class="l2inv-pd-item" id="pd-item-hair2"></span>
-                    </div>
-                    <div class="l2inv-pd-slot equip-slot" data-slot="earring1" title="Brinco 1">
-                      <span class="l2inv-pd-icon">💎</span>
-                      <span class="l2inv-pd-item" id="pd-item-earring1"></span>
                     </div>
                     <div class="l2inv-pd-slot equip-slot" data-slot="earring2" title="Brinco 2">
                       <span class="l2inv-pd-icon">💎</span>
                       <span class="l2inv-pd-item" id="pd-item-earring2"></span>
                     </div>
-                    <div class="l2inv-pd-slot equip-slot" data-slot="ring2" title="Anel 2">
-                      <span class="l2inv-pd-icon">💍</span>
-                      <span class="l2inv-pd-item" id="pd-item-ring2"></span>
-                    </div>
                     <div class="l2inv-pd-slot equip-slot" data-slot="cloak" title="Capa">
                       <span class="l2inv-pd-icon">🧥</span>
                       <span class="l2inv-pd-item" id="pd-item-cloak"></span>
                     </div>
-                    <div class="l2inv-pd-slot equip-slot" data-slot="talisman" title="Talismã">
-                      <span class="l2inv-pd-icon">🔮</span>
-                      <span class="l2inv-pd-item" id="pd-item-talisman"></span>
+                    <div class="l2inv-pd-slot equip-slot" data-slot="shield" title="Escudo / Secundária">
+                      <span class="l2inv-pd-icon">🛡️</span>
+                      <span class="l2inv-pd-item" id="pd-item-shield"></span>
                     </div>
-                    <div class="l2inv-pd-slot equip-slot" data-slot="agathion" title="Agathion / Mascot">
-                      <span class="l2inv-pd-icon">🧚‍♂️</span>
-                      <span class="l2inv-pd-item" id="pd-item-agathion"></span>
+                    <div class="l2inv-pd-slot equip-slot" data-slot="ring2" title="Anel 2">
+                      <span class="l2inv-pd-icon">💍</span>
+                      <span class="l2inv-pd-item" id="pd-item-ring2"></span>
+                    </div>
+                    <div class="l2inv-pd-slot equip-slot" data-slot="belt" title="Cinto">
+                      <span class="l2inv-pd-icon">🪢</span>
+                      <span class="l2inv-pd-item" id="pd-item-belt"></span>
                     </div>
                   </div>
                 </div>
