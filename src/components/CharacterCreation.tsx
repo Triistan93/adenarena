@@ -435,11 +435,15 @@ export const CharacterCreation: React.FC<CharacterCreationProps> = ({
               {/* Character Card / Artwork */}
               <div className="relative mx-auto w-48 h-56 rounded-xl border border-amber-500/40 bg-gradient-to-b from-amber-500/10 via-black/60 to-black p-2 flex flex-col items-center justify-center shadow-xl overflow-hidden group">
                 <img
+                  key={`${selectedRace}_${selectedClass}_${gender}_${currentImg}`}
                   src={currentImg}
                   alt={currentRaceObj.name}
                   className="w-full h-full object-contain filter drop-shadow-[0_0_12px_rgba(245,158,11,0.4)] transition-transform duration-300 group-hover:scale-105"
                   onError={(e) => {
-                    (e.target as HTMLElement).style.display = 'none';
+                    const img = e.currentTarget;
+                    img.onerror = null;
+                    img.src = '/img/humanpalaM.png';
+                    img.style.display = 'block';
                   }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />

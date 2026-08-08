@@ -727,39 +727,34 @@ function ensureHeroStructure() {
   const heroCard = root.querySelector('#stage-hero, .stage-hero');
   if (!heroCard) return null;
 
-  let name = heroCard.querySelector('#hero-name, #h-name, .stage-hero-name, .h-name, .stage-entity-name');
-  let hpBar = heroCard.querySelector('#hero-hp-bar, #h-hp-bar, .stage-hp-bar-hero, .h-hp, .m-hp');
-  let mpBar = heroCard.querySelector('#hero-mp-bar, #h-mp-bar, .stage-mp-bar-hero, .h-mp');
-  let sprite = heroCard.querySelector('#hero-sprite-container, #hero-full, .hero-sprite-host, .hero-full, .h-art');
+  let name = heroCard.querySelector('#hero-name, .stage-hero-name');
+  let level = heroCard.querySelector('#hero-level, .stage-hero-level');
+  let hpBar = heroCard.querySelector('#hero-hp-bar, .stage-hp-bar-hero');
+  let mpBar = heroCard.querySelector('#hero-mp-bar, .stage-mp-bar-hero');
+  let sprite = heroCard.querySelector('#hero-sprite-container, .hero-sprite-host');
 
-  if (!name) {
-    name = mkEl('div');
-    name.id = 'hero-name';
-    name.className = 'stage-entity-name stage-hero-name';
-    heroCard.prepend(name);
-  }
-  if (!hpBar) {
-    hpBar = mkEl('div');
-    hpBar.id = 'hero-hp-bar';
-    hpBar.className = 'stage-hp-bar stage-hp-bar-hero';
-    hpBar.innerHTML = `<div id="hero-hp-fill" class="stage-hp-fill stage-hp-fill-hero"></div><span id="hero-hp-text" class="stage-hp-text stage-hp-text-hero">0 / 0</span>`;
-    heroCard.appendChild(hpBar);
-  }
-  if (!mpBar) {
-    mpBar = mkEl('div');
-    mpBar.id = 'hero-mp-bar';
-    mpBar.className = 'stage-mp-bar stage-mp-bar-hero';
-    mpBar.innerHTML = `<div id="hero-mp-fill" class="stage-mp-fill stage-mp-fill-hero"></div><span id="hero-mp-text" class="stage-mp-text stage-mp-text-hero">0 / 0</span>`;
-    heroCard.appendChild(mpBar);
-  }
-  if (!sprite) {
-    sprite = mkEl('div');
-    sprite.id = 'hero-sprite-container';
-    sprite.className = 'hero-sprite-host';
-    heroCard.appendChild(sprite);
+  if (!name || !level || !hpBar || !mpBar || !sprite) {
+    heroCard.innerHTML = `
+      <div id="hero-name" class="stage-entity-name stage-hero-name">—</div>
+      <div id="hero-level" class="stage-entity-level stage-hero-level">Level 1</div>
+      <div id="hero-hp-bar" class="stage-hp-bar stage-hp-bar-hero">
+        <div id="hero-hp-fill" class="stage-hp-fill stage-hp-fill-hero"></div>
+        <span id="hero-hp-text" class="stage-hp-text stage-hp-text-hero">HP: 0 / 0</span>
+      </div>
+      <div id="hero-mp-bar" class="stage-mp-bar stage-mp-bar-hero">
+        <div id="hero-mp-fill" class="stage-mp-fill stage-mp-fill-hero"></div>
+        <span id="hero-mp-text" class="stage-mp-text stage-mp-text-hero">MP: 0 / 0</span>
+      </div>
+      <div id="hero-sprite-container" class="hero-sprite-host"></div>
+    `;
+    name = heroCard.querySelector('#hero-name');
+    level = heroCard.querySelector('#hero-level');
+    hpBar = heroCard.querySelector('#hero-hp-bar');
+    mpBar = heroCard.querySelector('#hero-mp-bar');
+    sprite = heroCard.querySelector('#hero-sprite-container');
   }
 
-  return { card: heroCard, name, hpBar, mpBar, sprite };
+  return { card: heroCard, name, level, hpBar, mpBar, sprite };
 }
 
 function ensureMonsterStructure() {
@@ -767,31 +762,28 @@ function ensureMonsterStructure() {
   const monsterCard = root.querySelector('#stage-monster, .stage-monster');
   if (!monsterCard) return null;
 
-  let name = monsterCard.querySelector('#monster-name, #m-name, .stage-entity-name, .m-name');
-  let hpBar = monsterCard.querySelector('#monster-hp-bar, #m-hp-bar, .stage-hp-bar, .m-hp');
-  let sprite = monsterCard.querySelector('#monster-sprite-container, #m-art, .monster-sprite-host, .m-art');
+  let name = monsterCard.querySelector('#monster-name, .stage-entity-name');
+  let level = monsterCard.querySelector('#monster-level, .stage-monster-level');
+  let hpBar = monsterCard.querySelector('#monster-hp-bar, .stage-hp-bar');
+  let sprite = monsterCard.querySelector('#monster-sprite-container, .monster-sprite-host');
 
-  if (!name) {
-    name = mkEl('div');
-    name.id = 'monster-name';
-    name.className = 'stage-entity-name';
-    monsterCard.prepend(name);
-  }
-  if (!hpBar) {
-    hpBar = mkEl('div');
-    hpBar.id = 'monster-hp-bar';
-    hpBar.className = 'stage-hp-bar';
-    hpBar.innerHTML = `<div id="monster-hp-fill" class="stage-hp-fill"></div><span id="monster-hp-text" class="stage-hp-text">0 / 0</span>`;
-    monsterCard.appendChild(hpBar);
-  }
-  if (!sprite) {
-    sprite = mkEl('div');
-    sprite.id = 'monster-sprite-container';
-    sprite.className = 'monster-sprite-host';
-    monsterCard.appendChild(sprite);
+  if (!name || !level || !hpBar || !sprite) {
+    monsterCard.innerHTML = `
+      <div id="monster-name" class="stage-entity-name">—</div>
+      <div id="monster-level" class="stage-entity-level stage-monster-level">Level 1</div>
+      <div id="monster-hp-bar" class="stage-hp-bar">
+        <div id="monster-hp-fill" class="stage-hp-fill"></div>
+        <span id="monster-hp-text" class="stage-hp-text">HP: 0 / 0</span>
+      </div>
+      <div id="monster-sprite-container" class="monster-sprite-host"></div>
+    `;
+    name = monsterCard.querySelector('#monster-name');
+    level = monsterCard.querySelector('#monster-level');
+    hpBar = monsterCard.querySelector('#monster-hp-bar');
+    sprite = monsterCard.querySelector('#monster-sprite-container');
   }
 
-  return { card: monsterCard, name, hpBar, sprite };
+  return { card: monsterCard, name, level, hpBar, sprite };
 }
 
 export function renderStageHero(state) {
@@ -799,17 +791,21 @@ export function renderStageHero(state) {
   const structure = ensureHeroStructure();
   if (!structure?.card) return;
 
+  const heroName = state.charName || state.heroName || state.playerName || state.name || 'Tristan';
+  const heroLevel = state.level || 1;
+
   if (structure.name) {
-    const classDef = getClass(state.class);
-    const className = classDef?.name || state.class || 'Aventureiro';
-    const heroName = state.heroName || state.name || state.playerName || 'Herói';
-    structure.name.textContent = `${heroName} (Lv. ${state.level || 1})`;
+    structure.name.textContent = heroName;
   }
 
-  const curHp = state.hp !== undefined ? state.hp : 100;
-  const maxHp = state.maxHp || curHp || 100;
-  const curMp = state.mp !== undefined ? state.mp : 50;
-  const maxMp = state.maxMp || curMp || 50;
+  if (structure.level) {
+    structure.level.textContent = `Level ${heroLevel}`;
+  }
+
+  const curHp = Math.round(state.hp !== undefined ? state.hp : 100);
+  const maxHp = Math.round(state.maxHp || curHp || 100);
+  const curMp = Math.round(state.mp !== undefined ? state.mp : 50);
+  const maxMp = Math.round(state.maxMp || curMp || 50);
 
   updateBar('hero-hp-fill', curHp, maxHp);
   updateBar('hero-hp-bar', curHp, maxHp);
@@ -817,15 +813,16 @@ export function renderStageHero(state) {
   updateBar('hero-mp-bar', curMp, maxMp);
 
   const heroHpText = structure.card.querySelector('#hero-hp-text, .stage-hp-text-hero');
-  if (heroHpText) heroHpText.textContent = `${Math.round(curHp)} / ${Math.round(maxHp)}`;
+  if (heroHpText) heroHpText.textContent = `HP: ${curHp} / ${maxHp}`;
 
   const heroMpText = structure.card.querySelector('#hero-mp-text, .stage-mp-text-hero');
-  if (heroMpText) heroMpText.textContent = `${Math.round(curMp)} / ${Math.round(maxMp)}`;
+  if (heroMpText) heroMpText.textContent = `MP: ${curMp} / ${maxMp}`;
 
   if (structure.sprite && typeof heroSVG === 'function') {
     const race = state.race || state.heroRace || state.playerRace || 'human';
     const cls = state.class || state.heroClass || state.playerClass || 'fighter';
-    structure.sprite.innerHTML = heroSVG(race, cls);
+    const gender = state.gender || 'M';
+    structure.sprite.innerHTML = heroSVG(race, cls, gender);
   }
 }
 
@@ -841,26 +838,31 @@ export function renderStageMonster(state) {
 
   if (!m) {
     if (structure.name) structure.name.textContent = 'Procurando Inimigo...';
+    if (structure.level) structure.level.textContent = '';
     if (structure.sprite) structure.sprite.innerHTML = '';
     updateBar('monster-hp-fill', 0, 1);
     updateBar('monster-hp-bar', 0, 1);
-    const mHpText = structure.card.querySelector('#monster-hp-text, #m-hp-text, .stage-hp-text');
-    if (mHpText) mHpText.textContent = '0 / 0';
+    const mHpText = structure.card.querySelector('#monster-hp-text, .stage-hp-text');
+    if (mHpText) mHpText.textContent = 'HP: 0';
     return;
   }
 
   if (structure.name) {
-    structure.name.textContent = `${m.name || 'Monstro'} (Lv. ${m.level || 1})`;
+    structure.name.textContent = m.name || 'Monstro';
   }
 
-  const curHp = m.hp !== undefined ? m.hp : (m._maxHp || m.maxHp || 100);
-  const maxHp = m._maxHp || m.maxHp || curHp || 100;
+  if (structure.level) {
+    structure.level.textContent = `Level ${m.level || 1}`;
+  }
+
+  const curHp = Math.round(m.hp !== undefined ? m.hp : (m._maxHp || m.maxHp || 100));
+  const maxHp = Math.round(m._maxHp || m.maxHp || curHp || 100);
 
   updateBar('monster-hp-fill', curHp, maxHp);
   updateBar('monster-hp-bar', curHp, maxHp);
 
-  const monsterHpText = structure.card.querySelector('#monster-hp-text, #m-hp-text, .stage-hp-text');
-  if (monsterHpText) monsterHpText.textContent = `${Math.round(curHp)} / ${Math.round(maxHp)}`;
+  const monsterHpText = structure.card.querySelector('#monster-hp-text, .stage-hp-text');
+  if (monsterHpText) monsterHpText.textContent = `HP: ${curHp} / ${maxHp}`;
 
   if (structure.sprite && typeof monsterSVG === 'function') {
     const mId = m.id || m.monsterId || m.key || m.name || 'goblin';

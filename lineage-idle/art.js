@@ -5,33 +5,81 @@
 // available.  Pure functions — no DOM, no globals.
 // ================================================================
 
-// ---- Hero image map: race_class → image path ----
 const HERO_IMG = {
   human_fighter: "/img/humanpalaM.png",
+  human_fighter_m: "/img/humanpalaM.png",
+  human_fighter_f: "/img/humanpalaF.png",
   human_mage: "/img/humanmageF.png",
-  elf_fighter: "/img/elf_fighter.png",
-  elf_mage: "/img/elfmageM.png",         
-  elf_archer: "/img/elfswsF.png",
-  elf_mystic: "/img/elf_mage.png",
-  elf_sentinel: "/img/elfswsF.png",
+  human_mage_m: "/img/humanmageM.png",
+  human_mage_f: "/img/humanmageF.png",
+  human_warrior: "/img/humanpalaM.png",
+  human_knight: "/img/humanpalaM.png",
+  human_rogue: "/img/humanpalaM.png",
+  human_wizard: "/img/humanmageM.png",
+  human_cleric: "/img/humanmageF.png",
+  human_deathPilgrim: "/img/humanpalaM.png",
+  human_wargBase: "/img/humanpalaM.png",
+  human_assassinBase: "/img/humanpalaM.png",
+
+  elf_fighter: "/img/elfwswM.png",
+  elf_fighter_m: "/img/elfwswM.png",
+  elf_fighter_f: "/img/elfswsF.png",
+  elf_mage: "/img/elfmageM.png",
+  elf_mage_m: "/img/elfmageM.png",
+  elf_mage_f: "/img/elfmageF.png",
+  elf_elvenKnight: "/img/elfwswM.png",
+  elf_elvenScout: "/img/elfswsF.png",
+  elf_elvenWizard: "/img/elfmageM.png",
+  elf_oracle: "/img/elfmageF.png",
+
   darkelf_fighter: "/img/darkelfskM.png",
+  darkelf_fighter_m: "/img/darkelfskM.png",
+  darkelf_fighter_f: "/img/darkelfskF.png",
   darkelf_mage: "/img/darkelfmageF.png",
-  darkelf_assassin: "/img/darkelf_fighter.png",
-  darkelf_shillien: "/img/darkelf_mage.png",
-  darkelf_sorcerer: "/img/darkelf_mage.png",
+  darkelf_mage_m: "/img/darkelfmageM.png",
+  darkelf_mage_f: "/img/darkelfmageF.png",
+  darkelf_palusKnight: "/img/darkelfskM.png",
+  darkelf_darkWizard: "/img/darkelfmageM.png",
+  darkelf_shillienOracle: "/img/darkelfmageF.png",
+  darkelf_elfDeathPilgrim: "/img/darkelfskM.png",
+  darkelf_assassinBase: "/img/darkelfskF.png",
+
   orc_fighter: "/img/orcfighterM.png",
+  orc_fighter_m: "/img/orcfighterM.png",
+  orc_fighter_f: "/img/orcfighterF.png",
   orc_mage: "/img/orc_mage.png",
-  orc_destroyer: "/img/orcfighterM.png",
+  orc_orcRaider: "/img/orcfighterM.png",
   orc_monk: "/img/orcfighterM.png",
-  orc_overlord: "/img/orc_mage.png",
+  orc_shaman: "/img/orc_mage.png",
+  orc_orcRider: "/img/orcfighterM.png",
+
   dwarf_artisan: "/img/dwarfmaestroM.png",
+  dwarf_artisan_m: "/img/dwarfmaestroM.png",
+  dwarf_artisan_f: "/img/dwarfmaestroF.png",
   dwarf_fighter: "/img/dwarfmaestroM.png",
-  dwarf_warsmith: "/img/dwarfmaestroM.png",
+  dwarf_shinemakerS1: "/img/dwarfmaestroF.png",
+
   kamael_soulbreaker: "/img/kamaelshF.png",
+  kamael_soulbreaker_m: "/img/kamaelshM.png",
+  kamael_soulbreaker_f: "/img/kamaelshF.png",
   kamael_fighter: "/img/kamaelDM.png",
-  kamael_berserker: "/img/kamaelDM.png",
+  kamael_hatamoto: "/img/kamaelDM.png",
+
+  sylph_sylphGunner: "/img/sylphM.png",
+  sylph_sylphGunner_m: "/img/sylphM.png",
+  sylph_sylphGunner_f: "/img/sylphF.png",
+  sylph_fighter: "/img/sylphM.png",
+
+  highelf_divineTemplarS1: "/img/elfwswM.png",
+  highelf_elementWeaverS1: "/img/elfmageM.png",
+  highelf_fighter: "/img/elfwswM.png",
+  highelf_mage: "/img/elfmageM.png",
+
+  ertheia_bloodRoseS1: "/img/sylphF.png",
+  ertheia_marauder: "/img/sylphM.png",
+  ertheia_sayhaSeer: "/img/sylphF.png",
   ertheia_fighter: "/img/sylphM.png",
-  ertheia_mage: "/img/sylphF.png",
+  ertheia_mage: "/img/sylphF.png"
 };
 
 // Fallback by race only
@@ -42,7 +90,9 @@ const RACE_FALLBACK = {
   orc: "/img/orcfighterM.png",
   dwarf: "/img/dwarfmaestroM.png",
   kamael: "/img/kamaelDM.png",
-  ertheia: "/img/sylphM.png",
+  sylph: "/img/sylphM.png",
+  highelf: "/img/elfwswM.png",
+  ertheia: "/img/sylphM.png"
 };
 
 function resolveImg(path) {
@@ -52,17 +102,27 @@ function resolveImg(path) {
   return path;
 }
 
-const MAGE_CLASSES = new Set(['mage', 'wizard', 'cleric', 'sorcerer', 'necromancer', 'bishop', 'prophet', 'spellsinger', 'spellhowler', 'shillien', 'overlord']);
+const MAGE_CLASSES = new Set(['mage', 'wizard', 'cleric', 'sorcerer', 'necromancer', 'bishop', 'prophet', 'spellsinger', 'spellhowler', 'shillien', 'overlord', 'darkWizard', 'elementWeaverS1', 'sayhaSeer', 'bloodRoseS1']);
 
-function heroImgPath(race, cls) {
+function heroImgPath(race, cls, gender) {
+  race = String(race || 'human').toLowerCase();
+  cls = String(cls || 'fighter').toLowerCase();
+  const g = String(gender || 'M').toLowerCase();
+
+  const genderKey = `${race}_${cls}_${g}`;
+  if (HERO_IMG[genderKey]) return resolveImg(HERO_IMG[genderKey]);
+
   const directKey = `${race}_${cls}`;
   if (HERO_IMG[directKey]) return resolveImg(HERO_IMG[directKey]);
 
   const archetype = MAGE_CLASSES.has(cls) ? 'mage' : 'fighter';
+  const archGenderKey = `${race}_${archetype}_${g}`;
+  if (HERO_IMG[archGenderKey]) return resolveImg(HERO_IMG[archGenderKey]);
+
   const archKey = `${race}_${archetype}`;
   if (HERO_IMG[archKey]) return resolveImg(HERO_IMG[archKey]);
 
-  const fallback = RACE_FALLBACK[race] || "/img/human_fighter.png";
+  const fallback = RACE_FALLBACK[race] || "/img/humanpalaM.png";
   return resolveImg(fallback);
 }
 
