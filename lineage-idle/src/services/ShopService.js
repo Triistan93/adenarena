@@ -14,31 +14,34 @@ import { addToInventory } from './InventoryService.js';
  * @param {number} [qty=1]
  * @param {Object} [callbacks] — { log, updateAllUI, save, classSatisfies }
  */
-export function buyItem(state, itemId, qty = 1, callbacks = {}) {
+export function buyItem(state, itemId, qty = 1, rarity = 'common', callbacks = {}) {
   const gData = D();
   const def = gData?.ALL_ITEMS?.[itemId];
   if (!def) return;
 
-  const cost = (def.price || 100) * qty;
+  const basePrice = def.price || 100;
+  const cost = basePrice * qty;
+
   if (state.gold < cost) {
-    if (callbacks.log) callbacks.log('Not enough gold!', 'system');
+    if (callbacks.log) callbacks.log('Ouro insuficiente para realizar a compra!', 'system');
     return;
   }
-  if (def.req && def.req.level > state.level) {
-    if (callbacks.log) callbacks.log('Level too low.', 'system');
+  const reqLvl = def.req?.level || def.reqLvl || 1;
+  if (reqLvl > state.level) {
+    if (callbacks.log) callbacks.log('Nível insuficiente para comprar este item.', 'system');
     return;
   }
   if (def.classReq && callbacks.classSatisfies && !callbacks.classSatisfies(state.class, def.classReq)) {
-    if (callbacks.log) callbacks.log('Wrong class for this item.', 'system');
+    if (callbacks.log) callbacks.log('Sua classe não pode utilizar este item.', 'system');
     return;
   }
 
-  if (!addToInventory(state, itemId, qty, null, false, callbacks)) return;
+  if (!addToInventory(state, itemId, qty, rarity, false, callbacks)) return;
 
   state.gold -= cost;
-  if (callbacks.log) callbacks.log(`Bought ${qty}x ${def.name} for ${cost.toLocaleString()}g`, 'loot');
+  if (callbacks.log) callbacks.log(`🎁 Comprou ${qty}x ${def.name} por 💰 ${cost.toLocaleString()} Gold!`, 'loot');
 
-  if (callbacks.updateAllUI) callbacks.updateAllUI();
+  if (callbacks.updateAllUI) callbacks.updateAllUI(state);
   if (callbacks.save) callbacks.save();
 }
 

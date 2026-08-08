@@ -2707,6 +2707,163 @@ select:focus-visible {
   border-radius: 5px;
 }
 
+/* ============ MMORPG MERCHANT STYLES ============ */
+.mystic-timer-pill {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 11px;
+  color: #fbbf24;
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  padding: 3px 10px;
+  border-radius: 12px;
+  text-shadow: 0 0 6px rgba(245, 158, 11, 0.4);
+}
+
+.tab-tag-rarity {
+  font-size: 9px;
+  padding: 1px 6px;
+  border-radius: 8px;
+  margin-left: 4px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.tab-tag-rarity.tag-common { background: rgba(156, 163, 175, 0.2); color: #d1d5db; }
+.tab-tag-rarity.tag-rare { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+.tab-tag-rarity.tag-mystic { background: rgba(168, 85, 247, 0.2); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.4); }
+
+.shop-filter-bar {
+  background: rgba(15, 18, 26, 0.85);
+  border: 1px solid rgba(212, 167, 68, 0.2);
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin-bottom: 12px;
+}
+.filter-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.filter-label {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--gilt-bright);
+  min-width: 90px;
+}
+.filter-group {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.shop-filter-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.shop-filter-btn:hover {
+  background: rgba(212, 167, 68, 0.15);
+  color: #fff;
+  border-color: rgba(212, 167, 68, 0.4);
+}
+.shop-filter-btn.active {
+  background: linear-gradient(135deg, #b48a3c, #8a6424);
+  color: #fff;
+  border-color: #f59e0b;
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.3);
+}
+
+.shop-item-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(135deg, rgba(24, 28, 38, 0.95), rgba(15, 17, 23, 0.95));
+  border: 1px solid rgba(212, 167, 68, 0.25);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-bottom: 8px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  position: relative;
+  overflow: hidden;
+}
+.shop-item-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+.shop-item-card.grade-ng { border-left: 4px solid #9ca3af; }
+.shop-item-card.grade-d { border-left: 4px solid #22c55e; }
+.shop-item-card.grade-c { border-left: 4px solid #3b82f6; }
+.shop-item-card.grade-b { border-left: 4px solid #a855f7; }
+.shop-item-card.grade-a { border-left: 4px solid #f59e0b; }
+.shop-item-card.grade-s { border-left: 4px solid #ef4444; box-shadow: 0 0 12px rgba(239, 68, 68, 0.2); }
+
+.shop-item-card.rarity-epic {
+  border-color: rgba(168, 85, 247, 0.6);
+  box-shadow: inset 0 0 15px rgba(168, 85, 247, 0.15);
+}
+.shop-item-card.rarity-legendary {
+  border-color: rgba(245, 158, 11, 0.8);
+  box-shadow: inset 0 0 20px rgba(245, 158, 11, 0.2), 0 0 15px rgba(245, 158, 11, 0.3);
+  animation: legendaryGlow 3s infinite alternate;
+}
+@keyframes legendaryGlow {
+  0% { box-shadow: inset 0 0 15px rgba(245, 158, 11, 0.2), 0 0 10px rgba(245, 158, 11, 0.2); }
+  100% { box-shadow: inset 0 0 25px rgba(245, 158, 11, 0.4), 0 0 20px rgba(245, 158, 11, 0.5); }
+}
+
+.shop-item-icon-box {
+  width: 44px; height: 44px; flex: 0 0 44px;
+  background: rgba(10, 12, 18, 0.9);
+  border: 1px solid rgba(212, 167, 68, 0.3);
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+}
+.shop-item-icon-box img {
+  max-width: 100%; max-height: 100%; object-fit: contain;
+}
+
+.shop-item-meta { flex: 1 1 auto; min-width: 0; }
+.shop-item-title-line { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.shop-item-name { font-family: "Cinzel", serif; font-weight: 700; font-size: 13px; color: var(--gilt-bright); }
+.shop-grade-badge { font-family: "IBM Plex Mono", monospace; font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: 4px; color: #fff; }
+.shop-item-stats { display: flex; gap: 8px; font-size: 11px; margin-top: 2px; }
+.shop-item-desc { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+
+.shop-item-action { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+.shop-item-price-tag { font-family: "IBM Plex Mono", monospace; font-size: 12px; font-weight: 700; color: #fbbf24; }
+
+.buy-item-btn {
+  background: linear-gradient(180deg, #d4a744, #9a7322);
+  border: 1px solid #f59e0b;
+  color: #000;
+  font-family: "Cinzel", serif;
+  font-weight: 800;
+  font-size: 11px;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+.buy-item-btn:hover:not(:disabled) {
+  background: linear-gradient(180deg, #f59e0b, #b48a3c);
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+}
+.buy-item-btn:disabled {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.4);
+  cursor: not-allowed;
+}
+
 .inv-slot:hover,
 .shop-item:hover:not(.locked),
 .zone-item:hover:not(.locked),

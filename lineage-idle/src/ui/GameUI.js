@@ -1254,44 +1254,266 @@ export function updateSkillInfoPanel(state, callbacks = {}) {
 /* ═══════════════════════════════════════════════════════════════════════════
    6. SHOP & CRAFTING
 ═══════════════════════════════════════════════════════════════════════════ */
+let currentShopTab = 'gear';
+let currentShopGrade = 'all';
+let currentShopSlot = 'all';
+let currentShopQty = 1;
+
 export function updateShopUI(state, callbacks = {}) {
+  const root = getRoot();
   const goldEl = findElement('gold-count') || findElement('shop-gold');
   if (goldEl) goldEl.textContent = (state.gold || 0).toLocaleString();
 
   const container = findElement('shop-items-container') || findElement('shop-list');
   if (!container) return;
 
-  const gData = D();
-  const shopItems = gData?.SHOP_ITEMS || [];
+  // Bind shop filter events if not bound yet
+  if (!root._shopEventsBound) {
+    root._shopEventsBound = true;
 
-  container.innerHTML = shopItems.map(item => {
-    const def = gData?.ALL_ITEMS?.[item.itemId || item.id];
+    root.querySelectorAll('.shop-subtab').forEach(btn => {
+      btn.onclick = () => {
+        currentShopTab = btn.dataset.shoptab || 'gear';
+        root.querySelectorAll('.shop-subtab').forEach(b => b.classList.toggle('active', b === btn));
+        updateShopUI(state, callbacks);
+      };
+    });
+
+    root.querySelectorAll('#shop-grade-filters .shop-filter-btn').forEach(btn => {
+      btn.onclick = () => {
+        currentShopGrade = btn.dataset.shopgrade || 'all';
+        root.querySelectorAll('#shop-grade-filters .shop-filter-btn').forEach(b => b.classList.toggle('active', b === btn));
+        updateShopUI(state, callbacks);
+      };
+    });
+
+    root.querySelectorAll('#shop-slot-filters .shop-filter-btn').forEach(btn => {
+      btn.onclick = () => {
+        currentShopSlot = btn.dataset.shopslot || 'all';
+        root.querySelectorAll('#shop-slot-filters .shop-filter-btn').forEach(b => b.classList.toggle('active', b === btn));
+        updateShopUI(state, callbacks);
+      };
+    });
+
+    root.querySelectorAll('#shop-batch-filters .shop-filter-btn').forEach(btn => {
+      btn.onclick = () => {
+        currentShopQty = parseInt(btn.dataset.shopqty, 10) || 1;
+        root.querySelectorAll('#shop-batch-filters .shop-filter-btn').forEach(b => b.classList.toggle('active', b === btn));
+        updateShopUI(state, callbacks);
+      };
+    });
+  }
+
+  // Toggle batch row visibility based on active subtab
+  const batchRow = root.querySelector('#shop-batch-row');
+  if (batchRow) {
+    batchRow.style.display = (currentShopTab === 'potions') ? 'flex' : 'none';
+  }
+
+  // Toggle slot filter row visibility
+  const slotRow = root.querySelector('#shop-slot-filter-row');
+  if (slotRow) {
+    slotRow.style.display = (currentShopTab === 'gear' || currentShopTab === 'mystic') ? 'flex' : 'none';
+  }
+
+  // Toggle mystic timer visibility
+  const mysticTimerEl = root.querySelector('#mystic-shop-timer');
+  const mysticCountdown = root.querySelector('#mystic-timer-countdown');
+
+  const now = Date.now();
+  const THREE_HOURS = 3 * 3600 * 1000;
+
+  // Initialize or check Mystic Shop 3-hour rotation reset
+  if (!state.mysticShopLastReset || (now - state.mysticShopLastReset >= THREE_HOURS)) {
+    state.mysticShopLastReset = now;
+    state.mysticShopInventory = rollMysticStock();
+  }
+
+  if (mysticTimerEl) {
+    mysticTimerEl.style.display = (currentShopTab === 'mystic') ? 'inline-flex' : 'none';
+    if (mysticCountdown) {
+      const remainingMs = Math.max(0, THREE_HOURS - (now - state.mysticShopLastReset));
+      const hours = Math.floor(remainingMs / (3600 * 1000));
+      const mins = Math.floor((remainingMs % (3600 * 1000)) / (60 * 1000));
+      const secs = Math.floor((remainingMs % (60 * 1000)) / 1000);
+      mysticCountdown.textContent = `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+  }
+
+  const gData = D();
+  const allItems = gData?.ALL_ITEMS || {};
+  let itemsToDisplay = [];
+
+  const charLvl = state.level || 1;
+
+  if (currentShopTab === 'gear') {
+    // Mercador Comum — Apenas Equipamentos Comuns (Cinza)
+    itemsToDisplay = Object.values(allItems).filter(def => {
+      if (!def || !def.id || !def.slot) return false;
+      const isEquip = ['weapon', 'armor', 'helmet', 'gloves', 'boots', 'legs', 'shield', 'ring', 'necklace', 'earring', 'belt', 'cloak'].includes(def.slot);
+      return isEquip;
+    }).map(def => ({ def, rarity: 'common' }));
+  } else if (currentShopTab === 'potions') {
+    // Consumíveis & Poções (Cinza)
+    itemsToDisplay = Object.values(allItems).filter(def => {
+      if (!def || !def.id) return false;
+      return def.slot === 'potion' || def.slot === 'consumable' || def.slot === 'powerup' || def.slot === 'scroll';
+    }).map(def => ({ def, rarity: 'common' }));
+  } else if (currentShopTab === 'class') {
+    // Aba Classe — Até Azul (Raro)
+    itemsToDisplay = Object.values(allItems).filter(def => {
+      if (!def || !def.id) return false;
+      return def.classReq || def.slot === 'class' || def.id.includes('scroll_of_') || def.id.includes('class_');
+    }).map(def => ({ def, rarity: 'rare' }));
+  } else if (currentShopTab === 'mystic') {
+    // Mercador Místico Ancestral — Estoque Rotação 3h com RNG Raro / Épico (1/1000) / Lendário (1/10000)
+    itemsToDisplay = (state.mysticShopInventory || []).map(item => {
+      const def = allItems[item.itemId || item.id] || item;
+      return { def, rarity: item.rarity || 'rare' };
+    });
+  }
+
+  // Filter by Grade / Level
+  if (currentShopGrade !== 'all') {
+    itemsToDisplay = itemsToDisplay.filter(({ def }) => {
+      const grade = getItemGradeCode(def);
+      return grade === currentShopGrade;
+    });
+  }
+
+  // Filter by Slot / Type
+  if (currentShopSlot !== 'all') {
+    itemsToDisplay = itemsToDisplay.filter(({ def }) => {
+      const slot = def.slot || '';
+      if (currentShopSlot === 'weapon') return slot === 'weapon' && (def.atk > 0 && def.matk === 0);
+      if (currentShopSlot === 'mweapon') return slot === 'weapon' && def.matk > 0;
+      if (currentShopSlot === 'heavy') return slot === 'armor' && (def.desc || '').toLowerCase().includes('heavy');
+      if (currentShopSlot === 'light') return slot === 'armor' && (def.desc || '').toLowerCase().includes('light');
+      if (currentShopSlot === 'robe') return slot === 'armor' && (def.desc || '').toLowerCase().includes('robe');
+      if (currentShopSlot === 'jewel') return ['ring', 'necklace', 'earring'].includes(slot);
+      return true;
+    });
+  }
+
+  if (itemsToDisplay.length === 0) {
+    container.innerHTML = `<div style="padding:20px; text-align:center; color:var(--text-muted); font-size:12px;">Nenhum item encontrado para os filtros selecionados.</div>`;
+    return;
+  }
+
+  const batchQty = (currentShopTab === 'potions') ? currentShopQty : 1;
+
+  container.innerHTML = itemsToDisplay.map(({ def, rarity }) => {
     if (!def) return '';
 
-    const price = (def.price || 100) * (item.qty || 1);
-    const canAfford = (state.gold || 0) >= price;
+    const reqLvl = def.req?.level || def.reqLvl || 1;
+    const isLevelOk = charLvl >= reqLvl;
+
+    const basePrice = def.price || 100;
+    const totalPrice = basePrice * batchQty;
+    const canAfford = (state.gold || 0) >= totalPrice;
+
+    const gradeInfo = getItemGrade(def);
+    const statsText = buildShopStatsSummary(def);
+
+    let buyText = `Comprar (${batchQty}x)`;
+    if (!isLevelOk) buyText = `🔒 Requer Lv. ${reqLvl}`;
+    else if (!canAfford) buyText = `💰 Gold Insuficiente`;
 
     return `
-      <div class="shop-item-card">
-        <div class="shop-item-icon">${getItemIcon(def || item)}</div>
-        <div class="shop-item-details">
-          <div class="shop-item-name">${def.name}</div>
-          <div class="shop-item-desc">${def.desc || ''}</div>
-          <div class="shop-item-price">💰 ${price.toLocaleString()} Gold</div>
+      <div class="shop-item-card grade-${gradeInfo.code} rarity-${rarity}">
+        <div class="shop-item-icon-box">
+          ${getItemIcon(def)}
         </div>
-        <button class="buy-item-btn" data-buy="${def.id || item.itemId}" ${!canAfford ? 'disabled' : ''}>
-          Comprar
-        </button>
+        <div class="shop-item-meta">
+          <div class="shop-item-title-line">
+            <span class="shop-item-name">${def.name}</span>
+            <span class="shop-grade-badge" style="background:${gradeInfo.color};">${gradeInfo.label}</span>
+            ${rarity !== 'common' ? `<span class="tab-tag-rarity tag-${rarity}">${rarity.toUpperCase()}</span>` : ''}
+          </div>
+          ${statsText ? `<div class="shop-item-stats">${statsText}</div>` : ''}
+          <div class="shop-item-desc">${def.desc || ''}</div>
+        </div>
+        <div class="shop-item-action">
+          <div class="shop-item-price-tag">💰 ${totalPrice.toLocaleString()} Gold</div>
+          <button class="buy-item-btn" data-buy="${def.id}" data-qty="${batchQty}" data-rarity="${rarity}" ${(!canAfford || !isLevelOk) ? 'disabled' : ''}>
+            ${buyText}
+          </button>
+        </div>
       </div>
     `;
   }).join('');
 
   container.querySelectorAll('[data-buy]').forEach(btn => {
     btn.onclick = () => {
-      if (callbacks.buyItem) callbacks.buyItem(btn.dataset.buy, 1);
-      else if (typeof window !== 'undefined' && typeof window.buyItem === 'function') window.buyItem(btn.dataset.buy, 1);
+      const qty = parseInt(btn.dataset.qty, 10) || 1;
+      const rarity = btn.dataset.rarity || 'common';
+      if (callbacks.buyItem) callbacks.buyItem(btn.dataset.buy, qty, rarity);
+      else if (typeof window !== 'undefined' && typeof window.buyItem === 'function') window.buyItem(btn.dataset.buy, qty, rarity);
     };
   });
+}
+
+function getItemGradeCode(item) {
+  const lvl = item.req?.level || item.reqLvl || 1;
+  if (lvl >= 76) return 's';
+  if (lvl >= 61) return 'a';
+  if (lvl >= 52) return 'b';
+  if (lvl >= 40) return 'c';
+  if (lvl >= 20) return 'd';
+  return 'ng';
+}
+
+function getItemGrade(item) {
+  const lvl = item.req?.level || item.reqLvl || 1;
+  if (lvl >= 76) return { code: 's', label: 'S-Grade', color: '#ef4444', minLvl: 76 };
+  if (lvl >= 61) return { code: 'a', label: 'A-Grade', color: '#f59e0b', minLvl: 61 };
+  if (lvl >= 52) return { code: 'b', label: 'B-Grade', color: '#a855f7', minLvl: 52 };
+  if (lvl >= 40) return { code: 'c', label: 'C-Grade', color: '#3b82f6', minLvl: 40 };
+  if (lvl >= 20) return { code: 'd', label: 'D-Grade', color: '#22c55e', minLvl: 20 };
+  return { code: 'ng', label: 'No-Grade', color: '#9ca3af', minLvl: 1 };
+}
+
+function buildShopStatsSummary(def) {
+  const parts = [];
+  if (def.atk) parts.push(`<span style="color:#f59e0b;">⚔️ +${def.atk} P.Atk</span>`);
+  if (def.matk) parts.push(`<span style="color:#a78bfa;">🔮 +${def.matk} M.Atk</span>`);
+  if (def.def) parts.push(`<span style="color:#60a5fa;">🛡️ +${def.def} P.Def</span>`);
+  if (def.mdef) parts.push(`<span style="color:#f472b6;">✨ +${def.mdef} M.Def</span>`);
+  if (def.eva) parts.push(`<span style="color:#34d399;">👟 +${def.eva} Esquiva</span>`);
+  if (def.crit) parts.push(`<span style="color:#fbbf24;">⚡ +${def.crit}% Crítico</span>`);
+  return parts.join(' · ');
+}
+
+function rollMysticStock() {
+  const gData = typeof window !== 'undefined' ? (window.EchoData || window.GameData) : null;
+  const allItems = gData?.ALL_ITEMS || {};
+  const equipIds = Object.keys(allItems).filter(id => {
+    const def = allItems[id];
+    return def && def.slot && def.slot !== 'potion' && def.slot !== 'material';
+  });
+
+  if (equipIds.length === 0) return [];
+
+  const stock = [];
+  const count = 6;
+
+  for (let i = 0; i < count; i++) {
+    const randomId = equipIds[Math.floor(Math.random() * equipIds.length)];
+    const rand = Math.random();
+    let rarity = 'rare';
+
+    if (rand <= 0.0001) {
+      rarity = 'legendary'; // 1 in 10,000 (0.01%)
+    } else if (rand <= 0.001) {
+      rarity = 'epic'; // 1 in 1,000 (0.1%)
+    } else {
+      rarity = 'rare'; // Blue default
+    }
+
+    stock.push({ itemId: randomId, rarity });
+  }
+
+  return stock;
 }
 
 export function updateCraftUI(state, callbacks = {}) {

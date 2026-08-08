@@ -438,16 +438,67 @@ export const IDLE_MARKUP = `
           <!-- Shop Tab -->
           <div id="tab-shop" class="tab-pane">
             <div class="shop-head">
-              <h3>Guilda dos Mercadores de Aden</h3>
-              <span class="shop-gold-pill">🪙 <span id="shop-gold">0</span></span>
+              <div>
+                <h3 style="margin:0; font-family:'Cinzel',serif; color:var(--gilt-bright);">Guilda dos Mercadores de Aden</h3>
+                <p style="margin:2px 0 0 0; font-size:11px; color:var(--text-muted);">Comércio imperial de equipamentos, consumíveis e relíquias místicas</p>
+              </div>
+              <div style="display:flex; flex-direction:column; align-items:flex-end; gap:4px;">
+                <span class="shop-gold-pill">💰 <span id="shop-gold">0</span> Gold</span>
+                <span id="mystic-shop-timer" class="mystic-timer-pill" style="display:none;">⏳ Restoque Místico: <strong id="mystic-timer-countdown">03:00:00</strong></span>
+              </div>
             </div>
+
+            <!-- Subtabs: Main Category Tabs -->
             <div class="shop-subtabs">
-              <button class="shop-subtab active" data-shoptab="gear">⚔ Equipamentos</button>
-              <button class="shop-subtab" data-shoptab="potions">🧪 Porções</button>
-              <button class="shop-subtab" data-shoptab="powerups">✨ Encantamentos</button>
-              <button class="shop-subtab" data-shoptab="class">🎖 Classe</button>
-              <button class="shop-subtab" data-shoptab="mystic">✦ Místico</button>
+              <button class="shop-subtab active" data-shoptab="gear">⚔️ Equipamentos <span class="tab-tag-rarity tag-common">Cinza</span></button>
+              <button class="shop-subtab" data-shoptab="potions">🧪 Consumíveis <span class="tab-tag-rarity tag-common">Cinza</span></button>
+              <button class="shop-subtab" data-shoptab="class">🎖️ Ordem de Classe <span class="tab-tag-rarity tag-rare">Até Azul</span></button>
+              <button class="shop-subtab" data-shoptab="mystic">✦ Mercador Místico <span class="tab-tag-rarity tag-mystic">RNG Ancestral</span></button>
             </div>
+
+            <!-- Filters Bar (Grade & Slot Filters) -->
+            <div class="shop-filter-bar" id="shop-filter-bar">
+              <!-- Grade Filter Row -->
+              <div class="filter-row">
+                <span class="filter-label">Nível / Grau:</span>
+                <div class="filter-group" id="shop-grade-filters">
+                  <button class="shop-filter-btn active" data-shopgrade="all">Todos</button>
+                  <button class="shop-filter-btn grade-btn-ng" data-shopgrade="ng">No-Grade (1-19)</button>
+                  <button class="shop-filter-btn grade-btn-d" data-shopgrade="d">D-Grade (20-39)</button>
+                  <button class="shop-filter-btn grade-btn-c" data-shopgrade="c">C-Grade (40-51)</button>
+                  <button class="shop-filter-btn grade-btn-b" data-shopgrade="b">B-Grade (52-60)</button>
+                  <button class="shop-filter-btn grade-btn-a" data-shopgrade="a">A-Grade (61-75)</button>
+                  <button class="shop-filter-btn grade-btn-s" data-shopgrade="s">S-Grade (76+)</button>
+                </div>
+              </div>
+
+              <!-- Slot Filter Row -->
+              <div class="filter-row" id="shop-slot-filter-row" style="margin-top:6px;">
+                <span class="filter-label">Tipo de Item:</span>
+                <div class="filter-group" id="shop-slot-filters">
+                  <button class="shop-filter-btn active" data-shopslot="all">Todos os Tipos</button>
+                  <button class="shop-filter-btn" data-shopslot="weapon">⚔️ Armas Físicas</button>
+                  <button class="shop-filter-btn" data-shopslot="mweapon">🔮 Armas Mágicas</button>
+                  <button class="shop-filter-btn" data-shopslot="heavy">🛡️ Armadura Pesada</button>
+                  <button class="shop-filter-btn" data-shopslot="light">🥋 Armadura Leve</button>
+                  <button class="shop-filter-btn" data-shopslot="robe">👘 Robe Mágico</button>
+                  <button class="shop-filter-btn" data-shopslot="jewel">📿 Joias &amp; Acessórios</button>
+                </div>
+              </div>
+
+              <!-- Batch Buy Controls (for Potions & Consumables) -->
+              <div class="filter-row" id="shop-batch-row" style="display:none; margin-top:6px;">
+                <span class="filter-label">Qtd. Compra em Lote:</span>
+                <div class="filter-group" id="shop-batch-filters">
+                  <button class="shop-filter-btn active" data-shopqty="1">1x</button>
+                  <button class="shop-filter-btn" data-shopqty="10">10x</button>
+                  <button class="shop-filter-btn" data-shopqty="50">50x</button>
+                  <button class="shop-filter-btn" data-shopqty="100">100x</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Shop Items Grid -->
             <div class="shop-list" id="shop-list"></div>
           </div>
 

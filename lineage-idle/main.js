@@ -1404,8 +1404,8 @@ function renderShopMystic(list) {
 
 function fmtCountdown(ms) { const s = Math.max(0, Math.floor(ms / 1000)), m = Math.floor(s / 60), ss = s % 60; return `${m}:${ss.toString().padStart(2,'0')}`; }
 
-function buyItem(itemId, qty = 1) {
-  return serviceBuyItem(state, itemId, qty, { log, updateAllUI, save, classSatisfies });
+function buyItem(itemId, qty = 1, rarity = 'common') {
+  return serviceBuyItem(state, itemId, qty, rarity, { log, updateAllUI, save, classSatisfies });
 }
 
 function buyMysticItem(itemId, rarity) {
@@ -3850,6 +3850,7 @@ export function init() {
   try {
     // Expose global action handlers to window for inline HTML handlers & global events
     window.registerCodexItem = registerCodexItem;
+    window.buyItem = buyItem;
     window.depositToWarehouse = depositToWarehouse;
     window.withdrawFromWarehouse = withdrawFromWarehouse;
     window.depositAllToWarehouse = depositAllToWarehouse;
