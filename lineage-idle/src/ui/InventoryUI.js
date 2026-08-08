@@ -319,10 +319,14 @@ const INVENTORY_CSS = `
 /* ═══════════ GRID DE ITENS — auto-fill preenche a largura ═══════════ */
 #inventory-grid, .inventory-grid {
   display: grid !important;
-  grid-template-columns: repeat(auto-fill, 40px) !important;
+  grid-template-columns: repeat(7, 40px) !important;
+  grid-template-rows: repeat(8, 40px) !important;
   grid-auto-rows: 40px !important;
+  grid-auto-flow: row !important;
   gap: 5px !important;
   padding: 8px !important;
+  width: max-content !important;
+  max-width: 100% !important;
   background: radial-gradient(ellipse at top, #241a10 0%, #14100a 75%) !important;
   border: 1px solid #3a2a1a !important;
   border-radius: 4px !important;
