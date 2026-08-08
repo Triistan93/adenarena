@@ -79,11 +79,27 @@ export const IDLE_MARKUP = `
             <button id="speed-toggle-btn" class="combat-ctrl-btn" title="Velocidade do combate (1x Normal ou 2x Turbo)">⏩ Velocidade: 1x</button>
           </div>
           <div class="stage-vs" aria-hidden="true">&#9876;</div>
-          <div class="stage-hero" id="stage-hero"></div>
+          <div class="stage-hero" id="stage-hero">
+            <div class="stage-entity-name stage-hero-name" id="hero-name">Tristan</div>
+            <div class="stage-entity-level stage-hero-level" id="hero-level">Level 1</div>
+            <div class="stage-hp-bar stage-hp-bar-hero" id="hero-hp-bar">
+              <div class="stage-hp-fill stage-hp-fill-hero" id="hero-hp-fill"></div>
+              <span class="stage-hp-text stage-hp-text-hero" id="hero-hp-text">HP: 100 / 100</span>
+            </div>
+            <div class="stage-mp-bar stage-mp-bar-hero" id="hero-mp-bar">
+              <div class="stage-mp-fill stage-mp-fill-hero" id="hero-mp-fill"></div>
+              <span class="stage-mp-text stage-mp-text-hero" id="hero-mp-text">MP: 50 / 50</span>
+            </div>
+            <div class="hero-sprite-host" id="hero-sprite-container"></div>
+          </div>
           <div class="stage-monster" id="stage-monster">
-            <div class="m-name" id="m-name"></div>
-            <div class="m-hp"><div class="m-hp-fill" id="m-hp-fill"></div></div>
-            <div class="m-art" id="m-art"></div>
+            <div class="stage-entity-name" id="monster-name">Procurando Inimigo...</div>
+            <div class="stage-entity-level stage-monster-level" id="monster-level">Level 1</div>
+            <div class="stage-hp-bar" id="monster-hp-bar">
+              <div class="stage-hp-fill" id="monster-hp-fill"></div>
+              <span class="stage-hp-text" id="monster-hp-text">HP: 0 / 0</span>
+            </div>
+            <div class="monster-sprite-host" id="monster-sprite-container"></div>
           </div>
           <div class="stage-floats" id="stage-floats"></div>
         </div>

@@ -132,8 +132,12 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
 
     const newCharState: any = {
       charName: data.charName,
+      heroName: data.charName,
+      playerName: data.charName,
+      name: data.charName,
       race: data.race,
       class: data.className,
+      gender: data.gender || 'M',
       level: 1,
       xp: 0,
       sp: 10,

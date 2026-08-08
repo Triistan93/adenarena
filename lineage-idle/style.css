@@ -2410,7 +2410,7 @@ select:focus-visible {
   pointer-events: none;
 }
 
-.m-art, .hero-full {
+.hero-sprite-host, .monster-sprite-host, .m-art, .hero-full {
   flex: 1 1 auto;
   width: 100%;
   height: 100%;
@@ -2421,7 +2421,7 @@ select:focus-visible {
   overflow: hidden;
 }
 
-.stage-hero .hero-full img, .stage-monster .mon-svg img, .stage-monster .mon-svg {
+.hero-sprite-host img, .monster-sprite-host img, .stage-hero .hero-full img, .stage-monster .mon-svg img, .stage-monster .mon-svg {
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
