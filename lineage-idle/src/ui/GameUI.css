@@ -108,13 +108,16 @@
   box-sizing: border-box;
 }
 
-/* ═══════════════ PAPERDOLL CLÁSSICO FIXO (175px LARGURA) ═══════════════ */
+/* ═══════════════ PAPERDOLL (LARGURA FLUIDA, 150–175px) ═══════════════
+   Antes era travado em 175px fixos; em painéis mais estreitos isso empurrava
+   o grid de itens para fora da área visível. Agora encolhe até 150px antes
+   de o grid começar a ceder espaço. */
 #tab-inventory .l2inv-left-paperdoll,
 .l2inv-left-paperdoll {
-  width: 175px;
-  min-width: 175px;
+  width: clamp(150px, 22%, 175px);
+  min-width: 150px;
   max-width: 175px;
-  flex: 0 0 175px;
+  flex: 0 1 175px;
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -192,7 +195,11 @@
   overflow: hidden;
 }
 
-/* ═══════════════ GRID FIXO DE 10x8 COM SCROLL VERTICAL ═══════════════ */
+/* ═══════════════ GRID FLUIDO DE 10 COLUNAS COM SCROLL VERTICAL ═══════════════
+   Antes: colunas/slots em px fixos (38px) deixavam espaço morto ou estouravam
+   o painel dependendo da largura disponível. Agora o grid preenche 100% da
+   largura do container pai e as células se ajustam via fr, mantendo o
+   tamanho mínimo/máximo dentro de uma faixa confortável. */
 #tab-inventory #inventory-grid,
 #tab-inventory .inventory-grid,
 #tab-inventory .l2inv-grid,
@@ -200,21 +207,22 @@
 .inventory-grid,
 .l2inv-grid {
   display: grid;
-  grid-template-columns: repeat(10, 38px); /* 10 COLUNAS FIXAS DE 38px */
-  grid-auto-rows: 38px;                     /* LINHAS FIXAS DE 38px */
+  grid-template-columns: repeat(10, minmax(0, 1fr)); /* 10 COLUNAS FLUIDAS */
+  grid-auto-rows: minmax(34px, 1fr);
   gap: 3px;
   padding: 6px;
+  width: 100%;
   background: rgba(10, 7, 4, 0.85);
   border: 2px solid #3a2a1a;
   border-radius: 4px;
-  height: 337px;                            /* EXATAMENTE 8 LINHAS VISÍVEIS */
-  max-height: 337px;
-  overflow-y: scroll;                       /* SIDEBAR DE ROLAGEM VERTICAL */
+  max-height: 337px;                        /* ~8 LINHAS VISÍVEIS, ROLA A PARTIR DAÍ */
+  overflow-y: auto;
   overflow-x: hidden;
   box-sizing: border-box;
   align-content: start;
-  justify-content: start;
-  flex: 0 0 auto;
+  justify-content: stretch;
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 #inventory-grid::-webkit-scrollbar,
@@ -236,12 +244,10 @@
 #tab-inventory .inv-slot,
 .inv-slot,
 .l2inv-slot {
-  width: 38px;
-  height: 38px;
-  min-width: 38px;
-  max-width: 38px;
-  min-height: 38px;
-  max-height: 38px;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1 / 1;    /* SEMPRE QUADRADO, INDEPENDENTE DA LARGURA DO PAINEL */
+  min-width: 0;
   background: #241e16;
   border: 1px solid #5a452a; /* LIMITADORES / LINHAS CLARAS */
   border-radius: 3px;
@@ -254,6 +260,12 @@
   padding: 2px;
   position: relative;
   cursor: pointer;
+  transition: border-color .12s, transform .12s;
+}
+#tab-inventory .inv-slot:not(.empty):hover,
+.inv-slot:not(.empty):hover {
+  border-color: #c9a227;
+  transform: translateY(-1px);
 }
 
 #tab-inventory .inv-slot.empty,
@@ -265,8 +277,10 @@
 }
 
 .inventory-item-image {
-  width: 24px;
-  height: 24px;
+  width: 70%;
+  height: 70%;
+  max-width: 28px;
+  max-height: 28px;
   object-fit: contain;
 }
 
@@ -470,3 +484,120 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   DIORAMA DE BATALHA — CARD PADRÃO PARA HERÓI E MONSTRO
+   Antes: o card do herói e o do monstro não compartilhavam nenhum estilo
+   (moldura, nome e barra de vida ficavam soltos e posicionados de forma
+   diferente em cada um). Esta seção define UM padrão único aplicado aos
+   dois — só a paleta de cor muda (azul para o herói, vermelho para o
+   monstro) para diferenciar quem é quem.
+═══════════════════════════════════════════════════════════════════════════ */
+#stage-hero, .stage-hero,
+#stage-monster, .stage-monster {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  height: 100%;
+  min-height: 140px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-sizing: border-box;
+  background: linear-gradient(180deg, rgba(20, 16, 10, .1) 0%, rgba(8, 6, 4, .78) 100%);
+  border: 1px solid rgba(212, 175, 55, .35);
+  box-shadow: inset 0 0 26px rgba(0, 0, 0, .55), 0 4px 14px rgba(0, 0, 0, .35);
+}
+
+/* Nome, sempre centralizado no topo, em pílula — igual para os dois lados */
+.stage-entity-name {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  max-width: calc(100% - 16px);
+  padding: 3px 12px;
+  font-family: "Cinzel", serif;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: .2px;
+  color: #f0d090;
+  background: rgba(10, 8, 6, .82);
+  border: 1px solid rgba(212, 175, 55, .45);
+  border-radius: 999px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.stage-hero-name { color: #a8d4ff; border-color: rgba(96, 165, 250, .45); }
+
+/* Área da arte (SVG do herói/monstro) — mesma proporção nos dois cards */
+.hero-sprite-host, .monster-sprite-host {
+  flex: 1 1 auto;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 8px 34px;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+.hero-sprite-host svg, .monster-sprite-host svg {
+  max-width: 82%;
+  max-height: 100%;
+  filter: drop-shadow(0 10px 12px rgba(0, 0, 0, .55));
+}
+
+/* Barras de HP/MP — sempre ancoradas na base do card, nunca soltas */
+.stage-hp-bar, .stage-mp-bar {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  height: 14px;
+  z-index: 3;
+  border-radius: 7px;
+  overflow: hidden;
+  background: rgba(8, 6, 4, .82);
+  border: 1px solid #4a3a2a;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, .6);
+}
+.stage-hp-bar { bottom: 8px; }
+.stage-mp-bar-hero { bottom: 26px; }
+
+.stage-hp-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #7a1414, #e34747);
+  transition: width .25s ease;
+}
+.stage-mp-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #14357a, #4778e3);
+  transition: width .25s ease;
+}
+
+.stage-hp-text, .stage-mp-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 1px 1px 0 #000, -1px -1px 0 #000;
+  pointer-events: none;
+}
+
+/* Fileira que abriga os dois cards lado a lado no palco de combate */
+.stage-battle-row {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: 16px;
+  width: 100%;
+  height: 100%;
+}
+.stage-battle-row > * { flex: 1 1 0; min-width: 0; }
