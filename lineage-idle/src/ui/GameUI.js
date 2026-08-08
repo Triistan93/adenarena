@@ -1,15 +1,6 @@
 /**
  * GameUI.js — Módulo unificado de interface gráfica do Lineage Idle.
  * Consolida TooltipUI, InventoryUI, StageUI, SkillsUI, ShopUI e AppLayout.
- *
- * NOTA IMPORTANTE SOBRE CSS (leia antes de mexer em estilos):
- * O jogo roda dentro de uma Shadow DOM (#idle-host.shadowRoot — ver getRoot()
- * abaixo). Uma folha de estilo externa como GameUI.css NÃO atravessa a
- * fronteira da Shadow DOM sozinha; por isso os estilos deste módulo são
- * injetados como uma tag <style> DIRETAMENTE dentro da shadow root (função
- * ensureGameUIStyles, mais abaixo). GameUI.css é mantido como referência /
- * fonte legível do mesmo conteúdo, mas quem efetivamente estiliza a tela é
- * o bloco injetado aqui. Editar só o .css sem espelhar aqui não terá efeito.
  */
 
 import { D, ALL_EQUIP_SLOTS, TIER_NAMES } from '../core/GameConfig.js';
@@ -252,73 +243,68 @@ function createEquipmentSlotDynamically(slot) {
   return slotEl;
 }
 
-const GAMEUI_CSS = `
-/* ═══════════ PAPERDOLL (LARGURA FLUIDA) ═══════════ */
+const INJECTED_GAMEUI_CSS = `
+/* === CONFINAMENTO DO PAPERDOLL (175px FIXOS) === */
 #tab-inventory .l2inv-left-paperdoll,
 .l2inv-left-paperdoll {
-  width: clamp(150px, 22%, 175px) !important;
-  min-width: 150px !important;
-  max-width: 175px !important;
-  flex: 0 1 175px !important;
-  padding: 6px !important;
-  box-sizing: border-box !important;
-  overflow-x: hidden !important;
-  overflow-y: auto !important;
-  border-right: 1px solid #3c2e1e !important;
+  width: 175px;
+  min-width: 175px;
+  max-width: 175px;
+  flex: 0 0 175px;
+  padding: 6px;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  overflow-y: auto;
+  border-right: 1px solid #3c2e1e;
 }
 
 #tab-inventory .l2inv-paperdoll-grid,
 .l2inv-paperdoll-grid {
-  display: flex !important;
-  flex-direction: row !important;
-  gap: 4px !important;
-  justify-content: center !important;
-  width: 100% !important;
-  box-sizing: border-box !important;
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+  justify-content: center;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 #tab-inventory .l2inv-doll-col,
 .l2inv-doll-col {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 4px !important;
-  width: 50px !important;
-  min-width: 50px !important;
-  max-width: 50px !important;
-  flex: 0 0 50px !important;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 50px;
+  min-width: 50px;
+  max-width: 50px;
+  flex: 0 0 50px;
 }
 
 #tab-inventory .equip-slot,
 .l2inv-pd-slot,
 .equip-slot {
-  width: 50px !important;
-  height: 50px !important;
-  min-width: 50px !important;
-  max-width: 50px !important;
-  min-height: 50px !important;
-  max-height: 50px !important;
-  box-sizing: border-box !important;
-  background: #1a1611 !important;
-  border: 1px solid #4a3a2a !important;
-  border-radius: 3px !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  position: relative !important;
+  width: 50px;
+  height: 50px;
+  min-width: 50px;
+  max-width: 50px;
+  min-height: 50px;
+  max-height: 50px;
+  box-sizing: border-box;
+  background: #1a1611;
+  border: 1px solid #4a3a2a;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 }
-.equip-slot.active { border-color: #c9a227 !important; }
 
 /* === DESATIVAR RESIZE MANUAL === */
 #inventory-panel, .inventory-panel, #inventory-window, #tab-inventory, .l2inv-header-frame {
-  resize: none !important;
-  user-select: none !important;
+  resize: none;
+  user-select: none;
 }
 
-/* ═══════════ GRID FLUIDO DE 10 COLUNAS COM SCROLL VERTICAL ═══════════
-   Antigamente 38px fixos: sobrava/faltava espaço dependendo da largura
-   real do painel. Agora preenche 100% do container via fr, sempre
-   quadrado (aspect-ratio), com no máximo ~8 linhas visíveis antes de
-   rolar. */
+/* === GRID FIXO DE 10x8 COM BORDAS DEFINIDAS E SCROLLBAR VERTICAL === */
 #tab-inventory #inventory-grid,
 #tab-inventory .inventory-grid,
 #tab-inventory .l2inv-grid,
@@ -326,333 +312,217 @@ const GAMEUI_CSS = `
 .inventory-grid,
 .l2inv-grid {
   display: grid !important;
-  grid-template-columns: repeat(10, minmax(0, 1fr)) !important;
-  grid-auto-rows: minmax(34px, 1fr) !important;
+  grid-template-columns: repeat(10, 38px) !important; /* EXACTLY 10 COLUMNS */
+  grid-auto-rows: 38px !important;                     /* EXACTLY 38px ROWS */
   gap: 3px !important;
   padding: 6px !important;
-  width: 100% !important;
   background: rgba(10, 7, 4, 0.85) !important;
   border: 2px solid #3c2e1e !important;
   border-radius: 4px !important;
+  height: 337px !important;                            /* EXACTLY 8 VISIBLE ROWS (8x38 + 7x3 + 12) */
   max-height: 337px !important;
-  overflow-y: auto !important;
+  overflow-y: scroll !important;                       /* SIDEBAR DE ROLAGEM VERTICAL */
   overflow-x: hidden !important;
   box-sizing: border-box !important;
   align-content: start !important;
-  justify-content: stretch !important;
-  flex: 1 1 auto !important;
-  min-width: 0 !important;
+  justify-content: start !important;
+  flex: 0 0 auto !important;
   scrollbar-width: thin !important;
   scrollbar-color: #5a452a #120d08 !important;
 }
 
+/* ESTILIZAÇÃO DA SIDEBAR DE ROLAGEM */
 #inventory-grid::-webkit-scrollbar,
-.inventory-grid::-webkit-scrollbar { width: 8px !important; }
+.inventory-grid::-webkit-scrollbar {
+  width: 8px !important;
+}
 #inventory-grid::-webkit-scrollbar-track,
-.inventory-grid::-webkit-scrollbar-track { background: #120d08 !important; border-radius: 4px !important; }
+.inventory-grid::-webkit-scrollbar-track {
+  background: #120d08 !important;
+  border-radius: 4px !important;
+}
 #inventory-grid::-webkit-scrollbar-thumb,
-.inventory-grid::-webkit-scrollbar-thumb { background: #5a452a !important; border-radius: 4px !important; border: 1px solid #7a5c38 !important; }
+.inventory-grid::-webkit-scrollbar-thumb {
+  background: #5a452a !important;
+  border-radius: 4px !important;
+  border: 1px solid #7a5c38 !important;
+}
 
-/* SLOTS DO INVENTÁRIO — SEMPRE QUADRADOS, PREENCHEM A CÉLULA DO GRID */
+/* SLOTS DO INVENTÁRIO (38px x 38px COM LINHAS/LIMITADORES CLAROS) */
 #tab-inventory .inv-slot,
 .inv-slot,
 .l2inv-slot {
-  width: 100% !important;
-  height: 100% !important;
-  aspect-ratio: 1 / 1 !important;
-  min-width: 0 !important;
+  width: 38px !important;
+  height: 38px !important;
+  min-width: 38px !important;
+  max-width: 38px !important;
+  min-height: 38px !important;
+  max-height: 38px !important;
   background: #241e16 !important;
-  border: 1px solid #5a452a !important;
+  border: 1px solid #5a452a !important; /* LIMITADORES / LINHAS VISÍVEIS */
   border-radius: 3px !important;
   box-sizing: border-box !important;
   overflow: hidden !important;
   display: flex !important;
-  flex-direction: column !important;
   align-items: center !important;
   justify-content: center !important;
-  padding: 2px !important;
   position: relative !important;
-  cursor: pointer !important;
   box-shadow: inset 0 0 4px rgba(0,0,0,0.8) !important;
-  transition: border-color .12s, transform .12s !important;
-}
-#tab-inventory .inv-slot:not(.empty):hover,
-.inv-slot:not(.empty):hover {
-  border-color: #c9a227 !important;
-  transform: translateY(-1px) !important;
 }
 
 #tab-inventory .inv-slot.empty,
 .inv-slot.empty {
   background: rgba(14, 10, 6, 0.6) !important;
-  border: 1px solid #2e2216 !important;
+  border: 1px solid #2e2216 !important; /* LINHAS DOS SLOTS VAZIOS */
   opacity: 0.6 !important;
   cursor: default !important;
 }
 
-/* ÍCONES DO ITEM — SEMPRE VISÍVEIS, PROPORCIONAIS AO SLOT */
-.inventory-item-image,
-.equip-icon img,
-.item-icon img {
-  display: inline-block !important;
-  width: 70% !important;
-  height: 70% !important;
-  max-width: 28px !important;
-  max-height: 28px !important;
+/* ÍCONES REDUZIDOS EM 30% (24px) */
+.inventory-item-image {
+  width: 24px !important;
+  height: 24px !important;
+  max-width: 24px !important;
+  max-height: 24px !important;
   object-fit: contain !important;
-  pointer-events: none !important;
 }
-.inventory-item-emoji { font-size: 15px !important; }
 
-/* === MAPA DE ZONAS & SAGAS === */
+.inventory-item-emoji {
+  font-size: 15px !important;
+}
+
+/* === MAPA DE ZONAS & DIORAMA DE COMBATE ESTILOS === */
 .saga-map-block {
-  padding: 12px 14px !important;
-  margin-bottom: 14px !important;
-  border: 1px solid rgba(212, 175, 55, .28) !important;
-  border-radius: 12px !important;
-  background: linear-gradient(180deg, rgba(28, 34, 48, .82), rgba(16, 20, 30, .82)) !important;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  border: 1px solid rgba(212, 175, 55, .28);
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(28, 34, 48, .82), rgba(16, 20, 30, .82));
 }
 .saga-header {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  padding-bottom: 8px !important;
-  margin-bottom: 10px !important;
-  border-bottom: 1px solid rgba(212, 175, 55, .2) !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid rgba(212, 175, 55, .2);
 }
 .saga-title {
-  color: #e8c37a !important;
-  font-size: 15px !important;
-  font-weight: 700 !important;
-  font-family: "Cinzel", serif !important;
+  color: #e8c37a;
+  font-size: 15px;
+  font-weight: 700;
+  font-family: "Cinzel", serif;
 }
 .saga-req {
-  padding: 2px 10px !important;
-  color: #8b93a7 !important;
-  font-size: 11px !important;
-  border: 1px solid rgba(139, 147, 167, .3) !important;
-  border-radius: 999px !important;
+  padding: 2px 10px;
+  color: #8b93a7;
+  font-size: 11px;
+  border: 1px solid rgba(139, 147, 167, .3);
+  border-radius: 999px;
 }
 .saga-zones-grid {
-  display: grid !important;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)) !important;
-  gap: 12px !important;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
 }
 .zone-card {
-  position: relative !important;
-  display: flex !important;
-  flex-direction: column !important;
-  overflow: hidden !important;
-  background: #131824 !important;
-  border: 1px solid rgba(212, 175, 55, .3) !important;
-  border-radius: 10px !important;
-  cursor: pointer !important;
-  transition: transform .16s, border-color .16s, box-shadow .16s !important;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #131824;
+  border: 1px solid rgba(212, 175, 55, .3);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform .16s, border-color .16s, box-shadow .16s;
 }
 .zone-card:hover:not(.locked):not(.active) {
-  transform: translateY(-3px) !important;
-  border-color: rgba(232, 195, 122, .8) !important;
-  box-shadow: 0 6px 18px rgba(0,0,0,.6) !important;
+  transform: translateY(-3px);
+  border-color: rgba(232, 195, 122, .8);
+  box-shadow: 0 6px 18px rgba(0,0,0,.6);
 }
 .zone-card.active {
-  border-color: #e8c37a !important;
-  box-shadow: 0 0 0 1px rgba(232, 195, 122, .5), 0 0 20px rgba(232, 195, 122, .25) !important;
+  border-color: #e8c37a;
+  box-shadow: 0 0 0 1px rgba(232, 195, 122, .5), 0 0 20px rgba(232, 195, 122, .25);
 }
 .zone-card-thumb {
-  position: relative !important;
-  height: 80px !important;
-  background-color: #0d1018 !important;
-  background-position: center !important;
-  background-size: cover !important;
-  display: block !important;
+  position: relative;
+  height: 80px;
+  background-color: #0d1018;
+  background-position: center;
+  background-size: cover;
 }
 .zone-card-thumb::after {
-  content: '' !important;
-  position: absolute !important;
-  inset: 0 !important;
-  background: linear-gradient(180deg, transparent 30%, rgba(10, 13, 20, .95)) !important;
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 30%, rgba(10, 13, 20, .95));
 }
 .zone-flag {
-  position: absolute !important;
-  top: 6px !important;
-  z-index: 2 !important;
-  padding: 3px 8px !important;
-  font-size: 10px !important;
-  border-radius: 999px !important;
+  position: absolute;
+  top: 6px;
+  z-index: 2;
+  padding: 3px 8px;
+  font-size: 10px;
+  border-radius: 999px;
 }
-.zone-flag.town { left: 6px !important; color: #7fd4a8 !important; background: rgba(8,10,16,.85) !important; border: 1px solid rgba(127,212,168,.4) !important; }
-.zone-flag.here { right: 6px !important; color: #0d1018 !important; font-weight: 800 !important; background: #e8c37a !important; }
-.zone-card-body { display: flex !important; flex-direction: column !important; gap: 6px !important; padding: 10px !important; }
-.zone-card-header { display: flex !important; align-items: baseline !important; justify-content: space-between !important; }
-.zone-card-title { color: #e6e9f2 !important; font-size: 13px !important; font-weight: 700 !important; font-family: "Cinzel", serif !important; }
-.zone-card-lvl { color: #e8c37a !important; font-size: 11px !important; }
-.zone-card-desc { color: #8b93a7 !important; font-size: 11px !important; }
+.zone-flag.town { left: 6px; color: #7fd4a8; background: rgba(8,10,16,.85); border: 1px solid rgba(127,212,168,.4); }
+.zone-flag.here { right: 6px; color: #0d1018; font-weight: 800; background: #e8c37a; }
+.zone-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px;
+}
+.zone-card-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.zone-card-title {
+  color: #e6e9f2;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: "Cinzel", serif;
+}
+.zone-card-lvl {
+  color: #e8c37a;
+  font-size: 11px;
+}
+.zone-card-desc {
+  color: #8b93a7;
+  font-size: 11px;
+}
 .select-zone-btn {
-  width: 100% !important;
-  padding: 8px !important;
-  color: #e8c37a !important;
-  font-family: inherit !important;
-  font-size: 11px !important;
-  font-weight: 700 !important;
-  background: rgba(212, 175, 55, .12) !important;
-  border: 1px solid rgba(212, 175, 55, .5) !important;
-  border-radius: 6px !important;
-  cursor: pointer !important;
+  width: 100%;
+  padding: 8px;
+  color: #e8c37a;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  background: rgba(212, 175, 55, .12);
+  border: 1px solid rgba(212, 175, 55, .5);
+  border-radius: 6px;
+  cursor: pointer;
 }
-.select-zone-btn:hover:not(:disabled) { color: #12161f !important; background: #e8c37a !important; }
-
-/* ═══════════════════════════════════════════════════════════════════
-   DIORAMA DE BATALHA — PADRÃO ÚNICO PARA HERÓI E MONSTRO
-   Mesma moldura, mesmo posicionamento de nome/barras/arte para os dois;
-   só a cor de destaque muda (azul herói, vermelho monstro).
-═══════════════════════════════════════════════════════════════════ */
-#stage-hero, .stage-hero,
-#stage-monster, .stage-monster {
-  position: relative !important;
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  justify-content: flex-end !important;
-  /* Não forçamos width/height:100% aqui — não temos acesso ao CSS que
-     define o contêiner pai real destes cards, e forçar 100% os fez herdar
-     o tamanho de um pai muito maior (a tela toda). Em vez disso, só damos
-     limites de segurança: não deixa colapsar a 0, não deixa explodir. */
-  min-width: 120px !important;
-  min-height: 120px !important;
-  max-width: 260px !important;
-  max-height: 320px !important;
-  border-radius: 10px !important;
-  overflow: hidden !important;
-  box-sizing: border-box !important;
-  background: linear-gradient(180deg, rgba(20,16,10,.1) 0%, rgba(8,6,4,.78) 100%) !important;
-  border: 1px solid rgba(212, 175, 55, .35) !important;
-  box-shadow: inset 0 0 26px rgba(0,0,0,.55), 0 4px 14px rgba(0,0,0,.35) !important;
+.select-zone-btn:hover:not(:disabled) {
+  color: #12161f;
+  background: #e8c37a;
 }
-
-.stage-entity-name {
-  position: absolute !important;
-  top: 8px !important;
-  left: 50% !important;
-  transform: translateX(-50%) !important;
-  z-index: 3 !important;
-  max-width: calc(100% - 16px) !important;
-  padding: 3px 12px !important;
-  font-family: "Cinzel", serif !important;
-  font-weight: 700 !important;
-  font-size: 12px !important;
-  letter-spacing: .2px !important;
-  color: #f0d090 !important;
-  background: rgba(10,8,6,.82) !important;
-  border: 1px solid rgba(212, 175, 55, .45) !important;
-  border-radius: 999px !important;
-  white-space: nowrap !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-}
-.stage-hero-name { color: #a8d4ff !important; border-color: rgba(96, 165, 250, .45) !important; }
-
-.hero-sprite-host, .monster-sprite-host {
-  flex: 1 1 auto !important;
-  width: 100% !important;
-  min-height: 70px !important;
-  max-height: 220px !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  padding: 24px 8px 30px !important;
-  box-sizing: border-box !important;
-  pointer-events: none !important;
-  overflow: hidden !important;
-}
-/* Teto FIXO em pixels (não em %) — garante que o SVG nunca fique enorme,
-   independente do tamanho real do contêiner pai, que não controlamos. */
-.hero-sprite-host svg, .monster-sprite-host svg {
-  width: auto !important;
-  height: auto !important;
-  max-width: 150px !important;
-  max-height: 170px !important;
-  filter: drop-shadow(0 10px 12px rgba(0,0,0,.55)) !important;
-}
-
-.stage-hp-bar, .stage-mp-bar {
-  position: absolute !important;
-  left: 8px !important;
-  right: 8px !important;
-  height: 14px !important;
-  z-index: 3 !important;
-  border-radius: 7px !important;
-  overflow: hidden !important;
-  background: rgba(8,6,4,.82) !important;
-  border: 1px solid #4a3a2a !important;
-  box-shadow: inset 0 1px 3px rgba(0,0,0,.6) !important;
-}
-.stage-hp-bar { bottom: 8px !important; }
-.stage-mp-bar-hero { bottom: 26px !important; }
-.stage-hp-fill { height: 100% !important; background: linear-gradient(90deg, #7a1414, #e34747) !important; transition: width .25s ease !important; }
-.stage-mp-fill { height: 100% !important; background: linear-gradient(90deg, #14357a, #4778e3) !important; transition: width .25s ease !important; }
-.stage-hp-text, .stage-mp-text {
-  position: absolute !important;
-  inset: 0 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  font-size: 9px !important;
-  font-weight: 700 !important;
-  color: #fff !important;
-  text-shadow: 1px 1px 0 #000, -1px -1px 0 #000 !important;
-  pointer-events: none !important;
-}
-
-.stage-battle-row {
-  display: flex !important;
-  align-items: stretch !important;
-  justify-content: center !important;
-  gap: 16px !important;
-  width: 100% !important;
-  height: 100% !important;
-}
-.stage-battle-row > * { flex: 1 1 0 !important; min-width: 0 !important; }
 `;
 
-/**
- * Injeta o CSS acima diretamente dentro da shadow root do jogo (e também no
- * document.head, como rede de segurança caso a shadow root ainda não exista
- * no momento da chamada). É chamada de forma idempotente — não duplica a
- * tag se já injetada — e é acionada tanto pelas funções de inventário
- * quanto pelas de stage/zonas, para garantir que os estilos existam desde
- * o primeiro render, independente de qual aba o jogador abrir primeiro.
- */
-export function ensureGameUIStyles() {
-  // IMPORTANTE: nunca usar getRoot() aqui. getRoot() cai para `document`
-  // quando #idle-host ainda não existe (ex.: no load inicial do módulo),
-  // e appendChild direto em `document` lança HierarchyRequestError
-  // ("Only one element on document allowed") porque document só aceita
-  // um único elemento filho (a tag <html>). Resolvemos a shadow root nós
-  // mesmos e só usamos alvos que são containers válidos: a shadow root
-  // (se existir) e document.head.
-  const shadowRoot = document.getElementById('idle-host')?.shadowRoot || null;
-  const targets = [shadowRoot, document.head].filter(Boolean);
+export function ensureInventoryStyles() {
+  const root = getRoot();
+  const targets = [root, document.head].filter(Boolean);
 
   for (const t of targets) {
     if (!t.querySelector('#gameui-styles-direct')) {
       const style = document.createElement('style');
       style.id = 'gameui-styles-direct';
-      style.textContent = GAMEUI_CSS;
+      style.textContent = INJECTED_GAMEUI_CSS;
       t.appendChild(style);
     }
   }
-}
-
-// Mantido por compatibilidade com chamadas existentes ao longo do arquivo.
-export function ensureInventoryStyles() {
-  ensureGameUIStyles();
-}
-
-// Garante que os estilos existam assim que este módulo é carregado, mesmo
-// antes de qualquer função de UI ser chamada (corrige o caso em que a
-// stage/zonas renderizam antes do inventário).
-if (typeof document !== 'undefined') {
-  ensureGameUIStyles();
 }
 
 export function updateInventoryUI(state, callbacks = {}) {
@@ -850,7 +720,7 @@ export function updateEquipmentUI(state, callbacks = {}) {
 /* ═══════════════════════════════════════════════════════════════════════════
    4. STAGE & ZONE MAP (RESTAURAÇÃO COMPLETA DO DIORAMA E ZONAS)
 ═══════════════════════════════════════════════════════════════════════════ */
-export function ensureStageStyles() { ensureGameUIStyles(); }
+export function ensureStageStyles() {}
 
 function ensureHeroStructure() {
   const root = getRoot();
@@ -912,7 +782,6 @@ function ensureMonsterStructure() {
 
 export function renderStageHero(state) {
   if (!state) return;
-  ensureGameUIStyles();
   const structure = ensureHeroStructure();
   if (!structure?.card) return;
 
@@ -935,7 +804,6 @@ export function renderStageHero(state) {
 
 export function renderStageMonster(state) {
   if (!state) return;
-  ensureGameUIStyles();
   const structure = ensureMonsterStructure();
   if (!structure?.card) return;
 
@@ -982,7 +850,6 @@ export function updateZoneUI(state, callbacks = {}) {
 }
 
 export function renderZoneMap(state, callbacks = {}) {
-  ensureGameUIStyles();
   const container = findElement('zone-map-container') || findElement('zone-list');
   if (!container) return;
 
