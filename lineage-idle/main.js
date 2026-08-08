@@ -118,37 +118,24 @@ import {
 import {
   startRaidBoss as serviceStartRaidBoss
 } from './src/services/RaidService.js';
-// ─── Sprint 6: Importa módulos de Interface gráfica (UI) ───────────────────
 import {
   formatItemDisplayName as uiFormatItemDisplayName,
   showItemTooltip as uiShowItemTooltip,
-  hideItemTooltip as uiHideItemTooltip
-} from './src/ui/TooltipUI.js';
-
-import { ensureAppLayout, showMenuPanel } from './src/ui/AppLayout.js';
-
-import {
+  hideItemTooltip as uiHideItemTooltip,
   updateInventoryUI as uiUpdateInventoryUI,
   updateWarehouseUI as uiUpdateWarehouseUI,
-  updateEquipmentUI as uiUpdateEquipmentUI
-} from './src/ui/InventoryUI.js';
-
-import {
+  updateEquipmentUI as uiUpdateEquipmentUI,
   updateSkillUI as uiUpdateSkillUI,
-  updateSkillInfoPanel as uiUpdateSkillInfoPanel
-} from './src/ui/SkillsUI.js';
-
-import {
+  updateSkillInfoPanel as uiUpdateSkillInfoPanel,
   renderStageHero as uiRenderStageHero,
   renderStageMonster as uiRenderStageMonster,
   updateZoneUI as uiUpdateZoneUI,
-  renderZoneMap as uiRenderZoneMap
-} from './src/ui/StageUI.js';
-
-import {
+  renderZoneMap as uiRenderZoneMap,
   updateShopUI as uiUpdateShopUI,
   updateCraftUI as uiUpdateCraftUI
-} from './src/ui/ShopUI.js';
+} from './src/ui/GameUI.js';
+
+import { ensureAppLayout, showMenuPanel } from './src/ui/AppLayout.js';
 // ─── Sprint 7: Importa EventBus e StateManager (Wiring & State) ───────────
 import EventBus from './src/core/EventBus.js';
 import {

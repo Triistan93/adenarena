@@ -1,0 +1,301 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   GameUI.css — Estilos Consolidados da Interface (Lineage Idle)
+   Contém estilos para Inventário, Paperdoll, Loja, Crafting, Habilidades,
+   Diorama de Batalha, Mapa de Zonas e Tooltips Flutuantes.
+═══════════════════════════════════════════════════════════════════════════ */
+
+/* ═══════════════ TOOLTIP ═══════════════ */
+#item-tooltip {
+  position: fixed !important;
+  z-index: 99999 !important;
+  pointer-events: none !important;
+  max-width: 300px !important;
+  background: rgba(30, 25, 15, 0.97) !important;
+  border: 1px solid #8a6b2e !important;
+  border-radius: 6px !important;
+  padding: 8px 10px !important;
+  color: #e8d5a3 !important;
+  font-size: 12px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8) !important;
+  display: none;
+}
+.tooltip-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 700;
+  color: #f0c050;
+  border-bottom: 1px solid #5a4525;
+  padding-bottom: 3px;
+  margin-bottom: 4px;
+}
+.tooltip-stats { color: #c8a87a; font-size: 11px; margin-top: 4px; }
+.tooltip-desc { color: #a08a5a; font-size: 11px; margin-top: 4px; }
+.tooltip-affixes { color: #60a5fa; font-size: 11px; margin-top: 4px; }
+
+/* ═══════════════ PAINEL DO INVENTÁRIO ═══════════════ */
+#inventory-panel, .inventory-panel, #inventory-window,
+[data-panel="inventory"], [data-menu-panel="inventory"] {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  margin: 0 !important;
+  background: linear-gradient(180deg, #251a0e 0%, #1a140e 100%) !important;
+  border: 1px solid #4a3a2a !important;
+  border-radius: 6px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+
+/* ═══════════════ HEADER ═══════════════ */
+.inventory-header, #inventory-header {
+  flex: 0 0 auto !important;
+  padding: 6px 10px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  flex-wrap: wrap !important;
+  border-bottom: 1px solid #3a2a1a !important;
+  background: #1e1810 !important;
+}
+
+.l2inv-tabs, .inventory-tabs { display: flex !important; gap: 4px !important; flex-wrap: wrap !important; }
+.l2inv-tabs button, .tab-btn {
+  height: 24px !important;
+  padding: 0 8px !important;
+  font-size: 10px !important;
+  background: #2a241c !important;
+  border: 1px solid #4a3a2a !important;
+  color: #c8a87a !important;
+  border-radius: 4px !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+  flex: 0 0 auto !important;
+  cursor: pointer !important;
+}
+.l2inv-tabs button.active, .tab-btn.active {
+  background: #4a3a24 !important;
+  border-color: #c9a227 !important;
+  color: #fff !important;
+}
+
+#inv-search-input {
+  height: 24px !important;
+  font-size: 11px !important;
+  padding: 0 6px !important;
+  background: #1a1611 !important;
+  border: 1px solid #4a3a2a !important;
+  color: #d8c8a8 !important;
+  border-radius: 4px !important;
+  min-width: 120px !important;
+  flex: 0 0 120px !important;
+}
+
+/* ═══════════════ BODY ═══════════════ */
+.inventory-body, #inventory-body {
+  flex: 1 1 auto !important;
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 8px !important;
+  padding: 8px !important;
+  overflow: hidden !important;
+  min-height: 0 !important;
+}
+
+/* ═══════════════ PAPERDOLL ═══════════════ */
+.l2inv-doll-col {
+  width: 220px !important;
+  min-width: 220px !important;
+  flex: 0 0 220px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+  background: radial-gradient(ellipse at center, #2a241c 0%, #17120e 100%) !important;
+  border: 1px solid #3a2a1a !important;
+  border-radius: 6px !important;
+  padding: 6px !important;
+  box-sizing: border-box !important;
+  position: relative !important;
+}
+
+#paperdoll-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, 60px) !important;
+  grid-template-rows: repeat(4, 60px) !important;
+  gap: 6px !important;
+  justify-content: center !important;
+  padding: 8px !important;
+  background: radial-gradient(ellipse at center, #2a241c 0%, #17120e 100%) !important;
+  border: 1px solid #3a2a1a !important;
+  border-radius: 6px !important;
+  width: fit-content !important;
+  margin: 0 auto !important;
+}
+
+.equip-slot {
+  width: 60px !important;
+  height: 60px !important;
+  background: #1a1611 !important;
+  border: 1px solid #4a3a2a !important;
+  border-radius: 3px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: relative !important;
+  cursor: pointer !important;
+}
+.equip-slot.active { border-color: #c9a227 !important; }
+
+/* ═══════════════ STATS FIXOS DO PERSONAGEM ═══════════════ */
+.l2inv-paperdoll-stats {
+  position: sticky !important;
+  bottom: 0 !important;
+  background: #140d07 !important;
+  padding: 6px 8px !important;
+  border-top: 1px solid #342412 !important;
+  z-index: 10 !important;
+  font-size: 11px !important;
+  color: #d4a744 !important;
+}
+
+/* ═══════════════ GRID DE SLOTS DE ITENS ═══════════════ */
+#inventory-grid, .inventory-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, 72px) !important;
+  grid-auto-rows: 72px !important;
+  gap: 6px !important;
+  padding: 8px !important;
+  background: rgba(0, 0, 0, 0.4) !important;
+  border: 1px solid #3a2a1a !important;
+  border-radius: 4px !important;
+  overflow-y: auto !important;
+  max-height: 100% !important;
+  align-content: start !important;
+  flex: 1 !important;
+}
+
+.inv-slot {
+  width: 72px !important;
+  height: 72px !important;
+  min-width: 72px !important;
+  max-width: 72px !important;
+  min-height: 72px !important;
+  max-height: 72px !important;
+  background: #241e16 !important;
+  border: 1px solid #3d2e1e !important;
+  border-radius: 4px !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 2px !important;
+  position: relative !important;
+  cursor: pointer !important;
+}
+
+.inventory-item-image {
+  width: 36px !important;
+  height: 36px !important;
+  object-fit: contain !important;
+}
+
+.item-name {
+  display: block !important;
+  font-size: 8px !important;
+  line-height: 1.1 !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
+  overflow: hidden !important;
+  max-width: 100% !important;
+  text-align: center !important;
+  color: #e2c074 !important;
+}
+
+.qty {
+  font-size: 9px !important;
+  position: absolute !important;
+  bottom: 1px !important;
+  right: 2px !important;
+  color: #f0c050 !important;
+  font-weight: bold !important;
+  text-shadow: 1px 1px 0 #000, -1px -1px 0 #000 !important;
+}
+
+.equipped-badge {
+  position: absolute !important;
+  top: 1px !important;
+  right: 1px !important;
+  width: 10px !important;
+  height: 10px !important;
+  font-size: 7px !important;
+  background: #22c55e !important;
+  color: #fff !important;
+  border-radius: 2px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.inv-check {
+  position: absolute !important;
+  top: 1px !important;
+  left: 1px !important;
+  width: 10px !important;
+  height: 10px !important;
+  background: #3b82f6 !important;
+  color: #fff !important;
+  border-radius: 2px !important;
+  font-size: 7px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.inv-slot:not(.is-selected) .inv-check { display: none !important; }
+
+.rarity-common    { border-color: #8a6b2e !important; }
+.rarity-uncommon  { border-color: #2d5a2d !important; }
+.rarity-rare      { border-color: #2a4a7a !important; }
+.rarity-epic      { border-color: #4a2d6a !important; }
+.rarity-legendary { border-color: #6a4a14 !important; }
+
+/* ═══════════════ LOJA & CRAFTING ═══════════════ */
+.shop-item-card, .craft-recipe-card {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 8px 12px !important;
+  margin-bottom: 6px !important;
+  background: rgba(30, 22, 14, 0.6) !important;
+  border: 1px solid #3a2a1a !important;
+  border-radius: 6px !important;
+}
+
+.shop-item-details, .craft-recipe-header {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+}
+
+.shop-item-name, .craft-recipe-title {
+  font-family: "Cinzel", serif !important;
+  font-weight: 700 !important;
+  color: #f0c050 !important;
+}
+
+.buy-item-btn, .craft-item-btn {
+  padding: 6px 12px !important;
+  background: linear-gradient(180deg, #4a3a24, #2a1e10) !important;
+  border: 1px solid #d4a744 !important;
+  color: #fff !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+}
+.buy-item-btn:disabled, .craft-item-btn:disabled {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+}

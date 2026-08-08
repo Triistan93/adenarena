@@ -1,17 +1,17 @@
 /**
  * index.js — Ponto unificado de exportação dos módulos de interface (UI).
+ * Redireciona todas as chamadas para o módulo consolidado GameUI.js e AppLayout.js.
  */
-import { renderStageHero, renderStageMonster, updateZoneUI } from './StageUI.js';
-import { updateInventoryUI, updateWarehouseUI, updateEquipmentUI } from './InventoryUI.js';
-import { updateSkillUI } from './SkillsUI.js';
-import { updateShopUI } from './ShopUI.js';
-import { showItemTooltip, hideItemTooltip, getItemIcon, getAssetUrl } from './TooltipUI.js';
+import {
+  renderStageHero,
+  renderStageMonster,
+  updateZoneUI,
+  updateInventoryUI,
+  updateSkillUI,
+  updateShopUI
+} from './GameUI.js';
 
-export * from './InventoryUI.js';
-export * from './ShopUI.js';
-export * from './SkillsUI.js';
-export * from './StageUI.js';
-export * from './TooltipUI.js';
+export * from './GameUI.js';
 export * from './AppLayout.js';
 
 /**
