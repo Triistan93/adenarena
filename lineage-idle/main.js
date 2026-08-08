@@ -3770,7 +3770,7 @@ function initPanelResizers() {
   let isDragging = false;
   let activeResizer = null;
   let startX = 0, startY = 0;
-  let startW1 = 210, startW3 = 480, startStageH = 340;
+  let startW1 = 210, startW3 = 680, startStageH = 340;
 
   if (r1) {
     r1.onmousedown = (e) => {
@@ -3791,7 +3791,7 @@ function initPanelResizers() {
       activeResizer = 'col3';
       startX = e.clientX;
       const tabsPanel = qs('.tabs-panel');
-      startW3 = tabsPanel ? tabsPanel.getBoundingClientRect().width : 480;
+      startW3 = tabsPanel ? tabsPanel.getBoundingClientRect().width : 680;
       doc().body.style.cursor = 'col-resize';
     };
   }

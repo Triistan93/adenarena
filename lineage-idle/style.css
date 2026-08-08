@@ -381,7 +381,7 @@ select:focus-visible {
 /* ---- Main Grid & Resizable Panels ---- */
 .main-grid {
   --col1-w: 220px;
-  --col3-w: 440px;
+  --col3-w: 680px;
   display: grid;
   grid-template-columns: var(--col1-w) 6px 1fr 6px var(--col3-w);
   flex: 1 1 auto;
@@ -1970,7 +1970,8 @@ select:focus-visible {
   color: var(--gilt-bright);
   box-shadow: 0 0 0 1px var(--gilt-deep) inset;
 }
-.shop-list, .craft-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 8px; }
+.shop-list { display: flex; flex-direction: column; gap: 8px; }
+.craft-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 8px; }
 .shop-empty { grid-column: 1 / -1; padding: 16px; text-align: center; color: var(--ink-mute); font-style: italic; font-size: 11px; }
 .shop-header { grid-column: 1 / -1; padding: 6px 2px; margin-top: 4px; }
 .shop-header h4 {
