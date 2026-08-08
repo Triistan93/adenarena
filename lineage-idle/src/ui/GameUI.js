@@ -146,7 +146,7 @@ export function getItemIcon(defOrId) {
   const iconUrl = getItemIconUrl(defOrId, def);
   if (!iconUrl) return emoji;
 
-  return `<img src="${iconUrl}" alt="${def?.name || ''}" class="inventory-item-image" onerror="this.style.display='none';if(this.nextElementSibling)this.nextElementSibling.style.display='inline-block';" style="width:34px; height:34px; object-fit:contain; vertical-align:middle; pointer-events:none;" /><span class="inventory-item-emoji" style="display:none; font-size:18px;">${emoji}</span>`;
+  return `<img src="${iconUrl}" alt="${def?.name || ''}" class="inventory-item-image" onerror="this.style.display='none';if(this.nextElementSibling)this.nextElementSibling.style.display='inline-block';" style="width:24px; height:24px; object-fit:contain; vertical-align:middle; pointer-events:none;" /><span class="inventory-item-emoji" style="display:none; font-size:15px;">${emoji}</span>`;
 }
 
 export function formatItemDisplayName(item, def) {
@@ -304,58 +304,91 @@ const INJECTED_GAMEUI_CSS = `
   user-select: none;
 }
 
-/* === GRID FIXO DE 10 COLUNAS COM PREENCHIMENTO COMPLETO === */
+/* === GRID FIXO DE 10x8 COM BORDAS DEFINIDAS E SCROLLBAR VERTICAL === */
 #tab-inventory #inventory-grid,
 #tab-inventory .inventory-grid,
 #tab-inventory .l2inv-grid,
 #inventory-grid,
 .inventory-grid,
 .l2inv-grid {
-  display: grid;
-  grid-template-columns: repeat(10, 1fr); /* 10 COLUNAS PREENCHENDO O PAINEL */
-  grid-auto-rows: minmax(42px, auto);
-  gap: 4px;
-  padding: 6px;
-  background: rgba(10, 7, 4, 0.65);
-  border: 1px solid #3c2e1e;
-  border-radius: 4px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  max-height: 100%;
-  align-content: start;
-  justify-content: start;
-  flex: 1 1 auto;
-  box-sizing: border-box;
+  display: grid !important;
+  grid-template-columns: repeat(10, 38px) !important; /* EXACTLY 10 COLUMNS */
+  grid-auto-rows: 38px !important;                     /* EXACTLY 38px ROWS */
+  gap: 3px !important;
+  padding: 6px !important;
+  background: rgba(10, 7, 4, 0.85) !important;
+  border: 2px solid #3c2e1e !important;
+  border-radius: 4px !important;
+  height: 337px !important;                            /* EXACTLY 8 VISIBLE ROWS (8x38 + 7x3 + 12) */
+  max-height: 337px !important;
+  overflow-y: scroll !important;                       /* SIDEBAR DE ROLAGEM VERTICAL */
+  overflow-x: hidden !important;
+  box-sizing: border-box !important;
+  align-content: start !important;
+  justify-content: start !important;
+  flex: 0 0 auto !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: #5a452a #120d08 !important;
 }
 
+/* ESTILIZAÇÃO DA SIDEBAR DE ROLAGEM */
+#inventory-grid::-webkit-scrollbar,
+.inventory-grid::-webkit-scrollbar {
+  width: 8px !important;
+}
+#inventory-grid::-webkit-scrollbar-track,
+.inventory-grid::-webkit-scrollbar-track {
+  background: #120d08 !important;
+  border-radius: 4px !important;
+}
+#inventory-grid::-webkit-scrollbar-thumb,
+.inventory-grid::-webkit-scrollbar-thumb {
+  background: #5a452a !important;
+  border-radius: 4px !important;
+  border: 1px solid #7a5c38 !important;
+}
+
+/* SLOTS DO INVENTÁRIO (38px x 38px COM LINHAS/LIMITADORES CLAROS) */
 #tab-inventory .inv-slot,
 .inv-slot,
 .l2inv-slot {
-  aspect-ratio: 1;
-  width: 100%;
-  box-sizing: border-box;
-  background: #241e16;
-  border: 1px solid #3d2e1e;
-  border-radius: 4px;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
+  width: 38px !important;
+  height: 38px !important;
+  min-width: 38px !important;
+  max-width: 38px !important;
+  min-height: 38px !important;
+  max-height: 38px !important;
+  background: #241e16 !important;
+  border: 1px solid #5a452a !important; /* LIMITADORES / LINHAS VISÍVEIS */
+  border-radius: 3px !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: relative !important;
+  box-shadow: inset 0 0 4px rgba(0,0,0,0.8) !important;
 }
 
 #tab-inventory .inv-slot.empty,
 .inv-slot.empty {
-  background: rgba(20, 14, 8, 0.45);
-  border: 1px solid #2a1e12;
-  opacity: 0.6;
-  cursor: default;
+  background: rgba(14, 10, 6, 0.6) !important;
+  border: 1px solid #2e2216 !important; /* LINHAS DOS SLOTS VAZIOS */
+  opacity: 0.6 !important;
+  cursor: default !important;
 }
 
+/* ÍCONES REDUZIDOS EM 30% (24px) */
 .inventory-item-image {
-  width: 32px;
-  height: 32px;
-  object-fit: contain;
+  width: 24px !important;
+  height: 24px !important;
+  max-width: 24px !important;
+  max-height: 24px !important;
+  object-fit: contain !important;
+}
+
+.inventory-item-emoji {
+  font-size: 15px !important;
 }
 
 /* === MAPA DE ZONAS & DIORAMA DE COMBATE ESTILOS === */
