@@ -796,7 +796,9 @@ export function renderStageHero(state) {
   updateBar('hero-mp-bar', state.mp || 0, state.maxMp || 1, 'mp');
 
   if (structure.sprite && typeof heroSVG === 'function') {
-    structure.sprite.innerHTML = heroSVG(state);
+    const race = state.race || state.heroRace || state.playerRace || 'human';
+    const cls = state.class || state.heroClass || state.playerClass || 'fighter';
+    structure.sprite.innerHTML = heroSVG(race, cls);
   }
 }
 
@@ -821,7 +823,9 @@ export function renderStageMonster(state) {
   updateBar('monster-hp-bar', m.hp || 0, m.maxHp || 1, 'hp');
 
   if (structure.sprite && typeof monsterSVG === 'function') {
-    structure.sprite.innerHTML = monsterSVG(m);
+    const mId = m.id || m.monsterId || m.key || m.name || 'goblin';
+    const opts = { crown: !!(m.isBoss || m.boss) };
+    structure.sprite.innerHTML = monsterSVG(mId, opts);
   }
 }
 

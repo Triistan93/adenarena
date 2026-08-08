@@ -327,20 +327,33 @@ function getAssetUrl(p) {
 // ================================================================
 //  heroSVG(race, cls, aura, mode)
 // ================================================================
-export function heroSVG(race, cls, aura, mode) {
+export function heroSVG(raceOrState, clsParam, aura, mode) {
+  let race = raceOrState;
+  let cls = clsParam;
+
+  if (typeof raceOrState === 'object' && raceOrState !== null) {
+    race = raceOrState.race || raceOrState.heroRace || raceOrState.playerRace || 'human';
+    cls = raceOrState.class || raceOrState.heroClass || raceOrState.playerClass || 'fighter';
+    aura = raceOrState.aura;
+    mode = raceOrState.mode;
+  }
+
+  race = String(race || 'human').toLowerCase();
+  cls = String(cls || 'fighter').toLowerCase();
+
   const src = getAssetUrl(heroImgPath(race, cls));
   const border = aura || "#8a6a24";
 
   if (mode === "bust") {
     return `<div class="hero-svg hero-bust" style="position:relative;width:100%;height:100%;overflow:hidden;border-radius:50%;">
-      <img src="${src}" alt="${race} ${cls}" draggable="false" onerror="this.onerror=null; this.src='${getAssetUrl(`img/${race}_${cls}.png`)}';"
+      <img src="${src}" alt="${race} ${cls}" draggable="false" onerror="this.onerror=null; this.src='${getAssetUrl('img/human_fighter.png')}';"
         style="width:100%;height:100%;object-fit:cover;object-position:center 15%;filter:drop-shadow(0 0 6px ${border});" />
       <div style="position:absolute;inset:0;border-radius:50%;border:2px solid ${border};box-shadow:inset 0 0 20px rgba(0,0,0,0.6);pointer-events:none;"></div>
     </div>`;
   }
 
   return `<div class="hero-svg hero-full" style="width:100%;height:100%;position:relative;">
-    <img src="${src}" alt="${race} ${cls}" draggable="false" onerror="this.onerror=null; this.src='${getAssetUrl(`img/${race}_${cls}.png`)}';"
+    <img src="${src}" alt="${race} ${cls}" draggable="false" onerror="this.onerror=null; this.src='${getAssetUrl('img/human_fighter.png')}';"
       style="width:100%;height:100%;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 8px 16px rgba(0,0,0,0.7)) drop-shadow(0 0 4px ${border || 'transparent'});" />
   </div>`;
 }
@@ -348,24 +361,34 @@ export function heroSVG(race, cls, aura, mode) {
 // ================================================================
 //  monsterSVG(id, opts)
 // ================================================================
-export function monsterSVG(id, opts) {
-  const safeId = String(id || '').trim();
+export function monsterSVG(idOrObj, opts) {
+  let safeId = idOrObj;
+  let safeOpts = opts || {};
+
+  if (typeof idOrObj === 'object' && idOrObj !== null) {
+    safeId = idOrObj.id || idOrObj.monsterId || idOrObj.key || idOrObj.name || '';
+    if (idOrObj.boss || idOrObj.isBoss) {
+      safeOpts = { ...safeOpts, crown: true };
+    }
+  }
+
+  safeId = String(safeId || '').trim();
   const cleanKey = safeId.replace(/\s+/g, '');
   const lowerCleanKey = cleanKey.toLowerCase();
 
-  const imgSrc = MON_IMG[safeId]
+  let imgSrc = MON_IMG[safeId]
     || MON_IMG[cleanKey]
     || MON_IMG[lowerCleanKey]
     || MON_IMG['mon_' + lowerCleanKey]
-    || (safeId ? MON_IMG[safeId.toLowerCase()] : null)
+    || (Object.entries(MON_IMG).find(([k]) => k.toLowerCase() === lowerCleanKey)?.[1])
     || '/img/mon_goblin.png';
 
-  const crown = opts?.crown
+  const crown = safeOpts?.crown
     ? `<div style="position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-size:22px;filter:drop-shadow(0 0 6px #f0c840);z-index:2;">👑</div>`
     : "";
 
   const resolvedSrc = getAssetUrl(resolveImg(imgSrc));
-  const glow = opts?.crown ? "drop-shadow(0 0 10px rgba(240,200,64,0.5))" : "drop-shadow(0 6px 12px rgba(0,0,0,0.6))";
+  const glow = safeOpts?.crown ? "drop-shadow(0 0 10px rgba(240,200,64,0.5))" : "drop-shadow(0 6px 12px rgba(0,0,0,0.6))";
   return `<div class="mon-svg" style="width:100%;height:100%;position:relative;">
     ${crown}
     <img src="${resolvedSrc}" alt="${safeId}" draggable="false" onerror="this.onerror=null; this.src='${getAssetUrl('img/mon_goblin.png')}';"
