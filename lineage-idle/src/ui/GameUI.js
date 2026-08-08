@@ -1267,42 +1267,50 @@ export function updateShopUI(state, callbacks = {}) {
   const container = findElement('shop-items-container') || findElement('shop-list');
   if (!container) return;
 
-  // Bind shop filter events if not bound yet
-  if (!root._shopEventsBound) {
-    root._shopEventsBound = true;
+  // Always re-bind subtabs & filter button listeners to ensure click handlers work on tab switches
+  root.querySelectorAll('.shop-subtab').forEach(btn => {
+    const tabName = btn.dataset.shoptab || 'gear';
+    btn.classList.toggle('active', tabName === currentShopTab);
+    btn.onclick = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      currentShopTab = tabName;
+      updateShopUI(state, callbacks);
+    };
+  });
 
-    root.querySelectorAll('.shop-subtab').forEach(btn => {
-      btn.onclick = () => {
-        currentShopTab = btn.dataset.shoptab || 'gear';
-        root.querySelectorAll('.shop-subtab').forEach(b => b.classList.toggle('active', b === btn));
-        updateShopUI(state, callbacks);
-      };
-    });
+  root.querySelectorAll('#shop-grade-filters .shop-filter-btn').forEach(btn => {
+    const gradeCode = btn.dataset.shopgrade || 'all';
+    btn.classList.toggle('active', gradeCode === currentShopGrade);
+    btn.onclick = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      currentShopGrade = gradeCode;
+      updateShopUI(state, callbacks);
+    };
+  });
 
-    root.querySelectorAll('#shop-grade-filters .shop-filter-btn').forEach(btn => {
-      btn.onclick = () => {
-        currentShopGrade = btn.dataset.shopgrade || 'all';
-        root.querySelectorAll('#shop-grade-filters .shop-filter-btn').forEach(b => b.classList.toggle('active', b === btn));
-        updateShopUI(state, callbacks);
-      };
-    });
+  root.querySelectorAll('#shop-slot-filters .shop-filter-btn').forEach(btn => {
+    const slotCode = btn.dataset.shopslot || 'all';
+    btn.classList.toggle('active', slotCode === currentShopSlot);
+    btn.onclick = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      currentShopSlot = slotCode;
+      updateShopUI(state, callbacks);
+    };
+  });
 
-    root.querySelectorAll('#shop-slot-filters .shop-filter-btn').forEach(btn => {
-      btn.onclick = () => {
-        currentShopSlot = btn.dataset.shopslot || 'all';
-        root.querySelectorAll('#shop-slot-filters .shop-filter-btn').forEach(b => b.classList.toggle('active', b === btn));
-        updateShopUI(state, callbacks);
-      };
-    });
-
-    root.querySelectorAll('#shop-batch-filters .shop-filter-btn').forEach(btn => {
-      btn.onclick = () => {
-        currentShopQty = parseInt(btn.dataset.shopqty, 10) || 1;
-        root.querySelectorAll('#shop-batch-filters .shop-filter-btn').forEach(b => b.classList.toggle('active', b === btn));
-        updateShopUI(state, callbacks);
-      };
-    });
-  }
+  root.querySelectorAll('#shop-batch-filters .shop-filter-btn').forEach(btn => {
+    const qtyVal = parseInt(btn.dataset.shopqty, 10) || 1;
+    btn.classList.toggle('active', qtyVal === currentShopQty);
+    btn.onclick = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      currentShopQty = qtyVal;
+      updateShopUI(state, callbacks);
+    };
+  });
 
   // Toggle batch row visibility based on active subtab
   const batchRow = root.querySelector('#shop-batch-row');
@@ -1372,6 +1380,15 @@ export function updateShopUI(state, callbacks = {}) {
       return { def, rarity: item.rarity || 'rare' };
     });
   }
+
+  // Deduplicate items by def.id to prevent double entries
+  const seenIds = new Set();
+  itemsToDisplay = itemsToDisplay.filter(({ def }) => {
+    if (!def || !def.id) return false;
+    if (seenIds.has(def.id)) return false;
+    seenIds.add(def.id);
+    return true;
+  });
 
   // Filter by Grade / Level
   if (currentShopGrade !== 'all') {
