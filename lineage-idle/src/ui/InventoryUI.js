@@ -379,7 +379,7 @@ const INVENTORY_CSS = `
       "ring     belt     ring2    boots    talisman agathion" !important;
   }
 }
-`
+
   /* ═══════════ NORMALIZAÇÃO DE ÍCONES (anti-sobreposição) ═══════════ */
 
 .inv-slot, .equip-slot {
