@@ -21,7 +21,7 @@ export function getMaxInventorySlots(state) {
  * @returns {number}
  */
 export function getMaxWarehouseSlots() {
-  return 100;
+  return 300;
 }
 
 /**
