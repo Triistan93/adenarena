@@ -611,8 +611,15 @@ const GAMEUI_CSS = `
  * o primeiro render, independente de qual aba o jogador abrir primeiro.
  */
 export function ensureGameUIStyles() {
-  const root = getRoot();
-  const targets = [root, document.head].filter(Boolean);
+  // IMPORTANTE: nunca usar getRoot() aqui. getRoot() cai para `document`
+  // quando #idle-host ainda não existe (ex.: no load inicial do módulo),
+  // e appendChild direto em `document` lança HierarchyRequestError
+  // ("Only one element on document allowed") porque document só aceita
+  // um único elemento filho (a tag <html>). Resolvemos a shadow root nós
+  // mesmos e só usamos alvos que são containers válidos: a shadow root
+  // (se existir) e document.head.
+  const shadowRoot = document.getElementById('idle-host')?.shadowRoot || null;
+  const targets = [shadowRoot, document.head].filter(Boolean);
 
   for (const t of targets) {
     if (!t.querySelector('#gameui-styles-direct')) {
