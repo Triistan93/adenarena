@@ -2348,12 +2348,14 @@ select:focus-visible {
 }
 
 .stage-entity-level, .stage-hero-level, .stage-monster-level {
+  width: 100% !important;
   font-family: "IBM Plex Mono", monospace;
   font-size: 10px;
   font-weight: 600;
   color: #c8a87a;
-  text-align: center;
-  margin-bottom: 2px;
+  text-align: center !important;
+  display: block !important;
+  margin: 0 auto 2px auto !important;
   flex-shrink: 0;
 }
 
