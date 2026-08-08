@@ -137,16 +137,16 @@ export function getItemIcon(defOrId) {
   const def = (typeof defOrId === 'string') ? (all[defOrId] || null) : (defOrId.itemId ? all[defOrId.itemId] : defOrId);
   const slot = def?.slot || (typeof defOrId === 'object' ? defOrId.slot : '') || '';
   const fallbackIcons = {
-    weapon: '⚔️', armor: '🛡️', helmet: '⛑️', gloves: '🧤', boots: '👢',
+    weapon: '⚔️', armor: '🛡️', helmet: '🪖', gloves: '🧤', boots: '👢',
     ring: '💍', earring: '💎', necklace: '📿', consumable: '🧪', material: '💎',
-    scroll: '📜', cloak: '🧣', cape: '🧣', belt: '🎗️', hair: '👑', agathion: '🐾'
+    scroll: '📜', cloak: '🧣', cape: '🧣', belt: '🎗️', hair: '👑', agathion: '👼'
   };
   const emoji = fallbackIcons[slot] || '📦';
 
   const iconUrl = getItemIconUrl(defOrId, def);
   if (!iconUrl) return emoji;
 
-  return `<img src="${iconUrl}" alt="${def?.name || ''}" class="inventory-item-image" onerror="this.style.display='none';if(this.nextElementSibling)this.nextElementSibling.style.display='inline-block';" style="width:32px; height:32px; object-fit:contain; vertical-align:middle; pointer-events:none;" /><span class="inventory-item-emoji" style="display:none; font-size:18px;">${emoji}</span>`;
+  return `<img src="${iconUrl}" alt="${def?.name || ''}" class="inventory-item-image" onerror="this.style.display='none';if(this.nextElementSibling)this.nextElementSibling.style.display='inline-block';" style="width:36px; height:36px; object-fit:contain; vertical-align:middle; pointer-events:none;" /><span class="inventory-item-emoji" style="display:none; font-size:18px;">${emoji}</span>`;
 }
 
 export function formatItemDisplayName(item, def) {
@@ -213,16 +213,20 @@ export function hideItemTooltip() {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   4. INVENTORY & EQUIPMENT
+   3. INVENTORY & PAPERDOLL (6 LINHAS x 3 COLUNAS)
 ═══════════════════════════════════════════════════════════════════════════ */
 const GEAR_SLOTS = ['weapon', 'shield', 'armor', 'helmet', 'gloves', 'legs', 'boots', 'cloak', 'belt', 'necklace', 'earring', 'ring', 'hair', 'hair2', 'agathion', 'talisman'];
 const CONSUMABLE_SLOTS = ['consumable', 'potion', 'scroll', 'food', 'powerup'];
 const MATERIAL_SLOTS = ['material', 'gem', 'ore', 'craft'];
 
 const SLOT_ICONS = {
-  weapon: '⚔️', armor: '🛡️', helmet: '🪖', gloves: '🧤', boots: '👢', ring: '💍'
+  hair: '🎭', helmet: '🪖', hair2: '👑',
+  earring1: '💎', armor: '🦺', earring2: '💎',
+  necklace: '📿', legs: '👖', cloak: '🧥',
+  weapon: '⚔️', gloves: '🧤', shield: '🛡️',
+  ring1: '💍', boots: '👢', ring2: '💍',
+  talisman: '🧿', agathion: '👼', belt: '🎗️'
 };
-const _warnedMissingSlots = new Set();
 
 function findEquipmentSlot(slot) {
   return findElement(`equip-slot-${slot}`) || getRoot().querySelector(`[data-slot="${slot}"]`);
@@ -311,10 +315,13 @@ export function updateInventoryUI(state, callbacks = {}) {
     slotEl.className = `inv-slot rarity-${rarity}` + (item.equipped ? ' is-equipped' : '') + (isSelected ? ' is-selected' : '');
     slotEl.dataset.uid = item.uid;
 
+    /*
+     * NATIVO LINEAGE II: o slot exibe exclusivamente o ícone PNG, quantidade e badge 'E'.
+     * O nome do item é omitido do slot (ficando no tooltip) para não poluir nem desalinhar.
+     */
     slotEl.innerHTML = `
       ${check}
       <span class="item-icon">${getItemIcon(def || item)}</span>
-      <span class="item-name">${escapeHTML(def.name)}</span>
       ${qty}
       ${equippedTag}
     `;
@@ -396,7 +403,6 @@ export function updateEquipmentUI(state, callbacks = {}) {
   state.equipment = state.equipment || {};
   ensureInventoryStyles();
   migrateEquipmentSlots(state);
-  ensurePaperdollLayout();
 
   for (const slot of ALL_EQUIP_SLOTS) {
     let slotEl = findEquipmentSlot(slot);
@@ -438,7 +444,7 @@ export function updateEquipmentUI(state, callbacks = {}) {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   5. STAGE & ZONE MAP
+   4. STAGE & ZONE MAP (COM IMAGENS DE FUNDO)
 ═══════════════════════════════════════════════════════════════════════════ */
 export function ensureStageStyles() {}
 
@@ -466,7 +472,7 @@ export function renderStageMonster(state) {
 
   const m = state.activeMonster;
   const monsterNameEl = findElement('m-name') || findElement('monster-name');
-  if (monsterNameEl) monsterNameEl.textContent = m?.name || 'Search Area...';
+  if (monsterNameEl) monsterNameEl.textContent = m?.name || 'Procurando Inimigo...';
 
   if (m) {
     updateBar('m-hp-fill', m.hp || 0, m.maxHp || 1, 'hp');
@@ -480,11 +486,22 @@ export function renderStageMonster(state) {
 
 export function updateZoneUI(state, callbacks = {}) {
   const zoneNameEl = findElement('zone-name') || findElement('stage-zone');
-  if (!zoneNameEl || !state.currentZone) return;
+  if (!state?.currentZone) return;
 
   const zDef = ZONES[state.currentZone];
-  if (zDef) {
+  if (zDef && zoneNameEl) {
     zoneNameEl.textContent = zDef.name;
+  }
+
+  // Restaura a imagem de fundo real do palco de combate (#stage)
+  const stageEl = findElement('stage');
+  if (stageEl && state.currentZone) {
+    const bgUrl = ZONE_BACKGROUNDS[state.currentZone] || zDef?.background;
+    if (bgUrl) {
+      stageEl.style.backgroundImage = `url('${getAssetUrl(bgUrl)}')`;
+      stageEl.style.backgroundSize = 'cover';
+      stageEl.style.backgroundPosition = 'center';
+    }
   }
 }
 
@@ -492,26 +509,56 @@ export function renderZoneMap(state, callbacks = {}) {
   const container = findElement('zone-list');
   if (!container) return;
 
-  container.innerHTML = Object.entries(ZONES).map(([zId, zDef]) => {
-    const active = state.currentZone === zId;
+  const sagasData = SAGAS || {
+    saga1: { name: 'Saga I: Gludio & Arredores', reqLvl: 1, zones: ['talking_island', 'elven_village', 'dark_elven_village', 'gludin', 'gludio'] }
+  };
+
+  container.innerHTML = Object.entries(sagasData).map(([sagaKey, sagaDef]) => {
+    const sagaZones = sagaDef.zones || [];
+    const zonesHtml = sagaZones.map(zId => {
+      const zDef = ZONES[zId];
+      if (!zDef) return '';
+      const active = state.currentZone === zId;
+      const bgUrl = ZONE_BACKGROUNDS[zId] || zDef.background || '';
+      const bgStyle = bgUrl ? `style="background-image: url('${getAssetUrl(bgUrl)}');"` : '';
+
+      return `
+        <div class="zone-card ${active ? 'active' : ''}" data-zone="${zId}">
+          <div class="zone-card-thumb" ${bgStyle}>
+            ${active ? '<span class="zone-flag">Em Caça</span>' : ''}
+          </div>
+          <div class="zone-card-body">
+            <div class="zone-title">${zDef.name}</div>
+            <div class="zone-sub">${zDef.desc || ''}</div>
+            <button class="select-zone-btn" data-zone-btn="${zId}">${active ? '✓ Selecionado' : '⚔ Viajar'}</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+
     return `
-      <div class="zone-card ${active ? 'active' : ''}" data-zone="${zId}">
-        <div class="zone-title">${zDef.name}</div>
-        <div class="zone-sub">${zDef.desc || ''}</div>
-        <button class="select-zone-btn" data-zone-btn="${zId}">${active ? 'Em Caça' : 'Viajar'}</button>
+      <div class="saga-map-block">
+        <div class="saga-header">
+          <h3>${sagaDef.name || sagaKey}</h3>
+          <span class="saga-req">Lv. ${sagaDef.reqLvl || 1}+</span>
+        </div>
+        <div class="saga-zones-grid">
+          ${zonesHtml}
+        </div>
       </div>
     `;
   }).join('');
 
   container.querySelectorAll('[data-zone-btn]').forEach(btn => {
-    btn.onclick = () => {
+    btn.onclick = (e) => {
+      e.stopPropagation();
       if (callbacks.selectZone) callbacks.selectZone(btn.dataset.zoneBtn);
     };
   });
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   6. SKILLS
+   5. SKILLS
 ═══════════════════════════════════════════════════════════════════════════ */
 const TREE_NODE_W = 110;
 const TREE_NODE_H = 78;
@@ -738,7 +785,7 @@ export function updateSkillInfoPanel(state, callbacks = {}) {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   7. SHOP & CRAFTING
+   6. SHOP & CRAFTING
 ═══════════════════════════════════════════════════════════════════════════ */
 export function updateShopUI(state, callbacks = {}) {
   const goldEl = findElement('gold-count') || findElement('shop-gold');

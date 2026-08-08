@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════════════════════════
    GameUI.css — Estilos Consolidados da Interface (Lineage Idle)
-   Contém estilos para Inventário, Paperdoll, Loja, Crafting, Habilidades,
+   Contém estilos para Inventário, Paperdoll (6x3), Loja, Crafting, Habilidades,
    Diorama de Batalha, Mapa de Zonas e Tooltips Flutuantes.
 ═══════════════════════════════════════════════════════════════════════════ */
 
@@ -105,7 +105,7 @@
   min-height: 0 !important;
 }
 
-/* ═══════════════ PAPERDOLL ═══════════════ */
+/* ═══════════════ PAPERDOLL CLÁSSICO (6 LINHAS x 3 COLUNAS) ═══════════════ */
 .l2inv-doll-col {
   width: 220px !important;
   min-width: 220px !important;
@@ -119,25 +119,33 @@
   padding: 6px !important;
   box-sizing: border-box !important;
   position: relative !important;
+  overflow-y: auto !important;
 }
 
 #paperdoll-grid {
   display: grid !important;
-  grid-template-columns: repeat(3, 60px) !important;
-  grid-template-rows: repeat(4, 60px) !important;
-  gap: 6px !important;
+  grid-template-columns: repeat(3, 56px) !important;
+  grid-template-rows: repeat(6, 56px) !important;
+  gap: 5px !important;
   justify-content: center !important;
-  padding: 8px !important;
+  padding: 6px !important;
   background: radial-gradient(ellipse at center, #2a241c 0%, #17120e 100%) !important;
   border: 1px solid #3a2a1a !important;
   border-radius: 6px !important;
   width: fit-content !important;
   margin: 0 auto !important;
+  grid-template-areas:
+    "hair helmet hair2"
+    "earring1 armor earring2"
+    "necklace legs cloak"
+    "weapon gloves shield"
+    "ring1 boots ring2"
+    "talisman agathion belt" !important;
 }
 
 .equip-slot {
-  width: 60px !important;
-  height: 60px !important;
+  width: 56px !important;
+  height: 56px !important;
   background: #1a1611 !important;
   border: 1px solid #4a3a2a !important;
   border-radius: 3px !important;
@@ -149,7 +157,7 @@
 }
 .equip-slot.active { border-color: #c9a227 !important; }
 
-/* ═══════════════ STATS FIXOS DO PERSONAGEM ═══════════════ */
+/* STATS DO PERSONAGEM FIXOS ABAIXO DO PAPERDOLL */
 .l2inv-paperdoll-stats {
   position: sticky !important;
   bottom: 0 !important;
@@ -161,12 +169,12 @@
   color: #d4a744 !important;
 }
 
-/* ═══════════════ GRID DE SLOTS DE ITENS ═══════════════ */
+/* ═══════════════ GRID DE SLOTS DO INVENTÁRIO (56px LIMPO) ═══════════════ */
 #inventory-grid, .inventory-grid {
   display: grid !important;
-  grid-template-columns: repeat(auto-fill, 72px) !important;
-  grid-auto-rows: 72px !important;
-  gap: 6px !important;
+  grid-template-columns: repeat(auto-fill, 56px) !important;
+  grid-auto-rows: 56px !important;
+  gap: 5px !important;
   padding: 8px !important;
   background: rgba(0, 0, 0, 0.4) !important;
   border: 1px solid #3a2a1a !important;
@@ -178,12 +186,12 @@
 }
 
 .inv-slot {
-  width: 72px !important;
-  height: 72px !important;
-  min-width: 72px !important;
-  max-width: 72px !important;
-  min-height: 72px !important;
-  max-height: 72px !important;
+  width: 56px !important;
+  height: 56px !important;
+  min-width: 56px !important;
+  max-width: 56px !important;
+  min-height: 56px !important;
+  max-height: 56px !important;
   background: #241e16 !important;
   border: 1px solid #3d2e1e !important;
   border-radius: 4px !important;
@@ -199,21 +207,9 @@
 }
 
 .inventory-item-image {
-  width: 36px !important;
-  height: 36px !important;
+  width: 38px !important;
+  height: 38px !important;
   object-fit: contain !important;
-}
-
-.item-name {
-  display: block !important;
-  font-size: 8px !important;
-  line-height: 1.1 !important;
-  white-space: nowrap !important;
-  text-overflow: ellipsis !important;
-  overflow: hidden !important;
-  max-width: 100% !important;
-  text-align: center !important;
-  color: #e2c074 !important;
 }
 
 .qty {
@@ -262,6 +258,123 @@
 .rarity-rare      { border-color: #2a4a7a !important; }
 .rarity-epic      { border-color: #4a2d6a !important; }
 .rarity-legendary { border-color: #6a4a14 !important; }
+
+/* ═══════════════ MAPA DE ZONAS E SAGAS ═══════════════ */
+.saga-map-block {
+  padding: 10px 10px 12px !important;
+  margin-bottom: 12px !important;
+  border: 1px solid rgba(212, 175, 55, .18) !important;
+  border-radius: 10px !important;
+  background: linear-gradient(180deg, rgba(28, 34, 48, .72), rgba(16, 20, 30, .72)) !important;
+}
+
+.saga-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 2px 4px 9px !important;
+  margin-bottom: 9px !important;
+  border-bottom: 1px solid rgba(212, 175, 55, .16) !important;
+}
+
+.saga-header h3 {
+  margin: 0 !important;
+  font-family: "Cinzel", serif !important;
+  color: #e8c37a !important;
+  font-size: 14px !important;
+}
+
+.saga-req {
+  padding: 2px 8px !important;
+  color: #8b93a7 !important;
+  font-size: 10px !important;
+  border: 1px solid rgba(139, 147, 167, .28) !important;
+  border-radius: 999px !important;
+}
+
+.saga-zones-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)) !important;
+  gap: 10px !important;
+}
+
+.zone-card {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  color: inherit !important;
+  background: #131824 !important;
+  border: 1px solid rgba(212, 175, 55, .22) !important;
+  border-radius: 9px !important;
+  cursor: pointer !important;
+  transition: transform .16s, border-color .16s, box-shadow .16s !important;
+}
+
+.zone-card.active {
+  border-color: #e8c37a !important;
+  box-shadow: 0 0 0 1px rgba(232, 195, 122, .45), 0 0 18px rgba(232, 195, 122, .18) !important;
+}
+
+.zone-card-thumb {
+  position: relative !important;
+  height: 64px !important;
+  background-color: #0d1018 !important;
+  background-position: center !important;
+  background-size: cover !important;
+}
+
+.zone-card-thumb::after {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background: linear-gradient(180deg, transparent 35%, rgba(10, 13, 20, .92)) !important;
+}
+
+.zone-flag {
+  position: absolute !important;
+  top: 5px !important;
+  left: 5px !important;
+  z-index: 2 !important;
+  padding: 3px 6px !important;
+  color: #fff !important;
+  font-size: 9px !important;
+  line-height: 1 !important;
+  background: rgba(8, 10, 16, .82) !important;
+  border-radius: 999px !important;
+}
+
+.zone-card-body {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+  padding: 8px !important;
+}
+
+.zone-title {
+  font-family: "Cinzel", serif !important;
+  font-weight: 700 !important;
+  font-size: 12px !important;
+  color: #e8c37a !important;
+}
+
+.zone-sub {
+  font-size: 10px !important;
+  color: #8b93a7 !important;
+}
+
+.select-zone-btn {
+  width: 100% !important;
+  padding: 6px 8px !important;
+  color: #e8c37a !important;
+  font-family: inherit !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  background: rgba(212, 175, 55, .09) !important;
+  border: 1px solid rgba(212, 175, 55, .5) !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+}
 
 /* ═══════════════ LOJA & CRAFTING ═══════════════ */
 .shop-item-card, .craft-recipe-card {
