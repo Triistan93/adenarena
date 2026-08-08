@@ -2298,30 +2298,104 @@ select:focus-visible {
 @keyframes vsPulse { 0%,100% { opacity: 0.3; transform: translate(-50%,-50%) scale(0.92); } 50% { opacity: 0.6; transform: translate(-50%,-50%) scale(1.06); } }
 
 /* ---- combatants ---- */
-.stage-hero {
-  position: absolute; left: 4%; bottom: 6%; width: 135px; height: 170px; z-index: 3;
+/* ---- combatants (pure vertical flex stack - zero escape) ---- */
+.stage-hero, .stage-monster {
+  position: absolute;
+  bottom: 6%;
+  width: 140px;
+  height: 180px;
+  max-height: 85%;
+  z-index: 3;
   border: 2px solid var(--gilt-bright);
-  background: rgba(10, 14, 22, 0.75);
+  background: rgba(10, 14, 22, 0.85);
   border-radius: 6px;
   box-shadow: 0 6px 20px rgba(0,0,0,0.85), inset 0 0 12px rgba(212,167,68,0.25);
-  padding: 6px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
-  backdrop-filter: blur(2px);
+  padding: 6px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  overflow: hidden;
+  backdrop-filter: blur(4px);
 }
-.stage-hero::before {
-  content: attr(data-label);
-  position: absolute; top: -20px;
-  font-family: "Cinzel", serif; font-size: 10px; font-weight: bold; letter-spacing: 0.12em;
-  color: var(--gilt-bright); text-shadow: 0 1px 3px #000;
+
+.stage-hero { left: 4%; }
+.stage-monster { right: 4%; }
+
+.stage-hero::before, .stage-monster::before {
+  display: none !important;
 }
-.stage-hero .hero-full, .stage-hero .hero-full img {
-  width: 100%; height: 100%;
+
+.m-name, .h-name {
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  transform: none !important;
+  width: 100%;
+  font-family: "Cinzel", serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--gilt-bright);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  text-shadow: 0 1px 3px #000;
+  margin-bottom: 3px;
+  flex-shrink: 0;
+}
+
+.m-hp, .h-hp {
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  transform: none !important;
+  width: 100%;
+  height: 7px;
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid rgba(212,167,68,0.3);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 4px;
+  flex-shrink: 0;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.8);
+}
+
+.m-hp-fill, .h-hp-fill {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, #b91c1c, #ef4444);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.3);
+  transition: width 0.25s ease;
+}
+
+.m-art, .hero-full {
+  flex: 1 1 auto;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.stage-hero .hero-full img, .stage-monster .mon-svg img, .stage-monster .mon-svg {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
   animation: heroBob 2.4s ease-in-out infinite;
   filter: drop-shadow(0 7px 12px rgba(0,0,0,0.7)) drop-shadow(0 0 6px rgba(232,200,96,0.2));
   transform-origin: 50% 100%;
-  user-select: none; -webkit-user-drag: none;
+  user-select: none;
+  -webkit-user-drag: none;
 }
+
 .stage.is-hero-atk .stage-hero { animation: heroSwing 0.42s cubic-bezier(0.3,0.8,0.3,1); }
 .stage-hero.hurt { animation: heroHurt 0.4s ease; }
+
 @keyframes heroBob {
   0%   { transform: translateY(0) scaleY(1); }
   25%  { transform: translateY(-2px) scaleY(1.005); }
@@ -2344,31 +2418,10 @@ select:focus-visible {
   100% { filter: none; transform: translateX(0) scale(1); }
 }
 
-.stage-monster {
-  position: absolute; right: 4%; bottom: 6%; width: 135px; height: 170px; z-index: 3;
-  border: 2px solid var(--gilt-bright);
-  background: rgba(10, 14, 22, 0.75);
-  border-radius: 6px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.85), inset 0 0 12px rgba(212,167,68,0.25);
-  padding: 6px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
-  backdrop-filter: blur(2px);
-}
-.stage-monster::before {
-  content: attr(data-label);
-  position: absolute; top: -20px;
-  font-family: "Cinzel", serif; font-size: 10px; font-weight: bold; letter-spacing: 0.12em;
-  color: var(--gilt-bright); text-shadow: 0 1px 3px #000;
-}
-.stage-monster .mon-svg, .stage-monster .mon-svg img {
-  width: 100%; height: 100%;
-  animation: monIdle 2.6s ease-in-out infinite;
-  filter: drop-shadow(0 7px 12px rgba(0,0,0,0.65)) drop-shadow(0 0 4px rgba(200,60,30,0.12));
-  transform-origin: 50% 100%;
-  user-select: none; -webkit-user-drag: none;
-}
 .stage-monster.hurt .mon-svg { animation: monHurt 0.4s ease; }
 .stage-monster.lunge { animation: monLunge 0.42s cubic-bezier(0.3,0.8,0.3,1); }
 #m-art.swap { animation: monIn 0.4s ease; }
+
 @keyframes monIdle {
   0%   { transform: translateY(0) scaleX(1) scaleY(1); }
   30%  { transform: translateY(-1px) scaleX(1.01) scaleY(1.008); }
@@ -2386,17 +2439,40 @@ select:focus-visible {
 @keyframes monLunge { 0% { transform: translateX(0); } 40% { transform: translateX(-24px); } 100% { transform: translateX(0); } }
 @keyframes monIn { from { opacity: 0; transform: scale(0.5) translateY(10px); } to { opacity: 1; transform: none; } }
 
-.m-name {
-  position: absolute; top: -22px; left: 50%; transform: translateX(-50%);
-  font-family: "Cinzel", serif; font-size: 10px; letter-spacing: 0.08em;
-  color: var(--bone); white-space: nowrap; text-shadow: 0 1px 2px #000;
+/* Fixed pixel sizes for slot icons to prevent tiny encolhimento */
+.inv-slot .item-icon,
+.inv-slot .inv-icon,
+.inv-slot img,
+.equip-slot .equip-icon,
+.equip-slot img,
+.inventory-item-image {
+  width: 38px !important;
+  height: 38px !important;
+  min-width: 38px !important;
+  min-height: 38px !important;
+  max-width: 38px !important;
+  max-height: 38px !important;
+  object-fit: contain !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
 }
-.m-hp {
-  position: absolute; top: -9px; left: 50%; transform: translateX(-50%);
-  width: 98px; height: 6px; background: #000;
-  box-shadow: 0 0 0 1px rgba(255,255,255,0.08);
+
+.shop-item-icon,
+.craft-recipe-icon,
+.skill-icon {
+  width: 36px !important;
+  height: 36px !important;
+  min-width: 36px !important;
+  min-height: 36px !important;
+  font-size: 24px !important;
+  object-fit: contain !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
 }
-.m-hp-fill { height: 100%; width: 100%; background: linear-gradient(90deg, #6a1e1e, #d24a3a); transition: width 0.25s ease; }
 
 .stage.kill-flash::after {
   content: ""; position: absolute; inset: 0; pointer-events: none;
