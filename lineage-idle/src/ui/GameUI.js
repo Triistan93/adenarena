@@ -245,220 +245,236 @@ function createEquipmentSlotDynamically(slot) {
 
 const INJECTED_GAMEUI_CSS = `
 /* === CONFINAMENTO DO PAPERDOLL (175px FIXOS) === */
+#tab-inventory .l2inv-left-paperdoll,
 .l2inv-left-paperdoll {
-  width: 175px !important;
-  min-width: 175px !important;
-  max-width: 175px !important;
-  flex: 0 0 175px !important;
-  padding: 6px !important;
-  box-sizing: border-box !important;
-  overflow-x: hidden !important;
-  overflow-y: auto !important;
-  border-right: 1px solid #3c2e1e !important;
+  width: 175px;
+  min-width: 175px;
+  max-width: 175px;
+  flex: 0 0 175px;
+  padding: 6px;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  overflow-y: auto;
+  border-right: 1px solid #3c2e1e;
 }
 
+#tab-inventory .l2inv-paperdoll-grid,
 .l2inv-paperdoll-grid {
-  display: flex !important;
-  flex-direction: row !important;
-  gap: 4px !important;
-  justify-content: center !important;
-  width: 100% !important;
-  box-sizing: border-box !important;
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+  justify-content: center;
+  width: 100%;
+  box-sizing: border-box;
 }
 
+#tab-inventory .l2inv-doll-col,
 .l2inv-doll-col {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 4px !important;
-  width: 50px !important;
-  min-width: 50px !important;
-  max-width: 50px !important;
-  flex: 0 0 50px !important;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 50px;
+  min-width: 50px;
+  max-width: 50px;
+  flex: 0 0 50px;
 }
 
-.l2inv-pd-slot, .equip-slot {
-  width: 50px !important;
-  height: 50px !important;
-  min-width: 50px !important;
-  max-width: 50px !important;
-  min-height: 50px !important;
-  max-height: 50px !important;
-  box-sizing: border-box !important;
-  background: #1a1611 !important;
-  border: 1px solid #4a3a2a !important;
-  border-radius: 3px !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  position: relative !important;
+#tab-inventory .equip-slot,
+.l2inv-pd-slot,
+.equip-slot {
+  width: 50px;
+  height: 50px;
+  min-width: 50px;
+  max-width: 50px;
+  min-height: 50px;
+  max-height: 50px;
+  box-sizing: border-box;
+  background: #1a1611;
+  border: 1px solid #4a3a2a;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 }
 
 /* === DESATIVAR RESIZE MANUAL === */
 #inventory-panel, .inventory-panel, #inventory-window, #tab-inventory, .l2inv-header-frame {
-  resize: none !important;
+  resize: none;
   user-select: none;
 }
 
-/* === GRID FIXO DE 8 COLUNAS COM SCROLL VERTICAL === */
-#inventory-grid, .inventory-grid, .l2inv-grid {
-  display: grid !important;
-  grid-template-columns: repeat(8, 48px) !important; /* EXACTLY 8 COLUMNS */
-  grid-auto-rows: 48px !important;
-  gap: 4px !important;
-  padding: 6px !important;
-  background: rgba(10, 7, 4, 0.6) !important;
-  border: 1px solid #3c2e1e !important;
-  border-radius: 4px !important;
-  overflow-y: auto !important; /* SCROLL VERTICAL PARA NOVOS ITENS */
-  overflow-x: hidden !important;
-  max-height: 100% !important;
-  align-content: start !important;
-  justify-content: start !important;
-  flex: 1 1 auto !important;
-  box-sizing: border-box !important;
+/* === GRID FIXO DE 10 COLUNAS COM PREENCHIMENTO COMPLETO === */
+#tab-inventory #inventory-grid,
+#tab-inventory .inventory-grid,
+#tab-inventory .l2inv-grid,
+#inventory-grid,
+.inventory-grid,
+.l2inv-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr); /* 10 COLUNAS PREENCHENDO O PAINEL */
+  grid-auto-rows: minmax(42px, auto);
+  gap: 4px;
+  padding: 6px;
+  background: rgba(10, 7, 4, 0.65);
+  border: 1px solid #3c2e1e;
+  border-radius: 4px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 100%;
+  align-content: start;
+  justify-content: start;
+  flex: 1 1 auto;
+  box-sizing: border-box;
 }
 
-.inv-slot, .l2inv-slot {
-  width: 48px !important;
-  height: 48px !important;
-  min-width: 48px !important;
-  max-width: 48px !important;
-  min-height: 48px !important;
-  max-height: 48px !important;
-  background: #241e16 !important;
-  border: 1px solid #3d2e1e !important;
-  border-radius: 4px !important;
-  box-sizing: border-box !important;
-  overflow: hidden !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  position: relative !important;
+#tab-inventory .inv-slot,
+.inv-slot,
+.l2inv-slot {
+  aspect-ratio: 1;
+  width: 100%;
+  box-sizing: border-box;
+  background: #241e16;
+  border: 1px solid #3d2e1e;
+  border-radius: 4px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+#tab-inventory .inv-slot.empty,
+.inv-slot.empty {
+  background: rgba(20, 14, 8, 0.45);
+  border: 1px solid #2a1e12;
+  opacity: 0.6;
+  cursor: default;
 }
 
 .inventory-item-image {
-  width: 34px !important;
-  height: 34px !important;
-  object-fit: contain !important;
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
 }
 
 /* === MAPA DE ZONAS & DIORAMA DE COMBATE ESTILOS === */
 .saga-map-block {
-  padding: 12px 14px !important;
-  margin-bottom: 14px !important;
-  border: 1px solid rgba(212, 175, 55, .28) !important;
-  border-radius: 12px !important;
-  background: linear-gradient(180deg, rgba(28, 34, 48, .82), rgba(16, 20, 30, .82)) !important;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  border: 1px solid rgba(212, 175, 55, .28);
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(28, 34, 48, .82), rgba(16, 20, 30, .82));
 }
 .saga-header {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  padding-bottom: 8px !important;
-  margin-bottom: 10px !important;
-  border-bottom: 1px solid rgba(212, 175, 55, .2) !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid rgba(212, 175, 55, .2);
 }
 .saga-title {
-  color: #e8c37a !important;
-  font-size: 15px !important;
-  font-weight: 700 !important;
-  font-family: "Cinzel", serif !important;
+  color: #e8c37a;
+  font-size: 15px;
+  font-weight: 700;
+  font-family: "Cinzel", serif;
 }
 .saga-req {
-  padding: 2px 10px !important;
-  color: #8b93a7 !important;
-  font-size: 11px !important;
-  border: 1px solid rgba(139, 147, 167, .3) !important;
-  border-radius: 999px !important;
+  padding: 2px 10px;
+  color: #8b93a7;
+  font-size: 11px;
+  border: 1px solid rgba(139, 147, 167, .3);
+  border-radius: 999px;
 }
 .saga-zones-grid {
-  display: grid !important;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)) !important;
-  gap: 12px !important;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
 }
 .zone-card {
-  position: relative !important;
-  display: flex !important;
-  flex-direction: column !important;
-  overflow: hidden !important;
-  background: #131824 !important;
-  border: 1px solid rgba(212, 175, 55, .3) !important;
-  border-radius: 10px !important;
-  cursor: pointer !important;
-  transition: transform .16s, border-color .16s, box-shadow .16s !important;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #131824;
+  border: 1px solid rgba(212, 175, 55, .3);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform .16s, border-color .16s, box-shadow .16s;
 }
 .zone-card:hover:not(.locked):not(.active) {
-  transform: translateY(-3px) !important;
-  border-color: rgba(232, 195, 122, .8) !important;
-  box-shadow: 0 6px 18px rgba(0,0,0,.6) !important;
+  transform: translateY(-3px);
+  border-color: rgba(232, 195, 122, .8);
+  box-shadow: 0 6px 18px rgba(0,0,0,.6);
 }
 .zone-card.active {
-  border-color: #e8c37a !important;
-  box-shadow: 0 0 0 1px rgba(232, 195, 122, .5), 0 0 20px rgba(232, 195, 122, .25) !important;
+  border-color: #e8c37a;
+  box-shadow: 0 0 0 1px rgba(232, 195, 122, .5), 0 0 20px rgba(232, 195, 122, .25);
 }
 .zone-card-thumb {
-  position: relative !important;
-  height: 80px !important;
-  background-color: #0d1018 !important;
-  background-position: center !important;
-  background-size: cover !important;
+  position: relative;
+  height: 80px;
+  background-color: #0d1018;
+  background-position: center;
+  background-size: cover;
 }
 .zone-card-thumb::after {
-  content: '' !important;
-  position: absolute !important;
-  inset: 0 !important;
-  background: linear-gradient(180deg, transparent 30%, rgba(10, 13, 20, .95)) !important;
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 30%, rgba(10, 13, 20, .95));
 }
 .zone-flag {
-  position: absolute !important;
-  top: 6px !important;
-  z-index: 2 !important;
-  padding: 3px 8px !important;
-  font-size: 10px !important;
-  border-radius: 999px !important;
+  position: absolute;
+  top: 6px;
+  z-index: 2;
+  padding: 3px 8px;
+  font-size: 10px;
+  border-radius: 999px;
 }
-.zone-flag.town { left: 6px !important; color: #7fd4a8 !important; background: rgba(8,10,16,.85) !important; border: 1px solid rgba(127,212,168,.4) !important; }
-.zone-flag.here { right: 6px !important; color: #0d1018 !important; font-weight: 800 !important; background: #e8c37a !important; }
+.zone-flag.town { left: 6px; color: #7fd4a8; background: rgba(8,10,16,.85); border: 1px solid rgba(127,212,168,.4); }
+.zone-flag.here { right: 6px; color: #0d1018; font-weight: 800; background: #e8c37a; }
 .zone-card-body {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 6px !important;
-  padding: 10px !important;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px;
 }
 .zone-card-header {
-  display: flex !important;
-  align-items: baseline !important;
-  justify-content: space-between !important;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
 }
 .zone-card-title {
-  color: #e6e9f2 !important;
-  font-size: 13px !important;
-  font-weight: 700 !important;
-  font-family: "Cinzel", serif !important;
+  color: #e6e9f2;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: "Cinzel", serif;
 }
 .zone-card-lvl {
-  color: #e8c37a !important;
-  font-size: 11px !important;
+  color: #e8c37a;
+  font-size: 11px;
 }
 .zone-card-desc {
-  color: #8b93a7 !important;
-  font-size: 11px !important;
+  color: #8b93a7;
+  font-size: 11px;
 }
 .select-zone-btn {
-  width: 100 !important;
-  padding: 8px !important;
-  color: #e8c37a !important;
-  font-family: inherit !important;
-  font-size: 11px !important;
-  font-weight: 700 !important;
-  background: rgba(212, 175, 55, .12) !important;
-  border: 1px solid rgba(212, 175, 55, .5) !important;
-  border-radius: 6px !important;
-  cursor: pointer !important;
+  width: 100%;
+  padding: 8px;
+  color: #e8c37a;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  background: rgba(212, 175, 55, .12);
+  border: 1px solid rgba(212, 175, 55, .5);
+  border-radius: 6px;
+  cursor: pointer;
 }
 .select-zone-btn:hover:not(:disabled) {
-  color: #12161f !important;
-  background: #e8c37a !important;
+  color: #12161f;
+  background: #e8c37a;
 }
 `;
 
@@ -572,8 +588,18 @@ export function updateInventoryUI(state, callbacks = {}) {
     grid.appendChild(slotEl);
   }
 
+  // Preenche os espaços em preto restantes com molduras de slots vazios até 80 slots (8 linhas x 10 colunas)
+  const renderedCount = grid.children.length;
+  const maxSlots = getMaxInventorySlots(state) || 80;
+  const totalDisplaySlots = Math.max(maxSlots, Math.ceil(renderedCount / 10) * 10, 80);
+
+  for (let i = renderedCount; i < totalDisplaySlots; i++) {
+    const emptySlotEl = mkEl('div');
+    emptySlotEl.className = 'inv-slot empty';
+    grid.appendChild(emptySlotEl);
+  }
+
   const cnt = findElement('inv-count') || findElement('inv-slots') || findElement('inv-slots-count');
-  const maxSlots = getMaxInventorySlots(state);
   if (cnt) cnt.textContent = `${state.inventory?.length || 0} / ${maxSlots}`;
 }
 

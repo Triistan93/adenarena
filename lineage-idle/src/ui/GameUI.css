@@ -6,17 +6,17 @@
 
 /* ═══════════════ TOOLTIP ═══════════════ */
 #item-tooltip {
-  position: fixed !important;
-  z-index: 99999 !important;
-  pointer-events: none !important;
-  max-width: 300px !important;
-  background: rgba(30, 25, 15, 0.97) !important;
-  border: 1px solid #8a6b2e !important;
-  border-radius: 6px !important;
-  padding: 8px 10px !important;
-  color: #e8d5a3 !important;
-  font-size: 12px !important;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8) !important;
+  position: fixed;
+  z-index: 99999;
+  pointer-events: none;
+  max-width: 300px;
+  background: rgba(30, 25, 15, 0.97);
+  border: 1px solid #8a6b2e;
+  border-radius: 6px;
+  padding: 8px 10px;
+  color: #e8d5a3;
+  font-size: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8);
   display: none;
 }
 .tooltip-header {
@@ -36,399 +36,416 @@
 /* ═══════════════ PAINEL DO INVENTÁRIO (SEM RESIZE MANUAL) ═══════════════ */
 #inventory-panel, .inventory-panel, #inventory-window,
 [data-panel="inventory"], [data-menu-panel="inventory"] {
-  width: 100% !important;
-  height: 100% !important;
-  max-width: 100% !important;
-  max-height: 100% !important;
-  margin: 0 !important;
-  background: linear-gradient(180deg, #251a0e 0%, #1a140e 100%) !important;
-  border: 1px solid #4a3a2a !important;
-  border-radius: 6px !important;
-  display: flex !important;
-  flex-direction: column !important;
-  overflow: hidden !important;
-  box-sizing: border-box !important;
-  resize: none !important; /* Desativa resize manual */
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  margin: 0;
+  background: linear-gradient(180deg, #251a0e 0%, #1a140e 100%);
+  border: 1px solid #4a3a2a;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+  resize: none; /* Desativa resize manual */
 }
 
 /* ═══════════════ HEADER ═══════════════ */
 .inventory-header, #inventory-header {
-  flex: 0 0 auto !important;
-  padding: 6px 10px !important;
-  display: flex !important;
-  align-items: center !important;
-  gap: 8px !important;
-  flex-wrap: wrap !important;
-  border-bottom: 1px solid #3a2a1a !important;
-  background: #1e1810 !important;
+  flex: 0 0 auto;
+  padding: 6px 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid #3a2a1a;
+  background: #1e1810;
 }
 
-.l2inv-tabs, .inventory-tabs { display: flex !important; gap: 4px !important; flex-wrap: wrap !important; }
+.l2inv-tabs, .inventory-tabs { display: flex; gap: 4px; flex-wrap: wrap; }
 .l2inv-tabs button, .tab-btn {
-  height: 24px !important;
-  padding: 0 8px !important;
-  font-size: 10px !important;
-  background: #2a241c !important;
-  border: 1px solid #4a3a2a !important;
-  color: #c8a87a !important;
-  border-radius: 4px !important;
-  text-transform: uppercase !important;
-  white-space: nowrap !important;
-  flex: 0 0 auto !important;
-  cursor: pointer !important;
+  height: 24px;
+  padding: 0 8px;
+  font-size: 10px;
+  background: #2a241c;
+  border: 1px solid #4a3a2a;
+  color: #c8a87a;
+  border-radius: 4px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  flex: 0 0 auto;
+  cursor: pointer;
 }
 .l2inv-tabs button.active, .tab-btn.active {
-  background: #4a3a24 !important;
-  border-color: #c9a227 !important;
-  color: #fff !important;
+  background: #4a3a24;
+  border-color: #c9a227;
+  color: #fff;
 }
 
 #inv-search-input {
-  height: 24px !important;
-  font-size: 11px !important;
-  padding: 0 6px !important;
-  background: #1a1611 !important;
-  border: 1px solid #4a3a2a !important;
-  color: #d8c8a8 !important;
-  border-radius: 4px !important;
-  min-width: 120px !important;
-  flex: 0 0 120px !important;
+  height: 24px;
+  font-size: 11px;
+  padding: 0 6px;
+  background: #1a1611;
+  border: 1px solid #4a3a2a;
+  color: #d8c8a8;
+  border-radius: 4px;
+  min-width: 120px;
+  flex: 0 0 120px;
 }
 
 /* ═══════════════ BODY ═══════════════ */
 .inventory-body, #inventory-body {
-  flex: 1 1 auto !important;
-  display: flex !important;
-  flex-direction: row !important;
-  gap: 8px !important;
-  padding: 8px !important;
-  overflow: hidden !important;
-  min-height: 0 !important;
-  width: 100% !important;
-  box-sizing: border-box !important;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  padding: 8px;
+  overflow: hidden;
+  min-height: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-/* ═══════════════ PAPERDOLL CLÁSSICO FIXO (190px LARGURA) ═══════════════ */
+/* ═══════════════ PAPERDOLL CLÁSSICO FIXO (175px LARGURA) ═══════════════ */
+#tab-inventory .l2inv-left-paperdoll,
+.l2inv-left-paperdoll {
+  width: 175px;
+  min-width: 175px;
+  max-width: 175px;
+  flex: 0 0 175px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: radial-gradient(ellipse at center, #2a241c 0%, #17120e 100%);
+  border: 1px solid #3a2a1a;
+  border-radius: 6px;
+  padding: 6px;
+  box-sizing: border-box;
+  position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+#tab-inventory .l2inv-paperdoll-grid,
+.l2inv-paperdoll-grid {
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+  justify-content: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+#tab-inventory .l2inv-doll-col,
 .l2inv-doll-col {
-  width: 190px !important;
-  min-width: 190px !important;
-  max-width: 190px !important;
-  flex: 0 0 190px !important;
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 6px !important;
-  background: radial-gradient(ellipse at center, #2a241c 0%, #17120e 100%) !important;
-  border: 1px solid #3a2a1a !important;
-  border-radius: 6px !important;
-  padding: 6px !important;
-  box-sizing: border-box !important;
-  position: relative !important;
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 50px;
+  min-width: 50px;
+  max-width: 50px;
+  flex: 0 0 50px;
 }
 
-#paperdoll-grid {
-  display: grid !important;
-  grid-template-columns: repeat(3, 48px) !important;
-  grid-template-rows: repeat(6, 48px) !important;
-  gap: 4px !important;
-  justify-content: center !important;
-  padding: 4px !important;
-  background: radial-gradient(ellipse at center, #2a241c 0%, #17120e 100%) !important;
-  border: 1px solid #3a2a1a !important;
-  border-radius: 6px !important;
-  width: fit-content !important;
-  margin: 0 auto !important;
-  box-sizing: border-box !important;
-  grid-template-areas:
-    "hair helmet hair2"
-    "earring1 armor earring2"
-    "necklace legs cloak"
-    "weapon gloves shield"
-    "ring1 boots ring2"
-    "talisman agathion belt" !important;
-}
-
+#tab-inventory .equip-slot,
+.l2inv-pd-slot,
 .equip-slot {
-  width: 48px !important;
-  height: 48px !important;
-  background: #1a1611 !important;
-  border: 1px solid #4a3a2a !important;
-  border-radius: 3px !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  position: relative !important;
-  cursor: pointer !important;
-  box-sizing: border-box !important;
+  width: 50px;
+  height: 50px;
+  min-width: 50px;
+  max-width: 50px;
+  min-height: 50px;
+  max-height: 50px;
+  background: #1a1611;
+  border: 1px solid #4a3a2a;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  box-sizing: border-box;
 }
-.equip-slot.active { border-color: #c9a227 !important; }
+.equip-slot.active { border-color: #c9a227; }
 
 /* STATS DO PERSONAGEM FIXOS ABAIXO DO PAPERDOLL */
 .l2inv-paperdoll-stats {
-  position: sticky !important;
-  bottom: 0 !important;
-  background: #140d07 !important;
-  padding: 6px 8px !important;
-  border-top: 1px solid #342412 !important;
-  z-index: 10 !important;
-  font-size: 11px !important;
-  color: #d4a744 !important;
+  position: sticky;
+  bottom: 0;
+  background: #140d07;
+  padding: 6px 8px;
+  border-top: 1px solid #342412;
+  z-index: 10;
+  font-size: 11px;
+  color: #d4a744;
 }
 
 /* ═══════════════ COLUNA DIREITA DO INVENTÁRIO ═══════════════ */
 .l2inv-main-col, .inventory-grid-container {
-  flex: 1 1 auto !important;
-  min-width: 0 !important;
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 6px !important;
-  overflow: hidden !important;
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow: hidden;
 }
 
-/* ═══════════════ GRID FIXO DE 8 COLUNAS COM SCROLL VERTICAL ═══════════════ */
-#inventory-grid, .inventory-grid {
-  display: grid !important;
-  grid-template-columns: repeat(8, 50px) !important; /* EXACTLY 8 COLUMNS */
-  grid-auto-rows: 50px !important;
-  gap: 4px !important;
-  padding: 6px !important;
-  background: rgba(0, 0, 0, 0.45) !important;
-  border: 1px solid #3a2a1a !important;
-  border-radius: 4px !important;
-  overflow-y: auto !important; /* BARRA DE ROLAGEM VERTICAL PARA NOVOS ITENS */
-  overflow-x: hidden !important;
-  max-height: 100% !important;
-  align-content: start !important;
-  justify-content: start !important;
-  flex: 1 !important;
-  box-sizing: border-box !important;
+/* ═══════════════ GRID FIXO DE 10 COLUNAS COM SCROLL VERTICAL ═══════════════ */
+#tab-inventory #inventory-grid,
+#tab-inventory .inventory-grid,
+#tab-inventory .l2inv-grid,
+#inventory-grid,
+.inventory-grid,
+.l2inv-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr); /* EXACTLY 10 COLUMNS FILLING SPACE */
+  grid-auto-rows: minmax(42px, auto);
+  gap: 4px;
+  padding: 6px;
+  background: rgba(10, 7, 4, 0.65);
+  border: 1px solid #3a2a1a;
+  border-radius: 4px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 100%;
+  align-content: start;
+  justify-content: start;
+  flex: 1 1 auto;
+  box-sizing: border-box;
 }
 
-.inv-slot {
-  width: 50px !important;
-  height: 50px !important;
-  min-width: 50px !important;
-  max-width: 50px !important;
-  min-height: 50px !important;
-  max-height: 50px !important;
-  background: #241e16 !important;
-  border: 1px solid #3d2e1e !important;
-  border-radius: 4px !important;
-  box-sizing: border-box !important;
-  overflow: hidden !important;
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  justify-content: center !important;
-  padding: 2px !important;
-  position: relative !important;
-  cursor: pointer !important;
+#tab-inventory .inv-slot,
+.inv-slot,
+.l2inv-slot {
+  aspect-ratio: 1;
+  width: 100%;
+  background: #241e16;
+  border: 1px solid #3d2e1e;
+  border-radius: 4px;
+  box-sizing: border-box;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  position: relative;
+  cursor: pointer;
+}
+
+#tab-inventory .inv-slot.empty,
+.inv-slot.empty {
+  background: rgba(20, 14, 8, 0.45);
+  border: 1px solid #2a1e12;
+  opacity: 0.6;
+  cursor: default;
 }
 
 .inventory-item-image {
-  width: 34px !important;
-  height: 34px !important;
-  object-fit: contain !important;
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
 }
 
 .qty {
-  font-size: 9px !important;
-  position: absolute !important;
-  bottom: 1px !important;
-  right: 2px !important;
-  color: #f0c050 !important;
-  font-weight: bold !important;
-  text-shadow: 1px 1px 0 #000, -1px -1px 0 #000 !important;
+  font-size: 9px;
+  position: absolute;
+  bottom: 1px;
+  right: 2px;
+  color: #f0c050;
+  font-weight: bold;
+  text-shadow: 1px 1px 0 #000, -1px -1px 0 #000;
 }
 
 .equipped-badge {
-  position: absolute !important;
-  top: 1px !important;
-  right: 1px !important;
-  width: 10px !important;
-  height: 10px !important;
-  font-size: 7px !important;
-  background: #22c55e !important;
-  color: #fff !important;
-  border-radius: 2px !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  width: 10px;
+  height: 10px;
+  font-size: 7px;
+  background: #22c55e;
+  color: #fff;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .inv-check {
-  position: absolute !important;
-  top: 1px !important;
-  left: 1px !important;
-  width: 10px !important;
-  height: 10px !important;
-  background: #3b82f6 !important;
-  color: #fff !important;
-  border-radius: 2px !important;
-  font-size: 7px !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: 10px;
+  height: 10px;
+  background: #3b82f6;
+  color: #fff;
+  border-radius: 2px;
+  font-size: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.inv-slot:not(.is-selected) .inv-check { display: none !important; }
+.inv-slot:not(.is-selected) .inv-check { display: none; }
 
-.rarity-common    { border-color: #8a6b2e !important; }
-.rarity-uncommon  { border-color: #2d5a2d !important; }
-.rarity-rare      { border-color: #2a4a7a !important; }
-.rarity-epic      { border-color: #4a2d6a !important; }
-.rarity-legendary { border-color: #6a4a14 !important; }
+.rarity-common    { border-color: #8a6b2e; }
+.rarity-uncommon  { border-color: #2d5a2d; }
+.rarity-rare      { border-color: #2a4a7a; }
+.rarity-epic      { border-color: #4a2d6a; }
+.rarity-legendary { border-color: #6a4a14; }
 
 /* ═══════════════ MAPA DE ZONAS E SAGAS ═══════════════ */
 .saga-map-block {
-  padding: 10px 10px 12px !important;
-  margin-bottom: 12px !important;
-  border: 1px solid rgba(212, 175, 55, .18) !important;
-  border-radius: 10px !important;
-  background: linear-gradient(180deg, rgba(28, 34, 48, .72), rgba(16, 20, 30, .72)) !important;
+  padding: 10px 10px 12px;
+  margin-bottom: 12px;
+  border: 1px solid rgba(212, 175, 55, .18);
+  border-radius: 10px;
+  background: linear-gradient(180deg, rgba(28, 34, 48, .72), rgba(16, 20, 30, .72));
 }
 
 .saga-header {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  padding: 2px 4px 9px !important;
-  margin-bottom: 9px !important;
-  border-bottom: 1px solid rgba(212, 175, 55, .16) !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px 4px 9px;
+  margin-bottom: 9px;
+  border-bottom: 1px solid rgba(212, 175, 55, .16);
 }
 
 .saga-header h3 {
-  margin: 0 !important;
-  font-family: "Cinzel", serif !important;
-  color: #e8c37a !important;
-  font-size: 14px !important;
+  margin: 0;
+  font-family: "Cinzel", serif;
+  color: #e8c37a;
+  font-size: 14px;
 }
 
 .saga-req {
-  padding: 2px 8px !important;
-  color: #8b93a7 !important;
-  font-size: 10px !important;
-  border: 1px solid rgba(139, 147, 167, .28) !important;
-  border-radius: 999px !important;
+  padding: 2px 8px;
+  color: #8b93a7;
+  font-size: 10px;
+  border: 1px solid rgba(139, 147, 167, .28);
+  border-radius: 999px;
 }
 
 .saga-zones-grid {
-  display: grid !important;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)) !important;
-  gap: 10px !important;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 10px;
 }
 
 .zone-card {
-  position: relative !important;
-  display: flex !important;
-  flex-direction: column !important;
-  overflow: hidden !important;
-  color: inherit !important;
-  background: #131824 !important;
-  border: 1px solid rgba(212, 175, 55, .22) !important;
-  border-radius: 999px !important;
-  cursor: pointer !important;
-  transition: transform .16s, border-color .16s, box-shadow .16s !important;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: inherit;
+  background: #131824;
+  border: 1px solid rgba(212, 175, 55, .22);
+  border-radius: 9px;
+  cursor: pointer;
+  transition: transform .16s, border-color .16s, box-shadow .16s;
 }
 
 .zone-card.active {
-  border-color: #e8c37a !important;
-  box-shadow: 0 0 0 1px rgba(232, 195, 122, .45), 0 0 18px rgba(232, 195, 122, .18) !important;
+  border-color: #e8c37a;
+  box-shadow: 0 0 0 1px rgba(232, 195, 122, .45), 0 0 18px rgba(232, 195, 122, .18);
 }
 
 .zone-card-thumb {
-  position: relative !important;
-  height: 64px !important;
-  background-color: #0d1018 !important;
-  background-position: center !important;
-  background-size: cover !important;
+  position: relative;
+  height: 64px;
+  background-color: #0d1018;
+  background-position: center;
+  background-size: cover;
 }
 
 .zone-card-thumb::after {
-  content: '' !important;
-  position: absolute !important;
-  inset: 0 !important;
-  background: linear-gradient(180deg, transparent 35%, rgba(10, 13, 20, .92)) !important;
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 35%, rgba(10, 13, 20, .92));
 }
 
 .zone-flag {
-  position: absolute !important;
-  top: 5px !important;
-  left: 5px !important;
-  z-index: 2 !important;
-  padding: 3px 6px !important;
-  color: #fff !important;
-  font-size: 9px !important;
-  line-height: 1 !important;
-  background: rgba(8, 10, 16, .82) !important;
-  border-radius: 999px !important;
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  z-index: 2;
+  padding: 3px 6px;
+  color: #fff;
+  font-size: 9px;
+  line-height: 1;
+  background: rgba(8, 10, 16, .82);
+  border-radius: 999px;
 }
 
 .zone-card-body {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 4px !important;
-  padding: 8px !important;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px;
 }
 
 .zone-title {
-  font-family: "Cinzel", serif !important;
-  font-weight: 700 !important;
-  font-size: 12px !important;
-  color: #e8c37a !important;
+  font-family: "Cinzel", serif;
+  font-weight: 700;
+  font-size: 12px;
+  color: #e8c37a;
 }
 
 .zone-sub {
-  font-size: 10px !important;
-  color: #8b93a7 !important;
+  font-size: 10px;
+  color: #8b93a7;
 }
 
 .select-zone-btn {
-  width: 100% !important;
-  padding: 6px 8px !important;
-  color: #e8c37a !important;
-  font-family: inherit !important;
-  font-size: 11px !important;
-  font-weight: 700 !important;
-  background: rgba(212, 175, 55, .09) !important;
-  border: 1px solid rgba(212, 175, 55, .5) !important;
-  border-radius: 6px !important;
-  cursor: pointer !important;
+  width: 100%;
+  padding: 6px 8px;
+  color: #e8c37a;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  background: rgba(212, 175, 55, .09);
+  border: 1px solid rgba(212, 175, 55, .5);
+  border-radius: 6px;
+  cursor: pointer;
 }
 
 /* ═══════════════ LOJA & CRAFTING ═══════════════ */
 .shop-item-card, .craft-recipe-card {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  padding: 8px 12px !important;
-  margin-bottom: 6px !important;
-  background: rgba(30, 22, 14, 0.6) !important;
-  border: 1px solid #3a2a1a !important;
-  border-radius: 6px !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  margin-bottom: 6px;
+  background: rgba(30, 22, 14, 0.6);
+  border: 1px solid #3a2a1a;
+  border-radius: 6px;
 }
 
 .shop-item-details, .craft-recipe-header {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 2px !important;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .shop-item-name, .craft-recipe-title {
-  font-family: "Cinzel", serif !important;
-  font-weight: 700 !important;
-  color: #f0c050 !important;
+  font-family: "Cinzel", serif;
+  font-weight: 700;
+  color: #f0c050;
 }
 
 .buy-item-btn, .craft-item-btn {
-  padding: 6px 12px !important;
-  background: linear-gradient(180deg, #4a3a24, #2a1e10) !important;
-  border: 1px solid #d4a744 !important;
-  color: #fff !important;
-  border-radius: 4px !important;
-  cursor: pointer !important;
+  padding: 6px 12px;
+  background: linear-gradient(180deg, #4a3a24, #2a1e10);
+  border: 1px solid #d4a744;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
 }
 .buy-item-btn:disabled, .craft-item-btn:disabled {
-  opacity: 0.5 !important;
-  cursor: not-allowed !important;
+  opacity: 0.5;
+  cursor: not-allowed;
 }

@@ -3202,16 +3202,16 @@ select:focus-visible {
 
   /* Inventory & Paperdoll Auto-Grids */
   .inventory-grid, #inventory-grid, .l2inv-grid {
-    display: grid !important;
-    grid-template-columns: repeat(8, 48px) !important; /* EXACTLY 8 COLUMNS */
-    grid-auto-rows: 48px !important;
-    gap: 4px !important;
-    overflow-y: auto !important;
-    overflow-x: hidden !important;
+    display: grid;
+    grid-template-columns: repeat(10, 1fr); /* 10 COLUNAS PREENCHENDO O PAINEL */
+    grid-auto-rows: minmax(42px, auto);
+    gap: 4px;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
   .inv-slot {
-    width: 48px !important;
-    height: 48px !important;
+    aspect-ratio: 1;
+    width: 100%;
   }
 
   .l2inv-paperdoll-grid {
