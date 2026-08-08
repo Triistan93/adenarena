@@ -2,9 +2,14 @@
  * GameUI.js — Módulo unificado de interface gráfica do Lineage Idle.
  * Consolida TooltipUI, InventoryUI, StageUI, SkillsUI, ShopUI e AppLayout.
  *
- * Todo o CSS da interface vive em GameUI.css (fonte única de verdade).
- * Este arquivo NÃO deve injetar <style> em runtime — isso já causou bugs
- * de layout no passado (ver nota em ensureInventoryStyles).
+ * NOTA IMPORTANTE SOBRE CSS (leia antes de mexer em estilos):
+ * O jogo roda dentro de uma Shadow DOM (#idle-host.shadowRoot — ver getRoot()
+ * abaixo). Uma folha de estilo externa como GameUI.css NÃO atravessa a
+ * fronteira da Shadow DOM sozinha; por isso os estilos deste módulo são
+ * injetados como uma tag <style> DIRETAMENTE dentro da shadow root (função
+ * ensureGameUIStyles, mais abaixo). GameUI.css é mantido como referência /
+ * fonte legível do mesmo conteúdo, mas quem efetivamente estiliza a tela é
+ * o bloco injetado aqui. Editar só o .css sem espelhar aqui não terá efeito.
  */
 
 import { D, ALL_EQUIP_SLOTS, TIER_NAMES } from '../core/GameConfig.js';
@@ -247,22 +252,388 @@ function createEquipmentSlotDynamically(slot) {
   return slotEl;
 }
 
+const GAMEUI_CSS = `
+/* ═══════════ PAPERDOLL (LARGURA FLUIDA) ═══════════ */
+#tab-inventory .l2inv-left-paperdoll,
+.l2inv-left-paperdoll {
+  width: clamp(150px, 22%, 175px) !important;
+  min-width: 150px !important;
+  max-width: 175px !important;
+  flex: 0 1 175px !important;
+  padding: 6px !important;
+  box-sizing: border-box !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  border-right: 1px solid #3c2e1e !important;
+}
+
+#tab-inventory .l2inv-paperdoll-grid,
+.l2inv-paperdoll-grid {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 4px !important;
+  justify-content: center !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+#tab-inventory .l2inv-doll-col,
+.l2inv-doll-col {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+  width: 50px !important;
+  min-width: 50px !important;
+  max-width: 50px !important;
+  flex: 0 0 50px !important;
+}
+
+#tab-inventory .equip-slot,
+.l2inv-pd-slot,
+.equip-slot {
+  width: 50px !important;
+  height: 50px !important;
+  min-width: 50px !important;
+  max-width: 50px !important;
+  min-height: 50px !important;
+  max-height: 50px !important;
+  box-sizing: border-box !important;
+  background: #1a1611 !important;
+  border: 1px solid #4a3a2a !important;
+  border-radius: 3px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: relative !important;
+}
+.equip-slot.active { border-color: #c9a227 !important; }
+
+/* === DESATIVAR RESIZE MANUAL === */
+#inventory-panel, .inventory-panel, #inventory-window, #tab-inventory, .l2inv-header-frame {
+  resize: none !important;
+  user-select: none !important;
+}
+
+/* ═══════════ GRID FLUIDO DE 10 COLUNAS COM SCROLL VERTICAL ═══════════
+   Antigamente 38px fixos: sobrava/faltava espaço dependendo da largura
+   real do painel. Agora preenche 100% do container via fr, sempre
+   quadrado (aspect-ratio), com no máximo ~8 linhas visíveis antes de
+   rolar. */
+#tab-inventory #inventory-grid,
+#tab-inventory .inventory-grid,
+#tab-inventory .l2inv-grid,
+#inventory-grid,
+.inventory-grid,
+.l2inv-grid {
+  display: grid !important;
+  grid-template-columns: repeat(10, minmax(0, 1fr)) !important;
+  grid-auto-rows: minmax(34px, 1fr) !important;
+  gap: 3px !important;
+  padding: 6px !important;
+  width: 100% !important;
+  background: rgba(10, 7, 4, 0.85) !important;
+  border: 2px solid #3c2e1e !important;
+  border-radius: 4px !important;
+  max-height: 337px !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  box-sizing: border-box !important;
+  align-content: start !important;
+  justify-content: stretch !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: #5a452a #120d08 !important;
+}
+
+#inventory-grid::-webkit-scrollbar,
+.inventory-grid::-webkit-scrollbar { width: 8px !important; }
+#inventory-grid::-webkit-scrollbar-track,
+.inventory-grid::-webkit-scrollbar-track { background: #120d08 !important; border-radius: 4px !important; }
+#inventory-grid::-webkit-scrollbar-thumb,
+.inventory-grid::-webkit-scrollbar-thumb { background: #5a452a !important; border-radius: 4px !important; border: 1px solid #7a5c38 !important; }
+
+/* SLOTS DO INVENTÁRIO — SEMPRE QUADRADOS, PREENCHEM A CÉLULA DO GRID */
+#tab-inventory .inv-slot,
+.inv-slot,
+.l2inv-slot {
+  width: 100% !important;
+  height: 100% !important;
+  aspect-ratio: 1 / 1 !important;
+  min-width: 0 !important;
+  background: #241e16 !important;
+  border: 1px solid #5a452a !important;
+  border-radius: 3px !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 2px !important;
+  position: relative !important;
+  cursor: pointer !important;
+  box-shadow: inset 0 0 4px rgba(0,0,0,0.8) !important;
+  transition: border-color .12s, transform .12s !important;
+}
+#tab-inventory .inv-slot:not(.empty):hover,
+.inv-slot:not(.empty):hover {
+  border-color: #c9a227 !important;
+  transform: translateY(-1px) !important;
+}
+
+#tab-inventory .inv-slot.empty,
+.inv-slot.empty {
+  background: rgba(14, 10, 6, 0.6) !important;
+  border: 1px solid #2e2216 !important;
+  opacity: 0.6 !important;
+  cursor: default !important;
+}
+
+/* ÍCONES DO ITEM — SEMPRE VISÍVEIS, PROPORCIONAIS AO SLOT */
+.inventory-item-image,
+.equip-icon img,
+.item-icon img {
+  display: inline-block !important;
+  width: 70% !important;
+  height: 70% !important;
+  max-width: 28px !important;
+  max-height: 28px !important;
+  object-fit: contain !important;
+  pointer-events: none !important;
+}
+.inventory-item-emoji { font-size: 15px !important; }
+
+/* === MAPA DE ZONAS & SAGAS === */
+.saga-map-block {
+  padding: 12px 14px !important;
+  margin-bottom: 14px !important;
+  border: 1px solid rgba(212, 175, 55, .28) !important;
+  border-radius: 12px !important;
+  background: linear-gradient(180deg, rgba(28, 34, 48, .82), rgba(16, 20, 30, .82)) !important;
+}
+.saga-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding-bottom: 8px !important;
+  margin-bottom: 10px !important;
+  border-bottom: 1px solid rgba(212, 175, 55, .2) !important;
+}
+.saga-title {
+  color: #e8c37a !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  font-family: "Cinzel", serif !important;
+}
+.saga-req {
+  padding: 2px 10px !important;
+  color: #8b93a7 !important;
+  font-size: 11px !important;
+  border: 1px solid rgba(139, 147, 167, .3) !important;
+  border-radius: 999px !important;
+}
+.saga-zones-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)) !important;
+  gap: 12px !important;
+}
+.zone-card {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  background: #131824 !important;
+  border: 1px solid rgba(212, 175, 55, .3) !important;
+  border-radius: 10px !important;
+  cursor: pointer !important;
+  transition: transform .16s, border-color .16s, box-shadow .16s !important;
+}
+.zone-card:hover:not(.locked):not(.active) {
+  transform: translateY(-3px) !important;
+  border-color: rgba(232, 195, 122, .8) !important;
+  box-shadow: 0 6px 18px rgba(0,0,0,.6) !important;
+}
+.zone-card.active {
+  border-color: #e8c37a !important;
+  box-shadow: 0 0 0 1px rgba(232, 195, 122, .5), 0 0 20px rgba(232, 195, 122, .25) !important;
+}
+.zone-card-thumb {
+  position: relative !important;
+  height: 80px !important;
+  background-color: #0d1018 !important;
+  background-position: center !important;
+  background-size: cover !important;
+  display: block !important;
+}
+.zone-card-thumb::after {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background: linear-gradient(180deg, transparent 30%, rgba(10, 13, 20, .95)) !important;
+}
+.zone-flag {
+  position: absolute !important;
+  top: 6px !important;
+  z-index: 2 !important;
+  padding: 3px 8px !important;
+  font-size: 10px !important;
+  border-radius: 999px !important;
+}
+.zone-flag.town { left: 6px !important; color: #7fd4a8 !important; background: rgba(8,10,16,.85) !important; border: 1px solid rgba(127,212,168,.4) !important; }
+.zone-flag.here { right: 6px !important; color: #0d1018 !important; font-weight: 800 !important; background: #e8c37a !important; }
+.zone-card-body { display: flex !important; flex-direction: column !important; gap: 6px !important; padding: 10px !important; }
+.zone-card-header { display: flex !important; align-items: baseline !important; justify-content: space-between !important; }
+.zone-card-title { color: #e6e9f2 !important; font-size: 13px !important; font-weight: 700 !important; font-family: "Cinzel", serif !important; }
+.zone-card-lvl { color: #e8c37a !important; font-size: 11px !important; }
+.zone-card-desc { color: #8b93a7 !important; font-size: 11px !important; }
+.select-zone-btn {
+  width: 100% !important;
+  padding: 8px !important;
+  color: #e8c37a !important;
+  font-family: inherit !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  background: rgba(212, 175, 55, .12) !important;
+  border: 1px solid rgba(212, 175, 55, .5) !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+}
+.select-zone-btn:hover:not(:disabled) { color: #12161f !important; background: #e8c37a !important; }
+
+/* ═══════════════════════════════════════════════════════════════════
+   DIORAMA DE BATALHA — PADRÃO ÚNICO PARA HERÓI E MONSTRO
+   Mesma moldura, mesmo posicionamento de nome/barras/arte para os dois;
+   só a cor de destaque muda (azul herói, vermelho monstro).
+═══════════════════════════════════════════════════════════════════ */
+#stage-hero, .stage-hero,
+#stage-monster, .stage-monster {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 140px !important;
+  border-radius: 10px !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+  background: linear-gradient(180deg, rgba(20,16,10,.1) 0%, rgba(8,6,4,.78) 100%) !important;
+  border: 1px solid rgba(212, 175, 55, .35) !important;
+  box-shadow: inset 0 0 26px rgba(0,0,0,.55), 0 4px 14px rgba(0,0,0,.35) !important;
+}
+
+.stage-entity-name {
+  position: absolute !important;
+  top: 8px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 3 !important;
+  max-width: calc(100% - 16px) !important;
+  padding: 3px 12px !important;
+  font-family: "Cinzel", serif !important;
+  font-weight: 700 !important;
+  font-size: 12px !important;
+  letter-spacing: .2px !important;
+  color: #f0d090 !important;
+  background: rgba(10,8,6,.82) !important;
+  border: 1px solid rgba(212, 175, 55, .45) !important;
+  border-radius: 999px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+.stage-hero-name { color: #a8d4ff !important; border-color: rgba(96, 165, 250, .45) !important; }
+
+.hero-sprite-host, .monster-sprite-host {
+  flex: 1 1 auto !important;
+  width: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 30px 8px 34px !important;
+  box-sizing: border-box !important;
+  pointer-events: none !important;
+}
+.hero-sprite-host svg, .monster-sprite-host svg {
+  max-width: 82% !important;
+  max-height: 100% !important;
+  filter: drop-shadow(0 10px 12px rgba(0,0,0,.55)) !important;
+}
+
+.stage-hp-bar, .stage-mp-bar {
+  position: absolute !important;
+  left: 8px !important;
+  right: 8px !important;
+  height: 14px !important;
+  z-index: 3 !important;
+  border-radius: 7px !important;
+  overflow: hidden !important;
+  background: rgba(8,6,4,.82) !important;
+  border: 1px solid #4a3a2a !important;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,.6) !important;
+}
+.stage-hp-bar { bottom: 8px !important; }
+.stage-mp-bar-hero { bottom: 26px !important; }
+.stage-hp-fill { height: 100% !important; background: linear-gradient(90deg, #7a1414, #e34747) !important; transition: width .25s ease !important; }
+.stage-mp-fill { height: 100% !important; background: linear-gradient(90deg, #14357a, #4778e3) !important; transition: width .25s ease !important; }
+.stage-hp-text, .stage-mp-text {
+  position: absolute !important;
+  inset: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  color: #fff !important;
+  text-shadow: 1px 1px 0 #000, -1px -1px 0 #000 !important;
+  pointer-events: none !important;
+}
+
+.stage-battle-row {
+  display: flex !important;
+  align-items: stretch !important;
+  justify-content: center !important;
+  gap: 16px !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+.stage-battle-row > * { flex: 1 1 0 !important; min-width: 0 !important; }
+`;
+
 /**
- * IMPORTANTE — CSS ÚNICO EM GameUI.css:
- * Esta função existia para injetar um <style> em runtime com regras
- * duplicadas (e em !important) do que já vive em GameUI.css. Isso fazia os
- * dois arquivos brigarem entre si: qualquer ajuste feito em GameUI.css
- * (largura do paperdoll, grid do inventário, etc.) era silenciosamente
- * ignorado porque o bloco injetado aqui, carregado depois e com
- * !important, sempre vencia. Essa era a causa raiz do inventário não se
- * encaixar corretamente na tela.
- *
- * A correção é ter uma única fonte de verdade: GameUI.css. Esta função foi
- * esvaziada e mantida apenas por compatibilidade com as chamadas existentes
- * (updateInventoryUI, updateWarehouseUI, updateEquipmentUI a chamam).
+ * Injeta o CSS acima diretamente dentro da shadow root do jogo (e também no
+ * document.head, como rede de segurança caso a shadow root ainda não exista
+ * no momento da chamada). É chamada de forma idempotente — não duplica a
+ * tag se já injetada — e é acionada tanto pelas funções de inventário
+ * quanto pelas de stage/zonas, para garantir que os estilos existam desde
+ * o primeiro render, independente de qual aba o jogador abrir primeiro.
  */
+export function ensureGameUIStyles() {
+  const root = getRoot();
+  const targets = [root, document.head].filter(Boolean);
+
+  for (const t of targets) {
+    if (!t.querySelector('#gameui-styles-direct')) {
+      const style = document.createElement('style');
+      style.id = 'gameui-styles-direct';
+      style.textContent = GAMEUI_CSS;
+      t.appendChild(style);
+    }
+  }
+}
+
+// Mantido por compatibilidade com chamadas existentes ao longo do arquivo.
 export function ensureInventoryStyles() {
-  // Não injeta mais CSS. Toda a estilização vive em GameUI.css.
+  ensureGameUIStyles();
+}
+
+// Garante que os estilos existam assim que este módulo é carregado, mesmo
+// antes de qualquer função de UI ser chamada (corrige o caso em que a
+// stage/zonas renderizam antes do inventário).
+if (typeof document !== 'undefined') {
+  ensureGameUIStyles();
 }
 
 export function updateInventoryUI(state, callbacks = {}) {
@@ -460,7 +831,7 @@ export function updateEquipmentUI(state, callbacks = {}) {
 /* ═══════════════════════════════════════════════════════════════════════════
    4. STAGE & ZONE MAP (RESTAURAÇÃO COMPLETA DO DIORAMA E ZONAS)
 ═══════════════════════════════════════════════════════════════════════════ */
-export function ensureStageStyles() {}
+export function ensureStageStyles() { ensureGameUIStyles(); }
 
 function ensureHeroStructure() {
   const root = getRoot();
@@ -522,6 +893,7 @@ function ensureMonsterStructure() {
 
 export function renderStageHero(state) {
   if (!state) return;
+  ensureGameUIStyles();
   const structure = ensureHeroStructure();
   if (!structure?.card) return;
 
@@ -544,6 +916,7 @@ export function renderStageHero(state) {
 
 export function renderStageMonster(state) {
   if (!state) return;
+  ensureGameUIStyles();
   const structure = ensureMonsterStructure();
   if (!structure?.card) return;
 
@@ -590,6 +963,7 @@ export function updateZoneUI(state, callbacks = {}) {
 }
 
 export function renderZoneMap(state, callbacks = {}) {
+  ensureGameUIStyles();
   const container = findElement('zone-map-container') || findElement('zone-list');
   if (!container) return;
 
