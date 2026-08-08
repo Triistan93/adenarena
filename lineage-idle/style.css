@@ -379,10 +379,6 @@ select:focus-visible {
 #clock { color: var(--ink); font-family: "IBM Plex Mono", monospace; font-size: 12px; }
 
 /* ---- Main Grid & Resizable Panels ---- */
-.stats-panel {
-  display: none !important;
-}
-
 .main-grid {
   --col1-w: 220px;
   --col3-w: 440px;
