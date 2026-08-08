@@ -1,6 +1,10 @@
 /**
  * GameUI.js — Módulo unificado de interface gráfica do Lineage Idle.
  * Consolida TooltipUI, InventoryUI, StageUI, SkillsUI, ShopUI e AppLayout.
+ *
+ * Todo o CSS da interface vive em GameUI.css (fonte única de verdade).
+ * Este arquivo NÃO deve injetar <style> em runtime — isso já causou bugs
+ * de layout no passado (ver nota em ensureInventoryStyles).
  */
 
 import { D, ALL_EQUIP_SLOTS, TIER_NAMES } from '../core/GameConfig.js';
@@ -243,286 +247,22 @@ function createEquipmentSlotDynamically(slot) {
   return slotEl;
 }
 
-const INJECTED_GAMEUI_CSS = `
-/* === CONFINAMENTO DO PAPERDOLL (175px FIXOS) === */
-#tab-inventory .l2inv-left-paperdoll,
-.l2inv-left-paperdoll {
-  width: 175px;
-  min-width: 175px;
-  max-width: 175px;
-  flex: 0 0 175px;
-  padding: 6px;
-  box-sizing: border-box;
-  overflow-x: hidden;
-  overflow-y: auto;
-  border-right: 1px solid #3c2e1e;
-}
-
-#tab-inventory .l2inv-paperdoll-grid,
-.l2inv-paperdoll-grid {
-  display: flex;
-  flex-direction: row;
-  gap: 4px;
-  justify-content: center;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-#tab-inventory .l2inv-doll-col,
-.l2inv-doll-col {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  width: 50px;
-  min-width: 50px;
-  max-width: 50px;
-  flex: 0 0 50px;
-}
-
-#tab-inventory .equip-slot,
-.l2inv-pd-slot,
-.equip-slot {
-  width: 50px;
-  height: 50px;
-  min-width: 50px;
-  max-width: 50px;
-  min-height: 50px;
-  max-height: 50px;
-  box-sizing: border-box;
-  background: #1a1611;
-  border: 1px solid #4a3a2a;
-  border-radius: 3px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-
-/* === DESATIVAR RESIZE MANUAL === */
-#inventory-panel, .inventory-panel, #inventory-window, #tab-inventory, .l2inv-header-frame {
-  resize: none;
-  user-select: none;
-}
-
-/* === GRID FIXO DE 10x8 COM BORDAS DEFINIDAS E SCROLLBAR VERTICAL === */
-#tab-inventory #inventory-grid,
-#tab-inventory .inventory-grid,
-#tab-inventory .l2inv-grid,
-#inventory-grid,
-.inventory-grid,
-.l2inv-grid {
-  display: grid !important;
-  grid-template-columns: repeat(10, 38px) !important; /* EXACTLY 10 COLUMNS */
-  grid-auto-rows: 38px !important;                     /* EXACTLY 38px ROWS */
-  gap: 3px !important;
-  padding: 6px !important;
-  background: rgba(10, 7, 4, 0.85) !important;
-  border: 2px solid #3c2e1e !important;
-  border-radius: 4px !important;
-  height: 337px !important;                            /* EXACTLY 8 VISIBLE ROWS (8x38 + 7x3 + 12) */
-  max-height: 337px !important;
-  overflow-y: scroll !important;                       /* SIDEBAR DE ROLAGEM VERTICAL */
-  overflow-x: hidden !important;
-  box-sizing: border-box !important;
-  align-content: start !important;
-  justify-content: start !important;
-  flex: 0 0 auto !important;
-  scrollbar-width: thin !important;
-  scrollbar-color: #5a452a #120d08 !important;
-}
-
-/* ESTILIZAÇÃO DA SIDEBAR DE ROLAGEM */
-#inventory-grid::-webkit-scrollbar,
-.inventory-grid::-webkit-scrollbar {
-  width: 8px !important;
-}
-#inventory-grid::-webkit-scrollbar-track,
-.inventory-grid::-webkit-scrollbar-track {
-  background: #120d08 !important;
-  border-radius: 4px !important;
-}
-#inventory-grid::-webkit-scrollbar-thumb,
-.inventory-grid::-webkit-scrollbar-thumb {
-  background: #5a452a !important;
-  border-radius: 4px !important;
-  border: 1px solid #7a5c38 !important;
-}
-
-/* SLOTS DO INVENTÁRIO (38px x 38px COM LINHAS/LIMITADORES CLAROS) */
-#tab-inventory .inv-slot,
-.inv-slot,
-.l2inv-slot {
-  width: 38px !important;
-  height: 38px !important;
-  min-width: 38px !important;
-  max-width: 38px !important;
-  min-height: 38px !important;
-  max-height: 38px !important;
-  background: #241e16 !important;
-  border: 1px solid #5a452a !important; /* LIMITADORES / LINHAS VISÍVEIS */
-  border-radius: 3px !important;
-  box-sizing: border-box !important;
-  overflow: hidden !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  position: relative !important;
-  box-shadow: inset 0 0 4px rgba(0,0,0,0.8) !important;
-}
-
-#tab-inventory .inv-slot.empty,
-.inv-slot.empty {
-  background: rgba(14, 10, 6, 0.6) !important;
-  border: 1px solid #2e2216 !important; /* LINHAS DOS SLOTS VAZIOS */
-  opacity: 0.6 !important;
-  cursor: default !important;
-}
-
-/* ÍCONES REDUZIDOS EM 30% (24px) */
-.inventory-item-image {
-  width: 24px !important;
-  height: 24px !important;
-  max-width: 24px !important;
-  max-height: 24px !important;
-  object-fit: contain !important;
-}
-
-.inventory-item-emoji {
-  font-size: 15px !important;
-}
-
-/* === MAPA DE ZONAS & DIORAMA DE COMBATE ESTILOS === */
-.saga-map-block {
-  padding: 12px 14px;
-  margin-bottom: 14px;
-  border: 1px solid rgba(212, 175, 55, .28);
-  border-radius: 12px;
-  background: linear-gradient(180deg, rgba(28, 34, 48, .82), rgba(16, 20, 30, .82));
-}
-.saga-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-bottom: 8px;
-  margin-bottom: 10px;
-  border-bottom: 1px solid rgba(212, 175, 55, .2);
-}
-.saga-title {
-  color: #e8c37a;
-  font-size: 15px;
-  font-weight: 700;
-  font-family: "Cinzel", serif;
-}
-.saga-req {
-  padding: 2px 10px;
-  color: #8b93a7;
-  font-size: 11px;
-  border: 1px solid rgba(139, 147, 167, .3);
-  border-radius: 999px;
-}
-.saga-zones-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 12px;
-}
-.zone-card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  background: #131824;
-  border: 1px solid rgba(212, 175, 55, .3);
-  border-radius: 10px;
-  cursor: pointer;
-  transition: transform .16s, border-color .16s, box-shadow .16s;
-}
-.zone-card:hover:not(.locked):not(.active) {
-  transform: translateY(-3px);
-  border-color: rgba(232, 195, 122, .8);
-  box-shadow: 0 6px 18px rgba(0,0,0,.6);
-}
-.zone-card.active {
-  border-color: #e8c37a;
-  box-shadow: 0 0 0 1px rgba(232, 195, 122, .5), 0 0 20px rgba(232, 195, 122, .25);
-}
-.zone-card-thumb {
-  position: relative;
-  height: 80px;
-  background-color: #0d1018;
-  background-position: center;
-  background-size: cover;
-}
-.zone-card-thumb::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, transparent 30%, rgba(10, 13, 20, .95));
-}
-.zone-flag {
-  position: absolute;
-  top: 6px;
-  z-index: 2;
-  padding: 3px 8px;
-  font-size: 10px;
-  border-radius: 999px;
-}
-.zone-flag.town { left: 6px; color: #7fd4a8; background: rgba(8,10,16,.85); border: 1px solid rgba(127,212,168,.4); }
-.zone-flag.here { right: 6px; color: #0d1018; font-weight: 800; background: #e8c37a; }
-.zone-card-body {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 10px;
-}
-.zone-card-header {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-}
-.zone-card-title {
-  color: #e6e9f2;
-  font-size: 13px;
-  font-weight: 700;
-  font-family: "Cinzel", serif;
-}
-.zone-card-lvl {
-  color: #e8c37a;
-  font-size: 11px;
-}
-.zone-card-desc {
-  color: #8b93a7;
-  font-size: 11px;
-}
-.select-zone-btn {
-  width: 100%;
-  padding: 8px;
-  color: #e8c37a;
-  font-family: inherit;
-  font-size: 11px;
-  font-weight: 700;
-  background: rgba(212, 175, 55, .12);
-  border: 1px solid rgba(212, 175, 55, .5);
-  border-radius: 6px;
-  cursor: pointer;
-}
-.select-zone-btn:hover:not(:disabled) {
-  color: #12161f;
-  background: #e8c37a;
-}
-`;
-
+/**
+ * IMPORTANTE — CSS ÚNICO EM GameUI.css:
+ * Esta função existia para injetar um <style> em runtime com regras
+ * duplicadas (e em !important) do que já vive em GameUI.css. Isso fazia os
+ * dois arquivos brigarem entre si: qualquer ajuste feito em GameUI.css
+ * (largura do paperdoll, grid do inventário, etc.) era silenciosamente
+ * ignorado porque o bloco injetado aqui, carregado depois e com
+ * !important, sempre vencia. Essa era a causa raiz do inventário não se
+ * encaixar corretamente na tela.
+ *
+ * A correção é ter uma única fonte de verdade: GameUI.css. Esta função foi
+ * esvaziada e mantida apenas por compatibilidade com as chamadas existentes
+ * (updateInventoryUI, updateWarehouseUI, updateEquipmentUI a chamam).
+ */
 export function ensureInventoryStyles() {
-  const root = getRoot();
-  const targets = [root, document.head].filter(Boolean);
-
-  for (const t of targets) {
-    if (!t.querySelector('#gameui-styles-direct')) {
-      const style = document.createElement('style');
-      style.id = 'gameui-styles-direct';
-      style.textContent = INJECTED_GAMEUI_CSS;
-      t.appendChild(style);
-    }
-  }
+  // Não injeta mais CSS. Toda a estilização vive em GameUI.css.
 }
 
 export function updateInventoryUI(state, callbacks = {}) {
