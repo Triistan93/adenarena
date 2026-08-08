@@ -3892,6 +3892,14 @@ export function init() {
         : [];
       
       state = { ...def, ...cloudData };
+      state.gender = cloudData.gender || cloudData.charGender || cloudData.sex || def.gender || 'M';
+      state.charName = cloudData.charName || cloudData.heroName || cloudData.playerName || cloudData.name || def.charName || 'Tristan';
+      state.heroName = state.charName;
+      state.playerName = state.charName;
+      state.name = state.charName;
+      if (state.hp <= 0) {
+        state.hp = state.maxHp || 100;
+      }
       // ⚠️ SEGURANÇA: privilegeLevel é confiável apenas para gate de UI local.
       // Qualquer efeito de comando GM (gold, level, sp, itens) que seja
       // persistido/sincronizado em backend DEVE ser revalidado no servidor,

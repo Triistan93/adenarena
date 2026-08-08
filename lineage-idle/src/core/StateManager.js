@@ -10,7 +10,8 @@ import { SAVE_KEY, D } from './GameConfig.js';
 import { getSelectedSet } from '../services/InventoryService.js';
 
 export const DEFAULT_STATE = () => ({
-  race: null, class: null,
+  race: null, class: null, gender: 'M',
+  charName: 'Tristan', heroName: 'Tristan', playerName: 'Tristan', name: 'Tristan',
   level: 1, xp: 0, sp: 10,
   maxHp: 100, hp: 100, maxMp: 50, mp: 50,
   base: { atk: 0, def: 0, eva: 0, matk: 0, mdef: 0 },
@@ -89,6 +90,14 @@ export function loadState() {
       : [];
 
     currentState = { ...def, ...data };
+    currentState.gender = data.gender || data.charGender || data.sex || def.gender || 'M';
+    currentState.charName = data.charName || data.heroName || data.playerName || data.name || def.charName || 'Tristan';
+    currentState.heroName = currentState.charName;
+    currentState.playerName = currentState.charName;
+    currentState.name = currentState.charName;
+    if (currentState.hp <= 0) {
+      currentState.hp = currentState.maxHp || 100;
+    }
     currentState.skills = { ...def.skills, ...(data.skills || {}) };
     currentState.equipment = { ...def.equipment, ...(data.equipment || {}) };
     currentState.base = { ...def.base, ...(data.base || {}) };

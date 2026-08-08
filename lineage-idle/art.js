@@ -393,33 +393,40 @@ function getAssetUrl(p) {
 // ================================================================
 //  heroSVG(race, cls, aura, mode)
 // ================================================================
-export function heroSVG(raceOrState, clsParam, aura, mode) {
+export function heroSVG(raceOrState, clsParam, genderParam, aura, mode) {
   let race = raceOrState;
   let cls = clsParam;
+  let gender = genderParam;
 
   if (typeof raceOrState === 'object' && raceOrState !== null) {
     race = raceOrState.race || raceOrState.heroRace || raceOrState.playerRace || 'human';
     cls = raceOrState.class || raceOrState.heroClass || raceOrState.playerClass || 'fighter';
+    gender = raceOrState.gender || raceOrState.charGender || raceOrState.sex || 'M';
     aura = raceOrState.aura;
     mode = raceOrState.mode;
+  } else if (typeof genderParam === 'string' && (genderParam === 'full' || genderParam === 'bust')) {
+    mode = genderParam;
+    aura = null;
+    gender = 'M';
   }
 
   race = String(race || 'human').toLowerCase();
   cls = String(cls || 'fighter').toLowerCase();
+  gender = String(gender || 'M').toUpperCase();
 
-  const src = getAssetUrl(heroImgPath(race, cls));
+  const src = getAssetUrl(heroImgPath(race, cls, gender));
   const border = aura || "#8a6a24";
 
   if (mode === "bust") {
     return `<div class="hero-svg hero-bust" style="position:relative;width:100%;height:100%;overflow:hidden;border-radius:50%;">
-      <img src="${src}" alt="${race} ${cls}" draggable="false" onerror="this.onerror=null; this.src='${getAssetUrl('img/human_fighter.png')}';"
+      <img src="${src}" alt="${race} ${cls}" draggable="false" onerror="this.onerror=null; this.src='${getAssetUrl('img/humanpalaM.png')}';"
         style="width:100%;height:100%;object-fit:cover;object-position:center 15%;filter:drop-shadow(0 0 6px ${border});" />
       <div style="position:absolute;inset:0;border-radius:50%;border:2px solid ${border};box-shadow:inset 0 0 20px rgba(0,0,0,0.6);pointer-events:none;"></div>
     </div>`;
   }
 
   return `<div class="hero-svg hero-full" style="width:100%;height:100%;position:relative;">
-    <img src="${src}" alt="${race} ${cls}" draggable="false" onerror="this.onerror=null; this.src='${getAssetUrl('img/human_fighter.png')}';"
+    <img src="${src}" alt="${race} ${cls}" draggable="false" onerror="this.onerror=null; this.src='${getAssetUrl('img/humanpalaM.png')}';"
       style="width:100%;height:100%;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 8px 16px rgba(0,0,0,0.7)) drop-shadow(0 0 4px ${border || 'transparent'});" />
   </div>`;
 }

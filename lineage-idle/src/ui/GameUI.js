@@ -802,9 +802,13 @@ export function renderStageHero(state) {
     structure.level.textContent = `Level ${heroLevel}`;
   }
 
-  const curHp = Math.round(state.hp !== undefined ? state.hp : 100);
+  if (state.hp !== undefined && state.hp <= 0 && state.maxHp > 0 && (!state.activeMonster || state.activeMonster.hp <= 0)) {
+    state.hp = state.maxHp;
+  }
+
+  const curHp = Math.round(state.hp !== undefined ? Math.max(0, state.hp) : 100);
   const maxHp = Math.round(state.maxHp || curHp || 100);
-  const curMp = Math.round(state.mp !== undefined ? state.mp : 50);
+  const curMp = Math.round(state.mp !== undefined ? Math.max(0, state.mp) : 50);
   const maxMp = Math.round(state.maxMp || curMp || 50);
 
   updateBar('hero-hp-fill', curHp, maxHp);
@@ -819,10 +823,7 @@ export function renderStageHero(state) {
   if (heroMpText) heroMpText.textContent = `MP: ${curMp} / ${maxMp}`;
 
   if (structure.sprite && typeof heroSVG === 'function') {
-    const race = state.race || state.heroRace || state.playerRace || 'human';
-    const cls = state.class || state.heroClass || state.playerClass || 'fighter';
-    const gender = state.gender || 'M';
-    structure.sprite.innerHTML = heroSVG(race, cls, gender);
+    structure.sprite.innerHTML = heroSVG(state);
   }
 }
 
