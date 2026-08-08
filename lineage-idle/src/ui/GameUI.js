@@ -146,7 +146,7 @@ export function getItemIcon(defOrId) {
   const iconUrl = getItemIconUrl(defOrId, def);
   if (!iconUrl) return emoji;
 
-  return `<img src="${iconUrl}" alt="${def?.name || ''}" class="inventory-item-image" onerror="this.style.display='none';if(this.nextElementSibling)this.nextElementSibling.style.display='inline-block';" style="width:36px; height:36px; object-fit:contain; vertical-align:middle; pointer-events:none;" /><span class="inventory-item-emoji" style="display:none; font-size:18px;">${emoji}</span>`;
+  return `<img src="${iconUrl}" alt="${def?.name || ''}" class="inventory-item-image" onerror="this.style.display='none';if(this.nextElementSibling)this.nextElementSibling.style.display='inline-block';" style="width:34px; height:34px; object-fit:contain; vertical-align:middle; pointer-events:none;" /><span class="inventory-item-emoji" style="display:none; font-size:18px;">${emoji}</span>`;
 }
 
 export function formatItemDisplayName(item, def) {
@@ -341,6 +341,125 @@ const INJECTED_GAMEUI_CSS = `
   height: 34px !important;
   object-fit: contain !important;
 }
+
+/* === MAPA DE ZONAS & DIORAMA DE COMBATE ESTILOS === */
+.saga-map-block {
+  padding: 12px 14px !important;
+  margin-bottom: 14px !important;
+  border: 1px solid rgba(212, 175, 55, .28) !important;
+  border-radius: 12px !important;
+  background: linear-gradient(180deg, rgba(28, 34, 48, .82), rgba(16, 20, 30, .82)) !important;
+}
+.saga-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding-bottom: 8px !important;
+  margin-bottom: 10px !important;
+  border-bottom: 1px solid rgba(212, 175, 55, .2) !important;
+}
+.saga-title {
+  color: #e8c37a !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  font-family: "Cinzel", serif !important;
+}
+.saga-req {
+  padding: 2px 10px !important;
+  color: #8b93a7 !important;
+  font-size: 11px !important;
+  border: 1px solid rgba(139, 147, 167, .3) !important;
+  border-radius: 999px !important;
+}
+.saga-zones-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)) !important;
+  gap: 12px !important;
+}
+.zone-card {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  background: #131824 !important;
+  border: 1px solid rgba(212, 175, 55, .3) !important;
+  border-radius: 10px !important;
+  cursor: pointer !important;
+  transition: transform .16s, border-color .16s, box-shadow .16s !important;
+}
+.zone-card:hover:not(.locked):not(.active) {
+  transform: translateY(-3px) !important;
+  border-color: rgba(232, 195, 122, .8) !important;
+  box-shadow: 0 6px 18px rgba(0,0,0,.6) !important;
+}
+.zone-card.active {
+  border-color: #e8c37a !important;
+  box-shadow: 0 0 0 1px rgba(232, 195, 122, .5), 0 0 20px rgba(232, 195, 122, .25) !important;
+}
+.zone-card-thumb {
+  position: relative !important;
+  height: 80px !important;
+  background-color: #0d1018 !important;
+  background-position: center !important;
+  background-size: cover !important;
+}
+.zone-card-thumb::after {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background: linear-gradient(180deg, transparent 30%, rgba(10, 13, 20, .95)) !important;
+}
+.zone-flag {
+  position: absolute !important;
+  top: 6px !important;
+  z-index: 2 !important;
+  padding: 3px 8px !important;
+  font-size: 10px !important;
+  border-radius: 999px !important;
+}
+.zone-flag.town { left: 6px !important; color: #7fd4a8 !important; background: rgba(8,10,16,.85) !important; border: 1px solid rgba(127,212,168,.4) !important; }
+.zone-flag.here { right: 6px !important; color: #0d1018 !important; font-weight: 800 !important; background: #e8c37a !important; }
+.zone-card-body {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+  padding: 10px !important;
+}
+.zone-card-header {
+  display: flex !important;
+  align-items: baseline !important;
+  justify-content: space-between !important;
+}
+.zone-card-title {
+  color: #e6e9f2 !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  font-family: "Cinzel", serif !important;
+}
+.zone-card-lvl {
+  color: #e8c37a !important;
+  font-size: 11px !important;
+}
+.zone-card-desc {
+  color: #8b93a7 !important;
+  font-size: 11px !important;
+}
+.select-zone-btn {
+  width: 100 !important;
+  padding: 8px !important;
+  color: #e8c37a !important;
+  font-family: inherit !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  background: rgba(212, 175, 55, .12) !important;
+  border: 1px solid rgba(212, 175, 55, .5) !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+}
+.select-zone-btn:hover:not(:disabled) {
+  color: #12161f !important;
+  background: #e8c37a !important;
+}
 `;
 
 export function ensureInventoryStyles() {
@@ -415,10 +534,6 @@ export function updateInventoryUI(state, callbacks = {}) {
     slotEl.className = `inv-slot rarity-${rarity}` + (item.equipped ? ' is-equipped' : '') + (isSelected ? ' is-selected' : '');
     slotEl.dataset.uid = item.uid;
 
-    /*
-     * NATIVO LINEAGE II: o slot exibe exclusivamente o ícone PNG, quantidade e badge 'E'.
-     * O nome do item é omitido do slot (ficando no tooltip) para não poluir nem desalinhar.
-     */
     slotEl.innerHTML = `
       ${check}
       <span class="item-icon">${getItemIcon(def || item)}</span>
@@ -457,7 +572,7 @@ export function updateInventoryUI(state, callbacks = {}) {
     grid.appendChild(slotEl);
   }
 
-  const cnt = findElement('inv-count') || findElement('inv-slots');
+  const cnt = findElement('inv-count') || findElement('inv-slots') || findElement('inv-slots-count');
   const maxSlots = getMaxInventorySlots(state);
   if (cnt) cnt.textContent = `${state.inventory?.length || 0} / ${maxSlots}`;
 }
@@ -544,43 +659,110 @@ export function updateEquipmentUI(state, callbacks = {}) {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   4. STAGE & ZONE MAP (COM IMAGENS DE FUNDO)
+   4. STAGE & ZONE MAP (RESTAURAÇÃO COMPLETA DO DIORAMA E ZONAS)
 ═══════════════════════════════════════════════════════════════════════════ */
 export function ensureStageStyles() {}
 
+function ensureHeroStructure() {
+  const root = getRoot();
+  const heroCard = root.querySelector('#stage-hero, .stage-hero');
+  if (!heroCard) return null;
+
+  let name = heroCard.querySelector('#hero-name');
+  let hpBar = heroCard.querySelector('#hero-hp-bar');
+  let mpBar = heroCard.querySelector('#hero-mp-bar');
+  let sprite = heroCard.querySelector('#hero-sprite-container');
+
+  if (!name || !hpBar || !mpBar || !sprite) {
+    heroCard.innerHTML = `
+      <div id="hero-name" class="stage-entity-name stage-hero-name">—</div>
+      <div id="hero-hp-bar" class="stage-hp-bar stage-hp-bar-hero">
+        <div id="hero-hp-fill" class="stage-hp-fill stage-hp-fill-hero"></div>
+        <span id="hero-hp-text" class="stage-hp-text stage-hp-text-hero">0 / 0</span>
+      </div>
+      <div id="hero-mp-bar" class="stage-mp-bar stage-mp-bar-hero">
+        <div id="hero-mp-fill" class="stage-mp-fill stage-mp-fill-hero"></div>
+        <span id="hero-mp-text" class="stage-mp-text stage-mp-text-hero">0 / 0</span>
+      </div>
+      <div id="hero-sprite-container" class="hero-sprite-host"></div>
+    `;
+    name = heroCard.querySelector('#hero-name');
+    hpBar = heroCard.querySelector('#hero-hp-bar');
+    mpBar = heroCard.querySelector('#hero-mp-bar');
+    sprite = heroCard.querySelector('#hero-sprite-container');
+  }
+
+  return { card: heroCard, name, hpBar, mpBar, sprite };
+}
+
+function ensureMonsterStructure() {
+  const root = getRoot();
+  const monsterCard = root.querySelector('#stage-monster, .stage-monster');
+  if (!monsterCard) return null;
+
+  let name = monsterCard.querySelector('#monster-name, #m-name');
+  let hpBar = monsterCard.querySelector('#monster-hp-bar, #m-hp-bar');
+  let sprite = monsterCard.querySelector('#monster-sprite-container, #m-art');
+
+  if (!name || !hpBar || !sprite) {
+    monsterCard.innerHTML = `
+      <div id="monster-name" class="stage-entity-name">—</div>
+      <div id="monster-hp-bar" class="stage-hp-bar">
+        <div id="monster-hp-fill" class="stage-hp-fill"></div>
+        <span id="monster-hp-text" class="stage-hp-text">0 / 0</span>
+      </div>
+      <div id="monster-sprite-container" class="monster-sprite-host"></div>
+    `;
+    name = monsterCard.querySelector('#monster-name');
+    hpBar = monsterCard.querySelector('#monster-hp-bar');
+    sprite = monsterCard.querySelector('#monster-sprite-container');
+  }
+
+  return { card: monsterCard, name, hpBar, sprite };
+}
+
 export function renderStageHero(state) {
   if (!state) return;
-  const heroCard = findElement('stage-hero');
-  if (!heroCard) return;
+  const structure = ensureHeroStructure();
+  if (!structure?.card) return;
 
-  const heroNameEl = findElement('hero-name');
-  if (heroNameEl) heroNameEl.textContent = state.heroName || 'Hero';
+  if (structure.name) {
+    const classDef = getClass(state.class);
+    const className = classDef?.name || state.class || 'Aventureiro';
+    const heroName = state.heroName || state.name || state.playerName || 'Herói';
+    structure.name.textContent = `${heroName} (Lv. ${state.level || 1})`;
+  }
 
   updateBar('hero-hp-bar', state.hp || 0, state.maxHp || 1, 'hp');
   updateBar('hero-mp-bar', state.mp || 0, state.maxMp || 1, 'mp');
 
-  const spriteContainer = findElement('hero-sprite-container');
-  if (spriteContainer && typeof heroSVG === 'function') {
-    spriteContainer.innerHTML = heroSVG(state);
+  if (structure.sprite && typeof heroSVG === 'function') {
+    structure.sprite.innerHTML = heroSVG(state);
   }
 }
 
 export function renderStageMonster(state) {
   if (!state) return;
-  const monsterCard = findElement('stage-monster');
-  if (!monsterCard) return;
+  const structure = ensureMonsterStructure();
+  if (!structure?.card) return;
 
   const m = state.activeMonster;
-  const monsterNameEl = findElement('m-name') || findElement('monster-name');
-  if (monsterNameEl) monsterNameEl.textContent = m?.name || 'Procurando Inimigo...';
 
-  if (m) {
-    updateBar('m-hp-fill', m.hp || 0, m.maxHp || 1, 'hp');
+  if (!m) {
+    if (structure.name) structure.name.textContent = 'Procurando Inimigo...';
+    if (structure.sprite) structure.sprite.innerHTML = '';
+    updateBar('monster-hp-bar', 0, 1, 'hp');
+    return;
   }
 
-  const artEl = findElement('m-art') || findElement('monster-sprite-container');
-  if (artEl && typeof monsterSVG === 'function') {
-    artEl.innerHTML = monsterSVG(m);
+  if (structure.name) {
+    structure.name.textContent = `${m.name || 'Monstro'} (Lv. ${m.level || 1})`;
+  }
+
+  updateBar('monster-hp-bar', m.hp || 0, m.maxHp || 1, 'hp');
+
+  if (structure.sprite && typeof monsterSVG === 'function') {
+    structure.sprite.innerHTML = monsterSVG(m);
   }
 }
 
@@ -593,7 +775,6 @@ export function updateZoneUI(state, callbacks = {}) {
     zoneNameEl.textContent = zDef.name;
   }
 
-  // Restaura a imagem de fundo real do palco de combate (#stage)
   const stageEl = findElement('stage');
   if (stageEl && state.currentZone) {
     const bgUrl = ZONE_BACKGROUNDS[state.currentZone] || zDef?.background;
@@ -606,55 +787,79 @@ export function updateZoneUI(state, callbacks = {}) {
 }
 
 export function renderZoneMap(state, callbacks = {}) {
-  const container = findElement('zone-list');
+  const container = findElement('zone-map-container') || findElement('zone-list');
   if (!container) return;
 
-  const sagasData = SAGAS || {
-    saga1: { name: 'Saga I: Gludio & Arredores', reqLvl: 1, zones: ['talking_island', 'elven_village', 'dark_elven_village', 'gludin', 'gludio'] }
-  };
+  container.innerHTML = '';
+  container.classList.add('zone-map-root');
 
-  container.innerHTML = Object.entries(sagasData).map(([sagaKey, sagaDef]) => {
-    const sagaZones = sagaDef.zones || [];
-    const zonesHtml = sagaZones.map(zId => {
+  const sagasData = SAGAS || [
+    { name: 'Interlude', unlocksAt: 1, zones: ['talking_island', 'elven_village', 'dark_elven_village', 'gludin', 'gludio'] }
+  ];
+
+  const sagaList = Array.isArray(sagasData) ? sagasData : Object.values(sagasData);
+
+  for (const saga of sagaList) {
+    if (!saga) continue;
+
+    const block = document.createElement('div');
+    block.className = 'saga-map-block';
+
+    const zonesList = saga.zones || [];
+    const cardsHtml = zonesList.map(zId => {
       const zDef = ZONES[zId];
       if (!zDef) return '';
-      const active = state.currentZone === zId;
+
+      const isCurrent = state.currentZone === zId;
+      const isLocked = (state.level || 1) < (zDef.minLevel || zDef.reqLvl || 1);
       const bgUrl = ZONE_BACKGROUNDS[zId] || zDef.background || '';
-      const bgStyle = bgUrl ? `style="background-image: url('${getAssetUrl(bgUrl)}');"` : '';
+      const thumbStyle = bgUrl ? `style="background-image:url('${getAssetUrl(bgUrl)}')"` : '';
+
+      const monsterCount = zDef.monsters?.length || zDef.monsterTypes?.length || 4;
+      const bossName = zDef.boss || zDef.bossName || 'Chefão';
 
       return `
-        <div class="zone-card ${active ? 'active' : ''}" data-zone="${zId}">
-          <div class="zone-card-thumb" ${bgStyle}>
-            ${active ? '<span class="zone-flag">Em Caça</span>' : ''}
+        <div class="zone-card ${isCurrent ? 'active' : ''} ${isLocked ? 'locked' : ''}" data-zone="${zId}" data-locked="${isLocked}" data-current="${isCurrent}">
+          <div class="zone-card-thumb" ${thumbStyle}>
+            ${zDef.isTown ? '<span class="zone-flag town">🏡 Vila</span>' : ''}
+            ${isLocked ? '<span class="zone-flag lock">🔒</span>' : ''}
+            ${isCurrent ? '<span class="zone-flag here">★</span>' : ''}
           </div>
           <div class="zone-card-body">
-            <div class="zone-title">${zDef.name}</div>
-            <div class="zone-sub">${zDef.desc || ''}</div>
-            <button class="select-zone-btn" data-zone-btn="${zId}">${active ? '✓ Selecionado' : '⚔ Viajar'}</button>
+            <div class="zone-card-header">
+              <span class="zone-card-title">${zDef.name}</span>
+              <span class="zone-card-lvl">Lv.${zDef.minLevel || zDef.reqLvl || 1}+</span>
+            </div>
+            <div class="zone-card-desc">
+              ${monsterCount} espécie${monsterCount === 1 ? '' : 's'} · 👑 ${bossName}
+            </div>
+            <button class="select-zone-btn" ${isLocked || isCurrent ? 'disabled' : ''}>
+              ${isCurrent ? '★ Caçando Aqui' : isLocked ? `🔒 Requer Lv.${zDef.minLevel || zDef.reqLvl || 1}` : 'Caçar nesta Área'}
+            </button>
           </div>
         </div>
       `;
     }).join('');
 
-    return `
-      <div class="saga-map-block">
-        <div class="saga-header">
-          <h3>${sagaDef.name || sagaKey}</h3>
-          <span class="saga-req">Lv. ${sagaDef.reqLvl || 1}+</span>
-        </div>
-        <div class="saga-zones-grid">
-          ${zonesHtml}
-        </div>
+    block.innerHTML = `
+      <div class="saga-header">
+        <span class="saga-title">🗺️ ${saga.name}</span>
+        <span class="saga-req">Lv. ${saga.unlocksAt || saga.reqLvl || 1}+</span>
       </div>
+      <div class="saga-zones-grid">${cardsHtml}</div>
     `;
-  }).join('');
 
-  container.querySelectorAll('[data-zone-btn]').forEach(btn => {
-    btn.onclick = (e) => {
-      e.stopPropagation();
-      if (callbacks.selectZone) callbacks.selectZone(btn.dataset.zoneBtn);
-    };
-  });
+    container.appendChild(block);
+  }
+
+  container.onclick = (event) => {
+    const card = event.target.closest?.('.zone-card');
+    if (!card) return;
+    if (card.dataset.locked === 'true' || card.dataset.current === 'true') return;
+    const zId = card.dataset.zone;
+    if (callbacks.selectZone) callbacks.selectZone(zId);
+    else if (typeof window.setZone === 'function') window.setZone(zId);
+  };
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
