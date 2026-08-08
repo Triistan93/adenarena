@@ -15,14 +15,31 @@ function getItemDef(itemId){
   const n=raw.toLowerCase().replace(/\s+/g,''); return Object.values(data.ALL_ITEMS).find(i=>i.name?.toLowerCase().replace(/\s+/g,'')===n)||null;
 }
 const EMOJI_BY_SLOT={weapon:'⚔️',shield:'🛡️',armor:'🦺',helmet:'🪖',gloves:'🧤',legs:'👖',boots:'👢',cloak:'🧥',belt:'🎗️',necklace:'📿',earring:'💎',earring1:'💎',earring2:'💎',ring:'💍',ring2:'💍',hair:'👑',hair2:'🎭',agathion:'👼',talisman:'🧿',consumable:'🧪',potion:'🧪',scroll:'📜',material:'💠',gem:'💠',quest:'📯'};
-function renderItemIcon(item,def){
-  let icon=''; try{ icon=getItemIcon(def||item)||'';}catch(e){}
-  if(icon instanceof HTMLElement) return icon.outerHTML;
-  const value=String(icon).trim(); const fallback=EMOJI_BY_SLOT[(def?.slot||'').toLowerCase()]||'📦';
+function renderItemIcon(item, def){
+  let icon=''; 
+  try{ icon = getItemIcon(def || item) || ''; }catch{}
+  if(icon instanceof HTMLElement) icon = icon.outerHTML;
+
+  const value = String(icon).trim();
+  const fallback = EMOJI_FALLBACK[(def?.slot||'').toLowerCase()] || '📦';
+
   if(!value) return `<span class="inventory-item-emoji">${fallback}</span>`;
-  if(value.startsWith('<')) return value;
-  const isImg=/^(?:https?:|data:image|blob:|\/|\.{1,2}\/|img\/)/i.test(value)||/\.(?:png|webp|jpe?g|gif|svg)(?:\?.*)?$/i.test(value);
-  if(isImg) return `<img class="inventory-item-image" src="${escapeHTML(value)}" alt="${escapeHTML(def?.name||item?.itemId||'Item')}" draggable="false" loading="lazy" onerror="this.style.display='none';this.nextElementSibling&&(this.nextElementSibling.style.display='inline-block');" /><span class="inventory-item-emoji" style="display:none;">${fallback}</span>`;
+
+  // Se veio HTML pronto, extrai só o src e remonta limpo (sem inline styles)
+  if(value.startsWith('<')){
+    const m = value.match(/<img[^>]+src=["']([^"']+)["']/i);
+    if(m && m[1]){
+      return `<img class="inventory-item-image" src="${escapeHTML(m[1])}" alt="${escapeHTML(def?.name||'')}" draggable="false" loading="lazy" onerror="this.style.display='none';this.nextElementSibling&&(this.nextElementSibling.style.display='inline-flex');"/><span class="inventory-item-emoji" style="display:none;">${fallback}</span>`;
+    }
+    // HTML sem <img> reconhecível → usa emoji
+    return `<span class="inventory-item-emoji">${fallback}</span>`;
+  }
+
+  const isImg = /^(https?:|data:image|blob:|\/|\.{1,2}\/|img\/)/i.test(value) || /\.(png|webp|jpe?g|gif|svg)/i.test(value);
+  if(isImg){
+    return `<img class="inventory-item-image" src="${escapeHTML(value)}" alt="${escapeHTML(def?.name||'')}" draggable="false" loading="lazy" onerror="this.style.display='none';this.nextElementSibling&&(this.nextElementSibling.style.display='inline-flex');"/><span class="inventory-item-emoji" style="display:none;">${fallback}</span>`;
+  }
+
   return `<span class="inventory-item-emoji">${escapeHTML(value)}</span>`;
 }
 const SLOT_LABELS={weapon:'Arma',shield:'Escudo',armor:'Armadura',helmet:'Elmo',gloves:'Luvas',legs:'Calças',boots:'Botas',cloak:'Capa',belt:'Cinto',necklace:'Colar',earring1:'Brinco',earring2:'Brinco',ring:'Anel',ring2:'Anel',hair:'Cabelo',hair2:'Cabelo2',agathion:'Agathion',talisman:'Talismã'};
@@ -362,4 +379,87 @@ const INVENTORY_CSS = `
       "ring     belt     ring2    boots    talisman agathion" !important;
   }
 }
-`;
+`
+  /* ═══════════ NORMALIZAÇÃO DE ÍCONES (anti-sobreposição) ═══════════ */
+
+.inv-slot, .equip-slot {
+  position: relative !important;
+  contain: paint !important;
+  isolation: isolate !important;
+}
+
+.inv-slot .item-icon,
+.equip-slot .equip-icon {
+  position: static !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Cobre TODAS as classes possíveis + neutraliza inline styles */
+.inv-slot img,
+.inv-slot .item-icon-img,
+.inv-slot .inventory-item-image {
+  position: static !important;
+  width: 32px !important;
+  height: 32px !important;
+  max-width: 32px !important;
+  max-height: 32px !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  display: block !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  vertical-align: middle !important;
+  transform: none !important;
+  inset: auto !important;
+  float: none !important;
+}
+
+.equip-slot img,
+.equip-slot .item-icon-img,
+.equip-slot .inventory-item-image {
+  position: static !important;
+  width: 34px !important;
+  height: 34px !important;
+  max-width: 34px !important;
+  max-height: 34px !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  display: block !important;
+  margin: 0 auto !important;
+  vertical-align: middle !important;
+  transform: none !important;
+  inset: auto !important;
+}
+
+.inv-slot .inventory-item-emoji,
+.inv-slot .item-icon-fallback,
+.equip-slot .inventory-item-emoji,
+.equip-slot .item-icon-fallback {
+  position: static !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 20px !important;
+  line-height: 1 !important;
+  margin: 0 !important;
+  transform: none !important;
+}
+
+/* Hover não pode vazar por cima dos vizinhos */
+.inv-slot:hover {
+  transform: none !important;
+  border-color: #c9a227 !important;
+  background: #2a241c !important;
+  box-shadow: inset 0 0 8px rgba(201,162,39,.25) !important;
+}
+;
