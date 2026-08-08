@@ -471,7 +471,7 @@ const INVENTORY_CSS = `
 .equip-slot .inventory-item-emoji,
 .equip-slot .item-icon-fallback {
   position: static !important;
-  display: inline-flex !important;
+  display: inline-flex;
   align-items: center !important;
   justify-content: center !important;
   font-size: 20px !important;
