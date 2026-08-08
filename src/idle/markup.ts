@@ -175,6 +175,12 @@ export const IDLE_MARKUP = `
               </div>
             </div>
 
+            <!-- Character Combat Attr Summary Grid -->
+            <div class="pane-section" style="margin-top: 14px;">
+              <h3>⚔️ Atributos do Personagem</h3>
+              <div id="char-tab-stats-summary" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 6px;"></div>
+            </div>
+
             <!-- Subclass & Certification Management Panel -->
             <div class="pane-section subclass-section" style="margin-top: 14px;">
               <div style="display:flex; justify-content:space-between; align-items:center;">

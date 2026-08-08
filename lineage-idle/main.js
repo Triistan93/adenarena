@@ -132,7 +132,8 @@ import {
   updateZoneUI as uiUpdateZoneUI,
   renderZoneMap as uiRenderZoneMap,
   updateShopUI as uiUpdateShopUI,
-  updateCraftUI as uiUpdateCraftUI
+  updateCraftUI as uiUpdateCraftUI,
+  updateCharacterUI as uiUpdateCharacterUI
 } from './src/ui/GameUI.js';
 
 import { ensureAppLayout, showMenuPanel } from './src/ui/AppLayout.js';
@@ -970,6 +971,9 @@ function updateWarehouseUI() {
 }
 function updateEquipmentUI() {
   return uiUpdateEquipmentUI(state, { unequipItem });
+}
+function updateCharacterUI() {
+  return uiUpdateCharacterUI(state);
 }
 
 
@@ -3521,6 +3525,7 @@ export function openPanel(tabName) {
   }
 
   if (targetTab === 'inventory') safeUiUpdate('inventory', updateInventoryUI);
+  else if (targetTab === 'character') safeUiUpdate('character', updateCharacterUI);
   else if (targetTab === 'skills') safeUiUpdate('skills', updateSkillUI);
   else if (targetTab === 'shop') safeUiUpdate('shop', updateShopUI);
   else if (targetTab === 'craft') safeUiUpdate('craft', updateCraftUI);

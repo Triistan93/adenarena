@@ -8,7 +8,8 @@ import {
   updateZoneUI,
   updateInventoryUI,
   updateSkillUI,
-  updateShopUI
+  updateShopUI,
+  updateCharacterUI
 } from './GameUI.js';
 
 export * from './GameUI.js';
@@ -27,4 +28,5 @@ export function updateAllUI(state, callbacks = {}) {
   updateInventoryUI(state, callbacks);
   updateSkillUI(state, callbacks);
   updateShopUI(state, callbacks);
+  updateCharacterUI(state, callbacks);
 }

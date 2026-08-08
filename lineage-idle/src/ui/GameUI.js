@@ -872,6 +872,62 @@ export function renderStageMonster(state) {
   }
 }
 
+export function updateCharacterUI(state) {
+  if (!state) return;
+  const root = getRoot();
+
+  const charName = state.charName || state.heroName || state.playerName || state.name || 'Tristan';
+  const level = state.level || 1;
+  const race = state.race || 'human';
+  const cls = state.class || 'fighter';
+
+  const gData = typeof window !== 'undefined' ? (window.EchoData || window.GameData) : null;
+  const raceDef = (gData && gData.RACES_ECHO && gData.RACES_ECHO[race]) || { name: race.toUpperCase() };
+  const classDef = (gData && gData.CLASSES_ECHO && gData.CLASSES_ECHO[cls]) || { name: cls.toUpperCase() };
+
+  const raceName = raceDef.name || race.toUpperCase();
+  const className = classDef.name || cls.toUpperCase();
+
+  const portraitName = root.querySelector('#portrait-name, .portrait-name');
+  if (portraitName) portraitName.textContent = charName;
+
+  const portraitSub = root.querySelector('#portrait-sub, .portrait-sub');
+  if (portraitSub) portraitSub.textContent = `Level ${level} · ${raceName} ${className}`;
+
+  const raceClassDisp = root.querySelector('#hero-race-class-display');
+  if (raceClassDisp) raceClassDisp.textContent = `${raceName} — ${className}`;
+
+  const portraitArt = root.querySelector('#portrait-art, .portrait-art');
+  if (portraitArt && typeof heroSVG === 'function') {
+    portraitArt.innerHTML = heroSVG(state);
+  }
+
+  const charStatsContainer = root.querySelector('#char-tab-stats-summary');
+  if (charStatsContainer) {
+    const stats = typeof getStats === 'function' ? getStats() : (state.base || {});
+    charStatsContainer.innerHTML = `
+      <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(212,167,68,0.2); padding:6px 10px; border-radius:6px; font-size:11px;">
+        <span style="color:#a8a29e;">⚔️ P.Atk:</span> <strong style="color:#f59e0b; float:right;">${stats.atk || 0}</strong>
+      </div>
+      <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(212,167,68,0.2); padding:6px 10px; border-radius:6px; font-size:11px;">
+        <span style="color:#a8a29e;">🛡️ P.Def:</span> <strong style="color:#60a5fa; float:right;">${stats.def || 0}</strong>
+      </div>
+      <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(212,167,68,0.2); padding:6px 10px; border-radius:6px; font-size:11px;">
+        <span style="color:#a8a29e;">👟 Esquiva:</span> <strong style="color:#34d399; float:right;">${stats.eva || 0}</strong>
+      </div>
+      <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(212,167,68,0.2); padding:6px 10px; border-radius:6px; font-size:11px;">
+        <span style="color:#a8a29e;">🔮 M.Atk:</span> <strong style="color:#a78bfa; float:right;">${stats.matk || 0}</strong>
+      </div>
+      <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(212,167,68,0.2); padding:6px 10px; border-radius:6px; font-size:11px;">
+        <span style="color:#a8a29e;">✨ M.Def:</span> <strong style="color:#f472b6; float:right;">${stats.mdef || 0}</strong>
+      </div>
+      <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(212,167,68,0.2); padding:6px 10px; border-radius:6px; font-size:11px;">
+        <span style="color:#a8a29e;">⚡ Crítico:</span> <strong style="color:#fbbf24; float:right;">${stats.crit || 0}%</strong>
+      </div>
+    `;
+  }
+}
+
 export function updateZoneUI(state, callbacks = {}) {
   const zoneNameEl = findElement('zone-name') || findElement('stage-zone');
   if (!state?.currentZone) return;
