@@ -33,7 +33,7 @@
 .tooltip-desc { color: #a08a5a; font-size: 11px; margin-top: 4px; }
 .tooltip-affixes { color: #60a5fa; font-size: 11px; margin-top: 4px; }
 
-/* ═══════════════ PAINEL DO INVENTÁRIO ═══════════════ */
+/* ═══════════════ PAINEL DO INVENTÁRIO (SEM RESIZE MANUAL) ═══════════════ */
 #inventory-panel, .inventory-panel, #inventory-window,
 [data-panel="inventory"], [data-menu-panel="inventory"] {
   width: 100% !important;
@@ -48,6 +48,7 @@
   flex-direction: column !important;
   overflow: hidden !important;
   box-sizing: border-box !important;
+  resize: none !important; /* Desativa resize manual */
 }
 
 /* ═══════════════ HEADER ═══════════════ */
@@ -103,13 +104,16 @@
   padding: 8px !important;
   overflow: hidden !important;
   min-height: 0 !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
 }
 
-/* ═══════════════ PAPERDOLL CLÁSSICO (6 LINHAS x 3 COLUNAS) ═══════════════ */
+/* ═══════════════ PAPERDOLL CLÁSSICO FIXO (190px LARGURA) ═══════════════ */
 .l2inv-doll-col {
-  width: 220px !important;
-  min-width: 220px !important;
-  flex: 0 0 220px !important;
+  width: 190px !important;
+  min-width: 190px !important;
+  max-width: 190px !important;
+  flex: 0 0 190px !important;
   display: flex !important;
   flex-direction: column !important;
   gap: 6px !important;
@@ -120,20 +124,22 @@
   box-sizing: border-box !important;
   position: relative !important;
   overflow-y: auto !important;
+  overflow-x: hidden !important;
 }
 
 #paperdoll-grid {
   display: grid !important;
-  grid-template-columns: repeat(3, 56px) !important;
-  grid-template-rows: repeat(6, 56px) !important;
-  gap: 5px !important;
+  grid-template-columns: repeat(3, 48px) !important;
+  grid-template-rows: repeat(6, 48px) !important;
+  gap: 4px !important;
   justify-content: center !important;
-  padding: 6px !important;
+  padding: 4px !important;
   background: radial-gradient(ellipse at center, #2a241c 0%, #17120e 100%) !important;
   border: 1px solid #3a2a1a !important;
   border-radius: 6px !important;
   width: fit-content !important;
   margin: 0 auto !important;
+  box-sizing: border-box !important;
   grid-template-areas:
     "hair helmet hair2"
     "earring1 armor earring2"
@@ -144,8 +150,8 @@
 }
 
 .equip-slot {
-  width: 56px !important;
-  height: 56px !important;
+  width: 48px !important;
+  height: 48px !important;
   background: #1a1611 !important;
   border: 1px solid #4a3a2a !important;
   border-radius: 3px !important;
@@ -154,6 +160,7 @@
   justify-content: center !important;
   position: relative !important;
   cursor: pointer !important;
+  box-sizing: border-box !important;
 }
 .equip-slot.active { border-color: #c9a227 !important; }
 
@@ -169,29 +176,42 @@
   color: #d4a744 !important;
 }
 
-/* ═══════════════ GRID DE SLOTS DO INVENTÁRIO (56px LIMPO) ═══════════════ */
+/* ═══════════════ COLUNA DIREITA DO INVENTÁRIO ═══════════════ */
+.l2inv-main-col, .inventory-grid-container {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+  overflow: hidden !important;
+}
+
+/* ═══════════════ GRID FIXO DE 8 COLUNAS COM SCROLL VERTICAL ═══════════════ */
 #inventory-grid, .inventory-grid {
   display: grid !important;
-  grid-template-columns: repeat(auto-fill, 56px) !important;
-  grid-auto-rows: 56px !important;
-  gap: 5px !important;
-  padding: 8px !important;
-  background: rgba(0, 0, 0, 0.4) !important;
+  grid-template-columns: repeat(8, 50px) !important; /* EXACTLY 8 COLUMNS */
+  grid-auto-rows: 50px !important;
+  gap: 4px !important;
+  padding: 6px !important;
+  background: rgba(0, 0, 0, 0.45) !important;
   border: 1px solid #3a2a1a !important;
   border-radius: 4px !important;
-  overflow-y: auto !important;
+  overflow-y: auto !important; /* BARRA DE ROLAGEM VERTICAL PARA NOVOS ITENS */
+  overflow-x: hidden !important;
   max-height: 100% !important;
   align-content: start !important;
+  justify-content: start !important;
   flex: 1 !important;
+  box-sizing: border-box !important;
 }
 
 .inv-slot {
-  width: 56px !important;
-  height: 56px !important;
-  min-width: 56px !important;
-  max-width: 56px !important;
-  min-height: 56px !important;
-  max-height: 56px !important;
+  width: 50px !important;
+  height: 50px !important;
+  min-width: 50px !important;
+  max-width: 50px !important;
+  min-height: 50px !important;
+  max-height: 50px !important;
   background: #241e16 !important;
   border: 1px solid #3d2e1e !important;
   border-radius: 4px !important;
@@ -207,8 +227,8 @@
 }
 
 .inventory-item-image {
-  width: 38px !important;
-  height: 38px !important;
+  width: 34px !important;
+  height: 34px !important;
   object-fit: contain !important;
 }
 
@@ -306,7 +326,7 @@
   color: inherit !important;
   background: #131824 !important;
   border: 1px solid rgba(212, 175, 55, .22) !important;
-  border-radius: 9px !important;
+  border-radius: 999px !important;
   cursor: pointer !important;
   transition: transform .16s, border-color .16s, box-shadow .16s !important;
 }
