@@ -755,7 +755,7 @@ export default function Shell() {
         <LoginScreen onEnterGame={handleEnterGame} />
       ) : (
         <>
-          {mode === "arena" ? <ArenaApp /> : <IdleGame />}
+          {mode === "arena" ? <ArenaApp /> : <div className="w-full h-full min-h-screen relative overflow-hidden"><IdleGame /></div>}
           <ModeSwitch mode={mode} setMode={setMode} />
           <div className="fixed top-4 right-4 z-40">
             <AuthModal 

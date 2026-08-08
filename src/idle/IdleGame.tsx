@@ -89,7 +89,7 @@ export default function IdleGame() {
 
   return (
     <>
-      <div ref={hostRef} id="idle-host" />
+      <div ref={hostRef} id="idle-host" className="w-full h-full min-h-screen block overflow-hidden" />
       {changeScrollData && (
         <CharacterCreation
           isChangeScroll={true}
