@@ -62,7 +62,11 @@ export const mkNS = (ns, tag) => document.createElementNS(ns, tag);
  * @param {number} max  — Valor máximo
  */
 export function updateBar(id, cur, max) {
-  const el_ = el(id);
+  let el_ = el(id);
+  if (el_ && (id.endsWith('-bar') || el_.classList.contains('stage-hp-bar') || el_.classList.contains('bar-container'))) {
+    const fill = el_.querySelector('.stage-hp-fill, .stage-mp-fill, .m-hp-fill, .bar-fill, .bar, [id$="-fill"]');
+    if (fill) el_ = fill;
+  }
   if (!el_) return;
   const pct = max > 0 ? Math.min(100, Math.max(0, (cur / max) * 100)) : 0;
   el_.style.width = pct + '%';
