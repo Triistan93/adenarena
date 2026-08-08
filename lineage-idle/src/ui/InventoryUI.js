@@ -236,13 +236,15 @@ const INVENTORY_CSS = `
   border-radius: 3px !important;
   display: flex !important; align-items: center !important; justify-content: center !important;
   cursor: pointer !important; box-sizing: border-box !important; overflow: hidden !important;
+  padding: 4px !important;
 }
+.equip-slot:hover { border-color: #c9a227 !important; transform: none !important; }
 .equip-slot.active { border-color: #c9a227 !important; background: #2a241c !important; }
 .equip-slot.rarity-rare { border-color: #3b82f6 !important; }
 .equip-slot.rarity-epic { border-color: #a855f7 !important; }
 .equip-slot.rarity-legendary { border-color: #f59e0b !important; }
 .equip-icon .inventory-item-image, .equip-icon img {
-  width: 34px !important; height: 34px !important; object-fit: contain !important;
+  width: 100% !important; height: 100% !important; object-fit: contain !important; object-position: center !important;
 }
 .equip-placeholder { font-size: 18px !important; opacity: .25 !important; }
 .equip-label { display: none !important; }
@@ -304,7 +306,7 @@ const INVENTORY_CSS = `
   display: grid !important;
   grid-template-columns: repeat(auto-fill, 40px) !important;
   grid-auto-rows: 40px !important;
-  gap: 3px !important;
+  gap: 5px !important;
   padding: 6px !important;
   background: #18130e !important;
   border: 1px solid #3a2a1a !important;
@@ -332,10 +334,12 @@ const INVENTORY_CSS = `
   border-radius: 2px !important;
   display: flex !important; align-items: center !important; justify-content: center !important;
   cursor: pointer !important; box-sizing: border-box !important; overflow: hidden !important;
+  padding: 3px !important;
 }
 .inv-slot:hover {
-  border-color: #8a7a5a !important; background: #2a241c !important;
-  transform: scale(1.06) !important; z-index: 5 !important;
+  border-color: #c9a227 !important; background: #2a241c !important;
+  transform: none !important; z-index: 1 !important;
+  box-shadow: inset 0 0 0 1px #c9a227, inset 0 0 8px rgba(201,162,39,.35) !important;
 }
 .inv-slot.is-equipped { border-color: #22c55e !important; }
 .inv-slot.is-selected { border-color: #3b82f6 !important; background: #1e2a3a !important; }
@@ -349,7 +353,8 @@ const INVENTORY_CSS = `
   width: 100% !important; height: 100% !important;
 }
 .inventory-item-image {
-  width: 32px !important; height: 32px !important; object-fit: contain !important;
+  width: 100% !important; height: 100% !important; max-width: 100% !important; max-height: 100% !important;
+  object-fit: contain !important; object-position: center !important;
 }
 .inventory-item-emoji { font-size: 20px !important; line-height: 1 !important; }
 .item-name { display: none !important; }
@@ -427,10 +432,10 @@ const INVENTORY_CSS = `
 .inv-slot .item-icon-img,
 .inv-slot .inventory-item-image {
   position: static !important;
-  width: 32px !important;
-  height: 32px !important;
-  max-width: 32px !important;
-  max-height: 32px !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
   min-width: 0 !important;
   min-height: 0 !important;
   object-fit: contain !important;
@@ -448,10 +453,10 @@ const INVENTORY_CSS = `
 .equip-slot .item-icon-img,
 .equip-slot .inventory-item-image {
   position: static !important;
-  width: 34px !important;
-  height: 34px !important;
-  max-width: 34px !important;
-  max-height: 34px !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
   object-fit: contain !important;
   object-position: center !important;
   display: block !important;
@@ -473,13 +478,5 @@ const INVENTORY_CSS = `
   line-height: 1 !important;
   margin: 0 !important;
   transform: none !important;
-}
-
-/* Hover não pode vazar por cima dos vizinhos */
-.inv-slot:hover {
-  transform: none !important;
-  border-color: #c9a227 !important;
-  background: #2a241c !important;
-  box-shadow: inset 0 0 8px rgba(201,162,39,.25) !important;
 }
 `;
