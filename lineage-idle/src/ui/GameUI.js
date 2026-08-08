@@ -513,9 +513,14 @@ const GAMEUI_CSS = `
   flex-direction: column !important;
   align-items: center !important;
   justify-content: flex-end !important;
-  width: 100% !important;
-  height: 100% !important;
-  min-height: 140px !important;
+  /* Não forçamos width/height:100% aqui — não temos acesso ao CSS que
+     define o contêiner pai real destes cards, e forçar 100% os fez herdar
+     o tamanho de um pai muito maior (a tela toda). Em vez disso, só damos
+     limites de segurança: não deixa colapsar a 0, não deixa explodir. */
+  min-width: 120px !important;
+  min-height: 120px !important;
+  max-width: 260px !important;
+  max-height: 320px !important;
   border-radius: 10px !important;
   overflow: hidden !important;
   box-sizing: border-box !important;
@@ -549,16 +554,23 @@ const GAMEUI_CSS = `
 .hero-sprite-host, .monster-sprite-host {
   flex: 1 1 auto !important;
   width: 100% !important;
+  min-height: 70px !important;
+  max-height: 220px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  padding: 30px 8px 34px !important;
+  padding: 24px 8px 30px !important;
   box-sizing: border-box !important;
   pointer-events: none !important;
+  overflow: hidden !important;
 }
+/* Teto FIXO em pixels (não em %) — garante que o SVG nunca fique enorme,
+   independente do tamanho real do contêiner pai, que não controlamos. */
 .hero-sprite-host svg, .monster-sprite-host svg {
-  max-width: 82% !important;
-  max-height: 100% !important;
+  width: auto !important;
+  height: auto !important;
+  max-width: 150px !important;
+  max-height: 170px !important;
   filter: drop-shadow(0 10px 12px rgba(0,0,0,.55)) !important;
 }
 
