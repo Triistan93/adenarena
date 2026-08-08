@@ -231,15 +231,30 @@ const INVENTORY_CSS = `
 .equip-slot {
   position: relative !important;
   width: 50px !important; height: 50px !important;
-  background: #1a1611 !important;
-  border: 1px solid #4a3a2a !important;
+  background:
+    radial-gradient(circle at 30% 22%, rgba(255,224,160,.10), transparent 55%),
+    linear-gradient(160deg, #2c2214 0%, #1c140b 55%, #100b06 100%) !important;
+  border: 1px solid #0c0805 !important;
   border-radius: 3px !important;
   display: flex !important; align-items: center !important; justify-content: center !important;
   cursor: pointer !important; box-sizing: border-box !important; overflow: hidden !important;
   padding: 4px !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,228,175,.18),
+    inset 0 -2px 3px rgba(0,0,0,.65),
+    inset 1px 0 0 rgba(255,228,175,.05),
+    inset -1px 0 0 rgba(0,0,0,.4) !important;
 }
-.equip-slot:hover { border-color: #c9a227 !important; transform: none !important; }
-.equip-slot.active { border-color: #c9a227 !important; background: #2a241c !important; }
+.equip-slot:hover {
+  border-color: #c9a227 !important; transform: none !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,228,175,.25),
+    inset 0 -2px 3px rgba(0,0,0,.6),
+    inset 1px 0 0 rgba(255,228,175,.08),
+    inset -1px 0 0 rgba(0,0,0,.35),
+    0 0 8px rgba(201,162,39,.55) !important;
+}
+.equip-slot.active { border-color: #c9a227 !important; }
 .equip-slot.rarity-rare { border-color: #3b82f6 !important; }
 .equip-slot.rarity-epic { border-color: #a855f7 !important; }
 .equip-slot.rarity-legendary { border-color: #f59e0b !important; }
@@ -307,8 +322,8 @@ const INVENTORY_CSS = `
   grid-template-columns: repeat(auto-fill, 40px) !important;
   grid-auto-rows: 40px !important;
   gap: 5px !important;
-  padding: 6px !important;
-  background: #18130e !important;
+  padding: 8px !important;
+  background: radial-gradient(ellipse at top, #241a10 0%, #14100a 75%) !important;
   border: 1px solid #3a2a1a !important;
   border-radius: 4px !important;
   align-content: start !important;
@@ -327,26 +342,41 @@ const INVENTORY_CSS = `
 }
 
 .inv-slot {
+  --rarity: rgba(0,0,0,0);
   position: relative !important;
   width: 40px !important; height: 40px !important;
-  background: #1e1a14 !important;
-  border: 1px solid #3d2e1e !important;
-  border-radius: 2px !important;
+  background:
+    radial-gradient(circle at 30% 22%, rgba(255,224,160,.10), transparent 55%),
+    linear-gradient(160deg, #2c2214 0%, #1c140b 55%, #100b06 100%) !important;
+  border: 1px solid #0c0805 !important;
+  border-radius: 3px !important;
   display: flex !important; align-items: center !important; justify-content: center !important;
   cursor: pointer !important; box-sizing: border-box !important; overflow: hidden !important;
   padding: 3px !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,228,175,.18),
+    inset 0 -2px 3px rgba(0,0,0,.65),
+    inset 1px 0 0 rgba(255,228,175,.05),
+    inset -1px 0 0 rgba(0,0,0,.4),
+    0 0 0 1px var(--rarity) !important;
 }
 .inv-slot:hover {
-  border-color: #c9a227 !important; background: #2a241c !important;
+  border-color: #c9a227 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,228,175,.25),
+    inset 0 -2px 3px rgba(0,0,0,.6),
+    inset 1px 0 0 rgba(255,228,175,.08),
+    inset -1px 0 0 rgba(0,0,0,.35),
+    0 0 0 1px var(--rarity),
+    0 0 8px rgba(201,162,39,.55) !important;
   transform: none !important; z-index: 1 !important;
-  box-shadow: inset 0 0 0 1px #c9a227, inset 0 0 8px rgba(201,162,39,.35) !important;
 }
-.inv-slot.is-equipped { border-color: #22c55e !important; }
-.inv-slot.is-selected { border-color: #3b82f6 !important; background: #1e2a3a !important; }
-.inv-slot.rarity-uncommon  { border-color: #22c55e !important; }
-.inv-slot.rarity-rare      { border-color: #3b82f6 !important; }
-.inv-slot.rarity-epic      { border-color: #a855f7 !important; }
-.inv-slot.rarity-legendary { border-color: #f59e0b !important; }
+.inv-slot.is-equipped { --rarity: #22c55e; }
+.inv-slot.is-selected { --rarity: #3b82f6; }
+.inv-slot.rarity-uncommon  { --rarity: #22c55e; }
+.inv-slot.rarity-rare      { --rarity: #3b82f6; }
+.inv-slot.rarity-epic      { --rarity: #a855f7; }
+.inv-slot.rarity-legendary { --rarity: #f59e0b; }
 
 .item-icon {
   display: flex !important; align-items: center !important; justify-content: center !important;
