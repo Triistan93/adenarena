@@ -22,14 +22,15 @@ function renderItemIcon(item, def){
 
   const value = String(icon).trim();
   const fallback = EMOJI_BY_SLOT[(def?.slot||'').toLowerCase()] || '📦';
+  const IMG_STYLE = 'position:static;display:block;width:100%;height:100%;max-width:100%;max-height:100%;min-width:0;min-height:0;object-fit:contain;object-position:center;margin:0;padding:0;transform:none;';
 
   if(!value) return `<span class="inventory-item-emoji">${fallback}</span>`;
 
-  // Se veio HTML pronto, extrai só o src e remonta limpo (sem inline styles)
+  // Se veio HTML pronto, extrai só o src e remonta limpo (sem inline styles herdados)
   if(value.startsWith('<')){
     const m = value.match(/<img[^>]+src=["']([^"']+)["']/i);
     if(m && m[1]){
-      return `<img class="inventory-item-image" src="${escapeHTML(m[1])}" alt="${escapeHTML(def?.name||'')}" draggable="false" loading="lazy" onerror="this.style.display='none';this.nextElementSibling&&(this.nextElementSibling.style.display='inline-flex');"/><span class="inventory-item-emoji" style="display:none;">${fallback}</span>`;
+      return `<img class="inventory-item-image" style="${IMG_STYLE}" src="${escapeHTML(m[1])}" alt="${escapeHTML(def?.name||'')}" draggable="false" loading="lazy" onerror="this.style.display='none';this.nextElementSibling&&(this.nextElementSibling.style.display='inline-flex');"/><span class="inventory-item-emoji" style="display:none;">${fallback}</span>`;
     }
     // HTML sem <img> reconhecível → usa emoji
     return `<span class="inventory-item-emoji">${fallback}</span>`;
@@ -37,7 +38,7 @@ function renderItemIcon(item, def){
 
   const isImg = /^(https?:|data:image|blob:|\/|\.{1,2}\/|img\/)/i.test(value) || /\.(png|webp|jpe?g|gif|svg)/i.test(value);
   if(isImg){
-    return `<img class="inventory-item-image" src="${escapeHTML(value)}" alt="${escapeHTML(def?.name||'')}" draggable="false" loading="lazy" onerror="this.style.display='none';this.nextElementSibling&&(this.nextElementSibling.style.display='inline-flex');"/><span class="inventory-item-emoji" style="display:none;">${fallback}</span>`;
+    return `<img class="inventory-item-image" style="${IMG_STYLE}" src="${escapeHTML(value)}" alt="${escapeHTML(def?.name||'')}" draggable="false" loading="lazy" onerror="this.style.display='none';this.nextElementSibling&&(this.nextElementSibling.style.display='inline-flex');"/><span class="inventory-item-emoji" style="display:none;">${fallback}</span>`;
   }
 
   return `<span class="inventory-item-emoji">${escapeHTML(value)}</span>`;
@@ -86,6 +87,7 @@ export function updateInventoryUI(state, callbacks = {}){
     const isSelected=selectedSet.has(item.uid);
     const qty=(item.count||1)>1?`<span class="qty">${item.count}</span>`:''; const equippedTag=item.equipped?`<span class="equipped-badge">E</span>`:''; const check=`<span class="inv-check">${isSelected?'✓':''}</span>`;
     const slotEl=mkEl('div'); slotEl.className=`inv-slot rarity-${rarity}`+(item.equipped?' is-equipped':'')+(isSelected?' is-selected':''); slotEl.dataset.uid=item.uid;
+    slotEl.style.position='relative'; slotEl.style.overflow='hidden';
     slotEl.innerHTML=`${check}<span class="item-icon">${renderItemIcon(item,def)}</span>${qty}${equippedTag}`;
     slotEl.title=def.name;
     slotEl.onmouseenter=(e)=>showItemTooltip(e,item,state,callbacks); slotEl.onmouseleave=()=>hideItemTooltip();
@@ -103,6 +105,7 @@ export function updateWarehouseUI(state, callbacks = {}){
   for(const item of state.warehouse){
     const def=getItemDef(item.itemId); if(!def) continue;
     const slotEl=mkEl('div'); const rarity=item.rarity||'common'; slotEl.className=`inv-slot rarity-${rarity}`; slotEl.dataset.uid=item.uid;
+    slotEl.style.position='relative'; slotEl.style.overflow='hidden';
     const countBadge=(item.count&&item.count>1)?`<span class="qty">${item.count}</span>`:'';
     slotEl.innerHTML=`<span class="item-icon">${renderItemIcon(item,def)}</span>${countBadge}`;
     slotEl.onmouseenter=(e)=>showItemTooltip(e,item,state,callbacks); slotEl.onmouseleave=()=>hideItemTooltip();
@@ -356,7 +359,7 @@ const INVENTORY_CSS = `
   border-radius: 3px !important;
   display: flex !important; align-items: center !important; justify-content: center !important;
   cursor: pointer !important; box-sizing: border-box !important; overflow: hidden !important;
-  padding: 3px !important;
+  padding: 4px !important;
   box-shadow:
     inset 0 1px 0 rgba(255,228,175,.18),
     inset 0 -2px 3px rgba(0,0,0,.65),
