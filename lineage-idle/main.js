@@ -2500,7 +2500,18 @@ function stageMonsterDie() {
 function stageMonsterLunge() { const m = el('stage-monster'); if (!m) return; m.classList.remove('lunge'); reflow(m); m.classList.add('lunge'); setTimeout(() => m.classList.remove('lunge'), 440); }
 function stageHeroHurt(dmg) { const h = el('stage-hero'); if (h) { h.classList.remove('hurt'); reflow(h); h.classList.add('hurt'); setTimeout(() => h.classList.remove('hurt'), 420); } stageFloat('-' + Math.round(dmg), 'sf-hurt', 'left'); }
 function stageHeroBlock() { stageFloat('BLOCK', 'sf-block', 'left'); }
-function stageFloat(text, cls, side) { const c = el('stage-floats'); if (!c) return; const s = mkEl('span'); s.className = 'sf ' + cls; s.textContent = text; s.style.left = (side === 'left' ? (16 + Math.random() * 8) : (68 + Math.random() * 12)) + '%'; c.appendChild(s); setTimeout(() => s.remove(), 1100); }
+const MAX_FLOAT_ITEMS = 12;
+function stageFloat(text, cls, side) {
+  const c = el('stage-floats');
+  if (!c) return;
+  while (c.children.length >= MAX_FLOAT_ITEMS) { c.removeChild(c.firstChild); }
+  const s = mkEl('span');
+  s.className = 'sf ' + cls;
+  s.textContent = text;
+  s.style.left = (side === 'left' ? (16 + Math.random() * 8) : (68 + Math.random() * 12)) + '%';
+  c.appendChild(s);
+  setTimeout(() => { if (s.parentNode === c) c.removeChild(s); }, 1100);
+}
 
 // --------------------------- COMBAT ---------------------------
 let combatInterval = null; let combatTick = 0; let monsterAttackTimeout = null;
@@ -2557,7 +2568,19 @@ function dealDamage(target, amount, type = 'physical') {
 const goldEvents = []; 
 function trackGold(amount) { goldEvents.push({ t: Date.now(), v: amount }); }
 function getGoldPerSec() { const now = Date.now(); while (goldEvents.length && now - goldEvents[0].t > 30000) goldEvents.shift(); if (!goldEvents.length) return 0; return goldEvents.reduce((s, e) => s + e.v, 0) / 30; }
-function floatText(text, cls = 'float-gold') { const layer = el('float-layer'); if (!layer) return; const span = mkEl('span'); span.className = 'float-text ' + cls; span.textContent = text; const rect = layer.getBoundingClientRect(); span.style.left = (rect.width * (0.35 + Math.random() * 0.3)) + 'px'; span.style.top = (rect.height * 0.55 + (Math.random() * 60 - 30)) + 'px'; layer.appendChild(span); setTimeout(() => span.remove(), 1400); }
+function floatText(text, cls = 'float-gold') {
+  const layer = el('float-layer');
+  if (!layer) return;
+  while (layer.children.length >= MAX_FLOAT_ITEMS) { layer.removeChild(layer.firstChild); }
+  const span = mkEl('span');
+  span.className = 'float-text ' + cls;
+  span.textContent = text;
+  const rect = layer.getBoundingClientRect();
+  span.style.left = (rect.width * (0.35 + Math.random() * 0.3)) + 'px';
+  span.style.top = (rect.height * 0.55 + (Math.random() * 60 - 30)) + 'px';
+  layer.appendChild(span);
+  setTimeout(() => { if (span.parentNode === layer) layer.removeChild(span); }, 1400);
+}
 
 function checkBuffsExpire() {
   if (!state.buffs) return;

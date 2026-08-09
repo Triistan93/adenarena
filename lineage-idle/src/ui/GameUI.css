@@ -7,6 +7,8 @@
 /* ═══════════════ TOOLTIP ═══════════════ */
 #item-tooltip {
   position: fixed;
+  top: 0;
+  left: 0;
   z-index: 99999;
   pointer-events: auto;
   max-width: 260px;
@@ -19,6 +21,7 @@
   font-size: 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8);
   display: none;
+  will-change: transform;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 .tooltip-header {

@@ -310,8 +310,9 @@ export function showItemTooltip(e, item, state, callbacks = {}) {
   });
 
   tooltip.style.display = 'block';
-  tooltip.style.left = `${Math.min(window.innerWidth - 240, e.clientX + 15)}px`;
-  tooltip.style.top = `${Math.max(10, Math.min(window.innerHeight - 200, e.clientY + 15))}px`;
+  const posX = Math.min(window.innerWidth - 250, e.clientX + 15);
+  const posY = Math.max(10, Math.min(window.innerHeight - 220, e.clientY + 15));
+  tooltip.style.transform = `translate3d(${posX}px, ${posY}px, 0)`;
 }
 
 export function hideItemTooltip() {
