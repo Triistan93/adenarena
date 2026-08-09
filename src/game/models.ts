@@ -902,6 +902,52 @@ export function buildSkyDome(): THREE.Mesh {
   return new THREE.Mesh(geo, mat);
 }
 
+export function buildCampfire(): THREE.Group {
+  const g = new THREE.Group();
+  for (let i = 0; i < 6; i++) {
+    const a = (i / 6) * Math.PI * 2;
+    const log = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 0.6, 8), toon("#4a2f18"));
+    log.rotation.z = Math.PI / 2;
+    log.rotation.y = a;
+    log.position.set(Math.cos(a) * 0.4, 0.08, Math.sin(a) * 0.4);
+    g.add(log);
+  }
+  const fire = new THREE.Mesh(new THREE.ConeGeometry(0.35, 0.7, 8), toon("#ff6a00", 0.9));
+  fire.position.y = 0.35;
+  g.add(fire);
+  const innerFire = new THREE.Mesh(new THREE.ConeGeometry(0.2, 0.45, 8), toon("#ffe100", 1.0));
+  innerFire.position.y = 0.25;
+  g.add(innerFire);
+  g.add(shadow(0.7));
+  return g;
+}
+
+export function buildStoneWall(): THREE.Group {
+  const g = new THREE.Group();
+  const wall = new THREE.Mesh(new THREE.BoxGeometry(3.5, 1.4, 0.5), toon("#5a626d"));
+  wall.position.y = 0.7;
+  g.add(wall);
+  const topCap = new THREE.Mesh(new THREE.BoxGeometry(3.7, 0.15, 0.6), toon("#788290"));
+  topCap.position.y = 1.45;
+  g.add(topCap);
+  g.add(shadow(1.8));
+  return g;
+}
+
+export function buildArch(): THREE.Group {
+  const g = new THREE.Group();
+  const pillarL = new THREE.Mesh(new THREE.BoxGeometry(0.6, 3.2, 0.6), toon("#4a525d"));
+  pillarL.position.set(-1.6, 1.6, 0);
+  g.add(pillarL);
+  const pillarR = new THREE.Mesh(new THREE.BoxGeometry(0.6, 3.2, 0.6), toon("#4a525d"));
+  pillarR.position.set(1.6, 1.6, 0);
+  g.add(pillarR);
+  const archTop = new THREE.Mesh(new THREE.BoxGeometry(3.8, 0.5, 0.7), toon("#6a727d"));
+  archTop.position.set(0, 3.3, 0);
+  g.add(archTop);
+  return g;
+}
+
 export const RACE_IDS: RaceId[] = [
   "human", "elf", "darkelf", "orc", "dwarf", "kamael",
 ];

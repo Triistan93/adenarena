@@ -347,28 +347,29 @@ export class Game {
     });
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     this.effect = new OutlineEffect(this.renderer, {
-      defaultThickness: 0.004,
-      defaultColor: [0.04, 0.04, 0.07],
-      defaultAlpha: 0.85,
+      defaultThickness: 0.0035,
+      defaultColor: [0.03, 0.03, 0.05],
+      defaultAlpha: 0.8,
     });
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color("#06080f");
-    this.scene.fog = new THREE.Fog("#06080f", 18, 78);
+    this.scene.background = new THREE.Color("#0e121a");
+    this.scene.fog = new THREE.FogExp2("#0e121a", 0.009);
 
-    this.camera = new THREE.PerspectiveCamera(55, 1, 0.1, 900);
-    this.camera.position.set(0, 20, 14);
+    // Camera Isometric 2.5D Graveyard Keeper angle (FOV 42)
+    this.camera = new THREE.PerspectiveCamera(42, 1, 0.1, 900);
+    this.camera.position.set(0, 18, 16);
 
-    const hemi = new THREE.HemisphereLight(0xbcd4ff, 0x2a3a1a, 0.9);
+    const hemi = new THREE.HemisphereLight(0x405578, 0x38281a, 0.85);
     this.scene.add(hemi);
-    const sun = new THREE.DirectionalLight(0xfff0d0, 1.1);
-    sun.position.set(18, 26, 12);
+    const sun = new THREE.DirectionalLight(0xffbd69, 1.25);
+    sun.position.set(24, 32, 16);
     this.scene.add(sun);
     this.sun = sun;
-    const fill = new THREE.DirectionalLight(0x88aaff, 0.35);
-    fill.position.set(-10, 8, -6);
+    const fill = new THREE.DirectionalLight(0x7890cc, 0.4);
+    fill.position.set(-14, 10, -8);
     this.scene.add(fill);
-    const glow = new THREE.PointLight(0xffd27a, 0.5, 60);
-    glow.position.set(0, 8, 4);
+    const glow = new THREE.PointLight(0xff9d26, 1.2, 80);
+    glow.position.set(0, 7, 3);
     this.scene.add(glow);
 
     // sky + sun disc
@@ -377,7 +378,7 @@ export class Game {
     this.scene.add(sky);
     const sunDisc = new THREE.Mesh(
       new THREE.SphereGeometry(8, 16, 16),
-      new THREE.MeshBasicMaterial({ color: 0xfff2c0 })
+      new THREE.MeshBasicMaterial({ color: 0xfff0b3 })
     );
     sunDisc.name = "sun";
     sunDisc.position.set(120, 90, -160);
@@ -385,7 +386,7 @@ export class Game {
 
     const ground = new THREE.Mesh(
       new THREE.PlaneGeometry(2000, 2000, 1, 1),
-      new THREE.MeshLambertMaterial({ color: "#4a7a3a" })
+      new THREE.MeshLambertMaterial({ color: "#3d5c2e" })
     );
     ground.rotation.x = -Math.PI / 2;
     (ground.material as THREE.Material).userData.outlineParameters = {
@@ -394,8 +395,8 @@ export class Game {
     this.scene.add(ground);
     // stone plaza under the village
     const plaza = new THREE.Mesh(
-      new THREE.CircleGeometry(20, 40),
-      new THREE.MeshLambertMaterial({ color: "#9a9a8a" })
+      new THREE.CircleGeometry(22, 44),
+      new THREE.MeshLambertMaterial({ color: "#7a7a6c" })
     );
     plaza.rotation.x = -Math.PI / 2;
     plaza.position.y = 0.03;
@@ -405,8 +406,8 @@ export class Game {
     this.scene.add(plaza);
     // path ring
     const path = new THREE.Mesh(
-      new THREE.RingGeometry(13, 15, 48),
-      new THREE.MeshLambertMaterial({ color: "#b0a890" })
+      new THREE.RingGeometry(13, 15.5, 48),
+      new THREE.MeshLambertMaterial({ color: "#9a8a70" })
     );
     path.rotation.x = -Math.PI / 2;
     path.position.y = 0.04;
@@ -1828,6 +1829,23 @@ export class Game {
     const fountain = buildFountain();
     fountain.position.set(0, 0, -8);
     this.scene.add(fountain);
+
+    const campfire = buildCampfire();
+    campfire.position.set(5, 0, -4);
+    this.scene.add(campfire);
+
+    const arch = buildArch();
+    arch.position.set(0, 0, 10);
+    this.scene.add(arch);
+
+    const wall1 = buildStoneWall();
+    wall1.position.set(-6, 0, 10);
+    this.scene.add(wall1);
+
+    const wall2 = buildStoneWall();
+    wall2.position.set(6, 0, 10);
+    this.scene.add(wall2);
+
     const houses = 8;
     for (let i = 0; i < houses; i++) {
       const a = (i / houses) * TAU;
@@ -1837,7 +1855,7 @@ export class Game {
       h.scale.setScalar(rand(0.9, 1.15));
       this.scene.add(h);
     }
-    for (let i = 0; i < 16; i++) {
+    for (let i = 0; i < 18; i++) {
       const a = rand(0, TAU);
       const d = rand(22, 42);
       const tr = buildTree();
@@ -1845,14 +1863,14 @@ export class Game {
       tr.scale.setScalar(rand(0.8, 1.3));
       this.scene.add(tr);
     }
-    for (let i = 0; i < 5; i++) {
-      const a = (i / 5) * TAU;
+    for (let i = 0; i < 6; i++) {
+      const a = (i / 6) * TAU;
       const t = buildTorch();
-      t.position.set(Math.cos(a) * 3, 0, Math.sin(a) * 3 - 8);
+      t.position.set(Math.cos(a) * 4, 0, Math.sin(a) * 4 - 6);
       this.scene.add(t);
     }
     // rocks
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 12; i++) {
       const a = rand(0, TAU);
       const d = rand(14, 40);
       const r = buildRock();
@@ -1861,7 +1879,7 @@ export class Game {
       this.scene.add(r);
     }
     // flowers
-    for (let i = 0; i < 40; i++) {
+    for (let i = 0; i < 45; i++) {
       const a = rand(0, TAU);
       const d = rand(10, 45);
       const f = buildFlower();
@@ -1870,9 +1888,9 @@ export class Game {
       this.scene.add(f);
     }
     // crates + barrels near houses
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < 8; i++) {
       const a = rand(0, TAU);
-      const d = rand(15, 19);
+      const d = rand(14, 20);
       const c = Math.random() < 0.5 ? buildCrate() : buildBarrel();
       c.position.set(Math.cos(a) * d, 0, Math.sin(a) * d);
       c.rotation.y = rand(0, TAU);
@@ -1922,13 +1940,13 @@ export class Game {
   updateCamera() {
     const tx = this.px * S;
     const tz = this.py * S;
-    const desired = new THREE.Vector3(tx, 9, tz + 11);
+    const desired = new THREE.Vector3(tx, 13.5, tz + 12.5);
     this.camera.position.lerp(desired, 0.1);
     if (this.shake > 0.2) {
       this.camera.position.x += rand(-this.shake, this.shake) * 0.05;
       this.camera.position.y += rand(-this.shake, this.shake) * 0.05;
     }
-    this.camera.lookAt(tx, 1.6, tz);
+    this.camera.lookAt(tx, 0.8, tz);
     // keep sky + sun centered on camera
     const sky = this.scene.getObjectByName("sky");
     if (sky) sky.position.copy(this.camera.position);
@@ -1978,190 +1996,198 @@ export class Game {
     ctx.clearRect(0, 0, this.w, this.h);
     ctx.textBaseline = "alphabetic";
 
-    const prog = clamp(this.wave / 30, 0, 1);
-    ctx.fillStyle = "rgba(255,255,255,0.08)";
-    ctx.fillRect(0, 0, this.w, 4);
-    ctx.fillStyle = this.cfg.race.color;
-    ctx.fillRect(0, 0, this.w * prog, 4);
-
-    // score
-    this.roundRect(ctx, 14, 14, 214, 84, 12);
-    ctx.fillStyle = "rgba(10,14,26,0.55)";
+    // --- Top-Right Location Banner (Graveyard Keeper Style) ---
+    const bannerW = 220;
+    const bannerH = 36;
+    const bannerX = this.w - bannerW - 16;
+    const bannerY = 16;
+    this.roundRect(ctx, bannerX, bannerY, bannerW, bannerH, 8);
+    ctx.fillStyle = "rgba(18, 22, 34, 0.88)";
     ctx.fill();
+    ctx.strokeStyle = "#d4a744";
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+    ctx.textAlign = "center";
+    ctx.font = "bold 12px Inter, sans-serif";
+    ctx.fillStyle = "#f4d58a";
+    ctx.fillText("📍 Town · Talking Island", bannerX + bannerW / 2, bannerY + 22);
+
+    // --- Top-Left Ornate Circular Compass Dial & HP/MP Bars ---
+    const cx = 56;
+    const cy = 56;
+    const dialR = 36;
+
+    // Outer Dial Shadow & Ring
+    ctx.beginPath();
+    ctx.arc(cx, cy, dialR + 4, 0, Math.PI * 2);
+    ctx.fillStyle = "rgba(10, 12, 18, 0.9)";
+    ctx.fill();
+    ctx.strokeStyle = "#c9962f";
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    // Dial Interior
+    ctx.beginPath();
+    ctx.arc(cx, cy, dialR, 0, Math.PI * 2);
+    ctx.fillStyle = "#161d2e";
+    ctx.fill();
+
+    // Celestial icon (Sun/Moon cycle)
+    const timeAngle = (this.elapsed * 0.1) % (Math.PI * 2);
+    const sunX = cx + Math.cos(timeAngle) * 18;
+    const sunY = cy + Math.sin(timeAngle) * 18;
+    ctx.font = "16px serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(Math.sin(timeAngle) > 0 ? "☀️" : "🌙", sunX, sunY);
+    ctx.textBaseline = "alphabetic";
+
+    // HP & MP Arched Bars next to dial
+    const barX = cx + dialR + 14;
+    const barW = 160;
+
+    // Character Name / Class Header
     ctx.textAlign = "left";
+    ctx.font = "800 13px Cinzel, serif";
     ctx.fillStyle = "#fff";
-    ctx.font = "800 30px Cinzel, serif";
-    ctx.fillText(String(Math.floor(this.score)), 26, 48);
-    ctx.fillStyle = "rgba(255,255,255,0.6)";
-    ctx.font = "600 12px Inter, sans-serif";
-    ctx.fillText("SCORE", 26, 64);
-    const mm = Math.floor(this.elapsed / 60);
-    const ss = Math.floor(this.elapsed % 60);
-    ctx.fillText(
-      `KILLS ${this.kills}   ${mm}:${ss.toString().padStart(2, "0")}`,
-      26,
-      84
-    );
+    ctx.fillText(`${this.cfg.cls.name} (${this.cfg.race.name})`, barX, 32);
 
-    // hp + mana
-    const hy = 108;
-    this.roundRect(ctx, 14, hy, 214, 64, 12);
-    ctx.fillStyle = "rgba(10,14,26,0.55)";
+    // HP Bar
+    const hpRatio = clamp(this.hp / this.maxHp, 0, 1);
+    const hpY = 40;
+    this.roundRect(ctx, barX, hpY, barW, 12, 6);
+    ctx.fillStyle = "rgba(15, 18, 28, 0.85)";
     ctx.fill();
-    ctx.fillStyle = "rgba(255,255,255,0.85)";
-    ctx.font = "600 12px Inter, sans-serif";
-    ctx.fillText(`${this.cfg.cls.name} · ${this.cfg.race.name}`, 26, hy + 16);
-    const barW = 190;
-    const bx = 26;
-    // hp
-    let by = hy + 24;
-    this.bar(ctx, bx, by, barW, 8, clamp(this.hp / this.maxHp, 0, 1), this.hp / this.maxHp > 0.3 ? "#5dff8f" : "#ff5a5a");
-    // mana
-    by = hy + 42;
-    this.bar(ctx, bx, by, barW, 8, clamp(this.mana / this.manaMax, 0, 1), "#4aa8ff");
+    ctx.strokeStyle = "#4a2a1a";
+    ctx.lineWidth = 1;
+    ctx.stroke();
 
-    // wave banner
+    if (hpRatio > 0) {
+      this.roundRect(ctx, barX + 1, hpY + 1, (barW - 2) * hpRatio, 10, 5);
+      const hpGrad = ctx.createLinearGradient(barX, hpY, barX + barW, hpY);
+      hpGrad.addColorStop(0, hpRatio > 0.3 ? "#28b556" : "#e63946");
+      hpGrad.addColorStop(1, hpRatio > 0.3 ? "#70e000" : "#ff6b6b");
+      ctx.fillStyle = hpGrad;
+      ctx.fill();
+    }
+
+    ctx.font = "bold 9px Inter, sans-serif";
+    ctx.fillStyle = "#ffffff";
+    ctx.fillText(`HP ${Math.ceil(this.hp)} / ${this.maxHp}`, barX + 6, hpY + 9);
+
+    // MP Bar
+    const mpRatio = clamp(this.mana / this.manaMax, 0, 1);
+    const mpY = 58;
+    this.roundRect(ctx, barX, mpY, barW, 10, 5);
+    ctx.fillStyle = "rgba(15, 18, 28, 0.85)";
+    ctx.fill();
+    ctx.strokeStyle = "#1a2a4a";
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    if (mpRatio > 0) {
+      this.roundRect(ctx, barX + 1, mpY + 1, (barW - 2) * mpRatio, 8, 4);
+      const mpGrad = ctx.createLinearGradient(barX, mpY, barX + barW, mpY);
+      mpGrad.addColorStop(0, "#2b6cb0");
+      mpGrad.addColorStop(1, "#4299e1");
+      ctx.fillStyle = mpGrad;
+      ctx.fill();
+    }
+
+    ctx.font = "bold 8px Inter, sans-serif";
+    ctx.fillStyle = "#ffffff";
+    ctx.fillText(`MP ${Math.ceil(this.mana)} / ${this.manaMax}`, barX + 6, mpY + 8);
+
+    // --- Bottom Centered Graveyard Keeper Action Hotbar ---
+    const slots = [
+      { key: "1", icon: "⚔️", label: "Ataque", cd: 0, maxCd: 1 },
+      { key: "2", icon: this.skills[0]?.emoji || "🔮", label: this.skills[0]?.name || "Skill 1", cd: this.skillCd[0] || 0, maxCd: this.skills[0]?.cooldown || 1 },
+      { key: "3", icon: this.skills[1]?.emoji || "⚡", label: this.skills[1]?.name || "Skill 2", cd: this.skillCd[1] || 0, maxCd: this.skills[1]?.cooldown || 1 },
+      { key: "4", icon: "🧪", label: "Poção HP", count: 12 },
+      { key: "5", icon: "🍖", label: "Comida", count: 5 },
+    ];
+
+    const slotW = 54;
+    const slotH = 54;
+    const gap = 8;
+    const totalW = slots.length * slotW + (slots.length - 1) * gap;
+    const startX = (this.w - totalW) / 2;
+    const hotbarY = this.h - slotH - 18;
+
+    // Hotbar container background
+    this.roundRect(ctx, startX - 10, hotbarY - 6, totalW + 20, slotH + 12, 14);
+    ctx.fillStyle = "rgba(12, 15, 24, 0.88)";
+    ctx.fill();
+    ctx.strokeStyle = "rgba(212, 167, 68, 0.5)";
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    this.skillRects = [];
+    slots.forEach((s, idx) => {
+      const sx = startX + idx * (slotW + gap);
+      const r = { x: sx, y: hotbarY, w: slotW, h: slotH };
+      this.skillRects.push(r);
+
+      const onCd = s.cd > 0;
+      this.roundRect(ctx, sx, hotbarY, slotW, slotH, 8);
+      ctx.fillStyle = onCd ? "rgba(20, 24, 36, 0.6)" : "rgba(30, 38, 56, 0.75)";
+      ctx.fill();
+      ctx.strokeStyle = onCd ? "rgba(255,255,255,0.15)" : "#c9962f";
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // Icon
+      ctx.textAlign = "center";
+      ctx.font = "22px serif";
+      ctx.fillText(s.icon, sx + slotW / 2, hotbarY + 34);
+
+      // Keybind badge [1..5]
+      this.roundRect(ctx, sx + 4, hotbarY + 4, 14, 14, 4);
+      ctx.fillStyle = "rgba(0, 0, 0, 0.6)";
+      ctx.fill();
+      ctx.font = "bold 9px Inter, sans-serif";
+      ctx.fillStyle = "#f4d58a";
+      ctx.fillText(s.key, sx + 11, hotbarY + 14);
+
+      // Quantity count (if potion / food item)
+      if (s.count !== undefined) {
+        ctx.font = "bold 10px Inter, sans-serif";
+        ctx.fillStyle = "#70e000";
+        ctx.textAlign = "right";
+        ctx.fillText(String(s.count), sx + slotW - 4, hotbarY + slotH - 4);
+      }
+
+      // Cooldown Overlay
+      if (onCd) {
+        const frac = clamp(s.cd / s.maxCd, 0, 1);
+        ctx.fillStyle = "rgba(0, 0, 0, 0.65)";
+        ctx.fillRect(sx, hotbarY, slotW, slotH * frac);
+        ctx.font = "bold 12px Inter, sans-serif";
+        ctx.fillStyle = "#fff";
+        ctx.textAlign = "center";
+        ctx.fillText(s.cd.toFixed(1), sx + slotW / 2, hotbarY + 32);
+      }
+    });
+
+    // Wave / Score Info Banner (Center top)
     const phase = Math.floor((this.wave - 1) / 3) + 1;
     ctx.textAlign = "center";
-    ctx.fillStyle = "rgba(255,255,255,0.7)";
-    ctx.font = "700 13px Inter, sans-serif";
-    if (this.waveState === "intermission" && this.wave > 0) {
-      ctx.fillText(
-        `NEXT WAVE IN ${Math.ceil(this.intermission)}s`,
-        this.w / 2,
-        30
-      );
-    } else {
-      ctx.fillText(`PHASE ${phase}  ·  WAVE ${this.wave}`, this.w / 2, 30);
-    }
+    ctx.fillStyle = "#f4d58a";
+    ctx.font = "800 13px Cinzel, serif";
+    ctx.fillText(`FASE ${phase}  ·  ONDA ${this.wave}`, this.w / 2, 28);
+
     if (this.waveBanner > 0) {
       const a = clamp(this.waveBanner / 0.6, 0, 1);
       ctx.globalAlpha = a;
-      ctx.font = "900 34px Cinzel, serif";
-      ctx.fillStyle = this.cfg.race.color;
-      ctx.fillText(this.waveBannerText, this.w / 2, 84);
+      ctx.font = "900 32px Cinzel, serif";
+      ctx.fillStyle = "#ffd877";
+      ctx.fillText(this.waveBannerText, this.w / 2, 80);
       ctx.globalAlpha = 1;
     }
 
-    // combo
-    if (this.combo >= 2) {
-      const mult = Math.min(1 + this.combo * 0.08, 3);
-      const pop = 1 + this.comboPop * 1.5;
-      ctx.save();
-      ctx.translate(this.w / 2, 132);
-      ctx.scale(pop, pop);
-      ctx.font = "900 28px Cinzel, serif";
-      ctx.lineWidth = 4;
-      ctx.strokeStyle = "rgba(0,0,0,0.6)";
-      const txt = `COMBO x${mult.toFixed(1)}`;
-      ctx.strokeText(txt, 0, 0);
-      ctx.fillStyle = this.cfg.race.color;
-      ctx.fillText(txt, 0, 0);
-      ctx.restore();
-    }
-
-    // hint
-    if (this.hintTimer > 0) {
-      const a = clamp(this.hintTimer / 2, 0, 1);
-      ctx.globalAlpha = a;
-      ctx.textAlign = "center";
-      ctx.fillStyle = "rgba(255,255,255,0.85)";
-      ctx.font = "600 14px Inter, sans-serif";
-      ctx.fillText(
-        "MOVE WASD/Arrows · AIM Mouse · ATTACK Click/Space · SKILLS 1/2 · PAUSE Esc",
-        this.w / 2,
-        this.h - 96
-      );
-      ctx.globalAlpha = 1;
-    }
-
-    // skill bar
-    this.skillRects = [];
-    const n = this.skills.length;
-    const bw = Math.min(72, (this.w - 40) / Math.max(n, 1) - 8);
-    const gap = 10;
-    const totalW = n * bw + (n - 1) * gap;
-    const startX = (this.w - totalW) / 2;
-    const sy = this.h - 78;
-    for (let i = 0; i < n; i++) {
-      const rx = startX + i * (bw + gap);
-      const r = { x: rx, y: sy, w: bw, h: 60 };
-      this.skillRects.push(r);
-      const sk = this.skills[i];
-      const cd = this.skillCd[i];
-      const onCd = cd > 0;
-      const noMana = this.mana < sk.mana;
-      ctx.globalAlpha = onCd || noMana ? 0.5 : 1;
-      this.roundRect(ctx, rx, sy, bw, 60, 12);
-      ctx.fillStyle = "rgba(10,14,26,0.7)";
-      ctx.fill();
-      ctx.strokeStyle = this.cfg.cls.weapon.color;
-      ctx.lineWidth = 2;
-      ctx.stroke();
-      ctx.textAlign = "center";
-      ctx.font = "26px serif";
-      ctx.fillStyle = "#fff";
-      ctx.fillText(sk.emoji, rx + bw / 2, sy + 30);
-      ctx.font = "700 11px Inter, sans-serif";
-      ctx.fillStyle = "rgba(255,255,255,0.7)";
-      ctx.fillText((i + 1).toString(), rx + 8, sy + 14);
-      ctx.fillStyle = "rgba(150,200,255,0.9)";
-      ctx.fillText(String(sk.mana), rx + bw - 8, sy + 14);
-      if (onCd) {
-        const frac = cd / sk.cooldown;
-        ctx.fillStyle = "rgba(0,0,0,0.6)";
-        ctx.fillRect(rx, sy, bw, 60 * frac);
-        ctx.fillStyle = "#fff";
-        ctx.font = "700 16px Inter, sans-serif";
-        ctx.fillText(cd.toFixed(1), rx + bw / 2, sy + 38);
-      }
-      ctx.globalAlpha = 1;
-    }
-
-    // pause button
+    // Pause Button
     this.pauseRect.x = this.w - this.pauseRect.s - 16;
     this.pauseRect.y = 16;
-    // ---- equipped gear row (left panel, under the vitals) ----
-    const gy = 184;
-    this.roundRect(ctx, 14, gy, 214, 54, 12);
-    ctx.fillStyle = "rgba(10,14,26,0.55)";
-    ctx.fill();
-    ctx.textAlign = "left";
-    ctx.fillStyle = "rgba(255,255,255,0.7)";
-    ctx.font = "600 11px Inter, sans-serif";
-    ctx.fillText("EQUIPMENT", 24, gy + 14);
-    const cellW = 60;
-    const gx0 = 24;
-    const gy0 = gy + 22;
-    for (let i = 0; i < SLOTS.length; i++) {
-      const slot = SLOTS[i];
-      const it = this.equipped[slot];
-      const x = gx0 + i * (cellW + 6);
-      this.roundRect(ctx, x, gy0, cellW, 24, 5);
-      ctx.fillStyle = it ? "rgba(0,0,0,0.45)" : "rgba(255,255,255,0.04)";
-      ctx.fill();
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = it ? RARITY_COLOR[it.rarity] : "rgba(255,255,255,0.12)";
-      ctx.stroke();
-      if (it) {
-        ctx.textAlign = "left";
-        ctx.font = "13px serif";
-        ctx.fillStyle = "#fff";
-        ctx.fillText(it.icon, x + 6, gy0 + 17);
-        ctx.font = "700 8.5px Inter, sans-serif";
-        ctx.fillStyle = RARITY_COLOR[it.rarity];
-        const nm = it.name.length > 8 ? it.name.slice(0, 7) + "…" : it.name;
-        ctx.fillText(nm, x + 22, gy0 + 15);
-      } else {
-        ctx.textAlign = "left";
-        ctx.font = "700 8px Inter, sans-serif";
-        ctx.fillStyle = "rgba(255,255,255,0.3)";
-        ctx.fillText(slot.toUpperCase(), x + 6, gy0 + 15);
-      }
-    }
-    ctx.textAlign = "left";
-
-    // ---- pause button ----
     this.roundRect(ctx, this.pauseRect.x, this.pauseRect.y, this.pauseRect.s, this.pauseRect.s, 10);
     ctx.fillStyle = "rgba(10,14,26,0.6)";
     ctx.fill();
