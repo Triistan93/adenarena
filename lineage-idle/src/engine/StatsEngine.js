@@ -467,6 +467,91 @@ export function getStats(state) {
   const cdr = sk('quickRecycle') * 0.10;
 
   const codexB = getCodexBonuses(state);
+  // Process Soul Crystal (SA) Bonus on Equipped Weapon
+  let saCrit = 0, saPatkMult = 0, saMatkMult = 0, saSpeed = 0, saHpMult = 0;
+  const wpnUid = state.equipment?.weapon;
+  const socket = (wpnUid && state.weaponSockets) ? state.weaponSockets[wpnUid] : null;
+  if (socket) {
+    const stage = Math.min(13, Math.max(1, socket.stage || 1));
+    const mult = 1 + (stage - 1) * 0.15;
+    if (socket.effect === 'focus') saCrit += Math.floor(15 * mult);
+    else if (socket.effect === 'haste') buffSpd += Math.floor(12 * mult);
+    else if (socket.effect === 'acumen') buffMatk += Math.floor(baseMatk * 0.15 * mult);
+    else if (socket.effect === 'health') elixirHpMult += (0.15 * mult);
+    else if (socket.effect === 'might') buffAtkMult += (0.10 * mult);
+    else if (socket.effect === 'empower') buffMatk += Math.floor(baseMatk * 0.12 * mult);
+  }
+
+  // Process Tattoos / Dyes Bonuses
+  let tatStr = 0, tatDex = 0, tatCon = 0, tatInt = 0, tatWit = 0, tatMen = 0;
+  if (state.tattoos && Array.isArray(state.tattoos)) {
+    for (const t of state.tattoos) {
+      if (!t) continue;
+      if (t.plusStat && t.minusStat) {
+        if (t.plusStat === 'str') tatStr += (t.plusVal || 0);
+        if (t.plusStat === 'dex') tatDex += (t.plusVal || 0);
+        if (t.plusStat === 'con') tatCon += (t.plusVal || 0);
+        if (t.plusStat === 'int') tatInt += (t.plusVal || 0);
+        if (t.plusStat === 'wit') tatWit += (t.plusVal || 0);
+        if (t.plusStat === 'men') tatMen += (t.plusVal || 0);
+
+        if (t.minusStat === 'str') tatStr -= (t.minusVal || 0);
+        if (t.minusStat === 'dex') tatDex -= (t.minusVal || 0);
+        if (t.minusStat === 'con') tatCon -= (t.minusVal || 0);
+        if (t.minusStat === 'int') tatInt -= (t.minusVal || 0);
+        if (t.minusStat === 'wit') tatWit -= (t.minusVal || 0);
+        if (t.minusStat === 'men') tatMen -= (t.minusVal || 0);
+      }
+    }
+  }
+
+  // Enforce maximum +5 stat increase cap
+  tatStr = Math.min(5, tatStr);
+  tatDex = Math.min(5, tatDex);
+  tatCon = Math.min(5, tatCon);
+  tatInt = Math.min(5, tatInt);
+  tatWit = Math.min(5, tatWit);
+  tatMen = Math.min(5, tatMen);
+
+  if (tatStr > 0) buffAtkMult += tatStr * 0.015;
+  if (tatDex > 0) { buffSpd += tatDex * 1.5; baseEva += tatDex; }
+  if (tatCon > 0) elixirHpMult += tatCon * 0.03;
+  if (tatInt > 0) buffMatk += Math.floor(baseMatk * tatInt * 0.02);
+  if (tatWit > 0) buffMatk += Math.floor(baseMatk * tatWit * 0.025);
+  if (tatMen > 0) buffMdef += Math.floor(baseMdef * tatMen * 0.02);
+
+  // Process Set Enchantment Bonuses (+4 to +10)
+  let minSetEnchant = 999;
+  let setPiecesCount = 0;
+  const armorSlots = ['head', 'chest', 'legs', 'gloves', 'boots'];
+  for (const s of armorSlots) {
+    const uid = state.equipment?.[s];
+    if (uid) {
+      const it = state.inventory?.find(i => i.uid === uid);
+      if (it) {
+        setPiecesCount++;
+        minSetEnchant = Math.min(minSetEnchant, it.enchant || 0);
+      } else {
+        minSetEnchant = 0;
+      }
+    } else {
+      minSetEnchant = 0;
+    }
+  }
+
+  let setEnchantHp = 0;
+  if (setPiecesCount >= 4 && minSetEnchant >= 4) {
+    const enc = Math.min(10, minSetEnchant);
+    if (enc >= 4) { buffDef += 15; baseEva += 1; }
+    if (enc >= 5) { buffDef += 25; }
+    if (enc >= 6) { buffDef += 40; baseEva += 2; }
+    if (enc >= 7) { buffDef += 60; buffAtkMult += 0.05; }
+    if (enc >= 8) { buffDef += 90; saCrit += 15; }
+    if (enc >= 9) { buffDef += 120; saCrit += 20; }
+    if (enc >= 10) { buffDef += 160; buffAtkMult += 0.10; saCrit += 25; }
+    setEnchantHp = enc * 50;
+  }
+
   const dollsB = getDollsBonuses(state);
   const certB  = getCertificationsBonuses(state);
   const towerMult = 1 + ((state.tower?.highestFloor || 0) * 0.01);
@@ -476,7 +561,7 @@ export function getStats(state) {
   const finalEva  = Math.floor(baseEva + (Number(eb.eva) || 0) + (Number(setB.eva) || 0) + codexB.eva + dollsB.eva);
   const finalMatk = Math.floor((baseMatk + (Number(eb.matk) || 0) + (Number(setB.matk) || 0) + buffMatk + codexB.matk + dollsB.matk + certB.matk) * towerMult);
   const finalMdef = Math.floor((baseMdef + (Number(eb.mdef) || 0) + (Number(setB.mdef) || 0) + buffMdef + codexB.mdef + dollsB.mdef + certB.mdef) * towerMult);
-  const finalCrit = (Number(eb.crit) || 0) + (Number(setB.crit) || 0) + codexB.crit + dollsB.crit + certB.crit + astralB.crit;
+  const finalCrit = (Number(eb.crit) || 0) + (Number(setB.crit) || 0) + codexB.crit + dollsB.crit + certB.crit + astralB.crit + saCrit;
 
   const lootBonus  = (Number(race?.stats?.lootBonus) || 0) + (Number(cls?.base?.lootBonus) || 0) + itemLootBonus + luckBoost;
   const atkSpd     = (buffSpd + (dollsB.speed || 0)) / 100;
@@ -489,7 +574,7 @@ export function getStats(state) {
   const execute   = sk('assassinate') * 0.02;
   const block     = sk('divineshield') * 0.05 + (setB.block || 0);
 
-  const maxHp = Math.floor((100 + state.level * 10 + sk('boostHp') * 60 + (Number(eb.hp) || 0) + (Number(setB.hp) || 0) + codexB.hp + dollsB.hp) * (1 + elixirHpMult));
+  const maxHp = Math.floor((100 + state.level * 10 + sk('boostHp') * 60 + (Number(eb.hp) || 0) + (Number(setB.hp) || 0) + codexB.hp + dollsB.hp + setEnchantHp) * (1 + elixirHpMult));
   const maxMp = Math.floor(50 + state.level * 5 + sk('boostMana') * 30 + (Number(eb.mp) || 0) + (Number(setB.mp) || 0) + codexB.mp + dollsB.mp);
 
   const rawStats = {

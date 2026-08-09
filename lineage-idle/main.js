@@ -4673,6 +4673,136 @@ function claimExpeditionReward(expId) {
   return true;
 }
 
+// --------------------------- FORGE EXPANSION: SOUL CRYSTALS, MASTERWORK & TATTOOS ---------------------------
+function buySoulCrystal(color = 'red', stage = 1) {
+  const prices = { 1: 15000, 2: 35000, 3: 80000, 4: 180000, 5: 450000 };
+  const cost = prices[stage] || 15000;
+
+  if ((state.gold || 0) < cost) {
+    log(`⚠️ Ouro insuficiente! Requer ${cost.toLocaleString()}g.`, 'warning');
+    return false;
+  }
+
+  state.gold -= cost;
+  if (!state.soulCrystals) state.soulCrystals = {};
+  const key = `${color}_stage${stage}`;
+  state.soulCrystals[key] = (state.soulCrystals[key] || 0) + 1;
+
+  log(`🔮 Comprou Soul Crystal ${color.toUpperCase()} (Stage ${stage})!`, 'rarity-legendary');
+  updateAllUI();
+  save();
+  return true;
+}
+
+function fuseSoulCrystals(color = 'red', stage = 1) {
+  if (stage >= 13) return false;
+  const key = `${color}_stage${stage}`;
+  const owned = state.soulCrystals ? (state.soulCrystals[key] || 0) : 0;
+  if (owned < 2) {
+    log(`⚠️ Você precisa de pelo menos 2x Soul Crystals do mesmo estágio para fundir!`, 'warning');
+    return false;
+  }
+
+  state.soulCrystals[key] -= 2;
+  const nextKey = `${color}_stage${stage + 1}`;
+  state.soulCrystals[nextKey] = (state.soulCrystals[nextKey] || 0) + 1;
+
+  log(`✨ SÍNTESE BEM SUCEDIDA! Soul Crystal subiu para Stage ${stage + 1}!`, 'rarity-legendary');
+  updateAllUI();
+  save();
+  return true;
+}
+
+function socketSoulCrystalToWeapon(effect = 'focus', stage = 1) {
+  const wpnUid = state.equipment?.weapon;
+  if (!wpnUid) {
+    log('⚠️ Equipe uma arma antes de engastar uma Pedra de Alma SA!', 'warning');
+    return false;
+  }
+
+  if (!state.weaponSockets) state.weaponSockets = {};
+  state.weaponSockets[wpnUid] = {
+    effect,
+    stage: Math.min(13, Math.max(1, stage))
+  };
+
+  log(`🔮 ENGASTOU SOUL CRYSTAL SA [${effect.toUpperCase()} Stage ${stage}] NA ARMA EQUIPADA!`, 'rarity-legendary');
+  floatText(`SA ${effect.toUpperCase()} ATIVADO`, 'float-gold');
+
+  updateAllUI();
+  save();
+  return true;
+}
+
+function upgradeItemToMasterwork(itemUid) {
+  const item = state.inventory?.find(i => i.uid === itemUid);
+  if (!item) return false;
+
+  const itemDef = getItemDef(item.itemId);
+  if (!itemDef) return false;
+
+  const tier = itemDef.tier || 1;
+  const costs = {
+    3: { crystals: 1, adena: 500000, grade: 'b' },
+    4: { crystals: 2, adena: 1000000, grade: 'a' },
+    5: { crystals: 4, adena: 1500000, grade: 's' },
+    6: { crystals: 5, adena: 2500000, grade: 's' }
+  };
+
+  const req = costs[tier] || costs[3];
+  if ((state.gold || 0) < req.adena) {
+    log(`⚠️ Adena insuficiente no Mestre Pushkin! Requer ${req.adena.toLocaleString()}g.`, 'warning');
+    return false;
+  }
+
+  state.gold -= req.adena;
+  item.isMasterwork = true;
+  item.name = item.name ? (item.name.includes('[Foundation MW]') ? item.name : `${item.name} [Foundation MW]`) : `${itemDef.name} [Foundation MW]`;
+
+  log(`✨ MESTRE FERREIRO PUSHKIN FORJOU ${item.name.toUpperCase()} (MASTERWORK RARE)!`, 'rarity-legendary');
+  floatText('MASTERWORK RARE!', 'float-gold');
+
+  updateAllUI();
+  save();
+  return true;
+}
+
+function applyTattoo(plusStat = 'str', minusStat = 'con', val = 4) {
+  if (!state.tattoos) state.tattoos = [];
+  if (state.tattoos.length >= 3) {
+    log('⚠️ Você já possui o limite máximo de 3 Tatuagens aplicadas!', 'warning');
+    return false;
+  }
+
+  const cost = val * 50000;
+  if ((state.gold || 0) < cost) {
+    log(`⚠️ Adena insuficiente para aplicar a Tatuagem! Requer ${cost.toLocaleString()}g.`, 'warning');
+    return false;
+  }
+
+  state.gold -= cost;
+  state.tattoos.push({
+    plusStat,
+    minusStat,
+    plusVal: val,
+    minusVal: val
+  });
+
+  log(`🖋️ TATUAGEM APLICADA: +${val} ${plusStat.toUpperCase()} / -${val} ${minusStat.toUpperCase()}!`, 'rarity-legendary');
+  updateAllUI();
+  save();
+  return true;
+}
+
+function removeTattoo(index) {
+  if (!state.tattoos || !state.tattoos[index]) return false;
+  const removed = state.tattoos.splice(index, 1);
+  log(`🖋️ Removeu Tatuagem (+${removed[0]?.plusVal} ${removed[0]?.plusStat?.toUpperCase()}).`, 'loot');
+  updateAllUI();
+  save();
+  return true;
+}
+
 export function init() {
   try {
     // Expose global action handlers to window for inline HTML handlers & global events
@@ -4719,6 +4849,12 @@ export function init() {
     window.MANOR_SEEDS = MANOR_SEEDS;
     window.CASTLES_DEFS = CASTLES_DEFS;
     window.EXPEDITION_DESTINATIONS = EXPEDITION_DESTINATIONS;
+    window.buySoulCrystal = buySoulCrystal;
+    window.fuseSoulCrystals = fuseSoulCrystals;
+    window.socketSoulCrystalToWeapon = socketSoulCrystalToWeapon;
+    window.upgradeItemToMasterwork = upgradeItemToMasterwork;
+    window.applyTattoo = applyTattoo;
+    window.removeTattoo = removeTattoo;
     window.getGameState = () => {
       const data = { 
         ...state, 

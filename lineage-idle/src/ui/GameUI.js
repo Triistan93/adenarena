@@ -2020,6 +2020,20 @@ export function updateCraftUI(state, callbacks = {}) {
   const container = findElement('craft-recipes-container') || findElement('craft-list');
   if (!container) return;
 
+  const subTab = window._forgeSubTab || 'craft';
+  if (subTab === 'soulcrystal') {
+    renderForgeSoulCrystals(container, state);
+    return;
+  }
+  if (subTab === 'masterwork') {
+    renderForgeMasterwork(container, state);
+    return;
+  }
+  if (subTab === 'tattoos') {
+    renderForgeTattoos(container, state);
+    return;
+  }
+
   const gData = D();
   const allItems = gData?.ALL_ITEMS || {};
   let recipes = gData?.CRAFTING_RECIPES;
@@ -2787,6 +2801,201 @@ export function renderExpeditionsUI(state) {
         </h4>
         ${manorHtml}
       </div>
+    </div>
+  `;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   21. FORGE HUB SUB-PANELS: SOUL CRYSTALS, MASTERWORK & TATTOOS
+═══════════════════════════════════════════════════════════════════════════ */
+export function renderForgeSoulCrystals(container, state) {
+  const wpnUid = state.equipment?.weapon;
+  const wpnItem = wpnUid ? state.inventory?.find(i => i.uid === wpnUid) : null;
+  const wpnDef = wpnItem ? getItemDef(wpnItem.itemId) : null;
+  const socket = (wpnUid && state.weaponSockets) ? state.weaponSockets[wpnUid] : null;
+
+  const soulCrystals = state.soulCrystals || {};
+  let crystalsListHtml = '';
+  const colors = ['red', 'green', 'blue'];
+  for (const color of colors) {
+    for (let st = 1; st <= 13; st++) {
+      const key = `${color}_stage${st}`;
+      const count = soulCrystals[key] || 0;
+      if (count > 0 || st === 1) {
+        const canFuse = count >= 2 && st < 13;
+        crystalsListHtml += `
+          <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(212,167,68,0.25); border-radius:8px; padding:10px; display:flex; justify-content:space-between; align-items:center; gap:8px;">
+            <div>
+              <strong style="color:${color === 'red' ? '#fca5a5' : (color === 'green' ? '#86efac' : '#7dd3fc')}; font-size:13px;">
+                🔮 Soul Crystal ${color.toUpperCase()} (Stage ${st})
+              </strong>
+              <div style="font-size:11px; color:#aaa;">Possuídos: <strong>${count}x</strong></div>
+            </div>
+            <div style="display:flex; gap:6px;">
+              ${st === 1 ? `<button onclick="window.buySoulCrystal('${color}', 1)" style="padding:4px 10px; font-size:11px; font-weight:bold; background:rgba(212,167,68,0.2); border:1px solid rgba(212,167,68,0.4); color:#ffd877; border-radius:4px; cursor:pointer;">🛒 Comprar (15k g)</button>` : ''}
+              ${canFuse ? `<button onclick="window.fuseSoulCrystals('${color}', ${st})" style="padding:4px 10px; font-size:11px; font-weight:bold; background:linear-gradient(180deg,#34d399,#059669); border:1px solid #6ee7b7; color:#000; border-radius:4px; cursor:pointer;">✨ Fundir (2x ➔ St.${st+1})</button>` : ''}
+            </div>
+          </div>
+        `;
+      }
+    }
+  }
+
+  container.innerHTML = `
+    <div style="padding:10px; color:#fff; font-family:sans-serif;">
+      <!-- Socket Header -->
+      <div style="background:rgba(26,18,48,0.85); border:1px solid rgba(168,85,247,0.4); border-radius:10px; padding:14px; margin-bottom:16px;">
+        <h4 style="margin:0 0 6px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:16px;">🔮 Soquete SA na Arma Equipada</h4>
+        <div style="font-size:12px; color:#aaa; margin-bottom:10px;">
+          Arma Equipada: <strong style="color:#ffd877;">${wpnDef ? wpnDef.name : 'Nenhuma Arma Equipada'}</strong>
+        </div>
+        ${socket ? `
+          <div style="background:rgba(52,211,153,0.15); border:1px solid #34d399; padding:8px 12px; border-radius:6px; font-size:12px; color:#34d399; font-weight:bold;">
+            ✓ SA Ativo: ${socket.effect.toUpperCase()} (Stage ${socket.stage})
+          </div>
+        ` : `
+          <div style="font-size:12px; color:#fca5a5;">Nenhum Soul Crystal SA engastado. Escolha um efeito abaixo:</div>
+        `}
+
+        <div style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;">
+          <button onclick="window.socketSoulCrystalToWeapon('focus', 1)" style="flex:1; padding:8px; font-weight:bold; font-size:11px; background:rgba(239,68,68,0.2); border:1px solid #ef4444; color:#fca5a5; border-radius:6px; cursor:pointer;">🔴 Engastar SA FOCUS (+Crit)</button>
+          <button onclick="window.socketSoulCrystalToWeapon('haste', 1)" style="flex:1; padding:8px; font-weight:bold; font-size:11px; background:rgba(34,197,94,0.2); border:1px solid #22c55e; color:#86efac; border-radius:6px; cursor:pointer;">🟢 Engastar SA HASTE (+AtkSpd)</button>
+          <button onclick="window.socketSoulCrystalToWeapon('acumen', 1)" style="flex:1; padding:8px; font-weight:bold; font-size:11px; background:rgba(56,189,248,0.2); border:1px solid #38bdf8; color:#7dd3fc; border-radius:6px; cursor:pointer;">🔵 Engastar SA ACUMEN (+CastSpd)</button>
+        </div>
+      </div>
+
+      <!-- Crystals Collection & Synthesis -->
+      <h4 style="margin:0 0 8px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">💎 Coleção &amp; Síntese de Soul Crystals (Stage 1 ➔ 13)</h4>
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        ${crystalsListHtml}
+      </div>
+    </div>
+  `;
+}
+
+export function renderForgeMasterwork(container, state) {
+  const eligibleItems = (state.inventory || []).filter(i => {
+    const def = getItemDef(i.itemId);
+    return def && (def.tier >= 3) && !i.isMasterwork;
+  });
+
+  let itemsHtml = '';
+  for (const item of eligibleItems) {
+    const def = getItemDef(item.itemId);
+    const tier = def.tier || 3;
+    const costs = {
+      3: { adena: 500000 },
+      4: { adena: 1000000 },
+      5: { adena: 1500000 },
+      6: { adena: 2500000 }
+    };
+    const req = costs[tier] || costs[3];
+    const canAfford = (state.gold || 0) >= req.adena;
+
+    itemsHtml += `
+      <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(212,167,68,0.3); border-radius:10px; padding:12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; gap:12px;">
+        <div>
+          <h4 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">${item.name || def.name}</h4>
+          <div style="font-size:11px; color:#aaa;">Custo do Mestre Pushkin: <strong style="color:#ffd877;">${req.adena.toLocaleString()} Adena</strong></div>
+        </div>
+        <button
+          onclick="window.upgradeItemToMasterwork('${item.uid}')"
+          ${!canAfford ? 'disabled' : ''}
+          style="padding:8px 14px; font-family:'Cinzel',serif; font-weight:bold; font-size:12px; background:${canAfford ? 'linear-gradient(180deg,#d4a744,#8a641c)' : 'rgba(60,50,40,0.5)'}; border:1px solid ${canAfford ? '#ffe699' : 'rgba(100,80,60,0.3)'}; color:${canAfford ? '#000' : '#777'}; border-radius:6px; cursor:${canAfford ? 'pointer' : 'not-allowed'};"
+        >
+          ✨ FORJAR MASTERWORK RARE
+        </button>
+      </div>
+    `;
+  }
+
+  container.innerHTML = `
+    <div style="padding:10px; color:#fff; font-family:sans-serif;">
+      <!-- Pushkin Header -->
+      <div style="background:linear-gradient(180deg, rgba(20,26,42,0.95), rgba(10,14,24,0.95)); border:1px solid rgba(212,167,68,0.4); border-radius:12px; padding:14px; margin-bottom:16px;">
+        <h3 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:18px;">✨ Mestre Ferreiro Pushkin (Giran Square)</h3>
+        <p style="margin:4px 0 0 0; font-size:12px; color:#aaa;">
+          Transforme seus equipamentos de Grade B, A, S e Dynasty em **MasterWork Foundation (Versões Raras)** com bônus de atributos elevados!
+        </p>
+      </div>
+
+      <h4 style="margin:0 0 10px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">🛡️ Equipamentos Elegíveis no Inventário</h4>
+      ${itemsHtml || '<div style="font-size:12px; color:#aaa;">Nenhum equipamento elegível de Grade B+ encontrado para upgrade no momento.</div>'}
+    </div>
+  `;
+}
+
+export function renderForgeTattoos(container, state) {
+  const tattoos = state.tattoos || [];
+  let currentTattoosHtml = '';
+
+  for (let idx = 0; idx < tattoos.length; idx++) {
+    const t = tattoos[idx];
+    currentTattoosHtml += `
+      <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(168,85,247,0.15); border:1px solid #a855f7; padding:8px 12px; border-radius:8px; margin-bottom:8px;">
+        <div>
+          <strong style="color:#d8b4fe; font-size:13px;">🖊️ Tatuagem #${idx + 1}: +${t.plusVal} ${t.plusStat.toUpperCase()} / -${t.minusVal} ${t.minusStat.toUpperCase()}</strong>
+        </div>
+        <button
+          onclick="window.removeTattoo(${idx})"
+          style="padding:4px 10px; font-weight:bold; font-size:11px; background:rgba(239,68,68,0.2); border:1px solid #ef4444; color:#fca5a5; border-radius:4px; cursor:pointer;"
+        >
+          🗑️ Remover
+        </button>
+      </div>
+    `;
+  }
+
+  const presets = [
+    { plus: 'str', minus: 'con', val: 4, name: '⚔️ Tatuagem do Guerreiro (+4 STR / -4 CON)' },
+    { plus: 'wit', minus: 'men', val: 4, name: '✨ Tatuagem do Arquimago (+4 WIT / -4 MEN)' },
+    { plus: 'dex', minus: 'str', val: 4, name: '🗡️ Tatuagem do Assassino (+4 DEX / -4 STR)' },
+    { plus: 'int', minus: 'men', val: 4, name: '🔥 Tatuagem de Poder Mágico (+4 INT / -4 MEN)' },
+    { plus: 'con', minus: 'str', val: 4, name: '🛡️ Tatuagem do Guardião (+4 CON / -4 STR)' },
+  ];
+
+  let presetsHtml = '';
+  for (const p of presets) {
+    const cost = p.val * 50000;
+    const canAfford = (state.gold || 0) >= cost;
+    const canApply = tattoos.length < 3 && canAfford;
+
+    presetsHtml += `
+      <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(212,167,68,0.3); border-radius:10px; padding:12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; gap:12px;">
+        <div>
+          <h4 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">${p.name}</h4>
+          <div style="font-size:11px; color:#aaa;">Custo de Instalação: <strong style="color:#ffd877;">${cost.toLocaleString()} Adena</strong></div>
+        </div>
+        <button
+          onclick="window.applyTattoo('${p.plus}', '${p.minus}', ${p.val})"
+          ${!canApply ? 'disabled' : ''}
+          style="padding:8px 14px; font-family:'Cinzel',serif; font-weight:bold; font-size:11px; background:${canApply ? 'linear-gradient(180deg,#a855f7,#6b21a8)' : 'rgba(60,50,40,0.5)'}; border:1px solid ${canApply ? '#c084fc' : 'rgba(100,80,60,0.3)'}; color:${canApply ? '#fff' : '#777'}; border-radius:6px; cursor:${canApply ? 'pointer' : 'not-allowed'};"
+        >
+          🖊️ APLICAR TATUAGEM
+        </button>
+      </div>
+    `;
+  }
+
+  container.innerHTML = `
+    <div style="padding:10px; color:#fff; font-family:sans-serif;">
+      <!-- Tattoos Banner -->
+      <div style="background:linear-gradient(180deg, rgba(30,16,48,0.95), rgba(14,8,26,0.95)); border:1px solid rgba(168,85,247,0.4); border-radius:12px; padding:14px; margin-bottom:16px;">
+        <h3 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:18px;">🖊️ Tatuagens &amp; Dyes do Herói (${tattoos.length}/3 Slots)</h3>
+        <p style="margin:4px 0 0 0; font-size:12px; color:#aaa;">
+          Aplique tintas de atributos no Mestre de Tatuagem para otimizar STR, DEX, CON, INT, WIT ou MEN (Cap de +5 por atributo).
+        </p>
+      </div>
+
+      <!-- Current Tattoos -->
+      <div style="margin-bottom:16px;">
+        <h4 style="margin:0 0 8px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">✨ Tatuagens Ativas no Herói</h4>
+        ${currentTattoosHtml || '<div style="font-size:12px; color:#aaa;">Nenhuma tatuagem instalada no momento.</div>'}
+      </div>
+
+      <!-- Presets -->
+      <h4 style="margin:0 0 8px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">🛍️ Tintas &amp; Dyes Disponíveis no Mercado</h4>
+      ${presetsHtml}
     </div>
   `;
 }
