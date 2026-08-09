@@ -1,5 +1,6 @@
 import { D, ALL_EQUIP_SLOTS } from '../core/GameConfig.js';
 import { getStats } from '../engine/StatsEngine.js';
+import { canEquipByType } from '../data/items/item_class_rules.js';
 
 export function resolveEquipSlot(rawSlot, equipmentState = {}) {
   const slot = String(rawSlot || '').trim().toLowerCase();
@@ -35,6 +36,17 @@ export function equipItem(state, uid, callbacks = {}) {
   if (!def) return;
   migrateEquipmentSlots(state);
   const targetSlot = resolveEquipSlot(def.slot, state.equipment);
+  // Validate level
+  if (def.req?.level && state.level < def.req.level) {
+    if (callbacks.log) callbacks.log(`Nível insuficiente para equipar ${def.name}. (Req: Lv.${def.req.level})`, 'system');
+    return;
+  }
+  // Validate class / armor type
+  const equipCheck = canEquipByType(state.class, def, callbacks.classSatisfies);
+  if (!equipCheck.ok) {
+    if (callbacks.log) callbacks.log(`Não pode equipar ${def.name}: ${equipCheck.reason || 'Classe incompatível'}`, 'system');
+    return;
+  }
   if (!ALL_EQUIP_SLOTS.includes(targetSlot)) {
     if (callbacks.log) callbacks.log(`${def.name} não pode ser equipado.`, 'system');
     return;

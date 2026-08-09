@@ -4,6 +4,8 @@ import * as ART from "./art.js";
 import "./data/echo-adapter.js";
 import "./data/affixes.js";
 import "./src/data/items/index.js";
+import { getArmorType, getWeaponType, canEquipByType, ARMOR_TYPE_LABEL, WEAPON_TYPE_LABEL } from './src/data/items/item_class_rules.js';
+import { AFFIX_MAP as AFFIX_MAP_IMPORT } from './data/affixes.js';
 
 
 
@@ -1066,6 +1068,17 @@ function showItemTooltip(item, e) {
   html += `<div style="color:var(--text-muted);font-size:10px;text-transform:capitalize;">${def.slot} · <span style="font-weight:bold; color:var(--gilt);">${grade}</span></div>`;
   if (def.req) html += `<div class="tt-req">Req: Lv.${def.req.level}</div>`;
   if (def.classReq) { const cls = getClass(def.classReq); const ok = classSatisfies(state.class, def.classReq); html += `<div class="tt-req ${ok?'ok':'no'}">Class: ${cls?.name || def.classReq}${ok?' ✓':''}</div>`; }
+  // Tipo de armadura / arma
+  const _armorType = getArmorType(def.id || '', def.name || '');
+  const _weaponType = def.slot === 'weapon' ? getWeaponType(def.id || '', def.name || '') : null;
+  if (_armorType) {
+    const lbl = ARMOR_TYPE_LABEL[_armorType];
+    html += `<div style="font-size:10px;color:var(--gilt);margin:2px 0;"><b>${lbl.icon} ${lbl.name}</b> <span style="color:var(--text-muted);">· ${lbl.hint}</span></div>`;
+  }
+  if (_weaponType) {
+    const lbl = WEAPON_TYPE_LABEL[_weaponType];
+    if (lbl) html += `<div style="font-size:10px;color:var(--gilt);margin:2px 0;"><b>${lbl.icon} ${lbl.name}</b> <span style="color:var(--text-muted);">· ${lbl.hint}</span></div>`;
+  }
   if (def.desc) html += `<div class="tt-desc">${def.desc}</div>`;
   const enchant = item.enchant || 0;
   const enchantMult = 1 + (enchant <= 3 ? enchant * 0.12 : (0.36 + (enchant - 3) * 0.15));
@@ -1093,7 +1106,7 @@ function showItemTooltip(item, e) {
     html += `<div class="tt-affixes-section" style="margin-top:8px; padding-top:6px; border-top:1px dashed #f0cd7e;">`;
     html += `<div style="font-size:10px; font-weight:bold; color:#f0cd7e; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:3px;">✦ Afixos Especiais</div>`;
     item.affixes.forEach(aff => {
-      const defAff = D().AFFIX_MAP ? D().AFFIX_MAP[aff.id] : null;
+      const defAff = window.GameData?.AFFIX_MAP?.[aff.id] || AFFIX_MAP_IMPORT?.[aff.id] || null;
       if (defAff) {
         const label = defAff.name.replace('{value}', aff.value);
         html += `<div class="tt-affix" style="color:#f0cd7e; font-size:11px; font-weight:600; margin-bottom:2px;">✦ ${label}</div>`;
@@ -1176,9 +1189,9 @@ function showItemTooltip(item, e) {
     }
   }
   
+  const _equipCheck = canEquipByType(state.class, def, classSatisfies);
   const canEquipLvl = !def.req || state.level >= def.req.level;
-  const canEquipCls = classSatisfies(state.class, def.classReq);
-  const canEquip = canEquipLvl && canEquipCls;
+  const canEquip = canEquipLvl && _equipCheck.ok;
   
   const inWarehouse = (state.warehouse || []).some(i => i.uid === item.uid);
   html += `<div class="tt-actions">`;
@@ -1187,7 +1200,10 @@ function showItemTooltip(item, e) {
   } else {
     if (item.equipped) html += `<button class="item-action" data-action="unequip" data-uid="${item.uid}">Unequip</button>`;
     else if (['weapon','armor','helmet','gloves','boots','ring'].includes(def.slot)) {
-      html += `<button class="item-action" data-action="equip" data-uid="${item.uid}" ${!canEquip ? 'disabled title="Nível ou classe incompatível"' : ''}>Equip</button>`;
+      html += `<button class="item-action" data-action="equip" data-uid="${item.uid}" ${!canEquip ? `disabled title="${!canEquipLvl ? 'Nível insuficiente' : (_equipCheck.reason || 'Classe incompatível')}"` : ''}><span style="font-size:10px">${canEquip ? '⚔ ' : '🔒 '}</span>Equip</button>`;
+      if (!canEquip && _equipCheck.reason) {
+        html += `<div style="font-size:9px;color:#ef4444;text-align:center;margin:2px 0;">${_equipCheck.reason}</div>`;
+      }
       html += `<button class="item-action" data-action="salvage" data-uid="${item.uid}">Break</button>`;
     }
     if (def.slot === 'consumable' || def.slot === 'scroll' || def.slot === 'powerup') html += `<button class="item-action" data-action="use" data-uid="${item.uid}">Use</button>`;

@@ -10,7 +10,8 @@ import { WEAPONS } from './weapons.js';
 import { ARMORS, HELMETS, BOOTS, GLOVES, LEGS, SHIELDS, BELTS, CLOAKS, SIGILS } from './armors.js';
 import { RINGS, EARRINGS, NECKLACES, HAIR, AGATHIONS } from './jewels.js';
 import { CONSUMABLES, MATERIALS } from './consumables.js';
-import { rollAffixes, AFFIX_MAP, AFFIX_POOL } from '../../../data/affixes.js';
+import { rollAffixes, rollAffixesForItem, AFFIX_MAP, AFFIX_POOL, AFFIX_POOLS_THEMED } from '../../../data/affixes.js';
+import { getArmorType, getWeaponType, canEquipByType, ARMOR_TYPE_LABEL, WEAPON_TYPE_LABEL, ARMOR_TYPE_ARCHETYPES, WEAPON_TYPE_ARCHETYPES } from './item_class_rules.js';
 import {
   ICON_MAP, MONSTER_DROPS, CRAFTING_RECIPES, SHOP_INVENTORY,
   ZONE_GOLD_MULT, MYSTIC_POOL, ZONE_CONSUMABLES,
@@ -30,7 +31,10 @@ if (typeof window !== 'undefined') {
     LEGS, SHIELDS, BELTS, CLOAKS, SIGILS, NECKLACES, EARRINGS, HAIR, AGATHIONS,
     CONSUMABLES, MATERIALS, ALL_ITEMS, MONSTER_DROPS, SHOP_INVENTORY, CRAFTING_RECIPES,
     ZONE_GOLD_MULT, MYSTIC_POOL, ZONE_CONSUMABLES, getZoneDropTier, rollRarity, rollDrop,
-    rollDropLegacy, getMysticRotation, rollItemWithRarity, rollAffixes, AFFIX_MAP, AFFIX_POOL
+    rollDropLegacy, getMysticRotation, rollItemWithRarity, rollAffixes, rollAffixesForItem,
+    AFFIX_MAP, AFFIX_POOL, AFFIX_POOLS_THEMED,
+    getArmorType, getWeaponType, canEquipByType,
+    ARMOR_TYPE_LABEL, WEAPON_TYPE_LABEL, ARMOR_TYPE_ARCHETYPES, WEAPON_TYPE_ARCHETYPES
   };
 
   window.ALL_ITEMS = ALL_ITEMS;
@@ -42,6 +46,8 @@ export {
   LEGS, SHIELDS, BELTS, CLOAKS, SIGILS, NECKLACES, EARRINGS, HAIR, AGATHIONS,
   CONSUMABLES, MATERIALS, ICON_MAP, MONSTER_DROPS, CRAFTING_RECIPES, SHOP_INVENTORY,
   ZONE_GOLD_MULT, MYSTIC_POOL, ZONE_CONSUMABLES, getZoneDropTier, rollRarity,
-  rollDrop, rollDropLegacy, getMysticRotation, rollItemWithRarity, rollAffixes,
-  AFFIX_MAP, AFFIX_POOL
+  rollDrop, rollDropLegacy, getMysticRotation, rollItemWithRarity, rollAffixes, rollAffixesForItem,
+  AFFIX_MAP, AFFIX_POOL, AFFIX_POOLS_THEMED,
+  getArmorType, getWeaponType, canEquipByType,
+  ARMOR_TYPE_LABEL, WEAPON_TYPE_LABEL, ARMOR_TYPE_ARCHETYPES, WEAPON_TYPE_ARCHETYPES
 };
