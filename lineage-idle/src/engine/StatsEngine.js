@@ -162,14 +162,41 @@ export function getTotalEquipBonuses(state) {
  */
 export function getCertificationsBonuses(state) {
   const certs = state.certifications || {};
-  return {
-    atk: (certs.emergent_atk || 0) * 20,
-    def: (certs.emergent_def || 0) * 20,
-    matk: (certs.emergent_matk || 0) * 25,
-    mdef: (certs.emergent_mdef || 0) * 25,
-    crit: (certs.master_crit || 0) * 5,
-    celestial: certs.celestial_shield ? true : false
-  };
+  let atk = (certs.emergent_atk || 0) * 20;
+  let def = (certs.emergent_def || 0) * 20;
+  let matk = (certs.emergent_matk || 0) * 25;
+  let mdef = (certs.emergent_mdef || 0) * 25;
+  let crit = (certs.master_crit || 0) * 5;
+  let celestial = certs.celestial_shield ? true : false;
+  let hpPercent = 0;
+  let mpPercent = 0;
+  let evaAdd = 0;
+
+  // MasterWork Emergent Passives from all subclasses
+  (state.subclasses || []).forEach(sub => {
+    if (sub.level >= 50) { atk += 18; matk += 12; def += 18; mdef += 15; crit += 7; }
+    if (sub.level >= 60) { atk += 18; matk += 12; def += 18; mdef += 15; crit += 7; }
+    if (sub.level >= 75) { atk += 27; matk += 18; def += 27; mdef += 23; crit += 11; }
+  });
+
+  // Master Abilities
+  const masterAbilities = state.masterAbilities || [];
+  if (masterAbilities.includes('boostHp')) hpPercent += 0.08;
+  if (masterAbilities.includes('boostMp')) mpPercent += 0.12;
+  if (masterAbilities.includes('evasion')) evaAdd += 5;
+  if (masterAbilities.includes('barrier')) celestial = true;
+
+  // Active Divine Transformations
+  const trans = state.activeTransformation;
+  if (trans === 'divineWarrior') { atk += Math.floor(atk * 0.25); }
+  if (trans === 'divineKnight') { def += Math.floor(def * 0.50); mdef += Math.floor(mdef * 0.50); }
+  if (trans === 'divineRogue') { crit += 40; evaAdd += 6; }
+  if (trans === 'divineWizard') { matk += Math.floor(matk * 0.30); }
+  if (trans === 'divineSummoner') { hpPercent += 0.20; }
+  if (trans === 'divineHealer') { mdef += Math.floor(mdef * 0.25); }
+  if (trans === 'divineEnchanter') { atk += Math.floor(atk * 0.15); matk += Math.floor(matk * 0.15); }
+
+  return { atk, def, matk, mdef, crit, celestial, hpPercent, mpPercent, evaAdd };
 }
 
 /**

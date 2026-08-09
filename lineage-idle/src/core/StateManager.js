@@ -35,7 +35,8 @@ export const DEFAULT_STATE = () => ({
   essences: { fire: 0, earth: 0, wind: 0, astral: 0 }, activeElixirs: {},
   prestigeLevel: 0, astralShards: 0, astralMastery: {},
   expeditions: [], castles: {}, manorSeeds: {}, manorCrops: {},
-  soulCrystals: {}, weaponSockets: {}, tattoos: []
+  soulCrystals: {}, weaponSockets: {}, tattoos: [],
+  fateWhisperQuest: false, masterAbilities: [], activeTransformation: null
 });
 
 let currentState = DEFAULT_STATE();

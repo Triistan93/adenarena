@@ -2323,6 +2323,69 @@ function updateAllUI() {
   setupVfxQualityControl();
 }
 
+function completeFateWhisperQuest() {
+  const activeMainLevel = state.activeSubclassIndex === null ? state.level : (state.mainClassData?.level || 1);
+  if (activeMainLevel < 52) {
+    log('⚠️ Requer Nível 52 na Classe Principal para completar a Quest Fate\'s Whisper!', 'warning');
+    return false;
+  }
+  state.fateWhisperQuest = true;
+  log('📜 QUEST FATE\'S WHISPER CONCLUÍDA! Subclasses desbloqueadas!', 'rarity-legendary');
+  floatText('SUBCLASSES DESBLOQUEADAS!', 'float-gold');
+  updateAllUI(); save();
+  return true;
+}
+
+function selectMasterAbilityModal() {
+  const abilities = [
+    { key: 'boostHp', name: '❤️ Boost HP (+8% HP, +20% HP Regen)' },
+    { key: 'boostMp', name: '💙 Boost MP (+12% MP, +20% MP Regen)' },
+    { key: 'evasion', name: '👟 Evasion (+5 Esquiva)' },
+    { key: 'haste', name: '⚡ Haste Proc (+32% Atk.Spd)' },
+    { key: 'barrier', name: '🌟 Barrier (Celestial Shield Invencível)' },
+    { key: 'boostCp', name: '🛡️ Boost CP (+20% CP)' },
+    { key: 'resistAttribute', name: '🔥 Resist Attribute (+20 Res. Elementais)' }
+  ];
+
+  const choice = prompt(`Escolha sua Habilidade Mestra (Master Ability Lv.75):\n\n${abilities.map((a, i) => `${i + 1}. ${a.name}`).join('\n')}\n\nDigite o número desejado:`);
+  if (!choice) return;
+  const idx = parseInt(choice, 10) - 1;
+  if (isNaN(idx) || idx < 0 || idx >= abilities.length) return;
+
+  const selectedKey = abilities[idx].key;
+  if (!state.masterAbilities) state.masterAbilities = [];
+  if (!state.masterAbilities.includes(selectedKey)) {
+    state.masterAbilities.push(selectedKey);
+  }
+  log(`🏆 HABILIDADE MESTRA **${abilities[idx].name.toUpperCase()}** APRENDIDA!`, 'rarity-legendary');
+  floatText('MASTER ABILITY APRENDIDA!', 'float-gold');
+  updateAllUI(); save();
+}
+
+function selectDivineTransformationModal() {
+  const transList = [
+    { key: 'divineWarrior', name: '⚔️ Divine Warrior (War Cry +25% P.Atk, Sonic Blaster)' },
+    { key: 'divineKnight', name: '🛡️ Divine Knight (Ultimate Defence +100% Def, Hate Aura)' },
+    { key: 'divineRogue', name: '🗡️ Divine Rogue (Stun Shot, Double Shot, +4 Eva)' },
+    { key: 'divineWizard', name: '🔮 Divine Wizard (Divine Flare, Divine Strike, Sleep AoE)' },
+    { key: 'divineSummoner', name: '🦄 Divine Summoner (Transfer Pain, Final Servitor)' },
+    { key: 'divineHealer', name: '🕊️ Divine Healer (Major Heal, Cleanse, Ress 70%)' },
+    { key: 'divineEnchanter', name: '📜 Divine Enchanter (Chant of Victory +10% Stats)' }
+  ];
+
+  const choice = prompt(`Escolha sua Transformação Divina (Divine Transformation Lv.80):\n\n${transList.map((t, i) => `${i + 1}. ${t.name}`).join('\n')}\n\nDigite o número desejado:`);
+  if (!choice) return;
+  const idx = parseInt(choice, 10) - 1;
+  if (isNaN(idx) || idx < 0 || idx >= transList.length) return;
+
+  const selectedKey = transList[idx].key;
+  state.activeTransformation = (state.activeTransformation === selectedKey) ? null : selectedKey;
+
+  log(`👼 TRANSFORMAÇÃO DIVINA **${transList[idx].name.toUpperCase()}** ${state.activeTransformation ? 'ATIVADA' : 'DESATIVADA'}!`, 'rarity-legendary');
+  floatText('TRANSFORMAÇÃO DIVINA!', 'float-gold');
+  updateAllUI(); save();
+}
+
 function renderSubclassesUI() {
   const container = el('subclass-list-container'); if (!container) return;
   const summaryEl = el('certifications-summary');
@@ -2335,11 +2398,17 @@ function renderSubclassesUI() {
   }
 
   if (addBtn) {
-    const isMain75 = activeMainLevel >= 75;
+    const isUnlocked = state.fateWhisperQuest || activeMainLevel >= 52;
     const isMax = (state.subclasses || []).length >= 3;
-    addBtn.disabled = !isMain75 || isMax;
-    addBtn.textContent = isMax ? '🔒 Limite Máximo Atingido (3/3 Subclasses)' : (!isMain75 ? '🔒 Nível 75 Requerido na Classe Principal' : '➕ Adicionar Nova Subclasse');
-    addBtn.onclick = openAddSubclassModal;
+    addBtn.disabled = !isUnlocked || isMax;
+    addBtn.textContent = isMax ? '🔒 Limite Máximo Atingido (3/3 Subclasses)' : (!isUnlocked ? '🔒 Conclua Quest Fate\'s Whisper (Lv.52)' : '➕ Adicionar Nova Subclasse (Sem Restrição)');
+    addBtn.onclick = () => {
+      if (!state.fateWhisperQuest) {
+        completeFateWhisperQuest();
+      } else {
+        openAddSubclassModal();
+      }
+    };
   }
 
   container.innerHTML = '';
@@ -2367,10 +2436,10 @@ function renderSubclassesUI() {
   (state.subclasses || []).forEach((sub, idx) => {
     const isSubActive = state.activeSubclassIndex === idx;
     const subClassDef = getClass(sub.classId);
-    
-    const cert65 = sub.level >= 65;
-    const cert70 = sub.level >= 70;
+
+    const cert50 = sub.level >= 50;
     const cert75 = sub.level >= 75;
+    const cert80 = sub.level >= 80;
 
     const card = mkEl('div');
     card.style.cssText = `border: 1px solid ${isSubActive ? 'var(--gilt-bright)' : 'var(--line)'}; padding: 10px; border-radius: 8px; background: ${isSubActive ? 'rgba(138,106,36,0.3)' : 'rgba(15,20,30,0.8)'}; display:flex; flex-direction:column; gap:6px;`;
@@ -2378,18 +2447,18 @@ function renderSubclassesUI() {
       <div style="display:flex; justify-content:space-between; align-items:center;">
         <div>
           <div style="font-weight:bold; color:${isSubActive ? 'var(--gilt-bright)' : '#10b981'}; font-size:12px;">
-            ⚔️ Subclasse ${idx + 1}: ${subClassDef?.name || sub.classId} <span style="color:#60a5fa;">Lv.${sub.level}</span>
+            ⚔️ Subclasse ${idx + 1}: ${subClassDef?.name || sub.classId} <span style="color:#60a5fa;">Lv.${sub.level}/85</span>
           </div>
-          <div style="font-size:10px; color:var(--text-muted);">Progresso independente &amp; Certificações</div>
+          <div style="font-size:10px; color:var(--text-muted);">Progresso independente &amp; Certificações L2 MasterWork</div>
         </div>
         <button class="action-btn" style="padding:4px 10px; font-size:11px;" ${isSubActive ? 'disabled' : ''} onclick="switchSubclass(${idx})">
           ${isSubActive ? '✓ Ativa' : 'Alternar ⚔️'}
         </button>
       </div>
-      <div style="display:flex; gap:6px; font-size:10px;">
-        <button class="action-btn" style="padding:2px 6px; font-size:9.5px;" ${!cert65 ? 'disabled' : ''} onclick="claimCert('${sub.id}', 'emergent', ${idx})">${cert65 ? (state.certifications[sub.id + '_emergent'] ? '✓ Cert. Lv 65' : 'Obter Cert. Lv 65 📜') : '🔒 Lv 65 Req'}</button>
-        <button class="action-btn" style="padding:2px 6px; font-size:9.5px;" ${!cert70 ? 'disabled' : ''} onclick="claimCert('${sub.id}', 'master', ${idx})">${cert70 ? (state.certifications[sub.id + '_master'] ? '✓ Cert. Lv 70' : 'Obter Cert. Lv 70 📜') : '🔒 Lv 70 Req'}</button>
-        <button class="action-btn" style="padding:2px 6px; font-size:9.5px;" ${!cert75 ? 'disabled' : ''} onclick="claimCert('${sub.id}', 'celestial', ${idx})">${cert75 ? (state.certifications[sub.id + '_celestial'] ? '✓ Cert. Lv 75' : 'Obter Cert. Lv 75 🛡️') : '🔒 Lv 75 Req'}</button>
+      <div style="display:flex; gap:6px; font-size:10px; flex-wrap:wrap;">
+        <button class="action-btn" style="padding:4px 8px; font-size:10px;" ${!cert50 ? 'disabled' : ''} onclick="claimCert('${sub.id}', 'emergent', ${idx})">${cert50 ? '✓ Emergent Passives (Lv 50+)' : '🔒 Lv 50 Req'}</button>
+        <button class="action-btn" style="padding:4px 8px; font-size:10px;" ${!cert75 ? 'disabled' : ''} onclick="window.selectMasterAbilityModal()">${cert75 ? '🏆 Master Ability (Lv 75)' : '🔒 Lv 75 Req'}</button>
+        <button class="action-btn" style="padding:4px 8px; font-size:10px;" ${!cert80 ? 'disabled' : ''} onclick="window.selectDivineTransformationModal()">${cert80 ? '👼 Transf. Divina (Lv 80)' : '🔒 Lv 80 Req'}</button>
       </div>
     `;
     container.appendChild(card);
@@ -2397,24 +2466,26 @@ function renderSubclassesUI() {
 
   if (summaryEl) {
     const certB = getCertificationsBonuses();
-    summaryEl.innerHTML = `Bônus Acumulados: <strong style="color:var(--gilt-bright);">+${certB.atk} P.Atk, +${certB.def} P.Def, +${certB.matk} M.Atk, +${certB.mdef} M.Def, +${certB.crit}% Crit Rate</strong> ${certB.celestial ? '· 🛡️ <span style="color:#60a5fa;">Escudo Celestial Ativo!</span>' : ''}`;
+    const activeTrans = state.activeTransformation ? ` · 👼 Transf. Divina: <strong style="color:#f4d58a;">${state.activeTransformation.toUpperCase()}</strong>` : '';
+    summaryEl.innerHTML = `Bônus Acumulados: <strong style="color:var(--gilt-bright);">+${certB.atk} P.Atk, +${certB.def} P.Def, +${certB.matk} M.Atk, +${certB.mdef} M.Def, +${certB.crit}% Crit Rate</strong> ${certB.celestial ? '· 🛡️ <span style="color:#60a5fa;">Escudo Celestial Ativo!</span>' : ''}${activeTrans}`;
   }
 }
 
 function openAddSubclassModal() {
   const currentClass = state.class;
+  // MasterWork: Todas as classes estão disponíveis sem restrição racial!
   const availableClasses = Object.keys(CLASSES).filter(cId => cId !== currentClass && !(state.subclasses || []).some(s => s.classId === cId));
-  
+
   if (availableClasses.length === 0) return;
-  const choice = prompt(`Escolha sua Subclasse:\n\nOpções disponíveis:\n${availableClasses.map((c, i) => `${i + 1}. ${CLASSES[c].name}`).join('\n')}\n\nDigite o número da classe desejada:`);
-  
+  const choice = prompt(`Escolha sua Subclasse (MasterWork - Sem Restrição Racial):\n\nOpções disponíveis:\n${availableClasses.map((c, i) => `${i + 1}. ${CLASSES[c].name}`).join('\n')}\n\nDigite o número da classe desejada:`);
+
   if (!choice) return;
   const selectedIdx = parseInt(choice, 10) - 1;
   if (isNaN(selectedIdx) || selectedIdx < 0 || selectedIdx >= availableClasses.length) {
     log('Opção de subclasse inválida.', 'system');
     return;
   }
-  
+
   const chosenClassId = availableClasses[selectedIdx];
   state.subclasses = state.subclasses || [];
   state.subclasses.push({
@@ -4821,6 +4892,8 @@ export function init() {
     window.selectZone = selectZone;
     window.startRaidBoss = startRaidBoss;
     window.openAddSubclassModal = openAddSubclassModal;
+    window.selectMasterAbilityModal = selectMasterAbilityModal;
+    window.selectDivineTransformationModal = selectDivineTransformationModal;
     window.openCraftModal = (itemId) => uiOpenCraftModal(itemId, state, { craftItem, getItemDef, updateAllUI, save });
     window.closeCraftModal = uiCloseCraftModal;
     window.setGameMode = setGameMode;
