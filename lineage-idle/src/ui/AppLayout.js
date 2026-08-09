@@ -25,6 +25,7 @@ export const PANEL_SELECTORS = {
   craft: ['#tab-craft', '#craft-panel', '.craft-panel', '[data-panel="craft"]'],
   zones: ['#tab-zones', '#zone-panel', '#zone-list', '#zone-map-container', '[data-panel="zones"]'],
   warehouse: ['#tab-warehouse', '#warehouse-panel', '#warehouse-window', '[data-panel="warehouse"]'],
+  alchemy: ['#tab-alchemy', '#alchemy-panel', '[data-panel="alchemy"]'],
   forge: ['#tab-forge', '#forge-panel', '[data-panel="forge"]'],
   codex: ['#tab-codex', '#codex-panel', '[data-panel="codex"]']
 };

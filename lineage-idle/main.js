@@ -139,6 +139,7 @@ import {
   openCraftModal as uiOpenCraftModal,
   closeCraftModal as uiCloseCraftModal,
   updateCharacterUI as uiUpdateCharacterUI,
+  renderAlchemyUI as uiRenderAlchemyUI,
   initTooltipEvents as uiInitTooltipEvents
 } from './src/ui/GameUI.js';
 
@@ -2282,6 +2283,10 @@ function updateTabBadgesUI() {
   if (questBadge) questBadge.style.display = hasQuestsClaimable() ? 'inline-flex' : 'none';
 }
 
+function updateAlchemyUI() {
+  uiRenderAlchemyUI(state);
+}
+
 function updateAllUI() {
   uiInitTooltipEvents();
   updateGameModeUI();
@@ -2292,6 +2297,7 @@ function updateAllUI() {
   safeUiUpdate('inventory', updateInventoryUI);
   safeUiUpdate('shop', updateShopUI);
   safeUiUpdate('craft', updateCraftUI);
+  safeUiUpdate('alchemy', updateAlchemyUI);
   safeUiUpdate('zone', updateZoneUI);
   safeUiUpdate('zone-map', renderZoneMap);
   safeUiUpdate('race-class', updateRaceClassUI);
@@ -3813,6 +3819,7 @@ export function openPanel(tabName) {
   else if (targetTab === 'skills') safeUiUpdate('skills', updateSkillUI);
   else if (targetTab === 'shop') safeUiUpdate('shop', updateShopUI);
   else if (targetTab === 'craft') safeUiUpdate('craft', updateCraftUI);
+  else if (targetTab === 'alchemy') safeUiUpdate('alchemy', updateAlchemyUI);
   else if (targetTab === 'enchant') safeUiUpdate('enchant', updateEnchantUI);
   else if (targetTab === 'zones') safeUiUpdate('zones', updateZoneUI);
   else if (targetTab === 'codex') safeUiUpdate('codex', updateCodexUI);
@@ -4130,6 +4137,247 @@ function initPanelResizers() {
   addTrackedListener(window, 'touchend', onEnd);
 }
 
+// --------------------------- ALCHEMY & SOUL CRUCIBLE ---------------------------
+const ESSENCES_PER_GRADE = {
+  common: 1,
+  'no-grade': 1,
+  'nograde': 1,
+  'd': 3,
+  'c': 8,
+  'b': 20,
+  'a': 45,
+  's': 100,
+  'frostlord': 250,
+  'frost': 250,
+};
+
+const ESSENCE_FEE_PER_GRADE = {
+  common: 50,
+  'no-grade': 50,
+  'nograde': 50,
+  'd': 150,
+  'c': 400,
+  'b': 1000,
+  'a': 2500,
+  's': 6000,
+  'frostlord': 15000,
+  'frost': 15000,
+};
+
+const ALCHEMY_RECIPES = {
+  elixir_berserker: {
+    name: "Elixir do Berserker",
+    icon: "⚔️",
+    desc: "+15% P.Atk e +10% Vel. Ataque por 1 hora",
+    cost: { fire: 15, wind: 10 },
+    gold: 2500,
+    duration: 3600000,
+  },
+  elixir_arcanist: {
+    name: "Elixir do Arcanista",
+    icon: "🔮",
+    desc: "+20% M.Atk e +50% Regeneração de Mana por 1 hora",
+    cost: { astral: 15, fire: 10 },
+    gold: 2500,
+    duration: 3600000,
+  },
+  elixir_fortune: {
+    name: "Elixir da Fortuna",
+    icon: "💰",
+    desc: "+25% Taxa de Drop e +30% Ouro Ganho por 1 hora",
+    cost: { earth: 20, astral: 15 },
+    gold: 5000,
+    duration: 3600000,
+  },
+  elixir_titan: {
+    name: "Elixir de Titã",
+    icon: "🛡️",
+    desc: "+25% HP Máximo e +20% P.Def por 1 hora",
+    cost: { earth: 25, fire: 15 },
+    gold: 5000,
+    duration: 3600000,
+  },
+  boss_summon_stone: {
+    name: "Pedra de Convocação Abissal",
+    icon: "🐉",
+    desc: "Invoca um Chefe Abissal com drop raro garantido",
+    cost: { fire: 50, astral: 50 },
+    gold: 20000,
+    duration: 0,
+    isItem: true,
+    itemId: "boss_summon_stone",
+  },
+};
+
+function getEssenceTypeForItem(def) {
+  if (!def) return 'fire';
+  const type = String(def.slot || def.type || '').toLowerCase();
+  if (['weapon', 'sword', 'mace', 'dagger', 'bow', 'staff', 'spear', 'dualsword', 'kris', 'axe', 'hammer', 'fist', 'rapier'].some(x => type.includes(x))) {
+    return 'fire';
+  }
+  if (['armor', 'shield', 'helmet', 'chest', 'legs'].some(x => type.includes(x))) {
+    return 'earth';
+  }
+  if (['boots', 'gloves', 'cloak', 'belt', 'hair'].some(x => type.includes(x))) {
+    return 'wind';
+  }
+  if (['ring', 'necklace', 'earring', 'talisman', 'agathion', 'accessory'].some(x => type.includes(x))) {
+    return 'astral';
+  }
+  return 'fire';
+}
+
+function getGradeForItem(def, inv) {
+  if (inv && inv.rarity) {
+    const r = String(inv.rarity).toLowerCase();
+    if (r.includes('frost')) return 'frostlord';
+    if (r.includes('legend') || r === 's') return 's';
+    if (r.includes('epic') || r === 'a') return 'a';
+    if (r.includes('rare') || r === 'b') return 'b';
+    if (r.includes('uncommon') || r === 'c') return 'c';
+    if (r === 'd') return 'd';
+  }
+  if (def && def.tier) {
+    if (def.tier >= 6) return 'frostlord';
+    if (def.tier === 5) return 's';
+    if (def.tier === 4) return 'a';
+    if (def.tier === 3) return 'b';
+    if (def.tier === 2) return 'c';
+    if (def.tier === 1) return 'd';
+  }
+  return 'nograde';
+}
+
+function dissolveItem(uid) {
+  if (!state.inventory || !Array.isArray(state.inventory)) return false;
+  const idx = state.inventory.findIndex(i => i.uid === uid);
+  if (idx < 0) return false;
+  const inv = state.inventory[idx];
+  
+  if (Object.values(state.equipment || {}).includes(uid)) {
+    log('⚠️ Não é possível dissolver um item equipado!', 'warning');
+    return false;
+  }
+
+  const def = D()?.ALL_ITEMS?.[inv.itemId];
+  const essenceType = getEssenceTypeForItem(def);
+  const grade = getGradeForItem(def, inv);
+  const essenceCount = ESSENCES_PER_GRADE[grade] || 1;
+  const fee = ESSENCE_FEE_PER_GRADE[grade] || 50;
+
+  if (state.gold < fee) {
+    log(`⚠️ Ouro insuficiente para dissolver no Cadinho! Requer ${fee}g.`, 'warning');
+    return false;
+  }
+
+  state.gold -= fee;
+  state.inventory.splice(idx, 1);
+  if (!state.essences) state.essences = { fire: 0, earth: 0, wind: 0, astral: 0 };
+  state.essences[essenceType] = (state.essences[essenceType] || 0) + essenceCount;
+
+  log(`🔥 Dissolveu item para +${essenceCount} Essência de ${essenceType.toUpperCase()}!`, 'loot');
+  updateAllUI();
+  save();
+  return true;
+}
+
+function dissolveItemsByFilter(filterGrade = 'all') {
+  if (!state.inventory || !Array.isArray(state.inventory)) return 0;
+  const equippedSet = new Set(Object.values(state.equipment || {}).filter(Boolean));
+  const toDissolve = [];
+
+  for (const inv of state.inventory) {
+    if (equippedSet.has(inv.uid)) continue;
+    const def = D()?.ALL_ITEMS?.[inv.itemId];
+    if (!def || def.type === 'consumable' || def.type === 'material') continue;
+
+    const grade = getGradeForItem(def, inv);
+    if (filterGrade === 'all' || filterGrade === grade || (filterGrade === 'nograde' && (grade === 'nograde' || grade === 'no-grade'))) {
+      toDissolve.push({ inv, def, grade });
+    }
+  }
+
+  if (toDissolve.length === 0) {
+    log('⚠️ Nenhum item elegível encontrado para dissolver!', 'warning');
+    return 0;
+  }
+
+  let totalEssences = { fire: 0, earth: 0, wind: 0, astral: 0 };
+  let totalFee = 0;
+  let count = 0;
+
+  for (const { inv, def, grade } of toDissolve) {
+    const fee = ESSENCE_FEE_PER_GRADE[grade] || 50;
+    if (state.gold < totalFee + fee) break;
+    totalFee += fee;
+    const type = getEssenceTypeForItem(def);
+    const amount = ESSENCES_PER_GRADE[grade] || 1;
+    totalEssences[type] = (totalEssences[type] || 0) + amount;
+    count++;
+    const idx = state.inventory.indexOf(inv);
+    if (idx >= 0) state.inventory.splice(idx, 1);
+  }
+
+  if (count === 0) {
+    log('⚠️ Ouro insuficiente para processar a dissolução em lote!', 'warning');
+    return 0;
+  }
+
+  state.gold -= totalFee;
+  if (!state.essences) state.essences = { fire: 0, earth: 0, wind: 0, astral: 0 };
+  for (const [type, amt] of Object.entries(totalEssences)) {
+    if (amt > 0) state.essences[type] = (state.essences[type] || 0) + amt;
+  }
+
+  log(`🔥 Cadinho de Almas: Dissolveu ${count} itens (+${totalEssences.fire} Fogo, +${totalEssences.earth} Terra, +${totalEssences.wind} Vento, +${totalEssences.astral} Astral)!`, 'rarity-legendary');
+  updateAllUI();
+  save();
+  return count;
+}
+
+function craftElixir(recipeId, qty = 1) {
+  const recipe = ALCHEMY_RECIPES[recipeId];
+  if (!recipe) return false;
+  const count = Math.max(1, Math.floor(qty));
+  const totalGold = recipe.gold * count;
+
+  if (state.gold < totalGold) {
+    log(`⚠️ Ouro insuficiente! Requer ${totalGold.toLocaleString()}g.`, 'warning');
+    return false;
+  }
+
+  if (!state.essences) state.essences = { fire: 0, earth: 0, wind: 0, astral: 0 };
+  for (const [type, amt] of Object.entries(recipe.cost)) {
+    const required = amt * count;
+    if ((state.essences[type] || 0) < required) {
+      log(`⚠️ Essências insuficientes! Requer ${required} Essências de ${type.toUpperCase()}.`, 'warning');
+      return false;
+    }
+  }
+
+  state.gold -= totalGold;
+  for (const [type, amt] of Object.entries(recipe.cost)) {
+    state.essences[type] -= amt * count;
+  }
+
+  if (recipe.isItem) {
+    addToInventory(recipe.itemId, count);
+    log(`🧪 Fabricou ${count}x ${recipe.name}!`, 'loot');
+  } else {
+    if (!state.activeElixirs) state.activeElixirs = {};
+    const now = Date.now();
+    const currentExpiry = state.activeElixirs[recipeId] && state.activeElixirs[recipeId] > now
+      ? state.activeElixirs[recipeId]
+      : now;
+    state.activeElixirs[recipeId] = currentExpiry + recipe.duration * count;
+    log(`🧪 Ativou ${recipe.name} por ${count} hora(s)!`, 'rarity-legendary');
+  }
+
+  updateAllUI();
+  save();
+  return true;
+}
+
 export function init() {
   try {
     // Expose global action handlers to window for inline HTML handlers & global events
@@ -4160,6 +4408,10 @@ export function init() {
     window.sweepTowerDaily = sweepTowerDaily;
     window.checkDailyReset = checkDailyReset;
     window.checkQuestProgress = checkQuestProgress;
+    window.dissolveItem = dissolveItem;
+    window.dissolveItemsByFilter = dissolveItemsByFilter;
+    window.craftElixir = craftElixir;
+    window.ALCHEMY_RECIPES = ALCHEMY_RECIPES;
     window.getGameState = () => {
       const data = { 
         ...state, 

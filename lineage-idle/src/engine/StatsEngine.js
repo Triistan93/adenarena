@@ -385,6 +385,19 @@ export function getStats(state) {
     else if (k === 'autoPotion') autoPotion = true;
   }
 
+  // Process Active Elixirs from Alchemy System
+  let elixirHpMult = 0;
+  if (state.activeElixirs && typeof state.activeElixirs === 'object') {
+    for (const [eId, expiry] of Object.entries(state.activeElixirs)) {
+      if (typeof expiry === 'number' && expiry > now) {
+        if (eId === 'elixir_berserker') { buffAtkMult += 0.15; buffSpd += 10; }
+        else if (eId === 'elixir_arcanist') { buffMatk += Math.floor(baseMatk * 0.20); mpRegenBonus += 0.50; }
+        else if (eId === 'elixir_fortune') { luckBoost += 0.25; goldBoost += 0.30; }
+        else if (eId === 'elixir_titan') { buffDef += Math.floor(baseDef * 0.20); elixirHpMult += 0.25; }
+      }
+    }
+  }
+
   const agathionUid = state.equipment?.agathion;
   const agathionItem = agathionUid ? state.inventory?.find(i => i.uid === agathionUid) : null;
   const agathionDef = agathionItem ? D()?.ALL_ITEMS?.[agathionItem.itemId] : null;
@@ -424,7 +437,7 @@ export function getStats(state) {
   const execute   = sk('assassinate') * 0.02;
   const block     = sk('divineshield') * 0.05 + (setB.block || 0);
 
-  const maxHp = Math.floor(100 + state.level * 10 + sk('boostHp') * 60 + (Number(eb.hp) || 0) + (Number(setB.hp) || 0) + codexB.hp + dollsB.hp);
+  const maxHp = Math.floor((100 + state.level * 10 + sk('boostHp') * 60 + (Number(eb.hp) || 0) + (Number(setB.hp) || 0) + codexB.hp + dollsB.hp) * (1 + elixirHpMult));
   const maxMp = Math.floor(50 + state.level * 5 + sk('boostMana') * 30 + (Number(eb.mp) || 0) + (Number(setB.mp) || 0) + codexB.mp + dollsB.mp);
 
   const rawStats = {

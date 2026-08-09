@@ -2300,3 +2300,160 @@ export function closeCraftModal() {
   const modal = findElement('craft-modal');
   if (modal) modal.style.display = 'none';
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   18. ALCHEMY & SOUL CRUCIBLE UI RENDERER
+═══════════════════════════════════════════════════════════════════════════ */
+export function renderAlchemyUI(state) {
+  if (!state) return;
+  const root = getRoot();
+  const container = root.querySelector('#tab-alchemy, .tab-alchemy');
+  if (!container) return;
+
+  const essences = state.essences || { fire: 0, earth: 0, wind: 0, astral: 0 };
+  const activeElixirs = state.activeElixirs || {};
+  const now = Date.now();
+
+  const recipes = (typeof window !== 'undefined' && window.ALCHEMY_RECIPES) ? window.ALCHEMY_RECIPES : {};
+
+  let activeBuffsHtml = '';
+  for (const [rId, expiry] of Object.entries(activeElixirs)) {
+    if (typeof expiry === 'number' && expiry > now) {
+      const recipe = recipes[rId];
+      const secondsLeft = Math.ceil((expiry - now) / 1000);
+      const mins = Math.floor(secondsLeft / 60);
+      const secs = secondsLeft % 60;
+      const timeStr = mins > 60
+        ? `${(mins / 60).toFixed(1)}h`
+        : `${mins}m ${secs < 10 ? '0' : ''}${secs}s`;
+
+      activeBuffsHtml += `
+        <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(212,167,68,0.15); border:1px solid rgba(212,167,68,0.4); padding:8px 12px; border-radius:8px; margin-bottom:8px;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:22px;">${recipe?.icon || '🧪'}</span>
+            <div>
+              <div style="font-weight:bold; color:#ffd877; font-size:13px;">${recipe?.name || rId}</div>
+              <div style="font-size:11px; color:#aaa;">${recipe?.desc || ''}</div>
+            </div>
+          </div>
+          <span style="font-family:monospace; font-weight:bold; color:#34d399; font-size:13px; background:rgba(0,0,0,0.5); padding:3px 8px; border-radius:4px;">⏱️ ${timeStr}</span>
+        </div>
+      `;
+    }
+  }
+
+  let recipesHtml = '';
+  for (const [rId, rec] of Object.entries(recipes)) {
+    let canAfford = (state.gold || 0) >= rec.gold;
+    let costHtml = '';
+    for (const [type, amt] of Object.entries(rec.cost)) {
+      const owned = essences[type] || 0;
+      const hasEnough = owned >= amt;
+      if (!hasEnough) canAfford = false;
+      const typeIcons = { fire: '🔥', earth: '🛡️', wind: '🍃', astral: '✨' };
+      costHtml += `<span style="color:${hasEnough ? '#4ade80' : '#ef4444'}; font-weight:bold; margin-right:8px;">${typeIcons[type] || ''} ${owned}/${amt}</span>`;
+    }
+
+    recipesHtml += `
+      <div style="background:rgba(18,22,34,0.85); border:1px solid ${canAfford ? 'rgba(212,167,68,0.4)' : 'rgba(255,255,255,0.08)'}; border-radius:10px; padding:12px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; gap:12px;">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div style="width:46px; height:46px; background:rgba(0,0,0,0.5); border:1px solid rgba(212,167,68,0.3); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:24px;">
+            ${rec.icon}
+          </div>
+          <div>
+            <h4 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:15px;">${rec.name}</h4>
+            <p style="margin:2px 0 6px 0; font-size:11px; color:#aaa;">${rec.desc}</p>
+            <div style="font-size:11px;">${costHtml} <span style="color:${(state.gold || 0) >= rec.gold ? '#ffd877' : '#ef4444'};">🪙 ${rec.gold.toLocaleString()}g</span></div>
+          </div>
+        </div>
+        <button
+          onclick="window.craftElixir('${rId}', 1)"
+          ${!canAfford ? 'disabled' : ''}
+          style="padding:8px 16px; font-family:'Cinzel',serif; font-weight:bold; font-size:12px; background:${canAfford ? 'linear-gradient(180deg,#d4a744,#8a641c)' : 'rgba(60,50,40,0.5)'}; border:1px solid ${canAfford ? '#ffe699' : 'rgba(100,80,60,0.3)'}; color:${canAfford ? '#000' : '#777'}; border-radius:6px; cursor:${canAfford ? 'pointer' : 'not-allowed'}; min-width:90px;"
+        >
+          🧪 CRIAR
+        </button>
+      </div>
+    `;
+  }
+
+  container.innerHTML = `
+    <div style="padding:16px; font-family:sans-serif; color:#fff;">
+      <!-- Essence Header -->
+      <div style="background:linear-gradient(180deg, rgba(20,26,42,0.9), rgba(10,14,24,0.9)); border:1px solid rgba(212,167,68,0.4); border-radius:12px; padding:14px; margin-bottom:16px; box-shadow:0 4px 20px rgba(0,0,0,0.5);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <h3 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:18px; display:flex; align-items:center; gap:8px;">
+            🧪 Cadinho de Almas & Alquimia
+          </h3>
+          <span style="font-size:12px; color:#aaa;">Extraia essências de itens e fabrique elixires</span>
+        </div>
+
+        <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:8px; text-align:center;">
+          <div style="background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.3); border-radius:8px; padding:8px;">
+            <div style="font-size:18px;">🔥</div>
+            <div style="font-size:10px; text-transform:uppercase; color:#fca5a5; font-weight:bold;">Fogo</div>
+            <div style="font-size:16px; font-weight:bold; color:#fff;">${(essences.fire || 0).toLocaleString()}</div>
+          </div>
+          <div style="background:rgba(34,197,94,0.12); border:1px solid rgba(34,197,94,0.3); border-radius:8px; padding:8px;">
+            <div style="font-size:18px;">🛡️</div>
+            <div style="font-size:10px; text-transform:uppercase; color:#86efac; font-weight:bold;">Terra</div>
+            <div style="font-size:16px; font-weight:bold; color:#fff;">${(essences.earth || 0).toLocaleString()}</div>
+          </div>
+          <div style="background:rgba(56,189,248,0.12); border:1px solid rgba(56,189,248,0.3); border-radius:8px; padding:8px;">
+            <div style="font-size:18px;">🍃</div>
+            <div style="font-size:10px; text-transform:uppercase; color:#7dd3fc; font-weight:bold;">Vento</div>
+            <div style="font-size:16px; font-weight:bold; color:#fff;">${(essences.wind || 0).toLocaleString()}</div>
+          </div>
+          <div style="background:rgba(168,85,247,0.12); border:1px solid rgba(168,85,247,0.3); border-radius:8px; padding:8px;">
+            <div style="font-size:18px;">✨</div>
+            <div style="font-size:10px; text-transform:uppercase; color:#d8b4fe; font-weight:bold;">Astral</div>
+            <div style="font-size:16px; font-weight:bold; color:#fff;">${(essences.astral || 0).toLocaleString()}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Active Elixirs Banner -->
+      ${activeBuffsHtml ? `
+        <div style="margin-bottom:16px;">
+          <h4 style="margin:0 0 8px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">✨ Elixires Ativos</h4>
+          ${activeBuffsHtml}
+        </div>
+      ` : ''}
+
+      <!-- Fast Dissolve Controls -->
+      <div style="background:rgba(15,20,32,0.8); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:12px; margin-bottom:16px;">
+        <h4 style="margin:0 0 8px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px; display:flex; align-items:center; gap:6px;">
+          🔥 Dissolução Rápida no Cadinho
+        </h4>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button
+            onclick="window.dissolveItemsByFilter('nograde')"
+            style="flex:1; padding:10px; font-weight:bold; font-size:12px; background:rgba(239,68,68,0.2); border:1px solid rgba(239,68,68,0.5); color:#fca5a5; border-radius:6px; cursor:pointer;"
+          >
+            🔥 Dissolver No-Grade
+          </button>
+          <button
+            onclick="window.dissolveItemsByFilter('d')"
+            style="flex:1; padding:10px; font-weight:bold; font-size:12px; background:rgba(59,130,246,0.2); border:1px solid rgba(59,130,246,0.5); color:#93c5fd; border-radius:6px; cursor:pointer;"
+          >
+            🔥 Dissolver D-Grade
+          </button>
+          <button
+            onclick="window.dissolveItemsByFilter('all')"
+            style="flex:1; padding:10px; font-weight:bold; font-size:12px; background:rgba(212,167,68,0.2); border:1px solid rgba(212,167,68,0.5); color:#fde047; border-radius:6px; cursor:pointer;"
+          >
+            🔥 Dissolver Todos Elegíveis
+          </button>
+        </div>
+      </div>
+
+      <!-- Recipes List -->
+      <div>
+        <h4 style="margin:0 0 10px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">
+          ⚗️ Receitas de Alquimia
+        </h4>
+        ${recipesHtml}
+      </div>
+    </div>
+  `;
+}
