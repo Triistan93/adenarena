@@ -58,8 +58,8 @@ export const IDLE_MARKUP = `
         <div class="stat-row"><label>Loot</label><span id="loot-text" class="stat-value">100%</span></div>
         <div class="stat-divider"></div>
         <div class="stat-row"><label>SP</label><span id="sp-text" class="stat-value">0</span></div>
-        <div class="stat-row"><label>Gold</label><span id="gold-text-stat" class="stat-value gold">0</span></div>
-        <div class="stat-row"><label>Gold/s</label><span id="gps-text" class="stat-value gold-dim">—</span></div>
+        <div class="stat-row"><label>Adena</label><span id="gold-text-stat" class="stat-value gold">0</span></div>
+        <div class="stat-row"><label>Adena/s</label><span id="gps-text" class="stat-value gold-dim">—</span></div>
         <div class="stat-row"><label>Craft Lv</label><span id="craft-level-stat" class="stat-value">1</span></div>
         <div class="stat-divider"></div>
         <div class="active-buffs" id="active-buffs"><span class="ab-empty">No active buffs</span></div>
@@ -451,7 +451,7 @@ export const IDLE_MARKUP = `
                 <p style="margin:2px 0 0 0; font-size:11px; color:var(--text-muted);">Comércio imperial de equipamentos, consumíveis e relíquias místicas</p>
               </div>
               <div style="display:flex; flex-direction:column; align-items:flex-end; gap:4px;">
-                <span class="shop-gold-pill">💰 <span id="shop-gold">0</span> Gold</span>
+                <span class="shop-gold-pill">🪙 <span id="shop-gold">0</span> Adena</span>
                 <span id="mystic-shop-timer" class="mystic-timer-pill" style="display:none;">⏳ Restoque Místico: <strong id="mystic-timer-countdown">03:00:00</strong></span>
               </div>
             </div>
@@ -645,7 +645,7 @@ export const IDLE_MARKUP = `
                 </div>
                 <div class="pass-xp-info">
                   <span id="pass-xp-text">0 / 100 XP do Passe</span>
-                  <button id="unlock-premium-pass-btn" class="inv-batch-btn gold-glow-btn" title="Ativar o Passe Premium com Gold do Jogo">👑 Ativar Passe Premium (100.000g)</button>
+                  <button id="unlock-premium-pass-btn" class="inv-batch-btn gold-glow-btn" title="Ativar o Passe Premium com Adena do Jogo">👑 Ativar Passe Premium (100.000 Adena)</button>
                 </div>
               </div>
               <div class="bar-container pass-bar-container">
@@ -818,8 +818,8 @@ export const IDLE_MARKUP = `
           <div class="admin-section">
             <h3>🪙 Ouro &amp; Skill Points</h3>
             <div class="admin-btn-group">
-              <button class="admin-btn" data-admin-cmd="gold1m">+1.000.000 Gold</button>
-              <button class="admin-btn" data-admin-cmd="gold10m">+10.000.000 Gold</button>
+              <button class="admin-btn" data-admin-cmd="gold1m">+1.000.000 Adena</button>
+              <button class="admin-btn" data-admin-cmd="gold10m">+10.000.000 Adena</button>
               <button class="admin-btn" data-admin-cmd="sp5k">+5.000 SP</button>
               <button class="admin-btn" data-admin-cmd="sp50k">+50.000 SP</button>
             </div>

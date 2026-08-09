@@ -951,63 +951,47 @@ export const MONSTER_DROPS = {
 };
 
 export const CRAFTING_RECIPES = {
-  "weapon_composition_bow": {
-    "id": "weapon_composition_bow",
-    "level": 1,
-    "gold": 500,
-    "materials": {
-      "iron_ore": 10,
-      "suede": 5
-    },
-    "reqs": [
-      {
-        "id": "iron_ore",
-        "count": 10
-      },
-      {
-        "id": "suede",
-        "count": 5
-      }
-    ]
-  },
-  "armor_full_plate_heavy_armor": {
-    "id": "armor_full_plate_heavy_armor",
-    "level": 40,
-    "gold": 5000,
-    "materials": {
-      "iron_ore": 50,
-      "crafted_leather": 20
-    },
-    "reqs": [
-      {
-        "id": "iron_ore",
-        "count": 50
-      },
-      {
-        "id": "crafted_leather",
-        "count": 20
-      }
-    ]
-  },
-  "armor_draconic_armor": {
-    "id": "armor_draconic_armor",
-    "level": 76,
-    "gold": 50000,
-    "materials": {
-      "oriharukon_ore": 100,
-      "adamantite": 50
-    },
-    "reqs": [
-      {
-        "id": "oriharukon_ore",
-        "count": 100
-      },
-      {
-        "id": "adamantite",
-        "count": 50
-      }
-    ]
-  }
+  // --- NO GRADE (Forja Lv 1) ---
+  "weapon_composition_bow": { "id": "weapon_composition_bow", "level": 1, "gold": 250, "reqs": [{ "id": "iron_ore", "count": 10 }, { "id": "suede", "count": 5 }] },
+  "weapon_falchion_sword": { "id": "weapon_falchion_sword", "level": 1, "gold": 250, "reqs": [{ "id": "iron_ore", "count": 10 }, { "id": "charcoal", "count": 5 }] },
+  "weapon_crucifix_of_blessing_magicblunt": { "id": "weapon_crucifix_of_blessing_magicblunt", "level": 1, "gold": 250, "reqs": [{ "id": "branch", "count": 8 }, { "id": "bone_powder", "count": 5 }] },
+  "armor_bone_breastplate": { "id": "armor_bone_breastplate", "level": 1, "gold": 300, "reqs": [{ "id": "bone", "count": 12 }, { "id": "cloth", "count": 8 }] },
+  "armor_devotion_armor_robe": { "id": "armor_devotion_armor_robe", "level": 1, "gold": 300, "reqs": [{ "id": "cloth", "count": 15 }, { "id": "silver_thread", "count": 6 }] },
+  "soulshot_ng": { "id": "soulshot_ng", "level": 1, "gold": 100, "reqs": [{ "id": "iron_ore", "count": 5 }, { "id": "charcoal", "count": 5 }] },
+  "spiritshot_ng": { "id": "spiritshot_ng", "level": 1, "gold": 100, "reqs": [{ "id": "magic_powder", "count": 5 }, { "id": "charcoal", "count": 5 }] },
+
+  // --- GRADE D (Forja Lv 2 - Lv 3) ---
+  "weapon_crimson_sword": { "id": "weapon_crimson_sword", "level": 20, "gold": 1200, "reqs": [{ "id": "iron_ore", "count": 25 }, { "id": "steel", "count": 10 }] },
+  "weapon_bow_of_silence": { "id": "weapon_bow_of_silence", "level": 20, "gold": 1200, "reqs": [{ "id": "iron_ore", "count": 20 }, { "id": "braided_hemp", "count": 12 }] },
+  "weapon_bronze_mace": { "id": "weapon_bronze_mace", "level": 20, "gold": 1200, "reqs": [{ "id": "iron_ore", "count": 25 }, { "id": "bronze_coin", "count": 8 }] },
+  "armor_brigandine_armor_heavy": { "id": "armor_brigandine_armor_heavy", "level": 25, "gold": 1500, "reqs": [{ "id": "iron_ore", "count": 30 }, { "id": "crafted_leather", "count": 15 }] },
+  "hp_potion_m": { "id": "hp_potion_m", "level": 20, "gold": 200, "reqs": [{ "id": "holy_water", "count": 5 }, { "id": "fire_reagent", "count": 3 }] },
+
+  // --- GRADE C (Forja Lv 4 - Lv 5) ---
+  "weapon_darkelven_dagger": { "id": "weapon_darkelven_dagger", "level": 40, "gold": 3500, "reqs": [{ "id": "steel", "count": 30 }, { "id": "coarse_bone_powder", "count": 15 }] },
+  "weapon_battle_axe": { "id": "weapon_battle_axe", "level": 40, "gold": 3500, "reqs": [{ "id": "iron_ore", "count": 45 }, { "id": "steel", "count": 20 }] },
+  "armor_full_plate_heavy_armor": { "id": "armor_full_plate_heavy_armor", "level": 40, "gold": 5000, "reqs": [{ "id": "iron_ore", "count": 50 }, { "id": "crafted_leather", "count": 20 }, { "id": "steel", "count": 10 }] },
+  "scroll_of_enchant_weapon_": { "id": "scroll_of_enchant_weapon_", "level": 40, "gold": 2500, "reqs": [{ "id": "magic_powder", "count": 20 }, { "id": "crystal_blue_d", "count": 5 }] },
+  "scroll_of_enchant_armor": { "id": "scroll_of_enchant_armor", "level": 40, "gold": 1800, "reqs": [{ "id": "magic_powder", "count": 15 }, { "id": "crystal_blue_d", "count": 5 }] },
+
+  // --- GRADE B (Forja Lv 6) ---
+  "weapon_archmage_staff": { "id": "weapon_archmage_staff", "level": 52, "gold": 8000, "reqs": [{ "id": "mithril_ore", "count": 40 }, { "id": "magic_powder", "count": 25 }] },
+  "weapon_bow_of_peril": { "id": "weapon_bow_of_peril", "level": 52, "gold": 8000, "reqs": [{ "id": "mithril_ore", "count": 45 }, { "id": "metallic_fiber", "count": 20 }] },
+  "armor_avadon_heavy_armor": { "id": "armor_avadon_heavy_armor", "level": 52, "gold": 10000, "reqs": [{ "id": "mithril_ore", "count": 50 }, { "id": "steel_ingot", "count": 25 }] },
+
+  // --- GRADE A (Forja Lv 7) ---
+  "weapon_divine_sword": { "id": "weapon_divine_sword", "level": 62, "gold": 18000, "reqs": [{ "id": "oriharukon_ore", "count": 60 }, { "id": "adamantite", "count": 30 }] },
+  "weapon_bloody_orchid_dagger": { "id": "weapon_bloody_orchid_dagger", "level": 62, "gold": 18000, "reqs": [{ "id": "blood_gem", "count": 20 }, { "id": "adamantite", "count": 30 }] },
+  "armor_dark_crystal_heavy_armor": { "id": "armor_dark_crystal_heavy_armor", "level": 62, "gold": 22000, "reqs": [{ "id": "oriharukon_ore", "count": 70 }, { "id": "adamantite", "count": 35 }] },
+
+  // --- GRADE S (Forja Lv 8 - Lv 9) ---
+  "weapon_draconic_bow": { "id": "weapon_draconic_bow", "level": 76, "gold": 45000, "reqs": [{ "id": "oriharukon_ore", "count": 100 }, { "id": "crystal_gold_s", "count": 20 }] },
+  "weapon_angel_slayer": { "id": "weapon_angel_slayer", "level": 76, "gold": 45000, "reqs": [{ "id": "oriharukon_ore", "count": 100 }, { "id": "adamantite", "count": 50 }] },
+  "armor_draconic_armor": { "id": "armor_draconic_armor", "level": 76, "gold": 50000, "reqs": [{ "id": "oriharukon_ore", "count": 100 }, { "id": "adamantite", "count": 50 }] },
+
+  // --- FROST LORD APEX (Forja Lv 10) ---
+  "weapon_frost_lord_sword": { "id": "weapon_frost_lord_sword", "level": 85, "gold": 90000, "reqs": [{ "id": "oriharukon_ore", "count": 150 }, { "id": "adamantite", "count": 80 }, { "id": "crystal_gold_s", "count": 30 }] },
+  "weapon_frost_lord_staff": { "id": "weapon_frost_lord_staff", "level": 85, "gold": 90000, "reqs": [{ "id": "mithril_ore", "count": 150 }, { "id": "magic_powder", "count": 80 }, { "id": "crystal_gold_s", "count": 30 }] }
 };
 
 export const SHOP_INVENTORY = [

@@ -1613,7 +1613,7 @@ function renderCraftRecipes() {
   for (const recipe of recipesList) {
     if (!recipe) continue;
     const recipeId = recipe.id || recipe.itemId;
-    const def = getItemDef(recipeId); if (!def || (def.req && def.req.level > state.level)) continue;
+    const def = getItemDef(recipeId); if (!def) continue;
     const canCraftIt = canCraft(recipeId);
     const item = mkEl('div'); item.className = 'craft-item' + (canCraftIt ? '' : ' locked');
     const reqLevel = recipe.level ? getCraftLevelReq(recipe.level) : 1;
@@ -1625,7 +1625,7 @@ function renderCraftRecipes() {
       const cls = have >= qty ? 'have' : 'need';
       return `<span class="${cls}">${matName} ${have}/${qty}</span>`;
     }).join(', ');
-    item.innerHTML = `<div class="item-info"><div class="item-name">${def.name}</div><div class="item-mats">${matHtml}</div><div class="item-desc">Req: Craft Lv.${reqLevel}</div></div><button class="item-action" data-craft="${recipeId}" ${!canCraftIt ? 'disabled' : ''}>Craft</button>`;
+    item.innerHTML = `<div class="item-info"><div class="item-name">${def.name}</div><div class="item-mats">${matHtml}</div><div class="item-desc">Req: Forja Lv.${reqLevel}</div></div><button class="item-action" data-craft="${recipeId}" ${!canCraftIt ? 'disabled' : ''}>Criar Item</button>`;
     list.appendChild(item);
   }
   qsa('[data-craft]').forEach(btn => btn.onclick = () => craftItem(btn.dataset.craft));
