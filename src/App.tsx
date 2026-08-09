@@ -651,6 +651,9 @@ function ModeSwitch({
 
   const selectMode = (m: Mode) => {
     setMode(m);
+    if (typeof (window as any).setGameMode === "function") {
+      (window as any).setGameMode(m);
+    }
     setIsOpen(false);
   };
 
@@ -662,7 +665,11 @@ function ModeSwitch({
         className={cn("hamburger-btn", isOpen && "is-active")}
         onClick={() => setIsOpen((prev) => !prev)}
       >
-        <span className="hamburger-icon" />
+        <span className="hamburger-icon">
+          <span />
+          <span />
+          <span />
+        </span>
         <span className="hamburger-mode-badge">
           {mode === "idle" ? "📜 Idle Chronicle" : "⚔ 3D Arena"}
         </span>
@@ -691,7 +698,7 @@ function ModeSwitch({
             <span className="mode-dropdown__icon">⚔</span>
             <div className="mode-dropdown__info">
               <div className="mode-dropdown__title">3D Arena</div>
-              <div className="mode-dropdown__desc">Combate de ação em tempo real</div>
+              <div className="mode-dropdown__desc">Combate de ação 3D em tempo real</div>
             </div>
             {mode === "arena" && <span className="mode-dropdown__check">✓</span>}
           </button>
@@ -734,6 +741,15 @@ import { LoginScreen } from "./components/LoginScreen";
 export default function Shell() {
   const [mode, setMode] = useState<Mode>("idle");
   const [hasEntered, setHasEntered] = useState(false);
+
+  useEffect(() => {
+    (window as any).onReactSetMode = (m: Mode) => {
+      setMode(m);
+    };
+    return () => {
+      delete (window as any).onReactSetMode;
+    };
+  }, []);
 
   const handleEnterGame = (cloudState?: any) => {
     if (cloudState && typeof cloudState === 'object') {

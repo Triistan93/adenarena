@@ -1810,7 +1810,7 @@ function updateGameModeUI() {
   const currentEl = el('game-mode-current');
   const gameEl = el('game');
   const currentMode = state.gameMode === 'arena' ? 'arena' : 'idle';
-  if (currentEl) currentEl.textContent = currentMode === 'arena' ? 'Arena' : 'Idle';
+  if (currentEl) currentEl.textContent = currentMode === 'arena' ? '3D Arena' : 'Idle';
   if (switchEl) switchEl.classList.toggle('arena', currentMode === 'arena');
   if (gameEl) {
     gameEl.classList.remove('mode-idle', 'mode-arena');
@@ -1827,8 +1827,11 @@ function setGameMode(mode) {
   const nextMode = mode === 'arena' ? 'arena' : 'idle';
   state.gameMode = nextMode;
   updateGameModeUI();
-  log(`Game mode switched to ${nextMode === 'arena' ? 'Arena' : 'Idle'}.`, 'system');
+  log(`Modo de jogo alterado para ${nextMode === 'arena' ? '⚔ 3D Arena' : '📜 Idle Chronicle'}.`, 'system');
   save();
+  if (typeof window !== 'undefined' && typeof window.onReactSetMode === 'function') {
+    window.onReactSetMode(nextMode);
+  }
 }
 
 function closeGameModeMenu() {
@@ -1845,6 +1848,35 @@ function toggleGameModeMenu() {
   const willOpen = !switchEl.classList.contains('open');
   switchEl.classList.toggle('open', willOpen);
   switchEl.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+}
+
+// Inicializa listeners do Seletor de Modo 3D / Idle (uma única vez no carregamento)
+if (typeof window !== 'undefined') {
+  window.addEventListener('DOMContentLoaded', () => {
+    const switchEl = el('game-mode-switch');
+    if (switchEl) {
+      switchEl.onclick = (e) => {
+        e.stopPropagation();
+        toggleGameModeMenu();
+      };
+    }
+
+    qsa('.mode-option').forEach(btn => {
+      btn.onclick = (e) => {
+        e.stopPropagation();
+        const targetMode = btn.dataset.mode || 'idle';
+        setGameMode(targetMode);
+        closeGameModeMenu();
+      };
+    });
+
+    document.addEventListener('click', (e) => {
+      const switchEl = el('game-mode-switch');
+      if (switchEl && switchEl.classList.contains('open') && !switchEl.contains(e.target)) {
+        closeGameModeMenu();
+      }
+    });
+  });
 }
 
 // QUEST_DEFS, BATTLE_PASS_TIERS e PASS_DEFS foram movidos para src/data/quests.js (Sprint 1)
@@ -4118,6 +4150,7 @@ export function init() {
     window.openAddSubclassModal = openAddSubclassModal;
     window.openCraftModal = (itemId) => uiOpenCraftModal(itemId, state, { craftItem, getItemDef, updateAllUI, save });
     window.closeCraftModal = uiCloseCraftModal;
+    window.setGameMode = setGameMode;
     window.switchSubclass = switchSubclass;
     window.claimCert = claimCert;
     window.claimQuestReward = claimQuestReward;
