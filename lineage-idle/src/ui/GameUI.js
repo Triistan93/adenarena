@@ -674,6 +674,49 @@ const INJECTED_GAMEUI_CSS = `
   font-size: 15px !important;
 }
 
+/* === BATCH ACTION BAR (AÇÕES EM LOTE) === */
+.inv-action-bar {
+  display: flex !important;
+  gap: 6px !important;
+  margin: 6px 0 !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+}
+.inv-action-btn {
+  padding: 5px 10px !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+  transition: transform 0.1s ease, background 0.15s ease !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+}
+.inv-action-btn:hover {
+  transform: translateY(-1px) !important;
+}
+.inv-action-btn.sell {
+  background: linear-gradient(180deg, #5a3810, #2a1505) !important;
+  border: 1px solid #a06020 !important;
+  color: #f8b070 !important;
+}
+.inv-action-btn.salvage {
+  background: linear-gradient(180deg, #3a1a4a, #1a0a28) !important;
+  border: 1px solid #8040a0 !important;
+  color: #d890f8 !important;
+}
+.inv-action-btn.select-junk {
+  background: linear-gradient(180deg, #1a3a2a, #0a1a10) !important;
+  border: 1px solid #3ab070 !important;
+  color: #70e898 !important;
+}
+.inv-action-btn.clear-sel {
+  background: linear-gradient(180deg, #3a1a1a, #1a0a0a) !important;
+  border: 1px solid #a03a3a !important;
+  color: #f87070 !important;
+}
+
 /* === MAPA DE ZONAS & DIORAMA DE COMBATE ESTILOS === */
 .saga-map-block {
   padding: 12px 14px;
@@ -925,6 +968,40 @@ export function updateInventoryUI(state, callbacks = {}) {
     const emptySlotEl = mkEl('div');
     emptySlotEl.className = 'inv-slot empty';
     grid.appendChild(emptySlotEl);
+  }
+
+  // Renderiza a barra de ações em lote (Batch Action Bar)
+  let actionBar = findElement('inv-action-bar');
+  if (!actionBar) {
+    const parent = grid.parentElement;
+    if (parent) {
+      actionBar = mkEl('div');
+      actionBar.id = 'inv-action-bar';
+      actionBar.className = 'inv-action-bar';
+      parent.insertBefore(actionBar, grid.nextSibling);
+    }
+  }
+
+  if (actionBar) {
+    const selSize = selectedSet.size || 0;
+    actionBar.innerHTML = `
+      <button class="inv-action-btn sell" id="btn-sell-selected" title="Vender itens selecionados">💰 Vender (${selSize})</button>
+      <button class="inv-action-btn salvage" id="btn-salvage-selected" title="Desmontar equipamentos selecionados em cristais/materiais">🔨 Desmontar (${selSize})</button>
+      <button class="inv-action-btn select-junk" id="btn-select-junk" title="Selecionar todos os itens Comuns e Incomuns">🧹 Selecionar Lixo</button>
+      ${selSize > 0 ? `<button class="inv-action-btn clear-sel" id="btn-clear-sel" title="Limpar seleção atual">❌ Limpar (${selSize})</button>` : ''}
+    `;
+
+    const btnSell = actionBar.querySelector('#btn-sell-selected');
+    if (btnSell) btnSell.onclick = () => { if (callbacks.sellSelectedItems) callbacks.sellSelectedItems(); };
+
+    const btnSalvage = actionBar.querySelector('#btn-salvage-selected');
+    if (btnSalvage) btnSalvage.onclick = () => { if (callbacks.salvageSelectedItems) callbacks.salvageSelectedItems(); };
+
+    const btnJunk = actionBar.querySelector('#btn-select-junk');
+    if (btnJunk) btnJunk.onclick = () => { if (callbacks.selectJunkItems) callbacks.selectJunkItems(); };
+
+    const btnClear = actionBar.querySelector('#btn-clear-sel');
+    if (btnClear) btnClear.onclick = () => { if (callbacks.clearItemSelection) callbacks.clearItemSelection(); };
   }
 
   const cnt = findElement('inv-count') || findElement('inv-slots') || findElement('inv-slots-count');

@@ -421,15 +421,18 @@ function unequipItem(a, b) {
 
 
 function salvageItem(uid) {
-  const idx = state.inventory.findIndex(i => i.uid === uid);
+  const idx = state.inventory.findIndex(i => String(i.uid) === String(uid));
   if (idx < 0) return;
   const item = state.inventory[idx];
-  if (item.equipped) { log('Unequip first!', 'system'); return; }
+  if (item.equipped) { log('Desequipe o item antes de desmontar!', 'system'); return; }
   const def = D().ALL_ITEMS[item.itemId];
   if (!def) return;
   const targetSlot = resolveEquipSlot(def.slot);
   const isEquip = (def.slot && def.slot !== 'consumable' && def.slot !== 'material' && def.slot !== 'scroll' && def.slot !== 'powerup') || ALL_EQUIP_SLOTS.includes(targetSlot);
-  if (!isEquip) return;
+  if (!isEquip) {
+    log('Apenas equipamentos podem ser desmontados.', 'system');
+    return;
+  }
 
   if (isHighValueItem(item)) {
     const rarityName = D().RARITY[item.rarity]?.name || item.rarity;
@@ -443,7 +446,7 @@ function salvageItem(uid) {
   const rarityMult = item.rarity ? (D().RARITY[item.rarity]?.mult || 1) : 1;
 
   let matId = 'iron_ore';
-  if (grade === 'S Grade') matId = 'crystal_s';
+  if (grade === 'S Grade' || def.tier === 6) matId = 'crystal_s';
   else if (grade === 'A Grade') matId = 'crystal_a';
   else if (grade === 'B Grade') matId = 'crystal_b';
   else if (grade === 'C Grade') matId = 'crystal_c';
@@ -453,7 +456,8 @@ function salvageItem(uid) {
   const amount = Math.max(1, Math.floor((reqLvl / 5 + 1) * rarityMult));
   state.inventory.splice(idx, 1);
   addToInventory(matId, amount);
-  log(`🔨 Desmontou ${def.name} em ${amount}x ${D().ALL_ITEMS[matId]?.name || matId}`, 'loot');
+  log(`🔨 Desmontou ${def.name} em ${amount}x ${D().ALL_ITEMS[matId]?.name || matId}!`, 'loot');
+  hideItemTooltip();
   updateAllUI(); save();
 }
 
@@ -470,8 +474,15 @@ function getSelectedSet() {
 
 function toggleSelectItem(uid) {
   const set = getSelectedSet();
-  if (set.has(uid)) set.delete(uid);
-  else set.add(uid);
+  const found = state.inventory.find(i => String(i.uid) === String(uid));
+  if (!found) return;
+  const realUid = found.uid;
+  if (set.has(realUid) || set.has(String(realUid))) {
+    set.delete(realUid);
+    set.delete(String(realUid));
+  } else {
+    set.add(realUid);
+  }
   updateInventoryUI();
 }
 
@@ -485,6 +496,19 @@ function selectItemsByFilter(filterFn) {
   updateInventoryUI();
 }
 
+function selectJunkItems() {
+  const set = getSelectedSet();
+  for (const item of state.inventory) {
+    if (item && !item.equipped) {
+      const r = (item.rarity || 'common').toLowerCase();
+      if (r === 'common' || r === 'uncommon') {
+        set.add(item.uid);
+      }
+    }
+  }
+  updateInventoryUI();
+}
+
 function clearItemSelection() {
   const set = getSelectedSet();
   set.clear();
@@ -493,11 +517,11 @@ function clearItemSelection() {
 
 function sellSelectedItems() {
   const set = getSelectedSet();
-  if (set.size === 0) return;
+  if (set.size === 0) { log('Nenhum item selecionado para vender.', 'system'); return; }
   const toDelete = Array.from(set);
   
   const hasHighValue = toDelete.some(uid => {
-    const item = state.inventory.find(i => i.uid === uid);
+    const item = state.inventory.find(i => String(i.uid) === String(uid));
     return isHighValueItem(item);
   });
   if (hasHighValue) {
@@ -508,35 +532,35 @@ function sellSelectedItems() {
 
   let totalGold = 0, count = 0;
   for (const uid of toDelete) {
-    const item = state.inventory.find(i => i.uid === uid);
+    const item = state.inventory.find(i => String(i.uid) === String(uid));
     if (!item || item.equipped) continue;
     const def = D().ALL_ITEMS[item.itemId];
     if (!def) continue;
     const itemQty = item.count || 1;
     const basePrice = def.price || 10;
-    const mult = item.rarity ? D().RARITY[item.rarity].mult : 1;
+    const mult = item.rarity ? (D().RARITY[item.rarity]?.mult || 1) : 1;
     const enchantMult = 1 + (item.enchant || 0) * 0.1;
     const goldEarned = Math.floor(basePrice * mult * enchantMult * 0.4) * itemQty;
     
     totalGold += goldEarned;
     count += itemQty;
-    removeFromInventory(uid, itemQty);
+    removeFromInventory(item.uid, itemQty);
   }
   
   set.clear();
   state.gold += totalGold;
-  log(`💰 Sold ${count} selected item(s) for ${totalGold.toLocaleString()}g!`, 'loot');
+  log(`💰 Vendeu ${count} item(ns) selecionado(s) por ${totalGold.toLocaleString()}g!`, 'loot');
   updateAllUI();
   save();
 }
 
 function salvageSelectedItems() {
   const set = getSelectedSet();
-  if (set.size === 0) return;
+  if (set.size === 0) { log('Nenhum item selecionado para desmontar.', 'system'); return; }
   const toDelete = Array.from(set);
 
   const hasHighValue = toDelete.some(uid => {
-    const item = state.inventory.find(i => i.uid === uid);
+    const item = state.inventory.find(i => String(i.uid) === String(uid));
     return isHighValueItem(item);
   });
   if (hasHighValue) {
@@ -549,7 +573,7 @@ function salvageSelectedItems() {
   const yieldSummary = {};
 
   for (const uid of toDelete) {
-    const item = state.inventory.find(i => i.uid === uid);
+    const item = state.inventory.find(i => String(i.uid) === String(uid));
     if (!item || item.equipped) continue;
     const def = D().ALL_ITEMS[item.itemId];
     if (!def) continue;
@@ -563,31 +587,34 @@ function salvageSelectedItems() {
     const rarityMult = item.rarity ? (D().RARITY[item.rarity]?.mult || 1) : 1;
 
     let matId = 'iron_ore';
-    if (grade === 'S Grade') matId = 'crystal_s';
+    if (grade === 'S Grade' || def.tier === 6) matId = 'crystal_s';
     else if (grade === 'A Grade') matId = 'crystal_a';
     else if (grade === 'B Grade') matId = 'crystal_b';
     else if (grade === 'C Grade') matId = 'crystal_c';
     else if (grade === 'D Grade') matId = 'crystal_d';
     else matId = (def.slot === 'weapon') ? 'iron_ore' : 'cloth';
 
-    const matYield = Math.max(1, Math.floor((reqLvl / 5 + 1) * rarityMult));
-    yieldSummary[matId] = (yieldSummary[matId] || 0) + matYield;
-    
-    const qty = item.count || 1;
-    removeFromInventory(uid, qty);
-    count += qty;
+    const amount = Math.max(1, Math.floor((reqLvl / 5 + 1) * rarityMult));
+    removeFromInventory(item.uid, 1);
+    addToInventory(matId, amount);
+
+    yieldSummary[matId] = (yieldSummary[matId] || 0) + amount;
+    count++;
   }
 
-  for (const [mId, qty] of Object.entries(yieldSummary)) {
-    addToInventory(mId, qty, null);
-  }
-  
   set.clear();
-  log(`🔨 Desmontou ${count} equipamento(s) selecionado(s)!`, 'loot');
+  const summaryStr = Object.entries(yieldSummary)
+    .map(([mId, amt]) => `${amt}x ${D().ALL_ITEMS[mId]?.name || mId}`)
+    .join(', ');
+
+  if (count > 0) {
+    log(`🔨 Desmontou ${count} equipamento(s) e obteve: ${summaryStr || 'materiais'}!`, 'loot');
+  } else {
+    log('Nenhum equipamento válido selecionado para desmontar.', 'system');
+  }
   updateAllUI();
   save();
 }
-
 function useItem(uid) {
   const idx = state.inventory.findIndex(i => i.uid === uid);
   if (idx < 0) return;
@@ -981,7 +1008,20 @@ function updateSkillInfoPanel() {
 
 
 function updateInventoryUI() {
-  return uiUpdateInventoryUI(state, { equipItem, sellItem, salvageItem, useItem, toggleSelectItem, depositToWarehouse, save, log });
+  return uiUpdateInventoryUI(state, {
+    equipItem,
+    sellItem,
+    salvageItem,
+    useItem,
+    toggleSelectItem,
+    sellSelectedItems,
+    salvageSelectedItems,
+    selectJunkItems,
+    clearItemSelection,
+    depositToWarehouse,
+    save,
+    log
+  });
 }
 function updateWarehouseUI() {
   return uiUpdateWarehouseUI(state, { withdrawFromWarehouse });
