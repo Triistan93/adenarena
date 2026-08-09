@@ -517,12 +517,29 @@ export const IDLE_MARKUP = `
 
           <!-- Craft Tab -->
           <div id="tab-craft" class="tab-pane">
-            <div class="craft-head">
-              <h3>Forja &amp; Criação de Itens</h3>
-              <p class="stat-value">Nível de Forja: <span id="craft-level">1</span></p>
+            <div class="craft-head" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
+              <div>
+                <h3 style="margin:0;">Forja Imperial &amp; Criação Universal</h3>
+                <p class="shop-info" style="margin:4px 0 0 0;">Forje qualquer equipamento do jogo: Armas, Armaduras, Joias, Capas, Agathions, Cintos, Talismãs e Consumíveis.</p>
+              </div>
+              <div class="stat-value" style="font-size:14px; background:rgba(212,175,55,0.1); border:1px solid rgba(212,175,55,0.3); padding:6px 14px; border-radius:8px;">
+                🔨 Nível de Forja: <strong id="craft-level" style="color:var(--gilt);">1</strong>
+              </div>
             </div>
+
+            <div class="craft-filters-bar" style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; align-items:center;">
+              <input type="text" id="craft-search-input" placeholder="🔍 Buscar receita por nome..." style="flex:1; min-width:200px; padding:7px 12px; border-radius:6px; border:1px solid rgba(255,255,255,0.15); background:rgba(0,0,0,0.5); color:#fff; font-size:13px;" />
+              <div style="display:flex; gap:6px; flex-wrap:wrap;" id="craft-category-filters">
+                <button class="inv-batch-btn active" data-craft-cat="all">🌟 Todos</button>
+                <button class="inv-batch-btn" data-craft-cat="weapon">⚔ Armas</button>
+                <button class="inv-batch-btn" data-craft-cat="armor">🛡 Armaduras</button>
+                <button class="inv-batch-btn" data-craft-cat="jewel">💍 Joias</button>
+                <button class="inv-batch-btn" data-craft-cat="relic">🧚 Agathions &amp; Relíquias</button>
+                <button class="inv-batch-btn" data-craft-cat="consumable">🧪 Consumíveis</button>
+              </div>
+            </div>
+
             <div id="craft-recipes-view" class="craft-view active">
-              <p class="shop-info">Combine materiais para forjar armas, armaduras e relíquias poderosas.</p>
               <div class="craft-list" id="craft-list"></div>
             </div>
           </div>

@@ -950,49 +950,140 @@ export const MONSTER_DROPS = {
   "forgeOfGods": ["weapon_valakas_blade", "pendant_fire_dragon", "armor_draconic_armor"]
 };
 
-export const CRAFTING_RECIPES = {
-  // --- NO GRADE (Forja Lv 1) ---
+export function generateAllCraftingRecipes(allItemsParam = null) {
+  const allItems = allItemsParam
+    || (typeof window !== 'undefined' && window.GameData?.ALL_ITEMS)
+    || (typeof window !== 'undefined' && window.ALL_ITEMS)
+    || {};
+    
+  const recipes = {};
+
+  for (const [id, def] of Object.entries(allItems)) {
+    if (!def) continue;
+    if (def.slot === 'material') continue; // Materiais de craft brutos não são forjados de si mesmos
+
+    const level = def.req?.level || def.level || 1;
+    const slot = def.slot || 'other';
+
+    let craftLevel = 1;
+    let baseGold = 250;
+    let reqs = [];
+
+    if (level < 20) {
+      craftLevel = 1;
+      baseGold = 250;
+    } else if (level < 40) {
+      craftLevel = 2;
+      baseGold = 1200;
+    } else if (level < 52) {
+      craftLevel = 4;
+      baseGold = 3500;
+    } else if (level < 62) {
+      craftLevel = 6;
+      baseGold = 8000;
+    } else if (level < 76) {
+      craftLevel = 7;
+      baseGold = 18000;
+    } else if (level < 80) {
+      craftLevel = 8;
+      baseGold = 45000;
+    } else {
+      craftLevel = 10;
+      baseGold = 90000;
+    }
+
+    if (slot === 'weapon') {
+      if (level < 20) reqs = [{ id: 'iron_ore', count: 10 }, { id: 'suede', count: 5 }];
+      else if (level < 40) reqs = [{ id: 'iron_ore', count: 25 }, { id: 'steel', count: 10 }];
+      else if (level < 52) reqs = [{ id: 'steel', count: 30 }, { id: 'coarse_bone_powder', count: 15 }];
+      else if (level < 62) reqs = [{ id: 'mithril_ore', count: 40 }, { id: 'enchanted_stone', count: 20 }];
+      else if (level < 76) reqs = [{ id: 'oriharukon_ore', count: 60 }, { id: 'adamantite', count: 30 }];
+      else if (level < 80) reqs = [{ id: 'oriharukon_ore', count: 100 }, { id: 'adamantite', count: 50 }];
+      else reqs = [{ id: 'oriharukon_ore', count: 150 }, { id: 'adamantite', count: 80 }, { id: 'frost_crystal', count: 15 }];
+    } else if (['armor', 'helmet', 'boots', 'gloves', 'legs', 'shield', 'sigil'].includes(slot)) {
+      if (level < 20) reqs = [{ id: 'iron_ore', count: 8 }, { id: 'suede', count: 6 }];
+      else if (level < 40) reqs = [{ id: 'iron_ore', count: 20 }, { id: 'crafted_leather', count: 10 }];
+      else if (level < 52) reqs = [{ id: 'steel', count: 25 }, { id: 'crafted_leather', count: 15 }];
+      else if (level < 62) reqs = [{ id: 'mithril_ore', count: 35 }, { id: 'steel_ingot', count: 20 }];
+      else if (level < 76) reqs = [{ id: 'oriharukon_ore', count: 50 }, { id: 'adamantite', count: 25 }];
+      else if (level < 80) reqs = [{ id: 'oriharukon_ore', count: 80 }, { id: 'adamantite', count: 40 }];
+      else reqs = [{ id: 'oriharukon_ore', count: 120 }, { id: 'adamantite', count: 60 }, { id: 'frost_crystal', count: 10 }];
+    } else if (['ring', 'earring', 'necklace'].includes(slot)) {
+      if (level < 20) reqs = [{ id: 'silver_nugget', count: 6 }, { id: 'charcoal', count: 5 }];
+      else if (level < 40) reqs = [{ id: 'silver_nugget', count: 15 }, { id: 'enchanted_stone', count: 8 }];
+      else if (level < 62) reqs = [{ id: 'silver_nugget', count: 30 }, { id: 'enchanted_stone', count: 15 }];
+      else reqs = [{ id: 'silver_nugget', count: 50 }, { id: 'divine_crystal', count: 8 }];
+    } else if (slot === 'agathion' || id.includes('agathion') || id.includes('doll')) {
+      reqs = [{ id: 'divine_crystal', count: 5 }, { id: 'adamantite', count: 20 }, { id: 'magic_powder', count: 30 }];
+      baseGold = Math.max(baseGold, 25000);
+      craftLevel = Math.max(craftLevel, 5);
+    } else if (slot === 'cloak') {
+      reqs = [{ id: 'suede', count: 30 }, { id: 'thread', count: 25 }, { id: 'crafted_leather', count: 15 }];
+      craftLevel = Math.max(craftLevel, 3);
+    } else if (slot === 'belt') {
+      reqs = [{ id: 'crafted_leather', count: 25 }, { id: 'steel', count: 15 }, { id: 'iron_ore', count: 20 }];
+      craftLevel = Math.max(craftLevel, 3);
+    } else if (slot === 'talisman' || id.includes('talisman')) {
+      reqs = [{ id: 'enchanted_stone', count: 12 }, { id: 'divine_crystal', count: 4 }];
+      baseGold = Math.max(baseGold, 15000);
+      craftLevel = Math.max(craftLevel, 4);
+    } else if (id.includes('pendant')) {
+      reqs = [{ id: 'dragon_bone', count: 15 }, { id: 'divine_crystal', count: 10 }];
+      baseGold = Math.max(baseGold, 50000);
+      craftLevel = Math.max(craftLevel, 7);
+    } else if (slot === 'potion' || slot === 'consumable') {
+      reqs = [{ id: 'holy_water', count: 5 }, { id: 'fire_reagent', count: 3 }];
+      baseGold = 200;
+    } else if (slot === 'scroll' || id.includes('scroll')) {
+      reqs = [{ id: 'magic_powder', count: 15 }, { id: 'crystal_blue_d', count: 5 }];
+      baseGold = 1800;
+    } else {
+      reqs = [{ id: 'iron_ore', count: 10 }, { id: 'suede', count: 5 }];
+    }
+
+    recipes[id] = {
+      id,
+      itemId: id,
+      level: craftLevel * 10,
+      craftLevel,
+      gold: baseGold,
+      reqs
+    };
+  }
+
+  return recipes;
+}
+
+const STATIC_CRAFTING_RECIPES = {
   "weapon_composition_bow": { "id": "weapon_composition_bow", "level": 1, "gold": 250, "reqs": [{ "id": "iron_ore", "count": 10 }, { "id": "suede", "count": 5 }] },
-  "weapon_falchion_sword": { "id": "weapon_falchion_sword", "level": 1, "gold": 250, "reqs": [{ "id": "iron_ore", "count": 10 }, { "id": "charcoal", "count": 5 }] },
-  "weapon_crucifix_of_blessing_magicblunt": { "id": "weapon_crucifix_of_blessing_magicblunt", "level": 1, "gold": 250, "reqs": [{ "id": "branch", "count": 8 }, { "id": "bone_powder", "count": 5 }] },
-  "armor_bone_breastplate": { "id": "armor_bone_breastplate", "level": 1, "gold": 300, "reqs": [{ "id": "bone", "count": 12 }, { "id": "cloth", "count": 8 }] },
-  "armor_devotion_armor_robe": { "id": "armor_devotion_armor_robe", "level": 1, "gold": 300, "reqs": [{ "id": "cloth", "count": 15 }, { "id": "silver_thread", "count": 6 }] },
-  "soulshot_ng": { "id": "soulshot_ng", "level": 1, "gold": 100, "reqs": [{ "id": "iron_ore", "count": 5 }, { "id": "charcoal", "count": 5 }] },
-  "spiritshot_ng": { "id": "spiritshot_ng", "level": 1, "gold": 100, "reqs": [{ "id": "magic_powder", "count": 5 }, { "id": "charcoal", "count": 5 }] },
-
-  // --- GRADE D (Forja Lv 2 - Lv 3) ---
-  "weapon_crimson_sword": { "id": "weapon_crimson_sword", "level": 20, "gold": 1200, "reqs": [{ "id": "iron_ore", "count": 25 }, { "id": "steel", "count": 10 }] },
-  "weapon_bow_of_silence": { "id": "weapon_bow_of_silence", "level": 20, "gold": 1200, "reqs": [{ "id": "iron_ore", "count": 20 }, { "id": "braided_hemp", "count": 12 }] },
-  "weapon_bronze_mace": { "id": "weapon_bronze_mace", "level": 20, "gold": 1200, "reqs": [{ "id": "iron_ore", "count": 25 }, { "id": "bronze_coin", "count": 8 }] },
-  "armor_brigandine_armor_heavy": { "id": "armor_brigandine_armor_heavy", "level": 25, "gold": 1500, "reqs": [{ "id": "iron_ore", "count": 30 }, { "id": "crafted_leather", "count": 15 }] },
-  "hp_potion_m": { "id": "hp_potion_m", "level": 20, "gold": 200, "reqs": [{ "id": "holy_water", "count": 5 }, { "id": "fire_reagent", "count": 3 }] },
-
-  // --- GRADE C (Forja Lv 4 - Lv 5) ---
-  "weapon_darkelven_dagger": { "id": "weapon_darkelven_dagger", "level": 40, "gold": 3500, "reqs": [{ "id": "steel", "count": 30 }, { "id": "coarse_bone_powder", "count": 15 }] },
-  "weapon_battle_axe": { "id": "weapon_battle_axe", "level": 40, "gold": 3500, "reqs": [{ "id": "iron_ore", "count": 45 }, { "id": "steel", "count": 20 }] },
   "armor_full_plate_heavy_armor": { "id": "armor_full_plate_heavy_armor", "level": 40, "gold": 5000, "reqs": [{ "id": "iron_ore", "count": 50 }, { "id": "crafted_leather", "count": 20 }, { "id": "steel", "count": 10 }] },
-  "scroll_of_enchant_weapon_": { "id": "scroll_of_enchant_weapon_", "level": 40, "gold": 2500, "reqs": [{ "id": "magic_powder", "count": 20 }, { "id": "crystal_blue_d", "count": 5 }] },
-  "scroll_of_enchant_armor": { "id": "scroll_of_enchant_armor", "level": 40, "gold": 1800, "reqs": [{ "id": "magic_powder", "count": 15 }, { "id": "crystal_blue_d", "count": 5 }] },
-
-  // --- GRADE B (Forja Lv 6) ---
-  "weapon_archmage_staff": { "id": "weapon_archmage_staff", "level": 52, "gold": 8000, "reqs": [{ "id": "mithril_ore", "count": 40 }, { "id": "magic_powder", "count": 25 }] },
-  "weapon_bow_of_peril": { "id": "weapon_bow_of_peril", "level": 52, "gold": 8000, "reqs": [{ "id": "mithril_ore", "count": 45 }, { "id": "metallic_fiber", "count": 20 }] },
-  "armor_avadon_heavy_armor": { "id": "armor_avadon_heavy_armor", "level": 52, "gold": 10000, "reqs": [{ "id": "mithril_ore", "count": 50 }, { "id": "steel_ingot", "count": 25 }] },
-
-  // --- GRADE A (Forja Lv 7) ---
-  "weapon_divine_sword": { "id": "weapon_divine_sword", "level": 62, "gold": 18000, "reqs": [{ "id": "oriharukon_ore", "count": 60 }, { "id": "adamantite", "count": 30 }] },
-  "weapon_bloody_orchid_dagger": { "id": "weapon_bloody_orchid_dagger", "level": 62, "gold": 18000, "reqs": [{ "id": "blood_gem", "count": 20 }, { "id": "adamantite", "count": 30 }] },
-  "armor_dark_crystal_heavy_armor": { "id": "armor_dark_crystal_heavy_armor", "level": 62, "gold": 22000, "reqs": [{ "id": "oriharukon_ore", "count": 70 }, { "id": "adamantite", "count": 35 }] },
-
-  // --- GRADE S (Forja Lv 8 - Lv 9) ---
-  "weapon_draconic_bow": { "id": "weapon_draconic_bow", "level": 76, "gold": 45000, "reqs": [{ "id": "oriharukon_ore", "count": 100 }, { "id": "crystal_gold_s", "count": 20 }] },
-  "weapon_angel_slayer": { "id": "weapon_angel_slayer", "level": 76, "gold": 45000, "reqs": [{ "id": "oriharukon_ore", "count": 100 }, { "id": "adamantite", "count": 50 }] },
-  "armor_draconic_armor": { "id": "armor_draconic_armor", "level": 76, "gold": 50000, "reqs": [{ "id": "oriharukon_ore", "count": 100 }, { "id": "adamantite", "count": 50 }] },
-
-  // --- FROST LORD APEX (Forja Lv 10) ---
-  "weapon_frost_lord_sword": { "id": "weapon_frost_lord_sword", "level": 85, "gold": 90000, "reqs": [{ "id": "oriharukon_ore", "count": 150 }, { "id": "adamantite", "count": 80 }, { "id": "crystal_gold_s", "count": 30 }] },
-  "weapon_frost_lord_staff": { "id": "weapon_frost_lord_staff", "level": 85, "gold": 90000, "reqs": [{ "id": "mithril_ore", "count": 150 }, { "id": "magic_powder", "count": 80 }, { "id": "crystal_gold_s", "count": 30 }] }
+  "armor_draconic_armor": { "id": "armor_draconic_armor", "level": 76, "gold": 50000, "reqs": [{ "id": "oriharukon_ore", "count": 100 }, { "id": "adamantite", "count": 50 }] }
 };
+
+export const CRAFTING_RECIPES = new Proxy(STATIC_CRAFTING_RECIPES, {
+  get(target, prop) {
+    if (prop in target) return target[prop];
+    const allItems = (typeof window !== 'undefined' && (window.GameData?.ALL_ITEMS || window.ALL_ITEMS)) || {};
+    if (allItems[prop]) {
+      const generated = generateAllCraftingRecipes(allItems);
+      Object.assign(target, generated);
+      return target[prop];
+    }
+    return target[prop];
+  },
+  ownKeys(target) {
+    const allItems = (typeof window !== 'undefined' && (window.GameData?.ALL_ITEMS || window.ALL_ITEMS)) || {};
+    const generated = generateAllCraftingRecipes(allItems);
+    Object.assign(target, generated);
+    return Reflect.ownKeys(target);
+  },
+  getOwnPropertyDescriptor(target, prop) {
+    const allItems = (typeof window !== 'undefined' && (window.GameData?.ALL_ITEMS || window.ALL_ITEMS)) || {};
+    const generated = generateAllCraftingRecipes(allItems);
+    Object.assign(target, generated);
+    return Reflect.getOwnPropertyDescriptor(target, prop);
+  }
+});
 
 export const SHOP_INVENTORY = [
   "hp_potion_s",

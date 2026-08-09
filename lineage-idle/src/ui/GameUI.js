@@ -1950,30 +1950,93 @@ function matchesSlotFilter(def, filterKey) {
 
 export function updateCraftUI(state, callbacks = {}) {
   const craftLvlEl = findElement('craft-level-num') || findElement('craft-level');
-  if (craftLvlEl) craftLvlEl.textContent = `Lv. ${state.craftLevel || 1}`;
+  if (craftLvlEl) craftLvlEl.textContent = `${state.craftLevel || 1}`;
 
   const container = findElement('craft-recipes-container') || findElement('craft-list');
   if (!container) return;
 
   const gData = D();
-  const recipes = gData?.CRAFTING_RECIPES || {};
-  const recipeList = Array.isArray(recipes) ? recipes : Object.values(recipes);
+  const allItems = gData?.ALL_ITEMS || {};
+  let recipes = gData?.CRAFTING_RECIPES;
 
-  container.innerHTML = recipeList.map(r => {
-    if (!r) return '';
+  if (gData?.generateAllCraftingRecipes) {
+    recipes = gData.generateAllCraftingRecipes(allItems);
+  } else if (!recipes || Object.keys(recipes).length <= 3) {
+    recipes = generateAllCraftingRecipes(allItems);
+  }
+
+  const recipeList = Object.values(recipes).filter(Boolean);
+
+  // Inicializa listeners para barra de busca e categorias (uma única vez)
+  if (!window._craftListenersBound) {
+    window._craftListenersBound = true;
+
+    const searchInput = findElement('craft-search-input');
+    if (searchInput) {
+      searchInput.oninput = (e) => {
+        window._craftSearchTerm = e.target.value;
+        updateCraftUI(state, callbacks);
+      };
+    }
+
+    const catButtons = document.querySelectorAll('#craft-category-filters [data-craft-cat]');
+    catButtons.forEach(btn => {
+      btn.onclick = () => {
+        catButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        window._craftSelectedCategory = btn.dataset.craftCat;
+        updateCraftUI(state, callbacks);
+      };
+    });
+  }
+
+  const activeCat = window._craftSelectedCategory || 'all';
+  const searchTerm = (window._craftSearchTerm || '').toLowerCase().trim();
+
+  const filtered = recipeList.filter(r => {
     const itemId = r.itemId || r.id;
-    const def = gData?.ALL_ITEMS?.[itemId];
-    if (!def) return '';
+    const def = allItems[itemId];
+    if (!def) return false;
 
-    const reqLvl = r.level ? getCraftLevelReq(r.level) : 1;
-    const isLevelOk = (state.craftLevel || 1) >= reqLvl;
+    // Filtro por Categoria
+    if (activeCat !== 'all') {
+      const slot = def.slot || '';
+      if (activeCat === 'weapon' && slot !== 'weapon') return false;
+      if (activeCat === 'armor' && !['armor', 'helmet', 'boots', 'gloves', 'legs', 'shield', 'sigil'].includes(slot)) return false;
+      if (activeCat === 'jewel' && !['ring', 'earring', 'necklace'].includes(slot)) return false;
+      if (activeCat === 'relic' && !['agathion', 'cloak', 'belt', 'talisman', 'hair'].includes(slot) && !itemId.includes('doll') && !itemId.includes('talisman') && !itemId.includes('pendant')) return false;
+      if (activeCat === 'consumable' && !['potion', 'consumable', 'scroll', 'material'].includes(slot)) return false;
+    }
+
+    // Filtro por Busca de Nome
+    if (searchTerm && !def.name.toLowerCase().includes(searchTerm)) {
+      return false;
+    }
+
+    return true;
+  });
+
+  if (filtered.length === 0) {
+    container.innerHTML = `
+      <div style="grid-column: 1 / -1; padding: 40px; text-align: center; color: var(--text-muted);">
+        <p style="font-size: 16px; margin-bottom: 8px;">🔍 Nenhum item encontrado para a busca atual.</p>
+        <p style="font-size: 13px;">Tente alterar a categoria ou o termo digitado.</p>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = filtered.map(r => {
+    const itemId = r.itemId || r.id;
+    const def = allItems[itemId];
+    const reqLvl = r.craftLevel || (r.level ? getCraftLevelReq(r.level) : 1);
     const mats = getRecipeMaterials(r);
 
     const matsHtml = mats.map(m => {
-      const matDef = gData?.ALL_ITEMS?.[m.matId];
+      const matDef = allItems[m.matId];
       const count = getInventoryCount(state, m.matId);
       const isOk = count >= m.qty;
-      return `<span style="color:${isOk ? '#4ade80' : '#ef4444'};">${matDef ? matDef.name : m.matId}: ${count}/${m.qty}</span>`;
+      return `<span style="color:${isOk ? '#4ade80' : '#ef4444'}; font-weight: 500;">${matDef ? matDef.name : m.matId}: ${count}/${m.qty}</span>`;
     }).join(' · ');
 
     const craftable = canCraft(state, itemId);
@@ -1984,7 +2047,7 @@ export function updateCraftUI(state, callbacks = {}) {
           <span class="craft-recipe-icon">${getItemIcon(def)}</span>
           <div>
             <div class="craft-recipe-title">${def.name}</div>
-            <div class="craft-recipe-sub">Requer Forja Lv.${reqLvl}</div>
+            <div class="craft-recipe-sub">Requer Forja Lv.${reqLvl} · 🪙 ${r.gold ? r.gold.toLocaleString() : 250} Adena</div>
           </div>
         </div>
         <div class="craft-mats-line">${matsHtml}</div>

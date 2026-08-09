@@ -23,12 +23,18 @@ export function getCraftLevelReq(recipeLevel) {
  * @returns {Object|null}
  */
 export function getRecipeDef(recipeId) {
-  const recipesData = D()?.CRAFTING_RECIPES;
-  if (!recipesData) return null;
+  const gData = D();
+  const recipesData = gData?.CRAFTING_RECIPES;
+  if (recipesData && recipesData[recipeId]) return recipesData[recipeId];
   if (Array.isArray(recipesData)) {
-    return recipesData.find(r => r.id === recipeId || r.itemId === recipeId) || null;
+    const found = recipesData.find(r => r.id === recipeId || r.itemId === recipeId);
+    if (found) return found;
   }
-  return recipesData[recipeId] || null;
+  if (gData?.generateAllCraftingRecipes && gData?.ALL_ITEMS) {
+    const generated = gData.generateAllCraftingRecipes(gData.ALL_ITEMS);
+    if (generated[recipeId]) return generated[recipeId];
+  }
+  return null;
 }
 
 /**
