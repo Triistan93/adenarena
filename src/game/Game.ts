@@ -2179,8 +2179,11 @@ export class Game {
     // Character Name / Class Header
     ctx.textAlign = "left";
     ctx.font = "800 13px Cinzel, serif";
-    ctx.fillStyle = "#fff";
-    ctx.fillText(`${this.cfg.cls.name} (${this.cfg.race.name})`, barX, 32);
+    ctx.fillStyle = "#ffd877";
+    const heroTitle = this.idleState
+      ? `${this.idleState.charName || this.idleState.heroName || "Herói"} · Lv.${this.level} (${this.cfg.cls.name})`
+      : `${this.cfg.cls.name} (${this.cfg.race.name})`;
+    ctx.fillText(heroTitle, barX, 32);
 
     // HP Bar
     const hpRatio = clamp(this.hp / this.maxHp, 0, 1);
