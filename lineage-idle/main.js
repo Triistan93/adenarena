@@ -400,10 +400,14 @@ const ALL_EQUIP_SLOTS = [
 ];
 
 function resolveEquipSlot(slot) { return serviceResolveEquipSlot(slot, state.equipment); }
-function equipItem(uid) {
+function equipItem(a, b) {
+  const uid = (typeof a === 'string' && a) ? a : (typeof b === 'string' ? b : null);
+  if (!uid) return;
   return serviceEquipItem(state, uid, { log, updateAllUI, save, classSatisfies, getClass });
 }
-function unequipItem(slot) {
+function unequipItem(a, b) {
+  const slot = (typeof a === 'string' && a) ? a : (typeof b === 'string' ? b : null);
+  if (!slot) return;
   return serviceUnequipItem(state, slot, { log, updateAllUI, save });
 }
 

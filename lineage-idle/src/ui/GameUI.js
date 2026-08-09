@@ -297,10 +297,10 @@ export function showItemTooltip(e, item, state, callbacks = {}) {
       ev.stopPropagation();
       const action = btn.dataset.ttAction;
       const uid = btn.dataset.uid;
-      if (action === 'equip'   && callbacks.equipItem)   callbacks.equipItem(state, uid, callbacks);
+      if (action === 'equip'   && callbacks.equipItem)   callbacks.equipItem(uid, state);
       if (action === 'unequip' && callbacks.unequipItem) {
         const slot = btn.dataset.slot;
-        callbacks.unequipItem(state, slot, callbacks);
+        callbacks.unequipItem(slot, state);
       }
       if (action === 'sell'    && callbacks.sellItem)    callbacks.sellItem(uid);
       if (action === 'salvage' && callbacks.salvageItem) callbacks.salvageItem(uid);
@@ -729,9 +729,9 @@ export function updateInventoryUI(state, callbacks = {}) {
       e.preventDefault();
       e.stopPropagation();
       if (item.equipped) {
-        if (callbacks.unequipItem) callbacks.unequipItem(state, item.equippedSlot || resolveEquipSlot(def.slot, state.equipment), callbacks);
+        if (callbacks.unequipItem) callbacks.unequipItem(item.equippedSlot || resolveEquipSlot(def.slot, state.equipment), state);
       } else {
-        if (callbacks.equipItem) callbacks.equipItem(state, item.uid, callbacks);
+        if (callbacks.equipItem) callbacks.equipItem(item.uid, state);
       }
     };
 
@@ -820,7 +820,7 @@ export function updateEquipmentUI(state, callbacks = {}) {
       slotEl.onmouseenter = (e) => showItemTooltip(e, item, state, callbacks);
       slotEl.onmouseleave = () => hideItemTooltip();
       slotEl.onclick = () => {
-        if (callbacks.unequipItem) callbacks.unequipItem(state, slot, callbacks);
+        if (callbacks.unequipItem) callbacks.unequipItem(slot, state);
       };
 
       item.equipped = true;
