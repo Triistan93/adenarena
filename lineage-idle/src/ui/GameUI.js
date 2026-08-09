@@ -2017,10 +2017,35 @@ export function updateCraftUI(state, callbacks = {}) {
   const craftLvlEl = findElement('craft-level-num') || findElement('craft-level');
   if (craftLvlEl) craftLvlEl.textContent = `${state.craftLevel || 1}`;
 
+  const subTab = window._forgeSubTab || 'craft';
+  const root = getRoot();
+
+  root.querySelectorAll('#forge-subtab-buttons [data-forge-tab], .forge-subtab-btn').forEach(btn => {
+    const isActive = (btn.dataset.forgeTab === subTab);
+    btn.classList.toggle('active', isActive);
+    btn.style.background = isActive ? 'linear-gradient(180deg,#d4a744,#8a641c)' : 'rgba(252,211,77,0.1)';
+    btn.style.color = isActive ? '#000' : '#ffd877';
+    btn.style.borderColor = isActive ? '#ffe699' : 'rgba(212,167,68,0.3)';
+    btn.onclick = (e) => {
+      e.preventDefault();
+      const targetTab = btn.dataset.forgeTab;
+      if (typeof window !== 'undefined' && typeof window.setForgeSubTab === 'function') {
+        window.setForgeSubTab(targetTab);
+      } else {
+        window._forgeSubTab = targetTab;
+        updateCraftUI(state, callbacks);
+      }
+    };
+  });
+
+  const filtersBar = findElement('craft-filters-bar');
+  if (filtersBar) {
+    filtersBar.style.display = (subTab === 'craft') ? 'flex' : 'none';
+  }
+
   const container = findElement('craft-recipes-container') || findElement('craft-list');
   if (!container) return;
 
-  const subTab = window._forgeSubTab || 'craft';
   if (subTab === 'soulcrystal') {
     renderForgeSoulCrystals(container, state);
     return;

@@ -4849,6 +4849,11 @@ export function init() {
     window.MANOR_SEEDS = MANOR_SEEDS;
     window.CASTLES_DEFS = CASTLES_DEFS;
     window.EXPEDITION_DESTINATIONS = EXPEDITION_DESTINATIONS;
+    window.setForgeSubTab = (tabKey) => {
+      window._forgeSubTab = tabKey;
+      updateAllUI();
+    };
+    window.updateAllUI = updateAllUI;
     window.buySoulCrystal = buySoulCrystal;
     window.fuseSoulCrystals = fuseSoulCrystals;
     window.socketSoulCrystalToWeapon = socketSoulCrystalToWeapon;

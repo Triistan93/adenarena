@@ -545,11 +545,11 @@ export const IDLE_MARKUP = `
                 🔨 Nível de Forja: <strong id="craft-level" style="color:var(--gilt);">1</strong>
               </div>
 
-              <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; width:100%; border-bottom:1px solid rgba(212,167,68,0.3); padding-bottom:10px;">
-                <button onclick="window._forgeSubTab = 'craft'; window.updateAllUI();" class="inv-batch-btn" style="font-family:'Cinzel',serif; font-weight:bold;">⚒️ Crafting</button>
-                <button onclick="window._forgeSubTab = 'soulcrystal'; window.updateAllUI();" class="inv-batch-btn" style="font-family:'Cinzel',serif; font-weight:bold;">🔮 Soul Crystals (SA)</button>
-                <button onclick="window._forgeSubTab = 'masterwork'; window.updateAllUI();" class="inv-batch-btn" style="font-family:'Cinzel',serif; font-weight:bold;">✨ Mestre Pushkin MW</button>
-                <button onclick="window._forgeSubTab = 'tattoos'; window.updateAllUI();" class="inv-batch-btn" style="font-family:'Cinzel',serif; font-weight:bold;">🖊️ Tatuagens &amp; Dyes</button>
+              <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; width:100%; border-bottom:1px solid rgba(212,167,68,0.3); padding-bottom:10px;" id="forge-subtab-buttons">
+                <button onclick="window.setForgeSubTab('craft')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="craft" style="font-family:'Cinzel',serif; font-weight:bold;">⚒️ Crafting</button>
+                <button onclick="window.setForgeSubTab('soulcrystal')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="soulcrystal" style="font-family:'Cinzel',serif; font-weight:bold;">🔮 Soul Crystals (SA)</button>
+                <button onclick="window.setForgeSubTab('masterwork')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="masterwork" style="font-family:'Cinzel',serif; font-weight:bold;">✨ Mestre Pushkin MW</button>
+                <button onclick="window.setForgeSubTab('tattoos')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="tattoos" style="font-family:'Cinzel',serif; font-weight:bold;">🖊️ Tatuagens &amp; Dyes</button>
               </div>
             </div>
 
