@@ -182,8 +182,8 @@ export function showItemTooltip(e, item, state, callbacks = {}) {
   const rarityDef = gData?.RARITY?.[rarity] || {};
   const rarityName = rarityDef.name || rarity;
   const rarityColor = rarityDef.color || '#c8a84e';
+  const mult = rarityDef.mult || 1;
 
-  // Mapa de cores por raridade
   const RARITY_GLOW = {
     common:    'none',
     uncommon:  '0 0 8px rgba(16,185,129,0.5)',
@@ -199,17 +199,32 @@ export function showItemTooltip(e, item, state, callbacks = {}) {
     legendary: 'rgba(45,30,5,0.97)',
   };
 
-  let statsStr = '';
-  if (def.stats) {
-    const statsList = Object.entries(def.stats).map(([k, v]) => `${k.toUpperCase()}: +${v}`);
-    if (statsList.length > 0) statsStr = `<div class="tooltip-stats">${statsList.join(' · ')}</div>`;
-  }
+  // ─── Stats base diretos (atk, def, matk, etc.) ────────────────────────────
+  const STAT_KEYS = ['atk','def','matk','mdef','hp','mp','eva','crit','speed','lifesteal'];
+  const STAT_LABEL = { atk:'ATK', def:'DEF', matk:'M.ATK', mdef:'M.DEF', hp:'HP', mp:'MP', eva:'EVA', crit:'CRIT', speed:'SPD', lifesteal:'LIFESTEAL' };
+  const enchant = item.enchant || 0;
+  const enchantMult = 1 + (enchant <= 3 ? enchant * 0.12 : (0.36 + (enchant - 3) * 0.15));
+  const foundationMult = item.foundation ? 1.3 : 1;
 
-  // ─── Afixos: resolve nome pelo AFFIX_MAP usando o id ──────────────────────
+  let statsHtml = '';
+  for (const s of STAT_KEYS) {
+    if (def[s]) {
+      const v = Math.floor(Number(def[s]) * mult * enchantMult * foundationMult);
+      const suffix = s === 'crit' ? '%' : '';
+      statsHtml += `<div style="display:flex;justify-content:space-between;font-size:11px;margin:1px 0;">`
+        + `<span style="color:#aaa;">${STAT_LABEL[s]}</span>`
+        + `<span style="color:#e8d87e;font-weight:600;">+${v}${suffix}</span>`
+        + `</div>`;
+    }
+  }
+  const statsStr = statsHtml
+    ? `<div style="margin:6px 0 2px;padding:4px 0;border-top:1px solid rgba(255,255,255,0.1);">${statsHtml}</div>`
+    : '';
+
+  // ─── Afixos especiais ─────────────────────────────────────────────────────
   let affixesStr = '';
   if (item.affixes && item.affixes.length > 0) {
     const affixLines = item.affixes.map(a => {
-      // Suporte a formato antigo (a.name) e novo (a.id → lookup)
       const affDef = (AFFIX_MAP || {})[a.id] || (gData?.AFFIX_MAP || {})[a.id];
       if (affDef && affDef.name) {
         const label = affDef.name.replace('{value}', a.value ?? a.val ?? '');
@@ -217,14 +232,30 @@ export function showItemTooltip(e, item, state, callbacks = {}) {
       } else if (a.name) {
         return `<div style="color:#f0cd7e;font-size:11px;font-weight:600;margin:1px 0;">✦ ${a.name}: +${a.value}</div>`;
       }
-      return ''; // ignora afixos com id inválido
+      return '';
     }).filter(Boolean);
     if (affixLines.length > 0) {
-      affixesStr = `<div style="margin-top:6px;padding-top:4px;border-top:1px dashed ${rarityColor}40;">`
+      affixesStr = `<div style="margin-top:6px;padding-top:4px;border-top:1px dashed ${rarityColor}50;">`
         + `<div style="font-size:9px;font-weight:bold;color:${rarityColor};text-transform:uppercase;letter-spacing:0.5px;margin-bottom:3px;">✦ Afixos Especiais</div>`
         + affixLines.join('')
         + `</div>`;
     }
+  }
+
+  // ─── Botões de ação ───────────────────────────────────────────────────────
+  let actionsHtml = '';
+  if (callbacks.onEquip || callbacks.onUnequip || callbacks.onSell) {
+    actionsHtml = `<div style="display:flex;gap:4px;margin-top:8px;flex-wrap:wrap;">`;
+    if (item.equipped && callbacks.onUnequip) {
+      actionsHtml += `<button onclick="(${callbacks.onUnequip.toString()})(event)" style="flex:1;padding:4px 6px;background:linear-gradient(180deg,#5a4020,#2a1a08);border:1px solid #a07030;border-radius:4px;color:#e8c870;font-size:10px;cursor:pointer;">Unequip</button>`;
+    } else if (!item.equipped && callbacks.onEquip) {
+      actionsHtml += `<button onclick="(${callbacks.onEquip.toString()})(event)" style="flex:1;padding:4px 6px;background:linear-gradient(180deg,#204050,#0a1a28);border:1px solid #305080;border-radius:4px;color:#70b8e8;font-size:10px;cursor:pointer;">Equip</button>`;
+    }
+    if (callbacks.onSell) {
+      const sellPrice = Math.floor((def.price || 10) * 0.4 * mult);
+      actionsHtml += `<button onclick="(${callbacks.onSell.toString()})(event)" style="flex:1;padding:4px 6px;background:linear-gradient(180deg,#3a2010,#1a0a00);border:1px solid #703010;border-radius:4px;color:#e88050;font-size:10px;cursor:pointer;">Vender ${sellPrice}g</button>`;
+    }
+    actionsHtml += `</div>`;
   }
 
   tooltip.style.background = RARITY_BG[rarity] || RARITY_BG.common;
@@ -233,13 +264,14 @@ export function showItemTooltip(e, item, state, callbacks = {}) {
 
   tooltip.innerHTML = `
     <div style="margin-bottom:4px;">
-      <span class="tooltip-title" style="color:${rarityColor};font-weight:bold;font-size:13px;text-shadow:0 0 8px ${rarityColor}60;">${escapeHTML(displayName)}</span>
+      <span style="color:${rarityColor};font-weight:bold;font-size:13px;text-shadow:0 0 8px ${rarityColor}60;">${escapeHTML(displayName)}</span>
     </div>
     <div style="color:${rarityColor};font-size:11px;font-weight:600;margin-bottom:2px;">${rarityName}</div>
-    <div style="color:var(--text-muted,#888);font-size:10px;text-transform:uppercase;margin-bottom:4px;">${def.slot ? def.slot.toUpperCase() : 'ITEM'}${def.req?.level ? ` · Req Lv.${def.req.level}` : ''}</div>
+    <div style="color:#888;font-size:10px;text-transform:uppercase;margin-bottom:4px;">${def.slot ? def.slot.toUpperCase() : 'ITEM'}${def.req?.level ? ` · Req Lv.${def.req.level}` : ''}</div>
     ${statsStr}
     ${affixesStr}
-    <div style="color:#aaa;font-size:10px;margin-top:4px;font-style:italic;">${escapeHTML(def.desc || '')}</div>
+    <div style="color:#777;font-size:10px;margin-top:4px;font-style:italic;">${escapeHTML(def.desc || '')}</div>
+    ${actionsHtml}
   `;
 
   tooltip.style.display = 'block';

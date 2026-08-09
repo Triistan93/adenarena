@@ -101,11 +101,12 @@ const ARCHETYPE_GROUPS = {
 
 /**
  * Retorna os tags de archetype do jogador, navegando a árvore de classes.
+ * Retorna null se não conseguir determinar (modo permissivo: pode equipar tudo).
  * @param {string} playerClassId
- * @returns {string[]}
+ * @returns {string[]|null}
  */
 export function getPlayerArchetypes(playerClassId) {
-  if (!playerClassId) return ['fighter'];
+  if (!playerClassId) return null; // sem classe = permissivo
   const classes = (typeof window !== 'undefined')
     ? (window.EchoData?.CLASSES_ECHO || window.GameData?.CLASSES || {})
     : {};
@@ -116,7 +117,6 @@ export function getPlayerArchetypes(playerClassId) {
     visited.add(current);
     const def = classes[current];
     if (!def) break;
-    // Verifica archetype da definição de classe
     const arch = def.archetype || def.skillTree;
     if (arch) {
       const base = ARCHETYPE_ALIASES[arch.toLowerCase()];
@@ -127,7 +127,7 @@ export function getPlayerArchetypes(playerClassId) {
   // Fallback pelo ID da própria classe
   const base = ARCHETYPE_ALIASES[playerClassId.toLowerCase()];
   if (base) return ARCHETYPE_GROUPS[base] || [base];
-  return ['fighter']; // fallback seguro
+  return null; // desconhecido = permissivo (pode equipar)
 }
 
 // ─── Validação Unificada ─────────────────────────────────────────────────────
@@ -154,6 +154,9 @@ export function canEquipByType(playerClassId, itemDef, classSatisfiesFn) {
 
   const slot = (itemDef.slot || '').toLowerCase();
   const archetypes = getPlayerArchetypes(playerClassId);
+
+  // Se archetypes é null = classe desconhecida = modo permissivo, pode equipar tudo
+  if (!archetypes) return { ok: true, reason: null };
 
   // 2. Armaduras
   if (['armor', 'helmet', 'boots', 'gloves', 'legs'].includes(slot)) {
