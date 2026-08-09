@@ -298,12 +298,14 @@ function depositToWarehouse(uid, amount = 1) {
   state.warehouse = state.warehouse || [];
   const maxSlots = getMaxWarehouseSlots();
 
-  if (def.stack && (def.slot === 'consumable' || def.slot === 'material' || def.slot === 'scroll' || def.slot === 'powerup') && !item.rarity) {
+  const isStackable = def.stack || ['consumable','material','scroll','powerup'].includes(def.slot);
+  if (isStackable) {
     let remaining = Math.min(amount, item.count || 1);
+    const maxStack = def.stack || 9999;
     while (remaining > 0) {
-      const existing = state.warehouse.find(i => i.itemId === item.itemId && !i.rarity && (i.count || 1) < def.stack);
+      const existing = state.warehouse.find(i => i.itemId === item.itemId && (i.count || 1) < maxStack);
       if (existing) {
-        const space = def.stack - (existing.count || 1);
+        const space = maxStack - (existing.count || 1);
         const add = Math.min(space, remaining);
         existing.count = (existing.count || 1) + add;
         remaining -= add;
@@ -312,12 +314,12 @@ function depositToWarehouse(uid, amount = 1) {
           log('Baú cheio!', 'system');
           return false;
         }
-        const add = Math.min(def.stack, remaining);
+        const add = Math.min(maxStack, remaining);
         state.warehouse.push({ ...item, uid: Date.now() + '_' + Math.random().toString(36).slice(2, 8), count: add, equipped: false });
         remaining -= add;
       }
     }
-    if (item.count > amount) {
+    if ((item.count || 1) > amount) {
       item.count -= amount;
     } else {
       state.inventory.splice(invIdx, 1);
@@ -351,12 +353,14 @@ function withdrawFromWarehouse(uid, amount = 1) {
 
   const maxInvSlots = getMaxInventorySlots();
 
-  if (def.stack && (def.slot === 'consumable' || def.slot === 'material' || def.slot === 'scroll' || def.slot === 'powerup') && !item.rarity) {
+  const isStackable = def.stack || ['consumable','material','scroll','powerup'].includes(def.slot);
+  if (isStackable) {
     let remaining = Math.min(amount, item.count || 1);
+    const maxStack = def.stack || 9999;
     while (remaining > 0) {
-      const existing = state.inventory.find(i => i.itemId === item.itemId && !i.rarity && (i.count || 1) < def.stack);
+      const existing = state.inventory.find(i => i.itemId === item.itemId && (i.count || 1) < maxStack);
       if (existing) {
-        const space = def.stack - (existing.count || 1);
+        const space = maxStack - (existing.count || 1);
         const add = Math.min(space, remaining);
         existing.count = (existing.count || 1) + add;
         remaining -= add;
@@ -365,12 +369,12 @@ function withdrawFromWarehouse(uid, amount = 1) {
           log('Mochila cheia!', 'system');
           return false;
         }
-        const add = Math.min(def.stack, remaining);
+        const add = Math.min(maxStack, remaining);
         state.inventory.push({ ...item, uid: Date.now() + '_' + Math.random().toString(36).slice(2, 8), count: add, equipped: false });
         remaining -= add;
       }
     }
-    if (item.count > amount) {
+    if ((item.count || 1) > amount) {
       item.count -= amount;
     } else {
       state.warehouse.splice(whIdx, 1);

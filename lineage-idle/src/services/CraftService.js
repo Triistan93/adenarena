@@ -95,9 +95,9 @@ export function craftItem(state, recipeId, callbacks = {}) {
     let remaining = qty;
     for (let i = state.inventory.length - 1; i >= 0 && remaining > 0; i--) {
       const it = state.inventory[i];
-      if (it.itemId === matId && !it.equipped && !it.rarity) {
+      if (it.itemId === matId && !it.equipped) {
         const take = Math.min(it.count || 1, remaining);
-        if (it.count > take) {
+        if ((it.count || 1) > take) {
           it.count -= take;
           remaining = 0;
         } else {

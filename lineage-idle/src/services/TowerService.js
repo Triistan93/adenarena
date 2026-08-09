@@ -101,6 +101,10 @@ export function challengeTowerFloor(state, callbacks = {}) {
   };
 
   MONSTERS[towerMonsterId] = monsterObj;
+  if (typeof window !== 'undefined') {
+    if (window.GameData?.MONSTERS) window.GameData.MONSTERS[towerMonsterId] = monsterObj;
+    if (window.ALL_MONSTERS) window.ALL_MONSTERS[towerMonsterId] = monsterObj;
+  }
   state.target = towerMonsterId;
   state.activeMonster = monsterObj;
   if (!state.zone) state.zone = 'talkingIsland';
