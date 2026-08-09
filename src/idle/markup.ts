@@ -499,20 +499,36 @@ export const IDLE_MARKUP = `
                 </div>
               </div>
 
-              <!-- Batch Buy Controls (for Potions & Consumables) -->
-              <div class="filter-row" id="shop-batch-row" style="display:none; margin-top:6px;">
-                <span class="filter-label">Qtd. Compra em Lote:</span>
-                <div class="filter-group" id="shop-batch-filters">
-                  <button class="shop-filter-btn active" data-shopqty="1">1x</button>
-                  <button class="shop-filter-btn" data-shopqty="10">10x</button>
-                  <button class="shop-filter-btn" data-shopqty="50">50x</button>
-                  <button class="shop-filter-btn" data-shopqty="100">100x</button>
-                </div>
-              </div>
+              <button class="shop-subtab-btn active" data-shop-tab="normal">📦 Mercador Regular</button>
+              <button class="shop-subtab-btn mystic-glow-btn" data-shop-tab="mystic">✨ Feira Mística de Aden</button>
             </div>
 
-            <!-- Shop Items Grid -->
-            <div class="shop-list" id="shop-list"></div>
+            <!-- Regular Merchant Content -->
+            <div id="shop-tab-normal-content" class="shop-tab-content active">
+              <div class="shop-filters-bar" id="shop-filters-bar">
+                <button class="inv-batch-btn active" data-shop-filter="all">🌟 Todos</button>
+                <button class="inv-batch-btn" data-shop-filter="weapon">⚔️ Armas Físicas</button>
+                <button class="inv-batch-btn" data-shop-filter="mweapon">🔮 Cajados / Varazinhas</button>
+                <button class="inv-batch-btn" data-shop-filter="heavy">🛡️ Armaduras Pesadas</button>
+                <button class="inv-batch-btn" data-shop-filter="light">🥋 Armaduras Leves</button>
+                <button class="inv-batch-btn" data-shop-filter="robe">📜 Túnicas &amp; Robes</button>
+                <button class="inv-batch-btn" data-shop-filter="jewel">💍 Joias &amp; Relíquias</button>
+              </div>
+
+              <div class="shop-list" id="shop-list"></div>
+            </div>
+
+            <!-- Mystic Merchant Content -->
+            <div id="shop-tab-mystic-content" class="shop-tab-content">
+              <div class="mystic-shop-banner">
+                <div class="mystic-banner-info">
+                  <h4>✨ Mercado Místico Secreto de Aden</h4>
+                  <p>Equipamentos Raros, Épicos e Lendários diretamente dos baús imperiais. Estoque rotativo a cada 3 horas!</p>
+                </div>
+                <button id="manual-refresh-mystic-btn" class="inv-batch-btn gold-glow-btn" title="Atualizar estoque imediatamente (Custo: 5.000 Adena)">🔄 Forçar Restoque (5.000 Adena)</button>
+              </div>
+              <div class="shop-list" id="mystic-shop-list"></div>
+            </div>
           </div>
 
           <!-- Craft Tab -->
@@ -522,8 +538,20 @@ export const IDLE_MARKUP = `
                 <h3 style="margin:0;">Forja Imperial &amp; Criação Universal</h3>
                 <p class="shop-info" style="margin:4px 0 0 0;">Forje qualquer equipamento do jogo: Armas, Armaduras, Joias, Capas, Agathions, Cintos, Talismãs e Consumíveis.</p>
               </div>
-              <div class="stat-value" style="font-size:14px; background:rgba(212,175,55,0.1); border:1px solid rgba(212,175,55,0.3); padding:6px 14px; border-radius:8px;">
-                🔨 Nível de Forja: <strong id="craft-level" style="color:var(--gilt);">1</strong>
+              <div style="display:flex; align-items:center; gap:10px;">
+                <div class="craft-qty-selector" style="display:flex; align-items:center; gap:6px; background:rgba(0,0,0,0.4); padding:4px 10px; border-radius:8px; border:1px solid rgba(212,175,55,0.3);">
+                  <span style="font-size:12px; color:var(--text-muted);">Qtd. Forja:</span>
+                  <div id="craft-qty-picker" style="display:flex; gap:4px;">
+                    <button class="inv-batch-btn active" data-craft-qty="1">1x</button>
+                    <button class="inv-batch-btn" data-craft-qty="5">5x</button>
+                    <button class="inv-batch-btn" data-craft-qty="10">10x</button>
+                    <button class="inv-batch-btn" data-craft-qty="50">50x</button>
+                    <button class="inv-batch-btn" data-craft-qty="100">100x</button>
+                  </div>
+                </div>
+                <div class="stat-value" style="font-size:14px; background:rgba(212,175,55,0.1); border:1px solid rgba(212,175,55,0.3); padding:6px 14px; border-radius:8px;">
+                  🔨 Nível de Forja: <strong id="craft-level" style="color:var(--gilt);">1</strong>
+                </div>
               </div>
             </div>
 

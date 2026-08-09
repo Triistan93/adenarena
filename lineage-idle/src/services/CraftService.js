@@ -65,36 +65,34 @@ export function getRecipeMaterials(recipe) {
  * @param {string} recipeId
  * @returns {boolean}
  */
-export function canCraft(state, recipeId) {
+export function canCraft(state, recipeId, qty = 1) {
   const recipe = getRecipeDef(recipeId);
   if (!recipe) return false;
   if (recipe.level && getCraftLevelReq(recipe.level) > (state.craftLevel || 1)) return false;
 
+  const count = Math.max(1, parseInt(qty, 10) || 1);
+  const totalGold = (recipe.gold || 250) * count;
+  if ((state.gold || 0) < totalGold) return false;
+
   const mats = getRecipeMaterials(recipe);
   if (mats.length === 0) return false;
-  for (const { matId, qty } of mats) {
-    if (getInventoryCount(state, matId) < qty) return false;
+  for (const { matId, qty: baseQty } of mats) {
+    if (getInventoryCount(state, matId) < (baseQty * count)) return false;
   }
   return true;
 }
 
-export function canCraftRecipe(state, id) {
-  return canCraft(state, id);
+export function canCraftRecipe(state, id, qty = 1) {
+  return canCraft(state, id, qty);
 }
 
-/**
- * Executa a criação de um item via receita de Crafting.
- * @param {Object} state
- * @param {string} recipeId
- * @param {Object} [callbacks] — { log, floatText, getItemDef, formatItemDisplayName, updateAllUI, save }
- * @returns {boolean}
- */
-export function craftItem(state, recipeId, callbacks = {}) {
+export function craftSingleItem(state, recipeId, callbacks = {}) {
   const recipe = getRecipeDef(recipeId);
-  if (!recipe || !canCraft(state, recipeId)) {
-    if (callbacks.log) callbacks.log('Missing materials or craft level too low.', 'system');
-    return false;
-  }
+  if (!recipe) return false;
+
+  const costGold = recipe.gold || 250;
+  if ((state.gold || 0) < costGold) return false;
+  state.gold -= costGold;
 
   const mats = getRecipeMaterials(recipe);
   for (const { matId, qty } of mats) {
@@ -128,29 +126,50 @@ export function craftItem(state, recipeId, callbacks = {}) {
     state.craftFoundationPity = (state.craftFoundationPity || 0) + 1;
   }
 
-  addToInventory(state, recipeId, 1, rarity, isFoundation, callbacks);
-
   const itemDef = callbacks.getItemDef ? callbacks.getItemDef(recipeId) : gData?.ALL_ITEMS?.[recipeId];
+  const isConsumable = itemDef && ['potion', 'consumable', 'scroll', 'soulshot', 'spiritshot'].includes(itemDef.slot);
+  const yieldAmount = (isConsumable && (recipeId.includes('shot') || recipeId.includes('potion'))) ? 50 : 1;
+
+  addToInventory(state, recipeId, yieldAmount, rarity, isFoundation, callbacks);
+
   const formattedName = callbacks.formatItemDisplayName
     ? callbacks.formatItemDisplayName({ itemId: recipeId, rarity, foundation: isFoundation }, itemDef)
     : (itemDef?.name || recipeId);
 
   if (isFoundation) {
-    if (callbacks.log) callbacks.log(`✨ FOUNDATION! Você forjou um ${formattedName}!`, 'rarity-foundation');
+    if (callbacks.log) callbacks.log(`✨ FOUNDATION! Você forjou ${yieldAmount}x ${formattedName}!`, 'rarity-foundation');
     if (callbacks.floatText) callbacks.floatText('✨ FOUNDATION!', 'float-jackpot');
   } else {
-    if (callbacks.log) callbacks.log(`Crafted ${formattedName}!`, 'rarity-' + rarity);
+    if (callbacks.log) callbacks.log(`Forjou ${yieldAmount}x ${formattedName}!`, 'rarity-' + rarity);
   }
 
   state.craftXp = (state.craftXp || 0) + 10 + (itemDef?.tier || 1) * 5;
   state.craftLevel = state.craftLevel || 1;
-  while (state.craftXp >= state.craftLevel * 50) {
-    state.craftXp -= state.craftLevel * 50;
-    state.craftLevel++;
-    if (callbacks.log) callbacks.log(`Crafting Level Up! Now Lv.${state.craftLevel}`, 'xp');
+
+  const nextReq = state.craftLevel * 100;
+  if (state.craftXp >= nextReq) {
+    state.craftLevel += 1;
+    state.craftXp -= nextReq;
+    if (callbacks.log) callbacks.log(`🎉 PARABÉNS! Nível de Forja subiu para Lv.${state.craftLevel}!`, 'rarity-epic');
   }
 
-  if (callbacks.updateAllUI) callbacks.updateAllUI();
-  if (callbacks.save) callbacks.save();
   return true;
+}
+
+export function craftItem(state, recipeId, qty = 1, callbacks = {}) {
+  const countToCraft = Math.max(1, parseInt(qty, 10) || 1);
+  let successCount = 0;
+
+  for (let i = 0; i < countToCraft; i++) {
+    if (!canCraft(state, recipeId, 1)) break;
+    const ok = craftSingleItem(state, recipeId, callbacks);
+    if (ok) successCount++;
+  }
+
+  if (successCount > 0) {
+    if (callbacks.updateAllUI) callbacks.updateAllUI();
+    if (callbacks.save) callbacks.save();
+  }
+
+  return successCount > 0;
 }

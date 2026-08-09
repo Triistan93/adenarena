@@ -1967,7 +1967,7 @@ export function updateCraftUI(state, callbacks = {}) {
 
   const recipeList = Object.values(recipes).filter(Boolean);
 
-  // Inicializa listeners para barra de busca e categorias (uma única vez)
+  // Inicializa listeners para barra de busca, categorias e seletor de quantidade (uma única vez)
   if (!window._craftListenersBound) {
     window._craftListenersBound = true;
 
@@ -1988,10 +1988,31 @@ export function updateCraftUI(state, callbacks = {}) {
         updateCraftUI(state, callbacks);
       };
     });
+
+    const craftQtyBtns = document.querySelectorAll('#craft-qty-picker [data-craft-qty]');
+    craftQtyBtns.forEach(btn => {
+      btn.onclick = () => {
+        craftQtyBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        window._craftBatchQty = parseInt(btn.dataset.craftQty, 10) || 1;
+        updateCraftUI(state, callbacks);
+      };
+    });
+
+    const shopQtyBtns = document.querySelectorAll('#shop-qty-picker [data-shop-qty]');
+    shopQtyBtns.forEach(btn => {
+      btn.onclick = () => {
+        shopQtyBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        window._shopBatchQty = parseInt(btn.dataset.shopQty, 10) || 1;
+        updateShopUI(state, callbacks);
+      };
+    });
   }
 
   const activeCat = window._craftSelectedCategory || 'all';
   const searchTerm = (window._craftSearchTerm || '').toLowerCase().trim();
+  const craftBatchQty = window._craftBatchQty || 1;
 
   const filtered = recipeList.filter(r => {
     const itemId = r.itemId || r.id;
@@ -2030,37 +2051,58 @@ export function updateCraftUI(state, callbacks = {}) {
     const itemId = r.itemId || r.id;
     const def = allItems[itemId];
     const reqLvl = r.craftLevel || (r.level ? getCraftLevelReq(r.level) : 1);
-    const mats = getRecipeMaterials(r);
+    const gradeInfo = getItemGrade(def);
+    const statsSummary = buildShopStatsSummary(def);
+    const totalAdena = (r.gold || 250) * craftBatchQty;
 
+    const mats = getRecipeMaterials(r);
     const matsHtml = mats.map(m => {
       const matDef = allItems[m.matId];
       const count = getInventoryCount(state, m.matId);
-      const isOk = count >= m.qty;
-      return `<span style="color:${isOk ? '#4ade80' : '#ef4444'}; font-weight: 500;">${matDef ? matDef.name : m.matId}: ${count}/${m.qty}</span>`;
+      const neededTotal = m.qty * craftBatchQty;
+      const isOk = count >= neededTotal;
+      return `<span style="color:${isOk ? '#4ade80' : '#ef4444'}; font-weight: 500;">${matDef ? matDef.name : m.matId}: ${count}/${neededTotal}</span>`;
     }).join(' · ');
 
-    const craftable = canCraft(state, itemId);
+    const craftable = canCraft(state, itemId, craftBatchQty);
 
     return `
-      <div class="craft-recipe-card ${craftable ? 'craftable' : ''}">
+      <div class="craft-recipe-card ${craftable ? 'craftable' : ''}" data-craft-preview="${itemId}">
         <div class="craft-recipe-header">
-          <span class="craft-recipe-icon">${getItemIcon(def)}</span>
-          <div>
-            <div class="craft-recipe-title">${def.name}</div>
-            <div class="craft-recipe-sub">Requer Forja Lv.${reqLvl} · 🪙 ${r.gold ? r.gold.toLocaleString() : 250} Adena</div>
+          <div class="craft-recipe-icon-box">
+            ${getItemIcon(def)}
+          </div>
+          <div style="flex:1;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div class="craft-recipe-title">${def.name}</div>
+              <span class="shop-grade-badge" style="background:${gradeInfo.color}; padding:2px 8px; border-radius:4px; font-size:10px; font-weight:bold; color:#fff;">${gradeInfo.label}</span>
+            </div>
+            <div class="craft-recipe-sub">Requer Forja Lv.${reqLvl} · 🪙 ${totalAdena.toLocaleString()} Adena</div>
           </div>
         </div>
+        ${statsSummary ? `<div class="craft-recipe-stats">📊 ${statsSummary}</div>` : ''}
         <div class="craft-mats-line">${matsHtml}</div>
-        <button class="craft-item-btn" data-craft="${itemId}" ${!craftable ? 'disabled' : ''}>
-          🔨 Criar Item
+        <button class="craft-item-btn" data-craft="${itemId}" data-craft-qty="${craftBatchQty}" ${!craftable ? 'disabled' : ''}>
+          🔨 Criar Item ${craftBatchQty > 1 ? `(${craftBatchQty}x)` : ''}
         </button>
       </div>
     `;
   }).join('');
 
   container.querySelectorAll('[data-craft]').forEach(btn => {
-    btn.onclick = () => {
-      if (callbacks.craftItem) callbacks.craftItem(btn.dataset.craft);
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      const qty = parseInt(btn.dataset.craftQty, 10) || 1;
+      if (callbacks.craftItem) callbacks.craftItem(btn.dataset.craft, qty);
+      else if (typeof window !== 'undefined' && typeof window.craftItem === 'function') window.craftItem(btn.dataset.craft, qty);
     };
+  });
+
+  // Eventos de Tooltip ao passar o mouse sobre a receita na Forja
+  container.querySelectorAll('[data-craft-preview]').forEach(card => {
+    const itemId = card.dataset.craftPreview;
+    card.onmouseenter = (e) => showItemTooltip(e, { itemId, rarity: 'common' });
+    card.onmousemove = (e) => showItemTooltip(e, { itemId, rarity: 'common' });
+    card.onmouseleave = () => hideItemTooltip();
   });
 }

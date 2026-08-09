@@ -767,10 +767,10 @@ function sellItem(uid) {
 }
 
 // --------------------------- CRAFTING (Sprint 3: Delegados) ---------------------------
-function canCraft(recipeId) { return serviceCanCraft(state, recipeId); }
-function canCraftRecipe(id) { return serviceCanCraftRecipe(state, id); }
-function craftItem(recipeId) {
-  return serviceCraftItem(state, recipeId, { log, floatText, getItemDef, formatItemDisplayName: uiFormatItemDisplayName, updateAllUI, save });
+function canCraft(recipeId, qty = 1) { return serviceCanCraft(state, recipeId, qty); }
+function canCraftRecipe(id, qty = 1) { return serviceCanCraftRecipe(state, id, qty); }
+function craftItem(recipeId, qty = 1) {
+  return serviceCraftItem(state, recipeId, qty, { log, floatText, getItemDef, formatItemDisplayName: uiFormatItemDisplayName, updateAllUI, save });
 }
 
 

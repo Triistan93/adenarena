@@ -440,7 +440,7 @@
 }
 
 /* ═══════════════ LOJA & CRAFTING ═══════════════ */
-.shop-item-card, .craft-recipe-card {
+.shop-item-card {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -451,19 +451,93 @@
   border-radius: 6px;
 }
 
-.shop-item-details, .craft-recipe-header {
+.craft-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+  gap: 12px;
+  padding: 4px;
+}
+
+.craft-recipe-card {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  justify-content: space-between;
+  padding: 12px 14px;
+  background: linear-gradient(145deg, rgba(26, 20, 15, 0.85), rgba(15, 10, 8, 0.95));
+  border: 1px solid rgba(212, 167, 68, 0.25);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  transition: all 0.2s ease-in-out;
+  position: relative;
 }
 
-.shop-item-name, .craft-recipe-title {
+.craft-recipe-card:hover {
+  border-color: rgba(212, 167, 68, 0.7);
+  box-shadow: 0 6px 18px rgba(212, 167, 68, 0.15);
+  transform: translateY(-2px);
+}
+
+.craft-recipe-card.craftable {
+  border-color: rgba(74, 222, 128, 0.5);
+  background: linear-gradient(145deg, rgba(20, 35, 25, 0.85), rgba(10, 20, 15, 0.95));
+}
+
+.craft-recipe-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.craft-recipe-icon-box {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(212, 167, 68, 0.4);
+  border-radius: 6px;
+  font-size: 24px;
+}
+
+.craft-recipe-title {
   font-family: "Cinzel", serif;
+  font-size: 15px;
   font-weight: 700;
-  color: #f0c050;
+  color: #f3c669;
+  line-height: 1.2;
 }
 
-.buy-item-btn, .craft-item-btn {
+.craft-recipe-sub {
+  font-size: 12px;
+  color: #9ca3af;
+  margin-top: 2px;
+}
+
+.craft-recipe-stats {
+  font-size: 11px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  padding: 4px 8px;
+  margin: 6px 0;
+  line-height: 1.4;
+}
+
+.craft-mats-line {
+  font-size: 11px;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 6px 10px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.buy-item-btn {
   padding: 6px 12px;
   background: linear-gradient(180deg, #4a3a24, #2a1e10);
   border: 1px solid #d4a744;
@@ -471,7 +545,29 @@
   border-radius: 4px;
   cursor: pointer;
 }
+
+.craft-item-btn {
+  width: 100%;
+  padding: 8px 14px;
+  font-family: "Cinzel", serif;
+  font-weight: 700;
+  font-size: 13px;
+  background: linear-gradient(180deg, #d4a744, #8a641c);
+  border: 1px solid #ffe699;
+  color: #000;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transition: all 0.15s ease;
+}
+
+.craft-item-btn:hover:not(:disabled) {
+  filter: brightness(1.15);
+  transform: translateY(-1px);
+}
+
 .buy-item-btn:disabled, .craft-item-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  box-shadow: none;
 }
