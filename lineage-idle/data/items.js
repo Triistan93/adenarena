@@ -2837,54 +2837,37 @@ const ICON_MAP = {
 };
 
 const MONSTER_DROPS = {
-  "zone1": [
-    "weapon_composition_bow",
-    "composition_bow",
-    "weapon_crucifix_of_blessing_magicblunt",
-    "armor_bone_breastplate",
-    "bone_breastplate",
-    "hp_potion_s"
-  ],
-  "zone2": [
-    "weapon_bow_of_silence",
-    "bow_of_silence",
-    "weapon_bronze_mace",
-    "armor_brigandine_armor_heavy",
-    "brigandine_armor_heavy",
-    "hp_potion_m"
-  ],
-  "zone3": [
-    "weapon_battle_axe",
-    "battle_axe",
-    "weapon_big_hammer",
-    "armor_full_plate_heavy_armor",
-    "full_plate_heavy_armor",
-    "hp_potion_l"
-  ],
-  "zone4": [
-    "weapon_archmage_staff",
-    "archmage_staff",
-    "weapon_assassins_dagger",
-    "armor_avadon_heavy_armor",
-    "avadon_heavy_armor",
-    "mp_potion_s"
-  ],
-  "zone5": [
-    "weapon_bloody_orchid_dagger",
-    "bloody_orchid_dagger",
-    "weapon_carnage_bow",
-    "armor_dark_crystal_heavy_armor",
-    "dark_crystal_heavy_armor",
-    "mp_potion_l"
-  ],
-  "zone6": [
-    "anais_first",
-    "weapon_anais_first",
-    "anakim_pistols",
-    "armor_draconic_armor",
-    "draconic_armor",
-    "hp_potion_xl"
-  ]
+  // Generic Tier fallbacks
+  "zone1": ["weapon_composition_bow", "weapon_falchion_sword", "weapon_short_spear", "weapon_crucifix_of_blessing_magicblunt", "armor_bone_breastplate"],
+  "zone2": ["weapon_bow_of_silence", "weapon_bronze_mace", "weapon_crimson_sword", "armor_brigandine_armor_heavy"],
+  "zone3": ["weapon_battle_axe", "weapon_big_hammer", "weapon_darkelven_dagger", "armor_full_plate_heavy_armor"],
+  "zone4": ["weapon_archmage_staff", "weapon_assassins_dagger", "weapon_bow_of_peril", "armor_avadon_heavy_armor"],
+  "zone5": ["weapon_bloody_orchid_dagger", "weapon_carnage_bow", "weapon_divine_sword", "armor_dark_crystal_heavy_armor"],
+  "zone6": ["weapon_draconic_bow", "weapon_angel_slayer", "weapon_imperial_staff", "armor_draconic_armor", "armor_imperial_crusader_armor"],
+
+  // 22 Hunting Zones specific drop tables
+  "talkingIsland": ["weapon_composition_bow", "weapon_falchion_sword", "weapon_short_spear", "weapon_crucifix_of_blessing_magicblunt", "armor_bone_breastplate"],
+  "elvenForest": ["weapon_hunting_bow", "weapon_sword_breaker", "weapon_crucifix_of_blessing_magicblunt"],
+  "darkForest": ["weapon_tomahawk_axe", "weapon_iron_hammer", "weapon_knight_sword"],
+  "orcVillage": ["weapon_tomahawk_axe", "weapon_knight_sword"],
+  "dwarvenMine": ["weapon_iron_hammer", "weapon_falchion_sword"],
+  "kamaelLair": ["weapon_sword_breaker", "weapon_hunting_bow"],
+  "ruinedOutpost": ["weapon_knight_sword", "weapon_bow_of_silence", "armor_brigandine_armor_heavy"],
+  "howlingMoor": ["weapon_bow_of_silence", "weapon_bronze_mace", "weapon_crimson_sword", "armor_brigandine_armor_heavy"],
+  "giranOutskirts": ["weapon_dual_bastard_sword", "weapon_elven_bow", "weapon_mystic_staff"],
+  "orcenRuins": ["weapon_titan_hammer", "weapon_warhammer", "weapon_winged_spear"],
+  "forsakenCrypt": ["weapon_saber_sword", "weapon_staff_of_magic", "weapon_battle_axe", "armor_full_plate_heavy_armor"],
+  "blackCitadel": ["weapon_battle_axe", "weapon_big_hammer", "weapon_darkelven_dagger", "weapon_crystal_staff", "armor_full_plate_heavy_armor"],
+  "gludioCastle": ["weapon_crystallized_ice_bow", "weapon_demons_staff", "weapon_dual_elven_sword", "armor_avadon_heavy_armor"],
+  "wolfMountain": ["weapon_eminence_bow", "weapon_katana", "weapon_samurai_longsword"],
+  "riftOfTheVoid": ["weapon_homunkuluss_magic_sword", "weapon_archmage_staff", "weapon_assassins_dagger", "armor_avadon_heavy_armor", "armor_dark_crystal_heavy_armor"],
+  "emeraldGrove": ["weapon_bow_of_peril", "weapon_divine_sword", "weapon_bloody_orchid_dagger", "weapon_carnage_bow", "armor_dark_crystal_heavy_armor"],
+  "underworldGate": ["weapon_dual_stormbringer_sword", "weapon_tallum_glaive"],
+  "adenCity": ["weapon_archmage_staff", "weapon_assassins_dagger", "armor_dark_crystal_heavy_armor"],
+  "dragonValley": ["weapon_draconic_bow", "weapon_angel_slayer", "weapon_imperial_staff", "armor_draconic_armor"],
+  "imperialTomb": ["weapon_arcana_mace", "weapon_heaven_divider", "weapon_forgotten_blade", "armor_imperial_crusader_armor"],
+  "antharasLair": ["weapon_antharas_slayer", "pendant_earth_dragon", "armor_imperial_crusader_armor"],
+  "forgeOfGods": ["weapon_valakas_blade", "pendant_fire_dragon", "armor_draconic_armor"]
 };
 
 const CRAFTING_RECIPES = {
@@ -2960,16 +2943,47 @@ const SHOP_INVENTORY = [
   "spiritshot_ng"
 ];
 
-const ZONE_GOLD_MULT = { zone1: 1.0, zone2: 1.5, zone3: 2.2, zone4: 3.5, zone5: 5.5, zone6: 9.0 };
+const ZONE_GOLD_MULT = {
+  zone1: 1.0, zone2: 1.5, zone3: 2.2, zone4: 3.5, zone5: 5.5, zone6: 9.0,
+  talkingIsland: 1.0, elvenForest: 1.2, darkForest: 1.4, orcVillage: 1.6, dwarvenMine: 1.8, kamaelLair: 2.0,
+  ruinedOutpost: 2.5, howlingMoor: 3.0, giranOutskirts: 3.8, orcenRuins: 4.5, forsakenCrypt: 5.5, blackCitadel: 6.8,
+  gludioCastle: 8.0, wolfMountain: 9.5, riftOfTheVoid: 11.0, emeraldGrove: 14.0, underworldGate: 18.0,
+  adenCity: 22.0, dragonValley: 28.0, imperialTomb: 35.0, antharasLair: 45.0, forgeOfGods: 60.0
+};
 const MYSTIC_POOL = ["anais_first","weapon_anais_first","anakim_pistols","weapon_anakim_pistols","jewel_ring_core","ring_core"];
 
 const ZONE_CONSUMABLES = {
+  // Generic Tier fallbacks
   zone1: ['hp_potion_s', 'iron_ore', 'suede', 'charcoal', 'animal_skin'],
   zone2: ['hp_potion_m', 'crafted_leather', 'coarse_bone_powder', 'steel', 'iron_ore'],
   zone3: ['hp_potion_l', 'oriharukon_ore', 'adamantite', 'silver_nugget', 'crafted_leather'],
   zone4: ['mp_potion_s', 'mithril_ore', 'enchanted_stone', 'thread', 'adamantite'],
   zone5: ['mp_potion_l', 'dread_shard', 'titanium_ore', 'elemental_stone', 'mithril_ore'],
-  zone6: ['hp_potion_xl', 'mp_potion_xl', 'dragon_bone', 'divine_crystal', 'titanium_ore']
+  zone6: ['hp_potion_xl', 'mp_potion_xl', 'dragon_bone', 'divine_crystal', 'titanium_ore'],
+
+  // Specific 22 hunting zones
+  talkingIsland: ['hp_potion_s', 'mp_potion_s', 'iron_ore', 'suede', 'charcoal'],
+  elvenForest: ['hp_potion_s', 'mp_potion_s', 'suede', 'animal_skin', 'thread'],
+  darkForest: ['hp_potion_s', 'mp_potion_s', 'charcoal', 'iron_ore'],
+  orcVillage: ['hp_potion_s', 'mp_potion_s', 'iron_ore', 'coarse_bone_powder'],
+  dwarvenMine: ['hp_potion_s', 'mp_potion_s', 'iron_ore', 'silver_nugget'],
+  kamaelLair: ['hp_potion_s', 'mp_potion_s', 'suede', 'thread'],
+  ruinedOutpost: ['hp_potion_s', 'hp_potion_m', 'crafted_leather', 'steel'],
+  howlingMoor: ['hp_potion_m', 'mp_potion_m', 'coarse_bone_powder', 'steel'],
+  giranOutskirts: ['hp_potion_m', 'mp_potion_m', 'steel', 'silver_nugget'],
+  orcenRuins: ['hp_potion_m', 'mp_potion_m', 'coarse_bone_powder', 'crafted_leather'],
+  forsakenCrypt: ['hp_potion_m', 'hp_potion_l', 'oriharukon_ore', 'adamantite'],
+  blackCitadel: ['hp_potion_l', 'mp_potion_l', 'oriharukon_ore', 'adamantite'],
+  gludioCastle: ['hp_potion_l', 'mp_potion_l', 'adamantite', 'crafted_leather'],
+  wolfMountain: ['hp_potion_l', 'mp_potion_l', 'coarse_bone_powder'],
+  riftOfTheVoid: ['hp_potion_l', 'mp_potion_s', 'mithril_ore', 'enchanted_stone'],
+  emeraldGrove: ['hp_potion_l', 'hp_potion_xl', 'mithril_ore', 'dread_shard'],
+  underworldGate: ['hp_potion_xl', 'mp_potion_xl', 'titanium_ore', 'elemental_stone'],
+  adenCity: ['hp_potion_xl', 'mp_potion_xl', 'titanium_ore', 'divine_crystal'],
+  dragonValley: ['hp_potion_xl', 'mp_potion_xl', 'dragon_bone', 'divine_crystal'],
+  imperialTomb: ['hp_potion_xl', 'mp_potion_xl', 'dragon_bone', 'divine_crystal'],
+  antharasLair: ['hp_potion_xl', 'mp_potion_xl', 'dragon_bone', 'divine_crystal', 'elemental_stone'],
+  forgeOfGods: ['hp_potion_xl', 'mp_potion_xl', 'dragon_bone', 'divine_crystal']
 };
 
 function rollRarity(bonus = 0) {
@@ -2991,13 +3005,22 @@ function getZoneDropTier(zoneLevel) {
   return 'zone6';
 }
 
-function rollDrop(zoneId = 'zone1', rarityBonus = 0, isBoss = false) {
+function rollDrop(zoneKey = 'zone1', rarityBonus = 0, isBoss = false) {
   const drops = [];
   
-  // 1. Consumable/Material Drop (75% base chance)
+  // Resolve pool key (specific zoneKey e.g. 'talkingIsland', or tier e.g. 'zone1')
+  let poolKey = zoneKey;
+  if (!MONSTER_DROPS[poolKey]) {
+    const numericLevel = typeof zoneKey === 'number' ? zoneKey : 1;
+    poolKey = getZoneDropTier(numericLevel);
+  }
+
+  // 1. Consumable/Material Drop (75% base chance, 100% for bosses)
   const matChance = isBoss ? 1.0 : 0.75;
   if (Math.random() < matChance) {
-    const matPool = ZONE_CONSUMABLES[zoneId] || ZONE_CONSUMABLES.zone1;
+    const rawMatPool = ZONE_CONSUMABLES[poolKey] || ZONE_CONSUMABLES.zone1;
+    const validMatPool = rawMatPool.filter(id => !!ALL_ITEMS[id]);
+    const matPool = validMatPool.length > 0 ? validMatPool : ['hp_potion_s'];
     const matId = matPool[Math.floor(Math.random() * matPool.length)];
     const def = ALL_ITEMS[matId];
     if (def) {
@@ -3006,18 +3029,14 @@ function rollDrop(zoneId = 'zone1', rarityBonus = 0, isBoss = false) {
     }
   }
 
-  // 2. Equipment Drop (3% - 5% rare chance for normal monsters, 20% for bosses)
-  const baseEquipChance = isBoss ? 0.20 : 0.04;
+  // 2. Equipment Drop (4% base chance, 25% for bosses)
+  const baseEquipChance = isBoss ? 0.25 : 0.04;
   const equipChance = baseEquipChance * (1 + Math.min(2, rarityBonus * 0.2));
   
   if (Math.random() < equipChance) {
-    const rawPool = MONSTER_DROPS[zoneId] || MONSTER_DROPS.zone1;
-    const equipPool = rawPool.filter(id => {
-      const def = ALL_ITEMS[id];
-      return def && ['weapon','armor','helmet','gloves','boots','ring','necklace','earring','shield','legs','belt','cloak','talisman','hair','hair2','agathion'].includes(def.slot);
-    });
-    
-    const targetPool = equipPool.length > 0 ? equipPool : rawPool;
+    const rawPool = MONSTER_DROPS[poolKey] || MONSTER_DROPS.zone1;
+    const validPool = rawPool.filter(id => !!ALL_ITEMS[id]);
+    const targetPool = validPool.length > 0 ? validPool : MONSTER_DROPS.zone1;
     const itemId = targetPool[Math.floor(Math.random() * targetPool.length)];
     const rarity = rollRarity(rarityBonus);
     const dropObj = { id: itemId, itemId, rarity, isEquipment: true, amount: 1 };

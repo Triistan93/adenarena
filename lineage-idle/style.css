@@ -3714,3 +3714,42 @@ select:focus-visible {
   z-index: 5;
   /* Seu grid de slots existente cuida do posicionamento */
 }
+
+/* ============ ZONE DETAILS CARD ============ */
+.zone-info-card {
+  margin-top: 10px;
+  background: linear-gradient(180deg, rgba(20, 16, 12, 0.95), rgba(10, 8, 5, 0.98));
+  border: 1px solid var(--gilt-deep);
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+}
+.z-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+}
+.z-card-title { display: flex; align-items: center; gap: 10px; }
+.z-card-title h3 { font-family: "Cinzel", serif; font-size: 14px; font-weight: 700; color: var(--gilt-bright); }
+.z-card-req { font-size: 10px; font-weight: 700; color: var(--gold); background: rgba(212,167,68,0.15); border: 1px solid rgba(212,167,68,0.3); padding: 2px 6px; border-radius: 10px; }
+.z-card-kills { font-size: 11px; font-weight: 700; color: #f59e0b; }
+
+.z-card-body { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 600px) { .z-card-body { grid-template-columns: 1fr; } }
+.z-card-sec h4 { font-family: "Cinzel", serif; font-size: 11px; font-weight: 700; color: var(--bone); margin-bottom: 6px; letter-spacing: 0.05em; }
+.z-mon-list { display: flex; flex-direction: column; gap: 4px; max-height: 120px; overflow-y: auto; }
+.z-mon-item { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.03); padding: 4px 8px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.05); font-size: 11px; }
+.z-mon-name { color: var(--bone); font-weight: 600; }
+.z-mon-lvl { color: #f59e0b; font-weight: 800; }
+.z-mon-stats { color: var(--ink-dim); font-size: 10px; }
+.z-badge { font-size: 9px; font-weight: 800; padding: 1px 4px; border-radius: 4px; }
+.z-badge.boss { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
+.z-badge.elite { background: rgba(168, 85, 247, 0.2); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.4); }
+
+.z-drops-grid { display: flex; flex-wrap: wrap; gap: 6px; max-height: 120px; overflow-y: auto; }
+.z-drop-pill { display: flex; align-items: center; gap: 5px; background: rgba(212,167,68,0.08); border: 1px solid rgba(212,167,68,0.2); border-radius: 4px; padding: 3px 7px; font-size: 10px; color: var(--bone); }
+.z-drop-img { width: 14px; height: 14px; object-fit: contain; }
+.z-empty { font-size: 10px; color: var(--ink-dim); font-style: italic; }

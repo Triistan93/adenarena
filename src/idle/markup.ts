@@ -458,6 +458,7 @@ export const IDLE_MARKUP = `
 
             <div id="zone-map-view" class="zone-view active">
               <div class="zone-list" id="zone-list"></div>
+              <div class="zone-info-card" id="zone-info-card"></div>
             </div>
 
             <div id="zone-raids-view" class="zone-view">
