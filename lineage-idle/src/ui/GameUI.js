@@ -242,27 +242,41 @@ export function showItemTooltip(e, item, state, callbacks = {}) {
     }
   }
 
-  // ─── Botões de ação ───────────────────────────────────────────────────────
-  const isEquipSlot = ['weapon','armor','helmet','gloves','boots','ring','legs','shield',
-    'cloak','belt','necklace','earring','hair','agathion','sigil'].includes(def.slot);
-  const isConsumable = ['consumable','scroll','powerup','potion','food'].includes(def.slot);
+  // ─── Botões de ação (Somente para itens do inventário com UID) ──────────────
+  const isInventoryItem = !!item.uid && !item.isForgePreview && !item.inForge;
+  let actionsHtml = '';
 
-  let actionsHtml = `<div style="display:flex;gap:4px;margin-top:8px;flex-wrap:wrap;">`;
-  if (isEquipSlot) {
-    if (item.equipped) {
-      actionsHtml += `<button data-tt-action="unequip" data-uid="${item.uid}" data-slot="${item.equippedSlot || def.slot}"
-        style="flex:1;padding:5px 8px;background:linear-gradient(180deg,#5a4020,#2a1a08);border:1px solid #a07030;
-        border-radius:4px;color:#e8c870;font-size:11px;cursor:pointer;font-weight:600;">⬆ Desequipar</button>`;
-    } else {
-      actionsHtml += `<button data-tt-action="equip" data-uid="${item.uid}"
-        style="flex:1;padding:5px 8px;background:linear-gradient(180deg,#1a3a5a,#0a1a2a);border:1px solid #3a7ab0;
-        border-radius:4px;color:#70c8f8;font-size:11px;cursor:pointer;font-weight:600;">⚔ Equipar</button>`;
+  if (isInventoryItem) {
+    actionsHtml = `<div style="display:flex;gap:4px;margin-top:8px;flex-wrap:wrap;">`;
+    const isEquipSlot = ['weapon','armor','helmet','gloves','boots','ring','legs','shield',
+      'cloak','belt','necklace','earring','hair','agathion','sigil'].includes(def.slot);
+    const isConsumable = ['consumable','scroll','powerup','potion','food'].includes(def.slot);
+
+    if (isEquipSlot) {
+      if (item.equipped) {
+        actionsHtml += `<button data-tt-action="unequip" data-uid="${item.uid}" data-slot="${item.equippedSlot || def.slot}"
+          style="flex:1;padding:5px 8px;background:linear-gradient(180deg,#5a4020,#2a1a08);border:1px solid #a07030;
+          border-radius:4px;color:#e8c870;font-size:11px;cursor:pointer;font-weight:600;">⬆ Desequipar</button>`;
+      } else {
+        actionsHtml += `<button data-tt-action="equip" data-uid="${item.uid}"
+          style="flex:1;padding:5px 8px;background:linear-gradient(180deg,#1a3a5a,#0a1a2a);border:1px solid #3a7ab0;
+          border-radius:4px;color:#70c8f8;font-size:11px;cursor:pointer;font-weight:600;">⚔ Equipar</button>`;
+      }
     }
-  }
-  if (isConsumable) {
-    actionsHtml += `<button data-tt-action="use" data-uid="${item.uid}"
-      style="flex:1;padding:5px 8px;background:linear-gradient(180deg,#1a4a2a,#0a2010);border:1px solid #3ab070;
-      border-radius:4px;color:#70e898;font-size:11px;cursor:pointer;font-weight:600;">▶ Usar</button>`;
+    if (isConsumable) {
+      actionsHtml += `<button data-tt-action="use" data-uid="${item.uid}"
+        style="flex:1;padding:5px 8px;background:linear-gradient(180deg,#1a4a2a,#0a2010);border:1px solid #3ab070;
+        border-radius:4px;color:#70e898;font-size:11px;cursor:pointer;font-weight:600;">▶ Usar</button>`;
+    }
+    if (!item.equipped) {
+      actionsHtml += `<button data-tt-action="salvage" data-uid="${item.uid}"
+        style="padding:5px 8px;background:linear-gradient(180deg,#4a2a1a,#200a0a);border:1px solid #b04a3a;
+        border-radius:4px;color:#f88870;font-size:11px;cursor:pointer;font-weight:600;">🔨 Desmontar</button>`;
+      actionsHtml += `<button data-tt-action="sell" data-uid="${item.uid}"
+        style="padding:5px 8px;background:linear-gradient(180deg,#4a4a1a,#20200a);border:1px solid #b0b03a;
+        border-radius:4px;color:#f8f870;font-size:11px;cursor:pointer;font-weight:600;">💰 Vender</button>`;
+    }
+    actionsHtml += `</div>`;
   }
   const sellPrice = Math.floor((def.price || 10) * 0.4 * mult);
   if (!item.equipped) {
@@ -1967,52 +1981,27 @@ export function updateCraftUI(state, callbacks = {}) {
 
   const recipeList = Object.values(recipes).filter(Boolean);
 
-  // Inicializa listeners para barra de busca, categorias e seletor de quantidade (uma única vez)
-  if (!window._craftListenersBound) {
-    window._craftListenersBound = true;
-
-    const searchInput = findElement('craft-search-input');
-    if (searchInput) {
-      searchInput.oninput = (e) => {
-        window._craftSearchTerm = e.target.value;
-        updateCraftUI(state, callbacks);
-      };
-    }
-
-    const catButtons = document.querySelectorAll('#craft-category-filters [data-craft-cat]');
-    catButtons.forEach(btn => {
-      btn.onclick = () => {
-        catButtons.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        window._craftSelectedCategory = btn.dataset.craftCat;
-        updateCraftUI(state, callbacks);
-      };
-    });
-
-    const craftQtyBtns = document.querySelectorAll('#craft-qty-picker [data-craft-qty]');
-    craftQtyBtns.forEach(btn => {
-      btn.onclick = () => {
-        craftQtyBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        window._craftBatchQty = parseInt(btn.dataset.craftQty, 10) || 1;
-        updateCraftUI(state, callbacks);
-      };
-    });
-
-    const shopQtyBtns = document.querySelectorAll('#shop-qty-picker [data-shop-qty]');
-    shopQtyBtns.forEach(btn => {
-      btn.onclick = () => {
-        shopQtyBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        window._shopBatchQty = parseInt(btn.dataset.shopQty, 10) || 1;
-        updateShopUI(state, callbacks);
-      };
-    });
+  // Conecta leitores para barra de busca e categorias (garante ligação contínua)
+  const searchInput = findElement('craft-search-input');
+  if (searchInput) {
+    searchInput.oninput = (e) => {
+      window._craftSearchTerm = e.target.value;
+      updateCraftUI(state, callbacks);
+    };
   }
+
+  const catButtons = document.querySelectorAll('#craft-category-filters [data-craft-cat]');
+  catButtons.forEach(btn => {
+    btn.onclick = () => {
+      catButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      window._craftSelectedCategory = btn.dataset.craftCat;
+      updateCraftUI(state, callbacks);
+    };
+  });
 
   const activeCat = window._craftSelectedCategory || 'all';
   const searchTerm = (window._craftSearchTerm || '').toLowerCase().trim();
-  const craftBatchQty = window._craftBatchQty || 1;
 
   const filtered = recipeList.filter(r => {
     const itemId = r.itemId || r.id;
@@ -2053,21 +2042,20 @@ export function updateCraftUI(state, callbacks = {}) {
     const reqLvl = r.craftLevel || (r.level ? getCraftLevelReq(r.level) : 1);
     const gradeInfo = getItemGrade(def);
     const statsSummary = buildShopStatsSummary(def);
-    const totalAdena = (r.gold || 250) * craftBatchQty;
+    const baseAdena = r.gold || 250;
 
     const mats = getRecipeMaterials(r);
     const matsHtml = mats.map(m => {
       const matDef = allItems[m.matId];
       const count = getInventoryCount(state, m.matId);
-      const neededTotal = m.qty * craftBatchQty;
-      const isOk = count >= neededTotal;
-      return `<span style="color:${isOk ? '#4ade80' : '#ef4444'}; font-weight: 500;">${matDef ? matDef.name : m.matId}: ${count}/${neededTotal}</span>`;
+      const isOk = count >= m.qty;
+      return `<span style="color:${isOk ? '#4ade80' : '#ef4444'}; font-weight: 500;">${matDef ? matDef.name : m.matId}: ${count}/${m.qty}</span>`;
     }).join(' · ');
 
-    const craftable = canCraft(state, itemId, craftBatchQty);
+    const craftable = canCraft(state, itemId, 1);
 
     return `
-      <div class="craft-recipe-card ${craftable ? 'craftable' : ''}" data-craft-preview="${itemId}">
+      <div class="craft-recipe-card ${craftable ? 'craftable' : ''}" data-open-craft="${itemId}">
         <div class="craft-recipe-header">
           <div class="craft-recipe-icon-box">
             ${getItemIcon(def)}
@@ -2077,32 +2065,168 @@ export function updateCraftUI(state, callbacks = {}) {
               <div class="craft-recipe-title">${def.name}</div>
               <span class="shop-grade-badge" style="background:${gradeInfo.color}; padding:2px 8px; border-radius:4px; font-size:10px; font-weight:bold; color:#fff;">${gradeInfo.label}</span>
             </div>
-            <div class="craft-recipe-sub">Requer Forja Lv.${reqLvl} · 🪙 ${totalAdena.toLocaleString()} Adena</div>
+            <div class="craft-recipe-sub">Requer Forja Lv.${reqLvl} · 🪙 ${baseAdena.toLocaleString()} Adena</div>
           </div>
         </div>
         ${statsSummary ? `<div class="craft-recipe-stats">📊 ${statsSummary}</div>` : ''}
         <div class="craft-mats-line">${matsHtml}</div>
-        <button class="craft-item-btn" data-craft="${itemId}" data-craft-qty="${craftBatchQty}" ${!craftable ? 'disabled' : ''}>
-          🔨 Criar Item ${craftBatchQty > 1 ? `(${craftBatchQty}x)` : ''}
+        <button class="craft-item-btn" data-open-craft="${itemId}">
+          🔨 Ver &amp; Forjar Item
         </button>
       </div>
     `;
   }).join('');
 
-  container.querySelectorAll('[data-craft]').forEach(btn => {
+  container.querySelectorAll('[data-open-craft]').forEach(btn => {
     btn.onclick = (e) => {
       e.stopPropagation();
-      const qty = parseInt(btn.dataset.craftQty, 10) || 1;
-      if (callbacks.craftItem) callbacks.craftItem(btn.dataset.craft, qty);
-      else if (typeof window !== 'undefined' && typeof window.craftItem === 'function') window.craftItem(btn.dataset.craft, qty);
+      openCraftModal(btn.dataset.openCraft, state, callbacks);
     };
   });
 
-  // Eventos de Tooltip ao passar o mouse sobre a receita na Forja
-  container.querySelectorAll('[data-craft-preview]').forEach(card => {
-    const itemId = card.dataset.craftPreview;
-    card.onmouseenter = (e) => showItemTooltip(e, { itemId, rarity: 'common' });
-    card.onmousemove = (e) => showItemTooltip(e, { itemId, rarity: 'common' });
+  // Eventos de Tooltip ao passar o mouse sobre a receita na Forja (sem botões de ação de inventário)
+  container.querySelectorAll('.craft-recipe-card').forEach(card => {
+    const itemId = card.dataset.openCraft;
+    card.onmouseenter = (e) => showItemTooltip(e, { itemId, rarity: 'common', isForgePreview: true });
+    card.onmousemove = (e) => showItemTooltip(e, { itemId, rarity: 'common', isForgePreview: true });
     card.onmouseleave = () => hideItemTooltip();
   });
+}
+
+/**
+ * Abre o Modal de Forja de um item específico.
+ */
+export function openCraftModal(itemId, state, callbacks = {}) {
+  const modal = findElement('craft-modal');
+  const body = findElement('craft-modal-body');
+  if (!modal || !body) return;
+
+  const gData = D();
+  const allItems = gData?.ALL_ITEMS || {};
+  const def = allItems[itemId];
+  if (!def) return;
+
+  let recipes = gData?.CRAFTING_RECIPES;
+  if (gData?.generateAllCraftingRecipes) {
+    recipes = gData.generateAllCraftingRecipes(allItems);
+  }
+  const r = recipes?.[itemId] || { id: itemId, gold: 250, reqs: [{ id: 'iron_ore', count: 10 }] };
+
+  let currentQty = 1;
+  const gradeInfo = getItemGrade(def);
+  const reqLvl = r.craftLevel || (r.level ? getCraftLevelReq(r.level) : 1);
+  const statsSummary = buildShopStatsSummary(def);
+
+  function renderModalContent() {
+    const totalAdena = (r.gold || 250) * currentQty;
+    const mats = getRecipeMaterials(r);
+
+    let maxCraftable = 9999;
+    const matsHtml = mats.map(m => {
+      const matDef = allItems[m.matId];
+      const count = getInventoryCount(state, m.matId);
+      const needed = m.qty * currentQty;
+      const isOk = count >= needed;
+      const possible = Math.floor(count / m.qty);
+      if (possible < maxCraftable) maxCraftable = possible;
+
+      return `
+        <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.5); padding:8px 12px; border-radius:6px; margin-bottom:6px; font-size:13px; border:1px solid ${isOk ? 'rgba(74,222,128,0.3)' : 'rgba(239,68,68,0.3)'};">
+          <span style="color:#ddd; display:flex; align-items:center; gap:8px;">
+            <span style="font-size:20px;">${getItemIcon(matDef)}</span> <strong>${matDef ? matDef.name : m.matId}</strong>
+          </span>
+          <span style="color:${isOk ? '#4ade80' : '#ef4444'}; font-weight:bold;">
+            ${isOk ? '✓' : '✗'} ${count} / ${needed}
+          </span>
+        </div>
+      `;
+    }).join('');
+
+    const maxAdenaCraftable = Math.floor((state.gold || 0) / (r.gold || 250));
+    if (maxAdenaCraftable < maxCraftable) maxCraftable = maxAdenaCraftable;
+    if (maxCraftable < 1) maxCraftable = 1;
+
+    const craftable = canCraft(state, itemId, currentQty);
+
+    body.innerHTML = `
+      <div style="display:flex; align-items:center; gap:14px; margin-bottom:14px; padding-bottom:12px; border-bottom:1px solid rgba(212,175,55,0.3);">
+        <div style="width:54px; height:54px; min-width:54px; background:rgba(0,0,0,0.6); border:2px solid ${gradeInfo.color}; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:28px; box-shadow:0 0 12px ${gradeInfo.color}40;">
+          ${getItemIcon(def)}
+        </div>
+        <div style="flex:1;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h3 style="margin:0; font-family:'Cinzel',serif; color:#f3c669; font-size:18px;">${def.name}</h3>
+            <span style="background:${gradeInfo.color}; color:#fff; font-size:11px; font-weight:bold; padding:2px 8px; border-radius:4px;">${gradeInfo.label}</span>
+          </div>
+          <div style="font-size:12px; color:#aaa; margin-top:2px;">Requer Forja Lv.${reqLvl} · Slot: ${def.slot || 'Geral'}</div>
+        </div>
+      </div>
+
+      ${statsSummary ? `
+        <div style="background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.1); border-radius:6px; padding:10px 12px; margin-bottom:12px; font-size:12px;">
+          <div style="font-weight:bold; color:var(--gilt); margin-bottom:4px;">📊 Atributos e Bônus Base:</div>
+          <div>${statsSummary}</div>
+          ${def.desc ? `<div style="font-size:11px; color:#888; margin-top:6px; font-style:italic;">"${def.desc}"</div>` : ''}
+        </div>
+      ` : ''}
+
+      <div style="margin-bottom:14px;">
+        <div style="font-size:12px; font-weight:bold; color:var(--text-muted); margin-bottom:6px;">📋 Materiais Necessários:</div>
+        ${matsHtml}
+      </div>
+
+      <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(212,175,55,0.2); border-radius:8px; padding:12px; margin-bottom:16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-size:12px; color:var(--text-muted);">Qtd. a Forjar:</span>
+          <span style="font-size:14px; font-weight:bold; color:#fff;">🪙 Custo: <strong style="color:var(--gilt);">${totalAdena.toLocaleString()} Adena</strong></span>
+        </div>
+
+        <div style="display:flex; gap:6px; flex-wrap:wrap;" id="craft-modal-qty-picker">
+          <button class="inv-batch-btn ${currentQty === 1 ? 'active' : ''}" data-modal-qty="1">1x</button>
+          <button class="inv-batch-btn ${currentQty === 5 ? 'active' : ''}" data-modal-qty="5">5x</button>
+          <button class="inv-batch-btn ${currentQty === 10 ? 'active' : ''}" data-modal-qty="10">10x</button>
+          <button class="inv-batch-btn ${currentQty === 50 ? 'active' : ''}" data-modal-qty="50">50x</button>
+          <button class="inv-batch-btn ${currentQty === 100 ? 'active' : ''}" data-modal-qty="100">100x</button>
+          <button class="inv-batch-btn ${currentQty === maxCraftable ? 'active' : ''}" data-modal-qty="${maxCraftable}">MÁX (${maxCraftable}x)</button>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:8px;">
+        <button id="craft-modal-submit" ${!craftable ? 'disabled' : ''} style="flex:1; padding:12px; font-family:'Cinzel',serif; font-weight:bold; font-size:14px; background:${craftable ? 'linear-gradient(180deg,#d4a744,#8a641c)' : 'rgba(60,50,40,0.5)'}; border:1px solid ${craftable ? '#ffe699' : 'rgba(100,80,60,0.3)'}; color:${craftable ? '#000' : '#777'}; border-radius:6px; cursor:${craftable ? 'pointer' : 'not-allowed'}; box-shadow:${craftable ? '0 4px 12px rgba(212,175,55,0.3)' : 'none'};">
+          🔨 FORJAR ITEM ${currentQty > 1 ? `(${currentQty}x)` : ''}
+        </button>
+      </div>
+    `;
+
+    body.querySelectorAll('[data-modal-qty]').forEach(btn => {
+      btn.onclick = () => {
+        currentQty = parseInt(btn.dataset.modalQty, 10) || 1;
+        renderModalContent();
+      };
+    });
+
+    const submitBtn = body.querySelector('#craft-modal-submit');
+    if (submitBtn) {
+      submitBtn.onclick = () => {
+        if (callbacks.craftItem) callbacks.craftItem(itemId, currentQty);
+        else if (typeof window !== 'undefined' && typeof window.craftItem === 'function') window.craftItem(itemId, currentQty);
+        closeCraftModal();
+        updateCraftUI(state, callbacks);
+      };
+    }
+  }
+
+  renderModalContent();
+  modal.style.display = 'flex';
+
+  const closeBtn = findElement('craft-modal-close');
+  if (closeBtn) closeBtn.onclick = closeCraftModal;
+  modal.onclick = (e) => {
+    if (e.target === modal) closeCraftModal();
+  };
+}
+
+export function closeCraftModal() {
+  const modal = findElement('craft-modal');
+  if (modal) modal.style.display = 'none';
 }

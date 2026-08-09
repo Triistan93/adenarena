@@ -934,6 +934,14 @@ export const IDLE_MARKUP = `
       </div>
     </div>
 
+    <!-- Modal de Criação da Forja -->
+    <div id="craft-modal" class="modal-overlay" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.75); backdrop-filter:blur(6px); z-index:9999; justify-content:center; align-items:center;">
+      <div class="craft-modal-content" style="background:linear-gradient(145deg, rgba(26,20,15,0.98), rgba(12,8,6,0.99)); border:1px solid rgba(212,175,55,0.5); border-radius:12px; width:92%; max-width:480px; padding:20px; box-shadow:0 10px 30px rgba(0,0,0,0.8); position:relative;">
+        <button id="craft-modal-close" style="position:absolute; top:12px; right:14px; background:none; border:none; color:#aaa; font-size:20px; cursor:pointer;">✖</button>
+        <div id="craft-modal-body"></div>
+      </div>
+    </div>
+
     <!-- Item Tooltip -->
     <div id="item-tooltip" class="item-tooltip"></div>
 

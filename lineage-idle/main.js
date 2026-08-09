@@ -136,6 +136,8 @@ import {
   renderZoneMap as uiRenderZoneMap,
   updateShopUI as uiUpdateShopUI,
   updateCraftUI as uiUpdateCraftUI,
+  openCraftModal as uiOpenCraftModal,
+  closeCraftModal as uiCloseCraftModal,
   updateCharacterUI as uiUpdateCharacterUI,
   initTooltipEvents as uiInitTooltipEvents
 } from './src/ui/GameUI.js';
@@ -4135,6 +4137,8 @@ export function init() {
     window.selectZone = selectZone;
     window.startRaidBoss = startRaidBoss;
     window.openAddSubclassModal = openAddSubclassModal;
+    window.openCraftModal = (itemId) => uiOpenCraftModal(itemId, state, { craftItem, getItemDef, updateAllUI, save });
+    window.closeCraftModal = uiCloseCraftModal;
     window.switchSubclass = switchSubclass;
     window.claimCert = claimCert;
     window.claimQuestReward = claimQuestReward;
