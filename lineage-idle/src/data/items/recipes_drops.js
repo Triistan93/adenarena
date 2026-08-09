@@ -956,11 +956,16 @@ export function generateAllCraftingRecipes(allItemsParam = null) {
     || (typeof window !== 'undefined' && window.ALL_ITEMS)
     || {};
     
+  const seenNames = new Set();
   const recipes = {};
 
   for (const [id, def] of Object.entries(allItems)) {
-    if (!def) continue;
+    if (!def || !def.name) continue;
     if (def.slot === 'material') continue; // Materiais de craft brutos não são forjados de si mesmos
+
+    const normName = def.name.toLowerCase().trim();
+    if (seenNames.has(normName)) continue;
+    seenNames.add(normName);
 
     const level = def.req?.level || def.level || 1;
     const slot = def.slot || 'other';

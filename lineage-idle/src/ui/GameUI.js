@@ -1979,7 +1979,19 @@ export function updateCraftUI(state, callbacks = {}) {
     recipes = generateAllCraftingRecipes(allItems);
   }
 
-  const recipeList = Object.values(recipes).filter(Boolean);
+  const seenNames = new Set();
+  const rawList = Object.values(recipes).filter(Boolean);
+  const recipeList = [];
+
+  for (const r of rawList) {
+    const itemId = r.itemId || r.id;
+    const def = allItems[itemId];
+    if (!def || !def.name) continue;
+    const normName = def.name.toLowerCase().trim();
+    if (seenNames.has(normName)) continue;
+    seenNames.add(normName);
+    recipeList.push(r);
+  }
 
   // Conecta leitores para barra de busca e categorias (garante ligação contínua)
   const searchInput = findElement('craft-search-input');

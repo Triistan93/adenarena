@@ -1609,28 +1609,7 @@ function checkOfflineProgress(lastTime) {
 
 
 function renderCraftRecipes() {
-  const list = el('craft-list'); if (!list) return; list.innerHTML = '';
-  const recipesData = D().CRAFTING_RECIPES || {};
-  const recipesList = Array.isArray(recipesData) ? recipesData : Object.entries(recipesData).map(([k, v]) => ({ id: k, ...v }));
-  for (const recipe of recipesList) {
-    if (!recipe) continue;
-    const recipeId = recipe.id || recipe.itemId;
-    const def = getItemDef(recipeId); if (!def) continue;
-    const canCraftIt = canCraft(recipeId);
-    const item = mkEl('div'); item.className = 'craft-item' + (canCraftIt ? '' : ' locked');
-    const reqLevel = recipe.level ? getCraftLevelReq(recipe.level) : 1;
-    const mats = getRecipeMaterials(recipe);
-    const matHtml = mats.map(({ matId, qty }) => {
-      const have = getInventoryCount(matId);
-      const matDef = getItemDef(matId);
-      const matName = matDef ? matDef.name : matId;
-      const cls = have >= qty ? 'have' : 'need';
-      return `<span class="${cls}">${matName} ${have}/${qty}</span>`;
-    }).join(', ');
-    item.innerHTML = `<div class="item-info"><div class="item-name">${def.name}</div><div class="item-mats">${matHtml}</div><div class="item-desc">Req: Forja Lv.${reqLevel}</div></div><button class="item-action" data-craft="${recipeId}" ${!canCraftIt ? 'disabled' : ''}>Criar Item</button>`;
-    list.appendChild(item);
-  }
-  qsa('[data-craft]').forEach(btn => btn.onclick = () => craftItem(btn.dataset.craft));
+  return updateCraftUI();
 }
 
 function updateEnchantUI() {
