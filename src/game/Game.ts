@@ -3,6 +3,7 @@ import { OutlineEffect } from "three/examples/jsm/effects/OutlineEffect.js";
 import {
   ENEMY_TYPES,
   CLASS_META,
+  SKILLS,
   type RaceDef,
   type ClassDef,
   type EnemyType,
@@ -325,10 +326,14 @@ export class Game {
     this.hp = cfg.cls.hp;
     this.speed = cfg.cls.speed;
     
-    // NOVO: Linka as skills de acordo com os IDs configurados no arquivo da classe
-    this.skills = (cfg.cls.skills || [])
-      .map((skillId: string) => SKILL_DEFS[skillId as keyof typeof SKILL_DEFS] as SkillDef)
-      .filter(Boolean);
+    // Carrega as habilidades configuradas para a classe selecionada
+    const rawSkills = (cfg.cls as any).skills || SKILLS[cfg.cls.id] || [];
+    this.skills = rawSkills.map((s: any) => {
+      if (typeof s === "string") {
+        return (SKILL_DEFS as any)[s] || (SKILLS as any)[cfg.cls.id]?.find((x: any) => x.id === s) || null;
+      }
+      return s;
+    }).filter(Boolean);
       
     const meta = CLASS_META[cfg.cls.id] ?? { manaMax: 100, manaRegen: 14 };
     this.manaMax = meta.manaMax;

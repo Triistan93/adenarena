@@ -537,26 +537,39 @@ function ArenaApp() {
   const startGame = useCallback(() => {
     const canvas = canvasRef.current;
     const hud = hudRef.current;
-    if (!canvas || !hud) return;
-    if (gameRef.current) gameRef.current.destroy();
-    const game = new Game(
-      canvas,
-      hud,
-      { race, cls },
-      {
-        onPaused: () => setPhase("paused"),
-        onResumed: () => setPhase("playing"),
-        onGameOver: (r: GameResult) => {
-          const { list, rank, isNew } = commitScore(r);
-          setHighscores(list);
-          setResult({ ...r, rank, isNew });
-          setPhase("gameover");
-        },
+    if (!canvas || !hud) {
+      console.warn("Canvas elements not mounted yet");
+      return;
+    }
+    if (gameRef.current) {
+      try {
+        gameRef.current.destroy();
+      } catch (e) {
+        console.warn("Error destroying previous game instance:", e);
       }
-    );
-    gameRef.current = game;
-    game.start();
-    setPhase("playing");
+    }
+    try {
+      const game = new Game(
+        canvas,
+        hud,
+        { race, cls },
+        {
+          onPaused: () => setPhase("paused"),
+          onResumed: () => setPhase("playing"),
+          onGameOver: (r: GameResult) => {
+            const { list, rank, isNew } = commitScore(r);
+            setHighscores(list);
+            setResult({ ...r, rank, isNew });
+            setPhase("gameover");
+          },
+        }
+      );
+      gameRef.current = game;
+      game.start();
+      setPhase("playing");
+    } catch (err) {
+      console.error("Error starting 3D Game Arena:", err);
+    }
   }, [race, cls]);
 
   const handleRace = (id: RaceId) => {
