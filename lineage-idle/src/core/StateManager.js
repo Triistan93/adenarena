@@ -32,7 +32,8 @@ export const DEFAULT_STATE = () => ({
   craftTab: 'recipes', zoneTab: 'map', soulshotActive: false, combatSpeed: 1,
   totalPlaytime: 0, buffs: {}, _cds: {}, gameMode: 'idle', privilegeLevel: 0,
   autoSellRarity: 'off', craftFoundationPity: 0, warehouse: [], maxWarehouseSlots: 100,
-  essences: { fire: 0, earth: 0, wind: 0, astral: 0 }, activeElixirs: {}
+  essences: { fire: 0, earth: 0, wind: 0, astral: 0 }, activeElixirs: {},
+  prestigeLevel: 0, astralShards: 0, astralMastery: {}
 });
 
 let currentState = DEFAULT_STATE();

@@ -26,6 +26,7 @@ export const PANEL_SELECTORS = {
   zones: ['#tab-zones', '#zone-panel', '#zone-list', '#zone-map-container', '[data-panel="zones"]'],
   warehouse: ['#tab-warehouse', '#warehouse-panel', '#warehouse-window', '[data-panel="warehouse"]'],
   alchemy: ['#tab-alchemy', '#alchemy-panel', '[data-panel="alchemy"]'],
+  astral: ['#tab-astral', '#astral-panel', '[data-panel="astral"]'],
   forge: ['#tab-forge', '#forge-panel', '[data-panel="forge"]'],
   codex: ['#tab-codex', '#codex-panel', '[data-panel="codex"]']
 };

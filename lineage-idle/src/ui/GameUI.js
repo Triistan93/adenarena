@@ -2457,3 +2457,136 @@ export function renderAlchemyUI(state) {
     </div>
   `;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   19. ASTRAL MASTERY & PRESTIGE REINCARNATION UI RENDERER
+═══════════════════════════════════════════════════════════════════════════ */
+export function renderAstralMasteryUI(state) {
+  if (!state) return;
+  const root = getRoot();
+  const container = root.querySelector('#tab-astral, .tab-astral');
+  if (!container) return;
+
+  const prestigeLvl = state.prestigeLevel || 0;
+  const astralShards = state.astralShards || 0;
+  const astralMastery = state.astralMastery || {};
+  const currentLvl = state.level || 1;
+
+  const titles = [
+    'Sem Prestígio (Mortal)',
+    'Aventureiro Renascido',
+    'Mestre da Constelação',
+    'Senhor da Reencarnação',
+    'Deus Ancestral de Aden'
+  ];
+  const currentTitle = prestigeLvl > 0 ? titles[Math.min(prestigeLvl, titles.length - 1)] : titles[0];
+
+  const nodes = (typeof window !== 'undefined' && window.ASTRAL_NODES) ? window.ASTRAL_NODES : {};
+
+  const constellations = {
+    dragon: { name: '🐉 Constelação do Dragão (Combate)', desc: 'Poder físico, mágico e letalidade de acertos críticos' },
+    phoenix: { name: '🦅 Constelação da Fênix (Resistência)', desc: 'Vitalidade, mana, regeneração acelerada e defesas' },
+    midas: { name: '💰 Constelação de Midas (Economia)', desc: 'Prosperidade em Adena, chance de saque e experiência' },
+  };
+
+  let constellationsHtml = '';
+  for (const [constKey, constDef] of Object.entries(constellations)) {
+    const constNodes = Object.values(nodes).filter(n => n.const === constKey);
+
+    let nodesHtml = '';
+    for (const node of constNodes) {
+      const nodeLvl = astralMastery[node.id] || 0;
+      const isMax = nodeLvl >= node.max;
+      const canUpgrade = !isMax && astralShards >= node.cost;
+
+      nodesHtml += `
+        <div style="background:rgba(18,24,38,0.85); border:1px solid ${isMax ? 'rgba(52,211,153,0.5)' : (canUpgrade ? 'rgba(212,167,68,0.4)' : 'rgba(255,255,255,0.08)')}; border-radius:10px; padding:12px; display:flex; justify-content:space-between; align-items:center; gap:12px;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:44px; height:44px; background:rgba(0,0,0,0.6); border:1px solid ${isMax ? '#34d399' : 'rgba(212,167,68,0.3)'}; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:24px;">
+              ${node.icon}
+            </div>
+            <div>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <h4 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">${node.name}</h4>
+                <span style="font-size:10px; background:rgba(0,0,0,0.5); padding:1px 6px; border-radius:4px; color:${isMax ? '#34d399' : '#ffd877'}; font-weight:bold;">${nodeLvl}/${node.max}</span>
+              </div>
+              <p style="margin:2px 0 0 0; font-size:11px; color:#aaa;">${node.desc}</p>
+            </div>
+          </div>
+
+          <button
+            onclick="window.upgradeAstralNode('${node.id}')"
+            ${!canUpgrade ? 'disabled' : ''}
+            style="padding:8px 14px; font-family:'Cinzel',serif; font-weight:bold; font-size:11px; background:${isMax ? 'rgba(52,211,153,0.15)' : (canUpgrade ? 'linear-gradient(180deg,#d4a744,#8a641c)' : 'rgba(60,50,40,0.5)')}; border:1px solid ${isMax ? '#34d399' : (canUpgrade ? '#ffe699' : 'rgba(100,80,60,0.3)')}; color:${isMax ? '#34d399' : (canUpgrade ? '#000' : '#777')}; border-radius:6px; cursor:${canUpgrade ? 'pointer' : 'default'}; min-width:90px;"
+          >
+            ${isMax ? '✓ MÁX' : `🌟 MELHORAR (${node.cost})`}
+          </button>
+        </div>
+      `;
+    }
+
+    constellationsHtml += `
+      <div style="margin-bottom:18px;">
+        <h4 style="margin:0 0 4px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:15px;">${constDef.name}</h4>
+        <p style="margin:0 0 10px 0; font-size:11px; color:#aaa;">${constDef.desc}</p>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          ${nodesHtml}
+        </div>
+      </div>
+    `;
+  }
+
+  const canReincarnate = currentLvl >= 75;
+  const estimatedShards = Math.max(10, (currentLvl - 74) * 10 + Math.floor((state.totalPlaytime || 0) / 3600000) * 2 + Math.floor((state.gold || 0) / 2500000));
+
+  container.innerHTML = `
+    <div style="padding:16px; font-family:sans-serif; color:#fff;">
+      <!-- Header Banner -->
+      <div style="background:linear-gradient(180deg, rgba(26,18,48,0.95), rgba(12,8,26,0.95)); border:1px solid rgba(168,85,247,0.4); border-radius:12px; padding:16px; margin-bottom:18px; box-shadow:0 4px 20px rgba(168,85,247,0.2);">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+          <div>
+            <span style="font-size:11px; text-transform:uppercase; color:#c084fc; font-weight:bold; letter-spacing:1px;">✨ Sistema de Prestígio Ancestral</span>
+            <h3 style="margin:2px 0 0 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:20px; display:flex; align-items:center; gap:8px;">
+              🌟 Árvore de Maestria Astral
+            </h3>
+            <div style="font-size:12px; color:#ddd; margin-top:4px;">
+              Título Atual: <strong style="color:#a855f7;">${currentTitle}</strong> (Prestígio Nível <strong>${prestigeLvl}</strong>)
+            </div>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.6); border:1px solid rgba(168,85,247,0.5); padding:8px 16px; border-radius:10px; text-align:right;">
+            <div style="font-size:10px; color:#aaa; text-transform:uppercase;">Saldo de Fragmentos</div>
+            <div style="font-size:20px; font-weight:bold; color:#d8b4fe; display:flex; align-items:center; justify-content:flex-end; gap:6px;">
+              ✨ <span>${astralShards.toLocaleString()}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reincarnation Ritual Panel -->
+      <div style="background:linear-gradient(180deg, rgba(40,20,20,0.85), rgba(20,10,10,0.85)); border:1px solid ${canReincarnate ? 'rgba(239,68,68,0.6)' : 'rgba(255,255,255,0.1)'}; border-radius:12px; padding:14px; margin-bottom:20px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+          <div>
+            <h4 style="margin:0; font-family:'Cinzel',serif; color:#fca5a5; font-size:16px; display:flex; align-items:center; gap:6px;">
+              🔥 Ritual da Reencarnação Ancestral
+            </h4>
+            <p style="margin:4px 0 0 0; font-size:11px; color:#aaa; max-width:480px;">
+              Reencarne para reiniciar ao Nível 1. Seus Equipamentos, Baú, Alquimia, Dolls e Pontos Astrais <strong>são preservados</strong>!
+            </p>
+          </div>
+
+          <button
+            onclick="window.reincarnateHero()"
+            ${!canReincarnate ? 'disabled' : ''}
+            style="padding:10px 18px; font-family:'Cinzel',serif; font-weight:bold; font-size:13px; background:${canReincarnate ? 'linear-gradient(180deg,#ef4444,#991b1b)' : 'rgba(60,50,40,0.5)'}; border:1px solid ${canReincarnate ? '#fca5a5' : 'rgba(100,80,60,0.3)'}; color:${canReincarnate ? '#fff' : '#777'}; border-radius:8px; cursor:${canReincarnate ? 'pointer' : 'not-allowed'}; box-shadow:${canReincarnate ? '0 4px 14px rgba(239,68,68,0.4)' : 'none'};"
+          >
+            ${canReincarnate ? `✨ REENCARNAR (+${estimatedShards} Fragmentos)` : '🔒 Requer Nível 75+'}
+          </button>
+        </div>
+      </div>
+
+      <!-- Constellations Tree -->
+      ${constellationsHtml}
+    </div>
+  `;
+}

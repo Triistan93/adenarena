@@ -27,7 +27,8 @@ import {
   applyPrimaryStats,
   getClass,
   getZoneDropTier,
-  getEquippedSetCount
+  getEquippedSetCount,
+  ASTRAL_NODES
 } from './src/engine/StatsEngine.js';
 
 import {
@@ -140,6 +141,7 @@ import {
   closeCraftModal as uiCloseCraftModal,
   updateCharacterUI as uiUpdateCharacterUI,
   renderAlchemyUI as uiRenderAlchemyUI,
+  renderAstralMasteryUI as uiRenderAstralMasteryUI,
   initTooltipEvents as uiInitTooltipEvents
 } from './src/ui/GameUI.js';
 
@@ -2287,6 +2289,10 @@ function updateAlchemyUI() {
   uiRenderAlchemyUI(state);
 }
 
+function updateAstralUI() {
+  uiRenderAstralMasteryUI(state);
+}
+
 function updateAllUI() {
   uiInitTooltipEvents();
   updateGameModeUI();
@@ -2298,6 +2304,7 @@ function updateAllUI() {
   safeUiUpdate('shop', updateShopUI);
   safeUiUpdate('craft', updateCraftUI);
   safeUiUpdate('alchemy', updateAlchemyUI);
+  safeUiUpdate('astral', updateAstralUI);
   safeUiUpdate('zone', updateZoneUI);
   safeUiUpdate('zone-map', renderZoneMap);
   safeUiUpdate('race-class', updateRaceClassUI);
@@ -3820,6 +3827,7 @@ export function openPanel(tabName) {
   else if (targetTab === 'shop') safeUiUpdate('shop', updateShopUI);
   else if (targetTab === 'craft') safeUiUpdate('craft', updateCraftUI);
   else if (targetTab === 'alchemy') safeUiUpdate('alchemy', updateAlchemyUI);
+  else if (targetTab === 'astral') safeUiUpdate('astral', updateAstralUI);
   else if (targetTab === 'enchant') safeUiUpdate('enchant', updateEnchantUI);
   else if (targetTab === 'zones') safeUiUpdate('zones', updateZoneUI);
   else if (targetTab === 'codex') safeUiUpdate('codex', updateCodexUI);
@@ -4378,6 +4386,72 @@ function craftElixir(recipeId, qty = 1) {
   return true;
 }
 
+function upgradeAstralNode(nodeId) {
+  const node = ASTRAL_NODES[nodeId];
+  if (!node) return false;
+
+  if (!state.astralMastery) state.astralMastery = {};
+  const currentLvl = state.astralMastery[nodeId] || 0;
+  if (currentLvl >= node.max) {
+    log(`⚠️ ${node.name} já atingiu o nível máximo (${node.max})!`, 'warning');
+    return false;
+  }
+
+  const shards = state.astralShards || 0;
+  if (shards < node.cost) {
+    log(`⚠️ Fragmentos Astrais insuficientes! Requer ${node.cost} Fragmentos.`, 'warning');
+    return false;
+  }
+
+  state.astralShards -= node.cost;
+  state.astralMastery[nodeId] = currentLvl + 1;
+
+  log(`🌟 Desbloqueou ${node.name} (Nível ${currentLvl + 1}/${node.max})!`, 'rarity-legendary');
+  updateAllUI();
+  save();
+  return true;
+}
+
+function reincarnateHero() {
+  if ((state.level || 1) < 75) {
+    log('⚠️ Reencarnação Ancestral requer Nível 75 ou superior!', 'warning');
+    return false;
+  }
+
+  const lvlBonus = (state.level - 74) * 10;
+  const timeHours = Math.floor((state.totalPlaytime || 0) / 3600000);
+  const timeBonus = timeHours * 2;
+  const goldBonus = Math.floor((state.gold || 0) / 2500000);
+  const earnedShards = Math.max(10, lvlBonus + timeBonus + goldBonus);
+
+  state.prestigeLevel = (state.prestigeLevel || 0) + 1;
+  state.astralShards = (state.astralShards || 0) + earnedShards;
+
+  state.level = 1;
+  state.xp = 0;
+  state.sp = 10;
+  state.skills = {};
+  state.zone = 'talkingIsland';
+  state.gold = 1000;
+  state.hp = state.maxHp || 100;
+  state.mp = state.maxMp || 50;
+
+  const titles = [
+    'Aventureiro Renascido',
+    'Mestre da Constelação',
+    'Senhor da Reencarnação',
+    'Deus Ancestral de Aden'
+  ];
+  const title = titles[Math.min(state.prestigeLevel - 1, titles.length - 1)];
+
+  log(`✨ REENCARNAÇÃO ANCESTRAL REALIZADA! Prestígio Nível ${state.prestigeLevel} (${title}). Conquistou +${earnedShards} Fragmentos Astrais!`, 'rarity-legendary');
+  floatText(`PRESTÍGIO Lv.${state.prestigeLevel}`, 'float-gold');
+
+  updateAllUI();
+  save();
+  return true;
+}
+
 export function init() {
   try {
     // Expose global action handlers to window for inline HTML handlers & global events
@@ -4412,6 +4486,9 @@ export function init() {
     window.dissolveItemsByFilter = dissolveItemsByFilter;
     window.craftElixir = craftElixir;
     window.ALCHEMY_RECIPES = ALCHEMY_RECIPES;
+    window.upgradeAstralNode = upgradeAstralNode;
+    window.reincarnateHero = reincarnateHero;
+    window.ASTRAL_NODES = ASTRAL_NODES;
     window.getGameState = () => {
       const data = { 
         ...state, 

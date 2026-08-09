@@ -10,6 +10,46 @@ import { D } from '../core/GameConfig.js';
 import { RACES, CLASSES, RACE_BASE_ATTRIBUTES } from '../data/races.js';
 import { CODEX_SETS, BOSS_DOLLS } from '../data/codex.js';
 
+export const ASTRAL_NODES = {
+  // Constelação do Dragão (Combate)
+  dragon_1: { id: 'dragon_1', const: 'dragon', name: 'Fúria Titânica', icon: '⚔️', desc: '+3% Atk Físico por nível', max: 10, cost: 1, stat: 'patkMult', val: 0.03 },
+  dragon_2: { id: 'dragon_2', const: 'dragon', name: 'Chama Arcana', icon: '🔮', desc: '+3% Atk Mágico por nível', max: 10, cost: 1, stat: 'matkMult', val: 0.03 },
+  dragon_3: { id: 'dragon_3', const: 'dragon', name: 'Golpe Mortal', icon: '🎯', desc: '+2% Chance Crítica por nível', max: 5, cost: 2, stat: 'crit', val: 2 },
+  dragon_4: { id: 'dragon_4', const: 'dragon', name: 'Lâmina Suprema', icon: '💥', desc: '+5% Dano Crítico por nível', max: 10, cost: 2, stat: 'critDmg', val: 0.05 },
+
+  // Constelação da Fênix (Resistência)
+  phoenix_1: { id: 'phoenix_1', const: 'phoenix', name: 'Sangue da Fênix', icon: '❤️', desc: '+5% HP Máximo por nível', max: 10, cost: 1, stat: 'hpMult', val: 0.05 },
+  phoenix_2: { id: 'phoenix_2', const: 'phoenix', name: 'Mente Iluminada', icon: '🔵', desc: '+5% MP Máximo por nível', max: 10, cost: 1, stat: 'mpMult', val: 0.05 },
+  phoenix_3: { id: 'phoenix_3', const: 'phoenix', name: 'Éter Sagrado', icon: '🌿', desc: '+10% Regeneração de Mana por nível', max: 10, cost: 1, stat: 'mpRegen', val: 0.10 },
+  phoenix_4: { id: 'phoenix_4', const: 'phoenix', name: 'Escudo Divino', icon: '🛡️', desc: '+3% P.Def e M.Def por nível', max: 10, cost: 2, stat: 'defMult', val: 0.03 },
+
+  // Constelação de Midas (Economia)
+  midas_1: { id: 'midas_1', const: 'midas', name: 'Toque de Midas', icon: '🪙', desc: '+5% Ouro Ganho por nível', max: 10, cost: 1, stat: 'goldBoost', val: 0.05 },
+  midas_2: { id: 'midas_2', const: 'midas', name: 'Sorte dos Deuses', icon: '🍀', desc: '+3% Taxa de Drop por nível', max: 10, cost: 1, stat: 'luckBoost', val: 0.03 },
+  midas_3: { id: 'midas_3', const: 'midas', name: 'Sabedoria Ancestral', icon: '📚', desc: '+5% XP Bônus por nível', max: 10, cost: 1, stat: 'xpBoost', val: 0.05 },
+  midas_4: { id: 'midas_4', const: 'midas', name: 'Aceleração Temporal', icon: '⚡', desc: '+2% Velocidade de Ataque por nível', max: 10, cost: 2, stat: 'speed', val: 2 },
+};
+
+export function getAstralMasteryBonuses(state) {
+  const out = {
+    patkMult: 0, matkMult: 0, crit: 0, critDmg: 0,
+    hpMult: 0, mpMult: 0, mpRegen: 0, defMult: 0,
+    goldBoost: 0, luckBoost: 0, xpBoost: 0, speed: 0
+  };
+  if (!state?.astralMastery || typeof state.astralMastery !== 'object') return out;
+
+  for (const [nodeId, lvl] of Object.entries(state.astralMastery)) {
+    const node = ASTRAL_NODES[nodeId];
+    if (node && lvl > 0) {
+      const amount = node.val * Math.min(lvl, node.max);
+      if (out[node.stat] !== undefined) {
+        out[node.stat] += amount;
+      }
+    }
+  }
+  return out;
+}
+
 /**
  * Retorna os dados completos da classe informada, resolvendo herança de arquétipo se necessário.
  * @param {string} classId
@@ -347,7 +387,7 @@ export function getStats(state) {
   baseDef  += sk('lightArmor') * 4.2;
   baseEva  += sk('lightArmor') * 3;
   baseMdef += sk('antiMagic') * 18;
-  const mpRegenBonus = sk('higherMana') * 2;
+  let mpRegenBonus = sk('higherMana') * 2;
 
   const eb = getTotalEquipBonuses(state);
   const setRes = getActiveSetBonuses(state);
@@ -398,6 +438,18 @@ export function getStats(state) {
     }
   }
 
+  // Process Astral Mastery Bonuses
+  const astralB = getAstralMasteryBonuses(state);
+  buffAtkMult += astralB.patkMult;
+  buffMatk += Math.floor(baseMatk * astralB.matkMult);
+  buffDef += Math.floor(baseDef * astralB.defMult);
+  elixirHpMult += astralB.hpMult;
+  mpRegenBonus += astralB.mpRegen;
+  goldBoost += astralB.goldBoost;
+  luckBoost += astralB.luckBoost;
+  xpBoost += astralB.xpBoost;
+  buffSpd += astralB.speed;
+
   const agathionUid = state.equipment?.agathion;
   const agathionItem = agathionUid ? state.inventory?.find(i => i.uid === agathionUid) : null;
   const agathionDef = agathionItem ? D()?.ALL_ITEMS?.[agathionItem.itemId] : null;
@@ -424,14 +476,14 @@ export function getStats(state) {
   const finalEva  = Math.floor(baseEva + (Number(eb.eva) || 0) + (Number(setB.eva) || 0) + codexB.eva + dollsB.eva);
   const finalMatk = Math.floor((baseMatk + (Number(eb.matk) || 0) + (Number(setB.matk) || 0) + buffMatk + codexB.matk + dollsB.matk + certB.matk) * towerMult);
   const finalMdef = Math.floor((baseMdef + (Number(eb.mdef) || 0) + (Number(setB.mdef) || 0) + buffMdef + codexB.mdef + dollsB.mdef + certB.mdef) * towerMult);
-  const finalCrit = (Number(eb.crit) || 0) + (Number(setB.crit) || 0) + codexB.crit + dollsB.crit + certB.crit;
+  const finalCrit = (Number(eb.crit) || 0) + (Number(setB.crit) || 0) + codexB.crit + dollsB.crit + certB.crit + astralB.crit;
 
   const lootBonus  = (Number(race?.stats?.lootBonus) || 0) + (Number(cls?.base?.lootBonus) || 0) + itemLootBonus + luckBoost;
   const atkSpd     = (buffSpd + (dollsB.speed || 0)) / 100;
   const lifeDrain  = ((Number(eb.lifesteal) || 0) + (dollsB.lifesteal || 0) + ((setB.lifesteal || 0) / 100));
   const craftBonus = itemCraftBonus;
 
-  const critDmg   = 1 + sk('executioner') * 0.15;
+  const critDmg   = 1 + sk('executioner') * 0.15 + astralB.critDmg;
   const regenHp   = sk('holylight') * 0.01;
   const meteorLvl = sk('meteor');
   const execute   = sk('assassinate') * 0.02;
