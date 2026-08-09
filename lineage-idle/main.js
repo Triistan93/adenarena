@@ -41,6 +41,7 @@ import {
   getMaxInventorySlots,
   getMaxWarehouseSlots,
   isHighValueItem,
+  isProtectedFromAutoSell,
   getItemGrade,
   getInventoryCount as serviceGetInventoryCount,
   addToInventory as serviceAddToInventory,
@@ -500,6 +501,8 @@ function selectJunkItems() {
   const set = getSelectedSet();
   for (const item of state.inventory) {
     if (item && !item.equipped) {
+      const def = D().ALL_ITEMS[item.itemId];
+      if (def && isProtectedFromAutoSell(item, def)) continue;
       const r = (item.rarity || 'common').toLowerCase();
       if (r === 'common' || r === 'uncommon') {
         set.add(item.uid);
@@ -536,6 +539,7 @@ function sellSelectedItems() {
     if (!item || item.equipped) continue;
     const def = D().ALL_ITEMS[item.itemId];
     if (!def) continue;
+    if (isProtectedFromAutoSell(item, def)) continue;
     const itemQty = item.count || 1;
     const basePrice = def.price || 10;
     const mult = item.rarity ? (D().RARITY[item.rarity]?.mult || 1) : 1;

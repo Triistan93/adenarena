@@ -288,6 +288,12 @@ export function showItemTooltip(e, item, state, callbacks = {}) {
     ? `<span style="color:${gradeColor};font-size:10px;font-weight:700;border:1px solid ${gradeColor}40;padding:1px 6px;border-radius:3px;background:rgba(0,0,0,0.3);margin-left:6px;">${gradeLabel}</span>`
     : '';
 
+  const PROTECTED_SLOTS = ['consumable', 'material', 'scroll', 'powerup', 'potion', 'food', 'spellbook', 'talisman', 'pendant', 'coin'];
+  const isProtected = PROTECTED_SLOTS.includes((def.slot || '').toLowerCase()) || !!def.stack;
+  const protectionBadge = isProtected
+    ? `<div style="color:#60a5fa;font-size:9px;font-weight:700;margin-top:4px;display:flex;align-items:center;gap:3px;"><span style="font-size:10px;">🛡️</span> Protegido contra Venda Automática</div>`
+    : '';
+
   tooltip.innerHTML = `
     <div style="margin-bottom:4px;display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
       <span style="color:${rarityColor};font-weight:bold;font-size:13px;text-shadow:0 0 8px ${rarityColor}60;">${escapeHTML(displayName)}</span>
@@ -299,6 +305,7 @@ export function showItemTooltip(e, item, state, callbacks = {}) {
     ${affixesStr}
     <div style="color:#777;font-size:10px;margin-top:4px;font-style:italic;">${escapeHTML(def.desc || '')}</div>
     <div style="color:#aaa;font-size:10px;margin-top:4px;">💰 Valor: <span style="color:#e8c870;font-weight:600;">${(def.price || 0).toLocaleString()}g</span></div>
+    ${protectionBadge}
     ${actionsHtml}
   `;
 

@@ -35,6 +35,29 @@ export function isHighValueItem(item) {
 }
 
 /**
+ * Verifica se um item é protegido contra venda e seleção automática
+ * (materiais de craft, poções, scrolls, enchants, spellbooks, talismãs).
+ * @param {Object} item
+ * @param {Object} [def]
+ * @returns {boolean} True se for protegido
+ */
+export function isProtectedFromAutoSell(item, def) {
+  if (!def) {
+    const gData = D();
+    def = gData?.ALL_ITEMS?.[item?.itemId];
+  }
+  if (!def) return false;
+  const slot = String(def.slot || '').toLowerCase();
+  const PROTECTED_SLOTS = [
+    'consumable', 'material', 'scroll', 'powerup', 'potion',
+    'food', 'spellbook', 'talisman', 'pendant', 'coin'
+  ];
+  if (PROTECTED_SLOTS.includes(slot)) return true;
+  if (def.stack || item?.isProtected) return true;
+  return false;
+}
+
+/**
  * Retorna o Grade do item baseado no nível requerido.
  * @param {number} lvl
  * @returns {string}
@@ -79,7 +102,7 @@ export function getWarehouseCount(state, itemId) {
  * @param {Object} state
  * @param {string} itemId
  * @param {number} [amount=1]
- * @param {string|null} [rarity=null]
+ * @param {string} [rarity=null]
  * @param {boolean} [foundation=false]
  * @param {Object} [callbacks] — { log }
  * @returns {boolean} True se adicionado com sucesso
@@ -94,9 +117,9 @@ export function addToInventory(state, itemId, amount = 1, rarity = null, foundat
   if (def.stack && (def.slot === 'consumable' || def.slot === 'material' || def.slot === 'scroll' || def.slot === 'powerup') && !rarity) {
     let remaining = amount;
     while (remaining > 0) {
-      const existing = state.inventory.find(i => i.itemId === itemId && !i.rarity && (i.count || 1) < def.stack);
+      const existing = state.inventory.find(i => i.itemId === itemId && !i.rarity && (i.count || 1) < (def.stack || 99999));
       if (existing) {
-        const space = def.stack - (existing.count || 1);
+        const space = (def.stack || 99999) - (existing.count || 1);
         const add = Math.min(space, remaining);
         existing.count = (existing.count || 1) + add;
         remaining -= add;
@@ -105,7 +128,7 @@ export function addToInventory(state, itemId, amount = 1, rarity = null, foundat
           if (callbacks.log) callbacks.log('Inventory full!', 'system');
           return false;
         }
-        const add = Math.min(def.stack, remaining);
+        const add = Math.min((def.stack || 99999), remaining);
         state.inventory.push({
           uid: Date.now() + '_' + Math.random().toString(36).slice(2, 8),
           itemId, count: add, rarity: null, equipped: false, foundation: false
@@ -118,17 +141,19 @@ export function addToInventory(state, itemId, amount = 1, rarity = null, foundat
 
   const RARITY_RANK = { 'common': 1, 'uncommon': 2, 'rare': 3, 'epic': 4, 'legendary': 5, 'mythic': 6, 's': 7 };
   if (rarity && !foundation && state.autoSellRarity && state.autoSellRarity !== 'off') {
-    const itemRarity = rarity.toLowerCase();
-    const targetRank = RARITY_RANK[state.autoSellRarity.toLowerCase()] || 0;
-    const itemRank = RARITY_RANK[itemRarity] || 1;
-    if (itemRank <= targetRank) {
-      const mult = gData?.RARITY?.[itemRarity] ? gData.RARITY[itemRarity].mult : 1;
-      const price = Math.max(1, Math.floor((def.price || 10) * 0.4 * mult)) * amount;
-      state.gold = (state.gold || 0) + price;
-      if (callbacks.log) {
-        callbacks.log(`🪙 [Auto-Sell] ${amount}x ${def.name} [${itemRarity.toUpperCase()}] vendido por +${price.toLocaleString()}g`, 'loot');
+    if (!isProtectedFromAutoSell(null, def)) {
+      const itemRarity = rarity.toLowerCase();
+      const targetRank = RARITY_RANK[state.autoSellRarity.toLowerCase()] || 0;
+      const itemRank = RARITY_RANK[itemRarity] || 1;
+      if (itemRank <= targetRank) {
+        const mult = gData?.RARITY?.[itemRarity] ? gData.RARITY[itemRarity].mult : 1;
+        const price = Math.max(1, Math.floor((def.price || 10) * 0.4 * mult)) * amount;
+        state.gold = (state.gold || 0) + price;
+        if (callbacks.log) {
+          callbacks.log(`🪙 [Auto-Sell] ${amount}x ${def.name} [${itemRarity.toUpperCase()}] vendido por +${price.toLocaleString()}g`, 'loot');
+        }
+        return true;
       }
-      return true;
     }
   }
 
