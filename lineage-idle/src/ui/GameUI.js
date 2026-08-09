@@ -2082,7 +2082,7 @@ export function updateCraftUI(state, callbacks = {}) {
         </div>
         ${statsSummary ? `<div class="craft-recipe-stats">📊 ${statsSummary}</div>` : ''}
         <div class="craft-mats-line">${matsHtml}</div>
-        <button class="craft-item-btn" data-open-craft="${itemId}">
+        <button class="craft-item-btn" data-open-craft="${itemId}" style="width:100%; padding:10px 14px; font-family:'Cinzel',serif; font-weight:700; font-size:13px; background:linear-gradient(180deg,#d4a744,#8a641c); border:1px solid #ffe699; color:#000; border-radius:6px; cursor:pointer; box-shadow:0 3px 10px rgba(0,0,0,0.4); margin-top:8px;">
           🔨 Ver &amp; Forjar Item
         </button>
       </div>

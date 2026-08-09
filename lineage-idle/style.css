@@ -2081,18 +2081,113 @@ select:focus-visible {
 .mystic-buy:hover:not(:disabled) { background: linear-gradient(180deg, var(--amethyst), #3a2a5a); color: #fff; box-shadow: 0 2px 10px rgba(154,115,199,0.4); }
 
 /* ============ CRAFT & ZONES ============ */
-.craft-list, .zone-list { display: flex; flex-direction: column; gap: 5px; }
-.craft-item {
-  padding: 7px 10px;
-  background: linear-gradient(180deg, var(--bg-2), var(--bg-1));
-  border: 1px solid var(--line);
-  display: flex; justify-content: space-between; align-items: center; gap: 8px;
-  transition: all .18s;
+.zone-list { display: flex; flex-direction: column; gap: 5px; }
+
+.craft-list {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)) !important;
+  gap: 14px !important;
+  padding: 8px 4px !important;
 }
-.craft-item:hover:not(.locked) { border-color: var(--verdigris); transform: translateX(2px); }
-.craft-item.locked { opacity: 0.5; }
-.item-mats { font-family: "IBM Plex Mono", monospace; font-size: 10px; margin-top: 2px; color: var(--ink-dim); }
-.item-mats .have { color: var(--verdigris); }
+
+.craft-recipe-card {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  padding: 14px 16px !important;
+  background: linear-gradient(145deg, rgba(28, 22, 16, 0.92), rgba(14, 10, 7, 0.98)) !important;
+  border: 1px solid rgba(212, 167, 68, 0.35) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5) !important;
+  transition: all 0.2s ease-in-out !important;
+  position: relative !important;
+}
+
+.craft-recipe-card:hover {
+  border-color: rgba(212, 167, 68, 0.8) !important;
+  box-shadow: 0 6px 20px rgba(212, 167, 68, 0.25) !important;
+  transform: translateY(-3px) !important;
+}
+
+.craft-recipe-card.craftable {
+  border-color: rgba(74, 222, 128, 0.6) !important;
+  background: linear-gradient(145deg, rgba(18, 38, 24, 0.9), rgba(8, 20, 13, 0.98)) !important;
+}
+
+.craft-recipe-header {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  margin-bottom: 6px !important;
+}
+
+.craft-recipe-icon-box {
+  width: 48px !important;
+  height: 48px !important;
+  min-width: 48px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: rgba(0, 0, 0, 0.6) !important;
+  border: 1.5px solid rgba(212, 167, 68, 0.4) !important;
+  border-radius: 8px !important;
+  font-size: 26px !important;
+}
+
+.craft-recipe-title {
+  font-family: "Cinzel", serif !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  color: #f3c669 !important;
+  line-height: 1.2 !important;
+}
+
+.craft-recipe-sub {
+  font-size: 12px !important;
+  color: #9ca3af !important;
+  margin-top: 2px !important;
+}
+
+.craft-recipe-stats {
+  font-size: 12px !important;
+  background: rgba(0, 0, 0, 0.45) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 6px !important;
+  padding: 6px 10px !important;
+  margin: 8px 0 !important;
+  line-height: 1.4 !important;
+}
+
+.craft-mats-line {
+  font-size: 12px !important;
+  background: rgba(0, 0, 0, 0.35) !important;
+  padding: 8px 12px !important;
+  border-radius: 6px !important;
+  margin-bottom: 12px !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+}
+
+.craft-item-btn {
+  width: 100% !important;
+  padding: 10px 16px !important;
+  font-family: "Cinzel", serif !important;
+  font-weight: 700 !important;
+  font-size: 13px !important;
+  background: linear-gradient(180deg, #d4a744, #8a641c) !important;
+  border: 1px solid #ffe699 !important;
+  color: #000 !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4) !important;
+  transition: all 0.15s ease !important;
+}
+
+.craft-item-btn:hover:not(:disabled) {
+  filter: brightness(1.15) !important;
+  transform: translateY(-1px) !important;
+}
 .item-mats .need { color: var(--blood); }
 .zone-item {
   padding: 8px 10px;
