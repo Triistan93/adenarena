@@ -2002,6 +2002,17 @@ function matchesSlotFilter(def, filterKey) {
   return true;
 }
 
+function getMaxAllowedReqLevel(pLvl) {
+  const lvl = Number(pLvl) || 1;
+  if (lvl < 20) return 19;  // Lv 1-19: Apenas No-Grade (1 a 19)
+  if (lvl < 40) return 39;  // Lv 20-39: No-Grade e D-Grade (1 a 39)
+  if (lvl < 52) return 51;  // Lv 40-51: Até C-Grade (1 a 51)
+  if (lvl < 61) return 60;  // Lv 52-60: Até B-Grade (1 a 60)
+  if (lvl < 76) return 75;  // Lv 61-75: Até A-Grade (1 a 75)
+  if (lvl < 80) return 79;  // Lv 76-79: Até S-Grade (1 a 79)
+  return 999;                // Lv 80+: Frost Lord e todos os itens
+}
+
 export function updateCraftUI(state, callbacks = {}) {
   const craftLvlEl = findElement('craft-level-num') || findElement('craft-level');
   if (craftLvlEl) craftLvlEl.textContent = `${state.craftLevel || 1}`;
@@ -2033,7 +2044,9 @@ export function updateCraftUI(state, callbacks = {}) {
     recipeList.push(r);
   }
 
-  // Conecta leitores para barra de busca e categorias (garante ligação contínua)
+  const activeCat = window._craftSelectedCategory || 'all';
+
+  // Conecta leitores para barra de busca e categorias (garante ligação contínua e destaque ativo)
   const searchInput = findElement('craft-search-input');
   if (searchInput) {
     searchInput.oninput = (e) => {
@@ -2044,17 +2057,20 @@ export function updateCraftUI(state, callbacks = {}) {
 
   const catButtons = document.querySelectorAll('#craft-category-filters [data-craft-cat]');
   catButtons.forEach(btn => {
-    btn.onclick = () => {
-      catButtons.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      window._craftSelectedCategory = btn.dataset.craftCat;
+    const isThisActive = btn.dataset.craftCat === activeCat;
+    btn.classList.toggle('active', isThisActive);
+    btn.onclick = (e) => {
+      e.preventDefault();
+      const selected = btn.dataset.craftCat;
+      window._craftSelectedCategory = selected;
+      catButtons.forEach(b => b.classList.toggle('active', b.dataset.craftCat === selected));
       updateCraftUI(state, callbacks);
     };
   });
 
-  const activeCat = window._craftSelectedCategory || 'all';
   const searchTerm = (window._craftSearchTerm || '').toLowerCase().trim();
-  const playerLevel = state.level || state.player?.level || 1;
+  const playerLevel = state.level || state.player?.level || state.hero?.level || 1;
+  const maxReqLvl = getMaxAllowedReqLevel(playerLevel);
 
   const filtered = recipeList.filter(r => {
     const itemId = r.itemId || r.id;
@@ -2063,7 +2079,7 @@ export function updateCraftUI(state, callbacks = {}) {
 
     // Restrição por Nível do Jogador (Nível 1 a 19 só enxerga No-Grade, Nível 20 a 39 enxerga No-Grade e D-Grade, etc.)
     const itemReqLevel = def.req?.level || def.level || r.level || 1;
-    if (itemReqLevel > playerLevel) {
+    if (itemReqLevel > maxReqLvl) {
       return false;
     }
 
