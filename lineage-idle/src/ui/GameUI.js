@@ -279,15 +279,26 @@ export function showItemTooltip(e, item, state, callbacks = {}) {
   tooltip.style.boxShadow  = `${RARITY_GLOW[rarity] || 'none'}, 0 4px 20px rgba(0,0,0,0.8)`;
   tooltip.style.borderColor = rarityColor + '60';
 
+  const tierNum = def.tier || 0;
+  const GRADE_MAP = { 0: '', 1: 'No Grade', 2: 'D Grade', 3: 'C Grade', 4: 'B Grade', 5: 'S Grade', 6: 'Frost Lord Grade' };
+  const GRADE_COLOR = { 0: '#888', 1: '#9e9e9e', 2: '#4fc3f7', 3: '#81c784', 4: '#7986cb', 5: '#ffd54f', 6: '#80deea' };
+  const gradeLabel = GRADE_MAP[tierNum] || '';
+  const gradeColor = GRADE_COLOR[tierNum] || '#888';
+  const gradeHtml = gradeLabel
+    ? `<span style="color:${gradeColor};font-size:10px;font-weight:700;border:1px solid ${gradeColor}40;padding:1px 6px;border-radius:3px;background:rgba(0,0,0,0.3);margin-left:6px;">${gradeLabel}</span>`
+    : '';
+
   tooltip.innerHTML = `
-    <div style="margin-bottom:4px;">
+    <div style="margin-bottom:4px;display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
       <span style="color:${rarityColor};font-weight:bold;font-size:13px;text-shadow:0 0 8px ${rarityColor}60;">${escapeHTML(displayName)}</span>
+      ${gradeHtml}
     </div>
     <div style="color:${rarityColor};font-size:11px;font-weight:600;margin-bottom:2px;">${rarityName}</div>
     <div style="color:#888;font-size:10px;text-transform:uppercase;margin-bottom:4px;">${def.slot ? def.slot.toUpperCase() : 'ITEM'}${def.req?.level ? ` · Req Lv.${def.req.level}` : ''}</div>
     ${statsStr}
     ${affixesStr}
     <div style="color:#777;font-size:10px;margin-top:4px;font-style:italic;">${escapeHTML(def.desc || '')}</div>
+    <div style="color:#aaa;font-size:10px;margin-top:4px;">💰 Valor: <span style="color:#e8c870;font-weight:600;">${(def.price || 0).toLocaleString()}g</span></div>
     ${actionsHtml}
   `;
 
@@ -397,6 +408,7 @@ const INJECTED_GAMEUI_CSS = `
   flex: 0 0 50px;
 }
 
+/* === PAPERDOLL / EQUIP SLOTS (fixed overflow) === */
 #tab-inventory .equip-slot,
 .l2inv-pd-slot,
 .equip-slot {
@@ -414,6 +426,33 @@ const INJECTED_GAMEUI_CSS = `
   align-items: center;
   justify-content: center;
   position: relative;
+  overflow: hidden;
+}
+
+.equip-slot.active {
+  background: linear-gradient(135deg, #2a2218 0%, #1a1611 100%);
+}
+
+.equip-slot .equip-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.equip-slot .equip-icon img,
+.equip-slot .equip-icon .inventory-item-image {
+  width: 32px !important;
+  height: 32px !important;
+  max-width: 32px !important;
+  max-height: 32px !important;
+  object-fit: contain !important;
+}
+
+.equip-placeholder {
+  font-size: 18px;
+  opacity: 0.3;
 }
 
 /* === DESATIVAR RESIZE MANUAL === */
@@ -430,16 +469,16 @@ const INJECTED_GAMEUI_CSS = `
 .inventory-grid,
 .l2inv-grid {
   display: grid !important;
-  grid-template-columns: repeat(10, 38px) !important; /* EXACTLY 10 COLUMNS */
-  grid-auto-rows: 38px !important;                     /* EXACTLY 38px ROWS */
+  grid-template-columns: repeat(10, 38px) !important;
+  grid-auto-rows: 38px !important;
   gap: 3px !important;
   padding: 6px !important;
   background: rgba(10, 7, 4, 0.85) !important;
   border: 2px solid #3c2e1e !important;
   border-radius: 4px !important;
-  height: 337px !important;                            /* EXACTLY 8 VISIBLE ROWS (8x38 + 7x3 + 12) */
+  height: 337px !important;
   max-height: 337px !important;
-  overflow-y: scroll !important;                       /* SIDEBAR DE ROLAGEM VERTICAL */
+  overflow-y: scroll !important;
   overflow-x: hidden !important;
   box-sizing: border-box !important;
   align-content: start !important;
@@ -466,7 +505,8 @@ const INJECTED_GAMEUI_CSS = `
   border: 1px solid #7a5c38 !important;
 }
 
-/* SLOTS DO INVENTÁRIO (38px x 38px COM LINHAS/LIMITADORES CLAROS) */
+/* === SLOTS DO INVENTÁRIO (38px x 38px) === */
+/* NOTE: border is NOT set here with !important — rarity styles from style.css will apply */
 #tab-inventory .inv-slot,
 .inv-slot,
 .l2inv-slot {
@@ -477,7 +517,6 @@ const INJECTED_GAMEUI_CSS = `
   min-height: 38px !important;
   max-height: 38px !important;
   background: #241e16 !important;
-  border: 1px solid #5a452a !important; /* LIMITADORES / LINHAS VISÍVEIS */
   border-radius: 3px !important;
   box-sizing: border-box !important;
   overflow: hidden !important;
@@ -485,18 +524,144 @@ const INJECTED_GAMEUI_CSS = `
   align-items: center !important;
   justify-content: center !important;
   position: relative !important;
+  transition: transform 0.12s ease, box-shadow 0.2s ease !important;
+  cursor: pointer;
+}
+
+/* Default border for slots without rarity class */
+.inv-slot:not([class*="rarity-"]) {
+  border: 1px solid #5a452a !important;
   box-shadow: inset 0 0 4px rgba(0,0,0,0.8) !important;
 }
 
 #tab-inventory .inv-slot.empty,
 .inv-slot.empty {
   background: rgba(14, 10, 6, 0.6) !important;
-  border: 1px solid #2e2216 !important; /* LINHAS DOS SLOTS VAZIOS */
+  border: 1px solid #2e2216 !important;
   opacity: 0.6 !important;
   cursor: default !important;
 }
 
-/* ÍCONES REDUZIDOS EM 30% (24px) */
+/* === PREMIUM RARITY BACKGROUNDS (gradient tints) === */
+.inv-slot.rarity-common {
+  background: linear-gradient(135deg, #241e16 0%, #1c1812 100%) !important;
+}
+.inv-slot.rarity-uncommon {
+  background: linear-gradient(135deg, #1a2618 0%, #162014 100%) !important;
+}
+.inv-slot.rarity-rare {
+  background: linear-gradient(135deg, #161e2e 0%, #121828 100%) !important;
+}
+.inv-slot.rarity-epic {
+  background: linear-gradient(135deg, #221630 0%, #1a1028 100%) !important;
+  animation: epic-shimmer 3s ease-in-out infinite alternate !important;
+}
+.inv-slot.rarity-legendary {
+  background: linear-gradient(135deg, #2e2210 0%, #261c08 100%) !important;
+}
+
+/* Same for equip slots */
+.equip-slot.rarity-common   { background: linear-gradient(135deg, #241e16 0%, #1c1812 100%); }
+.equip-slot.rarity-uncommon { background: linear-gradient(135deg, #1a2618 0%, #162014 100%); border-color: #22c55e !important; }
+.equip-slot.rarity-rare     { background: linear-gradient(135deg, #161e2e 0%, #121828 100%); border-color: #3b82f6 !important; }
+.equip-slot.rarity-epic     { background: linear-gradient(135deg, #221630 0%, #1a1028 100%); border-color: #a855f7 !important; box-shadow: 0 0 8px rgba(168,85,247,0.4); }
+.equip-slot.rarity-legendary { background: linear-gradient(135deg, #2e2210 0%, #261c08 100%); border-color: #f59e0b !important; box-shadow: 0 0 10px rgba(245,158,11,0.5); animation: legendary-glow 2.5s ease-in-out infinite alternate; }
+
+/* === RARITY ANIMATIONS === */
+@keyframes epic-shimmer {
+  0%   { box-shadow: 0 0 6px rgba(168, 85, 247, 0.3), inset 0 0 6px rgba(168, 85, 247, 0.2); }
+  100% { box-shadow: 0 0 10px rgba(168, 85, 247, 0.55), inset 0 0 10px rgba(168, 85, 247, 0.35); }
+}
+
+@keyframes legendary-glow {
+  0%   { box-shadow: 0 0 8px rgba(245, 158, 11, 0.4), inset 0 0 6px rgba(245, 158, 11, 0.25); }
+  100% { box-shadow: 0 0 16px rgba(245, 158, 11, 0.7), inset 0 0 12px rgba(245, 158, 11, 0.45); }
+}
+
+/* Hover lift effect for items (not empty slots) */
+.inv-slot:not(.empty):hover {
+  transform: translateY(-2px) scale(1.05) !important;
+  z-index: 10 !important;
+}
+
+/* Equipped badge */
+.equipped-badge {
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  font-size: 8px;
+  font-weight: 800;
+  color: #70c8f8;
+  background: rgba(10, 26, 42, 0.85);
+  border: 1px solid rgba(58, 122, 176, 0.6);
+  border-radius: 2px;
+  padding: 0 2px;
+  line-height: 10px;
+  z-index: 3;
+}
+
+/* === TIER GRADE BADGE === */
+.tier-badge {
+  position: absolute;
+  bottom: 1px;
+  right: 1px;
+  font-size: 7px;
+  font-weight: 900;
+  letter-spacing: 0.3px;
+  border-radius: 2px;
+  padding: 0px 2px;
+  line-height: 10px;
+  z-index: 3;
+  text-shadow: 0 1px 1px rgba(0,0,0,0.8);
+}
+.tier-badge.tier-1 { color: #9e9e9e; background: rgba(30,28,24,0.8); border: 1px solid #555; }
+.tier-badge.tier-2 { color: #4fc3f7; background: rgba(15,30,40,0.85); border: 1px solid #4fc3f7; }
+.tier-badge.tier-3 { color: #81c784; background: rgba(15,35,20,0.85); border: 1px solid #81c784; }
+.tier-badge.tier-4 { color: #7986cb; background: rgba(20,20,40,0.85); border: 1px solid #7986cb; }
+.tier-badge.tier-5 { color: #ffd54f; background: rgba(35,28,10,0.85); border: 1px solid #ffd54f; text-shadow: 0 0 4px rgba(255,213,79,0.5); }
+.tier-badge.tier-6 { color: #e0f7fa; background: rgba(10,30,40,0.9); border: 1px solid #80deea; text-shadow: 0 0 6px rgba(128,222,234,0.7); animation: frostlord-badge 2s ease-in-out infinite alternate; }
+
+@keyframes frostlord-badge {
+  0%   { border-color: #80deea; box-shadow: 0 0 3px rgba(128,222,234,0.4); }
+  100% { border-color: #b2ebf2; box-shadow: 0 0 6px rgba(178,235,242,0.7); }
+}
+
+/* Selection check mark */
+.inv-check {
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  font-size: 9px;
+  color: #4ade80;
+  z-index: 4;
+  pointer-events: none;
+}
+
+/* Quantity badge */
+.qty {
+  position: absolute;
+  bottom: 1px;
+  left: 1px;
+  font-size: 9px;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.9);
+  z-index: 3;
+}
+
+/* Is-equipped overlay stripe */
+.inv-slot.is-equipped {
+  outline: 1px solid rgba(112, 200, 248, 0.3);
+  outline-offset: -1px;
+}
+
+/* Is-selected highlight */
+.inv-slot.is-selected {
+  outline: 2px solid #4ade80 !important;
+  outline-offset: -2px;
+}
+
+/* ÍCONES REDUZIDOS (24px) */
 .inventory-item-image {
   width: 24px !important;
   height: 24px !important;
@@ -697,6 +862,12 @@ export function updateInventoryUI(state, callbacks = {}) {
     const equippedTag = item.equipped ? `<span class="equipped-badge">E</span>` : '';
     const check = `<span class="inv-check">${isSelected ? '✓' : ''}</span>`;
 
+    const tierNum = def.tier || 0;
+    const GRADE_LABELS = { 0: '', 1: 'NG', 2: 'D', 3: 'C', 4: 'B', 5: 'S', 6: 'FL' };
+    const gradeLabel = GRADE_LABELS[tierNum] || '';
+    const tierBadge = (gradeLabel && GEAR_SLOTS.includes(defSlot))
+      ? `<span class="tier-badge tier-${tierNum}">${gradeLabel}</span>` : '';
+
     const slotEl = mkEl('div');
     slotEl.className = `inv-slot rarity-${rarity}` + (item.equipped ? ' is-equipped' : '') + (isSelected ? ' is-selected' : '');
     slotEl.dataset.uid = item.uid;
@@ -706,6 +877,7 @@ export function updateInventoryUI(state, callbacks = {}) {
       <span class="item-icon">${getItemIcon(def || item)}</span>
       ${qty}
       ${equippedTag}
+      ${tierBadge}
     `;
 
     slotEl.title = def.name;

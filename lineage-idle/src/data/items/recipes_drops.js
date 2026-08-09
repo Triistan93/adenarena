@@ -923,6 +923,7 @@ export const MONSTER_DROPS = {
   "zone4": ["weapon_archmage_staff", "weapon_assassins_dagger", "weapon_bow_of_peril", "armor_avadon_heavy_armor"],
   "zone5": ["weapon_bloody_orchid_dagger", "weapon_carnage_bow", "weapon_divine_sword", "armor_dark_crystal_heavy_armor"],
   "zone6": ["weapon_draconic_bow", "weapon_angel_slayer", "weapon_imperial_staff", "armor_draconic_armor", "armor_imperial_crusader_armor"],
+  "zone7": ["weapon_frost_lord_bow", "weapon_frost_lord_dagger", "weapon_frost_lord_sword", "weapon_frost_lord_staff", "weapon_frost_lord_ancientsword", "weapon_frost_lord_axe", "weapon_frost_lord_dual_sword", "weapon_frost_lord_dualfist", "weapon_frost_lord_magic_blunt", "weapon_frost_lord_pistol", "weapon_frost_lord_rapier", "weapon_frost_lord_spear", "weapon_frost_lord_two_hand_sword"],
 
   // 22 Hunting Zones specific drop tables
   "talkingIsland": ["weapon_composition_bow", "weapon_falchion_sword", "weapon_short_spear", "weapon_crucifix_of_blessing_magicblunt", "armor_bone_breastplate"],
@@ -1023,7 +1024,7 @@ export const SHOP_INVENTORY = [
 ];
 
 export const ZONE_GOLD_MULT = {
-  zone1: 1.0, zone2: 1.5, zone3: 2.2, zone4: 3.5, zone5: 5.5, zone6: 9.0,
+  zone1: 1.0, zone2: 1.5, zone3: 2.2, zone4: 3.5, zone5: 5.5, zone6: 9.0, zone7: 14.0,
   talkingIsland: 1.0, elvenForest: 1.2, darkForest: 1.4, orcVillage: 1.6, dwarvenMine: 1.8, kamaelLair: 2.0,
   ruinedOutpost: 2.5, howlingMoor: 3.0, giranOutskirts: 3.8, orcenRuins: 4.5, forsakenCrypt: 5.5, blackCitadel: 6.8,
   gludioCastle: 8.0, wolfMountain: 9.5, riftOfTheVoid: 11.0, emeraldGrove: 14.0, underworldGate: 18.0,
@@ -1039,6 +1040,7 @@ export const ZONE_CONSUMABLES = {
   zone4: ['mp_potion_s', 'mithril_ore', 'enchanted_stone', 'thread', 'adamantite'],
   zone5: ['mp_potion_l', 'dread_shard', 'titanium_ore', 'elemental_stone', 'mithril_ore'],
   zone6: ['hp_potion_xl', 'mp_potion_xl', 'dragon_bone', 'divine_crystal', 'titanium_ore'],
+  zone7: ['hp_potion_xl', 'mp_potion_xl', 'dragon_bone', 'divine_crystal', 'titanium_ore', 'frost_crystal'],
 
   // Specific 22 hunting zones
   talkingIsland: ['hp_potion_s', 'mp_potion_s', 'iron_ore', 'suede', 'charcoal'],

@@ -77,6 +77,14 @@ export const IDLE_MARKUP = `
             <button id="soulshot-toggle-btn" class="combat-ctrl-btn" title="Ativar Soulshot no combate (+100% dano físico/mágico por golpe)">⚡ Soulshot: OFF</button>
             <button id="autopotion-toggle-btn" class="combat-ctrl-btn" title="Usar poções de HP automaticamente quando HP < 50%">🧪 Auto-Poção: OFF</button>
             <button id="speed-toggle-btn" class="combat-ctrl-btn" title="Velocidade do combate (1x Normal ou 2x Turbo)">⏩ Velocidade: 1x</button>
+            <label class="combat-ctrl-btn" style="display:inline-flex; align-items:center; gap:6px; cursor:pointer;">
+              <span>VFX</span>
+              <select id="vfx-quality-select" title="Qualidade dos efeitos visuais" style="background:transparent; color:inherit; border:none; outline:none;">
+                <option value="low">Baixo</option>
+                <option value="medium" selected>Médio</option>
+                <option value="high">Alto</option>
+              </select>
+            </label>
           </div>
           <div class="stage-vs" aria-hidden="true">&#9876;</div>
           <div class="stage-hero" id="stage-hero">

@@ -140,6 +140,7 @@ import {
 } from './src/ui/GameUI.js';
 
 import { ensureAppLayout, showMenuPanel } from './src/ui/AppLayout.js';
+import { VFX, initializeVFX } from './vfx.js';
 // ─── Sprint 7: Importa EventBus e StateManager (Wiring & State) ───────────
 import EventBus from './src/core/EventBus.js';
 import {
@@ -744,7 +745,10 @@ function craftItem(recipeId) {
 
 // --------------------------- UI HELPERS ---------------------------
 let ROOT = document; let _intervals = []; let _listeners = [];
-export function setRoot(r) { ROOT = r || document; }
+export function setRoot(r) {
+  ROOT = r || document;
+  initializeVFX(ROOT);
+}
 export function addTrackedListener(target, event, handler, opts) {
   if (target && target.addEventListener) {
     target.addEventListener(event, handler, opts);
@@ -2240,6 +2244,7 @@ function updateAllUI() {
   safeUiUpdate('tower', updateTowerUI);
   safeUiUpdate('warehouse', updateWarehouseUI);
   safeUiUpdate('tab-badges', updateTabBadgesUI);
+  setupVfxQualityControl();
 }
 
 function renderSubclassesUI() {
@@ -2520,6 +2525,100 @@ function stageFloat(text, cls, side) {
 // --------------------------- COMBAT ---------------------------
 let combatInterval = null; let combatTick = 0; let monsterAttackTimeout = null;
 
+function getStagePositionRelative(side) {
+  const stage = el('stage');
+  if (!stage) return { x: 0, y: 0 };
+  const rect = stage.getBoundingClientRect();
+  const host = el(side === 'hero' ? 'stage-hero' : 'stage-monster');
+  if (!host) return { x: rect.width * 0.5, y: rect.height * 0.5 };
+  const box = host.getBoundingClientRect();
+  return {
+    x: box.left - rect.left + box.width * 0.5,
+    y: box.top - rect.top + box.height * 0.5
+  };
+}
+
+function getCombatTargetPoint() {
+  const stage = el('stage');
+  if (!stage) return { x: 0, y: 0 };
+  const rect = stage.getBoundingClientRect();
+  const monster = el('stage-monster');
+  if (monster) {
+    const box = monster.getBoundingClientRect();
+    return { x: box.left - rect.left + box.width * 0.45, y: box.top - rect.top + box.height * 0.45 };
+  }
+  return { x: rect.width * 0.72, y: rect.height * 0.48 };
+}
+
+function playCombatVFX(type, options = {}) {
+  if (!VFX || typeof VFX.play !== 'function') return null;
+  const resolved = { ...options };
+  if (!resolved.source) resolved.source = getStagePositionRelative('hero');
+  if (!resolved.target) resolved.target = getCombatTargetPoint();
+  return VFX.play(type, resolved);
+}
+
+function setupVfxQualityControl() {
+  const select = el('vfx-quality-select');
+  if (!select || !VFX || typeof VFX.setQuality !== 'function') return;
+  const saved = (typeof window !== 'undefined' && window.localStorage) ? window.localStorage.getItem('lineage-idle-vfx-quality') : null;
+  const initial = saved || 'high';
+  select.value = initial;
+  VFX.setQuality(initial);
+  select.addEventListener('change', () => {
+    const value = select.value || 'high';
+    VFX.setQuality(value);
+    if (typeof window !== 'undefined' && window.localStorage) {
+      try { window.localStorage.setItem('lineage-idle-vfx-quality', value); } catch (_) {}
+    }
+  });
+}
+
+function getSkillVfxId(skillId, skillDef = null) {
+  const toSnake = (value) => String(value || '')
+    .toLowerCase()
+    .trim()
+    .replace(/['’]/g, '')
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_|_$/g, '');
+
+  const candidates = new Set();
+  const rawId = skillId || skillDef?.id || '';
+  const rawName = skillDef?.name || '';
+  const normalizedId = toSnake(rawId);
+  const normalizedName = toSnake(rawName);
+
+  if (normalizedId) candidates.add(normalizedId);
+  if (normalizedName) candidates.add(normalizedName);
+  if (normalizedId && normalizedId.includes('_')) {
+    const suffix = normalizedId.split('_').slice(1).join('_');
+    if (suffix) candidates.add(suffix);
+  }
+
+  const map = {
+    flame_strike: 'fireball',
+    fireball: 'fireball',
+    ice_bolt: 'ice_shards',
+    wind_strike: 'wind_blast',
+    wind_attack: 'wind_blast',
+    arcane_missile: 'arcane_missile',
+    lightning_strike: 'lightning',
+    energy_wave: 'energy_slash',
+    arrow_storm: 'arrow_rain',
+    sword_cross: 'cross_slash',
+    spear_throw: 'spiral_spear'
+  };
+
+  for (const candidate of candidates) {
+    if (map[candidate]) return map[candidate];
+    if (candidate.endsWith('flame_strike') || candidate.includes('flame_strike')) return 'fireball';
+    if (candidate.endsWith('wind_strike') || candidate.includes('wind_strike') || candidate.includes('wind_attack')) return 'wind_blast';
+    if (candidate.endsWith('ice_bolt') || candidate.includes('ice_bolt')) return 'ice_shards';
+  }
+
+  return null;
+}
+
 function getMonsterCategory(monster) {
   if (!monster) return 'humanoid';
   if (monster.category) return monster.category.toLowerCase();
@@ -2682,6 +2781,22 @@ function attackMonster() {
         stageHeroAttack();
         stageMonsterHurt(sDmg, false);
         
+        const vfxId = getSkillVfxId(skill.id, skill.def);
+        if (vfxId) {
+          const source = getStagePositionRelative('hero');
+          const target = getCombatTargetPoint();
+          const duration = vfxId === 'arrow_rain' ? 1200 : 900;
+          playCombatVFX(vfxId, {
+            source,
+            target,
+            color: vfxId === 'fireball' ? '#ff7a45' : (vfxId === 'ice_shards' ? '#8fe7ff' : (vfxId === 'wind_blast' ? '#72f3ca' : (vfxId === 'arcane_missile' ? '#9b7cff' : (vfxId === 'lightning' ? '#91f3ff' : (vfxId === 'energy_slash' ? '#95e6ff' : (vfxId === 'cross_slash' ? '#cfe8ff' : '#ffe4a1')))))),
+            power: Math.max(1, skill.lvl || 1),
+            duration,
+            arrowCount: vfxId === 'arrow_rain' ? 16 : undefined,
+            targetArea: vfxId === 'arrow_rain' ? { x: target.x - 90, y: target.y - 40, width: 180, height: 70 } : undefined
+          });
+        }
+
         log(`💥 ${skill.def.name}! ${sDmg} ${type} damage`, 'rarity-epic');
         floatText(skill.def.name, 'float-epic');
         

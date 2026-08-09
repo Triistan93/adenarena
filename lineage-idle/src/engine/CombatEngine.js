@@ -13,12 +13,17 @@ import { getStats } from './StatsEngine.js';
 let combatInterval = null;
 let monsterAttackTimeout = null;
 
+function hasValidState(state) {
+  return !!state && typeof state === 'object';
+}
+
 /**
  * Inicia o loop de combate na zona atual.
  * @param {Object} state — Estado do jogo
  * @param {Object} [callbacks] — { log, attackMonster }
  */
 export function startCombat(state, callbacks = {}) {
+  if (!hasValidState(state)) return false;
   state.combatActive = true;
 
   if (!state.activeMonster && state.zone && ZONES[state.zone]) {
@@ -39,6 +44,7 @@ export function startCombat(state, callbacks = {}) {
  * @param {Object} state
  */
 export function stopCombat(state) {
+  if (!hasValidState(state)) return false;
   state.combatActive = false;
   if (combatInterval) {
     clearInterval(combatInterval);
@@ -56,7 +62,8 @@ export function stopCombat(state) {
  * @param {Object} [callbacks] — { log, floatText, renderStageMonster, updateZoneKillProgressUI }
  */
 export function pickRandomMonster(state, callbacks = {}) {
-  if (state.activeMonster && state.activeMonster.isTower && state.activeMonster.hp > 0) return;
+  if (!hasValidState(state)) return false;
+  if (state.activeMonster && state.activeMonster.isTower && state.activeMonster.hp > 0) return false;
   if (!state.zone || !ZONES[state.zone]) return;
 
   const zone = ZONES[state.zone];
@@ -130,6 +137,7 @@ export function pickRandomMonster(state, callbacks = {}) {
  * @param {Object} [callbacks] — { log, updateAllUI, save, attackMonster }
  */
 export function selectZone(state, zoneId, callbacks = {}) {
+  if (!hasValidState(state)) return false;
   const zone = ZONES[zoneId];
   if (!zone) return;
   if (zone.level > state.level) {
@@ -150,6 +158,7 @@ export function selectZone(state, zoneId, callbacks = {}) {
  * @param {Object} [callbacks] — { log, floatText, showSagaModal }
  */
 export function updateSagaProgress(state, silent = true, callbacks = {}) {
+  if (!hasValidState(state)) return false;
   let highestSaga = 0;
   for (let i = 0; i < SAGAS.length; i++) {
     if (state.level >= SAGAS[i].unlocksAt) {
@@ -174,6 +183,7 @@ export function updateSagaProgress(state, silent = true, callbacks = {}) {
  * @param {Object} [callbacks] — { log, el }
  */
 export function playerDeath(state, monster, callbacks = {}) {
+  if (!hasValidState(state)) return false;
   stopCombat(state);
   const scroll = state.inventory?.find(i => i.itemId === 'scroll_of_rebirth' && (i.count || 1) > 0);
   let lossRate = 0.2;
@@ -216,6 +226,7 @@ export function playerDeath(state, monster, callbacks = {}) {
  * @param {Object} [callbacks] — { log, el, updateAllUI, save, attackMonster }
  */
 export function resurrect(state, useScroll = false, callbacks = {}) {
+  if (!hasValidState(state)) return false;
   if (callbacks.el) {
     const modal = callbacks.el('death-modal');
     if (modal) modal.classList.remove('active');
