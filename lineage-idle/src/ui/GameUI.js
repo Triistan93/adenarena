@@ -12,6 +12,7 @@ import {
 import { resolveEquipSlot, migrateEquipmentSlots, equipItem, unequipItem } from '../services/EquipmentService.js';
 import { getCraftLevelReq, getRecipeMaterials, canCraft } from '../services/CraftService.js';
 import { classSatisfies, getClassSkills } from '../services/CharacterService.js';
+import { AFFIX_MAP } from '../../data/affixes.js';
 import { getClass } from '../engine/StatsEngine.js';
 import { getSkillCost } from '../engine/SkillEngine.js';
 import { ZONES, SAGAS, ZONE_BACKGROUNDS } from '../data/zones.js';
@@ -178,7 +179,25 @@ export function showItemTooltip(e, item, state, callbacks = {}) {
 
   const displayName = formatItemDisplayName(item, def);
   const rarity = item.rarity || 'common';
-  const rarityName = gData?.RARITY?.[rarity]?.name || rarity;
+  const rarityDef = gData?.RARITY?.[rarity] || {};
+  const rarityName = rarityDef.name || rarity;
+  const rarityColor = rarityDef.color || '#c8a84e';
+
+  // Mapa de cores por raridade
+  const RARITY_GLOW = {
+    common:    'none',
+    uncommon:  '0 0 8px rgba(16,185,129,0.5)',
+    rare:      '0 0 10px rgba(59,130,246,0.5)',
+    epic:      '0 0 12px rgba(168,85,247,0.6)',
+    legendary: '0 0 16px rgba(245,158,11,0.7)',
+  };
+  const RARITY_BG = {
+    common:    'rgba(30,25,20,0.95)',
+    uncommon:  'rgba(16,40,30,0.95)',
+    rare:      'rgba(15,25,50,0.95)',
+    epic:      'rgba(30,15,50,0.95)',
+    legendary: 'rgba(45,30,5,0.97)',
+  };
 
   let statsStr = '';
   if (def.stats) {
@@ -186,25 +205,46 @@ export function showItemTooltip(e, item, state, callbacks = {}) {
     if (statsList.length > 0) statsStr = `<div class="tooltip-stats">${statsList.join(' · ')}</div>`;
   }
 
+  // ─── Afixos: resolve nome pelo AFFIX_MAP usando o id ──────────────────────
   let affixesStr = '';
   if (item.affixes && item.affixes.length > 0) {
-    affixesStr = `<div class="tooltip-affixes">${item.affixes.map(a => `✨ ${a.name}: +${a.value}`).join('<br/>')}</div>`;
+    const affixLines = item.affixes.map(a => {
+      // Suporte a formato antigo (a.name) e novo (a.id → lookup)
+      const affDef = (AFFIX_MAP || {})[a.id] || (gData?.AFFIX_MAP || {})[a.id];
+      if (affDef && affDef.name) {
+        const label = affDef.name.replace('{value}', a.value ?? a.val ?? '');
+        return `<div style="color:#f0cd7e;font-size:11px;font-weight:600;margin:1px 0;">✦ ${label}</div>`;
+      } else if (a.name) {
+        return `<div style="color:#f0cd7e;font-size:11px;font-weight:600;margin:1px 0;">✦ ${a.name}: +${a.value}</div>`;
+      }
+      return ''; // ignora afixos com id inválido
+    }).filter(Boolean);
+    if (affixLines.length > 0) {
+      affixesStr = `<div style="margin-top:6px;padding-top:4px;border-top:1px dashed ${rarityColor}40;">`
+        + `<div style="font-size:9px;font-weight:bold;color:${rarityColor};text-transform:uppercase;letter-spacing:0.5px;margin-bottom:3px;">✦ Afixos Especiais</div>`
+        + affixLines.join('')
+        + `</div>`;
+    }
   }
 
+  tooltip.style.background = RARITY_BG[rarity] || RARITY_BG.common;
+  tooltip.style.boxShadow  = `${RARITY_GLOW[rarity] || 'none'}, 0 4px 20px rgba(0,0,0,0.8)`;
+  tooltip.style.borderColor = rarityColor + '60';
+
   tooltip.innerHTML = `
-    <div class="tooltip-header rarity-${rarity}">
-      <span class="tooltip-title">${escapeHTML(displayName)}</span>
-      <span class="tooltip-rarity">${rarityName}</span>
+    <div style="margin-bottom:4px;">
+      <span class="tooltip-title" style="color:${rarityColor};font-weight:bold;font-size:13px;text-shadow:0 0 8px ${rarityColor}60;">${escapeHTML(displayName)}</span>
     </div>
-    <div class="tooltip-slot">${def.slot ? def.slot.toUpperCase() : 'ITEM'} ${def.req?.level ? `· Req Lv.${def.req.level}` : ''}</div>
+    <div style="color:${rarityColor};font-size:11px;font-weight:600;margin-bottom:2px;">${rarityName}</div>
+    <div style="color:var(--text-muted,#888);font-size:10px;text-transform:uppercase;margin-bottom:4px;">${def.slot ? def.slot.toUpperCase() : 'ITEM'}${def.req?.level ? ` · Req Lv.${def.req.level}` : ''}</div>
     ${statsStr}
     ${affixesStr}
-    <div class="tooltip-desc">${escapeHTML(def.desc || '')}</div>
+    <div style="color:#aaa;font-size:10px;margin-top:4px;font-style:italic;">${escapeHTML(def.desc || '')}</div>
   `;
 
   tooltip.style.display = 'block';
-  tooltip.style.left = `${e.clientX + 15}px`;
-  tooltip.style.top = `${e.clientY + 15}px`;
+  tooltip.style.left = `${Math.min(window.innerWidth - 240, e.clientX + 15)}px`;
+  tooltip.style.top = `${Math.max(10, Math.min(window.innerHeight - 200, e.clientY + 15))}px`;
 }
 
 export function hideItemTooltip() {

@@ -138,7 +138,22 @@ export function addToInventory(state, itemId, amount = 1, rarity = null, foundat
       return false;
     }
     const isEquip = def.slot && def.slot !== 'consumable' && def.slot !== 'material' && def.slot !== 'scroll' && def.slot !== 'powerup';
-    const affixes = isEquip ? (gData?.rollAffixes ? gData.rollAffixes(rarity || 'common') : []) : [];
+    // Detecta tipo do item para afixos temáticos (robe/light/heavy/bow/staff/dagger/melee)
+    let affixes = [];
+    if (isEquip) {
+      const rollFn = gData?.rollAffixesForItem || gData?.rollAffixes;
+      if (rollFn) {
+        const { getArmorType, getWeaponType } = (typeof window !== 'undefined' && window.GameData)
+          ? window.GameData
+          : {};
+        let itemType = null;
+        if (def.slot === 'weapon' && getWeaponType) itemType = getWeaponType(def.id || itemId, def.name || '');
+        else if (getArmorType) itemType = getArmorType(def.id || itemId, def.name || '');
+        affixes = gData?.rollAffixesForItem
+          ? gData.rollAffixesForItem(rarity || 'common', itemType)
+          : gData.rollAffixes(rarity || 'common');
+      }
+    }
     state.inventory.push({
       uid: Date.now() + '_' + Math.random().toString(36).slice(2, 8),
       itemId, count: 1, rarity, affixes, equipped: false, foundation: !!foundation
