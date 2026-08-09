@@ -14,8 +14,8 @@
 // Funções de escalamento por nível são publicadas em window.SkillScaling.
 // ═══════════════════════════════════════════════════════════════════════════
 
-// Import garante que classes_echo.js já rodou antes (e populou window.EchoData)
-import "./classes_echo.js";
+import "../src/data/classes/index.js";
+
 
 // ─── Helpers ──────────────────────────────────────────────────────────────
 

@@ -1,0 +1,472 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   GameUI.css — Estilos Consolidados da Interface (Lineage Idle)
+   Contém estilos para Inventário, Paperdoll (6x3), Loja, Crafting, Habilidades,
+   Diorama de Batalha, Mapa de Zonas e Tooltips Flutuantes.
+═══════════════════════════════════════════════════════════════════════════ */
+
+/* ═══════════════ TOOLTIP ═══════════════ */
+#item-tooltip {
+  position: fixed;
+  z-index: 99999;
+  pointer-events: none;
+  max-width: 300px;
+  background: rgba(30, 25, 15, 0.97);
+  border: 1px solid #8a6b2e;
+  border-radius: 6px;
+  padding: 8px 10px;
+  color: #e8d5a3;
+  font-size: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8);
+  display: none;
+}
+.tooltip-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 700;
+  color: #f0c050;
+  border-bottom: 1px solid #5a4525;
+  padding-bottom: 3px;
+  margin-bottom: 4px;
+}
+.tooltip-stats { color: #c8a87a; font-size: 11px; margin-top: 4px; }
+.tooltip-desc { color: #a08a5a; font-size: 11px; margin-top: 4px; }
+.tooltip-affixes { color: #60a5fa; font-size: 11px; margin-top: 4px; }
+
+/* ═══════════════ PAINEL DO INVENTÁRIO (SEM RESIZE MANUAL) ═══════════════ */
+#inventory-panel, .inventory-panel, #inventory-window,
+[data-panel="inventory"], [data-menu-panel="inventory"] {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  margin: 0;
+  background: linear-gradient(180deg, #251a0e 0%, #1a140e 100%);
+  border: 1px solid #4a3a2a;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+  resize: none; /* Desativa resize manual */
+}
+
+/* ═══════════════ HEADER ═══════════════ */
+.inventory-header, #inventory-header {
+  flex: 0 0 auto;
+  padding: 6px 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid #3a2a1a;
+  background: #1e1810;
+}
+
+.l2inv-tabs, .inventory-tabs { display: flex; gap: 4px; flex-wrap: wrap; }
+.l2inv-tabs button, .tab-btn {
+  height: 24px;
+  padding: 0 8px;
+  font-size: 10px;
+  background: #2a241c;
+  border: 1px solid #4a3a2a;
+  color: #c8a87a;
+  border-radius: 4px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  flex: 0 0 auto;
+  cursor: pointer;
+}
+.l2inv-tabs button.active, .tab-btn.active {
+  background: #4a3a24;
+  border-color: #c9a227;
+  color: #fff;
+}
+
+#inv-search-input {
+  height: 24px;
+  font-size: 11px;
+  padding: 0 6px;
+  background: #1a1611;
+  border: 1px solid #4a3a2a;
+  color: #d8c8a8;
+  border-radius: 4px;
+  min-width: 120px;
+  flex: 0 0 120px;
+}
+
+/* ═══════════════ BODY ═══════════════ */
+.inventory-body, #inventory-body {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  padding: 8px;
+  overflow: hidden;
+  min-height: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ═══════════════ PAPERDOLL CLÁSSICO FIXO (175px LARGURA) ═══════════════ */
+#tab-inventory .l2inv-left-paperdoll,
+.l2inv-left-paperdoll {
+  width: 175px;
+  min-width: 175px;
+  max-width: 175px;
+  flex: 0 0 175px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: radial-gradient(ellipse at center, #2a241c 0%, #17120e 100%);
+  border: 1px solid #3a2a1a;
+  border-radius: 6px;
+  padding: 6px;
+  box-sizing: border-box;
+  position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+#tab-inventory .l2inv-paperdoll-grid,
+.l2inv-paperdoll-grid {
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+  justify-content: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+#tab-inventory .l2inv-doll-col,
+.l2inv-doll-col {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 50px;
+  min-width: 50px;
+  max-width: 50px;
+  flex: 0 0 50px;
+}
+
+#tab-inventory .equip-slot,
+.l2inv-pd-slot,
+.equip-slot {
+  width: 50px;
+  height: 50px;
+  min-width: 50px;
+  max-width: 50px;
+  min-height: 50px;
+  max-height: 50px;
+  background: #1a1611;
+  border: 1px solid #4a3a2a;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+.equip-slot.active { border-color: #c9a227; }
+
+/* STATS DO PERSONAGEM FIXOS ABAIXO DO PAPERDOLL */
+.l2inv-paperdoll-stats {
+  position: sticky;
+  bottom: 0;
+  background: #140d07;
+  padding: 6px 8px;
+  border-top: 1px solid #342412;
+  z-index: 10;
+  font-size: 11px;
+  color: #d4a744;
+}
+
+/* ═══════════════ COLUNA DIREITA DO INVENTÁRIO ═══════════════ */
+.l2inv-main-col, .inventory-grid-container {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow: hidden;
+}
+
+/* ═══════════════ GRID FIXO DE 10x8 COM SCROLL VERTICAL ═══════════════ */
+#tab-inventory #inventory-grid,
+#tab-inventory .inventory-grid,
+#tab-inventory .l2inv-grid,
+#inventory-grid,
+.inventory-grid,
+.l2inv-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 38px); /* 10 COLUNAS FIXAS DE 38px */
+  grid-auto-rows: 38px;                     /* LINHAS FIXAS DE 38px */
+  gap: 3px;
+  padding: 6px;
+  background: rgba(10, 7, 4, 0.85);
+  border: 2px solid #3a2a1a;
+  border-radius: 4px;
+  height: 337px;                            /* EXATAMENTE 8 LINHAS VISÍVEIS */
+  max-height: 337px;
+  overflow-y: scroll;                       /* SIDEBAR DE ROLAGEM VERTICAL */
+  overflow-x: hidden;
+  box-sizing: border-box;
+  align-content: start;
+  justify-content: start;
+  flex: 0 0 auto;
+}
+
+#inventory-grid::-webkit-scrollbar,
+.inventory-grid::-webkit-scrollbar {
+  width: 8px;
+}
+#inventory-grid::-webkit-scrollbar-track,
+.inventory-grid::-webkit-scrollbar-track {
+  background: #120d08;
+  border-radius: 4px;
+}
+#inventory-grid::-webkit-scrollbar-thumb,
+.inventory-grid::-webkit-scrollbar-thumb {
+  background: #5a452a;
+  border-radius: 4px;
+  border: 1px solid #7a5c38;
+}
+
+#tab-inventory .inv-slot,
+.inv-slot,
+.l2inv-slot {
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  max-width: 38px;
+  min-height: 38px;
+  max-height: 38px;
+  background: #241e16;
+  border: 1px solid #5a452a; /* LIMITADORES / LINHAS CLARAS */
+  border-radius: 3px;
+  box-sizing: border-box;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  position: relative;
+  cursor: pointer;
+}
+
+#tab-inventory .inv-slot.empty,
+.inv-slot.empty {
+  background: rgba(14, 10, 6, 0.6);
+  border: 1px solid #2e2216;
+  opacity: 0.6;
+  cursor: default;
+}
+
+.inventory-item-image {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.qty {
+  font-size: 9px;
+  position: absolute;
+  bottom: 1px;
+  right: 2px;
+  color: #f0c050;
+  font-weight: bold;
+  text-shadow: 1px 1px 0 #000, -1px -1px 0 #000;
+}
+
+.equipped-badge {
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  width: 10px;
+  height: 10px;
+  font-size: 7px;
+  background: #22c55e;
+  color: #fff;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.inv-check {
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: 10px;
+  height: 10px;
+  background: #3b82f6;
+  color: #fff;
+  border-radius: 2px;
+  font-size: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.inv-slot:not(.is-selected) .inv-check { display: none; }
+
+.rarity-common    { border-color: #8a6b2e; }
+.rarity-uncommon  { border-color: #2d5a2d; }
+.rarity-rare      { border-color: #2a4a7a; }
+.rarity-epic      { border-color: #4a2d6a; }
+.rarity-legendary { border-color: #6a4a14; }
+
+/* ═══════════════ MAPA DE ZONAS E SAGAS ═══════════════ */
+.saga-map-block {
+  padding: 10px 10px 12px;
+  margin-bottom: 12px;
+  border: 1px solid rgba(212, 175, 55, .18);
+  border-radius: 10px;
+  background: linear-gradient(180deg, rgba(28, 34, 48, .72), rgba(16, 20, 30, .72));
+}
+
+.saga-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px 4px 9px;
+  margin-bottom: 9px;
+  border-bottom: 1px solid rgba(212, 175, 55, .16);
+}
+
+.saga-header h3 {
+  margin: 0;
+  font-family: "Cinzel", serif;
+  color: #e8c37a;
+  font-size: 14px;
+}
+
+.saga-req {
+  padding: 2px 8px;
+  color: #8b93a7;
+  font-size: 10px;
+  border: 1px solid rgba(139, 147, 167, .28);
+  border-radius: 999px;
+}
+
+.saga-zones-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 10px;
+}
+
+.zone-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: inherit;
+  background: #131824;
+  border: 1px solid rgba(212, 175, 55, .22);
+  border-radius: 9px;
+  cursor: pointer;
+  transition: transform .16s, border-color .16s, box-shadow .16s;
+}
+
+.zone-card.active {
+  border-color: #e8c37a;
+  box-shadow: 0 0 0 1px rgba(232, 195, 122, .45), 0 0 18px rgba(232, 195, 122, .18);
+}
+
+.zone-card-thumb {
+  position: relative;
+  height: 64px;
+  background-color: #0d1018;
+  background-position: center;
+  background-size: cover;
+}
+
+.zone-card-thumb::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 35%, rgba(10, 13, 20, .92));
+}
+
+.zone-flag {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  z-index: 2;
+  padding: 3px 6px;
+  color: #fff;
+  font-size: 9px;
+  line-height: 1;
+  background: rgba(8, 10, 16, .82);
+  border-radius: 999px;
+}
+
+.zone-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px;
+}
+
+.zone-title {
+  font-family: "Cinzel", serif;
+  font-weight: 700;
+  font-size: 12px;
+  color: #e8c37a;
+}
+
+.zone-sub {
+  font-size: 10px;
+  color: #8b93a7;
+}
+
+.select-zone-btn {
+  width: 100%;
+  padding: 6px 8px;
+  color: #e8c37a;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  background: rgba(212, 175, 55, .09);
+  border: 1px solid rgba(212, 175, 55, .5);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* ═══════════════ LOJA & CRAFTING ═══════════════ */
+.shop-item-card, .craft-recipe-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  margin-bottom: 6px;
+  background: rgba(30, 22, 14, 0.6);
+  border: 1px solid #3a2a1a;
+  border-radius: 6px;
+}
+
+.shop-item-details, .craft-recipe-header {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.shop-item-name, .craft-recipe-title {
+  font-family: "Cinzel", serif;
+  font-weight: 700;
+  color: #f0c050;
+}
+
+.buy-item-btn, .craft-item-btn {
+  padding: 6px 12px;
+  background: linear-gradient(180deg, #4a3a24, #2a1e10);
+  border: 1px solid #d4a744;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.buy-item-btn:disabled, .craft-item-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

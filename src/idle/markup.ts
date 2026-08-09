@@ -79,11 +79,27 @@ export const IDLE_MARKUP = `
             <button id="speed-toggle-btn" class="combat-ctrl-btn" title="Velocidade do combate (1x Normal ou 2x Turbo)">⏩ Velocidade: 1x</button>
           </div>
           <div class="stage-vs" aria-hidden="true">&#9876;</div>
-          <div class="stage-hero" id="stage-hero"></div>
+          <div class="stage-hero" id="stage-hero">
+            <div class="stage-entity-name stage-hero-name" id="hero-name">Tristan</div>
+            <div class="stage-entity-level stage-hero-level" id="hero-level">Level 1</div>
+            <div class="stage-hp-bar stage-hp-bar-hero" id="hero-hp-bar">
+              <div class="stage-hp-fill stage-hp-fill-hero" id="hero-hp-fill"></div>
+              <span class="stage-hp-text stage-hp-text-hero" id="hero-hp-text">HP: 100 / 100</span>
+            </div>
+            <div class="stage-mp-bar stage-mp-bar-hero" id="hero-mp-bar">
+              <div class="stage-mp-fill stage-mp-fill-hero" id="hero-mp-fill"></div>
+              <span class="stage-mp-text stage-mp-text-hero" id="hero-mp-text">MP: 50 / 50</span>
+            </div>
+            <div class="hero-sprite-host" id="hero-sprite-container"></div>
+          </div>
           <div class="stage-monster" id="stage-monster">
-            <div class="m-name" id="m-name"></div>
-            <div class="m-hp"><div class="m-hp-fill" id="m-hp-fill"></div></div>
-            <div class="m-art" id="m-art"></div>
+            <div class="stage-entity-name" id="monster-name">Procurando Inimigo...</div>
+            <div class="stage-entity-level stage-monster-level" id="monster-level">Level 1</div>
+            <div class="stage-hp-bar" id="monster-hp-bar">
+              <div class="stage-hp-fill" id="monster-hp-fill"></div>
+              <span class="stage-hp-text" id="monster-hp-text">HP: 0 / 0</span>
+            </div>
+            <div class="monster-sprite-host" id="monster-sprite-container"></div>
           </div>
           <div class="stage-floats" id="stage-floats"></div>
         </div>
@@ -102,7 +118,8 @@ export const IDLE_MARKUP = `
           <p class="log-entry system">Select your Race &amp; Class to begin.</p>
         </div>
         <form id="chat-form" class="chat-input-bar">
-          <input type="text" id="chat-input" class="chat-input" placeholder="Digite uma mensagem..." autocomplete="off" />
+          <label for="chat-input" class="sr-only" style="display:none;">Mensagem do Chat</label>
+          <input type="text" id="chat-input" name="chatInput" class="chat-input" placeholder="Digite uma mensagem..." autocomplete="off" aria-label="Digite uma mensagem no chat" />
           <button type="submit" class="chat-send-btn">Enviar</button>
         </form>
       </section>
@@ -156,6 +173,12 @@ export const IDLE_MARKUP = `
                 </div>
                 <div style="font-size: 28px; background: rgba(212,167,68,0.1); padding: 8px 12px; border-radius: 12px; border: 1px solid rgba(212,167,68,0.2);">📜</div>
               </div>
+            </div>
+
+            <!-- Character Combat Attr Summary Grid -->
+            <div class="pane-section" style="margin-top: 14px;">
+              <h3>⚔️ Atributos do Personagem</h3>
+              <div id="char-tab-stats-summary" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 6px;"></div>
             </div>
 
             <!-- Subclass & Certification Management Panel -->
@@ -225,35 +248,35 @@ export const IDLE_MARKUP = `
               <!-- Left Panel: 3-column Paperdoll Equipment Grid + Stats -->
               <div class="l2inv-left-paperdoll">
                 <div class="l2inv-paperdoll-grid">
-                  <!-- Column 1 (Left) -->
+                  <!-- Column 1 (Left - 6 slots) -->
                   <div class="l2inv-doll-col">
-                    <div class="l2inv-pd-slot equip-slot" data-slot="hair" title="Acessório de Cabeça">
+                    <div class="l2inv-pd-slot equip-slot" data-slot="hair" title="Máscara 1 / Acessório">
                       <span class="l2inv-pd-icon">👒</span>
                       <span class="l2inv-pd-item" id="pd-item-hair"></span>
                     </div>
-                    <div class="l2inv-pd-slot equip-slot" data-slot="gloves" title="Luvas">
-                      <span class="l2inv-pd-icon">🧤</span>
-                      <span class="l2inv-pd-item" id="pd-item-gloves"></span>
-                    </div>
-                    <div class="l2inv-pd-slot equip-slot" data-slot="weapon" title="Arma Principal">
-                      <span class="l2inv-pd-icon">⚔️</span>
-                      <span class="l2inv-pd-item" id="pd-item-weapon"></span>
+                    <div class="l2inv-pd-slot equip-slot" data-slot="earring1" title="Brinco 1">
+                      <span class="l2inv-pd-icon">💎</span>
+                      <span class="l2inv-pd-item" id="pd-item-earring1"></span>
                     </div>
                     <div class="l2inv-pd-slot equip-slot" data-slot="necklace" title="Colar">
                       <span class="l2inv-pd-icon">📿</span>
                       <span class="l2inv-pd-item" id="pd-item-necklace"></span>
                     </div>
+                    <div class="l2inv-pd-slot equip-slot" data-slot="weapon" title="Arma Principal">
+                      <span class="l2inv-pd-icon">⚔️</span>
+                      <span class="l2inv-pd-item" id="pd-item-weapon"></span>
+                    </div>
                     <div class="l2inv-pd-slot equip-slot" data-slot="ring" title="Anel 1">
                       <span class="l2inv-pd-icon">💍</span>
                       <span class="l2inv-pd-item" id="pd-item-ring"></span>
                     </div>
-                    <div class="l2inv-pd-slot equip-slot" data-slot="belt" title="Cinto">
-                      <span class="l2inv-pd-icon">🪢</span>
-                      <span class="l2inv-pd-item" id="pd-item-belt"></span>
+                    <div class="l2inv-pd-slot equip-slot" data-slot="talisman" title="Talismã">
+                      <span class="l2inv-pd-icon">🔮</span>
+                      <span class="l2inv-pd-item" id="pd-item-talisman"></span>
                     </div>
                   </div>
 
-                  <!-- Column 2 (Center) -->
+                  <!-- Column 2 (Center - 6 slots) -->
                   <div class="l2inv-doll-col">
                     <div class="l2inv-pd-slot equip-slot" data-slot="helmet" title="Capacete">
                       <span class="l2inv-pd-icon">⛑️</span>
@@ -263,49 +286,49 @@ export const IDLE_MARKUP = `
                       <span class="l2inv-pd-icon">🛡️</span>
                       <span class="l2inv-pd-item" id="pd-item-armor"></span>
                     </div>
-                    <div class="l2inv-pd-slot equip-slot" data-slot="legs" title="Perneiras">
+                    <div class="l2inv-pd-slot equip-slot" data-slot="legs" title="Calças / Perneiras">
                       <span class="l2inv-pd-icon">👖</span>
                       <span class="l2inv-pd-item" id="pd-item-legs"></span>
                     </div>
-                    <div class="l2inv-pd-slot equip-slot" data-slot="shield" title="Escudo / Secundária">
-                      <span class="l2inv-pd-icon">🛡️</span>
-                      <span class="l2inv-pd-item" id="pd-item-shield"></span>
+                    <div class="l2inv-pd-slot equip-slot" data-slot="gloves" title="Luvas">
+                      <span class="l2inv-pd-icon">🧤</span>
+                      <span class="l2inv-pd-item" id="pd-item-gloves"></span>
                     </div>
                     <div class="l2inv-pd-slot equip-slot" data-slot="boots" title="Botas">
                       <span class="l2inv-pd-icon">👢</span>
                       <span class="l2inv-pd-item" id="pd-item-boots"></span>
                     </div>
+                    <div class="l2inv-pd-slot equip-slot" data-slot="agathion" title="Agathion">
+                      <span class="l2inv-pd-icon">🧚‍♂️</span>
+                      <span class="l2inv-pd-item" id="pd-item-agathion"></span>
+                    </div>
                   </div>
 
-                  <!-- Column 3 (Right) -->
+                  <!-- Column 3 (Right - 6 slots) -->
                   <div class="l2inv-doll-col">
-                    <div class="l2inv-pd-slot equip-slot" data-slot="hair2" title="Máscara">
+                    <div class="l2inv-pd-slot equip-slot" data-slot="hair2" title="Máscara 2">
                       <span class="l2inv-pd-icon">🎭</span>
                       <span class="l2inv-pd-item" id="pd-item-hair2"></span>
-                    </div>
-                    <div class="l2inv-pd-slot equip-slot" data-slot="earring1" title="Brinco 1">
-                      <span class="l2inv-pd-icon">💎</span>
-                      <span class="l2inv-pd-item" id="pd-item-earring1"></span>
                     </div>
                     <div class="l2inv-pd-slot equip-slot" data-slot="earring2" title="Brinco 2">
                       <span class="l2inv-pd-icon">💎</span>
                       <span class="l2inv-pd-item" id="pd-item-earring2"></span>
                     </div>
-                    <div class="l2inv-pd-slot equip-slot" data-slot="ring2" title="Anel 2">
-                      <span class="l2inv-pd-icon">💍</span>
-                      <span class="l2inv-pd-item" id="pd-item-ring2"></span>
-                    </div>
                     <div class="l2inv-pd-slot equip-slot" data-slot="cloak" title="Capa">
                       <span class="l2inv-pd-icon">🧥</span>
                       <span class="l2inv-pd-item" id="pd-item-cloak"></span>
                     </div>
-                    <div class="l2inv-pd-slot equip-slot" data-slot="talisman" title="Talismã">
-                      <span class="l2inv-pd-icon">🔮</span>
-                      <span class="l2inv-pd-item" id="pd-item-talisman"></span>
+                    <div class="l2inv-pd-slot equip-slot" data-slot="shield" title="Escudo / Secundária">
+                      <span class="l2inv-pd-icon">🛡️</span>
+                      <span class="l2inv-pd-item" id="pd-item-shield"></span>
                     </div>
-                    <div class="l2inv-pd-slot equip-slot" data-slot="agathion" title="Agathion / Mascot">
-                      <span class="l2inv-pd-icon">🧚‍♂️</span>
-                      <span class="l2inv-pd-item" id="pd-item-agathion"></span>
+                    <div class="l2inv-pd-slot equip-slot" data-slot="ring2" title="Anel 2">
+                      <span class="l2inv-pd-icon">💍</span>
+                      <span class="l2inv-pd-item" id="pd-item-ring2"></span>
+                    </div>
+                    <div class="l2inv-pd-slot equip-slot" data-slot="belt" title="Cinto">
+                      <span class="l2inv-pd-icon">🪢</span>
+                      <span class="l2inv-pd-item" id="pd-item-belt"></span>
                     </div>
                   </div>
                 </div>
@@ -365,15 +388,16 @@ export const IDLE_MARKUP = `
                     <button class="rarity-filter-btn r-legendary" data-rarity="legendary">L</button>
                   </div>
                   <div style="display:flex; align-items:center; gap:4px; font-size:10px; color:var(--gilt-bright);">
-                    <span style="font-weight:600;">Auto-Venda:</span>
-                    <select id="auto-sell-rarity-select" style="background:#090b10; color:#fff; border:1px solid rgba(212,167,68,0.3); border-radius:4px; padding:2px 4px; font-size:10px; cursor:pointer;">
+                    <label for="auto-sell-rarity-select" style="font-weight:600; cursor:pointer;">Auto-Venda:</label>
+                    <select id="auto-sell-rarity-select" name="autoSellRarity" aria-label="Filtro de Auto-Venda por Raridade" style="background:#090b10; color:#fff; border:1px solid rgba(212,167,68,0.3); border-radius:4px; padding:2px 4px; font-size:10px; cursor:pointer;">
                       <option value="off">Desativado</option>
                       <option value="common">≤ Comum</option>
                       <option value="uncommon">≤ Incomum</option>
                       <option value="rare">≤ Raro</option>
                     </select>
                   </div>
-                  <input type="text" id="inv-search-input" placeholder="🔍 Buscar..." style="background:#090b10; color:#fff; border:1px solid rgba(212,167,68,0.3); border-radius:4px; padding:2px 6px; font-size:10px; width:80px;" title="Filtrar por nome de item" />
+                  <label for="inv-search-input" class="sr-only" style="display:none;">Buscar no inventário</label>
+                  <input type="text" id="inv-search-input" name="invSearch" aria-label="Filtrar inventário por nome de item" placeholder="🔍 Buscar..." style="background:#090b10; color:#fff; border:1px solid rgba(212,167,68,0.3); border-radius:4px; padding:2px 6px; font-size:10px; width:80px;" title="Filtrar por nome de item" />
                   <div class="l2inv-batch-pills">
                     <button id="select-commons-btn" class="l2inv-pill-btn" title="Selecionar comuns">✓ Comum</button>
                     <button id="select-uncommons-btn" class="l2inv-pill-btn" title="Selecionar incomuns">✓ Incomum</button>
@@ -414,16 +438,72 @@ export const IDLE_MARKUP = `
           <!-- Shop Tab -->
           <div id="tab-shop" class="tab-pane">
             <div class="shop-head">
-              <h3>Guilda dos Mercadores de Aden</h3>
-              <span class="shop-gold-pill">🪙 <span id="shop-gold">0</span></span>
+              <div>
+                <h3 style="margin:0; font-family:'Cinzel',serif; color:var(--gilt-bright);">Guilda dos Mercadores de Aden</h3>
+                <p style="margin:2px 0 0 0; font-size:11px; color:var(--text-muted);">Comércio imperial de equipamentos, consumíveis e relíquias místicas</p>
+              </div>
+              <div style="display:flex; flex-direction:column; align-items:flex-end; gap:4px;">
+                <span class="shop-gold-pill">💰 <span id="shop-gold">0</span> Gold</span>
+                <span id="mystic-shop-timer" class="mystic-timer-pill" style="display:none;">⏳ Restoque Místico: <strong id="mystic-timer-countdown">03:00:00</strong></span>
+              </div>
             </div>
+
+            <!-- Subtabs: Main Category Tabs -->
             <div class="shop-subtabs">
-              <button class="shop-subtab active" data-shoptab="gear">⚔ Equipamentos</button>
-              <button class="shop-subtab" data-shoptab="potions">🧪 Porções</button>
-              <button class="shop-subtab" data-shoptab="powerups">✨ Encantamentos</button>
-              <button class="shop-subtab" data-shoptab="class">🎖 Classe</button>
-              <button class="shop-subtab" data-shoptab="mystic">✦ Místico</button>
+              <button class="shop-subtab active" data-shoptab="gear">⚔️ Equipamentos <span class="tab-tag-rarity tag-common">Cinza</span></button>
+              <button class="shop-subtab" data-shoptab="potions">🧪 Consumíveis <span class="tab-tag-rarity tag-common">Cinza</span></button>
+              <button class="shop-subtab" data-shoptab="class">🎖️ Ordem de Classe <span class="tab-tag-rarity tag-rare">Até Azul</span></button>
+              <button class="shop-subtab" data-shoptab="mystic">✦ Mercador Místico <span class="tab-tag-rarity tag-mystic">RNG Ancestral</span></button>
             </div>
+
+            <!-- Filters Bar (Grade & Slot Filters) -->
+            <div class="shop-filter-bar" id="shop-filter-bar">
+              <!-- Grade Filter Row -->
+              <div class="filter-row">
+                <span class="filter-label">Nível / Grau:</span>
+                <div class="filter-group" id="shop-grade-filters">
+                  <button class="shop-filter-btn active" data-shopgrade="all">Todos</button>
+                  <button class="shop-filter-btn grade-btn-ng" data-shopgrade="ng">No-Grade (1-19)</button>
+                  <button class="shop-filter-btn grade-btn-d" data-shopgrade="d">D-Grade (20-39)</button>
+                  <button class="shop-filter-btn grade-btn-c" data-shopgrade="c">C-Grade (40-51)</button>
+                  <button class="shop-filter-btn grade-btn-b" data-shopgrade="b">B-Grade (52-60)</button>
+                  <button class="shop-filter-btn grade-btn-a" data-shopgrade="a">A-Grade (61-75)</button>
+                  <button class="shop-filter-btn grade-btn-s" data-shopgrade="s">S-Grade (76+)</button>
+                </div>
+              </div>
+
+              <!-- Slot Filter Row -->
+              <div class="filter-row" id="shop-slot-filter-row" style="margin-top:6px;">
+                <span class="filter-label">Tipo de Item:</span>
+                <div class="filter-group" id="shop-slot-filters">
+                  <button class="shop-filter-btn active" data-shopslot="all">Todos os Tipos</button>
+                  <button class="shop-filter-btn" data-shopslot="weapon">⚔️ Armas Físicas</button>
+                  <button class="shop-filter-btn" data-shopslot="mweapon">🔮 Armas Mágicas</button>
+                  <button class="shop-filter-btn" data-shopslot="heavy">🛡️ Pesada</button>
+                  <button class="shop-filter-btn" data-shopslot="light">🥋 Leve</button>
+                  <button class="shop-filter-btn" data-shopslot="robe">👘 Robe Mágico</button>
+                  <button class="shop-filter-btn" data-shopslot="helmet">🪖 Capacetes</button>
+                  <button class="shop-filter-btn" data-shopslot="gloves">🥊 Luvas</button>
+                  <button class="shop-filter-btn" data-shopslot="boots">🥾 Botas</button>
+                  <button class="shop-filter-btn" data-shopslot="legs">👖 Calças</button>
+                  <button class="shop-filter-btn" data-shopslot="shield">🛡️ Escudos</button>
+                  <button class="shop-filter-btn" data-shopslot="jewel">📿 Joias &amp; Acessórios</button>
+                </div>
+              </div>
+
+              <!-- Batch Buy Controls (for Potions & Consumables) -->
+              <div class="filter-row" id="shop-batch-row" style="display:none; margin-top:6px;">
+                <span class="filter-label">Qtd. Compra em Lote:</span>
+                <div class="filter-group" id="shop-batch-filters">
+                  <button class="shop-filter-btn active" data-shopqty="1">1x</button>
+                  <button class="shop-filter-btn" data-shopqty="10">10x</button>
+                  <button class="shop-filter-btn" data-shopqty="50">50x</button>
+                  <button class="shop-filter-btn" data-shopqty="100">100x</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Shop Items Grid -->
             <div class="shop-list" id="shop-list"></div>
           </div>
 
@@ -741,11 +821,12 @@ export const IDLE_MARKUP = `
           <div class="admin-section admin-spawner">
             <h3>🎁 Spawner de Itens</h3>
             <div class="spawner-fields">
-              <select id="admin-item-select" class="admin-select"></select>
+              <label for="admin-item-select" class="sr-only" style="display:none;">Item para Gerar</label>
+              <select id="admin-item-select" name="adminItemSelect" class="admin-select" aria-label="Item para Gerar"></select>
               <div class="spawner-row">
-                <label>Qtd: <input type="number" id="admin-item-qty" value="1" min="1" max="999" class="admin-num-input" /></label>
-                <label>Raridade: 
-                  <select id="admin-item-rarity" class="admin-select">
+                <label for="admin-item-qty">Qtd: <input type="number" id="admin-item-qty" name="adminItemQty" value="1" min="1" max="999" class="admin-num-input" aria-label="Quantidade" /></label>
+                <label for="admin-item-rarity">Raridade: 
+                  <select id="admin-item-rarity" name="adminItemRarity" class="admin-select" aria-label="Raridade do Item">
                     <option value="common">Comum</option>
                     <option value="uncommon">Incomum</option>
                     <option value="rare">Raro</option>
@@ -753,8 +834,8 @@ export const IDLE_MARKUP = `
                     <option value="legendary">Lendário (Dourado)</option>
                   </select>
                 </label>
-                <label>Encanto: 
-                  <select id="admin-item-enchant" class="admin-select">
+                <label for="admin-item-enchant">Encanto: 
+                  <select id="admin-item-enchant" name="adminItemEnchant" class="admin-select" aria-label="Nível de Encanto">
                     <option value="0">+0</option>
                     <option value="3">+3</option>
                     <option value="7">+7</option>
@@ -762,8 +843,8 @@ export const IDLE_MARKUP = `
                     <option value="16">+16 (Máx)</option>
                   </select>
                 </label>
-                <label>Afixo: 
-                  <select id="admin-item-affix" class="admin-select">
+                <label for="admin-item-affix">Afixo: 
+                  <select id="admin-item-affix" name="adminItemAffix" class="admin-select" aria-label="Afixo do Item">
                     <option value="roll">🎲 Sortear da Raridade</option>
                     <option value="none">Nenhum Afixo</option>
                     <option value="crit_boost">✦ +% Crítico</option>

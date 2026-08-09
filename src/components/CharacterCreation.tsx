@@ -36,9 +36,9 @@ const RACES_INFO: Record<string, {
     allowedClasses: [
       { id: 'fighter', name: 'Guerreiro (Fighter)', desc: 'Combate corpo a corpo com espada e escudo.', icon: '⚔️' },
       { id: 'mage', name: 'Mago (Mage)', desc: 'Dominador de magia elemental e mana elevado.', icon: '🔮' },
-      { id: 'deathPilgrim', name: 'Death Knight EM DESENVOLVIMENTO💀', desc: 'Peregrino das trevas futuro Cavaleiro da Morte com DP.', icon: '💀' },
-      { id: 'wargBase', name: 'Warg EM DESENVOLVIMENTO🐺', desc: 'Lutador primitivo que se transforma em Lobo guerreiro.', icon: '🐺' },
-      { id: 'assassinBase', name: 'Assassin EM DESENVOLVIMENTO🗡️', desc: 'Caçador das sombras com adagas e clones sombrios.', icon: '🗡️' }
+      { id: 'deathPilgrim', name: 'Death Knight 💀', desc: '⚠️ EM DESENVOLVIMENTO, CONTEM BUGS. Peregrino das trevas futuro Cavaleiro da Morte com DP.', icon: '💀' },
+      { id: 'wargBase', name: 'Warg 🐺', desc: '⚠️ EM DESENVOLVIMENTO, CONTEM BUGS. Lutador primitivo que se transforma em Lobo guerreiro.', icon: '🐺' },
+      { id: 'assassinBase', name: 'Assassin 🗡️', desc: '⚠️ EM DESENVOLVIMENTO, CONTEM BUGS. Caçador das sombras com adagas e clones sombrios.', icon: '🗡️' }
     ],
     image: {
       fighter: { M: '/img/humanpalaM.png', F: '/img/humanpalaF.png' },
@@ -74,8 +74,8 @@ const RACES_INFO: Record<string, {
     allowedClasses: [
       { id: 'fighter', name: 'Guerreiro Negro (Fighter)', desc: 'Assassino mortal e cavaleiro sombrio.', icon: '🗡️' },
       { id: 'mage', name: 'Mago Negro (Mage)', desc: 'Invocador de maldições e magia de fogo/trevas.', icon: '🔮' },
-      { id: 'elfDeathPilgrim', name: 'Death Knight EM DESENVOLVIMENTO💀', desc: 'Cavaleiro da Morte Dark Elf com Dark Points.', icon: '💀' },
-      { id: 'assassinBase', name: 'Assassin EM DESENVOLVIMENTO🗡️', desc: 'Assassina mortal das sombras de Shillien.', icon: '🗡️' }
+      { id: 'elfDeathPilgrim', name: 'Death Knight 💀', desc: '⚠️ EM DESENVOLVIMENTO, CONTEM BUGS. Cavaleiro da Morte Dark Elf com Dark Points e magia sombria.', icon: '💀' },
+      { id: 'assassinBase', name: 'Assassin 🗡️', desc: '⚠️ EM DESENVOLVIMENTO, CONTEM BUGS. Assassina mortal das sombras de Shillien.', icon: '🗡️' }
     ],
     image: {
       fighter: { M: '/img/darkelfskM.png', F: '/img/darkelfskF.png' },
@@ -94,7 +94,7 @@ const RACES_INFO: Record<string, {
     allowedClasses: [
       { id: 'fighter', name: 'Guerreiro Orc (Fighter)', desc: 'Destruidor com armas de duas mãos e garras.', icon: '🪓' },
       { id: 'mage', name: 'Xamã Orc (Shaman)', desc: 'Mago de combate e buffs tribais de sangue.', icon: '🔥' },
-      { id: 'orcRider', name: 'Vanguard Rider EM DESENVOLVIMENTO🐉', desc: 'Cavaleiro Orc montado especialista em lança.', icon: '🐉' }
+      { id: 'orcRider', name: 'Vanguard Rider 🐉', desc: '⚠️ EM DESENVOLVIMENTO, CONTEM BUGS. Cavaleiro Orc montado especialista em lança de guerra.', icon: '🐉' }
     ],
     image: {
       fighter: { M: '/img/orcfighterM.png', F: '/img/orcfighterF.png' },
@@ -111,7 +111,7 @@ const RACES_INFO: Record<string, {
     perks: ['🎒 +100 Espaços de Inventário', '⚒️ Bônus de Craft & Drop de Materiais', '⛏️ Inicia nas Minas dos Anões'],
     allowedClasses: [
       { id: 'artisan', name: 'Artesão (Artisan)', desc: 'Especialista em forja de armas e armaduras.', icon: '⚒️' },
-      { id: 'shinemakerS1', name: 'ShineMaker EM DESENVOLVIMENTO ✨', desc: 'Mestre da luz cristalina, suporte e dano cristalino.', icon: '✨' }
+      { id: 'shinemakerS1', name: 'ShineMaker ✨', desc: '⚠️ EM DESENVOLVIMENTO, CONTEM BUGS. Mestre da luz cristalina, suporte e dano cristalino.', icon: '✨' }
     ],
     image: {
       artisan: { M: '/img/dwarfmaestroM.png', F: '/img/dwarfmaestroF.png' },
@@ -128,7 +128,7 @@ const RACES_INFO: Record<string, {
     perks: ['⚡ Usam Armaduras LEVES por Lore', '🗡️ Ataques Físicos Ultrarrápidos', '🏰 Inicia na Lair dos Kamael'],
     allowedClasses: [
       { id: 'soulbreaker', name: 'Soulbreaker', desc: 'Espadachim das sombras especializado em rapieiras.', icon: '🗡️' },
-      { id: 'hatamoto', name: 'Samurai EM DESENVOLVIMENTO⛩️', desc: 'Mestre da katana ancestral e técnica Iaijutsu.', icon: '⛩️' }
+      { id: 'hatamoto', name: 'Samurai ⛩️', desc: '⚠️ EM DESENVOLVIMENTO, CONTEM BUGS. Mestre da katana ancestral e técnica Iaijutsu.', icon: '⛩️' }
     ],
     image: {
       soulbreaker: { M: '/img/kamaelshM.png', F: '/img/kamaelshF.png' },
@@ -144,7 +144,7 @@ const RACES_INFO: Record<string, {
     desc: 'Atiradores elementais dos ventos com armas de fogo.',
     perks: ['💨 +12 Esquiva & Velocidade', '🔫 Atiradores Elementais Ranged', '🌪️ Inicia na Ilha de Falar'],
     allowedClasses: [
-      { id: 'sylphGunner', name: 'Storm Blaster EM DESENVOLVIMENTO🔫', desc: 'Atirador elemental com armas de fogo e tiros de vento.', icon: '🔫' }
+      { id: 'sylphGunner', name: 'Storm Blaster 🔫', desc: '⚠️ EM DESENVOLVIMENTO, CONTEM BUGS. Atirador elemental com armas de fogo e tiros de vento.', icon: '🔫' }
     ],
     image: {
       sylphGunner: { M: '/img/sylphM.png', F: '/img/sylphF.png' },
@@ -159,9 +159,9 @@ const RACES_INFO: Record<string, {
     desc: 'Elfos supremos detentores da luz divina e maestria elemental.',
     perks: ['🌟 +8 Magia & Defesa Divina', '🛡️ Guardiões Sagrados de Aden', '🌲 Inicia na Floresta Élfica'],
     allowedClasses: [
-      { id: 'divineTemplarS1', name: 'Divine Templar EM DESENVOLVIMENTO🛡️', desc: 'Guardião sagrado supremo e tanque com Sacred Aegis.', icon: '🛡️' },
-      { id: 'elementWeaverS1', name: 'Element Weaver EM DESENVOLVIMENTO🌀', desc: 'Mago supremo combinando Fogo, Água e Vento.', icon: '🌀' },
-      { id: 'shinemakerS1', name: 'ShineMaker EM DESENVOLVIMENTO ✨', desc: 'Invocador de luz sagrada e suporte cristalino.', icon: '✨' }
+      { id: 'divineTemplarS1', name: 'Divine Templar 🛡️', desc: '⚠️ EM DESENVOLVIMENTO, CONTEM BUGS. Guardião sagrado supremo e tanque com Sacred Aegis.', icon: '🛡️' },
+      { id: 'elementWeaverS1', name: 'Element Weaver 🌀', desc: '⚠️ EM DESENVOLVIMENTO, CONTEM BUGS. Mago supremo combinando Fogo, Água e Vento.', icon: '🌀' },
+      { id: 'shinemakerS1', name: 'ShineMaker ✨', desc: '⚠️ EM DESENVOLVIMENTO, CONTEM BUGS. Invocador de luz sagrada e suporte cristalino.', icon: '✨' }
     ],
     image: {
       divineTemplarS1: { M: '/img/elfwswM.png', F: '/img/elfswsF.png' },
@@ -178,9 +178,9 @@ const RACES_INFO: Record<string, {
     desc: 'Guerreiros e místicas tocados pelos ventos e espíritos da natureza.',
     perks: ['🌪️ +10 Esquiva Nativa', '🌹 Combate Híbrido com Roubo de Vida', '🏰 Inicia na Ilha de Falar'],
     allowedClasses: [
-      { id: 'bloodRoseS1', name: 'Blood Rose EM DESENVOLVIMENTO🌹', desc: 'Mística dos ventos e espinhos com roubo de vida.', icon: '🌹' },
-      { id: 'marauder', name: 'Marauder EM DESENVOLVIMENTO 🌪️', desc: 'Lutadora com garras e combos de furacão.', icon: '🥊' },
-      { id: 'sayhaSeer', name: 'Sayha Seeker EM DESENVOLVIMENTO🌀', desc: 'Invocadora de vendavais e espíritos de Sayha.', icon: '🌀' }
+      { id: 'bloodRoseS1', name: 'Blood Rose 🌹', desc: '⚠️ EM DESENVOLVIMENTO, CONTEM BUGS. Mística dos ventos e espinhos com roubo de vida.', icon: '🌹' },
+      { id: 'marauder', name: 'Marauder / Eviscerator 🌪️', desc: 'Lutadora com garras e combos de furacão.', icon: '🥊' },
+      { id: 'sayhaSeer', name: 'Sayha Seeker 🌀', desc: 'Invocadora de vendavais e espíritos de Sayha.', icon: '🌀' }
     ],
     image: {
       bloodRoseS1: { M: '/img/elf_mage.png', F: '/img/elf_mage.png' },
@@ -435,11 +435,15 @@ export const CharacterCreation: React.FC<CharacterCreationProps> = ({
               {/* Character Card / Artwork */}
               <div className="relative mx-auto w-48 h-56 rounded-xl border border-amber-500/40 bg-gradient-to-b from-amber-500/10 via-black/60 to-black p-2 flex flex-col items-center justify-center shadow-xl overflow-hidden group">
                 <img
+                  key={`${selectedRace}_${selectedClass}_${gender}_${currentImg}`}
                   src={currentImg}
                   alt={currentRaceObj.name}
                   className="w-full h-full object-contain filter drop-shadow-[0_0_12px_rgba(245,158,11,0.4)] transition-transform duration-300 group-hover:scale-105"
                   onError={(e) => {
-                    (e.target as HTMLElement).style.display = 'none';
+                    const img = e.currentTarget;
+                    img.onerror = null;
+                    img.src = '/img/humanpalaM.png';
+                    img.style.display = 'block';
                   }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
