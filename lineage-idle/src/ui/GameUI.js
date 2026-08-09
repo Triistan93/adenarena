@@ -974,8 +974,9 @@ export function renderZoneMap(state, callbacks = {}) {
       const zDef = ZONES[zId];
       if (!zDef) return '';
 
-      const isCurrent = state.currentZone === zId;
-      const isLocked = (state.level || 1) < (zDef.minLevel || zDef.reqLvl || 1);
+      const isCurrent = (state.zone || state.currentZone) === zId;
+      const reqLvl = zDef.level ?? zDef.minLevel ?? zDef.reqLvl ?? 1;
+      const isLocked = (state.level || 1) < reqLvl;
       const bgUrl = ZONE_BACKGROUNDS[zId] || zDef.background || '';
       const thumbStyle = bgUrl ? `style="background-image:url('${getAssetUrl(bgUrl)}')"` : '';
 
@@ -992,13 +993,13 @@ export function renderZoneMap(state, callbacks = {}) {
           <div class="zone-card-body">
             <div class="zone-card-header">
               <span class="zone-card-title">${zDef.name}</span>
-              <span class="zone-card-lvl">Lv.${zDef.minLevel || zDef.reqLvl || 1}+</span>
+              <span class="zone-card-lvl">Lv.${reqLvl}+</span>
             </div>
             <div class="zone-card-desc">
               ${monsterCount} espécie${monsterCount === 1 ? '' : 's'} · 👑 ${bossName}
             </div>
             <button class="select-zone-btn" ${isLocked || isCurrent ? 'disabled' : ''}>
-              ${isCurrent ? '★ Caçando Aqui' : isLocked ? `🔒 Requer Lv.${zDef.minLevel || zDef.reqLvl || 1}` : 'Caçar nesta Área'}
+              ${isCurrent ? '★ Caçando Aqui' : isLocked ? `🔒 Requer Lv.${reqLvl}` : 'Caçar nesta Área'}
             </button>
           </div>
         </div>

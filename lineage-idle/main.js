@@ -169,9 +169,30 @@ try {
 const SAVE_KEY = 'lineageIdleSave_v2';
 const D = () => window.GameData;
 
-// MONSTERS e ZONES foram movidos para src/data/monsters.js e src/data/zones.js (Sprint 1)
-// Os imports estão no topo do arquivo.
-// getXPForLevel e getTotalXP importados do LevelEngine.js (Sprint 2)
+// ========== ECHO OF ELEMENTS — Skill bridges ==========
+const SKILL_DEFS = new Proxy({}, {
+  get: (_, prop) => (window.EchoData?.SKILL_DEFS_ECHO || {})[prop],
+  has: (_, prop) => prop in (window.EchoData?.SKILL_DEFS_ECHO || {}),
+  ownKeys: () => Reflect.ownKeys(window.EchoData?.SKILL_DEFS_ECHO || {}),
+  getOwnPropertyDescriptor: (_, prop) => Reflect.getOwnPropertyDescriptor(window.EchoData?.SKILL_DEFS_ECHO || {}, prop)
+});
+
+const SKILL_REQS = new Proxy({}, {
+  get: (_, prop) => (window.EchoData?.SKILL_REQS_ECHO || {})[prop],
+  has: (_, prop) => prop in (window.EchoData?.SKILL_REQS_ECHO || {}),
+  ownKeys: () => Reflect.ownKeys(window.EchoData?.SKILL_REQS_ECHO || {}),
+  getOwnPropertyDescriptor: (_, prop) => Reflect.getOwnPropertyDescriptor(window.EchoData?.SKILL_REQS_ECHO || {}, prop)
+});
+
+const SKILL_TREE_LAYOUT = new Proxy({}, {
+  get: (_, prop) => (window.EchoData?.SKILL_TREE_LAYOUT_ECHO || {})[prop],
+  has: (_, prop) => prop in (window.EchoData?.SKILL_TREE_LAYOUT_ECHO || {}),
+  ownKeys: () => Reflect.ownKeys(window.EchoData?.SKILL_TREE_LAYOUT_ECHO || {}),
+  getOwnPropertyDescriptor: (_, prop) => Reflect.getOwnPropertyDescriptor(window.EchoData?.SKILL_TREE_LAYOUT_ECHO || {}, prop)
+});
+
+const TIER_NAMES = ['Foundation', 'Discipline', 'Mastery', 'Ascendancy', 'Legend'];
+// ======================================================
 
 // --------------------------- STATE ---------------------------
 let state = getState();
