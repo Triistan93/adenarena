@@ -1078,12 +1078,13 @@ export function rollRarity(bonus = 0) {
 }
 
 export function getZoneDropTier(zoneLevel) {
-  if (zoneLevel < 15) return 'zone1';
-  if (zoneLevel < 35) return 'zone2';
-  if (zoneLevel < 55) return 'zone3';
-  if (zoneLevel < 75) return 'zone4';
-  if (zoneLevel < 90) return 'zone5';
-  return 'zone6';
+  if (zoneLevel < 20) return 'zone1'; // NoGrade (Lv 1-19)
+  if (zoneLevel < 40) return 'zone2'; // D Grade (Lv 20-39)
+  if (zoneLevel < 52) return 'zone3'; // C Grade (Lv 40-51)
+  if (zoneLevel < 62) return 'zone4'; // B Grade (Lv 52-61)
+  if (zoneLevel < 76) return 'zone5'; // A Grade (Lv 62-75)
+  if (zoneLevel < 85) return 'zone6'; // S Grade (Lv 76-84)
+  return 'zone7'; // Frost Lord Apex (Lv 85+)
 }
 
 export function rollDrop(zoneKey = 'zone1', rarityBonus = 0, isBoss = false, allItemsParam = null) {
@@ -1095,13 +1096,19 @@ export function rollDrop(zoneKey = 'zone1', rarityBonus = 0, isBoss = false, all
 
   // Resolve pool key (specific zoneKey e.g. 'talkingIsland', or tier e.g. 'zone1')
   let poolKey = zoneKey;
-  if (!MONSTER_DROPS[poolKey]) {
-    const numericLevel = typeof zoneKey === 'number' ? zoneKey : 1;
+  let numericLevel = 1;
+  if (typeof zoneKey === 'number') {
+    numericLevel = zoneKey;
     poolKey = getZoneDropTier(numericLevel);
+  } else if (!MONSTER_DROPS[poolKey]) {
+    poolKey = 'zone1';
   }
-  
-  // 1. Consumable/Material Drop (75% base chance, 100% for bosses)
-  const matChance = isBoss ? 1.0 : 0.75;
+
+  const isLowLevel = poolKey === 'zone1' || numericLevel < 20
+    || ['talkingIsland', 'elvenForest', 'darkForest', 'orcVillage', 'dwarvenMine', 'kamaelLair', 'ruinedOutpost'].includes(poolKey);
+
+  // 1. Consumable/Material Drop (15% chance for normal monsters, 40% for bosses)
+  const matChance = isBoss ? 0.40 : 0.15;
   if (Math.random() < matChance) {
     const rawMatPool = ZONE_CONSUMABLES[poolKey] || ZONE_CONSUMABLES.zone1;
     const validMatPool = rawMatPool.filter(id => !!allItems[id]);
@@ -1110,22 +1117,31 @@ export function rollDrop(zoneKey = 'zone1', rarityBonus = 0, isBoss = false, all
       const matId = matPool[Math.floor(Math.random() * matPool.length)];
       const def = allItems[matId];
       if (def) {
-        const amount = (def.slot === 'potion' || def.slot === 'consumable') ? Math.floor(Math.random() * 2) + 1 : Math.floor(Math.random() * 3) + 1;
-        drops.push({ id: matId, itemId: matId, rarity: 'common', isEquipment: false, amount });
+        drops.push({ id: matId, itemId: matId, rarity: 'common', isEquipment: false, amount: 1 });
       }
     }
   }
 
-  // 2. Equipment Drop (4% base chance, 25% for bosses)
-  const baseEquipChance = isBoss ? 0.25 : 0.04;
+  // 2. Equipment Drop (Raro: 0.5% para monstros normais de nível baixo, 4% para chefes)
+  const baseEquipChance = isLowLevel
+    ? (isBoss ? 0.04 : 0.005)
+    : (isBoss ? 0.08 : 0.015);
   const equipChance = baseEquipChance * (1 + Math.min(2, rarityBonus * 0.2));
   
   if (Math.random() < equipChance) {
     const rawPool = MONSTER_DROPS[poolKey] || MONSTER_DROPS.zone1;
-    const validPool = (rawPool || []).filter(id => !!allItems[id]);
-    const targetPool = validPool.length > 0 ? validPool : (MONSTER_DROPS.zone1 || []);
-    if (targetPool && targetPool.length > 0) {
-      const itemId = targetPool[Math.floor(Math.random() * targetPool.length)];
+    let validPool = (rawPool || []).filter(id => {
+      const itemDef = allItems[id];
+      if (!itemDef) return false;
+      // Garante estritamente que monstros de nível baixo (Lv 1-19) dropem APENAS NoGrade!
+      if (isLowLevel && itemDef.req && itemDef.req.level >= 20) return false;
+      return true;
+    });
+
+    if (validPool.length === 0) validPool = MONSTER_DROPS.zone1.filter(id => !!allItems[id]);
+    
+    if (validPool && validPool.length > 0) {
+      const itemId = validPool[Math.floor(Math.random() * validPool.length)];
       const rarity = rollRarity(rarityBonus);
       const dropObj = { id: itemId, itemId, rarity, isEquipment: true, amount: 1 };
       drops.push(dropObj);

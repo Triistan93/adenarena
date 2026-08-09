@@ -65,7 +65,7 @@ export function checkLevelUp(state, callbacks = {}) {
       state.mp = state.maxMp;
     }
 
-    const spReward = Math.min(10, Math.floor(state.level * 0.8 + 1));
+    const spReward = Math.max(1, Math.floor(state.level * 0.15 + 1));
     state.sp += spReward;
 
     // Dispara via EventBus para decoupled listeners

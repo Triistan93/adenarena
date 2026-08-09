@@ -2940,15 +2940,16 @@ function attackMonster() {
     const zoneTier = getZoneDropTier(zoneLevel);
     const zoneMult = (D().ZONE_GOLD_MULT && D().ZONE_GOLD_MULT[zoneTier]) || 1;
     const xpMult = 1 + (stats.xpBoost || 0);
-    const xpGain = Math.floor(monster.xp * xpMult), spGain = monster.sp + (monster.boss ? 2 : 0);
+    const xpGain = Math.floor(monster.xp * xpMult);
+    const spGain = Math.max(0, Math.floor((monster.sp || 1) * 0.25)) + (monster.boss ? 1 : 0);
     state.xp += xpGain; state.sp += spGain;
-    log(`Defeated ${monster.name}! +${xpGain} XP, +${spGain} SP`, 'xp');
+    log(`Derrotou ${monster.name}! +${xpGain} XP, +${spGain} SP`, 'xp');
 
     const baseGold = monster.gold[0] + Math.random() * (monster.gold[1] - monster.gold[0]), jackpot = Math.random() < (monster.boss ? 0.08 : 0.015);
     const goldMult = zoneMult * (1 + (stats.goldBoost || 0)) * (jackpot ? 10 : 1);
     let gold = Math.floor(baseGold * stats.loot * goldMult); if (gold < 1) gold = 1;
     state.gold += gold; trackGold(gold);
-    if (jackpot) { log(`💰 JACKPOT! +${gold} Gold (×10)`, 'rarity-legendary'); floatText(`💰 +${gold}g`, 'float-jackpot'); } else { log(`+${gold} Gold`, 'loot'); if (gold >= 20) floatText(`+${gold}g`, 'float-gold'); }
+    if (jackpot) { log(`🪙 JACKPOT! +${gold.toLocaleString()} Adena (×10)`, 'rarity-legendary'); floatText(`🪙 +${gold} Adena`, 'float-jackpot'); } else { log(`+${gold.toLocaleString()} Adena`, 'loot'); if (gold >= 20) floatText(`+${gold} Adena`, 'float-gold'); }
 
     const rawDrop = D().rollDrop(zoneTier, stats.loot, !!(monster.boss || monster.elite));
     const drops = Array.isArray(rawDrop) ? rawDrop : (rawDrop && rawDrop.itemId ? [ { id: rawDrop.itemId, itemId: rawDrop.itemId, rarity: rawDrop.rarity, isEquipment: true, amount: 1 } ] : []);
