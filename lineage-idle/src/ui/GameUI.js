@@ -243,20 +243,37 @@ export function showItemTooltip(e, item, state, callbacks = {}) {
   }
 
   // ─── Botões de ação ───────────────────────────────────────────────────────
-  let actionsHtml = '';
-  if (callbacks.onEquip || callbacks.onUnequip || callbacks.onSell) {
-    actionsHtml = `<div style="display:flex;gap:4px;margin-top:8px;flex-wrap:wrap;">`;
-    if (item.equipped && callbacks.onUnequip) {
-      actionsHtml += `<button onclick="(${callbacks.onUnequip.toString()})(event)" style="flex:1;padding:4px 6px;background:linear-gradient(180deg,#5a4020,#2a1a08);border:1px solid #a07030;border-radius:4px;color:#e8c870;font-size:10px;cursor:pointer;">Unequip</button>`;
-    } else if (!item.equipped && callbacks.onEquip) {
-      actionsHtml += `<button onclick="(${callbacks.onEquip.toString()})(event)" style="flex:1;padding:4px 6px;background:linear-gradient(180deg,#204050,#0a1a28);border:1px solid #305080;border-radius:4px;color:#70b8e8;font-size:10px;cursor:pointer;">Equip</button>`;
+  const isEquipSlot = ['weapon','armor','helmet','gloves','boots','ring','legs','shield',
+    'cloak','belt','necklace','earring','hair','agathion','sigil'].includes(def.slot);
+  const isConsumable = ['consumable','scroll','powerup','potion','food'].includes(def.slot);
+
+  let actionsHtml = `<div style="display:flex;gap:4px;margin-top:8px;flex-wrap:wrap;">`;
+  if (isEquipSlot) {
+    if (item.equipped) {
+      actionsHtml += `<button data-tt-action="unequip" data-uid="${item.uid}" data-slot="${item.equippedSlot || def.slot}"
+        style="flex:1;padding:5px 8px;background:linear-gradient(180deg,#5a4020,#2a1a08);border:1px solid #a07030;
+        border-radius:4px;color:#e8c870;font-size:11px;cursor:pointer;font-weight:600;">⬆ Desequipar</button>`;
+    } else {
+      actionsHtml += `<button data-tt-action="equip" data-uid="${item.uid}"
+        style="flex:1;padding:5px 8px;background:linear-gradient(180deg,#1a3a5a,#0a1a2a);border:1px solid #3a7ab0;
+        border-radius:4px;color:#70c8f8;font-size:11px;cursor:pointer;font-weight:600;">⚔ Equipar</button>`;
     }
-    if (callbacks.onSell) {
-      const sellPrice = Math.floor((def.price || 10) * 0.4 * mult);
-      actionsHtml += `<button onclick="(${callbacks.onSell.toString()})(event)" style="flex:1;padding:4px 6px;background:linear-gradient(180deg,#3a2010,#1a0a00);border:1px solid #703010;border-radius:4px;color:#e88050;font-size:10px;cursor:pointer;">Vender ${sellPrice}g</button>`;
-    }
-    actionsHtml += `</div>`;
   }
+  if (isConsumable) {
+    actionsHtml += `<button data-tt-action="use" data-uid="${item.uid}"
+      style="flex:1;padding:5px 8px;background:linear-gradient(180deg,#1a4a2a,#0a2010);border:1px solid #3ab070;
+      border-radius:4px;color:#70e898;font-size:11px;cursor:pointer;font-weight:600;">▶ Usar</button>`;
+  }
+  const sellPrice = Math.floor((def.price || 10) * 0.4 * mult);
+  if (!item.equipped) {
+    actionsHtml += `<button data-tt-action="sell" data-uid="${item.uid}"
+      style="flex:1;padding:5px 8px;background:linear-gradient(180deg,#3a2010,#1a0a00);border:1px solid #804020;
+      border-radius:4px;color:#e88050;font-size:11px;cursor:pointer;font-weight:600;">💰 ${sellPrice}g</button>`;
+    actionsHtml += `<button data-tt-action="salvage" data-uid="${item.uid}"
+      style="flex:1;padding:5px 8px;background:linear-gradient(180deg,#2a1a2a,#0a0a10);border:1px solid #604070;
+      border-radius:4px;color:#c878d8;font-size:11px;cursor:pointer;font-weight:600;">⚒ Break</button>`;
+  }
+  actionsHtml += `</div>`;
 
   tooltip.style.background = RARITY_BG[rarity] || RARITY_BG.common;
   tooltip.style.boxShadow  = `${RARITY_GLOW[rarity] || 'none'}, 0 4px 20px rgba(0,0,0,0.8)`;
@@ -274,6 +291,24 @@ export function showItemTooltip(e, item, state, callbacks = {}) {
     ${actionsHtml}
   `;
 
+  // Delegação de eventos para os botões do tooltip
+  tooltip.querySelectorAll('[data-tt-action]').forEach(btn => {
+    btn.onclick = (ev) => {
+      ev.stopPropagation();
+      const action = btn.dataset.ttAction;
+      const uid = btn.dataset.uid;
+      if (action === 'equip'   && callbacks.equipItem)   callbacks.equipItem(state, uid, callbacks);
+      if (action === 'unequip' && callbacks.unequipItem) {
+        const slot = btn.dataset.slot;
+        callbacks.unequipItem(state, slot, callbacks);
+      }
+      if (action === 'sell'    && callbacks.sellItem)    callbacks.sellItem(uid);
+      if (action === 'salvage' && callbacks.salvageItem) callbacks.salvageItem(uid);
+      if (action === 'use'     && callbacks.useItem)     callbacks.useItem(uid);
+      hideItemTooltip();
+    };
+  });
+
   tooltip.style.display = 'block';
   tooltip.style.left = `${Math.min(window.innerWidth - 240, e.clientX + 15)}px`;
   tooltip.style.top = `${Math.max(10, Math.min(window.innerHeight - 200, e.clientY + 15))}px`;
@@ -282,6 +317,16 @@ export function showItemTooltip(e, item, state, callbacks = {}) {
 export function hideItemTooltip() {
   const tooltip = findElement('item-tooltip');
   if (tooltip) tooltip.style.display = 'none';
+}
+
+// Inicializa o auto-hide do tooltip ao mover mouse para fora dele
+let _tooltipInitialized = false;
+export function initTooltipEvents() {
+  if (_tooltipInitialized) return;
+  _tooltipInitialized = true;
+  const tooltip = findElement('item-tooltip');
+  if (!tooltip) return;
+  tooltip.addEventListener('mouseleave', () => hideItemTooltip());
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -665,7 +710,12 @@ export function updateInventoryUI(state, callbacks = {}) {
     slotEl.title = def.name;
 
     slotEl.onmouseenter = (e) => showItemTooltip(e, item, state, callbacks);
-    slotEl.onmouseleave = () => hideItemTooltip();
+    slotEl.onmouseleave = (ev) => {
+      const tip = findElement('item-tooltip');
+      const rel = ev.relatedTarget;
+      if (tip && (tip === rel || tip.contains(rel))) return;
+      hideItemTooltip();
+    };
 
     slotEl.onclick = (e) => {
       e.stopPropagation();

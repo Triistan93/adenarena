@@ -8,16 +8,18 @@
 #item-tooltip {
   position: fixed;
   z-index: 99999;
-  pointer-events: none;
-  max-width: 300px;
+  pointer-events: auto;
+  max-width: 260px;
+  min-width: 180px;
   background: rgba(30, 25, 15, 0.97);
   border: 1px solid #8a6b2e;
-  border-radius: 6px;
-  padding: 8px 10px;
+  border-radius: 8px;
+  padding: 10px 12px;
   color: #e8d5a3;
   font-size: 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8);
   display: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 .tooltip-header {
   display: flex;

@@ -135,7 +135,8 @@ import {
   renderZoneMap as uiRenderZoneMap,
   updateShopUI as uiUpdateShopUI,
   updateCraftUI as uiUpdateCraftUI,
-  updateCharacterUI as uiUpdateCharacterUI
+  updateCharacterUI as uiUpdateCharacterUI,
+  initTooltipEvents as uiInitTooltipEvents
 } from './src/ui/GameUI.js';
 
 import { ensureAppLayout, showMenuPanel } from './src/ui/AppLayout.js';
@@ -2213,6 +2214,7 @@ function updateTabBadgesUI() {
 }
 
 function updateAllUI() {
+  uiInitTooltipEvents();
   updateGameModeUI();
   safeUiUpdate('zone-bg', updateZoneBackground);
   safeUiUpdate('stats', updateStatsUI);
