@@ -142,6 +142,7 @@ import {
   updateCharacterUI as uiUpdateCharacterUI,
   renderAlchemyUI as uiRenderAlchemyUI,
   renderAstralMasteryUI as uiRenderAstralMasteryUI,
+  renderExpeditionsUI as uiRenderExpeditionsUI,
   initTooltipEvents as uiInitTooltipEvents
 } from './src/ui/GameUI.js';
 
@@ -2293,6 +2294,10 @@ function updateAstralUI() {
   uiRenderAstralMasteryUI(state);
 }
 
+function updateExpeditionsUI() {
+  uiRenderExpeditionsUI(state);
+}
+
 function updateAllUI() {
   uiInitTooltipEvents();
   updateGameModeUI();
@@ -2305,6 +2310,7 @@ function updateAllUI() {
   safeUiUpdate('craft', updateCraftUI);
   safeUiUpdate('alchemy', updateAlchemyUI);
   safeUiUpdate('astral', updateAstralUI);
+  safeUiUpdate('expeditions', updateExpeditionsUI);
   safeUiUpdate('zone', updateZoneUI);
   safeUiUpdate('zone-map', renderZoneMap);
   safeUiUpdate('race-class', updateRaceClassUI);
@@ -3828,6 +3834,7 @@ export function openPanel(tabName) {
   else if (targetTab === 'craft') safeUiUpdate('craft', updateCraftUI);
   else if (targetTab === 'alchemy') safeUiUpdate('alchemy', updateAlchemyUI);
   else if (targetTab === 'astral') safeUiUpdate('astral', updateAstralUI);
+  else if (targetTab === 'expeditions') safeUiUpdate('expeditions', updateExpeditionsUI);
   else if (targetTab === 'enchant') safeUiUpdate('enchant', updateEnchantUI);
   else if (targetTab === 'zones') safeUiUpdate('zones', updateZoneUI);
   else if (targetTab === 'codex') safeUiUpdate('codex', updateCodexUI);
@@ -4452,6 +4459,220 @@ function reincarnateHero() {
   return true;
 }
 
+// --------------------------- EXPEDITIONS & MANOR SYSTEM ---------------------------
+const MANOR_SEEDS = {
+  dark_coda: { id: 'dark_coda', name: 'Dark Coda Seed', level: 10, price: 100, reward1: 'stem', reward2: 'braided_hemp', ratio1: 5, ratio2: 2 },
+  red_coda: { id: 'red_coda', name: 'Red Coda Seed', level: 13, price: 200, reward1: 'varnish', reward2: 'cokes', ratio1: 5, ratio2: 2 },
+  chilly_coda: { id: 'chilly_coda', name: 'Chilly Coda Seed', level: 16, price: 350, reward1: 'suede', reward2: 'oriharukon_ore', ratio1: 5, ratio2: 2 },
+  blue_coda: { id: 'blue_coda', name: 'Blue Coda Seed', level: 19, price: 500, reward1: 'animal_skin', reward2: 'crafted_leather', ratio1: 5, ratio2: 2 },
+  red_cobol: { id: 'red_cobol', name: 'Red Cobol Seed', level: 31, price: 1000, reward1: 'charcoal', reward2: 'enria', ratio1: 10, ratio2: 2 },
+  chilly_cobol: { id: 'chilly_cobol', name: 'Chilly Cobol Seed', level: 34, price: 1500, reward1: 'animal_bone', reward2: 'steel', ratio1: 10, ratio2: 3 },
+  twin_codran: { id: 'twin_codran', name: 'Twin Codran Seed', level: 58, price: 3000, reward1: 'charcoal', reward2: 'mold_lubricant', ratio1: 15, ratio2: 3 },
+  king_coba: { id: 'king_coba', name: 'King Coba Seed', level: 85, price: 10000, reward1: 'metallic_thread', reward2: 'durable_metal_plate', ratio1: 20, ratio2: 5 }
+};
+
+const CASTLES_DEFS = {
+  dion: { id: 'dion', name: 'Castelo de Dion', reqLevel: 30, taxPerHour: 5000, desc: '+5.000 Adena por hora', enemyName: 'Guarda de Dion (Lv. 30)' },
+  giran: { id: 'giran', name: 'Castelo de Giran', reqLevel: 50, taxPerHour: 15000, desc: '+15.000 Adena por hora & 5% Desconto na Loja', enemyName: 'Guarda de Giran (Lv. 50)' },
+  goddard: { id: 'goddard', name: 'Castelo de Goddard', reqLevel: 70, taxPerHour: 35000, desc: '+35.000 Adena por hora & +5% XP Bônus', enemyName: 'Guarda de Goddard (Lv. 70)' },
+  aden: { id: 'aden', name: 'Castelo Imperial de Aden', reqLevel: 85, taxPerHour: 75000, desc: '+75.000 Adena por hora & +10% Dano Geral', enemyName: 'Guarda Imperial de Aden (Lv. 85)' }
+};
+
+const EXPEDITION_DESTINATIONS = {
+  branded: { id: 'branded', name: 'Catacumbas de Branded', duration: 3600000, cost: 5000, minGold: 20000, maxGold: 30000, desc: 'Expedição rápida (1 hora) com saque de ouro e pergaminhos' },
+  martyrs: { id: 'martyrs', name: 'Necrópole dos Martírios', duration: 14400000, cost: 20000, minGold: 100000, maxGold: 150000, desc: 'Expedição média (4 horas) com baús C/B e materiais' },
+  dragon_valley: { id: 'dragon_valley', name: 'Vale dos Dragões Abissais', duration: 28800000, cost: 50000, minGold: 300000, maxGold: 400000, desc: 'Expedição longa (8 horas) com baús A/S e Fragmentos Astrais' },
+  shilen_temple: { id: 'shilen_temple', name: 'Templo da Deusa Shilen', duration: 43200000, cost: 100000, minGold: 800000, maxGold: 1200000, desc: 'Expedição mítica (12 horas) com Baú Frost Lord e 25 Fragmentos Astrais' }
+};
+
+function buyManorSeed(seedId, qty = 1) {
+  const seed = MANOR_SEEDS[seedId];
+  if (!seed) return false;
+  const count = Math.max(1, Math.floor(qty));
+  const totalCost = seed.price * count;
+
+  if ((state.gold || 0) < totalCost) {
+    log(`⚠️ Ouro insuficiente! Requer ${totalCost.toLocaleString()}g.`, 'warning');
+    return false;
+  }
+
+  state.gold -= totalCost;
+  if (!state.manorSeeds) state.manorSeeds = {};
+  state.manorSeeds[seedId] = (state.manorSeeds[seedId] || 0) + count;
+
+  log(`🌾 Comprou ${count}x Semente ${seed.name}!`, 'loot');
+  updateAllUI();
+  save();
+  return true;
+}
+
+function exchangeManorCrop(seedId, rewardOption = 1) {
+  const seed = MANOR_SEEDS[seedId];
+  if (!seed) return false;
+
+  const ownedCrops = state.manorCrops ? (state.manorCrops[seedId] || 0) : 0;
+  if (ownedCrops <= 0) {
+    log(`⚠️ Você não possui Colheita de ${seed.name} para entregar!`, 'warning');
+    return false;
+  }
+
+  const matKey = rewardOption === 2 ? seed.reward2 : seed.reward1;
+  const ratio = rewardOption === 2 ? seed.ratio2 : seed.ratio1;
+  const matAmount = Math.max(1, Math.floor(ownedCrops / ratio));
+
+  if (matAmount < 1) {
+    log(`⚠️ Colheita insuficiente! Requer pelo menos ${ratio}x colheitas para trocar por 1 material.`, 'warning');
+    return false;
+  }
+
+  const cropsUsed = matAmount * ratio;
+  state.manorCrops[seedId] -= cropsUsed;
+
+  addToInventory(matKey, matAmount);
+  log(`🌾 Entregou ${cropsUsed}x Colheita no Manor Manager e recebeu +${matAmount}x ${matKey.toUpperCase()}!`, 'rarity-legendary');
+
+  updateAllUI();
+  save();
+  return true;
+}
+
+function conquerCastle(castleId) {
+  const castle = CASTLES_DEFS[castleId];
+  if (!castle) return false;
+
+  if (!state.castles) state.castles = {};
+  if (state.castles[castleId]?.conquered) {
+    log(`⚠️ Você já domina o ${castle.name}!`, 'warning');
+    return false;
+  }
+
+  const playerLvl = state.level || 1;
+  if (playerLvl < castle.reqLevel) {
+    log(`⚠️ Nível insuficiente para desafiar o ${castle.name}! Requer Nível ${castle.reqLevel}.`, 'warning');
+    return false;
+  }
+
+  state.castles[castleId] = {
+    conquered: true,
+    lastTaxClaim: Date.now()
+  };
+
+  log(`🏰 CONQUISTOU O ${castle.name.toUpperCase()}! Bônus ativado: ${castle.desc}.`, 'rarity-legendary');
+  floatText(`DOMINOU ${castle.name.toUpperCase()}`, 'float-gold');
+
+  updateAllUI();
+  save();
+  return true;
+}
+
+function claimCastleTaxes(castleId) {
+  const castle = CASTLES_DEFS[castleId];
+  if (!castle) return false;
+
+  const data = state.castles ? state.castles[castleId] : null;
+  if (!data || !data.conquered) {
+    log(`⚠️ Você não domina o ${castle.name}!`, 'warning');
+    return false;
+  }
+
+  const now = Date.now();
+  const hoursPassed = (now - (data.lastTaxClaim || now)) / 3600000;
+  if (hoursPassed < 1) {
+    const minsLeft = Math.ceil((1 - hoursPassed) * 60);
+    log(`⚠️ Aguarde mais ${minsLeft} minutos para recolher os impostos de ${castle.name}.`, 'warning');
+    return false;
+  }
+
+  const hoursToClaim = Math.min(24, Math.floor(hoursPassed));
+  const adenaEarned = hoursToClaim * castle.taxPerHour;
+
+  data.lastTaxClaim = now;
+  state.gold = (state.gold || 0) + adenaEarned;
+
+  log(`💰 Coletou ${adenaEarned.toLocaleString()} Adena em impostos de ${castle.name} (${hoursToClaim}h)!`, 'rarity-legendary');
+
+  updateAllUI();
+  save();
+  return true;
+}
+
+function startExpedition(destId) {
+  const dest = EXPEDITION_DESTINATIONS[destId];
+  if (!dest) return false;
+
+  if (!state.expeditions) state.expeditions = [];
+  const activeExp = state.expeditions.find(e => e.destId === destId && !e.claimed);
+  if (activeExp) {
+    log(`⚠️ Já existe uma expedição ativa para ${dest.name}!`, 'warning');
+    return false;
+  }
+
+  if ((state.gold || 0) < dest.cost) {
+    log(`⚠️ Ouro insuficiente para equipar a expedição! Requer ${dest.cost.toLocaleString()}g.`, 'warning');
+    return false;
+  }
+
+  state.gold -= dest.cost;
+  const now = Date.now();
+  state.expeditions.push({
+    id: 'exp_' + now + '_' + Math.floor(Math.random() * 1000),
+    destId,
+    startTime: now,
+    duration: dest.duration,
+    claimed: false
+  });
+
+  log(`🧭 Esquadrão de Mercenários enviado para ${dest.name}! Duração: ${dest.duration / 3600000}h.`, 'loot');
+
+  updateAllUI();
+  save();
+  return true;
+}
+
+function claimExpeditionReward(expId) {
+  if (!state.expeditions) return false;
+  const expIdx = state.expeditions.findIndex(e => e.id === expId);
+  if (expIdx < 0) return false;
+
+  const exp = state.expeditions[expIdx];
+  const dest = EXPEDITION_DESTINATIONS[exp.destId];
+  if (!dest) return false;
+
+  const now = Date.now();
+  if (now < exp.startTime + exp.duration) {
+    log('⚠️ Esta expedição ainda está em andamento!', 'warning');
+    return false;
+  }
+
+  const goldEarned = Math.floor(dest.minGold + Math.random() * (dest.maxGold - dest.minGold));
+  state.gold = (state.gold || 0) + goldEarned;
+
+  if (exp.destId === 'shilen_temple') {
+    state.astralShards = (state.astralShards || 0) + 25;
+    addToInventory('weapon_frost_lord_sword', 1, 'frostlord');
+  } else if (exp.destId === 'dragon_valley') {
+    state.astralShards = (state.astralShards || 0) + 10;
+    addToInventory('jewel_tateossian_ring', 1, 'legendary');
+  } else if (exp.destId === 'martyrs') {
+    addToInventory('scroll_enchant_weapon_a', 2);
+  } else {
+    addToInventory('scroll_enchant_weapon_d', 3);
+  }
+
+  const seedKeys = Object.keys(MANOR_SEEDS);
+  const randomSeed = seedKeys[Math.floor(Math.random() * seedKeys.length)];
+  if (!state.manorCrops) state.manorCrops = {};
+  state.manorCrops[randomSeed] = (state.manorCrops[randomSeed] || 0) + 10;
+
+  state.expeditions.splice(expIdx, 1);
+
+  log(`🎁 Expedição de ${dest.name} concluída! Resgatou ${goldEarned.toLocaleString()}g e recompensas valiosas!`, 'rarity-legendary');
+
+  updateAllUI();
+  save();
+  return true;
+}
+
 export function init() {
   try {
     // Expose global action handlers to window for inline HTML handlers & global events
@@ -4489,6 +4710,15 @@ export function init() {
     window.upgradeAstralNode = upgradeAstralNode;
     window.reincarnateHero = reincarnateHero;
     window.ASTRAL_NODES = ASTRAL_NODES;
+    window.buyManorSeed = buyManorSeed;
+    window.exchangeManorCrop = exchangeManorCrop;
+    window.conquerCastle = conquerCastle;
+    window.claimCastleTaxes = claimCastleTaxes;
+    window.startExpedition = startExpedition;
+    window.claimExpeditionReward = claimExpeditionReward;
+    window.MANOR_SEEDS = MANOR_SEEDS;
+    window.CASTLES_DEFS = CASTLES_DEFS;
+    window.EXPEDITION_DESTINATIONS = EXPEDITION_DESTINATIONS;
     window.getGameState = () => {
       const data = { 
         ...state, 

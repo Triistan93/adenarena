@@ -146,6 +146,7 @@ export const IDLE_MARKUP = `
           <button class="tab-btn" data-tab="craft">⚒️ Forja <span id="tab-badge-craft" class="tab-badge" style="display:none">!</span></button>
           <button class="tab-btn" data-tab="alchemy">🧪 Alquimia</button>
           <button class="tab-btn" data-tab="astral">🌟 Maestria</button>
+          <button class="tab-btn" data-tab="expeditions">🏰 Expedições &amp; Manor</button>
           <button class="tab-btn" data-tab="enchant">✨ Encantamento</button>
           <button class="tab-btn" data-tab="codex">📜 Codex</button>
           <button class="tab-btn" data-tab="dolls">🧸 Dolls</button>
@@ -567,6 +568,9 @@ export const IDLE_MARKUP = `
 
           <!-- Astral Mastery Tab -->
           <div id="tab-astral" class="tab-pane"></div>
+
+          <!-- Expeditions & Manor Tab -->
+          <div id="tab-expeditions" class="tab-pane"></div>
 
           <!-- Dedicated Enchantment Tab -->
           <div id="tab-enchant" class="tab-pane">

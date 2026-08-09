@@ -2590,3 +2590,203 @@ export function renderAstralMasteryUI(state) {
     </div>
   `;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   20. EXPEDITIONS, CASTLES & MANOR UI RENDERER
+═══════════════════════════════════════════════════════════════════════════ */
+export function renderExpeditionsUI(state) {
+  if (!state) return;
+  const root = getRoot();
+  const container = root.querySelector('#tab-expeditions, .tab-expeditions');
+  if (!container) return;
+
+  const now = Date.now();
+  const dests = (typeof window !== 'undefined' && window.EXPEDITION_DESTINATIONS) ? window.EXPEDITION_DESTINATIONS : {};
+  const castles = (typeof window !== 'undefined' && window.CASTLES_DEFS) ? window.CASTLES_DEFS : {};
+  const seeds = (typeof window !== 'undefined' && window.MANOR_SEEDS) ? window.MANOR_SEEDS : {};
+
+  const activeExpeditions = state.expeditions || [];
+  const playerCastles = state.castles || {};
+  const ownedCrops = state.manorCrops || {};
+  const currentLvl = state.level || 1;
+
+  let expHtml = '';
+  for (const [dId, dDef] of Object.entries(dests)) {
+    const active = activeExpeditions.find(e => e.destId === dId);
+    let statusBtn = '';
+
+    if (active) {
+      const finishTime = active.startTime + active.duration;
+      if (now >= finishTime) {
+        statusBtn = `
+          <button
+            onclick="window.claimExpeditionReward('${active.id}')"
+            style="padding:8px 14px; font-weight:bold; font-size:12px; background:linear-gradient(180deg,#34d399,#059669); border:1px solid #6ee7b7; color:#000; border-radius:6px; cursor:pointer; box-shadow:0 0 10px rgba(52,211,153,0.4);"
+          >
+            🎁 COLETAR SAQUE
+          </button>
+        `;
+      } else {
+        const secondsLeft = Math.ceil((finishTime - now) / 1000);
+        const hours = Math.floor(secondsLeft / 3600);
+        const mins = Math.floor((secondsLeft % 3600) / 60);
+        const secs = secondsLeft % 60;
+        const timeStr = `${hours}h ${mins}m ${secs < 10 ? '0' : ''}${secs}s`;
+
+        statusBtn = `
+          <span style="font-family:monospace; font-weight:bold; color:#fbbf24; background:rgba(0,0,0,0.5); padding:6px 12px; border-radius:6px; border:1px solid rgba(251,191,36,0.3);">
+            ⏱️ ${timeStr}
+          </span>
+        `;
+      }
+    } else {
+      const canAfford = (state.gold || 0) >= dDef.cost;
+      statusBtn = `
+        <button
+          onclick="window.startExpedition('${dId}')"
+          ${!canAfford ? 'disabled' : ''}
+          style="padding:8px 14px; font-family:'Cinzel',serif; font-weight:bold; font-size:12px; background:${canAfford ? 'linear-gradient(180deg,#d4a744,#8a641c)' : 'rgba(60,50,40,0.5)'}; border:1px solid ${canAfford ? '#ffe699' : 'rgba(100,80,60,0.3)'}; color:${canAfford ? '#000' : '#777'}; border-radius:6px; cursor:${canAfford ? 'pointer' : 'not-allowed'};"
+        >
+          🧭 ENVIAR (${(dDef.cost / 1000).toFixed(0)}k gold)
+        </button>
+      `;
+    }
+
+    expHtml += `
+      <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(212,167,68,0.3); border-radius:10px; padding:12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; gap:12px;">
+        <div>
+          <h4 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">${dDef.name}</h4>
+          <p style="margin:2px 0 0 0; font-size:11px; color:#aaa;">${dDef.desc}</p>
+        </div>
+        ${statusBtn}
+      </div>
+    `;
+  }
+
+  let castlesHtml = '';
+  for (const [cId, cDef] of Object.entries(castles)) {
+    const cData = playerCastles[cId];
+    const isConquered = !!cData?.conquered;
+
+    let actionBtn = '';
+    if (isConquered) {
+      const lastClaim = cData.lastTaxClaim || now;
+      const hoursPassed = (now - lastClaim) / 3600000;
+      const canClaim = hoursPassed >= 1;
+      const accumGold = Math.floor(Math.min(24, hoursPassed) * cDef.taxPerHour);
+
+      actionBtn = `
+        <button
+          onclick="window.claimCastleTaxes('${cId}')"
+          ${!canClaim ? 'disabled' : ''}
+          style="padding:8px 14px; font-weight:bold; font-size:11px; background:${canClaim ? 'linear-gradient(180deg,#fbbf24,#b45309)' : 'rgba(60,50,40,0.5)'}; border:1px solid ${canClaim ? '#fde047' : 'rgba(100,80,60,0.3)'}; color:${canClaim ? '#000' : '#777'}; border-radius:6px; cursor:${canClaim ? 'pointer' : 'not-allowed'};"
+        >
+          🪙 IMPOSTOS (+${accumGold.toLocaleString()}g)
+        </button>
+      `;
+    } else {
+      const canChallenge = currentLvl >= cDef.reqLevel;
+      actionBtn = `
+        <button
+          onclick="window.conquerCastle('${cId}')"
+          ${!canChallenge ? 'disabled' : ''}
+          style="padding:8px 14px; font-family:'Cinzel',serif; font-weight:bold; font-size:11px; background:${canChallenge ? 'linear-gradient(180deg,#ef4444,#991b1b)' : 'rgba(60,50,40,0.5)'}; border:1px solid ${canChallenge ? '#fca5a5' : 'rgba(100,80,60,0.3)'}; color:${canChallenge ? '#fff' : '#777'}; border-radius:6px; cursor:${canChallenge ? 'pointer' : 'not-allowed'};"
+        >
+          ${canChallenge ? '⚔️ DOMINAR' : `🔒 Lv. ${cDef.reqLevel}+`}
+        </button>
+      `;
+    }
+
+    castlesHtml += `
+      <div style="background:rgba(18,22,34,0.85); border:1px solid ${isConquered ? 'rgba(52,211,153,0.5)' : 'rgba(212,167,68,0.2)'}; border-radius:10px; padding:12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; gap:12px;">
+        <div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <h4 style="margin:0; font-family:'Cinzel',serif; color:${isConquered ? '#34d399' : '#f4d58a'}; font-size:14px;">🏰 ${cDef.name}</h4>
+            <span style="font-size:10px; background:rgba(0,0,0,0.5); padding:1px 6px; border-radius:4px; color:${isConquered ? '#34d399' : '#fca5a5'}; font-weight:bold;">${isConquered ? '✓ SEU DOMÍNIO' : 'GUARDA INIMIGA'}</span>
+          </div>
+          <p style="margin:2px 0 0 0; font-size:11px; color:#aaa;">${cDef.desc}</p>
+        </div>
+        ${actionBtn}
+      </div>
+    `;
+  }
+
+  let manorHtml = '';
+  for (const [sId, sDef] of Object.entries(seeds)) {
+    const cropsCount = ownedCrops[sId] || 0;
+    const canExchange1 = cropsCount >= sDef.ratio1;
+    const canExchange2 = cropsCount >= sDef.ratio2;
+
+    manorHtml += `
+      <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(212,167,68,0.25); border-radius:10px; padding:12px; margin-bottom:8px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <div>
+            <h4 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">🌾 ${sDef.name} (Lv. ${sDef.level})</h4>
+            <div style="font-size:11px; color:#aaa;">Colheita Acumulada: <strong style="color:#34d399;">${cropsCount}x Crops</strong></div>
+          </div>
+          <button
+            onclick="window.buyManorSeed('${sId}', 10)"
+            style="padding:6px 12px; font-weight:bold; font-size:11px; background:rgba(212,167,68,0.2); border:1px solid rgba(212,167,68,0.4); color:#ffd877; border-radius:6px; cursor:pointer;"
+          >
+            🛒 Comprar 10x Sementes (${(sDef.price * 10).toLocaleString()}g)
+          </button>
+        </div>
+
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button
+            onclick="window.exchangeManorCrop('${sId}', 1)"
+            ${!canExchange1 ? 'disabled' : ''}
+            style="flex:1; padding:6px; font-size:11px; font-weight:bold; background:${canExchange1 ? 'rgba(52,211,153,0.2)' : 'rgba(50,50,50,0.3)'}; border:1px solid ${canExchange1 ? '#34d399' : '#555'}; color:${canExchange1 ? '#6ee7b7' : '#777'}; border-radius:6px; cursor:${canExchange1 ? 'pointer' : 'not-allowed'};"
+          >
+            🔄 Trocar ${sDef.ratio1}x Crops ➔ +1 ${sDef.reward1.toUpperCase()}
+          </button>
+          <button
+            onclick="window.exchangeManorCrop('${sId}', 2)"
+            ${!canExchange2 ? 'disabled' : ''}
+            style="flex:1; padding:6px; font-size:11px; font-weight:bold; background:${canExchange2 ? 'rgba(168,85,247,0.2)' : 'rgba(50,50,50,0.3)'}; border:1px solid ${canExchange2 ? '#a855f7' : '#555'}; color:${canExchange2 ? '#d8b4fe' : '#777'}; border-radius:6px; cursor:${canExchange2 ? 'pointer' : 'not-allowed'};"
+          >
+            🔄 Trocar ${sDef.ratio2}x Crops ➔ +1 ${sDef.reward2.toUpperCase()}
+          </button>
+        </div>
+      </div>
+    `;
+  }
+
+  container.innerHTML = `
+    <div style="padding:16px; font-family:sans-serif; color:#fff;">
+      <!-- Header Banner -->
+      <div style="background:linear-gradient(180deg, rgba(20,26,42,0.95), rgba(10,14,24,0.95)); border:1px solid rgba(212,167,68,0.4); border-radius:12px; padding:16px; margin-bottom:18px; box-shadow:0 4px 20px rgba(0,0,0,0.5);">
+        <h3 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:20px; display:flex; align-items:center; gap:8px;">
+          🏰 Expedições de Mercenários, Castelos & Manor
+        </h3>
+        <p style="margin:4px 0 0 0; font-size:12px; color:#aaa;">
+          Envie expedições passivas, conquiste castelos para impostos e negocie colheitas do Manor por materiais nobres de craft!
+        </p>
+      </div>
+
+      <!-- Expeditions Section -->
+      <div style="margin-bottom:20px;">
+        <h4 style="margin:0 0 8px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:15px;">
+          🧭 Expedições Passivas de Mercenários
+        </h4>
+        ${expHtml}
+      </div>
+
+      <!-- Castles Section -->
+      <div style="margin-bottom:20px;">
+        <h4 style="margin:0 0 8px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:15px;">
+          🏰 Domínio dos Castelos de Aden (Impostos Passivos)
+        </h4>
+        ${castlesHtml}
+      </div>
+
+      <!-- Manor Farming Section -->
+      <div>
+        <h4 style="margin:0 0 8px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:15px;">
+          🌾 Manor Manager & Mercado de Colheita
+        </h4>
+        ${manorHtml}
+      </div>
+    </div>
+  `;
+}
