@@ -1300,24 +1300,105 @@ export function updateCharacterUI(state) {
   const charStatsContainer = root.querySelector('#char-tab-stats-summary');
   if (charStatsContainer) {
     const stats = typeof getStats === 'function' ? getStats() : (state.base || {});
+
+    // Calculate Tattoos Active Stat Deltas
+    let tatStr = 0, tatDex = 0, tatCon = 0, tatInt = 0, tatWit = 0, tatMen = 0;
+    const tattoos = state.tattoos || [];
+    for (const t of tattoos) {
+      if (!t) continue;
+      if (t.plusStat === 'str') tatStr += t.plusVal;
+      if (t.plusStat === 'dex') tatDex += t.plusVal;
+      if (t.plusStat === 'con') tatCon += t.plusVal;
+      if (t.plusStat === 'int') tatInt += t.plusVal;
+      if (t.plusStat === 'wit') tatWit += t.plusVal;
+      if (t.plusStat === 'men') tatMen += t.plusVal;
+
+      if (t.minusStat === 'str') tatStr -= t.minusVal;
+      if (t.minusStat === 'dex') tatDex -= t.minusVal;
+      if (t.minusStat === 'con') tatCon -= t.minusVal;
+      if (t.minusStat === 'int') tatInt -= t.minusVal;
+      if (t.minusStat === 'wit') tatWit -= t.minusVal;
+      if (t.minusStat === 'men') tatMen -= t.minusVal;
+    }
+
+    const fmtTat = (val) => {
+      if (!val) return '';
+      return val > 0 ? `<span style="color:#4ade80; font-size:10px;">(+${val})</span>` : `<span style="color:#ef4444; font-size:10px;">(${val})</span>`;
+    };
+
+    // Socket SA on Equipped Weapon
+    const wpnUid = state.equipment?.weapon;
+    const socket = (wpnUid && state.weaponSockets) ? state.weaponSockets[wpnUid] : null;
+
+    let tattoosHtml = '';
+    if (tattoos.length > 0) {
+      tattoosHtml = tattoos.map(t => `<div style="font-size:11px; color:#d8b4fe;">🖊️ Tatuagem: +${t.plusVal} ${t.plusStat.toUpperCase()} / -${t.minusVal} ${t.minusStat.toUpperCase()}</div>`).join('');
+    } else {
+      tattoosHtml = '<div style="font-size:11px; color:#aaa;">Nenhuma tatuagem instalada. (Instale na ⚒️ Forja)</div>';
+    }
+
     charStatsContainer.innerHTML = `
-      <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(212,167,68,0.2); padding:6px 10px; border-radius:6px; font-size:11px;">
-        <span style="color:#a8a29e;">⚔️ P.Atk:</span> <strong style="color:#f59e0b; float:right;">${stats.atk || 0}</strong>
+      <div style="grid-column: 1 / -1; display:grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom:6px;">
+        <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(212,167,68,0.2); padding:6px 10px; border-radius:6px; font-size:11px;">
+          <span style="color:#a8a29e;">⚔️ P.Atk:</span> <strong style="color:#f59e0b; float:right;">${stats.atk || 0}</strong>
+        </div>
+        <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(212,167,68,0.2); padding:6px 10px; border-radius:6px; font-size:11px;">
+          <span style="color:#a8a29e;">🛡️ P.Def:</span> <strong style="color:#60a5fa; float:right;">${stats.def || 0}</strong>
+        </div>
+        <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(212,167,68,0.2); padding:6px 10px; border-radius:6px; font-size:11px;">
+          <span style="color:#a8a29e;">👟 Esquiva:</span> <strong style="color:#34d399; float:right;">${stats.eva || 0}</strong>
+        </div>
+        <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(212,167,68,0.2); padding:6px 10px; border-radius:6px; font-size:11px;">
+          <span style="color:#a8a29e;">🔮 M.Atk:</span> <strong style="color:#a78bfa; float:right;">${stats.matk || 0}</strong>
+        </div>
+        <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(212,167,68,0.2); padding:6px 10px; border-radius:6px; font-size:11px;">
+          <span style="color:#a8a29e;">✨ M.Def:</span> <strong style="color:#f472b6; float:right;">${stats.mdef || 0}</strong>
+        </div>
+        <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(212,167,68,0.2); padding:6px 10px; border-radius:6px; font-size:11px;">
+          <span style="color:#a8a29e;">⚡ Crítico:</span> <strong style="color:#fbbf24; float:right;">${stats.crit || 0}%</strong>
+        </div>
       </div>
-      <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(212,167,68,0.2); padding:6px 10px; border-radius:6px; font-size:11px;">
-        <span style="color:#a8a29e;">🛡️ P.Def:</span> <strong style="color:#60a5fa; float:right;">${stats.def || 0}</strong>
+
+      <!-- Primary Stats with Tattoo Influences -->
+      <div style="grid-column: 1 / -1; background:rgba(20,26,42,0.6); border:1px solid rgba(212,167,68,0.3); border-radius:8px; padding:10px; margin-bottom:8px;">
+        <h4 style="margin:0 0 6px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:12px;">📊 Atributos Primários (Dyes &amp; L2 Stats)</h4>
+        <div style="display:grid; grid-template-columns: repeat(6, 1fr); gap:4px; text-align:center; font-size:11px;">
+          <div style="background:rgba(0,0,0,0.3); padding:4px; border-radius:4px;">
+            <div style="color:#aaa; font-size:10px;">STR</div>
+            <strong style="color:#ffd877;">${(state.primaryStats?.str || 40)} ${fmtTat(tatStr)}</strong>
+          </div>
+          <div style="background:rgba(0,0,0,0.3); padding:4px; border-radius:4px;">
+            <div style="color:#aaa; font-size:10px;">DEX</div>
+            <strong style="color:#ffd877;">${(state.primaryStats?.dex || 30)} ${fmtTat(tatDex)}</strong>
+          </div>
+          <div style="background:rgba(0,0,0,0.3); padding:4px; border-radius:4px;">
+            <div style="color:#aaa; font-size:10px;">CON</div>
+            <strong style="color:#ffd877;">${(state.primaryStats?.con || 43)} ${fmtTat(tatCon)}</strong>
+          </div>
+          <div style="background:rgba(0,0,0,0.3); padding:4px; border-radius:4px;">
+            <div style="color:#aaa; font-size:10px;">INT</div>
+            <strong style="color:#ffd877;">${(state.primaryStats?.int || 21)} ${fmtTat(tatInt)}</strong>
+          </div>
+          <div style="background:rgba(0,0,0,0.3); padding:4px; border-radius:4px;">
+            <div style="color:#aaa; font-size:10px;">WIT</div>
+            <strong style="color:#ffd877;">${(state.primaryStats?.wit || 11)} ${fmtTat(tatWit)}</strong>
+          </div>
+          <div style="background:rgba(0,0,0,0.3); padding:4px; border-radius:4px;">
+            <div style="color:#aaa; font-size:10px;">MEN</div>
+            <strong style="color:#ffd877;">${(state.primaryStats?.men || 25)} ${fmtTat(tatMen)}</strong>
+          </div>
+        </div>
       </div>
-      <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(212,167,68,0.2); padding:6px 10px; border-radius:6px; font-size:11px;">
-        <span style="color:#a8a29e;">👟 Esquiva:</span> <strong style="color:#34d399; float:right;">${stats.eva || 0}</strong>
-      </div>
-      <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(212,167,68,0.2); padding:6px 10px; border-radius:6px; font-size:11px;">
-        <span style="color:#a8a29e;">🔮 M.Atk:</span> <strong style="color:#a78bfa; float:right;">${stats.matk || 0}</strong>
-      </div>
-      <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(212,167,68,0.2); padding:6px 10px; border-radius:6px; font-size:11px;">
-        <span style="color:#a8a29e;">✨ M.Def:</span> <strong style="color:#f472b6; float:right;">${stats.mdef || 0}</strong>
-      </div>
-      <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(212,167,68,0.2); padding:6px 10px; border-radius:6px; font-size:11px;">
-        <span style="color:#a8a29e;">⚡ Crítico:</span> <strong style="color:#fbbf24; float:right;">${stats.crit || 0}%</strong>
+
+      <!-- Active Refinements & Dyes Summary Card -->
+      <div style="grid-column: 1 / -1; background:rgba(30,16,48,0.7); border:1px solid rgba(168,85,247,0.4); border-radius:8px; padding:10px;">
+        <h4 style="margin:0 0 6px 0; font-family:'Cinzel',serif; color:#d8b4fe; font-size:12px; display:flex; align-items:center; gap:6px;">
+          🔮 Refinamentos &amp; Dyes Gravados
+        </h4>
+        ${tattoosHtml}
+        <div style="font-size:11px; color:#34d399; margin-top:4px;">
+          ${socket ? `🔮 SA Arma: <strong>${socket.effect.toUpperCase()} Stage ${socket.stage}</strong>` : '🔮 SA Arma: Nenhum Soul Crystal engastado.'}
+        </div>
       </div>
     `;
   }
