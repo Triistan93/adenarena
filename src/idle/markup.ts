@@ -538,20 +538,8 @@ export const IDLE_MARKUP = `
                 <h3 style="margin:0;">Forja Imperial &amp; Criação Universal</h3>
                 <p class="shop-info" style="margin:4px 0 0 0;">Forje qualquer equipamento do jogo: Armas, Armaduras, Joias, Capas, Agathions, Cintos, Talismãs e Consumíveis.</p>
               </div>
-              <div style="display:flex; align-items:center; gap:10px;">
-                <div class="craft-qty-selector" style="display:flex; align-items:center; gap:6px; background:rgba(0,0,0,0.4); padding:4px 10px; border-radius:8px; border:1px solid rgba(212,175,55,0.3);">
-                  <span style="font-size:12px; color:var(--text-muted);">Qtd. Forja:</span>
-                  <div id="craft-qty-picker" style="display:flex; gap:4px;">
-                    <button class="inv-batch-btn active" data-craft-qty="1">1x</button>
-                    <button class="inv-batch-btn" data-craft-qty="5">5x</button>
-                    <button class="inv-batch-btn" data-craft-qty="10">10x</button>
-                    <button class="inv-batch-btn" data-craft-qty="50">50x</button>
-                    <button class="inv-batch-btn" data-craft-qty="100">100x</button>
-                  </div>
-                </div>
-                <div class="stat-value" style="font-size:14px; background:rgba(212,175,55,0.1); border:1px solid rgba(212,175,55,0.3); padding:6px 14px; border-radius:8px;">
-                  🔨 Nível de Forja: <strong id="craft-level" style="color:var(--gilt);">1</strong>
-                </div>
+              <div class="stat-value" style="font-size:14px; background:rgba(212,175,55,0.1); border:1px solid rgba(212,175,55,0.3); padding:6px 14px; border-radius:8px;">
+                🔨 Nível de Forja: <strong id="craft-level" style="color:var(--gilt);">1</strong>
               </div>
             </div>
 

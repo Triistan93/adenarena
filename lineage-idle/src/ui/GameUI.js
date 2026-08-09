@@ -1920,6 +1920,46 @@ function rollMysticStock() {
   return stock;
 }
 
+function isItemInCraftCategory(itemId, def, cat) {
+  if (!cat || cat === 'all') return true;
+
+  const slot = (def.slot || '').toLowerCase();
+  const type = (def.type || '').toLowerCase();
+  const id = itemId.toLowerCase();
+  const name = (def.name || '').toLowerCase();
+
+  if (cat === 'weapon') {
+    return type === 'weapon' ||
+      ['weapon', 'sword', 'two_hand_sword', 'bow', 'dagger', 'dualfist', 'staff', 'blunt', 'spear', 'rapier', 'pistol', 'ancientsword', 'dual_sword', 'magic_blunt'].includes(slot) ||
+      id.startsWith('weapon_') || id.includes('sword') || id.includes('bow') || id.includes('dagger') || id.includes('staff') || id.includes('spear') || id.includes('axe') || id.includes('blunt') || id.includes('rapier') || id.includes('pistol');
+  }
+
+  if (cat === 'armor') {
+    return type === 'armor' ||
+      ['armor', 'heavy', 'light', 'robe', 'helmet', 'boots', 'gloves', 'legs', 'shield', 'sigil'].includes(slot) ||
+      id.startsWith('armor_') || id.startsWith('helmet_') || id.startsWith('boots_') || id.startsWith('gloves_') || id.startsWith('legs_') || id.startsWith('shield_') || id.startsWith('sigil_') ||
+      name.includes('armor') || name.includes('helmet') || name.includes('boots') || name.includes('gloves') || name.includes('gaiters') || name.includes('shield');
+  }
+
+  if (cat === 'jewel') {
+    return ['ring', 'earring', 'necklace'].includes(slot) ||
+      id.startsWith('ring_') || id.startsWith('earring_') || id.startsWith('necklace_') ||
+      name.includes('ring') || name.includes('earring') || name.includes('necklace');
+  }
+
+  if (cat === 'relic') {
+    return ['agathion', 'cloak', 'belt', 'talisman', 'hair', 'pendant'].includes(slot) ||
+      id.includes('doll') || id.includes('talisman') || id.includes('pendant') || id.includes('cloak') || id.includes('belt') || id.includes('agathion');
+  }
+
+  if (cat === 'consumable') {
+    return ['potion', 'consumable', 'scroll', 'material', 'powerup', 'food'].includes(slot) ||
+      id.includes('potion') || id.includes('scroll') || id.includes('soulshot') || id.includes('spiritshot') || id.includes('shot');
+  }
+
+  return true;
+}
+
 function matchesSlotFilter(def, filterKey) {
   if (!def || !filterKey || filterKey === 'all') return true;
   const slot = (def.slot || '').toLowerCase();
@@ -2014,20 +2054,22 @@ export function updateCraftUI(state, callbacks = {}) {
 
   const activeCat = window._craftSelectedCategory || 'all';
   const searchTerm = (window._craftSearchTerm || '').toLowerCase().trim();
+  const playerLevel = state.level || state.player?.level || 1;
 
   const filtered = recipeList.filter(r => {
     const itemId = r.itemId || r.id;
     const def = allItems[itemId];
     if (!def) return false;
 
+    // Restrição por Nível do Jogador (Nível 1 a 19 só enxerga No-Grade, Nível 20 a 39 enxerga No-Grade e D-Grade, etc.)
+    const itemReqLevel = def.req?.level || def.level || r.level || 1;
+    if (itemReqLevel > playerLevel) {
+      return false;
+    }
+
     // Filtro por Categoria
-    if (activeCat !== 'all') {
-      const slot = def.slot || '';
-      if (activeCat === 'weapon' && slot !== 'weapon') return false;
-      if (activeCat === 'armor' && !['armor', 'helmet', 'boots', 'gloves', 'legs', 'shield', 'sigil'].includes(slot)) return false;
-      if (activeCat === 'jewel' && !['ring', 'earring', 'necklace'].includes(slot)) return false;
-      if (activeCat === 'relic' && !['agathion', 'cloak', 'belt', 'talisman', 'hair'].includes(slot) && !itemId.includes('doll') && !itemId.includes('talisman') && !itemId.includes('pendant')) return false;
-      if (activeCat === 'consumable' && !['potion', 'consumable', 'scroll', 'material'].includes(slot)) return false;
+    if (!isItemInCraftCategory(itemId, def, activeCat)) {
+      return false;
     }
 
     // Filtro por Busca de Nome
