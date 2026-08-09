@@ -948,6 +948,53 @@ export function buildArch(): THREE.Group {
   return g;
 }
 
+export function buildSlashArcMesh(color: string): THREE.Mesh {
+  const geo = new THREE.RingGeometry(0.8, 1.7, 24, 1, 0, Math.PI * 0.75);
+  const mat = new THREE.MeshBasicMaterial({
+    color: new THREE.Color(color),
+    side: THREE.DoubleSide,
+    transparent: true,
+    opacity: 0.95,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+  });
+  const mesh = new THREE.Mesh(geo, mat);
+  mesh.rotation.x = -Math.PI / 2;
+  return mesh;
+}
+
+export function buildRuneCircleMesh(color: string, radius = 2.5): THREE.Mesh {
+  const geo = new THREE.RingGeometry(radius * 0.8, radius, 32);
+  const mat = new THREE.MeshBasicMaterial({
+    color: new THREE.Color(color),
+    side: THREE.DoubleSide,
+    transparent: true,
+    opacity: 0.85,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+  });
+  const mesh = new THREE.Mesh(geo, mat);
+  mesh.rotation.x = -Math.PI / 2;
+  mesh.position.y = 0.05;
+  return mesh;
+}
+
+export function buildTargetRingMesh(): THREE.Mesh {
+  const geo = new THREE.RingGeometry(0.9, 1.1, 24);
+  const mat = new THREE.MeshBasicMaterial({
+    color: new THREE.Color("#ff3333"),
+    side: THREE.DoubleSide,
+    transparent: true,
+    opacity: 0.9,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+  });
+  const mesh = new THREE.Mesh(geo, mat);
+  mesh.rotation.x = -Math.PI / 2;
+  mesh.position.y = 0.06;
+  return mesh;
+}
+
 export const RACE_IDS: RaceId[] = [
   "human", "elf", "darkelf", "orc", "dwarf", "kamael",
 ];

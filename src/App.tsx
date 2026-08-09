@@ -548,11 +548,15 @@ function ArenaApp() {
         console.warn("Error destroying previous game instance:", e);
       }
     }
+    const idleState = typeof window !== 'undefined' && typeof (window as any).getGameState === 'function' 
+      ? (window as any).getGameState() 
+      : null;
+
     try {
       const game = new Game(
         canvas,
         hud,
-        { race, cls },
+        { race, cls, idleState },
         {
           onPaused: () => setPhase("paused"),
           onResumed: () => setPhase("playing"),

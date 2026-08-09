@@ -38,6 +38,9 @@ import {
   buildCampfire,
   buildStoneWall,
   buildArch,
+  buildSlashArcMesh,
+  buildRuneCircleMesh,
+  buildTargetRingMesh,
 } from "./models";
 
 interface Enemy {
@@ -314,6 +317,17 @@ export class Game {
   pauseRect = { x: 0, y: 0, s: 44 };
   skillRects: { x: number; y: number; w: number; h: number }[] = [];
 
+  // Raycast & Target Selection & VFX & State Bridge
+  raycaster = new THREE.Raycaster();
+  mouse = new THREE.Vector2();
+  targetEnemy: Enemy | null = null;
+  targetRingMesh: THREE.Mesh | null = null;
+  activeVfxMeshes: { mesh: THREE.Object3D; life: number; maxLife: number }[] = [];
+  idleState: any = null;
+  patk = 20;
+  matk = 20;
+  level = 1;
+
   constructor(
     canvas: HTMLCanvasElement,
     hud: HTMLCanvasElement,
@@ -328,6 +342,19 @@ export class Game {
     this.maxHp = cfg.cls.hp;
     this.hp = cfg.cls.hp;
     this.speed = cfg.cls.speed;
+
+    // Sincroniza estado do Idle Game se fornecido
+    if (cfg.idleState) {
+      this.idleState = cfg.idleState;
+      this.level = cfg.idleState.level || 1;
+      this.maxHp = cfg.idleState.maxHp || cfg.idleState.hp || cfg.cls.hp;
+      this.hp = cfg.idleState.hp || this.maxHp;
+      this.manaMax = cfg.idleState.maxMp || cfg.idleState.mp || 100;
+      this.mana = cfg.idleState.mp || this.manaMax;
+      this.patk = cfg.idleState.patk || cfg.cls.weapon.damage;
+      this.matk = cfg.idleState.matk || cfg.cls.weapon.damage;
+      this.speed = cfg.idleState.speed || cfg.cls.speed;
+    }
     
     // Carrega as habilidades configuradas para a classe selecionada
     const rawSkills = (cfg.cls as any).skills || SKILLS[cfg.cls.id] || [];
@@ -339,9 +366,9 @@ export class Game {
     }).filter(Boolean);
       
     const meta = CLASS_META[cfg.cls.id] ?? { manaMax: 100, manaRegen: 14 };
-    this.manaMax = meta.manaMax;
+    this.manaMax = this.idleState ? this.manaMax : meta.manaMax;
     this.manaRegen = meta.manaRegen;
-    this.mana = this.manaMax;
+    this.mana = this.idleState ? this.mana : this.manaMax;
     this.equipped = {};
     this.recalcEquip();
     this.skillCd = this.skills.map(() => 0);
@@ -671,6 +698,29 @@ export class Game {
         return;
       }
     }
+
+    // Raycast seleção de alvo 3D
+    this.mouse.x = (x / this.w) * 2 - 1;
+    this.mouse.y = -(y / this.h) * 2 + 1;
+    this.raycaster.setFromCamera(this.mouse, this.camera);
+    const enemyMeshes = this.enemies.map(en => en.group);
+    const intersects = this.raycaster.intersectObjects(enemyMeshes, true);
+    if (intersects.length > 0) {
+      const topObj = intersects[0].object;
+      let parent: THREE.Object3D | null = topObj;
+      while (parent && parent.parent && parent.parent !== this.scene) {
+        parent = parent.parent;
+      }
+      const found = this.enemies.find(en => en.group === parent);
+      if (found) {
+        this.targetEnemy = found;
+        if (!this.targetRingMesh) {
+          this.targetRingMesh = buildTargetRingMesh();
+          this.scene.add(this.targetRingMesh);
+        }
+      }
+    }
+
     if (e.pointerType === "mouse") {
       this.mouseActive = true;
       this.lastMouseMove = performance.now();
@@ -685,6 +735,74 @@ export class Game {
       this.touchRight = { id: e.pointerId, bx: x, by: y, x: 0, y: 0 };
     }
   };
+
+  rewardIdleGame(xp: number, gold: number) {
+    if (typeof window !== "undefined" && typeof (window as any).getGameState === "function" && typeof (window as any).loadGameState === "function") {
+      try {
+        const curState = (window as any).getGameState();
+        if (curState) {
+          curState.gold = (curState.gold || 0) + gold;
+          curState.exp = (curState.exp || 0) + xp;
+          (window as any).loadGameState(curState);
+        }
+      } catch (err) {
+        console.warn("Error syncing 3D rewards to Idle State:", err);
+      }
+    }
+  }
+
+  spawnSlashArc(color: string) {
+    const mesh = buildSlashArcMesh(color);
+    const px = this.px * S;
+    const pz = this.py * S;
+    const offsetDist = 0.9;
+    mesh.position.set(
+      px + Math.sin(this.facingAngle || 0) * offsetDist,
+      1.1,
+      pz + Math.cos(this.facingAngle || 0) * offsetDist
+    );
+    mesh.rotation.z = -(this.facingAngle || 0);
+    this.scene.add(mesh);
+    this.activeVfxMeshes.push({ mesh, life: 0, maxLife: 0.2 });
+  }
+
+  spawnRuneCircle(wx: number, wz: number, color: string, radius = 2.5) {
+    const mesh = buildRuneCircleMesh(color, radius);
+    mesh.position.set(wx, 0.05, wz);
+    this.scene.add(mesh);
+    this.activeVfxMeshes.push({ mesh, life: 0, maxLife: 0.75 });
+  }
+
+  updateVfx(dt: number) {
+    for (let i = this.activeVfxMeshes.length - 1; i >= 0; i--) {
+      const item = this.activeVfxMeshes[i];
+      item.life += dt;
+      const progress = item.life / item.maxLife;
+      const m = item.mesh as THREE.Mesh;
+      if (m.material && "opacity" in m.material) {
+        (m.material as any).opacity = Math.max(0, 1 - progress);
+      }
+      m.scale.setScalar(1 + progress * 0.35);
+      if (item.life >= item.maxLife) {
+        this.scene.remove(item.mesh);
+        this.disposeGroup(item.mesh);
+        this.activeVfxMeshes.splice(i, 1);
+      }
+    }
+
+    if (this.targetEnemy && this.targetRingMesh) {
+      if (this.targetEnemy.hp <= 0 || !this.enemies.includes(this.targetEnemy)) {
+        this.targetEnemy = null;
+        this.targetRingMesh.visible = false;
+      } else {
+        this.targetRingMesh.position.set(this.targetEnemy.x * S, 0.05, this.targetEnemy.y * S);
+        this.targetRingMesh.visible = true;
+      }
+    } else if (this.targetRingMesh) {
+      this.targetRingMesh.visible = false;
+    }
+  }
+
   onPointerMove = (e: PointerEvent) => {
     const rect = this.canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -768,6 +886,7 @@ export class Game {
   update(dt: number) {
     this.elapsed += dt;
     this.score += dt * 2;
+    this.updateVfx(dt);
     if (this.invuln > 0) this.invuln -= dt;
     if (this.playerFlash > 0) this.playerFlash -= dt;
     if (this.swing > 0) this.swing -= dt;
@@ -1275,6 +1394,7 @@ export class Game {
     this.comboPop = 0.3;
     const mult = Math.min(1 + this.combo * 0.08, 3);
     this.score += e.score * mult;
+    this.rewardIdleGame(Math.round(e.score * 1.5), Math.round(e.score * 0.8));
     this.spawnParticles(e.x, e.y, e.type.color, e.boss ? 28 : 14, e.boss ? 5 : 3);
     this.spawnRing(e.x, e.y, e.r * 3, e.type.color);
     this.shake = Math.max(this.shake, e.boss ? 12 : 5);
@@ -1335,6 +1455,7 @@ export class Game {
   applySkill(sk: SkillDef) {
     const w = this.cfg.cls.weapon;
     const dmg = w.damage * (sk.damage ?? 1);
+    this.spawnRuneCircle(this.px * S, this.py * S, w.color, (sk.radius || 120) * S);
     switch (sk.kind) {
       case "aoe":
       case "nova": {
@@ -1794,6 +1915,7 @@ export class Game {
   triggerAttackAnim() {
     const w = this.cfg.cls.weapon;
     this.attackT = this.attackDur;
+    this.spawnSlashArc(w.color);
     switch (w.shape) {
       case "sword":
       case "dualsword":
