@@ -9,6 +9,7 @@ import { D } from '../core/GameConfig.js';
 import { MONSTERS } from '../data/monsters.js';
 import { addToInventory } from './InventoryService.js';
 import { triggerQuestEvent } from './QuestService.js';
+import { startCombat, stopCombat } from '../engine/CombatEngine.js';
 
 /**
  * Retorna as propriedades e estatísticas de um andar da Torre.
@@ -114,7 +115,8 @@ export function challengeTowerFloor(state, callbacks = {}) {
     if (sz) sz.textContent = `🏰 TORRE · Andar ${targetFloor}`;
   }
 
-  state.combatActive = true;
+  stopCombat(state);
+  startCombat(state, callbacks);
   if (callbacks.renderStageMonster) callbacks.renderStageMonster();
 }
 

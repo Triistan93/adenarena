@@ -19,18 +19,18 @@ let monsterAttackTimeout = null;
  * @param {Object} [callbacks] — { log, attackMonster }
  */
 export function startCombat(state, callbacks = {}) {
-  if (state.combatActive) return;
-  if (!state.zone || !ZONES[state.zone]) return;
-
   state.combatActive = true;
-  if (callbacks.log) callbacks.log(`Entering ${ZONES[state.zone].name}...`, 'system');
 
-  pickRandomMonster(state, callbacks);
-  state._cds = {};
+  if (!state.activeMonster && state.zone && ZONES[state.zone]) {
+    if (callbacks.log) callbacks.log(`Entering ${ZONES[state.zone].name}...`, 'system');
+    pickRandomMonster(state, callbacks);
+  }
+  state._cds = state._cds || {};
 
   if (combatInterval) clearInterval(combatInterval);
   if (typeof callbacks.attackMonster === 'function') {
-    combatInterval = setInterval(() => callbacks.attackMonster(), 200);
+    const spd = Math.max(1, state.combatSpeed || 1);
+    combatInterval = setInterval(() => callbacks.attackMonster(), Math.round(200 / spd));
   }
 }
 
