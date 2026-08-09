@@ -35,6 +35,9 @@ import {
   buildBanner,
   buildCloud,
   buildSkyDome,
+  buildCampfire,
+  buildStoneWall,
+  buildArch,
 } from "./models";
 
 interface Enemy {
