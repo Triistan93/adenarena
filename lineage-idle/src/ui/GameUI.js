@@ -2139,6 +2139,18 @@ export function updateCraftUI(state, callbacks = {}) {
     renderForgeTattoos(container, state);
     return;
   }
+  if (subTab === 'elemental') {
+    renderForgeElementalAttributes(container, state);
+    return;
+  }
+  if (subTab === 'belts') {
+    renderForgeBelts(container, state);
+    return;
+  }
+  if (subTab === 'lifestones') {
+    renderForgeLifeStones(container, state);
+    return;
+  }
 
   const gData = D();
   const allItems = gData?.ALL_ITEMS || {};
@@ -3102,6 +3114,171 @@ export function renderForgeTattoos(container, state) {
       <!-- Presets -->
       <h4 style="margin:0 0 8px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">🛍️ Tintas &amp; Dyes Disponíveis no Mercado</h4>
       ${presetsHtml}
+    </div>
+  `;
+}
+
+export function renderForgeElementalAttributes(container, state) {
+  const eligibleItems = (state.inventory || []).filter(i => {
+    const def = getItemDef(i.itemId);
+    return def && (def.tier >= 3 || def.slot === 'weapon' || def.slot === 'armor');
+  });
+
+  let itemsHtml = '';
+  for (const item of eligibleItems) {
+    const def = getItemDef(item.itemId);
+    const elem = item.elemental || { type: 'fire', val: 0 };
+    const canAfford = (state.gold || 0) >= 250000;
+
+    itemsHtml += `
+      <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(212,167,68,0.3); border-radius:10px; padding:12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; gap:12px;">
+        <div>
+          <h4 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">${item.name || def.name}</h4>
+          <div style="font-size:11px; color:#34d399;">Atributo Atual: <strong>+${elem.val} ${elem.type.toUpperCase()}</strong></div>
+        </div>
+        <div style="display:flex; gap:4px; flex-wrap:wrap;">
+          <button onclick="window.insertAttributeStone('${item.uid}', 'fire')" ${!canAfford ? 'disabled' : ''} style="padding:4px 8px; font-size:11px; background:rgba(239,68,68,0.2); border:1px solid #ef4444; color:#fca5a5; border-radius:4px; cursor:pointer;">🔥 Fire (+5)</button>
+          <button onclick="window.insertAttributeStone('${item.uid}', 'water')" ${!canAfford ? 'disabled' : ''} style="padding:4px 8px; font-size:11px; background:rgba(56,189,248,0.2); border:1px solid #38bdf8; color:#7dd3fc; border-radius:4px; cursor:pointer;">💧 Water (+5)</button>
+          <button onclick="window.insertAttributeStone('${item.uid}', 'wind')" ${!canAfford ? 'disabled' : ''} style="padding:4px 8px; font-size:11px; background:rgba(34,197,94,0.2); border:1px solid #22c55e; color:#86efac; border-radius:4px; cursor:pointer;">🍃 Wind (+5)</button>
+          <button onclick="window.insertAttributeStone('${item.uid}', 'earth')" ${!canAfford ? 'disabled' : ''} style="padding:4px 8px; font-size:11px; background:rgba(234,179,8,0.2); border:1px solid #eab308; color:#fef08a; border-radius:4px; cursor:pointer;">🪨 Earth (+5)</button>
+        </div>
+      </div>
+    `;
+  }
+
+  const canAffordBelt = (state.gold || 0) >= 500000;
+
+  container.innerHTML = `
+    <div style="padding:10px; color:#fff; font-family:sans-serif;">
+      <!-- Elemental Banner -->
+      <div style="background:linear-gradient(180deg, rgba(20,26,42,0.95), rgba(10,14,24,0.95)); border:1px solid rgba(212,167,68,0.4); border-radius:12px; padding:14px; margin-bottom:16px;">
+        <h3 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:18px;">🔥 Master Atributos Elementais &amp; Cintos (PvE)</h3>
+        <p style="margin:4px 0 0 0; font-size:12px; color:#aaa;">
+          Insira Pedras de Atributo (Fire, Water, Wind, Earth, Dark, Divine) em suas armas para obter até **+70% de dano extra no PvE Geral**!
+        </p>
+      </div>
+
+      <!-- Belt Compound -->
+      <div style="background:rgba(212,167,68,0.1); border:1px solid rgba(212,167,68,0.4); border-radius:10px; padding:12px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <strong style="color:#ffd877; font-size:14px;">✨ Oficina de Síntese de Cinto Sagrado (Blessed Top-Grade Belt)</strong>
+          <div style="font-size:11px; color:#aaa;">Sintetize cintos de ornamento por 500.000 Adena para obter +7.2% Defesa &amp; +6% Dano de Skills (PvE)</div>
+        </div>
+        <button onclick="window.compoundBelts()" ${!canAffordBelt ? 'disabled' : ''} style="padding:8px 14px; font-family:'Cinzel',serif; font-weight:bold; font-size:12px; background:linear-gradient(180deg,#d4a744,#8a641c); border:1px solid #ffe699; color:#000; border-radius:6px; cursor:pointer;">
+          ✨ SINTETIZAR CINTO
+        </button>
+      </div>
+
+      <h4 style="margin:0 0 10px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">🛡️ Equipamentos Elegíveis no Inventário</h4>
+      ${itemsHtml || '<div style="font-size:12px; color:#aaa;">Nenhum equipamento elegível encontrado no inventário.</div>'}
+    </div>
+  `;
+}
+
+export function renderForgeLifeStones(container, state) {
+  const eligibleItems = (state.inventory || []).filter(i => {
+    const def = getItemDef(i.itemId);
+    return def && (def.slot === 'weapon' || def.slot === 'necklace' || def.slot === 'earring' || def.slot === 'ring');
+  });
+
+  let itemsHtml = '';
+  for (const item of eligibleItems) {
+    const def = getItemDef(item.itemId);
+    const aug = item.augmentation || null;
+    const canAfford = (state.gold || 0) >= 750000;
+
+    itemsHtml += `
+      <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(212,167,68,0.3); border-radius:10px; padding:12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; gap:12px;">
+        <div>
+          <h4 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">${item.name || def.name}</h4>
+          ${aug ? `<div style="font-size:11px; color:#34d399;">🔮 Augmentation Ativo: <strong>${aug.name}</strong></div>` : '<div style="font-size:11px; color:#aaa;">Nenhum Augmentation aplicado.</div>'}
+        </div>
+        <button
+          onclick="window.augmentWithLifeStone('${item.uid}')"
+          ${!canAfford ? 'disabled' : ''}
+          style="padding:8px 14px; font-family:'Cinzel',serif; font-weight:bold; font-size:12px; background:${canAfford ? 'linear-gradient(180deg,#a855f7,#6b21a8)' : 'rgba(60,50,40,0.5)'}; border:1px solid ${canAfford ? '#c084fc' : 'rgba(100,80,60,0.3)'}; color:${canAfford ? '#fff' : '#777'}; border-radius:6px; cursor:${canAfford ? 'pointer' : 'not-allowed'};"
+        >
+          💎 SUPERIOR LIFE STONE
+        </button>
+      </div>
+    `;
+  }
+
+  container.innerHTML = `
+    <div style="padding:10px; color:#fff; font-family:sans-serif;">
+      <!-- Life Stone Banner -->
+      <div style="background:linear-gradient(180deg, rgba(30,16,48,0.95), rgba(14,8,26,0.95)); border:1px solid rgba(168,85,247,0.4); border-radius:12px; padding:14px; margin-bottom:16px;">
+        <h3 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:18px;">💎 Augmentation por Life Stones (Armas &amp; Joias Épicas)</h3>
+        <p style="margin:4px 0 0 0; font-size:12px; color:#aaa;">
+          Insira **Superior-Grade Life Stones** em armas e joias épicas (*Queen Ant, Baium, Valakas, Zaken, Antharas*) para garantir **100% de Atributo + Habilidades de Item** (*Might, Empower, Shield, Focus, Celestial Shield*).
+        </p>
+      </div>
+
+      <h4 style="margin:0 0 10px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">🔮 Armas &amp; Acessórios Elegíveis</h4>
+      ${itemsHtml || '<div style="font-size:12px; color:#aaa;">Nenhum equipamento elegível para Augmentation no inventário.</div>'}
+    </div>
+  `;
+}
+
+export function renderForgeBelts(container, state) {
+  const canAffordBelt = (state.gold || 0) >= 500000;
+  
+  const inventoryBelts = (state.inventory || []).filter(i => {
+    const def = getItemDef(i.itemId);
+    return i.itemId.includes('belt') || (def && def.slot === 'belt');
+  });
+
+  let inventoryBeltsHtml = '';
+  for (const b of inventoryBelts) {
+    const def = getItemDef(b.itemId);
+    inventoryBeltsHtml += `
+      <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(212,167,68,0.3); border-radius:10px; padding:12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <h4 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">🎗️ ${b.name || def?.name || 'Mithril Belt'}</h4>
+          <div style="font-size:11px; color:#34d399;">+7.2% Defesa Geral (PvE) &amp; +6% Dano de Skills / Ataques</div>
+        </div>
+        <span style="font-size:11px; padding:4px 8px; background:rgba(52,211,153,0.15); border:1px solid #34d399; color:#6ee7b7; border-radius:4px;">No Inventário</span>
+      </div>
+    `;
+  }
+
+  container.innerHTML = `
+    <div style="padding:10px; color:#fff; font-family:sans-serif;">
+      <!-- Belt Header -->
+      <div style="background:linear-gradient(180deg, rgba(30,22,12,0.95), rgba(16,12,6,0.95)); border:1px solid rgba(212,167,68,0.5); border-radius:12px; padding:14px; margin-bottom:16px;">
+        <h3 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:18px;">🎗️ Oficina de Síntese de Cintos Sagrados (Belt Compound)</h3>
+        <p style="margin:4px 0 0 0; font-size:12px; color:#aaa;">
+          Sintetize Cintos de Ornamento Mágico no Mestre Ferreiro para criar o lendário **Blessed Top-Grade Belt [S]**.
+        </p>
+      </div>
+
+      <!-- Compound Card -->
+      <div style="background:rgba(20,26,42,0.9); border:1px solid rgba(212,167,68,0.4); border-radius:12px; padding:16px; margin-bottom:16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <div>
+            <h4 style="margin:0; font-family:'Cinzel',serif; color:#ffd877; font-size:16px;">✨ Blessed Top-Grade Magic Ornament Belt [S]</h4>
+            <div style="font-size:12px; color:#aaa; margin-top:4px;">
+              Bônus Concedido: <strong style="color:#34d399;">+7.2% Defesa Geral (PvE)</strong> &amp; <strong style="color:#f43f5e;">+6.0% Dano de Habilidades e Ataque Físico</strong>
+            </div>
+          </div>
+          <span style="background:rgba(212,167,68,0.2); border:1px solid #d4a744; color:#ffe699; padding:4px 10px; border-radius:20px; font-size:11px; font-weight:bold;">Taxa de Sucesso: 70%</span>
+        </div>
+
+        <div style="font-size:12px; color:#ccc; background:rgba(0,0,0,0.3); padding:10px; border-radius:8px; margin-bottom:12px;">
+          💰 Custo de Síntese: <strong style="color:#ffd877;">500.000 Adena</strong>
+        </div>
+
+        <button
+          onclick="window.compoundBelts()"
+          ${!canAffordBelt ? 'disabled' : ''}
+          style="width:100%; padding:12px; font-family:'Cinzel',serif; font-weight:bold; font-size:13px; background:${canAffordBelt ? 'linear-gradient(180deg,#d4a744,#8a641c)' : 'rgba(60,50,40,0.5)'}; border:1px solid ${canAffordBelt ? '#ffe699' : 'rgba(100,80,60,0.3)'}; color:${canAffordBelt ? '#000' : '#777'}; border-radius:8px; cursor:${canAffordBelt ? 'pointer' : 'not-allowed'}; box-shadow:0 4px 15px rgba(212,167,68,0.2);"
+        >
+          ✨ SINTETIZAR CINTO SAGRADO [S] (500.000g)
+        </button>
+      </div>
+
+      <h4 style="margin:0 0 10px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">🎗️ Cintos no Inventário</h4>
+      ${inventoryBeltsHtml || '<div style="font-size:12px; color:#aaa;">Nenhum cinto adicional no inventário no momento.</div>'}
     </div>
   `;
 }

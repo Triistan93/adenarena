@@ -4874,6 +4874,97 @@ function removeTattoo(index) {
   return true;
 }
 
+// --------------------------- BASIC MECHANICS: ATTRIBUTES, BELTS & LIFE STONES ---------------------------
+function addSkillCharge() {
+  state.charges = Math.min(8, (state.charges || 0) + 1);
+  log(`⚡ Carga de Habilidade acumulada: **Nível ${state.charges}/8** (+${(state.charges - 1) * 20}% Dano de Skill)!`, 'rarity-legendary');
+  floatText(`CARGA NÍVEL ${state.charges}!`, 'float-gold');
+  updateAllUI(); save();
+  return true;
+}
+
+function addKamaelSoul() {
+  state.souls = Math.min(5, (state.souls || 0) + 1);
+  log(`👻 Alma Kamael absorvida: **${state.souls}/5 Almas** (+${state.souls * 5}% Dano de Skill)!`, 'rarity-legendary');
+  floatText(`ALMA ABSORVIDA (${state.souls}/5)!`, 'float-gold');
+  updateAllUI(); save();
+  return true;
+}
+
+function insertAttributeStone(itemUid, elemType = 'fire') {
+  const item = state.inventory?.find(i => i.uid === itemUid);
+  if (!item) {
+    log('⚠️ Item não encontrado no inventário!', 'warning');
+    return false;
+  }
+  const cost = 250000;
+  if ((state.gold || 0) < cost) {
+    log(`⚠️ Adena insuficiente para engaste elemental! Requer ${cost.toLocaleString()}g.`, 'warning');
+    return false;
+  }
+
+  state.gold -= cost;
+  if (!item.elemental) item.elemental = { type: elemType, val: 0 };
+  
+  const isFirst = item.elemental.val === 0;
+  const inc = isFirst ? 20 : 5;
+  item.elemental.type = elemType;
+  item.elemental.val = Math.min(300, item.elemental.val + inc);
+
+  log(`🔥 ENGASTE ELEMENTAL BEM SUCEDIDO! **${item.name || 'Item'}** recebeu +${inc} Atributo ${elemType.toUpperCase()} (Total: ${item.elemental.val})!`, 'rarity-legendary');
+  floatText(`ATRIBUTO ${elemType.toUpperCase()} +${inc}!`, 'float-gold');
+  updateAllUI(); save();
+  return true;
+}
+
+function compoundBelts() {
+  const cost = 500000;
+  if ((state.gold || 0) < cost) {
+    log(`⚠️ Adena insuficiente para síntese de Cinto! Requer ${cost.toLocaleString()}g.`, 'warning');
+    return false;
+  }
+
+  state.gold -= cost;
+  const roll = Math.random();
+  if (roll <= 0.70) {
+    addToInventory('blessed_top_belt', 1, 'legendary');
+    log('✨ SÍNTESE DE CINTO BEM SUCEDIDA! Forjou Blessed Top-Grade Belt [S] (+7.2% Defesa / +6% Dano)!', 'rarity-legendary');
+    floatText('CINTO SAGRADO FORJADO!', 'float-gold');
+  } else {
+    log('⚠️ Falha na síntese do cinto! Tente novamente.', 'warning');
+  }
+
+  updateAllUI(); save();
+  return true;
+}
+
+function augmentWithLifeStone(itemUid) {
+  const item = state.inventory?.find(i => i.uid === itemUid);
+  if (!item) return false;
+
+  const cost = 750000;
+  if ((state.gold || 0) < cost) {
+    log(`⚠️ Adena insuficiente para Augmentation! Requer ${cost.toLocaleString()}g.`, 'warning');
+    return false;
+  }
+
+  state.gold -= cost;
+  const options = [
+    { name: 'Might (+8% P.Atk)', stat: 'patkMult', val: 0.08 },
+    { name: 'Empower (+15% M.Atk)', stat: 'matkMult', val: 0.15 },
+    { name: 'Shield (+10% P.Def)', stat: 'defMult', val: 0.10 },
+    { name: 'Focus (+50 Crit Rate)', stat: 'crit', val: 50 },
+    { name: 'Lesser Celestial Shield (7s Invencível)', stat: 'celestial', val: true }
+  ];
+  const chosen = options[Math.floor(Math.random() * options.length)];
+  item.augmentation = chosen;
+
+  log(`🔮 AUGMENTATION SUPERIOR CONCLUÍDO! **${item.name || 'Item'}** recebeu **Item Skill: ${chosen.name}**!`, 'rarity-legendary');
+  floatText(`AUGMENTATION: ${chosen.name}!`, 'float-gold');
+  updateAllUI(); save();
+  return true;
+}
+
 export function init() {
   try {
     // Expose global action handlers to window for inline HTML handlers & global events
@@ -4933,6 +5024,11 @@ export function init() {
     window.upgradeItemToMasterwork = upgradeItemToMasterwork;
     window.applyTattoo = applyTattoo;
     window.removeTattoo = removeTattoo;
+    window.addSkillCharge = addSkillCharge;
+    window.addKamaelSoul = addKamaelSoul;
+    window.insertAttributeStone = insertAttributeStone;
+    window.compoundBelts = compoundBelts;
+    window.augmentWithLifeStone = augmentWithLifeStone;
     window.getGameState = () => {
       const data = { 
         ...state, 
