@@ -143,7 +143,10 @@ import {
   renderAlchemyUI as uiRenderAlchemyUI,
   renderAstralMasteryUI as uiRenderAstralMasteryUI,
   renderExpeditionsUI as uiRenderExpeditionsUI,
-  initTooltipEvents as uiInitTooltipEvents
+  initTooltipEvents as uiInitTooltipEvents,
+  openCompoundModal,
+  closeCompoundModal,
+  renderCompoundModal
 } from './src/ui/GameUI.js';
 
 import { ensureAppLayout, showMenuPanel } from './src/ui/AppLayout.js';
@@ -4965,6 +4968,73 @@ function augmentWithLifeStone(itemUid) {
   return true;
 }
 
+function executeCompoundAction(targetUid, ingredientUid) {
+  if (!targetUid || !ingredientUid) {
+    log('⚠️ Selecione o Item Base e o Item Ingrediente para realizar o Compound!', 'warning');
+    return false;
+  }
+  if (targetUid === ingredientUid) {
+    log('⚠️ O Item Ingrediente deve ser diferente do Item Base!', 'warning');
+    return false;
+  }
+
+  const target = state.inventory?.find(i => i.uid === targetUid);
+  const ingredient = state.inventory?.find(i => i.uid === ingredientUid);
+
+  if (!target || !ingredient) {
+    log('⚠️ Itens não encontrados no inventário!', 'warning');
+    return false;
+  }
+
+  if (target.itemId !== ingredient.itemId) {
+    log('⚠️ Os itens para Compound devem ser exatamente do mesmo tipo!', 'warning');
+    return false;
+  }
+
+  const curLv = target.compoundLevel || 1;
+  const cost = 100000 * Math.pow(2, Math.min(8, curLv - 1));
+
+  if ((state.gold || 0) < cost) {
+    log(`⚠️ Adena insuficiente! Custo de Compound Lv.${curLv}: ${cost.toLocaleString()}g.`, 'warning');
+    return false;
+  }
+
+  state.gold -= cost;
+  
+  // Consume ingredient item
+  const ingIdx = state.inventory.findIndex(i => i.uid === ingredientUid);
+  if (ingIdx >= 0) {
+    if (ingredient.count > 1) {
+      ingredient.count -= 1;
+    } else {
+      state.inventory.splice(ingIdx, 1);
+    }
+  }
+
+  const rates = [0.75, 0.65, 0.50, 0.40, 0.30, 0.25, 0.20, 0.15, 0.10];
+  const rate = rates[Math.min(rates.length - 1, curLv - 1)] || 0.50;
+  const roll = Math.random();
+
+  if (roll <= rate) {
+    const nextLv = curLv + 1;
+    target.compoundLevel = nextLv;
+    target.enchant = (target.enchant || 0) + 1;
+    
+    // Scale item stats by +15% per compound level
+    target.statsMult = 1 + (nextLv - 1) * 0.15;
+    
+    log(`✨ COMPOUND BEM-SUCEDIDO! **${target.name || 'Item'}** evoluiu para **Nível ${nextLv}**!`, 'rarity-legendary');
+    floatText(`COMPOUND SUCESSO! Lv.${nextLv}`, 'float-gold');
+  } else {
+    log(`💥 FALHA NO COMPOUND! **${target.name || 'Item'}** permaneceu no Nível ${curLv}. O ingrediente foi consumido.`, 'warning');
+    floatText('COMPOUND FALHOU!', 'float-dmg');
+  }
+
+  updateAllUI();
+  save();
+  return true;
+}
+
 export function init() {
   try {
     // Expose global action handlers to window for inline HTML handlers & global events
@@ -5029,6 +5099,10 @@ export function init() {
     window.insertAttributeStone = insertAttributeStone;
     window.compoundBelts = compoundBelts;
     window.augmentWithLifeStone = augmentWithLifeStone;
+    window.executeCompoundAction = executeCompoundAction;
+    window.openCompoundModal = openCompoundModal;
+    window.closeCompoundModal = closeCompoundModal;
+    window.renderCompoundModal = renderCompoundModal;
     window.getGameState = () => {
       const data = { 
         ...state, 

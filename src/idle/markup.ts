@@ -414,6 +414,7 @@ export const IDLE_MARKUP = `
                     <button id="select-uncommons-btn" class="l2inv-pill-btn" title="Selecionar incomuns">✓ Incomum</button>
                     <button id="select-all-btn" class="l2inv-pill-btn" title="Selecionar todos">✓ Todos</button>
                     <button id="clear-selection-btn" class="l2inv-pill-btn" title="Limpar seleções">✕</button>
+                    <button id="open-compound-btn" class="l2inv-pill-btn" onclick="window.openCompoundModal()" title="Abrir Sistema de Compound" style="background:linear-gradient(135deg,rgba(168,85,247,0.3),rgba(109,40,217,0.3)); border-color:rgba(168,85,247,0.6); color:#c084fc; font-weight:bold;">🧪 COMPOUND</button>
                   </div>
                 </div>
 

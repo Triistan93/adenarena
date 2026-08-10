@@ -2101,6 +2101,19 @@ export function updateCraftUI(state, callbacks = {}) {
   const subTab = window._forgeSubTab || 'craft';
   const root = getRoot();
 
+  const subTabBtnsEl = findElement('forge-subtab-buttons');
+  if (subTabBtnsEl) {
+    subTabBtnsEl.innerHTML = `
+      <button class="inv-batch-btn forge-subtab-btn" data-forge-tab="craft" style="font-family:'Cinzel',serif; font-weight:bold;">⚒️ Crafting</button>
+      <button class="inv-batch-btn forge-subtab-btn" data-forge-tab="soulcrystal" style="font-family:'Cinzel',serif; font-weight:bold;">🔮 Soul Crystals (SA)</button>
+      <button class="inv-batch-btn forge-subtab-btn" data-forge-tab="masterwork" style="font-family:'Cinzel',serif; font-weight:bold;">✨ Pushkin MW</button>
+      <button class="inv-batch-btn forge-subtab-btn" data-forge-tab="tattoos" style="font-family:'Cinzel',serif; font-weight:bold;">🖊️ Dyes / Tatuagens</button>
+      <button class="inv-batch-btn forge-subtab-btn" data-forge-tab="elemental" style="font-family:'Cinzel',serif; font-weight:bold;">🔥 Atributos Elementais</button>
+      <button class="inv-batch-btn forge-subtab-btn" data-forge-tab="belts" style="font-family:'Cinzel',serif; font-weight:bold;">🎗️ Síntese de Cintos [S]</button>
+      <button class="inv-batch-btn forge-subtab-btn" data-forge-tab="lifestones" style="font-family:'Cinzel',serif; font-weight:bold;">💎 Augmentation / Life Stones</button>
+    `;
+  }
+
   root.querySelectorAll('#forge-subtab-buttons [data-forge-tab], .forge-subtab-btn').forEach(btn => {
     const isActive = (btn.dataset.forgeTab === subTab);
     btn.classList.toggle('active', isActive);
@@ -3279,6 +3292,103 @@ export function renderForgeBelts(container, state) {
 
       <h4 style="margin:0 0 10px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">🎗️ Cintos no Inventário</h4>
       ${inventoryBeltsHtml || '<div style="font-size:12px; color:#aaa;">Nenhum cinto adicional no inventário no momento.</div>'}
+    </div>
+  `;
+}
+
+export function openCompoundModal(state) {
+  let modal = document.getElementById('compound-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'compound-modal';
+    modal.className = 'modal-overlay active';
+    modal.style.cssText = 'position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:99999; display:flex; align-items:center; justify-content:center; padding:15px;';
+    document.body.appendChild(modal);
+  }
+  modal.style.display = 'flex';
+  renderCompoundModal(modal, state || window.getGameState?.() || window._state);
+}
+
+export function closeCompoundModal() {
+  const modal = document.getElementById('compound-modal');
+  if (modal) modal.style.display = 'none';
+}
+
+export function renderCompoundModal(container, state) {
+  const st = state || window.getGameState?.() || window._state || {};
+  const inv = st.inventory || [];
+  
+  const targetItems = inv.filter(i => {
+    const countSame = inv.filter(other => other.itemId === i.itemId).reduce((acc, o) => acc + (o.count || 1), 0);
+    return countSame >= 2;
+  });
+
+  const selectedTargetUid = window._compoundTargetUid || (targetItems[0]?.uid || null);
+  const targetItem = inv.find(i => i.uid === selectedTargetUid);
+  
+  const ingredientItems = targetItem ? inv.filter(i => i.itemId === targetItem.itemId && (i.uid !== targetItem.uid || (i.count || 1) >= 2)) : [];
+  const selectedIngredientUid = window._compoundIngredientUid || (ingredientItems[0]?.uid || null);
+
+  const curLv = targetItem ? (targetItem.compoundLevel || 1) : 1;
+  const cost = 100000 * Math.pow(2, Math.min(8, curLv - 1));
+  const rates = [75, 65, 50, 40, 30, 25, 20, 15, 10];
+  const rate = rates[Math.min(rates.length - 1, curLv - 1)] || 50;
+
+  let targetOptionsHtml = '';
+  for (const t of targetItems) {
+    const isSel = t.uid === selectedTargetUid;
+    const def = getItemDef(t.itemId);
+    targetOptionsHtml += `
+      <div onclick="window._compoundTargetUid='${t.uid}'; window._compoundIngredientUid=null; window.renderCompoundModal(document.getElementById('compound-modal'))"
+        style="padding:10px; border-radius:8px; background:${isSel ? 'rgba(168,85,247,0.25)' : 'rgba(255,255,255,0.05)'}; border:1px solid ${isSel ? '#a855f7' : 'rgba(255,255,255,0.15)'}; cursor:pointer; margin-bottom:6px; display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <strong style="color:#f4d58a; font-size:13px;">${t.name || def?.name || 'Item'}</strong>
+          <div style="font-size:11px; color:#aaa;">Nível Atual: Lv.${t.compoundLevel || 1}</div>
+        </div>
+        <span style="font-size:11px; color:#34d399;">Qtd: ${t.count || 1}x</span>
+      </div>
+    `;
+  }
+
+  container.innerHTML = `
+    <div style="background:linear-gradient(180deg, rgba(20,16,32,0.98), rgba(10,8,16,0.98)); border:1px solid rgba(168,85,247,0.5); border-radius:14px; max-width:550px; width:100%; padding:20px; color:#fff; font-family:sans-serif; box-shadow:0 10px 30px rgba(0,0,0,0.8);">
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(168,85,247,0.3); padding-bottom:12px; margin-bottom:16px;">
+        <h3 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:18px;">🧪 Sistema de Compound (L2 Essence)</h3>
+        <button onclick="window.closeCompoundModal()" style="background:none; border:none; color:#aaa; font-size:20px; cursor:pointer;">✕</button>
+      </div>
+
+      <p style="font-size:12px; color:#aaa; margin-top:0;">
+        Combine dois equipamentos idênticos para evoluir para o próximo nível. Em caso de falha, o item principal permanece intacto e o ingrediente é consumido.
+      </p>
+
+      <div style="display:flex; gap:12px; margin-bottom:16px;">
+        <div style="flex:1;">
+          <h4 style="margin:0 0 6px 0; font-size:12px; color:#ffd877;">1. Item Base (Elegíveis)</h4>
+          <div style="max-height:180px; overflow-y:auto;">
+            ${targetOptionsHtml || '<div style="font-size:11px; color:#777;">Nenhum par de itens idênticos no inventário.</div>'}
+          </div>
+        </div>
+
+        <div style="flex:1; background:rgba(0,0,0,0.4); border:1px solid rgba(212,167,68,0.3); border-radius:10px; padding:12px; display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <h4 style="margin:0 0 8px 0; font-size:13px; color:#f4d58a;">🔮 Prévia de Evolução</h4>
+            ${targetItem ? `
+              <div style="font-size:12px; color:#fff; margin-bottom:4px;"><strong>${targetItem.name || 'Item'}</strong></div>
+              <div style="font-size:11px; color:#34d399;">Lv.${curLv} ➔ <strong style="color:#ffd877;">Lv.${curLv + 1}</strong> (+15% Atributos)</div>
+              <div style="font-size:11px; color:#a855f7; margin-top:6px;">Taxa de Sucesso: <strong>${rate}%</strong></div>
+              <div style="font-size:11px; color:#fbbf24; margin-top:2px;">Custo em Adena: <strong>${cost.toLocaleString()}g</strong></div>
+            ` : '<div style="font-size:11px; color:#777;">Selecione um item base.</div>'}
+          </div>
+
+          <button
+            onclick="window.executeCompoundAction('${selectedTargetUid}', '${selectedIngredientUid || selectedTargetUid}'); window.renderCompoundModal(document.getElementById('compound-modal'))"
+            ${(!targetItem || (st.gold || 0) < cost) ? 'disabled' : ''}
+            style="width:100%; margin-top:12px; padding:10px; font-family:'Cinzel',serif; font-weight:bold; font-size:12px; background:${targetItem ? 'linear-gradient(180deg,#a855f7,#6b21a8)' : 'rgba(60,50,40,0.5)'}; border:1px solid ${targetItem ? '#c084fc' : 'rgba(100,80,60,0.3)'}; color:${targetItem ? '#fff' : '#777'}; border-radius:6px; cursor:${targetItem ? 'pointer' : 'not-allowed'};"
+          >
+            ⚡ EXECUTAR COMPOUND
+          </button>
+        </div>
+      </div>
     </div>
   `;
 }
