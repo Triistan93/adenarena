@@ -414,6 +414,7 @@ export const IDLE_MARKUP = `
                     <button id="select-uncommons-btn" class="l2inv-pill-btn" title="Selecionar incomuns">✓ Incomum</button>
                     <button id="select-all-btn" class="l2inv-pill-btn" title="Selecionar todos">✓ Todos</button>
                     <button id="clear-selection-btn" class="l2inv-pill-btn" title="Limpar seleções">✕</button>
+                    <button id="open-compound-btn" class="l2inv-pill-btn" onclick="window.openCompoundModal()" title="Abrir Sistema de Compound" style="background:linear-gradient(135deg,rgba(168,85,247,0.3),rgba(109,40,217,0.3)); border-color:rgba(168,85,247,0.6); color:#c084fc; font-weight:bold;">🧪 COMPOUND</button>
                   </div>
                 </div>
 
@@ -548,8 +549,11 @@ export const IDLE_MARKUP = `
               <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; width:100%; border-bottom:1px solid rgba(212,167,68,0.3); padding-bottom:10px;" id="forge-subtab-buttons">
                 <button onclick="window.setForgeSubTab('craft')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="craft" style="font-family:'Cinzel',serif; font-weight:bold;">⚒️ Crafting</button>
                 <button onclick="window.setForgeSubTab('soulcrystal')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="soulcrystal" style="font-family:'Cinzel',serif; font-weight:bold;">🔮 Soul Crystals (SA)</button>
-                <button onclick="window.setForgeSubTab('masterwork')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="masterwork" style="font-family:'Cinzel',serif; font-weight:bold;">✨ Mestre Pushkin MW</button>
-                <button onclick="window.setForgeSubTab('tattoos')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="tattoos" style="font-family:'Cinzel',serif; font-weight:bold;">🖊️ Tatuagens &amp; Dyes</button>
+                <button onclick="window.setForgeSubTab('masterwork')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="masterwork" style="font-family:'Cinzel',serif; font-weight:bold;">✨ Pushkin MW</button>
+                <button onclick="window.setForgeSubTab('tattoos')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="tattoos" style="font-family:'Cinzel',serif; font-weight:bold;">🖊️ Dyes / Tatuagens</button>
+                <button onclick="window.setForgeSubTab('elemental')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="elemental" style="font-family:'Cinzel',serif; font-weight:bold;">🔥 Atributos Elementais</button>
+                <button onclick="window.setForgeSubTab('belts')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="belts" style="font-family:'Cinzel',serif; font-weight:bold;">🎗️ Síntese de Cintos [S]</button>
+                <button onclick="window.setForgeSubTab('lifestones')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="lifestones" style="font-family:'Cinzel',serif; font-weight:bold;">💎 Augmentation / Life Stones</button>
               </div>
             </div>
 

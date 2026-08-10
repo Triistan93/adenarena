@@ -1,8 +1,8 @@
 /**
- * compound.js — Módulo do Sistema de Compound (Lineage 2 Essence Standard)
+ * compound.js ÔÇö M├│dulo do Sistema de Compound (Lineage 2 Essence Standard)
  *
- * Permite a síntese de Talismãs, Pedras de Broche, Agathions, Capas e Cintos.
- * Fusão de 2 itens iguais do mesmo nível.
+ * Permite a s├¡ntese de Talism├ús, Pedras de Broche, Agathions, Capas e Cintos.
+ * Fus├úo de 2 itens iguais do mesmo n├¡vel.
  */
 
 export const COMPOUND_RATES = {

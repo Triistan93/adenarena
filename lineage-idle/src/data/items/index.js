@@ -17,6 +17,7 @@ import {
   ZONE_GOLD_MULT, MYSTIC_POOL, ZONE_CONSUMABLES,
   getZoneDropTier, rollRarity, rollDrop, rollDropLegacy, getMysticRotation, rollItemWithRarity
 } from './recipes_drops.js';
+import { ELEMENT_OPPOSITES, ELEMENTAL_STONES, getAttributeDamageBonus } from './attributes_belts.js';
 
 export const ALL_ITEMS = {
   ...WEAPONS, ...ARMORS, ...HELMETS, ...BOOTS, ...GLOVES, ...RINGS,
@@ -34,7 +35,8 @@ if (typeof window !== 'undefined') {
     rollDropLegacy, getMysticRotation, rollItemWithRarity, rollAffixes, rollAffixesForItem,
     AFFIX_MAP, AFFIX_POOL, AFFIX_POOLS_THEMED,
     getArmorType, getWeaponType, canEquipByType,
-    ARMOR_TYPE_LABEL, WEAPON_TYPE_LABEL, ARMOR_TYPE_ARCHETYPES, WEAPON_TYPE_ARCHETYPES
+    ARMOR_TYPE_LABEL, WEAPON_TYPE_LABEL, ARMOR_TYPE_ARCHETYPES, WEAPON_TYPE_ARCHETYPES,
+    ELEMENT_OPPOSITES, ELEMENTAL_STONES, getAttributeDamageBonus
   };
 
   window.ALL_ITEMS = ALL_ITEMS;
@@ -49,5 +51,6 @@ export {
   rollDrop, rollDropLegacy, getMysticRotation, rollItemWithRarity, rollAffixes, rollAffixesForItem,
   AFFIX_MAP, AFFIX_POOL, AFFIX_POOLS_THEMED,
   getArmorType, getWeaponType, canEquipByType,
-  ARMOR_TYPE_LABEL, WEAPON_TYPE_LABEL, ARMOR_TYPE_ARCHETYPES, WEAPON_TYPE_ARCHETYPES
+  ARMOR_TYPE_LABEL, WEAPON_TYPE_LABEL, ARMOR_TYPE_ARCHETYPES, WEAPON_TYPE_ARCHETYPES,
+  ELEMENT_OPPOSITES, ELEMENTAL_STONES, getAttributeDamageBonus
 };

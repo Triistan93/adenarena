@@ -2139,6 +2139,18 @@ export function updateCraftUI(state, callbacks = {}) {
     renderForgeTattoos(container, state);
     return;
   }
+  if (subTab === 'elemental') {
+    renderForgeElemental(container, state);
+    return;
+  }
+  if (subTab === 'belts') {
+    renderForgeBelts(container, state);
+    return;
+  }
+  if (subTab === 'lifestones') {
+    renderForgeLifestones(container, state);
+    return;
+  }
 
   const gData = D();
   const allItems = gData?.ALL_ITEMS || {};
@@ -3102,6 +3114,265 @@ export function renderForgeTattoos(container, state) {
       <!-- Presets -->
       <h4 style="margin:0 0 8px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">🛍️ Tintas &amp; Dyes Disponíveis no Mercado</h4>
       ${presetsHtml}
+    </div>
+  `;
+}
+
+export function renderForgeElemental(container, state) {
+  const inv = state.inventory || [];
+  const itemsWithElem = inv.filter(i => (i.slot === 'weapon' || i.slot === 'chest' || i.slot === 'legs'));
+
+  let itemsHtml = '';
+  for (const item of itemsWithElem) {
+    const elem = item.elemental || { type: 'fire', val: 0 };
+    const cost = 250000;
+    const canAfford = (state.gold || 0) >= cost;
+
+    itemsHtml += `
+      <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(239,68,68,0.3); border-radius:10px; padding:12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; gap:12px;">
+        <div>
+          <h4 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">${item.name || 'Equipamento'}</h4>
+          <div style="font-size:11px; color:#aaa; margin-top:2px;">
+            Atributo Atual: <strong style="color:#ef4444;">${elem.type.toUpperCase()} +${elem.val}</strong> (Cap: +300)
+          </div>
+          <div style="font-size:11px; color:#777;">Custo de Engaste: 250.000 Adena</div>
+        </div>
+
+        <div style="display:flex; gap:6px;">
+          <button
+            onclick="window.insertAttributeStone('${item.uid}', 'fire')"
+            ${!canAfford ? 'disabled' : ''}
+            style="padding:6px 10px; font-family:'Cinzel',serif; font-weight:bold; font-size:10px; background:${canAfford ? 'linear-gradient(180deg,#ef4444,#991b1b)' : 'rgba(60,50,40,0.5)'}; border:1px solid ${canAfford ? '#fca5a5' : 'rgba(100,80,60,0.3)'}; color:${canAfford ? '#fff' : '#777'}; border-radius:6px; cursor:${canAfford ? 'pointer' : 'not-allowed'};"
+          >
+            🔥 FOGO (+${elem.val === 0 ? 20 : 5})
+          </button>
+          <button
+            onclick="window.insertAttributeStone('${item.uid}', 'water')"
+            ${!canAfford ? 'disabled' : ''}
+            style="padding:6px 10px; font-family:'Cinzel',serif; font-weight:bold; font-size:10px; background:${canAfford ? 'linear-gradient(180deg,#3b82f6,#1d4ed8)' : 'rgba(60,50,40,0.5)'}; border:1px solid ${canAfford ? '#93c5fd' : 'rgba(100,80,60,0.3)'}; color:${canAfford ? '#fff' : '#777'}; border-radius:6px; cursor:${canAfford ? 'pointer' : 'not-allowed'};"
+          >
+            💧 ÁGUA (+${elem.val === 0 ? 20 : 5})
+          </button>
+        </div>
+      </div>
+    `;
+  }
+
+  container.innerHTML = `
+    <div style="padding:10px; color:#fff; font-family:sans-serif;">
+      <div style="background:linear-gradient(180deg, rgba(40,16,16,0.95), rgba(20,8,8,0.95)); border:1px solid rgba(239,68,68,0.4); border-radius:12px; padding:14px; margin-bottom:16px;">
+        <h3 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:18px;">🔥 Atributos Elementais (PvE Bonus)</h3>
+        <p style="margin:4px 0 0 0; font-size:12px; color:#aaa;">
+          Incuta Pedras Elementais (Fogo, Água, Terra, Vento, Escuridão, Sagrado) em Armas e Armaduras. Concede até +70% de Dano PvE extra contra alvos vulneráveis.
+        </p>
+      </div>
+
+      <h4 style="margin:0 0 8px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">🗡️ Equipamentos Elegíveis para Engaste</h4>
+      ${itemsHtml || '<div style="font-size:12px; color:#aaa;">Nenhuma arma ou armadura elegível no inventário.</div>'}
+    </div>
+  `;
+}
+
+export function renderForgeLifestones(container, state) {
+  const inv = state.inventory || [];
+  const epics = inv.filter(i => (i.slot === 'weapon' || i.slot === 'ring' || i.slot === 'earring' || i.slot === 'necklace'));
+
+  let epicsHtml = '';
+  for (const item of epics) {
+    const aug = item.augmentation;
+    const cost = 750000;
+    const canAfford = (state.gold || 0) >= cost;
+
+    epicsHtml += `
+      <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(168,85,247,0.3); border-radius:10px; padding:12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; gap:12px;">
+        <div>
+          <h4 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">${item.name || 'Item Épico'}</h4>
+          <div style="font-size:11px; color:#aaa; margin-top:2px;">
+            Augmentation Atual: <strong style="color:${aug ? '#c084fc' : '#777'};">${aug ? aug.name : 'Nenhum'}</strong>
+          </div>
+          <div style="font-size:11px; color:#777;">Custo de Augmentation: 750.000 Adena</div>
+        </div>
+
+        <button
+          onclick="window.augmentWithLifeStone('${item.uid}')"
+          ${!canAfford ? 'disabled' : ''}
+          style="padding:8px 14px; font-family:'Cinzel',serif; font-weight:bold; font-size:11px; background:${canAfford ? 'linear-gradient(180deg,#a855f7,#6b21a8)' : 'rgba(60,50,40,0.5)'}; border:1px solid ${canAfford ? '#c084fc' : 'rgba(100,80,60,0.3)'}; color:${canAfford ? '#fff' : '#777'}; border-radius:6px; cursor:${canAfford ? 'pointer' : 'not-allowed'};"
+        >
+          💎 APLICAR LIFE STONE
+        </button>
+      </div>
+    `;
+  }
+
+  container.innerHTML = `
+    <div style="padding:10px; color:#fff; font-family:sans-serif;">
+      <div style="background:linear-gradient(180deg, rgba(30,16,48,0.95), rgba(14,8,26,0.95)); border:1px solid rgba(168,85,247,0.4); border-radius:12px; padding:14px; margin-bottom:16px;">
+        <h3 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:18px;">💎 Augmentation / Life Stones (Superior LS)</h3>
+        <p style="margin:4px 0 0 0; font-size:12px; color:#aaa;">
+          Utilize Superior Life Stones para encantar Armas e Joias Épicas (Queen Ant, Baium, Valakas, Zaken, Antharas) com Item Skills ativas/passivas.
+        </p>
+      </div>
+
+      <h4 style="margin:0 0 8px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">👑 Armas e Joias Épicas no Inventário</h4>
+      ${epicsHtml || '<div style="font-size:12px; color:#aaa;">Nenhuma arma ou joia épica no inventário no momento.</div>'}
+    </div>
+  `;
+}
+
+export function renderForgeBelts(container, state) {
+  const inv = state.inventory || [];
+  const beltsInInv = inv.filter(i => i.slot === 'belt' || (i.itemId || '').includes('belt'));
+
+  let inventoryBeltsHtml = '';
+  for (const b of beltsInInv) {
+    inventoryBeltsHtml += `
+      <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(212,167,68,0.3); border-radius:8px; padding:10px; margin-bottom:6px; display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <strong style="color:#ffd877; font-size:13px;">${b.name || 'Cinto'}</strong>
+          <div style="font-size:11px; color:#aaa;">Nível de Encaixe: ${b.compoundLevel || 1}</div>
+        </div>
+        <span style="font-size:11px; color:#34d399;">Disponível</span>
+      </div>
+    `;
+  }
+
+  const cost = 500000;
+  const canAffordBelt = (state.gold || 0) >= cost;
+
+  container.innerHTML = `
+    <div style="padding:10px; color:#fff; font-family:sans-serif;">
+      <!-- Belts Banner -->
+      <div style="background:linear-gradient(180deg, rgba(40,30,12,0.95), rgba(20,15,6,0.95)); border:1px solid rgba(212,167,68,0.4); border-radius:12px; padding:14px; margin-bottom:16px;">
+        <h3 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:18px;">🎗️ Síntese de Cintos [S] (Blessed Top-Grade Belt)</h3>
+        <p style="margin:4px 0 0 0; font-size:12px; color:#aaa;">
+          Combine materiais raros e cinto base para fundir o lendário <strong>Blessed Top-Grade Magic Ornament Belt [S]</strong>.
+        </p>
+      </div>
+
+      <!-- Compound Card -->
+      <div style="background:rgba(20,26,42,0.9); border:1px solid rgba(212,167,68,0.4); border-radius:12px; padding:16px; margin-bottom:16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <div>
+            <h4 style="margin:0; font-family:'Cinzel',serif; color:#ffd877; font-size:16px;">✨ Blessed Top-Grade Magic Ornament Belt [S]</h4>
+            <div style="font-size:12px; color:#aaa; margin-top:4px;">
+              Bônus Concedido: <strong style="color:#34d399;">+7.2% Defesa Geral (PvE)</strong> &amp; <strong style="color:#f43f5e;">+6.0% Dano de Habilidades e Ataque Físico</strong>
+            </div>
+          </div>
+          <span style="background:rgba(212,167,68,0.2); border:1px solid #d4a744; color:#ffe699; padding:4px 10px; border-radius:20px; font-size:11px; font-weight:bold;">Taxa de Sucesso: 70%</span>
+        </div>
+
+        <div style="font-size:12px; color:#ccc; background:rgba(0,0,0,0.3); padding:10px; border-radius:8px; margin-bottom:12px;">
+          💰 Custo de Síntese: <strong style="color:#ffd877;">500.000 Adena</strong>
+        </div>
+
+        <button
+          onclick="window.compoundBelts()"
+          ${!canAffordBelt ? 'disabled' : ''}
+          style="width:100%; padding:12px; font-family:'Cinzel',serif; font-weight:bold; font-size:13px; background:${canAffordBelt ? 'linear-gradient(180deg,#d4a744,#8a641c)' : 'rgba(60,50,40,0.5)'}; border:1px solid ${canAffordBelt ? '#ffe699' : 'rgba(100,80,60,0.3)'}; color:${canAffordBelt ? '#000' : '#777'}; border-radius:8px; cursor:${canAffordBelt ? 'pointer' : 'not-allowed'}; box-shadow:0 4px 15px rgba(212,167,68,0.2);"
+        >
+          ✨ SINTETIZAR CINTO SAGRADO [S] (500.000g)
+        </button>
+      </div>
+
+      <h4 style="margin:0 0 10px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">🎗️ Cintos no Inventário</h4>
+      ${inventoryBeltsHtml || '<div style="font-size:12px; color:#aaa;">Nenhum cinto adicional no inventário no momento.</div>'}
+    </div>
+  `;
+}
+
+export function openCompoundModal(state) {
+  let modal = document.getElementById('compound-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'compound-modal';
+    modal.className = 'modal-overlay active';
+    modal.style.cssText = 'position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:99999; display:flex; align-items:center; justify-content:center; padding:15px;';
+    document.body.appendChild(modal);
+  }
+  modal.style.display = 'flex';
+  renderCompoundModal(modal, state || window.getGameState?.() || window._state);
+}
+
+export function closeCompoundModal() {
+  const modal = document.getElementById('compound-modal');
+  if (modal) modal.style.display = 'none';
+}
+
+export function renderCompoundModal(container, state) {
+  const st = state || window.getGameState?.() || window._state || {};
+  const inv = st.inventory || [];
+  
+  const targetItems = inv.filter(i => {
+    const countSame = inv.filter(other => other.itemId === i.itemId).reduce((acc, o) => acc + (o.count || 1), 0);
+    return countSame >= 2;
+  });
+
+  const selectedTargetUid = window._compoundTargetUid || (targetItems[0]?.uid || null);
+  const targetItem = inv.find(i => i.uid === selectedTargetUid);
+  
+  const ingredientItems = targetItem ? inv.filter(i => i.itemId === targetItem.itemId && (i.uid !== targetItem.uid || (i.count || 1) >= 2)) : [];
+  const selectedIngredientUid = window._compoundIngredientUid || (ingredientItems[0]?.uid || null);
+
+  const curLv = targetItem ? (targetItem.compoundLevel || 1) : 1;
+  const cost = 100000 * Math.pow(2, Math.min(8, curLv - 1));
+  const rates = [75, 65, 50, 40, 30, 25, 20, 15, 10];
+  const rate = rates[Math.min(rates.length - 1, curLv - 1)] || 50;
+
+  let targetOptionsHtml = '';
+  for (const t of targetItems) {
+    const isSel = t.uid === selectedTargetUid;
+    const def = getItemDef(t.itemId);
+    targetOptionsHtml += `
+      <div onclick="window._compoundTargetUid='${t.uid}'; window._compoundIngredientUid=null; window.renderCompoundModal(document.getElementById('compound-modal'))"
+        style="padding:10px; border-radius:8px; background:${isSel ? 'rgba(168,85,247,0.25)' : 'rgba(255,255,255,0.05)'}; border:1px solid ${isSel ? '#a855f7' : 'rgba(255,255,255,0.15)'}; cursor:pointer; margin-bottom:6px; display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <strong style="color:#f4d58a; font-size:13px;">${t.name || def?.name || 'Item'}</strong>
+          <div style="font-size:11px; color:#aaa;">Nível Atual: Lv.${t.compoundLevel || 1}</div>
+        </div>
+        <span style="font-size:11px; color:#34d399;">Qtd: ${t.count || 1}x</span>
+      </div>
+    `;
+  }
+
+  container.innerHTML = `
+    <div style="background:linear-gradient(180deg, rgba(20,16,32,0.98), rgba(10,8,16,0.98)); border:1px solid rgba(168,85,247,0.5); border-radius:14px; max-width:550px; width:100%; padding:20px; color:#fff; font-family:sans-serif; box-shadow:0 10px 30px rgba(0,0,0,0.8);">
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(168,85,247,0.3); padding-bottom:12px; margin-bottom:16px;">
+        <h3 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:18px;">🧪 Sistema de Compound (L2 Essence)</h3>
+        <button onclick="window.closeCompoundModal()" style="background:none; border:none; color:#aaa; font-size:20px; cursor:pointer;">✕</button>
+      </div>
+
+      <p style="font-size:12px; color:#aaa; margin-top:0;">
+        Combine dois equipamentos idênticos para evoluir para o próximo nível. Em caso de falha, o item principal permanece intacto e o ingrediente é consumido.
+      </p>
+
+      <div style="display:flex; gap:12px; margin-bottom:16px;">
+        <div style="flex:1;">
+          <h4 style="margin:0 0 6px 0; font-size:12px; color:#ffd877;">1. Item Base (Elegíveis)</h4>
+          <div style="max-height:180px; overflow-y:auto;">
+            ${targetOptionsHtml || '<div style="font-size:11px; color:#777;">Nenhum par de itens idênticos no inventário.</div>'}
+          </div>
+        </div>
+
+        <div style="flex:1; background:rgba(0,0,0,0.4); border:1px solid rgba(212,167,68,0.3); border-radius:10px; padding:12px; display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <h4 style="margin:0 0 8px 0; font-size:13px; color:#f4d58a;">🔮 Prévia de Evolução</h4>
+            ${targetItem ? `
+              <div style="font-size:12px; color:#fff; margin-bottom:4px;"><strong>${targetItem.name || 'Item'}</strong></div>
+              <div style="font-size:11px; color:#34d399;">Lv.${curLv} ➔ <strong style="color:#ffd877;">Lv.${curLv + 1}</strong> (+15% Atributos)</div>
+              <div style="font-size:11px; color:#a855f7; margin-top:6px;">Taxa de Sucesso: <strong>${rate}%</strong></div>
+              <div style="font-size:11px; color:#fbbf24; margin-top:2px;">Custo em Adena: <strong>${cost.toLocaleString()}g</strong></div>
+            ` : '<div style="font-size:11px; color:#777;">Selecione um item base.</div>'}
+          </div>
+
+          <button
+            onclick="window.executeCompoundAction('${selectedTargetUid}', '${selectedIngredientUid || selectedTargetUid}'); window.renderCompoundModal(document.getElementById('compound-modal'))"
+            ${(!targetItem || (st.gold || 0) < cost) ? 'disabled' : ''}
+            style="width:100%; margin-top:12px; padding:10px; font-family:'Cinzel',serif; font-weight:bold; font-size:12px; background:${targetItem ? 'linear-gradient(180deg,#a855f7,#6b21a8)' : 'rgba(60,50,40,0.5)'}; border:1px solid ${targetItem ? '#c084fc' : 'rgba(100,80,60,0.3)'}; color:${targetItem ? '#fff' : '#777'}; border-radius:6px; cursor:${targetItem ? 'pointer' : 'not-allowed'};"
+          >
+            ⚡ EXECUTAR COMPOUND
+          </button>
+        </div>
+      </div>
     </div>
   `;
 }
