@@ -664,8 +664,8 @@ function useItem(uid) {
   else if (def.type === 'teleport') {
     state.hp = state.maxHp; state.mp = state.maxMp;
     const town = state.race ? RACES[state.race].startZone : 'talkingIsland';
-    if (state.zone !== town) { state.zone = town; el('zone-name').textContent = ZONES[state.zone].name; stopCombat(); setTimeout(startCombat, 300); }
-    log(`Used ${def.name}: returned to ${ZONES[town].name}, fully healed.`, 'heal');
+    if (state.zone !== town) { state.zone = town; const zn = el('zone-name'); if (zn) zn.textContent = ZONES[state.zone]?.name || town; stopCombat(); setTimeout(startCombat, 300); }
+    log(`Used ${def.name}: returned to ${ZONES[town]?.name || town}, fully healed.`, 'heal');
   } else if (def.type === 'raceClassChange' || item.itemId === 'scroll_race_class_change') {
     if (typeof window !== 'undefined' && typeof window.onOpenRaceClassChangeModal === 'function') {
       window.onOpenRaceClassChangeModal({
@@ -893,11 +893,11 @@ function updateStatsUI() {
   const gpsEl = el('gps-text'); if (gpsEl) gpsEl.textContent = gps > 0 ? `${gps.toFixed(1)}/s` : '—';
   
   const _clEl = el('craft-level-stat'); if (_clEl) _clEl.textContent = state.craftLevel;
-  const _rcEl = el('race-text'); if (_rcEl) _rcEl.textContent = state.race ? RACES[state.race].name : '-';
-  const _csEl = el('class-text'); if (_csEl) _csEl.textContent = state.class ? getClass(state.class).name : '-';
-  const _sgEl = el('saga-text'); if (_sgEl) _sgEl.textContent = SAGAS[state.currentSaga].name;
+  const _rcEl = el('race-text'); if (_rcEl) _rcEl.textContent = (state.race && RACES?.[state.race]?.name) || state.race || '-';
+  const _csEl = el('class-text'); if (_csEl) _csEl.textContent = (state.class && getClass(state.class)?.name) || state.class || '-';
+  const _sgEl = el('saga-text'); if (_sgEl) _sgEl.textContent = (state.currentSaga && SAGAS?.[state.currentSaga]?.name) || state.currentSaga || '-';
   const _sz = el('stage-zone');
-  if (_sz) { const _t = state.zone ? ZONES[state.zone].name + (ZONES[state.zone].town ? ' · town' : '') : '—'; if (_sz.textContent !== _t) _sz.textContent = _t; }
+  if (_sz) { const _t = (state.zone && ZONES?.[state.zone]) ? ZONES[state.zone].name + (ZONES[state.zone].town ? ' · town' : '') : '—'; if (_sz.textContent !== _t) _sz.textContent = _t; }
   const _spaEl = el('sp-available'); if (_spaEl) _spaEl.textContent = state.sp;
   const _gtEl = el('gold-text'); if (_gtEl) _gtEl.textContent = state.gold.toLocaleString();
   const _sgdEl = el('shop-gold'); if (_sgdEl) _sgdEl.textContent = state.gold.toLocaleString();
@@ -3291,9 +3291,9 @@ function startGame() {
     log('Select race and class before beginning the saga.', 'system');
     return;
   }
-  state.zone = RACES[state.race].startZone;
+  state.zone = RACES[state.race]?.startZone || 'talkingIsland';
   const zoneEl = el('zone-name');
-  if (zoneEl) zoneEl.textContent = ZONES[state.zone].name;
+  if (zoneEl) zoneEl.textContent = ZONES[state.zone]?.name || 'Talking Island';
   updateAllUI();
   startCombat();
   save();
