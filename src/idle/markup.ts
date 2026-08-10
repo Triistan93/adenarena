@@ -423,6 +423,11 @@ export const IDLE_MARKUP = `
 
                 <!-- Item Slots Grid (8 columns x 7 rows dark reddish-brown slots) -->
                 <div class="l2inv-slots-grid" id="inventory-grid"></div>
+
+                <div class="l2inv-trash-actions">
+                  <button id="sell-selected-btn" class="l2inv-trash-btn sell" disabled title="Vender Itens Selecionados">💰 Vender</button>
+                  <button id="salvage-selected-btn" class="l2inv-trash-btn salvage" disabled title="Desmontar Selecionados">🔨 Desmontar</button>
+                </div>
               </div>
             </div>
 
@@ -443,13 +448,6 @@ export const IDLE_MARKUP = `
                 <div class="l2inv-weight-gauge" title="Capacidade da Mochila">
                   <span class="l2inv-weight-icon">🎒</span>
                   <span id="inv-slots">0/150</span>
-                </div>
-              </div>
-            </div>
-                </div>
-                <div class="l2inv-trash-actions">
-                  <button id="sell-selected-btn" class="l2inv-trash-btn sell" disabled title="Vender Itens Selecionados">💰 Vender</button>
-                  <button id="salvage-selected-btn" class="l2inv-trash-btn salvage" disabled title="Desmontar Selecionados">🔨 Desmontar</button>
                 </div>
               </div>
             </div>
