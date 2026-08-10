@@ -169,9 +169,26 @@ export function formatItemDisplayName(item, def) {
   return `${enchantStr}${baseName}${foundationStr}${rarityStr}`;
 }
 
-export function showItemTooltip(e, item, state, callbacks = {}) {
+export function showItemTooltip(arg1, arg2, state, callbacks = {}) {
+  let e = null;
+  let item = null;
+
+  if (arg1 && (arg1 instanceof Event || arg1.clientX !== undefined || arg1.pageX !== undefined || arg1.target !== undefined)) {
+    e = arg1;
+    item = arg2;
+  } else if (arg2 && (arg2 instanceof Event || arg2.clientX !== undefined || arg2.pageX !== undefined || arg2.target !== undefined)) {
+    e = arg2;
+    item = arg1;
+  } else {
+    item = arg1 || arg2;
+  }
+
   const tooltip = findElement('item-tooltip');
   if (!tooltip || !item) return;
+
+  if (typeof item === 'string') {
+    item = { itemId: item, rarity: 'common' };
+  }
 
   const gData = D();
   const def = gData?.ALL_ITEMS?.[item.itemId];
@@ -445,8 +462,10 @@ export function showItemTooltip(e, item, state, callbacks = {}) {
   });
 
   tooltip.style.display = 'block';
-  const posX = Math.min(window.innerWidth - 250, e.clientX + 15);
-  const posY = Math.max(10, Math.min(window.innerHeight - 220, e.clientY + 15));
+  const clientX = e?.clientX ?? (e?.pageX || 100);
+  const clientY = e?.clientY ?? (e?.pageY || 100);
+  const posX = Math.min(window.innerWidth - 260, clientX + 15);
+  const posY = Math.max(10, Math.min(window.innerHeight - 250, clientY + 15));
   tooltip.style.transform = `translate3d(${posX}px, ${posY}px, 0)`;
 }
 
