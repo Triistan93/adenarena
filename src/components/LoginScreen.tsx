@@ -61,12 +61,12 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
     const isKamael = data.race === 'kamael';
     const isLight = isKamael || data.className === 'rogue' || data.className === 'scout' || data.className === 'assassin' || data.className === 'warder' || data.className === 'soulbreaker' || data.className === 'sylphGunner';
 
-    let starterWeapon = 'wooden_sword';
-    let starterHelm = 'iron_helm';
-    let starterArmor = 'iron_armor';
-    let starterLegs = 'iron_gaiters';
-    let starterGloves = 'iron_gauntlets';
-    let starterBoots = 'iron_boots';
+    let starterWeapon = 'knight_sword';
+    let starterHelm = 'bronze_helmet';
+    let starterArmor = 'bronze_breastplate_heavy';
+    let starterLegs = 'bronze_gaiters_heavy';
+    let starterGloves = 'bronze_gloves';
+    let starterBoots = 'lether_boots';
 
     // Map class → starter skill using Echo archetype system
     const ECHO_STARTER_SKILLS: Record<string, string> = {
@@ -92,21 +92,21 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
     let starterSkill = ECHO_STARTER_SKILLS[data.className] || 'power_strike_f';
 
     if (isMage) {
-      starterWeapon = 'oak_staff';
-      starterHelm = 'cloth_cap';
-      starterArmor = 'cloth_robe';
-      starterLegs = 'cloth_pants';
-      starterGloves = 'cloth_gloves';
-      starterBoots = 'cloth_boots';
+      starterWeapon = 'crucifix_of_blessing_magicblunt';
+      starterHelm = 'devotion_helmet';
+      starterArmor = 'devotion_armor_robe';
+      starterLegs = 'devotion_pants_robe';
+      starterGloves = 'devotion_gloves';
+      starterBoots = 'devotion_boots';
     } else if (isLight) {
-      starterWeapon = isKamael ? 'training_dagger' : (data.race === 'sylph' ? 'training_dagger' : 'wooden_sword');
-      starterHelm = 'leather_helm';
-      starterArmor = 'leather_vest';
-      starterLegs = 'leather_gaiters';
+      starterWeapon = isKamael ? 'sword_breaker' : (data.race === 'sylph' ? 'sword_breaker' : 'hunting_bow');
+      starterHelm = 'leather_helmet';
+      starterArmor = 'leather_vest_light';
+      starterLegs = 'leather_pants_light';
       starterGloves = 'leather_gloves';
-      starterBoots = 'leather_boots';
+      starterBoots = 'lether_boots';
     } else if (data.className === 'artisan' || data.className === 'shinemakerS1') {
-      starterWeapon = 'bronze_mace';
+      starterWeapon = 'iron_hammer';
     }
 
     const starterShotsId = isMage ? 'spiritshot_ng' : 'soulshot_ng';
