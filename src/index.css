@@ -7,9 +7,12 @@
 
 html,
 body,
-#root {
+#root,
+#idle-host {
   height: 100%;
+  width: 100%;
   margin: 0;
+  display: block;
 }
 
 body {

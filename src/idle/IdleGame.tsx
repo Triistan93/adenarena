@@ -2,9 +2,10 @@ import { useLayoutEffect, useRef, useState } from "react";
 
 // Side-effect import FIRST so window.GameData exists before main.js evaluates.
 // @ts-ignore -- plain JS module, no type declarations
-import "../../lineage-idle/data/items.js";
-// @ts-ignore -- Echo of Elements class/skill data ÔÇö must load BEFORE main.js
-import "../../lineage-idle/data/classes_echo.js";
+import "../../lineage-idle/src/data/items/index.js";
+
+import "../../lineage-idle/src/data/classes/index.js";
+
 // @ts-ignore -- Adapta CLASSES_ECHO.skills[] para SKILL_DEFS_ECHO / CLASS_SKILLS_ECHO / SKILL_TREE_LAYOUT_ECHO
 //               que o engine (main.js) precisa. Deve vir DEPOIS de classes_echo.js e ANTES de main.js.
 import "../../lineage-idle/data/echo-adapter.js";
@@ -12,6 +13,8 @@ import "../../lineage-idle/data/echo-adapter.js";
 import "../../lineage-idle/theme-grimoire.js";
 // @ts-ignore
 import { init, setRoot, destroy } from "../../lineage-idle/main.js";
+// @ts-ignore
+import { bootstrap, destroyBootstrap } from "../../lineage-idle/src/core/GameBootstrap.js";
 // @ts-ignore -- Vite ?raw import returns the CSS source as a string
 import idleCss from "../../lineage-idle/style.css?raw";
 // @ts-ignore -- Grimoire theme CSS
@@ -42,12 +45,12 @@ export default function IdleGame() {
 
     const shadow = host.shadowRoot ?? host.attachShadow({ mode: "open" });
     shadow.innerHTML = `<style>${idleCss}\n${grimoireCss}</style>${IDLE_MARKUP}`;
-    setRoot(shadow as unknown as Document);
+    
+    // Inicializa├º├úo unificada via GameBootstrap
+    bootstrap(shadow as unknown as Document);
     init();
 
     // ---- Embers / brasas de fogo ÔÇö montagem correta no Shadow DOM ----
-    // ShadowRoot N├âO tem createElement; sempre usar document.createElement
-    // e depois inserir no #game do shadow.
     if ((window as any).GrimoireFX) {
       const gameDiv = shadow.getElementById
         ? shadow.getElementById('game')
@@ -55,7 +58,6 @@ export default function IdleGame() {
       if (gameDiv && !gameDiv.querySelector('.g-ember-global')) {
         const emberDiv = document.createElement('div');
         emberDiv.className = 'g-ember-global';
-        // Primeiro filho do #game ÔåÆ fica atr├ís da UI mas na frente do fundo
         gameDiv.insertBefore(emberDiv, gameDiv.firstChild);
         (window as any).GrimoireFX.mountEmbers(emberDiv, {
           count: 60,
@@ -70,6 +72,7 @@ export default function IdleGame() {
 
     return () => {
       delete (window as any).onOpenRaceClassChangeModal;
+      destroyBootstrap();
       destroy();
       if (host.shadowRoot) {
         host.shadowRoot.innerHTML = "";
@@ -86,7 +89,7 @@ export default function IdleGame() {
 
   return (
     <>
-      <div ref={hostRef} id="idle-host" />
+      <div ref={hostRef} id="idle-host" className="w-full h-full min-h-screen block overflow-hidden" />
       {changeScrollData && (
         <CharacterCreation
           isChangeScroll={true}

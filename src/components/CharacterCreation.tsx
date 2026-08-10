@@ -4,17 +4,11 @@ export interface CharacterCreationData {
   charName: string;
   race: string;
   className: string;
-  gender: 'M' | 'F';
 }
 
 interface CharacterCreationProps {
   onComplete: (data: CharacterCreationData) => void;
   onCancel?: () => void;
-  isChangeScroll?: boolean;
-  initialCharName?: string;
-  initialRace?: string;
-  initialClass?: string;
-  initialGender?: 'M' | 'F';
 }
 
 const RACES_INFO: Record<string, {
@@ -24,7 +18,7 @@ const RACES_INFO: Record<string, {
   desc: string;
   perks: string[];
   allowedClasses: { id: string; name: string; desc: string; icon: string }[];
-  image: Record<string, { M: string; F: string }>;
+  image: Record<string, string>;
   startZoneName: string;
 }> = {
   human: {
@@ -35,17 +29,11 @@ const RACES_INFO: Record<string, {
     perks: ['ÔÜö´©Å Status F├¡sicos Equilibrados', '­ƒøí´©Å Excelente Adaptabilidade', '­ƒÅ░ Inicia na Ilha de Falar'],
     allowedClasses: [
       { id: 'fighter', name: 'Guerreiro (Fighter)', desc: 'Combate corpo a corpo com espada e escudo.', icon: 'ÔÜö´©Å' },
-      { id: 'mage', name: 'Mago (Mage)', desc: 'Dominador de magia elemental e mana elevado.', icon: '­ƒö«' },
-      { id: 'deathPilgrim', name: 'Death Knight EM DESENVOLVIMENTO­ƒÆÇ', desc: 'Peregrino das trevas futuro Cavaleiro da Morte com DP.', icon: '­ƒÆÇ' },
-      { id: 'wargBase', name: 'Warg EM DESENVOLVIMENTO­ƒÉ║', desc: 'Lutador primitivo que se transforma em Lobo guerreiro.', icon: '­ƒÉ║' },
-      { id: 'assassinBase', name: 'Assassin EM DESENVOLVIMENTO­ƒùí´©Å', desc: 'Ca├ºador das sombras com adagas e clones sombrios.', icon: '­ƒùí´©Å' }
+      { id: 'mage', name: 'Mago (Mage)', desc: 'Dominador de magia elemental e mana elevado.', icon: '­ƒö«' }
     ],
     image: {
-      fighter: { M: '/img/humanpalaM.png', F: '/img/humanpalaF.png' },
-      mage: { M: '/img/humanmageM.png', F: '/img/humanmageF.png' },
-      deathPilgrim: { M: '/img/human_fighter.png', F: '/img/human_fighter.png' },
-      wargBase: { M: '/img/human_fighter.png', F: '/img/human_fighter.png' },
-      assassinBase: { M: '/img/human_fighter.png', F: '/img/human_fighter.png' }
+      fighter: '/img/human_fighter.png',
+      mage: '/img/human_mage.png'
     },
     startZoneName: 'Ilha de Falar (Talking Island)'
   },
@@ -54,186 +42,105 @@ const RACES_INFO: Record<string, {
     name: 'Elfo',
     icon: '­ƒºØÔÇìÔÖé´©Å',
     desc: 'Graciosos e extremamente ├ígeis, aben├ºoados pela deusa Eva.',
-    perks: ['­ƒìâ +8 Esquiva Nativa', 'ÔÜí Alta Velocidade de Movimento', '­ƒî▓ Inicia na Floresta ├ëlfica'],
+    perks: ['­ƒìâ +8 Esquiva Nativa', 'ÔÜí Alta Velocidade de Movimento', '­ƒî▓ Inicia na Floresta Elfica'],
     allowedClasses: [
       { id: 'fighter', name: 'Guerreiro Elfo (Fighter)', desc: 'Defensor gracioso e arqueiro veloz.', icon: '­ƒÅ╣' },
       { id: 'mage', name: 'Mago Elfo (Mage)', desc: 'Dominador de magia de ├ígua e cura sagrada.', icon: '­ƒîè' }
     ],
     image: {
-      fighter: { M: '/img/elfwswM.png', F: '/img/elfswsF.png' },
-      mage: { M: '/img/elfmageM.png', F: '/img/elfmageF.png' }
+      fighter: '/img/elf_fighter.png',
+      mage: '/img/elf_mage.png'
     },
-    startZoneName: 'Floresta ├ëlfica (Elven Forest)'
+    startZoneName: 'Floresta dos Elfos (Elven Forest)'
   },
   darkelf: {
     id: 'darkelf',
     name: 'Elfo Negro',
     icon: '­ƒºØÔÇìÔÖÇ´©Å',
-    desc: 'Mestres de magia negra e ataques cr├¡ticos devastadores de Shillien.',
-    perks: ['­ƒöÑ +15 Poder de Ataque & Magia', '­ƒùí´©Å Alto Poder Cr├¡tico', '­ƒîæ Inicia na Floresta Negra'],
+    desc: 'Seguidores de Shillien, mestres do dano cr├¡tico e feiti├ºos sombrios.',
+    perks: ['­ƒöÑ +6 Ataque M├ígico & +2 Atq. F├¡sico', '­ƒÆÑ Alta Taxa de Dano Cr├¡tico', '­ƒîæ Inicia na Floresta Sombria'],
     allowedClasses: [
-      { id: 'fighter', name: 'Guerreiro Negro (Fighter)', desc: 'Assassino mortal e cavaleiro sombrio.', icon: '­ƒùí´©Å' },
-      { id: 'mage', name: 'Mago Negro (Mage)', desc: 'Invocador de maldi├º├Áes e magia de fogo/trevas.', icon: '­ƒö«' },
-      { id: 'elfDeathPilgrim', name: 'Death Knight EM DESENVOLVIMENTO­ƒÆÇ', desc: 'Cavaleiro da Morte Dark Elf com Dark Points.', icon: '­ƒÆÇ' },
-      { id: 'assassinBase', name: 'Assassin EM DESENVOLVIMENTO­ƒùí´©Å', desc: 'Assassina mortal das sombras de Shillien.', icon: '­ƒùí´©Å' }
+      { id: 'fighter', name: 'Guerreiro Sombrio (Fighter)', desc: 'Assassino mortal e cavaleiro sombrio.', icon: '­ƒùí´©Å' },
+      { id: 'mage', name: 'Mago Negro (Dark Mage)', desc: 'Feiticeiro devastador do vento e maldi├º├Áes.', icon: '­ƒÆÇ' }
     ],
     image: {
-      fighter: { M: '/img/darkelfskM.png', F: '/img/darkelfskF.png' },
-      mage: { M: '/img/darkelfmageM.png', F: '/img/darkelfmageF.png' },
-      elfDeathPilgrim: { M: '/img/darkelf_fighter.png', F: '/img/darkelf_fighter.png' },
-      assassinBase: { M: '/img/darkelf_fighter.png', F: '/img/darkelf_fighter.png' }
+      fighter: '/img/darkelf_fighter.png',
+      mage: '/img/darkelf_mage.png'
     },
-    startZoneName: 'Floresta Negra (Dark Forest)'
+    startZoneName: 'Floresta Sombria (Dark Forest)'
   },
   orc: {
     id: 'orc',
     name: 'Orc',
     icon: '­ƒæ╣',
-    desc: 'Guerreiros de for├ºa bruta descomunal e constitui├º├úo vital superior.',
-    perks: ['­ƒÆ¬ +100 Vida M├íxima (HP)', '­ƒøí´©Å Resili├¬ncia em Batalha Prolongada', '­ƒîï Inicia na Vila Orc'],
+    desc: 'Guerreiros de for├ºa f├¡sica incompar├ível e resist├¬ncia implac├ível.',
+    perks: ['­ƒÆ¬ +6 Defesa & +4 Ataque F├¡sico', 'ÔØñ´©Å Vida (HP) e Tenacidade Elevados', '­ƒîï Inicia na Vila dos Orcs'],
     allowedClasses: [
-      { id: 'fighter', name: 'Guerreiro Orc (Fighter)', desc: 'Destruidor com armas de duas m├úos e garras.', icon: '­ƒ¬ô' },
-      { id: 'mage', name: 'Xam├ú Orc (Shaman)', desc: 'Mago de combate e buffs tribais de sangue.', icon: '­ƒöÑ' },
-      { id: 'orcRider', name: 'Vanguard Rider EM DESENVOLVIMENTO­ƒÉë', desc: 'Cavaleiro Orc montado especialista em lan├ºa.', icon: '­ƒÉë' }
+      { id: 'fighter', name: 'Guerreiro Orc (Fighter)', desc: 'Lutador com armas de duas m├úos e garras.', icon: '­ƒ¬ô' },
+      { id: 'mage', name: 'Xam├ú Orc (Shaman)', desc: 'M├¡stico tribal que evoca totens e maldi├º├Áes.', icon: '­ƒöÑ' }
     ],
     image: {
-      fighter: { M: '/img/orcfighterM.png', F: '/img/orcfighterF.png' },
-      mage: { M: '/img/orc_mage.png', F: '/img/orc_mage.png' },
-      orcRider: { M: '/img/orcfighterM.png', F: '/img/orcfighterF.png' }
+      fighter: '/img/orc_fighter.png',
+      mage: '/img/orc_mage.png'
     },
-    startZoneName: 'Vila Orc (Orc Village)'
+    startZoneName: 'Vila dos Orcs (Orc Village)'
   },
   dwarf: {
     id: 'dwarf',
     name: 'An├úo',
-    icon: 'ÔÜÆ´©Å',
-    desc: 'Mestres da forja, especialistas em minera├º├úo e cria├º├úo de itens.',
-    perks: ['­ƒÄÆ +100 Espa├ºos de Invent├írio', 'ÔÜÆ´©Å B├┤nus de Craft & Drop de Materiais', 'ÔøÅ´©Å Inicia nas Minas dos An├Áes'],
+    icon: '­ƒºö',
+    desc: 'Mestres forjadores de Aden com grande capacidade de armazenamento.',
+    perks: ['­ƒÄÆ +100 Slots de Invent├írio (250 Slots Cap.)', '­ƒÆÄ +15% B├┤nus de Drop de Materiais', 'ÔøÅ´©Å Inicia na Mina dos An├Áes'],
     allowedClasses: [
-      { id: 'artisan', name: 'Artes├úo (Artisan)', desc: 'Especialista em forja de armas e armaduras.', icon: 'ÔÜÆ´©Å' },
-      { id: 'shinemakerS1', name: 'ShineMaker EM DESENVOLVIMENTO Ô£¿', desc: 'Mestre da luz cristalina, suporte e dano cristalino.', icon: 'Ô£¿' }
+      { id: 'artisan', name: 'Artes├úo (Artisan)', desc: 'Especialista em manufatura e forja de armaduras.', icon: 'ÔÜÆ´©Å' },
+      { id: 'fighter', name: 'Guerreiro An├úo (Fighter)', desc: 'Combatente resistente com marretas e machados.', icon: '­ƒö¿' }
     ],
     image: {
-      artisan: { M: '/img/dwarfmaestroM.png', F: '/img/dwarfmaestroF.png' },
-      fighter: { M: '/img/dwarfmaestroM.png', F: '/img/dwarfmaestroF.png' },
-      shinemakerS1: { M: '/img/dwarf_artisan.png', F: '/img/dwarf_artisan.png' }
+      artisan: '/img/dwarf_artisan.png',
+      fighter: '/img/dwarf_artisan.png'
     },
-    startZoneName: 'Minas dos An├Áes (Dwarven Mine)'
+    startZoneName: 'Mina dos An├Áes (Dwarven Mine)'
   },
   kamael: {
     id: 'kamael',
     name: 'Kamael',
     icon: '­ƒ¬Â',
-    desc: 'Ra├ºa de uma asa s├│ com maestria lend├íria em estocadas de rapieira.',
-    perks: ['ÔÜí Usam Armaduras LEVES por Lore', '­ƒùí´©Å Ataques F├¡sicos Ultrarr├ípidos', '­ƒÅ░ Inicia na Lair dos Kamael'],
+    desc: 'Guerreiros de uma asa s├│, especializados em l├óminas duplas e almas.',
+    perks: ['­ƒªà +6 Ataque & +6 Esquiva', '­ƒùí´©Å Especialista em L├óminas e Bestas', '­ƒÅø´©Å Inicia no Ref├║gio Kamael'],
     allowedClasses: [
-      { id: 'soulbreaker', name: 'Soulbreaker', desc: 'Espadachim das sombras especializado em rapieiras.', icon: '­ƒùí´©Å' },
-      { id: 'hatamoto', name: 'Samurai EM DESENVOLVIMENTOÔø®´©Å', desc: 'Mestre da katana ancestral e t├®cnica Iaijutsu.', icon: 'Ôø®´©Å' }
+      { id: 'soulbreaker', name: 'Soulbreaker', desc: 'Mestre em l├óminas duplas e absor├º├úo de almas.', icon: 'ÔÜí' },
+      { id: 'fighter', name: 'Guerreiro Kamael (Fighter)', desc: 'Combatente veloz de espadas de uma m├úo.', icon: '­ƒùí´©Å' }
     ],
     image: {
-      soulbreaker: { M: '/img/kamaelshM.png', F: '/img/kamaelshF.png' },
-      fighter: { M: '/img/kamaelDM.png', F: '/img/kamaelDF.png' },
-      hatamoto: { M: '/img/kamael_soulbreaker.png', F: '/img/kamael_soulbreaker.png' }
+      soulbreaker: '/img/kamael_soulbreaker.png',
+      fighter: '/img/kamael_soulbreaker.png'
     },
-    startZoneName: 'Lair dos Kamael (Kamael Lair)'
-  },
-  sylph: {
-    id: 'sylph',
-    name: 'Sylph',
-    icon: '­ƒö½',
-    desc: 'Atiradores elementais dos ventos com armas de fogo.',
-    perks: ['­ƒÆ¿ +12 Esquiva & Velocidade', '­ƒö½ Atiradores Elementais Ranged', '­ƒî¬´©Å Inicia na Ilha de Falar'],
-    allowedClasses: [
-      { id: 'sylphGunner', name: 'Storm Blaster EM DESENVOLVIMENTO­ƒö½', desc: 'Atirador elemental com armas de fogo e tiros de vento.', icon: '­ƒö½' }
-    ],
-    image: {
-      sylphGunner: { M: '/img/sylphM.png', F: '/img/sylphF.png' },
-      fighter: { M: '/img/sylphM.png', F: '/img/sylphF.png' }
-    },
-    startZoneName: 'Ilha de Falar (Talking Island)'
-  },
-  highelf: {
-    id: 'highelf',
-    name: 'High Elf',
-    icon: 'Ô£¿',
-    desc: 'Elfos supremos detentores da luz divina e maestria elemental.',
-    perks: ['­ƒîƒ +8 Magia & Defesa Divina', '­ƒøí´©Å Guardi├Áes Sagrados de Aden', '­ƒî▓ Inicia na Floresta ├ëlfica'],
-    allowedClasses: [
-      { id: 'divineTemplarS1', name: 'Divine Templar EM DESENVOLVIMENTO­ƒøí´©Å', desc: 'Guardi├úo sagrado supremo e tanque com Sacred Aegis.', icon: '­ƒøí´©Å' },
-      { id: 'elementWeaverS1', name: 'Element Weaver EM DESENVOLVIMENTO­ƒîÇ', desc: 'Mago supremo combinando Fogo, ├ügua e Vento.', icon: '­ƒîÇ' },
-      { id: 'shinemakerS1', name: 'ShineMaker EM DESENVOLVIMENTO Ô£¿', desc: 'Invocador de luz sagrada e suporte cristalino.', icon: 'Ô£¿' }
-    ],
-    image: {
-      divineTemplarS1: { M: '/img/elfwswM.png', F: '/img/elfswsF.png' },
-      elementWeaverS1: { M: '/img/elfmageM.png', F: '/img/elfmageF.png' },
-      shinemakerS1: { M: '/img/elf_mage.png', F: '/img/elf_mage.png' },
-      fighter: { M: '/img/elfwswM.png', F: '/img/elfswsF.png' }
-    },
-    startZoneName: 'Floresta ├ëlfica (Elven Forest)'
-  },
-  ertheia: {
-    id: 'ertheia',
-    name: 'Ertheia',
-    icon: '­ƒî╣',
-    desc: 'Guerreiros e m├¡sticas tocados pelos ventos e esp├¡ritos da natureza.',
-    perks: ['­ƒî¬´©Å +10 Esquiva Nativa', '­ƒî╣ Combate H├¡brido com Roubo de Vida', '­ƒÅ░ Inicia na Ilha de Falar'],
-    allowedClasses: [
-      { id: 'bloodRoseS1', name: 'Blood Rose EM DESENVOLVIMENTO­ƒî╣', desc: 'M├¡stica dos ventos e espinhos com roubo de vida.', icon: '­ƒî╣' },
-      { id: 'marauder', name: 'Marauder EM DESENVOLVIMENTO ­ƒî¬´©Å', desc: 'Lutadora com garras e combos de furac├úo.', icon: '­ƒÑè' },
-      { id: 'sayhaSeer', name: 'Sayha Seeker EM DESENVOLVIMENTO­ƒîÇ', desc: 'Invocadora de vendavais e esp├¡ritos de Sayha.', icon: '­ƒîÇ' }
-    ],
-    image: {
-      bloodRoseS1: { M: '/img/elf_mage.png', F: '/img/elf_mage.png' },
-      marauder: { M: '/img/elf_fighter.png', F: '/img/elf_fighter.png' },
-      sayhaSeer: { M: '/img/elf_mage.png', F: '/img/elf_mage.png' },
-      fighter: { M: '/img/elf_fighter.png', F: '/img/elf_fighter.png' }
-    },
-    startZoneName: 'Ilha de Falar (Talking Island)'
+    startZoneName: 'Ref├║gio Kamael (Kamael Village)'
   }
 };
 
 const RANDOM_NAMES = [
-  'Astaroth', 'Valerius', 'Kaelen', 'Sylas', 'Lyrion',
-  'Ignis', 'Morgana', 'Vaelin', 'Darian', 'Balthazar',
-  'Thorne', 'Elysia', 'Gideon', 'Zephyr', 'Orion',
-  'Aethelgard', 'Aerion', 'Caelum', 'Elowen', 'Fenris',
-  'Galadriel', 'Isolden', 'Malakor', 'Naelis', 'Thalor',
-  'Azrael', 'Belial', 'Kaelen', 'Malakor', 'Moros',
-  'Nocturna', 'Oberon', 'Ravena', 'Soren', 'Vesper',
-  'Aethelstan', 'Boran', 'Cassian', 'Draven', 'Eldrin',
-  'Garrick', 'Kaelith', 'Ragnar', 'Valen', 'Varian',
-  'Astraea', 'Celestia', 'Eridanus', 'Hesperos', 'Lyra',
-  'Nebula', 'Solon', 'Tenebris', 'Vael', 'Zorion'
+  'Aethelgard', 'Sylvana', 'Varian', 'Kaela', 'Thorin', 'Elyndra', 'Bronn', 
+  'Malakor', 'Zarek', 'Valerius', 'Sylas', 'Aerith', 'Durgrim', 'Kaelen', 
+  'Lucian', 'Morgana', 'Garrick', 'Freya', 'Darian', 'Valerya', 'Oberon'
 ];
 
-export const CharacterCreation: React.FC<CharacterCreationProps> = ({
-  onComplete,
-  onCancel,
-  isChangeScroll = false,
-  initialCharName = '',
-  initialRace = 'human',
-  initialClass = 'fighter',
-  initialGender = 'M'
-}) => {
-  const [charName, setCharName] = useState(initialCharName);
-  const [selectedRace, setSelectedRace] = useState(initialRace);
-  const [selectedClass, setSelectedClass] = useState(initialClass);
-  const [gender, setGender] = useState<'M' | 'F'>(initialGender);
+export function CharacterCreation({ onComplete, onCancel }: CharacterCreationProps) {
+  const [charName, setCharName] = useState('SirVarian');
+  const [selectedRace, setSelectedRace] = useState('human');
+  const [selectedClass, setSelectedClass] = useState('fighter');
 
   const currentRaceObj = RACES_INFO[selectedRace] || RACES_INFO.human;
 
   const handleSelectRace = (raceId: string) => {
     setSelectedRace(raceId);
-    const rInfo = RACES_INFO[raceId];
-    if (rInfo && rInfo.allowedClasses.length > 0) {
-      if (!rInfo.allowedClasses.some(c => c.id === selectedClass)) {
-        setSelectedClass(rInfo.allowedClasses[0].id);
-      }
+    const raceData = RACES_INFO[raceId];
+    if (raceData && raceData.allowedClasses.length > 0) {
+      setSelectedClass(raceData.allowedClasses[0].id);
     }
   };
 
   const handleGenerateRandomName = () => {
-    if (isChangeScroll) return;
     const idx = Math.floor(Math.random() * RANDOM_NAMES.length);
     setCharName(RANDOM_NAMES[idx]);
   };
@@ -244,14 +151,11 @@ export const CharacterCreation: React.FC<CharacterCreationProps> = ({
     onComplete({
       charName: finalName,
       race: selectedRace,
-      className: selectedClass,
-      gender: gender
+      className: selectedClass
     });
   };
 
-  // Pega a imagem baseada na classe e no g├¬nero (com fallbacks de seguran├ºa)
-  const currentImgObj = currentRaceObj.image[selectedClass] || currentRaceObj.image.fighter;
-  const currentImg = currentImgObj?.[gender] || '/img/human_fighter.png';
+  const currentImg = currentRaceObj.image[selectedClass] || currentRaceObj.image.fighter || '/img/human_fighter.png';
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md p-4 overflow-y-auto">
@@ -260,29 +164,15 @@ export const CharacterCreation: React.FC<CharacterCreationProps> = ({
         {/* Banner Header */}
         <div className="mb-6 text-center border-b border-amber-500/20 pb-4">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-bold uppercase tracking-widest mb-1">
-            {isChangeScroll ? '­ƒô£ Scroll of Race & Class Change' : 'Ô£¿ Lineage II ┬À Aden Arena'}
+            Ô£¿ Lineage II ┬À Aden Arena
           </div>
           <h2 className="font-display text-2xl font-bold tracking-wide text-amber-100">
-            {isChangeScroll ? 'Troca de Ra├ºa & Classe' : 'Cria├º├úo & Customiza├º├úo de Personagem'}
+            Cria├º├úo & Customiza├º├úo de Personagem
           </h2>
           <p className="text-xs text-slate-400 mt-1">
-            {isChangeScroll
-              ? 'Selecione a nova ra├ºa e classe. O nome do personagem permanece inalterado.'
-              : 'Escolha seu nome, g├¬nero, ra├ºa e classe inicial para iniciar sua jornada.'}
+            Escolha seu nome, ra├ºa e classe inicial para iniciar sua jornada no mundo de Aden.
           </p>
         </div>
-
-        {isChangeScroll && (
-          <div className="mb-6 rounded-xl border border-amber-500/40 bg-amber-500/10 p-3.5 text-xs text-amber-200 flex items-start gap-3">
-            <span className="text-xl">ÔÜá´©Å</span>
-            <div>
-              <p className="font-bold text-amber-300">AVISO DE REESPECIALIZA├ç├âO:</p>
-              <p className="mt-0.5 text-amber-200/90 leading-relaxed">
-                Ao confirmar a troca de Ra├ºa &amp; Classe, <strong>todas as suas habilidades ser├úo resetadas</strong>, todo o <strong>SP gasto ser├í totalmente devolvido</strong> e seus <strong>equipamentos atuais ser├úo desequipados</strong> com seguran├ºa para o seu invent├írio.
-              </p>
-            </div>
-          </div>
-        )}
 
         <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
@@ -292,71 +182,33 @@ export const CharacterCreation: React.FC<CharacterCreationProps> = ({
             {/* 1. Nome do Personagem */}
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-amber-300 mb-2">
-                1. Nome do Personagem {isChangeScroll && '(­ƒöÆ Fixo)'}
+                1. Nome do Personagem
               </label>
               <div className="flex gap-2">
                 <input
                   type="text"
                   maxLength={16}
                   value={charName}
-                  onChange={(e) => !isChangeScroll && setCharName(e.target.value)}
-                  disabled={isChangeScroll}
+                  onChange={(e) => setCharName(e.target.value)}
                   placeholder="Digite o nome do seu her├│i..."
-                  className={`flex-1 rounded-xl border px-4 py-2.5 text-sm font-semibold ${
-                    isChangeScroll
-                      ? 'bg-slate-900/90 border-slate-700 text-amber-300/80 cursor-not-allowed'
-                      : 'bg-black/50 border-amber-500/30 text-amber-100 placeholder-slate-500 focus:border-amber-400 focus:outline-none focus:ring-1 focus:ring-amber-400'
-                  }`}
+                  className="flex-1 rounded-xl border border-amber-500/30 bg-black/50 px-4 py-2.5 text-sm font-semibold text-amber-100 placeholder-slate-500 focus:border-amber-400 focus:outline-none focus:ring-1 focus:ring-amber-400"
                   required
                 />
-                {!isChangeScroll && (
-                  <button
-                    type="button"
-                    onClick={handleGenerateRandomName}
-                    className="rounded-xl border border-amber-500/40 bg-amber-500/20 px-3 py-2.5 text-xs font-bold text-amber-300 hover:bg-amber-500/30 transition flex items-center gap-1.5"
-                    title="Gerar nome aleat├│rio"
-                  >
-                    ­ƒÄ▓ Aleat├│rio
-                  </button>
-                )}
-              </div>
-            </div>
-
-            {/* 2. Escolha do G├¬nero */}
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-amber-300 mb-2">
-                2. G├¬nero
-              </label>
-              <div className="flex gap-3">
                 <button
                   type="button"
-                  onClick={() => setGender('M')}
-                  className={`flex-1 py-2.5 rounded-xl border font-bold flex items-center justify-center gap-2 transition ${
-                    gender === 'M'
-                      ? 'border-blue-500 bg-blue-500/20 text-blue-200 ring-1 ring-blue-500/50'
-                      : 'border-white/10 bg-white/5 text-slate-400 hover:border-blue-500/40 hover:bg-blue-500/10'
-                  }`}
+                  onClick={handleGenerateRandomName}
+                  className="rounded-xl border border-amber-500/40 bg-amber-500/20 px-3 py-2.5 text-xs font-bold text-amber-300 hover:bg-amber-500/30 transition flex items-center gap-1.5"
+                  title="Gerar nome aleat├│rio"
                 >
-                  ÔÖé´©Å Masculino
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setGender('F')}
-                  className={`flex-1 py-2.5 rounded-xl border font-bold flex items-center justify-center gap-2 transition ${
-                    gender === 'F'
-                      ? 'border-pink-500 bg-pink-500/20 text-pink-200 ring-1 ring-pink-500/50'
-                      : 'border-white/10 bg-white/5 text-slate-400 hover:border-pink-500/40 hover:bg-pink-500/10'
-                  }`}
-                >
-                  ÔÖÇ´©Å Feminino
+                  ­ƒÄ▓ Aleat├│rio
                 </button>
               </div>
             </div>
 
-            {/* 3. Escolha da Ra├ºa */}
+            {/* 2. Escolha da Ra├ºa */}
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-amber-300 mb-2">
-                3. Escolha a Ra├ºa ({currentRaceObj.name})
+                2. Escolha a Ra├ºa ({currentRaceObj.name})
               </label>
               <div className="grid grid-cols-3 gap-2">
                 {Object.values(RACES_INFO).map((r) => {
@@ -380,10 +232,10 @@ export const CharacterCreation: React.FC<CharacterCreationProps> = ({
               </div>
             </div>
 
-            {/* 4. Escolha da Classe Inicial */}
+            {/* 3. Escolha da Classe Inicial */}
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-amber-300 mb-2">
-                4. Classe Inicial
+                3. Classe Inicial
               </label>
               <div className="grid grid-cols-2 gap-3">
                 {currentRaceObj.allowedClasses.map((cls) => {
@@ -453,10 +305,6 @@ export const CharacterCreation: React.FC<CharacterCreationProps> = ({
               {/* Summary Stats */}
               <div className="mt-4 text-xs space-y-1.5 border-t border-white/10 pt-3 text-left">
                 <div className="flex justify-between">
-                  <span className="text-slate-400">G├¬nero:</span>
-                  <span className="font-bold text-amber-200">{gender === 'M' ? 'Masculino ÔÖé´©Å' : 'Feminino ÔÖÇ´©Å'}</span>
-                </div>
-                <div className="flex justify-between">
                   <span className="text-slate-400">Ra├ºa:</span>
                   <span className="font-bold text-amber-200">{currentRaceObj.name}</span>
                 </div>
@@ -498,34 +346,5 @@ export const CharacterCreation: React.FC<CharacterCreationProps> = ({
 
       </div>
     </div>
-  );
-}
-
-export default function App() {
-  const [created, setCreated] = useState<CharacterCreationData | null>(null);
-
-  if (created) {
-    return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0b0e17] p-4 text-white text-center">
-        <div className="max-w-md w-full rounded-2xl border border-amber-500/30 bg-black/50 p-6 shadow-2xl">
-          <h2 className="text-2xl font-bold text-amber-400 mb-4">Personagem Criado!</h2>
-          <pre className="text-left text-amber-100 bg-black/80 p-4 rounded-xl border border-white/10 text-sm overflow-x-auto">
-            {JSON.stringify(created, null, 2)}
-          </pre>
-          <button 
-            onClick={() => setCreated(null)}
-            className="mt-6 w-full px-6 py-3 bg-gradient-to-r from-amber-600 via-amber-500 to-yellow-500 hover:from-amber-500 hover:to-yellow-400 text-black font-bold uppercase tracking-wider rounded-xl transition shadow-lg"
-          >
-            Voltar
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <CharacterCreation 
-      onComplete={(data) => setCreated(data)} 
-    />
   );
 }
