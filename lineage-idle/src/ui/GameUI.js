@@ -199,27 +199,137 @@ export function showItemTooltip(e, item, state, callbacks = {}) {
     legendary: 'rgba(45,30,5,0.97)',
   };
 
-  // ─── Stats base diretos (atk, def, matk, etc.) ────────────────────────────
+  // ─── Stats base diretos com Comparativo Delta ────────────────────────────
   const STAT_KEYS = ['atk','def','matk','mdef','hp','mp','eva','crit','speed','lifesteal'];
   const STAT_LABEL = { atk:'ATK', def:'DEF', matk:'M.ATK', mdef:'M.DEF', hp:'HP', mp:'MP', eva:'EVA', crit:'CRIT', speed:'SPD', lifesteal:'LIFESTEAL' };
   const enchant = item.enchant || 0;
   const enchantMult = 1 + (enchant <= 3 ? enchant * 0.12 : (0.36 + (enchant - 3) * 0.15));
   const foundationMult = item.foundation ? 1.3 : 1;
 
+  // Comparativo contra o item atualmente equipado
+  let equippedStats = null;
+  if (!item.equipped && state && state.equipment && def.slot) {
+    const { resolveEquipSlot } = (typeof window !== 'undefined' && window.GameData) ? window.GameData : {};
+    const targetSlot = resolveEquipSlot ? resolveEquipSlot(def.slot, state.equipment) : def.slot;
+    const eqUid = state.equipment[targetSlot];
+    if (eqUid) {
+      const eqItem = state.inventory?.find(i => i.uid === eqUid);
+      const eqDef = eqItem ? gData?.ALL_ITEMS?.[eqItem.itemId] : null;
+      if (eqDef) {
+        const eqMult = eqItem.rarity ? (gData?.RARITY?.[eqItem.rarity]?.mult || 1) : 1;
+        const eqEnc = eqItem.enchant || 0;
+        const eqEncMult = 1 + (eqEnc <= 3 ? eqEnc * 0.12 : (0.36 + (eqEnc - 3) * 0.15));
+        const eqFoundMult = eqItem.foundation ? 1.3 : 1;
+        equippedStats = {};
+        for (const s of STAT_KEYS) {
+          if (eqDef[s]) {
+            equippedStats[s] = Math.floor(Number(eqDef[s]) * eqMult * eqEncMult * eqFoundMult);
+          }
+        }
+      }
+    }
+  }
+
   let statsHtml = '';
   for (const s of STAT_KEYS) {
     if (def[s]) {
       const v = Math.floor(Number(def[s]) * mult * enchantMult * foundationMult);
       const suffix = s === 'crit' ? '%' : '';
+      let deltaHtml = '';
+      if (equippedStats !== null) {
+        const eqV = equippedStats[s] || 0;
+        const diff = v - eqV;
+        if (diff > 0) deltaHtml = `<span style="color:#4ade80;font-size:10px;font-weight:bold;margin-left:5px;">(+${diff}${suffix})</span>`;
+        else if (diff < 0) deltaHtml = `<span style="color:#ef4444;font-size:10px;font-weight:bold;margin-left:5px;">(${diff}${suffix})</span>`;
+      }
       statsHtml += `<div style="display:flex;justify-content:space-between;font-size:11px;margin:1px 0;">`
         + `<span style="color:#aaa;">${STAT_LABEL[s]}</span>`
-        + `<span style="color:#e8d87e;font-weight:600;">+${v}${suffix}</span>`
+        + `<div><span style="color:#e8d87e;font-weight:600;">+${v}${suffix}</span>${deltaHtml}</div>`
         + `</div>`;
     }
   }
   const statsStr = statsHtml
     ? `<div style="margin:6px 0 2px;padding:4px 0;border-top:1px solid rgba(255,255,255,0.1);">${statsHtml}</div>`
     : '';
+
+  // ─── Set Bonus Preview (Visualização de Bônus de Conjunto) ───────────────
+  let setBonusStr = '';
+  const armorSets = gData?.ARMOR_SETS || {};
+  for (const [setKey, setDef] of Object.entries(armorSets)) {
+    if (!setDef) continue;
+    let isSetPiece = false;
+    if (setDef.pieces && Object.values(setDef.pieces).includes(def.id)) isSetPiece = true;
+    if (!isSetPiece && setDef.variantPieces) {
+      for (const list of Object.values(setDef.variantPieces)) {
+        if (Array.isArray(list) && list.includes(def.id)) { isSetPiece = true; break; }
+      }
+    }
+    if (!isSetPiece && setDef.shieldPiece && setDef.shieldPiece === def.id) isSetPiece = true;
+
+    if (isSetPiece) {
+      let equippedCount = 0;
+      let hasShield = false;
+      const totalReq = setDef.fullPieceCount || 5;
+
+      if (state && state.equipment && state.inventory) {
+        const slots = ['armor', 'helmet', 'boots', 'gloves', 'legs'];
+        for (const slot of slots) {
+          const uid = state.equipment[slot];
+          if (!uid) continue;
+          const eqItem = state.inventory.find(i => i.uid === uid);
+          if (!eqItem) continue;
+          const eqDef = gData?.ALL_ITEMS?.[eqItem.itemId];
+          if (!eqDef) continue;
+          const id = eqDef.id;
+          let matched = false;
+          if (setDef.pieces && Object.values(setDef.pieces).includes(id)) matched = true;
+          if (!matched && setDef.variantPieces) {
+            for (const list of Object.values(setDef.variantPieces)) {
+              if (Array.isArray(list) && list.includes(id)) { matched = true; break; }
+            }
+          }
+          if (matched) equippedCount++;
+        }
+        if (setDef.shieldPiece && state.equipment.shield) {
+          const shItem = state.inventory.find(i => i.uid === state.equipment.shield);
+          if (shItem && gData?.ALL_ITEMS?.[shItem.itemId]?.id === setDef.shieldPiece) hasShield = true;
+        }
+      }
+
+      let bonusLines = [];
+      if (setDef.bonuses) {
+        for (const [reqP, bObj] of Object.entries(setDef.bonuses)) {
+          const isReqActive = (equippedCount >= Number(reqP)) || (reqP === String(totalReq + 1) && hasShield && equippedCount >= totalReq);
+          const color = isReqActive ? '#4ade80' : '#888888';
+          const parts = [];
+          if (bObj.atk) parts.push(`+${bObj.atk} P.Atk`);
+          if (bObj.def) parts.push(`+${bObj.def} P.Def`);
+          if (bObj.matk) parts.push(`+${bObj.matk} M.Atk`);
+          if (bObj.mdef) parts.push(`+${bObj.mdef} M.Def`);
+          if (bObj.hp) parts.push(`+${bObj.hp} HP`);
+          if (bObj.mp) parts.push(`+${bObj.mp} MP`);
+          if (bObj.eva) parts.push(`+${bObj.eva} Eva`);
+          if (bObj.crit) parts.push(`+${bObj.crit}% Crit`);
+          if (bObj.speed) parts.push(`+${bObj.speed} Spd`);
+          if (bObj.primary) {
+            for (const [pk, pv] of Object.entries(bObj.primary)) {
+              parts.push(`+${pv} ${pk.toUpperCase()}`);
+            }
+          }
+          bonusLines.push(`<div style="color:${color}; font-size:10px; margin:1px 0;">• (${reqP} pçs): ${parts.join(', ')}</div>`);
+        }
+      }
+
+      setBonusStr = `<div style="margin-top:6px; padding-top:4px; border-top:1px dashed rgba(212,167,68,0.4);">
+        <div style="font-size:11px; font-weight:bold; color:#f4d58a; display:flex; justify-content:space-between; margin-bottom:2px;">
+          <span>🛡️ Set ${setDef.name}</span>
+          <span style="color:${equippedCount >= 2 ? '#4ade80' : '#d4a744'}; font-size:10px;">(${equippedCount}/${totalReq} equipados)</span>
+        </div>
+        ${bonusLines.join('')}
+      </div>`;
+      break;
+    }
+  }
 
   // ─── Afixos especiais ─────────────────────────────────────────────────────
   let affixesStr = '';
@@ -309,6 +419,7 @@ export function showItemTooltip(e, item, state, callbacks = {}) {
     <div style="color:#888;font-size:10px;text-transform:uppercase;margin-bottom:4px;">${def.slot ? def.slot.toUpperCase() : 'ITEM'}${def.req?.level ? ` · Req Lv.${def.req.level}` : ''}</div>
     ${statsStr}
     ${affixesStr}
+    ${setBonusStr}
     <div style="color:#777;font-size:10px;margin-top:4px;font-style:italic;">${escapeHTML(def.desc || '')}</div>
     <div style="color:#aaa;font-size:10px;margin-top:4px;">💰 Valor: <span style="color:#e8c870;font-weight:600;">${(def.price || 0).toLocaleString()}g</span></div>
     ${protectionBadge}
@@ -1023,37 +1134,73 @@ export function updateInventoryUI(state, callbacks = {}) {
 
 export function updateWarehouseUI(state, callbacks = {}) {
   ensureInventoryStyles();
-  const container = findElement('warehouse-grid');
-  const countEl = findElement('warehouse-slot-count');
-  if (!container) return;
+  const whStorageGrid = findElement('wh-storage-grid') || findElement('warehouse-grid');
+  const whInvGrid = findElement('wh-inventory-grid');
+  const storageCountEl = findElement('wh-storage-count') || findElement('warehouse-slot-count');
+  const invCountEl = findElement('wh-inv-count');
+
+  if (!whStorageGrid && !whInvGrid) return;
 
   state.warehouse = state.warehouse || [];
-  const maxSlots = getMaxWarehouseSlots();
-  if (countEl) countEl.textContent = `${state.warehouse.length} / ${maxSlots}`;
+  const maxWhSlots = getMaxWarehouseSlots();
+  const maxInvSlots = getMaxInventorySlots(state);
 
-  container.innerHTML = '';
+  if (storageCountEl) storageCountEl.textContent = `${state.warehouse.length} / ${maxWhSlots} slots`;
+  if (invCountEl) invCountEl.textContent = `${state.inventory?.length || 0} / ${maxInvSlots} slots`;
 
-  for (const item of state.warehouse) {
-    const def = getItemDef(item.itemId);
-    if (!def) continue;
+  // 1. Render Right Side: Warehouse Items
+  if (whStorageGrid) {
+    whStorageGrid.innerHTML = '';
+    for (const item of state.warehouse) {
+      const def = getItemDef(item.itemId);
+      if (!def) continue;
 
-    const slotEl = mkEl('div');
-    const rarity = item.rarity || 'common';
-    slotEl.className = `inv-slot rarity-${rarity}`;
-    slotEl.dataset.uid = item.uid;
+      const slotEl = mkEl('div');
+      const rarity = item.rarity || 'common';
+      slotEl.className = `inv-slot rarity-${rarity}`;
+      slotEl.dataset.uid = item.uid;
 
-    const countBadge = (item.count && item.count > 1) ? `<span class="qty">${item.count}</span>` : '';
+      const countBadge = (item.count && item.count > 1) ? `<span class="qty">${item.count}</span>` : '';
+      slotEl.innerHTML = `<span class="item-icon">${getItemIcon(def || item)}</span>${countBadge}`;
+      slotEl.title = def.name;
 
-    slotEl.innerHTML = `<span class="item-icon">${getItemIcon(def || item)}</span>${countBadge}`;
+      slotEl.onmouseenter = (e) => showItemTooltip(e, item, state, callbacks);
+      slotEl.onmouseleave = () => hideItemTooltip();
+      slotEl.onclick = () => {
+        if (callbacks.withdrawFromWarehouse) callbacks.withdrawFromWarehouse(item.uid);
+        else if (window.withdrawFromWarehouse) window.withdrawFromWarehouse(item.uid);
+      };
 
-    slotEl.title = def.name;
-    slotEl.onmouseenter = (e) => showItemTooltip(e, item, state, callbacks);
-    slotEl.onmouseleave = () => hideItemTooltip();
-    slotEl.onclick = () => {
-      if (callbacks.withdrawFromWarehouse) callbacks.withdrawFromWarehouse(item.uid);
-    };
+      whStorageGrid.appendChild(slotEl);
+    }
+  }
 
-    container.appendChild(slotEl);
+  // 2. Render Left Side: Inventory Items for Warehouse view
+  if (whInvGrid) {
+    whInvGrid.innerHTML = '';
+    const unequipped = (state.inventory || []).filter(i => i && i.itemId && !i.equipped);
+    for (const item of unequipped) {
+      const def = getItemDef(item.itemId);
+      if (!def) continue;
+
+      const slotEl = mkEl('div');
+      const rarity = item.rarity || 'common';
+      slotEl.className = `inv-slot rarity-${rarity}`;
+      slotEl.dataset.uid = item.uid;
+
+      const countBadge = (item.count && item.count > 1) ? `<span class="qty">${item.count}</span>` : '';
+      slotEl.innerHTML = `<span class="item-icon">${getItemIcon(def || item)}</span>${countBadge}`;
+      slotEl.title = def.name;
+
+      slotEl.onmouseenter = (e) => showItemTooltip(e, item, state, callbacks);
+      slotEl.onmouseleave = () => hideItemTooltip();
+      slotEl.onclick = () => {
+        if (callbacks.depositToWarehouse) callbacks.depositToWarehouse(item.uid, item.count || 1);
+        else if (window.depositToWarehouse) window.depositToWarehouse(item.uid, item.count || 1);
+      };
+
+      whInvGrid.appendChild(slotEl);
+    }
   }
 }
 

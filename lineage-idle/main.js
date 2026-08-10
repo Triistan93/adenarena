@@ -3951,6 +3951,52 @@ function depositAllToWarehouse() {
   }
 }
 
+function depositSelectedToWarehouse() {
+  const selectedSet = getSelectedSet(state);
+  if (!selectedSet || selectedSet.size === 0) {
+    log('Nenhum item selecionado na mochila. Marque os itens para guardar.', 'system');
+    return;
+  }
+  let movedCount = 0;
+  for (const uid of Array.from(selectedSet)) {
+    const item = state.inventory.find(i => i.uid === uid && !i.equipped);
+    if (item && depositToWarehouse(item.uid, item.count || 1)) {
+      movedCount++;
+      selectedSet.delete(uid);
+    }
+  }
+  if (movedCount > 0) {
+    log(`📦 ${movedCount} item(ns) selecionado(s) guardado(s) no Baú.`, 'loot');
+    updateAllUI(); save();
+  }
+}
+
+function depositMaterialsToWarehouse() {
+  const unequipped = state.inventory.filter(i => {
+    if (!i || i.equipped) return false;
+    const def = (typeof window !== 'undefined' && window.GameData) ? window.GameData?.ALL_ITEMS?.[i.itemId] : null;
+    if (!def) return false;
+    const slot = (def.slot || '').toLowerCase();
+    return ['consumable', 'material', 'scroll', 'powerup', 'potion', 'food', 'spellbook'].includes(slot) || !!def.stack;
+  });
+  if (unequipped.length === 0) {
+    log('Nenhum material ou consumível desequipado para guardar.', 'system');
+    return;
+  }
+  let movedCount = 0;
+  for (const item of [...unequipped]) {
+    if (depositToWarehouse(item.uid, item.count || 1)) {
+      movedCount++;
+    } else {
+      break;
+    }
+  }
+  if (movedCount > 0) {
+    log(`📥 ${movedCount} material(is)/consumível(is) guardado(s) no Baú.`, 'loot');
+    updateAllUI(); save();
+  }
+}
+
 function withdrawAllFromWarehouse() {
   if (!state.warehouse || state.warehouse.length === 0) {
     log('O Baú está vazio.', 'system');
@@ -3966,6 +4012,26 @@ function withdrawAllFromWarehouse() {
   }
   if (movedCount > 0) {
     log(`🎒 ${movedCount} item(ns) retirado(s) do Baú.`, 'loot');
+    updateAllUI(); save();
+  }
+}
+
+function withdrawSelectedFromWarehouse() {
+  const selectedSet = getSelectedSet(state);
+  if (!selectedSet || selectedSet.size === 0) {
+    log('Nenhum item selecionado no Baú. Marque os itens para retirar.', 'system');
+    return;
+  }
+  let movedCount = 0;
+  for (const uid of Array.from(selectedSet)) {
+    const item = (state.warehouse || []).find(i => i.uid === uid);
+    if (item && withdrawFromWarehouse(item.uid, item.count || 1)) {
+      movedCount++;
+      selectedSet.delete(uid);
+    }
+  }
+  if (movedCount > 0) {
+    log(`🎒 ${movedCount} item(ns) selecionado(s) retirado(s) do Baú.`, 'loot');
     updateAllUI(); save();
   }
 }
@@ -5052,10 +5118,11 @@ export function init() {
     // Expose global action handlers to window for inline HTML handlers & global events
     window.registerCodexItem = registerCodexItem;
     window.buyItem = buyItem;
-    window.depositToWarehouse = depositToWarehouse;
-    window.withdrawFromWarehouse = withdrawFromWarehouse;
     window.depositAllToWarehouse = depositAllToWarehouse;
+    window.depositSelectedToWarehouse = depositSelectedToWarehouse;
+    window.depositMaterialsToWarehouse = depositMaterialsToWarehouse;
     window.withdrawAllFromWarehouse = withdrawAllFromWarehouse;
+    window.withdrawSelectedFromWarehouse = withdrawSelectedFromWarehouse;
     window.selectDollForSynth = selectDollForSynth;
     window.synthesizeDolls = synthesizeDolls;
     window.craftSpecialRecipe = craftSpecialRecipe;
