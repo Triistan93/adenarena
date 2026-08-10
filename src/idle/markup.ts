@@ -259,7 +259,7 @@ export const IDLE_MARKUP = `
               <!-- Left Panel: 3-column Paperdoll Equipment Grid + Stats -->
               <div class="l2inv-left-paperdoll">
                 <div class="l2inv-paperdoll-grid">
-                  <!-- Column 1 (Left - 6 slots) -->
+                  <!-- Column 1 (Left - 7 slots) -->
                   <div class="l2inv-doll-col">
                     <div class="l2inv-pd-slot equip-slot" data-slot="hair1" title="Acessório / Cabelo 1">
                       <span class="l2inv-pd-icon">👒</span>
@@ -280,6 +280,10 @@ export const IDLE_MARKUP = `
                     <div class="l2inv-pd-slot equip-slot" data-slot="ring1" title="Anel 1">
                       <span class="l2inv-pd-icon">💍</span>
                       <span class="l2inv-pd-item" id="pd-item-ring1"></span>
+                    </div>
+                    <div class="l2inv-pd-slot equip-slot" data-slot="belt" title="Cinto">
+                      <span class="l2inv-pd-icon">🪢</span>
+                      <span class="l2inv-pd-item" id="pd-item-belt"></span>
                     </div>
                     <div class="l2inv-pd-slot equip-slot" data-slot="brooch" title="Broche (Estojo de Joias)">
                       <span class="l2inv-pd-icon">❇️</span>

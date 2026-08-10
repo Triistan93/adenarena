@@ -901,8 +901,10 @@ function updateStatsUI() {
   const _spaEl = el('sp-available'); if (_spaEl) _spaEl.textContent = state.sp;
   const _gtEl = el('gold-text'); if (_gtEl) _gtEl.textContent = state.gold.toLocaleString();
   const _sgdEl = el('shop-gold'); if (_sgdEl) _sgdEl.textContent = state.gold.toLocaleString();
-  const _cl2El = el('craft-level'); if (_cl2El) _cl2El.textContent = state.craftLevel;
-  const _isEl = el('inv-slots'); if (_isEl) _isEl.textContent = `${state.inventory.length}/50`;
+  const _maxInvSlots = getMaxInventorySlots(state);
+  const _isEl = el('inv-slots'); if (_isEl) _isEl.textContent = `${state.inventory.length}/${_maxInvSlots}`;
+  const _invSlotsCnt = el('inv-slots-count'); if (_invSlotsCnt) _invSlotsCnt.textContent = `${state.inventory.length}`;
+  const _maxInvCnt = el('max-inv-slots'); if (_maxInvCnt) _maxInvCnt.textContent = `${_maxInvSlots}`;
 
   const abEl = el('active-buffs');
   if (abEl) {
@@ -928,18 +930,15 @@ function updateDetailedEquipStatsUI() {
   const spdEl = el('l2stat-speed'); if (spdEl) spdEl.textContent = stats.speed;
 
   const pStats = state.primaryStats || {};
-  const hasPrimary = (pStats.str > 0 || pStats.dex > 0 || pStats.con > 0 || pStats.int > 0 || pStats.wit > 0 || pStats.men > 0);
   const primBox = el('l2inv-primary-box');
   if (primBox) {
-    primBox.style.display = hasPrimary ? 'block' : 'none';
-    if (hasPrimary) {
-      const strEl = el('l2stat-str'); if (strEl) strEl.textContent = pStats.str || 0;
-      const dexEl = el('l2stat-dex'); if (dexEl) dexEl.textContent = pStats.dex || 0;
-      const conEl = el('l2stat-con'); if (conEl) conEl.textContent = pStats.con || 0;
-      const intEl = el('l2stat-int'); if (intEl) intEl.textContent = pStats.int || 0;
-      const witEl = el('l2stat-wit'); if (witEl) witEl.textContent = pStats.wit || 0;
-      const menEl = el('l2stat-men'); if (menEl) menEl.textContent = pStats.men || 0;
-    }
+    primBox.style.display = 'block';
+    const strEl = el('l2stat-str'); if (strEl) strEl.textContent = pStats.str || 0;
+    const dexEl = el('l2stat-dex'); if (dexEl) dexEl.textContent = pStats.dex || 0;
+    const conEl = el('l2stat-con'); if (conEl) conEl.textContent = pStats.con || 0;
+    const intEl = el('l2stat-int'); if (intEl) intEl.textContent = pStats.int || 0;
+    const witEl = el('l2stat-wit'); if (witEl) witEl.textContent = pStats.wit || 0;
+    const menEl = el('l2stat-men'); if (menEl) menEl.textContent = pStats.men || 0;
   }
 
   const defaultSlotIcons = {

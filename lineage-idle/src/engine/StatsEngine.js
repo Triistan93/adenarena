@@ -439,11 +439,12 @@ export function getStats(state) {
   const raceStats = race?.stats || {};
   const clsBase = cls?.base || {};
 
-  let baseAtk  = (Number(state.base?.atk)  || 0) + (Number(raceStats.atk)  || 0) + (Number(clsBase.atk)  || 0) + (state.level * 3) + 15;
-  let baseDef  = (Number(state.base?.def)  || 0) + (Number(raceStats.def)  || 0) + (Number(clsBase.def)  || 0) + (state.level * 2) + 10;
-  let baseEva  = (Number(state.base?.eva)  || 0) + (Number(raceStats.eva)  || 0) + (Number(clsBase.eva)  || 0);
-  let baseMatk = (Number(state.base?.matk) || 0) + (Number(raceStats.matk) || 0) + (Number(clsBase.matk) || 0) + (state.level * 3) + 15;
-  let baseMdef = (Number(state.base?.mdef) || 0) + (Number(raceStats.mdef) || 0) + (Number(clsBase.mdef) || 0) + (state.level * 2) + 8;
+  const lvl = Number(state?.level) || 1;
+  let baseAtk  = (Number(state?.base?.atk)  || 0) + (Number(raceStats.atk)  || 0) + (Number(clsBase.atk)  || 0) + (lvl * 3) + 15;
+  let baseDef  = (Number(state?.base?.def)  || 0) + (Number(raceStats.def)  || 0) + (Number(clsBase.def)  || 0) + (lvl * 2) + 10;
+  let baseEva  = (Number(state?.base?.eva)  || 0) + (Number(raceStats.eva)  || 0) + (Number(clsBase.eva)  || 0);
+  let baseMatk = (Number(state?.base?.matk) || 0) + (Number(raceStats.matk) || 0) + (Number(clsBase.matk) || 0) + (lvl * 3) + 15;
+  let baseMdef = (Number(state?.base?.mdef) || 0) + (Number(raceStats.mdef) || 0) + (Number(clsBase.mdef) || 0) + (lvl * 2) + 8;
 
   baseAtk  += sk('wpnMastF') * 4.5;
   baseAtk  += sk('weaponMastM') * 1.5;
