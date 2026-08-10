@@ -156,7 +156,7 @@ export const IDLE_MARKUP = `
         </div>
         <div class="tab-content">
           <!-- Character Tab -->
-          <div id="tab-character" class="tab-pane active">
+          <div id="tab-character" class="tab-pane">
             <div class="portrait" id="portrait">
               <div class="portrait-aura" id="portrait-aura"></div>
               <div class="portrait-art" id="portrait-art"></div>
@@ -602,7 +602,7 @@ export const IDLE_MARKUP = `
           </div>
 
           <!-- Zones & Raids Tab -->
-          <div id="tab-zones" class="tab-pane">
+          <div id="tab-zones" class="tab-pane active">
             <div class="zone-head-tabs">
               <button class="zone-subtab active" data-zonetab="map">🗺️ Zonas de Caça</button>
               <button class="zone-subtab" data-zonetab="raids">🐉 Raids de Chefões Epicos</button>

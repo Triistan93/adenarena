@@ -2126,13 +2126,14 @@ function updateExpeditionsUI() {
 }
 
 function updateAllUI() {
+  state = getState();
   uiInitTooltipEvents();
   updateGameModeUI();
   safeUiUpdate('zone-bg', updateZoneBackground);
   safeUiUpdate('stats', updateStatsUI);
-  safeUiUpdate('equipment', () => updateEquipmentUI(state));
+  safeUiUpdate('equipment', updateEquipmentUI);
   safeUiUpdate('skills', updateSkillUI);
-  safeUiUpdate('inventory', () => updateInventoryUI(state));
+  safeUiUpdate('inventory', updateInventoryUI);
   safeUiUpdate('shop', updateShopUI);
   safeUiUpdate('craft', updateCraftUI);
   safeUiUpdate('alchemy', updateAlchemyUI);
@@ -2145,7 +2146,7 @@ function updateAllUI() {
   safeUiUpdate('subclasses', renderSubclassesUI);
   safeUiUpdate('quests', updateQuestsUI);
   safeUiUpdate('tower', updateTowerUI);
-  safeUiUpdate('warehouse', () => updateWarehouseUI(state));
+  safeUiUpdate('warehouse', updateWarehouseUI);
   safeUiUpdate('tab-badges', updateTabBadgesUI);
   setupVfxQualityControl();
 }
@@ -3709,6 +3710,7 @@ function attachGlobalErrorHandlers() {
 const tabScrollMap = {};
 
 export function openPanel(tabName) {
+  state = getState();
   const targetTab = (!tabName || tabName === 'zones' || tabName === 'combat' || tabName === 'close') ? 'zones' : tabName;
 
   const root = document.getElementById('idle-host')?.shadowRoot || document;
@@ -3725,7 +3727,7 @@ export function openPanel(tabName) {
     pane.scrollTop = tabScrollMap[pane.id];
   }
 
-  if (targetTab === 'inventory') safeUiUpdate('inventory', () => updateInventoryUI(state));
+  if (targetTab === 'inventory') safeUiUpdate('inventory', updateInventoryUI);
   else if (targetTab === 'character') safeUiUpdate('character', updateCharacterUI);
   else if (targetTab === 'skills') safeUiUpdate('skills', updateSkillUI);
   else if (targetTab === 'shop') safeUiUpdate('shop', updateShopUI);
@@ -3740,11 +3742,9 @@ export function openPanel(tabName) {
   else if (targetTab === 'magiclamp') safeUiUpdate('magiclamp', updateMagicLampUI);
   else if (targetTab === 'quests') safeUiUpdate('quests', updateQuestsUI);
   else if (targetTab === 'tower') safeUiUpdate('tower', updateTowerUI);
-  else if (targetTab === 'warehouse') safeUiUpdate('warehouse', () => updateWarehouseUI(state));
+  else if (targetTab === 'warehouse') safeUiUpdate('warehouse', updateWarehouseUI);
 
-  // Tutorial: exibe guia automaticamente na 1ª visita à aba; injeta botão persistente
   try {
-    state = getState();
     checkTabGuide(targetTab, state, save);
   } catch(e) { /* silently fail — tutorial não bloqueia o jogo */ }
 }
