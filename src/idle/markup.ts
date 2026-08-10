@@ -261,9 +261,9 @@ export const IDLE_MARKUP = `
                 <div class="l2inv-paperdoll-grid">
                   <!-- Column 1 (Left - 6 slots) -->
                   <div class="l2inv-doll-col">
-                    <div class="l2inv-pd-slot equip-slot" data-slot="hair" title="Máscara 1 / Acessório">
+                    <div class="l2inv-pd-slot equip-slot" data-slot="hair1" title="Acessório / Cabelo 1">
                       <span class="l2inv-pd-icon">👒</span>
-                      <span class="l2inv-pd-item" id="pd-item-hair"></span>
+                      <span class="l2inv-pd-item" id="pd-item-hair1"></span>
                     </div>
                     <div class="l2inv-pd-slot equip-slot" data-slot="earring1" title="Brinco 1">
                       <span class="l2inv-pd-icon">💎</span>
@@ -277,13 +277,13 @@ export const IDLE_MARKUP = `
                       <span class="l2inv-pd-icon">⚔️</span>
                       <span class="l2inv-pd-item" id="pd-item-weapon"></span>
                     </div>
-                    <div class="l2inv-pd-slot equip-slot" data-slot="ring" title="Anel 1">
+                    <div class="l2inv-pd-slot equip-slot" data-slot="ring1" title="Anel 1">
                       <span class="l2inv-pd-icon">💍</span>
-                      <span class="l2inv-pd-item" id="pd-item-ring"></span>
+                      <span class="l2inv-pd-item" id="pd-item-ring1"></span>
                     </div>
-                    <div class="l2inv-pd-slot equip-slot" data-slot="talisman" title="Talismã">
-                      <span class="l2inv-pd-icon">🔮</span>
-                      <span class="l2inv-pd-item" id="pd-item-talisman"></span>
+                    <div class="l2inv-pd-slot equip-slot" data-slot="brooch" title="Broche (Estojo de Joias)">
+                      <span class="l2inv-pd-icon">❇️</span>
+                      <span class="l2inv-pd-item" id="pd-item-brooch"></span>
                     </div>
                   </div>
 
@@ -309,15 +309,15 @@ export const IDLE_MARKUP = `
                       <span class="l2inv-pd-icon">👢</span>
                       <span class="l2inv-pd-item" id="pd-item-boots"></span>
                     </div>
-                    <div class="l2inv-pd-slot equip-slot" data-slot="agathion" title="Agathion">
+                    <div class="l2inv-pd-slot equip-slot" data-slot="agathion_bracelet" title="Bracelete de Agathion">
                       <span class="l2inv-pd-icon">🧚‍♂️</span>
-                      <span class="l2inv-pd-item" id="pd-item-agathion"></span>
+                      <span class="l2inv-pd-item" id="pd-item-agathion_bracelet"></span>
                     </div>
                   </div>
 
                   <!-- Column 3 (Right - 6 slots) -->
                   <div class="l2inv-doll-col">
-                    <div class="l2inv-pd-slot equip-slot" data-slot="hair2" title="Máscara 2">
+                    <div class="l2inv-pd-slot equip-slot" data-slot="hair2" title="Acessório / Cabelo 2">
                       <span class="l2inv-pd-icon">🎭</span>
                       <span class="l2inv-pd-item" id="pd-item-hair2"></span>
                     </div>
@@ -337,9 +337,9 @@ export const IDLE_MARKUP = `
                       <span class="l2inv-pd-icon">💍</span>
                       <span class="l2inv-pd-item" id="pd-item-ring2"></span>
                     </div>
-                    <div class="l2inv-pd-slot equip-slot" data-slot="belt" title="Cinto">
-                      <span class="l2inv-pd-icon">🪢</span>
-                      <span class="l2inv-pd-item" id="pd-item-belt"></span>
+                    <div class="l2inv-pd-slot equip-slot" data-slot="talisman_bracelet" title="Bracelete de Talismã">
+                      <span class="l2inv-pd-icon">🔮</span>
+                      <span class="l2inv-pd-item" id="pd-item-talisman_bracelet"></span>
                     </div>
                   </div>
                 </div>
@@ -362,7 +362,7 @@ export const IDLE_MARKUP = `
                 </div>
 
                 <!-- Primary Attributes Section (STR/DEX/CON/INT/WIT/MEN) -->
-                <div class="l2inv-primary-box" id="l2inv-primary-box" style="display:none; margin-top:6px; padding:6px 8px; background:rgba(0,0,0,0.5); border:1px solid rgba(212,167,68,0.3); border-radius:4px;">
+                <div class="l2inv-primary-box" id="l2inv-primary-box" style="margin-top:6px; padding:6px 8px; background:rgba(0,0,0,0.5); border:1px solid rgba(212,167,68,0.3); border-radius:4px;">
                   <div style="font-size:10px; font-weight:bold; color:var(--gilt-bright); text-transform:uppercase; margin-bottom:4px; letter-spacing:0.5px;">Atributos Primários</div>
                   <div class="l2inv-stat-row" style="font-size:10px;">
                     <span>STR: <strong id="l2stat-str" style="color:#10b981;">0</strong></span>
@@ -414,7 +414,6 @@ export const IDLE_MARKUP = `
                     <button id="select-uncommons-btn" class="l2inv-pill-btn" title="Selecionar incomuns">✓ Incomum</button>
                     <button id="select-all-btn" class="l2inv-pill-btn" title="Selecionar todos">✓ Todos</button>
                     <button id="clear-selection-btn" class="l2inv-pill-btn" title="Limpar seleções">✕</button>
-                    <button id="open-compound-btn" class="l2inv-pill-btn" onclick="window.openCompoundModal()" title="Abrir Sistema de Compound" style="background:linear-gradient(135deg,rgba(168,85,247,0.3),rgba(109,40,217,0.3)); border-color:rgba(168,85,247,0.6); color:#c084fc; font-weight:bold;">🧪 COMPOUND</button>
                   </div>
                 </div>
 
@@ -428,6 +427,8 @@ export const IDLE_MARKUP = `
               <div class="l2inv-bottom-left-actions">
                 <button class="l2inv-icon-btn" id="nav-craft-btn" title="Abrir Forja / Crafting">⚒️</button>
                 <button class="l2inv-icon-btn" id="auto-equip-btn" title="Equipar Melhores Itens">⚡</button>
+                <button class="l2inv-icon-btn" id="organize-inv-btn" title="Organizar Mochila (Fundir Pilhas e Ordenar)">🧹</button>
+                <button class="l2inv-icon-btn" id="open-compound-btn" onclick="window.openCompoundModal()" title="Abrir Sistema de Compound / Síntese" style="color:#c084fc;">🔮 Síntese</button>
               </div>
 
               <div class="l2inv-bottom-right-info">
@@ -435,9 +436,12 @@ export const IDLE_MARKUP = `
                   <span class="l2inv-gold-icon">🪙</span>
                   <span class="l2inv-gold-val" id="gold-text">0</span>
                 </div>
-                <div class="l2inv-weight-gauge" title="Capacidade do Alforge">
+                <div class="l2inv-weight-gauge" title="Capacidade da Mochila">
                   <span class="l2inv-weight-icon">🎒</span>
-                  <span id="inv-slots">0/50</span>
+                  <span id="inv-slots">0/150</span>
+                </div>
+              </div>
+            </div>
                 </div>
                 <div class="l2inv-trash-actions">
                   <button id="sell-selected-btn" class="l2inv-trash-btn sell" disabled title="Vender Itens Selecionados">💰 Vender</button>

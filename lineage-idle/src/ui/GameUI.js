@@ -248,8 +248,9 @@ export function showItemTooltip(e, item, state, callbacks = {}) {
 
   if (isInventoryItem) {
     actionsHtml = `<div style="display:flex;gap:4px;margin-top:8px;flex-wrap:wrap;">`;
-    const isEquipSlot = ['weapon','armor','helmet','gloves','boots','ring','legs','shield',
-      'cloak','belt','necklace','earring','hair','agathion','sigil'].includes(def.slot);
+    const isEquipSlot = ['weapon','armor','helmet','gloves','boots','ring','ring1','ring2','legs','shield',
+      'cloak','belt','necklace','earring','earring1','earring2','hair','hair1','hair2','agathion','agathion_bracelet',
+      'brooch','talisman_bracelet','talisman','jewel','sigil'].includes(def.slot);
     const isConsumable = ['consumable','scroll','powerup','potion','food'].includes(def.slot);
 
     if (isEquipSlot) {
@@ -269,25 +270,16 @@ export function showItemTooltip(e, item, state, callbacks = {}) {
         border-radius:4px;color:#70e898;font-size:11px;cursor:pointer;font-weight:600;">▶ Usar</button>`;
     }
     if (!item.equipped) {
+      const sellPrice = Math.floor((def.price || 10) * 0.4 * mult);
       actionsHtml += `<button data-tt-action="salvage" data-uid="${item.uid}"
         style="padding:5px 8px;background:linear-gradient(180deg,#4a2a1a,#200a0a);border:1px solid #b04a3a;
         border-radius:4px;color:#f88870;font-size:11px;cursor:pointer;font-weight:600;">🔨 Desmontar</button>`;
       actionsHtml += `<button data-tt-action="sell" data-uid="${item.uid}"
         style="padding:5px 8px;background:linear-gradient(180deg,#4a4a1a,#20200a);border:1px solid #b0b03a;
-        border-radius:4px;color:#f8f870;font-size:11px;cursor:pointer;font-weight:600;">💰 Vender</button>`;
+        border-radius:4px;color:#f8f870;font-size:11px;cursor:pointer;font-weight:600;">💰 Vender (${sellPrice}g)</button>`;
     }
     actionsHtml += `</div>`;
   }
-  const sellPrice = Math.floor((def.price || 10) * 0.4 * mult);
-  if (!item.equipped) {
-    actionsHtml += `<button data-tt-action="sell" data-uid="${item.uid}"
-      style="flex:1;padding:5px 8px;background:linear-gradient(180deg,#3a2010,#1a0a00);border:1px solid #804020;
-      border-radius:4px;color:#e88050;font-size:11px;cursor:pointer;font-weight:600;">💰 ${sellPrice}g</button>`;
-    actionsHtml += `<button data-tt-action="salvage" data-uid="${item.uid}"
-      style="flex:1;padding:5px 8px;background:linear-gradient(180deg,#2a1a2a,#0a0a10);border:1px solid #604070;
-      border-radius:4px;color:#c878d8;font-size:11px;cursor:pointer;font-weight:600;">⚒ Break</button>`;
-  }
-  actionsHtml += `</div>`;
 
   tooltip.style.background = RARITY_BG[rarity] || RARITY_BG.common;
   tooltip.style.boxShadow  = `${RARITY_GLOW[rarity] || 'none'}, 0 4px 20px rgba(0,0,0,0.8)`;
@@ -370,12 +362,12 @@ const CONSUMABLE_SLOTS = ['consumable', 'potion', 'scroll', 'food', 'powerup'];
 const MATERIAL_SLOTS = ['material', 'gem', 'ore', 'craft'];
 
 const SLOT_ICONS = {
-  hair: '🎭', helmet: '🪖', hair2: '👑',
-  earring1: '💎', armor: '🦺', earring2: '💎',
+  hair1: '👒', hair2: '🎭', helmet: '🪖',
+  earring1: '💎', armor: '🛡️', earring2: '💎',
   necklace: '📿', legs: '👖', cloak: '🧥',
   weapon: '⚔️', gloves: '🧤', shield: '🛡️',
   ring1: '💍', boots: '👢', ring2: '💍',
-  talisman: '🧿', agathion: '👼', belt: '🎗️'
+  brooch: '❇️', agathion_bracelet: '🧚‍♂️', talisman_bracelet: '🔮', belt: '🪢'
 };
 
 function findEquipmentSlot(slot) {
