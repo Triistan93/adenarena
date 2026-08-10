@@ -1,6 +1,6 @@
-// ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
-// CLASSES ÔÇö Kamael (Trooper, Berserker, Soulhound, Trickster & Samurai)
-// ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
+// ═══════════════════════════════════════════
+// CLASSES — Kamael (Trooper, Berserker, Soulhound, Trickster & Samurai)
+// ═══════════════════════════════════════════
 
 export const KAMAEL_CLASSES = {
   soulbreaker: {
@@ -9,7 +9,7 @@ export const KAMAEL_CLASSES = {
     race: 'kamael',
     archetype: 'soulbreaker',
     stage: 0,
-    desc: 'Classe base de combate com absor├º├úo de almas e rapieira.',
+    desc: 'Classe base de combate com absorção de almas e rapieira.',
     base: { atk: 15, def: 8, hp: 95, mp: 40, eva: 8, crit: 8, matk: 12, mdef: 6 },
     skillTree: 'soulHound'
   },
@@ -31,7 +31,7 @@ export const KAMAEL_CLASSES = {
     race: 'kamael',
     archetype: 'soulbreaker',
     stage: 2,
-    desc: 'Guerreiro fren├®tico de espada antiga e arremessos ao alvo.',
+    desc: 'Guerreiro frenético de espada antiga e arremessos ao alvo.',
     base: { atk: 64, def: 20, hp: 340, mp: 90, eva: 16, crit: 18, mdef: 18 },
     skillTree: 'doombringer'
   },
@@ -42,7 +42,7 @@ export const KAMAEL_CLASSES = {
     race: 'kamael',
     archetype: 'soulbreaker',
     stage: 3,
-    desc: 'Trazedor da ru├¡na com investidas furiadas e corte de asas.',
+    desc: 'Trazedor da ruína com investidas furiadas e corte de asas.',
     base: { atk: 128, def: 40, hp: 620, mp: 160, eva: 32, crit: 32, mdef: 36 },
     skillTree: 'doombringer'
   },
@@ -53,7 +53,7 @@ export const KAMAEL_CLASSES = {
     race: 'kamael',
     archetype: 'soulbreaker',
     stage: 2,
-    desc: 'Ca├ºador de almas h├¡brido de florete f├¡sico e magia negra.',
+    desc: 'Caçador de almas híbrido de florete físico e magia negra.',
     base: { atk: 62, def: 18, hp: 320, mp: 140, eva: 20, crit: 20, matk: 55, mdef: 25 },
     skillTree: 'soulHound'
   },
@@ -64,7 +64,7 @@ export const KAMAEL_CLASSES = {
     race: 'kamael',
     archetype: 'soulbreaker',
     stage: 3,
-    desc: 'Mestre das almas com Leopold e estocadas m├ígicas fulminantes.',
+    desc: 'Mestre das almas com Leopold e estocadas mágicas fulminantes.',
     base: { atk: 124, def: 35, hp: 580, mp: 280, eva: 40, crit: 36, matk: 110, mdef: 50 },
     skillTree: 'soulHound'
   },
@@ -86,7 +86,7 @@ export const KAMAEL_CLASSES = {
     race: 'kamael',
     archetype: 'soulbreaker',
     stage: 2,
-    desc: 'Especialista em besta de disparo r├ípido e esquiva sombria.',
+    desc: 'Especialista em besta de disparo rápido e esquiva sombria.',
     base: { atk: 60, def: 16, hp: 300, mp: 100, eva: 22, crit: 22, mdef: 20 },
     skillTree: 'trickster'
   },
@@ -119,7 +119,7 @@ export const KAMAEL_CLASSES = {
     race: 'kamael',
     archetype: 'soulbreaker',
     stage: 2,
-    desc: 'Espadachim Kamael do caminho do bushido e cortes r├ípidos.',
+    desc: 'Espadachim Kamael do caminho do bushido e cortes rápidos.',
     base: { atk: 65, def: 20, hp: 330, mp: 85, eva: 24, crit: 24, mdef: 20 },
     skillTree: 'samurai'
   },
@@ -130,7 +130,7 @@ export const KAMAEL_CLASSES = {
     race: 'kamael',
     archetype: 'soulbreaker',
     stage: 3,
-    desc: 'Mestre Kamael da katana com esp├¡rito do corte supremo.',
+    desc: 'Mestre Kamael da katana com espírito do corte supremo.',
     base: { atk: 132, def: 40, hp: 600, mp: 150, eva: 45, crit: 42, mdef: 40 },
     skillTree: 'samurai'
   }

@@ -1,20 +1,20 @@
 /**
- * rarity_sets.js ÔÇö Configura├º├Áes de Raridade, Slots de Equipamento e Conjuntos de Armaduras (Armor Sets).
+ * rarity_sets.js — Configurações de Raridade, Slots de Equipamento e Conjuntos de Armaduras (Armor Sets).
  */
 
 export const RARITY = {
   common: { name: 'Comum', mult: 1.0, color: '#9e9e9e', textClass: 'rarity-common', dropWeight: 70 },
   uncommon: { name: 'Incomum', mult: 1.4, color: '#10b981', textClass: 'rarity-uncommon', dropWeight: 20 },
   rare: { name: 'Raro', mult: 1.8, color: '#3b82f6', textClass: 'rarity-rare', dropWeight: 7 },
-  epic: { name: '├ëpico', mult: 2.4, color: '#a855f7', textClass: 'rarity-epic', dropWeight: 2.5 },
-  legendary: { name: 'Lend├írio', mult: 3.2, color: '#f59e0b', textClass: 'rarity-legendary', dropWeight: 0.5 }
+  epic: { name: 'Épico', mult: 2.4, color: '#a855f7', textClass: 'rarity-epic', dropWeight: 2.5 },
+  legendary: { name: 'Lendário', mult: 3.2, color: '#f59e0b', textClass: 'rarity-legendary', dropWeight: 0.5 }
 };
 
 export const SLOT = {
   weapon: 'Arma', armor: 'Armadura', helmet: 'Capacete', boots: 'Botas',
-  gloves: 'Luvas', ring: 'Anel', legs: 'Cal├ºa', shield: 'Escudo',
+  gloves: 'Luvas', ring: 'Anel', legs: 'Calça', shield: 'Escudo',
   necklace: 'Colar', earring: 'Brinco', belt: 'Cinto', cloak: 'Manto',
-  sigil: 'Sigil', hair: 'Acess├│rio', agathion: 'Agathion', consumable: 'Consum├¡vel', material: 'Material'
+  sigil: 'Sigil', hair: 'Acessório', agathion: 'Agathion', consumable: 'Consumível', material: 'Material'
 };
 
 export const ARMOR_SETS = {

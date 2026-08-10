@@ -1,5 +1,5 @@
 /**
- * index.js ÔÇö Ponto unificado de exporta├º├úo dos servi├ºos de regras de neg├│cio (Services).
+ * index.js — Ponto unificado de exportação dos serviços de regras de negócio (Services).
  */
 export * from './CharacterService.js';
 export * from './CraftService.js';

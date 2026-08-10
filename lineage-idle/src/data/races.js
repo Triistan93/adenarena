@@ -1,11 +1,11 @@
 /**
- * races.js ÔÇö Atributos base de Ra├ºas e bridge para EchoData do Lineage Idle.
- * Extra├¡do de lineage-idle/main.js (linhas 27-53)
+ * races.js — Atributos base de Raças e bridge para EchoData do Lineage Idle.
+ * Extraído de lineage-idle/main.js (linhas 27-53)
  */
 
 /**
- * Atributos base prim├írios por ra├ºa+arqu├®tipo.
- * Usados em getBaseAttributes() para c├ílculo de STR/CON/DEX/WIT/INT/MEN.
+ * Atributos base primários por raça+arquétipo.
+ * Usados em getBaseAttributes() para cálculo de STR/CON/DEX/WIT/INT/MEN.
  */
 export const RACE_BASE_ATTRIBUTES = {
   // Fighters
@@ -25,8 +25,8 @@ export const RACE_BASE_ATTRIBUTES = {
 };
 
 /**
- * Mapa de ra├ºas ÔÇö bridge para window.EchoData.RACES_ECHO.
- * Definido como getter para garantir leitura ap├│s todos os imports.
+ * Mapa de raças — bridge para window.EchoData.RACES_ECHO.
+ * Definido como getter para garantir leitura após todos os imports.
  * @type {Object}
  */
 export const RACES = (typeof window !== 'undefined' && window.EchoData)
@@ -34,7 +34,7 @@ export const RACES = (typeof window !== 'undefined' && window.EchoData)
   : {};
 
 /**
- * Mapa de classes ÔÇö bridge para window.EchoData.CLASSES_ECHO.
+ * Mapa de classes — bridge para window.EchoData.CLASSES_ECHO.
  * @type {Object}
  */
 export const CLASSES = (typeof window !== 'undefined' && window.EchoData)

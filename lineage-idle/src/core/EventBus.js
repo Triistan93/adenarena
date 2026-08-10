@@ -1,19 +1,19 @@
 /**
- * EventBus ÔÇö Sistema pub/sub simples para comunica├º├úo desacoplada entre m├│dulos.
+ * EventBus — Sistema pub/sub simples para comunicação desacoplada entre módulos.
  * Uso: EventBus.on('levelUp', cb)  /  EventBus.emit('levelUp', data)  /  EventBus.off('levelUp', cb)
  */
 const EventBus = (() => {
   const _handlers = {};
 
   return {
-    /** Inscreve um handler para um evento. Retorna fun├º├úo de cancelamento. */
+    /** Inscreve um handler para um evento. Retorna função de cancelamento. */
     on(event, handler) {
       if (!_handlers[event]) _handlers[event] = [];
       _handlers[event].push(handler);
       return () => this.off(event, handler);
     },
 
-    /** Cancela inscri├º├úo de um handler espec├¡fico. */
+    /** Cancela inscrição de um handler específico. */
     off(event, handler) {
       if (!_handlers[event]) return;
       _handlers[event] = _handlers[event].filter(h => h !== handler);
@@ -26,7 +26,7 @@ const EventBus = (() => {
       });
     },
 
-    /** Remove todos os handlers de um evento espec├¡fico. */
+    /** Remove todos os handlers de um evento específico. */
     clear(event) {
       delete _handlers[event];
     }

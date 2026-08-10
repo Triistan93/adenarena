@@ -75,7 +75,7 @@ canvas {
 }
 
 /* =========================================================
-   MODE SWITCH ÔÇö Top-left Collapsible Hamburger Menu
+   MODE SWITCH — Top-left Collapsible Hamburger Menu
    ========================================================= */
 .mode-menu-container {
   position: fixed;
@@ -286,3 +286,4 @@ canvas {
   font-weight: bold;
   color: #f2c660;
 }
+

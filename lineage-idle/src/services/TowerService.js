@@ -1,38 +1,39 @@
 /**
- * TowerService.js ÔÇö Motor da Torre da Insol├¬ncia (Tower of Insolence) do Lineage Idle.
+ * TowerService.js — Motor da Torre da Insolência (Tower of Insolence) do Lineage Idle.
  *
- * Respons├ível pela defini├º├úo de andares (1 a 100), desafios de chefes de andar,
- * b├┤nus permanente acumulativo por andar conclu├¡do e sistema de Varredura Di├íria (Sweep).
+ * Responsável pela definição de andares (1 a 100), desafios de chefes de andar,
+ * bônus permanente acumulativo por andar concluído e sistema de Varredura Diária (Sweep).
  */
 
 import { D } from '../core/GameConfig.js';
 import { MONSTERS } from '../data/monsters.js';
 import { addToInventory } from './InventoryService.js';
 import { triggerQuestEvent } from './QuestService.js';
+import { startCombat, stopCombat } from '../engine/CombatEngine.js';
 
 /**
- * Retorna as propriedades e estat├¡sticas de um andar da Torre.
- * @param {number} floorNum ÔÇö N├║mero do andar (1 a 100)
- * @returns {Object} Defini├º├úo do andar
+ * Retorna as propriedades e estatísticas de um andar da Torre.
+ * @param {number} floorNum — Número do andar (1 a 100)
+ * @returns {Object} Definição do andar
  */
 export function getTowerFloorDef(floorNum) {
   const f = Math.max(1, Math.min(100, Number(floorNum) || 1));
   const isBoss = f % 10 === 0;
 
   const names = {
-    10: 'Hallate, o Guardi├úo da Torre (Boss)',
+    10: 'Hallate, o Guardião da Torre (Boss)',
     20: 'Kernea, a Imperatriz de Sangue (Boss)',
     30: 'Varan, o Arquiduque Sombrio (Boss)',
-    40: 'Kavatan, o Guardi├úo de Elmore (Boss)',
+    40: 'Kavatan, o Guardião de Elmore (Boss)',
     50: 'Baium, o Imperador Imortal (Boss)',
     60: 'Galaxia, a Primordial (Boss)',
-    70: 'Shielhead, o Tit├ú de A├ºo (Boss)',
+    70: 'Shielhead, o Titã de Aço (Boss)',
     80: 'Golkonda, o Destruidor de Reinos (Boss)',
-    90: 'Verdelet, o Dem├┤nio Guardi├úo (Boss)',
-    100: 'Arcanjo da Insol├¬ncia (Final Boss)'
+    90: 'Verdelet, o Demônio Guardião (Boss)',
+    100: 'Arcanjo da Insolência (Final Boss)'
   };
 
-  const name = names[f] || (isBoss ? `Guardi├úo do Andar ${f} (Boss)` : `Guerreiro de Insol├¬ncia Nv.${f}`);
+  const name = names[f] || (isBoss ? `Guardião do Andar ${f} (Boss)` : `Guerreiro de Insolência Nv.${f}`);
   const reqLvl = Math.min(100, Math.floor(f * 0.95) + 1);
 
   const baseHp = Math.floor(120 * Math.pow(1.12, f - 1) * (isBoss ? 2.5 : 1));
@@ -59,26 +60,26 @@ export function getTowerFloorDef(floorNum) {
 }
 
 /**
- * Inicia o desafio ao andar atual da Torre da Insol├¬ncia.
+ * Inicia o desafio ao andar atual da Torre da Insolência.
  * @param {Object} state
- * @param {Object} [callbacks] ÔÇö { log, floatText, el, renderStageMonster, attackMonster }
+ * @param {Object} [callbacks] — { log, floatText, el, renderStageMonster, attackMonster }
  */
 export function challengeTowerFloor(state, callbacks = {}) {
   state.tower = state.tower || { highestFloor: 0, currentFloor: 1, lastSweepTime: 0 };
   const targetFloor = (state.tower.highestFloor || 0) + 1;
   if (targetFloor > 100) {
-    if (callbacks.log) callbacks.log('­ƒÅå Voc├¬ j├í conquistou todos os 100 Andares da Torre da Insol├¬ncia!', 'rarity-legendary');
+    if (callbacks.log) callbacks.log('🏆 Você já conquistou todos os 100 Andares da Torre da Insolência!', 'rarity-legendary');
     return;
   }
 
   const fDef = getTowerFloorDef(targetFloor);
 
   if (state.level < fDef.reqLvl) {
-    if (callbacks.log) callbacks.log(`ÔÜá´©Å N├¡vel insuficiente! O Andar ${targetFloor} requer N├¡vel ${fDef.reqLvl}.`, 'system');
+    if (callbacks.log) callbacks.log(`⚠️ Nível insuficiente! O Andar ${targetFloor} requer Nível ${fDef.reqLvl}.`, 'system');
     return;
   }
 
-  if (callbacks.log) callbacks.log(`­ƒÅ░ Desafiando Andar ${targetFloor}: **${fDef.name}**!`, 'rarity-legendary');
+  if (callbacks.log) callbacks.log(`🏰 Desafiando Andar ${targetFloor}: **${fDef.name}**!`, 'rarity-legendary');
   if (callbacks.floatText) callbacks.floatText(`ANDAR ${targetFloor}!`, 'float-jackpot');
 
   const towerMonsterId = `tower_floor_${targetFloor}`;
@@ -101,21 +102,26 @@ export function challengeTowerFloor(state, callbacks = {}) {
   };
 
   MONSTERS[towerMonsterId] = monsterObj;
+  if (typeof window !== 'undefined') {
+    if (window.GameData?.MONSTERS) window.GameData.MONSTERS[towerMonsterId] = monsterObj;
+    if (window.ALL_MONSTERS) window.ALL_MONSTERS[towerMonsterId] = monsterObj;
+  }
   state.target = towerMonsterId;
   state.activeMonster = monsterObj;
   if (!state.zone) state.zone = 'talkingIsland';
 
   if (callbacks.el) {
     const sz = callbacks.el('stage-zone');
-    if (sz) sz.textContent = `­ƒÅ░ TORRE ┬À Andar ${targetFloor}`;
+    if (sz) sz.textContent = `🏰 TORRE · Andar ${targetFloor}`;
   }
 
-  state.combatActive = true;
+  stopCombat(state);
+  startCombat(state, callbacks);
   if (callbacks.renderStageMonster) callbacks.renderStageMonster();
 }
 
 /**
- * Finaliza com vit├│ria a conquista de um andar da Torre.
+ * Finaliza com vitória a conquista de um andar da Torre.
  * @param {Object} state
  * @param {number} floorNum
  * @param {Object} [callbacks]
@@ -127,18 +133,18 @@ export function completeTowerFloor(state, floorNum, callbacks = {}) {
     state.tower.currentFloor = Math.min(100, floorNum + 1);
 
     const fDef = getTowerFloorDef(floorNum);
-    if (callbacks.log) callbacks.log(`­ƒÅå VIT├ôRIA! Andar ${floorNum} Conquistado! B├┤nus Permanente ATK/DEF +${floorNum}%!`, 'rarity-legendary');
+    if (callbacks.log) callbacks.log(`🏆 VITÓRIA! Andar ${floorNum} Conquistado! Bônus Permanente ATK/DEF +${floorNum}%!`, 'rarity-legendary');
     if (callbacks.floatText) callbacks.floatText(`ANDAR ${floorNum} CONQUISTADO!`, 'float-jackpot');
 
     if (fDef.rewardLamps > 0) {
       state.magicLamps = (state.magicLamps || 0) + fDef.rewardLamps;
-      if (callbacks.log) callbacks.log(`­ƒ¬ö Recompensa de Primeiro Abate: +${fDef.rewardLamps} L├ómpadas M├ígicas!`, 'rarity-epic');
+      if (callbacks.log) callbacks.log(`🪔 Recompensa de Primeiro Abate: +${fDef.rewardLamps} Lâmpadas Mágicas!`, 'rarity-epic');
     }
     if (fDef.rewardCrystals) {
       addToInventory(state, fDef.rewardCrystals, 3, null, false, callbacks);
       const gData = D();
       const cName = gData?.ALL_ITEMS?.[fDef.rewardCrystals]?.name || fDef.rewardCrystals;
-      if (callbacks.log) callbacks.log(`Ô£¿ Recompensa de Primeiro Abate: +3x ${cName}!`, 'rarity-legendary');
+      if (callbacks.log) callbacks.log(`✨ Recompensa de Primeiro Abate: +3x ${cName}!`, 'rarity-legendary');
     }
 
     triggerQuestEvent(state, 'boss', 1);
@@ -149,7 +155,7 @@ export function completeTowerFloor(state, floorNum, callbacks = {}) {
 }
 
 /**
- * Realiza a Varredura Di├íria (Sweep) da Torre da Insol├¬ncia coletando 50% dos recursos de todos os andares conquistados.
+ * Realiza a Varredura Diária (Sweep) da Torre da Insolência coletando 50% dos recursos de todos os andares conquistados.
  * @param {Object} state
  * @param {Object} [callbacks]
  */
@@ -157,14 +163,14 @@ export function sweepTowerDaily(state, callbacks = {}) {
   state.tower = state.tower || { highestFloor: 0, currentFloor: 1, lastSweepTime: 0 };
   const highest = state.tower.highestFloor || 0;
   if (highest < 1) {
-    if (callbacks.log) callbacks.log('Conquiste ao menos 1 Andar da Torre para realizar a Varredura Di├íria!', 'system');
+    if (callbacks.log) callbacks.log('Conquiste ao menos 1 Andar da Torre para realizar a Varredura Diária!', 'system');
     return;
   }
 
   const now = Date.now();
   const ONE_DAY = 24 * 60 * 60 * 1000;
   if (state.tower.lastSweepTime && (now - state.tower.lastSweepTime) < ONE_DAY) {
-    if (callbacks.log) callbacks.log('A Varredura Di├íria j├í foi realizada hoje! Tente novamente amanh├ú.', 'system');
+    if (callbacks.log) callbacks.log('A Varredura Diária já foi realizada hoje! Tente novamente amanhã.', 'system');
     return;
   }
 
@@ -181,7 +187,7 @@ export function sweepTowerDaily(state, callbacks = {}) {
   state.gold = (state.gold || 0) + totalGold;
   state.sp = (state.sp || 0) + totalSp;
 
-  if (callbacks.log) callbacks.log(`­ƒº╣ VARREDURA DA TORRE! Reclamou recompensas de ${highest} andares: +${totalGold.toLocaleString()} Gold, +${totalSp.toLocaleString()} SP!`, 'rarity-legendary');
+  if (callbacks.log) callbacks.log(`🧹 VARREDURA DA TORRE! Reclamou recompensas de ${highest} andares: +${totalGold.toLocaleString()} Gold, +${totalSp.toLocaleString()} SP!`, 'rarity-legendary');
   if (callbacks.floatText) callbacks.floatText(`+${totalGold.toLocaleString()}g VARREDURA!`, 'float-jackpot');
 
   if (callbacks.updateAllUI) callbacks.updateAllUI();

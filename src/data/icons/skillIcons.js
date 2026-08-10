@@ -1,45 +1,45 @@
-// ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
-// ICONS ÔÇö Mapeamento de ├ìcones de Habilidades e Classes
-// ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
+// ═══════════════════════════════════════════
+// ICONS — Mapeamento de Ícones de Habilidades e Classes
+// ═══════════════════════════════════════════
 
 export const SKILL_ICONS = {
-  // A├ºo & F├¡sico
-  power_strike_f: "ÔÜö´©Å­ƒÆÑ",
-  mortal_blow: "­ƒùí´©Å­ƒÆÑ",
-  stun_attack: "­ƒÆ½",
-  triple_slash: "ÔÜö´©ÅÔÜö´©ÅÔÜö´©Å",
-  sonicBlasterG: "­ƒöè",
+  // Aço & Físico
+  power_strike_f: "⚔️💥",
+  mortal_blow: "🗡️💥",
+  stun_attack: "💫",
+  triple_slash: "⚔️⚔️⚔️",
+  sonicBlasterG: "🔊",
   
   // Magia & Elementos
-  wind_strike: "­ƒî¬´©Å",
-  energy_bolt_m: "ÔÜí­ƒö«",
-  prominence: "ÔÿÇ´©Å­ƒöÑ",
-  hydro_blast: "­ƒîè­ƒÆÑ",
-  death_spike_n: "­ƒÆÇ­ƒª┤",
-  self_heal: "­ƒÆÜ",
+  wind_strike: "🌪️",
+  energy_bolt_m: "⚡🔮",
+  prominence: "☀️🔥",
+  hydro_blast: "🌊💥",
+  death_spike_n: "💀🦴",
+  self_heal: "💚",
   
   // Passivos
-  weapon_mastery_f: "­ƒùí´©Å",
-  light_armor_f: "­ƒÑï",
-  heavy_armor_f: "­ƒøí´©Å",
-  boost_hp_f: "ÔØñ´©Å",
-  weapon_mastery_m: "­ƒö«",
-  robe_mast_m: "­ƒæÿ",
-  boost_mana_m: "­ƒîè",
-  anti_magic_m: "­ƒøí´©ÅÔ£¿",
-  dual_weapon_mast: "ÔÜö´©Å",
+  weapon_mastery_f: "🗡️",
+  light_armor_f: "🥋",
+  heavy_armor_f: "🛡️",
+  boost_hp_f: "❤️",
+  weapon_mastery_m: "🔮",
+  robe_mast_m: "👘",
+  boost_mana_m: "🌊",
+  anti_magic_m: "🛡️✨",
+  dual_weapon_mast: "⚔️",
 
   // Buffs
-  fighter_will: "ÔÜö´©ÅÔ£¿",
-  mage_will: "­ƒö«Ô£¿",
-  war_cry: "­ƒô»",
-  battle_roar: "­ƒô»­ƒÆÑ",
-  gladiators_harmony: "ÔÜö´©ÅÔÜö´©ÅÔ£¿",
-  paladins_harmony: "­ƒøí´©ÅÔ£¿",
-  haste_buff: "ÔÜí",
-  might_buff: "­ƒÆ¬"
+  fighter_will: "⚔️✨",
+  mage_will: "🔮✨",
+  war_cry: "📯",
+  battle_roar: "📯💥",
+  gladiators_harmony: "⚔️⚔️✨",
+  paladins_harmony: "🛡️✨",
+  haste_buff: "⚡",
+  might_buff: "💪"
 };
 
 export function getSkillIcon(skillId) {
-  return SKILL_ICONS[skillId] || "Ô£ª";
+  return SKILL_ICONS[skillId] || "✦";
 }

@@ -1,6 +1,6 @@
 /* ================================================================
-GRIMOIRE THEME ÔÇö "O Grim├│rio"
-Tema visual extra├¡do do painel de auditoria: fonte display,
+GRIMOIRE THEME — "O Grimório"
+Tema visual extraído do painel de auditoria: fonte display,
 paleta de cores, sparks/embers subindo, carimbo "CORRIGIDO",
 anel de runas, reveal on scroll, code tokens.
 ================================================================ */
@@ -23,7 +23,7 @@ anel de runas, reveal on scroll, code tokens.
   --g-gold: #d4a94e;
   --g-goldhi: #f0cd7e;
 
-  /* raridades ÔÇö use pra tint de bordas/textos de itens */
+  /* raridades — use pra tint de bordas/textos de itens */
   --g-common: #b0b0b0;
   --g-uncommon: #48bb78;
   --g-rare: #539bf5;
@@ -126,17 +126,17 @@ anel de runas, reveal on scroll, code tokens.
   100% { transform: translate3d(var(--ex, 30px), -110vh, 0) scale(0.2); opacity: 0; }
 }
 
-/* Container de embers ÔÇö absolute no #game que j├í cobre 100% da tela */
-/* Em Shadow DOM, position:fixed fica confinado ao shadow host; usar absolute ├® mais confi├ível */
+/* Container de embers — absolute no #game que já cobre 100% da tela */
+/* Em Shadow DOM, position:fixed fica confinado ao shadow host; usar absolute é mais confiável */
 .g-ember-global {
   position: absolute;
   inset: 0;
   overflow: hidden;
   pointer-events: none;
-  z-index: 5;  /* acima do fundo, abaixo da UI (panels come├ºam em z-index: 20+) */
+  z-index: 5;  /* acima do fundo, abaixo da UI (panels começam em z-index: 20+) */
 }
 
-/* Container local (dentro de um elemento espec├¡fico) */
+/* Container local (dentro de um elemento específico) */
 .ember-field {
   position: absolute;
   inset: 0;
@@ -185,7 +185,7 @@ anel de runas, reveal on scroll, code tokens.
 }
 .mask-line.is-in > span { transform: translateY(0); }
 
-/* ---------- carimbo "CORRIGIDO" / "LEND├üRIO" / "NOVO" ---------- */
+/* ---------- carimbo "CORRIGIDO" / "LENDÁRIO" / "NOVO" ---------- */
 @keyframes g-stamp-in {
   0% { opacity: 0; transform: rotate(-14deg) scale(1.9); }
   60% { opacity: 1; transform: rotate(-8deg) scale(0.94); }
@@ -225,7 +225,7 @@ anel de runas, reveal on scroll, code tokens.
 .stamp-uncommon { --stamp-color: var(--g-uncommon); }
 .stamp-common { --stamp-color: var(--g-common); }
 
-/* ---------- carimbo IDLE no t├¡tulo do jogo ---------- */
+/* ---------- carimbo IDLE no título do jogo ---------- */
 #game-title .title-idle-stamp {
   display: inline-block;
   position: relative;

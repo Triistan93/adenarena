@@ -1,10 +1,10 @@
 /**
- * DomHelpers ÔÇö Utilit├írios de manipula├º├úo do Shadow DOM do Lineage Idle.
+ * DomHelpers — Utilitários de manipulação do Shadow DOM do Lineage Idle.
  *
- * Centraliza as refer├¬ncias ao ROOT (Shadow Root), fun├º├Áes de query,
- * cria├º├úo de elementos e rastreamento de event listeners/intervals.
+ * Centraliza as referências ao ROOT (Shadow Root), funções de query,
+ * criação de elementos e rastreamento de event listeners/intervals.
  *
- * O ROOT ├® injetado pelo IdleGame.tsx via setRoot() antes de init() ser chamado.
+ * O ROOT é injetado pelo IdleGame.tsx via setRoot() antes de init() ser chamado.
  */
 
 /** @type {Document|ShadowRoot} Root do Shadow DOM */
@@ -57,9 +57,9 @@ export const mkNS = (ns, tag) => document.createElementNS(ns, tag);
 
 /**
  * Atualiza a barra de progresso (HP, MP, XP).
- * @param {string} id   ÔÇö ID do elemento .bar-fill
- * @param {number} cur  ÔÇö Valor atual
- * @param {number} max  ÔÇö Valor m├íximo
+ * @param {string} id   — ID do elemento .bar-fill
+ * @param {number} cur  — Valor atual
+ * @param {number} max  — Valor máximo
  */
 export function updateBar(id, cur, max) {
   let el_ = el(id);
@@ -75,9 +75,9 @@ export function updateBar(id, cur, max) {
 }
 
 /**
- * Wrapper de seguran├ºa para atualiza├º├Áes de UI ÔÇö captura erros sem travar o jogo.
- * @param {string}   label ÔÇö Nome do m├│dulo (para logging)
- * @param {Function} fn    ÔÇö Fun├º├úo de atualiza├º├úo
+ * Wrapper de segurança para atualizações de UI — captura erros sem travar o jogo.
+ * @param {string}   label — Nome do módulo (para logging)
+ * @param {Function} fn    — Função de atualização
  */
 export function safeUiUpdate(label, fn) {
   try {

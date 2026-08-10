@@ -1,10 +1,10 @@
-// ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
-// DATA INDEX ÔÇö Ponto ├Ünico de Entrada Modular
-// ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
+// ═══════════════════════════════════════════
+// DATA INDEX — Ponto Único de Entrada Modular
+// ═══════════════════════════════════════════
 
 import { RACES } from "./races.js";
 
-// Classes por Ra├ºa
+// Classes por Raça
 import { HUMAN_CLASSES } from "./classes/human.js";
 import { ELF_CLASSES } from "./classes/elf.js";
 import { DARKELF_CLASSES } from "./classes/darkElf.js";
@@ -19,7 +19,7 @@ import { ERTHEIA_CLASSES } from "./classes/ertheia.js";
 import { SKILL_DEFS, ACTIVE_SKILLS, PASSIVE_SKILLS, BUFF_SKILLS } from "./skills/index.js";
 import { SKILL_ICONS, getSkillIcon } from "./icons/skillIcons.js";
 
-// Consolida├º├úo de todas as classes
+// Consolidação de todas as classes
 export const CLASSES = {
   ...HUMAN_CLASSES,
   ...ELF_CLASSES,

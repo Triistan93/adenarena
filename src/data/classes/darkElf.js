@@ -1,6 +1,6 @@
-// ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
-// CLASSES ÔÇö Dark Elf (Palus Knight, Assassin, Spellhowler & Ghost Sentinel)
-// ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
+// ═══════════════════════════════════════════
+// CLASSES — Dark Elf (Palus Knight, Assassin, Spellhowler & Ghost Sentinel)
+// ═══════════════════════════════════════════
 
 export const DARKELF_CLASSES = {
   palusKnight: {
@@ -10,7 +10,7 @@ export const DARKELF_CLASSES = {
     race: 'darkelf',
     archetype: 'fighter',
     stage: 1,
-    desc: 'Cavaleiro sombrio focado em dano f├¡sico elevado e magia negra.',
+    desc: 'Cavaleiro sombrio focado em dano físico elevado e magia negra.',
     base: { atk: 26, def: 22, hp: 180, mp: 40, eva: 8, crit: 10, mdef: 14 },
     skillTree: 'palusKnight'
   },
@@ -32,7 +32,7 @@ export const DARKELF_CLASSES = {
     race: 'darkelf',
     archetype: 'fighter',
     stage: 3,
-    desc: 'Templ├írio supremo das sombras com cubos avan├ºados e provoca├º├úo.',
+    desc: 'Templário supremo das sombras com cubos avançados e provocação.',
     base: { atk: 96, def: 98, hp: 790, mp: 170, eva: 18, crit: 20, mdef: 70 },
     skillTree: 'shillienTemplar'
   },
@@ -43,7 +43,7 @@ export const DARKELF_CLASSES = {
     race: 'darkelf',
     archetype: 'fighter',
     stage: 2,
-    desc: 'Dan├ºarino das l├óminas duplas com dan├ºas de ataque e dano cr├¡tico.',
+    desc: 'Dançarino das lâminas duplas com danças de ataque e dano crítico.',
     base: { atk: 56, def: 32, hp: 400, mp: 85, eva: 14, crit: 18, mdef: 25 },
     skillTree: 'bladedancer'
   },
@@ -54,7 +54,7 @@ export const DARKELF_CLASSES = {
     race: 'darkelf',
     archetype: 'fighter',
     stage: 3,
-    desc: 'Dan├ºarino espectral mestre em dan├ºas de f├║ria e sombras.',
+    desc: 'Dançarino espectral mestre em danças de fúria e sombras.',
     base: { atk: 112, def: 64, hp: 720, mp: 160, eva: 22, crit: 28, mdef: 50 },
     skillTree: 'spectralDancer'
   },
@@ -65,7 +65,7 @@ export const DARKELF_CLASSES = {
     race: 'darkelf',
     archetype: 'fighter',
     stage: 1,
-    desc: 'Assassino sombrio com o maior dano cr├¡tico base do jogo.',
+    desc: 'Assassino sombrio com o maior dano crítico base do jogo.',
     base: { atk: 30, def: 8, hp: 130, mp: 35, eva: 14, crit: 20, mdef: 6 },
     skillTree: 'deAssassin'
   },
@@ -87,7 +87,7 @@ export const DARKELF_CLASSES = {
     race: 'darkelf',
     archetype: 'fighter',
     stage: 3,
-    desc: 'Ca├ºador de fantasmas supremo com danos cr├¡ticos devastadores.',
+    desc: 'Caçador de fantasmas supremo com danos críticos devastadores.',
     base: { atk: 124, def: 28, hp: 520, mp: 130, eva: 48, crit: 50, mdef: 22 },
     skillTree: 'ghostHunter'
   },
@@ -98,7 +98,7 @@ export const DARKELF_CLASSES = {
     race: 'darkelf',
     archetype: 'fighter',
     stage: 2,
-    desc: 'Arqueiro fantasma com tiros fatais de alt├¡ssimo dano por flecha.',
+    desc: 'Arqueiro fantasma com tiros fatais de altíssimo dano por flecha.',
     base: { atk: 66, def: 12, hp: 270, mp: 75, eva: 20, crit: 30, mdef: 10 },
     skillTree: 'phantomRanger'
   },
@@ -109,7 +109,7 @@ export const DARKELF_CLASSES = {
     race: 'darkelf',
     archetype: 'fighter',
     stage: 3,
-    desc: 'Sentinela fantasma com disparos sombrios e perfura├º├úo mortal.',
+    desc: 'Sentinela fantasma com disparos sombrios e perfuração mortal.',
     base: { atk: 132, def: 24, hp: 500, mp: 140, eva: 36, crit: 45, mdef: 20 },
     skillTree: 'ghostSentinel'
   },
@@ -120,7 +120,7 @@ export const DARKELF_CLASSES = {
     race: 'darkelf',
     archetype: 'mage',
     stage: 1,
-    desc: 'Mago negro de alt├¡ssimo M.Atk e magias de vento/trevas.',
+    desc: 'Mago negro de altíssimo M.Atk e magias de vento/trevas.',
     base: { atk: 10, def: 6, hp: 100, mp: 170, eva: 6, crit: 6, matk: 48, mdef: 20 },
     skillTree: 'darkWizard'
   },
@@ -153,7 +153,7 @@ export const DARKELF_CLASSES = {
     race: 'darkelf',
     archetype: 'mage',
     stage: 1,
-    desc: 'Or├ículo de Shillien de suporte agressivo e recarga de mana.',
+    desc: 'Oráculo de Shillien de suporte agressivo e recarga de mana.',
     base: { atk: 9, def: 10, hp: 120, mp: 160, eva: 6, crit: 4, matk: 36, mdef: 26 },
     skillTree: 'shillienOracle'
   },
@@ -164,7 +164,7 @@ export const DARKELF_CLASSES = {
     race: 'darkelf',
     archetype: 'mage',
     stage: 2,
-    desc: 'Anci├úo de Shillien com empoderamento m├ígico e Vampiric Rage.',
+    desc: 'Ancião de Shillien com empoderamento mágico e Vampiric Rage.',
     base: { atk: 15, def: 20, hp: 260, mp: 380, eva: 8, crit: 6, matk: 68, mdef: 58 },
     skillTree: 'shillienElder'
   },
@@ -175,7 +175,7 @@ export const DARKELF_CLASSES = {
     race: 'darkelf',
     archetype: 'mage',
     stage: 3,
-    desc: 'Santo de Shillien com ben├º├úo das sombras e lifesteal para party.',
+    desc: 'Santo de Shillien com benção das sombras e lifesteal para party.',
     base: { atk: 25, def: 38, hp: 490, mp: 700, eva: 14, crit: 8, matk: 120, mdef: 110 },
     skillTree: 'shillienSaint'
   }

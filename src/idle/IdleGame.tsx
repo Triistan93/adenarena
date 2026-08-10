@@ -46,11 +46,11 @@ export default function IdleGame() {
     const shadow = host.shadowRoot ?? host.attachShadow({ mode: "open" });
     shadow.innerHTML = `<style>${idleCss}\n${grimoireCss}</style>${IDLE_MARKUP}`;
     
-    // Inicializa├º├úo unificada via GameBootstrap
+    // Inicialização unificada via GameBootstrap
     bootstrap(shadow as unknown as Document);
     init();
 
-    // ---- Embers / brasas de fogo ÔÇö montagem correta no Shadow DOM ----
+    // ---- Embers / brasas de fogo — montagem correta no Shadow DOM ----
     if ((window as any).GrimoireFX) {
       const gameDiv = shadow.getElementById
         ? shadow.getElementById('game')

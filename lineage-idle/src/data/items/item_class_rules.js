@@ -1,13 +1,13 @@
 /**
- * item_class_rules.js ÔÇö Regras de Tipo de Item e Restri├º├Áes de Classe
+ * item_class_rules.js — Regras de Tipo de Item e Restrições de Classe
  *
  * Define:
- *  - Infer├¬ncia de armorType (heavy/light/robe) e weaponType (bow/staff/dagger/melee) por nome
+ *  - Inferência de armorType (heavy/light/robe) e weaponType (bow/staff/dagger/melee) por nome
  *  - Quais archetypes de classe podem usar cada tipo
- *  - Fun├º├úo unificada canEquipByType(playerClass, itemDef) para valida├º├úo
+ *  - Função unificada canEquipByType(playerClass, itemDef) para validação
  */
 
-// ÔöÇÔöÇÔöÇ Mapeamentos de Archetype por Tipo de Armadura ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+// ─── Mapeamentos de Archetype por Tipo de Armadura ─────────────────────────
 export const ARMOR_TYPE_ARCHETYPES = {
   heavy: ['fighter'],
   light: ['rogue', 'archer', 'assassin'],
@@ -23,27 +23,27 @@ export const WEAPON_TYPE_ARCHETYPES = {
   spear:  ['fighter']
 };
 
-// ÔöÇÔöÇÔöÇ Labels de UI por tipo ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+// ─── Labels de UI por tipo ──────────────────────────────────────────────────
 export const ARMOR_TYPE_LABEL = {
-  heavy: { icon: '­ƒøí', name: 'Armadura Pesada',  hint: 'Apenas Fighters' },
-  light: { icon: '­ƒÅ╣', name: 'Armadura Leve',    hint: 'Rogues / Arqueiros / Assassinos' },
-  robe:  { icon: '­ƒºÖ', name: 'Manto M├ígico',     hint: 'Magos / Healers' },
+  heavy: { icon: '🛡', name: 'Armadura Pesada',  hint: 'Apenas Fighters' },
+  light: { icon: '🏹', name: 'Armadura Leve',    hint: 'Rogues / Arqueiros / Assassinos' },
+  robe:  { icon: '🧙', name: 'Manto Mágico',     hint: 'Magos / Healers' },
 };
 
 export const WEAPON_TYPE_LABEL = {
-  bow:    { icon: '­ƒÅ╣', name: 'Arco',           hint: 'Arqueiros / Rogues' },
-  staff:  { icon: '­ƒ¬ä', name: 'Cajado',          hint: 'Magos / Healers' },
-  dagger: { icon: '­ƒùí', name: 'Adaga',           hint: 'Rogues / Assassinos' },
-  melee:  { icon: 'ÔÜö',  name: 'Corpo-a-corpo',  hint: 'Fighters / Rogues' },
-  blunt:  { icon: '­ƒö¿', name: 'Ma├ºa / Martelo', hint: 'Fighters / Healers' },
-  spear:  { icon: '­ƒö▒', name: 'Lan├ºa',           hint: 'Fighters' },
+  bow:    { icon: '🏹', name: 'Arco',           hint: 'Arqueiros / Rogues' },
+  staff:  { icon: '🪄', name: 'Cajado',          hint: 'Magos / Healers' },
+  dagger: { icon: '🗡', name: 'Adaga',           hint: 'Rogues / Assassinos' },
+  melee:  { icon: '⚔',  name: 'Corpo-a-corpo',  hint: 'Fighters / Rogues' },
+  blunt:  { icon: '🔨', name: 'Maça / Martelo', hint: 'Fighters / Healers' },
+  spear:  { icon: '🔱', name: 'Lança',           hint: 'Fighters' },
 };
 
-// ÔöÇÔöÇÔöÇ Infer├¬ncia de Tipo por Nome ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+// ─── Inferência de Tipo por Nome ────────────────────────────────────────────
 
 /**
  * Detecta o tipo de armadura (heavy/light/robe) pelo ID ou nome do item.
- * Retorna null para pe├ºas que n├úo t├¬m tipo (capacetes gen├®ricos, etc).
+ * Retorna null para peças que não têm tipo (capacetes genéricos, etc).
  */
 export function getArmorType(itemId = '', itemName = '') {
   const s = `${itemId} ${itemName}`.toLowerCase();
@@ -67,7 +67,7 @@ export function getWeaponType(itemId = '', itemName = '') {
   return null;
 }
 
-// ÔöÇÔöÇÔöÇ Mapa de Archetype por Classe ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+// ─── Mapa de Archetype por Classe ──────────────────────────────────────────
 const ARCHETYPE_ALIASES = {
   // Fighters
   fighter: 'fighter', warrior: 'fighter', knight: 'fighter', paladin: 'fighter',
@@ -100,12 +100,13 @@ const ARCHETYPE_GROUPS = {
 };
 
 /**
- * Retorna os tags de archetype do jogador, navegando a ├írvore de classes.
+ * Retorna os tags de archetype do jogador, navegando a árvore de classes.
+ * Retorna null se não conseguir determinar (modo permissivo: pode equipar tudo).
  * @param {string} playerClassId
- * @returns {string[]}
+ * @returns {string[]|null}
  */
 export function getPlayerArchetypes(playerClassId) {
-  if (!playerClassId) return ['fighter'];
+  if (!playerClassId) return null; // sem classe = permissivo
   const classes = (typeof window !== 'undefined')
     ? (window.EchoData?.CLASSES_ECHO || window.GameData?.CLASSES || {})
     : {};
@@ -116,7 +117,6 @@ export function getPlayerArchetypes(playerClassId) {
     visited.add(current);
     const def = classes[current];
     if (!def) break;
-    // Verifica archetype da defini├º├úo de classe
     const arch = def.archetype || def.skillTree;
     if (arch) {
       const base = ARCHETYPE_ALIASES[arch.toLowerCase()];
@@ -124,17 +124,17 @@ export function getPlayerArchetypes(playerClassId) {
     }
     current = def.parent;
   }
-  // Fallback pelo ID da pr├│pria classe
+  // Fallback pelo ID da própria classe
   const base = ARCHETYPE_ALIASES[playerClassId.toLowerCase()];
   if (base) return ARCHETYPE_GROUPS[base] || [base];
-  return ['fighter']; // fallback seguro
+  return null; // desconhecido = permissivo (pode equipar)
 }
 
-// ÔöÇÔöÇÔöÇ Valida├º├úo Unificada ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+// ─── Validação Unificada ─────────────────────────────────────────────────────
 
 /**
  * Verifica se o jogador pode equipar um item considerando:
- *  1. classReq expl├¡cito
+ *  1. classReq explícito
  *  2. armorType (heavy/light/robe) vs archetype
  *  3. weaponType (bow/staff/dagger/etc.) vs archetype
  *
@@ -146,7 +146,7 @@ export function getPlayerArchetypes(playerClassId) {
 export function canEquipByType(playerClassId, itemDef, classSatisfiesFn) {
   if (!itemDef) return { ok: true, reason: null };
 
-  // 1. Requisito de classe expl├¡cito
+  // 1. Requisito de classe explícito
   if (itemDef.classReq) {
     const ok = classSatisfiesFn ? classSatisfiesFn(playerClassId, itemDef.classReq) : true;
     if (!ok) return { ok: false, reason: `Requer classe: ${itemDef.classReq}` };
@@ -154,6 +154,9 @@ export function canEquipByType(playerClassId, itemDef, classSatisfiesFn) {
 
   const slot = (itemDef.slot || '').toLowerCase();
   const archetypes = getPlayerArchetypes(playerClassId);
+
+  // Se archetypes é null = classe desconhecida = modo permissivo, pode equipar tudo
+  if (!archetypes) return { ok: true, reason: null };
 
   // 2. Armaduras
   if (['armor', 'helmet', 'boots', 'gloves', 'legs'].includes(slot)) {
@@ -163,7 +166,7 @@ export function canEquipByType(playerClassId, itemDef, classSatisfiesFn) {
       const ok = archetypes.some(a => allowed.includes(a));
       if (!ok) {
         const lbl = ARMOR_TYPE_LABEL[armorType];
-        return { ok: false, reason: `${lbl?.icon || ''} ${lbl?.name || armorType} ┬À ${lbl?.hint || 'Classe incompat├¡vel'}` };
+        return { ok: false, reason: `${lbl?.icon || ''} ${lbl?.name || armorType} · ${lbl?.hint || 'Classe incompatível'}` };
       }
     }
   }
@@ -176,7 +179,7 @@ export function canEquipByType(playerClassId, itemDef, classSatisfiesFn) {
       const ok = archetypes.some(a => allowed.includes(a));
       if (!ok) {
         const lbl = WEAPON_TYPE_LABEL[weaponType];
-        return { ok: false, reason: `${lbl?.icon || ''} ${lbl?.name || weaponType} ┬À ${lbl?.hint || 'Classe incompat├¡vel'}` };
+        return { ok: false, reason: `${lbl?.icon || ''} ${lbl?.name || weaponType} · ${lbl?.hint || 'Classe incompatível'}` };
       }
     }
   }

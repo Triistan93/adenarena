@@ -1,5 +1,5 @@
 /**
- * index.js ÔÇö Ponto unificado de exporta├º├úo dos motores de jogo (Engine).
+ * index.js — Ponto unificado de exportação dos motores de jogo (Engine).
  */
 export * from './CombatEngine.js';
 export * from './FormulaEngine.js';

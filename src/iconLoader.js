@@ -7,7 +7,7 @@ export async function loadIconIndex() {
     const response = await fetch("./img/icons/icon_index.json");
 
     if (!response.ok) {
-        console.error("N├úo foi poss├¡vel carregar icon_index.json");
+        console.error("Não foi possível carregar icon_index.json");
         return;
     }
 

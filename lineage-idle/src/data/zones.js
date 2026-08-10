@@ -1,10 +1,10 @@
 /**
- * zones.js ÔÇö Defini├º├Áes de Zonas, Sagas e Backgrounds do Lineage Idle.
- * Extra├¡do de lineage-idle/main.js (linhas 57-88, 3778-3808)
+ * zones.js — Definições de Zonas, Sagas e Backgrounds do Lineage Idle.
+ * Extraído de lineage-idle/main.js (linhas 57-88, 3778-3808)
  */
 
 /**
- * Cap├¡tulos de progress├úo da hist├│ria.
+ * Capítulos de progressão da história.
  * Cada Saga desbloqueia um conjunto de zonas quando o jogador atingir `unlocksAt`.
  */
 export const SAGAS = [
@@ -16,8 +16,8 @@ export const SAGAS = [
 ];
 
 /**
- * Mapa de zonas de ca├ºa.
- * Cada zona define: nome, n├¡vel m├¡nimo, monstros, boss, shop e se ├® town.
+ * Mapa de zonas de caça.
+ * Cada zona define: nome, nível mínimo, monstros, boss, shop e se é town.
  */
 export const ZONES = {
   talkingIsland: { name: 'Talking Island', level: 1, monsters: ['goblin', 'goblinThief', 'armoredGoblin', 'goblinMage'], boss: 'goblinKing', shop: 'talkingIsland', town: true },

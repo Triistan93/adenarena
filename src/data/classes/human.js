@@ -1,6 +1,6 @@
-// ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
-// CLASSES ÔÇö Human (Fighter, Mage & Death Knight Line)
-// ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
+// ═══════════════════════════════════════════
+// CLASSES — Human (Fighter, Mage & Death Knight Line)
+// ═══════════════════════════════════════════
 
 export const HUMAN_CLASSES = {
   fighter: {
@@ -45,7 +45,7 @@ export const HUMAN_CLASSES = {
     race: 'human',
     archetype: 'fighter',
     stage: 3,
-    desc: 'Espadachim supremo que domina a arte de esgrima dupla e ondas s├┤nicas.',
+    desc: 'Espadachim supremo que domina a arte de esgrima dupla e ondas sônicas.',
     base: { atk: 110, def: 45, hp: 650, mp: 160, eva: 12, crit: 20, mdef: 30 },
     skillTree: 'duelist',
     skills: ['powerStrike', 'dash', 'battleRoar', 'whirlwind', 'sonicBlaster', 'sonicStorm']
@@ -57,7 +57,7 @@ export const HUMAN_CLASSES = {
     race: 'human',
     archetype: 'fighter',
     stage: 2,
-    desc: 'Especialista em lan├ºa e combate contra m├║ltiplos alvos.',
+    desc: 'Especialista em lança e combate contra múltiplos alvos.',
     base: { atk: 48, def: 35, hp: 420, mp: 70, eva: 4, crit: 6, mdef: 20 },
     skillTree: 'warlord',
     skills: ['powerStrike', 'dash', 'whirlwind', 'thunderStorm']
@@ -69,7 +69,7 @@ export const HUMAN_CLASSES = {
     race: 'human',
     archetype: 'fighter',
     stage: 3,
-    desc: 'Mestre da guerra que domina o campo de batalha com ataques em ├írea.',
+    desc: 'Mestre da guerra que domina o campo de batalha com ataques em área.',
     base: { atk: 95, def: 60, hp: 780, mp: 130, eva: 8, crit: 10, mdef: 35 },
     skillTree: 'dreadnought',
     skills: ['powerStrike', 'dash', 'whirlwind', 'thunderStorm', 'earthquake']
@@ -93,7 +93,7 @@ export const HUMAN_CLASSES = {
     race: 'human',
     archetype: 'fighter',
     stage: 2,
-    desc: 'Cavaleiro sagrado com cura, escudos divinos e defesa imbat├¡vel.',
+    desc: 'Cavaleiro sagrado com cura, escudos divinos e defesa imbatível.',
     base: { atk: 32, def: 60, hp: 520, mp: 100, eva: 5, crit: 5, mdef: 35 },
     skillTree: 'paladin',
     skills: ['powerStrike', 'shieldStun', 'ultimateDefense', 'holyBlessing', 'selfHeal']
@@ -105,7 +105,7 @@ export const HUMAN_CLASSES = {
     race: 'human',
     archetype: 'fighter',
     stage: 3,
-    desc: 'Tanque supremo com poder da F├¬nix Sagrada e regenera├º├úo.',
+    desc: 'Tanque supremo com poder da Fênix Sagrada e regeneração.',
     base: { atk: 65, def: 110, hp: 950, mp: 180, eva: 8, crit: 8, mdef: 70 },
     skillTree: 'phoenixKnight',
     skills: ['powerStrike', 'shieldStun', 'ultimateDefense', 'holyBlessing', 'selfHeal', 'touchOfLife']
@@ -117,7 +117,7 @@ export const HUMAN_CLASSES = {
     race: 'human',
     archetype: 'fighter',
     stage: 2,
-    desc: 'Cavaleiro sombrio com pantera negra, reflex├úo e maldi├º├Áes.',
+    desc: 'Cavaleiro sombrio com pantera negra, reflexão e maldições.',
     base: { atk: 45, def: 50, hp: 480, mp: 90, eva: 6, crit: 8, mdef: 30 },
     skillTree: 'darkAvenger',
     skills: ['powerStrike', 'shieldStun', 'ultimateDefense', 'lifeScavenge']
@@ -141,7 +141,7 @@ export const HUMAN_CLASSES = {
     race: 'human',
     archetype: 'fighter',
     stage: 1,
-    desc: 'Atirador ou assassino ├ígil com adagas e arcos.',
+    desc: 'Atirador ou assassino ágil com adagas e arcos.',
     base: { atk: 24, def: 12, hp: 150, mp: 35, eva: 12, crit: 15, mdef: 6 },
     skillTree: 'rogue',
     skills: ['mortalBlow', 'dash']
@@ -153,7 +153,7 @@ export const HUMAN_CLASSES = {
     race: 'human',
     archetype: 'fighter',
     stage: 2,
-    desc: 'Assassino mortal com passos de sombra e ataques por tr├ís.',
+    desc: 'Assassino mortal com passos de sombra e ataques por trás.',
     base: { atk: 50, def: 18, hp: 320, mp: 75, eva: 25, crit: 25, mdef: 12 },
     skillTree: 'treasureHunter',
     skills: ['mortalBlow', 'dash', 'backstab', 'ultimateEvasion']
@@ -189,7 +189,7 @@ export const HUMAN_CLASSES = {
     race: 'human',
     archetype: 'fighter',
     stage: 3,
-    desc: 'Arqueiro lend├írio com tiro supremo de sete flechas.',
+    desc: 'Arqueiro lendário com tiro supremo de sete flechas.',
     base: { atk: 115, def: 30, hp: 580, mp: 150, eva: 32, crit: 32, mdef: 22 },
     skillTree: 'sagittarius',
     skills: ['powerShot', 'dash', 'snipe', 'sevenArrows']
@@ -201,7 +201,7 @@ export const HUMAN_CLASSES = {
     race: 'human',
     archetype: 'mage',
     stage: 0,
-    desc: 'Classe base m├ígica humana.',
+    desc: 'Classe base mágica humana.',
     base: { atk: 6, def: 6, hp: 70, mp: 80, eva: 4, crit: 2, matk: 18, mdef: 12 },
     skillTree: 'humanMage',
     skills: ['windStrike', 'selfHeal']
@@ -237,7 +237,7 @@ export const HUMAN_CLASSES = {
     race: 'human',
     archetype: 'mage',
     stage: 3,
-    desc: 'Arquimago lend├írio do fogo e tempestade de mana.',
+    desc: 'Arquimago lendário do fogo e tempestade de mana.',
     base: { atk: 30, def: 30, hp: 480, mp: 600, eva: 14, crit: 10, matk: 165, mdef: 90 },
     skillTree: 'archmage',
     skills: ['windStrike', 'fireball', 'prominence', 'meteor', 'selfHeal']
@@ -249,7 +249,7 @@ export const HUMAN_CLASSES = {
     race: 'human',
     archetype: 'mage',
     stage: 2,
-    desc: 'Mestre da morte, maldi├º├Áes e invoca├º├úo de esqueletos.',
+    desc: 'Mestre da morte, maldições e invocação de esqueletos.',
     base: { atk: 16, def: 18, hp: 280, mp: 290, eva: 7, crit: 5, matk: 78, mdef: 42 },
     skillTree: 'necromancer',
     skills: ['windStrike', 'vampiricClaw', 'deathSpike', 'selfHeal']
@@ -285,7 +285,7 @@ export const HUMAN_CLASSES = {
     race: 'human',
     archetype: 'mage',
     stage: 2,
-    desc: 'Mestre curandeiro com b├¬n├º├úos divinas e ressuscitar.',
+    desc: 'Mestre curandeiro com bênçãos divinas e ressuscitar.',
     base: { atk: 15, def: 25, hp: 300, mp: 350, eva: 6, crit: 4, matk: 60, mdef: 60 },
     skillTree: 'bishop',
     skills: ['windStrike', 'heal', 'greaterHeal', 'battleRoar']
@@ -297,7 +297,7 @@ export const HUMAN_CLASSES = {
     race: 'human',
     archetype: 'mage',
     stage: 3,
-    desc: 'Bispo sagrado com milagres e restaura├º├úo em massa.',
+    desc: 'Bispo sagrado com milagres e restauração em massa.',
     base: { atk: 25, def: 45, hp: 550, mp: 650, eva: 10, crit: 6, matk: 110, mdef: 115 },
     skillTree: 'cardinal',
     skills: ['windStrike', 'heal', 'greaterHeal', 'divineMiracle', 'battleRoar']
@@ -321,7 +321,7 @@ export const HUMAN_CLASSES = {
     race: 'human',
     archetype: 'mage',
     stage: 3,
-    desc: 'Supremo encantador de party com Profecia e B├┤nus Lend├írios.',
+    desc: 'Supremo encantador de party com Profecia e Bônus Lendários.',
     base: { atk: 35, def: 40, hp: 580, mp: 580, eva: 12, crit: 8, matk: 100, mdef: 95 },
     skillTree: 'hierophant',
     skills: ['windStrike', 'heal', 'haste', 'battleRoar', 'prophecyOfFire']
@@ -345,7 +345,7 @@ export const HUMAN_CLASSES = {
     race: 'human',
     archetype: 'fighter',
     stage: 1,
-    desc: 'L├ómina da Morte munida de chamas das trevas.',
+    desc: 'Lâmina da Morte munida de chamas das trevas.',
     base: { atk: 32, def: 22, hp: 220, mp: 40, eva: 6, crit: 10, mdef: 14 },
     skillTree: 'deathKnight',
     skills: ['powerStrike', 'dash', 'darkStrike']

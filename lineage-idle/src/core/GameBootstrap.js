@@ -1,7 +1,7 @@
 /**
- * GameBootstrap.js ÔÇö Orquestrador Central de Inicializa├º├úo e Ciclo de Vida do Lineage Idle.
+ * GameBootstrap.js — Orquestrador Central de Inicialização e Ciclo de Vida do Lineage Idle.
  *
- * Respons├ível por executar o boot em ordem determin├¡stica:
+ * Responsável por executar o boot em ordem determinística:
  * 1. Definir Root do Shadow DOM
  * 2. Carregar Dados de Jogo (Items, Classes, Zonas, Monstros)
  * 3. Inicializar Estado (StateManager / LocalStorage / Default)
@@ -22,7 +22,7 @@ import { updateAllUI } from '../ui/index.js';
 let isBootstrapped = false;
 
 /**
- * Orquestra a inicializa├º├úo completa do jogo no Shadow DOM.
+ * Orquestra a inicialização completa do jogo no Shadow DOM.
  * @param {Document|ShadowRoot} shadowRoot
  */
 export async function bootstrap(shadowRoot) {
@@ -32,13 +32,13 @@ export async function bootstrap(shadowRoot) {
   }
 
   try {
-    // Vincula todos os event listeners aos bot├Áes do Shadow DOM
+    // Vincula todos os event listeners aos botões do Shadow DOM
     bindEvents();
-    // 1. Carrega o estado salvo ou inicializa padr├úo
+    // 1. Carrega o estado salvo ou inicializa padrão
     const hasSave = loadState();
     let state = getState();
 
-    // 2. Se for novo jogador, define ra├ºa/classe padr├úo e calcula atributos base
+    // 2. Se for novo jogador, define raça/classe padrão e calcula atributos base
     if (!hasSave || !state.race || !state.class) {
       state.race = state.race || 'human';
       state.class = state.class || 'fighter';
@@ -60,11 +60,11 @@ export async function bootstrap(shadowRoot) {
       try {
         updateAllUI(newState);
       } catch (err) {
-        console.warn('[GameBootstrap] Erro na atualiza├º├úo reativa da UI:', err);
+        console.warn('[GameBootstrap] Erro na atualização reativa da UI:', err);
       }
     });
 
-    // 4. For├ºa renderiza├º├úo inicial de toda a UI
+    // 4. Força renderização inicial de toda a UI
     updateAllUI(state);
 
     // 5. Inicia o combate se houver uma zona selecionada
@@ -72,7 +72,7 @@ export async function bootstrap(shadowRoot) {
       startCombat(state);
     }
 
-    // 6. Registra os loops de tempo, save autom├ítico e rel├│gio
+    // 6. Registra os loops de tempo, save automático e relógio
     _intervals.push(setInterval(() => {
       const s = getState();
       const now = Date.now();
@@ -112,16 +112,16 @@ export async function bootstrap(shadowRoot) {
     isBootstrapped = true;
     console.log('[GameBootstrap] Jogo inicializado com sucesso em modo modular reativo!');
   } catch (err) {
-    console.error('[GameBootstrap] Falha cr├¡tica na inicializa├º├úo:', err);
+    console.error('[GameBootstrap] Falha crítica na inicialização:', err);
   }
 }
 
 /**
- * Finaliza os loops e desfaz inscri├º├Áes de evento ao desmontar o jogo.
+ * Finaliza os loops e desfaz inscrições de evento ao desmontar o jogo.
  */
 export function destroyBootstrap() {
   stopCombat();
   cleanupTracked();
   isBootstrapped = false;
-  console.log('[GameBootstrap] Recursos limpos e destru├¡dos.');
+  console.log('[GameBootstrap] Recursos limpos e destruídos.');
 }

@@ -39,13 +39,13 @@ export function AuthModal({ onCloudDataLoaded, getCurrentState }: AuthModalProps
           const cloudState = await loadPlayerStateFromCloud(currentUser.uid);
           if (cloudState && typeof cloudState === 'object' && cloudState.level !== undefined && onCloudDataLoaded) {
             onCloudDataLoaded(cloudState);
-            setMsg(`­ƒÆ¥ Progresso de N├¡vel ${cloudState.level} carregado da nuvem!`);
+            setMsg(`💾 Progresso de Nível ${cloudState.level} carregado da nuvem!`);
             setTimeout(() => setMsg(null), 5000);
           } else if (getCurrentState) {
             const currentState = getCurrentState();
             if (currentState && currentState.level > 1) {
               await savePlayerStateToCloud(currentUser.uid, currentState);
-              setMsg('Ôÿü´©Å Novo progresso sincronizado com a nuvem!');
+              setMsg('☁️ Novo progresso sincronizado com a nuvem!');
               setTimeout(() => setMsg(null), 5000);
             }
           }
@@ -105,7 +105,7 @@ export function AuthModal({ onCloudDataLoaded, getCurrentState }: AuthModalProps
       if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
         setError('E-mail ou senha incorretos.');
       } else if (err.code === 'auth/invalid-email') {
-        setError('E-mail inv├ílido.');
+        setError('E-mail inválido.');
       } else {
         setError(err.message || 'Erro ao realizar login.');
       }
@@ -124,7 +124,7 @@ export function AuthModal({ onCloudDataLoaded, getCurrentState }: AuthModalProps
       return;
     }
     if (password !== confirmPassword) {
-      setError('As senhas n├úo coincidem.');
+      setError('As senhas não coincidem.');
       return;
     }
 
@@ -134,7 +134,7 @@ export function AuthModal({ onCloudDataLoaded, getCurrentState }: AuthModalProps
       setIsOpen(false);
     } catch (err: any) {
       if (err.code === 'auth/email-already-in-use') {
-        setError('Este e-mail j├í est├í cadastrado.');
+        setError('Este e-mail já está cadastrado.');
       } else if (err.code === 'auth/weak-password') {
         setError('Senha muito fraca. Use pelo menos 6 caracteres.');
       } else {
@@ -162,7 +162,7 @@ export function AuthModal({ onCloudDataLoaded, getCurrentState }: AuthModalProps
   const handleLogout = async () => {
     await signOut(auth);
     setUser(null);
-    setMsg('Sess├úo encerrada.');
+    setMsg('Sessão encerrada.');
     setTimeout(() => setMsg(null), 3000);
   };
 
@@ -173,7 +173,7 @@ export function AuthModal({ onCloudDataLoaded, getCurrentState }: AuthModalProps
     const ok = await savePlayerStateToCloud(user.uid, currentState);
     setSyncing(false);
     if (ok) {
-      setMsg('Ôÿü´©Å Jogo salvo com sucesso no Firebase!');
+      setMsg('☁️ Jogo salvo com sucesso no Firebase!');
       setTimeout(() => setMsg(null), 4000);
     } else {
       setError('Falha ao salvar na nuvem.');
@@ -187,7 +187,7 @@ export function AuthModal({ onCloudDataLoaded, getCurrentState }: AuthModalProps
     setSyncing(false);
     if (cloudState && cloudState.level !== undefined) {
       onCloudDataLoaded(cloudState);
-      setMsg(`­ƒÆ¥ Progresso de N├¡vel ${cloudState.level} carregado da nuvem!`);
+      setMsg(`💾 Progresso de Nível ${cloudState.level} carregado da nuvem!`);
       setTimeout(() => setMsg(null), 4000);
     } else {
       setError('Nenhum save encontrado na nuvem para este e-mail.');
@@ -195,48 +195,69 @@ export function AuthModal({ onCloudDataLoaded, getCurrentState }: AuthModalProps
     }
   };
 
+  const [showPopover, setShowPopover] = useState(false);
+
   return (
     <div className="relative inline-block text-left">
-      {/* Header Account Badge */}
-      <div className="flex items-center gap-2">
-        {user ? (
-          <div className="flex items-center gap-2 bg-slate-900/90 border border-amber-500/30 rounded-xl px-3 py-1.5 text-xs text-white">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span className="font-semibold truncate max-w-[140px] text-amber-200">{user.email?.split('@')[0]}</span>
-            <button 
-              onClick={handleManualSync} 
-              disabled={syncing}
-              className="px-2 py-0.5 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 rounded border border-amber-500/40 text-[10px] font-bold transition"
-              title="Salvar progresso atual no Firebase"
-            >
-              {syncing ? 'Ôîø...' : 'Ôÿü´©Å Salvar'}
-            </button>
-            <button 
-              onClick={handleManualLoad} 
-              disabled={syncing}
-              className="px-2 py-0.5 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 rounded border border-blue-500/40 text-[10px] font-bold transition"
-              title="Carregar progresso salvo da nuvem"
-            >
-              {syncing ? 'Ôîø...' : '­ƒôÑ Carregar'}
-            </button>
-            <button 
-              onClick={handleLogout} 
-              className="px-1.5 py-0.5 bg-red-500/20 hover:bg-red-500/30 text-red-300 rounded text-[10px] transition"
-              title="Sair da conta"
-            >
-              ­ƒÜ¬
-            </button>
-          </div>
-        ) : (
-          <button
-            onClick={() => setIsOpen(true)}
-            className="flex items-center gap-1.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-bold rounded-xl px-3 py-1.5 text-xs shadow-lg shadow-amber-500/20 transition"
-          >
-            <span>Ôÿü´©Å</span>
-            <span>Entrar / Salvar na Nuvem</span>
-          </button>
-        )}
-      </div>
+      {/* Compact Floppy Disk Button */}
+      <button
+        onClick={() => setShowPopover(!showPopover)}
+        className="flex items-center gap-1.5 bg-slate-900/90 hover:bg-slate-800 border border-amber-500/40 rounded-xl px-2.5 py-1.5 text-xs text-amber-300 shadow-lg shadow-black/60 transition cursor-pointer"
+        title="Menu de Salvamento na Nuvem (Clique para expandir)"
+      >
+        <span className="text-base">💾</span>
+        {user && <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>}
+      </button>
+
+      {/* Popover Dropdown Menu */}
+      {showPopover && (
+        <div className="absolute right-0 mt-2 w-64 bg-[#0b0f1c] border border-amber-500/40 rounded-2xl p-3 shadow-2xl z-50 text-xs text-white space-y-2">
+          {user ? (
+            <>
+              <div className="flex items-center justify-between pb-2 border-b border-amber-500/20">
+                <span className="font-bold text-amber-300 truncate max-w-[170px]">{user.email?.split('@')[0]}</span>
+                <span className="w-2 h-2 rounded-full bg-emerald-400" title="Conectado"></span>
+              </div>
+              <button
+                onClick={() => { setShowPopover(false); handleManualSync(); }}
+                disabled={syncing}
+                className="w-full flex items-center justify-center gap-2 py-1.5 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 rounded-xl border border-amber-500/40 font-semibold transition cursor-pointer"
+              >
+                <span>☁️</span>
+                <span>{syncing ? 'Salvando...' : 'Salvar Progresso'}</span>
+              </button>
+              <button
+                onClick={() => { setShowPopover(false); handleManualLoad(); }}
+                disabled={syncing}
+                className="w-full flex items-center justify-center gap-2 py-1.5 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 rounded-xl border border-blue-500/40 font-semibold transition cursor-pointer"
+              >
+                <span>📥</span>
+                <span>{syncing ? 'Carregando...' : 'Carregar Save'}</span>
+              </button>
+              <button
+                onClick={() => { setShowPopover(false); handleLogout(); }}
+                className="w-full flex items-center justify-center gap-2 py-1.5 bg-red-500/20 hover:bg-red-500/30 text-red-300 rounded-xl border border-red-500/30 font-semibold transition cursor-pointer"
+              >
+                <span>🚪</span>
+                <span>Sair da Conta</span>
+              </button>
+            </>
+          ) : (
+            <>
+              <div className="text-amber-200 font-semibold text-center py-1">
+                Salvamento na Nuvem
+              </div>
+              <button
+                onClick={() => { setShowPopover(false); setIsOpen(true); }}
+                className="w-full flex items-center justify-center gap-2 py-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-bold rounded-xl shadow transition cursor-pointer"
+              >
+                <span>🔑</span>
+                <span>Entrar / Criar Conta</span>
+              </button>
+            </>
+          )}
+        </div>
+      )}
 
       {/* Cloud Status Toast Notification */}
       {msg && (
@@ -253,13 +274,13 @@ export function AuthModal({ onCloudDataLoaded, getCurrentState }: AuthModalProps
               onClick={() => setIsOpen(false)}
               className="absolute top-4 right-4 text-white/40 hover:text-white text-lg font-bold"
             >
-              Ô£ò
+              ✕
             </button>
 
             <div className="text-center mb-6">
-              <span className="text-4xl">­ƒÅ░</span>
+              <span className="text-4xl">🏰</span>
               <h2 className="font-display text-2xl font-black text-amber-300 mt-1">Conta Aden Arena</h2>
-              <p className="text-xs text-white/50">Salve seu progresso na nuvem Firebase para n├úo perder nada!</p>
+              <p className="text-xs text-white/50">Salve seu progresso na nuvem Firebase para não perder nada!</p>
             </div>
 
             {/* Auth Tabs */}
@@ -326,7 +347,7 @@ export function AuthModal({ onCloudDataLoaded, getCurrentState }: AuthModalProps
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="ÔÇóÔÇóÔÇóÔÇóÔÇóÔÇóÔÇóÔÇó"
+                  placeholder="••••••••"
                   className="w-full bg-slate-900/80 border border-white/15 rounded-xl px-3 py-2 text-xs text-white placeholder-white/20 focus:outline-none focus:border-amber-400"
                 />
               </div>
@@ -339,7 +360,7 @@ export function AuthModal({ onCloudDataLoaded, getCurrentState }: AuthModalProps
                     required
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder="ÔÇóÔÇóÔÇóÔÇóÔÇóÔÇóÔÇóÔÇó"
+                    placeholder="••••••••"
                     className="w-full bg-slate-900/80 border border-white/15 rounded-xl px-3 py-2 text-xs text-white placeholder-white/20 focus:outline-none focus:border-amber-400"
                   />
                 </div>

@@ -1,8 +1,8 @@
 /**
- * CharacterService.js ÔÇö Gest├úo de Promo├º├Áes de Classe, Heran├ºa e Subclasses do Lineage Idle.
+ * CharacterService.js — Gestão de Promoções de Classe, Herança e Subclasses do Lineage Idle.
  *
- * Respons├ível pela resolu├º├úo de heran├ºa de classes (classSatisfies), verifica├º├úo de elegibilidade
- * de promo├º├úo (1┬¬, 2┬¬ e 3┬¬ Troca de Classe - 3rd Job) e cerim├┤nia de promo├º├úo com reembolso de SP.
+ * Responsável pela resolução de herança de classes (classSatisfies), verificação de elegibilidade
+ * de promoção (1ª, 2ª e 3ª Troca de Classe - 3rd Job) e cerimônia de promoção com reembolso de SP.
  */
 
 import { D } from '../core/GameConfig.js';
@@ -11,7 +11,7 @@ import { getClass } from '../engine/StatsEngine.js';
 import { getSkillCost } from '../engine/SkillEngine.js';
 
 /**
- * Verifica se a classe atual do jogador satisfaz um requisito de classe (percorrendo a ├írvore de heran├ºa).
+ * Verifica se a classe atual do jogador satisfaz um requisito de classe (percorrendo a árvore de herança).
  * @param {string} playerClass
  * @param {string} reqClass
  * @returns {boolean}
@@ -34,7 +34,7 @@ export function classSatisfies(playerClass, reqClass) {
 }
 
 /**
- * Resolve a chave de ├írvore de habilidades (skill tree key) exata para a classe.
+ * Resolve a chave de árvore de habilidades (skill tree key) exata para a classe.
  * @param {string} classId
  * @returns {string|null}
  */
@@ -83,9 +83,9 @@ export function getClassSkills(classId) {
 }
 
 /**
- * Verifica se o jogador pode realizar uma promo├º├úo de classe (Lv.20, Lv.40 ou Lv.76).
+ * Verifica se o jogador pode realizar uma promoção de classe (Lv.20, Lv.40 ou Lv.76).
  * @param {Object} state
- * @param {Object} [callbacks] ÔÇö { el, openClassTransferModal }
+ * @param {Object} [callbacks] — { el, openClassTransferModal }
  */
 export function checkClassAdvancement(state, callbacks = {}) {
   const currentClassDef = getClass(state.class);
@@ -101,16 +101,16 @@ export function checkClassAdvancement(state, callbacks = {}) {
 
   if (state.level >= 20 && currentStage === 0) {
     canAdvance = true;
-    advTitle = 'ÔÜí 1┬¬ Troca de Classe Dispon├¡vel!';
-    advSub = `Atingiu o N├¡vel ${state.level}! Escolha o caminho de evolu├º├úo para a Ordem de ${currentClassDef.name}.`;
+    advTitle = '⚡ 1ª Troca de Classe Disponível!';
+    advSub = `Atingiu o Nível ${state.level}! Escolha o caminho de evolução para a Ordem de ${currentClassDef.name}.`;
   } else if (state.level >= 40 && currentStage === 1) {
     canAdvance = true;
-    advTitle = 'ÔÜö´©Å 2┬¬ Troca de Classe Dispon├¡vel!';
-    advSub = `Atingiu o N├¡vel ${state.level}! Escolha a sua Classe ├ëpica de Especialista.`;
+    advTitle = '⚔️ 2ª Troca de Classe Disponível!';
+    advSub = `Atingiu o Nível ${state.level}! Escolha a sua Classe Épica de Especialista.`;
   } else if (state.level >= 76 && currentStage === 2) {
     canAdvance = true;
-    advTitle = '­ƒææ 3┬¬ Troca de Classe Dispon├¡vel (3rd Job)!';
-    advSub = `Atingiu o N├¡vel ${state.level}! Torne-se um Mestre Sagrado da 3┬¬ Transfer├¬ncia e alcance o poder dos Noblesses!`;
+    advTitle = '👑 3ª Troca de Classe Disponível (3rd Job)!';
+    advSub = `Atingiu o Nível ${state.level}! Torne-se um Mestre Sagrado da 3ª Transferência e alcance o poder dos Noblesses!`;
   }
 
   if (canAdvance) {
@@ -127,10 +127,10 @@ export function checkClassAdvancement(state, callbacks = {}) {
 }
 
 /**
- * Promove o personagem para uma nova classe e reembolsa SPs de skills incompat├¡veis.
+ * Promove o personagem para uma nova classe e reembolsa SPs de skills incompatíveis.
  * @param {Object} state
  * @param {string} newClassId
- * @param {Object} [callbacks] ÔÇö { log, floatText, el, updateAllUI, save }
+ * @param {Object} [callbacks] — { log, floatText, el, updateAllUI, save }
  */
 export function promoteClass(state, newClassId, callbacks = {}) {
   const newClassDef = getClass(newClassId);
@@ -164,12 +164,12 @@ export function promoteClass(state, newClassId, callbacks = {}) {
 
   if (totalRefunded > 0) {
     state.sp += totalRefunded;
-    if (callbacks.log) callbacks.log(`­ƒöä ${totalRefunded.toLocaleString()} SP foram reembolsados para distribui├º├úo na nova ├írvore exclusiva de ${newClassDef.name}!`, 'rarity-legendary');
+    if (callbacks.log) callbacks.log(`🔄 ${totalRefunded.toLocaleString()} SP foram reembolsados para distribuição na nova árvore exclusiva de ${newClassDef.name}!`, 'rarity-legendary');
     if (callbacks.floatText) callbacks.floatText(`+${totalRefunded.toLocaleString()} SP`, 'float-jackpot');
   }
 
-  if (callbacks.log) callbacks.log(`­ƒÄë PARAB├ëNS! Voc├¬ concluiu a Cerim├┤nia e agora ├® um **${newClassDef.name}**!`, 'rarity-legendary');
-  if (callbacks.floatText) callbacks.floatText(`­ƒÄë ${newClassDef.name.toUpperCase()}!`, 'float-jackpot');
+  if (callbacks.log) callbacks.log(`🎉 PARABÉNS! Você concluiu a Cerimônia e agora é um **${newClassDef.name}**!`, 'rarity-legendary');
+  if (callbacks.floatText) callbacks.floatText(`🎉 ${newClassDef.name.toUpperCase()}!`, 'float-jackpot');
 
   if (callbacks.el) {
     const modal = callbacks.el('class-transfer-modal');

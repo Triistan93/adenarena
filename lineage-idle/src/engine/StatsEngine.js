@@ -10,45 +10,6 @@ import { D } from '../core/GameConfig.js';
 import { RACES, CLASSES, RACE_BASE_ATTRIBUTES } from '../data/races.js';
 import { CODEX_SETS, BOSS_DOLLS } from '../data/codex.js';
 
-export const STR_MODIFIERS = {
-  10: 0.42, 11: 0.43, 12: 0.45, 13: 0.46, 14: 0.48, 15: 0.50,
-  16: 0.51, 17: 0.53, 18: 0.55, 19: 0.57, 20: 0.59, 21: 0.61,
-  22: 0.63, 23: 0.66, 24: 0.68, 25: 0.71, 26: 0.73, 27: 0.76,
-  28: 0.78, 29: 0.81, 30: 0.84, 31: 0.87, 32: 0.90, 33: 0.94,
-  34: 0.94, 35: 1.01, 36: 1.04, 37: 1.08, 38: 1.12, 39: 1.16,
-  40: 1.20, 41: 1.24, 42: 1.29, 43: 1.33, 44: 1.38, 45: 1.43,
-  46: 1.48, 47: 1.54, 48: 1.59, 49: 1.65, 50: 1.71, 51: 1.77,
-  52: 1.83, 53: 1.90, 54: 1.97, 55: 2.04, 56: 2.11, 57: 2.19,
-  58: 2.27, 59: 2.35, 60: 2.45
-};
-
-export const DEX_MODIFIERS = {
-  10: 0.92, 11: 0.93, 12: 0.94, 13: 0.94, 14: 0.95, 15: 0.96,
-  16: 0.97, 17: 0.98, 18: 0.99, 19: 1.00, 20: 1.01, 21: 1.01,
-  22: 1.02, 23: 1.03, 24: 1.04, 25: 1.05, 26: 1.06, 27: 1.07,
-  28: 1.08, 29: 1.09, 30: 1.10, 31: 1.11, 32: 1.12, 33: 1.13,
-  34: 1.14, 35: 1.15, 36: 1.16, 37: 1.17, 38: 1.18, 39: 1.19,
-  40: 1.20, 41: 1.21, 42: 1.22, 43: 1.24, 44: 1.25, 45: 1.26,
-  46: 1.27, 47: 1.28, 48: 1.29, 49: 1.30, 50: 1.35
-};
-
-export function calculatePhysicalSkillDamage({ pAtkSkill = 1000, pAtkChar = 500, pDefChar = 300, isRange = false, chargeLv = 0, soulCount = 0, mult = 1.0 }) {
-  const constant = isRange ? 70 : 77;
-  let chargeMult = 0;
-  if (chargeLv > 1) {
-    chargeMult = 0.2 * (chargeLv - 1);
-  }
-  let soulMult = 0;
-  if (soulCount > 0) {
-    soulMult = 0.05 * Math.min(5, soulCount);
-  }
-
-  const baseAtkSum = pAtkSkill + pAtkChar;
-  const chargeSoulBonus = baseAtkSum * (chargeMult + soulMult);
-  const damage = constant * (baseAtkSum + chargeSoulBonus) * mult / Math.max(1, pDefChar);
-  return Math.floor(damage);
-}
-
 export const ASTRAL_NODES = {
   // Constelação do Dragão (Combate)
   dragon_1: { id: 'dragon_1', const: 'dragon', name: 'Fúria Titânica', icon: '⚔️', desc: '+3% Atk Físico por nível', max: 10, cost: 1, stat: 'patkMult', val: 0.03 },

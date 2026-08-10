@@ -1,6 +1,6 @@
 /**
  * Web Audio API Synthesizer for Lineage Idle RPG.
- * Zero external assets required ÔÇö procedurally generates retro SFX.
+ * Zero external assets required — procedurally generates retro SFX.
  */
 
 class IdleAudioManager {

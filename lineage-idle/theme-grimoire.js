@@ -1,5 +1,5 @@
 // ================================================================
-// theme-grimoire.js ÔÇö helpers vanilla JS para o tema "O Grim├│rio"
+// theme-grimoire.js — helpers vanilla JS para o tema "O Grimório"
 // Salve como lineage-idle/theme-grimoire.js e inclua depois do CSS:
 // <script src="./theme-grimoire.js"></script>
 // ================================================================
@@ -19,9 +19,9 @@
       span.className = 'ember';
       // Tamanho: 2px a 7px (brasas menores e maiores)
       const size = 2 + ((i * 11) % 6);
-      // Dura├º├úo: 7s a 18s (brasas lentas e r├ípidas)
+      // Duração: 7s a 18s (brasas lentas e rápidas)
       const dur = 7 + ((i * 13) % 12);
-      // Delay negativo p/ come├ºar em pontos aleat├│rios do ciclo
+      // Delay negativo p/ começar em pontos aleatórios do ciclo
       const delay = -((i * 23) % Math.floor(dur));
       // Drift horizontal: mais amplo para parecer natural
       const drift = ((i % 7) - 3) * 40;
@@ -29,9 +29,9 @@
       const opacity = 0.4 + ((i * 7) % 50) / 100;
       const color = colors[i % colors.length];
 
-      // Posi├º├úo horizontal distribu├¡da por toda a tela
+      // Posição horizontal distribuída por toda a tela
       span.style.left = ((i * 31 + 7) % 97) + '%';
-      // Altura de in├¡cio aleat├│ria (n├úo apenas bottom)
+      // Altura de início aleatória (não apenas bottom)
       const startBottom = ((i * 43) % 30);
       span.style.bottom = startBottom + '%';
       span.style.setProperty('--es', size + 'px');
@@ -42,7 +42,7 @@
       span.style.setProperty('--ec', color);
       frag.appendChild(span);
     }
-    // Se j├í ├® um global container, mant├®m a classe; sen├úo adiciona ember-field
+    // Se já é um global container, mantém a classe; senão adiciona ember-field
     if (!container.classList.contains('g-ember-global')) {
       container.classList.add('ember-field');
     }
@@ -72,18 +72,18 @@
     els.forEach((el) => io.observe(el));
   };
 
-  // ---- 3) Dispara/reinicia o carimbo (├║til quando o item aparece) --
+  // ---- 3) Dispara/reinicia o carimbo (útil quando o item aparece) --
   // Uso: GrimoireFX.stamp(document.querySelector('.stamp'))
   GrimoireFX.stamp = function (el) {
     if (!el) return;
     el.style.animation = 'none';
-    // for├ºa reflow pra poder tocar a anima├º├úo de novo
+    // força reflow pra poder tocar a animação de novo
     void el.offsetWidth;
     el.style.animation = '';
   };
 
   // ---- 4) Cria um carimbo dinamicamente (ex: ao lootar item raro) --
-  // Uso: GrimoireFX.spawnStamp(container, { text: 'LEND├üRIO', sub: 'dragon slayer', rarity: 'legendary' })
+  // Uso: GrimoireFX.spawnStamp(container, { text: 'LENDÁRIO', sub: 'dragon slayer', rarity: 'legendary' })
   GrimoireFX.spawnStamp = function (container, { text = 'CORRIGIDO', sub = '', rarity = 'uncommon', duration = 2400 } = {}) {
     if (!container) return;
     const el = document.createElement('div');
@@ -102,7 +102,7 @@
   // Uso: GrimoireFX.scramble(document.querySelector('#path'), '~/lineage-idle/save.json')
   GrimoireFX.scramble = function (el, text, opts = {}) {
     if (!el) return;
-    const glyphs = '!<>-_\\\\/[]{}ÔÇö=+*^?#$%&@';
+    const glyphs = '!<>-_\\\\/[]{}—=+*^?#$%&@';
     const total = opts.frames ?? 34;
     const startDelay = opts.startDelay ?? 200;
     let frame = 0;
@@ -122,7 +122,7 @@
     }, startDelay);
   };
 
-  // ---- 6) Count-up num├®rico (ex: gold ganho, xp, dano total) ------
+  // ---- 6) Count-up numérico (ex: gold ganho, xp, dano total) ------
   // Uso: GrimoireFX.countUp(document.querySelector('#gold'), 15230)
   GrimoireFX.countUp = function (el, target, opts = {}) {
     if (!el) return;

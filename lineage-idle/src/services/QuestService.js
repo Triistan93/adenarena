@@ -1,8 +1,8 @@
 /**
- * QuestService.js ÔÇö Gest├úo de Miss├Áes Di├írias, Semanais e Passe de Batalha (Adena Pass).
+ * QuestService.js — Gestão de Missões Diárias, Semanais e Passe de Batalha (Adena Pass).
  *
- * Respons├ível pela checagem de resets de quests, escuta de eventos de quests (kills, craft, boss, etc),
- * resgate de recompensas di├írias/semanais e progresso/desbloqueio do Passe de Batalha.
+ * Responsável pela checagem de resets de quests, escuta de eventos de quests (kills, craft, boss, etc),
+ * resgate de recompensas diárias/semanais e progresso/desbloqueio do Passe de Batalha.
  */
 
 import { D } from '../core/GameConfig.js';
@@ -10,7 +10,7 @@ import { QUEST_DEFS, BATTLE_PASS_TIERS } from '../data/quests.js';
 import { addToInventory } from './InventoryService.js';
 
 /**
- * Reseta o progresso das miss├Áes di├írias (24h) e semanais (7 dias).
+ * Reseta o progresso das missões diárias (24h) e semanais (7 dias).
  * @param {Object} state
  */
 export function checkQuestResets(state) {
@@ -39,7 +39,7 @@ export function checkQuestResets(state) {
 }
 
 /**
- * Incrementa o progresso de miss├Áes do tipo especificado (ex: 'kill', 'craft', 'boss', 'enchant').
+ * Incrementa o progresso de missões do tipo especificado (ex: 'kill', 'craft', 'boss', 'enchant').
  * @param {Object} state
  * @param {string} type
  * @param {number} [amount=1]
@@ -55,10 +55,10 @@ export function triggerQuestEvent(state, type, amount = 1) {
 }
 
 /**
- * Reclama as recompensas de uma miss├úo conclu├¡da.
+ * Reclama as recompensas de uma missão concluída.
  * @param {Object} state
  * @param {string} questId
- * @param {Object} [callbacks] ÔÇö { log, floatText, updateAllUI, save }
+ * @param {Object} [callbacks] — { log, floatText, updateAllUI, save }
  * @returns {boolean}
  */
 export function claimQuestReward(state, questId, callbacks = {}) {
@@ -84,8 +84,8 @@ export function claimQuestReward(state, questId, callbacks = {}) {
     state.battlePass.xp += rew.passXp;
   }
 
-  if (callbacks.log) callbacks.log(`­ƒÄü Recompensa Reclamada: **${qDef.name}**!`, 'rarity-legendary');
-  if (callbacks.floatText) callbacks.floatText(`­ƒÄü MISS├âO CONCLU├ìDA!`, 'float-jackpot');
+  if (callbacks.log) callbacks.log(`🎁 Recompensa Reclamada: **${qDef.name}**!`, 'rarity-legendary');
+  if (callbacks.floatText) callbacks.floatText(`🎁 MISSÃO CONCLUÍDA!`, 'float-jackpot');
 
   if (callbacks.updateAllUI) callbacks.updateAllUI();
   if (callbacks.save) callbacks.save();
@@ -110,7 +110,7 @@ export function unlockPremiumPass(state, callbacks = {}) {
   state.gold -= COST;
   state.battlePass.unlockedPremium = true;
 
-  if (callbacks.log) callbacks.log('Ô£¿ PASSE PREMIUM DE ADENA ATIVADO COM SUCESSO!', 'rarity-legendary');
+  if (callbacks.log) callbacks.log('✨ PASSE PREMIUM DE ADENA ATIVADO COM SUCESSO!', 'rarity-legendary');
   if (callbacks.floatText) callbacks.floatText('PREMIUM ATIVO!', 'float-jackpot');
 
   if (callbacks.updateAllUI) callbacks.updateAllUI();
@@ -118,10 +118,10 @@ export function unlockPremiumPass(state, callbacks = {}) {
 }
 
 /**
- * Reclama a recompensa de um n├¡vel do Passe de Batalha (Free ou Premium).
+ * Reclama a recompensa de um nível do Passe de Batalha (Free ou Premium).
  * @param {Object} state
  * @param {number} tierLevel
- * @param {string} [passType='free'] ÔÇö 'free' ou 'premium'
+ * @param {string} [passType='free'] — 'free' ou 'premium'
  * @param {Object} [callbacks]
  */
 export function claimPassReward(state, tierLevel, passType = 'free', callbacks = {}) {
@@ -139,7 +139,7 @@ export function claimPassReward(state, tierLevel, passType = 'free', callbacks =
     if (rew.sp) state.sp = (state.sp || 0) + rew.sp;
     if (rew.magicLamps) state.magicLamps = (state.magicLamps || 0) + rew.magicLamps;
     if (rew.item) addToInventory(state, rew.item, rew.count || 1, null, false, callbacks);
-    if (callbacks.log) callbacks.log(`­ƒÄ½ Recompensa Gr├ítis do Passe Nv.${tierLevel} Reclamada!`, 'loot');
+    if (callbacks.log) callbacks.log(`🎫 Recompensa Grátis do Passe Nv.${tierLevel} Reclamada!`, 'loot');
   } else if (passType === 'premium') {
     if (!state.battlePass.unlockedPremium) return;
     if (state.battlePass.claimedPremium.includes(tierLevel)) return;
@@ -151,7 +151,7 @@ export function claimPassReward(state, tierLevel, passType = 'free', callbacks =
       if (!state.titles.includes(rew.title)) state.titles.push(rew.title);
     }
     if (rew.item) addToInventory(state, rew.item, rew.count || 1, 'legendary', false, callbacks);
-    if (callbacks.log) callbacks.log(`­ƒææ Recompensa PREMIUM do Passe Nv.${tierLevel} Reclamada!`, 'rarity-legendary');
+    if (callbacks.log) callbacks.log(`👑 Recompensa PREMIUM do Passe Nv.${tierLevel} Reclamada!`, 'rarity-legendary');
   }
 
   if (callbacks.updateAllUI) callbacks.updateAllUI();

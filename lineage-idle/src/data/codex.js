@@ -1,51 +1,51 @@
 /**
- * codex.js ÔÇö Defini├º├Áes do Codex de Cole├º├Áes e Boss Dolls do Lineage Idle.
- * Extra├¡do de lineage-idle/main.js (linhas 4748-4791, 4894-4935)
+ * codex.js — Definições do Codex de Coleções e Boss Dolls do Lineage Idle.
+ * Extraído de lineage-idle/main.js (linhas 4748-4791, 4894-4935)
  */
 
 /**
- * Sets do Codex de Cole├º├Áes.
+ * Sets do Codex de Coleções.
  * Cada set exige que o jogador registre todos os `items` para ganhar o `bonus`.
  */
 export const CODEX_SETS = {
   novice_weapons: {
-    name:  'ÔÜö´©Å Armamento de Recruta',
-    desc:  'Registre as armas iniciais de ca├ºa dos novatos.',
+    name:  '⚔️ Armamento de Recruta',
+    desc:  'Registre as armas iniciais de caça dos novatos.',
     items: ['wooden_sword', 'apprentice_staff', 'short_bow'],
     bonus: { atk: 25, matk: 25 },
     label: '+25 P. Atk & +25 M. Atk'
   },
   novice_armors: {
-    name:  '­ƒøí´©Å Vestimentas de Tecido & Couro',
-    desc:  'Registre os trajes defensivos b├ísicos de treino.',
+    name:  '🛡️ Vestimentas de Tecido & Couro',
+    desc:  'Registre os trajes defensivos básicos de treino.',
     items: ['cloth_shirt', 'leather_armor', 'cloth_pants'],
     bonus: { def: 30, mdef: 30 },
     label: '+30 P. Def & +30 M. Def'
   },
   novice_jewels: {
-    name:  '­ƒô┐ Joias de Carvalho de Elmore',
-    desc:  'Registre joias ancestrais de madeira m├¡stica.',
+    name:  '📿 Joias de Carvalho de Elmore',
+    desc:  'Registre joias ancestrais de madeira mística.',
     items: ['oak_necklace', 'oak_earring'],
     bonus: { hp: 100, mp: 50 },
     label: '+100 Max HP & +50 Max MP'
   },
   d_grade_champions: {
-    name:  '­ƒùí´©Å Equipamentos de Ordem D-Grade',
-    desc:  'Registre l├óminas e vestes de guerreiros comprovados.',
+    name:  '🗡️ Equipamentos de Ordem D-Grade',
+    desc:  'Registre lâminas e vestes de guerreiros comprovados.',
     items: ['bastard_sword', 'elven_bow', 'mithril_gaiters'],
     bonus: { atk: 50, crit: 5 },
     label: '+50 P. Atk & +5% P. Crit Rate'
   },
   crystal_masters: {
-    name:  '­ƒÆÄ Cristais das Cavernas de Aden',
-    desc:  'Registre cristais extra├¡dos do desmanche nobre.',
+    name:  '💎 Cristais das Cavernas de Aden',
+    desc:  'Registre cristais extraídos do desmanche nobre.',
     items: ['crystal_d', 'crystal_c', 'crystal_b'],
     bonus: { atk: 60, matk: 60, hp: 150 },
     label: '+60 P. Atk, +60 M. Atk, +150 HP'
   },
   spellbook_codex: {
-    name:  '­ƒôû Livros Sagrados dos Astros',
-    desc:  'Registre os grim├│rios das estrelas de Aden.',
+    name:  '📖 Livros Sagrados dos Astros',
+    desc:  'Registre os grimórios das estrelas de Aden.',
     items: ['spellbook_1star', 'spellbook_2star', 'spellbook_3star', 'spellbook_4star'],
     bonus: { atk: 100, matk: 100, hp: 300, def: 50 },
     label: '+100 P. Atk, +100 M. Atk, +300 HP, +50 Def'
@@ -53,12 +53,12 @@ export const CODEX_SETS = {
 };
 
 /**
- * Boss Dolls ÔÇö Bonifica├º├Áes por n├¡vel das Dolls de Raid Boss.
- * O jogador obt├®m dolls ao derrotar raids e pode sintetiz├í-las para subir de n├¡vel.
+ * Boss Dolls — Bonificações por nível das Dolls de Raid Boss.
+ * O jogador obtém dolls ao derrotar raids e pode sintetizá-las para subir de nível.
  */
 export const BOSS_DOLLS = {
   doll_queen_ant: {
-    name: '­ƒÉ£ Queen Ant Doll', icon: '­ƒÉ£',
+    name: '🐜 Queen Ant Doll', icon: '🐜',
     statsByLvl: {
       1: { atk: 15,  crit: 3,  label: '+15 P. Atk, +3% Crit'   },
       2: { atk: 35,  crit: 6,  label: '+35 P. Atk, +6% Crit'   },
@@ -68,7 +68,7 @@ export const BOSS_DOLLS = {
     }
   },
   doll_baium: {
-    name: 'ÔÜí Baium Doll', icon: 'ÔÜí',
+    name: '⚡ Baium Doll', icon: '⚡',
     statsByLvl: {
       1: { speed: 5,  label: '+5% Speed'  },
       2: { speed: 10, label: '+10% Speed' },
@@ -78,7 +78,7 @@ export const BOSS_DOLLS = {
     }
   },
   doll_orfen: {
-    name: '­ƒªï Orfen Doll', icon: '­ƒªï',
+    name: '🦋 Orfen Doll', icon: '🦋',
     statsByLvl: {
       1: { matk: 20,  crit: 3,  label: '+20 M. Atk, +3% M. Crit'   },
       2: { matk: 45,  crit: 6,  label: '+45 M. Atk, +6% M. Crit'   },
@@ -88,7 +88,7 @@ export const BOSS_DOLLS = {
     }
   },
   doll_zaken: {
-    name: '­ƒÅ┤ÔÇìÔÿá´©Å Zaken Doll', icon: '­ƒÅ┤ÔÇìÔÿá´©Å',
+    name: '🏴‍☠️ Zaken Doll', icon: '🏴‍☠️',
     statsByLvl: {
       1: { def: 25,  lifesteal: 3,  label: '+25 Def, +3% Lifesteal'   },
       2: { def: 50,  lifesteal: 5,  label: '+50 Def, +5% Lifesteal'   },

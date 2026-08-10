@@ -79,7 +79,7 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
     let starterGloves = 'iron_gauntlets';
     let starterBoots = 'iron_boots';
 
-    // Map class ÔåÆ starter skill using Echo archetype system
+    // Map class → starter skill using Echo archetype system
     const ECHO_STARTER_SKILLS: Record<string, string> = {
       // Mage archetypes
       mage: 'energy_bolt_m', wizard: 'energy_bolt_m', cleric: 'energy_bolt_m',
@@ -181,7 +181,7 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
       if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
         setError('E-mail ou senha incorretos.');
       } else if (err.code === 'auth/invalid-email') {
-        setError('E-mail inv├ílido.');
+        setError('E-mail inválido.');
       } else {
         setError(err.message || 'Erro ao realizar login.');
       }
@@ -199,7 +199,7 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
       return;
     }
     if (password !== confirmPassword) {
-      setError('As senhas n├úo coincidem.');
+      setError('As senhas não coincidem.');
       return;
     }
 
@@ -209,7 +209,7 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
       setShowCreation(true);
     } catch (err: any) {
       if (err.code === 'auth/email-already-in-use') {
-        setError('Este e-mail j├í est├í cadastrado.');
+        setError('Este e-mail já está cadastrado.');
       } else if (err.code === 'auth/weak-password') {
         setError('Senha muito fraca. Use pelo menos 6 caracteres.');
       } else {
@@ -301,44 +301,44 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
           >
             ADEN ARENA
           </h1>
-          <p className="text-xs text-white/40 mt-1">Portal de Autentica├º├úo & Progresso em Nuvem</p>
+          <p className="text-xs text-white/40 mt-1">Portal de Autenticação & Progresso em Nuvem</p>
         </div>
 
         {/* User Already Logged In State */}
         {user ? (
           <div className="space-y-4 text-center">
             <div className="bg-slate-900/80 border border-amber-500/30 rounded-2xl p-4">
-              <span className="text-3xl">­ƒææ</span>
+              <span className="text-3xl">👑</span>
               <h2 className="font-bold text-lg text-amber-300 mt-1">Bem-vindo de volta!</h2>
               <p className="text-xs text-white/70 font-semibold">{user.email}</p>
               
               {cloudState ? (
                 <div className="mt-3 bg-white/5 rounded-xl p-2.5 text-xs text-left space-y-1 border border-white/10">
                   <div className="flex justify-between font-bold">
-                    <span className="text-white/60">Her├│i:</span>
+                    <span className="text-white/60">Herói:</span>
                     <span className="text-amber-200">
-                      {cloudState.charName || 'Aventureiro'} ┬À Nv. {cloudState.level || 1} ({(cloudState.class || '').toUpperCase()})
+                      {cloudState.charName || 'Aventureiro'} · Nv. {cloudState.level || 1} ({(cloudState.class || '').toUpperCase()})
                     </span>
                   </div>
                   <div className="flex justify-between text-[11px]">
                     <span className="text-white/40">Gold:</span>
-                    <span className="text-emerald-300 font-bold">­ƒ¬Ö {(cloudState.gold || 0).toLocaleString()}</span>
+                    <span className="text-emerald-300 font-bold">🪙 {(cloudState.gold || 0).toLocaleString()}</span>
                   </div>
                   {cloudState.tower?.highestFloor > 0 && (
                     <div className="flex justify-between text-[11px]">
                       <span className="text-white/40">Torre:</span>
-                      <span className="text-purple-300 font-bold">­ƒÅ░ Andar {cloudState.tower.highestFloor}</span>
+                      <span className="text-purple-300 font-bold">🏰 Andar {cloudState.tower.highestFloor}</span>
                     </div>
                   )}
                   <div className="flex justify-between text-[11px]">
-                    <span className="text-white/40">Privil├®gio:</span>
+                    <span className="text-white/40">Privilégio:</span>
                     <span className={cloudState.privilegeLevel >= 1 ? "text-red-400 font-bold" : "text-slate-400 font-semibold"}>
-                      {cloudState.privilegeLevel >= 1 ? "­ƒææ Admin (Nv. 1)" : "­ƒæñ Jogador (Nv. 0)"}
+                      {cloudState.privilegeLevel >= 1 ? "👑 Admin (Nv. 1)" : "👤 Jogador (Nv. 0)"}
                     </span>
                   </div>
                 </div>
               ) : (
-                <p className="text-[11px] text-amber-200/60 mt-2">Nenhum save pr├®vio encontrado. Um novo personagem ser├í criado!</p>
+                <p className="text-[11px] text-amber-200/60 mt-2">Nenhum save prévio encontrado. Um novo personagem será criado!</p>
               )}
             </div>
 
@@ -346,14 +346,14 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
               onClick={handleStartLoggedGame}
               className="w-full bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-black font-display font-black text-lg rounded-2xl py-3 shadow-lg shadow-amber-500/25 transition active:scale-95"
             >
-              ÔÜö ENTRAR NO JOGO ÔûÂ
+              ⚔ ENTRAR NO JOGO ▶
             </button>
 
             <button
               onClick={() => setShowCreation(true)}
               className="w-full bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 font-semibold text-xs rounded-xl py-2.5 transition"
             >
-              Ô£¿ Criar Novo Personagem / Recustomizar
+              ✨ Criar Novo Personagem / Recustomizar
             </button>
 
             <button
@@ -429,7 +429,7 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="ÔÇóÔÇóÔÇóÔÇóÔÇóÔÇóÔÇóÔÇó"
+                  placeholder="••••••••"
                   className="w-full bg-slate-900/90 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-white/20 focus:outline-none focus:border-amber-400"
                 />
               </div>
@@ -442,7 +442,7 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
                     required
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder="ÔÇóÔÇóÔÇóÔÇóÔÇóÔÇóÔÇóÔÇó"
+                    placeholder="••••••••"
                     className="w-full bg-slate-900/90 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-white/20 focus:outline-none focus:border-amber-400"
                   />
                 </div>
@@ -462,7 +462,7 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
                 onClick={handlePlayGuest}
                 className="text-xs text-white/50 hover:text-amber-300 underline underline-offset-4 transition font-semibold"
               >
-                ­ƒùí´©Å Jogar como Convidado (Save Local)
+                🗡️ Jogar como Convidado (Save Local)
               </button>
             </div>
           </div>

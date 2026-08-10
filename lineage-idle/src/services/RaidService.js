@@ -1,7 +1,7 @@
 /**
- * RaidService.js ÔÇö Gest├úo de Chefes de Raid ├ëpicos do Lineage Idle.
+ * RaidService.js — Gestão de Chefes de Raid Épicos do Lineage Idle.
  *
- * Respons├ível pela valida├º├úo e inicializa├º├úo de batalhas contra Raids ├ëpicos (Antaras, Valakas, Baium, etc).
+ * Responsável pela validação e inicialização de batalhas contra Raids Épicos (Antaras, Valakas, Baium, etc).
  */
 
 import { RAID_BOSSES } from '../data/raids.js';
@@ -9,10 +9,10 @@ import { MONSTERS } from '../data/monsters.js';
 import { stopCombat, startCombat } from '../engine/CombatEngine.js';
 
 /**
- * Inicia o combate de Raid ├ëpico contra o chefe escolhido.
+ * Inicia o combate de Raid Épico contra o chefe escolhido.
  * @param {Object} state
  * @param {string} raidId
- * @param {Object} [callbacks] ÔÇö { log, el, renderStageMonster, attackMonster }
+ * @param {Object} [callbacks] — { log, el, renderStageMonster, attackMonster }
  */
 export function startRaidBoss(state, raidId, callbacks = {}) {
   const bossTemplate = RAID_BOSSES[raidId];
@@ -36,12 +36,12 @@ export function startRaidBoss(state, raidId, callbacks = {}) {
 
   if (callbacks.el) {
     const sz = callbacks.el('stage-zone');
-    if (sz) sz.textContent = `­ƒÉë RAID ┬À ${bossTemplate.name}`;
+    if (sz) sz.textContent = `🐉 RAID · ${bossTemplate.name}`;
   }
 
   stopCombat(state);
   startCombat(state, callbacks);
 
-  if (callbacks.log) callbacks.log(`ÔÜö´©Å EPIC RAID: Challenge against ${bossTemplate.name} initiated!`, 'rarity-legendary');
+  if (callbacks.log) callbacks.log(`⚔️ EPIC RAID: Challenge against ${bossTemplate.name} initiated!`, 'rarity-legendary');
   if (callbacks.renderStageMonster) callbacks.renderStageMonster();
 }

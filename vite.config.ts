@@ -17,7 +17,7 @@ export default defineConfig({
   },
   build: {
     outDir: "dist",
-    // Raise the chunk-size warning threshold ÔÇö this game has heavy 3-D assets
+    // Raise the chunk-size warning threshold — this game has heavy 3-D assets
     chunkSizeWarningLimit: 2000,
   },
   server: {

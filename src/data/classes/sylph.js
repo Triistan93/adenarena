@@ -1,6 +1,6 @@
-// ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
-// CLASSES ÔÇö Sylph (Sharpshooter, Wind Sniper & Storm Blaster)
-// ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
+// ═══════════════════════════════════════════
+// CLASSES — Sylph (Sharpshooter, Wind Sniper & Storm Blaster)
+// ═══════════════════════════════════════════
 
 export const SYLPH_CLASSES = {
   sylphGunner: {
@@ -20,7 +20,7 @@ export const SYLPH_CLASSES = {
     race: 'sylph',
     archetype: 'fighter',
     stage: 1,
-    desc: 'Atirador de precis├úo elemental com armas de fogo do vento.',
+    desc: 'Atirador de precisão elemental com armas de fogo do vento.',
     base: { atk: 28, def: 12, hp: 160, mp: 65, eva: 18, crit: 14, matk: 18, mdef: 12 },
     skillTree: 'stormBlaster'
   },
@@ -42,7 +42,7 @@ export const SYLPH_CLASSES = {
     race: 'sylph',
     archetype: 'fighter',
     stage: 3,
-    desc: 'Atirador supremo Sylph com Storm Shot e proj├®teis tempestuosos.',
+    desc: 'Atirador supremo Sylph com Storm Shot e projéteis tempestuosos.',
     base: { atk: 140, def: 38, hp: 550, mp: 200, eva: 50, crit: 40, matk: 70, mdef: 45 },
     skillTree: 'stormBlaster'
   }

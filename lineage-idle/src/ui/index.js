@@ -1,6 +1,6 @@
 /**
- * index.js ÔÇö Ponto unificado de exporta├º├úo dos m├│dulos de interface (UI).
- * Redireciona todas as chamadas para o m├│dulo consolidado GameUI.js e AppLayout.js.
+ * index.js — Ponto unificado de exportação dos módulos de interface (UI).
+ * Redireciona todas as chamadas para o módulo consolidado GameUI.js e AppLayout.js.
  */
 import {
   renderStageHero,

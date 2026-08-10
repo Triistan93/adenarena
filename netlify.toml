@@ -1,0 +1,13 @@
+[build]
+  command   = "npm run build"
+  publish   = "dist"
+
+# Node version — pin to LTS so Netlify always picks a compatible version
+[build.environment]
+  NODE_VERSION = "20"
+
+# SPA fallback: any path that is NOT a static file → serve index.html
+[[redirects]]
+  from   = "/*"
+  to     = "/index.html"
+  status = 200

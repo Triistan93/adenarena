@@ -1,7 +1,7 @@
 /**
- * ShopService.js ÔÇö Gest├úo de Loja Regular e Compras M├¡sticas do Lineage Idle.
+ * ShopService.js — Gestão de Loja Regular e Compras Místicas do Lineage Idle.
  *
- * Respons├ível pelas compras de itens na loja convencional e compras de gear m├¡stico com ouro.
+ * Responsável pelas compras de itens na loja convencional e compras de gear místico com ouro.
  */
 
 import { D } from '../core/GameConfig.js';
@@ -12,7 +12,7 @@ import { addToInventory } from './InventoryService.js';
  * @param {Object} state
  * @param {string} itemId
  * @param {number} [qty=1]
- * @param {Object} [callbacks] ÔÇö { log, updateAllUI, save, classSatisfies }
+ * @param {Object} [callbacks] — { log, updateAllUI, save, classSatisfies }
  */
 export function buyItem(state, itemId, qty = 1, rarity = 'common', callbacks = {}) {
   const gData = D();
@@ -28,25 +28,25 @@ export function buyItem(state, itemId, qty = 1, rarity = 'common', callbacks = {
   }
   const reqLvl = def.req?.level || def.reqLvl || 1;
   if (reqLvl > state.level) {
-    if (callbacks.log) callbacks.log('N├¡vel insuficiente para comprar este item.', 'system');
+    if (callbacks.log) callbacks.log('Nível insuficiente para comprar este item.', 'system');
     return;
   }
   if (def.classReq && callbacks.classSatisfies && !callbacks.classSatisfies(state.class, def.classReq)) {
-    if (callbacks.log) callbacks.log('Sua classe n├úo pode utilizar este item.', 'system');
+    if (callbacks.log) callbacks.log('Sua classe não pode utilizar este item.', 'system');
     return;
   }
 
   if (!addToInventory(state, itemId, qty, rarity, false, callbacks)) return;
 
   state.gold -= cost;
-  if (callbacks.log) callbacks.log(`­ƒÄü Comprou ${qty}x ${def.name} por ­ƒÆ░ ${cost.toLocaleString()} Gold!`, 'loot');
+  if (callbacks.log) callbacks.log(`🎁 Comprou ${qty}x ${def.name} por 💰 ${cost.toLocaleString()} Gold!`, 'loot');
 
   if (callbacks.updateAllUI) callbacks.updateAllUI(state);
   if (callbacks.save) callbacks.save();
 }
 
 /**
- * Realiza a compra m├¡stica de um item com raridade sorteada.
+ * Realiza a compra mística de um item com raridade sorteada.
  * @param {Object} state
  * @param {string} itemId
  * @param {string} rarity

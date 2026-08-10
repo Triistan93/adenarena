@@ -1,5 +1,5 @@
 /**
- * index.js ÔÇö M├│dulo central de Classes do Echo of Elements (L2 Essence 547).
+ * index.js — Módulo central de Classes do Echo of Elements (L2 Essence 547).
  *
  * Exporta RACES_ECHO e CLASSES_ECHO e registra window.EchoData e window.GameData para compatibilidade.
  */

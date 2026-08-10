@@ -70,7 +70,7 @@ function HighScoreTable({
   return (
     <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
       <h3 className="mb-3 font-display text-lg font-bold tracking-wide text-amber-200">
-        ÔÜ£ Hall of Legends
+        ⚜ Hall of Legends
       </h3>
       {scores.length === 0 ? (
         <p className="py-6 text-center text-sm text-white/40">
@@ -104,7 +104,7 @@ function HighScoreTable({
               </span>
               <span className="flex-1 truncate font-semibold text-white/90">
                 {s.cls}{" "}
-                <span className="font-normal text-white/40">┬À {s.race}</span>
+                <span className="font-normal text-white/40">· {s.race}</span>
               </span>
               <span className="tabular-nums font-bold text-amber-200">
                 {s.score.toLocaleString()}
@@ -218,7 +218,7 @@ function MenuScreen({
             ADEN ARENA
           </h1>
           <p className="mx-auto mt-2 max-w-xl text-sm text-white/50">
-            Escolha seu campe├úo ou jogue com seu personagem ativo do Idle Game no ambiente 3D!
+            Escolha seu campeão ou jogue com seu personagem ativo do Idle Game no ambiente 3D!
           </p>
         </header>
 
@@ -227,14 +227,14 @@ function MenuScreen({
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div>
                 <div className="inline-flex items-center gap-1.5 rounded-full bg-amber-400/20 px-3 py-0.5 text-[11px] font-black uppercase text-amber-300 border border-amber-400/30">
-                  <span>Ôÿà</span> Personagem Idle Conectado
+                  <span>★</span> Personagem Idle Conectado
                 </div>
                 <h2 className="mt-2 font-display text-2xl font-black text-white">
-                  {idleState.charName || idleState.heroName || "Seu Her├│i"} ┬À N├¡vel {idleState.level || 1}
+                  {idleState.charName || idleState.heroName || "Seu Herói"} · Nível {idleState.level || 1}
                 </h2>
                 <p className="mt-1 text-xs text-amber-200/80">
-                  HP: {Math.ceil(idleState.hp || idleState.maxHp || 100)} / {idleState.maxHp || 100} ┬À 
-                  P.Atk: {idleState.patk || 20} ┬À M.Atk: {idleState.matk || 20} ┬À 
+                  HP: {Math.ceil(idleState.hp || idleState.maxHp || 100)} / {idleState.maxHp || 100} · 
+                  P.Atk: {idleState.patk || 20} · M.Atk: {idleState.matk || 20} · 
                   Speed: {idleState.speed || 220}
                 </p>
               </div>
@@ -245,7 +245,7 @@ function MenuScreen({
                 }}
                 className="rounded-xl bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 px-6 py-3.5 font-display text-base font-black tracking-wide text-[#1a1100] shadow-lg shadow-amber-500/30 hover:brightness-110 active:scale-95 transition"
               >
-                ÔÜö´©Å JOGAR COM {String(idleState.charName || idleState.heroName || "SEU HER├ôI").toUpperCase()} ÔûÂ
+                ⚔️ JOGAR COM {String(idleState.charName || idleState.heroName || "SEU HERÓI").toUpperCase()} ▶
               </button>
             </div>
           </div>
@@ -256,7 +256,7 @@ function MenuScreen({
           <div className="space-y-6 lg:col-span-2">
             <section>
               <h2 className="mb-2 font-display text-xl font-bold text-white/90">
-                1 ┬À Choose your Race
+                1 · Choose your Race
               </h2>
               <div className="grid grid-cols-3 gap-2 sm:grid-cols-6">
                 {RACES.map((r) => {
@@ -293,7 +293,7 @@ function MenuScreen({
 
             <section>
               <h2 className="mb-2 font-display text-xl font-bold text-white/90">
-                2 ┬À Choose your Class &amp; Weapon
+                2 · Choose your Class &amp; Weapon
               </h2>
               <div className="grid gap-2.5 sm:grid-cols-2">
                 {race.classes.map((c) => {
@@ -353,7 +353,7 @@ function MenuScreen({
                         {SKILLS[c.id]?.map((s) => (
                           <span
                             key={s.id}
-                            title={`${s.name} ÔÇö ${s.desc}`}
+                            title={`${s.name} — ${s.desc}`}
                             className="inline-flex items-center gap-1 rounded-md bg-black/30 px-1.5 py-0.5 text-[10px] text-white/75"
                           >
                             <span>{s.emoji}</span>
@@ -394,7 +394,7 @@ function MenuScreen({
                     {cls.name}
                   </h3>
                   <p className="text-xs text-white/50">
-                    {race.name} ┬À {cls.role}
+                    {race.name} · {cls.role}
                   </p>
                 </div>
               </div>
@@ -402,7 +402,7 @@ function MenuScreen({
                 onClick={() => onPlay(race, cls)}
                 className="mt-4 w-full rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 px-4 py-3 text-center font-display text-lg font-black tracking-wide text-[#2a1c00] shadow-lg shadow-amber-500/30 transition hover:brightness-110 active:scale-[0.98]"
               >
-                ENTER THE ARENA ÔûÂ
+                ENTER THE ARENA ▶
               </button>
             </div>
 
@@ -412,19 +412,19 @@ function MenuScreen({
               </h4>
               <ul className="space-y-1">
                 <li>
-                  <span className="text-white/80">Move</span> ÔÇö WASD / Arrows or
+                  <span className="text-white/80">Move</span> — WASD / Arrows or
                   left thumbstick
                 </li>
                 <li>
-                  <span className="text-white/80">Aim</span> ÔÇö Mouse, or right
+                  <span className="text-white/80">Aim</span> — Mouse, or right
                   thumbstick
                 </li>
                 <li>
-                  <span className="text-white/80">Attack</span> ÔÇö Click / Space,
+                  <span className="text-white/80">Attack</span> — Click / Space,
                   or hold right side
                 </li>
                 <li>
-                  <span className="text-white/80">Pause</span> ÔÇö Esc or the
+                  <span className="text-white/80">Pause</span> — Esc or the
                   pause button
                 </li>
               </ul>
@@ -435,7 +435,7 @@ function MenuScreen({
         </div>
 
         <footer className="mt-8 text-center text-[11px] text-white/30">
-          Built with React ┬À Canvas ┬À Tailwind ÔÇö runs at 60fps on desktop &amp;
+          Built with React · Canvas · Tailwind — runs at 60fps on desktop &amp;
           mobile.
         </footer>
       </div>
@@ -522,7 +522,7 @@ function GameOverOverlay({
 
         {isNew && (
           <div className="mx-auto mt-3 inline-block rounded-full bg-amber-400/20 px-4 py-1 text-xs font-bold uppercase tracking-wider text-amber-300 ring-1 ring-amber-300/50">
-            Ôÿà New High Score ┬À Rank #{rank}
+            ★ New High Score · Rank #{rank}
           </div>
         )}
 
@@ -552,10 +552,10 @@ function GameOverOverlay({
           </div>
           <div className="rounded-xl bg-white/[0.04] p-3">
             <p className="text-[11px] uppercase tracking-wider text-white/40">
-              Kills ┬À Combo
+              Kills · Combo
             </p>
             <p className="font-bold text-white">
-              {result.kills} ┬À x{result.bestCombo}
+              {result.kills} · x{result.bestCombo}
             </p>
           </div>
         </div>
@@ -777,7 +777,7 @@ function ModeSwitch({
           <span />
         </span>
         <span className="hamburger-mode-badge">
-          {mode === "idle" ? "­ƒô£ Idle Chronicle" : "ÔÜö 3D Arena"}
+          {mode === "idle" ? "📜 Idle Chronicle" : "⚔ 3D Arena"}
         </span>
       </button>
 
@@ -789,24 +789,24 @@ function ModeSwitch({
             className={cn("mode-dropdown__item", mode === "idle" && "is-active")}
             onClick={() => selectMode("idle")}
           >
-            <span className="mode-dropdown__icon">­ƒô£</span>
+            <span className="mode-dropdown__icon">📜</span>
             <div className="mode-dropdown__info">
               <div className="mode-dropdown__title">Idle Chronicle</div>
-              <div className="mode-dropdown__desc">RPG de texto e progress├úo autom├ítica</div>
+              <div className="mode-dropdown__desc">RPG de texto e progressão automática</div>
             </div>
-            {mode === "idle" && <span className="mode-dropdown__check">Ô£ô</span>}
+            {mode === "idle" && <span className="mode-dropdown__check">✓</span>}
           </button>
           <button
             type="button"
             className={cn("mode-dropdown__item", mode === "arena" && "is-active")}
             onClick={() => selectMode("arena")}
           >
-            <span className="mode-dropdown__icon">ÔÜö</span>
+            <span className="mode-dropdown__icon">⚔</span>
             <div className="mode-dropdown__info">
               <div className="mode-dropdown__title">3D Arena</div>
-              <div className="mode-dropdown__desc">Combate de a├º├úo 3D em tempo real</div>
+              <div className="mode-dropdown__desc">Combate de ação 3D em tempo real</div>
             </div>
-            {mode === "arena" && <span className="mode-dropdown__check">Ô£ô</span>}
+            {mode === "arena" && <span className="mode-dropdown__check">✓</span>}
           </button>
         </div>
       )}
@@ -826,7 +826,7 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { hasError: boole
       return (
         <div className="fixed inset-0 flex flex-col items-center justify-center bg-[#06080f] text-white p-6 text-center z-50">
           <h2 className="text-2xl font-bold text-amber-300 mb-2">Ops! Ocorreu um erro inesperado.</h2>
-          <p className="text-sm text-white/60 mb-4">{this.state.error?.message || "Erro de execu├º├úo."}</p>
+          <p className="text-sm text-white/60 mb-4">{this.state.error?.message || "Erro de execução."}</p>
           <button
             onClick={() => window.location.reload()}
             className="px-4 py-2 bg-amber-500 text-black font-bold rounded-xl hover:bg-amber-400 transition"

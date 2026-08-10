@@ -38,17 +38,17 @@ export function equipItem(state, uid, callbacks = {}) {
   const targetSlot = resolveEquipSlot(def.slot, state.equipment);
   // Validate level
   if (def.req?.level && state.level < def.req.level) {
-    if (callbacks.log) callbacks.log(`N├¡vel insuficiente para equipar ${def.name}. (Req: Lv.${def.req.level})`, 'system');
+    if (callbacks.log) callbacks.log(`Nível insuficiente para equipar ${def.name}. (Req: Lv.${def.req.level})`, 'system');
     return;
   }
   // Validate class / armor type
   const equipCheck = canEquipByType(state.class, def, callbacks.classSatisfies);
   if (!equipCheck.ok) {
-    if (callbacks.log) callbacks.log(`N├úo pode equipar ${def.name}: ${equipCheck.reason || 'Classe incompat├¡vel'}`, 'system');
+    if (callbacks.log) callbacks.log(`Não pode equipar ${def.name}: ${equipCheck.reason || 'Classe incompatível'}`, 'system');
     return;
   }
   if (!ALL_EQUIP_SLOTS.includes(targetSlot)) {
-    if (callbacks.log) callbacks.log(`${def.name} n├úo pode ser equipado.`, 'system');
+    if (callbacks.log) callbacks.log(`${def.name} não pode ser equipado.`, 'system');
     return;
   }
   const currentUid = state.equipment[targetSlot];

@@ -1,25 +1,25 @@
-// ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
-// echo-adapter.js ÔÇö Adapta o novo CLASSES_ECHO para o formato que o engine
+// ═══════════════════════════════════════════════════════════════════════════
+// echo-adapter.js — Adapta o novo CLASSES_ECHO para o formato que o engine
 //                   de lineage-idle/main.js precisa.
 //
-// O engine (main.js) l├¬ via window.EchoData:
-//   SKILL_DEFS_ECHO        ÔÇö defini├º├Áes de skill (id ÔåÆ def)
-//   SKILL_REQS_ECHO        ÔÇö pr├®-requisitos (id ÔåÆ { reqLvl })
-//   SKILL_TREE_LAYOUT_ECHO ÔÇö layout da ├írvore (classKey ÔåÆ { [skillId]: {col,row} })
-//   CLASS_SKILLS_ECHO      ÔÇö classe ÔåÆ [skillId, ...]
+// O engine (main.js) lê via window.EchoData:
+//   SKILL_DEFS_ECHO        — definições de skill (id → def)
+//   SKILL_REQS_ECHO        — pré-requisitos (id → { reqLvl })
+//   SKILL_TREE_LAYOUT_ECHO — layout da árvore (classKey → { [skillId]: {col,row} })
+//   CLASS_SKILLS_ECHO      — classe → [skillId, ...]
 //
-// Esse m├│dulo gera esses objetos a partir do campo "skills: [...]" de cada
+// Esse módulo gera esses objetos a partir do campo "skills: [...]" de cada
 // entrada em CLASSES_ECHO e os publica em window.EchoData.
 //
-// Fun├º├Áes de escalamento por n├¡vel s├úo publicadas em window.SkillScaling.
-// ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
+// Funções de escalamento por nível são publicadas em window.SkillScaling.
+// ═══════════════════════════════════════════════════════════════════════════
 
 import "../src/data/classes/index.js";
 
 
-// ÔöÇÔöÇÔöÇ Helpers ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+// ─── Helpers ──────────────────────────────────────────────────────────────
 
-/** Converte nome de skill em snake_case ├║nico por classe */
+/** Converte nome de skill em snake_case único por classe */
 function toSkillId(classId, skillName) {
   return classId + '_' + skillName
     .toLowerCase()
@@ -28,13 +28,13 @@ function toSkillId(classId, skillName) {
     .replace(/^_|_$/g, '');
 }
 
-/** Mapeia raridade textual para tier num├®rico */
+/** Mapeia raridade textual para tier numérico */
 function rarityToTier(rarity) {
   if (!rarity) return 0;
-  if (rarity === '1Ôÿà' || rarity === '1') return 0;
-  if (rarity === '2Ôÿà' || rarity === '2') return 1;
-  if (rarity === '3Ôÿà' || rarity === '3') return 2;
-  if (rarity === '4Ôÿà' || rarity === '4') return 3;
+  if (rarity === '1★' || rarity === '1') return 0;
+  if (rarity === '2★' || rarity === '2') return 1;
+  if (rarity === '3★' || rarity === '3') return 2;
+  if (rarity === '4★' || rarity === '4') return 3;
   return 0;
 }
 
@@ -47,16 +47,16 @@ function cdToMs(cd) {
   return parseFloat(s) * 1000 || 8000;
 }
 
-/** Extrai poder num├®rico da string de efeito */
+/** Extrai poder numérico da string de efeito */
 function effectToPwr(effect, type) {
   if (!effect) return 20;
   const match = effect.match(/(\d+)%/);
-  if (match) return Math.round(parseInt(match[1]) / 5); // 150% ÔåÆ 30
+  if (match) return Math.round(parseInt(match[1]) / 5); // 150% → 30
   if (type === 'Passivo') return 0;
   return 20;
 }
 
-/** Mapa tipo textual ÔåÆ tipo interno do engine */
+/** Mapa tipo textual → tipo interno do engine */
 function mapType(t) {
   if (!t) return 'active';
   const lower = t.toLowerCase();
@@ -66,13 +66,13 @@ function mapType(t) {
   return 'active';
 }
 
-// ÔöÇÔöÇÔöÇ Fun├º├Áes de Escalamento por N├¡vel ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+// ─── Funções de Escalamento por Nível ──────────────────────────────────
 
 /**
- * Calcula poder da skill no n├¡vel investido.
- * F├│rmula: basePwr * (1 + 0.10 * (lvl - 1))
- * N├¡vel 1 = 100%, N├¡vel 5 = 140% do poder base.
- * Crescimento moderado: +10% por n├¡vel.
+ * Calcula poder da skill no nível investido.
+ * Fórmula: basePwr * (1 + 0.10 * (lvl - 1))
+ * Nível 1 = 100%, Nível 5 = 140% do poder base.
+ * Crescimento moderado: +10% por nível.
  */
 function getSkillPwrAtLevel(def, lvl) {
   const basePwr = Number(def.pwr) || 30;
@@ -81,24 +81,24 @@ function getSkillPwrAtLevel(def, lvl) {
 }
 
 /**
- * Calcula heal amount no n├¡vel investido.
- * F├│rmula mantida do original: maxHp * (0.25 + lvl * 0.05)
+ * Calcula heal amount no nível investido.
+ * Fórmula mantida do original: maxHp * (0.25 + lvl * 0.05)
  */
 function getSkillHealAtLevel(maxHp, lvl) {
   return Math.floor(maxHp * (0.25 + Math.max(1, lvl) * 0.05));
 }
 
 /**
- * Calcula buff amount no n├¡vel investido.
- * F├│rmula mantida do original: 0.20 + (lvl * 0.05)
+ * Calcula buff amount no nível investido.
+ * Fórmula mantida do original: 0.20 + (lvl * 0.05)
  */
 function getSkillBuffAtLevel(lvl) {
   return 0.20 + (Math.max(1, lvl) * 0.05);
 }
 
 /**
- * Gera texto din├ómico do efeito da skill baseado no n├¡vel atual.
- * Mostra valor atual e pr├®via do pr├│ximo n├¡vel quando aplic├ível.
+ * Gera texto dinâmico do efeito da skill baseado no nível atual.
+ * Mostra valor atual e prévia do próximo nível quando aplicável.
  */
 function buildSkillEffectText(def, lvl) {
   if (!def) return '';
@@ -107,7 +107,7 @@ function buildSkillEffectText(def, lvl) {
   const max = def.max || 5;
   const effectBase = def.effectText || def.info || def.name;
 
-  // Passivas: mostrar texto est├ítico original
+  // Passivas: mostrar texto estático original
   if (type === 'passive' || type === 'stat') {
     return effectBase;
   }
@@ -118,31 +118,31 @@ function buildSkillEffectText(def, lvl) {
     let text = `Buff: +${Math.round(current * 100)}% por 60s`;
     if (currentLvl < max) {
       const next = getSkillBuffAtLevel(currentLvl + 1);
-      text += ` (Lv.${currentLvl + 1} ÔåÆ +${Math.round(next * 100)}%)`;
+      text += ` (Lv.${currentLvl + 1} → +${Math.round(next * 100)}%)`;
     }
     return text;
   }
 
   // Heals
   if (def.effect === 'heal' || type === 'heal') {
-    let text = `Cura: 25% + ${currentLvl * 5}% do HP m├íximo`;
+    let text = `Cura: 25% + ${currentLvl * 5}% do HP máximo`;
     if (currentLvl < max) {
-      text += ` (Lv.${currentLvl + 1} ÔåÆ ${25 + (currentLvl + 1) * 5}%)`;
+      text += ` (Lv.${currentLvl + 1} → ${25 + (currentLvl + 1) * 5}%)`;
     }
     return text;
   }
 
   // Skills de dano (active)
   const currentPwr = getSkillPwrAtLevel(def, currentLvl);
-  let text = `${effectBase} ÔÇö Poder: ${currentPwr}`;
+  let text = `${effectBase} — Poder: ${currentPwr}`;
   if (currentLvl < max) {
     const nextPwr = getSkillPwrAtLevel(def, currentLvl + 1);
-    text += ` (Lv.${currentLvl + 1} ÔåÆ ${nextPwr})`;
+    text += ` (Lv.${currentLvl + 1} → ${nextPwr})`;
   }
   return text;
 }
 
-// Publica fun├º├Áes de escalamento globalmente
+// Publica funções de escalamento globalmente
 window.SkillScaling = {
   getSkillPwrAtLevel,
   getSkillHealAtLevel,
@@ -150,12 +150,12 @@ window.SkillScaling = {
   buildSkillEffectText
 };
 
-// ÔöÇÔöÇÔöÇ Constru├º├úo ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+// ─── Construção ─────────────────────────────────────────────────────────
 
 function buildEchoAdapter() {
   const E = window.EchoData;
   if (!E || !E.CLASSES_ECHO) {
-    console.warn('[echo-adapter] window.EchoData.CLASSES_ECHO n├úo encontrado.');
+    console.warn('[echo-adapter] window.EchoData.CLASSES_ECHO não encontrado.');
     return;
   }
 
@@ -175,7 +175,7 @@ function buildEchoAdapter() {
       const sk = skillList[i];
       const rawName = sk.name || ('skill_' + i);
 
-      // Gera ID ├║nico por classe ÔÇö sem cache/dedup
+      // Gera ID único por classe — sem cache/dedup
       const skillId = toSkillId(classId, rawName);
 
       const tier = rarityToTier(sk.rarity);
@@ -200,7 +200,7 @@ function buildEchoAdapter() {
         classReq:   classId
       };
 
-      // Skills tier > 0 exigem n├¡vel m├¡nimo
+      // Skills tier > 0 exigem nível mínimo
       if (tier > 0) {
         SKILL_REQS_ECHO[skillId] = { reqLvl: tier * 20 };
       }
@@ -211,7 +211,7 @@ function buildEchoAdapter() {
     }
   }
 
-  // Heran├ºa de skills: filho inclui skills do pai
+  // Herança de skills: filho inclui skills do pai
   for (const [classId, def] of Object.entries(CLASSES_ECHO)) {
     if (!def.parent) continue;
     const parentList = CLASS_SKILLS_ECHO[def.parent] || [];
@@ -226,7 +226,7 @@ function buildEchoAdapter() {
     CLASS_SKILLS_ECHO[classId] = merged;
   }
 
-  // Layout autom├ítico por tier ÔåÆ coluna
+  // Layout automático por tier → coluna
   const SKILL_TREE_LAYOUT_ECHO = {};
   for (const [classId, skillIds] of Object.entries(CLASS_SKILLS_ECHO)) {
     const layout = {};
@@ -241,7 +241,7 @@ function buildEchoAdapter() {
     SKILL_TREE_LAYOUT_ECHO[classId] = layout;
   }
 
-  // Publica em window.EchoData (o que main.js l├¬)
+  // Publica em window.EchoData (o que main.js lê)
   E.SKILL_DEFS_ECHO        = SKILL_DEFS_ECHO;
   E.SKILL_REQS_ECHO        = SKILL_REQS_ECHO;
   E.CLASS_SKILLS_ECHO      = CLASS_SKILLS_ECHO;
