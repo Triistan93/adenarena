@@ -995,6 +995,9 @@ export function ensureInventoryStyles() {
 }
 
 export function updateInventoryUI(state, callbacks = {}) {
+  if (!state || typeof state !== 'object') {
+    state = (typeof window !== 'undefined' && window.state) ? window.state : {};
+  }
   ensureInventoryStyles();
   updateEquipmentUI(state, callbacks);
 
@@ -1152,6 +1155,9 @@ export function updateInventoryUI(state, callbacks = {}) {
 }
 
 export function updateWarehouseUI(state, callbacks = {}) {
+  if (!state || typeof state !== 'object') {
+    state = (typeof window !== 'undefined' && window.state) ? window.state : {};
+  }
   ensureInventoryStyles();
   const whStorageGrid = findElement('wh-storage-grid') || findElement('warehouse-grid');
   const whInvGrid = findElement('wh-inventory-grid');
@@ -1224,6 +1230,9 @@ export function updateWarehouseUI(state, callbacks = {}) {
 }
 
 export function updateEquipmentUI(state, callbacks = {}) {
+  if (!state || typeof state !== 'object') {
+    state = (typeof window !== 'undefined' && window.state) ? window.state : {};
+  }
   if (!state) return;
   state.equipment = state.equipment || {};
   ensureInventoryStyles();

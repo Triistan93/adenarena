@@ -2130,9 +2130,9 @@ function updateAllUI() {
   updateGameModeUI();
   safeUiUpdate('zone-bg', updateZoneBackground);
   safeUiUpdate('stats', updateStatsUI);
-  safeUiUpdate('equipment', updateEquipmentUI);
+  safeUiUpdate('equipment', () => updateEquipmentUI(state));
   safeUiUpdate('skills', updateSkillUI);
-  safeUiUpdate('inventory', updateInventoryUI);
+  safeUiUpdate('inventory', () => updateInventoryUI(state));
   safeUiUpdate('shop', updateShopUI);
   safeUiUpdate('craft', updateCraftUI);
   safeUiUpdate('alchemy', updateAlchemyUI);
@@ -2145,7 +2145,7 @@ function updateAllUI() {
   safeUiUpdate('subclasses', renderSubclassesUI);
   safeUiUpdate('quests', updateQuestsUI);
   safeUiUpdate('tower', updateTowerUI);
-  safeUiUpdate('warehouse', updateWarehouseUI);
+  safeUiUpdate('warehouse', () => updateWarehouseUI(state));
   safeUiUpdate('tab-badges', updateTabBadgesUI);
   setupVfxQualityControl();
 }
@@ -3725,7 +3725,7 @@ export function openPanel(tabName) {
     pane.scrollTop = tabScrollMap[pane.id];
   }
 
-  if (targetTab === 'inventory') safeUiUpdate('inventory', updateInventoryUI);
+  if (targetTab === 'inventory') safeUiUpdate('inventory', () => updateInventoryUI(state));
   else if (targetTab === 'character') safeUiUpdate('character', updateCharacterUI);
   else if (targetTab === 'skills') safeUiUpdate('skills', updateSkillUI);
   else if (targetTab === 'shop') safeUiUpdate('shop', updateShopUI);
@@ -3740,7 +3740,7 @@ export function openPanel(tabName) {
   else if (targetTab === 'magiclamp') safeUiUpdate('magiclamp', updateMagicLampUI);
   else if (targetTab === 'quests') safeUiUpdate('quests', updateQuestsUI);
   else if (targetTab === 'tower') safeUiUpdate('tower', updateTowerUI);
-  else if (targetTab === 'warehouse') safeUiUpdate('warehouse', updateWarehouseUI);
+  else if (targetTab === 'warehouse') safeUiUpdate('warehouse', () => updateWarehouseUI(state));
 
   // Tutorial: exibe guia automaticamente na 1ª visita à aba; injeta botão persistente
   try {
