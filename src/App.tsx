@@ -1,4 +1,4 @@
-import { Component, useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { Component, useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { Game, type GameResult } from "./game/Game";
 import {
   RACES,
@@ -70,7 +70,7 @@ function HighScoreTable({
   return (
     <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
       <h3 className="mb-3 font-display text-lg font-bold tracking-wide text-amber-200">
-        ⚜ Hall of Legends
+        ÔÜ£ Hall of Legends
       </h3>
       {scores.length === 0 ? (
         <p className="py-6 text-center text-sm text-white/40">
@@ -104,7 +104,7 @@ function HighScoreTable({
               </span>
               <span className="flex-1 truncate font-semibold text-white/90">
                 {s.cls}{" "}
-                <span className="font-normal text-white/40">· {s.race}</span>
+                <span className="font-normal text-white/40">┬À {s.race}</span>
               </span>
               <span className="tabular-nums font-bold text-amber-200">
                 {s.score.toLocaleString()}
@@ -120,57 +120,11 @@ function HighScoreTable({
   );
 }
 
-function getIdleState() {
-  if (typeof window !== "undefined" && typeof (window as any).getGameState === "function") {
-    try {
-      return (window as any).getGameState();
-    } catch (e) {
-      console.warn("Failed to get idle state:", e);
-    }
-  }
-  return null;
-}
-
-function resolveRaceAndClass(idleState: any): { race: RaceDef; cls: ClassDef } {
-  const defaultRace = RACES[0];
-  const defaultCls = defaultRace.classes[0];
-  if (!idleState) return { race: defaultRace, cls: defaultCls };
-
-  const rawRaceId = String(idleState.raceId || idleState.race || "").toLowerCase();
-  const rawClassId = String(idleState.classId || idleState.class || "").toLowerCase();
-
-  let race = RACES.find((r) => r.id === rawRaceId);
-  if (!race) {
-    for (const r of RACES) {
-      if (r.classes.some((c) => c.id === rawClassId)) {
-        race = r;
-        break;
-      }
-    }
-  }
-  if (!race) race = defaultRace;
-
-  let cls = race.classes.find((c) => c.id === rawClassId);
-  if (!cls) {
-    for (const r of RACES) {
-      const match = r.classes.find((c) => c.id === rawClassId);
-      if (match) {
-        cls = match;
-        break;
-      }
-    }
-  }
-  if (!cls) cls = race.classes[0];
-
-  return { race, cls };
-}
-
-// ---------- Character Select / Menu ----------
+// ---------- Menu ----------
 function MenuScreen({
   raceId,
   clsId,
   highscores,
-  idleState,
   onRace,
   onClass,
   onPlay,
@@ -178,10 +132,9 @@ function MenuScreen({
   raceId: RaceId;
   clsId: string;
   highscores: ScoreEntry[];
-  idleState?: any;
   onRace: (id: RaceId) => void;
   onClass: (id: string) => void;
-  onPlay: (customRace?: RaceDef, customCls?: ClassDef) => void;
+  onPlay: () => void;
 }) {
   const race = RACES.find((r) => r.id === raceId) as RaceDef;
   const cls = race.classes.find((c) => c.id === clsId) ?? race.classes[0];
@@ -206,8 +159,7 @@ function MenuScreen({
           <p className="text-xs font-semibold uppercase tracking-[0.4em] text-amber-300/80">
             Lineage-inspired Browser RPG
           </p>
-          <h1
-            className="font-display text-5xl font-black tracking-tight text-transparent sm:text-6xl"
+          <h1 className="font-display text-5xl font-black tracking-tight text-transparent sm:text-6xl"
             style={{
               backgroundImage:
                 "linear-gradient(180deg,#fff 0%,#f4d58a 60%,#c9962f 100%)",
@@ -218,45 +170,18 @@ function MenuScreen({
             ADEN ARENA
           </h1>
           <p className="mx-auto mt-2 max-w-xl text-sm text-white/50">
-            Escolha seu campeão ou jogue com seu personagem ativo do Idle Game no ambiente 3D!
+            Choose your lineage, master its exclusive class and weapon, and
+            survive the endless swarm. Auto-aims the nearest foe ÔÇö just move and
+            strike.
           </p>
         </header>
-
-        {idleState && (
-          <div className="mb-8 rounded-2xl border border-amber-500/50 bg-gradient-to-r from-amber-500/20 via-amber-950/40 to-amber-500/10 p-5 shadow-2xl backdrop-blur-md">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <div>
-                <div className="inline-flex items-center gap-1.5 rounded-full bg-amber-400/20 px-3 py-0.5 text-[11px] font-black uppercase text-amber-300 border border-amber-400/30">
-                  <span>★</span> Personagem Idle Conectado
-                </div>
-                <h2 className="mt-2 font-display text-2xl font-black text-white">
-                  {idleState.charName || idleState.heroName || "Seu Herói"} · Nível {idleState.level || 1}
-                </h2>
-                <p className="mt-1 text-xs text-amber-200/80">
-                  HP: {Math.ceil(idleState.hp || idleState.maxHp || 100)} / {idleState.maxHp || 100} · 
-                  P.Atk: {idleState.patk || 20} · M.Atk: {idleState.matk || 20} · 
-                  Speed: {idleState.speed || 220}
-                </p>
-              </div>
-              <button
-                onClick={() => {
-                  const res = resolveRaceAndClass(idleState);
-                  onPlay(res.race, res.cls);
-                }}
-                className="rounded-xl bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 px-6 py-3.5 font-display text-base font-black tracking-wide text-[#1a1100] shadow-lg shadow-amber-500/30 hover:brightness-110 active:scale-95 transition"
-              >
-                ⚔️ JOGAR COM {String(idleState.charName || idleState.heroName || "SEU HERÓI").toUpperCase()} ▶
-              </button>
-            </div>
-          </div>
-        )}
 
         <div className="grid gap-6 lg:grid-cols-3">
           {/* selection */}
           <div className="space-y-6 lg:col-span-2">
             <section>
               <h2 className="mb-2 font-display text-xl font-bold text-white/90">
-                1 · Choose your Race
+                1 ┬À Choose your Race
               </h2>
               <div className="grid grid-cols-3 gap-2 sm:grid-cols-6">
                 {RACES.map((r) => {
@@ -293,9 +218,9 @@ function MenuScreen({
 
             <section>
               <h2 className="mb-2 font-display text-xl font-bold text-white/90">
-                2 · Choose your Class &amp; Weapon
+                2 ┬À Choose your Class &amp; Weapon
               </h2>
-              <div className="grid gap-2.5 sm:grid-cols-2">
+              <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
                 {race.classes.map((c) => {
                   const active = c.id === clsId;
                   return (
@@ -303,15 +228,15 @@ function MenuScreen({
                       key={c.id}
                       onClick={() => onClass(c.id)}
                       className={cn(
-                        "group relative rounded-xl border p-3.5 text-left transition",
+                        "flex flex-col rounded-2xl border p-4 text-left transition",
                         active
-                          ? "border-amber-400/80 bg-gradient-to-b from-amber-400/10 to-transparent"
+                          ? "border-white/70 bg-white/10"
                           : "border-white/10 bg-white/[0.02] hover:bg-white/[0.06]"
                       )}
                       style={
                         active
                           ? {
-                              boxShadow: `0 0 24px -6px ${c.color}`,
+                              boxShadow: `0 0 26px -6px ${c.color}`,
                               borderColor: c.color,
                             }
                           : undefined
@@ -353,7 +278,7 @@ function MenuScreen({
                         {SKILLS[c.id]?.map((s) => (
                           <span
                             key={s.id}
-                            title={`${s.name} — ${s.desc}`}
+                            title={`${s.name} ÔÇö ${s.desc}`}
                             className="inline-flex items-center gap-1 rounded-md bg-black/30 px-1.5 py-0.5 text-[10px] text-white/75"
                           >
                             <span>{s.emoji}</span>
@@ -394,15 +319,15 @@ function MenuScreen({
                     {cls.name}
                   </h3>
                   <p className="text-xs text-white/50">
-                    {race.name} · {cls.role}
+                    {race.name} ┬À {cls.role}
                   </p>
                 </div>
               </div>
               <button
-                onClick={() => onPlay(race, cls)}
+                onClick={onPlay}
                 className="mt-4 w-full rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 px-4 py-3 text-center font-display text-lg font-black tracking-wide text-[#2a1c00] shadow-lg shadow-amber-500/30 transition hover:brightness-110 active:scale-[0.98]"
               >
-                ENTER THE ARENA ▶
+                ENTER THE ARENA ÔûÂ
               </button>
             </div>
 
@@ -412,19 +337,19 @@ function MenuScreen({
               </h4>
               <ul className="space-y-1">
                 <li>
-                  <span className="text-white/80">Move</span> — WASD / Arrows or
+                  <span className="text-white/80">Move</span> ÔÇö WASD / Arrows or
                   left thumbstick
                 </li>
                 <li>
-                  <span className="text-white/80">Aim</span> — Mouse, or right
+                  <span className="text-white/80">Aim</span> ÔÇö Mouse, or right
                   thumbstick
                 </li>
                 <li>
-                  <span className="text-white/80">Attack</span> — Click / Space,
+                  <span className="text-white/80">Attack</span> ÔÇö Click / Space,
                   or hold right side
                 </li>
                 <li>
-                  <span className="text-white/80">Pause</span> — Esc or the
+                  <span className="text-white/80">Pause</span> ÔÇö Esc or the
                   pause button
                 </li>
               </ul>
@@ -435,7 +360,7 @@ function MenuScreen({
         </div>
 
         <footer className="mt-8 text-center text-[11px] text-white/30">
-          Built with React · Canvas · Tailwind — runs at 60fps on desktop &amp;
+          Built with React ┬À Canvas ┬À Tailwind ÔÇö runs at 60fps on desktop &amp;
           mobile.
         </footer>
       </div>
@@ -522,7 +447,7 @@ function GameOverOverlay({
 
         {isNew && (
           <div className="mx-auto mt-3 inline-block rounded-full bg-amber-400/20 px-4 py-1 text-xs font-bold uppercase tracking-wider text-amber-300 ring-1 ring-amber-300/50">
-            ★ New High Score · Rank #{rank}
+            Ôÿà New High Score ┬À Rank #{rank}
           </div>
         )}
 
@@ -552,10 +477,10 @@ function GameOverOverlay({
           </div>
           <div className="rounded-xl bg-white/[0.04] p-3">
             <p className="text-[11px] uppercase tracking-wider text-white/40">
-              Kills · Combo
+              Kills ┬À Combo
             </p>
             <p className="font-bold text-white">
-              {result.kills} · x{result.bestCombo}
+              {result.kills} ┬À x{result.bestCombo}
             </p>
           </div>
         </div>
@@ -588,13 +513,9 @@ function ArenaApp() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const hudRef = useRef<HTMLCanvasElement>(null);
   const gameRef = useRef<Game | null>(null);
-
-  const idleState = useMemo(() => getIdleState(), []);
-  const initialResolved = useMemo(() => resolveRaceAndClass(idleState), [idleState]);
-
-  const [phase, setPhase] = useState<Phase>(idleState ? "playing" : "menu");
-  const [raceId, setRaceId] = useState<RaceId>(initialResolved.race.id);
-  const [clsId, setClsId] = useState<string>(initialResolved.cls.id);
+  const [phase, setPhase] = useState<Phase>("menu");
+  const [raceId, setRaceId] = useState<RaceId>("human");
+  const [clsId, setClsId] = useState<string>("warrior");
   const [highscores, setHighscores] = useState<ScoreEntry[]>(() => loadHS());
   const [result, setResult] = useState<
     (GameResult & { rank: number; isNew: boolean }) | null
@@ -613,57 +534,30 @@ function ArenaApp() {
     }
   }, []);
 
-  const startGame = useCallback((targetRace?: RaceDef, targetCls?: ClassDef) => {
+  const startGame = useCallback(() => {
     const canvas = canvasRef.current;
     const hud = hudRef.current;
-    if (!canvas || !hud) {
-      console.warn("Canvas elements not mounted yet");
-      return;
-    }
-    if (gameRef.current) {
-      try {
-        gameRef.current.destroy();
-      } catch (e) {
-        console.warn("Error destroying previous game instance:", e);
+    if (!canvas || !hud) return;
+    if (gameRef.current) gameRef.current.destroy();
+    const game = new Game(
+      canvas,
+      hud,
+      { race, cls },
+      {
+        onPaused: () => setPhase("paused"),
+        onResumed: () => setPhase("playing"),
+        onGameOver: (r: GameResult) => {
+          const { list, rank, isNew } = commitScore(r);
+          setHighscores(list);
+          setResult({ ...r, rank, isNew });
+          setPhase("gameover");
+        },
       }
-    }
-    const currentIdleState = getIdleState();
-    const activeRace = targetRace || race;
-    const activeCls = targetCls || cls;
-
-    try {
-      const game = new Game(
-        canvas,
-        hud,
-        { race: activeRace, cls: activeCls, idleState: currentIdleState },
-        {
-          onPaused: () => setPhase("paused"),
-          onResumed: () => setPhase("playing"),
-          onGameOver: (r: GameResult) => {
-            const { list, rank, isNew } = commitScore(r);
-            setHighscores(list);
-            setResult({ ...r, rank, isNew });
-            setPhase("gameover");
-          },
-        }
-      );
-      gameRef.current = game;
-      game.start();
-      setPhase("playing");
-    } catch (err) {
-      console.error("Error starting 3D Game Arena:", err);
-    }
+    );
+    gameRef.current = game;
+    game.start();
+    setPhase("playing");
   }, [race, cls]);
-
-  // Se o jogador possui personagem no Idle Game, inicia a arena diretamente com ele!
-  useEffect(() => {
-    if (idleState) {
-      const t = setTimeout(() => {
-        startGame(initialResolved.race, initialResolved.cls);
-      }, 60);
-      return () => clearTimeout(t);
-    }
-  }, []);
 
   const handleRace = (id: RaceId) => {
     setRaceId(id);
@@ -757,9 +651,6 @@ function ModeSwitch({
 
   const selectMode = (m: Mode) => {
     setMode(m);
-    if (typeof (window as any).setGameMode === "function") {
-      (window as any).setGameMode(m);
-    }
     setIsOpen(false);
   };
 
@@ -771,13 +662,9 @@ function ModeSwitch({
         className={cn("hamburger-btn", isOpen && "is-active")}
         onClick={() => setIsOpen((prev) => !prev)}
       >
-        <span className="hamburger-icon">
-          <span />
-          <span />
-          <span />
-        </span>
+        <span className="hamburger-icon" />
         <span className="hamburger-mode-badge">
-          {mode === "idle" ? "📜 Idle Chronicle" : "⚔ 3D Arena"}
+          {mode === "idle" ? "­ƒô£ Idle Chronicle" : "ÔÜö 3D Arena"}
         </span>
       </button>
 
@@ -789,24 +676,24 @@ function ModeSwitch({
             className={cn("mode-dropdown__item", mode === "idle" && "is-active")}
             onClick={() => selectMode("idle")}
           >
-            <span className="mode-dropdown__icon">📜</span>
+            <span className="mode-dropdown__icon">­ƒô£</span>
             <div className="mode-dropdown__info">
               <div className="mode-dropdown__title">Idle Chronicle</div>
-              <div className="mode-dropdown__desc">RPG de texto e progressão automática</div>
+              <div className="mode-dropdown__desc">RPG de texto e progress├úo autom├ítica</div>
             </div>
-            {mode === "idle" && <span className="mode-dropdown__check">✓</span>}
+            {mode === "idle" && <span className="mode-dropdown__check">Ô£ô</span>}
           </button>
           <button
             type="button"
             className={cn("mode-dropdown__item", mode === "arena" && "is-active")}
             onClick={() => selectMode("arena")}
           >
-            <span className="mode-dropdown__icon">⚔</span>
+            <span className="mode-dropdown__icon">ÔÜö</span>
             <div className="mode-dropdown__info">
               <div className="mode-dropdown__title">3D Arena</div>
-              <div className="mode-dropdown__desc">Combate de ação 3D em tempo real</div>
+              <div className="mode-dropdown__desc">Combate de a├º├úo em tempo real</div>
             </div>
-            {mode === "arena" && <span className="mode-dropdown__check">✓</span>}
+            {mode === "arena" && <span className="mode-dropdown__check">Ô£ô</span>}
           </button>
         </div>
       )}
@@ -826,7 +713,7 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { hasError: boole
       return (
         <div className="fixed inset-0 flex flex-col items-center justify-center bg-[#06080f] text-white p-6 text-center z-50">
           <h2 className="text-2xl font-bold text-amber-300 mb-2">Ops! Ocorreu um erro inesperado.</h2>
-          <p className="text-sm text-white/60 mb-4">{this.state.error?.message || "Erro de execução."}</p>
+          <p className="text-sm text-white/60 mb-4">{this.state.error?.message || "Erro de execu├º├úo."}</p>
           <button
             onClick={() => window.location.reload()}
             className="px-4 py-2 bg-amber-500 text-black font-bold rounded-xl hover:bg-amber-400 transition"
@@ -848,15 +735,6 @@ export default function Shell() {
   const [mode, setMode] = useState<Mode>("idle");
   const [hasEntered, setHasEntered] = useState(false);
 
-  useEffect(() => {
-    (window as any).onReactSetMode = (m: Mode) => {
-      setMode(m);
-    };
-    return () => {
-      delete (window as any).onReactSetMode;
-    };
-  }, []);
-
   const handleEnterGame = (cloudState?: any) => {
     if (cloudState && typeof cloudState === 'object') {
       try {
@@ -877,7 +755,7 @@ export default function Shell() {
         <LoginScreen onEnterGame={handleEnterGame} />
       ) : (
         <>
-          {mode === "arena" ? <ArenaApp /> : <div className="w-full h-full min-h-screen relative overflow-hidden"><IdleGame /></div>}
+          {mode === "arena" ? <ArenaApp /> : <IdleGame />}
           <ModeSwitch mode={mode} setMode={setMode} />
           <div className="fixed top-4 right-4 z-40">
             <AuthModal 
