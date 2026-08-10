@@ -150,6 +150,7 @@ import {
 } from './src/ui/GameUI.js';
 
 import { ensureAppLayout, showMenuPanel } from './src/ui/AppLayout.js';
+import { checkTabGuide, closeTabGuideModal, openTabGuideModal } from './src/ui/TutorialGuide.js';
 import { VFX, initializeVFX } from './vfx.js';
 // ─── Sprint 7: Importa EventBus e StateManager (Wiring & State) ───────────
 import EventBus from './src/core/EventBus.js';
@@ -166,6 +167,11 @@ import {
 // ────────────────────────────────────────────────────────────────────────────
 // ────────────────────────────────────────────────────────────────────────────
 // ────────────────────────────────────────────────────────────────────────────
+
+// ── Tutorial Guide: expõe funções do modal ao escopo global (onclick inline) ──
+window.closeTabGuideModal = closeTabGuideModal;
+window.openTabGuideModal = openTabGuideModal;
+// ─────────────────────────────────────────────────────────────────────────────
 
 // Carregamento síncrono de icon_index.json antes de qualquer renderização de itens
 try {
@@ -3917,6 +3923,12 @@ export function openPanel(tabName) {
   else if (targetTab === 'quests') safeUiUpdate('quests', updateQuestsUI);
   else if (targetTab === 'tower') safeUiUpdate('tower', updateTowerUI);
   else if (targetTab === 'warehouse') safeUiUpdate('warehouse', updateWarehouseUI);
+
+  // Tutorial: exibe guia automaticamente na 1ª visita à aba; injeta botão persistente
+  try {
+    state = getState();
+    checkTabGuide(targetTab, state, save);
+  } catch(e) { /* silently fail — tutorial não bloqueia o jogo */ }
 }
 
 function depositAllToWarehouse() {
