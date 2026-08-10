@@ -54,7 +54,7 @@ const RACES_INFO: Record<string, {
     name: 'Elfo',
     icon: '🧝‍♂️',
     desc: 'Graciosos e extremamente ágeis, abençoados pela deusa Eva.',
-    perks: ['🍃 +8 Esquiva Nativa', '⚡ Alta Velocidade de Movimento', '🌲 Inicia na Floresta Élfica'],
+    perks: ['🍃 +8 Esquiva Nativa', '⚡ Alta Velocidade de Movimento', '🏝️ Inicia na Ilha de Falar (Lv. 1)'],
     allowedClasses: [
       { id: 'fighter', name: 'Guerreiro Elfo (Fighter)', desc: 'Defensor gracioso e arqueiro veloz.', icon: '🏹' },
       { id: 'mage', name: 'Mago Elfo (Mage)', desc: 'Dominador de magia de água e cura sagrada.', icon: '🌊' }
@@ -63,14 +63,14 @@ const RACES_INFO: Record<string, {
       fighter: { M: '/img/elfwswM.png', F: '/img/elfswsF.png' },
       mage: { M: '/img/elfmageM.png', F: '/img/elfmageF.png' }
     },
-    startZoneName: 'Floresta Élfica (Elven Forest)'
+    startZoneName: 'Ilha de Falar (Talking Island)'
   },
   darkelf: {
     id: 'darkelf',
     name: 'Elfo Negro',
     icon: '🧝‍♀️',
     desc: 'Mestres de magia negra e ataques críticos devastadores de Shillien.',
-    perks: ['🔥 +15 Poder de Ataque & Magia', '🗡️ Alto Poder Crítico', '🌑 Inicia na Floresta Negra'],
+    perks: ['🔥 +15 Poder de Ataque & Magia', '🗡️ Alto Poder Crítico', '🏝️ Inicia na Ilha de Falar (Lv. 1)'],
     allowedClasses: [
       { id: 'fighter', name: 'Guerreiro Negro (Fighter)', desc: 'Assassino mortal e cavaleiro sombrio.', icon: '🗡️' },
       { id: 'mage', name: 'Mago Negro (Mage)', desc: 'Invocador de maldições e magia de fogo/trevas.', icon: '🔮' },
@@ -83,14 +83,14 @@ const RACES_INFO: Record<string, {
       elfDeathPilgrim: { M: '/img/darkelf_fighter.png', F: '/img/darkelf_fighter.png' },
       assassinBase: { M: '/img/darkelf_fighter.png', F: '/img/darkelf_fighter.png' }
     },
-    startZoneName: 'Floresta Negra (Dark Forest)'
+    startZoneName: 'Ilha de Falar (Talking Island)'
   },
   orc: {
     id: 'orc',
     name: 'Orc',
     icon: '👹',
     desc: 'Guerreiros de força bruta descomunal e constituição vital superior.',
-    perks: ['💪 +100 Vida Máxima (HP)', '🛡️ Resiliência em Batalha Prolongada', '🌋 Inicia na Vila Orc'],
+    perks: ['💪 +100 Vida Máxima (HP)', '🛡️ Resiliência em Batalha Prolongada', '🏝️ Inicia na Ilha de Falar (Lv. 1)'],
     allowedClasses: [
       { id: 'fighter', name: 'Guerreiro Orc (Fighter)', desc: 'Destruidor com armas de duas mãos e garras.', icon: '🪓' },
       { id: 'mage', name: 'Xamã Orc (Shaman)', desc: 'Mago de combate e buffs tribais de sangue.', icon: '🔥' },
@@ -101,14 +101,14 @@ const RACES_INFO: Record<string, {
       mage: { M: '/img/orc_mage.png', F: '/img/orc_mage.png' },
       orcRider: { M: '/img/orcfighterM.png', F: '/img/orcfighterF.png' }
     },
-    startZoneName: 'Vila Orc (Orc Village)'
+    startZoneName: 'Ilha de Falar (Talking Island)'
   },
   dwarf: {
     id: 'dwarf',
     name: 'Anão',
     icon: '⚒️',
     desc: 'Mestres da forja, especialistas em mineração e criação de itens.',
-    perks: ['🎒 +100 Espaços de Inventário', '⚒️ Bônus de Craft & Drop de Materiais', '⛏️ Inicia nas Minas dos Anões'],
+    perks: ['🎒 +100 Espaços de Inventário', '⚒️ Bônus de Craft & Drop de Materiais', '🏝️ Inicia na Ilha de Falar (Lv. 1)'],
     allowedClasses: [
       { id: 'artisan', name: 'Artesão (Artisan)', desc: 'Especialista em forja de armas e armaduras.', icon: '⚒️' },
       { id: 'shinemakerS1', name: 'ShineMaker ✨', desc: '⚠️ EM DESENVOLVIMENTO, CONTEM BUGS. Mestre da luz cristalina, suporte e dano cristalino.', icon: '✨' }
@@ -118,14 +118,14 @@ const RACES_INFO: Record<string, {
       fighter: { M: '/img/dwarfmaestroM.png', F: '/img/dwarfmaestroF.png' },
       shinemakerS1: { M: '/img/dwarf_artisan.png', F: '/img/dwarf_artisan.png' }
     },
-    startZoneName: 'Minas dos Anões (Dwarven Mine)'
+    startZoneName: 'Ilha de Falar (Talking Island)'
   },
   kamael: {
     id: 'kamael',
     name: 'Kamael',
     icon: '🪶',
     desc: 'Raça de uma asa só com maestria lendária em estocadas de rapieira.',
-    perks: ['⚡ Usam Armaduras LEVES por Lore', '🗡️ Ataques Físicos Ultrarrápidos', '🏰 Inicia na Lair dos Kamael'],
+    perks: ['⚡ Usam Armaduras LEVES por Lore', '🗡️ Ataques Físicos Ultrarrápidos', '🏝️ Inicia na Ilha de Falar (Lv. 1)'],
     allowedClasses: [
       { id: 'soulbreaker', name: 'Soulbreaker', desc: 'Espadachim das sombras especializado em rapieiras.', icon: '🗡️' },
       { id: 'hatamoto', name: 'Samurai ⛩️', desc: '⚠️ EM DESENVOLVIMENTO, CONTEM BUGS. Mestre da katana ancestral e técnica Iaijutsu.', icon: '⛩️' }
@@ -135,14 +135,14 @@ const RACES_INFO: Record<string, {
       fighter: { M: '/img/kamaelDM.png', F: '/img/kamaelDF.png' },
       hatamoto: { M: '/img/kamael_soulbreaker.png', F: '/img/kamael_soulbreaker.png' }
     },
-    startZoneName: 'Lair dos Kamael (Kamael Lair)'
+    startZoneName: 'Ilha de Falar (Talking Island)'
   },
   sylph: {
     id: 'sylph',
     name: 'Sylph',
     icon: '🔫',
     desc: 'Atiradores elementais dos ventos com armas de fogo.',
-    perks: ['💨 +12 Esquiva & Velocidade', '🔫 Atiradores Elementais Ranged', '🌪️ Inicia na Ilha de Falar'],
+    perks: ['💨 +12 Esquiva & Velocidade', '🔫 Atiradores Elementais Ranged', '🏝️ Inicia na Ilha de Falar (Lv. 1)'],
     allowedClasses: [
       { id: 'sylphGunner', name: 'Storm Blaster 🔫', desc: '⚠️ EM DESENVOLVIMENTO, CONTEM BUGS. Atirador elemental com armas de fogo e tiros de vento.', icon: '🔫' }
     ],
@@ -157,7 +157,7 @@ const RACES_INFO: Record<string, {
     name: 'High Elf',
     icon: '✨',
     desc: 'Elfos supremos detentores da luz divina e maestria elemental.',
-    perks: ['🌟 +8 Magia & Defesa Divina', '🛡️ Guardiões Sagrados de Aden', '🌲 Inicia na Floresta Élfica'],
+    perks: ['🌟 +8 Magia & Defesa Divina', '🛡️ Guardiões Sagrados de Aden', '🏝️ Inicia na Ilha de Falar (Lv. 1)'],
     allowedClasses: [
       { id: 'divineTemplarS1', name: 'Divine Templar 🛡️', desc: '⚠️ EM DESENVOLVIMENTO, CONTEM BUGS. Guardião sagrado supremo e tanque com Sacred Aegis.', icon: '🛡️' },
       { id: 'elementWeaverS1', name: 'Element Weaver 🌀', desc: '⚠️ EM DESENVOLVIMENTO, CONTEM BUGS. Mago supremo combinando Fogo, Água e Vento.', icon: '🌀' },
@@ -169,7 +169,7 @@ const RACES_INFO: Record<string, {
       shinemakerS1: { M: '/img/elf_mage.png', F: '/img/elf_mage.png' },
       fighter: { M: '/img/elfwswM.png', F: '/img/elfswsF.png' }
     },
-    startZoneName: 'Floresta Élfica (Elven Forest)'
+    startZoneName: 'Ilha de Falar (Talking Island)'
   },
   ertheia: {
     id: 'ertheia',

@@ -55,22 +55,11 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
   }, []);
 
   const handleCharacterCreated = async (data: CharacterCreationData) => {
-    const startZoneMap: Record<string, string> = {
-      human: 'talkingIsland',
-      elf: 'elvenForest',
-      darkelf: 'darkForest',
-      orc: 'orcVillage',
-      dwarf: 'dwarvenMine',
-      kamael: 'kamaelLair',
-      sylph: 'talkingIsland',
-      highelf: 'elvenForest',
-      ertheia: 'talkingIsland'
-    };
-    const startZone = startZoneMap[data.race] || 'talkingIsland';
+    const startZone = 'talkingIsland';
 
-    const isMage = data.className === 'mage' || data.className === 'wizard' || data.className === 'cleric' || data.className === 'darkWizard' || data.className === 'shaman';
+    const isMage = data.className === 'mage' || data.className === 'wizard' || data.className === 'cleric' || data.className === 'darkWizard' || data.className === 'shaman' || data.className === 'oracle' || data.className === 'sayhaSeer' || data.className === 'elementWeaverS1' || data.className === 'bloodRoseBase';
     const isKamael = data.race === 'kamael';
-    const isLight = isKamael || data.className === 'rogue' || data.className === 'scout' || data.className === 'assassin' || data.className === 'warder' || data.className === 'soulbreaker';
+    const isLight = isKamael || data.className === 'rogue' || data.className === 'scout' || data.className === 'assassin' || data.className === 'warder' || data.className === 'soulbreaker' || data.className === 'sylphGunner';
 
     let starterWeapon = 'wooden_sword';
     let starterHelm = 'iron_helm';
@@ -110,7 +99,7 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
       starterGloves = 'cloth_gloves';
       starterBoots = 'cloth_boots';
     } else if (isLight) {
-      starterWeapon = isKamael ? 'training_dagger' : 'short_bow';
+      starterWeapon = isKamael ? 'training_dagger' : (data.race === 'sylph' ? 'training_dagger' : 'wooden_sword');
       starterHelm = 'leather_helm';
       starterArmor = 'leather_vest';
       starterLegs = 'leather_gaiters';
@@ -120,6 +109,8 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
       starterWeapon = 'bronze_mace';
     }
 
+    const starterShotsId = isMage ? 'spiritshot_ng' : 'soulshot_ng';
+
     const inventoryItems = [
       { uid: 'init_w', itemId: starterWeapon, count: 1, rarity: 'common', enchant: 0 },
       { uid: 'init_h', itemId: starterHelm, count: 1, rarity: 'common', enchant: 0 },
@@ -127,7 +118,8 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
       { uid: 'init_l', itemId: starterLegs, count: 1, rarity: 'common', enchant: 0 },
       { uid: 'init_g', itemId: starterGloves, count: 1, rarity: 'common', enchant: 0 },
       { uid: 'init_b', itemId: starterBoots, count: 1, rarity: 'common', enchant: 0 },
-      { uid: 'init_pot', itemId: 'hp_potion_s', count: 30 }
+      { uid: 'init_pot', itemId: 'hp_potion_s', count: 100 },
+      { uid: 'init_shots', itemId: starterShotsId, count: 300 }
     ];
 
     const newCharState: any = {
@@ -141,8 +133,8 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
       level: 1,
       xp: 0,
       sp: 10,
-      gold: 1000,
-      zone: startZone,
+      gold: 2000,
+      zone: 'talkingIsland',
       inventory: inventoryItems,
       equipment: {
         weapon: 'init_w',
