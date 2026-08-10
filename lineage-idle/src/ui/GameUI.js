@@ -1216,7 +1216,9 @@ export function renderStageHero(state) {
   if (heroMpText) heroMpText.textContent = `MP: ${curMp} / ${maxMp}`;
 
   if (structure.sprite && typeof heroSVG === 'function') {
-    structure.sprite.innerHTML = heroSVG(state);
+    const _hRace = (state.race || 'human').toLowerCase();
+    const _hCls = (state.class || state.className || 'fighter').toLowerCase();
+    structure.sprite.innerHTML = heroSVG(_hRace, _hCls);
   }
 }
 
@@ -1294,7 +1296,9 @@ export function updateCharacterUI(state) {
 
   const portraitArt = root.querySelector('#portrait-art, .portrait-art');
   if (portraitArt && typeof heroSVG === 'function') {
-    portraitArt.innerHTML = heroSVG(state);
+    const _pRace = (state.race || 'human').toLowerCase();
+    const _pCls = (state.class || state.className || 'fighter').toLowerCase();
+    portraitArt.innerHTML = heroSVG(_pRace, _pCls, null, 'bust');
   }
 
   const charStatsContainer = root.querySelector('#char-tab-stats-summary');
