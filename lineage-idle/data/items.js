@@ -2838,52 +2838,102 @@ const ICON_MAP = {
 
 const MONSTER_DROPS = {
   "zone1": [
-    "weapon_composition_bow",
-    "composition_bow",
-    "weapon_crucifix_of_blessing_magicblunt",
-    "armor_bone_breastplate",
-    "bone_breastplate",
-    "hp_potion_s"
+    "weapon_composition_bow", "weapon_crucifix_of_blessing_magicblunt", "weapon_falchion_sword",
+    "weapon_hunting_bow", "weapon_iron_hammer", "weapon_knight_sword", "weapon_short_spear",
+    "weapon_sword_breaker", "weapon_tomahawk_axe", "armor_bone_breastplate", "armor_bronze_breastplate_heavy",
+    "armor_devotion_armor_robe", "armor_leather_vest_light", "armor_bronze_helmet", "armor_devotion_helmet",
+    "armor_leather_helmet", "armor_devotion_boots", "armor_lether_boots", "armor_bronze_gloves",
+    "armor_devotion_gloves", "armor_leather_gloves", "armor_bone_gaiters", "armor_bronze_gaiters_heavy",
+    "armor_devotion_pants_robe", "armor_leather_pants_light", "shield_bone_shield", "shield_buckler",
+    "wooden_shield", "armor_adventurer_belt", "armor_bronze_cloack_heavy", "armor_devotion_cloack",
+    "armor_leather_cloack", "necklace_of_grace", "necklace_of_knowledge", "earring_of_grace"
   ],
   "zone2": [
-    "weapon_bow_of_silence",
-    "bow_of_silence",
-    "weapon_bronze_mace",
-    "armor_brigandine_armor_heavy",
-    "brigandine_armor_heavy",
-    "hp_potion_m"
+    "weapon_bow_of_silence", "weapon_bronze_mace", "weapon_crimson_sword", "weapon_dual_bastard_sword",
+    "weapon_dual_saber_sword", "weapon_elven_bow", "weapon_mystic_staff", "weapon_saber_sword",
+    "weapon_staff_of_magic", "weapon_titan_hammer", "weapon_warhammer", "weapon_winged_spear",
+    "armor_brigandine_armor_heavy", "armor_manticore_armor_light", "armor_mithril_tunic_robe",
+    "armor_brigandine_helmet_heavy", "armor_iron_helm", "armor_manticore_helmet_light",
+    "armor_mithril_helmet_robe", "armor_brigandine_boots_heavy", "armor_manticore_boots_light",
+    "armor_mithril_boots_robe", "armor_brigandine_gloves_heavy", "armor_manticore_gloves_light",
+    "armor_mithril_gloves_robe", "armor_brigandine_pants_heavy", "armor_manticore_pants_light",
+    "armor_mithril_pants_robe", "armor_brigandine_belt", "armor_brigandine_cloack_heavy",
+    "armor_manticore_cloack_light", "armor_mithril_cloack_robe"
   ],
   "zone3": [
-    "weapon_battle_axe",
-    "battle_axe",
-    "weapon_big_hammer",
-    "armor_full_plate_heavy_armor",
-    "full_plate_heavy_armor",
-    "hp_potion_l"
+    "weapon_battle_axe", "weapon_big_hammer", "weapon_crystal_staff", "weapon_crystallized_ice_bow",
+    "weapon_darkelven_dagger", "weapon_demons_staff", "weapon_dual_elven_sword", "weapon_dual_revolution_sword",
+    "weapon_eminence_bow", "weapon_homunkuluss_magic_sword", "weapon_katana", "weapon_samurai_longsword",
+    "weapon_spiked_spear", "armor_full_plate_heavy_armor", "armor_karmian_robe_armor",
+    "armor_plated_leather_light_armor", "armor_theca_light_armor", "armor_full_plate_heavy_helmet",
+    "armor_karmian_helmet", "armor_theca_light_helmet", "armor_full_plate_heavy_boots",
+    "armor_karmian_robe_boots", "armor_plated_leather_light_boots", "armor_theca_light_boots",
+    "armor_full_plate_heavy_gloves", "armor_karmian_robe_gloves", "armor_plated_leather_light_gloves",
+    "armor_theca_light_gloves", "armor_karmian_robe_pants", "armor_plated_leather_light_pants",
+    "armor_theca_light_pants", "armor_full_plate_shield", "armor_full_plate_belt",
+    "armor_full_plate_cloack", "armor_karmian_cloack", "armor_theca_light_cloack"
   ],
   "zone4": [
-    "weapon_archmage_staff",
-    "archmage_staff",
-    "weapon_assassins_dagger",
-    "armor_avadon_heavy_armor",
-    "avadon_heavy_armor",
-    "mp_potion_s"
+    "weapon_archmage_staff", "weapon_assassins_dagger", "weapon_bow_of_peril", "weapon_divine_sword",
+    "weapon_dual_stormbringer_sword", "weapon_dual_tsurugi_sword", "weapon_great_axe", "weapon_great_sword",
+    "weapon_lancia_spear", "weapon_orcish_axe", "weapon_soul_seeker_dagger", "weapon_staff_of_evil_sprits",
+    "weapon_sword_of_damascus", "weapon_thorn_spear", "weapon_valhalla_magic_sword", "armor_avadon_heavy_armor",
+    "armor_avadon_light_armor", "armor_avadon_robe_armor", "armor_blue_wolf_heavy_armor",
+    "armor_blue_wolf_light_armor", "armor_blue_wolf_robe_armor", "armor_doom_light_armor",
+    "armor_avadon_heavy_helmet", "armor_avadon_helmet", "armor_blue_wolf_helmet", "armor_doom_light_helmet",
+    "armor_avadon_heavy_boots", "armor_avadon_light_boots", "armor_blue_wolf_heavy_boots",
+    "armor_blue_wolf_light_boots", "armor_blue_wolf_robe_boots", "armor_doom_light_boots",
+    "armor_avadon_heavy_gloves", "armor_avadon_light_gloves", "armor_avadon_robe_gloves",
+    "armor_blue_wolf_heavy_gloves", "armor_blue_wolf_light_gloves", "armor_blue_wolf_robe_gloves",
+    "armor_doom_light_gloves", "armor_avadon_heavy_pants", "armor_blue_wolf_heavy_pants",
+    "armor_blue_wolf_robe_pants", "armor_avadon_shield", "armor_blue_wolf_shield", "armor_doom_shield",
+    "armor_blue_wolf_belt", "armor_avadon_cloack", "armor_blue_wolf_cloack", "armor_doom_cloack"
   ],
   "zone5": [
-    "weapon_bloody_orchid_dagger",
-    "bloody_orchid_dagger",
-    "weapon_carnage_bow",
-    "armor_dark_crystal_heavy_armor",
-    "dark_crystal_heavy_armor",
-    "mp_potion_l"
+    "weapon_bloody_orchid_dagger", "weapon_carnage_bow", "weapon_dragon_slayer_twohanded_sword",
+    "weapon_elemental_magic_sword", "weapon_gorgon_twohanded_sword", "weapon_halbard_spear",
+    "weapon_miracle_magic_sword", "weapon_orcish_blood_axe", "weapon_soul_bow", "weapon_soul_separator_dagger",
+    "weapon_tallum_blade", "weapon_tallum_spear", "weapon_tear_of_darkness", "weapon_worldtrees_branch_staff",
+    "armor_dark_crystal_heavy_armor", "armor_dark_crystal_light_armor", "armor_dark_crystal_robe_armor",
+    "armor_majestic_heavy_armor", "armor_majestic_light_armor", "armor_majestic_robe_armor",
+    "armor_nightmare_heavy_armor", "armor_nightmare_light_armor", "armor_nightmare_robe_armor",
+    "armor_tallum_heavy_armor", "armor_tallum_light_armor", "armor_tallum_robe_armor",
+    "armor_dark_crystal_heavy_helmet", "armor_dark_crystal_light_helmet", "armor_dark_crystal_robe_helmet",
+    "armor_majestic_heavy_helmet", "armor_majestic_light_helmet", "armor_majestic_robe_helmet",
+    "armor_nightmare_heavy_helmet", "armor_nightmare_light_helmet", "armor_nightmare_robe_helmet",
+    "armor_tallum_heavy_helmet", "armor_tallum_light_helmet", "armor_tallum_robe_helmet",
+    "armor_dark_crystal_heavy_boots", "armor_dark_crystal_light_boots", "armor_dark_crystal_robe_boots",
+    "armor_majestic_heavy_boots", "armor_majestic_light_boots", "armor_majestic_robe_boots",
+    "armor_nightmare_heavy_boots", "armor_nightmare_light_boots", "armor_nightmare_robe_boots",
+    "armor_tallum_heavy_boots", "armor_tallum_light_boots", "armor_tallum_robe_boots",
+    "armor_dark_crystal_heavy_glove", "armor_dark_crystal_light_glove", "armor_dark_crystal_robe_glove",
+    "armor_majestic_heavy_glove", "armor_majestic_light_glove", "armor_majestic_robe_glove",
+    "armor_nightmare_heavy_glove", "armor_nightmare_light_glove", "armor_nightmare_robe_glove",
+    "armor_tallum_heavy_glove", "armor_tallum_light_glove", "armor_tallum_robe_glove",
+    "armor_dark_crystal_heavy_pants", "armor_dark_crystal_light_pants", "armor_tallum_robe_pants",
+    "armor_dark_crystal_shield", "armor_nightmare_shield", "armor_majestic_belt", "armor_majestic_cloack",
+    "armor_nightmare_cloack", "armor_tallum_cloack"
   ],
   "zone6": [
-    "anais_first",
-    "weapon_anais_first",
-    "anakim_pistols",
-    "armor_draconic_armor",
-    "draconic_armor",
-    "hp_potion_xl"
+    "angel_slayer", "arcana_mace", "draconic_bow", "imperial_staff", "weapon_dynasty_ancient_sword",
+    "weapon_dynasty_bow", "weapon_dynasty_crossbow", "weapon_dynasty_dagger", "weapon_dynasty_dual_sword_",
+    "weapon_dynasty_magic_sword", "weapon_dynasty_spear", "weapon_dynasty_staff", "weapon_dynasty_sword",
+    "armor_draconic_armor", "armor_dynasti_heavy_armor", "armor_dynasti_light_armor", "armor_dynasti_robe_armor",
+    "armor_imperial_crusader_breastplate", "armor_major_arcana_robe", "armor_draconic_helmet",
+    "armor_dynasti_heavy_helmet", "armor_imperial_crusader_helmet", "armor_major_arcana_robe_helmet",
+    "armor_draconic_boots", "armor_dynasti_heavy_boots", "armor_imperial_crusader_boots",
+    "armor_major_arcana_robe_boots", "armor_draconic_gloves", "armor_dynasti_heavy_gloves",
+    "armor_imperial_crusader_gloves", "armor_major_arcana_robe_gloves", "jewel_ring_of_baium",
+    "jewel_ring_of_valakas", "jewel_ring_queen_ant", "armor_dynasti_shield", "armor_imperial_crusader_shield",
+    "armor_antharas_belt", "armor_nobless_belt", "armor_antharas_cloack", "armor_dynasti_cloack",
+    "armor_valakas_cloack", "armor_zaken_cloack", "jewel_necklace_of_frintezza", "jewel_necklace_of_valakas",
+    "jewel_earring_of_antharas", "jewel_earring_of_zaken"
+  ],
+  "zone7": [
+    "weapon_frost_lord_bow", "weapon_frost_lord_dagger", "weapon_frost_lord_sword", "weapon_frost_lord_staff",
+    "weapon_frost_lord_ancientsword", "weapon_frost_lord_axe", "weapon_frost_lord_dual_sword",
+    "weapon_frost_lord_dualfist", "weapon_frost_lord_magic_blunt", "weapon_frost_lord_pistol",
+    "weapon_frost_lord_rapier", "weapon_frost_lord_spear", "weapon_frost_lord_two_hand_sword"
   ]
 };
 
@@ -2972,11 +3022,16 @@ function rollRarity(bonus = 0) {
   return 'common';
 }
 
-function rollDrop(zoneId = 'zone1', rarityBonus = 0) {
+function rollDrop(zoneId = 'zone1', rarityBonus = 0, isBoss = false) {
+  const isLowLevel = zoneId === 'zone1' || ['talkingIsland', 'elvenForest', 'darkForest', 'orcVillage', 'dwarvenMine', 'kamaelLair', 'ruinedOutpost'].includes(zoneId);
+  const equipChance = isLowLevel ? (isBoss ? 0.15 : 0.003) : (isBoss ? 0.25 : 0.006);
+  if (Math.random() >= equipChance) {
+    return [];
+  }
   const pool = MONSTER_DROPS[zoneId] || MONSTER_DROPS.zone1;
   const itemId = pool[Math.floor(Math.random() * pool.length)];
   const rarity = rollRarity(rarityBonus);
-  return { itemId, rarity };
+  return [{ id: itemId, itemId, rarity, isEquipment: true, amount: 1 }];
 }
 
 function getMysticRotation() {
