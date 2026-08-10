@@ -458,9 +458,6 @@ export function getStats(state) {
   const eb = getTotalEquipBonuses(state);
   const setRes = getActiveSetBonuses(state);
   const setB = setRes.statTotals;
-  const primaryStats = setRes.primaryStats;
-
-  state.primaryStats = primaryStats;
 
   let itemCraftBonus = 0, itemLootBonus = 0;
   if (state.equipment) {
@@ -585,6 +582,18 @@ export function getStats(state) {
   if (tatInt > 0) buffMatk += Math.floor(baseMatk * tatInt * 0.02);
   if (tatWit > 0) buffMatk += Math.floor(baseMatk * tatWit * 0.025);
   if (tatMen > 0) buffMdef += Math.floor(baseMdef * tatMen * 0.02);
+
+  // Calculate consolidated primary attributes (Base Race + Tattoos/Dyes + Equipment + Set Bonuses)
+  const baseAttrs = getBaseAttributes(state.race, state.class);
+  const primaryStats = {
+    str: (baseAttrs.str || 0) + (setRes.primaryStats?.str || 0) + (Number(eb.str) || 0) + tatStr,
+    dex: (baseAttrs.dex || 0) + (setRes.primaryStats?.dex || 0) + (Number(eb.dex) || 0) + tatDex,
+    con: (baseAttrs.con || 0) + (setRes.primaryStats?.con || 0) + (Number(eb.con) || 0) + tatCon,
+    int: (baseAttrs.int || 0) + (setRes.primaryStats?.int || 0) + (Number(eb.int) || 0) + tatInt,
+    wit: (baseAttrs.wit || 0) + (setRes.primaryStats?.wit || 0) + (Number(eb.wit) || 0) + tatWit,
+    men: (baseAttrs.men || 0) + (setRes.primaryStats?.men || 0) + (Number(eb.men) || 0) + tatMen
+  };
+  state.primaryStats = primaryStats;
 
   // Process Set Enchantment Bonuses (+4 to +10)
   let minSetEnchant = 999;
