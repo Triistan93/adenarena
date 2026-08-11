@@ -2622,6 +2622,10 @@ export function closeCraftModal() {
 ═══════════════════════════════════════════════════════════════════════════ */
 export function renderAlchemyUI(state) {
   if (!state) return;
+  if (typeof window !== 'undefined') {
+    window.renderAlchemyUI = renderAlchemyUI;
+    window._lastState = state;
+  }
   const root = getRoot();
   const container = root.querySelector('#tab-alchemy, .tab-alchemy');
   if (!container) return;
@@ -2727,7 +2731,7 @@ export function renderAlchemyUI(state) {
     const optionsHtml = inventoryItems.map(item => {
       const def = getItemDef(item.itemId);
       const rName = def?.name || item.itemId;
-      const gCode = getItemGradeCode(def).code.toUpperCase();
+      const gCode = getItemGradeCode(def).toUpperCase();
       return `<option value="${item.uid}" ${item.uid === selectedItem.uid ? 'selected' : ''}>[${gCode}] ${rName} (x${item.count || 1})</option>`;
     }).join('');
 
