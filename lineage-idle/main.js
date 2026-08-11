@@ -3035,13 +3035,13 @@ function monsterAttack(monster) {
 // --------------------------- GM ADMIN & CHAT CONSOLE ---------------------------
 function generateUid() { return 'item_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9); }
 
-function spawnAdminItem(itemId, qty = 1, rarity = 'common', enchant = 0, affixChoice = 'roll') {
+function spawnAdminItem(itemId, qty = 1, rarity = 'common', enchant = 0, affixChoice = 'roll', isFoundation = false) {
   const def = getItemDef(itemId);
   if (!def) { log(`[Admin] Item '${itemId}' não encontrado.`, 'system'); return; }
   const realId = def.id || itemId;
   
-  if (def.stack && (def.slot === 'consumable' || def.slot === 'material' || def.slot === 'scroll' || def.slot === 'powerup') && rarity === 'common') {
-    addToInventory(realId, qty, null);
+  if (def.stack && (def.slot === 'consumable' || def.slot === 'material' || def.slot === 'scroll' || def.slot === 'powerup') && rarity === 'common' && !isFoundation) {
+    addToInventory(realId, qty, null, false, {}, true);
   } else {
     for (let i = 0; i < qty; i++) {
       const isEquip = def.slot && def.slot !== 'consumable' && def.slot !== 'material' && def.slot !== 'scroll' && def.slot !== 'powerup';
@@ -3063,6 +3063,7 @@ function spawnAdminItem(itemId, qty = 1, rarity = 'common', enchant = 0, affixCh
         rarity: rarity,
         enchant: enchant,
         affixes: affixes,
+        foundation: !!isFoundation,
         equipped: false,
         count: 1
       });
@@ -3070,7 +3071,8 @@ function spawnAdminItem(itemId, qty = 1, rarity = 'common', enchant = 0, affixCh
   }
 
   const enchantStr = enchant > 0 ? `+${enchant} ` : '';
-  log(`🎁 [Admin] ${qty}x ${enchantStr}${def.name} [${rarity}] gerado(s) na mochila!`, 'rarity-legendary');
+  const foundationStr = isFoundation ? '✨ [FOUNDATION] ' : '';
+  log(`🎁 [Admin] ${qty}x ${foundationStr}${enchantStr}${def.name} [${rarity}] gerado(s) na mochila!`, 'rarity-legendary');
   floatText('🎁 ITEM GERADO!', 'float-jackpot');
   updateAllUI();
   save();
@@ -3236,18 +3238,121 @@ function populateAdminItemSelect() {
   }
 }
 
+function addAdminXP(amount) {
+  const amt = parseInt(amount) || 0;
+  if (amt <= 0) return;
+  state.xp = (state.xp || 0) + amt;
+  checkLevelUp(state, { getStats, log, floatText, updateAllUI, save });
+  log(`🌟 [Admin] +${amt.toLocaleString()} XP concedido(s)! (Nível atual: ${state.level})`, 'rarity-legendary');
+  floatText(`🌟 +${amt.toLocaleString()} XP!`, 'float-jackpot');
+  updateAllUI();
+  save();
+}
+
+function addAdminGold(amount) {
+  const amt = parseInt(amount) || 0;
+  if (amt <= 0) return;
+  state.gold = (state.gold || 0) + amt;
+  triggerQuestEvent('gold', amt);
+  log(`🪙 [Admin] +${amt.toLocaleString()} Adena concedido(s)!`, 'rarity-legendary');
+  floatText(`🪙 +${amt.toLocaleString()} Adena!`, 'float-gold');
+  updateAllUI();
+  save();
+}
+
+function addAdminSP(amount) {
+  const amt = parseInt(amount) || 0;
+  if (amt <= 0) return;
+  state.sp = (state.sp || 0) + amt;
+  log(`✦ [Admin] +${amt.toLocaleString()} SP concedido(s)!`, 'rarity-legendary');
+  floatText(`✦ +${amt.toLocaleString()} SP!`, 'float-jackpot');
+  updateSkillUI();
+  updateAllUI();
+  save();
+}
+
+function adminUnlockSagas() {
+  const sagas = D().SAGAS || {};
+  state.unlockedSagas = state.unlockedSagas || {};
+  for (const sagaId of Object.keys(sagas)) {
+    state.unlockedSagas[sagaId] = true;
+  }
+  log('📜 [Admin] Todas as Sagas foram DESBLOQUEADAS!', 'rarity-legendary');
+  floatText('📜 SAGAS DESBLOQUEADAS', 'float-jackpot');
+  updateAllUI();
+  save();
+}
+
+function adminCompleteQuest() {
+  if (state.quests && state.quests.length > 0) {
+    for (const q of state.quests) {
+      q.progress = q.target;
+      q.completed = true;
+    }
+    log('✅ [Admin] Todas as Missões Ativas foram CONCLUÍDAS!', 'rarity-legendary');
+    floatText('✅ MISSÕES CONCLUÍDAS', 'float-jackpot');
+    updateQuestUI();
+    updateAllUI();
+    save();
+  } else {
+    log('Nenhuma missão ativa encontrada para concluir.', 'system');
+  }
+}
+
+function adminMaxCraft() {
+  state.craftLevel = 50;
+  state.craftXp = 0;
+  state.craftCharges = 100;
+  state.craftPoints = 0;
+  log('⚒️ [Admin] Forja no Level Máximo (50) + 100 Cargas de Random Craft!', 'rarity-legendary');
+  floatText('⚒️ CRAFT MÁXIMO', 'float-jackpot');
+  updateAllUI();
+  save();
+}
+
+function adminMaxSkills() {
+  const skillDefs = D().SKILL_DEFS || {};
+  for (const [skillId, def] of Object.entries(skillDefs)) {
+    if (def && classSatisfies(state.class, def.classReq)) {
+      state.skills[skillId] = def.max || 5;
+    }
+  }
+  log('📖 [Admin] Todas as Habilidades da Classe foram MAXIMIZADAS!', 'rarity-legendary');
+  floatText('📖 SKILLS MÁXIMAS', 'float-jackpot');
+  updateSkillUI();
+  updateAllUI();
+  save();
+}
+
+function adminKillMonster() {
+  const monster = state.currentMonster;
+  if (monster) {
+    log(`⚡ [Admin] Matou o monstro ${monster.name} instantaneamente!`, 'rarity-legendary');
+    monster.hp = 0;
+    onMonsterDefeated(monster);
+  } else {
+    log('Nenhum monstro em combate ativo.', 'system');
+  }
+}
+
 function executeAdminCmd(cmd) {
   if (cmd === 'level20') { applyAdminLevelChange(20); }
   else if (cmd === 'level40') { applyAdminLevelChange(40); }
   else if (cmd === 'level76') { applyAdminLevelChange(76); }
   else if (cmd === 'level85') { applyAdminLevelChange(85); }
+  else if (cmd === 'add1level') { applyAdminLevelChange((state.level || 1) + 1); }
   else if (cmd === 'add5levels') { applyAdminLevelChange((state.level || 1) + 5); }
-  else if (cmd === 'gold1m') { state.gold += 1000000; triggerQuestEvent('gold', 1000000); log('🪙 [Admin] +1.000.000 Ouro concedido!', 'rarity-legendary'); }
-  else if (cmd === 'gold10m') { state.gold += 10000000; triggerQuestEvent('gold', 10000000); log('🪙 [Admin] +10.000.000 Ouro concedido!', 'rarity-legendary'); }
-  else if (cmd === 'sp5k') { state.sp += 5000; log('✦ [Admin] +5.000 SP concedido!', 'rarity-legendary'); updateSkillUI(); }
-  else if (cmd === 'sp50k') { state.sp += 50000; log('✦ [Admin] +50.000 SP concedido!', 'rarity-legendary'); updateSkillUI(); }
+  else if (cmd === 'gold1m') { addAdminGold(1000000); }
+  else if (cmd === 'gold10m') { addAdminGold(10000000); }
+  else if (cmd === 'sp5k') { addAdminSP(5000); }
+  else if (cmd === 'sp50k') { addAdminSP(50000); }
   else if (cmd === 'godmode') { state.godMode = !state.godMode; log(`🛡️ [Admin] Invencibilidade: ${state.godMode ? 'ATIVADO' : 'DESATIVADO'}!`, 'rarity-legendary'); }
   else if (cmd === 'healfull') { const stats = getStats(); state.hp = stats.maxHp; state.mp = stats.maxMp; log('❤️ [Admin] HP/MP Restaurados 100%!', 'rarity-legendary'); }
+  else if (cmd === 'unlocksagas') { adminUnlockSagas(); }
+  else if (cmd === 'completequest') { adminCompleteQuest(); }
+  else if (cmd === 'maxcraft') { adminMaxCraft(); }
+  else if (cmd === 'maxskills') { adminMaxSkills(); }
+  else if (cmd === 'killmonster') { adminKillMonster(); }
   else if (cmd === 'autoequip') { autoEquipBest(); }
   else if (cmd === 'resetsave') { resetSave(); }
 
@@ -4177,6 +4282,39 @@ export function bindEvents() {
       btn.onclick = () => executeAdminCmd(btn.dataset.adminCmd);
     });
 
+    const addXpBtn = el('admin-add-xp-btn');
+    if (addXpBtn) {
+      addXpBtn.onclick = () => {
+        const inp = el('admin-xp-custom');
+        if (inp && inp.value) {
+          addAdminXP(inp.value);
+          inp.value = '';
+        }
+      };
+    }
+
+    const addGoldBtn = el('admin-add-gold-btn');
+    if (addGoldBtn) {
+      addGoldBtn.onclick = () => {
+        const inp = el('admin-gold-custom');
+        if (inp && inp.value) {
+          addAdminGold(inp.value);
+          inp.value = '';
+        }
+      };
+    }
+
+    const addSpBtn = el('admin-add-sp-btn');
+    if (addSpBtn) {
+      addSpBtn.onclick = () => {
+        const inp = el('admin-sp-custom');
+        if (inp && inp.value) {
+          addAdminSP(inp.value);
+          inp.value = '';
+        }
+      };
+    }
+
     const spawnBtn = el('admin-spawn-btn');
     if (spawnBtn) {
       spawnBtn.onclick = () => {
@@ -4185,14 +4323,17 @@ export function bindEvents() {
         const raritySel = el('admin-item-rarity');
         const enchantSel = el('admin-item-enchant');
         const affixSel = el('admin-item-affix');
+        const foundChk = el('admin-item-foundation');
         if (itemSel && itemSel.value) {
           const qty = parseInt(qtyInput?.value || 1) || 1;
+          const isFoundation = !!(foundChk && foundChk.checked);
           spawnAdminItem(
             itemSel.value,
             qty,
             raritySel?.value || 'common',
             parseInt(enchantSel?.value || 0) || 0,
-            affixSel?.value || 'roll'
+            affixSel?.value || 'roll',
+            isFoundation
           );
         }
       };

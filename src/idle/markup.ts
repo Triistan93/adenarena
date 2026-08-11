@@ -874,32 +874,45 @@ export const IDLE_MARKUP = `
           <button id="close-admin-modal-btn" class="modal-close-x">✕</button>
         </div>
         <div class="admin-grid">
-          <!-- Section 1: Level & Stats Cheats -->
+          <!-- Section 1: Level & XP Controls -->
           <div class="admin-section">
-            <h3>📊 Nível &amp; Atributos</h3>
+            <h3>📊 Nível &amp; Experiência (XP)</h3>
             <div class="admin-btn-group">
-              <button class="admin-btn" data-admin-cmd="level20">Set Level 20</button>
-              <button class="admin-btn" data-admin-cmd="level40">Set Level 40</button>
-              <button class="admin-btn" data-admin-cmd="level76">Set Level 76</button>
-              <button class="admin-btn" data-admin-cmd="level85">Set Level 85</button>
+              <button class="admin-btn" data-admin-cmd="level20">Set Lv.20</button>
+              <button class="admin-btn" data-admin-cmd="level40">Set Lv.40</button>
+              <button class="admin-btn" data-admin-cmd="level76">Set Lv.76</button>
+              <button class="admin-btn" data-admin-cmd="level85">Set Lv.85</button>
+              <button class="admin-btn" data-admin-cmd="add1level">+1 Nível</button>
               <button class="admin-btn" data-admin-cmd="add5levels">+5 Níveis</button>
+            </div>
+            <div class="admin-input-row" style="margin-top:8px; display:flex; gap:6px;">
+              <input type="number" id="admin-xp-custom" class="admin-num-input" placeholder="Qtd. XP (ex: 100000)" style="flex:1;" />
+              <button id="admin-add-xp-btn" class="admin-btn primary">+ Conceder XP</button>
             </div>
           </div>
 
-          <!-- Section 2: Currency & Points -->
+          <!-- Section 2: Currency & Skill Points -->
           <div class="admin-section">
-            <h3>🪙 Ouro &amp; Skill Points</h3>
+            <h3>🪙 Ouro &amp; Skill Points (SP)</h3>
             <div class="admin-btn-group">
-              <button class="admin-btn" data-admin-cmd="gold1m">+1.000.000 Adena</button>
-              <button class="admin-btn" data-admin-cmd="gold10m">+10.000.000 Adena</button>
-              <button class="admin-btn" data-admin-cmd="sp5k">+5.000 SP</button>
-              <button class="admin-btn" data-admin-cmd="sp50k">+50.000 SP</button>
+              <button class="admin-btn" data-admin-cmd="gold1m">+1M Adena</button>
+              <button class="admin-btn" data-admin-cmd="gold10m">+10M Adena</button>
+              <button class="admin-btn" data-admin-cmd="sp5k">+5K SP</button>
+              <button class="admin-btn" data-admin-cmd="sp50k">+50K SP</button>
+            </div>
+            <div class="admin-input-row" style="margin-top:8px; display:flex; gap:6px;">
+              <input type="number" id="admin-gold-custom" class="admin-num-input" placeholder="Qtd. Adena (ex: 5000000)" style="flex:1;" />
+              <button id="admin-add-gold-btn" class="admin-btn primary">+ Ouro</button>
+            </div>
+            <div class="admin-input-row" style="margin-top:6px; display:flex; gap:6px;">
+              <input type="number" id="admin-sp-custom" class="admin-num-input" placeholder="Qtd. SP (ex: 25000)" style="flex:1;" />
+              <button id="admin-add-sp-btn" class="admin-btn primary">+ SP</button>
             </div>
           </div>
 
           <!-- Section 3: Item Spawner -->
           <div class="admin-section admin-spawner">
-            <h3>🎁 Spawner de Itens</h3>
+            <h3>🎁 Gerador de Itens &amp; Relíquias</h3>
             <div class="spawner-fields">
               <label for="admin-item-select" class="sr-only" style="display:none;">Item para Gerar</label>
               <select id="admin-item-select" name="adminItemSelect" class="admin-select" aria-label="Item para Gerar"></select>
@@ -912,6 +925,8 @@ export const IDLE_MARKUP = `
                     <option value="rare">Raro</option>
                     <option value="epic">Épico (Roxo)</option>
                     <option value="legendary">Lendário (Dourado)</option>
+                    <option value="mythic">Místico (Vermelho)</option>
+                    <option value="s">Grau S Divine</option>
                   </select>
                 </label>
                 <label for="admin-item-enchant">Encanto: 
@@ -920,7 +935,9 @@ export const IDLE_MARKUP = `
                     <option value="3">+3</option>
                     <option value="7">+7</option>
                     <option value="10">+10</option>
-                    <option value="16">+16 (Máx)</option>
+                    <option value="16">+16 (L2 Classic)</option>
+                    <option value="20">+20</option>
+                    <option value="30">+30 (Godlike)</option>
                   </select>
                 </label>
                 <label for="admin-item-affix">Afixo: 
@@ -935,25 +952,31 @@ export const IDLE_MARKUP = `
                     <option value="boss_dmg">✦ +% Dano vs Chefes</option>
                     <option value="on_kill_heal">✦ +% Cura ao Matar</option>
                     <option value="stun_chance">✦ % Chance de Stun</option>
-                    <option value="undead_dmg">✦ +% Dano vs Mortos-Vivos</option>
-                    <option value="dragon_dmg">✦ +% Dano vs Dragões</option>
-                    <option value="beast_dmg">✦ +% Dano vs Bestas</option>
-                    <option value="demon_dmg">✦ +% Dano vs Demônios</option>
-                    <option value="humanoid_dmg">✦ +% Dano vs Humanoides</option>
                   </select>
                 </label>
               </div>
-              <button id="admin-spawn-btn" class="admin-btn primary">✨ Gerar Item na Mochila</button>
+              <div class="spawner-check-row" style="margin-top:6px; display:flex; align-items:center; gap:8px;">
+                <label style="font-size:12px; color:var(--gilt-bright); cursor:pointer; display:flex; align-items:center; gap:6px;">
+                  <input type="checkbox" id="admin-item-foundation" style="accent-color:#d4a744; width:15px; height:15px; cursor:pointer;" />
+                  ✨ <strong>Item Foundation</strong> (Bônus Místico de Raridade &amp; Afixo Exclusivo)
+                </label>
+              </div>
+              <button id="admin-spawn-btn" class="admin-btn primary" style="margin-top:10px; width:100%; padding:10px; font-weight:bold;">✨ Gerar Item na Mochila</button>
             </div>
           </div>
 
-          <!-- Section 4: Utility Cheats -->
+          <!-- Section 4: Game Cheats & Progression -->
           <div class="admin-section">
-            <h3>⚡ Utilitários &amp; Deuses</h3>
+            <h3>⚡ Cheats de Jogo &amp; Progressão</h3>
             <div class="admin-btn-group">
               <button class="admin-btn" data-admin-cmd="godmode">🛡️ Invencibilidade (God Mode)</button>
               <button class="admin-btn" data-admin-cmd="healfull">❤️ Recuperar HP/MP Full</button>
-              <button class="admin-btn" data-admin-cmd="autoequip">⚔️ Auto-Equipar Melhores</button>
+              <button class="admin-btn" data-admin-cmd="unlocksagas">📜 Desbloquear Sagas</button>
+              <button class="admin-btn" data-admin-cmd="completequest">✅ Concluir Missão</button>
+              <button class="admin-btn" data-admin-cmd="maxcraft">⚒️ Level Máx Crafting</button>
+              <button class="admin-btn" data-admin-cmd="maxskills">📖 Max Skills</button>
+              <button class="admin-btn" data-admin-cmd="killmonster">⚡ Derrotar Monstro</button>
+              <button class="admin-btn" data-admin-cmd="autoequip">⚔️ Auto-Equipar</button>
               <button class="admin-btn danger" data-admin-cmd="resetsave">🗑️ Resetar Progresso</button>
             </div>
           </div>
