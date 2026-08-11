@@ -88,8 +88,10 @@ export function getRecipeMaterials(recipe) {
 export function canCraft(state, recipeId, qty = 1) {
   const recipe = getRecipeDef(recipeId);
   if (!recipe) return false;
+
   const currentCraftLvl = state.craftLevel || state.level || state.player?.level || 1;
-  if (recipe.level && getCraftLevelReq(recipe.level) > currentCraftLvl) return false;
+  const reqLvl = recipe.craftLevel || (recipe.level ? getCraftLevelReq(recipe.level) : 1);
+  if (reqLvl > currentCraftLvl) return false;
 
   const count = Math.max(1, parseInt(qty, 10) || 1);
   const totalGold = (recipe.gold || 250) * count;

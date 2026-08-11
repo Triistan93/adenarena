@@ -1142,7 +1142,7 @@ export function generateAllCraftingRecipes(allItemsParam = null) {
       reqs = [{ id: 'iron_ore', count: 10 }, { id: 'suede', count: 5 }];
     }
 
-    recipes[id] = {
+    const recipeObj = {
       id,
       itemId: id,
       level: craftLevel * 10,
@@ -1150,6 +1150,12 @@ export function generateAllCraftingRecipes(allItemsParam = null) {
       gold: baseGold,
       reqs
     };
+    recipes[id] = recipeObj;
+
+    const stripped = id.replace(/^(weapon_|armor_|jewel_|shield_|wepoan_)/, '');
+    if (stripped !== id) {
+      recipes[stripped] = recipeObj;
+    }
   }
 
   return recipes;
