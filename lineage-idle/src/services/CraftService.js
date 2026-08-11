@@ -153,7 +153,7 @@ export function craftSingleItem(state, recipeId, callbacks = {}) {
   const isConsumable = itemDef && ['potion', 'consumable', 'scroll', 'soulshot', 'spiritshot'].includes(itemDef.slot);
   const yieldAmount = (isConsumable && (recipeId.includes('shot') || recipeId.includes('potion'))) ? 50 : 1;
 
-  addToInventory(state, recipeId, yieldAmount, rarity, isFoundation, callbacks);
+  addToInventory(state, recipeId, yieldAmount, rarity, isFoundation, callbacks, true);
 
   const formattedName = callbacks.formatItemDisplayName
     ? callbacks.formatItemDisplayName({ itemId: recipeId, rarity, foundation: isFoundation }, itemDef)

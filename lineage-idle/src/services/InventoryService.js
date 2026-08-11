@@ -107,7 +107,7 @@ export function getWarehouseCount(state, itemId) {
  * @param {Object} [callbacks] — { log }
  * @returns {boolean} True se adicionado com sucesso
  */
-export function addToInventory(state, itemId, amount = 1, rarity = null, foundation = false, callbacks = {}) {
+export function addToInventory(state, itemId, amount = 1, rarity = null, foundation = false, callbacks = {}, skipAutoSell = false) {
   const gData = D();
   const def = gData?.ALL_ITEMS?.[itemId];
   if (!def) return false;
@@ -144,7 +144,7 @@ export function addToInventory(state, itemId, amount = 1, rarity = null, foundat
   const isGear = GEAR_SLOTS.includes(defSlot);
 
   const RARITY_RANK = { 'common': 1, 'uncommon': 2, 'rare': 3, 'epic': 4, 'legendary': 5, 'mythic': 6, 's': 7 };
-  if (isGear && rarity && !foundation && state.autoSellRarity && state.autoSellRarity !== 'off') {
+  if (!skipAutoSell && isGear && rarity && !foundation && state.autoSellRarity && state.autoSellRarity !== 'off') {
     if (!isProtectedFromAutoSell(null, def)) {
       const itemRarity = rarity.toLowerCase();
       const targetRank = RARITY_RANK[state.autoSellRarity.toLowerCase()] || 0;

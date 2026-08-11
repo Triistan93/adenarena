@@ -856,7 +856,11 @@ function log(msg, type = 'system') {
 
   const currentFilter = state.logFilter || 'all';
   if (currentFilter !== 'all') {
-    if (currentFilter === 'combat') {
+    if (currentFilter === 'actions') {
+      const isAction = type.startsWith('rarity-') || type === 'loot' || type === 'enchant' || type === 'craft' || type === 'saga' || type === 'boss' || type === 'system';
+      const isXpOrGoldSpam = msg.includes('+') && (msg.includes('XP') || (msg.includes('g') && !msg.includes('vendido') && !msg.includes('Forjou')));
+      if (!isAction || isXpOrGoldSpam) entry.style.display = 'none';
+    } else if (currentFilter === 'combat') {
       const isCombat = type === 'combat' || type === 'damage' || type === 'heal';
       if (!isCombat) entry.style.display = 'none';
     } else if (currentFilter === 'loot') {
@@ -1419,6 +1423,11 @@ function setLogFilter(filterType) {
   entries.forEach(entry => {
     if (filterType === 'all') {
       entry.style.display = 'block';
+    } else if (filterType === 'actions') {
+      const isAction = Array.from(entry.classList).some(c => c.startsWith('rarity-')) || entry.classList.contains('loot') || entry.classList.contains('enchant') || entry.classList.contains('craft') || entry.classList.contains('saga') || entry.classList.contains('boss') || entry.classList.contains('system');
+      const text = entry.textContent || '';
+      const isSpam = text.includes('XP') || (text.includes('+') && text.includes('g') && !text.includes('vendido') && !text.includes('Forjou'));
+      entry.style.display = (isAction && !isSpam) ? 'block' : 'none';
     } else if (filterType === 'combat') {
       const isCombat = entry.classList.contains('combat') || entry.classList.contains('damage') || entry.classList.contains('heal');
       entry.style.display = isCombat ? 'block' : 'none';

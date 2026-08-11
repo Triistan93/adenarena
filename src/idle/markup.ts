@@ -124,6 +124,7 @@ export const IDLE_MARKUP = `
         <div class="log-controls-bar">
           <div class="log-filters">
             <button class="log-filter-btn active" data-logfilter="all">Todos</button>
+            <button class="log-filter-btn" data-logfilter="actions">📜 Ações</button>
             <button class="log-filter-btn" data-logfilter="combat">⚔️ Combate</button>
             <button class="log-filter-btn" data-logfilter="loot">💰 Loot</button>
             <button class="log-filter-btn" data-logfilter="system">⚙️ Sistema</button>
