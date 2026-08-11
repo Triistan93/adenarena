@@ -254,7 +254,7 @@ export const IDLE_MARKUP = `
               <div class="l2inv-title-group">
                 <span class="l2inv-window-icon">🎒</span>
                 <span class="l2inv-window-title">Inventory</span>
-                <span class="l2inv-counter" id="l2inv-counter">(<span id="inv-slots-count">0</span>/50)</span>
+                <span class="l2inv-counter" id="l2inv-counter">(<span id="inv-slots-count">0</span>/<span id="max-inv-slots">150</span>)</span>
               </div>
               <div class="l2inv-window-controls">
                 <button class="l2inv-win-btn" title="Ajuda">?</button>

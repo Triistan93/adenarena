@@ -920,6 +920,7 @@ function updateStatsUI() {
   const _isEl = el('inv-slots'); if (_isEl) _isEl.textContent = `${state.inventory.length}/${_maxInvSlots}`;
   const _invSlotsCnt = el('inv-slots-count'); if (_invSlotsCnt) _invSlotsCnt.textContent = `${state.inventory.length}`;
   const _maxInvCnt = el('max-inv-slots'); if (_maxInvCnt) _maxInvCnt.textContent = `${_maxInvSlots}`;
+  const _l2InvCounter = el('l2inv-counter'); if (_l2InvCounter) _l2InvCounter.textContent = `(${state.inventory.length}/${_maxInvSlots})`;
 
   const abEl = el('active-buffs');
   if (abEl) {

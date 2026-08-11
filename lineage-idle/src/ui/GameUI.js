@@ -1151,8 +1151,10 @@ export function updateInventoryUI(state, callbacks = {}) {
     if (btnClear) btnClear.onclick = () => { if (callbacks.clearItemSelection) callbacks.clearItemSelection(); };
   }
 
-  const cnt = findElement('inv-count') || findElement('inv-slots') || findElement('inv-slots-count');
-  if (cnt) cnt.textContent = `${state.inventory?.length || 0} / ${maxSlots}`;
+  const cnt = findElement('inv-count') || findElement('inv-slots');
+  if (cnt) cnt.textContent = `${state.inventory?.length || 0}/${maxSlots}`;
+  const l2cnt = findElement('l2inv-counter');
+  if (l2cnt) l2cnt.textContent = `(${state.inventory?.length || 0}/${maxSlots})`;
 }
 
 export function updateWarehouseUI(state, callbacks = {}) {
