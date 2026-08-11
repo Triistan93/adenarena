@@ -3065,7 +3065,7 @@ function spawnAdminItem(itemId, qty = 1, rarity = 'common', enchant = 0, affixCh
   const enchantStr = enchant > 0 ? `+${enchant} ` : '';
   log(`🎁 [Admin] ${qty}x ${enchantStr}${def.name} [${rarity}] gerado(s) na mochila!`, 'rarity-legendary');
   floatText('🎁 ITEM GERADO!', 'float-jackpot');
-  updateInventoryUI();
+  updateAllUI();
   save();
 }
 
@@ -3764,9 +3764,9 @@ function spinRandomCraft() {
   const def = D().ALL_ITEMS[wonId];
 
   if (def && ['weapon','armor','helmet','gloves','boots','ring','necklace','earring','belt','cloak','talisman','legs','shield','hair','hair2'].includes(def.slot)) {
-    addToInventory(wonId, 1, 'rare');
+    addToInventory(wonId, 1, 'rare', false, {}, true);
   } else {
-    addToInventory(wonId, 1);
+    addToInventory(wonId, 1, null, false, {}, true);
   }
 
   log(`🎰 RANDOM CRAFT! Você criou com sucesso: **${def?.name || wonId}**!`, 'rarity-legendary');
