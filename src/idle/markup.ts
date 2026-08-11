@@ -652,6 +652,7 @@ export const IDLE_MARKUP = `
               <button class="action-btn action-btn--primary" id="start-doll-synth-btn">Combinar &amp; Sintetizar ✨</button>
             </div>
             <div class="dolls-grid" id="dolls-grid" style="margin-top: 16px;"></div>
+            <div id="dolls-encyclopedia" style="margin-top: 20px;"></div>
           </div>
 
           <!-- Magic Lamp & Special Craft Tab -->

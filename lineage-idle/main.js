@@ -3501,6 +3501,61 @@ function updateDollsUI() {
     const b = getDollsBonuses();
     summaryEl.innerHTML = `Dolls na Coleção: <strong>${state.dolls.length}</strong> · Bônus Totais: +${b.atk} ATK, +${b.def} DEF, +${b.matk} MATK`;
   }
+
+  // Render Enciclopédia de Boss Dolls & Fontes de Obtenção
+  const encyclopediaEl = el('dolls-encyclopedia');
+  if (encyclopediaEl) {
+    let encHtml = `
+      <div style="background:rgba(12,16,26,0.95); border:1px solid rgba(212,167,68,0.4); border-radius:12px; padding:14px;">
+        <h4 style="margin:0 0 12px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:15px; display:flex; align-items:center; gap:8px;">
+          📚 Enciclopédia de Boss Dolls &amp; Fontes de Drop
+        </h4>
+    `;
+
+    for (const [dId, def] of Object.entries(BOSS_DOLLS)) {
+      const ownedDolls = state.dolls.filter(i => i.dollId === dId);
+      const maxOwnedLvl = ownedDolls.reduce((max, d) => Math.max(max, d.level || 1), 0);
+      const isUnlocked = ownedDolls.length > 0;
+
+      let lvlBadgesHtml = '';
+      for (let lvl = 1; lvl <= 5; lvl++) {
+        const info = def.statsByLvl[lvl];
+        if (!info) continue;
+        const isThisLvl = maxOwnedLvl === lvl;
+        lvlBadgesHtml += `
+          <div style="font-size:11px; padding:5px 8px; border-radius:6px; background:${isThisLvl ? 'rgba(52,211,153,0.2)' : 'rgba(0,0,0,0.4)'}; border:1px solid ${isThisLvl ? '#34d399' : 'rgba(255,255,255,0.08)'}; color:${isThisLvl ? '#34d399' : '#aaa'}; display:flex; justify-content:space-between; align-items:center;">
+            <span><strong>Lv.${lvl}:</strong> ${info.label}</span>
+            ${isThisLvl ? '<span style="color:#34d399; font-weight:bold;">[ATIVO]</span>' : ''}
+          </div>
+        `;
+      }
+
+      encHtml += `
+        <div style="background:rgba(18,24,36,0.9); border:1px solid ${isUnlocked ? 'rgba(212,167,68,0.5)' : 'rgba(255,255,255,0.08)'}; border-radius:10px; padding:12px; margin-bottom:12px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:8px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <span style="font-size:26px;">${def.icon}</span>
+              <div>
+                <h4 style="margin:0; font-family:'Cinzel',serif; color:${isUnlocked ? '#f4d58a' : '#aaa'}; font-size:14px; display:flex; align-items:center; gap:6px;">
+                  ${def.name} ${isUnlocked ? `<span style="font-size:10px; background:rgba(52,211,153,0.2); border:1px solid #34d399; color:#34d399; padding:1px 6px; border-radius:4px;">Nível Ativo: Lv.${maxOwnedLvl}</span>` : '<span style="font-size:10px; background:rgba(239,68,68,0.2); border:1px solid #ef4444; color:#fca5a5; padding:1px 6px; border-radius:4px;">🔒 Não Bloqueado</span>'}
+                </h4>
+                <p style="margin:2px 0 0 0; font-size:11px; color:#94a3b8;">${def.desc}</p>
+              </div>
+            </div>
+            <div style="font-size:11px; background:rgba(0,0,0,0.5); border:1px solid rgba(212,167,68,0.3); padding:4px 10px; border-radius:8px; color:#ffd877; font-weight:bold;">
+              📍 Drop: ${def.source}
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:6px; margin-top:8px;">
+            ${lvlBadgesHtml}
+          </div>
+        </div>
+      `;
+    }
+    encHtml += `</div>`;
+    encyclopediaEl.innerHTML = encHtml;
+  }
 }
 
 function selectDollForSynth(uid) {
