@@ -1755,22 +1755,38 @@ export function updateSkillUI(state, callbacks = {}) {
     for (const parentId of Object.keys(reqs)) {
       const parentPos = pos[parentId];
       if (!parentPos) continue;
-      const owned = (state.skills[parentId] || 0) >= reqs[parentId];
+      const parentLevel = state.skills[parentId] || 0;
+      const reqLevel = reqs[parentId];
+      const owned = parentLevel >= reqLevel;
       const cls = owned ? 'link link-owned' : 'link';
-      if (parentPos.y === childPos.y) {
-        const cy = parentPos.y - 26;
-        lines += `<path class="${cls}" d="M ${parentPos.x} ${parentPos.y} Q ${(parentPos.x + childPos.x) / 2} ${cy} ${childPos.x} ${childPos.y}" />`;
-      } else {
-        lines += `<line class="${cls}" x1="${parentPos.x}" y1="${parentPos.y}" x2="${childPos.x}" y2="${childPos.y}" />`;
-      }
+
+      const midX = (parentPos.x + childPos.x) / 2;
+      lines += `<path class="${cls}" d="M ${parentPos.x} ${parentPos.y} C ${midX} ${parentPos.y}, ${midX} ${childPos.y}, ${childPos.x} ${childPos.y}" fill="none" />`;
     }
   }
 
   let tierLabels = '';
   for (let c = 0; c < cols; c++) {
     const x = TREE_PAD_X + c * TREE_NODE_W + TREE_NODE_W / 2;
-    tierLabels += `<text class="tier-label" x="${x}" y="${H - 4}">${TIER_NAMES[c] || ''}</text>`;
+    tierLabels += `<text class="tier-label" x="${x}" y="${H - 6}">${TIER_NAMES[c] || ''}</text>`;
   }
+
+  const defsSvg = `
+    <defs>
+      <linearGradient id="linkGradientOwned" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#ffd877" stop-opacity="0.9" />
+        <stop offset="100%" stop-color="#34d399" stop-opacity="0.9" />
+      </linearGradient>
+      <linearGradient id="linkGradientLocked" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#64748b" stop-opacity="0.4" />
+        <stop offset="100%" stop-color="#334155" stop-opacity="0.4" />
+      </linearGradient>
+      <filter id="glowGold" x="-20%" y="-20%" width="140%" height="140%">
+        <feGaussianBlur stdDeviation="3" result="blur" />
+        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+      </filter>
+    </defs>
+  `;
 
   wrap.querySelector('svg')?.remove();
   const svg = mkNS('http://www.w3.org/2000/svg', 'svg');
@@ -1778,7 +1794,7 @@ export function updateSkillUI(state, callbacks = {}) {
   svg.setAttribute('width', W);
   svg.setAttribute('height', H);
   svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
-  svg.innerHTML = lines + tierLabels;
+  svg.innerHTML = defsSvg + lines + tierLabels;
   wrap.insertBefore(svg, wrap.firstChild);
 
   let nodesLayer = wrap.querySelector('.skill-tree-nodes');
