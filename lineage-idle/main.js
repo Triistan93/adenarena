@@ -274,19 +274,139 @@ function getStats() { return engineGetStats(state); }
 function classSatisfies(playerClass, reqClass) { return serviceClassSatisfies(playerClass, reqClass); }
 function getSkillTreeKey(classId) { return serviceGetSkillTreeKey(classId); }
 function getClassSkills(classId) { return serviceGetClassSkills(classId); }
+function validateAndFixCharacterClass() {
+  if (!state.race) state.race = 'human';
+  
+  const raceDefaults = {
+    human: 'fighter',
+    elf: 'elfFighter',
+    darkelf: 'darkElfFighter',
+    orc: 'orcBase',
+    dwarf: 'artisan',
+    kamael: 'soulbreaker',
+    sylph: 'sylphGunner',
+    highelf: 'highElfBase',
+    ertheia: 'bloodRoseBase'
+  };
+
+  const currentClassDef = getClass(state.class);
+  if (!currentClassDef || (currentClassDef.stage === 0 && currentClassDef.race && currentClassDef.race !== state.race)) {
+    state.class = raceDefaults[state.race] || 'fighter';
+  }
+}
+
 // Opens the Class Transfer modal — declared before checkClassAdvancement uses it
 function openClassTransferModal(classInfo) {
+  validateAndFixCharacterClass();
   const modal = el('class-transfer-modal');
-  if (modal) {
-    const titleEl = el('class-transfer-title');
-    if (titleEl) titleEl.textContent = classInfo?.name || 'Transferência de Classe';
-    modal.classList.add('active');
-  } else {
-    // Fallback: expose via window so React layer can pick it up
-    if (typeof window !== 'undefined' && typeof window.onOpenClassTransferModal === 'function') {
-      window.onOpenClassTransferModal(classInfo);
+  if (!modal) return;
+
+  const currentClassDef = getClass(state.class);
+  const currentStage = currentClassDef?.stage || 0;
+  const targetStage = currentStage + 1;
+
+  const titleEl = el('class-modal-heading');
+  if (titleEl) {
+    const stageNames = ['1ª Troca de Classe', '2ª Troca de Classe', '3ª Troca de Classe (3rd Job)'];
+    titleEl.textContent = `📜 ${stageNames[currentStage] || 'Cerimônia de Avanço de Classe'}`;
+  }
+
+  const echoClasses = (typeof window !== 'undefined' && window.EchoData)
+    ? window.EchoData.CLASSES_ECHO
+    : {};
+  const allClasses = Object.keys(echoClasses).length ? echoClasses : (D()?.CLASSES || {});
+
+  const candidates = [];
+  for (const [clsId, clsDef] of Object.entries(allClasses)) {
+    if (!clsDef || clsDef.stage !== targetStage) continue;
+    
+    // Race filter: if class specifies a race, it must match character's race
+    if (clsDef.race && clsDef.race !== state.race) continue;
+
+    // Parent matching check
+    const matchesParent = clsDef.parent === state.class 
+      || (clsDef.parent === 'fighter' && (state.class === 'elfFighter' || state.class === 'darkElfFighter' || state.class === 'orcBase' || state.class === 'fighter'))
+      || (clsDef.parent === 'mage' && (state.class === 'elfMage' || state.class === 'darkElfMage' || state.class === 'mage'))
+      || (clsDef.parent === 'elfFighter' && (state.class === 'fighter' || state.class === 'elfFighter') && state.race === 'elf')
+      || (clsDef.parent === 'darkElfFighter' && (state.class === 'fighter' || state.class === 'darkElfFighter') && state.race === 'darkelf')
+      || (clsDef.parent === 'artisan' && state.race === 'dwarf')
+      || (clsDef.parent === 'soulbreaker' && state.race === 'kamael');
+
+    if (matchesParent) {
+      candidates.push({ id: clsId, def: clsDef });
     }
   }
+
+  const container = el('class-options-container');
+  if (container) {
+    container.innerHTML = '';
+    if (!candidates.length) {
+      container.innerHTML = `
+        <div style="padding:24px; text-align:center; color:var(--text-muted); font-size:13px; background:rgba(0,0,0,0.4); border:1px solid rgba(212,175,55,0.2); border-radius:8px;">
+          ⚠️ Nenhuma opção de evolução disponível para <strong>${currentClassDef?.name || state.class}</strong> na etapa ${targetStage}.
+        </div>
+      `;
+    } else {
+      for (const { id: clsId, def: clsDef } of candidates) {
+        const card = mkEl('div');
+        card.className = 'class-option-card';
+        card.style.cssText = `
+          background: linear-gradient(180deg, rgba(24, 18, 12, 0.98), rgba(12, 9, 5, 0.99));
+          border: 1px solid var(--border-gilt);
+          border-radius: 8px;
+          padding: 16px;
+          margin-bottom: 12px;
+          box-shadow: 0 4px 16px rgba(0,0,0,0.6);
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        `;
+
+        const statsStr = Object.entries(clsDef.base || {})
+          .filter(([, v]) => v > 0)
+          .map(([k, v]) => `+${v} ${k.toUpperCase()}`)
+          .join(' · ');
+
+        const archetypeIcons = {
+          fighter: '⚔️ Guerreiro',
+          tank: '🛡️ Tanque Guardião',
+          mage: '🔮 Mago Elemental',
+          healer: '✨ Clérigo / Cura',
+          bard: '🎵 Dançarino / Bardo',
+          assassin: '🗡️ Assassino Mortal',
+          archer: '🏹 Atirador',
+          artisan: '⚒️ Artesão Master',
+          soulbreaker: '⚡ Soulbreaker'
+        };
+        const archLabel = archetypeIcons[clsDef.archetype] || clsDef.archetype || 'Especialista';
+
+        card.innerHTML = `
+          <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:6px;">
+            <h3 style="margin:0; font-family:'Cinzel',serif; color:var(--gilt-bright); font-size:17px; display:flex; align-items:center; gap:8px;">
+              ${clsDef.name}
+            </h3>
+            <span style="padding:3px 10px; background:rgba(212,167,68,0.15); border:1px solid var(--border-gilt); border-radius:4px; font-size:11px; color:var(--gilt-bright); font-weight:bold;">
+              ${archLabel}
+            </span>
+          </div>
+          <p style="margin:4px 0; font-size:12px; color:var(--text-muted); line-height:1.4;">${clsDef.desc || 'Evolução de ordem avançada.'}</p>
+          ${statsStr ? `<div style="font-size:11px; color:#6ee7b7; font-weight:bold; background:rgba(110,231,183,0.1); padding:4px 8px; border-radius:4px; border:1px solid rgba(110,231,183,0.2);">✨ Bônus de Atributos: ${statsStr}</div>` : ''}
+          <button class="action-btn action-btn--primary promote-btn" data-class-id="${clsId}" style="margin-top:8px; padding:10px; width:100%; font-weight:bold; font-family:'Cinzel',serif; font-size:13px; cursor:pointer;">
+            ⚔️ Escolher &amp; Avançar para ${clsDef.name}
+          </button>
+        `;
+
+        const btn = card.querySelector('.promote-btn');
+        if (btn) {
+          btn.onclick = () => promoteClass(clsId);
+        }
+
+        container.appendChild(card);
+      }
+    }
+  }
+
+  modal.classList.add('active');
 }
 
 function checkClassAdvancement() { return serviceCheckClassAdvancement(state, { el, openClassTransferModal }); }
@@ -3483,9 +3603,18 @@ function unequipAll() {
 
 function setRace(raceId) {
   state.race = raceId;
-  if (raceId === 'dwarf') state.class = 'artisan';
-  else if (raceId === 'kamael') state.class = 'soulbreaker';
-  else if (state.class === 'artisan' || state.class === 'soulbreaker') state.class = 'fighter';
+  const raceMap = {
+    human: 'fighter',
+    elf: 'elfFighter',
+    darkelf: 'darkElfFighter',
+    orc: 'orcBase',
+    dwarf: 'artisan',
+    kamael: 'soulbreaker',
+    sylph: 'sylphGunner',
+    highelf: 'highElfBase',
+    ertheia: 'bloodRoseBase'
+  };
+  state.class = raceMap[raceId] || 'fighter';
   const race = RACES[raceId];
   state.base = { ...race.stats };
   const cls = getClass(state.class);
@@ -4278,6 +4407,14 @@ export function bindEvents() {
     if (closeAdminBtn) {
       closeAdminBtn.onclick = () => {
         const modal = el('admin-modal');
+        if (modal) modal.classList.remove('active');
+      };
+    }
+
+    const closeClassBtn = el('close-class-modal-btn');
+    if (closeClassBtn) {
+      closeClassBtn.onclick = () => {
+        const modal = el('class-transfer-modal');
         if (modal) modal.classList.remove('active');
       };
     }
