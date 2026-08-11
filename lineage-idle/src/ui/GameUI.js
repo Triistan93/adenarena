@@ -1039,6 +1039,7 @@ export function updateInventoryUI(state, callbacks = {}) {
       if ((f === 'gear' || f === 'equip') && !GEAR_SLOTS.includes(defSlot)) continue;
       if ((f === 'consumable' || f === 'supplies') && !CONSUMABLE_SLOTS.includes(defSlot)) continue;
       if ((f === 'material' || f === 'crafting') && !MATERIAL_SLOTS.includes(defSlot)) continue;
+      if ((f === 'scroll' || f === 'quest') && !(defSlot === 'quest' || defSlot === 'scroll' || (def.id && def.id.includes('quest')) || def.type === 'quest')) continue;
     }
 
     const rarity = item.rarity || 'common';

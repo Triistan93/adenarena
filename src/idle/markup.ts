@@ -518,22 +518,21 @@ export const IDLE_MARKUP = `
                 </div>
               </div>
 
-              <button class="shop-subtab-btn active" data-shop-tab="normal">📦 Mercador Regular</button>
-              <button class="shop-subtab-btn mystic-glow-btn" data-shop-tab="mystic">✨ Feira Mística de Aden</button>
+              <!-- Batch Quantity Row for Potions & Consumables -->
+              <div class="filter-row" id="shop-batch-row" style="margin-top:6px; display:none;">
+                <span class="filter-label">Quantidade:</span>
+                <div class="filter-group" id="shop-batch-filters">
+                  <button class="shop-filter-btn active" data-shopqty="1">1x</button>
+                  <button class="shop-filter-btn" data-shopqty="5">5x</button>
+                  <button class="shop-filter-btn" data-shopqty="10">10x</button>
+                  <button class="shop-filter-btn" data-shopqty="50">50x</button>
+                  <button class="shop-filter-btn" data-shopqty="100">100x</button>
+                </div>
+              </div>
             </div>
 
-            <!-- Regular Merchant Content -->
+            <!-- Merchant Content List -->
             <div id="shop-tab-normal-content" class="shop-tab-content active">
-              <div class="shop-filters-bar" id="shop-filters-bar">
-                <button class="inv-batch-btn active" data-shop-filter="all">🌟 Todos</button>
-                <button class="inv-batch-btn" data-shop-filter="weapon">⚔️ Armas Físicas</button>
-                <button class="inv-batch-btn" data-shop-filter="mweapon">🔮 Cajados / Varazinhas</button>
-                <button class="inv-batch-btn" data-shop-filter="heavy">🛡️ Armaduras Pesadas</button>
-                <button class="inv-batch-btn" data-shop-filter="light">🥋 Armaduras Leves</button>
-                <button class="inv-batch-btn" data-shop-filter="robe">📜 Túnicas &amp; Robes</button>
-                <button class="inv-batch-btn" data-shop-filter="jewel">💍 Joias &amp; Relíquias</button>
-              </div>
-
               <div class="shop-list" id="shop-list"></div>
             </div>
 

@@ -139,8 +139,12 @@ export function addToInventory(state, itemId, amount = 1, rarity = null, foundat
     return true;
   }
 
+  const GEAR_SLOTS = ['weapon', 'shield', 'armor', 'helmet', 'gloves', 'legs', 'boots', 'cloak', 'belt', 'necklace', 'earring', 'ring', 'hair', 'hair2', 'agathion', 'talisman'];
+  const defSlot = String(def.slot || '').toLowerCase();
+  const isGear = GEAR_SLOTS.includes(defSlot);
+
   const RARITY_RANK = { 'common': 1, 'uncommon': 2, 'rare': 3, 'epic': 4, 'legendary': 5, 'mythic': 6, 's': 7 };
-  if (rarity && !foundation && state.autoSellRarity && state.autoSellRarity !== 'off') {
+  if (isGear && rarity && !foundation && state.autoSellRarity && state.autoSellRarity !== 'off') {
     if (!isProtectedFromAutoSell(null, def)) {
       const itemRarity = rarity.toLowerCase();
       const targetRank = RARITY_RANK[state.autoSellRarity.toLowerCase()] || 0;
