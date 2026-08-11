@@ -3048,13 +3048,25 @@ export function renderExpeditionsUI(state) {
       `;
     }
 
+    const minG = dDef.minGold ? (dDef.minGold / 1000).toFixed(0) + 'k' : '20k';
+    const maxG = dDef.maxGold ? (dDef.maxGold / 1000).toFixed(0) + 'k' : '30k';
+    const shards = dDef.shards || (dId === 'branded' ? 2 : dId === 'martyrs' ? 5 : dId === 'dragon_valley' ? 12 : 25);
+    const chestName = dId === 'branded' ? 'Scroll de Encantamento D/C' : dId === 'martyrs' ? 'Baú de Equipamento C/B' : dId === 'dragon_valley' ? 'Baú Relíquia A/S' : '👑 Baú Supremo Frost Lord';
+
     expHtml += `
-      <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(212,167,68,0.3); border-radius:10px; padding:12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; gap:12px;">
-        <div>
+      <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(212,167,68,0.3); border-radius:10px; padding:14px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
+        <div style="flex:1; min-width:220px;">
           <h4 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">${dDef.name}</h4>
-          <p style="margin:2px 0 0 0; font-size:11px; color:#aaa;">${dDef.desc}</p>
+          <p style="margin:2px 0 6px 0; font-size:11px; color:#aaa;">${dDef.desc}</p>
+          <div style="display:flex; gap:6px; flex-wrap:wrap; align-items:center;">
+            <span style="font-size:10px; background:rgba(212,167,68,0.15); border:1px solid rgba(212,167,68,0.3); padding:2px 8px; border-radius:6px; color:#ffd877; font-weight:bold;">🪙 ${minG}-${maxG} Gold</span>
+            <span style="font-size:10px; background:rgba(168,85,247,0.15); border:1px solid rgba(168,85,247,0.3); padding:2px 8px; border-radius:6px; color:#d8b4fe; font-weight:bold;">✨ +${shards} Cacos Astrais</span>
+            <span style="font-size:10px; background:rgba(59,130,246,0.15); border:1px solid rgba(59,130,246,0.3); padding:2px 8px; border-radius:6px; color:#93c5fd; font-weight:bold;">📦 ${chestName}</span>
+          </div>
         </div>
-        ${statusBtn}
+        <div>
+          ${statusBtn}
+        </div>
       </div>
     `;
   }

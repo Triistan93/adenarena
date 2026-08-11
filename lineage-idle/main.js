@@ -2691,6 +2691,20 @@ function checkBuffsExpire() {
 function attackMonster() {
   if (state.isCombatActive === false) return;
   if (!state.zone || !state.target) return;
+
+  if (state.towerCombatActive) {
+    const elapsed = Date.now() - (state.towerStartTime || Date.now());
+    if (elapsed > 60000) {
+      state.towerCombatActive = false;
+      log('⏱️ Tempo de Instância Esgotado (60s)! Desafio da Torre Falhou!', 'warning');
+      if (typeof window !== 'undefined' && window.floatText) window.floatText('⏱️ TEMPO ESGOTADO!', 'float-warning');
+      state.activeMonster = null;
+      pickRandomMonster();
+      updateAllUI();
+      return;
+    }
+  }
+
   checkBuffsExpire();
   const stats = getStats(), monster = state.activeMonster || MONSTERS[state.target]; if (!monster) return;
   combatTick++;
@@ -2896,6 +2910,25 @@ function attackMonster() {
     const spGain = Math.max(0, Math.floor((monster.sp || 1) * 0.25)) + (monster.boss ? 1 : 0);
     state.xp += xpGain; state.sp += spGain;
     log(`Derrotou ${monster.name}! +${xpGain} XP, +${spGain} SP`, 'xp');
+
+    // Acúmulo de Lâmpada Mágica & Craft Points por Abate
+    state.magicLampExp = (state.magicLampExp || 0) + Math.floor(xpGain * 0.4);
+    state.craftPoints = (state.craftPoints || 0) + (monster.boss ? 50 : 10);
+
+    if (state.magicLampExp >= 50000) {
+      state.magicLampExp -= 50000;
+      state.magicLamps = (state.magicLamps || 0) + 1;
+      log(`🪔 NOVA LÂMPADA MÁGICA ACUMULADA! (Total: ${state.magicLamps})`, 'rarity-legendary');
+      if (typeof window !== 'undefined' && window.floatText) {
+        window.floatText('🪔 LÂMPADA MÁGICA +1!', 'float-jackpot');
+      }
+    }
+
+    if (state.craftPoints >= 1000) {
+      state.craftPoints -= 1000;
+      state.craftCharges = Math.min(100, (state.craftCharges || 0) + 1);
+      log(`🛠️ CARGA DE CRAFT ACUMULADA! (Total: ${state.craftCharges})`, 'rarity-rare');
+    }
 
     const baseGold = monster.gold[0] + Math.random() * (monster.gold[1] - monster.gold[0]), jackpot = Math.random() < (monster.boss ? 0.08 : 0.015);
     const goldMult = zoneMult * (1 + (stats.goldBoost || 0)) * (jackpot ? 10 : 1);

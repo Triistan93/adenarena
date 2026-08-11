@@ -101,6 +101,9 @@ export function challengeTowerFloor(state, callbacks = {}) {
     _stunnedUntil: 0
   };
 
+  state.towerCombatActive = true;
+  state.towerStartTime = Date.now();
+
   MONSTERS[towerMonsterId] = monsterObj;
   if (typeof window !== 'undefined') {
     if (window.GameData?.MONSTERS) window.GameData.MONSTERS[towerMonsterId] = monsterObj;
@@ -112,7 +115,7 @@ export function challengeTowerFloor(state, callbacks = {}) {
 
   if (callbacks.el) {
     const sz = callbacks.el('stage-zone');
-    if (sz) sz.textContent = `🏰 TORRE · Andar ${targetFloor}`;
+    if (sz) sz.textContent = `🏰 INSTÂNCIA TORRE · Andar ${targetFloor} (60s)`;
   }
 
   stopCombat(state);
@@ -127,6 +130,7 @@ export function challengeTowerFloor(state, callbacks = {}) {
  * @param {Object} [callbacks]
  */
 export function completeTowerFloor(state, floorNum, callbacks = {}) {
+  state.towerCombatActive = false;
   state.tower = state.tower || { highestFloor: 0, currentFloor: 1, lastSweepTime: 0 };
   if (floorNum > state.tower.highestFloor) {
     state.tower.highestFloor = floorNum;
