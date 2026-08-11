@@ -217,12 +217,20 @@ const TIER_NAMES = ['Foundation', 'Discipline', 'Mastery', 'Ascendancy', 'Legend
 // --------------------------- STATE ---------------------------
 let state = getState();
 
+let _saveTimeout = null;
 function save(manual = false) {
-  managerSaveState(manual);
   if (manual) {
+    if (_saveTimeout) { clearTimeout(_saveTimeout); _saveTimeout = null; }
+    managerSaveState(true);
     log('Game saved successfully.', 'system');
     floatText('SAVED', 'float-gold');
+    return;
   }
+  if (_saveTimeout) return;
+  _saveTimeout = setTimeout(() => {
+    _saveTimeout = null;
+    managerSaveState(false);
+  }, 400);
 }
 
 function load() {
@@ -422,11 +430,13 @@ const ALL_EQUIP_SLOTS = [
 
 function resolveEquipSlot(slot) { return serviceResolveEquipSlot(slot, state.equipment); }
 function equipItem(a, b) {
+  if (typeof hideItemTooltip === 'function') hideItemTooltip();
   const uid = (typeof a === 'string' && a) ? a : (typeof b === 'string' ? b : null);
   if (!uid) return;
   return serviceEquipItem(state, uid, { log, updateAllUI, save, classSatisfies, getClass });
 }
 function unequipItem(a, b) {
+  if (typeof hideItemTooltip === 'function') hideItemTooltip();
   const slot = (typeof a === 'string' && a) ? a : (typeof b === 'string' ? b : null);
   if (!slot) return;
   return serviceUnequipItem(state, slot, { log, updateAllUI, save });
@@ -635,6 +645,7 @@ function salvageSelectedItems() {
   save();
 }
 function useItem(uid) {
+  if (typeof hideItemTooltip === 'function') hideItemTooltip();
   const idx = state.inventory.findIndex(i => i.uid === uid);
   if (idx < 0) return;
   const item = state.inventory[idx];
@@ -2149,25 +2160,39 @@ function updateAllUI() {
   state = getState();
   uiInitTooltipEvents();
   updateGameModeUI();
-  safeUiUpdate('zone-bg', updateZoneBackground);
+
+  // Fast core components (always update on action)
   safeUiUpdate('stats', updateStatsUI);
   safeUiUpdate('equipment', updateEquipmentUI);
-  safeUiUpdate('skills', updateSkillUI);
   safeUiUpdate('inventory', updateInventoryUI);
-  safeUiUpdate('shop', updateShopUI);
-  safeUiUpdate('craft', updateCraftUI);
-  safeUiUpdate('alchemy', updateAlchemyUI);
-  safeUiUpdate('astral', updateAstralUI);
-  safeUiUpdate('expeditions', updateExpeditionsUI);
-  safeUiUpdate('zone', updateZoneUI);
-  safeUiUpdate('zone-map', renderZoneMap);
-  safeUiUpdate('race-class', updateRaceClassUI);
   safeUiUpdate('combat-controls', updateCombatControlsUI);
-  safeUiUpdate('subclasses', renderSubclassesUI);
-  safeUiUpdate('quests', updateQuestsUI);
-  safeUiUpdate('tower', updateTowerUI);
-  safeUiUpdate('warehouse', updateWarehouseUI);
   safeUiUpdate('tab-badges', updateTabBadgesUI);
+
+  // Tab-specific heavy updates (only rendered if tab is currently active/visible)
+  const isTabVisible = (panelId) => {
+    const root = ROOT || document;
+    const pane = root.querySelector(`#tab-${panelId}, [data-menu-panel="${panelId}"], .tab-${panelId}, [data-tab-content="${panelId}"]`);
+    if (!pane) return false;
+    return pane.classList.contains('active') || pane.classList.contains('is-active') || (!pane.hidden && pane.offsetWidth > 0);
+  };
+
+  if (isTabVisible('skills')) safeUiUpdate('skills', updateSkillUI);
+  if (isTabVisible('shop')) safeUiUpdate('shop', updateShopUI);
+  if (isTabVisible('craft')) safeUiUpdate('craft', updateCraftUI);
+  if (isTabVisible('alchemy')) safeUiUpdate('alchemy', updateAlchemyUI);
+  if (isTabVisible('astral')) safeUiUpdate('astral', updateAstralUI);
+  if (isTabVisible('expeditions')) safeUiUpdate('expeditions', updateExpeditionsUI);
+  if (isTabVisible('stage') || isTabVisible('zone') || isTabVisible('zones')) {
+    safeUiUpdate('zone-bg', updateZoneBackground);
+    safeUiUpdate('zone', updateZoneUI);
+    safeUiUpdate('zone-map', renderZoneMap);
+  }
+  if (isTabVisible('race-class')) safeUiUpdate('race-class', updateRaceClassUI);
+  if (isTabVisible('subclasses')) safeUiUpdate('subclasses', renderSubclassesUI);
+  if (isTabVisible('quests')) safeUiUpdate('quests', updateQuestsUI);
+  if (isTabVisible('tower')) safeUiUpdate('tower', updateTowerUI);
+  if (isTabVisible('warehouse')) safeUiUpdate('warehouse', updateWarehouseUI);
+
   setupVfxQualityControl();
 }
 
