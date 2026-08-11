@@ -2496,7 +2496,7 @@ export function openCraftModal(itemId, state, callbacks = {}) {
   if (gData?.generateAllCraftingRecipes) {
     recipes = gData.generateAllCraftingRecipes(allItems);
   }
-  const r = recipes?.[itemId] || { id: itemId, gold: 250, reqs: [{ id: 'iron_ore', count: 10 }] };
+  const r = getRecipeDef(itemId) || recipes?.[itemId] || { id: itemId, gold: 250, reqs: [{ id: 'iron_ore', count: 10 }] };
 
   let currentQty = 1;
   const gradeInfo = getItemGrade(def);

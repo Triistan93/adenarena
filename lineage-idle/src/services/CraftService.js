@@ -23,17 +23,37 @@ export function getCraftLevelReq(recipeLevel) {
  * @returns {Object|null}
  */
 export function getRecipeDef(recipeId) {
+  if (!recipeId) return null;
   const gData = D();
-  const recipesData = gData?.CRAFTING_RECIPES;
-  if (recipesData && recipesData[recipeId]) return recipesData[recipeId];
+  const allItems = gData?.ALL_ITEMS || {};
+  let recipesData = gData?.CRAFTING_RECIPES;
+  if (!recipesData && gData?.generateAllCraftingRecipes) {
+    recipesData = gData.generateAllCraftingRecipes(allItems);
+  }
+  if (!recipesData) return null;
+
+  const raw = String(recipeId);
+  const altKeys = [
+    raw,
+    'weapon_' + raw,
+    'armor_' + raw,
+    'jewel_' + raw,
+    raw.replace(/^(weapon_|armor_|jewel_|shield_|wepoan_)/, '')
+  ];
+
   if (Array.isArray(recipesData)) {
-    const found = recipesData.find(r => r.id === recipeId || r.itemId === recipeId);
+    const found = recipesData.find(r => altKeys.includes(r.id) || altKeys.includes(r.itemId));
     if (found) return found;
   }
-  if (gData?.generateAllCraftingRecipes && gData?.ALL_ITEMS) {
-    const generated = gData.generateAllCraftingRecipes(gData.ALL_ITEMS);
-    if (generated[recipeId]) return generated[recipeId];
+
+  if (typeof recipesData === 'object') {
+    for (const k of altKeys) {
+      if (recipesData[k]) return recipesData[k];
+    }
+    const found = Object.values(recipesData).find(r => altKeys.includes(r.id) || altKeys.includes(r.itemId));
+    if (found) return found;
   }
+
   return null;
 }
 
