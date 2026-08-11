@@ -91,7 +91,7 @@ export function spendSP(state, skillId, callbacks = {}) {
   }
 
   const reqs = (typeof window !== 'undefined' && window.EchoData) ? window.EchoData.SKILL_REQS_ECHO[skillId] : D()?.SKILL_REQS?.[skillId];
-  if (reqs && !Object.entries(reqs).every(([s, v]) => s === 'level' || s === 'sp' || (state.skills[s] || 0) >= v)) {
+  if (reqs && !Object.entries(reqs).every(([s, v]) => s === 'level' || s === 'sp' || s === 'reqLvl' || (state.skills[s] || 0) >= v)) {
     if (callbacks.log) callbacks.log('Pré-requisitos de habilidades não preenchidos.', 'system');
     return false;
   }

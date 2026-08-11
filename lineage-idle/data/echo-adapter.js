@@ -197,13 +197,12 @@ function buildEchoAdapter() {
         desc:       sk.desc || '',
         effectText: sk.effect || '',
         icon:       sk.icon || '',
-        classReq:   classId
+        classReq:   classId,
+        reqLvl:     tier * 20
       };
 
-      // Skills tier > 0 exigem nível mínimo
-      if (tier > 0) {
-        SKILL_REQS_ECHO[skillId] = { reqLvl: tier * 20 };
-      }
+      // Limpa pré-requisitos fictícios em SKILL_REQS_ECHO
+      SKILL_REQS_ECHO[skillId] = {};
 
       if (!CLASS_SKILLS_ECHO[classId].includes(skillId)) {
         CLASS_SKILLS_ECHO[classId].push(skillId);

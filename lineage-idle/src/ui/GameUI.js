@@ -1755,6 +1755,7 @@ export function updateSkillUI(state, callbacks = {}) {
     const childPos = pos[id];
     if (!childPos) continue;
     for (const parentId of Object.keys(reqs)) {
+      if (parentId === 'reqLvl' || parentId === 'level' || parentId === 'sp') continue;
       const parentPos = pos[parentId];
       if (!parentPos) continue;
       const parentLevel = state.skills[parentId] || 0;
@@ -1821,7 +1822,7 @@ export function updateSkillUI(state, callbacks = {}) {
     node.style.height = TREE_NODE_H + 'px';
 
     const reqs = SKILL_REQS[id];
-    const reqOk = !reqs || Object.entries(reqs).every(([s, v]) => s === 'level' || s === 'sp' || (state.skills[s] || 0) >= v);
+    const reqOk = !reqs || Object.entries(reqs).every(([s, v]) => s === 'level' || s === 'sp' || s === 'reqLvl' || (state.skills[s] || 0) >= v);
     const lvlOk = state.level >= (def.reqLvl || 1);
     const canBuy = reqOk && lvlOk && state.sp >= getSkillCost(id, lvl) && lvl < max;
     const btnClass = canBuy ? 'skill-btn can-buy' : 'skill-btn';
@@ -1881,12 +1882,12 @@ export function updateSkillInfoPanel(state, callbacks = {}) {
   const maxed = lvl >= max;
   const cost = getSkillCost(id, lvl);
   const reqs = SKILL_REQS[id];
-  const meetsReqs = !reqs || Object.entries(reqs).every(([s, v]) => s === 'level' || s === 'sp' || (state.skills[s] || 0) >= v);
+  const meetsReqs = !reqs || Object.entries(reqs).every(([s, v]) => s === 'level' || s === 'sp' || s === 'reqLvl' || (state.skills[s] || 0) >= v);
   const lvlOk = state.level >= (def.reqLvl || 1);
   const canAfford = state.sp >= cost && !maxed;
 
-  let reqHtml = (reqs && Object.keys(reqs).filter(s => s !== 'level' && s !== 'sp').length > 0)
-    ? Object.entries(reqs).filter(([s]) => s !== 'level' && s !== 'sp').map(([s, v]) => {
+  let reqHtml = (reqs && Object.keys(reqs).filter(s => s !== 'level' && s !== 'sp' && s !== 'reqLvl').length > 0)
+    ? Object.entries(reqs).filter(([s]) => s !== 'level' && s !== 'sp' && s !== 'reqLvl').map(([s, v]) => {
         const ok = (state.skills[s] || 0) >= v;
         return `<span class="req ${ok ? 'ok' : 'no'}">${SKILL_DEFS[s]?.name || s} ${v}</span>`;
       }).join('')

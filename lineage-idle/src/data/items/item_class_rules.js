@@ -74,8 +74,8 @@ const ARCHETYPE_ALIASES = {
   gladiator: 'fighter', titan: 'fighter', warlord: 'fighter', destroyer: 'fighter',
   tyrant: 'fighter', berserker: 'fighter', shillien_knight: 'fighter',
   phoenix_knight: 'fighter', temple_knight: 'fighter', hell_knight: 'fighter',
-  // Rogues / Archers
-  rogue: 'rogue', archer: 'rogue', assassin: 'rogue',
+  // Rogues / Archers / Assassins — all map to 'rogue' group
+  rogue: 'rogue', archer: 'rogue', assassin: 'rogue', dagger: 'rogue',
   hawkeye: 'rogue', sagittarius: 'rogue', ghost_hunter: 'rogue',
   adventurer: 'rogue', wind_rider: 'rogue', ghost_sentinel: 'rogue',
   treasure_hunter: 'rogue', plain_walker: 'rogue',
@@ -94,6 +94,9 @@ const ARCHETYPE_ALIASES = {
 const ARCHETYPE_GROUPS = {
   fighter:  ['fighter'],
   rogue:    ['rogue', 'archer', 'assassin'],
+  archer:   ['rogue', 'archer', 'assassin'],
+  assassin: ['rogue', 'archer', 'assassin'],
+  dagger:   ['rogue', 'archer', 'assassin'],
   mage:     ['mage', 'healer', 'summoner', 'enchanter'],
   healer:   ['mage', 'healer', 'summoner', 'enchanter'],
   summoner: ['mage', 'healer', 'summoner', 'enchanter'],
