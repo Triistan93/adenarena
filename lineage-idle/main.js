@@ -1350,7 +1350,27 @@ function toggleCombatSpeed() {
   save();
 }
 
+function toggleCombatState() {
+  state.isCombatActive = state.isCombatActive === false ? true : false;
+  updateCombatControlsUI();
+  const isActive = state.isCombatActive !== false;
+  log(`Caça Automática **${isActive ? 'RETOMADA ▶️' : 'PAUSADA 🛑'}**.`, 'system');
+  if (typeof window !== 'undefined' && window.floatText) {
+    window.floatText(isActive ? '▶️ CAÇA RETOMADA' : '🛑 CAÇA PAUSADA', 'float-gold');
+  }
+  save();
+}
+
 function updateCombatControlsUI() {
+  const combatBtn = el('combat-toggle-btn');
+  if (combatBtn) {
+    const isActive = state.isCombatActive !== false;
+    combatBtn.classList.toggle('active', isActive);
+    combatBtn.textContent = isActive ? '🛑 Parar Caça' : '▶️ Iniciar Caça';
+    combatBtn.style.background = isActive ? 'rgba(239,68,68,0.2)' : 'rgba(34,197,94,0.2)';
+    combatBtn.style.borderColor = isActive ? '#ef4444' : '#22c55e';
+    combatBtn.style.color = isActive ? '#fca5a5' : '#86efac';
+  }
   const ssBtn = el('soulshot-toggle-btn');
   if (ssBtn) {
     ssBtn.classList.toggle('active', !!state.soulshotActive);
@@ -3958,6 +3978,7 @@ export function bindEvents() {
     const clearSelBtn = el('clear-selection-btn'); if (clearSelBtn) clearSelBtn.onclick = clearItemSelection;
     const sellSelBtn = el('sell-selected-btn'); if (sellSelBtn) sellSelBtn.onclick = sellSelectedItems;
     const salvSelBtn = el('salvage-selected-btn'); if (salvSelBtn) salvSelBtn.onclick = salvageSelectedItems;
+    const combatToggleBtn = el('combat-toggle-btn'); if (combatToggleBtn) combatToggleBtn.onclick = toggleCombatState;
     const ssToggleBtn = el('soulshot-toggle-btn'); if (ssToggleBtn) ssToggleBtn.onclick = toggleSoulshot;
     const apToggleBtn = el('autopotion-toggle-btn'); if (apToggleBtn) apToggleBtn.onclick = toggleAutoPotion;
     const spdToggleBtn = el('speed-toggle-btn'); if (spdToggleBtn) spdToggleBtn.onclick = toggleCombatSpeed;

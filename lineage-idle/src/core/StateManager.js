@@ -29,7 +29,7 @@ export const DEFAULT_STATE = () => ({
   magicLampExp: 0, magicLamps: 0, craftPoints: 0, craftCharges: 0, randomCraftWheel: [],
   subclasses: [], activeSubclassIndex: null, certifications: {}, mainClassData: null,
   craftLevel: 1, craftXp: 0, shopTab: 'gear', selectedSkill: null, filter: 'all',
-  craftTab: 'recipes', zoneTab: 'map', soulshotActive: false, combatSpeed: 1,
+  craftTab: 'recipes', zoneTab: 'map', soulshotActive: false, isCombatActive: true, combatSpeed: 1,
   totalPlaytime: 0, buffs: {}, _cds: {}, gameMode: 'idle', privilegeLevel: 0,
   autoSellRarity: 'off', craftFoundationPity: 0, warehouse: [], maxWarehouseSlots: 100,
   essences: { fire: 0, earth: 0, wind: 0, astral: 0 }, activeElixirs: {},

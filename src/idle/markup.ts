@@ -7,14 +7,22 @@ export const IDLE_MARKUP = `
     <!-- Top Bar -->
     <header class="top-bar">
       <span id="game-title">LINEAGE <span class="title-idle-stamp"><span class="stamp-idle"><span class="stamp-idle-text">IDLE</span><span class="stamp-idle-sub">CHRONICLE</span></span></span></span>
-      <div class="top-stats">
-        <span class="ts-zone">
-          <span class="ts-label">Zone</span>
-          <span id="zone-name">Talking Island</span>
-          <span id="zone-kill-progress" style="font-size:11px; color:#f59e0b; margin-left:8px; font-weight:800; background:rgba(0,0,0,0.4); padding:2px 8px; border-radius:10px; border:1px solid rgba(245,158,11,0.3);">⚔️ 0/15 Caçados</span>
-        </span>
-        <span class="ts-clock"><span class="ts-label">Session</span><span id="clock">00:00:00</span></span>
-        <button id="audio-mute-btn" onclick="window.toggleMuteAudio && window.toggleMuteAudio()" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:#fff;border-radius:6px;padding:3px 10px;font-size:11px;font-weight:600;cursor:pointer;margin-left:8px;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background='rgba(255,255,255,0.08)'">🔊 Audio</button>
+      <div class="top-stats" style="display:flex; align-items:center; justify-content:space-between; width:100%; gap:12px;">
+        <div class="top-stats-left" style="display:flex; align-items:center; gap:8px;">
+          <span class="ts-zone">
+            <span class="ts-label">Zone</span>
+            <span id="zone-name">Talking Island</span>
+            <span id="zone-kill-progress" style="font-size:11px; color:#f59e0b; margin-left:8px; font-weight:800; background:rgba(0,0,0,0.4); padding:2px 8px; border-radius:10px; border:1px solid rgba(245,158,11,0.3);">⚔️ 0/15 Caçados</span>
+          </span>
+          <div id="top-bar-guide-container" style="display:inline-flex;">
+            <button id="top-bar-guide-btn" class="top-guide-btn" style="background:linear-gradient(135deg, rgba(212, 167, 68, 0.25), rgba(138, 100, 28, 0.25)); border:1px solid rgba(212, 167, 68, 0.6); color:#ffd877; border-radius:12px; padding:3px 10px; font-size:11px; font-weight:bold; font-family:'Cinzel',serif; cursor:pointer; display:inline-flex; align-items:center; gap:4px; transition:all 0.2s;" onclick="window.openCurrentTabGuide && window.openCurrentTabGuide()">❓ Guia da Aba</button>
+          </div>
+        </div>
+        <div class="top-stats-right" style="display:flex; align-items:center; gap:10px; margin-left:auto;">
+          <span class="ts-clock" style="display:inline-flex; align-items:center; gap:4px;"><span class="ts-label">Session</span><span id="clock">00:00:00</span></span>
+          <span id="save-status-badge" style="font-size:10px; background:rgba(16,185,129,0.15); border:1px solid rgba(16,185,129,0.4); color:#34d399; padding:2px 8px; border-radius:8px; font-weight:bold;">💾 Salvo</span>
+          <button id="audio-mute-btn" onclick="window.toggleMuteAudio && window.toggleMuteAudio()" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:#fff;border-radius:6px;padding:3px 10px;font-size:11px;font-weight:600;cursor:pointer;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background='rgba(255,255,255,0.08)'">🔊 Audio</button>
+        </div>
       </div>
     </header>
 
@@ -74,6 +82,7 @@ export const IDLE_MARKUP = `
           <div class="stage-bg stage-bg-b" id="stage-bg-b"></div>
           <div class="stage-zone" id="stage-zone">—</div>
           <div class="combat-controls-bar">
+            <button id="combat-toggle-btn" class="combat-ctrl-btn active" title="Pausar ou Iniciar Caça Automática (Tecla P)">🛑 Parar Caça</button>
             <button id="soulshot-toggle-btn" class="combat-ctrl-btn" title="Ativar Soulshot no combate (+100% dano físico/mágico por golpe)">⚡ Soulshot: OFF</button>
             <button id="autopotion-toggle-btn" class="combat-ctrl-btn" title="Usar poções de HP automaticamente quando HP < 50%">🧪 Auto-Poção: OFF</button>
             <button id="speed-toggle-btn" class="combat-ctrl-btn" title="Velocidade do combate (1x Normal ou 2x Turbo)">⏩ Velocidade: 1x</button>

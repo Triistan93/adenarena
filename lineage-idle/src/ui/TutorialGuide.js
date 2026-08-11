@@ -443,49 +443,25 @@ export function renderPersistentHelpButton(tabKey, resolvedGuideKey) {
   const guideKey = resolvedGuideKey || tabKey;
   if (!guideKey || !GUIDES_DATA[guideKey]) return;
 
-  const root = getShadowRoot();
-  // Tenta encontrar o painel da aba de várias formas
-  const activePane = root.querySelector(`#tab-${tabKey}`)
-    || root.querySelector(`[data-menu-panel="${tabKey}"]`)
-    || root.querySelector(`.tab-pane.active`);
-  if (!activePane) return;
-
-  // Remove botão existente de abas anteriores antes de criar o novo
-  let btn = activePane.querySelector('.tab-help-btn');
-  if (!btn) {
-    btn = document.createElement('button');
-    btn.className = 'tab-help-btn';
-    btn.title = 'Abrir Guia desta Aba';
-    btn.style.cssText = `
-      position: absolute; top: 10px; right: 12px; z-index: 100;
-      background: linear-gradient(135deg, rgba(212, 167, 68, 0.2), rgba(138, 100, 28, 0.2));
-      border: 1px solid rgba(212, 167, 68, 0.55); color: #ffd877;
-      border-radius: 20px; padding: 5px 11px; font-size: 11px; font-weight: bold;
-      font-family: 'Cinzel', serif; cursor: pointer; display: inline-flex;
-      align-items: center; gap: 5px; letter-spacing: 0.3px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.4); backdrop-filter: blur(2px);
-      transition: background 0.2s, border-color 0.2s, transform 0.1s;
-    `;
-    btn.onmouseenter = () => {
-      btn.style.background = 'linear-gradient(135deg, rgba(212, 167, 68, 0.4), rgba(138, 100, 28, 0.4))';
-      btn.style.borderColor = 'rgba(212, 167, 68, 0.9)';
-      btn.style.transform = 'scale(1.04)';
-    };
-    btn.onmouseleave = () => {
-      btn.style.background = 'linear-gradient(135deg, rgba(212, 167, 68, 0.2), rgba(138, 100, 28, 0.2))';
-      btn.style.borderColor = 'rgba(212, 167, 68, 0.55)';
-      btn.style.transform = 'scale(1)';
-    };
-    if (activePane.style.position === '' || activePane.style.position === 'static') {
-      activePane.style.position = 'relative';
-    }
-    activePane.insertBefore(btn, activePane.firstChild);
+  if (typeof window !== 'undefined') {
+    window._currentActiveGuideKey = guideKey;
+    window.openCurrentTabGuide = () => openTabGuideModal(window._currentActiveGuideKey || guideKey);
   }
 
-  btn.innerHTML = `❓ Guia da Aba`;
-  btn.onclick = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    openTabGuideModal(guideKey);
-  };
+  const root = getShadowRoot();
+
+  // Clean up any legacy position:absolute help buttons inside tab panes
+  root.querySelectorAll('.tab-help-btn').forEach(b => b.remove());
+
+  const topGuideBtn = root.querySelector('#top-bar-guide-btn') || document.getElementById('top-bar-guide-btn');
+  if (topGuideBtn) {
+    const guideData = GUIDES_DATA[guideKey];
+    topGuideBtn.style.display = 'inline-flex';
+    topGuideBtn.title = `Guia: ${guideData?.title || tabKey}`;
+    topGuideBtn.onclick = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      openTabGuideModal(guideKey);
+    };
+  }
 }
