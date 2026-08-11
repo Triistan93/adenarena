@@ -429,17 +429,23 @@ const ALL_EQUIP_SLOTS = [
 ];
 
 function resolveEquipSlot(slot) { return serviceResolveEquipSlot(slot, state.equipment); }
-function equipItem(a, b) {
+function equipItem(a, b, silent = false) {
   if (typeof hideItemTooltip === 'function') hideItemTooltip();
   const uid = (typeof a === 'string' && a) ? a : (typeof b === 'string' ? b : null);
   if (!uid) return;
-  return serviceEquipItem(state, uid, { log, updateAllUI, save, classSatisfies, getClass });
+  const callbacks = silent
+    ? { log, classSatisfies, getClass }
+    : { log, updateAllUI, save, classSatisfies, getClass };
+  return serviceEquipItem(state, uid, callbacks);
 }
-function unequipItem(a, b) {
+function unequipItem(a, b, silent = false) {
   if (typeof hideItemTooltip === 'function') hideItemTooltip();
   const slot = (typeof a === 'string' && a) ? a : (typeof b === 'string' ? b : null);
   if (!slot) return;
-  return serviceUnequipItem(state, slot, { log, updateAllUI, save });
+  const callbacks = silent
+    ? { log }
+    : { log, updateAllUI, save };
+  return serviceUnequipItem(state, slot, callbacks);
 }
 
 
@@ -3333,15 +3339,36 @@ function autoEquipBest() {
       }
     }
     
-    equipItem(bestItem.uid);
+    equipItem(bestItem.uid, null, true);
     equippedCount++;
   }
   
   if (equippedCount > 0) {
     log(`⚡ Auto-equipped ${equippedCount} superior item(s)!`, 'rarity-legendary');
     floatText('⚡ EQUIPADO!', 'float-jackpot');
+    updateAllUI();
+    save();
   } else {
     log('Você já está usando os melhores equipamentos da mochila!', 'system');
+  }
+}
+
+function unequipAll() {
+  let count = 0;
+  const equipObj = state.equipment || {};
+  for (const slot of Object.keys(equipObj)) {
+    if (equipObj[slot]) {
+      unequipItem(slot, null, true);
+      count++;
+    }
+  }
+  if (count > 0) {
+    log(`🛡️ Desequipou todos os ${count} itens da armadura.`, 'system');
+    floatText('🛡️ DESEQUIPADO!', 'sf-heal');
+    updateAllUI();
+    save();
+  } else {
+    log('Nenhum item equipado para remover.', 'system');
   }
 }
 
@@ -4121,7 +4148,7 @@ export function bindEvents() {
     const resFree = el('res-free'); if (resFree) resFree.onclick = () => resurrect(false);
     const resScroll = el('res-scroll'); if (resScroll) resScroll.onclick = () => resurrect(true);
     const sagaOk = el('saga-ok'); if (sagaOk) sagaOk.onclick = () => { const modal = el('saga-modal'); if (modal) modal.classList.remove('active'); };
-    const unequipBtn = el('unequip-all-btn'); if (unequipBtn) unequipBtn.onclick = () => { for (const slot of Object.keys(state.equipment)) unequipItem(slot); };
+    const unequipBtn = el('unequip-all-btn'); if (unequipBtn) unequipBtn.onclick = unequipAll;
     qsa('.equip-slot').forEach(slot => { slot.onclick = () => { const s = slot.dataset.slot, uid = state.equipment[s]; if (uid) unequipItem(s); }; });
     const navCraftBtn = el('nav-craft-btn'); if (navCraftBtn) navCraftBtn.onclick = () => { const craftTab = qs('.tab-btn[data-tab="craft"]'); if (craftTab) craftTab.click(); };
     
