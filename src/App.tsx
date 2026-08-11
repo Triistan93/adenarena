@@ -879,7 +879,7 @@ export default function Shell() {
         <>
           {mode === "arena" ? <ArenaApp /> : <div className="w-full h-full min-h-screen relative overflow-hidden"><IdleGame /></div>}
           <ModeSwitch mode={mode} setMode={setMode} />
-          <div className="fixed top-4 right-4 z-40">
+          <div className="fixed top-2.5 right-2.5 z-40">
             <AuthModal 
               onCloudDataLoaded={(cloudState) => {
                 if (typeof window !== 'undefined' && (window as any).loadGameState) {

@@ -209,7 +209,7 @@ select:focus-visible {
   justify-content: space-between;
   align-items: center;
   gap: 10px;
-  padding: 10px 18px 10px 220px;
+  padding: 8px 65px 8px 220px;
   background:
     linear-gradient(180deg, rgba(20, 23, 31, 0.98) 0%, rgba(9, 11, 16, 0.98) 100%),
     radial-gradient(circle at top left, rgba(212,167,68,0.12), transparent 45%);
@@ -226,13 +226,6 @@ select:focus-visible {
   position: absolute; left: 0; right: 0; bottom: -1px; height: 1px;
   background: linear-gradient(90deg, transparent, var(--gilt-deep) 22%, var(--gilt) 50%, var(--gilt-deep) 78%, transparent);
   opacity: 0.8;
-}
-.top-bar::after {
-  content: '✧';
-  position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
-  color: rgba(212,167,68,0.35);
-  font-size: 18px;
-  pointer-events: none;
 }
 #game-title {
   font-family: "Cinzel", serif;
