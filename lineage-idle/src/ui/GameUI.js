@@ -13,7 +13,7 @@ import { resolveEquipSlot, migrateEquipmentSlots, equipItem, unequipItem } from 
 import { getCraftLevelReq, getRecipeMaterials, canCraft, getRecipeDef } from '../services/CraftService.js';
 import { classSatisfies, getClassSkills } from '../services/CharacterService.js';
 import { AFFIX_MAP } from '../../data/affixes.js';
-import { getClass } from '../engine/StatsEngine.js';
+import { getClass, getStats, getActiveSetBonuses } from '../engine/StatsEngine.js';
 import { getSkillCost } from '../engine/SkillEngine.js';
 import { ZONES, SAGAS, ZONE_BACKGROUNDS } from '../data/zones.js';
 import { MONSTERS, MONSTER_BY_NAME } from '../data/monsters.js';
@@ -1469,7 +1469,9 @@ export function updateCharacterUI(state) {
 
   const charStatsContainer = root.querySelector('#char-tab-stats-summary');
   if (charStatsContainer) {
-    const stats = typeof getStats === 'function' ? getStats() : (state.base || {});
+    const stats = getStats(state);
+    const setRes = typeof getActiveSetBonuses === 'function' ? getActiveSetBonuses(state) : { primaryStats: {} };
+    const setPrim = setRes.primaryStats || {};
 
     // Calculate Tattoos Active Stat Deltas
     let tatStr = 0, tatDex = 0, tatCon = 0, tatInt = 0, tatWit = 0, tatMen = 0;
@@ -1491,9 +1493,18 @@ export function updateCharacterUI(state) {
       if (t.minusStat === 'men') tatMen -= t.minusVal;
     }
 
-    const fmtTat = (val) => {
-      if (!val) return '';
-      return val > 0 ? `<span style="color:#4ade80; font-size:10px;">(+${val})</span>` : `<span style="color:#ef4444; font-size:10px;">(${val})</span>`;
+    const renderStatBlock = (label, val, setVal, dyeVal) => {
+      const badges = [];
+      if (setVal) badges.push(`<span style="color:#4ade80; font-size:9px;">Set +${setVal}</span>`);
+      if (dyeVal) badges.push(dyeVal > 0 ? `<span style="color:#a78bfa; font-size:9px;">Dye +${dyeVal}</span>` : `<span style="color:#ef4444; font-size:9px;">Dye ${dyeVal}</span>`);
+      const badgesHtml = badges.length > 0 ? `<div style="display:flex; justify-content:center; gap:2px; flex-wrap:wrap; margin-top:2px;">${badges.join(' ')}</div>` : '';
+      return `
+        <div style="background:rgba(0,0,0,0.3); padding:4px 2px; border-radius:4px;">
+          <div style="color:#aaa; font-size:10px;">${label}</div>
+          <strong style="color:#ffd877; font-size:13px;">${val}</strong>
+          ${badgesHtml}
+        </div>
+      `;
     };
 
     // Socket SA on Equipped Weapon
@@ -1529,34 +1540,16 @@ export function updateCharacterUI(state) {
         </div>
       </div>
 
-      <!-- Primary Stats with Tattoo Influences -->
+      <!-- Primary Stats with Set & Tattoo Influences -->
       <div style="grid-column: 1 / -1; background:rgba(20,26,42,0.6); border:1px solid rgba(212,167,68,0.3); border-radius:8px; padding:10px; margin-bottom:8px;">
-        <h4 style="margin:0 0 6px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:12px;">📊 Atributos Primários (Dyes &amp; L2 Stats)</h4>
+        <h4 style="margin:0 0 6px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:12px;">📊 Atributos Primários (Sets, Dyes &amp; L2 Stats)</h4>
         <div style="display:grid; grid-template-columns: repeat(6, 1fr); gap:4px; text-align:center; font-size:11px;">
-          <div style="background:rgba(0,0,0,0.3); padding:4px; border-radius:4px;">
-            <div style="color:#aaa; font-size:10px;">STR</div>
-            <strong style="color:#ffd877;">${(state.primaryStats?.str || 40)} ${fmtTat(tatStr)}</strong>
-          </div>
-          <div style="background:rgba(0,0,0,0.3); padding:4px; border-radius:4px;">
-            <div style="color:#aaa; font-size:10px;">DEX</div>
-            <strong style="color:#ffd877;">${(state.primaryStats?.dex || 30)} ${fmtTat(tatDex)}</strong>
-          </div>
-          <div style="background:rgba(0,0,0,0.3); padding:4px; border-radius:4px;">
-            <div style="color:#aaa; font-size:10px;">CON</div>
-            <strong style="color:#ffd877;">${(state.primaryStats?.con || 43)} ${fmtTat(tatCon)}</strong>
-          </div>
-          <div style="background:rgba(0,0,0,0.3); padding:4px; border-radius:4px;">
-            <div style="color:#aaa; font-size:10px;">INT</div>
-            <strong style="color:#ffd877;">${(state.primaryStats?.int || 21)} ${fmtTat(tatInt)}</strong>
-          </div>
-          <div style="background:rgba(0,0,0,0.3); padding:4px; border-radius:4px;">
-            <div style="color:#aaa; font-size:10px;">WIT</div>
-            <strong style="color:#ffd877;">${(state.primaryStats?.wit || 11)} ${fmtTat(tatWit)}</strong>
-          </div>
-          <div style="background:rgba(0,0,0,0.3); padding:4px; border-radius:4px;">
-            <div style="color:#aaa; font-size:10px;">MEN</div>
-            <strong style="color:#ffd877;">${(state.primaryStats?.men || 25)} ${fmtTat(tatMen)}</strong>
-          </div>
+          ${renderStatBlock('STR', state.primaryStats?.str || 40, setPrim.str || 0, tatStr)}
+          ${renderStatBlock('DEX', state.primaryStats?.dex || 30, setPrim.dex || 0, tatDex)}
+          ${renderStatBlock('CON', state.primaryStats?.con || 43, setPrim.con || 0, tatCon)}
+          ${renderStatBlock('INT', state.primaryStats?.int || 21, setPrim.int || 0, tatInt)}
+          ${renderStatBlock('WIT', state.primaryStats?.wit || 11, setPrim.wit || 0, tatWit)}
+          ${renderStatBlock('MEN', state.primaryStats?.men || 25, setPrim.men || 0, tatMen)}
         </div>
       </div>
 

@@ -1168,6 +1168,7 @@ function updateSkillInfoPanel() {
 
 
 function updateInventoryUI() {
+  updateDetailedEquipStatsUI();
   return uiUpdateInventoryUI(state, {
     equipItem,
     sellItem,
@@ -1187,6 +1188,7 @@ function updateWarehouseUI() {
   return uiUpdateWarehouseUI(state, { withdrawFromWarehouse });
 }
 function updateEquipmentUI() {
+  updateDetailedEquipStatsUI();
   return uiUpdateEquipmentUI(state, { unequipItem });
 }
 function updateCharacterUI() {
@@ -2301,6 +2303,8 @@ function updateAllUI() {
   safeUiUpdate('stats', updateStatsUI);
   safeUiUpdate('equipment', updateEquipmentUI);
   safeUiUpdate('inventory', updateInventoryUI);
+  safeUiUpdate('equip-stats', updateDetailedEquipStatsUI);
+  safeUiUpdate('character', updateCharacterUI);
   safeUiUpdate('combat-controls', updateCombatControlsUI);
   safeUiUpdate('tab-badges', updateTabBadgesUI);
   safeUiUpdate('class-advancement', checkClassAdvancement);
