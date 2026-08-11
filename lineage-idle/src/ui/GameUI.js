@@ -2355,7 +2355,7 @@ export function updateCraftUI(state, callbacks = {}) {
     };
   }
 
-  const catButtons = document.querySelectorAll('#craft-category-filters [data-craft-cat]');
+  const catButtons = root.querySelectorAll('#craft-category-filters [data-craft-cat]');
   catButtons.forEach(btn => {
     const isThisActive = btn.dataset.craftCat === activeCat;
     btn.classList.toggle('active', isThisActive);
@@ -2677,6 +2677,86 @@ export function renderAlchemyUI(state) {
     `;
   }
 
+  // Cadinho de Almas — Módulo de Seleção e Preview de Dissolução
+  const inventoryItems = (state.inventory || []).filter(i => {
+    if (!i || !i.itemId || i.equipped) return false;
+    const def = getItemDef(i.itemId);
+    if (!def) return false;
+    const slot = (def.slot || '').toLowerCase();
+    return ['weapon', 'armor', 'shield', 'helmet', 'gloves', 'boots', 'legs', 'ring', 'necklace', 'earring', 'belt', 'cloak'].includes(slot);
+  });
+
+  let crucibleSelectHtml = '';
+  if (inventoryItems.length === 0) {
+    crucibleSelectHtml = `
+      <div style="background:rgba(15,20,32,0.8); border:1px dashed rgba(255,255,255,0.15); border-radius:10px; padding:14px; margin-bottom:16px; text-align:center; color:#aaa; font-size:12px;">
+        📦 Nenhum equipamento desequipado na mochila para desintegrar no Cadinho.
+      </div>
+    `;
+  } else {
+    const selectedUid = window._selectedCrucibleUid || inventoryItems[0].uid;
+    const selectedItem = inventoryItems.find(i => i.uid === selectedUid) || inventoryItems[0];
+    const selectedDef = getItemDef(selectedItem.itemId);
+
+    const grade = getItemGradeCode(selectedDef);
+    const yields = {
+      ng: { fire: 5, earth: 5, wind: 5, astral: 1 },
+      d:  { fire: 15, earth: 15, wind: 15, astral: 3 },
+      c:  { fire: 35, earth: 35, wind: 35, astral: 8 },
+      b:  { fire: 75, earth: 75, wind: 75, astral: 20 },
+      a:  { fire: 150, earth: 150, wind: 150, astral: 50 },
+      s:  { fire: 350, earth: 350, wind: 350, astral: 120 }
+    }[grade] || { fire: 5, earth: 5, wind: 5, astral: 1 };
+
+    const optionsHtml = inventoryItems.map(item => {
+      const def = getItemDef(item.itemId);
+      const rName = def?.name || item.itemId;
+      const gCode = getItemGradeCode(def).code.toUpperCase();
+      return `<option value="${item.uid}" ${item.uid === selectedItem.uid ? 'selected' : ''}>[${gCode}] ${rName} (x${item.count || 1})</option>`;
+    }).join('');
+
+    crucibleSelectHtml = `
+      <div style="background:linear-gradient(135deg, rgba(30,20,40,0.9), rgba(15,10,24,0.9)); border:1px solid rgba(168,85,247,0.4); border-radius:10px; padding:14px; margin-bottom:16px; box-shadow:0 4px 16px rgba(168,85,247,0.15);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <h4 style="margin:0; font-family:'Cinzel',serif; color:#c084fc; font-size:14px; display:flex; align-items:center; gap:6px;">
+            🔮 Cadinho de Almas — Inspeção &amp; Preview
+          </h4>
+          <span style="font-size:10px; background:rgba(168,85,247,0.2); border:1px solid rgba(168,85,247,0.4); padding:2px 8px; border-radius:10px; color:#e9d5ff; font-weight:bold;">${inventoryItems.length} Equipamento(s) Disponível(is)</span>
+        </div>
+
+        <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:12px;">
+          <select id="crucible-item-select" style="flex:1; min-width:220px; padding:8px 12px; background:rgba(0,0,0,0.6); border:1px solid rgba(168,85,247,0.5); color:#fff; border-radius:6px; font-size:12px;" onchange="window._selectedCrucibleUid = this.value; if (window.renderAlchemyUI) window.renderAlchemyUI(window._lastState);">
+            ${optionsHtml}
+          </select>
+          <button
+            onclick="if (window.dissolveItem) window.dissolveItem('${selectedItem.uid}');"
+            style="padding:8px 18px; font-family:'Cinzel',serif; font-weight:bold; font-size:12px; background:linear-gradient(180deg, #a855f7, #6b21a8); border:1px solid #c084fc; color:#fff; border-radius:6px; cursor:pointer;"
+          >
+            🔥 Dissolver Item
+          </button>
+        </div>
+
+        <div style="background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:10px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <div style="font-size:24px; width:36px; height:36px; background:rgba(0,0,0,0.6); border:1px solid rgba(168,85,247,0.4); border-radius:6px; display:flex; align-items:center; justify-content:center;">
+              ${getItemIcon(selectedDef)}
+            </div>
+            <div>
+              <div style="font-weight:bold; color:#f4d58a; font-size:13px;">${selectedDef?.name || 'Item'}</div>
+              <div style="font-size:11px; color:#aaa;">Rendimento estimado ao dissolver no Cadinho:</div>
+            </div>
+          </div>
+          <div style="display:flex; gap:10px; font-size:12px; font-weight:bold;">
+            <span style="color:#fca5a5;">🔥 +${yields.fire}</span>
+            <span style="color:#86efac;">🛡️ +${yields.earth}</span>
+            <span style="color:#7dd3fc;">🍃 +${yields.wind}</span>
+            <span style="color:#d8b4fe;">✨ +${yields.astral}</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
   container.innerHTML = `
     <div style="padding:16px; font-family:sans-serif; color:#fff;">
       <!-- Essence Header -->
@@ -2720,10 +2800,13 @@ export function renderAlchemyUI(state) {
         </div>
       ` : ''}
 
+      <!-- Single Item Crucible Inspection & Yield Preview -->
+      ${crucibleSelectHtml}
+
       <!-- Fast Dissolve Controls -->
       <div style="background:rgba(15,20,32,0.8); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:12px; margin-bottom:16px;">
         <h4 style="margin:0 0 8px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px; display:flex; align-items:center; gap:6px;">
-          🔥 Dissolução Rápida no Cadinho
+          🔥 Dissolução em Lote no Cadinho
         </h4>
         <div style="display:flex; gap:8px; flex-wrap:wrap;">
           <button
