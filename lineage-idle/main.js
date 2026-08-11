@@ -5076,6 +5076,8 @@ export function init() {
     window.selectDivineTransformationModal = selectDivineTransformationModal;
     window.openCraftModal = (itemId) => uiOpenCraftModal(itemId, state, { craftItem, getItemDef, updateAllUI, save });
     window.closeCraftModal = uiCloseCraftModal;
+    window.craftItem = craftItem;
+    window.canCraft = canCraft;
     window.setGameMode = setGameMode;
     window.switchSubclass = switchSubclass;
     window.claimCert = claimCert;

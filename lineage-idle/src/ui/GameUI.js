@@ -2594,10 +2594,13 @@ export function openCraftModal(itemId, state, callbacks = {}) {
     const submitBtn = body.querySelector('#craft-modal-submit');
     if (submitBtn) {
       submitBtn.onclick = () => {
-        if (callbacks.craftItem) callbacks.craftItem(itemId, currentQty);
-        else if (typeof window !== 'undefined' && typeof window.craftItem === 'function') window.craftItem(itemId, currentQty);
+        let ok = false;
+        if (callbacks.craftItem) ok = callbacks.craftItem(itemId, currentQty);
+        else if (typeof window !== 'undefined' && typeof window.craftItem === 'function') ok = window.craftItem(itemId, currentQty);
         closeCraftModal();
         updateCraftUI(state, callbacks);
+        if (callbacks.updateAllUI) callbacks.updateAllUI();
+        else if (typeof window !== 'undefined' && typeof window.updateAllUI === 'function') window.updateAllUI();
       };
     }
   }
