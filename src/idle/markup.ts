@@ -12,7 +12,7 @@ export const IDLE_MARKUP = `
           <span class="ts-zone">
             <span class="ts-label">Zone</span>
             <span id="zone-name">Talking Island</span>
-            <span id="zone-kill-progress" style="font-size:11px; color:#f59e0b; margin-left:8px; font-weight:800; background:rgba(0,0,0,0.4); padding:2px 8px; border-radius:10px; border:1px solid rgba(245,158,11,0.3);">⚔️ 0/15 Caçados</span>
+            <span id="zone-kill-progress" style="font-size:11px; color:#f59e0b; margin-left:8px; font-weight:800; background:rgba(0,0,0,0.4); padding:2px 8px; border-radius:10px; border:1px solid rgba(245,158,11,0.3);">⚔️ 0/50 Caçados</span>
           </span>
           <div id="top-bar-guide-container" style="display:inline-flex;">
             <button id="top-bar-guide-btn" class="top-guide-btn" style="background:linear-gradient(135deg, rgba(212, 167, 68, 0.25), rgba(138, 100, 28, 0.25)); border:1px solid rgba(212, 167, 68, 0.6); color:#ffd877; border-radius:12px; padding:3px 10px; font-size:11px; font-weight:bold; font-family:'Cinzel',serif; cursor:pointer; display:inline-flex; align-items:center; gap:4px; transition:all 0.2s;" onclick="window.openCurrentTabGuide && window.openCurrentTabGuide()">❓ Guia da Aba</button>

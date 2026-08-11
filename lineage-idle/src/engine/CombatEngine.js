@@ -70,7 +70,7 @@ export function pickRandomMonster(state, callbacks = {}) {
   const zone = ZONES[state.zone];
   state.zoneKills = state.zoneKills || {};
   const currentKills = state.zoneKills[state.zone] || 0;
-  const KILL_GOAL = 15;
+  const KILL_GOAL = 50;
 
   let targetId = null;
   let isBossSpawn = false;

@@ -3186,7 +3186,7 @@ function updateZoneKillProgressUI() {
   if (killEl && state.zone) {
     state.zoneKills = state.zoneKills || {};
     const count = state.zoneKills[state.zone] || 0;
-    const req = 15;
+    const req = 50;
     killEl.textContent = `⚔️ ${count}/${req} Caçados`;
     if (count >= req) {
       killEl.style.color = '#ef4444';
@@ -4391,6 +4391,13 @@ function craftElixir(recipeId, qty = 1) {
 }
 
 function upgradeAstralNode(nodeId) {
+  if (!state.prestigeLevel || state.prestigeLevel < 1) {
+    log('🔒 A Maestria Astral requer realizar a 1ª Reencarnação (Reborn no Nível 75+)!', 'warning');
+    if (typeof window !== 'undefined' && window.floatText) {
+      window.floatText('🔒 Requer Reencarnação!', 'float-meteor');
+    }
+    return false;
+  }
   const node = ASTRAL_NODES[nodeId];
   if (!node) return false;
 

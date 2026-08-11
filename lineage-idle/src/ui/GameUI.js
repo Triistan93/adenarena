@@ -2772,6 +2772,7 @@ export function renderAstralMasteryUI(state) {
   const astralMastery = state.astralMastery || {};
   const currentLvl = state.level || 1;
 
+  const isReborn = prestigeLvl > 0;
   const titles = [
     'Sem Prestígio (Mortal)',
     'Aventureiro Renascido',
@@ -2779,7 +2780,7 @@ export function renderAstralMasteryUI(state) {
     'Senhor da Reencarnação',
     'Deus Ancestral de Aden'
   ];
-  const currentTitle = prestigeLvl > 0 ? titles[Math.min(prestigeLvl, titles.length - 1)] : titles[0];
+  const currentTitle = isReborn ? titles[Math.min(prestigeLvl, titles.length - 1)] : titles[0];
 
   const nodes = (typeof window !== 'undefined' && window.ASTRAL_NODES) ? window.ASTRAL_NODES : {};
 
@@ -2797,7 +2798,7 @@ export function renderAstralMasteryUI(state) {
     for (const node of constNodes) {
       const nodeLvl = astralMastery[node.id] || 0;
       const isMax = nodeLvl >= node.max;
-      const canUpgrade = !isMax && astralShards >= node.cost;
+      const canUpgrade = isReborn && !isMax && astralShards >= node.cost;
 
       nodesHtml += `
         <div style="background:rgba(18,24,38,0.85); border:1px solid ${isMax ? 'rgba(52,211,153,0.5)' : (canUpgrade ? 'rgba(212,167,68,0.4)' : 'rgba(255,255,255,0.08)')}; border-radius:10px; padding:12px; display:flex; justify-content:space-between; align-items:center; gap:12px;">
@@ -2817,9 +2818,10 @@ export function renderAstralMasteryUI(state) {
           <button
             onclick="window.upgradeAstralNode('${node.id}')"
             ${!canUpgrade ? 'disabled' : ''}
+            title="${!isReborn ? 'Requer realizar a 1ª Reencarnação (Reborn no Nível 75+)' : (!canUpgrade ? 'Cacos Astrais Insuficientes' : 'Melhorar Nó Astral')}"
             style="padding:8px 14px; font-family:'Cinzel',serif; font-weight:bold; font-size:11px; background:${isMax ? 'rgba(52,211,153,0.15)' : (canUpgrade ? 'linear-gradient(180deg,#d4a744,#8a641c)' : 'rgba(60,50,40,0.5)')}; border:1px solid ${isMax ? '#34d399' : (canUpgrade ? '#ffe699' : 'rgba(100,80,60,0.3)')}; color:${isMax ? '#34d399' : (canUpgrade ? '#000' : '#777')}; border-radius:6px; cursor:${canUpgrade ? 'pointer' : 'default'}; min-width:90px;"
           >
-            ${isMax ? '✓ MÁX' : `🌟 MELHORAR (${node.cost})`}
+            ${!isReborn ? '🔒 REBORN REQUERIDO' : (isMax ? '✓ MÁX' : `🌟 MELHORAR (${node.cost})`)}
           </button>
         </div>
       `;
@@ -2839,8 +2841,19 @@ export function renderAstralMasteryUI(state) {
   const canReincarnate = currentLvl >= 75;
   const estimatedShards = Math.max(10, (currentLvl - 74) * 10 + Math.floor((state.totalPlaytime || 0) / 3600000) * 2 + Math.floor((state.gold || 0) / 2500000));
 
+  const lockNoticeBanner = !isReborn ? `
+    <div style="background:linear-gradient(135deg, rgba(239,68,68,0.18), rgba(185,28,28,0.28)); border:1px solid rgba(239,68,68,0.6); border-radius:10px; padding:12px 16px; margin-bottom:16px; display:flex; align-items:center; gap:12px; color:#fca5a5; box-shadow:0 4px 12px rgba(239,68,68,0.2);">
+      <span style="font-size:24px;">🔒</span>
+      <div>
+        <h4 style="margin:0; font-family:'Cinzel',serif; color:#f87171; font-size:14px;">MAESTRIA ASTRAL BLOQUEADA</h4>
+        <p style="margin:2px 0 0 0; font-size:11px; color:#e2e8f0;">Você precisa alcançar o Nível 75+ e realizar a sua <strong>1ª Reencarnação (Reborn)</strong> para utilizar os Cacos Astrais e despertar os bônus da Constelação!</p>
+      </div>
+    </div>
+  ` : '';
+
   container.innerHTML = `
     <div style="padding:16px; font-family:sans-serif; color:#fff;">
+      ${lockNoticeBanner}
       <!-- Header Banner -->
       <div style="background:linear-gradient(180deg, rgba(26,18,48,0.95), rgba(12,8,26,0.95)); border:1px solid rgba(168,85,247,0.4); border-radius:12px; padding:16px; margin-bottom:18px; box-shadow:0 4px 20px rgba(168,85,247,0.2);">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
