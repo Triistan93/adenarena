@@ -2689,6 +2689,7 @@ function checkBuffsExpire() {
 }
 
 function attackMonster() {
+  if (state.isCombatActive === false) return;
   if (!state.zone || !state.target) return;
   checkBuffsExpire();
   const stats = getStats(), monster = state.activeMonster || MONSTERS[state.target]; if (!monster) return;
@@ -2928,16 +2929,21 @@ function attackMonster() {
       onTowerFloorVictory(monster.towerFloor);
     }
 
-    checkLevelUp(); pickRandomMonster();
+    checkLevelUp();
+    if (state.isCombatActive !== false) {
+      pickRandomMonster();
+    }
   } else { 
     if (monsterAttackTimeout) clearTimeout(monsterAttackTimeout);
-    monsterAttackTimeout = setTimeout(() => monsterAttack(monster), 500); 
+    if (state.isCombatActive !== false) {
+      monsterAttackTimeout = setTimeout(() => monsterAttack(monster), 500); 
+    }
   }
   updateStatsUI();
 }
 
 function monsterAttack(monster) {
-  if (!state.combatActive || !state.target || state.hp <= 0) return;
+  if (state.isCombatActive === false || !state.target || state.hp <= 0) return;
   const now = combatTick * 200;
   if (monster._stunnedUntil && monster._stunnedUntil > now) return; 
   
