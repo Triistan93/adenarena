@@ -266,7 +266,7 @@ const CLASSES_ECHO = {
 
   // ─── ROGUE (1ª classe) ───
   rogue: {
-    name: 'Rogue', parent: 'fighter', race: 'human', archetype: 'fighter', stage: 1,
+    name: 'Rogue', parent: 'fighter', race: 'human', archetype: 'assassin', stage: 1,
     desc: 'Ladino ágil, especialista em dagger e bow. Skills anteriores permanecem.',
     base: { atk: 22, def: 12, hp: 150, mp: 40, eva: 15, crit: 12, mdef: 8 },
     skills: [
@@ -787,7 +787,7 @@ const CLASSES_ECHO = {
 
   // ─── SCOUT (1ª classe — Elf) ───
   elfScout: {
-    name: 'Scout', parent: 'elfFighter', race: 'elf', archetype: 'fighter', stage: 1,
+    name: 'Scout', parent: 'elfFighter', race: 'elf', archetype: 'assassin', stage: 1,
     desc: 'Batedor élfico, dagger e bow. Skills anteriores permanecem.',
     base: { atk: 20, def: 10, hp: 140, mp: 40, eva: 18, crit: 12, mdef: 8 },
     skills: [
