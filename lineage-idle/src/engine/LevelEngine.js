@@ -83,7 +83,18 @@ export function checkLevelUp(state, callbacks = {}) {
   }
 
   if (leveledUp) {
-    if (typeof callbacks.updateAllUI === 'function') callbacks.updateAllUI();
+    if (typeof callbacks.checkClassAdvancement === 'function') {
+      callbacks.checkClassAdvancement();
+    }
+    if (typeof callbacks.updateSkillUI === 'function') {
+      callbacks.updateSkillUI();
+    }
+    if (typeof callbacks.updateRaceClassUI === 'function') {
+      callbacks.updateRaceClassUI();
+    }
+    if (typeof callbacks.updateAllUI === 'function') {
+      callbacks.updateAllUI();
+    }
     if (typeof callbacks.save === 'function') callbacks.save();
   }
 

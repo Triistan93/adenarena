@@ -768,7 +768,7 @@ window.executeRaceClassChange = (scrollUid, newRace, newClass) => {
 
 // --------------------------- LEVEL UP wrapper ---------------------------
 // engineCheckLevelUp is imported from LevelEngine.js — provide local wrapper that other code can call
-function checkLevelUp() { return engineCheckLevelUp(state, { log, floatText, updateAllUI, checkClassAdvancement }); }
+function checkLevelUp() { return engineCheckLevelUp(state, { log, floatText, updateAllUI, checkClassAdvancement, updateSkillUI, updateRaceClassUI, getStats }); }
 
 // --------------------------- SELL ITEM ---------------------------
 function sellItem(uid) {
@@ -2183,6 +2183,7 @@ function updateAllUI() {
   safeUiUpdate('inventory', updateInventoryUI);
   safeUiUpdate('combat-controls', updateCombatControlsUI);
   safeUiUpdate('tab-badges', updateTabBadgesUI);
+  safeUiUpdate('class-advancement', checkClassAdvancement);
 
   // Tab-specific heavy updates (only rendered if tab is currently active/visible)
   const isTabVisible = (panelId) => {
@@ -3242,7 +3243,10 @@ function addAdminXP(amount) {
   const amt = parseInt(amount) || 0;
   if (amt <= 0) return;
   state.xp = (state.xp || 0) + amt;
-  checkLevelUp(state, { getStats, log, floatText, updateAllUI, save });
+  checkLevelUp();
+  checkClassAdvancement();
+  updateSkillUI();
+  updateRaceClassUI();
   log(`🌟 [Admin] +${amt.toLocaleString()} XP concedido(s)! (Nível atual: ${state.level})`, 'rarity-legendary');
   floatText(`🌟 +${amt.toLocaleString()} XP!`, 'float-jackpot');
   updateAllUI();
