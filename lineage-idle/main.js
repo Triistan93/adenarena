@@ -54,7 +54,8 @@ import {
   getSelectedSet as serviceGetSelectedSet,
   toggleSelectItem as serviceToggleSelectItem,
   selectItemsByFilter as serviceSelectItemsByFilter,
-  clearItemSelection as serviceClearItemSelection
+  clearItemSelection as serviceClearItemSelection,
+  consolidateInventoryStacks
 } from './src/services/InventoryService.js';
 
 import {
@@ -237,6 +238,7 @@ function load() {
   const loaded = managerLoadState();
   if (loaded) {
     state = getState();
+    consolidateInventoryStacks(state);
     checkQuestResets();
     updateSagaProgress(true);
     log('✨ Atualização de versão carregada com sucesso! Seu progresso e itens foram 100% mantidos.', 'rarity-legendary');
@@ -1168,6 +1170,7 @@ function updateSkillInfoPanel() {
 
 
 function updateInventoryUI() {
+  consolidateInventoryStacks(state);
   updateDetailedEquipStatsUI();
   return uiUpdateInventoryUI(state, {
     equipItem,
@@ -1612,6 +1615,31 @@ function renderCraftRecipes() {
   return updateCraftUI();
 }
 
+function isEnchantScroll(itemId, isWeapon) {
+  if (!itemId) return false;
+  const id = String(itemId).toLowerCase();
+  if (isWeapon) {
+    return (id.includes('weapon') || id.includes('armas')) && (id.includes('enchant') || id.includes('scroll'));
+  } else {
+    return (id.includes('armor') || id.includes('shield') || id.includes('armadura')) && (id.includes('enchant') || id.includes('scroll'));
+  }
+}
+
+function getEnchantScrollCount(isWeapon) {
+  if (!state.inventory) return 0;
+  return state.inventory.reduce((sum, item) => {
+    if (isEnchantScroll(item.itemId, isWeapon)) {
+      return sum + (item.count || 1);
+    }
+    return sum;
+  }, 0);
+}
+
+function findEnchantScrollItem(isWeapon) {
+  if (!state.inventory) return null;
+  return state.inventory.find(item => isEnchantScroll(item.itemId, isWeapon) && (item.count || 1) > 0);
+}
+
 function updateEnchantUI() {
   const wsList = [el('enchant-workspace'), el('enchant-workspace-dedicated')].filter(Boolean);
   if (!wsList.length) return;
@@ -1620,7 +1648,7 @@ function updateEnchantUI() {
     ws.innerHTML = '';
     const equippable = state.inventory.filter(i => {
       const def = D().ALL_ITEMS[i.itemId];
-      return def && ['weapon','armor','helmet','gloves','boots','ring'].includes(def.slot);
+      return def && ['weapon','armor','helmet','gloves','boots','shield','legs','ring','necklace','earring','belt','cloak'].includes(def.slot);
     });
     
     if (!equippable.length) {
@@ -1631,20 +1659,21 @@ function updateEnchantUI() {
     for (const item of equippable) {
       const def = D().ALL_ITEMS[item.itemId];
       const isWeapon = def.slot === 'weapon';
-      const scrollId = isWeapon ? 'enchant_weapon_scroll' : 'enchant_armor_scroll';
-      const scrollDef = D().ALL_ITEMS[scrollId];
-      const count = getInventoryCount(scrollId);
+      const count = getEnchantScrollCount(isWeapon);
+      const scrollItem = findEnchantScrollItem(isWeapon);
+      const scrollDef = scrollItem ? D().ALL_ITEMS[scrollItem.itemId] : null;
+      const scrollName = scrollDef ? scrollDef.name : (isWeapon ? 'Scroll of Enchant Weapon' : 'Scroll of Enchant Armor');
       const enchant = item.enchant || 0;
-      const rarityColor = item.rarity ? D().RARITY[item.rarity].color : 'var(--gilt)';
+      const rarityColor = item.rarity ? (D().RARITY[item.rarity]?.color || 'var(--gilt)') : 'var(--gilt)';
       
       const card = mkEl('div'); card.className = 'enchant-card';
-      const title = (enchant > 0 ? `+${enchant} ` : '') + def.name + (item.rarity ? ` [${D().RARITY[item.rarity].name}]` : '');
+      const title = (enchant > 0 ? `+${enchant} ` : '') + def.name + (item.rarity ? ` [${D().RARITY[item.rarity]?.name || item.rarity}]` : '');
       const safeMsg = enchant < 3 ? '100% Seguro (Até +3)' : `Sucesso: ${Math.max(30, 100 - (enchant - 3) * 10)}%`;
       
       card.innerHTML = `
         <div class="enchant-card-info">
           <div class="enchant-item-title" style="color:${rarityColor}">${title} ${item.equipped ? '⚡ (EQUIPADO)' : ''}</div>
-          <div class="enchant-item-sub">Req: ${scrollDef ? scrollDef.name : scrollId} (Possui: ${count}) · ${safeMsg}</div>
+          <div class="enchant-item-sub">Req: ${scrollName} (Possui: ${count}) · ${safeMsg}</div>
         </div>
         <button class="item-action" data-enchant="${item.uid}" ${count < 1 ? 'disabled title="Sem pergaminhos de encantamento"' : ''}>Encantar (+1)</button>
       `;
@@ -1661,12 +1690,14 @@ function enchantItem(uid) {
   const item = state.inventory.find(i => i.uid === uid); if (!item) return;
   const def = D().ALL_ITEMS[item.itemId]; if (!def) return;
   const isWeapon = def.slot === 'weapon';
-  const scrollId = isWeapon ? 'enchant_weapon_scroll' : 'enchant_armor_scroll';
-  const scrollItem = state.inventory.find(i => i.itemId === scrollId && (i.count || 1) > 0);
+  const scrollItem = findEnchantScrollItem(isWeapon);
   if (!scrollItem) { log('Pergaminho de encantamento necessário!', 'system'); return; }
   
-  if (scrollItem.count > 1) scrollItem.count--;
-  else removeFromInventory(scrollItem.uid, 1);
+  if ((scrollItem.count || 1) > 1) {
+    scrollItem.count--;
+  } else {
+    removeFromInventory(scrollItem.uid, 1);
+  }
 
   const currentEnchant = item.enchant || 0;
   const chance = currentEnchant < 3 ? 1.0 : Math.max(0.3, 1.0 - (currentEnchant - 3) * 0.1);
@@ -1674,11 +1705,11 @@ function enchantItem(uid) {
   if (Math.random() < chance) {
     item.enchant = currentEnchant + 1;
     log(`✨ ENCHANT SUCCESS! ${def.name} is now +${item.enchant}!`, 'rarity-legendary');
-    floatText(`✨ +${item.enchant} SUCESSO!`, 'float-jackpot');
+    if (typeof floatText === 'function') floatText(`✨ +${item.enchant} SUCESSO!`, 'float-jackpot');
   } else {
     item.enchant = Math.max(0, currentEnchant - 1);
     log(`💥 Enchant Failed! ${def.name} reduced to +${item.enchant}.`, 'system');
-    floatText(`💥 FALHOU (-1)`, 'float-crit');
+    if (typeof floatText === 'function') floatText(`💥 FALHOU (-1)`, 'float-crit');
   }
   
   updateAllUI(); save();

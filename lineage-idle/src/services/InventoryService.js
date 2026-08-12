@@ -123,6 +123,37 @@ export function getWarehouseCount(state, itemId) {
  * @param {Object} [callbacks] — { log }
  * @returns {boolean} True se adicionado com sucesso
  */
+export function consolidateInventoryStacks(state) {
+  if (!state || !Array.isArray(state.inventory)) return;
+  const gData = D();
+  const newInv = [];
+  const stackMap = new Map();
+
+  for (const item of state.inventory) {
+    if (!item || !item.itemId) continue;
+    const def = gData?.ALL_ITEMS?.[item.itemId];
+    const isStackable = def && (!!def.stack || ['consumable', 'material', 'scroll', 'powerup', 'potion', 'food', 'quest'].includes(String(def.slot || '').toLowerCase()) || ['consumable', 'material', 'scroll'].includes(String(def.type || '').toLowerCase()));
+
+    if (isStackable && !item.equipped) {
+      const key = def.id || item.itemId;
+      if (stackMap.has(key)) {
+        const existing = stackMap.get(key);
+        existing.count = (existing.count || 1) + (item.count || 1);
+      } else {
+        item.itemId = key;
+        item.count = item.count || 1;
+        item.rarity = null;
+        item.foundation = false;
+        stackMap.set(key, item);
+        newInv.push(item);
+      }
+    } else {
+      newInv.push(item);
+    }
+  }
+  state.inventory = newInv;
+}
+
 export function addToInventory(state, itemId, amount = 1, rarity = null, foundation = false, callbacks = {}, skipAutoSell = false) {
   const gData = D();
   const def = gData?.ALL_ITEMS?.[itemId];
@@ -130,24 +161,27 @@ export function addToInventory(state, itemId, amount = 1, rarity = null, foundat
 
   const maxSlots = getMaxInventorySlots(state);
 
-  if (def.stack && (def.slot === 'consumable' || def.slot === 'material' || def.slot === 'scroll' || def.slot === 'powerup') && !rarity) {
+  const isStackable = !!def.stack || ['consumable', 'material', 'scroll', 'powerup', 'potion', 'food', 'quest'].includes(String(def.slot || '').toLowerCase()) || ['consumable', 'material', 'scroll'].includes(String(def.type || '').toLowerCase());
+
+  if (isStackable) {
     let remaining = amount;
+    const maxStack = def.stack || 99999;
     while (remaining > 0) {
-      const existing = state.inventory.find(i => i.itemId === itemId && !i.rarity && (i.count || 1) < (def.stack || 99999));
+      const existing = state.inventory.find(i => (i.itemId === itemId || i.itemId === def.id) && !i.equipped && (i.count || 1) < maxStack);
       if (existing) {
-        const space = (def.stack || 99999) - (existing.count || 1);
+        const space = maxStack - (existing.count || 1);
         const add = Math.min(space, remaining);
         existing.count = (existing.count || 1) + add;
         remaining -= add;
       } else {
         if (state.inventory.length >= maxSlots) {
-          if (callbacks.log) callbacks.log('Inventory full!', 'system');
+          if (callbacks.log) callbacks.log('Mochila cheia!', 'system');
           return false;
         }
-        const add = Math.min((def.stack || 99999), remaining);
+        const add = Math.min(maxStack, remaining);
         state.inventory.push({
           uid: Date.now() + '_' + Math.random().toString(36).slice(2, 8),
-          itemId, count: add, rarity: null, equipped: false, foundation: false
+          itemId: def.id || itemId, count: add, rarity: null, equipped: false, foundation: false
         });
         remaining -= add;
       }
