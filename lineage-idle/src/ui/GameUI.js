@@ -2702,6 +2702,8 @@ export function renderAlchemyUI(state) {
     const def = getItemDef(i.itemId);
     if (!def) return false;
     const slot = (def.slot || '').toLowerCase();
+    const type = (def.type || '').toLowerCase();
+    if (def.stack || def.isQuestItem || type === 'material' || type === 'quest' || type === 'consumable') return false;
     return ['weapon', 'armor', 'shield', 'helmet', 'gloves', 'boots', 'legs', 'ring', 'necklace', 'earring', 'belt', 'cloak'].includes(slot);
   });
 

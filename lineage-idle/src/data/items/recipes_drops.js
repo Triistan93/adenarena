@@ -1289,8 +1289,8 @@ export function rollDrop(zoneKey = 'zone1', rarityBonus = 0, isBoss = false, all
   const isLowLevel = poolKey === 'zone1' || numericLevel < 20
     || ['talkingIsland', 'elvenForest', 'darkForest', 'orcVillage', 'dwarvenMine', 'kamaelLair', 'ruinedOutpost'].includes(poolKey);
 
-  // 1. Consumable/Material Drop (15% chance for normal monsters, 40% for bosses)
-  const matChance = isBoss ? 0.40 : 0.15;
+  // 1. Consumable/Material Drop (30% chance for normal monsters, 60% for bosses)
+  const matChance = isBoss ? 0.60 : 0.30;
   if (Math.random() < matChance) {
     const rawMatPool = ZONE_CONSUMABLES[poolKey] || ZONE_CONSUMABLES.zone1;
     const validMatPool = rawMatPool.filter(id => !!allItems[id]);
@@ -1304,10 +1304,10 @@ export function rollDrop(zoneKey = 'zone1', rarityBonus = 0, isBoss = false, all
     }
   }
 
-  // 2. Equipment Drop (Raro: 0.3% para monstros normais de nível baixo, 0.6% para alto nível, 15-25% para chefes)
+  // 2. Equipment Drop (Raro: 0.1%-0.3% para monstros normais, MÁXIMO 5% para chefes)
   const baseEquipChance = isLowLevel
-    ? (isBoss ? 0.15 : 0.003)
-    : (isBoss ? 0.25 : 0.006);
+    ? (isBoss ? 0.03 : 0.001)
+    : (isBoss ? 0.05 : 0.003);
   const equipChance = baseEquipChance * (1 + Math.min(2, (rarityBonus || 0) * 0.2));
   
   if (Math.random() < equipChance) {

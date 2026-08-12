@@ -91,16 +91,16 @@ export function pickRandomMonster(state, callbacks = {}) {
     let isElite = false;
 
     if (isBossSpawn || template.boss) {
-      hpMult = 3.5;
-      atkMult = 1.5;
-      xpMult = 5.0;
-      goldMult = 5.0;
+      hpMult = 4.5;
+      atkMult = 2.0;
+      xpMult = 6.0;
+      goldMult = 6.0;
       isBossSpawn = true;
     } else if (Math.random() < 0.08) {
-      hpMult = 1.6;
-      atkMult = 1.2;
-      xpMult = 2.0;
-      goldMult = 2.5;
+      hpMult = 1.8;
+      atkMult = 1.3;
+      xpMult = 2.5;
+      goldMult = 3.0;
       isElite = true;
     }
 

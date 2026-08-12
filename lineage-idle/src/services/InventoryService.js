@@ -48,13 +48,29 @@ export function isProtectedFromAutoSell(item, def) {
   }
   if (!def) return false;
   const slot = String(def.slot || '').toLowerCase();
+  const type = String(def.type || '').toLowerCase();
   const PROTECTED_SLOTS = [
     'consumable', 'material', 'scroll', 'powerup', 'potion',
-    'food', 'spellbook', 'talisman', 'pendant', 'coin'
+    'food', 'spellbook', 'talisman', 'pendant', 'coin',
+    'quest', 'quest_item', 'recipe', 'key', 'box', 'container', 'essence'
   ];
-  if (PROTECTED_SLOTS.includes(slot)) return true;
-  if (def.stack || item?.isProtected) return true;
+  if (PROTECTED_SLOTS.includes(slot) || PROTECTED_SLOTS.includes(type)) return true;
+  if (def.stack || def.isQuestItem || item?.isProtected) return true;
   return false;
+}
+
+/**
+ * Retorna se a definição de um item corresponde a um Equipamento genuíno desequipável.
+ * @param {Object} def
+ * @returns {boolean}
+ */
+export function isEquipmentItem(def) {
+  if (!def) return false;
+  const slot = String(def.slot || '').toLowerCase();
+  const type = String(def.type || '').toLowerCase();
+  if (def.stack || def.isQuestItem || type === 'material' || type === 'quest' || type === 'consumable') return false;
+  const EQUIP_SLOTS = ['weapon', 'armor', 'shield', 'helmet', 'gloves', 'boots', 'legs', 'ring', 'necklace', 'earring', 'belt', 'cloak'];
+  return EQUIP_SLOTS.includes(slot);
 }
 
 /**

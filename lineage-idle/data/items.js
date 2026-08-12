@@ -3024,7 +3024,7 @@ function rollRarity(bonus = 0) {
 
 function rollDrop(zoneId = 'zone1', rarityBonus = 0, isBoss = false) {
   const isLowLevel = zoneId === 'zone1' || ['talkingIsland', 'elvenForest', 'darkForest', 'orcVillage', 'dwarvenMine', 'kamaelLair', 'ruinedOutpost'].includes(zoneId);
-  const equipChance = isLowLevel ? (isBoss ? 0.15 : 0.003) : (isBoss ? 0.25 : 0.006);
+  const equipChance = isLowLevel ? (isBoss ? 0.03 : 0.001) : (isBoss ? 0.05 : 0.003);
   if (Math.random() >= equipChance) {
     return [];
   }

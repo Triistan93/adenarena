@@ -13,7 +13,8 @@ import EventBus from '../core/EventBus.js';
  * @returns {number}
  */
 export function getXPForLevel(lvl) {
-  return Math.floor(100 * Math.pow(1.8, lvl - 1));
+  if (lvl <= 1) return 100;
+  return Math.floor(100 + Math.pow(lvl, 2.45) * 55);
 }
 
 /**

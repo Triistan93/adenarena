@@ -2994,6 +2994,20 @@ function attackMonster() {
 
   const atkInterval = Math.max(200, 1000 - stats.atkSpd * 600);
   if (combatTick % Math.max(1, Math.round(atkInterval / 200)) !== 0) return;
+
+  // Level Gap Miss Penalty: se o monstro é muito superior (+3 níveis), aumenta a chance de Miss do jogador
+  const monLvl = monster.lvl || 1;
+  const pLvl = state.level || 1;
+  const gap = monLvl - pLvl;
+  if (gap >= 3) {
+    const missChance = gap >= 10 ? 0.70 : (gap >= 5 ? 0.35 : 0.15);
+    if (Math.random() < missChance) {
+      log(`❌ MISS! ${monster.name} esquivou do seu ataque (Diferença de Nível +${gap})!`, 'warning');
+      if (typeof stageFloat === 'function') stageFloat('MISS', 'sf-miss', 'right');
+      return;
+    }
+  }
+
   if (!castedSkillThisTick) stageHeroAttack();
 
   const useMagic = stats.matk > stats.atk;
@@ -3073,7 +3087,7 @@ function attackMonster() {
     const zoneMult = (D().ZONE_GOLD_MULT && D().ZONE_GOLD_MULT[zoneTier]) || 1;
     const xpMult = 1 + (stats.xpBoost || 0);
     const xpGain = Math.floor(monster.xp * xpMult);
-    const spGain = Math.max(0, Math.floor((monster.sp || 1) * 0.25)) + (monster.boss ? 1 : 0);
+    const spGain = monster.boss ? 8 : (monster.isElite ? 3 : Math.max(1, monster.sp || 1));
     state.xp += xpGain; state.sp += spGain;
     log(`Derrotou ${monster.name}! +${xpGain} XP, +${spGain} SP`, 'xp');
 
@@ -3151,6 +3165,14 @@ function monsterAttack(monster) {
   
   const type = (monster.atkType === 'magical' || monster.isMage === true) ? 'magical' : 'physical';
   let damage = dealDamage({ def: stats.def, mdef: stats.mdef }, monster.atk, type);
+
+  // Level Gap Penalty: se o monstro tem nível muito superior ao jogador (+5 níveis), o dano recebido aumenta
+  const levelDiff = (monster.lvl || 1) - (state.level || 1);
+  if (levelDiff > 5) {
+    const extraDmgMult = 1 + Math.min(1.5, (levelDiff - 5) * 0.15);
+    damage = Math.floor(damage * extraDmgMult);
+  }
+
   if (state.godMode) damage = 0;
   if (damage > 0) { state.hp -= damage; log(`${monster.name} hits for ${damage}`, 'damage'); stageHeroHurt(damage); }
   if (state.hp <= 0) { state.hp = 0; playerDeath(monster); }
@@ -4708,6 +4730,13 @@ function dissolveItem(uid) {
   }
 
   const def = D()?.ALL_ITEMS?.[inv.itemId];
+  const slot = (def?.slot || '').toLowerCase();
+  const EQUIP_SLOTS = ['weapon', 'armor', 'shield', 'helmet', 'gloves', 'boots', 'legs', 'ring', 'necklace', 'earring', 'belt', 'cloak'];
+  if (!def || !EQUIP_SLOTS.includes(slot) || def.stack || def.isQuestItem || def.type === 'material' || def.type === 'quest' || def.type === 'consumable') {
+    log('⚠️ Apenas equipamentos podem ser desintegrados no Cadinho de Almas!', 'warning');
+    return false;
+  }
+
   const essenceType = getEssenceTypeForItem(def);
   const grade = getGradeForItem(def, inv);
   const essenceCount = ESSENCES_PER_GRADE[grade] || 1;
@@ -4733,11 +4762,14 @@ function dissolveItemsByFilter(filterGrade = 'all') {
   if (!state.inventory || !Array.isArray(state.inventory)) return 0;
   const equippedSet = new Set(Object.values(state.equipment || {}).filter(Boolean));
   const toDissolve = [];
+  const EQUIP_SLOTS = ['weapon', 'armor', 'shield', 'helmet', 'gloves', 'boots', 'legs', 'ring', 'necklace', 'earring', 'belt', 'cloak'];
 
   for (const inv of state.inventory) {
     if (equippedSet.has(inv.uid)) continue;
     const def = D()?.ALL_ITEMS?.[inv.itemId];
-    if (!def || def.type === 'consumable' || def.type === 'material') continue;
+    if (!def) continue;
+    const slot = (def.slot || '').toLowerCase();
+    if (!EQUIP_SLOTS.includes(slot) || def.stack || def.isQuestItem || def.type === 'material' || def.type === 'quest' || def.type === 'consumable') continue;
 
     const grade = getGradeForItem(def, inv);
     if (filterGrade === 'all' || filterGrade === grade || (filterGrade === 'nograde' && (grade === 'nograde' || grade === 'no-grade'))) {
