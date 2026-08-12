@@ -57,7 +57,7 @@ export function checkLevelUp(state, callbacks = {}) {
   if (!state) return false;
   let leveledUp = false;
   const initialLevel = state.level || 1;
-  const MAX_LEVEL = 85;
+  const MAX_LEVEL = 100;
   let totalSpReward = 0;
 
   // Processa subida de níveis sem travar o navegador
