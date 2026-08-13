@@ -183,22 +183,59 @@ function buildEchoAdapter() {
       const pwr  = effectToPwr(sk.effect, sk.type);
       const cd   = cdToMs(sk.cooldown);
 
+      let reqWeapon = sk.requiredWeapon || null;
+      let reqShield = sk.requiredShield || false;
+      const isUltimate = (sk.rarity === '4★' || tier === 3);
+      const reqItem = (sk.rarity === '4★') ? 'spellbook_4star' : (sk.requiredItemToUnlock || null);
+
+      if (!reqWeapon) {
+        const arch = (classDef.archetype || classId || '').toLowerCase();
+        const sName = (rawName || '').toLowerCase();
+        const sDesc = (sk.desc || sk.effect || '').toLowerCase();
+
+        if (arch.includes('archer') || sName.includes('bow') || sName.includes('shot') || sName.includes('arrow')) {
+          reqWeapon = 'bow';
+        } else if (arch.includes('assassin') || arch.includes('rogue') || sName.includes('dagger') || sName.includes('backstab') || sName.includes('blow')) {
+          reqWeapon = 'dagger';
+        } else if (arch.includes('knight') || arch.includes('paladin') || sName.includes('shield')) {
+          reqWeapon = 'sword';
+          if (sName.includes('shield') || arch.includes('knight')) reqShield = true;
+        } else if (arch.includes('mage') || arch.includes('healer') || arch.includes('summoner') || sName.includes('staff') || sName.includes('spell') || sName.includes('hydro') || sName.includes('prominence')) {
+          reqWeapon = 'staff';
+        } else if (sName.includes('dual') || sName.includes('sonic')) {
+          reqWeapon = 'dual';
+        } else if (sName.includes('spear') || sName.includes('polearm')) {
+          reqWeapon = 'spear';
+        } else if (sName.includes('twohand') || sName.includes('crush_of_doom')) {
+          reqWeapon = 'twohand';
+        } else if (sName.includes('fist') || sName.includes('punch') || sName.includes('bison')) {
+          reqWeapon = 'fist';
+        } else if (sName.includes('ancientsword') || sName.includes('rush_impact')) {
+          reqWeapon = 'ancientsword';
+        }
+      }
+
       SKILL_DEFS_ECHO[skillId] = {
-        id:         skillId,
-        name:       rawName,
-        type:       type,
-        tier:       tier,
-        cost:       tier === 0 ? 5 : tier === 1 ? 15 : tier === 2 ? 25 : 35,
-        max:        5,
-        pwr:        pwr,
-        baseCd:     cd,
-        effect:     type === 'buff' ? 'warcry' : (type === 'passive' ? 'stat' : 'dmg'),
-        info:       sk.desc || sk.effect || rawName,
-        desc:       sk.desc || '',
-        effectText: sk.effect || '',
-        icon:       sk.icon || '',
-        classReq:   classId,
-        reqLvl:     tier * 20
+        id:                   skillId,
+        name:                 rawName,
+        type:                 type,
+        tier:                 tier,
+        cost:                 tier === 0 ? 5 : tier === 1 ? 15 : tier === 2 ? 25 : 35,
+        max:                  5,
+        pwr:                  pwr,
+        baseCd:               cd,
+        effect:               type === 'buff' ? 'warcry' : (type === 'passive' ? 'stat' : 'dmg'),
+        info:                 sk.desc || sk.effect || rawName,
+        desc:                 sk.desc || '',
+        effectText:           sk.effect || '',
+        icon:                 sk.icon || '',
+        classReq:             classId,
+        reqLvl:               tier * 20,
+        requiredWeapon:       reqWeapon,
+        requiredShield:       reqShield,
+        requiredItemToUnlock: reqItem,
+        isUltimate:           isUltimate,
+        starRank:             sk.rarity === '4★' ? 4 : (tier + 1)
       };
 
       // Limpa pré-requisitos fictícios em SKILL_REQS_ECHO

@@ -94,7 +94,8 @@ import {
   getSkillCost,
   spendSP as engineSpendSP,
   resetSP as engineResetSP,
-  getStarterSkillForClass
+  getStarterSkillForClass,
+  canCastSkillWeapon
 } from './src/engine/SkillEngine.js';
 // ─── Sprint 5: Importa serviços de Personagem, Quests, Torre e Raids ────────
 import {
@@ -2946,6 +2947,12 @@ function attackMonster() {
   const realNow = Date.now();
   let castedSkillThisTick = false;
   for(const skill of activeSkills) {
+    // 0. Validação de Arma e Escudo para a Habilidade
+    const wpnCheck = (typeof canCastSkillWeapon === 'function') ? canCastSkillWeapon(state, skill.def) : { ok: true };
+    if (!wpnCheck.ok) {
+      continue; // Arma ou Escudo incompatível com o requisito da skill
+    }
+
     const isBuff = skill.def.type === 'buff' || skill.def.type === 'harmony' || skill.def.type === 'toggle' || skill.def.effect === 'warcry';
     const isHeal = skill.def.effect === 'heal' || skill.def.type === 'heal' || skill.id.includes('heal') || skill.id.includes('curation');
 

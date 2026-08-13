@@ -1807,8 +1807,25 @@ export function updateSkillUI(state, callbacks = {}) {
     if (!p) continue;
     const lvl = state.skills[id] || 0;
     const max = def.max || def.maxLevel || 5;
-    const node = mkEl('div');
-    node.className = `skill-node tier-${def.tier || 0}` + (lvl > 0 ? ' owned' : '') + (lvl === max ? ' maxed' : '');
+
+    // Check weapon restriction
+    const wpnCheck = (typeof canCastSkillWeapon === 'function') ? canCastSkillWeapon(state, def) : { ok: true };
+    const isWpnBlocked = !wpnCheck.ok;
+
+    // Check 4-Star Ultimate Book Unlock Requirement
+    const bookReq = def.requiredItemToUnlock || (def.starRank === 4 ? 'spellbook_4star' : null);
+    const hasBook = bookReq ? state.inventory?.some(i => i.itemId === bookReq && (i.count || 1) > 0) : true;
+    const isBookLocked = bookReq && lvl === 0 && !hasBook;
+
+    let nodeClass = `skill-node tier-${def.tier || 0}`;
+    if (lvl > 0) nodeClass += ' owned';
+    if (lvl === max) nodeClass += ' maxed';
+    if (isWpnBlocked) nodeClass += ' weapon-blocked';
+    if (def.isUltimate || def.starRank === 4) nodeClass += ' ultimate-4star';
+    if (isBookLocked) nodeClass += ' book-locked';
+    else if (bookReq && lvl === 0 && hasBook) nodeClass += ' book-ready';
+
+    node.className = nodeClass;
     node.style.left = (p.x - TREE_NODE_W / 2) + 'px';
     node.style.top = (p.y - TREE_NODE_H / 2) + 'px';
     node.style.width = TREE_NODE_W + 'px';
@@ -1817,10 +1834,20 @@ export function updateSkillUI(state, callbacks = {}) {
     const reqs = SKILL_REQS[id];
     const reqOk = !reqs || Object.entries(reqs).every(([s, v]) => s === 'level' || s === 'sp' || s === 'reqLvl' || (state.skills[s] || 0) >= v);
     const lvlOk = state.level >= (def.reqLvl || 1);
-    const canBuy = reqOk && lvlOk && state.sp >= getSkillCost(id, lvl) && lvl < max;
+    const canBuy = reqOk && lvlOk && state.sp >= getSkillCost(id, lvl) && lvl < max && !isBookLocked;
     const btnClass = canBuy ? 'skill-btn can-buy' : 'skill-btn';
 
+    let badgeHtml = '';
+    if (isWpnBlocked) {
+      badgeHtml = `<span style="position:absolute; top:-6px; right:-4px; background:#dc2626; color:#fff; font-size:9px; padding:1px 3px; border-radius:3px; font-weight:bold; box-shadow:0 0 4px #000;">🚫 ${wpnCheck.reason || 'Arma'}</span>`;
+    } else if (isBookLocked) {
+      badgeHtml = `<span style="position:absolute; top:-6px; right:-4px; background:#7c3aed; color:#fff; font-size:9px; padding:1px 3px; border-radius:3px; font-weight:bold; box-shadow:0 0 4px #000;">🔒 Livro 4★</span>`;
+    } else if (bookReq && lvl === 0 && hasBook) {
+      badgeHtml = `<span style="position:absolute; top:-6px; right:-4px; background:#f59e0b; color:#000; font-size:9px; padding:1px 3px; border-radius:3px; font-weight:bold; box-shadow:0 0 6px #f59e0b; animation:pulse 1.2s infinite;">⭐ Livro OK</span>`;
+    }
+
     node.innerHTML = `
+      ${badgeHtml}
       <button class="${btnClass}" data-skill="${id}">
         <span class="skill-icon">${def.icon || '✦'}</span>
         <span class="skill-name">${def.name}</span>

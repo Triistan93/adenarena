@@ -142,3 +142,56 @@ export function resetSP(state, callbacks = {}) {
   if (callbacks.updateAllUI) callbacks.updateAllUI();
   if (callbacks.save) callbacks.save();
 }
+
+/**
+ * Valida se a habilidade pode ser conjurada com base na arma e escudo equipados.
+ * @param {Object} state
+ * @param {Object} skillDef
+ * @returns {{ ok: boolean, reason?: string }}
+ */
+export function canCastSkillWeapon(state, skillDef) {
+  if (!skillDef) return { ok: true };
+
+  // 1. Requisito de Arma
+  if (skillDef.requiredWeapon && skillDef.requiredWeapon !== 'any') {
+    const wpnUid = state.equipment?.weapon;
+    const wpnItem = wpnUid ? state.inventory?.find(i => i.uid === wpnUid) : null;
+    const allItems = (typeof window !== 'undefined' && window.GameData) ? window.GameData.ALL_ITEMS : {};
+    const itemDef = (wpnItem?.itemId && allItems[wpnItem.itemId]) || wpnItem || {};
+
+    const s = `${itemDef.id || wpnItem?.itemId || ''} ${itemDef.name || wpnItem?.name || ''}`.toLowerCase();
+    let wpnType = null;
+    if (/bow/.test(s)) wpnType = 'bow';
+    else if (/staff|wand|scepter|magicblunt|magic_sword|crucifix/.test(s)) wpnType = 'staff';
+    else if (/mace|hammer|blunt/.test(s)) wpnType = 'blunt';
+    else if (/dagger/.test(s)) wpnType = 'dagger';
+    else if (/spear|lance|pike/.test(s)) wpnType = 'spear';
+    else if (/dual/.test(s)) wpnType = 'dual';
+    else if (/twohand/.test(s)) wpnType = 'twohand';
+    else if (/fist|knuckle/.test(s)) wpnType = 'fist';
+    else if (/ancientsword/.test(s)) wpnType = 'ancientsword';
+    else if (/sword|axe|blade|katana|longsword|rapier/.test(s)) wpnType = 'sword';
+
+    if (wpnType !== skillDef.requiredWeapon) {
+      const labels = {
+        bow: 'Arco', dagger: 'Adaga', staff: 'Cajado Mágico', sword: 'Espada',
+        dual: 'Espadas Duplas', spear: 'Lança', twohand: 'Arma de 2 Mãos',
+        fist: 'Manopla', ancientsword: 'Espada Anciã'
+      };
+      const reqLabel = labels[skillDef.requiredWeapon] || skillDef.requiredWeapon.toUpperCase();
+      return { ok: false, reason: `Requer ${reqLabel} equipado` };
+    }
+  }
+
+  // 2. Requisito de Escudo
+  if (skillDef.requiredShield) {
+    const shieldUid = state.equipment?.shield;
+    const shieldItem = shieldUid ? state.inventory?.find(i => i.uid === shieldUid) : null;
+    if (!shieldItem) {
+      return { ok: false, reason: 'Requer Escudo equipado' };
+    }
+  }
+
+  return { ok: true };
+}
+
