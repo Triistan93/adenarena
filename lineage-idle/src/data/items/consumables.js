@@ -99,7 +99,15 @@ export const MATERIALS = {
   "talisman_speed": {"id":"talisman_speed","name":"Talisman Speed","slot":"material","tier":1,"stack":99999,"price":1000,"icon":"talismans/talisman_speed.png","desc":"Talismã: Talisman Speed."},
   "talisman_venir": {"id":"talisman_venir","name":"Talisman Venir","slot":"material","tier":1,"stack":99999,"price":1000,"icon":"talismans/talisman_venir.png","desc":"Talismã: Talisman Venir."},
   "pendant_earth_dragon": {"id":"pendant_earth_dragon","name":"Pendant Earth Dragon","slot":"material","tier":1,"stack":99999,"price":800,"icon":"pendants/pendant_earth_dragon.png","desc":"Pingente: Pendant Earth Dragon."},
-  "pendant_fire_dragon": {"id":"pendant_fire_dragon","name":"Pendant Fire Dragon","slot":"material","tier":1,"stack":99999,"price":800,"icon":"pendants/pendant_fire_dragon.png","desc":"Pingente: Pendant Fire Dragon."}
+  "pendant_fire_dragon": {"id":"pendant_fire_dragon","name":"Pendant Fire Dragon","slot":"material","tier":1,"stack":99999,"price":800,"icon":"pendants/pendant_fire_dragon.png","desc":"Pingente: Pendant Fire Dragon."},
+  "ancient_spellbook_page": {"id":"ancient_spellbook_page","name":"Página de Livro Ancestral","slot":"material","tier":4,"stack":99999,"price":5000,"icon":"spellbooks/spellbook_4star.png","desc":"Página rara de pergaminho ancestral. Junte 10x para fabricar um Spellbook: 4-Star ⭐ na Forja."},
+  "zaken_shard": {"id":"zaken_shard","name":"Fragmento de Zaken","slot":"material","tier":4,"stack":99999,"price":10000,"icon":"materials/enria.png","desc":"Fragmento de lâmina amaldiçoada do Capitão Zaken. Utilizado no craft de Relíquias de Boss."},
+  "core_shard": {"id":"core_shard","name":"Fragmento do Core","slot":"material","tier":4,"stack":99999,"price":10000,"icon":"materials/asofe.png","desc":"Fragmento de núcleo mecânico do Boss Core. Utilizado no craft de Relíquias de Boss."},
+  "orfen_shard": {"id":"orfen_shard","name":"Fragmento de Orfen","slot":"material","tier":4,"stack":99999,"price":10000,"icon":"materials/thons.png","desc":"Fragmento de presas venenosas de Orfen. Utilizado no craft de Relíquias de Boss."},
+  "baium_shard": {"id":"baium_shard","name":"Fragmento de Baium","slot":"material","tier":4,"stack":99999,"price":15000,"icon":"materials/mold_hardener.png","desc":"Fragmento de cristal de vida do Imperador Baium. Utilizado no craft de Anéis Épicos."},
+  "magic_dark_heart": {"id":"magic_dark_heart","name":"Coração das Trevas Mágico","slot":"material","tier":4,"stack":99999,"price":50000,"icon":"materials/mold_glue.png","desc":"Coração radiante de magia sombria. Drop com 5% de chance dos Raid Bosses. Exigido em relíquias de Boss."},
+  "frost_fragment": {"id":"frost_fragment","name":"Fragmento Gelado","slot":"material","tier":5,"stack":99999,"price":20000,"icon":"materials/varnish.png","desc":"Fragmento de gelo eterno de Frost Lord Castle. Junte 100x para forjar Armas Frost Lord (TOP Tier)."},
+  "frost_lord_dark_heart": {"id":"frost_lord_dark_heart","name":"Coração de Frost Lord","slot":"material","tier":5,"stack":99999,"price":200000,"icon":"materials/mold_lubricant.png","desc":"Coração congelado de poder absoluto. Drop de 5% dos Unique Bosses de Frost Lord Castle (Respawn 3h-6h). Exigido para Armas Frost Lord TOP Tier!"}
 };
 
 if (typeof window !== 'undefined') {

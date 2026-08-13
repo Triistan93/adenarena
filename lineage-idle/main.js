@@ -37,6 +37,13 @@ import {
   calcSpForLevel,
   checkLevelUp as engineCheckLevelUp
 } from './src/engine/LevelEngine.js';
+
+import {
+  checkGradePenalty,
+  getPlayerTotalGradePenalty,
+  rollChampionMonster,
+  ZONE_GRADE_MULTIPLIERS
+} from './src/engine/BalanceEngine.js';
 // ─── Sprint 3: Importa serviços de Inventário, Equipamentos, Loja e Craft ──
 import {
   getMaxInventorySlots,

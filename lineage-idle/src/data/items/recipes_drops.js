@@ -1164,7 +1164,17 @@ export function generateAllCraftingRecipes(allItemsParam = null) {
 const STATIC_CRAFTING_RECIPES = {
   "weapon_composition_bow": { "id": "weapon_composition_bow", "level": 1, "gold": 250, "reqs": [{ "id": "iron_ore", "count": 10 }, { "id": "suede", "count": 5 }] },
   "armor_full_plate_heavy_armor": { "id": "armor_full_plate_heavy_armor", "level": 40, "gold": 5000, "reqs": [{ "id": "iron_ore", "count": 50 }, { "id": "crafted_leather", "count": 20 }, { "id": "steel", "count": 10 }] },
-  "armor_draconic_armor": { "id": "armor_draconic_armor", "level": 76, "gold": 50000, "reqs": [{ "id": "oriharukon_ore", "count": 100 }, { "id": "adamantite", "count": 50 }] }
+  "armor_draconic_armor": { "id": "armor_draconic_armor", "level": 76, "gold": 50000, "reqs": [{ "id": "oriharukon_ore", "count": 100 }, { "id": "adamantite", "count": 50 }] },
+  
+  // Crafts Especiais de Livros, Relíquias de Boss e Frost Lord TOP Tier
+  "spellbook_4star": { "id": "spellbook_4star", "level": 76, "craftLevel": 4, "gold": 500000, "reqs": [{ "id": "ancient_spellbook_page", "count": 10 }] },
+  "weapon_zaken_sword": { "id": "weapon_zaken_sword", "level": 76, "craftLevel": 5, "gold": 750000, "reqs": [{ "id": "zaken_shard", "count": 10 }, { "id": "magic_dark_heart", "count": 1 }] },
+  "weapon_core_bow": { "id": "weapon_core_bow", "level": 76, "craftLevel": 5, "gold": 750000, "reqs": [{ "id": "core_shard", "count": 10 }, { "id": "magic_dark_heart", "count": 1 }] },
+  "weapon_orfen_dagger": { "id": "weapon_orfen_dagger", "level": 76, "craftLevel": 5, "gold": 750000, "reqs": [{ "id": "orfen_shard", "count": 10 }, { "id": "magic_dark_heart", "count": 1 }] },
+  "jewel_baium_ring": { "id": "jewel_baium_ring", "level": 76, "craftLevel": 5, "gold": 1000000, "reqs": [{ "id": "baium_shard", "count": 10 }, { "id": "magic_dark_heart", "count": 1 }] },
+  "weapon_frost_lord_sword": { "id": "weapon_frost_lord_sword", "level": 76, "craftLevel": 6, "gold": 1500000, "reqs": [{ "id": "frost_fragment", "count": 100 }, { "id": "frost_lord_dark_heart", "count": 1 }] },
+  "weapon_frost_lord_bow": { "id": "weapon_frost_lord_bow", "level": 76, "craftLevel": 6, "gold": 1500000, "reqs": [{ "id": "frost_fragment", "count": 100 }, { "id": "frost_lord_dark_heart", "count": 1 }] },
+  "weapon_frost_lord_staff": { "id": "weapon_frost_lord_staff", "level": 76, "craftLevel": 6, "gold": 1500000, "reqs": [{ "id": "frost_fragment", "count": 100 }, { "id": "frost_lord_dark_heart", "count": 1 }] }
 };
 
 export const CRAFTING_RECIPES = new Proxy(STATIC_CRAFTING_RECIPES, {
@@ -1350,4 +1360,10 @@ export function getMysticRotation() {
 export function rollItemWithRarity(itemId, bonus = 0) {
   const rarity = rollRarity(bonus);
   return { itemId, rarity };
+}
+
+if (typeof window !== 'undefined') {
+  window.GameData = window.GameData || {};
+  window.GameData.CRAFTING_RECIPES = CRAFTING_RECIPES;
+  window.GameData.SHOP_INVENTORY = SHOP_INVENTORY;
 }

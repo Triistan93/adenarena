@@ -1003,6 +1003,19 @@ select:focus-visible {
   position: relative;
 }
 .equip-slot:hover { border-color: var(--gilt-deep); transform: translateX(2px); }
+.equip-slot.has-grade-penalty {
+  border: 1px solid #ef4444 !important;
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.4) inset !important;
+}
+.rarity-frost-lord {
+  border: 1px solid #38bdf8 !important;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.45) !important;
+  animation: frost-glow 2s infinite ease-in-out;
+}
+@keyframes frost-glow {
+  0%, 100% { box-shadow: 0 0 6px #38bdf8, 0 0 14px rgba(56,189,248,0.5); }
+  50%      { box-shadow: 0 0 14px #38bdf8, 0 0 24px rgba(56,189,248,0.95); }
+}
 .equip-slot::before {
   content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px;
   background: var(--gilt-deep); opacity: 0; transition: opacity .2s;

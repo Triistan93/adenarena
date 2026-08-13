@@ -1252,11 +1252,18 @@ export function updateEquipmentUI(state, callbacks = {}) {
 
     if (item && def) {
       const rarity = item.rarity || 'common';
-      slotEl.className = `equip-slot active rarity-${rarity}`;
+      const gradeKey = def.grade || def.tierGrade || (def.tier === 6 ? 'frostlord' : (def.tier === 5 ? 'boss' : (def.tier === 4 ? 's' : (def.tier === 3 ? 'a' : (def.tier === 2 ? 'b' : (def.tier === 1 ? 'd' : 'ng'))))));
+      const penaltyCheck = (typeof window !== 'undefined' && window.BalanceEngine) ? window.BalanceEngine.checkGradePenalty(state.level || 1, gradeKey) : { hasPenalty: false };
+
+      let slotClasses = `equip-slot active rarity-${rarity}`;
+      if (penaltyCheck.hasPenalty) slotClasses += ' has-grade-penalty';
+
+      slotEl.className = slotClasses;
       slotEl.dataset.uid = uid;
       slotEl.dataset.slot = slot;
 
-      slotEl.innerHTML = `<span class="equip-icon">${getItemIcon(def || item)}</span>`;
+      const penaltyBadge = penaltyCheck.hasPenalty ? `<span class="grade-penalty-badge" style="position:absolute; top:-3px; right:-3px; background:#dc2626; color:#fff; font-size:8px; padding:1px 2px; border-radius:2px; font-weight:bold; box-shadow:0 0 4px #000;" title="${penaltyCheck.reason}">⚠️</span>` : '';
+      slotEl.innerHTML = `${penaltyBadge}<span class="equip-icon">${getItemIcon(def || item)}</span>`;
 
       slotEl.onmouseenter = (e) => showItemTooltip(e, item, state, callbacks);
       slotEl.onmouseleave = () => hideItemTooltip();
