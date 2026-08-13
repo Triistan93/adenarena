@@ -36,3 +36,10 @@ export const ARMOR_SETS = {
   "draconic_set": {"name":"Draconic","fullPieceCount":4,"pieces":{"armor":"armor_draconic_armor","helmet":"armor_draconic_helmet","boots":"armor_draconic_boots","gloves":"armor_draconic_gloves"},"bonuses":{"2":{"atk":130,"crit":8},"3":{"speed":15,"eva":12},"4":{"atk":300,"crit":15,"eva":25,"speed":25,"primary":{"dex":6,"str":5}}}},
   "major_arcana_set": {"name":"Major Arcana","fullPieceCount":4,"pieces":{"armor":"armor_major_arcana_robe","helmet":"armor_major_arcana_robe_helmet","boots":"armor_major_arcana_robe_boots","gloves":"armor_major_arcana_robe_gloves"},"bonuses":{"2":{"matk":140,"mdef":120},"3":{"mp":500,"speed":12},"4":{"matk":320,"mdef":280,"mp":800,"primary":{"wit":6,"int":5}}}}
 };
+
+if (typeof window !== 'undefined') {
+  window.GameData = window.GameData || {};
+  window.GameData.ARMOR_SETS = ARMOR_SETS;
+  window.GameData.RARITY = RARITY;
+  window.GameData.SLOT = SLOT;
+}
