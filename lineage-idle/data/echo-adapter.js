@@ -215,6 +215,26 @@ function buildEchoAdapter() {
         }
       }
 
+      let skillIcon = sk.icon || '';
+      if (!skillIcon || skillIcon === '✦' || skillIcon.length <= 4) {
+        const sName = (rawName || '').toLowerCase();
+        const sDesc = (sk.desc || sk.effect || '').toLowerCase();
+
+        if (/fire|flame|burn|blaze|prominence|burst/.test(sName + sDesc)) {
+          skillIcon = 'assets/skills/fire_strike.jpg';
+        } else if (/water|hydro|aqua|ice|freeze|frost|ocean/.test(sName + sDesc)) {
+          skillIcon = 'assets/skills/water_wave.jpg';
+        } else if (/wind|gale|air|cyclone|storm|typhoon|breeze/.test(sName + sDesc)) {
+          skillIcon = 'assets/skills/wind_blade.jpg';
+        } else if (/holy|light|sacred|divine|aegis|shield|bless|templar/.test(sName + sDesc)) {
+          skillIcon = 'assets/skills/holy_shield.jpg';
+        } else if (/vampiric|blood|drain|dark|shadow|curse|rose/.test(sName + sDesc)) {
+          skillIcon = 'assets/skills/vampiric_blood.jpg';
+        } else {
+          skillIcon = 'assets/skills/fire_strike.jpg';
+        }
+      }
+
       SKILL_DEFS_ECHO[skillId] = {
         id:                   skillId,
         name:                 rawName,
@@ -228,7 +248,7 @@ function buildEchoAdapter() {
         info:                 sk.desc || sk.effect || rawName,
         desc:                 sk.desc || '',
         effectText:           sk.effect || '',
-        icon:                 sk.icon || '',
+        icon:                 skillIcon,
         classReq:             classId,
         reqLvl:               tier * 20,
         requiredWeapon:       reqWeapon,

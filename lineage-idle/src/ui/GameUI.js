@@ -1853,10 +1853,16 @@ export function updateSkillUI(state, callbacks = {}) {
       badgeHtml = `<span style="position:absolute; top:-6px; right:-4px; background:#f59e0b; color:#000; font-size:9px; padding:1px 3px; border-radius:3px; font-weight:bold; box-shadow:0 0 6px #f59e0b; animation:pulse 1.2s infinite;">⭐ Livro OK</span>`;
     }
 
+    const iconVal = def.icon || '✦';
+    const isIconImg = iconVal.endsWith('.jpg') || iconVal.endsWith('.png') || iconVal.includes('/');
+    const iconHtml = isIconImg 
+      ? `<img src="${iconVal}" class="skill-icon-img" alt="${def.name}" style="width:24px; height:24px; object-fit:cover; border-radius:4px; border:1px solid rgba(255,255,255,0.2);" />` 
+      : `<span class="skill-icon">${iconVal}</span>`;
+
     node.innerHTML = `
       ${badgeHtml}
       <button class="${btnClass}" data-skill="${id}">
-        <span class="skill-icon">${def.icon || '✦'}</span>
+        ${iconHtml}
         <span class="skill-name">${def.name}</span>
         <span class="skill-lvl-num">${lvl}/${max}</span>
       </button>
