@@ -101,3 +101,8 @@ export const MATERIALS = {
   "pendant_earth_dragon": {"id":"pendant_earth_dragon","name":"Pendant Earth Dragon","slot":"material","tier":1,"stack":99999,"price":800,"icon":"pendants/pendant_earth_dragon.png","desc":"Pingente: Pendant Earth Dragon."},
   "pendant_fire_dragon": {"id":"pendant_fire_dragon","name":"Pendant Fire Dragon","slot":"material","tier":1,"stack":99999,"price":800,"icon":"pendants/pendant_fire_dragon.png","desc":"Pingente: Pendant Fire Dragon."}
 };
+
+if (typeof window !== 'undefined') {
+  window.GameData = window.GameData || {};
+  window.GameData.CONSUMABLES = CONSUMABLES;
+}

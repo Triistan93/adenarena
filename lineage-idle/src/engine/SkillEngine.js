@@ -156,7 +156,8 @@ export function canCastSkillWeapon(state, skillDef) {
   if (skillDef.requiredWeapon && skillDef.requiredWeapon !== 'any') {
     const wpnUid = state.equipment?.weapon;
     const wpnItem = wpnUid ? state.inventory?.find(i => i.uid === wpnUid) : null;
-    const allItems = (typeof window !== 'undefined' && window.GameData) ? window.GameData.ALL_ITEMS : {};
+    const gData = (typeof window !== 'undefined' && window.GameData) ? window.GameData : {};
+    const allItems = gData.ALL_ITEMS || {};
     const itemDef = (wpnItem?.itemId && allItems[wpnItem.itemId]) || wpnItem || {};
 
     const s = `${itemDef.id || wpnItem?.itemId || ''} ${itemDef.name || wpnItem?.name || ''}`.toLowerCase();
