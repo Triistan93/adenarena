@@ -421,6 +421,14 @@ export function showItemTooltip(arg1, arg2, state, callbacks = {}) {
     ? `<span style="color:${gradeColor};font-size:10px;font-weight:700;border:1px solid ${gradeColor}40;padding:1px 6px;border-radius:3px;background:rgba(0,0,0,0.3);margin-left:6px;">${gradeLabel}</span>`
     : '';
 
+  const penaltyCheck = (typeof window !== 'undefined' && window.BalanceEngine)
+    ? window.BalanceEngine.checkGradePenalty(state?.level || 1, def)
+    : { hasPenalty: false };
+
+  const penaltyWarningHtml = penaltyCheck.hasPenalty
+    ? `<div style="color:#ef4444; font-size:10px; font-weight:bold; margin-top:4px; padding:3px 6px; background:rgba(239,68,68,0.18); border:1px solid #ef4444; border-radius:3px; box-shadow:0 0 6px rgba(239,68,68,0.3);">⚠️ ${penaltyCheck.reason}</div>`
+    : '';
+
   const PROTECTED_SLOTS = ['consumable', 'material', 'scroll', 'powerup', 'potion', 'food', 'spellbook', 'talisman', 'pendant', 'coin'];
   const isProtected = PROTECTED_SLOTS.includes((def.slot || '').toLowerCase()) || !!def.stack;
   const protectionBadge = isProtected
@@ -434,6 +442,7 @@ export function showItemTooltip(arg1, arg2, state, callbacks = {}) {
     </div>
     <div style="color:${rarityColor};font-size:11px;font-weight:600;margin-bottom:2px;">${rarityName}</div>
     <div style="color:#888;font-size:10px;text-transform:uppercase;margin-bottom:4px;">${def.slot ? def.slot.toUpperCase() : 'ITEM'}${def.req?.level ? ` · Req Lv.${def.req.level}` : ''}</div>
+    ${penaltyWarningHtml}
     ${statsStr}
     ${affixesStr}
     ${setBonusStr}
@@ -1252,8 +1261,7 @@ export function updateEquipmentUI(state, callbacks = {}) {
 
     if (item && def) {
       const rarity = item.rarity || 'common';
-      const gradeKey = def.grade || def.tierGrade || (def.tier === 6 ? 'frostlord' : (def.tier === 5 ? 'boss' : (def.tier === 4 ? 's' : (def.tier === 3 ? 'a' : (def.tier === 2 ? 'b' : (def.tier === 1 ? 'd' : 'ng'))))));
-      const penaltyCheck = (typeof window !== 'undefined' && window.BalanceEngine) ? window.BalanceEngine.checkGradePenalty(state.level || 1, gradeKey) : { hasPenalty: false };
+      const penaltyCheck = (typeof window !== 'undefined' && window.BalanceEngine) ? window.BalanceEngine.checkGradePenalty(state.level || 1, def || item) : { hasPenalty: false };
 
       let slotClasses = `equip-slot active rarity-${rarity}`;
       if (penaltyCheck.hasPenalty) slotClasses += ' has-grade-penalty';

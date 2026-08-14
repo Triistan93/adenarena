@@ -10,13 +10,17 @@
 
 export const GRADE_REQUIREMENTS = {
   ng: 1,
+  nograde: 1,
+  none: 1,
   d: 20,
   c: 40,
   b: 52,
-  a: 61,
-  s: 76,
-  boss: 76,
-  frostlord: 76
+  a: 62,
+  s: 62,
+  special: 80,
+  boss: 80,
+  frostlord: 85,
+  frost: 85
 };
 
 export const ZONE_GRADE_MULTIPLIERS = {
@@ -30,14 +34,74 @@ export const ZONE_GRADE_MULTIPLIERS = {
 };
 
 /**
+ * Identifica o Grau exato de um item de acordo com suas propriedades e descrição.
+ * @param {Object} itemDef
+ * @returns {string} — 'ng', 'd', 'c', 'b', 'a', 's', 'boss', 'frostlord'
+ */
+export function getItemGrade(itemDef) {
+  if (!itemDef) return 'ng';
+
+  // 1. Grau explícito
+  const explicitGrade = String(itemDef.grade || itemDef.tierGrade || '').toLowerCase();
+  if (explicitGrade === 'none' || explicitGrade === 'no grade' || explicitGrade === 'nograde' || explicitGrade === 'ng') return 'ng';
+  if (explicitGrade === 'd') return 'd';
+  if (explicitGrade === 'c') return 'c';
+  if (explicitGrade === 'b') return 'b';
+  if (explicitGrade === 'a') return 'a';
+  if (explicitGrade === 's') return 's';
+  if (explicitGrade === 'boss' || explicitGrade === 'special') return 'boss';
+  if (explicitGrade === 'frostlord' || explicitGrade === 'frost') return 'frostlord';
+
+  // 2. Inspecção por descrição e ícone
+  const desc = String(itemDef.desc || itemDef.info || itemDef.name || '').toLowerCase();
+  const icon = String(itemDef.icon || '').toLowerCase();
+
+  if (desc.includes('no grade') || desc.includes('(no grade)') || icon.includes('nograde/')) return 'ng';
+  if (desc.includes('frost lord') || icon.includes('frost_lord')) return 'frostlord';
+  if (desc.includes('(special') || desc.includes('(boss') || icon.includes('gradespecial/')) return 'boss';
+  if (desc.includes('(s grade)') || icon.includes('grades/')) return 's';
+  if (desc.includes('(a grade)') || icon.includes('gradea/')) return 'a';
+  if (desc.includes('(b grade)') || icon.includes('gradeb/')) return 'b';
+  if (desc.includes('(c grade)') || icon.includes('gradec/')) return 'c';
+  if (desc.includes('(d grade)') || icon.includes('graded/')) return 'd';
+
+  // 3. Fallback baseado em Tier e Nível Requerido:
+  // Tier 1 = No Grade (Lv 1-19)
+  // Tier 2 = D Grade (Lv 20-39)
+  // Tier 3 = C Grade (Lv 40-51)
+  // Tier 4 = B Grade (Lv 52-61)
+  // Tier 5 = S Grade (Lv 62-79)
+  // Tier 6 = Special / Boss / Frost Lord (Lv 80+)
+  const tier = Number(itemDef.tier) || 0;
+  const reqLvl = Number(itemDef.req?.level || itemDef.reqLvl || 0);
+
+  if (tier === 1 || reqLvl < 20) return 'ng';
+  if (tier === 2 || (reqLvl >= 20 && reqLvl < 40)) return 'd';
+  if (tier === 3 || (reqLvl >= 40 && reqLvl < 52)) return 'c';
+  if (tier === 4 || (reqLvl >= 52 && reqLvl < 62)) return 'b';
+  if (reqLvl >= 80 && reqLvl < 85) return 'boss';
+  if (tier >= 6 || reqLvl >= 85) return 'frostlord';
+  if (tier === 5 || reqLvl >= 62) return 's';
+
+  return 'ng';
+}
+
+/**
  * Verifica se o jogador sofre Penalidade de Grau pelo equipamento equipado.
  * @param {number} playerLevel
- * @param {string} itemGrade — 'ng', 'd', 'c', 'b', 'a', 's', 'boss', 'frostlord'
+ * @param {string|Object} itemOrGrade — 'ng', 'd', 'c', 'b', 's', 'boss', 'frostlord' ou itemDef
  * @returns {{ hasPenalty: boolean, reason?: string, minLvl?: number }}
  */
-export function checkGradePenalty(playerLevel, itemGrade) {
-  if (!itemGrade || itemGrade === 'ng') return { hasPenalty: false };
-  const gradeKey = String(itemGrade).toLowerCase();
+export function checkGradePenalty(playerLevel, itemOrGrade) {
+  let gradeKey = 'ng';
+  if (typeof itemOrGrade === 'object' && itemOrGrade !== null) {
+    gradeKey = getItemGrade(itemOrGrade);
+  } else {
+    gradeKey = String(itemOrGrade || 'ng').toLowerCase();
+  }
+
+  if (gradeKey === 'ng' || gradeKey === 'nograde' || gradeKey === 'none') return { hasPenalty: false };
+
   const minLvl = GRADE_REQUIREMENTS[gradeKey] || 1;
   if ((playerLevel || 1) < minLvl) {
     return {
@@ -65,9 +129,7 @@ export function getPlayerTotalGradePenalty(state) {
     if (!itemUid) continue;
     const invItem = state.inventory?.find(i => i.uid === itemUid);
     if (!invItem) continue;
-    const itemDef = allItems[invItem.itemId] || invItem;
-    const grade = itemDef.grade || itemDef.tierGrade || 'ng';
-    const check = checkGradePenalty(state.level || 1, grade);
+    const check = checkGradePenalty(state.level || 1, itemDef);
     if (check.hasPenalty) {
       count++;
     }
@@ -142,6 +204,7 @@ if (typeof window !== 'undefined') {
   window.BalanceEngine = {
     GRADE_REQUIREMENTS,
     ZONE_GRADE_MULTIPLIERS,
+    getItemGrade,
     checkGradePenalty,
     getPlayerTotalGradePenalty,
     calcPhysicalDamage,

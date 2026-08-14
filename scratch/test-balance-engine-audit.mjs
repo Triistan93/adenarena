@@ -47,14 +47,16 @@ let passedChecks = 0;
 console.log('--- TESTE 1: Validação de Grade Penalty por Nível ---');
 const penaltyLowLvl = balanceEngine.checkGradePenalty(20, 's');
 const penaltyOkLvl = balanceEngine.checkGradePenalty(76, 's');
+const penaltyNoGradeLvl1 = balanceEngine.checkGradePenalty(1, { id: 'armor_bronze_helmet', name: 'Bronze Helmet', tier: 1, desc: 'Bronze Helmet (No Grade).' });
 
-if (penaltyLowLvl.hasPenalty && !penaltyOkLvl.hasPenalty) {
+if (penaltyLowLvl.hasPenalty && !penaltyOkLvl.hasPenalty && !penaltyNoGradeLvl1.hasPenalty) {
   console.log('✓ Grade Penalty funcionando corretamente:');
+  console.log(`  └ Nível 1 com Item No-Grade (Bronze Helmet): ${!penaltyNoGradeLvl1.hasPenalty ? 'PERMITIDO SEM PENALIDADE ✓' : 'ERRO ❌'}`);
   console.log(`  └ Nível 20 com Item S-Grade: ${penaltyLowLvl.hasPenalty ? 'APLICOU PENALIDADE ✓ (' + penaltyLowLvl.reason + ')' : 'ERRO ❌'}`);
   console.log(`  └ Nível 76 com Item S-Grade: ${!penaltyOkLvl.hasPenalty ? 'PERMITIDO SEM PENALIDADE ✓' : 'ERRO ❌'}`);
   passedChecks++;
 } else {
-  errors.push(`Falha no cálculo de Grade Penalty: LowLvl=${penaltyLowLvl.hasPenalty}, OkLvl=${penaltyOkLvl.hasPenalty}`);
+  errors.push(`Falha no cálculo de Grade Penalty: LowLvl=${penaltyLowLvl.hasPenalty}, OkLvl=${penaltyOkLvl.hasPenalty}, NoGradeLvl1=${penaltyNoGradeLvl1.hasPenalty}`);
 }
 
 // Test 2: Validate Damage Formulas

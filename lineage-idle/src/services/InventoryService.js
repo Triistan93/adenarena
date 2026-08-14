@@ -73,18 +73,25 @@ export function isEquipmentItem(def) {
   return EQUIP_SLOTS.includes(slot);
 }
 
+import { getItemGrade as balanceGetItemGrade } from '../engine/BalanceEngine.js';
+
 /**
- * Retorna o Grade do item baseado no nível requerido.
- * @param {number} lvl
- * @returns {string}
+ * Retorna o Grade do item baseado na definição do item ou nível.
+ * @param {number|Object} itemOrLvl
+ * @returns {string} — 'ng', 'd', 'c', 'b', 's', 'boss', 'frostlord'
  */
-export function getItemGrade(lvl) {
-  if (!lvl || lvl < 20) return 'No Grade';
-  if (lvl < 40) return 'D Grade';
-  if (lvl < 52) return 'C Grade';
-  if (lvl < 62) return 'B Grade';
-  if (lvl < 76) return 'A Grade';
-  return 'S Grade';
+export function getItemGrade(itemOrLvl) {
+  if (typeof itemOrLvl === 'object' && itemOrLvl !== null) {
+    return balanceGetItemGrade(itemOrLvl);
+  }
+  const lvl = Number(itemOrLvl) || 0;
+  if (!lvl || lvl < 20) return 'ng';
+  if (lvl < 40) return 'd';
+  if (lvl < 52) return 'c';
+  if (lvl < 62) return 'b';
+  if (lvl < 80) return 's';
+  if (lvl < 85) return 'boss';
+  return 'frostlord';
 }
 
 /**
