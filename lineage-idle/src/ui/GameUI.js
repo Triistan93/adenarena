@@ -1820,6 +1820,7 @@ export function updateSkillUI(state, callbacks = {}) {
     if (!def) continue;
     const p = pos[id];
     if (!p) continue;
+    const node = mkEl('div');
     const lvl = state.skills[id] || 0;
     const max = def.max || def.maxLevel || 5;
 
