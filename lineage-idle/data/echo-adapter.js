@@ -186,7 +186,7 @@ function buildEchoAdapter() {
       let reqWeapon = sk.requiredWeapon || null;
       let reqShield = sk.requiredShield || false;
       const isUltimate = (sk.rarity === '4★' || tier === 3);
-      const reqItem = (sk.rarity === '4★') ? 'spellbook_4star' : (sk.requiredItemToUnlock || null);
+      const reqItem = (sk.rarity === '4★') ? 'spellbook_4star' : null;
 
       if (!reqWeapon) {
         const arch = (classDef.archetype || classId || '').toLowerCase();

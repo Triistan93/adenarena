@@ -1828,8 +1828,8 @@ export function updateSkillUI(state, callbacks = {}) {
     const wpnCheck = (typeof canCastSkillWeapon === 'function') ? canCastSkillWeapon(state, def) : { ok: true };
     const isWpnBlocked = !wpnCheck.ok;
 
-    // Check 4-Star Ultimate Book Unlock Requirement
-    const bookReq = def.requiredItemToUnlock || (def.starRank === 4 ? 'spellbook_4star' : null);
+    // Check 4-Star Ultimate Book Unlock Requirement (Apenas Ultimates 4★ exigem Livro Ancestral)
+    const bookReq = (def.starRank === 4 || def.isUltimate) ? 'spellbook_4star' : null;
     const hasBook = bookReq ? state.inventory?.some(i => i.itemId === bookReq && (i.count || 1) > 0) : true;
     const isBookLocked = bookReq && lvl === 0 && !hasBook;
 

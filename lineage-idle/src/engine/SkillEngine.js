@@ -78,16 +78,16 @@ export function spendSP(state, skillId, callbacks = {}) {
     return false;
   }
 
-  // Requisito de livro de habilidade (Spellbook) em Essence para skills de estrela (1-Star a 4-Star)
-  if (def.starRank && def.starRank > 0 && lvl === 0) {
-    const bookId = `spellbook_${def.starRank}star`;
+  // Requisito de livro de habilidade (Spellbook 4★) EXCLUSIVAMENTE para Ultimates 4-Star ⭐
+  if (def.starRank === 4 && lvl === 0) {
+    const bookId = 'spellbook_4star';
     const bookItem = state.inventory?.find(i => i.itemId === bookId && (i.count || 1) > 0);
     if (!bookItem) {
-      if (callbacks.log) callbacks.log(`⭐ Exige o livro de habilidade Spellbook: ${def.starRank}-Star ⭐ no mercador ou mochila para aprender!`, 'system');
+      if (callbacks.log) callbacks.log(`⭐ Exige o Livro Spellbook 4-Star ⭐ para aprender esta habilidade Ultimate! (Fabrique na Forja com 10x Páginas Ancestrais)`, 'system');
       return false;
     }
     if (callbacks.removeFromInventory) callbacks.removeFromInventory(bookItem.uid, 1);
-    if (callbacks.log) callbacks.log(`📖 Livro Spellbook: ${def.starRank}-Star ⭐ consumido com sucesso!`, 'rarity-legendary');
+    if (callbacks.log) callbacks.log(`📖 Livro Spellbook: 4-Star ⭐ consumido com sucesso! Ultimate aprendida!`, 'rarity-legendary');
   }
 
   const reqs = (typeof window !== 'undefined' && window.EchoData) ? window.EchoData.SKILL_REQS_ECHO[skillId] : D()?.SKILL_REQS?.[skillId];
