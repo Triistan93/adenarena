@@ -2464,28 +2464,36 @@ skills: [
 
   // Warg (Human Beast Fighter)
   wargBase: {
-    name: 'Warg', parent: 'fighter', race: 'human', archetype: 'fighter', stage: 0,
+    name: 'Warg', parent: null, race: 'human', archetype: 'fighter', stage: 0,
     base: { atk: 26, def: 12, hp: 120, mp: 40, eva: 8, crit: 8, mdef: 8 },
     skills: [
-      { name: "Beast Claw",    type: "Ativo",   rarity: "1★", effect: "Dano físico 150% com garras ferrenhas", cooldown: "7s" },
-      { name: "Feral Instinct", type: "Passivo", rarity: "1★", effect: "+10% ATK e +8% Precisão", cooldown: null },
-      { name: "Beast Vitality", type: "Passivo", rarity: "1★", effect: "+15% Max HP e +10% Regeneração", cooldown: null }
+      { name: "Beast Claw",                 type: "Ativo",     rarity: "1★", effect: "Dano físico 150% com garras ferrenhas", cooldown: "6s" },
+      { name: "Feral Strike",               type: "Ativo",     rarity: "1★", effect: "Dano físico 190% + sangramento 3s", cooldown: "8s" },
+      { name: "Beast Howl",                 type: "Self-Buff", rarity: "2★", effect: "+20% ATK, +15% Atk Speed 60s", cooldown: "45s" },
+      { name: "Ancestral Wolf Transformation", type: "Self-Buff", rarity: "4★", effect: "Transformação: +50% ATK, +40% Crit Dmg por 60s", cooldown: "90s" },
+      { name: "Vampiric Feral Bite",        type: "Ativo",     rarity: "3★", effect: "Mordida vampírica 220% + recupera 35% do dano em HP", cooldown: "14s" }
     ]
   },
   wargS1: {
     name: 'Warg', parent: 'wargBase', race: 'human', archetype: 'fighter', stage: 1,
     base: { atk: 34, def: 18, hp: 220, mp: 60, eva: 12, crit: 12, mdef: 14 },
     skills: [
-      { name: "Feral Strike", type: "Ativo", rarity: "1★", effect: "Dano físico 190% + sangramento 3s", cooldown: "8s" },
-      { name: "Beast Howl",   type: "Self-Buff", rarity: "2★", effect: "+20% ATK, +15% Atk Speed 60s", cooldown: "45s" }
+      { name: "Beast Claw",                 type: "Ativo",     rarity: "1★", effect: "Dano físico 170% com garras ferrenhas", cooldown: "6s" },
+      { name: "Feral Strike",               type: "Ativo",     rarity: "1★", effect: "Dano físico 210% + sangramento 3s", cooldown: "8s" },
+      { name: "Beast Howl",                 type: "Self-Buff", rarity: "2★", effect: "+25% ATK, +20% Atk Speed 60s", cooldown: "45s" },
+      { name: "Ancestral Wolf Transformation", type: "Self-Buff", rarity: "4★", effect: "Transformação: +50% ATK, +40% Crit Dmg por 60s", cooldown: "90s" },
+      { name: "Vampiric Feral Bite",        type: "Ativo",     rarity: "3★", effect: "Mordida vampírica 240% + recupera 40% do dano em HP", cooldown: "14s" }
     ]
   },
   wargS2: {
     name: 'Warg', parent: 'wargS1', race: 'human', archetype: 'fighter', stage: 2,
     base: { atk: 68, def: 32, hp: 440, mp: 90, eva: 18, crit: 18, mdef: 28 },
     skills: [
-      { name: "Wolf Pack Rush", type: "Ativo", rarity: "2★", effect: "Dano físico 280% + stun 3s", cooldown: "14s" },
-      { name: "Warg Fury",      type: "Self-Buff", rarity: "3★", effect: "+35% ATK, +25% Crit Rate 120s", cooldown: "60s" }
+      { name: "Beast Claw",                 type: "Ativo",     rarity: "2★", effect: "Dano físico 220% com garras afiadas", cooldown: "6s" },
+      { name: "Wolf Pack Rush",             type: "Ativo",     rarity: "2★", effect: "Dano físico 280% + stun 3s", cooldown: "12s" },
+      { name: "Beast Howl",                 type: "Self-Buff", rarity: "2★", effect: "+30% ATK, +20% Atk Speed 60s", cooldown: "45s" },
+      { name: "Ancestral Wolf Transformation", type: "Self-Buff", rarity: "4★", effect: "Transformação: +55% ATK, +40% Crit Dmg por 60s", cooldown: "90s" },
+      { name: "Vampiric Feral Bite",        type: "Ativo",     rarity: "3★", effect: "Mordida vampírica 260% + recupera 40% do dano em HP", cooldown: "14s" }
     ]
   },
   wargS3: {
@@ -2493,19 +2501,23 @@ skills: [
     desc: 'Warg — guerreiro feral com transformação em lobo ancestral.',
     base: { atk: 138, def: 64, hp: 850, mp: 130, eva: 28, crit: 30, mdef: 55 },
     skills: [
-      { name: "Ancestral Wolf Transformation", type: "Ativo", rarity: "4★", effect: "Transformação: +60% ATK, +40% Crit Dmg por 40s", cooldown: "90s" },
-      { name: "Feral Slaughter",              type: "Ativo", rarity: "4★", effect: "Dano físico 750% + sangramento massivo", cooldown: "120s" },
-      { name: "Warg Harmony",                  type: "Self-Buff", rarity: "4★", effect: "+55% ATK, +35% Crit Rate por 30 min", cooldown: "90 min" }
+      { name: "Beast Claw",                 type: "Ativo",     rarity: "2★", effect: "Dano físico 260% com garras ancestrais", cooldown: "6s" },
+      { name: "Wolf Pack Rush",             type: "Ativo",     rarity: "3★", effect: "Investida brutal 360% + atordoa por 3s", cooldown: "12s" },
+      { name: "Beast Howl",                 type: "Self-Buff", rarity: "3★", effect: "+35% ATK, +25% Atk Speed por 120s", cooldown: "45s" },
+      { name: "Ancestral Wolf Transformation", type: "Self-Buff", rarity: "4★", effect: "Transformação em Lobo Ancestral: +60% ATK, +45% Crit Dmg por 60s", cooldown: "90s" },
+      { name: "Vampiric Feral Bite",        type: "Ativo",     rarity: "4★", effect: "Mordida vampírica 320% + recupera 50% do dano em HP", cooldown: "14s" }
     ]
   },
   warg: {
-    name: 'Warg', parent: 'wargS2', race: 'human', archetype: 'fighter', stage: 3,
-    desc: 'Warg — guerreiro feral com transformação em lobo ancestral.',
+    name: 'Warg', parent: null, race: 'human', archetype: 'fighter', stage: 3,
+    desc: 'Warg — guerreiro feral com transformação em lobo ancestral e vampirismo feral.',
     base: { atk: 138, def: 64, hp: 850, mp: 130, eva: 28, crit: 30, mdef: 55 },
     skills: [
-      { name: "Ancestral Wolf Transformation", type: "Ativo", rarity: "4★", effect: "Transformação: +60% ATK, +40% Crit Dmg por 40s", cooldown: "90s" },
-      { name: "Feral Slaughter",              type: "Ativo", rarity: "4★", effect: "Dano físico 750% + sangramento massivo", cooldown: "120s" },
-      { name: "Warg Harmony",                  type: "Self-Buff", rarity: "4★", effect: "+55% ATK, +35% Crit Rate por 30 min", cooldown: "90 min" }
+      { name: "Beast Claw",                 type: "Ativo",     rarity: "2★", effect: "Dano físico 260% com garras ancestrais", cooldown: "6s" },
+      { name: "Wolf Pack Rush",             type: "Ativo",     rarity: "3★", effect: "Investida brutal 360% + atordoa por 3s", cooldown: "12s" },
+      { name: "Beast Howl",                 type: "Self-Buff", rarity: "3★", effect: "+35% ATK, +25% Atk Speed por 120s", cooldown: "45s" },
+      { name: "Ancestral Wolf Transformation", type: "Self-Buff", rarity: "4★", effect: "Transformação em Lobo Ancestral: +60% ATK, +45% Crit Dmg por 60s", cooldown: "90s" },
+      { name: "Vampiric Feral Bite",        type: "Ativo",     rarity: "4★", effect: "Mordida vampírica 320% + recupera 50% do dano em HP", cooldown: "14s" }
     ]
   },
 

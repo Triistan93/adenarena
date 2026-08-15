@@ -5,7 +5,7 @@ globalThis.window.GameData = {};
 
 await import('../lineage-idle/data/echo-adapter.js');
 
-console.log('🧪 VERIFICANDO ARVORES GERADAS PELO ECHO-ADAPTER...\n');
+console.log('🧪 VERIFICANDO ARVORES GERADAS PELO ECHO-ADAPTER (PADRÃO 5 SKILLS: 2 DANO, 2 BUFFS, 1 SUSTENTAÇÃO)...\n');
 
 const E = globalThis.window.EchoData;
 const defs = E.SKILL_DEFS_ECHO;
@@ -28,53 +28,45 @@ function assert(condition, name) {
   }
 }
 
-// 1. Orc Raider & Orc Rider
+// 1. Warg
+const wargSkills = classSkills['warg'] || [];
+assert(wargSkills.length === 5, `Warg possui exatamente 5 skills (Atual: ${wargSkills.length})`);
+console.log(`   Skills do Warg:`, wargSkills.map(id => `"${defs[id]?.name}" [Tier ${defs[id]?.tier}]`).join(', '));
+
+// 2. Orc Raider & Orc Rider
 const orcRaiderSkills = classSkills['orcRaider'] || [];
-const raiderSkills = classSkills['raider'] || [];
 const orcRiderSkills = classSkills['orcRider'] || [];
-const vanguardSkills = classSkills['vanguardRider'] || [];
+assert(orcRaiderSkills.length === 5, `orcRaider possui exatamente 5 skills (Atual: ${orcRaiderSkills.length})`);
+assert(orcRiderSkills.length === 5, `orcRider possui exatamente 5 skills (Atual: ${orcRiderSkills.length})`);
 
-assert(orcRaiderSkills.length > 0, `orcRaider possui ${orcRaiderSkills.length} skills na árvore`);
-assert(raiderSkills.length > 0, `raider possui ${raiderSkills.length} skills na árvore`);
-assert(orcRiderSkills.length > 0, `orcRider possui ${orcRiderSkills.length} skills na árvore`);
-assert(vanguardSkills.length > 0, `vanguardRider possui ${vanguardSkills.length} skills na árvore`);
-
-// 2. Dark Elf
+// 3. Dark Elf & Assassin
 const darkFighterSkills = classSkills['darkFighter'] || [];
-const darkMageSkills = classSkills['darkMage'] || [];
 const assassinSkills = classSkills['assassin'] || [];
+assert(darkFighterSkills.length === 5, `darkFighter possui exatamente 5 skills (Atual: ${darkFighterSkills.length})`);
+assert(assassinSkills.length === 5, `assassin possui exatamente 5 skills (Atual: ${assassinSkills.length})`);
 
-assert(darkFighterSkills.length > 0, `darkFighter possui ${darkFighterSkills.length} skills na árvore`);
-assert(darkMageSkills.length > 0, `darkMage possui ${darkMageSkills.length} skills na árvore`);
-assert(assassinSkills.length > 0, `assassin possui ${assassinSkills.length} skills na árvore`);
-
-// 3. Dwarf
+// 4. Dwarf
 const artisanSkills = classSkills['artisan'] || [];
 const scavengerSkills = classSkills['scavenger'] || [];
+assert(artisanSkills.length === 5, `artisan possui exatamente 5 skills (Atual: ${artisanSkills.length})`);
+assert(scavengerSkills.length === 5, `scavenger possui exatamente 5 skills (Atual: ${scavengerSkills.length})`);
 
-assert(artisanSkills.length > 0, `artisan possui ${artisanSkills.length} skills na árvore`);
-assert(scavengerSkills.length > 0, `scavenger possui ${scavengerSkills.length} skills na árvore`);
-
-// 4. High Elf & Ertheia
-const spiritMasterSkills = classSkills['spiritMaster'] || [];
+// 5. High Elf & Ertheia
 const divineTemplarSkills = classSkills['divineTemplar'] || [];
 const ertheiaFighterSkills = classSkills['ertheiaFighter'] || [];
-const ertheiaMageSkills = classSkills['ertheiaMage'] || [];
+assert(divineTemplarSkills.length === 5, `divineTemplar possui exatamente 5 skills (Atual: ${divineTemplarSkills.length})`);
+assert(ertheiaFighterSkills.length === 5, `ertheiaFighter possui exatamente 5 skills (Atual: ${ertheiaFighterSkills.length})`);
 
-assert(spiritMasterSkills.length > 0, `spiritMaster possui ${spiritMasterSkills.length} skills na árvore`);
-assert(divineTemplarSkills.length > 0, `divineTemplar possui ${divineTemplarSkills.length} skills na árvore`);
-assert(ertheiaFighterSkills.length > 0, `ertheiaFighter possui ${ertheiaFighterSkills.length} skills na árvore`);
-assert(ertheiaMageSkills.length > 0, `ertheiaMage possui ${ertheiaMageSkills.length} skills na árvore`);
-
-// 5. Verificar TODAS as classes
-let zeroSkillClasses = [];
+// 6. Auditoria de TODAS as 181 classes: todas DEVEM ter exatamente 5 skills e posições válidas
+let invalidCount = 0;
 for (const [cls, list] of Object.entries(classSkills)) {
-  if (!list || list.length === 0) {
-    zeroSkillClasses.push(cls);
+  if (!list || list.length !== 5) {
+    console.error(`Classe [${cls}] tem contagem inválida: ${list?.length}`);
+    invalidCount++;
   }
 }
 
-assert(zeroSkillClasses.length === 0, `Zero classes sem skills no jogo (Classes vazias: ${zeroSkillClasses.length})`);
+assert(invalidCount === 0, `100% das 181 classes possuem exatamente 5 habilidades padronizadas`);
 
 console.log(`\n========================================`);
 console.log(`RESULTADO DO ECHO ADAPTER: ${passed} PASSARAM, ${failed} FALHARAM`);

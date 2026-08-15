@@ -378,18 +378,242 @@ function buildEchoAdapter() {
     }
   }
 
+  // ─── PADRONIZAÇÃO UNIVERSAL: 5 SKILLS POR CLASSE (2 DANO, 2 BUFFS, 1 CURA/VAMP) ───
+  function isSustainSkill(s) {
+    if (!s) return false;
+    const name = (s.name || '').toLowerCase();
+    const desc = (s.desc || s.effectText || s.effect || s.info || '').toLowerCase();
+    return s.type === 'heal' || 
+           name.includes('heal') || name.includes('bandage') || name.includes('drain') || 
+           name.includes('vampir') || name.includes('bite') || name.includes('lifesteal') || 
+           name.includes('shield') || name.includes('barrier') || name.includes('aegis') || 
+           name.includes('recupera') || name.includes('absorv') || name.includes('regen') ||
+           (desc.includes('hp') && (desc.includes('recupera') || desc.includes('cura') || desc.includes('roubo') || desc.includes('absorve') || desc.includes('lifesteal')));
+  }
+
+  function isBuffSkill(s) {
+    if (!s) return false;
+    return (s.type === 'buff' || s.type === 'toggle' || s.type === 'passive') && !isSustainSkill(s);
+  }
+
+  function isDamageSkill(s) {
+    if (!s) return false;
+    return s.type === 'active' && !isSustainSkill(s);
+  }
+
+  function createSignatureSustain(classId, classDef) {
+    const race = (classDef?.race || '').toLowerCase();
+    const arch = (classDef?.archetype || '').toLowerCase();
+    const name = (classDef?.name || '').toLowerCase();
+    const sid = classId + '_signature_sustain';
+
+    if (name.includes('warg') || arch.includes('beast')) {
+      return {
+        id: sid,
+        name: 'Vampiric Feral Bite',
+        type: 'active',
+        tier: 4,
+        cost: 35,
+        max: 5,
+        pwr: 45,
+        baseCd: 12000,
+        effect: 'drain',
+        info: 'Mordida feral vampírica causando 220% de dano e recuperando 35% em HP.',
+        desc: 'Mordida feral que drena a vitalidade do alvo.',
+        icon: 'assets/skills/vampiric_blood.jpg',
+        classReq: classId,
+        reqLvl: 76,
+        starRank: 4
+      };
+    }
+
+    if (race.includes('darkelf') || name.includes('assassin') || name.includes('abyss') || name.includes('ghost') || name.includes('blood')) {
+      return {
+        id: sid,
+        name: 'Vampiric Touch',
+        type: 'active',
+        tier: 4,
+        cost: 35,
+        max: 5,
+        pwr: 40,
+        baseCd: 10000,
+        effect: 'drain',
+        info: 'Toque sombrio que absorve 40% do dano causado diretamente em HP.',
+        desc: 'Drena a essência vital do inimigo.',
+        icon: 'assets/skills/vampiric_blood.jpg',
+        classReq: classId,
+        reqLvl: 76,
+        starRank: 4
+      };
+    }
+
+    if (arch.includes('mage') || arch.includes('healer') || race.includes('elf') || race.includes('highelf')) {
+      return {
+        id: sid,
+        name: 'Blessing of Recovery',
+        type: 'heal',
+        tier: 4,
+        cost: 35,
+        max: 5,
+        pwr: 0,
+        baseCd: 15000,
+        effect: 'heal',
+        info: 'Cura divina que restaura 25% do HP máximo do herói.',
+        desc: 'Abençoa o conjurador restaurando pontos de vida.',
+        icon: 'assets/skills/holy_shield.jpg',
+        classReq: classId,
+        reqLvl: 76,
+        starRank: 4
+      };
+    }
+
+    return {
+      id: sid,
+      name: 'Battle Recovery',
+      type: 'heal',
+      tier: 4,
+      cost: 35,
+      max: 5,
+      pwr: 0,
+      baseCd: 18000,
+      effect: 'heal',
+      info: 'Bandagem de batalha que restaura 20% do HP máximo.',
+      desc: 'Trata ferimentos rapidamente durante o combate.',
+      icon: 'assets/skills/holy_shield.jpg',
+      classReq: classId,
+      reqLvl: 76,
+      starRank: 4
+    };
+  }
+
+  function createSignatureDamage(classId, classDef, idx) {
+    const arch = (classDef?.archetype || '').toLowerCase();
+    const sid = `${classId}_sig_dmg_${idx}`;
+    if (arch.includes('mage') || arch.includes('healer') || arch.includes('summoner')) {
+      return {
+        id: sid,
+        name: idx === 1 ? 'Elemental Bolt' : 'Mystic Burst',
+        type: 'active',
+        tier: idx - 1,
+        cost: idx === 1 ? 5 : 15,
+        max: 5,
+        pwr: idx === 1 ? 25 : 38,
+        baseCd: idx === 1 ? 4000 : 7000,
+        effect: 'dmg',
+        info: idx === 1 ? 'Disparo de energia arcana causando 160% de dano mágico.' : 'Explosão de magia pura causando 220% de dano mágico.',
+        desc: 'Ataque mágico focado.',
+        icon: 'assets/skills/fire_strike.jpg',
+        classReq: classId,
+        reqLvl: idx === 1 ? 1 : 20,
+        starRank: idx
+      };
+    }
+    return {
+      id: sid,
+      name: idx === 1 ? 'Power Strike' : 'Heavy Slash',
+      type: 'active',
+      tier: idx - 1,
+      cost: idx === 1 ? 5 : 15,
+      max: 5,
+      pwr: idx === 1 ? 30 : 45,
+      baseCd: idx === 1 ? 5000 : 8000,
+      effect: 'dmg',
+      info: idx === 1 ? 'Golpe físico concentrado causando 150% de dano.' : 'Corte poderoso causando 200% de dano físico.',
+      desc: 'Ataque marcial contundente.',
+      icon: 'assets/skills/fire_strike.jpg',
+      classReq: classId,
+      reqLvl: idx === 1 ? 1 : 20,
+      starRank: idx
+    };
+  }
+
+  function createSignatureBuff(classId, classDef, idx) {
+    const sid = `${classId}_sig_buff_${idx}`;
+    return {
+      id: sid,
+      name: idx === 1 ? 'Battle Stance' : 'Heroic Spirit',
+      type: 'buff',
+      tier: idx + 1,
+      cost: idx === 1 ? 25 : 35,
+      max: 5,
+      pwr: 0,
+      baseCd: 45000,
+      effect: 'warcry',
+      info: idx === 1 ? '+15% ATK / M.ATK por 120s.' : '+20% Defesa e +15% Chance Crítica por 120s.',
+      desc: 'Fortalecimento de combate.',
+      icon: 'assets/skills/holy_shield.jpg',
+      classReq: classId,
+      reqLvl: idx === 1 ? 40 : 60,
+      starRank: idx + 2
+    };
+  }
+
+  // Padroniza cada classe para exatamente 5 habilidades (2 Dano, 2 Buffs, 1 Sustentação)
+  for (const [classId, skillIds] of Object.entries(CLASS_SKILLS_ECHO)) {
+    const classDef = CLASSES_ECHO[classId];
+    const skills = skillIds.map(id => SKILL_DEFS_ECHO[id]).filter(Boolean);
+
+    const dmgPool = skills.filter(isDamageSkill);
+    const buffPool = skills.filter(isBuffSkill);
+    const sustainPool = skills.filter(isSustainSkill);
+
+    // Prioriza as habilidades mais fortes / de maior estágio
+    dmgPool.sort((a, b) => (b.starRank || b.tier || 0) - (a.starRank || a.tier || 0));
+    buffPool.sort((a, b) => (b.starRank || b.tier || 0) - (a.starRank || a.tier || 0));
+    sustainPool.sort((a, b) => (b.starRank || b.tier || 0) - (a.starRank || a.tier || 0));
+
+    const selectedDmg = dmgPool.slice(0, 2);
+    const selectedBuff = buffPool.slice(0, 2);
+    let selectedSustain = sustainPool.slice(0, 1);
+
+    if (selectedSustain.length === 0) {
+      const fallback = createSignatureSustain(classId, classDef);
+      SKILL_DEFS_ECHO[fallback.id] = fallback;
+      selectedSustain = [fallback];
+    }
+
+    while (selectedDmg.length < 2) {
+      const sigDmg = createSignatureDamage(classId, classDef, selectedDmg.length + 1);
+      SKILL_DEFS_ECHO[sigDmg.id] = sigDmg;
+      selectedDmg.push(sigDmg);
+    }
+    while (selectedBuff.length < 2) {
+      const sigBuff = createSignatureBuff(classId, classDef, selectedBuff.length + 1);
+      SKILL_DEFS_ECHO[sigBuff.id] = sigBuff;
+      selectedBuff.push(sigBuff);
+    }
+
+    const curated5 = [
+      ...selectedDmg,
+      ...selectedBuff,
+      ...selectedSustain
+    ];
+
+    // Ajusta tiers e posições para 5 colunas perfeitas:
+    // [0]: Dano 1 (Tier 0, Col 0)
+    // [1]: Dano 2 (Tier 1, Col 1)
+    // [2]: Buff 1 (Tier 2, Col 2)
+    // [3]: Buff 2 (Tier 3, Col 3)
+    // [4]: Sustentação (Tier 4, Col 4)
+    const normalizedIds = [];
+    curated5.forEach((s, idx) => {
+      s.tier = idx;
+      s.col = idx;
+      s.reqLvl = idx === 0 ? 1 : idx * 20;
+      s.cost = idx === 0 ? 5 : (idx * 10 + 5);
+      normalizedIds.push(s.id);
+    });
+
+    CLASS_SKILLS_ECHO[classId] = normalizedIds;
+  }
+
   // Layout automático por tier → coluna
   const SKILL_TREE_LAYOUT_ECHO = {};
   for (const [classId, skillIds] of Object.entries(CLASS_SKILLS_ECHO)) {
     const layout = {};
-    const colCounters = [0, 0, 0, 0, 0];
-    for (const sid of skillIds) {
-      const def = SKILL_DEFS_ECHO[sid];
-      if (!def) continue;
-      const col = Math.min(def.tier, 4);
-      const row = colCounters[col]++;
-      layout[sid] = { col, row };
-    }
+    skillIds.forEach((sid, idx) => {
+      layout[sid] = { col: idx, row: 0 };
+    });
     SKILL_TREE_LAYOUT_ECHO[classId] = layout;
   }
 

@@ -3087,12 +3087,11 @@ function attackMonster() {
         }
 
         log(`💥 ${skill.def.name}! ${sDmg} ${type} damage`, 'rarity-epic');
-        floatText(skill.def.name, 'float-epic');
-        
-        if (skill.def.effect === 'vampiric') {
-          const heal = Math.floor(sDmg * 0.4);
-          state.hp = Math.min(state.maxHp, state.hp + heal);
-          log(`🦇 Absorbed ${heal} HP`, 'heal');
+        if (skill.def.effect === 'vampiric' || skill.def.effect === 'drain' || skill.id.includes('vampir') || skill.id.includes('drain') || skill.id.includes('bite')) {
+          const heal = Math.max(1, Math.floor(sDmg * 0.40));
+          state.hp = Math.min(stats.maxHp, state.hp + heal);
+          log(`🦇 Vampirismo! Absorveu ${heal} HP`, 'heal');
+          floatText(`+${heal} HP`, 'sf-heal');
         }
         if (skill.def.effect === 'stun') {
            monster._stunnedUntil = now + 3500;
