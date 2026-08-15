@@ -28,6 +28,7 @@ export const PANEL_SELECTORS = {
   alchemy: ['#tab-alchemy', '#alchemy-panel', '[data-panel="alchemy"]'],
   astral: ['#tab-astral', '#astral-panel', '[data-panel="astral"]'],
   expeditions: ['#tab-expeditions', '#expeditions-panel', '[data-panel="expeditions"]'],
+  raids: ['#tab-raids', '#raids-panel', '[data-panel="raids"]'],
   forge: ['#tab-forge', '#forge-panel', '[data-panel="forge"]'],
   codex: ['#tab-codex', '#codex-panel', '[data-panel="codex"]']
 };
