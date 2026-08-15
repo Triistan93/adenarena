@@ -129,6 +129,8 @@ export function getPlayerTotalGradePenalty(state) {
     if (!itemUid) continue;
     const invItem = state.inventory?.find(i => i.uid === itemUid);
     if (!invItem) continue;
+    const itemDef = allItems[invItem.itemId];
+    if (!itemDef) continue;
     const check = checkGradePenalty(state.level || 1, itemDef);
     if (check.hasPenalty) {
       count++;
