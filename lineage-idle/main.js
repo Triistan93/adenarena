@@ -140,7 +140,12 @@ import {
 } from './src/services/TowerService.js';
 
 import {
-  startRaidBoss as serviceStartRaidBoss
+  startRaidBoss as serviceStartRaidBoss,
+  getRaidStatus as serviceGetRaidStatus,
+  canEnterRaid as serviceCanEnterRaid,
+  handleRaidVictory as serviceHandleRaidVictory,
+  processRaidBossMechanics as serviceProcessRaidBossMechanics,
+  checkAndResetDailyRaidTickets as serviceCheckAndResetDailyRaidTickets
 } from './src/services/RaidService.js';
 import {
   formatItemDisplayName as uiFormatItemDisplayName,
@@ -163,6 +168,7 @@ import {
   renderAlchemyUI as uiRenderAlchemyUI,
   renderAstralMasteryUI as uiRenderAstralMasteryUI,
   renderExpeditionsUI as uiRenderExpeditionsUI,
+  renderRaidsTab as uiRenderRaidsTab,
   initTooltipEvents as uiInitTooltipEvents,
   openCompoundModal,
   closeCompoundModal,
@@ -1119,6 +1125,8 @@ function updateStatsUI() {
   
   const _gEl = el('gold-text-stat');
   if (_gEl) { _gEl.textContent = state.gold.toLocaleString(); if (_gEl._lastGold != null && state.gold > _gEl._lastGold) { _gEl.classList.remove('pulse'); void _gEl.offsetWidth; _gEl.classList.add('pulse'); } _gEl._lastGold = state.gold; }
+  const _acEl = el('top-ac-amount');
+  if (_acEl) _acEl.textContent = `${(state.adenCoins || 0).toLocaleString()} AC`;
   const gps = getGoldPerSec();
   const gpsEl = el('gps-text'); if (gpsEl) gpsEl.textContent = gps > 0 ? `${gps.toFixed(1)}/s` : '—';
   
@@ -2465,6 +2473,11 @@ function updateExpeditionsUI() {
   uiRenderExpeditionsUI(state);
 }
 
+function updateRaidsUI() {
+  const pane = el('tab-raids');
+  if (pane) uiRenderRaidsTab(pane, state);
+}
+
 function updateAllUI() {
   state = getState();
   uiInitTooltipEvents();
@@ -2494,6 +2507,7 @@ function updateAllUI() {
   if (isTabVisible('alchemy')) safeUiUpdate('alchemy', updateAlchemyUI);
   if (isTabVisible('astral')) safeUiUpdate('astral', updateAstralUI);
   if (isTabVisible('expeditions')) safeUiUpdate('expeditions', updateExpeditionsUI);
+  if (isTabVisible('raids')) safeUiUpdate('raids', updateRaidsUI);
   if (isTabVisible('stage') || isTabVisible('zone') || isTabVisible('zones')) {
     safeUiUpdate('zone-bg', updateZoneBackground);
     safeUiUpdate('zone', updateZoneUI);
@@ -3027,7 +3041,7 @@ function checkBuffsExpire() {
 
 function attackMonster() {
   if (state.isCombatActive === false) return;
-  if (!state.zone || !state.target) return;
+  if ((!state.zone && !state.isRaidActive) || !state.target) return;
 
   if (state.towerCombatActive) {
     const elapsed = Date.now() - (state.towerStartTime || Date.now());
@@ -3044,6 +3058,9 @@ function attackMonster() {
 
   checkBuffsExpire();
   const stats = getStats(), monster = state.activeMonster || MONSTERS[state.target]; if (!monster) return;
+  if (monster.isRaid) {
+    serviceProcessRaidBossMechanics(state, { log, floatText });
+  }
   combatTick++;
 
   if (stats.regenHp > 0) {
@@ -3322,6 +3339,18 @@ function attackMonster() {
 
     if (monster.isTower) {
       onTowerFloorVictory(monster.towerFloor);
+    }
+
+    if (monster.isRaid) {
+      serviceHandleRaidVictory(state, state.activeRaidId || state.target, {
+        log,
+        onUpdate: () => { updateAllUI(); save(); }
+      });
+      state.isRaidActive = false;
+      state.activeRaidId = null;
+      state.zone = state.lastSafeZone || (state.race ? (RACES[state.race]?.startZone || 'talkingIsland') : 'talkingIsland');
+      state.target = null;
+      state.activeMonster = null;
     }
 
     checkLevelUp();
@@ -4369,6 +4398,7 @@ export function openPanel(tabName) {
   else if (targetTab === 'alchemy') safeUiUpdate('alchemy', updateAlchemyUI);
   else if (targetTab === 'astral') safeUiUpdate('astral', updateAstralUI);
   else if (targetTab === 'expeditions') safeUiUpdate('expeditions', updateExpeditionsUI);
+  else if (targetTab === 'raids') safeUiUpdate('raids', updateRaidsUI);
   else if (targetTab === 'enchant') safeUiUpdate('enchant', updateEnchantUI);
   else if (targetTab === 'zones') safeUiUpdate('zones', updateZoneUI);
   else if (targetTab === 'codex') safeUiUpdate('codex', updateCodexUI);
@@ -5876,6 +5906,21 @@ export function init() {
       CashShopService.addAdenCoins(state, amount, { log, onUpdate: () => { updateAllUI(); save(); } });
       const modal = document.getElementById('cash-shop-modal');
       if (modal) renderCashShopModal(modal);
+    };
+
+    // Raids & Bosses Épicos
+    window.startRaidBossAction = (raidId) => {
+      const started = serviceStartRaidBoss(state, raidId, {
+        log,
+        el,
+        renderStageMonster,
+        attackMonster,
+        onUpdate: () => { updateAllUI(); save(); }
+      });
+      if (started) {
+        updateAllUI();
+        save();
+      }
     };
     window.getGameState = () => {
       const data = { 

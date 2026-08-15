@@ -33,6 +33,11 @@
         </div>
       </div>
       <div class="top-stats">
+        <button class="ts-cash-shop-btn" id="top-cash-shop-btn" onclick="window.openCashShopModal && window.openCashShopModal()" title="Abrir Loja de Aden" style="display:flex; align-items:center; gap:6px; background:linear-gradient(135deg, rgba(212,175,55,0.2), rgba(0,0,0,0.6)); border:1px solid #ffd700; border-radius:6px; padding:3px 8px; cursor:pointer; color:#fff; font-family:'IBM Plex Sans',sans-serif; text-shadow:0 0 4px #000;">
+          <span style="font-size:14px;">🪙</span>
+          <span id="top-ac-amount" style="font-weight:bold; color:#ffd700; font-size:12px;">0 AC</span>
+          <span style="background:rgba(212,175,55,0.3); border:1px solid rgba(255,215,0,0.6); border-radius:3px; padding:1px 5px; font-size:9px; color:#fef08a; text-transform:uppercase; font-weight:700;">Loja</span>
+        </button>
         <span class="ts-zone"><span class="ts-label">Zone</span><span id="zone-name">Talking Island</span></span>
         <span class="ts-clock"><span class="ts-label">Session</span><span id="clock">00:00:00</span></span>
       </div>
@@ -152,6 +157,7 @@
           <button class="tab-btn" data-tab="alchemy">🧪 Alquimia</button>
           <button class="tab-btn" data-tab="astral">🌟 Maestria</button>
           <button class="tab-btn" data-tab="expeditions">🏰 Expedições &amp; Manor</button>
+          <button class="tab-btn" data-tab="raids">🐉 Raids &amp; Bosses</button>
           <button class="tab-btn" data-tab="zones">Zones</button>
         </div>
         <div class="tab-content">
@@ -328,6 +334,9 @@
 
           <!-- Expeditions & Manor Tab -->
           <div id="tab-expeditions" class="tab-pane"></div>
+
+          <!-- Raids & Bosses Tab -->
+          <div id="tab-raids" class="tab-pane"></div>
 
           <!-- Zones Tab -->
           <div id="tab-zones" class="tab-pane">

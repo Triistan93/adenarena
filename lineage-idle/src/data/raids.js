@@ -1,51 +1,274 @@
 /**
- * raids.js — Definições dos Raid Bosses do Lineage Idle.
- * Extraído de lineage-idle/main.js (linhas 2528-2534)
+ * raids.js — Definições dos Raid Bosses e Masmorras Diárias do Lineage Idle.
+ *
+ * Contém os 8 Chefes Épicos canônicos de Lineage II:
+ * 1. Queen Ant (Lv. 40 - Ermos de Gludio)
+ * 2. Core (Lv. 50 - Torre Cruma)
+ * 3. Orfen (Lv. 55 - Mar de Esporos)
+ * 4. Zaken (Lv. 60 - Navio Pirata da Ilha do Diabo)
+ * 5. Imperador Baium (Lv. 75 - Torre da Insolência)
+ * 6. Frintezza & Scarlet van Halisha (Lv. 85 - Sepulcro Imperial)
+ * 7. Dragão Antharas (Lv. 95 - Covil do Dragão da Terra)
+ * 8. Dragão Valakas (Lv. 100 - Vulcão Forja dos Deuses)
  */
+
 export const RAID_BOSSES = {
   queen_ant: {
     id: 'queen_ant',
     name: 'Queen Ant 👑',
-    lvl: 40, hp: 12000, atk: 180, def: 60, eva: 10,
-    xp: 8000, sp: 80, gold: [4000, 8000],
-    boss: true, raid: true,
+    title: 'Rainha dos Ermos de Gludio',
+    lvl: 40,
+    hp: 35000,
+    atk: 220,
+    def: 75,
+    mdef: 110,
+    eva: 10,
+    crit: 12,
+    xp: 28000,
+    sp: 350,
+    gold: [15000, 30000],
+    boss: true,
+    raid: true,
     reqLvl: 30,
-    desc: 'Rainha Formiga dos Ermos de Gludio. Drop: Ring of Queen Ant'
+    icon: 'gradespecial/jewels/jewel_ring_queen_ant.png',
+    bg: 'dungeon_wastelands',
+    desc: 'Rainha das Formigas Gigantes. Enxames de operárias a curam enquanto ela espalha veneno ácido corrosivo.',
+    mechanics: [
+      { name: 'Nuvem de Veneno Corrosivo', triggerHp: 0.75, damagePercent: 0.15, text: '⚠️ Queen Ant liberou Nuvem de Veneno Ácido!' },
+      { name: 'Chamado das Formigas Nutrizes', triggerHp: 0.35, healPercent: 0.20, text: '✨ Formigas Nutrizes curaram a Rainha em +20% HP!' }
+    ],
+    drops: [
+      { itemId: 'jewel_ring_queen_ant', name: 'Ring of Queen Ant', chance: 0.25, isEpicJewel: true },
+      { itemId: 'scroll_blessed_armor', name: 'Blessed Scroll: Enchant Armor', chance: 0.40 },
+      { itemId: 'scroll_blessed_weapon', name: 'Blessed Scroll: Enchant Weapon', chance: 0.25 },
+      { itemId: 'adena_coins', count: 10, name: '10x Aden Coins (AC)', chance: 0.50 }
+    ]
   },
+
+  core: {
+    id: 'core',
+    name: 'Core da Torre Cruma 🔮',
+    title: 'Núcleo Arcano da Civilização Antiga',
+    lvl: 50,
+    hp: 65000,
+    atk: 340,
+    def: 115,
+    mdef: 160,
+    eva: 12,
+    crit: 14,
+    xp: 55000,
+    sp: 650,
+    gold: [35000, 65000],
+    boss: true,
+    raid: true,
+    reqLvl: 45,
+    icon: 'gradespecial/jewels/jewel_ring_core.png',
+    bg: 'dungeon_cruma',
+    desc: 'O núcleo consciente deixado pelos Titãs no coração da Torre Cruma. Dispara rajadas de plasma e barreira refletiva.',
+    mechanics: [
+      { name: 'Barreira Eletromagnética', triggerHp: 0.60, damagePercent: 0.20, text: '⚡ Core ativou Barreira Refletiva causando choque em área!' },
+      { name: 'Sobrecarga de Plasma', triggerHp: 0.25, damagePercent: 0.30, text: '💥 Sobrecarga de Plasma de Alta Voltagem disparada!' }
+    ],
+    drops: [
+      { itemId: 'jewel_ring_core', name: 'Ring of Core', chance: 0.25, isEpicJewel: true },
+      { itemId: 'scroll_blessed_armor', name: 'Blessed Scroll: Enchant Armor', chance: 0.45 },
+      { itemId: 'scroll_blessed_weapon', name: 'Blessed Scroll: Enchant Weapon', chance: 0.30 },
+      { itemId: 'adena_coins', count: 15, name: '15x Aden Coins (AC)', chance: 0.50 }
+    ]
+  },
+
+  orfen: {
+    id: 'orfen',
+    name: 'Orfen das Sombras 🕷️',
+    title: 'Senhora do Mar de Esporos',
+    lvl: 55,
+    hp: 95000,
+    atk: 420,
+    def: 145,
+    mdef: 210,
+    eva: 18,
+    crit: 16,
+    xp: 90000,
+    sp: 950,
+    gold: [50000, 95000],
+    boss: true,
+    raid: true,
+    reqLvl: 50,
+    icon: 'gradespecial/jewels/jewel_earring_orfen.png',
+    bg: 'dungeon_sea_of_spores',
+    desc: 'Aracnídea gigante mutante que controla os fungos e esporos venenosos. Teletransporta-se para o ninho ao sofrer dano.',
+    mechanics: [
+      { name: 'Névoa Alucinógena de Esporos', triggerHp: 0.70, damagePercent: 0.18, text: '🌫️ Orfen cobriu a arena com Névoa Venenosa de Esporos!' },
+      { name: 'Teletransporte para o Ninho', triggerHp: 0.30, healPercent: 0.15, text: '🕷️ Orfen recuou para as sombras e regenerou +15% de HP!' }
+    ],
+    drops: [
+      { itemId: 'jewel_earring_orfen', name: 'Earring of Orfen', chance: 0.25, isEpicJewel: true },
+      { itemId: 'scroll_blessed_armor', name: 'Blessed Scroll: Enchant Armor', chance: 0.50 },
+      { itemId: 'scroll_blessed_weapon', name: 'Blessed Scroll: Enchant Weapon', chance: 0.35 },
+      { itemId: 'adena_coins', count: 20, name: '20x Aden Coins (AC)', chance: 0.50 }
+    ]
+  },
+
   zaken: {
     id: 'zaken',
-    name: 'Zaken o Pirata 🏴‍☠️',
-    lvl: 60, hp: 35000, atk: 320, def: 110, eva: 15,
-    xp: 25000, sp: 200, gold: [15000, 30000],
-    boss: true, raid: true,
-    reqLvl: 50,
-    desc: 'Capitão pirata da Ilha do Diabo. Drop: Earring of Zaken'
+    name: 'Capitão Zaken 🏴‍☠️',
+    title: 'Senhor Imortal da Ilha do Diabo',
+    lvl: 60,
+    hp: 140000,
+    atk: 520,
+    def: 175,
+    mdef: 250,
+    eva: 22,
+    crit: 18,
+    xp: 140000,
+    sp: 1600,
+    gold: [80000, 160000],
+    boss: true,
+    raid: true,
+    reqLvl: 55,
+    icon: 'gradespecial/jewels/jewel_earring_of_zaken.png',
+    bg: 'dungeon_devils_isle',
+    desc: 'Capitão pirata amaldiçoado com vampirismo eterno no interior do Galeão Fantasma da Ilha do Diabo.',
+    mechanics: [
+      { name: 'Passo das Sombras', triggerHp: 0.65, damagePercent: 0.22, text: '🌑 Zaken se desmaterializou nas sombras e atacou pelas costas!' },
+      { name: 'Banquete de Sangue Vampírico', triggerHp: 0.30, healPercent: 0.20, damagePercent: 0.15, text: '🩸 Banquete de Sangue: Zaken drenou sua vida e recuperou +20% HP!' }
+    ],
+    drops: [
+      { itemId: 'jewel_earring_of_zaken', name: 'Earring of Zaken', chance: 0.25, isEpicJewel: true },
+      { itemId: 'armor_zaken_cloack', name: 'Capa Pirata de Zaken', chance: 0.30 },
+      { itemId: 'scroll_blessed_weapon', name: 'Blessed Scroll: Enchant Weapon', chance: 0.40 },
+      { itemId: 'adena_coins', count: 25, name: '25x Aden Coins (AC)', chance: 0.50 }
+    ]
   },
+
   baium: {
     id: 'baium',
     name: 'Imperador Baium ⚡',
-    lvl: 80, hp: 90000, atk: 580, def: 180, eva: 12,
-    xp: 90000, sp: 500, gold: [40000, 80000],
-    boss: true, raid: true,
+    title: 'Soberano da Torre da Insolência',
+    lvl: 75,
+    hp: 260000,
+    atk: 750,
+    def: 230,
+    mdef: 330,
+    eva: 15,
+    crit: 20,
+    xp: 320000,
+    sp: 3200,
+    gold: [180000, 360000],
+    boss: true,
+    raid: true,
     reqLvl: 70,
-    desc: 'Imperador aprisionado na Torre. Drop: Ring of Baium'
+    icon: 'gradespecial/jewels/jewel_ring_of_baium.png',
+    bg: 'dungeon_tower_of_insolence',
+    desc: 'O antigo Imperador de Elmore-Aden petrificado pelos deuses no 14º andar da Torre da Insolência.',
+    mechanics: [
+      { name: 'Punho Esmagador dos Trovões', triggerHp: 0.70, damagePercent: 0.25, text: '⚡ Baium desferiu o Punho Esmagador dos Trovões!' },
+      { name: 'Fúria da Divindade Aprisionada', triggerHp: 0.30, damagePercent: 0.35, text: '🌩️ Fúria Imperial: Baium aumentou seu poder de ataque massivamente!' }
+    ],
+    drops: [
+      { itemId: 'jewel_ring_of_baium', name: 'Ring of Baium', chance: 0.25, isEpicJewel: true },
+      { itemId: 'weapon_samurai_longsword', name: 'Samurai Longsword +5', chance: 0.35 },
+      { itemId: 'scroll_blessed_weapon', name: 'Blessed Scroll: Enchant Weapon', chance: 0.50 },
+      { itemId: 'adena_coins', count: 50, name: '50x Aden Coins (AC)', chance: 0.50 }
+    ]
   },
+
+  frintezza: {
+    id: 'frintezza',
+    name: 'Príncipe Frintezza & Halisha 🎻',
+    title: 'Maestro do Sepulcro Imperial',
+    lvl: 85,
+    hp: 420000,
+    atk: 1050,
+    def: 310,
+    mdef: 440,
+    eva: 18,
+    crit: 22,
+    xp: 680000,
+    sp: 5800,
+    gold: [350000, 700000],
+    boss: true,
+    raid: true,
+    reqLvl: 80,
+    icon: 'gradespecial/jewels/jewel_necklace_of_frintezza.png',
+    bg: 'dungeon_imperial_tomb',
+    desc: 'Príncipe amaldiçoado tocando seu órgão sombrio enquanto seu campeão demoníaco Scarlet van Halisha massacra invasores.',
+    mechanics: [
+      { name: 'Réquiem da Hipnose', triggerHp: 0.65, damagePercent: 0.25, text: '🎼 A melodia de Frintezza confunde seus sentidos e drena suas forças!' },
+      { name: 'Transformação Demoníaca de Halisha', triggerHp: 0.25, damagePercent: 0.40, text: '👹 Scarlet van Halisha assume sua Forma de Demônio Alado!' }
+    ],
+    drops: [
+      { itemId: 'jewel_necklace_of_frintezza', name: 'Necklace of Frintezza', chance: 0.25, isEpicJewel: true },
+      { itemId: 'weapon_frost_lord_sword', name: 'Frost Lord Sword (Tier 6 Apex)', chance: 0.20 },
+      { itemId: 'scroll_blessed_weapon', name: 'Blessed Scroll: Enchant Weapon', chance: 0.55 },
+      { itemId: 'adena_coins', count: 75, name: '75x Aden Coins (AC)', chance: 0.50 }
+    ]
+  },
+
   antharas: {
     id: 'antharas',
-    name: 'Dragão Antharas 🐉',
-    lvl: 95, hp: 220000, atk: 850, def: 280, eva: 10,
-    xp: 300000, sp: 1500, gold: [150000, 350000],
-    boss: true, raid: true,
+    name: 'Dragão da Terra Antharas 🐉',
+    title: 'Senhor dos Abismos Subterrâneos',
+    lvl: 95,
+    hp: 750000,
+    atk: 1450,
+    def: 410,
+    mdef: 590,
+    eva: 12,
+    crit: 24,
+    xp: 1400000,
+    sp: 12000,
+    gold: [700000, 1400000],
+    boss: true,
+    raid: true,
     reqLvl: 85,
-    desc: 'Dragão da Terra. Drops: Earring of Antharas & Dragon Slayer'
+    icon: 'gradespecial/jewels/jewel_earring_of_antharas.png',
+    bg: 'dungeon_antharas_lair',
+    desc: 'O terrível Dragão da Terra guardião das profundezas de Giran. Seus tremores abalam montanhas e petrificam exércitos.',
+    mechanics: [
+      { name: 'Terremoto Fóssil', triggerHp: 0.70, damagePercent: 0.30, text: '🌋 Terremoto Fóssil: O chão estremece causando dano maciço!' },
+      { name: 'Rugido do Pavor Ancestral', triggerHp: 0.35, damagePercent: 0.40, text: '🐉 Rugido Aterrorizante de Antharas rompe as barreiras de defesa!' }
+    ],
+    drops: [
+      { itemId: 'jewel_earring_of_antharas', name: 'Earring of Antharas', chance: 0.25, isEpicJewel: true },
+      { itemId: 'weapon_frost_lord_two_hand_sword', name: 'Frost Lord Greatsword (Tier 6 Apex)', chance: 0.25 },
+      { itemId: 'scroll_blessed_weapon', name: 'Blessed Scroll: Enchant Weapon', chance: 0.60 },
+      { itemId: 'adena_coins', count: 100, name: '100x Aden Coins (AC)', chance: 0.50 }
+    ]
   },
+
   valakas: {
     id: 'valakas',
-    name: 'Dragão Valakas 🔥',
-    lvl: 100, hp: 450000, atk: 1200, def: 380, eva: 8,
-    xp: 750000, sp: 3500, gold: [400000, 800000],
-    boss: true, raid: true,
+    name: 'Dragão do Fogo Valakas 🔥',
+    title: 'Senhor Supremo do Vulcão Forja dos Deuses',
+    lvl: 100,
+    hp: 1250000,
+    atk: 1950,
+    def: 510,
+    mdef: 740,
+    eva: 15,
+    crit: 25,
+    xp: 2500000,
+    sp: 25000,
+    gold: [1500000, 3000000],
+    boss: true,
+    raid: true,
     reqLvl: 90,
-    desc: 'Senhor do Vulcão. Drops: Facemask & Necklace of Valakas'
+    icon: 'gradespecial/jewels/jewel_necklace_of_valakas.png',
+    bg: 'dungeon_valakas_volcano',
+    desc: 'A criatura mais poderosa de Aden. Habita a caldeira de lava da Forja dos Deuses, incinerando quem ousa desafiá-lo.',
+    mechanics: [
+      { name: 'Chuva de Meteoros Incandescentes', triggerHp: 0.75, damagePercent: 0.30, text: '☄️ Chuva de Meteoros de Valakas incinera toda a arena!' },
+      { name: 'Sopro Infernal do Vulcão', triggerHp: 0.40, damagePercent: 0.45, text: '🔥 Sopro de Chamas Eternas atinge em cheio com poder colossal!' },
+      { name: 'Aura da Caldeira Ardente', triggerHp: 0.15, damagePercent: 0.50, text: '🌋 Valakas entra em Fúria Vulcânica Máxima!' }
+    ],
+    drops: [
+      { itemId: 'jewel_necklace_of_valakas', name: 'Necklace of Valakas', chance: 0.25, isEpicJewel: true },
+      { itemId: 'jewel_ring_of_valakas', name: 'Ring of Valakas', chance: 0.25, isEpicJewel: true },
+      { itemId: 'armor_valakas_cloack', name: 'Valakas Dragon Cloak', chance: 0.35 },
+      { itemId: 'valakas_mask', name: 'Máscara Flamejante de Valakas', chance: 0.40 },
+      { itemId: 'scroll_blessed_weapon', name: 'Blessed Scroll: Enchant Weapon', chance: 0.75 },
+      { itemId: 'adena_coins', count: 150, name: '150x Aden Coins (AC)', chance: 0.60 }
+    ]
   }
 };

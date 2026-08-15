@@ -4121,3 +4121,161 @@ export function renderCashShopModal(container) {
   `;
 }
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   16. ABA DE MASMORRAS DIÁRIAS & EPIC RAID BOSSES
+═══════════════════════════════════════════════════════════════════════════ */
+export function renderRaidsTab(container, state) {
+  if (!container || !state) return;
+
+  const gData = D();
+  const raidBosses = gData?.RAID_BOSSES || {};
+  const status = typeof getRaidStatus === 'function' ? getRaidStatus(state) : {
+    tickets: state.dailyRaidTickets ?? 3,
+    maxTickets: 3,
+    clears: state.dailyRaidClears || {},
+    totalKills: state.totalRaidKills || 0
+  };
+
+  const currentHeroLvl = state.level || 1;
+
+  const cardsHtml = Object.entries(raidBosses).map(([id, boss]) => {
+    const isLocked = currentHeroLvl < (boss.reqLvl || 1);
+    const inCombat = state.isRaidActive && state.activeRaidId === id;
+    const timesCleared = status.clears[id] || 0;
+    const hasTickets = (status.tickets || 0) > 0;
+
+    let diffBadge = '⭐ Normal';
+    let diffColor = '#60a5fa';
+    if (boss.lvl >= 100) { diffBadge = '👑 SUPREMO'; diffColor = '#ffd700'; }
+    else if (boss.lvl >= 90) { diffBadge = '⭐⭐⭐⭐⭐ Lendário'; diffColor = '#f59e0b'; }
+    else if (boss.lvl >= 75) { diffBadge = '⭐⭐⭐⭐ Mítico'; diffColor = '#c084fc'; }
+    else if (boss.lvl >= 60) { diffBadge = '⭐⭐⭐ Épico'; diffColor = '#f43f5e'; }
+    else if (boss.lvl >= 50) { diffBadge = '⭐⭐ Desafiador'; diffColor = '#34d399'; }
+
+    let actionBtnHtml = '';
+    if (inCombat) {
+      actionBtnHtml = `<button disabled style="width:100%; padding:10px; font-weight:bold; font-size:12px; background:linear-gradient(180deg,#16a34a,#15803d); border:1px solid #4ade80; color:#fff; border-radius:6px; cursor:default; animation:pulse 1.5s infinite;">⚔️ EM COMBATE ATIVO</button>`;
+    } else if (isLocked) {
+      actionBtnHtml = `<button disabled style="width:100%; padding:10px; font-weight:bold; font-size:12px; background:#27272a; border:1px solid #3f3f46; color:#71717a; border-radius:6px; cursor:not-allowed;">🔒 Bloqueado (Requer Lv. ${boss.reqLvl})</button>`;
+    } else if (!hasTickets) {
+      actionBtnHtml = `<button disabled style="width:100%; padding:10px; font-weight:bold; font-size:12px; background:#450a0a; border:1px solid #7f1d1d; color:#fca5a5; border-radius:6px; cursor:not-allowed;">🎟️ Sem Ingressos Diários</button>`;
+    } else {
+      actionBtnHtml = `
+        <button
+          onclick="window.startRaidBossAction('${id}')"
+          style="width:100%; padding:10px; font-family:'Cinzel',serif; font-weight:bold; font-size:12px; background:linear-gradient(180deg,#dc2626,#991b1b); border:1px solid #f87171; color:#fff; border-radius:6px; cursor:pointer; box-shadow:0 0 10px rgba(220,38,38,0.4); transition:all 0.2s;"
+          onmouseover="this.style.filter='brightness(1.15)'"
+          onmouseout="this.style.filter='none'"
+        >
+          ⚔️ DESAFIAR RAID (1 🎟️)
+        </button>
+      `;
+    }
+
+    const mechanicsHtml = (boss.mechanics || []).map(m => `
+      <span style="background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.15); border-radius:4px; padding:2px 6px; font-size:10px; color:#e2e8f0;">
+        ⚡ ${m.name}
+      </span>
+    `).join('');
+
+    const dropsPreviewHtml = (boss.drops || []).map(d => {
+      const isEpic = d.isEpicJewel;
+      const isAC = d.itemId === 'adena_coins';
+      const borderCol = isEpic ? '#ffd700' : (isAC ? '#38bdf8' : '#a855f7');
+      const bgCol = isEpic ? 'rgba(255,215,0,0.15)' : 'rgba(0,0,0,0.4)';
+      return `
+        <div style="display:flex; align-items:center; gap:4px; background:${bgCol}; border:1px solid ${borderCol}; border-radius:4px; padding:2px 6px; font-size:10px; color:${isEpic ? '#ffd700' : '#f8fafc'}; font-weight:${isEpic ? 'bold' : 'normal'};">
+          <span>${isEpic ? '👑' : (isAC ? '🪙' : '🎁')}</span>
+          <span>${d.name}</span>
+          <span style="color:#94a3b8; font-size:9px;">(${Math.round(d.chance * 100)}%)</span>
+        </div>
+      `;
+    }).join('');
+
+    return `
+      <div style="background:linear-gradient(145deg, rgba(24,18,14,0.95), rgba(12,9,7,0.98)); border:1px solid ${inCombat ? '#22c55e' : (isLocked ? 'rgba(80,60,40,0.3)' : 'rgba(212,175,55,0.4)')}; border-radius:10px; padding:14px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:0 4px 15px rgba(0,0,0,0.6); position:relative;">
+        <div>
+          <!-- Header do Card -->
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
+            <div>
+              <div style="font-family:'Cinzel',serif; font-size:15px; font-weight:bold; color:#fef08a;">${boss.name}</div>
+              <div style="font-size:11px; color:#94a3b8; font-style:italic;">${boss.title || 'Chefe de Raid'}</div>
+            </div>
+            <div style="display:flex; flex-direction:column; align-items:flex-end; gap:2px;">
+              <span style="background:rgba(0,0,0,0.6); border:1px solid ${diffColor}; color:${diffColor}; font-size:10px; font-weight:bold; padding:2px 8px; border-radius:10px;">
+                ${diffBadge}
+              </span>
+              <span style="font-size:10px; color:#cbd5e1;">Req. Lv. ${boss.reqLvl}</span>
+            </div>
+          </div>
+
+          <!-- Status do Boss -->
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; background:rgba(0,0,0,0.35); border:1px solid rgba(255,255,255,0.06); border-radius:6px; padding:8px; margin-bottom:8px; font-size:11px;">
+            <div>❤️ HP: <strong style="color:#ef4444;">${boss.hp.toLocaleString()}</strong></div>
+            <div>⚔️ P.ATK: <strong style="color:#f87171;">${boss.atk}</strong></div>
+            <div>🛡️ P.DEF: <strong style="color:#60a5fa;">${boss.def}</strong></div>
+            <div>🔮 M.DEF: <strong style="color:#c084fc;">${boss.mdef}</strong></div>
+          </div>
+
+          <!-- Descrição -->
+          <p style="font-size:11px; color:#94a3b8; line-height:1.35; margin:0 0 8px 0;">${boss.desc}</p>
+
+          <!-- Mecânicas -->
+          <div style="margin-bottom:8px;">
+            <div style="font-size:10px; font-weight:bold; color:#d4af37; text-transform:uppercase; margin-bottom:4px;">Mecânicas Especiais:</div>
+            <div style="display:flex; flex-wrap:wrap; gap:4px;">${mechanicsHtml}</div>
+          </div>
+
+          <!-- Drops Épicos -->
+          <div style="margin-bottom:12px;">
+            <div style="font-size:10px; font-weight:bold; color:#ffd700; text-transform:uppercase; margin-bottom:4px;">Drops Notáveis:</div>
+            <div style="display:flex; flex-wrap:wrap; gap:4px;">${dropsPreviewHtml}</div>
+          </div>
+        </div>
+
+        <div>
+          <div style="display:flex; justify-content:space-between; align-items:center; font-size:10.5px; color:#cbd5e1; margin-bottom:6px; border-top:1px solid rgba(255,255,255,0.08); padding-top:6px;">
+            <span>Conclusões Hoje:</span>
+            <strong style="color:${timesCleared > 0 ? '#4ade80' : '#e2e8f0'};">${timesCleared}x derrotado</strong>
+          </div>
+          ${actionBtnHtml}
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  container.innerHTML = `
+    <div style="padding:14px; max-width:980px; margin:0 auto; font-family:'IBM Plex Sans',sans-serif; color:#f8fafc;">
+      <!-- Banner Superior -->
+      <div style="background:linear-gradient(135deg, rgba(212,175,55,0.18), rgba(220,38,38,0.18)); border:1px solid #ffd700; border-radius:12px; padding:16px; margin-bottom:16px; box-shadow:0 4px 20px rgba(0,0,0,0.5);">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+          <div>
+            <h2 style="margin:0 0 4px 0; font-family:'Cinzel',serif; color:#ffd700; font-size:20px; display:flex; align-items:center; gap:8px;">
+              <span>🐉 Masmorras Diárias &amp; Epic Raid Bosses</span>
+            </h2>
+            <p style="margin:0; font-size:12px; color:#cbd5e1; line-height:1.4;">
+              Enfrente as lendas de Lineage II para conquistar <strong>Joias de Chefe Lendárias</strong> (+Crit Dmg, +Lifesteal, +Stats), <strong>Blessed Scrolls</strong> e <strong>Aden Coins</strong>!
+            </p>
+          </div>
+          <div style="display:flex; gap:10px; align-items:center;">
+            <div style="background:rgba(0,0,0,0.55); border:1px solid #ffd700; border-radius:8px; padding:8px 14px; text-align:center;">
+              <div style="font-size:10px; color:#cbd5e1; text-transform:uppercase;">Ingressos Diários</div>
+              <div style="font-size:18px; font-weight:bold; color:#fde047;">🎟️ ${status.tickets}/${status.maxTickets}</div>
+            </div>
+            <div style="background:rgba(0,0,0,0.55); border:1px solid rgba(255,255,255,0.2); border-radius:8px; padding:8px 14px; text-align:center;">
+              <div style="font-size:10px; color:#cbd5e1; text-transform:uppercase;">Abates Épicos</div>
+              <div style="font-size:18px; font-weight:bold; color:#4ade80;">💀 ${status.totalKills}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grid de Bosses -->
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(290px, 1fr)); gap:14px;">
+        ${cardsHtml}
+      </div>
+    </div>
+  `;
+}
+
+
