@@ -19,6 +19,10 @@ import { ZONES, SAGAS, ZONE_BACKGROUNDS } from '../data/zones.js';
 import { MONSTERS, MONSTER_BY_NAME } from '../data/monsters.js';
 import { RAID_BOSSES } from '../data/raids.js';
 import { getRaidStatus } from '../services/RaidService.js';
+import { INFINITY_WEAPONS, HEROIC_SKILLS, OLYMPIAD_GLADIATORS, OLYMPIAD_SHOP_CATALOG } from '../data/olympiad.js';
+import { NOBLESSE_QUEST_DEFS } from '../data/quests.js';
+import { NoblesseService } from '../services/NoblesseService.js';
+import { OlympiadService } from '../services/OlympiadService.js';
 import { heroSVG, monsterSVG, MON_IMG } from '../../art.js';
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -4278,5 +4282,375 @@ export function renderRaidsTab(container, state) {
     </div>
   `;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   17. ABA DE GRAND OLYMPIAD GAMES & HERÓIS DE CLASSE
+═══════════════════════════════════════════════════════════════════════════ */
+export function renderOlympiadTab(container, state) {
+  if (!container || !state) return;
+
+  const olyStatus = OlympiadService.getOlympiadStatus(state);
+  const activeSubTab = window._activeOlympiadSubTab || 'arena';
+
+  window.setOlympiadSubTab = (subTab) => {
+    window._activeOlympiadSubTab = subTab;
+    if (typeof window.updateOlympiadUI === 'function') {
+      window.updateOlympiadUI();
+    } else {
+      renderOlympiadTab(container, state);
+    }
+  };
+
+  // 1. Sub-aba: Arena de Duelos 1v1
+  let subContentHtml = '';
+  if (activeSubTab === 'arena') {
+    const gladiator = OlympiadService.getGladiatorOpponent(state);
+    const heroHpMax = state.maxHp || 15000;
+    const heroAtk = Math.max(state.atk || 450, 200);
+    const heroMatk = Math.max(state.matk || 400, 150);
+    const heroDef = Math.max(state.def || 350, 150);
+    const heroMdef = Math.max(state.mdef || 300, 150);
+
+    let fightBtnHtml = '';
+    if (!olyStatus.canEnter) {
+      fightBtnHtml = `
+        <button disabled style="width:100%; padding:14px; font-weight:bold; font-size:13px; background:#27272a; border:1px solid #3f3f46; color:#a1a1aa; border-radius:8px; cursor:not-allowed;">
+          🔒 ${olyStatus.reason}
+        </button>
+      `;
+    } else {
+      fightBtnHtml = `
+        <button
+          onclick="window.startOlympiadMatchAction()"
+          style="width:100%; padding:14px; font-family:'Cinzel',serif; font-weight:bold; font-size:14px; background:linear-gradient(180deg,#eab308,#ca8a04); border:1px solid #fde047; color:#000; border-radius:8px; cursor:pointer; box-shadow:0 0 15px rgba(234,179,8,0.5); transition:all 0.2s;"
+          onmouseover="this.style.filter='brightness(1.15)'"
+          onmouseout="this.style.filter='none'"
+        >
+          ⚔️ ENFILEIRAR DUELO RANQUEADO (1v1)
+        </button>
+      `;
+    }
+
+    subContentHtml = `
+      <div style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,215,0,0.25); border-radius:10px; padding:16px; margin-bottom:16px;">
+        <div style="text-align:center; margin-bottom:16px;">
+          <h3 style="margin:0 0 6px 0; font-family:'Cinzel',serif; color:#fde047; font-size:18px;">🏟️ Coliseu Imperial de Aden</h3>
+          <p style="margin:0; font-size:12px; color:#cbd5e1;">Enfrente gladiadores do seu nível de pontuação em combate 1v1. Vitórias concedem pontos de ELO e <strong>Olympiad Tokens</strong>!</p>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr auto 1fr; gap:12px; align-items:center; margin-bottom:16px;">
+          <!-- Seu Herói -->
+          <div style="background:rgba(0,0,0,0.5); border:1px solid #3b82f6; border-radius:8px; padding:12px; text-align:center;">
+            <div style="font-size:11px; color:#93c5fd; text-transform:uppercase; font-weight:bold;">Seu Personagem</div>
+            <div style="font-family:'Cinzel',serif; font-size:16px; font-weight:bold; color:#fff; margin:4px 0;">${state.heroName || 'Você'}</div>
+            <div style="font-size:11px; color:#cbd5e1; margin-bottom:8px;">Lv. ${olyStatus.level} • ${olyStatus.tierName}</div>
+            <div style="font-size:11px; text-align:left; background:rgba(0,0,0,0.3); padding:8px; border-radius:6px; line-height:1.4;">
+              <div>❤️ HP Máx: <strong style="color:#ef4444;">${heroHpMax.toLocaleString()}</strong></div>
+              <div>⚔️ P.Atk: <strong style="color:#f87171;">${heroAtk}</strong></div>
+              <div>🔮 M.Atk: <strong style="color:#c084fc;">${heroMatk}</strong></div>
+              <div>🛡️ P.Def: <strong style="color:#60a5fa;">${heroDef}</strong> | M.Def: <strong style="color:#818cf8;">${heroMdef}</strong></div>
+            </div>
+          </div>
+
+          <!-- VS -->
+          <div style="text-align:center; font-family:'Cinzel',serif; font-size:22px; font-weight:bold; color:#ffd700; text-shadow:0 0 10px rgba(255,215,0,0.6);">
+            VS
+          </div>
+
+          <!-- Oponente -->
+          <div style="background:rgba(0,0,0,0.5); border:1px solid #ef4444; border-radius:8px; padding:12px; text-align:center;">
+            <div style="font-size:11px; color:#fca5a5; text-transform:uppercase; font-weight:bold;">Gladiador da Arena</div>
+            <div style="font-family:'Cinzel',serif; font-size:16px; font-weight:bold; color:#f87171; margin:4px 0;">${gladiator.name}</div>
+            <div style="font-size:11px; color:#cbd5e1; margin-bottom:8px;">Lv. ${gladiator.lvl} • ${gladiator.title}</div>
+            <div style="font-size:11px; text-align:left; background:rgba(0,0,0,0.3); padding:8px; border-radius:6px; line-height:1.4;">
+              <div>❤️ HP Máx: <strong style="color:#ef4444;">${gladiator.hp.toLocaleString()}</strong></div>
+              <div>⚔️ P.Atk: <strong style="color:#f87171;">${gladiator.atk}</strong></div>
+              <div>🛡️ P.Def: <strong style="color:#60a5fa;">${gladiator.def}</strong></div>
+              <div>🔮 M.Def: <strong style="color:#c084fc;">${gladiator.mdef}</strong></div>
+            </div>
+          </div>
+        </div>
+
+        ${fightBtnHtml}
+      </div>
+    `;
+  }
+  // 2. Sub-aba: Saga de Noblesse (Possessor of a Precious Soul)
+  else if (activeSubTab === 'noblesse') {
+    const nobStatus = NoblesseService.getNoblesseStatus(state);
+    const prog = nobStatus.progress || {};
+
+    const steps = [
+      {
+        num: 1,
+        title: 'Parte 1: O Legado de Eva & Talien',
+        desc: 'Investigue o legado dos heróis antigos com Talien em Giran. Recupere as 25 Páginas do Poema de Eva em Valley of Saints.',
+        progressText: `${prog.part1Kills || 0}/25 monstros em Valley of Saints`,
+        isDone: nobStatus.isNoblesse || (state.noblesseStep || 1) > 1,
+        isCurrent: !nobStatus.isNoblesse && (state.noblesseStep || 1) === 1,
+        canComplete: !nobStatus.isNoblesse && (state.noblesseStep || 1) === 1 && (prog.part1Kills || 0) >= 25,
+        btnText: 'Concluir Parte 1'
+      },
+      {
+        num: 2,
+        title: 'Parte 2: Ritual de Virgil em Rune',
+        desc: 'Leve a carta sagrada a Virgil em Rune Township e purifique 30 espíritos no pântano sombrio de Swamp of Screams.',
+        progressText: `${prog.part2Kills || 0}/30 almas em Swamp of Screams`,
+        isDone: nobStatus.isNoblesse || (state.noblesseStep || 1) > 2,
+        isCurrent: !nobStatus.isNoblesse && (state.noblesseStep || 1) === 2,
+        canComplete: !nobStatus.isNoblesse && (state.noblesseStep || 1) === 2 && (prog.part2Kills || 0) >= 30,
+        btnText: 'Concluir Parte 2'
+      },
+      {
+        num: 3,
+        title: 'Parte 3: O Julgamento de Barakiel',
+        desc: 'Ajude Caradine em Wall of Argos e derrote o lendário Raid Boss Flame of Splendor Barakiel para recuperar o Cajado da Deusa.',
+        progressText: prog.barakielKilled ? '✓ Barakiel Derrotado' : 'Derrotar Raid Boss Barakiel',
+        isDone: nobStatus.isNoblesse || (state.noblesseStep || 1) > 3,
+        isCurrent: !nobStatus.isNoblesse && (state.noblesseStep || 1) === 3,
+        canComplete: !nobStatus.isNoblesse && (state.noblesseStep || 1) === 3 && Boolean(prog.barakielKilled),
+        btnText: 'Concluir Parte 3'
+      },
+      {
+        num: 4,
+        title: 'Parte 4: Consagração da Deusa Eva',
+        desc: 'Apresente o cajado sagrado à Lady of the Lake. Receba a Bênção Sagrada, a Noblesse Tiara e a sagração como Nobre de Aden!',
+        progressText: nobStatus.isNoblesse ? '✓ Noblesse Consagrado' : 'Apresentar à Lady of the Lake',
+        isDone: nobStatus.isNoblesse,
+        isCurrent: !nobStatus.isNoblesse && (state.noblesseStep || 1) === 4,
+        canComplete: !nobStatus.isNoblesse && (state.noblesseStep || 1) === 4,
+        btnText: '👑 Receber Bênção de Noblesse'
+      }
+    ];
+
+    const stepsHtml = steps.map(s => {
+      let statusBadge = `<span style="color:#94a3b8; font-size:11px;">🔒 Bloqueado</span>`;
+      let btnHtml = '';
+
+      if (s.isDone) {
+        statusBadge = `<span style="color:#4ade80; font-size:11px; font-weight:bold;">✓ Concluído</span>`;
+      } else if (s.isCurrent) {
+        statusBadge = `<span style="color:#fde047; font-size:11px; font-weight:bold;">⚡ Em Andamento (${s.progressText})</span>`;
+        if (s.canComplete) {
+          btnHtml = `
+            <button
+              onclick="window.completeNoblesseStepAction(${s.num})"
+              style="padding:6px 14px; font-weight:bold; font-size:11px; background:linear-gradient(180deg,#16a34a,#15803d); border:1px solid #4ade80; color:#fff; border-radius:6px; cursor:pointer;"
+            >
+              ${s.btnText}
+            </button>
+          `;
+        } else {
+          btnHtml = `
+            <button disabled style="padding:6px 14px; font-size:11px; background:#27272a; border:1px solid #3f3f46; color:#71717a; border-radius:6px; cursor:not-allowed;">
+              Progresso Pendente
+            </button>
+          `;
+        }
+      }
+
+      return `
+        <div style="background:rgba(0,0,0,0.45); border:1px solid ${s.isDone ? 'rgba(74,222,128,0.3)' : (s.isCurrent ? 'rgba(253,224,71,0.5)' : 'rgba(255,255,255,0.08)')}; border-radius:8px; padding:12px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; gap:10px;">
+          <div>
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+              <span style="font-family:'Cinzel',serif; font-size:13px; font-weight:bold; color:${s.isDone ? '#4ade80' : (s.isCurrent ? '#fde047' : '#e2e8f0')};">${s.title}</span>
+              ${statusBadge}
+            </div>
+            <p style="margin:0; font-size:11px; color:#cbd5e1; line-height:1.35;">${s.desc}</p>
+          </div>
+          <div>${btnHtml}</div>
+        </div>
+      `;
+    }).join('');
+
+    subContentHtml = `
+      <div style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,215,0,0.25); border-radius:10px; padding:16px; margin-bottom:16px;">
+        <div style="margin-bottom:14px;">
+          <h3 style="margin:0 0 6px 0; font-family:'Cinzel',serif; color:#fde047; font-size:17px;">📜 Saga de Noblesse: Possessor of a Precious Soul</h3>
+          <p style="margin:0; font-size:12px; color:#cbd5e1;">Requisito canônico para acessar a <strong>Grand Olympiad (Lv. 76+)</strong>. Conclua as 4 partes da saga para receber a <strong>Noblesse Tiara</strong> e o título permanente de Nobreza!</p>
+        </div>
+        ${stepsHtml}
+      </div>
+    `;
+  }
+  // 3. Sub-aba: Monumento dos Heróis & Armas Infinity
+  else if (activeSubTab === 'monument') {
+    const weaponsListHtml = Object.values(INFINITY_WEAPONS).map(w => `
+      <div style="background:rgba(0,0,0,0.5); border:1px solid rgba(255,215,0,0.3); border-radius:8px; padding:12px; display:flex; flex-direction:column; justify-content:space-between;">
+        <div>
+          <div style="font-family:'Cinzel',serif; font-size:14px; font-weight:bold; color:#ffd700; margin-bottom:4px;">${w.name}</div>
+          <p style="font-size:11px; color:#cbd5e1; line-height:1.35; margin:0 0 8px 0;">${w.desc}</p>
+        </div>
+        <div style="font-size:10px; color:#93c5fd; background:rgba(0,0,0,0.4); padding:4px 8px; border-radius:4px;">
+          Requer: Lv. 76+ &amp; Status de Herói Ativo
+        </div>
+      </div>
+    `).join('');
+
+    const heroSkillsHtml = Object.values(HEROIC_SKILLS).map(s => `
+      <div style="background:rgba(0,0,0,0.5); border:1px solid rgba(192,132,252,0.3); border-radius:8px; padding:10px;">
+        <div style="font-family:'Cinzel',serif; font-size:13px; font-weight:bold; color:#c084fc; margin-bottom:4px;">${s.name}</div>
+        <p style="font-size:11px; color:#cbd5e1; margin:0; line-height:1.35;">${s.desc}</p>
+      </div>
+    `).join('');
+
+    let claimBtnHtml = '';
+    if (state.isHero) {
+      claimBtnHtml = `<div style="text-align:center; padding:12px; background:rgba(234,179,8,0.2); border:1px solid #ffd700; border-radius:8px; color:#fde047; font-weight:bold; font-size:14px;">👑 VOCÊ É UM HERÓI DE CLASSE SUPREMO DE ADEN!</div>`;
+    } else if (olyStatus.points >= 1500) {
+      claimBtnHtml = `
+        <button
+          onclick="window.claimHeroStatusAction('weapon_infinity_blade')"
+          style="width:100%; padding:14px; font-family:'Cinzel',serif; font-weight:bold; font-size:14px; background:linear-gradient(180deg,#ffd700,#b45309); border:1px solid #fef08a; color:#000; border-radius:8px; cursor:pointer; box-shadow:0 0 20px rgba(255,215,0,0.7); animation:pulse 1.5s infinite;"
+        >
+          👑 REIVINDICAR COROA DE HERÓI (Desbloquear Aura &amp; Armas Infinity)
+        </button>
+      `;
+    } else {
+      claimBtnHtml = `
+        <div style="text-align:center; padding:10px; background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.1); border-radius:8px; color:#94a3b8; font-size:12px;">
+          Alcance <strong>1.500 Pontos de Olimpíada</strong> para ser consagrado Herói da sua Classe! (Atual: ${olyStatus.points} pts)
+        </div>
+      `;
+    }
+
+    subContentHtml = `
+      <div style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,215,0,0.25); border-radius:10px; padding:16px; margin-bottom:16px;">
+        <div style="margin-bottom:14px;">
+          <h3 style="margin:0 0 6px 0; font-family:'Cinzel',serif; color:#fde047; font-size:17px;">👑 Monumento dos Heróis da Grand Olympiad</h3>
+          <p style="margin:0; font-size:12px; color:#cbd5e1;">Os campeões absolutos de cada classe recebem a <strong>Aura Dourada Cintilante</strong>, as <strong>Armas Infinity</strong> e as 4 <strong>Habilidades Míticas de Herói</strong>.</p>
+        </div>
+
+        <div style="margin-bottom:16px;">${claimBtnHtml}</div>
+
+        <div style="margin-bottom:16px;">
+          <div style="font-family:'Cinzel',serif; font-size:14px; font-weight:bold; color:#ffd700; margin-bottom:8px;">⚔️ Arsenal de Armas Infinity de Herói:</div>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:10px;">
+            ${weaponsListHtml}
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family:'Cinzel',serif; font-size:14px; font-weight:bold; color:#c084fc; margin-bottom:8px;">🌟 Habilidades Heroicas Míticas:</div>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:8px;">
+            ${heroSkillsHtml}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+  // 4. Sub-aba: Loja de Tokens de Olimpíada
+  else if (activeSubTab === 'shop') {
+    const shopCardsHtml = OLYMPIAD_SHOP_CATALOG.map(item => {
+      const canAfford = (olyStatus.tokens || 0) >= item.priceTokens;
+      return `
+        <div style="background:rgba(0,0,0,0.5); border:1px solid ${canAfford ? 'rgba(56,189,248,0.3)' : 'rgba(255,255,255,0.08)'}; border-radius:8px; padding:12px; display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <div style="font-family:'Cinzel',serif; font-size:13.5px; font-weight:bold; color:#38bdf8; margin-bottom:4px;">${item.name}</div>
+            <p style="font-size:11px; color:#cbd5e1; line-height:1.35; margin:0 0 10px 0;">${item.desc}</p>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(255,255,255,0.08); padding-top:8px;">
+            <div style="font-weight:bold; font-size:12px; color:#fde047;">🪙 ${item.priceTokens} Tokens</div>
+            <button
+              ${canAfford ? '' : 'disabled'}
+              onclick="window.buyOlympiadItemAction('${item.id}')"
+              style="padding:6px 14px; font-weight:bold; font-size:11px; background:${canAfford ? 'linear-gradient(180deg,#0284c7,#0369a1)' : '#27272a'}; border:1px solid ${canAfford ? '#38bdf8' : '#3f3f46'}; color:${canAfford ? '#fff' : '#71717a'}; border-radius:6px; cursor:${canAfford ? 'pointer' : 'not-allowed'};"
+            >
+              Comprar
+            </button>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    subContentHtml = `
+      <div style="background:rgba(15,23,42,0.6); border:1px solid rgba(255,215,0,0.25); border-radius:10px; padding:16px; margin-bottom:16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+          <div>
+            <h3 style="margin:0 0 4px 0; font-family:'Cinzel',serif; color:#fde047; font-size:17px;">🛍️ Loja de Tokens de Olimpíada (Noblesse Gate Pass)</h3>
+            <p style="margin:0; font-size:12px; color:#cbd5e1;">Adquira Giant's Codex, Blessed Scrolls S-Grade e suprimentos raros com seus tokens.</p>
+          </div>
+          <div style="background:rgba(0,0,0,0.6); border:1px solid #fde047; border-radius:8px; padding:6px 14px; font-weight:bold; color:#fde047; font-size:13px;">
+            🪙 Saldo: ${olyStatus.tokens.toLocaleString()} Tokens
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(270px, 1fr)); gap:12px;">
+          ${shopCardsHtml}
+        </div>
+      </div>
+    `;
+  }
+
+  container.innerHTML = `
+    <div style="padding:14px; max-width:980px; margin:0 auto; font-family:'IBM Plex Sans',sans-serif; color:#f8fafc;">
+      <!-- Header Banner Superior -->
+      <div style="background:linear-gradient(135deg, rgba(234,179,8,0.2), rgba(168,85,247,0.2)); border:1px solid #ffd700; border-radius:12px; padding:16px; margin-bottom:14px; box-shadow:0 4px 20px rgba(0,0,0,0.5);">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+          <div>
+            <h2 style="margin:0 0 4px 0; font-family:'Cinzel',serif; color:#ffd700; font-size:20px; display:flex; align-items:center; gap:8px;">
+              <span>🏆 Grand Olympiad Games &amp; Heróis de Classe</span>
+            </h2>
+            <p style="margin:0; font-size:12px; color:#cbd5e1; line-height:1.4;">
+              Duelos ranqueados 1v1 para Nobres (<strong>Lv. 76+ &amp; Noblesse</strong>). Conquiste a coroa de <strong>HERO</strong>, a <strong>Aura Dourada</strong> e as <strong>Armas Infinity</strong>!
+            </p>
+          </div>
+          <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+            <div style="background:rgba(0,0,0,0.55); border:1px solid ${olyStatus.isNoblesse ? '#4ade80' : '#ef4444'}; border-radius:8px; padding:6px 12px; text-align:center;">
+              <div style="font-size:9.5px; color:#cbd5e1; text-transform:uppercase;">Status</div>
+              <div style="font-size:12px; font-weight:bold; color:${olyStatus.isNoblesse ? '#4ade80' : '#f87171'};">
+                ${olyStatus.isNoblesse ? '👑 Noblesse' : '🔒 Não-Noblesse'}
+              </div>
+            </div>
+            <div style="background:rgba(0,0,0,0.55); border:1px solid #ffd700; border-radius:8px; padding:6px 12px; text-align:center;">
+              <div style="font-size:9.5px; color:#cbd5e1; text-transform:uppercase;">Pontuação ELO</div>
+              <div style="font-size:13px; font-weight:bold; color:#fde047;">🏆 ${olyStatus.points} pts</div>
+            </div>
+            <div style="background:rgba(0,0,0,0.55); border:1px solid #38bdf8; border-radius:8px; padding:6px 12px; text-align:center;">
+              <div style="font-size:9.5px; color:#cbd5e1; text-transform:uppercase;">Tokens</div>
+              <div style="font-size:13px; font-weight:bold; color:#38bdf8;">🪙 ${olyStatus.tokens}</div>
+            </div>
+            <div style="background:rgba(0,0,0,0.55); border:1px solid rgba(255,255,255,0.2); border-radius:8px; padding:6px 12px; text-align:center;">
+              <div style="font-size:9.5px; color:#cbd5e1; text-transform:uppercase;">Cartel</div>
+              <div style="font-size:12px; font-weight:bold; color:#a3e635;">${olyStatus.wins}V - ${olyStatus.losses}D</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navegação por Sub-Abas -->
+      <div style="display:flex; gap:8px; margin-bottom:14px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:8px; flex-wrap:wrap;">
+        <button
+          onclick="window.setOlympiadSubTab('arena')"
+          style="padding:8px 16px; font-family:'Cinzel',serif; font-size:12px; font-weight:bold; background:${activeSubTab === 'arena' ? 'linear-gradient(180deg,#ca8a04,#a16207)' : 'rgba(0,0,0,0.4)'}; border:1px solid ${activeSubTab === 'arena' ? '#fde047' : 'rgba(255,255,255,0.1)'}; color:${activeSubTab === 'arena' ? '#fff' : '#cbd5e1'}; border-radius:6px; cursor:pointer;"
+        >
+          ⚔️ Arena 1v1
+        </button>
+        <button
+          onclick="window.setOlympiadSubTab('noblesse')"
+          style="padding:8px 16px; font-family:'Cinzel',serif; font-size:12px; font-weight:bold; background:${activeSubTab === 'noblesse' ? 'linear-gradient(180deg,#ca8a04,#a16207)' : 'rgba(0,0,0,0.4)'}; border:1px solid ${activeSubTab === 'noblesse' ? '#fde047' : 'rgba(255,255,255,0.1)'}; color:${activeSubTab === 'noblesse' ? '#fff' : '#cbd5e1'}; border-radius:6px; cursor:pointer;"
+        >
+          📜 Saga de Noblesse
+        </button>
+        <button
+          onclick="window.setOlympiadSubTab('monument')"
+          style="padding:8px 16px; font-family:'Cinzel',serif; font-size:12px; font-weight:bold; background:${activeSubTab === 'monument' ? 'linear-gradient(180deg,#ca8a04,#a16207)' : 'rgba(0,0,0,0.4)'}; border:1px solid ${activeSubTab === 'monument' ? '#fde047' : 'rgba(255,255,255,0.1)'}; color:${activeSubTab === 'monument' ? '#fff' : '#cbd5e1'}; border-radius:6px; cursor:pointer;"
+        >
+          👑 Monumento dos Heróis &amp; Armas Infinity
+        </button>
+        <button
+          onclick="window.setOlympiadSubTab('shop')"
+          style="padding:8px 16px; font-family:'Cinzel',serif; font-size:12px; font-weight:bold; background:${activeSubTab === 'shop' ? 'linear-gradient(180deg,#ca8a04,#a16207)' : 'rgba(0,0,0,0.4)'}; border:1px solid ${activeSubTab === 'shop' ? '#fde047' : 'rgba(255,255,255,0.1)'}; color:${activeSubTab === 'shop' ? '#fff' : '#cbd5e1'}; border-radius:6px; cursor:pointer;"
+        >
+          🛍️ Loja de Tokens
+        </button>
+      </div>
+
+      <!-- Conteúdo da Sub-aba Ativa -->
+      ${subContentHtml}
+    </div>
+  `;
+}
+
 
 

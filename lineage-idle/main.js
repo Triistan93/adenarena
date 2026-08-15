@@ -169,6 +169,7 @@ import {
   renderAstralMasteryUI as uiRenderAstralMasteryUI,
   renderExpeditionsUI as uiRenderExpeditionsUI,
   renderRaidsTab as uiRenderRaidsTab,
+  renderOlympiadTab as uiRenderOlympiadTab,
   initTooltipEvents as uiInitTooltipEvents,
   openCompoundModal,
   closeCompoundModal,
@@ -178,6 +179,8 @@ import {
   renderCashShopModal
 } from './src/ui/GameUI.js';
 import { CashShopService } from './src/services/CashShopService.js';
+import { NoblesseService } from './src/services/NoblesseService.js';
+import { OlympiadService } from './src/services/OlympiadService.js';
 
 import { ensureAppLayout, showMenuPanel } from './src/ui/AppLayout.js';
 import { checkTabGuide, closeTabGuideModal, openTabGuideModal } from './src/ui/TutorialGuide.js';
@@ -2478,6 +2481,11 @@ function updateRaidsUI() {
   if (pane) uiRenderRaidsTab(pane, state);
 }
 
+function updateOlympiadUI() {
+  const pane = el('tab-olympiad');
+  if (pane) uiRenderOlympiadTab(pane, state);
+}
+
 function updateAllUI() {
   state = getState();
   uiInitTooltipEvents();
@@ -2508,6 +2516,7 @@ function updateAllUI() {
   if (isTabVisible('astral')) safeUiUpdate('astral', updateAstralUI);
   if (isTabVisible('expeditions')) safeUiUpdate('expeditions', updateExpeditionsUI);
   if (isTabVisible('raids')) safeUiUpdate('raids', updateRaidsUI);
+  if (isTabVisible('olympiad')) safeUiUpdate('olympiad', updateOlympiadUI);
   if (isTabVisible('stage') || isTabVisible('zone') || isTabVisible('zones')) {
     safeUiUpdate('zone-bg', updateZoneBackground);
     safeUiUpdate('zone', updateZoneUI);
@@ -3336,6 +3345,7 @@ function attackMonster() {
     triggerQuestEvent('kill', 1);
     if (monster.boss || monster.elite) triggerQuestEvent('boss', 1);
     triggerQuestEvent('gold', gold);
+    NoblesseService.recordKill(state, monster, { log });
 
     if (monster.isTower) {
       onTowerFloorVictory(monster.towerFloor);
@@ -4399,6 +4409,7 @@ export function openPanel(tabName) {
   else if (targetTab === 'astral') safeUiUpdate('astral', updateAstralUI);
   else if (targetTab === 'expeditions') safeUiUpdate('expeditions', updateExpeditionsUI);
   else if (targetTab === 'raids') safeUiUpdate('raids', updateRaidsUI);
+  else if (targetTab === 'olympiad') safeUiUpdate('olympiad', updateOlympiadUI);
   else if (targetTab === 'enchant') safeUiUpdate('enchant', updateEnchantUI);
   else if (targetTab === 'zones') safeUiUpdate('zones', updateZoneUI);
   else if (targetTab === 'codex') safeUiUpdate('codex', updateCodexUI);
@@ -5922,6 +5933,45 @@ export function init() {
         save();
       }
     };
+
+    // Grand Olympiad & Noblesse Saga
+    window.startOlympiadMatchAction = async () => {
+      const res = await OlympiadService.startOlympiadMatch(state, {
+        log,
+        onUpdate: () => { updateAllUI(); save(); }
+      });
+      updateAllUI();
+      save();
+      return res;
+    };
+    window.completeNoblesseStepAction = (step) => {
+      const res = NoblesseService.completeStep(state, step, {
+        log,
+        onUpdate: () => { updateAllUI(); save(); }
+      });
+      updateAllUI();
+      save();
+      return res;
+    };
+    window.claimHeroStatusAction = (weaponId) => {
+      const res = OlympiadService.claimHeroStatus(state, weaponId, {
+        log,
+        onUpdate: () => { updateAllUI(); save(); }
+      });
+      updateAllUI();
+      save();
+      return res;
+    };
+    window.buyOlympiadItemAction = (itemId) => {
+      const res = OlympiadService.buyShopItem(state, itemId, {
+        log,
+        onUpdate: () => { updateAllUI(); save(); }
+      });
+      updateAllUI();
+      save();
+      return res;
+    };
+
     window.getGameState = () => {
       const data = { 
         ...state, 

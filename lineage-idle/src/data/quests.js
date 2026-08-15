@@ -43,3 +43,51 @@ export const BATTLE_PASS_TIERS = [
  * @deprecated Use BATTLE_PASS_TIERS
  */
 export const PASS_DEFS = BATTLE_PASS_TIERS;
+
+/**
+ * Definições da Saga de Quests de Noblesse: Possessor of a Precious Soul (Partes 1 a 4).
+ */
+export const NOBLESSE_QUEST_DEFS = {
+  part1: {
+    id: 'quest_noblesse_part1',
+    name: 'Possessor of a Precious Soul - Parte 1',
+    step: 1,
+    reqLvl: 75,
+    npc: 'Talien (Giran)',
+    desc: 'Investigue o legado dos heróis antigos com Talien em Giran. Recupere as Páginas do Poema de Eva em Valley of Saints.',
+    targetKills: 25,
+    targetZone: 'valleyOfSaints',
+    reward: { xp: 500000, sp: 25000, gold: 100000, itemName: "Virgil's Letter" }
+  },
+  part2: {
+    id: 'quest_noblesse_part2',
+    name: 'Possessor of a Precious Soul - Parte 2',
+    step: 2,
+    reqLvl: 75,
+    npc: 'Virgil (Rune Township)',
+    desc: 'Leve a carta a Virgil em Rune e purifique as alvas corrompidas nos pântanos de Swamp of Screams.',
+    targetKills: 30,
+    targetZone: 'swampOfScreams',
+    reward: { xp: 800000, sp: 40000, gold: 150000, itemName: 'Caradine’s Letter' }
+  },
+  part3: {
+    id: 'quest_noblesse_part3',
+    name: 'Possessor of a Precious Soul - Parte 3',
+    step: 3,
+    reqLvl: 75,
+    npc: 'Caradine (Goddard)',
+    desc: 'Ajude Caradine em Wall of Argos e enfrente o lendário Raid Boss Flame of Splendor Barakiel para recuperar o Staff of Goddess: Rain Song.',
+    targetBoss: 'barakiel',
+    reward: { xp: 1200000, sp: 60000, gold: 250000, itemName: 'Staff of Goddess: Rain Song' }
+  },
+  part4: {
+    id: 'quest_noblesse_part4',
+    name: 'Possessor of a Precious Soul - Parte 4',
+    step: 4,
+    reqLvl: 75,
+    npc: 'Lady of the Lake (Coliseu / Obelisco Sagrado)',
+    desc: 'Apresente o cajado sagrado à Lady of the Lake. Receba a Bênção Sagrada da Deusa Eva, a Noblesse Tiara e torne-se um Nobre oficial de Aden!',
+    reward: { xp: 2000000, sp: 100000, gold: 500000, isNoblesse: true, tiara: 'accessory_noblesse_tiara', skill: 'blessing_of_noble' }
+  }
+};
+

@@ -121,7 +121,9 @@ export const HAIR = {
   "noble_gold_crown": {"id":"noble_gold_crown","name":"Noble Gold Crown","slot":"hair","tier":1,"def":2,"mdef":5,"matk":0,"hp":0,"req":{"level":1},"price":500,"icon":"acessories/noble_gold_crown.png","desc":"Acessório: Noble Gold Crown."},
   "phantom_mask_gear": {"id":"phantom_mask_gear","name":"Phantom Mask Gear","slot":"hair","tier":1,"def":2,"mdef":5,"matk":0,"hp":0,"req":{"level":1},"price":500,"icon":"acessories/phantom_mask_gear.png","desc":"Acessório: Phantom Mask Gear."},
   "phantom_mask_item": {"id":"phantom_mask_item","name":"Phantom Mask Item","slot":"hair","tier":1,"def":2,"mdef":5,"matk":0,"hp":0,"req":{"level":1},"price":500,"icon":"acessories/phantom_mask_item.png","desc":"Acessório: Phantom Mask Item."},
-  "valakas_mask": {"id":"valakas_mask","name":"Valakas Mask","slot":"hair","tier":1,"def":2,"mdef":5,"matk":0,"hp":0,"req":{"level":1},"price":500,"icon":"acessories/valakas_mask.png","desc":"Acessório: Valakas Mask."}
+  "valakas_mask": {"id":"valakas_mask","name":"Valakas Mask","slot":"hair","tier":1,"def":2,"mdef":5,"matk":0,"hp":0,"req":{"level":1},"price":500,"icon":"acessories/valakas_mask.png","desc":"Acessório: Valakas Mask."},
+  "accessory_noblesse_tiara": {"id":"accessory_noblesse_tiara","name":"Noblesse Tiara","slot":"hair","tier":5,"rarity":"legendary","def":25,"mdef":45,"matk":20,"hp":150,"mp":100,"req":{"level":75},"price":100000,"icon":"acessories/hero_circlet.png","desc":"Coroa Sagrada da Nobreza de Aden: Concede +25 P.Def, +45 M.Def, +20 M.Atk, +150 HP, +100 MP e o status honorável de Noblesse."},
+  "noblesse_tiara": {"id":"accessory_noblesse_tiara","name":"Noblesse Tiara","slot":"hair","tier":5,"rarity":"legendary","def":25,"mdef":45,"matk":20,"hp":150,"mp":100,"req":{"level":75},"price":100000,"icon":"acessories/hero_circlet.png","desc":"Coroa Sagrada da Nobreza de Aden: Concede +25 P.Def, +45 M.Def, +20 M.Atk, +150 HP, +100 MP e o status honorável de Noblesse."}
 };
 
 export const AGATHIONS = {
