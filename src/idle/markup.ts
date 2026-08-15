@@ -170,6 +170,7 @@ export const IDLE_MARKUP = `
           <button class="tab-btn" data-tab="astral">🌟 Maestria</button>
           <button class="tab-btn" data-tab="expeditions">🏰 Expedições &amp; Manor</button>
           <button class="tab-btn" data-tab="raids">🐉 Raids &amp; Bosses</button>
+          <button class="tab-btn" data-tab="olympiad">🏆 Olimpíadas &amp; Heróis</button>
           <button class="tab-btn" data-tab="enchant">✨ Encantamento</button>
           <button class="tab-btn" data-tab="codex">📜 Codex</button>
           <button class="tab-btn" data-tab="dolls">🧸 Dolls</button>
@@ -613,6 +614,9 @@ export const IDLE_MARKUP = `
 
           <!-- Raids & Bosses Tab -->
           <div id="tab-raids" class="tab-pane"></div>
+
+          <!-- Grand Olympiad & Heroes Tab -->
+          <div id="tab-olympiad" class="tab-pane"></div>
 
           <!-- Dedicated Enchantment Tab -->
           <div id="tab-enchant" class="tab-pane">
