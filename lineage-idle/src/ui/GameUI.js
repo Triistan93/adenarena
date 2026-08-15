@@ -78,6 +78,45 @@ export function getAssetUrl(p) {
   return '/' + cleanPath;
 }
 
+const HEIRLOOM_ICON_MAP = {
+  weapon_heirloom_sword: 'gradec/weapons/weapon_samurai_longsword.png',
+  weapon_heirloom_spear: 'gradec/weapons/weapon_spiked_spear.png',
+  weapon_heirloom_dagger: 'gradec/weapons/weapon_darkelven_dagger.png',
+  weapon_heirloom_bow: 'gradec/weapons/weapon_eminence_bow.png',
+  weapon_heirloom_staff: 'gradec/weapons/weapon_crystal_staff.png',
+  weapon_heirloom_duals: 'gradec/weapons/weapon_dual_revolution_sword.png',
+  weapon_heirloom_blunt: 'gradec/weapons/weapon_big_hammer.png',
+  armor_heirloom_chest_heavy: 'gradec/armors/armor_full_plate_heavy_armor.png',
+  armor_heirloom_legs_heavy: 'gradec/armors/armor_plated_leather_light_pants.png',
+  armor_heirloom_helmet_heavy: 'gradec/armors/armor_full_plate_heavy_helmet.png',
+  armor_heirloom_gloves_heavy: 'gradec/armors/armor_full_plate_heavy_gloves.png',
+  armor_heirloom_boots_heavy: 'gradec/armors/armor_full_plate_heavy_boots.png',
+  armor_heirloom_chest_light: 'gradec/armors/armor_theca_light_armor.png',
+  armor_heirloom_legs_light: 'gradec/armors/armor_theca_light_pants.png',
+  armor_heirloom_helmet_light: 'gradec/armors/armor_theca_light_helmet.png',
+  armor_heirloom_gloves_light: 'gradec/armors/armor_theca_light_gloves.png',
+  armor_heirloom_boots_light: 'gradec/armors/armor_theca_light_boots.png',
+  armor_heirloom_chest_robe: 'gradec/armors/armor_karmian_robe_armor.png',
+  armor_heirloom_legs_robe: 'gradec/armors/armor_karmian_robe_pants.png',
+  armor_heirloom_helmet_robe: 'gradec/armors/armor_karmian_helmet.png',
+  armor_heirloom_gloves_robe: 'gradec/armors/armor_karmian_robe_gloves.png',
+  armor_heirloom_boots_robe: 'gradec/armors/armor_karmian_robe_boots.png',
+  armor_heirloom_chest: 'gradec/armors/armor_full_plate_heavy_armor.png',
+  armor_heirloom_legs: 'gradec/armors/armor_plated_leather_light_pants.png',
+  armor_heirloom_helmet: 'gradec/armors/armor_full_plate_heavy_helmet.png',
+  armor_heirloom_gloves: 'gradec/armors/armor_full_plate_heavy_gloves.png',
+  armor_heirloom_boots: 'gradec/armors/armor_full_plate_heavy_boots.png',
+  shield_heirloom_aegis: 'gradec/armors/armor_full_plate_shield.png',
+  jewelry_heirloom_necklace: 'gradec/jewels/jewel_blessed_necklace.png',
+  jewelry_heirloom_earring_1: 'gradec/jewels/jewel_blessed_earing.png',
+  jewelry_heirloom_earring_2: 'gradec/jewels/jewel_blessed_earing.png',
+  jewelry_heirloom_ring_1: 'gradec/jewels/jewel_blessed_ring.png',
+  jewelry_heirloom_ring_2: 'gradec/jewels/jewel_blessed_ring.png',
+  cloak_heirloom_royal: 'gradec/armors/armor_full_plate_cloack.png',
+  belt_heirloom_champion: 'gradec/armors/armor_full_plate_belt.png',
+  hair_heirloom_crown: 'acessories/noble_gold_crown.png'
+};
+
 export function getItemIconUrl(itemOrDef, defParam) {
   if (!itemOrDef && !defParam) return null;
   const gData = D();
@@ -91,6 +130,12 @@ export function getItemIconUrl(itemOrDef, defParam) {
   } else if (itemOrDef) {
     itemId = itemOrDef.itemId || itemOrDef.id || '';
     if (!def) def = all[itemId] || itemOrDef;
+  }
+
+  // Prioridade 1: Mapeamento de Herança resiliente
+  if (HEIRLOOM_ICON_MAP[itemId] || HEIRLOOM_ICON_MAP[def?.id]) {
+    const matchedPath = HEIRLOOM_ICON_MAP[itemId] || HEIRLOOM_ICON_MAP[def?.id];
+    return getAssetUrl(`img/icons/${matchedPath}`);
   }
 
   const iconIndex = (typeof window !== 'undefined' && window.IconIndex)
@@ -217,11 +262,41 @@ export function showItemTooltip(arg1, arg2, state, callbacks = {}) {
   };
 
   // ─── Stats base diretos com Comparativo Delta ────────────────────────────
-  const STAT_KEYS = ['atk','def','matk','mdef','hp','mp','eva','crit','speed','lifesteal'];
-  const STAT_LABEL = { atk:'ATK', def:'DEF', matk:'M.ATK', mdef:'M.DEF', hp:'HP', mp:'MP', eva:'EVA', crit:'CRIT', speed:'SPD', lifesteal:'LIFESTEAL' };
+  const STAT_KEYS = [
+    'atk', 'def', 'matk', 'mdef', 'hp', 'mp', 'eva', 'crit', 'speed', 'lifesteal',
+    'hit', 'atkSpeed', 'castSpeed', 'weightBonus', 'invSlots', 'xpBoost',
+    'stunChance', 'stunResist', 'blockRate', 'hpRegen', 'mpRegen', 'critDmg', 'aoeTargets'
+  ];
+  const STAT_LABEL = {
+    atk: 'P.ATK', def: 'P.DEF', matk: 'M.ATK', mdef: 'M.DEF', hp: 'HP Máximo', mp: 'MP Máximo',
+    eva: 'Evasão', crit: 'Taxa Crítica', speed: 'Velocidade', lifesteal: 'Roubo de Vida',
+    hit: 'Precisão', atkSpeed: 'Atk Speed', castSpeed: 'Cast Speed', weightBonus: 'Capacidade de Carga',
+    invSlots: 'Slots de Mochila', xpBoost: 'Bônus de XP', stunChance: 'Chance de Stun',
+    stunResist: 'Resistência a Stun', blockRate: 'Taxa de Bloqueio', hpRegen: 'Regen HP/s',
+    mpRegen: 'Regen MP/s', critDmg: 'Dano Crítico', aoeTargets: 'Alvos em Área'
+  };
+
   const enchant = item.enchant || 0;
   const enchantMult = 1 + (enchant <= 3 ? enchant * 0.12 : (0.36 + (enchant - 3) * 0.15));
   const foundationMult = item.foundation ? 1.3 : 1;
+  const currentLvl = state?.level || 1;
+  const isHeirloom = !!(def.isHeirloom || item.isHeirloom);
+
+  // Calcula atributos ativos (com suporte dinâmico a Herança)
+  let activeItemStats = { ...def };
+  if (isHeirloom) {
+    if (def.heirloomScaling) {
+      if (currentLvl <= 19 && def.heirloomScaling.phase1) {
+        activeItemStats = { ...activeItemStats, ...(def.heirloomScaling.phase1.stats || {}) };
+      } else if (currentLvl <= 39 && def.heirloomScaling.phase2) {
+        activeItemStats = { ...activeItemStats, ...(def.heirloomScaling.phase2.stats || {}) };
+      } else {
+        activeItemStats = { ...activeItemStats, ...(def.heirloomScaling.phase3?.stats || def.base || {}) };
+      }
+    } else if (def.base) {
+      activeItemStats = { ...activeItemStats, ...def.base };
+    }
+  }
 
   // Comparativo contra o item atualmente equipado
   let equippedStats = null;
@@ -237,10 +312,24 @@ export function showItemTooltip(arg1, arg2, state, callbacks = {}) {
         const eqEnc = eqItem.enchant || 0;
         const eqEncMult = 1 + (eqEnc <= 3 ? eqEnc * 0.12 : (0.36 + (eqEnc - 3) * 0.15));
         const eqFoundMult = eqItem.foundation ? 1.3 : 1;
+        let eqActiveStats = { ...eqDef };
+        if (eqDef.isHeirloom || eqItem.isHeirloom) {
+          if (eqDef.heirloomScaling) {
+            if (currentLvl <= 19 && eqDef.heirloomScaling.phase1) {
+              eqActiveStats = { ...eqActiveStats, ...(eqDef.heirloomScaling.phase1.stats || {}) };
+            } else if (currentLvl <= 39 && eqDef.heirloomScaling.phase2) {
+              eqActiveStats = { ...eqActiveStats, ...(eqDef.heirloomScaling.phase2.stats || {}) };
+            } else {
+              eqActiveStats = { ...eqActiveStats, ...(eqDef.heirloomScaling.phase3?.stats || eqDef.base || {}) };
+            }
+          } else if (eqDef.base) {
+            eqActiveStats = { ...eqActiveStats, ...eqDef.base };
+          }
+        }
         equippedStats = {};
         for (const s of STAT_KEYS) {
-          if (eqDef[s]) {
-            equippedStats[s] = Math.floor(Number(eqDef[s]) * eqMult * eqEncMult * eqFoundMult);
+          if (eqActiveStats[s] !== undefined && eqActiveStats[s] !== null) {
+            equippedStats[s] = Math.floor(Number(eqActiveStats[s]) * eqMult * eqEncMult * eqFoundMult);
           }
         }
       }
@@ -249,9 +338,16 @@ export function showItemTooltip(arg1, arg2, state, callbacks = {}) {
 
   let statsHtml = '';
   for (const s of STAT_KEYS) {
-    if (def[s]) {
-      const v = Math.floor(Number(def[s]) * mult * enchantMult * foundationMult);
-      const suffix = s === 'crit' ? '%' : '';
+    if (activeItemStats[s] !== undefined && activeItemStats[s] !== null && activeItemStats[s] !== 0) {
+      const isPercent = s === 'crit' || s === 'stunChance' || s === 'stunResist' || s === 'blockRate' || s === 'xpBoost' || s === 'critDmg';
+      const rawVal = Number(activeItemStats[s]);
+      let v = rawVal;
+      if (!isPercent) {
+        v = Math.floor(rawVal * mult * enchantMult * foundationMult);
+      } else {
+        v = rawVal <= 1 ? Math.round(rawVal * 100) : rawVal;
+      }
+      const suffix = isPercent ? '%' : '';
       let deltaHtml = '';
       if (equippedStats !== null) {
         const eqV = equippedStats[s] || 0;
@@ -259,14 +355,14 @@ export function showItemTooltip(arg1, arg2, state, callbacks = {}) {
         if (diff > 0) deltaHtml = `<span style="color:#4ade80;font-size:10px;font-weight:bold;margin-left:5px;">(+${diff}${suffix})</span>`;
         else if (diff < 0) deltaHtml = `<span style="color:#ef4444;font-size:10px;font-weight:bold;margin-left:5px;">(${diff}${suffix})</span>`;
       }
-      statsHtml += `<div style="display:flex;justify-content:space-between;font-size:11px;margin:1px 0;">`
-        + `<span style="color:#aaa;">${STAT_LABEL[s]}</span>`
-        + `<div><span style="color:#e8d87e;font-weight:600;">+${v}${suffix}</span>${deltaHtml}</div>`
+      statsHtml += `<div style="display:flex;justify-content:space-between;font-size:11px;margin:2px 0;">`
+        + `<span style="color:#cbd5e1;">${STAT_LABEL[s] || s.toUpperCase()}</span>`
+        + `<div><span style="color:#fcd34d;font-weight:700;">+${v}${suffix}</span>${deltaHtml}</div>`
         + `</div>`;
     }
   }
   const statsStr = statsHtml
-    ? `<div style="margin:6px 0 2px;padding:4px 0;border-top:1px solid rgba(255,255,255,0.1);">${statsHtml}</div>`
+    ? `<div style="margin:8px 0 4px;padding:6px 0;border-top:1px solid rgba(255,255,255,0.12);border-bottom:1px solid rgba(255,255,255,0.08);">${statsHtml}</div>`
     : '';
 
   // ─── Set Bonus Preview (Visualização de Bônus de Conjunto) ───────────────
@@ -435,16 +531,32 @@ export function showItemTooltip(arg1, arg2, state, callbacks = {}) {
     ? `<div style="color:#60a5fa;font-size:9px;font-weight:700;margin-top:4px;display:flex;align-items:center;gap:3px;"><span style="font-size:10px;">🛡️</span> Protegido contra Venda Automática</div>`
     : '';
 
-  const isHeirloom = def.isHeirloom || item.isHeirloom;
+  const currentHeroLvl = state?.level || 1;
+  let heirloomPhaseText = '';
+  let heirloomNextEvolution = '';
+  if (currentHeroLvl <= 19) {
+    heirloomPhaseText = '✦ Fase 1 (Lv. 1–19): +50% superior a No-Grade';
+    heirloomNextEvolution = '✦ Próxima Evolução: Nível 20 (+50% D-Grade)';
+  } else if (currentHeroLvl <= 39) {
+    heirloomPhaseText = '✦ Fase 2 (Lv. 20–39): +50% superior a D-Grade';
+    heirloomNextEvolution = '✦ Próxima Evolução: Nível 40 (C-Grade Pleno +4 Glow)';
+  } else {
+    heirloomPhaseText = '✦ Fase 3 (Lv. 40+): Maturidade C-Grade Pleno (+4 Glow)';
+    heirloomNextEvolution = '✦ Nível Máximo de Herança Atingido!';
+  }
+
   const heirloomHtml = isHeirloom
     ? `
-      <div style="background:linear-gradient(135deg, rgba(255,215,0,0.18), rgba(168,85,247,0.18)); border:1px solid #ffd700; border-radius:4px; padding:6px 8px; margin:6px 0; box-shadow:0 0 10px rgba(255,215,0,0.2);">
+      <div style="background:linear-gradient(135deg, rgba(255,215,0,0.18), rgba(168,85,247,0.18)); border:1px solid #ffd700; border-radius:6px; padding:8px 10px; margin:8px 0; box-shadow:0 0 12px rgba(255,215,0,0.25);">
         <div style="display:flex; justify-content:space-between; align-items:center; font-size:11px; font-weight:bold; color:#ffd700;">
-          <span>⚔️ Item de Herança</span>
-          <span>Nível ${state?.level || 1}/40</span>
+          <span style="display:flex;align-items:center;gap:4px;">⚔️ <span>Item de Herança Dinâmico</span></span>
+          <span style="background:rgba(0,0,0,0.45); border:1px solid rgba(255,215,0,0.5); padding:1px 6px; border-radius:4px; font-size:10px; color:#fde047;">Lv. ${currentHeroLvl}/40</span>
         </div>
-        <div style="font-size:10px; color:#f8fafc; margin-top:2px;">
-          ${(state?.level || 1) <= 19 ? '✦ Fase 1: +50% No-Grade Verde' : ((state?.level || 1) <= 39 ? '✦ Fase 2: +50% D-Grade Verde' : '✦ Fase 3: Maturidade C-Grade Pleno (+4 Glow)')}
+        <div style="font-size:10px; color:#f8fafc; font-weight:600; margin-top:4px;">
+          ${heirloomPhaseText}
+        </div>
+        <div style="font-size:9.5px; color:#a78bfa; margin-top:2px; font-style:italic;">
+          ${heirloomNextEvolution}
         </div>
       </div>
     `

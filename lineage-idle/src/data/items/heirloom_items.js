@@ -19,7 +19,7 @@ export const HEIRLOOM_ITEMS = {
     isHeirloom: true,
     maxHeirloomLevel: 40,
     desc: 'Espada ancestral que evolui em poder com o crescimento do seu portador do Nível 1 ao 40.',
-    icon: 'assets/items/weapons/sword_bastard.jpg',
+    icon: 'gradec/weapons/weapon_samurai_longsword.png',
     base: { atk: 138, crit: 8, hit: 12 },
     heirloomScaling: {
       phase1: { maxLvl: 19, baseMult: 1.5, stats: { atk: 38, crit: 5, hit: 5 }, label: 'No-Grade Superior (+50%)' },
@@ -37,7 +37,7 @@ export const HEIRLOOM_ITEMS = {
     isHeirloom: true,
     maxHeirloomLevel: 40,
     desc: 'Lança lendária de montaria que se fortalece conforme o herói avança de nível (Lv. 1 ao 40).',
-    icon: 'assets/items/weapons/spear_orc.jpg',
+    icon: 'gradec/weapons/weapon_spiked_spear.png',
     base: { atk: 138, crit: 6, hit: 10, aoeTargets: 4 },
     heirloomScaling: {
       phase1: { maxLvl: 19, baseMult: 1.5, stats: { atk: 38, crit: 4, hit: 4, aoeTargets: 2 }, label: 'No-Grade Superior (+50%)' },
@@ -55,7 +55,7 @@ export const HEIRLOOM_ITEMS = {
     isHeirloom: true,
     maxHeirloomLevel: 40,
     desc: 'Lâmina precisa forjada em aço estelar que amplia a letalidade do portador (Lv. 1 ao 40).',
-    icon: 'assets/items/weapons/dagger_mithril.jpg',
+    icon: 'gradec/weapons/weapon_darkelven_dagger.png',
     base: { atk: 118, crit: 18, hit: 15, eva: 8 },
     heirloomScaling: {
       phase1: { maxLvl: 19, baseMult: 1.5, stats: { atk: 32, crit: 10, hit: 6, eva: 3 }, label: 'No-Grade Superior (+50%)' },
@@ -73,7 +73,7 @@ export const HEIRLOOM_ITEMS = {
     isHeirloom: true,
     maxHeirloomLevel: 40,
     desc: 'Arco flexível entalhado em madeira élfica sagrada que dispara flechas com força crescente.',
-    icon: 'assets/items/weapons/bow_composite.jpg',
+    icon: 'gradec/weapons/weapon_eminence_bow.png',
     base: { atk: 168, crit: 15, hit: 14 },
     heirloomScaling: {
       phase1: { maxLvl: 19, baseMult: 1.5, stats: { atk: 45, crit: 8, hit: 5 }, label: 'No-Grade Superior (+50%)' },
@@ -91,7 +91,7 @@ export const HEIRLOOM_ITEMS = {
     isHeirloom: true,
     maxHeirloomLevel: 40,
     desc: 'Cajado ornado com cristal arcano que amplifica a potência dos feitiços mágicos.',
-    icon: 'assets/items/weapons/staff_ghoul.jpg',
+    icon: 'gradec/weapons/weapon_crystal_staff.png',
     base: { atk: 68, matk: 165, mdef: 18, mp: 80 },
     heirloomScaling: {
       phase1: { maxLvl: 19, baseMult: 1.5, stats: { atk: 18, matk: 45, mdef: 6, mp: 20 }, label: 'No-Grade Superior (+50%)' },
@@ -109,7 +109,7 @@ export const HEIRLOOM_ITEMS = {
     isHeirloom: true,
     maxHeirloomLevel: 40,
     desc: 'Par de lâminas forjadas para guerreiros velozes que desferem golpes duplos mortais.',
-    icon: 'assets/items/weapons/dual_revolution.jpg',
+    icon: 'gradec/weapons/weapon_dual_revolution_sword.png',
     base: { atk: 148, crit: 10, hit: 12 },
     heirloomScaling: {
       phase1: { maxLvl: 19, baseMult: 1.5, stats: { atk: 40, crit: 6, hit: 5 }, label: 'No-Grade Superior (+50%)' },
@@ -127,7 +127,7 @@ export const HEIRLOOM_ITEMS = {
     isHeirloom: true,
     maxHeirloomLevel: 40,
     desc: 'Martelo pesado de forja que esmaga armaduras inimigas com grande impacto.',
-    icon: 'assets/items/weapons/blunt_morning_star.jpg',
+    icon: 'gradec/weapons/weapon_big_hammer.png',
     base: { atk: 142, crit: 6, hit: 10, stunChance: 0.15 },
     heirloomScaling: {
       phase1: { maxLvl: 19, baseMult: 1.5, stats: { atk: 39, crit: 4, hit: 4, stunChance: 0.05 }, label: 'No-Grade Superior (+50%)' },
@@ -149,7 +149,7 @@ export const HEIRLOOM_ITEMS = {
     isHeirloom: true,
     maxHeirloomLevel: 40,
     desc: 'Peitoral de placas forjado para suportar o impacto de investidas e monstros colossais.',
-    icon: 'assets/items/armors/plate_composite.jpg',
+    icon: 'gradec/armors/armor_full_plate_heavy_armor.png',
     base: { def: 98, hp: 280, mdef: 36, weightBonus: 2000 },
     heirloomScaling: {
       phase1: { maxLvl: 19, stats: { def: 28, hp: 70, mdef: 10, weightBonus: 500 } },
@@ -167,7 +167,7 @@ export const HEIRLOOM_ITEMS = {
     isHeirloom: true,
     maxHeirloomLevel: 40,
     desc: 'Proteção articulada para as pernas de guerreiros de linha de frente.',
-    icon: 'assets/items/armors/legs_iron.jpg',
+    icon: 'gradec/armors/armor_plated_leather_light_pants.png',
     base: { def: 62, hp: 180, mdef: 24 },
     heirloomScaling: {
       phase1: { maxLvl: 19, stats: { def: 18, hp: 45, mdef: 7 } },
@@ -185,7 +185,7 @@ export const HEIRLOOM_ITEMS = {
     isHeirloom: true,
     maxHeirloomLevel: 40,
     desc: 'Elmo de ferro polido com viseira protetora.',
-    icon: 'assets/items/armors/helm_iron.jpg',
+    icon: 'gradec/armors/armor_full_plate_heavy_helmet.png',
     base: { def: 42, hp: 120, mdef: 18 },
     heirloomScaling: {
       phase1: { maxLvl: 19, stats: { def: 12, hp: 30, mdef: 5 } },
@@ -203,7 +203,7 @@ export const HEIRLOOM_ITEMS = {
     isHeirloom: true,
     maxHeirloomLevel: 40,
     desc: 'Manoplas sólidas para empunhar armas pesadas com firmeza.',
-    icon: 'assets/items/armors/gloves_iron.jpg',
+    icon: 'gradec/armors/armor_full_plate_heavy_gloves.png',
     base: { def: 32, atkSpeed: 5, hit: 6, mdef: 14 },
     heirloomScaling: {
       phase1: { maxLvl: 19, stats: { def: 9, atkSpeed: 2, hit: 2, mdef: 4 } },
@@ -221,7 +221,7 @@ export const HEIRLOOM_ITEMS = {
     isHeirloom: true,
     maxHeirloomLevel: 40,
     desc: 'Botas reforçadas para máxima estabilidade em combate corpo-a-corpo.',
-    icon: 'assets/items/armors/boots_iron.jpg',
+    icon: 'gradec/armors/armor_full_plate_heavy_boots.png',
     base: { def: 32, speed: 6, mdef: 14 },
     heirloomScaling: {
       phase1: { maxLvl: 19, stats: { def: 9, speed: 2, mdef: 4 } },
@@ -241,7 +241,7 @@ export const HEIRLOOM_ITEMS = {
     isHeirloom: true,
     maxHeirloomLevel: 40,
     desc: 'Colete de couro flexível reforçado que permite movimentação ágil e esquiva refinada.',
-    icon: 'assets/items/armors/plate_composite.jpg',
+    icon: 'gradec/armors/armor_theca_light_armor.png',
     base: { def: 78, eva: 8, crit: 6, mdef: 32 },
     heirloomScaling: {
       phase1: { maxLvl: 19, stats: { def: 22, eva: 3, crit: 2, mdef: 8 } },
@@ -259,7 +259,7 @@ export const HEIRLOOM_ITEMS = {
     isHeirloom: true,
     maxHeirloomLevel: 40,
     desc: 'Calças leves de caçador que não restringem passos furtivos.',
-    icon: 'assets/items/armors/legs_iron.jpg',
+    icon: 'gradec/armors/armor_theca_light_pants.png',
     base: { def: 50, eva: 6, speed: 4, mdef: 20 },
     heirloomScaling: {
       phase1: { maxLvl: 19, stats: { def: 14, eva: 2, speed: 1, mdef: 6 } },
@@ -277,7 +277,7 @@ export const HEIRLOOM_ITEMS = {
     isHeirloom: true,
     maxHeirloomLevel: 40,
     desc: 'Proteção de cabeça leve com visor aberto para máxima precisão de mira.',
-    icon: 'assets/items/armors/helm_iron.jpg',
+    icon: 'gradec/armors/armor_theca_light_helmet.png',
     base: { def: 34, hit: 6, mdef: 16 },
     heirloomScaling: {
       phase1: { maxLvl: 19, stats: { def: 10, hit: 2, mdef: 4 } },
@@ -295,7 +295,7 @@ export const HEIRLOOM_ITEMS = {
     isHeirloom: true,
     maxHeirloomLevel: 40,
     desc: 'Luvas de couro de dragão que aumentam a velocidade de ataque e disparo de flechas.',
-    icon: 'assets/items/armors/gloves_iron.jpg',
+    icon: 'gradec/armors/armor_theca_light_gloves.png',
     base: { def: 26, atkSpeed: 8, crit: 4, mdef: 12 },
     heirloomScaling: {
       phase1: { maxLvl: 19, stats: { def: 8, atkSpeed: 3, crit: 1, mdef: 3 } },
@@ -313,7 +313,7 @@ export const HEIRLOOM_ITEMS = {
     isHeirloom: true,
     maxHeirloomLevel: 40,
     desc: 'Botas macias que silenciam passos e conferem velocidade de corrida.',
-    icon: 'assets/items/armors/boots_iron.jpg',
+    icon: 'gradec/armors/armor_theca_light_boots.png',
     base: { def: 26, speed: 10, eva: 6, mdef: 12 },
     heirloomScaling: {
       phase1: { maxLvl: 19, stats: { def: 8, speed: 4, eva: 2, mdef: 3 } },
@@ -333,7 +333,7 @@ export const HEIRLOOM_ITEMS = {
     isHeirloom: true,
     maxHeirloomLevel: 40,
     desc: 'Manto tecido com fios etéreos que potencializa o poder mágico e regeneração de mana.',
-    icon: 'assets/items/armors/plate_composite.jpg',
+    icon: 'gradec/armors/armor_karmian_robe_armor.png',
     base: { def: 56, matk: 35, mp: 250, mdef: 58, mpRegen: 8 },
     heirloomScaling: {
       phase1: { maxLvl: 19, stats: { def: 16, matk: 10, mp: 60, mdef: 16, mpRegen: 2 } },
@@ -351,7 +351,7 @@ export const HEIRLOOM_ITEMS = {
     isHeirloom: true,
     maxHeirloomLevel: 40,
     desc: 'Vestimenta inferior mágica que estabiliza o fluxo de mana.',
-    icon: 'assets/items/armors/legs_iron.jpg',
+    icon: 'gradec/armors/armor_karmian_robe_pants.png',
     base: { def: 38, mp: 160, mdef: 40 },
     heirloomScaling: {
       phase1: { maxLvl: 19, stats: { def: 10, mp: 40, mdef: 12 } },
@@ -369,7 +369,7 @@ export const HEIRLOOM_ITEMS = {
     isHeirloom: true,
     maxHeirloomLevel: 40,
     desc: 'Diadema de prata com safira que clareia a mente durante a conjuração de magias.',
-    icon: 'assets/items/armors/helm_iron.jpg',
+    icon: 'gradec/armors/armor_karmian_helmet.png',
     base: { def: 26, matk: 15, mdef: 32 },
     heirloomScaling: {
       phase1: { maxLvl: 19, stats: { def: 8, matk: 4, mdef: 10 } },
@@ -387,7 +387,7 @@ export const HEIRLOOM_ITEMS = {
     isHeirloom: true,
     maxHeirloomLevel: 40,
     desc: 'Luvas de seda pura encantada que aceleram a velocidade de conjuração mágica (Cast Speed).',
-    icon: 'assets/items/armors/gloves_iron.jpg',
+    icon: 'gradec/armors/armor_karmian_robe_gloves.png',
     base: { def: 20, castSpeed: 15, mdef: 24 },
     heirloomScaling: {
       phase1: { maxLvl: 19, stats: { def: 6, castSpeed: 5, mdef: 8 } },
@@ -405,7 +405,7 @@ export const HEIRLOOM_ITEMS = {
     isHeirloom: true,
     maxHeirloomLevel: 40,
     desc: 'Sandálias leves que canalizam mana da terra para o conjurador.',
-    icon: 'assets/items/armors/boots_iron.jpg',
+    icon: 'gradec/armors/armor_karmian_robe_boots.png',
     base: { def: 20, speed: 7, mpRegen: 4, mdef: 24 },
     heirloomScaling: {
       phase1: { maxLvl: 19, stats: { def: 6, speed: 3, mpRegen: 1, mdef: 8 } },
@@ -425,7 +425,7 @@ export const HEIRLOOM_ITEMS = {
     isHeirloom: true,
     maxHeirloomLevel: 40,
     desc: 'Peitoral de placas forjado para suportar o impacto de investidas e monstros colossais.',
-    icon: 'assets/items/armors/plate_composite.jpg',
+    icon: 'gradec/armors/armor_full_plate_heavy_armor.png',
     base: { def: 98, hp: 280, mdef: 36, weightBonus: 2000 },
     heirloomScaling: {
       phase1: { maxLvl: 19, stats: { def: 28, hp: 70, mdef: 10, weightBonus: 500 } },
@@ -443,7 +443,7 @@ export const HEIRLOOM_ITEMS = {
     isHeirloom: true,
     maxHeirloomLevel: 40,
     desc: 'Proteção articulada para as pernas de guerreiros de linha de frente.',
-    icon: 'assets/items/armors/legs_iron.jpg',
+    icon: 'gradec/armors/armor_plated_leather_light_pants.png',
     base: { def: 62, hp: 180, mdef: 24 },
     heirloomScaling: {
       phase1: { maxLvl: 19, stats: { def: 18, hp: 45, mdef: 7 } },
@@ -461,7 +461,7 @@ export const HEIRLOOM_ITEMS = {
     isHeirloom: true,
     maxHeirloomLevel: 40,
     desc: 'Elmo de ferro polido com viseira protetora.',
-    icon: 'assets/items/armors/helm_iron.jpg',
+    icon: 'gradec/armors/armor_full_plate_heavy_helmet.png',
     base: { def: 42, hp: 120, mdef: 18 },
     heirloomScaling: {
       phase1: { maxLvl: 19, stats: { def: 12, hp: 30, mdef: 5 } },
@@ -479,7 +479,7 @@ export const HEIRLOOM_ITEMS = {
     isHeirloom: true,
     maxHeirloomLevel: 40,
     desc: 'Manoplas sólidas para empunhar armas pesadas com firmeza.',
-    icon: 'assets/items/armors/gloves_iron.jpg',
+    icon: 'gradec/armors/armor_full_plate_heavy_gloves.png',
     base: { def: 32, atkSpeed: 5, hit: 6, mdef: 14 },
     heirloomScaling: {
       phase1: { maxLvl: 19, stats: { def: 9, atkSpeed: 2, hit: 2, mdef: 4 } },
@@ -497,7 +497,7 @@ export const HEIRLOOM_ITEMS = {
     isHeirloom: true,
     maxHeirloomLevel: 40,
     desc: 'Botas reforçadas para máxima estabilidade em combate corpo-a-corpo.',
-    icon: 'assets/items/armors/boots_iron.jpg',
+    icon: 'gradec/armors/armor_full_plate_heavy_boots.png',
     base: { def: 32, speed: 6, mdef: 14 },
     heirloomScaling: {
       phase1: { maxLvl: 19, stats: { def: 9, speed: 2, mdef: 4 } },
@@ -514,7 +514,7 @@ export const HEIRLOOM_ITEMS = {
     isHeirloom: true,
     maxHeirloomLevel: 40,
     desc: 'Escudo guardião que bloqueia projéteis e ataques contundentes.',
-    icon: 'assets/items/armors/shield_plate.jpg',
+    icon: 'gradec/armors/armor_full_plate_shield.png',
     base: { def: 74, blockRate: 25, hp: 150 },
     heirloomScaling: {
       phase1: { maxLvl: 19, stats: { def: 22, blockRate: 15, hp: 40 } },
@@ -533,7 +533,7 @@ export const HEIRLOOM_ITEMS = {
     isHeirloom: true,
     maxHeirloomLevel: 40,
     desc: 'Amuleto real que concede proteção mágica superior e vitalidade.',
-    icon: 'assets/items/accessories/necklace_silver.jpg',
+    icon: 'gradec/jewels/jewel_blessed_necklace.png',
     base: { mdef: 48, hp: 160, mp: 80 },
     heirloomScaling: {
       phase1: { maxLvl: 19, stats: { mdef: 14, hp: 40, mp: 20 } },
@@ -550,7 +550,7 @@ export const HEIRLOOM_ITEMS = {
     isHeirloom: true,
     maxHeirloomLevel: 40,
     desc: 'Brinco místico banhado pela luz da lua conferindo defesa e resistência.',
-    icon: 'assets/items/accessories/earring_silver.jpg',
+    icon: 'gradec/jewels/jewel_blessed_earing.png',
     base: { mdef: 36, hp: 90, stunResist: 0.10 },
     heirloomScaling: {
       phase1: { maxLvl: 19, stats: { mdef: 10, hp: 25, stunResist: 0.03 } },
@@ -567,7 +567,7 @@ export const HEIRLOOM_ITEMS = {
     isHeirloom: true,
     maxHeirloomLevel: 40,
     desc: 'Brinco brilhante banhado pela energia solar conferindo regeneração.',
-    icon: 'assets/items/accessories/earring_silver.jpg',
+    icon: 'gradec/jewels/jewel_blessed_earing.png',
     base: { mdef: 36, hp: 90, hpRegen: 5 },
     heirloomScaling: {
       phase1: { maxLvl: 19, stats: { mdef: 10, hp: 25, hpRegen: 1 } },
@@ -584,7 +584,7 @@ export const HEIRLOOM_ITEMS = {
     isHeirloom: true,
     maxHeirloomLevel: 40,
     desc: 'Anel cravado com safira ancestral que aumenta o poder de ataque.',
-    icon: 'assets/items/accessories/ring_silver.jpg',
+    icon: 'gradec/jewels/jewel_blessed_ring.png',
     base: { mdef: 24, atk: 12, critDmg: 0.05 },
     heirloomScaling: {
       phase1: { maxLvl: 19, stats: { mdef: 7, atk: 3, critDmg: 0.01 } },
@@ -601,7 +601,7 @@ export const HEIRLOOM_ITEMS = {
     isHeirloom: true,
     maxHeirloomLevel: 40,
     desc: 'Anel cravado com rubi ancestral que eleva a taxa de acerto crítico.',
-    icon: 'assets/items/accessories/ring_silver.jpg',
+    icon: 'gradec/jewels/jewel_blessed_ring.png',
     base: { mdef: 24, crit: 5, matk: 15 },
     heirloomScaling: {
       phase1: { maxLvl: 19, stats: { mdef: 7, crit: 1, matk: 4 } },
@@ -620,7 +620,7 @@ export const HEIRLOOM_ITEMS = {
     isHeirloom: true,
     maxHeirloomLevel: 40,
     desc: 'Capa de veludo bordada com fios de ouro que protege contra todos os elementos.',
-    icon: 'assets/items/accessories/cloak_royal.jpg',
+    icon: 'gradec/armors/armor_full_plate_cloack.png',
     base: { def: 18, mdef: 22, hp: 100 },
     heirloomScaling: {
       phase1: { maxLvl: 19, stats: { def: 5, mdef: 6, hp: 30 } },
@@ -637,7 +637,7 @@ export const HEIRLOOM_ITEMS = {
     isHeirloom: true,
     maxHeirloomLevel: 40,
     desc: 'Cinto de couro de dragão que expande a capacidade de carga e inventário.',
-    icon: 'assets/items/accessories/belt_leather.jpg',
+    icon: 'gradec/armors/armor_full_plate_belt.png',
     base: { def: 14, hp: 80, weightBonus: 3000, invSlots: 20 },
     heirloomScaling: {
       phase1: { maxLvl: 19, stats: { def: 4, hp: 20, weightBonus: 1000, invSlots: 10 } },
@@ -654,7 +654,7 @@ export const HEIRLOOM_ITEMS = {
     isHeirloom: true,
     maxHeirloomLevel: 40,
     desc: 'Diadema dourado brilhante com asas laterais que irradia majestade e autoridade.',
-    icon: 'assets/items/accessories/crown_gold.jpg',
+    icon: 'acessories/noble_gold_crown.png',
     base: { def: 10, mdef: 15, hp: 100, xpBoost: 0.10 },
     heirloomScaling: {
       phase1: { maxLvl: 19, stats: { def: 3, mdef: 5, hp: 30, xpBoost: 0.05 } },

@@ -18,7 +18,7 @@ export const CASH_SHOP_CATALOG = {
       priceAC: 100,
       brlEquivalent: 'R$ 7,50',
       badge: 'POPULAR',
-      icon: 'assets/items/weapons/sword_bastard.jpg',
+      icon: 'graded/weapons/weapon_bastard_sword.png',
       desc: 'Kit essencial para começar sem lentidão. Adapta-se à sua classe entregando o conjunto D-Grade correspondente (Heavy, Light ou Robe) + Arma +3 + 2.000x Shots e Poções.',
       contents: {
         gearTier: 'D-Grade Verde (Auto-adaptado)',
@@ -39,7 +39,7 @@ export const CASH_SHOP_CATALOG = {
       priceAC: 250,
       brlEquivalent: 'R$ 15,00',
       badge: 'RECOMENDADO',
-      icon: 'assets/items/weapons/sword_revolution.jpg',
+      icon: 'graded/weapons/weapon_revolution_sword.png',
       desc: 'O melhor custo-benefício. Entrega Conjunto D-Grade completo +3 (Heavy, Light ou Robe), Arma +5 brilhante, Joias completas, 5.000x Shots e Título [Pioneiro].',
       contents: {
         gearTier: 'D-Grade Verde +3 Reforçado',
@@ -64,7 +64,7 @@ export const CASH_SHOP_CATALOG = {
       priceAC: 500,
       brlEquivalent: 'R$ 29,90',
       badge: 'SUPREMO',
-      icon: 'assets/items/accessories/crown_gold.jpg',
+      icon: 'acessories/noble_gold_crown.png',
       desc: 'O pacote definitivo de soberania. Inclui o conjunto completo de Equipamentos de Herança adaptados à sua classe (Heavy, Light ou Robe + Arma da Classe) que escalam do Lv. 1 ao 40, Capa, Cinto, Coroa Alada, Agathion, 15.000x Shots, Passe VIP 30D e Título Dourado [Lorde Soberano].',
       contents: {
         gearTier: 'Herança Escalonável (Lv. 1 ao 40 - Heavy/Light/Robe)',
@@ -93,7 +93,7 @@ export const CASH_SHOP_CATALOG = {
       category: 'weapon_skin',
       name: 'Aparência de Arma: Frost Lord',
       priceAC: 200,
-      icon: 'assets/items/weapons/sword_bastard.jpg',
+      icon: 'gradespecial/weapons/weapon_frost_lord_sword.png',
       desc: 'Envolve sua arma com névoa gélida e partículas cintilantes de gelo eterno.',
       visualEffect: 'frost_aura'
     },
@@ -102,7 +102,7 @@ export const CASH_SHOP_CATALOG = {
       category: 'weapon_skin',
       name: 'Aparência de Arma: Dragão Infernal',
       priceAC: 200,
-      icon: 'assets/items/weapons/sword_revolution.jpg',
+      icon: 'gradec/weapons/weapon_samurai_longsword.png',
       desc: 'Incendeia a lâmina com fogo ardente e faíscas vulcânicas.',
       visualEffect: 'fire_aura'
     },
@@ -111,7 +111,7 @@ export const CASH_SHOP_CATALOG = {
       category: 'weapon_skin',
       name: 'Aparência de Arma: Sagrado Celestial',
       priceAC: 200,
-      icon: 'assets/items/weapons/staff_ghoul.jpg',
+      icon: 'gradec/weapons/weapon_crystal_staff.png',
       desc: 'Irradia raios de luz divina dourada e runas sagradas flutuantes.',
       visualEffect: 'holy_aura'
     },
@@ -120,7 +120,7 @@ export const CASH_SHOP_CATALOG = {
       category: 'costume',
       name: 'Traje de Gala Real de Aden',
       priceAC: 350,
-      icon: 'assets/items/armors/plate_composite.jpg',
+      icon: 'gradec/armors/armor_full_plate_heavy_armor.png',
       desc: 'Vestimenta cerimonial nobre confeccionada para os bailes imperiais do Castelo de Aden.',
       visualEffect: 'royal_suit'
     },
@@ -129,7 +129,7 @@ export const CASH_SHOP_CATALOG = {
       category: 'costume',
       name: 'Armadura do Cavaleiro da Morte',
       priceAC: 350,
-      icon: 'assets/items/armors/helm_iron.jpg',
+      icon: 'gradec/armors/armor_full_plate_heavy_helmet.png',
       desc: 'Traje sombrio de placas negras com olhos azuis incandescentes que emana autoridade obscura.',
       visualEffect: 'death_knight_suit'
     },
@@ -138,7 +138,7 @@ export const CASH_SHOP_CATALOG = {
       category: 'costume',
       name: 'Roupão Élfico da Primavera',
       priceAC: 300,
-      icon: 'assets/items/accessories/cloak_royal.jpg',
+      icon: 'gradec/armors/armor_full_plate_cloack.png',
       desc: 'Túnica élfica adornada com folhas e pétalas encantadas da Floresta dos Tributos.',
       visualEffect: 'elven_spring_suit'
     }
@@ -204,35 +204,35 @@ export const CASH_SHOP_CATALOG = {
       id: 'pass_vip_teleport_30d',
       name: 'Passe de Teleporte VIP (30 Dias)',
       priceAC: 150,
-      icon: 'assets/items/accessories/necklace_silver.jpg',
+      icon: 'gradec/jewels/jewel_blessed_necklace.png',
       desc: 'Teleportes instantâneos ilimitados para qualquer zona de caça de Aden sem custo de taxas de Adena por 30 dias.'
     },
     {
       id: 'scroll_blessed_weapon',
       name: 'Pergaminho Abençoado de Arma (Universal)',
       priceAC: 80,
-      icon: 'assets/items/weapons/sword_bastard.jpg',
+      icon: 'scrolls/scroll_of_enchant_weapon_.png',
       desc: 'Encanta qualquer arma do jogo (+1). Em caso de falha, o equipamento é 100% protegido (não perde níveis nem quebra).'
     },
     {
       id: 'scroll_blessed_armor',
       name: 'Pergaminho Abençoado de Armadura (Universal)',
       priceAC: 50,
-      icon: 'assets/items/armors/plate_composite.jpg',
+      icon: 'scrolls/scroll_of_enchant_armor.png',
       desc: 'Encanta qualquer armadura, escudo ou joia (+1). Em caso de falha, o equipamento é 100% protegido (não perde níveis nem quebra).'
     },
     {
       id: 'spellbook_4star_tome',
       name: 'Tomo Ancestral de Habilidade 4★',
       priceAC: 300,
-      icon: 'assets/skills/holy_shield.jpg',
+      icon: 'spellbooks/spellbook_4star.png',
       desc: 'Tomo primordial necessário para desbloquear a Habilidade Suprema 4★ de Nível 80+ da sua 3ª Classe.'
     },
     {
       id: 'elixir_vigor_bundle_5',
       name: 'Pacote com 5x Elixires de Vigor (1h)',
       priceAC: 25,
-      icon: 'assets/items/accessories/earring_silver.jpg',
+      icon: 'consumables/berserker_elixir.png',
       desc: 'Frascos revigorantes que concedem +30% de Experiência e +30% de Adena por 1 hora cada.'
     }
   ],

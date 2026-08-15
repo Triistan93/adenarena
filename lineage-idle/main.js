@@ -1323,22 +1323,70 @@ function getItemDef(itemId) {
   return null;
 }
 
+const HEIRLOOM_ICON_MAP_MAIN = {
+  weapon_heirloom_sword: 'gradec/weapons/weapon_samurai_longsword.png',
+  weapon_heirloom_spear: 'gradec/weapons/weapon_spiked_spear.png',
+  weapon_heirloom_dagger: 'gradec/weapons/weapon_darkelven_dagger.png',
+  weapon_heirloom_bow: 'gradec/weapons/weapon_eminence_bow.png',
+  weapon_heirloom_staff: 'gradec/weapons/weapon_crystal_staff.png',
+  weapon_heirloom_duals: 'gradec/weapons/weapon_dual_revolution_sword.png',
+  weapon_heirloom_blunt: 'gradec/weapons/weapon_big_hammer.png',
+  armor_heirloom_chest_heavy: 'gradec/armors/armor_full_plate_heavy_armor.png',
+  armor_heirloom_legs_heavy: 'gradec/armors/armor_plated_leather_light_pants.png',
+  armor_heirloom_helmet_heavy: 'gradec/armors/armor_full_plate_heavy_helmet.png',
+  armor_heirloom_gloves_heavy: 'gradec/armors/armor_full_plate_heavy_gloves.png',
+  armor_heirloom_boots_heavy: 'gradec/armors/armor_full_plate_heavy_boots.png',
+  armor_heirloom_chest_light: 'gradec/armors/armor_theca_light_armor.png',
+  armor_heirloom_legs_light: 'gradec/armors/armor_theca_light_pants.png',
+  armor_heirloom_helmet_light: 'gradec/armors/armor_theca_light_helmet.png',
+  armor_heirloom_gloves_light: 'gradec/armors/armor_theca_light_gloves.png',
+  armor_heirloom_boots_light: 'gradec/armors/armor_theca_light_boots.png',
+  armor_heirloom_chest_robe: 'gradec/armors/armor_karmian_robe_armor.png',
+  armor_heirloom_legs_robe: 'gradec/armors/armor_karmian_robe_pants.png',
+  armor_heirloom_helmet_robe: 'gradec/armors/armor_karmian_helmet.png',
+  armor_heirloom_gloves_robe: 'gradec/armors/armor_karmian_robe_gloves.png',
+  armor_heirloom_boots_robe: 'gradec/armors/armor_karmian_robe_boots.png',
+  armor_heirloom_chest: 'gradec/armors/armor_full_plate_heavy_armor.png',
+  armor_heirloom_legs: 'gradec/armors/armor_plated_leather_light_pants.png',
+  armor_heirloom_helmet: 'gradec/armors/armor_full_plate_heavy_helmet.png',
+  armor_heirloom_gloves: 'gradec/armors/armor_full_plate_heavy_gloves.png',
+  armor_heirloom_boots: 'gradec/armors/armor_full_plate_heavy_boots.png',
+  shield_heirloom_aegis: 'gradec/armors/armor_full_plate_shield.png',
+  jewelry_heirloom_necklace: 'gradec/jewels/jewel_blessed_necklace.png',
+  jewelry_heirloom_earring_1: 'gradec/jewels/jewel_blessed_earing.png',
+  jewelry_heirloom_earring_2: 'gradec/jewels/jewel_blessed_earing.png',
+  jewelry_heirloom_ring_1: 'gradec/jewels/jewel_blessed_ring.png',
+  jewelry_heirloom_ring_2: 'gradec/jewels/jewel_blessed_ring.png',
+  cloak_heirloom_royal: 'gradec/armors/armor_full_plate_cloack.png',
+  belt_heirloom_champion: 'gradec/armors/armor_full_plate_belt.png',
+  hair_heirloom_crown: 'acessories/noble_gold_crown.png'
+};
+
 function getItemIcon(defOrId) { 
   if (!defOrId) return '📦';
   const def = (typeof defOrId === 'string') ? getItemDef(defOrId) : (defOrId.itemId ? getItemDef(defOrId.itemId) : defOrId);
   const slot = def?.slot || (typeof defOrId === 'object' ? defOrId.slot : '') || '';
-  const fallbackIcons = { weapon: '⚔️', armor: '🛡️', helmet: '⛑️', gloves: '🧤', boots: '👢', ring: '💍', earring: '💎', necklace: '📿', consumable: '🧪', material: '💎', scroll: '📜', cloak: '🧣', belt: '🎗️', hair: '👑', agathion: '🐾' }; 
+  const fallbackIcons = { weapon: '⚔️', armor: '🛡️', helmet: '⛑️', gloves: '🧤', boots: '👢', ring: '💍', earring: '💎', necklace: '📿', consumable: '🧪', material: '💎', scroll: '📜', cloak: '🧣', belt: '🎗️', hair: '👑', hair1: '👑', agathion: '🐾' }; 
   const emoji = fallbackIcons[slot] || '📦'; 
+
+  const itemId = typeof defOrId === 'string' ? defOrId : (def?.id || defOrId.itemId || '');
+  if (HEIRLOOM_ICON_MAP_MAIN[itemId] || HEIRLOOM_ICON_MAP_MAIN[def?.id]) {
+    const iconUrl = getAssetUrl(`img/icons/${HEIRLOOM_ICON_MAP_MAIN[itemId] || HEIRLOOM_ICON_MAP_MAIN[def?.id]}`);
+    return `<img src="${iconUrl}" alt="${def?.name || ''}" class="item-icon-img" onerror="this.style.display='none';if(this.nextElementSibling)this.nextElementSibling.style.display='inline-block';" style="width:28px; height:28px; object-fit:contain; vertical-align:middle;" /><span class="item-icon-fallback" style="display:none; font-size:18px;">${emoji}</span>`;
+  }
 
   let iconPath = def?.icon || '';
   if (!iconPath) {
-    const id = typeof defOrId === 'string' ? defOrId : (def?.id || defOrId.itemId || '');
     const iconIndex = (typeof window !== 'undefined' && window.IconIndex) ? window.IconIndex : ((D() && D().ICON_MAP) ? D().ICON_MAP : {});
-    iconPath = iconIndex[id] || iconIndex['armor_' + id] || iconIndex['jewel_' + id] || iconIndex['weapon_' + id] || iconIndex[String(id).replace(/^(armor_|jewel_|weapon_|shield_|wepoan_)/, '')] || '';
+    iconPath = iconIndex[itemId] || iconIndex['armor_' + itemId] || iconIndex['jewel_' + itemId] || iconIndex['weapon_' + itemId] || iconIndex[String(itemId).replace(/^(armor_|jewel_|weapon_|shield_|wepoan_)/, '')] || '';
   }
   if (!iconPath) return emoji;
-  if (!iconPath.endsWith('.png')) iconPath += '.png';
-  const iconUrl = getAssetUrl(`img/icons/${iconPath}`);
+  let p = String(iconPath).replace(/\\/g, '/').replace(/^\//, '');
+  if (!p.endsWith('.png') && !p.endsWith('.jpg') && !p.endsWith('.webp') && !p.endsWith('.svg')) p += '.png';
+  if (!p.startsWith('img/icons/') && !p.startsWith('img/')) {
+    p = `img/icons/${p}`;
+  }
+  const iconUrl = getAssetUrl(p);
   return `<img src="${iconUrl}" alt="${def?.name || ''}" class="item-icon-img" onerror="this.style.display='none';if(this.nextElementSibling)this.nextElementSibling.style.display='inline-block';" style="width:28px; height:28px; object-fit:contain; vertical-align:middle;" /><span class="item-icon-fallback" style="display:none; font-size:18px;">${emoji}</span>`; 
 }
 

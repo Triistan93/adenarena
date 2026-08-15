@@ -95,12 +95,15 @@ export function getItemGrade(itemDef) {
 export function checkGradePenalty(playerLevel, itemOrGrade) {
   let gradeKey = 'ng';
   if (typeof itemOrGrade === 'object' && itemOrGrade !== null) {
+    if (itemOrGrade.isHeirloom || itemOrGrade.id?.includes('heirloom') || itemOrGrade.itemId?.includes('heirloom')) {
+      return { hasPenalty: false };
+    }
     gradeKey = getItemGrade(itemOrGrade);
   } else {
     gradeKey = String(itemOrGrade || 'ng').toLowerCase();
   }
 
-  if (gradeKey === 'ng' || gradeKey === 'nograde' || gradeKey === 'none') return { hasPenalty: false };
+  if (gradeKey === 'ng' || gradeKey === 'nograde' || gradeKey === 'none' || gradeKey === 'heirloom') return { hasPenalty: false };
 
   const minLvl = GRADE_REQUIREMENTS[gradeKey] || 1;
   if ((playerLevel || 1) < minLvl) {
