@@ -19,6 +19,7 @@ import {
   getZoneDropTier, rollRarity, rollDrop, rollDropLegacy, getMysticRotation, rollItemWithRarity
 } from './recipes_drops.js';
 import { ELEMENT_OPPOSITES, ELEMENTAL_STONES, getAttributeDamageBonus } from './attributes_belts.js';
+import { RAID_BOSSES } from '../raids.js';
 
 export const ALL_ITEMS = {
   ...WEAPONS, ...ARMORS, ...HELMETS, ...BOOTS, ...GLOVES, ...RINGS,
@@ -38,7 +39,8 @@ if (typeof window !== 'undefined') {
     AFFIX_MAP, AFFIX_POOL, AFFIX_POOLS_THEMED,
     getArmorType, getWeaponType, canEquipByType,
     ARMOR_TYPE_LABEL, WEAPON_TYPE_LABEL, ARMOR_TYPE_ARCHETYPES, WEAPON_TYPE_ARCHETYPES,
-    ELEMENT_OPPOSITES, ELEMENTAL_STONES, getAttributeDamageBonus
+    ELEMENT_OPPOSITES, ELEMENTAL_STONES, getAttributeDamageBonus,
+    RAID_BOSSES
   };
 
   window.ALL_ITEMS = ALL_ITEMS;

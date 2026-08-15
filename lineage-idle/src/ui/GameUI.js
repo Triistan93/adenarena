@@ -17,6 +17,8 @@ import { getClass, getStats, getActiveSetBonuses } from '../engine/StatsEngine.j
 import { getSkillCost } from '../engine/SkillEngine.js';
 import { ZONES, SAGAS, ZONE_BACKGROUNDS } from '../data/zones.js';
 import { MONSTERS, MONSTER_BY_NAME } from '../data/monsters.js';
+import { RAID_BOSSES } from '../data/raids.js';
+import { getRaidStatus } from '../services/RaidService.js';
 import { heroSVG, monsterSVG, MON_IMG } from '../../art.js';
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -4127,8 +4129,7 @@ export function renderCashShopModal(container) {
 export function renderRaidsTab(container, state) {
   if (!container || !state) return;
 
-  const gData = D();
-  const raidBosses = gData?.RAID_BOSSES || {};
+  const raidBosses = RAID_BOSSES || (D() && D().RAID_BOSSES) || {};
   const status = typeof getRaidStatus === 'function' ? getRaidStatus(state) : {
     tickets: state.dailyRaidTickets ?? 3,
     maxTickets: 3,
