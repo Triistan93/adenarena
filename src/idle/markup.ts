@@ -20,7 +20,7 @@ export const IDLE_MARKUP = `
         </div>
         <div class="top-stats-right" style="display:flex; align-items:center; gap:10px; margin-left:auto;">
           <button id="cash-shop-btn" onclick="window.openCashShopModal && window.openCashShopModal()" style="background:linear-gradient(135deg, rgba(255, 215, 0, 0.25), rgba(180, 83, 9, 0.35)); border:1px solid #ffd700; color:#fde047; border-radius:10px; padding:3px 10px; font-size:11px; font-weight:bold; font-family:'Cinzel',serif; cursor:pointer; display:inline-flex; align-items:center; gap:6px; transition:all 0.2s; box-shadow:0 0 8px rgba(255,215,0,0.2);">
-            🪙 Loja de Aden
+            🪙 <span id="top-ac-amount" style="font-weight:bold; color:#ffd700;">0 AC</span> <span style="background:rgba(212,175,55,0.3); border:1px solid rgba(255,215,0,0.6); border-radius:3px; padding:1px 5px; font-size:9px; color:#fef08a; text-transform:uppercase; font-weight:700;">Loja</span>
           </button>
           <button id="daily-reward-btn" onclick="window.openDailyRewardModal && window.openDailyRewardModal()" style="background:linear-gradient(135deg, rgba(234, 179, 8, 0.25), rgba(161, 98, 7, 0.35)); border:1px solid rgba(234, 179, 8, 0.6); color:#fef08a; border-radius:10px; padding:3px 10px; font-size:11px; font-weight:bold; font-family:'Cinzel',serif; cursor:pointer; display:inline-flex; align-items:center; gap:6px; transition:all 0.2s; position:relative;">
             🎁 Check-in Diário
@@ -169,6 +169,7 @@ export const IDLE_MARKUP = `
           <button class="tab-btn" data-tab="alchemy">🧪 Alquimia</button>
           <button class="tab-btn" data-tab="astral">🌟 Maestria</button>
           <button class="tab-btn" data-tab="expeditions">🏰 Expedições &amp; Manor</button>
+          <button class="tab-btn" data-tab="raids">🐉 Raids &amp; Bosses</button>
           <button class="tab-btn" data-tab="enchant">✨ Encantamento</button>
           <button class="tab-btn" data-tab="codex">📜 Codex</button>
           <button class="tab-btn" data-tab="dolls">🧸 Dolls</button>
@@ -609,6 +610,9 @@ export const IDLE_MARKUP = `
 
           <!-- Expeditions & Manor Tab -->
           <div id="tab-expeditions" class="tab-pane"></div>
+
+          <!-- Raids & Bosses Tab -->
+          <div id="tab-raids" class="tab-pane"></div>
 
           <!-- Dedicated Enchantment Tab -->
           <div id="tab-enchant" class="tab-pane">
