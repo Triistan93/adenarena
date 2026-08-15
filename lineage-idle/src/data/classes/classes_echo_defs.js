@@ -2333,7 +2333,7 @@ skills: [
     ]
   },
   holyTemplar: {
-    name: 'Holy Templar', parent: 'divineTemplarS1', race: 'highelf', archetype: 'tank', stage: 2,
+    name: 'Holy Templar', parent: 'lightTemplar', race: 'highelf', archetype: 'tank', stage: 2,
     base: { atk: 38, def: 62, hp: 450, mp: 98, eva: 10, crit: 6, mdef: 38 },
     skills: [
       { name: "Divine Charge",           type: "Ativo",   rarity: "2★", effect: "Charge 260% + taunt AoE", cooldown: "18s", duration: null, note: "Skill permanece após trocar de classe" },
@@ -2441,7 +2441,7 @@ skills: [
     ]
   },
   divineTemplar: {
-    name: 'Divine Templar', parent: 'divineTemplarS2', race: 'highelf', archetype: 'tank', stage: 3,
+    name: 'Divine Templar', parent: 'holyTemplar', race: 'highelf', archetype: 'tank', stage: 3,
     desc: 'Templário Divino — tanque sagrado com poder ofensivo e defesa suprema.',
     base: { atk: 72, def: 98, hp: 750, mp: 145, eva: 14, crit: 8, mdef: 68 },
     skills: [
@@ -2515,9 +2515,9 @@ skills: [
       { name: "ShineMaker's Harmony",         type: "Self-Buff", rarity: "4★", effect: "+55% M.ATK, +45% Heal Power por 30 min", cooldown: "90 min" }
     ]
   },
-  shinemakerS1: { name: 'ShineMaker', parent: 'shineMakerS1', race: 'highelf', archetype: 'support', stage: 1 },
-  shinemakerS2: { name: 'ShineMaker', parent: 'shineMakerS2', race: 'highelf', archetype: 'support', stage: 2 },
-  shinemakerS3: { name: 'ShineMaker', parent: 'shineMakerS2', race: 'highelf', archetype: 'support', stage: 3 },
+  shinemakerS1: { name: 'ShineMaker', parent: 'highElfBase', race: 'highelf', archetype: 'support', stage: 1 },
+  shinemakerS2: { name: 'ShineMaker', parent: 'shinemakerS1', race: 'highelf', archetype: 'support', stage: 2 },
+  shinemakerS3: { name: 'ShineMaker', parent: 'shinemakerS2', race: 'highelf', archetype: 'support', stage: 3 },
 
   // Blood Rose (Ertheia Mystic)
   bloodRoseBase: {
