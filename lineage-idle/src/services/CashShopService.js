@@ -106,13 +106,13 @@ export class CashShopService {
       }
     };
 
-    // 1. Pack Tier 1 (Iniciante)
+    // 1. Pack Tier 1 (Iniciante - Herança Lv. 1-40)
     if (packId === 'starter_pack_tier1') {
-      const armorSet = this.getDGradeArmorSet(archetype);
-      armorSet.forEach(id => addItem(id, 1, 0));
+      const heirloomArmor = this.getHeirloomArmorSet(archetype);
+      heirloomArmor.forEach(id => addItem(id, 1, 0, true));
 
-      const starterWeapon = this.getStarterWeaponForClass(state.class);
-      addItem(starterWeapon, 1, 3); // Arma D-Grade +3
+      const heirloomWeapon = this.getHeirloomWeaponForClass(state.class);
+      addItem(heirloomWeapon, 1, 0, true);
 
       // Shots inteligentes: Spiritshots para magos, Soulshots para físicos
       const shotId = isMage ? 'spiritshot_d' : 'soulshot_d';
@@ -121,24 +121,24 @@ export class CashShopService {
       addItem('scroll_teleport', 5);
 
       if (callbacks.log) {
-        callbacks.log(`🎉 **${pack.name}** resgatado! Você recebeu o Conjunto ${archetype.toUpperCase()} D-Grade, Arma +3 e 2.000x Shots adaptados à sua classe!`, 'system');
+        callbacks.log(`🎉 **${pack.name}** resgatado! Você recebeu o Conjunto de Herança ${archetype.toUpperCase()} (Lv. 1 ao 40), Arma de Herança da Classe e 2.000x Shots!`, 'system');
       }
     }
 
-    // 2. Pack Tier 2 (Campeão)
+    // 2. Pack Tier 2 (Campeão - Herança Lv. 1-40 + Joias de Herança)
     else if (packId === 'starter_pack_tier2') {
-      const armorSet = this.getDGradeArmorSet(archetype);
-      armorSet.forEach(id => addItem(id, 1, 3)); // Armadura +3
+      const heirloomArmor = this.getHeirloomArmorSet(archetype);
+      heirloomArmor.forEach(id => addItem(id, 1, 0, true));
 
-      const starterWeapon = this.getStarterWeaponForClass(state.class);
-      addItem(starterWeapon, 1, 5); // Arma +5
+      const heirloomWeapon = this.getHeirloomWeaponForClass(state.class);
+      addItem(heirloomWeapon, 1, 0, true);
 
-      // Joias D-Grade
-      addItem('jewel_elven_necklace', 1);
-      addItem('jewel_elven_earring', 1);
-      addItem('jewel_elven_earring', 1);
-      addItem('jewel_elven_ring', 1);
-      addItem('jewel_elven_ring', 1);
+      // Joias de Herança (Lv. 1 ao 40)
+      addItem('jewelry_heirloom_necklace', 1, 0, true);
+      addItem('jewelry_heirloom_earring_1', 1, 0, true);
+      addItem('jewelry_heirloom_earring_2', 1, 0, true);
+      addItem('jewelry_heirloom_ring_1', 1, 0, true);
+      addItem('jewelry_heirloom_ring_2', 1, 0, true);
 
       // Shots inteligentes
       const shotId = isMage ? 'spiritshot_d' : 'soulshot_d';
@@ -153,7 +153,7 @@ export class CashShopService {
       state.title = 'Pioneiro';
 
       if (callbacks.log) {
-        callbacks.log(`👑 **${pack.name}** ativado! Conjunto ${archetype.toUpperCase()} D-Grade +3, Arma +5, Joias, 5.000x Shots e Título **[Pioneiro]** concedidos!`, 'system');
+        callbacks.log(`👑 **${pack.name}** ativado! Conjunto de Herança ${archetype.toUpperCase()}, Arma de Herança, 5x Joias de Herança, 5.000x Shots e Título **[Pioneiro]** concedidos!`, 'system');
       }
     }
 
@@ -166,6 +166,11 @@ export class CashShopService {
       // Entrega a Arma de Herança correspondente à classe
       const heirloomWeapon = this.getHeirloomWeaponForClass(state.class);
       addItem(heirloomWeapon, 1, 0, true);
+
+      // Escudo Aegis de Herança para classes de escudo
+      if (['paladin', 'dark_avenger', 'temple_knight', 'shillien_knight', 'knight', 'vanguard_rider'].includes(state.class)) {
+        addItem('shield_heirloom_aegis', 1, 0, true);
+      }
 
       // Joias de Herança
       addItem('jewelry_heirloom_necklace', 1, 0, true);

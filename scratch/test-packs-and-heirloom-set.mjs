@@ -26,41 +26,63 @@ const { getStats, getActiveSetBonuses } = await import('../lineage-idle/src/engi
 
 console.log('🧪 TESTANDO COMPRA DOS PACKS 1 E 2 E VALIDAÇÃO DOS ITENS...\n');
 
-// 1. Testar Compra do Pack 1 (Guerreiro / Heavy)
+// 1. Testar Compra do Pack 1 no Nível 1 (Guerreiro / Heavy)
 const statePack1 = {
   class: 'paladin',
   adenCoins: 500,
   inventory: [],
   equipment: {},
-  level: 20
+  level: 1
 };
 
 const ok1 = CashShopService.buyStarterPack(statePack1, 'starter_pack_tier1', { log: () => {} });
-assert(ok1, 'Compra do Starter Pack 1 realizada com sucesso');
-assert(statePack1.inventory.length >= 8, 'Inventário recebeu armaduras, arma, shots e poções do Pack 1');
+assert(ok1, 'Compra do Starter Pack 1 realizada com sucesso no Nível 1');
+assert(statePack1.inventory.length >= 8, 'Inventário recebeu armaduras de herança, arma, shots e poções do Pack 1');
 
 for (const invItem of statePack1.inventory) {
   const def = ALL_ITEMS[invItem.itemId];
   assert(!!def, `Item do Pack 1 '${invItem.itemId}' existe em ALL_ITEMS`);
+  const equipSlots = ['weapon', 'armor', 'legs', 'helmet', 'gloves', 'boots', 'necklace', 'earring', 'earring1', 'earring2', 'ring', 'ring1', 'ring2', 'cloak', 'belt', 'hair', 'shield'];
+  if (def.slot && equipSlots.includes(def.slot)) {
+    assert(invItem.isHeirloom || def.isHeirloom, `Equipamento do Pack 1 '${def.name}' é Item de Herança (Lv. 1 ao 40)`);
+  }
 }
 
-// 2. Testar Compra do Pack 2 (Mago / Robe)
+// Equipar itens do Pack 1 no Level 1
+const p1Armor = statePack1.inventory.find(i => i.itemId === 'armor_heirloom_chest_heavy');
+assert(!!p1Armor, 'Armadura de Herança entregue no Pack 1');
+statePack1.equipment.armor = p1Armor.uid;
+const statsP1 = getStats(statePack1);
+assert(statsP1.def > 0, `Armadura de Herança equipada com sucesso no Nível 1 (P.Def: ${statsP1.def})`);
+
+// 2. Testar Compra do Pack 2 no Nível 1 (Mago / Robe)
 const statePack2 = {
   class: 'sorcerer',
   adenCoins: 500,
   inventory: [],
   equipment: {},
-  level: 20
+  level: 1
 };
 
 const ok2 = CashShopService.buyStarterPack(statePack2, 'starter_pack_tier2', { log: () => {} });
-assert(ok2, 'Compra do Starter Pack 2 realizada com sucesso');
+assert(ok2, 'Compra do Starter Pack 2 realizada com sucesso no Nível 1');
 assert(statePack2.title === 'Pioneiro', 'Título [Pioneiro] desbloqueado e ativado');
 
 for (const invItem of statePack2.inventory) {
   const def = ALL_ITEMS[invItem.itemId];
   assert(!!def, `Item do Pack 2 '${invItem.itemId}' existe em ALL_ITEMS`);
+  const equipSlots = ['weapon', 'armor', 'legs', 'helmet', 'gloves', 'boots', 'necklace', 'earring', 'earring1', 'earring2', 'ring', 'ring1', 'ring2', 'cloak', 'belt', 'hair', 'shield'];
+  if (def.slot && equipSlots.includes(def.slot)) {
+    assert(invItem.isHeirloom || def.isHeirloom, `Equipamento/Joia do Pack 2 '${def.name}' é Item de Herança (Lv. 1 ao 40)`);
+  }
 }
+
+// Equipar Joias e Robe do Pack 2 no Level 1
+const p2Necklace = statePack2.inventory.find(i => i.itemId === 'jewelry_heirloom_necklace');
+assert(!!p2Necklace, 'Colar de Herança entregue no Pack 2');
+statePack2.equipment.necklace = p2Necklace.uid;
+const statsP2 = getStats(statePack2);
+assert(statsP2.mdef > 0, `Colar de Herança equipado com sucesso no Nível 1 (M.Def: ${statsP2.mdef})`);
 
 console.log('\n🧪 TESTANDO BÔNUS DE SET COMPLETO DE HERANÇA (XP/ADENA/STATS)...\n');
 

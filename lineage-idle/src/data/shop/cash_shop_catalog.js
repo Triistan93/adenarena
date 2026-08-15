@@ -18,13 +18,14 @@ export const CASH_SHOP_CATALOG = {
       priceAC: 100,
       brlEquivalent: 'R$ 7,50',
       badge: 'POPULAR',
-      icon: 'graded/weapons/weapon_bastard_sword.png',
-      desc: 'Kit essencial para começar sem lentidão. Adapta-se à sua classe entregando o conjunto D-Grade correspondente (Heavy, Light ou Robe) + Arma +3 + 2.000x Shots e Poções.',
+      icon: 'gradec/weapons/weapon_berserker_blade.png',
+      desc: 'Kit essencial para começar no Nível 1 sem qualquer penalidade de grau. Entrega o Conjunto de Armadura de Herança (Heavy, Light ou Robe) + Arma de Herança da Classe (escalonáveis do Lv. 1 ao 40) + 2.000x Shots e Poções.',
       contents: {
-        gearTier: 'D-Grade Verde (Auto-adaptado)',
-        weaponEnchant: 3,
+        gearTier: 'Herança Dinâmica (Lv. 1 ao 40 - Auto-adaptado)',
+        isHeirloomSet: true,
         items: [
-          { id: 'armor_brigandine_tunic', name: 'Conjunto D-Grade (Heavy/Light/Robe)', count: 1 }
+          { id: 'armor_heirloom_chest', name: 'Conjunto de Armadura de Herança (5 Peças)', count: 1, isHeirloom: true },
+          { id: 'weapon_heirloom_sword', name: 'Arma de Herança da Classe (Lv. 1 ao 40)', count: 1, isHeirloom: true }
         ],
         consumables: [
           { id: 'soulshot_d', name: '2.000x Shots da Classe (Soul/Spiritshot)', count: 2000 },
@@ -39,16 +40,16 @@ export const CASH_SHOP_CATALOG = {
       priceAC: 250,
       brlEquivalent: 'R$ 15,00',
       badge: 'RECOMENDADO',
-      icon: 'graded/weapons/weapon_revolution_sword.png',
-      desc: 'O melhor custo-benefício. Entrega Conjunto D-Grade completo +3 (Heavy, Light ou Robe), Arma +5 brilhante, Joias completas, 5.000x Shots e Título [Pioneiro].',
+      icon: 'gradec/weapons/weapon_samurai_longsword.png',
+      desc: 'O melhor custo-benefício. Entrega Conjunto de Armadura de Herança (5 Peças), Arma de Herança da Classe, Kit Completo de 5x Joias de Herança (todas equipáveis no Lv. 1), 5.000x Shots e Título [Pioneiro].',
       contents: {
-        gearTier: 'D-Grade Verde +3 Reforçado',
-        armorEnchant: 3,
-        weaponEnchant: 5,
+        gearTier: 'Herança Dinâmica + Joias de Herança (Lv. 1 ao 40)',
+        isHeirloomSet: true,
         title: { id: 'title_pioneiro', name: 'Pioneiro', color: '#38bdf8', glow: true },
         items: [
-          { id: 'armor_brigandine_tunic', name: 'Conjunto D-Grade +3 (Heavy/Light/Robe)', count: 1, enchant: 3 },
-          { id: 'jewelry_necklace_d', name: 'Kit Completo de Joias D-Grade', count: 1 }
+          { id: 'armor_heirloom_chest', name: 'Conjunto de Armadura de Herança (5 Peças)', count: 1, isHeirloom: true },
+          { id: 'weapon_heirloom_sword', name: 'Arma de Herança da Classe (Lv. 1 ao 40)', count: 1, isHeirloom: true },
+          { id: 'jewelry_heirloom_necklace', name: 'Kit Completo de 5x Joias de Herança', count: 1, isHeirloom: true }
         ],
         consumables: [
           { id: 'soulshot_d', name: '5.000x Shots da Classe (Soul/Spiritshot)', count: 5000 },
@@ -65,16 +66,17 @@ export const CASH_SHOP_CATALOG = {
       brlEquivalent: 'R$ 29,90',
       badge: 'SUPREMO',
       icon: 'acessories/noble_gold_crown.png',
-      desc: 'O pacote definitivo de soberania. Inclui o conjunto completo de Equipamentos de Herança adaptados à sua classe (Heavy, Light ou Robe + Arma da Classe) que escalam do Lv. 1 ao 40, Capa, Cinto, Coroa Alada, Agathion, 15.000x Shots, Passe VIP 30D e Título Dourado [Lorde Soberano].',
+      desc: 'O pacote definitivo de soberania. Inclui o conjunto completo de Equipamentos de Herança adaptados à sua classe (5 Peças de Armadura + Arma + 5x Joias + Capa Real + Cinto + Coroa Alada + Escudo Aegis) que ativam o Bônus Soberano de +60% XP/Adena, Agathion Dragão Dourado, 15.000x Shots, Passe VIP 30D e Título Dourado [Lorde Soberano].',
       contents: {
-        gearTier: 'Herança Escalonável (Lv. 1 ao 40 - Heavy/Light/Robe)',
+        gearTier: 'Full Lorde Soberano (12+ Peças de Herança Lv. 1 ao 40)',
         isHeirloomSet: true,
         title: { id: 'title_lorde_soberano', name: 'Lorde Soberano', color: '#ffd700', glow: true, animated: true },
         agathion: { id: 'agathion_golden_dragon', name: 'Agathion Dragão Dourado', desc: 'Companheiro místico que concede +5% Ouro e visual exuberante.' },
         items: [
-          { id: 'armor_heirloom_chest', name: 'Conjunto de Armadura de Herança (Heavy/Light/Robe)', count: 1, isHeirloom: true },
-          { id: 'jewelry_heirloom_necklace', name: 'Kit Completo de Joias de Herança', count: 1, isHeirloom: true },
-          { id: 'cloak_heirloom_royal', name: 'Capa Real + Cinto do Campeão + Coroa Alada', count: 1, isHeirloom: true }
+          { id: 'armor_heirloom_chest', name: 'Conjunto de Armadura de Herança (5 Peças)', count: 1, isHeirloom: true },
+          { id: 'weapon_heirloom_sword', name: 'Arma de Herança da Classe', count: 1, isHeirloom: true },
+          { id: 'jewelry_heirloom_necklace', name: 'Kit Completo de 5x Joias de Herança', count: 1, isHeirloom: true },
+          { id: 'cloak_heirloom_royal', name: 'Capa Real + Cinto do Campeão + Coroa Alada + Escudo Aegis', count: 1, isHeirloom: true }
         ],
         consumables: [
           { id: 'soulshot_c', name: '15.000x Shots C-Grade (Soul/Spiritshot)', count: 15000 },
