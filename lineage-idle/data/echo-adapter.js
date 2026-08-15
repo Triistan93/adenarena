@@ -597,37 +597,110 @@ function buildEchoAdapter() {
       selectedBuff[1] = b2;
     }
 
-    // A ordem de progressão por nível é:
-    // [0]: Dano 1 (1★, Lv. 1, Tier 0)
-    // [1]: Dano 2 (2★, Lv. 20, Tier 1)
-    // [2]: Buff 1 (2★-3★, Lv. 40, Tier 2)
-    // [3]: Sustentação (3★, Lv. 60, Tier 3)
-    // [4]: Buff 2 / Ultimate Suprema (4★, Lv. 76+, Tier 4)
+    const stage = Number(classDef?.stage) || 0;
+    const stageReqLvl = stage === 0 ? 1 : stage === 1 ? 20 : stage === 2 ? 40 : 76;
+    const stageStar = stage === 0 ? 1 : stage === 1 ? 2 : 3;
+    const stageCost = stage === 0 ? 5 : stage === 1 ? 15 : stage === 2 ? 25 : 35;
+
+    // As 5 habilidades padrão do estágio atual
     const curated5 = [
       selectedDmg[0],
       selectedDmg[1],
       selectedBuff[0],
-      selectedSustain[0],
-      selectedBuff[1]
+      selectedBuff[1],
+      selectedSustain[0]
     ];
 
-    const reqLevels = [1, 20, 40, 60, 76];
-    const starRanks = [1, 2, 3, 3, 4];
-    const costs = [5, 15, 25, 35, 45];
-
     const normalizedIds = [];
-    curated5.forEach((s, idx) => {
-      s.tier = idx;
-      s.col = idx;
-      s.reqLvl = reqLevels[idx];
-      s.starRank = starRanks[idx];
-      s.cost = costs[idx];
-      if (idx === 4) {
-        s.isUltimate = true;
-        s.starRank = 4;
-      }
-      normalizedIds.push(s.id);
+    curated5.forEach((rawSkill, idx) => {
+      const sId = `${classId}_${rawSkill.name.toLowerCase().replace(/[^a-z0-9]+/g, '_')}`;
+      const s = {
+        ...rawSkill,
+        id: sId,
+        tier: stage,
+        col: idx,
+        reqLvl: stageReqLvl,
+        starRank: stageStar,
+        cost: stageCost,
+        classReq: classId,
+        isUltimate: false
+      };
+      SKILL_DEFS_ECHO[sId] = s;
+      normalizedIds.push(sId);
     });
+
+    // Se for classe final (3ª Troca / Stage 3 / Lv. 76+), adiciona os desbloqueios de Nível 80+ (2x 3★ e 1x 4★ Ultimate)
+    if (stage >= 3 || classId === 'warg' || classId === 'duelist' || classId === 'titan' || classId === 'vanguardRider') {
+      const arch = (classDef?.archetype || '').toLowerCase();
+      const name = (classDef?.name || '').toLowerCase();
+
+      // 1. Skill 3★ Transcendental 1 (Dano Avançado Lv 80+)
+      const s3_1 = {
+        id: `${classId}_transcendent_strike`,
+        name: `Transcendent ${selectedDmg[0]?.name || 'Burst'}`,
+        type: 'active',
+        tier: 4,
+        col: 5,
+        reqLvl: 80,
+        starRank: 3,
+        cost: 50,
+        pwr: 55,
+        baseCd: 14000,
+        effect: 'dmg',
+        info: 'Dano transcendental supremo causando 450% de poder.',
+        desc: 'Liberação de poder heroico no Nível 80+.',
+        icon: selectedDmg[0]?.icon || 'assets/skills/fire_strike.jpg',
+        classReq: classId,
+        isUltimate: false
+      };
+      SKILL_DEFS_ECHO[s3_1.id] = s3_1;
+      normalizedIds.push(s3_1.id);
+
+      // 2. Skill 3★ Transcendental 2 (Buff de Domínio Lv 80+)
+      const s3_2 = {
+        id: `${classId}_transcendent_mastery`,
+        name: `Mastery of ${classDef?.name || 'Power'}`,
+        type: 'buff',
+        tier: 4,
+        col: 6,
+        reqLvl: 80,
+        starRank: 3,
+        cost: 50,
+        pwr: 0,
+        baseCd: 60000,
+        effect: 'warcry',
+        info: '+40% ATK/M.ATK e +25% Dano Crítico por 120s.',
+        desc: 'Domínio supremo de combate.',
+        icon: 'assets/skills/holy_shield.jpg',
+        classReq: classId,
+        isUltimate: false
+      };
+      SKILL_DEFS_ECHO[s3_2.id] = s3_2;
+      normalizedIds.push(s3_2.id);
+
+      // 3. Skill 4★ Ultimate Suprema (Exige Lv 80+ e Livro Ancestral 4★)
+      const s4_ult = {
+        id: `${classId}_ultimate_4star`,
+        name: name.includes('warg') ? 'Ancestral Wolf Transformation' : `Ultimate ${classDef?.name || 'Apex'} Force`,
+        type: name.includes('warg') ? 'buff' : 'active',
+        tier: 4,
+        col: 7,
+        reqLvl: 80,
+        starRank: 4,
+        cost: 75,
+        pwr: 80,
+        baseCd: 90000,
+        effect: name.includes('warg') ? 'warcry' : 'dmg',
+        info: name.includes('warg') ? 'Transformação em Lobo Ancestral: +60% ATK e +45% Crit Dmg por 60s.' : 'Dano supremo de 4 Estrelas causando 750% de poder com 100% de chance crítica.',
+        desc: 'Habilidade Suprema de 4 Estrelas do Nível 80+.',
+        icon: name.includes('warg') ? 'assets/skills/vampiric_blood.jpg' : 'assets/skills/holy_shield.jpg',
+        classReq: classId,
+        isUltimate: true,
+        requiredItemToUnlock: 'spellbook_4star'
+      };
+      SKILL_DEFS_ECHO[s4_ult.id] = s4_ult;
+      normalizedIds.push(s4_ult.id);
+    }
 
     CLASS_SKILLS_ECHO[classId] = normalizedIds;
   }

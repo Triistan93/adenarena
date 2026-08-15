@@ -1941,12 +1941,35 @@ export function updateSkillInfoPanel(state, callbacks = {}) {
     ? window.SkillScaling.buildSkillEffectText(def, lvl)
     : (def.info || def.desc || '');
 
+  let legacySectionHtml = '';
+  if (state.legacyPassives && Object.keys(state.legacyPassives).length > 0) {
+    const listHtml = Object.values(state.legacyPassives).map(p => `
+      <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.3); border:1px solid rgba(255,215,0,0.25); border-radius:4px; padding:4px 8px; margin-top:4px; font-size:11px;">
+        <span style="color:#ffd700; font-weight:bold;">🧬 ${p.name || p.originalSkill}</span>
+        <span style="color:#34d399; font-weight:bold;">+${(p.val * 100).toFixed(1)}% ${p.stat.toUpperCase()}</span>
+      </div>
+    `).join('');
+
+    legacySectionHtml = `
+      <div class="si-legacy-section" style="margin-top:14px; padding-top:10px; border-top:1px dashed rgba(255,215,0,0.25);">
+        <h4 style="color:#ffd700; font-size:11px; margin-bottom:4px; display:flex; align-items:center; gap:4px;">
+          <span>🧬 Memória de Linhagem</span>
+          <span style="font-size:9px; color:var(--text-muted); font-weight:normal;">(20% Eficácia Passiva)</span>
+        </h4>
+        <div class="legacy-passives-list">
+          ${listHtml}
+        </div>
+      </div>
+    `;
+  }
+
   panel.innerHTML = `
     <div class="si-head"><span class="si-icon">${def.icon || '✦'}</span><div class="si-title"><h3>${def.name}</h3><p class="si-tier">${tier} · Lv.${lvl}/${max}</p></div></div>
     <p class="si-desc">${def.desc || def.note || ''}</p><div class="si-effect">${effectText}</div>
     <div class="si-reqs"><span class="si-label">Requires</span>${reqHtml}</div>
     <button class="si-btn" data-skillup="${id}" ${(!canAfford || !meetsReqs || !lvlOk) ? 'disabled' : ''}>${maxed ? '✦ MAXED' : `Invest ${cost.toLocaleString()} SP`}</button>
     <p class="si-sp">SP available: <strong>${(state.sp || 0).toLocaleString()}</strong></p>
+    ${legacySectionHtml}
   `;
 
   const btn = panel.querySelector('[data-skillup]');

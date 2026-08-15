@@ -5,12 +5,12 @@ globalThis.window.GameData = {};
 
 await import('../lineage-idle/data/echo-adapter.js');
 
-console.log('🧪 VERIFICANDO ARVORES GERADAS PELO ECHO-ADAPTER (PADRÃO 5 SKILLS: 2 DANO, 2 BUFFS, 1 SUSTENTAÇÃO)...\n');
+console.log('🧪 VERIFICANDO ARVORES GERADAS PELO ECHO-ADAPTER (CICLO DE VIDA & NÍVEIS 1-19, 20-39, 40-75, 76-79, 80+)...\n');
 
 const E = globalThis.window.EchoData;
 const defs = E.SKILL_DEFS_ECHO;
 const classSkills = E.CLASS_SKILLS_ECHO;
-const layouts = E.SKILL_TREE_LAYOUT_ECHO;
+const classes = E.CLASSES_ECHO;
 
 console.log(`Total de skills no jogo: ${Object.keys(defs).length}`);
 console.log(`Total de classes com árvore de skills: ${Object.keys(classSkills).length}\n`);
@@ -28,45 +28,43 @@ function assert(condition, name) {
   }
 }
 
-// 1. Warg
+// 1. Stage 0 (Lv 1 - 19)
+const fighterSkills = classSkills['fighter'] || [];
+assert(fighterSkills.length === 5, `Classe Base (Fighter Lv 1-19) possui exatamente 5 skills (Atual: ${fighterSkills.length})`);
+
+// 2. Stage 1 (Lv 20 - 39)
+const warriorSkills = classSkills['warrior'] || [];
+assert(warriorSkills.length === 5, `1ª Troca (Warrior Lv 20-39) possui exatamente 5 skills (Atual: ${warriorSkills.length})`);
+
+// 3. Stage 2 (Lv 40 - 75)
+const gladiatorSkills = classSkills['gladiator'] || [];
+assert(gladiatorSkills.length === 5, `2ª Troca (Gladiator Lv 40-75) possui exatamente 5 skills (Atual: ${gladiatorSkills.length})`);
+
+// 4. Stage 3 (Lv 76+) & Lv 80+ Ultimates
+const duelistSkills = classSkills['duelist'] || [];
 const wargSkills = classSkills['warg'] || [];
-assert(wargSkills.length === 5, `Warg possui exatamente 5 skills (Atual: ${wargSkills.length})`);
-console.log(`   Skills do Warg:`, wargSkills.map(id => `"${defs[id]?.name}" [Tier ${defs[id]?.tier}]`).join(', '));
+assert(duelistSkills.length === 8, `3ª Troca (Duelist Lv 76+ e Lv 80+) possui 8 skills (5 do Lv 76 + 3 do Lv 80+)`);
+assert(wargSkills.length === 8, `3ª Troca (Warg Lv 76+ e Lv 80+) possui 8 skills (5 do Lv 76 + 3 do Lv 80+)`);
 
-// 2. Orc Raider & Orc Rider
-const orcRaiderSkills = classSkills['orcRaider'] || [];
-const orcRiderSkills = classSkills['orcRider'] || [];
-assert(orcRaiderSkills.length === 5, `orcRaider possui exatamente 5 skills (Atual: ${orcRaiderSkills.length})`);
-assert(orcRiderSkills.length === 5, `orcRider possui exatamente 5 skills (Atual: ${orcRiderSkills.length})`);
+// 5. Validação de 4★ Ultimate no Lv 80+
+const wargUltId = wargSkills.find(id => defs[id]?.starRank === 4);
+const wargUlt = defs[wargUltId];
+assert(wargUlt != null, `Warg possui 1 Habilidade 4★ Ultimate`);
+assert(wargUlt?.reqLvl === 80, `4★ Ultimate do Warg exige Lv. 80+`);
 
-// 3. Dark Elf & Assassin
-const darkFighterSkills = classSkills['darkFighter'] || [];
-const assassinSkills = classSkills['assassin'] || [];
-assert(darkFighterSkills.length === 5, `darkFighter possui exatamente 5 skills (Atual: ${darkFighterSkills.length})`);
-assert(assassinSkills.length === 5, `assassin possui exatamente 5 skills (Atual: ${assassinSkills.length})`);
-
-// 4. Dwarf
-const artisanSkills = classSkills['artisan'] || [];
-const scavengerSkills = classSkills['scavenger'] || [];
-assert(artisanSkills.length === 5, `artisan possui exatamente 5 skills (Atual: ${artisanSkills.length})`);
-assert(scavengerSkills.length === 5, `scavenger possui exatamente 5 skills (Atual: ${scavengerSkills.length})`);
-
-// 5. High Elf & Ertheia
-const divineTemplarSkills = classSkills['divineTemplar'] || [];
-const ertheiaFighterSkills = classSkills['ertheiaFighter'] || [];
-assert(divineTemplarSkills.length === 5, `divineTemplar possui exatamente 5 skills (Atual: ${divineTemplarSkills.length})`);
-assert(ertheiaFighterSkills.length === 5, `ertheiaFighter possui exatamente 5 skills (Atual: ${ertheiaFighterSkills.length})`);
-
-// 6. Auditoria de TODAS as 181 classes: todas DEVEM ter exatamente 5 skills e posições válidas
+// 6. Auditoria de todas as 181 classes:
 let invalidCount = 0;
 for (const [cls, list] of Object.entries(classSkills)) {
-  if (!list || list.length !== 5) {
-    console.error(`Classe [${cls}] tem contagem inválida: ${list?.length}`);
+  const cDef = classes[cls];
+  const stage = Number(cDef?.stage) || 0;
+  const expectedCount = (stage >= 3 || cls === 'warg' || cls === 'duelist' || cls === 'titan') ? 8 : 5;
+  if (!list || list.length !== expectedCount) {
+    console.error(`Classe [${cls}] (Stage ${stage}) tem contagem inesperada: ${list?.length} (esperado: ${expectedCount})`);
     invalidCount++;
   }
 }
 
-assert(invalidCount === 0, `100% das 181 classes possuem exatamente 5 habilidades padronizadas`);
+assert(invalidCount === 0, `100% das 181 classes seguem rigorosamente a regra de progressão por estágio`);
 
 console.log(`\n========================================`);
 console.log(`RESULTADO DO ECHO ADAPTER: ${passed} PASSARAM, ${failed} FALHARAM`);

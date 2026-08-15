@@ -147,19 +147,58 @@ export function promoteClass(state, newClassId, callbacks = {}) {
   }
 
   let totalRefunded = 0;
+  let convertedBuffsCount = 0;
   const echoDefs = (typeof window !== 'undefined' && window.EchoData) ? window.EchoData.SKILL_DEFS_ECHO : {};
   const skillDefs = echoDefs || D()?.SKILL_DEFS || {};
+
+  state.legacyPassives = state.legacyPassives || {};
 
   for (const [sId, lvl] of Object.entries(state.skills || {})) {
     if (lvl > 0 && skillDefs[sId]) {
       const def = skillDefs[sId];
-      if (!classSatisfies(newClassId, def.classReq)) {
-        for (let l = 0; l < lvl; l++) {
-          totalRefunded += getSkillCost(sId, l);
-        }
-        state.skills[sId] = 0;
+      const isBuff = def.type === 'buff' || def.type === 'toggle' || def.effect === 'warcry';
+
+      // 1. Reembolsa 100% do SP investido na habilidade da classe anterior
+      for (let l = 0; l < lvl; l++) {
+        totalRefunded += getSkillCost(sId, l);
       }
+
+      // 2. Se for Buff, converte em Passiva de Linhagem Permanente (20% da eficácia original)
+      if (isBuff) {
+        const baseEffectVal = 0.15 + (lvl * 0.03); // ex: 30% no nível 5
+        const passiveVal = +(baseEffectVal * 0.20).toFixed(4); // 20% da eficácia = +6% permanente
+        
+        let statKey = 'patk';
+        const sName = (def.name || '').toLowerCase();
+        if (sName.includes('def') || sName.includes('shield') || sName.includes('aegis') || sName.includes('iron') || sName.includes('will')) {
+          statKey = 'pdef';
+        } else if (sName.includes('magic') || sName.includes('mage') || sName.includes('mystic') || sName.includes('elem')) {
+          statKey = 'matk';
+        } else if (sName.includes('crit') || sName.includes('fury')) {
+          statKey = 'crit';
+        } else if (sName.includes('speed') || sName.includes('wind') || sName.includes('dash') || sName.includes('step')) {
+          statKey = 'speed';
+        }
+
+        state.legacyPassives[sId] = {
+          id: sId,
+          name: `Linhagem: ${def.name}`,
+          originalSkill: def.name,
+          lvl: lvl,
+          stat: statKey,
+          val: passiveVal,
+          desc: `Herança de Classe Passada: +${(passiveVal * 100).toFixed(1)}% ${statKey.toUpperCase()}`
+        };
+        convertedBuffsCount++;
+      }
+
+      // 3. Apaga a habilidade ativa anterior
+      state.skills[sId] = 0;
     }
+  }
+
+  if (convertedBuffsCount > 0) {
+    if (callbacks.log) callbacks.log(`🧬 ${convertedBuffsCount} Buffs anteriores foram convertidos em **Passivas de Linhagem Permanentes** com 20% de eficácia!`, 'rarity-epic');
   }
 
   if (totalRefunded > 0) {

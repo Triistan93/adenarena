@@ -514,6 +514,20 @@ export function getStats(state) {
   xpBoost += astralB.xpBoost;
   buffSpd += astralB.speed;
 
+  // Process Legacy Passives (Herança de Classes Passadas - 20% Eficácia)
+  let legacyCrit = 0;
+  if (state.legacyPassives && typeof state.legacyPassives === 'object') {
+    for (const p of Object.values(state.legacyPassives)) {
+      if (!p || !p.val) continue;
+      const v = Number(p.val) || 0;
+      if (p.stat === 'patk' || p.stat === 'atk') buffAtkMult += v;
+      else if (p.stat === 'pdef' || p.stat === 'def') buffDef += Math.floor(baseDef * v);
+      else if (p.stat === 'matk') buffMatk += Math.floor(baseMatk * v);
+      else if (p.stat === 'speed') buffSpd += Math.floor(v * 50);
+      else if (p.stat === 'crit') legacyCrit += Math.floor(v * 50);
+    }
+  }
+
   const agathionUid = state.equipment?.agathion;
   const agathionItem = agathionUid ? state.inventory?.find(i => i.uid === agathionUid) : null;
   const agathionDef = agathionItem ? D()?.ALL_ITEMS?.[agathionItem.itemId] : null;
