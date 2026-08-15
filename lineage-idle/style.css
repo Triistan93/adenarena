@@ -772,17 +772,37 @@ select:focus-visible {
   color: var(--ink-mute);
   font-weight: 700;
 }
-.log-entry.system  { color: var(--ink-mute); font-style: italic; }
-.log-entry.system::before { content: '·'; }
+.log-time {
+  font-size: 10px;
+  color: #6b7280;
+  margin-right: 4px;
+  font-weight: 500;
+}
+.log-badge {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: bold;
+  padding: 1px 5px;
+  border-radius: 4px;
+  margin-right: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.badge-sys { background: rgba(156, 163, 175, 0.15); color: #9ca3af; border: 1px solid rgba(156, 163, 175, 0.3); }
+.badge-loot { background: rgba(6, 182, 212, 0.15); color: #22d3ee; border: 1px solid rgba(6, 182, 212, 0.4); }
+.badge-gold { background: rgba(234, 179, 8, 0.15); color: #fbbf24; border: 1px solid rgba(234, 179, 8, 0.4); }
+.badge-xp { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); }
+.badge-combat { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.35); }
+.badge-rare { background: rgba(168, 85, 247, 0.2); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.5); }
+.badge-legendary { background: rgba(245, 158, 11, 0.25); color: #fef08a; border: 1px solid rgba(245, 158, 11, 0.6); box-shadow: 0 0 8px rgba(245, 158, 11, 0.3); }
+
+.log-entry.system  { color: var(--ink-mute); }
 .log-entry.combat  { color: var(--ink-dim); }
 .log-entry.damage  { color: #d88; }
 .log-entry.heal    { color: var(--verdigris); }
-.log-entry.xp      { color: var(--amethyst); border-left-color: var(--amethyst); padding-left: 10px; }
-.log-entry.xp::before { content: '✦'; color: var(--amethyst); }
-.log-entry.loot    { color: var(--gilt); }
-.log-entry.loot::before { content: '◈'; color: var(--gilt); }
+.log-entry.xp      { color: #93c5fd; border-left-color: #3b82f6; }
+.log-entry.loot    { color: #fde047; border-left-color: #eab308; }
 .log-entry.saga    { color: var(--gilt-bright); font-weight: 700; letter-spacing: 0.05em; border-left-color: var(--gilt); }
-.log-entry.saga::before { content: '✧'; color: var(--gilt-bright); }
 .log-entry.rarity-common    { color: var(--r-common); }
 .log-entry.rarity-uncommon  { color: var(--r-uncommon); border-left-color: var(--r-uncommon); }
 .log-entry.rarity-rare      { color: var(--r-rare); border-left-color: var(--r-rare); }

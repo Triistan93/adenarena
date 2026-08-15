@@ -997,34 +997,88 @@ function updateBar(id, cur, max) {
   if (bar) bar.style.width = `${Math.max(0, (cur / max) * 100)}%`;
   if (text) text.textContent = `${Math.floor(cur)} / ${Math.floor(max)}`;
 }
-function log(msg, type = 'system') {
+function getLogTime() {
+  const d = new Date();
+  return `[${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}:${String(d.getSeconds()).padStart(2, '0')}]`;
+}
+
+function resolveLogCategory(type, msg) {
+  if (type === 'xp' || type === 'gold' || msg.includes('XP') || msg.includes('SP') || msg.includes('Adena') || msg.includes('JACKPOT') || msg.includes('Level Up')) {
+    return 'gold_xp';
+  }
+  if (type === 'loot' || type.startsWith('rarity-') || msg.includes('Drop') || msg.includes('Obteve') || msg.includes('✦')) {
+    return 'loot';
+  }
+  if (type === 'combat' || type === 'damage' || type === 'heal' || msg.includes('hit') || msg.includes('missed') || msg.includes('DODGE') || msg.includes('Curou') || msg.includes('dano')) {
+    return 'combat';
+  }
+  return 'system';
+}
+
+function getLogBadgeHtml(type, category) {
+  if (category === 'loot') {
+    if (type === 'rarity-legendary') return '<span class="log-badge badge-legendary">LENDÁRIO</span>';
+    if (type === 'rarity-epic') return '<span class="log-badge badge-rare">ÉPICO</span>';
+    if (type === 'rarity-rare') return '<span class="log-badge badge-rare">RARO</span>';
+    return '<span class="log-badge badge-loot">DROP</span>';
+  }
+  if (category === 'gold_xp') {
+    if (type === 'xp') return '<span class="log-badge badge-xp">XP</span>';
+    return '<span class="log-badge badge-gold">OURO</span>';
+  }
+  if (category === 'combat') {
+    if (type === 'heal') return '<span class="log-badge badge-loot">CURA</span>';
+    return '<span class="log-badge badge-combat">LUTA</span>';
+  }
+  return '<span class="log-badge badge-sys">INFO</span>';
+}
+
+function log(msg, type = 'system', explicitCategory = null) {
   const logEl = el('log');
   if (!logEl) return;
+
+  const category = explicitCategory || resolveLogCategory(type, msg);
   const entry = mkEl('p');
   entry.className = `log-entry ${type}`;
-  entry.textContent = msg;
+  entry.dataset.category = category;
+
+  const timeStr = getLogTime();
+  const badgeHtml = getLogBadgeHtml(type, category);
+  entry.innerHTML = `<span class="log-time">${timeStr}</span> ${badgeHtml} ${msg}`;
 
   const currentFilter = state.logFilter || 'all';
-  if (currentFilter !== 'all') {
-    if (currentFilter === 'actions') {
-      const isAction = type.startsWith('rarity-') || type === 'loot' || type === 'enchant' || type === 'craft' || type === 'saga' || type === 'boss' || type === 'system';
-      const isXpOrGoldSpam = msg.includes('+') && (msg.includes('XP') || (msg.includes('g') && !msg.includes('vendido') && !msg.includes('Forjou')));
-      if (!isAction || isXpOrGoldSpam) entry.style.display = 'none';
-    } else if (currentFilter === 'combat') {
-      const isCombat = type === 'combat' || type === 'damage' || type === 'heal';
-      if (!isCombat) entry.style.display = 'none';
-    } else if (currentFilter === 'loot') {
-      const isLoot = type === 'loot' || type === 'xp' || type === 'saga' || type.startsWith('rarity-');
-      if (!isLoot) entry.style.display = 'none';
-    } else if (currentFilter === 'system') {
-      const isSys = type === 'system';
-      if (!isSys) entry.style.display = 'none';
-    }
+  if (currentFilter !== 'all' && currentFilter !== category) {
+    entry.style.display = 'none';
   }
 
+  // Smart Auto-Scroll: apenas se o jogador já estiver no final do log
+  const scrollThreshold = 60;
+  const isNearBottom = (logEl.scrollHeight - logEl.scrollTop - logEl.clientHeight) <= scrollThreshold;
+
   logEl.appendChild(entry);
-  logEl.scrollTop = logEl.scrollHeight;
-  while (logEl.children.length > 100) logEl.removeChild(logEl.firstChild);
+
+  const scrollBtn = el('log-scroll-down-btn');
+  if (isNearBottom) {
+    logEl.scrollTop = logEl.scrollHeight;
+    if (scrollBtn) scrollBtn.style.display = 'none';
+  } else {
+    // Jogador está lendo o histórico anterior; não arrasta a tela bruscamente!
+    if (scrollBtn) scrollBtn.style.display = 'block';
+  }
+
+  // Mantém até 250 mensagens no histórico
+  while (logEl.children.length > 250) {
+    logEl.removeChild(logEl.firstChild);
+  }
+}
+
+function scrollLogToBottom() {
+  const logEl = el('log');
+  const scrollBtn = el('log-scroll-down-btn');
+  if (logEl) {
+    logEl.scrollTo({ top: logEl.scrollHeight, behavior: 'smooth' });
+  }
+  if (scrollBtn) scrollBtn.style.display = 'none';
 }
 
 function safeUiUpdate(label, fn) {
@@ -1577,22 +1631,16 @@ function setLogFilter(filterType) {
   entries.forEach(entry => {
     if (filterType === 'all') {
       entry.style.display = 'block';
-    } else if (filterType === 'actions') {
-      const isAction = Array.from(entry.classList).some(c => c.startsWith('rarity-')) || entry.classList.contains('loot') || entry.classList.contains('enchant') || entry.classList.contains('craft') || entry.classList.contains('saga') || entry.classList.contains('boss') || entry.classList.contains('system');
-      const text = entry.textContent || '';
-      const isSpam = text.includes('XP') || (text.includes('+') && text.includes('g') && !text.includes('vendido') && !text.includes('Forjou'));
-      entry.style.display = (isAction && !isSpam) ? 'block' : 'none';
-    } else if (filterType === 'combat') {
-      const isCombat = entry.classList.contains('combat') || entry.classList.contains('damage') || entry.classList.contains('heal');
-      entry.style.display = isCombat ? 'block' : 'none';
-    } else if (filterType === 'loot') {
-      const isLoot = entry.classList.contains('loot') || entry.classList.contains('xp') || entry.classList.contains('saga') || Array.from(entry.classList).some(c => c.startsWith('rarity-'));
-      entry.style.display = isLoot ? 'block' : 'none';
-    } else if (filterType === 'system') {
-      const isSys = entry.classList.contains('system');
-      entry.style.display = isSys ? 'block' : 'none';
+    } else {
+      const cat = entry.dataset.category || resolveLogCategory(entry.className, entry.textContent || '');
+      entry.style.display = (cat === filterType) ? 'block' : 'none';
     }
   });
+
+  const logEl = el('log');
+  if (logEl) {
+    logEl.scrollTop = logEl.scrollHeight;
+  }
 }
 
 function checkOfflineProgress(lastTime) {
@@ -3147,7 +3195,7 @@ function attackMonster() {
     const xpGain = Math.floor(monster.xp * xpMult);
     const spGain = monster.boss ? 8 : (monster.isElite ? 3 : Math.max(1, monster.sp || 1));
     state.xp += xpGain; state.sp += spGain;
-    log(`Derrotou ${monster.name}! +${xpGain} XP, +${spGain} SP`, 'xp');
+    log(`Derrotou **${monster.name}**! Recebeu **+${xpGain.toLocaleString()} XP** e **+${spGain} SP**`, 'xp', 'gold_xp');
 
     // Acúmulo de Lâmpada Mágica & Craft Points por Abate
     state.magicLampExp = (state.magicLampExp || 0) + Math.floor(xpGain * 0.4);
@@ -3172,7 +3220,13 @@ function attackMonster() {
     const goldMult = zoneMult * (1 + (stats.goldBoost || 0)) * (jackpot ? 10 : 1);
     let gold = Math.floor(baseGold * stats.loot * goldMult); if (gold < 1) gold = 1;
     state.gold += gold; trackGold(gold);
-    if (jackpot) { log(`🪙 JACKPOT! +${gold.toLocaleString()} Adena (×10)`, 'rarity-legendary'); floatText(`🪙 +${gold} Adena`, 'float-jackpot'); } else { log(`+${gold.toLocaleString()} Adena`, 'loot'); if (gold >= 20) floatText(`+${gold} Adena`, 'float-gold'); }
+    if (jackpot) { 
+      log(`🪙 JACKPOT! Coletou **+${gold.toLocaleString()} Adena** (×10)!`, 'rarity-legendary', 'gold_xp'); 
+      floatText(`🪙 +${gold} Adena`, 'float-jackpot'); 
+    } else { 
+      log(`Coletou **+${gold.toLocaleString()} Adena** de ${monster.name}`, 'gold', 'gold_xp'); 
+      if (gold >= 20) floatText(`+${gold} Adena`, 'float-gold'); 
+    }
 
     const rawDrop = D().rollDrop(zoneTier, stats.loot, !!(monster.boss || monster.elite));
     const drops = Array.isArray(rawDrop) ? rawDrop : (rawDrop && rawDrop.itemId ? [ { id: rawDrop.itemId, itemId: rawDrop.itemId, rarity: rawDrop.rarity, isEquipment: true, amount: 1 } ] : []);
@@ -3184,11 +3238,11 @@ function attackMonster() {
         if (isEquip) {
           addToInventory(dropId, 1, drop.rarity || 'common');
           const rName = D().RARITY[drop.rarity || 'common']?.name || (drop.rarity || 'common');
-          log(`✦ ${def.name} [${rName}]`, 'rarity-' + (drop.rarity || 'common'));
+          log(`✦ Obteve **${def.name}** [${rName}]!`, 'rarity-' + (drop.rarity || 'common'), 'loot');
           floatText(`✦ ${rName}!`, 'float-' + (drop.rarity || 'common'));
         } else {
           addToInventory(dropId, drop.amount || 1);
-          log(`+ ${drop.amount || 1}× ${def.name}`, 'loot');
+          log(`📦 Obteve **${drop.amount || 1}x ${def.name}**`, 'loot', 'loot');
         }
       }
     }
@@ -4462,6 +4516,18 @@ export function bindEvents() {
     const spdToggleBtn = el('speed-toggle-btn'); if (spdToggleBtn) spdToggleBtn.onclick = toggleCombatSpeed;
     const clearLogBtn = el('clear-log-btn'); if (clearLogBtn) clearLogBtn.onclick = clearLog;
     qsa('.log-filter-btn').forEach(btn => btn.onclick = () => setLogFilter(btn.dataset.logfilter));
+    const logEl = el('log');
+    if (logEl) {
+      logEl.onscroll = () => {
+        const isNearBottom = (logEl.scrollHeight - logEl.scrollTop - logEl.clientHeight) <= 60;
+        const scrollBtn = el('log-scroll-down-btn');
+        if (isNearBottom && scrollBtn) {
+          scrollBtn.style.display = 'none';
+        }
+      };
+    }
+    const scrollDownBtn = el('log-scroll-down-btn');
+    if (scrollDownBtn) scrollDownBtn.onclick = scrollLogToBottom;
     const offlineOkBtn = el('offline-ok'); if (offlineOkBtn) offlineOkBtn.onclick = () => { const modal = el('offline-modal'); if (modal) modal.classList.remove('active'); };
     const resetSpBtn = el('reset-sp-btn'); if (resetSpBtn) resetSpBtn.onclick = resetSP;
     const autoEquipBtn = el('auto-equip-btn'); if (autoEquipBtn) autoEquipBtn.onclick = autoEquipBest;
@@ -5621,6 +5687,8 @@ export function init() {
     window.closeDailyRewardModal = closeDailyRewardModal;
     window.claimDailyRewardAction = claimDailyRewardAction;
     window.renderDailyRewardModal = renderDailyRewardModal;
+    window.scrollLogToBottom = scrollLogToBottom;
+    window.clearLog = clearLog;
     window.registerCodexItem = registerCodexItem;
     window.buyItem = buyItem;
     window.depositAllToWarehouse = depositAllToWarehouse;

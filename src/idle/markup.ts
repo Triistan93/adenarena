@@ -127,17 +127,22 @@ export const IDLE_MARKUP = `
         <div class="grid-resizer grid-resizer-h" id="resizer-row-stage" title="Arrastre para redimensionar janela de combate"></div>
         <div class="log-controls-bar">
           <div class="log-filters">
-            <button class="log-filter-btn active" data-logfilter="all">Todos</button>
-            <button class="log-filter-btn" data-logfilter="actions">📜 Ações</button>
+            <button class="log-filter-btn active" data-logfilter="all">✨ Todos</button>
+            <button class="log-filter-btn" data-logfilter="loot">📦 Drops &amp; Itens</button>
+            <button class="log-filter-btn" data-logfilter="gold_xp">💰 XP &amp; Ouro</button>
             <button class="log-filter-btn" data-logfilter="combat">⚔️ Combate</button>
-            <button class="log-filter-btn" data-logfilter="loot">💰 Loot</button>
             <button class="log-filter-btn" data-logfilter="system">⚙️ Sistema</button>
           </div>
-          <button id="clear-log-btn" class="log-clear-btn" title="Limpar histórico de log">🧹 Limpar Log</button>
+          <button id="clear-log-btn" class="log-clear-btn" title="Limpar histórico de log">🧹 Limpar</button>
         </div>
-        <div id="log" class="log">
-          <p class="log-entry system">Welcome to Lineage Idle.</p>
-          <p class="log-entry system">Select your Race &amp; Class to begin.</p>
+        <div style="position:relative; height:100%; min-height:0; display:flex; flex-direction:column; overflow:hidden;">
+          <div id="log" class="log">
+            <p class="log-entry system"><span class="log-time">[00:00:00]</span> <span class="log-badge badge-sys">SISTEMA</span> Bem-vindo ao Aden Arena.</p>
+            <p class="log-entry system"><span class="log-time">[00:00:00]</span> <span class="log-badge badge-sys">SISTEMA</span> Selecione sua Raça &amp; Classe para iniciar sua jornada.</p>
+          </div>
+          <button id="log-scroll-down-btn" style="display:none; position:absolute; bottom:12px; left:50%; transform:translateX(-50%); background:rgba(30,35,45,0.92); border:1px solid rgba(212,167,68,0.6); color:#fef08a; font-family:'Cinzel',serif; font-size:11px; font-weight:bold; padding:4px 14px; border-radius:20px; cursor:pointer; box-shadow:0 4px 14px rgba(0,0,0,0.6); z-index:10; animation:bounce 1.5s infinite;" onclick="window.scrollLogToBottom && window.scrollLogToBottom()">
+            ⬇️ Novas Mensagens
+          </button>
         </div>
         <form id="chat-form" class="chat-input-bar">
           <label for="chat-input" class="sr-only" style="display:none;">Mensagem do Chat</label>
