@@ -130,15 +130,15 @@ export function pickRandomMonster(state, callbacks = {}) {
     };
 
     if (isBossSpawn) {
-      if (callbacks.log) callbacks.log(`🚨 CHEFÃO DA ZONA DESPERTADO! 👑 ${template.name} apareceu!`, 'rarity-legendary');
+      if (callbacks.log) callbacks.log(`🚨 CHEFÃO DA ZONA DESPERTADO! 👑 ${template.name} apareceu!`, 'boss', 'system');
       if (callbacks.floatText) callbacks.floatText(`🚨 CHEFÃO APARECEU!`, 'float-jackpot');
     } else if (champion) {
-      if (callbacks.log) callbacks.log(`${champion.namePrefix}! ${template.name} apareceu com drops multiplicados!`, 'rarity-legendary');
+      if (callbacks.log) callbacks.log(`${champion.namePrefix}! ${template.name} apareceu com drops multiplicados!`, 'boss', 'system');
       if (callbacks.floatText) callbacks.floatText(champion.namePrefix, 'float-jackpot');
     } else if (isElite) {
-      if (callbacks.log) callbacks.log(`⚡ Monstro Élite ${template.name} (Miniboss) surgiu!`, 'loot');
+      if (callbacks.log) callbacks.log(`⚡ Monstro Élite ${template.name} (Miniboss) surgiu!`, 'boss', 'system');
     } else {
-      if (callbacks.log) callbacks.log(`Um ${template.name} selvagem apareceu!`, 'combat');
+      if (callbacks.log) callbacks.log(`Um ${template.name} selvagem apareceu!`, 'combat', 'combat');
     }
 
     if (callbacks.renderStageMonster) callbacks.renderStageMonster();

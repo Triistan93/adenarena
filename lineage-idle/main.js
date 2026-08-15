@@ -1003,6 +1003,10 @@ function getLogTime() {
 }
 
 function resolveLogCategory(type, msg) {
+  // Spawn de Boss/Elite, Sagas e Avisos do Servidor pertencem à aba Sistema
+  if (type === 'boss' || type === 'system' || msg.includes('surgiu') || msg.includes('apareceu') || msg.includes('DESPERTADO') || msg.includes('desbloqueada') || msg.includes('DESBLOQUEADA') || msg.includes('Salvo') || msg.includes('carregado') || msg.includes('Élite') || msg.includes('CHEFÃO') || msg.includes('Miniboss')) {
+    return 'system';
+  }
   if (type === 'xp' || type === 'gold' || msg.includes('XP') || msg.includes('SP') || msg.includes('Adena') || msg.includes('JACKPOT') || msg.includes('Level Up')) {
     return 'gold_xp';
   }
@@ -1015,7 +1019,10 @@ function resolveLogCategory(type, msg) {
   return 'system';
 }
 
-function getLogBadgeHtml(type, category) {
+function getLogBadgeHtml(type, category, msg = '') {
+  if (type === 'boss' || msg.includes('CHEFÃO') || msg.includes('Élite') || msg.includes('Miniboss')) {
+    return '<span class="log-badge badge-boss">BOSS</span>';
+  }
   if (category === 'loot') {
     if (type === 'rarity-legendary') return '<span class="log-badge badge-legendary">LENDÁRIO</span>';
     if (type === 'rarity-epic') return '<span class="log-badge badge-rare">ÉPICO</span>';
@@ -1030,7 +1037,7 @@ function getLogBadgeHtml(type, category) {
     if (type === 'heal') return '<span class="log-badge badge-loot">CURA</span>';
     return '<span class="log-badge badge-combat">LUTA</span>';
   }
-  return '<span class="log-badge badge-sys">INFO</span>';
+  return '<span class="log-badge badge-sys">SISTEMA</span>';
 }
 
 function log(msg, type = 'system', explicitCategory = null) {
@@ -1043,7 +1050,7 @@ function log(msg, type = 'system', explicitCategory = null) {
   entry.dataset.category = category;
 
   const timeStr = getLogTime();
-  const badgeHtml = getLogBadgeHtml(type, category);
+  const badgeHtml = getLogBadgeHtml(type, category, msg);
   entry.innerHTML = `<span class="log-time">${timeStr}</span> ${badgeHtml} ${msg}`;
 
   const currentFilter = state.logFilter || 'all';
