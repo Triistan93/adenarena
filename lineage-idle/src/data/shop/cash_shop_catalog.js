@@ -208,18 +208,18 @@ export const CASH_SHOP_CATALOG = {
       desc: 'Teleportes instantâneos ilimitados para qualquer zona de caça de Aden sem custo de taxas de Adena por 30 dias.'
     },
     {
-      id: 'scroll_blessed_weapon_c',
-      name: 'Pergaminho Abençoado de Arma (Blessed C-Grade)',
+      id: 'scroll_blessed_weapon',
+      name: 'Pergaminho Abençoado de Arma (Universal)',
       priceAC: 80,
       icon: 'assets/items/weapons/sword_bastard.jpg',
-      desc: 'Em caso de falha de encantamento, a arma NÃO é destruída em cristais, apenas mantém o nível seguro.'
+      desc: 'Encanta qualquer arma do jogo (+1). Em caso de falha, o equipamento é 100% protegido (não perde níveis nem quebra).'
     },
     {
-      id: 'scroll_blessed_armor_c',
-      name: 'Pergaminho Abençoado de Armadura (Blessed C-Grade)',
+      id: 'scroll_blessed_armor',
+      name: 'Pergaminho Abençoado de Armadura (Universal)',
       priceAC: 50,
       icon: 'assets/items/armors/plate_composite.jpg',
-      desc: 'Encanta armaduras com segurança absoluta sem risco de perda do equipamento.'
+      desc: 'Encanta qualquer armadura, escudo ou joia (+1). Em caso de falha, o equipamento é 100% protegido (não perde níveis nem quebra).'
     },
     {
       id: 'spellbook_4star_tome',

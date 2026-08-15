@@ -946,12 +946,14 @@ export const IDLE_MARKUP = `
 
           <!-- Section 2: Currency & Skill Points -->
           <div class="admin-section">
-            <h3>🪙 Ouro &amp; Skill Points (SP)</h3>
+            <h3>🪙 Economia (Adena, SP &amp; Aden Coins)</h3>
             <div class="admin-btn-group">
               <button class="admin-btn" data-admin-cmd="gold1m">+1M Adena</button>
               <button class="admin-btn" data-admin-cmd="gold10m">+10M Adena</button>
               <button class="admin-btn" data-admin-cmd="sp5k">+5K SP</button>
               <button class="admin-btn" data-admin-cmd="sp50k">+50K SP</button>
+              <button class="admin-btn" data-admin-cmd="ac500" style="background:#7c2d12; border-color:#f59e0b; color:#fbbf24;">+500 AC</button>
+              <button class="admin-btn" data-admin-cmd="ac2000" style="background:#7c2d12; border-color:#f59e0b; color:#fbbf24;">+2.000 AC</button>
             </div>
             <div class="admin-input-row" style="margin-top:8px; display:flex; gap:6px;">
               <input type="number" id="admin-gold-custom" class="admin-num-input" placeholder="Qtd. Adena (ex: 5000000)" style="flex:1;" />
@@ -960,6 +962,10 @@ export const IDLE_MARKUP = `
             <div class="admin-input-row" style="margin-top:6px; display:flex; gap:6px;">
               <input type="number" id="admin-sp-custom" class="admin-num-input" placeholder="Qtd. SP (ex: 25000)" style="flex:1;" />
               <button id="admin-add-sp-btn" class="admin-btn primary">+ SP</button>
+            </div>
+            <div class="admin-input-row" style="margin-top:6px; display:flex; gap:6px;">
+              <input type="number" id="admin-ac-custom" class="admin-num-input" placeholder="Qtd. Aden Coins (ex: 1000)" style="flex:1;" />
+              <button id="admin-add-ac-btn" class="admin-btn primary" style="background:linear-gradient(135deg,#b45309,#d97706); border-color:#f59e0b;">+ Aden Coins</button>
             </div>
           </div>
 

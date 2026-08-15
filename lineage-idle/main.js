@@ -1695,29 +1695,32 @@ function renderCraftRecipes() {
   return updateCraftUI();
 }
 
-function isEnchantScroll(itemId, isWeapon) {
+function isEnchantScroll(itemId, isWeapon, isBlessed = false) {
   if (!itemId) return false;
   const id = String(itemId).toLowerCase();
+  const matchesBlessed = id.includes('blessed');
+  if (isBlessed !== matchesBlessed) return false;
+
   if (isWeapon) {
-    return (id.includes('weapon') || id.includes('armas')) && (id.includes('enchant') || id.includes('scroll'));
+    return (id.includes('weapon') || id.includes('armas')) && (id.includes('enchant') || id.includes('scroll') || id.includes('blessed'));
   } else {
-    return (id.includes('armor') || id.includes('shield') || id.includes('armadura')) && (id.includes('enchant') || id.includes('scroll'));
+    return (id.includes('armor') || id.includes('shield') || id.includes('armadura')) && (id.includes('enchant') || id.includes('scroll') || id.includes('blessed'));
   }
 }
 
-function getEnchantScrollCount(isWeapon) {
+function getEnchantScrollCount(isWeapon, isBlessed = false) {
   if (!state.inventory) return 0;
   return state.inventory.reduce((sum, item) => {
-    if (isEnchantScroll(item.itemId, isWeapon)) {
+    if (isEnchantScroll(item.itemId, isWeapon, isBlessed)) {
       return sum + (item.count || 1);
     }
     return sum;
   }, 0);
 }
 
-function findEnchantScrollItem(isWeapon) {
+function findEnchantScrollItem(isWeapon, isBlessed = false) {
   if (!state.inventory) return null;
-  return state.inventory.find(item => isEnchantScroll(item.itemId, isWeapon) && (item.count || 1) > 0);
+  return state.inventory.find(item => isEnchantScroll(item.itemId, isWeapon, isBlessed) && (item.count || 1) > 0);
 }
 
 function updateEnchantUI() {
@@ -1739,10 +1742,8 @@ function updateEnchantUI() {
     for (const item of equippable) {
       const def = D().ALL_ITEMS[item.itemId];
       const isWeapon = def.slot === 'weapon';
-      const count = getEnchantScrollCount(isWeapon);
-      const scrollItem = findEnchantScrollItem(isWeapon);
-      const scrollDef = scrollItem ? D().ALL_ITEMS[scrollItem.itemId] : null;
-      const scrollName = scrollDef ? scrollDef.name : (isWeapon ? 'Scroll of Enchant Weapon' : 'Scroll of Enchant Armor');
+      const normalCount = getEnchantScrollCount(isWeapon, false);
+      const blessedCount = getEnchantScrollCount(isWeapon, true);
       const enchant = item.enchant || 0;
       const rarityColor = item.rarity ? (D().RARITY[item.rarity]?.color || 'var(--gilt)') : 'var(--gilt)';
       
@@ -1753,25 +1754,31 @@ function updateEnchantUI() {
       card.innerHTML = `
         <div class="enchant-card-info">
           <div class="enchant-item-title" style="color:${rarityColor}">${title} ${item.equipped ? '⚡ (EQUIPADO)' : ''}</div>
-          <div class="enchant-item-sub">Req: ${scrollName} (Possui: ${count}) · ${safeMsg}</div>
+          <div class="enchant-item-sub">Scroll Normal: ${normalCount}x · Blessed: ${blessedCount}x · ${safeMsg}</div>
         </div>
-        <button class="item-action" data-enchant="${item.uid}" ${count < 1 ? 'disabled title="Sem pergaminhos de encantamento"' : ''}>Encantar (+1)</button>
+        <div class="enchant-card-actions" style="display:flex; gap:6px; align-items:center;">
+          <button class="item-action" data-enchant="${item.uid}" data-blessed="false" ${normalCount < 1 ? 'disabled title="Sem Pergaminhos Normais"' : ''}>⚡ Normal</button>
+          <button class="item-action blessed-btn" data-enchant="${item.uid}" data-blessed="true" style="background:linear-gradient(135deg, #7e22ce, #b45309); color:#fff; border:1px solid #f59e0b; font-weight:bold;" ${blessedCount < 1 ? 'disabled title="Sem Pergaminhos Abençoados (Blessed)"' : ''}>✨ Blessed</button>
+        </div>
       `;
       ws.appendChild(card);
     }
 
     ws.querySelectorAll('[data-enchant]').forEach(btn => {
-      btn.onclick = () => enchantItem(btn.dataset.enchant);
+      btn.onclick = () => enchantItem(btn.dataset.enchant, btn.dataset.blessed === 'true');
     });
   }
 }
 
-function enchantItem(uid) {
+function enchantItem(uid, useBlessed = false) {
   const item = state.inventory.find(i => i.uid === uid); if (!item) return;
   const def = D().ALL_ITEMS[item.itemId]; if (!def) return;
   const isWeapon = def.slot === 'weapon';
-  const scrollItem = findEnchantScrollItem(isWeapon);
-  if (!scrollItem) { log('Pergaminho de encantamento necessário!', 'system'); return; }
+  const scrollItem = findEnchantScrollItem(isWeapon, useBlessed);
+  if (!scrollItem) { 
+    log(useBlessed ? 'Pergaminho Abençoado (Blessed) necessário!' : 'Pergaminho de encantamento necessário!', 'system'); 
+    return; 
+  }
   
   if ((scrollItem.count || 1) > 1) {
     scrollItem.count--;
@@ -1784,12 +1791,17 @@ function enchantItem(uid) {
   
   if (Math.random() < chance) {
     item.enchant = currentEnchant + 1;
-    log(`✨ ENCHANT SUCCESS! ${def.name} is now +${item.enchant}!`, 'rarity-legendary');
+    log(`✨ ENCHANT SUCCESS! ${def.name} agora está +${item.enchant}!`, 'rarity-legendary');
     if (typeof floatText === 'function') floatText(`✨ +${item.enchant} SUCESSO!`, 'float-jackpot');
   } else {
-    item.enchant = Math.max(0, currentEnchant - 1);
-    log(`💥 Enchant Failed! ${def.name} reduced to +${item.enchant}.`, 'system');
-    if (typeof floatText === 'function') floatText(`💥 FALHOU (-1)`, 'float-crit');
+    if (useBlessed) {
+      log(`🛡️ [BLESSED PROTECTED] A tentativa de encanto falhou, mas ${def.name} manteve o nível +${currentEnchant} intacto!`, 'rarity-epic');
+      if (typeof floatText === 'function') floatText(`🛡️ PROTEGIDO (+${currentEnchant})`, 'float-jackpot');
+    } else {
+      item.enchant = Math.max(0, currentEnchant - 1);
+      log(`💥 Encantamento falhou! ${def.name} reduziu para +${item.enchant}.`, 'system');
+      if (typeof floatText === 'function') floatText(`💥 FALHOU (-1)`, 'float-crit');
+    }
   }
   
   updateAllUI(); save();
@@ -3543,6 +3555,16 @@ function addAdminSP(amount) {
   save();
 }
 
+function addAdminAC(amount) {
+  const amt = parseInt(amount) || 0;
+  if (amt <= 0) return;
+  state.adenCoins = (state.adenCoins || 0) + amt;
+  log(`🪙 [Admin] +${amt.toLocaleString()} Aden Coins (AC) concedida(s)!`, 'rarity-legendary');
+  floatText(`🪙 +${amt.toLocaleString()} AC!`, 'float-gold');
+  updateAllUI();
+  save();
+}
+
 function adminUnlockSagas() {
   const sagas = D().SAGAS || {};
   state.unlockedSagas = state.unlockedSagas || {};
@@ -3618,6 +3640,8 @@ function executeAdminCmd(cmd) {
   else if (cmd === 'gold10m') { addAdminGold(10000000); }
   else if (cmd === 'sp5k') { addAdminSP(5000); }
   else if (cmd === 'sp50k') { addAdminSP(50000); }
+  else if (cmd === 'ac500') { addAdminAC(500); }
+  else if (cmd === 'ac2000') { addAdminAC(2000); }
   else if (cmd === 'godmode') { state.godMode = !state.godMode; log(`🛡️ [Admin] Invencibilidade: ${state.godMode ? 'ATIVADO' : 'DESATIVADO'}!`, 'rarity-legendary'); }
   else if (cmd === 'healfull') { const stats = getStats(); state.hp = stats.maxHp; state.mp = stats.maxMp; log('❤️ [Admin] HP/MP Restaurados 100%!', 'rarity-legendary'); }
   else if (cmd === 'unlocksagas') { adminUnlockSagas(); }
@@ -4611,6 +4635,17 @@ export function bindEvents() {
         const inp = el('admin-sp-custom');
         if (inp && inp.value) {
           addAdminSP(inp.value);
+          inp.value = '';
+        }
+      };
+    }
+
+    const addAcBtn = el('admin-add-ac-btn');
+    if (addAcBtn) {
+      addAcBtn.onclick = () => {
+        const inp = el('admin-ac-custom');
+        if (inp && inp.value) {
+          addAdminAC(inp.value);
           inp.value = '';
         }
       };
