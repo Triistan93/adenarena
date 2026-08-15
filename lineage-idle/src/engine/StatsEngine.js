@@ -670,10 +670,11 @@ export function getStats(state) {
  * @returns {string} ('zone1'..'zone6')
  */
 export function getZoneDropTier(zoneLevel) {
-  if (zoneLevel < 15) return 'zone1';
-  if (zoneLevel < 35) return 'zone2';
-  if (zoneLevel < 55) return 'zone3';
-  if (zoneLevel < 75) return 'zone4';
-  if (zoneLevel < 90) return 'zone5';
-  return 'zone6';
+  if (zoneLevel < 20) return 'zone1'; // No Grade (Lv 1-19)
+  if (zoneLevel < 40) return 'zone2'; // D Grade (Lv 20-39)
+  if (zoneLevel < 52) return 'zone3'; // C Grade (Lv 40-51)
+  if (zoneLevel < 62) return 'zone4'; // B Grade (Lv 52-61)
+  if (zoneLevel < 76) return 'zone5'; // A Grade (Lv 62-75)
+  if (zoneLevel < 85) return 'zone6'; // S Grade (Lv 76-84)
+  return 'zone7'; // Special / Boss / Frost Lord (Lv 85+)
 }

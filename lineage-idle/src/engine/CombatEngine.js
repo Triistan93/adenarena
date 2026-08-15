@@ -9,6 +9,7 @@ import { ZONES, SAGAS } from '../data/zones.js';
 import { MONSTERS } from '../data/monsters.js';
 import { RACES } from '../data/races.js';
 import { getStats } from './StatsEngine.js';
+import { rollChampionMonster } from './BalanceEngine.js';
 
 let combatInterval = null;
 let monsterAttackTimeout = null;
@@ -89,6 +90,7 @@ export function pickRandomMonster(state, callbacks = {}) {
   if (template) {
     let hpMult = 1, atkMult = 1, xpMult = 1, goldMult = 1;
     let isElite = false;
+    let champion = null;
 
     if (isBossSpawn || template.boss) {
       hpMult = 4.5;
@@ -96,12 +98,20 @@ export function pickRandomMonster(state, callbacks = {}) {
       xpMult = 6.0;
       goldMult = 6.0;
       isBossSpawn = true;
-    } else if (Math.random() < 0.08) {
-      hpMult = 1.8;
-      atkMult = 1.3;
-      xpMult = 2.5;
-      goldMult = 3.0;
-      isElite = true;
+    } else {
+      champion = rollChampionMonster();
+      if (champion) {
+        hpMult = champion.hpMult;
+        atkMult = champion.atkMult;
+        xpMult = champion.xpMult;
+        goldMult = champion.goldMult;
+      } else if (Math.random() < 0.08) {
+        hpMult = 1.8;
+        atkMult = 1.3;
+        xpMult = 2.5;
+        goldMult = 3.0;
+        isElite = true;
+      }
     }
 
     const finalHp = Math.floor(template.hp * hpMult);
@@ -114,12 +124,17 @@ export function pickRandomMonster(state, callbacks = {}) {
       gold: [Math.floor((template.gold[0] || 5) * goldMult), Math.floor((template.gold[1] || 15) * goldMult)],
       boss: isBossSpawn || !!template.boss,
       isElite: isElite,
+      champion: champion ? champion.type : null,
+      championColor: champion ? champion.color : null,
       _stunnedUntil: 0
     };
 
     if (isBossSpawn) {
       if (callbacks.log) callbacks.log(`🚨 CHEFÃO DA ZONA DESPERTADO! 👑 ${template.name} apareceu!`, 'rarity-legendary');
       if (callbacks.floatText) callbacks.floatText(`🚨 CHEFÃO APARECEU!`, 'float-jackpot');
+    } else if (champion) {
+      if (callbacks.log) callbacks.log(`${champion.namePrefix}! ${template.name} apareceu com drops multiplicados!`, 'rarity-legendary');
+      if (callbacks.floatText) callbacks.floatText(champion.namePrefix, 'float-jackpot');
     } else if (isElite) {
       if (callbacks.log) callbacks.log(`⚡ Monstro Élite ${template.name} (Miniboss) surgiu!`, 'loot');
     } else {
