@@ -8,6 +8,7 @@
 import EventBus from './EventBus.js';
 import { SAVE_KEY, D } from './GameConfig.js';
 import { getSelectedSet } from '../services/InventoryService.js';
+import { generateStateChecksum, validateStateIntegrity, sanitizeGameState } from '../engine/SecurityEngine.js';
 
 export const DEFAULT_STATE = () => ({
   race: null, class: null, gender: 'M',
@@ -59,19 +60,29 @@ export function setState(partialState) {
 }
 
 /**
- * Salva o estado atual no localStorage.
+ * Salva o estado atual no localStorage com Checksum de integridade e Backup de segurança.
  * @param {boolean} [manual=false]
  */
 export function saveState(manual = false) {
   currentState.lastSaveTime = Date.now();
+  sanitizeGameState(currentState);
+
   const data = {
     ...currentState,
     totalPlaytime: (currentState.totalPlaytime || 0) + (Date.now() - (currentState.startTime || Date.now())),
     selectedUids: Array.from(getSelectedSet(currentState))
   };
   delete data.startTime;
+
+  // Assina os dados vitais com Checksum anti-tamper
+  data._chk = generateStateChecksum(data);
+
   try {
-    localStorage.setItem(SAVE_KEY, JSON.stringify(data));
+    const serialized = JSON.stringify(data);
+    localStorage.setItem(SAVE_KEY, serialized);
+    // Grava também no slot de backup de segurança
+    localStorage.setItem(`${SAVE_KEY}_backup`, serialized);
+
     EventBus.emit('state:saved', { manual, time: currentState.lastSaveTime });
   } catch (err) {
     console.error('[StateManager] Erro ao salvar estado:', err);
@@ -79,14 +90,42 @@ export function saveState(manual = false) {
 }
 
 /**
- * Carrega o estado salvo no localStorage efetuando deep merge.
+ * Carrega o estado salvo no localStorage com validação de integridade e auto-recuperação de backup.
  * @returns {boolean} Sucesso da leitura
  */
 export function loadState() {
-  const raw = localStorage.getItem(SAVE_KEY);
-  if (!raw) return false;
+  let raw = localStorage.getItem(SAVE_KEY);
+  let isBackupRestore = false;
+
+  if (!raw) {
+    // Tenta carregar do backup se o primário estiver ausente
+    raw = localStorage.getItem(`${SAVE_KEY}_backup`);
+    if (!raw) return false;
+    isBackupRestore = true;
+  }
+
   try {
-    const data = JSON.parse(raw);
+    let data = JSON.parse(raw);
+
+    // Valida integridade e sanidade dos dados
+    const check = validateStateIntegrity(data);
+    if (!check.valid) {
+      console.warn('[StateManager] Falha na integridade do save principal:', check.reason);
+      const backupRaw = localStorage.getItem(`${SAVE_KEY}_backup`);
+      if (backupRaw && backupRaw !== raw) {
+        try {
+          const backupData = JSON.parse(backupRaw);
+          if (validateStateIntegrity(backupData).valid) {
+            console.log('[StateManager] Restaurado com sucesso a partir do backup seguro.');
+            data = backupData;
+            isBackupRestore = true;
+          }
+        } catch (bErr) {
+          console.error('[StateManager] Backup também corrompido:', bErr);
+        }
+      }
+    }
+
     const def = DEFAULT_STATE();
     const allItems = D()?.ALL_ITEMS;
     const hasItemsDict = allItems && Object.keys(allItems).length > 0;
@@ -95,6 +134,8 @@ export function loadState() {
       : [];
 
     currentState = { ...def, ...data };
+    sanitizeGameState(currentState);
+
     currentState.gender = data.gender || data.charGender || data.sex || def.gender || 'M';
     currentState.charName = data.charName || data.heroName || data.playerName || data.name || def.charName || 'Tristan';
     currentState.heroName = currentState.charName;
@@ -144,6 +185,10 @@ export function loadState() {
     currentState.selectedSkill = data.selectedSkill || null;
     currentState.startTime = Date.now();
 
+    if (isBackupRestore) {
+      saveState(false);
+    }
+
     EventBus.emit('state:loaded', currentState);
     return true;
   } catch (err) {
@@ -157,6 +202,7 @@ export function loadState() {
  */
 export function resetState() {
   localStorage.removeItem(SAVE_KEY);
+  localStorage.removeItem(`${SAVE_KEY}_backup`);
   currentState = DEFAULT_STATE();
   EventBus.emit('state:reset', currentState);
 }

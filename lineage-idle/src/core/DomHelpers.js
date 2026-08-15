@@ -74,16 +74,47 @@ export function updateBar(id, cur, max) {
   el_.setAttribute('aria-valuemax', Math.round(max));
 }
 
+const _pendingUiUpdates = new Map();
+let _rafScheduled = false;
+
+function flushUiUpdates() {
+  _rafScheduled = false;
+  const updates = Array.from(_pendingUiUpdates.entries());
+  _pendingUiUpdates.clear();
+
+  for (const [label, fn] of updates) {
+    try {
+      fn();
+    } catch (err) {
+      console.warn(`UI update failed (${label}):`, err);
+    }
+  }
+}
+
 /**
- * Wrapper de segurança para atualizações de UI — captura erros sem travar o jogo.
- * @param {string}   label — Nome do módulo (para logging)
+ * Wrapper de segurança e alta performance para atualizações de UI (60 FPS Coalesced).
+ * Agrupa chamadas redundantes no mesmo frame de animação para evitar reflows de layout excessivos.
+ * @param {string}   label — Nome do módulo (para logging e coalescing)
  * @param {Function} fn    — Função de atualização
+ * @param {boolean}  [immediate=false] — Se true, executa síncrono imediatamente
  */
-export function safeUiUpdate(label, fn) {
-  try {
-    fn();
-  } catch (err) {
-    console.warn(`UI update failed (${label}):`, err);
+export function safeUiUpdate(label, fn, immediate = false) {
+  if (typeof fn !== 'function') return;
+
+  if (immediate || typeof requestAnimationFrame === 'undefined') {
+    try {
+      fn();
+    } catch (err) {
+      console.warn(`UI update failed (${label}):`, err);
+    }
+    return;
+  }
+
+  _pendingUiUpdates.set(label, fn);
+
+  if (!_rafScheduled) {
+    _rafScheduled = true;
+    requestAnimationFrame(flushUiUpdates);
   }
 }
 

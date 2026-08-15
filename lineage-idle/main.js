@@ -44,6 +44,11 @@ import {
   rollChampionMonster,
   ZONE_GRADE_MULTIPLIERS
 } from './src/engine/BalanceEngine.js';
+
+import {
+  validateOfflineTime,
+  sanitizeGameState
+} from './src/engine/SecurityEngine.js';
 // ─── Sprint 3: Importa serviços de Inventário, Equipamentos, Loja e Craft ──
 import {
   getMaxInventorySlots,
@@ -1586,12 +1591,10 @@ function setLogFilter(filterType) {
 
 function checkOfflineProgress(lastTime) {
   if (!lastTime) return;
-  const elapsedMs = Date.now() - lastTime;
-  if (elapsedMs < 60000) return;
+  const val = validateOfflineTime(lastTime);
+  if (!val.valid || val.minutesOffline < 1) return;
   
-  const minutesOffline = Math.min(480, Math.floor(elapsedMs / 60000));
-  if (minutesOffline < 1) return;
-  
+  const minutesOffline = val.minutesOffline;
   const OFFLINE_EFFICIENCY = 0.30; // Auto-Hunt Offline limit de 30%
   const rawKills = minutesOffline * 10;
   const kills = Math.floor(rawKills * OFFLINE_EFFICIENCY);
@@ -1599,9 +1602,9 @@ function checkOfflineProgress(lastTime) {
   const xpEarned = Math.floor(kills * (state.level * 12 + 15));
   const spEarned = Math.floor(kills * (state.level * 4 + 5));
   
-  state.gold += goldEarned;
-  state.xp += xpEarned;
-  state.sp += spEarned;
+  state.gold = Math.max(0, (state.gold || 0) + goldEarned);
+  state.xp = Math.max(0, (state.xp || 0) + xpEarned);
+  state.sp = Math.max(0, (state.sp || 0) + spEarned);
   checkLevelUp();
   
   const rewardsEl = el('offline-rewards');
@@ -1615,6 +1618,7 @@ function checkOfflineProgress(lastTime) {
       <div>📘 XP Ganho: <strong style="color:#60a5fa;">+${xpEarned.toLocaleString()} XP</strong></div>
       <div>✨ SP Ganho: <strong style="color:#a855f7;">+${spEarned.toLocaleString()} SP</strong></div>
     `;
+    modalEl.style.display = 'flex';
     modalEl.classList.add('active');
   }
 }
