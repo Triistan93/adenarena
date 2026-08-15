@@ -207,7 +207,7 @@ export function getEquipBonus(state, slot) {
  * @returns {Object}
  */
 export function getTotalEquipBonuses(state) {
-  const totals = { atk: 0, def: 0, matk: 0, mdef: 0, hp: 0, mp: 0, eva: 0, crit: 0, speed: 0, lifesteal: 0 };
+  const totals = { atk: 0, def: 0, matk: 0, mdef: 0, hp: 0, mp: 0, eva: 0, crit: 0, speed: 0, lifesteal: 0, xpBoost: 0, goldBoost: 0, adenaBoost: 0 };
   if (!state.equipment) return totals;
   for (const slot of Object.keys(state.equipment)) {
     const b = getEquipBonus(state, slot);
@@ -323,7 +323,7 @@ export function getEquippedSetCount(state, setDef) {
 export function getActiveSetBonuses(state) {
   const activeBonuses = [];
   const primaryStats = { str: 0, dex: 0, con: 0, int: 0, wit: 0, men: 0 };
-  const statTotals = { atk: 0, def: 0, matk: 0, mdef: 0, hp: 0, mp: 0, eva: 0, crit: 0, speed: 0, lifesteal: 0, block: 0 };
+  const statTotals = { atk: 0, def: 0, matk: 0, mdef: 0, hp: 0, mp: 0, eva: 0, crit: 0, speed: 0, lifesteal: 0, block: 0, xpBoost: 0, goldBoost: 0, adenaBoost: 0 };
 
   const gData = D();
   const armorSets = gData?.ARMOR_SETS || {};
@@ -563,6 +563,49 @@ export function getStats(state) {
     else if (agathionItem.itemId === 'agathion_rudolph') { goldBoost += 0.20; }
     else if (agathionItem.itemId === 'agathion_angel') { buffDef += Math.floor(baseDef * 0.20); }
     else if (agathionItem.itemId === 'agathion_dragon_child') { buffAtkMult += 0.25; }
+  }
+
+  // Add equipment and armor set bonus multipliers
+  xpBoost += (Number(eb.xpBoost) || 0) + (Number(setB.xpBoost) || 0);
+  goldBoost += (Number(eb.goldBoost || eb.adenaBoost) || 0) + (Number(setB.goldBoost || setB.adenaBoost) || 0);
+
+  // Process Full Heirloom Sovereign Set Bonus (Pack Tier 3 Multi-Piece)
+  let heirloomPiecesEquipped = 0;
+  if (state.equipment) {
+    const allSlots = ['weapon', 'armor', 'legs', 'helmet', 'gloves', 'boots', 'shield', 'necklace', 'earring1', 'earring2', 'ring1', 'ring2', 'cloak', 'belt', 'hair'];
+    for (const slotKey of allSlots) {
+      const uid = state.equipment[slotKey];
+      if (!uid) continue;
+      const invItem = state.inventory?.find(i => i.uid === uid);
+      if (!invItem) continue;
+      const def = D()?.ALL_ITEMS?.[invItem.itemId];
+      if (invItem.isHeirloom || def?.isHeirloom || invItem.itemId?.includes('heirloom')) {
+        heirloomPiecesEquipped++;
+      }
+    }
+  }
+
+  // 8+ Peças de Herança (Armadura + Arma + Joias/Acessórios): +20% XP, +20% Adena, +10% Stats
+  if (heirloomPiecesEquipped >= 8) {
+    xpBoost += 0.20;
+    goldBoost += 0.20;
+    buffAtkMult += 0.10;
+    buffDef += Math.floor(baseDef * 0.10);
+    buffMatk += Math.floor(baseMatk * 0.10);
+    buffMdef += Math.floor(baseMdef * 0.10);
+    buffSpd += 15;
+  }
+
+  // 12+ Peças de Herança (Conjunto Completo do Lorde Soberano): +15% XP extra (+35% total), +15% Adena extra, +25% HP
+  if (heirloomPiecesEquipped >= 12) {
+    xpBoost += 0.15;
+    goldBoost += 0.15;
+    buffAtkMult += 0.10;
+    buffDef += Math.floor(baseDef * 0.10);
+    buffMatk += Math.floor(baseMatk * 0.10);
+    buffMdef += Math.floor(baseMdef * 0.10);
+    buffSpd += 10;
+    elixirHpMult += 0.25;
   }
 
   const atkMult = 1 + buffAtkMult;

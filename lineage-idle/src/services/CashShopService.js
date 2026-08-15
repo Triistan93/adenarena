@@ -134,11 +134,11 @@ export class CashShopService {
       addItem(starterWeapon, 1, 5); // Arma +5
 
       // Joias D-Grade
-      addItem('jewelry_necklace_d', 1);
-      addItem('jewelry_earring_d1', 1);
-      addItem('jewelry_earring_d2', 1);
-      addItem('jewelry_ring_d1', 1);
-      addItem('jewelry_ring_d2', 1);
+      addItem('jewel_elven_necklace', 1);
+      addItem('jewel_elven_earring', 1);
+      addItem('jewel_elven_earring', 1);
+      addItem('jewel_elven_ring', 1);
+      addItem('jewel_elven_ring', 1);
 
       // Shots inteligentes
       const shotId = isMage ? 'spiritshot_d' : 'soulshot_d';
@@ -216,27 +216,27 @@ export class CashShopService {
   static getDGradeArmorSet(archetype = 'heavy') {
     if (archetype === 'robe') {
       return [
-        'armor_knowledge_tunic',
-        'armor_knowledge_hose',
-        'armor_magic_circlet',
-        'armor_silk_gloves',
-        'armor_cloth_boots'
+        'armor_mithril_tunic_robe',
+        'armor_mithril_pants_robe',
+        'armor_mithril_helmet_robe',
+        'armor_mithril_gloves_robe',
+        'armor_mithril_boots_robe'
       ];
     } else if (archetype === 'light') {
       return [
-        'armor_manticore_skin_shirt',
-        'armor_manticore_skin_gaiters',
-        'armor_leather_helmet',
-        'armor_leather_gloves',
-        'armor_leather_boots'
+        'armor_manticore_armor_light',
+        'armor_manticore_pants_light',
+        'armor_manticore_helmet_light',
+        'armor_manticore_gloves_light',
+        'armor_manticore_boots_light'
       ];
     }
     return [
-      'armor_brigandine_tunic',
-      'armor_brigandine_gaiters',
-      'armor_brigandine_helmet',
-      'armor_brigandine_gloves',
-      'armor_brigandine_boots'
+      'armor_brigandine_armor_heavy',
+      'armor_brigandine_pants_heavy',
+      'armor_brigandine_helmet_heavy',
+      'armor_brigandine_gloves_heavy',
+      'armor_brigandine_boots_heavy'
     ];
   }
 
@@ -302,12 +302,13 @@ export class CashShopService {
    */
   static getStarterWeaponForClass(classId = '') {
     const cls = String(classId).toLowerCase();
-    if (cls.includes('vanguard') || cls.includes('spear') || cls.includes('warlord')) return 'weapon_short_spear';
-    if (cls.includes('dagger') || cls.includes('assassin') || cls.includes('rogue')) return 'weapon_sword_breaker';
-    if (cls.includes('archer') || cls.includes('bow') || cls.includes('ranger')) return 'weapon_hunting_bow';
-    if (cls.includes('mage') || cls.includes('wizard') || cls.includes('cleric') || cls.includes('elder')) return 'weapon_crucifix_of_blessing';
-    if (cls.includes('dwarf') || cls.includes('artisan') || cls.includes('scavenger')) return 'weapon_iron_hammer';
-    return 'weapon_bastard_sword';
+    if (cls.includes('vanguard') || cls.includes('spear') || cls.includes('warlord')) return 'weapon_winged_spear';
+    if (cls.includes('dagger') || cls.includes('assassin') || cls.includes('rogue') || cls.includes('abyss') || cls.includes('treasure')) return 'weapon_crimson_sword';
+    if (cls.includes('archer') || cls.includes('bow') || cls.includes('ranger') || cls.includes('hawkeye') || cls.includes('phantom') || cls.includes('silver')) return 'weapon_elven_bow';
+    if (cls.includes('mage') || cls.includes('wizard') || cls.includes('sorcerer') || cls.includes('spellsinger') || cls.includes('spellhowler') || cls.includes('cleric') || cls.includes('bishop') || cls.includes('elder') || cls.includes('shillien')) return 'weapon_mystic_staff';
+    if (cls.includes('gladiator') || cls.includes('duelist') || cls.includes('tyrant') || cls.includes('warg')) return 'weapon_dual_bastard_sword';
+    if (cls.includes('dwarf') || cls.includes('artisan') || cls.includes('scavenger') || cls.includes('warsmith') || cls.includes('bounty')) return 'weapon_warhammer';
+    return 'weapon_crimson_sword';
   }
 
   /**

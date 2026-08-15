@@ -415,6 +415,8 @@ export function showItemTooltip(arg1, arg2, state, callbacks = {}) {
           const isReqActive = (equippedCount >= Number(reqP)) || (reqP === String(totalReq + 1) && hasShield && equippedCount >= totalReq);
           const color = isReqActive ? '#4ade80' : '#888888';
           const parts = [];
+          if (bObj.xpBoost) parts.push(`+${Math.round(bObj.xpBoost * 100)}% XP`);
+          if (bObj.goldBoost || bObj.adenaBoost) parts.push(`+${Math.round((bObj.goldBoost || bObj.adenaBoost) * 100)}% Adena`);
           if (bObj.atk) parts.push(`+${bObj.atk} P.Atk`);
           if (bObj.def) parts.push(`+${bObj.def} P.Def`);
           if (bObj.matk) parts.push(`+${bObj.matk} M.Atk`);
@@ -545,6 +547,32 @@ export function showItemTooltip(arg1, arg2, state, callbacks = {}) {
     heirloomNextEvolution = '✦ Nível Máximo de Herança Atingido!';
   }
 
+  let heirloomCount = 0;
+  if (state?.equipment) {
+    const allSlots = ['weapon', 'armor', 'legs', 'helmet', 'gloves', 'boots', 'shield', 'necklace', 'earring1', 'earring2', 'ring1', 'ring2', 'cloak', 'belt', 'hair'];
+    for (const slotKey of allSlots) {
+      const uid = state.equipment[slotKey];
+      if (!uid) continue;
+      const invItem = state.inventory?.find(i => i.uid === uid);
+      if (!invItem) continue;
+      const d = gData?.ALL_ITEMS?.[invItem.itemId];
+      if (invItem.isHeirloom || d?.isHeirloom || invItem.itemId?.includes('heirloom')) {
+        heirloomCount++;
+      }
+    }
+  }
+
+  let heirloomSetBonusText = '';
+  if (heirloomCount >= 12) {
+    heirloomSetBonusText = '<span style="color:#4ade80;">👑 Set Soberano (12/12 Full):</span> +60% XP/Adena, +20% Stats, +25% HP';
+  } else if (heirloomCount >= 8) {
+    heirloomSetBonusText = '<span style="color:#4ade80;">👑 Bônus Soberano (8/12):</span> +45% XP/Adena, +10% Stats';
+  } else if (heirloomCount >= 5) {
+    heirloomSetBonusText = '<span style="color:#4ade80;">🛡️ Set Armadura (5/5):</span> +25% XP/Adena, +60 Atk/Matk, +80 Def/Mdef';
+  } else {
+    heirloomSetBonusText = `<span style="color:#fde047;">👑 Set Soberano:</span> ${heirloomCount}/12 equipadas (Equipe 5+ para bônus de XP/Adena)`;
+  }
+
   const heirloomHtml = isHeirloom
     ? `
       <div style="background:linear-gradient(135deg, rgba(255,215,0,0.18), rgba(168,85,247,0.18)); border:1px solid #ffd700; border-radius:6px; padding:8px 10px; margin:8px 0; box-shadow:0 0 12px rgba(255,215,0,0.25);">
@@ -557,6 +585,9 @@ export function showItemTooltip(arg1, arg2, state, callbacks = {}) {
         </div>
         <div style="font-size:9.5px; color:#a78bfa; margin-top:2px; font-style:italic;">
           ${heirloomNextEvolution}
+        </div>
+        <div style="font-size:9.5px; margin-top:6px; padding-top:4px; border-top:1px dashed rgba(255,215,0,0.3); color:#e2e8f0;">
+          ${heirloomSetBonusText}
         </div>
       </div>
     `

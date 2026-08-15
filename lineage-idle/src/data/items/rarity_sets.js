@@ -34,7 +34,25 @@ export const ARMOR_SETS = {
   "majestic_set": {"name":"Majestic","fullPieceCount":4,"variantPieces":{"armor":["armor_majestic_heavy_armor","armor_majestic_light_armor","armor_majestic_robe_armor"],"helmet":["armor_majestic_heavy_helmet","armor_majestic_light_helmet","armor_majestic_robe_helmet"],"boots":["armor_majestic_heavy_boots","armor_majestic_light_boots","armor_majestic_robe_boots"],"gloves":["armor_majestic_heavy_glove","armor_majestic_light_glove","armor_majestic_robe_glove"]},"bonuses":{"2":{"atk":80,"matk":80},"3":{"mdef":90,"mp":250},"4":{"atk":180,"matk":180,"mdef":180,"primary":{"int":5,"str":4}}}},
   "nightmare_set": {"name":"Nightmare","fullPieceCount":4,"variantPieces":{"armor":["armor_nightmare_heavy_armor","armor_nightmare_light_armor","armor_nightmare_robe_armor"],"helmet":["armor_nightmare_heavy_helmet","armor_nightmare_light_helmet","armor_nightmare_robe_helmet"],"boots":["armor_nightmare_heavy_boots","armor_nightmare_light_boots","armor_nightmare_robe_boots"],"gloves":["armor_nightmare_heavy_glove","armor_nightmare_light_glove","armor_nightmare_robe_glove"]},"shieldPiece":"armor_nightmare_shield","bonuses":{"2":{"def":90,"mdef":90},"3":{"hp":400,"lifesteal":3},"4":{"def":200,"mdef":200,"hp":700,"primary":{"con":5,"wit":4}},"5":{"def":60,"mdef":50,"primary":{"con":2}}}},
   "draconic_set": {"name":"Draconic","fullPieceCount":4,"pieces":{"armor":"armor_draconic_armor","helmet":"armor_draconic_helmet","boots":"armor_draconic_boots","gloves":"armor_draconic_gloves"},"bonuses":{"2":{"atk":130,"crit":8},"3":{"speed":15,"eva":12},"4":{"atk":300,"crit":15,"eva":25,"speed":25,"primary":{"dex":6,"str":5}}}},
-  "major_arcana_set": {"name":"Major Arcana","fullPieceCount":4,"pieces":{"armor":"armor_major_arcana_robe","helmet":"armor_major_arcana_robe_helmet","boots":"armor_major_arcana_robe_boots","gloves":"armor_major_arcana_robe_gloves"},"bonuses":{"2":{"matk":140,"mdef":120},"3":{"mp":500,"speed":12},"4":{"matk":320,"mdef":280,"mp":800,"primary":{"wit":6,"int":5}}}}
+  "major_arcana_set": {"name":"Major Arcana","fullPieceCount":4,"pieces":{"armor":"armor_major_arcana_robe","helmet":"armor_major_arcana_robe_helmet","boots":"armor_major_arcana_robe_boots","gloves":"armor_major_arcana_robe_gloves"},"bonuses":{"2":{"matk":140,"mdef":120},"3":{"mp":500,"speed":12},"4":{"matk":320,"mdef":280,"mp":800,"primary":{"wit":6,"int":5}}}},
+  "heirloom_set": {
+    "name": "Herança Soberana",
+    "fullPieceCount": 5,
+    "variantPieces": {
+      "armor": ["armor_heirloom_chest_heavy", "armor_heirloom_chest_light", "armor_heirloom_chest_robe", "armor_heirloom_chest"],
+      "legs": ["armor_heirloom_legs_heavy", "armor_heirloom_legs_light", "armor_heirloom_legs_robe", "armor_heirloom_legs"],
+      "helmet": ["armor_heirloom_helmet_heavy", "armor_heirloom_helmet_light", "armor_heirloom_helmet_robe", "armor_heirloom_helmet"],
+      "gloves": ["armor_heirloom_gloves_heavy", "armor_heirloom_gloves_light", "armor_heirloom_gloves_robe", "armor_heirloom_gloves"],
+      "boots": ["armor_heirloom_boots_heavy", "armor_heirloom_boots_light", "armor_heirloom_boots_robe", "armor_heirloom_boots"]
+    },
+    "shieldPiece": "shield_heirloom_aegis",
+    "bonuses": {
+      "2": { "def": 30, "mdef": 25, "hp": 100, "xpBoost": 0.10, "goldBoost": 0.10 },
+      "3": { "atk": 25, "matk": 25, "hp": 200, "mp": 100, "xpBoost": 0.15, "goldBoost": 0.15 },
+      "5": { "def": 80, "mdef": 70, "atk": 60, "matk": 60, "hp": 400, "mp": 200, "speed": 10, "xpBoost": 0.25, "goldBoost": 0.25, "primary": { "str": 3, "dex": 3, "con": 3, "int": 3, "wit": 3, "men": 3 } },
+      "6": { "def": 50, "mdef": 40, "hp": 250, "xpBoost": 0.30, "goldBoost": 0.30, "primary": { "con": 2, "str": 2 } }
+    }
+  }
 };
 
 if (typeof window !== 'undefined') {
