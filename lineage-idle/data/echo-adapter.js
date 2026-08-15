@@ -557,13 +557,16 @@ function buildEchoAdapter() {
     const buffPool = skills.filter(isBuffSkill);
     const sustainPool = skills.filter(isSustainSkill);
 
-    // Prioriza as habilidades mais fortes / de maior estágio
-    dmgPool.sort((a, b) => (b.starRank || b.tier || 0) - (a.starRank || a.tier || 0));
-    buffPool.sort((a, b) => (b.starRank || b.tier || 0) - (a.starRank || a.tier || 0));
-    sustainPool.sort((a, b) => (b.starRank || b.tier || 0) - (a.starRank || a.tier || 0));
+    // Ordena do menor para o maior (progressão natural de níveis):
+    // Dano 1 (1★) -> Dano 2 (2★)
+    dmgPool.sort((a, b) => (a.starRank || a.tier || 1) - (b.starRank || b.tier || 1));
+    // Buff 1 (2★/3★) -> Buff 2 / Ultimate (4★)
+    buffPool.sort((a, b) => (a.starRank || a.tier || 1) - (b.starRank || b.tier || 1));
+    // Sustain (3★)
+    sustainPool.sort((a, b) => (a.starRank || a.tier || 1) - (b.starRank || b.tier || 1));
 
-    const selectedDmg = dmgPool.slice(0, 2);
-    const selectedBuff = buffPool.slice(0, 2);
+    const selectedDmg = [dmgPool[0], dmgPool[1] || dmgPool[0]];
+    const selectedBuff = [buffPool[0], buffPool[buffPool.length - 1] || buffPool[0]];
     let selectedSustain = sustainPool.slice(0, 1);
 
     if (selectedSustain.length === 0) {
@@ -572,35 +575,57 @@ function buildEchoAdapter() {
       selectedSustain = [fallback];
     }
 
-    while (selectedDmg.length < 2) {
-      const sigDmg = createSignatureDamage(classId, classDef, selectedDmg.length + 1);
-      SKILL_DEFS_ECHO[sigDmg.id] = sigDmg;
-      selectedDmg.push(sigDmg);
+    // Garante 2 danos e 2 buffs
+    if (!selectedDmg[0]) {
+      const d1 = createSignatureDamage(classId, classDef, 1);
+      SKILL_DEFS_ECHO[d1.id] = d1;
+      selectedDmg[0] = d1;
     }
-    while (selectedBuff.length < 2) {
-      const sigBuff = createSignatureBuff(classId, classDef, selectedBuff.length + 1);
-      SKILL_DEFS_ECHO[sigBuff.id] = sigBuff;
-      selectedBuff.push(sigBuff);
+    if (!selectedDmg[1] || selectedDmg[1].id === selectedDmg[0].id) {
+      const d2 = createSignatureDamage(classId, classDef, 2);
+      SKILL_DEFS_ECHO[d2.id] = d2;
+      selectedDmg[1] = d2;
+    }
+    if (!selectedBuff[0]) {
+      const b1 = createSignatureBuff(classId, classDef, 1);
+      SKILL_DEFS_ECHO[b1.id] = b1;
+      selectedBuff[0] = b1;
+    }
+    if (!selectedBuff[1] || selectedBuff[1].id === selectedBuff[0].id) {
+      const b2 = createSignatureBuff(classId, classDef, 2);
+      SKILL_DEFS_ECHO[b2.id] = b2;
+      selectedBuff[1] = b2;
     }
 
+    // A ordem de progressão por nível é:
+    // [0]: Dano 1 (1★, Lv. 1, Tier 0)
+    // [1]: Dano 2 (2★, Lv. 20, Tier 1)
+    // [2]: Buff 1 (2★-3★, Lv. 40, Tier 2)
+    // [3]: Sustentação (3★, Lv. 60, Tier 3)
+    // [4]: Buff 2 / Ultimate Suprema (4★, Lv. 76+, Tier 4)
     const curated5 = [
-      ...selectedDmg,
-      ...selectedBuff,
-      ...selectedSustain
+      selectedDmg[0],
+      selectedDmg[1],
+      selectedBuff[0],
+      selectedSustain[0],
+      selectedBuff[1]
     ];
 
-    // Ajusta tiers e posições para 5 colunas perfeitas:
-    // [0]: Dano 1 (Tier 0, Col 0)
-    // [1]: Dano 2 (Tier 1, Col 1)
-    // [2]: Buff 1 (Tier 2, Col 2)
-    // [3]: Buff 2 (Tier 3, Col 3)
-    // [4]: Sustentação (Tier 4, Col 4)
+    const reqLevels = [1, 20, 40, 60, 76];
+    const starRanks = [1, 2, 3, 3, 4];
+    const costs = [5, 15, 25, 35, 45];
+
     const normalizedIds = [];
     curated5.forEach((s, idx) => {
       s.tier = idx;
       s.col = idx;
-      s.reqLvl = idx === 0 ? 1 : idx * 20;
-      s.cost = idx === 0 ? 5 : (idx * 10 + 5);
+      s.reqLvl = reqLevels[idx];
+      s.starRank = starRanks[idx];
+      s.cost = costs[idx];
+      if (idx === 4) {
+        s.isUltimate = true;
+        s.starRank = 4;
+      }
       normalizedIds.push(s.id);
     });
 
