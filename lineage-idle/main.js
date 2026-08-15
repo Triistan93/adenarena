@@ -5971,6 +5971,12 @@ export function init() {
       save();
       return res;
     };
+    window.teleportToQuestZone = (zoneId) => {
+      if (zoneId) {
+        changeZone(zoneId);
+        openPanel('zones');
+      }
+    };
 
     window.getGameState = () => {
       const data = { 

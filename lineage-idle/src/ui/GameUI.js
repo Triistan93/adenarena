@@ -4384,42 +4384,54 @@ export function renderOlympiadTab(container, state) {
       {
         num: 1,
         title: 'Parte 1: O Legado de Eva & Talien',
+        npc: '👤 Talien (Giran)',
+        dialog: '"Nobre guerreiro, para comprovar o valor de sua alma, recupere as 25 Páginas do Poema de Eva caídas com as criaturas de Valley of Saints."',
         desc: 'Investigue o legado dos heróis antigos com Talien em Giran. Recupere as 25 Páginas do Poema de Eva em Valley of Saints.',
         progressText: `${prog.part1Kills || 0}/25 monstros em Valley of Saints`,
+        travelBtn: `<button onclick="window.teleportToQuestZone('valleyOfSaints')" style="padding:4px 10px; font-size:10.5px; font-weight:bold; background:#1e3a8a; border:1px solid #60a5fa; color:#93c5fd; border-radius:4px; cursor:pointer; margin-top:4px;">🗺️ Ir para Valley of Saints</button>`,
         isDone: nobStatus.isNoblesse || (state.noblesseStep || 1) > 1,
         isCurrent: !nobStatus.isNoblesse && (state.noblesseStep || 1) === 1,
         canComplete: !nobStatus.isNoblesse && (state.noblesseStep || 1) === 1 && (prog.part1Kills || 0) >= 25,
-        btnText: 'Concluir Parte 1'
+        btnText: '💬 Entregar a Talien (Giran)'
       },
       {
         num: 2,
         title: 'Parte 2: Ritual de Virgil em Rune',
+        npc: '👤 Virgil (Rune Township)',
+        dialog: '"As almas do Pântano dos Gritos anseiam por libertação. Purifique 30 espíritos corrompidos em Swamp of Screams para consagrar a essência."',
         desc: 'Leve a carta sagrada a Virgil em Rune Township e purifique 30 espíritos no pântano sombrio de Swamp of Screams.',
         progressText: `${prog.part2Kills || 0}/30 almas em Swamp of Screams`,
+        travelBtn: `<button onclick="window.teleportToQuestZone('swampOfScreams')" style="padding:4px 10px; font-size:10.5px; font-weight:bold; background:#1e3a8a; border:1px solid #60a5fa; color:#93c5fd; border-radius:4px; cursor:pointer; margin-top:4px;">🗺️ Ir para Swamp of Screams</button>`,
         isDone: nobStatus.isNoblesse || (state.noblesseStep || 1) > 2,
         isCurrent: !nobStatus.isNoblesse && (state.noblesseStep || 1) === 2,
         canComplete: !nobStatus.isNoblesse && (state.noblesseStep || 1) === 2 && (prog.part2Kills || 0) >= 30,
-        btnText: 'Concluir Parte 2'
+        btnText: '💬 Falar com Virgil (Rune)'
       },
       {
         num: 3,
         title: 'Parte 3: O Julgamento de Barakiel',
+        npc: '👤 Caradine (Goddard)',
+        dialog: '"O Cajado Sagrado da Deusa está nas mãos do temível Flame of Splendor Barakiel em Wall of Argos. Derrote-o em combate épico para recuperá-lo!"',
         desc: 'Ajude Caradine em Wall of Argos e derrote o lendário Raid Boss Flame of Splendor Barakiel para recuperar o Cajado da Deusa.',
         progressText: prog.barakielKilled ? '✓ Barakiel Derrotado' : 'Derrotar Raid Boss Barakiel',
+        travelBtn: `<button onclick="window.startRaidBossAction('barakiel')" style="padding:4px 10px; font-size:10.5px; font-weight:bold; background:#7f1d1d; border:1px solid #f87171; color:#fca5a5; border-radius:4px; cursor:pointer; margin-top:4px;">⚔️ Desafiar Raid Barakiel</button>`,
         isDone: nobStatus.isNoblesse || (state.noblesseStep || 1) > 3,
         isCurrent: !nobStatus.isNoblesse && (state.noblesseStep || 1) === 3,
         canComplete: !nobStatus.isNoblesse && (state.noblesseStep || 1) === 3 && Boolean(prog.barakielKilled),
-        btnText: 'Concluir Parte 3'
+        btnText: '💬 Entregar Cajado a Caradine'
       },
       {
         num: 4,
         title: 'Parte 4: Consagração da Deusa Eva',
+        npc: '👑 Lady of the Lake (Obelisco Sagrado)',
+        dialog: '"Sua alma é pura e valorosa. Apresente o cajado consagrado da Deusa Eva e receba a sagração eterna como Noblesse de Aden!"',
         desc: 'Apresente o cajado sagrado à Lady of the Lake. Receba a Bênção Sagrada, a Noblesse Tiara e a sagração como Nobre de Aden!',
         progressText: nobStatus.isNoblesse ? '✓ Noblesse Consagrado' : 'Apresentar à Lady of the Lake',
+        travelBtn: '',
         isDone: nobStatus.isNoblesse,
         isCurrent: !nobStatus.isNoblesse && (state.noblesseStep || 1) === 4,
         canComplete: !nobStatus.isNoblesse && (state.noblesseStep || 1) === 4,
-        btnText: '👑 Receber Bênção de Noblesse'
+        btnText: '👑 Falar com Lady of the Lake (Consagração)'
       }
     ];
 
@@ -4435,27 +4447,31 @@ export function renderOlympiadTab(container, state) {
           btnHtml = `
             <button
               onclick="window.completeNoblesseStepAction(${s.num})"
-              style="padding:6px 14px; font-weight:bold; font-size:11px; background:linear-gradient(180deg,#16a34a,#15803d); border:1px solid #4ade80; color:#fff; border-radius:6px; cursor:pointer;"
+              style="padding:8px 16px; font-weight:bold; font-size:11.5px; background:linear-gradient(180deg,#16a34a,#15803d); border:1px solid #4ade80; color:#fff; border-radius:6px; cursor:pointer; box-shadow:0 0 10px rgba(74,222,128,0.4);"
             >
               ${s.btnText}
             </button>
           `;
         } else {
           btnHtml = `
-            <button disabled style="padding:6px 14px; font-size:11px; background:#27272a; border:1px solid #3f3f46; color:#71717a; border-radius:6px; cursor:not-allowed;">
-              Progresso Pendente
-            </button>
+            <div style="display:flex; flex-direction:column; gap:4px; align-items:flex-end;">
+              ${s.travelBtn}
+              <button disabled style="padding:6px 12px; font-size:10.5px; background:#27272a; border:1px solid #3f3f46; color:#71717a; border-radius:6px; cursor:not-allowed;">
+                Progresso Pendente
+              </button>
+            </div>
           `;
         }
       }
 
       return `
-        <div style="background:rgba(0,0,0,0.45); border:1px solid ${s.isDone ? 'rgba(74,222,128,0.3)' : (s.isCurrent ? 'rgba(253,224,71,0.5)' : 'rgba(255,255,255,0.08)')}; border-radius:8px; padding:12px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; gap:10px;">
-          <div>
+        <div style="background:rgba(0,0,0,0.45); border:1px solid ${s.isDone ? 'rgba(74,222,128,0.3)' : (s.isCurrent ? 'rgba(253,224,71,0.5)' : 'rgba(255,255,255,0.08)')}; border-radius:8px; padding:14px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; gap:12px;">
+          <div style="flex:1;">
             <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
-              <span style="font-family:'Cinzel',serif; font-size:13px; font-weight:bold; color:${s.isDone ? '#4ade80' : (s.isCurrent ? '#fde047' : '#e2e8f0')};">${s.title}</span>
+              <span style="font-family:'Cinzel',serif; font-size:13.5px; font-weight:bold; color:${s.isDone ? '#4ade80' : (s.isCurrent ? '#fde047' : '#e2e8f0')};">${s.title}</span>
               ${statusBadge}
             </div>
+            <div style="font-size:11px; color:#fef08a; font-style:italic; margin-bottom:4px;">${s.npc}: ${s.dialog}</div>
             <p style="margin:0; font-size:11px; color:#cbd5e1; line-height:1.35;">${s.desc}</p>
           </div>
           <div>${btnHtml}</div>

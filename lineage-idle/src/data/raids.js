@@ -270,5 +270,37 @@ export const RAID_BOSSES = {
       { itemId: 'scroll_blessed_weapon', name: 'Blessed Scroll: Enchant Weapon', chance: 0.75 },
       { itemId: 'adena_coins', count: 150, name: '150x Aden Coins (AC)', chance: 0.60 }
     ]
+  },
+
+  barakiel: {
+    id: 'barakiel',
+    name: 'Flame of Splendor Barakiel 🔥',
+    title: 'Guardião do Cajado da Deusa (Noblesse Quest)',
+    lvl: 75,
+    hp: 180000,
+    atk: 520,
+    def: 180,
+    mdef: 240,
+    eva: 15,
+    crit: 16,
+    xp: 150000,
+    sp: 1800,
+    gold: [50000, 100000],
+    boss: true,
+    raid: true,
+    isBarakiel: true,
+    reqLvl: 75,
+    icon: 'gradespecial/scrolls/scroll_enchant_weapon_s.png',
+    bg: 'dungeon_goddard',
+    desc: 'Lorde flamejante de Wall of Argos. Derrotá-lo é o teste definitivo da Parte 3 da Quest de Noblesse para obter o Cajado da Deusa.',
+    mechanics: [
+      { name: 'Explosão de Chamas Solares', triggerHp: 0.60, damagePercent: 0.20, text: '🔥 Barakiel conjurou Explosão de Chamas Solares!' },
+      { name: 'Barreira de Fogo Puro', triggerHp: 0.25, healPercent: 0.15, text: '🛡️ Barakiel invocou a Barreira de Fogo Puro!' }
+    ],
+    drops: [
+      { itemId: 'staff_of_goddess', name: 'Staff of Goddess: Rain Song (Quest)', chance: 1.0 },
+      { itemId: 'scroll_blessed_weapon_s', name: 'Blessed Scroll: Enchant Weapon (S)', chance: 0.50 },
+      { itemId: 'adena_coins', count: 20, name: '20x Aden Coins (AC)', chance: 0.80 }
+    ]
   }
 };
