@@ -15,6 +15,8 @@
 // ═══════════════════════════════════════════════════════════════════════════
 
 import "../src/data/classes/index.js";
+import { CASH_SHOP_CATALOG } from "../src/data/shop/cash_shop_catalog.js";
+import { HEIRLOOM_ITEMS } from "../src/data/items/heirloom_items.js";
 
 
 // ─── Helpers ──────────────────────────────────────────────────────────────
@@ -720,6 +722,8 @@ function buildEchoAdapter() {
   E.SKILL_REQS_ECHO        = SKILL_REQS_ECHO;
   E.CLASS_SKILLS_ECHO      = CLASS_SKILLS_ECHO;
   E.SKILL_TREE_LAYOUT_ECHO = SKILL_TREE_LAYOUT_ECHO;
+  E.CASH_SHOP_CATALOG      = CASH_SHOP_CATALOG;
+  E.HEIRLOOM_ITEMS         = HEIRLOOM_ITEMS;
 
   console.log(
     '[echo-adapter] Skills geradas:', Object.keys(SKILL_DEFS_ECHO).length,

@@ -10,6 +10,7 @@ import { WEAPONS } from './weapons.js';
 import { ARMORS, HELMETS, BOOTS, GLOVES, LEGS, SHIELDS, BELTS, CLOAKS, SIGILS } from './armors.js';
 import { RINGS, EARRINGS, NECKLACES, HAIR, AGATHIONS } from './jewels.js';
 import { CONSUMABLES, MATERIALS } from './consumables.js';
+import { HEIRLOOM_ITEMS } from './heirloom_items.js';
 import { rollAffixes, rollAffixesForItem, AFFIX_MAP, AFFIX_POOL, AFFIX_POOLS_THEMED } from '../../../data/affixes.js';
 import { getArmorType, getWeaponType, canEquipByType, ARMOR_TYPE_LABEL, WEAPON_TYPE_LABEL, ARMOR_TYPE_ARCHETYPES, WEAPON_TYPE_ARCHETYPES } from './item_class_rules.js';
 import {
@@ -22,7 +23,8 @@ import { ELEMENT_OPPOSITES, ELEMENTAL_STONES, getAttributeDamageBonus } from './
 export const ALL_ITEMS = {
   ...WEAPONS, ...ARMORS, ...HELMETS, ...BOOTS, ...GLOVES, ...RINGS,
   ...LEGS, ...SHIELDS, ...BELTS, ...CLOAKS, ...SIGILS, ...NECKLACES,
-  ...EARRINGS, ...HAIR, ...AGATHIONS, ...CONSUMABLES, ...MATERIALS
+  ...EARRINGS, ...HAIR, ...AGATHIONS, ...CONSUMABLES, ...MATERIALS,
+  ...HEIRLOOM_ITEMS
 };
 
 if (typeof window !== 'undefined') {

@@ -19,6 +19,9 @@ export const IDLE_MARKUP = `
           </div>
         </div>
         <div class="top-stats-right" style="display:flex; align-items:center; gap:10px; margin-left:auto;">
+          <button id="cash-shop-btn" onclick="window.openCashShopModal && window.openCashShopModal()" style="background:linear-gradient(135deg, rgba(255, 215, 0, 0.25), rgba(180, 83, 9, 0.35)); border:1px solid #ffd700; color:#fde047; border-radius:10px; padding:3px 10px; font-size:11px; font-weight:bold; font-family:'Cinzel',serif; cursor:pointer; display:inline-flex; align-items:center; gap:6px; transition:all 0.2s; box-shadow:0 0 8px rgba(255,215,0,0.2);">
+            🪙 Loja de Aden
+          </button>
           <button id="daily-reward-btn" onclick="window.openDailyRewardModal && window.openDailyRewardModal()" style="background:linear-gradient(135deg, rgba(234, 179, 8, 0.25), rgba(161, 98, 7, 0.35)); border:1px solid rgba(234, 179, 8, 0.6); color:#fef08a; border-radius:10px; padding:3px 10px; font-size:11px; font-weight:bold; font-family:'Cinzel',serif; cursor:pointer; display:inline-flex; align-items:center; gap:6px; transition:all 0.2s; position:relative;">
             🎁 Check-in Diário
             <span id="daily-reward-dot" style="display:none; width:8px; height:8px; background:#ef4444; border-radius:50%; box-shadow:0 0 8px #ef4444; position:absolute; top:-2px; right:-2px;"></span>

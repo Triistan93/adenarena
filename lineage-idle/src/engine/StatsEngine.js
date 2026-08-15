@@ -139,8 +139,28 @@ export function getBaseAttributes(raceKey, classKey) {
 }
 
 /**
+ * Retorna os atributos dinamicamente escalados de um item de Herança com base no nível do jogador.
+ * @param {Object} def — Definição do item
+ * @param {number} playerLevel — Nível atual do herói (1 a 40+)
+ * @returns {Object}
+ */
+export function getHeirloomScaledStats(def, playerLevel = 1) {
+  if (!def || !def.heirloomScaling) return def?.base || def || {};
+  const lvl = Math.max(1, Number(playerLevel) || 1);
+  const scaling = def.heirloomScaling;
+
+  if (lvl <= 19 && scaling.phase1) {
+    return { ...def, ...(scaling.phase1.stats || {}) };
+  } else if (lvl <= 39 && scaling.phase2) {
+    return { ...def, ...(scaling.phase2.stats || {}) };
+  } else {
+    return { ...def, ...(scaling.phase3?.stats || def.base || {}) };
+  }
+}
+
+/**
  * Retorna o bônus individual de um slot de equipamento, aplicando multiplicadores de raridade,
- * encantamento, refinamento foundation e afixos de itens.
+ * encantamento, refinamento foundation, afixos de itens e escalonamento de herança.
  * @param {Object} state — Estado do jogo
  * @param {string} slot  — Nome do slot ('weapon', 'armor', etc.)
  * @returns {Object|null}
@@ -151,7 +171,7 @@ export function getEquipBonus(state, slot) {
   const inv = state.inventory?.find(i => i.uid === itemId);
   if (!inv) return null;
   const gData = D();
-  const def = gData?.ALL_ITEMS?.[inv.itemId];
+  const def = gData?.ALL_ITEMS?.[inv.itemId] || (typeof window !== 'undefined' && window.ALL_ITEMS?.[inv.itemId]);
   if (!def) return null;
 
   const rarityMult = inv.rarity ? (gData?.RARITY?.[inv.rarity]?.mult || 1) : 1;
@@ -159,7 +179,12 @@ export function getEquipBonus(state, slot) {
   const enchantMult = 1 + (enchant <= 3 ? enchant * 0.3 : (0.36 + (enchant - 3) * 0.5));
   const foundationMult = inv.foundation ? 1.3 : 1;
 
-  const out = { ...def };
+  let out = { ...def };
+  if (def.isHeirloom || inv.isHeirloom) {
+    const scaled = getHeirloomScaledStats(def, state.level || 1);
+    out = { ...out, ...scaled };
+  }
+
   ['atk','def','matk','mdef','hp','mp','eva','crit','speed','lifesteal'].forEach(k => {
     if (out[k]) out[k] = Math.floor(Number(out[k]) * rarityMult * enchantMult * foundationMult);
   });

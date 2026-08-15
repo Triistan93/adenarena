@@ -435,6 +435,21 @@ export function showItemTooltip(arg1, arg2, state, callbacks = {}) {
     ? `<div style="color:#60a5fa;font-size:9px;font-weight:700;margin-top:4px;display:flex;align-items:center;gap:3px;"><span style="font-size:10px;">🛡️</span> Protegido contra Venda Automática</div>`
     : '';
 
+  const isHeirloom = def.isHeirloom || item.isHeirloom;
+  const heirloomHtml = isHeirloom
+    ? `
+      <div style="background:linear-gradient(135deg, rgba(255,215,0,0.18), rgba(168,85,247,0.18)); border:1px solid #ffd700; border-radius:4px; padding:6px 8px; margin:6px 0; box-shadow:0 0 10px rgba(255,215,0,0.2);">
+        <div style="display:flex; justify-content:space-between; align-items:center; font-size:11px; font-weight:bold; color:#ffd700;">
+          <span>⚔️ Item de Herança</span>
+          <span>Nível ${state?.level || 1}/40</span>
+        </div>
+        <div style="font-size:10px; color:#f8fafc; margin-top:2px;">
+          ${(state?.level || 1) <= 19 ? '✦ Fase 1: +50% No-Grade Verde' : ((state?.level || 1) <= 39 ? '✦ Fase 2: +50% D-Grade Verde' : '✦ Fase 3: Maturidade C-Grade Pleno (+4 Glow)')}
+        </div>
+      </div>
+    `
+    : '';
+
   tooltip.innerHTML = `
     <div style="margin-bottom:4px;display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
       <span style="color:${rarityColor};font-weight:bold;font-size:13px;text-shadow:0 0 8px ${rarityColor}60;">${escapeHTML(displayName)}</span>
@@ -442,6 +457,7 @@ export function showItemTooltip(arg1, arg2, state, callbacks = {}) {
     </div>
     <div style="color:${rarityColor};font-size:11px;font-weight:600;margin-bottom:2px;">${rarityName}</div>
     <div style="color:#888;font-size:10px;text-transform:uppercase;margin-bottom:4px;">${def.slot ? def.slot.toUpperCase() : 'ITEM'}${def.req?.level ? ` · Req Lv.${def.req.level}` : ''}</div>
+    ${heirloomHtml}
     ${penaltyWarningHtml}
     ${statsStr}
     ${affixesStr}
@@ -3745,3 +3761,220 @@ export function renderCompoundModal(container, state) {
     </div>
   `;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   15. LOJA COMERCIAL DE ADEN (CASH SHOP & 5 ABAS)
+═══════════════════════════════════════════════════════════════════════════ */
+let currentCashShopTab = 'starter_packs';
+
+export function openCashShopModal() {
+  let modal = document.getElementById('cash-shop-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'cash-shop-modal';
+    modal.style.position = 'fixed';
+    modal.style.top = '0';
+    modal.style.left = '0';
+    modal.style.width = '100vw';
+    modal.style.height = '100vh';
+    modal.style.background = 'rgba(0,0,0,0.85)';
+    modal.style.display = 'flex';
+    modal.style.alignItems = 'center';
+    modal.style.justifyContent = 'center';
+    modal.style.zIndex = '99999';
+    modal.style.backdropFilter = 'blur(6px)';
+    document.body.appendChild(modal);
+  }
+  modal.style.display = 'flex';
+  renderCashShopModal(modal);
+}
+
+export function closeCashShopModal() {
+  const modal = document.getElementById('cash-shop-modal');
+  if (modal) modal.style.display = 'none';
+}
+
+if (typeof window !== 'undefined') {
+  window.openCashShopModal = openCashShopModal;
+  window.closeCashShopModal = closeCashShopModal;
+  window.setCashShopTab = (tab) => {
+    currentCashShopTab = tab;
+    const modal = document.getElementById('cash-shop-modal');
+    if (modal) renderCashShopModal(modal);
+  };
+}
+
+export function renderCashShopModal(container) {
+  if (!container) return;
+  const state = (typeof window !== 'undefined' && window.__GAME_STATE__) ? window.__GAME_STATE__ : (window.gameState || {});
+  const { CASH_SHOP_CATALOG } = (typeof window !== 'undefined' && window.EchoData?.CASH_SHOP_CATALOG) ? window.EchoData : { CASH_SHOP_CATALOG: {} };
+  const catalog = CASH_SHOP_CATALOG || {};
+
+  const balanceAC = Number(state.adenCoins) || 0;
+
+  // Render Tabs Header
+  const tabs = [
+    { id: 'starter_packs', name: '⭐ Starter Packs' },
+    { id: 'costumes_and_skins', name: '🎨 Trajes & Skins' },
+    { id: 'titles_and_effects', name: '🏷️ Títulos & Efeitos' },
+    { id: 'utility_and_passes', name: '🧪 Utilitários & Passes' },
+    { id: 'donation_tiers', name: '🪙 Obter Aden Coins' }
+  ];
+
+  const tabsHtml = tabs.map(t => `
+    <button
+      onclick="window.setCashShopTab('${t.id}')"
+      style="padding:8px 14px; font-family:'Cinzel',serif; font-size:12px; font-weight:bold; cursor:pointer; border-radius:6px 6px 0 0; border:1px solid ${currentCashShopTab === t.id ? '#ffd700' : 'rgba(255,255,255,0.1)'}; border-bottom:none; background:${currentCashShopTab === t.id ? 'linear-gradient(180deg,#2a2210,#181408)' : 'rgba(20,20,25,0.6)'}; color:${currentCashShopTab === t.id ? '#ffd700' : '#aaa'}; transition:all 0.2s;"
+    >
+      ${t.name}
+    </button>
+  `).join('');
+
+  // Render Tab Content
+  let contentHtml = '';
+
+  // 1. Starter Packs
+  if (currentCashShopTab === 'starter_packs') {
+    const packs = catalog.starter_packs || [];
+    contentHtml = `
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:14px; margin-top:10px;">
+        ${packs.map(p => `
+          <div style="background:rgba(0,0,0,0.5); border:1px solid ${p.id === 'starter_pack_tier3' ? '#ffd700' : 'rgba(255,215,0,0.3)'}; border-radius:10px; padding:14px; display:flex; flex-direction:column; justify-content:space-between; position:relative; box-shadow:${p.id === 'starter_pack_tier3' ? '0 0 15px rgba(255,215,0,0.25)' : 'none'};">
+            ${p.badge ? `<span style="position:absolute; top:-10px; right:12px; background:${p.id === 'starter_pack_tier3' ? '#ffd700' : '#38bdf8'}; color:#000; font-weight:bold; font-size:10px; padding:2px 8px; border-radius:10px;">${p.badge}</span>` : ''}
+            <div>
+              <h4 style="margin:0 0 6px 0; color:#ffd700; font-size:14px; font-family:'Cinzel',serif;">${p.name}</h4>
+              <div style="font-size:11px; color:#38bdf8; font-weight:bold; margin-bottom:8px;">${p.brlEquivalent} · <span style="color:#ffd700;">🪙 ${p.priceAC} AC</span></div>
+              <p style="font-size:11px; color:#ccc; line-height:1.4; margin:0 0 10px 0;">${p.desc}</p>
+            </div>
+            <button
+              onclick="window.executeCashShopBuy('starter_pack', '${p.id}')"
+              style="width:100%; padding:10px; font-family:'Cinzel',serif; font-weight:bold; font-size:12px; background:linear-gradient(180deg,#ffd700,#b45309); border:1px solid #fef08a; border-radius:6px; color:#000; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,0.5);"
+            >
+              🪙 ADQUIRIR (${p.priceAC} AC)
+            </button>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  // 2. Trajes & Skins
+  else if (currentCashShopTab === 'costumes_and_skins') {
+    const skins = catalog.costumes_and_skins || [];
+    contentHtml = `
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px; margin-top:10px;">
+        ${skins.map(s => `
+          <div style="background:rgba(0,0,0,0.5); border:1px solid rgba(168,85,247,0.4); border-radius:8px; padding:12px; display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <h4 style="margin:0 0 4px 0; color:#c084fc; font-size:13px; font-family:'Cinzel',serif;">${s.name}</h4>
+              <div style="font-size:11px; color:#ffd700; font-weight:bold; margin-bottom:6px;">🪙 ${s.priceAC} AC</div>
+              <p style="font-size:11px; color:#bbb; line-height:1.3; margin:0 0 8px 0;">${s.desc}</p>
+            </div>
+            <button
+              onclick="window.executeCashShopBuy('cosmetic', '${s.id}')"
+              style="width:100%; padding:8px; font-family:'Cinzel',serif; font-weight:bold; font-size:11px; background:linear-gradient(180deg,#a855f7,#6b21a8); border:1px solid #c084fc; border-radius:4px; color:#fff; cursor:pointer;"
+            >
+              🎨 EQUIPAR SKIN (${s.priceAC} AC)
+            </button>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  // 3. Títulos & Efeitos
+  else if (currentCashShopTab === 'titles_and_effects') {
+    const titles = catalog.titles_and_effects || [];
+    contentHtml = `
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:12px; margin-top:10px;">
+        ${titles.map(t => `
+          <div style="background:rgba(0,0,0,0.5); border:1px solid rgba(255,215,0,0.3); border-radius:8px; padding:12px; display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <h4 style="margin:0 0 4px 0; color:${t.color || '#ffd700'}; font-size:13px; font-family:'Cinzel',serif;">${t.name}</h4>
+              <div style="font-size:11px; color:#ffd700; font-weight:bold; margin-bottom:6px;">🪙 ${t.priceAC} AC</div>
+              <p style="font-size:11px; color:#bbb; line-height:1.3; margin:0 0 8px 0;">${t.desc}</p>
+            </div>
+            <button
+              onclick="window.executeCashShopBuy('title', '${t.id}')"
+              style="width:100%; padding:8px; font-family:'Cinzel',serif; font-weight:bold; font-size:11px; background:linear-gradient(180deg,#eab308,#a16207); border:1px solid #fde047; border-radius:4px; color:#000; cursor:pointer;"
+            >
+              🏷️ DESBLOQUEAR (${t.priceAC} AC)
+            </button>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  // 4. Utilitários & Passes
+  else if (currentCashShopTab === 'utility_and_passes') {
+    const utils = catalog.utility_and_passes || [];
+    contentHtml = `
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px; margin-top:10px;">
+        ${utils.map(u => `
+          <div style="background:rgba(0,0,0,0.5); border:1px solid rgba(56,189,248,0.4); border-radius:8px; padding:12px; display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <h4 style="margin:0 0 4px 0; color:#38bdf8; font-size:13px; font-family:'Cinzel',serif;">${u.name}</h4>
+              <div style="font-size:11px; color:#ffd700; font-weight:bold; margin-bottom:6px;">🪙 ${u.priceAC} AC</div>
+              <p style="font-size:11px; color:#bbb; line-height:1.3; margin:0 0 8px 0;">${u.desc}</p>
+            </div>
+            <button
+              onclick="window.executeCashShopBuy('utility', '${u.id}')"
+              style="width:100%; padding:8px; font-family:'Cinzel',serif; font-weight:bold; font-size:11px; background:linear-gradient(180deg,#0284c7,#0369a1); border:1px solid #38bdf8; border-radius:4px; color:#fff; cursor:pointer;"
+            >
+              🧪 COMPRAR (${u.priceAC} AC)
+            </button>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  // 5. Obter Aden Coins (Doação Pix)
+  else if (currentCashShopTab === 'donation_tiers') {
+    const tiers = catalog.donation_tiers || [];
+    contentHtml = `
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:14px; margin-top:10px;">
+        ${tiers.map(d => `
+          <div style="background:rgba(0,0,0,0.5); border:1px solid ${d.popular ? '#ffd700' : 'rgba(255,215,0,0.3)'}; border-radius:10px; padding:14px; display:flex; flex-direction:column; justify-content:space-between; position:relative;">
+            ${d.popular ? `<span style="position:absolute; top:-10px; right:12px; background:#ffd700; color:#000; font-weight:bold; font-size:10px; padding:2px 8px; border-radius:10px;">MAIS VENDIDO</span>` : ''}
+            <div>
+              <h4 style="margin:0 0 4px 0; color:#ffd700; font-size:15px; font-family:'Cinzel',serif;">🪙 ${d.totalAC || d.amountAC} AC</h4>
+              <div style="font-size:12px; color:#34d399; font-weight:bold; margin-bottom:6px;">${d.priceBRL}</div>
+              <p style="font-size:11px; color:#bbb; line-height:1.3; margin:0 0 8px 0;">${d.desc}</p>
+            </div>
+            <button
+              onclick="window.executeDonationPix('${d.id}', ${d.totalAC || d.amountAC})"
+              style="width:100%; padding:10px; font-family:'Cinzel',serif; font-weight:bold; font-size:11px; background:linear-gradient(180deg,#10b981,#047857); border:1px solid #34d399; border-radius:6px; color:#fff; cursor:pointer;"
+            >
+              💳 RECARREGAR PIX (${d.priceBRL})
+            </button>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  container.innerHTML = `
+    <div style="background:linear-gradient(180deg, rgba(20,16,10,0.98), rgba(10,8,6,0.98)); border:1px solid #ffd700; border-radius:14px; max-width:850px; width:92vw; max-height:85vh; padding:20px; color:#fff; font-family:sans-serif; box-shadow:0 0 40px rgba(255,215,0,0.25); display:flex; flex-direction:column;">
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,215,0,0.3); padding-bottom:12px;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <h3 style="margin:0; font-family:'Cinzel',serif; color:#ffd700; font-size:20px;">🪙 Loja Comercial de Aden</h3>
+          <span style="background:rgba(0,0,0,0.5); border:1px solid #ffd700; padding:3px 10px; border-radius:20px; font-size:12px; color:#ffd700; font-weight:bold;">
+            Saldo: ${balanceAC.toLocaleString()} AC
+          </span>
+        </div>
+        <button onclick="window.closeCashShopModal()" style="background:none; border:none; color:#aaa; font-size:22px; cursor:pointer;">✕</button>
+      </div>
+
+      <div style="display:flex; gap:6px; border-bottom:1px solid rgba(255,215,0,0.2); margin-top:12px; overflow-x:auto;">
+        ${tabsHtml}
+      </div>
+
+      <div style="flex:1; overflow-y:auto; padding:10px 4px 4px 4px;">
+        ${contentHtml}
+      </div>
+    </div>
+  `;
+}
+

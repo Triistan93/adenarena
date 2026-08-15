@@ -166,8 +166,12 @@ import {
   initTooltipEvents as uiInitTooltipEvents,
   openCompoundModal,
   closeCompoundModal,
-  renderCompoundModal
+  renderCompoundModal,
+  openCashShopModal,
+  closeCashShopModal,
+  renderCashShopModal
 } from './src/ui/GameUI.js';
+import { CashShopService } from './src/services/CashShopService.js';
 
 import { ensureAppLayout, showMenuPanel } from './src/ui/AppLayout.js';
 import { checkTabGuide, closeTabGuideModal, openTabGuideModal } from './src/ui/TutorialGuide.js';
@@ -5763,6 +5767,33 @@ export function init() {
     window.openCompoundModal = openCompoundModal;
     window.closeCompoundModal = closeCompoundModal;
     window.renderCompoundModal = renderCompoundModal;
+
+    // Cash Shop Comercial
+    window.openCashShopModal = openCashShopModal;
+    window.closeCashShopModal = closeCashShopModal;
+    window.renderCashShopModal = renderCashShopModal;
+    window.executeCashShopBuy = (type, id) => {
+      let success = false;
+      if (type === 'starter_pack') {
+        success = CashShopService.buyStarterPack(state, id, { log, onUpdate: () => { updateAllUI(); save(); } });
+      } else if (type === 'cosmetic') {
+        success = CashShopService.buyCostumeOrSkin(state, id, { log, onUpdate: () => { updateAllUI(); save(); } });
+      } else if (type === 'title') {
+        success = CashShopService.buyTitleOrEffect(state, id, { log, onUpdate: () => { updateAllUI(); save(); } });
+      } else if (type === 'utility') {
+        success = CashShopService.buyUtility(state, id, { log, onUpdate: () => { updateAllUI(); save(); } });
+      }
+      if (success) {
+        const modal = document.getElementById('cash-shop-modal');
+        if (modal) renderCashShopModal(modal);
+      }
+      return success;
+    };
+    window.executeDonationPix = (tierId, amount) => {
+      CashShopService.addAdenCoins(state, amount, { log, onUpdate: () => { updateAllUI(); save(); } });
+      const modal = document.getElementById('cash-shop-modal');
+      if (modal) renderCashShopModal(modal);
+    };
     window.getGameState = () => {
       const data = { 
         ...state, 
