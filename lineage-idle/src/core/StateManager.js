@@ -19,6 +19,7 @@ export const DEFAULT_STATE = () => ({
   skills: {},
   quests: { progress: {}, claimed: [], lastDailyReset: 0, lastWeeklyReset: 0 },
   battlePass: { xp: 0, claimedFree: [], claimedPremium: [], unlockedPremium: false },
+  dailyRewards: { currentDay: 1, claimedDays: [], lastClaimDate: '', streak: 0, totalClaims: 0 },
   tower: { highestFloor: 0, currentFloor: 1, lastSweepTime: 0 },
   zone: 'talkingIsland', currentSaga: 0, gold: 2000, inventory: [],
   equipment: {
@@ -171,6 +172,7 @@ export function loadState() {
 
     currentState.quests = data.quests && typeof data.quests === 'object' ? data.quests : { progress: {}, claimed: [], lastDailyReset: 0, lastWeeklyReset: 0 };
     currentState.battlePass = data.battlePass && typeof data.battlePass === 'object' ? data.battlePass : { xp: 0, claimedFree: [], claimedPremium: [], unlockedPremium: false };
+    currentState.dailyRewards = data.dailyRewards && typeof data.dailyRewards === 'object' ? data.dailyRewards : { currentDay: 1, claimedDays: [], lastClaimDate: '', streak: 0, totalClaims: 0 };
     currentState.tower = data.tower && typeof data.tower === 'object' ? data.tower : { highestFloor: 0, currentFloor: 1, lastSweepTime: 0 };
 
     currentState.buffs = data.buffs || {};

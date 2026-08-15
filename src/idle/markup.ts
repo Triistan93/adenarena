@@ -19,6 +19,10 @@ export const IDLE_MARKUP = `
           </div>
         </div>
         <div class="top-stats-right" style="display:flex; align-items:center; gap:10px; margin-left:auto;">
+          <button id="daily-reward-btn" onclick="window.openDailyRewardModal && window.openDailyRewardModal()" style="background:linear-gradient(135deg, rgba(234, 179, 8, 0.25), rgba(161, 98, 7, 0.35)); border:1px solid rgba(234, 179, 8, 0.6); color:#fef08a; border-radius:10px; padding:3px 10px; font-size:11px; font-weight:bold; font-family:'Cinzel',serif; cursor:pointer; display:inline-flex; align-items:center; gap:6px; transition:all 0.2s; position:relative;">
+            🎁 Check-in Diário
+            <span id="daily-reward-dot" style="display:none; width:8px; height:8px; background:#ef4444; border-radius:50%; box-shadow:0 0 8px #ef4444; position:absolute; top:-2px; right:-2px;"></span>
+          </button>
           <span class="ts-clock" style="display:inline-flex; align-items:center; gap:4px;"><span class="ts-label">Session</span><span id="clock">00:00:00</span></span>
           <span id="save-status-badge" style="font-size:10px; background:rgba(16,185,129,0.15); border:1px solid rgba(16,185,129,0.4); color:#34d399; padding:2px 8px; border-radius:8px; font-weight:bold;">💾 Salvo</span>
           <button id="audio-mute-btn" onclick="window.toggleMuteAudio && window.toggleMuteAudio()" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:#fff;border-radius:6px;padding:3px 10px;font-size:11px;font-weight:600;cursor:pointer;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background='rgba(255,255,255,0.08)'">🔊 Audio</button>
@@ -851,6 +855,47 @@ export const IDLE_MARKUP = `
         <p id="offline-desc">Enquanto esteve ausente, seu herói continuou o treinamento em Aden.</p>
         <div id="offline-rewards" style="margin: 14px 0; font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--gilt-bright);"></div>
         <button id="offline-ok" class="action-btn action-btn--primary">Coletar Recompensas ⚔️</button>
+      </div>
+    </div>
+
+    <!-- Daily Check-in Rewards Modal (28 Days) -->
+    <div id="daily-reward-modal" class="modal">
+      <div class="modal-content" style="max-width:720px; width:95%; max-height:90vh; overflow-y:auto; background:linear-gradient(180deg, #181410 0%, #0d0a08 100%); border:2px solid rgba(212, 167, 68, 0.4); box-shadow:0 10px 40px rgba(0,0,0,0.8), 0 0 20px rgba(212,167,68,0.15); border-radius:12px; padding:20px;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px; border-bottom:1px solid rgba(212,167,68,0.2); padding-bottom:10px;">
+          <div>
+            <h2 style="margin:0; font-family:'Cinzel',serif; color:#fef08a; font-size:20px; display:flex; align-items:center; gap:8px;">
+              🎁 Calendário de Presença — Recompensas Diárias
+            </h2>
+            <p style="margin:4px 0 0 0; font-size:12px; color:#d1d5db;">Faça login todos os dias para desbloquear pergaminhos, itens de boss e fortunas de Aden!</p>
+          </div>
+          <button id="close-daily-reward-btn" style="background:transparent; border:none; color:#9ca3af; font-size:20px; cursor:pointer; padding:0 6px;" onclick="window.closeDailyRewardModal && window.closeDailyRewardModal()">✕</button>
+        </div>
+
+        <!-- Streak & Milestone Info Bar -->
+        <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(212,167,68,0.3); border-radius:8px; padding:10px 14px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:18px;">🔥</span>
+            <div>
+              <div style="font-size:11px; color:#9ca3af; text-transform:uppercase; font-weight:bold;">Sequência Consecutiva</div>
+              <div id="daily-streak-text" style="font-size:14px; font-weight:bold; color:#f59e0b;">1 Dia de Glória</div>
+            </div>
+          </div>
+          <div id="daily-status-badge" style="font-size:12px; font-weight:bold; padding:4px 12px; border-radius:12px; background:rgba(34,197,94,0.2); border:1px solid rgba(34,197,94,0.5); color:#4ade80;">
+            ✨ Recompensa de Hoje Disponível!
+          </div>
+        </div>
+
+        <!-- 28-Day Grid -->
+        <div id="daily-rewards-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(85px, 1fr)); gap:8px; margin-bottom:16px;">
+          <!-- Rendered dynamically -->
+        </div>
+
+        <!-- Modal Footer Actions -->
+        <div style="display:flex; justify-content:flex-end; gap:10px; border-top:1px solid rgba(212,167,68,0.2); padding-top:14px;">
+          <button id="daily-claim-btn" class="action-btn action-btn--primary" style="font-family:'Cinzel',serif; font-size:13px; font-weight:bold; padding:8px 24px;" onclick="window.claimDailyRewardAction && window.claimDailyRewardAction()">
+            ✨ Resgatar Presente do Dia
+          </button>
+        </div>
       </div>
     </div>
 

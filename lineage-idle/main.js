@@ -71,6 +71,12 @@ import {
 } from './src/services/InventoryService.js';
 
 import {
+  DAILY_REWARDS_TABLE,
+  getDailyRewardStatus,
+  claimDailyReward
+} from './src/services/DailyRewardService.js';
+
+import {
   resolveEquipSlot as serviceResolveEquipSlot,
   equipItem as serviceEquipItem,
   unequipItem as serviceUnequipItem
@@ -5485,9 +5491,136 @@ function executeCompoundAction(targetUid, ingredientUid) {
   return true;
 }
 
+function renderDailyRewardModal() {
+  const status = getDailyRewardStatus(state);
+  const grid = el('daily-rewards-grid');
+  const streakEl = el('daily-streak-text');
+  const statusBadge = el('daily-status-badge');
+  const claimBtn = el('daily-claim-btn');
+  const dotEl = el('daily-reward-dot');
+
+  if (dotEl) {
+    dotEl.style.display = status.canClaim ? 'block' : 'none';
+  }
+
+  if (streakEl) {
+    streakEl.textContent = `${status.streak} ${status.streak === 1 ? 'Dia de Glória' : 'Dias Consecutivos'} 🔥`;
+  }
+
+  if (statusBadge) {
+    if (status.canClaim) {
+      statusBadge.style.background = 'rgba(34,197,94,0.2)';
+      statusBadge.style.borderColor = 'rgba(34,197,94,0.5)';
+      statusBadge.style.color = '#4ade80';
+      statusBadge.textContent = `✨ Recompensa do Dia ${status.currentDay} Disponível!`;
+    } else {
+      statusBadge.style.background = 'rgba(107,114,128,0.2)';
+      statusBadge.style.borderColor = 'rgba(107,114,128,0.4)';
+      statusBadge.style.color = '#9ca3af';
+      statusBadge.textContent = '✓ Check-in de Hoje Concluído';
+    }
+  }
+
+  if (claimBtn) {
+    claimBtn.disabled = !status.canClaim;
+    claimBtn.style.opacity = status.canClaim ? '1' : '0.5';
+    claimBtn.style.cursor = status.canClaim ? 'pointer' : 'not-allowed';
+    claimBtn.textContent = status.canClaim
+      ? `✨ Resgatar Presente do Dia ${status.currentDay}`
+      : `✓ Dia ${status.currentDay > 1 ? status.currentDay - 1 : 28} Resgatado (Volte Amanhã)`;
+  }
+
+  if (!grid) return;
+  grid.innerHTML = '';
+
+  DAILY_REWARDS_TABLE.forEach(item => {
+    const isClaimed = (status.claimedDays || []).includes(item.day);
+    const isCurrent = item.day === status.currentDay && status.canClaim;
+
+    let borderColor = 'rgba(255,255,255,0.1)';
+    let bg = 'rgba(0,0,0,0.3)';
+    if (item.isMilestone) {
+      borderColor = 'rgba(234,179,8,0.5)';
+      bg = 'rgba(234,179,8,0.08)';
+    }
+    if (isCurrent) {
+      borderColor = '#f59e0b';
+      bg = 'linear-gradient(135deg, rgba(245,158,11,0.25), rgba(180,83,9,0.25))';
+    } else if (isClaimed) {
+      borderColor = 'rgba(34,197,94,0.4)';
+      bg = 'rgba(34,197,94,0.1)';
+    }
+
+    const card = document.createElement('div');
+    card.style.cssText = `
+      border: 1px solid ${borderColor};
+      background: ${bg};
+      border-radius: 8px;
+      padding: 8px 4px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 95px;
+      position: relative;
+      transition: all 0.2s;
+      ${isCurrent ? 'box-shadow: 0 0 12px rgba(245,158,11,0.4); transform: scale(1.03);' : ''}
+    `;
+
+    card.innerHTML = `
+      <div style="font-size:10px; font-weight:bold; color:${isCurrent ? '#fef08a' : (isClaimed ? '#4ade80' : '#9ca3af')};">
+        ${item.isMilestone ? '⭐ ' : ''}Dia ${item.day}
+      </div>
+      <div style="font-size:22px; margin:4px 0;">${item.icon}</div>
+      <div style="font-size:10px; font-weight:600; color:#f3f4f6; line-height:1.2; max-width:80px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${item.desc}">
+        ${item.name}
+      </div>
+      <div style="font-size:9px; color:${isClaimed ? '#4ade80' : (isCurrent ? '#f59e0b' : '#6b7280')}; margin-top:2px; font-weight:bold;">
+        ${isClaimed ? '✓ Coletado' : (isCurrent ? '🎁 Resgatar' : '🔒')}
+      </div>
+    `;
+
+    grid.appendChild(card);
+  });
+}
+
+function openDailyRewardModal() {
+  renderDailyRewardModal();
+  const m = el('daily-reward-modal');
+  if (m) m.classList.add('active');
+}
+
+function closeDailyRewardModal() {
+  const m = el('daily-reward-modal');
+  if (m) m.classList.remove('active');
+}
+
+function claimDailyRewardAction() {
+  const res = claimDailyReward(state, {
+    log,
+    floatText,
+    addToInventory: (itemId, count) => {
+      serviceAddToInventory(state, itemId, count);
+    }
+  });
+
+  if (res.success) {
+    updateAllUI();
+    save();
+    renderDailyRewardModal();
+  } else {
+    log(`⚠️ ${res.message}`, 'system');
+  }
+}
+
 export function init() {
   try {
     // Expose global action handlers to window for inline HTML handlers & global events
+    window.openDailyRewardModal = openDailyRewardModal;
+    window.closeDailyRewardModal = closeDailyRewardModal;
+    window.claimDailyRewardAction = claimDailyRewardAction;
+    window.renderDailyRewardModal = renderDailyRewardModal;
     window.registerCodexItem = registerCodexItem;
     window.buyItem = buyItem;
     window.depositAllToWarehouse = depositAllToWarehouse;
@@ -5646,6 +5779,20 @@ export function init() {
       updateRaceClassUI(); 
       updateStatsUI(); 
     }
+
+    // Verifica status da Recompensa Diária (Daily Check-in)
+    setTimeout(() => {
+      try {
+        const dailyStatus = getDailyRewardStatus(state);
+        const dotEl = el('daily-reward-dot');
+        if (dotEl) dotEl.style.display = dailyStatus.canClaim ? 'block' : 'none';
+        if (dailyStatus.canClaim) {
+          openDailyRewardModal();
+        }
+      } catch (err) {
+        console.warn('Erro ao checar daily reward status:', err);
+      }
+    }, 1200);
 
     _intervals.push(setInterval(updateClock, 1000)); 
     _intervals.push(setInterval(save, 10000)); 
