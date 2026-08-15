@@ -2465,7 +2465,12 @@ skills: [
   // Warg (Human Beast Fighter)
   wargBase: {
     name: 'Warg', parent: 'fighter', race: 'human', archetype: 'fighter', stage: 0,
-    base: { atk: 26, def: 12, hp: 120, mp: 40, eva: 8, crit: 8, mdef: 8 }
+    base: { atk: 26, def: 12, hp: 120, mp: 40, eva: 8, crit: 8, mdef: 8 },
+    skills: [
+      { name: "Beast Claw",    type: "Ativo",   rarity: "1★", effect: "Dano físico 150% com garras ferrenhas", cooldown: "7s" },
+      { name: "Feral Instinct", type: "Passivo", rarity: "1★", effect: "+10% ATK e +8% Precisão", cooldown: null },
+      { name: "Beast Vitality", type: "Passivo", rarity: "1★", effect: "+15% Max HP e +10% Regeneração", cooldown: null }
+    ]
   },
   wargS1: {
     name: 'Warg', parent: 'wargBase', race: 'human', archetype: 'fighter', stage: 1,
@@ -2515,14 +2520,38 @@ skills: [
       { name: "ShineMaker's Harmony",         type: "Self-Buff", rarity: "4★", effect: "+55% M.ATK, +45% Heal Power por 30 min", cooldown: "90 min" }
     ]
   },
-  shinemakerS1: { name: 'ShineMaker', parent: 'highElfBase', race: 'highelf', archetype: 'support', stage: 1 },
-  shinemakerS2: { name: 'ShineMaker', parent: 'shinemakerS1', race: 'highelf', archetype: 'support', stage: 2 },
-  shinemakerS3: { name: 'ShineMaker', parent: 'shinemakerS2', race: 'highelf', archetype: 'support', stage: 3 },
+  shinemakerS1: {
+    name: 'ShineMaker', parent: 'highElfBase', race: 'highelf', archetype: 'support', stage: 1,
+    skills: [
+      { name: "Light Spark", type: "Ativo", rarity: "1★", effect: "Dano sagrado 180%", cooldown: "8s" },
+      { name: "Luminary Glow", type: "Self-Buff", rarity: "2★", effect: "+20% M.ATK e +15% Cast Speed", cooldown: "60s" }
+    ]
+  },
+  shinemakerS2: {
+    name: 'ShineMaker', parent: 'shinemakerS1', race: 'highelf', archetype: 'support', stage: 2,
+    skills: [
+      { name: "Prism Burst", type: "Ativo", rarity: "2★", effect: "Dano AoE sagrado 260%", cooldown: "16s" },
+      { name: "Shine Barrier", type: "Ativo", rarity: "3★", effect: "Escudo sagrado de 25% Max HP por 20s", cooldown: "45s" }
+    ]
+  },
+  shinemakerS3: {
+    name: 'ShineMaker', parent: 'shinemakerS2', race: 'highelf', archetype: 'support', stage: 3,
+    skills: [
+      { name: "Star Fall", type: "Ativo", rarity: "4★", effect: "Dano AoE sagrado 580% + stun 3s", cooldown: "60s" },
+      { name: "Transcendent Star Fall", type: "Ativo", rarity: "4★", effect: "Dano AoE sagrado 750% + blind 5s", cooldown: "180s" },
+      { name: "ShineMaker's Harmony", type: "Self-Buff", rarity: "4★", effect: "+55% M.ATK, +45% Heal Power por 30 min", cooldown: "90 min" }
+    ]
+  },
 
   // Blood Rose (Ertheia Mystic)
   bloodRoseBase: {
     name: 'Blood Rose', parent: 'mage', race: 'ertheia', archetype: 'mage', stage: 0,
-    base: { atk: 10, def: 10, hp: 110, mp: 130, matk: 26, mdef: 18, eva: 8, crit: 5 }
+    base: { atk: 10, def: 10, hp: 110, mp: 130, matk: 26, mdef: 18, eva: 8, crit: 5 },
+    skills: [
+      { name: "Rose Petal Strike", type: "Ativo", rarity: "1★", effect: "Dano mágico 140%", cooldown: "6s" },
+      { name: "Ertheia Spirit", type: "Passivo", rarity: "1★", effect: "+10% M.ATK e +8% Cast Speed", cooldown: null },
+      { name: "Mystic Barrier", type: "Passivo", rarity: "1★", effect: "+12% M.DEF", cooldown: null }
+    ]
   },
   bloodRoseS1: {
     name: 'Blood Rose', parent: 'bloodRoseBase', race: 'ertheia', archetype: 'mage', stage: 1,

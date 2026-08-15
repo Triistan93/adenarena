@@ -282,6 +282,102 @@ function buildEchoAdapter() {
     CLASS_SKILLS_ECHO[classId] = merged;
   }
 
+  // ─── MAPEAMENTO & NORMALIZAÇÃO DE ALIASES DE CLASSES ─────────────────
+  const CLASS_ALIASES = {
+    // Orc
+    'orcRaider': 'raider',
+    'orc_raider': 'raider',
+    'orcRider': 'rider',
+    'orc_rider': 'rider',
+    'vanguardRider': 'vanguardRider',
+    'vanguard_rider': 'vanguardRider',
+    'vanguardrider': 'vanguardRider',
+    'vanguard': 'vanguardRider',
+    'orcShaman': 'orcShaman',
+    'shaman': 'orcShaman',
+    'orcMage': 'orcMage',
+    'orcFighter': 'orcFighter',
+
+    // Dark Elf
+    'darkFighter': 'darkElfFighter',
+    'dark_fighter': 'darkElfFighter',
+    'darkElfFighter': 'darkElfFighter',
+    'darkMage': 'darkElfMage',
+    'dark_mage': 'darkElfMage',
+    'darkElfMage': 'darkElfMage',
+    'assassin': 'assassinDE',
+    'deAssassin': 'assassinDE',
+    'assassinDE': 'assassinDE',
+    'bladedancer': 'bladeDancer',
+    'bladeDancer': 'bladeDancer',
+
+    // Elf
+    'elfFighter': 'elfFighter',
+    'elfMage': 'elfMage',
+    'evasTemplar': 'evaTemplar',
+    'evaTemplar': 'evaTemplar',
+    'swordsinger': 'swordSinger',
+    'swordSinger': 'swordSinger',
+    'elvenScout': 'elvenScout',
+    'windRiderElven': 'windRider',
+    'windRider': 'windRider',
+    'oracle': 'elvenOracle',
+    'elvenOracle': 'elvenOracle',
+    'elder': 'elvenElder',
+    'elvenElder': 'elvenElder',
+    'evasSaint': 'evaSaint',
+    'evaSaint': 'evaSaint',
+
+    // Dwarf
+    'artisan': 'artisanDwarf',
+    'artisanClass': 'artisanDwarf',
+    'artisanDwarf': 'artisanDwarf',
+    'scavenger': 'scavenger',
+    'bountyHunter': 'bountyHunter',
+    'warsmith': 'warsmith',
+    'maestro': 'maestro',
+
+    // Kamael
+    'soulbreaker': 'soulBreakerKamael',
+    'soulBreaker': 'soulBreakerKamael',
+    'soulhound': 'soulHound',
+    'soulHound': 'soulHound',
+    'arbalester': 'arbalesterKamael',
+    'arbalesterKamael': 'arbalesterKamael',
+    'trickster': 'trickster',
+
+    // High Elf
+    'highElf': 'highElfBase',
+    'highElfBase': 'highElfBase',
+    'spiritMaster': 'elementWeaver',
+    'elementWeaver': 'elementWeaver',
+    'divineTemplar': 'divineTemplar',
+    'shinemaker': 'shinemaker',
+    'shinemakerS1': 'shinemakerS1',
+    'shinemakerS2': 'shinemakerS2',
+    'shinemakerS3': 'shinemakerS3',
+
+    // Ertheia
+    'ertheia': 'marauder',
+    'ertheiaFighter': 'marauder',
+    'ertheiaMage': 'sayhaSeer',
+    'bloodRose': 'bloodRoseBase',
+    'bloodRoseBase': 'bloodRoseBase',
+    'marauder': 'marauder',
+    'cloudBreaker': 'sayhaSeer',
+    'sayhaSeer': 'sayhaSeer',
+    'eviscerator': 'eviscerator'
+  };
+
+  for (const [alias, target] of Object.entries(CLASS_ALIASES)) {
+    if (CLASS_SKILLS_ECHO[target] && !CLASS_SKILLS_ECHO[alias]) {
+      CLASS_SKILLS_ECHO[alias] = [...CLASS_SKILLS_ECHO[target]];
+    }
+    if (CLASSES_ECHO[target] && !CLASSES_ECHO[alias]) {
+      CLASSES_ECHO[alias] = { ...CLASSES_ECHO[target], id: alias };
+    }
+  }
+
   // Layout automático por tier → coluna
   const SKILL_TREE_LAYOUT_ECHO = {};
   for (const [classId, skillIds] of Object.entries(CLASS_SKILLS_ECHO)) {
