@@ -2165,51 +2165,79 @@ skills: [
     base: { atk: 105, def: 42, hp: 580, mp: 108, eva: 38, crit: 38, mdef: 28 },
     skills: [
       { name: "Transcendent Double Claw Strike", type: "Ativo", rarity: "4Ôÿà", effect: "Dano 620% (lobo) + bleed 8s", cooldown: "160s", duration: "8s", note: "Forma Lobo. Skill permanece ap├│s trocar de classe" },
-      { name: "Full Moon",                       type: "Self-Buff", rarity: "4Ôÿà", effect: "+50% All Stats em forma lobo por 30s", cooldown: "180s", duration: "30s", note: "Skill permanece ap├│s trocar de classe" },
-      { name: "Ancient Might",                   type: "Self-Buff", rarity: "3Ôÿà", effect: "+40% ATK e DEF por 60s", cooldown: "120s", duration: "60s", note: "Skill permanece ap├│s trocar de classe" },
-      { name: "Warg Spirit",                     type: "Passivo", rarity: "3Ôÿà", effect: "+25% ATK, +20% Crit, +15% EVA", cooldown: null, duration: null, note: "Skill permanece ap├│s trocar de classe" },
-      { name: "Warg Mastery",                    type: "Passivo", rarity: "3Ôÿà", effect: "+20% ATK em forma lobo, +15% dura├º├úo transforma├º├úo", cooldown: null, duration: null, note: "Skill permanece ap├│s trocar de classe" },
-      { name: "Master of Combat",                type: "Passivo", rarity: "4Ôÿà", effect: "+10% All Stats, +15% PvE Damage", cooldown: null, duration: null, note: "Skill permanece ap├│s trocar de classe" },
-      { name: "Warg Harmony",                    type: "Self-Buff", rarity: "4Ôÿà", effect: "+55% ATK, +45% Crit, +35% EVA por 30 min", cooldown: "90 min", duration: "30 min", note: "Skill permanece ap├│s trocar de classe" }
+      { name: "Full Moon",                       type:   highElfBase: {
+    name: 'Templar', race: 'highelf', archetype: 'highelf', stage: 0,
+    desc: 'Alto Elfo Templário — poder sagrado inicial.',
+    base: { atk: 8, def: 8, hp: 80, mp: 70, matk: 10, mdef: 8, eva: 6, crit: 4 },
+    skills: [
+      { name: "Holy Light",         type: "Ativo",   rarity: "1★", effect: "Dano sagrado 150%", cooldown: "8s", duration: null, note: "Skill permanece após trocar de classe" },
+      { name: "MP Increase",        type: "Passivo", rarity: "1★", effect: "+10% Max MP", cooldown: null, duration: null, note: "Skill permanece após trocar de classe" }
     ]
   },
 
-  // ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
-  // ASSASSIN (Human Male / Dark Elf Female)
-  // ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
-  assassinS0: {
-    name: 'Assassin', race: 'human', archetype: 'assassin', stage: 0,
-    desc: 'Ca├ºador das sombras com adagas.',
-    base: { atk: 13, def: 6, hp: 80, mp: 40, eva: 12, crit: 12, mdef: 4 },
+  // Light Templar (Stage 1 - Lv 20)
+  divineTemplarS1: {
+    name: 'Light Templar', parent: 'highElfBase', race: 'highelf', archetype: 'tank', stage: 1,
+    base: { atk: 18, def: 28, hp: 200, mp: 65, eva: 6, crit: 4, mdef: 18 },
     skills: [
-      { name: "Assassination",      type: "Ativo",   rarity: "1Ôÿà", effect: "Dano 170% + gera 1 Assassin Dagger", cooldown: "8s", duration: null, note: "Skill permanece ap├│s trocar de classe" },
-      { name: "Shadow Dash",        type: "Ativo",   rarity: "1Ôÿà", effect: "Teleporta curta dist├óncia + invisibilidade 2s", cooldown: "15s", duration: "2s", note: "Skill permanece ap├│s trocar de classe" },
-      { name: "Dagger Mastery",     type: "Passivo", rarity: "1Ôÿà", effect: "+12% ATK com adagas", cooldown: null, duration: null, note: "Skill permanece ap├│s trocar de classe" },
-      { name: "Light Armor Mastery", type: "Passivo", rarity: "1Ôÿà", effect: "+8% EVA com armadura leve", cooldown: null, duration: null, note: "Skill permanece ap├│s trocar de classe" }
+      { name: "Holy Strike",        type: "Ativo",   rarity: "1★", effect: "Dano sagrado 190%", cooldown: "10s", duration: null, note: "Skill permanece após trocar de classe" },
+      { name: "Shield of Light",    type: "Ativo",   rarity: "2★", effect: "Absorve 2500 dano + reflete holy", cooldown: "30s", duration: "12s", note: "Skill permanece após trocar de classe" },
+      { name: "Holy Shield Mastery", type: "Passivo", rarity: "1★", effect: "+15% DEF com escudo", cooldown: null, duration: null, note: "Skill permanece após trocar de classe" },
+      { name: "Heavy Armor Mastery", type: "Passivo", rarity: "1★", effect: "+15% DEF com armadura pesada", cooldown: null, duration: null, note: "Skill permanece após trocar de classe" }
+    ]
+  },
+  lightTemplar: {
+    name: 'Light Templar', parent: 'highElfBase', race: 'highelf', archetype: 'tank', stage: 1,
+    base: { atk: 18, def: 28, hp: 200, mp: 65, eva: 6, crit: 4, mdef: 18 },
+    skills: [
+      { name: "Holy Strike",        type: "Ativo",   rarity: "1★", effect: "Dano sagrado 190%", cooldown: "10s", duration: null, note: "Skill permanece após trocar de classe" },
+      { name: "Shield of Light",    type: "Ativo",   rarity: "2★", effect: "Absorve 2500 dano + reflete holy", cooldown: "30s", duration: "12s", note: "Skill permanece após trocar de classe" },
+      { name: "Holy Shield Mastery", type: "Passivo", rarity: "1★", effect: "+15% DEF com escudo", cooldown: null, duration: null, note: "Skill permanece após trocar de classe" },
+      { name: "Heavy Armor Mastery", type: "Passivo", rarity: "1★", effect: "+15% DEF com armadura pesada", cooldown: null, duration: null, note: "Skill permanece após trocar de classe" }
     ]
   },
 
-  assassinS1: {
-    name: 'Assassin', parent: 'assassinS0', archetype: 'assassin', stage: 1,
-    base: { atk: 26, def: 10, hp: 140, mp: 55, eva: 20, crit: 18, mdef: 6 },
+  // Holy Templar (Stage 2 - Lv 40)
+  divineTemplarS2: {
+    name: 'Holy Templar', parent: 'divineTemplarS1', race: 'highelf', archetype: 'tank', stage: 2,
+    base: { atk: 38, def: 62, hp: 450, mp: 98, eva: 10, crit: 6, mdef: 38 },
     skills: [
-      { name: "Shadow Strike",      type: "Ativo",   rarity: "2Ôÿà", effect: "Dano 240% por tr├ís + crit garantido", cooldown: "14s", duration: null, note: "Skill permanece ap├│s trocar de classe" },
-      { name: "Blade Rush",         type: "Ativo",   rarity: "1Ôÿà", effect: "Avan├ºa 200% + gera 1 Assassin Dagger", cooldown: "12s", duration: null, note: "Skill permanece ap├│s trocar de classe" },
-      { name: "Path of the Assassin", type: "Passivo", rarity: "2Ôÿà", effect: "Gera Assassin Daggers ao matar (max 5)", cooldown: null, duration: null, note: "Skill permanece ap├│s trocar de classe" },
-      { name: "Assassin's Focus",   type: "Passivo", rarity: "1Ôÿà", effect: "+10% Crit Rate, +10% Crit Power", cooldown: null, duration: null, note: "Skill permanece ap├│s trocar de classe" }
+      { name: "Divine Charge",           type: "Ativo",   rarity: "2★", effect: "Charge 260% + taunt AoE", cooldown: "18s", duration: null, note: "Skill permanece após trocar de classe" },
+      { name: "Sacred Aegis",            type: "Ativo",   rarity: "3★", effect: "+60% Block Rate + reflete holy 15s", cooldown: "60s", duration: "15s", note: "Skill permanece após trocar de classe" },
+      { name: "Celestial Punishment",    type: "Ativo",   rarity: "2★", effect: "Dano sagrado 280% + silence 3s", cooldown: "20s", duration: "3s", note: "Skill permanece após trocar de classe" },
+      { name: "Holy Chain",              type: "Ativo",   rarity: "2★", effect: "Taunt + root alvo 4s", cooldown: "22s", duration: "4s", note: "Skill permanece após trocar de classe" },
+      { name: "Divine Templar Harmony (S2)", type: "Self-Buff", rarity: "3★", effect: "+35% DEF, +25% ATK, +20% M.DEF por 25 min", cooldown: "60 min", duration: "25 min", note: "Skill permanece após trocar de classe" }
+    ]
+  },
+  holyTemplar: {
+    name: 'Holy Templar', parent: 'divineTemplarS1', race: 'highelf', archetype: 'tank', stage: 2,
+    base: { atk: 38, def: 62, hp: 450, mp: 98, eva: 10, crit: 6, mdef: 38 },
+    skills: [
+      { name: "Divine Charge",           type: "Ativo",   rarity: "2★", effect: "Charge 260% + taunt AoE", cooldown: "18s", duration: null, note: "Skill permanece após trocar de classe" },
+      { name: "Sacred Aegis",            type: "Ativo",   rarity: "3★", effect: "+60% Block Rate + reflete holy 15s", cooldown: "60s", duration: "15s", note: "Skill permanece após trocar de classe" },
+      { name: "Celestial Punishment",    type: "Ativo",   rarity: "2★", effect: "Dano sagrado 280% + silence 3s", cooldown: "20s", duration: "3s", note: "Skill permanece após trocar de classe" },
+      { name: "Holy Chain",              type: "Ativo",   rarity: "2★", effect: "Taunt + root alvo 4s", cooldown: "22s", duration: "4s", note: "Skill permanece após trocar de classe" },
+      { name: "Divine Templar Harmony (S2)", type: "Self-Buff", rarity: "3★", effect: "+35% DEF, +25% ATK, +20% M.DEF por 25 min", cooldown: "60 min", duration: "25 min", note: "Skill permanece após trocar de classe" }
     ]
   },
 
-  assassinS2: {
-    name: 'Assassin', parent: 'assassinS1', archetype: 'assassin', stage: 2,
-    desc: 'Assassino com sistema de sombras desbloqueado.',
-    base: { atk: 55, def: 18, hp: 280, mp: 82, eva: 35, crit: 30, mdef: 14 },
+  // Divine Templar (Stage 3 - Lv 76)
+  divineTemplarS3: {
+    name: 'Divine Templar', parent: 'divineTemplarS2', race: 'highelf', archetype: 'tank', stage: 3,
+    desc: 'Templário Divino — tanque sagrado com poder ofensivo e defesa suprema.',
+    base: { atk: 72, def: 98, hp: 750, mp: 145, eva: 14, crit: 8, mdef: 68 },
     skills: [
-      { name: "Phantom Strike",     type: "Ativo",   rarity: "2Ôÿà", effect: "Dano 280% + invoca sombra no local", cooldown: "16s", duration: null, note: "Skill permanece ap├│s trocar de classe" },
-      { name: "Lethal Shadow",      type: "Ativo",   rarity: "3Ôÿà", effect: "Dano 340% + sombra ataca junto (340%)", cooldown: "22s", duration: null, note: "Skill permanece ap├│s trocar de classe" },
-      { name: "Resolve to Kill",    type: "Self-Buff", rarity: "3Ôÿà", effect: "Ativa Brutality: +40% ATK por 20s (requer 3 Daggers)", cooldown: "60s", duration: "20s", note: "Skill permanece ap├│s trocar de classe" },
-      { name: "Chain Kill",         type: "Ativo",   rarity: "2Ôÿà", effect: "Dano 260% + reset Assassination CD se matar", cooldown: "18s", duration: null, note: "Skill permanece ap├│s trocar de classe" },
-      { name: "Shadow Step",        type: "Ativo",   rarity: "2Ôÿà", effect: "Teleporta atr├ís do alvo", cooldown: "20s", duration: null, note: "Skill permanece ap├│s trocar de classe" },
+      { name: "Lord Knight",                   type: "Ativo",   rarity: "4★", effect: "Forma divina: +50% DEF e ATK por 30s + regen MP", cooldown: "120s", duration: "30s", note: "Skill permanece após trocar de classe" },
+      { name: "Divine Shield",                 type: "Ativo",   rarity: "3★", effect: "Absorve 8000 dano + cura 20% ao expirar", cooldown: "60s", duration: "15s", note: "Skill permanece após trocar de classe" },
+      { name: "Ultimate Divine Defense",       type: "Ativo",   rarity: "4★", effect: "Imunidade total 10s + taunt AoE massivo", cooldown: "300s", duration: "10s", note: "Skill permanece após trocar de classe" },
+      { name: "Transcendent Holy Charge",      type: "Ativo",   rarity: "4★", effect: "Charge dano sagrado 650% + stun 4s + AoE", cooldown: "180s", duration: "4s", note: "Skill permanece após trocar de classe" },
+      { name: "Lord Knight's Aura",            type: "Self-Buff", rarity: "3★", effect: "+30% DEF e +20% ATK para grupo por 120s", cooldown: "120s", duration: "120s", note: "Skill permanece após trocar de classe" },
+      { name: "Divine Templar Spirit",         type: "Passivo", rarity: "3★", effect: "+25% DEF, +20% Max HP, +15% Holy Damage", cooldown: null, duration: null, note: "Skill permanece após trocar de classe" },
+      { name: "Body of Divine Templar",        type: "Passivo", rarity: "3★", effect: "+20% Max HP, +15% M.DEF, +15% HP Regen", cooldown: null, duration: null, note: "Skill permanece após trocar de classe" },
+      { name: "Master of Combat",              type: "Passivo", rarity: "4★", effect: "+10% All Stats, +15% PvE Damage", cooldown: null, duration: null, note: "Skill permanece após trocar de classe" },
+      { name: "Divine Templar Harmony",        type: "Self-Buff", rarity: "4★", effect: "+60% DEF, +45% Max HP, +35% Holy Damage por 30 min", cooldown: "90 min", duration: "30 min", note: "Skill permanece após trocar de classe" }
+    ]
+  },orta atr├ís do alvo", cooldown: "20s", duration: null, note: "Skill permanece ap├│s trocar de classe" },
       { name: "Assassin's Mark",    type: "Ativo",   rarity: "2Ôÿà", effect: "Marca alvo: +25% dano contra ele 10s", cooldown: "25s", duration: "10s", note: "Skill permanece ap├│s trocar de classe" },
       { name: "Brutality",          type: "Passivo", rarity: "2Ôÿà", effect: "Auto-buff +15% ATK quando tem 5 Daggers", cooldown: null, duration: null, note: "Skill permanece ap├│s trocar de classe" },
       { name: "Assassin's Evasion", type: "Passivo", rarity: "2Ôÿà", effect: "+15% EVA, +10% Debuff Resist", cooldown: null, duration: null, note: "Skill permanece ap├│s trocar de classe" },

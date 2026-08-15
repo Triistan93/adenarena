@@ -2289,8 +2289,8 @@ skills: [
   // HIGH ELF — DIVINE TEMPLAR / ELEMENT WEAVER / SHINEMAKER
   // ═══════════════════════════════════════════
   highElfBase: {
-    name: 'High Elf', race: 'highelf', archetype: 'highelf', stage: 0,
-    desc: 'Alto Elfo — poder divino e elementar.',
+    name: 'Templar', race: 'highelf', archetype: 'highelf', stage: 0,
+    desc: 'Alto Elfo Templário — poder sagrado inicial.',
     base: { atk: 8, def: 8, hp: 80, mp: 70, matk: 10, mdef: 8, eva: 6, crit: 4 },
     skills: [
       { name: "Holy Light",         type: "Ativo",   rarity: "1★", effect: "Dano sagrado 150%", cooldown: "8s", duration: null, note: "Skill permanece após trocar de classe" },
@@ -2298,9 +2298,19 @@ skills: [
     ]
   },
 
-  // Divine Templar (stages 1-3 mantém mesmo nome)
+  // Light Templar (Stage 1 - Lv 20)
   divineTemplarS1: {
-    name: 'Divine Templar', parent: 'highElfBase', race: 'highelf', archetype: 'tank', stage: 1,
+    name: 'Light Templar', parent: 'highElfBase', race: 'highelf', archetype: 'tank', stage: 1,
+    base: { atk: 18, def: 28, hp: 200, mp: 65, eva: 6, crit: 4, mdef: 18 },
+    skills: [
+      { name: "Holy Strike",        type: "Ativo",   rarity: "1★", effect: "Dano sagrado 190%", cooldown: "10s", duration: null, note: "Skill permanece após trocar de classe" },
+      { name: "Shield of Light",    type: "Ativo",   rarity: "2★", effect: "Absorve 2500 dano + reflete holy", cooldown: "30s", duration: "12s", note: "Skill permanece após trocar de classe" },
+      { name: "Holy Shield Mastery", type: "Passivo", rarity: "1★", effect: "+15% DEF com escudo", cooldown: null, duration: null, note: "Skill permanece após trocar de classe" },
+      { name: "Heavy Armor Mastery", type: "Passivo", rarity: "1★", effect: "+15% DEF com armadura pesada", cooldown: null, duration: null, note: "Skill permanece após trocar de classe" }
+    ]
+  },
+  lightTemplar: {
+    name: 'Light Templar', parent: 'highElfBase', race: 'highelf', archetype: 'tank', stage: 1,
     base: { atk: 18, def: 28, hp: 200, mp: 65, eva: 6, crit: 4, mdef: 18 },
     skills: [
       { name: "Holy Strike",        type: "Ativo",   rarity: "1★", effect: "Dano sagrado 190%", cooldown: "10s", duration: null, note: "Skill permanece após trocar de classe" },
@@ -2310,8 +2320,20 @@ skills: [
     ]
   },
 
+  // Holy Templar (Stage 2 - Lv 40)
   divineTemplarS2: {
-    name: 'Divine Templar', parent: 'divineTemplarS1', race: 'highelf', archetype: 'tank', stage: 2,
+    name: 'Holy Templar', parent: 'divineTemplarS1', race: 'highelf', archetype: 'tank', stage: 2,
+    base: { atk: 38, def: 62, hp: 450, mp: 98, eva: 10, crit: 6, mdef: 38 },
+    skills: [
+      { name: "Divine Charge",           type: "Ativo",   rarity: "2★", effect: "Charge 260% + taunt AoE", cooldown: "18s", duration: null, note: "Skill permanece após trocar de classe" },
+      { name: "Sacred Aegis",            type: "Ativo",   rarity: "3★", effect: "+60% Block Rate + reflete holy 15s", cooldown: "60s", duration: "15s", note: "Skill permanece após trocar de classe" },
+      { name: "Celestial Punishment",    type: "Ativo",   rarity: "2★", effect: "Dano sagrado 280% + silence 3s", cooldown: "20s", duration: "3s", note: "Skill permanece após trocar de classe" },
+      { name: "Holy Chain",              type: "Ativo",   rarity: "2★", effect: "Taunt + root alvo 4s", cooldown: "22s", duration: "4s", note: "Skill permanece após trocar de classe" },
+      { name: "Divine Templar Harmony (S2)", type: "Self-Buff", rarity: "3★", effect: "+35% DEF, +25% ATK, +20% M.DEF por 25 min", cooldown: "60 min", duration: "25 min", note: "Skill permanece após trocar de classe" }
+    ]
+  },
+  holyTemplar: {
+    name: 'Holy Templar', parent: 'divineTemplarS1', race: 'highelf', archetype: 'tank', stage: 2,
     base: { atk: 38, def: 62, hp: 450, mp: 98, eva: 10, crit: 6, mdef: 38 },
     skills: [
       { name: "Divine Charge",           type: "Ativo",   rarity: "2★", effect: "Charge 260% + taunt AoE", cooldown: "18s", duration: null, note: "Skill permanece após trocar de classe" },
@@ -2322,6 +2344,7 @@ skills: [
     ]
   },
 
+  // Divine Templar (Stage 3 - Lv 76)
   divineTemplarS3: {
     name: 'Divine Templar', parent: 'divineTemplarS2', race: 'highelf', archetype: 'tank', stage: 3,
     desc: 'Templário Divino — tanque sagrado com poder ofensivo e defesa suprema.',

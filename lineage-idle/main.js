@@ -335,6 +335,9 @@ function openClassTransferModal(classInfo) {
 
     // Parent matching check
     const matchesParent = clsDef.parent === state.class 
+      || (clsDef.parent === 'highElfBase' && (state.class === 'highElfBase' || state.class === 'highelf' || state.class === 'templar'))
+      || (clsDef.parent === 'divineTemplarS1' && (state.class === 'divineTemplarS1' || state.class === 'lightTemplar'))
+      || (clsDef.parent === 'divineTemplarS2' && (state.class === 'divineTemplarS2' || state.class === 'holyTemplar'))
       || (clsDef.parent === 'fighter' && (state.class === 'elfFighter' || state.class === 'darkElfFighter' || state.class === 'orcBase' || state.class === 'fighter'))
       || (clsDef.parent === 'mage' && (state.class === 'elfMage' || state.class === 'darkElfMage' || state.class === 'mage'))
       || (clsDef.parent === 'elfFighter' && (state.class === 'fighter' || state.class === 'elfFighter') && state.race === 'elf')
