@@ -12,6 +12,7 @@ import {
   type User 
 } from '../firebase';
 import { CharacterCreation, CharacterCreationData } from './CharacterCreation';
+import { getStarterKit } from '../data/starterKits';
 
 interface LoginScreenProps {
   onEnterGame: (cloudState?: any) => void;
@@ -55,72 +56,33 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
   }, []);
 
   const handleCharacterCreated = async (data: CharacterCreationData) => {
-    const startZone = 'talkingIsland';
+    const kit = getStarterKit(data.race, data.className);
 
-    const isMage = data.className === 'mage' || data.className === 'wizard' || data.className === 'cleric' || data.className === 'darkWizard' || data.className === 'shaman' || data.className === 'oracle' || data.className === 'sayhaSeer' || data.className === 'elementWeaverS1' || data.className === 'bloodRoseBase';
-    const isKamael = data.race === 'kamael';
-    const isLight = isKamael || data.className === 'rogue' || data.className === 'scout' || data.className === 'assassin' || data.className === 'warder' || data.className === 'soulbreaker' || data.className === 'sylphGunner';
-
-    let starterWeapon = 'knight_sword';
-    let starterHelm = 'bronze_helmet';
-    let starterArmor = 'bronze_breastplate_heavy';
-    let starterLegs = 'bronze_gaiters_heavy';
-    let starterGloves = 'bronze_gloves';
-    let starterBoots = 'lether_boots';
-
-    // Map class → starter skill using Echo archetype system
-    const ECHO_STARTER_SKILLS: Record<string, string> = {
-      // Mage archetypes
-      mage: 'energy_bolt_m', wizard: 'energy_bolt_m', cleric: 'energy_bolt_m',
-      darkWizard: 'energy_bolt_m', shaman: 'energy_bolt_m',
-      // Exclusive archetypes
-      deathPilgrim: 'death_spike_dk', elfDeathPilgrim: 'death_spike_dk',
-      wargBase: 'warg_will',
-      assassinBase: 'assassin_harmony',
-      sylphGunner: 'burst_fire',
-      highElfBase: 'divine_templar_harmony',
-      divineTemplarS1: 'divine_templar_harmony', divineTemplarS2: 'divine_templar_harmony', divineTemplar: 'divine_templar_harmony',
-      elementWeaverS1: 'element_weaver_harmony', elementWeaverS2: 'element_weaver_harmony', elementWeaver: 'element_weaver_harmony',
-      bloodRoseBase: 'blood_rose_harmony', bloodRoseS1: 'blood_rose_harmony', bloodRoseS2: 'blood_rose_harmony', bloodRose: 'blood_rose_harmony',
-      shinemakerS1: 'shinemaker_harmony', shinemakerS2: 'shinemaker_harmony', shinemaker: 'shinemaker_harmony',
-      // Kamael
-      soulbreaker: 'samurai_harmony', hatamoto: 'samurai_harmony',
-      // Artisan/Dwarf
-      artisan: 'shinemaker_harmony',
-      // Default fighter
-    };
-    let starterSkill = ECHO_STARTER_SKILLS[data.className] || 'power_strike_f';
-
-    if (isMage) {
-      starterWeapon = 'crucifix_of_blessing_magicblunt';
-      starterHelm = 'devotion_helmet';
-      starterArmor = 'devotion_armor_robe';
-      starterLegs = 'devotion_pants_robe';
-      starterGloves = 'devotion_gloves';
-      starterBoots = 'devotion_boots';
-    } else if (isLight) {
-      starterWeapon = isKamael ? 'sword_breaker' : (data.race === 'sylph' ? 'sword_breaker' : 'hunting_bow');
-      starterHelm = 'leather_helmet';
-      starterArmor = 'leather_vest_light';
-      starterLegs = 'leather_pants_light';
-      starterGloves = 'leather_gloves';
-      starterBoots = 'lether_boots';
-    } else if (data.className === 'artisan' || data.className === 'shinemakerS1') {
-      starterWeapon = 'iron_hammer';
-    }
-
-    const starterShotsId = isMage ? 'spiritshot_ng' : 'soulshot_ng';
-
-    const inventoryItems = [
-      { uid: 'init_w', itemId: starterWeapon, count: 1, rarity: 'common', enchant: 0 },
-      { uid: 'init_h', itemId: starterHelm, count: 1, rarity: 'common', enchant: 0 },
-      { uid: 'init_a', itemId: starterArmor, count: 1, rarity: 'common', enchant: 0 },
-      { uid: 'init_l', itemId: starterLegs, count: 1, rarity: 'common', enchant: 0 },
-      { uid: 'init_g', itemId: starterGloves, count: 1, rarity: 'common', enchant: 0 },
-      { uid: 'init_b', itemId: starterBoots, count: 1, rarity: 'common', enchant: 0 },
-      { uid: 'init_pot', itemId: 'hp_potion_s', count: 100 },
-      { uid: 'init_shots', itemId: starterShotsId, count: 300 }
+    const inventoryItems: any[] = [
+      { uid: 'init_w', itemId: kit.weapon, count: 1, rarity: 'common', enchant: 0 },
+      { uid: 'init_h', itemId: kit.helmet, count: 1, rarity: 'common', enchant: 0 },
+      { uid: 'init_a', itemId: kit.armor, count: 1, rarity: 'common', enchant: 0 },
+      { uid: 'init_l', itemId: kit.legs, count: 1, rarity: 'common', enchant: 0 },
+      { uid: 'init_g', itemId: kit.gloves, count: 1, rarity: 'common', enchant: 0 },
+      { uid: 'init_b', itemId: kit.boots, count: 1, rarity: 'common', enchant: 0 },
+      { uid: 'init_pot', itemId: kit.potions.itemId, count: kit.potions.count },
+      { uid: 'init_shots', itemId: kit.shotType, count: kit.shotsCount }
     ];
+
+    const equipmentMap: Record<string, string | null> = {
+      weapon: 'init_w',
+      helmet: 'init_h',
+      armor: 'init_a',
+      legs: 'init_l',
+      gloves: 'init_g',
+      boots: 'init_b',
+      shield: null
+    };
+
+    if (kit.shield) {
+      inventoryItems.push({ uid: 'init_sh', itemId: kit.shield, count: 1, rarity: 'common', enchant: 0 });
+      equipmentMap.shield = 'init_sh';
+    }
 
     const newCharState: any = {
       charName: data.charName,
@@ -136,18 +98,11 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
       gold: 2000,
       zone: 'talkingIsland',
       inventory: inventoryItems,
-      equipment: {
-        weapon: 'init_w',
-        helmet: 'init_h',
-        armor: 'init_a',
-        legs: 'init_l',
-        gloves: 'init_g',
-        boots: 'init_b'
-      },
+      equipment: equipmentMap,
       skills: {
-        [starterSkill]: 1
+        [kit.starterSkill]: 1
       },
-      selectedSkill: starterSkill,
+      selectedSkill: kit.starterSkill,
       lastSaveTime: Date.now()
     };
 

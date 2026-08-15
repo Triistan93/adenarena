@@ -34,11 +34,11 @@ const RACES_INFO: Record<string, {
     desc: 'Versáteis e equilibrados em todas as disciplinas de combate e magia.',
     perks: ['⚔️ Status Físicos Equilibrados', '🛡️ Excelente Adaptabilidade', '🏰 Inicia na Ilha de Falar'],
     allowedClasses: [
-      { id: 'fighter', name: 'Guerreiro (Fighter)', desc: 'Combate corpo a corpo com espada e escudo.', icon: '⚔️' },
-      { id: 'mage', name: 'Mago (Mage)', desc: 'Dominador de magia elemental e mana elevado.', icon: '🔮' },
-      { id: 'deathPilgrim', name: 'Death Knight 💀', desc: '⚠️ EM DESENVOLVIMENTO, CONTEM BUGS. Peregrino das trevas futuro Cavaleiro da Morte com DP.', icon: '💀' },
-      { id: 'wargBase', name: 'Warg 🐺', desc: '⚠️ EM DESENVOLVIMENTO, CONTEM BUGS. Lutador primitivo que se transforma em Lobo guerreiro.', icon: '🐺' },
-      { id: 'assassinBase', name: 'Assassin 🗡️', desc: '⚠️ EM DESENVOLVIMENTO, CONTEM BUGS. Caçador das sombras com adagas e clones sombrios.', icon: '🗡️' }
+      { id: 'fighter', name: 'Guerreiro (Fighter)', desc: 'Combate corpo a corpo com espada, escudo e alta vitalidade.', icon: '⚔️' },
+      { id: 'mage', name: 'Mago (Mage)', desc: 'Dominador de magia elemental e grande reserva de mana.', icon: '🔮' },
+      { id: 'deathPilgrim', name: 'Death Knight 💀', desc: 'Cavaleiro da Morte alimentado por Dark Points e golpes gélidos.', icon: '💀' },
+      { id: 'wargBase', name: 'Warg 🐺', desc: 'Lutador primitivo e feroz com instintos lupinos e regeneração.', icon: '🐺' },
+      { id: 'assassinBase', name: 'Assassin 🗡️', desc: 'Caçador das sombras mortal com adagas velozes e clones sombrios.', icon: '🗡️' }
     ],
     image: {
       fighter: { M: '/img/humanpalaM.png', F: '/img/humanpalaF.png' },
@@ -56,8 +56,8 @@ const RACES_INFO: Record<string, {
     desc: 'Graciosos e extremamente ágeis, abençoados pela deusa Eva.',
     perks: ['🍃 +8 Esquiva Nativa', '⚡ Alta Velocidade de Movimento', '🏝️ Inicia na Ilha de Falar (Lv. 1)'],
     allowedClasses: [
-      { id: 'fighter', name: 'Guerreiro Elfo (Fighter)', desc: 'Defensor gracioso e arqueiro veloz.', icon: '🏹' },
-      { id: 'mage', name: 'Mago Elfo (Mage)', desc: 'Dominador de magia de água e cura sagrada.', icon: '🌊' }
+      { id: 'fighter', name: 'Guerreiro Elfo (Fighter)', desc: 'Defensor gracioso e arqueiro veloz com precisão letal.', icon: '🏹' },
+      { id: 'mage', name: 'Mago Elfo (Mage)', desc: 'Dominador de magia de água, luz sagrada e suporte rápido.', icon: '🌊' }
     ],
     image: {
       fighter: { M: '/img/elfwswM.png', F: '/img/elfswsF.png' },
@@ -72,10 +72,10 @@ const RACES_INFO: Record<string, {
     desc: 'Mestres de magia negra e ataques críticos devastadores de Shillien.',
     perks: ['🔥 +15 Poder de Ataque & Magia', '🗡️ Alto Poder Crítico', '🏝️ Inicia na Ilha de Falar (Lv. 1)'],
     allowedClasses: [
-      { id: 'fighter', name: 'Guerreiro Negro (Fighter)', desc: 'Assassino mortal e cavaleiro sombrio.', icon: '🗡️' },
-      { id: 'mage', name: 'Mago Negro (Mage)', desc: 'Invocador de maldições e magia de fogo/trevas.', icon: '🔮' },
-      { id: 'elfDeathPilgrim', name: 'Death Knight 💀', desc: '⚠️ EM DESENVOLVIMENTO, CONTEM BUGS. Cavaleiro da Morte Dark Elf com Dark Points e magia sombria.', icon: '💀' },
-      { id: 'assassinBase', name: 'Assassin 🗡️', desc: '⚠️ EM DESENVOLVIMENTO, CONTEM BUGS. Assassina mortal das sombras de Shillien.', icon: '🗡️' }
+      { id: 'fighter', name: 'Guerreiro Negro (Fighter)', desc: 'Assassino mortal e cavaleiro sombrio focado em dano crítico.', icon: '🗡️' },
+      { id: 'mage', name: 'Mago Negro (Mage)', desc: 'Invocador de maldições e magia de fogo/trevas de alto impacto.', icon: '🔮' },
+      { id: 'elfDeathPilgrim', name: 'Death Knight 💀', desc: 'Cavaleiro da Morte Dark Elf com maestria em magias sombrias.', icon: '💀' },
+      { id: 'assassinBase', name: 'Assassin 🗡️', desc: 'Assassina mortal das sombras com venenos e golpes críticos.', icon: '🗡️' }
     ],
     image: {
       fighter: { M: '/img/darkelfskM.png', F: '/img/darkelfskF.png' },
@@ -92,9 +92,9 @@ const RACES_INFO: Record<string, {
     desc: 'Guerreiros de força bruta descomunal e constituição vital superior.',
     perks: ['💪 +100 Vida Máxima (HP)', '🛡️ Resiliência em Batalha Prolongada', '🏝️ Inicia na Ilha de Falar (Lv. 1)'],
     allowedClasses: [
-      { id: 'fighter', name: 'Guerreiro Orc (Fighter)', desc: 'Destruidor com armas de duas mãos e garras.', icon: '🪓' },
-      { id: 'mage', name: 'Xamã Orc (Shaman)', desc: 'Mago de combate e buffs tribais de sangue.', icon: '🔥' },
-      { id: 'orcRider', name: 'Vanguard Rider 🐉', desc: '⚠️ EM DESENVOLVIMENTO, CONTEM BUGS. Cavaleiro Orc montado especialista em lança de guerra.', icon: '🐉' }
+      { id: 'fighter', name: 'Guerreiro Orc (Fighter)', desc: 'Destruidor com machados de duas mãos e fúria guerreira.', icon: '🪓' },
+      { id: 'mage', name: 'Xamã Orc (Shaman)', desc: 'Mago de combate e buffs tribais de sangue e resistência.', icon: '🔥' },
+      { id: 'orcRider', name: 'Vanguard Rider 🐉', desc: 'Cavaleiro Orc montado especialista em investidas e estocadas de lança.', icon: '🐉' }
     ],
     image: {
       fighter: { M: '/img/orcfighterM.png', F: '/img/orcfighterF.png' },
@@ -110,8 +110,8 @@ const RACES_INFO: Record<string, {
     desc: 'Mestres da forja, especialistas em mineração e criação de itens.',
     perks: ['🎒 +100 Espaços de Inventário', '⚒️ Bônus de Craft & Drop de Materiais', '🏝️ Inicia na Ilha de Falar (Lv. 1)'],
     allowedClasses: [
-      { id: 'artisan', name: 'Artesão (Artisan)', desc: 'Especialista em forja de armas e armaduras.', icon: '⚒️' },
-      { id: 'shinemakerS1', name: 'ShineMaker ✨', desc: '⚠️ EM DESENVOLVIMENTO, CONTEM BUGS. Mestre da luz cristalina, suporte e dano cristalino.', icon: '✨' }
+      { id: 'artisan', name: 'Artesão (Artisan)', desc: 'Especialista em forja de armas, armaduras pesadas e martelos.', icon: '⚒️' },
+      { id: 'shinemakerS1', name: 'ShineMaker ✨', desc: 'Mestre da luz cristalina, suporte celestial e martelo luminoso.', icon: '✨' }
     ],
     image: {
       artisan: { M: '/img/dwarfmaestroM.png', F: '/img/dwarfmaestroF.png' },
@@ -127,8 +127,8 @@ const RACES_INFO: Record<string, {
     desc: 'Raça de uma asa só com maestria lendária em estocadas de rapieira.',
     perks: ['⚡ Usam Armaduras LEVES por Lore', '🗡️ Ataques Físicos Ultrarrápidos', '🏝️ Inicia na Ilha de Falar (Lv. 1)'],
     allowedClasses: [
-      { id: 'soulbreaker', name: 'Soulbreaker', desc: 'Espadachim das sombras especializado em rapieiras.', icon: '🗡️' },
-      { id: 'hatamoto', name: 'Samurai ⛩️', desc: '⚠️ EM DESENVOLVIMENTO, CONTEM BUGS. Mestre da katana ancestral e técnica Iaijutsu.', icon: '⛩️' }
+      { id: 'soulbreaker', name: 'Soulbreaker', desc: 'Espadachim das sombras especializado em rapieiras e absorção de almas.', icon: '🗡️' },
+      { id: 'hatamoto', name: 'Samurai ⛩️', desc: 'Mestre da katana ancestral e técnica de corte veloz Iaijutsu.', icon: '⛩️' }
     ],
     image: {
       soulbreaker: { M: '/img/kamaelshM.png', F: '/img/kamaelshF.png' },
@@ -144,7 +144,7 @@ const RACES_INFO: Record<string, {
     desc: 'Atiradores elementais dos ventos com armas de fogo.',
     perks: ['💨 +12 Esquiva & Velocidade', '🔫 Atiradores Elementais Ranged', '🏝️ Inicia na Ilha de Falar (Lv. 1)'],
     allowedClasses: [
-      { id: 'sylphGunner', name: 'Storm Blaster 🔫', desc: '⚠️ EM DESENVOLVIMENTO, CONTEM BUGS. Atirador elemental com armas de fogo e tiros de vento.', icon: '🔫' }
+      { id: 'sylphGunner', name: 'Storm Blaster 🔫', desc: 'Atirador elemental com armas de fogo rápidas e tiros de vento.', icon: '🔫' }
     ],
     image: {
       sylphGunner: { M: '/img/sylphM.png', F: '/img/sylphF.png' },
@@ -159,9 +159,9 @@ const RACES_INFO: Record<string, {
     desc: 'Elfos supremos detentores da luz divina e maestria elemental.',
     perks: ['🌟 +8 Magia & Defesa Divina', '🛡️ Guardiões Sagrados de Aden', '🏝️ Inicia na Ilha de Falar (Lv. 1)'],
     allowedClasses: [
-      { id: 'divineTemplarS1', name: 'Divine Templar 🛡️', desc: '⚠️ EM DESENVOLVIMENTO, CONTEM BUGS. Guardião sagrado supremo e tanque com Sacred Aegis.', icon: '🛡️' },
-      { id: 'elementWeaverS1', name: 'Element Weaver 🌀', desc: '⚠️ EM DESENVOLVIMENTO, CONTEM BUGS. Mago supremo combinando Fogo, Água e Vento.', icon: '🌀' },
-      { id: 'shinemakerS1', name: 'ShineMaker ✨', desc: '⚠️ EM DESENVOLVIMENTO, CONTEM BUGS. Invocador de luz sagrada e suporte cristalino.', icon: '✨' }
+      { id: 'divineTemplarS1', name: 'Divine Templar 🛡️', desc: 'Guardião sagrado supremo e tanque inabalável com Sacred Aegis.', icon: '🛡️' },
+      { id: 'elementWeaverS1', name: 'Element Weaver 🌀', desc: 'Mago supremo combinando os três pilares de Fogo, Água e Vento.', icon: '🌀' },
+      { id: 'shinemakerS1', name: 'ShineMaker ✨', desc: 'Invocador de luz sagrada, bênçãos de proteção e suporte cristalino.', icon: '✨' }
     ],
     image: {
       divineTemplarS1: { M: '/img/elfwswM.png', F: '/img/elfswsF.png' },
@@ -178,9 +178,9 @@ const RACES_INFO: Record<string, {
     desc: 'Guerreiros e místicas tocados pelos ventos e espíritos da natureza.',
     perks: ['🌪️ +10 Esquiva Nativa', '🌹 Combate Híbrido com Roubo de Vida', '🏰 Inicia na Ilha de Falar'],
     allowedClasses: [
-      { id: 'bloodRoseS1', name: 'Blood Rose 🌹', desc: '⚠️ EM DESENVOLVIMENTO, CONTEM BUGS. Mística dos ventos e espinhos com roubo de vida.', icon: '🌹' },
-      { id: 'marauder', name: 'Marauder / Eviscerator 🌪️', desc: 'Lutadora com garras e combos de furacão.', icon: '🥊' },
-      { id: 'sayhaSeer', name: 'Sayha Seeker 🌀', desc: 'Invocadora de vendavais e espíritos de Sayha.', icon: '🌀' }
+      { id: 'bloodRoseS1', name: 'Blood Rose 🌹', desc: 'Mística dos ventos e espinhos com roubo de vida e dano em área.', icon: '🌹' },
+      { id: 'marauder', name: 'Marauder / Eviscerator 🌪️', desc: 'Lutadora com garras e combos velozes de furacão.', icon: '🥊' },
+      { id: 'sayhaSeer', name: 'Sayha Seeker 🌀', desc: 'Invocadora de vendavais e espíritos protetores de Sayha.', icon: '🌀' }
     ],
     image: {
       bloodRoseS1: { M: '/img/elf_mage.png', F: '/img/elf_mage.png' },
