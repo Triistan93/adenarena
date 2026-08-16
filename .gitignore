@@ -19,6 +19,11 @@ Thumbs.db
 .env.local
 .env.*.local
 
-# ── IDE ───────────────────────────────────────────────────────
+# ── IDE & Local Tooling ───────────────────────────────────────
 .vscode/
 .idea/
+.agents/
+skills/
+skills-lock.json
+scratch/
+

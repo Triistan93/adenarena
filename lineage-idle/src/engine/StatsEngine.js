@@ -11,6 +11,7 @@ import { RACES, CLASSES, RACE_BASE_ATTRIBUTES } from '../data/races.js';
 import { CODEX_SETS, BOSS_DOLLS } from '../data/codex.js';
 import { FortressService } from '../services/FortressService.js';
 import { CombatPowerService } from '../services/CombatPowerService.js';
+import { resolveCanonicalClassId } from '../data/classes/class_aliases.js';
 
 export const STR_MODIFIERS = {
   10: 0.42, 11: 0.43, 12: 0.45, 13: 0.46, 14: 0.48, 15: 0.50,
@@ -98,8 +99,9 @@ export function getAstralMasteryBonuses(state) {
  */
 export function getClass(classId) {
   if (!classId) return null;
+  const canonicalId = resolveCanonicalClassId(classId);
   const classes = (typeof window !== 'undefined' && window.EchoData) ? window.EchoData.CLASSES_ECHO : CLASSES;
-  let def = classes[classId] || classes[String(classId).toLowerCase()] || null;
+  let def = classes[canonicalId] || classes[classId] || classes[String(canonicalId).toLowerCase()] || classes[String(classId).toLowerCase()] || null;
   if (!def) return null;
 
   if (def.archetype === undefined && def.parent) {

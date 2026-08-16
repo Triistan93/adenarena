@@ -717,6 +717,20 @@ function buildEchoAdapter() {
     SKILL_TREE_LAYOUT_ECHO[classId] = layout;
   }
 
+  // Mapeia todos os aliases de classes para garantir que qualquer identificador carregue sua árvore
+  const classAliases = E.CLASS_ALIASES || {};
+  for (const [alias, canonical] of Object.entries(classAliases)) {
+    if (CLASS_SKILLS_ECHO[canonical] && !CLASS_SKILLS_ECHO[alias]) {
+      CLASS_SKILLS_ECHO[alias] = CLASS_SKILLS_ECHO[canonical];
+    }
+    if (SKILL_TREE_LAYOUT_ECHO[canonical] && !SKILL_TREE_LAYOUT_ECHO[alias]) {
+      SKILL_TREE_LAYOUT_ECHO[alias] = SKILL_TREE_LAYOUT_ECHO[canonical];
+    }
+    if (CLASSES_ECHO[canonical] && !CLASSES_ECHO[alias]) {
+      CLASSES_ECHO[alias] = CLASSES_ECHO[canonical];
+    }
+  }
+
   // Publica em window.EchoData (o que main.js lê)
   E.SKILL_DEFS_ECHO        = SKILL_DEFS_ECHO;
   E.SKILL_REQS_ECHO        = SKILL_REQS_ECHO;

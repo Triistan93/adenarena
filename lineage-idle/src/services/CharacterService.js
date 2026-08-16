@@ -9,6 +9,7 @@ import { D } from '../core/GameConfig.js';
 import { RACES, CLASSES } from '../data/races.js';
 import { getClass } from '../engine/StatsEngine.js';
 import { getSkillCost } from '../engine/SkillEngine.js';
+import { resolveCanonicalClassId } from '../data/classes/class_aliases.js';
 
 /**
  * Verifica se a classe atual do jogador satisfaz um requisito de classe (percorrendo a árvore de herança).
@@ -67,15 +68,19 @@ export function getClassSkills(classId) {
   const E = typeof window !== 'undefined' ? window.EchoData : null;
   const CS = E?.CLASS_SKILLS_ECHO;
   if (!CS) return null;
+  const canonicalId = resolveCanonicalClassId(classId);
+  if (CS[canonicalId]) return CS[canonicalId];
   if (CS[classId]) return CS[classId];
-  const def = getClass(classId);
+  const def = getClass(canonicalId) || getClass(classId);
   if (def?.skillTree && CS[def.skillTree]) return CS[def.skillTree];
   let current = def?.parent;
-  const visited = new Set([classId]);
+  const visited = new Set([classId, canonicalId]);
   while (current && !visited.has(current)) {
     visited.add(current);
+    const parentCanon = resolveCanonicalClassId(current);
+    if (CS[parentCanon]) return CS[parentCanon];
     if (CS[current]) return CS[current];
-    const pd = getClass(current);
+    const pd = getClass(parentCanon) || getClass(current);
     if (pd?.skillTree && CS[pd.skillTree]) return CS[pd.skillTree];
     current = pd?.parent;
   }
