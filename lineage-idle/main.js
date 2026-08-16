@@ -1750,7 +1750,25 @@ function checkOfflineProgress(lastTime) {
     `;
     modalEl.style.display = 'flex';
     modalEl.classList.add('active');
+
+    const okBtn = el('offline-ok');
+    if (okBtn) {
+      okBtn.onclick = (e) => {
+        if (e) { e.preventDefault(); e.stopPropagation(); }
+        closeOfflineModal();
+      };
+    }
   }
+}
+
+function closeOfflineModal() {
+  const modalEl = el('offline-modal');
+  if (modalEl) {
+    modalEl.classList.remove('active');
+    modalEl.style.display = 'none';
+  }
+  updateAllUI();
+  save();
 }
 
 
@@ -4664,14 +4682,20 @@ export function bindEvents() {
     }
     const scrollDownBtn = el('log-scroll-down-btn');
     if (scrollDownBtn) scrollDownBtn.onclick = scrollLogToBottom;
-    const offlineOkBtn = el('offline-ok'); if (offlineOkBtn) offlineOkBtn.onclick = () => { const modal = el('offline-modal'); if (modal) modal.classList.remove('active'); };
+    const offlineOkBtn = el('offline-ok'); if (offlineOkBtn) offlineOkBtn.onclick = closeOfflineModal;
+    const offlineModal = el('offline-modal');
+    if (offlineModal) {
+      offlineModal.onclick = (e) => {
+        if (e.target === offlineModal) closeOfflineModal();
+      };
+    }
     const resetSpBtn = el('reset-sp-btn'); if (resetSpBtn) resetSpBtn.onclick = resetSP;
     const autoEquipBtn = el('auto-equip-btn'); if (autoEquipBtn) autoEquipBtn.onclick = autoEquipBest;
     const startBtn = el('start-btn'); if (startBtn) startBtn.onclick = startGame;
     const resetBtn = el('reset-btn'); if (resetBtn) resetBtn.onclick = resetSave;
     const resFree = el('res-free'); if (resFree) resFree.onclick = () => resurrect(false);
     const resScroll = el('res-scroll'); if (resScroll) resScroll.onclick = () => resurrect(true);
-    const sagaOk = el('saga-ok'); if (sagaOk) sagaOk.onclick = () => { const modal = el('saga-modal'); if (modal) modal.classList.remove('active'); };
+    const sagaOk = el('saga-ok'); if (sagaOk) sagaOk.onclick = () => { const modal = el('saga-modal'); if (modal) { modal.classList.remove('active'); modal.style.display = 'none'; } };
     const unequipBtn = el('unequip-all-btn'); if (unequipBtn) unequipBtn.onclick = unequipAll;
     qsa('.equip-slot').forEach(slot => { slot.onclick = () => { const s = slot.dataset.slot, uid = state.equipment[s]; if (uid) unequipItem(s); }; });
     const navCraftBtn = el('nav-craft-btn'); if (navCraftBtn) navCraftBtn.onclick = () => { const craftTab = qs('.tab-btn[data-tab="craft"]'); if (craftTab) craftTab.click(); };
@@ -5990,6 +6014,7 @@ export function init() {
         openPanel('zones');
       }
     };
+    window.closeOfflineModal = closeOfflineModal;
 
     // Clan & Castle Siege Actions
     window.setClanSubTab = (t) => {
