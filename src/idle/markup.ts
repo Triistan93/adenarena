@@ -175,6 +175,7 @@ export const IDLE_MARKUP = `
           <button class="tab-btn" data-tab="sevensigns">🏛️ Sete Selos</button>
           <button class="tab-btn" data-tab="fortress">⚔️ Fortalezas</button>
           <button class="tab-btn" data-tab="colosseum">🎭 Coliseu</button>
+          <button class="tab-btn" data-tab="rankings">🏆 Rankings</button>
           <button class="tab-btn" data-tab="enchant">✨ Encantamento</button>
           <button class="tab-btn" data-tab="codex">📜 Codex</button>
           <button class="tab-btn" data-tab="dolls">🧸 Dolls</button>
@@ -633,6 +634,9 @@ export const IDLE_MARKUP = `
 
           <!-- Colosseum & Duels Tab -->
           <div id="tab-colosseum" class="tab-pane"></div>
+
+          <!-- Global Rankings & Leaderboards Tab -->
+          <div id="tab-rankings" class="tab-pane"></div>
 
           <!-- Dedicated Enchantment Tab -->
           <div id="tab-enchant" class="tab-pane">

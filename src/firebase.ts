@@ -9,7 +9,19 @@ import {
   onAuthStateChanged,
   type User
 } from 'firebase/auth';
-import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
+import { 
+  getFirestore, 
+  doc, 
+  setDoc, 
+  getDoc, 
+  serverTimestamp, 
+  collection, 
+  getDocs, 
+  query, 
+  orderBy, 
+  limit, 
+  where 
+} from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyB36IqqrnZglElfM5kxsTi1S2Acclate9Y",
@@ -87,3 +99,77 @@ export async function deletePlayerStateFromCloud(userId: string) {
     return false;
   }
 }
+
+/**
+ * Sincroniza o perfil público do jogador para o ranking global e duelos assíncronos
+ */
+export async function syncPlayerPublicProfile(userId: string, profileData: any) {
+  try {
+    if (!userId || !profileData) return false;
+    const profileRef = doc(db, 'public_profiles', userId);
+    const payload = {
+      ...profileData,
+      userId,
+      updatedAt: serverTimestamp()
+    };
+    await setDoc(profileRef, payload, { merge: true });
+    return true;
+  } catch (err) {
+    console.error('Public Profile Sync Error:', err);
+    return false;
+  }
+}
+
+/**
+ * Busca rankings globais no Firestore (Combat Power, Olimpíadas, Duelos, Castelos)
+ */
+export async function fetchLeaderboardRankings(category: 'cp' | 'olympiad' | 'duels' | 'castles' = 'cp', limitCount: number = 20) {
+  try {
+    const profilesCol = collection(db, 'public_profiles');
+    let q;
+    if (category === 'olympiad') {
+      q = query(profilesCol, orderBy('olympiadPoints', 'desc'), limit(limitCount));
+    } else if (category === 'duels') {
+      q = query(profilesCol, orderBy('duelWins', 'desc'), limit(limitCount));
+    } else {
+      q = query(profilesCol, orderBy('combatPower', 'desc'), limit(limitCount));
+    }
+
+    const snap = await getDocs(q);
+    const results: any[] = [];
+    snap.forEach((d) => {
+      results.push({ id: d.id, ...d.data() });
+    });
+    return results;
+  } catch (err) {
+    console.warn('Leaderboard Fetch Notice (using local cache if available):', err);
+    return [];
+  }
+}
+
+/**
+ * Busca oponentes reais com Combat Power semelhante para duelos equilibrados
+ */
+export async function fetchPvPMatchmakingOpponents(playerCP: number = 10000, rangePct: number = 0.25, limitCount: number = 5) {
+  try {
+    const minCP = Math.max(100, Math.floor(playerCP * (1 - rangePct)));
+    const maxCP = Math.floor(playerCP * (1 + rangePct));
+    const profilesCol = collection(db, 'public_profiles');
+    const q = query(
+      profilesCol, 
+      where('combatPower', '>=', minCP),
+      where('combatPower', '<=', maxCP),
+      limit(limitCount)
+    );
+    const snap = await getDocs(q);
+    const opponents: any[] = [];
+    snap.forEach((d) => {
+      opponents.push({ id: d.id, ...d.data() });
+    });
+    return opponents;
+  } catch (err) {
+    console.warn('Matchmaking Opponents Fetch Notice:', err);
+    return [];
+  }
+}
+

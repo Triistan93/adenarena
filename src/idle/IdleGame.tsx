@@ -24,6 +24,26 @@ import { IDLE_MARKUP } from "./markup";
 import "./heroImages";
 import "../utils/idleAudio";
 import { CharacterCreation, CharacterCreationData } from "../components/CharacterCreation";
+import { 
+  syncPlayerPublicProfile, 
+  fetchLeaderboardRankings, 
+  fetchPvPMatchmakingOpponents, 
+  auth 
+} from "../firebase";
+
+// Expondo FirebaseBridge para os serviços de Rankings e Matchmaking
+if (typeof window !== "undefined") {
+  (window as any).FirebaseBridge = {
+    syncPublicProfile: async (profileData: any) => {
+      const user = auth.currentUser;
+      if (!user) return false;
+      return await syncPlayerPublicProfile(user.uid, profileData);
+    },
+    fetchLeaderboard: fetchLeaderboardRankings,
+    fetchMatchmakingOpponents: fetchPvPMatchmakingOpponents,
+    getCurrentUserId: () => auth.currentUser?.uid || null
+  };
+}
 
 /**
  * Mounts the Lineage Idle game inside a Shadow DOM so its global-looking
