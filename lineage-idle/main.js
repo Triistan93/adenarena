@@ -3967,11 +3967,13 @@ function openAdminModal() {
   }
   const modal = el('admin-modal');
   if (!modal) return;
-  populateAdminItemSelect();
+  const searchInput = el('admin-item-search');
+  if (searchInput) searchInput.value = '';
+  populateAdminItemSelect('');
   modal.classList.add('active');
 }
 
-function populateAdminItemSelect() {
+function populateAdminItemSelect(query = '') {
   const sel = el('admin-item-select');
   if (!sel) return;
   sel.innerHTML = '';
@@ -3979,22 +3981,51 @@ function populateAdminItemSelect() {
   const seen = new Set();
   const list = [];
   const all = D().ALL_ITEMS || {};
+  const rawQ = String(query || '').trim().toLowerCase();
+  const queryTerms = rawQ.split(/\s+/).filter(Boolean);
   
   for (const [id, def] of Object.entries(all)) {
     if (!def || !def.name) continue;
     const primaryId = def.id || id;
     if (seen.has(primaryId)) continue;
     seen.add(primaryId);
+
+    if (queryTerms.length > 0) {
+      const grade = getItemGrade(def.req?.level || 1).toLowerCase();
+      const searchableText = [
+        def.name,
+        primaryId,
+        def.slot || '',
+        def.type || '',
+        def.weaponType || '',
+        grade,
+        `grade ${grade}`,
+        `lv.${def.req?.level || 1}`
+      ].join(' ').toLowerCase();
+
+      const matchesAllTerms = queryTerms.every(term => searchableText.includes(term));
+      if (!matchesAllTerms) continue;
+    }
+
     list.push({ id: primaryId, def });
   }
   
   list.sort((a, b) => (b.def.tier || 1) - (a.def.tier || 1) || a.def.name.localeCompare(b.def.name));
   
+  if (list.length === 0) {
+    const opt = mkEl('option');
+    opt.value = '';
+    opt.textContent = `⚠️ Nenhum item encontrado para "${query}"`;
+    opt.disabled = true;
+    sel.appendChild(opt);
+    return;
+  }
+
   for (const { id, def } of list) {
     const opt = mkEl('option');
     opt.value = id;
     const grade = getItemGrade(def.req?.level || 1);
-    opt.textContent = `${def.name} [${grade}] (${def.slot} · Lv.${def.req?.level || 1})`;
+    opt.textContent = `${def.name} [${grade}] (${def.slot || 'Item'} · Lv.${def.req?.level || 1})`;
     sel.appendChild(opt);
   }
 }
@@ -5141,6 +5172,24 @@ export function bindEvents() {
           addAdminAC(inp.value);
           inp.value = '';
         }
+      };
+    }
+
+    const itemSearchInput = el('admin-item-search');
+    if (itemSearchInput) {
+      itemSearchInput.oninput = (e) => {
+        populateAdminItemSelect(e.target.value);
+      };
+    }
+
+    const itemSearchClearBtn = el('admin-item-search-clear');
+    if (itemSearchClearBtn) {
+      itemSearchClearBtn.onclick = () => {
+        if (itemSearchInput) {
+          itemSearchInput.value = '';
+          itemSearchInput.focus();
+        }
+        populateAdminItemSelect('');
       };
     }
 

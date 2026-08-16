@@ -1004,6 +1004,16 @@ export const IDLE_MARKUP = `
           <div class="admin-section admin-spawner">
             <h3>🎁 Gerador de Itens &amp; Relíquias</h3>
             <div class="spawner-fields">
+              <div class="admin-search-wrapper" style="margin-bottom:8px; display:flex; gap:6px;">
+                <input 
+                  type="text" 
+                  id="admin-item-search" 
+                  class="admin-num-input" 
+                  placeholder="🔍 Pesquisar item por nome, tipo ou slot (ex: bow, katana, dagger, ring)..." 
+                  style="flex:1; padding:8px 12px; font-size:13px; border-radius:6px; background:rgba(0,0,0,0.5); border:1px solid #4a5568; color:#f8fafc;" 
+                />
+                <button type="button" id="admin-item-search-clear" class="admin-btn" style="padding:4px 10px; font-size:12px;" title="Limpar busca">Limpar</button>
+              </div>
               <label for="admin-item-select" class="sr-only" style="display:none;">Item para Gerar</label>
               <select id="admin-item-select" name="adminItemSelect" class="admin-select" aria-label="Item para Gerar"></select>
               <div class="spawner-row">
