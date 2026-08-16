@@ -874,7 +874,7 @@ export const IDLE_MARKUP = `
         <h2 id="offline-title">⌛ Bem-vindo de Volta!</h2>
         <p id="offline-desc">Enquanto esteve ausente, seu herói continuou o treinamento em Aden.</p>
         <div id="offline-rewards" style="margin: 14px 0; font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--gilt-bright);"></div>
-        <button id="offline-ok" class="action-btn action-btn--primary">Coletar Recompensas ⚔️</button>
+        <button id="offline-ok" class="action-btn action-btn--primary" onclick="window.closeOfflineModal && window.closeOfflineModal()">Coletar Recompensas ⚔️</button>
       </div>
     </div>
 
