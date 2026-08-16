@@ -174,6 +174,8 @@ import {
   renderSevenSignsTab as uiRenderSevenSignsTab,
   renderFortressTab as uiRenderFortressTab,
   renderColosseumTab as uiRenderColosseumTab,
+  renderRankingTab as uiRenderRankingTab,
+  setActiveRankingTab as uiSetActiveRankingTab,
   openSkillEnchantModal,
   openAugmentModal,
   initTooltipEvents as uiInitTooltipEvents,
@@ -193,6 +195,8 @@ import { AugmentationService } from './src/services/AugmentationService.js';
 import { SevenSignsService } from './src/services/SevenSignsService.js';
 import { FortressService } from './src/services/FortressService.js';
 import { ColosseumService } from './src/services/ColosseumService.js';
+import { CombatPowerService } from './src/services/CombatPowerService.js';
+import { RankingService } from './src/services/RankingService.js';
 
 import { ensureAppLayout, showMenuPanel } from './src/ui/AppLayout.js';
 import { checkTabGuide, closeTabGuideModal, openTabGuideModal } from './src/ui/TutorialGuide.js';
@@ -267,6 +271,7 @@ function save(manual = false) {
   if (manual) {
     if (_saveTimeout) { clearTimeout(_saveTimeout); _saveTimeout = null; }
     managerSaveState(true);
+    try { RankingService.syncToCloud(state); } catch (e) {}
     log('Game saved successfully.', 'system');
     floatText('SAVED', 'float-gold');
     return;
@@ -275,6 +280,7 @@ function save(manual = false) {
   _saveTimeout = setTimeout(() => {
     _saveTimeout = null;
     managerSaveState(false);
+    try { RankingService.syncToCloud(state); } catch (e) {}
   }, 400);
 }
 
@@ -2536,6 +2542,11 @@ function updateColosseumUI() {
   if (pane) uiRenderColosseumTab(pane, state);
 }
 
+function updateRankingsUI() {
+  const pane = el('tab-rankings');
+  if (pane) uiRenderRankingTab(pane, state);
+}
+
 function updateAllUI() {
   state = getState();
   uiInitTooltipEvents();
@@ -2572,6 +2583,7 @@ function updateAllUI() {
   if (isTabVisible('sevensigns')) safeUiUpdate('sevensigns', updateSevenSignsUI);
   if (isTabVisible('fortress')) safeUiUpdate('fortress', updateFortressUI);
   if (isTabVisible('colosseum')) safeUiUpdate('colosseum', updateColosseumUI);
+  if (isTabVisible('rankings')) safeUiUpdate('rankings', updateRankingsUI);
   if (isTabVisible('stage') || isTabVisible('zone') || isTabVisible('zones')) {
     safeUiUpdate('zone-bg', updateZoneBackground);
     safeUiUpdate('zone', updateZoneUI);
@@ -4469,6 +4481,7 @@ export function openPanel(tabName) {
   else if (targetTab === 'sevensigns') safeUiUpdate('sevensigns', updateSevenSignsUI);
   else if (targetTab === 'fortress') safeUiUpdate('fortress', updateFortressUI);
   else if (targetTab === 'colosseum') safeUiUpdate('colosseum', updateColosseumUI);
+  else if (targetTab === 'rankings') safeUiUpdate('rankings', updateRankingsUI);
   else if (targetTab === 'enchant') safeUiUpdate('enchant', updateEnchantUI);
   else if (targetTab === 'zones') safeUiUpdate('zones', updateZoneUI);
   else if (targetTab === 'codex') safeUiUpdate('codex', updateCodexUI);
@@ -6297,6 +6310,38 @@ export function init() {
       const res = ColosseumService.buyShopItem(state, itemId, {
         log,
         onUpdate: () => { updateAllUI(); save(); }
+      });
+      updateAllUI();
+      save();
+      return res;
+    };
+
+    // Rankings Window Actions
+    window.updateRankingsUI = () => updateRankingsUI();
+    window.setRankingCategoryAction = (cat) => {
+      window._activeRankingCat = cat;
+      uiSetActiveRankingTab(cat);
+      updateRankingsUI();
+    };
+    window.refreshRankingsAction = () => {
+      uiSetActiveRankingTab(window._activeRankingCat || 'cp');
+      updateRankingsUI();
+      log('🏆 Rankings e Combat Powers globais atualizados.', 'system');
+    };
+    window.challengeRankingPlayerAction = (charName, oppCP) => {
+      openPanel('colosseum');
+      const res = ColosseumService.startDuel(state, 'bet_500k', {
+        log,
+        onUpdate: () => { updateAllUI(); save(); }
+      }, {
+        charName,
+        name: charName,
+        className: 'Rival do Ranking',
+        statsSnapshot: {
+          hp: Math.floor(oppCP * 0.08),
+          pAtk: Math.floor(oppCP * 0.06),
+          pDef: Math.floor(oppCP * 0.04)
+        }
       });
       updateAllUI();
       save();

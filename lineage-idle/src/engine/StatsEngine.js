@@ -10,6 +10,7 @@ import { D } from '../core/GameConfig.js';
 import { RACES, CLASSES, RACE_BASE_ATTRIBUTES } from '../data/races.js';
 import { CODEX_SETS, BOSS_DOLLS } from '../data/codex.js';
 import { FortressService } from '../services/FortressService.js';
+import { CombatPowerService } from '../services/CombatPowerService.js';
 
 export const STR_MODIFIERS = {
   10: 0.42, 11: 0.43, 12: 0.45, 13: 0.46, 14: 0.48, 15: 0.50,
@@ -782,7 +783,9 @@ export function getStats(state) {
     regenHp, meteorLvl, execute, block
   };
 
-  return applyPrimaryStats(rawStats, primaryStats);
+  const finalStats = applyPrimaryStats(rawStats, primaryStats);
+  finalStats.combatPower = CombatPowerService.calculateCombatPower({ ...state, stats: finalStats });
+  return finalStats;
 }
 
 /**

@@ -22,7 +22,7 @@ export class ColosseumService {
   /**
    * Inicia um Duelo 1v1 com Aposta
    */
-  static startDuel(state, tierId, hooks = {}) {
+  static startDuel(state, tierId, hooks = {}, customOpponent = null) {
     const colState = this.ensureState(state);
     const tier = DUEL_BET_TIERS.find(t => t.id === tierId) || DUEL_BET_TIERS[0];
 
@@ -33,21 +33,36 @@ export class ColosseumService {
     // Deduz a aposta
     state.gold -= tier.bet;
 
-    // Seleciona um arquétipo aleatório
-    const arch = DUEL_OPPONENT_ARCHETYPES[Math.floor(Math.random() * DUEL_OPPONENT_ARCHETYPES.length)];
     const pStats = state.stats || { atk: 2000, def: 1800, maxHp: 8000 };
+    let oppName, oppTitle, oppIcon, oppHp, oppPAtk, oppPDef;
 
-    const oppHp = Math.floor((pStats.maxHp || 8000) * (arch.hpMult || 1.0));
-    const oppPAtk = Math.floor((pStats.atk || 2000) * (arch.pAtkMult || 1.0));
-    const oppPDef = Math.floor((pStats.def || 1800) * (arch.pDefMult || 1.0));
+    if (customOpponent) {
+      oppName = customOpponent.charName || customOpponent.name || 'Desafiante Lendário';
+      oppTitle = customOpponent.className ? `Lv. ${customOpponent.level || 80} ${customOpponent.className}` : 'Gladiador do Reino';
+      oppIcon = customOpponent.isHero ? '👑' : '⚔️';
+      
+      const snap = customOpponent.statsSnapshot || {};
+      oppHp = snap.hp || Math.floor((pStats.maxHp || 8000) * 1.1);
+      oppPAtk = snap.pAtk || Math.floor((pStats.atk || 2000) * 1.05);
+      oppPDef = snap.pDef || Math.floor((pStats.def || 1800) * 1.05);
+    } else {
+      // Seleciona um arquétipo aleatório
+      const arch = DUEL_OPPONENT_ARCHETYPES[Math.floor(Math.random() * DUEL_OPPONENT_ARCHETYPES.length)];
+      oppName = arch.name;
+      oppTitle = arch.title;
+      oppIcon = arch.icon;
+      oppHp = Math.floor((pStats.maxHp || 8000) * (arch.hpMult || 1.0));
+      oppPAtk = Math.floor((pStats.atk || 2000) * (arch.pAtkMult || 1.0));
+      oppPDef = Math.floor((pStats.def || 1800) * (arch.pDefMult || 1.0));
+    }
 
     colState.activeDuel = {
       tierId: tier.id,
       bet: tier.bet,
       rewardAA: tier.rewardAA,
-      opponentName: arch.name,
-      opponentTitle: arch.title,
-      opponentIcon: arch.icon,
+      opponentName: oppName,
+      opponentTitle: oppTitle,
+      opponentIcon: oppIcon,
       hp: oppHp,
       maxHp: oppHp,
       pAtk: oppPAtk,
@@ -57,7 +72,7 @@ export class ColosseumService {
       turn: 1
     };
 
-    hooks.log?.(`⚔️ Duelo iniciado na Arena de Giran contra **${arch.name}**! Aposta: ${tier.bet.toLocaleString()}g`, 'warning');
+    hooks.log?.(`⚔️ Duelo iniciado na Arena de Giran contra **${oppName}**! Aposta: ${tier.bet.toLocaleString()}g`, 'warning');
     hooks.onUpdate?.();
     return { success: true, duel: colState.activeDuel };
   }

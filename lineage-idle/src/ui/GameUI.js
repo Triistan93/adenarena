@@ -37,6 +37,8 @@ import { BRACELETS, TALISMANS } from '../data/talismans.js';
 import { FortressService } from '../services/FortressService.js';
 import { DUEL_BET_TIERS, DUEL_OPPONENT_ARCHETYPES, SURVIVAL_WAVES, COLOSSEUM_SHOP_CATALOG } from '../data/colosseum.js';
 import { ColosseumService } from '../services/ColosseumService.js';
+import { CombatPowerService } from '../services/CombatPowerService.js';
+import { renderRankingTab, setActiveRankingTab } from './RankingUI.js';
 import { heroSVG, monsterSVG, MON_IMG } from '../../art.js';
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -1650,8 +1652,20 @@ export function updateCharacterUI(state) {
   const portraitName = root.querySelector('#portrait-name, .portrait-name');
   if (portraitName) portraitName.textContent = charName;
 
+  const cp = CombatPowerService.calculateCombatPower(state);
+  const cpTier = CombatPowerService.getCombatPowerTier(cp);
+
   const portraitSub = root.querySelector('#portrait-sub, .portrait-sub');
-  if (portraitSub) portraitSub.textContent = `Level ${level} · ${raceName} ${className}`;
+  if (portraitSub) {
+    portraitSub.innerHTML = `
+      <div style="font-weight: 500;">Level ${level} · ${raceName} ${className}</div>
+      <div style="margin-top: 3px; font-weight: bold; color: #38bdf8; font-size: 0.85rem; display: flex; align-items: center; gap: 4px;">
+        <span>${cpTier.badge}</span>
+        <span style="color: #f8fafc;">${CombatPowerService.formatCombatPower(cp)}</span>
+        <span style="font-size: 0.7rem; padding: 1px 4px; border-radius: 3px; background: rgba(56,189,248,0.15); color: ${cpTier.color};">${cpTier.name}</span>
+      </div>
+    `;
+  }
 
   const raceClassDisp = root.querySelector('#hero-race-class-display');
   if (raceClassDisp) raceClassDisp.textContent = `${raceName} — ${className}`;
@@ -5582,6 +5596,200 @@ export function renderColosseumTab(container, state) {
                     Comprar
                   </button>
                 </div>
+      <!-- Grid Principal: Fortalezas e Loadout de Talismãs -->
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:14px;">
+        <!-- Lista de Fortalezas -->
+        <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(212,167,68,0.3); border-radius:8px; padding:14px;">
+          <h3 style="margin:0 0 10px 0; color:#fef08a; font-family:'Cinzel',serif; font-size:15px;">Territórios de Fortaleza</h3>
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            ${Object.values(FORTRESSES).map(fort => {
+              const isOwned = fState.owned?.includes(fort.id);
+              return `
+                <div style="background:rgba(0,0,0,0.5); border:1px solid ${isOwned ? '#22c55e' : 'rgba(255,255,255,0.1)'}; border-radius:8px; padding:12px; display:flex; justify-content:space-between; align-items:center;">
+                  <div>
+                    <div style="font-weight:bold; color:#fef08a; font-size:13px;">${fort.name} (Lv. ${fort.level})</div>
+                    <div style="font-size:11px; color:#9ca3af;">${fort.region} | Produção: +${fort.epauletteRate} Epaulettes/min</div>
+                    <div style="font-size:11px; color:#4ade80; font-weight:bold;">${fort.buff.label}</div>
+                  </div>
+                  <button
+                    onclick="window.startFortressSiegeAction('${fort.id}')"
+                    style="padding:6px 12px; font-size:11px; font-weight:bold; border-radius:6px; cursor:pointer; ${isOwned ? 'background:#15803d; color:#fff; border:none;' : 'background:#b45309; color:#fff; border:1px solid #f59e0b;'}"
+                  >
+                    ${isOwned ? '✓ Conquistada' : '⚔️ Declarar Cerco'}
+                  </button>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+
+        <!-- Loja & Montagem de Talismãs -->
+        <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(212,167,68,0.3); border-radius:8px; padding:14px;">
+          <h3 style="margin:0 0 10px 0; color:#fef08a; font-family:'Cinzel',serif; font-size:15px;">📿 Braceletes & Talismãs Equipados</h3>
+          
+          <!-- Seleção de Bracelete -->
+          <div style="margin-bottom:12px; display:flex; gap:6px; flex-wrap:wrap;">
+            ${Object.values(BRACELETS).map(b => `
+              <button
+                onclick="window.buyBraceletAction('${b.id}')"
+                style="padding:4px 8px; font-size:10px; border-radius:4px; font-weight:bold; cursor:pointer; ${fState.equippedBracelet === b.id ? 'background:#eab308; color:#000; border:none;' : 'background:rgba(0,0,0,0.5); color:#d1d5db; border:1px solid #d4a744;'}"
+              >
+                ${b.name} (${b.costEpaulettes} 🎖️)
+              </button>
+            `).join('')}
+          </div>
+
+          <!-- Talismãs Disponíveis -->
+          <div style="display:flex; flex-direction:column; gap:8px; max-height:280px; overflow-y:auto;">
+            ${Object.values(TALISMANS).map(tal => {
+              const isEquipped = fState.equippedTalismans?.includes(tal.id);
+              return `
+                <div style="background:rgba(0,0,0,0.5); border:1px solid ${isEquipped ? '#3b82f6' : 'rgba(255,255,255,0.1)'}; border-radius:6px; padding:8px 10px; display:flex; justify-content:space-between; align-items:center;">
+                  <div>
+                    <div style="font-weight:bold; color:#f3f4f6; font-size:12px;">${tal.name}</div>
+                    <div style="font-size:10px; color:#9ca3af;">${tal.desc} | Custo: ${tal.costEpaulettes} 🎖️</div>
+                  </div>
+                  <button
+                    onclick="${isEquipped ? `window.unequipTalismanAction('${tal.id}')` : `window.equipTalismanAction('${tal.id}')`}"
+                    style="padding:4px 10px; font-size:11px; font-weight:bold; border-radius:4px; cursor:pointer; ${isEquipped ? 'background:#ef4444; color:#fff; border:none;' : 'background:#2563eb; color:#fff; border:1px solid #60a5fa;'}"
+                  >
+                    ${isEquipped ? '✕ Remover' : 'Equipar'}
+                  </button>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      </div>
+  `;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   25. COLOSSEUM & DUELS UI
+═══════════════════════════════════════════════════════════════════════════ */
+export function renderColosseumTab(container, state) {
+  if (!container) return;
+  const colState = ColosseumService.ensureState(state);
+  const activeDuel = colState.activeDuel;
+  const activeSurvival = colState.activeSurvival;
+
+  container.innerHTML = `
+    <div class="colosseum-container" style="display:flex; flex-direction:column; gap:14px;">
+      <!-- Header Banner -->
+      <div style="background:linear-gradient(135deg, rgba(30,15,10,0.95), rgba(15,8,5,0.98)); border:1px solid rgba(239,68,68,0.4); border-radius:10px; padding:16px; box-shadow:0 6px 20px rgba(0,0,0,0.6);">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+          <div>
+            <h2 style="margin:0; font-family:'Cinzel',serif; color:#fca5a5; font-size:20px; display:flex; align-items:center; gap:8px;">
+              🎭 Coliseu & Duelos Livres de Aden
+            </h2>
+            <div style="font-size:12px; color:#d1d5db; margin-top:4px;">
+              Vitórias em Duelo: <strong>${colState.duelWins || 0}</strong> | Onda Máxima no Coliseu: <strong>${colState.highestWave || 0}/10</strong> | Badges do Coliseu: <strong style="color:#fde047;">${colState.badges || 0} 🎖️</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Duelo Ativo -->
+      ${activeDuel ? `
+        <div style="background:linear-gradient(135deg, rgba(40,15,15,0.95), rgba(20,5,5,0.98)); border:2px solid #ef4444; border-radius:10px; padding:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+            <div>
+              <h3 style="margin:0; color:#fca5a5; font-family:'Cinzel',serif; font-size:18px;">⚔️ Duelo 1v1: ${activeDuel.opponentName}</h3>
+              <div style="font-size:12px; color:#f87171;">${activeDuel.opponentTitle} | Aposta: ${(activeDuel.bet * 2).toLocaleString()}g em jogo!</div>
+            </div>
+            <button
+              onclick="window.executeDuelTurnAction()"
+              style="padding:10px 24px; font-size:13px; font-weight:bold; background:#dc2626; border:1px solid #ef4444; color:#fff; border-radius:8px; cursor:pointer;"
+            >
+              ⚔️ Desferir Golpe de Duelo!
+            </button>
+          </div>
+          <div style="margin-top:12px; background:rgba(0,0,0,0.6); border:1px solid #ef4444; border-radius:8px; height:18px; position:relative; overflow:hidden;">
+            <div style="width:${Math.max(0, Math.min(100, (activeDuel.hp / activeDuel.maxHp) * 100))}%; height:100%; background:linear-gradient(90deg, #dc2626, #f87171);"></div>
+            <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:bold; color:#fff;">
+              ${activeDuel.hp.toLocaleString()} / ${activeDuel.maxHp.toLocaleString()} HP
+            </div>
+          </div>
+        </div>
+      ` : ''}
+
+      <!-- Sobrevivência Ativa -->
+      ${activeSurvival ? `
+        <div style="background:linear-gradient(135deg, rgba(40,20,5,0.95), rgba(20,10,2,0.98)); border:2px solid #f59e0b; border-radius:10px; padding:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+            <div>
+              <h3 style="margin:0; color:#fde047; font-family:'Cinzel',serif; font-size:18px;">🔥 Onda ${activeSurvival.waveIndex + 1}/10: ${activeSurvival.waveData.name}</h3>
+              <div style="font-size:12px; color:#fbbf24;">Badges Acumulados no Desafio: +${activeSurvival.totalBadgesAccumulated} 🎖️</div>
+            </div>
+            <button
+              onclick="window.executeSurvivalTurnAction()"
+              style="padding:10px 24px; font-size:13px; font-weight:bold; background:#d97706; border:1px solid #f59e0b; color:#fff; border-radius:8px; cursor:pointer;"
+            >
+              ⚔️ Atacar Onda do Coliseu!
+            </button>
+          </div>
+          <div style="margin-top:12px; background:rgba(0,0,0,0.6); border:1px solid #f59e0b; border-radius:8px; height:18px; position:relative; overflow:hidden;">
+            <div style="width:${Math.max(0, Math.min(100, (activeSurvival.currentHp / activeSurvival.maxHp) * 100))}%; height:100%; background:linear-gradient(90deg, #d97706, #fde047);"></div>
+            <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:bold; color:#fff;">
+              ${activeSurvival.currentHp.toLocaleString()} / ${activeSurvival.maxHp.toLocaleString()} HP
+            </div>
+          </div>
+        </div>
+      ` : ''}
+
+      <!-- Modos de Jogo -->
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:14px;">
+        <!-- Duelos com Apostas -->
+        <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(239,68,68,0.3); border-radius:8px; padding:14px;">
+          <h3 style="margin:0 0 10px 0; color:#fca5a5; font-family:'Cinzel',serif; font-size:15px;">⚔️ Duelos 1v1 com Apostas</h3>
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            ${DUEL_BET_TIERS.map(tier => `
+              <div style="background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:12px; display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                  <div style="font-weight:bold; color:#fee2e2; font-size:13px;">${tier.name}</div>
+                  <div style="font-size:11px; color:#fca5a5;">Aposta: ${tier.label} (Prêmio 2x: ${(tier.bet * 2).toLocaleString()}g)</div>
+                </div>
+                <button
+                  onclick="window.startColosseumDuelAction('${tier.id}')"
+                  style="padding:6px 14px; font-size:11px; font-weight:bold; background:#b91c1c; border:1px solid #ef4444; color:#fff; border-radius:6px; cursor:pointer;"
+                >
+                  Desafiar
+                </button>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <!-- Desafio de Sobrevivência & Loja de Badges -->
+        <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(245,158,11,0.3); border-radius:8px; padding:14px; display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <h3 style="margin:0 0 10px 0; color:#fde047; font-family:'Cinzel',serif; font-size:15px;">🏆 Desafio das 10 Ondas</h3>
+            <p style="font-size:12px; color:#9ca3af; margin:0 0 12px 0;">Enfrente 10 ondas consecutivas de gladiadores e chefes do coliseu sem descanso para conquistar glória e Badges!</p>
+            <button
+              onclick="window.startColosseumSurvivalAction()"
+              style="width:100%; padding:10px; font-size:13px; font-weight:bold; background:#d97706; border:1px solid #f59e0b; color:#fff; border-radius:8px; cursor:pointer;"
+            >
+              🔥 Iniciar Desafio das 10 Ondas
+            </button>
+          </div>
+
+          <!-- Loja de Badges do Coliseu -->
+          <div style="margin-top:16px; border-top:1px solid rgba(245,158,11,0.2); padding-top:12px;">
+            <h4 style="margin:0 0 8px 0; color:#fde047; font-size:13px;">Loja de Badges do Coliseu</h4>
+            <div style="display:flex; flex-direction:column; gap:6px; max-height:160px; overflow-y:auto;">
+              ${COLOSSEUM_SHOP_CATALOG.map(it => `
+                <div style="background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.08); border-radius:6px; padding:6px 10px; display:flex; justify-content:space-between; align-items:center;">
+                  <div>
+                    <div style="font-weight:bold; color:#fef3c7; font-size:11px;">${it.name}</div>
+                    <div style="font-size:10px; color:#f59e0b;">${it.costBadges} Badges</div>
+                  </div>
+                  <button
+                    onclick="window.buyColosseumShopItemAction('${it.id}')"
+                    style="padding:4px 8px; font-size:10px; font-weight:bold; background:#b45309; border:1px solid #f59e0b; color:#fff; border-radius:4px; cursor:pointer;"
+                  >
+                    Comprar
+                  </button>
+                </div>
               `).join('')}
             </div>
           </div>
@@ -5591,7 +5799,5 @@ export function renderColosseumTab(container, state) {
   `;
 }
 
-
-
-
+export { renderRankingTab, setActiveRankingTab };
 

@@ -34,6 +34,7 @@ export const PANEL_SELECTORS = {
   sevensigns: ['#tab-sevensigns', '#sevensigns-panel', '[data-panel="sevensigns"]'],
   fortress: ['#tab-fortress', '#fortress-panel', '[data-panel="fortress"]'],
   colosseum: ['#tab-colosseum', '#colosseum-panel', '[data-panel="colosseum"]'],
+  rankings: ['#tab-rankings', '#rankings-panel', '[data-panel="rankings"]'],
   forge: ['#tab-forge', '#forge-panel', '[data-panel="forge"]'],
   codex: ['#tab-codex', '#codex-panel', '[data-panel="codex"]']
 };
