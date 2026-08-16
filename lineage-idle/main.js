@@ -197,7 +197,7 @@ import { FortressService } from './src/services/FortressService.js';
 import { ColosseumService } from './src/services/ColosseumService.js';
 import { CombatPowerService } from './src/services/CombatPowerService.js';
 import { RankingService } from './src/services/RankingService.js';
-
+import { SubclassCertificationService, EMERGENT_ABILITIES, MASTER_ABILITIES_BY_ARCHETYPE, DIVINE_TRANSFORMATIONS } from './src/services/SubclassCertificationService.js';
 import { ensureAppLayout, showMenuPanel } from './src/ui/AppLayout.js';
 import { checkTabGuide, closeTabGuideModal, openTabGuideModal } from './src/ui/TutorialGuide.js';
 import { VFX, initializeVFX } from './vfx.js';
@@ -2666,6 +2666,7 @@ function renderSubclassesUI() {
   const summaryEl = el('certifications-summary');
   const countBadge = el('subclass-count-badge');
   const addBtn = el('add-subclass-btn');
+  const cpBadge = el('cert-total-cp-badge');
 
   const activeMainLevel = state.activeSubclassIndex === null ? state.level : (state.mainClassData?.level || 1);
   if (countBadge) {
@@ -2676,9 +2677,11 @@ function renderSubclassesUI() {
     const isUnlocked = state.fateWhisperQuest || activeMainLevel >= 52;
     const isMax = (state.subclasses || []).length >= 3;
     addBtn.disabled = !isUnlocked || isMax;
-    addBtn.textContent = isMax ? '🔒 Limite Máximo Atingido (3/3 Subclasses)' : (!isUnlocked ? '🔒 Conclua Quest Fate\'s Whisper (Lv.52)' : '➕ Adicionar Nova Subclasse (Sem Restrição)');
+    addBtn.textContent = isMax ? '🔒 Limite Máximo Atingido (3/3 Subclasses)' : (!isUnlocked ? '🔒 Conclua Quest Fate\'s Whisper (Lv.52)' : '➕ Adicionar Nova Subclasse (Sem Restrição Racial)');
     addBtn.onclick = () => {
-      if (!state.fateWhisperQuest) {
+      if (!state.fateWhisperQuest && activeMainLevel < 52) {
+        log('Requer Nível 52+ para iniciar a jornada de Subclasses.', 'system');
+      } else if (!state.fateWhisperQuest) {
         completeFateWhisperQuest();
       } else {
         openAddSubclassModal();
@@ -2688,83 +2691,411 @@ function renderSubclassesUI() {
 
   container.innerHTML = '';
 
-  // Main Class Card
+  // 1. Card da Classe Principal (Main Class)
   const mainClassId = state.activeSubclassIndex === null ? state.class : (state.mainClassData?.class || 'fighter');
   const isMainActive = state.activeSubclassIndex === null;
+  const mainClassDef = getClass(mainClassId);
 
   const mainCard = mkEl('div');
-  mainCard.style.cssText = `border: 1px solid ${isMainActive ? 'var(--gilt-bright)' : 'var(--line)'}; padding: 10px; border-radius: 8px; background: ${isMainActive ? 'rgba(138,106,36,0.3)' : 'rgba(15,20,30,0.8)'}; display:flex; justify-content:space-between; align-items:center;`;
+  mainCard.style.cssText = `border: 1px solid ${isMainActive ? 'var(--gilt-bright)' : 'var(--line)'}; padding: 12px; border-radius: 8px; background: ${isMainActive ? 'rgba(138,106,36,0.25)' : 'rgba(15,20,30,0.8)'}; display:flex; justify-content:space-between; align-items:center; box-shadow:0 2px 8px rgba(0,0,0,0.5);`;
   mainCard.innerHTML = `
     <div>
-      <div style="font-weight:bold; color:${isMainActive ? 'var(--gilt-bright)' : 'var(--bone)'}; font-size:12px;">
-        👑 Classe Principal: ${getClass(mainClassId)?.name || mainClassId} <span style="color:#60a5fa;">Lv.${activeMainLevel}</span>
+      <div style="font-weight:bold; color:${isMainActive ? 'var(--gilt-bright)' : 'var(--bone)'}; font-size:13px; display:flex; align-items:center; gap:6px;">
+        <span>👑 Classe Principal:</span>
+        <span style="color:#fde047;">${mainClassDef?.name || mainClassId}</span>
+        <span style="color:#60a5fa; font-size:11px; background:rgba(96,165,250,0.15); padding:1px 6px; border-radius:4px;">Lv.${activeMainLevel}</span>
       </div>
-      <div style="font-size:10px; color:var(--text-muted);">Sua ordem de origem primária</div>
+      <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Origem primária — Todas as certificações das subclasses acumulam bônus permanentes aqui.</div>
     </div>
-    <button class="action-btn" style="padding:4px 10px; font-size:11px;" ${isMainActive ? 'disabled' : ''} onclick="switchSubclass(null)">
-      ${isMainActive ? '✓ Ativa' : 'Alternar 👑'}
+    <button class="action-btn" style="padding:6px 12px; font-size:11px;" ${isMainActive ? 'disabled' : ''} onclick="switchSubclass(null)">
+      ${isMainActive ? '✓ Em Uso' : 'Alternar 👑'}
     </button>
   `;
   container.appendChild(mainCard);
 
-  // Subclasses Cards
+  // 2. Cards das Subclasses do Jogador
   (state.subclasses || []).forEach((sub, idx) => {
     const isSubActive = state.activeSubclassIndex === idx;
     const subClassDef = getClass(sub.classId);
-
-    const cert50 = sub.level >= 50;
-    const cert75 = sub.level >= 75;
-    const cert80 = sub.level >= 80;
+    const archetype = SubclassCertificationService.getArchetypeForClass(sub.classId);
+    const milestones = SubclassCertificationService.getSubclassMilestones(state, sub.id);
 
     const card = mkEl('div');
-    card.style.cssText = `border: 1px solid ${isSubActive ? 'var(--gilt-bright)' : 'var(--line)'}; padding: 10px; border-radius: 8px; background: ${isSubActive ? 'rgba(138,106,36,0.3)' : 'rgba(15,20,30,0.8)'}; display:flex; flex-direction:column; gap:6px;`;
-    card.innerHTML = `
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <div>
-          <div style="font-weight:bold; color:${isSubActive ? 'var(--gilt-bright)' : '#10b981'}; font-size:12px;">
-            ⚔️ Subclasse ${idx + 1}: ${subClassDef?.name || sub.classId} <span style="color:#60a5fa;">Lv.${sub.level}/85</span>
+    card.style.cssText = `border: 1px solid ${isSubActive ? '#10b981' : 'var(--line)'}; padding: 12px; border-radius: 8px; background: ${isSubActive ? 'rgba(16,185,129,0.15)' : 'rgba(15,20,30,0.85)'}; display:flex; flex-direction:column; gap:8px; box-shadow:0 2px 8px rgba(0,0,0,0.5);`;
+
+    let milestoneSlotsHtml = '';
+    milestones.forEach(m => {
+      if (m.isLearned) {
+        let optDef = EMERGENT_ABILITIES[m.learnedId];
+        if (!optDef) {
+          optDef = (MASTER_ABILITIES_BY_ARCHETYPE[archetype] || []).find(a => a.id === m.learnedId);
+        }
+        if (!optDef) {
+          optDef = Object.values(DIVINE_TRANSFORMATIONS).find(d => d.id === m.learnedId);
+        }
+
+        const icon = optDef?.icon || '✨';
+        const name = optDef?.name || m.learnedId;
+        milestoneSlotsHtml += `
+          <div style="flex:1; min-width:110px; background:rgba(212,175,55,0.15); border:1px solid rgba(212,175,55,0.4); border-radius:6px; padding:6px; font-size:10px; display:flex; flex-direction:column; gap:2px;" title="${optDef?.desc || ''}">
+            <div style="color:#fde047; font-weight:bold; display:flex; align-items:center; gap:4px;">
+              <span>${icon}</span>
+              <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${name}</span>
+            </div>
+            <div style="color:#94a3b8; font-size:9px;">${m.badge} · <strong style="color:#38bdf8;">+${optDef?.cp || 1500} CP</strong></div>
           </div>
-          <div style="font-size:10px; color:var(--text-muted);">Progresso independente &amp; Certificações L2 MasterWork</div>
+        `;
+      } else if (m.isUnlocked) {
+        milestoneSlotsHtml += `
+          <div style="flex:1; min-width:110px; background:rgba(16,185,129,0.15); border:1px dashed #10b981; border-radius:6px; padding:6px; font-size:10px; display:flex; flex-direction:column; justify-content:space-between; gap:4px;">
+            <div style="color:#10b981; font-weight:bold;">✨ ${m.badge}</div>
+            <button class="action-btn action-btn--primary" style="padding:3px 6px; font-size:9px; font-weight:bold;" onclick="window.openCertificationModal('${sub.id}', '${m.milestoneKey}')">Aprender 📜</button>
+          </div>
+        `;
+      } else {
+        milestoneSlotsHtml += `
+          <div style="flex:1; min-width:110px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.08); border-radius:6px; padding:6px; font-size:10px; display:flex; flex-direction:column; gap:2px; opacity:0.6;">
+            <div style="color:#64748b; font-weight:bold;">🔒 ${m.badge}</div>
+            <div style="color:#475569; font-size:9px;">Requer Nível ${m.requiredLevel}</div>
+          </div>
+        `;
+      }
+    });
+
+    card.innerHTML = `
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
+        <div>
+          <div style="font-weight:bold; color:${isSubActive ? '#34d399' : 'var(--bone)'}; font-size:13px; display:flex; align-items:center; gap:6px;">
+            <span>⚔️ Subclasse ${idx + 1}:</span>
+            <span style="color:#fde047;">${subClassDef?.name || sub.classId}</span>
+            <span style="color:#60a5fa; font-size:11px; background:rgba(96,165,250,0.15); padding:1px 6px; border-radius:4px;">Lv.${sub.level}/85</span>
+            <span style="color:#a855f7; font-size:10px; background:rgba(168,85,247,0.15); padding:1px 5px; border-radius:4px; text-transform:uppercase;">${archetype}</span>
+          </div>
+          <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Certificados MasterWork disponíveis nos Lvs. 65, 70, 75 e 80.</div>
         </div>
-        <button class="action-btn" style="padding:4px 10px; font-size:11px;" ${isSubActive ? 'disabled' : ''} onclick="switchSubclass(${idx})">
-          ${isSubActive ? '✓ Ativa' : 'Alternar ⚔️'}
-        </button>
+        <div style="display:flex; gap:6px;">
+          <button class="inv-batch-btn" style="padding:4px 8px; font-size:10px;" onclick="window.openResetCertificationsModal('${sub.id}')" title="Redistribuir certificações desta subclasse">🔄 Resetar (1kk)</button>
+          <button class="action-btn" style="padding:6px 12px; font-size:11px;" ${isSubActive ? 'disabled' : ''} onclick="switchSubclass(${idx})">
+            ${isSubActive ? '✓ Em Uso' : 'Alternar ⚔️'}
+          </button>
+        </div>
       </div>
-      <div style="display:flex; gap:6px; font-size:10px; flex-wrap:wrap;">
-        <button class="action-btn" style="padding:4px 8px; font-size:10px;" ${!cert50 ? 'disabled' : ''} onclick="claimCert('${sub.id}', 'emergent', ${idx})">${cert50 ? '✓ Emergent Passives (Lv 50+)' : '🔒 Lv 50 Req'}</button>
-        <button class="action-btn" style="padding:4px 8px; font-size:10px;" ${!cert75 ? 'disabled' : ''} onclick="window.selectMasterAbilityModal()">${cert75 ? '🏆 Master Ability (Lv 75)' : '🔒 Lv 75 Req'}</button>
-        <button class="action-btn" style="padding:4px 8px; font-size:10px;" ${!cert80 ? 'disabled' : ''} onclick="window.selectDivineTransformationModal()">${cert80 ? '👼 Transf. Divina (Lv 80)' : '🔒 Lv 80 Req'}</button>
+
+      <!-- Grid de 4 Marcos de Certificação -->
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap:6px; margin-top:4px;">
+        ${milestoneSlotsHtml}
       </div>
     `;
     container.appendChild(card);
   });
 
-  if (summaryEl) {
-    const certB = getCertificationsBonuses();
-    const activeTrans = state.activeTransformation ? ` · 👼 Transf. Divina: <strong style="color:#f4d58a;">${state.activeTransformation.toUpperCase()}</strong>` : '';
-    summaryEl.innerHTML = `Bônus Acumulados: <strong style="color:var(--gilt-bright);">+${certB.atk} P.Atk, +${certB.def} P.Def, +${certB.matk} M.Atk, +${certB.mdef} M.Def, +${certB.crit}% Crit Rate</strong> ${certB.celestial ? '· 🛡️ <span style="color:#60a5fa;">Escudo Celestial Ativo!</span>' : ''}${activeTrans}`;
+  // 3. Atualização do Resumo de Certificações e CP
+  const certBonuses = SubclassCertificationService.calculateTotalCertificationBonuses(state);
+  const totalCertCp = SubclassCertificationService.calculateCertificationCP(state);
+
+  if (cpBadge) {
+    cpBadge.textContent = `+${totalCertCp.toLocaleString('pt-BR')} CP`;
   }
+
+  if (summaryEl) {
+    const activeTransStr = state.activeTransformation ? `<div style="margin-top:4px; color:#fde047; font-weight:bold;">👼 Transformação Divina Ativa: ${state.activeTransformation.toUpperCase()}</div>` : '';
+    
+    if (certBonuses.totalCertCount === 0) {
+      summaryEl.innerHTML = `Nenhuma certificação aprendida ainda. Suba suas subclasses aos Lvs. 65, 70, 75 e 80 para acumular bônus permanentes!`;
+    } else {
+      const parts = [];
+      if (certBonuses.pAtk) parts.push(`+${certBonuses.pAtk} P.Atk`);
+      if (certBonuses.pDef) parts.push(`+${certBonuses.pDef} P.Def`);
+      if (certBonuses.mAtk) parts.push(`+${certBonuses.mAtk} M.Atk`);
+      if (certBonuses.mDef) parts.push(`+${certBonuses.mDef} M.Def`);
+      if (certBonuses.pAtkPercent) parts.push(`+${Math.round(certBonuses.pAtkPercent * 100)}% P.Atk`);
+      if (certBonuses.pDefPercent) parts.push(`+${Math.round(certBonuses.pDefPercent * 100)}% P.Def`);
+      if (certBonuses.mAtkPercent) parts.push(`+${Math.round(certBonuses.mAtkPercent * 100)}% M.Atk`);
+      if (certBonuses.mDefPercent) parts.push(`+${Math.round(certBonuses.mDefPercent * 100)}% M.Def`);
+      if (certBonuses.maxHpPercent) parts.push(`+${Math.round(certBonuses.maxHpPercent * 100)}% Max HP`);
+      if (certBonuses.maxMpPercent) parts.push(`+${Math.round(certBonuses.maxMpPercent * 100)}% Max MP`);
+      if (certBonuses.maxCpPercent) parts.push(`+${Math.round(certBonuses.maxCpPercent * 100)}% Max CP`);
+      if (certBonuses.critRate) parts.push(`+${certBonuses.critRate} Crit Rate`);
+      if (certBonuses.castSpd) parts.push(`+${certBonuses.castSpd} Cast Speed`);
+      if (certBonuses.evasion) parts.push(`+${certBonuses.evasion} Esquiva`);
+      if (certBonuses.celestialProc) parts.push(`🌟 Escudo Celestial (Proc)`);
+      if (certBonuses.hasteProc) parts.push(`⚡ Chance Haste (Proc)`);
+      if (certBonuses.defenceProc) parts.push(`🛡️ Counter Defense (Proc)`);
+      if (certBonuses.spiritProc) parts.push(`👻 Counter Spirit (Proc)`);
+      if (certBonuses.critProc) parts.push(`💥 Chance Critical (Proc)`);
+
+      summaryEl.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+          <span style="color:#fde047; font-weight:bold;">Certificados Ativos: ${certBonuses.totalCertCount}/12</span>
+          <button class="inv-batch-btn" style="padding:2px 8px; font-size:9px;" onclick="window.openDivineTransformationToggleModal()">👼 Gerenciar Transformação</button>
+        </div>
+        <div style="line-height:1.5; color:var(--bone); font-size:11px;">
+          ${parts.join(' · ')}
+        </div>
+        ${activeTransStr}
+      `;
+    }
+  }
+}
+
+// --------------------------- MODAL DE CERTIFICAÇÃO ---------------------------
+
+function openCertificationModal(subId, milestoneKey) {
+  const modal = el('cert-modal');
+  const body = el('cert-modal-body');
+  if (!modal || !body) return;
+
+  const sub = (state.subclasses || []).find(s => s.id === subId);
+  if (!sub) return;
+
+  const milestones = SubclassCertificationService.getSubclassMilestones(state, subId);
+  const milestone = milestones.find(m => m.milestoneKey === milestoneKey);
+  if (!milestone) return;
+
+  const subClassDef = getClass(sub.classId);
+  const archetype = SubclassCertificationService.getArchetypeForClass(sub.classId);
+
+  let optionsHtml = '';
+  milestone.options.forEach(opt => {
+    optionsHtml += `
+      <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(212,175,55,0.3); border-radius:8px; padding:12px; display:flex; justify-content:space-between; align-items:center; gap:10px;">
+        <div style="flex:1;">
+          <div style="display:flex; align-items:center; gap:6px;">
+            <span style="font-size:18px;">${opt.icon || '✨'}</span>
+            <strong style="color:#fde047; font-size:13px;">${opt.name}</strong>
+            ${opt.badge ? `<span style="font-size:10px; background:rgba(212,175,55,0.2); color:#ffd700; padding:1px 6px; border-radius:4px;">${opt.badge}</span>` : ''}
+          </div>
+          <div style="font-size:11px; color:#d1d5db; margin-top:4px; line-height:1.4;">${opt.desc}</div>
+          <div style="font-size:10px; color:#38bdf8; margin-top:4px;">Contribuição de Poder: <strong>+${(opt.cp || 1500).toLocaleString('pt-BR')} CP</strong></div>
+        </div>
+        <button class="action-btn action-btn--primary" style="padding:8px 14px; font-size:11px; white-space:nowrap;" onclick="window.confirmLearnCertification('${subId}', '${milestoneKey}', '${opt.id}')">
+          Aprender 📜
+        </button>
+      </div>
+    `;
+  });
+
+  body.innerHTML = `
+    <div style="margin-bottom:14px;">
+      <h3 style="margin:0; color:#fde047; font-family:'Cinzel',serif; font-size:16px;">📜 ${milestone.title}</h3>
+      <p style="margin:4px 0 0 0; font-size:11px; color:var(--text-muted);">Subclasse: <strong>${subClassDef?.name || sub.classId}</strong> (Arquétipo: <span style="text-transform:uppercase; color:#a855f7;">${archetype}</span>)</p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:8px; max-height:360px; overflow-y:auto; padding-right:4px;">
+      ${optionsHtml}
+    </div>
+  `;
+
+  const closeBtn = el('cert-modal-close');
+  if (closeBtn) closeBtn.onclick = closeCertificationModal;
+
+  modal.style.display = 'flex';
+}
+
+function closeCertificationModal() {
+  const modal = el('cert-modal');
+  if (modal) modal.style.display = 'none';
+}
+
+function confirmLearnCertification(subId, milestoneKey, abilityId) {
+  const success = SubclassCertificationService.learnCertification(state, subId, milestoneKey, abilityId, {
+    log: (msg, type) => log(msg, type),
+    onUpdate: () => {
+      floatText('✨ CERTIFICAÇÃO ADQUIRIDA!', 'float-jackpot');
+      updateAllUI();
+      save();
+    }
+  });
+
+  if (success) {
+    closeCertificationModal();
+  }
+}
+
+function openResetCertificationsModal(subId) {
+  const sub = (state.subclasses || []).find(s => s.id === subId);
+  if (!sub) return;
+
+  const subClassDef = getClass(sub.classId);
+  const costAdena = 1000000;
+  const hasAdena = (state.gold || 0) >= costAdena;
+
+  const modal = el('cert-modal');
+  const body = el('cert-modal-body');
+  if (!modal || !body) return;
+
+  body.innerHTML = `
+    <div style="margin-bottom:14px;">
+      <h3 style="margin:0; color:#ef4444; font-family:'Cinzel',serif; font-size:16px;">🔄 Redefinir Certificações</h3>
+      <p style="margin:4px 0 0 0; font-size:12px; color:var(--bone);">Deseja redefinir e redistribuir todas as certificações de <strong>${subClassDef?.name || sub.classId}</strong>?</p>
+    </div>
+    <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:12px; font-size:11px; color:#d1d5db; line-height:1.4;">
+      <p style="margin:0 0 6px 0;">Ao confirmar, todos os certificados já aprendidos nesta subclasse serão devolvidos, permitindo que você escolha novas habilidades para os Lvs. 65, 70, 75 e 80.</p>
+      <p style="margin:0; color:${hasAdena ? '#fde047' : '#ef4444'}; font-weight:bold;">Custo de Redefinição: 1.000.000 Adena (${(state.gold || 0).toLocaleString('pt-BR')} Adena atual)</p>
+    </div>
+    <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:14px;">
+      <button class="action-btn" onclick="window.closeCertificationModal()">Cancelar</button>
+      <button class="action-btn action-btn--danger" ${!hasAdena ? 'disabled' : ''} onclick="window.confirmResetCertifications('${subId}')">Confirmar Reset (-1kk Adena)</button>
+    </div>
+  `;
+
+  const closeBtn = el('cert-modal-close');
+  if (closeBtn) closeBtn.onclick = closeCertificationModal;
+
+  modal.style.display = 'flex';
+}
+
+function confirmResetCertifications(subId) {
+  const success = SubclassCertificationService.resetSubclassCertifications(state, subId, {
+    log: (msg, type) => log(msg, type),
+    onUpdate: () => {
+      updateAllUI();
+      save();
+    }
+  });
+
+  if (success) {
+    closeCertificationModal();
+  }
+}
+
+function openDivineTransformationToggleModal() {
+  const modal = el('cert-modal');
+  const body = el('cert-modal-body');
+  if (!modal || !body) return;
+
+  const certBonuses = SubclassCertificationService.calculateTotalCertificationBonuses(state);
+  const learnedDivines = [];
+
+  for (const subId in (state.subclassCertifications || {})) {
+    const dId = state.subclassCertifications[subId]?.lv80;
+    if (dId) {
+      const def = Object.values(DIVINE_TRANSFORMATIONS).find(d => d.id === dId);
+      if (def && !learnedDivines.some(ld => ld.id === def.id)) {
+        learnedDivines.push(def);
+      }
+    }
+  }
+
+  if (learnedDivines.length === 0) {
+    body.innerHTML = `
+      <div style="text-align:center; padding:20px 10px;">
+        <div style="font-size:32px; margin-bottom:8px;">🔒</div>
+        <h3 style="color:#fde047; margin:0 0 6px 0;">Nenhuma Transformação Divina Desbloqueada</h3>
+        <p style="font-size:12px; color:var(--text-muted); margin:0;">Alcance o Nível 80 com qualquer Subclasse para desbloquear sua Forma Divina correspondente!</p>
+        <button class="action-btn" style="margin-top:14px;" onclick="window.closeCertificationModal()">Fechar</button>
+      </div>
+    `;
+  } else {
+    let listHtml = '';
+    learnedDivines.forEach(dt => {
+      const isActive = state.activeTransformation === dt.id;
+      listHtml += `
+        <div style="background:rgba(0,0,0,0.4); border:1px solid ${isActive ? '#ffd700' : 'rgba(212,175,55,0.3)'}; border-radius:8px; padding:12px; display:flex; justify-content:space-between; align-items:center; gap:10px;">
+          <div>
+            <div style="font-weight:bold; color:#fde047; font-size:13px; display:flex; align-items:center; gap:6px;">
+              <span>${dt.icon}</span>
+              <span>${dt.name}</span>
+              ${isActive ? '<span style="font-size:10px; background:#ffd700; color:#000; font-weight:bold; padding:1px 6px; border-radius:4px;">ATIVA</span>' : ''}
+            </div>
+            <div style="font-size:11px; color:#d1d5db; margin-top:2px;">${dt.desc}</div>
+          </div>
+          <button class="action-btn ${isActive ? 'action-btn--danger' : 'action-btn--primary'}" style="padding:6px 12px; font-size:11px; white-space:nowrap;" onclick="window.toggleDivineTransformation('${dt.id}')">
+            ${isActive ? 'Desativar ❌' : 'Ativar 👼'}
+          </button>
+        </div>
+      `;
+    });
+
+    body.innerHTML = `
+      <div style="margin-bottom:14px;">
+        <h3 style="margin:0; color:#fde047; font-family:'Cinzel',serif; font-size:16px;">👼 Transformações Divinas Disponíveis</h3>
+        <p style="margin:4px 0 0 0; font-size:11px; color:var(--text-muted);">Ative a forma divina para receber bônus devastadores em combate e sieges.</p>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:8px; max-height:360px; overflow-y:auto;">
+        ${listHtml}
+      </div>
+    `;
+  }
+
+  const closeBtn = el('cert-modal-close');
+  if (closeBtn) closeBtn.onclick = closeCertificationModal;
+
+  modal.style.display = 'flex';
+}
+
+function toggleDivineTransformation(transId) {
+  if (state.activeTransformation === transId) {
+    state.activeTransformation = null;
+    log('👼 Transformação Divina desativada.', 'system');
+  } else {
+    state.activeTransformation = transId;
+    log(`👼 **TRANSFORMAÇÃO DIVINA ATIVADA!** (+${transId.toUpperCase()})`, 'rarity-legendary');
+    floatText('TRANSFORMAÇÃO DIVINA!', 'float-jackpot');
+  }
+
+  closeCertificationModal();
+  updateAllUI();
+  save();
 }
 
 function openAddSubclassModal() {
   const currentClass = state.class;
-  // MasterWork: Todas as classes estão disponíveis sem restrição racial!
+  // MasterWork: Todas as classes disponíveis sem restrição racial!
   const availableClasses = Object.keys(CLASSES).filter(cId => cId !== currentClass && !(state.subclasses || []).some(s => s.classId === cId));
 
-  if (availableClasses.length === 0) return;
-  const choice = prompt(`Escolha sua Subclasse (MasterWork - Sem Restrição Racial):\n\nOpções disponíveis:\n${availableClasses.map((c, i) => `${i + 1}. ${CLASSES[c].name}`).join('\n')}\n\nDigite o número da classe desejada:`);
-
-  if (!choice) return;
-  const selectedIdx = parseInt(choice, 10) - 1;
-  if (isNaN(selectedIdx) || selectedIdx < 0 || selectedIdx >= availableClasses.length) {
-    log('Opção de subclasse inválida.', 'system');
+  if (availableClasses.length === 0) {
+    log('Todas as classes já foram aprendidas como subclasse.', 'system');
     return;
   }
 
-  const chosenClassId = availableClasses[selectedIdx];
+  const modal = el('cert-modal');
+  const body = el('cert-modal-body');
+  if (!modal || !body) return;
+
+  let classOptionsHtml = '';
+  availableClasses.forEach(cId => {
+    const cDef = CLASSES[cId];
+    const arch = SubclassCertificationService.getArchetypeForClass(cId);
+    classOptionsHtml += `
+      <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:10px; display:flex; justify-content:space-between; align-items:center; gap:8px;">
+        <div>
+          <div style="font-weight:bold; color:#fde047; font-size:12px;">${cDef?.name || cId}</div>
+          <div style="font-size:10px; color:#a855f7; text-transform:uppercase;">Arquétipo: ${arch}</div>
+        </div>
+        <button class="action-btn action-btn--primary" style="padding:6px 12px; font-size:11px;" onclick="window.confirmAddSubclass('${cId}')">
+          Adicionar ⚔️
+        </button>
+      </div>
+    `;
+  });
+
+  body.innerHTML = `
+    <div style="margin-bottom:14px;">
+      <h3 style="margin:0; color:#fde047; font-family:'Cinzel',serif; font-size:16px;">➕ Adicionar Nova Subclasse</h3>
+      <p style="margin:4px 0 0 0; font-size:11px; color:var(--text-muted);">MasterWork Edition — Sem Restrição Racial. Inicia no Nível 40.</p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:6px; max-height:340px; overflow-y:auto; padding-right:4px;">
+      ${classOptionsHtml}
+    </div>
+  `;
+
+  const closeBtn = el('cert-modal-close');
+  if (closeBtn) closeBtn.onclick = closeCertificationModal;
+
+  modal.style.display = 'flex';
+}
+
+function confirmAddSubclass(chosenClassId) {
   state.subclasses = state.subclasses || [];
+  if (state.subclasses.length >= 3) {
+    log('Limite máximo de 3 subclasses atingido.', 'system');
+    closeCertificationModal();
+    return;
+  }
+
+  const subId = 'sub_' + Date.now();
   state.subclasses.push({
-    id: 'sub_' + Date.now(),
+    id: subId,
     classId: chosenClassId,
     level: 40,
     xp: 0,
@@ -2772,9 +3103,12 @@ function openAddSubclassModal() {
     skills: {}
   });
 
-  log(`🌟 Parabéns! Você aprendeu a Subclasse **${CLASSES[chosenClassId].name}** (Nível 40)!`, 'rarity-legendary');
+  log(`🌟 Parabéns! Você aprendeu a Subclasse **${CLASSES[chosenClassId]?.name || chosenClassId}** (Nível 40)!`, 'rarity-legendary');
   floatText(`🌟 SUBCLASSE APRENDIDA!`, 'float-jackpot');
-  updateAllUI(); save();
+
+  closeCertificationModal();
+  updateAllUI();
+  save();
 }
 
 function switchSubclass(targetIndex) {
@@ -2827,30 +3161,6 @@ function switchSubclass(targetIndex) {
     state.base[k] = (race?.stats[k] || 0) + (cls?.base[k] || 0);
   }
 
-  updateAllUI(); save();
-}
-
-function claimCert(subId, certType, subIndex) {
-  state.certifications = state.certifications || {};
-  const certKey = subId + '_' + certType;
-  if (state.certifications[certKey]) {
-    log('Você já adquiriu esta Certificação de Subclasse.', 'system');
-    return;
-  }
-  state.certifications[certKey] = true;
-  if (certType === 'emergent') {
-    state.certifications['emergent_atk'] = (state.certifications['emergent_atk'] || 0) + 1;
-    state.certifications['emergent_def'] = (state.certifications['emergent_def'] || 0) + 1;
-    log('📜 Certificação Nível 65 Adquirida! (+20 P.Atk, +20 P.Def permanente)', 'rarity-legendary');
-  } else if (certType === 'master') {
-    state.certifications['master_crit'] = (state.certifications['master_crit'] || 0) + 1;
-    state.certifications['master_matk'] = (state.certifications['master_matk'] || 0) + 1;
-    log('📜 Certificação Nível 70 Adquirida! (+5% Crit Rate, +25 M.Atk permanente)', 'rarity-legendary');
-  } else if (certType === 'celestial') {
-    state.certifications['celestial_shield'] = (state.certifications['celestial_shield'] || 0) + 1;
-    log('🛡️ Certificação Nível 75 Adquirida! (Escudo Celestial ativado permanente!)', 'rarity-legendary');
-  }
-  floatText('✨ CERTIFICAÇÃO ADQUIRIDA!', 'float-jackpot');
   updateAllUI(); save();
 }
 
@@ -5917,15 +6227,21 @@ export function init() {
     window.selectZone = selectZone;
     window.startRaidBoss = startRaidBoss;
     window.openAddSubclassModal = openAddSubclassModal;
-    window.selectMasterAbilityModal = selectMasterAbilityModal;
-    window.selectDivineTransformationModal = selectDivineTransformationModal;
+    window.openCertificationModal = openCertificationModal;
+    window.closeCertificationModal = closeCertificationModal;
+    window.confirmLearnCertification = confirmLearnCertification;
+    window.openResetCertificationsModal = openResetCertificationsModal;
+    window.confirmResetCertifications = confirmResetCertifications;
+    window.openDivineTransformationToggleModal = openDivineTransformationToggleModal;
+    window.toggleDivineTransformation = toggleDivineTransformation;
+    window.openAddSubclassModal = openAddSubclassModal;
+    window.confirmAddSubclass = confirmAddSubclass;
     window.openCraftModal = (itemId) => uiOpenCraftModal(itemId, state, { craftItem, getItemDef, updateAllUI, save });
     window.closeCraftModal = uiCloseCraftModal;
     window.craftItem = craftItem;
     window.canCraft = canCraft;
     window.setGameMode = setGameMode;
     window.switchSubclass = switchSubclass;
-    window.claimCert = claimCert;
     window.claimQuestReward = claimQuestReward;
     window.claimPassReward = claimPassReward;
     window.unlockPremiumPass = unlockPremiumPass;

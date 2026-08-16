@@ -235,10 +235,13 @@ export const IDLE_MARKUP = `
                 <button id="add-subclass-btn" class="action-btn action-btn--primary" style="flex:1; font-size:11px;">➕ Adicionar Subclasse (Lv 75+)</button>
               </div>
 
-              <!-- Certifications Tree -->
+              <!-- Certifications Tree Summary -->
               <div style="margin-top: 14px; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 6px; border: 1px solid var(--line);">
-                <h4 style="margin:0 0 6px 0; font-size:12px; color:var(--gilt-bright);">✨ Certificações Passivas Adquiridas</h4>
-                <div id="certifications-summary" style="font-size:11px; color:var(--ink-dim);">Nenhuma certificação aprendida ainda. Suba suas subclasses aos Lvs. 65, 70 e 75!</div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <h4 style="margin:0 0 6px 0; font-size:12px; color:var(--gilt-bright);">✨ Certificações Passivas Adquiridas</h4>
+                  <span id="cert-total-cp-badge" style="font-size:11px; font-weight:bold; color:#fde047;">+0 CP</span>
+                </div>
+                <div id="certifications-summary" style="font-size:11px; color:var(--ink-dim);">Nenhuma certificação aprendida ainda. Suba suas subclasses aos Lvs. 65, 70, 75 e 80!</div>
               </div>
             </div>
 
@@ -1076,6 +1079,14 @@ export const IDLE_MARKUP = `
       <div class="craft-modal-content" style="background:linear-gradient(145deg, rgba(26,20,15,0.98), rgba(12,8,6,0.99)); border:1px solid rgba(212,175,55,0.5); border-radius:12px; width:92%; max-width:480px; padding:20px; box-shadow:0 10px 30px rgba(0,0,0,0.8); position:relative;">
         <button id="craft-modal-close" style="position:absolute; top:12px; right:14px; background:none; border:none; color:#aaa; font-size:20px; cursor:pointer;">✖</button>
         <div id="craft-modal-body"></div>
+      </div>
+    </div>
+
+    <!-- Modal de Certificação de Subclasses -->
+    <div id="cert-modal" class="modal-overlay" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.75); backdrop-filter:blur(6px); z-index:9999; justify-content:center; align-items:center;">
+      <div class="craft-modal-content" style="background:linear-gradient(145deg, rgba(20,24,35,0.98), rgba(10,12,18,0.99)); border:1px solid rgba(212,175,55,0.6); border-radius:12px; width:92%; max-width:520px; padding:20px; box-shadow:0 10px 35px rgba(0,0,0,0.85); position:relative;">
+        <button id="cert-modal-close" style="position:absolute; top:12px; right:14px; background:none; border:none; color:#aaa; font-size:20px; cursor:pointer;">✖</button>
+        <div id="cert-modal-body"></div>
       </div>
     </div>
 

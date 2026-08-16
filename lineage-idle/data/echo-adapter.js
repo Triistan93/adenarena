@@ -707,12 +707,13 @@ function buildEchoAdapter() {
     CLASS_SKILLS_ECHO[classId] = normalizedIds;
   }
 
-  // Layout automático por tier → coluna
+  // Layout automático por tier → coluna (tanto por classe quanto plano por skillId)
   const SKILL_TREE_LAYOUT_ECHO = {};
   for (const [classId, skillIds] of Object.entries(CLASS_SKILLS_ECHO)) {
     const layout = {};
     skillIds.forEach((sid, idx) => {
       layout[sid] = { col: idx, row: 0 };
+      SKILL_TREE_LAYOUT_ECHO[sid] = { col: idx, row: 0 };
     });
     SKILL_TREE_LAYOUT_ECHO[classId] = layout;
   }
@@ -720,14 +721,14 @@ function buildEchoAdapter() {
   // Mapeia todos os aliases de classes para garantir que qualquer identificador carregue sua árvore
   const classAliases = E.CLASS_ALIASES || {};
   for (const [alias, canonical] of Object.entries(classAliases)) {
-    if (CLASS_SKILLS_ECHO[canonical] && !CLASS_SKILLS_ECHO[alias]) {
+    if (CLASS_SKILLS_ECHO[canonical]) {
       CLASS_SKILLS_ECHO[alias] = CLASS_SKILLS_ECHO[canonical];
     }
-    if (SKILL_TREE_LAYOUT_ECHO[canonical] && !SKILL_TREE_LAYOUT_ECHO[alias]) {
+    if (SKILL_TREE_LAYOUT_ECHO[canonical]) {
       SKILL_TREE_LAYOUT_ECHO[alias] = SKILL_TREE_LAYOUT_ECHO[canonical];
     }
     if (CLASSES_ECHO[canonical] && !CLASSES_ECHO[alias]) {
-      CLASSES_ECHO[alias] = CLASSES_ECHO[canonical];
+      CLASSES_ECHO[alias] = { ...CLASSES_ECHO[canonical], id: alias };
     }
   }
 

@@ -52,7 +52,7 @@ export function getStarterKit(race: string, className: string): StarterKitConfig
   // 2. Mapeamento Específico por Classe / Especialização
 
   // 🐉 Orc Vanguard Rider — Exclusivo de Lança (Spear) e Heavy Armor
-  if (c === 'orcrider' || c === 'vanguard' || c === 'vanguardrider') {
+  if (c === 'rider' || c === 'orcrider' || c === 'vanguard' || c === 'vanguardrider') {
     return {
       weapon: 'short_spear',
       armorType: 'heavy',
@@ -65,7 +65,7 @@ export function getStarterKit(race: string, className: string): StarterKitConfig
   }
 
   // 🐺 Warg / Beast Fighter — Machados/Garras
-  if (c === 'wargbase' || c === 'warg') {
+  if (c === 'wargbase' || c === 'wargs0' || c === 'warg') {
     return {
       weapon: 'tomahawk_axe',
       armorType: 'heavy',
@@ -78,7 +78,7 @@ export function getStarterKit(race: string, className: string): StarterKitConfig
   }
 
   // 💀 Death Knight / Death Pilgrim — Espada de 1 Mão
-  if (c === 'deathpilgrim' || c === 'elfdeathpilgrim' || c === 'deathknight') {
+  if (c === 'deathpilgrim' || c === 'elfdeathpilgrim' || c === 'deathknight' || c.includes('death')) {
     return {
       weapon: 'falchion_sword',
       armorType: 'heavy',
@@ -91,12 +91,39 @@ export function getStarterKit(race: string, className: string): StarterKitConfig
   }
 
   // 🗡️ Assassin — Adagas Ágeis e Armadura Leve
-  if (c === 'assassinbase' || c === 'assassin') {
+  if (c === 'assassins0' || c === 'assassinbase' || c === 'assassin' || c === 'assassinde' || c.includes('assassin')) {
     return {
       weapon: 'sword_breaker',
       armorType: 'light',
       ...LIGHT_SET,
       starterSkill: 'assassin_harmony',
+      shotType: 'soulshot_ng',
+      potions: { itemId: 'hp_potion_s', count: 100 },
+      shotsCount: 400
+    };
+  }
+
+  // 🐺 Warg — Luvas / Garras de Combate e Armadura Leve
+  if (c.includes('warg')) {
+    return {
+      weapon: 'sword_breaker',
+      armorType: 'light',
+      ...LIGHT_SET,
+      starterSkill: 'warg_harmony',
+      shotType: 'soulshot_ng',
+      potions: { itemId: 'hp_potion_s', count: 100 },
+      shotsCount: 400
+    };
+  }
+
+  // 🐉 Orc Vanguard Rider — Lança e Escudo / Armadura Pesada
+  if (c.includes('rider') || c.includes('vanguard')) {
+    return {
+      weapon: 'falchion_sword',
+      shield: 'shield_small_shield',
+      armorType: 'heavy',
+      ...HEAVY_SET,
+      starterSkill: 'power_strike_f',
       shotType: 'soulshot_ng',
       potions: { itemId: 'hp_potion_s', count: 100 },
       shotsCount: 400
@@ -117,7 +144,7 @@ export function getStarterKit(race: string, className: string): StarterKitConfig
   }
 
   // ⚒️ Anão Artesão / ShineMaker — Martelos Pesados de Forja
-  if (c === 'artisan' || c === 'shinemakers1' || c === 'shinemaker') {
+  if (c === 'dwarffighter' || c === 'artisan' || c === 'artisandwarf' || c === 'shinemakers1' || c === 'shinemaker') {
     return {
       weapon: 'iron_hammer',
       armorType: 'heavy',

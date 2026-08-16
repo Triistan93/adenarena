@@ -38,13 +38,14 @@ const RACES_INFO: Record<string, {
       { id: 'mage', name: 'Mago (Mage)', desc: 'Dominador de magia elemental e grande reserva de mana.', icon: '🔮' },
       { id: 'deathPilgrim', name: 'Death Knight 💀', desc: 'Cavaleiro da Morte alimentado por Dark Points e golpes gélidos.', icon: '💀' },
       { id: 'wargBase', name: 'Warg 🐺', desc: 'Lutador primitivo e feroz com instintos lupinos e regeneração.', icon: '🐺' },
-      { id: 'assassinBase', name: 'Assassin 🗡️', desc: 'Caçador das sombras mortal com adagas velozes e clones sombrios.', icon: '🗡️' }
+      { id: 'assassinS0', name: 'Assassin 🗡️', desc: 'Caçador das sombras mortal com adagas velozes e clones sombrios.', icon: '🗡️' }
     ],
     image: {
       fighter: { M: '/img/humanpalaM.png', F: '/img/humanpalaF.png' },
       mage: { M: '/img/humanmageM.png', F: '/img/humanmageF.png' },
       deathPilgrim: { M: '/img/human_fighter.png', F: '/img/human_fighter.png' },
       wargBase: { M: '/img/human_fighter.png', F: '/img/human_fighter.png' },
+      assassinS0: { M: '/img/human_fighter.png', F: '/img/human_fighter.png' },
       assassinBase: { M: '/img/human_fighter.png', F: '/img/human_fighter.png' }
     },
     startZoneName: 'Ilha de Falar (Talking Island)'
@@ -56,10 +57,12 @@ const RACES_INFO: Record<string, {
     desc: 'Graciosos e extremamente ágeis, abençoados pela deusa Eva.',
     perks: ['🍃 +8 Esquiva Nativa', '⚡ Alta Velocidade de Movimento', '🏝️ Inicia na Ilha de Falar (Lv. 1)'],
     allowedClasses: [
-      { id: 'fighter', name: 'Guerreiro Elfo (Fighter)', desc: 'Defensor gracioso e arqueiro veloz com precisão letal.', icon: '🏹' },
-      { id: 'mage', name: 'Mago Elfo (Mage)', desc: 'Dominador de magia de água, luz sagrada e suporte rápido.', icon: '🌊' }
+      { id: 'elfFighter', name: 'Guerreiro Elfo (Fighter)', desc: 'Defensor gracioso e arqueiro veloz com precisão letal.', icon: '🏹' },
+      { id: 'elfMage', name: 'Mago Elfo (Mage)', desc: 'Dominador de magia de água, luz sagrada e suporte rápido.', icon: '🌊' }
     ],
     image: {
+      elfFighter: { M: '/img/elfwswM.png', F: '/img/elfswsF.png' },
+      elfMage: { M: '/img/elfmageM.png', F: '/img/elfmageF.png' },
       fighter: { M: '/img/elfwswM.png', F: '/img/elfswsF.png' },
       mage: { M: '/img/elfmageM.png', F: '/img/elfmageF.png' }
     },
@@ -72,16 +75,20 @@ const RACES_INFO: Record<string, {
     desc: 'Mestres de magia negra e ataques críticos devastadores de Shillien.',
     perks: ['🔥 +15 Poder de Ataque & Magia', '🗡️ Alto Poder Crítico', '🏝️ Inicia na Ilha de Falar (Lv. 1)'],
     allowedClasses: [
-      { id: 'fighter', name: 'Guerreiro Negro (Fighter)', desc: 'Assassino mortal e cavaleiro sombrio focado em dano crítico.', icon: '🗡️' },
-      { id: 'mage', name: 'Mago Negro (Mage)', desc: 'Invocador de maldições e magia de fogo/trevas de alto impacto.', icon: '🔮' },
-      { id: 'elfDeathPilgrim', name: 'Death Knight 💀', desc: 'Cavaleiro da Morte Dark Elf com maestria em magias sombrias.', icon: '💀' },
-      { id: 'assassinBase', name: 'Assassin 🗡️', desc: 'Assassina mortal das sombras com venenos e golpes críticos.', icon: '🗡️' }
+      { id: 'darkElfFighter', name: 'Guerreiro Negro (Fighter)', desc: 'Assassino mortal e cavaleiro sombrio focado em dano crítico.', icon: '🗡️' },
+      { id: 'darkElfMage', name: 'Mago Negro (Mage)', desc: 'Invocador de maldições e magia de fogo/trevas de alto impacto.', icon: '🔮' },
+      { id: 'deathPilgrim', name: 'Death Knight 💀', desc: 'Cavaleiro da Morte Dark Elf com maestria em magias sombrias.', icon: '💀' },
+      { id: 'assassinS0', name: 'Assassin 🗡️', desc: 'Assassina mortal das sombras com venenos e golpes críticos.', icon: '🗡️' }
     ],
     image: {
-      fighter: { M: '/img/darkelfskM.png', F: '/img/darkelfskF.png' },
-      mage: { M: '/img/darkelfmageM.png', F: '/img/darkelfmageF.png' },
+      darkElfFighter: { M: '/img/darkelfskM.png', F: '/img/darkelfskF.png' },
+      darkElfMage: { M: '/img/darkelfmageM.png', F: '/img/darkelfmageF.png' },
+      deathPilgrim: { M: '/img/darkelf_fighter.png', F: '/img/darkelf_fighter.png' },
       elfDeathPilgrim: { M: '/img/darkelf_fighter.png', F: '/img/darkelf_fighter.png' },
-      assassinBase: { M: '/img/darkelf_fighter.png', F: '/img/darkelf_fighter.png' }
+      assassinS0: { M: '/img/darkelf_fighter.png', F: '/img/darkelf_fighter.png' },
+      assassinBase: { M: '/img/darkelf_fighter.png', F: '/img/darkelf_fighter.png' },
+      fighter: { M: '/img/darkelfskM.png', F: '/img/darkelfskF.png' },
+      mage: { M: '/img/darkelfmageM.png', F: '/img/darkelfmageF.png' }
     },
     startZoneName: 'Ilha de Falar (Talking Island)'
   },
@@ -92,14 +99,17 @@ const RACES_INFO: Record<string, {
     desc: 'Guerreiros de força bruta descomunal e constituição vital superior.',
     perks: ['💪 +100 Vida Máxima (HP)', '🛡️ Resiliência em Batalha Prolongada', '🏝️ Inicia na Ilha de Falar (Lv. 1)'],
     allowedClasses: [
-      { id: 'fighter', name: 'Guerreiro Orc (Fighter)', desc: 'Destruidor com machados de duas mãos e fúria guerreira.', icon: '🪓' },
-      { id: 'mage', name: 'Xamã Orc (Shaman)', desc: 'Mago de combate e buffs tribais de sangue e resistência.', icon: '🔥' },
-      { id: 'orcRider', name: 'Vanguard Rider 🐉', desc: 'Cavaleiro Orc montado especialista em investidas e estocadas de lança.', icon: '🐉' }
+      { id: 'orcFighter', name: 'Guerreiro Orc (Fighter)', desc: 'Destruidor com machados de duas mãos e fúria guerreira.', icon: '🪓' },
+      { id: 'orcMage', name: 'Xamã Orc (Shaman)', desc: 'Mago de combate e buffs tribais de sangue e resistência.', icon: '🔥' },
+      { id: 'rider', name: 'Vanguard Rider 🐉', desc: 'Cavaleiro Orc montado especialista em investidas e estocadas de lança.', icon: '🐉' }
     ],
     image: {
+      orcFighter: { M: '/img/orcfighterM.png', F: '/img/orcfighterF.png' },
+      orcMage: { M: '/img/orc_mage.png', F: '/img/orc_mage.png' },
+      rider: { M: '/img/orcfighterM.png', F: '/img/orcfighterF.png' },
+      orcRider: { M: '/img/orcfighterM.png', F: '/img/orcfighterF.png' },
       fighter: { M: '/img/orcfighterM.png', F: '/img/orcfighterF.png' },
-      mage: { M: '/img/orc_mage.png', F: '/img/orc_mage.png' },
-      orcRider: { M: '/img/orcfighterM.png', F: '/img/orcfighterF.png' }
+      mage: { M: '/img/orc_mage.png', F: '/img/orc_mage.png' }
     },
     startZoneName: 'Ilha de Falar (Talking Island)'
   },
@@ -110,10 +120,11 @@ const RACES_INFO: Record<string, {
     desc: 'Mestres da forja, especialistas em mineração e criação de itens.',
     perks: ['🎒 +100 Espaços de Inventário', '⚒️ Bônus de Craft & Drop de Materiais', '🏝️ Inicia na Ilha de Falar (Lv. 1)'],
     allowedClasses: [
-      { id: 'artisan', name: 'Artesão (Artisan)', desc: 'Especialista em forja de armas, armaduras pesadas e martelos.', icon: '⚒️' },
+      { id: 'dwarfFighter', name: 'Artesão (Artisan)', desc: 'Especialista em forja de armas, armaduras pesadas e martelos.', icon: '⚒️' },
       { id: 'shinemakerS1', name: 'ShineMaker ✨', desc: 'Mestre da luz cristalina, suporte celestial e martelo luminoso.', icon: '✨' }
     ],
     image: {
+      dwarfFighter: { M: '/img/dwarfmaestroM.png', F: '/img/dwarfmaestroF.png' },
       artisan: { M: '/img/dwarfmaestroM.png', F: '/img/dwarfmaestroF.png' },
       fighter: { M: '/img/dwarfmaestroM.png', F: '/img/dwarfmaestroF.png' },
       shinemakerS1: { M: '/img/dwarf_artisan.png', F: '/img/dwarf_artisan.png' }
@@ -127,10 +138,11 @@ const RACES_INFO: Record<string, {
     desc: 'Raça de uma asa só com maestria lendária em estocadas de rapieira.',
     perks: ['⚡ Usam Armaduras LEVES por Lore', '🗡️ Ataques Físicos Ultrarrápidos', '🏝️ Inicia na Ilha de Falar (Lv. 1)'],
     allowedClasses: [
-      { id: 'soulbreaker', name: 'Soulbreaker', desc: 'Espadachim das sombras especializado em rapieiras e absorção de almas.', icon: '🗡️' },
+      { id: 'kamaelSoldier', name: 'Soldier / Soulbreaker', desc: 'Espadachim das sombras especializado em rapieiras e absorção de almas.', icon: '🗡️' },
       { id: 'hatamoto', name: 'Samurai ⛩️', desc: 'Mestre da katana ancestral e técnica de corte veloz Iaijutsu.', icon: '⛩️' }
     ],
     image: {
+      kamaelSoldier: { M: '/img/kamaelshM.png', F: '/img/kamaelshF.png' },
       soulbreaker: { M: '/img/kamaelshM.png', F: '/img/kamaelshF.png' },
       fighter: { M: '/img/kamaelDM.png', F: '/img/kamaelDF.png' },
       hatamoto: { M: '/img/kamael_soulbreaker.png', F: '/img/kamael_soulbreaker.png' }

@@ -5,6 +5,8 @@
 export const FATE_WHISPER_MIN_LEVEL = 52;
 export const SUBCLASS_MAX_LEVEL = 85;
 
+export { SUBCLASS_ARCHETYPES, EMERGENT_ABILITIES, MASTER_ABILITIES_BY_ARCHETYPE } from '../services/SubclassCertificationService.js';
+
 export const EMERGENT_SKILLS = {
   physAtk: { name: 'Sub-Class Ability: Physical Attack', levels: [18, 36, 63], desc: 'Aumenta o Ataque Físico' },
   magAtk: { name: 'Sub-Class Ability: Magical Attack', levels: [12, 24, 42], desc: 'Aumenta o Ataque Mágico' },

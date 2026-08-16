@@ -11,6 +11,7 @@ import { RACES, CLASSES, RACE_BASE_ATTRIBUTES } from '../data/races.js';
 import { CODEX_SETS, BOSS_DOLLS } from '../data/codex.js';
 import { FortressService } from '../services/FortressService.js';
 import { CombatPowerService } from '../services/CombatPowerService.js';
+import { SubclassCertificationService } from '../services/SubclassCertificationService.js';
 import { resolveCanonicalClassId } from '../data/classes/class_aliases.js';
 
 export const STR_MODIFIERS = {
@@ -224,47 +225,42 @@ export function getTotalEquipBonuses(state) {
 }
 
 /**
- * Retorna os bônus concedidos por certificações de subclass.
+ * Calcula os bônus acumulados de certificação de subclasses e transformações divinas.
  * @param {Object} state
  * @returns {Object}
  */
 export function getCertificationsBonuses(state) {
-  const certs = state.certifications || {};
-  let atk = (certs.emergent_atk || 0) * 20;
-  let def = (certs.emergent_def || 0) * 20;
-  let matk = (certs.emergent_matk || 0) * 25;
-  let mdef = (certs.emergent_mdef || 0) * 25;
-  let crit = (certs.master_crit || 0) * 5;
-  let celestial = certs.celestial_shield ? true : false;
-  let hpPercent = 0;
-  let mpPercent = 0;
-  let evaAdd = 0;
+  if (!state) return { atk: 0, def: 0, matk: 0, mdef: 0, crit: 0, celestial: false, hpPercent: 0, mpPercent: 0, cpPercent: 0, evaAdd: 0, pAtkPercent: 0, pDefPercent: 0, mAtkPercent: 0, mDefPercent: 0, atkSpdPercent: 0, speedPercent: 0, castSpd: 0 };
+  
+  const certBonuses = SubclassCertificationService.calculateTotalCertificationBonuses(state);
 
-  // MasterWork Emergent Passives from all subclasses
-  (state.subclasses || []).forEach(sub => {
-    if (sub.level >= 50) { atk += 18; matk += 12; def += 18; mdef += 15; crit += 7; }
-    if (sub.level >= 60) { atk += 18; matk += 12; def += 18; mdef += 15; crit += 7; }
-    if (sub.level >= 75) { atk += 27; matk += 18; def += 27; mdef += 23; crit += 11; }
-  });
-
-  // Master Abilities
-  const masterAbilities = state.masterAbilities || [];
-  if (masterAbilities.includes('boostHp')) hpPercent += 0.08;
-  if (masterAbilities.includes('boostMp')) mpPercent += 0.12;
-  if (masterAbilities.includes('evasion')) evaAdd += 5;
-  if (masterAbilities.includes('barrier')) celestial = true;
-
-  // Active Divine Transformations
-  const trans = state.activeTransformation;
-  if (trans === 'divineWarrior') { atk += Math.floor(atk * 0.25); }
-  if (trans === 'divineKnight') { def += Math.floor(def * 0.50); mdef += Math.floor(mdef * 0.50); }
-  if (trans === 'divineRogue') { crit += 40; evaAdd += 6; }
-  if (trans === 'divineWizard') { matk += Math.floor(matk * 0.30); }
-  if (trans === 'divineSummoner') { hpPercent += 0.20; }
-  if (trans === 'divineHealer') { mdef += Math.floor(mdef * 0.25); }
-  if (trans === 'divineEnchanter') { atk += Math.floor(atk * 0.15); matk += Math.floor(matk * 0.15); }
-
-  return { atk, def, matk, mdef, crit, celestial, hpPercent, mpPercent, evaAdd };
+  return {
+    atk: certBonuses.pAtk || 0,
+    def: certBonuses.pDef || 0,
+    matk: certBonuses.mAtk || 0,
+    mdef: certBonuses.mDef || 0,
+    crit: certBonuses.critRate || 0,
+    celestial: certBonuses.celestialProc || false,
+    hpPercent: certBonuses.maxHpPercent || 0,
+    mpPercent: certBonuses.maxMpPercent || 0,
+    cpPercent: certBonuses.maxCpPercent || 0,
+    evaAdd: certBonuses.evasion || 0,
+    pAtkPercent: certBonuses.pAtkPercent || 0,
+    pDefPercent: certBonuses.pDefPercent || 0,
+    mAtkPercent: certBonuses.mAtkPercent || 0,
+    mDefPercent: certBonuses.mDefPercent || 0,
+    atkSpd: certBonuses.atkSpd || 0,
+    atkSpdPercent: certBonuses.atkSpdPercent || 0,
+    speedPercent: certBonuses.speedPercent || 0,
+    castSpd: certBonuses.castSpd || 0,
+    range: certBonuses.range || 0,
+    hasteProc: certBonuses.hasteProc || false,
+    defenceProc: certBonuses.defenceProc || false,
+    spiritProc: certBonuses.spiritProc || false,
+    critProc: certBonuses.critProc || false,
+    totalCP: certBonuses.totalCP || 0,
+    totalCertCount: certBonuses.totalCertCount || 0
+  };
 }
 
 /**
@@ -756,15 +752,22 @@ export function getStats(state) {
   const certB  = getCertificationsBonuses(state);
   const towerMult = 1 + ((state.tower?.highestFloor || 0) * 0.01);
 
-  const finalAtk  = Math.floor((baseAtk + (Number(eb.atk) || 0) + (Number(setB.atk) || 0) + buffAtk + codexB.atk + dollsB.atk + certB.atk) * atkMult * towerMult);
-  const finalDef  = Math.floor((baseDef + (Number(eb.def) || 0) + (Number(setB.def) || 0) + buffDef + codexB.def + dollsB.def + certB.def) * defMult * towerMult);
-  const finalEva  = Math.floor(baseEva + (Number(eb.eva) || 0) + (Number(setB.eva) || 0) + codexB.eva + dollsB.eva);
-  const finalMatk = Math.floor((baseMatk + (Number(eb.matk) || 0) + (Number(setB.matk) || 0) + buffMatk + codexB.matk + dollsB.matk + certB.matk) * towerMult);
-  const finalMdef = Math.floor((baseMdef + (Number(eb.mdef) || 0) + (Number(setB.mdef) || 0) + buffMdef + codexB.mdef + dollsB.mdef + certB.mdef) * towerMult);
+  const certAtkMult  = 1 + (certB.pAtkPercent || 0);
+  const certDefMult  = 1 + (certB.pDefPercent || 0);
+  const certMatkMult = 1 + (certB.mAtkPercent || 0);
+  const certMdefMult = 1 + (certB.mDefPercent || 0);
+  const certHpMult   = 1 + (certB.hpPercent || 0);
+  const certMpMult   = 1 + (certB.mpPercent || 0);
+
+  const finalAtk  = Math.floor((baseAtk + (Number(eb.atk) || 0) + (Number(setB.atk) || 0) + buffAtk + codexB.atk + dollsB.atk + certB.atk) * atkMult * towerMult * certAtkMult);
+  const finalDef  = Math.floor((baseDef + (Number(eb.def) || 0) + (Number(setB.def) || 0) + buffDef + codexB.def + dollsB.def + certB.def) * defMult * towerMult * certDefMult);
+  const finalEva  = Math.floor(baseEva + (Number(eb.eva) || 0) + (Number(setB.eva) || 0) + codexB.eva + dollsB.eva + (certB.evaAdd || 0));
+  const finalMatk = Math.floor((baseMatk + (Number(eb.matk) || 0) + (Number(setB.matk) || 0) + buffMatk + codexB.matk + dollsB.matk + certB.matk) * towerMult * certMatkMult);
+  const finalMdef = Math.floor((baseMdef + (Number(eb.mdef) || 0) + (Number(setB.mdef) || 0) + buffMdef + codexB.mdef + dollsB.mdef + certB.mdef) * towerMult * certMdefMult);
   const finalCrit = (Number(eb.crit) || 0) + (Number(setB.crit) || 0) + codexB.crit + dollsB.crit + certB.crit + astralB.crit + saCrit + augCrit;
 
   const lootBonus  = (Number(race?.stats?.lootBonus) || 0) + (Number(cls?.base?.lootBonus) || 0) + itemLootBonus + luckBoost;
-  const atkSpd     = (buffSpd + (dollsB.speed || 0)) / 100;
+  const atkSpd     = ((buffSpd + (dollsB.speed || 0)) / 100) + (certB.atkSpdPercent || 0);
   const lifeDrain  = ((Number(eb.lifesteal) || 0) + (dollsB.lifesteal || 0) + ((setB.lifesteal || 0) / 100));
   const craftBonus = itemCraftBonus;
 
@@ -774,15 +777,16 @@ export function getStats(state) {
   const execute   = sk('assassinate') * 0.02;
   const block     = sk('divineshield') * 0.05 + (setB.block || 0);
 
-  const maxHp = Math.floor((100 + state.level * 10 + sk('boostHp') * 60 + (Number(eb.hp) || 0) + (Number(setB.hp) || 0) + codexB.hp + dollsB.hp + setEnchantHp) * (1 + elixirHpMult));
-  const maxMp = Math.floor(50 + state.level * 5 + sk('boostMana') * 30 + (Number(eb.mp) || 0) + (Number(setB.mp) || 0) + codexB.mp + dollsB.mp);
+  const maxHp = Math.floor((100 + state.level * 10 + sk('boostHp') * 60 + (Number(eb.hp) || 0) + (Number(setB.hp) || 0) + codexB.hp + dollsB.hp + setEnchantHp) * (1 + elixirHpMult) * certHpMult);
+  const maxMp = Math.floor((50 + state.level * 5 + sk('boostMana') * 30 + (Number(eb.mp) || 0) + (Number(setB.mp) || 0) + codexB.mp + dollsB.mp) * certMpMult);
 
   const rawStats = {
     atk: finalAtk || 1, def: finalDef || 0, eva: finalEva || 0, matk: finalMatk || 1, mdef: finalMdef || 0,
-    crit: finalCrit, critDmg, loot: 1 + lootBonus, speed: 1 + (buffSpd + (setB.speed || 0)) / 100, cdr,
+    crit: finalCrit, critDmg, loot: 1 + lootBonus, speed: 1 + (buffSpd + (setB.speed || 0)) / 100 + (certB.speedPercent || 0), cdr,
     atkSpd, lifeDrain, craftBonus, mpRegen: mpRegenBonus,
     xpBoost, goldBoost, luckBoost, autoPotion, maxHp, maxMp,
-    regenHp, meteorLvl, execute, block
+    regenHp, meteorLvl, execute, block,
+    celestial: certB.celestial, hasteProc: certB.hasteProc, defenceProc: certB.defenceProc, spiritProc: certB.spiritProc, critProc: certB.critProc
   };
 
   const finalStats = applyPrimaryStats(rawStats, primaryStats);

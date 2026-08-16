@@ -71,10 +71,15 @@ export function getClassSkills(classId) {
   const canonicalId = resolveCanonicalClassId(classId);
   if (CS[canonicalId]) return CS[canonicalId];
   if (CS[classId]) return CS[classId];
-  const def = getClass(canonicalId) || getClass(classId);
+  const lowerCanon = String(canonicalId).toLowerCase();
+  const lowerClass = String(classId).toLowerCase();
+  if (CS[lowerCanon]) return CS[lowerCanon];
+  if (CS[lowerClass]) return CS[lowerClass];
+
+  const def = getClass(canonicalId) || getClass(classId) || getClass(lowerCanon) || getClass(lowerClass);
   if (def?.skillTree && CS[def.skillTree]) return CS[def.skillTree];
   let current = def?.parent;
-  const visited = new Set([classId, canonicalId]);
+  const visited = new Set([classId, canonicalId, lowerClass, lowerCanon]);
   while (current && !visited.has(current)) {
     visited.add(current);
     const parentCanon = resolveCanonicalClassId(current);

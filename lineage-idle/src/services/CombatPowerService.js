@@ -9,6 +9,7 @@
 
 import { D } from '../core/GameConfig.js';
 import { BRACELETS, TALISMANS } from '../data/talismans.js';
+import { SubclassCertificationService } from './SubclassCertificationService.js';
 
 export const CombatPowerService = {
   /**
@@ -152,6 +153,10 @@ export const CombatPowerService = {
 
     // 9. Seven Signs
     if (state.sevenSigns?.faction) cp += 500;
+
+    // 10. Subclass Certifications & Master Abilities
+    const certCp = SubclassCertificationService.calculateCertificationCP(state);
+    cp += certCp;
 
     return Math.max(100, Math.floor(cp));
   },

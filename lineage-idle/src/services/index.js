@@ -9,3 +9,13 @@ export * from './QuestService.js';
 export * from './RaidService.js';
 export * from './ShopService.js';
 export * from './TowerService.js';
+export * from './SubclassCertificationService.js';
+export * from './CombatPowerService.js';
+export * from './NoblesseService.js';
+export * from './ColosseumService.js';
+export * from './FortressService.js';
+export * from './SevenSignsService.js';
+export * from './SkillEnchantService.js';
+export * from './AugmentationService.js';
+export * from './RankingService.js';
+
