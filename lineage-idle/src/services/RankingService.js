@@ -8,112 +8,6 @@
 import { CombatPowerService } from './CombatPowerService.js';
 import { D } from '../core/GameConfig.js';
 
-// Hall of Legends padrão de alta fidelidade para inicialização e modo offline
-export const DEFAULT_LEGEND_PROFILES = [
-  {
-    userId: 'legend_1',
-    charName: 'LordValakas',
-    race: 'Human',
-    className: 'Duelist',
-    level: 85,
-    combatPower: 268500,
-    olympiadPoints: 2450,
-    olympiadWins: 142,
-    duelWins: 380,
-    clanName: 'DragonSlayers',
-    castleLord: 'Giran Castle',
-    isHero: true,
-    topWeaponName: '+16 Infinity Blade (Hero)',
-    topWeaponGlow: 'golden-amber',
-    statsSnapshot: { hp: 12500, pAtk: 14200, mAtk: 1200, pDef: 8900, mDef: 6500, crit: 480 }
-  },
-  {
-    userId: 'legend_2',
-    charName: 'QueenShillien',
-    race: 'Dark Elf',
-    className: 'Ghost Sentinel',
-    level: 84,
-    combatPower: 242100,
-    olympiadPoints: 2180,
-    olympiadWins: 115,
-    duelWins: 290,
-    clanName: 'MoonlightOrder',
-    castleLord: 'Aden Castle',
-    isHero: true,
-    topWeaponName: '+14 Draconic Bow (Focus)',
-    topWeaponGlow: 'blue-ice',
-    statsSnapshot: { hp: 8400, pAtk: 16800, mAtk: 800, pDef: 6200, mDef: 5800, crit: 500 }
-  },
-  {
-    userId: 'legend_3',
-    charName: 'ArchmageEva',
-    race: 'Elf',
-    className: 'Mystic Muse',
-    level: 83,
-    combatPower: 228900,
-    olympiadPoints: 2050,
-    olympiadWins: 98,
-    duelWins: 240,
-    clanName: 'SilverLight',
-    castleLord: 'Dion Castle',
-    isHero: false,
-    topWeaponName: '+12 Arcana Mace (Acumen)',
-    topWeaponGlow: 'crimson-fire',
-    statsSnapshot: { hp: 7900, pAtk: 2400, mAtk: 18500, pDef: 5400, mDef: 7800, crit: 220 }
-  },
-  {
-    userId: 'legend_4',
-    charName: 'TitanGore',
-    race: 'Orc',
-    className: 'Titan',
-    level: 82,
-    combatPower: 215400,
-    olympiadPoints: 1920,
-    olympiadWins: 89,
-    duelWins: 210,
-    clanName: 'BloodFury',
-    castleLord: 'Gludio Castle',
-    isHero: false,
-    topWeaponName: '+11 Heaven\'s Divider (Focus)',
-    topWeaponGlow: 'purple-void',
-    statsSnapshot: { hp: 16500, pAtk: 15400, mAtk: 600, pDef: 7800, mDef: 4900, crit: 360 }
-  },
-  {
-    userId: 'legend_5',
-    charName: 'SoulHoundX',
-    race: 'Kamael',
-    className: 'Soul Hound',
-    level: 81,
-    combatPower: 198200,
-    olympiadPoints: 1840,
-    olympiadWins: 76,
-    duelWins: 185,
-    clanName: 'DarkWings',
-    castleLord: null,
-    isHero: false,
-    topWeaponName: '+10 Imperial Staff',
-    topWeaponGlow: 'blue-ice',
-    statsSnapshot: { hp: 9200, pAtk: 9800, mAtk: 14200, pDef: 6100, mDef: 6700, crit: 310 }
-  },
-  {
-    userId: 'legend_6',
-    charName: 'FortuneHunterGim',
-    race: 'Dwarf',
-    className: 'Fortune Seeker',
-    level: 80,
-    combatPower: 185000,
-    olympiadPoints: 1690,
-    olympiadWins: 62,
-    duelWins: 160,
-    clanName: 'GoldenAnvil',
-    castleLord: null,
-    isHero: false,
-    topWeaponName: '+9 Basalt Battlehammer',
-    topWeaponGlow: 'golden-amber',
-    statsSnapshot: { hp: 14200, pAtk: 8900, mAtk: 400, pDef: 8500, mDef: 5200, crit: 280 }
-  }
-];
-
 let _cachedRankings = {
   cp: [],
   olympiad: [],
@@ -220,17 +114,7 @@ export const RankingService = {
       console.warn('Firebase Leaderboard offline fallback');
     }
 
-    if (!remoteList || remoteList.length === 0) {
-      remoteList = [...DEFAULT_LEGEND_PROFILES];
-      if (category === 'olympiad') {
-        remoteList.sort((a, b) => (b.olympiadPoints || 0) - (a.olympiadPoints || 0));
-      } else if (category === 'duels') {
-        remoteList.sort((a, b) => (b.duelWins || 0) - (a.duelWins || 0));
-      } else {
-        remoteList.sort((a, b) => (b.combatPower || 0) - (a.combatPower || 0));
-      }
-    }
-
+    remoteList = remoteList || [];
     _cachedRankings[category] = remoteList;
     _cachedRankings.lastFetchTime = now;
 
