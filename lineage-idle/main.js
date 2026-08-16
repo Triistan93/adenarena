@@ -3132,7 +3132,8 @@ function switchSubclass(targetIndex) {
       xp: state.xp,
       sp: state.sp,
       class: state.class,
-      skills: { ...state.skills }
+      skills: { ...state.skills },
+      legacyPassives: { ...(state.legacyPassives || {}) }
     };
   } else {
     const activeSub = state.subclasses[state.activeSubclassIndex];
@@ -3141,17 +3142,19 @@ function switchSubclass(targetIndex) {
       activeSub.xp = state.xp;
       activeSub.sp = state.sp;
       activeSub.skills = { ...state.skills };
+      activeSub.legacyPassives = { ...(state.legacyPassives || {}) };
     }
   }
 
   if (targetIndex === null) {
     state.activeSubclassIndex = null;
-    const main = state.mainClassData || { level: 75, xp: 0, sp: 50, class: 'fighter', skills: {} };
+    const main = state.mainClassData || { level: 75, xp: 0, sp: 50, class: 'fighter', skills: {}, legacyPassives: {} };
     state.level = main.level;
     state.xp = main.xp;
     state.sp = main.sp;
     state.class = main.class;
     state.skills = { ...(main.skills || {}) };
+    state.legacyPassives = { ...(main.legacyPassives || {}) };
     log(`👑 Alternado para a Classe Principal (**${getClass(state.class).name}**)!`, 'system');
   } else {
     const targetSub = state.subclasses[targetIndex];
@@ -3162,6 +3165,7 @@ function switchSubclass(targetIndex) {
       state.sp = targetSub.sp;
       state.class = targetSub.classId;
       state.skills = { ...(targetSub.skills || {}) };
+      state.legacyPassives = { ...(targetSub.legacyPassives || {}) };
       log(`⚔️ Alternado para a Subclasse **${getClass(state.class).name}** (Lv.${state.level})!`, 'rarity-rare');
     }
   }

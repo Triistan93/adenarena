@@ -2019,50 +2019,56 @@ skills: [
     ]
   },
 
-  // ─── HATAMOTO → RONIN → SAMURAI ───
-  hatamoto: {
-    name: 'Hatamoto', parent: 'kamaelSoldier', race: 'kamael', archetype: 'samurai', stage: 1,
-    desc: 'Hatamoto — guerreiro da lâmina com disciplina marcial.',
-    base: { atk: 26, def: 12, hp: 160, mp: 48, eva: 10, crit: 12, mdef: 8 },
+  // ─── SAMURAI BASE → HATAMOTO → RONIN → SAMURAI (Kamael Kenjutsu) ───
+  samuraiBase: {
+    name: 'Bushi (Samurai)', parent: null, race: 'kamael', archetype: 'samurai', stage: 0,
+    desc: 'Bushi — aprendiz do caminho da lâmina e técnicas de Katana.',
+    base: { atk: 14, def: 8, hp: 100, mp: 35, eva: 8, crit: 8, mdef: 6 },
     skills: [
-      { name: "Iaijutsu",           type: "Ativo",   rarity: "1★", effect: "Dano 200% draw-slash", cooldown: "10s", duration: null, note: "Skill permanece após trocar de classe" },
-      { name: "Crescent Slash",     type: "Ativo",   rarity: "1★", effect: "Dano 180% + bleed 4s", cooldown: "12s", duration: "4s", note: "Skill permanece após trocar de classe" },
-      { name: "Katana Mastery",     type: "Passivo", rarity: "1★", effect: "+15% ATK com katana", cooldown: null, duration: null, note: "Skill permanece após trocar de classe" },
-      { name: "Light Armor Mastery", type: "Passivo", rarity: "1★", effect: "+10% EVA com armadura leve", cooldown: null, duration: null, note: "Skill permanece após trocar de classe" }
+      { name: "Iaijutsu Slash",       type: "Ativo",   rarity: "1★", effect: "Dano físico rápido 160% ao desembainhar a espada", cooldown: "8s", duration: null, note: "Skill permanece após trocar de classe" },
+      { name: "Crescent Blade",       type: "Ativo",   rarity: "1★", effect: "Dano de corte 140% + bleed 4s", cooldown: "10s", duration: "4s", note: "Skill permanece após trocar de classe" },
+      { name: "Katana Mastery",       type: "Passivo", rarity: "1★", effect: "+15% P.ATK com Katana/Espadas", cooldown: null, duration: null, note: "Skill permanece após trocar de classe" },
+      { name: "Bushido Spirit",       type: "Passivo", rarity: "1★", effect: "+10% Taxa de Crítico e +8% Esquiva", cooldown: null, duration: null, note: "Skill permanece após trocar de classe" },
+      { name: "Samurai's Harmony",    type: "Self-Buff", rarity: "1★", effect: "+20% P.ATK, +15% Crit Rate por 30 min", cooldown: "30 min", duration: "30 min", note: "Skill permanece após trocar de classe" }
+    ]
+  },
+
+  hatamoto: {
+    name: 'Hatamoto', parent: 'samuraiBase', race: 'kamael', archetype: 'samurai', stage: 1,
+    desc: 'Hatamoto — guerreiro de elite da lâmina com disciplina marcial.',
+    base: { atk: 28, def: 14, hp: 170, mp: 52, eva: 12, crit: 14, mdef: 10 },
+    skills: [
+      { name: "Whirlwind Cut",        type: "Ativo",   rarity: "1★", effect: "Dano giratório AoE 210%", cooldown: "12s", duration: null, note: "Skill permanece após trocar de classe" },
+      { name: "Focused Strike",       type: "Ativo",   rarity: "2★", effect: "Estocada concentrada: dano 250% + 30% bônus de dano crítico", cooldown: "14s", duration: null, note: "Skill permanece após trocar de classe" },
+      { name: "Bushido Stance",       type: "Toggle",  rarity: "2★", effect: "+20% P.ATK, +15% Crit Rate, -10% P.DEF", cooldown: "5s", duration: "Toggle", note: "Skill permanece após trocar de classe" },
+      { name: "Katana Focus",         type: "Passivo", rarity: "2★", effect: "+18% Taxa de Crítico com Katana", cooldown: null, duration: null, note: "Skill permanece após trocar de classe" }
     ]
   },
 
   ronin: {
     name: 'Ronin', parent: 'hatamoto', race: 'kamael', archetype: 'samurai', stage: 2,
-    desc: 'Ronin — espadachim solitário com técnicas devastadoras.',
-    base: { atk: 55, def: 22, hp: 320, mp: 72, eva: 18, crit: 22, mdef: 15 },
+    desc: 'Ronin — espadachim solitário com técnicas devastadoras de corte.',
+    base: { atk: 58, def: 24, hp: 340, mp: 78, eva: 20, crit: 25, mdef: 18 },
     skills: [
-      { name: "Whirlwind Cut",      type: "Ativo",   rarity: "2★", effect: "Dano AoE 280%", cooldown: "18s", duration: null, note: "Skill permanece após trocar de classe" },
-      { name: "Piercing Strike",    type: "Ativo",   rarity: "2★", effect: "Dano 260% + ignore DEF parcial", cooldown: "14s", duration: null, note: "Skill permanece após trocar de classe" },
-      { name: "Focused Strike",     type: "Ativo",   rarity: "2★", effect: "Dano 300% + crit bônus +30%", cooldown: "18s", duration: null, note: "Skill permanece após trocar de classe" },
-      { name: "Wind Blade",         type: "Ativo",   rarity: "2★", effect: "Dano vento 240% ranged", cooldown: "14s", duration: null, note: "Skill permanece após trocar de classe" },
-      { name: "Bushido Stance",     type: "Toggle",  rarity: "2★", effect: "+20% ATK, +15% Crit, -10% DEF", cooldown: "5s", duration: "Toggle", note: "Skill permanece após trocar de classe" },
-      { name: "Counter Slash",      type: "Ativo",   rarity: "3★", effect: "Contra-ataque: dano 320% quando bloqueia", cooldown: "25s", duration: null, note: "Skill permanece após trocar de classe" },
-      { name: "Katana Focus",       type: "Passivo", rarity: "2★", effect: "+15% Crit Rate com katana", cooldown: null, duration: null, note: "Skill permanece após trocar de classe" },
-      { name: "Ronin's Harmony",    type: "Self-Buff", rarity: "3★", effect: "+35% ATK, +25% Crit, +20% ATK Speed por 25 min", cooldown: "60 min", duration: "25 min", note: "Skill permanece após trocar de classe" }
+      { name: "Sakura Storm",         type: "Ativo",   rarity: "3★", effect: "Dano AoE pétalas cortantes 360% + sangramento contínuo 6s", cooldown: "18s", duration: "6s", note: "Skill permanece após trocar de classe" },
+      { name: "Rising Dragon",        type: "Ativo",   rarity: "3★", effect: "Corte ascendente do dragão: dano 340% + knockup 2s", cooldown: "16s", duration: null, note: "Skill permanece após trocar de classe" },
+      { name: "Counter Slash",        type: "Ativo",   rarity: "3★", effect: "Contra-ataque letal: dano 380% e absorve 20% do dano recebido", cooldown: "20s", duration: null, note: "Skill permanece após trocar de classe" },
+      { name: "Honor Code",           type: "Self-Buff", rarity: "3★", effect: "+30% P.ATK, +25% Crit Power, +15% Velocidade de Ataque por 120s", cooldown: "120s", duration: "120s", note: "Skill permanece após trocar de classe" },
+      { name: "Way of the Blade",      type: "Passivo", rarity: "3★", effect: "+20% P.ATK, +15% Crit Power com lâminas", cooldown: null, duration: null, note: "Skill permanece após trocar de classe" }
     ]
   },
 
   samurai: {
     name: 'Samurai', parent: 'ronin', race: 'kamael', archetype: 'samurai', stage: 3,
-    desc: 'Samurai — mestre supremo da lâmina com técnicas lendárias.',
-    base: { atk: 105, def: 38, hp: 540, mp: 108, eva: 30, crit: 38, mdef: 25 },
+    desc: 'Samurai — mestre supremo da lâmina com técnicas lendárias de Kenjutsu.',
+    base: { atk: 110, def: 40, hp: 580, mp: 115, eva: 32, crit: 40, mdef: 28 },
     skills: [
-      { name: "Sakura Storm",                type: "Ativo",   rarity: "3★", effect: "Dano AoE 420% + bleed 6s", cooldown: "25s", duration: "6s", note: "Skill permanece após trocar de classe" },
-      { name: "Rising Dragon",               type: "Ativo",   rarity: "3★", effect: "Dano 380% + launch (knockup)", cooldown: "22s", duration: null, note: "Skill permanece após trocar de classe" },
-      { name: "Final Cut",                    type: "Ativo",   rarity: "4★", effect: "Dano 550% execute (dano dobra se alvo < 25% HP)", cooldown: "60s", duration: null, note: "Skill permanece após trocar de classe" },
-      { name: "Honor Code",                   type: "Self-Buff", rarity: "3★", effect: "+30% ATK, +20% Crit, +15% EVA por 120s", cooldown: "120s", duration: "120s", note: "Skill permanece após trocar de classe" },
-      { name: "Transcendent Iaijutsu",        type: "Ativo",   rarity: "4★", effect: "Dano 700% + ignore DEF + bleed 10s", cooldown: "180s", duration: "10s", note: "Skill permanece após trocar de classe" },
-      { name: "Way of the Blade",             type: "Passivo", rarity: "3★", effect: "+15% ATK, +15% Crit Rate, +10% ATK Speed com katana", cooldown: null, duration: null, note: "Skill permanece após trocar de classe" },
-      { name: "Samurai Spirit",               type: "Passivo", rarity: "3★", effect: "+25% ATK, +20% Crit Power, +15% EVA", cooldown: null, duration: null, note: "Skill permanece após trocar de classe" },
-      { name: "Body of the Samurai",          type: "Passivo", rarity: "3★", effect: "+20% Max HP, +15% HP Regen", cooldown: null, duration: null, note: "Skill permanece após trocar de classe" },
-      { name: "Master of Combat",             type: "Passivo", rarity: "4★", effect: "+10% All Stats, +15% PvE Damage", cooldown: null, duration: null, note: "Skill permanece após trocar de classe" },
-      { name: "Samurai's Harmony",            type: "Self-Buff", rarity: "4★", effect: "+55% ATK, +45% Crit, +30% ATK Speed por 30 min", cooldown: "90 min", duration: "30 min", note: "Skill permanece após trocar de classe" }
+      { name: "Final Cut",                    type: "Ativo",   rarity: "4★", effect: "Golpe de execução: dano 580% (dobra o dano se o alvo tiver menos de 30% HP)", cooldown: "45s", duration: null, note: "Skill permanece após trocar de classe" },
+      { name: "Transcendent Iaijutsu",        type: "Ativo",   rarity: "4★", effect: "Corte supremo dimensional 750% + ignora 40% da defesa do alvo + sangramento 10s", cooldown: "120s", duration: "10s", note: "Skill permanece após trocar de classe" },
+      { name: "Samurai Spirit",               type: "Passivo", rarity: "3★", effect: "+25% P.ATK, +20% Crit Power, +15% Esquiva", cooldown: null, duration: null, note: "Skill permanece após trocar de classe" },
+      { name: "Body of the Samurai",          type: "Passivo", rarity: "3★", effect: "+20% Max HP, +25% Regeneração de HP", cooldown: null, duration: null, note: "Skill permanece após trocar de classe" },
+      { name: "Master of Combat",             type: "Passivo", rarity: "4★", effect: "+15% Todos os Atributos, +20% Dano Crítico Geral", cooldown: null, duration: null, note: "Skill permanece após trocar de classe" },
+      { name: "Samurai's Ultimate Harmony",   type: "Self-Buff", rarity: "4★", effect: "+60% P.ATK, +50% Crit Rate, +35% Velocidade de Ataque por 30 min", cooldown: "90 min", duration: "30 min", note: "Skill permanece após trocar de classe" }
     ]
   },
     // ═══════════════════════════════════════════
@@ -2521,136 +2527,201 @@ skills: [
     ]
   },
 
-  // ShineMaker aliases
-  shinemaker: {
-    name: 'ShineMaker', parent: 'shineMakerS2', race: 'highelf', archetype: 'support', stage: 3,
-    desc: 'Criadora de luz — suporte sagrado com dano ofensivo.',
-    base: { atk: 22, def: 38, hp: 350, mp: 400, matk: 98, mdef: 78, eva: 14, crit: 8 },
+  // ─── SHINEMAKER (Dwarf Exclusive) ───
+  shineMakerBase: {
+    name: 'ShineMaker', parent: 'dwarfFighter', race: 'dwarf', archetype: 'support', stage: 0,
+    desc: 'ShineMaker — artífice anã dominadora de energia luminosa e suporte cristalino.',
+    base: { atk: 12, def: 18, hp: 120, mp: 90, matk: 18, mdef: 16, eva: 6, crit: 6 },
     skills: [
-      { name: "Star Fall",                    type: "Ativo",     rarity: "4★", effect: "Dano AoE sagrado 580% + stun 3s", cooldown: "60s" },
-      { name: "Transcendent Star Fall",       type: "Ativo",     rarity: "4★", effect: "Dano AoE sagrado 750% + blind 5s", cooldown: "180s" },
-      { name: "ShineMaker's Harmony",         type: "Self-Buff", rarity: "4★", effect: "+55% M.ATK, +45% Heal Power por 30 min", cooldown: "90 min" }
+      { name: "Light Spark",                  type: "Ativo",     rarity: "1★", effect: "Dano sagrado 160% com martelo brilhante", cooldown: "8s" },
+      { name: "Luminary Glow",                type: "Self-Buff", rarity: "1★", effect: "+15% M.ATK e +10% P.DEF", cooldown: "60s" },
+      { name: "Crystal Weapon Mastery",       type: "Passivo",   rarity: "1★", effect: "+15% ATK com Martelos/Maças", cooldown: null },
+      { name: "ShineMaker's Harmony",         type: "Self-Buff", rarity: "1★", effect: "+20% M.ATK, +20% P.DEF por 30 min", cooldown: "30 min" }
+    ]
+  },
+  shinemaker: {
+    name: 'ShineMaker', parent: 'shineMakerS2', race: 'dwarf', archetype: 'support', stage: 3,
+    desc: 'Criadora de luz — suporte sagrado anão com poder celestial e dano luminoso.',
+    base: { atk: 26, def: 42, hp: 420, mp: 420, matk: 110, mdef: 86, eva: 16, crit: 10 },
+    skills: [
+      { name: "Star Fall",                    type: "Ativo",     rarity: "4★", effect: "Dano AoE sagrado 580% + stun 3s", cooldown: "45s" },
+      { name: "Transcendent Star Fall",       type: "Ativo",     rarity: "4★", effect: "Dano AoE sagrado 750% + blind 5s", cooldown: "120s" },
+      { name: "Divine Crystal Aegis",         type: "Ativo",     rarity: "4★", effect: "Barreira protetora sagrada que absorve 35% do dano máximo", cooldown: "60s" },
+      { name: "ShineMaker's Ultimate Harmony", type: "Self-Buff", rarity: "4★", effect: "+60% M.ATK, +50% P.DEF, +40% Cura por 30 min", cooldown: "90 min" }
     ]
   },
   shinemakerS1: {
-    name: 'ShineMaker', parent: 'highElfBase', race: 'highelf', archetype: 'support', stage: 1,
+    name: 'ShineMaker', parent: 'dwarfFighter', race: 'dwarf', archetype: 'support', stage: 1,
+    base: { atk: 18, def: 24, hp: 190, mp: 180, matk: 45, mdef: 32, eva: 10, crit: 8 },
     skills: [
-      { name: "Light Spark", type: "Ativo", rarity: "1★", effect: "Dano sagrado 180%", cooldown: "8s" },
-      { name: "Luminary Glow", type: "Self-Buff", rarity: "2★", effect: "+20% M.ATK e +15% Cast Speed", cooldown: "60s" }
+      { name: "Light Spark",                  type: "Ativo",     rarity: "1★", effect: "Dano sagrado 190%", cooldown: "8s" },
+      { name: "Luminary Glow",                type: "Self-Buff", rarity: "2★", effect: "+20% M.ATK e +15% Cast Speed", cooldown: "60s" },
+      { name: "Crystal Blessing",             type: "Passivo",   rarity: "1★", effect: "+15% Max MP e +12% Regeneração de MP", cooldown: null }
     ]
   },
   shinemakerS2: {
-    name: 'ShineMaker', parent: 'shinemakerS1', race: 'highelf', archetype: 'support', stage: 2,
+    name: 'ShineMaker', parent: 'shinemakerS1', race: 'dwarf', archetype: 'support', stage: 2,
+    base: { atk: 28, def: 36, hp: 320, mp: 300, matk: 82, mdef: 60, eva: 14, crit: 10 },
     skills: [
-      { name: "Prism Burst", type: "Ativo", rarity: "2★", effect: "Dano AoE sagrado 260%", cooldown: "16s" },
-      { name: "Shine Barrier", type: "Ativo", rarity: "3★", effect: "Escudo sagrado de 25% Max HP por 20s", cooldown: "45s" }
+      { name: "Prism Burst",                  type: "Ativo",     rarity: "2★", effect: "Dano AoE sagrado 280%", cooldown: "14s" },
+      { name: "Shine Barrier",                type: "Ativo",     rarity: "3★", effect: "Escudo sagrado de 25% Max HP por 20s", cooldown: "35s" },
+      { name: "Radiant Hammer Strike",        type: "Ativo",     rarity: "3★", effect: "Dano físico/sagrado 320% + redução de defesa do alvo 20%", cooldown: "18s" }
     ]
   },
   shinemakerS3: {
-    name: 'ShineMaker', parent: 'shinemakerS2', race: 'highelf', archetype: 'support', stage: 3,
+    name: 'ShineMaker', parent: 'shinemakerS2', race: 'dwarf', archetype: 'support', stage: 3,
+    base: { atk: 38, def: 52, hp: 580, mp: 520, matk: 145, mdef: 98, eva: 20, crit: 14 },
     skills: [
-      { name: "Star Fall", type: "Ativo", rarity: "4★", effect: "Dano AoE sagrado 580% + stun 3s", cooldown: "60s" },
-      { name: "Transcendent Star Fall", type: "Ativo", rarity: "4★", effect: "Dano AoE sagrado 750% + blind 5s", cooldown: "180s" },
-      { name: "ShineMaker's Harmony", type: "Self-Buff", rarity: "4★", effect: "+55% M.ATK, +45% Heal Power por 30 min", cooldown: "90 min" }
+      { name: "Star Fall",                    type: "Ativo",     rarity: "4★", effect: "Dano AoE sagrado 580% + stun 3s", cooldown: "45s" },
+      { name: "Transcendent Star Fall",       type: "Ativo",     rarity: "4★", effect: "Dano AoE sagrado 750% + blind 5s", cooldown: "120s" },
+      { name: "ShineMaker's Harmony",         type: "Self-Buff", rarity: "4★", effect: "+55% M.ATK, +45% Heal Power por 30 min", cooldown: "90 min" }
     ]
   },
 
-  // Blood Rose (Ertheia Mystic)
+  // ─── BLOOD ROSE (Dark Elf Exclusive — Espinhos Sombrios & Magia de Sangue) ───
   bloodRoseBase: {
-    name: 'Blood Rose', parent: 'mage', race: 'ertheia', archetype: 'mage', stage: 0,
-    base: { atk: 10, def: 10, hp: 110, mp: 130, matk: 26, mdef: 18, eva: 8, crit: 5 },
+    name: 'Blood Rose', parent: null, race: 'darkelf', archetype: 'mage', stage: 0,
+    desc: 'Rosa de Sangue — mística dos Elfos Negros devota de Shillien, mestra de espinhos sombrios e roubo de vida.',
+    base: { atk: 12, def: 10, hp: 110, mp: 130, matk: 30, mdef: 18, eva: 8, crit: 8 },
     skills: [
-      { name: "Rose Petal Strike", type: "Ativo", rarity: "1★", effect: "Dano mágico 140%", cooldown: "6s" },
-      { name: "Ertheia Spirit", type: "Passivo", rarity: "1★", effect: "+10% M.ATK e +8% Cast Speed", cooldown: null },
-      { name: "Mystic Barrier", type: "Passivo", rarity: "1★", effect: "+12% M.DEF", cooldown: null }
+      { name: "Rose Petal Strike",            type: "Ativo",     rarity: "1★", effect: "Dano de trevas 160% lançando pétalas cortantes", cooldown: "6s" },
+      { name: "Dark Thorn Shield",            type: "Passivo",   rarity: "1★", effect: "+15% M.DEF e reflete 10% do dano físico em espinhos", cooldown: null },
+      { name: "Sanguine Pulse",               type: "Ativo",     rarity: "1★", effect: "Pulso de sangue: dano 140% + drena 30% em HP", cooldown: "8s" },
+      { name: "Blood Rose Harmony",           type: "Self-Buff", rarity: "1★", effect: "+20% M.ATK, +15% Vampirismo por 30 min", cooldown: "30 min" }
     ]
   },
   bloodRoseS1: {
-    name: 'Blood Rose', parent: 'bloodRoseBase', race: 'ertheia', archetype: 'mage', stage: 1,
-    base: { atk: 14, def: 16, hp: 180, mp: 220, matk: 54, mdef: 32, eva: 12, crit: 8 },
+    name: 'Blood Rose', parent: 'bloodRoseBase', race: 'darkelf', archetype: 'mage', stage: 1,
+    desc: 'Rosa de Sangue — sacerdotisa das trevas com controle de espinhos sangrentos.',
+    base: { atk: 16, def: 18, hp: 190, mp: 230, matk: 60, mdef: 36, eva: 12, crit: 10 },
     skills: [
-      { name: "Thorn Slash", type: "Ativo", rarity: "1★", effect: "Dano mágico de espinhos 190%", cooldown: "8s" },
-      { name: "Rose Drain",  type: "Ativo", rarity: "2★", effect: "Dano 160% + absorve 40% em HP", cooldown: "12s" }
+      { name: "Crimson Thorns",               type: "Ativo",     rarity: "1★", effect: "Erupção de espinhos: dano mágico 210% + sangramento 5s", cooldown: "8s" },
+      { name: "Sanguine Drain",               type: "Ativo",     rarity: "2★", effect: "Dano sombrio 200% + absorve 50% do dano em HP", cooldown: "10s" },
+      { name: "Thorn Armor Mastery",          type: "Passivo",   rarity: "1★", effect: "+15% M.ATK de Trevas e +10% Esquiva", cooldown: null },
+      { name: "Curse of Shillien",            type: "Ativo",     rarity: "2★", effect: "Maldição das trevas: reduz P.DEF e M.DEF do alvo em 20%", cooldown: "16s" }
     ]
   },
   bloodRoseS2: {
-    name: 'Blood Rose', parent: 'bloodRoseS1', race: 'ertheia', archetype: 'mage', stage: 2,
-    base: { atk: 22, def: 28, hp: 320, mp: 360, matk: 96, mdef: 58, eva: 18, crit: 12 },
+    name: 'Blood Rose', parent: 'bloodRoseS1', race: 'darkelf', archetype: 'mage', stage: 2,
+    desc: 'Rosa de Sangue — dominadora do jardim profano de Shillien.',
+    base: { atk: 25, def: 30, hp: 340, mp: 380, matk: 105, mdef: 65, eva: 18, crit: 15 },
     skills: [
-      { name: "Blood Rose Petals", type: "Ativo", rarity: "3★", effect: "Dano AoE sangrento 340%", cooldown: "20s" },
-      { name: "Vampiric Blossom",  type: "Ativo", rarity: "3★", effect: "Dano 280% + roubo de vida 50%", cooldown: "18s" }
+      { name: "Black Rose Petal Dance",       type: "Ativo",     rarity: "3★", effect: "Dano AoE profano 360% com tempestade de rosas negras", cooldown: "18s" },
+      { name: "Thorn Embrace",                type: "Ativo",     rarity: "3★", effect: "Aprisiona o alvo em espinhos sombrios: dano 320% + imobilização 3s", cooldown: "16s" },
+      { name: "Vampiric Blossom",             type: "Ativo",     rarity: "3★", effect: "Desabrochar vampírico: dano 300% + roubo de vida massivo de 60%", cooldown: "15s" },
+      { name: "Bleeding Thorn Mastery",       type: "Passivo",   rarity: "3★", effect: "+20% Dano Crítico Mágico e +15% Efeito de Sangramento", cooldown: null }
     ]
   },
   bloodRoseS3: {
-    name: 'Blood Rose', parent: 'bloodRoseS2', race: 'ertheia', archetype: 'mage', stage: 3,
-    desc: 'Rosa de Sangue — mística Ertheia mestre de espinhos e roubo de vida.',
-    base: { atk: 38, def: 48, hp: 580, mp: 580, matk: 168, mdef: 98, eva: 24, crit: 18 },
+    name: 'Blood Rose', parent: 'bloodRoseS2', race: 'darkelf', archetype: 'mage', stage: 3,
+    desc: 'Rosa de Sangue — Rainha Suprema dos Espinhos de Shillien.',
+    base: { atk: 42, def: 52, hp: 620, mp: 620, matk: 180, mdef: 105, eva: 25, crit: 20 },
     skills: [
-      { name: "Rose Garden Burst",  type: "Ativo", rarity: "4★", effect: "Dano AoE 620% + cura grupo 25%", cooldown: "90s" },
-      { name: "Blood Thorn Storm",  type: "Ativo", rarity: "4★", effect: "Dano AoE 780% + sangramento e lifesteal", cooldown: "150s" },
-      { name: "Blood Rose Harmony", type: "Self-Buff", rarity: "4★", effect: "+60% M.ATK, +30% Lifesteal por 30 min", cooldown: "90 min" }
+      { name: "Rose Garden Burst",            type: "Ativo",     rarity: "4★", effect: "Explosão do Jardim Negro: dano AoE 680% + drena 35% do dano total para curar o herói", cooldown: "60s" },
+      { name: "Blood Thorn Storm",            type: "Ativo",     rarity: "4★", effect: "Tempestade cataclísmica de espinhos sangrentos 820% + sangramento profundo 10s", cooldown: "120s" },
+      { name: "Queen of Thorns Aura",         type: "Passivo",   rarity: "4★", effect: "+25% Dano Mágico de Trevas, +20% Roubo de Vida Permanente", cooldown: null },
+      { name: "Blood Rose Ultimate Harmony",  type: "Self-Buff", rarity: "4★", effect: "+65% M.ATK, +40% Roubo de Vida, +30% Velocidade de Cast por 30 min", cooldown: "90 min" }
     ]
   },
   bloodRose: {
-    name: 'Blood Rose', parent: 'bloodRoseS2', race: 'ertheia', archetype: 'mage', stage: 3,
-    desc: 'Rosa de Sangue — mística Ertheia mestre de espinhos e roubo de vida.',
-    base: { atk: 38, def: 48, hp: 580, mp: 580, matk: 168, mdef: 98, eva: 24, crit: 18 },
+    name: 'Blood Rose', parent: 'bloodRoseS2', race: 'darkelf', archetype: 'mage', stage: 3,
+    desc: 'Rosa de Sangue — Rainha Suprema dos Espinhos de Shillien.',
+    base: { atk: 42, def: 52, hp: 620, mp: 620, matk: 180, mdef: 105, eva: 25, crit: 20 },
     skills: [
-      { name: "Rose Garden Burst",  type: "Ativo", rarity: "4★", effect: "Dano AoE 620% + cura grupo 25%", cooldown: "90s" },
-      { name: "Blood Thorn Storm",  type: "Ativo", rarity: "4★", effect: "Dano AoE 780% + sangramento e lifesteal", cooldown: "150s" },
-      { name: "Blood Rose Harmony", type: "Self-Buff", rarity: "4★", effect: "+60% M.ATK, +30% Lifesteal por 30 min", cooldown: "90 min" }
+      { name: "Rose Garden Burst",            type: "Ativo",     rarity: "4★", effect: "Explosão do Jardim Negro: dano AoE 680% + drena 35% do dano total para curar o herói", cooldown: "60s" },
+      { name: "Blood Thorn Storm",            type: "Ativo",     rarity: "4★", effect: "Tempestade cataclísmica de espinhos sangrentos 820% + sangramento profundo 10s", cooldown: "120s" },
+      { name: "Queen of Thorns Aura",         type: "Passivo",   rarity: "4★", effect: "+25% Dano Mágico de Trevas, +20% Roubo de Vida Permanente", cooldown: null },
+      { name: "Blood Rose Ultimate Harmony",  type: "Self-Buff", rarity: "4★", effect: "+65% M.ATK, +40% Roubo de Vida, +30% Velocidade de Cast por 30 min", cooldown: "90 min" }
     ]
   },
 
-  // Marauder & Eviscerator (Ertheia Fighter)
-  marauder: {
-    name: 'Marauder', parent: 'fighter', race: 'ertheia', archetype: 'fighter', stage: 1,
-    base: { atk: 32, def: 16, hp: 200, mp: 60, eva: 16, crit: 12, mdef: 12 },
+  // ─── ERTHEIA MARAUDER & EVISCERATOR (Ertheia Martial Brawler) ───
+  marauderBase: {
+    name: 'Ertheia Fighter', parent: null, race: 'ertheia', archetype: 'fighter', stage: 0,
+    desc: 'Lutadora Ertheia — mestre veloz de combate corporal com ventos de Sayha.',
+    base: { atk: 16, def: 10, hp: 120, mp: 40, eva: 12, crit: 10, mdef: 8 },
     skills: [
-      { name: "Pummel Strike", type: "Ativo", rarity: "1★", effect: "Dano físico marcial 190%", cooldown: "8s" },
-      { name: "Wind Step",     type: "Self-Buff", rarity: "2★", effect: "+20% Eva, +15% Speed 60s", cooldown: "45s" }
+      { name: "Pummel Strike",                type: "Ativo",     rarity: "1★", effect: "Golpe rápido de punho: dano físico 160%", cooldown: "6s" },
+      { name: "Sayha Wind Step",              type: "Self-Buff", rarity: "1★", effect: "+15% Esquiva e +15% Velocidade de Movimento", cooldown: "45s" },
+      { name: "Fist Mastery",                 type: "Passivo",   rarity: "1★", effect: "+15% P.ATK com Garras/Punhos", cooldown: null },
+      { name: "Sayha's Harmony",              type: "Self-Buff", rarity: "1★", effect: "+20% P.ATK, +15% Velocidade de Ataque por 30 min", cooldown: "30 min" }
+    ]
+  },
+  marauder: {
+    name: 'Marauder', parent: 'marauderBase', race: 'ertheia', archetype: 'fighter', stage: 1,
+    desc: 'Saqueadora — especialista em combos rápidos de vento e golpes aéreos.',
+    base: { atk: 34, def: 18, hp: 210, mp: 65, eva: 18, crit: 15, mdef: 14 },
+    skills: [
+      { name: "Distortion Punch",             type: "Ativo",     rarity: "1★", effect: "Punho de distorção: dano 220% + atordoamento 1.5s", cooldown: "8s" },
+      { name: "Wind Blend Strike",            type: "Ativo",     rarity: "2★", effect: "Investida com vento: dano 240% com +30% chance crítica", cooldown: "10s" },
+      { name: "Aerial Combo",                 type: "Ativo",     rarity: "2★", effect: "Combo aéreo: dano 260% + lança o inimigo ao ar", cooldown: "12s" },
+      { name: "Retaliation Counter",          type: "Passivo",   rarity: "1★", effect: "+15% Esquiva e contra-ataca com 100% de dano ao esquivar", cooldown: null }
     ]
   },
   ertheiaWarrior: {
     name: 'Eviscerator', parent: 'marauder', race: 'ertheia', archetype: 'fighter', stage: 2,
-    base: { atk: 66, def: 30, hp: 420, mp: 90, eva: 26, crit: 20, mdef: 26 },
+    desc: 'Evisceradora — guerreira marcial letal que corta o ar e destrói defesas.',
+    base: { atk: 70, def: 32, hp: 440, mp: 95, eva: 28, crit: 24, mdef: 28 },
     skills: [
-      { name: "Aerial Combo",     type: "Ativo", rarity: "2★", effect: "Dano físico 290% + knockup 2s", cooldown: "14s" },
-      { name: "Eviscerate Slash", type: "Ativo", rarity: "3★", effect: "Dano crítico 340%", cooldown: "18s" }
+      { name: "Gravity Shockwave",            type: "Ativo",     rarity: "3★", effect: "Onda de choque gravitacional: dano AoE 360% + knockback", cooldown: "16s" },
+      { name: "Eviscerate Slash",             type: "Ativo",     rarity: "3★", effect: "Corte visceral: dano físico 380% com alto bônus crítico", cooldown: "14s" },
+      { name: "Hurricane Spin Kick",          type: "Ativo",     rarity: "3★", effect: "Chute furacão 360º: dano 340% em área", cooldown: "15s" },
+      { name: "Wind Fighter Mastery",         type: "Passivo",   rarity: "3★", effect: "+20% P.ATK, +20% Taxa de Crítico e +15% Velocidade de Ataque", cooldown: null }
     ]
   },
   eviscerator: {
     name: 'Eviscerator', parent: 'ertheiaWarrior', race: 'ertheia', archetype: 'fighter', stage: 3,
-    desc: 'Eviscerador — mestre Ertheia de combate marcial e combos aéreos.',
-    base: { atk: 136, def: 58, hp: 820, mp: 130, eva: 38, crit: 32, mdef: 52 },
+    desc: 'Evisceradora Imperial — mestre suprema de combate corporal com poder dimensional de Sayha.',
+    base: { atk: 140, def: 60, hp: 860, mp: 140, eva: 42, crit: 35, mdef: 56 },
     skills: [
-      { name: "Ultimate Eviscerate Combo", type: "Ativo", rarity: "4★", effect: "Dano físico 750% + 100% Crit Rate", cooldown: "90s" },
-      { name: "Eviscerator Harmony",       type: "Self-Buff", rarity: "4★", effect: "+55% ATK, +35% Crit Rate por 30 min", cooldown: "90 min" }
+      { name: "Ultimate Eviscerate Combo",    type: "Ativo",     rarity: "4★", effect: "Combo supremo de 10 golpes marciais 800% + 100% Taxa de Crítico", cooldown: "60s" },
+      { name: "Spacetime Annihilation",       type: "Ativo",     rarity: "4★", effect: "Distorção dimensional devastadora: dano AoE 880% + quebra de defesa 30%", cooldown: "120s" },
+      { name: "Sayha's Divine Protection",    type: "Passivo",   rarity: "4★", effect: "+25% Esquiva, +20% Redução de Dano Físico recebido", cooldown: null },
+      { name: "Eviscerator Ultimate Harmony", type: "Self-Buff", rarity: "4★", effect: "+60% P.ATK, +40% Crit Power, +35% Velocidade de Ataque por 30 min", cooldown: "90 min" }
     ]
   },
 
-  // Sayha Seeker (Ertheia Wind Mage)
-  sayhaSeer: {
-    name: 'Sayha Seeker', parent: 'mage', race: 'ertheia', archetype: 'mage', stage: 1,
-    base: { atk: 12, def: 14, hp: 160, mp: 200, matk: 50, mdef: 30, eva: 14, crit: 6 },
+  // ─── SAYHA SEEKER & SEER (Ertheia Wind Mage) ───
+  sayhaMageBase: {
+    name: 'Sayha Mage', parent: null, race: 'ertheia', archetype: 'mage', stage: 0,
+    desc: 'Mística Ertheia — invocadora elemental dos vendavais de Sayha.',
+    base: { atk: 10, def: 10, hp: 100, mp: 130, matk: 26, mdef: 18, eva: 10, crit: 6 },
     skills: [
-      { name: "Sayha's Wind", type: "Ativo", rarity: "1★", effect: "Dano vento 200%", cooldown: "8s" }
+      { name: "Sayha's Wind",                 type: "Ativo",     rarity: "1★", effect: "Rajada de vento cortante: dano mágico 160%", cooldown: "6s" },
+      { name: "Wind Veil",                    type: "Self-Buff", rarity: "1★", effect: "+15% M.ATK e +12% Esquiva por 60s", cooldown: "45s" },
+      { name: "Ertheia Magic Mastery",        type: "Passivo",   rarity: "1★", effect: "+15% M.ATK com Cajados", cooldown: null },
+      { name: "Sayha Seer's Harmony",         type: "Self-Buff", rarity: "1★", effect: "+20% M.ATK, +20% Dano de Vento por 30 min", cooldown: "30 min" }
+    ]
+  },
+  sayhaSeer: {
+    name: 'Sayha Seeker', parent: 'sayhaMageBase', race: 'ertheia', archetype: 'mage', stage: 1,
+    desc: 'Buscadora de Sayha — canalizadora de correntes de ar e tempestades.',
+    base: { atk: 14, def: 16, hp: 170, mp: 210, matk: 55, mdef: 32, eva: 16, crit: 8 },
+    skills: [
+      { name: "Sayha's Wind Strike",          type: "Ativo",     rarity: "1★", effect: "Dano de vento concentrado 210%", cooldown: "7s" },
+      { name: "Gale Burst",                   type: "Ativo",     rarity: "2★", effect: "Rajada explosiva de ar: dano 240% + retarda inimigo 3s", cooldown: "10s" },
+      { name: "Eye of the Storm",             type: "Passivo",   rarity: "1★", effect: "+15% Velocidade de Cast e +10% M.DEF", cooldown: null }
     ]
   },
   windRiderErth: {
     name: 'Sayha Seeker', parent: 'sayhaSeer', race: 'ertheia', archetype: 'mage', stage: 2,
-    base: { atk: 20, def: 26, hp: 300, mp: 340, matk: 92, mdef: 56, eva: 22, crit: 10 },
+    desc: 'Condutora dos Ventos — maga que comanda tufões devastadores.',
+    base: { atk: 22, def: 28, hp: 320, mp: 360, matk: 98, mdef: 60, eva: 24, crit: 12 },
     skills: [
-      { name: "Typhoon Strike", type: "Ativo", rarity: "3★", effect: "Dano AoE vento 340%", cooldown: "18s" }
+      { name: "Typhoon Strike",               type: "Ativo",     rarity: "3★", effect: "Tufão cortante: dano AoE de vento 360%", cooldown: "16s" },
+      { name: "Cyclone Blast",                type: "Ativo",     rarity: "3★", effect: "Ciclone ascendente: dano 340% + knockup 2s", cooldown: "14s" },
+      { name: "Wind Domain",                  type: "Passivo",   rarity: "3★", effect: "+20% Dano Elemental de Vento e +15% Taxa de Crítico Mágico", cooldown: null }
     ]
   },
   sayhaSeeker: {
     name: 'Sayha Seeker', parent: 'windRiderErth', race: 'ertheia', archetype: 'mage', stage: 3,
-    desc: 'Buscador de Sayha — mago supremo do elemento Vento.',
-    base: { atk: 36, def: 46, hp: 550, mp: 560, matk: 165, mdef: 95, eva: 32, crit: 16 },
+    desc: 'Mestra Suprema de Sayha — soberana dos vendavais e tempestades de Aden.',
+    base: { atk: 38, def: 48, hp: 580, mp: 580, matk: 175, mdef: 100, eva: 34, crit: 18 },
     skills: [
-      { name: "Sayha Ultimate Tempest", type: "Ativo", rarity: "4★", effect: "Dano AoE Vento 750% + knockback 3s", cooldown: "90s" },
-      { name: "Sayha Seeker Harmony",    type: "Self-Buff", rarity: "4★", effect: "+60% M.ATK, +40% Wind Damage por 30 min", cooldown: "90 min" }
+      { name: "Sayha Ultimate Tempest",       type: "Ativo",     rarity: "4★", effect: "Tempestade Suprema de Sayha: dano AoE 820% + dispersão e retardo em massa", cooldown: "60s" },
+      { name: "Spacetime Vortex",             type: "Ativo",     rarity: "4★", effect: "Vórtice dimensional de vento: dano 860% com alta penetração mágica", cooldown: "120s" },
+      { name: "Wind Spirit Transcendence",    type: "Passivo",   rarity: "4★", effect: "+25% M.ATK, +20% Dano Crítico Mágico, +20% Esquiva Permanente", cooldown: null },
+      { name: "Sayha Seeker Ultimate Harmony", type: "Self-Buff", rarity: "4★", effect: "+65% M.ATK, +45% Dano de Vento, +35% Velocidade de Cast por 30 min", cooldown: "90 min" }
     ]
   }
 };

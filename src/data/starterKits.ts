@@ -144,12 +144,38 @@ export function getStarterKit(race: string, className: string): StarterKitConfig
   }
 
   // ⚒️ Anão Artesão / ShineMaker — Martelos Pesados de Forja
-  if (c === 'dwarffighter' || c === 'artisan' || c === 'artisandwarf' || c === 'shinemakers1' || c === 'shinemaker') {
+  if (c === 'dwarffighter' || c === 'artisan' || c === 'artisandwarf' || c.includes('shine')) {
     return {
       weapon: 'iron_hammer',
       armorType: 'heavy',
       ...HEAVY_SET,
       starterSkill: c.includes('shine') ? 'shinemaker_harmony' : 'power_strike_f',
+      shotType: 'soulshot_ng',
+      potions: { itemId: 'hp_potion_s', count: 100 },
+      shotsCount: 400
+    };
+  }
+
+  // 🌹 Dark Elf Blood Rose — Magia de Rosas e Espinhos
+  if (c.includes('bloodrose') || c.includes('blood_rose')) {
+    return {
+      weapon: 'crucifix_of_blessing_magicblunt',
+      armorType: 'robe',
+      ...ROBE_SET,
+      starterSkill: 'blood_rose_harmony',
+      shotType: 'spiritshot_ng',
+      potions: { itemId: 'hp_potion_s', count: 100 },
+      shotsCount: 500
+    };
+  }
+
+  // 🌪️ Ertheia Marauder / Eviscerator — Brawler e Punhos de Vento
+  if (c.includes('marauder') || c.includes('eviscerator') || (r === 'ertheia' && !c.includes('mage') && !c.includes('seer'))) {
+    return {
+      weapon: 'sword_breaker',
+      armorType: 'light',
+      ...LIGHT_SET,
+      starterSkill: 'sayha_harmony',
       shotType: 'soulshot_ng',
       potions: { itemId: 'hp_potion_s', count: 100 },
       shotsCount: 400
@@ -183,8 +209,8 @@ export function getStarterKit(race: string, className: string): StarterKitConfig
     };
   }
 
-  // ⛩️ Kamael Soulbreaker / Samurai (Hatamoto)
-  if (r === 'kamael' || c === 'soulbreaker' || c === 'hatamoto') {
+  // ⛩️ Kamael Soulbreaker / Samurai
+  if (r === 'kamael' || c.includes('samurai') || c.includes('hatamoto') || c === 'soulbreaker') {
     return {
       weapon: 'sword_breaker',
       armorType: 'light',

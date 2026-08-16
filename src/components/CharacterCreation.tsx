@@ -43,10 +43,10 @@ const RACES_INFO: Record<string, {
     image: {
       fighter: { M: '/img/humanpalaM.png', F: '/img/humanpalaF.png' },
       mage: { M: '/img/humanmageM.png', F: '/img/humanmageF.png' },
-      deathPilgrim: { M: '/img/human_fighter.png', F: '/img/human_fighter.png' },
-      wargBase: { M: '/img/human_fighter.png', F: '/img/human_fighter.png' },
-      assassinS0: { M: '/img/human_fighter.png', F: '/img/human_fighter.png' },
-      assassinBase: { M: '/img/human_fighter.png', F: '/img/human_fighter.png' }
+      deathPilgrim: { M: '/img/humanpalaM.png', F: '/img/humanpalaF.png' },
+      wargBase: { M: '/img/humanpalaM.png', F: '/img/humanpalaF.png' },
+      assassinS0: { M: '/img/humanpalaM.png', F: '/img/humanpalaF.png' },
+      assassinBase: { M: '/img/humanpalaM.png', F: '/img/humanpalaF.png' }
     },
     startZoneName: 'Ilha de Falar (Talking Island)'
   },
@@ -78,15 +78,18 @@ const RACES_INFO: Record<string, {
       { id: 'darkElfFighter', name: 'Guerreiro Negro (Fighter)', desc: 'Assassino mortal e cavaleiro sombrio focado em dano crítico.', icon: '🗡️' },
       { id: 'darkElfMage', name: 'Mago Negro (Mage)', desc: 'Invocador de maldições e magia de fogo/trevas de alto impacto.', icon: '🔮' },
       { id: 'deathPilgrim', name: 'Death Knight 💀', desc: 'Cavaleiro da Morte Dark Elf com maestria em magias sombrias.', icon: '💀' },
-      { id: 'assassinS0', name: 'Assassin 🗡️', desc: 'Assassina mortal das sombras com venenos e golpes críticos.', icon: '🗡️' }
+      { id: 'assassinS0', name: 'Assassin 🗡️', desc: 'Assassina mortal das sombras com venenos e golpes críticos.', icon: '🗡️' },
+      { id: 'bloodRoseBase', name: 'Blood Rose 🌹', desc: 'Mística devota de Shillien com magia de espinhos negros e drenagem de sangue.', icon: '🌹' }
     ],
     image: {
       darkElfFighter: { M: '/img/darkelfskM.png', F: '/img/darkelfskF.png' },
       darkElfMage: { M: '/img/darkelfmageM.png', F: '/img/darkelfmageF.png' },
-      deathPilgrim: { M: '/img/darkelf_fighter.png', F: '/img/darkelf_fighter.png' },
-      elfDeathPilgrim: { M: '/img/darkelf_fighter.png', F: '/img/darkelf_fighter.png' },
-      assassinS0: { M: '/img/darkelf_fighter.png', F: '/img/darkelf_fighter.png' },
-      assassinBase: { M: '/img/darkelf_fighter.png', F: '/img/darkelf_fighter.png' },
+      deathPilgrim: { M: '/img/darkelfskM.png', F: '/img/darkelfskF.png' },
+      elfDeathPilgrim: { M: '/img/darkelfskM.png', F: '/img/darkelfskF.png' },
+      assassinS0: { M: '/img/darkelfskM.png', F: '/img/darkelfskF.png' },
+      assassinBase: { M: '/img/darkelfskM.png', F: '/img/darkelfskF.png' },
+      bloodRoseBase: { M: '/img/darkelfmageM.png', F: '/img/darkelfmageF.png' },
+      bloodRoseS1: { M: '/img/darkelfmageM.png', F: '/img/darkelfmageF.png' },
       fighter: { M: '/img/darkelfskM.png', F: '/img/darkelfskF.png' },
       mage: { M: '/img/darkelfmageM.png', F: '/img/darkelfmageF.png' }
     },
@@ -127,7 +130,8 @@ const RACES_INFO: Record<string, {
       dwarfFighter: { M: '/img/dwarfmaestroM.png', F: '/img/dwarfmaestroF.png' },
       artisan: { M: '/img/dwarfmaestroM.png', F: '/img/dwarfmaestroF.png' },
       fighter: { M: '/img/dwarfmaestroM.png', F: '/img/dwarfmaestroF.png' },
-      shinemakerS1: { M: '/img/dwarf_artisan.png', F: '/img/dwarf_artisan.png' }
+      shinemakerS1: { M: '/img/dwarfmaestroM.png', F: '/img/dwarfmaestroF.png' },
+      shineMakerBase: { M: '/img/dwarfmaestroM.png', F: '/img/dwarfmaestroF.png' }
     },
     startZoneName: 'Ilha de Falar (Talking Island)'
   },
@@ -135,17 +139,18 @@ const RACES_INFO: Record<string, {
     id: 'kamael',
     name: 'Kamael',
     icon: '🪶',
-    desc: 'Raça de uma asa só com maestria lendária em estocadas de rapieira.',
+    desc: 'Raça de uma asa só com maestria lendária em lâminas rápidas e rapieiras.',
     perks: ['⚡ Usam Armaduras LEVES por Lore', '🗡️ Ataques Físicos Ultrarrápidos', '🏝️ Inicia na Ilha de Falar (Lv. 1)'],
     allowedClasses: [
       { id: 'kamaelSoldier', name: 'Soldier / Soulbreaker', desc: 'Espadachim das sombras especializado em rapieiras e absorção de almas.', icon: '🗡️' },
-      { id: 'hatamoto', name: 'Samurai ⛩️', desc: 'Mestre da katana ancestral e técnica de corte veloz Iaijutsu.', icon: '⛩️' }
+      { id: 'samuraiBase', name: 'Samurai ⛩️', desc: 'Mestre da katana ancestral e técnica de corte veloz Iaijutsu.', icon: '⛩️' }
     ],
     image: {
       kamaelSoldier: { M: '/img/kamaelshM.png', F: '/img/kamaelshF.png' },
       soulbreaker: { M: '/img/kamaelshM.png', F: '/img/kamaelshF.png' },
       fighter: { M: '/img/kamaelDM.png', F: '/img/kamaelDF.png' },
-      hatamoto: { M: '/img/kamael_soulbreaker.png', F: '/img/kamael_soulbreaker.png' }
+      samuraiBase: { M: '/img/kamaelDM.png', F: '/img/kamaelDF.png' },
+      hatamoto: { M: '/img/kamaelDM.png', F: '/img/kamaelDF.png' }
     },
     startZoneName: 'Ilha de Falar (Talking Island)'
   },
@@ -172,33 +177,33 @@ const RACES_INFO: Record<string, {
     perks: ['🌟 +8 Magia & Defesa Divina', '🛡️ Guardiões Sagrados de Aden', '🏝️ Inicia na Ilha de Falar (Lv. 1)'],
     allowedClasses: [
       { id: 'divineTemplarS1', name: 'Divine Templar 🛡️', desc: 'Guardião sagrado supremo e tanque inabalável com Sacred Aegis.', icon: '🛡️' },
-      { id: 'elementWeaverS1', name: 'Element Weaver 🌀', desc: 'Mago supremo combinando os três pilares de Fogo, Água e Vento.', icon: '🌀' },
-      { id: 'shinemakerS1', name: 'ShineMaker ✨', desc: 'Invocador de luz sagrada, bênçãos de proteção e suporte cristalino.', icon: '✨' }
+      { id: 'elementWeaverS1', name: 'Element Weaver 🌀', desc: 'Mago supremo combinando os três pilares de Fogo, Água e Vento.', icon: '🌀' }
     ],
     image: {
       divineTemplarS1: { M: '/img/elfwswM.png', F: '/img/elfswsF.png' },
       elementWeaverS1: { M: '/img/elfmageM.png', F: '/img/elfmageF.png' },
-      shinemakerS1: { M: '/img/elf_mage.png', F: '/img/elf_mage.png' },
-      fighter: { M: '/img/elfwswM.png', F: '/img/elfswsF.png' }
+      fighter: { M: '/img/elfwswM.png', F: '/img/elfswsF.png' },
+      mage: { M: '/img/elfmageM.png', F: '/img/elfmageF.png' }
     },
     startZoneName: 'Ilha de Falar (Talking Island)'
   },
   ertheia: {
     id: 'ertheia',
     name: 'Ertheia',
-    icon: '🌹',
-    desc: 'Guerreiros e místicas tocados pelos ventos e espíritos da natureza.',
-    perks: ['🌪️ +10 Esquiva Nativa', '🌹 Combate Híbrido com Roubo de Vida', '🏰 Inicia na Ilha de Falar'],
+    icon: '🌪️',
+    desc: 'Guerreiras e místicas ágeis tocadas pelos ventos e espíritos de Sayha.',
+    perks: ['🌪️ +10 Esquiva Nativa', '🥊 Combate Marcial e Artes Corporais', '🏰 Inicia na Ilha de Falar'],
     allowedClasses: [
-      { id: 'bloodRoseS1', name: 'Blood Rose 🌹', desc: 'Mística dos ventos e espinhos com roubo de vida e dano em área.', icon: '🌹' },
-      { id: 'marauder', name: 'Marauder / Eviscerator 🌪️', desc: 'Lutadora com garras e combos velozes de furacão.', icon: '🥊' },
+      { id: 'marauderBase', name: 'Marauder / Eviscerator 🌪️', desc: 'Lutadora com garras, punhos velozes e combos de furacão.', icon: '🥊' },
       { id: 'sayhaSeer', name: 'Sayha Seeker 🌀', desc: 'Invocadora de vendavais e espíritos protetores de Sayha.', icon: '🌀' }
     ],
     image: {
-      bloodRoseS1: { M: '/img/elf_mage.png', F: '/img/elf_mage.png' },
-      marauder: { M: '/img/elf_fighter.png', F: '/img/elf_fighter.png' },
-      sayhaSeer: { M: '/img/elf_mage.png', F: '/img/elf_mage.png' },
-      fighter: { M: '/img/elf_fighter.png', F: '/img/elf_fighter.png' }
+      marauderBase: { M: '/img/elfwswM.png', F: '/img/elfswsF.png' },
+      marauder: { M: '/img/elfwswM.png', F: '/img/elfswsF.png' },
+      sayhaMageBase: { M: '/img/elfmageM.png', F: '/img/elfmageF.png' },
+      sayhaSeer: { M: '/img/elfmageM.png', F: '/img/elfmageF.png' },
+      fighter: { M: '/img/elfwswM.png', F: '/img/elfswsF.png' },
+      mage: { M: '/img/elfmageM.png', F: '/img/elfmageF.png' }
     },
     startZoneName: 'Ilha de Falar (Talking Island)'
   }

@@ -20,6 +20,7 @@ const HERO_IMG = {
   human_deathpilgrim: "/img/humanpalaM.png",
   human_wargbase: "/img/humanpalaM.png",
   human_assassinbase: "/img/humanpalaM.png",
+  human_assassins0: "/img/humanpalaM.png",
 
   elf_fighter: "/img/elfwswM.png",
   elf_fighter_m: "/img/elfwswM.png",
@@ -48,7 +49,14 @@ const HERO_IMG = {
   darkelf_darkwizard_f: "/img/darkelfmageF.png",
   darkelf_shillienoracle: "/img/darkelfmageF.png",
   darkelf_elfdeathpilgrim: "/img/darkelfskM.png",
+  darkelf_deathpilgrim: "/img/darkelfskM.png",
   darkelf_assassinbase: "/img/darkelfskF.png",
+  darkelf_assassins0: "/img/darkelfskF.png",
+  darkelf_bloodrosebase: "/img/darkelfmageF.png",
+  darkelf_bloodroses1: "/img/darkelfmageF.png",
+  darkelf_bloodroses2: "/img/darkelfmageF.png",
+  darkelf_bloodroses3: "/img/darkelfmageF.png",
+  darkelf_bloodrose: "/img/darkelfmageF.png",
 
   orc_fighter: "/img/orcfighterM.png",
   orc_fighter_m: "/img/orcfighterM.png",
@@ -57,19 +65,31 @@ const HERO_IMG = {
   orc_orcraider: "/img/orcfighterM.png",
   orc_monk: "/img/orcfighterM.png",
   orc_shaman: "/img/orc_mage.png",
+  orc_rider: "/img/orcfighterM.png",
   orc_orcrider: "/img/orcfighterM.png",
+  orc_vanguardrider: "/img/orcfighterM.png",
 
   dwarf_artisan: "/img/dwarfmaestroM.png",
   dwarf_artisan_m: "/img/dwarfmaestroM.png",
   dwarf_artisan_f: "/img/dwarfmaestroF.png",
   dwarf_fighter: "/img/dwarfmaestroM.png",
+  dwarf_shinemakerbase: "/img/dwarfmaestroF.png",
   dwarf_shinemakers1: "/img/dwarfmaestroF.png",
+  dwarf_shinemakers2: "/img/dwarfmaestroF.png",
+  dwarf_shinemakers3: "/img/dwarfmaestroF.png",
+  dwarf_shinemaker: "/img/dwarfmaestroF.png",
 
   kamael_soulbreaker: "/img/kamaelshF.png",
   kamael_soulbreaker_m: "/img/kamaelshM.png",
   kamael_soulbreaker_f: "/img/kamaelshF.png",
+  kamael_kamaelsoldier: "/img/kamaelshM.png",
   kamael_fighter: "/img/kamaelDM.png",
+  kamael_samuraibase: "/img/kamaelDM.png",
+  kamael_samuraibase_m: "/img/kamaelDM.png",
+  kamael_samuraibase_f: "/img/kamaelDF.png",
   kamael_hatamoto: "/img/kamaelDM.png",
+  kamael_ronin: "/img/kamaelDM.png",
+  kamael_samurai: "/img/kamaelDM.png",
 
   sylph_sylphgunner: "/img/sylphM.png",
   sylph_sylphgunner_m: "/img/sylphM.png",
@@ -81,11 +101,18 @@ const HERO_IMG = {
   highelf_fighter: "/img/elfwswM.png",
   highelf_mage: "/img/elfmageM.png",
 
-  ertheia_bloodroses1: "/img/sylphF.png",
-  ertheia_marauder: "/img/sylphM.png",
-  ertheia_sayhaseer: "/img/sylphF.png",
-  ertheia_fighter: "/img/sylphM.png",
-  ertheia_mage: "/img/sylphF.png"
+  ertheia_marauderbase: "/img/elfwswM.png",
+  ertheia_marauderbase_m: "/img/elfwswM.png",
+  ertheia_marauderbase_f: "/img/elfswsF.png",
+  ertheia_marauder: "/img/elfwswM.png",
+  ertheia_eviscerator: "/img/elfswsF.png",
+  ertheia_sayhamagebase: "/img/elfmageF.png",
+  ertheia_sayhamagebase_m: "/img/elfmageM.png",
+  ertheia_sayhamagebase_f: "/img/elfmageF.png",
+  ertheia_sayhaseer: "/img/elfmageF.png",
+  ertheia_sayhaseeker: "/img/elfmageF.png",
+  ertheia_fighter: "/img/elfwswM.png",
+  ertheia_mage: "/img/elfmageF.png"
 };
 
 // Fallback by race only
@@ -98,7 +125,7 @@ const RACE_FALLBACK = {
   kamael: "/img/kamaelDM.png",
   sylph: "/img/sylphM.png",
   highelf: "/img/elfwswM.png",
-  ertheia: "/img/sylphM.png"
+  ertheia: "/img/elfswsF.png"
 };
 
 function resolveImg(path) {
