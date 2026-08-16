@@ -3736,6 +3736,20 @@ function attackMonster() {
         }
       }
     }
+
+    // Drop de Carta de Monstro Colecionável (0.5% a 5%)
+    const monKey = monster.id || monster.monsterId || monster.originalId;
+    const cardId = `card_${monKey}`;
+    const cardDef = MONSTER_CARDS[cardId] || MONSTER_CARDS[`card_${String(monKey).toLowerCase()}`];
+    if (cardDef) {
+      const dropChance = cardDef.dropChance || (monster.boss ? 0.03 : 0.006);
+      if (Math.random() < dropChance) {
+        addToInventory(cardId, 1);
+        log(`🃏 DROP RARO! Obteve **${cardDef.name}** [${(cardDef.rarity || 'rare').toUpperCase()}]!`, 'rarity-' + (cardDef.rarity || 'rare'), 'loot');
+        floatText(`🃏 CARTA DE MONSTRO!`, 'float-jackpot');
+      }
+    }
+
     triggerQuestEvent('kill', 1);
     if (monster.boss || monster.elite) triggerQuestEvent('boss', 1);
     triggerQuestEvent('gold', gold);
@@ -4363,6 +4377,18 @@ function getCodexBonuses() {
       }
     }
   }
+
+  if (typeof CardCodexService !== 'undefined' && CardCodexService.getCodexPassiveBonuses) {
+    const cardB = CardCodexService.getCodexPassiveBonuses(state);
+    totals.atk += Math.floor(cardB.pAtk || 0);
+    totals.def += Math.floor(cardB.pDef || 0);
+    totals.matk += Math.floor(cardB.mAtk || 0);
+    totals.mdef += Math.floor(cardB.mDef || 0);
+    totals.hp += Math.floor(cardB.maxHp || 0);
+    totals.mp += Math.floor(cardB.maxMp || 0);
+    totals.crit += Math.floor(cardB.critRate || 0);
+  }
+
   return totals;
 }
 
@@ -6995,6 +7021,25 @@ export function init() {
         if (btn) btn.textContent = isMuted ? '🔇 Muted' : '🔊 Audio';
       }
     };
+
+    // Registra todas as Cartas de Monstros colecionáveis no ALL_ITEMS do jogo
+    if (D() && D().ALL_ITEMS) {
+      for (const [cardId, cardDef] of Object.entries(MONSTER_CARDS)) {
+        if (!D().ALL_ITEMS[cardId]) {
+          D().ALL_ITEMS[cardId] = {
+            id: cardId,
+            name: cardDef.name,
+            slot: 'card',
+            type: 'monster_card',
+            rarity: cardDef.rarity || 'common',
+            tier: cardDef.rarity === 'sovereign' ? 6 : (cardDef.rarity === 'primordial' ? 5 : (cardDef.rarity === 'mythic' ? 4 : (cardDef.rarity === 'legendary' ? 3 : 2))),
+            price: cardDef.level ? cardDef.level * 250 : 2500,
+            icon: 'gradespecial/jewels/jewel_ring_of_baium.png',
+            desc: `Carta Colecionável do Monstro ${cardDef.monster}. Absorva no Codex para bônus passivos permanentes em toda a conta!`
+          };
+        }
+      }
+    }
 
     attachGlobalErrorHandlers();
     bindEvents();

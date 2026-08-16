@@ -9,6 +9,7 @@
 import { D } from '../core/GameConfig.js';
 import { RACES, CLASSES, RACE_BASE_ATTRIBUTES } from '../data/races.js';
 import { CODEX_SETS, BOSS_DOLLS } from '../data/codex.js';
+import { CardCodexService } from '../services/CardCodexService.js';
 import { FortressService } from '../services/FortressService.js';
 import { CombatPowerService } from '../services/CombatPowerService.js';
 import { SubclassCertificationService } from '../services/SubclassCertificationService.js';
@@ -392,6 +393,19 @@ export function getCodexBonuses(state) {
       }
     }
   }
+
+  // Bônus passivos acumulados das Cartas de Monstros no Codex
+  if (typeof CardCodexService !== 'undefined' && CardCodexService.getCodexPassiveBonuses) {
+    const cardB = CardCodexService.getCodexPassiveBonuses(state);
+    totals.atk += Math.floor(cardB.pAtk || 0);
+    totals.def += Math.floor(cardB.pDef || 0);
+    totals.matk += Math.floor(cardB.mAtk || 0);
+    totals.mdef += Math.floor(cardB.mDef || 0);
+    totals.hp += Math.floor(cardB.maxHp || 0);
+    totals.mp += Math.floor(cardB.maxMp || 0);
+    totals.crit += Math.floor(cardB.critRate || 0);
+  }
+
   return totals;
 }
 

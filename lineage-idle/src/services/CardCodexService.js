@@ -2,71 +2,162 @@
  * CardCodexService.js — Gerenciador do Sistema de Cartas de Monstros, Codex e Engaste em Equipamentos.
  */
 
-export const MONSTER_CARDS = {
-  card_ant_queen: {
-    id: 'card_ant_queen',
+import { MONSTERS } from '../data/monsters.js';
+import { RAID_BOSSES } from '../data/raids.js';
+
+export const MONSTER_CARDS = {};
+
+// 1. Chefes Épicos & Raid Bosses com stats de alta linhagem
+const EPIC_RAID_CARDS = {
+  card_queen_ant: {
+    id: 'card_queen_ant',
     name: 'Carta Rainha Formiga (Queen Ant)',
     monster: 'Queen Ant',
     rarity: 'epic',
-    dropChance: 0.005, // 0.5%
+    dropChance: 0.05,
     socketBonus: { critRate: 15, critDmg: 0.12 },
-    codexBonus: { pAtk: 25, critDmg: 0.03 }
+    codexBonus: { pAtk: 35, critDmg: 0.04, maxHp: 150 }
   },
   card_core: {
     id: 'card_core',
-    name: 'Carta Core de Cruma',
+    name: 'Carta Core da Torre Cruma',
     monster: 'Core',
     rarity: 'epic',
-    dropChance: 0.005,
+    dropChance: 0.05,
     socketBonus: { mAtk: 40, castSpeed: 10 },
-    codexBonus: { mAtk: 30, mpRegen: 5 }
+    codexBonus: { mAtk: 35, mpRegen: 8, maxMp: 120 }
   },
   card_orfen: {
     id: 'card_orfen',
     name: 'Carta Orfen do Mar de Esporos',
     monster: 'Orfen',
     rarity: 'epic',
-    dropChance: 0.005,
+    dropChance: 0.05,
     socketBonus: { healPower: 25, maxMp: 200 },
-    codexBonus: { healPower: 15, mDef: 20 }
+    codexBonus: { healPower: 20, mDef: 30, maxHp: 200 }
   },
   card_zaken: {
     id: 'card_zaken',
-    name: 'Carta Zaken o Imortal',
+    name: 'Carta Capitão Pirata Zaken',
     monster: 'Zaken',
     rarity: 'legendary',
-    dropChance: 0.002,
+    dropChance: 0.04,
     socketBonus: { lifesteal: 0.08, eva: 12 },
-    codexBonus: { lifesteal: 0.03, pAtk: 45 }
+    codexBonus: { lifesteal: 0.04, pAtk: 50, pDef: 35 }
   },
   card_baium: {
     id: 'card_baium',
     name: 'Carta Imperador Baium',
     monster: 'Baium',
     rarity: 'mythic',
-    dropChance: 0.001,
+    dropChance: 0.03,
     socketBonus: { pAtk: 120, atkSpeed: 15, critRate: 20 },
-    codexBonus: { pAtk: 60, mAtk: 60, allStats: 5 }
+    codexBonus: { pAtk: 80, mAtk: 80, allStats: 6 }
+  },
+  card_barakiel: {
+    id: 'card_barakiel',
+    name: 'Carta Flame of Splendor Barakiel',
+    monster: 'Flame of Splendor Barakiel',
+    rarity: 'legendary',
+    dropChance: 0.04,
+    socketBonus: { holyDmg: 30, pAtk: 90 },
+    codexBonus: { holyDmg: 15, pAtk: 45, pDef: 40 }
+  },
+  card_frintezza: {
+    id: 'card_frintezza',
+    name: 'Carta Príncipe Frintezza & Halisha',
+    monster: 'Frintezza',
+    rarity: 'mythic',
+    dropChance: 0.02,
+    socketBonus: { darkDmg: 40, castSpeed: 15, critDmg: 0.15 },
+    codexBonus: { darkDmg: 20, mAtk: 90, maxHp: 500 }
   },
   card_antharas: {
     id: 'card_antharas',
     name: 'Carta Dragão da Terra Antharas',
     monster: 'Antharas',
     rarity: 'primordial',
-    dropChance: 0.0005,
+    dropChance: 0.01,
     socketBonus: { pDef: 250, maxHp: 1500, earthResist: 40 },
-    codexBonus: { maxHp: 800, pDef: 100, earthResist: 20 }
+    codexBonus: { maxHp: 1200, pDef: 120, earthResist: 25 }
   },
   card_valakas: {
     id: 'card_valakas',
     name: 'Carta Dragão do Fogo Valakas',
     monster: 'Valakas',
     rarity: 'sovereign',
-    dropChance: 0.0002,
+    dropChance: 0.005,
     socketBonus: { pAtk: 350, mAtk: 350, fireDmg: 50 },
-    codexBonus: { pAtk: 150, mAtk: 150, fireDmg: 25 }
+    codexBonus: { pAtk: 200, mAtk: 200, fireDmg: 30, maxHp: 2000 }
   }
 };
+
+// Registra cartas de raid épicas
+Object.assign(MONSTER_CARDS, EPIC_RAID_CARDS);
+// Aliases de compatibilidade
+MONSTER_CARDS.card_ant_queen = MONSTER_CARDS.card_queen_ant;
+
+// 2. Constrói automaticamente cartas para TODOS os monstros regulares e de zona
+for (const [monId, m] of Object.entries(MONSTERS || {})) {
+  const cardId = `card_${monId}`;
+  if (MONSTER_CARDS[cardId]) continue; // já registrado como boss supremo
+
+  const lvl = m.lvl || m.level || 1;
+  const isBoss = Boolean(m.boss);
+  const isElite = Boolean(m.elite);
+
+  // Determinação de raridade
+  let rarity = 'common';
+  if (isBoss) {
+    rarity = lvl >= 80 ? 'epic' : (lvl >= 45 ? 'rare' : 'uncommon');
+  } else if (isElite || lvl >= 80) {
+    rarity = 'rare';
+  } else if (lvl >= 40) {
+    rarity = 'uncommon';
+  }
+
+  // Chance de drop
+  let dropChance = isBoss ? 0.03 : (isElite ? 0.015 : 0.006);
+
+  // Bônus passivo para a conta (Codex)
+  const codexBonus = {};
+  if (m.matk > m.atk || m.magic) {
+    codexBonus.mAtk = Math.max(2, Math.floor(lvl * 0.75));
+    codexBonus.mDef = Math.max(1, Math.floor(lvl * 0.4));
+  } else {
+    codexBonus.pAtk = Math.max(2, Math.floor(lvl * 0.7));
+    codexBonus.pDef = Math.max(1, Math.floor(lvl * 0.45));
+  }
+
+  codexBonus.maxHp = Math.max(10, Math.floor(lvl * 8));
+
+  if (m.element === 'fire') codexBonus.fireDmg = Math.max(1, Math.floor(lvl * 0.15));
+  if (m.element === 'water') codexBonus.waterDmg = Math.max(1, Math.floor(lvl * 0.15));
+  if (m.element === 'earth') codexBonus.earthDmg = Math.max(1, Math.floor(lvl * 0.15));
+  if (m.element === 'dark') codexBonus.darkDmg = Math.max(1, Math.floor(lvl * 0.15));
+  if (m.element === 'holy') codexBonus.holyDmg = Math.max(1, Math.floor(lvl * 0.15));
+  if (m.traits?.includes('lifesteal')) codexBonus.lifesteal = 0.01;
+  if (m.traits?.includes('bleed')) codexBonus.critRate = Math.max(1, Math.floor(lvl * 0.05));
+
+  // Bônus de engaste
+  const socketBonus = {
+    pAtk: Math.max(4, Math.floor(lvl * 1.2)),
+    pDef: Math.max(3, Math.floor(lvl * 0.9)),
+    maxHp: Math.max(20, Math.floor(lvl * 15))
+  };
+
+  MONSTER_CARDS[cardId] = {
+    id: cardId,
+    name: `Carta de ${m.name}`,
+    monster: m.name,
+    monsterId: monId,
+    level: lvl,
+    rarity,
+    dropChance,
+    socketBonus,
+    codexBonus
+  };
+}
 
 export class CardCodexService {
   /**
@@ -84,13 +175,38 @@ export class CardCodexService {
     const current = accountState.cardCodex[cardId] || { rank: 0, count: 0 };
 
     current.count += 1;
-    current.rank = Math.min(5, Math.floor(current.count / 3) + 1);
+    current.rank = Math.min(5, Math.floor(current.count / 2) + 1);
     accountState.cardCodex[cardId] = current;
 
     hooks.log?.(`🃏 Carta **${cardDef.name}** absorvida no Codex da Conta! (Rank ${current.rank})`, 'gain');
     hooks.onUpdate?.();
 
     return { success: true, rank: current.rank, totalCards: current.count };
+  }
+
+  /**
+   * Retorna os bônus passivos acumulados de todas as cartas absorvidas no Codex da Conta.
+   * @param {Object} accountState
+   * @returns {Object}
+   */
+  static getCodexPassiveBonuses(accountState) {
+    const totals = { pAtk: 0, mAtk: 0, pDef: 0, mDef: 0, maxHp: 0, maxMp: 0, critRate: 0, critDmg: 0, lifesteal: 0, allStats: 0 };
+    const cardCodex = accountState?.cardCodex || {};
+
+    for (const [cardId, data] of Object.entries(cardCodex)) {
+      if (!data || data.rank <= 0) continue;
+      const def = MONSTER_CARDS[cardId];
+      if (!def || !def.codexBonus) continue;
+
+      const rankMultiplier = 1 + (data.rank - 1) * 0.25; // +25% por rank adicional
+      for (const [stat, val] of Object.entries(def.codexBonus)) {
+        if (typeof val === 'number') {
+          totals[stat] = (totals[stat] || 0) + (val * rankMultiplier);
+        }
+      }
+    }
+
+    return totals;
   }
 
   /**
@@ -114,3 +230,4 @@ export class CardCodexService {
     return { success: true, slottedCards: itemInstance.slottedCards };
   }
 }
+
