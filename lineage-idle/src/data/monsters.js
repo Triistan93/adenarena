@@ -105,6 +105,18 @@ export const MONSTERS = {
   swiftBlaze: { name: 'Swift Blaze Fiend', lvl: 72, hp: 16500, atk: 910, def: 300, eva: 28, xp: 20000, sp: 210, gold: [6200, 13000] },
   cerberus: { name: 'Cerberus Hell Guardian', lvl: 75, hp: 58000, atk: 1350, def: 520, eva: 14, xp: 42000, sp: 450, gold: [18000, 36000], boss: true },
 
+  // Valley of Saints (Level 72-75 — Quest Noblesse Parte 1)
+  saintEye: { name: 'Eye of Splendor', lvl: 72, hp: 19500, atk: 880, def: 340, eva: 15, matk: 950, mdef: 420, xp: 21000, sp: 220, gold: [6500, 13500], element: 'holy' },
+  saintGuardian: { name: 'Guardian of Splendor', lvl: 73, hp: 23000, atk: 950, def: 370, eva: 10, xp: 23500, sp: 240, gold: [7200, 14500], element: 'holy' },
+  splendorLight: { name: 'Splendor Light Sovereign', lvl: 74, hp: 25000, atk: 1020, def: 390, eva: 14, xp: 26000, sp: 260, gold: [8000, 16000], element: 'holy' },
+  splendorKnight: { name: 'High Paladin of Splendor', lvl: 75, hp: 62000, atk: 1450, def: 560, eva: 12, xp: 48000, sp: 480, gold: [20000, 40000], element: 'holy', boss: true },
+
+  // Swamp of Screams (Level 74-76 — Quest Noblesse Parte 2)
+  swampStrikers: { name: 'Stakato Screamer', lvl: 74, hp: 24000, atk: 990, def: 380, eva: 18, xp: 25000, sp: 250, gold: [7800, 15500], element: 'water' },
+  corruptedSpiders: { name: 'Swamp Spider Matriarch', lvl: 75, hp: 26500, atk: 1050, def: 400, eva: 20, xp: 27500, sp: 270, gold: [8500, 17000], element: 'dark' },
+  screamingSouls: { name: 'Tormented Screaming Soul', lvl: 75, hp: 22000, atk: 600, def: 350, eva: 22, matk: 1200, mdef: 500, xp: 28000, sp: 280, gold: [8800, 17500], element: 'dark', magic: true },
+  swampAbomination: { name: 'Swamp Abomination Titan', lvl: 76, hp: 68000, atk: 1550, def: 590, eva: 14, xp: 52000, sp: 520, gold: [22000, 44000], boss: true },
+
   // Aden City (Level 76-79)
   royalKnight: { name: 'Aden Royal Guard', lvl: 76, hp: 22000, atk: 980, def: 380, eva: 8, xp: 24000, sp: 240, gold: [7500, 15000] },
   highMage: { name: 'Aden High Spellweaver', lvl: 78, hp: 19000, atk: 450, def: 320, eva: 10, matk: 1150, mdef: 450, xp: 28000, sp: 270, gold: [8800, 18000] },

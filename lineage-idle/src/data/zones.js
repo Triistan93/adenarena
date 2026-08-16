@@ -10,7 +10,7 @@
 export const SAGAS = [
   { id: 'interlude', name: 'Interlude', level: 0, unlocksAt: 0, zones: ['talkingIsland', 'elvenForest', 'darkForest', 'orcVillage', 'dwarvenMine', 'kamaelLair', 'ruinedOutpost', 'howlingMoor'] },
   { id: 'prelude', name: 'Prelude of War', level: 1, unlocksAt: 20, zones: ['giranOutskirts', 'orcenRuins', 'forsakenCrypt', 'blackCitadel'] },
-  { id: 'saga1', name: 'Saga I: The Awakening', level: 2, unlocksAt: 40, zones: ['gludioCastle', 'wolfMountain', 'riftOfTheVoid', 'emeraldGrove', 'underworldGate'] },
+  { id: 'saga1', name: 'Saga I: The Awakening', level: 2, unlocksAt: 40, zones: ['gludioCastle', 'wolfMountain', 'riftOfTheVoid', 'emeraldGrove', 'underworldGate', 'valleyOfSaints', 'swampOfScreams'] },
   { id: 'saga2', name: 'Saga II: The Shadow', level: 3, unlocksAt: 76, zones: ['adenCity', 'dragonValley'] },
   { id: 'saga3', name: 'Saga III: Realm of the Gods', level: 4, unlocksAt: 85, zones: ['imperialTomb', 'antharasLair', 'forgeOfGods'] }
 ];
@@ -37,6 +37,8 @@ export const ZONES = {
   riftOfTheVoid:   { name: 'Rift of the Void', level: 50, monsters: ['voidCreature', 'voidBrute', 'voidStalker', 'beholder'], boss: 'voidDragonLord', shop: 'dragonValley', town: false },
   emeraldGrove:    { name: 'Emerald Grove', level: 60, monsters: ['emeraldSnake', 'emeraldDragon'], boss: 'fafurion', shop: 'dragonValley', town: false },
   underworldGate:  { name: 'Gates of the Underworld', level: 70, monsters: ['blazingWerewolf', 'swiftBlaze'], boss: 'cerberus', shop: 'dragonValley', town: false },
+  valleyOfSaints:  { name: 'Valley of Saints', level: 72, monsters: ['saintEye', 'saintGuardian', 'splendorLight'], boss: 'splendorKnight', shop: 'adenCity', town: false },
+  swampOfScreams:  { name: 'Swamp of Screams', level: 74, monsters: ['swampStrikers', 'corruptedSpiders', 'screamingSouls'], boss: 'swampAbomination', shop: 'adenCity', town: false },
   adenCity: { name: 'Aden City', level: 76, monsters: ['royalKnight', 'highMage'], boss: 'adenCommander', shop: 'adenCity', town: true },
   dragonValley: { name: 'Dragon Valley', level: 80, monsters: ['dragon', 'dragonKnight', 'frostKnight', 'frostLordDragon'], boss: 'lindvior', shop: 'dragonValley', town: true },
   imperialTomb:    { name: 'Imperial Tomb', level: 85, monsters: ['tombGuardian', 'sepulcherArchon', 'undeadKnight', 'lichLord'], boss: 'deathKing', shop: 'adenCity', town: false },
@@ -69,6 +71,8 @@ export const ZONE_BACKGROUNDS = {
   riftOfTheVoid:  '/img/Maps/map.png',
   emeraldGrove:   '/img/Maps/elvenForest.png',
   underworldGate: '/img/Maps/map.png',
+  valleyOfSaints: '/img/Maps/gludioCastle.png',
+  swampOfScreams: '/img/Maps/DarkElvenForest.png',
   adenCity:       '/img/Maps/gludioCastle.png',
   dragonValley:   '/img/Maps/map.png',
   imperialTomb:   '/img/Maps/gludioCastle.png',
@@ -81,5 +85,6 @@ export const ZONE_BACKGROUNDS = {
   frintezza:  '/img/Maps/gludioCastle.png',
   baium:      '/img/Maps/gludioCastle.png',
   antharas:   '/img/Maps/map.png',
-  valakas:    '/img/Maps/map.png'
+  valakas:    '/img/Maps/map.png',
+  barakiel:   '/img/Maps/gludioCastle.png'
 };

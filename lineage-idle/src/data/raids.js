@@ -298,8 +298,9 @@ export const RAID_BOSSES = {
       { name: 'Barreira de Fogo Puro', triggerHp: 0.25, healPercent: 0.15, text: '🛡️ Barakiel invocou a Barreira de Fogo Puro!' }
     ],
     drops: [
+      { itemId: 'staff_goddess_rain_song', name: 'Staff of Goddess: Rain Song (Quest)', chance: 1.0 },
       { itemId: 'staff_of_goddess', name: 'Staff of Goddess: Rain Song (Quest)', chance: 1.0 },
-      { itemId: 'scroll_blessed_weapon_s', name: 'Blessed Scroll: Enchant Weapon (S)', chance: 0.50 },
+      { itemId: 'scroll_blessed_weapon', name: 'Blessed Scroll: Enchant Weapon (S)', chance: 0.50 },
       { itemId: 'adena_coins', count: 20, name: '20x Aden Coins (AC)', chance: 0.80 }
     ]
   }
