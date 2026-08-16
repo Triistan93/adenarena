@@ -86,7 +86,11 @@ import {
 
 import {
   buyItem as serviceBuyItem,
-  buyMysticItem as serviceBuyMysticItem
+  buyMysticItem as serviceBuyMysticItem,
+  sellItem as serviceSellItem,
+  sellAllJunk as serviceSellAllJunk,
+  buybackItem as serviceBuybackItem,
+  rerollMysticStock as serviceRerollMysticStock
 } from './src/services/ShopService.js';
 
 import {
@@ -1510,7 +1514,18 @@ function showSkillTooltip(skillId, e) {
 }
 
 function updateShopUI() {
-  return uiUpdateShopUI(state, { buyItem, buyMysticItem });
+  return uiUpdateShopUI(state, {
+    buyItem,
+    buyMysticItem,
+    sellItem: (uid, qty) => serviceSellItem(state, uid, qty, { log, updateAllUI, save }),
+    sellAllJunk: () => serviceSellAllJunk(state, { log, updateAllUI, save }),
+    buybackItem: (idx) => serviceBuybackItem(state, idx, { log, updateAllUI, save }),
+    rerollMysticStock: (rollStockFn) => serviceRerollMysticStock(state, rollStockFn, { log, updateAllUI, save }),
+    switchTab: (tabId) => {
+      const tabBtn = (ROOT || document).querySelector(`.menu-btn[data-tab="${tabId}"]`);
+      if (tabBtn) tabBtn.click();
+    }
+  });
 }
 function updateCraftUI() {
   return uiUpdateCraftUI(state, { craftItem });

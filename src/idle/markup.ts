@@ -490,7 +490,7 @@ export const IDLE_MARKUP = `
             <div class="shop-head">
               <div>
                 <h3 style="margin:0; font-family:'Cinzel',serif; color:var(--gilt-bright);">Guilda dos Mercadores de Aden</h3>
-                <p style="margin:2px 0 0 0; font-size:11px; color:var(--text-muted);">Comércio imperial de equipamentos, consumíveis e relíquias místicas</p>
+                <p style="margin:2px 0 0 0; font-size:11px; color:var(--text-muted);">Comércio imperial de equipamentos, consumíveis, tomos arcanos e relíquias místicas</p>
               </div>
               <div style="display:flex; flex-direction:column; align-items:flex-end; gap:4px;">
                 <span class="shop-gold-pill">🪙 <span id="shop-gold">0</span> Adena</span>
@@ -500,16 +500,24 @@ export const IDLE_MARKUP = `
 
             <!-- Subtabs: Main Category Tabs -->
             <div class="shop-subtabs">
-              <button class="shop-subtab active" data-shoptab="gear">⚔️ Equipamentos <span class="tab-tag-rarity tag-common">Cinza</span></button>
-              <button class="shop-subtab" data-shoptab="potions">🧪 Consumíveis <span class="tab-tag-rarity tag-common">Cinza</span></button>
-              <button class="shop-subtab" data-shoptab="class">🎖️ Ordem de Classe <span class="tab-tag-rarity tag-rare">Até Azul</span></button>
-              <button class="shop-subtab" data-shoptab="mystic">✦ Mercador Místico <span class="tab-tag-rarity tag-mystic">RNG Ancestral</span></button>
+              <button class="shop-subtab active" data-shoptab="gear">⚔️ Armaria Imperial</button>
+              <button class="shop-subtab" data-shoptab="potions">🧪 Mercearia &amp; Shots</button>
+              <button class="shop-subtab" data-shoptab="spellbooks">📜 Livraria Arcana</button>
+              <button class="shop-subtab" data-shoptab="mystic">🌟 Empório Místico</button>
+              <button class="shop-subtab" data-shoptab="currencies">💎 Câmbio de Moedas</button>
+              <button class="shop-subtab" data-shoptab="sell" style="border-color:rgba(239,68,68,0.4); color:#fca5a5;">💰 Venda &amp; Recompra</button>
             </div>
 
-            <!-- Filters Bar (Grade & Slot Filters) -->
-            <div class="shop-filter-bar" id="shop-filter-bar">
+            <!-- Search & Filters Bar -->
+            <div class="shop-filter-bar" id="shop-filter-bar" style="display:flex; flex-direction:column; gap:8px; margin-bottom:12px;">
+              <!-- Global Real-Time Search Bar -->
+              <div style="display:flex; gap:8px; align-items:center; width:100%;">
+                <input type="text" id="shop-search-input" placeholder="🔍 Buscar por nome (ex: Bow, Potion, Soulshot, Zubei, Spellbook)..." style="flex:1; min-width:200px; padding:8px 14px; border-radius:6px; border:1px solid rgba(212,175,55,0.3); background:rgba(0,0,0,0.6); color:#fff; font-size:13px;" />
+                <button id="shop-clear-search-btn" class="inv-batch-btn" style="display:none; padding:7px 12px;">✕ Limpar</button>
+              </div>
+
               <!-- Grade Filter Row -->
-              <div class="filter-row">
+              <div class="filter-row" id="shop-grade-filter-row">
                 <span class="filter-label">Nível / Grau:</span>
                 <div class="filter-group" id="shop-grade-filters">
                   <button class="shop-filter-btn active" data-shopgrade="all">Todos</button>
@@ -523,7 +531,7 @@ export const IDLE_MARKUP = `
               </div>
 
               <!-- Slot Filter Row -->
-              <div class="filter-row" id="shop-slot-filter-row" style="margin-top:6px;">
+              <div class="filter-row" id="shop-slot-filter-row">
                 <span class="filter-label">Tipo de Item:</span>
                 <div class="filter-group" id="shop-slot-filters">
                   <button class="shop-filter-btn active" data-shopslot="all">Todos os Tipos</button>
@@ -542,34 +550,20 @@ export const IDLE_MARKUP = `
               </div>
 
               <!-- Batch Quantity Row for Potions & Consumables -->
-              <div class="filter-row" id="shop-batch-row" style="margin-top:6px; display:none;">
+              <div class="filter-row" id="shop-batch-row" style="display:none;">
                 <span class="filter-label">Quantidade:</span>
-                <div class="filter-group" id="shop-batch-filters">
+                <div class="filter-group" id="shop-batch-filters" style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
                   <button class="shop-filter-btn active" data-shopqty="1">1x</button>
-                  <button class="shop-filter-btn" data-shopqty="5">5x</button>
                   <button class="shop-filter-btn" data-shopqty="10">10x</button>
-                  <button class="shop-filter-btn" data-shopqty="50">50x</button>
                   <button class="shop-filter-btn" data-shopqty="100">100x</button>
+                  <button class="shop-filter-btn" data-shopqty="1000">1000x</button>
+                  <button class="shop-filter-btn" data-shopqty="5000">5000x</button>
                 </div>
               </div>
             </div>
 
-            <!-- Merchant Content List -->
-            <div id="shop-tab-normal-content" class="shop-tab-content active">
-              <div class="shop-list" id="shop-list"></div>
-            </div>
-
-            <!-- Mystic Merchant Content -->
-            <div id="shop-tab-mystic-content" class="shop-tab-content">
-              <div class="mystic-shop-banner">
-                <div class="mystic-banner-info">
-                  <h4>✨ Mercado Místico Secreto de Aden</h4>
-                  <p>Equipamentos Raros, Épicos e Lendários diretamente dos baús imperiais. Estoque rotativo a cada 3 horas!</p>
-                </div>
-                <button id="manual-refresh-mystic-btn" class="inv-batch-btn gold-glow-btn" title="Atualizar estoque imediatamente (Custo: 5.000 Adena)">🔄 Forçar Restoque (5.000 Adena)</button>
-              </div>
-              <div class="shop-list" id="mystic-shop-list"></div>
-            </div>
+            <!-- Merchant Content List Container -->
+            <div class="shop-list" id="shop-list"></div>
           </div>
 
           <!-- Craft Tab -->

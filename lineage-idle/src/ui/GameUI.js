@@ -2227,6 +2227,7 @@ let currentShopTab = 'gear';
 let currentShopGrade = 'all';
 let currentShopSlot = 'all';
 let currentShopQty = 1;
+let currentShopSearch = '';
 
 export function updateShopUI(state, callbacks = {}) {
   const root = getRoot();
@@ -2236,7 +2237,7 @@ export function updateShopUI(state, callbacks = {}) {
   const container = findElement('shop-items-container') || findElement('shop-list');
   if (!container) return;
 
-  // Always re-bind subtabs & filter button listeners to ensure click handlers work on tab switches
+  // 1. Re-vincular subtabs da loja
   root.querySelectorAll('.shop-subtab').forEach(btn => {
     const tabName = btn.dataset.shoptab || 'gear';
     btn.classList.toggle('active', tabName === currentShopTab);
@@ -2248,6 +2249,30 @@ export function updateShopUI(state, callbacks = {}) {
     };
   });
 
+  // 2. Barra de Busca em Tempo Real
+  const searchInput = root.querySelector('#shop-search-input');
+  const clearSearchBtn = root.querySelector('#shop-clear-search-btn');
+  if (searchInput && !searchInput._bound) {
+    searchInput._bound = true;
+    searchInput.oninput = (e) => {
+      currentShopSearch = (e.target.value || '').trim().toLowerCase();
+      if (clearSearchBtn) {
+        clearSearchBtn.style.display = currentShopSearch ? 'inline-block' : 'none';
+      }
+      updateShopUI(state, callbacks);
+    };
+  }
+  if (clearSearchBtn && !clearSearchBtn._bound) {
+    clearSearchBtn._bound = true;
+    clearSearchBtn.onclick = () => {
+      if (searchInput) searchInput.value = '';
+      currentShopSearch = '';
+      clearSearchBtn.style.display = 'none';
+      updateShopUI(state, callbacks);
+    };
+  }
+
+  // 3. Filtros de Grau (Grade)
   root.querySelectorAll('#shop-grade-filters .shop-filter-btn').forEach(btn => {
     const gradeCode = btn.dataset.shopgrade || 'all';
     btn.classList.toggle('active', gradeCode === currentShopGrade);
@@ -2259,6 +2284,7 @@ export function updateShopUI(state, callbacks = {}) {
     };
   });
 
+  // 4. Filtros de Slot
   root.querySelectorAll('#shop-slot-filters .shop-filter-btn').forEach(btn => {
     const slotCode = btn.dataset.shopslot || 'all';
     btn.classList.toggle('active', slotCode === currentShopSlot);
@@ -2270,6 +2296,7 @@ export function updateShopUI(state, callbacks = {}) {
     };
   });
 
+  // 5. Filtros de Quantidade
   root.querySelectorAll('#shop-batch-filters .shop-filter-btn').forEach(btn => {
     const qtyVal = parseInt(btn.dataset.shopqty, 10) || 1;
     btn.classList.toggle('active', qtyVal === currentShopQty);
@@ -2281,26 +2308,30 @@ export function updateShopUI(state, callbacks = {}) {
     };
   });
 
-  // Toggle batch row visibility based on active subtab
+  // 6. Visibilidade condicional das linhas de filtros
+  const filterBar = root.querySelector('#shop-filter-bar');
+  const gradeRow = root.querySelector('#shop-grade-filter-row');
+  const slotRow = root.querySelector('#shop-slot-filter-row');
   const batchRow = root.querySelector('#shop-batch-row');
+  const mysticTimerEl = root.querySelector('#mystic-shop-timer');
+  const mysticCountdown = root.querySelector('#mystic-timer-countdown');
+
+  if (filterBar) {
+    filterBar.style.display = (currentShopTab === 'currencies' || currentShopTab === 'sell') ? 'none' : 'flex';
+  }
+  if (gradeRow) {
+    gradeRow.style.display = (currentShopTab === 'gear' || currentShopTab === 'mystic') ? 'flex' : 'none';
+  }
+  if (slotRow) {
+    slotRow.style.display = (currentShopTab === 'gear' || currentShopTab === 'mystic') ? 'flex' : 'none';
+  }
   if (batchRow) {
     batchRow.style.display = (currentShopTab === 'potions') ? 'flex' : 'none';
   }
 
-  // Toggle slot filter row visibility
-  const slotRow = root.querySelector('#shop-slot-filter-row');
-  if (slotRow) {
-    slotRow.style.display = (currentShopTab === 'gear' || currentShopTab === 'mystic') ? 'flex' : 'none';
-  }
-
-  // Toggle mystic timer visibility
-  const mysticTimerEl = root.querySelector('#mystic-shop-timer');
-  const mysticCountdown = root.querySelector('#mystic-timer-countdown');
-
+  // 7. Timer do Mercador Místico (3 horas)
   const now = Date.now();
   const THREE_HOURS = 3 * 3600 * 1000;
-
-  // Initialize or check Mystic Shop 3-hour rotation reset
   if (!state.mysticShopLastReset || (now - state.mysticShopLastReset >= THREE_HOURS)) {
     state.mysticShopLastReset = now;
     state.mysticShopInventory = rollMysticStock();
@@ -2319,38 +2350,231 @@ export function updateShopUI(state, callbacks = {}) {
 
   const gData = D();
   const allItems = gData?.ALL_ITEMS || {};
-  let itemsToDisplay = [];
-
   const charLvl = state.level || 1;
 
+  // ═══════════════════════════════════════════════════════════════════════════
+  // RENDERIZAÇÃO DA SUB-ABA: VENDA & RECOMPRA (SELL / BUYBACK)
+  // ═══════════════════════════════════════════════════════════════════════════
+  if (currentShopTab === 'sell') {
+    const inv = state.inventory || [];
+    const buyback = state.buybackQueue || [];
+    const selectedSet = getSelectedSet(state);
+
+    let html = `
+      <div style="background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.3); border-radius:10px; padding:12px 16px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+        <div>
+          <h4 style="margin:0 0 4px 0; color:#fca5a5; font-family:'Cinzel',serif;">🧹 Balcão de Vendas &amp; Descarte</h4>
+          <p style="margin:0; font-size:11px; color:var(--text-muted);">Venda itens não utilizados da sua mochila pelo valor canônico de 50% de Adena. Itens equipados e itens travados com 🔒 (Favoritos) estão protegidos.</p>
+        </div>
+        <button class="inv-batch-btn" data-sell-junk="true" style="background:#ef4444; color:#fff; border:none; padding:8px 16px; font-weight:bold; cursor:pointer;">
+          🧹 Vender Todos os Comuns (Junk Sell)
+        </button>
+      </div>
+    `;
+
+    // Seção de Recompra (Buyback)
+    if (buyback.length > 0) {
+      html += `
+        <div style="margin-bottom:16px;">
+          <h5 style="margin:0 0 8px 0; color:var(--gilt-bright); font-family:'Cinzel',serif;">↩️ Recompra Recente (Últimos ${buyback.length} itens)</h5>
+          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:8px;">
+            ${buyback.map((entry, idx) => {
+              const item = entry.itemCopy;
+              const def = allItems[item.itemId || item.id] || item;
+              return `
+                <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(0,0,0,0.5); border:1px solid rgba(212,175,55,0.25); border-radius:8px; padding:8px 12px;">
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <div style="width:36px; height:36px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.05); border-radius:6px;">
+                      ${getItemIcon(def)}
+                    </div>
+                    <div>
+                      <div style="font-weight:bold; font-size:12px; color:#fff;">${def.name} ${item.count > 1 ? `(${item.count}x)` : ''}</div>
+                      <div style="font-size:11px; color:#f59e0b;">💰 ${entry.sellPrice.toLocaleString()}g</div>
+                    </div>
+                  </div>
+                  <button class="inv-batch-btn" data-buyback="${idx}" style="padding:4px 10px; font-size:11px;">↩️ Recomprar</button>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    // Seção de Itens da Mochila para Venda
+    html += `<h5 style="margin:0 0 8px 0; color:#fff; font-family:'Cinzel',serif;">🎒 Itens na Mochila (${inv.length} itens)</h5>`;
+
+    if (inv.length === 0) {
+      html += `<div style="padding:30px; text-align:center; color:var(--text-muted); font-size:12px;">Sua mochila está vazia.</div>`;
+    } else {
+      html += `<div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)); gap:8px;">`;
+      html += inv.map(item => {
+        const def = allItems[item.itemId || item.id] || item;
+        const basePrice = def?.price || 100;
+        const sellUnit = Math.max(1, Math.floor(basePrice * 0.5));
+        const count = item.count || 1;
+        const totalSell = sellUnit * count;
+        const isLocked = selectedSet.has(item.uid);
+        const isEquipped = Boolean(item.equipped);
+
+        let actionHtml = '';
+        if (isEquipped) {
+          actionHtml = `<span style="font-size:11px; color:#10b981; font-weight:bold;">🛡️ Equipado</span>`;
+        } else if (isLocked) {
+          actionHtml = `<span style="font-size:11px; color:#f59e0b; font-weight:bold;">🔒 Bloqueado</span>`;
+        } else {
+          actionHtml = `
+            <div style="display:flex; gap:4px;">
+              <button class="inv-batch-btn" data-sell="${item.uid}" data-qty="1" style="padding:4px 8px; font-size:11px;">Vender 1x (${sellUnit.toLocaleString()}g)</button>
+              ${count > 1 ? `<button class="inv-batch-btn" data-sell="${item.uid}" data-qty="${count}" style="padding:4px 8px; font-size:11px;">Tudo (${totalSell.toLocaleString()}g)</button>` : ''}
+            </div>
+          `;
+        }
+
+        const gradeInfo = getItemGrade(def);
+        return `
+          <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:8px 12px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <div style="width:36px; height:36px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.05); border-radius:6px;">
+                ${getItemIcon(def)}
+              </div>
+              <div>
+                <div style="font-weight:bold; font-size:12px; color:#fff;">
+                  ${item.enchant > 0 ? `+${item.enchant} ` : ''}${def.name}
+                  ${count > 1 ? `<span style="color:#a78bfa;">(${count}x)</span>` : ''}
+                </div>
+                <div style="font-size:11px; color:var(--text-muted); display:flex; gap:6px;">
+                  <span style="color:${gradeInfo.color};">${gradeInfo.label}</span>
+                  <span>💰 Venda: ${sellUnit.toLocaleString()}g</span>
+                </div>
+              </div>
+            </div>
+            <div>${actionHtml}</div>
+          </div>
+        `;
+      }).join('');
+      html += `</div>`;
+    }
+
+    container.innerHTML = html;
+    attachShopEvents(container, callbacks);
+    return;
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // RENDERIZAÇÃO DA SUB-ABA: CÂMBIO & MOEDAS ESPECIAIS (CURRENCIES)
+  // ═══════════════════════════════════════════════════════════════════════════
+  if (currentShopTab === 'currencies') {
+    const aaCount = Number(state.sevenSigns?.ancientAdena) || 0;
+    const olyTokens = Number(state.olympiadTokens) || 0;
+    const gladBadges = Number(state.colosseum?.badges) || 0;
+    const fortEpaulettes = Number(state.fortresses?.epaulettes) || 0;
+
+    container.innerHTML = `
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:12px; width:100%;">
+        <!-- Mammon & Sete Selos -->
+        <div style="background:rgba(30,20,50,0.6); border:1px solid rgba(168,85,247,0.4); border-radius:10px; padding:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
+            <div>
+              <h4 style="margin:0; color:#c084fc; font-family:'Cinzel',serif;">🏛️ Mercador &amp; Ferreiro de Mammon</h4>
+              <p style="margin:2px 0 0 0; font-size:11px; color:var(--text-muted);">Comércio exclusivo de Pedras Seladas e Ancient Adena (AA)</p>
+            </div>
+            <span style="font-size:20px;">🔮</span>
+          </div>
+          <div style="background:rgba(0,0,0,0.4); padding:8px 12px; border-radius:6px; margin-bottom:12px; font-size:13px; color:#fff;">
+            Saldo: <strong style="color:#a855f7;">${aaCount.toLocaleString()} Ancient Adena</strong>
+          </div>
+          <button class="inv-batch-btn" data-goto-tab="sevensigns" style="width:100%; padding:8px; font-weight:bold; background:rgba(168,85,247,0.2); border-color:#a855f7; color:#e9d5ff;">
+            Acessar Sete Selos &amp; Mammon ➔
+          </button>
+        </div>
+
+        <!-- Grand Olympiad -->
+        <div style="background:rgba(40,30,10,0.6); border:1px solid rgba(245,158,11,0.4); border-radius:10px; padding:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
+            <div>
+              <h4 style="margin:0; color:#fbbf24; font-family:'Cinzel',serif;">👑 Monumento de Heróis da Olimpíada</h4>
+              <p style="margin:2px 0 0 0; font-size:11px; color:var(--text-muted);">Armas da Infinidade, Mantos e Bênçãos de Nobre</p>
+            </div>
+            <span style="font-size:20px;">🏆</span>
+          </div>
+          <div style="background:rgba(0,0,0,0.4); padding:8px 12px; border-radius:6px; margin-bottom:12px; font-size:13px; color:#fff;">
+            Saldo: <strong style="color:#f59e0b;">${olyTokens.toLocaleString()} Olympiad Tokens</strong>
+          </div>
+          <button class="inv-batch-btn" data-goto-tab="olympiad" style="width:100%; padding:8px; font-weight:bold; background:rgba(245,158,11,0.2); border-color:#f59e0b; color:#fef3c7;">
+            Acessar Loja de Olimpíada ➔
+          </button>
+        </div>
+
+        <!-- Coliseu de Gladiadores -->
+        <div style="background:rgba(40,15,15,0.6); border:1px solid rgba(239,68,68,0.4); border-radius:10px; padding:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
+            <div>
+              <h4 style="margin:0; color:#f87171; font-family:'Cinzel',serif;">⚔️ Intendência dos Gladiadores</h4>
+              <p style="margin:2px 0 0 0; font-size:11px; color:var(--text-muted);">Joias de Sangue, Poções de Fúria e Títulos da Arena</p>
+            </div>
+            <span style="font-size:20px;">🛡️</span>
+          </div>
+          <div style="background:rgba(0,0,0,0.4); padding:8px 12px; border-radius:6px; margin-bottom:12px; font-size:13px; color:#fff;">
+            Saldo: <strong style="color:#ef4444;">${gladBadges.toLocaleString()} Gladiator Badges</strong>
+          </div>
+          <button class="inv-batch-btn" data-goto-tab="colosseum" style="width:100%; padding:8px; font-weight:bold; background:rgba(239,68,68,0.2); border-color:#ef4444; color:#fee2e2;">
+            Acessar Quartel do Coliseu ➔
+          </button>
+        </div>
+
+        <!-- Fortalezas -->
+        <div style="background:rgba(20,35,25,0.6); border:1px solid rgba(34,197,94,0.4); border-radius:10px; padding:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
+            <div>
+              <h4 style="margin:0; color:#4ade80; font-family:'Cinzel',serif;">🏰 Quartel-General de Fronteira</h4>
+              <p style="margin:2px 0 0 0; font-size:11px; color:var(--text-muted);">Braceletes de Aço, Mithril e Talismãs Militares</p>
+            </div>
+            <span style="font-size:20px;">🎖️</span>
+          </div>
+          <div style="background:rgba(0,0,0,0.4); padding:8px 12px; border-radius:6px; margin-bottom:12px; font-size:13px; color:#fff;">
+            Saldo: <strong style="color:#22c55e;">${fortEpaulettes.toLocaleString()} Knight's Epaulettes</strong>
+          </div>
+          <button class="inv-batch-btn" data-goto-tab="fortress" style="width:100%; padding:8px; font-weight:bold; background:rgba(34,197,94,0.2); border-color:#22c55e; color:#dcfce7;">
+            Acessar Quartel de Fortaleza ➔
+          </button>
+        </div>
+      </div>
+    `;
+    attachShopEvents(container, callbacks);
+    return;
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // CATÁLOGO REGULAR DE COMPRAS (GEAR, POTIONS, SPELLBOOKS, MYSTIC)
+  // ═══════════════════════════════════════════════════════════════════════════
+  let itemsToDisplay = [];
+
   if (currentShopTab === 'gear') {
-    // Mercador Comum — Apenas Equipamentos Comuns (Cinza)
     itemsToDisplay = Object.values(allItems).filter(def => {
       if (!def || !def.id || !def.slot) return false;
       const isEquip = ['weapon', 'armor', 'helmet', 'gloves', 'boots', 'legs', 'shield', 'ring', 'necklace', 'earring', 'belt', 'cloak'].includes(def.slot);
       return isEquip;
     }).map(def => ({ def, rarity: 'common' }));
   } else if (currentShopTab === 'potions') {
-    // Consumíveis & Poções (Cinza)
     itemsToDisplay = Object.values(allItems).filter(def => {
       if (!def || !def.id) return false;
       return def.slot === 'potion' || def.slot === 'consumable' || def.slot === 'powerup' || def.slot === 'scroll';
     }).map(def => ({ def, rarity: 'common' }));
-  } else if (currentShopTab === 'class') {
-    // Aba Classe — Até Azul (Raro)
+  } else if (currentShopTab === 'spellbooks') {
     itemsToDisplay = Object.values(allItems).filter(def => {
       if (!def || !def.id) return false;
-      return def.classReq || def.slot === 'class' || def.id.includes('scroll_of_') || def.id.includes('class_');
+      const isBook = def.slot === 'spellbook' || def.id.includes('spellbook') || def.id.includes('scroll_of_') || def.id.includes('tome_') || (def.desc && def.desc.toLowerCase().includes('aprender'));
+      return isBook;
     }).map(def => ({ def, rarity: 'rare' }));
   } else if (currentShopTab === 'mystic') {
-    // Mercador Místico Ancestral — Estoque Rotação 3h com RNG Raro / Épico (1/1000) / Lendário (1/10000)
     itemsToDisplay = (state.mysticShopInventory || []).map(item => {
       const def = allItems[item.itemId || item.id] || item;
       return { def, rarity: item.rarity || 'rare' };
     });
   }
 
-  // Deduplicate items by def.id to prevent double entries
+  // Deduplicação por ID
   const seenIds = new Set();
   itemsToDisplay = itemsToDisplay.filter(({ def }) => {
     if (!def || !def.id) return false;
@@ -2359,27 +2583,61 @@ export function updateShopUI(state, callbacks = {}) {
     return true;
   });
 
-  // Filter by Grade / Level
-  if (currentShopGrade !== 'all') {
+  // Filtro de Grau (Grade)
+  if (currentShopGrade !== 'all' && (currentShopTab === 'gear' || currentShopTab === 'mystic')) {
     itemsToDisplay = itemsToDisplay.filter(({ def }) => {
       const grade = getItemGradeCode(def);
       return grade === currentShopGrade;
     });
   }
 
-  // Filter by Slot / Type
-  if (currentShopSlot !== 'all') {
+  // Filtro de Slot
+  if (currentShopSlot !== 'all' && (currentShopTab === 'gear' || currentShopTab === 'mystic')) {
     itemsToDisplay = itemsToDisplay.filter(({ def }) => matchesSlotFilter(def, currentShopSlot));
   }
 
+  // Filtro de Busca Textual
+  if (currentShopSearch) {
+    itemsToDisplay = itemsToDisplay.filter(({ def }) => {
+      const nameMatch = (def.name || '').toLowerCase().includes(currentShopSearch);
+      const descMatch = (def.desc || '').toLowerCase().includes(currentShopSearch);
+      const slotMatch = (def.slot || '').toLowerCase().includes(currentShopSearch);
+      const idMatch = (def.id || '').toLowerCase().includes(currentShopSearch);
+      const gradeMatch = getItemGradeCode(def).toLowerCase() === currentShopSearch || getItemGrade(def).label.toLowerCase().includes(currentShopSearch);
+      return nameMatch || descMatch || slotMatch || idMatch || gradeMatch;
+    });
+  }
+
+  // Se estiver na aba Mystic, adicionar banner no topo
+  let headerHtml = '';
+  if (currentShopTab === 'mystic') {
+    headerHtml = `
+      <div style="background:linear-gradient(135deg, rgba(30,15,50,0.8), rgba(15,10,25,0.9)); border:1px solid rgba(168,85,247,0.4); border-radius:10px; padding:12px 16px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; width:100%;">
+        <div>
+          <h4 style="margin:0 0 4px 0; color:#e9d5ff; font-family:'Cinzel',serif;">✨ Empório Místico Ancestral</h4>
+          <p style="margin:0; font-size:11px; color:var(--text-muted);">Relíquias Raras, Épicas e Lendárias sorteadas a cada 3 horas. Você pode invocar novos itens imediatamente pagando uma taxa.</p>
+        </div>
+        <button class="inv-batch-btn" data-reroll-mystic="true" style="background:#a855f7; color:#fff; border:none; padding:8px 16px; font-weight:bold; cursor:pointer;">
+          🔮 Forçar Restoque (50.000g)
+        </button>
+      </div>
+    `;
+  }
+
   if (itemsToDisplay.length === 0) {
-    container.innerHTML = `<div style="padding:20px; text-align:center; color:var(--text-muted); font-size:12px;">Nenhum item encontrado para os filtros selecionados.</div>`;
+    container.innerHTML = `
+      ${headerHtml}
+      <div style="padding:30px; text-align:center; color:var(--text-muted); font-size:12px; width:100%;">
+        Nenhum item encontrado para os critérios selecionados.
+      </div>
+    `;
+    attachShopEvents(container, callbacks);
     return;
   }
 
   const batchQty = (currentShopTab === 'potions') ? currentShopQty : 1;
 
-  container.innerHTML = itemsToDisplay.map(({ def, rarity }) => {
+  container.innerHTML = headerHtml + itemsToDisplay.map(({ def, rarity }) => {
     if (!def) return '';
 
     const reqLvl = def.req?.level || def.reqLvl || 1;
@@ -2391,10 +2649,15 @@ export function updateShopUI(state, callbacks = {}) {
 
     const gradeInfo = getItemGrade(def);
     const statsText = buildShopStatsSummary(def);
+    const diffText = buildShopComparisonDelta(def, state);
 
     let buyText = `Comprar (${batchQty}x)`;
     if (!isLevelOk) buyText = `🔒 Requer Lv. ${reqLvl}`;
     else if (!canAfford) buyText = `💰 Gold Insuficiente`;
+
+    // Botão de "Máx" para consumíveis
+    const isStackable = def.slot === 'potion' || def.slot === 'consumable' || def.slot === 'scroll' || def.slot === 'powerup';
+    const maxAffordQty = isStackable ? Math.max(1, Math.floor((state.gold || 0) / basePrice)) : 1;
 
     return `
       <div class="shop-item-card grade-${gradeInfo.code} rarity-${rarity}">
@@ -2408,90 +2671,139 @@ export function updateShopUI(state, callbacks = {}) {
             ${rarity !== 'common' ? `<span class="tab-tag-rarity tag-${rarity}">${rarity.toUpperCase()}</span>` : ''}
           </div>
           ${statsText ? `<div class="shop-item-stats">${statsText}</div>` : ''}
+          ${diffText ? `<div class="shop-item-diff" style="margin-top:2px; font-size:11px;">${diffText}</div>` : ''}
           <div class="shop-item-desc">${def.desc || ''}</div>
         </div>
         <div class="shop-item-action">
           <div class="shop-item-price-tag">💰 ${totalPrice.toLocaleString()} Gold</div>
-          <button class="buy-item-btn" data-buy="${def.id}" data-qty="${batchQty}" data-rarity="${rarity}" ${(!canAfford || !isLevelOk) ? 'disabled' : ''}>
-            ${buyText}
-          </button>
+          <div style="display:flex; gap:4px; align-items:center;">
+            <button class="buy-item-btn" data-buy="${def.id}" data-qty="${batchQty}" data-rarity="${rarity}" ${(!canAfford || !isLevelOk) ? 'disabled' : ''}>
+              ${buyText}
+            </button>
+            ${isStackable && canAfford && maxAffordQty > batchQty ? `
+              <button class="inv-batch-btn" data-buy="${def.id}" data-qty="${maxAffordQty}" data-rarity="${rarity}" title="Comprar máximo possível (${maxAffordQty.toLocaleString()}x)" style="padding:6px 10px; font-size:11px; font-weight:bold;">
+                Máx
+              </button>
+            ` : ''}
+          </div>
         </div>
       </div>
     `;
   }).join('');
 
+  attachShopEvents(container, callbacks);
+}
+
+/**
+ * Vincula a delegação centralizada de eventos para ações do Mercador.
+ */
+function attachShopEvents(container, callbacks) {
   container.onclick = (e) => {
-    const btn = e.target.closest('[data-buy]');
-    if (!btn || btn.disabled) return;
-    const qty = parseInt(btn.dataset.qty, 10) || 1;
-    const rarity = btn.dataset.rarity || 'common';
-    const itemId = btn.dataset.buy;
-    if (callbacks.buyItem) callbacks.buyItem(itemId, qty, rarity);
-    else if (typeof window !== 'undefined' && typeof window.buyItem === 'function') window.buyItem(itemId, qty, rarity);
+    // 1. Ação de Compra
+    const buyBtn = e.target.closest('[data-buy]');
+    if (buyBtn && !buyBtn.disabled) {
+      const qty = parseInt(buyBtn.dataset.qty, 10) || 1;
+      const rarity = buyBtn.dataset.rarity || 'common';
+      const itemId = buyBtn.dataset.buy;
+      if (callbacks.buyItem) callbacks.buyItem(itemId, qty, rarity);
+      else if (typeof window !== 'undefined' && typeof window.buyItem === 'function') window.buyItem(itemId, qty, rarity);
+      return;
+    }
+
+    // 2. Ação de Venda Individual
+    const sellBtn = e.target.closest('[data-sell]');
+    if (sellBtn && !sellBtn.disabled) {
+      const uid = sellBtn.dataset.sell;
+      const qty = parseInt(sellBtn.dataset.qty, 10) || 1;
+      if (callbacks.sellItem) callbacks.sellItem(uid, qty);
+      return;
+    }
+
+    // 3. Venda em Massa de Lixo
+    const junkBtn = e.target.closest('[data-sell-junk]');
+    if (junkBtn) {
+      if (callbacks.sellAllJunk) callbacks.sellAllJunk();
+      return;
+    }
+
+    // 4. Recompra (Buyback)
+    const buybackBtn = e.target.closest('[data-buyback]');
+    if (buybackBtn) {
+      const idx = parseInt(buybackBtn.dataset.buyback, 10);
+      if (callbacks.buybackItem) callbacks.buybackItem(idx);
+      return;
+    }
+
+    // 5. Reroll Místico
+    const rerollBtn = e.target.closest('[data-reroll-mystic]');
+    if (rerollBtn) {
+      if (callbacks.rerollMysticStock) callbacks.rerollMysticStock(rollMysticStock);
+      return;
+    }
+
+    // 6. Ir para Aba Especial
+    const gotoBtn = e.target.closest('[data-goto-tab]');
+    if (gotoBtn) {
+      const target = gotoBtn.dataset.gotoTab;
+      if (callbacks.switchTab) callbacks.switchTab(target);
+      return;
+    }
   };
 }
 
-function getItemGradeCode(item) {
-  const lvl = item.req?.level || item.reqLvl || 1;
-  if (lvl >= 76) return 's';
-  if (lvl >= 61) return 'a';
-  if (lvl >= 52) return 'b';
-  if (lvl >= 40) return 'c';
-  if (lvl >= 20) return 'd';
-  return 'ng';
-}
+/**
+ * Compara atributos de um item da loja com o item atualmente equipado no mesmo slot.
+ */
+function buildShopComparisonDelta(def, state) {
+  if (!def || !def.slot || !state || !state.equipment) return '';
+  const isEquip = ['weapon', 'armor', 'helmet', 'gloves', 'boots', 'legs', 'shield', 'ring', 'necklace', 'earring'].includes(def.slot);
+  if (!isEquip) return '';
 
-function getItemGrade(item) {
-  const lvl = item.req?.level || item.reqLvl || 1;
-  if (lvl >= 76) return { code: 's', label: 'S-Grade', color: '#ef4444', minLvl: 76 };
-  if (lvl >= 61) return { code: 'a', label: 'A-Grade', color: '#f59e0b', minLvl: 61 };
-  if (lvl >= 52) return { code: 'b', label: 'B-Grade', color: '#a855f7', minLvl: 52 };
-  if (lvl >= 40) return { code: 'c', label: 'C-Grade', color: '#3b82f6', minLvl: 40 };
-  if (lvl >= 20) return { code: 'd', label: 'D-Grade', color: '#22c55e', minLvl: 20 };
-  return { code: 'ng', label: 'No-Grade', color: '#9ca3af', minLvl: 1 };
-}
+  let equipSlotKey = def.slot;
+  if (def.slot === 'weapon' || def.slot === 'bow' || def.slot === 'dagger' || def.slot === 'staff') equipSlotKey = 'weapon';
 
-function buildShopStatsSummary(def) {
-  const parts = [];
-  if (def.atk) parts.push(`<span style="color:#f59e0b;">⚔️ +${def.atk} P.Atk</span>`);
-  if (def.matk) parts.push(`<span style="color:#a78bfa;">🔮 +${def.matk} M.Atk</span>`);
-  if (def.def) parts.push(`<span style="color:#60a5fa;">🛡️ +${def.def} P.Def</span>`);
-  if (def.mdef) parts.push(`<span style="color:#f472b6;">✨ +${def.mdef} M.Def</span>`);
-  if (def.eva) parts.push(`<span style="color:#34d399;">👟 +${def.eva} Esquiva</span>`);
-  if (def.crit) parts.push(`<span style="color:#fbbf24;">⚡ +${def.crit}% Crítico</span>`);
-  return parts.join(' · ');
-}
+  const equippedUid = state.equipment[equipSlotKey];
+  if (!equippedUid) return '<span style="color:#10b981; font-weight:bold;">✨ Novo Slot</span>';
 
-function rollMysticStock() {
-  const gData = typeof window !== 'undefined' ? (window.EchoData || window.GameData) : null;
-  const allItems = gData?.ALL_ITEMS || {};
-  const equipIds = Object.keys(allItems).filter(id => {
-    const def = allItems[id];
-    return def && def.slot && def.slot !== 'potion' && def.slot !== 'material';
-  });
+  const equippedItem = (state.inventory || []).find(i => i.uid === equippedUid || i.id === equippedUid);
+  if (!equippedItem) return '';
 
-  if (equipIds.length === 0) return [];
+  const gData = D();
+  const eqDef = gData?.ALL_ITEMS?.[equippedItem.itemId || equippedItem.id] || equippedItem;
+  if (!eqDef) return '';
 
-  const stock = [];
-  const count = 6;
+  const diffs = [];
 
-  for (let i = 0; i < count; i++) {
-    const randomId = equipIds[Math.floor(Math.random() * equipIds.length)];
-    const rand = Math.random();
-    let rarity = 'rare';
-
-    if (rand <= 0.0001) {
-      rarity = 'legendary'; // 1 in 10,000 (0.01%)
-    } else if (rand <= 0.001) {
-      rarity = 'epic'; // 1 in 1,000 (0.1%)
-    } else {
-      rarity = 'rare'; // Blue default
+  if (def.atk != null && eqDef.atk != null) {
+    const delta = (def.atk || 0) - (eqDef.atk || 0);
+    if (delta !== 0) {
+      diffs.push(`<span style="color:${delta > 0 ? '#10b981' : '#ef4444'}; font-weight:bold;">${delta > 0 ? '+' : ''}${delta} P.Atk</span>`);
     }
-
-    stock.push({ itemId: randomId, rarity });
   }
 
-  return stock;
+  if (def.def != null && eqDef.def != null) {
+    const delta = (def.def || 0) - (eqDef.def || 0);
+    if (delta !== 0) {
+      diffs.push(`<span style="color:${delta > 0 ? '#10b981' : '#ef4444'}; font-weight:bold;">${delta > 0 ? '+' : ''}${delta} P.Def</span>`);
+    }
+  }
+
+  if (def.matk != null && eqDef.matk != null) {
+    const delta = (def.matk || 0) - (eqDef.matk || 0);
+    if (delta !== 0) {
+      diffs.push(`<span style="color:${delta > 0 ? '#10b981' : '#ef4444'}; font-weight:bold;">${delta > 0 ? '+' : ''}${delta} M.Atk</span>`);
+    }
+  }
+
+  if (def.mdef != null && eqDef.mdef != null) {
+    const delta = (def.mdef || 0) - (eqDef.mdef || 0);
+    if (delta !== 0) {
+      diffs.push(`<span style="color:${delta > 0 ? '#10b981' : '#ef4444'}; font-weight:bold;">${delta > 0 ? '+' : ''}${delta} M.Def</span>`);
+    }
+  }
+
+  if (diffs.length === 0) return '';
+  return `<span style="color:var(--text-muted); font-size:10px;">Comparado ao equipado:</span> ` + diffs.join(' · ');
 }
 
 function isItemInCraftCategory(itemId, def, cat) {
