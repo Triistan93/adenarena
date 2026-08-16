@@ -36,6 +36,34 @@ export const CODEX_SETS = {
     bonus: { atk: 50, crit: 5 },
     label: '+50 P. Atk & +5% P. Crit Rate'
   },
+  c_grade_legion: {
+    name:  '🛡️ Legião de Ferro C-Grade',
+    desc:  'Registre armas e armaduras dos veteranos de Gludio.',
+    items: ['berserker_blade', 'composite_armor_heavy', 'eminence_bow'],
+    bonus: { atk: 75, def: 50, hp: 200 },
+    label: '+75 P. Atk, +50 Def, +200 HP'
+  },
+  b_grade_knights: {
+    name:  '⚔️ Cavaleiros da Ordem B-Grade',
+    desc:  'Registre armaduras e lâminas nobres de Giran.',
+    items: ['great_sword', 'blue_wolf_breastplate_heavy', 'bow_of_peril'],
+    bonus: { atk: 120, def: 80, crit: 8 },
+    label: '+120 P. Atk, +80 Def, +8% Crit'
+  },
+  a_grade_sovereign: {
+    name:  '👑 Soberania Real A-Grade',
+    desc:  'Registre o poder majestoso das tropas reais de Aden.',
+    items: ['dragon_slayer', 'dark_crystal_breastplate_heavy', 'carnage_bow'],
+    bonus: { atk: 200, matk: 200, hp: 500, def: 120 },
+    label: '+200 P. Atk, +200 M. Atk, +500 HP, +120 Def'
+  },
+  s_grade_immortals: {
+    name:  '🌌 Relíquias dos Imortais S-Grade',
+    desc:  'Registre o poder supremo forjado pelos deuses de Elmore-Aden.',
+    items: ['draconic_bow', 'imperial_crusader_breastplate', 'arcana_mace_staff'],
+    bonus: { atk: 350, matk: 350, hp: 1000, def: 200, crit: 15 },
+    label: '+350 P. Atk, +350 M. Atk, +1000 HP, +200 Def, +15% Crit'
+  },
   crystal_masters: {
     name:  '💎 Pedras Elementais de Aden',
     desc:  'Registre gemas extraídas das cavernas místicas.',
@@ -66,6 +94,18 @@ export const BOSS_DOLLS = {
       3: { atk: 60,  crit: 10, label: '+60 P. Atk, +10% Crit'  },
       4: { atk: 100, crit: 15, label: '+100 P. Atk, +15% Crit' },
       5: { atk: 160, crit: 25, label: '+160 P. Atk, +25% Crit' }
+    }
+  },
+  doll_core: {
+    name: '🔮 Core Doll', icon: '🔮', rarity: 'rare',
+    source: '👑 Drop do Chefe Core em Cruma (5%) · 🎲 Altar de Alquimia',
+    desc: 'Núcleo condensado de Cruma. Concede poder mágico e velocidade de conjuração.',
+    statsByLvl: {
+      1: { matk: 20, mp: 50,  label: '+20 M. Atk, +50 MP'   },
+      2: { matk: 45, mp: 100, label: '+45 M. Atk, +100 MP'  },
+      3: { matk: 80, mp: 180, label: '+80 M. Atk, +180 MP'  },
+      4: { matk: 130, mp: 300, label: '+130 M. Atk, +300 MP' },
+      5: { matk: 200, mp: 500, label: '+200 M. Atk, +500 MP' }
     }
   },
   doll_orfen: {
@@ -114,6 +154,18 @@ export const BOSS_DOLLS = {
       3: { hp: 800, def: 140, label: '+800 Max HP, +140 Def' },
       4: { hp: 1300, def: 220, label: '+1300 Max HP, +220 Def' },
       5: { hp: 2000, def: 350, label: '+2000 Max HP, +350 Def' }
+    }
+  },
+  doll_valakas: {
+    name: '🔥 Valakas Doll', icon: '🔥', rarity: 'legendary',
+    source: '👑 Drop do Dragão Soberano Valakas (1%) · 🏆 Recompensa Suprema',
+    desc: 'Coração em chamas de Valakas. Concede poder de ataque e crítico esmagadores.',
+    statsByLvl: {
+      1: { atk: 80,  matk: 80,  crit: 5,  label: '+80 P/M.Atk, +5% Crit' },
+      2: { atk: 180, matk: 180, crit: 10, label: '+180 P/M.Atk, +10% Crit' },
+      3: { atk: 320, matk: 320, crit: 18, label: '+320 P/M.Atk, +18% Crit' },
+      4: { atk: 500, matk: 500, crit: 25, label: '+500 P/M.Atk, +25% Crit' },
+      5: { atk: 800, matk: 800, crit: 40, label: '+800 P/M.Atk, +40% Crit' }
     }
   }
 };
