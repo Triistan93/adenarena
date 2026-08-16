@@ -112,7 +112,7 @@ export function checkClassAdvancement(state, callbacks = {}) {
   if (state.level >= 20 && currentStage === 0) {
     canAdvance = true;
     advTitle = '⚡ 1ª Troca de Classe Disponível!';
-    advSub = `Atingiu o Nível ${state.level}! Escolha o caminho de evolução para a Ordem de ${currentClassDef.name}.`;
+    advSub = `Atingiu o Nível ${state.level}! Escolha o caminho de evolução para a Ordem de ${currentClassDef?.name || state.class}.`;
   } else if (state.level >= 40 && currentStage === 1) {
     canAdvance = true;
     advTitle = '⚔️ 2ª Troca de Classe Disponível!';

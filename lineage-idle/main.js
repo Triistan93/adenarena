@@ -11,6 +11,7 @@ import { AFFIX_MAP as AFFIX_MAP_IMPORT } from './data/affixes.js';
 
 // ─── Sprint 1: Importa módulos de dados extraídos ───────────────────────────
 import { RACE_BASE_ATTRIBUTES, RACES, CLASSES, DWARF_CLASS, KAMAEL_CLASS } from './src/data/races.js';
+import { resolveCanonicalClassId } from './src/data/classes/class_aliases.js';
 import { SAGAS, ZONES, ZONE_BACKGROUNDS }                                   from './src/data/zones.js';
 import { MONSTERS }                                                          from './src/data/monsters.js';
 import { RAID_BOSSES }                                                       from './src/data/raids.js';
@@ -367,6 +368,8 @@ function openClassTransferModal(classInfo) {
     ? window.EchoData.CLASSES_ECHO
     : {};
   const allClasses = Object.keys(echoClasses).length ? echoClasses : (D()?.CLASSES || {});
+  const canonStateClass = resolveCanonicalClassId(state.class);
+  const seenClassIds = new Set();
 
   const candidates = [];
   for (const [clsId, clsDef] of Object.entries(allClasses)) {
@@ -375,20 +378,29 @@ function openClassTransferModal(classInfo) {
     // Race filter: if class specifies a race, it must match character's race
     if (clsDef.race && clsDef.race !== state.race) continue;
 
+    const parentCanon = resolveCanonicalClassId(clsDef.parent);
+    const clsCanon = resolveCanonicalClassId(clsId);
+
     // Parent matching check
-    const matchesParent = clsDef.parent === state.class 
-      || (clsDef.parent === 'highElfBase' && (state.class === 'highElfBase' || state.class === 'highelf' || state.class === 'templar'))
-      || (clsDef.parent === 'divineTemplarS1' && (state.class === 'divineTemplarS1' || state.class === 'lightTemplar'))
-      || (clsDef.parent === 'divineTemplarS2' && (state.class === 'divineTemplarS2' || state.class === 'holyTemplar'))
-      || (clsDef.parent === 'fighter' && (state.class === 'elfFighter' || state.class === 'darkElfFighter' || state.class === 'orcBase' || state.class === 'fighter'))
-      || (clsDef.parent === 'mage' && (state.class === 'elfMage' || state.class === 'darkElfMage' || state.class === 'mage'))
-      || (clsDef.parent === 'elfFighter' && (state.class === 'fighter' || state.class === 'elfFighter') && state.race === 'elf')
-      || (clsDef.parent === 'darkElfFighter' && (state.class === 'fighter' || state.class === 'darkElfFighter') && state.race === 'darkelf')
+    const matchesParent = (clsDef.parent === state.class)
+      || (clsDef.parent === canonStateClass)
+      || (parentCanon === canonStateClass)
+      || (parentCanon === state.class)
+      || (clsDef.parent === 'highElfBase' && (canonStateClass === 'highElfBase' || canonStateClass === 'highelf' || canonStateClass === 'templar'))
+      || (clsDef.parent === 'divineTemplarS1' && (canonStateClass === 'divineTemplarS1' || canonStateClass === 'lightTemplar'))
+      || (clsDef.parent === 'divineTemplarS2' && (canonStateClass === 'divineTemplarS2' || canonStateClass === 'holyTemplar'))
+      || (clsDef.parent === 'fighter' && (canonStateClass === 'elfFighter' || canonStateClass === 'darkElfFighter' || canonStateClass === 'orcBase' || canonStateClass === 'fighter'))
+      || (clsDef.parent === 'mage' && (canonStateClass === 'elfMage' || canonStateClass === 'darkElfMage' || canonStateClass === 'mage'))
+      || (clsDef.parent === 'elfFighter' && (canonStateClass === 'fighter' || canonStateClass === 'elfFighter') && state.race === 'elf')
+      || (clsDef.parent === 'darkElfFighter' && (canonStateClass === 'fighter' || canonStateClass === 'darkElfFighter') && state.race === 'darkelf')
       || (clsDef.parent === 'artisan' && state.race === 'dwarf')
       || (clsDef.parent === 'soulbreaker' && state.race === 'kamael');
 
     if (matchesParent) {
-      candidates.push({ id: clsId, def: clsDef });
+      if (!seenClassIds.has(clsCanon)) {
+        seenClassIds.add(clsCanon);
+        candidates.push({ id: clsCanon, def: clsDef });
+      }
     }
   }
 
