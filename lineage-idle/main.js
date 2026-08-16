@@ -171,6 +171,9 @@ import {
   renderRaidsTab as uiRenderRaidsTab,
   renderOlympiadTab as uiRenderOlympiadTab,
   renderClanTab as uiRenderClanTab,
+  renderSevenSignsTab as uiRenderSevenSignsTab,
+  renderFortressTab as uiRenderFortressTab,
+  renderColosseumTab as uiRenderColosseumTab,
   openSkillEnchantModal,
   openAugmentModal,
   initTooltipEvents as uiInitTooltipEvents,
@@ -187,6 +190,9 @@ import { OlympiadService } from './src/services/OlympiadService.js';
 import { ClanService } from './src/services/ClanService.js';
 import { SkillEnchantService } from './src/services/SkillEnchantService.js';
 import { AugmentationService } from './src/services/AugmentationService.js';
+import { SevenSignsService } from './src/services/SevenSignsService.js';
+import { FortressService } from './src/services/FortressService.js';
+import { ColosseumService } from './src/services/ColosseumService.js';
 
 import { ensureAppLayout, showMenuPanel } from './src/ui/AppLayout.js';
 import { checkTabGuide, closeTabGuideModal, openTabGuideModal } from './src/ui/TutorialGuide.js';
@@ -2515,10 +2521,26 @@ function updateClanUI() {
   if (pane) uiRenderClanTab(pane, state);
 }
 
+function updateSevenSignsUI() {
+  const pane = el('tab-sevensigns');
+  if (pane) uiRenderSevenSignsTab(pane, state);
+}
+
+function updateFortressUI() {
+  const pane = el('tab-fortress');
+  if (pane) uiRenderFortressTab(pane, state);
+}
+
+function updateColosseumUI() {
+  const pane = el('tab-colosseum');
+  if (pane) uiRenderColosseumTab(pane, state);
+}
+
 function updateAllUI() {
   state = getState();
   uiInitTooltipEvents();
   updateGameModeUI();
+  try { FortressService.updateProductionTick(state); } catch (e) {}
 
   // Fast core components (always update on action)
   safeUiUpdate('stats', updateStatsUI);
@@ -2547,6 +2569,9 @@ function updateAllUI() {
   if (isTabVisible('raids')) safeUiUpdate('raids', updateRaidsUI);
   if (isTabVisible('olympiad')) safeUiUpdate('olympiad', updateOlympiadUI);
   if (isTabVisible('clan')) safeUiUpdate('clan', updateClanUI);
+  if (isTabVisible('sevensigns')) safeUiUpdate('sevensigns', updateSevenSignsUI);
+  if (isTabVisible('fortress')) safeUiUpdate('fortress', updateFortressUI);
+  if (isTabVisible('colosseum')) safeUiUpdate('colosseum', updateColosseumUI);
   if (isTabVisible('stage') || isTabVisible('zone') || isTabVisible('zones')) {
     safeUiUpdate('zone-bg', updateZoneBackground);
     safeUiUpdate('zone', updateZoneUI);
@@ -4441,6 +4466,9 @@ export function openPanel(tabName) {
   else if (targetTab === 'raids') safeUiUpdate('raids', updateRaidsUI);
   else if (targetTab === 'olympiad') safeUiUpdate('olympiad', updateOlympiadUI);
   else if (targetTab === 'clan') safeUiUpdate('clan', updateClanUI);
+  else if (targetTab === 'sevensigns') safeUiUpdate('sevensigns', updateSevenSignsUI);
+  else if (targetTab === 'fortress') safeUiUpdate('fortress', updateFortressUI);
+  else if (targetTab === 'colosseum') safeUiUpdate('colosseum', updateColosseumUI);
   else if (targetTab === 'enchant') safeUiUpdate('enchant', updateEnchantUI);
   else if (targetTab === 'zones') safeUiUpdate('zones', updateZoneUI);
   else if (targetTab === 'codex') safeUiUpdate('codex', updateCodexUI);
@@ -6113,6 +6141,162 @@ export function init() {
           updateAllUI();
           save();
         }
+      });
+      updateAllUI();
+      save();
+      return res;
+    };
+
+    // Seven Signs Window Actions
+    window.setSevenSignsSubTab = (t) => {
+      window._activeSevenSignsSubTab = t;
+      updateSevenSignsUI();
+    };
+    window.joinFactionAction = (factionId) => {
+      const res = SevenSignsService.joinFaction(state, factionId, {
+        log,
+        onUpdate: () => { updateAllUI(); save(); }
+      });
+      updateAllUI();
+      save();
+      return res;
+    };
+    window.depositSealStonesAction = (stoneId, count) => {
+      const res = SevenSignsService.depositStones(state, stoneId, count, {
+        log,
+        onUpdate: () => { updateAllUI(); save(); }
+      });
+      updateAllUI();
+      save();
+      return res;
+    };
+    window.startSevenSignsBossFightAction = (bossId) => {
+      const res = SevenSignsService.startBossFight(state, bossId, {
+        log,
+        onUpdate: () => { window.setSevenSignsSubTab('bosses'); updateAllUI(); save(); }
+      });
+      if (res.success) window.setSevenSignsSubTab('bosses');
+      updateAllUI();
+      save();
+      return res;
+    };
+    window.executeSevenSignsBossTurnAction = () => {
+      const res = SevenSignsService.executeBossTurn(state, {
+        log,
+        onUpdate: () => { updateAllUI(); save(); }
+      });
+      updateAllUI();
+      save();
+      return res;
+    };
+    window.buyMammonItemAction = (itemId) => {
+      const res = SevenSignsService.buyMammonItem(state, itemId, {
+        log,
+        onUpdate: () => { updateAllUI(); save(); }
+      });
+      updateAllUI();
+      save();
+      return res;
+    };
+    window.unsealArmorAction = () => {
+      const armor = state.equipment?.armor ? (state.inventory?.find(i => i.uid === state.equipment.armor) || state.equipment.armor) : null;
+      const res = SevenSignsService.unsealArmor(state, armor, {
+        log,
+        onUpdate: () => { updateAllUI(); save(); }
+      });
+      updateAllUI();
+      save();
+      return res;
+    };
+
+    // Fortress Window Actions
+    window.startFortressSiegeAction = (fortId) => {
+      const res = FortressService.startFortressSiege(state, fortId, {
+        log,
+        onUpdate: () => { updateAllUI(); save(); }
+      });
+      updateAllUI();
+      save();
+      return res;
+    };
+    window.executeFortressTurnAction = () => {
+      const res = FortressService.executeSiegeTurn(state, {
+        log,
+        onUpdate: () => { updateAllUI(); save(); }
+      });
+      updateAllUI();
+      save();
+      return res;
+    };
+    window.buyBraceletAction = (braceletId) => {
+      const res = FortressService.buyBracelet(state, braceletId, {
+        log,
+        onUpdate: () => { updateAllUI(); save(); }
+      });
+      updateAllUI();
+      save();
+      return res;
+    };
+    window.equipTalismanAction = (talismanId) => {
+      const res = FortressService.equipTalisman(state, talismanId, {
+        log,
+        onUpdate: () => { updateAllUI(); save(); }
+      });
+      updateAllUI();
+      save();
+      return res;
+    };
+    window.unequipTalismanAction = (talismanId) => {
+      const res = FortressService.unequipTalisman(state, talismanId, {
+        log,
+        onUpdate: () => { updateAllUI(); save(); }
+      });
+      updateAllUI();
+      save();
+      return res;
+    };
+
+    // Colosseum Window Actions
+    window.startColosseumDuelAction = (tierId) => {
+      const res = ColosseumService.startDuel(state, tierId, {
+        log,
+        onUpdate: () => { updateAllUI(); save(); }
+      });
+      updateAllUI();
+      save();
+      return res;
+    };
+    window.executeDuelTurnAction = () => {
+      const res = ColosseumService.executeDuelTurn(state, {
+        log,
+        onUpdate: () => { updateAllUI(); save(); }
+      });
+      updateAllUI();
+      save();
+      return res;
+    };
+    window.startColosseumSurvivalAction = () => {
+      const res = ColosseumService.startSurvival(state, {
+        log,
+        onUpdate: () => { updateAllUI(); save(); }
+      });
+      updateAllUI();
+      save();
+      return res;
+    };
+    window.executeSurvivalTurnAction = () => {
+      const res = ColosseumService.executeSurvivalTurn(state, {
+        log,
+        onUpdate: () => { updateAllUI(); save(); }
+      });
+      updateAllUI();
+      save();
+      return res;
+    };
+    window.buyColosseumShopItemAction = (itemId) => {
+      const res = ColosseumService.buyShopItem(state, itemId, {
+        log,
+        onUpdate: () => { updateAllUI(); save(); }
       });
       updateAllUI();
       save();

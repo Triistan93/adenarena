@@ -31,6 +31,9 @@ export const PANEL_SELECTORS = {
   raids: ['#tab-raids', '#raids-panel', '[data-panel="raids"]'],
   olympiad: ['#tab-olympiad', '#olympiad-panel', '[data-panel="olympiad"]'],
   clan: ['#tab-clan', '#clan-panel', '[data-panel="clan"]'],
+  sevensigns: ['#tab-sevensigns', '#sevensigns-panel', '[data-panel="sevensigns"]'],
+  fortress: ['#tab-fortress', '#fortress-panel', '[data-panel="fortress"]'],
+  colosseum: ['#tab-colosseum', '#colosseum-panel', '[data-panel="colosseum"]'],
   forge: ['#tab-forge', '#forge-panel', '[data-panel="forge"]'],
   codex: ['#tab-codex', '#codex-panel', '[data-panel="codex"]']
 };

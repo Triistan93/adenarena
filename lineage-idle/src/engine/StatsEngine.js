@@ -9,6 +9,7 @@
 import { D } from '../core/GameConfig.js';
 import { RACES, CLASSES, RACE_BASE_ATTRIBUTES } from '../data/races.js';
 import { CODEX_SETS, BOSS_DOLLS } from '../data/codex.js';
+import { FortressService } from '../services/FortressService.js';
 
 export const STR_MODIFIERS = {
   10: 0.42, 11: 0.43, 12: 0.45, 13: 0.46, 14: 0.48, 15: 0.50,
@@ -591,6 +592,20 @@ export function getStats(state) {
     if (weaponAug.stats.crit) augCrit += weaponAug.stats.crit;
     if (weaponAug.stats.eva) baseEva += weaponAug.stats.eva;
     if (weaponAug.stats.hp) elixirHpMult += (weaponAug.stats.hp / 2000);
+  }
+
+  // Process Fortress & Talisman Bonuses
+  if (state.fortresses) {
+    const fBonuses = FortressService.getBonuses(state);
+    buffAtkMult += fBonuses.pAtkMult;
+    buffMatk += Math.floor(baseMatk * fBonuses.mAtkMult);
+    buffDef += Math.floor(baseDef * fBonuses.pDefMult);
+    buffMdef += Math.floor(baseMdef * fBonuses.mDefMult);
+    elixirHpMult += fBonuses.hpMult;
+    mpRegenBonus += fBonuses.mpRegen;
+    buffSpd += fBonuses.speed;
+    baseEva += fBonuses.eva;
+    augCrit += fBonuses.crit;
   }
 
   // Process Full Heirloom Sovereign Set Bonus (Pack Tier 3 Multi-Piece)
