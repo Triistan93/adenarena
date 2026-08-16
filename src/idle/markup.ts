@@ -172,6 +172,9 @@ export const IDLE_MARKUP = `
           <button class="tab-btn" data-tab="raids">🐉 Raids &amp; Bosses</button>
           <button class="tab-btn" data-tab="olympiad">🏆 Olimpíadas &amp; Heróis</button>
           <button class="tab-btn" data-tab="clan">🛡️ Clã &amp; Castelos</button>
+          <button class="tab-btn" data-tab="sevensigns">🏛️ Sete Selos</button>
+          <button class="tab-btn" data-tab="fortress">⚔️ Fortalezas</button>
+          <button class="tab-btn" data-tab="colosseum">🎭 Coliseu</button>
           <button class="tab-btn" data-tab="enchant">✨ Encantamento</button>
           <button class="tab-btn" data-tab="codex">📜 Codex</button>
           <button class="tab-btn" data-tab="dolls">🧸 Dolls</button>
@@ -621,6 +624,15 @@ export const IDLE_MARKUP = `
 
           <!-- Clan, Castles & Siege Tab -->
           <div id="tab-clan" class="tab-pane"></div>
+
+          <!-- Seven Signs Tab -->
+          <div id="tab-sevensigns" class="tab-pane"></div>
+
+          <!-- Fortresses & Talismans Tab -->
+          <div id="tab-fortress" class="tab-pane"></div>
+
+          <!-- Colosseum & Duels Tab -->
+          <div id="tab-colosseum" class="tab-pane"></div>
 
           <!-- Dedicated Enchantment Tab -->
           <div id="tab-enchant" class="tab-pane">
