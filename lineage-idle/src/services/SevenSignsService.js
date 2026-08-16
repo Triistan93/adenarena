@@ -190,6 +190,11 @@ export class SevenSignsService {
    * Deselar armadura com o Blacksmith of Mammon
    */
   static unsealArmor(state, armorItem, hooks = {}) {
+    const accessCheck = this.canAccessExclusiveBlacksmith(state);
+    if (!accessCheck.allowed) {
+      return { success: false, message: accessCheck.message };
+    }
+
     const ss = this.ensureState(state);
     const cost = 50000;
     if (ss.ancientAdena < cost) {
@@ -204,5 +209,118 @@ export class SevenSignsService {
     hooks.log?.(`⚒️ O Blacksmith of Mammon removeu o selo ancestral de **${armorItem.name}**! O conjunto liberou seu potencial total!`, 'gain');
     hooks.onUpdate?.();
     return { success: true, armor: armorItem };
+  }
+
+  /**
+   * Gatekeeper de Acesso ao Ferreiro / Mercador Oculto dos Selos.
+   * Regra: Apenas a facção vencedora ganha acesso durante o período de validação dos selos.
+   * @param {Object} state
+   * @returns {{ allowed: boolean, message: string }}
+   */
+  static canAccessExclusiveBlacksmith(state) {
+    const ss = this.ensureState(state);
+    const phase = ss.phase || 'seal_validation'; // 'competition' | 'seal_validation'
+    const winner = ss.winnerFaction || (ss.dawnScore >= ss.duskScore ? 'dawn' : 'dusk');
+
+    if (phase === 'competition') {
+      return {
+        allowed: false,
+        message: 'O Ferreiro dos Selos está em transe sagrado durante o período de competição das Seven Signs.'
+      };
+    }
+
+    if (!ss.faction) {
+      return {
+        allowed: false,
+        message: 'Acesso Negado: Você não jurou fidelidade a nenhuma facção das Seven Signs.'
+      };
+    }
+
+    if (ss.faction !== winner) {
+      return {
+        allowed: false,
+        message: `Acesso Restrito: Apenas membros da facção vitoriosa [${winner.toUpperCase()}] têm a bênção do Ferreiro Oculto de Mammon nesta semana.`
+      };
+    }
+
+    return {
+      allowed: true,
+      message: `Acesso Concedido: Bem-vindo à Forja Oculta de Mammon, nobre campeão de [${winner.toUpperCase()}].`
+    };
+  }
+
+  /**
+   * Resolução do Ciclo Semanal das Seven Signs (Cron/Loop de Servidor).
+   * @param {Object} state
+   * @param {'dawn'|'dusk'|'tie'|null} overrideWinner
+   * @returns {Object}
+   */
+  static resolveWeeklyCycle(state, overrideWinner = null) {
+    const ss = this.ensureState(state);
+    ss.cycleNumber = (ss.cycleNumber || 1);
+
+    if (ss.phase === 'competition' || !ss.phase) {
+      let winner = overrideWinner;
+      if (!winner) {
+        winner = ss.dawnScore > ss.duskScore ? 'dawn' : ss.duskScore > ss.dawnScore ? 'dusk' : 'tie';
+      }
+      ss.phase = 'seal_validation';
+      ss.winnerFaction = winner;
+      ss.cycleEndsAt = Date.now() + 7 * 24 * 60 * 60 * 1000;
+    } else {
+      ss.cycleNumber += 1;
+      ss.phase = 'competition';
+      ss.winnerFaction = null;
+      ss.dawnScore = 250000;
+      ss.duskScore = 240000;
+      ss.cycleEndsAt = Date.now() + 7 * 24 * 60 * 60 * 1000;
+    }
+
+    return ss;
+  }
+
+  /**
+   * Cálculo de Penalidade de Morte no Mundo Aberto (Open World Death Penalty).
+   * - Inocente: Perde 4% de EXP e 2% chance de drop de item da mochila.
+   * - PK / Assassino (Karma > 0): Perde 10% de EXP e 60% chance de drop de item valioso.
+   * @param {Object} state
+   * @param {Object} hooks
+   * @returns {{ expLost: number, droppedItem: Object|null }}
+   */
+  static applyDeathPenalty(state, hooks = {}) {
+    const karma = state.karma || 0;
+    const isPk = karma > 0;
+    const currentXp = state.xp || 0;
+    
+    // Perda de EXP
+    const expLossRate = isPk ? 0.10 : 0.04;
+    const expLost = Math.floor(currentXp * expLossRate);
+    state.xp = Math.max(0, currentXp - expLost);
+
+    // Chance de Drop de Item
+    let droppedItem = null;
+    const dropChance = isPk ? 0.60 : 0.02;
+    const inv = state.inventory || [];
+
+    if (Math.random() <= dropChance && inv.length > 0) {
+      // Prioriza itens não equipados
+      const eligibleIndices = [];
+      inv.forEach((item, index) => {
+        if (!item.isEquipped || isPk) eligibleIndices.push(index);
+      });
+
+      if (eligibleIndices.length > 0) {
+        const pickedIndex = eligibleIndices[Math.floor(Math.random() * eligibleIndices.length)];
+        droppedItem = inv.splice(pickedIndex, 1)[0];
+      }
+    }
+
+    hooks.log?.(
+      `💀 **PENALIDADE DE MORTE:** Você perdeu -${expLost.toLocaleString()} EXP! ${droppedItem ? `💥 Um item [${droppedItem.name || droppedItem.id}] caiu no chão!` : ''}`,
+      'danger'
+    );
+    hooks.onUpdate?.();
+
+    return { expLost, droppedItem };
   }
 }

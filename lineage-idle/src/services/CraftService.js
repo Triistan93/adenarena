@@ -196,3 +196,99 @@ export function craftItem(state, recipeId, qty = 1, callbacks = {}) {
 
   return successCount > 0;
 }
+
+/**
+ * Validação de Barreira de Forja da Conta (Anti-Bot & Gatekeeper de Mercado).
+ * @param {Object} state
+ * @param {number} requiredForgeLevel
+ * @returns {{ allowed: boolean, error?: string }}
+ */
+export function checkAccountForgeLevel(state, requiredForgeLevel = 10) {
+  const currentForgeLevel = state.accountForgeLevel || state.craftLevel || 1;
+  if (currentForgeLevel < requiredForgeLevel) {
+    return {
+      allowed: false,
+      error: `Barreira de Forja: Nível de Forja da Conta Lv.${requiredForgeLevel} necessário (Atual: Lv.${currentForgeLevel}). Destrua itens na forja para avançar.`
+    };
+  }
+  return { allowed: true };
+}
+
+/**
+ * Item Sink Massivo: Destrói permanentemente lotes de itens de baixo nível para forjar relíquias supremas.
+ * @param {Object} state
+ * @param {string} targetItemId
+ * @param {Array<{itemId: string, count: number}>} sacrificeList
+ * @param {Object} callbacks
+ * @returns {{ success: boolean, message: string }}
+ */
+export function executeMassiveItemSink(state, targetItemId, sacrificeList = [], callbacks = {}) {
+  // Valida Nível de Forja (Lv. 10+ para forjas massivas)
+  const check = checkAccountForgeLevel(state, 10);
+  if (!check.allowed) {
+    return { success: false, message: check.error };
+  }
+
+  const inv = state.inventory || [];
+  let totalDestroyed = 0;
+
+  // 1. Validação de Estoque
+  for (const req of sacrificeList) {
+    const item = inv.find(i => (i.id === req.itemId || i.itemId === req.itemId));
+    const available = item ? (item.count || item.quantity || 1) : 0;
+    if (available < req.count) {
+      return { success: false, message: `Quantidade insuficiente de ${req.itemId} (Requer: ${req.count}, Disponível: ${available}).` };
+    }
+  }
+
+  // 2. Destruição Atômica de Itens (Item Sink)
+  for (const req of sacrificeList) {
+    const itemIndex = inv.findIndex(i => (i.id === req.itemId || i.itemId === req.itemId));
+    if (itemIndex !== -1) {
+      const item = inv[itemIndex];
+      const cur = item.count || item.quantity || 1;
+      if (cur > req.count) {
+        if (item.count) item.count -= req.count;
+        if (item.quantity) item.quantity -= req.count;
+      } else {
+        inv.splice(itemIndex, 1);
+      }
+      totalDestroyed += req.count;
+    }
+  }
+
+  // 3. Criação do Item Forjado
+  const added = addToInventory(state, targetItemId, 1);
+  if (!added) {
+    state.inventory.push({
+      uid: 'forge_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8),
+      id: targetItemId,
+      itemId: targetItemId,
+      name: targetItemId,
+      count: 1,
+      quantity: 1,
+      rarity: 'sovereign',
+      isEquipped: false
+    });
+  }
+
+  // 4. Progressão de Nível de Forja da Conta
+  const expGained = totalDestroyed * 10;
+  state.accountForgeExp = (state.accountForgeExp || 0) + expGained;
+  state.accountForgeLevel = state.accountForgeLevel || state.craftLevel || 1;
+
+  while (state.accountForgeExp >= state.accountForgeLevel * 250) {
+    state.accountForgeExp -= state.accountForgeLevel * 250;
+    state.accountForgeLevel += 1;
+    if (callbacks.log) callbacks.log(`🎉 NÍVEL DE FORJA DA CONTA EVOLUIU PARA Lv.${state.accountForgeLevel}!`, 'rarity-legendary');
+  }
+
+  if (callbacks.log) {
+    callbacks.log(`🔥 ITEM SINK MASSIVO: ${totalDestroyed}x itens foram destruídos na forja sagrada! Criado: [${targetItemId}]!`, 'rarity-sovereign');
+  }
+  if (callbacks.updateAllUI) callbacks.updateAllUI();
+  if (callbacks.save) callbacks.save();
+
+  return { success: true, message: `Forja concluída com sucesso! +${expGained} EXP de Forja obtidos.` };
+}
+
