@@ -579,8 +579,16 @@ export const IDLE_MARKUP = `
                 <h3 style="margin:0;">Forja Imperial &amp; Criação Universal</h3>
                 <p class="shop-info" style="margin:4px 0 0 0;">Forje qualquer equipamento do jogo: Armas, Armaduras, Joias, Capas, Agathions, Cintos, Talismãs e Consumíveis.</p>
               </div>
-              <div class="stat-value" style="font-size:14px; background:rgba(212,175,55,0.1); border:1px solid rgba(212,175,55,0.3); padding:6px 14px; border-radius:8px;">
-                🔨 Nível de Forja: <strong id="craft-level" style="color:var(--gilt);">1</strong>
+              <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                <div class="stat-value" style="font-size:13px; background:rgba(212,175,55,0.1); border:1px solid rgba(212,175,55,0.3); padding:6px 14px; border-radius:8px;">
+                  🔨 Nível de Forja: <strong id="craft-level" style="color:var(--gilt);">1</strong>
+                  <div style="width:120px; height:6px; background:rgba(0,0,0,0.5); border-radius:3px; margin-top:4px; overflow:hidden;">
+                    <div id="craft-forge-exp-bar" style="height:100%; width:0%; background:linear-gradient(90deg, #f59e0b, #10b981); transition:width 0.3s;"></div>
+                  </div>
+                </div>
+                <div id="market-status-badge" style="font-size:12px; font-weight:bold; padding:6px 12px; border-radius:8px; background:rgba(239,68,68,0.15); border:1px solid #ef4444; color:#fca5a5;">
+                  🔒 Mercado: Requer Forja Lv. 10
+                </div>
               </div>
 
               <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; width:100%; border-bottom:1px solid rgba(212,167,68,0.3); padding-bottom:10px;" id="forge-subtab-buttons">
@@ -934,6 +942,33 @@ export const IDLE_MARKUP = `
           <button id="daily-claim-btn" class="action-btn action-btn--primary" style="font-family:'Cinzel',serif; font-size:13px; font-weight:bold; padding:8px 24px;" onclick="window.claimDailyRewardAction && window.claimDailyRewardAction()">
             ✨ Resgatar Presente do Dia
           </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Game Progression & Systems Guide Modal -->
+    <div id="guide-modal" class="modal">
+      <div class="modal-content guide-modal-box" style="max-width:780px; max-height:85vh; overflow-y:auto; background:#0f1219; border:1px solid #d4a744; border-radius:12px; padding:20px; box-shadow:0 0 30px rgba(0,0,0,0.85); color:#f8fafc; font-family:'Cinzel',serif;">
+        <div class="modal-header" style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(212,175,55,0.3); padding-bottom:12px;">
+          <h2 style="margin:0; color:#ffd700; font-size:18px; display:flex; align-items:center; gap:8px;">
+            <span>📖 Guia Oficial do Aventureiro &amp; Progressão de Aden</span>
+          </h2>
+          <button id="close-guide-modal-btn" class="modal-close-x" style="background:transparent; border:none; color:#94a3b8; font-size:20px; cursor:pointer;" onclick="window.closeGuideModal && window.closeGuideModal()">✕</button>
+        </div>
+        
+        <!-- Guide Tabs -->
+        <div style="display:flex; gap:8px; margin:14px 0; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:8px; flex-wrap:wrap;">
+          <button class="inv-batch-btn active" id="guide-tab-btn-journey" onclick="window.switchGuideTab('journey')">🗺️ Jornada por Nível</button>
+          <button class="inv-batch-btn" id="guide-tab-btn-forge" onclick="window.switchGuideTab('forge')">🔨 Forja &amp; Mercado</button>
+          <button class="inv-batch-btn" id="guide-tab-btn-codex" onclick="window.switchGuideTab('codex')">🃏 Cartas &amp; Dolls</button>
+          <button class="inv-batch-btn" id="guide-tab-btn-combat" onclick="window.switchGuideTab('combat')">⚔️ Movesets &amp; 4★</button>
+          <button class="inv-batch-btn" id="guide-tab-btn-sevensigns" onclick="window.switchGuideTab('sevensigns')">🏛️ Sete Selos &amp; Noblesse</button>
+        </div>
+
+        <div id="guide-content" style="font-size:13px; line-height:1.6; color:#cbd5e1;"></div>
+
+        <div class="modal-actions" style="margin-top:20px; text-align:right; border-top:1px solid rgba(255,255,255,0.1); padding-top:12px;">
+          <button class="action-btn action-btn--primary" onclick="window.closeGuideModal && window.closeGuideModal()">Entendido! ⚔️</button>
         </div>
       </div>
     </div>

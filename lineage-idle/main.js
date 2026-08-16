@@ -17,6 +17,7 @@ import { MONSTERS }                                                          fro
 import { RAID_BOSSES }                                                       from './src/data/raids.js';
 import { QUEST_DEFS, BATTLE_PASS_TIERS, PASS_DEFS }                        from './src/data/quests.js';
 import { CODEX_SETS, BOSS_DOLLS }                                           from './src/data/codex.js';
+import { MONSTER_CARDS, CardCodexService }                                    from './src/services/CardCodexService.js';
 // ─── Sprint 2: Importa motores de Stats e Nível ────────────────────────────
 import {
   getStats as engineGetStats,
@@ -4370,6 +4371,23 @@ function updateCodexUI() {
   const summaryEl = el('codex-summary');
   grid.innerHTML = '';
   state.codex = state.codex || {};
+  state.cardCodex = state.cardCodex || {};
+
+  const subTab = window._codexSubTab || 'sets';
+
+  // Sub-abas do Codex
+  const tabsNav = mkEl('div');
+  tabsNav.style.cssText = 'display:flex; gap:8px; margin-bottom:14px; border-bottom:1px solid rgba(212,175,55,0.25); padding-bottom:8px;';
+  tabsNav.innerHTML = `
+    <button class="inv-batch-btn ${subTab === 'sets' ? 'active' : ''}" style="font-family:\'Cinzel\',serif; font-weight:bold; ${subTab === 'sets' ? 'background:linear-gradient(180deg,#d4a744,#8a641c); color:#000;' : ''}" onclick="window.setCodexSubTab('sets')">📜 Coleções de Equipamentos</button>
+    <button class="inv-batch-btn ${subTab === 'cards' ? 'active' : ''}" style="font-family:\'Cinzel\',serif; font-weight:bold; ${subTab === 'cards' ? 'background:linear-gradient(180deg,#d4a744,#8a641c); color:#000;' : ''}" onclick="window.setCodexSubTab('cards')">🃏 Álbum de Cartas & Dolls de Monstros</button>
+  `;
+  grid.appendChild(tabsNav);
+
+  if (subTab === 'cards') {
+    renderMonsterCardsCodex(grid, summaryEl);
+    return;
+  }
 
   let totalSets = Object.keys(CODEX_SETS).length, completedSets = 0;
 
@@ -4412,6 +4430,61 @@ function updateCodexUI() {
   if (summaryEl) {
     const b = getCodexBonuses();
     summaryEl.innerHTML = `<span style="color:var(--gilt-bright); font-weight:bold;">Coleções Concluídas: ${completedSets}/${totalSets}</span> · Bônus Totais: +${b.atk} ATK, +${b.def} DEF, +${b.matk} MATK, +${b.hp} HP`;
+  }
+}
+
+function renderMonsterCardsCodex(container, summaryEl) {
+  const allCards = MONSTER_CARDS || {};
+  let totalCards = Object.keys(allCards).length;
+  let absorbedCards = 0;
+
+  const cardsContainer = mkEl('div');
+  cardsContainer.style.cssText = 'display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:12px;';
+
+  for (const [cardId, cardDef] of Object.entries(allCards)) {
+    const current = state.cardCodex?.[cardId] || { rank: 0, count: 0 };
+    const isAbsorbed = current.rank > 0;
+    if (isAbsorbed) absorbedCards++;
+
+    const invCount = getInventoryCount(cardId) + getWarehouseCount(cardId);
+
+    const bonusLabel = Object.entries(cardDef.codexBonus || {})
+      .map(([stat, val]) => `+${typeof val === 'number' && val < 1 ? (val * 100).toFixed(0) + '%' : val} ${stat.toUpperCase()}`)
+      .join(', ');
+
+    const cardBox = mkEl('div');
+    cardBox.style.cssText = `border: 1px solid ${isAbsorbed ? '#10b981' : 'rgba(212,175,55,0.3)'}; padding: 12px; border-radius: 8px; background: rgba(15,18,25,0.85); display:flex; flex-direction:column; justify-content:space-between;`;
+
+    cardBox.innerHTML = `
+      <div>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <h4 style="margin:0; color:${isAbsorbed ? '#10b981' : 'var(--gilt-bright)'}">🃏 ${cardDef.name}</h4>
+          <span style="font-size:10px; padding:2px 6px; border-radius:4px; background:rgba(0,0,0,0.5); color:#f59e0b; text-transform:uppercase;">${cardDef.rarity}</span>
+        </div>
+        <p style="font-size:11px; color:var(--text-muted); margin:4px 0;">👑 Fonte: Drop do Chefe <strong>${cardDef.monster}</strong> (${(cardDef.dropChance * 100).toFixed(2)}%)</p>
+        <div style="background:rgba(0,0,0,0.3); padding:6px 8px; border-radius:6px; margin:6px 0; font-size:11px;">
+          <span style="color:#6ee7b7; font-weight:bold;">Bônus Passivo na Conta:</span> ${bonusLabel || 'Nenhum'}
+        </div>
+      </div>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px; border-top:1px solid rgba(255,255,255,0.08); padding-top:6px;">
+        <span style="font-size:11px; color:${isAbsorbed ? '#34d399' : 'var(--text-muted)'};">
+          ${isAbsorbed ? `✓ Rank ${current.rank} (${current.count} absorvidas)` : 'Não Absorvida'}
+        </span>
+        ${invCount > 0 ? `
+          <button class="action-btn action-btn--primary" style="padding:3px 10px; font-size:11px;" onclick="window.absorbCardAction('${cardId}')">Absorver 📥 (${invCount})</button>
+        ` : `
+          <span style="font-size:11px; color:var(--text-muted);">Não possui</span>
+        `}
+      </div>
+    `;
+
+    cardsContainer.appendChild(cardBox);
+  }
+
+  container.appendChild(cardsContainer);
+
+  if (summaryEl) {
+    summaryEl.innerHTML = `<span style="color:var(--gilt-bright); font-weight:bold;">Álbum de Cartas: ${absorbedCards}/${totalCards} Cartas Absorvidas</span> · Bônus Permanentes Ativos na Conta`;
   }
 }
 
@@ -6412,6 +6485,36 @@ export function init() {
       save();
       return res;
     };
+    window.setCodexSubTab = (tab) => {
+      window._codexSubTab = tab;
+      updateCodexUI();
+    };
+    window.absorbCardAction = (cardId) => {
+      const invIdx = state.inventory.findIndex(i => i.itemId === cardId && !i.equipped);
+      let foundInWarehouse = false;
+      let whIdx = -1;
+
+      if (invIdx >= 0) {
+        state.inventory.splice(invIdx, 1);
+      } else {
+        whIdx = (state.warehouse || []).findIndex(i => i.itemId === cardId && !i.equipped);
+        if (whIdx >= 0) {
+          state.warehouse.splice(whIdx, 1);
+          foundInWarehouse = true;
+        } else {
+          log('Você não possui esta carta para absorver.', 'system');
+          return;
+        }
+      }
+
+      const res = CardCodexService.absorbCardIntoCodex(state, cardId, {
+        log,
+        onUpdate: () => { updateAllUI(); save(); }
+      });
+      updateAllUI();
+      save();
+      return res;
+    };
     window.claimHeroStatusAction = (weaponId) => {
       const res = OlympiadService.claimHeroStatus(state, weaponId, {
         log,
@@ -6434,6 +6537,101 @@ export function init() {
       if (zoneId) {
         changeZone(zoneId);
         openPanel('zones');
+      }
+    };
+
+    // Guia do Aventureiro & Progressão do Jogo
+    window.openCurrentTabGuide = (preferredTab) => {
+      const modal = el('guide-modal');
+      if (!modal) return;
+      window.switchGuideTab(preferredTab || 'journey');
+      modal.classList.add('active');
+    };
+    window.closeGuideModal = () => {
+      const modal = el('guide-modal');
+      if (modal) modal.classList.remove('active');
+    };
+    window.switchGuideTab = (tab) => {
+      const contentEl = el('guide-content');
+      if (!contentEl) return;
+
+      const tabs = ['journey', 'forge', 'codex', 'combat', 'sevensigns'];
+      tabs.forEach(t => {
+        const btn = el(`guide-tab-btn-${t}`);
+        if (btn) {
+          const isActive = t === tab;
+          btn.classList.toggle('active', isActive);
+          btn.style.background = isActive ? 'linear-gradient(180deg,#d4a744,#8a641c)' : 'rgba(252,211,77,0.1)';
+          btn.style.color = isActive ? '#000' : '#ffd877';
+        }
+      });
+
+      if (tab === 'journey') {
+        contentEl.innerHTML = `
+          <div style="background:rgba(0,0,0,0.35); padding:12px; border-radius:8px; border:1px solid rgba(212,175,55,0.2); margin-bottom:10px;">
+            <h4 style="color:#fbbf24; margin:0 0 6px 0;">🐣 Nível 1 a 20 — Os Primeiros Passos (No-Grade)</h4>
+            <p style="margin:0 0 4px 0;">• <strong>Zonas:</strong> Talking Island, Elven Forest, Dark Forest, Orc Village, Dwarven Mine, Kamael Lair, Ruined Outpost, Howling Moor.</p>
+            <p style="margin:0 0 4px 0;">• <strong>O que fazer:</strong> Equipe o Starter Kit da sua classe. Suas habilidades exigem a arma correta (ex: Arco para arqueiros, Adaga para assassinos). Desmanche itens sobressalentes na Forja para subir o Nível de Forja da Conta.</p>
+            <p style="margin:0; color:#34d399; font-weight:bold;">🏆 Marco: 1ª Troca de Classe no Nível 20 (Desbloqueia Grau D e Saga Prelude of War).</p>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.35); padding:12px; border-radius:8px; border:1px solid rgba(212,175,55,0.2); margin-bottom:10px;">
+            <h4 style="color:#fbbf24; margin:0 0 6px 0;">🛡️ Nível 20 a 40 — Grau D &amp; Primeiro Raid Boss</h4>
+            <p style="margin:0 0 4px 0;">• <strong>Zonas:</strong> Giran Outskirts, Orcen Ruins, Forsaken Crypt, Black Citadel.</p>
+            <p style="margin:0 0 4px 0;">• <strong>Raid Boss:</strong> Enfrente a <strong>Queen Ant 👑 (Lv. 40)</strong> para dropar o <em>Ring of Queen Ant</em> e a <em>Queen Ant Doll</em> (Codex).</p>
+            <p style="margin:0 0 4px 0;">• <strong>Sete Selos:</strong> Colete Seal Stones (Red, Green, Blue) caídas dos monstros para contribuir na vitória semanal da sua facção.</p>
+            <p style="margin:0; color:#34d399; font-weight:bold;">🏆 Marco: 2ª Troca de Classe no Nível 40 (Desbloqueia Grau C e Saga The Awakening).</p>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.35); padding:12px; border-radius:8px; border:1px solid rgba(212,175,55,0.2); margin-bottom:10px;">
+            <h4 style="color:#fbbf24; margin:0 0 6px 0;">⚔️ Nível 40 a 75 — Grau C/B/A, Barreira de Forja &amp; Noblesse</h4>
+            <p style="margin:0 0 4px 0;">• <strong>Zonas:</strong> Gludio Castle, Wolf Mountain, Rift of the Void, Emerald Grove, Gates of the Underworld, Valley of Saints, Swamp of Screams.</p>
+            <p style="margin:0 0 4px 0;">• <strong>Raid Bosses:</strong> Core (Lv. 50), Orfen (Lv. 55), Zaken (Lv. 60).</p>
+            <p style="margin:0 0 4px 0;">• <strong>Forja Nível 10:</strong> Ao atingir o Nível 10 de Forja, o <strong>Mercado Global</strong> é desbloqueado para comercializar itens livremente.</p>
+            <p style="margin:0 0 4px 0;">• <strong>Saga de Noblesse (Lv. 75):</strong> Complete as 4 partes da quest em Valley of Saints, Swamp of Screams e derrote o <strong>Raid Boss Barakiel</strong> para se consagrar Noblesse!</p>
+            <p style="margin:0; color:#34d399; font-weight:bold;">🏆 Marco: 3ª Troca de Classe no Nível 76 (Sagas Ancestrais e Grau S).</p>
+          </div>
+
+          <div style="background:rgba(0,0,0,0.35); padding:12px; border-radius:8px; border:1px solid rgba(212,175,55,0.2);">
+            <h4 style="color:#fbbf24; margin:0 0 6px 0;">👑 Nível 76 a 95+ — Endgame, Dragões &amp; Transcendência (Reset)</h4>
+            <p style="margin:0 0 4px 0;">• <strong>Zonas:</strong> Aden City, Dragon Valley, Imperial Tomb, Antharas' Lair, Forge of the Gods.</p>
+            <p style="margin:0 0 4px 0;">• <strong>Raid Bosses Épicos:</strong> Imperador Baium (Lv. 75), Frintezza (Lv. 85), Antharas (Lv. 95) e Valakas (Lv. 100).</p>
+            <p style="margin:0 0 4px 0;">• <strong>Grand Olympiad:</strong> Nobres disputam o título de Herói Supremo todo fim de semana.</p>
+            <p style="margin:0; color:#ffd700; font-weight:bold;">♾️ Rebirth / Reset: Ao atingir o Nível 85, você pode Transcender (Reset) para o Nível 1 acumulando +60 Pontos de Atributos Permanentes!</p>
+          </div>
+        `;
+      } else if (tab === 'forge') {
+        contentEl.innerHTML = `
+          <h4 style="color:#fbbf24; margin-top:0;">🔨 Nível de Forja da Conta &amp; Economia Circular</h4>
+          <p>• <strong>Como subir o Nível de Forja:</strong> Ao desmanchar equipamentos sobressalentes na mochila ou forjar receitas, você ganha <strong>EXP de Forja</strong>.</p>
+          <p>• <strong>Por que a Forja é essencial:</strong> Níveis mais altos aumentam a chance de criar itens Masterwork (Pushkin), reduzem custos e liberam receitas de Grau A, S e Soberanas.</p>
+          <p>• <strong>Desbloqueio do Mercado Global (Lv. 10):</strong> Para combater bots e valorizar os jogadores dedicados, o Mercado Global exige Nível 10 de Forja da Conta.</p>
+          <p>• <strong>Item Sinks Massivos:</strong> No Endgame, você pode sacrificar armas antigas no Ferreiro Oculto para condensar Energia Ancestral e forjar Relíquias Soberanas.</p>
+        `;
+      } else if (tab === 'codex') {
+        contentEl.innerHTML = `
+          <h4 style="color:#fbbf24; margin-top:0;">🃏 Codex de Coleções &amp; Cartas de Monstros</h4>
+          <p>• <strong>Coleções de Itens:</strong> Registre armas e armaduras de treino para desbloquear bônus passivos permanentes de ATK, DEF e HP para toda a sua conta.</p>
+          <p>• <strong>Cartas de Monstros &amp; Boss Dolls:</strong> Ao derrotar Chefes de Raid (Queen Ant, Core, Orfen, Zaken, Baium, Antharas, Valakas), você tem chance de dropar suas Cartas Raras.</p>
+          <p>• <strong>Absorver no Codex:</strong> Absorver a carta no Álbum concede atributos perpétuos na conta (P.ATK, M.ATK, Vampirismo, etc.).</p>
+          <p>• <strong>Engaste em Equipamentos:</strong> Você também pode engastar cartas em slots de armas para potencializar seu dano elemental e crítico.</p>
+        `;
+      } else if (tab === 'combat') {
+        contentEl.innerHTML = `
+          <h4 style="color:#fbbf24; margin-top:0;">⚔️ Restrições de Combate, Movesets &amp; Grimórios 4★</h4>
+          <p>• <strong>Moveset por Arma:</strong> Habilidades físicas exigem o arquétipo correto de arma equipado (ex: Habilidades de tiro exigem Arco, Danças exigem Espadas Duplas, etc.).</p>
+          <p>• <strong>Fraquezas Elementais:</strong> Monstros e chefes possuem elementos (Fogo, Água, Vento, Terra, Sagrado, Trevas). Usar a fraqueza oposta concede até +50% de dano bônus.</p>
+          <p>• <strong>Habilidades Supremas (4★):</strong> Habilidades 4-Star exigem o respectivo <em>Spellbook: 4-Star</em> na mochila para serem aprendidas pela 1ª vez. Uma vez aprendida, o livro é consumido e a habilidade pode ser usada para sempre!</p>
+          <p>• <strong>Hard DPS Check:</strong> Chefes de Raid possuem temporizadores de Enrage. Se o grupo não causar dano suficiente dentro do tempo limite, o Boss entra em fúria mortal.</p>
+        `;
+      } else if (tab === 'sevensigns') {
+        contentEl.innerHTML = `
+          <h4 style="color:#fbbf24; margin-top:0;">🏛️ Sete Selos (Seven Signs), Mammon &amp; Noblesse</h4>
+          <p>• <strong>Ciclo Semanal das Seven Signs:</strong> Escolha entre <strong>Senhores do Amanhecer (Dawn)</strong> ou <strong>Revolucionários do Crepúsculo (Dusk)</strong>. Entregue Seal Stones obtidas nas caças para acumular pontos de vitória.</p>
+          <p>• <strong>Ferreiro &amp; Mercador de Mammon:</strong> A facção vencedora ganha acesso exclusivo ao Ferreiro de Mammon para remoção de selos, trocas de armas Grau A/S e serviços sem perda de encanto usando Ancient Adena.</p>
+          <p>• <strong>Questline de Noblesse (Possessor of a Precious Soul):</strong> No Nível 75, cumpra as 4 etapas da jornada em Valley of Saints e Swamp of Screams e derrote o Raid Boss <strong>Barakiel</strong> para conquistar o status de Noblesse.</p>
+          <p>• <strong>Grand Olympiad:</strong> Nobres Nível 76+ podem lutar na arena 1v1 pelas cobiçadas Armas da Infinidade e o manto de Herói Supremo de Aden!</p>
+        `;
       }
     };
     window.closeOfflineModal = closeOfflineModal;

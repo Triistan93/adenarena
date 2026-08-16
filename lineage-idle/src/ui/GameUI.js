@@ -2156,11 +2156,58 @@ export function updateSkillInfoPanel(state, callbacks = {}) {
     `;
   }
 
+  const is4Star = (def.starRank === 4 || def.tier === 4 || def.is4Star || id.includes('4star'));
+  const has4StarBook = state.inventory?.some(i => i.itemId === 'spellbook_4star' && (i.count || 1) > 0);
+  const requiresBookNow = is4Star && lvl === 0;
+
+  // Moveset / Restrição de Arma
+  let weaponReqBadge = '';
+  const weaponReq = def.weaponType || def.requiredWeapon;
+  if (weaponReq) {
+    const eqWeapon = state.equipment?.weapon;
+    const eqType = eqWeapon?.weaponType || eqWeapon?.type || '';
+    const isWepMatch = eqType.toLowerCase().includes(weaponReq.toLowerCase());
+    weaponReqBadge = `
+      <div style="display:inline-flex; align-items:center; gap:4px; font-size:11px; padding:3px 8px; border-radius:4px; margin-bottom:6px; background:${isWepMatch ? 'rgba(16,185,129,0.15)' : 'rgba(239,68,68,0.15)'}; border:1px solid ${isWepMatch ? '#10b981' : '#ef4444'}; color:${isWepMatch ? '#6ee7b7' : '#fca5a5'}; font-weight:bold;">
+        ${isWepMatch ? '⚔️' : '⚠️'} Exige: ${weaponReq.toUpperCase()} ${isWepMatch ? '(Equipada)' : '(Não Equipada)'}
+      </div>
+    `;
+  }
+
+  // 4-Star Ultimate Box
+  let star4BoxHtml = '';
+  if (is4Star) {
+    star4BoxHtml = `
+      <div style="background:rgba(245,158,11,0.1); border:1px solid #f59e0b; border-radius:6px; padding:8px; margin:8px 0; font-size:11px;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span style="color:#fbbf24; font-weight:bold;">⭐ Habilidade Suprema 4-Star</span>
+          <span style="background:rgba(0,0,0,0.4); padding:2px 6px; border-radius:4px; color:${requiresBookNow ? (has4StarBook ? '#34d399' : '#f87171') : '#34d399'}; font-weight:bold;">
+            ${requiresBookNow ? (has4StarBook ? '✓ Spellbook Disponível' : '✗ Falta Spellbook 4★') : '✓ Grimório Consagrado'}
+          </span>
+        </div>
+        ${requiresBookNow ? `
+          <p style="margin:4px 0 0 0; color:var(--text-muted);">Aprender esta habilidade consumirá 1x <strong>Spellbook: 4-Star</strong> da sua mochila. Uma vez aprendida, fica desbloqueada para sempre!</p>
+        ` : `
+          <p style="margin:4px 0 0 0; color:#6ee7b7;">Habilidade aprendida permanentemente na conta. Não requer carregar o livro na mochila.</p>
+        `}
+      </div>
+    `;
+  }
+
+  const canLearn = canAfford && meetsReqs && lvlOk && (!requiresBookNow || has4StarBook);
+
+  let btnLabel = maxed ? '✦ MAXED' : `Invest ${cost.toLocaleString()} SP`;
+  if (!maxed && requiresBookNow) {
+    btnLabel = has4StarBook ? `📖 Consumir Livro 4★ & Aprender (${cost.toLocaleString()} SP)` : '🔒 Falta Spellbook 4★ na Mochila';
+  }
+
   panel.innerHTML = `
     <div class="si-head"><span class="si-icon">${def.icon || '✦'}</span><div class="si-title"><h3>${def.name}</h3><p class="si-tier">${tier} · Lv.${lvl}/${max}</p></div></div>
+    ${weaponReqBadge}
+    ${star4BoxHtml}
     <p class="si-desc">${def.desc || def.note || ''}</p><div class="si-effect">${effectText}</div>
     <div class="si-reqs"><span class="si-label">Requires</span>${reqHtml}</div>
-    <button class="si-btn" data-skillup="${id}" ${(!canAfford || !meetsReqs || !lvlOk) ? 'disabled' : ''}>${maxed ? '✦ MAXED' : `Invest ${cost.toLocaleString()} SP`}</button>
+    <button class="si-btn" data-skillup="${id}" ${!canLearn ? 'disabled' : ''} style="${requiresBookNow && has4StarBook ? 'background:linear-gradient(180deg,#f59e0b,#b45309); color:#fff; font-weight:bold;' : ''}">${btnLabel}</button>
     <p class="si-sp">SP available: <strong>${(state.sp || 0).toLocaleString()}</strong></p>
     ${legacySectionHtml}
   `;
@@ -2540,8 +2587,31 @@ function getMaxAllowedReqLevel(pLvl) {
 }
 
 export function updateCraftUI(state, callbacks = {}) {
+  const forgeLvl = state.accountForgeLevel || state.craftLevel || 1;
+  const forgeExp = state.accountForgeExp || 0;
+  const reqExpForNext = forgeLvl * 100;
+  const pct = Math.min(100, Math.floor((forgeExp / reqExpForNext) * 100));
+
   const craftLvlEl = findElement('craft-level-num') || findElement('craft-level');
-  if (craftLvlEl) craftLvlEl.textContent = `${state.craftLevel || 1}`;
+  if (craftLvlEl) craftLvlEl.textContent = `${forgeLvl} (${pct}%)`;
+
+  const expBarEl = findElement('craft-forge-exp-bar');
+  if (expBarEl) expBarEl.style.width = `${pct}%`;
+
+  const marketBadge = findElement('market-status-badge');
+  if (marketBadge) {
+    if (forgeLvl >= 10) {
+      marketBadge.style.background = 'rgba(16,185,129,0.15)';
+      marketBadge.style.borderColor = '#10b981';
+      marketBadge.style.color = '#6ee7b7';
+      marketBadge.innerHTML = '🔓 Mercado Global: Liberado';
+    } else {
+      marketBadge.style.background = 'rgba(239,68,68,0.15)';
+      marketBadge.style.borderColor = '#ef4444';
+      marketBadge.style.color = '#fca5a5';
+      marketBadge.innerHTML = `🔒 Mercado: Requer Forja Lv. 10 (Atual: Lv. ${forgeLvl})`;
+    }
+  }
 
   const subTab = window._forgeSubTab || 'craft';
   const root = getRoot();
