@@ -61,6 +61,64 @@ export async function savePlayerStateToCloud(userId: string, stateData: any) {
     };
 
     await setDoc(userRef, payload, { merge: true });
+
+    // Sincroniza automaticamente o perfil público para o Ranking com os dados REAIS
+    try {
+      const stats = cleanState.stats || {};
+      const pAtk = Number(stats.atk || stats.pAtk) || 100;
+      const mAtk = Number(stats.matk || stats.mAtk) || 50;
+      const pDef = Number(stats.def || stats.pDef) || 80;
+      const mDef = Number(stats.mdef || stats.mDef) || 60;
+      const maxHp = Number(stats.maxHp || stats.hp) || 1000;
+      const level = Number(cleanState.level) || 1;
+      const cp = Number(stats.combatPower) || Math.floor(level * 150 + pAtk * 1.8 + pDef * 1.5 + mAtk * 1.6 + mDef * 1.5 + maxHp * 0.12);
+
+      let topWeaponName = 'Sem Arma';
+      let topWeaponGlow = null;
+      if (cleanState.equipment?.weapon) {
+        const wUid = cleanState.equipment.weapon;
+        const wItem = cleanState.inventory?.find((i: any) => i.uid === wUid || i.id === wUid);
+        if (wItem) {
+          const enc = Number(wItem.enchant || wItem.enchantLevel) || 0;
+          topWeaponName = enc > 0 ? `+${enc} ${wItem.name || 'Arma'}` : (wItem.name || 'Arma');
+          topWeaponGlow = wItem.augmentation?.glow || (enc >= 16 ? 'crimson-fire' : enc >= 10 ? 'golden-amber' : enc >= 4 ? 'blue-ice' : null);
+        }
+      }
+
+      const publicData = {
+        userId,
+        charName: cleanState.name || cleanState.charName || cleanState.playerName || 'Hero',
+        race: cleanState.race || 'Human',
+        className: cleanState.className || cleanState.class || 'Warrior',
+        level,
+        combatPower: cp,
+        olympiadPoints: Number(cleanState.olympiad?.points || cleanState.olympiadPoints) || 1000,
+        olympiadWins: Number(cleanState.olympiad?.wins || cleanState.olympiadWins) || 0,
+        olympiadLosses: Number(cleanState.olympiad?.losses || cleanState.olympiadLosses) || 0,
+        duelWins: Number(cleanState.colosseum?.duelWins || cleanState.duelWins) || 0,
+        duelLosses: Number(cleanState.colosseum?.duelLosses || cleanState.duelLosses) || 0,
+        clanName: cleanState.clan?.name || 'Sem Clã',
+        castleLord: cleanState.clan?.castle || null,
+        isHero: Boolean(cleanState.olympiad?.isHero || cleanState.isHero),
+        topWeaponName,
+        topWeaponGlow,
+        statsSnapshot: {
+          hp: maxHp,
+          pAtk,
+          mAtk,
+          pDef,
+          mDef,
+          crit: Number(stats.crit) || 10
+        },
+        updatedAt: serverTimestamp()
+      };
+
+      const profileRef = doc(db, 'public_profiles', userId);
+      await setDoc(profileRef, publicData, { merge: true });
+    } catch (profErr) {
+      console.warn('Auto Public Profile Sync error:', profErr);
+    }
+
     return true;
   } catch (err) {
     console.error('Cloud Save Error:', err);
@@ -122,6 +180,7 @@ export async function syncPlayerPublicProfile(userId: string, profileData: any) 
 
 /**
  * Busca rankings globais no Firestore (Combat Power, Olimpíadas, Duelos, Castelos)
+ * Consulta exclusivamente os perfis reais dos jogadores salvos no banco de dados.
  */
 export async function fetchLeaderboardRankings(category: 'cp' | 'olympiad' | 'duels' | 'castles' = 'cp', limitCount: number = 20) {
   try {
@@ -138,11 +197,69 @@ export async function fetchLeaderboardRankings(category: 'cp' | 'olympiad' | 'du
     const snap = await getDocs(q);
     const results: any[] = [];
     snap.forEach((d) => {
-      results.push({ id: d.id, ...d.data() });
+      const data = d.data();
+      if (data && (data.charName || data.name)) {
+        results.push({ id: d.id, ...data });
+      }
     });
+
+    // Se public_profiles ainda estiver vazio, consulta a coleção users para recuperar os jogadores reais
+    if (results.length === 0) {
+      const usersCol = collection(db, 'users');
+      const userSnap = await getDocs(usersCol);
+      userSnap.forEach((uDoc) => {
+        const uData = uDoc.data();
+        const state = uData?.state;
+        if (state && (state.name || state.charName)) {
+          const stats = state.stats || {};
+          const pAtk = Number(stats.atk || stats.pAtk) || 100;
+          const pDef = Number(stats.def || stats.pDef) || 80;
+          const mAtk = Number(stats.matk || stats.mAtk) || 50;
+          const mDef = Number(stats.mdef || stats.mDef) || 60;
+          const maxHp = Number(stats.maxHp || stats.hp) || 1000;
+          const level = Number(state.level) || 1;
+          const cp = Number(stats.combatPower) || Math.floor(level * 150 + pAtk * 1.8 + pDef * 1.5 + mAtk * 1.6 + mDef * 1.5 + maxHp * 0.12);
+
+          results.push({
+            id: uDoc.id,
+            userId: uDoc.id,
+            charName: state.name || state.charName || 'Hero',
+            race: state.race || 'Human',
+            className: state.className || state.class || 'Warrior',
+            level,
+            combatPower: cp,
+            olympiadPoints: Number(state.olympiad?.points || state.olympiadPoints) || 1000,
+            olympiadWins: Number(state.olympiad?.wins || state.olympiadWins) || 0,
+            olympiadLosses: Number(state.olympiad?.losses || state.olympiadLosses) || 0,
+            duelWins: Number(state.colosseum?.duelWins || state.duelWins) || 0,
+            duelLosses: Number(state.colosseum?.duelLosses || state.duelLosses) || 0,
+            clanName: state.clan?.name || 'Sem Clã',
+            castleLord: state.clan?.castle || null,
+            isHero: Boolean(state.olympiad?.isHero || state.isHero),
+            statsSnapshot: {
+              hp: maxHp,
+              pAtk,
+              mAtk,
+              pDef,
+              mDef,
+              crit: Number(stats.crit) || 10
+            }
+          });
+        }
+      });
+
+      if (category === 'olympiad') {
+        results.sort((a, b) => (b.olympiadPoints || 0) - (a.olympiadPoints || 0));
+      } else if (category === 'duels') {
+        results.sort((a, b) => (b.duelWins || 0) - (a.duelWins || 0));
+      } else {
+        results.sort((a, b) => (b.combatPower || 0) - (a.combatPower || 0));
+      }
+    }
+
     return results;
   } catch (err) {
-    console.warn('Leaderboard Fetch Notice (using local cache if available):', err);
+    console.warn('Leaderboard Fetch Notice:', err);
     return [];
   }
 }

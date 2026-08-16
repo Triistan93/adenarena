@@ -1,7 +1,7 @@
 import assert from 'assert';
 
 import { CombatPowerService } from '../adenarena/lineage-idle/src/services/CombatPowerService.js';
-import { RankingService, DEFAULT_LEGEND_PROFILES } from '../adenarena/lineage-idle/src/services/RankingService.js';
+import { RankingService } from '../adenarena/lineage-idle/src/services/RankingService.js';
 import { ColosseumService } from '../adenarena/lineage-idle/src/services/ColosseumService.js';
 import { getStats } from '../adenarena/lineage-idle/src/engine/StatsEngine.js';
 
@@ -94,13 +94,30 @@ console.log('✓ Perfil público gerado com sucesso:', {
 
 console.log('\n=== TESTE 3: Leaderboards e Ordenação de Categorias ===');
 async function testLeaderboards() {
+  // Simula ranking com perfis reais do Firestore
+  const mockRealFirestorePlayers = [
+    { userId: 'u1', charName: 'PlayerGamer1', combatPower: 195000, olympiadPoints: 2100, duelWins: 45 },
+    { userId: 'u2', charName: 'SilverBlade', combatPower: 145000, olympiadPoints: 1850, duelWins: 32 },
+    { userId: 'u3', charName: 'DarkArcher', combatPower: 98000, olympiadPoints: 1200, duelWins: 18 }
+  ];
+
+  globalThis.window = {
+    FirebaseBridge: {
+      fetchLeaderboard: async (category) => {
+        if (category === 'olympiad') return [...mockRealFirestorePlayers].sort((a, b) => b.olympiadPoints - a.olympiadPoints);
+        if (category === 'duels') return [...mockRealFirestorePlayers].sort((a, b) => b.duelWins - a.duelWins);
+        return [...mockRealFirestorePlayers].sort((a, b) => b.combatPower - a.combatPower);
+      }
+    }
+  };
+
   const cpRankings = await RankingService.getLeaderboard('cp', stateVeteran);
-  assert(cpRankings.length >= 6, 'Deve retornar rankings com os líderes');
+  assert(cpRankings.length >= 3, 'Deve retornar rankings com jogadores reais do Firestore + jogador local');
   // Verifica ordem decrescente de CP
   for (let i = 0; i < cpRankings.length - 1; i++) {
     assert(cpRankings[i].combatPower >= cpRankings[i + 1].combatPower, 'Rankings de CP devem estar ordenados');
   }
-  console.log(`✓ Ranking de Combat Power validado com ${cpRankings.length} competidores (Top 1: ${cpRankings[0].charName} - ${CombatPowerService.formatCombatPower(cpRankings[0].combatPower)})`);
+  console.log(`✓ Ranking de Combat Power validado com ${cpRankings.length} competidores reais (Top 1: ${cpRankings[0].charName} - ${CombatPowerService.formatCombatPower(cpRankings[0].combatPower)})`);
 
   const olyRankings = await RankingService.getLeaderboard('olympiad', stateVeteran);
   for (let i = 0; i < olyRankings.length - 1; i++) {
