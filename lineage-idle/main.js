@@ -170,6 +170,9 @@ import {
   renderExpeditionsUI as uiRenderExpeditionsUI,
   renderRaidsTab as uiRenderRaidsTab,
   renderOlympiadTab as uiRenderOlympiadTab,
+  renderClanTab as uiRenderClanTab,
+  openSkillEnchantModal,
+  openAugmentModal,
   initTooltipEvents as uiInitTooltipEvents,
   openCompoundModal,
   closeCompoundModal,
@@ -181,6 +184,9 @@ import {
 import { CashShopService } from './src/services/CashShopService.js';
 import { NoblesseService } from './src/services/NoblesseService.js';
 import { OlympiadService } from './src/services/OlympiadService.js';
+import { ClanService } from './src/services/ClanService.js';
+import { SkillEnchantService } from './src/services/SkillEnchantService.js';
+import { AugmentationService } from './src/services/AugmentationService.js';
 
 import { ensureAppLayout, showMenuPanel } from './src/ui/AppLayout.js';
 import { checkTabGuide, closeTabGuideModal, openTabGuideModal } from './src/ui/TutorialGuide.js';
@@ -2486,6 +2492,11 @@ function updateOlympiadUI() {
   if (pane) uiRenderOlympiadTab(pane, state);
 }
 
+function updateClanUI() {
+  const pane = el('tab-clan');
+  if (pane) uiRenderClanTab(pane, state);
+}
+
 function updateAllUI() {
   state = getState();
   uiInitTooltipEvents();
@@ -2517,6 +2528,7 @@ function updateAllUI() {
   if (isTabVisible('expeditions')) safeUiUpdate('expeditions', updateExpeditionsUI);
   if (isTabVisible('raids')) safeUiUpdate('raids', updateRaidsUI);
   if (isTabVisible('olympiad')) safeUiUpdate('olympiad', updateOlympiadUI);
+  if (isTabVisible('clan')) safeUiUpdate('clan', updateClanUI);
   if (isTabVisible('stage') || isTabVisible('zone') || isTabVisible('zones')) {
     safeUiUpdate('zone-bg', updateZoneBackground);
     safeUiUpdate('zone', updateZoneUI);
@@ -4410,6 +4422,7 @@ export function openPanel(tabName) {
   else if (targetTab === 'expeditions') safeUiUpdate('expeditions', updateExpeditionsUI);
   else if (targetTab === 'raids') safeUiUpdate('raids', updateRaidsUI);
   else if (targetTab === 'olympiad') safeUiUpdate('olympiad', updateOlympiadUI);
+  else if (targetTab === 'clan') safeUiUpdate('clan', updateClanUI);
   else if (targetTab === 'enchant') safeUiUpdate('enchant', updateEnchantUI);
   else if (targetTab === 'zones') safeUiUpdate('zones', updateZoneUI);
   else if (targetTab === 'codex') safeUiUpdate('codex', updateCodexUI);
@@ -5976,6 +5989,109 @@ export function init() {
         changeZone(zoneId);
         openPanel('zones');
       }
+    };
+
+    // Clan & Castle Siege Actions
+    window.setClanSubTab = (t) => {
+      window._activeClanSubTab = t;
+      updateClanUI();
+    };
+    window.upgradeClanAction = () => {
+      const res = ClanService.upgradeClan(state, {
+        log,
+        onUpdate: () => { updateAllUI(); save(); }
+      });
+      updateAllUI();
+      save();
+      return res;
+    };
+    window.startCastleSiegeAction = (castleId) => {
+      const res = ClanService.startSiege(state, castleId, {
+        log,
+        onUpdate: () => { window.setClanSubTab('siege'); updateAllUI(); save(); }
+      });
+      if (res.success) window.setClanSubTab('siege');
+      updateAllUI();
+      save();
+      return res;
+    };
+    window.executeSiegeTurnAction = () => {
+      const res = ClanService.executeSiegeTurn(state, {
+        log,
+        onUpdate: () => { updateAllUI(); save(); }
+      });
+      updateAllUI();
+      save();
+      return res;
+    };
+    window.claimCastleTaxesAction = (castleId) => {
+      const res = ClanService.claimCastleTaxes(state, castleId, {
+        log,
+        onUpdate: () => { updateAllUI(); save(); }
+      });
+      updateAllUI();
+      save();
+      return res;
+    };
+    window.buyCastleShopItemAction = (itemId) => {
+      const res = ClanService.buyCastleShopItem(state, itemId, {
+        log,
+        onUpdate: () => { updateAllUI(); save(); }
+      });
+      updateAllUI();
+      save();
+      return res;
+    };
+
+    // Skill Enchantment Actions
+    window.openSkillEnchantModalAction = (skillId, skillName) => {
+      openSkillEnchantModal(skillId, skillName, state);
+    };
+    window.enchantSkillAction = (skillId, skillName, route, isMastery) => {
+      const res = SkillEnchantService.enchantSkill(state, skillId, skillName, route, isMastery, {
+        log,
+        onUpdate: () => {
+          openSkillEnchantModal(skillId, skillName, state);
+          updateAllUI();
+          save();
+        }
+      });
+      updateAllUI();
+      save();
+      return res;
+    };
+
+    // Weapon Augmentation Actions
+    window.openAugmentModalAction = () => {
+      openAugmentModal(state);
+    };
+    window.augmentWeaponAction = (lifeStoneId) => {
+      const weapon = state.equipment?.weapon ? (state.inventory?.find(i => i.uid === state.equipment.weapon) || state.equipment.weapon) : null;
+      const res = AugmentationService.augmentWeapon(state, weapon, lifeStoneId, {
+        log,
+        onUpdate: () => {
+          openAugmentModal(state);
+          updateAllUI();
+          save();
+        }
+      });
+      updateAllUI();
+      save();
+      return res;
+    };
+    window.removeAugmentAction = () => {
+      const weapon = state.equipment?.weapon ? (state.inventory?.find(i => i.uid === state.equipment.weapon) || state.equipment.weapon) : null;
+      const res = AugmentationService.removeAugmentation(state, weapon, {
+        log,
+        onUpdate: () => {
+          openAugmentModal(state);
+          updateAllUI();
+          save();
+        }
+      });
+      updateAllUI();
+      save();
+      return res;
     };
 
     window.getGameState = () => {

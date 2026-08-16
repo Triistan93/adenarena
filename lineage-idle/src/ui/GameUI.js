@@ -23,6 +23,13 @@ import { INFINITY_WEAPONS, HEROIC_SKILLS, OLYMPIAD_GLADIATORS, OLYMPIAD_SHOP_CAT
 import { NOBLESSE_QUEST_DEFS } from '../data/quests.js';
 import { NoblesseService } from '../services/NoblesseService.js';
 import { OlympiadService } from '../services/OlympiadService.js';
+import { CLAN_LEVEL_DATA, CLAN_SKILLS } from '../data/clan.js';
+import { CASTLES, CASTLE_SHOP_CATALOG } from '../data/castles.js';
+import { ClanService } from '../services/ClanService.js';
+import { ENCHANT_ROUTES, getEnchantLevelData, ENCHANT_ITEMS } from '../data/skill_enchant.js';
+import { SkillEnchantService } from '../services/SkillEnchantService.js';
+import { LIFE_STONES, ITEM_SKILLS } from '../data/augmentation.js';
+import { AugmentationService } from '../services/AugmentationService.js';
 import { heroSVG, monsterSVG, MON_IMG } from '../../art.js';
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -4667,6 +4674,444 @@ export function renderOlympiadTab(container, state) {
     </div>
   `;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   15. CLAN & CASTLE SIEGES TAB (🏰 Clãs, Castelos & Sieges)
+═══════════════════════════════════════════════════════════════════════════ */
+export function renderClanTab(container, state) {
+  if (!container || !state) return;
+  const root = getRoot();
+  const activeSubTab = window._activeClanSubTab || 'skills';
+
+  // Atualizar geração passiva de impostos
+  ClanService.updateTaxesTick(state);
+  const clanStatus = ClanService.getClanStatus(state);
+  const clan = clanStatus.clan;
+  const lvlData = clanStatus.levelData;
+  const nextLvl = clanStatus.nextLevelData;
+
+  let subContentHtml = '';
+
+  // 1. Sub-aba: Habilidades de Clã
+  if (activeSubTab === 'skills') {
+    const skillsHtml = Object.values(CLAN_SKILLS).map(sk => {
+      const isUnlocked = clan.level >= sk.levelReq;
+      const statusBadge = isUnlocked
+        ? `<span style="color:#4ade80; font-size:11px; font-weight:bold;">✓ Ativa</span>`
+        : `<span style="color:#94a3b8; font-size:11px;">🔒 Requer Clã Lv. ${sk.levelReq}</span>`;
+
+      return `
+        <div style="background:rgba(0,0,0,0.45); border:1px solid ${isUnlocked ? 'rgba(74,222,128,0.3)' : 'rgba(255,255,255,0.08)'}; border-radius:8px; padding:12px; display:flex; align-items:center; gap:12px;">
+          <div style="width:40px; height:40px; border-radius:6px; background:#18181b; border:1px solid ${isUnlocked ? '#4ade80' : '#3f3f46'}; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+            <img src="${sk.icon}" style="width:32px; height:32px; object-fit:contain; filter:${isUnlocked ? 'none' : 'grayscale(100%) opacity(0.5)'};" />
+          </div>
+          <div style="flex:1;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2px;">
+              <span style="font-family:'Cinzel',serif; font-size:13px; font-weight:bold; color:${isUnlocked ? '#fef08a' : '#94a3b8'};">${sk.name}</span>
+              ${statusBadge}
+            </div>
+            <div style="font-size:11px; color:#cbd5e1; line-height:1.35;">${sk.desc}</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    subContentHtml = `
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:10px;">
+        ${skillsHtml}
+      </div>
+    `;
+  }
+  // 2. Sub-aba: Castelos & Tributos de Aden
+  else if (activeSubTab === 'castles') {
+    const castlesHtml = Object.values(CASTLES).map(c => {
+      const isOwned = clan.castles?.includes(c.id);
+      const accTax = clan.accumulatedTaxes?.[c.id] || 0;
+
+      return `
+        <div style="background:rgba(0,0,0,0.45); border:1px solid ${isOwned ? 'rgba(234,179,8,0.5)' : 'rgba(255,255,255,0.08)'}; border-radius:8px; padding:14px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; gap:12px;">
+          <div style="flex:1;">
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+              <span style="font-family:'Cinzel',serif; font-size:14px; font-weight:bold; color:${isOwned ? '#fde047' : '#e2e8f0'};">${c.name}</span>
+              ${isOwned ? '<span style="background:rgba(234,179,8,0.2); border:1px solid #eab308; color:#fde047; font-size:10.5px; padding:2px 8px; border-radius:10px; font-weight:bold;">👑 Sob Seu Comando</span>' : '<span style="color:#94a3b8; font-size:11px;">Sem Senhor / Neutro</span>'}
+            </div>
+            <div style="font-size:11.5px; color:#cbd5e1; margin-bottom:6px;">${c.desc}</div>
+            <div style="font-size:11px; color:#94a3b8; display:flex; gap:14px; flex-wrap:wrap;">
+              <span>📊 Taxa de Comércio: <strong style="color:#fde047;">${c.taxRatePercent}%</strong></span>
+              <span>💰 Renda: <strong style="color:#a3e635;">${c.adenaPerMinute.toLocaleString()} Adena/min</strong></span>
+              <span>⚔️ Nível Recomendado: <strong>Lv. ${c.reqCharLevel}+</strong></span>
+            </div>
+            ${isOwned ? `
+              <div style="margin-top:8px; font-size:11.5px; color:#fef08a;">
+                Tesouro do Castelo Acumulado: <strong style="color:#a3e635; font-size:13px;">${accTax.toLocaleString()} Adena</strong>
+              </div>
+            ` : ''}
+          </div>
+          <div>
+            ${isOwned ? `
+              <button
+                onclick="window.claimCastleTaxesAction('${c.id}')"
+                style="padding:8px 16px; font-size:11px; font-weight:bold; background:linear-gradient(180deg,#16a34a,#15803d); border:1px solid #4ade80; color:#fff; border-radius:6px; cursor:pointer;"
+              >
+                💰 Recolher Tributos
+              </button>
+            ` : `
+              <button
+                onclick="window.startCastleSiegeAction('${c.id}')"
+                style="padding:8px 16px; font-size:11px; font-weight:bold; background:linear-gradient(180deg,#b91c1c,#991b1b); border:1px solid #ef4444; color:#fff; border-radius:6px; cursor:pointer;"
+              >
+                ⚔️ Declarar Cerco
+              </button>
+            `}
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    subContentHtml = `<div>${castlesHtml}</div>`;
+  }
+  // 3. Sub-aba: Guerra de Cerco (Siege Arena)
+  else if (activeSubTab === 'siege') {
+    const siege = state.activeSiege;
+
+    if (!siege || siege.isCompleted) {
+      subContentHtml = `
+        <div style="text-align:center; padding:30px; background:rgba(0,0,0,0.3); border-radius:8px; border:1px dashed rgba(255,255,255,0.1);">
+          <div style="font-size:36px; margin-bottom:8px;">🏰</div>
+          <div style="font-family:'Cinzel',serif; font-size:15px; color:#e2e8f0; margin-bottom:6px;">Nenhum Cerco Ativo no Momento</div>
+          <div style="font-size:12px; color:#94a3b8; margin-bottom:14px;">Vá até a aba "Castelos &amp; Tributos" e declare guerra a um dos 5 castelos de Aden!</div>
+          <button
+            onclick="window.setClanSubTab('castles')"
+            style="padding:8px 16px; font-size:11.5px; font-weight:bold; background:linear-gradient(180deg,#ca8a04,#a16207); border:1px solid #fde047; color:#fff; border-radius:6px; cursor:pointer;"
+          >
+            Ver Castelos Disponíveis
+          </button>
+        </div>
+      `;
+    } else {
+      const phaseNames = {
+        1: 'Fase 1: Destruição dos Portões Exteriores',
+        2: 'Fase 2: Confronto com a Guarda Real do Castelo',
+        3: 'Fase 3: Sala do Trono — Canalização do Seal of Ruler'
+      };
+
+      const hpCurrent = siege.phase === 1 ? siege.gateHp : (siege.phase === 2 ? siege.guardsHp : siege.castRounds);
+      const hpMax = siege.phase === 1 ? siege.maxGateHp : (siege.phase === 2 ? siege.maxGuardsHp : siege.reqCastRounds);
+      const hpPercent = Math.min(100, Math.max(0, Math.round((hpCurrent / hpMax) * 100)));
+
+      subContentHtml = `
+        <div style="background:rgba(0,0,0,0.5); border:1px solid #ef4444; border-radius:8px; padding:16px; margin-bottom:14px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <div>
+              <div style="font-family:'Cinzel',serif; font-size:16px; font-weight:bold; color:#f87171;">⚔️ CERCO ATIVO: ${siege.castleName}</div>
+              <div style="font-size:12px; color:#fde047; font-weight:bold;">${phaseNames[siege.phase]}</div>
+            </div>
+            <button
+              onclick="window.executeSiegeTurnAction()"
+              style="padding:10px 20px; font-family:'Cinzel',serif; font-size:13px; font-weight:bold; background:linear-gradient(180deg,#dc2626,#b91c1c); border:1px solid #f87171; color:#fff; border-radius:6px; cursor:pointer; box-shadow:0 0 12px rgba(239,68,68,0.5);"
+            >
+              ${siege.phase === 3 ? '✨ Canalizar Seal of Ruler' : '⚔️ Desferir Ataque do Clã'}
+            </button>
+          </div>
+
+          <!-- Barra de Progresso da Fase -->
+          <div style="margin-bottom:12px;">
+            <div style="display:flex; justify-content:space-between; font-size:11px; color:#cbd5e1; margin-bottom:4px;">
+              <span>${siege.phase === 3 ? 'Progresso do Selo Sagrado' : 'HP do Alvo'}</span>
+              <span>${hpCurrent.toLocaleString()} / ${hpMax.toLocaleString()} (${hpPercent}%)</span>
+            </div>
+            <div style="width:100%; height:12px; background:#18181b; border-radius:6px; overflow:hidden; border:1px solid #3f3f46;">
+              <div style="width:${hpPercent}%; height:100%; background:${siege.phase === 3 ? 'linear-gradient(90deg,#eab308,#fde047)' : 'linear-gradient(90deg,#ef4444,#dc2626)'}; transition:width 0.3s ease;"></div>
+            </div>
+          </div>
+
+          <!-- Log do Cerco -->
+          <div style="background:#09090b; border:1px solid #27272a; border-radius:6px; padding:10px; max-height:140px; overflow-y:auto; font-family:monospace; font-size:11px; color:#cbd5e1;">
+            ${(siege.logs || []).map(l => `<div style="margin-bottom:3px;">${l}</div>`).join('')}
+          </div>
+        </div>
+      `;
+    }
+  }
+  // 4. Sub-aba: Loja do Castelo
+  else if (activeSubTab === 'shop') {
+    const shopHtml = CASTLE_SHOP_CATALOG.map(item => `
+      <div style="background:rgba(0,0,0,0.45); border:1px solid rgba(234,179,8,0.3); border-radius:8px; padding:12px; display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:10px;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div style="width:40px; height:40px; border-radius:6px; background:#18181b; border:1px solid #eab308; display:flex; align-items:center; justify-content:center;">
+            <img src="${item.icon}" style="width:32px; height:32px; object-fit:contain;" />
+          </div>
+          <div>
+            <div style="font-family:'Cinzel',serif; font-size:13px; font-weight:bold; color:#fde047;">${item.name}</div>
+            <div style="font-size:11px; color:#cbd5e1;">${item.desc}</div>
+            <div style="font-size:11px; color:#a3e635; font-weight:bold; margin-top:2px;">Preço: ${item.priceAdena.toLocaleString()} Adena</div>
+          </div>
+        </div>
+        <button
+          onclick="window.buyCastleShopItemAction('${item.id}')"
+          style="padding:6px 14px; font-size:11px; font-weight:bold; background:linear-gradient(180deg,#ca8a04,#a16207); border:1px solid #fde047; color:#fff; border-radius:6px; cursor:pointer;"
+        >
+          Comprar
+        </button>
+      </div>
+    `).join('');
+
+    subContentHtml = `<div>${shopHtml}</div>`;
+  }
+
+  container.innerHTML = `
+    <div style="padding:14px; color:#e2e8f0;">
+      <!-- Header do Clã -->
+      <div style="background:linear-gradient(135deg,rgba(161,98,7,0.25),rgba(0,0,0,0.6)); border:1px solid rgba(234,179,8,0.4); border-radius:10px; padding:16px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center; gap:14px; flex-wrap:wrap;">
+        <div style="display:flex; align-items:center; gap:14px;">
+          <div style="font-size:40px; filter:drop-shadow(0 0 10px rgba(234,179,8,0.5));">🛡️</div>
+          <div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-family:'Cinzel',serif; font-size:18px; font-weight:bold; color:#fde047;">${clan.name}</span>
+              <span style="background:#ca8a04; color:#fff; font-size:11px; font-weight:bold; padding:2px 8px; border-radius:10px;">Nível ${clan.level} (${lvlData.title})</span>
+            </div>
+            <div style="font-size:11.5px; color:#cbd5e1; margin-top:2px;">${lvlData.desc}</div>
+            <div style="font-size:11px; color:#94a3b8; margin-top:4px;">Capacidade: <strong>${lvlData.maxMembers} membros</strong> | Castelos Governados: <strong style="color:#fde047;">${(clan.castles || []).length}</strong></div>
+          </div>
+        </div>
+
+        <div>
+          ${nextLvl ? `
+            <button
+              onclick="window.upgradeClanAction()"
+              style="padding:8px 16px; font-family:'Cinzel',serif; font-size:12px; font-weight:bold; background:linear-gradient(180deg,#16a34a,#15803d); border:1px solid #4ade80; color:#fff; border-radius:6px; cursor:pointer;"
+            >
+              ⬆️ Elevar Clã para Lv. ${nextLvl.level} (${nextLvl.costAdena.toLocaleString()} Adena / ${nextLvl.costSp.toLocaleString()} SP)
+            </button>
+          ` : `
+            <span style="color:#fde047; font-weight:bold; font-size:12px;">👑 Nível Máximo do Clã</span>
+          `}
+        </div>
+      </div>
+
+      <!-- Sub-Abas -->
+      <div style="display:flex; gap:8px; margin-bottom:14px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:8px; flex-wrap:wrap;">
+        <button
+          onclick="window.setClanSubTab('skills')"
+          style="padding:8px 16px; font-family:'Cinzel',serif; font-size:12px; font-weight:bold; background:${activeSubTab === 'skills' ? 'linear-gradient(180deg,#ca8a04,#a16207)' : 'rgba(0,0,0,0.4)'}; border:1px solid ${activeSubTab === 'skills' ? '#fde047' : 'rgba(255,255,255,0.1)'}; color:${activeSubTab === 'skills' ? '#fff' : '#cbd5e1'}; border-radius:6px; cursor:pointer;"
+        >
+          🛡️ Habilidades de Clã
+        </button>
+        <button
+          onclick="window.setClanSubTab('castles')"
+          style="padding:8px 16px; font-family:'Cinzel',serif; font-size:12px; font-weight:bold; background:${activeSubTab === 'castles' ? 'linear-gradient(180deg,#ca8a04,#a16207)' : 'rgba(0,0,0,0.4)'}; border:1px solid ${activeSubTab === 'castles' ? '#fde047' : 'rgba(255,255,255,0.1)'}; color:${activeSubTab === 'castles' ? '#fff' : '#cbd5e1'}; border-radius:6px; cursor:pointer;"
+        >
+          🏰 Castelos &amp; Tributos
+        </button>
+        <button
+          onclick="window.setClanSubTab('siege')"
+          style="padding:8px 16px; font-family:'Cinzel',serif; font-size:12px; font-weight:bold; background:${activeSubTab === 'siege' ? 'linear-gradient(180deg,#ca8a04,#a16207)' : 'rgba(0,0,0,0.4)'}; border:1px solid ${activeSubTab === 'siege' ? '#fde047' : 'rgba(255,255,255,0.1)'}; color:${activeSubTab === 'siege' ? '#fff' : '#cbd5e1'}; border-radius:6px; cursor:pointer;"
+        >
+          ⚔️ Guerra de Cerco (Siege)
+        </button>
+        <button
+          onclick="window.setClanSubTab('shop')"
+          style="padding:8px 16px; font-family:'Cinzel',serif; font-size:12px; font-weight:bold; background:${activeSubTab === 'shop' ? 'linear-gradient(180deg,#ca8a04,#a16207)' : 'rgba(0,0,0,0.4)'}; border:1px solid ${activeSubTab === 'shop' ? '#fde047' : 'rgba(255,255,255,0.1)'}; color:${activeSubTab === 'shop' ? '#fff' : '#cbd5e1'}; border-radius:6px; cursor:pointer;"
+        >
+          🛍️ Loja do Castelo
+        </button>
+      </div>
+
+      <!-- Conteúdo da Sub-Aba -->
+      ${subContentHtml}
+    </div>
+  `;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   16. SKILL ENCHANTMENT MODAL (🔮 Encantamento de Habilidades)
+═══════════════════════════════════════════════════════════════════════════ */
+export function openSkillEnchantModal(skillId, skillName = 'Habilidade', state) {
+  const root = getRoot();
+  let modal = root.querySelector('#skill-enchant-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'skill-enchant-modal';
+    root.appendChild(modal);
+  }
+
+  const current = SkillEnchantService.getSkillEnchant(state, skillId);
+  const nextLvl = current.level + 1;
+  const costData = getEnchantLevelData(nextLvl);
+  const activeRoute = current.route || 'power';
+
+  modal.style.display = 'flex';
+  modal.style.position = 'fixed';
+  modal.style.inset = '0';
+  modal.style.background = 'rgba(0,0,0,0.75)';
+  modal.style.zIndex = '10000';
+  modal.style.justifyContent = 'center';
+  modal.style.alignItems = 'center';
+  modal.style.backdropFilter = 'blur(4px)';
+
+  modal.innerHTML = `
+    <div style="background:#18181b; border:1px solid #a855f7; border-radius:12px; width:92%; max-width:480px; padding:20px; color:#e2e8f0; box-shadow:0 0 25px rgba(168,85,247,0.4);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:10px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:20px;">🔮</span>
+          <span style="font-family:'Cinzel',serif; font-size:16px; font-weight:bold; color:#c084fc;">Encantamento de Habilidade</span>
+        </div>
+        <button onclick="document.querySelector('#idle-host')?.shadowRoot?.querySelector('#skill-enchant-modal')?.remove()" style="background:none; border:none; color:#94a3b8; font-size:18px; cursor:pointer;">✕</button>
+      </div>
+
+      <div style="text-align:center; margin-bottom:16px;">
+        <div style="font-family:'Cinzel',serif; font-size:18px; font-weight:bold; color:#fde047;">${skillName} <span style="color:#a855f7;">+${current.level}</span></div>
+        <div style="font-size:12px; color:#cbd5e1; margin-top:2px;">Próximo Nível: <strong style="color:#4ade80;">+${nextLvl}</strong> | Chance de Sucesso: <strong style="color:#fde047;">${costData.successRatePercent}%</strong></div>
+      </div>
+
+      <!-- Seleção de Rota -->
+      <div style="margin-bottom:14px;">
+        <label style="font-size:11.5px; color:#94a3b8; display:block; margin-bottom:6px;">Escolha a Rota de Encantamento:</label>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+          ${Object.values(ENCHANT_ROUTES).map(r => `
+            <button
+              onclick="window._selectedEnchantRoute = '${r.id}'; openSkillEnchantModal('${skillId}', '${skillName}', window.getGameState ? window.getGameState() : {})"
+              style="padding:8px; font-size:11px; font-weight:bold; text-align:left; background:${(window._selectedEnchantRoute || activeRoute) === r.id ? '#581c87' : '#27272a'}; border:1px solid ${(window._selectedEnchantRoute || activeRoute) === r.id ? '#c084fc' : '#3f3f46'}; color:#fff; border-radius:6px; cursor:pointer;"
+            >
+              ${r.name}
+            </button>
+          `).join('')}
+        </div>
+      </div>
+
+      <!-- Custos -->
+      <div style="background:#09090b; border:1px solid #27272a; border-radius:8px; padding:12px; margin-bottom:16px; font-size:11.5px; color:#cbd5e1;">
+        <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+          <span>Custo de SP:</span>
+          <strong style="color:#60a5fa;">${costData.spCost.toLocaleString()} SP</strong>
+        </div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+          <span>Custo de Adena:</span>
+          <strong style="color:#a3e635;">${costData.adenaCost.toLocaleString()} Adena</strong>
+        </div>
+        <div style="display:flex; justify-content:space-between;">
+          <span>Requisito de Item:</span>
+          <strong style="color:#fde047;">1x Giant's Codex</strong>
+        </div>
+      </div>
+
+      <!-- Botões de Ação -->
+      <div style="display:flex; gap:8px;">
+        <button
+          onclick="window.enchantSkillAction('${skillId}', '${skillName}', '${window._selectedEnchantRoute || activeRoute}', false)"
+          style="flex:1; padding:10px; font-size:11.5px; font-weight:bold; background:linear-gradient(180deg,#7e22ce,#6b21a8); border:1px solid #a855f7; color:#fff; border-radius:6px; cursor:pointer;"
+        >
+          📜 Encantar Normal
+        </button>
+        <button
+          onclick="window.enchantSkillAction('${skillId}', '${skillName}', '${window._selectedEnchantRoute || activeRoute}', true)"
+          style="flex:1; padding:10px; font-size:11.5px; font-weight:bold; background:linear-gradient(180deg,#ca8a04,#a16207); border:1px solid #fde047; color:#fff; border-radius:6px; cursor:pointer;"
+        >
+          🌟 Encanto Seguro (Mastery)
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   17. WEAPON AUGMENTATION MODAL (💎 Augmentação com Life Stones)
+═══════════════════════════════════════════════════════════════════════════ */
+export function openAugmentModal(state) {
+  const root = getRoot();
+  let modal = root.querySelector('#augment-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'augment-modal';
+    root.appendChild(modal);
+  }
+
+  const weapon = state.equipment?.weapon;
+
+  modal.style.display = 'flex';
+  modal.style.position = 'fixed';
+  modal.style.inset = '0';
+  modal.style.background = 'rgba(0,0,0,0.75)';
+  modal.style.zIndex = '10000';
+  modal.style.justifyContent = 'center';
+  modal.style.alignItems = 'center';
+  modal.style.backdropFilter = 'blur(4px)';
+
+  if (!weapon) {
+    modal.innerHTML = `
+      <div style="background:#18181b; border:1px solid #ef4444; border-radius:12px; padding:20px; text-align:center; color:#e2e8f0; max-width:380px;">
+        <div style="font-size:32px; margin-bottom:8px;">⚠️</div>
+        <div style="font-family:'Cinzel',serif; font-size:15px; margin-bottom:6px;">Nenhuma Arma Equipada</div>
+        <div style="font-size:11.5px; color:#cbd5e1; margin-bottom:14px;">Equipe uma arma no seu personagem antes de visitar o Ferreiro de Augmentação.</div>
+        <button onclick="document.querySelector('#idle-host')?.shadowRoot?.querySelector('#augment-modal')?.remove()" style="padding:6px 14px; background:#27272a; border:1px solid #3f3f46; color:#fff; border-radius:6px; cursor:pointer;">Fechar</button>
+      </div>
+    `;
+    return;
+  }
+
+  const currentAug = weapon.augmentation;
+  const activeStoneId = window._selectedLifeStoneId || 'life_stone_top_76';
+
+  modal.innerHTML = `
+    <div style="background:#18181b; border:1px solid #06b6d4; border-radius:12px; width:92%; max-width:500px; padding:20px; color:#e2e8f0; box-shadow:0 0 25px rgba(6,182,212,0.4);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:10px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:20px;">💎</span>
+          <span style="font-family:'Cinzel',serif; font-size:16px; font-weight:bold; color:#67e8f9;">Ferreiro de Augmentação de Armas</span>
+        </div>
+        <button onclick="document.querySelector('#idle-host')?.shadowRoot?.querySelector('#augment-modal')?.remove()" style="background:none; border:none; color:#94a3b8; font-size:18px; cursor:pointer;">✕</button>
+      </div>
+
+      <div style="text-align:center; margin-bottom:16px;">
+        <div style="font-family:'Cinzel',serif; font-size:16px; font-weight:bold; color:#fde047;">${weapon.name || 'Arma Equipada'}</div>
+        ${currentAug ? `
+          <div style="margin-top:6px; background:#083344; border:1px solid #06b6d4; border-radius:6px; padding:8px; font-size:11.5px; color:#a5f3fc;">
+            <div>✨ Augmentação Ativa: <strong>${currentAug.lifeStoneName}</strong></div>
+            <div style="margin-top:2px;">Atributos: <strong>${Object.entries(currentAug.stats || {}).map(([k,v]) => `+${v} ${k.toUpperCase()}`).join(', ')}</strong></div>
+            ${currentAug.itemSkill ? `<div style="color:#fde047; font-weight:bold; margin-top:2px;">Habilidade: ${currentAug.itemSkill.name}</div>` : ''}
+          </div>
+        ` : `
+          <div style="font-size:11.5px; color:#94a3b8; margin-top:4px;">Nenhuma Pedra da Vida infundida nesta arma ainda.</div>
+        `}
+      </div>
+
+      <!-- Seleção de Life Stone -->
+      <div style="margin-bottom:14px;">
+        <label style="font-size:11.5px; color:#94a3b8; display:block; margin-bottom:6px;">Escolha a Life Stone para Infundir:</label>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          ${Object.values(LIFE_STONES).map(s => `
+            <button
+              onclick="window._selectedLifeStoneId = '${s.id}'; openAugmentModal(window.getGameState ? window.getGameState() : {})"
+              style="padding:10px; font-size:11px; text-align:left; background:${activeStoneId === s.id ? '#164e63' : '#27272a'}; border:1px solid ${activeStoneId === s.id ? '#22d3ee' : '#3f3f46'}; color:#fff; border-radius:6px; cursor:pointer;"
+            >
+              <div style="font-weight:bold; color:#67e8f9;">${s.name}</div>
+              <div style="font-size:10px; color:#cbd5e1;">${s.desc} | Preço: ${s.priceAdena.toLocaleString()} Adena</div>
+            </button>
+          `).join('')}
+        </div>
+      </div>
+
+      <!-- Botões de Ação -->
+      <div style="display:flex; gap:8px;">
+        <button
+          onclick="window.augmentWeaponAction('${activeStoneId}')"
+          style="flex:1; padding:10px; font-size:12px; font-weight:bold; background:linear-gradient(180deg,#0891b2,#0e7490); border:1px solid #22d3ee; color:#fff; border-radius:6px; cursor:pointer; box-shadow:0 0 10px rgba(34,211,238,0.4);"
+        >
+          💎 Infundir Life Stone
+        </button>
+        ${currentAug ? `
+          <button
+            onclick="window.removeAugmentAction()"
+            style="padding:10px 16px; font-size:11px; font-weight:bold; background:#7f1d1d; border:1px solid #ef4444; color:#fca5a5; border-radius:6px; cursor:pointer;"
+          >
+            🔨 Remover (100k)
+          </button>
+        ` : ''}
+      </div>
+    </div>
+  `;
+}
+
 
 
 

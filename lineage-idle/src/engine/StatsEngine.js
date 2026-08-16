@@ -569,6 +569,30 @@ export function getStats(state) {
   xpBoost += (Number(eb.xpBoost) || 0) + (Number(setB.xpBoost) || 0);
   goldBoost += (Number(eb.goldBoost || eb.adenaBoost) || 0) + (Number(setB.goldBoost || setB.adenaBoost) || 0);
 
+  // Process Clan Skills Bonuses
+  if (state.clan && state.clan.level) {
+    const clanLvl = state.clan.level;
+    if (clanLvl >= 1) { elixirHpMult += 0.10; } // Clan Imperium (+10% HP)
+    if (clanLvl >= 2) { buffAtkMult += 0.08; } // Clan Might (+8% P.Atk)
+    if (clanLvl >= 3) { buffDef += Math.floor(baseDef * 0.10); } // Clan Shield (+10% P.Def)
+    if (clanLvl >= 4) { buffMatk += Math.floor(baseMatk * 0.10); buffMdef += Math.floor(baseMdef * 0.12); } // Clan Empower & Magic Barrier
+    if (clanLvl >= 5) { mpRegenBonus += 0.20; buffSpd += 5; } // Clan Vitality (+20% Regen, +5 Spd)
+  }
+
+  // Process Weapon Augmentation Stats
+  const equippedWeaponItem = state.equipment?.weapon ? (state.inventory?.find(i => i.uid === state.equipment.weapon) || state.equipment.weapon) : null;
+  const weaponAug = (equippedWeaponItem && typeof equippedWeaponItem === 'object') ? equippedWeaponItem.augmentation : null;
+  let augCrit = 0;
+  if (weaponAug && weaponAug.stats) {
+    if (weaponAug.stats.atk) buffAtk += weaponAug.stats.atk;
+    if (weaponAug.stats.matk) buffMatk += weaponAug.stats.matk;
+    if (weaponAug.stats.def) buffDef += weaponAug.stats.def;
+    if (weaponAug.stats.mdef) buffMdef += weaponAug.stats.mdef;
+    if (weaponAug.stats.crit) augCrit += weaponAug.stats.crit;
+    if (weaponAug.stats.eva) baseEva += weaponAug.stats.eva;
+    if (weaponAug.stats.hp) elixirHpMult += (weaponAug.stats.hp / 2000);
+  }
+
   // Process Full Heirloom Sovereign Set Bonus (Pack Tier 3 Multi-Piece)
   let heirloomPiecesEquipped = 0;
   if (state.equipment) {
@@ -719,7 +743,7 @@ export function getStats(state) {
   const finalEva  = Math.floor(baseEva + (Number(eb.eva) || 0) + (Number(setB.eva) || 0) + codexB.eva + dollsB.eva);
   const finalMatk = Math.floor((baseMatk + (Number(eb.matk) || 0) + (Number(setB.matk) || 0) + buffMatk + codexB.matk + dollsB.matk + certB.matk) * towerMult);
   const finalMdef = Math.floor((baseMdef + (Number(eb.mdef) || 0) + (Number(setB.mdef) || 0) + buffMdef + codexB.mdef + dollsB.mdef + certB.mdef) * towerMult);
-  const finalCrit = (Number(eb.crit) || 0) + (Number(setB.crit) || 0) + codexB.crit + dollsB.crit + certB.crit + astralB.crit + saCrit;
+  const finalCrit = (Number(eb.crit) || 0) + (Number(setB.crit) || 0) + codexB.crit + dollsB.crit + certB.crit + astralB.crit + saCrit + augCrit;
 
   const lootBonus  = (Number(race?.stats?.lootBonus) || 0) + (Number(cls?.base?.lootBonus) || 0) + itemLootBonus + luckBoost;
   const atkSpd     = (buffSpd + (dollsB.speed || 0)) / 100;

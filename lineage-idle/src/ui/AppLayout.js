@@ -30,6 +30,7 @@ export const PANEL_SELECTORS = {
   expeditions: ['#tab-expeditions', '#expeditions-panel', '[data-panel="expeditions"]'],
   raids: ['#tab-raids', '#raids-panel', '[data-panel="raids"]'],
   olympiad: ['#tab-olympiad', '#olympiad-panel', '[data-panel="olympiad"]'],
+  clan: ['#tab-clan', '#clan-panel', '[data-panel="clan"]'],
   forge: ['#tab-forge', '#forge-panel', '[data-panel="forge"]'],
   codex: ['#tab-codex', '#codex-panel', '[data-panel="codex"]']
 };
