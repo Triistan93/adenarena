@@ -15,6 +15,7 @@ let _cachedRankings = {
   castles: [],
   lastFetchTime: 0
 };
+let _lastProfileSync = 0;
 
 export const RankingService = {
   /**
@@ -76,10 +77,16 @@ export const RankingService = {
   },
 
   /**
-   * Sincroniza o perfil atual do jogador no Firebase Firestore
+   * Sincroniza o perfil atual do jogador no Firebase Firestore (com debounce/throttling de 30s)
    * @param {Object} state 
+   * @param {boolean} [force=false]
    */
-  async syncToCloud(state) {
+  async syncToCloud(state, force = false) {
+    const now = Date.now();
+    if (!force && now - _lastProfileSync < 30000) {
+      return; // Evita sobrecarga de escritas no Firestore durante ações rápidas/spam de cliques
+    }
+    _lastProfileSync = now;
     try {
       if (typeof window !== 'undefined' && window.FirebaseBridge?.syncPublicProfile) {
         const profile = this.buildPublicProfile(state);

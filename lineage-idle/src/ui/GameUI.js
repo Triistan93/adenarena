@@ -2420,14 +2420,15 @@ export function updateShopUI(state, callbacks = {}) {
     `;
   }).join('');
 
-  container.querySelectorAll('[data-buy]').forEach(btn => {
-    btn.onclick = () => {
-      const qty = parseInt(btn.dataset.qty, 10) || 1;
-      const rarity = btn.dataset.rarity || 'common';
-      if (callbacks.buyItem) callbacks.buyItem(btn.dataset.buy, qty, rarity);
-      else if (typeof window !== 'undefined' && typeof window.buyItem === 'function') window.buyItem(btn.dataset.buy, qty, rarity);
-    };
-  });
+  container.onclick = (e) => {
+    const btn = e.target.closest('[data-buy]');
+    if (!btn || btn.disabled) return;
+    const qty = parseInt(btn.dataset.qty, 10) || 1;
+    const rarity = btn.dataset.rarity || 'common';
+    const itemId = btn.dataset.buy;
+    if (callbacks.buyItem) callbacks.buyItem(itemId, qty, rarity);
+    else if (typeof window !== 'undefined' && typeof window.buyItem === 'function') window.buyItem(itemId, qty, rarity);
+  };
 }
 
 function getItemGradeCode(item) {

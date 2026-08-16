@@ -273,7 +273,7 @@ function save(manual = false) {
   if (manual) {
     if (_saveTimeout) { clearTimeout(_saveTimeout); _saveTimeout = null; }
     managerSaveState(true);
-    try { RankingService.syncToCloud(state); } catch (e) {}
+    try { RankingService.syncToCloud(state, true); } catch (e) {}
     log('Game saved successfully.', 'system');
     floatText('SAVED', 'float-gold');
     return;
@@ -282,8 +282,8 @@ function save(manual = false) {
   _saveTimeout = setTimeout(() => {
     _saveTimeout = null;
     managerSaveState(false);
-    try { RankingService.syncToCloud(state); } catch (e) {}
-  }, 400);
+    try { RankingService.syncToCloud(state, false); } catch (e) {}
+  }, 1000);
 }
 
 function load() {
@@ -2560,7 +2560,42 @@ function updateRankingsUI() {
   if (pane) uiRenderRankingTab(pane, state);
 }
 
-function updateAllUI() {
+let _uiUpdateRafId = null;
+function updateAllUI(immediate = false) {
+  // 1. Atualizações instantâneas e leves de números para feedback imediato ao clique
+  try {
+    const root = ROOT || (typeof document !== 'undefined' ? document : null);
+    if (root) {
+      const g1 = root.querySelector('#gold-count'); if (g1) g1.textContent = (state.gold || 0).toLocaleString();
+      const g2 = root.querySelector('#shop-gold'); if (g2) g2.textContent = (state.gold || 0).toLocaleString();
+      const spEl = root.querySelector('#sp-count'); if (spEl) spEl.textContent = (state.sp || 0).toLocaleString();
+    }
+  } catch (e) {}
+
+  // 2. Se for update imediato (ex: troca de aba ou inicialização), executa agora
+  if (immediate) {
+    if (_uiUpdateRafId) {
+      if (typeof cancelAnimationFrame === 'function') cancelAnimationFrame(_uiUpdateRafId);
+      _uiUpdateRafId = null;
+    }
+    _performFullUIUpdate();
+    return;
+  }
+
+  // 3. Batching via requestAnimationFrame: se já há uma renderização agendada, não enfileira outra
+  if (_uiUpdateRafId) return;
+
+  const scheduleFn = (typeof requestAnimationFrame === 'function')
+    ? requestAnimationFrame
+    : (cb) => setTimeout(cb, 16);
+
+  _uiUpdateRafId = scheduleFn(() => {
+    _uiUpdateRafId = null;
+    _performFullUIUpdate();
+  });
+}
+
+function _performFullUIUpdate() {
   state = getState();
   uiInitTooltipEvents();
   updateGameModeUI();
@@ -2578,7 +2613,8 @@ function updateAllUI() {
 
   // Tab-specific heavy updates (only rendered if tab is currently active/visible)
   const isTabVisible = (panelId) => {
-    const root = ROOT || document;
+    const root = ROOT || (typeof document !== 'undefined' ? document : null);
+    if (!root) return false;
     const pane = root.querySelector(`#tab-${panelId}, [data-menu-panel="${panelId}"], .tab-${panelId}, [data-tab-content="${panelId}"]`);
     if (!pane) return false;
     return pane.classList.contains('active') || pane.classList.contains('is-active') || (!pane.hidden && pane.offsetWidth > 0);
