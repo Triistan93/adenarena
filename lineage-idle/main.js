@@ -6574,14 +6574,18 @@ export function init() {
     };
     window.createClanAction = () => {
       const input = document.getElementById('clan-create-name-input');
-      const name = input ? input.value : '';
+      const name = input ? input.value : (window._clanCreateNameDraft || '');
+      // Salva rascunho do nome para sobreviver a re-renders
+      window._clanCreateNameDraft = name;
       const crestId = window._selectedClanCrestId || 'lion_gold';
       const res = ClanService.createClan(state, { name, crestId }, { log, updateAllUI, save });
       if (res.success) {
         window._activeClanSubTab = 'members';
+        window._clanCreateNameDraft = '';
+        updateAllUI();
+        save();
       }
-      updateAllUI();
-      save();
+      // Na falha, NÃO re-renderiza a aba para preservar o input
       return res;
     };
     window.requestJoinClanAction = (clanId) => {

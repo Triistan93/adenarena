@@ -5463,6 +5463,7 @@ export function renderClanTab(container, state) {
               type="text"
               placeholder="Ex: BloodOath, Imperium, Sovereign..."
               maxlength="20"
+              value="${(window._clanCreateNameDraft || '').replace(/"/g, '&quot;')}"
               style="width:100%; box-sizing:border-box; background:#18181b; border:1px solid #ca8a04; color:#fff; padding:10px 14px; border-radius:6px; font-size:13px;"
             />
           </div>

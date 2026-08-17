@@ -40,7 +40,7 @@ export const DEFAULT_STATE = () => ({
   soulCrystals: {}, weaponSockets: {}, tattoos: [],
   fateWhisperQuest: false, masterAbilities: [], activeTransformation: null,
   clan: { joined: false }, clanCoins: 0, clanDonationsToday: 0, clanLastDonationDay: 0, worldClans: null,
-  _clanSystemVersion: 2
+  _clanSystemVersion: 3
 });
 
 let currentState = DEFAULT_STATE();
@@ -191,15 +191,15 @@ export function loadState() {
     // Migração e sanitização segura do sistema de Clãs
     // Se o save não tem _clanSystemVersion >= 2, reseta clã para o estado limpo (nova implementação)
     const savedClanVersion = Number(data._clanSystemVersion) || 0;
-    if (savedClanVersion < 2) {
+    if (savedClanVersion < 3) {
       // Migração: save anterior à nova implementação de Clãs — reset total
       currentState.clan = { joined: false };
       currentState.worldClans = null;
       currentState.clanCoins = 0;
       currentState.clanDonationsToday = 0;
       currentState.clanLastDonationDay = 0;
-      currentState._clanSystemVersion = 2;
-      console.log('[StateManager] Migração de Clãs v2: dados antigos resetados para o novo sistema.');
+      currentState._clanSystemVersion = 3;
+      console.log('[StateManager] Migração de Clãs v3: dados antigos resetados para o novo sistema.');
     } else {
       if (data.clan && data.clan.joined === true && data.clan.crestId && data.clan.name) {
         currentState.clan = data.clan;
@@ -210,7 +210,7 @@ export function loadState() {
       currentState.clanDonationsToday = Number(data.clanDonationsToday) || 0;
       currentState.clanLastDonationDay = Number(data.clanLastDonationDay) || 0;
       currentState.worldClans = Array.isArray(data.worldClans) && data.worldClans.length > 0 ? data.worldClans : null;
-      currentState._clanSystemVersion = 2;
+      currentState._clanSystemVersion = 3;
     }
 
     currentState.startTime = Date.now();
