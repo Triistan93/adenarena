@@ -2986,12 +2986,17 @@ export function updateCraftUI(state, callbacks = {}) {
 
   const gData = D();
   const allItems = gData?.ALL_ITEMS || {};
-  let recipes = gData?.CRAFTING_RECIPES;
+  let recipes = gData?.CRAFTING_RECIPES || {};
 
-  if (gData?.generateAllCraftingRecipes) {
-    recipes = gData.generateAllCraftingRecipes(allItems);
-  } else if (!recipes || Object.keys(recipes).length <= 3) {
-    recipes = generateAllCraftingRecipes(allItems);
+  // Mapa de inventário pré-agregado O(1) para evitar milhares de buscas no array de inventário
+  const invMap = new Map();
+  for (const item of (state.inventory || [])) {
+    if (item && item.itemId && !item.equipped) {
+      invMap.set(item.itemId, (invMap.get(item.itemId) || 0) + (item.count || 1));
+      if (item.id && item.id !== item.itemId) {
+        invMap.set(item.id, (invMap.get(item.id) || 0) + (item.count || 1));
+      }
+    }
   }
 
   const seenNames = new Set();
@@ -3010,9 +3015,10 @@ export function updateCraftUI(state, callbacks = {}) {
 
   const activeCat = window._craftSelectedCategory || 'all';
 
-  // Conecta leitores para barra de busca e categorias (garante ligação contínua e destaque ativo)
+  // Conecta leitores para barra de busca e categorias (uma única vez com debounce)
   const searchInput = findElement('craft-search-input');
-  if (searchInput) {
+  if (searchInput && !searchInput._bound) {
+    searchInput._bound = true;
     searchInput.oninput = (e) => {
       window._craftSearchTerm = e.target.value;
       updateCraftUI(state, callbacks);
@@ -3033,19 +3039,11 @@ export function updateCraftUI(state, callbacks = {}) {
   });
 
   const searchTerm = (window._craftSearchTerm || '').toLowerCase().trim();
-  const playerLevel = state.level || state.player?.level || state.hero?.level || 1;
-  const maxReqLvl = getMaxAllowedReqLevel(playerLevel);
 
   const filtered = recipeList.filter(r => {
     const itemId = r.itemId || r.id;
     const def = allItems[itemId];
     if (!def) return false;
-
-    // Restrição por Nível do Jogador (Nível 1 a 19 só enxerga No-Grade, Nível 20 a 39 enxerga No-Grade e D-Grade, etc.)
-    const itemReqLevel = def.req?.level || def.level || r.level || 1;
-    if (itemReqLevel > maxReqLvl) {
-      return false;
-    }
 
     // Filtro por Categoria
     if (!isItemInCraftCategory(itemId, def, activeCat)) {
@@ -3062,31 +3060,49 @@ export function updateCraftUI(state, callbacks = {}) {
 
   if (filtered.length === 0) {
     container.innerHTML = `
-      <div style="grid-column: 1 / -1; padding: 40px; text-align: center; color: var(--text-muted);">
-        <p style="font-size: 16px; margin-bottom: 8px;">🔍 Nenhum item encontrado para a busca atual.</p>
-        <p style="font-size: 13px;">Tente alterar a categoria ou o termo digitado.</p>
+      <div style="grid-column: 1 / -1; padding: 40px; text-align: center; color: var(--text-muted); width:100%;">
+        <p style="font-size: 16px; margin-bottom: 8px;">🔍 Nenhuma receita encontrada para os filtros selecionados.</p>
+        <p style="font-size: 13px;">Tente alterar a categoria ou o termo de busca digitado.</p>
       </div>
     `;
     return;
   }
 
+  const playerLvl = state.level || state.player?.level || 1;
+
   container.innerHTML = filtered.map(r => {
     const itemId = r.itemId || r.id;
     const def = allItems[itemId];
-    const reqLvl = r.craftLevel || (r.level ? getCraftLevelReq(r.level) : 1);
+    const itemReqLevel = def.req?.level || def.level || r.level || 1;
+    const reqForgeLvl = r.craftLevel || (r.level ? getCraftLevelReq(r.level) : 1);
     const gradeInfo = getItemGrade(def);
     const statsSummary = buildShopStatsSummary(def);
     const baseAdena = r.gold || 250;
 
     const mats = getRecipeMaterials(r);
+    let hasAllMats = (state.gold || 0) >= baseAdena;
+
     const matsHtml = mats.map(m => {
       const matDef = allItems[m.matId];
-      const count = getInventoryCount(state, m.matId);
+      const count = invMap.get(m.matId) || 0;
       const isOk = count >= m.qty;
-      return `<span style="color:${isOk ? '#4ade80' : '#ef4444'}; font-weight: 500;">${matDef ? matDef.name : m.matId}: ${count}/${m.qty}</span>`;
+      if (!isOk) hasAllMats = false;
+
+      return `
+        <span style="display:inline-flex; align-items:center; gap:3px; margin-right:6px; color:${isOk ? '#4ade80' : '#ef4444'}; font-size:11px; font-weight:500;">
+          ${matDef ? matDef.name : m.matId}: ${count}/${m.qty}
+          ${!isOk ? `<button class="inv-batch-btn" data-open-locator="${m.matId}" title="Ver onde dropa este material" style="padding:1px 4px; font-size:9px; margin-left:2px; background:rgba(239,68,68,0.2); border-color:#ef4444; color:#fca5a5;">🔍</button>` : ''}
+        </span>
+      `;
     }).join(' · ');
 
-    const craftable = canCraft(state, itemId, 1);
+    const isLvlOk = playerLvl >= itemReqLevel;
+    const isForgeLvlOk = forgeLvl >= reqForgeLvl;
+    const craftable = hasAllMats && isForgeLvlOk;
+
+    let buttonText = '🔨 Forjar Item';
+    if (!isForgeLvlOk) buttonText = `🔒 Requer Forja Lv.${reqForgeLvl}`;
+    else if (!isLvlOk) buttonText = `⚠️ Requer Lv.${itemReqLevel} p/ Usar`;
 
     return `
       <div class="craft-recipe-card ${craftable ? 'craftable' : ''}" data-open-craft="${itemId}">
@@ -3099,32 +3115,32 @@ export function updateCraftUI(state, callbacks = {}) {
               <div class="craft-recipe-title">${def.name}</div>
               <span class="shop-grade-badge" style="background:${gradeInfo.color}; padding:2px 8px; border-radius:4px; font-size:10px; font-weight:bold; color:#fff;">${gradeInfo.label}</span>
             </div>
-            <div class="craft-recipe-sub">Requer Forja Lv.${reqLvl} · 🪙 ${baseAdena.toLocaleString()} Adena</div>
+            <div class="craft-recipe-sub">Requer Forja Lv.${reqForgeLvl} · 🪙 ${baseAdena.toLocaleString()} Adena</div>
           </div>
         </div>
         ${statsSummary ? `<div class="craft-recipe-stats">📊 ${statsSummary}</div>` : ''}
         <div class="craft-mats-line">${matsHtml}</div>
-        <button class="craft-item-btn" data-open-craft="${itemId}" style="width:100%; padding:10px 14px; font-family:'Cinzel',serif; font-weight:700; font-size:13px; background:linear-gradient(180deg,#d4a744,#8a641c); border:1px solid #ffe699; color:#000; border-radius:6px; cursor:pointer; box-shadow:0 3px 10px rgba(0,0,0,0.4); margin-top:8px;">
-          🔨 Ver &amp; Forjar Item
+        <button class="craft-item-btn" data-open-craft="${itemId}" style="width:100%; padding:10px 14px; font-family:'Cinzel',serif; font-weight:700; font-size:13px; background:${craftable ? 'linear-gradient(180deg,#d4a744,#8a641c)' : 'rgba(60,50,40,0.5)'}; border:1px solid ${craftable ? '#ffe699' : 'rgba(100,80,60,0.3)'}; color:${craftable ? '#000' : '#888'}; border-radius:6px; cursor:pointer; box-shadow:0 3px 10px rgba(0,0,0,0.4); margin-top:8px;">
+          ${buttonText}
         </button>
       </div>
     `;
   }).join('');
 
-  container.querySelectorAll('[data-open-craft]').forEach(btn => {
-    btn.onclick = (e) => {
+  // Event Delegation centralizado no container para desempenho ultra rápido sem gargalo de memória
+  container.onclick = (e) => {
+    const locBtn = e.target.closest('[data-open-locator]');
+    if (locBtn) {
       e.stopPropagation();
-      openCraftModal(btn.dataset.openCraft, state, callbacks);
-    };
-  });
-
-  // Eventos de Tooltip ao passar o mouse sobre a receita na Forja (sem botões de ação de inventário)
-  container.querySelectorAll('.craft-recipe-card').forEach(card => {
-    const itemId = card.dataset.openCraft;
-    card.onmouseenter = (e) => showItemTooltip(e, { itemId, rarity: 'common', isForgePreview: true });
-    card.onmousemove = (e) => showItemTooltip(e, { itemId, rarity: 'common', isForgePreview: true });
-    card.onmouseleave = () => hideItemTooltip();
-  });
+      showDropLocatorModal(locBtn.dataset.openLocator);
+      return;
+    }
+    const craftCard = e.target.closest('[data-open-craft]');
+    if (craftCard) {
+      openCraftModal(craftCard.dataset.openCraft, state, callbacks);
+      return;
+    }
+  };
 }
 
 /**
@@ -3140,47 +3156,41 @@ export function openCraftModal(itemId, state, callbacks = {}) {
   const def = allItems[itemId];
   if (!def) return;
 
-  let recipes = gData?.CRAFTING_RECIPES;
-  if (gData?.generateAllCraftingRecipes) {
-    recipes = gData.generateAllCraftingRecipes(allItems);
-  }
-  const r = getRecipeDef(itemId) || recipes?.[itemId] || { id: itemId, gold: 250, reqs: [{ id: 'iron_ore', count: 10 }] };
-
+  const r = getRecipeDef(itemId) || { id: itemId, gold: 250, reqs: [{ id: 'iron_ore', count: 10 }] };
   let currentQty = 1;
   const gradeInfo = getItemGrade(def);
-  const reqLvl = r.craftLevel || (r.level ? getCraftLevelReq(r.level) : 1);
+  const reqForgeLvl = r.craftLevel || (r.level ? getCraftLevelReq(r.level) : 1);
   const statsSummary = buildShopStatsSummary(def);
 
   function renderModalContent() {
     const totalAdena = (r.gold || 250) * currentQty;
     const mats = getRecipeMaterials(r);
+    const maxCraftable = Math.max(1, calculateMaxCraftableQty(state, itemId));
 
-    let maxCraftable = 9999;
     const matsHtml = mats.map(m => {
       const matDef = allItems[m.matId];
       const count = getInventoryCount(state, m.matId);
       const needed = m.qty * currentQty;
       const isOk = count >= needed;
-      const possible = Math.floor(count / m.qty);
-      if (possible < maxCraftable) maxCraftable = possible;
 
       return `
         <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.5); padding:8px 12px; border-radius:6px; margin-bottom:6px; font-size:13px; border:1px solid ${isOk ? 'rgba(74,222,128,0.3)' : 'rgba(239,68,68,0.3)'};">
           <span style="color:#ddd; display:flex; align-items:center; gap:8px;">
             <span style="font-size:20px;">${getItemIcon(matDef)}</span> <strong>${matDef ? matDef.name : m.matId}</strong>
           </span>
-          <span style="color:${isOk ? '#4ade80' : '#ef4444'}; font-weight:bold;">
-            ${isOk ? '✓' : '✗'} ${count} / ${needed}
-          </span>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="color:${isOk ? '#4ade80' : '#ef4444'}; font-weight:bold;">
+              ${isOk ? '✓' : '✗'} ${count} / ${needed}
+            </span>
+            ${!isOk ? `<button onclick="window.showDropLocator('${m.matId}')" style="background:rgba(239,68,68,0.2); border:1px solid #ef4444; color:#fca5a5; border-radius:4px; font-size:10px; padding:2px 6px; cursor:pointer;" title="Onde Obter">🔍 Onde Cai</button>` : ''}
+          </div>
         </div>
       `;
     }).join('');
 
-    const maxAdenaCraftable = Math.floor((state.gold || 0) / (r.gold || 250));
-    if (maxAdenaCraftable < maxCraftable) maxCraftable = maxAdenaCraftable;
-    if (maxCraftable < 1) maxCraftable = 1;
-
-    const craftable = canCraft(state, itemId, currentQty);
+    const forgeLvl = state.accountForgeLevel || state.craftLevel || 1;
+    const isForgeLvlOk = forgeLvl >= reqForgeLvl;
+    const craftable = isForgeLvlOk && canCraft(state, itemId, currentQty);
 
     body.innerHTML = `
       <div style="display:flex; align-items:center; gap:14px; margin-bottom:14px; padding-bottom:12px; border-bottom:1px solid rgba(212,175,55,0.3);">
@@ -3192,7 +3202,7 @@ export function openCraftModal(itemId, state, callbacks = {}) {
             <h3 style="margin:0; font-family:'Cinzel',serif; color:#f3c669; font-size:18px;">${def.name}</h3>
             <span style="background:${gradeInfo.color}; color:#fff; font-size:11px; font-weight:bold; padding:2px 8px; border-radius:4px;">${gradeInfo.label}</span>
           </div>
-          <div style="font-size:12px; color:#aaa; margin-top:2px;">Requer Forja Lv.${reqLvl} · Slot: ${def.slot || 'Geral'}</div>
+          <div style="font-size:12px; color:#aaa; margin-top:2px;">Requer Forja Lv.${reqForgeLvl} · Slot: ${def.slot || 'Geral'}</div>
         </div>
       </div>
 
@@ -3232,12 +3242,16 @@ export function openCraftModal(itemId, state, callbacks = {}) {
       </div>
     `;
 
-    body.querySelectorAll('[data-modal-qty]').forEach(btn => {
-      btn.onclick = () => {
-        currentQty = parseInt(btn.dataset.modalQty, 10) || 1;
-        renderModalContent();
-      };
-    });
+    // Conectar eventos do modal
+    const picker = body.querySelector('#craft-modal-qty-picker');
+    if (picker) {
+      picker.querySelectorAll('[data-modal-qty]').forEach(btn => {
+        btn.onclick = () => {
+          currentQty = parseInt(btn.dataset.modalQty, 10) || 1;
+          renderModalContent();
+        };
+      });
+    }
 
     const submitBtn = body.querySelector('#craft-modal-submit');
     if (submitBtn) {

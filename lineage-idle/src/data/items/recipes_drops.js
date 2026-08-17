@@ -1177,27 +1177,29 @@ const STATIC_CRAFTING_RECIPES = {
   "weapon_frost_lord_staff": { "id": "weapon_frost_lord_staff", "level": 76, "craftLevel": 6, "gold": 1500000, "reqs": [{ "id": "frost_fragment", "count": 100 }, { "id": "frost_lord_dark_heart", "count": 1 }] }
 };
 
+let _allRecipesGenerated = false;
+function ensureAllRecipesGenerated() {
+  if (_allRecipesGenerated) return;
+  const allItems = (typeof window !== 'undefined' && (window.GameData?.ALL_ITEMS || window.ALL_ITEMS)) || {};
+  if (Object.keys(allItems).length > 0) {
+    const generated = generateAllCraftingRecipes(allItems);
+    Object.assign(STATIC_CRAFTING_RECIPES, generated);
+    _allRecipesGenerated = true;
+  }
+}
+
 export const CRAFTING_RECIPES = new Proxy(STATIC_CRAFTING_RECIPES, {
   get(target, prop) {
     if (prop in target) return target[prop];
-    const allItems = (typeof window !== 'undefined' && (window.GameData?.ALL_ITEMS || window.ALL_ITEMS)) || {};
-    if (allItems[prop]) {
-      const generated = generateAllCraftingRecipes(allItems);
-      Object.assign(target, generated);
-      return target[prop];
-    }
+    ensureAllRecipesGenerated();
     return target[prop];
   },
   ownKeys(target) {
-    const allItems = (typeof window !== 'undefined' && (window.GameData?.ALL_ITEMS || window.ALL_ITEMS)) || {};
-    const generated = generateAllCraftingRecipes(allItems);
-    Object.assign(target, generated);
+    ensureAllRecipesGenerated();
     return Reflect.ownKeys(target);
   },
   getOwnPropertyDescriptor(target, prop) {
-    const allItems = (typeof window !== 'undefined' && (window.GameData?.ALL_ITEMS || window.ALL_ITEMS)) || {};
-    const generated = generateAllCraftingRecipes(allItems);
-    Object.assign(target, generated);
+    ensureAllRecipesGenerated();
     return Reflect.getOwnPropertyDescriptor(target, prop);
   }
 });

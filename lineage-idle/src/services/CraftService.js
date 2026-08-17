@@ -94,13 +94,9 @@ export function getRecipeMaterials(recipe) {
  * @param {string} recipeId
  * @returns {number}
  */
-export function calculateMaxCraftableQty(state, recipeId) {
-  const recipe = getRecipeDef(recipeId);
+export function calculateMaxCraftableQty(state, recipeOrId) {
+  const recipe = (typeof recipeOrId === 'object' && recipeOrId !== null) ? recipeOrId : getRecipeDef(recipeOrId);
   if (!recipe) return 0;
-
-  const currentCraftLvl = state.accountForgeLevel || state.craftLevel || 1;
-  const reqLvl = recipe.craftLevel || (recipe.level ? getCraftLevelReq(recipe.level) : 1);
-  if (reqLvl > currentCraftLvl) return 0;
 
   const costGold = recipe.gold || 250;
   let maxByGold = costGold > 0 ? Math.floor((state.gold || 0) / costGold) : 999999;
