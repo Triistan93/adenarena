@@ -113,10 +113,17 @@ export async function savePlayerStateToCloud(userId: string, stateData: any) {
         updatedAt: serverTimestamp()
       };
 
-      const profileRef = doc(db, 'public_profiles', userId);
-      await setDoc(profileRef, publicData, { merge: true });
-    } catch (profErr) {
-      console.warn('Auto Public Profile Sync error:', profErr);
+      if (auth.currentUser && auth.currentUser.uid === userId) {
+        const profileRef = doc(db, 'public_profiles', userId);
+        await setDoc(profileRef, publicData, { merge: true });
+      }
+    } catch (profErr: any) {
+      if (profErr?.code === 'permission-denied' || String(profErr).includes('permissions')) {
+        // Permissão do Firestore requer atualização da regra da coleção public_profiles no console
+        console.debug('Firebase public_profiles sync requer permissão no Firestore Rules.');
+      } else {
+        console.warn('Auto Public Profile Sync warning:', profErr);
+      }
     }
 
     return true;
@@ -163,7 +170,7 @@ export async function deletePlayerStateFromCloud(userId: string) {
  */
 export async function syncPlayerPublicProfile(userId: string, profileData: any) {
   try {
-    if (!userId || !profileData) return false;
+    if (!userId || !profileData || !auth.currentUser) return false;
     const profileRef = doc(db, 'public_profiles', userId);
     const payload = {
       ...profileData,
@@ -172,8 +179,12 @@ export async function syncPlayerPublicProfile(userId: string, profileData: any) 
     };
     await setDoc(profileRef, payload, { merge: true });
     return true;
-  } catch (err) {
-    console.error('Public Profile Sync Error:', err);
+  } catch (err: any) {
+    if (err?.code === 'permission-denied' || String(err).includes('permissions')) {
+      console.debug('Firebase public_profiles sync requer permissão no Firestore Rules.');
+    } else {
+      console.warn('Public Profile Sync Warning:', err);
+    }
     return false;
   }
 }

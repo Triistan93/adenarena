@@ -1,0 +1,24 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Dados privados de cada jogador (saves, progresso e inventário)
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Perfis públicos para Rankings Globais, Duelos do Coliseu e Lista de Castelos
+    match /public_profiles/{userId} {
+      // Qualquer jogador pode ler o ranking e perfis públicos
+      allow read: if true;
+      // Apenas o próprio jogador autenticado pode atualizar seu perfil público
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Clãs Imperiais e Guerras
+    match /clans/{clanId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+  }
+}
