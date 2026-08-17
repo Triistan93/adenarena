@@ -2979,6 +2979,10 @@ export function updateCraftUI(state, callbacks = {}) {
     renderForgeLifestones(container, state);
     return;
   }
+  if (subTab === 'randomcraft') {
+    renderForgeRandomCraft(container, state, callbacks);
+    return;
+  }
 
   const gData = D();
   const allItems = gData?.ALL_ITEMS || {};
@@ -4223,6 +4227,139 @@ export function renderForgeBelts(container, state) {
       ${inventoryBeltsHtml || '<div style="font-size:12px; color:#aaa;">Nenhum cinto adicional no inventário no momento.</div>'}
     </div>
   `;
+}
+
+export function renderForgeRandomCraft(container, state, callbacks = {}) {
+  const charge = state.randomCraftCharge || 0;
+  const slots = state.randomCraftSlots || [];
+  const gData = D();
+  const allItems = gData?.ALL_ITEMS || {};
+
+  let slotsHtml = '';
+  if (charge >= 100 && slots.length > 0) {
+    slotsHtml = `
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:10px; margin-top:14px;">
+        ${slots.map((s, idx) => {
+          const def = allItems[s.itemId] || { name: s.itemId, slot: 'relic' };
+          const gradeInfo = getItemGrade(def);
+          return `
+            <div style="background:rgba(0,0,0,0.6); border:1px solid ${gradeInfo.color}; border-radius:10px; padding:12px; text-align:center; display:flex; flex-direction:column; align-items:center; justify-content:space-between; gap:8px;">
+              <div style="width:48px; height:48px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.05); border-radius:8px;">
+                ${getItemIcon(def)}
+              </div>
+              <div>
+                <div style="font-weight:bold; font-size:13px; color:#fff;">${def.name}</div>
+                <div style="font-size:11px; color:${gradeInfo.color}; font-weight:bold;">${gradeInfo.label}</div>
+              </div>
+              <button
+                onclick="window.claimRandomCraftReward(${idx})"
+                style="width:100%; padding:8px; font-family:'Cinzel',serif; font-weight:bold; font-size:11px; background:linear-gradient(180deg,#a855f7,#6b21a8); border:1px solid #c084fc; color:#fff; border-radius:6px; cursor:pointer;"
+              >
+                🎁 RESGATAR ESTE ITEM
+              </button>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `;
+  } else {
+    slotsHtml = `
+      <div style="background:rgba(0,0,0,0.4); border:1px dashed rgba(168,85,247,0.3); border-radius:10px; padding:30px; text-align:center; margin-top:14px;">
+        <div style="font-size:32px; margin-bottom:8px;">🎲</div>
+        <div style="font-size:14px; font-weight:bold; color:#e9d5ff; margin-bottom:4px;">Roleta Mística Carregando (${charge}/100 Pontos)</div>
+        <div style="font-size:12px; color:var(--text-muted); max-width:480px; margin:0 auto 16px auto;">
+          Destrua materiais excedentes ou complete missões territoriais para acumular 100 pontos e invocar 5 relíquias misteriosas de Aden!
+        </div>
+        <button
+          onclick="window.chargeRandomCraftPoints(25)"
+          style="padding:10px 20px; font-family:'Cinzel',serif; font-weight:bold; font-size:12px; background:linear-gradient(180deg,#a855f7,#6b21a8); border:1px solid #c084fc; color:#fff; border-radius:8px; cursor:pointer;"
+        >
+          ⚡ Reciclar Materiais (+25 Pontos)
+        </button>
+      </div>
+    `;
+  }
+
+  container.innerHTML = `
+    <div style="padding:10px; color:#fff; font-family:sans-serif;">
+      <!-- Banner -->
+      <div style="background:linear-gradient(180deg, rgba(30,16,48,0.95), rgba(14,8,26,0.95)); border:1px solid rgba(168,85,247,0.4); border-radius:12px; padding:16px; margin-bottom:16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+          <div>
+            <h3 style="margin:0; font-family:'Cinzel',serif; color:#e9d5ff; font-size:18px;">🎲 Roleta Imperial de Criação Aleatória (Random Craft)</h3>
+            <p style="margin:4px 0 0 0; font-size:12px; color:#aaa;">
+              Invoque relíquias raras, boss dolls, armas de topo e consumíveis especiais a custo zero de Adena.
+            </p>
+          </div>
+          <div style="font-size:14px; font-weight:bold; color:#ffd877;">
+            Carga: <strong style="color:#a855f7;">${charge}%</strong>
+          </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div style="width:100%; height:10px; background:rgba(0,0,0,0.6); border-radius:5px; margin-top:12px; overflow:hidden; border:1px solid rgba(168,85,247,0.3);">
+          <div style="height:100%; width:${charge}%; background:linear-gradient(90deg,#a855f7,#ec4899); transition:width 0.4s;"></div>
+        </div>
+      </div>
+
+      ${slotsHtml}
+    </div>
+  `;
+}
+
+/**
+ * Exibe modal com as fontes territoriais e monstros de um determinado material.
+ */
+export function showDropLocatorModal(matId) {
+  let modal = document.getElementById('drop-locator-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'drop-locator-modal';
+    modal.className = 'modal-overlay active';
+    modal.style.cssText = 'position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:999999; display:flex; align-items:center; justify-content:center; padding:15px;';
+    document.body.appendChild(modal);
+  }
+
+  const gData = D();
+  const matDef = gData?.ALL_ITEMS?.[matId] || { name: matId };
+  const sources = [
+    { zoneName: 'Ruínas de Despair (Gludio)', minLvl: 20, type: 'Drop Comum', monster: 'Ruins Bat & Skeletal Warrior' },
+    { zoneName: 'Execution Grounds (Dion)', minLvl: 30, type: 'Spoil de Anão', monster: 'Ghoul & Strain' },
+    { zoneName: 'Torre Cruma (Dion)', minLvl: 40, type: 'Drop & Spoil', monster: 'Porta & Excuro' },
+    { zoneName: 'Dragon Valley (Giran)', minLvl: 52, type: 'Dungeon / Boss', monster: 'Cave Maid & Drake' }
+  ];
+
+  modal.innerHTML = `
+    <div style="background:#121622; border:2px solid #d4a744; border-radius:12px; max-width:480px; width:100%; padding:20px; color:#fff; box-shadow:0 8px 30px rgba(0,0,0,0.8);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom:1px solid rgba(212,167,68,0.3); padding-bottom:8px;">
+        <h3 style="margin:0; font-family:'Cinzel',serif; color:#ffd877; font-size:16px;">🔍 Onde Obter: ${matDef.name}</h3>
+        <button onclick="document.getElementById('drop-locator-modal').style.display='none'" style="background:none; border:none; color:#aaa; font-size:18px; cursor:pointer;">✕</button>
+      </div>
+
+      <div style="font-size:12px; color:var(--text-muted); margin-bottom:12px;">
+        Zonas de caça e monstros recomendados com base nas tabelas canônicas de Drop e Spoil:
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:8px; max-height:280px; overflow-y:auto;">
+        ${sources.map(s => `
+          <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:10px; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <div style="font-weight:bold; font-size:13px; color:#fff;">📍 ${s.zoneName}</div>
+              <div style="font-size:11px; color:#aaa; margin-top:2px;">Monstros: <strong style="color:#ffd877;">${s.monster}</strong> (Lv.${s.minLvl}+)</div>
+            </div>
+            <span style="background:rgba(34,197,94,0.15); border:1px solid #22c55e; color:#86efac; padding:3px 8px; border-radius:4px; font-size:10px; font-weight:bold;">${s.type}</span>
+          </div>
+        `).join('')}
+      </div>
+
+      <div style="margin-top:16px; text-align:right;">
+        <button onclick="document.getElementById('drop-locator-modal').style.display='none'" style="padding:8px 16px; font-family:'Cinzel',serif; font-weight:bold; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; border-radius:6px; cursor:pointer;">
+          Fechar Localizador
+        </button>
+      </div>
+    </div>
+  `;
+  modal.style.display = 'flex';
 }
 
 export function openCompoundModal(state) {

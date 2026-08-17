@@ -97,9 +97,21 @@ import {
   getCraftLevelReq,
   getRecipeDef,
   getRecipeMaterials,
+  calculateMaxCraftableQty,
   canCraft as serviceCanCraft,
   canCraftRecipe as serviceCanCraftRecipe,
-  craftItem as serviceCraftItem
+  craftItem as serviceCraftItem,
+  getMaterialDropSources,
+  applySoulCrystal as serviceApplySoulCrystal,
+  unsealItem as serviceUnsealItem,
+  polishMasterwork as servicePolishMasterwork,
+  applyDyeSymbol as serviceApplyDyeSymbol,
+  removeDyeSymbol as serviceRemoveDyeSymbol,
+  applyElementalStone as serviceApplyElementalStone,
+  applyLifeStone as serviceApplyLifeStone,
+  removeAugment as serviceRemoveAugment,
+  chargeRandomCraft as serviceChargeRandomCraft,
+  claimRandomCraft as serviceClaimRandomCraft
 } from './src/services/CraftService.js';
 // ─── Sprint 4: Importa motores de Combate e Habilidades ────────────────────
 import {
@@ -190,7 +202,8 @@ import {
   renderCompoundModal,
   openCashShopModal,
   closeCashShopModal,
-  renderCashShopModal
+  renderCashShopModal,
+  showDropLocatorModal
 } from './src/ui/GameUI.js';
 import { CashShopService } from './src/services/CashShopService.js';
 import { NoblesseService } from './src/services/NoblesseService.js';
@@ -6494,9 +6507,15 @@ export function init() {
     window.addSkillCharge = addSkillCharge;
     window.addKamaelSoul = addKamaelSoul;
     window.insertAttributeStone = insertAttributeStone;
-    window.compoundBelts = compoundBelts;
-    window.augmentWithLifeStone = augmentWithLifeStone;
-    window.executeCompoundAction = executeCompoundAction;
+    window.chargeRandomCraftPoints = (pts = 25) => {
+      serviceChargeRandomCraft(state, pts, { log, updateAllUI, save });
+    };
+    window.claimRandomCraftReward = (slotIdx = 0) => {
+      serviceClaimRandomCraft(state, slotIdx, { log, updateAllUI, save });
+    };
+    window.showDropLocator = (matId) => {
+      showDropLocatorModal(matId);
+    };
     window.openCompoundModal = openCompoundModal;
     window.closeCompoundModal = closeCompoundModal;
     window.renderCompoundModal = renderCompoundModal;
