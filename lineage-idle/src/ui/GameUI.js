@@ -2809,6 +2809,35 @@ function attachShopEvents(container, callbacks) {
 }
 
 /**
+ * Formata um resumo conciso dos atributos de um item para exibição em cards de loja e forja.
+ * @param {Object} def
+ * @returns {string}
+ */
+export function buildShopStatsSummary(def) {
+  if (!def) return '';
+  const parts = [];
+  if (def.atk != null && def.atk > 0) parts.push(`⚔️ ${def.atk} P.Atk`);
+  if (def.matk != null && def.matk > 0) parts.push(`🪄 ${def.matk} M.Atk`);
+  if (def.pAtk != null && def.pAtk > 0 && def.atk == null) parts.push(`⚔️ ${def.pAtk} P.Atk`);
+  if (def.mAtk != null && def.mAtk > 0 && def.matk == null) parts.push(`🪄 ${def.mAtk} M.Atk`);
+  if (def.def != null && def.def > 0) parts.push(`🛡️ ${def.def} P.Def`);
+  if (def.mdef != null && def.mdef > 0) parts.push(`🔮 ${def.mdef} M.Def`);
+  if (def.pDef != null && def.pDef > 0 && def.def == null) parts.push(`🛡️ ${def.pDef} P.Def`);
+  if (def.mDef != null && def.mDef > 0 && def.mdef == null) parts.push(`🔮 ${def.mDef} M.Def`);
+  if (def.critRate != null && def.critRate > 0) parts.push(`🎯 +${def.critRate} Crit`);
+  if (def.crit != null && def.crit > 0 && def.critRate == null) parts.push(`🎯 +${def.crit} Crit`);
+  if (def.hp != null && def.hp > 0) parts.push(`❤️ +${def.hp} HP`);
+  if (def.mp != null && def.mp > 0) parts.push(`💙 +${def.mp} MP`);
+  if (def.castSpeed != null && def.castSpeed > 0) parts.push(`⚡ +${def.castSpeed}% Cast`);
+  if (def.atkSpeed != null && def.atkSpeed > 0) parts.push(`💨 +${def.atkSpeed}% AtkSpd`);
+  if (def.effect) parts.push(`✨ ${def.effect}`);
+  if (def.healAmount) parts.push(`🧪 Recupera ${def.healAmount} HP`);
+  if (def.bonus) parts.push(`✨ ${def.bonus}`);
+
+  return parts.join(' · ');
+}
+
+/**
  * Compara atributos de um item da loja com o item atualmente equipado no mesmo slot.
  */
 function buildShopComparisonDelta(def, state) {
