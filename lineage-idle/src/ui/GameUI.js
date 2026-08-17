@@ -10,7 +10,7 @@ import {
   toggleSelectItem, selectItemsByFilter, clearItemSelection, getInventoryCount
 } from '../services/InventoryService.js';
 import { resolveEquipSlot, migrateEquipmentSlots, equipItem, unequipItem } from '../services/EquipmentService.js';
-import { getCraftLevelReq, getRecipeMaterials, canCraft, getRecipeDef } from '../services/CraftService.js';
+import { getCraftLevelReq, getRecipeMaterials, canCraft, getRecipeDef, calculateMaxCraftableQty } from '../services/CraftService.js';
 import { classSatisfies, getClassSkills } from '../services/CharacterService.js';
 import { AFFIX_MAP } from '../../data/affixes.js';
 import { getClass, getStats, getActiveSetBonuses } from '../engine/StatsEngine.js';
@@ -134,6 +134,13 @@ export function getItemGrade(itemDef) {
     default:
       return { code: 'ng', label: 'No-Grade', color: '#9ca3af' };
   }
+}
+
+export { calculateMaxCraftableQty };
+if (typeof window !== 'undefined') {
+  window.calculateMaxCraftableQty = calculateMaxCraftableQty;
+  window.getItemGrade = getItemGrade;
+  window.getItemGradeCode = getItemGradeCode;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
