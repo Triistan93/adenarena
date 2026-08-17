@@ -473,22 +473,31 @@ export function monsterSVG(idOrObj, opts) {
   }
 
   safeId = String(safeId || '').trim();
+  const baseKey = safeId.replace(/^chaos_/i, '');
   const cleanKey = safeId.replace(/\s+/g, '');
   const lowerCleanKey = cleanKey.toLowerCase();
+  const isChaos = safeId.startsWith('chaos_') || safeOpts?.isChaosBoss;
 
   let imgSrc = MON_IMG[safeId]
+    || MON_IMG[baseKey]
     || MON_IMG[cleanKey]
     || MON_IMG[lowerCleanKey]
     || MON_IMG['mon_' + lowerCleanKey]
-    || (Object.entries(MON_IMG).find(([k]) => k.toLowerCase() === lowerCleanKey)?.[1])
+    || MON_IMG['mon_' + baseKey.toLowerCase()]
+    || (Object.entries(MON_IMG).find(([k]) => k.toLowerCase() === lowerCleanKey || k.toLowerCase() === baseKey.toLowerCase())?.[1])
     || '/img/mon_goblin.png';
 
-  const crown = safeOpts?.crown
-    ? `<div style="position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-size:22px;filter:drop-shadow(0 0 6px #f0c840);z-index:2;">👑</div>`
-    : "";
+  const crown = isChaos
+    ? `<div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);font-size:24px;filter:drop-shadow(0 0 10px #ef4444);z-index:2;animation:pulse 1.5s infinite;">🔥👑🔥</div>`
+    : (safeOpts?.crown
+      ? `<div style="position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-size:22px;filter:drop-shadow(0 0 6px #f0c840);z-index:2;">👑</div>`
+      : "");
 
   const resolvedSrc = getAssetUrl(resolveImg(imgSrc));
-  const glow = safeOpts?.crown ? "drop-shadow(0 0 10px rgba(240,200,64,0.5))" : "drop-shadow(0 6px 12px rgba(0,0,0,0.6))";
+  const glow = isChaos
+    ? "drop-shadow(0 0 16px rgba(239,68,68,0.9)) drop-shadow(0 0 24px rgba(168,85,247,0.7))"
+    : (safeOpts?.crown ? "drop-shadow(0 0 10px rgba(240,200,64,0.5))" : "drop-shadow(0 6px 12px rgba(0,0,0,0.6))");
+
   return `<div class="mon-svg" style="width:100%;height:100%;position:relative;">
     ${crown}
     <img src="${resolvedSrc}" alt="${safeId}" draggable="false" onerror="this.onerror=null; this.src='${getAssetUrl('img/mon_goblin.png')}';"

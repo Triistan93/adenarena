@@ -65,7 +65,7 @@ export function stopCombat(state) {
 export function pickRandomMonster(state, callbacks = {}) {
   if (!hasValidState(state)) return false;
   if (state.isCombatActive === false) return false;
-  if (state.activeMonster && state.activeMonster.isTower && state.activeMonster.hp > 0) return false;
+  if (state.activeMonster && (state.activeMonster.isTower || state.activeMonster.isChaosBoss || state.activeMonster.isRaid) && state.activeMonster.hp > 0) return false;
   if (!state.zone || !ZONES[state.zone]) return;
 
   const zone = ZONES[state.zone];

@@ -415,15 +415,22 @@ export function useChaosBossSummonStone(state, callbacks = {}) {
 
   const chaosHp = Math.floor(baseBoss.hp * 2.5);
   const chaosBoss = {
+    ...baseBoss,
     id: `chaos_${baseBoss.id}`,
     baseId: baseBoss.id,
     name: `[CHAOS] ${baseBoss.name}`,
+    title: '👑 CHEFE DO CAOS',
     isChaosBoss: true,
     isBoss: true,
+    isRaid: true,
     isRaidBoss: true,
+    boss: true,
     level: baseBoss.level,
     hp: chaosHp,
     maxHp: chaosHp,
+    _maxHp: chaosHp,
+    _stunnedUntil: 0,
+    _triggeredMechanics: {},
     atk: Math.floor(baseBoss.atk * 1.5),
     def: Math.floor(baseBoss.def * 1.3),
     exp: Math.floor(baseBoss.exp * 3),
@@ -433,8 +440,15 @@ export function useChaosBossSummonStone(state, callbacks = {}) {
   };
 
   state.activeMonster = chaosBoss;
+  state.target = chaosBoss.id;
+  state.isRaidActive = false; // Permite combate idle normal
+
   log(`🌀 UMA FENDA DO CAOS SE ABRIU! Você invocou ${chaosBoss.name} no modo combate!`, 'rarity-legendary');
   floatText('🌀 CHAOS BOSS INVOCADO!', 'float-meteor');
+
+  if (callbacks.renderStageMonster) {
+    try { callbacks.renderStageMonster(); } catch (e) {}
+  }
 
   updateAllUI();
   save();

@@ -6266,7 +6266,14 @@ export function init() {
     window.dissolveItemsByFilter = (filterGrade) => serviceDissolveItemsByGrade(state, filterGrade, { log, updateAllUI, save });
     window.dissolveAllJunkAction = () => serviceDissolveAllJunkEquipment(state, { log, updateAllUI, save });
     window.craftElixir = (recipeId, qty) => serviceCraftElixir(state, recipeId, qty, { log, updateAllUI, save });
-    window.useChaosBossSummonStoneAction = () => serviceUseChaosBossSummonStone(state, { log, updateAllUI, save, floatText });
+    window.useChaosBossSummonStoneAction = () => {
+      const res = serviceUseChaosBossSummonStone(state, { log, updateAllUI, save, floatText, renderStageMonster, attackMonster });
+      if (res) {
+        if (typeof renderStageMonster === 'function') renderStageMonster();
+        if (typeof updateMonsterHP === 'function') updateMonsterHP();
+        if (typeof attackMonster === 'function') attackMonster();
+      }
+    };
     window.ALCHEMY_RECIPES = ALCHEMY_RECIPES;
     window.upgradeAstralNode = upgradeAstralNode;
     window.reincarnateHero = reincarnateHero;
