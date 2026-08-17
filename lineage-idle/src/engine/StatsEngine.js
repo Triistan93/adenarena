@@ -530,15 +530,22 @@ export function getStats(state) {
 
   // Process Active Elixirs from Alchemy System
   let elixirHpMult = 0;
-  if (state.activeElixirs && typeof state.activeElixirs === 'object') {
-    for (const [eId, expiry] of Object.entries(state.activeElixirs)) {
-      if (typeof expiry === 'number' && expiry > now) {
-        if (eId === 'elixir_berserker') { buffAtkMult += 0.15; buffSpd += 10; }
-        else if (eId === 'elixir_arcanist') { buffMatk += Math.floor(baseMatk * 0.20); mpRegenBonus += 0.50; }
-        else if (eId === 'elixir_fortune') { luckBoost += 0.25; goldBoost += 0.30; }
-        else if (eId === 'elixir_titan') { buffDef += Math.floor(baseDef * 0.20); elixirHpMult += 0.25; }
-        else if (eId === 'elixir_transcendence') { xpBoost += 0.20; }
+  const elixirSources = { ...(state.activeElixirs || {}) };
+  if (state.buffs && typeof state.buffs === 'object') {
+    for (const [k, b] of Object.entries(state.buffs)) {
+      if (b && (b.isElixir || k.startsWith('elixir_')) && typeof b.until === 'number') {
+        elixirSources[k] = Math.max(elixirSources[k] || 0, b.until);
       }
+    }
+  }
+
+  for (const [eId, expiry] of Object.entries(elixirSources)) {
+    if (typeof expiry === 'number' && expiry > now) {
+      if (eId === 'elixir_berserker') { buffAtkMult += 0.15; buffSpd += 10; }
+      else if (eId === 'elixir_arcanist') { buffMatk += Math.floor(baseMatk * 0.20); mpRegenBonus += 0.50; }
+      else if (eId === 'elixir_fortune') { luckBoost += 0.25; goldBoost += 0.30; }
+      else if (eId === 'elixir_titan') { buffDef += Math.floor(baseDef * 0.20); elixirHpMult += 0.25; }
+      else if (eId === 'elixir_transcendence') { xpBoost += 0.20; }
     }
   }
 

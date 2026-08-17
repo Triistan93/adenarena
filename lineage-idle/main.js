@@ -1215,9 +1215,42 @@ function updateStatsUI() {
   const abEl = el('active-buffs');
   if (abEl) {
     const now = Date.now();
-    const items = Object.entries(state.buffs || {}).filter(([,b]) => b.until > now).map(([k,b]) => {
-      const map = { xpBoost: ['📘', `+${Math.round(b.amount*100)}% XP`], goldBoost: ['🪙', `+${Math.round(b.amount*100)}% G`], luckBoost: ['🍀', `+${Math.round(b.amount*100)}% L`], autoPotion: ['🧪', 'Auto-Heal'], atk: ['⚔', `+${b.amount} ATK`], def: ['🛡', `+${b.amount} DEF`], matk: ['✦', `+${b.amount} MATK`], speed: ['⚡', `+${b.amount} SPD`], warcry: ['🗣', `+${b.amount*100}% ATK`] };
-      const e = map[k]; if (!e) return null;
+    // Sincroniza elixires ativos no state.buffs se necessário
+    if (state.activeElixirs && typeof state.activeElixirs === 'object') {
+      state.buffs = state.buffs || {};
+      for (const [eId, exp] of Object.entries(state.activeElixirs)) {
+        if (exp > now && !state.buffs[eId]) {
+          const rec = (typeof ALCHEMY_RECIPES !== 'undefined' ? ALCHEMY_RECIPES[eId] : null);
+          state.buffs[eId] = {
+            name: rec ? rec.name : eId,
+            icon: rec ? rec.icon : '🧪',
+            desc: rec ? rec.desc : 'Elixir Alquímico Ativo',
+            amount: 1,
+            until: exp,
+            isElixir: true
+          };
+        }
+      }
+    }
+
+    const items = Object.entries(state.buffs || {}).filter(([,b]) => b && typeof b.until === 'number' && b.until > now).map(([k,b]) => {
+      const map = {
+        xpBoost: ['📘', `+${Math.round((b.amount||0)*100)}% XP`],
+        goldBoost: ['🪙', `+${Math.round((b.amount||0)*100)}% G`],
+        luckBoost: ['🍀', `+${Math.round((b.amount||0)*100)}% L`],
+        autoPotion: ['🧪', 'Auto-Heal'],
+        atk: ['⚔', `+${b.amount} ATK`],
+        def: ['🛡', `+${b.amount} DEF`],
+        matk: ['✦', `+${b.amount} MATK`],
+        speed: ['⚡', `+${b.amount} SPD`],
+        warcry: ['🗣', `+${(b.amount||0)*100}% ATK`],
+        elixir_berserker: ['⚔️', 'Elixir Berserker (+15% Atk, +10 Spd)'],
+        elixir_arcanist: ['🔮', 'Elixir Arcanista (+20% M.Atk, +50% MP)'],
+        elixir_fortune: ['💰', 'Elixir da Fortuna (+25% Drop, +30% Ouro)'],
+        elixir_titan: ['🛡️', 'Elixir de Titã (+25% HP, +20% Def)'],
+        elixir_transcendence: ['✨', 'Elixir Transcendência (+20% XP/SP)']
+      };
+      const e = map[k] || (b.icon ? [b.icon, b.desc || b.name || k] : ['🧪', b.name || k]);
       return `<span class="ab-chip" title="${e[1]} · ${fmtCountdown(b.until-now)}">${e[0]}<em>${fmtCountdown(b.until-now)}</em></span>`;
     }).filter(Boolean);
     abEl.innerHTML = items.length ? items.join('') : '<span class="ab-empty">No active buffs</span>';

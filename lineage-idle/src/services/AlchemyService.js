@@ -355,12 +355,22 @@ export function craftElixir(state, recipeId, qty = 1, callbacks = {}) {
     log(`🧪 Alquimia: Fabricou ${count}x [${recipe.name}] e guardou na mochila!`, 'loot');
   } else {
     if (!state.activeElixirs) state.activeElixirs = {};
+    if (!state.buffs) state.buffs = {};
     const now = Date.now();
     const currentExpiry = state.activeElixirs[recipeId] && state.activeElixirs[recipeId] > now
       ? state.activeElixirs[recipeId]
       : now;
-    state.activeElixirs[recipeId] = currentExpiry + recipe.duration * count;
-    log(`🧪 Alquimia: Ativou ${recipe.name} por ${count} hora(s)!`, 'rarity-legendary');
+    const finalExpiry = currentExpiry + recipe.duration * count;
+    state.activeElixirs[recipeId] = finalExpiry;
+    state.buffs[recipeId] = {
+      name: recipe.name,
+      icon: recipe.icon,
+      desc: recipe.desc,
+      amount: 1,
+      until: finalExpiry,
+      isElixir: true
+    };
+    log(`🧪 Ativou ${recipe.name} por ${count} hora(s)! Bônus ativo em Active Buffs e Atributos!`, 'rarity-legendary');
   }
 
   updateAllUI();
