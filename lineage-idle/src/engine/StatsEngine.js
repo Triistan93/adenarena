@@ -537,6 +537,7 @@ export function getStats(state) {
         else if (eId === 'elixir_arcanist') { buffMatk += Math.floor(baseMatk * 0.20); mpRegenBonus += 0.50; }
         else if (eId === 'elixir_fortune') { luckBoost += 0.25; goldBoost += 0.30; }
         else if (eId === 'elixir_titan') { buffDef += Math.floor(baseDef * 0.20); elixirHpMult += 0.25; }
+        else if (eId === 'elixir_transcendence') { xpBoost += 0.20; }
       }
     }
   }

@@ -3421,6 +3421,9 @@ export function renderAlchemyUI(state) {
     }
   }
 
+  // Quantidade de Pedras de Invocação do Caos
+  const chaosStoneCount = getInventoryCount(state, 'boss_summon_stone');
+
   let recipesHtml = '';
   for (const [rId, rec] of Object.entries(recipes)) {
     let canAfford = (state.gold || 0) >= rec.gold;
@@ -3464,7 +3467,7 @@ export function renderAlchemyUI(state) {
     const slot = (def.slot || '').toLowerCase();
     const type = (def.type || '').toLowerCase();
     if (def.stack || def.isQuestItem || type === 'material' || type === 'quest' || type === 'consumable') return false;
-    return ['weapon', 'armor', 'shield', 'helmet', 'gloves', 'boots', 'legs', 'ring', 'necklace', 'earring', 'belt', 'cloak'].includes(slot);
+    return ['weapon', 'armor', 'shield', 'helmet', 'gloves', 'boots', 'legs', 'ring', 'necklace', 'earring', 'belt', 'cloak', 'sigil'].includes(slot);
   });
 
   let crucibleSelectHtml = '';
@@ -3481,13 +3484,13 @@ export function renderAlchemyUI(state) {
 
     const grade = getItemGradeCode(selectedDef);
     const yields = {
-      ng: { fire: 5, earth: 5, wind: 5, astral: 1 },
-      d:  { fire: 15, earth: 15, wind: 15, astral: 3 },
-      c:  { fire: 35, earth: 35, wind: 35, astral: 8 },
-      b:  { fire: 75, earth: 75, wind: 75, astral: 20 },
-      a:  { fire: 150, earth: 150, wind: 150, astral: 50 },
-      s:  { fire: 350, earth: 350, wind: 350, astral: 120 }
-    }[grade] || { fire: 5, earth: 5, wind: 5, astral: 1 };
+      ng: { fire: 1, earth: 1, wind: 1, astral: 0, fee: 50 },
+      d:  { fire: 3, earth: 3, wind: 3, astral: 1, fee: 150 },
+      c:  { fire: 8, earth: 8, wind: 8, astral: 2, fee: 400 },
+      b:  { fire: 20, earth: 20, wind: 20, astral: 5, fee: 1000 },
+      a:  { fire: 50, earth: 50, wind: 50, astral: 15, fee: 2500 },
+      s:  { fire: 120, earth: 120, wind: 120, astral: 40, fee: 6000 }
+    }[grade] || { fire: 1, earth: 1, wind: 1, astral: 0, fee: 50 };
 
     const optionsHtml = inventoryItems.map(item => {
       const def = getItemDef(item.itemId);
@@ -3524,7 +3527,7 @@ export function renderAlchemyUI(state) {
             </div>
             <div>
               <div style="font-weight:bold; color:#f4d58a; font-size:13px;">${selectedDef?.name || 'Item'}</div>
-              <div style="font-size:11px; color:#aaa;">Rendimento estimado ao dissolver no Cadinho:</div>
+              <div style="font-size:11px; color:#aaa;">Rendimento estimado ao dissolver no Cadinho (Taxa: 🪙 ${yields.fee}g):</div>
             </div>
           </div>
           <div style="display:flex; gap:10px; font-size:12px; font-weight:bold;">
@@ -3546,7 +3549,7 @@ export function renderAlchemyUI(state) {
           <h3 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:18px; display:flex; align-items:center; gap:8px;">
             🧪 Cadinho de Almas & Alquimia
           </h3>
-          <span style="font-size:12px; color:#aaa;">Extraia essências de itens e fabrique elixires</span>
+          <span style="font-size:12px; color:#aaa;">Extraia essências de itens e fabrique elixires místicos</span>
         </div>
 
         <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:8px; text-align:center;">
@@ -3581,32 +3584,66 @@ export function renderAlchemyUI(state) {
         </div>
       ` : ''}
 
+      <!-- Chaos Boss Summoning Portal -->
+      <div style="background:linear-gradient(135deg, rgba(60,20,30,0.9), rgba(20,10,30,0.9)); border:1px solid rgba(239,68,68,0.5); border-radius:10px; padding:14px; margin-bottom:16px; box-shadow:0 4px 16px rgba(239,68,68,0.2);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <h4 style="margin:0; font-family:'Cinzel',serif; color:#fca5a5; font-size:15px; display:flex; align-items:center; gap:8px;">
+            🌀 Fenda do Caos — Invocação de Boss Abissal
+          </h4>
+          <span style="font-size:11px; background:rgba(239,68,68,0.2); border:1px solid rgba(239,68,68,0.4); padding:3px 10px; border-radius:12px; color:#fecaca; font-weight:bold;">
+            Pedras na Mochila: ${chaosStoneCount}x
+          </span>
+        </div>
+        <p style="margin:0 0 12px 0; font-size:12px; color:#cbd5e1; line-height:1.4;">
+          Rasgue o tecido do espaço no combate idle para convocar uma versão <strong>[CHAOS]</strong> de um Boss Épico. Chefes do Caos possuem +150% HP e concedem <strong>Drops Garantidos de Pergaminhos Abençoados, Top Life Stones e Relíquias</strong>!
+        </p>
+        <button
+          onclick="if (window.useChaosBossSummonStoneAction) window.useChaosBossSummonStoneAction();"
+          ${chaosStoneCount <= 0 ? 'disabled' : ''}
+          style="width:100%; padding:10px 16px; font-family:'Cinzel',serif; font-weight:bold; font-size:13px; background:${chaosStoneCount > 0 ? 'linear-gradient(180deg, #ef4444, #991b1b)' : 'rgba(80,40,40,0.5)'}; border:1px solid ${chaosStoneCount > 0 ? '#fca5a5' : 'rgba(120,60,60,0.4)'}; color:#fff; border-radius:6px; cursor:${chaosStoneCount > 0 ? 'pointer' : 'not-allowed'}; display:flex; align-items:center; justify-content:center; gap:8px;"
+        >
+          🌀 INVOCAÇÃO ABISSAL: ABRIR FENDA DO CAOS
+        </button>
+      </div>
+
       <!-- Single Item Crucible Inspection & Yield Preview -->
       ${crucibleSelectHtml}
 
       <!-- Fast Dissolve Controls -->
       <div style="background:rgba(15,20,32,0.8); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:12px; margin-bottom:16px;">
         <h4 style="margin:0 0 8px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px; display:flex; align-items:center; gap:6px;">
-          🔥 Dissolução em Lote no Cadinho
+          🔥 Dissolução em Lote no Cadinho de Almas
         </h4>
-        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap:8px;">
           <button
-            onclick="window.dissolveItemsByFilter('nograde')"
-            style="flex:1; padding:10px; font-weight:bold; font-size:12px; background:rgba(239,68,68,0.2); border:1px solid rgba(239,68,68,0.5); color:#fca5a5; border-radius:6px; cursor:pointer;"
+            onclick="if (window.dissolveItemsByFilter) window.dissolveItemsByFilter('nograde');"
+            style="padding:10px; font-weight:bold; font-size:11px; background:rgba(148,163,184,0.15); border:1px solid rgba(148,163,184,0.4); color:#e2e8f0; border-radius:6px; cursor:pointer;"
           >
-            🔥 Dissolver No-Grade
+            🔥 No-Grade
           </button>
           <button
-            onclick="window.dissolveItemsByFilter('d')"
-            style="flex:1; padding:10px; font-weight:bold; font-size:12px; background:rgba(59,130,246,0.2); border:1px solid rgba(59,130,246,0.5); color:#93c5fd; border-radius:6px; cursor:pointer;"
+            onclick="if (window.dissolveItemsByFilter) window.dissolveItemsByFilter('d');"
+            style="padding:10px; font-weight:bold; font-size:11px; background:rgba(59,130,246,0.2); border:1px solid rgba(59,130,246,0.5); color:#93c5fd; border-radius:6px; cursor:pointer;"
           >
-            🔥 Dissolver D-Grade
+            🔥 D-Grade
           </button>
           <button
-            onclick="window.dissolveItemsByFilter('all')"
-            style="flex:1; padding:10px; font-weight:bold; font-size:12px; background:rgba(212,167,68,0.2); border:1px solid rgba(212,167,68,0.5); color:#fde047; border-radius:6px; cursor:pointer;"
+            onclick="if (window.dissolveItemsByFilter) window.dissolveItemsByFilter('c');"
+            style="padding:10px; font-weight:bold; font-size:11px; background:rgba(34,197,94,0.2); border:1px solid rgba(34,197,94,0.5); color:#86efac; border-radius:6px; cursor:pointer;"
           >
-            🔥 Dissolver Todos Elegíveis
+            🔥 C-Grade
+          </button>
+          <button
+            onclick="if (window.dissolveItemsByFilter) window.dissolveItemsByFilter('b');"
+            style="padding:10px; font-weight:bold; font-size:11px; background:rgba(168,85,247,0.2); border:1px solid rgba(168,85,247,0.5); color:#d8b4fe; border-radius:6px; cursor:pointer;"
+          >
+            🔥 B-Grade
+          </button>
+          <button
+            onclick="if (window.dissolveAllJunkAction) window.dissolveAllJunkAction();"
+            style="padding:10px; font-weight:bold; font-size:11px; background:rgba(239,68,68,0.2); border:1px solid rgba(239,68,68,0.5); color:#fca5a5; border-radius:6px; cursor:pointer;"
+          >
+            🔥 Lixo Geral (NG/D/C)
           </button>
         </div>
       </div>
@@ -3614,7 +3651,7 @@ export function renderAlchemyUI(state) {
       <!-- Recipes List -->
       <div>
         <h4 style="margin:0 0 10px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">
-          ⚗️ Receitas de Alquimia
+          ⚗️ Receitas de Alquimia &amp; Transmutação
         </h4>
         ${recipesHtml}
       </div>

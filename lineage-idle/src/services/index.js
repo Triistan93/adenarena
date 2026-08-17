@@ -18,4 +18,5 @@ export * from './SevenSignsService.js';
 export * from './SkillEnchantService.js';
 export * from './AugmentationService.js';
 export * from './RankingService.js';
+export * from './AlchemyService.js';
 
