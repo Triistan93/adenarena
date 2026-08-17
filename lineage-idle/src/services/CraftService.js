@@ -1,17 +1,17 @@
 /**
  * CraftService.js — Motor de Criação, Metalurgia Imperial e Aprimoramento do Lineage Idle.
  *
- * Responsável por:
- * 1. Forja Universal com Craft em Lote e Cálculo "Máx".
+ * Módulos Integrados e Balanceados:
+ * 1. Forja Universal com Craft em Lote e Cálculo "Máx" O(1).
  * 2. Critical Craft (Double Craft e Foundation / Masterwork).
  * 3. Localizador de Fontes de Drop (Drop & Spoil Locator).
- * 4. Soul Crystals & Habilidades Especiais (SA).
- * 5. Ferreiro Pushkin (Unseal de B/A/S e Polimento Masterwork).
- * 6. Symbol Maker (Tatuagens Sagradas +4/-4 com teto de +5).
- * 7. Atributos Elementais (Fogo/Água, Terra/Vento, Sagrado/Trevas - 150/300).
- * 8. Augmentation com Life Stones e Remoção.
- * 9. Roleta de Reciclagem (Random Craft).
- * 10. Progressão de Nível de Forja da Conta (Account Forge System).
+ * 4. Soul Crystals (Níveis 1 a 15, Drenagem de Alma & Epic Boss Stage 15 com 50% de chance).
+ * 5. Ferreiro Pushkin (Mestre Armeiro: Unseal, Masterwork e Troca de Armas de Mesmo Grau).
+ * 6. Symbol Maker (Dyes & Tatuagens Sagradas em Estágios 1 a 5).
+ * 7. Atributos Elementais (Consumo Real de Pedras, Roda de Oposição e Drop Sources).
+ * 8. Síntese de Cintos (Compound de Duplicatas com 30% de Sucesso e Rolagem de Stats).
+ * 9. Augmentation com Life Stones Transparentes.
+ * 10. Random Craft Balanceado (Reciclagem Real de Itens e Pools Proporcionais).
  */
 
 import { D } from '../core/GameConfig.js';
@@ -91,7 +91,7 @@ export function getRecipeMaterials(recipe) {
 /**
  * Calcula a quantidade máxima de repetições possíveis de uma receita com os materiais atuais.
  * @param {Object} state
- * @param {string} recipeId
+ * @param {string|Object} recipeOrId
  * @returns {number}
  */
 export function calculateMaxCraftableQty(state, recipeOrId) {
@@ -137,11 +137,6 @@ export function canCraftRecipe(state, id, qty = 1) {
 
 /**
  * Executa a criação de um item ou lote de itens com suporte a Critical Craft (Double / Foundation).
- * @param {Object} state
- * @param {string} recipeId
- * @param {number} [qty=1]
- * @param {Object} [callbacks]
- * @returns {boolean}
  */
 export function craftItem(state, recipeId, qty = 1, callbacks = {}) {
   const recipe = getRecipeDef(recipeId);
@@ -240,8 +235,6 @@ export function craftItem(state, recipeId, qty = 1, callbacks = {}) {
 
 /**
  * Retorna as fontes de drop e monstros para um determinado material (Drop & Spoil Locator).
- * @param {string} matId
- * @returns {Array<{zoneName: string, minLevel: number, source: string}>}
  */
 export function getMaterialDropSources(matId) {
   const gData = D();
@@ -274,27 +267,105 @@ export function getMaterialDropSources(matId) {
 
 /**
  * ═══════════════════════════════════════════════════════════════════════════
- * SUBSISTEMA 2: SOUL CRYSTALS & SPECIAL ABILITY (SA)
+ * SUBSISTEMA 2: SOUL CRYSTALS (1 a 15, DRENAGEM DE ALMAS & EPIC BOSSES)
  * ═══════════════════════════════════════════════════════════════════════════
  */
 export const SA_DEFINITIONS = {
   red: {
-    focus: { name: 'Focus', desc: '+65 Taxa de Crítico Físico', stat: 'crit', val: 65 },
-    critical_damage: { name: 'Critical Damage', desc: '+280 Dano Crítico', stat: 'critDmg', val: 280 },
-    might: { name: 'Might', desc: '+15% Dano Físico P.Atk', stat: 'atkPct', val: 0.15 }
+    focus: { name: 'Focus', desc: 'Taxa de Crítico Físico', stat: 'crit', baseVal: 65 },
+    critical_damage: { name: 'Critical Damage', desc: 'Dano Crítico Físico', stat: 'critDmg', baseVal: 280 },
+    might: { name: 'Might', desc: 'Dano Físico P.Atk', stat: 'atkPct', baseVal: 0.15 }
   },
   green: {
-    acumen: { name: 'Acumen', desc: '+15% Velocidade de Conjuração Mágica', stat: 'castSpd', val: 0.15 },
-    haste: { name: 'Haste', desc: '+10% Velocidade de Ataque Físico', stat: 'atkSpd', val: 0.10 },
-    health: { name: 'Health', desc: '+25% Vida Máxima (Max HP)', stat: 'hpPct', val: 0.25 }
+    acumen: { name: 'Acumen', desc: 'Velocidade de Conjuração Mágica', stat: 'castSpd', baseVal: 0.15 },
+    haste: { name: 'Haste', desc: 'Velocidade de Ataque Físico', stat: 'atkSpd', baseVal: 0.10 },
+    health: { name: 'Health', desc: 'Vida Máxima (Max HP)', stat: 'hpPct', baseVal: 0.25 }
   },
   blue: {
-    empower: { name: 'Empower', desc: '+20% Poder de Ataque Mágico (M.Atk)', stat: 'matkPct', val: 0.20 },
-    guidance: { name: 'Guidance', desc: '+8 Precisão / Acerto', stat: 'acc', val: 8 },
-    anger: { name: 'Anger', desc: '+25% Dano Físico quando HP < 50%', stat: 'anger', val: 0.25 }
+    empower: { name: 'Empower', desc: 'Poder de Ataque Mágico (M.Atk)', stat: 'matkPct', baseVal: 0.20 },
+    guidance: { name: 'Guidance', desc: 'Precisão / Acerto', stat: 'acc', baseVal: 8 },
+    anger: { name: 'Anger', desc: 'Dano Físico quando HP < 50%', stat: 'anger', baseVal: 0.25 }
   }
 };
 
+/**
+ * Processa a absorção de almas ao derrotar um monstro ou chefe.
+ * @param {Object} state
+ * @param {Object} monster
+ * @param {Object} callbacks
+ */
+export function processSoulDrainOnKill(state, monster = {}, callbacks = {}) {
+  const crystal = (state.inventory || []).find(i => (i.itemId?.startsWith('soul_crystal_') || i.isSoulCrystal) && !i.equipped);
+  if (!crystal) return;
+
+  const currentLevel = crystal.stage || crystal.crystalLevel || 1;
+  const isEpicBoss = monster.isEpicBoss || ['valakas', 'antharas', 'baium', 'frintezza', 'barakiel'].includes(monster.id || monster.key);
+  const isRaidBoss = monster.isBoss || monster.isRaid || isEpicBoss;
+
+  // Estágio Máximo Lendário: Nível 14 -> 15 Requer Derrotar um Epic Boss com 50% de chance!
+  if (currentLevel === 14) {
+    if (isEpicBoss) {
+      const resonanceSuccess = Math.random() < 0.50; // 50% de chance canônica
+      if (resonanceSuccess) {
+        crystal.stage = 15;
+        crystal.crystalLevel = 15;
+        crystal.name = `Soul Crystal - Estágio 15 (Lendário)`;
+        if (callbacks.log) {
+          callbacks.log(`🌟 RESSONÂNCIA ÉPICA! A alma de ${monster.name || 'Epic Boss'} elevou o Soul Crystal ao Nível 15 (MÁXIMO)!`, 'rarity-sovereign');
+        }
+        if (callbacks.floatText) callbacks.floatText('🌟 SOUL CRYSTAL STAGE 15!', 'float-jackpot');
+      } else {
+        if (callbacks.log) {
+          callbacks.log(`💨 A alma do Epic Boss escapou... O Soul Crystal Lv.14 não conseguiu ressonar (50% de chance).`, 'system');
+        }
+      }
+      if (callbacks.updateAllUI) callbacks.updateAllUI();
+      if (callbacks.save) callbacks.save();
+    }
+    return;
+  }
+
+  if (currentLevel >= 15) return; // Já no teto máximo
+
+  // Progressão de Níveis 1 a 10 (Monstros Comuns / Campeões)
+  if (currentLevel < 10) {
+    crystal.absorbedSouls = (crystal.absorbedSouls || 0) + 1;
+    const reqSouls = currentLevel * 10;
+    if (crystal.absorbedSouls >= reqSouls) {
+      crystal.absorbedSouls = 0;
+      const successChance = 0.70 - (currentLevel * 0.04);
+      if (Math.random() < successChance) {
+        crystal.stage = currentLevel + 1;
+        crystal.crystalLevel = crystal.stage;
+        if (callbacks.log) callbacks.log(`🔮 SOUL UPGRADE! Soul Crystal absorveu almas e subiu para o Nível ${crystal.stage}!`, 'rarity-epic');
+      } else {
+        if (callbacks.log) callbacks.log(`⚠️ Falha na absorção de almas! O cristal manteve o Nível ${currentLevel}.`, 'system');
+      }
+    }
+    return;
+  }
+
+  // Progressão de Níveis 10 a 13 (Masmorras e Raids Médios)
+  if (currentLevel >= 10 && currentLevel < 14) {
+    if (isRaidBoss || monster.level >= 50) {
+      crystal.absorbedSouls = (crystal.absorbedSouls || 0) + (isRaidBoss ? 10 : 1);
+      const reqSouls = currentLevel * 20;
+      if (crystal.absorbedSouls >= reqSouls) {
+        crystal.absorbedSouls = 0;
+        const successChance = 0.45;
+        if (Math.random() < successChance) {
+          crystal.stage = currentLevel + 1;
+          crystal.crystalLevel = crystal.stage;
+          if (callbacks.log) callbacks.log(`🔮 SOUL UPGRADE! Soul Crystal absorveu almas de elite e subiu para o Nível ${crystal.stage}!`, 'rarity-legendary');
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Engasta o Soul Crystal na Arma com bônus proporcional ao nível do cristal (1 a 15).
+ */
 export function applySoulCrystal(state, weaponUid, color = 'red', saKey = 'focus', callbacks = {}) {
   const item = (state.inventory || []).find(i => i.uid === weaponUid || i.id === weaponUid);
   if (!item) {
@@ -305,7 +376,7 @@ export function applySoulCrystal(state, weaponUid, color = 'red', saKey = 'focus
   const gData = D();
   const def = gData?.ALL_ITEMS?.[item.itemId || item.id] || item;
   if (!def || def.slot !== 'weapon') {
-    if (callbacks.log) callbacks.log('Soul Crystals só podem ser inseridos em Armas!', 'system');
+    if (callbacks.log) callbacks.log('Soul Crystals só podem ser engastados em Armas!', 'system');
     return false;
   }
 
@@ -313,17 +384,30 @@ export function applySoulCrystal(state, weaponUid, color = 'red', saKey = 'focus
   const saBonus = saGroup?.[saKey] || Object.values(saGroup || {})[0];
   if (!saBonus) return false;
 
+  // Busca cristal no inventário
+  const crystalIdx = (state.inventory || []).findIndex(i => (i.itemId?.startsWith('soul_crystal_') || i.isSoulCrystal) && !i.equipped);
+  const crystalLevel = crystalIdx !== -1 ? (state.inventory[crystalIdx].stage || state.inventory[crystalIdx].crystalLevel || 1) : 1;
+
+  if (crystalIdx !== -1) {
+    state.inventory.splice(crystalIdx, 1); // Consome o cristal utilizado
+  }
+
+  // Escala de poder por nível do cristal (Nível 1 = 50%, Nível 10 = 85%, Nível 15 = 120%)
+  const powerScale = 0.50 + (crystalLevel * 0.05);
+  const finalVal = typeof saBonus.baseVal === 'number' ? (saBonus.baseVal > 1 ? Math.round(saBonus.baseVal * powerScale) : parseFloat((saBonus.baseVal * powerScale).toFixed(3))) : saBonus.baseVal;
+
   item.soulCrystal = {
     color,
     key: saKey,
     name: saBonus.name,
-    desc: saBonus.desc,
+    level: crystalLevel,
+    desc: `${saBonus.desc} (+${typeof finalVal === 'number' && finalVal < 1 ? (finalVal * 100).toFixed(0) + '%' : finalVal})`,
     stat: saBonus.stat,
-    val: saBonus.val
+    val: finalVal
   };
 
   if (callbacks.log) {
-    callbacks.log(`🔮 SPECIAL ABILITY CONCEDIDA: ${def.name} recebeu [SA: ${saBonus.name}]! (${saBonus.desc})`, 'rarity-epic');
+    callbacks.log(`🔮 SPECIAL ABILITY CONCEDIDA (Lv.${crystalLevel}): ${def.name} recebeu [SA: ${saBonus.name}]! (${item.soulCrystal.desc})`, 'rarity-legendary');
   }
 
   if (callbacks.updateAllUI) callbacks.updateAllUI();
@@ -333,7 +417,7 @@ export function applySoulCrystal(state, weaponUid, color = 'red', saKey = 'focus
 
 /**
  * ═══════════════════════════════════════════════════════════════════════════
- * SUBSISTEMA 3: FERREIRO PUSHKIN (UNSEAL & MASTERWORK)
+ * SUBSISTEMA 3: FERREIRO PUSHKIN (UNSEAL, MASTERWORK & WEAPON SWAP)
  * ═══════════════════════════════════════════════════════════════════════════
  */
 export function unsealItem(state, itemUid, callbacks = {}) {
@@ -364,7 +448,7 @@ export function unsealItem(state, itemUid, callbacks = {}) {
 export function polishMasterwork(state, itemUid, callbacks = {}) {
   const item = (state.inventory || []).find(i => i.uid === itemUid || i.id === itemUid);
   if (!item || !item.foundation) {
-    if (callbacks.log) callbacks.log('Apenas itens Foundation podem ser polidos para Masterwork!', 'system');
+    if (callbacks.log) callbacks.log('Apenas itens Foundation com Alma Ancestral podem ser polidos para Masterwork!', 'system');
     return false;
   }
 
@@ -396,29 +480,72 @@ export function polishMasterwork(state, itemUid, callbacks = {}) {
 }
 
 /**
+ * Troca de Armas de Mesmo Grau no Ferreiro Pushkin (Blacksmith Weapon Exchange).
+ */
+export function swapWeaponSameGrade(state, weaponUid, targetWeaponId, callbacks = {}) {
+  const item = (state.inventory || []).find(i => i.uid === weaponUid || i.id === weaponUid);
+  if (!item || item.equipped) {
+    if (callbacks.log) callbacks.log('Arma não encontrada ou está equipada!', 'system');
+    return false;
+  }
+
+  const gData = D();
+  const allItems = gData?.ALL_ITEMS || {};
+  const currentDef = allItems[item.itemId || item.id] || item;
+  const targetDef = allItems[targetWeaponId];
+
+  if (!targetDef || targetDef.slot !== 'weapon') {
+    if (callbacks.log) callbacks.log('Arma de destino inválida.', 'system');
+    return false;
+  }
+
+  const swapFee = 150000;
+  if ((state.gold || 0) < swapFee) {
+    if (callbacks.log) callbacks.log(`Ferreiro Pushkin cobra ${swapFee.toLocaleString()} Adena pela troca de armas.`, 'system');
+    return false;
+  }
+
+  state.gold -= swapFee;
+  item.itemId = targetWeaponId;
+  item.name = targetDef.name;
+
+  if (callbacks.log) {
+    callbacks.log(`🔄 TROCA CONCLUÍDA: ${currentDef.name} foi convertida em [${targetDef.name}]!`, 'rarity-epic');
+  }
+
+  if (callbacks.updateAllUI) callbacks.updateAllUI();
+  if (callbacks.save) callbacks.save();
+  return true;
+}
+
+/**
  * ═══════════════════════════════════════════════════════════════════════════
- * SUBSISTEMA 4: SYMBOL MAKER & TATUAGENS SAGRADAS (DYES)
+ * SUBSISTEMA 4: SYMBOL MAKER & TATUAGENS EM ESTÁGIOS (1 a 5)
  * ═══════════════════════════════════════════════════════════════════════════
  */
 export const DYES_CATALOG = {
-  dye_str_con: { name: 'Dye of STR (+4 STR / -4 CON)', plus: { str: 4 }, minus: { con: 4 } },
-  dye_dex_con: { name: 'Dye of DEX (+4 DEX / -4 CON)', plus: { dex: 4 }, minus: { con: 4 } },
-  dye_con_str: { name: 'Dye of CON (+4 CON / -4 STR)', plus: { con: 4 }, minus: { str: 4 } },
-  dye_wit_men: { name: 'Dye of WIT (+4 WIT / -4 MEN)', plus: { wit: 4 }, minus: { men: 4 } },
-  dye_int_men: { name: 'Dye of INT (+4 INT / -4 MEN)', plus: { int: 4 }, minus: { men: 4 } },
-  dye_men_int: { name: 'Dye of MEN (+4 MEN / -4 INT)', plus: { men: 4 }, minus: { int: 4 } }
+  dye_str_con: { key: 'dye_str_con', name: 'Dye of STR/CON', statPlus: 'str', statMinus: 'con' },
+  dye_dex_con: { key: 'dye_dex_con', name: 'Dye of DEX/CON', statPlus: 'dex', statMinus: 'con' },
+  dye_con_str: { key: 'dye_con_str', name: 'Dye of CON/STR', statPlus: 'con', statMinus: 'str' },
+  dye_wit_men: { key: 'dye_wit_men', name: 'Dye of WIT/MEN', statPlus: 'wit', statMinus: 'men' },
+  dye_int_men: { key: 'dye_int_men', name: 'Dye of INT/MEN', statPlus: 'int', statMinus: 'men' },
+  dye_men_int: { key: 'dye_men_int', name: 'Dye of MEN/INT', statPlus: 'men', statMinus: 'int' }
 };
 
-export function applyDyeSymbol(state, slotIdx = 0, dyeKey = 'dye_str_con', callbacks = {}) {
+export function applyDyeSymbol(state, slotIdx = 0, dyeKey = 'dye_str_con', stage = 1, callbacks = {}) {
   state.dyeSymbols = state.dyeSymbols || [null, null, null];
   if (slotIdx < 0 || slotIdx > 2) return false;
 
   const dye = DYES_CATALOG[dyeKey];
   if (!dye) return false;
 
-  // Validar teto de +5 por atributo base
+  const validStage = Math.max(1, Math.min(5, stage));
+  const plusObj = { [dye.statPlus]: validStage };
+  const minusObj = { [dye.statMinus]: validStage };
+
+  // Validar teto estrito de +5 líquido por atributo base
   const testSymbols = [...state.dyeSymbols];
-  testSymbols[slotIdx] = dye;
+  testSymbols[slotIdx] = { plus: plusObj, minus: minusObj };
 
   const netStats = { str: 0, dex: 0, con: 0, int: 0, wit: 0, men: 0 };
   for (const s of testSymbols) {
@@ -429,25 +556,64 @@ export function applyDyeSymbol(state, slotIdx = 0, dyeKey = 'dye_str_con', callb
 
   for (const [k, v] of Object.entries(netStats)) {
     if (v > 5) {
-      if (callbacks.log) callbacks.log(`Limite excedido! O bônus total de ${k.toUpperCase()} não pode ultrapassar +5.`, 'system');
+      if (callbacks.log) callbacks.log(`Limite excedido! O saldo de ${k.toUpperCase()} não pode ultrapassar +5.`, 'system');
       return false;
     }
   }
 
   state.dyeSymbols[slotIdx] = {
     key: dyeKey,
-    name: dye.name,
-    plus: dye.plus,
-    minus: dye.minus
+    stage: validStage,
+    name: `${dye.name} (Estágio ${validStage}: +${validStage} / -${validStage})`,
+    plus: plusObj,
+    minus: minusObj
   };
 
   if (callbacks.log) {
-    callbacks.log(`🖊️ SÍMBOLO SAGRADO GRAVADO: Slot ${slotIdx + 1} recebeu [${dye.name}]!`, 'rarity-epic');
+    callbacks.log(`🖊️ SÍMBOLO SAGRADO GRAVADO: Slot ${slotIdx + 1} recebeu [${dye.name} Estágio ${validStage}]!`, 'rarity-epic');
   }
 
   if (callbacks.updateAllUI) callbacks.updateAllUI();
   if (callbacks.save) callbacks.save();
   return true;
+}
+
+export function upgradeDyeSymbol(state, slotIdx = 0, callbacks = {}) {
+  state.dyeSymbols = state.dyeSymbols || [null, null, null];
+  const current = state.dyeSymbols[slotIdx];
+  if (!current) {
+    if (callbacks.log) callbacks.log('Nenhum símbolo instalado neste slot.', 'system');
+    return false;
+  }
+
+  if (current.stage >= 5) {
+    if (callbacks.log) callbacks.log('Este símbolo já atingiu o Estágio Máximo (+5 / -5)!', 'system');
+    return false;
+  }
+
+  const costs = [0, 50000, 150000, 400000, 1000000];
+  const upgradeCost = costs[current.stage] || 100000;
+
+  if ((state.gold || 0) < upgradeCost) {
+    if (callbacks.log) callbacks.log(`Adena insuficiente! Requer ${upgradeCost.toLocaleString()} Adena para evoluir a tatuagem.`, 'system');
+    return false;
+  }
+
+  state.gold -= upgradeCost;
+
+  const successChances = [0, 0.75, 0.55, 0.40, 0.25];
+  const chance = successChances[current.stage] || 0.30;
+  const isSuccess = Math.random() < chance;
+
+  if (isSuccess) {
+    const nextStage = current.stage + 1;
+    return applyDyeSymbol(state, slotIdx, current.key, nextStage, callbacks);
+  } else {
+    if (callbacks.log) callbacks.log(`💨 A infusão da tinta sagrada falhou! A tatuagem manteve o Estágio ${current.stage}.`, 'system');
+    if (callbacks.updateAllUI) callbacks.updateAllUI();
+    if (callbacks.save) callbacks.save();
+    return false;
+  }
 }
 
 export function removeDyeSymbol(state, slotIdx = 0, callbacks = {}) {
@@ -468,9 +634,27 @@ export function removeDyeSymbol(state, slotIdx = 0, callbacks = {}) {
 
 /**
  * ═══════════════════════════════════════════════════════════════════════════
- * SUBSISTEMA 5: ATRIBUTOS ELEMENTAIS (150 / 300)
+ * SUBSISTEMA 5: ATRIBUTOS ELEMENTAIS (RODA DE OPOSIÇÃO & 150/300)
  * ═══════════════════════════════════════════════════════════════════════════
  */
+export const ELEMENT_DEFINITIONS = {
+  fire: { name: 'Fogo 🔥', opposed: 'water', stoneId: 'fire_stone', dropZone: 'Forge of the Gods (Lv.70+)' },
+  water: { name: 'Água 💧', opposed: 'fire', stoneId: 'water_stone', dropZone: 'Garden of Eva (Lv.45+)' },
+  wind: { name: 'Vento 🌪️', opposed: 'earth', stoneId: 'wind_stone', dropZone: 'Dragon Valley (Lv.55+)' },
+  earth: { name: 'Terra 🌍', opposed: 'wind', stoneId: 'earth_stone', dropZone: 'Mithril Mines (Lv.35+)' },
+  holy: { name: 'Sagrado ✨', opposed: 'dark', stoneId: 'holy_stone', dropZone: 'Monastery of Silence (Lv.75+)' },
+  dark: { name: 'Trevas 🌑', opposed: 'holy', stoneId: 'dark_stone', dropZone: 'Imperial Tomb / Crypt (Lv.70+)' }
+};
+
+export function getElementalDropSources() {
+  return Object.entries(ELEMENT_DEFINITIONS).map(([key, elem]) => ({
+    element: key,
+    name: elem.name,
+    stoneId: elem.stoneId,
+    dropZone: elem.dropZone
+  }));
+}
+
 export function applyElementalStone(state, equipUid, element = 'fire', callbacks = {}) {
   const item = (state.inventory || []).find(i => i.uid === equipUid || i.id === equipUid);
   if (!item) return false;
@@ -495,10 +679,10 @@ export function applyElementalStone(state, equipUid, element = 'fire', callbacks
     val: newVal
   };
 
-  const elemNames = { fire: 'Fogo 🔥', water: 'Água 💧', wind: 'Vento 🌪️', earth: 'Terra 🌍', holy: 'Sagrado ✨', dark: 'Trevas 🌑' };
+  const elemInfo = ELEMENT_DEFINITIONS[element] || { name: element };
 
   if (callbacks.log) {
-    callbacks.log(`🔥 INFUSÃO ELEMENTAL: ${def.name} recebeu +${step} de ${elemNames[element] || element}! (Total: ${newVal}/${maxCap})`, 'rarity-epic');
+    callbacks.log(`🔥 INFUSÃO ELEMENTAL: ${def.name} recebeu +${step} de ${elemInfo.name}! (Total: ${newVal}/${maxCap})`, 'rarity-epic');
   }
 
   if (callbacks.updateAllUI) callbacks.updateAllUI();
@@ -508,9 +692,79 @@ export function applyElementalStone(state, equipUid, element = 'fire', callbacks
 
 /**
  * ═══════════════════════════════════════════════════════════════════════════
- * SUBSISTEMA 6: AUGMENTATION (LIFE STONES)
+ * SUBSISTEMA 6: SÍNTESE DE CINTOS COM CÓPIAS DUPLICADAS (30% DE SUCESSO)
  * ═══════════════════════════════════════════════════════════════════════════
  */
+export function compoundBeltsWithDuplicates(state, primaryUid, secondaryUid, callbacks = {}) {
+  const inv = state.inventory || [];
+  const primaryItem = inv.find(i => i.uid === primaryUid || i.id === primaryUid);
+  const secondaryItem = inv.find(i => i.uid === secondaryUid || i.id === secondaryUid);
+
+  if (!primaryItem || !secondaryItem || primaryItem === secondaryItem) {
+    if (callbacks.log) callbacks.log('Selecione dois cintos distintos para a síntese!', 'system');
+    return false;
+  }
+
+  const primaryId = primaryItem.itemId || primaryItem.id;
+  const secondaryId = secondaryItem.itemId || secondaryItem.id;
+
+  if (primaryId !== secondaryId) {
+    if (callbacks.log) callbacks.log('A síntese requer 2 cintos idênticos do mesmo tipo e grau!', 'system');
+    return false;
+  }
+
+  const compoundCost = 100000;
+  if ((state.gold || 0) < compoundCost) {
+    if (callbacks.log) callbacks.log(`Adena insuficiente! Requer ${compoundCost.toLocaleString()} Adena para a fusão.`, 'system');
+    return false;
+  }
+
+  state.gold -= compoundCost;
+
+  // Remove o cinto secundário do inventário
+  const secIdx = inv.findIndex(i => (i.uid === secondaryUid || i.id === secondaryUid));
+  if (secIdx !== -1) inv.splice(secIdx, 1);
+
+  // 30% de chance canônica
+  const isSuccess = Math.random() < 0.30;
+
+  if (isSuccess) {
+    primaryItem.enchant = (primaryItem.enchant || 0) + 1;
+    primaryItem.beltBonuses = {
+      hpBonusPct: 0.03 + (primaryItem.enchant * 0.01),
+      pDefBonus: 15 + (primaryItem.enchant * 5),
+      weightBonus: 1000 + (primaryItem.enchant * 500),
+      pvpDmgPct: 0.02 + (primaryItem.enchant * 0.01)
+    };
+
+    if (callbacks.log) {
+      callbacks.log(`✨ SÍNTESE DE CINTO BEM SUCEDIDA (+${primaryItem.enchant})! Concedeu +${(primaryItem.beltBonuses.hpBonusPct * 100).toFixed(0)}% Max HP e +${primaryItem.beltBonuses.pDefBonus} P.Def!`, 'rarity-legendary');
+    }
+  } else {
+    if (callbacks.log) {
+      callbacks.log(`💥 FALHA NA SÍNTESE! O cinto secundário foi destruído, mas o principal permanece intacto.`, 'system');
+    }
+  }
+
+  if (callbacks.updateAllUI) callbacks.updateAllUI();
+  if (callbacks.save) callbacks.save();
+  return isSuccess;
+}
+
+/**
+ * ═══════════════════════════════════════════════════════════════════════════
+ * SUBSISTEMA 7: AUGMENTATION (LIFE STONES TRANSPARENTES)
+ * ═══════════════════════════════════════════════════════════════════════════
+ */
+export function getLifeStoneDropSources() {
+  return [
+    { grade: 'common', name: 'Life Stone Comum', source: 'Monstros de Caça (1% Glow, 2% Skill)' },
+    { grade: 'mid', name: 'Mid-Grade Life Stone', source: 'Monstros Campeões (5% Glow, 5% Skill)' },
+    { grade: 'high', name: 'High-Grade Life Stone', source: 'Chefes de Dungeon & Masmorras (15% Glow, 12% Skill)' },
+    { grade: 'top', name: 'Top-Grade Life Stone', source: 'Raid Bosses & Epic Bosses (40% Glow, 25% Skill)' }
+  ];
+}
+
 export function applyLifeStone(state, weaponUid, grade = 'top', callbacks = {}) {
   const item = (state.inventory || []).find(i => i.uid === weaponUid || i.id === weaponUid);
   if (!item) return false;
@@ -528,12 +782,12 @@ export function applyLifeStone(state, weaponUid, grade = 'top', callbacks = {}) 
   const hpBonus = Math.floor((100 + Math.random() * 200) * mult);
 
   const skills = [
-    { name: 'Item Skill: Shield', desc: '+15% Defesa Física por 2 min' },
+    { name: 'Item Skill: Shield', desc: '+15% Defesa Física' },
     { name: 'Item Skill: Wild Magic', desc: '+20% Taxa de Crítico Mágico' },
     { name: 'Item Skill: Might', desc: '+12% Ataque Físico' },
-    { name: 'Item Skill: Heal', desc: 'Cura instantânea de 1.500 HP' }
+    { name: 'Item Skill: Heal', desc: 'Recupera 1.500 HP' }
   ];
-  const skill = (grade === 'top' || Math.random() < 0.3) ? skills[Math.floor(Math.random() * skills.length)] : null;
+  const skill = (grade === 'top' || Math.random() < 0.25) ? skills[Math.floor(Math.random() * skills.length)] : null;
 
   item.augmentation = {
     grade,
@@ -544,7 +798,7 @@ export function applyLifeStone(state, weaponUid, grade = 'top', callbacks = {}) 
   };
 
   if (callbacks.log) {
-    callbacks.log(`💎 AUGMENTATION CONCLUÍDO: ${def.name} recebeu [+${atkBonus} P.Atk, +${critBonus} Crit, +${hpBonus} HP]${skill ? ` e [Skill: ${skill.name}]` : ''}!`, 'rarity-legendary');
+    callbacks.log(`💎 AUGMENTATION CONCLUÍDO: ${def.name} recebeu [+${atkBonus} P.Atk, +${critBonus} Crit, +${hpBonus} HP]${skill ? ` e [${skill.name}]` : ''}!`, 'rarity-legendary');
   }
 
   if (callbacks.updateAllUI) callbacks.updateAllUI();
@@ -566,10 +820,48 @@ export function removeAugment(state, weaponUid, callbacks = {}) {
 
 /**
  * ═══════════════════════════════════════════════════════════════════════════
- * SUBSISTEMA 7: RANDOM CRAFT (ROLETA MÍSTICA DE ADEN)
+ * SUBSISTEMA 8: RANDOM CRAFT BALANCEADO (SEM OVERPOWER & CUSTO REAL)
  * ═══════════════════════════════════════════════════════════════════════════
  */
-export function chargeRandomCraft(state, pointsToAdd = 25, callbacks = {}) {
+export function chargeRandomCraftWithItem(state, itemUid, callbacks = {}) {
+  const inv = state.inventory || [];
+  const itemIdx = inv.findIndex(i => (i.uid === itemUid || i.id === itemUid) && !i.equipped);
+  if (itemIdx === -1) {
+    if (callbacks.log) callbacks.log('Item não encontrado ou está equipado!', 'system');
+    return false;
+  }
+
+  const selectedSet = getSelectedSet(state);
+  if (selectedSet.has(itemUid)) {
+    if (callbacks.log) callbacks.log('Itens bloqueados com 🔒 não podem ser reciclados!', 'system');
+    return false;
+  }
+
+  const item = inv[itemIdx];
+  const gData = D();
+  const def = gData?.ALL_ITEMS?.[item.itemId || item.id] || item;
+  const tier = Number(def.tier) || 1;
+
+  // Carga proporcional ao Grau do item:
+  // No-Grade: +2%, D-Grade: +5%, C-Grade: +10%, B-Grade: +20%, A-Grade: +35%, S-Grade: +60%
+  const chargePoints = tier >= 5 ? 35 : tier >= 4 ? 20 : tier >= 3 ? 10 : tier >= 2 ? 5 : 2;
+
+  inv.splice(itemIdx, 1);
+  return chargeRandomCraft(state, chargePoints, callbacks);
+}
+
+export function chargeRandomCraftWithAdena(state, callbacks = {}) {
+  const feeAdena = 200000;
+  if ((state.gold || 0) < feeAdena) {
+    if (callbacks.log) callbacks.log(`Requer ${feeAdena.toLocaleString()} Adena para carregar +20% de pontos.`, 'system');
+    return false;
+  }
+
+  state.gold -= feeAdena;
+  return chargeRandomCraft(state, 20, callbacks);
+}
+
+export function chargeRandomCraft(state, pointsToAdd = 20, callbacks = {}) {
   state.randomCraftCharge = (state.randomCraftCharge || 0) + pointsToAdd;
   if (state.randomCraftCharge >= 100) {
     state.randomCraftCharge = 100;
@@ -582,25 +874,60 @@ export function chargeRandomCraft(state, pointsToAdd = 25, callbacks = {}) {
   return true;
 }
 
+/**
+ * Tabela Ponderada Anti-Overpower para o Random Craft:
+ * 70% Consumíveis/Enchant Scrolls, 25% Gear B/A, 4.9% Gear S, 0.1% Rare Jewel
+ */
 export function rollRandomCraftSlots(state) {
-  const gData = D();
-  const allItems = gData?.ALL_ITEMS || {};
-  const itemKeys = Object.keys(allItems);
+  const poolConsumables = [
+    'scroll_enchant_weapon_s', 'scroll_enchant_armor_s', 'scroll_enchant_weapon_a', 'scroll_enchant_armor_a',
+    'giants_codex', 'soulshot_s', 'spiritshot_s', 'hp_potion_xl', 'mp_potion_xl'
+  ];
+  const poolGearBA = [
+    'weapon_keshanberk', 'weapon_damascus', 'weapon_tallum_blade', 'weapon_dragon_slayer',
+    'armor_tallum_heavy_armor', 'armor_majestic_light', 'armor_dark_crystal_robe'
+  ];
+  const poolGearS = [
+    'weapon_draconic_bow', 'weapon_angel_slayer', 'weapon_arcana_mace', 'weapon_saint_spear',
+    'armor_imperial_crusader_armor', 'armor_draconic_leather_armor', 'armor_major_arcana_robe'
+  ];
+  const poolJackpot = [
+    'ring_core', 'jewel_ring_core', 'ring_queen_ant'
+  ];
 
   state.randomCraftSlots = [];
   for (let i = 0; i < 5; i++) {
-    const rKey = itemKeys[Math.floor(Math.random() * itemKeys.length)];
+    const roll = Math.random();
+    let chosenId = 'scroll_enchant_weapon_a';
+    let rarity = 'common';
+    let count = 1;
+
+    if (roll < 0.70) {
+      chosenId = poolConsumables[Math.floor(Math.random() * poolConsumables.length)];
+      rarity = 'rare';
+      count = chosenId.includes('shot') ? 500 : (chosenId.includes('potion') ? 20 : 1);
+    } else if (roll < 0.95) {
+      chosenId = poolGearBA[Math.floor(Math.random() * poolGearBA.length)];
+      rarity = 'epic';
+    } else if (roll < 0.999) {
+      chosenId = poolGearS[Math.floor(Math.random() * poolGearS.length)];
+      rarity = 'legendary';
+    } else {
+      chosenId = poolJackpot[Math.floor(Math.random() * poolJackpot.length)];
+      rarity = 'sovereign';
+    }
+
     state.randomCraftSlots.push({
-      itemId: rKey,
-      count: 1,
-      rarity: Math.random() < 0.1 ? 'epic' : 'rare'
+      itemId: chosenId,
+      count,
+      rarity
     });
   }
 }
 
 export function claimRandomCraft(state, slotIdx = 0, callbacks = {}) {
   if ((state.randomCraftCharge || 0) < 100 || !state.randomCraftSlots || !state.randomCraftSlots[slotIdx]) {
-    if (callbacks.log) callbacks.log('A Roleta precisa estar em 100% de carga para resgatar!', 'system');
+    if (callbacks.log) callbacks.log('A Roleta precisa atingir 100% de carga para resgatar o item!', 'system');
     return false;
   }
 
@@ -614,88 +941,10 @@ export function claimRandomCraft(state, slotIdx = 0, callbacks = {}) {
   const def = gData?.ALL_ITEMS?.[reward.itemId] || { name: reward.itemId };
 
   if (callbacks.log) {
-    callbacks.log(`🎉 RECOMPENSA DA ROLETA: Você forjou [${def.name}] gratuitamente!`, 'rarity-legendary');
+    callbacks.log(`🎉 RECOMPENSA DA ROLETA: Você resgatou [${def.name}]!`, 'rarity-legendary');
   }
 
   if (callbacks.updateAllUI) callbacks.updateAllUI();
   if (callbacks.save) callbacks.save();
   return true;
-}
-
-/**
- * Validação de Barreira de Forja da Conta (Anti-Bot & Gatekeeper de Mercado).
- * @param {Object} state
- * @param {number} requiredForgeLevel
- * @returns {{ allowed: boolean, error?: string }}
- */
-export function checkAccountForgeLevel(state, requiredForgeLevel = 10) {
-  const currentForgeLevel = state.accountForgeLevel || state.craftLevel || 1;
-  if (currentForgeLevel < requiredForgeLevel) {
-    return {
-      allowed: false,
-      error: `Barreira de Forja: Nível de Forja da Conta Lv.${requiredForgeLevel} necessário (Atual: Lv.${currentForgeLevel}). Destrua itens na forja para avançar.`
-    };
-  }
-  return { allowed: true };
-}
-
-/**
- * Item Sink Massivo: Destrói permanentemente lotes de itens de baixo nível para forjar relíquias supremas.
- * @param {Object} state
- * @param {string} targetItemId
- * @param {Array<{itemId: string, count: number}>} sacrificeList
- * @param {Object} callbacks
- * @returns {{ success: boolean, message: string }}
- */
-export function executeMassiveItemSink(state, targetItemId, sacrificeList = [], callbacks = {}) {
-  const check = checkAccountForgeLevel(state, 10);
-  if (!check.allowed) {
-    return { success: false, message: check.error };
-  }
-
-  const inv = state.inventory || [];
-  let totalDestroyed = 0;
-
-  for (const req of sacrificeList) {
-    const item = inv.find(i => (i.id === req.itemId || i.itemId === req.itemId));
-    const available = item ? (item.count || item.quantity || 1) : 0;
-    if (available < req.count) {
-      return { success: false, message: `Quantidade insuficiente de ${req.itemId} (Requer: ${req.count}, Disponível: ${available}).` };
-    }
-  }
-
-  for (const req of sacrificeList) {
-    const itemIndex = inv.findIndex(i => (i.id === req.itemId || i.itemId === req.itemId));
-    if (itemIndex !== -1) {
-      const item = inv[itemIndex];
-      const cur = item.count || item.quantity || 1;
-      if (cur > req.count) {
-        if (item.count) item.count -= req.count;
-        if (item.quantity) item.quantity -= req.count;
-      } else {
-        inv.splice(itemIndex, 1);
-      }
-      totalDestroyed += req.count;
-    }
-  }
-
-  addToInventory(state, targetItemId, 1);
-
-  const expGained = totalDestroyed * 10;
-  state.accountForgeExp = (state.accountForgeExp || 0) + expGained;
-  state.accountForgeLevel = state.accountForgeLevel || state.craftLevel || 1;
-
-  while (state.accountForgeExp >= state.accountForgeLevel * 250) {
-    state.accountForgeExp -= state.accountForgeLevel * 250;
-    state.accountForgeLevel += 1;
-    if (callbacks.log) callbacks.log(`🎉 NÍVEL DE FORJA DA CONTA EVOLUIU PARA Lv.${state.accountForgeLevel}!`, 'rarity-legendary');
-  }
-
-  if (callbacks.log) {
-    callbacks.log(`🔥 ITEM SINK MASSIVO: ${totalDestroyed}x itens foram destruídos na forja sagrada! Criado: [${targetItemId}]!`, 'rarity-sovereign');
-  }
-  if (callbacks.updateAllUI) callbacks.updateAllUI();
-  if (callbacks.save) callbacks.save();
-
-  return { success: true, message: `Forja concluída com sucesso! +${expGained} EXP de Forja obtidos.` };
 }

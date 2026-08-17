@@ -3973,358 +3973,401 @@ export function renderExpeditionsUI(state) {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   21. FORGE HUB SUB-PANELS: SOUL CRYSTALS, MASTERWORK & TATTOOS
+   21. FORGE HUB SUB-PANELS: SOUL CRYSTALS, PUSHKIN, TATTOOS, ELEMENTAL, BELTS, AUGMENT, RANDOM CRAFT
 ═══════════════════════════════════════════════════════════════════════════ */
+
 export function renderForgeSoulCrystals(container, state) {
   const wpnUid = state.equipment?.weapon;
-  const wpnItem = wpnUid ? state.inventory?.find(i => i.uid === wpnUid) : null;
+  const wpnItem = wpnUid ? (state.inventory || []).find(i => i.uid === wpnUid) : null;
   const wpnDef = wpnItem ? getItemDef(wpnItem.itemId) : null;
-  const socket = (wpnUid && state.weaponSockets) ? state.weaponSockets[wpnUid] : null;
 
-  const soulCrystals = state.soulCrystals || {};
-  let crystalsListHtml = '';
-  const colors = ['red', 'green', 'blue'];
-  for (const color of colors) {
-    for (let st = 1; st <= 13; st++) {
-      const key = `${color}_stage${st}`;
-      const count = soulCrystals[key] || 0;
-      if (count > 0 || st === 1) {
-        const canFuse = count >= 2 && st < 13;
-        crystalsListHtml += `
-          <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(212,167,68,0.25); border-radius:8px; padding:10px; display:flex; justify-content:space-between; align-items:center; gap:8px;">
-            <div>
-              <strong style="color:${color === 'red' ? '#fca5a5' : (color === 'green' ? '#86efac' : '#7dd3fc')}; font-size:13px;">
-                🔮 Soul Crystal ${color.toUpperCase()} (Stage ${st})
-              </strong>
-              <div style="font-size:11px; color:#aaa;">Possuídos: <strong>${count}x</strong></div>
-            </div>
-            <div style="display:flex; gap:6px;">
-              ${st === 1 ? `<button onclick="window.buySoulCrystal('${color}', 1)" style="padding:4px 10px; font-size:11px; font-weight:bold; background:rgba(212,167,68,0.2); border:1px solid rgba(212,167,68,0.4); color:#ffd877; border-radius:4px; cursor:pointer;">🛒 Comprar (15k g)</button>` : ''}
-              ${canFuse ? `<button onclick="window.fuseSoulCrystals('${color}', ${st})" style="padding:4px 10px; font-size:11px; font-weight:bold; background:linear-gradient(180deg,#34d399,#059669); border:1px solid #6ee7b7; color:#000; border-radius:4px; cursor:pointer;">✨ Fundir (2x ➔ St.${st+1})</button>` : ''}
-            </div>
-          </div>
-        `;
-      }
-    }
-  }
+  // Busca cristal no inventário
+  const crystal = (state.inventory || []).find(i => (i.itemId?.startsWith('soul_crystal_') || i.isSoulCrystal) && !i.equipped);
+  const crystalStage = crystal ? (crystal.stage || crystal.crystalLevel || 1) : 0;
+  const absorbedSouls = crystal ? (crystal.absorbedSouls || 0) : 0;
+  const reqSouls = crystalStage < 10 ? crystalStage * 10 : crystalStage * 20;
 
   container.innerHTML = `
     <div style="padding:10px; color:#fff; font-family:sans-serif;">
-      <!-- Socket Header -->
-      <div style="background:rgba(26,18,48,0.85); border:1px solid rgba(168,85,247,0.4); border-radius:10px; padding:14px; margin-bottom:16px;">
-        <h4 style="margin:0 0 6px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:16px;">🔮 Soquete SA na Arma Equipada</h4>
-        <div style="font-size:12px; color:#aaa; margin-bottom:10px;">
-          Arma Equipada: <strong style="color:#ffd877;">${wpnDef ? wpnDef.name : 'Nenhuma Arma Equipada'}</strong>
-        </div>
-        ${socket ? `
-          <div style="background:rgba(52,211,153,0.15); border:1px solid #34d399; padding:8px 12px; border-radius:6px; font-size:12px; color:#34d399; font-weight:bold;">
-            ✓ SA Ativo: ${socket.effect.toUpperCase()} (Stage ${socket.stage})
+      <!-- Banner de Drenagem de Almas -->
+      <div style="background:linear-gradient(180deg, rgba(30,16,50,0.95), rgba(16,8,28,0.95)); border:1px solid rgba(168,85,247,0.5); border-radius:12px; padding:16px; margin-bottom:16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+          <div>
+            <h3 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:18px;">🔮 Soul Crystal Ancestral &amp; Drenagem de Almas</h3>
+            <p style="margin:4px 0 0 0; font-size:12px; color:#aaa;">
+              Mantenha o Soul Crystal na mochila durante suas caçadas. Derrotar criaturas acumula almas e evolui o cristal do Estágio 1 até o lendário Estágio 15!
+            </p>
           </div>
-        ` : `
-          <div style="font-size:12px; color:#fca5a5;">Nenhum Soul Crystal SA engastado. Escolha um efeito abaixo:</div>
-        `}
-
-        <div style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;">
-          <button onclick="window.socketSoulCrystalToWeapon('focus', 1)" style="flex:1; padding:8px; font-weight:bold; font-size:11px; background:rgba(239,68,68,0.2); border:1px solid #ef4444; color:#fca5a5; border-radius:6px; cursor:pointer;">🔴 Engastar SA FOCUS (+Crit)</button>
-          <button onclick="window.socketSoulCrystalToWeapon('haste', 1)" style="flex:1; padding:8px; font-weight:bold; font-size:11px; background:rgba(34,197,94,0.2); border:1px solid #22c55e; color:#86efac; border-radius:6px; cursor:pointer;">🟢 Engastar SA HASTE (+AtkSpd)</button>
-          <button onclick="window.socketSoulCrystalToWeapon('acumen', 1)" style="flex:1; padding:8px; font-weight:bold; font-size:11px; background:rgba(56,189,248,0.2); border:1px solid #38bdf8; color:#7dd3fc; border-radius:6px; cursor:pointer;">🔵 Engastar SA ACUMEN (+CastSpd)</button>
+          <div style="text-align:right;">
+            <div style="font-size:11px; color:#aaa;">Cristal na Mochila:</div>
+            <strong style="color:${crystalStage === 15 ? '#fbbf24' : '#c084fc'}; font-size:14px;">
+              ${crystal ? `Estágio ${crystalStage} ${crystalStage === 15 ? '👑 (MÁXIMO)' : ''}` : '❌ Nenhum Cristal'}
+            </strong>
+          </div>
         </div>
+
+        ${crystal && crystalStage < 14 ? `
+          <div style="margin-top:12px; background:rgba(0,0,0,0.4); padding:10px; border-radius:8px; border:1px solid rgba(168,85,247,0.3);">
+            <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px;">
+              <span>Almas Absorvidas: <strong style="color:#a855f7;">${absorbedSouls} / ${reqSouls}</strong></span>
+              <span style="color:#aaa;">Meta p/ Estágio ${crystalStage + 1}</span>
+            </div>
+            <div style="width:100%; height:8px; background:rgba(0,0,0,0.6); border-radius:4px; overflow:hidden;">
+              <div style="height:100%; width:${Math.min(100, Math.floor((absorbedSouls / reqSouls) * 100))}%; background:linear-gradient(90deg,#a855f7,#ec4899);"></div>
+            </div>
+          </div>
+        ` : ''}
+
+        ${crystalStage === 14 ? `
+          <div style="margin-top:12px; background:rgba(239,68,68,0.15); border:1px solid #ef4444; padding:12px; border-radius:8px; font-size:12px; color:#fca5a5;">
+            ⚔️ <strong>DESAFIO LENDÁRIO (ESTÁGIO 14 ➔ 15):</strong><br>
+            Para ascender ao Estágio 15, derrote um <strong>Epic Boss</strong> (Valakas, Antharas, Baium, Frintezza). Há <strong>50% de chance canônica</strong> de ressonância da alma épica!
+          </div>
+        ` : ''}
+
+        ${!crystal ? `
+          <div style="margin-top:12px; display:flex; gap:10px;">
+            <button onclick="window.buyInitialSoulCrystal()" style="padding:10px 18px; font-family:'Cinzel',serif; font-weight:bold; font-size:12px; background:linear-gradient(180deg,#a855f7,#6b21a8); border:1px solid #c084fc; color:#fff; border-radius:6px; cursor:pointer;">
+              🛒 Adquirir Soul Crystal Inicial (50.000 Adena)
+            </button>
+          </div>
+        ` : ''}
       </div>
 
-      <!-- Crystals Collection & Synthesis -->
-      <h4 style="margin:0 0 8px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">💎 Coleção &amp; Síntese de Soul Crystals (Stage 1 ➔ 13)</h4>
-      <div style="display:flex; flex-direction:column; gap:8px;">
-        ${crystalsListHtml}
+      <!-- Socket na Arma Equipada -->
+      <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(212,167,68,0.3); border-radius:10px; padding:16px; margin-bottom:16px;">
+        <h4 style="margin:0 0 6px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:16px;">🗡️ Engaste de Habilidade Especial (Special Ability - SA)</h4>
+        <div style="font-size:12px; color:#aaa; margin-bottom:12px;">
+          Arma Equipada: <strong style="color:#ffd877;">${wpnDef ? wpnDef.name : 'Nenhuma Arma Equipada'}</strong>
+          ${wpnItem?.soulCrystal ? `<span style="color:#34d399; font-weight:bold; margin-left:8px;">[SA Ativo: ${wpnItem.soulCrystal.name} (Lv.${wpnItem.soulCrystal.level || 1})]</span>` : ''}
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:10px;">
+          <div style="background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); border-radius:8px; padding:12px;">
+            <strong style="color:#fca5a5; font-size:13px;">🔴 Soul Crystal Vermelho</strong>
+            <div style="font-size:11px; color:#aaa; margin:4px 0 8px 0;">Foco em Crítico e Ataque Físico.</div>
+            <button onclick="window.applySAAction('red', 'focus')" style="width:100%; padding:6px; font-weight:bold; font-size:11px; background:rgba(239,68,68,0.25); border:1px solid #ef4444; color:#fff; border-radius:4px; cursor:pointer; margin-bottom:4px;">Engastar Focus (+Crit)</button>
+            <button onclick="window.applySAAction('red', 'might')" style="width:100%; padding:6px; font-weight:bold; font-size:11px; background:rgba(239,68,68,0.25); border:1px solid #ef4444; color:#fff; border-radius:4px; cursor:pointer;">Engastar Might (+P.Atk)</button>
+          </div>
+
+          <div style="background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.3); border-radius:8px; padding:12px;">
+            <strong style="color:#86efac; font-size:13px;">🟢 Soul Crystal Verde</strong>
+            <div style="font-size:11px; color:#aaa; margin:4px 0 8px 0;">Foco em Velocidade e Sobrevivência.</div>
+            <button onclick="window.applySAAction('green', 'acumen')" style="width:100%; padding:6px; font-weight:bold; font-size:11px; background:rgba(34,197,94,0.25); border:1px solid #22c55e; color:#fff; border-radius:4px; cursor:pointer; margin-bottom:4px;">Engastar Acumen (+CastSpd)</button>
+            <button onclick="window.applySAAction('green', 'health')" style="width:100%; padding:6px; font-weight:bold; font-size:11px; background:rgba(34,197,94,0.25); border:1px solid #22c55e; color:#fff; border-radius:4px; cursor:pointer;">Engastar Health (+Max HP)</button>
+          </div>
+
+          <div style="background:rgba(56,189,248,0.1); border:1px solid rgba(56,189,248,0.3); border-radius:8px; padding:12px;">
+            <strong style="color:#7dd3fc; font-size:13px;">🔵 Soul Crystal Azul</strong>
+            <div style="font-size:11px; color:#aaa; margin:4px 0 8px 0;">Foco em Poder Mágico e Precisão.</div>
+            <button onclick="window.applySAAction('blue', 'empower')" style="width:100%; padding:6px; font-weight:bold; font-size:11px; background:rgba(56,189,248,0.25); border:1px solid #38bdf8; color:#fff; border-radius:4px; cursor:pointer; margin-bottom:4px;">Engastar Empower (+M.Atk)</button>
+            <button onclick="window.applySAAction('blue', 'guidance')" style="width:100%; padding:6px; font-weight:bold; font-size:11px; background:rgba(56,189,248,0.25); border:1px solid #38bdf8; color:#fff; border-radius:4px; cursor:pointer;">Engastar Guidance (+Precisão)</button>
+          </div>
+        </div>
       </div>
     </div>
   `;
 }
 
 export function renderForgeMasterwork(container, state) {
-  const eligibleItems = (state.inventory || []).filter(i => {
-    const def = getItemDef(i.itemId);
-    return def && (def.tier >= 3) && !i.isMasterwork;
-  });
+  const inv = state.inventory || [];
+  const sealedItems = inv.filter(i => i.sealed);
+  const foundationItems = inv.filter(i => i.foundation && !i.isMasterwork);
+  const weapons = inv.filter(i => i.slot === 'weapon' && !i.equipped);
 
-  let itemsHtml = '';
-  for (const item of eligibleItems) {
-    const def = getItemDef(item.itemId);
-    const tier = def.tier || 3;
-    const costs = {
-      3: { adena: 500000 },
-      4: { adena: 1000000 },
-      5: { adena: 1500000 },
-      6: { adena: 2500000 }
-    };
-    const req = costs[tier] || costs[3];
-    const canAfford = (state.gold || 0) >= req.adena;
-
-    itemsHtml += `
-      <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(212,167,68,0.3); border-radius:10px; padding:12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; gap:12px;">
-        <div>
-          <h4 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">${item.name || def.name}</h4>
-          <div style="font-size:11px; color:#aaa;">Custo do Mestre Pushkin: <strong style="color:#ffd877;">${req.adena.toLocaleString()} Adena</strong></div>
-        </div>
-        <button
-          onclick="window.upgradeItemToMasterwork('${item.uid}')"
-          ${!canAfford ? 'disabled' : ''}
-          style="padding:8px 14px; font-family:'Cinzel',serif; font-weight:bold; font-size:12px; background:${canAfford ? 'linear-gradient(180deg,#d4a744,#8a641c)' : 'rgba(60,50,40,0.5)'}; border:1px solid ${canAfford ? '#ffe699' : 'rgba(100,80,60,0.3)'}; color:${canAfford ? '#000' : '#777'}; border-radius:6px; cursor:${canAfford ? 'pointer' : 'not-allowed'};"
-        >
-          ✨ FORJAR MASTERWORK RARE
-        </button>
+  let sealedHtml = sealedItems.map(item => `
+    <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(212,167,68,0.25); border-radius:8px; padding:10px 14px; display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+      <div>
+        <strong style="color:#ffd877;">🔒 ${item.name || item.itemId}</strong>
+        <div style="font-size:11px; color:#aaa;">Taxa de Quebra de Selo: 25.000 Adena</div>
       </div>
-    `;
-  }
+      <button onclick="window.unsealItemAction('${item.uid}')" style="padding:6px 14px; font-family:'Cinzel',serif; font-weight:bold; font-size:11px; background:linear-gradient(180deg,#d4a744,#8a641c); border:1px solid #ffe699; color:#000; border-radius:6px; cursor:pointer;">
+        🔓 Quebrar Selo
+      </button>
+    </div>
+  `).join('');
+
+  let foundationHtml = foundationItems.map(item => `
+    <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(168,85,247,0.3); border-radius:8px; padding:10px 14px; display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+      <div>
+        <strong style="color:#d8b4fe;">✨ ${item.name || item.itemId} (Alma Ancestral)</strong>
+        <div style="font-size:11px; color:#aaa;">Custo de Polimento: 100.000 Adena</div>
+      </div>
+      <button onclick="window.polishMasterworkAction('${item.uid}')" style="padding:6px 14px; font-family:'Cinzel',serif; font-weight:bold; font-size:11px; background:linear-gradient(180deg,#a855f7,#6b21a8); border:1px solid #c084fc; color:#fff; border-radius:6px; cursor:pointer;">
+        👑 Polir p/ Masterwork
+      </button>
+    </div>
+  `).join('');
 
   container.innerHTML = `
     <div style="padding:10px; color:#fff; font-family:sans-serif;">
-      <!-- Pushkin Header -->
-      <div style="background:linear-gradient(180deg, rgba(20,26,42,0.95), rgba(10,14,24,0.95)); border:1px solid rgba(212,167,68,0.4); border-radius:12px; padding:14px; margin-bottom:16px;">
-        <h3 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:18px;">✨ Mestre Ferreiro Pushkin (Giran Square)</h3>
+      <!-- Pushkin Banner -->
+      <div style="background:linear-gradient(180deg, rgba(20,26,42,0.95), rgba(10,14,24,0.95)); border:1px solid rgba(212,167,68,0.4); border-radius:12px; padding:16px; margin-bottom:16px;">
+        <h3 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:18px;">⚒️ Ferreiro Imperial Pushkin (Giran Square)</h3>
         <p style="margin:4px 0 0 0; font-size:12px; color:#aaa;">
-          Transforme seus equipamentos de Grade B, A, S e Dynasty em **MasterWork Foundation (Versões Raras)** com bônus de atributos elevados!
+          Mestre em metalurgia ancestral: quebra de selos de armaduras B/A/S, polimento de peças Foundation em Masterwork e troca de armas de mesmo grau.
         </p>
       </div>
 
-      <h4 style="margin:0 0 10px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">🛡️ Equipamentos Elegíveis no Inventário</h4>
-      ${itemsHtml || '<div style="font-size:12px; color:#aaa;">Nenhum equipamento elegível de Grade B+ encontrado para upgrade no momento.</div>'}
+      <!-- Unseal Section -->
+      <div style="margin-bottom:16px;">
+        <h4 style="margin:0 0 8px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">🔒 Deslacrar Equipamentos Selados (Unseal)</h4>
+        ${sealedHtml || '<div style="font-size:12px; color:#aaa; background:rgba(0,0,0,0.3); padding:10px; border-radius:6px;">Nenhum equipamento selado encontrado no inventário.</div>'}
+      </div>
+
+      <!-- Masterwork Section -->
+      <div style="margin-bottom:16px;">
+        <h4 style="margin:0 0 8px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">👑 Polimento Masterwork (Peças Foundation)</h4>
+        ${foundationHtml || '<div style="font-size:12px; color:#aaa; background:rgba(0,0,0,0.3); padding:10px; border-radius:6px;">Nenhuma peça com Alma Ancestral (Foundation) encontrada. Forje itens na aba Forja para obter Foundation!</div>'}
+      </div>
     </div>
   `;
 }
 
 export function renderForgeTattoos(container, state) {
-  const tattoos = state.tattoos || [];
-  let currentTattoosHtml = '';
+  const dyes = state.dyeSymbols || [null, null, null];
 
-  for (let idx = 0; idx < tattoos.length; idx++) {
-    const t = tattoos[idx];
-    currentTattoosHtml += `
-      <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(168,85,247,0.15); border:1px solid #a855f7; padding:8px 12px; border-radius:8px; margin-bottom:8px;">
-        <div>
-          <strong style="color:#d8b4fe; font-size:13px;">🖊️ Tatuagem #${idx + 1}: +${t.plusVal} ${t.plusStat.toUpperCase()} / -${t.minusVal} ${t.minusStat.toUpperCase()}</strong>
+  let slotsHtml = dyes.map((d, idx) => {
+    if (d) {
+      const canUpgrade = d.stage < 5;
+      return `
+        <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(168,85,247,0.4); border-radius:10px; padding:12px; display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <div>
+            <strong style="color:#d8b4fe; font-size:13px;">Slot ${idx + 1}: ${d.name}</strong>
+            <div style="font-size:11px; color:#aaa; margin-top:2px;">
+              Bônus: <strong style="color:#4ade80;">${JSON.stringify(d.plus)}</strong> · Penalidade: <strong style="color:#ef4444;">${JSON.stringify(d.minus)}</strong>
+            </div>
+          </div>
+          <div style="display:flex; gap:6px;">
+            ${canUpgrade ? `
+              <button onclick="window.upgradeDyeAction(${idx})" style="padding:6px 12px; font-weight:bold; font-size:11px; background:linear-gradient(180deg,#34d399,#059669); border:1px solid #6ee7b7; color:#000; border-radius:6px; cursor:pointer;">
+                ⚡ Evoluir p/ Estágio ${d.stage + 1}
+              </button>
+            ` : '<span style="font-size:11px; color:#ffd877; font-weight:bold; padding:4px 8px;">👑 Estágio Máximo</span>'}
+            <button onclick="window.removeDyeAction(${idx})" style="padding:6px 10px; font-weight:bold; font-size:11px; background:rgba(239,68,68,0.2); border:1px solid #ef4444; color:#fca5a5; border-radius:6px; cursor:pointer;">
+              🗑️ Remover
+            </button>
+          </div>
         </div>
-        <button
-          onclick="window.removeTattoo(${idx})"
-          style="padding:4px 10px; font-weight:bold; font-size:11px; background:rgba(239,68,68,0.2); border:1px solid #ef4444; color:#fca5a5; border-radius:4px; cursor:pointer;"
-        >
-          🗑️ Remover
-        </button>
-      </div>
-    `;
-  }
+      `;
+    } else {
+      return `
+        <div style="background:rgba(0,0,0,0.3); border:1px dashed rgba(255,255,255,0.2); border-radius:10px; padding:12px; display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="color:#aaa; font-size:13px;">Slot ${idx + 1}: [Vazio]</span>
+          <span style="font-size:11px; color:#777;">Grave uma tatuagem abaixo</span>
+        </div>
+      `;
+    }
+  }).join('');
 
-  const presets = [
-    { plus: 'str', minus: 'con', val: 4, name: '⚔️ Tatuagem do Guerreiro (+4 STR / -4 CON)' },
-    { plus: 'wit', minus: 'men', val: 4, name: '✨ Tatuagem do Arquimago (+4 WIT / -4 MEN)' },
-    { plus: 'dex', minus: 'str', val: 4, name: '🗡️ Tatuagem do Assassino (+4 DEX / -4 STR)' },
-    { plus: 'int', minus: 'men', val: 4, name: '🔥 Tatuagem de Poder Mágico (+4 INT / -4 MEN)' },
-    { plus: 'con', minus: 'str', val: 4, name: '🛡️ Tatuagem do Guardião (+4 CON / -4 STR)' },
+  const catalog = [
+    { key: 'dye_str_con', name: 'Dye do Guerreiro (+STR / -CON)', stat: 'str' },
+    { key: 'dye_dex_con', name: 'Dye do Assassino (+DEX / -CON)', stat: 'dex' },
+    { key: 'dye_con_str', name: 'Dye do Guardião (+CON / -STR)', stat: 'con' },
+    { key: 'dye_wit_men', name: 'Dye da Conjuração (+WIT / -MEN)', stat: 'wit' },
+    { key: 'dye_int_men', name: 'Dye do Mago (+INT / -MEN)', stat: 'int' },
+    { key: 'dye_men_int', name: 'Dye da Sabedoria (+MEN / -INT)', stat: 'men' }
   ];
 
-  let presetsHtml = '';
-  for (const p of presets) {
-    const cost = p.val * 50000;
-    const canAfford = (state.gold || 0) >= cost;
-    const canApply = tattoos.length < 3 && canAfford;
-
-    presetsHtml += `
-      <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(212,167,68,0.3); border-radius:10px; padding:12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; gap:12px;">
-        <div>
-          <h4 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">${p.name}</h4>
-          <div style="font-size:11px; color:#aaa;">Custo de Instalação: <strong style="color:#ffd877;">${cost.toLocaleString()} Adena</strong></div>
-        </div>
-        <button
-          onclick="window.applyTattoo('${p.plus}', '${p.minus}', ${p.val})"
-          ${!canApply ? 'disabled' : ''}
-          style="padding:8px 14px; font-family:'Cinzel',serif; font-weight:bold; font-size:11px; background:${canApply ? 'linear-gradient(180deg,#a855f7,#6b21a8)' : 'rgba(60,50,40,0.5)'}; border:1px solid ${canApply ? '#c084fc' : 'rgba(100,80,60,0.3)'}; color:${canApply ? '#fff' : '#777'}; border-radius:6px; cursor:${canApply ? 'pointer' : 'not-allowed'};"
-        >
-          🖊️ APLICAR TATUAGEM
-        </button>
+  const catalogHtml = catalog.map(c => `
+    <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(212,167,68,0.25); border-radius:8px; padding:10px 12px; display:flex; justify-content:space-between; align-items:center;">
+      <div>
+        <strong style="color:#f4d58a; font-size:13px;">${c.name}</strong>
+        <div style="font-size:11px; color:#aaa;">Inicia no Estágio 1 (+1 / -1) · Custo: 10.000 Adena</div>
       </div>
-    `;
-  }
+      <button onclick="window.applyInitialDyeAction('${c.key}')" style="padding:6px 12px; font-weight:bold; font-size:11px; background:linear-gradient(180deg,#a855f7,#6b21a8); border:1px solid #c084fc; color:#fff; border-radius:6px; cursor:pointer;">
+        🖊️ Gravar no Slot Livre
+      </button>
+    </div>
+  `).join('');
 
   container.innerHTML = `
     <div style="padding:10px; color:#fff; font-family:sans-serif;">
-      <!-- Tattoos Banner -->
-      <div style="background:linear-gradient(180deg, rgba(30,16,48,0.95), rgba(14,8,26,0.95)); border:1px solid rgba(168,85,247,0.4); border-radius:12px; padding:14px; margin-bottom:16px;">
-        <h3 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:18px;">🖊️ Tatuagens &amp; Dyes do Herói (${tattoos.length}/3 Slots)</h3>
+      <div style="background:linear-gradient(180deg, rgba(30,16,48,0.95), rgba(14,8,26,0.95)); border:1px solid rgba(168,85,247,0.4); border-radius:12px; padding:16px; margin-bottom:16px;">
+        <h3 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:18px;">🖊️ Symbol Maker: Tatuagens Sagradas em Estágios (1 a 5)</h3>
         <p style="margin:4px 0 0 0; font-size:12px; color:#aaa;">
-          Aplique tintas de atributos no Mestre de Tatuagem para otimizar STR, DEX, CON, INT, WIT ou MEN (Cap de +5 por atributo).
+          Grave símbolos sagrados no corpo do herói. Inicie no Estágio 1 (+1/-1) e aprimore com pós mágicos até o Estágio 5 (+5/-5). Teto estrito de +5 por atributo líquido!
         </p>
       </div>
 
-      <!-- Current Tattoos -->
-      <div style="margin-bottom:16px;">
-        <h4 style="margin:0 0 8px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">✨ Tatuagens Ativas no Herói</h4>
-        ${currentTattoosHtml || '<div style="font-size:12px; color:#aaa;">Nenhuma tatuagem instalada no momento.</div>'}
-      </div>
+      <h4 style="margin:0 0 8px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">✨ Slots de Símbolos Ativos (Máx 3)</h4>
+      <div style="margin-bottom:16px;">${slotsHtml}</div>
 
-      <!-- Presets -->
-      <h4 style="margin:0 0 8px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">🛍️ Tintas &amp; Dyes Disponíveis no Mercado</h4>
-      ${presetsHtml}
+      <h4 style="margin:0 0 8px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">🛍️ Tintas Sagradas Disponíveis</h4>
+      <div style="display:flex; flex-direction:column; gap:8px;">${catalogHtml}</div>
     </div>
   `;
 }
 
 export function renderForgeElemental(container, state) {
   const inv = state.inventory || [];
-  const itemsWithElem = inv.filter(i => (i.slot === 'weapon' || i.slot === 'chest' || i.slot === 'legs'));
+  const equips = inv.filter(i => (i.slot === 'weapon' || i.slot === 'armor' || i.slot === 'chest' || i.slot === 'legs') && !i.equipped);
 
-  let itemsHtml = '';
-  for (const item of itemsWithElem) {
-    const elem = item.elemental || { type: 'fire', val: 0 };
-    const cost = 250000;
-    const canAfford = (state.gold || 0) >= cost;
+  let equipsHtml = equips.map(item => {
+    const elem = item.elementalAttribute || { element: 'none', val: 0 };
+    const isWpn = item.slot === 'weapon';
+    const cap = isWpn ? 300 : 120;
 
-    itemsHtml += `
-      <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(239,68,68,0.3); border-radius:10px; padding:12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; gap:12px;">
+    return `
+      <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(212,167,68,0.25); border-radius:10px; padding:12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
         <div>
-          <h4 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">${item.name || 'Equipamento'}</h4>
+          <strong style="color:#ffd877; font-size:14px;">${item.name || item.itemId}</strong>
           <div style="font-size:11px; color:#aaa; margin-top:2px;">
-            Atributo Atual: <strong style="color:#ef4444;">${elem.type.toUpperCase()} +${elem.val}</strong> (Cap: +300)
+            Atributo Atual: <strong style="color:#38bdf8;">${elem.element.toUpperCase()} +${elem.val}</strong> (Teto: +${cap})
           </div>
-          <div style="font-size:11px; color:#777;">Custo de Engaste: 250.000 Adena</div>
         </div>
-
-        <div style="display:flex; gap:6px;">
-          <button
-            onclick="window.insertAttributeStone('${item.uid}', 'fire')"
-            ${!canAfford ? 'disabled' : ''}
-            style="padding:6px 10px; font-family:'Cinzel',serif; font-weight:bold; font-size:10px; background:${canAfford ? 'linear-gradient(180deg,#ef4444,#991b1b)' : 'rgba(60,50,40,0.5)'}; border:1px solid ${canAfford ? '#fca5a5' : 'rgba(100,80,60,0.3)'}; color:${canAfford ? '#fff' : '#777'}; border-radius:6px; cursor:${canAfford ? 'pointer' : 'not-allowed'};"
-          >
-            🔥 FOGO (+${elem.val === 0 ? 20 : 5})
-          </button>
-          <button
-            onclick="window.insertAttributeStone('${item.uid}', 'water')"
-            ${!canAfford ? 'disabled' : ''}
-            style="padding:6px 10px; font-family:'Cinzel',serif; font-weight:bold; font-size:10px; background:${canAfford ? 'linear-gradient(180deg,#3b82f6,#1d4ed8)' : 'rgba(60,50,40,0.5)'}; border:1px solid ${canAfford ? '#93c5fd' : 'rgba(100,80,60,0.3)'}; color:${canAfford ? '#fff' : '#777'}; border-radius:6px; cursor:${canAfford ? 'pointer' : 'not-allowed'};"
-          >
-            💧 ÁGUA (+${elem.val === 0 ? 20 : 5})
-          </button>
+        <div style="display:flex; gap:6px; flex-wrap:wrap;">
+          <button onclick="window.applyElementalAction('${item.uid}', 'fire')" style="padding:6px 10px; font-weight:bold; font-size:11px; background:rgba(239,68,68,0.2); border:1px solid #ef4444; color:#fca5a5; border-radius:6px; cursor:pointer;">🔥 Fogo (+20)</button>
+          <button onclick="window.applyElementalAction('${item.uid}', 'water')" style="padding:6px 10px; font-weight:bold; font-size:11px; background:rgba(59,130,246,0.2); border:1px solid #3b82f6; color:#93c5fd; border-radius:6px; cursor:pointer;">💧 Água (+20)</button>
+          <button onclick="window.applyElementalAction('${item.uid}', 'wind')" style="padding:6px 10px; font-weight:bold; font-size:11px; background:rgba(34,197,94,0.2); border:1px solid #22c55e; color:#86efac; border-radius:6px; cursor:pointer;">🌪️ Vento (+20)</button>
+          <button onclick="window.applyElementalAction('${item.uid}', 'earth')" style="padding:6px 10px; font-weight:bold; font-size:11px; background:rgba(217,119,6,0.2); border:1px solid #d97706; color:#fde68a; border-radius:6px; cursor:pointer;">🌍 Terra (+20)</button>
+          <button onclick="window.applyElementalAction('${item.uid}', 'holy')" style="padding:6px 10px; font-weight:bold; font-size:11px; background:rgba(234,179,8,0.2); border:1px solid #eab308; color:#fef08a; border-radius:6px; cursor:pointer;">✨ Sagrado (+20)</button>
+          <button onclick="window.applyElementalAction('${item.uid}', 'dark')" style="padding:6px 10px; font-weight:bold; font-size:11px; background:rgba(168,85,247,0.2); border:1px solid #a855f7; color:#d8b4fe; border-radius:6px; cursor:pointer;">🌑 Trevas (+20)</button>
         </div>
       </div>
     `;
-  }
+  }).join('');
 
   container.innerHTML = `
     <div style="padding:10px; color:#fff; font-family:sans-serif;">
-      <div style="background:linear-gradient(180deg, rgba(40,16,16,0.95), rgba(20,8,8,0.95)); border:1px solid rgba(239,68,68,0.4); border-radius:12px; padding:14px; margin-bottom:16px;">
-        <h3 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:18px;">🔥 Atributos Elementais (PvE Bonus)</h3>
-        <p style="margin:4px 0 0 0; font-size:12px; color:#aaa;">
-          Incuta Pedras Elementais (Fogo, Água, Terra, Vento, Escuridão, Sagrado) em Armas e Armaduras. Concede até +70% de Dano PvE extra contra alvos vulneráveis.
+      <!-- Elemental Wheel Guide -->
+      <div style="background:linear-gradient(180deg, rgba(20,26,42,0.95), rgba(10,14,24,0.95)); border:1px solid rgba(212,167,68,0.4); border-radius:12px; padding:16px; margin-bottom:16px;">
+        <h3 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:18px;">🔥 Roda dos 6 Atributos Elementais</h3>
+        <p style="margin:4px 0 10px 0; font-size:12px; color:#aaa;">
+          Incuta atributos em armas (até 300) e armaduras (até 120). Elementos opostos causam dano massivo amplificado no PvE e PvP!
         </p>
-      </div>
 
-      <h4 style="margin:0 0 8px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">🗡️ Equipamentos Elegíveis para Engaste</h4>
-      ${itemsHtml || '<div style="font-size:12px; color:#aaa;">Nenhuma arma ou armadura elegível no inventário.</div>'}
-    </div>
-  `;
-}
-
-export function renderForgeLifestones(container, state) {
-  const inv = state.inventory || [];
-  const epics = inv.filter(i => (i.slot === 'weapon' || i.slot === 'ring' || i.slot === 'earring' || i.slot === 'necklace'));
-
-  let epicsHtml = '';
-  for (const item of epics) {
-    const aug = item.augmentation;
-    const cost = 750000;
-    const canAfford = (state.gold || 0) >= cost;
-
-    epicsHtml += `
-      <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(168,85,247,0.3); border-radius:10px; padding:12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; gap:12px;">
-        <div>
-          <h4 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">${item.name || 'Item Épico'}</h4>
-          <div style="font-size:11px; color:#aaa; margin-top:2px;">
-            Augmentation Atual: <strong style="color:${aug ? '#c084fc' : '#777'};">${aug ? aug.name : 'Nenhum'}</strong>
+        <!-- Drop Sources Guide -->
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:8px;">
+          <div style="background:rgba(239,68,68,0.15); border:1px solid #ef4444; padding:8px 10px; border-radius:6px; font-size:11px;">
+            🔥 <strong>Fogo ↔ Água 💧</strong><br><span style="color:#aaa;">Drop: Forge of the Gods / Garden of Eva</span>
           </div>
-          <div style="font-size:11px; color:#777;">Custo de Augmentation: 750.000 Adena</div>
+          <div style="background:rgba(34,197,94,0.15); border:1px solid #22c55e; padding:8px 10px; border-radius:6px; font-size:11px;">
+            🌪️ <strong>Vento ↔ Terra 🌍</strong><br><span style="color:#aaa;">Drop: Dragon Valley / Mithril Mines</span>
+          </div>
+          <div style="background:rgba(234,179,8,0.15); border:1px solid #eab308; padding:8px 10px; border-radius:6px; font-size:11px;">
+            ✨ <strong>Sagrado ↔ Trevas 🌑</strong><br><span style="color:#aaa;">Drop: Monastery of Silence / Imperial Tomb</span>
+          </div>
         </div>
-
-        <button
-          onclick="window.augmentWithLifeStone('${item.uid}')"
-          ${!canAfford ? 'disabled' : ''}
-          style="padding:8px 14px; font-family:'Cinzel',serif; font-weight:bold; font-size:11px; background:${canAfford ? 'linear-gradient(180deg,#a855f7,#6b21a8)' : 'rgba(60,50,40,0.5)'}; border:1px solid ${canAfford ? '#c084fc' : 'rgba(100,80,60,0.3)'}; color:${canAfford ? '#fff' : '#777'}; border-radius:6px; cursor:${canAfford ? 'pointer' : 'not-allowed'};"
-        >
-          💎 APLICAR LIFE STONE
-        </button>
-      </div>
-    `;
-  }
-
-  container.innerHTML = `
-    <div style="padding:10px; color:#fff; font-family:sans-serif;">
-      <div style="background:linear-gradient(180deg, rgba(30,16,48,0.95), rgba(14,8,26,0.95)); border:1px solid rgba(168,85,247,0.4); border-radius:12px; padding:14px; margin-bottom:16px;">
-        <h3 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:18px;">💎 Augmentation / Life Stones (Superior LS)</h3>
-        <p style="margin:4px 0 0 0; font-size:12px; color:#aaa;">
-          Utilize Superior Life Stones para encantar Armas e Joias Épicas (Queen Ant, Baium, Valakas, Zaken, Antharas) com Item Skills ativas/passivas.
-        </p>
       </div>
 
-      <h4 style="margin:0 0 8px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">👑 Armas e Joias Épicas no Inventário</h4>
-      ${epicsHtml || '<div style="font-size:12px; color:#aaa;">Nenhuma arma ou joia épica no inventário no momento.</div>'}
+      <h4 style="margin:0 0 8px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">🗡️ Equipamentos no Inventário</h4>
+      ${equipsHtml || '<div style="font-size:12px; color:#aaa;">Nenhuma arma ou armadura livre no inventário.</div>'}
     </div>
   `;
 }
 
 export function renderForgeBelts(container, state) {
   const inv = state.inventory || [];
-  const beltsInInv = inv.filter(i => i.slot === 'belt' || (i.itemId || '').includes('belt'));
+  const belts = inv.filter(i => (i.slot === 'belt' || i.itemId?.includes('belt')) && !i.equipped);
 
-  let inventoryBeltsHtml = '';
-  for (const b of beltsInInv) {
-    inventoryBeltsHtml += `
-      <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(212,167,68,0.3); border-radius:8px; padding:10px; margin-bottom:6px; display:flex; justify-content:space-between; align-items:center;">
-        <div>
-          <strong style="color:#ffd877; font-size:13px;">${b.name || 'Cinto'}</strong>
-          <div style="font-size:11px; color:#aaa;">Nível de Encaixe: ${b.compoundLevel || 1}</div>
-        </div>
-        <span style="font-size:11px; color:#34d399;">Disponível</span>
-      </div>
-    `;
-  }
-
-  const cost = 500000;
-  const canAffordBelt = (state.gold || 0) >= cost;
+  let beltsOptionsHtml = belts.map(b => `<option value="${b.uid}">${b.name || b.itemId} (+${b.enchant || 0})</option>`).join('');
 
   container.innerHTML = `
     <div style="padding:10px; color:#fff; font-family:sans-serif;">
-      <!-- Belts Banner -->
-      <div style="background:linear-gradient(180deg, rgba(40,30,12,0.95), rgba(20,15,6,0.95)); border:1px solid rgba(212,167,68,0.4); border-radius:12px; padding:14px; margin-bottom:16px;">
-        <h3 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:18px;">🎗️ Síntese de Cintos [S] (Blessed Top-Grade Belt)</h3>
+      <!-- Belts Header -->
+      <div style="background:linear-gradient(180deg, rgba(20,26,42,0.95), rgba(10,14,24,0.95)); border:1px solid rgba(212,167,68,0.4); border-radius:12px; padding:16px; margin-bottom:16px;">
+        <h3 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:18px;">🎗️ Síntese de Cintos com Duplicatas (30% de Sucesso)</h3>
         <p style="margin:4px 0 0 0; font-size:12px; color:#aaa;">
-          Combine materiais raros e cinto base para fundir o lendário <strong>Blessed Top-Grade Magic Ornament Belt [S]</strong>.
+          Junte <strong>2 Cintos Idênticos</strong> na bigorna imperial. Há <strong>30% de chance de sucesso</strong> para elevar o cinto e rolar bônus raros (+Max HP %, +P.Def, +Limite de Carga e +Dano PvP). Em caso de falha, apenas a cópia secundária é destruída!
         </p>
       </div>
 
-      <!-- Compound Card -->
-      <div style="background:rgba(20,26,42,0.9); border:1px solid rgba(212,167,68,0.4); border-radius:12px; padding:16px; margin-bottom:16px;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-          <div>
-            <h4 style="margin:0; font-family:'Cinzel',serif; color:#ffd877; font-size:16px;">✨ Blessed Top-Grade Magic Ornament Belt [S]</h4>
-            <div style="font-size:12px; color:#aaa; margin-top:4px;">
-              Bônus Concedido: <strong style="color:#34d399;">+7.2% Defesa Geral (PvE)</strong> &amp; <strong style="color:#f43f5e;">+6.0% Dano de Habilidades e Ataque Físico</strong>
-            </div>
+      ${belts.length >= 2 ? `
+        <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(212,167,68,0.3); border-radius:10px; padding:16px; max-width:500px; margin-bottom:16px;">
+          <div style="margin-bottom:12px;">
+            <label style="font-size:12px; color:#aaa; display:block; margin-bottom:4px;">1. Cinto Primário (Alvo do Upgrade):</label>
+            <select id="belt-primary-select" style="width:100%; padding:8px; background:#0e1320; color:#fff; border:1px solid rgba(212,167,68,0.3); border-radius:6px;">
+              ${beltsOptionsHtml}
+            </select>
           </div>
-          <span style="background:rgba(212,167,68,0.2); border:1px solid #d4a744; color:#ffe699; padding:4px 10px; border-radius:20px; font-size:11px; font-weight:bold;">Taxa de Sucesso: 70%</span>
-        </div>
 
-        <div style="font-size:12px; color:#ccc; background:rgba(0,0,0,0.3); padding:10px; border-radius:8px; margin-bottom:12px;">
-          💰 Custo de Síntese: <strong style="color:#ffd877;">500.000 Adena</strong>
-        </div>
+          <div style="margin-bottom:16px;">
+            <label style="font-size:12px; color:#aaa; display:block; margin-bottom:4px;">2. Cinto Secundário (Sacrifício Idêntico):</label>
+            <select id="belt-secondary-select" style="width:100%; padding:8px; background:#0e1320; color:#fff; border:1px solid rgba(212,167,68,0.3); border-radius:6px;">
+              ${beltsOptionsHtml}
+            </select>
+          </div>
 
-        <button
-          onclick="window.compoundBelts()"
-          ${!canAffordBelt ? 'disabled' : ''}
-          style="width:100%; padding:12px; font-family:'Cinzel',serif; font-weight:bold; font-size:13px; background:${canAffordBelt ? 'linear-gradient(180deg,#d4a744,#8a641c)' : 'rgba(60,50,40,0.5)'}; border:1px solid ${canAffordBelt ? '#ffe699' : 'rgba(100,80,60,0.3)'}; color:${canAffordBelt ? '#000' : '#777'}; border-radius:8px; cursor:${canAffordBelt ? 'pointer' : 'not-allowed'}; box-shadow:0 4px 15px rgba(212,167,68,0.2);"
-        >
-          ✨ SINTETIZAR CINTO SAGRADO [S] (500.000g)
-        </button>
+          <div style="font-size:12px; color:#ffd877; margin-bottom:14px;">
+            🪙 Custo de Síntese: <strong>100.000 Adena</strong> · Chance: <strong style="color:#34d399;">30%</strong>
+          </div>
+
+          <button onclick="window.compoundBeltsWithDuplicateAction()" style="width:100%; padding:12px; font-family:'Cinzel',serif; font-weight:bold; font-size:13px; background:linear-gradient(180deg,#d4a744,#8a641c); border:1px solid #ffe699; color:#000; border-radius:6px; cursor:pointer;">
+            ✨ SINTETIZAR CINTOS (30% CHANCE)
+          </button>
+        </div>
+      ` : `
+        <div style="background:rgba(0,0,0,0.3); border:1px dashed rgba(212,167,68,0.3); border-radius:10px; padding:20px; text-align:center;">
+          <div style="font-size:14px; color:#ffd877; margin-bottom:4px;">Cintos Insuficientes na Mochila (${belts.length}/2)</div>
+          <div style="font-size:12px; color:#aaa;">Você precisa de ao menos 2 cintos idênticos no inventário para realizar a fusão.</div>
+        </div>
+      `}
+    </div>
+  `;
+}
+
+export function renderForgeLifestones(container, state) {
+  const inv = state.inventory || [];
+  const weapons = inv.filter(i => i.slot === 'weapon' && !i.equipped);
+
+  const dropTable = [
+    { grade: 'Comum', source: 'Monstros de Mapa Comum', glow: '1% Brilho', skill: '2% Chance de Skill' },
+    { grade: 'Mid-Grade', source: 'Monstros Campeões', glow: '5% Brilho', skill: '5% Chance de Skill' },
+    { grade: 'High-Grade', source: 'Chefes de Dungeon & Masmorras', glow: '15% Brilho', skill: '12% Chance de Skill' },
+    { grade: 'Top-Grade', source: 'Raid Bosses & Epic Bosses', glow: '40% Brilho', skill: '25% Chance de Skill' }
+  ];
+
+  const dropTableHtml = dropTable.map(d => `
+    <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(168,85,247,0.25); border-radius:8px; padding:10px 12px; display:flex; justify-content:space-between; align-items:center;">
+      <div>
+        <strong style="color:#d8b4fe; font-size:13px;">💎 Life Stone ${d.grade}</strong>
+        <div style="font-size:11px; color:#aaa;">Drop: ${d.source}</div>
+      </div>
+      <div style="text-align:right; font-size:11px;">
+        <span style="color:#38bdf8; font-weight:bold;">${d.glow}</span> · <span style="color:#34d399; font-weight:bold;">${d.skill}</span>
+      </div>
+    </div>
+  `).join('');
+
+  let weaponsHtml = weapons.map(w => {
+    const aug = w.augmentation;
+    return `
+      <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(212,167,68,0.25); border-radius:10px; padding:12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+        <div>
+          <strong style="color:#ffd877; font-size:14px;">${w.name || w.itemId}</strong>
+          <div style="font-size:11px; color:#aaa; margin-top:2px;">
+            Augment: <strong style="color:${aug ? '#c084fc' : '#777'};">${aug ? `+${aug.atkBonus} P.Atk, +${aug.critBonus} Crit ${aug.skill ? `[${aug.skill.name}]` : ''}` : 'Nenhum'}</strong>
+          </div>
+        </div>
+        <div style="display:flex; gap:6px;">
+          <button onclick="window.applyAugmentAction('${w.uid}', 'top')" style="padding:6px 12px; font-weight:bold; font-size:11px; background:linear-gradient(180deg,#a855f7,#6b21a8); border:1px solid #c084fc; color:#fff; border-radius:6px; cursor:pointer;">
+            💎 Augment Top-Grade
+          </button>
+          ${aug ? `
+            <button onclick="window.removeAugmentAction('${w.uid}')" style="padding:6px 10px; font-weight:bold; font-size:11px; background:rgba(239,68,68,0.2); border:1px solid #ef4444; color:#fca5a5; border-radius:6px; cursor:pointer;">
+              🗑️ Remover
+            </button>
+          ` : ''}
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  container.innerHTML = `
+    <div style="padding:10px; color:#fff; font-family:sans-serif;">
+      <div style="background:linear-gradient(180deg, rgba(30,16,48,0.95), rgba(14,8,26,0.95)); border:1px solid rgba(168,85,247,0.4); border-radius:12px; padding:16px; margin-bottom:16px;">
+        <h3 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:18px;">💎 Augmentation &amp; Life Stones Ancestrais</h3>
+        <p style="margin:4px 0 0 0; font-size:12px; color:#aaa;">
+          Incuta Life Stones nas armas para despertar atributos passivos secundários e Item Skills poderosas.
+        </p>
       </div>
 
-      <h4 style="margin:0 0 10px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">🎗️ Cintos no Inventário</h4>
-      ${inventoryBeltsHtml || '<div style="font-size:12px; color:#aaa;">Nenhum cinto adicional no inventário no momento.</div>'}
+      <h4 style="margin:0 0 8px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">📊 Tabela de Life Stones &amp; Onde Obter</h4>
+      <div style="display:flex; flex-direction:column; gap:6px; margin-bottom:16px;">${dropTableHtml}</div>
+
+      <h4 style="margin:0 0 8px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">🗡️ Armas no Inventário</h4>
+      ${weaponsHtml || '<div style="font-size:12px; color:#aaa;">Nenhuma arma livre no inventário.</div>'}
     </div>
   `;
 }
@@ -4348,7 +4391,7 @@ export function renderForgeRandomCraft(container, state, callbacks = {}) {
                 ${getItemIcon(def)}
               </div>
               <div>
-                <div style="font-weight:bold; font-size:13px; color:#fff;">${def.name}</div>
+                <div style="font-weight:bold; font-size:13px; color:#fff;">${def.name} ${s.count > 1 ? `(${s.count}x)` : ''}</div>
                 <div style="font-size:11px; color:${gradeInfo.color}; font-weight:bold;">${gradeInfo.label}</div>
               </div>
               <button
@@ -4364,18 +4407,20 @@ export function renderForgeRandomCraft(container, state, callbacks = {}) {
     `;
   } else {
     slotsHtml = `
-      <div style="background:rgba(0,0,0,0.4); border:1px dashed rgba(168,85,247,0.3); border-radius:10px; padding:30px; text-align:center; margin-top:14px;">
+      <div style="background:rgba(0,0,0,0.4); border:1px dashed rgba(168,85,247,0.3); border-radius:10px; padding:24px; text-align:center; margin-top:14px;">
         <div style="font-size:32px; margin-bottom:8px;">🎲</div>
-        <div style="font-size:14px; font-weight:bold; color:#e9d5ff; margin-bottom:4px;">Roleta Mística Carregando (${charge}/100 Pontos)</div>
-        <div style="font-size:12px; color:var(--text-muted); max-width:480px; margin:0 auto 16px auto;">
-          Destrua materiais excedentes ou complete missões territoriais para acumular 100 pontos e invocar 5 relíquias misteriosas de Aden!
+        <div style="font-size:14px; font-weight:bold; color:#e9d5ff; margin-bottom:4px;">Roleta Mística em Carga (${charge}/100 Pontos)</div>
+        <div style="font-size:12px; color:var(--text-muted); max-width:500px; margin:0 auto 16px auto;">
+          Recicle equipamentos indesejados da mochila ou invista Adena para acumular 100 pontos e invocar 5 relíquias da Forja!
         </div>
-        <button
-          onclick="window.chargeRandomCraftPoints(25)"
-          style="padding:10px 20px; font-family:'Cinzel',serif; font-weight:bold; font-size:12px; background:linear-gradient(180deg,#a855f7,#6b21a8); border:1px solid #c084fc; color:#fff; border-radius:8px; cursor:pointer;"
-        >
-          ⚡ Reciclar Materiais (+25 Pontos)
-        </button>
+        <div style="display:flex; justify-content:center; gap:10px; flex-wrap:wrap;">
+          <button
+            onclick="window.chargeRandomCraftWithAdenaAction()"
+            style="padding:10px 18px; font-family:'Cinzel',serif; font-weight:bold; font-size:12px; background:linear-gradient(180deg,#d4a744,#8a641c); border:1px solid #ffe699; color:#000; border-radius:8px; cursor:pointer;"
+          >
+            🪙 Carga por Adena (+20 Pontos - 200k g)
+          </button>
+        </div>
       </div>
     `;
   }
@@ -4388,7 +4433,7 @@ export function renderForgeRandomCraft(container, state, callbacks = {}) {
           <div>
             <h3 style="margin:0; font-family:'Cinzel',serif; color:#e9d5ff; font-size:18px;">🎲 Roleta Imperial de Criação Aleatória (Random Craft)</h3>
             <p style="margin:4px 0 0 0; font-size:12px; color:#aaa;">
-              Invoque relíquias raras, boss dolls, armas de topo e consumíveis especiais a custo zero de Adena.
+              Tabela Balanceada: 70% Consumíveis/Enchants, 25% Equipamentos B/A, 4.9% Equipamentos S e 0.1% Relíquias Raras.
             </p>
           </div>
           <div style="font-size:14px; font-weight:bold; color:#ffd877;">

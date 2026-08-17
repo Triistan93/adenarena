@@ -103,14 +103,21 @@ import {
   craftItem as serviceCraftItem,
   getMaterialDropSources,
   applySoulCrystal as serviceApplySoulCrystal,
+  processSoulDrainOnKill as serviceProcessSoulDrainOnKill,
   unsealItem as serviceUnsealItem,
   polishMasterwork as servicePolishMasterwork,
+  swapWeaponSameGrade as serviceSwapWeaponSameGrade,
   applyDyeSymbol as serviceApplyDyeSymbol,
+  upgradeDyeSymbol as serviceUpgradeDyeSymbol,
   removeDyeSymbol as serviceRemoveDyeSymbol,
   applyElementalStone as serviceApplyElementalStone,
+  compoundBeltsWithDuplicates as serviceCompoundBeltsWithDuplicates,
   applyLifeStone as serviceApplyLifeStone,
   removeAugment as serviceRemoveAugment,
   chargeRandomCraft as serviceChargeRandomCraft,
+  chargeRandomCraftWithAdena as serviceChargeRandomCraftWithAdena,
+  chargeRandomCraftWithItem as serviceChargeRandomCraftWithItem,
+  rollRandomCraftSlots as serviceRollRandomCraftSlots,
   claimRandomCraft as serviceClaimRandomCraft
 } from './src/services/CraftService.js';
 // ─── Sprint 4: Importa motores de Combate e Habilidades ────────────────────
@@ -3751,6 +3758,13 @@ function attackMonster() {
     state.xp += xpGain; state.sp += spGain;
     log(`Derrotou **${monster.name}**! Recebeu **+${xpGain.toLocaleString()} XP** e **+${spGain} SP**`, 'xp', 'gold_xp');
 
+    // Drenagem de Alma para Soul Crystals (Níveis 1 a 15 e Epic Bosses)
+    try {
+      serviceProcessSoulDrainOnKill(state, monster, { log, floatText, updateAllUI, save });
+    } catch (e) {
+      console.warn('Erro na drenagem de almas:', e);
+    }
+
     // Acúmulo de Lâmpada Mágica & Craft Points por Abate
     state.magicLampExp = (state.magicLampExp || 0) + Math.floor(xpGain * 0.4);
     state.craftPoints = (state.craftPoints || 0) + (monster.boss ? 50 : 10);
@@ -7179,6 +7193,93 @@ export function init() {
           colors: ['#f0883e', '#f0cd7e', '#e87d2e', '#ffd166', '#ff9b42']
         });
       }
+    }
+
+    // ---- Global Handlers para os 7 Subsistemas da Forja Imperial ----
+    if (typeof window !== 'undefined') {
+      window.buyInitialSoulCrystal = () => {
+        const cost = 50000;
+        if ((state.gold || 0) < cost) {
+          log('Adena insuficiente para adquirir o Soul Crystal Inicial (50.000 Adena necessária).', 'system');
+          return;
+        }
+        state.gold -= cost;
+        serviceAddToInventory(state, 'soul_crystal_red_stage1', 1, 'rare', false, { log, updateAllUI, save });
+        log('🔮 Soul Crystal Adquirido! Mantenha na mochila para absorver almas.', 'rarity-epic');
+        updateAllUI();
+        save();
+      };
+
+      window.applySAAction = (color, saKey) => {
+        const wpnUid = state.equipment?.weapon;
+        if (!wpnUid) {
+          log('Equipe uma arma primeiro para engastar o Soul Crystal!', 'system');
+          return;
+        }
+        serviceApplySoulCrystal(state, wpnUid, color, saKey, { log, updateAllUI, save, floatText });
+      };
+
+      window.unsealItemAction = (uid) => {
+        serviceUnsealItem(state, uid, { log, updateAllUI, save });
+      };
+
+      window.polishMasterworkAction = (uid) => {
+        servicePolishMasterwork(state, uid, { log, updateAllUI, save });
+      };
+
+      window.applyInitialDyeAction = (key) => {
+        state.dyeSymbols = state.dyeSymbols || [null, null, null];
+        const freeSlot = state.dyeSymbols.findIndex(s => !s);
+        if (freeSlot === -1) {
+          log('Todos os 3 slots de tatuagem estão ocupados! Remova uma tatuagem existente primeiro.', 'system');
+          return;
+        }
+        const cost = 10000;
+        if ((state.gold || 0) < cost) {
+          log('Adena insuficiente para gravar o símbolo (10.000 Adena necessária).', 'system');
+          return;
+        }
+        state.gold -= cost;
+        serviceApplyDyeSymbol(state, freeSlot, key, 1, { log, updateAllUI, save });
+      };
+
+      window.upgradeDyeAction = (slotIdx) => {
+        serviceUpgradeDyeSymbol(state, slotIdx, { log, updateAllUI, save });
+      };
+
+      window.removeDyeAction = (slotIdx) => {
+        serviceRemoveDyeSymbol(state, slotIdx, { log, updateAllUI, save });
+      };
+
+      window.applyElementalAction = (uid, elem) => {
+        serviceApplyElementalStone(state, uid, elem, { log, updateAllUI, save });
+      };
+
+      window.compoundBeltsWithDuplicateAction = () => {
+        const pUid = document.getElementById('belt-primary-select')?.value;
+        const sUid = document.getElementById('belt-secondary-select')?.value;
+        if (!pUid || !sUid) {
+          log('Selecione os dois cintos para a fusão!', 'system');
+          return;
+        }
+        serviceCompoundBeltsWithDuplicates(state, pUid, sUid, { log, updateAllUI, save, floatText });
+      };
+
+      window.applyAugmentAction = (uid, grade) => {
+        serviceApplyLifeStone(state, uid, grade, { log, updateAllUI, save });
+      };
+
+      window.removeAugmentAction = (uid) => {
+        serviceRemoveAugment(state, uid, { log, updateAllUI, save });
+      };
+
+      window.chargeRandomCraftWithAdenaAction = () => {
+        serviceChargeRandomCraftWithAdena(state, { log, updateAllUI, save });
+      };
+
+      window.claimRandomCraftReward = (idx) => {
+        serviceClaimRandomCraft(state, idx, { log, updateAllUI, save });
+      };
     }
   } catch (err) {
     console.warn('Game init warning:', err);
