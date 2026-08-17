@@ -79,6 +79,63 @@ export function getItemDef(itemId) {
   return Object.values(data.ALL_ITEMS).find(i => i.name?.toLowerCase().replace(/\s+/g, '') === normalized) || null;
 }
 
+export function getItemGradeCode(itemDef) {
+  if (!itemDef) return 'ng';
+  const explicit = String(itemDef.grade || itemDef.tierGrade || '').toLowerCase();
+  if (['none', 'no grade', 'nograde', 'ng'].includes(explicit)) return 'ng';
+  if (['d', 'c', 'b', 'a', 's'].includes(explicit)) return explicit;
+  if (['boss', 'special'].includes(explicit)) return 'boss';
+  if (['frostlord', 'frost'].includes(explicit)) return 'frostlord';
+
+  const desc = String(itemDef.desc || itemDef.info || itemDef.name || '').toLowerCase();
+  const icon = String(itemDef.icon || '').toLowerCase();
+
+  if (desc.includes('no grade') || desc.includes('(no grade)') || icon.includes('nograde/')) return 'ng';
+  if (desc.includes('frost lord') || icon.includes('frost_lord')) return 'frostlord';
+  if (desc.includes('(special') || desc.includes('(boss') || icon.includes('gradespecial/')) return 'boss';
+  if (desc.includes('(s grade)') || icon.includes('grades/')) return 's';
+  if (desc.includes('(a grade)') || icon.includes('gradea/')) return 'a';
+  if (desc.includes('(b grade)') || icon.includes('gradeb/')) return 'b';
+  if (desc.includes('(c grade)') || icon.includes('gradec/')) return 'c';
+  if (desc.includes('(d grade)') || icon.includes('graded/')) return 'd';
+
+  const tier = Number(itemDef.tier) || 0;
+  const reqLvl = Number(itemDef.req?.level || itemDef.reqLvl || 0);
+
+  if (tier === 1 || reqLvl < 20) return 'ng';
+  if (tier === 2 || (reqLvl >= 20 && reqLvl < 40)) return 'd';
+  if (tier === 3 || (reqLvl >= 40 && reqLvl < 52)) return 'c';
+  if (tier === 4 || (reqLvl >= 52 && reqLvl < 61)) return 'b';
+  if (tier === 5 || (reqLvl >= 61 && reqLvl < 76)) return 'a';
+  if (tier === 6 || (reqLvl >= 76 && reqLvl < 80)) return 's';
+  if (tier >= 7 || reqLvl >= 80) return 'frostlord';
+
+  return 'ng';
+}
+
+export function getItemGrade(itemDef) {
+  const code = getItemGradeCode(itemDef);
+  switch (code) {
+    case 'd':
+      return { code: 'd', label: 'D-Grade', color: '#60a5fa' };
+    case 'c':
+      return { code: 'c', label: 'C-Grade', color: '#4ade80' };
+    case 'b':
+      return { code: 'b', label: 'B-Grade', color: '#f59e0b' };
+    case 'a':
+      return { code: 'a', label: 'A-Grade', color: '#a855f7' };
+    case 's':
+      return { code: 's', label: 'S-Grade', color: '#ef4444' };
+    case 'boss':
+      return { code: 'boss', label: 'Boss/Épico', color: '#ec4899' };
+    case 'frostlord':
+      return { code: 'frostlord', label: 'Frost Lord', color: '#38bdf8' };
+    case 'ng':
+    default:
+      return { code: 'ng', label: 'No-Grade', color: '#9ca3af' };
+  }
+}
+
 /* ═══════════════════════════════════════════════════════════════════════════
    2. TOOLTIP & ICON HELPERS
 ═══════════════════════════════════════════════════════════════════════════ */
