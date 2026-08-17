@@ -592,13 +592,18 @@ export function getStats(state) {
   goldBoost += (Number(eb.goldBoost || eb.adenaBoost) || 0) + (Number(setB.goldBoost || setB.adenaBoost) || 0);
 
   // Process Clan Skills Bonuses
-  if (state.clan && state.clan.level) {
+  if (state.clan && state.clan.joined !== false && state.clan.level) {
     const clanLvl = state.clan.level;
     if (clanLvl >= 1) { elixirHpMult += 0.10; } // Clan Imperium (+10% HP)
     if (clanLvl >= 2) { buffAtkMult += 0.08; } // Clan Might (+8% P.Atk)
     if (clanLvl >= 3) { buffDef += Math.floor(baseDef * 0.10); } // Clan Shield (+10% P.Def)
     if (clanLvl >= 4) { buffMatk += Math.floor(baseMatk * 0.10); buffMdef += Math.floor(baseMdef * 0.12); } // Clan Empower & Magic Barrier
     if (clanLvl >= 5) { mpRegenBonus += 0.20; buffSpd += 5; } // Clan Vitality (+20% Regen, +5 Spd)
+    if (clanLvl >= 6) { augCrit += 10; } // Clan Guidance (+10% Crit Rate)
+    if (clanLvl >= 7) { baseEva += 10; buffSpd += 8; } // Clan Agility (+10 Eva, +8 Spd)
+    if (clanLvl >= 8) { buffAtkMult += 0.06; } // Clan Dominance (+6% All Atk)
+    if (clanLvl >= 9) { cdr += 0.10; mpRegenBonus += 0.15; } // Clan Clarity (+10% CDR, +15% MP)
+    if (clanLvl >= 10) { buffAtkMult += 0.15; buffDef += Math.floor(baseDef * 0.15); xpBoost += 0.15; luckBoost += 0.15; } // Clan Sovereignty
   }
 
   // Process Weapon Augmentation Stats

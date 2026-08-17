@@ -6564,11 +6564,74 @@ export function init() {
       window._activeClanSubTab = t;
       updateClanUI();
     };
+    window.setClanUnjoinedTabAction = (tab) => {
+      window._activeClanUnjoinedTab = tab;
+      updateClanUI();
+    };
+    window.selectClanCrestAction = (crestId) => {
+      window._selectedClanCrestId = crestId;
+      updateClanUI();
+    };
+    window.createClanAction = () => {
+      const input = document.getElementById('clan-create-name-input');
+      const name = input ? input.value : '';
+      const crestId = window._selectedClanCrestId || 'lion_gold';
+      const res = ClanService.createClan(state, { name, crestId }, { log, updateAllUI, save });
+      if (res.success) {
+        window._activeClanSubTab = 'members';
+      }
+      updateAllUI();
+      save();
+      return res;
+    };
+    window.requestJoinClanAction = (clanId) => {
+      const res = ClanService.requestJoinClan(state, clanId, { log, updateAllUI, save });
+      if (res.success && res.joined) {
+        window._activeClanSubTab = 'members';
+      }
+      updateAllUI();
+      save();
+      return res;
+    };
+    window.handleClanJoinRequestAction = (applicantId, accept) => {
+      const res = ClanService.handleJoinRequest(state, applicantId, accept, { log, updateAllUI, save });
+      updateAllUI();
+      save();
+      return res;
+    };
+    window.donateToClanAction = (tierKey) => {
+      const res = ClanService.donateToClan(state, tierKey, { log, updateAllUI, save });
+      updateAllUI();
+      save();
+      return res;
+    };
+    window.buyClanShopItemAction = (itemId, count = 1) => {
+      const res = ClanService.buyClanShopItem(state, itemId, count, { log, updateAllUI, save });
+      updateAllUI();
+      save();
+      return res;
+    };
+    window.promoteClanMemberAction = (memberName) => {
+      const res = ClanService.promoteMember(state, memberName, { log, updateAllUI, save });
+      updateAllUI();
+      save();
+      return res;
+    };
+    window.kickClanMemberAction = (memberName) => {
+      const res = ClanService.kickMember(state, memberName, { log, updateAllUI, save });
+      updateAllUI();
+      save();
+      return res;
+    };
+    window.leaveClanAction = () => {
+      const res = ClanService.leaveClan(state, { log, updateAllUI, save });
+      window._activeClanUnjoinedTab = 'browse';
+      updateAllUI();
+      save();
+      return res;
+    };
     window.upgradeClanAction = () => {
-      const res = ClanService.upgradeClan(state, {
-        log,
-        onUpdate: () => { updateAllUI(); save(); }
-      });
+      const res = ClanService.upgradeClan(state, { log, updateAllUI, save });
       updateAllUI();
       save();
       return res;
@@ -6576,9 +6639,9 @@ export function init() {
     window.startCastleSiegeAction = (castleId) => {
       const res = ClanService.startSiege(state, castleId, {
         log,
-        onUpdate: () => { window.setClanSubTab('siege'); updateAllUI(); save(); }
+        onUpdate: () => { window.setClanSubTab('castles'); updateAllUI(); save(); }
       });
-      if (res.success) window.setClanSubTab('siege');
+      if (res.success) window.setClanSubTab('castles');
       updateAllUI();
       save();
       return res;
@@ -6602,9 +6665,10 @@ export function init() {
       return res;
     };
     window.buyCastleShopItemAction = (itemId) => {
-      const res = ClanService.buyCastleShopItem(state, itemId, {
+      const res = ClanService.buyClanShopItem(state, itemId, 1, {
         log,
-        onUpdate: () => { updateAllUI(); save(); }
+        updateAllUI,
+        save
       });
       updateAllUI();
       save();

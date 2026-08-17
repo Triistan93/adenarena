@@ -23,7 +23,14 @@ import { INFINITY_WEAPONS, HEROIC_SKILLS, OLYMPIAD_GLADIATORS, OLYMPIAD_SHOP_CAT
 import { NOBLESSE_QUEST_DEFS } from '../data/quests.js';
 import { NoblesseService } from '../services/NoblesseService.js';
 import { OlympiadService } from '../services/OlympiadService.js';
-import { CLAN_LEVEL_DATA, CLAN_SKILLS } from '../data/clan.js';
+import {
+  CLAN_LEVEL_DATA,
+  CLAN_SKILLS,
+  CLAN_CRESTS,
+  CLAN_DONATIONS,
+  CLAN_SHOP_CATALOG,
+  DEFAULT_WORLD_CLANS
+} from '../data/clan.js';
 import { CASTLES, CASTLE_SHOP_CATALOG } from '../data/castles.js';
 import { ClanService } from '../services/ClanService.js';
 import { ENCHANT_ROUTES, getEnchantLevelData, ENCHANT_ITEMS } from '../data/skill_enchant.js';
@@ -5412,34 +5419,331 @@ export function renderOlympiadTab(container, state) {
 export function renderClanTab(container, state) {
   if (!container || !state) return;
   const root = getRoot();
-  const activeSubTab = window._activeClanSubTab || 'skills';
 
   // Atualizar geração passiva de impostos
   ClanService.updateTaxesTick(state);
   const clanStatus = ClanService.getClanStatus(state);
+
+  // ═════════════════════════════════════════════════════════════════════════
+  // ESTADO 1: JOGADOR SEM CLÃ (CRIAÇÃO OU BUSCA DE CLÃS EXISTENTES)
+  // ═════════════════════════════════════════════════════════════════════════
+  if (!clanStatus.hasClan) {
+    const unjoinedTab = window._activeClanUnjoinedTab || 'create';
+    const selectedCrestId = window._selectedClanCrestId || 'lion_gold';
+
+    let unjoinedContentHtml = '';
+
+    // Sub-aba: Criar Clã
+    if (unjoinedTab === 'create') {
+      const crestsHtml = CLAN_CRESTS.map(c => {
+        const isSel = c.id === selectedCrestId;
+        return `
+          <div
+            onclick="window.selectClanCrestAction('${c.id}')"
+            style="cursor:pointer; background:${isSel ? 'rgba(234,179,8,0.25)' : 'rgba(0,0,0,0.5)'}; border:2px solid ${isSel ? '#fde047' : 'rgba(255,255,255,0.08)'}; border-radius:8px; padding:10px; text-align:center; transition:all 0.2s ease;"
+          >
+            <div style="font-size:28px; filter:drop-shadow(0 0 6px ${c.color}); margin-bottom:4px;">${c.icon}</div>
+            <div style="font-family:'Cinzel',serif; font-size:12px; font-weight:bold; color:${isSel ? '#fde047' : '#e2e8f0'};">${c.name}</div>
+            <div style="font-size:10px; color:#94a3b8; margin-top:2px;">${c.desc}</div>
+          </div>
+        `;
+      }).join('');
+
+      unjoinedContentHtml = `
+        <div style="background:rgba(0,0,0,0.5); border:1px solid rgba(234,179,8,0.3); border-radius:10px; padding:18px; max-width:750px; margin:0 auto;">
+          <div style="text-align:center; margin-bottom:16px;">
+            <h3 style="font-family:'Cinzel',serif; font-size:18px; color:#fde047; margin:0 0 6px 0;">👑 Fundar uma Nova Ordem Militar</h3>
+            <p style="font-size:12px; color:#cbd5e1; margin:0;">Defina o nome da sua linhagem, escolha seu brasão sagrado e recrute bravos guerreiros para conquistar os Castelos de Aden.</p>
+          </div>
+
+          <div style="margin-bottom:16px;">
+            <label style="display:block; font-family:'Cinzel',serif; font-size:12px; color:#fef08a; font-weight:bold; margin-bottom:6px;">Nome do Clã (3 a 20 caracteres):</label>
+            <input
+              id="clan-create-name-input"
+              type="text"
+              placeholder="Ex: BloodOath, Imperium, Sovereign..."
+              maxlength="20"
+              style="width:100%; box-sizing:border-box; background:#18181b; border:1px solid #ca8a04; color:#fff; padding:10px 14px; border-radius:6px; font-size:13px;"
+            />
+          </div>
+
+          <div style="margin-bottom:16px;">
+            <label style="display:block; font-family:'Cinzel',serif; font-size:12px; color:#fef08a; font-weight:bold; margin-bottom:8px;">Escolha a Bandeira / Brasão do Clã:</label>
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:10px;">
+              ${crestsHtml}
+            </div>
+          </div>
+
+          <div style="background:rgba(234,179,8,0.1); border:1px solid rgba(234,179,8,0.3); border-radius:8px; padding:12px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+            <div style="font-size:12px; color:#cbd5e1;">
+              <div>📋 Requisitos de Fundação: <strong>Nível 20+ de Personagem</strong></div>
+              <div>💰 Custo de Registro Imperial: <strong style="color:#a3e635;">100.000 Adena</strong></div>
+            </div>
+            <button
+              onclick="window.createClanAction()"
+              style="padding:10px 24px; font-family:'Cinzel',serif; font-size:13px; font-weight:bold; background:linear-gradient(180deg,#eab308,#ca8a04); border:1px solid #fde047; color:#000; border-radius:6px; cursor:pointer; box-shadow:0 0 12px rgba(234,179,8,0.4);"
+            >
+              👑 FUNDAR CLÃ
+            </button>
+          </div>
+        </div>
+      `;
+    }
+    // Sub-aba: Buscar Clãs Existentes
+    else {
+      const worldClans = clanStatus.worldClans || [];
+      const clansListHtml = worldClans.map(wc => {
+        const crest = CLAN_CRESTS.find(c => c.id === wc.crestId) || CLAN_CRESTS[0];
+        const isFull = (wc.membersCount || 0) >= (wc.maxMembers || 50);
+
+        return `
+          <div style="background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:14px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
+            <div style="display:flex; align-items:center; gap:12px;">
+              <div style="width:48px; height:48px; border-radius:8px; background:${crest.bg}; border:1px solid ${crest.color}; display:flex; align-items:center; justify-content:center; font-size:26px;">
+                ${crest.icon}
+              </div>
+              <div>
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <span style="font-family:'Cinzel',serif; font-size:15px; font-weight:bold; color:#fde047;">${wc.name}</span>
+                  <span style="background:#ca8a04; color:#fff; font-size:10px; font-weight:bold; padding:2px 6px; border-radius:8px;">Nv. ${wc.level}</span>
+                  ${(wc.castles || []).length > 0 ? `<span style="background:rgba(234,179,8,0.2); border:1px solid #eab308; color:#fde047; font-size:10px; padding:1px 6px; border-radius:8px;">🏰 Castelo</span>` : ''}
+                </div>
+                <div style="font-size:11.5px; color:#cbd5e1; margin-top:2px;">${wc.desc || 'Clã ativo em Aden.'}</div>
+                <div style="font-size:11px; color:#94a3b8; margin-top:2px;">Líder: <strong style="color:#e2e8f0;">${wc.leader}</strong> | Membros: <strong style="color:#38bdf8;">${wc.membersCount || 1}/${wc.maxMembers || 50}</strong></div>
+              </div>
+            </div>
+            <div>
+              <button
+                onclick="window.requestJoinClanAction('${wc.id}')"
+                ${isFull ? 'disabled' : ''}
+                style="padding:8px 18px; font-family:'Cinzel',serif; font-size:11.5px; font-weight:bold; background:${isFull ? '#3f3f46' : 'linear-gradient(180deg,#16a34a,#15803d)'}; border:1px solid ${isFull ? '#52525b' : '#4ade80'}; color:#fff; border-radius:6px; cursor:${isFull ? 'not-allowed' : 'pointer'};"
+              >
+                ${isFull ? '🔒 Lotação Máxima' : '📨 Solicitar Entrada'}
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      unjoinedContentHtml = `
+        <div style="max-width:850px; margin:0 auto;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <div style="font-family:'Cinzel',serif; font-size:15px; color:#fde047; font-weight:bold;">📜 Clãs Registrados no Continente de Aden</div>
+            <div style="font-size:11px; color:#94a3b8;">${worldClans.length} clãs encontrados</div>
+          </div>
+          <div>${clansListHtml}</div>
+        </div>
+      `;
+    }
+
+    container.innerHTML = `
+      <div style="padding:14px; color:#e2e8f0;">
+        <div style="text-align:center; margin-bottom:16px;">
+          <h2 style="font-family:'Cinzel',serif; font-size:22px; color:#fde047; margin:0 0 6px 0;">🏛️ Salão dos Clãs &amp; Senhores da Guerra</h2>
+          <p style="font-size:12px; color:#cbd5e1; margin:0;">Junte-se a uma irmandade de guerreiros ou erga seu próprio império para dominar as terras de Aden.</p>
+        </div>
+
+        <div style="display:flex; justify-content:center; gap:10px; margin-bottom:18px;">
+          <button
+            onclick="window.setClanUnjoinedTabAction('create')"
+            style="padding:10px 24px; font-family:'Cinzel',serif; font-size:12.5px; font-weight:bold; background:${unjoinedTab === 'create' ? 'linear-gradient(180deg,#ca8a04,#a16207)' : 'rgba(0,0,0,0.4)'}; border:1px solid ${unjoinedTab === 'create' ? '#fde047' : 'rgba(255,255,255,0.1)'}; color:${unjoinedTab === 'create' ? '#fff' : '#cbd5e1'}; border-radius:6px; cursor:pointer;"
+          >
+            👑 Criar um Novo Clã
+          </button>
+          <button
+            onclick="window.setClanUnjoinedTabAction('browse')"
+            style="padding:10px 24px; font-family:'Cinzel',serif; font-size:12.5px; font-weight:bold; background:${unjoinedTab === 'browse' ? 'linear-gradient(180deg,#ca8a04,#a16207)' : 'rgba(0,0,0,0.4)'}; border:1px solid ${unjoinedTab === 'browse' ? '#fde047' : 'rgba(255,255,255,0.1)'}; color:${unjoinedTab === 'browse' ? '#fff' : '#cbd5e1'}; border-radius:6px; cursor:pointer;"
+          >
+            📜 Entrar em um Clã Existente
+          </button>
+        </div>
+
+        ${unjoinedContentHtml}
+      </div>
+    `;
+    return;
+  }
+
+  // ═════════════════════════════════════════════════════════════════════════
+  // ESTADO 2: JOGADOR COM CLÃ ATIVO (DASHBOARD COMPLETO)
+  // ═════════════════════════════════════════════════════════════════════════
   const clan = clanStatus.clan;
+  const crest = clanStatus.crest || CLAN_CRESTS[0];
   const lvlData = clanStatus.levelData;
   const nextLvl = clanStatus.nextLevelData;
+  const activeSubTab = window._activeClanSubTab || 'members';
 
   let subContentHtml = '';
 
-  // 1. Sub-aba: Habilidades de Clã
-  if (activeSubTab === 'skills') {
-    const skillsHtml = Object.values(CLAN_SKILLS).map(sk => {
-      const isUnlocked = clan.level >= sk.levelReq;
-      const statusBadge = isUnlocked
-        ? `<span style="color:#4ade80; font-size:11px; font-weight:bold;">✓ Ativa</span>`
-        : `<span style="color:#94a3b8; font-size:11px;">🔒 Requer Clã Lv. ${sk.levelReq}</span>`;
+  // -------------------------------------------------------------
+  // 1. SUB-ABA: MEMBROS & GESTÃO DO CLÃ
+  // -------------------------------------------------------------
+  if (activeSubTab === 'members') {
+    const membersHtml = (clan.members || []).map(m => {
+      const roleMap = {
+        leader: { name: 'Líder Supremo 👑', color: '#fde047' },
+        vice_leader: { name: 'Vice-Líder ⭐', color: '#38bdf8' },
+        veteran: { name: 'Veterano ⚔️', color: '#a855f7' },
+        member: { name: 'Membro 🛡️', color: '#94a3b8' }
+      };
+      const r = roleMap[m.role] || roleMap.member;
+      const isMe = (m.name === (state.charName || state.heroName || 'Tristan'));
 
       return `
-        <div style="background:rgba(0,0,0,0.45); border:1px solid ${isUnlocked ? 'rgba(74,222,128,0.3)' : 'rgba(255,255,255,0.08)'}; border-radius:8px; padding:12px; display:flex; align-items:center; gap:12px;">
-          <div style="width:40px; height:40px; border-radius:6px; background:#18181b; border:1px solid ${isUnlocked ? '#4ade80' : '#3f3f46'}; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-            <img src="${sk.icon}" style="width:32px; height:32px; object-fit:contain; filter:${isUnlocked ? 'none' : 'grayscale(100%) opacity(0.5)'};" />
+        <div style="background:rgba(0,0,0,0.4); border:1px solid ${isMe ? 'rgba(234,179,8,0.4)' : 'rgba(255,255,255,0.06)'}; border-radius:8px; padding:12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="font-size:22px;">${m.isOnline ? '🟢' : '⚪'}</div>
+            <div>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span style="font-family:'Cinzel',serif; font-size:14px; font-weight:bold; color:${isMe ? '#fde047' : '#e2e8f0'};">${m.name}</span>
+                <span style="color:${r.color}; font-size:11px; font-weight:bold;">${r.name}</span>
+                <span style="background:#27272a; color:#a1a1aa; font-size:10px; padding:1px 6px; border-radius:4px;">Lv. ${m.level}</span>
+              </div>
+              <div style="font-size:11px; color:#94a3b8; margin-top:2px;">
+                Classe: <strong style="color:#cbd5e1;">${String(m.class || 'fighter').toUpperCase()}</strong> |
+                Poder (CP): <strong style="color:#38bdf8;">${(m.cp || 1000).toLocaleString()}</strong> |
+                Doado: <strong style="color:#a3e635;">${(m.donatedTotal || 0).toLocaleString()}g</strong>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex; gap:6px;">
+            ${clanStatus.isLeader && !isMe && m.role !== 'vice_leader' ? `
+              <button onclick="window.promoteClanMemberAction('${m.name}')" style="padding:4px 10px; font-size:10.5px; background:#1e3a8a; border:1px solid #38bdf8; color:#fff; border-radius:4px; cursor:pointer;">
+                ⭐ Promover
+              </button>
+            ` : ''}
+            ${clanStatus.isLeader && !isMe ? `
+              <button onclick="window.kickClanMemberAction('${m.name}')" style="padding:4px 10px; font-size:10.5px; background:#7f1d1d; border:1px solid #ef4444; color:#fff; border-radius:4px; cursor:pointer;">
+                🚪 Expulsar
+              </button>
+            ` : ''}
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    // Painel de Solicitações Pendentes (visível para Líder e Vice)
+    let applicantsHtml = '';
+    if (clanStatus.isViceLeader && (clan.pendingApplicants || []).length > 0) {
+      applicantsHtml = `
+        <div style="background:rgba(234,179,8,0.1); border:1px solid rgba(234,179,8,0.3); border-radius:8px; padding:12px; margin-bottom:14px;">
+          <div style="font-family:'Cinzel',serif; font-size:13px; font-weight:bold; color:#fde047; margin-bottom:8px;">📨 Solicitações de Recrutamento Pendentes (${clan.pendingApplicants.length})</div>
+          ${clan.pendingApplicants.map(app => `
+            <div style="display:flex; justify-content:space-between; align-items:center; background:#18181b; padding:8px 12px; border-radius:6px; margin-bottom:6px;">
+              <div>
+                <span style="font-weight:bold; color:#e2e8f0; font-size:12.5px;">${app.name}</span>
+                <span style="color:#94a3b8; font-size:11px; margin-left:6px;">Lv. ${app.level} ${String(app.class || '').toUpperCase()} (CP: ${(app.cp || 1000).toLocaleString()})</span>
+              </div>
+              <div style="display:flex; gap:6px;">
+                <button onclick="window.handleClanJoinRequestAction('${app.id}', true)" style="padding:4px 10px; font-size:10.5px; font-weight:bold; background:#15803d; border:1px solid #4ade80; color:#fff; border-radius:4px; cursor:pointer;">
+                  ✓ Aceitar
+                </button>
+                <button onclick="window.handleClanJoinRequestAction('${app.id}', false)" style="padding:4px 10px; font-size:10.5px; background:#991b1b; border:1px solid #ef4444; color:#fff; border-radius:4px; cursor:pointer;">
+                  ✕ Recusar
+                </button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    subContentHtml = `
+      <div>
+        ${applicantsHtml}
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <div style="font-family:'Cinzel',serif; font-size:14px; font-weight:bold; color:#fde047;">👥 Roster de Membros do Clã (${(clan.members || []).length}/${lvlData.maxMembers})</div>
+          <button
+            onclick="window.leaveClanAction()"
+            style="padding:4px 12px; font-size:11px; background:rgba(239,68,68,0.2); border:1px solid #ef4444; color:#fca5a5; border-radius:4px; cursor:pointer;"
+          >
+            🚪 Deixar o Clã
+          </button>
+        </div>
+        ${membersHtml}
+      </div>
+    `;
+  }
+  // -------------------------------------------------------------
+  // 2. SUB-ABA: DOAÇÕES DE FUNDOS (3x AO DIA)
+  // -------------------------------------------------------------
+  else if (activeSubTab === 'donations') {
+    const donationsToday = clanStatus.donationsToday;
+    const canDonate = donationsToday < clanStatus.maxDonationsDaily;
+
+    const donationsCardsHtml = Object.values(CLAN_DONATIONS).map(d => {
+      const hasGold = (state.gold || 0) >= (d.cost.gold || 0);
+      const hasSp = !d.cost.sp || (state.sp || 0) >= d.cost.sp;
+      const isAffordable = hasGold && hasSp && canDonate;
+
+      return `
+        <div style="background:rgba(0,0,0,0.5); border:1px solid rgba(234,179,8,0.25); border-radius:8px; padding:16px; display:flex; flex-direction:column; justify-content:space-between; gap:12px;">
+          <div>
+            <div style="font-size:32px; margin-bottom:6px;">${d.icon}</div>
+            <div style="font-family:'Cinzel',serif; font-size:15px; font-weight:bold; color:#fde047;">${d.name}</div>
+            <div style="font-size:11.5px; color:#cbd5e1; margin-top:4px;">${d.desc}</div>
+
+            <div style="margin-top:12px; background:rgba(0,0,0,0.4); border-radius:6px; padding:8px; font-size:11px;">
+              <div style="color:#94a3b8; margin-bottom:4px;">Custo da Doação:</div>
+              <div style="color:${hasGold ? '#a3e635' : '#ef4444'}; font-weight:bold;">💰 ${d.cost.gold.toLocaleString()} Adena</div>
+              ${d.cost.sp ? `<div style="color:${hasSp ? '#38bdf8' : '#ef4444'}; font-weight:bold;">✨ ${d.cost.sp.toLocaleString()} SP</div>` : ''}
+            </div>
+
+            <div style="margin-top:8px; background:rgba(234,179,8,0.1); border-radius:6px; padding:8px; font-size:11px;">
+              <div style="color:#fde047; font-weight:bold; margin-bottom:2px;">Recompensas Concedidas:</div>
+              <div style="color:#38bdf8;">📈 +${d.reward.clanExp} EXP de Clã</div>
+              <div style="color:#a3e635;">🏦 +${d.reward.clanGold.toLocaleString()}g no Tesouro</div>
+              <div style="color:#fde047; font-weight:bold;">🪙 +${d.reward.clanCoins} Moedas de Clã</div>
+            </div>
+          </div>
+
+          <button
+            onclick="window.donateToClanAction('${d.id}')"
+            ${!isAffordable ? 'disabled' : ''}
+            style="padding:10px 16px; font-family:'Cinzel',serif; font-size:12px; font-weight:bold; background:${isAffordable ? 'linear-gradient(180deg,#ca8a04,#a16207)' : '#3f3f46'}; border:1px solid ${isAffordable ? '#fde047' : '#52525b'}; color:${isAffordable ? '#fff' : '#a1a1aa'}; border-radius:6px; cursor:${isAffordable ? 'pointer' : 'not-allowed'}; width:100%;"
+          >
+            ${!canDonate ? '🔒 Limite Diário Atingido' : (isAffordable ? '✨ Realizar Doação' : '⚠️ Recursos Insuficientes')}
+          </button>
+        </div>
+      `;
+    }).join('');
+
+    subContentHtml = `
+      <div>
+        <div style="background:rgba(0,0,0,0.5); border:1px solid rgba(234,179,8,0.3); border-radius:8px; padding:14px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+          <div>
+            <div style="font-family:'Cinzel',serif; font-size:15px; font-weight:bold; color:#fde047;">✨ Contribuições Diárias para o Clã</div>
+            <div style="font-size:11.5px; color:#cbd5e1; margin-top:2px;">Doe até 3 vezes por dia para elevar a EXP do clã e conquistar Moedas de Clã para a loja exclusiva.</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:11px; color:#94a3b8;">Doações Realizadas Hoje:</div>
+            <div style="font-size:16px; font-weight:bold; color:${canDonate ? '#a3e635' : '#ef4444'};">${donationsToday} / 3</div>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:14px;">
+          ${donationsCardsHtml}
+        </div>
+      </div>
+    `;
+  }
+  // -------------------------------------------------------------
+  // 3. SUB-ABA: HABILIDADES DE CLÃ (CLAN SKILLS 1 a 10)
+  // -------------------------------------------------------------
+  else if (activeSubTab === 'skills') {
+    const skillsHtml = Object.values(CLAN_SKILLS).map(sk => {
+      const isUnlocked = clan.level >= sk.levelReq;
+      return `
+        <div style="background:rgba(0,0,0,0.45); border:1px solid ${isUnlocked ? 'rgba(74,222,128,0.35)' : 'rgba(255,255,255,0.08)'}; border-radius:8px; padding:12px; display:flex; align-items:center; gap:12px;">
+          <div style="width:42px; height:42px; border-radius:6px; background:#18181b; border:1px solid ${isUnlocked ? '#4ade80' : '#3f3f46'}; display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0;">
+            ${isUnlocked ? '🛡️' : '🔒'}
           </div>
           <div style="flex:1;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2px;">
-              <span style="font-family:'Cinzel',serif; font-size:13px; font-weight:bold; color:${isUnlocked ? '#fef08a' : '#94a3b8'};">${sk.name}</span>
-              ${statusBadge}
+              <span style="font-family:'Cinzel',serif; font-size:13.5px; font-weight:bold; color:${isUnlocked ? '#fef08a' : '#94a3b8'};">${sk.name}</span>
+              <span style="font-size:11px; font-weight:bold; color:${isUnlocked ? '#4ade80' : '#94a3b8'};">
+                ${isUnlocked ? '✓ Ativa' : `🔒 Requer Clã Lv. ${sk.levelReq}`}
+              </span>
             </div>
             <div style="font-size:11px; color:#cbd5e1; line-height:1.35;">${sk.desc}</div>
           </div>
@@ -5448,33 +5752,94 @@ export function renderClanTab(container, state) {
     }).join('');
 
     subContentHtml = `
-      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:10px;">
-        ${skillsHtml}
+      <div>
+        <div style="font-family:'Cinzel',serif; font-size:14px; font-weight:bold; color:#fde047; margin-bottom:10px;">🌟 Habilidades de Clã Passivas (Ativas para Todos os Membros)</div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:10px;">
+          ${skillsHtml}
+        </div>
       </div>
     `;
   }
-  // 2. Sub-aba: Castelos & Tributos de Aden
-  else if (activeSubTab === 'castles') {
-    const castlesHtml = Object.values(CASTLES).map(c => {
-      const isOwned = clan.castles?.includes(c.id);
-      const accTax = clan.accumulatedTaxes?.[c.id] || 0;
+  // -------------------------------------------------------------
+  // 4. SUB-ABA: LOJA DO CLÃ (CLAN SHOP COM CLAN COINS)
+  // -------------------------------------------------------------
+  else if (activeSubTab === 'shop') {
+    const clanCoins = clanStatus.clanCoins;
+    const shopHtml = CLAN_SHOP_CATALOG.map(item => {
+      const isLvlOk = (clan.level || 1) >= item.clanLevelReq;
+      const canAfford = clanCoins >= item.costCoins && isLvlOk;
 
       return `
-        <div style="background:rgba(0,0,0,0.45); border:1px solid ${isOwned ? 'rgba(234,179,8,0.5)' : 'rgba(255,255,255,0.08)'}; border-radius:8px; padding:14px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; gap:12px;">
+        <div style="background:rgba(0,0,0,0.5); border:1px solid rgba(234,179,8,0.25); border-radius:8px; padding:14px; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:10px;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:44px; height:44px; border-radius:6px; background:#18181b; border:1px solid #ca8a04; display:flex; align-items:center; justify-content:center; font-size:24px;">
+              ${item.icon}
+            </div>
+            <div>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span style="font-family:'Cinzel',serif; font-size:14px; font-weight:bold; color:#fde047;">${item.name}</span>
+                <span style="font-size:10px; padding:1px 6px; border-radius:4px; background:#27272a; color:${isLvlOk ? '#4ade80' : '#f87171'};">
+                  ${isLvlOk ? `Clã Lv. ${item.clanLevelReq}+` : `🔒 Requer Clã Lv. ${item.clanLevelReq}`}
+                </span>
+              </div>
+              <div style="font-size:11.5px; color:#cbd5e1; margin-top:2px;">${item.desc}</div>
+              <div style="font-size:11.5px; color:#fde047; font-weight:bold; margin-top:4px;">
+                🪙 ${item.costCoins} Moedas de Clã
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <button
+              onclick="window.buyClanShopItemAction('${item.id}', 1)"
+              ${!canAfford ? 'disabled' : ''}
+              style="padding:8px 18px; font-family:'Cinzel',serif; font-size:11.5px; font-weight:bold; background:${canAfford ? 'linear-gradient(180deg,#ca8a04,#a16207)' : '#3f3f46'}; border:1px solid ${canAfford ? '#fde047' : '#52525b'}; color:${canAfford ? '#fff' : '#a1a1aa'}; border-radius:6px; cursor:${canAfford ? 'pointer' : 'not-allowed'};"
+            >
+              🛍️ Comprar
+            </button>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    subContentHtml = `
+      <div>
+        <div style="background:rgba(0,0,0,0.5); border:1px solid rgba(234,179,8,0.3); border-radius:8px; padding:12px 16px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+          <div style="font-family:'Cinzel',serif; font-size:14px; font-weight:bold; color:#fde047;">🛍️ Loja da Ordem Imperial</div>
+          <div style="display:flex; align-items:center; gap:6px; background:rgba(234,179,8,0.15); border:1px solid #eab308; padding:4px 12px; border-radius:8px;">
+            <span style="font-size:16px;">🪙</span>
+            <span style="font-size:12px; color:#cbd5e1;">Suas Moedas de Clã:</span>
+            <strong style="color:#fde047; font-size:14px;">${clanCoins.toLocaleString()}</strong>
+          </div>
+        </div>
+        <div>${shopHtml}</div>
+      </div>
+    `;
+  }
+  // -------------------------------------------------------------
+  // 5. SUB-ABA: CASTELOS & GUERRAS DE CERCO
+  // -------------------------------------------------------------
+  else if (activeSubTab === 'castles') {
+    const castlesHtml = Object.values(CASTLES).map(c => {
+      const isOwned = (clan.castles || []).includes(c.id);
+      const accTax = (clan.accumulatedTaxes || {})[c.id] || 0;
+
+      return `
+        <div style="background:rgba(0,0,0,0.45); border:1px solid ${isOwned ? 'rgba(234,179,8,0.5)' : 'rgba(255,255,255,0.08)'}; border-radius:8px; padding:14px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
           <div style="flex:1;">
             <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
-              <span style="font-family:'Cinzel',serif; font-size:14px; font-weight:bold; color:${isOwned ? '#fde047' : '#e2e8f0'};">${c.name}</span>
+              <span style="font-family:'Cinzel',serif; font-size:14.5px; font-weight:bold; color:${isOwned ? '#fde047' : '#e2e8f0'};">${c.name}</span>
               ${isOwned ? '<span style="background:rgba(234,179,8,0.2); border:1px solid #eab308; color:#fde047; font-size:10.5px; padding:2px 8px; border-radius:10px; font-weight:bold;">👑 Sob Seu Comando</span>' : '<span style="color:#94a3b8; font-size:11px;">Sem Senhor / Neutro</span>'}
             </div>
             <div style="font-size:11.5px; color:#cbd5e1; margin-bottom:6px;">${c.desc}</div>
             <div style="font-size:11px; color:#94a3b8; display:flex; gap:14px; flex-wrap:wrap;">
-              <span>📊 Taxa de Comércio: <strong style="color:#fde047;">${c.taxRatePercent}%</strong></span>
+              <span>📊 Imposto Comercial: <strong style="color:#fde047;">${c.taxRatePercent}%</strong></span>
               <span>💰 Renda: <strong style="color:#a3e635;">${c.adenaPerMinute.toLocaleString()} Adena/min</strong></span>
-              <span>⚔️ Nível Recomendado: <strong>Lv. ${c.reqCharLevel}+</strong></span>
+              <span>⚔️ Requisito: <strong>Lv. ${c.reqCharLevel}+</strong></span>
             </div>
             ${isOwned ? `
               <div style="margin-top:8px; font-size:11.5px; color:#fef08a;">
-                Tesouro do Castelo Acumulado: <strong style="color:#a3e635; font-size:13px;">${accTax.toLocaleString()} Adena</strong>
+                Tesouro Acumulado no Castelo: <strong style="color:#a3e635; font-size:13px;">${accTax.toLocaleString()} Adena</strong>
               </div>
             ` : ''}
           </div>
@@ -5501,127 +5866,79 @@ export function renderClanTab(container, state) {
 
     subContentHtml = `<div>${castlesHtml}</div>`;
   }
-  // 3. Sub-aba: Guerra de Cerco (Siege Arena)
-  else if (activeSubTab === 'siege') {
-    const siege = state.activeSiege;
 
-    if (!siege || siege.isCompleted) {
-      subContentHtml = `
-        <div style="text-align:center; padding:30px; background:rgba(0,0,0,0.3); border-radius:8px; border:1px dashed rgba(255,255,255,0.1);">
-          <div style="font-size:36px; margin-bottom:8px;">🏰</div>
-          <div style="font-family:'Cinzel',serif; font-size:15px; color:#e2e8f0; margin-bottom:6px;">Nenhum Cerco Ativo no Momento</div>
-          <div style="font-size:12px; color:#94a3b8; margin-bottom:14px;">Vá até a aba "Castelos &amp; Tributos" e declare guerra a um dos 5 castelos de Aden!</div>
-          <button
-            onclick="window.setClanSubTab('castles')"
-            style="padding:8px 16px; font-size:11.5px; font-weight:bold; background:linear-gradient(180deg,#ca8a04,#a16207); border:1px solid #fde047; color:#fff; border-radius:6px; cursor:pointer;"
-          >
-            Ver Castelos Disponíveis
-          </button>
-        </div>
-      `;
-    } else {
-      const phaseNames = {
-        1: 'Fase 1: Destruição dos Portões Exteriores',
-        2: 'Fase 2: Confronto com a Guarda Real do Castelo',
-        3: 'Fase 3: Sala do Trono — Canalização do Seal of Ruler'
-      };
-
-      const hpCurrent = siege.phase === 1 ? siege.gateHp : (siege.phase === 2 ? siege.guardsHp : siege.castRounds);
-      const hpMax = siege.phase === 1 ? siege.maxGateHp : (siege.phase === 2 ? siege.maxGuardsHp : siege.reqCastRounds);
-      const hpPercent = Math.min(100, Math.max(0, Math.round((hpCurrent / hpMax) * 100)));
-
-      subContentHtml = `
-        <div style="background:rgba(0,0,0,0.5); border:1px solid #ef4444; border-radius:8px; padding:16px; margin-bottom:14px;">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-            <div>
-              <div style="font-family:'Cinzel',serif; font-size:16px; font-weight:bold; color:#f87171;">⚔️ CERCO ATIVO: ${siege.castleName}</div>
-              <div style="font-size:12px; color:#fde047; font-weight:bold;">${phaseNames[siege.phase]}</div>
-            </div>
-            <button
-              onclick="window.executeSiegeTurnAction()"
-              style="padding:10px 20px; font-family:'Cinzel',serif; font-size:13px; font-weight:bold; background:linear-gradient(180deg,#dc2626,#b91c1c); border:1px solid #f87171; color:#fff; border-radius:6px; cursor:pointer; box-shadow:0 0 12px rgba(239,68,68,0.5);"
-            >
-              ${siege.phase === 3 ? '✨ Canalizar Seal of Ruler' : '⚔️ Desferir Ataque do Clã'}
-            </button>
-          </div>
-
-          <!-- Barra de Progresso da Fase -->
-          <div style="margin-bottom:12px;">
-            <div style="display:flex; justify-content:space-between; font-size:11px; color:#cbd5e1; margin-bottom:4px;">
-              <span>${siege.phase === 3 ? 'Progresso do Selo Sagrado' : 'HP do Alvo'}</span>
-              <span>${hpCurrent.toLocaleString()} / ${hpMax.toLocaleString()} (${hpPercent}%)</span>
-            </div>
-            <div style="width:100%; height:12px; background:#18181b; border-radius:6px; overflow:hidden; border:1px solid #3f3f46;">
-              <div style="width:${hpPercent}%; height:100%; background:${siege.phase === 3 ? 'linear-gradient(90deg,#eab308,#fde047)' : 'linear-gradient(90deg,#ef4444,#dc2626)'}; transition:width 0.3s ease;"></div>
-            </div>
-          </div>
-
-          <!-- Log do Cerco -->
-          <div style="background:#09090b; border:1px solid #27272a; border-radius:6px; padding:10px; max-height:140px; overflow-y:auto; font-family:monospace; font-size:11px; color:#cbd5e1;">
-            ${(siege.logs || []).map(l => `<div style="margin-bottom:3px;">${l}</div>`).join('')}
-          </div>
-        </div>
-      `;
-    }
-  }
-  // 4. Sub-aba: Loja do Castelo
-  else if (activeSubTab === 'shop') {
-    const shopHtml = CASTLE_SHOP_CATALOG.map(item => `
-      <div style="background:rgba(0,0,0,0.45); border:1px solid rgba(234,179,8,0.3); border-radius:8px; padding:12px; display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:10px;">
-        <div style="display:flex; align-items:center; gap:10px;">
-          <div style="width:40px; height:40px; border-radius:6px; background:#18181b; border:1px solid #eab308; display:flex; align-items:center; justify-content:center;">
-            <img src="${item.icon}" style="width:32px; height:32px; object-fit:contain;" />
-          </div>
-          <div>
-            <div style="font-family:'Cinzel',serif; font-size:13px; font-weight:bold; color:#fde047;">${item.name}</div>
-            <div style="font-size:11px; color:#cbd5e1;">${item.desc}</div>
-            <div style="font-size:11px; color:#a3e635; font-weight:bold; margin-top:2px;">Preço: ${item.priceAdena.toLocaleString()} Adena</div>
-          </div>
-        </div>
-        <button
-          onclick="window.buyCastleShopItemAction('${item.id}')"
-          style="padding:6px 14px; font-size:11px; font-weight:bold; background:linear-gradient(180deg,#ca8a04,#a16207); border:1px solid #fde047; color:#fff; border-radius:6px; cursor:pointer;"
-        >
-          Comprar
-        </button>
-      </div>
-    `).join('');
-
-    subContentHtml = `<div>${shopHtml}</div>`;
-  }
+  // Progresso de EXP do Clã
+  const clanExp = clan.exp || 0;
+  const reqExp = nextLvl ? nextLvl.reqExp : clanExp;
+  const expPercent = nextLvl ? Math.min(100, Math.max(0, Math.round((clanExp / reqExp) * 100))) : 100;
 
   container.innerHTML = `
     <div style="padding:14px; color:#e2e8f0;">
-      <!-- Header do Clã -->
-      <div style="background:linear-gradient(135deg,rgba(161,98,7,0.25),rgba(0,0,0,0.6)); border:1px solid rgba(234,179,8,0.4); border-radius:10px; padding:16px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center; gap:14px; flex-wrap:wrap;">
-        <div style="display:flex; align-items:center; gap:14px;">
-          <div style="font-size:40px; filter:drop-shadow(0 0 10px rgba(234,179,8,0.5));">🛡️</div>
-          <div>
-            <div style="display:flex; align-items:center; gap:8px;">
-              <span style="font-family:'Cinzel',serif; font-size:18px; font-weight:bold; color:#fde047;">${clan.name}</span>
-              <span style="background:#ca8a04; color:#fff; font-size:11px; font-weight:bold; padding:2px 8px; border-radius:10px;">Nível ${clan.level} (${lvlData.title})</span>
+      <!-- Header do Clã Ativo -->
+      <div style="background:linear-gradient(135deg,rgba(161,98,7,0.25),rgba(0,0,0,0.6)); border:1px solid rgba(234,179,8,0.4); border-radius:10px; padding:16px; margin-bottom:16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:12px;">
+          <div style="display:flex; align-items:center; gap:14px;">
+            <div style="width:52px; height:52px; border-radius:10px; background:${crest.bg}; border:2px solid ${crest.color}; display:flex; align-items:center; justify-content:center; font-size:28px; filter:drop-shadow(0 0 10px ${crest.color});">
+              ${crest.icon}
             </div>
-            <div style="font-size:11.5px; color:#cbd5e1; margin-top:2px;">${lvlData.desc}</div>
-            <div style="font-size:11px; color:#94a3b8; margin-top:4px;">Capacidade: <strong>${lvlData.maxMembers} membros</strong> | Castelos Governados: <strong style="color:#fde047;">${(clan.castles || []).length}</strong></div>
+            <div>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span style="font-family:'Cinzel',serif; font-size:19px; font-weight:bold; color:#fde047;">${clan.name}</span>
+                <span style="background:#ca8a04; color:#fff; font-size:11px; font-weight:bold; padding:2px 8px; border-radius:10px;">Nível ${clan.level} (${lvlData.title})</span>
+                <span style="background:rgba(56,189,248,0.2); border:1px solid #38bdf8; color:#38bdf8; font-size:11px; padding:2px 8px; border-radius:10px; font-weight:bold;">${clanStatus.isLeader ? '👑 Líder Supremo' : (clan.role === 'vice_leader' ? '⭐ Vice-Líder' : '🛡️ Membro')}</span>
+              </div>
+              <div style="font-size:11.5px; color:#cbd5e1; margin-top:2px;">${lvlData.desc}</div>
+              <div style="font-size:11px; color:#94a3b8; margin-top:4px; display:flex; gap:12px; flex-wrap:wrap;">
+                <span>👥 Membros: <strong>${(clan.members || []).length}/${lvlData.maxMembers}</strong></span>
+                <span>🏦 Tesouro: <strong style="color:#a3e635;">${(clan.gold || 0).toLocaleString()}g</strong></span>
+                <span>🪙 Suas Moedas de Clã: <strong style="color:#fde047;">${(clanStatus.clanCoins || 0).toLocaleString()}</strong></span>
+                <span>🏰 Castelos: <strong style="color:#fde047;">${(clan.castles || []).length}</strong></span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            ${clanStatus.isLeader && nextLvl ? `
+              <button
+                onclick="window.upgradeClanAction()"
+                style="padding:10px 18px; font-family:'Cinzel',serif; font-size:12px; font-weight:bold; background:linear-gradient(180deg,#16a34a,#15803d); border:1px solid #4ade80; color:#fff; border-radius:6px; cursor:pointer; box-shadow:0 0 10px rgba(74,222,128,0.4);"
+              >
+                ⬆️ Elevar Clã para Lv. ${nextLvl.level}
+              </button>
+            ` : (clan.level >= 10 ? `
+              <span style="color:#fde047; font-weight:bold; font-size:12px;">👑 Nível Máximo Atingido (Império Supremo)</span>
+            ` : '')}
           </div>
         </div>
 
-        <div>
-          ${nextLvl ? `
-            <button
-              onclick="window.upgradeClanAction()"
-              style="padding:8px 16px; font-family:'Cinzel',serif; font-size:12px; font-weight:bold; background:linear-gradient(180deg,#16a34a,#15803d); border:1px solid #4ade80; color:#fff; border-radius:6px; cursor:pointer;"
-            >
-              ⬆️ Elevar Clã para Lv. ${nextLvl.level} (${nextLvl.costAdena.toLocaleString()} Adena / ${nextLvl.costSp.toLocaleString()} SP)
-            </button>
-          ` : `
-            <span style="color:#fde047; font-weight:bold; font-size:12px;">👑 Nível Máximo do Clã</span>
-          `}
-        </div>
+        <!-- Barra de Progresso de EXP do Clã -->
+        ${nextLvl ? `
+          <div>
+            <div style="display:flex; justify-content:space-between; font-size:10.5px; color:#cbd5e1; margin-bottom:3px;">
+              <span>Progresso para o Nível ${nextLvl.level}</span>
+              <span>${clanExp.toLocaleString()} / ${reqExp.toLocaleString()} EXP (${expPercent}%)</span>
+            </div>
+            <div style="width:100%; height:8px; background:#18181b; border-radius:4px; overflow:hidden; border:1px solid #3f3f46;">
+              <div style="width:${expPercent}%; height:100%; background:linear-gradient(90deg,#eab308,#a3e635); transition:width 0.3s ease;"></div>
+            </div>
+          </div>
+        ` : ''}
       </div>
 
-      <!-- Sub-Abas -->
+      <!-- Sub-Abas do Painel de Clã -->
       <div style="display:flex; gap:8px; margin-bottom:14px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:8px; flex-wrap:wrap;">
+        <button
+          onclick="window.setClanSubTab('members')"
+          style="padding:8px 16px; font-family:'Cinzel',serif; font-size:12px; font-weight:bold; background:${activeSubTab === 'members' ? 'linear-gradient(180deg,#ca8a04,#a16207)' : 'rgba(0,0,0,0.4)'}; border:1px solid ${activeSubTab === 'members' ? '#fde047' : 'rgba(255,255,255,0.1)'}; color:${activeSubTab === 'members' ? '#fff' : '#cbd5e1'}; border-radius:6px; cursor:pointer;"
+        >
+          👥 Membros &amp; Roster
+        </button>
+        <button
+          onclick="window.setClanSubTab('donations')"
+          style="padding:8px 16px; font-family:'Cinzel',serif; font-size:12px; font-weight:bold; background:${activeSubTab === 'donations' ? 'linear-gradient(180deg,#ca8a04,#a16207)' : 'rgba(0,0,0,0.4)'}; border:1px solid ${activeSubTab === 'donations' ? '#fde047' : 'rgba(255,255,255,0.1)'}; color:${activeSubTab === 'donations' ? '#fff' : '#cbd5e1'}; border-radius:6px; cursor:pointer;"
+        >
+          ✨ Doações (3x/dia)
+        </button>
         <button
           onclick="window.setClanSubTab('skills')"
           style="padding:8px 16px; font-family:'Cinzel',serif; font-size:12px; font-weight:bold; background:${activeSubTab === 'skills' ? 'linear-gradient(180deg,#ca8a04,#a16207)' : 'rgba(0,0,0,0.4)'}; border:1px solid ${activeSubTab === 'skills' ? '#fde047' : 'rgba(255,255,255,0.1)'}; color:${activeSubTab === 'skills' ? '#fff' : '#cbd5e1'}; border-radius:6px; cursor:pointer;"
@@ -5629,26 +5946,20 @@ export function renderClanTab(container, state) {
           🛡️ Habilidades de Clã
         </button>
         <button
-          onclick="window.setClanSubTab('castles')"
-          style="padding:8px 16px; font-family:'Cinzel',serif; font-size:12px; font-weight:bold; background:${activeSubTab === 'castles' ? 'linear-gradient(180deg,#ca8a04,#a16207)' : 'rgba(0,0,0,0.4)'}; border:1px solid ${activeSubTab === 'castles' ? '#fde047' : 'rgba(255,255,255,0.1)'}; color:${activeSubTab === 'castles' ? '#fff' : '#cbd5e1'}; border-radius:6px; cursor:pointer;"
-        >
-          🏰 Castelos &amp; Tributos
-        </button>
-        <button
-          onclick="window.setClanSubTab('siege')"
-          style="padding:8px 16px; font-family:'Cinzel',serif; font-size:12px; font-weight:bold; background:${activeSubTab === 'siege' ? 'linear-gradient(180deg,#ca8a04,#a16207)' : 'rgba(0,0,0,0.4)'}; border:1px solid ${activeSubTab === 'siege' ? '#fde047' : 'rgba(255,255,255,0.1)'}; color:${activeSubTab === 'siege' ? '#fff' : '#cbd5e1'}; border-radius:6px; cursor:pointer;"
-        >
-          ⚔️ Guerra de Cerco (Siege)
-        </button>
-        <button
           onclick="window.setClanSubTab('shop')"
           style="padding:8px 16px; font-family:'Cinzel',serif; font-size:12px; font-weight:bold; background:${activeSubTab === 'shop' ? 'linear-gradient(180deg,#ca8a04,#a16207)' : 'rgba(0,0,0,0.4)'}; border:1px solid ${activeSubTab === 'shop' ? '#fde047' : 'rgba(255,255,255,0.1)'}; color:${activeSubTab === 'shop' ? '#fff' : '#cbd5e1'}; border-radius:6px; cursor:pointer;"
         >
-          🛍️ Loja do Castelo
+          🛍️ Loja do Clã
+        </button>
+        <button
+          onclick="window.setClanSubTab('castles')"
+          style="padding:8px 16px; font-family:'Cinzel',serif; font-size:12px; font-weight:bold; background:${activeSubTab === 'castles' ? 'linear-gradient(180deg,#ca8a04,#a16207)' : 'rgba(0,0,0,0.4)'}; border:1px solid ${activeSubTab === 'castles' ? '#fde047' : 'rgba(255,255,255,0.1)'}; color:${activeSubTab === 'castles' ? '#fff' : '#cbd5e1'}; border-radius:6px; cursor:pointer;"
+        >
+          🏰 Castelos &amp; Cercos
         </button>
       </div>
 
-      <!-- Conteúdo da Sub-Aba -->
+      <!-- Conteúdo da Sub-Aba Ativa -->
       ${subContentHtml}
     </div>
   `;
