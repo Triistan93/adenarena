@@ -271,7 +271,8 @@ export function getItemIcon(defOrId) {
   const fallbackIcons = {
     weapon: '⚔️', armor: '🛡️', helmet: '🪖', gloves: '🧤', boots: '👢',
     ring: '💍', earring: '💎', necklace: '📿', consumable: '🧪', material: '💎',
-    scroll: '📜', cloak: '🧣', cape: '🧣', belt: '🎗️', hair: '👑', agathion: '👼'
+    scroll: '📜', cloak: '🧣', cape: '🧣', belt: '🎗️', hair: '👑', agathion: '👼',
+    crystal: '🔮'
   };
   const emoji = fallbackIcons[slot] || '📦';
 
@@ -742,8 +743,8 @@ export function initTooltipEvents() {
    3. INVENTORY & PAPERDOLL (6 LINHAS x 3 COLUNAS)
 ═══════════════════════════════════════════════════════════════════════════ */
 const GEAR_SLOTS = ['weapon', 'shield', 'armor', 'helmet', 'gloves', 'legs', 'boots', 'cloak', 'belt', 'necklace', 'earring', 'ring', 'hair', 'hair2', 'agathion', 'talisman'];
-const CONSUMABLE_SLOTS = ['consumable', 'potion', 'scroll', 'food', 'powerup'];
-const MATERIAL_SLOTS = ['material', 'gem', 'ore', 'craft'];
+const CONSUMABLE_SLOTS = ['consumable', 'potion', 'scroll', 'food', 'powerup', 'crystal'];
+const MATERIAL_SLOTS = ['material', 'gem', 'ore', 'craft', 'crystal'];
 
 const SLOT_ICONS = {
   hair1: '👒', hair2: '🎭', helmet: '🪖',

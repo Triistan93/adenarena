@@ -7204,7 +7204,14 @@ export function init() {
           return;
         }
         state.gold -= cost;
-        serviceAddToInventory(state, 'soul_crystal_red_stage1', 1, 'rare', false, { log, updateAllUI, save });
+        serviceAddToInventory(state, 'soul_crystal_red_stage1', 1, 'rare', false, { log, updateAllUI, save }, true);
+        const crystal = (state.inventory || []).find(i => i.itemId === 'soul_crystal_red_stage1');
+        if (crystal) {
+          crystal.isSoulCrystal = true;
+          crystal.stage = 1;
+          crystal.crystalLevel = 1;
+          crystal.absorbedSouls = 0;
+        }
         log('🔮 Soul Crystal Adquirido! Mantenha na mochila para absorver almas.', 'rarity-epic');
         updateAllUI();
         save();

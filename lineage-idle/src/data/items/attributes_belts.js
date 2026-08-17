@@ -1,5 +1,5 @@
 /**
- * M├│dulo de Atributos Elementais, S├¡ntese de Cintos (PvE) e Augmentation por Life Stones
+ * attributes_belts.js — Atributos Elementais, Síntese de Cintos (PvE) e Augmentation por Life Stones
  */
 
 export const ELEMENT_OPPOSITES = {
@@ -7,17 +7,32 @@ export const ELEMENT_OPPOSITES = {
   water: 'fire',
   earth: 'wind',
   wind: 'earth',
-  dark: 'divine',
-  divine: 'dark'
+  dark: 'holy',
+  holy: 'dark'
 };
 
 export const ELEMENTAL_STONES = {
-  fire_stone: { id: 'fire_stone', name: 'Fire Stone', element: 'fire', type: 'stone', bonusWpn: 5, firstWpn: 20, bonusArmor: 6 },
-  water_stone: { id: 'water_stone', name: 'Water Stone', element: 'water', type: 'stone', bonusWpn: 5, firstWpn: 20, bonusArmor: 6 },
-  earth_stone: { id: 'earth_stone', name: 'Earth Stone', element: 'earth', type: 'stone', bonusWpn: 5, firstWpn: 20, bonusArmor: 6 },
-  wind_stone: { id: 'wind_stone', name: 'Wind Stone', element: 'wind', type: 'stone', bonusWpn: 5, firstWpn: 20, bonusArmor: 6 },
-  dark_stone: { id: 'dark_stone', name: 'Dark Stone', element: 'dark', type: 'stone', bonusWpn: 5, firstWpn: 20, bonusArmor: 6 },
-  divine_stone: { id: 'divine_stone', name: 'Divine Stone', element: 'divine', type: 'stone', bonusWpn: 5, firstWpn: 20, bonusArmor: 6 }
+  fire_stone: { id: 'fire_stone', name: 'Pedra de Fogo 🔥', element: 'fire', slot: 'material', type: 'elemental_stone', tier: 4, rarity: 'epic', price: 25000, desc: 'Incuta em armas (+20) e armaduras (+6) para atributo Fogo.' },
+  water_stone: { id: 'water_stone', name: 'Pedra de Água 💧', element: 'water', slot: 'material', type: 'elemental_stone', tier: 4, rarity: 'epic', price: 25000, desc: 'Incuta em armas (+20) e armaduras (+6) para atributo Água.' },
+  earth_stone: { id: 'earth_stone', name: 'Pedra de Terra 🌍', element: 'earth', slot: 'material', type: 'elemental_stone', tier: 4, rarity: 'epic', price: 25000, desc: 'Incuta em armas (+20) e armaduras (+6) para atributo Terra.' },
+  wind_stone: { id: 'wind_stone', name: 'Pedra de Vento 🌪️', element: 'wind', slot: 'material', type: 'elemental_stone', tier: 4, rarity: 'epic', price: 25000, desc: 'Incuta em armas (+20) e armaduras (+6) para atributo Vento.' },
+  dark_stone: { id: 'dark_stone', name: 'Pedra das Trevas 🌑', element: 'dark', slot: 'material', type: 'elemental_stone', tier: 4, rarity: 'epic', price: 25000, desc: 'Incuta em armas (+20) e armaduras (+6) para atributo Trevas.' },
+  holy_stone: { id: 'holy_stone', name: 'Pedra Sagrada ✨', element: 'holy', slot: 'material', type: 'elemental_stone', tier: 4, rarity: 'epic', price: 25000, desc: 'Incuta em armas (+20) e armaduras (+6) para atributo Sagrado.' }
+};
+
+export const LIFE_STONE_ITEMS = {
+  lifestone_common: { id: 'lifestone_common', name: 'Life Stone Comum 💎', grade: 'common', slot: 'material', type: 'lifestone', tier: 3, rarity: 'rare', price: 50000, desc: 'Life Stone básica para Augmentation de armas.' },
+  lifestone_mid: { id: 'lifestone_mid', name: 'Mid-Grade Life Stone 💎', grade: 'mid', slot: 'material', type: 'lifestone', tier: 4, rarity: 'epic', price: 150000, desc: 'Mid-Grade Life Stone para Augmentation com maior chance de atributos.' },
+  lifestone_high: { id: 'lifestone_high', name: 'High-Grade Life Stone 💎', grade: 'high', slot: 'material', type: 'lifestone', tier: 5, rarity: 'legendary', price: 400000, desc: 'High-Grade Life Stone com alta chance de Item Skills.' },
+  lifestone_top: { id: 'lifestone_top', name: 'Top-Grade Life Stone 💎', grade: 'top', slot: 'material', type: 'lifestone', tier: 6, rarity: 'sovereign', price: 1000000, desc: 'Top-Grade Life Stone suprema com 40% de Brilho e 25% de Item Skills Épicas.' }
+};
+
+export const BELT_ITEMS = {
+  belt_cloth: { id: 'belt_cloth', name: 'Cinto de Pano [No-Grade]', slot: 'belt', tier: 1, rarity: 'common', price: 5000, desc: 'Cinto simples de tecido. +500 Limite de Peso.' },
+  belt_leather: { id: 'belt_leather', name: 'Cinto de Couro [D-Grade]', slot: 'belt', tier: 2, rarity: 'rare', price: 25000, desc: 'Cinto reforçado de couro. +1000 Limite de Peso, +10 P.Def.' },
+  belt_iron: { id: 'belt_iron', name: 'Cinto de Ferro [C-Grade]', slot: 'belt', tier: 3, rarity: 'epic', price: 75000, desc: 'Cinto cravado em ferro. +1500 Limite de Peso, +20 P.Def.' },
+  belt_mithril: { id: 'belt_mithril', name: 'Cinto de Mithril [B-Grade]', slot: 'belt', tier: 4, rarity: 'epic', price: 200000, desc: 'Cinto encantado de Mithril. +2000 Limite de Peso, +35 P.Def.' },
+  belt_blessed_top: { id: 'belt_blessed_top', name: 'Blessed Top-Grade Magic Ornament Belt [S]', slot: 'belt', tier: 6, rarity: 'legendary', price: 1000000, desc: 'Cinto Sagrado Supremo: +7.2% Defesa Geral (PvE), +6% Dano Físico e Skills.' }
 };
 
 export function getAttributeDamageBonus(attackerAttr = 0, targetAttrDef = 0) {
@@ -30,29 +45,15 @@ export function getAttributeDamageBonus(attackerAttr = 0, targetAttrDef = 0) {
 }
 
 export const BELT_COMPOUND_RATES = {
-  1: { rate: 0.70, label: 'N├¡vel 1 (70% Sucesso)' },
-  2: { rate: 0.25, label: 'N├¡vel 2 (25% Sucesso)' },
-  3: { rate: 0.15, label: 'N├¡vel 3 (15% Sucesso)' }
-};
-
-export const BELT_GRADES = {
-  blessed_top_belt: {
-    id: 'blessed_top_belt',
-    name: 'Blessed Top-Grade Magic Ornament Belt [S]',
-    defBonus: 0.072,
-    atkBonus: 0.060,
-    skillDmgBonus: 0.060,
-    desc: 'Cinto Sagrado: +7.2% Defesa Geral (PvE) & +6% Dano de Ataque F├¡sico e Skills'
-  }
+  1: { rate: 0.30, label: 'Síntese de Cinto (30% Sucesso)' }
 };
 
 export const SUPERIOR_LIFE_STONE_AUGMENTS = [
-  { id: 'might', name: 'Item Skill: Might', icon: 'ÔÜö´©Å', desc: 'P.Atk +8% (PvE Geral)', pAtkMult: 0.08 },
-  { id: 'empower', name: 'Item Skill: Empower', icon: '­ƒö«', desc: 'M.Atk +15% (PvE Geral)', mAtkMult: 0.15 },
-  { id: 'shield', name: 'Item Skill: Shield', icon: '­ƒøí´©Å', desc: 'P.Def +10% (PvE Geral)', pDefMult: 0.10 },
-  { id: 'magicBarrier', name: 'Item Skill: Magic Barrier', icon: 'Ô£¿', desc: 'M.Def +12% (PvE Geral)', mDefMult: 0.12 },
-  { id: 'focus', name: 'Item Skill: Focus', icon: '­ƒÄ»', desc: 'P.Crit.Rate +50 pt.', critRateAdd: 50 },
-  { id: 'wildMagic', name: 'Item Skill: Wild Magic', icon: 'ÔÜí', desc: 'M.Crit.Rate +4 pt.', mCritAdd: 4 },
-  { id: 'vampiricRage', name: 'Item Skill: Vampiric Rage', icon: '­ƒ®©', desc: 'Vampiric Rage +6% (Dano Convertido em HP)', lifestealAdd: 0.06 },
-  { id: 'celestialShield', name: 'Item Skill: Lesser Celestial Shield', icon: '­ƒîƒ', desc: 'Invencibilidade Tempor├íria por 7s', celestial: true }
+  { id: 'might', name: 'Item Skill: Might', desc: 'P.Atk +8% (PvE Geral)', pAtkMult: 0.08 },
+  { id: 'empower', name: 'Item Skill: Empower', desc: 'M.Atk +15% (PvE Geral)', mAtkMult: 0.15 },
+  { id: 'shield', name: 'Item Skill: Shield', desc: 'P.Def +10% (PvE Geral)', pDefMult: 0.10 },
+  { id: 'magicBarrier', name: 'Item Skill: Magic Barrier', desc: 'M.Def +12% (PvE Geral)', mDefMult: 0.12 },
+  { id: 'focus', name: 'Item Skill: Focus', desc: 'P.Crit.Rate +50 pt.', critRateAdd: 50 },
+  { id: 'wildMagic', name: 'Item Skill: Wild Magic', desc: 'M.Crit.Rate +4 pt.', mCritAdd: 4 },
+  { id: 'vampiricRage', name: 'Item Skill: Vampiric Rage', desc: 'Vampiric Rage +6%', lifestealAdd: 0.06 }
 ];

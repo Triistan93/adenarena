@@ -163,8 +163,17 @@ export function consolidateInventoryStacks(state) {
 
 export function addToInventory(state, itemId, amount = 1, rarity = null, foundation = false, callbacks = {}, skipAutoSell = false) {
   const gData = D();
-  const def = gData?.ALL_ITEMS?.[itemId];
-  if (!def) return false;
+  const def = gData?.ALL_ITEMS?.[itemId] || {
+    id: itemId,
+    name: itemId.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+    slot: itemId.includes('crystal') ? 'crystal' : (itemId.includes('stone') ? 'material' : (itemId.includes('belt') ? 'belt' : 'consumable')),
+    type: itemId.includes('crystal') ? 'soul_crystal' : 'item',
+    isSoulCrystal: itemId.includes('crystal'),
+    stage: 1,
+    tier: 3,
+    rarity: 'rare',
+    desc: 'Item místico de Aden.'
+  };
 
   const maxSlots = getMaxInventorySlots(state);
 

@@ -18,14 +18,19 @@ import {
   ZONE_GOLD_MULT, MYSTIC_POOL, ZONE_CONSUMABLES,
   getZoneDropTier, rollRarity, rollDrop, rollDropLegacy, getMysticRotation, rollItemWithRarity
 } from './recipes_drops.js';
-import { ELEMENT_OPPOSITES, ELEMENTAL_STONES, getAttributeDamageBonus } from './attributes_belts.js';
+import { ELEMENT_OPPOSITES, ELEMENTAL_STONES, LIFE_STONE_ITEMS, BELT_ITEMS, getAttributeDamageBonus } from './attributes_belts.js';
+import { SOUL_CRYSTAL_ITEMS } from './soul_crystals.js';
 import { RAID_BOSSES } from '../raids.js';
 
 export const ALL_ITEMS = {
   ...WEAPONS, ...ARMORS, ...HELMETS, ...BOOTS, ...GLOVES, ...RINGS,
   ...LEGS, ...SHIELDS, ...BELTS, ...CLOAKS, ...SIGILS, ...NECKLACES,
   ...EARRINGS, ...HAIR, ...AGATHIONS, ...CONSUMABLES, ...MATERIALS,
-  ...HEIRLOOM_ITEMS
+  ...HEIRLOOM_ITEMS,
+  ...SOUL_CRYSTAL_ITEMS,
+  ...ELEMENTAL_STONES,
+  ...LIFE_STONE_ITEMS,
+  ...BELT_ITEMS
 };
 
 if (typeof window !== 'undefined') {
