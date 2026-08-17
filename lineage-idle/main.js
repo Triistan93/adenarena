@@ -6624,9 +6624,11 @@ export function init() {
       return res;
     };
     window.leaveClanAction = () => {
+      if (!confirm('⚠️ Tem certeza que deseja DEIXAR o clã? Essa ação não pode ser desfeita!')) return;
       const res = ClanService.leaveClan(state, { log, updateAllUI, save });
-      window._activeClanUnjoinedTab = 'browse';
-      updateAllUI();
+      window._activeClanUnjoinedTab = 'create';
+      window._activeClanSubTab = 'members';
+      updateClanUI();
       save();
       return res;
     };
