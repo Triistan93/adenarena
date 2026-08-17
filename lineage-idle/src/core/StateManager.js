@@ -38,7 +38,8 @@ export const DEFAULT_STATE = () => ({
   prestigeLevel: 0, astralShards: 0, astralMastery: {},
   expeditions: [], castles: {}, manorSeeds: {}, manorCrops: {},
   soulCrystals: {}, weaponSockets: {}, tattoos: [],
-  fateWhisperQuest: false, masterAbilities: [], activeTransformation: null
+  fateWhisperQuest: false, masterAbilities: [], activeTransformation: null,
+  clan: { joined: false }, clanCoins: 0, clanDonationsToday: 0, clanLastDonationDay: 0, worldClans: null
 });
 
 let currentState = DEFAULT_STATE();
@@ -185,6 +186,18 @@ export function loadState() {
     currentState.autoPotionActive = !!data.autoPotionActive;
     currentState.combatSpeed = data.combatSpeed === 2 ? 2 : 1;
     currentState.selectedSkill = data.selectedSkill || null;
+
+    // Migração e sanitização segura do sistema de Clãs
+    if (data.clan && data.clan.joined === true && data.clan.crestId && data.clan.name) {
+      currentState.clan = data.clan;
+    } else {
+      currentState.clan = { joined: false };
+    }
+    currentState.clanCoins = Number(data.clanCoins) || 0;
+    currentState.clanDonationsToday = Number(data.clanDonationsToday) || 0;
+    currentState.clanLastDonationDay = Number(data.clanLastDonationDay) || 0;
+    currentState.worldClans = Array.isArray(data.worldClans) && data.worldClans.length > 0 ? data.worldClans : null;
+
     currentState.startTime = Date.now();
 
     if (isBackupRestore) {

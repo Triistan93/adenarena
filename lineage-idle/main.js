@@ -6655,6 +6655,12 @@ export function init() {
       save();
       return res;
     };
+    window.surrenderSiegeAction = () => {
+      state.activeSiege = null;
+      log('🏳️ O Cerco ao Castelo foi cancelado.', 'system');
+      updateAllUI();
+      save();
+    };
     window.claimCastleTaxesAction = (castleId) => {
       const res = ClanService.claimCastleTaxes(state, castleId, {
         log,

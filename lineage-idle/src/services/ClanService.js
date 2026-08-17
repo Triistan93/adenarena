@@ -25,7 +25,7 @@ export class ClanService {
       state.worldClans = JSON.parse(JSON.stringify(DEFAULT_WORLD_CLANS));
     }
 
-    if (!state.clan || state.clan.joined === false) {
+    if (!state.clan || state.clan.joined !== true || !state.clan.crestId) {
       return {
         hasClan: false,
         worldClans: state.worldClans,
@@ -599,9 +599,7 @@ export class ClanService {
     const updateAllUI = callbacks.updateAllUI || (() => {});
     const save = callbacks.save || (() => {});
 
-    if (!state.clan || !state.clan.joined) return { success: false };
-
-    const clanName = state.clan.name;
+    const clanName = state.clan?.name || 'Clã';
     state.clan = { joined: false };
 
     log(`🚪 Você deixou o Clã [${clanName}].`, 'warning');
@@ -620,8 +618,13 @@ export class ClanService {
 
     if (!castle) return { success: false, reason: 'invalid_castle' };
 
-    if ((state.clan?.level || 1) < (castle.reqClanLevel || 5)) {
-      log(`Apenas Clãs de Nível ${castle.reqClanLevel || 5}+ podem declarar Cerco a ${castle.name}.`, 'error');
+    if ((state.level || 1) < (castle.reqCharLevel || 40)) {
+      log(`⚠️ Nível insuficiente! Requer Nível ${castle.reqCharLevel}+ de Personagem para declarar Cerco a ${castle.name}.`, 'warning');
+      return { success: false, reason: 'char_level_low' };
+    }
+
+    if ((state.clan?.level || 1) < (castle.reqClanLevel || 1)) {
+      log(`⚠️ Nível de Clã insuficiente! Apenas Clãs de Nível ${castle.reqClanLevel || 1}+ podem declarar Cerco a ${castle.name}.`, 'warning');
       return { success: false, reason: 'clan_level_low' };
     }
 

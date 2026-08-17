@@ -5820,6 +5820,61 @@ export function renderClanTab(container, state) {
   // 5. SUB-ABA: CASTELOS & GUERRAS DE CERCO
   // -------------------------------------------------------------
   else if (activeSubTab === 'castles') {
+    let activeSiegeBannerHtml = '';
+    const siege = state.activeSiege;
+    if (siege && !siege.isCompleted) {
+      const phaseNames = {
+        1: 'Fase 1: Destruição dos Portões Exteriores',
+        2: 'Fase 2: Confronto com a Guarda Real do Castelo',
+        3: 'Fase 3: Sala do Trono — Canalização do Seal of Ruler'
+      };
+
+      const hpCurrent = siege.phase === 1 ? siege.gateHp : (siege.phase === 2 ? siege.guardsHp : siege.castRounds);
+      const hpMax = siege.phase === 1 ? siege.maxGateHp : (siege.phase === 2 ? siege.maxGuardsHp : siege.reqCastRounds);
+      const hpPercent = Math.min(100, Math.max(0, Math.round((hpCurrent / hpMax) * 100)));
+
+      activeSiegeBannerHtml = `
+        <div style="background:rgba(0,0,0,0.6); border:2px solid #ef4444; border-radius:8px; padding:16px; margin-bottom:16px; box-shadow:0 0 14px rgba(239,68,68,0.35);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:10px;">
+            <div>
+              <div style="font-family:'Cinzel',serif; font-size:16px; font-weight:bold; color:#f87171;">⚔️ CERCO ATIVO EM ANDAMENTO: ${siege.castleName}</div>
+              <div style="font-size:12px; color:#fde047; font-weight:bold;">${phaseNames[siege.phase]}</div>
+            </div>
+            <div style="display:flex; gap:8px;">
+              <button
+                onclick="window.executeSiegeTurnAction()"
+                style="padding:10px 20px; font-family:'Cinzel',serif; font-size:13px; font-weight:bold; background:linear-gradient(180deg,#dc2626,#b91c1c); border:1px solid #f87171; color:#fff; border-radius:6px; cursor:pointer; box-shadow:0 0 12px rgba(239,68,68,0.5);"
+              >
+                ${siege.phase === 3 ? '✨ Canalizar Seal of Ruler' : '⚔️ Desferir Ataque do Clã'}
+              </button>
+              <button
+                onclick="window.surrenderSiegeAction()"
+                style="padding:10px 14px; font-size:11px; background:rgba(0,0,0,0.5); border:1px solid #71717a; color:#a1a1aa; border-radius:6px; cursor:pointer;"
+              >
+                🏳️ Recuar
+              </button>
+            </div>
+          </div>
+
+          <!-- Barra de Progresso da Fase -->
+          <div style="margin-bottom:12px;">
+            <div style="display:flex; justify-content:space-between; font-size:11px; color:#cbd5e1; margin-bottom:4px;">
+              <span>${siege.phase === 3 ? 'Progresso do Selo Sagrado' : 'HP do Alvo da Fase'}</span>
+              <span>${hpCurrent.toLocaleString()} / ${hpMax.toLocaleString()} (${hpPercent}%)</span>
+            </div>
+            <div style="width:100%; height:12px; background:#18181b; border-radius:6px; overflow:hidden; border:1px solid #3f3f46;">
+              <div style="width:${hpPercent}%; height:100%; background:${siege.phase === 3 ? 'linear-gradient(90deg,#eab308,#fde047)' : 'linear-gradient(90deg,#ef4444,#dc2626)'}; transition:width 0.3s ease;"></div>
+            </div>
+          </div>
+
+          <!-- Log do Cerco -->
+          <div style="background:#09090b; border:1px solid #27272a; border-radius:6px; padding:10px; max-height:120px; overflow-y:auto; font-family:monospace; font-size:11px; color:#cbd5e1;">
+            ${(siege.logs || []).map(l => `<div style="margin-bottom:3px;">${l}</div>`).join('')}
+          </div>
+        </div>
+      `;
+    }
+
     const castlesHtml = Object.values(CASTLES).map(c => {
       const isOwned = (clan.castles || []).includes(c.id);
       const accTax = (clan.accumulatedTaxes || {})[c.id] || 0;
@@ -5835,7 +5890,7 @@ export function renderClanTab(container, state) {
             <div style="font-size:11px; color:#94a3b8; display:flex; gap:14px; flex-wrap:wrap;">
               <span>📊 Imposto Comercial: <strong style="color:#fde047;">${c.taxRatePercent}%</strong></span>
               <span>💰 Renda: <strong style="color:#a3e635;">${c.adenaPerMinute.toLocaleString()} Adena/min</strong></span>
-              <span>⚔️ Requisito: <strong>Lv. ${c.reqCharLevel}+</strong></span>
+              <span>⚔️ Requisito: <strong>Nv. ${c.reqCharLevel}+ (Clã Lv. ${c.reqClanLevel || 1}+)</strong></span>
             </div>
             ${isOwned ? `
               <div style="margin-top:8px; font-size:11.5px; color:#fef08a;">
@@ -5864,7 +5919,7 @@ export function renderClanTab(container, state) {
       `;
     }).join('');
 
-    subContentHtml = `<div>${castlesHtml}</div>`;
+    subContentHtml = `<div>${activeSiegeBannerHtml}${castlesHtml}</div>`;
   }
 
   // Progresso de EXP do Clã
