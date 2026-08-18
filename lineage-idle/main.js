@@ -3363,8 +3363,21 @@ function updateMonsterHP() { const fill = el('m-hp-fill'), mon = state.activeMon
 
 
 function reflow(n) { void n.offsetWidth; }
-function stageHeroAttack() { const st = el('stage'); if (!st) return; st.classList.remove('is-hero-atk'); reflow(st); st.classList.add('is-hero-atk'); }
-function stageMonsterHurt(dmg, crit) { updateMonsterHP(); const m = el('stage-monster'); if (m) { m.classList.remove('hurt'); reflow(m); m.classList.add('hurt'); setTimeout(() => m.classList.remove('hurt'), 420); } stageFloat((crit ? 'CRIT ' : '') + Math.round(dmg), crit ? 'sf-crit' : 'sf-dmg', 'right'); }
+function stageHeroAttack() { 
+  const st = el('stage'); 
+  if (st) { st.classList.remove('is-hero-atk'); reflow(st); st.classList.add('is-hero-atk'); }
+  if (window._gameCanvas2DInstance) window._gameCanvas2DInstance.triggerHeroAttack();
+}
+function stageMonsterHurt(dmg, crit) { 
+  updateMonsterHP(); 
+  const m = el('stage-monster'); 
+  if (m) { m.classList.remove('hurt'); reflow(m); m.classList.add('hurt'); setTimeout(() => m.classList.remove('hurt'), 420); } 
+  stageFloat((crit ? 'CRIT ' : '') + Math.round(dmg), crit ? 'sf-crit' : 'sf-dmg', 'right');
+  if (window._gameCanvas2DInstance) {
+    window._gameCanvas2DInstance.addDamageNumber(Math.round(dmg), null, null, crit ? 'crit' : 'normal');
+    window._gameCanvas2DInstance.addHitEffect(null, null, state.soulshotActive);
+  }
+}
 function stageMonsterDie() { 
   const fill = el('m-hp-fill'); 
   if (fill) fill.style.width = '0%'; 
@@ -3378,7 +3391,15 @@ function stageMonsterDie() {
   stageFloat('SLAIN', 'sf-slain', 'right'); 
 }
 function stageMonsterLunge() { const m = el('stage-monster'); if (!m) return; m.classList.remove('lunge'); reflow(m); m.classList.add('lunge'); setTimeout(() => m.classList.remove('lunge'), 440); }
-function stageHeroHurt(dmg) { const h = el('stage-hero'); if (h) { h.classList.remove('hurt'); reflow(h); h.classList.add('hurt'); setTimeout(() => h.classList.remove('hurt'), 420); } stageFloat('-' + Math.round(dmg), 'sf-hurt', 'left'); }
+function stageHeroHurt(dmg) { 
+  const h = el('stage-hero'); 
+  if (h) { h.classList.remove('hurt'); reflow(h); h.classList.add('hurt'); setTimeout(() => h.classList.remove('hurt'), 420); } 
+  stageFloat('-' + Math.round(dmg), 'sf-hurt', 'left');
+  if (window._gameCanvas2DInstance) {
+    window._gameCanvas2DInstance.triggerHeroHurt();
+    window._gameCanvas2DInstance.addDamageNumber(Math.round(dmg), null, null, 'hero_damage');
+  }
+}
 function stageHeroBlock() { stageFloat('BLOCK', 'sf-block', 'left'); }
 const MAX_FLOAT_ITEMS = 12;
 function stageFloat(text, cls, side) {
@@ -7249,19 +7270,44 @@ export function init() {
 
       // ─── 2D Canvas Engine Setup ───────────────────────────────────────
       try {
-        const canvasEl = document.getElementById('combat-canvas-2d');
-        if (canvasEl && !window._gameCanvas2DInstance) {
-          window._gameCanvas2DInstance = new GameCanvas2D(canvasEl);
+        const canvasEl = el('combat-canvas-2d');
+        const stageEl = el('stage');
+        if (canvasEl) {
+          canvasEl.style.display = 'block';
+          canvasEl.style.position = 'absolute';
+          canvasEl.style.top = '0';
+          canvasEl.style.left = '0';
+          canvasEl.style.width = '100%';
+          canvasEl.style.height = '100%';
+          canvasEl.style.zIndex = '5';
+          canvasEl.style.pointerEvents = 'none';
+
+          if (!window._gameCanvas2DInstance) {
+            window._gameCanvas2DInstance = new GameCanvas2D(canvasEl, () => state);
+          }
         }
-        const toggleBtn = document.getElementById('toggle-2d-canvas-btn');
+
+        const toggleBtn = el('toggle-2d-canvas-btn');
         if (toggleBtn) {
-          toggleBtn.onclick = () => {
+          const sync2DMode = (isActive) => {
             if (canvasEl) {
-              const isHidden = canvasEl.style.display === 'none';
-              canvasEl.style.display = isHidden ? 'block' : 'none';
-              toggleBtn.textContent = isHidden ? '🎮 2D Pixel: ON' : '🎮 2D Pixel: OFF';
-              toggleBtn.style.background = isHidden ? 'linear-gradient(180deg,#d97706,#b45309)' : '#3f3f46';
+              canvasEl.style.display = isActive ? 'block' : 'none';
             }
+            if (stageEl) {
+              if (isActive) stageEl.classList.add('mode-2d-active');
+              else stageEl.classList.remove('mode-2d-active');
+            }
+            toggleBtn.textContent = isActive ? '🎮 2D Pixel: ON' : '🎮 2D Pixel: OFF';
+            toggleBtn.style.background = isActive ? 'linear-gradient(180deg,#d97706,#b45309)' : '#3f3f46';
+          };
+
+          const initial2D = state.pixelMode2D !== false;
+          sync2DMode(initial2D);
+
+          toggleBtn.onclick = () => {
+            state.pixelMode2D = !state.pixelMode2D;
+            sync2DMode(state.pixelMode2D);
+            if (typeof save === 'function') save();
           };
         }
       } catch (e) {

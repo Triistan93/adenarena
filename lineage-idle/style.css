@@ -416,6 +416,20 @@ select:focus-visible {
   box-shadow: 0 0 10px rgba(212,167,68,0.6);
 }
 
+.stage.mode-2d-active .stage-bg-a,
+.stage.mode-2d-active .stage-bg-b,
+.stage.mode-2d-active .stage-hero,
+.stage.mode-2d-active .stage-monster,
+.stage.mode-2d-active .stage-vs {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.stage.mode-2d-active #combat-canvas-2d {
+  opacity: 1 !important;
+  display: block !important;
+}
+
 .shop-bulk-actions {
   display: flex;
   gap: 4px;
