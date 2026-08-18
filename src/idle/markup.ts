@@ -89,6 +89,7 @@ export const IDLE_MARKUP = `
           <div class="stage-bg stage-bg-b" id="stage-bg-b"></div>
           <div class="stage-zone" id="stage-zone">—</div>
           <div class="combat-controls-bar">
+            <button id="toggle-2d-canvas-btn" class="combat-ctrl-btn" title="Alternar Modo 2D Pixel Art" style="cursor:pointer; font-size:11px; padding:2px 8px; background:linear-gradient(180deg,#d97706,#b45309); border:1px solid #fde047; color:#fff; border-radius:4px; font-weight:bold;">🎮 2D Pixel: ON</button>
             <button id="combat-toggle-btn" class="combat-ctrl-btn active" title="Pausar ou Iniciar Caça Automática (Tecla P)">🛑 Parar Caça</button>
             <button id="soulshot-toggle-btn" class="combat-ctrl-btn" title="Ativar Soulshot no combate (+100% dano físico/mágico por golpe)">⚡ Soulshot: OFF</button>
             <button id="autopotion-toggle-btn" class="combat-ctrl-btn" title="Usar poções de HP automaticamente quando HP < 50%">🧪 Auto-Poção: OFF</button>
@@ -102,6 +103,7 @@ export const IDLE_MARKUP = `
               </select>
             </label>
           </div>
+          <canvas id="combat-canvas-2d" width="600" height="220" style="position:absolute; top:0; left:0; width:100%; height:100%; z-index:2; pointer-events:none; border-radius:8px; image-rendering:pixelated;"></canvas>
           <div class="stage-vs" aria-hidden="true">&#9876;</div>
           <div class="stage-hero" id="stage-hero">
             <div class="stage-entity-name stage-hero-name" id="hero-name">Tristan</div>
@@ -172,6 +174,7 @@ export const IDLE_MARKUP = `
           <button class="tab-btn" data-tab="raids">🐉 Raids &amp; Bosses</button>
           <button class="tab-btn" data-tab="olympiad">🏆 Olimpíadas &amp; Heróis</button>
           <button class="tab-btn" data-tab="clan">🛡️ Clã &amp; Castelos</button>
+          <button class="tab-btn" data-tab="market">🏛️ Mercado</button>
           <button class="tab-btn" data-tab="sevensigns">🏛️ Sete Selos</button>
           <button class="tab-btn" data-tab="fortress">⚔️ Fortalezas</button>
           <button class="tab-btn" data-tab="colosseum">🎭 Coliseu</button>
@@ -631,6 +634,9 @@ export const IDLE_MARKUP = `
 
           <!-- Clan, Castles & Siege Tab -->
           <div id="tab-clan" class="tab-pane"></div>
+
+          <!-- Market Tab -->
+          <div id="tab-market" class="tab-pane"></div>
 
           <!-- Seven Signs Tab -->
           <div id="tab-sevensigns" class="tab-pane"></div>

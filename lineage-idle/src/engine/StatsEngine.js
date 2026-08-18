@@ -591,6 +591,9 @@ export function getStats(state) {
   xpBoost += (Number(eb.xpBoost) || 0) + (Number(setB.xpBoost) || 0);
   goldBoost += (Number(eb.goldBoost || eb.adenaBoost) || 0) + (Number(setB.goldBoost || setB.adenaBoost) || 0);
 
+  let augCrit = 0;
+  let clanCdrBonus = 0;
+
   // Process Clan Skills Bonuses
   if (state.clan && state.clan.joined !== false && state.clan.level) {
     const clanLvl = state.clan.level;
@@ -602,14 +605,13 @@ export function getStats(state) {
     if (clanLvl >= 6) { augCrit += 10; } // Clan Guidance (+10% Crit Rate)
     if (clanLvl >= 7) { baseEva += 10; buffSpd += 8; } // Clan Agility (+10 Eva, +8 Spd)
     if (clanLvl >= 8) { buffAtkMult += 0.06; } // Clan Dominance (+6% All Atk)
-    if (clanLvl >= 9) { cdr += 0.10; mpRegenBonus += 0.15; } // Clan Clarity (+10% CDR, +15% MP)
+    if (clanLvl >= 9) { clanCdrBonus += 0.10; mpRegenBonus += 0.15; } // Clan Clarity (+10% CDR, +15% MP)
     if (clanLvl >= 10) { buffAtkMult += 0.15; buffDef += Math.floor(baseDef * 0.15); xpBoost += 0.15; luckBoost += 0.15; } // Clan Sovereignty
   }
 
   // Process Weapon Augmentation Stats
   const equippedWeaponItem = state.equipment?.weapon ? (state.inventory?.find(i => i.uid === state.equipment.weapon) || state.equipment.weapon) : null;
   const weaponAug = (equippedWeaponItem && typeof equippedWeaponItem === 'object') ? equippedWeaponItem.augmentation : null;
-  let augCrit = 0;
   if (weaponAug && weaponAug.stats) {
     if (weaponAug.stats.atk) buffAtk += weaponAug.stats.atk;
     if (weaponAug.stats.matk) buffMatk += weaponAug.stats.matk;
@@ -675,7 +677,7 @@ export function getStats(state) {
 
   const atkMult = 1 + buffAtkMult;
   const defMult = 1 + sk('heavyArmor') * 0.05;
-  const cdr = sk('quickRecycle') * 0.10;
+  const cdr = (sk('quickRecycle') * 0.10) + clanCdrBonus;
 
   const codexB = getCodexBonuses(state);
   // Process Soul Crystal (SA) Bonus on Equipped Weapon
