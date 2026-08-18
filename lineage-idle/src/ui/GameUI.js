@@ -6682,5 +6682,363 @@ export function renderColosseumTab(container, state) {
   `;
 }
 
+/**
+ * Renderiza a aba da Casa de Leilões e Mercado Aberto de Aden (Aden Coins & Adena).
+ */
+export function renderMarketTab(state) {
+  const container = document.getElementById('tab-market');
+  if (!container || !state) return;
+
+  import('../services/MarketService.js').then(({ MarketService }) => {
+    import('../data/market.js').then(({ MARKET_CATEGORIES, MARKET_CONFIG }) => {
+      const status = MarketService.getMarketStatus(state);
+      const activeSubTab = window._activeMarketSubTab || 'browse';
+      const selectedCategory = window._selectedMarketCategory || 'all';
+      const searchQuery = window._marketSearchQuery || '';
+      const sortBy = window._marketSortBy || 'recent';
+
+      let subTabContent = '';
+
+      // ─────────────────────────────────────────────────────────────
+      // 1. SUB-ABA: EXPLORAR OFERTAS / COMPRAR (BROWSE)
+      // ─────────────────────────────────────────────────────────────
+      if (activeSubTab === 'browse') {
+        const listings = MarketService.getCatalog(state, {
+          category: selectedCategory,
+          search: searchQuery,
+          sortBy
+        });
+
+        const categoryButtons = MARKET_CATEGORIES.map(cat => {
+          const isActive = selectedCategory === cat.id;
+          return `
+            <button
+              onclick="window.setMarketCategoryAction('${cat.id}')"
+              style="padding:6px 12px; font-size:11px; font-family:'Cinzel',serif; border-radius:6px; cursor:pointer; background:${isActive ? 'linear-gradient(180deg,#ca8a04,#a16207)' : 'rgba(0,0,0,0.5)'}; border:1px solid ${isActive ? '#fde047' : 'rgba(255,255,255,0.1)'}; color:${isActive ? '#fff' : '#cbd5e1'}; font-weight:${isActive ? 'bold' : 'normal'};"
+            >
+              ${cat.icon} ${cat.name}
+            </button>
+          `;
+        }).join('');
+
+        const listingsHtml = listings.length === 0
+          ? `<div style="text-align:center; padding:32px; color:#94a3b8; font-size:13px;">Nenhum item anunciado nesta categoria no momento.</div>`
+          : listings.map(l => {
+              const isAC = l.currency === 'adenCoin';
+              const priceTag = isAC
+                ? `<span style="color:#ffd700; font-weight:bold; font-size:13px;">🪙 ${l.unitPriceAdenCoins} AC</span>`
+                : `<span style="color:#a3e635; font-weight:bold; font-size:13px;">💰 ${l.unitPriceAdena.toLocaleString()}g</span>`;
+
+              const isOwner = l.sellerType === 'player';
+              const gradeBadge = l.grade && l.grade !== 'all'
+                ? `<span style="background:rgba(212,175,55,0.2); border:1px solid #ca8a04; color:#fde047; font-size:9px; padding:1px 5px; border-radius:4px; font-weight:bold;">${l.grade}</span>`
+                : '';
+
+              return `
+                <div style="background:rgba(0,0,0,0.6); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:10px 14px; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
+                  <div style="display:flex; align-items:center; gap:10px;">
+                    <div style="width:40px; height:40px; border-radius:6px; background:rgba(20,20,30,0.8); border:1px solid rgba(255,215,0,0.3); display:flex; align-items:center; justify-content:center; font-size:20px;">
+                      ${l.icon || '📦'}
+                    </div>
+                    <div>
+                      <div style="display:flex; align-items:center; gap:6px;">
+                        <strong style="color:#f8fafc; font-size:13px;">${l.name}</strong>
+                        ${l.enchant > 0 ? `<span style="color:#38bdf8; font-weight:bold; font-size:11px;">+${l.enchant}</span>` : ''}
+                        ${gradeBadge}
+                      </div>
+                      <div style="font-size:11px; color:#94a3b8; margin-top:2px;">
+                        Qtd: <strong style="color:#e2e8f0;">${l.quantity}</strong> | Vendedor: <span style="color:${isOwner ? '#38bdf8' : '#cbd5e1'}; font-weight:${isOwner ? 'bold' : 'normal'};">${l.sellerName}${isOwner ? ' (Você)' : ''}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="display:flex; align-items:center; gap:14px;">
+                    <div style="text-align:right;">
+                      <div style="font-size:10px; color:#94a3b8;">Preço Unitário:</div>
+                      ${priceTag}
+                    </div>
+                    <div>
+                      ${isOwner
+                        ? `<button onclick="window.cancelMarketListingAction('${l.id}')" style="padding:6px 12px; font-size:11px; background:rgba(239,68,68,0.2); border:1px solid #ef4444; color:#fca5a5; border-radius:6px; cursor:pointer;">↩️ Cancelar</button>`
+                        : `<button onclick="window.buyMarketItemAction('${l.id}')" style="padding:6px 14px; font-size:11.5px; font-weight:bold; font-family:'Cinzel',serif; background:linear-gradient(180deg,#16a34a,#15803d); border:1px solid #4ade80; color:#fff; border-radius:6px; cursor:pointer;">🛍️ Comprar</button>`
+                      }
+                    </div>
+                  </div>
+                </div>
+              `;
+            }).join('');
+
+        subTabContent = `
+          <div>
+            <!-- Barra de Filtros & Busca -->
+            <div style="display:flex; gap:10px; margin-bottom:12px; flex-wrap:wrap; align-items:center; justify-content:space-between;">
+              <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                ${categoryButtons}
+              </div>
+              <div style="display:flex; gap:8px;">
+                <input
+                  type="text"
+                  placeholder="Buscar item ou vendedor..."
+                  value="${(searchQuery || '').replace(/"/g, '&quot;')}"
+                  oninput="window.setMarketSearchAction(this.value)"
+                  style="background:#18181b; border:1px solid rgba(255,255,255,0.15); border-radius:6px; color:#fff; padding:6px 10px; font-size:11.5px; width:180px;"
+                />
+                <select
+                  onchange="window.setMarketSortAction(this.value)"
+                  style="background:#18181b; border:1px solid rgba(255,255,255,0.15); border-radius:6px; color:#cbd5e1; padding:6px 8px; font-size:11.5px;"
+                >
+                  <option value="recent" ${sortBy === 'recent' ? 'selected' : ''}>Mais Recentes</option>
+                  <option value="price_asc" ${sortBy === 'price_asc' ? 'selected' : ''}>Menor Preço</option>
+                  <option value="price_desc" ${sortBy === 'price_desc' ? 'selected' : ''}>Maior Preço</option>
+                  <option value="qty_desc" ${sortBy === 'qty_desc' ? 'selected' : ''}>Maior Quantidade</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Lista de Ofertas -->
+            <div style="display:flex; flex-direction:column; gap:8px; max-height:480px; overflow-y:auto; padding-right:4px;">
+              ${listingsHtml}
+            </div>
+          </div>
+        `;
+      }
+
+      // ─────────────────────────────────────────────────────────────
+      // 2. SUB-ABA: ANUNCIAR ITENS DA MOCHILA (SELL)
+      // ─────────────────────────────────────────────────────────────
+      else if (activeSubTab === 'sell') {
+        const inventory = (state.inventory || []).filter(it => it && it.itemId);
+        const selectedUid = window._marketSelectedSellUid || (inventory[0] ? (inventory[0].uid || inventory[0].itemId) : null);
+        const selectedItem = inventory.find(it => it.uid === selectedUid || it.itemId === selectedUid) || inventory[0];
+
+        const invItemsHtml = inventory.length === 0
+          ? `<div style="color:#94a3b8; font-size:12px; padding:20px; text-align:center;">Sua mochila está vazia.</div>`
+          : inventory.map(it => {
+              const isSel = (it.uid === selectedUid || it.itemId === selectedUid);
+              return `
+                <div
+                  onclick="window.selectMarketSellItemAction('${it.uid || it.itemId}')"
+                  style="cursor:pointer; padding:8px 10px; border-radius:6px; background:${isSel ? 'rgba(212,175,55,0.25)' : 'rgba(0,0,0,0.4)'}; border:1px solid ${isSel ? '#fde047' : 'rgba(255,255,255,0.08)'}; display:flex; justify-content:space-between; align-items:center;"
+                >
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <span style="font-size:16px;">${it.icon || '📦'}</span>
+                    <div>
+                      <div style="font-size:12px; color:#f8fafc; font-weight:${isSel ? 'bold' : 'normal'};">${it.name || it.itemId}</div>
+                      <div style="font-size:10px; color:#94a3b8;">Qtd: ${it.count || 1} ${it.grade ? '| Grau ' + it.grade : ''}</div>
+                    </div>
+                  </div>
+                  ${isSel ? `<span style="color:#fde047; font-size:11px; font-weight:bold;">Selecionado</span>` : ''}
+                </div>
+              `;
+            }).join('');
+
+        subTabContent = `
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+            <!-- Coluna 1: Mochila -->
+            <div style="background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:12px;">
+              <h4 style="margin:0 0 10px 0; font-family:'Cinzel',serif; font-size:14px; color:#fde047;">🎒 Escolha o Item da Mochila</h4>
+              <div style="display:flex; flex-direction:column; gap:6px; max-height:400px; overflow-y:auto; padding-right:4px;">
+                ${invItemsHtml}
+              </div>
+            </div>
+
+            <!-- Coluna 2: Formulário de Anúncio -->
+            <div style="background:rgba(0,0,0,0.5); border:1px solid rgba(234,179,8,0.3); border-radius:8px; padding:16px;">
+              <h4 style="margin:0 0 14px 0; font-family:'Cinzel',serif; font-size:14px; color:#fde047;">📢 Publicar Anúncio no Mercado</h4>
+
+              ${selectedItem ? `
+                <div style="background:rgba(20,20,30,0.8); border:1px solid rgba(212,175,55,0.3); border-radius:8px; padding:12px; margin-bottom:14px; display:flex; align-items:center; gap:12px;">
+                  <div style="font-size:28px;">${selectedItem.icon || '📦'}</div>
+                  <div>
+                    <div style="font-size:14px; font-weight:bold; color:#f8fafc;">${selectedItem.name || selectedItem.itemId}</div>
+                    <div style="font-size:11px; color:#94a3b8;">Disponível na Mochila: <strong style="color:#fde047;">${selectedItem.count || 1}</strong></div>
+                  </div>
+                </div>
+
+                <div style="margin-bottom:12px;">
+                  <label style="display:block; font-size:11.5px; color:#cbd5e1; margin-bottom:4px;">Quantidade a Vender:</label>
+                  <input
+                    id="mkt-sell-qty"
+                    type="number"
+                    min="1"
+                    max="${selectedItem.count || 1}"
+                    value="1"
+                    style="width:100%; box-sizing:border-box; background:#18181b; border:1px solid #ca8a04; color:#fff; padding:8px 10px; border-radius:6px; font-size:12px;"
+                  />
+                </div>
+
+                <div style="margin-bottom:12px;">
+                  <label style="display:block; font-size:11.5px; color:#cbd5e1; margin-bottom:4px;">Moeda de Recebimento:</label>
+                  <select
+                    id="mkt-sell-currency"
+                    onchange="window._marketSellCurrency = this.value; window.updateMarketFormAction && window.updateMarketFormAction()"
+                    style="width:100%; box-sizing:border-box; background:#18181b; border:1px solid #ca8a04; color:#fff; padding:8px 10px; border-radius:6px; font-size:12px;"
+                  >
+                    <option value="adenCoin" selected>🪙 Aden Coin (AC) — Moeda Premium de Jogadores</option>
+                    <option value="adena">💰 Adena (Ouro Padrão)</option>
+                  </select>
+                </div>
+
+                <div style="margin-bottom:14px;">
+                  <label style="display:block; font-size:11.5px; color:#cbd5e1; margin-bottom:4px;">Preço Unitário:</label>
+                  <input
+                    id="mkt-sell-price"
+                    type="number"
+                    min="1"
+                    placeholder="Ex: 10 (em AC) ou 50000 (em Adena)"
+                    style="width:100%; box-sizing:border-box; background:#18181b; border:1px solid #ca8a04; color:#fff; padding:8px 10px; border-radius:6px; font-size:12px;"
+                  />
+                </div>
+
+                <div style="background:rgba(234,179,8,0.1); border:1px solid rgba(234,179,8,0.2); border-radius:6px; padding:8px 10px; margin-bottom:14px; font-size:11px; color:#cbd5e1;">
+                  ℹ️ Taxa de anúncio: <strong>1% em Adena (mín. 1.000g)</strong> | Taxa de corretagem sobre a venda: <strong>5%</strong>
+                </div>
+
+                <button
+                  onclick="window.submitMarketListingAction('${selectedItem.uid || selectedItem.itemId}')"
+                  style="width:100%; padding:10px; font-family:'Cinzel',serif; font-size:13px; font-weight:bold; background:linear-gradient(180deg,#ca8a04,#a16207); border:1px solid #fde047; color:#fff; border-radius:6px; cursor:pointer;"
+                >
+                  📢 Publicar Anúncio
+                </button>
+              ` : `
+                <div style="color:#94a3b8; font-size:12px;">Selecione um item na lista ao lado para anunciar.</div>
+              `}
+            </div>
+          </div>
+        `;
+      }
+
+      // ─────────────────────────────────────────────────────────────
+      // 3. SUB-ABA: MEUS ANÚNCIOS & RESGATE DE LUCROS (MY_LISTINGS)
+      // ─────────────────────────────────────────────────────────────
+      else if (activeSubTab === 'my_listings') {
+        const myListings = (state.marketListings || []).filter(l => l.sellerType === 'player');
+        const claimable = state.marketClaimable || [];
+        const history = (state.marketHistory || []).slice(-15).reverse();
+
+        const myListingsHtml = myListings.length === 0
+          ? `<div style="color:#94a3b8; font-size:12px; padding:16px; text-align:center;">Você não possui nenhum anúncio ativo.</div>`
+          : myListings.map(l => `
+              <div style="background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.08); border-radius:6px; padding:8px 12px; display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                  <div style="font-size:12px; font-weight:bold; color:#f8fafc;">${l.name} (${l.quantity}x)</div>
+                  <div style="font-size:10.5px; color:#94a3b8;">Preço: <span style="color:#ffd700;">${l.currency === 'adenCoin' ? l.unitPriceAdenCoins + ' AC' : l.unitPriceAdena.toLocaleString() + 'g'}</span></div>
+                </div>
+                <button
+                  onclick="window.cancelMarketListingAction('${l.id}')"
+                  style="padding:5px 10px; font-size:11px; background:rgba(239,68,68,0.2); border:1px solid #ef4444; color:#fca5a5; border-radius:4px; cursor:pointer;"
+                >
+                  ↩️ Cancelar
+                </button>
+              </div>
+            `).join('');
+
+        const historyHtml = history.length === 0
+          ? `<div style="color:#94a3b8; font-size:12px; padding:12px; text-align:center;">Nenhuma transação recente registrada.</div>`
+          : history.map(h => `
+              <div style="font-size:11px; padding:6px 8px; border-bottom:1px solid rgba(255,255,255,0.05); display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                  <span style="color:${h.type === 'sale' ? '#4ade80' : '#38bdf8'}; font-weight:bold;">[${h.type === 'sale' ? 'VENDA' : 'COMPRA'}]</span>
+                  <span style="color:#e2e8f0; margin-left:4px;">${h.quantity}x ${h.itemName}</span>
+                </div>
+                <div style="font-weight:bold; color:#ffd700;">${h.totalEarned || h.totalPaid || ''}</div>
+              </div>
+            `).join('');
+
+        subTabContent = `
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+            <!-- Coluna 1: Anúncios Ativos -->
+            <div style="background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:12px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <h4 style="margin:0; font-family:'Cinzel',serif; font-size:14px; color:#fde047;">📋 Anúncios Ativos</h4>
+                <span style="font-size:11px; color:#94a3b8;">${myListings.length}/${MARKET_CONFIG.MAX_ACTIVE_LISTINGS}</span>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:6px; max-height:380px; overflow-y:auto; padding-right:4px;">
+                ${myListingsHtml}
+              </div>
+            </div>
+
+            <!-- Coluna 2: Lucros a Resgatar & Histórico -->
+            <div style="display:flex; flex-direction:column; gap:14px;">
+              <!-- Caixa de Resgate -->
+              <div style="background:linear-gradient(135deg,rgba(212,175,55,0.2),rgba(20,20,30,0.9)); border:1px solid #fde047; border-radius:8px; padding:14px; display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                  <div style="font-size:11px; color:#fef08a; text-transform:uppercase; font-weight:bold;">Lucros Pendentes de Vendas</div>
+                  <div style="font-size:18px; font-weight:bold; color:#ffd700; margin-top:2px;">
+                    🪙 ${status.claimableCoins} AC ${status.claimableAdena > 0 ? ` + 💰 ${status.claimableAdena.toLocaleString()}g` : ''}
+                  </div>
+                </div>
+                <button
+                  onclick="window.claimMarketEarningsAction()"
+                  ${(status.claimableCoins <= 0 && status.claimableAdena <= 0) ? 'disabled' : ''}
+                  style="padding:8px 16px; font-family:'Cinzel',serif; font-size:12px; font-weight:bold; background:${(status.claimableCoins > 0 || status.claimableAdena > 0) ? 'linear-gradient(180deg,#eab308,#ca8a04)' : '#3f3f46'}; border:1px solid ${(status.claimableCoins > 0 || status.claimableAdena > 0) ? '#fde047' : '#52525b'}; color:${(status.claimableCoins > 0 || status.claimableAdena > 0) ? '#000' : '#94a3b8'}; border-radius:6px; cursor:${(status.claimableCoins > 0 || status.claimableAdena > 0) ? 'pointer' : 'not-allowed'};"
+                >
+                  💰 Coletar Lucros
+                </button>
+              </div>
+
+              <!-- Histórico Recente -->
+              <div style="background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:12px; flex:1;">
+                <h4 style="margin:0 0 8px 0; font-family:'Cinzel',serif; font-size:13px; color:#fde047;">📜 Histórico de Transações</h4>
+                <div style="max-height:240px; overflow-y:auto;">
+                  ${historyHtml}
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      container.innerHTML = `
+        <div style="padding:14px; color:#e2e8f0;">
+          <!-- Header do Mercado -->
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:10px;">
+            <div>
+              <h2 style="font-family:'Cinzel',serif; font-size:20px; color:#fde047; margin:0 0 2px 0;">🏛️ Grand Bazaar &amp; Mercado de Aden</h2>
+              <p style="font-size:11.5px; color:#94a3b8; margin:0;">Compre e venda itens craftados, receitas e equipamentos por <strong>Aden Coins</strong> e <strong>Adena</strong>.</p>
+            </div>
+            <div style="display:flex; gap:12px; align-items:center; background:rgba(0,0,0,0.6); border:1px solid rgba(255,215,0,0.3); border-radius:8px; padding:6px 14px;">
+              <div>
+                <span style="font-size:10px; color:#94a3b8; display:block;">Seu Saldo:</span>
+                <strong style="color:#ffd700; font-size:13px;">🪙 ${(state.adenCoins || 0).toLocaleString()} AC</strong>
+              </div>
+              <div style="width:1px; height:24px; background:rgba(255,255,255,0.1);"></div>
+              <div>
+                <span style="font-size:10px; color:#94a3b8; display:block;">Adena:</span>
+                <strong style="color:#a3e635; font-size:13px;">💰 ${(state.gold || 0).toLocaleString()}g</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Navegação de Sub-Abas -->
+          <div style="display:flex; gap:8px; margin-bottom:14px; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:8px;">
+            <button
+              onclick="window.setMarketSubTabAction('browse')"
+              style="padding:8px 18px; font-family:'Cinzel',serif; font-size:12px; font-weight:bold; border-radius:6px; cursor:pointer; background:${activeSubTab === 'browse' ? 'linear-gradient(180deg,#ca8a04,#a16207)' : 'rgba(0,0,0,0.4)'}; border:1px solid ${activeSubTab === 'browse' ? '#fde047' : 'rgba(255,255,255,0.1)'}; color:${activeSubTab === 'browse' ? '#fff' : '#cbd5e1'};"
+            >
+              🛍️ Explorar Ofertas
+            </button>
+            <button
+              onclick="window.setMarketSubTabAction('sell')"
+              style="padding:8px 18px; font-family:'Cinzel',serif; font-size:12px; font-weight:bold; border-radius:6px; cursor:pointer; background:${activeSubTab === 'sell' ? 'linear-gradient(180deg,#ca8a04,#a16207)' : 'rgba(0,0,0,0.4)'}; border:1px solid ${activeSubTab === 'sell' ? '#fde047' : 'rgba(255,255,255,0.1)'}; color:${activeSubTab === 'sell' ? '#fff' : '#cbd5e1'};"
+            >
+              📢 Anunciar Itens
+            </button>
+            <button
+              onclick="window.setMarketSubTabAction('my_listings')"
+              style="padding:8px 18px; font-family:'Cinzel',serif; font-size:12px; font-weight:bold; border-radius:6px; cursor:pointer; background:${activeSubTab === 'my_listings' ? 'linear-gradient(180deg,#ca8a04,#a16207)' : 'rgba(0,0,0,0.4)'}; border:1px solid ${activeSubTab === 'my_listings' ? '#fde047' : 'rgba(255,255,255,0.1)'}; color:${activeSubTab === 'my_listings' ? '#fff' : '#cbd5e1'};"
+            >
+              📋 Meus Anúncios ${status.claimableCoins > 0 || status.claimableAdena > 0 ? `<span style="background:#ef4444; color:#fff; font-size:9px; padding:1px 5px; border-radius:10px; margin-left:4px;">!</span>` : ''}
+            </button>
+          </div>
+
+          <!-- Conteúdo da Sub-Aba Ativa -->
+          ${subTabContent}
+        </div>
+      `;
+    });
+  });
+}
+
 export { renderRankingTab, setActiveRankingTab };
+
 

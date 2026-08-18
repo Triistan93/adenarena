@@ -209,6 +209,7 @@ import {
   renderFortressTab as uiRenderFortressTab,
   renderColosseumTab as uiRenderColosseumTab,
   renderRankingTab as uiRenderRankingTab,
+  renderMarketTab as uiRenderMarketTab,
   setActiveRankingTab as uiSetActiveRankingTab,
   openSkillEnchantModal,
   openAugmentModal,
@@ -221,6 +222,8 @@ import {
   renderCashShopModal,
   showDropLocatorModal
 } from './src/ui/GameUI.js';
+import { MarketService } from './src/services/MarketService.js';
+import { GameCanvas2D } from './src/engine/GameCanvas2D.js';
 import { CashShopService } from './src/services/CashShopService.js';
 import { NoblesseService } from './src/services/NoblesseService.js';
 import { OlympiadService } from './src/services/OlympiadService.js';
@@ -2637,6 +2640,10 @@ function updateRankingsUI() {
   if (pane) uiRenderRankingTab(pane, state);
 }
 
+function updateMarketUI() {
+  uiRenderMarketTab(state);
+}
+
 let _uiUpdateRafId = null;
 function updateAllUI(immediate = false) {
   // 1. Atualizações instantâneas e leves de números para feedback imediato ao clique
@@ -2646,6 +2653,7 @@ function updateAllUI(immediate = false) {
       const g1 = root.querySelector('#gold-count'); if (g1) g1.textContent = (state.gold || 0).toLocaleString();
       const g2 = root.querySelector('#shop-gold'); if (g2) g2.textContent = (state.gold || 0).toLocaleString();
       const spEl = root.querySelector('#sp-count'); if (spEl) spEl.textContent = (state.sp || 0).toLocaleString();
+      const acEl = root.querySelector('#top-ac-amount'); if (acEl) acEl.textContent = `${(state.adenCoins || 0).toLocaleString()} AC`;
     }
   } catch (e) {}
 
@@ -2706,6 +2714,7 @@ function _performFullUIUpdate() {
   if (isTabVisible('raids')) safeUiUpdate('raids', updateRaidsUI);
   if (isTabVisible('olympiad')) safeUiUpdate('olympiad', updateOlympiadUI);
   if (isTabVisible('clan')) safeUiUpdate('clan', updateClanUI);
+  if (isTabVisible('market')) safeUiUpdate('market', updateMarketUI);
   if (isTabVisible('sevensigns')) safeUiUpdate('sevensigns', updateSevenSignsUI);
   if (isTabVisible('fortress')) safeUiUpdate('fortress', updateFortressUI);
   if (isTabVisible('colosseum')) safeUiUpdate('colosseum', updateColosseumUI);
@@ -7176,6 +7185,88 @@ export function init() {
       window.claimRandomCraftReward = (idx) => {
         serviceClaimRandomCraft(state, idx, { log, updateAllUI, save });
       };
+
+      // ─── Mercado de Aden (Grand Bazaar) Handlers ───────────────────────
+      window.setMarketSubTabAction = (tab) => {
+        window._activeMarketSubTab = tab;
+        updateMarketUI();
+      };
+      window.setMarketCategoryAction = (catId) => {
+        window._selectedMarketCategory = catId;
+        updateMarketUI();
+      };
+      window.setMarketSearchAction = (query) => {
+        window._marketSearchQuery = query;
+        updateMarketUI();
+      };
+      window.setMarketSortAction = (sortBy) => {
+        window._marketSortBy = sortBy;
+        updateMarketUI();
+      };
+      window.selectMarketSellItemAction = (uid) => {
+        window._marketSelectedSellUid = uid;
+        updateMarketUI();
+      };
+      window.submitMarketListingAction = (uid) => {
+        const qtyInput = document.getElementById('mkt-sell-qty');
+        const priceInput = document.getElementById('mkt-sell-price');
+        const currencySelect = document.getElementById('mkt-sell-currency');
+        const quantity = qtyInput ? Number(qtyInput.value) : 1;
+        const price = priceInput ? Number(priceInput.value) : 0;
+        const currency = currencySelect ? currencySelect.value : 'adenCoin';
+
+        const res = MarketService.listItem(state, {
+          itemUid: uid,
+          quantity,
+          priceAdenCoins: currency === 'adenCoin' ? price : 0,
+          priceAdena: currency === 'adena' ? price : 0,
+          currency
+        }, { log, updateAllUI, save });
+
+        if (res.success) {
+          window._activeMarketSubTab = 'my_listings';
+          updateMarketUI();
+        }
+      };
+      window.buyMarketItemAction = (listingId) => {
+        const res = MarketService.buyItem(state, listingId, 1, { log, updateAllUI, save });
+        if (res.success) {
+          updateMarketUI();
+        }
+      };
+      window.cancelMarketListingAction = (listingId) => {
+        const res = MarketService.cancelListing(state, listingId, { log, updateAllUI, save });
+        if (res.success) {
+          updateMarketUI();
+        }
+      };
+      window.claimMarketEarningsAction = () => {
+        const res = MarketService.claimEarnings(state, { log, updateAllUI, save });
+        if (res.success) {
+          updateMarketUI();
+        }
+      };
+
+      // ─── 2D Canvas Engine Setup ───────────────────────────────────────
+      try {
+        const canvasEl = document.getElementById('combat-canvas-2d');
+        if (canvasEl && !window._gameCanvas2DInstance) {
+          window._gameCanvas2DInstance = new GameCanvas2D(canvasEl);
+        }
+        const toggleBtn = document.getElementById('toggle-2d-canvas-btn');
+        if (toggleBtn) {
+          toggleBtn.onclick = () => {
+            if (canvasEl) {
+              const isHidden = canvasEl.style.display === 'none';
+              canvasEl.style.display = isHidden ? 'block' : 'none';
+              toggleBtn.textContent = isHidden ? '🎮 2D Pixel: ON' : '🎮 2D Pixel: OFF';
+              toggleBtn.style.background = isHidden ? 'linear-gradient(180deg,#d97706,#b45309)' : '#3f3f46';
+            }
+          };
+        }
+      } catch (e) {
+        console.warn('Canvas 2D setup notice:', e);
+      }
     }
   } catch (err) {
     console.warn('Game init warning:', err);
@@ -7184,6 +7275,7 @@ export function init() {
 
 function tickUI() {
   const now = Date.now(); let buffChanged = false;
+  try { MarketService.processMarketSimulationTick(state, { log }); } catch (e) {}
   for (const k of Object.keys(state.buffs || {})) { if (state.buffs[k].until < now) { delete state.buffs[k]; buffChanged = true; } }
   const gpsEl = el('gps-text'); if (gpsEl) { gpsEl.textContent = getGoldPerSec() > 0 ? `${getGoldPerSec().toFixed(1)}/s` : '—'; }
   safeUiUpdate('stats-tick', updateStatsUI);

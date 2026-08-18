@@ -40,6 +40,7 @@ export const DEFAULT_STATE = () => ({
   soulCrystals: {}, weaponSockets: {}, tattoos: [],
   fateWhisperQuest: false, masterAbilities: [], activeTransformation: null,
   clan: { joined: false }, clanCoins: 0, clanDonationsToday: 0, clanLastDonationDay: 0, worldClans: null,
+  adenCoins: 50, marketListings: null, marketClaimable: [], marketHistory: [], lastMarketSimTime: 0,
   _clanSystemVersion: 3
 });
 
@@ -212,6 +213,12 @@ export function loadState() {
       currentState.worldClans = Array.isArray(data.worldClans) && data.worldClans.length > 0 ? data.worldClans : null;
       currentState._clanSystemVersion = 3;
     }
+
+    currentState.adenCoins = typeof data.adenCoins === 'number' && !isNaN(data.adenCoins) ? Math.max(0, data.adenCoins) : 50;
+    currentState.marketListings = Array.isArray(data.marketListings) ? data.marketListings : null;
+    currentState.marketClaimable = Array.isArray(data.marketClaimable) ? data.marketClaimable : [];
+    currentState.marketHistory = Array.isArray(data.marketHistory) ? data.marketHistory : [];
+    currentState.lastMarketSimTime = Number(data.lastMarketSimTime) || Date.now();
 
     currentState.startTime = Date.now();
 
