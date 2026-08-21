@@ -218,22 +218,21 @@ function buildEchoAdapter() {
       }
 
       let skillIcon = sk.icon || '';
-      if (!skillIcon || skillIcon === '✦' || skillIcon.length <= 4) {
+      if (!skillIcon || skillIcon === '✦' || skillIcon.length <= 4 || skillIcon.endsWith('.jpg')) {
         const sName = (rawName || '').toLowerCase();
         const sDesc = (sk.desc || sk.effect || '').toLowerCase();
+        const arch = (classDef.archetype || classId || '').toLowerCase();
+        const combined = `${sName} ${sDesc} ${arch} ${classId}`;
+        let hash = 0;
+        for (let c = 0; c < combined.length; c++) hash = (hash * 31 + combined.charCodeAt(c)) >>> 0;
+        const iconNum = (hash % 48) + 1;
 
-        if (/fire|flame|burn|blaze|prominence|burst/.test(sName + sDesc)) {
-          skillIcon = 'assets/skills/fire_strike.jpg';
-        } else if (/water|hydro|aqua|ice|freeze|frost|ocean/.test(sName + sDesc)) {
-          skillIcon = 'assets/skills/water_wave.jpg';
-        } else if (/wind|gale|air|cyclone|storm|typhoon|breeze/.test(sName + sDesc)) {
-          skillIcon = 'assets/skills/wind_blade.jpg';
-        } else if (/holy|light|sacred|divine|aegis|shield|bless|templar/.test(sName + sDesc)) {
-          skillIcon = 'assets/skills/holy_shield.jpg';
-        } else if (/vampiric|blood|drain|dark|shadow|curse|rose/.test(sName + sDesc)) {
-          skillIcon = 'assets/skills/vampiric_blood.jpg';
+        if (/holy|light|sacred|divine|aegis|shield|bless|templar|heal|sanctuary|prayer|aura|resurrect|angel|recovery|guard|buff|spirit|stance|barrier|purify/.test(combined)) {
+          skillIcon = `/assets/2d/icons/paladin-skills/PNG/Icon${iconNum}.png`;
+        } else if (/vampiric|blood|drain|dark|shadow|curse|rose|death|undead|bone|corpse|hex|poison|doom|abyss|ghost|touch|wolf|warg|decay|soul/.test(combined)) {
+          skillIcon = `/assets/2d/icons/undead-skills/PNG/Icon${iconNum}.png`;
         } else {
-          skillIcon = 'assets/skills/fire_strike.jpg';
+          skillIcon = `/assets/2d/icons/swordsman-skills/PNG/Icon${iconNum}.png`;
         }
       }
 
@@ -422,7 +421,7 @@ function buildEchoAdapter() {
         effect: 'drain',
         info: 'Mordida feral vampírica causando 220% de dano e recuperando 35% em HP.',
         desc: 'Mordida feral que drena a vitalidade do alvo.',
-        icon: 'assets/skills/vampiric_blood.jpg',
+        icon: '/assets/2d/icons/undead-skills/PNG/Icon12.png',
         classReq: classId,
         reqLvl: 76,
         starRank: 4
@@ -442,7 +441,7 @@ function buildEchoAdapter() {
         effect: 'drain',
         info: 'Toque sombrio que absorve 40% do dano causado diretamente em HP.',
         desc: 'Drena a essência vital do inimigo.',
-        icon: 'assets/skills/vampiric_blood.jpg',
+        icon: '/assets/2d/icons/undead-skills/PNG/Icon18.png',
         classReq: classId,
         reqLvl: 76,
         starRank: 4
@@ -462,7 +461,7 @@ function buildEchoAdapter() {
         effect: 'heal',
         info: 'Cura divina que restaura 25% do HP máximo do herói.',
         desc: 'Abençoa o conjurador restaurando pontos de vida.',
-        icon: 'assets/skills/holy_shield.jpg',
+        icon: '/assets/2d/icons/paladin-skills/PNG/Icon7.png',
         classReq: classId,
         reqLvl: 76,
         starRank: 4
@@ -481,7 +480,7 @@ function buildEchoAdapter() {
       effect: 'heal',
       info: 'Bandagem de batalha que restaura 20% do HP máximo.',
       desc: 'Trata ferimentos rapidamente durante o combate.',
-      icon: 'assets/skills/holy_shield.jpg',
+      icon: '/assets/2d/icons/paladin-skills/PNG/Icon14.png',
       classReq: classId,
       reqLvl: 76,
       starRank: 4
@@ -504,7 +503,7 @@ function buildEchoAdapter() {
         effect: 'dmg',
         info: idx === 1 ? 'Disparo de energia arcana causando 160% de dano mágico.' : 'Explosão de magia pura causando 220% de dano mágico.',
         desc: 'Ataque mágico focado.',
-        icon: 'assets/skills/fire_strike.jpg',
+        icon: idx === 1 ? '/assets/2d/icons/paladin-skills/PNG/Icon22.png' : '/assets/2d/icons/paladin-skills/PNG/Icon31.png',
         classReq: classId,
         reqLvl: idx === 1 ? 1 : 20,
         starRank: idx
@@ -522,7 +521,7 @@ function buildEchoAdapter() {
       effect: 'dmg',
       info: idx === 1 ? 'Golpe físico concentrado causando 150% de dano.' : 'Corte poderoso causando 200% de dano físico.',
       desc: 'Ataque marcial contundente.',
-      icon: 'assets/skills/fire_strike.jpg',
+      icon: idx === 1 ? '/assets/2d/icons/swordsman-skills/PNG/Icon1.png' : '/assets/2d/icons/swordsman-skills/PNG/Icon6.png',
       classReq: classId,
       reqLvl: idx === 1 ? 1 : 20,
       starRank: idx
@@ -543,7 +542,7 @@ function buildEchoAdapter() {
       effect: 'warcry',
       info: idx === 1 ? '+15% ATK / M.ATK por 120s.' : '+20% Defesa e +15% Chance Crítica por 120s.',
       desc: 'Fortalecimento de combate.',
-      icon: 'assets/skills/holy_shield.jpg',
+      icon: idx === 1 ? '/assets/2d/icons/paladin-skills/PNG/Icon4.png' : '/assets/2d/icons/paladin-skills/PNG/Icon10.png',
       classReq: classId,
       reqLvl: idx === 1 ? 40 : 60,
       starRank: idx + 2
@@ -651,7 +650,7 @@ function buildEchoAdapter() {
         effect: 'dmg',
         info: 'Dano transcendental supremo causando 450% de poder.',
         desc: 'Liberação de poder heroico no Nível 80+.',
-        icon: selectedDmg[0]?.icon || 'assets/skills/fire_strike.jpg',
+        icon: selectedDmg[0]?.icon || '/assets/2d/icons/swordsman-skills/PNG/Icon12.png',
         classReq: classId,
         isUltimate: false
       };
@@ -673,7 +672,7 @@ function buildEchoAdapter() {
         effect: 'warcry',
         info: '+40% ATK/M.ATK e +25% Dano Crítico por 120s.',
         desc: 'Domínio supremo de combate.',
-        icon: 'assets/skills/holy_shield.jpg',
+        icon: '/assets/2d/icons/paladin-skills/PNG/Icon28.png',
         classReq: classId,
         isUltimate: false
       };
@@ -695,7 +694,7 @@ function buildEchoAdapter() {
         effect: name.includes('warg') ? 'warcry' : 'dmg',
         info: name.includes('warg') ? 'Transformação em Lobo Ancestral: +60% ATK e +45% Crit Dmg por 60s.' : 'Dano supremo de 4 Estrelas causando 750% de poder com 100% de chance crítica.',
         desc: 'Habilidade Suprema de 4 Estrelas do Nível 80+.',
-        icon: name.includes('warg') ? 'assets/skills/vampiric_blood.jpg' : 'assets/skills/holy_shield.jpg',
+        icon: name.includes('warg') ? '/assets/2d/icons/undead-skills/PNG/Icon34.png' : '/assets/2d/icons/paladin-skills/PNG/Icon34.png',
         classReq: classId,
         isUltimate: true,
         requiredItemToUnlock: 'spellbook_4star'
