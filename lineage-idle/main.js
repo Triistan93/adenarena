@@ -2036,8 +2036,7 @@ function renderZoneInfoCard() {
 
   const dropsHtml = allDropIds.map(id => {
     const def = D().ALL_ITEMS ? D().ALL_ITEMS[id] : null;
-    if (!def) return '';
-    const icon = def.icon ? `<img src="img/items/${def.icon}" class="z-drop-img" onError="this.style.display='none'"/>` : '✦';
+    const icon = getItemIcon(def);
     return `<div class="z-drop-pill" title="${def.name}">${icon} <span>${def.name}</span></div>`;
   }).join('');
 

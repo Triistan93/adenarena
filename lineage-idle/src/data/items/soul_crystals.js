@@ -6,8 +6,8 @@ export const SOUL_CRYSTAL_ITEMS = {};
 
 const colors = [
   { key: 'red', name: 'Vermelho', icon: 'gradespecial/jewels/jewel_necklace_of_valakas.png' },
-  { key: 'green', name: 'Verde', icon: 'gradespecial/jewels/jewel_ring_of_queen_ant.png' },
-  { key: 'blue', name: 'Azul', icon: 'gradespecial/jewels/jewel_ring_of_core.png' }
+  { key: 'green', name: 'Verde', icon: 'gradespecial/jewels/jewel_ring_queen_ant.png' },
+  { key: 'blue', name: 'Azul', icon: 'gradespecial/jewels/jewel_ring_core.png' }
 ];
 
 for (const c of colors) {

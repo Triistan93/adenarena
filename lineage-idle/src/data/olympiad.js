@@ -18,7 +18,7 @@ export const INFINITY_WEAPONS = {
     mp: 250,
     req: { level: 76, isHero: true },
     price: 1000000,
-    icon: 'gradespecial/weapons/weapon_infinity_blade.png',
+    icon: 'gradespecial/weapons/zaken_sword.png',
     desc: 'Espada de Herói da Grand Olympiad: +280 P.Atk, +190 M.Atk, +12% Crit, +60 P.Def, +500 HP e Chance de Cancelar Buffs do Oponente.'
   },
   weapon_infinity_cleaver: {
@@ -34,7 +34,7 @@ export const INFINITY_WEAPONS = {
     hp: 750,
     req: { level: 76, isHero: true },
     price: 1000000,
-    icon: 'gradespecial/weapons/weapon_infinity_cleaver.png',
+    icon: 'gradespecial/weapons/orfen_twohanded_sword.png',
     desc: 'Espada de Duas Mãos do Herói: +345 P.Atk, +30% Dano Crítico, +15% Crit e +750 HP.'
   },
   weapon_infinity_axe: {
@@ -50,7 +50,7 @@ export const INFINITY_WEAPONS = {
     hp: 600,
     req: { level: 76, isHero: true },
     price: 1000000,
-    icon: 'gradespecial/weapons/weapon_infinity_axe.png',
+    icon: 'gradespecial/weapons/weapon_frost_lord_axe.png',
     desc: 'Machado de Guerra do Herói: +280 P.Atk, +25% Chance de Atordoamento (Stun), +10% Crit e +600 HP.'
   },
   weapon_infinity_rod: {
@@ -67,7 +67,7 @@ export const INFINITY_WEAPONS = {
     mp: 600,
     req: { level: 76, isHero: true },
     price: 1000000,
-    icon: 'gradespecial/weapons/weapon_infinity_rod.png',
+    icon: 'gradespecial/weapons/imperial_staff.png',
     desc: 'Cajado Mágico do Herói: +360 M.Atk, +20% Velocidade de Conjuração (Cast Spd), +15 MP Regen e +600 MP.'
   },
   weapon_infinity_bow: {
@@ -83,7 +83,7 @@ export const INFINITY_WEAPONS = {
     speed: 15,
     req: { level: 76, isHero: true },
     price: 1000000,
-    icon: 'gradespecial/weapons/weapon_infinity_bow.png',
+    icon: 'gradespecial/weapons/draconic_bow.png',
     desc: 'Arco Imperial do Herói: +395 P.Atk, +18% Crit, +25% Dano Crítico, +15 Velocidade de Movimento e Disparo Perfurante.'
   },
   weapon_infinity_dagger: {
@@ -99,7 +99,7 @@ export const INFINITY_WEAPONS = {
     atkSpeed: 15,
     req: { level: 76, isHero: true },
     price: 1000000,
-    icon: 'gradespecial/weapons/weapon_infinity_dagger.png',
+    icon: 'gradespecial/weapons/baium_dagger.png',
     desc: 'Adaga Mortal do Herói: +255 P.Atk, +22% Crit, +18 Evasão, +15% Velocidade de Ataque e Golpe Letal.'
   },
   weapon_infinity_spear: {
@@ -115,7 +115,7 @@ export const INFINITY_WEAPONS = {
     hp: 600,
     req: { level: 76, isHero: true },
     price: 1000000,
-    icon: 'gradespecial/weapons/weapon_infinity_spear.png',
+    icon: 'gradespecial/weapons/gorde_spear.png',
     desc: 'Lança de Titã do Herói: +295 P.Atk, +30% Dano em Área (AoE), +12% Crit e +600 HP.'
   },
   weapon_infinity_duals: {
@@ -131,7 +131,7 @@ export const INFINITY_WEAPONS = {
     hp: 550,
     req: { level: 76, isHero: true },
     price: 1000000,
-    icon: 'gradespecial/weapons/weapon_infinity_duals.png',
+    icon: 'gradespecial/weapons/juriel_dual_sword.png',
     desc: 'Lâminas Duplas do Herói: +340 P.Atk, +20% Velocidade de Ataque (Atk Spd), +16% Crit e +550 HP.'
   }
 };

@@ -2267,8 +2267,14 @@ export function updateSkillInfoPanel(state, callbacks = {}) {
     btnLabel = has4StarBook ? `📖 Consumir Livro 4★ & Aprender (${cost.toLocaleString()} SP)` : '🔒 Falta Spellbook 4★ na Mochila';
   }
 
+  const siIconVal = def.icon || '✦';
+  const isSiIconImg = siIconVal.endsWith('.jpg') || siIconVal.endsWith('.png') || siIconVal.includes('/');
+  const siIconHtml = isSiIconImg
+    ? `<img src="${getAssetUrl(siIconVal)}" class="skill-icon-img" alt="${def.name}" style="width:32px; height:32px; object-fit:cover; border-radius:6px; border:1px solid rgba(255,255,255,0.2); vertical-align:middle;" />`
+    : `<span class="si-icon">${siIconVal}</span>`;
+
   panel.innerHTML = `
-    <div class="si-head"><span class="si-icon">${def.icon || '✦'}</span><div class="si-title"><h3>${def.name}</h3><p class="si-tier">${tier} · Lv.${lvl}/${max}</p></div></div>
+    <div class="si-head">${siIconHtml}<div class="si-title"><h3>${def.name}</h3><p class="si-tier">${tier} · Lv.${lvl}/${max}</p></div></div>
     ${weaponReqBadge}
     ${star4BoxHtml}
     <p class="si-desc">${def.desc || def.note || ''}</p><div class="si-effect">${effectText}</div>
@@ -5435,7 +5441,7 @@ export function renderClanTab(container, state) {
       return `
         <div style="background:rgba(0,0,0,0.45); border:1px solid ${isUnlocked ? 'rgba(74,222,128,0.3)' : 'rgba(255,255,255,0.08)'}; border-radius:8px; padding:12px; display:flex; align-items:center; gap:12px;">
           <div style="width:40px; height:40px; border-radius:6px; background:#18181b; border:1px solid ${isUnlocked ? '#4ade80' : '#3f3f46'}; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-            <img src="${sk.icon}" style="width:32px; height:32px; object-fit:contain; filter:${isUnlocked ? 'none' : 'grayscale(100%) opacity(0.5)'};" />
+            <img src="${getAssetUrl(sk.icon.startsWith('img/') || sk.icon.startsWith('assets/') || sk.icon.startsWith('/') ? sk.icon : 'img/icons/' + sk.icon)}" style="width:32px; height:32px; object-fit:contain; filter:${isUnlocked ? 'none' : 'grayscale(100%) opacity(0.5)'};" onerror="this.style.display='none'" />
           </div>
           <div style="flex:1;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2px;">
@@ -5571,7 +5577,7 @@ export function renderClanTab(container, state) {
       <div style="background:rgba(0,0,0,0.45); border:1px solid rgba(234,179,8,0.3); border-radius:8px; padding:12px; display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:10px;">
         <div style="display:flex; align-items:center; gap:10px;">
           <div style="width:40px; height:40px; border-radius:6px; background:#18181b; border:1px solid #eab308; display:flex; align-items:center; justify-content:center;">
-            <img src="${item.icon}" style="width:32px; height:32px; object-fit:contain;" />
+            <img src="${getAssetUrl(item.icon.startsWith('img/') || item.icon.startsWith('assets/') || item.icon.startsWith('/') ? item.icon : 'img/icons/' + item.icon)}" style="width:32px; height:32px; object-fit:contain;" onerror="this.style.display='none'" />
           </div>
           <div>
             <div style="font-family:'Cinzel',serif; font-size:13px; font-weight:bold; color:#fde047;">${item.name}</div>
