@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App";
 
-// Force purge stale Service Workers & Web Caches to guarantee players load the latest release
+// Force purge stale Service Workers, Web Caches, and handle stale chunk reloads
 if (typeof window !== "undefined") {
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.getRegistrations().then((registrations) => {
@@ -19,6 +19,20 @@ if (typeof window !== "undefined") {
       }
     });
   }
+
+  window.addEventListener("error", (e) => {
+    const msg = e.message || "";
+    if (
+      msg.includes("Failed to fetch dynamically imported module") ||
+      msg.includes("Failed to load module script") ||
+      msg.includes("text/html")
+    ) {
+      if (!sessionStorage.getItem("chunk_reload_lock")) {
+        sessionStorage.setItem("chunk_reload_lock", "1");
+        window.location.reload();
+      }
+    }
+  });
 }
 
 createRoot(document.getElementById("root")!).render(

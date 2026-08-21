@@ -4,7 +4,7 @@
   "framework": "vite",
   "headers": [
     {
-      "source": "/index.html",
+      "source": "/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
@@ -32,7 +32,7 @@
   ],
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/((?!assets/|.*\\..*).*)",
       "destination": "/index.html"
     }
   ]
