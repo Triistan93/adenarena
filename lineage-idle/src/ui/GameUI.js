@@ -2121,10 +2121,13 @@ export function updateSkillUI(state, callbacks = {}) {
       badgeHtml = `<span style="position:absolute; top:-6px; right:-4px; background:#f59e0b; color:#000; font-size:9px; padding:1px 3px; border-radius:3px; font-weight:bold; box-shadow:0 0 6px #f59e0b; animation:pulse 1.2s infinite;">⭐ Livro OK</span>`;
     }
 
-    const iconVal = def.icon || '✦';
+    let iconVal = def.icon || '✦';
+    if (iconVal.endsWith('.jpg') && !iconVal.includes('/')) {
+      iconVal = `/assets/skills/${iconVal}`;
+    }
     const isIconImg = iconVal.endsWith('.jpg') || iconVal.endsWith('.png') || iconVal.includes('/');
     const iconHtml = isIconImg 
-      ? `<img src="${iconVal}" class="skill-icon-img" alt="${def.name}" style="width:24px; height:24px; object-fit:cover; border-radius:4px; border:1px solid rgba(255,255,255,0.2);" />` 
+      ? `<img src="${getAssetUrl(iconVal)}" class="skill-icon-img" alt="${def.name}" style="width:24px; height:24px; object-fit:cover; border-radius:4px; border:1px solid rgba(255,255,255,0.2);" onerror="this.style.display='none'" />` 
       : `<span class="skill-icon">${iconVal}</span>`;
 
     node.innerHTML = `
@@ -2267,10 +2270,13 @@ export function updateSkillInfoPanel(state, callbacks = {}) {
     btnLabel = has4StarBook ? `📖 Consumir Livro 4★ & Aprender (${cost.toLocaleString()} SP)` : '🔒 Falta Spellbook 4★ na Mochila';
   }
 
-  const siIconVal = def.icon || '✦';
+  let siIconVal = def.icon || '✦';
+  if (siIconVal.endsWith('.jpg') && !siIconVal.includes('/')) {
+    siIconVal = `/assets/skills/${siIconVal}`;
+  }
   const isSiIconImg = siIconVal.endsWith('.jpg') || siIconVal.endsWith('.png') || siIconVal.includes('/');
   const siIconHtml = isSiIconImg
-    ? `<img src="${getAssetUrl(siIconVal)}" class="skill-icon-img" alt="${def.name}" style="width:32px; height:32px; object-fit:cover; border-radius:6px; border:1px solid rgba(255,255,255,0.2); vertical-align:middle;" />`
+    ? `<img src="${getAssetUrl(siIconVal)}" class="skill-icon-img" alt="${def.name}" style="width:32px; height:32px; object-fit:cover; border-radius:6px; border:1px solid rgba(255,255,255,0.2); vertical-align:middle;" onerror="this.style.display='none'" />`
     : `<span class="si-icon">${siIconVal}</span>`;
 
   panel.innerHTML = `
