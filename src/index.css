@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@import "bootstrap/dist/css/bootstrap-grid.min.css";
+@import "bootstrap/dist/css/bootstrap-utilities.min.css";
 
 @theme {
   --font-display: "Cinzel", "Times New Roman", serif;

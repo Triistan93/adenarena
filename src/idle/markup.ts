@@ -12,24 +12,24 @@ export const IDLE_MARKUP = `
           <span class="ts-zone">
             <span class="ts-label">Zone</span>
             <span id="zone-name">Talking Island</span>
-            <span id="zone-kill-progress" style="font-size:11px; color:#f59e0b; margin-left:8px; font-weight:800; background:rgba(0,0,0,0.4); padding:2px 8px; border-radius:10px; border:1px solid rgba(245,158,11,0.3);">⚔️ 0/50 Caçados</span>
-            <span id="season-badge" style="font-size:10px; color:#60a5fa; margin-left:6px; font-weight:bold; background:rgba(37,99,235,0.15); padding:2px 8px; border-radius:10px; border:1px solid rgba(96,165,250,0.35); font-family:'Cinzel',serif;" title="Temporada 1: O Despertar de Aden (Cap Lv 60)">🏆 Temp 1: Cap Lv 60</span>
+            <span id="zone-kill-progress" style="font-size:11px; color:#f59e0b; margin-left:8px; font-weight:800; background:rgba(0,0,0,0.5); padding:2px 8px; border-radius:4px; border:1px solid rgba(245,158,11,0.4);"><span style="color:#d4af37;">⚔</span> 0/50 Caçados</span>
+            <span id="season-badge" style="font-size:10px; color:#93c5fd; margin-left:6px; font-weight:bold; background:rgba(30,58,138,0.25); padding:2px 8px; border-radius:4px; border:1px solid rgba(147,197,253,0.35); font-family:'Cinzel',serif;" title="Temporada 1: O Despertar de Aden (Cap Lv 60)">✦ Temp 1: Cap Lv 60</span>
           </span>
           <div id="top-bar-guide-container" style="display:inline-flex;">
-            <button id="top-bar-guide-btn" class="top-guide-btn" style="background:linear-gradient(135deg, rgba(212, 167, 68, 0.25), rgba(138, 100, 28, 0.25)); border:1px solid rgba(212, 167, 68, 0.6); color:#ffd877; border-radius:12px; padding:3px 10px; font-size:11px; font-weight:bold; font-family:'Cinzel',serif; cursor:pointer; display:inline-flex; align-items:center; gap:4px; transition:all 0.2s;" onclick="window.openCurrentTabGuide && window.openCurrentTabGuide()">❓ Guia da Aba</button>
+            <button id="top-bar-guide-btn" class="top-guide-btn" style="background:linear-gradient(180deg, rgba(70,55,25,0.7), rgba(30,22,10,0.9)); border:1px solid rgba(212, 167, 68, 0.6); color:#ffd877; border-radius:4px; padding:3px 10px; font-size:11px; font-weight:bold; font-family:'Cinzel',serif; cursor:pointer; display:inline-flex; align-items:center; gap:5px; transition:all 0.2s;" onclick="window.openCurrentTabGuide && window.openCurrentTabGuide()">📜 Guia</button>
           </div>
         </div>
         <div class="top-stats-right" style="display:flex; align-items:center; gap:10px; margin-left:auto;">
-          <button id="cash-shop-btn" onclick="window.openCashShopModal && window.openCashShopModal()" style="background:linear-gradient(135deg, rgba(255, 215, 0, 0.25), rgba(180, 83, 9, 0.35)); border:1px solid #ffd700; color:#fde047; border-radius:10px; padding:3px 10px; font-size:11px; font-weight:bold; font-family:'Cinzel',serif; cursor:pointer; display:inline-flex; align-items:center; gap:6px; transition:all 0.2s; box-shadow:0 0 8px rgba(255,215,0,0.2);">
-            🪙 <span id="top-ac-amount" style="font-weight:bold; color:#ffd700;">0 AC</span> <span style="background:rgba(212,175,55,0.3); border:1px solid rgba(255,215,0,0.6); border-radius:3px; padding:1px 5px; font-size:9px; color:#fef08a; text-transform:uppercase; font-weight:700;">Loja</span>
+          <button id="cash-shop-btn" onclick="window.openCashShopModal && window.openCashShopModal()" style="background:linear-gradient(180deg, rgba(138,106,36,0.6), rgba(48,35,15,0.95)); border:1px solid #ffd700; color:#fde047; border-radius:4px; padding:3px 10px; font-size:11px; font-weight:bold; font-family:'Cinzel',serif; cursor:pointer; display:inline-flex; align-items:center; gap:6px; transition:all 0.2s; box-shadow:0 0 10px rgba(255,215,0,0.25);">
+            <span style="color:#ffd700; font-size:12px;">⚜</span> <span id="top-ac-amount" style="font-weight:bold; color:#ffd700;">0 AC</span> <span style="background:rgba(212,175,55,0.3); border:1px solid rgba(255,215,0,0.6); border-radius:3px; padding:1px 5px; font-size:9px; color:#fef08a; text-transform:uppercase; font-weight:700;">Loja</span>
           </button>
-          <button id="daily-reward-btn" onclick="window.openDailyRewardModal && window.openDailyRewardModal()" style="background:linear-gradient(135deg, rgba(234, 179, 8, 0.25), rgba(161, 98, 7, 0.35)); border:1px solid rgba(234, 179, 8, 0.6); color:#fef08a; border-radius:10px; padding:3px 10px; font-size:11px; font-weight:bold; font-family:'Cinzel',serif; cursor:pointer; display:inline-flex; align-items:center; gap:6px; transition:all 0.2s; position:relative;">
-            🎁 Check-in Diário
+          <button id="daily-reward-btn" onclick="window.openDailyRewardModal && window.openDailyRewardModal()" style="background:linear-gradient(180deg, rgba(80,55,20,0.7), rgba(35,22,10,0.9)); border:1px solid rgba(234, 179, 8, 0.6); color:#fef08a; border-radius:4px; padding:3px 10px; font-size:11px; font-weight:bold; font-family:'Cinzel',serif; cursor:pointer; display:inline-flex; align-items:center; gap:6px; transition:all 0.2s; position:relative;">
+            🎁 Check-in
             <span id="daily-reward-dot" style="display:none; width:8px; height:8px; background:#ef4444; border-radius:50%; box-shadow:0 0 8px #ef4444; position:absolute; top:-2px; right:-2px;"></span>
           </button>
           <span class="ts-clock" style="display:inline-flex; align-items:center; gap:4px;"><span class="ts-label">Session</span><span id="clock">00:00:00</span></span>
-          <span id="save-status-badge" style="font-size:10px; background:rgba(16,185,129,0.15); border:1px solid rgba(16,185,129,0.4); color:#34d399; padding:2px 8px; border-radius:8px; font-weight:bold;">💾 Salvo</span>
-          <button id="audio-mute-btn" onclick="window.toggleMuteAudio && window.toggleMuteAudio()" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:#fff;border-radius:6px;padding:3px 10px;font-size:11px;font-weight:600;cursor:pointer;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background='rgba(255,255,255,0.08)'">🔊 Audio</button>
+          <span id="save-status-badge" style="font-size:10px; background:rgba(16,185,129,0.15); border:1px solid rgba(16,185,129,0.4); color:#34d399; padding:2px 8px; border-radius:4px; font-weight:bold;">● Salvo</span>
+          <button id="audio-mute-btn" onclick="window.toggleMuteAudio && window.toggleMuteAudio()" style="background:rgba(30,35,45,0.8);border:1px solid rgba(255,255,255,0.15);color:#ece4d3;border-radius:4px;padding:3px 10px;font-size:11px;font-weight:600;cursor:pointer;transition:background 0.2s;" onmouseover="this.style.background='rgba(50,55,70,0.9)'" onmouseout="this.style.background='rgba(30,35,45,0.8)'">♫ Audio</button>
         </div>
       </div>
     </header>
@@ -160,29 +160,29 @@ export const IDLE_MARKUP = `
       <!-- Right: Main Menu Workspace (Expanded) -->
       <aside class="panel tabs-panel">
         <div class="tab-buttons">
-          <button class="tab-btn active" data-tab="zones">⚔️ Combate &amp; Caça</button>
-          <button class="tab-btn" data-tab="character">👤 Personagem</button>
-          <button class="tab-btn" data-tab="inventory">🎒 Inventário <span id="tab-badge-inventory" class="tab-badge" style="display:none">!</span></button>
-          <button class="tab-btn" data-tab="warehouse">📦 Baú</button>
-          <button class="tab-btn" data-tab="skills">✦ Habilidades <span id="tab-badge-skills" class="tab-badge" style="display:none">!</span></button>
-          <button class="tab-btn" data-tab="shop">🛒 Mercador</button>
-          <button class="tab-btn" data-tab="craft">⚒️ Forja <span id="tab-badge-craft" class="tab-badge" style="display:none">!</span></button>
-          <button class="tab-btn" data-tab="alchemy">🧪 Alquimia</button>
-          <button class="tab-btn" data-tab="astral">🌟 Maestria</button>
-          <button class="tab-btn" data-tab="expeditions">🏰 Expedições &amp; Manor</button>
-          <button class="tab-btn" data-tab="raids">🐉 Raids &amp; Bosses</button>
-          <button class="tab-btn" data-tab="olympiad">🏆 Olimpíadas &amp; Heróis</button>
-          <button class="tab-btn" data-tab="clan">🛡️ Clã &amp; Castelos</button>
-          <button class="tab-btn" data-tab="sevensigns">🏛️ Sete Selos</button>
-          <button class="tab-btn" data-tab="fortress">⚔️ Fortalezas</button>
-          <button class="tab-btn" data-tab="colosseum">🎭 Coliseu</button>
-          <button class="tab-btn" data-tab="rankings">🏆 Rankings</button>
-          <button class="tab-btn" data-tab="enchant">✨ Encantamento</button>
-          <button class="tab-btn" data-tab="codex">📜 Codex</button>
-          <button class="tab-btn" data-tab="dolls">🧸 Dolls</button>
-          <button class="tab-btn" data-tab="magiclamp">🪔 Lâmpada &amp; Craft</button>
-          <button class="tab-btn" data-tab="quests">🎯 Missões <span id="tab-badge-quests" class="tab-badge" style="display:none">!</span></button>
-          <button class="tab-btn" data-tab="tower">🏰 Torre Insolência</button>
+          <button class="tab-btn active" data-tab="zones"><span style="color:#d4af37; margin-right:3px;">⚔</span> Combate &amp; Caça</button>
+          <button class="tab-btn" data-tab="character"><span style="color:#93c5fd; margin-right:3px;">🛡</span> Personagem</button>
+          <button class="tab-btn" data-tab="inventory"><span style="color:#f59e0b; margin-right:3px;">🎒</span> Inventário <span id="tab-badge-inventory" class="tab-badge" style="display:none">!</span></button>
+          <button class="tab-btn" data-tab="warehouse"><span style="color:#a78bfa; margin-right:3px;">📦</span> Baú</button>
+          <button class="tab-btn" data-tab="skills"><span style="color:#38bdf8; margin-right:3px;">✦</span> Habilidades <span id="tab-badge-skills" class="tab-badge" style="display:none">!</span></button>
+          <button class="tab-btn" data-tab="shop"><span style="color:#fbbf24; margin-right:3px;">⚜</span> Mercador</button>
+          <button class="tab-btn" data-tab="craft"><span style="color:#f97316; margin-right:3px;">⚒</span> Forja <span id="tab-badge-craft" class="tab-badge" style="display:none">!</span></button>
+          <button class="tab-btn" data-tab="alchemy"><span style="color:#34d399; margin-right:3px;">🧪</span> Alquimia</button>
+          <button class="tab-btn" data-tab="astral"><span style="color:#c084fc; margin-right:3px;">★</span> Maestria</button>
+          <button class="tab-btn" data-tab="expeditions"><span style="color:#60a5fa; margin-right:3px;">🏰</span> Expedições &amp; Manor</button>
+          <button class="tab-btn" data-tab="raids"><span style="color:#f87171; margin-right:3px;">🐉</span> Raids &amp; Bosses</button>
+          <button class="tab-btn" data-tab="olympiad"><span style="color:#fbbf24; margin-right:3px;">🏆</span> Olimpíadas &amp; Heróis</button>
+          <button class="tab-btn" data-tab="clan"><span style="color:#6ee7b7; margin-right:3px;">🛡</span> Clã &amp; Castelos</button>
+          <button class="tab-btn" data-tab="sevensigns"><span style="color:#c084fc; margin-right:3px;">🏛</span> Sete Selos</button>
+          <button class="tab-btn" data-tab="fortress"><span style="color:#fb923c; margin-right:3px;">⚔</span> Fortalezas</button>
+          <button class="tab-btn" data-tab="colosseum"><span style="color:#f43f5e; margin-right:3px;">⚔</span> Coliseu</button>
+          <button class="tab-btn" data-tab="rankings"><span style="color:#fbbf24; margin-right:3px;">🏆</span> Rankings</button>
+          <button class="tab-btn" data-tab="enchant"><span style="color:#38bdf8; margin-right:3px;">✦</span> Encantamento</button>
+          <button class="tab-btn" data-tab="codex"><span style="color:#fde047; margin-right:3px;">📜</span> Codex</button>
+          <button class="tab-btn" data-tab="dolls"><span style="color:#f472b6; margin-right:3px;">🧸</span> Dolls</button>
+          <button class="tab-btn" data-tab="magiclamp"><span style="color:#fbbf24; margin-right:3px;">🪔</span> Lâmpada &amp; Craft</button>
+          <button class="tab-btn" data-tab="quests"><span style="color:#4ade80; margin-right:3px;">🎯</span> Missões <span id="tab-badge-quests" class="tab-badge" style="display:none">!</span></button>
+          <button class="tab-btn" data-tab="tower"><span style="color:#e879f9; margin-right:3px;">🏰</span> Torre Insolência</button>
         </div>
         <div class="tab-content">
           <!-- Character Tab -->
