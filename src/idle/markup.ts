@@ -764,7 +764,7 @@ export const IDLE_MARKUP = `
                 </div>
                 <div class="pass-xp-info">
                   <span id="pass-xp-text">0 / 100 XP do Passe</span>
-                  <button id="unlock-premium-pass-btn" class="inv-batch-btn gold-glow-btn" title="Ativar o Passe Premium com Adena do Jogo">👑 Ativar Passe Premium (100.000 Adena)</button>
+                  <button id="unlock-premium-pass-btn" class="inv-batch-btn gold-glow-btn" title="Adquirir o Passe Premium Oficial da Temporada">👑 Obter Passe Premium (R$ 15,00)</button>
                 </div>
               </div>
               <div class="bar-container pass-bar-container">

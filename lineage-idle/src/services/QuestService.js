@@ -93,7 +93,7 @@ export function claimQuestReward(state, questId, callbacks = {}) {
 }
 
 /**
- * Desbloqueia a trilha Premium do Passe de Batalha de Adena por 100.000g.
+ * Desbloqueia a trilha Premium do Passe de Batalha de Adena (adquirido via loja oficial / Cakto).
  * @param {Object} state
  * @param {Object} [callbacks]
  */
@@ -101,17 +101,10 @@ export function unlockPremiumPass(state, callbacks = {}) {
   state.battlePass = state.battlePass || { xp: 0, claimedFree: [], claimedPremium: [], unlockedPremium: false };
   if (state.battlePass.unlockedPremium) return;
 
-  const COST = 100000;
-  if (state.gold < COST) {
-    if (callbacks.log) callbacks.log(`O Passe Premium custa ${COST.toLocaleString()} Gold. Gold insuficiente!`, 'system');
-    return;
-  }
-
-  state.gold -= COST;
   state.battlePass.unlockedPremium = true;
 
-  if (callbacks.log) callbacks.log('✨ PASSE PREMIUM DE ADENA ATIVADO COM SUCESSO!', 'rarity-legendary');
-  if (callbacks.floatText) callbacks.floatText('PREMIUM ATIVO!', 'float-jackpot');
+  if (callbacks.log) callbacks.log('👑 PASSE DE BATALHA PREMIUM ATIVADO COM SUCESSO!', 'rarity-legendary');
+  if (callbacks.floatText) callbacks.floatText('👑 PASSE PREMIUM ATIVO!', 'float-jackpot');
 
   if (callbacks.updateAllUI) callbacks.updateAllUI();
   if (callbacks.save) callbacks.save();

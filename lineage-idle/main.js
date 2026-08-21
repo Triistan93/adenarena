@@ -2240,7 +2240,7 @@ function claimPassReward(level, type = 'free') {
   return serviceClaimPassReward(state, level, type, { log, floatText, updateAllUI, save });
 }
 function unlockPremiumPass() {
-  return serviceUnlockPremiumPass(state, { log, floatText, updateAllUI, save });
+  window.open('https://pay.cakto.com.br/36g8n4b_1054492', '_blank');
 }
 
 
@@ -2384,9 +2384,11 @@ function renderBattlePassUI() {
       unlockBtn.disabled = true;
       unlockBtn.style.opacity = '0.7';
     } else {
-      unlockBtn.textContent = '👑 Ativar Passe Premium (100.000g)';
+      unlockBtn.textContent = '👑 Obter Passe Premium (R$ 15,00)';
       unlockBtn.disabled = false;
-      unlockBtn.onclick = () => unlockPremiumPass();
+      unlockBtn.onclick = () => {
+        window.open('https://pay.cakto.com.br/36g8n4b_1054492', '_blank');
+      };
     }
   }
 
@@ -2398,7 +2400,7 @@ function renderBattlePassUI() {
       const premClaimed = state.battlePass.claimedPremium.includes(tier.level);
 
       const freeLabel = freeClaimed ? '✓' : (isUnlocked ? 'Reclamar' : 'Tranca');
-      const premLabel = premClaimed ? '✓' : (isUnlocked && state.battlePass.unlockedPremium ? 'Reclamar' : (state.battlePass.unlockedPremium ? 'Tranca' : '👑 Premium'));
+      const premLabel = premClaimed ? '✓' : (isUnlocked && state.battlePass.unlockedPremium ? 'Reclamar' : (state.battlePass.unlockedPremium ? 'Tranca' : '👑 R$ 15'));
 
       const freeRewardStr = Object.entries(tier.free).map(([k, v]) => `${k === 'gold' ? '💰 ' + v : k === 'sp' ? '✦ ' + v : v}`).join(', ');
       const premRewardStr = Object.entries(tier.premium).map(([k, v]) => `${k === 'gold' ? '💰 ' + v : k === 'title' ? '🏷️ ' + v : v}`).join(', ');
@@ -2414,7 +2416,7 @@ function renderBattlePassUI() {
           <div class="pass-reward-box premium">
             <span style="font-weight:bold;color:#fef08a;">👑 Premium</span><br/>
             <span>${premRewardStr}</span><br/>
-            <button class="inv-batch-btn gold-glow-btn" data-pass-prem="${tier.level}" ${!isUnlocked || !state.battlePass.unlockedPremium || premClaimed ? 'disabled' : ''} style="margin-top:4px;font-size:9px;">${premLabel}</button>
+            <button class="inv-batch-btn gold-glow-btn" data-pass-prem="${tier.level}" ${premClaimed ? 'disabled' : ''} style="margin-top:4px;font-size:9px;">${premLabel}</button>
           </div>
         </div>
       `;
@@ -2424,7 +2426,13 @@ function renderBattlePassUI() {
       btn.onclick = () => claimPassReward(Number(btn.dataset.passFree), 'free');
     });
     trackList.querySelectorAll('[data-pass-prem]').forEach(btn => {
-      btn.onclick = () => claimPassReward(Number(btn.dataset.passPrem), 'premium');
+      btn.onclick = () => {
+        if (!state.battlePass.unlockedPremium) {
+          window.open('https://pay.cakto.com.br/36g8n4b_1054492', '_blank');
+          return;
+        }
+        claimPassReward(Number(btn.dataset.passPrem), 'premium');
+      };
     });
   }
 }
@@ -6982,6 +6990,26 @@ export function init() {
         }
       } catch (err) {
         console.warn('Erro ao checar daily reward status:', err);
+      }
+
+      // Verifica retorno de pagamento do Checkout Cakto
+      try {
+        if (typeof window !== 'undefined' && window.location) {
+          const urlParams = new URLSearchParams(window.location.search);
+          const status = urlParams.get('status');
+          const payment = urlParams.get('payment');
+          if (status === 'approved' || status === 'completed' || payment === 'success' || urlParams.get('unlocked_premium') === '1') {
+            if (!state.battlePass?.unlockedPremium) {
+              state.battlePass = state.battlePass || { xp: 0, claimedFree: [], claimedPremium: [], unlockedPremium: false };
+              state.battlePass.unlockedPremium = true;
+              updateAllUI();
+              save();
+              log('🎉 Pagamento aprovado! Seu Passe Premium foi ativado com sucesso!', 'rarity-legendary');
+            }
+          }
+        }
+      } catch (err) {
+        console.warn('Erro ao processar retorno de pagamento:', err);
       }
     }, 1200);
 
