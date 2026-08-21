@@ -225,14 +225,29 @@ function buildEchoAdapter() {
         const combined = `${sName} ${sDesc} ${arch} ${classId}`;
         let hash = 0;
         for (let c = 0; c < combined.length; c++) hash = (hash * 31 + combined.charCodeAt(c)) >>> 0;
-        const iconNum = (hash % 48) + 1;
 
-        if (/holy|light|sacred|divine|aegis|shield|bless|templar|heal|sanctuary|prayer|aura|resurrect|angel|recovery|guard|buff|spirit|stance|barrier|purify/.test(combined)) {
-          skillIcon = `/assets/2d/icons/paladin-skills/PNG/Icon${iconNum}.png`;
-        } else if (/vampiric|blood|drain|dark|shadow|curse|rose|death|undead|bone|corpse|hex|poison|doom|abyss|ghost|touch|wolf|warg|decay|soul/.test(combined)) {
-          skillIcon = `/assets/2d/icons/undead-skills/PNG/Icon${iconNum}.png`;
+        if (/water|ice|frost|freeze|aqua|blizzard|hail|hydro|chill|cold|wave|ocean/.test(combined)) {
+          skillIcon = '/assets/skills/water_wave.jpg';
+        } else if (/fire|flame|burn|blaze|prominence|burst|ignition|solar|magma|volcano|flare|pyro/.test(combined)) {
+          skillIcon = '/assets/skills/fire_strike.jpg';
+        } else if (/wind|gale|air|cyclone|storm|typhoon|breeze|lightning|spark|thunder|volt|shock|tempest/.test(combined)) {
+          skillIcon = '/assets/skills/wind_blade.jpg';
+        } else if (/holy|light|sacred|divine|bless|templar|heal|sanctuary|prayer|angel|recovery|purify|resurrect|cure|radiant/.test(combined)) {
+          skillIcon = '/assets/skills/holy_shield.jpg';
+        } else if (/vampiric|blood|drain|dark|shadow|curse|rose|death|undead|bone|corpse|hex|poison|doom|abyss|ghost|touch|decay|soul/.test(combined)) {
+          skillIcon = '/assets/skills/vampiric_blood.jpg';
+        } else if (/bow|arrow|archer|snipe|shot|quiver|pierce|rain of arrows/.test(combined)) {
+          const bowNum = (hash % 20) + 1;
+          skillIcon = `/assets/2d/icons/bows-crossbows/PNG/Background/Icon${bowNum}.png`;
+        } else if (/shield|guard|defense|iron wall|aegis|barrier|fortress|deflect|block/.test(combined)) {
+          const shieldNum = (hash % 20) + 1;
+          skillIcon = `/assets/2d/icons/shields-amulets/PNG/Background/Icon${shieldNum}.png`;
+        } else if (/buff|warcry|spirit|stance|mastery|song|dance|shout|roar|might|focus|guidance|haste/.test(combined)) {
+          const palNum = (hash % 30) + 1;
+          skillIcon = `/assets/2d/icons/paladin-skills/PNG/Icon${palNum}.png`;
         } else {
-          skillIcon = `/assets/2d/icons/swordsman-skills/PNG/Icon${iconNum}.png`;
+          const swordNum = (hash % 30) + 1;
+          skillIcon = `/assets/2d/icons/swordsman-skills/PNG/Icon${swordNum}.png`;
         }
       }
 
