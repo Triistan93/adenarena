@@ -6,6 +6,7 @@
  */
 
 import EventBus from '../core/EventBus.js';
+import { getSeasonMaxLevel } from '../core/SeasonConfig.js';
 
 const TOTAL_XP_CACHE = [0];
 
@@ -57,10 +58,10 @@ export function checkLevelUp(state, callbacks = {}) {
   if (!state) return false;
   let leveledUp = false;
   const initialLevel = state.level || 1;
-  const MAX_LEVEL = 100;
+  const MAX_LEVEL = getSeasonMaxLevel();
   let totalSpReward = 0;
 
-  // Processa subida de níveis sem travar o navegador
+  // Processa subida de níveis respeitando o teto da temporada
   while ((state.level || 1) < MAX_LEVEL && (state.xp || 0) >= getTotalXP(state.level || 1)) {
     state.level = (state.level || 1) + 1;
     leveledUp = true;

@@ -318,6 +318,29 @@ export function rerollMysticStock(state, rollStockFn, callbacks = {}) {
 }
 
 /**
+ * Gera um lote de itens para o estoque do Mercador Místico.
+ * @returns {Array<Object>}
+ */
+export function rollMysticStock() {
+  const gData = D();
+  const pool = gData?.MYSTIC_POOL || ["weapon_anais_first", "weapon_anakim_pistols", "jewel_ring_core"];
+  const rarities = ['rare', 'epic', 'legendary', 'mythic'];
+  const candidateIds = [...pool, 'enchant_weapon_scroll', 'enchant_armor_scroll', 'scroll_of_resurrection', 'teleport_scroll'];
+  
+  const stock = [];
+  const chosen = new Set();
+  
+  for (let i = 0; i < 6; i++) {
+    const randomId = candidateIds[Math.floor(Math.random() * candidateIds.length)];
+    if (chosen.has(randomId) && candidateIds.length > 6) continue;
+    chosen.add(randomId);
+    const rarity = rarities[Math.floor(Math.random() * rarities.length)];
+    stock.push({ id: randomId, itemId: randomId, rarity, amount: 1 });
+  }
+  return stock;
+}
+
+/**
  * Calcula a quantidade máxima de um item que o jogador pode comprar.
  * @param {Object} state
  * @param {string} itemId

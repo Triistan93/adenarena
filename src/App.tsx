@@ -9,6 +9,7 @@ import {
 } from "./game/data";
 import { cn } from "./utils/cn";
 import IdleGame from "./idle/IdleGame";
+import Aden2DGame from "./pixel2d/Aden2DGame";
 
 type Phase = "menu" | "playing" | "paused" | "gameover";
 
@@ -721,7 +722,7 @@ function ArenaApp() {
 }
 
 // ---------- Mode switch (top-left collapsible hamburger menu) ----------
-type Mode = "idle" | "arena";
+type Mode = "idle" | "arena" | "pixel2d";
 
 function ModeSwitch({
   mode,
@@ -763,6 +764,14 @@ function ModeSwitch({
     setIsOpen(false);
   };
 
+  const getModeBadge = () => {
+    switch (mode) {
+      case "idle": return "📜 Idle Chronicle";
+      case "arena": return "⚔ 3D Arena";
+      case "pixel2d": return "👾 Aden Pixel 2D";
+    }
+  };
+
   return (
     <div className="mode-menu-container" ref={menuRef}>
       <button
@@ -777,13 +786,13 @@ function ModeSwitch({
           <span />
         </span>
         <span className="hamburger-mode-badge">
-          {mode === "idle" ? "📜 Idle Chronicle" : "⚔ 3D Arena"}
+          {getModeBadge()}
         </span>
       </button>
 
       {isOpen && (
         <div className="mode-dropdown">
-          <div className="mode-dropdown__header">Modo de Jogo</div>
+          <div className="mode-dropdown__header">Modo de Jogo (Temporada 1)</div>
           <button
             type="button"
             className={cn("mode-dropdown__item", mode === "idle" && "is-active")}
@@ -792,9 +801,24 @@ function ModeSwitch({
             <span className="mode-dropdown__icon">📜</span>
             <div className="mode-dropdown__info">
               <div className="mode-dropdown__title">Idle Chronicle</div>
-              <div className="mode-dropdown__desc">RPG de texto e progressão automática</div>
+              <div className="mode-dropdown__desc">RPG de progressão e conquistas de Aden</div>
             </div>
             {mode === "idle" && <span className="mode-dropdown__check">✓</span>}
+          </button>
+          
+          {/* Modos 2D e 3D preservados no código, ocultos para temporadas futuras */}
+          {/*
+          <button
+            type="button"
+            className={cn("mode-dropdown__item", mode === "pixel2d" && "is-active")}
+            onClick={() => selectMode("pixel2d")}
+          >
+            <span className="mode-dropdown__icon">👾</span>
+            <div className="mode-dropdown__info">
+              <div className="mode-dropdown__title">Aden Pixel 2D</div>
+              <div className="mode-dropdown__desc">Combate retrô 2D com pixel art & animações</div>
+            </div>
+            {mode === "pixel2d" && <span className="mode-dropdown__check">✓</span>}
           </button>
           <button
             type="button"
@@ -808,6 +832,7 @@ function ModeSwitch({
             </div>
             {mode === "arena" && <span className="mode-dropdown__check">✓</span>}
           </button>
+          */}
         </div>
       )}
     </div>
@@ -877,7 +902,15 @@ export default function Shell() {
         <LoginScreen onEnterGame={handleEnterGame} />
       ) : (
         <>
-          {mode === "arena" ? <ArenaApp /> : <div className="w-full h-full min-h-screen relative overflow-hidden"><IdleGame /></div>}
+          {mode === "arena" ? (
+            <ArenaApp />
+          ) : mode === "pixel2d" ? (
+            <Aden2DGame />
+          ) : (
+            <div className="w-full h-full min-h-screen relative overflow-hidden">
+              <IdleGame />
+            </div>
+          )}
           <ModeSwitch mode={mode} setMode={setMode} />
           <div className="fixed top-2.5 right-2.5 z-40">
             <AuthModal 

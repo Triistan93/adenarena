@@ -235,6 +235,8 @@ import { RankingService } from './src/services/RankingService.js';
 import { SubclassCertificationService, EMERGENT_ABILITIES, MASTER_ABILITIES_BY_ARCHETYPE, DIVINE_TRANSFORMATIONS } from './src/services/SubclassCertificationService.js';
 import { ensureAppLayout, showMenuPanel } from './src/ui/AppLayout.js';
 import { checkTabGuide, closeTabGuideModal, openTabGuideModal } from './src/ui/TutorialGuide.js';
+import { isFeatureUnlocked, getCurrentSeason, getSeasonForFeature } from './src/core/SeasonConfig.js';
+import { renderSeasonLockedPanel, updateSeasonTabBadges } from './src/ui/SeasonUI.js';
 import { VFX, initializeVFX } from './vfx.js';
 // ─── Sprint 7: Importa EventBus e StateManager (Wiring & State) ───────────
 import EventBus from './src/core/EventBus.js';
@@ -2117,11 +2119,11 @@ function updateGameModeUI() {
   const switchEl = el('game-mode-switch');
   const currentEl = el('game-mode-current');
   const gameEl = el('game');
-  const currentMode = state.gameMode === 'arena' ? 'arena' : 'idle';
-  if (currentEl) currentEl.textContent = currentMode === 'arena' ? '3D Arena' : 'Idle';
+  const currentMode = state.gameMode === 'arena' ? 'arena' : state.gameMode === 'pixel2d' ? 'pixel2d' : 'idle';
+  if (currentEl) currentEl.textContent = currentMode === 'arena' ? '3D Arena' : currentMode === 'pixel2d' ? 'Aden Pixel 2D' : 'Idle';
   if (switchEl) switchEl.classList.toggle('arena', currentMode === 'arena');
   if (gameEl) {
-    gameEl.classList.remove('mode-idle', 'mode-arena');
+    gameEl.classList.remove('mode-idle', 'mode-arena', 'mode-pixel2d');
     gameEl.classList.add(`mode-${currentMode}`);
   }
   qsa('.mode-option').forEach(btn => {
@@ -2132,10 +2134,11 @@ function updateGameModeUI() {
 }
 
 function setGameMode(mode) {
-  const nextMode = mode === 'arena' ? 'arena' : 'idle';
+  const nextMode = mode === 'arena' ? 'arena' : mode === 'pixel2d' ? 'pixel2d' : 'idle';
   state.gameMode = nextMode;
   updateGameModeUI();
-  log(`Modo de jogo alterado para ${nextMode === 'arena' ? '⚔ 3D Arena' : '📜 Idle Chronicle'}.`, 'system');
+  const label = nextMode === 'arena' ? '⚔ 3D Arena' : nextMode === 'pixel2d' ? '👾 Aden Pixel 2D' : '📜 Idle Chronicle';
+  log(`Modo de jogo alterado para ${label}.`, 'system');
   save();
   if (typeof window !== 'undefined' && typeof window.onReactSetMode === 'function') {
     window.onReactSetMode(nextMode);
@@ -2588,6 +2591,8 @@ function updateTabBadgesUI() {
   
   const questBadge = el('tab-badge-quests');
   if (questBadge) questBadge.style.display = hasQuestsClaimable() ? 'inline-flex' : 'none';
+
+  updateSeasonTabBadges(ROOT);
 }
 
 function updateAlchemyUI() {
@@ -5050,6 +5055,12 @@ export function openPanel(tabName) {
   const pane = root.querySelector(`#tab-${targetTab}`);
   if (pane && tabScrollMap[pane.id] !== undefined) {
     pane.scrollTop = tabScrollMap[pane.id];
+  }
+
+  // Verifica se o recurso pertence a uma temporada futura
+  if (!isFeatureUnlocked(targetTab)) {
+    if (pane) renderSeasonLockedPanel(pane, targetTab);
+    return;
   }
 
   if (targetTab === 'inventory') safeUiUpdate('inventory', updateInventoryUI);

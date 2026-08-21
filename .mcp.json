@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "cakto": {
+      "url": "https://app.cakto.com.br/mcp/http",
+      "headers": {
+        "X-Cakto-Client-Id": "HkPs6oyQXvwaYHzSDUwF5Kn8sgFHgASqtNTg6S4R",
+        "X-Cakto-Client-Secret": "oNndMvazfEU6Z4etqpDQxPMwQbONzp72fOUK2GSiIpi1P4SMyI3xRD4wf088H6qYHsS61GeiWZ0uG2NtUq4PwmbAErKVls0N1HWcVQdF6AxyC61Hq4K7RrZj0MlYHG7W"
+      }
+    }
+  }
+}

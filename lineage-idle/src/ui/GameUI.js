@@ -11,6 +11,7 @@ import {
 } from '../services/InventoryService.js';
 import { resolveEquipSlot, migrateEquipmentSlots, equipItem, unequipItem } from '../services/EquipmentService.js';
 import { getCraftLevelReq, getRecipeMaterials, canCraft, getRecipeDef, calculateMaxCraftableQty } from '../services/CraftService.js';
+import { rollMysticStock } from '../services/ShopService.js';
 import { classSatisfies, getClassSkills } from '../services/CharacterService.js';
 import { AFFIX_MAP } from '../../data/affixes.js';
 import { getClass, getStats, getActiveSetBonuses } from '../engine/StatsEngine.js';
