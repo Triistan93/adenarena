@@ -20,6 +20,9 @@ export const IDLE_MARKUP = `
           </div>
         </div>
         <div class="top-stats-right" style="display:flex; align-items:center; gap:10px; margin-left:auto;">
+          <button id="top-market-btn" onclick="const t = document.querySelector('.tab-btn[data-tab=\\'market\\']'); if (t) t.click();" style="background:linear-gradient(180deg, rgba(30,40,60,0.8), rgba(15,20,30,0.95)); border:1px solid #60a5fa; color:#93c5fd; border-radius:4px; padding:3px 10px; font-size:11px; font-weight:bold; font-family:'Cinzel',serif; cursor:pointer; display:inline-flex; align-items:center; gap:6px; transition:all 0.2s; box-shadow:0 0 10px rgba(96,165,250,0.25);">
+            🏛️ Mercado
+          </button>
           <button id="cash-shop-btn" onclick="window.openCashShopModal && window.openCashShopModal()" style="background:linear-gradient(180deg, rgba(138,106,36,0.6), rgba(48,35,15,0.95)); border:1px solid #ffd700; color:#fde047; border-radius:4px; padding:3px 10px; font-size:11px; font-weight:bold; font-family:'Cinzel',serif; cursor:pointer; display:inline-flex; align-items:center; gap:6px; transition:all 0.2s; box-shadow:0 0 10px rgba(255,215,0,0.25);">
             <span style="color:#ffd700; font-size:12px;">⚜</span> <span id="top-ac-amount" style="font-weight:bold; color:#ffd700;">0 AC</span> <span style="background:rgba(212,175,55,0.3); border:1px solid rgba(255,215,0,0.6); border-radius:3px; padding:1px 5px; font-size:9px; color:#fef08a; text-transform:uppercase; font-weight:700;">Loja</span>
           </button>
@@ -166,6 +169,7 @@ export const IDLE_MARKUP = `
           <button class="tab-btn" data-tab="warehouse"><span style="color:#a78bfa; margin-right:3px;">📦</span> Baú</button>
           <button class="tab-btn" data-tab="skills"><span style="color:#38bdf8; margin-right:3px;">✦</span> Habilidades <span id="tab-badge-skills" class="tab-badge" style="display:none">!</span></button>
           <button class="tab-btn" data-tab="shop"><span style="color:#fbbf24; margin-right:3px;">⚜</span> Mercador</button>
+          <button class="tab-btn" data-tab="market"><span style="color:#ffd877; margin-right:3px;">🏛</span> Mercado</button>
           <button class="tab-btn" data-tab="craft"><span style="color:#f97316; margin-right:3px;">⚒</span> Forja <span id="tab-badge-craft" class="tab-badge" style="display:none">!</span></button>
           <button class="tab-btn" data-tab="alchemy"><span style="color:#34d399; margin-right:3px;">🧪</span> Alquimia</button>
           <button class="tab-btn" data-tab="astral"><span style="color:#c084fc; margin-right:3px;">★</span> Maestria</button>
@@ -567,6 +571,9 @@ export const IDLE_MARKUP = `
             <div class="shop-list" id="shop-list"></div>
           </div>
 
+          <!-- Market Tab (Mercado de Giran) -->
+          <div id="tab-market" class="tab-pane"></div>
+
           <!-- Craft Tab -->
           <div id="tab-craft" class="tab-pane">
             <div class="craft-head" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
@@ -581,13 +588,14 @@ export const IDLE_MARKUP = `
                     <div id="craft-forge-exp-bar" style="height:100%; width:0%; background:linear-gradient(90deg, #f59e0b, #10b981); transition:width 0.3s;"></div>
                   </div>
                 </div>
-                <div id="market-status-badge" style="font-size:12px; font-weight:bold; padding:6px 12px; border-radius:8px; background:rgba(239,68,68,0.15); border:1px solid #ef4444; color:#fca5a5;">
-                  🔒 Mercado: Requer Forja Lv. 10
-                </div>
+                <button onclick="const t = document.querySelector('.tab-btn[data-tab=\\'market\\']'); if (t) t.click();" style="font-size:12px; font-weight:bold; padding:6px 14px; border-radius:8px; background:linear-gradient(135deg, rgba(234,179,8,0.25), rgba(0,0,0,0.6)); border:1px solid #ffd700; color:#fde047; cursor:pointer; font-family:'Cinzel',serif; display:flex; align-items:center; gap:6px; box-shadow:0 0 10px rgba(253,224,71,0.2);">
+                  🏛️ Mercado de Giran (P2P) ➔
+                </button>
               </div>
 
               <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; width:100%; border-bottom:1px solid rgba(212,167,68,0.3); padding-bottom:10px;" id="forge-subtab-buttons">
                 <button onclick="window.setForgeSubTab('craft')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="craft" style="font-family:'Cinzel',serif; font-weight:bold;">⚒️ Crafting</button>
+                <button onclick="const t = document.querySelector('.tab-btn[data-tab=\\'market\\']'); if (t) t.click();" class="inv-batch-btn forge-subtab-btn" style="font-family:'Cinzel',serif; font-weight:bold; background:rgba(234,179,8,0.2); border-color:#fde047; color:#fef08a;">🏛️ Mercado de Giran (P2P)</button>
                 <button onclick="window.setForgeSubTab('soulcrystal')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="soulcrystal" style="font-family:'Cinzel',serif; font-weight:bold;">🔮 Soul Crystals (SA)</button>
                 <button onclick="window.setForgeSubTab('masterwork')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="masterwork" style="font-family:'Cinzel',serif; font-weight:bold;">✨ Pushkin MW</button>
                 <button onclick="window.setForgeSubTab('tattoos')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="tattoos" style="font-family:'Cinzel',serif; font-weight:bold;">🖊️ Dyes / Tatuagens</button>
