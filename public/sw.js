@@ -1,13 +1,16 @@
 /**
  * Service Worker — Aden Arena PWA
- * Caching inteligente de assets estáticos e suporte offline
+ * Caching inteligente de assets estáticos com network-first para manifest
  */
 
-const CACHE_NAME = 'aden-arena-cache-v1';
+const CACHE_NAME = 'aden-arena-cache-v2';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
-  '/manifest.webmanifest'
+  '/manifest.webmanifest',
+  '/icon-192.png',
+  '/icon-512.png',
+  '/favicon.ico'
 ];
 
 self.addEventListener('install', (event) => {
@@ -31,17 +34,35 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  // Ignora requisições POST ou de API externa
   if (event.request.method !== 'GET') return;
 
+  const url = new URL(event.request.url);
+
+  // Network-first para manifest e navegações para refletir atualizações na hora
+  if (url.pathname.includes('manifest') || event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+          return response;
+        })
+        .catch(() => caches.match(event.request))
+    );
+    return;
+  }
+
+  // Cache-first para assets estáticos
   event.respondWith(
     caches.match(event.request).then((cached) => {
-      return cached || fetch(event.request).catch(() => {
-        // Fallback offline se for navegação
-        if (event.request.mode === 'navigate') {
-          return caches.match('/index.html');
+      return cached || fetch(event.request).then((response) => {
+        if (response && response.status === 200 && response.type === 'basic') {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
         }
+        return response;
       });
     })
   );
 });
+
