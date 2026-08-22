@@ -22,6 +22,7 @@ export const PANEL_SELECTORS = {
   skills: ['#tab-skills', '#skills-panel', '[data-panel="skills"]'],
   inventory: ['#tab-inventory', '#inventory-panel', '#inventory-window', '.inventory-panel', '[data-panel="inventory"]'],
   shop: ['#tab-shop', '#shop-panel', '.shop-panel', '[data-panel="shop"]'],
+  market: ['#tab-market', '#market-panel', '[data-panel="market"]'],
   craft: ['#tab-craft', '#craft-panel', '.craft-panel', '[data-panel="craft"]'],
   zones: ['#tab-zones', '#zone-panel', '#zone-list', '#zone-map-container', '[data-panel="zones"]'],
   warehouse: ['#tab-warehouse', '#warehouse-panel', '#warehouse-window', '[data-panel="warehouse"]'],

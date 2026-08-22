@@ -38,6 +38,9 @@
           <span id="top-ac-amount" style="font-weight:bold; color:#ffd700; font-size:12px;">0 AC</span>
           <span style="background:rgba(212,175,55,0.3); border:1px solid rgba(255,215,0,0.6); border-radius:3px; padding:1px 5px; font-size:9px; color:#fef08a; text-transform:uppercase; font-weight:700;">Loja</span>
         </button>
+        <button id="btn-pwa-install" onclick="window.installPwaApp()" class="ts-cash-shop-btn" style="display:none; align-items:center; gap:4px; background:linear-gradient(135deg, rgba(59,130,246,0.3), rgba(0,0,0,0.6)); border:1px solid #60a5fa; border-radius:6px; padding:3px 8px; cursor:pointer; color:#93c5fd; font-size:11px; font-weight:bold;">
+          <span>📲</span> <span>Instalar App</span>
+        </button>
         <span class="ts-zone"><span class="ts-label">Zone</span><span id="zone-name">Talking Island</span></span>
         <span class="ts-clock"><span class="ts-label">Session</span><span id="clock">00:00:00</span></span>
       </div>
@@ -153,6 +156,7 @@
           <button class="tab-btn" data-tab="skills">Skills</button>
           <button class="tab-btn" data-tab="inventory">Inv</button>
           <button class="tab-btn" data-tab="shop">Shop</button>
+          <button class="tab-btn" data-tab="market">🏛️ Mercado</button>
           <button class="tab-btn" data-tab="craft">Craft</button>
           <button class="tab-btn" data-tab="alchemy">🧪 Alquimia</button>
           <button class="tab-btn" data-tab="astral">🌟 Maestria</button>
@@ -383,6 +387,9 @@
             <!-- Merchant Content List Container -->
             <div class="shop-list" id="shop-list"></div>
           </div>
+
+          <!-- Market Tab (Mercado de Giran) -->
+          <div id="tab-market" class="tab-pane"></div>
 
           <!-- Craft Tab -->
           <div id="tab-craft" class="tab-pane">

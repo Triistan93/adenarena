@@ -7,6 +7,11 @@
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
     <meta name="theme-color" content="#06080f" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Aden Arena" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="/assets/2d/icons/paladin-skills/PNG/Icon34.png" />
     <title>Aden Arena — Lineage Browser RPG</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -22,5 +27,16 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').then((reg) => {
+            console.log('[PWA] Service Worker registrado:', reg.scope);
+          }).catch((err) => {
+            console.warn('[PWA] Falha ao registrar Service Worker:', err);
+          });
+        });
+      }
+    </script>
   </body>
 </html>

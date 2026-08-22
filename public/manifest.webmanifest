@@ -1,0 +1,36 @@
+{
+  "name": "Aden Arena — Lineage Browser RPG",
+  "short_name": "Aden Arena",
+  "description": "RPG Idle épico ambientado no universo clássico de Aden com mercado P2P, forja, batalhas 2D, clãs e ranking mundial.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#06080f",
+  "theme_color": "#06080f",
+  "icons": [
+    {
+      "src": "/public/assets/2d/icons/paladin-skills/PNG/Icon34.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/2d/icons/paladin-skills/PNG/Icon34.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/public/assets/2d/icons/paladin-skills/PNG/Icon34.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/2d/icons/paladin-skills/PNG/Icon34.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

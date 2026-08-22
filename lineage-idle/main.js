@@ -210,6 +210,8 @@ import {
   renderColosseumTab as uiRenderColosseumTab,
   renderRankingTab as uiRenderRankingTab,
   setActiveRankingTab as uiSetActiveRankingTab,
+  renderMarketTab as uiRenderMarketTab,
+  setActiveMarketTab as uiSetActiveMarketTab,
   openSkillEnchantModal,
   openAugmentModal,
   initTooltipEvents as uiInitTooltipEvents,
@@ -2186,6 +2188,28 @@ if (typeof window !== 'undefined') {
         closeGameModeMenu();
       }
     });
+
+    // PWA Install Prompt Listener
+    let deferredPrompt = null;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      const installBtn = document.getElementById('btn-pwa-install');
+      if (installBtn) installBtn.style.display = 'inline-flex';
+    });
+
+    window.installPwaApp = async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        console.log('[PWA] Escolha de instalação:', outcome);
+        deferredPrompt = null;
+        const installBtn = document.getElementById('btn-pwa-install');
+        if (installBtn) installBtn.style.display = 'none';
+      } else {
+        alert('Para instalar o Aden Arena no celular:\n\n• No Chrome (Android): Toque nos 3 pontinhos e escolha "Instalar aplicativo"\n• No Safari (iOS): Toque no botão Compartilhar e escolha "Adicionar à Tela de Início" 📲');
+      }
+    };
   });
 }
 
@@ -2644,6 +2668,11 @@ function updateColosseumUI() {
   if (pane) uiRenderColosseumTab(pane, state);
 }
 
+function updateMarketUI() {
+  const pane = el('tab-market');
+  if (pane) uiRenderMarketTab(pane, state, { log, updateAllUI, save });
+}
+
 function updateRankingsUI() {
   const pane = el('tab-rankings');
   if (pane) uiRenderRankingTab(pane, state);
@@ -2721,6 +2750,7 @@ function _performFullUIUpdate() {
   if (isTabVisible('sevensigns')) safeUiUpdate('sevensigns', updateSevenSignsUI);
   if (isTabVisible('fortress')) safeUiUpdate('fortress', updateFortressUI);
   if (isTabVisible('colosseum')) safeUiUpdate('colosseum', updateColosseumUI);
+  if (isTabVisible('market')) safeUiUpdate('market', updateMarketUI);
   if (isTabVisible('rankings')) safeUiUpdate('rankings', updateRankingsUI);
   if (isTabVisible('stage') || isTabVisible('zone') || isTabVisible('zones')) {
     safeUiUpdate('zone-bg', updateZoneBackground);
@@ -5074,6 +5104,7 @@ export function openPanel(tabName) {
   else if (targetTab === 'character') safeUiUpdate('character', updateCharacterUI);
   else if (targetTab === 'skills') safeUiUpdate('skills', updateSkillUI);
   else if (targetTab === 'shop') safeUiUpdate('shop', updateShopUI);
+  else if (targetTab === 'market') safeUiUpdate('market', updateMarketUI);
   else if (targetTab === 'craft') safeUiUpdate('craft', updateCraftUI);
   else if (targetTab === 'alchemy') safeUiUpdate('alchemy', updateAlchemyUI);
   else if (targetTab === 'astral') safeUiUpdate('astral', updateAstralUI);
@@ -6835,6 +6866,9 @@ export function init() {
       save();
       return res;
     };
+
+    // Market Window Actions
+    window.updateMarketUI = () => updateMarketUI();
 
     // Rankings Window Actions
     window.updateRankingsUI = () => updateRankingsUI();

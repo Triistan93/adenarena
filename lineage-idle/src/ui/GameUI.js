@@ -40,6 +40,7 @@ import { DUEL_BET_TIERS, DUEL_OPPONENT_ARCHETYPES, SURVIVAL_WAVES, COLOSSEUM_SHO
 import { ColosseumService } from '../services/ColosseumService.js';
 import { CombatPowerService } from '../services/CombatPowerService.js';
 import { renderRankingTab, setActiveRankingTab } from './RankingUI.js';
+import { renderMarketTab, setActiveMarketTab } from './MarketUI.js';
 import { heroSVG, monsterSVG, MON_IMG } from '../../art.js';
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -6328,5 +6329,4 @@ export function renderColosseumTab(container, state) {
   `;
 }
 
-export { renderRankingTab, setActiveRankingTab };
-
+export { renderRankingTab, setActiveRankingTab, renderMarketTab, setActiveMarketTab };

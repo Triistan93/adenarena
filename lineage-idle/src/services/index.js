@@ -19,4 +19,4 @@ export * from './SkillEnchantService.js';
 export * from './AugmentationService.js';
 export * from './RankingService.js';
 export * from './AlchemyService.js';
-
+export * from './MarketService.js';

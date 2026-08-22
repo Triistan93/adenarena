@@ -1,179 +1,139 @@
 /**
- * RankingUI.js — Interface Visual de Rankings Globais (Leaderboards & Hall of Legends)
+ * RankingUI.js — Interface Completa de Rankings Globais e Leaderboards
  * 
- * Renderiza o painel de classificação por Combat Power, Grand Olympiad, Duelos de Coliseu
- * e Lordes dos Castelos, integrando dados reais do Firebase Firestore com o motor idle.
+ * Exibe Top Combat Power (CP), Top Nível, Top Olympiad PvP e Lordes de Castelos
+ * com sistema de inspeção de equipamentos e desafio assíncrono.
  */
 
 import { RankingService } from '../services/RankingService.js';
 import { CombatPowerService } from '../services/CombatPowerService.js';
 
-let _activeCategory = 'cp'; // 'cp' | 'olympiad' | 'duels' | 'castles'
-let _cachedList = [];
-let _isLoading = false;
+let _activeTab = 'cp'; // 'cp' | 'level' | 'olympiad' | 'castles'
 
-export function setActiveRankingTab(category) {
-  _activeCategory = category;
-  _cachedList = [];
-  if (typeof window !== 'undefined' && window.updateRankingsUI) {
-    window.updateRankingsUI();
-  }
+export function setActiveRankingTab(tab) {
+  _activeTab = tab;
 }
 
 export function renderRankingTab(container, state) {
-  if (!container) return;
+  if (!container || !state) return;
 
-  const currentCP = CombatPowerService.calculateCombatPower(state);
-  const cpTier = CombatPowerService.getCombatPowerTier(currentCP);
+  const playerCP = CombatPowerService.calculateCombatPower(state);
+  const rankings = RankingService.getLeaderboards();
+  const playerProfile = RankingService.buildPublicProfile(state);
+
+  let currentList = [];
+  if (_activeTab === 'cp') currentList = rankings.cp || [];
+  else if (_activeTab === 'level') currentList = (rankings.cp || []).slice().sort((a, b) => (b.level || 0) - (a.level || 0));
+  else if (_activeTab === 'olympiad') currentList = rankings.olympiad || [];
+  else if (_activeTab === 'castles') currentList = rankings.castles || [];
+
+  // Garante que o jogador local esteja inserido no topo proporcional
+  const playerRankIndex = currentList.findIndex(p => p.charName === playerProfile.charName);
+  const playerRankDisplay = playerRankIndex !== -1 ? `#${playerRankIndex + 1}` : '#12';
 
   let html = `
-    <div class="ranking-panel-wrapper" style="padding: 12px; color: #e2e8f0;">
-      <!-- Header do Painel -->
-      <div style="display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, rgba(20,20,35,0.9), rgba(35,25,50,0.9)); border: 1px solid rgba(212,175,55,0.3); border-radius: 10px; padding: 14px 18px; margin-bottom: 14px;">
-        <div>
-          <h2 style="margin: 0; color: #fbbf24; font-size: 1.3rem; display: flex; align-items: center; gap: 8px;">
-            🏆 Hall dos Campeões de Aden
-          </h2>
-          <div style="font-size: 0.85rem; color: #94a3b8; margin-top: 4px;">
-            Classificação global sincronizada via Cloud Database
+    <div style="padding: 10px; max-width: 1000px; margin: 0 auto; font-family: 'Cinzel', serif;">
+      
+      <!-- Top Banner & Player Standing -->
+      <div style="background: linear-gradient(135deg, rgba(30,20,10,0.95), rgba(15,12,8,0.98)); border: 1px solid rgba(212,167,68,0.5); border-radius: 12px; padding: 16px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.6);">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <div style="font-size: 36px; background: rgba(0,0,0,0.4); border: 1px solid #ffd877; border-radius: 10px; width: 54px; height: 54px; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 12px rgba(253,224,71,0.3);">
+            🏆
+          </div>
+          <div>
+            <h2 style="margin: 0; color: #f4d58a; font-size: 20px; font-weight: bold;">Quadro de Honra Mundial de Aden</h2>
+            <p style="margin: 2px 0 0 0; color: #94a3b8; font-size: 12px; font-family: 'Inter', sans-serif;">Classificação dos Maiores Guerreiros do Servidor</p>
           </div>
         </div>
-        <div style="text-align: right;">
-          <div style="font-size: 0.75rem; color: #94a3b8;">Seu Poder de Combate:</div>
-          <div style="font-size: 1.15rem; font-weight: bold; color: #38bdf8; display: flex; align-items: center; justify-content: flex-end; gap: 6px;">
-            <span>${cpTier.badge}</span>
-            <span>${CombatPowerService.formatCombatPower(currentCP)}</span>
+
+        <div style="background: rgba(0,0,0,0.6); border: 1px solid rgba(212,167,68,0.4); border-radius: 8px; padding: 8px 16px; display: flex; align-items: center; gap: 14px;">
+          <div style="text-align: right;">
+            <div style="font-size: 11px; color: #94a3b8; font-family: 'Inter', sans-serif;">Sua Posição Global:</div>
+            <div style="font-size: 16px; font-weight: bold; color: #ffd877; font-family: 'IBM Plex Mono', monospace;">${playerRankDisplay}</div>
           </div>
-          <span style="display: inline-block; font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; background: rgba(56,189,248,0.15); color: ${cpTier.color}; border: 1px solid ${cpTier.color}40; margin-top: 2px;">
-            ${cpTier.name}
-          </span>
+          <div style="text-align: right; border-left: 1px solid rgba(255,255,255,0.1); padding-left: 12px;">
+            <div style="font-size: 11px; color: #94a3b8; font-family: 'Inter', sans-serif;">Seu Poder (CP):</div>
+            <div style="font-size: 16px; font-weight: bold; color: #60a5fa; font-family: 'IBM Plex Mono', monospace;">⚔️ ${playerCP.toLocaleString()}</div>
+          </div>
         </div>
       </div>
 
-      <!-- Sub-Abas de Categoria -->
-      <div style="display: flex; gap: 8px; margin-bottom: 14px; overflow-x: auto; padding-bottom: 4px;">
-        <button onclick="window.setRankingCategoryAction && window.setRankingCategoryAction('cp')" 
-                style="flex: 1; min-width: 120px; padding: 8px 12px; border-radius: 8px; border: 1px solid ${_activeCategory === 'cp' ? '#fbbf24' : 'rgba(255,255,255,0.1)'}; background: ${_activeCategory === 'cp' ? 'rgba(251,191,36,0.2)' : 'rgba(0,0,0,0.4)'}; color: ${_activeCategory === 'cp' ? '#fbbf24' : '#94a3b8'}; cursor: pointer; font-weight: bold; font-size: 0.85rem;">
-          👑 Combat Power
+      <!-- Categories Tabs -->
+      <div style="display: flex; gap: 8px; margin-bottom: 14px; border-bottom: 1px solid rgba(212,167,68,0.2); padding-bottom: 8px; flex-wrap: wrap;">
+        <button class="rank-cat-btn ${_activeTab === 'cp' ? 'active' : ''}" data-cat="cp" style="background: ${_activeTab === 'cp' ? '#ca8a04' : 'rgba(0,0,0,0.4)'}; color: ${_activeTab === 'cp' ? '#000' : '#cbd5e1'}; border: 1px solid ${_activeTab === 'cp' ? '#fde047' : 'rgba(255,255,255,0.1)'}; padding: 7px 16px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 12px;">
+          ⚔️ Top Combat Power (CP)
         </button>
-        <button onclick="window.setRankingCategoryAction && window.setRankingCategoryAction('olympiad')" 
-                style="flex: 1; min-width: 120px; padding: 8px 12px; border-radius: 8px; border: 1px solid ${_activeCategory === 'olympiad' ? '#fbbf24' : 'rgba(255,255,255,0.1)'}; background: ${_activeCategory === 'olympiad' ? 'rgba(251,191,36,0.2)' : 'rgba(0,0,0,0.4)'}; color: ${_activeCategory === 'olympiad' ? '#fbbf24' : '#94a3b8'}; cursor: pointer; font-weight: bold; font-size: 0.85rem;">
-          🏆 Grand Olympiad
+        <button class="rank-cat-btn ${_activeTab === 'level' ? 'active' : ''}" data-cat="level" style="background: ${_activeTab === 'level' ? '#ca8a04' : 'rgba(0,0,0,0.4)'}; color: ${_activeTab === 'level' ? '#000' : '#cbd5e1'}; border: 1px solid ${_activeTab === 'level' ? '#fde047' : 'rgba(255,255,255,0.1)'}; padding: 7px 16px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 12px;">
+          ⭐ Top Nível &amp; XP
         </button>
-        <button onclick="window.setRankingCategoryAction && window.setRankingCategoryAction('duels')" 
-                style="flex: 1; min-width: 120px; padding: 8px 12px; border-radius: 8px; border: 1px solid ${_activeCategory === 'duels' ? '#fbbf24' : 'rgba(255,255,255,0.1)'}; background: ${_activeCategory === 'duels' ? 'rgba(251,191,36,0.2)' : 'rgba(0,0,0,0.4)'}; color: ${_activeCategory === 'duels' ? '#fbbf24' : '#94a3b8'}; cursor: pointer; font-weight: bold; font-size: 0.85rem;">
-          ⚔️ Duelos de Coliseu
+        <button class="rank-cat-btn ${_activeTab === 'olympiad' ? 'active' : ''}" data-cat="olympiad" style="background: ${_activeTab === 'olympiad' ? '#ca8a04' : 'rgba(0,0,0,0.4)'}; color: ${_activeTab === 'olympiad' ? '#000' : '#cbd5e1'}; border: 1px solid ${_activeTab === 'olympiad' ? '#fde047' : 'rgba(255,255,255,0.1)'}; padding: 7px 16px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 12px;">
+          👑 Top Olimpíadas (PvP)
         </button>
-        <button onclick="window.setRankingCategoryAction && window.setRankingCategoryAction('castles')" 
-                style="flex: 1; min-width: 120px; padding: 8px 12px; border-radius: 8px; border: 1px solid ${_activeCategory === 'castles' ? '#fbbf24' : 'rgba(255,255,255,0.1)'}; background: ${_activeCategory === 'castles' ? 'rgba(251,191,36,0.2)' : 'rgba(0,0,0,0.4)'}; color: ${_activeCategory === 'castles' ? '#fbbf24' : '#94a3b8'}; cursor: pointer; font-weight: bold; font-size: 0.85rem;">
-          🏰 Lordes dos Castelos
+        <button class="rank-cat-btn ${_activeTab === 'castles' ? 'active' : ''}" data-cat="castles" style="background: ${_activeTab === 'castles' ? '#ca8a04' : 'rgba(0,0,0,0.4)'}; color: ${_activeTab === 'castles' ? '#000' : '#cbd5e1'}; border: 1px solid ${_activeTab === 'castles' ? '#fde047' : 'rgba(255,255,255,0.1)'}; padding: 7px 16px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 12px;">
+          🏰 Lordes de Castelo
         </button>
       </div>
 
-      <!-- Container da Tabela de Rankings -->
-      <div id="ranking-list-container">
-        <div style="text-align: center; padding: 30px; color: #94a3b8;">
-          <div class="spinner" style="margin: 0 auto 10px auto;"></div>
-          Carregando líderes do reino...
-        </div>
+      <!-- Leaderboard List -->
+      <div style="display: flex; flex-direction: column; gap: 8px; font-family: 'Inter', sans-serif;">
+        ${currentList.slice(0, 50).map((p, idx) => {
+          const rank = idx + 1;
+          const isTop1 = rank === 1;
+          const isTop3 = rank <= 3;
+          const badgeColor = isTop1 ? '#fbbf24' : (rank === 2 ? '#94a3b8' : (rank === 3 ? '#b45309' : '#475569'));
+          const isSelf = p.charName === playerProfile.charName;
+
+          return `
+            <div style="background: ${isSelf ? 'rgba(59,130,246,0.15)' : 'rgba(18,24,36,0.85)'}; border: 1px solid ${isSelf ? '#3b82f6' : (isTop3 ? 'rgba(212,167,68,0.4)' : 'rgba(255,255,255,0.06)')}; border-radius: 10px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
+              
+              <!-- Rank & Avatar & Name -->
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="width: 32px; height: 32px; border-radius: 50%; background: ${badgeColor}; color: #000; font-weight: bold; font-family: 'Cinzel', serif; font-size: 14px; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 8px ${badgeColor}88;">
+                  ${isTop1 ? '👑' : rank}
+                </div>
+                <div>
+                  <div style="font-weight: bold; color: ${isTop1 ? '#fde047' : '#fff'}; font-size: 14px; font-family: 'Cinzel', serif; display: flex; align-items: center; gap: 6px;">
+                    ${p.charName} ${p.isHero ? '<span style="color:#fde047; font-size:11px;">[HERO 👑]</span>' : ''} ${isSelf ? '<span style="color:#60a5fa; font-size:10px;">(Você)</span>' : ''}
+                  </div>
+                  <div style="font-size: 11px; color: #94a3b8;">
+                    Lv. ${p.level} · ${p.className} · ${p.topWeaponName || 'Arma Lendária'}
+                  </div>
+                </div>
+              </div>
+
+              <!-- Stats & Actions -->
+              <div style="display: flex; align-items: center; gap: 16px;">
+                <div style="text-align: right; font-family: 'IBM Plex Mono', monospace;">
+                  <div style="font-size: 13px; font-weight: bold; color: #60a5fa;">
+                    ⚔️ ${(p.combatPower || 1000).toLocaleString()} CP
+                  </div>
+                  <div style="font-size: 10px; color: #94a3b8;">
+                    ${_activeTab === 'olympiad' ? (p.olympiadPoints || 1000) + ' pts Olimpíadas' : 'Clã: ' + (p.clanName || 'Sem Clã')}
+                  </div>
+                </div>
+
+                ${!isSelf ? `
+                  <button onclick="window.challengeRankingPlayerAction('${p.charName}', ${p.combatPower || 1000})" style="background: rgba(220,38,38,0.2); border: 1px solid #ef4444; color: #fca5a5; border-radius: 6px; padding: 6px 12px; font-size: 11px; cursor: pointer; font-weight: bold;">
+                    ⚔️ Desafiar
+                  </button>
+                ` : ''}
+              </div>
+
+            </div>
+          `;
+        }).join('')}
       </div>
+
     </div>
   `;
 
   container.innerHTML = html;
 
-  // Carrega assincronamente os dados
-  loadAndRenderList(container, state, _activeCategory);
-}
-
-async function loadAndRenderList(container, state, category) {
-  const listEl = container.querySelector('#ranking-list-container');
-  if (!listEl) return;
-
-  try {
-    const list = await RankingService.getLeaderboard(category, state);
-    if (!list || list.length === 0) {
-      listEl.innerHTML = `<div style="text-align: center; padding: 30px; color: #94a3b8;">Nenhum guerreiro registrado nesta categoria ainda.</div>`;
-      return;
-    }
-
-    let rowsHtml = '';
-    list.forEach((player, idx) => {
-      const rankNum = idx + 1;
-      const isTop1 = rankNum === 1;
-      const isTop2 = rankNum === 2;
-      const isTop3 = rankNum === 3;
-      const medal = isTop1 ? '🥇' : isTop2 ? '🥈' : isTop3 ? '🥉' : `#${rankNum}`;
-      const isMe = player.isCurrentPlayer;
-
-      const pCP = Number(player.combatPower) || 1000;
-      const tier = CombatPowerService.getCombatPowerTier(pCP);
-
-      let statHighlight = '';
-      if (category === 'olympiad') {
-        statHighlight = `<span style="color: #fbbf24; font-weight: bold;">${player.olympiadPoints || 1000} Pts</span> <span style="font-size:0.75rem; color:#94a3b8;">(${player.olympiadWins || 0}V / ${player.olympiadLosses || 0}D)</span>`;
-      } else if (category === 'duels') {
-        statHighlight = `<span style="color: #22c55e; font-weight: bold;">${player.duelWins || 0} Vitórias</span>`;
-      } else if (category === 'castles') {
-        statHighlight = `<span style="color: #a855f7; font-weight: bold;">${player.castleLord || 'Lorde de Castelo'}</span>`;
-      } else {
-        statHighlight = `<span style="color: #38bdf8; font-weight: bold;">${CombatPowerService.formatCombatPower(pCP)}</span>`;
-      }
-
-      rowsHtml += `
-        <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; margin-bottom: 8px; border-radius: 8px; background: ${isMe ? 'rgba(56, 189, 248, 0.12)' : (isTop1 ? 'rgba(251, 191, 36, 0.08)' : 'rgba(0,0,0,0.35)')}; border: 1px solid ${isMe ? '#38bdf8' : (isTop1 ? 'rgba(251, 191, 36, 0.4)' : 'rgba(255,255,255,0.06)')};">
-          <!-- Rank & Avatar Info -->
-          <div style="display: flex; align-items: center; gap: 12px;">
-            <div style="font-size: ${rankNum <= 3 ? '1.3rem' : '0.95rem'}; font-weight: bold; width: 32px; text-align: center; color: ${isTop1 ? '#fbbf24' : isTop2 ? '#cbd5e1' : isTop3 ? '#f97316' : '#94a3b8'};">
-              ${medal}
-            </div>
-            <div>
-              <div style="display: flex; align-items: center; gap: 6px;">
-                <span style="font-weight: bold; color: ${isMe ? '#38bdf8' : '#f8fafc'}; font-size: 0.95rem;">${player.charName}</span>
-                ${player.isHero ? '<span title="Grande Herói de Aden">👑</span>' : ''}
-                ${isMe ? '<span style="font-size: 0.65rem; background: #38bdf8; color: #0f172a; padding: 1px 5px; border-radius: 3px; font-weight: bold;">VOCÊ</span>' : ''}
-              </div>
-              <div style="font-size: 0.75rem; color: #94a3b8; display: flex; align-items: center; gap: 8px; margin-top: 2px;">
-                <span>Lv. ${player.level} ${player.className}</span>
-                <span>•</span>
-                <span style="color: #cbd5e1;">🛡️ ${player.clanName || 'Sem Clã'}</span>
-                ${player.topWeaponName ? `<span>•</span> <span style="color: #fbbf24;">⚔️ ${player.topWeaponName}</span>` : ''}
-              </div>
-            </div>
-          </div>
-
-          <!-- Stats & Ações -->
-          <div style="display: flex; align-items: center; gap: 14px;">
-            <div style="text-align: right;">
-              <div>${statHighlight}</div>
-              <div style="font-size: 0.7rem; color: ${tier.color};">${tier.badge} ${tier.name}</div>
-            </div>
-            ${!isMe ? `
-              <button onclick="window.challengeRankingPlayerAction && window.challengeRankingPlayerAction('${player.charName}', ${pCP})" 
-                      style="padding: 6px 10px; font-size: 0.75rem; font-weight: bold; border-radius: 6px; background: rgba(239,68,68,0.2); border: 1px solid rgba(239,68,68,0.5); color: #f87171; cursor: pointer; transition: all 0.2s;"
-                      onmouseover="this.style.background='rgba(239,68,68,0.4)'"
-                      onmouseout="this.style.background='rgba(239,68,68,0.2)'">
-                ⚔️ Desafiar
-              </button>
-            ` : ''}
-          </div>
-        </div>
-      `;
-    });
-
-    listEl.innerHTML = `
-      <div style="max-height: 600px; overflow-y: auto; padding-right: 4px;">
-        ${rowsHtml}
-      </div>
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.08);">
-        <span style="font-size: 0.75rem; color: #64748b;">Os rankings são recalculados e sincronizados a cada salvamento na nuvem.</span>
-        <button onclick="window.refreshRankingsAction && window.refreshRankingsAction()" 
-                style="padding: 6px 12px; font-size: 0.8rem; border-radius: 6px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); color: #cbd5e1; cursor: pointer;">
-          🔄 Atualizar Lista
-        </button>
-      </div>
-    `;
-  } catch (err) {
-    listEl.innerHTML = `<div style="text-align: center; padding: 30px; color: #f87171;">Erro ao carregar rankings: ${err.message}</div>`;
-  }
+  // Event Listeners de Categoria
+  container.querySelectorAll('.rank-cat-btn').forEach(btn => {
+    btn.onclick = () => {
+      _activeTab = btn.dataset.cat;
+      renderRankingTab(container, state);
+    };
+  });
 }
