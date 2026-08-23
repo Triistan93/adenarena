@@ -2269,13 +2269,20 @@ export function updateSkillInfoPanel(state, callbacks = {}) {
   // Moveset / Restrição de Arma
   let weaponReqBadge = '';
   const weaponReq = def.weaponType || def.requiredWeapon;
-  if (weaponReq) {
-    const eqWeapon = state.equipment?.weapon;
-    const eqType = eqWeapon?.weaponType || eqWeapon?.type || '';
-    const isWepMatch = eqType.toLowerCase().includes(weaponReq.toLowerCase());
+  if (weaponReq && weaponReq !== 'any') {
+    const wpnCheck = (typeof canCastSkillWeapon === 'function')
+      ? canCastSkillWeapon(state, def)
+      : { ok: true };
+    const isWepMatch = wpnCheck.ok;
+    const reqLabels = {
+      bow: 'Arco', dagger: 'Adaga', staff: 'Cajado', sword: 'Espada',
+      dual: 'Dual', spear: 'Lança', twohand: '2-Mãos', fist: 'Manopla',
+      ancientsword: 'Espada Anciã', blunt: 'Maça'
+    };
+    const reqDisplay = reqLabels[weaponReq.toLowerCase()] || weaponReq.toUpperCase();
     weaponReqBadge = `
       <div style="display:inline-flex; align-items:center; gap:4px; font-size:11px; padding:3px 8px; border-radius:4px; margin-bottom:6px; background:${isWepMatch ? 'rgba(16,185,129,0.15)' : 'rgba(239,68,68,0.15)'}; border:1px solid ${isWepMatch ? '#10b981' : '#ef4444'}; color:${isWepMatch ? '#6ee7b7' : '#fca5a5'}; font-weight:bold;">
-        ${isWepMatch ? '⚔️' : '⚠️'} Exige: ${weaponReq.toUpperCase()} ${isWepMatch ? '(Equipada)' : '(Não Equipada)'}
+        ${isWepMatch ? '⚔️' : '⚠️'} Exige: ${reqDisplay} ${isWepMatch ? '(Equipada)' : '(Não Equipada)'}
       </div>
     `;
   }

@@ -153,33 +153,45 @@ export function canCastSkillWeapon(state, skillDef) {
   if (!skillDef) return { ok: true };
 
   // 1. Requisito de Arma
-  if (skillDef.requiredWeapon && skillDef.requiredWeapon !== 'any') {
+  const reqWeapon = skillDef.weaponType || skillDef.requiredWeapon;
+  if (reqWeapon && reqWeapon !== 'any') {
     const wpnUid = state.equipment?.weapon;
-    const wpnItem = wpnUid ? state.inventory?.find(i => i.uid === wpnUid) : null;
-    const gData = (typeof window !== 'undefined' && window.GameData) ? window.GameData : {};
-    const allItems = gData.ALL_ITEMS || {};
-    const itemDef = (wpnItem?.itemId && allItems[wpnItem.itemId]) || wpnItem || {};
-
-    const s = `${itemDef.id || wpnItem?.itemId || ''} ${itemDef.name || wpnItem?.name || ''}`.toLowerCase();
-    let wpnType = null;
-    if (/bow/.test(s)) wpnType = 'bow';
-    else if (/staff|wand|scepter|magicblunt|magic_sword|crucifix/.test(s)) wpnType = 'staff';
-    else if (/mace|hammer|blunt/.test(s)) wpnType = 'blunt';
-    else if (/dagger/.test(s)) wpnType = 'dagger';
-    else if (/spear|lance|pike/.test(s)) wpnType = 'spear';
-    else if (/dual/.test(s)) wpnType = 'dual';
-    else if (/twohand/.test(s)) wpnType = 'twohand';
-    else if (/fist|knuckle/.test(s)) wpnType = 'fist';
-    else if (/ancientsword/.test(s)) wpnType = 'ancientsword';
-    else if (/sword|axe|blade|katana|longsword|rapier/.test(s)) wpnType = 'sword';
-
-    if (wpnType !== skillDef.requiredWeapon) {
+    if (!wpnUid) {
       const labels = {
         bow: 'Arco', dagger: 'Adaga', staff: 'Cajado Mágico', sword: 'Espada',
         dual: 'Espadas Duplas', spear: 'Lança', twohand: 'Arma de 2 Mãos',
-        fist: 'Manopla', ancientsword: 'Espada Anciã'
+        fist: 'Manopla', ancientsword: 'Espada Anciã', blunt: 'Maça'
       };
-      const reqLabel = labels[skillDef.requiredWeapon] || skillDef.requiredWeapon.toUpperCase();
+      const reqLabel = labels[reqWeapon] || reqWeapon.toUpperCase();
+      return { ok: false, reason: `Requer ${reqLabel} equipado` };
+    }
+
+    const wpnItem = (typeof wpnUid === 'object') ? wpnUid : state.inventory?.find(i => i.uid === wpnUid);
+    const gData = (typeof window !== 'undefined' && window.GameData) ? window.GameData : {};
+    const eData = (typeof window !== 'undefined' && window.EchoData) ? window.EchoData : {};
+    const allItems = gData.ALL_ITEMS || eData.ALL_ITEMS || {};
+    const itemDef = (wpnItem?.itemId && allItems[wpnItem.itemId]) || wpnItem || {};
+
+    const s = `${itemDef.id || wpnItem?.itemId || ''} ${itemDef.name || wpnItem?.name || ''} ${itemDef.type || ''} ${itemDef.weaponType || ''}`.toLowerCase();
+    let wpnType = null;
+    if (/bow|crossbow/.test(s)) wpnType = 'bow';
+    else if (/staff|wand|scepter|magicblunt|magic_sword|crucifix|mace/.test(s)) wpnType = 'staff';
+    else if (/hammer|blunt/.test(s)) wpnType = 'blunt';
+    else if (/dagger|knife/.test(s)) wpnType = 'dagger';
+    else if (/spear|lance|pike|halberd/.test(s)) wpnType = 'spear';
+    else if (/dual/.test(s)) wpnType = 'dual';
+    else if (/twohand|great_sword|great_axe/.test(s)) wpnType = 'twohand';
+    else if (/fist|knuckle|claw/.test(s)) wpnType = 'fist';
+    else if (/ancientsword/.test(s)) wpnType = 'ancientsword';
+    else if (/sword|axe|blade|katana|longsword|rapier|saber|falchion/.test(s)) wpnType = 'sword';
+
+    if (wpnType !== reqWeapon) {
+      const labels = {
+        bow: 'Arco', dagger: 'Adaga', staff: 'Cajado Mágico', sword: 'Espada',
+        dual: 'Espadas Duplas', spear: 'Lança', twohand: 'Arma de 2 Mãos',
+        fist: 'Manopla', ancientsword: 'Espada Anciã', blunt: 'Maça'
+      };
+      const reqLabel = labels[reqWeapon] || reqWeapon.toUpperCase();
       return { ok: false, reason: `Requer ${reqLabel} equipado` };
     }
   }
@@ -187,7 +199,7 @@ export function canCastSkillWeapon(state, skillDef) {
   // 2. Requisito de Escudo
   if (skillDef.requiredShield) {
     const shieldUid = state.equipment?.shield;
-    const shieldItem = shieldUid ? state.inventory?.find(i => i.uid === shieldUid) : null;
+    const shieldItem = (shieldUid && typeof shieldUid === 'object') ? shieldUid : (shieldUid ? state.inventory?.find(i => i.uid === shieldUid) : null);
     if (!shieldItem) {
       return { ok: false, reason: 'Requer Escudo equipado' };
     }
