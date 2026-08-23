@@ -3412,7 +3412,18 @@ function updateMonsterHP() { const fill = el('m-hp-fill'), mon = state.activeMon
 
 function reflow(n) { void n.offsetWidth; }
 function stageHeroAttack() { const st = el('stage'); if (!st) return; st.classList.remove('is-hero-atk'); reflow(st); st.classList.add('is-hero-atk'); }
-function stageMonsterHurt(dmg, crit) { updateMonsterHP(); const m = el('stage-monster'); if (m) { m.classList.remove('hurt'); reflow(m); m.classList.add('hurt'); setTimeout(() => m.classList.remove('hurt'), 420); } stageFloat((crit ? 'CRIT ' : '') + Math.round(dmg), crit ? 'sf-crit' : 'sf-dmg', 'right'); }
+function stageMonsterHurt(dmg, crit) { 
+  updateMonsterHP(); 
+  const m = el('stage-monster'); 
+  if (m) { 
+    m.classList.remove('hurt'); 
+    reflow(m); 
+    m.classList.add('hurt'); 
+    setTimeout(() => m.classList.remove('hurt'), 420); 
+  } 
+  const floatClass = crit ? 'sf-crit crit-hit-text' : 'sf-dmg';
+  stageFloat((crit ? '💥 CRIT! ' : '') + Math.round(dmg), floatClass, 'right'); 
+}
 function stageMonsterDie() { 
   const fill = el('m-hp-fill'); 
   if (fill) fill.style.width = '0%'; 

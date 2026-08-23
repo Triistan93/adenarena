@@ -40,44 +40,48 @@ export const IDLE_MARKUP = `
     <!-- Main Layout -->
     <main class="main-grid">
       <!-- Left: Character Stats -->
-      <aside class="panel stats-panel">
-        <div class="stat-row">
-          <label>HP</label>
-          <div class="bar-container">
-            <div id="hp-bar" class="bar hp" style="width:100%"></div>
-            <span id="hp-text">100 / 100</span>
+      <aside class="panel stats-panel l2-gold-frame">
+        <div style="display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(212,169,78,0.3); padding-bottom:6px; margin-bottom:10px;">
+          <h2 style="font-family:'Cinzel',serif; font-size:13px; font-weight:900; color:#ffd700; margin:0; letter-spacing:0.1em; text-transform:uppercase; text-shadow:0 0 8px rgba(255,215,0,0.3);">⚔️ Status do Herói</h2>
+          <span id="char-combat-power" style="font-family:'Cinzel',serif; font-size:11px; color:#60a5fa; font-weight:bold; background:rgba(30,58,138,0.3); border:1px solid rgba(96,165,250,0.3); padding:1px 6px; border-radius:4px;">CP: 120</span>
+        </div>
+        <div class="stat-row l2-gauge-slot">
+          <label style="color:#ef4444; font-weight:bold; font-family:'Cinzel',serif;">HP</label>
+          <div class="bar-container l2-gauge-bezel">
+            <div id="hp-bar" class="bar hp l2-gauge-hp-fill" style="width:100%"></div>
+            <span id="hp-text" style="font-weight:700; text-shadow:1px 1px 2px #000;">100 / 100</span>
           </div>
         </div>
-        <div class="stat-row">
-          <label>MP</label>
-          <div class="bar-container">
-            <div id="mp-bar" class="bar mp" style="width:100%"></div>
-            <span id="mp-text">50 / 50</span>
+        <div class="stat-row l2-gauge-slot">
+          <label style="color:#3b82f6; font-weight:bold; font-family:'Cinzel',serif;">MP</label>
+          <div class="bar-container l2-gauge-bezel">
+            <div id="mp-bar" class="bar mp l2-gauge-mp-fill" style="width:100%"></div>
+            <span id="mp-text" style="font-weight:700; text-shadow:1px 1px 2px #000;">50 / 50</span>
           </div>
         </div>
-        <div class="stat-row">
-          <label>XP</label>
-          <div class="bar-container">
-            <div id="xp-bar" class="bar xp" style="width:0%"></div>
-            <span id="xp-text">0 / 100</span>
+        <div class="stat-row l2-gauge-slot">
+          <label style="color:#c084fc; font-weight:bold; font-family:'Cinzel',serif;">XP</label>
+          <div class="bar-container l2-gauge-bezel">
+            <div id="xp-bar" class="bar xp l2-gauge-xp-fill" style="width:0%"></div>
+            <span id="xp-text" style="font-weight:700; text-shadow:1px 1px 2px #000;">0 / 100</span>
           </div>
         </div>
         <div class="stat-divider"></div>
-        <div class="stat-row"><label>Level</label><span id="level-text" class="stat-value">1</span></div>
+        <div class="stat-row"><label>Level</label><span id="level-text" class="stat-value" style="color:#ffd700; font-weight:bold;">1</span></div>
         <div class="stat-row"><label>Saga</label><span id="saga-text" class="stat-value">Interlude</span></div>
         <div class="stat-row"><label>Race</label><span id="race-text" class="stat-value">Human</span></div>
         <div class="stat-row"><label>Class</label><span id="class-text" class="stat-value">Fighter</span></div>
         <div class="stat-divider"></div>
-        <div class="stat-row"><label>ATK</label><span id="atk-text" class="stat-value">10</span></div>
-        <div class="stat-row"><label>DEF</label><span id="def-text" class="stat-value">5</span></div>
+        <div class="stat-row"><label>ATK</label><span id="atk-text" class="stat-value" style="color:#f87171; font-weight:bold;">10</span></div>
+        <div class="stat-row"><label>DEF</label><span id="def-text" class="stat-value" style="color:#60a5fa; font-weight:bold;">5</span></div>
         <div class="stat-row"><label>EVA</label><span id="eva-text" class="stat-value">0</span></div>
-        <div class="stat-row"><label>MATK</label><span id="matk-text" class="stat-value">0</span></div>
+        <div class="stat-row"><label>MATK</label><span id="matk-text" class="stat-value" style="color:#a78bfa; font-weight:bold;">0</span></div>
         <div class="stat-row"><label>MDEF</label><span id="mdef-text" class="stat-value">0</span></div>
-        <div class="stat-row"><label>CRIT</label><span id="crit-text" class="stat-value">0%</span></div>
-        <div class="stat-row"><label>Loot</label><span id="loot-text" class="stat-value">100%</span></div>
+        <div class="stat-row"><label>CRIT</label><span id="crit-text" class="stat-value" style="color:#fde047; font-weight:bold;">0%</span></div>
+        <div class="stat-row"><label>Loot</label><span id="loot-text" class="stat-value" style="color:#34d399; font-weight:bold;">100%</span></div>
         <div class="stat-divider"></div>
-        <div class="stat-row"><label>SP</label><span id="sp-text" class="stat-value">0</span></div>
-        <div class="stat-row"><label>Adena</label><span id="gold-text-stat" class="stat-value gold">0</span></div>
+        <div class="stat-row"><label>SP</label><span id="sp-text" class="stat-value" style="color:#67e8f9; font-weight:bold;">0</span></div>
+        <div class="stat-row"><label>Adena</label><span id="gold-text-stat" class="stat-value gold" style="color:#f59e0b; font-weight:bold; font-size:14px;">0</span></div>
         <div class="stat-row"><label>Adena/s</label><span id="gps-text" class="stat-value gold-dim">—</span></div>
         <div class="stat-row"><label>Craft Lv</label><span id="craft-level-stat" class="stat-value">1</span></div>
         <div class="stat-divider"></div>
@@ -87,7 +91,7 @@ export const IDLE_MARKUP = `
       <div class="grid-resizer grid-resizer-v" id="resizer-col-1" title="Arrastre para redimensionar painel de atributos"></div>
 
       <!-- Center: live battle stage + combat ticker (compact & centered) -->
-      <section class="panel log-panel center-panel" id="center-panel">
+      <section class="panel log-panel center-panel l2-gold-frame" id="center-panel">
         <div class="stage" id="stage" data-state="idle">
           <div class="stage-bg stage-bg-a" id="stage-bg-a"></div>
           <div class="stage-bg stage-bg-b" id="stage-bg-b"></div>
@@ -160,33 +164,64 @@ export const IDLE_MARKUP = `
 
       <div class="grid-resizer grid-resizer-v" id="resizer-col-2" title="Arrastre para redimensionar inventário e abas"></div>
 
-      <!-- Right: Main Menu Workspace (Expanded) -->
-      <aside class="panel tabs-panel">
-        <div class="tab-buttons">
-          <button class="tab-btn active" data-tab="zones"><span style="color:#d4af37; margin-right:3px;">⚔</span> Combate &amp; Caça</button>
-          <button class="tab-btn" data-tab="character"><span style="color:#93c5fd; margin-right:3px;">🛡</span> Personagem</button>
-          <button class="tab-btn" data-tab="inventory"><span style="color:#f59e0b; margin-right:3px;">🎒</span> Inventário <span id="tab-badge-inventory" class="tab-badge" style="display:none">!</span></button>
-          <button class="tab-btn" data-tab="warehouse"><span style="color:#a78bfa; margin-right:3px;">📦</span> Baú</button>
-          <button class="tab-btn" data-tab="skills"><span style="color:#38bdf8; margin-right:3px;">✦</span> Habilidades <span id="tab-badge-skills" class="tab-badge" style="display:none">!</span></button>
-          <button class="tab-btn" data-tab="shop"><span style="color:#fbbf24; margin-right:3px;">⚜</span> Mercador</button>
-          <button class="tab-btn" data-tab="market"><span style="color:#ffd877; margin-right:3px;">🏛</span> Mercado</button>
-          <button class="tab-btn" data-tab="craft"><span style="color:#f97316; margin-right:3px;">⚒</span> Forja <span id="tab-badge-craft" class="tab-badge" style="display:none">!</span></button>
-          <button class="tab-btn" data-tab="alchemy"><span style="color:#34d399; margin-right:3px;">🧪</span> Alquimia</button>
-          <button class="tab-btn" data-tab="astral"><span style="color:#c084fc; margin-right:3px;">★</span> Maestria</button>
-          <button class="tab-btn" data-tab="expeditions"><span style="color:#60a5fa; margin-right:3px;">🏰</span> Expedições &amp; Manor</button>
-          <button class="tab-btn" data-tab="raids"><span style="color:#f87171; margin-right:3px;">🐉</span> Raids &amp; Bosses</button>
-          <button class="tab-btn" data-tab="olympiad"><span style="color:#fbbf24; margin-right:3px;">🏆</span> Olimpíadas &amp; Heróis</button>
-          <button class="tab-btn" data-tab="clan"><span style="color:#6ee7b7; margin-right:3px;">🛡</span> Clã &amp; Castelos</button>
-          <button class="tab-btn" data-tab="sevensigns"><span style="color:#c084fc; margin-right:3px;">🏛</span> Sete Selos</button>
-          <button class="tab-btn" data-tab="fortress"><span style="color:#fb923c; margin-right:3px;">⚔</span> Fortalezas</button>
-          <button class="tab-btn" data-tab="colosseum"><span style="color:#f43f5e; margin-right:3px;">⚔</span> Coliseu</button>
-          <button class="tab-btn" data-tab="rankings"><span style="color:#fbbf24; margin-right:3px;">🏆</span> Rankings</button>
-          <button class="tab-btn" data-tab="enchant"><span style="color:#38bdf8; margin-right:3px;">✦</span> Encantamento</button>
-          <button class="tab-btn" data-tab="codex"><span style="color:#fde047; margin-right:3px;">📜</span> Codex</button>
-          <button class="tab-btn" data-tab="dolls"><span style="color:#f472b6; margin-right:3px;">🧸</span> Dolls</button>
-          <button class="tab-btn" data-tab="magiclamp"><span style="color:#fbbf24; margin-right:3px;">🪔</span> Lâmpada &amp; Craft</button>
-          <button class="tab-btn" data-tab="quests"><span style="color:#4ade80; margin-right:3px;">🎯</span> Missões <span id="tab-badge-quests" class="tab-badge" style="display:none">!</span></button>
-          <button class="tab-btn" data-tab="tower"><span style="color:#e879f9; margin-right:3px;">🏰</span> Torre Insolência</button>
+      <!-- Right: Main Menu Workspace (Expanded with Master 4-Pillar Dock) -->
+      <aside class="panel tabs-panel l2-gold-frame">
+        <!-- Master Navigation Dock: 4 Pillars of Aden -->
+        <div class="pillar-dock-container" id="pillar-dock-container">
+          <div class="pillar-master-tabs">
+            <button type="button" class="pillar-tab-btn active" data-pillar="combat" onclick="window.switchPillar && window.switchPillar('combat')">
+              <span>⚔️</span> Combate
+            </button>
+            <button type="button" class="pillar-tab-btn" data-pillar="character" onclick="window.switchPillar && window.switchPillar('character')">
+              <span>🛡️</span> Herói
+            </button>
+            <button type="button" class="pillar-tab-btn" data-pillar="economy" onclick="window.switchPillar && window.switchPillar('economy')">
+              <span>🏛️</span> Império
+            </button>
+            <button type="button" class="pillar-tab-btn" data-pillar="glory" onclick="window.switchPillar && window.switchPillar('glory')">
+              <span>👑</span> Glória
+            </button>
+          </div>
+
+          <!-- Pillar 1 Subtabs: Combate -->
+          <div class="pillar-subtabs-strip" id="pillar-strip-combat">
+            <button class="tab-btn active subtab-pill-btn" data-tab="zones">⚔ Caça &amp; Zonas</button>
+            <button class="tab-btn subtab-pill-btn" data-tab="raids">🐉 Raids &amp; Bosses</button>
+            <button class="tab-btn subtab-pill-btn" data-tab="tower">🏰 Torre da Insolência</button>
+            <button class="tab-btn subtab-pill-btn" data-tab="colosseum">⚔ Coliseu PvP</button>
+            <button class="tab-btn subtab-pill-btn" data-tab="expeditions">🏰 Expedições</button>
+          </div>
+
+          <!-- Pillar 2 Subtabs: Herói -->
+          <div class="pillar-subtabs-strip" id="pillar-strip-character" style="display:none;">
+            <button class="tab-btn subtab-pill-btn" data-tab="character">🛡 Personagem</button>
+            <button class="tab-btn subtab-pill-btn" data-tab="inventory">🎒 Mochila <span id="tab-badge-inventory" class="tab-badge" style="display:none">!</span></button>
+            <button class="tab-btn subtab-pill-btn" data-tab="skills">✦ Habilidades <span id="tab-badge-skills" class="tab-badge" style="display:none">!</span></button>
+            <button class="tab-btn subtab-pill-btn" data-tab="astral">★ Maestria</button>
+            <button class="tab-btn subtab-pill-btn" data-tab="dolls">🧸 Dolls &amp; Pets</button>
+            <button class="tab-btn subtab-pill-btn" data-tab="quests">🎯 Missões <span id="tab-badge-quests" class="tab-badge" style="display:none">!</span></button>
+          </div>
+
+          <!-- Pillar 3 Subtabs: Império & Economia -->
+          <div class="pillar-subtabs-strip" id="pillar-strip-economy" style="display:none;">
+            <button class="tab-btn subtab-pill-btn" data-tab="market" style="border-color:#ffd700; color:#fde047; font-weight:bold;">🏛 Mercado Giran (P2P)</button>
+            <button class="tab-btn subtab-pill-btn" data-tab="shop">⚜ Mercador</button>
+            <button class="tab-btn subtab-pill-btn" data-tab="craft">⚒ Forja Imperial <span id="tab-badge-craft" class="tab-badge" style="display:none">!</span></button>
+            <button class="tab-btn subtab-pill-btn" data-tab="alchemy">🧪 Alquimia</button>
+            <button class="tab-btn subtab-pill-btn" data-tab="warehouse">📦 Baú Privado</button>
+            <button class="tab-btn subtab-pill-btn" data-tab="magiclamp">🪔 Lâmpada Mágica</button>
+          </div>
+
+          <!-- Pillar 4 Subtabs: Glória & Sociedade -->
+          <div class="pillar-subtabs-strip" id="pillar-strip-glory" style="display:none;">
+            <button class="tab-btn subtab-pill-btn" data-tab="clan">🛡 Clã &amp; Castelos</button>
+            <button class="tab-btn subtab-pill-btn" data-tab="olympiad">🏆 Olimpíadas</button>
+            <button class="tab-btn subtab-pill-btn" data-tab="rankings">🏆 Rankings Mundiais</button>
+            <button class="tab-btn subtab-pill-btn" data-tab="sevensigns">🏛 Sete Selos</button>
+            <button class="tab-btn subtab-pill-btn" data-tab="fortress">⚔ Fortalezas</button>
+            <button class="tab-btn subtab-pill-btn" data-tab="enchant">✦ Encantamento</button>
+            <button class="tab-btn subtab-pill-btn" data-tab="codex">📜 Codex</button>
+          </div>
         </div>
         <div class="tab-content">
           <!-- Character Tab -->

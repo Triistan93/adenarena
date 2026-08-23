@@ -1325,13 +1325,24 @@ export function updateInventoryUI(state, callbacks = {}) {
     const tierBadge = (gradeLabel && GEAR_SLOTS.includes(defSlot))
       ? `<span class="tier-badge tier-${tierNum}">${gradeLabel}</span>` : '';
 
+    const enchantLevel = item.enchant || item.enchantLevel || 0;
+    let invSlotClasses = `inv-slot rarity-${rarity}` + (item.equipped ? ' is-equipped' : '') + (isSelected ? ' is-selected' : '');
+    if (enchantLevel >= 16) invSlotClasses += ' enchant-halo-16';
+    else if (enchantLevel >= 10) invSlotClasses += ' enchant-halo-10';
+    else if (enchantLevel >= 4) invSlotClasses += ' enchant-halo-4';
+
+    const enchantBadge = enchantLevel > 0 
+      ? `<span class="enchant-level-badge" style="position:absolute; bottom:2px; left:2px; background:rgba(0,0,0,0.85); color:${enchantLevel >= 16 ? '#d8b4fe' : enchantLevel >= 10 ? '#fca5a5' : '#7dd3fc'}; font-size:9px; font-weight:900; padding:1px 3px; border-radius:3px; border:1px solid currentColor; line-height:1; z-index:5;">+${enchantLevel}</span>`
+      : '';
+
     const slotEl = mkEl('div');
-    slotEl.className = `inv-slot rarity-${rarity}` + (item.equipped ? ' is-equipped' : '') + (isSelected ? ' is-selected' : '');
+    slotEl.className = invSlotClasses;
     slotEl.dataset.uid = item.uid;
 
     slotEl.innerHTML = `
       ${check}
       <span class="item-icon">${getItemIcon(def || item)}</span>
+      ${enchantBadge}
       ${qty}
       ${equippedTag}
       ${tierBadge}
@@ -1520,16 +1531,24 @@ export function updateEquipmentUI(state, callbacks = {}) {
     if (item && def) {
       const rarity = item.rarity || 'common';
       const penaltyCheck = (typeof window !== 'undefined' && window.BalanceEngine) ? window.BalanceEngine.checkGradePenalty(state.level || 1, def || item) : { hasPenalty: false };
+      const enchantLevel = item.enchant || item.enchantLevel || 0;
 
       let slotClasses = `equip-slot active rarity-${rarity}`;
       if (penaltyCheck.hasPenalty) slotClasses += ' has-grade-penalty';
+      if (enchantLevel >= 16) slotClasses += ' enchant-halo-16';
+      else if (enchantLevel >= 10) slotClasses += ' enchant-halo-10';
+      else if (enchantLevel >= 4) slotClasses += ' enchant-halo-4';
 
       slotEl.className = slotClasses;
       slotEl.dataset.uid = uid;
       slotEl.dataset.slot = slot;
 
       const penaltyBadge = penaltyCheck.hasPenalty ? `<span class="grade-penalty-badge" style="position:absolute; top:-3px; right:-3px; background:#dc2626; color:#fff; font-size:8px; padding:1px 2px; border-radius:2px; font-weight:bold; box-shadow:0 0 4px #000;" title="${penaltyCheck.reason}">⚠️</span>` : '';
-      slotEl.innerHTML = `${penaltyBadge}<span class="equip-icon">${getItemIcon(def || item)}</span>`;
+      const enchantBadge = enchantLevel > 0 
+        ? `<span class="enchant-level-badge" style="position:absolute; bottom:2px; left:2px; background:rgba(0,0,0,0.85); color:${enchantLevel >= 16 ? '#d8b4fe' : enchantLevel >= 10 ? '#fca5a5' : '#7dd3fc'}; font-size:9px; font-weight:900; padding:1px 3px; border-radius:3px; border:1px solid currentColor; line-height:1; z-index:5;">+${enchantLevel}</span>`
+        : '';
+
+      slotEl.innerHTML = `${penaltyBadge}${enchantBadge}<span class="equip-icon">${getItemIcon(def || item)}</span>`;
 
       slotEl.onmouseenter = (e) => showItemTooltip(e, item, state, callbacks);
       slotEl.onmouseleave = () => hideItemTooltip();

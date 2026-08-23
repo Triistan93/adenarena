@@ -64,6 +64,36 @@ export function getActivePanel() {
   return null;
 }
 
+const PILLAR_MAP = {
+  zones: 'combat',
+  raids: 'combat',
+  tower: 'combat',
+  colosseum: 'combat',
+  expeditions: 'combat',
+  
+  character: 'character',
+  inventory: 'character',
+  skills: 'character',
+  astral: 'character',
+  dolls: 'character',
+  quests: 'character',
+  
+  market: 'economy',
+  shop: 'economy',
+  craft: 'economy',
+  alchemy: 'economy',
+  warehouse: 'economy',
+  magiclamp: 'economy',
+  
+  clan: 'glory',
+  olympiad: 'glory',
+  rankings: 'glory',
+  sevensigns: 'glory',
+  fortress: 'glory',
+  enchant: 'glory',
+  codex: 'glory'
+};
+
 /**
  * Alterna qual .tab-pane está visível dentro da coluna de menus.
  * Não mexe em display/visibility/grid do layout — apenas nas abas internas.
@@ -94,6 +124,40 @@ export function showMenuPanel(panelId) {
     const isTarget = btn.dataset?.tab === panelId;
     btn.classList.toggle('active', isTarget);
   });
+
+  // Sincroniza o Pilar Mestre correspondente
+  const pillar = PILLAR_MAP[panelId] || 'combat';
+  const pillarBtns = root.querySelectorAll('.pillar-tab-btn');
+  pillarBtns.forEach(btn => {
+    btn.classList.toggle('active', btn.dataset?.pillar === pillar);
+  });
+
+  const strips = root.querySelectorAll('.pillar-subtabs-strip');
+  strips.forEach(strip => {
+    strip.style.display = strip.id === `pillar-strip-${pillar}` ? 'flex' : 'none';
+  });
+}
+
+// Expõe globalmente a troca manual de pilar
+if (typeof window !== 'undefined') {
+  window.switchPillar = function(pillarName) {
+    const root = getShadowRoot();
+    const pillarBtns = root.querySelectorAll('.pillar-tab-btn');
+    pillarBtns.forEach(btn => {
+      btn.classList.toggle('active', btn.dataset?.pillar === pillarName);
+    });
+
+    const strips = root.querySelectorAll('.pillar-subtabs-strip');
+    strips.forEach(strip => {
+      strip.style.display = strip.id === `pillar-strip-${pillarName}` ? 'flex' : 'none';
+    });
+
+    const targetStrip = root.getElementById(`pillar-strip-${pillarName}`);
+    if (targetStrip) {
+      const firstTab = targetStrip.querySelector('.tab-btn');
+      if (firstTab) firstTab.click();
+    }
+  };
 }
 
 /**

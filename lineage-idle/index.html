@@ -153,26 +153,63 @@
       </section>
 
       <!-- Right: Tabs -->
-      <aside class="panel tabs-panel">
-        <div class="tab-buttons">
-          <button class="tab-btn active" data-tab="character">Char</button>
-          <button class="tab-btn" data-tab="equipment">Equip</button>
-          <button class="tab-btn" data-tab="skills">Skills</button>
-          <button class="tab-btn" data-tab="inventory">Inv</button>
-          <button class="tab-btn" data-tab="shop">Shop</button>
-          <button class="tab-btn" data-tab="market">🏛️ Mercado</button>
-          <button class="tab-btn" data-tab="craft">Craft</button>
-          <button class="tab-btn" data-tab="alchemy">🧪 Alquimia</button>
-          <button class="tab-btn" data-tab="astral">🌟 Maestria</button>
-          <button class="tab-btn" data-tab="expeditions">🏰 Expedições &amp; Manor</button>
-          <button class="tab-btn" data-tab="raids">🐉 Raids &amp; Bosses</button>
-          <button class="tab-btn" data-tab="olympiad">🏆 Olimpíadas &amp; Heróis</button>
-          <button class="tab-btn" data-tab="clan">🛡️ Clã &amp; Castelos</button>
-          <button class="tab-btn" data-tab="sevensigns">🏛️ Sete Selos</button>
-          <button class="tab-btn" data-tab="fortress">⚔️ Fortalezas</button>
-          <button class="tab-btn" data-tab="colosseum">🎭 Coliseu</button>
-          <button class="tab-btn" data-tab="rankings">🏆 Rankings</button>
-          <button class="tab-btn" data-tab="zones">Zones</button>
+      <aside class="panel tabs-panel l2-gold-frame">
+        <!-- Master Navigation Dock: 4 Pillars of Aden -->
+        <div class="pillar-dock-container" id="pillar-dock-container">
+          <div class="pillar-master-tabs">
+            <button type="button" class="pillar-tab-btn active" data-pillar="combat" onclick="window.switchPillar && window.switchPillar('combat')">
+              <span>⚔️</span> Combate
+            </button>
+            <button type="button" class="pillar-tab-btn" data-pillar="character" onclick="window.switchPillar && window.switchPillar('character')">
+              <span>🛡️</span> Herói
+            </button>
+            <button type="button" class="pillar-tab-btn" data-pillar="economy" onclick="window.switchPillar && window.switchPillar('economy')">
+              <span>🏛️</span> Império
+            </button>
+            <button type="button" class="pillar-tab-btn" data-pillar="glory" onclick="window.switchPillar && window.switchPillar('glory')">
+              <span>👑</span> Glória
+            </button>
+          </div>
+
+          <!-- Pillar 1 Subtabs: Combate -->
+          <div class="pillar-subtabs-strip" id="pillar-strip-combat">
+            <button class="tab-btn active subtab-pill-btn" data-tab="zones">⚔ Caça &amp; Zonas</button>
+            <button class="tab-btn subtab-pill-btn" data-tab="raids">🐉 Raids &amp; Bosses</button>
+            <button class="tab-btn subtab-pill-btn" data-tab="tower">🏰 Torre da Insolência</button>
+            <button class="tab-btn subtab-pill-btn" data-tab="colosseum">⚔ Coliseu PvP</button>
+            <button class="tab-btn subtab-pill-btn" data-tab="expeditions">🏰 Expedições</button>
+          </div>
+
+          <!-- Pillar 2 Subtabs: Herói -->
+          <div class="pillar-subtabs-strip" id="pillar-strip-character" style="display:none;">
+            <button class="tab-btn subtab-pill-btn" data-tab="character">🛡 Personagem</button>
+            <button class="tab-btn subtab-pill-btn" data-tab="inventory">🎒 Mochila <span id="tab-badge-inventory" class="tab-badge" style="display:none">!</span></button>
+            <button class="tab-btn subtab-pill-btn" data-tab="skills">✦ Habilidades <span id="tab-badge-skills" class="tab-badge" style="display:none">!</span></button>
+            <button class="tab-btn subtab-pill-btn" data-tab="astral">★ Maestria</button>
+            <button class="tab-btn subtab-pill-btn" data-tab="dolls">🧸 Dolls &amp; Pets</button>
+            <button class="tab-btn subtab-pill-btn" data-tab="quests">🎯 Missões <span id="tab-badge-quests" class="tab-badge" style="display:none">!</span></button>
+          </div>
+
+          <!-- Pillar 3 Subtabs: Império & Economia -->
+          <div class="pillar-subtabs-strip" id="pillar-strip-economy" style="display:none;">
+            <button class="tab-btn subtab-pill-btn" data-tab="market" style="border-color:#ffd700; color:#fde047; font-weight:bold;">🏛 Mercado Giran (P2P)</button>
+            <button class="tab-btn subtab-pill-btn" data-tab="shop">⚜ Mercador</button>
+            <button class="tab-btn subtab-pill-btn" data-tab="craft">⚒ Forja Imperial <span id="tab-badge-craft" class="tab-badge" style="display:none">!</span></button>
+            <button class="tab-btn subtab-pill-btn" data-tab="alchemy">🧪 Alquimia</button>
+            <button class="tab-btn subtab-pill-btn" data-tab="warehouse">📦 Baú Privado</button>
+            <button class="tab-btn subtab-pill-btn" data-tab="magiclamp">🪔 Lâmpada Mágica</button>
+          </div>
+
+          <!-- Pillar 4 Subtabs: Glória & Sociedade -->
+          <div class="pillar-subtabs-strip" id="pillar-strip-glory" style="display:none;">
+            <button class="tab-btn subtab-pill-btn" data-tab="clan">🛡 Clã &amp; Castelos</button>
+            <button class="tab-btn subtab-pill-btn" data-tab="olympiad">🏆 Olimpíadas</button>
+            <button class="tab-btn subtab-pill-btn" data-tab="rankings">🏆 Rankings Mundiais</button>
+            <button class="tab-btn subtab-pill-btn" data-tab="sevensigns">🏛 Sete Selos</button>
+            <button class="tab-btn subtab-pill-btn" data-tab="fortress">⚔ Fortalezas</button>
+            <button class="tab-btn subtab-pill-btn" data-tab="enchant">✦ Encantamento</button>
+            <button class="tab-btn subtab-pill-btn" data-tab="codex">📜 Codex</button>
+          </div>
         </div>
         <div class="tab-content">
           
