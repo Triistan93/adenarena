@@ -138,24 +138,42 @@ export function showMenuPanel(panelId) {
   });
 }
 
-// Expõe globalmente a troca manual de pilar
+// Expõe globalmente a troca manual de pilar com expansão/colapso reativo
 if (typeof window !== 'undefined') {
   window.switchPillar = function(pillarName) {
     const root = getShadowRoot();
+    const activePillarBtn = root.querySelector(`.pillar-tab-btn[data-pillar="${pillarName}"]`);
+    const isCurrentlyActive = activePillarBtn && activePillarBtn.classList.contains('active');
+    const strip = root.getElementById(`pillar-strip-${pillarName}`);
+    const isStripVisible = strip && strip.style.display !== 'none' && !strip.classList.contains('collapsed');
+
+    // Se já está aberto e clicou novamente no mesmo pilar, fecha/recolhe o menu de sub-opções!
+    if (isCurrentlyActive && isStripVisible) {
+      if (strip) {
+        strip.style.display = 'none';
+        strip.classList.add('collapsed');
+      }
+      if (activePillarBtn) activePillarBtn.classList.remove('active');
+      return;
+    }
+
+    // Caso contrário, ativa o pilar e expande suas sub-opções
     const pillarBtns = root.querySelectorAll('.pillar-tab-btn');
     pillarBtns.forEach(btn => {
       btn.classList.toggle('active', btn.dataset?.pillar === pillarName);
     });
 
     const strips = root.querySelectorAll('.pillar-subtabs-strip');
-    strips.forEach(strip => {
-      strip.style.display = strip.id === `pillar-strip-${pillarName}` ? 'flex' : 'none';
+    strips.forEach(s => {
+      const isTarget = s.id === `pillar-strip-${pillarName}`;
+      s.style.display = isTarget ? 'flex' : 'none';
+      s.classList.toggle('collapsed', !isTarget);
     });
 
     const targetStrip = root.getElementById(`pillar-strip-${pillarName}`);
     if (targetStrip) {
-      const firstTab = targetStrip.querySelector('.tab-btn');
-      if (firstTab) firstTab.click();
+      const activeTab = targetStrip.querySelector('.tab-btn.active') || targetStrip.querySelector('.tab-btn');
+      if (activeTab) activeTab.click();
     }
   };
 }

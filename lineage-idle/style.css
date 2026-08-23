@@ -974,15 +974,39 @@ select:focus-visible {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 0 16px rgba(192, 132, 252, 0.5) !important;
 }
 
-/* ---------- Subtab Ribbon & Chips ---------- */
+/* ---------- Subtab Ribbon & Chips (Expandable Drawer) ---------- */
+@keyframes slideDownSubtabs {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scaleY(0.95);
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scaleY(1);
+    max-height: 80px;
+  }
+}
+
 .pillar-subtabs-strip {
   display: flex !important;
-  gap: 5px !important;
+  gap: 6px !important;
   overflow-x: auto !important;
-  padding: 4px 2px 2px 2px !important;
+  padding: 6px 4px 4px 4px !important;
   scrollbar-width: thin !important;
   scrollbar-color: rgba(212, 169, 78, 0.3) transparent !important;
+  animation: slideDownSubtabs 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+  background: rgba(10, 8, 5, 0.75) !important;
+  border-radius: 5px !important;
+  border: 1px solid rgba(212, 169, 78, 0.15) !important;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.6) !important;
+  box-sizing: border-box !important;
 }
+
+.pillar-subtabs-strip.collapsed {
+  display: none !important;
+}
+
 .pillar-subtabs-strip::-webkit-scrollbar { height: 4px !important; }
 .pillar-subtabs-strip::-webkit-scrollbar-thumb {
   background: rgba(212, 169, 78, 0.4) !important;
