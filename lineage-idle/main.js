@@ -1404,10 +1404,15 @@ function getAssetUrl(p) {
   if (!p) return '';
   p = String(p).replace(/\\/g, '/');
   if (p.includes('water_wave.jpg')) p = '/assets/2d/icons/shields-amulets/PNG/Background/Icon15.png';
-  else if (p.includes('fire_strike.jpg')) p = '/assets/2d/icons/shields-amulets/PNG/Background/Icon14.png';
-  else if (p.includes('wind_blade.jpg')) p = '/assets/2d/icons/shields-amulets/PNG/Background/Icon16.png';
-  else if (p.includes('holy_shield.jpg')) p = '/assets/2d/icons/paladin-skills/PNG/Icon1.png';
-  else if (p.includes('vampiric_blood.jpg')) p = '/assets/2d/icons/undead-skills/PNG/Icon1.png';
+  else if (p.includes('fire_strike.jpg')) p = '/assets/skills/icons/flame_strike.png';
+  else if (p.includes('wind_blade.jpg')) p = '/assets/skills/icons/tornado_vortex.png';
+  else if (p.includes('holy_shield.jpg')) p = '/assets/skills/icons/shield_of_light.png';
+  else if (p.includes('vampiric_blood.jpg')) p = '/assets/skills/icons/vampiric_pulse.png';
+
+  if (!p.includes('/') && (p.endsWith('.png') || p.endsWith('.jpg'))) {
+    p = `/assets/skills/icons/${p}`;
+  }
+
   if (p.startsWith('http://') || p.startsWith('https://') || p.startsWith('data:')) return p;
   const cleanPath = p.replace(/^\//, '');
   let baseUrl = '';
@@ -1563,9 +1568,14 @@ function showSkillTooltip(skillId, e) {
   const reqText = reqs ? Object.entries(reqs).map(([s, v]) => `${SKILL_DEFS[s]?.name || s} ${v}`).join(', ') : 'Nenhum';
   const tier = TIER_NAMES[def.tier] || '';
 
+  const isImg = def.icon && (def.icon.includes('/') || def.icon.endsWith('.png') || def.icon.endsWith('.jpg'));
+  const iconHtml = isImg
+    ? `<img src="${getAssetUrl(def.icon)}" class="skill-icon-img" alt="${def.name}" style="width:28px; height:28px; object-fit:cover; border-radius:4px; border:1px solid rgba(255,255,255,0.2); vertical-align:middle;" onerror="this.style.display='none'" />`
+    : `<span class="tt-icon">${def.icon || '✦'}</span>`;
+
   tt.innerHTML = `
     <div class="tt-header rarity-epic">
-      <span class="tt-icon">${def.icon || '✦'}</span>
+      <span class="tt-icon">${iconHtml}</span>
       <div class="tt-title">
         <div class="tt-name" style="color:var(--gilt); font-weight:700;">${def.name}</div>
         <div class="tt-slot">${tier} · Lv.${lvl}/${max}</div>

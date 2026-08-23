@@ -152,10 +152,15 @@ export function getAssetUrl(p) {
   if (!p) return '';
   p = String(p).replace(/\\/g, '/');
   if (p.includes('water_wave.jpg')) p = '/assets/2d/icons/shields-amulets/PNG/Background/Icon15.png';
-  else if (p.includes('fire_strike.jpg')) p = '/assets/2d/icons/shields-amulets/PNG/Background/Icon14.png';
-  else if (p.includes('wind_blade.jpg')) p = '/assets/2d/icons/shields-amulets/PNG/Background/Icon16.png';
-  else if (p.includes('holy_shield.jpg')) p = '/assets/2d/icons/paladin-skills/PNG/Icon1.png';
-  else if (p.includes('vampiric_blood.jpg')) p = '/assets/2d/icons/undead-skills/PNG/Icon1.png';
+  else if (p.includes('fire_strike.jpg')) p = '/assets/skills/icons/flame_strike.png';
+  else if (p.includes('wind_blade.jpg')) p = '/assets/skills/icons/tornado_vortex.png';
+  else if (p.includes('holy_shield.jpg')) p = '/assets/skills/icons/shield_of_light.png';
+  else if (p.includes('vampiric_blood.jpg')) p = '/assets/skills/icons/vampiric_pulse.png';
+
+  if (!p.includes('/') && (p.endsWith('.png') || p.endsWith('.jpg'))) {
+    p = `/assets/skills/icons/${p}`;
+  }
+
   if (p.startsWith('http://') || p.startsWith('https://') || p.startsWith('data:')) return p;
   const cleanPath = p.replace(/^\//, '');
   let baseUrl = '';
