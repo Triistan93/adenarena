@@ -4899,6 +4899,214 @@ if (typeof window !== 'undefined') {
   };
 }
 
+export function openAutoRecycleModal(state, callbacks = {}) {
+  let modal = document.getElementById('auto-recycle-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'auto-recycle-modal';
+    modal.className = 'modal-overlay active';
+    modal.style.cssText = 'position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:99999; display:flex; align-items:center; justify-content:center; padding:15px;';
+    document.body.appendChild(modal);
+  }
+  modal.style.display = 'flex';
+  renderAutoRecycleModal(modal, state || window.getGameState?.() || window._state, callbacks);
+}
+
+export function closeAutoRecycleModal() {
+  const modal = document.getElementById('auto-recycle-modal');
+  if (modal) modal.style.display = 'none';
+}
+
+export function renderAutoRecycleModal(container, state, callbacks = {}) {
+  const st = state || window.getGameState?.() || window._state || {};
+  if (!st.autoRecycle) {
+    st.autoRecycle = {
+      enabled: false,
+      mode: 'sell',
+      maxRarity: 'common',
+      grades: { ng: true, d: false, c: false, b: false, a: false, s: false }
+    };
+  }
+  const ar = st.autoRecycle;
+  const isEnabled = !!ar.enabled;
+  const mode = ar.mode || 'sell';
+  const maxRarity = ar.maxRarity || 'common';
+  const grades = ar.grades || { ng: true, d: false, c: false, b: false, a: false, s: false };
+
+  const content = container.querySelector('#auto-recycle-modal-body') || container;
+
+  content.innerHTML = `
+    <div style="font-family:'Cinzel',serif; color:#f8fafc; max-height:85vh; overflow-y:auto; padding-right:4px;">
+      <!-- Header -->
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(212,167,68,0.3); padding-bottom:12px; margin-bottom:16px;">
+        <div>
+          <h3 style="margin:0; font-size:18px; color:#ffd877;">⚙️ Filtro de Loot AFK &amp; Auto-Recycle</h3>
+          <div style="font-size:11px; color:#94a3b8; font-family:sans-serif; margin-top:2px;">
+            Gerencie e recicle automaticamente equipamentos comuns descartáveis durante a caçada AFK.
+          </div>
+        </div>
+      </div>
+
+      <!-- Master Switch -->
+      <div style="background:rgba(0,0,0,0.4); border:1px solid ${isEnabled ? '#22c55e' : 'rgba(255,255,255,0.1)'}; border-radius:10px; padding:14px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <div style="font-weight:bold; font-size:14px; color:${isEnabled ? '#86efac' : '#cbd5e1'};">
+            ${isEnabled ? '🟢 Auto-Recycle ATIVADO' : '⚪ Auto-Recycle DESATIVADO'}
+          </div>
+          <div style="font-size:11px; color:#94a3b8; font-family:sans-serif; margin-top:2px;">
+            ${isEnabled ? 'Equipamentos comuns que atendem aos filtros são processados no momento do drop.' : 'Todos os itens dropados irão direto para a sua mochila normalmente.'}
+          </div>
+        </div>
+        <button id="toggle-auto-recycle-btn" class="inv-batch-btn" style="padding:6px 14px; font-size:12px; font-weight:bold; cursor:pointer; border-radius:6px; background:${isEnabled ? 'linear-gradient(180deg,#ef4444,#991b1b)' : 'linear-gradient(180deg,#22c55e,#15803d)'}; border:1px solid ${isEnabled ? '#fca5a5' : '#86efac'}; color:#fff;">
+          ${isEnabled ? 'Desativar' : 'Ativar Agora'}
+        </button>
+      </div>
+
+      <!-- Modo de Conversão -->
+      <div style="background:rgba(0,0,0,0.3); border:1px solid rgba(212,167,68,0.2); border-radius:10px; padding:14px; margin-bottom:14px;">
+        <div style="font-size:13px; font-weight:bold; color:#ffd877; margin-bottom:8px;">Modo de Conversão:</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+          <button id="ar-mode-sell" style="padding:10px; border-radius:8px; cursor:pointer; font-family:'Cinzel',serif; font-size:12px; font-weight:bold; display:flex; flex-direction:column; align-items:center; gap:4px; ${mode === 'sell' ? 'background:linear-gradient(180deg,#d4a744,#8a641c); border:1px solid #ffe699; color:#000;' : 'background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:#cbd5e1;'}">
+            <span>🪙 Auto-Venda (Adena)</span>
+            <span style="font-size:10px; font-family:sans-serif; font-weight:normal; opacity:0.9;">Converte drops em Ouro</span>
+          </button>
+          <button id="ar-mode-dismantle" style="padding:10px; border-radius:8px; cursor:pointer; font-family:'Cinzel',serif; font-size:12px; font-weight:bold; display:flex; flex-direction:column; align-items:center; gap:4px; ${mode === 'dismantle' ? 'background:linear-gradient(180deg,#a855f7,#6b21a8); border:1px solid #e9d5ff; color:#fff;' : 'background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:#cbd5e1;'}">
+            <span>🔨 Desmanche (Cristais)</span>
+            <span style="font-size:10px; font-family:sans-serif; font-weight:normal; opacity:0.9;">Converte em Cristais e Insumos</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Filtro de Graus -->
+      <div style="background:rgba(0,0,0,0.3); border:1px solid rgba(212,167,68,0.2); border-radius:10px; padding:14px; margin-bottom:14px;">
+        <div style="font-size:13px; font-weight:bold; color:#ffd877; margin-bottom:8px;">Graus de Equipamento Elegíveis:</div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(110px, 1fr)); gap:8px; font-family:sans-serif; font-size:12px;">
+          <label style="display:flex; align-items:center; gap:6px; background:rgba(255,255,255,0.05); padding:8px; border-radius:6px; cursor:pointer;">
+            <input type="checkbox" id="ar-grade-ng" ${grades.ng ? 'checked' : ''} style="cursor:pointer;" />
+            <span>⚪ No-Grade</span>
+          </label>
+          <label style="display:flex; align-items:center; gap:6px; background:rgba(255,255,255,0.05); padding:8px; border-radius:6px; cursor:pointer;">
+            <input type="checkbox" id="ar-grade-d" ${grades.d ? 'checked' : ''} style="cursor:pointer;" />
+            <span style="color:#60a5fa;">🔵 Grade D</span>
+          </label>
+          <label style="display:flex; align-items:center; gap:6px; background:rgba(255,255,255,0.05); padding:8px; border-radius:6px; cursor:pointer;">
+            <input type="checkbox" id="ar-grade-c" ${grades.c ? 'checked' : ''} style="cursor:pointer;" />
+            <span style="color:#4ade80;">🟢 Grade C</span>
+          </label>
+          <label style="display:flex; align-items:center; gap:6px; background:rgba(255,255,255,0.05); padding:8px; border-radius:6px; cursor:pointer;">
+            <input type="checkbox" id="ar-grade-b" ${grades.b ? 'checked' : ''} style="cursor:pointer;" />
+            <span style="color:#f59e0b;">🟡 Grade B</span>
+          </label>
+          <div style="display:flex; align-items:center; gap:6px; background:rgba(239,68,68,0.1); border:1px dashed rgba(239,68,68,0.3); padding:8px; border-radius:6px; color:#fca5a5; font-size:11px;" title="Graus nobres são permanentemente protegidos contra reciclagem">
+            🔒 Grade A &amp; S (Protegidos)
+          </div>
+        </div>
+      </div>
+
+      <!-- Filtro de Raridade Máxima -->
+      <div style="background:rgba(0,0,0,0.3); border:1px solid rgba(212,167,68,0.2); border-radius:10px; padding:14px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+        <div style="font-size:13px; font-weight:bold; color:#ffd877;">Raridade Máxima:</div>
+        <select id="ar-rarity-select" style="background:#090b10; color:#fff; border:1px solid rgba(212,167,68,0.4); border-radius:6px; padding:6px 10px; font-size:12px; font-family:sans-serif; cursor:pointer;">
+          <option value="common" ${maxRarity === 'common' ? 'selected' : ''}>Apenas Comum (Branco)</option>
+          <option value="uncommon" ${maxRarity === 'uncommon' ? 'selected' : ''}>Até Incomum (Verde)</option>
+          <option value="rare" ${maxRarity === 'rare' ? 'selected' : ''}>Até Raro (Azul)</option>
+        </select>
+      </div>
+
+      <!-- Card de Blindagem e Proteção Inviolável -->
+      <div style="background:rgba(22,101,52,0.15); border:1px solid #16a34a; border-radius:10px; padding:12px; font-family:sans-serif; font-size:11px; color:#bbf7d0; margin-bottom:16px;">
+        <div style="font-weight:bold; font-size:12px; color:#86efac; margin-bottom:4px; display:flex; align-items:center; gap:6px;">
+          🛡️ BLINDAGEM DE RECURSOS ATIVA:
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px 12px; margin-top:6px;">
+          <div>✓ 🧱 <strong>Materiais &amp; Minérios:</strong> 100% Protegidos</div>
+          <div>✓ 🧪 <strong>Poções &amp; Comidas:</strong> 100% Protegidas</div>
+          <div>✓ ⚡ <strong>Soulshots &amp; Shots:</strong> 100% Protegidos</div>
+          <div>✓ 📜 <strong>Pergaminhos &amp; Livros:</strong> 100% Protegidos</div>
+          <div>✓ 👑 <strong>Itens de Herança:</strong> 100% Protegidos</div>
+          <div>✓ ✨ <strong>Itens com Enchant / SA:</strong> 100% Protegidos</div>
+        </div>
+      </div>
+
+      <!-- Footer Button -->
+      <div style="text-align:right;">
+        <button id="save-close-auto-recycle-btn" style="padding:10px 22px; font-family:'Cinzel',serif; font-weight:bold; font-size:13px; background:linear-gradient(180deg,#d4a744,#8a641c); border:1px solid #ffe699; color:#000; border-radius:6px; cursor:pointer; box-shadow:0 2px 10px rgba(0,0,0,0.5);">
+          💾 Salvar e Fechar
+        </button>
+      </div>
+    </div>
+  `;
+
+  // Bind Events
+  const toggleBtn = content.querySelector('#toggle-auto-recycle-btn');
+  if (toggleBtn) {
+    toggleBtn.onclick = () => {
+      st.autoRecycle.enabled = !st.autoRecycle.enabled;
+      if (callbacks.save) callbacks.save();
+      renderAutoRecycleModal(container, st, callbacks);
+    };
+  }
+
+  const modeSellBtn = content.querySelector('#ar-mode-sell');
+  const modeDismantleBtn = content.querySelector('#ar-mode-dismantle');
+  if (modeSellBtn) {
+    modeSellBtn.onclick = () => {
+      st.autoRecycle.mode = 'sell';
+      if (callbacks.save) callbacks.save();
+      renderAutoRecycleModal(container, st, callbacks);
+    };
+  }
+  if (modeDismantleBtn) {
+    modeDismantleBtn.onclick = () => {
+      st.autoRecycle.mode = 'dismantle';
+      if (callbacks.save) callbacks.save();
+      renderAutoRecycleModal(container, st, callbacks);
+    };
+  }
+
+  const chkNg = content.querySelector('#ar-grade-ng');
+  const chkD = content.querySelector('#ar-grade-d');
+  const chkC = content.querySelector('#ar-grade-c');
+  const chkB = content.querySelector('#ar-grade-b');
+  const selRarity = content.querySelector('#ar-rarity-select');
+
+  const saveSettings = () => {
+    st.autoRecycle.grades = {
+      ng: chkNg ? chkNg.checked : true,
+      d: chkD ? chkD.checked : false,
+      c: chkC ? chkC.checked : false,
+      b: chkB ? chkB.checked : false,
+      a: false,
+      s: false
+    };
+    if (selRarity) st.autoRecycle.maxRarity = selRarity.value;
+    if (callbacks.save) callbacks.save();
+  };
+
+  if (chkNg) chkNg.onchange = saveSettings;
+  if (chkD) chkD.onchange = saveSettings;
+  if (chkC) chkC.onchange = saveSettings;
+  if (chkB) chkB.onchange = saveSettings;
+  if (selRarity) selRarity.onchange = saveSettings;
+
+  const saveCloseBtn = content.querySelector('#save-close-auto-recycle-btn');
+  if (saveCloseBtn) {
+    saveCloseBtn.onclick = () => {
+      saveSettings();
+      closeAutoRecycleModal();
+      if (callbacks.log) {
+        callbacks.log(`⚙️ Filtro AFK salvo: ${st.autoRecycle.enabled ? 'Ativado (' + (st.autoRecycle.mode === 'sell' ? 'Auto-Venda' : 'Desmanche') + ')' : 'Desativado'}`, 'system');
+      }
+    };
+  }
+}
+
+if (typeof window !== 'undefined') {
+  window.openAutoRecycleModal = function(state, callbacks) {
+    openAutoRecycleModal(state || window.getGameState?.() || window._state, callbacks);
+  };
+}
+
 export function openCompoundModal(state) {
   let modal = document.getElementById('compound-modal');
   if (!modal) {

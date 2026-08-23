@@ -215,6 +215,9 @@ import {
   openSkillEnchantModal,
   openAugmentModal,
   initTooltipEvents as uiInitTooltipEvents,
+  openAutoRecycleModal,
+  closeAutoRecycleModal,
+  renderAutoRecycleModal,
   openCompoundModal,
   closeCompoundModal,
   renderCompoundModal,
@@ -5419,6 +5422,7 @@ export function bindEvents() {
     const towerSweepBtn = el('tower-sweep-btn');
     if (towerSweepBtn) towerSweepBtn.onclick = sweepTowerDaily;
     
+    const autoRecycleBtn = el('open-auto-recycle-btn'); if (autoRecycleBtn) autoRecycleBtn.onclick = () => openAutoRecycleModal(state, { save, log, addToInventory });
     const selCommonsBtn = el('select-commons-btn'); if (selCommonsBtn) selCommonsBtn.onclick = () => selectItemsByFilter(i => (i.rarity || 'common') === 'common');
     const selUncommonsBtn = el('select-uncommons-btn'); if (selUncommonsBtn) selUncommonsBtn.onclick = () => selectItemsByFilter(i => i.rarity === 'uncommon');
     const selAllBtn = el('select-all-btn'); if (selAllBtn) selAllBtn.onclick = () => selectItemsByFilter(() => true);
@@ -6478,6 +6482,8 @@ export function init() {
     window.showDropLocator = (matId) => {
       showDropLocatorModal(matId);
     };
+    window.openAutoRecycleModal = () => openAutoRecycleModal(state, { save, log, addToInventory });
+    window.closeAutoRecycleModal = closeAutoRecycleModal;
     window.openCompoundModal = openCompoundModal;
     window.closeCompoundModal = closeCompoundModal;
     window.renderCompoundModal = renderCompoundModal;

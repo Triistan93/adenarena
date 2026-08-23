@@ -490,6 +490,7 @@ export const IDLE_MARKUP = `
                   <label for="inv-search-input" class="sr-only" style="display:none;">Buscar no inventário</label>
                   <input type="text" id="inv-search-input" name="invSearch" aria-label="Filtrar inventário por nome de item" placeholder="🔍 Buscar..." style="background:#090b10; color:#fff; border:1px solid rgba(212,167,68,0.3); border-radius:4px; padding:2px 6px; font-size:10px; width:80px;" title="Filtrar por nome de item" />
                   <div class="l2inv-batch-pills">
+                    <button id="open-auto-recycle-btn" class="l2inv-pill-btn" style="background:rgba(212,167,68,0.2); border-color:#fde047; color:#fef08a; font-weight:bold;" title="Configurar Filtro de Loot AFK & Auto-Recycle">⚙️ Filtro AFK</button>
                     <button id="select-commons-btn" class="l2inv-pill-btn" title="Selecionar comuns">✓ Comum</button>
                     <button id="select-uncommons-btn" class="l2inv-pill-btn" title="Selecionar incomuns">✓ Incomum</button>
                     <button id="select-all-btn" class="l2inv-pill-btn" title="Selecionar todos">✓ Todos</button>
@@ -1177,6 +1178,14 @@ export const IDLE_MARKUP = `
       <div class="craft-modal-content" style="background:linear-gradient(145deg, rgba(20,24,35,0.98), rgba(10,12,18,0.99)); border:1px solid rgba(212,175,55,0.6); border-radius:12px; width:92%; max-width:520px; padding:20px; box-shadow:0 10px 35px rgba(0,0,0,0.85); position:relative;">
         <button id="cert-modal-close" style="position:absolute; top:12px; right:14px; background:none; border:none; color:#aaa; font-size:20px; cursor:pointer;">✖</button>
         <div id="cert-modal-body"></div>
+      </div>
+    </div>
+
+    <!-- Modal de Filtro de Loot AFK & Auto-Recycle -->
+    <div id="auto-recycle-modal" class="modal-overlay" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.8); backdrop-filter:blur(6px); z-index:99999; justify-content:center; align-items:center;">
+      <div class="craft-modal-content" style="background:linear-gradient(145deg, rgba(20,24,35,0.98), rgba(10,12,18,0.99)); border:1px solid #d4a744; border-radius:12px; width:92%; max-width:540px; padding:22px; box-shadow:0 10px 40px rgba(0,0,0,0.9); position:relative; font-family:'Cinzel',serif; color:#f8fafc;">
+        <button id="close-auto-recycle-modal-btn" style="position:absolute; top:12px; right:14px; background:none; border:none; color:#aaa; font-size:20px; cursor:pointer;" onclick="const m=document.getElementById('auto-recycle-modal'); if(m) m.style.display='none';">✖</button>
+        <div id="auto-recycle-modal-body"></div>
       </div>
     </div>
 

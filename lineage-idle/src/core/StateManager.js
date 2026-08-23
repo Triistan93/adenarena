@@ -33,7 +33,21 @@ export const DEFAULT_STATE = () => ({
   craftLevel: 1, craftXp: 0, shopTab: 'gear', selectedSkill: null, filter: 'all',
   craftTab: 'recipes', zoneTab: 'map', soulshotActive: false, isCombatActive: true, combatSpeed: 1,
   totalPlaytime: 0, buffs: {}, _cds: {}, gameMode: 'idle', privilegeLevel: 0,
-  autoSellRarity: 'off', craftFoundationPity: 0, warehouse: [], maxWarehouseSlots: 100,
+  autoSellRarity: 'off',
+  autoRecycle: {
+    enabled: false,
+    mode: 'sell',           // 'sell' (Adena) ou 'dismantle' (Cristais & Insumos)
+    maxRarity: 'common',    // 'common', 'uncommon', 'rare'
+    grades: {
+      ng: true,             // No-Grade
+      d: false,             // D-Grade
+      c: false,             // C-Grade
+      b: false,             // B-Grade
+      a: false,             // Sempre false (protegido)
+      s: false              // Sempre false (protegido)
+    }
+  },
+  craftFoundationPity: 0, warehouse: [], maxWarehouseSlots: 100,
   essences: { fire: 0, earth: 0, wind: 0, astral: 0 }, activeElixirs: {},
   prestigeLevel: 0, astralShards: 0, astralMastery: {},
   expeditions: [], castles: {}, manorSeeds: {}, manorCrops: {},

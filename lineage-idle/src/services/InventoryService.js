@@ -35,6 +35,141 @@ export function isHighValueItem(item) {
 }
 
 /**
+ * Avalia com rigor e blindagem se um item dropado é elegível para reciclagem/venda automática AFK.
+ * @param {Object} item
+ * @param {Object} def
+ * @param {Object} state
+ * @returns {boolean}
+ */
+export function isEligibleForAutoRecycle(item, def, state) {
+  if (!state || !state.autoRecycle || !state.autoRecycle.enabled) return false;
+  if (!def || !item) return false;
+
+  // 1. BLINDAGEM ABSOLUTA: Itens não-recicláveis (Whitelist/Hard Guards)
+  const slot = String(def.slot || '').toLowerCase();
+  const type = String(def.type || '').toLowerCase();
+  const id = String(def.id || item.itemId || '').toLowerCase();
+  const name = String(def.name || '').toLowerCase();
+
+  const NEVER_RECYCLE_SLOTS = [
+    'consumable', 'material', 'scroll', 'powerup', 'potion',
+    'food', 'spellbook', 'talisman', 'pendant', 'coin',
+    'quest', 'quest_item', 'recipe', 'key', 'box', 'container', 'essence',
+    'agathion', 'cloak', 'hair', 'hair2', 'doll'
+  ];
+  if (NEVER_RECYCLE_SLOTS.includes(slot) || NEVER_RECYCLE_SLOTS.includes(type)) return false;
+  if (def.stack || def.isQuestItem || item.isProtected) return false;
+
+  // 2. Proteção estrita de Itens de Herança & Starter Packs
+  if (def.isHeirloom || item.isHeirloom || id.includes('heirloom') || name.includes('herança')) return false;
+
+  // 3. Proteção de Equipamentos Modificados / Encantados / Especiais
+  if (item.enchant && item.enchant > 0) return false;
+  if (item.augmented || item.soulCrystal || item.foundation) return false;
+  if (item.equipped) return false;
+
+  // 4. Deve ser um equipamento desequipável genuíno
+  const GEAR_SLOTS = ['weapon', 'shield', 'armor', 'helmet', 'gloves', 'legs', 'boots', 'necklace', 'earring', 'ring', 'belt'];
+  if (!GEAR_SLOTS.includes(slot)) return false;
+
+  // 5. Verificação de Grau (Grade)
+  const reqLvl = def.req?.level || def.level || 1;
+  let gradeCode = 'ng';
+  if (reqLvl >= 76) gradeCode = 's';
+  else if (reqLvl >= 62) gradeCode = 'a';
+  else if (reqLvl >= 52) gradeCode = 'b';
+  else if (reqLvl >= 40) gradeCode = 'c';
+  else if (reqLvl >= 20) gradeCode = 'd';
+  else gradeCode = 'ng';
+
+  // Grades A e S são permanentemente protegidas contra reciclagem automática
+  if (gradeCode === 'a' || gradeCode === 's') return false;
+
+  // Checa se o grau está explicitamente habilitado pelo jogador
+  const gradeEnabled = state.autoRecycle.grades?.[gradeCode];
+  if (!gradeEnabled) return false;
+
+  // 6. Verificação de Raridade Máxima
+  const RARITY_RANK = { 'common': 1, 'uncommon': 2, 'rare': 3, 'epic': 4, 'legendary': 5, 'mythic': 6 };
+  const itemRarity = String(item.rarity || 'common').toLowerCase();
+  const maxRarity = String(state.autoRecycle.maxRarity || 'common').toLowerCase();
+  const itemRank = RARITY_RANK[itemRarity] || 1;
+  const maxRank = RARITY_RANK[maxRarity] || 1;
+
+  if (itemRank > maxRank) return false;
+  if (itemRank >= 4) return false; // Nunca reciclar itens épicos/lendários
+
+  return true;
+}
+
+/**
+ * Processa a reciclagem de um item elegível convertendo-o em Adena ou Cristais/Insumos.
+ * @param {Object} item
+ * @param {Object} def
+ * @param {Object} state
+ * @param {Object} callbacks
+ */
+export function processAutoRecycleItem(item, def, state, callbacks = {}) {
+  const gData = D();
+  const mode = state.autoRecycle?.mode || 'sell';
+  const reqLvl = def.req?.level || def.level || 1;
+  const itemRarity = String(item.rarity || 'common').toLowerCase();
+  const mult = gData?.RARITY?.[itemRarity]?.mult || 1;
+
+  if (mode === 'sell') {
+    // Modo 1: Auto-Venda por Adena
+    const basePrice = def.price || (reqLvl * 15 + 20);
+    const goldGain = Math.max(5, Math.floor(basePrice * 0.4 * mult));
+    state.gold = (state.gold || 0) + goldGain;
+    if (callbacks.log) {
+      callbacks.log(`🪙 [Auto-Venda AFK] ${def.name} vendido automaticamente por +${goldGain.toLocaleString()} Adena`, 'loot');
+    }
+    return true;
+  } else {
+    // Modo 2: Desmanche por Cristais e Materiais
+    let gradeCode = 'ng';
+    if (reqLvl >= 76) gradeCode = 's';
+    else if (reqLvl >= 62) gradeCode = 'a';
+    else if (reqLvl >= 52) gradeCode = 'b';
+    else if (reqLvl >= 40) gradeCode = 'c';
+    else if (reqLvl >= 20) gradeCode = 'd';
+    else gradeCode = 'ng';
+
+    let matId = 'iron_ore';
+    if (gradeCode === 'b') matId = 'crystal_b';
+    else if (gradeCode === 'c') matId = 'crystal_c';
+    else if (gradeCode === 'd') matId = 'crystal_d';
+    else matId = (def.slot === 'weapon') ? 'iron_ore' : 'suede';
+
+    const matAmount = Math.max(1, Math.floor((reqLvl / 10 + 1) * mult));
+
+    // Adiciona o material de desmanche de forma segura
+    if (typeof callbacks.addToInventory === 'function') {
+      callbacks.addToInventory(matId, matAmount);
+    } else {
+      let existing = (state.inventory || []).find(i => i.itemId === matId && !i.rarity && !i.equipped);
+      if (existing) {
+        existing.count = (existing.count || 1) + matAmount;
+      } else {
+        state.inventory = state.inventory || [];
+        state.inventory.push({
+          uid: Date.now() + '_' + Math.random().toString(36).slice(2, 8),
+          itemId: matId,
+          count: matAmount,
+          equipped: false
+        });
+      }
+    }
+
+    const matName = gData?.ALL_ITEMS?.[matId]?.name || matId;
+    if (callbacks.log) {
+      callbacks.log(`🔨 [Auto-Recycle AFK] ${def.name} desmanchado em +${matAmount}x ${matName}`, 'loot');
+    }
+    return true;
+  }
+}
+
+/**
  * Verifica se um item é protegido contra venda e seleção automática
  * (materiais de craft, poções, scrolls, enchants, spellbooks, talismãs).
  * @param {Object} item
@@ -208,6 +343,14 @@ export function addToInventory(state, itemId, amount = 1, rarity = null, foundat
   const GEAR_SLOTS = ['weapon', 'shield', 'armor', 'helmet', 'gloves', 'legs', 'boots', 'cloak', 'belt', 'necklace', 'earring', 'ring', 'hair', 'hair2', 'agathion', 'talisman'];
   const defSlot = String(def.slot || '').toLowerCase();
   const isGear = GEAR_SLOTS.includes(defSlot);
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // SISTEMA DE FILTRO DE LOOT AFK & AUTO-RECYCLE COM BLINDAGEM ESTREITA
+  // ═══════════════════════════════════════════════════════════════════════════
+  if (!skipAutoSell && isGear && isEligibleForAutoRecycle({ itemId, rarity, foundation }, def, state)) {
+    processAutoRecycleItem({ itemId, rarity, foundation }, def, state, callbacks);
+    return true;
+  }
 
   const RARITY_RANK = { 'common': 1, 'uncommon': 2, 'rare': 3, 'epic': 4, 'legendary': 5, 'mythic': 6, 's': 7 };
   if (!skipAutoSell && isGear && rarity && !foundation && state.autoSellRarity && state.autoSellRarity !== 'off') {
