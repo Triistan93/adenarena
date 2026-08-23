@@ -3077,17 +3077,34 @@ export function getItemTierNum(def) {
 }
 
 export const SUBCATEGORIES_BY_CAT = {
+  all: [
+    { id: 'all', label: '🌟 Todas' },
+    { id: 'staff', label: '🪄 Cajados (Staff)' },
+    { id: 'sword', label: '⚔️ Espadas 1-Mão' },
+    { id: 'bow', label: '🏹 Arcos (Bow)' },
+    { id: 'dagger', label: '🗡️ Adagas (Dagger)' },
+    { id: 'dual', label: '⚔️⚔️ Duplas (Dual)' },
+    { id: 'heavy', label: '🛡️ Pesada (Heavy)' },
+    { id: 'light', label: '🦺 Leve (Light)' },
+    { id: 'robe', label: '🧙 Túnica (Robe)' },
+    { id: 'necklace', label: '📿 Colares' },
+    { id: 'ring', label: '💍 Anéis' },
+    { id: 'earring', label: '👂 Brincos' },
+    { id: 'potion', label: '🧪 Poções' },
+    { id: 'shot', label: '⚡ Soulshots' },
+    { id: 'material', label: '🧱 Materiais' }
+  ],
   weapon: [
     { id: 'all', label: '⚔️ Todas' },
-    { id: 'staff', label: '🪄 Cajados' },
-    { id: 'bow', label: '🏹 Arcos' },
-    { id: 'dagger', label: '🗡️ Adagas' },
+    { id: 'staff', label: '🪄 Cajados (Staff)' },
+    { id: 'bow', label: '🏹 Arcos (Bow)' },
+    { id: 'dagger', label: '🗡️ Adagas (Dagger)' },
     { id: 'sword', label: '⚔️ Espadas 1-Mão' },
-    { id: 'dual', label: '⚔️⚔️ Duplas' },
-    { id: 'spear', label: '🔱 Lanças' },
-    { id: 'twohand', label: '🔨 2-Mãos' },
-    { id: 'blunt', label: '🪓 Maças' },
-    { id: 'fist', label: '🥊 Manoplas' }
+    { id: 'dual', label: '⚔️⚔️ Duplas (Dual)' },
+    { id: 'spear', label: '🔱 Lanças (Spear)' },
+    { id: 'twohand', label: '🔨 2-Mãos (Two-Hand)' },
+    { id: 'blunt', label: '🪓 Maças (Blunt)' },
+    { id: 'fist', label: '🥊 Manoplas (Fist)' }
   ],
   armor: [
     { id: 'all', label: '🛡️ Todas' },
@@ -3239,7 +3256,14 @@ export function updateCraftUI(state, callbacks = {}) {
   });
 
   const filtersBar = findElement('craft-filters-bar');
-  const subfiltersBar = findElement('craft-subcategory-filters');
+  let subfiltersBar = findElement('craft-subcategory-filters');
+  if (!subfiltersBar && filtersBar && filtersBar.parentNode) {
+    subfiltersBar = document.createElement('div');
+    subfiltersBar.id = 'craft-subcategory-filters';
+    subfiltersBar.style.cssText = 'display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px; padding:6px 10px; background:rgba(0,0,0,0.3); border-radius:6px; border:1px solid rgba(255,255,255,0.05);';
+    filtersBar.parentNode.insertBefore(subfiltersBar, filtersBar.nextSibling);
+  }
+
   if (filtersBar) {
     filtersBar.style.display = (subTab === 'craft') ? 'flex' : 'none';
   }
@@ -3302,6 +3326,11 @@ export function updateCraftUI(state, callbacks = {}) {
     const itemId = r.itemId || r.id;
     const def = allItems[itemId];
     if (!def || !def.name) continue;
+
+    // Itens de herança são EXCLUSIVOS dos Starter Packs do Cash Shop
+    const isHeirloom = def.isHeirloom || itemId.includes('heirloom') || (def.name && (def.name.toLowerCase().includes('herança') || def.name.toLowerCase().includes('heirloom')));
+    if (isHeirloom) continue;
+
     const normName = def.name.toLowerCase().trim();
     if (seenNames.has(normName)) continue;
     seenNames.add(normName);
@@ -3322,7 +3351,7 @@ export function updateCraftUI(state, callbacks = {}) {
       subfiltersBar.innerHTML = subcats.map(sub => {
         const isSubActive = (sub.id === activeSubcat);
         return `
-          <button class="inv-batch-btn ${isSubActive ? 'active' : ''}" data-craft-subcat="${sub.id}" style="padding:3px 8px; font-size:11px; ${isSubActive ? 'background:linear-gradient(180deg,#d4a744,#8a641c); color:#000; font-weight:bold; border-color:#ffe699;' : 'background:rgba(255,255,255,0.05); color:#cbd5e1;'}">
+          <button class="inv-batch-btn ${isSubActive ? 'active' : ''}" data-craft-subcat="${sub.id}" style="padding:4px 10px; font-size:11px; border-radius:4px; cursor:pointer; transition:all 0.15s; ${isSubActive ? 'background:linear-gradient(180deg,#d4a744,#8a641c); color:#000; font-weight:bold; border:1px solid #ffe699; box-shadow:0 0 8px rgba(212,167,68,0.4);' : 'background:rgba(255,255,255,0.06); color:#cbd5e1; border:1px solid rgba(255,255,255,0.1);'}">
             ${sub.label}
           </button>
         `;

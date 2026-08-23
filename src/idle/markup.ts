@@ -657,6 +657,8 @@ export const IDLE_MARKUP = `
               </div>
             </div>
 
+            <div id="craft-subcategory-filters" style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px; padding:6px 10px; background:rgba(0,0,0,0.3); border-radius:6px; border:1px solid rgba(255,255,255,0.05);"></div>
+
             <div id="craft-recipes-view" class="craft-view active">
               <div class="craft-list" id="craft-list"></div>
             </div>

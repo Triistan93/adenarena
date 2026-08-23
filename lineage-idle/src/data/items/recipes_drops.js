@@ -1224,8 +1224,9 @@ export function generateAllCraftingRecipes(allItemsParam = null) {
   const recipes = {};
 
   for (const [id, def] of Object.entries(allItems)) {
-    if (!def || !def.name) continue;
     if (def.slot === 'material') continue; // Materiais de craft brutos não são forjados de si mesmos
+    const isHeirloom = def.isHeirloom || id.includes('heirloom') || (def.name && (def.name.toLowerCase().includes('herança') || def.name.toLowerCase().includes('heirloom')));
+    if (isHeirloom) continue; // Itens de Herança são exclusivos dos Starter Packs do Cash Shop
 
     const normName = def.name.toLowerCase().trim();
     if (seenNames.has(normName)) continue;
