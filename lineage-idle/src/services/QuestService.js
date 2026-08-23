@@ -6,7 +6,7 @@
  */
 
 import { D } from '../core/GameConfig.js';
-import { QUEST_DEFS, BATTLE_PASS_TIERS } from '../data/quests.js';
+import { QUEST_DEFS, BATTLE_PASS_TIERS, DAILY_COMPLETION_BONUS } from '../data/quests.js';
 import { addToInventory } from './InventoryService.js';
 
 /**
@@ -14,13 +14,14 @@ import { addToInventory } from './InventoryService.js';
  * @param {Object} state
  */
 export function checkQuestResets(state) {
-  state.quests = state.quests || { progress: {}, claimed: [], lastDailyReset: 0, lastWeeklyReset: 0 };
+  state.quests = state.quests || { progress: {}, claimed: [], lastDailyReset: 0, lastWeeklyReset: 0, dailyBonusClaimed: false };
   const now = Date.now();
   const ONE_DAY = 24 * 60 * 60 * 1000;
   const SEVEN_DAYS = 7 * ONE_DAY;
 
   if (!state.quests.lastDailyReset || (now - state.quests.lastDailyReset) >= ONE_DAY) {
     state.quests.lastDailyReset = now;
+    state.quests.dailyBonusClaimed = false;
     for (const q of QUEST_DEFS.daily) {
       delete state.quests.progress[q.id];
       const idx = state.quests.claimed.indexOf(q.id);
@@ -86,6 +87,38 @@ export function claimQuestReward(state, questId, callbacks = {}) {
 
   if (callbacks.log) callbacks.log(`🎁 Recompensa Reclamada: **${qDef.name}**!`, 'rarity-legendary');
   if (callbacks.floatText) callbacks.floatText(`🎁 MISSÃO CONCLUÍDA!`, 'float-jackpot');
+
+  if (callbacks.updateAllUI) callbacks.updateAllUI();
+  if (callbacks.save) callbacks.save();
+  return true;
+}
+
+/**
+ * Reclama o Grande Baú Diário da Guilda de Aventureiros após completar todas as missões diárias.
+ * @param {Object} state
+ * @param {Object} [callbacks]
+ * @returns {boolean}
+ */
+export function claimDailyBonusChest(state, callbacks = {}) {
+  checkQuestResets(state);
+  if (state.quests.dailyBonusClaimed) return false;
+
+  const allCompleted = (QUEST_DEFS.daily || []).every(q => state.quests.claimed.includes(q.id));
+  if (!allCompleted) return false;
+
+  state.quests.dailyBonusClaimed = true;
+  const rew = DAILY_COMPLETION_BONUS.reward;
+
+  if (rew.gold) state.gold = (state.gold || 0) + rew.gold;
+  if (rew.sp) state.sp = (state.sp || 0) + rew.sp;
+  if (rew.magicLamps) state.magicLamps = (state.magicLamps || 0) + rew.magicLamps;
+  if (rew.passXp) {
+    state.battlePass = state.battlePass || { xp: 0, claimedFree: [], claimedPremium: [], unlockedPremium: false };
+    state.battlePass.xp += rew.passXp;
+  }
+
+  if (callbacks.log) callbacks.log(`👑 TESOURO MÁXIMO! Reclamou o **${DAILY_COMPLETION_BONUS.name}** (+${rew.sp} SP, +${rew.gold.toLocaleString()}g, +${rew.magicLamps}x Lâmpadas)!`, 'rarity-legendary');
+  if (callbacks.floatText) callbacks.floatText(`👑 BAÚ DIÁRIO RESGATADO!`, 'float-jackpot');
 
   if (callbacks.updateAllUI) callbacks.updateAllUI();
   if (callbacks.save) callbacks.save();

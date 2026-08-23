@@ -182,6 +182,50 @@ for (const [monId, m] of Object.entries(MONSTERS || {})) {
 
 export class CardCodexService {
   /**
+   * Determina o Rank da Carta com base no total de cópias absorvidas.
+   * @param {number} count
+   * @returns {number}
+   */
+  static getRankFromCount(count) {
+    if (count >= 15) return 5;
+    if (count >= 10) return 4;
+    if (count >= 6) return 3;
+    if (count >= 3) return 2;
+    if (count >= 1) return 1;
+    return 0;
+  }
+
+  /**
+   * Quantidade de cartas necessárias para atingir o próximo rank.
+   * @param {number} rank
+   * @returns {number}
+   */
+  static getNextRankRequirement(rank) {
+    if (rank >= 5) return 15;
+    if (rank === 4) return 15;
+    if (rank === 3) return 10;
+    if (rank === 2) return 6;
+    if (rank === 1) return 3;
+    return 1;
+  }
+
+  /**
+   * Multiplicador com Retornos Decrescentes (Diminishing Returns) por Rank.
+   * @param {number} rank
+   * @returns {number}
+   */
+  static getRankMultiplier(rank) {
+    switch (rank) {
+      case 5: return 2.15; // +15% no rank 5
+      case 4: return 2.00; // +20% no rank 4
+      case 3: return 1.80; // +30% no rank 3
+      case 2: return 1.50; // +50% no rank 2
+      case 1: return 1.00; // 100% no rank 1
+      default: return 0;
+    }
+  }
+
+  /**
    * Absorve uma carta no Codex da Conta, garantindo bônus passivos permanentes.
    * @param {Object} accountState
    * @param {string} cardId
@@ -196,10 +240,10 @@ export class CardCodexService {
     const current = accountState.cardCodex[cardId] || { rank: 0, count: 0 };
 
     current.count += 1;
-    current.rank = Math.min(5, Math.floor(current.count / 2) + 1);
+    current.rank = CardCodexService.getRankFromCount(current.count);
     accountState.cardCodex[cardId] = current;
 
-    hooks.log?.(`🃏 Carta **${cardDef.name}** absorvida no Codex da Conta! (Rank ${current.rank})`, 'gain');
+    hooks.log?.(`🃏 Carta **${cardDef.name}** absorvida no Codex! (${current.count} cópias · Rank ${current.rank}/5)`, 'gain');
     hooks.onUpdate?.();
 
     return { success: true, rank: current.rank, totalCards: current.count };
@@ -219,10 +263,10 @@ export class CardCodexService {
       const def = MONSTER_CARDS[cardId];
       if (!def || !def.codexBonus) continue;
 
-      const rankMultiplier = 1 + (data.rank - 1) * 0.25; // +25% por rank adicional
+      const rankMultiplier = CardCodexService.getRankMultiplier(data.rank);
       for (const [stat, val] of Object.entries(def.codexBonus)) {
         if (typeof val === 'number') {
-          totals[stat] = (totals[stat] || 0) + (val * rankMultiplier);
+          totals[stat] = (totals[stat] || 0) + Math.round(val * rankMultiplier);
         }
       }
     }

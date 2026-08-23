@@ -4,20 +4,29 @@
  */
 
 /**
- * Definições das quests diárias e semanais.
+ * Definições das quests diárias e semanais com injeção balanceada de SP.
  * Cada quest tem: id, name, desc, target, type, reward, icon
  */
+export const DAILY_COMPLETION_BONUS = {
+  name: 'Baú da Guilda dos Aventureiros de Aden',
+  desc: 'Conclua todas as 5 missões diárias para receber o tesouro máximo da guilda.',
+  reward: { gold: 50000, sp: 500, magicLamps: 2, passXp: 250 },
+  icon: '🎁'
+};
+
 export const QUEST_DEFS = {
   daily: [
-    { id: 'd_kills',  name: 'Caçador de Monstros',   desc: 'Derrote 50 monstros nas zonas de caça',          target: 50,     type: 'kill',  reward: { gold: 5000,  sp: 25,  passXp: 100 },               icon: '⚔️' },
-    { id: 'd_boss',   name: 'Desafiador de Elites',   desc: 'Derrote 1 Chefe ou Monstro de Elite',            target: 1,      type: 'boss',  reward: { gold: 10000, sp: 50,  passXp: 150 },               icon: '🐉' },
-    { id: 'd_craft',  name: 'Mestre da Forja',         desc: 'Realize 1 criação no Craft ou roleta',           target: 1,      type: 'craft', reward: { gold: 3000,  craftPoints: 15, passXp: 100 },      icon: '🔨' },
-    { id: 'd_codex',  name: 'Relíquia de Aden',        desc: 'Obtenha 1 Doll ou registre item no Codex',       target: 1,      type: 'codex', reward: { gold: 5000,  magicLamps: 1, passXp: 100 },       icon: '📜' }
+    { id: 'd_kills',  name: 'Caçador de Monstros',      desc: 'Derrote 50 monstros nas zonas de caça',          target: 50,     type: 'kill',   reward: { gold: 15000, sp: 150, passXp: 100 },               icon: '⚔️' },
+    { id: 'd_boss',   name: 'Desafiador de Elites',      desc: 'Derrote 2 Chefes ou Monstros de Elite',          target: 2,      type: 'boss',   reward: { gold: 30000, sp: 250, magicLamps: 1, passXp: 150 }, icon: '🐉' },
+    { id: 'd_craft',  name: 'Mestre da Forja',           desc: 'Realize 2 criações ou reciclagens na Forja',     target: 2,      type: 'craft',  reward: { gold: 10000, sp: 100, craftPoints: 25, passXp: 100 }, icon: '🔨' },
+    { id: 'd_codex',  name: 'Relíquia de Aden',          desc: 'Registre 1 item ou absorva 1 Carta no Codex',   target: 1,      type: 'codex',  reward: { gold: 15000, sp: 150, magicLamps: 1, passXp: 100 }, icon: '📜' },
+    { id: 'd_tower',  name: 'Conquistador da Torre',     desc: 'Desafie ou faça a Varredura da Torre',           target: 1,      type: 'tower',  reward: { gold: 25000, sp: 200, passXp: 100 },               icon: '🏰' }
   ],
   weekly: [
-    { id: 'w_kills',  name: 'Exterminador de Aden',    desc: 'Derrote 400 monstros',                           target: 400,    type: 'kill',  reward: { gold: 40000, sp: 250, passXp: 500 },              icon: '☠️' },
-    { id: 'w_bosses', name: 'Caçador de Lendas',        desc: 'Derrote 8 Chefes de Raid ou Elites',             target: 8,      type: 'boss',  reward: { gold: 75000, sp: 500, passXp: 600 },              icon: '👑' },
-    { id: 'w_gold',   name: 'Acumulador de Fortunas',   desc: 'Ganhe 100.000 de Gold',                          target: 100000, type: 'gold',  reward: { gold: 50000, magicLamps: 3, passXp: 500 },       icon: '💰' }
+    { id: 'w_kills',  name: 'Exterminador de Aden',      desc: 'Derrote 500 monstros nas zonas de caça',         target: 500,    type: 'kill',   reward: { gold: 150000, sp: 1500, passXp: 500 },              icon: '☠️' },
+    { id: 'w_bosses', name: 'Caçador de Lendas',          desc: 'Derrote 10 Chefes de Raid ou Monstros de Elite', target: 10,     type: 'boss',   reward: { gold: 250000, sp: 2500, magicLamps: 3, passXp: 600 }, icon: '👑' },
+    { id: 'w_gold',   name: 'Acumulador de Fortunas',     desc: 'Acumule 250.000 de Gold através de caçadas',     target: 250000, type: 'gold',   reward: { gold: 100000, sp: 1000, magicLamps: 5, passXp: 500 }, icon: '💰' },
+    { id: 'w_craft',  name: 'Grão-Mestre Ferreiro',      desc: 'Crie ou recicle 10 itens na Forja Real',         target: 10,     type: 'craft',  reward: { gold: 100000, sp: 1000, craftPoints: 100, passXp: 500 }, icon: '⚒️' }
   ]
 };
 

@@ -24,7 +24,7 @@ export { MONSTERS }                        from './monsters.js';
 export { RAID_BOSSES }                     from './raids.js';
 
 // ─── Game progression ─────────────────────────────────────────────────────────
-export { QUEST_DEFS, BATTLE_PASS_TIERS, PASS_DEFS } from './quests.js';
+export { QUEST_DEFS, BATTLE_PASS_TIERS, PASS_DEFS, DAILY_COMPLETION_BONUS } from './quests.js';
 
 // ─── Collections ──────────────────────────────────────────────────────────────
 export { CODEX_SETS, BOSS_DOLLS } from './codex.js';

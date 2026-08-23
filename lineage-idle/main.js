@@ -15,7 +15,7 @@ import { resolveCanonicalClassId } from './src/data/classes/class_aliases.js';
 import { SAGAS, ZONES, ZONE_BACKGROUNDS }                                   from './src/data/zones.js';
 import { MONSTERS }                                                          from './src/data/monsters.js';
 import { RAID_BOSSES }                                                       from './src/data/raids.js';
-import { QUEST_DEFS, BATTLE_PASS_TIERS, PASS_DEFS }                        from './src/data/quests.js';
+import { QUEST_DEFS, BATTLE_PASS_TIERS, PASS_DEFS, DAILY_COMPLETION_BONUS } from './src/data/quests.js';
 import { CODEX_SETS, BOSS_DOLLS }                                           from './src/data/codex.js';
 import { MONSTER_CARDS, CardCodexService }                                    from './src/services/CardCodexService.js';
 // ─── Sprint 2: Importa motores de Stats e Nível ────────────────────────────
@@ -162,6 +162,7 @@ import {
   checkQuestResets as serviceCheckQuestResets,
   triggerQuestEvent as serviceTriggerQuestEvent,
   claimQuestReward as serviceClaimQuestReward,
+  claimDailyBonusChest as serviceClaimDailyBonusChest,
   unlockPremiumPass as serviceUnlockPremiumPass,
   claimPassReward as serviceClaimPassReward
 } from './src/services/QuestService.js';
@@ -2295,7 +2296,10 @@ function updateQuestsUI() {
 
   if (dailyContainer) {
     let dailyClaimedCount = 0;
-    dailyContainer.innerHTML = QUEST_DEFS.daily.map(q => {
+    const allDailyDone = QUEST_DEFS.daily.every(q => state.quests.claimed.includes(q.id));
+    const isDailyBonusClaimed = Boolean(state.quests.dailyBonusClaimed);
+
+    const cardsHtml = QUEST_DEFS.daily.map(q => {
       const progress = Math.min(q.target, state.quests.progress[q.id] || 0);
       const isCompleted = progress >= q.target;
       const isClaimed = state.quests.claimed.includes(q.id);
@@ -2332,11 +2336,48 @@ function updateQuestsUI() {
       `;
     }).join('');
 
+    const grandBonusHtml = `
+      <div class="grand-daily-card" style="background:linear-gradient(135deg, rgba(35,25,12,0.95), rgba(18,12,6,0.98)); border:1px solid ${isDailyBonusClaimed ? '#10b981' : (allDailyDone ? '#facc15' : 'rgba(212,167,68,0.3)')}; border-radius:10px; padding:14px 16px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; box-shadow:0 4px 15px rgba(0,0,0,0.5);">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div style="font-size:32px; background:rgba(0,0,0,0.4); border-radius:8px; padding:6px 10px; border:1px solid rgba(212,167,68,0.3);">🎁</div>
+          <div>
+            <div style="font-family:'Cinzel',serif; font-weight:bold; font-size:14px; color:#ffd877;">
+              ${DAILY_COMPLETION_BONUS.name}
+            </div>
+            <div style="font-size:11px; color:#94a3b8; margin:2px 0 4px 0;">
+              Conclua as 5 caçadas diárias (${dailyClaimedCount}/${QUEST_DEFS.daily.length}) para resgatar o tesouro supremo.
+            </div>
+            <div style="font-size:11px; color:#86efac; font-weight:bold;">
+              ✦ +500 SP Extra · 💰 +50.000g · 🪔 +2 Lâmpadas Mágicas · 🎫 +250 XP Passe
+            </div>
+          </div>
+        </div>
+        <div>
+          ${isDailyBonusClaimed ? `
+            <span style="font-size:11px; color:#10b981; font-weight:bold; padding:6px 14px; border:1px solid #10b981; border-radius:6px; background:rgba(16,185,129,0.15);">✓ Resgatado Hoje</span>
+          ` : `
+            <button id="claim-grand-daily-btn" class="action-btn action-btn--primary" style="padding:8px 18px; font-weight:bold; font-size:12px; ${allDailyDone ? 'background:linear-gradient(180deg,#d4a744,#8a641c); border:1px solid #ffe699; color:#000; box-shadow:0 0 12px rgba(234,179,8,0.5); cursor:pointer;' : 'opacity:0.5; cursor:not-allowed;'}" ${!allDailyDone ? 'disabled' : ''}>
+              ${allDailyDone ? '🎁 Resgatar Baú (+500 SP)' : `${dailyClaimedCount}/${QUEST_DEFS.daily.length} Diárias`}
+            </button>
+          `}
+        </div>
+      </div>
+    `;
+
+    dailyContainer.innerHTML = grandBonusHtml + cardsHtml;
+
     if (dailyBadge) dailyBadge.textContent = `${dailyClaimedCount}/${QUEST_DEFS.daily.length} Concluídas`;
 
     dailyContainer.querySelectorAll('[data-quest]').forEach(btn => {
       btn.onclick = () => claimQuestReward(btn.dataset.quest);
     });
+
+    const grandBtn = dailyContainer.querySelector('#claim-grand-daily-btn');
+    if (grandBtn && allDailyDone && !isDailyBonusClaimed) {
+      grandBtn.onclick = () => {
+        serviceClaimDailyBonusChest(state, { log, floatText, updateAllUI, save });
+      };
+    }
   }
 
   if (weeklyContainer) {
@@ -2479,14 +2520,16 @@ function renderBattlePassUI() {
 }
 
 // --------------------------- TOWER OF INSOLENCE ---------------------------
-function getTowerFloorDef(floorNum) { return serviceGetTowerFloorDef(floorNum); }
 function challengeTowerFloor() {
+  triggerQuestEvent('tower', 1);
   return serviceChallengeTowerFloor(state, { log, floatText, el, renderStageMonster, attackMonster });
 }
 function onTowerFloorVictory(floorNum) {
+  triggerQuestEvent('tower', 1);
   return serviceCompleteTowerFloor(state, floorNum, { log, floatText, updateAllUI, save });
 }
 function sweepTowerDaily() {
+  triggerQuestEvent('tower', 1);
   return serviceSweepTowerDaily(state, { log, floatText, updateAllUI, save });
 }
 
@@ -4724,47 +4767,178 @@ function renderMonsterCardsCodex(container, summaryEl) {
   let totalCards = Object.keys(allCards).length;
   let absorbedCards = 0;
 
+  const searchQuery = (window._cardSearchQuery || '').toLowerCase().trim();
+  const rarityFilter = window._cardRarityFilter || 'all';
+
+  // Barra de Filtros e Pesquisa
+  const filterBar = mkEl('div');
+  filterBar.style.cssText = 'background:rgba(0,0,0,0.4); border:1px solid rgba(212,175,55,0.25); border-radius:10px; padding:10px 14px; margin-bottom:14px; display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:10px;';
+  
+  filterBar.innerHTML = `
+    <div style="display:flex; align-items:center; gap:8px; flex:1; min-width:200px;">
+      <input 
+        type="text" 
+        id="card-search-input" 
+        placeholder="🔍 Buscar por nome do monstro ou carta..." 
+        value="${window._cardSearchQuery || ''}"
+        style="width:100%; background:#090b10; color:#fff; border:1px solid rgba(212,167,68,0.3); border-radius:6px; padding:6px 10px; font-size:12px; font-family:sans-serif;"
+      />
+    </div>
+    <div style="display:flex; flex-wrap:wrap; gap:4px;">
+      ${['all', 'common', 'uncommon', 'rare', 'epic', 'legendary', 'mythic'].map(r => {
+        const labels = { all: 'Todas', common: 'Comum', uncommon: 'Incomum', rare: 'Rara', epic: 'Épica', legendary: 'Lendária', mythic: 'Mítica+' };
+        const isActive = rarityFilter === r;
+        return `
+          <button 
+            class="inv-batch-btn" 
+            style="padding:4px 10px; font-size:11px; font-weight:bold; ${isActive ? 'background:linear-gradient(180deg,#d4a744,#8a641c); border:1px solid #ffe699; color:#000;' : 'background:rgba(255,255,255,0.05); color:#94a3b8;'}"
+            onclick="window.setCardRarityFilter('${r}')"
+          >
+            ${labels[r] || r}
+          </button>
+        `;
+      }).join('')}
+    </div>
+  `;
+  container.appendChild(filterBar);
+
+  const searchInput = filterBar.querySelector('#card-search-input');
+  if (searchInput) {
+    searchInput.oninput = (e) => {
+      window._cardSearchQuery = e.target.value;
+      updateCodexUI();
+    };
+  }
+
   const cardsContainer = mkEl('div');
-  cardsContainer.style.cssText = 'display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:12px;';
+  cardsContainer.style.cssText = 'display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:12px;';
+
+  const RARITY_COLORS = {
+    common: { border: 'rgba(148,163,184,0.4)', glow: 'rgba(148,163,184,0.15)', text: '#94a3b8', bg: 'rgba(15,20,30,0.85)' },
+    uncommon: { border: 'rgba(34,197,94,0.5)', glow: 'rgba(34,197,94,0.2)', text: '#4ade80', bg: 'rgba(10,25,18,0.85)' },
+    rare: { border: 'rgba(59,130,246,0.6)', glow: 'rgba(59,130,246,0.25)', text: '#60a5fa', bg: 'rgba(12,20,35,0.85)' },
+    epic: { border: 'rgba(168,85,247,0.7)', glow: 'rgba(168,85,247,0.3)', text: '#c084fc', bg: 'rgba(25,12,35,0.85)' },
+    legendary: { border: 'rgba(245,158,11,0.8)', glow: 'rgba(245,158,11,0.4)', text: '#f59e0b', bg: 'rgba(35,20,8,0.85)' },
+    mythic: { border: 'rgba(239,68,68,0.9)', glow: 'rgba(239,68,68,0.5)', text: '#ef4444', bg: 'rgba(35,10,10,0.85)' },
+    primordial: { border: 'rgba(244,63,94,1)', glow: 'rgba(244,63,94,0.6)', text: '#fb7185', bg: 'rgba(40,10,20,0.85)' },
+    sovereign: { border: '#facc15', glow: 'rgba(250,204,21,0.7)', text: '#fde047', bg: 'rgba(40,25,10,0.9)' }
+  };
+
+  let matchingCardsCount = 0;
 
   for (const [cardId, cardDef] of Object.entries(allCards)) {
     const current = state.cardCodex?.[cardId] || { rank: 0, count: 0 };
     const isAbsorbed = current.rank > 0;
     if (isAbsorbed) absorbedCards++;
 
+    // Filtros de busca e raridade
+    const rKey = (cardDef.rarity || 'common').toLowerCase();
+    if (rarityFilter !== 'all') {
+      if (rarityFilter === 'mythic') {
+        if (!['mythic', 'primordial', 'sovereign'].includes(rKey)) continue;
+      } else if (rKey !== rarityFilter) {
+        continue;
+      }
+    }
+
+    if (searchQuery) {
+      const matchName = String(cardDef.name || '').toLowerCase().includes(searchQuery);
+      const matchMon = String(cardDef.monster || '').toLowerCase().includes(searchQuery);
+      if (!matchName && !matchMon) continue;
+    }
+
+    matchingCardsCount++;
+    const rStyle = RARITY_COLORS[rKey] || RARITY_COLORS.common;
     const invCount = getInventoryCount(cardId) + getWarehouseCount(cardId);
 
+    const rankMult = isAbsorbed ? CardCodexService.getRankMultiplier(current.rank) : 1.0;
     const bonusLabel = Object.entries(cardDef.codexBonus || {})
-      .map(([stat, val]) => `+${typeof val === 'number' && val < 1 ? (val * 100).toFixed(0) + '%' : val} ${stat.toUpperCase()}`)
+      .map(([stat, val]) => {
+        const multipliedVal = isAbsorbed ? Math.round(val * rankMult) : val;
+        return `+${typeof val === 'number' && val < 1 ? (val * 100).toFixed(0) + '%' : multipliedVal} ${stat.toUpperCase()}`;
+      })
       .join(', ');
 
+    const nextRankReq = CardCodexService.getNextRankRequirement(current.rank);
+    const dropPct = (Number(cardDef.dropChance || 0.0005) * 100).toFixed(2);
+
     const cardBox = mkEl('div');
-    cardBox.style.cssText = `border: 1px solid ${isAbsorbed ? '#10b981' : 'rgba(212,175,55,0.3)'}; padding: 12px; border-radius: 8px; background: rgba(15,18,25,0.85); display:flex; flex-direction:column; justify-content:space-between;`;
+    cardBox.style.cssText = `border:1px solid ${isAbsorbed ? rStyle.border : 'rgba(212,175,55,0.2)'}; padding:14px; border-radius:10px; background:${rStyle.bg}; display:flex; flex-direction:column; justify-content:space-between; box-shadow:0 4px 15px ${isAbsorbed ? rStyle.glow : 'rgba(0,0,0,0.5)'}; transition:transform 0.2s;`;
 
     cardBox.innerHTML = `
       <div>
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <h4 style="margin:0; color:${isAbsorbed ? '#10b981' : 'var(--gilt-bright)'}">🃏 ${cardDef.name}</h4>
-          <span style="font-size:10px; padding:2px 6px; border-radius:4px; background:rgba(0,0,0,0.5); color:#f59e0b; text-transform:uppercase;">${cardDef.rarity}</span>
+        <div style="display:flex; gap:12px; align-items:flex-start;">
+          <!-- Monster Icon Frame -->
+          <div style="width:52px; height:52px; min-width:52px; border-radius:10px; border:2px solid ${rStyle.border}; background:radial-gradient(circle, rgba(255,255,255,0.1), rgba(0,0,0,0.9)); display:flex; align-items:center; justify-content:center; overflow:hidden; box-shadow:0 0 10px ${rStyle.glow};">
+            <img src="${cardDef.icon || 'icons/general/card.png'}" alt="${cardDef.name}" style="width:40px; height:40px; image-rendering:pixelated; object-fit:contain;" onerror="this.src='icons/general/card.png'; this.onerror=null;" />
+          </div>
+
+          <div style="flex:1;">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+              <h4 style="margin:0; font-size:13px; font-family:'Cinzel',serif; color:${isAbsorbed ? '#fff' : '#cbd5e1'}; line-height:1.2;">
+                ${cardDef.name}
+              </h4>
+            </div>
+            <div style="display:flex; gap:6px; align-items:center; margin-top:4px;">
+              <span style="font-size:9px; padding:1px 6px; border-radius:4px; background:rgba(0,0,0,0.6); color:${rStyle.text}; text-transform:uppercase; font-weight:bold; border:1px solid ${rStyle.border};">
+                ${cardDef.rarity}
+              </span>
+              <span style="font-size:10px; color:#94a3b8;">
+                Drop: <strong>${dropPct}%</strong>
+              </span>
+            </div>
+          </div>
         </div>
-        <p style="font-size:11px; color:var(--text-muted); margin:4px 0;">👑 Fonte: Drop do Chefe <strong>${cardDef.monster}</strong> (${(cardDef.dropChance * 100).toFixed(2)}%)</p>
-        <div style="background:rgba(0,0,0,0.3); padding:6px 8px; border-radius:6px; margin:6px 0; font-size:11px;">
-          <span style="color:#6ee7b7; font-weight:bold;">Bônus Passivo na Conta:</span> ${bonusLabel || 'Nenhum'}
+
+        <!-- Bônus Passivo da Coleção -->
+        <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.08); padding:8px 10px; border-radius:6px; margin:10px 0 8px 0; font-size:11px;">
+          <div style="display:flex; justify-content:space-between; margin-bottom:2px;">
+            <span style="color:${rStyle.text}; font-weight:bold;">Bônus Passivo na Conta:</span>
+            ${isAbsorbed ? `<span style="color:#fde047; font-size:10px;">(x${rankMult.toFixed(2)})</span>` : ''}
+          </div>
+          <div style="color:#e2e8f0; font-family:sans-serif;">${bonusLabel || 'Nenhum'}</div>
+        </div>
+
+        <!-- Rank e Progresso -->
+        <div style="margin-bottom:8px;">
+          <div style="display:flex; justify-content:space-between; font-size:11px; margin-bottom:3px;">
+            <span style="color:${isAbsorbed ? '#86efac' : '#94a3b8'}; font-weight:bold;">
+              ${isAbsorbed ? `⭐ Rank ${current.rank}/5 (${current.count} absorvidas)` : '⚪ Não Absorvida'}
+            </span>
+            <span style="font-size:10px; color:#94a3b8;">
+              ${current.rank >= 5 ? 'Rank Máximo' : `Próximo Rank: ${current.count}/${nextRankReq}`}
+            </span>
+          </div>
+          <div style="width:100%; height:6px; background:rgba(0,0,0,0.6); border-radius:3px; overflow:hidden; border:1px solid rgba(255,255,255,0.1);">
+            <div style="height:100%; width:${Math.min(100, Math.floor((current.count / (nextRankReq || 1)) * 100))}%; background:${isAbsorbed ? 'linear-gradient(90deg,#22c55e,#86efac)' : 'linear-gradient(90deg,#64748b,#94a3b8)'}; transition:width 0.3s;"></div>
+          </div>
         </div>
       </div>
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px; border-top:1px solid rgba(255,255,255,0.08); padding-top:6px;">
-        <span style="font-size:11px; color:${isAbsorbed ? '#34d399' : 'var(--text-muted)'};">
-          ${isAbsorbed ? `✓ Rank ${current.rank} (${current.count} absorvidas)` : 'Não Absorvida'}
+
+      <!-- Ações -->
+      <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(255,255,255,0.08); padding-top:8px; margin-top:4px;">
+        <span style="font-size:11px; color:${invCount > 0 ? '#86efac' : '#64748b'}; font-weight:bold;">
+          ${invCount > 0 ? `📦 Possui: ${invCount}x` : 'Sem cartas no inventário'}
         </span>
-        ${invCount > 0 ? `
-          <button class="action-btn action-btn--primary" style="padding:3px 10px; font-size:11px;" onclick="window.absorbCardAction('${cardId}')">Absorver 📥 (${invCount})</button>
-        ` : `
-          <span style="font-size:11px; color:var(--text-muted);">Não possui</span>
-        `}
+        <div style="display:flex; gap:6px;">
+          ${invCount > 0 ? `
+            <button class="action-btn action-btn--primary" style="padding:4px 10px; font-size:11px; font-weight:bold;" onclick="window.absorbCardAction('${cardId}', false)">Absorver 📥</button>
+            ${invCount > 1 ? `
+              <button class="action-btn" style="padding:4px 8px; font-size:11px; font-weight:bold; background:rgba(212,167,68,0.2); border-color:#d4a744; color:#fde047;" onclick="window.absorbCardAction('${cardId}', true)">Todas (${invCount})</button>
+            ` : ''}
+          ` : ''}
+        </div>
       </div>
     `;
 
     cardsContainer.appendChild(cardBox);
+  }
+
+  if (matchingCardsCount === 0) {
+    const emptyBox = mkEl('div');
+    emptyBox.style.cssText = 'grid-column:1/-1; text-align:center; padding:30px; color:#94a3b8; font-size:13px; background:rgba(0,0,0,0.3); border-radius:8px;';
+    emptyBox.textContent = 'Nenhuma carta de monstro encontrada para os filtros selecionados.';
+    cardsContainer.appendChild(emptyBox);
   }
 
   container.appendChild(cardsContainer);
@@ -6553,31 +6727,63 @@ export function init() {
       window._codexSubTab = tab;
       updateCodexUI();
     };
-    window.absorbCardAction = (cardId) => {
-      const invIdx = state.inventory.findIndex(i => i.itemId === cardId && !i.equipped);
-      let foundInWarehouse = false;
-      let whIdx = -1;
+    window.setCardRarityFilter = (filter) => {
+      window._cardRarityFilter = filter;
+      updateCodexUI();
+    };
+    window.claimDailyBonusChestAction = () => {
+      return serviceClaimDailyBonusChest(state, { log, floatText, updateAllUI, save });
+    };
+    window.absorbCardAction = (cardId, absorbAll = false) => {
+      let absorbedCount = 0;
 
-      if (invIdx >= 0) {
-        state.inventory.splice(invIdx, 1);
-      } else {
-        whIdx = (state.warehouse || []).findIndex(i => i.itemId === cardId && !i.equipped);
+      const absorbOne = () => {
+        const invIdx = state.inventory.findIndex(i => i.itemId === cardId && !i.equipped);
+        if (invIdx >= 0) {
+          if ((state.inventory[invIdx].count || 1) > 1) {
+            state.inventory[invIdx].count -= 1;
+          } else {
+            state.inventory.splice(invIdx, 1);
+          }
+          return true;
+        }
+        const whIdx = (state.warehouse || []).findIndex(i => i.itemId === cardId && !i.equipped);
         if (whIdx >= 0) {
-          state.warehouse.splice(whIdx, 1);
-          foundInWarehouse = true;
+          if ((state.warehouse[whIdx].count || 1) > 1) {
+            state.warehouse[whIdx].count -= 1;
+          } else {
+            state.warehouse.splice(whIdx, 1);
+          }
+          return true;
+        }
+        return false;
+      };
+
+      if (!absorbAll) {
+        if (absorbOne()) {
+          CardCodexService.absorbCardIntoCodex(state, cardId, { log });
+          absorbedCount = 1;
         } else {
           log('Você não possui esta carta para absorver.', 'system');
           return;
         }
+      } else {
+        while (absorbOne()) {
+          CardCodexService.absorbCardIntoCodex(state, cardId, {});
+          absorbedCount++;
+        }
+        if (absorbedCount > 0) {
+          const cardDef = MONSTER_CARDS[cardId];
+          const cur = state.cardCodex?.[cardId] || {};
+          log(`🃏 Absorvidas **${absorbedCount}x cartas de ${cardDef?.name || cardId}** no Codex! (Rank ${cur.rank}/5 · Total: ${cur.count})`, 'gain');
+        }
       }
 
-      const res = CardCodexService.absorbCardIntoCodex(state, cardId, {
-        log,
-        onUpdate: () => { updateAllUI(); save(); }
-      });
-      updateAllUI();
-      save();
-      return res;
+      if (absorbedCount > 0) {
+        triggerQuestEvent('codex', absorbedCount);
+        updateAllUI();
+        save();
+      }
     };
     window.claimHeroStatusAction = (weaponId) => {
       const res = OlympiadService.claimHeroStatus(state, weaponId, {
