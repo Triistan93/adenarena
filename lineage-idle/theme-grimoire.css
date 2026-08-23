@@ -287,6 +287,12 @@ anel de runas, reveal on scroll, code tokens.
 /* ---------- respeita usuarios com reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
   .ember, .ticker-track, .rune-ring, .rune-ring-rev, .gem-live { animation: none !important; }
+  .ember { display: none !important; }
+  .reveal, .mask-line > span { opacity: 1 !important; transform: none !important; transition: none !important; }
+  .stamp { animation: none !important; opacity: 1; transform: rotate(-8deg); }
+  .lift, .lift:hover { transform: none; transition: none; }
+}
+
 /* ================================================================
    AAA DARK FANTASY LINEAGE II DESIGN SYSTEM
    Royal Gold Frames, Obsidian Stone, Glossy Gauges, +16 Auras, Master Dock
@@ -295,12 +301,12 @@ anel de runas, reveal on scroll, code tokens.
 /* ---------- Molduras Reais em Ouro & Obsidiana ---------- */
 .l2-gold-frame {
   position: relative;
-  background: linear-gradient(180deg, rgba(26, 22, 17, 0.95) 0%, rgba(14, 12, 9, 0.98) 100%);
-  border: 1px solid #c89e3a;
+  background: linear-gradient(180deg, rgba(22, 18, 14, 0.98) 0%, rgba(12, 10, 8, 0.99) 100%) !important;
+  border: 1px solid #c89e3a !important;
   box-shadow: 
-    0 0 0 1px rgba(0, 0, 0, 0.8),
-    0 0 15px rgba(212, 169, 78, 0.15),
-    inset 0 0 12px rgba(0, 0, 0, 0.7);
+    0 0 0 1px rgba(0, 0, 0, 0.9),
+    0 0 16px rgba(212, 169, 78, 0.18),
+    inset 0 0 15px rgba(0, 0, 0, 0.8) !important;
   border-radius: 6px;
 }
 
@@ -308,7 +314,7 @@ anel de runas, reveal on scroll, code tokens.
   content: "";
   position: absolute;
   inset: 2px;
-  border: 1px solid rgba(212, 169, 78, 0.25);
+  border: 1px solid rgba(212, 169, 78, 0.2);
   pointer-events: none;
   border-radius: 4px;
 }
@@ -329,229 +335,202 @@ anel de runas, reveal on scroll, code tokens.
 }
 
 /* ================================================================
-   ELEVATED MASTER NAVIGATION DOCK (4 PILARES DE ADEN)
+   LUXURY MASTER NAVIGATION DOCK (4 PILARES DE ADEN)
 ================================================================ */
 .pillar-dock-container {
-  display: flex;
-  flex-direction: column;
+  display: flex !important;
+  flex-direction: column !important;
   background: 
-    radial-gradient(ellipse at 50% 0%, rgba(212, 169, 78, 0.14), transparent 70%),
-    linear-gradient(180deg, #18130d 0%, #0d0a07 100%);
-  border-bottom: 1.5px solid #d4a94e;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  padding: 6px 8px 8px 8px;
-  gap: 8px;
-  z-index: 25;
-  border-top-left-radius: 6px;
-  border-top-right-radius: 6px;
+    radial-gradient(ellipse at 50% 0%, rgba(212, 169, 78, 0.16), transparent 75%),
+    linear-gradient(180deg, #1e1811 0%, #0d0a07 100%) !important;
+  border-bottom: 2px solid #8a6a24 !important;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.8) !important;
+  padding: 6px 8px 8px 8px !important;
+  gap: 8px !important;
+  z-index: 25 !important;
+  border-top-left-radius: 6px !important;
+  border-top-right-radius: 6px !important;
+  box-sizing: border-box !important;
 }
 
 .pillar-master-tabs {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 6px;
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 6px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
 }
 
 .pillar-tab-btn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 8px;
-  background: linear-gradient(180deg, #2a2115 0%, #15100a 100%);
-  border: 1px solid #5a4525;
-  border-radius: 6px;
-  color: #c5b89a;
-  cursor: pointer;
-  transition: all 0.22s cubic-bezier(0.2, 0.8, 0.25, 1);
-  position: relative;
-  overflow: hidden;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 2px 5px rgba(0, 0, 0, 0.5);
-  text-align: left;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 7px !important;
+  padding: 8px 6px !important;
+  background: linear-gradient(180deg, #2a2218 0%, #15110b 100%) !important;
+  border: 1px solid #5a4525 !important;
+  border-radius: 5px !important;
+  color: #c5b89a !important;
+  cursor: pointer !important;
+  font-family: 'Cinzel', serif !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.25, 1) !important;
+  position: relative !important;
+  overflow: hidden !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 2px 6px rgba(0, 0, 0, 0.6) !important;
+  text-align: center !important;
+  user-select: none !important;
 }
 
 .pillar-tab-btn:hover {
-  background: linear-gradient(180deg, #3d2f1d 0%, #1f180f 100%);
-  border-color: #d4a94e;
-  color: #fff2d1;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 0 14px rgba(212, 169, 78, 0.35);
-  transform: translateY(-1px);
+  background: linear-gradient(180deg, #443420 0%, #221a10 100%) !important;
+  border-color: #d4a94e !important;
+  color: #fff4d4 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 0 12px rgba(212, 169, 78, 0.4) !important;
+  transform: translateY(-1px) !important;
 }
 
 .pillar-tab-btn.active {
-  background: linear-gradient(180deg, #594017 0%, #291c09 100%);
-  border-color: #ffd700;
-  color: #fff9e6;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 0 18px rgba(255, 215, 0, 0.45);
+  background: linear-gradient(180deg, #6e4e1a 0%, #301f09 100%) !important;
+  border-color: #ffd700 !important;
+  color: #ffffff !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 0 16px rgba(255, 215, 0, 0.5) !important;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.6) !important;
 }
 
 .pillar-tab-btn.active::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 10%;
-  width: 80%;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, #ffe082, #ffd700, #ffe082, transparent);
-  box-shadow: 0 0 10px #ffe082;
+  content: "" !important;
+  position: absolute !important;
+  bottom: 0 !important;
+  left: 10% !important;
+  width: 80% !important;
+  height: 2px !important;
+  background: linear-gradient(90deg, transparent, #ffe082, #ffd700, #ffe082, transparent) !important;
+  box-shadow: 0 0 8px #ffe082 !important;
 }
 
-/* Emblemas de cada pilar */
-.pillar-crest {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 26px;
-  height: 26px;
-  min-width: 26px;
-  border-radius: 6px;
-  background: rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(212, 169, 78, 0.3);
-  font-size: 13px;
-  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.8);
-  transition: all 0.2s ease;
-}
-
-.pillar-tab-btn:hover .pillar-crest,
-.pillar-tab-btn.active .pillar-crest {
-  border-color: #ffd700;
-  box-shadow: 0 0 8px currentColor;
-}
-
-.pillar-info {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
+.pillar-icon {
+  font-size: 13px !important;
+  line-height: 1 !important;
+  filter: drop-shadow(0 0 4px rgba(0,0,0,0.8)) !important;
 }
 
 .pillar-title {
-  font-family: 'Cinzel', serif;
-  font-size: 11px;
-  font-weight: 900;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: inherit;
-  line-height: 1.1;
+  font-family: 'Cinzel', serif !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.06em !important;
+  color: inherit !important;
+  line-height: 1 !important;
 }
 
-.pillar-sub {
-  font-family: 'IBM Plex Sans', sans-serif;
-  font-size: 9px;
-  color: #8f826d;
-  font-weight: 500;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  line-height: 1.2;
-  margin-top: 2px;
-}
-
-.pillar-tab-btn.active .pillar-sub {
-  color: #e5d8b8;
-}
-
-/* Cores temáticas para cada pilar */
+/* Temas individuais sutis */
 .pillar-tab-btn[data-pillar="combat"].active {
-  border-color: #f97316;
-  background: linear-gradient(180deg, #5a260e 0%, #2b1105 100%);
+  background: linear-gradient(180deg, #632b13 0%, #2e1205 100%) !important;
+  border-color: #f97316 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 0 16px rgba(249, 115, 22, 0.5) !important;
 }
-.pillar-tab-btn[data-pillar="combat"] .pillar-crest { color: #f97316; }
 
 .pillar-tab-btn[data-pillar="character"].active {
-  border-color: #60a5fa;
-  background: linear-gradient(180deg, #1e3a8a 0%, #0f172a 100%);
+  background: linear-gradient(180deg, #1e3a8a 0%, #0d172e 100%) !important;
+  border-color: #60a5fa !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 0 16px rgba(96, 165, 250, 0.5) !important;
 }
-.pillar-tab-btn[data-pillar="character"] .pillar-crest { color: #60a5fa; }
 
 .pillar-tab-btn[data-pillar="economy"].active {
-  border-color: #ffd700;
-  background: linear-gradient(180deg, #5c4418 0%, #2b1f09 100%);
+  background: linear-gradient(180deg, #6b4d1b 0%, #2f1f0a 100%) !important;
+  border-color: #ffd700 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 0 16px rgba(255, 215, 0, 0.5) !important;
 }
-.pillar-tab-btn[data-pillar="economy"] .pillar-crest { color: #ffd700; }
 
 .pillar-tab-btn[data-pillar="glory"].active {
-  border-color: #c084fc;
-  background: linear-gradient(180deg, #4c1d95 0%, #1e1035 100%);
+  background: linear-gradient(180deg, #531c9a 0%, #1f0b3b 100%) !important;
+  border-color: #c084fc !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 0 16px rgba(192, 132, 252, 0.5) !important;
 }
-.pillar-tab-btn[data-pillar="glory"] .pillar-crest { color: #c084fc; }
 
 /* ---------- Subtab Ribbon & Chips ---------- */
 .pillar-subtabs-strip {
-  display: flex;
-  gap: 5px;
-  overflow-x: auto;
-  padding: 4px 2px 2px 2px;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(212, 169, 78, 0.3) transparent;
+  display: flex !important;
+  gap: 5px !important;
+  overflow-x: auto !important;
+  padding: 4px 2px 2px 2px !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(212, 169, 78, 0.3) transparent !important;
 }
-.pillar-subtabs-strip::-webkit-scrollbar { height: 4px; }
+.pillar-subtabs-strip::-webkit-scrollbar { height: 4px !important; }
 .pillar-subtabs-strip::-webkit-scrollbar-thumb {
-  background: rgba(212, 169, 78, 0.4);
-  border-radius: 4px;
+  background: rgba(212, 169, 78, 0.4) !important;
+  border-radius: 4px !important;
 }
 
 .subtab-pill-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  background: linear-gradient(180deg, #221a11 0%, #120e09 100%);
-  border: 1px solid #4a3820;
-  border-radius: 5px;
-  color: #a89a80;
-  font-family: 'IBM Plex Sans', sans-serif;
-  font-size: 11px;
-  font-weight: 600;
-  white-space: nowrap;
-  cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.25, 1);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.5);
-  position: relative;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 6px 12px !important;
+  background: linear-gradient(180deg, #221a11 0%, #120e09 100%) !important;
+  border: 1px solid #4a3820 !important;
+  border-radius: 5px !important;
+  color: #a89a80 !important;
+  font-family: 'IBM Plex Sans', sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  white-space: nowrap !important;
+  cursor: pointer !important;
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.25, 1) !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.5) !important;
+  position: relative !important;
+  user-select: none !important;
 }
 
 .subtab-pill-btn:hover {
-  background: linear-gradient(180deg, #382a1b 0%, #1f170e 100%);
-  border-color: #d4a94e;
-  color: #f0cd7e;
-  transform: translateY(-1px);
-  box-shadow: 0 3px 8px rgba(0,0,0,0.6);
+  background: linear-gradient(180deg, #382a1b 0%, #1f170e 100%) !important;
+  border-color: #d4a94e !important;
+  color: #f0cd7e !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.6) !important;
 }
 
 .subtab-pill-btn.active {
-  background: linear-gradient(180deg, #664d1c 0%, #33240a 100%);
-  border-color: #ffd700;
-  color: #ffffff;
-  font-weight: 700;
-  box-shadow: 0 0 10px rgba(212, 169, 78, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  background: linear-gradient(180deg, #664d1c 0%, #33240a 100%) !important;
+  border-color: #ffd700 !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  box-shadow: 0 0 10px rgba(212, 169, 78, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
 }
 
 .subtab-pill-btn.active::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 20%;
-  width: 60%;
-  height: 2px;
-  background: #ffe082;
-  box-shadow: 0 0 6px #ffe082;
+  content: "" !important;
+  position: absolute !important;
+  bottom: 0 !important;
+  left: 20% !important;
+  width: 60% !important;
+  height: 2px !important;
+  background: #ffe082 !important;
+  box-shadow: 0 0 6px #ffe082 !important;
 }
 
 /* Badges de notificação estilizados como gemas */
 .tab-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 14px;
-  height: 14px;
-  padding: 0 3px;
-  background: linear-gradient(180deg, #ef4444 0%, #991b1b 100%);
-  color: #fff;
-  font-size: 9px;
-  font-weight: 900;
-  border-radius: 10px;
-  border: 1px solid #fca5a5;
-  box-shadow: 0 0 6px #ef4444;
-  margin-left: 2px;
-  animation: pulse 1.5s infinite;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 14px !important;
+  height: 14px !important;
+  padding: 0 3px !important;
+  background: linear-gradient(180deg, #ef4444 0%, #991b1b 100%) !important;
+  color: #fff !important;
+  font-size: 9px !important;
+  font-weight: 900 !important;
+  border-radius: 10px !important;
+  border: 1px solid #fca5a5 !important;
+  box-shadow: 0 0 6px #ef4444 !important;
+  margin-left: 2px !important;
+  animation: pulse 1.5s infinite !important;
 }
 
 /* ---------- Gauges de Status Autênticos (Lineage II Gloss) ---------- */
