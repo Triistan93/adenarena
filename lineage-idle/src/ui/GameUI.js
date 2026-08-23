@@ -2672,12 +2672,15 @@ export function updateShopUI(state, callbacks = {}) {
   // CATÁLOGO REGULAR DE COMPRAS (GEAR, POTIONS, SPELLBOOKS, MYSTIC)
   // ═══════════════════════════════════════════════════════════════════════════
   let itemsToDisplay = [];
+  const maxShopGradeTier = getMaxVisibleGradeTier(charLvl);
 
   if (currentShopTab === 'gear') {
     itemsToDisplay = Object.values(allItems).filter(def => {
       if (!def || !def.id || !def.slot) return false;
       const isEquip = ['weapon', 'armor', 'helmet', 'gloves', 'boots', 'legs', 'shield', 'ring', 'necklace', 'earring', 'belt', 'cloak'].includes(def.slot);
-      return isEquip;
+      if (!isEquip) return false;
+      const itemTier = getItemTierNum(def);
+      return itemTier <= maxShopGradeTier;
     }).map(def => ({ def, rarity: 'common' }));
   } else if (currentShopTab === 'potions') {
     itemsToDisplay = Object.values(allItems).filter(def => {
@@ -3040,15 +3043,151 @@ function matchesSlotFilter(def, filterKey) {
   return true;
 }
 
-function getMaxAllowedReqLevel(pLvl) {
+export function getMaxAllowedReqLevel(pLvl) {
   const lvl = Number(pLvl) || 1;
-  if (lvl < 20) return 19;  // Lv 1-19: Apenas No-Grade (1 a 19)
-  if (lvl < 40) return 39;  // Lv 20-39: No-Grade e D-Grade (1 a 39)
-  if (lvl < 52) return 51;  // Lv 40-51: Até C-Grade (1 a 51)
-  if (lvl < 61) return 60;  // Lv 52-60: Até B-Grade (1 a 60)
-  if (lvl < 76) return 75;  // Lv 61-75: Até A-Grade (1 a 75)
-  if (lvl < 80) return 79;  // Lv 76-79: Até S-Grade (1 a 79)
-  return 999;                // Lv 80+: Frost Lord e todos os itens
+  if (lvl < 20) return 39;  // Lv 1-19: No-Grade e D-Grade (1 a 39)
+  if (lvl < 40) return 51;  // Lv 20-39: No-Grade, D-Grade e C-Grade (1 a 51)
+  if (lvl < 52) return 61;  // Lv 40-51: Até B-Grade (1 a 61)
+  if (lvl < 62) return 75;  // Lv 52-61: Até A-Grade (1 a 75)
+  if (lvl < 76) return 84;  // Lv 62-75: Até S-Grade (1 a 84)
+  return 999;               // Lv 76+: Frost Lord e todos os itens
+}
+
+export function getMaxVisibleGradeTier(pLvl) {
+  const lvl = Number(pLvl) || 1;
+  if (lvl < 20) return 2; // Lv 1-19: No Grade + Grade D (Tier 1 & 2)
+  if (lvl < 40) return 3; // Lv 20-39: Até Grade C (Tier 3)
+  if (lvl < 52) return 4; // Lv 40-51: Até Grade B (Tier 4)
+  if (lvl < 62) return 5; // Lv 52-61: Até Grade A (Tier 5)
+  if (lvl < 76) return 6; // Lv 62-75: Até Grade S (Tier 6)
+  return 7;               // Lv 76+: Todas as grades (até Tier 7 - Frost Lord/Apex)
+}
+
+export function getItemTierNum(def) {
+  if (!def) return 1;
+  if (def.tier != null) return Number(def.tier) || 1;
+  const reqLvl = def.req?.level || def.level || 1;
+  if (reqLvl < 20) return 1;
+  if (reqLvl < 40) return 2;
+  if (reqLvl < 52) return 3;
+  if (reqLvl < 62) return 4;
+  if (reqLvl < 76) return 5;
+  if (reqLvl < 85) return 6;
+  return 7;
+}
+
+export const SUBCATEGORIES_BY_CAT = {
+  weapon: [
+    { id: 'all', label: '⚔️ Todas' },
+    { id: 'staff', label: '🪄 Cajados' },
+    { id: 'bow', label: '🏹 Arcos' },
+    { id: 'dagger', label: '🗡️ Adagas' },
+    { id: 'sword', label: '⚔️ Espadas 1-Mão' },
+    { id: 'dual', label: '⚔️⚔️ Duplas' },
+    { id: 'spear', label: '🔱 Lanças' },
+    { id: 'twohand', label: '🔨 2-Mãos' },
+    { id: 'blunt', label: '🪓 Maças' },
+    { id: 'fist', label: '🥊 Manoplas' }
+  ],
+  armor: [
+    { id: 'all', label: '🛡️ Todas' },
+    { id: 'heavy', label: '🛡️ Pesada (Heavy)' },
+    { id: 'light', label: '🦺 Leve (Light)' },
+    { id: 'robe', label: '🧙 Túnica (Robe)' },
+    { id: 'shield', label: '🛡️ Escudos' },
+    { id: 'helmet', label: '🪖 Elmos' },
+    { id: 'gloves', label: '🧤 Luvas' },
+    { id: 'boots', label: '👢 Botas' }
+  ],
+  jewel: [
+    { id: 'all', label: '💎 Todas' },
+    { id: 'necklace', label: '📿 Colares' },
+    { id: 'earring', label: '👂 Brincos' },
+    { id: 'ring', label: '💍 Anéis' }
+  ],
+  relic: [
+    { id: 'all', label: '🌟 Todas' },
+    { id: 'agathion', label: '🧚 Agathions' },
+    { id: 'cloak', label: '🧥 Capas' },
+    { id: 'belt', label: '🎗️ Cintos' },
+    { id: 'talisman', label: '🧿 Talismãs' }
+  ],
+  consumable: [
+    { id: 'all', label: '🧪 Todos' },
+    { id: 'potion', label: '🧪 Poções' },
+    { id: 'shot', label: '⚡ Soulshots' },
+    { id: 'scroll', label: '📜 Pergaminhos' },
+    { id: 'material', label: '🧱 Materiais' }
+  ]
+};
+
+export function matchesCraftSubcategory(itemId, def, subcat) {
+  if (!subcat || subcat === 'all') return true;
+  const s = `${itemId} ${def.name || ''} ${def.slot || ''} ${def.type || ''} ${def.weaponType || ''} ${def.armorType || ''} ${def.desc || ''}`.toLowerCase();
+
+  switch (subcat) {
+    case 'staff':
+      return /staff|wand|scepter|magicblunt|magic_sword|crucifix/.test(s) || (def.slot === 'weapon' && def.matk > 0 && def.atk < def.matk);
+    case 'bow':
+      return /bow|crossbow/.test(s);
+    case 'dagger':
+      return /dagger|knife/.test(s);
+    case 'sword':
+      return (/sword|blade|katana|falchion|saber|rapier/.test(s)) && !/dual|twohand|great_sword|magic_sword/.test(s);
+    case 'dual':
+      return /dual/.test(s);
+    case 'spear':
+      return /spear|lance|pike|halberd/.test(s);
+    case 'twohand':
+      return /twohand|great_sword|great_axe|big_hammer|ancientsword/.test(s);
+    case 'blunt':
+      return (/hammer|blunt|mace|axe/.test(s)) && !/magicblunt|staff/.test(s);
+    case 'fist':
+      return /fist|knuckle|claw/.test(s);
+
+    case 'heavy':
+      return /heavy|breastplate|gaiters_heavy|plate/.test(s) || (s.includes('heavy') && !s.includes('light'));
+    case 'light':
+      return /light|leather/.test(s) || (s.includes('light') && !s.includes('heavy'));
+    case 'robe':
+      return /robe|tunic|devotion|magic/.test(s);
+    case 'shield':
+      return /shield|sigil/.test(s);
+    case 'helmet':
+      return /helmet|circlet|cap|crown/.test(s) || def.slot === 'helmet';
+    case 'gloves':
+      return /glove|gauntlet/.test(s) || def.slot === 'gloves';
+    case 'boots':
+      return /boot|shoes/.test(s) || def.slot === 'boots';
+
+    case 'necklace':
+      return /necklace/.test(s) || def.slot === 'necklace';
+    case 'earring':
+      return /earring/.test(s) || def.slot === 'earring';
+    case 'ring':
+      return /ring/.test(s) || def.slot === 'ring';
+
+    case 'agathion':
+      return /agathion|doll/.test(s) || def.slot === 'agathion';
+    case 'cloak':
+      return /cloak|cloack/.test(s) || def.slot === 'cloak';
+    case 'belt':
+      return /belt/.test(s) || def.slot === 'belt';
+    case 'talisman':
+      return /talisman|pendant|bracelet/.test(s) || def.slot === 'talisman';
+
+    case 'potion':
+      return /potion|draught|elixir|buff/.test(s) || def.slot === 'potion';
+    case 'shot':
+      return /soulshot|spiritshot|shot/.test(s);
+    case 'scroll':
+      return /scroll|enchant|resurrection|teleport|spellbook/.test(s) || def.slot === 'scroll';
+    case 'material':
+      return /ore|bone|stone|powder|suede|leather|crystal|varnish|stem|thread|adamantite|steel|ingot/.test(s) || def.slot === 'material';
+
+    default:
+      return true;
+  }
 }
 
 export function updateCraftUI(state, callbacks = {}) {
@@ -3100,8 +3239,12 @@ export function updateCraftUI(state, callbacks = {}) {
   });
 
   const filtersBar = findElement('craft-filters-bar');
+  const subfiltersBar = findElement('craft-subcategory-filters');
   if (filtersBar) {
     filtersBar.style.display = (subTab === 'craft') ? 'flex' : 'none';
+  }
+  if (subfiltersBar && subTab !== 'craft') {
+    subfiltersBar.style.display = 'none';
   }
 
   const container = findElement('craft-recipes-container') || findElement('craft-list');
@@ -3165,7 +3308,38 @@ export function updateCraftUI(state, callbacks = {}) {
     recipeList.push(r);
   }
 
+  const playerLvl = state.level || state.player?.level || 1;
+  const maxGradeTier = getMaxVisibleGradeTier(playerLvl);
+
   const activeCat = window._craftSelectedCategory || 'all';
+  const activeSubcat = window._craftSelectedSubcategory || 'all';
+
+  // Renderiza botões de subcategoria dinamicamente
+  if (subfiltersBar && subTab === 'craft') {
+    const subcats = SUBCATEGORIES_BY_CAT[activeCat];
+    if (subcats && subcats.length > 0) {
+      subfiltersBar.style.display = 'flex';
+      subfiltersBar.innerHTML = subcats.map(sub => {
+        const isSubActive = (sub.id === activeSubcat);
+        return `
+          <button class="inv-batch-btn ${isSubActive ? 'active' : ''}" data-craft-subcat="${sub.id}" style="padding:3px 8px; font-size:11px; ${isSubActive ? 'background:linear-gradient(180deg,#d4a744,#8a641c); color:#000; font-weight:bold; border-color:#ffe699;' : 'background:rgba(255,255,255,0.05); color:#cbd5e1;'}">
+            ${sub.label}
+          </button>
+        `;
+      }).join('');
+
+      subfiltersBar.querySelectorAll('[data-craft-subcat]').forEach(btn => {
+        btn.onclick = (e) => {
+          e.preventDefault();
+          const targetSub = btn.dataset.craftSubcat;
+          window._craftSelectedSubcategory = targetSub;
+          updateCraftUI(state, callbacks);
+        };
+      });
+    } else {
+      subfiltersBar.style.display = 'none';
+    }
+  }
 
   // Conecta leitores para barra de busca e categorias (uma única vez com debounce)
   const searchInput = findElement('craft-search-input');
@@ -3185,6 +3359,7 @@ export function updateCraftUI(state, callbacks = {}) {
       e.preventDefault();
       const selected = btn.dataset.craftCat;
       window._craftSelectedCategory = selected;
+      window._craftSelectedSubcategory = 'all'; // Reseta subfiltro ao mudar de categoria
       catButtons.forEach(b => b.classList.toggle('active', b.dataset.craftCat === selected));
       updateCraftUI(state, callbacks);
     };
@@ -3197,12 +3372,23 @@ export function updateCraftUI(state, callbacks = {}) {
     const def = allItems[itemId];
     if (!def) return false;
 
-    // Filtro por Categoria
+    // 1. Regra de Grau (Nível do Jogador + 1 Grau à frente)
+    const itemTier = getItemTierNum(def);
+    if (itemTier > maxGradeTier) {
+      return false;
+    }
+
+    // 2. Filtro por Categoria Principal
     if (!isItemInCraftCategory(itemId, def, activeCat)) {
       return false;
     }
 
-    // Filtro por Busca de Nome
+    // 3. Filtro por Subcategoria (ex: Arma > Staff, Armadura > Robe, etc.)
+    if (!matchesCraftSubcategory(itemId, def, activeSubcat)) {
+      return false;
+    }
+
+    // 4. Filtro por Busca de Nome
     if (searchTerm && !def.name.toLowerCase().includes(searchTerm)) {
       return false;
     }
@@ -3219,8 +3405,6 @@ export function updateCraftUI(state, callbacks = {}) {
     `;
     return;
   }
-
-  const playerLvl = state.level || state.player?.level || 1;
 
   container.innerHTML = filtered.map(r => {
     const itemId = r.itemId || r.id;
@@ -4640,11 +4824,16 @@ export function showDropLocatorModal(matId) {
       <div style="display:flex; flex-direction:column; gap:8px; max-height:290px; overflow-y:auto;">
         ${sources.length > 0 ? sources.map(s => `
           <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:10px; display:flex; justify-content:space-between; align-items:center; gap:8px;">
-            <div>
+            <div style="flex:1;">
               <div style="font-weight:bold; font-size:13px; color:#fff;">📍 ${s.zoneName} <span style="font-size:11px; color:#94a3b8;">(Lv.${s.minLvl}+)</span></div>
               <div style="font-size:11px; color:#aaa; margin-top:2px;">Monstros: <strong style="color:#ffd877;">${s.monster}</strong></div>
             </div>
-            <span style="background:rgba(34,197,94,0.15); border:1px solid #22c55e; color:#86efac; padding:3px 8px; border-radius:4px; font-size:10px; font-weight:bold; white-space:nowrap;">${s.type}</span>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <span style="background:rgba(34,197,94,0.15); border:1px solid #22c55e; color:#86efac; padding:3px 8px; border-radius:4px; font-size:10px; font-weight:bold; white-space:nowrap;">${s.type}</span>
+              <button onclick="window.travelToZoneFromLocator('${s.zoneKey}')" class="inv-batch-btn" style="background:linear-gradient(180deg,#d4a744,#8a641c); border:1px solid #ffe699; color:#000; padding:4px 8px; border-radius:4px; font-size:10px; font-weight:bold; cursor:pointer; white-space:nowrap;" title="Viajar e iniciar caçada nesta zona imediatamente">
+                ⚔️ Caçar Aqui
+              </button>
+            </div>
           </div>
         `).join('') : `
           <div style="text-align:center; padding:20px; color:var(--text-muted); font-size:13px;">
@@ -4661,6 +4850,24 @@ export function showDropLocatorModal(matId) {
     </div>
   `;
   modal.style.display = 'flex';
+}
+
+if (typeof window !== 'undefined') {
+  window.travelToZoneFromLocator = function(zoneKey) {
+    const modal = document.getElementById('drop-locator-modal');
+    if (modal) modal.style.display = 'none';
+
+    if (zoneKey && (zoneKey.startsWith('raid_') || zoneKey === 'queen_ant' || zoneKey === 'zaken' || zoneKey === 'baium' || zoneKey === 'antharas' || zoneKey === 'valakas' || zoneKey === 'frintezza' || zoneKey === 'barakiel')) {
+      const root = getRoot();
+      const raidBtn = root.querySelector('[data-tab="raids"]') || document.querySelector('[data-tab="raids"]');
+      if (raidBtn) raidBtn.click();
+      return;
+    }
+
+    if (typeof window.selectZone === 'function') {
+      window.selectZone(zoneKey);
+    }
+  };
 }
 
 export function openCompoundModal(state) {
