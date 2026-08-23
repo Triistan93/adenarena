@@ -12,30 +12,45 @@ const TOTAL_XP_CACHE = [0];
 
 /**
  * Calcula a XP necessária para subir do nível `lvl - 1` para `lvl`.
- * Curva calibrada para exigir ~15 dias de jogo contínuo/idle até o Level Cap (Lv 85+).
+ * Curva calibrada milimetricamente para valorizar cada conquista:
+ *   - Nível 1 ao 20: 6 horas de jogo (0.25 dias)
+ *   - Nível 21 ao 40: 3 dias de jogo
+ *   - Nível 41 ao 60: 7 dias de jogo
+ *   - Nível 61 ao 75: 15 dias de jogo
+ *   - Nível 76 ao 85: 20 dias de jogo
+ *   - Nível 86 ao 100: ~35 dias de jogo
+ *   - Nível 101 ao 120: Level Cap 120 Supremo
  * @param {number} lvl — Nível alvo
  * @returns {number}
  */
 export function getXPForLevel(lvl) {
-  if (lvl <= 1) return 100;
+  if (lvl <= 1) return 150;
   if (lvl <= 20) {
-    // 1-20: Progressão inicial fluida (~2h de jogo)
-    return Math.floor(100 + Math.pow(lvl, 2.3) * 50);
+    // Lv 1 ao 20: 6 horas de jogo
+    return Math.floor(150 + Math.pow(lvl, 2.5) * 88);
   }
   if (lvl <= 40) {
-    // 20-40: 1ª Transferência de Classe (~1 dia de jogo)
-    return Math.floor(Math.pow(lvl, 2.6) * 110);
+    // Lv 21 ao 40: 3 dias de jogo
+    return Math.floor(Math.pow(lvl, 2.72) * 550);
   }
   if (lvl <= 60) {
-    // 40-60: 2ª Transferência de Classe (~4 dias de jogo)
-    return Math.floor(Math.pow(lvl, 2.92) * 180);
+    // Lv 41 ao 60: 7 dias de jogo
+    return Math.floor(Math.pow(lvl, 2.96) * 800);
   }
   if (lvl <= 75) {
-    // 60-75: Transição A-Grade / Nobreza (~8-9 dias de jogo)
-    return Math.floor(Math.pow(lvl, 3.22) * 260);
+    // Lv 61 ao 75: 15 dias de jogo
+    return Math.floor(Math.pow(lvl, 3.20) * 1050);
   }
-  // 76 a 85+: Endgame hardcore S-Grade / 3ª Classe (~15 a 20 dias de jogo)
-  return Math.floor(Math.pow(lvl, 3.65) * 380);
+  if (lvl <= 85) {
+    // Lv 76 ao 85: 20 dias de jogo
+    return Math.floor(Math.pow(lvl, 3.42) * 1000);
+  }
+  if (lvl <= 100) {
+    // Lv 86 ao 100: ~35 dias de jogo
+    return Math.floor(Math.pow(lvl, 3.65) * 1200);
+  }
+  // Lv 101 ao 120: Level Cap 120 Supremo
+  return Math.floor(Math.pow(lvl, 3.88) * 1800);
 }
 
 /**
@@ -60,9 +75,12 @@ export function getTotalXP(lvl) {
  */
 export function getSpRewardForLevel(lvl) {
   if (lvl <= 20) return Math.floor(8 + lvl * 0.5); // 9 a 18 SP
-  if (lvl <= 40) return Math.floor(15 + (lvl - 20) * 1.25); // 16 a 40 SP
-  if (lvl <= 75) return Math.floor(40 + (lvl - 40) * 2.2); // 42 a 117 SP
-  return Math.floor(120 + (lvl - 75) * 18); // 138 a 300 SP
+  if (lvl <= 40) return Math.floor(18 + (lvl - 20) * 1.35); // 19 a 45 SP
+  if (lvl <= 60) return Math.floor(50 + (lvl - 40) * 2.5); // 52 a 100 SP
+  if (lvl <= 75) return Math.floor(110 + (lvl - 60) * 4.6); // 114 a 179 SP
+  if (lvl <= 85) return Math.floor(200 + (lvl - 75) * 15); // 215 a 350 SP
+  if (lvl <= 100) return Math.floor(400 + (lvl - 85) * 13.3); // 413 a 600 SP
+  return Math.floor(700 + (lvl - 100) * 15); // 715 a 1000 SP
 }
 
 /**

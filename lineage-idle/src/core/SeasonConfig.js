@@ -131,10 +131,6 @@ export function getSeasonForFeature(tabId) {
   return SEASONS_DATA[2]; // Default para próxima temporada
 }
 
-/**
- * Retorna o limite máximo de nível permitido pela temporada atual.
- * @returns {number}
- */
 export function getSeasonMaxLevel() {
-  return getCurrentSeason().maxLevel || 60;
+  return 120;
 }
