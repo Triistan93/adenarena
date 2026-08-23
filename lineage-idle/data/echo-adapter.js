@@ -179,16 +179,12 @@ function buildEchoAdapter() {
 
       // Gera ID único por classe — sem cache/dedup
       const skillId = toSkillId(classId, rawName);
-
-      const tier = rarityToTier(sk.rarity);
       const type = mapType(sk.type);
       const pwr  = effectToPwr(sk.effect, sk.type);
       const cd   = cdToMs(sk.cooldown);
 
       let reqWeapon = sk.requiredWeapon || null;
       let reqShield = sk.requiredShield || false;
-      const isUltimate = (sk.rarity === '4★' || tier === 3);
-      const reqItem = (sk.rarity === '4★') ? 'spellbook_4star' : null;
 
       if (!reqWeapon) {
         const arch = (classDef.archetype || classId || '').toLowerCase();
@@ -365,30 +361,37 @@ function buildEchoAdapter() {
         }
       }
 
+      const stage = Number(classDef.stage) || 0;
+      const sNameLower = (rawName || '').toLowerCase();
+      const is4Star = (sk.rarity === '4★' || (stage >= 3 && sk.rarity === '4★') || sNameLower.includes('transcendent') || sNameLower.includes('ancestral wolf') || sNameLower.includes('apex force'));
+      const tier = is4Star ? 4 : stage;
+      const reqLvl = tier === 0 ? 1 : tier === 1 ? 20 : tier === 2 ? 40 : tier === 3 ? 76 : 80;
+      const cost = tier === 0 ? 5 : tier === 1 ? 15 : tier === 2 ? 30 : tier === 3 ? 60 : 100;
+      const starRank = is4Star ? 4 : (tier + 1);
+
       SKILL_DEFS_ECHO[skillId] = {
         id:                   skillId,
         name:                 rawName,
         type:                 type,
         tier:                 tier,
-        cost:                 tier === 0 ? 5 : tier === 1 ? 15 : tier === 2 ? 25 : 35,
+        cost:                 cost,
         max:                  5,
         pwr:                  pwr,
         baseCd:               cd,
-        effect:               type === 'buff' ? 'warcry' : (type === 'passive' ? 'stat' : 'dmg'),
+        effect:               type === 'buff' ? 'warcry' : (type === 'passive' ? 'stat' : (sNameLower.includes('heal') || sNameLower.includes('bandage') ? 'heal' : 'dmg')),
         info:                 sk.desc || sk.effect || rawName,
         desc:                 sk.desc || '',
         effectText:           sk.effect || '',
         icon:                 skillIcon,
         classReq:             classId,
-        reqLvl:               tier * 20,
+        reqLvl:               reqLvl,
         requiredWeapon:       reqWeapon,
         requiredShield:       reqShield,
-        requiredItemToUnlock: reqItem,
-        isUltimate:           isUltimate,
-        starRank:             sk.rarity === '4★' ? 4 : (tier + 1)
+        requiredItemToUnlock: is4Star ? 'spellbook_4star' : null,
+        isUltimate:           is4Star,
+        starRank:             starRank
       };
 
-      // Limpa pré-requisitos fictícios em SKILL_REQS_ECHO
       SKILL_REQS_ECHO[skillId] = {};
 
       if (!CLASS_SKILLS_ECHO[classId].includes(skillId)) {
@@ -397,17 +400,27 @@ function buildEchoAdapter() {
     }
   }
 
-  // Herança de skills: filho inclui skills do pai
-  for (const [classId, def] of Object.entries(CLASSES_ECHO)) {
-    if (!def.parent) continue;
-    const parentList = CLASS_SKILLS_ECHO[def.parent] || [];
-    const ownList    = CLASS_SKILLS_ECHO[classId]    || [];
-    const merged = [];
-    for (const id of parentList) {
-      if (!merged.includes(id)) merged.push(id);
+  // Herança completa de skills: Percorre árvore genealógica [ancestral_raiz -> ... -> classe_atual]
+  const ownSkillsByClass = {};
+  for (const [cId, list] of Object.entries(CLASS_SKILLS_ECHO)) {
+    ownSkillsByClass[cId] = [...list];
+  }
+
+  for (const [classId, classDef] of Object.entries(CLASSES_ECHO)) {
+    const chain = [];
+    let curr = classId;
+    const visited = new Set();
+    while (curr && !visited.has(curr)) {
+      visited.add(curr);
+      chain.unshift(curr);
+      curr = CLASSES_ECHO[curr]?.parent;
     }
-    for (const id of ownList) {
-      if (!merged.includes(id)) merged.push(id);
+
+    const merged = [];
+    for (const c of chain) {
+      for (const sid of (ownSkillsByClass[c] || [])) {
+        if (!merged.includes(sid)) merged.push(sid);
+      }
     }
     CLASS_SKILLS_ECHO[classId] = merged;
   }
@@ -448,7 +461,8 @@ function buildEchoAdapter() {
     'evaTemplar': 'evaTemplar',
     'swordsinger': 'swordSinger',
     'swordSinger': 'swordSinger',
-    'elvenScout': 'elvenScout',
+    'elvenScout': 'elfScout',
+    'elfScout': 'elfScout',
     'windRiderElven': 'windRider',
     'windRider': 'windRider',
     'oracle': 'elvenOracle',
@@ -508,355 +522,35 @@ function buildEchoAdapter() {
     }
   }
 
-  // ─── PADRONIZAÇÃO UNIVERSAL: 5 SKILLS POR CLASSE (2 DANO, 2 BUFFS, 1 CURA/VAMP) ───
-  function isSustainSkill(s) {
-    if (!s) return false;
-    const name = (s.name || '').toLowerCase();
-    const desc = (s.desc || s.effectText || s.effect || s.info || '').toLowerCase();
-    return s.type === 'heal' || 
-           name.includes('heal') || name.includes('bandage') || name.includes('drain') || 
-           name.includes('vampir') || name.includes('bite') || name.includes('lifesteal') || 
-           name.includes('shield') || name.includes('barrier') || name.includes('aegis') || 
-           name.includes('recupera') || name.includes('absorv') || name.includes('regen') ||
-           (desc.includes('hp') && (desc.includes('recupera') || desc.includes('cura') || desc.includes('roubo') || desc.includes('absorve') || desc.includes('lifesteal')));
-  }
-
-  function isBuffSkill(s) {
-    if (!s) return false;
-    return (s.type === 'buff' || s.type === 'toggle' || s.type === 'passive') && !isSustainSkill(s);
-  }
-
-  function isDamageSkill(s) {
-    if (!s) return false;
-    return s.type === 'active' && !isSustainSkill(s);
-  }
-
-  function createSignatureSustain(classId, classDef) {
-    const race = (classDef?.race || '').toLowerCase();
-    const arch = (classDef?.archetype || '').toLowerCase();
-    const name = (classDef?.name || '').toLowerCase();
-    const sid = classId + '_signature_sustain';
-
-    if (name.includes('warg') || arch.includes('beast')) {
-      return {
-        id: sid,
-        name: 'Vampiric Feral Bite',
-        type: 'active',
-        tier: 4,
-        cost: 35,
-        max: 5,
-        pwr: 45,
-        baseCd: 12000,
-        effect: 'drain',
-        info: 'Mordida feral vampírica causando 220% de dano e recuperando 35% em HP.',
-        desc: 'Mordida feral que drena a vitalidade do alvo.',
-        icon: '/assets/2d/icons/undead-skills/PNG/Icon12.png',
-        classReq: classId,
-        reqLvl: 76,
-        starRank: 4
-      };
-    }
-
-    if (race.includes('darkelf') || name.includes('assassin') || name.includes('abyss') || name.includes('ghost') || name.includes('blood')) {
-      return {
-        id: sid,
-        name: 'Vampiric Touch',
-        type: 'active',
-        tier: 4,
-        cost: 35,
-        max: 5,
-        pwr: 40,
-        baseCd: 10000,
-        effect: 'drain',
-        info: 'Toque sombrio que absorve 40% do dano causado diretamente em HP.',
-        desc: 'Drena a essência vital do inimigo.',
-        icon: '/assets/2d/icons/undead-skills/PNG/Icon18.png',
-        classReq: classId,
-        reqLvl: 76,
-        starRank: 4
-      };
-    }
-
-    if (arch.includes('mage') || arch.includes('healer') || race.includes('elf') || race.includes('highelf')) {
-      return {
-        id: sid,
-        name: 'Blessing of Recovery',
-        type: 'heal',
-        tier: 4,
-        cost: 35,
-        max: 5,
-        pwr: 0,
-        baseCd: 15000,
-        effect: 'heal',
-        info: 'Cura divina que restaura 25% do HP máximo do herói.',
-        desc: 'Abençoa o conjurador restaurando pontos de vida.',
-        icon: '/assets/2d/icons/paladin-skills/PNG/Icon7.png',
-        classReq: classId,
-        reqLvl: 76,
-        starRank: 4
-      };
-    }
-
-    return {
-      id: sid,
-      name: 'Battle Recovery',
-      type: 'heal',
-      tier: 4,
-      cost: 35,
-      max: 5,
-      pwr: 0,
-      baseCd: 18000,
-      effect: 'heal',
-      info: 'Bandagem de batalha que restaura 20% do HP máximo.',
-      desc: 'Trata ferimentos rapidamente durante o combate.',
-      icon: '/assets/2d/icons/paladin-skills/PNG/Icon14.png',
-      classReq: classId,
-      reqLvl: 76,
-      starRank: 4
-    };
-  }
-
-  function createSignatureDamage(classId, classDef, idx) {
-    const arch = (classDef?.archetype || '').toLowerCase();
-    const sid = `${classId}_sig_dmg_${idx}`;
-    if (arch.includes('mage') || arch.includes('healer') || arch.includes('summoner')) {
-      return {
-        id: sid,
-        name: idx === 1 ? 'Elemental Bolt' : 'Mystic Burst',
-        type: 'active',
-        tier: idx - 1,
-        cost: idx === 1 ? 5 : 15,
-        max: 5,
-        pwr: idx === 1 ? 25 : 38,
-        baseCd: idx === 1 ? 4000 : 7000,
-        effect: 'dmg',
-        info: idx === 1 ? 'Disparo de energia arcana causando 160% de dano mágico.' : 'Explosão de magia pura causando 220% de dano mágico.',
-        desc: 'Ataque mágico focado.',
-        icon: idx === 1 ? '/assets/2d/icons/paladin-skills/PNG/Icon22.png' : '/assets/2d/icons/paladin-skills/PNG/Icon31.png',
-        classReq: classId,
-        reqLvl: idx === 1 ? 1 : 20,
-        starRank: idx
-      };
-    }
-    return {
-      id: sid,
-      name: idx === 1 ? 'Power Strike' : 'Heavy Slash',
-      type: 'active',
-      tier: idx - 1,
-      cost: idx === 1 ? 5 : 15,
-      max: 5,
-      pwr: idx === 1 ? 30 : 45,
-      baseCd: idx === 1 ? 5000 : 8000,
-      effect: 'dmg',
-      info: idx === 1 ? 'Golpe físico concentrado causando 150% de dano.' : 'Corte poderoso causando 200% de dano físico.',
-      desc: 'Ataque marcial contundente.',
-      icon: idx === 1 ? '/assets/2d/icons/swordsman-skills/PNG/Icon1.png' : '/assets/2d/icons/swordsman-skills/PNG/Icon6.png',
-      classReq: classId,
-      reqLvl: idx === 1 ? 1 : 20,
-      starRank: idx
-    };
-  }
-
-  function createSignatureBuff(classId, classDef, idx) {
-    const sid = `${classId}_sig_buff_${idx}`;
-    return {
-      id: sid,
-      name: idx === 1 ? 'Battle Stance' : 'Heroic Spirit',
-      type: 'buff',
-      tier: idx + 1,
-      cost: idx === 1 ? 25 : 35,
-      max: 5,
-      pwr: 0,
-      baseCd: 45000,
-      effect: 'warcry',
-      info: idx === 1 ? '+15% ATK / M.ATK por 120s.' : '+20% Defesa e +15% Chance Crítica por 120s.',
-      desc: 'Fortalecimento de combate.',
-      icon: idx === 1 ? '/assets/2d/icons/paladin-skills/PNG/Icon4.png' : '/assets/2d/icons/paladin-skills/PNG/Icon10.png',
-      classReq: classId,
-      reqLvl: idx === 1 ? 40 : 60,
-      starRank: idx + 2
-    };
-  }
-
-  // Padroniza cada classe para exatamente 5 habilidades (2 Dano, 2 Buffs, 1 Sustentação)
-  for (const [classId, skillIds] of Object.entries(CLASS_SKILLS_ECHO)) {
-    const classDef = CLASSES_ECHO[classId];
-    const skills = skillIds.map(id => SKILL_DEFS_ECHO[id]).filter(Boolean);
-
-    const dmgPool = skills.filter(isDamageSkill);
-    const buffPool = skills.filter(isBuffSkill);
-    const sustainPool = skills.filter(isSustainSkill);
-
-    // Ordena do menor para o maior (progressão natural de níveis):
-    // Dano 1 (1★) -> Dano 2 (2★)
-    dmgPool.sort((a, b) => (a.starRank || a.tier || 1) - (b.starRank || b.tier || 1));
-    // Buff 1 (2★/3★) -> Buff 2 / Ultimate (4★)
-    buffPool.sort((a, b) => (a.starRank || a.tier || 1) - (b.starRank || b.tier || 1));
-    // Sustain (3★)
-    sustainPool.sort((a, b) => (a.starRank || a.tier || 1) - (b.starRank || b.tier || 1));
-
-    const selectedDmg = [dmgPool[0], dmgPool[1] || dmgPool[0]];
-    const selectedBuff = [buffPool[0], buffPool[buffPool.length - 1] || buffPool[0]];
-    let selectedSustain = sustainPool.slice(0, 1);
-
-    if (selectedSustain.length === 0) {
-      const fallback = createSignatureSustain(classId, classDef);
-      SKILL_DEFS_ECHO[fallback.id] = fallback;
-      selectedSustain = [fallback];
-    }
-
-    // Garante 2 danos e 2 buffs
-    if (!selectedDmg[0]) {
-      const d1 = createSignatureDamage(classId, classDef, 1);
-      SKILL_DEFS_ECHO[d1.id] = d1;
-      selectedDmg[0] = d1;
-    }
-    if (!selectedDmg[1] || selectedDmg[1].id === selectedDmg[0].id) {
-      const d2 = createSignatureDamage(classId, classDef, 2);
-      SKILL_DEFS_ECHO[d2.id] = d2;
-      selectedDmg[1] = d2;
-    }
-    if (!selectedBuff[0]) {
-      const b1 = createSignatureBuff(classId, classDef, 1);
-      SKILL_DEFS_ECHO[b1.id] = b1;
-      selectedBuff[0] = b1;
-    }
-    if (!selectedBuff[1] || selectedBuff[1].id === selectedBuff[0].id) {
-      const b2 = createSignatureBuff(classId, classDef, 2);
-      SKILL_DEFS_ECHO[b2.id] = b2;
-      selectedBuff[1] = b2;
-    }
-
-    const stage = Number(classDef?.stage) || 0;
-    const stageReqLvl = stage === 0 ? 1 : stage === 1 ? 20 : stage === 2 ? 40 : 76;
-    const stageStar = stage === 0 ? 1 : stage === 1 ? 2 : 3;
-    const stageCost = stage === 0 ? 5 : stage === 1 ? 15 : stage === 2 ? 25 : 35;
-
-    // As 5 habilidades padrão do estágio atual
-    const curated5 = [
-      selectedDmg[0],
-      selectedDmg[1],
-      selectedBuff[0],
-      selectedBuff[1],
-      selectedSustain[0]
-    ];
-
-    const normalizedIds = [];
-    curated5.forEach((rawSkill, idx) => {
-      const sId = `${classId}_${rawSkill.name.toLowerCase().replace(/[^a-z0-9]+/g, '_')}`;
-      const s = {
-        ...rawSkill,
-        id: sId,
-        tier: stage,
-        col: idx,
-        reqLvl: stageReqLvl,
-        starRank: stageStar,
-        cost: stageCost,
-        classReq: classId,
-        isUltimate: false
-      };
-      SKILL_DEFS_ECHO[sId] = s;
-      normalizedIds.push(sId);
-    });
-
-    // Se for classe final (3ª Troca / Stage 3 / Lv. 76+), adiciona os desbloqueios de Nível 80+ (2x 3★ e 1x 4★ Ultimate)
-    if (stage >= 3 || classId === 'warg' || classId === 'duelist' || classId === 'titan' || classId === 'vanguardRider') {
-      const arch = (classDef?.archetype || '').toLowerCase();
-      const name = (classDef?.name || '').toLowerCase();
-
-      // 1. Skill 3★ Transcendental 1 (Dano Avançado Lv 80+)
-      const s3_1 = {
-        id: `${classId}_transcendent_strike`,
-        name: `Transcendent ${selectedDmg[0]?.name || 'Burst'}`,
-        type: 'active',
-        tier: 4,
-        col: 5,
-        reqLvl: 80,
-        starRank: 3,
-        cost: 50,
-        pwr: 55,
-        baseCd: 14000,
-        effect: 'dmg',
-        info: 'Dano transcendental supremo causando 450% de poder.',
-        desc: 'Liberação de poder heroico no Nível 80+.',
-        icon: selectedDmg[0]?.icon || '/assets/2d/icons/swordsman-skills/PNG/Icon12.png',
-        classReq: classId,
-        isUltimate: false
-      };
-      SKILL_DEFS_ECHO[s3_1.id] = s3_1;
-      normalizedIds.push(s3_1.id);
-
-      // 2. Skill 3★ Transcendental 2 (Buff de Domínio Lv 80+)
-      const s3_2 = {
-        id: `${classId}_transcendent_mastery`,
-        name: `Mastery of ${classDef?.name || 'Power'}`,
-        type: 'buff',
-        tier: 4,
-        col: 6,
-        reqLvl: 80,
-        starRank: 3,
-        cost: 50,
-        pwr: 0,
-        baseCd: 60000,
-        effect: 'warcry',
-        info: '+40% ATK/M.ATK e +25% Dano Crítico por 120s.',
-        desc: 'Domínio supremo de combate.',
-        icon: '/assets/2d/icons/paladin-skills/PNG/Icon28.png',
-        classReq: classId,
-        isUltimate: false
-      };
-      SKILL_DEFS_ECHO[s3_2.id] = s3_2;
-      normalizedIds.push(s3_2.id);
-
-      // 3. Skill 4★ Ultimate Suprema (Exige Lv 80+ e Livro Ancestral 4★)
-      const s4_ult = {
-        id: `${classId}_ultimate_4star`,
-        name: name.includes('warg') ? 'Ancestral Wolf Transformation' : `Ultimate ${classDef?.name || 'Apex'} Force`,
-        type: name.includes('warg') ? 'buff' : 'active',
-        tier: 4,
-        col: 7,
-        reqLvl: 80,
-        starRank: 4,
-        cost: 75,
-        pwr: 80,
-        baseCd: 90000,
-        effect: name.includes('warg') ? 'warcry' : 'dmg',
-        info: name.includes('warg') ? 'Transformação em Lobo Ancestral: +60% ATK e +45% Crit Dmg por 60s.' : 'Dano supremo de 4 Estrelas causando 750% de poder com 100% de chance crítica.',
-        desc: 'Habilidade Suprema de 4 Estrelas do Nível 80+.',
-        icon: name.includes('warg') ? '/assets/2d/icons/undead-skills/PNG/Icon34.png' : '/assets/2d/icons/paladin-skills/PNG/Icon34.png',
-        classReq: classId,
-        isUltimate: true,
-        requiredItemToUnlock: 'spellbook_4star'
-      };
-      SKILL_DEFS_ECHO[s4_ult.id] = s4_ult;
-      normalizedIds.push(s4_ult.id);
-    }
-
-    CLASS_SKILLS_ECHO[classId] = normalizedIds;
-  }
-
-  // Layout automático por tier → coluna (tanto por classe quanto plano por skillId)
+  // ─── LAYOUT DA ÁRVORE DE HABILIDADES (Organizado por Tiers / Colunas 0 a 4) ───
   const SKILL_TREE_LAYOUT_ECHO = {};
   for (const [classId, skillIds] of Object.entries(CLASS_SKILLS_ECHO)) {
     const layout = {};
-    skillIds.forEach((sid, idx) => {
-      layout[sid] = { col: idx, row: 0 };
-      SKILL_TREE_LAYOUT_ECHO[sid] = { col: idx, row: 0 };
-    });
+    const tierBuckets = { 0: [], 1: [], 2: [], 3: [], 4: [] };
+
+    for (const sid of skillIds) {
+      const def = SKILL_DEFS_ECHO[sid];
+      const t = (def && def.tier !== undefined) ? def.tier : 0;
+      if (tierBuckets[t]) tierBuckets[t].push(sid);
+      else tierBuckets[0].push(sid);
+    }
+
+    for (let c = 0; c < 5; c++) {
+      const list = tierBuckets[c] || [];
+      list.forEach((sid, row) => {
+        layout[sid] = { col: c, row };
+        if (!SKILL_TREE_LAYOUT_ECHO[sid]) {
+          SKILL_TREE_LAYOUT_ECHO[sid] = { col: c, row };
+        }
+      });
+    }
+
     SKILL_TREE_LAYOUT_ECHO[classId] = layout;
   }
 
-  // Mapeia todos os aliases de classes para garantir que qualquer identificador carregue sua árvore
-  const classAliases = E.CLASS_ALIASES || {};
-  for (const [alias, canonical] of Object.entries(classAliases)) {
-    if (CLASS_SKILLS_ECHO[canonical]) {
-      CLASS_SKILLS_ECHO[alias] = CLASS_SKILLS_ECHO[canonical];
-    }
-    if (SKILL_TREE_LAYOUT_ECHO[canonical]) {
-      SKILL_TREE_LAYOUT_ECHO[alias] = SKILL_TREE_LAYOUT_ECHO[canonical];
-    }
-    if (CLASSES_ECHO[canonical] && !CLASSES_ECHO[alias]) {
-      CLASSES_ECHO[alias] = { ...CLASSES_ECHO[canonical], id: alias };
+  for (const [alias, target] of Object.entries(CLASS_ALIASES)) {
+    if (SKILL_TREE_LAYOUT_ECHO[target] && !SKILL_TREE_LAYOUT_ECHO[alias]) {
+      SKILL_TREE_LAYOUT_ECHO[alias] = SKILL_TREE_LAYOUT_ECHO[target];
     }
   }
 
@@ -869,8 +563,8 @@ function buildEchoAdapter() {
   E.HEIRLOOM_ITEMS         = HEIRLOOM_ITEMS;
 
   console.log(
-    '[echo-adapter] Skills geradas:', Object.keys(SKILL_DEFS_ECHO).length,
-    '| Classes com skills:', Object.keys(CLASS_SKILLS_ECHO).length
+    '[echo-adapter] Skills autênticas geradas:', Object.keys(SKILL_DEFS_ECHO).length,
+    '| Classes com árvore completa:', Object.keys(CLASS_SKILLS_ECHO).length
   );
 }
 

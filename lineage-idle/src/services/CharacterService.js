@@ -160,15 +160,21 @@ export function promoteClass(state, newClassId, callbacks = {}) {
   let convertedBuffsCount = 0;
   const echoDefs = (typeof window !== 'undefined' && window.EchoData) ? window.EchoData.SKILL_DEFS_ECHO : {};
   const skillDefs = echoDefs || D()?.SKILL_DEFS || {};
+  const newClassSkills = getClassSkills(newClassId) || [];
 
   state.legacyPassives = state.legacyPassives || {};
 
   for (const [sId, lvl] of Object.entries(state.skills || {})) {
     if (lvl > 0 && skillDefs[sId]) {
+      // Se a habilidade faz parte da árvore da nova classe (herança), preserva o progresso!
+      if (newClassSkills.includes(sId)) {
+        continue;
+      }
+
       const def = skillDefs[sId];
       const isBuff = def.type === 'buff' || def.type === 'toggle' || def.effect === 'warcry';
 
-      // 1. Reembolsa 100% do SP investido na habilidade da classe anterior
+      // 1. Reembolsa 100% do SP investido na habilidade incompatível da classe anterior
       for (let l = 0; l < lvl; l++) {
         totalRefunded += getSkillCost(sId, l);
       }
@@ -202,23 +208,31 @@ export function promoteClass(state, newClassId, callbacks = {}) {
         convertedBuffsCount++;
       }
 
-      // 3. Apaga a habilidade ativa anterior
+      // 3. Apaga a habilidade ativa incompatível
       state.skills[sId] = 0;
     }
   }
 
+  // Bônus Nobre de SP por conclusão da Cerimônia de Avanço de Classe
+  const stage = Number(newClassDef.stage) || 1;
+  const transferSpBonus = stage === 1 ? 35 : stage === 2 ? 80 : 200;
+  state.sp = (state.sp || 0) + transferSpBonus;
+
   if (convertedBuffsCount > 0) {
-    if (callbacks.log) callbacks.log(`🧬 ${convertedBuffsCount} Buffs anteriores foram convertidos em **Passivas de Linhagem Permanentes** com 20% de eficácia!`, 'rarity-epic');
+    if (callbacks.log) callbacks.log(`🧬 ${convertedBuffsCount} Buffs incompatíveis foram convertidos em **Passivas de Linhagem Permanentes** com 20% de eficácia!`, 'rarity-epic');
   }
 
   if (totalRefunded > 0) {
     state.sp += totalRefunded;
-    if (callbacks.log) callbacks.log(`🔄 ${totalRefunded.toLocaleString()} SP foram reembolsados para distribuição na nova árvore exclusiva de ${newClassDef.name}!`, 'rarity-legendary');
-    if (callbacks.floatText) callbacks.floatText(`+${totalRefunded.toLocaleString()} SP`, 'float-jackpot');
+    if (callbacks.log) callbacks.log(`🔄 ${totalRefunded.toLocaleString()} SP foram reembolsados de habilidades incompatíveis para distribuição na árvore de ${newClassDef.name}!`, 'rarity-legendary');
   }
 
-  if (callbacks.log) callbacks.log(`🎉 PARABÉNS! Você concluiu a Cerimônia e agora é um **${newClassDef.name}**!`, 'rarity-legendary');
-  if (callbacks.floatText) callbacks.floatText(`🎉 ${newClassDef.name.toUpperCase()}!`, 'float-jackpot');
+  if (callbacks.log) {
+    callbacks.log(`🎉 PARABÉNS! Você concluiu a Cerimônia e agora é um **${newClassDef.name}**! (+${transferSpBonus} SP concedidos para novas habilidades)`, 'rarity-legendary');
+  }
+  if (callbacks.floatText) {
+    callbacks.floatText(`🎉 ${newClassDef.name.toUpperCase()}! (+${transferSpBonus} SP)`, 'float-jackpot');
+  }
 
   if (callbacks.el) {
     const modal = callbacks.el('class-transfer-modal');
