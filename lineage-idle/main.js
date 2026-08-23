@@ -5887,6 +5887,7 @@ export function bindEvents() {
     const unequipBtn = el('unequip-all-btn'); if (unequipBtn) unequipBtn.onclick = unequipAll;
     qsa('.equip-slot').forEach(slot => { slot.onclick = () => { const s = slot.dataset.slot, uid = state.equipment[s]; if (uid) unequipItem(s); }; });
     const navCraftBtn = el('nav-craft-btn'); if (navCraftBtn) navCraftBtn.onclick = () => { const craftTab = qs('.tab-btn[data-tab="craft"]'); if (craftTab) craftTab.click(); };
+    const topMarketBtn = el('top-market-btn'); if (topMarketBtn) topMarketBtn.onclick = () => openPanel('market');
     
     // Chat & Admin Console Handlers
     const chatForm = el('chat-form');
@@ -8181,6 +8182,9 @@ export function init() {
       window.claimRandomCraftReward = (idx) => {
         serviceClaimRandomCraft(state, idx, { log, updateAllUI, save });
       };
+
+      window.openMarketTab = () => openPanel('market');
+      window.openMarket = () => openPanel('market');
     }
   } catch (err) {
     console.warn('Game init warning:', err);

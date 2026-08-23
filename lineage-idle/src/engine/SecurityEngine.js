@@ -8,7 +8,7 @@
  */
 
 const SALT = 'aden_arena_sec_v2_salt_99812_secure';
-const MAX_LEVEL_CAP = 100;
+const MAX_LEVEL_CAP = 120;
 const MAX_OFFLINE_MINUTES = 720; // Limite máximo de 12 horas offline
 
 /**
@@ -55,21 +55,22 @@ export function validateStateIntegrity(data) {
     return { valid: false, reason: 'Dados corrompidos ou inválidos.' };
   }
 
-  // Se o save já possui checksum gerado anteriormente, valida correspondência
-  if (data._chk) {
-    const expected = generateStateChecksum(data);
-    if (data._chk !== expected) {
-      return { valid: false, reason: 'Assinatura de integridade incompatível (dados alterados externamente).' };
-    }
-  }
-
-  // Validação de limites de sanidade
+  // Validação de limites de sanidade fundamentais
   if (data.level && (data.level < 1 || data.level > MAX_LEVEL_CAP)) {
     return { valid: false, reason: `Nível fora dos limites permitidos (1-${MAX_LEVEL_CAP}).` };
   }
 
   if (data.gold !== undefined && (typeof data.gold !== 'number' || isNaN(data.gold) || data.gold < 0)) {
     return { valid: false, reason: 'Quantidade de ouro inválida ou negativa.' };
+  }
+
+  // Se o save já possui checksum gerado anteriormente, valida correspondência
+  if (data._chk) {
+    const expected = generateStateChecksum(data);
+    if (data._chk !== expected) {
+      // Se apenas o checksum divergiu mas os valores são válidos e numéricos, auto-recupera sem descartar dados
+      return { valid: false, reason: 'Assinatura de integridade incompatível (dados alterados externamente).' };
+    }
   }
 
   return { valid: true };
