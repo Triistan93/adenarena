@@ -18,6 +18,7 @@ import { getClass, getStats, getActiveSetBonuses } from '../engine/StatsEngine.j
 import { getSkillCost } from '../engine/SkillEngine.js';
 import { ZONES, SAGAS, ZONE_BACKGROUNDS } from '../data/zones.js';
 import { MONSTERS, MONSTER_BY_NAME } from '../data/monsters.js';
+import { ZONE_CONSUMABLES, MONSTER_DROPS, getZoneDropTier } from '../data/items/recipes_drops.js';
 import { RAID_BOSSES } from '../data/raids.js';
 import { getRaidStatus } from '../services/RaidService.js';
 import { INFINITY_WEAPONS, HEROIC_SKILLS, OLYMPIAD_GLADIATORS, OLYMPIAD_SHOP_CATALOG } from '../data/olympiad.js';
@@ -4568,35 +4569,88 @@ export function showDropLocatorModal(matId) {
   }
 
   const gData = D();
-  const matDef = gData?.ALL_ITEMS?.[matId] || { name: matId };
-  const sources = [
-    { zoneName: 'Ruínas de Despair (Gludio)', minLvl: 20, type: 'Drop Comum', monster: 'Ruins Bat & Skeletal Warrior' },
-    { zoneName: 'Execution Grounds (Dion)', minLvl: 30, type: 'Spoil de Anão', monster: 'Ghoul & Strain' },
-    { zoneName: 'Torre Cruma (Dion)', minLvl: 40, type: 'Drop & Spoil', monster: 'Porta & Excuro' },
-    { zoneName: 'Dragon Valley (Giran)', minLvl: 52, type: 'Dungeon / Boss', monster: 'Cave Maid & Drake' }
-  ];
+  const eData = (typeof window !== 'undefined' && window.EchoData) ? window.EchoData : {};
+  const allItems = gData?.ALL_ITEMS || eData?.ALL_ITEMS || {};
+  const matDef = allItems[matId] || { name: matId };
+
+  const zones = gData?.ZONES || ZONES || {};
+  const monsters = gData?.MONSTERS || MONSTERS || {};
+  const zoneConsumables = gData?.ZONE_CONSUMABLES || ZONE_CONSUMABLES || {};
+  const monsterDrops = gData?.MONSTER_DROPS || MONSTER_DROPS || {};
+
+  const sources = [];
+
+  // 1. Localiza Zonas onde o item dropa diretamente ou através do tier
+  for (const [zoneKey, zDef] of Object.entries(zones)) {
+    if (!zDef || zDef.town) continue;
+    const tier = (typeof getZoneDropTier === 'function') ? getZoneDropTier(zDef.level || 1) : null;
+    const directMats = zoneConsumables[zoneKey] || [];
+    const tierMats = tier ? (zoneConsumables[tier] || []) : [];
+    const directEquips = monsterDrops[zoneKey] || [];
+    const tierEquips = tier ? (monsterDrops[tier] || []) : [];
+
+    const hasInZone = directMats.includes(matId) || tierMats.includes(matId) || directEquips.includes(matId) || tierEquips.includes(matId);
+    if (hasInZone) {
+      const monsterNames = (zDef.monsters || [])
+        .map(mId => (monsters[mId]?.name || mId))
+        .filter(Boolean);
+      const bossName = zDef.boss ? (monsters[zDef.boss]?.name || zDef.boss) : null;
+
+      let monsterDisplay = monsterNames.slice(0, 3).join(', ');
+      if (bossName) monsterDisplay += ` & ${bossName}`;
+
+      sources.push({
+        zoneKey,
+        zoneName: zDef.name || zoneKey,
+        minLvl: zDef.level || 1,
+        type: zDef.boss ? 'Drop & Boss' : 'Drop Comum',
+        monster: monsterDisplay || 'Monstros da Zona'
+      });
+    }
+  }
+
+  // 2. Raid Bosses que dropam este item
+  const raidList = gData?.RAID_BOSSES || RAID_BOSSES || {};
+  for (const [rId, rDef] of Object.entries(raidList)) {
+    if (rDef.drops && rDef.drops.some(d => d.itemId === matId || d.id === matId)) {
+      sources.push({
+        zoneKey: rId,
+        zoneName: `Raid Boss: ${rDef.name}`,
+        minLvl: rDef.level || 50,
+        type: 'Raid Épico',
+        monster: rDef.name
+      });
+    }
+  }
+
+  // Ordena fontes por nível
+  sources.sort((a, b) => a.minLvl - b.minLvl);
 
   modal.innerHTML = `
-    <div style="background:#121622; border:2px solid #d4a744; border-radius:12px; max-width:480px; width:100%; padding:20px; color:#fff; box-shadow:0 8px 30px rgba(0,0,0,0.8);">
+    <div style="background:#121622; border:2px solid #d4a744; border-radius:12px; max-width:520px; width:100%; padding:20px; color:#fff; box-shadow:0 8px 30px rgba(0,0,0,0.8);">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom:1px solid rgba(212,167,68,0.3); padding-bottom:8px;">
         <h3 style="margin:0; font-family:'Cinzel',serif; color:#ffd877; font-size:16px;">🔍 Onde Obter: ${matDef.name}</h3>
         <button onclick="document.getElementById('drop-locator-modal').style.display='none'" style="background:none; border:none; color:#aaa; font-size:18px; cursor:pointer;">✕</button>
       </div>
 
       <div style="font-size:12px; color:var(--text-muted); margin-bottom:12px;">
-        Zonas de caça e monstros recomendados com base nas tabelas canônicas de Drop e Spoil:
+        Zonas de caça e monstros do jogo onde este item realmente dropa nas tabelas ativas:
       </div>
 
-      <div style="display:flex; flex-direction:column; gap:8px; max-height:280px; overflow-y:auto;">
-        ${sources.map(s => `
-          <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:10px; display:flex; justify-content:space-between; align-items:center;">
+      <div style="display:flex; flex-direction:column; gap:8px; max-height:290px; overflow-y:auto;">
+        ${sources.length > 0 ? sources.map(s => `
+          <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:10px; display:flex; justify-content:space-between; align-items:center; gap:8px;">
             <div>
-              <div style="font-weight:bold; font-size:13px; color:#fff;">📍 ${s.zoneName}</div>
-              <div style="font-size:11px; color:#aaa; margin-top:2px;">Monstros: <strong style="color:#ffd877;">${s.monster}</strong> (Lv.${s.minLvl}+)</div>
+              <div style="font-weight:bold; font-size:13px; color:#fff;">📍 ${s.zoneName} <span style="font-size:11px; color:#94a3b8;">(Lv.${s.minLvl}+)</span></div>
+              <div style="font-size:11px; color:#aaa; margin-top:2px;">Monstros: <strong style="color:#ffd877;">${s.monster}</strong></div>
             </div>
-            <span style="background:rgba(34,197,94,0.15); border:1px solid #22c55e; color:#86efac; padding:3px 8px; border-radius:4px; font-size:10px; font-weight:bold;">${s.type}</span>
+            <span style="background:rgba(34,197,94,0.15); border:1px solid #22c55e; color:#86efac; padding:3px 8px; border-radius:4px; font-size:10px; font-weight:bold; white-space:nowrap;">${s.type}</span>
           </div>
-        `).join('')}
+        `).join('') : `
+          <div style="text-align:center; padding:20px; color:var(--text-muted); font-size:13px;">
+            Este item é obtido via <strong>Alquimia, Quests, Cash Shop ou Eventos</strong>.
+          </div>
+        `}
       </div>
 
       <div style="margin-top:16px; text-align:right;">
