@@ -227,15 +227,20 @@ function buildEchoAdapter() {
         for (let c = 0; c < combined.length; c++) hash = (hash * 31 + combined.charCodeAt(c)) >>> 0;
 
         if (/water|ice|frost|freeze|aqua|blizzard|hail|hydro|chill|cold|wave|ocean/.test(combined)) {
-          skillIcon = '/assets/skills/water_wave.jpg';
+          const waterNum = (hash % 5) + 11;
+          skillIcon = `/assets/2d/icons/shields-amulets/PNG/Background/Icon${waterNum}.png`;
         } else if (/fire|flame|burn|blaze|prominence|burst|ignition|solar|magma|volcano|flare|pyro/.test(combined)) {
-          skillIcon = '/assets/skills/fire_strike.jpg';
+          const fireNum = (hash % 5) + 6;
+          skillIcon = `/assets/2d/icons/shields-amulets/PNG/Background/Icon${fireNum}.png`;
         } else if (/wind|gale|air|cyclone|storm|typhoon|breeze|lightning|spark|thunder|volt|shock|tempest/.test(combined)) {
-          skillIcon = '/assets/skills/wind_blade.jpg';
+          const windNum = (hash % 5) + 16;
+          skillIcon = `/assets/2d/icons/shields-amulets/PNG/Background/Icon${windNum}.png`;
         } else if (/holy|light|sacred|divine|bless|templar|heal|sanctuary|prayer|angel|recovery|purify|resurrect|cure|radiant/.test(combined)) {
-          skillIcon = '/assets/skills/holy_shield.jpg';
+          const holyNum = (hash % 30) + 1;
+          skillIcon = `/assets/2d/icons/paladin-skills/PNG/Icon${holyNum}.png`;
         } else if (/vampiric|blood|drain|dark|shadow|curse|rose|death|undead|bone|corpse|hex|poison|doom|abyss|ghost|touch|decay|soul/.test(combined)) {
-          skillIcon = '/assets/skills/vampiric_blood.jpg';
+          const darkNum = (hash % 40) + 1;
+          skillIcon = `/assets/2d/icons/undead-skills/PNG/Icon${darkNum}.png`;
         } else if (/bow|arrow|archer|snipe|shot|quiver|pierce|rain of arrows/.test(combined)) {
           const bowNum = (hash % 20) + 1;
           skillIcon = `/assets/2d/icons/bows-crossbows/PNG/Background/Icon${bowNum}.png`;
