@@ -328,16 +328,22 @@ anel de runas, reveal on scroll, code tokens.
   pointer-events: none;
 }
 
-/* ---------- Master Navigation Dock (4 Pilares de Aden) ---------- */
+/* ================================================================
+   ELEVATED MASTER NAVIGATION DOCK (4 PILARES DE ADEN)
+================================================================ */
 .pillar-dock-container {
   display: flex;
   flex-direction: column;
-  background: linear-gradient(180deg, #16120c 0%, #0c0a07 100%);
-  border-bottom: 1px solid rgba(212, 169, 78, 0.35);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
-  padding: 4px 8px 6px 8px;
-  gap: 6px;
+  background: 
+    radial-gradient(ellipse at 50% 0%, rgba(212, 169, 78, 0.14), transparent 70%),
+    linear-gradient(180deg, #18130d 0%, #0d0a07 100%);
+  border-bottom: 1.5px solid #d4a94e;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  padding: 6px 8px 8px 8px;
+  gap: 8px;
   z-index: 25;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
 }
 
 .pillar-master-tabs {
@@ -349,88 +355,203 @@ anel de runas, reveal on scroll, code tokens.
 .pillar-tab-btn {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 8px 10px;
-  background: linear-gradient(180deg, rgba(40, 32, 22, 0.8) 0%, rgba(20, 16, 11, 0.95) 100%);
-  border: 1px solid rgba(212, 169, 78, 0.3);
-  border-radius: 5px;
+  gap: 8px;
+  padding: 6px 8px;
+  background: linear-gradient(180deg, #2a2115 0%, #15100a 100%);
+  border: 1px solid #5a4525;
+  border-radius: 6px;
   color: #c5b89a;
-  font-family: 'Cinzel', serif;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.25, 1);
+  transition: all 0.22s cubic-bezier(0.2, 0.8, 0.25, 1);
   position: relative;
   overflow: hidden;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 2px 5px rgba(0, 0, 0, 0.5);
+  text-align: left;
 }
 
 .pillar-tab-btn:hover {
-  background: linear-gradient(180deg, rgba(65, 52, 34, 0.9) 0%, rgba(30, 24, 16, 0.95) 100%);
-  border-color: #f0cd7e;
+  background: linear-gradient(180deg, #3d2f1d 0%, #1f180f 100%);
+  border-color: #d4a94e;
   color: #fff2d1;
-  box-shadow: 0 0 12px rgba(212, 169, 78, 0.3);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 0 14px rgba(212, 169, 78, 0.35);
   transform: translateY(-1px);
 }
 
 .pillar-tab-btn.active {
-  background: linear-gradient(180deg, #5c4418 0%, #2b1f09 100%);
+  background: linear-gradient(180deg, #594017 0%, #291c09 100%);
   border-color: #ffd700;
   color: #fff9e6;
-  box-shadow: 0 0 16px rgba(255, 215, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 0 18px rgba(255, 215, 0, 0.45);
 }
 
 .pillar-tab-btn.active::after {
   content: "";
   position: absolute;
   bottom: 0;
-  left: 15%;
-  width: 70%;
+  left: 10%;
+  width: 80%;
   height: 2px;
-  background: linear-gradient(90deg, transparent, #ffe082, transparent);
-  box-shadow: 0 0 8px #ffe082;
+  background: linear-gradient(90deg, transparent, #ffe082, #ffd700, #ffe082, transparent);
+  box-shadow: 0 0 10px #ffe082;
 }
 
+/* Emblemas de cada pilar */
+.pillar-crest {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  min-width: 26px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(212, 169, 78, 0.3);
+  font-size: 13px;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.8);
+  transition: all 0.2s ease;
+}
+
+.pillar-tab-btn:hover .pillar-crest,
+.pillar-tab-btn.active .pillar-crest {
+  border-color: #ffd700;
+  box-shadow: 0 0 8px currentColor;
+}
+
+.pillar-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.pillar-title {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: inherit;
+  line-height: 1.1;
+}
+
+.pillar-sub {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 9px;
+  color: #8f826d;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+  margin-top: 2px;
+}
+
+.pillar-tab-btn.active .pillar-sub {
+  color: #e5d8b8;
+}
+
+/* Cores temáticas para cada pilar */
+.pillar-tab-btn[data-pillar="combat"].active {
+  border-color: #f97316;
+  background: linear-gradient(180deg, #5a260e 0%, #2b1105 100%);
+}
+.pillar-tab-btn[data-pillar="combat"] .pillar-crest { color: #f97316; }
+
+.pillar-tab-btn[data-pillar="character"].active {
+  border-color: #60a5fa;
+  background: linear-gradient(180deg, #1e3a8a 0%, #0f172a 100%);
+}
+.pillar-tab-btn[data-pillar="character"] .pillar-crest { color: #60a5fa; }
+
+.pillar-tab-btn[data-pillar="economy"].active {
+  border-color: #ffd700;
+  background: linear-gradient(180deg, #5c4418 0%, #2b1f09 100%);
+}
+.pillar-tab-btn[data-pillar="economy"] .pillar-crest { color: #ffd700; }
+
+.pillar-tab-btn[data-pillar="glory"].active {
+  border-color: #c084fc;
+  background: linear-gradient(180deg, #4c1d95 0%, #1e1035 100%);
+}
+.pillar-tab-btn[data-pillar="glory"] .pillar-crest { color: #c084fc; }
+
+/* ---------- Subtab Ribbon & Chips ---------- */
 .pillar-subtabs-strip {
   display: flex;
-  gap: 4px;
+  gap: 5px;
   overflow-x: auto;
   padding: 4px 2px 2px 2px;
-  scrollbar-width: none;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(212, 169, 78, 0.3) transparent;
 }
-.pillar-subtabs-strip::-webkit-scrollbar { display: none; }
+.pillar-subtabs-strip::-webkit-scrollbar { height: 4px; }
+.pillar-subtabs-strip::-webkit-scrollbar-thumb {
+  background: rgba(212, 169, 78, 0.4);
+  border-radius: 4px;
+}
 
 .subtab-pill-btn {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 5px 12px;
-  background: rgba(22, 18, 13, 0.7);
-  border: 1px solid rgba(212, 169, 78, 0.2);
-  border-radius: 4px;
+  gap: 6px;
+  padding: 6px 12px;
+  background: linear-gradient(180deg, #221a11 0%, #120e09 100%);
+  border: 1px solid #4a3820;
+  border-radius: 5px;
   color: #a89a80;
   font-family: 'IBM Plex Sans', sans-serif;
   font-size: 11px;
   font-weight: 600;
   white-space: nowrap;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.25, 1);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+  position: relative;
 }
 
 .subtab-pill-btn:hover {
-  background: rgba(45, 36, 25, 0.9);
-  border-color: rgba(212, 169, 78, 0.5);
+  background: linear-gradient(180deg, #382a1b 0%, #1f170e 100%);
+  border-color: #d4a94e;
   color: #f0cd7e;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.6);
 }
 
 .subtab-pill-btn.active {
-  background: linear-gradient(180deg, rgba(85, 65, 25, 0.8) 0%, rgba(40, 30, 12, 0.9) 100%);
-  border-color: #d4a94e;
-  color: #fff;
+  background: linear-gradient(180deg, #664d1c 0%, #33240a 100%);
+  border-color: #ffd700;
+  color: #ffffff;
   font-weight: 700;
-  box-shadow: 0 0 8px rgba(212, 169, 78, 0.25);
+  box-shadow: 0 0 10px rgba(212, 169, 78, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.subtab-pill-btn.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 20%;
+  width: 60%;
+  height: 2px;
+  background: #ffe082;
+  box-shadow: 0 0 6px #ffe082;
+}
+
+/* Badges de notificação estilizados como gemas */
+.tab-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 14px;
+  height: 14px;
+  padding: 0 3px;
+  background: linear-gradient(180deg, #ef4444 0%, #991b1b 100%);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 900;
+  border-radius: 10px;
+  border: 1px solid #fca5a5;
+  box-shadow: 0 0 6px #ef4444;
+  margin-left: 2px;
+  animation: pulse 1.5s infinite;
 }
 
 /* ---------- Gauges de Status Autênticos (Lineage II Gloss) ---------- */
