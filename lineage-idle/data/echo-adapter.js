@@ -19,15 +19,18 @@ import { CASH_SHOP_CATALOG } from "../src/data/shop/cash_shop_catalog.js";
 import { HEIRLOOM_ITEMS } from "../src/data/items/heirloom_items.js";
 
 
-// ─── Helpers ──────────────────────────────────────────────────────────────
-
-/** Converte nome de skill em snake_case único por classe */
-function toSkillId(classId, skillName) {
-  return classId + '_' + skillName
+/** Transforma string em slug snake_case */
+function slugify(str) {
+  return String(str || '')
     .toLowerCase()
     .replace(/['']/g, '')
     .replace(/[^a-z0-9]+/g, '_')
     .replace(/^_|_$/g, '');
+}
+
+/** Converte nome de skill em snake_case único por classe */
+function toSkillId(classId, skillName) {
+  return classId + '_' + slugify(skillName);
 }
 
 /** Mapeia raridade textual para tier numérico */
@@ -360,7 +363,7 @@ function buildEchoAdapter() {
     for (let idx = 0; idx < curatedSkills.length; idx++) {
       const sk = curatedSkills[idx];
       const rawName = sk.name || `Skill_${idx + 1}`;
-      const skillId = `${classId}_${slugify(rawName)}`;
+      const skillId = toSkillId(classId, rawName);
 
       const type = (sk.type === 'Passivo' || sk.type === 'passive') ? 'passive'
                  : ((sk.type || '').toLowerCase().includes('buff') || (sk.type || '').toLowerCase().includes('toggle')) ? 'buff'
