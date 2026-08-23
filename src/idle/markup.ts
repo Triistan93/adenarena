@@ -518,6 +518,8 @@ export const IDLE_MARKUP = `
                 <button class="l2inv-icon-btn" id="organize-inv-btn" title="Organizar Mochila (Fundir Pilhas e Ordenar)">🧹</button>
                 <button class="l2inv-icon-btn" id="open-compound-btn" onclick="window.openCompoundModal()" title="Abrir Sistema de Compound / Síntese" style="color:#c084fc;">🔮 Síntese</button>
                 <button class="l2inv-icon-btn" id="open-symbol-maker-btn" onclick="window.openSymbolMakerModal()" title="Abrir Gravador de Símbolos / Tatuagens de Henna" style="color:#fde047;">🎭 Tatuagens</button>
+                <button class="l2inv-icon-btn" id="open-pet-btn" onclick="window.openPetModal()" title="Companheiros &amp; Mascotes de Batalha (Lobo, Kookaburra, Buffalo, Dragão)" style="color:#6ee7b7;">🐾 Mascotes</button>
+                <button class="l2inv-icon-btn" id="open-manor-btn" onclick="window.openManorModal()" title="Sistema Manor de Sementes &amp; Colheita Agrícola" style="color:#86efac;">🌾 Manor</button>
               </div>
 
               <div class="l2inv-bottom-right-info">
@@ -710,9 +712,12 @@ export const IDLE_MARKUP = `
 
           <!-- Zones & Raids Tab -->
           <div id="tab-zones" class="tab-pane active">
-            <div class="zone-head-tabs">
-              <button class="zone-subtab active" data-zonetab="map">🗺️ Zonas de Caça</button>
-              <button class="zone-subtab" data-zonetab="raids">🐉 Raids de Chefões Epicos</button>
+            <div class="zone-head-tabs" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:6px;">
+              <div style="display:flex; gap:6px;">
+                <button class="zone-subtab active" data-zonetab="map">🗺️ Zonas de Caça</button>
+                <button class="zone-subtab" data-zonetab="raids">🐉 Raids de Chefões Epicos</button>
+              </div>
+              <button class="action-btn" onclick="window.openInstancesModal()" style="padding:4px 10px; font-size:11px; background:linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); border:1px solid #818cf8; color:#e0e7ff; font-weight:bold;">🌀 Instâncias Solo (Kamaloka &amp; Pailaka)</button>
             </div>
 
             <div id="zone-map-view" class="zone-view active">
@@ -1057,6 +1062,62 @@ export const IDLE_MARKUP = `
         <!-- Available Hennas for Inscription -->
         <div style="font-family:'Cinzel',serif; font-size:13px; font-weight:bold; color:#93c5fd; margin-bottom:8px;">📜 Hennas Maiores Disponíveis no Inventário / Mercado</div>
         <div id="symbol-hennas-list" style="display:flex; flex-direction:column; gap:8px; max-height:220px; overflow-y:auto; padding-right:4px;"></div>
+      </div>
+    </div>
+
+    <!-- Pet Manager Modal -->
+    <div id="pet-manager-modal" class="modal">
+      <div class="modal-content" style="max-width: 680px; background: linear-gradient(180deg, #140e0a 0%, #0a0705 100%); border: 2px solid var(--border-gilt); border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.85); padding: 20px;">
+        <div class="modal-header" style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(212,175,55,0.3); padding-bottom:12px; margin-bottom:16px;">
+          <h2 style="margin:0; font-family:'Cinzel',serif; color:#ffd877; font-size:18px; display:flex; align-items:center; gap:8px;">
+            <span>🐾 Santuário de Companheiros &amp; Mascotes de Aden</span>
+          </h2>
+          <button id="close-pet-modal-btn" class="modal-close-x" style="background:none; border:none; color:#94a3b8; font-size:18px; cursor:pointer;">✕</button>
+        </div>
+        <p style="font-size:12px; color:#cbd5e1; margin-bottom:14px; line-height:1.4;">
+          Adote e invoque companheiros leais para lutar ao seu lado! Os pets sobem de nível ao seu lado (Lv. 1 a 60), atacam nos turnos de batalha e concedem bônus passivos e habilidades de suporte exclusivas.
+        </p>
+
+        <!-- Active Pet Overview -->
+        <div id="pet-active-container" style="margin-bottom:16px;"></div>
+
+        <!-- Available / Owned Pets List -->
+        <div style="font-family:'Cinzel',serif; font-size:13px; font-weight:bold; color:#93c5fd; margin-bottom:8px;">📜 Catálogo de Companheiros de Aden</div>
+        <div id="pet-list-container" style="display:flex; flex-direction:column; gap:10px; max-height:260px; overflow-y:auto; padding-right:4px;"></div>
+      </div>
+    </div>
+
+    <!-- Solo Instances (Kamaloka & Pailaka) Modal -->
+    <div id="solo-instances-modal" class="modal">
+      <div class="modal-content" style="max-width: 720px; background: linear-gradient(180deg, #0e121e 0%, #060913 100%); border: 2px solid #6366f1; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.85); padding: 20px;">
+        <div class="modal-header" style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(99,102,241,0.3); padding-bottom:12px; margin-bottom:16px;">
+          <h2 style="margin:0; font-family:'Cinzel',serif; color:#a5b4fc; font-size:18px; display:flex; align-items:center; gap:8px;">
+            <span>🌀 Fendas Dimensionais: Kamaloka &amp; Pailaka</span>
+          </h2>
+          <button id="close-instances-modal-btn" class="modal-close-x" style="background:none; border:none; color:#94a3b8; font-size:18px; cursor:pointer;">✕</button>
+        </div>
+        <p style="font-size:12px; color:#cbd5e1; margin-bottom:14px; line-height:1.4;">
+          Desafie chefes dimensionais em masmorras solo diárias. Cada fenda concede <strong>1 entrada diária gratuita</strong> com saltos acelerados de XP, grandes recompensas em Adena, SP e itens de grau garantidos!
+        </p>
+
+        <div id="instances-list-container" style="display:flex; flex-direction:column; gap:10px; max-height:360px; overflow-y:auto; padding-right:4px;"></div>
+      </div>
+    </div>
+
+    <!-- Manor Manager Modal -->
+    <div id="manor-manager-modal" class="modal">
+      <div class="modal-content" style="max-width: 680px; background: linear-gradient(180deg, #101c13 0%, #07100a 100%); border: 2px solid #22c55e; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.85); padding: 20px;">
+        <div class="modal-header" style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(34,197,94,0.3); padding-bottom:12px; margin-bottom:16px;">
+          <h2 style="margin:0; font-family:'Cinzel',serif; color:#86efac; font-size:18px; display:flex; align-items:center; gap:8px;">
+            <span>🌾 Administrador de Manor &amp; Colheita Agrícola</span>
+          </h2>
+          <button id="close-manor-modal-btn" class="modal-close-x" style="background:none; border:none; color:#94a3b8; font-size:18px; cursor:pointer;">✕</button>
+        </div>
+        <p style="font-size:12px; color:#cbd5e1; margin-bottom:14px; line-height:1.4;">
+          Compre sementes nas províncias de Aden (Gludio, Dion, Giran). Ao caçar monstros na região, seu herói semeará e colherá colheitas agrícolas para trocar por <strong>Materiais Raros de Forja (Enria, Mithril Alloy, Varnish of Purity)</strong> no Castelo!
+        </p>
+
+        <div id="manor-provinces-list" style="display:flex; flex-direction:column; gap:12px; max-height:360px; overflow-y:auto; padding-right:4px;"></div>
       </div>
     </div>
 

@@ -20,6 +20,12 @@ import { CODEX_SETS, BOSS_DOLLS }                                           from
 import { MONSTER_CARDS, CardCodexService }                                    from './src/services/CardCodexService.js';
 import { DYES_CATALOG }                                                       from './src/data/dyes.js';
 import { DyeService }                                                         from './src/services/DyeService.js';
+import { PET_CATALOG }                                                        from './src/data/pets.js';
+import { PetService }                                                         from './src/services/PetService.js';
+import { SOLO_INSTANCES }                                                     from './src/data/instances.js';
+import { InstanceService }                                                    from './src/services/InstanceService.js';
+import { MANOR_PROVINCES }                                                    from './src/data/manor.js';
+import { ManorService }                                                       from './src/services/ManorService.js';
 // ─── Sprint 2: Importa motores de Stats e Nível ────────────────────────────
 import {
   getStats as engineGetStats,
@@ -4090,9 +4096,29 @@ function attackMonster() {
   }
 
   monster.hp -= damage;
+
+  // Ataque Conjunto do Mascote de Batalha (Pet)
+  const activePetBonus = PetService.getActivePetBonus(state);
+  if (activePetBonus && activePetBonus.atk > 0 && combatTick % 2 === 0 && monster.hp > 0) {
+    const petDmg = Math.max(1, Math.floor(dealDamage(monster, activePetBonus.atk, 'physical') * 1.2));
+    monster.hp -= petDmg;
+    log(`🐾 [${activePetBonus.name}] Ataque de Mascote! ${petDmg} physical damage`, 'damage');
+  }
+
   if (monster.hp <= 0 && !castedSkillThisTick) stageMonsterDie(); else if (!castedSkillThisTick) stageMonsterHurt(damage, wasCrit);
   
   if (monster.hp <= 0) {
+    // Evolução de XP do Mascote
+    PetService.addPetXp(state, monster.xp || 100, { log, floatText });
+
+    // Colheita Agrícola do Manor
+    ManorService.processHarvest(state, monster, { log });
+
+    // Conclusão de Instância Solo (Kamaloka / Pailaka)
+    if (monster.isInstanceBoss && monster.instanceId) {
+      InstanceService.onInstanceBossVictory(state, monster.instanceId, { log, floatText, updateAllUI, save });
+    }
+
     if (procBonuses.on_kill_heal > 0) {
       const killHeal = Math.floor(state.maxHp * (procBonuses.on_kill_heal / 100));
       if (killHeal > 0) {
@@ -6977,6 +7003,301 @@ export function init() {
 
     const closeSymbolBtn = el('close-symbol-modal-btn');
     if (closeSymbolBtn) closeSymbolBtn.onclick = closeSymbolMakerModal;
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // 🐾 PETS & COMPANIONS SYSTEM
+    // ═══════════════════════════════════════════════════════════════════════
+    function openPetModal() {
+      const modal = el('pet-manager-modal');
+      if (!modal) return;
+      renderPetModalUI();
+      modal.classList.add('active');
+    }
+    function closePetModal() {
+      const modal = el('pet-manager-modal');
+      if (modal) modal.classList.remove('active');
+    }
+    function renderPetModalUI() {
+      const modal = el('pet-manager-modal');
+      if (!modal) return;
+      const pState = PetService.getPetState(state);
+      const activePet = pState.activePetId ? pState.pets[pState.activePetId] : null;
+
+      const activeContainer = el('pet-active-container');
+      const listContainer = el('pet-list-container');
+
+      if (activeContainer) {
+        if (activePet) {
+          const def = PET_CATALOG[activePet.id];
+          const bonus = PetService.getActivePetBonus(state);
+          const reqXp = activePet.level * activePet.level * 400;
+          const xpPct = Math.min(100, Math.floor(((activePet.xp || 0) / reqXp) * 100));
+
+          activeContainer.innerHTML = `
+            <div style="background:rgba(212,167,68,0.15); border:1px solid var(--border-gilt); border-radius:8px; padding:14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+              <div style="display:flex; align-items:center; gap:12px;">
+                <span style="font-size:36px;">${def?.icon || '🐾'}</span>
+                <div>
+                  <div style="font-family:'Cinzel',serif; font-weight:bold; color:#ffd877; font-size:16px;">${activePet.name} (Lv. ${activePet.level}/60)</div>
+                  <div style="font-size:11px; color:#86efac; margin-top:2px;">✨ Bônus Ativo: ${bonus?.desc || ''} (+${Math.round((bonus?.val || 0) * 100)}%)</div>
+                  <div style="font-size:11px; color:#93c5fd; margin-top:2px;">⚔️ Ataque de Suporte: ${bonus?.atk || 0} Dano Físico</div>
+                  <div style="width:160px; height:6px; background:rgba(0,0,0,0.6); border-radius:3px; margin-top:6px; overflow:hidden;">
+                    <div style="width:${xpPct}%; height:100%; background:#eab308;"></div>
+                  </div>
+                  <div style="font-size:9px; color:#94a3b8; margin-top:2px;">XP Pet: ${activePet.xp || 0} / ${reqXp} (${xpPct}%)</div>
+                </div>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:6px;">
+                <button class="action-btn action-btn--primary" onclick="window.feedPetAction()" style="padding:6px 12px; font-size:11px; font-weight:bold;">
+                  🍖 Alimentar (5k Adena)
+                </button>
+                <button class="action-btn" onclick="window.summonPetAction('${activePet.id}')" style="padding:6px 12px; font-size:11px;">
+                  🛑 Recolher Mascote
+                </button>
+              </div>
+            </div>
+          `;
+        } else {
+          activeContainer.innerHTML = `
+            <div style="padding:16px; text-align:center; background:rgba(0,0,0,0.4); border:1px dashed rgba(212,167,68,0.3); border-radius:8px; color:#94a3b8; font-size:12px;">
+              🐾 Nenhum mascote invocado no momento. Invoque um dos seus companheiros abaixo para lutar ao seu lado!
+            </div>
+          `;
+        }
+      }
+
+      if (listContainer) {
+        listContainer.innerHTML = '';
+        Object.values(PET_CATALOG).forEach(petDef => {
+          const owned = !!pState.pets[petDef.id];
+          const petData = owned ? pState.pets[petDef.id] : null;
+          const isActive = pState.activePetId === petDef.id;
+          const canUnlock = (state.level || 1) >= petDef.unlockLvl;
+          const canAfford = (state.gold || 0) >= petDef.cost;
+
+          const card = mkEl('div');
+          card.style.cssText = `
+            background: ${owned ? 'rgba(0,0,0,0.6)' : 'rgba(20,15,10,0.4)'};
+            border: 1px solid ${isActive ? 'var(--border-gilt)' : 'rgba(255,255,255,0.1)'};
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+          `;
+
+          card.innerHTML = `
+            <div style="display:flex; align-items:center; gap:10px;">
+              <span style="font-size:28px;">${petDef.icon}</span>
+              <div>
+                <div style="font-weight:bold; color:#ffd877; font-size:13px;">${petDef.name} ${owned ? `(Lv. ${petData.level})` : `(Exige Lv. ${petDef.unlockLvl})`}</div>
+                <div style="font-size:11px; color:#cbd5e1; margin-top:2px;">${petDef.desc}</div>
+                <div style="font-size:10px; color:#60a5fa; margin-top:2px;">Habilidade: <strong>${petDef.skillName}</strong> — ${petDef.skillDesc}</div>
+              </div>
+            </div>
+            <div>
+              ${owned ? `
+                <button class="action-btn ${isActive ? '' : 'action-btn--primary'}" style="padding:6px 12px; font-size:11px; font-weight:bold;" onclick="window.summonPetAction('${petDef.id}')">
+                  ${isActive ? '🛑 Recolher' : '⚔️ Invocar'}
+                </button>
+              ` : `
+                <button class="action-btn ${canUnlock && canAfford ? 'action-btn--primary' : ''}" style="padding:6px 12px; font-size:11px; font-weight:bold;" ${!canUnlock || !canAfford ? 'disabled' : ''} onclick="window.adoptPetAction('${petDef.id}')">
+                  🐾 Adotar (${petDef.cost.toLocaleString()}g)
+                </button>
+              `}
+            </div>
+          `;
+          listContainer.appendChild(card);
+        });
+      }
+    }
+
+    window.openPetModal = openPetModal;
+    window.closePetModal = closePetModal;
+    window.renderPetModalUI = renderPetModalUI;
+    window.adoptPetAction = (petId) => {
+      const res = PetService.adoptPet(state, petId, { log, floatText, updateAllUI, save });
+      if (res.success) renderPetModalUI();
+      return res;
+    };
+    window.summonPetAction = (petId) => {
+      const res = PetService.summonPet(state, petId, { log, floatText, updateAllUI, save });
+      if (res.success) renderPetModalUI();
+      return res;
+    };
+    window.feedPetAction = () => {
+      const res = PetService.feedPet(state, { log, floatText, updateAllUI, save });
+      if (res.success) renderPetModalUI();
+      return res;
+    };
+    const closePetBtn = el('close-pet-modal-btn');
+    if (closePetBtn) closePetBtn.onclick = closePetModal;
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // 🌀 SOLO INSTANCES SYSTEM (Kamaloka & Pailaka)
+    // ═══════════════════════════════════════════════════════════════════════
+    function openInstancesModal() {
+      const modal = el('solo-instances-modal');
+      if (!modal) return;
+      renderInstancesModalUI();
+      modal.classList.add('active');
+    }
+    function closeInstancesModal() {
+      const modal = el('solo-instances-modal');
+      if (modal) modal.classList.remove('active');
+    }
+    function renderInstancesModalUI() {
+      const modal = el('solo-instances-modal');
+      if (!modal) return;
+      const listContainer = el('instances-list-container');
+      if (!listContainer) return;
+
+      const entries = InstanceService.getDailyEntries(state);
+      listContainer.innerHTML = '';
+
+      Object.values(SOLO_INSTANCES).forEach(inst => {
+        const completed = !!entries.completed[inst.id];
+        const pLvl = state.level || 1;
+        const canEnter = pLvl >= inst.minLvl && !completed;
+
+        const card = mkEl('div');
+        card.style.cssText = `
+          background: ${completed ? 'rgba(10,30,10,0.5)' : 'rgba(0,0,0,0.6)'};
+          border: 1px solid ${completed ? '#22c55e' : (canEnter ? 'var(--border-gilt)' : 'rgba(255,255,255,0.1)')};
+          border-radius: 8px;
+          padding: 12px 14px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 12px;
+        `;
+
+        card.innerHTML = `
+          <div style="display:flex; align-items:center; gap:12px;">
+            <span style="font-size:32px;">${inst.icon}</span>
+            <div>
+              <div style="font-family:'Cinzel',serif; font-weight:bold; color:#ffd877; font-size:14px;">
+                ${inst.name}
+                <span style="font-size:10px; padding:2px 6px; border-radius:4px; background:rgba(212,167,68,0.2); margin-left:6px; color:#fde047;">Lv. ${inst.minLvl}+</span>
+              </div>
+              <div style="font-size:11px; color:#cbd5e1; margin-top:2px;">Chefe: <strong style="color:#f87171;">${inst.bossName}</strong> (HP: ${inst.bossHp.toLocaleString()} · Atk: ${inst.bossAtk})</div>
+              <div style="font-size:10px; color:#6ee7b7; margin-top:2px;">🎁 Recompensas: +${inst.rewards.xp.toLocaleString()} XP · +${inst.rewards.gold.toLocaleString()}g · +${inst.rewards.sp} SP · ${inst.rewards.guaranteedRewardText}</div>
+            </div>
+          </div>
+          <div>
+            ${completed ? `
+              <span style="font-size:11px; font-weight:bold; color:#86efac; background:rgba(34,197,94,0.2); padding:4px 8px; border-radius:4px;">✅ Concluído Hoje</span>
+            ` : `
+              <button class="action-btn ${canEnter ? 'action-btn--primary' : ''}" style="padding:8px 16px; font-size:12px; font-weight:bold; font-family:'Cinzel',serif;" ${!canEnter ? 'disabled' : ''} onclick="window.challengeInstanceAction('${inst.id}')">
+                ⚔️ Entrar
+              </button>
+            `}
+          </div>
+        `;
+        listContainer.appendChild(card);
+      });
+    }
+
+    window.openInstancesModal = openInstancesModal;
+    window.closeInstancesModal = closeInstancesModal;
+    window.renderInstancesModalUI = renderInstancesModalUI;
+    window.challengeInstanceAction = (instanceId) => {
+      const res = InstanceService.challengeInstance(state, instanceId, { log, floatText, renderStageMonster, updateAllUI });
+      if (res.success) {
+        closeInstancesModal();
+      }
+      return res;
+    };
+    const closeInstBtn = el('close-instances-modal-btn');
+    if (closeInstBtn) closeInstBtn.onclick = closeInstancesModal;
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // 🌾 MANOR & CROPS FARMING SYSTEM
+    // ═══════════════════════════════════════════════════════════════════════
+    function openManorModal() {
+      const modal = el('manor-manager-modal');
+      if (!modal) return;
+      renderManorModalUI();
+      modal.classList.add('active');
+    }
+    function closeManorModal() {
+      const modal = el('manor-manager-modal');
+      if (modal) modal.classList.remove('active');
+    }
+    function renderManorModalUI() {
+      const modal = el('manor-manager-modal');
+      if (!modal) return;
+      const listContainer = el('manor-provinces-list');
+      if (!listContainer) return;
+
+      const mState = ManorService.getManorState(state);
+      listContainer.innerHTML = '';
+
+      Object.values(MANOR_PROVINCES).forEach(prov => {
+        const seedCount = mState.seeds[prov.seed.id] || 0;
+        const cropCount = mState.crops[prov.seed.cropId] || 0;
+        const canExchange = cropCount >= prov.seed.exchangeRate;
+        const isActive = mState.activeProvince === prov.id;
+
+        const card = mkEl('div');
+        card.style.cssText = `
+          background: rgba(0,0,0,0.6);
+          border: 1px solid ${isActive ? 'var(--border-gilt)' : 'rgba(255,255,255,0.1)'};
+          border-radius: 8px;
+          padding: 12px 14px;
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        `;
+
+        card.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-size:24px;">${prov.icon}</span>
+              <div>
+                <div style="font-family:'Cinzel',serif; font-weight:bold; color:#ffd877; font-size:14px;">${prov.name}</div>
+                <div style="font-size:11px; color:#94a3b8;">Zona Recomendada: Lv. ${prov.minLvl} - ${prov.maxLvl}</div>
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <span style="font-size:11px; color:#cbd5e1;">Sementes Ativas: <strong style="color:#fde047;">${seedCount}x</strong> · Colheitas: <strong style="color:#86efac;">${cropCount}x</strong></span>
+            </div>
+          </div>
+          <div style="background:rgba(212,167,68,0.1); padding:8px 10px; border-radius:6px; font-size:11px; color:#cbd5e1; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              🌱 <strong>${prov.seed.name}</strong> (${prov.seed.cost}g cada)<br>
+              📦 Troca no Castelo: <strong>${prov.seed.exchangeRate}x Colheitas $\rightarrow$ 1x ${prov.seed.rewardItemName}</strong>
+            </div>
+            <div style="display:flex; gap:6px;">
+              <button class="action-btn" style="padding:6px 10px; font-size:11px;" onclick="window.buyManorSeedsAction('${prov.id}', 20)">
+                🌱 Comprar 20x (${(prov.seed.cost * 20).toLocaleString()}g)
+              </button>
+              <button class="action-btn ${canExchange ? 'action-btn--primary' : ''}" style="padding:6px 10px; font-size:11px; font-weight:bold;" ${!canExchange ? 'disabled' : ''} onclick="window.exchangeManorCropsAction('${prov.id}')">
+                📦 Entregar Colheita
+              </button>
+            </div>
+          </div>
+        `;
+        listContainer.appendChild(card);
+      });
+    }
+
+    window.openManorModal = openManorModal;
+    window.closeManorModal = closeManorModal;
+    window.renderManorModalUI = renderManorModalUI;
+    window.buyManorSeedsAction = (provId, count = 20) => {
+      const res = ManorService.buySeeds(state, provId, count, { log, updateAllUI, save });
+      if (res.success) renderManorModalUI();
+      return res;
+    };
+    window.exchangeManorCropsAction = (provId) => {
+      const res = ManorService.exchangeCrops(state, provId, { log, floatText, updateAllUI, save });
+      if (res.success) renderManorModalUI();
+      return res;
+    };
+    const closeManorBtn = el('close-manor-modal-btn');
+    if (closeManorBtn) closeManorBtn.onclick = closeManorModal;
 
     // Cash Shop Comercial
     window.openCashShopModal = openCashShopModal;

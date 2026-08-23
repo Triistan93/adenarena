@@ -15,6 +15,7 @@ import { CombatPowerService } from '../services/CombatPowerService.js';
 import { SubclassCertificationService } from '../services/SubclassCertificationService.js';
 import { DyeService } from '../services/DyeService.js';
 import { DYES_CATALOG } from '../data/dyes.js';
+import { PetService } from '../services/PetService.js';
 import { resolveCanonicalClassId } from '../data/classes/class_aliases.js';
 
 export const STR_MODIFIERS = {
@@ -575,6 +576,15 @@ export function getStats(state) {
       else if (p.stat === 'speed') buffSpd += Math.floor(v * 50);
       else if (p.stat === 'crit') legacyCrit += Math.floor(v * 50);
     }
+  }
+
+  // Process Active Pet Bonus (Companheiros de Batalha)
+  const petBonus = PetService.getActivePetBonus(state);
+  if (petBonus) {
+    if (petBonus.stat === 'patkMult') buffAtkMult += petBonus.val;
+    else if (petBonus.stat === 'matkMult') buffMatk += Math.floor(baseMatk * petBonus.val);
+    else if (petBonus.stat === 'hpMult') elixirHpMult += petBonus.val;
+    else if (petBonus.stat === 'speedBoost') buffSpd += Math.floor(petBonus.val * 100);
   }
 
   const agathionUid = state.equipment?.agathion;

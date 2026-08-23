@@ -32,6 +32,11 @@ export { CODEX_SETS, BOSS_DOLLS } from './codex.js';
 // ─── Dyes & Henna ─────────────────────────────────────────────────────────────
 export { DYES_CATALOG } from './dyes.js';
 
+// ─── Cap 1-60 Systems (Pets, Instances, Manor) ───────────────────────────────
+export { PET_CATALOG }    from './pets.js';
+export { SOLO_INSTANCES }  from './instances.js';
+export { MANOR_PROVINCES } from './manor.js';
+
 // ─── Items (via window.GameData, set by items.js side-effects) ───────────────
 /** Lazy accessor para window.GameData — deve ser lido APÓS todos os imports avaliados */
 export const GameData = () => window.GameData;
