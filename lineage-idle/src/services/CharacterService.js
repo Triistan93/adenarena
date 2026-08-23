@@ -160,39 +160,33 @@ export function promoteClass(state, newClassId, callbacks = {}) {
   let convertedBuffsCount = 0;
   const echoDefs = (typeof window !== 'undefined' && window.EchoData) ? window.EchoData.SKILL_DEFS_ECHO : {};
   const skillDefs = echoDefs || D()?.SKILL_DEFS || {};
-  const newClassSkills = getClassSkills(newClassId) || [];
 
   state.legacyPassives = state.legacyPassives || {};
 
   for (const [sId, lvl] of Object.entries(state.skills || {})) {
     if (lvl > 0 && skillDefs[sId]) {
-      // Se a habilidade faz parte da árvore da nova classe (herança), preserva o progresso!
-      if (newClassSkills.includes(sId)) {
-        continue;
-      }
-
       const def = skillDefs[sId];
-      const isBuff = def.type === 'buff' || def.type === 'toggle' || def.effect === 'warcry';
+      const isBuff = def.type === 'buff' || def.type === 'toggle' || def.effect === 'warcry' || (def.name || '').includes('Harmony') || (def.name || '').includes('Will') || (def.name || '').includes('Roar') || (def.name || '').includes('Aura') || (def.name || '').includes('Icon');
 
-      // 1. Reembolsa 100% do SP investido na habilidade incompatível da classe anterior
+      // 1. Reembolsa 100% do SP investido na habilidade da classe anterior
       for (let l = 0; l < lvl; l++) {
         totalRefunded += getSkillCost(sId, l);
       }
 
-      // 2. Se for Buff, converte em Passiva de Linhagem Permanente (20% da eficácia original)
-      if (isBuff) {
+      // 2. Se for Buff, converte até 2 em Passivas de Linhagem Permanentes (20% da eficácia original)
+      if (isBuff && convertedBuffsCount < 2) {
         const baseEffectVal = 0.15 + (lvl * 0.03); // ex: 30% no nível 5
         const passiveVal = +(baseEffectVal * 0.20).toFixed(4); // 20% da eficácia = +6% permanente
         
         let statKey = 'patk';
         const sName = (def.name || '').toLowerCase();
-        if (sName.includes('def') || sName.includes('shield') || sName.includes('aegis') || sName.includes('iron') || sName.includes('will')) {
+        if (sName.includes('def') || sName.includes('shield') || sName.includes('aegis') || sName.includes('iron') || sName.includes('will') || sName.includes('armor')) {
           statKey = 'pdef';
-        } else if (sName.includes('magic') || sName.includes('mage') || sName.includes('mystic') || sName.includes('elem')) {
+        } else if (sName.includes('magic') || sName.includes('mage') || sName.includes('mystic') || sName.includes('elem') || sName.includes('fire') || sName.includes('water') || sName.includes('wind')) {
           statKey = 'matk';
-        } else if (sName.includes('crit') || sName.includes('fury')) {
+        } else if (sName.includes('crit') || sName.includes('fury') || sName.includes('stance')) {
           statKey = 'crit';
-        } else if (sName.includes('speed') || sName.includes('wind') || sName.includes('dash') || sName.includes('step')) {
+        } else if (sName.includes('speed') || sName.includes('wind') || sName.includes('dash') || sName.includes('step') || sName.includes('haste')) {
           statKey = 'speed';
         }
 
@@ -207,31 +201,31 @@ export function promoteClass(state, newClassId, callbacks = {}) {
         };
         convertedBuffsCount++;
       }
-
-      // 3. Apaga a habilidade ativa incompatível
-      state.skills[sId] = 0;
     }
   }
+
+  // 3. Reseta as habilidades ativas anteriores para dar lugar às novas habilidades exclusivas da nova classe
+  state.skills = {};
 
   // Bônus Nobre de SP por conclusão da Cerimônia de Avanço de Classe
   const stage = Number(newClassDef.stage) || 1;
   const transferSpBonus = stage === 1 ? 35 : stage === 2 ? 80 : 200;
-  state.sp = (state.sp || 0) + transferSpBonus;
+  state.sp = (state.sp || 0) + totalRefunded + transferSpBonus;
 
   if (convertedBuffsCount > 0) {
-    if (callbacks.log) callbacks.log(`🧬 ${convertedBuffsCount} Buffs incompatíveis foram convertidos em **Passivas de Linhagem Permanentes** com 20% de eficácia!`, 'rarity-epic');
-  }
-
-  if (totalRefunded > 0) {
-    state.sp += totalRefunded;
-    if (callbacks.log) callbacks.log(`🔄 ${totalRefunded.toLocaleString()} SP foram reembolsados de habilidades incompatíveis para distribuição na árvore de ${newClassDef.name}!`, 'rarity-legendary');
+    if (callbacks.log) callbacks.log(`🧬 ${convertedBuffsCount} Buff(s) da classe anterior foram convertidos em **Passivas de Linhagem Permanentes** com 20% de eficácia!`, 'rarity-epic');
   }
 
   if (callbacks.log) {
-    callbacks.log(`🎉 PARABÉNS! Você concluiu a Cerimônia e agora é um **${newClassDef.name}**! (+${transferSpBonus} SP concedidos para novas habilidades)`, 'rarity-legendary');
+    callbacks.log(`🎉 PARABÉNS! Você concluiu a Cerimônia e agora é um **${newClassDef.name}**!`, 'rarity-legendary');
+    if (totalRefunded > 0) {
+      callbacks.log(`🔄 ${totalRefunded.toLocaleString()} SP investidos foram 100% reembolsados + ${transferSpBonus} SP de presente cerimonial para aprender suas novas habilidades!`, 'rarity-legendary');
+    } else {
+      callbacks.log(`✨ +${transferSpBonus} SP de presente cerimonial concedidos para suas novas habilidades!`, 'rarity-legendary');
+    }
   }
   if (callbacks.floatText) {
-    callbacks.floatText(`🎉 ${newClassDef.name.toUpperCase()}! (+${transferSpBonus} SP)`, 'float-jackpot');
+    callbacks.floatText(`🎉 ${newClassDef.name.toUpperCase()}! (+${totalRefunded + transferSpBonus} SP)`, 'float-jackpot');
   }
 
   if (callbacks.el) {

@@ -1985,7 +1985,6 @@ export function updateSkillUI(state, callbacks = {}) {
   const SKILL_REQS = echoData?.SKILL_REQS_ECHO || D()?.SKILL_REQS || {};
   const SKILL_TREE_LAYOUT = echoData?.SKILL_TREE_LAYOUT_ECHO || D()?.SKILL_TREE_LAYOUT || {};
 
-  const cols = 5;
   const pos = {};
 
   const classSkillIds = getClassSkills(state.class);
@@ -2037,13 +2036,19 @@ export function updateSkillUI(state, callbacks = {}) {
     });
   }
 
+  const maxCol = Object.values(pos).reduce((m, p) => {
+    const col = Math.round((p.x - TREE_PAD_X - TREE_NODE_W / 2) / TREE_NODE_W);
+    return Math.max(m, col);
+  }, 1);
+  const cols = Math.max(2, maxCol + 1);
+
   const maxRow = Object.values(pos).reduce((m, p) => {
     const row = Math.round((p.y - TREE_PAD_Y - TREE_NODE_H / 2) / TREE_NODE_H);
     return Math.max(m, row);
-  }, 6);
-  const rows = maxRow + 2;
-  const W = cols * TREE_NODE_W + TREE_PAD_X * 2;
-  const H = rows * TREE_NODE_H + TREE_PAD_Y * 2;
+  }, 2);
+  const rows = maxRow + 1;
+  const W = Math.max(300, cols * TREE_NODE_W + TREE_PAD_X * 2);
+  const H = Math.max(260, rows * TREE_NODE_H + TREE_PAD_Y * 2);
   wrap.style.width = W + 'px';
   wrap.style.height = H + 'px';
 
@@ -2066,9 +2071,11 @@ export function updateSkillUI(state, callbacks = {}) {
   }
 
   let tierLabels = '';
-  for (let c = 0; c < cols; c++) {
-    const x = TREE_PAD_X + c * TREE_NODE_W + TREE_NODE_W / 2;
-    tierLabels += `<text class="tier-label" x="${x}" y="${H - 6}">${TIER_NAMES[c] || ''}</text>`;
+  if (cols >= 4) {
+    for (let c = 0; c < cols; c++) {
+      const x = TREE_PAD_X + c * TREE_NODE_W + TREE_NODE_W / 2;
+      tierLabels += `<text class="tier-label" x="${x}" y="${H - 6}">${TIER_NAMES[c] || ''}</text>`;
+    }
   }
 
   const defsSvg = `

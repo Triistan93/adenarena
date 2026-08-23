@@ -152,6 +152,188 @@ window.SkillScaling = {
   buildSkillEffectText
 };
 
+/**
+ * Curadoria de Habilidades da Classe:
+ * Cada classe possui um arsenal focado de 5 a 6 habilidades de assinatura (ataques, buffs, cura e ultimate 4★).
+ */
+function curateClassSkills(skills) {
+  if (!skills || skills.length <= 6) return skills || [];
+
+  const ultimates = skills.filter(s => s.rarity === '4★' || (s.name || '').toLowerCase().includes('transcendent') || (s.name || '').toLowerCase().includes('ancestral') || (s.name || '').toLowerCase().includes('apex'));
+  const harmonies = skills.filter(s => (s.name || '').includes('Harmony') || (s.name || '').includes('Will') || (s.name || '').includes('Aura') || (s.name || '').includes('Roar') || (s.name || '').includes('Icon'));
+  const actives = skills.filter(s => s.type === 'Ativo' && !ultimates.includes(s) && !harmonies.includes(s));
+  const sustainsAndPassives = skills.filter(s => !ultimates.includes(s) && !harmonies.includes(s) && !actives.includes(s));
+
+  const result = [];
+  // Prioriza até 3 ataques ativos
+  for (let i = 0; i < Math.min(3, actives.length); i++) result.push(actives[i]);
+  // Prioriza 1 habilidade de controle / área / sustain
+  for (let i = 3; i < Math.min(4, actives.length); i++) result.push(actives[i]);
+  // Prioriza buffs de assinatura / harmonia
+  for (let i = 0; i < Math.min(2, harmonies.length); i++) {
+    if (!result.includes(harmonies[i])) result.push(harmonies[i]);
+  }
+  // Adiciona ultimate 4★ se houver
+  for (const u of ultimates) {
+    if (!result.includes(u)) result.push(u);
+  }
+  // Completa até 6 com passivas ou sustentos restantes
+  for (const sp of sustainsAndPassives) {
+    if (result.length >= 6) break;
+    if (!result.includes(sp)) result.push(sp);
+  }
+  for (const act of actives) {
+    if (result.length >= 6) break;
+    if (!result.includes(act)) result.push(act);
+  }
+
+  return result.slice(0, 6);
+}
+
+/**
+ * Resolução Semântica de Ícones para Habilidades
+ * Garante que NENHUMA habilidade caia em ícones genéricos repetidos.
+ */
+function resolveSkillIcon(rawName, sk, classDef, classId) {
+  let skillIcon = sk.icon || '';
+  if (skillIcon && skillIcon !== '✦' && skillIcon.length > 4 && !skillIcon.endsWith('.jpg') && !skillIcon.startsWith('/assets/2d/icons/swordsman')) {
+    return skillIcon;
+  }
+
+  const name = (rawName || '').toLowerCase();
+  const arch = (classDef?.archetype || classId || '').toLowerCase();
+  const race = (classDef?.race || '').toLowerCase();
+
+  // 1. Water / Aqua / Hydro / Wave / Ocean / Swirl
+  if (/aqua|hydro|water|wave|bubble|stream|frost_tide|tsunami/.test(name)) {
+    return '/assets/2d/icons/shields-amulets/PNG/Background/Icon15.png';
+  }
+  // 2. Ice / Frost / Freeze / Cold / Blizzard
+  if (/ice|frost|blizzard|freez|cold|glacier/.test(name)) {
+    return '/assets/skills/icons/ice_bolt.png';
+  }
+  // 3. Fire / Flame / Blaze / Burn / Flare / Volcano / Meteor / Prominence / Inferno
+  if (/meteor|inferno|prominence|volcano|blaze|flame|fire|burn|flare|blazing|sun|solar|aura_burn/.test(name)) {
+    if (/prominence|volcano|inferno|meteor/.test(name)) return '/assets/skills/icons/phoenix_flame.png';
+    return '/assets/skills/icons/flame_strike.png';
+  }
+  // 4. Wind / Tornado / Cyclone / Twister / Vortex / Air / Storm / Gale
+  if (/tornado|cyclone|twister|vortex|wind|tempest|gale|hurricane/.test(name)) {
+    if (/sayha/.test(name)) return '/assets/skills/icons/sayha_wind.png';
+    return '/assets/skills/icons/tornado_vortex.png';
+  }
+  // 5. Earth / Stone / Rock / Quake / Golem / Construct / Hammer
+  if (/earth|quake|ground|stone|rock|golem|construct|forge|hammer/.test(name)) {
+    if (/golem/.test(name)) return '/assets/skills/icons/golem_power.png';
+    if (/forge|craft/.test(name)) return '/assets/skills/icons/dwarf_forge.png';
+    return '/assets/skills/icons/distortion_punch.png';
+  }
+  // 6. Holy / Divine / Light / Angel / Saint / Healing / Purify / Miracle / Resurrection
+  if (/resurrection|revive|miracle|sublime/.test(name)) {
+    return '/assets/skills/icons/resurrection.png';
+  }
+  if (/cure|purify|cleanse|antidote|bandage|recovery/.test(name)) {
+    return '/assets/skills/icons/cure_poison.png';
+  }
+  if (/heal|blessing|touch_of_life|balance_life|tree_of_life|life/.test(name) && !/drain/.test(name)) {
+    return '/assets/skills/icons/blessing_of_recovery.png';
+  }
+  if (/holy|divine|light|angel|sanctuary|sacred/.test(name)) {
+    if (/strike|slash|attack|blade/.test(name)) return '/assets/skills/icons/holy_strike.png';
+    if (/barrier|shield|aegis/.test(name)) return '/assets/skills/icons/divine_barrier.png';
+    return '/assets/skills/icons/holy_light.png';
+  }
+  // 7. Dark / Shadow / Death / Drain / Vampiric / Necro / Gloom / Corpse / Poison / Blood
+  if (/drain|vampir|lifesteal|touch_of_death|sanguine/.test(name)) {
+    if (/claw|bite|feral/.test(name)) return '/assets/skills/icons/beast_claw.png';
+    return '/assets/skills/icons/dark_drain.png';
+  }
+  if (/death|corpse|unholy|doom|dark|shadow|curse|poison|bleed|spoil/.test(name)) {
+    if (/death_spike|death_raid/.test(name)) return '/assets/skills/icons/death_spike.png';
+    if (/shadow_step|shadow_dash/.test(name)) return '/assets/skills/icons/shadow_dash.png';
+    if (/spoil/.test(name)) return '/assets/skills/icons/spoil.png';
+    return '/assets/skills/icons/dark_weapon.png';
+  }
+  // 8. Sleep / Trance / Fear / Horror / Silence / Cancel / Mind / Confusion
+  if (/sleep|trance|drowse/.test(name)) {
+    return '/assets/2d/icons/undead-skills/PNG/Icon24.png';
+  }
+  if (/fear|horror|terror/.test(name)) {
+    return '/assets/2d/icons/undead-skills/PNG/Icon31.png';
+  }
+  if (/silence|cancel|anti_magic|dispel|mute/.test(name)) {
+    return '/assets/2d/icons/undead-skills/PNG/Icon29.png';
+  }
+  // 9. Dagger / Stealth / Assassination / Backstab / Critical Blows
+  if (/backstab|deadly_blow|mortal_blow|lethal_blow|blinding_blow|assassin|stealth/.test(name)) {
+    return '/assets/skills/icons/deadly_blow.png';
+  }
+  // 10. Bow / Crossbow / Arrow / Shot / Snipe
+  if (/arrow|bow|shot|snipe|burst_shot|rain|gun/.test(name)) {
+    if (/gun|rifle/.test(name)) return '/assets/skills/icons/gun_mastery.png';
+    if (/double_shot|quick_shot|burst_fire/.test(name)) return '/assets/skills/icons/quick_shot.png';
+    return '/assets/skills/icons/archery_bow.png';
+  }
+  // 11. Dual Swords / Combos / Sonic
+  if (/sonic|dual|triple_slash|double_sonic/.test(name)) {
+    return '/assets/skills/icons/dual_daggers.png';
+  }
+  // 12. Spear / Polearm / Whirlwind / Sweep
+  if (/polearm|spear|whirlwind|sweep|spin/.test(name)) {
+    return '/assets/skills/icons/spear_mastery.png';
+  }
+  // 13. Shield / Defense / Taunt / Stun / Block / Barrier
+  if (/shield|defend|defense|block|barrier|iron_will|majesty|aegis|wall/.test(name)) {
+    if (/stun|strike/.test(name)) return '/assets/skills/icons/cross_shield.png';
+    return '/assets/skills/icons/aegis_shield.png';
+  }
+  if (/taunt|hate|provoke|roar|cry|shout|frenzy|might|berserk|fury/.test(name)) {
+    return '/assets/skills/icons/might.png';
+  }
+  // 14. Speed / Agility / Dash / Evasion / Dodge / Haste
+  if (/speed|dash|step|evasion|dodge|haste|quick|sprint/.test(name)) {
+    return '/assets/skills/icons/haste.png';
+  }
+  // 15. Focus / Crit / Eye / Accuracy / Precision
+  if (/focus|crit|accuracy|eye|precision|target/.test(name)) {
+    return '/assets/skills/icons/focus.png';
+  }
+  // 16. Mana / Robe / Staff / Magic Mastery
+  if (/mana|mp|recharge|mind|intellect/.test(name)) {
+    return '/assets/skills/icons/mp_increase.png';
+  }
+  if (/hp|health|vitality|body/.test(name)) {
+    return '/assets/skills/icons/hp_increase.png';
+  }
+  if (/robe/.test(name)) {
+    return '/assets/skills/icons/robe_mastery.png';
+  }
+  if (/armor/.test(name)) {
+    return '/assets/skills/icons/heavy_armor_mastery_icon.png';
+  }
+  if (/harmony/.test(name)) {
+    return '/assets/skills/icons/group_blessing.png';
+  }
+  if (/transcendent/.test(name)) {
+    return '/assets/skills/icons/transcendence.png';
+  }
+
+  // Fallback por arquétipo
+  if (arch.includes('mage') || arch.includes('wizard') || arch.includes('sorcerer')) {
+    return '/assets/skills/icons/mystic_burst.png';
+  }
+  if (arch.includes('cleric') || arch.includes('healer') || arch.includes('bishop')) {
+    return '/assets/skills/icons/holy_light.png';
+  }
+  if (arch.includes('assassin') || arch.includes('rogue')) {
+    return '/assets/skills/icons/curved_dagger.png';
+  }
+  if (arch.includes('archer')) {
+    return '/assets/skills/icons/archery_bow.png';
+  }
+  return '/assets/skills/icons/power_strike.png';
+}
+
 // ─── Construção ─────────────────────────────────────────────────────────
 
 function buildEchoAdapter() {
@@ -173,29 +355,41 @@ function buildEchoAdapter() {
 
     CLASS_SKILLS_ECHO[classId] = CLASS_SKILLS_ECHO[classId] || [];
 
-    for (let i = 0; i < skillList.length; i++) {
-      const sk = skillList[i];
-      const rawName = sk.name || ('skill_' + i);
+    const curatedSkills = curateClassSkills(classDef.skills);
 
-      // Gera ID único por classe — sem cache/dedup
-      const skillId = toSkillId(classId, rawName);
-      const type = mapType(sk.type);
-      const pwr  = effectToPwr(sk.effect, sk.type);
-      const cd   = cdToMs(sk.cooldown);
+    for (let idx = 0; idx < curatedSkills.length; idx++) {
+      const sk = curatedSkills[idx];
+      const rawName = sk.name || `Skill_${idx + 1}`;
+      const skillId = `${classId}_${slugify(rawName)}`;
 
-      let reqWeapon = sk.requiredWeapon || null;
-      let reqShield = sk.requiredShield || false;
+      const type = (sk.type === 'Passivo' || sk.type === 'passive') ? 'passive'
+                 : ((sk.type || '').toLowerCase().includes('buff') || (sk.type || '').toLowerCase().includes('toggle')) ? 'buff'
+                 : 'active';
 
-      if (!reqWeapon) {
-        const arch = (classDef.archetype || classId || '').toLowerCase();
+      let pwr = 100;
+      if (sk.effect) {
+        const match = sk.effect.match(/(\d+)%/);
+        if (match) pwr = parseInt(match[1], 10);
+      }
+
+      let cd = 10;
+      if (sk.cooldown && sk.cooldown !== 'N/A') {
+        const match = sk.cooldown.match(/(\d+)/);
+        if (match) cd = parseInt(match[1], 10);
+      }
+
+      let reqWeapon = null;
+      let reqShield = false;
+      if (sk.reqWeapon) {
+        reqWeapon = sk.reqWeapon;
+      } else {
         const sName = (rawName || '').toLowerCase();
-        const sDesc = (sk.desc || sk.effect || '').toLowerCase();
-
-        if (arch.includes('archer') || sName.includes('bow') || sName.includes('shot') || sName.includes('arrow')) {
+        const arch = (classDef.archetype || classId || '').toLowerCase();
+        if (arch.includes('archer') || sName.includes('shot') || sName.includes('arrow') || sName.includes('bow')) {
           reqWeapon = 'bow';
-        } else if (arch.includes('assassin') || arch.includes('rogue') || sName.includes('dagger') || sName.includes('backstab') || sName.includes('blow')) {
+        } else if (arch.includes('dagger') || arch.includes('assassin') || sName.includes('stab') || sName.includes('blow') || sName.includes('dagger')) {
           reqWeapon = 'dagger';
-        } else if (arch.includes('knight') || arch.includes('paladin') || sName.includes('shield')) {
+        } else if (arch.includes('tank') || arch.includes('knight') || arch.includes('paladin') || sName.includes('shield') || sName.includes('stun')) {
           reqWeapon = 'sword';
           if (sName.includes('shield') || arch.includes('knight')) reqShield = true;
         } else if (arch.includes('mage') || arch.includes('healer') || arch.includes('summoner') || sName.includes('staff') || sName.includes('spell') || sName.includes('hydro') || sName.includes('prominence')) {
@@ -213,153 +407,7 @@ function buildEchoAdapter() {
         }
       }
 
-      let skillIcon = sk.icon || '';
-      if (!skillIcon || skillIcon === '✦' || skillIcon.length <= 4 || skillIcon.endsWith('.jpg') || skillIcon.startsWith('/assets/2d/icons/swordsman')) {
-        const sName = (rawName || '').toLowerCase();
-        const sDesc = (sk.desc || sk.effect || '').toLowerCase();
-        const arch = (classDef.archetype || classId || '').toLowerCase();
-        const race = (classDef.race || '').toLowerCase();
-        const combined = `${sName} ${sDesc} ${arch} ${classId}`;
-
-        // 1. Exact semantic mappings from Custom Skill Atlas
-        if (sName.includes('transcendent')) {
-          skillIcon = '/assets/skills/icons/transcendence.png';
-        } else if (sName.includes('mastery of') || sName.includes('mastery')) {
-          if (sName.includes('gun')) skillIcon = '/assets/skills/icons/gun_mastery.png';
-          else if (sName.includes('katana') || sName.includes('blade')) skillIcon = '/assets/skills/icons/samurai_harmony.png';
-          else if (sName.includes('robe')) skillIcon = '/assets/skills/icons/robe_mastery.png';
-          else if (sName.includes('heavy armor')) skillIcon = '/assets/skills/icons/heavy_armor_mastery_icon.png';
-          else if (sName.includes('light armor') || sName.includes('shield')) skillIcon = '/assets/skills/icons/shield_mastery.png';
-          else if (sName.includes('dp')) skillIcon = '/assets/skills/icons/dp_mastery.png';
-          else skillIcon = '/assets/skills/icons/mastery_buff.png';
-        } else if (sName.includes('ultimate') || sName.includes('force')) {
-          skillIcon = '/assets/skills/icons/ultimate_force.png';
-        } else if (sName.includes('power strike')) {
-          if (race.includes('orc')) skillIcon = '/assets/skills/icons/orc_power_strike.png';
-          else if (race.includes('dwarf')) skillIcon = '/assets/skills/icons/dwarf_forge.png';
-          else skillIcon = '/assets/skills/icons/power_strike.png';
-        } else if (sName.includes('mortal blow') || sName.includes('deadly blow')) {
-          skillIcon = '/assets/skills/icons/mortal_blow.png';
-        } else if (sName.includes('heavy slash')) {
-          skillIcon = '/assets/skills/icons/heavy_slash.png';
-        } else if (sName.includes('holy strike') || sName.includes('holy slash')) {
-          skillIcon = '/assets/skills/icons/holy_strike.png';
-        } else if (sName.includes('holy light') || sName.includes('divine light')) {
-          skillIcon = '/assets/skills/icons/holy_light.png';
-        } else if (sName.includes('ice bolt') || sName.includes('ice weave') || sName.includes('frost')) {
-          skillIcon = '/assets/skills/icons/ice_bolt.png';
-        } else if (sName.includes('flame strike') || sName.includes('fire strike') || sName.includes('blaze')) {
-          skillIcon = '/assets/skills/icons/flame_strike.png';
-        } else if (sName.includes('wind strike') || sName.includes('cyclone')) {
-          skillIcon = '/assets/skills/icons/tornado_vortex.png';
-        } else if (sName.includes('sayha') && sName.includes('wind')) {
-          skillIcon = '/assets/skills/icons/sayha_wind.png';
-        } else if (sName.includes('sayha wind step') || sName.includes('wind step')) {
-          skillIcon = '/assets/skills/icons/sayha_wind_step.png';
-        } else if (sName.includes('pummel strike')) {
-          skillIcon = '/assets/skills/icons/pummel_strike.png';
-        } else if (sName.includes('distortion punch')) {
-          skillIcon = '/assets/skills/icons/distortion_punch.png';
-        } else if (sName.includes('iron punch')) {
-          skillIcon = '/assets/skills/icons/iron_punch.png';
-        } else if (sName.includes('orc spirit')) {
-          skillIcon = '/assets/skills/icons/orc_spirit.png';
-        } else if (sName.includes('mystic burst')) {
-          skillIcon = '/assets/skills/icons/mystic_burst.png';
-        } else if (sName.includes('focus')) {
-          skillIcon = '/assets/skills/icons/focus.png';
-        } else if (sName.includes('battle mount')) {
-          skillIcon = '/assets/skills/icons/battle_mount.png';
-        } else if (sName.includes('spoil')) {
-          skillIcon = '/assets/skills/icons/spoil.png';
-        } else if (sName.includes('golem power') || sName.includes('construct') || sName.includes('golem')) {
-          skillIcon = '/assets/skills/icons/golem_power.png';
-        } else if (sName.includes('assassination')) {
-          skillIcon = '/assets/skills/icons/assassination.png';
-        } else if (sName.includes('shadow dash') || sName.includes('shadow step')) {
-          skillIcon = '/assets/skills/icons/shadow_dash.png';
-        } else if (sName.includes('soul strike')) {
-          skillIcon = '/assets/skills/icons/soul_strike.png';
-        } else if (sName.includes('energy blast')) {
-          skillIcon = '/assets/skills/icons/energy_shield.png';
-        } else if (sName.includes('iaijutsu slash') || sName.includes('crescent blade')) {
-          skillIcon = '/assets/skills/icons/iaijutsu_slash.png';
-        } else if (sName.includes('quick shot')) {
-          skillIcon = '/assets/skills/icons/quick_shot.png';
-        } else if (sName.includes('burst fire') || sName.includes('evasive shot')) {
-          skillIcon = '/assets/skills/icons/burst_fire.png';
-        } else if (sName.includes('gun mastery')) {
-          skillIcon = '/assets/skills/icons/gun_mastery.png';
-        } else if (sName.includes('rose petal strike') || sName.includes('dark thorn')) {
-          skillIcon = '/assets/skills/icons/rose_petal_strike.png';
-        } else if (sName.includes('vampiric pulse') || sName.includes('sanguine pulse')) {
-          skillIcon = '/assets/skills/icons/vampiric_pulse.png';
-        } else if (sName.includes('beast claw') || sName.includes('feral strike') || sName.includes('vampiric feral') || sName.includes('ancestral wolf')) {
-          skillIcon = '/assets/skills/icons/beast_claw.png';
-        } else if (sName.includes('death spike')) {
-          skillIcon = '/assets/skills/icons/death_spike.png';
-        } else if (sName.includes('death raid')) {
-          skillIcon = '/assets/skills/icons/death_raid.png';
-        } else if (sName.includes('dark weapon')) {
-          skillIcon = '/assets/skills/icons/dark_weapon.png';
-        } else if (sName.includes('soul drain') || sName.includes('vampiric touch')) {
-          skillIcon = '/assets/skills/icons/dark_drain.png';
-        } else if (sName.includes('heroic spirit') || sName.includes("fighter's will")) {
-          skillIcon = '/assets/skills/icons/heroic_spirit.png';
-        } else if (sName.includes('elven spirit')) {
-          skillIcon = '/assets/skills/icons/elven_spirit.png';
-        } else if (sName.includes('might')) {
-          skillIcon = '/assets/skills/icons/might.png';
-        } else if (sName.includes('critical chance') || sName.includes('eagle eye')) {
-          skillIcon = '/assets/skills/icons/critical_chance.png';
-        } else if (sName.includes('deflect arrow')) {
-          skillIcon = '/assets/skills/icons/deflect_arrow.png';
-        } else if (sName.includes('evasion') || sName.includes('dodge') || sName.includes('retaliation')) {
-          skillIcon = '/assets/skills/icons/scout_dodge.png';
-        } else if (sName.includes('blessing of recovery')) {
-          skillIcon = '/assets/skills/icons/blessing_of_recovery.png';
-        } else if (sName.includes('self heal')) {
-          skillIcon = '/assets/skills/icons/self_heal.png';
-        } else if (sName.includes('bandage') || sName.includes('battle recovery')) {
-          skillIcon = '/assets/skills/icons/bandage.png';
-        } else if (sName.includes('cure poison') || sName.includes('cure bleed')) {
-          skillIcon = '/assets/skills/icons/cure_poison.png';
-        } else if (sName.includes('hp increase') || sName.includes('boost hp')) {
-          skillIcon = '/assets/skills/icons/hp_increase.png';
-        } else if (sName.includes('mp increase') || sName.includes('boost mana')) {
-          skillIcon = '/assets/skills/icons/mp_increase.png';
-        } else if (sName.includes('shield of light') || sName.includes('holy shield')) {
-          skillIcon = '/assets/skills/icons/shield_of_light.png';
-        } else if (sName.includes('lightning barrier')) {
-          skillIcon = '/assets/skills/icons/lightning_barrier.png';
-        } else if (sName.includes('spirit of phoenix')) {
-          skillIcon = '/assets/skills/icons/spirit_of_phoenix.png';
-        } else if (sName.includes('harmony')) {
-          if (sName.includes('shillien saint') || sName.includes('shillien')) skillIcon = '/assets/skills/icons/shillien_saint_harmony.png';
-          else if (sName.includes('storm screamer')) skillIcon = '/assets/skills/icons/storm_screamer_harmony.png';
-          else if (sName.includes('divine templar') || sName.includes('templar')) skillIcon = '/assets/skills/icons/divine_templar_harmony.png';
-          else if (sName.includes('samurai')) skillIcon = '/assets/skills/icons/samurai_harmony.png';
-          else if (sName.includes('maestro') || sName.includes('warsmith')) skillIcon = '/assets/skills/icons/maestro_harmony.png';
-          else if (sName.includes('bounty hunter') || sName.includes('fortune seeker')) skillIcon = '/assets/skills/icons/fortune_seeker_harmony.png';
-          else if (sName.includes('wind sniper') || sName.includes('storm blaster')) skillIcon = '/assets/skills/icons/wind_sniper_harmony.png';
-          else if (sName.includes('sayha')) skillIcon = '/assets/skills/icons/sayha_seeker_harmony.png';
-          else if (sName.includes('ghost hunter') || sName.includes('assassin')) skillIcon = '/assets/skills/icons/ninja_dash.png';
-          else if (sName.includes('gladiator') || sName.includes('duelist')) skillIcon = '/assets/skills/icons/dual_daggers.png';
-          else if (sName.includes('titan') || sName.includes('destroyer') || sName.includes('tyrant') || sName.includes('grand khavatari')) skillIcon = '/assets/skills/icons/tyrant_harmony.png';
-          else if (sName.includes('sorcerer') || sName.includes('archmage')) skillIcon = '/assets/skills/icons/flame_strike.png';
-          else if (sName.includes('prophet') || sName.includes('hierophant')) skillIcon = '/assets/skills/icons/prophet_harmony.png';
-          else if (sName.includes('cardinal') || sName.includes('bishop') || sName.includes('cleric')) skillIcon = '/assets/skills/icons/resurrection.png';
-          else if (sName.includes('eva')) skillIcon = '/assets/skills/icons/tree_of_life.png';
-          else skillIcon = '/assets/skills/icons/group_blessing.png';
-        } else {
-          // Fallback based on category
-          if (/bow|arrow|archer|snipe/.test(combined)) skillIcon = '/assets/skills/icons/archery_bow.png';
-          else if (/shield|guard|defense|iron wall|barrier|block/.test(combined)) skillIcon = '/assets/skills/icons/shield_mastery.png';
-          else if (/buff|warcry|spirit|stance|might|haste/.test(combined)) skillIcon = '/assets/skills/icons/might.png';
-          else if (/magic|mage|cast|spell|mana/.test(combined)) skillIcon = '/assets/skills/icons/robe_mastery.png';
-          else skillIcon = '/assets/skills/icons/power_strike.png';
-        }
-      }
+      const skillIcon = resolveSkillIcon(rawName, sk, classDef, classId);
 
       const stage = Number(classDef.stage) || 0;
       const sNameLower = (rawName || '').toLowerCase();
@@ -398,31 +446,6 @@ function buildEchoAdapter() {
         CLASS_SKILLS_ECHO[classId].push(skillId);
       }
     }
-  }
-
-  // Herança completa de skills: Percorre árvore genealógica [ancestral_raiz -> ... -> classe_atual]
-  const ownSkillsByClass = {};
-  for (const [cId, list] of Object.entries(CLASS_SKILLS_ECHO)) {
-    ownSkillsByClass[cId] = [...list];
-  }
-
-  for (const [classId, classDef] of Object.entries(CLASSES_ECHO)) {
-    const chain = [];
-    let curr = classId;
-    const visited = new Set();
-    while (curr && !visited.has(curr)) {
-      visited.add(curr);
-      chain.unshift(curr);
-      curr = CLASSES_ECHO[curr]?.parent;
-    }
-
-    const merged = [];
-    for (const c of chain) {
-      for (const sid of (ownSkillsByClass[c] || [])) {
-        if (!merged.includes(sid)) merged.push(sid);
-      }
-    }
-    CLASS_SKILLS_ECHO[classId] = merged;
   }
 
   // ─── MAPEAMENTO & NORMALIZAÇÃO DE ALIASES DE CLASSES ─────────────────
@@ -522,28 +545,18 @@ function buildEchoAdapter() {
     }
   }
 
-  // ─── LAYOUT DA ÁRVORE DE HABILIDADES (Organizado por Tiers / Colunas 0 a 4) ───
+  // ─── LAYOUT DA ÁRVORE DE HABILIDADES (2 Colunas Limpas e Elegantes) ───
   const SKILL_TREE_LAYOUT_ECHO = {};
   for (const [classId, skillIds] of Object.entries(CLASS_SKILLS_ECHO)) {
     const layout = {};
-    const tierBuckets = { 0: [], 1: [], 2: [], 3: [], 4: [] };
-
-    for (const sid of skillIds) {
-      const def = SKILL_DEFS_ECHO[sid];
-      const t = (def && def.tier !== undefined) ? def.tier : 0;
-      if (tierBuckets[t]) tierBuckets[t].push(sid);
-      else tierBuckets[0].push(sid);
-    }
-
-    for (let c = 0; c < 5; c++) {
-      const list = tierBuckets[c] || [];
-      list.forEach((sid, row) => {
-        layout[sid] = { col: c, row };
-        if (!SKILL_TREE_LAYOUT_ECHO[sid]) {
-          SKILL_TREE_LAYOUT_ECHO[sid] = { col: c, row };
-        }
-      });
-    }
+    skillIds.forEach((sid, idx) => {
+      const col = idx % 2;
+      const row = Math.floor(idx / 2);
+      layout[sid] = { col, row };
+      if (!SKILL_TREE_LAYOUT_ECHO[sid]) {
+        SKILL_TREE_LAYOUT_ECHO[sid] = { col, row };
+      }
+    });
 
     SKILL_TREE_LAYOUT_ECHO[classId] = layout;
   }
