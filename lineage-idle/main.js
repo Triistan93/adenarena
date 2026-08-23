@@ -3504,49 +3504,82 @@ function setupVfxQualityControl() {
   });
 }
 
+function getSkillVfxData(skillId, skillDef = null) {
+  const name = String(skillDef?.name || '').toLowerCase();
+  const id = String(skillId || skillDef?.id || '').toLowerCase();
+  const desc = String(skillDef?.desc || skillDef?.info || '').toLowerCase();
+  const combined = `${id} ${name} ${desc}`;
+
+  // 1. Holy / Divine / Solar / Beam
+  if (combined.includes('solar') || combined.includes('divine') || combined.includes('judgment') || combined.includes('holy_strike') || combined.includes('sanctuary') || combined.includes('radiant') || combined.includes('angel') || combined.includes('light_strike')) {
+    return { id: 'holy_beam', color: '#fef08a', duration: 650 };
+  }
+
+  // 2. Dark / Necro / Drain / Vampire / Curse / Void / Death
+  if (combined.includes('drain') || combined.includes('vampir') || combined.includes('death_spike') || combined.includes('shadow') || combined.includes('abyss') || combined.includes('corpse') || combined.includes('curse') || combined.includes('void') || combined.includes('dark') || combined.includes('blood') || combined.includes('necro') || combined.includes('chaos')) {
+    return { id: 'dark_vortex', color: '#c084fc', duration: 850 };
+  }
+
+  // 3. Fire / Flame / Prominence / Blaze / Meteor
+  if (combined.includes('fire') || combined.includes('flame') || combined.includes('blaze') || combined.includes('prominence') || combined.includes('meteor') || combined.includes('ignite') || combined.includes('burn') || combined.includes('magma') || combined.includes('lava') || combined.includes('pyro')) {
+    return { id: 'fireball', color: '#ff7a45', duration: 900 };
+  }
+
+  // 4. Ice / Frost / Water / Hydro / Blizzard
+  if (combined.includes('ice') || combined.includes('frost') || combined.includes('freeze') || combined.includes('hydro') || combined.includes('blizzard') || combined.includes('aqua') || combined.includes('cold') || combined.includes('glacier')) {
+    return { id: 'ice_shards', color: '#8fe7ff', duration: 900 };
+  }
+
+  // 5. Wind / Tempest / Gale / Tornado / Aeroblaster
+  if (combined.includes('wind') || combined.includes('gale') || combined.includes('tempest') || combined.includes('cyclone') || combined.includes('breeze') || combined.includes('aeroblaster') || combined.includes('tornado') || combined.includes('storm')) {
+    return { id: 'wind_blast', color: '#72f3ca', duration: 850 };
+  }
+
+  // 6. Lightning / Thunder / Shock / Electric
+  if (combined.includes('lightning') || combined.includes('thunder') || combined.includes('shock') || combined.includes('spark') || combined.includes('volt') || combined.includes('electric') || combined.includes('plasma')) {
+    return { id: 'lightning', color: '#91f3ff', duration: 600 };
+  }
+
+  // 7. Bow / Arrows / Guns / Shot / Snipe
+  if (combined.includes('double_shot') || combined.includes('rapid_shot') || combined.includes('power_shot') || combined.includes('snipe') || combined.includes('burst_fire') || combined.includes('lethal_shot') || combined.includes('arrow') || combined.includes('shot') || combined.includes('gun') || combined.includes('bullet') || combined.includes('pierce')) {
+    if (combined.includes('rain') || combined.includes('shower') || combined.includes('storm')) {
+      return { id: 'arrow_rain', color: '#ffd700', duration: 1200 };
+    }
+    return { id: 'double_shot', color: '#fef08a', duration: 800 };
+  }
+
+  // 8. Heavy Crush / Hammer / Shield Slam / Stun / Bash
+  if (combined.includes('crush') || combined.includes('hammer') || combined.includes('smash') || combined.includes('slam') || combined.includes('stun') || combined.includes('shield') || combined.includes('bash') || combined.includes('impact') || combined.includes('earthquake')) {
+    return { id: 'power_smash', color: '#fb923c', duration: 600 };
+  }
+
+  // 9. Whirlwind / Spin / Blade Dance
+  if (combined.includes('whirlwind') || combined.includes('spin') || combined.includes('cyclone_slash') || combined.includes('blade_dance') || combined.includes('vortex_slash')) {
+    return { id: 'whirlwind', color: '#93c5fd', duration: 650 };
+  }
+
+  // 10. Spear / Lance / Drill / Thrust
+  if (combined.includes('spear') || combined.includes('lance') || combined.includes('thrust') || combined.includes('drill')) {
+    return { id: 'spiral_spear', color: '#fdba74', duration: 750 };
+  }
+
+  // 11. Cross Slash / Blade / Sword / Mortal Blow / Dual
+  if (combined.includes('cross') || combined.includes('slash') || combined.includes('blade') || combined.includes('strike') || combined.includes('blow') || combined.includes('sword') || combined.includes('cut') || combined.includes('cleave') || combined.includes('fatal')) {
+    return { id: 'cross_slash', color: '#e2e8f0', duration: 600 };
+  }
+
+  // 12. Arcane / Magic / Wave Fallback
+  if (skillDef?.type === 'magic' || combined.includes('magic') || combined.includes('mana') || combined.includes('energy') || combined.includes('wave') || combined.includes('flare')) {
+    return { id: 'arcane_missile', color: '#c084fc', duration: 800 };
+  }
+
+  // Default Physical Fallback
+  return { id: 'energy_slash', color: '#93c5fd', duration: 700 };
+}
+
 function getSkillVfxId(skillId, skillDef = null) {
-  const toSnake = (value) => String(value || '')
-    .toLowerCase()
-    .trim()
-    .replace(/['’]/g, '')
-    .replace(/[^a-z0-9]+/g, '_')
-    .replace(/^_|_$/g, '');
-
-  const candidates = new Set();
-  const rawId = skillId || skillDef?.id || '';
-  const rawName = skillDef?.name || '';
-  const normalizedId = toSnake(rawId);
-  const normalizedName = toSnake(rawName);
-
-  if (normalizedId) candidates.add(normalizedId);
-  if (normalizedName) candidates.add(normalizedName);
-  if (normalizedId && normalizedId.includes('_')) {
-    const suffix = normalizedId.split('_').slice(1).join('_');
-    if (suffix) candidates.add(suffix);
-  }
-
-  const map = {
-    flame_strike: 'fireball',
-    fireball: 'fireball',
-    ice_bolt: 'ice_shards',
-    wind_strike: 'wind_blast',
-    wind_attack: 'wind_blast',
-    arcane_missile: 'arcane_missile',
-    lightning_strike: 'lightning',
-    energy_wave: 'energy_slash',
-    arrow_storm: 'arrow_rain',
-    sword_cross: 'cross_slash',
-    spear_throw: 'spiral_spear'
-  };
-
-  for (const candidate of candidates) {
-    if (map[candidate]) return map[candidate];
-    if (candidate.endsWith('flame_strike') || candidate.includes('flame_strike')) return 'fireball';
-    if (candidate.endsWith('wind_strike') || candidate.includes('wind_strike') || candidate.includes('wind_attack')) return 'wind_blast';
-    if (candidate.endsWith('ice_bolt') || candidate.includes('ice_bolt')) return 'ice_shards';
-  }
-
-  return null;
+  const data = getSkillVfxData(skillId, skillDef);
+  return data ? data.id : null;
 }
 
 function getMonsterCategory(monster) {
@@ -3719,11 +3752,37 @@ function attackMonster() {
         state.buffs['warcry'] = buffObj;
         log(`🗣 ${skill.def.name}! ${skill.def.info || 'Buff Ativo por 60s'}`, 'rarity-rare');
         floatText(skill.def.name, 'float-epic');
+
+        // Dispara VFX Premium de Aura de Buff
+        const source = getStagePositionRelative('hero');
+        let buffColor = '#ffd700'; // Ouro / Âmbar padrão
+        const lowerName = String(skill.def.name || skill.id).toLowerCase();
+        if (lowerName.includes('berserk') || lowerName.includes('frenzy') || lowerName.includes('rage') || lowerName.includes('guts')) buffColor = '#ef4444';
+        else if (lowerName.includes('shield') || lowerName.includes('protect') || lowerName.includes('guard') || lowerName.includes('barrier')) buffColor = '#3b82f6';
+        else if (lowerName.includes('death') || lowerName.includes('whisper') || lowerName.includes('vampir') || lowerName.includes('shadow')) buffColor = '#a855f7';
+        else if (lowerName.includes('haste') || lowerName.includes('wind') || lowerName.includes('agility') || lowerName.includes('speed')) buffColor = '#22c55e';
+        else if (lowerName.includes('acumen') || lowerName.includes('empower') || lowerName.includes('clarity') || lowerName.includes('mana')) buffColor = '#06b6d4';
+
+        playCombatVFX('buff_aura', {
+          source,
+          color: buffColor,
+          power: Math.max(1, skill.lvl || 1),
+          duration: 1100
+        });
       } else if (isHeal) {
         const healAmt = window.SkillScaling ? window.SkillScaling.getSkillHealAtLevel(stats.maxHp, skill.lvl) : Math.floor(stats.maxHp * (0.25 + skill.lvl * 0.05));
         state.hp = Math.min(stats.maxHp, state.hp + healAmt);
         log(`✨ ${skill.def.name}! Curou ${healAmt} HP`, 'heal');
         floatText(`+${healAmt} HP`, 'sf-heal');
+
+        // Dispara VFX Premium de Cura Sagrada
+        const source = getStagePositionRelative('hero');
+        playCombatVFX('holy_heal', {
+          source,
+          color: '#4ade80',
+          power: Math.max(1, skill.lvl || 1),
+          duration: 950
+        });
       } else {
         const useMagicSkill = stats.matk > stats.atk;
         const type = useMagicSkill ? 'magic' : 'physical';
@@ -3735,19 +3794,18 @@ function attackMonster() {
         stageHeroAttack();
         stageMonsterHurt(sDmg, false);
         
-        const vfxId = getSkillVfxId(skill.id, skill.def);
-        if (vfxId) {
+        const vfxData = getSkillVfxData(skill.id, skill.def);
+        if (vfxData && vfxData.id) {
           const source = getStagePositionRelative('hero');
           const target = getCombatTargetPoint();
-          const duration = vfxId === 'arrow_rain' ? 1200 : 900;
-          playCombatVFX(vfxId, {
+          playCombatVFX(vfxData.id, {
             source,
             target,
-            color: vfxId === 'fireball' ? '#ff7a45' : (vfxId === 'ice_shards' ? '#8fe7ff' : (vfxId === 'wind_blast' ? '#72f3ca' : (vfxId === 'arcane_missile' ? '#9b7cff' : (vfxId === 'lightning' ? '#91f3ff' : (vfxId === 'energy_slash' ? '#95e6ff' : (vfxId === 'cross_slash' ? '#cfe8ff' : '#ffe4a1')))))),
+            color: vfxData.color || '#ffd700',
             power: Math.max(1, skill.lvl || 1),
-            duration,
-            arrowCount: vfxId === 'arrow_rain' ? 16 : undefined,
-            targetArea: vfxId === 'arrow_rain' ? { x: target.x - 90, y: target.y - 40, width: 180, height: 70 } : undefined
+            duration: vfxData.duration || 800,
+            arrowCount: vfxData.id === 'arrow_rain' ? 16 : undefined,
+            targetArea: vfxData.id === 'arrow_rain' ? { x: target.x - 90, y: target.y - 40, width: 180, height: 70 } : undefined
           });
         }
 

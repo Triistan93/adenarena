@@ -20,6 +20,13 @@
     arrow_rain: { rgb: '217,176,106' },
     cross_slash: { rgb: '232,236,247' },
     spiral_spear: { rgb: '255,170,90' },
+    double_shot: { rgb: '255,215,100' },
+    power_smash: { rgb: '255,140,40' },
+    dark_vortex: { rgb: '180,90,255' },
+    holy_beam: { rgb: '255,235,140' },
+    holy_heal: { rgb: '100,255,160' },
+    buff_aura: { rgb: '255,210,70' },
+    whirlwind: { rgb: '180,225,255' },
     lights: { rgb: '242,201,110' }
   };
 
@@ -239,6 +246,81 @@
     if (e.type === 'spiral_spear') e.state.speed = e.speed || 7.2;
     if (e.type === 'cross_slash') e.state.age = 0;
 
+    if (e.type === 'double_shot') {
+      e.state.speed = e.speed || 9.2;
+      e.state.arrow1 = { x: e.source.x, y: e.source.y - 6, active: true, done: false };
+      e.state.arrow2 = { x: e.source.x, y: e.source.y + 6, active: false, done: false, delay: 110 };
+      e.maxAge = e.maxAge || 1200;
+    }
+
+    if (e.type === 'power_smash') {
+      e.maxAge = e.maxAge || 520;
+      e.state.impacted = false;
+      this._doFlash(e.rgb, 0.4);
+    }
+
+    if (e.type === 'holy_beam') {
+      e.maxAge = e.maxAge || 650;
+      e.state.impacted = false;
+      this._doFlash('255,245,180', 0.6);
+      this._ring(e.target.x, e.target.y, '255,230,120', 50, 4.5, 3);
+    }
+
+    if (e.type === 'dark_vortex') {
+      e.maxAge = e.maxAge || 850;
+      e.state.angle = 0;
+      this._ring(e.target.x, e.target.y, '180,90,255', 45, 3.5, 2.5);
+    }
+
+    if (e.type === 'whirlwind') {
+      e.maxAge = e.maxAge || 580;
+      e.state.rotation = 0;
+      this._ring(e.target.x, e.target.y, '180,225,255', 48, 5.5, 3);
+    }
+
+    if (e.type === 'holy_heal') {
+      e.maxAge = e.maxAge || 950;
+      this._ring(e.source.x, e.source.y, '100,255,160', 44, 4.2, 2.8);
+      this._ring(e.source.x, e.source.y, '255,240,150', 58, 2.8, 1.6);
+      this._doFlash('160,255,190', 0.35);
+      for (var h = 0; h < 24; h += 1) {
+        this._addParticle({
+          x: e.source.x + rand(-24, 24),
+          y: e.source.y + rand(-10, 20),
+          vx: rand(-0.8, 0.8),
+          vy: rand(-2.8, -1.2),
+          max: rand(45, 80),
+          radius: rand(2.5, 4.8),
+          rgb: Math.random() < 0.6 ? '120,255,170' : '255,235,140',
+          kind: 'sparkle',
+          rotation: rand(0, 6.28),
+          rotationSpeed: rand(-0.15, 0.15),
+          additive: true
+        });
+      }
+    }
+
+    if (e.type === 'buff_aura') {
+      e.maxAge = e.maxAge || 1100;
+      this._ring(e.source.x, e.source.y, e.rgb, 46, 3.8, 3);
+      this._doFlash(e.rgb, 0.3);
+      for (var b = 0; b < 28; b += 1) {
+        this._addParticle({
+          x: e.source.x + rand(-20, 20),
+          y: e.source.y + rand(-6, 18),
+          vx: rand(-0.6, 0.6),
+          vy: rand(-2.2, -0.8),
+          max: rand(50, 95),
+          radius: rand(2.2, 4.2),
+          rgb: e.rgb,
+          kind: 'sparkle',
+          rotation: rand(0, 6.28),
+          rotationSpeed: rand(-0.2, 0.2),
+          additive: true
+        });
+      }
+    }
+
     if (e.type === 'particles') {
       this._burst(e.target.x, e.target.y, e.rgb, 46, 4.5);
       e.done = true;
@@ -379,6 +461,45 @@
       this._ring(x, y, '255,190,120', 34, 5.6, 2.4);
       this._burst(x, y, '255,170,90', 40, 5.6);
     }
+    if (e.type === 'double_shot') {
+      this._ring(x, y, '255,220,100', 32, 6.4, 2.2);
+      this._burst(x, y, '255,230,140', 28, 4.8);
+      for (var ds = 0; ds < 8; ds += 1) {
+        this._addParticle({ x: x, y: y, vx: rand(-3.5, 3.5), vy: rand(-3.5, 3.5), max: rand(20, 45), radius: rand(2, 3.8), rgb: '255,230,120', kind: 'sparkle', rotation: rand(0, 6.28), rotationSpeed: rand(-0.2, 0.2), additive: true });
+      }
+    }
+    if (e.type === 'power_smash') {
+      this._ring(x, y, '255,140,40', 52, 7.2, 4.2);
+      this._ring(x, y, '255,220,120', 68, 4.2, 2.2);
+      this._burst(x, y, '255,160,50', 65, 7.5);
+      for (var ps = 0; ps < 16; ps += 1) {
+        var ang = Math.random() * Math.PI * 2;
+        this._addParticle({ x: x, y: y, vx: Math.cos(ang) * rand(2.5, 7.5), vy: Math.sin(ang) * rand(2.5, 7.5) - 1.2, max: rand(45, 85), radius: rand(3.5, 7.5), rgb: '255,180,60', gravity: 0.16, drag: 0.97, kind: 'shard', rotation: rand(0, 6.28), rotationSpeed: rand(-0.3, 0.3) });
+      }
+    }
+    if (e.type === 'holy_beam') {
+      this._ring(x, y, '255,245,180', 60, 5.2, 3.6);
+      this._ring(x, y, '255,215,100', 80, 3.2, 1.8);
+      this._burst(x, y, '255,240,160', 55, 6.2);
+      for (var hb = 0; hb < 20; hb += 1) {
+        this._addParticle({ x: x + rand(-18, 18), y: y + rand(-12, 12), vx: rand(-1.8, 1.8), vy: rand(-3.5, -0.8), max: rand(40, 80), radius: rand(2.8, 5.2), rgb: '255,240,150', kind: 'sparkle', rotation: rand(0, 6.28), rotationSpeed: rand(-0.15, 0.15), additive: true });
+      }
+    }
+    if (e.type === 'dark_vortex') {
+      this._ring(x, y, '180,90,255', 48, 4.4, 3);
+      this._burst(x, y, '160,70,240', 48, 5.2);
+      for (var dv = 0; dv < 14; dv += 1) {
+        this._addParticle({ x: x + rand(-12, 12), y: y + rand(-12, 12), vx: rand(-1.2, 1.2), vy: rand(-1.8, 0.5), max: rand(50, 90), radius: rand(3, 6), rgb: '140,50,220', kind: 'soul_mote', additive: true });
+      }
+    }
+    if (e.type === 'whirlwind') {
+      this._ring(x, y, '180,225,255', 54, 6.2, 3.2);
+      this._burst(x, y, '190,230,255', 46, 5.8);
+      for (var ww = 0; ww < 16; ww += 1) {
+        var wAng = Math.random() * Math.PI * 2;
+        this._addParticle({ x: x, y: y, vx: Math.cos(wAng) * rand(2, 6), vy: Math.sin(wAng) * rand(2, 6), max: rand(30, 60), radius: rand(2.2, 4.5), rgb: '170,220,255', kind: 'shard', rotation: rand(0, 6.28), rotationSpeed: rand(-0.35, 0.35) });
+      }
+    }
   };
 
   LineageVFX.prototype._drawCrossImpact = function (x, y, rgb) {
@@ -442,7 +563,7 @@
     if (e.type === 'fireball' || e.type === 'ice_shards' || e.type === 'wind_blast' || e.type === 'arcane_missile' || e.type === 'energy_slash' || e.type === 'spiral_spear') {
       this._updateProjectile(e, dt);
     }
-    if (e.type === 'lightning') {
+    if (e.type === 'lightning' || e.type === 'holy_heal' || e.type === 'buff_aura' || e.type === 'power_smash' || e.type === 'holy_beam' || e.type === 'dark_vortex' || e.type === 'whirlwind') {
       if (e.age > e.maxAge) e.done = true;
     }
     if (e.type === 'arrow_rain') this._updateArrowRain(e, dt);
@@ -554,6 +675,204 @@
     ctx.save(); ctx.globalCompositeOperation = 'lighter'; draw(Math.PI / 4, first); draw(-Math.PI / 4, second); ctx.restore();
   };
 
+  LineageVFX.prototype._drawHolyHeal = function (e) {
+    var ctx = this.ctx, p = e.source, progress = clamp(e.age / e.maxAge, 0, 1), fade = 1 - progress;
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    var angle = e.age * 0.003;
+    ctx.save();
+    ctx.translate(p.x, p.y + 14);
+    ctx.scale(1, 0.4);
+    ctx.rotate(angle);
+    ctx.strokeStyle = rgba('100,255,160', fade * 0.85);
+    ctx.lineWidth = 2;
+    ctx.shadowColor = 'rgba(100,255,160,0.9)';
+    ctx.shadowBlur = 14;
+    ctx.beginPath(); ctx.arc(0, 0, 36, 0, Math.PI * 2); ctx.stroke();
+    for (var i = 0; i < 4; i++) {
+      ctx.rotate(Math.PI / 2);
+      ctx.beginPath(); ctx.moveTo(-36, 0); ctx.lineTo(36, 0); ctx.stroke();
+    }
+    ctx.restore();
+
+    for (var b = -1; b <= 1; b++) {
+      var bx = p.x + b * 16, h = 120 * clamp(e.age / 250, 0, 1);
+      var beam = ctx.createLinearGradient(bx, p.y + 20, bx, p.y + 20 - h);
+      beam.addColorStop(0, rgba('100,255,160', fade * 0.7));
+      beam.addColorStop(0.5, rgba('255,245,180', fade * 0.9));
+      beam.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.fillStyle = beam;
+      ctx.fillRect(bx - 6, p.y + 20 - h, 12, h);
+    }
+    ctx.restore();
+  };
+
+  LineageVFX.prototype._drawBuffAura = function (e) {
+    var ctx = this.ctx, p = e.source, progress = clamp(e.age / e.maxAge, 0, 1), fade = 1 - progress;
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    var waveY = p.y + 16 - (progress * 55);
+    ctx.save();
+    ctx.translate(p.x, waveY);
+    ctx.scale(1, 0.35);
+    ctx.strokeStyle = rgba(e.rgb, fade * 0.85);
+    ctx.lineWidth = 3;
+    ctx.shadowColor = rgba(e.rgb, 0.95);
+    ctx.shadowBlur = 18;
+    ctx.beginPath(); ctx.arc(0, 0, 32 * (0.8 + progress * 0.4), 0, Math.PI * 2); ctx.stroke();
+    ctx.restore();
+
+    ctx.save();
+    ctx.translate(p.x, p.y + 16);
+    ctx.scale(1, 0.35);
+    ctx.rotate(e.age * 0.004);
+    ctx.strokeStyle = rgba(e.rgb, fade * 0.6);
+    ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.arc(0, 0, 42, 0, Math.PI * 2); ctx.stroke();
+    ctx.restore();
+    ctx.restore();
+  };
+
+  LineageVFX.prototype._drawDoubleShot = function (e, dt) {
+    var s = e.state, speed = s.speed * (dt / 16);
+    var targetDist = distance(e.source, e.target);
+    var angle = Math.atan2(e.target.y - e.source.y, e.target.x - e.source.x);
+
+    if (s.arrow1 && !s.arrow1.done) {
+      s.arrow1.x += Math.cos(angle) * speed;
+      s.arrow1.y += Math.sin(angle) * speed;
+      this._drawArrow({ x: s.arrow1.x, y: s.arrow1.y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed }, 1);
+      if (distance(e.source, s.arrow1) >= targetDist) {
+        s.arrow1.done = true;
+        this._impact(e, e.target.x, e.target.y - 4);
+      }
+    }
+    if (s.arrow2) {
+      if (!s.arrow2.active && e.age >= s.arrow2.delay) s.arrow2.active = true;
+      if (s.arrow2.active && !s.arrow2.done) {
+        s.arrow2.x += Math.cos(angle) * speed;
+        s.arrow2.y += Math.sin(angle) * speed;
+        this._drawArrow({ x: s.arrow2.x, y: s.arrow2.y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed }, 1);
+        if (distance(e.source, s.arrow2) >= targetDist) {
+          s.arrow2.done = true;
+          this._impact(e, e.target.x, e.target.y + 4);
+        }
+      }
+    }
+    if (s.arrow1 && s.arrow1.done && s.arrow2 && s.arrow2.done) e.done = true;
+  };
+
+  LineageVFX.prototype._drawPowerSmash = function (e) {
+    var ctx = this.ctx, p = e.target, progress = clamp(e.age / e.maxAge, 0, 1), fade = 1 - progress;
+    if (!e.state.impacted && e.age >= 100) {
+      e.state.impacted = true;
+      this._impact(e, p.x, p.y);
+    }
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    var slashLen = 75 * clamp(e.age / 120, 0, 1);
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    var grad = ctx.createLinearGradient(0, -slashLen, 0, slashLen * 0.4);
+    grad.addColorStop(0, 'rgba(255,255,255,0)');
+    grad.addColorStop(0.4, rgba(e.rgb, fade * 0.95));
+    grad.addColorStop(1, rgba('255,245,180', fade));
+    ctx.strokeStyle = grad;
+    ctx.lineWidth = 6 * fade;
+    ctx.shadowColor = rgba(e.rgb, 0.95);
+    ctx.shadowBlur = 24;
+    ctx.beginPath(); ctx.moveTo(0, -slashLen); ctx.lineTo(0, slashLen * 0.4); ctx.stroke();
+    ctx.lineWidth = 3 * fade;
+    ctx.beginPath(); ctx.moveTo(-slashLen * 0.6, slashLen * 0.3); ctx.lineTo(slashLen * 0.6, slashLen * 0.3); ctx.stroke();
+    ctx.restore();
+    ctx.restore();
+  };
+
+  LineageVFX.prototype._drawDarkVortex = function (e) {
+    var ctx = this.ctx, p = e.target, progress = clamp(e.age / e.maxAge, 0, 1), fade = 1 - progress;
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    e.state.angle -= 0.08;
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    ctx.rotate(e.state.angle);
+    for (var v = 0; v < 3; v++) {
+      ctx.rotate((Math.PI * 2) / 3);
+      var vGrad = ctx.createRadialGradient(0, 0, 4, 0, 0, 36);
+      vGrad.addColorStop(0, rgba('230,170,255', fade * 0.9));
+      vGrad.addColorStop(0.5, rgba('160,70,240', fade * 0.6));
+      vGrad.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = vGrad;
+      ctx.beginPath(); ctx.ellipse(18, 0, 22, 9, 0.4, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.restore();
+
+    var heroP = e.source;
+    var tProgress = clamp((e.age - 150) / 450, 0, 1);
+    if (tProgress > 0 && tProgress < 1) {
+      var curX = p.x + (heroP.x - p.x) * tProgress;
+      var curY = p.y + (heroP.y - p.y) * tProgress + Math.sin(tProgress * Math.PI) * -35;
+      ctx.fillStyle = rgba('200,120,255', fade * 0.95);
+      ctx.shadowColor = 'rgba(180,90,255,0.9)';
+      ctx.shadowBlur = 12;
+      ctx.beginPath(); ctx.arc(curX, curY, 4, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.restore();
+  };
+
+  LineageVFX.prototype._drawHolyBeam = function (e) {
+    var ctx = this.ctx, p = e.target, progress = clamp(e.age / e.maxAge, 0, 1), fade = 1 - progress;
+    if (!e.state.impacted && e.age >= 60) {
+      e.state.impacted = true;
+      this._impact(e, p.x, p.y);
+    }
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    var beamGrad = ctx.createLinearGradient(p.x - 20, 0, p.x + 20, 0);
+    beamGrad.addColorStop(0, 'rgba(255,255,255,0)');
+    beamGrad.addColorStop(0.5, rgba('255,245,200', fade * 0.95));
+    beamGrad.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = beamGrad;
+    ctx.fillRect(p.x - 24, 0, 48, p.y + 10);
+    ctx.fillStyle = rgba('255,255,255', fade);
+    ctx.fillRect(p.x - 8, 0, 16, p.y + 10);
+    ctx.save();
+    ctx.translate(p.x, p.y + 8);
+    ctx.scale(1, 0.35);
+    ctx.rotate(e.age * 0.005);
+    ctx.strokeStyle = rgba('255,220,100', fade * 0.9);
+    ctx.lineWidth = 2.5;
+    ctx.shadowColor = 'rgba(255,220,100,0.95)';
+    ctx.shadowBlur = 18;
+    ctx.beginPath(); ctx.arc(0, 0, 44, 0, Math.PI * 2); ctx.stroke();
+    ctx.restore();
+    ctx.restore();
+  };
+
+  LineageVFX.prototype._drawWhirlwind = function (e) {
+    var ctx = this.ctx, p = e.target, progress = clamp(e.age / e.maxAge, 0, 1), fade = 1 - progress;
+    e.state.rotation += 0.18;
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.translate(p.x, p.y);
+    ctx.rotate(e.state.rotation);
+    for (var w = 0; w < 3; w++) {
+      ctx.rotate((Math.PI * 2) / 3);
+      var wGrad = ctx.createLinearGradient(-35, 0, 35, 0);
+      wGrad.addColorStop(0, 'rgba(255,255,255,0)');
+      wGrad.addColorStop(0.5, rgba('180,225,255', fade * 0.9));
+      wGrad.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.strokeStyle = wGrad;
+      ctx.lineWidth = 3.5;
+      ctx.shadowColor = 'rgba(180,225,255,0.95)';
+      ctx.shadowBlur = 16;
+      ctx.beginPath();
+      ctx.arc(0, 0, 36 + w * 4, 0, Math.PI * 0.85);
+      ctx.stroke();
+    }
+    ctx.restore();
+  };
+
   LineageVFX.prototype._drawLights = function (e) {
     var ctx = this.ctx;
     ctx.save(); ctx.globalCompositeOperation = 'lighter';
@@ -575,6 +894,36 @@
       ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rotation); ctx.fillStyle = rgba(p.rgb, alpha * 0.9); ctx.shadowColor = rgba(p.rgb, 0.8); ctx.shadowBlur = 8 * this.qualityConfig.blur; ctx.beginPath(); ctx.moveTo(p.radius, 0); ctx.lineTo(-p.radius * 0.6, p.radius * 0.45); ctx.lineTo(-p.radius * 0.6, -p.radius * 0.45); ctx.closePath(); ctx.fill(); ctx.restore();
     } else if (p.kind === 'leaf') {
       ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rotation); ctx.fillStyle = rgba(p.rgb, alpha * 0.75); ctx.beginPath(); ctx.ellipse(0, 0, p.radius, p.radius * 0.45, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+    } else if (p.kind === 'sparkle') {
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rotation || 0);
+      ctx.fillStyle = rgba(p.rgb, alpha);
+      ctx.shadowColor = rgba(p.rgb, 0.9);
+      ctx.shadowBlur = 10 * this.qualityConfig.blur;
+      var s = p.radius * (0.8 + alpha * 0.4);
+      ctx.beginPath();
+      ctx.moveTo(0, -s * 2.2);
+      ctx.lineTo(s * 0.4, -s * 0.4);
+      ctx.lineTo(s * 2.2, 0);
+      ctx.lineTo(s * 0.4, s * 0.4);
+      ctx.lineTo(0, s * 2.2);
+      ctx.lineTo(-s * 0.4, s * 0.4);
+      ctx.lineTo(-s * 2.2, 0);
+      ctx.lineTo(-s * 0.4, -s * 0.4);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    } else if (p.kind === 'soul_mote') {
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.fillStyle = rgba(p.rgb, alpha * 0.85);
+      ctx.shadowColor = rgba(p.rgb, 0.95);
+      ctx.shadowBlur = 12 * this.qualityConfig.blur;
+      ctx.beginPath();
+      ctx.arc(0, 0, p.radius * (1 + (1 - alpha)), 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
     }
   };
 
@@ -613,6 +962,13 @@
       if (e.type === 'arrow_rain') this._drawArrowRain(e);
       if (e.type === 'energy_slash') this._drawEnergySlash(e);
       if (e.type === 'cross_slash') this._drawCrossSlash(e);
+      if (e.type === 'double_shot') this._drawDoubleShot(e, dt);
+      if (e.type === 'power_smash') this._drawPowerSmash(e);
+      if (e.type === 'dark_vortex') this._drawDarkVortex(e);
+      if (e.type === 'holy_beam') this._drawHolyBeam(e);
+      if (e.type === 'holy_heal') this._drawHolyHeal(e);
+      if (e.type === 'buff_aura') this._drawBuffAura(e);
+      if (e.type === 'whirlwind') this._drawWhirlwind(e);
       if (e.type === 'fireball' || e.type === 'ice_shards' || e.type === 'wind_blast' || e.type === 'arcane_missile' || e.type === 'spiral_spear') this._drawProjectile(e);
       if (e.type === 'energy_slash' || e.type === 'spiral_spear') this._drawCasterGlyph(e.source, e.rgb, clamp(1 - e.age / 500, 0, 1));
       if (e.done) {
