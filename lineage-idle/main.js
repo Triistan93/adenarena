@@ -1505,7 +1505,7 @@ function getItemIcon(defOrId) {
   if (!iconPath) return emoji;
   let p = String(iconPath).replace(/\\/g, '/').replace(/^\//, '');
   if (!p.endsWith('.png') && !p.endsWith('.jpg') && !p.endsWith('.webp') && !p.endsWith('.svg')) p += '.png';
-  if (!p.startsWith('img/icons/') && !p.startsWith('img/')) {
+  if (!p.startsWith('img/icons/') && !p.startsWith('img/') && !p.startsWith('assets/')) {
     p = `img/icons/${p}`;
   }
   const iconUrl = getAssetUrl(p);
@@ -3922,9 +3922,11 @@ function attackMonster() {
     const zoneMult = (D().ZONE_GOLD_MULT && D().ZONE_GOLD_MULT[zoneTier]) || 1;
     const xpMult = 1 + (stats.xpBoost || 0);
     const xpGain = Math.floor(monster.xp * xpMult);
-    const spGain = monster.boss ? 8 : (monster.isElite ? 3 : Math.max(1, monster.sp || 1));
-    state.xp += xpGain; state.sp += spGain;
-    log(`Derrotou **${monster.name}**! Recebeu **+${xpGain.toLocaleString()} XP** e **+${spGain} SP**`, 'xp', 'gold_xp');
+    // SP é concedido apenas em ocasiões especiais (Level Up, Quests, Raid Bosses)
+    const spGain = monster.isRaid ? 25 : (monster.boss ? 5 : (monster.isElite ? 2 : 0));
+    state.xp += xpGain;
+    if (spGain > 0) state.sp += spGain;
+    log(`Derrotou **${monster.name}**! Recebeu **+${xpGain.toLocaleString()} XP**${spGain > 0 ? ` e **+${spGain} SP**` : ''}`, 'xp', 'gold_xp');
 
     // Drenagem de Alma para Soul Crystals (Níveis 1 a 15 e Epic Bosses)
     try {
@@ -3992,12 +3994,12 @@ function attackMonster() {
       }
     }
 
-    // Drop de Carta de Monstro Colecionável (0.5% a 5%)
+    // Drop de Carta de Monstro Colecionável (0.05% comum, 0.15% elite, 0.8% boss)
     const monKey = monster.id || monster.monsterId || monster.originalId;
     const cardId = `card_${monKey}`;
     const cardDef = MONSTER_CARDS[cardId] || MONSTER_CARDS[`card_${String(monKey).toLowerCase()}`];
     if (cardDef) {
-      const dropChance = cardDef.dropChance || (monster.boss ? 0.03 : 0.006);
+      const dropChance = cardDef.dropChance || (monster.isRaid ? 0.015 : (monster.boss ? 0.008 : 0.0005));
       if (Math.random() < dropChance) {
         addToInventory(cardId, 1);
         log(`🃏 DROP RARO! Obteve **${cardDef.name}** [${(cardDef.rarity || 'rare').toUpperCase()}]!`, 'rarity-' + (cardDef.rarity || 'rare'), 'loot');
@@ -7067,7 +7069,7 @@ export function init() {
             rarity: cardDef.rarity || 'common',
             tier: cardDef.rarity === 'sovereign' ? 6 : (cardDef.rarity === 'primordial' ? 5 : (cardDef.rarity === 'mythic' ? 4 : (cardDef.rarity === 'legendary' ? 3 : 2))),
             price: cardDef.level ? cardDef.level * 250 : 2500,
-            icon: 'gradespecial/jewels/jewel_ring_of_baium.png',
+            icon: cardDef.icon || 'assets/2d/monsters/low-level-32x/PNG/Transperent/Icon1.png',
             desc: `Carta Colecionável do Monstro ${cardDef.monster}. Absorva no Codex para bônus passivos permanentes em toda a conta!`
           };
         }

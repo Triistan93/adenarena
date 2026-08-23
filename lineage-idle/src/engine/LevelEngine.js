@@ -12,12 +12,30 @@ const TOTAL_XP_CACHE = [0];
 
 /**
  * Calcula a XP necessária para subir do nível `lvl - 1` para `lvl`.
+ * Curva calibrada para exigir ~15 dias de jogo contínuo/idle até o Level Cap (Lv 85+).
  * @param {number} lvl — Nível alvo
  * @returns {number}
  */
 export function getXPForLevel(lvl) {
   if (lvl <= 1) return 100;
-  return Math.floor(100 + Math.pow(lvl, 2.45) * 55);
+  if (lvl <= 20) {
+    // 1-20: Progressão inicial fluida (~2h de jogo)
+    return Math.floor(100 + Math.pow(lvl, 2.3) * 50);
+  }
+  if (lvl <= 40) {
+    // 20-40: 1ª Transferência de Classe (~1 dia de jogo)
+    return Math.floor(Math.pow(lvl, 2.6) * 110);
+  }
+  if (lvl <= 60) {
+    // 40-60: 2ª Transferência de Classe (~4 dias de jogo)
+    return Math.floor(Math.pow(lvl, 2.92) * 180);
+  }
+  if (lvl <= 75) {
+    // 60-75: Transição A-Grade / Nobreza (~8-9 dias de jogo)
+    return Math.floor(Math.pow(lvl, 3.22) * 260);
+  }
+  // 76 a 85+: Endgame hardcore S-Grade / 3ª Classe (~15 a 20 dias de jogo)
+  return Math.floor(Math.pow(lvl, 3.65) * 380);
 }
 
 /**
@@ -36,6 +54,18 @@ export function getTotalXP(lvl) {
 }
 
 /**
+ * Calcula a quantidade nobre de SP concedida ao atingir o nível `lvl`.
+ * @param {number} lvl
+ * @returns {number}
+ */
+export function getSpRewardForLevel(lvl) {
+  if (lvl <= 20) return Math.floor(8 + lvl * 0.5); // 9 a 18 SP
+  if (lvl <= 40) return Math.floor(15 + (lvl - 20) * 1.25); // 16 a 40 SP
+  if (lvl <= 75) return Math.floor(40 + (lvl - 40) * 2.2); // 42 a 117 SP
+  return Math.floor(120 + (lvl - 75) * 18); // 138 a 300 SP
+}
+
+/**
  * Calcula o SP acumulado concedido até o nível `lvl`.
  * @param {number} lvl
  * @returns {number}
@@ -43,7 +73,7 @@ export function getTotalXP(lvl) {
 export function calcSpForLevel(lvl) {
   let total = 0;
   for (let l = 2; l <= lvl; l++) {
-    total += Math.min(10, Math.floor(l * 0.8 + 1));
+    total += getSpRewardForLevel(l);
   }
   return total;
 }
@@ -65,7 +95,7 @@ export function checkLevelUp(state, callbacks = {}) {
   while ((state.level || 1) < MAX_LEVEL && (state.xp || 0) >= getTotalXP(state.level || 1)) {
     state.level = (state.level || 1) + 1;
     leveledUp = true;
-    const spReward = Math.max(1, Math.floor(state.level * 0.15 + 1));
+    const spReward = getSpRewardForLevel(state.level);
     totalSpReward += spReward;
     state.sp = (state.sp || 0) + spReward;
   }
