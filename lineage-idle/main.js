@@ -560,8 +560,9 @@ function openClassTransferModal(classInfo) {
 
     container.innerHTML = `
       <div style="background:rgba(212,167,68,0.1); border:1px solid rgba(212,167,68,0.3); border-radius:8px; padding:12px; margin-bottom:12px; font-size:12px; color:#e2e8f0; line-height:1.5;">
-        ✨ <strong>Herança de Classe Passada:</strong> Escolha <strong>até 2 habilidades</strong> da sua classe anterior para se tornarem <strong>Passivas de Linhagem Permanentes</strong> (com 20% da sua eficácia).<br>
-        🔄 <em>Todo o SP investido nas habilidades anteriores será 100% reembolsado para você aprender os novos poderes de ${clsDef.name}!</em>
+        ✨ <strong>Consagração de Linhagem:</strong> Escolha <strong>até 2 habilidades</strong> da sua classe anterior para se tornarem <strong>Passivas de Linhagem Permanentes</strong> (com 20% da sua eficácia).<br>
+        🔄 <em>O kit ativo anterior será purificado e todo o SP investido será 100% reembolsado para a nova jornada!</em><br>
+        📖 <strong style="color:#fde047;">Aviso dos Mestres de Aden:</strong> As habilidades da 2ª Classe (Lv. 40+) exigirão <strong>Livros de Magia (1★, 2★, 3★ e 4★)</strong> e SP para serem desbloqueadas. Obtenha-os em caçadas, instâncias solo, chefes épicos ou adquira de outros jogadores no <strong>Mercado Global</strong>!
       </div>
       <div id="legacy-skills-grid" style="display:flex; flex-direction:column; gap:8px; margin-bottom:14px; max-height:280px; overflow-y:auto; padding-right:4px;"></div>
       <div style="display:flex; gap:10px; justify-content:space-between; margin-top:8px;">
@@ -2161,9 +2162,33 @@ function enchantItem(uid, useBlessed = false) {
       log(`🛡️ [BLESSED PROTECTED] A tentativa de encanto falhou, mas ${def.name} manteve o nível +${currentEnchant} intacto!`, 'rarity-epic');
       if (typeof floatText === 'function') floatText(`🛡️ PROTEGIDO (+${currentEnchant})`, 'float-jackpot');
     } else {
-      item.enchant = Math.max(0, currentEnchant - 1);
-      log(`💥 Encantamento falhou! ${def.name} reduziu para +${item.enchant}.`, 'system');
-      if (typeof floatText === 'function') floatText(`💥 FALHOU (-1)`, 'float-crit');
+      const grade = (def.grade || 'NG').toUpperCase();
+      if (currentEnchant >= 3 && grade !== 'NG') {
+        const crystalMap = {
+          'D': { id: 'crystal_d', name: 'Cristal: D-Grade', count: 25 + currentEnchant * 5 },
+          'C': { id: 'crystal_c', name: 'Cristal: C-Grade', count: 35 + currentEnchant * 8 },
+          'B': { id: 'crystal_b', name: 'Cristal: B-Grade', count: 50 + currentEnchant * 12 },
+          'A': { id: 'crystal_a', name: 'Cristal: A-Grade', count: 80 + currentEnchant * 15 },
+          'S': { id: 'crystal_s', name: 'Cristal: S-Grade', count: 120 + currentEnchant * 20 }
+        };
+        const cInfo = crystalMap[grade] || { id: 'crystal_d', name: 'Cristal: D-Grade', count: 25 };
+        
+        if (state.equipment) {
+          for (const [slotKey, uidEquipped] of Object.entries(state.equipment)) {
+            if (uidEquipped === item.uid) {
+              state.equipment[slotKey] = null;
+            }
+          }
+        }
+        removeFromInventory(item.uid, 1);
+        addToInventory(cInfo.id, cInfo.count);
+        log(`💥 FALHA CRÍTICA! ${def.name} +${currentEnchant} se estilhaçou e foi cristalizado em **${cInfo.count}x ${cInfo.name}**!`, 'rarity-legendary');
+        if (typeof floatText === 'function') floatText(`💥 CRISTALIZADO (+${cInfo.count}x)`, 'float-crit');
+      } else {
+        item.enchant = Math.max(0, currentEnchant - 1);
+        log(`💥 Encantamento falhou! ${def.name} reduziu para +${item.enchant}.`, 'system');
+        if (typeof floatText === 'function') floatText(`💥 FALHOU (-1)`, 'float-crit');
+      }
     }
   }
   
@@ -4196,7 +4221,19 @@ function attackMonster() {
       if (gold >= 20) floatText(`+${gold} Adena`, 'float-gold'); 
     }
 
-    const rawDrop = D().rollDrop(zoneTier, stats.loot, !!(monster.boss || monster.elite));
+    // Penalidade de Nível de Drop (Level-Gap Anti-Monopólio)
+    const mLevel = monster.lvl || monster.level || zoneLevel || 1;
+    const pLevel = state.level || 1;
+    const lvlDiff = Math.max(0, pLevel - mLevel);
+    let levelGapPenalty = 1.0;
+    if (lvlDiff > 10) {
+      levelGapPenalty = 0.15; // -85% de drop para veteranos caçando em áreas iniciais
+    } else if (lvlDiff > 5) {
+      levelGapPenalty = 0.50; // -50% de drop
+    }
+
+    const effectiveLootRate = stats.loot * levelGapPenalty;
+    const rawDrop = D().rollDrop(zoneTier, effectiveLootRate, !!(monster.boss || monster.elite));
     const drops = Array.isArray(rawDrop) ? rawDrop : (rawDrop && rawDrop.itemId ? [ { id: rawDrop.itemId, itemId: rawDrop.itemId, rarity: rawDrop.rarity, isEquipment: true, amount: 1 } ] : []);
     for (const drop of drops) {
       const dropId = drop.id || drop.itemId;
@@ -4215,12 +4252,29 @@ function attackMonster() {
       }
     }
 
+    // Drop de Livros de Magia (Spellbooks 1★, 2★, 3★)
+    if (mLevel >= 38) {
+      const bookChance = (monster.isRaid ? 0.25 : (monster.boss ? 0.08 : 0.005)) * levelGapPenalty;
+      if (Math.random() < bookChance) {
+        let droppedBookId = 'book_1star';
+        if (mLevel >= 56 || monster.isRaid) droppedBookId = 'book_3star';
+        else if (mLevel >= 48) droppedBookId = 'book_2star';
+
+        const bookDef = D().ALL_ITEMS[droppedBookId];
+        if (bookDef) {
+          addToInventory(droppedBookId, 1);
+          log(`📖 DROP DE GRIMÓRIO! Obteve **${bookDef.name}** de ${monster.name}!`, 'rarity-legendary', 'loot');
+          floatText(`📖 ${bookDef.name}!`, 'float-jackpot');
+        }
+      }
+    }
+
     // Drop de Carta de Monstro Colecionável (0.05% comum, 0.15% elite, 0.8% boss)
     const monKey = monster.id || monster.monsterId || monster.originalId;
     const cardId = `card_${monKey}`;
     const cardDef = MONSTER_CARDS[cardId] || MONSTER_CARDS[`card_${String(monKey).toLowerCase()}`];
     if (cardDef) {
-      const dropChance = cardDef.dropChance || (monster.isRaid ? 0.015 : (monster.boss ? 0.008 : 0.0005));
+      const dropChance = (cardDef.dropChance || (monster.isRaid ? 0.015 : (monster.boss ? 0.008 : 0.0005))) * levelGapPenalty;
       if (Math.random() < dropChance) {
         addToInventory(cardId, 1);
         log(`🃏 DROP RARO! Obteve **${cardDef.name}** [${(cardDef.rarity || 'rare').toUpperCase()}]!`, 'rarity-' + (cardDef.rarity || 'rare'), 'loot');
@@ -4633,8 +4687,28 @@ function adminKillMonster() {
   }
 }
 
+function setServerLevelCap(cap) {
+  state.serverMaxLevel = cap;
+  state.levelCap = cap;
+  log(`📢 [DECRETO REAL] O Lorde Soberano de Aden estabeleceu o Cap Máximo de Nível do Servidor em **Nível ${cap}**!`, 'rarity-legendary');
+  if (typeof floatText === 'function') floatText(`👑 CAP DO SERVIDOR: LV. ${cap}!`, 'float-jackpot');
+  
+  const capBadge = el('admin-current-cap-badge');
+  if (capBadge) capBadge.textContent = `Cap Atual: Nível ${cap}`;
+  
+  engineCheckLevelUp(state, { getStats, log, floatText, updateAllUI, save });
+  updateAllUI();
+  save();
+}
+
 function executeAdminCmd(cmd) {
-  if (cmd === 'level20') { applyAdminLevelChange(20); }
+  if (cmd === 'setcap40') { setServerLevelCap(40); }
+  else if (cmd === 'setcap60') { setServerLevelCap(60); }
+  else if (cmd === 'setcap75') { setServerLevelCap(75); }
+  else if (cmd === 'setcap85') { setServerLevelCap(85); }
+  else if (cmd === 'setcap100') { setServerLevelCap(100); }
+  else if (cmd === 'setcap120') { setServerLevelCap(120); }
+  else if (cmd === 'level20') { applyAdminLevelChange(20); }
   else if (cmd === 'level40') { applyAdminLevelChange(40); }
   else if (cmd === 'level76') { applyAdminLevelChange(76); }
   else if (cmd === 'level85') { applyAdminLevelChange(85); }

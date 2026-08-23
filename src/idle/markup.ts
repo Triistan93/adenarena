@@ -1129,6 +1129,23 @@ export const IDLE_MARKUP = `
           <button id="close-admin-modal-btn" class="modal-close-x">✕</button>
         </div>
         <div class="admin-grid">
+          <!-- Section 0: Server Level Cap & Season Pacing -->
+          <div class="admin-section" style="grid-column: 1 / -1; background: rgba(30, 20, 10, 0.6); border: 1px solid var(--border-gilt); border-radius: 8px; padding: 12px; margin-bottom: 8px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <h3 style="margin:0; color:#ffd877; font-family:'Cinzel',serif; font-size:14px;">⏳ Gestão de Cap de Servidor &amp; Temporadas</h3>
+              <span id="admin-current-cap-badge" style="font-size:11px; padding:3px 8px; border-radius:4px; background:rgba(212,167,68,0.2); border:1px solid var(--border-gilt); color:#ffd877; font-weight:bold;">Cap Atual: Nível 60 (Fase 1)</span>
+            </div>
+            <p style="font-size:11px; color:#cbd5e1; margin-bottom:10px;">Defina o teto de nível máximo acessível para todos os jogadores do servidor:</p>
+            <div class="admin-btn-group">
+              <button class="admin-btn" data-admin-cmd="setcap40">Cap Lv. 40</button>
+              <button class="admin-btn primary" data-admin-cmd="setcap60">Cap Lv. 60 (Fase 1)</button>
+              <button class="admin-btn" data-admin-cmd="setcap75">Cap Lv. 75 (Fase 2)</button>
+              <button class="admin-btn" data-admin-cmd="setcap85">Cap Lv. 85 (Fase 3)</button>
+              <button class="admin-btn" data-admin-cmd="setcap100">Cap Lv. 100 (Fase 4)</button>
+              <button class="admin-btn" data-admin-cmd="setcap120" style="background:#7c2d12; border-color:#f59e0b; color:#fbbf24; font-weight:bold;">👑 Cap Lv. 120 (Supremo)</button>
+            </div>
+          </div>
+
           <!-- Section 1: Level & XP Controls -->
           <div class="admin-section">
             <h3>📊 Nível &amp; Experiência (XP)</h3>

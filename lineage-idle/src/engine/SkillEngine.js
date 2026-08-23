@@ -78,16 +78,23 @@ export function spendSP(state, skillId, callbacks = {}) {
     return false;
   }
 
-  // Requisito de livro de habilidade (Spellbook 4★) EXCLUSIVAMENTE para Ultimates 4-Star ⭐
-  if (def.starRank === 4 && lvl === 0) {
-    const bookId = 'spellbook_4star';
-    const bookItem = state.inventory?.find(i => i.itemId === bookId && (i.count || 1) > 0);
+  // Requisito de livro de habilidade (Spellbooks 1★ a 4★) para habilidades de Lv. 40+ no primeiro nível (lvl === 0)
+  const reqBookId = def.requiredItemToUnlock || (def.starRank === 4 ? 'book_4star' : null);
+  if (reqBookId && lvl === 0) {
+    const bookItem = state.inventory?.find(i => (i.itemId === reqBookId || (reqBookId === 'book_4star' && i.itemId === 'spellbook_4star')) && (i.count || 1) > 0);
     if (!bookItem) {
-      if (callbacks.log) callbacks.log(`⭐ Exige o Livro Spellbook 4-Star ⭐ para aprender esta habilidade Ultimate! (Fabrique na Forja com 10x Páginas Ancestrais)`, 'system');
+      const bookNames = {
+        'book_1star': 'Tomo Sagrado: 1★ (Comum)',
+        'book_2star': 'Tomo Sagrado: 2★ (Raro)',
+        'book_3star': 'Tomo Sagrado: 3★ (Épico)',
+        'book_4star': 'Tomo Sagrado: 4★ (Lendário Divino)'
+      };
+      const bName = bookNames[reqBookId] || reqBookId;
+      if (callbacks.log) callbacks.log(`🔒 Exige o **${bName}** na mochila para desbloquear esta habilidade! (Encontre em caçadas/instâncias ou compre no Mercado Global)`, 'warning');
       return false;
     }
     if (callbacks.removeFromInventory) callbacks.removeFromInventory(bookItem.uid, 1);
-    if (callbacks.log) callbacks.log(`📖 Livro Spellbook: 4-Star ⭐ consumido com sucesso! Ultimate aprendida!`, 'rarity-legendary');
+    if (callbacks.log) callbacks.log(`📖 **${def.name}** desbloqueada com sucesso! (${bookItem.itemId} consumido)`, 'rarity-legendary');
   }
 
   const reqs = (typeof window !== 'undefined' && window.EchoData) ? window.EchoData.SKILL_REQS_ECHO[skillId] : D()?.SKILL_REQS?.[skillId];

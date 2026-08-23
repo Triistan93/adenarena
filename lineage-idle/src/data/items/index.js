@@ -20,6 +20,7 @@ import {
 } from './recipes_drops.js';
 import { ELEMENT_OPPOSITES, ELEMENTAL_STONES, LIFE_STONE_ITEMS, BELT_ITEMS, getAttributeDamageBonus } from './attributes_belts.js';
 import { SOUL_CRYSTAL_ITEMS } from './soul_crystals.js';
+import { SPELLBOOK_ITEMS, CRYSTAL_ITEMS } from '../spellbooks.js';
 import { RAID_BOSSES } from '../raids.js';
 
 export const ALL_ITEMS = {
@@ -28,6 +29,8 @@ export const ALL_ITEMS = {
   ...EARRINGS, ...HAIR, ...AGATHIONS, ...CONSUMABLES, ...MATERIALS,
   ...HEIRLOOM_ITEMS,
   ...SOUL_CRYSTAL_ITEMS,
+  ...SPELLBOOK_ITEMS,
+  ...CRYSTAL_ITEMS,
   ...ELEMENTAL_STONES,
   ...LIFE_STONE_ITEMS,
   ...BELT_ITEMS

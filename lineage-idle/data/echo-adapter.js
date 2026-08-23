@@ -404,7 +404,29 @@ function buildEchoAdapter() {
       const tier = is4Star ? 4 : stage;
       const reqLvl = tier === 0 ? 1 : tier === 1 ? 20 : tier === 2 ? 40 : tier === 3 ? 76 : 80;
       const cost = tier === 0 ? 5 : tier === 1 ? 15 : tier === 2 ? 30 : tier === 3 ? 60 : 100;
-      const starRank = is4Star ? 4 : (tier + 1);
+
+      let requiredBook = null;
+      let starRank = 1;
+      if (is4Star || tier >= 4) {
+        starRank = 4;
+        requiredBook = 'book_4star';
+      } else if (tier === 3 || sk.rarity === '3★') {
+        starRank = 3;
+        requiredBook = 'book_3star';
+      } else if (tier === 2) {
+        // 2ª Classe (Nível 40+)
+        if (sk.rarity === '2★' || sNameLower.includes('mastery') || sNameLower.includes('frenzy') || sNameLower.includes('roar') || sNameLower.includes('stance')) {
+          starRank = 2;
+          requiredBook = 'book_2star';
+        } else {
+          starRank = 1;
+          requiredBook = 'book_1star';
+        }
+      } else {
+        // Níveis 1 a 39 (habilidades básicas sem livros para onboarding fluido)
+        starRank = 1;
+        requiredBook = null;
+      }
 
       SKILL_DEFS_ECHO[skillId] = {
         id:                   skillId,
@@ -424,7 +446,7 @@ function buildEchoAdapter() {
         reqLvl:               reqLvl,
         requiredWeapon:       reqWeapon,
         requiredShield:       reqShield,
-        requiredItemToUnlock: is4Star ? 'spellbook_4star' : null,
+        requiredItemToUnlock: requiredBook,
         isUltimate:           is4Star,
         starRank:             starRank
       };

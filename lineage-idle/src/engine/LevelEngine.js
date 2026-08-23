@@ -26,31 +26,31 @@ const TOTAL_XP_CACHE = [0];
 export function getXPForLevel(lvl) {
   if (lvl <= 1) return 150;
   if (lvl <= 20) {
-    // Lv 1 ao 20: 6 horas de jogo
-    return Math.floor(150 + Math.pow(lvl, 2.5) * 88);
+    // Lv 1 ao 20: ~0.7M XP acumulado (~1 dia de onboarding)
+    return Math.floor(150 + Math.pow(lvl, 2.45) * 85);
   }
   if (lvl <= 40) {
-    // Lv 21 ao 40: 3 dias de jogo
-    return Math.floor(Math.pow(lvl, 2.72) * 550);
+    // Lv 21 ao 40: ~54M XP acumulado (~4 dias de jogo)
+    return Math.floor(Math.pow(lvl, 2.65) * 320);
   }
   if (lvl <= 60) {
-    // Lv 41 ao 60: 7 dias de jogo
-    return Math.floor(Math.pow(lvl, 2.96) * 800);
+    // Lv 41 ao 60: ~1.1B XP acumulado (~10 dias até o Cap 60 da Fase 1)
+    return Math.floor(Math.pow(lvl, 2.92) * 580);
   }
   if (lvl <= 75) {
-    // Lv 61 ao 75: 15 dias de jogo
-    return Math.floor(Math.pow(lvl, 3.20) * 1050);
+    // Lv 61 ao 75: ~8.8B XP acumulado (~20 dias até o Cap 75 da Fase 2)
+    return Math.floor(Math.pow(lvl, 3.18) * 820);
   }
   if (lvl <= 85) {
-    // Lv 76 ao 85: 20 dias de jogo
-    return Math.floor(Math.pow(lvl, 3.42) * 1000);
+    // Lv 76 ao 85: ~41.6B XP acumulado (~30 dias até o Cap 85 da Fase 3)
+    return Math.floor(Math.pow(lvl, 3.42) * 1100);
   }
   if (lvl <= 100) {
-    // Lv 86 ao 100: ~35 dias de jogo
-    return Math.floor(Math.pow(lvl, 3.65) * 1200);
+    // Lv 86 ao 100: ~398B XP acumulado (~50 dias até o Cap 100 da Fase 4)
+    return Math.floor(Math.pow(lvl, 3.68) * 1450);
   }
-  // Lv 101 ao 120: Level Cap 120 Supremo
-  return Math.floor(Math.pow(lvl, 3.88) * 1800);
+  // Lv 101 ao 120: A Muralha dos Deuses (~15.8B a 31B XP por nível = ~7 a 10 dias por nível)
+  return Math.floor(15000000000 + (lvl - 100) * 800000000);
 }
 
 /**
@@ -106,16 +106,24 @@ export function checkLevelUp(state, callbacks = {}) {
   if (!state) return false;
   let leveledUp = false;
   const initialLevel = state.level || 1;
-  const MAX_LEVEL = getSeasonMaxLevel();
+  const MAX_LEVEL = state.serverMaxLevel || state.levelCap || getSeasonMaxLevel() || 60;
   let totalSpReward = 0;
 
-  // Processa subida de níveis respeitando o teto da temporada
+  // Processa subida de níveis respeitando o teto de servidor/temporada
   while ((state.level || 1) < MAX_LEVEL && (state.xp || 0) >= getTotalXP(state.level || 1)) {
     state.level = (state.level || 1) + 1;
     leveledUp = true;
     const spReward = getSpRewardForLevel(state.level);
     totalSpReward += spReward;
     state.sp = (state.sp || 0) + spReward;
+  }
+
+  // Se atingiu o cap máximo, trava o XP no limite do cap (sem gerar SP infinito para preservar a economia)
+  if ((state.level || 1) >= MAX_LEVEL) {
+    const capXp = getTotalXP(MAX_LEVEL);
+    if ((state.xp || 0) > capXp) {
+      state.xp = capXp;
+    }
   }
 
   // Executa os callbacks de interface e salvar apenas UMA vez por lote

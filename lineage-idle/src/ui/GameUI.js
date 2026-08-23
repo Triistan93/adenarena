@@ -2292,9 +2292,17 @@ export function updateSkillInfoPanel(state, callbacks = {}) {
     `;
   }
 
-  const is4Star = (def.starRank === 4 || def.tier === 4 || def.is4Star || id.includes('4star'));
-  const has4StarBook = state.inventory?.some(i => i.itemId === 'spellbook_4star' && (i.count || 1) > 0);
-  const requiresBookNow = is4Star && lvl === 0;
+  const reqBookId = def.requiredItemToUnlock || (def.starRank === 4 ? 'book_4star' : null);
+  const requiresBookNow = !!reqBookId && lvl === 0;
+  const hasRequiredBook = reqBookId ? (state.inventory?.some(i => (i.itemId === reqBookId || (reqBookId === 'book_4star' && i.itemId === 'spellbook_4star')) && (i.count || 1) > 0)) : true;
+
+  const bookNames = {
+    'book_1star': 'Tomo 1★ (Comum)',
+    'book_2star': 'Tomo 2★ (Raro)',
+    'book_3star': 'Tomo 3★ (Épico)',
+    'book_4star': 'Tomo 4★ (Lendário)'
+  };
+  const bName = reqBookId ? (bookNames[reqBookId] || 'Livro de Magia') : '';
 
   // Moveset / Restrição de Arma
   let weaponReqBadge = '';
@@ -2317,31 +2325,27 @@ export function updateSkillInfoPanel(state, callbacks = {}) {
     `;
   }
 
-  // 4-Star Ultimate Box
+  // Spellbook Requirement Box (1★ a 4★)
   let star4BoxHtml = '';
-  if (is4Star) {
+  if (requiresBookNow) {
     star4BoxHtml = `
       <div style="background:rgba(245,158,11,0.1); border:1px solid #f59e0b; border-radius:6px; padding:8px; margin:8px 0; font-size:11px;">
         <div style="display:flex; justify-content:space-between; align-items:center;">
-          <span style="color:#fbbf24; font-weight:bold;">⭐ Habilidade Suprema 4-Star</span>
-          <span style="background:rgba(0,0,0,0.4); padding:2px 6px; border-radius:4px; color:${requiresBookNow ? (has4StarBook ? '#34d399' : '#f87171') : '#34d399'}; font-weight:bold;">
-            ${requiresBookNow ? (has4StarBook ? '✓ Spellbook Disponível' : '✗ Falta Spellbook 4★') : '✓ Grimório Consagrado'}
+          <span style="color:#fbbf24; font-weight:bold;">📖 Requisito: ${bName}</span>
+          <span style="background:rgba(0,0,0,0.4); padding:2px 6px; border-radius:4px; color:${hasRequiredBook ? '#34d399' : '#f87171'}; font-weight:bold;">
+            ${hasRequiredBook ? '✓ Disponível na Mochila' : '✗ Falta na Mochila'}
           </span>
         </div>
-        ${requiresBookNow ? `
-          <p style="margin:4px 0 0 0; color:var(--text-muted);">Aprender esta habilidade consumirá 1x <strong>Spellbook: 4-Star</strong> da sua mochila. Uma vez aprendida, fica desbloqueada para sempre!</p>
-        ` : `
-          <p style="margin:4px 0 0 0; color:#6ee7b7;">Habilidade aprendida permanentemente na conta. Não requer carregar o livro na mochila.</p>
-        `}
+        <p style="margin:4px 0 0 0; color:var(--text-muted);">Desbloquear esta habilidade consumirá 1x <strong>${bName}</strong> da sua mochila. (Encontre em caçadas/bosses ou compre no Mercado Global!)</p>
       </div>
     `;
   }
 
-  const canLearn = canAfford && meetsReqs && lvlOk && (!requiresBookNow || has4StarBook);
+  const canLearn = canAfford && meetsReqs && lvlOk && (!requiresBookNow || hasRequiredBook);
 
   let btnLabel = maxed ? '✦ MAXED' : `Invest ${cost.toLocaleString()} SP`;
   if (!maxed && requiresBookNow) {
-    btnLabel = has4StarBook ? `📖 Consumir Livro 4★ & Aprender (${cost.toLocaleString()} SP)` : '🔒 Falta Spellbook 4★ na Mochila';
+    btnLabel = hasRequiredBook ? `📖 Consumir ${bName} & Aprender (${cost.toLocaleString()} SP)` : `🔒 Falta ${bName}`;
   }
 
   let siIconVal = def.icon || '✦';
