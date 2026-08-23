@@ -29,6 +29,9 @@ export { QUEST_DEFS, BATTLE_PASS_TIERS, PASS_DEFS, DAILY_COMPLETION_BONUS } from
 // ─── Collections ──────────────────────────────────────────────────────────────
 export { CODEX_SETS, BOSS_DOLLS } from './codex.js';
 
+// ─── Dyes & Henna ─────────────────────────────────────────────────────────────
+export { DYES_CATALOG } from './dyes.js';
+
 // ─── Items (via window.GameData, set by items.js side-effects) ───────────────
 /** Lazy accessor para window.GameData — deve ser lido APÓS todos os imports avaliados */
 export const GameData = () => window.GameData;

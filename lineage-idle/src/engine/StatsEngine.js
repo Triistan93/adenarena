@@ -13,6 +13,8 @@ import { CardCodexService } from '../services/CardCodexService.js';
 import { FortressService } from '../services/FortressService.js';
 import { CombatPowerService } from '../services/CombatPowerService.js';
 import { SubclassCertificationService } from '../services/SubclassCertificationService.js';
+import { DyeService } from '../services/DyeService.js';
+import { DYES_CATALOG } from '../data/dyes.js';
 import { resolveCanonicalClassId } from '../data/classes/class_aliases.js';
 
 export const STR_MODIFIERS = {
@@ -688,36 +690,14 @@ export function getStats(state) {
     else if (socket.effect === 'empower') buffMatk += Math.floor(baseMatk * 0.12 * mult);
   }
 
-  // Process Tattoos / Dyes Bonuses
-  let tatStr = 0, tatDex = 0, tatCon = 0, tatInt = 0, tatWit = 0, tatMen = 0;
-  if (state.tattoos && Array.isArray(state.tattoos)) {
-    for (const t of state.tattoos) {
-      if (!t) continue;
-      if (t.plusStat && t.minusStat) {
-        if (t.plusStat === 'str') tatStr += (t.plusVal || 0);
-        if (t.plusStat === 'dex') tatDex += (t.plusVal || 0);
-        if (t.plusStat === 'con') tatCon += (t.plusVal || 0);
-        if (t.plusStat === 'int') tatInt += (t.plusVal || 0);
-        if (t.plusStat === 'wit') tatWit += (t.plusVal || 0);
-        if (t.plusStat === 'men') tatMen += (t.plusVal || 0);
-
-        if (t.minusStat === 'str') tatStr -= (t.minusVal || 0);
-        if (t.minusStat === 'dex') tatDex -= (t.minusVal || 0);
-        if (t.minusStat === 'con') tatCon -= (t.minusVal || 0);
-        if (t.minusStat === 'int') tatInt -= (t.minusVal || 0);
-        if (t.minusStat === 'wit') tatWit -= (t.minusVal || 0);
-        if (t.minusStat === 'men') tatMen -= (t.minusVal || 0);
-      }
-    }
-  }
-
-  // Enforce maximum +5 stat increase cap
-  tatStr = Math.min(5, tatStr);
-  tatDex = Math.min(5, tatDex);
-  tatCon = Math.min(5, tatCon);
-  tatInt = Math.min(5, tatInt);
-  tatWit = Math.min(5, tatWit);
-  tatMen = Math.min(5, tatMen);
+  // Process Tattoos / Dyes Bonuses via DyeService with +5 net cap
+  const netDyes = DyeService.calculateNetDyeBonuses(state);
+  const tatStr = netDyes.str || 0;
+  const tatDex = netDyes.dex || 0;
+  const tatCon = netDyes.con || 0;
+  const tatInt = netDyes.int || 0;
+  const tatWit = netDyes.wit || 0;
+  const tatMen = netDyes.men || 0;
 
   if (tatStr > 0) buffAtkMult += tatStr * 0.015;
   if (tatDex > 0) { buffSpd += tatDex * 1.5; baseEva += tatDex; }
@@ -789,22 +769,40 @@ export function getStats(state) {
   const finalCrit = (Number(eb.crit) || 0) + (Number(setB.crit) || 0) + codexB.crit + dollsB.crit + certB.crit + astralB.crit + saCrit + augCrit;
 
   const lootBonus  = (Number(race?.stats?.lootBonus) || 0) + (Number(cls?.base?.lootBonus) || 0) + itemLootBonus + luckBoost;
-  const atkSpd     = ((buffSpd + (dollsB.speed || 0)) / 100) + (certB.atkSpdPercent || 0);
+  const rawAtkSpd  = ((buffSpd + (dollsB.speed || 0)) / 100) + (certB.atkSpdPercent || 0);
   const lifeDrain  = ((Number(eb.lifesteal) || 0) + (dollsB.lifesteal || 0) + ((setB.lifesteal || 0) / 100));
   const craftBonus = itemCraftBonus;
 
-  const critDmg   = 1 + sk('executioner') * 0.15 + astralB.critDmg;
+  const baseCritDmg = 1 + sk('executioner') * 0.15 + astralB.critDmg;
   const regenHp   = sk('holylight') * 0.01;
   const meteorLvl = sk('meteor');
   const execute   = sk('assassinate') * 0.02;
-  const block     = sk('divineshield') * 0.05 + (setB.block || 0);
+  const rawBlock  = sk('divineshield') * 0.05 + (setB.block || 0);
+
+  // ═══════════════════════════════════════════════════════════════════════
+  // COMBAT SOFT-CAPS & DIMINISHING RETURNS
+  // ═══════════════════════════════════════════════════════════════════════
+  // 1. Critical Rate: Cap em 500 (50.0% max chance).
+  // Excesso converte em Dano Crítico Bônus (10 pontos de excesso = +1% Dano Crítico).
+  const rawCrit = finalCrit;
+  const effectiveCritRate = Math.min(50, rawCrit > 100 ? (rawCrit / 10) : rawCrit);
+  const excessCrit = Math.max(0, (rawCrit > 100 ? rawCrit - 500 : (rawCrit > 50 ? (rawCrit - 50) * 10 : 0)));
+  const critOverflowDmgBonus = Math.round((excessCrit / 10) * 0.01 * 1000) / 1000;
+  const critDmg = Math.round((baseCritDmg + critOverflowDmgBonus) * 100) / 100;
+
+  // 2. Esquiva & Bloqueio com Escudo: Cap em 80% (atacante tem sempre no mínimo 20% de acerto).
+  const effectiveEvasion = Math.min(80, finalEva);
+  const block = Math.min(80, rawBlock);
+
+  // 3. Velocidade de Ataque: Retornos decrescentes suaves acima de 2.0x
+  const atkSpd = rawAtkSpd > 2.0 ? (2.0 + Math.log10(1 + (rawAtkSpd - 2.0) * 0.5)) : rawAtkSpd;
 
   const maxHp = Math.floor((100 + state.level * 10 + sk('boostHp') * 60 + (Number(eb.hp) || 0) + (Number(setB.hp) || 0) + codexB.hp + dollsB.hp + setEnchantHp) * (1 + elixirHpMult) * certHpMult);
   const maxMp = Math.floor((50 + state.level * 5 + sk('boostMana') * 30 + (Number(eb.mp) || 0) + (Number(setB.mp) || 0) + codexB.mp + dollsB.mp) * certMpMult);
 
   const rawStats = {
-    atk: finalAtk || 1, def: finalDef || 0, eva: finalEva || 0, matk: finalMatk || 1, mdef: finalMdef || 0,
-    crit: finalCrit, critDmg, loot: 1 + lootBonus, speed: 1 + (buffSpd + (setB.speed || 0)) / 100 + (certB.speedPercent || 0), cdr,
+    atk: finalAtk || 1, def: finalDef || 0, eva: effectiveEvasion || 0, matk: finalMatk || 1, mdef: finalMdef || 0,
+    crit: effectiveCritRate, rawCrit, critOverflowDmgBonus, critDmg, loot: 1 + lootBonus, speed: 1 + (buffSpd + (setB.speed || 0)) / 100 + (certB.speedPercent || 0), cdr,
     atkSpd, lifeDrain, craftBonus, mpRegen: mpRegenBonus,
     xpBoost, goldBoost, luckBoost, autoPotion, maxHp, maxMp,
     regenHp, meteorLvl, execute, block,

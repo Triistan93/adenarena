@@ -517,6 +517,7 @@ export const IDLE_MARKUP = `
                 <button class="l2inv-icon-btn" id="auto-equip-btn" title="Equipar Melhores Itens">⚡</button>
                 <button class="l2inv-icon-btn" id="organize-inv-btn" title="Organizar Mochila (Fundir Pilhas e Ordenar)">🧹</button>
                 <button class="l2inv-icon-btn" id="open-compound-btn" onclick="window.openCompoundModal()" title="Abrir Sistema de Compound / Síntese" style="color:#c084fc;">🔮 Síntese</button>
+                <button class="l2inv-icon-btn" id="open-symbol-maker-btn" onclick="window.openSymbolMakerModal()" title="Abrir Gravador de Símbolos / Tatuagens de Henna" style="color:#fde047;">🎭 Tatuagens</button>
               </div>
 
               <div class="l2inv-bottom-right-info">
@@ -1030,6 +1031,32 @@ export const IDLE_MARKUP = `
         <div class="modal-actions" style="margin-top: 16px;">
           <button id="close-class-modal-btn" class="action-btn">Fechar</button>
         </div>
+      </div>
+    </div>
+
+    <!-- Symbol Maker (Dyes & Henna Tattoos) Modal -->
+    <div id="symbol-maker-modal" class="modal">
+      <div class="modal-content" style="max-width: 680px; background: linear-gradient(180deg, #140e0a 0%, #0a0705 100%); border: 2px solid var(--border-gilt); border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.85); padding: 20px;">
+        <div class="modal-header" style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(212,175,55,0.3); padding-bottom:12px; margin-bottom:16px;">
+          <h2 style="margin:0; font-family:'Cinzel',serif; color:#ffd877; font-size:18px; display:flex; align-items:center; gap:8px;">
+            <span>🎭 Gravador de Símbolos &amp; Tatuagens de Henna</span>
+          </h2>
+          <button id="close-symbol-modal-btn" class="modal-close-x" style="background:none; border:none; color:#94a3b8; font-size:18px; cursor:pointer;">✕</button>
+        </div>
+        <p style="font-size:12px; color:#cbd5e1; margin-bottom:14px; line-height:1.4;">
+          Grave até <strong>3 Símbolos Sagrados de Henna</strong> no seu herói para transferir atributos primários (STR, DEX, CON, INT, WIT, MEN). <em>Regra de Aden: nenhum atributo pode receber mais de +5 de bônus líquido.</em>
+        </p>
+
+        <!-- Current Tattoos Slots -->
+        <div style="font-family:'Cinzel',serif; font-size:13px; font-weight:bold; color:#fde047; margin-bottom:8px;">✨ Seus Símbolos Gravados (Slots de Linhagem)</div>
+        <div id="symbol-slots-container" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(190px, 1fr)); gap:10px; margin-bottom:16px;"></div>
+
+        <!-- Net Modifiers Summary Bar -->
+        <div id="symbol-net-summary" style="background:rgba(0,0,0,0.6); border:1px solid rgba(212,175,55,0.3); border-radius:8px; padding:10px 14px; margin-bottom:16px; font-size:12px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;"></div>
+
+        <!-- Available Hennas for Inscription -->
+        <div style="font-family:'Cinzel',serif; font-size:13px; font-weight:bold; color:#93c5fd; margin-bottom:8px;">📜 Hennas Maiores Disponíveis no Inventário / Mercado</div>
+        <div id="symbol-hennas-list" style="display:flex; flex-direction:column; gap:8px; max-height:220px; overflow-y:auto; padding-right:4px;"></div>
       </div>
     </div>
 

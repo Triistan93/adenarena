@@ -18,6 +18,8 @@ import { RAID_BOSSES }                                                       fro
 import { QUEST_DEFS, BATTLE_PASS_TIERS, PASS_DEFS, DAILY_COMPLETION_BONUS } from './src/data/quests.js';
 import { CODEX_SETS, BOSS_DOLLS }                                           from './src/data/codex.js';
 import { MONSTER_CARDS, CardCodexService }                                    from './src/services/CardCodexService.js';
+import { DYES_CATALOG }                                                       from './src/data/dyes.js';
+import { DyeService }                                                         from './src/services/DyeService.js';
 // ─── Sprint 2: Importa motores de Stats e Nível ────────────────────────────
 import {
   getStats as engineGetStats,
@@ -6808,6 +6810,173 @@ export function init() {
     window.openCompoundModal = openCompoundModal;
     window.closeCompoundModal = closeCompoundModal;
     window.renderCompoundModal = renderCompoundModal;
+
+    // Symbol Maker (Dyes & Henna Tattoos)
+    function openSymbolMakerModal() {
+      const modal = el('symbol-maker-modal');
+      if (!modal) return;
+      renderSymbolMakerUI();
+      modal.classList.add('active');
+    }
+
+    function closeSymbolMakerModal() {
+      const modal = el('symbol-maker-modal');
+      if (modal) modal.classList.remove('active');
+    }
+
+    function renderSymbolMakerUI() {
+      const modal = el('symbol-maker-modal');
+      if (!modal) return;
+
+      const slotsContainer = el('symbol-slots-container');
+      const summaryContainer = el('symbol-net-summary');
+      const listContainer = el('symbol-hennas-list');
+
+      const slots = DyeService.getDyeSlots(state);
+      const net = DyeService.calculateNetDyeBonuses(state);
+
+      // 1. Render Current Slots
+      if (slotsContainer) {
+        slotsContainer.innerHTML = '';
+        slots.forEach((s) => {
+          const card = mkEl('div');
+          card.style.cssText = `
+            background: ${s.unlocked ? (s.tattoo ? 'rgba(212,167,68,0.15)' : 'rgba(0,0,0,0.5)') : 'rgba(30,10,10,0.4)'};
+            border: 1px solid ${s.unlocked ? (s.tattoo ? 'var(--border-gilt)' : 'rgba(255,255,255,0.15)') : '#7f1d1d'};
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 8px;
+          `;
+
+          if (!s.unlocked) {
+            card.innerHTML = `
+              <div style="font-size:11px; font-weight:bold; color:#f87171;">🔒 ${s.name}</div>
+              <div style="font-size:11px; color:#94a3b8;">Desbloqueia no Nível ${s.requiredLvl}+</div>
+            `;
+          } else if (s.tattoo) {
+            card.innerHTML = `
+              <div>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                  <span style="font-size:11px; font-weight:bold; color:#ffd877;">${s.name}</span>
+                  <span style="font-size:14px;">${s.tattoo.icon || '✨'}</span>
+                </div>
+                <div style="font-weight:bold; font-size:13px; color:#86efac;">${s.tattoo.shortName || s.tattoo.name}</div>
+                <div style="font-size:10px; color:#cbd5e1; margin-top:2px;">Gravado em ${new Date(s.tattoo.engravedAt || Date.now()).toLocaleDateString()}</div>
+              </div>
+              <button class="action-btn action-btn--danger" onclick="window.removeDyeAction(${s.index})" style="padding:4px 8px; font-size:11px; margin-top:6px;">
+                🧹 Remover (10k Adena)
+              </button>
+            `;
+          } else {
+            card.innerHTML = `
+              <div>
+                <div style="font-size:11px; font-weight:bold; color:#60a5fa;">✨ ${s.name}</div>
+                <div style="font-size:11px; color:#94a3b8; margin-top:4px;">Slot Vazio Disponível</div>
+              </div>
+              <div style="font-size:10px; color:#cbd5e1;">Selecione uma Henna abaixo para gravar</div>
+            `;
+          }
+          slotsContainer.appendChild(card);
+        });
+      }
+
+      // 2. Render Net Summary Bar
+      if (summaryContainer) {
+        const statsList = [
+          { key: 'str', label: 'STR', color: '#f87171' },
+          { key: 'dex', label: 'DEX', color: '#60a5fa' },
+          { key: 'con', label: 'CON', color: '#4ade80' },
+          { key: 'int', label: 'INT', color: '#c084fc' },
+          { key: 'wit', label: 'WIT', color: '#fde047' },
+          { key: 'men', label: 'MEN', color: '#38bdf8' }
+        ];
+        summaryContainer.innerHTML = `
+          <div style="font-weight:bold; color:#ffd877;">📊 Bônus Líquidos Ativos (Cap +5):</div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            ${statsList.map(st => {
+              const val = net[st.key] || 0;
+              const sign = val > 0 ? `+${val}` : `${val}`;
+              return `<span style="font-weight:bold; color:${st.color};">${st.label}: ${sign}</span>`;
+            }).join(' · ')}
+          </div>
+        `;
+      }
+
+      // 3. Render Hennas List
+      if (listContainer) {
+        listContainer.innerHTML = '';
+        const catalog = Object.values(DYES_CATALOG);
+        catalog.forEach(dye => {
+          const invItem = (state.inventory || []).find(i => i.itemId === dye.id);
+          const count = invItem ? (invItem.count || 1) : 0;
+          const hasReq = count >= (dye.requiredCount || 10);
+          const canAfford = (state.gold || 0) >= (dye.fee || 50000);
+          const nextEmptySlot = slots.findIndex(s => s.unlocked && !s.tattoo);
+
+          const row = mkEl('div');
+          row.style.cssText = `
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 6px;
+            padding: 8px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+          `;
+
+          row.innerHTML = `
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-size:16px;">${dye.icon}</span>
+              <div>
+                <div style="font-weight:bold; color:#ffd877; font-size:13px;">${dye.name}</div>
+                <div style="font-size:11px; color:#cbd5e1;">${dye.desc}</div>
+                <div style="font-size:10px; color:#94a3b8; margin-top:2px;">
+                  Possui: <strong style="color:${hasReq ? '#86efac' : '#f87171'};">${count}/10 tintas</strong> · Taxa: <strong>${(dye.fee || 50000).toLocaleString()} Adena</strong>
+                </div>
+              </div>
+            </div>
+            <div>
+              ${nextEmptySlot >= 0 ? `
+                <button class="action-btn ${hasReq && canAfford ? 'action-btn--primary' : ''}" 
+                        style="padding:6px 12px; font-size:11px; font-weight:bold;"
+                        ${!hasReq || !canAfford ? 'disabled' : ''}
+                        onclick="window.drawDyeAction(${nextEmptySlot}, '${dye.id}')">
+                  ✍️ Gravar (Slot ${nextEmptySlot + 1})
+                </button>
+              ` : `
+                <span style="font-size:10px; color:#94a3b8;">Sem slots vagos</span>
+              `}
+            </div>
+          `;
+          listContainer.appendChild(row);
+        });
+      }
+    }
+
+    window.openSymbolMakerModal = openSymbolMakerModal;
+    window.closeSymbolMakerModal = closeSymbolMakerModal;
+    window.renderSymbolMakerUI = renderSymbolMakerUI;
+    window.drawDyeAction = (slotIdx, dyeId) => {
+      const res = DyeService.drawDye(state, slotIdx, dyeId, { log, floatText, updateAllUI, save });
+      if (res.success) {
+        renderSymbolMakerUI();
+      }
+      return res;
+    };
+    window.removeDyeAction = (slotIdx) => {
+      const res = DyeService.removeDye(state, slotIdx, { log, floatText, updateAllUI, save });
+      if (res.success) {
+        renderSymbolMakerUI();
+      }
+      return res;
+    };
+
+    const closeSymbolBtn = el('close-symbol-modal-btn');
+    if (closeSymbolBtn) closeSymbolBtn.onclick = closeSymbolMakerModal;
 
     // Cash Shop Comercial
     window.openCashShopModal = openCashShopModal;
