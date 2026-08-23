@@ -56,8 +56,8 @@ function cdToMs(cd) {
 function effectToPwr(effect, type) {
   if (!effect) return 20;
   const match = effect.match(/(\d+)%/);
-  if (match) return Math.round(parseInt(match[1]) / 5); // 150% → 30
-  if (type === 'Passivo') return 0;
+  if (match) return Math.round(parseInt(match[1], 10) / 10); // 210% → 21 (2.1x dano)
+  if (type === 'Passivo' || type === 'passive') return 0;
   return 20;
 }
 
@@ -369,17 +369,8 @@ function buildEchoAdapter() {
                  : ((sk.type || '').toLowerCase().includes('buff') || (sk.type || '').toLowerCase().includes('toggle')) ? 'buff'
                  : 'active';
 
-      let pwr = 100;
-      if (sk.effect) {
-        const match = sk.effect.match(/(\d+)%/);
-        if (match) pwr = parseInt(match[1], 10);
-      }
-
-      let cd = 10;
-      if (sk.cooldown && sk.cooldown !== 'N/A') {
-        const match = sk.cooldown.match(/(\d+)/);
-        if (match) cd = parseInt(match[1], 10);
-      }
+      const pwr = effectToPwr(sk.effect, sk.type);
+      const cd  = cdToMs(sk.cooldown);
 
       let reqWeapon = null;
       let reqShield = false;
