@@ -1981,6 +1981,35 @@ export function updateSkillUI(state, callbacks = {}) {
   const wrap = findElement('skill-tree');
   if (!wrap) return;
 
+  const legacyContainer = findElement('legacy-passives-container');
+  if (legacyContainer) {
+    const legacyPassives = Object.values(state.legacyPassives || {});
+    if (legacyPassives.length > 0) {
+      legacyContainer.style.display = 'block';
+      legacyContainer.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <div style="font-family:'Cinzel',serif; font-size:12px; font-weight:bold; color:#ffd877; display:flex; align-items:center; gap:6px;">
+            <span>🧬 Passivas de Linhagem Herdadas</span>
+            <span style="font-size:10px; font-weight:normal; color:#94a3b8;">(20% da eficácia original de classes passadas)</span>
+          </div>
+        </div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;">
+          ${legacyPassives.map(p => `
+            <div style="background:rgba(0,0,0,0.5); border:1px solid rgba(212,167,68,0.4); border-radius:6px; padding:6px 10px; display:flex; align-items:center; gap:8px; font-size:11px; box-shadow:0 2px 8px rgba(0,0,0,0.4);">
+              <span style="font-size:14px;">✦</span>
+              <div>
+                <div style="font-weight:bold; color:#86efac;">${p.name}</div>
+                <div style="color:#cbd5e1; font-size:10px;">${p.desc || `+${(p.val * 100).toFixed(1)}% ${p.stat?.toUpperCase()}`}</div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    } else {
+      legacyContainer.style.display = 'none';
+    }
+  }
+
   const echoData = typeof window !== 'undefined' ? window.EchoData : null;
   const SKILL_DEFS = echoData?.SKILL_DEFS_ECHO || D()?.SKILL_DEFS || {};
   const SKILL_REQS = echoData?.SKILL_REQS_ECHO || D()?.SKILL_REQS || {};

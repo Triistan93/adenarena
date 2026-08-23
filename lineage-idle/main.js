@@ -448,70 +448,217 @@ function openClassTransferModal(classInfo) {
 
   const container = el('class-options-container');
   if (container) {
+    renderClassStep1();
+  }
+
+  function renderClassStep1() {
     container.innerHTML = '';
+    const titleEl = el('class-modal-heading');
+    if (titleEl) {
+      const stageNames = ['1ª Troca de Classe', '2ª Troca de Classe', '3ª Troca de Classe (3rd Job)'];
+      titleEl.textContent = `📜 ${stageNames[currentStage] || 'Cerimônia de Avanço de Classe'}`;
+    }
+
     if (!candidates.length) {
       container.innerHTML = `
         <div style="padding:24px; text-align:center; color:var(--text-muted); font-size:13px; background:rgba(0,0,0,0.4); border:1px solid rgba(212,175,55,0.2); border-radius:8px;">
           ⚠️ Nenhuma opção de evolução disponível para <strong>${currentClassDef?.name || state.class}</strong> na etapa ${targetStage}.
         </div>
       `;
-    } else {
-      for (const { id: clsId, def: clsDef } of candidates) {
-        const card = mkEl('div');
-        card.className = 'class-option-card';
-        card.style.cssText = `
-          background: linear-gradient(180deg, rgba(24, 18, 12, 0.98), rgba(12, 9, 5, 0.99));
-          border: 1px solid var(--border-gilt);
-          border-radius: 8px;
-          padding: 16px;
-          margin-bottom: 12px;
-          box-shadow: 0 4px 16px rgba(0,0,0,0.6);
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
-        `;
+      return;
+    }
 
-        const statsStr = Object.entries(clsDef.base || {})
-          .filter(([, v]) => v > 0)
-          .map(([k, v]) => `+${v} ${k.toUpperCase()}`)
-          .join(' · ');
+    for (const { id: clsId, def: clsDef } of candidates) {
+      const card = mkEl('div');
+      card.className = 'class-option-card';
+      card.style.cssText = `
+        background: linear-gradient(180deg, rgba(24, 18, 12, 0.98), rgba(12, 9, 5, 0.99));
+        border: 1px solid var(--border-gilt);
+        border-radius: 8px;
+        padding: 16px;
+        margin-bottom: 12px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.6);
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      `;
 
-        const archetypeIcons = {
-          fighter: '⚔️ Guerreiro',
-          tank: '🛡️ Tanque Guardião',
-          mage: '🔮 Mago Elemental',
-          healer: '✨ Clérigo / Cura',
-          bard: '🎵 Dançarino / Bardo',
-          assassin: '🗡️ Assassino Mortal',
-          archer: '🏹 Atirador',
-          artisan: '⚒️ Artesão Master',
-          soulbreaker: '⚡ Soulbreaker'
-        };
-        const archLabel = archetypeIcons[clsDef.archetype] || clsDef.archetype || 'Especialista';
+      const statsStr = Object.entries(clsDef.base || {})
+        .filter(([, v]) => v > 0)
+        .map(([k, v]) => `+${v} ${k.toUpperCase()}`)
+        .join(' · ');
 
-        card.innerHTML = `
-          <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:6px;">
-            <h3 style="margin:0; font-family:'Cinzel',serif; color:var(--gilt-bright); font-size:17px; display:flex; align-items:center; gap:8px;">
-              ${clsDef.name}
-            </h3>
-            <span style="padding:3px 10px; background:rgba(212,167,68,0.15); border:1px solid var(--border-gilt); border-radius:4px; font-size:11px; color:var(--gilt-bright); font-weight:bold;">
-              ${archLabel}
-            </span>
-          </div>
-          <p style="margin:4px 0; font-size:12px; color:var(--text-muted); line-height:1.4;">${clsDef.desc || 'Evolução de ordem avançada.'}</p>
-          ${statsStr ? `<div style="font-size:11px; color:#6ee7b7; font-weight:bold; background:rgba(110,231,183,0.1); padding:4px 8px; border-radius:4px; border:1px solid rgba(110,231,183,0.2);">✨ Bônus de Atributos: ${statsStr}</div>` : ''}
-          <button class="action-btn action-btn--primary promote-btn" data-class-id="${clsId}" style="margin-top:8px; padding:10px; width:100%; font-weight:bold; font-family:'Cinzel',serif; font-size:13px; cursor:pointer;">
-            ⚔️ Escolher &amp; Avançar para ${clsDef.name}
-          </button>
-        `;
+      const archetypeIcons = {
+        fighter: '⚔️ Guerreiro',
+        tank: '🛡️ Tanque Guardião',
+        mage: '🔮 Mago Elemental',
+        healer: '✨ Clérigo / Cura',
+        bard: '🎵 Dançarino / Bardo',
+        assassin: '🗡️ Assassino Mortal',
+        archer: '🏹 Atirador',
+        artisan: '⚒️ Artesão Master',
+        soulbreaker: '⚡ Soulbreaker'
+      };
+      const archLabel = archetypeIcons[clsDef.archetype] || clsDef.archetype || 'Especialista';
 
-        const btn = card.querySelector('.promote-btn');
-        if (btn) {
-          btn.onclick = () => promoteClass(clsId);
-        }
+      card.innerHTML = `
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:6px;">
+          <h3 style="margin:0; font-family:'Cinzel',serif; color:var(--gilt-bright); font-size:17px; display:flex; align-items:center; gap:8px;">
+            ${clsDef.name}
+          </h3>
+          <span style="padding:3px 10px; background:rgba(212,167,68,0.15); border:1px solid var(--border-gilt); border-radius:4px; font-size:11px; color:var(--gilt-bright); font-weight:bold;">
+            ${archLabel}
+          </span>
+        </div>
+        <p style="margin:4px 0; font-size:12px; color:var(--text-muted); line-height:1.4;">${clsDef.desc || 'Evolução de ordem avançada.'}</p>
+        ${statsStr ? `<div style="font-size:11px; color:#6ee7b7; font-weight:bold; background:rgba(110,231,183,0.1); padding:4px 8px; border-radius:4px; border:1px solid rgba(110,231,183,0.2);">✨ Bônus de Atributos: ${statsStr}</div>` : ''}
+        <button class="action-btn action-btn--primary promote-btn" data-class-id="${clsId}" style="margin-top:8px; padding:10px; width:100%; font-weight:bold; font-family:'Cinzel',serif; font-size:13px; cursor:pointer;">
+          ⚔️ Escolher &amp; Avançar para ${clsDef.name}
+        </button>
+      `;
 
-        container.appendChild(card);
+      const btn = card.querySelector('.promote-btn');
+      if (btn) {
+        btn.onclick = () => onSelectClassOption(clsId, clsDef);
       }
+
+      container.appendChild(card);
+    }
+  }
+
+  function onSelectClassOption(clsId, clsDef) {
+    const echoDefs = (typeof window !== 'undefined' && window.EchoData) ? window.EchoData.SKILL_DEFS_ECHO : {};
+    const skillDefs = echoDefs || D()?.SKILL_DEFS || {};
+    
+    // Lista de habilidades aprendidas na classe anterior
+    const learnedSkills = Object.entries(state.skills || {})
+      .filter(([, lvl]) => lvl > 0)
+      .map(([sId, lvl]) => ({ id: sId, lvl, def: skillDefs[sId] || { name: sId } }));
+
+    if (learnedSkills.length === 0) {
+      // Se não aprendeu nenhuma habilidade, avança diretamente
+      promoteClass(clsId, []);
+      return;
+    }
+
+    renderLegacySelectionStep(clsId, clsDef, learnedSkills);
+  }
+
+  function renderLegacySelectionStep(clsId, clsDef, learnedSkills) {
+    const titleEl = el('class-modal-heading');
+    if (titleEl) {
+      titleEl.textContent = `🧬 Consagração de Linhagem: ${clsDef.name}`;
+    }
+
+    container.innerHTML = `
+      <div style="background:rgba(212,167,68,0.1); border:1px solid rgba(212,167,68,0.3); border-radius:8px; padding:12px; margin-bottom:12px; font-size:12px; color:#e2e8f0; line-height:1.5;">
+        ✨ <strong>Herança de Classe Passada:</strong> Escolha <strong>até 2 habilidades</strong> da sua classe anterior para se tornarem <strong>Passivas de Linhagem Permanentes</strong> (com 20% da sua eficácia).<br>
+        🔄 <em>Todo o SP investido nas habilidades anteriores será 100% reembolsado para você aprender os novos poderes de ${clsDef.name}!</em>
+      </div>
+      <div id="legacy-skills-grid" style="display:flex; flex-direction:column; gap:8px; margin-bottom:14px; max-height:280px; overflow-y:auto; padding-right:4px;"></div>
+      <div style="display:flex; gap:10px; justify-content:space-between; margin-top:8px;">
+        <button id="legacy-back-btn" class="action-btn" style="flex:1;">⬅️ Voltar</button>
+        <button id="legacy-confirm-btn" class="action-btn action-btn--primary" style="flex:2; font-weight:bold; font-family:'Cinzel',serif;">✨ Consagrar Linhagem &amp; Evoluir</button>
+      </div>
+    `;
+
+    const grid = el('legacy-skills-grid');
+    const selected = new Set();
+
+    // Auto-seleciona até 2 se forem buffs
+    learnedSkills.forEach(s => {
+      const def = s.def;
+      const isBuff = def.type === 'buff' || def.type === 'toggle' || def.effect === 'warcry' || (def.name || '').includes('Harmony') || (def.name || '').includes('Will') || (def.name || '').includes('Roar') || (def.name || '').includes('Aura');
+      if (isBuff && selected.size < 2) selected.add(s.id);
+    });
+    if (selected.size === 0 && learnedSkills.length > 0) {
+      selected.add(learnedSkills[0].id);
+      if (learnedSkills.length > 1) selected.add(learnedSkills[1].id);
+    }
+
+    learnedSkills.forEach(s => {
+      const def = s.def;
+      const lvl = s.lvl;
+      const baseEffectVal = 0.15 + (lvl * 0.03);
+      const passiveVal = +(baseEffectVal * 0.20).toFixed(4);
+
+      let statKey = 'P.ATK';
+      const sName = (def.name || '').toLowerCase();
+      if (sName.includes('def') || sName.includes('shield') || sName.includes('aegis') || sName.includes('iron') || sName.includes('will') || sName.includes('armor')) statKey = 'P.DEF';
+      else if (sName.includes('magic') || sName.includes('mage') || sName.includes('mystic') || sName.includes('elem') || sName.includes('fire') || sName.includes('water') || sName.includes('wind') || sName.includes('mana')) statKey = 'M.ATK';
+      else if (sName.includes('crit') || sName.includes('fury') || sName.includes('stance') || sName.includes('focus')) statKey = 'CRIT';
+      else if (sName.includes('speed') || sName.includes('wind') || sName.includes('dash') || sName.includes('step') || sName.includes('haste') || sName.includes('agility')) statKey = 'SPEED';
+
+      const row = mkEl('div');
+      row.className = 'legacy-skill-select-row';
+      row.dataset.skillId = s.id;
+      row.style.cssText = `
+        background: ${selected.has(s.id) ? 'rgba(212,167,68,0.2)' : 'rgba(0,0,0,0.5)'};
+        border: 1px solid ${selected.has(s.id) ? 'var(--border-gilt)' : 'rgba(255,255,255,0.1)'};
+        border-radius: 6px;
+        padding: 8px 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      `;
+
+      row.innerHTML = `
+        <div style="display:flex; align-items:center; gap:10px;">
+          <input type="checkbox" ${selected.has(s.id) ? 'checked' : ''} style="cursor:pointer; width:16px; height:16px;" />
+          <div>
+            <div style="font-weight:bold; color:#ffd877; font-size:13px;">${def.name || s.id} (Lv. ${lvl})</div>
+            <div style="font-size:11px; color:#86efac;">🧬 Passiva de Linhagem: +${(passiveVal * 100).toFixed(1)}% ${statKey}</div>
+          </div>
+        </div>
+        <span style="font-size:11px; color:#94a3b8;">${selected.has(s.id) ? '✅ Selecionado' : 'Clique para escolher'}</span>
+      `;
+
+      row.onclick = (e) => {
+        if (e.target.tagName !== 'INPUT') {
+          const chk = row.querySelector('input');
+          chk.checked = !chk.checked;
+        }
+        const isChecked = row.querySelector('input').checked;
+        if (isChecked) {
+          if (selected.size >= 2) {
+            row.querySelector('input').checked = false;
+            if (typeof log === 'function') log('Você pode selecionar no máximo 2 Passivas de Linhagem!', 'warning');
+            return;
+          }
+          selected.add(s.id);
+        } else {
+          selected.delete(s.id);
+        }
+        updateGridSelection();
+      };
+
+      grid.appendChild(row);
+    });
+
+    function updateGridSelection() {
+      const rows = grid.querySelectorAll('.legacy-skill-select-row');
+      rows.forEach(r => {
+        const sid = r.dataset.skillId;
+        const isSel = selected.has(sid);
+        r.style.background = isSel ? 'rgba(212,167,68,0.2)' : 'rgba(0,0,0,0.5)';
+        r.style.borderColor = isSel ? 'var(--border-gilt)' : 'rgba(255,255,255,0.1)';
+        const chk = r.querySelector('input');
+        if (chk) chk.checked = isSel;
+        const statusSpan = r.querySelector('span:last-child');
+        if (statusSpan) statusSpan.textContent = isSel ? '✅ Selecionado' : 'Clique para escolher';
+      });
+    }
+
+    const backBtn = el('legacy-back-btn');
+    if (backBtn) backBtn.onclick = () => renderClassStep1();
+
+    const confirmBtn = el('legacy-confirm-btn');
+    if (confirmBtn) {
+      confirmBtn.onclick = () => {
+        promoteClass(clsId, Array.from(selected));
+      };
     }
   }
 
@@ -519,7 +666,7 @@ function openClassTransferModal(classInfo) {
 }
 
 function checkClassAdvancement() { return serviceCheckClassAdvancement(state, { el, openClassTransferModal }); }
-function promoteClass(newClassId) { return servicePromoteClass(state, newClassId, { log, floatText, el, updateAllUI, save }); }
+function promoteClass(newClassId, selectedIds = null) { return servicePromoteClass(state, newClassId, selectedIds, { log, floatText, el, updateAllUI, save }); }
 
 
 // --------------------------- INVENTORY / SALVAGE (Sprint 3: Delegados) ---------------------------

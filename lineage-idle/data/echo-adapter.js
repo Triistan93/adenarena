@@ -198,20 +198,15 @@ function curateClassSkills(skills) {
  * Garante que NENHUMA habilidade caia em ícones genéricos repetidos.
  */
 function resolveSkillIcon(rawName, sk, classDef, classId) {
-  let skillIcon = sk.icon || '';
-  if (skillIcon && skillIcon !== '✦' && skillIcon.length > 4 && !skillIcon.endsWith('.jpg') && !skillIcon.startsWith('/assets/2d/icons/swordsman')) {
-    return skillIcon;
-  }
-
-  const name = (rawName || '').toLowerCase();
+  const name = (rawName || '').toLowerCase().replace(/[^a-z0-9]+/g, '_');
   const arch = (classDef?.archetype || classId || '').toLowerCase();
   const race = (classDef?.race || '').toLowerCase();
 
-  // 1. Water / Aqua / Hydro / Wave / Ocean / Swirl
-  if (/aqua|hydro|water|wave|bubble|stream|frost_tide|tsunami/.test(name)) {
-    return '/assets/2d/icons/shields-amulets/PNG/Background/Icon15.png';
+  // 1. Water / Aqua / Hydro / Wave / Ocean / Swirl / Rain / Freeze
+  if (/aqua|hydro|water|wave|bubble|stream|frost_tide|tsunami|swirl|ocean|splash|ice_bolt/.test(name)) {
+    return '/assets/skills/icons/ice_bolt.png';
   }
-  // 2. Ice / Frost / Freeze / Cold / Blizzard
+  // 2. Ice / Frost / Freeze / Cold / Blizzard / Glacier
   if (/ice|frost|blizzard|freez|cold|glacier/.test(name)) {
     return '/assets/skills/icons/ice_bolt.png';
   }
