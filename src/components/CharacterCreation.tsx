@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { checkNicknameAvailability } from '../firebase';
 
 export interface CharacterCreationData {
   charName: string;
@@ -236,6 +237,8 @@ export const CharacterCreation: React.FC<CharacterCreationProps> = ({
   const [selectedRace, setSelectedRace] = useState(initialRace);
   const [selectedClass, setSelectedClass] = useState(initialClass);
   const [gender, setGender] = useState<'M' | 'F'>(initialGender);
+  const [nameError, setNameError] = useState<string | null>(null);
+  const [isChecking, setIsChecking] = useState(false);
 
   const currentRaceObj = RACES_INFO[selectedRace] || RACES_INFO.human;
 
@@ -251,13 +254,36 @@ export const CharacterCreation: React.FC<CharacterCreationProps> = ({
 
   const handleGenerateRandomName = () => {
     if (isChangeScroll) return;
+    setNameError(null);
     const idx = Math.floor(Math.random() * RANDOM_NAMES.length);
     setCharName(RANDOM_NAMES[idx]);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const finalName = charName.trim() || 'Herói de Aden';
+    setNameError(null);
+    const finalName = charName.trim();
+    if (!finalName || finalName.length < 3) {
+      setNameError('O nome deve conter pelo menos 3 caracteres.');
+      return;
+    }
+
+    if (!isChangeScroll) {
+      setIsChecking(true);
+      try {
+        const check = await checkNicknameAvailability(finalName);
+        if (!check.available) {
+          setNameError(check.reason || 'Este nome já está em uso por outro jogador em Aden.');
+          setIsChecking(false);
+          return;
+        }
+      } catch (err) {
+        // Fallback
+      } finally {
+        setIsChecking(false);
+      }
+    }
+
     onComplete({
       charName: finalName,
       race: selectedRace,
@@ -316,11 +342,16 @@ export const CharacterCreation: React.FC<CharacterCreationProps> = ({
                   type="text"
                   maxLength={16}
                   value={charName}
-                  onChange={(e) => !isChangeScroll && setCharName(e.target.value)}
-                  disabled={isChangeScroll}
+                  onChange={(e) => {
+                    setNameError(null);
+                    if (!isChangeScroll) setCharName(e.target.value);
+                  }}
+                  disabled={isChangeScroll || isChecking}
                   placeholder="Digite o nome do seu herói..."
                   className={`flex-1 rounded-xl border px-4 py-2.5 text-sm font-semibold ${
-                    isChangeScroll
+                    nameError
+                      ? 'bg-red-950/30 border-red-500/60 text-red-200 focus:border-red-400 focus:outline-none'
+                      : isChangeScroll
                       ? 'bg-slate-900/90 border-slate-700 text-amber-300/80 cursor-not-allowed'
                       : 'bg-black/50 border-amber-500/30 text-amber-100 placeholder-slate-500 focus:border-amber-400 focus:outline-none focus:ring-1 focus:ring-amber-400'
                   }`}
@@ -330,13 +361,20 @@ export const CharacterCreation: React.FC<CharacterCreationProps> = ({
                   <button
                     type="button"
                     onClick={handleGenerateRandomName}
-                    className="rounded-xl border border-amber-500/40 bg-amber-500/20 px-3 py-2.5 text-xs font-bold text-amber-300 hover:bg-amber-500/30 transition flex items-center gap-1.5"
+                    disabled={isChecking}
+                    className="rounded-xl border border-amber-500/40 bg-amber-500/20 px-3 py-2.5 text-xs font-bold text-amber-300 hover:bg-amber-500/30 transition flex items-center gap-1.5 disabled:opacity-50"
                     title="Gerar nome aleatório"
                   >
                     🎲 Aleatório
                   </button>
                 )}
               </div>
+              {nameError && (
+                <div className="mt-2 rounded-lg bg-red-500/15 border border-red-500/40 p-2 text-xs text-red-300 flex items-center gap-2 animate-shake">
+                  <span className="text-sm">⚠️</span>
+                  <span>{nameError}</span>
+                </div>
+              )}
             </div>
 
             {/* 2. Escolha do Gênero */}
@@ -498,9 +536,10 @@ export const CharacterCreation: React.FC<CharacterCreationProps> = ({
             <div className="mt-6 space-y-2">
               <button
                 type="submit"
-                className="w-full rounded-xl bg-gradient-to-r from-amber-600 via-amber-500 to-yellow-500 py-3 text-sm font-bold uppercase tracking-wider text-black shadow-lg hover:from-amber-500 hover:to-yellow-400 transition transform active:scale-95"
+                disabled={isChecking}
+                className="w-full rounded-xl bg-gradient-to-r from-amber-600 via-amber-500 to-yellow-500 py-3 text-sm font-bold uppercase tracking-wider text-black shadow-lg hover:from-amber-500 hover:to-yellow-400 transition transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                ✨ Criar Personagem & Entrar em Aden
+                {isChecking ? '⏳ Verificando Disponibilidade do Nome...' : '✨ Criar Personagem & Entrar em Aden'}
               </button>
               {onCancel && (
                 <button

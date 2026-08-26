@@ -146,6 +146,49 @@ export async function savePlayerStateToCloud(userId: string, stateData: any) {
   }
 }
 
+export async function checkNicknameAvailability(nickname: string, currentUserId?: string | null): Promise<{ available: boolean; reason?: string }> {
+  try {
+    const cleanNick = String(nickname || '').trim();
+    if (!cleanNick || cleanNick.length < 3) {
+      return { available: false, reason: 'O nome do personagem deve ter pelo menos 3 caracteres.' };
+    }
+    if (cleanNick.length > 16) {
+      return { available: false, reason: 'O nome do personagem não pode ter mais de 16 caracteres.' };
+    }
+
+    const normNick = cleanNick.toLowerCase();
+
+    // 1. Verifica na coleção public_profiles
+    const profilesCol = collection(db, 'public_profiles');
+    const snap = await getDocs(profilesCol);
+    let isTaken = false;
+
+    snap.forEach((d) => {
+      const data = d.data();
+      const pName = String(data?.charName || data?.name || '').trim().toLowerCase();
+      if (pName === normNick) {
+        // Se pertencer ao próprio usuário atual, está liberado
+        if (currentUserId && (d.id === currentUserId || data.userId === currentUserId)) {
+          return;
+        }
+        isTaken = true;
+      }
+    });
+
+    if (isTaken) {
+      return { 
+        available: false, 
+        reason: `O nome "${cleanNick}" já está em uso por outro herói em Aden. Escolha outro nome!` 
+      };
+    }
+
+    return { available: true };
+  } catch (err) {
+    console.debug('Nickname check notice:', err);
+    return { available: true };
+  }
+}
+
 export async function loadPlayerStateFromCloud(userId: string) {
   try {
     const userRef = doc(db, 'users', userId);
@@ -160,6 +203,43 @@ export async function loadPlayerStateFromCloud(userId: string) {
         return stateObj;
       }
     }
+
+    // Auto-conversão: Se users/{userId} não existe, mas public_profiles/{userId} existe
+    const profRef = doc(db, 'public_profiles', userId);
+    const profSnap = await getDoc(profRef);
+    if (profSnap.exists()) {
+      const pData = profSnap.data();
+      const reconstructedState = {
+        charName: pData.charName || 'Hero',
+        heroName: pData.charName || 'Hero',
+        playerName: pData.charName || 'Hero',
+        name: pData.charName || 'Hero',
+        race: pData.race || 'Human',
+        class: pData.className || 'Warrior',
+        className: pData.className || 'Warrior',
+        gender: 'M',
+        level: Number(pData.level) || 1,
+        xp: 0,
+        sp: 10,
+        gold: 50000,
+        zone: 'talkingIsland',
+        inventory: [],
+        equipment: {},
+        skills: {},
+        lastSaveTime: Date.now()
+      };
+
+      const payload = {
+        state: reconstructedState,
+        privilegeLevel: 0,
+        role: 'player',
+        updatedAt: serverTimestamp()
+      };
+
+      await setDoc(userRef, payload, { merge: true });
+      return reconstructedState;
+    }
+
     return null;
   } catch (err) {
     console.error('Cloud Load Error:', err);
