@@ -610,42 +610,43 @@ export default function Aden2DGame() {
       // --- HUD ---
       const liveState = w.getGameState ? w.getGameState() : s;
 
-      // Top-left: Hero info panel
-      const panelW = Math.min(320, canvas.width * 0.4);
-      ctx.fillStyle = 'rgba(0,0,0,0.65)';
+      // Top-left: Hero info panel (Responsive for mobile & 4K)
+      const isMobileScreen = canvas.width < 600;
+      const panelW = Math.min(340, Math.max(180, canvas.width * (isMobileScreen ? 0.6 : 0.38)));
+      ctx.fillStyle = 'rgba(0,0,0,0.72)';
       roundRect(ctx, 8, 8, panelW, 110, 8);
       ctx.fill();
 
       ctx.textAlign = 'left';
       ctx.fillStyle = '#ffd700';
-      ctx.font = 'bold 18px monospace';
+      ctx.font = isMobileScreen ? 'bold 14px monospace' : 'bold 18px monospace';
       ctx.fillText(`⚔ ${liveState.name || 'Hero'}  Lv.${liveState.level || 1}`, 18, 30);
 
       // HP bar
       ctx.fillStyle = '#aaa';
-      ctx.font = '12px monospace';
+      ctx.font = '11px monospace';
       ctx.fillText('HP', 18, 52);
       drawBar(40, 41, panelW - 55, 14, (liveState.hp || 0) / (liveState.maxHp || 1), '#e44', '#333');
       ctx.fillStyle = '#fff';
-      ctx.font = '11px monospace';
+      ctx.font = '10px monospace';
       ctx.textAlign = 'right';
       ctx.fillText(`${Math.floor(liveState.hp || 0)}/${liveState.maxHp || 0}`, panelW - 5, 53);
 
       // MP bar
       ctx.textAlign = 'left';
       ctx.fillStyle = '#aaa';
-      ctx.font = '12px monospace';
+      ctx.font = '11px monospace';
       ctx.fillText('MP', 18, 72);
       drawBar(40, 61, panelW - 55, 14, (liveState.mp || 0) / (liveState.maxMp || 1), '#44f', '#333');
       ctx.fillStyle = '#fff';
-      ctx.font = '11px monospace';
+      ctx.font = '10px monospace';
       ctx.textAlign = 'right';
       ctx.fillText(`${Math.floor(liveState.mp || 0)}/${liveState.maxMp || 0}`, panelW - 5, 73);
 
       // XP bar
       ctx.textAlign = 'left';
       ctx.fillStyle = '#aaa';
-      ctx.font = '12px monospace';
+      ctx.font = '11px monospace';
       ctx.fillText('XP', 18, 92);
       const nextXp = (liveState.level || 1) * 150;
       drawBar(40, 81, panelW - 55, 10, (liveState.xp || 0) / nextXp, '#ff4', '#333');
@@ -657,13 +658,13 @@ export default function Aden2DGame() {
       // Top-right: Gold
       ctx.textAlign = 'right';
       const goldText = `💰 ${(liveState.gold || 0).toLocaleString()} Adena`;
-      const goldW = Math.min(250, ctx.measureText(goldText).width + 30);
-      ctx.fillStyle = 'rgba(0,0,0,0.65)';
-      roundRect(ctx, canvas.width - goldW - 16, 8, goldW + 8, 36, 8);
+      ctx.font = isMobileScreen ? 'bold 13px monospace' : 'bold 17px monospace';
+      const goldW = Math.min(260, ctx.measureText(goldText).width + 24);
+      ctx.fillStyle = 'rgba(0,0,0,0.72)';
+      roundRect(ctx, canvas.width - goldW - 12, 8, goldW, 34, 8);
       ctx.fill();
       ctx.fillStyle = '#ffd700';
-      ctx.font = 'bold 18px monospace';
-      ctx.fillText(goldText, canvas.width - 18, 32);
+      ctx.fillText(goldText, canvas.width - 20, 30);
 
       // Bottom center: Monster HP
       if (combatState !== CombatState.VICTORY_LOOT && combatState !== CombatState.DEAD && combatState !== CombatState.LOADING) {

@@ -199,6 +199,9 @@ select:focus-visible {
   display: flex;
   flex-direction: column;
   height: 100%;
+  height: 100dvh;
+  max-height: 100dvh;
+  width: 100%;
   z-index: 1;
 }
 
@@ -209,7 +212,7 @@ select:focus-visible {
   justify-content: space-between;
   align-items: center;
   gap: 10px;
-  padding: 8px 65px 8px 220px;
+  padding: max(8px, env(safe-area-inset-top, 8px)) clamp(10px, 2vw, 32px) 8px clamp(12px, 3.5vw, 64px);
   background:
     linear-gradient(180deg, rgba(20, 23, 31, 0.98) 0%, rgba(9, 11, 16, 0.98) 100%),
     radial-gradient(circle at top left, rgba(212,167,68,0.12), transparent 45%);
@@ -230,10 +233,11 @@ select:focus-visible {
 #game-title {
   font-family: "Cinzel", serif;
   font-weight: 900;
-  font-size: 18px;
+  font-size: clamp(13px, 1.4vw, 18px);
   letter-spacing: 0.22em;
   color: var(--bone);
   text-shadow: 0 1px 0 #000, 0 0 18px rgba(212,167,68,0.35);
+  white-space: nowrap;
 }
 #game-title em {
   font-style: normal;
@@ -3762,63 +3766,111 @@ select:focus-visible {
 }
 
 /* ============ ADVANCED RESPONSIVE DESIGN ============ */
-@media (max-width: 980px) and (min-width: 769px) {
-  .main-grid { 
-    grid-template-columns: 180px 4px 1fr 4px 320px !important; 
+/* ============ ADVANCED UNIVERSAL RESPONSIVE DESIGN (MOBILE TO 75" 4K) ============ */
+
+/* 1. Ultra-Large / 4K / 75-inch TVs (min-width: 1921px) */
+@media (min-width: 1921px) {
+  :host, #game {
+    font-size: clamp(14px, 0.82vw, 18px);
+  }
+  .main-grid {
+    --col1-w: clamp(260px, 13vw, 360px);
+    --col3-w: clamp(750px, 38vw, 1100px);
+  }
+  .top-bar {
+    padding: max(12px, env(safe-area-inset-top, 12px)) 40px 12px 80px;
+  }
+  #game-title {
+    font-size: clamp(18px, 1.2vw, 26px);
+  }
+  .stage-hero img, .stage-monster img {
+    max-width: 140px;
+    max-height: 140px;
   }
 }
 
+/* 2. Laptops 13-14" & Standard Displays (1025px - 1440px) */
+@media (max-width: 1440px) and (min-width: 1025px) {
+  .main-grid {
+    --col1-w: clamp(170px, 14vw, 200px);
+    --col3-w: clamp(380px, 38vw, 560px);
+  }
+  .panel {
+    padding: 8px 10px;
+  }
+}
+
+/* 3. Tablets in Landscape & Netbooks (769px - 1024px) */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .main-grid { 
+    --col1-w: 160px;
+    --col3-w: clamp(320px, 42vw, 420px);
+    grid-template-columns: var(--col1-w) 4px 1fr 4px var(--col3-w) !important;
+    height: calc(100dvh - 46px) !important;
+  }
+  .top-bar {
+    padding: max(6px, env(safe-area-inset-top, 6px)) 12px 6px 54px !important;
+  }
+  #game-title {
+    font-size: 14px !important;
+  }
+}
+
+/* 4. Mobile Devices & Tablets in Portrait (<= 768px) */
 @media (max-width: 768px) {
   /* Resizers hidden on mobile touch devices */
   .grid-resizer-v, .grid-resizer-h {
     display: none !important;
   }
 
-  /* Top Bar Adaptation to avoid overlapping top-left hamburger menu */
+  /* Top Bar Adaptation with safe area support */
   .top-bar {
-    padding: 8px 12px 8px 135px !important;
+    padding: max(6px, env(safe-area-inset-top, 6px)) 10px 6px clamp(48px, 12vw, 70px) !important;
     gap: 6px !important;
   }
   #game-title {
-    font-size: 13px !important;
-    letter-spacing: 0.12em !important;
+    font-size: 12px !important;
+    letter-spacing: 0.08em !important;
   }
   .top-stats {
-    gap: 6px !important;
+    gap: 4px !important;
   }
   .top-stats > span {
-    padding: 4px 6px !important;
-    font-size: 10px !important;
+    padding: 3px 6px !important;
+    font-size: 9.5px !important;
   }
-  .ts-label { font-size: 8px !important; }
+  .ts-label { font-size: 7.5px !important; }
 
   /* Main Grid Stack */
   .main-grid {
     display: flex !important;
     flex-direction: column !important;
-    flex: 1 !important;
+    flex: 1 1 auto !important;
+    width: 100% !important;
+    height: auto !important;
+    max-height: calc(100dvh - 44px) !important;
     overflow-y: auto !important;
     -webkit-overflow-scrolling: touch;
-    padding-bottom: 60px !important; /* Clears floating bottom nav */
+    padding-bottom: max(64px, calc(56px + env(safe-area-inset-bottom, 12px))) !important;
   }
 
   /* Panel Ordering & Layout */
   .center-panel {
     order: 1;
-    min-height: 300px;
+    min-height: auto;
     flex: none;
     border-bottom: 2px solid var(--gilt-deep);
   }
 
   .stage {
-    min-height: 150px !important;
-    max-height: 200px !important;
+    min-height: 140px !important;
+    max-height: 190px !important;
   }
 
   .tabs-panel {
     order: 2;
-    flex: 1;
-    min-height: 420px;
+    flex: 1 0 auto;
+    min-height: 380px;
     border: none !important;
   }
 
@@ -3829,8 +3881,8 @@ select:focus-visible {
     border-top: 2px solid var(--line);
     display: grid !important;
     grid-template-columns: repeat(2, 1fr) !important;
-    gap: 4px 12px;
-    padding: 12px;
+    gap: 4px 10px;
+    padding: 10px;
   }
   .stats-panel .stat-divider {
     grid-column: 1 / -1;
@@ -3842,24 +3894,24 @@ select:focus-visible {
     flex-wrap: nowrap !important;
     overflow-x: auto !important;
     -webkit-overflow-scrolling: touch;
-    gap: 6px !important;
+    gap: 4px !important;
     padding: 6px 4px !important;
     border-bottom: 1px solid var(--line);
   }
   .tab-btn {
     flex: 0 0 auto !important;
     min-width: max-content !important;
-    padding: 8px 14px !important;
+    padding: 7px 12px !important;
     font-size: 11px !important;
     touch-action: manipulation;
   }
 
   /* Inventory & Paperdoll Auto-Grids */
   .inventory-grid, #inventory-grid, .l2inv-grid {
-    display: grid;
-    grid-template-columns: repeat(10, 1fr); /* 10 COLUNAS PREENCHENDO O PAINEL */
-    grid-auto-rows: minmax(42px, auto);
-    gap: 4px;
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(36px, 1fr)) !important;
+    grid-auto-rows: minmax(36px, auto);
+    gap: 3px;
     overflow-y: auto;
     overflow-x: hidden;
   }
@@ -3886,17 +3938,18 @@ select:focus-visible {
     padding-bottom: 12px;
   }
   .skill-tree-grid {
-    min-width: 580px;
+    min-width: 540px;
   }
 
-  /* Mobile Bottom Glass Navigation Dock */
+  /* Mobile Bottom Glass Navigation Dock with Safe Area */
   .mobile-bottom-nav {
     display: flex !important;
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
-    height: 56px;
+    height: calc(52px + env(safe-area-inset-bottom, 0px));
+    padding-bottom: env(safe-area-inset-bottom, 0px);
     background: rgba(10, 13, 20, 0.96);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
@@ -3916,14 +3969,14 @@ select:focus-visible {
     background: transparent;
     border: none;
     color: var(--ink-dim);
-    font-size: 9.5px;
+    font-size: 9px;
     gap: 2px;
     cursor: pointer;
     touch-action: manipulation;
     transition: color 0.15s ease;
   }
   .mobile-nav-btn span.icon {
-    font-size: 16px;
+    font-size: 15px;
   }
   .mobile-nav-btn.active {
     color: var(--gilt-bright);
@@ -3936,28 +3989,31 @@ select:focus-visible {
     touch-action: manipulation;
   }
 
-  .modal-content {
-    max-height: 90vh;
-    overflow-y: auto;
+  .modal-content, .admin-modal-content, .class-modal-content, .saga-modal-content {
+    max-width: min(95vw, 680px) !important;
+    max-height: 88dvh !important;
+    overflow-y: auto !important;
+    margin: auto;
   }
 }
 
+/* 5. Small Mobile Phones (<= 480px) */
 @media (max-width: 480px) {
   .top-bar {
-    padding: 6px 8px 6px 110px !important;
+    padding: max(5px, env(safe-area-inset-top, 5px)) 6px 5px 50px !important;
   }
   #game-title {
     font-size: 11px !important;
-    letter-spacing: 0.05em !important;
+    letter-spacing: 0.04em !important;
   }
   .top-stats {
-    display: none !important; /* Hide secondary top clock on tiny screens to preserve space */
+    display: none !important;
   }
   .stage-hero, .stage-monster {
-    transform: scale(0.85);
+    transform: scale(0.8);
   }
   .stage-vs {
-    font-size: 16px !important;
+    font-size: 14px !important;
   }
 }
 

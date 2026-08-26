@@ -225,14 +225,14 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-[#06080f] text-white flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-[#06080f] text-white flex items-start sm:items-center justify-center p-3 sm:p-6 min-h-[100dvh]">
       {/* Background Glow */}
       <div className="pointer-events-none absolute inset-0 opacity-50">
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl animate-pulse" />
         <div className="absolute bottom-10 right-10 w-80 h-80 bg-purple-600/10 rounded-full blur-3xl" />
       </div>
 
-      <div className="relative w-full max-w-md bg-[#0b0f1c]/95 border border-amber-500/30 rounded-3xl p-8 shadow-2xl backdrop-blur-xl">
+      <div className="relative w-full max-w-md my-auto bg-[#0b0f1c]/95 border border-amber-500/30 rounded-3xl p-5 sm:p-8 shadow-2xl backdrop-blur-xl">
         {/* Game Title Header */}
         <div className="text-center mb-6">
           <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-amber-400/80 mb-1">

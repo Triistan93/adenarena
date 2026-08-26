@@ -297,8 +297,8 @@ export const CharacterCreation: React.FC<CharacterCreationProps> = ({
   const currentImg = currentImgObj?.[gender] || '/img/human_fighter.png';
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md p-4 overflow-y-auto">
-      <div className="relative w-full max-w-4xl rounded-2xl border border-amber-500/30 bg-[#0b0e17] p-6 shadow-2xl text-white">
+    <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center bg-black/90 backdrop-blur-md p-3 sm:p-6 overflow-y-auto min-h-[100dvh]">
+      <div className="relative w-full max-w-4xl my-auto rounded-2xl border border-amber-500/30 bg-[#0b0e17] p-4 sm:p-6 shadow-2xl text-white max-h-[92dvh] overflow-y-auto">
         
         {/* Banner Header */}
         <div className="mb-6 text-center border-b border-amber-500/20 pb-4">

@@ -910,12 +910,12 @@ export default function Shell() {
           ) : mode === "pixel2d" ? (
             <Aden2DGame />
           ) : (
-            <div className="w-full h-full min-h-screen relative overflow-hidden">
+            <div className="w-full h-full min-h-[100dvh] max-h-[100dvh] relative overflow-hidden">
               <IdleGame />
             </div>
           )}
           <ModeSwitch mode={mode} setMode={setMode} />
-          <div className="fixed top-2.5 right-2.5 z-40">
+          <div className="fixed top-[max(6px,env(safe-area-inset-top,6px))] right-[max(6px,env(safe-area-inset-right,6px))] z-40">
             <AuthModal 
               onCloudDataLoaded={(cloudState) => {
                 if (typeof window !== 'undefined' && (window as any).loadGameState) {
