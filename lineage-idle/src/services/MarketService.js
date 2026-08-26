@@ -4,7 +4,7 @@
  * Gerencia anúncios 100% reais entre jogadores em tempo real:
  * - Venda livre em Adena (🪙) ou Aden Coin (👑)
  * - Taxa de listagem imperial de 5% em Adena (Adena Sink)
- * - Sincronização multi-contas em Nuvem (Firebase Firestore) + BroadcastChannel
+ * - Sincronização multi-contas em Nuvem (Firebase Firestore + API Serverless + BroadcastChannel)
  * - Zero NPCs ou itens fantasmas artificiais
  * - Coleta segura de lucros com histórico detalhado
  */
@@ -69,16 +69,16 @@ export const MarketService = {
     if (msg.type === 'SYNC_LISTINGS') {
       this.fetchRemoteListings();
     } else if (msg.type === 'LISTING_CREATED' && msg.listing) {
-      const current = this.getListings();
+      const current = this.getListingsLocal();
       if (!current.some(l => l.id === msg.listing.id)) {
         current.unshift(msg.listing);
-        this.saveListings(current);
+        this.saveListings(current, false);
         this.notifyUI();
       }
     } else if (msg.type === 'LISTING_REMOVED' && msg.listingId) {
-      const current = this.getListings();
+      const current = this.getListingsLocal();
       const updated = current.filter(l => l.id !== msg.listingId);
-      this.saveListings(updated);
+      this.saveListings(updated, false);
       this.notifyUI();
     }
   },
@@ -93,9 +93,20 @@ export const MarketService = {
       try {
         window.FirebaseBridge.subscribeMarketListings((remoteListings) => {
           if (Array.isArray(remoteListings)) {
-            const cleanList = remoteListings.filter(this._isValidPlayerListing);
-            _inMemoryListings = cleanList;
-            this.saveListings(cleanList, false);
+            const cleanRemote = remoteListings.filter(this._isValidPlayerListing);
+            const localAll = this.getListingsLocal();
+            const myLocal = localAll.filter(l => l.isLocalCreator);
+            
+            const mergedMap = new Map();
+            cleanRemote.forEach(l => mergedMap.set(l.id, l));
+            myLocal.forEach(l => {
+              if (!mergedMap.has(l.id)) mergedMap.set(l.id, l);
+            });
+            
+            const merged = Array.from(mergedMap.values()).filter(this._isValidPlayerListing);
+            merged.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+            _inMemoryListings = merged;
+            this.saveListings(merged, false);
             this.notifyUI();
           }
         });
@@ -121,55 +132,125 @@ export const MarketService = {
   },
 
   /**
+   * Valida se um anúncio pertence ao jogador atual
+   */
+  _isMyListing(listing, state) {
+    if (!listing) return false;
+    
+    const pName = (state?.charName || state?.heroName || state?.playerName || state?.name || '').trim().toLowerCase();
+    const sName = (listing.sellerName || '').trim().toLowerCase();
+    
+    if (pName && sName) {
+      if (pName === sName) return true;
+      return false;
+    }
+    
+    const myUid = typeof window !== 'undefined' ? window.FirebaseBridge?.getCurrentUserId?.() : null;
+    if (myUid && listing.sellerUid && myUid === listing.sellerUid) {
+      return true;
+    }
+    
+    return listing.isLocalCreator === true;
+  },
+
+  /**
+   * Obtém apenas os anúncios pertencentes ao jogador atual
+   */
+  getMyListings(state) {
+    const all = this.getListings(state);
+    return all.filter(l => this._isMyListing(l, state));
+  },
+
+  /**
+   * Lê os anúncios armazenados no localStorage local sem sobrescrever
+   */
+  getListingsLocal() {
+    try {
+      const raw = localStorage.getItem(MARKET_STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) {
+          return parsed.filter(this._isValidPlayerListing);
+        }
+      }
+    } catch (e) {
+      console.warn('[MarketService] Erro ao carregar anúncios locais:', e);
+    }
+    return [];
+  },
+
+  /**
    * Obtém todos os anúncios ativos do mercado (filtra estritamente itens de jogadores reais)
    */
-  getListings() {
+  getListings(state) {
     this.initCloudSubscription();
 
     if (_inMemoryListings !== null) {
       return _inMemoryListings;
     }
 
-    try {
-      const raw = localStorage.getItem(MARKET_STORAGE_KEY);
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        if (Array.isArray(parsed)) {
-          const clean = parsed.filter(this._isValidPlayerListing);
-          _inMemoryListings = clean;
-          return clean;
-        }
-      }
-    } catch (e) {
-      console.warn('[MarketService] Erro ao carregar anúncios locais:', e);
-    }
-
-    // Se estiver vazio, inicia com lista vazia (SEM NPCs FANTASMAS) e busca da nuvem
-    _inMemoryListings = [];
-    this.fetchRemoteListings();
+    const localList = this.getListingsLocal();
+    _inMemoryListings = localList;
+    
+    // Dispara busca assíncrona na nuvem em segundo plano
+    this.fetchRemoteListings(state);
     return _inMemoryListings;
   },
 
   /**
-   * Busca anúncios mais recentes da nuvem (Firestore)
+   * Busca anúncios mais recentes da nuvem (Firestore + API Serverless) com Merge Seguro
    */
-  async fetchRemoteListings() {
+  async fetchRemoteListings(state) {
     this.initCloudSubscription();
+    let remoteList = [];
+
+    // 1. Tenta buscar via FirebaseBridge
     try {
       if (typeof window !== 'undefined' && window.FirebaseBridge?.fetchMarketListings) {
         const remote = await window.FirebaseBridge.fetchMarketListings();
-        if (Array.isArray(remote)) {
-          const clean = remote.filter(this._isValidPlayerListing);
-          _inMemoryListings = clean;
-          this.saveListings(clean, false);
-          this.notifyUI();
-          return clean;
+        if (Array.isArray(remote) && remote.length > 0) {
+          remoteList = remote.filter(this._isValidPlayerListing);
         }
       }
     } catch (err) {
-      console.warn('[MarketService] Erro ao buscar anúncios da nuvem:', err);
+      console.warn('[MarketService] Erro ao buscar anúncios do Firebase:', err);
     }
-    return this.getListings();
+
+    // 2. Se Firebase estiver vazio ou offline, tenta buscar da API Serverless /api/market
+    if (remoteList.length === 0 && typeof fetch !== 'undefined') {
+      try {
+        const res = await fetch('/api/market');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.ok && Array.isArray(data.listings)) {
+            remoteList = data.listings.filter(this._isValidPlayerListing);
+          }
+        }
+      } catch (apiErr) {
+        // Silencioso em offline / ambiente de testes
+      }
+    }
+
+    // 3. MERGE SEGURO: Preserva anúncios criados localmente pelo jogador para NUNCA sumirem
+    const localAll = this.getListingsLocal();
+    const myLocalListings = localAll.filter(l => this._isMyListing(l, state));
+
+    const mergedMap = new Map();
+    remoteList.forEach(l => mergedMap.set(l.id, l));
+    myLocalListings.forEach(l => {
+      if (!mergedMap.has(l.id)) {
+        mergedMap.set(l.id, l);
+      }
+    });
+
+    const finalMerged = Array.from(mergedMap.values()).filter(this._isValidPlayerListing);
+    finalMerged.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+
+    _inMemoryListings = finalMerged;
+    this.saveListings(finalMerged, false);
+    this.notifyUI();
+
+    return finalMerged;
   },
 
   /**
@@ -180,7 +261,6 @@ export const MarketService = {
     _inMemoryListings = clean;
     try {
       localStorage.setItem(MARKET_STORAGE_KEY, JSON.stringify(clean));
-      // Limpa chaves legadas de mock anteriores
       localStorage.removeItem('l2_aden_market_listings_v1');
     } catch (e) {
       console.error('[MarketService] Falha ao salvar anúncios:', e);
@@ -201,7 +281,8 @@ export const MarketService = {
       const raw = localStorage.getItem(MARKET_SALES_KEY);
       if (raw) {
         const all = JSON.parse(raw);
-        return all[charName] || { pendingAdena: 0, pendingAdenCoins: 0, history: [] };
+        const normKey = String(charName).trim().toLowerCase();
+        return all[charName] || all[normKey] || { pendingAdena: 0, pendingAdenCoins: 0, history: [] };
       }
     } catch (e) {
       console.warn('[MarketService] Erro ao carregar vendas locais:', e);
@@ -210,26 +291,44 @@ export const MarketService = {
   },
 
   /**
-   * Atualiza as vendas do jogador com base na nuvem
+   * Atualiza as vendas do jogador com base na nuvem e API
    */
   async fetchPlayerSalesFromCloud(charName = 'Hero of Aden') {
+    let remoteSales = null;
+
+    // 1. Tenta Firebase
     try {
       if (typeof window !== 'undefined' && window.FirebaseBridge?.fetchPlayerSales) {
-        const remoteSales = await window.FirebaseBridge.fetchPlayerSales(charName);
-        if (remoteSales) {
-          const local = this.getPlayerSales(charName);
-          const merged = {
-            pendingAdena: Math.max(local.pendingAdena || 0, remoteSales.pendingAdena || 0),
-            pendingAdenCoins: Math.max(local.pendingAdenCoins || 0, remoteSales.pendingAdenCoins || 0),
-            history: remoteSales.history || local.history || []
-          };
-          this.savePlayerSales(charName, merged);
-          return merged;
-        }
+        remoteSales = await window.FirebaseBridge.fetchPlayerSales(charName);
       }
     } catch (err) {
-      console.warn('[MarketService] Erro ao sincronizar vendas da nuvem:', err);
+      console.warn('[MarketService] Erro ao sincronizar vendas do Firebase:', err);
     }
+
+    // 2. Tenta API Serverless
+    if (!remoteSales && typeof fetch !== 'undefined') {
+      try {
+        const res = await fetch(`/api/market?salesFor=${encodeURIComponent(charName)}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data.ok && data.sales) {
+            remoteSales = data.sales;
+          }
+        }
+      } catch (e) {}
+    }
+
+    if (remoteSales) {
+      const local = this.getPlayerSales(charName);
+      const merged = {
+        pendingAdena: Math.max(local.pendingAdena || 0, remoteSales.pendingAdena || 0),
+        pendingAdenCoins: Math.max(local.pendingAdenCoins || 0, remoteSales.pendingAdenCoins || 0),
+        history: remoteSales.history || local.history || []
+      };
+      this.savePlayerSales(charName, merged);
+      return merged;
+    }
+
     return this.getPlayerSales(charName);
   },
 
@@ -240,7 +339,9 @@ export const MarketService = {
     try {
       const raw = localStorage.getItem(MARKET_SALES_KEY);
       const all = raw ? JSON.parse(raw) : {};
+      const normKey = String(charName).trim().toLowerCase();
       all[charName] = data;
+      all[normKey] = data;
       localStorage.setItem(MARKET_SALES_KEY, JSON.stringify(all));
       localStorage.removeItem('l2_aden_market_sales_v1');
     } catch (e) {
@@ -292,7 +393,7 @@ export const MarketService = {
       state.inventory.splice(itemIndex, 1);
     }
 
-    const sellerName = state.name || state.charName || 'Hero of Aden';
+    const sellerName = state.charName || state.heroName || state.playerName || state.name || 'Hero of Aden';
     const sellerUid = typeof window !== 'undefined' ? (window.FirebaseBridge?.getCurrentUserId?.() || sellerName) : sellerName;
     const listingId = 'mkt_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
 
@@ -301,6 +402,7 @@ export const MarketService = {
       sellerName: sellerName,
       sellerUid: sellerUid,
       isPlayerListing: true,
+      isLocalCreator: true,
       createdAt: Date.now(),
       currency: currency === 'adencoin' ? 'adencoin' : 'adena',
       pricePerUnit: unitPrice,
@@ -318,19 +420,30 @@ export const MarketService = {
       }
     };
 
-    // 1. Salva localmente
-    const listings = this.getListings();
+    // 1. Salva localmente com prioridade absoluta
+    const listings = this.getListingsLocal();
     listings.unshift(newListing);
     this.saveListings(listings, true);
 
-    // 2. Transmite para outras abas
+    // 2. Transmite para outras abas locais
     if (_marketBroadcastChannel) {
       try {
         _marketBroadcastChannel.postMessage({ type: 'LISTING_CREATED', listing: newListing });
       } catch (e) {}
     }
 
-    // 3. Sincroniza com Firebase Cloud
+    // 3. Sincroniza com API Serverless /api/market
+    if (typeof fetch !== 'undefined') {
+      try {
+        fetch('/api/market', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'create', listing: newListing })
+        }).catch(() => {});
+      } catch (e) {}
+    }
+
+    // 4. Sincroniza com Firebase Cloud
     try {
       if (typeof window !== 'undefined' && window.FirebaseBridge?.createMarketListing) {
         await window.FirebaseBridge.createMarketListing(newListing);
@@ -354,16 +467,16 @@ export const MarketService = {
   async buyListing(state, listingId) {
     if (!state) return { ok: false, msg: 'Estado de jogo indisponível.' };
 
-    const listings = this.getListings();
+    const listings = this.getListings(state);
     const index = listings.findIndex(l => l.id === listingId);
     if (index === -1) {
       return { ok: false, msg: 'Este anúncio já foi adquirido por outro jogador ou foi cancelado!' };
     }
 
     const listing = listings[index];
-    const buyerName = state.name || state.charName || 'Hero of Aden';
+    const buyerName = state.charName || state.heroName || state.playerName || state.name || 'Hero of Aden';
 
-    if (listing.sellerName === buyerName && listing.isPlayerListing) {
+    if (this._isMyListing(listing, state)) {
       return { ok: false, msg: 'Você não pode comprar seu próprio anúncio! Cancele-o na aba Minhas Vendas se desejar o item de volta.' };
     }
 
@@ -436,7 +549,18 @@ export const MarketService = {
       } catch (e) {}
     }
 
-    // 3. Sincroniza com Firebase Cloud (Deleta listagem e Credita vendedor)
+    // 3. Sincroniza com API Serverless
+    if (typeof fetch !== 'undefined') {
+      try {
+        fetch('/api/market', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'buy', listingId, buyerName })
+        }).catch(() => {});
+      } catch (e) {}
+    }
+
+    // 4. Sincroniza com Firebase Cloud (Deleta listagem e Credita vendedor)
     try {
       if (typeof window !== 'undefined') {
         if (window.FirebaseBridge?.deleteMarketListing) {
@@ -465,16 +589,15 @@ export const MarketService = {
   async cancelListing(state, listingId) {
     if (!state) return { ok: false, msg: 'Estado de jogo indisponível.' };
 
-    const listings = this.getListings();
+    const listings = this.getListings(state);
     const index = listings.findIndex(l => l.id === listingId);
     if (index === -1) {
       return { ok: false, msg: 'Anúncio não encontrado ou já negociado.' };
     }
 
     const listing = listings[index];
-    const playerName = state.name || state.charName || 'Hero of Aden';
 
-    if (listing.sellerName !== playerName) {
+    if (!this._isMyListing(listing, state)) {
       return { ok: false, msg: 'Você só pode cancelar seus próprios anúncios!' };
     }
 
@@ -498,7 +621,18 @@ export const MarketService = {
       } catch (e) {}
     }
 
-    // 2. Deleta do Firestore
+    // 2. Sincroniza com API Serverless
+    if (typeof fetch !== 'undefined') {
+      try {
+        fetch('/api/market', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'cancel', listingId })
+        }).catch(() => {});
+      } catch (e) {}
+    }
+
+    // 3. Deleta do Firestore
     try {
       if (typeof window !== 'undefined' && window.FirebaseBridge?.deleteMarketListing) {
         await window.FirebaseBridge.deleteMarketListing(listingId);
@@ -521,7 +655,7 @@ export const MarketService = {
   async claimProfits(state) {
     if (!state) return { ok: false, msg: 'Estado indisponível.' };
 
-    const playerName = state.name || state.charName || 'Hero of Aden';
+    const playerName = state.charName || state.heroName || state.playerName || state.name || 'Hero of Aden';
     
     // Atualiza com dados mais recentes da nuvem antes de resgatar
     const salesData = await this.fetchPlayerSalesFromCloud(playerName);
@@ -545,6 +679,18 @@ export const MarketService = {
 
     this.savePlayerSales(playerName, salesData);
 
+    // Sincroniza com API Serverless
+    if (typeof fetch !== 'undefined') {
+      try {
+        fetch('/api/market', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'claim', sellerName: playerName })
+        }).catch(() => {});
+      } catch (e) {}
+    }
+
+    // Sincroniza com Firebase Cloud
     try {
       if (typeof window !== 'undefined' && window.FirebaseBridge?.claimPlayerSales) {
         await window.FirebaseBridge.claimPlayerSales(playerName);
@@ -563,4 +709,3 @@ export const MarketService = {
     };
   }
 };
-

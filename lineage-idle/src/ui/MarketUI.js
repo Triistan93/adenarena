@@ -81,7 +81,7 @@ export function renderMarketTab(container, state, callbacks = {}) {
           🏷️ Criar Anúncio
         </button>
         <button class="market-nav-btn ${_activeMarketTab === 'my_sales' ? 'active' : ''}" data-tab="my_sales" style="background: ${_activeMarketTab === 'my_sales' ? 'rgba(212,167,68,0.25)' : 'rgba(0,0,0,0.4)'}; border: 1px solid ${_activeMarketTab === 'my_sales' ? '#ffd877' : 'rgba(255,255,255,0.1)'}; color: ${_activeMarketTab === 'my_sales' ? '#ffd877' : '#94a3b8'}; padding: 8px 18px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 13px; display: flex; align-items: center; gap: 6px;">
-          📜 Minhas Vendas (${MarketService.getListings().filter(l => l.sellerName === playerName).length})
+          📜 Minhas Vendas (${MarketService.getMyListings(state).length})
         </button>
       </div>
   `;
@@ -180,7 +180,7 @@ function renderBuyTab(state) {
           const currencyColor = isAdena ? '#ffd877' : '#60a5fa';
           const totalCost = Number(l.totalPrice) || (l.pricePerUnit * l.quantity);
           const iconUrl = getItemIconUrl(l.item);
-          const isOwnListing = l.sellerName === (state.name || state.charName);
+          const isOwnListing = MarketService._isMyListing(l, state);
 
           return `
             <div style="background: rgba(18,24,36,0.9); border: 1px solid rgba(212,167,68,0.3); border-radius: 10px; padding: 12px; display: flex; flex-direction: column; justify-content: space-between; gap: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.4); transition: transform 0.15s ease;">
@@ -365,8 +365,8 @@ function renderSellTab(state) {
  * Renderiza os anúncios ativos do jogador e histórico de vendas
  */
 function renderMySalesTab(state, salesData) {
-  const playerName = state.name || state.charName || 'Hero of Aden';
-  const myListings = MarketService.getListings().filter(l => l.sellerName === playerName);
+  const playerName = state.charName || state.heroName || state.playerName || state.name || 'Hero of Aden';
+  const myListings = MarketService.getMyListings(state);
   const history = salesData.history || [];
 
   return `
@@ -379,24 +379,29 @@ function renderMySalesTab(state, salesData) {
         </h4>
 
         ${myListings.length === 0 ? `
-          <p style="color: #94a3b8; font-size: 12px; margin: 0;">Você não possui nenhum anúncio ativo no mercado.</p>
+          <div style="padding: 20px; text-align: center; color: #94a3b8; font-size: 12px;">
+            Você não possui nenhum anúncio ativo no mercado no momento.<br />
+            <button id="btn-my-sales-create" class="action-btn action-btn--primary" style="margin-top: 10px; padding: 6px 14px; font-size: 11px; cursor: pointer; font-family: 'Cinzel', serif;">🏷️ Criar um Anúncio Agora</button>
+          </div>
         ` : `
           <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px;">
             ${myListings.map(l => {
               const isAdena = l.currency === 'adena';
               return `
-                <div style="background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 10px; display: flex; justify-content: space-between; align-items: center;">
+                <div style="background: rgba(0,0,0,0.4); border: 1px solid rgba(212,167,68,0.3); border-radius: 8px; padding: 10px; display: flex; justify-content: space-between; align-items: center; box-shadow: inset 0 0 10px rgba(0,0,0,0.5);">
                   <div style="display: flex; align-items: center; gap: 10px;">
-                    <img src="${getItemIconUrl(l.item)}" style="width: 32px; height: 32px; object-fit: contain;" />
+                    <img src="${getItemIconUrl(l.item)}" style="width: 34px; height: 34px; object-fit: contain;" />
                     <div>
-                      <div style="font-weight: bold; color: #ffd877; font-size: 12px;">${l.quantity}x ${l.item.name}</div>
+                      <div style="font-weight: bold; color: #ffd877; font-size: 12px;">
+                        ${l.item?.enchant > 0 ? `<span style="color:#60a5fa;">+${l.item.enchant}</span> ` : ''}${l.quantity}x ${l.item?.name}
+                      </div>
                       <div style="font-size: 11px; color: ${isAdena ? '#fde047' : '#93c5fd'}; font-family: 'IBM Plex Mono', monospace;">
-                        ${isAdena ? '🪙' : '👑'} ${l.totalPrice.toLocaleString()}
+                        ${isAdena ? '🪙' : '👑'} ${Number(l.totalPrice).toLocaleString()} ${isAdena ? 'Adena' : 'AC'}
                       </div>
                     </div>
                   </div>
-                  <button class="market-cancel-btn" data-id="${l.id}" style="background: rgba(239,68,68,0.2); border: 1px solid #ef4444; color: #fca5a5; border-radius: 6px; padding: 4px 10px; font-size: 11px; cursor: pointer;">
-                    Cancelar
+                  <button class="market-cancel-btn action-btn" data-id="${l.id}" style="background: rgba(239,68,68,0.2); border: 1px solid #ef4444; color: #fca5a5; border-radius: 6px; padding: 6px 12px; font-size: 11px; cursor: pointer; font-weight: bold;">
+                    ✕ Cancelar
                   </button>
                 </div>
               `;
@@ -585,6 +590,15 @@ function attachMarketEvents(container, state, callbacks = {}) {
     };
   }
 
+  // Botão de Criar Anúncio no estado vazio de Minhas Vendas
+  const mySalesCreateBtn = container.querySelector('#btn-my-sales-create');
+  if (mySalesCreateBtn) {
+    mySalesCreateBtn.onclick = () => {
+      _activeMarketTab = 'sell';
+      renderMarketTab(container, state, callbacks);
+    };
+  }
+
   // Publicar Anúncio
   const submitBtn = container.querySelector('#btn-submit-listing');
   if (submitBtn) {
@@ -601,7 +615,7 @@ function attachMarketEvents(container, state, callbacks = {}) {
       if (callbacks.log) callbacks.log(res.msg, res.ok ? 'success' : 'warning');
       if (res.ok) {
         _selectedSellItemUid = null;
-        _activeMarketTab = 'buy';
+        _activeMarketTab = 'my_sales';
         if (callbacks.save) callbacks.save();
         if (callbacks.updateAllUI) callbacks.updateAllUI(true);
       } else {
