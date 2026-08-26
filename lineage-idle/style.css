@@ -3816,8 +3816,17 @@ select:focus-visible {
   }
 }
 
-/* 4. Mobile Devices & Tablets in Portrait (<= 768px) */
-@media (max-width: 768px) {
+/* 4. NATIVE MOBILE APP ARCHITECTURE (device-mobile & <= 768px) */
+@media (max-width: 768px), (pointer: coarse) and (max-width: 900px) {
+  /* Prevent horizontal/vertical bouncing on mobile */
+  :host, #game {
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    width: 100vw !important;
+    overflow: hidden !important;
+    position: relative !important;
+  }
+
   /* Resizers hidden on mobile touch devices */
   .grid-resizer-v, .grid-resizer-h {
     display: none !important;
@@ -3825,12 +3834,13 @@ select:focus-visible {
 
   /* Top Bar Adaptation with safe area support */
   .top-bar {
-    padding: max(6px, env(safe-area-inset-top, 6px)) 10px 6px clamp(48px, 12vw, 70px) !important;
+    padding: max(6px, env(safe-area-inset-top, 6px)) 8px 6px clamp(48px, 12vw, 70px) !important;
     gap: 6px !important;
+    flex-shrink: 0 !important;
   }
   #game-title {
     font-size: 12px !important;
-    letter-spacing: 0.08em !important;
+    letter-spacing: 0.06em !important;
   }
   .top-stats {
     gap: 4px !important;
@@ -3841,52 +3851,114 @@ select:focus-visible {
   }
   .ts-label { font-size: 7.5px !important; }
 
-  /* Main Grid Stack */
+  /* Main Grid on Mobile: Locked viewport, no whole-page drag */
   .main-grid {
     display: flex !important;
     flex-direction: column !important;
     flex: 1 1 auto !important;
     width: 100% !important;
-    height: auto !important;
-    max-height: calc(100dvh - 44px) !important;
-    overflow-y: auto !important;
-    -webkit-overflow-scrolling: touch;
-    padding-bottom: max(64px, calc(56px + env(safe-area-inset-bottom, 12px))) !important;
+    height: calc(100dvh - max(46px, calc(42px + env(safe-area-inset-top, 0px)))) !important;
+    max-height: calc(100dvh - max(46px, calc(42px + env(safe-area-inset-top, 0px)))) !important;
+    overflow: hidden !important;
+    padding-bottom: calc(52px + env(safe-area-inset-bottom, 0px)) !important;
+    position: relative !important;
+    box-sizing: border-box !important;
   }
 
-  /* Panel Ordering & Layout */
+  /* Mobile Active View System */
+  /* Default: Battle View (Stage + Isolated Log) */
   .center-panel {
-    order: 1;
-    min-height: auto;
-    flex: none;
-    border-bottom: 2px solid var(--gilt-deep);
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 1 0 !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+    border: none !important;
+    padding: 0 !important;
   }
 
   .stage {
+    flex: 0 0 auto !important;
     min-height: 140px !important;
-    max-height: 190px !important;
+    max-height: 180px !important;
+    overflow: hidden !important;
   }
 
+  .combat-controls-bar {
+    padding: 4px 6px !important;
+    gap: 4px !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    flex-shrink: 0 !important;
+  }
+
+  .log-controls-bar {
+    padding: 4px 6px !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* Combat Log on Mobile: ISOLATED with overflow-anchor: none */
+  .log, #log {
+    flex: 1 1 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
+    overflow-y: auto !important;
+    overflow-anchor: none !important; /* PREVENTS BROWSER SCROLL ANCHORING/PULLING */
+    -webkit-overflow-scrolling: touch;
+    padding: 6px 8px !important;
+  }
+
+  /* Tabs Panel on Mobile (Full View) */
   .tabs-panel {
-    order: 2;
-    flex: 1 0 auto;
-    min-height: 380px;
+    display: none !important;
+    flex-direction: column !important;
+    flex: 1 1 0 !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
     border: none !important;
   }
 
+  .tab-content {
+    flex: 1 1 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
+    overflow-y: auto !important;
+    overflow-anchor: none !important;
+    -webkit-overflow-scrolling: touch;
+    padding: 8px !important;
+  }
+
+  /* Stats Panel on Mobile */
   .stats-panel {
-    order: 3;
-    flex: none;
-    max-height: none !important;
-    border-top: 2px solid var(--line);
-    display: grid !important;
+    display: none !important;
+    flex: 1 1 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    border: none !important;
+    padding: 10px !important;
     grid-template-columns: repeat(2, 1fr) !important;
-    gap: 4px 10px;
-    padding: 10px;
+    gap: 4px 10px !important;
   }
   .stats-panel .stat-divider {
     grid-column: 1 / -1;
   }
+
+  /* Mobile Active View Conditionals */
+  #game[data-mobile-view="battle"] .center-panel { display: flex !important; }
+  #game[data-mobile-view="battle"] .tabs-panel { display: none !important; }
+  #game[data-mobile-view="battle"] .stats-panel { display: none !important; }
+
+  #game[data-mobile-view="hero"] .center-panel { display: none !important; }
+  #game[data-mobile-view="hero"] .tabs-panel { display: none !important; }
+  #game[data-mobile-view="hero"] .stats-panel { display: grid !important; }
+
+  #game:not([data-mobile-view="battle"]):not([data-mobile-view="hero"]) .center-panel { display: none !important; }
+  #game:not([data-mobile-view="battle"]):not([data-mobile-view="hero"]) .stats-panel { display: none !important; }
+  #game:not([data-mobile-view="battle"]):not([data-mobile-view="hero"]) .tabs-panel { display: flex !important; }
 
   /* Touch Scrollable Horizontal Tab Buttons */
   .tab-buttons {
@@ -3897,6 +3969,7 @@ select:focus-visible {
     gap: 4px !important;
     padding: 6px 4px !important;
     border-bottom: 1px solid var(--line);
+    flex-shrink: 0 !important;
   }
   .tab-btn {
     flex: 0 0 auto !important;
@@ -3950,9 +4023,9 @@ select:focus-visible {
     right: 0;
     height: calc(52px + env(safe-area-inset-bottom, 0px));
     padding-bottom: env(safe-area-inset-bottom, 0px);
-    background: rgba(10, 13, 20, 0.96);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    background: rgba(10, 13, 20, 0.98);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     border-top: 1px solid var(--gilt-deep);
     z-index: 999;
     justify-content: space-around;
@@ -3973,7 +4046,7 @@ select:focus-visible {
     gap: 2px;
     cursor: pointer;
     touch-action: manipulation;
-    transition: color 0.15s ease;
+    transition: color 0.15s ease, transform 0.15s ease;
   }
   .mobile-nav-btn span.icon {
     font-size: 15px;
@@ -3981,6 +4054,7 @@ select:focus-visible {
   .mobile-nav-btn.active {
     color: var(--gilt-bright);
     font-weight: bold;
+    transform: translateY(-1px);
   }
 
   /* Touch Target Sizing (Min 38px) */

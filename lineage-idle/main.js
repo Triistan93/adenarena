@@ -1286,6 +1286,8 @@ function log(msg, type = 'system', explicitCategory = null) {
   const logEl = el('log');
   if (!logEl) return;
 
+  logEl.style.overflowAnchor = 'none';
+
   const category = explicitCategory || resolveLogCategory(type, msg);
   const entry = mkEl('p');
   entry.className = `log-entry ${type}`;
@@ -1300,19 +1302,21 @@ function log(msg, type = 'system', explicitCategory = null) {
     entry.style.display = 'none';
   }
 
-  // Smart Auto-Scroll: apenas se o jogador já estiver no final do log
+  // Se o log estiver oculto (jogador navegando em outra aba no mobile), apenas adiciona o elemento
+  const isLogVisible = logEl.offsetParent !== null;
   const scrollThreshold = 60;
-  const isNearBottom = (logEl.scrollHeight - logEl.scrollTop - logEl.clientHeight) <= scrollThreshold;
+  const isNearBottom = isLogVisible && (logEl.scrollHeight - logEl.scrollTop - logEl.clientHeight) <= scrollThreshold;
 
   logEl.appendChild(entry);
 
   const scrollBtn = el('log-scroll-down-btn');
-  if (isNearBottom) {
-    logEl.scrollTop = logEl.scrollHeight;
-    if (scrollBtn) scrollBtn.style.display = 'none';
-  } else {
-    // Jogador está lendo o histórico anterior; não arrasta a tela bruscamente!
-    if (scrollBtn) scrollBtn.style.display = 'block';
+  if (isLogVisible) {
+    if (isNearBottom) {
+      logEl.scrollTop = logEl.scrollHeight;
+      if (scrollBtn) scrollBtn.style.display = 'none';
+    } else {
+      if (scrollBtn) scrollBtn.style.display = 'block';
+    }
   }
 
   // Mantém até 250 mensagens no histórico
@@ -5600,6 +5604,15 @@ export function openPanel(tabName) {
   const targetTab = (!tabName || tabName === 'zones' || tabName === 'combat' || tabName === 'close') ? 'zones' : tabName;
 
   const root = document.getElementById('idle-host')?.shadowRoot || document;
+  const game = root.getElementById ? root.getElementById('game') : root.querySelector?.('#game');
+  if (game && (game.classList.contains('device-mobile') || window.innerWidth <= 768)) {
+    game.dataset.mobileView = targetTab;
+    const mobileBtns = root.querySelectorAll ? root.querySelectorAll('.mobile-nav-btn') : [];
+    mobileBtns.forEach(b => {
+      b.classList.toggle('active', b.dataset.tab === targetTab);
+    });
+  }
+
   const currentActivePane = root.querySelector('.tab-pane.active');
   if (currentActivePane) {
     tabScrollMap[currentActivePane.id] = currentActivePane.scrollTop;
@@ -5804,19 +5817,41 @@ export function bindEvents() {
       };
     });
 
+    function setMobileView(viewName) {
+      const game = el('game');
+      if (!game) return;
+
+      state.mobileView = viewName || 'battle';
+      game.dataset.mobileView = state.mobileView;
+
+      qsa('.mobile-nav-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.tab === state.mobileView);
+      });
+
+      if (state.mobileView === 'battle') {
+        updateCombatControlsUI();
+      } else if (state.mobileView === 'hero') {
+        updateStatsUI();
+      } else {
+        const desktopTabBtn = qs(`.tab-btn[data-tab="${state.mobileView}"]`);
+        if (desktopTabBtn) {
+          desktopTabBtn.click();
+        } else {
+          openPanel(state.mobileView);
+        }
+      }
+    }
+    window.setMobileView = setMobileView;
+
+    const gameEl = el('game');
+    if (gameEl && !gameEl.dataset.mobileView) {
+      gameEl.dataset.mobileView = 'battle';
+    }
+
     qsa('.mobile-nav-btn').forEach(btn => {
       btn.onclick = () => {
-        const tabName = btn.dataset.tab;
-        qsa('.mobile-nav-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        
-        const desktopTabBtn = qs(`.tab-btn[data-tab="${tabName}"]`);
-        if (desktopTabBtn) desktopTabBtn.click();
-
-        const tabsPane = el('tab-' + tabName);
-        if (tabsPane && tabsPane.scrollIntoView) {
-          tabsPane.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+        const tabName = btn.dataset.tab || 'battle';
+        setMobileView(tabName);
       };
     });
 

@@ -23,6 +23,7 @@ import grimoireCss from "../../lineage-idle/theme-grimoire.css?raw";
 import { IDLE_MARKUP } from "./markup";
 import "./heroImages";
 import "../utils/idleAudio";
+import { deviceDetector } from "../services/DeviceDetector";
 import { CharacterCreation, CharacterCreationData } from "../components/CharacterCreation";
 import { 
   syncPlayerPublicProfile, 
@@ -125,11 +126,21 @@ export default function IdleGame() {
     bootstrap(shadow as unknown as Document);
     init();
 
+    // Device Type Detection & Mobile/Desktop Classes
+    const gameDiv = shadow.getElementById
+      ? shadow.getElementById('game')
+      : (shadow as any).querySelector?.('#game');
+
+    let unsubDevice: (() => void) | null = null;
+    if (gameDiv) {
+      deviceDetector.applyClasses(gameDiv as HTMLElement);
+      unsubDevice = deviceDetector.subscribe(() => {
+        deviceDetector.applyClasses(gameDiv as HTMLElement);
+      });
+    }
+
     // ---- Embers / brasas de fogo — montagem correta no Shadow DOM ----
     if ((window as any).GrimoireFX) {
-      const gameDiv = shadow.getElementById
-        ? shadow.getElementById('game')
-        : (shadow as any).querySelector?.('#game');
       if (gameDiv && !gameDiv.querySelector('.g-ember-global')) {
         const emberDiv = document.createElement('div');
         emberDiv.className = 'g-ember-global';
@@ -146,6 +157,7 @@ export default function IdleGame() {
     };
 
     return () => {
+      if (unsubDevice) unsubDevice();
       delete (window as any).onOpenRaceClassChangeModal;
       destroyBootstrap();
       destroy();
