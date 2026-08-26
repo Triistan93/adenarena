@@ -1577,45 +1577,54 @@ skills: [
     ]
   },
 
-  // ─── RIDER (1ª classe — Vanguard Rider line) ───
+  // ─── RIDER (Classe Base — Vanguard Rider line — Lv. 1) ───
   rider: {
-    name: 'Rider', parent: 'orcFighter', race: 'orc', archetype: 'rider', stage: 1,
-    desc: 'Cavaleiro orc — combate montado com lança.',
-    base: { atk: 26, def: 18, hp: 200, mp: 40, eva: 5, crit: 8, mdef: 8 },
+    name: 'Rider', parent: null, race: 'orc', archetype: 'rider', stage: 0,
+    desc: 'Cavaleiro orc inicial — combate montado com lança.',
+    base: { atk: 12, def: 8, hp: 110, mp: 35, eva: 5, crit: 8, mdef: 6 },
     skills: [
-      { name: "Lance Charge",         type: "Ativo",   rarity: "1★", effect: "Dano 190% + avança montado", cooldown: "12s", duration: null, note: "Skill permanece após trocar de classe" },
-      { name: "Mounted Thrust",       type: "Ativo",   rarity: "1★", effect: "Dano 170%", cooldown: "10s", duration: null, note: "Skill permanece após trocar de classe" },
-      { name: "Lance Mastery",        type: "Passivo", rarity: "1★", effect: "+12% ATK com lança", cooldown: null, duration: null, note: "Skill permanece após trocar de classe" },
-      { name: "Battle Mount",         type: "Toggle",  rarity: "1★", effect: "Monta na criatura (+20% Move Speed, muda skills)", cooldown: "10s", duration: "Toggle", note: "Skill permanece após trocar de classe" }
+      { name: "Lance Charge",         type: "Ativo",   rarity: "1★", effect: "Dano 160% + avanço montado", cooldown: "10s", duration: null, note: "Skill permanece após trocar de classe" },
+      { name: "Mounted Thrust",       type: "Ativo",   rarity: "1★", effect: "Dano 140%", cooldown: "8s", duration: null, note: "Skill permanece após trocar de classe" },
+      { name: "Lance Mastery",        type: "Passivo", rarity: "1★", effect: "+10% ATK com lança", cooldown: null, duration: null, note: "Skill permanece após trocar de classe" },
+      { name: "Battle Mount",         type: "Toggle",  rarity: "1★", effect: "Monta na criatura (+15% Move Speed)", cooldown: "10s", duration: "Toggle", note: "Skill permanece após trocar de classe" }
     ]
   },
 
-  // ─── DRAGOON (2ª classe) ───
+  // ─── DRAGOON (1ª classe — Lv. 20+) ───
   dragoon: {
-    name: 'Dragoon', parent: 'rider', race: 'orc', archetype: 'rider', stage: 2,
+    name: 'Dragoon', parent: 'rider', race: 'orc', archetype: 'rider', stage: 1,
     desc: 'Dragão montado — ataques montados devastadores.',
-    base: { atk: 55, def: 38, hp: 400, mp: 62, eva: 8, crit: 10, mdef: 18 },
+    base: { atk: 28, def: 18, hp: 220, mp: 48, eva: 7, crit: 10, mdef: 12 },
     skills: [
-      { name: "Trample",              type: "Ativo",   rarity: "2★", effect: "Dano AoE montado 260%", cooldown: "18s", duration: null, note: "Skill permanece após trocar de classe" },
-      { name: "Battle Rush",          type: "Ativo",   rarity: "2★", effect: "Charge 240% + stun 2s", cooldown: "16s", duration: "2s", note: "Skill permanece após trocar de classe" },
-      { name: "Mounted Whirlwind",    type: "Ativo",   rarity: "2★", effect: "Dano AoE 280%", cooldown: "20s", duration: null, note: "Skill permanece após trocar de classe" },
-      { name: "Beast Roar",           type: "Ativo",   rarity: "2★", effect: "Reduz ATK inimigos AoE -20% 8s + taunt", cooldown: "25s", duration: "8s", note: "Skill permanece após trocar de classe" },
-      { name: "Devastating Charge",   type: "Ativo",   rarity: "3★", effect: "Dano 340% + knockdown", cooldown: "25s", duration: null, note: "Skill permanece após trocar de classe" },
-      { name: "Rider's Mastery",      type: "Passivo", rarity: "2★", effect: "+20% ATK montado, +15% DEF montado", cooldown: null, duration: null, note: "Skill permanece após trocar de classe" },
-      { name: "Mounted Combat",       type: "Passivo", rarity: "2★", effect: "+15% ATK Speed enquanto montado", cooldown: null, duration: null, note: "Skill permanece após trocar de classe" },
-      { name: "Dragoon's Harmony",    type: "Self-Buff", rarity: "3★", effect: "+30% ATK, +25% DEF, +20% HP por 25 min", cooldown: "60 min", duration: "25 min", note: "Skill permanece após trocar de classe" }
+      { name: "Trample",              type: "Ativo",   rarity: "1★", effect: "Dano AoE montado 220%", cooldown: "16s", duration: null, note: "Skill permanece após trocar de classe" },
+      { name: "Battle Rush",          type: "Ativo",   rarity: "2★", effect: "Charge 200% + stun 2s", cooldown: "14s", duration: "2s", note: "Skill permanece após trocar de classe" },
+      { name: "Mounted Whirlwind",    type: "Ativo",   rarity: "1★", effect: "Dano AoE 240%", cooldown: "18s", duration: null, note: "Skill permanece após trocar de classe" },
+      { name: "Beast Roar",           type: "Ativo",   rarity: "2★", effect: "Reduz ATK inimigos AoE -15% 8s + taunt", cooldown: "22s", duration: "8s", note: "Skill permanece após trocar de classe" },
+      { name: "Dragoon's Harmony",    type: "Self-Buff", rarity: "2★", effect: "+20% ATK, +15% DEF, +10% HP por 20 min", cooldown: "45 min", duration: "20 min", note: "Skill permanece após trocar de classe" }
     ]
   },
 
-  // ─── VANGUARD RIDER (3ª classe) ───
+  // ─── VANGUARD RIDER (2ª classe — Lv. 40+) ───
   vanguardRider: {
-    name: 'Vanguard Rider', parent: 'dragoon', race: 'orc', archetype: 'rider', stage: 3,
+    name: 'Vanguard Rider', parent: 'dragoon', race: 'orc', archetype: 'rider', stage: 2,
     desc: 'Cavaleiro de vanguarda — devastação montada com poder de dragão.',
-    base: { atk: 98, def: 62, hp: 680, mp: 95, eva: 12, crit: 14, mdef: 32 },
+    base: { atk: 58, def: 38, hp: 420, mp: 75, eva: 10, crit: 14, mdef: 22 },
     skills: [
-      { name: "Thunder Crash",                type: "Ativo",   rarity: "3★", effect: "Dano AoE 420% + stun 3s", cooldown: "30s", duration: "3s", note: "Skill permanece após trocar de classe" },
-      { name: "Mounted Slam",                 type: "Ativo",   rarity: "3★", effect: "Dano 380% + knockdown + bleed 6s", cooldown: "25s", duration: "6s bleed", note: "Skill permanece após trocar de classe" },
+      { name: "Devastating Charge",           type: "Ativo",   rarity: "2★", effect: "Dano 320% + knockdown", cooldown: "22s", duration: null, note: "Skill permanece após trocar de classe" },
+      { name: "Thunder Crash",                type: "Ativo",   rarity: "3★", effect: "Dano AoE 380% + stun 3s", cooldown: "28s", duration: "3s", note: "Skill permanece após trocar de classe" },
+      { name: "Mounted Slam",                 type: "Ativo",   rarity: "2★", effect: "Dano 340% + knockdown + bleed 6s", cooldown: "22s", duration: "6s bleed", note: "Skill permanece após trocar de classe" },
       { name: "War Banner",                   type: "Party-Buff", rarity: "3★", effect: "+20% ATK e DEF para o grupo por 120s", cooldown: "60s", duration: "120s", note: "Skill permanece após trocar de classe" },
+      { name: "Rider's Mastery",              type: "Passivo", rarity: "2★", effect: "+20% ATK montado, +15% DEF montado", cooldown: null, duration: null, note: "Skill permanece após trocar de classe" },
+      { name: "Mounted Combat",               type: "Passivo", rarity: "2★", effect: "+15% ATK Speed enquanto montado", cooldown: null, duration: null, note: "Skill permanece após trocar de classe" }
+    ]
+  },
+
+  // ─── GRAND VANGUARD (3ª classe — Lv. 76+) ───
+  grandVanguard: {
+    name: 'Grand Vanguard', parent: 'vanguardRider', race: 'orc', archetype: 'rider', stage: 3,
+    desc: 'Grande Vanguarda — lorde dragão montado supremo.',
+    base: { atk: 102, def: 65, hp: 700, mp: 110, eva: 14, crit: 18, mdef: 35 },
+    skills: [
       { name: "Dragon's Breath",              type: "Ativo",   rarity: "4★", effect: "Dano fogo AoE 550% + burn 8s", cooldown: "60s", duration: "8s", note: "Skill permanece após trocar de classe" },
       { name: "Transcendent Charge",          type: "Ativo",   rarity: "4★", effect: "Charge dano 680% + knockback + stun 4s", cooldown: "180s", duration: "4s", note: "Skill permanece após trocar de classe" },
       { name: "BP Mastery",                   type: "Passivo", rarity: "3★", effect: "Gera Battle Points ao atacar, +5% ATK por BP (max 5)", cooldown: null, duration: null, note: "Skill permanece após trocar de classe" },
