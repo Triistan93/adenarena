@@ -2912,14 +2912,8 @@ function updateColosseumUI() {
 
 function updateMarketUI() {
   const pane = el('tab-market');
-  if (pane) {
+  if (pane && !pane.hidden) {
     uiRenderMarketTab(pane, state, { log, updateAllUI, save });
-    MarketService.fetchRemoteListings().then(() => {
-      const activePane = el('tab-market');
-      if (activePane && !activePane.hidden) {
-        uiRenderMarketTab(activePane, state, { log, updateAllUI, save });
-      }
-    }).catch(() => {});
   }
 }
 
@@ -8194,6 +8188,12 @@ export function init() {
 
       window.openMarketTab = () => openPanel('market');
       window.openMarket = () => openPanel('market');
+
+      // Inicializa listeners em tempo real e sincronização do Mercado de Giran
+      MarketService.initCloudSubscription(state, { log, updateAllUI, save });
+      MarketService.subscribeUI(() => {
+        updateMarketUI();
+      });
     }
   } catch (err) {
     console.warn('Game init warning:', err);

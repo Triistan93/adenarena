@@ -25,12 +25,14 @@ export function setActiveMarketTab(tab) {
 export function renderMarketTab(container, state, callbacks = {}) {
   if (!container || !state) return;
 
-  const playerName = state.name || state.charName || 'Hero of Aden';
+  MarketService.initCloudSubscription(state, callbacks);
+
+  const playerName = state.charName || state.heroName || state.playerName || state.name || 'Hero of Aden';
   const playerGold = Number(state.gold || 0);
   const playerAc = Number(state.adenCoins || state.ac || 0);
   const salesData = MarketService.getPlayerSales(playerName);
-  const pendingAdena = salesData.pendingAdena || 0;
-  const pendingAc = salesData.pendingAdenCoins || 0;
+  const pendingAdena = Number(salesData.pendingAdena || 0);
+  const pendingAc = Number(salesData.pendingAdenCoins || 0);
   const hasProfits = pendingAdena > 0 || pendingAc > 0;
 
   // Header com tema de Giran
@@ -368,10 +370,33 @@ function renderMySalesTab(state, salesData) {
   const playerName = state.charName || state.heroName || state.playerName || state.name || 'Hero of Aden';
   const myListings = MarketService.getMyListings(state);
   const history = salesData.history || [];
+  const pendingAdena = Number(salesData.pendingAdena || 0);
+  const pendingAc = Number(salesData.pendingAdenCoins || 0);
+  const hasProfits = pendingAdena > 0 || pendingAc > 0;
 
   return `
     <div style="display: flex; flex-direction: column; gap: 16px; font-family: 'Inter', sans-serif;">
       
+      <!-- Saldo de Vendas & Resgate -->
+      <div style="background: linear-gradient(135deg, rgba(20,30,45,0.95), rgba(12,18,28,0.98)); border: 1px solid ${hasProfits ? 'rgba(34,197,94,0.6)' : 'rgba(212,167,68,0.3)'}; border-radius: 10px; padding: 14px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; box-shadow: ${hasProfits ? '0 0 15px rgba(34,197,94,0.2)' : 'none'};">
+        <div>
+          <h4 style="margin: 0; color: #f4d58a; font-family: 'Cinzel', serif; font-size: 14px; display: flex; align-items: center; gap: 6px;">
+            💰 Lucros de Vendas Pendentes
+          </h4>
+          <div style="margin-top: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 13px; display: flex; gap: 14px;">
+            <span style="color:#ffd877;">🪙 ${pendingAdena.toLocaleString()} Adena</span>
+            <span style="color:#60a5fa;">👑 ${pendingAc.toLocaleString()} AC</span>
+          </div>
+        </div>
+        ${hasProfits ? `
+          <button id="btn-my-sales-claim" class="action-btn" style="background: linear-gradient(135deg, #15803d, #22c55e); color: #fff; font-weight: bold; border: 1px solid #4ade80; border-radius: 8px; padding: 8px 18px; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 0 12px rgba(34,197,94,0.4); animation: pulse 1.5s infinite;">
+            🎁 Coletar Lucros Agora
+          </button>
+        ` : `
+          <span style="color: #64748b; font-size: 12px;">Nenhum lucro pendente de resgate</span>
+        `}
+      </div>
+
       <!-- Anúncios Ativos -->
       <div style="background: rgba(15,20,30,0.85); border: 1px solid rgba(212,167,68,0.3); border-radius: 10px; padding: 14px;">
         <h4 style="margin: 0 0 12px 0; color: #f4d58a; font-family: 'Cinzel', serif; font-size: 14px;">
@@ -541,10 +566,10 @@ function attachMarketEvents(container, state, callbacks = {}) {
   });
 
   // Coletar Lucros
-  const claimBtn = container.querySelector('#btn-market-claim');
-  if (claimBtn) {
-    claimBtn.onclick = async () => {
-      claimBtn.disabled = true;
+  const claimBtns = container.querySelectorAll('#btn-market-claim, #btn-my-sales-claim, .market-claim-btn');
+  claimBtns.forEach(btn => {
+    btn.onclick = async () => {
+      btn.disabled = true;
       const res = await MarketService.claimProfits(state);
       if (callbacks.log) callbacks.log(res.msg, res.ok ? 'gold' : 'info');
       if (res.ok) {
@@ -553,7 +578,7 @@ function attachMarketEvents(container, state, callbacks = {}) {
       }
       renderMarketTab(container, state, callbacks);
     };
-  }
+  });
 
   // Selecionar Item para Venda
   container.querySelectorAll('.market-select-item').forEach(el => {

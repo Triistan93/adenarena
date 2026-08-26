@@ -371,13 +371,19 @@ export async function deleteMarketListingInCloud(listingId: string): Promise<boo
   }
 }
 
+function normalizeSellerKey(sellerName: string): string {
+  if (!sellerName) return 'hero_default';
+  return String(sellerName).trim().toLowerCase().replace(/[^a-z0-9_-]/g, '_');
+}
+
 /**
  * Registra a venda de um item e credita o saldo pendente para o vendedor
  */
 export async function recordMarketSaleInCloud(sellerName: string, saleData: any): Promise<boolean> {
   try {
     if (!sellerName || !saleData) return false;
-    const saleRef = doc(db, 'market_sales', sellerName);
+    const normKey = normalizeSellerKey(sellerName);
+    const saleRef = doc(db, 'market_sales', normKey);
     const snap = await getDoc(saleRef);
     const existing = snap.exists() ? snap.data() : { pendingAdena: 0, pendingAdenCoins: 0, history: [] };
 
@@ -419,7 +425,8 @@ export async function recordMarketSaleInCloud(sellerName: string, saleData: any)
 export async function fetchPlayerSalesFromCloud(sellerName: string): Promise<any> {
   try {
     if (!sellerName) return { pendingAdena: 0, pendingAdenCoins: 0, history: [] };
-    const saleRef = doc(db, 'market_sales', sellerName);
+    const normKey = normalizeSellerKey(sellerName);
+    const saleRef = doc(db, 'market_sales', normKey);
     const snap = await getDoc(saleRef);
     if (snap.exists()) {
       return snap.data();
@@ -437,7 +444,8 @@ export async function fetchPlayerSalesFromCloud(sellerName: string): Promise<any
 export async function claimPlayerSalesInCloud(sellerName: string): Promise<boolean> {
   try {
     if (!sellerName) return false;
-    const saleRef = doc(db, 'market_sales', sellerName);
+    const normKey = normalizeSellerKey(sellerName);
+    const saleRef = doc(db, 'market_sales', normKey);
     await setDoc(saleRef, { pendingAdena: 0, pendingAdenCoins: 0, updatedAt: serverTimestamp() }, { merge: true });
     return true;
   } catch (err) {
@@ -474,6 +482,30 @@ export function subscribeToMarketListings(onUpdate: (listings: any[]) => void): 
     return unsubscribe;
   } catch (err) {
     console.warn('[Firebase] Falha ao assinar atualizações do mercado:', err);
+    return () => {};
+  }
+}
+
+/**
+ * Escuta atualizações de vendas e lucros do jogador em tempo real
+ */
+export function subscribeToPlayerSales(sellerName: string, onUpdate: (sales: any) => void): () => void {
+  try {
+    if (!sellerName) return () => {};
+    const normKey = normalizeSellerKey(sellerName);
+    const saleRef = doc(db, 'market_sales', normKey);
+    const unsubscribe = onSnapshot(saleRef, (snap) => {
+      if (snap.exists()) {
+        onUpdate(snap.data());
+      } else {
+        onUpdate({ pendingAdena: 0, pendingAdenCoins: 0, history: [] });
+      }
+    }, (err) => {
+      console.warn('[Firebase] Erro no listener de vendas do jogador:', err);
+    });
+    return unsubscribe;
+  } catch (err) {
+    console.warn('[Firebase] Falha ao assinar vendas do jogador:', err);
     return () => {};
   }
 }

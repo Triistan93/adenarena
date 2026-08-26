@@ -35,6 +35,7 @@ import {
   fetchPlayerSalesFromCloud,
   claimPlayerSalesInCloud,
   subscribeToMarketListings,
+  subscribeToPlayerSales,
   auth 
 } from "../firebase";
 
@@ -57,7 +58,8 @@ if (typeof window !== "undefined") {
     recordMarketSale: recordMarketSaleInCloud,
     fetchPlayerSales: fetchPlayerSalesFromCloud,
     claimPlayerSales: claimPlayerSalesInCloud,
-    subscribeMarketListings: subscribeToMarketListings
+    subscribeMarketListings: subscribeToMarketListings,
+    subscribePlayerSales: subscribeToPlayerSales
   };
 }
 
