@@ -125,7 +125,7 @@ const RACES_INFO: Record<string, {
     perks: ['🎒 +100 Espaços de Inventário', '⚒️ Bônus de Craft & Drop de Materiais', '🏝️ Inicia na Ilha de Falar (Lv. 1)'],
     allowedClasses: [
       { id: 'dwarfFighter', name: 'Artesão (Artisan)', desc: 'Especialista em forja de armas, armaduras pesadas e martelos.', icon: '⚒️' },
-      { id: 'shinemakerS1', name: 'ShineMaker ✨', desc: 'Mestre da luz cristalina, suporte celestial e martelo luminoso.', icon: '✨' }
+      { id: 'shineMakerBase', name: 'ShineMaker ✨', desc: 'Mestre da luz cristalina, suporte celestial e martelo luminoso.', icon: '✨' }
     ],
     image: {
       dwarfFighter: { M: '/img/dwarfmaestroM.png', F: '/img/dwarfmaestroF.png' },
@@ -177,11 +177,13 @@ const RACES_INFO: Record<string, {
     desc: 'Elfos supremos detentores da luz divina e maestria elemental.',
     perks: ['🌟 +8 Magia & Defesa Divina', '🛡️ Guardiões Sagrados de Aden', '🏝️ Inicia na Ilha de Falar (Lv. 1)'],
     allowedClasses: [
-      { id: 'divineTemplarS1', name: 'Divine Templar 🛡️', desc: 'Guardião sagrado supremo e tanque inabalável com Sacred Aegis.', icon: '🛡️' },
-      { id: 'elementWeaverS1', name: 'Element Weaver 🌀', desc: 'Mago supremo combinando os três pilares de Fogo, Água e Vento.', icon: '🌀' }
+      { id: 'divineTemplarBase', name: 'Divine Templar 🛡️', desc: 'Guardião sagrado supremo e tanque inabalável com Sacred Aegis.', icon: '🛡️' },
+      { id: 'elementWeaverBase', name: 'Element Weaver 🌀', desc: 'Mago supremo combinando os três pilares de Fogo, Água e Vento.', icon: '🌀' }
     ],
     image: {
+      divineTemplarBase: { M: '/img/elfwswM.png', F: '/img/elfswsF.png' },
       divineTemplarS1: { M: '/img/elfwswM.png', F: '/img/elfswsF.png' },
+      elementWeaverBase: { M: '/img/elfmageM.png', F: '/img/elfmageF.png' },
       elementWeaverS1: { M: '/img/elfmageM.png', F: '/img/elfmageF.png' },
       fighter: { M: '/img/elfwswM.png', F: '/img/elfswsF.png' },
       mage: { M: '/img/elfmageM.png', F: '/img/elfmageF.png' }
@@ -196,7 +198,7 @@ const RACES_INFO: Record<string, {
     perks: ['🌪️ +10 Esquiva Nativa', '🥊 Combate Marcial e Artes Corporais', '🏰 Inicia na Ilha de Falar'],
     allowedClasses: [
       { id: 'marauderBase', name: 'Marauder / Eviscerator 🌪️', desc: 'Lutadora com garras, punhos velozes e combos de furacão.', icon: '🥊' },
-      { id: 'sayhaSeer', name: 'Sayha Seeker 🌀', desc: 'Invocadora de vendavais e espíritos protetores de Sayha.', icon: '🌀' }
+      { id: 'sayhaMageBase', name: 'Sayha Seeker 🌀', desc: 'Invocadora de vendavais e espíritos protetores de Sayha.', icon: '🌀' }
     ],
     image: {
       marauderBase: { M: '/img/elfwswM.png', F: '/img/elfswsF.png' },

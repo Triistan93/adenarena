@@ -2304,12 +2304,38 @@ skills: [
   // HIGH ELF — DIVINE TEMPLAR / ELEMENT WEAVER / SHINEMAKER
   // ═══════════════════════════════════════════
   highElfBase: {
-    name: 'Templar', race: 'highelf', archetype: 'highelf', stage: 0,
-    desc: 'Alto Elfo Templário — poder sagrado inicial.',
-    base: { atk: 8, def: 8, hp: 80, mp: 70, matk: 10, mdef: 8, eva: 6, crit: 4 },
+    name: 'High Elf', race: 'highelf', archetype: 'highelf', stage: 0,
+    desc: 'Alto Elfo — poder sagrado e elemental inicial.',
+    base: { atk: 10, def: 10, hp: 90, mp: 75, matk: 12, mdef: 10, eva: 6, crit: 4 },
     skills: [
       { name: "Holy Light",         type: "Ativo",   rarity: "1★", effect: "Dano sagrado 150%", cooldown: "8s", duration: null, note: "Skill permanece após trocar de classe" },
+      { name: "Elemental Weave",    type: "Ativo",   rarity: "1★", effect: "Dano elemental 140%", cooldown: "8s", duration: null, note: "Skill permanece após trocar de classe" },
+      { name: "High Elf Mastery",   type: "Passivo", rarity: "1★", effect: "+10% P.ATK e M.ATK", cooldown: null, duration: null, note: "Skill permanece após trocar de classe" },
       { name: "MP Increase",        type: "Passivo", rarity: "1★", effect: "+10% Max MP", cooldown: null, duration: null, note: "Skill permanece após trocar de classe" }
+    ]
+  },
+
+  divineTemplarBase: {
+    name: 'Divine Templar', parent: null, race: 'highelf', archetype: 'tank', stage: 0,
+    desc: 'Templário Divino inicial — guardião sagrado com escudo e luz.',
+    base: { atk: 12, def: 14, hp: 105, mp: 45, eva: 6, crit: 4, mdef: 10 },
+    skills: [
+      { name: "Holy Strike",        type: "Ativo",   rarity: "1★", effect: "Dano sagrado 160%", cooldown: "8s", duration: null, note: "Skill permanece após trocar de classe" },
+      { name: "Holy Light",         type: "Ativo",   rarity: "1★", effect: "Dano sagrado 140%", cooldown: "8s", duration: null, note: "Skill permanece após trocar de classe" },
+      { name: "Holy Shield Mastery", type: "Passivo", rarity: "1★", effect: "+12% DEF com escudo", cooldown: null, duration: null, note: "Skill permanece após trocar de classe" },
+      { name: "Heavy Armor Mastery", type: "Passivo", rarity: "1★", effect: "+10% DEF com armadura pesada", cooldown: null, duration: null, note: "Skill permanece após trocar de classe" }
+    ]
+  },
+
+  elementWeaverBase: {
+    name: 'Element Weaver', parent: null, race: 'highelf', archetype: 'mage', stage: 0,
+    desc: 'Tecelão Elemental inicial — canalizador de fogo, gelo e vento.',
+    base: { atk: 8, def: 8, hp: 80, mp: 85, matk: 16, mdef: 10, eva: 6, crit: 4 },
+    skills: [
+      { name: "Fire Weave",    type: "Ativo", rarity: "1★", effect: "Dano fogo 160%", cooldown: "8s", duration: null, note: "Skill permanece após trocar de classe" },
+      { name: "Ice Weave",     type: "Ativo", rarity: "1★", effect: "Dano gelo 150% + slow 15% 3s", cooldown: "8s", duration: "3s", note: "Skill permanece após trocar de classe" },
+      { name: "Wind Weave",    type: "Ativo", rarity: "1★", effect: "Dano vento 150%", cooldown: "8s", duration: null, note: "Skill permanece após trocar de classe" },
+      { name: "Robe Mastery",  type: "Passivo", rarity: "1★", effect: "+10% M.ATK com robe", cooldown: null, duration: null, note: "Skill permanece após trocar de classe" }
     ]
   },
 
@@ -2484,9 +2510,8 @@ skills: [
     skills: [
       { name: "Beast Claw",                 type: "Ativo",     rarity: "1★", effect: "Dano físico 150% com garras ferrenhas", cooldown: "6s" },
       { name: "Feral Strike",               type: "Ativo",     rarity: "1★", effect: "Dano físico 190% + sangramento 3s", cooldown: "8s" },
-      { name: "Beast Howl",                 type: "Self-Buff", rarity: "2★", effect: "+20% ATK, +15% Atk Speed 60s", cooldown: "45s" },
-      { name: "Ancestral Wolf Transformation", type: "Self-Buff", rarity: "4★", effect: "Transformação: +50% ATK, +40% Crit Dmg por 60s", cooldown: "90s" },
-      { name: "Vampiric Feral Bite",        type: "Ativo",     rarity: "3★", effect: "Mordida vampírica 220% + recupera 35% do dano em HP", cooldown: "14s" }
+      { name: "Beast Howl",                 type: "Self-Buff", rarity: "1★", effect: "+15% ATK, +10% Atk Speed 60s", cooldown: "45s" },
+      { name: "Wolf Reflexes",              type: "Passivo",   rarity: "1★", effect: "+10% Move Speed e +8% Evasão", cooldown: null }
     ]
   },
   wargS1: {
