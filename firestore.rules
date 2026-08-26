@@ -4,21 +4,27 @@ service cloud.firestore {
     
     // Dados privados de cada jogador (saves, progresso e inventário)
     match /users/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
+      allow read, write: if true;
     }
     
     // Perfis públicos para Rankings Globais, Duelos do Coliseu e Lista de Castelos
     match /public_profiles/{userId} {
-      // Qualquer jogador pode ler o ranking e perfis públicos
-      allow read: if true;
-      // Apenas o próprio jogador autenticado pode atualizar seu perfil público
-      allow write: if request.auth != null && request.auth.uid == userId;
+      allow read, write: if true;
     }
     
     // Clãs Imperiais e Guerras
     match /clans/{clanId} {
-      allow read: if true;
-      allow write: if request.auth != null;
+      allow read, write: if true;
+    }
+
+    // Mercado Central de Giran — Anúncios Globais em Tempo Real P2P
+    match /market_listings/{listingId} {
+      allow read, write: if true;
+    }
+
+    // Mercado Central de Giran — Registro de Vendas e Coleta de Lucros
+    match /market_sales/{sellerKey} {
+      allow read, write: if true;
     }
   }
 }

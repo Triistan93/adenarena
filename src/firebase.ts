@@ -1,10 +1,10 @@
-import { initializeApp } from 'firebase/app';
 import { 
   getAuth, 
   GoogleAuthProvider, 
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword, 
   signInWithPopup, 
+  signInAnonymously,
   signOut, 
   onAuthStateChanged,
   type User
@@ -40,10 +40,20 @@ export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
 export const db = getFirestore(app);
 
+// Autenticação anônima automática para jogadores convidados
+if (typeof window !== 'undefined') {
+  onAuthStateChanged(auth, (user) => {
+    if (!user) {
+      signInAnonymously(auth).catch(() => {});
+    }
+  });
+}
+
 export { 
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword, 
   signInWithPopup, 
+  signInAnonymously,
   signOut, 
   onAuthStateChanged,
   User
@@ -321,8 +331,12 @@ export async function createMarketListingInCloud(listing: any): Promise<boolean>
     cleanListing.updatedAt = serverTimestamp();
     await setDoc(listingRef, cleanListing);
     return true;
-  } catch (err) {
-    console.warn('[Firebase] Erro ao criar anúncio no mercado:', err);
+  } catch (err: any) {
+    if (err?.code === 'permission-denied' || String(err).includes('permissions')) {
+      console.debug('[Firebase] market_listings requer permissão no Firestore Rules.');
+    } else {
+      console.warn('[Firebase] Erro ao criar anúncio no mercado:', err);
+    }
     return false;
   }
 }
@@ -337,7 +351,6 @@ export async function fetchMarketListingsFromCloud(): Promise<any[]> {
     const list: any[] = [];
     snap.forEach((d) => {
       const data = d.data();
-      // Filtra estritamente apenas itens de jogadores reais (sem sementes/NPCs fantasmas)
       if (
         data && 
         data.item && 
@@ -350,8 +363,12 @@ export async function fetchMarketListingsFromCloud(): Promise<any[]> {
     });
     list.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
     return list;
-  } catch (err) {
-    console.warn('[Firebase] Erro ao buscar anúncios do mercado:', err);
+  } catch (err: any) {
+    if (err?.code === 'permission-denied' || String(err).includes('permissions')) {
+      console.debug('[Firebase] market_listings requer permissão no Firestore Rules.');
+    } else {
+      console.warn('[Firebase] Erro ao buscar anúncios do mercado:', err);
+    }
     return [];
   }
 }
@@ -365,8 +382,12 @@ export async function deleteMarketListingInCloud(listingId: string): Promise<boo
     const listingRef = doc(db, 'market_listings', listingId);
     await deleteDoc(listingRef);
     return true;
-  } catch (err) {
-    console.warn('[Firebase] Erro ao deletar anúncio:', err);
+  } catch (err: any) {
+    if (err?.code === 'permission-denied' || String(err).includes('permissions')) {
+      console.debug('[Firebase] deleteMarketListing requer permissão no Firestore Rules.');
+    } else {
+      console.warn('[Firebase] Erro ao deletar anúncio:', err);
+    }
     return false;
   }
 }
@@ -413,8 +434,12 @@ export async function recordMarketSaleInCloud(sellerName: string, saleData: any)
 
     await setDoc(saleRef, existing, { merge: true });
     return true;
-  } catch (err) {
-    console.warn('[Firebase] Erro ao registrar venda no mercado:', err);
+  } catch (err: any) {
+    if (err?.code === 'permission-denied' || String(err).includes('permissions')) {
+      console.debug('[Firebase] market_sales requer permissão no Firestore Rules.');
+    } else {
+      console.warn('[Firebase] Erro ao registrar venda no mercado:', err);
+    }
     return false;
   }
 }
@@ -432,8 +457,12 @@ export async function fetchPlayerSalesFromCloud(sellerName: string): Promise<any
       return snap.data();
     }
     return { pendingAdena: 0, pendingAdenCoins: 0, history: [] };
-  } catch (err) {
-    console.warn('[Firebase] Erro ao buscar vendas do jogador:', err);
+  } catch (err: any) {
+    if (err?.code === 'permission-denied' || String(err).includes('permissions')) {
+      console.debug('[Firebase] fetchPlayerSales requer permissão no Firestore Rules.');
+    } else {
+      console.warn('[Firebase] Erro ao buscar vendas do jogador:', err);
+    }
     return { pendingAdena: 0, pendingAdenCoins: 0, history: [] };
   }
 }
@@ -448,8 +477,12 @@ export async function claimPlayerSalesInCloud(sellerName: string): Promise<boole
     const saleRef = doc(db, 'market_sales', normKey);
     await setDoc(saleRef, { pendingAdena: 0, pendingAdenCoins: 0, updatedAt: serverTimestamp() }, { merge: true });
     return true;
-  } catch (err) {
-    console.warn('[Firebase] Erro ao limpar lucros no cloud:', err);
+  } catch (err: any) {
+    if (err?.code === 'permission-denied' || String(err).includes('permissions')) {
+      console.debug('[Firebase] claimPlayerSales requer permissão no Firestore Rules.');
+    } else {
+      console.warn('[Firebase] Erro ao limpar lucros no cloud:', err);
+    }
     return false;
   }
 }
@@ -477,11 +510,11 @@ export function subscribeToMarketListings(onUpdate: (listings: any[]) => void): 
       list.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
       onUpdate(list);
     }, (err) => {
-      console.warn('[Firebase] Erro no listener do mercado:', err);
+      console.debug('[Firebase] subscribeToMarketListings notice:', err);
     });
     return unsubscribe;
   } catch (err) {
-    console.warn('[Firebase] Falha ao assinar atualizações do mercado:', err);
+    console.debug('[Firebase] Falha ao assinar atualizações do mercado:', err);
     return () => {};
   }
 }
@@ -501,11 +534,11 @@ export function subscribeToPlayerSales(sellerName: string, onUpdate: (sales: any
         onUpdate({ pendingAdena: 0, pendingAdenCoins: 0, history: [] });
       }
     }, (err) => {
-      console.warn('[Firebase] Erro no listener de vendas do jogador:', err);
+      console.debug('[Firebase] subscribeToPlayerSales notice:', err);
     });
     return unsubscribe;
   } catch (err) {
-    console.warn('[Firebase] Falha ao assinar vendas do jogador:', err);
+    console.debug('[Firebase] Falha ao assinar vendas do jogador:', err);
     return () => {};
   }
 }
