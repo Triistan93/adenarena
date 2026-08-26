@@ -1,19 +1,31 @@
 /**
- * MarketService.js — Mercado de Giran (Auction House P2P)
+ * MarketService.js — Mercado Central de Giran (Auction House P2P Real)
  * 
- * Gerencia anúncios de compra e venda de itens entre jogadores, suportando:
- * - Venda em Adena (🪙) ou Aden Coin (👑)
- * - Taxa de listagem de 5% de Adena (Adena Sink anti-inflação)
- * - Filtragem por Categoria, Grau, Moeda e Busca por Texto
- * - Coleta de lucros de vendas realizadas
- * - Mercado dinâmico inicial abastecido com mercadorias de Aden
+ * Gerencia anúncios 100% reais entre jogadores em tempo real:
+ * - Venda livre em Adena (🪙) ou Aden Coin (👑)
+ * - Taxa de listagem imperial de 5% em Adena (Adena Sink)
+ * - Sincronização multi-contas em Nuvem (Firebase Firestore) + BroadcastChannel
+ * - Zero NPCs ou itens fantasmas artificiais
+ * - Coleta segura de lucros com histórico detalhado
  */
 
-import { D } from '../core/GameConfig.js';
-import { getItemIconUrl } from '../ui/GameUI.js';
+const MARKET_STORAGE_KEY = 'l2_aden_market_listings_v2';
+const MARKET_SALES_KEY = 'l2_aden_market_sales_v2';
 
-const MARKET_STORAGE_KEY = 'l2_aden_market_listings_v1';
-const MARKET_SALES_KEY = 'l2_aden_market_sales_v1';
+// Canal de sincronização instantânea entre abas e perfis no mesmo navegador
+let _marketBroadcastChannel = null;
+try {
+  if (typeof BroadcastChannel !== 'undefined') {
+    _marketBroadcastChannel = new BroadcastChannel('aden_market_sync');
+    _marketBroadcastChannel.onmessage = (event) => {
+      if (event && event.data && event.data.type) {
+        MarketService.onBroadcastMessage(event.data);
+      }
+    };
+  }
+} catch (e) {
+  console.warn('[MarketService] BroadcastChannel indisponível:', e);
+}
 
 export const MARKET_CATEGORIES = [
   { id: 'all', name: 'Todos os Itens', icon: '🌐' },
@@ -26,31 +38,158 @@ export const MARKET_CATEGORIES = [
   { id: 'consumable', name: 'Poções & Elixires', icon: '🧪' }
 ];
 
+let _inMemoryListings = null;
+let _isSubscribedToCloud = false;
+let _onMarketChangeCallbacks = new Set();
+
 export const MarketService = {
   /**
-   * Obtém todos os anúncios ativos do mercado
+   * Registra um callback para quando o mercado for atualizado em tempo real
+   */
+  subscribeUI(callback) {
+    if (typeof callback === 'function') {
+      _onMarketChangeCallbacks.add(callback);
+    }
+    return () => _onMarketChangeCallbacks.delete(callback);
+  },
+
+  /**
+   * Notifica ouvintes de UI para re-renderizar o mercado
+   */
+  notifyUI() {
+    _onMarketChangeCallbacks.forEach(cb => {
+      try { cb(); } catch (e) {}
+    });
+  },
+
+  /**
+   * Trata mensagens do BroadcastChannel
+   */
+  onBroadcastMessage(msg) {
+    if (msg.type === 'SYNC_LISTINGS') {
+      this.fetchRemoteListings();
+    } else if (msg.type === 'LISTING_CREATED' && msg.listing) {
+      const current = this.getListings();
+      if (!current.some(l => l.id === msg.listing.id)) {
+        current.unshift(msg.listing);
+        this.saveListings(current);
+        this.notifyUI();
+      }
+    } else if (msg.type === 'LISTING_REMOVED' && msg.listingId) {
+      const current = this.getListings();
+      const updated = current.filter(l => l.id !== msg.listingId);
+      this.saveListings(updated);
+      this.notifyUI();
+    }
+  },
+
+  /**
+   * Inicializa escuta em tempo real no Firestore se disponível
+   */
+  initCloudSubscription() {
+    if (_isSubscribedToCloud) return;
+    if (typeof window !== 'undefined' && window.FirebaseBridge?.subscribeMarketListings) {
+      _isSubscribedToCloud = true;
+      try {
+        window.FirebaseBridge.subscribeMarketListings((remoteListings) => {
+          if (Array.isArray(remoteListings)) {
+            const cleanList = remoteListings.filter(this._isValidPlayerListing);
+            _inMemoryListings = cleanList;
+            this.saveListings(cleanList, false);
+            this.notifyUI();
+          }
+        });
+      } catch (err) {
+        console.warn('[MarketService] Erro ao assinar Firestore:', err);
+      }
+    }
+  },
+
+  /**
+   * Valida se um anúncio é estritamente de um jogador real (sem sementes/NPCs)
+   */
+  _isValidPlayerListing(item) {
+    if (!item || !item.item) return false;
+    if (item.isPlayerListing === false) return false;
+    if (String(item.id || '').startsWith('seed_')) return false;
+    const ghostNpcNames = [
+      'Merchant Katrina', 'Blacksmith Pushkin', 'Trader Woody', 
+      'Shadow Walker Ren', 'Priestess Chloe', 'Dwarf Master Bronze'
+    ];
+    if (ghostNpcNames.includes(item.sellerName)) return false;
+    return true;
+  },
+
+  /**
+   * Obtém todos os anúncios ativos do mercado (filtra estritamente itens de jogadores reais)
    */
   getListings() {
+    this.initCloudSubscription();
+
+    if (_inMemoryListings !== null) {
+      return _inMemoryListings;
+    }
+
     try {
       const raw = localStorage.getItem(MARKET_STORAGE_KEY);
       if (raw) {
         const parsed = JSON.parse(raw);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        if (Array.isArray(parsed)) {
+          const clean = parsed.filter(this._isValidPlayerListing);
+          _inMemoryListings = clean;
+          return clean;
+        }
       }
     } catch (e) {
-      console.warn('[MarketService] Erro ao carregar anúncios:', e);
+      console.warn('[MarketService] Erro ao carregar anúncios locais:', e);
     }
-    return this.generateInitialMarketSeed();
+
+    // Se estiver vazio, inicia com lista vazia (SEM NPCs FANTASMAS) e busca da nuvem
+    _inMemoryListings = [];
+    this.fetchRemoteListings();
+    return _inMemoryListings;
   },
 
   /**
-   * Salva os anúncios no storage
+   * Busca anúncios mais recentes da nuvem (Firestore)
    */
-  saveListings(listings) {
+  async fetchRemoteListings() {
+    this.initCloudSubscription();
     try {
-      localStorage.setItem(MARKET_STORAGE_KEY, JSON.stringify(listings));
+      if (typeof window !== 'undefined' && window.FirebaseBridge?.fetchMarketListings) {
+        const remote = await window.FirebaseBridge.fetchMarketListings();
+        if (Array.isArray(remote)) {
+          const clean = remote.filter(this._isValidPlayerListing);
+          _inMemoryListings = clean;
+          this.saveListings(clean, false);
+          this.notifyUI();
+          return clean;
+        }
+      }
+    } catch (err) {
+      console.warn('[MarketService] Erro ao buscar anúncios da nuvem:', err);
+    }
+    return this.getListings();
+  },
+
+  /**
+   * Salva os anúncios no storage local e atualiza a memória
+   */
+  saveListings(listings, broadcast = true) {
+    const clean = Array.isArray(listings) ? listings.filter(this._isValidPlayerListing) : [];
+    _inMemoryListings = clean;
+    try {
+      localStorage.setItem(MARKET_STORAGE_KEY, JSON.stringify(clean));
+      // Limpa chaves legadas de mock anteriores
+      localStorage.removeItem('l2_aden_market_listings_v1');
     } catch (e) {
       console.error('[MarketService] Falha ao salvar anúncios:', e);
+    }
+
+    if (broadcast && _marketBroadcastChannel) {
+      try {
+        _marketBroadcastChannel.postMessage({ type: 'SYNC_LISTINGS' });
+      } catch (e) {}
     }
   },
 
@@ -65,9 +204,33 @@ export const MarketService = {
         return all[charName] || { pendingAdena: 0, pendingAdenCoins: 0, history: [] };
       }
     } catch (e) {
-      console.warn('[MarketService] Erro ao carregar vendas do jogador:', e);
+      console.warn('[MarketService] Erro ao carregar vendas locais:', e);
     }
     return { pendingAdena: 0, pendingAdenCoins: 0, history: [] };
+  },
+
+  /**
+   * Atualiza as vendas do jogador com base na nuvem
+   */
+  async fetchPlayerSalesFromCloud(charName = 'Hero of Aden') {
+    try {
+      if (typeof window !== 'undefined' && window.FirebaseBridge?.fetchPlayerSales) {
+        const remoteSales = await window.FirebaseBridge.fetchPlayerSales(charName);
+        if (remoteSales) {
+          const local = this.getPlayerSales(charName);
+          const merged = {
+            pendingAdena: Math.max(local.pendingAdena || 0, remoteSales.pendingAdena || 0),
+            pendingAdenCoins: Math.max(local.pendingAdenCoins || 0, remoteSales.pendingAdenCoins || 0),
+            history: remoteSales.history || local.history || []
+          };
+          this.savePlayerSales(charName, merged);
+          return merged;
+        }
+      }
+    } catch (err) {
+      console.warn('[MarketService] Erro ao sincronizar vendas da nuvem:', err);
+    }
+    return this.getPlayerSales(charName);
   },
 
   /**
@@ -79,15 +242,16 @@ export const MarketService = {
       const all = raw ? JSON.parse(raw) : {};
       all[charName] = data;
       localStorage.setItem(MARKET_SALES_KEY, JSON.stringify(all));
+      localStorage.removeItem('l2_aden_market_sales_v1');
     } catch (e) {
       console.error('[MarketService] Falha ao salvar vendas do jogador:', e);
     }
   },
 
   /**
-   * Cria um novo anúncio no mercado
+   * Cria um novo anúncio de jogador no mercado
    */
-  createListing(state, { itemUid, quantity = 1, pricePerUnit, currency = 'adena' }) {
+  async createListing(state, { itemUid, quantity = 1, pricePerUnit, currency = 'adena' }) {
     if (!state || !state.inventory) {
       return { ok: false, msg: 'Inventário indisponível.' };
     }
@@ -110,11 +274,11 @@ export const MarketService = {
     const unitPrice = Math.max(1, Math.floor(Number(pricePerUnit) || 1));
     const totalPrice = unitPrice * qtyToSell;
 
-    // Cálculo da taxa de listagem (5% em Adena)
+    // Cálculo da taxa imperial de listagem (5% em Adena - mínimo 100a)
     const listingFee = Math.max(100, Math.floor((currency === 'adena' ? totalPrice : totalPrice * 1000) * 0.05));
 
     if ((state.gold || 0) < listingFee) {
-      return { ok: false, msg: `Adena insuficiente para a taxa de listagem (Exige ${listingFee.toLocaleString()} Adena).` };
+      return { ok: false, msg: `Adena insuficiente para a taxa imperial de listagem (Exige ${listingFee.toLocaleString()} Adena).` };
     }
 
     // Deduz a taxa de listagem
@@ -129,11 +293,13 @@ export const MarketService = {
     }
 
     const sellerName = state.name || state.charName || 'Hero of Aden';
+    const sellerUid = typeof window !== 'undefined' ? (window.FirebaseBridge?.getCurrentUserId?.() || sellerName) : sellerName;
     const listingId = 'mkt_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
 
     const newListing = {
       id: listingId,
       sellerName: sellerName,
+      sellerUid: sellerUid,
       isPlayerListing: true,
       createdAt: Date.now(),
       currency: currency === 'adencoin' ? 'adencoin' : 'adena',
@@ -152,13 +318,32 @@ export const MarketService = {
       }
     };
 
+    // 1. Salva localmente
     const listings = this.getListings();
     listings.unshift(newListing);
-    this.saveListings(listings);
+    this.saveListings(listings, true);
+
+    // 2. Transmite para outras abas
+    if (_marketBroadcastChannel) {
+      try {
+        _marketBroadcastChannel.postMessage({ type: 'LISTING_CREATED', listing: newListing });
+      } catch (e) {}
+    }
+
+    // 3. Sincroniza com Firebase Cloud
+    try {
+      if (typeof window !== 'undefined' && window.FirebaseBridge?.createMarketListing) {
+        await window.FirebaseBridge.createMarketListing(newListing);
+      }
+    } catch (err) {
+      console.warn('[MarketService] Erro ao gravar anúncio na nuvem:', err);
+    }
+
+    this.notifyUI();
 
     return { 
       ok: true, 
-      msg: `Anúncio criado com sucesso! Taxa paga: ${listingFee.toLocaleString()} Adena.`,
+      msg: `Anúncio criado com sucesso! Taxa recolhida pelo Império: ${listingFee.toLocaleString()} Adena.`,
       listing: newListing 
     };
   },
@@ -166,20 +351,20 @@ export const MarketService = {
   /**
    * Compra um item anunciado no mercado
    */
-  buyListing(state, listingId) {
+  async buyListing(state, listingId) {
     if (!state) return { ok: false, msg: 'Estado de jogo indisponível.' };
 
     const listings = this.getListings();
     const index = listings.findIndex(l => l.id === listingId);
     if (index === -1) {
-      return { ok: false, msg: 'Este anúncio já foi vendido ou expirou!' };
+      return { ok: false, msg: 'Este anúncio já foi adquirido por outro jogador ou foi cancelado!' };
     }
 
     const listing = listings[index];
     const buyerName = state.name || state.charName || 'Hero of Aden';
 
     if (listing.sellerName === buyerName && listing.isPlayerListing) {
-      return { ok: false, msg: 'Você não pode comprar seu próprio anúncio. Cancele-o na aba Minhas Vendas!' };
+      return { ok: false, msg: 'Você não pode comprar seu próprio anúncio! Cancele-o na aba Minhas Vendas se desejar o item de volta.' };
     }
 
     const totalCost = Number(listing.totalPrice) || (listing.pricePerUnit * listing.quantity);
@@ -200,7 +385,7 @@ export const MarketService = {
       state.gold = playerGold - totalCost;
     }
 
-    // Entrega o item ao comprador
+    // Entrega o item comprado ao inventário do jogador
     const boughtItem = {
       ...listing.item,
       uid: 'item_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
@@ -221,31 +406,51 @@ export const MarketService = {
       state.inventory.push(boughtItem);
     }
 
-    // Se o vendedor for um jogador, credita o lucro na conta dele
-    if (listing.isPlayerListing) {
-      const salesData = this.getPlayerSales(listing.sellerName);
-      if (currency === 'adencoin') {
-        salesData.pendingAdenCoins = (salesData.pendingAdenCoins || 0) + totalCost;
-      } else {
-        salesData.pendingAdena = (salesData.pendingAdena || 0) + totalCost;
-      }
+    // Registra a venda para o vendedor
+    const saleRecord = {
+      itemName: listing.item.name,
+      quantity: listing.quantity,
+      totalCost: totalCost,
+      currency: currency,
+      buyer: buyerName
+    };
 
-      salesData.history = salesData.history || [];
-      salesData.history.unshift({
-        itemName: listing.item.name,
-        quantity: listing.quantity,
-        totalCost: totalCost,
-        currency: currency,
-        buyer: buyerName,
-        soldAt: Date.now()
-      });
+    // 1. Atualiza vendas locais se o vendedor estiver salvo localmente
+    const salesData = this.getPlayerSales(listing.sellerName);
+    if (currency === 'adencoin') {
+      salesData.pendingAdenCoins = (salesData.pendingAdenCoins || 0) + totalCost;
+    } else {
+      salesData.pendingAdena = (salesData.pendingAdena || 0) + totalCost;
+    }
+    salesData.history = salesData.history || [];
+    salesData.history.unshift({ ...saleRecord, soldAt: Date.now() });
+    this.savePlayerSales(listing.sellerName, salesData);
 
-      this.savePlayerSales(listing.sellerName, salesData);
+    // 2. Remove da lista local e transmite
+    listings.splice(index, 1);
+    this.saveListings(listings, true);
+
+    if (_marketBroadcastChannel) {
+      try {
+        _marketBroadcastChannel.postMessage({ type: 'LISTING_REMOVED', listingId });
+      } catch (e) {}
     }
 
-    // Remove do mural
-    listings.splice(index, 1);
-    this.saveListings(listings);
+    // 3. Sincroniza com Firebase Cloud (Deleta listagem e Credita vendedor)
+    try {
+      if (typeof window !== 'undefined') {
+        if (window.FirebaseBridge?.deleteMarketListing) {
+          await window.FirebaseBridge.deleteMarketListing(listingId);
+        }
+        if (window.FirebaseBridge?.recordMarketSale) {
+          await window.FirebaseBridge.recordMarketSale(listing.sellerName, saleRecord);
+        }
+      }
+    } catch (err) {
+      console.warn('[MarketService] Erro ao sincronizar compra na nuvem:', err);
+    }
+
+    this.notifyUI();
 
     return {
       ok: true,
@@ -255,15 +460,15 @@ export const MarketService = {
   },
 
   /**
-   * Cancela uma listagem e devolve o item para o jogador
+   * Cancela uma listagem e devolve o item para a mochila do jogador
    */
-  cancelListing(state, listingId) {
+  async cancelListing(state, listingId) {
     if (!state) return { ok: false, msg: 'Estado de jogo indisponível.' };
 
     const listings = this.getListings();
     const index = listings.findIndex(l => l.id === listingId);
     if (index === -1) {
-      return { ok: false, msg: 'Anúncio não encontrado.' };
+      return { ok: false, msg: 'Anúncio não encontrado ou já negociado.' };
     }
 
     const listing = listings[index];
@@ -283,29 +488,49 @@ export const MarketService = {
     state.inventory = state.inventory || [];
     state.inventory.push(returnedItem);
 
+    // 1. Remove da lista local
     listings.splice(index, 1);
-    this.saveListings(listings);
+    this.saveListings(listings, true);
+
+    if (_marketBroadcastChannel) {
+      try {
+        _marketBroadcastChannel.postMessage({ type: 'LISTING_REMOVED', listingId });
+      } catch (e) {}
+    }
+
+    // 2. Deleta do Firestore
+    try {
+      if (typeof window !== 'undefined' && window.FirebaseBridge?.deleteMarketListing) {
+        await window.FirebaseBridge.deleteMarketListing(listingId);
+      }
+    } catch (err) {
+      console.warn('[MarketService] Erro ao deletar listagem cancelada na nuvem:', err);
+    }
+
+    this.notifyUI();
 
     return {
       ok: true,
-      msg: `Anúncio cancelado! ${listing.quantity}x ${listing.item.name} devolvido à sua mochila.`
+      msg: `Anúncio cancelado com sucesso! ${listing.quantity}x ${listing.item.name} devolvido à sua mochila.`
     };
   },
 
   /**
    * Coleta todos os lucros pendentes de vendas
    */
-  claimProfits(state) {
+  async claimProfits(state) {
     if (!state) return { ok: false, msg: 'Estado indisponível.' };
 
     const playerName = state.name || state.charName || 'Hero of Aden';
-    const salesData = this.getPlayerSales(playerName);
+    
+    // Atualiza com dados mais recentes da nuvem antes de resgatar
+    const salesData = await this.fetchPlayerSalesFromCloud(playerName);
 
     const adena = salesData.pendingAdena || 0;
     const adencoin = salesData.pendingAdenCoins || 0;
 
     if (adena <= 0 && adencoin <= 0) {
-      return { ok: false, msg: 'Nenhum lucro pendente para resgatar no momento.' };
+      return { ok: false, msg: 'Nenhum lucro pendente de vendas para resgatar no momento.' };
     }
 
     if (adena > 0) {
@@ -320,87 +545,22 @@ export const MarketService = {
 
     this.savePlayerSales(playerName, salesData);
 
+    try {
+      if (typeof window !== 'undefined' && window.FirebaseBridge?.claimPlayerSales) {
+        await window.FirebaseBridge.claimPlayerSales(playerName);
+      }
+    } catch (err) {
+      console.warn('[MarketService] Erro ao limpar lucros na nuvem:', err);
+    }
+
+    this.notifyUI();
+
     return {
       ok: true,
-      msg: `Lucros coletados com sucesso: +${adena.toLocaleString()} Adena 🪙 e +${adencoin} Aden Coins 👑!`,
+      msg: `Lucros imperiais coletados com sucesso: +${adena.toLocaleString()} Adena 🪙 e +${adencoin} Aden Coins 👑!`,
       adena,
       adencoin
     };
-  },
-
-  /**
-   * Povoa o mercado com ofertas iniciais de mercadores de Aden para economia ativa
-   */
-  generateInitialMarketSeed() {
-    const seed = [
-      {
-        id: 'seed_1',
-        sellerName: 'Merchant Katrina',
-        isPlayerListing: false,
-        createdAt: Date.now() - 3600000,
-        currency: 'adena',
-        pricePerUnit: 45000,
-        totalPrice: 45000,
-        quantity: 1,
-        item: { id: 'scroll_of_enchant_weapon_', name: 'Scroll: Enchant Weapon (D-Grade) 📜', slot: 'scroll', tier: 2, rarity: 'rare', enchant: 0, desc: 'Encanta armas D-Grade.', icon: 'scrolls/scroll_of_enchant_weapon_.png' }
-      },
-      {
-        id: 'seed_2',
-        sellerName: 'Blacksmith Pushkin',
-        isPlayerListing: false,
-        createdAt: Date.now() - 7200000,
-        currency: 'adencoin',
-        pricePerUnit: 15,
-        totalPrice: 15,
-        quantity: 1,
-        item: { id: 'spellbook_2star', name: 'Spellbook: 2-Star ⭐⭐', slot: 'material', tier: 3, rarity: 'epic', enchant: 0, desc: 'Livro sagrado de 2 Estrelas para habilidades avançadas.', icon: 'spellbooks/spellbook_2star.png' }
-      },
-      {
-        id: 'seed_3',
-        sellerName: 'Trader Woody',
-        isPlayerListing: false,
-        createdAt: Date.now() - 10800000,
-        currency: 'adena',
-        pricePerUnit: 350,
-        totalPrice: 17500,
-        quantity: 50,
-        item: { id: 'iron_ore', name: 'Iron Ore 💎', slot: 'material', tier: 1, rarity: 'common', enchant: 0, desc: 'Minério de ferro refinado para forja.', icon: 'materials/iron_ore.png' }
-      },
-      {
-        id: 'seed_4',
-        sellerName: 'Shadow Walker Ren',
-        isPlayerListing: false,
-        createdAt: Date.now() - 14400000,
-        currency: 'adencoin',
-        pricePerUnit: 50,
-        totalPrice: 50,
-        quantity: 1,
-        item: { id: 'spellbook_4star', name: 'Spellbook: 4-Star ⭐⭐⭐⭐ [Ancestral]', slot: 'material', tier: 5, rarity: 'legendary', enchant: 0, desc: 'Livro Ancestral Supremo para habilidades de 4 Estrelas do Lv 80+.', icon: 'spellbooks/spellbook_4star.png' }
-      },
-      {
-        id: 'seed_5',
-        sellerName: 'Priestess Chloe',
-        isPlayerListing: false,
-        createdAt: Date.now() - 18000000,
-        currency: 'adena',
-        pricePerUnit: 120000,
-        totalPrice: 120000,
-        quantity: 1,
-        item: { id: 'armor_brigandine_armor_heavy', name: '+4 Brigandine Tunic', slot: 'armor', tier: 2, rarity: 'rare', enchant: 4, desc: 'Armadura pesada de Brigandine refinada.', icon: 'graded/armors/armor_brigandine_armor_heavy.png' }
-      },
-      {
-        id: 'seed_6',
-        sellerName: 'Dwarf Master Bronze',
-        isPlayerListing: false,
-        createdAt: Date.now() - 21600000,
-        currency: 'adencoin',
-        pricePerUnit: 25,
-        totalPrice: 25,
-        quantity: 1,
-        item: { id: 'lifestone_top', name: 'Top-Grade Life Stone 💎', slot: 'material', tier: 6, rarity: 'sovereign', enchant: 0, desc: 'Pedra de Vida Suprema para Augmentation.', icon: 'materials/crystal_gold_s.png' }
-      }
-    ];
-    this.saveListings(seed);
-    return seed;
   }
 };
+

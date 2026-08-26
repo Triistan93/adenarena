@@ -246,6 +246,7 @@ import { FortressService } from './src/services/FortressService.js';
 import { ColosseumService } from './src/services/ColosseumService.js';
 import { CombatPowerService } from './src/services/CombatPowerService.js';
 import { RankingService } from './src/services/RankingService.js';
+import { MarketService } from './src/services/MarketService.js';
 import { SubclassCertificationService, EMERGENT_ABILITIES, MASTER_ABILITIES_BY_ARCHETYPE, DIVINE_TRANSFORMATIONS } from './src/services/SubclassCertificationService.js';
 import { ensureAppLayout, showMenuPanel } from './src/ui/AppLayout.js';
 import { checkTabGuide, closeTabGuideModal, openTabGuideModal } from './src/ui/TutorialGuide.js';
@@ -2911,7 +2912,15 @@ function updateColosseumUI() {
 
 function updateMarketUI() {
   const pane = el('tab-market');
-  if (pane) uiRenderMarketTab(pane, state, { log, updateAllUI, save });
+  if (pane) {
+    uiRenderMarketTab(pane, state, { log, updateAllUI, save });
+    MarketService.fetchRemoteListings().then(() => {
+      const activePane = el('tab-market');
+      if (activePane && !activePane.hidden) {
+        uiRenderMarketTab(activePane, state, { log, updateAllUI, save });
+      }
+    }).catch(() => {});
+  }
 }
 
 function updateRankingsUI() {

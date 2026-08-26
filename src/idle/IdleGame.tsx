@@ -28,10 +28,17 @@ import {
   syncPlayerPublicProfile, 
   fetchLeaderboardRankings, 
   fetchPvPMatchmakingOpponents, 
+  createMarketListingInCloud,
+  fetchMarketListingsFromCloud,
+  deleteMarketListingInCloud,
+  recordMarketSaleInCloud,
+  fetchPlayerSalesFromCloud,
+  claimPlayerSalesInCloud,
+  subscribeToMarketListings,
   auth 
 } from "../firebase";
 
-// Expondo FirebaseBridge para os serviços de Rankings e Matchmaking
+// Expondo FirebaseBridge para os serviços de Rankings, Matchmaking e Mercado Global P2P
 if (typeof window !== "undefined") {
   (window as any).FirebaseBridge = {
     syncPublicProfile: async (profileData: any) => {
@@ -41,7 +48,16 @@ if (typeof window !== "undefined") {
     },
     fetchLeaderboard: fetchLeaderboardRankings,
     fetchMatchmakingOpponents: fetchPvPMatchmakingOpponents,
-    getCurrentUserId: () => auth.currentUser?.uid || null
+    getCurrentUserId: () => auth.currentUser?.uid || null,
+
+    // Métodos do Mercado Global P2P em Nuvem
+    createMarketListing: createMarketListingInCloud,
+    fetchMarketListings: fetchMarketListingsFromCloud,
+    deleteMarketListing: deleteMarketListingInCloud,
+    recordMarketSale: recordMarketSaleInCloud,
+    fetchPlayerSales: fetchPlayerSalesFromCloud,
+    claimPlayerSales: claimPlayerSalesInCloud,
+    subscribeMarketListings: subscribeToMarketListings
   };
 }
 

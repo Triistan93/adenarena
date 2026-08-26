@@ -45,12 +45,12 @@ export function renderMarketTab(container, state, callbacks = {}) {
           </div>
           <div>
             <h2 style="margin: 0; color: #f4d58a; font-size: 20px; font-weight: bold; letter-spacing: 0.5px;">Mercado Central de Giran</h2>
-            <p style="margin: 2px 0 0 0; color: #94a3b8; font-size: 12px; font-family: 'Inter', sans-serif;">Comércio P2P livre entre jogadores · Negocie em Adena (🪙) ou Aden Coins (👑)</p>
+            <p style="margin: 2px 0 0 0; color: #94a3b8; font-size: 12px; font-family: 'Inter', sans-serif;">Comércio P2P Global 100% entre jogadores reais · Negocie em Adena (🪙) ou Aden Coins (👑)</p>
           </div>
         </div>
 
-        <!-- Balances & Claim Button -->
-        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+        <!-- Balances, Sync & Claim Button -->
+        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
           <div style="background: rgba(0,0,0,0.5); border: 1px solid rgba(234,179,8,0.3); border-radius: 8px; padding: 8px 14px; display: flex; gap: 14px; font-family: 'IBM Plex Mono', monospace; font-size: 13px;">
             <div style="color: #ffd877; display: flex; align-items: center; gap: 6px;">
               🪙 <span>${playerGold.toLocaleString()}</span>
@@ -59,6 +59,10 @@ export function renderMarketTab(container, state, callbacks = {}) {
               👑 <span>${playerAc.toLocaleString()} AC</span>
             </div>
           </div>
+
+          <button id="btn-market-refresh" class="action-btn" title="Sincronizar com a Nuvem" style="background: rgba(30,40,60,0.8); border: 1px solid #60a5fa; color: #93c5fd; border-radius: 8px; padding: 8px 12px; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+            🔄 Atualizar
+          </button>
 
           ${hasProfits ? `
             <button id="btn-market-claim" class="action-btn" style="background: linear-gradient(135deg, #15803d, #22c55e); color: #fff; font-weight: bold; border: 1px solid #4ade80; border-radius: 8px; padding: 8px 16px; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 0 12px rgba(34,197,94,0.4); animation: pulse 1.5s infinite;">
@@ -111,7 +115,7 @@ function renderBuyTab(state) {
       if (_selectedCategory === 'weapon' && slot !== 'weapon') return false;
       if (_selectedCategory === 'armor' && !['armor', 'shield', 'helmet', 'gloves', 'boots'].includes(slot)) return false;
       if (_selectedCategory === 'jewel' && !['ring', 'earring', 'necklace', 'belt', 'talisman'].includes(slot)) return false;
-      if (_selectedCategory === 'spellbook' && !item.item?.name?.toLowerCase().includes('spellbook') && slot !== 'spellbook') return false;
+      if (_selectedCategory === 'spellbook' && !item.item?.name?.toLowerCase().includes('spellbook') && slot !== 'spellbook' && !item.item?.id?.startsWith('book_')) return false;
       if (_selectedCategory === 'scroll' && slot !== 'scroll' && !item.item?.name?.toLowerCase().includes('scroll') && !item.item?.name?.toLowerCase().includes('enchant')) return false;
       if (_selectedCategory === 'material' && slot !== 'material') return false;
       if (_selectedCategory === 'consumable' && slot !== 'consumable' && slot !== 'powerup') return false;
@@ -162,10 +166,11 @@ function renderBuyTab(state) {
 
     <!-- Listings Grid / List -->
     ${filtered.length === 0 ? `
-      <div style="text-align: center; padding: 40px; background: rgba(15,20,30,0.5); border: 1px dashed rgba(255,255,255,0.1); border-radius: 10px; color: #94a3b8; font-family: 'Inter', sans-serif;">
-        <div style="font-size: 32px; margin-bottom: 8px;">📭</div>
-        Nenhum item anunciado nesta categoria com os filtros atuais.<br />
-        <span style="font-size: 12px; color: #64748b;">Seja o primeiro a anunciar na aba "Criar Anúncio"!</span>
+      <div style="text-align: center; padding: 40px 20px; background: rgba(15,20,30,0.6); border: 1px dashed rgba(212,167,68,0.3); border-radius: 10px; color: #cbd5e1; font-family: 'Cinzel', serif;">
+        <div style="font-size: 38px; margin-bottom: 8px;">🏛️</div>
+        <h3 style="margin: 0 0 6px 0; color: #ffd877; font-size: 16px;">O Mercado de Giran está pronto para novas ofertas!</h3>
+        <p style="margin: 0 0 16px 0; font-size: 12px; color: #94a3b8; font-family: 'Inter', sans-serif;">Nenhum item anunciado nesta categoria no momento. Todos os itens deste mercado vêm 100% de jogadores reais de Aden.</p>
+        <button id="btn-market-empty-sell" class="action-btn action-btn--primary" style="padding: 8px 20px; font-weight: bold; cursor: pointer; font-size: 12px; font-family: 'Cinzel', serif;">🏷️ Seja o Primeiro a Criar um Anúncio</button>
       </div>
     ` : `
       <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px;">
@@ -190,7 +195,7 @@ function renderBuyTab(state) {
                     ${l.item.enchant > 0 ? `<span style="color:#60a5fa;">+${l.item.enchant}</span> ` : ''}${l.item.name}
                   </div>
                   <div style="font-size: 11px; color: #94a3b8; font-family: 'Inter', sans-serif; margin-top: 2px;">
-                    Qtd: <strong style="color:#fff;">${l.quantity}x</strong> · Vendedor: <span style="color:${l.isPlayerListing ? '#34d399' : '#a78bfa'};">${l.sellerName}</span>
+                    Qtd: <strong style="color:#fff;">${l.quantity}x</strong> · Vendedor: <span style="color:${l.isPlayerListing ? '#34d399' : '#a78bfa'}; font-weight:bold;">${l.sellerName}</span>
                   </div>
                 </div>
               </div>
@@ -198,23 +203,24 @@ function renderBuyTab(state) {
               <!-- Price & Buy Button -->
               <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.06); pt: 8px; margin-top: 4px; padding-top: 8px;">
                 <div>
+                  <div style="font-size: 10px; color: #94a3b8; font-family: 'Inter', sans-serif;">Preço Total:</div>
                   <div style="font-size: 14px; font-weight: bold; color: ${currencyColor}; font-family: 'IBM Plex Mono', monospace;">
-                    ${currencyIcon} ${totalCost.toLocaleString()}
+                    ${currencyIcon} ${totalCost.toLocaleString()} ${isAdena ? 'Adena' : 'AC'}
                   </div>
                   ${l.quantity > 1 ? `
-                    <div style="font-size: 10px; color: #64748b; font-family: 'Inter', sans-serif;">
-                      (${currencyIcon} ${l.pricePerUnit.toLocaleString()} / un)
+                    <div style="font-size: 10px; color: #64748b; font-family: 'IBM Plex Mono', monospace;">
+                      (${l.pricePerUnit.toLocaleString()} / un)
                     </div>
                   ` : ''}
                 </div>
 
                 ${isOwnListing ? `
-                  <button class="market-cancel-btn" data-id="${l.id}" style="background: rgba(239,68,68,0.2); border: 1px solid #ef4444; color: #fca5a5; border-radius: 6px; padding: 6px 12px; font-size: 11px; cursor: pointer;">
-                    ❌ Cancelar
+                  <button class="market-cancel-btn action-btn" data-id="${l.id}" style="background: rgba(239,68,68,0.2); border: 1px solid #ef4444; color: #fca5a5; padding: 6px 12px; border-radius: 6px; font-size: 11px; cursor: pointer; font-weight: bold;">
+                    ✕ Cancelar
                   </button>
                 ` : `
-                  <button class="market-buy-btn" data-id="${l.id}" style="background: linear-gradient(135deg, #ca8a04, #eab308); color: #000; font-weight: bold; border: 1px solid #fde047; border-radius: 6px; padding: 6px 16px; font-size: 12px; cursor: pointer; box-shadow: 0 0 8px rgba(234,179,8,0.3);">
-                    Comprar
+                  <button class="market-buy-btn action-btn action-btn--primary" data-id="${l.id}" style="padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; font-family: 'Cinzel', serif;">
+                    🛒 Comprar
                   </button>
                 `}
               </div>
@@ -474,11 +480,35 @@ function attachMarketEvents(container, state, callbacks = {}) {
     };
   }
 
+  // Sincronização e Atualização Manual com a Nuvem
+  const refreshBtn = container.querySelector('#btn-market-refresh');
+  if (refreshBtn) {
+    refreshBtn.onclick = async () => {
+      refreshBtn.disabled = true;
+      refreshBtn.innerText = '⏳ Sincronizando...';
+      const playerName = state.name || state.charName || 'Hero of Aden';
+      await MarketService.fetchRemoteListings();
+      await MarketService.fetchPlayerSalesFromCloud(playerName);
+      if (callbacks.log) callbacks.log('Mercado de Giran sincronizado com o servidor global!', 'info');
+      renderMarketTab(container, state, callbacks);
+    };
+  }
+
+  // Botão de Criar Anúncio no estado vazio
+  const emptySellBtn = container.querySelector('#btn-market-empty-sell');
+  if (emptySellBtn) {
+    emptySellBtn.onclick = () => {
+      _activeMarketTab = 'sell';
+      renderMarketTab(container, state, callbacks);
+    };
+  }
+
   // Comprar Anúncio
   container.querySelectorAll('.market-buy-btn').forEach(btn => {
-    btn.onclick = () => {
+    btn.onclick = async () => {
       const listingId = btn.dataset.id;
-      const res = MarketService.buyListing(state, listingId);
+      btn.disabled = true;
+      const res = await MarketService.buyListing(state, listingId);
       if (callbacks.log) callbacks.log(res.msg, res.ok ? 'success' : 'warning');
       if (res.ok) {
         if (callbacks.save) callbacks.save();
@@ -492,9 +522,10 @@ function attachMarketEvents(container, state, callbacks = {}) {
 
   // Cancelar Anúncio
   container.querySelectorAll('.market-cancel-btn').forEach(btn => {
-    btn.onclick = () => {
+    btn.onclick = async () => {
       const listingId = btn.dataset.id;
-      const res = MarketService.cancelListing(state, listingId);
+      btn.disabled = true;
+      const res = await MarketService.cancelListing(state, listingId);
       if (callbacks.log) callbacks.log(res.msg, res.ok ? 'info' : 'warning');
       if (res.ok) {
         if (callbacks.save) callbacks.save();
@@ -507,8 +538,9 @@ function attachMarketEvents(container, state, callbacks = {}) {
   // Coletar Lucros
   const claimBtn = container.querySelector('#btn-market-claim');
   if (claimBtn) {
-    claimBtn.onclick = () => {
-      const res = MarketService.claimProfits(state);
+    claimBtn.onclick = async () => {
+      claimBtn.disabled = true;
+      const res = await MarketService.claimProfits(state);
       if (callbacks.log) callbacks.log(res.msg, res.ok ? 'gold' : 'info');
       if (res.ok) {
         if (callbacks.save) callbacks.save();
@@ -556,9 +588,10 @@ function attachMarketEvents(container, state, callbacks = {}) {
   // Publicar Anúncio
   const submitBtn = container.querySelector('#btn-submit-listing');
   if (submitBtn) {
-    submitBtn.onclick = () => {
+    submitBtn.onclick = async () => {
       if (!_selectedSellItemUid) return alert('Selecione um item primeiro!');
-      const res = MarketService.createListing(state, {
+      submitBtn.disabled = true;
+      const res = await MarketService.createListing(state, {
         itemUid: _selectedSellItemUid,
         quantity: _sellQuantity,
         pricePerUnit: _sellPriceUnit,

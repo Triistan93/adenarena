@@ -14,6 +14,8 @@ import {
   doc, 
   setDoc, 
   getDoc, 
+  deleteDoc,
+  onSnapshot,
   serverTimestamp, 
   collection, 
   getDocs, 
@@ -298,6 +300,181 @@ export async function fetchPvPMatchmakingOpponents(playerCP: number = 10000, ran
   } catch (err) {
     console.warn('Matchmaking Opponents Fetch Notice:', err);
     return [];
+  }
+}
+
+/**
+ * =========================================================================
+ * MERCADO GLOBAL P2P DE GIRAN — SINCRONIZAÇÃO EM TEMPO REAL NO FIRESTORE
+ * =========================================================================
+ */
+
+/**
+ * Salva um novo anúncio criado por um jogador no Firestore
+ */
+export async function createMarketListingInCloud(listing: any): Promise<boolean> {
+  try {
+    if (!listing || !listing.id) return false;
+    const listingRef = doc(db, 'market_listings', listing.id);
+    const cleanListing = JSON.parse(JSON.stringify(listing));
+    cleanListing.isPlayerListing = true;
+    cleanListing.updatedAt = serverTimestamp();
+    await setDoc(listingRef, cleanListing);
+    return true;
+  } catch (err) {
+    console.warn('[Firebase] Erro ao criar anúncio no mercado:', err);
+    return false;
+  }
+}
+
+/**
+ * Busca todos os anúncios REAIS de jogadores ativos no mercado
+ */
+export async function fetchMarketListingsFromCloud(): Promise<any[]> {
+  try {
+    const listingsCol = collection(db, 'market_listings');
+    const snap = await getDocs(listingsCol);
+    const list: any[] = [];
+    snap.forEach((d) => {
+      const data = d.data();
+      // Filtra estritamente apenas itens de jogadores reais (sem sementes/NPCs fantasmas)
+      if (
+        data && 
+        data.item && 
+        data.isPlayerListing !== false && 
+        !String(data.id || '').startsWith('seed_') &&
+        !['Merchant Katrina', 'Blacksmith Pushkin', 'Trader Woody', 'Shadow Walker Ren', 'Priestess Chloe', 'Dwarf Master Bronze'].includes(data.sellerName)
+      ) {
+        list.push({ id: d.id, ...data });
+      }
+    });
+    list.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+    return list;
+  } catch (err) {
+    console.warn('[Firebase] Erro ao buscar anúncios do mercado:', err);
+    return [];
+  }
+}
+
+/**
+ * Remove um anúncio comprado ou cancelado do mercado
+ */
+export async function deleteMarketListingInCloud(listingId: string): Promise<boolean> {
+  try {
+    if (!listingId) return false;
+    const listingRef = doc(db, 'market_listings', listingId);
+    await deleteDoc(listingRef);
+    return true;
+  } catch (err) {
+    console.warn('[Firebase] Erro ao deletar anúncio:', err);
+    return false;
+  }
+}
+
+/**
+ * Registra a venda de um item e credita o saldo pendente para o vendedor
+ */
+export async function recordMarketSaleInCloud(sellerName: string, saleData: any): Promise<boolean> {
+  try {
+    if (!sellerName || !saleData) return false;
+    const saleRef = doc(db, 'market_sales', sellerName);
+    const snap = await getDoc(saleRef);
+    const existing = snap.exists() ? snap.data() : { pendingAdena: 0, pendingAdenCoins: 0, history: [] };
+
+    const isAdena = saleData.currency === 'adena';
+    const amount = Number(saleData.totalCost) || 0;
+
+    if (isAdena) {
+      existing.pendingAdena = (existing.pendingAdena || 0) + amount;
+    } else {
+      existing.pendingAdenCoins = (existing.pendingAdenCoins || 0) + amount;
+    }
+
+    existing.history = existing.history || [];
+    existing.history.unshift({
+      itemName: saleData.itemName || 'Item de Aden',
+      quantity: Number(saleData.quantity) || 1,
+      totalCost: amount,
+      currency: saleData.currency || 'adena',
+      buyer: saleData.buyer || 'Outro Jogador',
+      soldAt: Date.now()
+    });
+
+    if (existing.history.length > 30) {
+      existing.history = existing.history.slice(0, 30);
+    }
+    existing.updatedAt = serverTimestamp();
+
+    await setDoc(saleRef, existing, { merge: true });
+    return true;
+  } catch (err) {
+    console.warn('[Firebase] Erro ao registrar venda no mercado:', err);
+    return false;
+  }
+}
+
+/**
+ * Consulta os lucros e histórico de vendas de um jogador
+ */
+export async function fetchPlayerSalesFromCloud(sellerName: string): Promise<any> {
+  try {
+    if (!sellerName) return { pendingAdena: 0, pendingAdenCoins: 0, history: [] };
+    const saleRef = doc(db, 'market_sales', sellerName);
+    const snap = await getDoc(saleRef);
+    if (snap.exists()) {
+      return snap.data();
+    }
+    return { pendingAdena: 0, pendingAdenCoins: 0, history: [] };
+  } catch (err) {
+    console.warn('[Firebase] Erro ao buscar vendas do jogador:', err);
+    return { pendingAdena: 0, pendingAdenCoins: 0, history: [] };
+  }
+}
+
+/**
+ * Resgata os lucros pendentes de vendas do jogador no Firestore
+ */
+export async function claimPlayerSalesInCloud(sellerName: string): Promise<boolean> {
+  try {
+    if (!sellerName) return false;
+    const saleRef = doc(db, 'market_sales', sellerName);
+    await setDoc(saleRef, { pendingAdena: 0, pendingAdenCoins: 0, updatedAt: serverTimestamp() }, { merge: true });
+    return true;
+  } catch (err) {
+    console.warn('[Firebase] Erro ao limpar lucros no cloud:', err);
+    return false;
+  }
+}
+
+/**
+ * Escuta atualizações do mercado em tempo real via Firestore onSnapshot
+ */
+export function subscribeToMarketListings(onUpdate: (listings: any[]) => void): () => void {
+  try {
+    const listingsCol = collection(db, 'market_listings');
+    const unsubscribe = onSnapshot(listingsCol, (snap) => {
+      const list: any[] = [];
+      snap.forEach((d) => {
+        const data = d.data();
+        if (
+          data && 
+          data.item && 
+          data.isPlayerListing !== false && 
+          !String(data.id || '').startsWith('seed_') &&
+          !['Merchant Katrina', 'Blacksmith Pushkin', 'Trader Woody', 'Shadow Walker Ren', 'Priestess Chloe', 'Dwarf Master Bronze'].includes(data.sellerName)
+        ) {
+          list.push({ id: d.id, ...data });
+        }
+      });
+      list.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+      onUpdate(list);
+    }, (err) => {
+      console.warn('[Firebase] Erro no listener do mercado:', err);
+    });
+    return unsubscribe;
+  } catch (err) {
+    console.warn('[Firebase] Falha ao assinar atualizações do mercado:', err);
+    return () => {};
   }
 }
 
