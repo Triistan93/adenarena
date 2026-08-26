@@ -65,80 +65,60 @@ export async function savePlayerStateToCloud(userId: string, stateData: any) {
     const userRef = doc(db, 'users', userId);
     const cleanState = JSON.parse(JSON.stringify(stateData));
     
-    // SECURITY: Never allow client-sent privilegeLevel to be written to Firestore!
+    // SECURITY: Never allow client-sent privilegeLevel to overwrite Firestore root privilege!
     delete cleanState.privilegeLevel;
-    
+
+    const stats = cleanState.stats || {};
+    const pAtk = Number(stats.atk || stats.pAtk) || 100;
+    const mAtk = Number(stats.matk || stats.mAtk) || 50;
+    const pDef = Number(stats.def || stats.pDef) || 80;
+    const mDef = Number(stats.mdef || stats.mDef) || 60;
+    const maxHp = Number(stats.maxHp || stats.hp) || 1000;
+    const level = Number(cleanState.level) || 1;
+    const cp = Number(stats.combatPower) || Math.floor(level * 150 + pAtk * 1.8 + pDef * 1.5 + mAtk * 1.6 + mDef * 1.5 + maxHp * 0.12);
+
+    let topWeaponName = 'Sem Arma';
+    let topWeaponGlow = null;
+    if (cleanState.equipment?.weapon) {
+      const wUid = cleanState.equipment.weapon;
+      const wItem = cleanState.inventory?.find((i: any) => i.uid === wUid || i.id === wUid);
+      if (wItem) {
+        const enc = Number(wItem.enchant || wItem.enchantLevel) || 0;
+        topWeaponName = enc > 0 ? `+${enc} ${wItem.name || 'Arma'}` : (wItem.name || 'Arma');
+        topWeaponGlow = wItem.augmentation?.glow || (enc >= 16 ? 'crimson-fire' : enc >= 10 ? 'golden-amber' : enc >= 4 ? 'blue-ice' : null);
+      }
+    }
+
     const payload: any = {
+      userId,
+      charName: cleanState.name || cleanState.charName || cleanState.playerName || 'Hero',
+      race: cleanState.race || 'Human',
+      className: cleanState.className || cleanState.class || 'Warrior',
+      level,
+      combatPower: cp,
+      olympiadPoints: Number(cleanState.olympiad?.points || cleanState.olympiadPoints) || 1000,
+      olympiadWins: Number(cleanState.olympiad?.wins || cleanState.olympiadWins) || 0,
+      olympiadLosses: Number(cleanState.olympiad?.losses || cleanState.olympiadLosses) || 0,
+      duelWins: Number(cleanState.colosseum?.duelWins || cleanState.duelWins) || 0,
+      duelLosses: Number(cleanState.colosseum?.duelLosses || cleanState.duelLosses) || 0,
+      clanName: cleanState.clan?.name || 'Sem Clã',
+      castleLord: cleanState.clan?.castle || null,
+      isHero: Boolean(cleanState.olympiad?.isHero || cleanState.isHero),
+      topWeaponName,
+      topWeaponGlow,
+      statsSnapshot: {
+        hp: maxHp,
+        pAtk,
+        mAtk,
+        pDef,
+        mDef,
+        crit: Number(stats.crit) || 10
+      },
       state: cleanState,
       updatedAt: serverTimestamp()
     };
 
     await setDoc(userRef, payload, { merge: true });
-
-    // Sincroniza automaticamente o perfil público para o Ranking com os dados REAIS
-    try {
-      const stats = cleanState.stats || {};
-      const pAtk = Number(stats.atk || stats.pAtk) || 100;
-      const mAtk = Number(stats.matk || stats.mAtk) || 50;
-      const pDef = Number(stats.def || stats.pDef) || 80;
-      const mDef = Number(stats.mdef || stats.mDef) || 60;
-      const maxHp = Number(stats.maxHp || stats.hp) || 1000;
-      const level = Number(cleanState.level) || 1;
-      const cp = Number(stats.combatPower) || Math.floor(level * 150 + pAtk * 1.8 + pDef * 1.5 + mAtk * 1.6 + mDef * 1.5 + maxHp * 0.12);
-
-      let topWeaponName = 'Sem Arma';
-      let topWeaponGlow = null;
-      if (cleanState.equipment?.weapon) {
-        const wUid = cleanState.equipment.weapon;
-        const wItem = cleanState.inventory?.find((i: any) => i.uid === wUid || i.id === wUid);
-        if (wItem) {
-          const enc = Number(wItem.enchant || wItem.enchantLevel) || 0;
-          topWeaponName = enc > 0 ? `+${enc} ${wItem.name || 'Arma'}` : (wItem.name || 'Arma');
-          topWeaponGlow = wItem.augmentation?.glow || (enc >= 16 ? 'crimson-fire' : enc >= 10 ? 'golden-amber' : enc >= 4 ? 'blue-ice' : null);
-        }
-      }
-
-      const publicData = {
-        userId,
-        charName: cleanState.name || cleanState.charName || cleanState.playerName || 'Hero',
-        race: cleanState.race || 'Human',
-        className: cleanState.className || cleanState.class || 'Warrior',
-        level,
-        combatPower: cp,
-        olympiadPoints: Number(cleanState.olympiad?.points || cleanState.olympiadPoints) || 1000,
-        olympiadWins: Number(cleanState.olympiad?.wins || cleanState.olympiadWins) || 0,
-        olympiadLosses: Number(cleanState.olympiad?.losses || cleanState.olympiadLosses) || 0,
-        duelWins: Number(cleanState.colosseum?.duelWins || cleanState.duelWins) || 0,
-        duelLosses: Number(cleanState.colosseum?.duelLosses || cleanState.duelLosses) || 0,
-        clanName: cleanState.clan?.name || 'Sem Clã',
-        castleLord: cleanState.clan?.castle || null,
-        isHero: Boolean(cleanState.olympiad?.isHero || cleanState.isHero),
-        topWeaponName,
-        topWeaponGlow,
-        statsSnapshot: {
-          hp: maxHp,
-          pAtk,
-          mAtk,
-          pDef,
-          mDef,
-          crit: Number(stats.crit) || 10
-        },
-        updatedAt: serverTimestamp()
-      };
-
-      if (auth.currentUser && auth.currentUser.uid === userId) {
-        const profileRef = doc(db, 'public_profiles', userId);
-        await setDoc(profileRef, publicData, { merge: true });
-      }
-    } catch (profErr: any) {
-      if (profErr?.code === 'permission-denied' || String(profErr).includes('permissions')) {
-        // Permissão do Firestore requer atualização da regra da coleção public_profiles no console
-        console.debug('Firebase public_profiles sync requer permissão no Firestore Rules.');
-      } else {
-        console.warn('Auto Public Profile Sync warning:', profErr);
-      }
-    }
-
     return true;
   } catch (err) {
     console.error('Cloud Save Error:', err);
@@ -158,16 +138,15 @@ export async function checkNicknameAvailability(nickname: string, currentUserId?
 
     const normNick = cleanNick.toLowerCase();
 
-    // 1. Verifica na coleção public_profiles
-    const profilesCol = collection(db, 'public_profiles');
-    const snap = await getDocs(profilesCol);
+    // Consulta unificada na coleção users
+    const usersCol = collection(db, 'users');
+    const snap = await getDocs(usersCol);
     let isTaken = false;
 
     snap.forEach((d) => {
       const data = d.data();
-      const pName = String(data?.charName || data?.name || '').trim().toLowerCase();
+      const pName = String(data?.charName || data?.state?.charName || data?.state?.name || '').trim().toLowerCase();
       if (pName === normNick) {
-        // Se pertencer ao próprio usuário atual, está liberado
         if (currentUserId && (d.id === currentUserId || data.userId === currentUserId)) {
           return;
         }
@@ -203,43 +182,6 @@ export async function loadPlayerStateFromCloud(userId: string) {
         return stateObj;
       }
     }
-
-    // Auto-conversão: Se users/{userId} não existe, mas public_profiles/{userId} existe
-    const profRef = doc(db, 'public_profiles', userId);
-    const profSnap = await getDoc(profRef);
-    if (profSnap.exists()) {
-      const pData = profSnap.data();
-      const reconstructedState = {
-        charName: pData.charName || 'Hero',
-        heroName: pData.charName || 'Hero',
-        playerName: pData.charName || 'Hero',
-        name: pData.charName || 'Hero',
-        race: pData.race || 'Human',
-        class: pData.className || 'Warrior',
-        className: pData.className || 'Warrior',
-        gender: 'M',
-        level: Number(pData.level) || 1,
-        xp: 0,
-        sp: 10,
-        gold: 50000,
-        zone: 'talkingIsland',
-        inventory: [],
-        equipment: {},
-        skills: {},
-        lastSaveTime: Date.now()
-      };
-
-      const payload = {
-        state: reconstructedState,
-        privilegeLevel: 0,
-        role: 'player',
-        updatedAt: serverTimestamp()
-      };
-
-      await setDoc(userRef, payload, { merge: true });
-      return reconstructedState;
-    }
-
     return null;
   } catch (err) {
     console.error('Cloud Load Error:', err);
@@ -259,109 +201,87 @@ export async function deletePlayerStateFromCloud(userId: string) {
 }
 
 /**
- * Sincroniza o perfil público do jogador para o ranking global e duelos assíncronos
+ * Sincroniza dados públicos do perfil diretamente no documento users/{userId}
  */
 export async function syncPlayerPublicProfile(userId: string, profileData: any) {
   try {
     if (!userId || !profileData || !auth.currentUser) return false;
-    const profileRef = doc(db, 'public_profiles', userId);
+    const userRef = doc(db, 'users', userId);
     const payload = {
       ...profileData,
       userId,
       updatedAt: serverTimestamp()
     };
-    await setDoc(profileRef, payload, { merge: true });
+    await setDoc(userRef, payload, { merge: true });
     return true;
   } catch (err: any) {
-    if (err?.code === 'permission-denied' || String(err).includes('permissions')) {
-      console.debug('Firebase public_profiles sync requer permissão no Firestore Rules.');
-    } else {
-      console.warn('Public Profile Sync Warning:', err);
-    }
+    console.debug('User profile sync notice:', err);
     return false;
   }
 }
 
 /**
- * Busca rankings globais no Firestore (Combat Power, Olimpíadas, Duelos, Castelos)
- * Consulta exclusivamente os perfis reais dos jogadores salvos no banco de dados.
+ * Busca rankings globais diretamente na coleção unificada users
  */
 export async function fetchLeaderboardRankings(category: 'cp' | 'olympiad' | 'duels' | 'castles' = 'cp', limitCount: number = 20) {
   try {
-    const profilesCol = collection(db, 'public_profiles');
-    let q;
-    if (category === 'olympiad') {
-      q = query(profilesCol, orderBy('olympiadPoints', 'desc'), limit(limitCount));
-    } else if (category === 'duels') {
-      q = query(profilesCol, orderBy('duelWins', 'desc'), limit(limitCount));
-    } else {
-      q = query(profilesCol, orderBy('combatPower', 'desc'), limit(limitCount));
-    }
-
-    const snap = await getDocs(q);
+    const usersCol = collection(db, 'users');
+    const userSnap = await getDocs(usersCol);
     const results: any[] = [];
-    snap.forEach((d) => {
-      const data = d.data();
-      if (data && (data.charName || data.name)) {
-        results.push({ id: d.id, ...data });
+
+    userSnap.forEach((uDoc) => {
+      const uData = uDoc.data();
+      const state = uData?.state || {};
+      const charName = uData?.charName || state.charName || state.name;
+      if (charName) {
+        const stats = state.stats || uData.statsSnapshot || {};
+        const pAtk = Number(stats.atk || stats.pAtk) || 100;
+        const pDef = Number(stats.def || stats.pDef) || 80;
+        const mAtk = Number(stats.matk || stats.mAtk) || 50;
+        const mDef = Number(stats.mdef || stats.mDef) || 60;
+        const maxHp = Number(stats.maxHp || stats.hp) || 1000;
+        const level = Number(uData.level || state.level) || 1;
+        const cp = Number(uData.combatPower || stats.combatPower) || Math.floor(level * 150 + pAtk * 1.8 + pDef * 1.5 + mAtk * 1.6 + mDef * 1.5 + maxHp * 0.12);
+
+        results.push({
+          id: uDoc.id,
+          userId: uDoc.id,
+          charName,
+          race: uData.race || state.race || 'Human',
+          className: uData.className || state.className || state.class || 'Warrior',
+          level,
+          combatPower: cp,
+          olympiadPoints: Number(uData.olympiadPoints || state.olympiad?.points || state.olympiadPoints) || 1000,
+          olympiadWins: Number(uData.olympiadWins || state.olympiad?.wins || state.olympiadWins) || 0,
+          olympiadLosses: Number(uData.olympiadLosses || state.olympiad?.losses || state.olympiadLosses) || 0,
+          duelWins: Number(uData.duelWins || state.colosseum?.duelWins || state.duelWins) || 0,
+          duelLosses: Number(uData.duelLosses || state.colosseum?.duelLosses || state.duelLosses) || 0,
+          clanName: uData.clanName || state.clan?.name || 'Sem Clã',
+          castleLord: uData.castleLord || state.clan?.castle || null,
+          isHero: Boolean(uData.isHero || state.olympiad?.isHero || state.isHero),
+          topWeaponName: uData.topWeaponName || 'Sem Arma',
+          topWeaponGlow: uData.topWeaponGlow || null,
+          statsSnapshot: {
+            hp: maxHp,
+            pAtk,
+            mAtk,
+            pDef,
+            mDef,
+            crit: Number(stats.crit) || 10
+          }
+        });
       }
     });
 
-    // Se public_profiles ainda estiver vazio, consulta a coleção users para recuperar os jogadores reais
-    if (results.length === 0) {
-      const usersCol = collection(db, 'users');
-      const userSnap = await getDocs(usersCol);
-      userSnap.forEach((uDoc) => {
-        const uData = uDoc.data();
-        const state = uData?.state;
-        if (state && (state.name || state.charName)) {
-          const stats = state.stats || {};
-          const pAtk = Number(stats.atk || stats.pAtk) || 100;
-          const pDef = Number(stats.def || stats.pDef) || 80;
-          const mAtk = Number(stats.matk || stats.mAtk) || 50;
-          const mDef = Number(stats.mdef || stats.mDef) || 60;
-          const maxHp = Number(stats.maxHp || stats.hp) || 1000;
-          const level = Number(state.level) || 1;
-          const cp = Number(stats.combatPower) || Math.floor(level * 150 + pAtk * 1.8 + pDef * 1.5 + mAtk * 1.6 + mDef * 1.5 + maxHp * 0.12);
-
-          results.push({
-            id: uDoc.id,
-            userId: uDoc.id,
-            charName: state.name || state.charName || 'Hero',
-            race: state.race || 'Human',
-            className: state.className || state.class || 'Warrior',
-            level,
-            combatPower: cp,
-            olympiadPoints: Number(state.olympiad?.points || state.olympiadPoints) || 1000,
-            olympiadWins: Number(state.olympiad?.wins || state.olympiadWins) || 0,
-            olympiadLosses: Number(state.olympiad?.losses || state.olympiadLosses) || 0,
-            duelWins: Number(state.colosseum?.duelWins || state.duelWins) || 0,
-            duelLosses: Number(state.colosseum?.duelLosses || state.duelLosses) || 0,
-            clanName: state.clan?.name || 'Sem Clã',
-            castleLord: state.clan?.castle || null,
-            isHero: Boolean(state.olympiad?.isHero || state.isHero),
-            statsSnapshot: {
-              hp: maxHp,
-              pAtk,
-              mAtk,
-              pDef,
-              mDef,
-              crit: Number(stats.crit) || 10
-            }
-          });
-        }
-      });
-
-      if (category === 'olympiad') {
-        results.sort((a, b) => (b.olympiadPoints || 0) - (a.olympiadPoints || 0));
-      } else if (category === 'duels') {
-        results.sort((a, b) => (b.duelWins || 0) - (a.duelWins || 0));
-      } else {
-        results.sort((a, b) => (b.combatPower || 0) - (a.combatPower || 0));
-      }
+    if (category === 'olympiad') {
+      results.sort((a, b) => (b.olympiadPoints || 0) - (a.olympiadPoints || 0));
+    } else if (category === 'duels') {
+      results.sort((a, b) => (b.duelWins || 0) - (a.duelWins || 0));
+    } else {
+      results.sort((a, b) => (b.combatPower || 0) - (a.combatPower || 0));
     }
 
-    return results;
+    return results.slice(0, limitCount);
   } catch (err) {
     console.warn('Leaderboard Fetch Notice:', err);
     return [];
@@ -369,25 +289,25 @@ export async function fetchLeaderboardRankings(category: 'cp' | 'olympiad' | 'du
 }
 
 /**
- * Busca oponentes reais com Combat Power semelhante para duelos equilibrados
+ * Busca oponentes reais com Combat Power semelhante para duelos na coleção users
  */
 export async function fetchPvPMatchmakingOpponents(playerCP: number = 10000, rangePct: number = 0.25, limitCount: number = 5) {
   try {
     const minCP = Math.max(100, Math.floor(playerCP * (1 - rangePct)));
     const maxCP = Math.floor(playerCP * (1 + rangePct));
-    const profilesCol = collection(db, 'public_profiles');
-    const q = query(
-      profilesCol, 
-      where('combatPower', '>=', minCP),
-      where('combatPower', '<=', maxCP),
-      limit(limitCount)
-    );
-    const snap = await getDocs(q);
+    const usersCol = collection(db, 'users');
+    const snap = await getDocs(usersCol);
     const opponents: any[] = [];
+
     snap.forEach((d) => {
-      opponents.push({ id: d.id, ...d.data() });
+      const data = d.data();
+      const cp = Number(data.combatPower || data.state?.stats?.combatPower) || 0;
+      if (cp >= minCP && cp <= maxCP) {
+        opponents.push({ id: d.id, ...data });
+      }
     });
-    return opponents;
+
+    return opponents.slice(0, limitCount);
   } catch (err) {
     console.warn('Matchmaking Opponents Fetch Notice:', err);
     return [];

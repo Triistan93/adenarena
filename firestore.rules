@@ -2,13 +2,8 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     
-    // Dados privados de cada jogador (saves, progresso e inventário)
+    // Coleção Única de Usuários (Saves, Rankings, Status, PvP e Permissões)
     match /users/{userId} {
-      allow read, write: if true;
-    }
-    
-    // Perfis públicos para Rankings Globais, Duelos do Coliseu e Lista de Castelos
-    match /public_profiles/{userId} {
       allow read, write: if true;
     }
     
