@@ -885,6 +885,9 @@ export default function Shell() {
   const handleEnterGame = (cloudState?: any) => {
     if (cloudState && typeof cloudState === 'object') {
       try {
+        const priv = Number(cloudState.privilegeLevel) || (cloudState.role === 'admin' ? 1 : 0) || 0;
+        (window as any).currentUserPrivilege = priv;
+        cloudState.privilegeLevel = priv;
         localStorage.setItem('lineageIdleSave_v2', JSON.stringify(cloudState));
       } catch (e) {
         console.error('Error saving cloudState to localStorage:', e);

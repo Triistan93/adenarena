@@ -36,6 +36,8 @@ import {
   claimPlayerSalesInCloud,
   subscribeToMarketListings,
   subscribeToPlayerSales,
+  loadPlayerStateFromCloud,
+  onAuthStateChanged,
   auth 
 } from "../firebase";
 
@@ -76,6 +78,41 @@ export default function IdleGame() {
     race: string;
     class: string;
   } | null>(null);
+
+  useEffect(() => {
+    const syncAdminStatus = async (userUid: string) => {
+      try {
+        const cloudState = await loadPlayerStateFromCloud(userUid);
+        if (cloudState) {
+          const priv = Number(cloudState.privilegeLevel) || (cloudState.role === 'admin' ? 1 : 0) || 0;
+          (window as any).currentUserPrivilege = priv;
+          if (typeof (window as any).getGameState === 'function') {
+            const st = (window as any).getGameState();
+            if (st) {
+              st.privilegeLevel = priv;
+            }
+          }
+          if (typeof (window as any).loadGameState === 'function') {
+            (window as any).loadGameState(cloudState);
+          }
+        }
+      } catch (e) {
+        console.debug('IdleGame admin cloud sync notice:', e);
+      }
+    };
+
+    if (auth.currentUser) {
+      syncAdminStatus(auth.currentUser.uid);
+    }
+
+    const unsub = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        syncAdminStatus(user.uid);
+      }
+    });
+
+    return () => unsub();
+  }, []);
 
   useLayoutEffect(() => {
     const host = hostRef.current;

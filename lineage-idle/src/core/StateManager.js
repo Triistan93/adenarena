@@ -125,18 +125,24 @@ export function loadState() {
     // Valida integridade e sanidade dos dados
     const check = validateStateIntegrity(data);
     if (!check.valid) {
-      console.warn('[StateManager] Falha na integridade do save principal:', check.reason);
-      const backupRaw = localStorage.getItem(`${SAVE_KEY}_backup`);
-      if (backupRaw && backupRaw !== raw) {
-        try {
-          const backupData = JSON.parse(backupRaw);
-          if (validateStateIntegrity(backupData).valid) {
-            console.log('[StateManager] Restaurado com sucesso a partir do backup seguro.');
-            data = backupData;
-            isBackupRestore = true;
+      console.warn('[StateManager] Verificação de integridade:', check.reason);
+      // Se os dados numéricos fundamentais existirem e forem válidos, preserva o save e atualiza o checksum
+      if (typeof data.level === 'number' && data.level >= 1 && typeof data.gold === 'number') {
+        data._chk = generateStateChecksum(data);
+        console.log('[StateManager] Checksum de segurança sincronizado com os dados atuais.');
+      } else {
+        const backupRaw = localStorage.getItem(`${SAVE_KEY}_backup`);
+        if (backupRaw && backupRaw !== raw) {
+          try {
+            const backupData = JSON.parse(backupRaw);
+            if (validateStateIntegrity(backupData).valid) {
+              console.log('[StateManager] Restaurado com sucesso a partir do backup seguro.');
+              data = backupData;
+              isBackupRestore = true;
+            }
+          } catch (bErr) {
+            console.error('[StateManager] Backup também corrompido:', bErr);
           }
-        } catch (bErr) {
-          console.error('[StateManager] Backup também corrompido:', bErr);
         }
       }
     }
@@ -151,6 +157,7 @@ export function loadState() {
     currentState = { ...def, ...data };
     sanitizeGameState(currentState);
 
+    currentState.privilegeLevel = Number(data.privilegeLevel) || (data.role === 'admin' ? 1 : 0) || 0;
     currentState.gender = data.gender || data.charGender || data.sex || def.gender || 'M';
     currentState.charName = data.charName || data.heroName || data.playerName || data.name || def.charName || 'Tristan';
     currentState.heroName = currentState.charName;

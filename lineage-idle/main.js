@@ -4441,11 +4441,13 @@ function handleChatSubmit(inputStr) {
 
   const isAdminCmd = lower.startsWith('//') || lower === '/admin' || lower === 'admin' || lower === 'gm' || lower === '//gm';
   if (isAdminCmd) {
-    if ((state.privilegeLevel || 0) < 1) {
+    const currentPriv = Number(state?.privilegeLevel) || (state?.role === 'admin' ? 1 : 0) || (typeof window !== 'undefined' ? (Number(window.currentUserPrivilege) || (window.getGameState && window.getGameState().privilegeLevel) || 0) : 0);
+    if (currentPriv < 1) {
       log('⛔ [Acesso Negado] Você precisa ter privilégio de Administrador (Nível 1) para usar comandos GM!', 'damage');
       floatText('⛔ ACESSO NEGADO', 'sf-hurt');
       return;
     }
+    state.privilegeLevel = currentPriv;
   }
 
   // Open Admin Console secret commands
@@ -4510,11 +4512,13 @@ function handleChatSubmit(inputStr) {
 }
 
 function openAdminModal() {
-  if ((state.privilegeLevel || 0) < 1) {
+  const currentPriv = Number(state?.privilegeLevel) || (state?.role === 'admin' ? 1 : 0) || (typeof window !== 'undefined' ? (Number(window.currentUserPrivilege) || (window.getGameState && window.getGameState().privilegeLevel) || 0) : 0);
+  if (currentPriv < 1) {
     log('⛔ [Acesso Negado] Painel de Administrador restrito a usuários com Privilégio Nível 1!', 'damage');
     floatText('⛔ ACESSO NEGADO', 'sf-hurt');
     return;
   }
+  state.privilegeLevel = currentPriv;
   const modal = el('admin-modal');
   if (!modal) return;
   const searchInput = el('admin-item-search');
@@ -7948,11 +7952,11 @@ export function init() {
       if (state.hp <= 0) {
         state.hp = state.maxHp || 100;
       }
-      // ⚠️ SEGURANÇA: privilegeLevel é confiável apenas para gate de UI local.
-      // Qualquer efeito de comando GM (gold, level, sp, itens) que seja
-      // persistido/sincronizado em backend DEVE ser revalidado no servidor,
-      // pois este valor é 100% controlável pelo cliente via DevTools.
-      state.privilegeLevel = Number(cloudData.privilegeLevel) || (cloudData.role === 'admin' ? 1 : 0);
+      state.privilegeLevel = Number(cloudData.privilegeLevel) || (cloudData.role === 'admin' ? 1 : 0) || 0;
+      if (typeof window !== 'undefined') {
+        window.currentUserPrivilege = state.privilegeLevel;
+      }
+      managerSetState({ privilegeLevel: state.privilegeLevel });
       state.skills = { ...def.skills, ...(cloudData.skills || {}) };
       const _sk = getStarterSkillForClass(state.class);
       if (_sk) { state.skills[_sk] = Math.max(1, state.skills[_sk] || 0); if (!state.selectedSkill) state.selectedSkill = _sk; }
