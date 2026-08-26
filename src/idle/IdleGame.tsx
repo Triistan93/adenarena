@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 // Side-effect import FIRST so window.GameData exists before main.js evaluates.
 // @ts-ignore -- plain JS module, no type declarations
