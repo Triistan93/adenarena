@@ -52,7 +52,16 @@ export const DEFAULT_STATE = () => ({
   prestigeLevel: 0, astralShards: 0, astralMastery: {},
   expeditions: [], castles: {}, manorSeeds: {}, manorCrops: {},
   soulCrystals: {}, weaponSockets: {}, tattoos: [],
-  fateWhisperQuest: false, masterAbilities: [], activeTransformation: null
+  fateWhisperQuest: false, masterAbilities: [], activeTransformation: null,
+  serverRates: {
+    xp: 1,
+    sp: 1,
+    adena: 1,
+    drop: 1,
+    spoil: 1,
+    enchant: 1,
+    book: 1
+  }
 });
 
 let currentState = DEFAULT_STATE();

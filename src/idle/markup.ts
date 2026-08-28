@@ -20,6 +20,9 @@ export const IDLE_MARKUP = `
           </div>
         </div>
         <div class="top-stats-right" style="display:flex; align-items:center; gap:10px; margin-left:auto;">
+          <button id="admin-top-btn" class="admin-top-btn" onclick="window.openAdminModal && window.openAdminModal()" style="display:none; background:linear-gradient(180deg, rgba(160,30,30,0.85), rgba(90,15,15,0.98)); border:1px solid #ef4444; color:#fee2e2; border-radius:4px; padding:3px 10px; font-size:11px; font-weight:bold; font-family:'Cinzel',serif; cursor:pointer; align-items:center; gap:5px; transition:all 0.2s; box-shadow:0 0 10px rgba(239,68,68,0.35);">
+            👑 Admin
+          </button>
           <button id="top-market-btn" onclick="window.openMarketTab ? window.openMarketTab() : (window.openPanel && window.openPanel('market'))" style="background:linear-gradient(180deg, rgba(30,40,60,0.8), rgba(15,20,30,0.95)); border:1px solid #60a5fa; color:#93c5fd; border-radius:4px; padding:3px 10px; font-size:11px; font-weight:bold; font-family:'Cinzel',serif; cursor:pointer; display:inline-flex; align-items:center; gap:6px; transition:all 0.2s; box-shadow:0 0 10px rgba(96,165,250,0.25);">
             🏛️ Mercado
           </button>
@@ -1124,148 +1127,339 @@ export const IDLE_MARKUP = `
     <!-- GM Admin Control Panel Modal -->
     <div id="admin-modal" class="modal">
       <div class="modal-content admin-modal-box">
-        <div class="modal-header">
-          <h2>🛡️ GM Admin Command Panel</h2>
+        <div class="modal-header" style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(212,167,68,0.4); padding-bottom:8px; margin-bottom:10px;">
+          <div>
+            <h2 style="margin:0; font-family:'Cinzel',serif; font-size:16px; color:#ffd700; display:flex; align-items:center; gap:8px;">
+              👑 GM Admin Command Center
+            </h2>
+            <div id="admin-live-rates-summary" style="font-size:11px; color:#38bdf8; font-weight:600; margin-top:3px;">
+              Rates Ativas: XP x1.0 · SP x1.0 · Adena x1.0 · Drop x1.0 · Spoil x1.0 · Enchant x1.0
+            </div>
+          </div>
           <button id="close-admin-modal-btn" class="modal-close-x">✕</button>
         </div>
-        <div class="admin-grid">
-          <!-- Section 0: Server Level Cap & Season Pacing -->
-          <div class="admin-section" style="grid-column: 1 / -1; background: rgba(30, 20, 10, 0.6); border: 1px solid var(--border-gilt); border-radius: 8px; padding: 12px; margin-bottom: 8px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-              <h3 style="margin:0; color:#ffd877; font-family:'Cinzel',serif; font-size:14px;">⏳ Gestão de Cap de Servidor &amp; Temporadas</h3>
-              <span id="admin-current-cap-badge" style="font-size:11px; padding:3px 8px; border-radius:4px; background:rgba(212,167,68,0.2); border:1px solid var(--border-gilt); color:#ffd877; font-weight:bold;">Cap Atual: Nível 60 (Fase 1)</span>
-            </div>
-            <p style="font-size:11px; color:#cbd5e1; margin-bottom:10px;">Defina o teto de nível máximo acessível para todos os jogadores do servidor:</p>
-            <div class="admin-btn-group">
-              <button class="admin-btn" data-admin-cmd="setcap40">Cap Lv. 40</button>
-              <button class="admin-btn primary" data-admin-cmd="setcap60">Cap Lv. 60 (Fase 1)</button>
-              <button class="admin-btn" data-admin-cmd="setcap75">Cap Lv. 75 (Fase 2)</button>
-              <button class="admin-btn" data-admin-cmd="setcap85">Cap Lv. 85 (Fase 3)</button>
-              <button class="admin-btn" data-admin-cmd="setcap100">Cap Lv. 100 (Fase 4)</button>
-              <button class="admin-btn" data-admin-cmd="setcap120" style="background:#7c2d12; border-color:#f59e0b; color:#fbbf24; font-weight:bold;">👑 Cap Lv. 120 (Supremo)</button>
-            </div>
-          </div>
 
-          <!-- Section 1: Level & XP Controls -->
-          <div class="admin-section">
-            <h3>📊 Nível &amp; Experiência (XP)</h3>
-            <div class="admin-btn-group">
-              <button class="admin-btn" data-admin-cmd="level20">Set Lv.20</button>
-              <button class="admin-btn" data-admin-cmd="level40">Set Lv.40</button>
-              <button class="admin-btn" data-admin-cmd="level76">Set Lv.76</button>
-              <button class="admin-btn" data-admin-cmd="level85">Set Lv.85</button>
-              <button class="admin-btn" data-admin-cmd="add1level">+1 Nível</button>
-              <button class="admin-btn" data-admin-cmd="add5levels">+5 Níveis</button>
-            </div>
-            <div class="admin-input-row" style="margin-top:8px; display:flex; gap:6px;">
-              <input type="number" id="admin-xp-custom" class="admin-num-input" placeholder="Qtd. XP (ex: 100000)" style="flex:1;" />
-              <button id="admin-add-xp-btn" class="admin-btn primary">+ Conceder XP</button>
-            </div>
-          </div>
+        <!-- Admin Navigation Tabs -->
+        <nav class="admin-nav-tabs" style="display:flex; gap:4px; margin-bottom:12px; border-bottom:1px solid rgba(212,167,68,0.2); padding-bottom:6px; overflow-x:auto; -webkit-overflow-scrolling:touch;">
+          <button class="admin-tab-btn active" data-admin-tab="rates">⚡ Rates do Servidor</button>
+          <button class="admin-tab-btn" data-admin-tab="cap">⏳ Cap &amp; Temporadas</button>
+          <button class="admin-tab-btn" data-admin-tab="spawner">🎁 Gerador de Itens</button>
+          <button class="admin-tab-btn" data-admin-tab="player">📊 Recursos &amp; Nível</button>
+          <button class="admin-tab-btn" data-admin-tab="cheats">⚔️ Cheats &amp; Combate</button>
+        </nav>
 
-          <!-- Section 2: Currency & Skill Points -->
-          <div class="admin-section">
-            <h3>🪙 Economia (Adena, SP &amp; Aden Coins)</h3>
-            <div class="admin-btn-group">
-              <button class="admin-btn" data-admin-cmd="gold1m">+1M Adena</button>
-              <button class="admin-btn" data-admin-cmd="gold10m">+10M Adena</button>
-              <button class="admin-btn" data-admin-cmd="sp5k">+5K SP</button>
-              <button class="admin-btn" data-admin-cmd="sp50k">+50K SP</button>
-              <button class="admin-btn" data-admin-cmd="ac500" style="background:#7c2d12; border-color:#f59e0b; color:#fbbf24;">+500 AC</button>
-              <button class="admin-btn" data-admin-cmd="ac2000" style="background:#7c2d12; border-color:#f59e0b; color:#fbbf24;">+2.000 AC</button>
-            </div>
-            <div class="admin-input-row" style="margin-top:8px; display:flex; gap:6px;">
-              <input type="number" id="admin-gold-custom" class="admin-num-input" placeholder="Qtd. Adena (ex: 5000000)" style="flex:1;" />
-              <button id="admin-add-gold-btn" class="admin-btn primary">+ Ouro</button>
-            </div>
-            <div class="admin-input-row" style="margin-top:6px; display:flex; gap:6px;">
-              <input type="number" id="admin-sp-custom" class="admin-num-input" placeholder="Qtd. SP (ex: 25000)" style="flex:1;" />
-              <button id="admin-add-sp-btn" class="admin-btn primary">+ SP</button>
-            </div>
-            <div class="admin-input-row" style="margin-top:6px; display:flex; gap:6px;">
-              <input type="number" id="admin-ac-custom" class="admin-num-input" placeholder="Qtd. Aden Coins (ex: 1000)" style="flex:1;" />
-              <button id="admin-add-ac-btn" class="admin-btn primary" style="background:linear-gradient(135deg,#b45309,#d97706); border-color:#f59e0b;">+ Aden Coins</button>
-            </div>
-          </div>
-
-          <!-- Section 3: Item Spawner -->
-          <div class="admin-section admin-spawner">
-            <h3>🎁 Gerador de Itens &amp; Relíquias</h3>
-            <div class="spawner-fields">
-              <div class="admin-search-wrapper" style="margin-bottom:8px; display:flex; gap:6px;">
-                <input 
-                  type="text" 
-                  id="admin-item-search" 
-                  class="admin-num-input" 
-                  placeholder="🔍 Pesquisar item por nome, tipo ou slot (ex: bow, katana, dagger, ring)..." 
-                  style="flex:1; padding:8px 12px; font-size:13px; border-radius:6px; background:rgba(0,0,0,0.5); border:1px solid #4a5568; color:#f8fafc;" 
-                />
-                <button type="button" id="admin-item-search-clear" class="admin-btn" style="padding:4px 10px; font-size:12px;" title="Limpar busca">Limpar</button>
+        <div class="admin-tabs-container">
+          <!-- TAB 1: SERVER RATES CONTROLLER -->
+          <div id="admin-tab-rates" class="admin-tab-panel active">
+            <!-- Quick Rate Presets -->
+            <div style="background:rgba(20,24,35,0.7); border:1px solid rgba(212,167,68,0.3); border-radius:6px; padding:10px; margin-bottom:12px;">
+              <div style="font-size:12px; font-weight:bold; color:#ffd877; margin-bottom:8px; font-family:'Cinzel',serif;">
+                🚀 Presets Rápidos de Servidor (1 Clique)
               </div>
-              <label for="admin-item-select" class="sr-only" style="display:none;">Item para Gerar</label>
-              <select id="admin-item-select" name="adminItemSelect" class="admin-select" aria-label="Item para Gerar"></select>
-              <div class="spawner-row">
-                <label for="admin-item-qty">Qtd: <input type="number" id="admin-item-qty" name="adminItemQty" value="1" min="1" max="999" class="admin-num-input" aria-label="Quantidade" /></label>
-                <label for="admin-item-rarity">Raridade: 
-                  <select id="admin-item-rarity" name="adminItemRarity" class="admin-select" aria-label="Raridade do Item">
-                    <option value="common">Comum</option>
-                    <option value="uncommon">Incomum</option>
-                    <option value="rare">Raro</option>
-                    <option value="epic">Épico (Roxo)</option>
-                    <option value="legendary">Lendário (Dourado)</option>
-                    <option value="mythic">Místico (Vermelho)</option>
-                    <option value="s">Grau S Divine</option>
-                  </select>
-                </label>
-                <label for="admin-item-enchant">Encanto: 
-                  <select id="admin-item-enchant" name="adminItemEnchant" class="admin-select" aria-label="Nível de Encanto">
-                    <option value="0">+0</option>
-                    <option value="3">+3</option>
-                    <option value="7">+7</option>
-                    <option value="10">+10</option>
-                    <option value="16">+16 (L2 Classic)</option>
-                    <option value="20">+20</option>
-                    <option value="30">+30 (Godlike)</option>
-                  </select>
-                </label>
-                <label for="admin-item-affix">Afixo: 
-                  <select id="admin-item-affix" name="adminItemAffix" class="admin-select" aria-label="Afixo do Item">
-                    <option value="roll">🎲 Sortear da Raridade</option>
-                    <option value="none">Nenhum Afixo</option>
-                    <option value="crit_boost">✦ +% Crítico</option>
-                    <option value="eva_boost">✦ +% Evasão</option>
-                    <option value="lifesteal_boost">✦ +% Roubo de Vida</option>
-                    <option value="atk_boost">✦ +% Ataque</option>
-                    <option value="speed_boost">✦ +% Vel. de Ataque</option>
-                    <option value="boss_dmg">✦ +% Dano vs Chefes</option>
-                    <option value="on_kill_heal">✦ +% Cura ao Matar</option>
-                    <option value="stun_chance">✦ % Chance de Stun</option>
-                  </select>
-                </label>
+              <div class="admin-btn-group" style="display:flex; flex-wrap:wrap; gap:6px;">
+                <button class="admin-preset-btn" data-rate-preset="classic">🛡️ Retail Classic (1x)</button>
+                <button class="admin-preset-btn" data-rate-preset="aden">⚔️ Aden Dynamic (3x)</button>
+                <button class="admin-preset-btn" data-rate-preset="mid">🔥 Mid-Rate (10x)</button>
+                <button class="admin-preset-btn" data-rate-preset="high">👑 High-Rate (50x)</button>
+                <button class="admin-preset-btn" data-rate-preset="turbo">⚡ Turbo PvP (100x)</button>
+                <button class="admin-preset-btn danger" data-rate-preset="reset" style="margin-left:auto;">🔄 Resetar (1x)</button>
               </div>
-              <div class="spawner-check-row" style="margin-top:6px; display:flex; align-items:center; gap:8px;">
-                <label style="font-size:12px; color:var(--gilt-bright); cursor:pointer; display:flex; align-items:center; gap:6px;">
-                  <input type="checkbox" id="admin-item-foundation" style="accent-color:#d4a744; width:15px; height:15px; cursor:pointer;" />
-                  ✨ <strong>Item Foundation</strong> (Bônus Místico de Raridade &amp; Afixo Exclusivo)
-                </label>
+            </div>
+
+            <!-- Detailed Rates Grid -->
+            <div class="admin-rates-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:10px;">
+              <!-- 1. XP Rate -->
+              <div class="admin-rate-card" data-rate-key="xp">
+                <div class="rate-card-header">
+                  <span class="rate-title">🌟 Rate de Experiência (XP)</span>
+                  <span id="rate-val-xp" class="rate-badge">x1.0</span>
+                </div>
+                <div class="rate-btn-row">
+                  <button class="rate-pill-btn" data-rate-set="xp:1">1x</button>
+                  <button class="rate-pill-btn" data-rate-set="xp:2">2x</button>
+                  <button class="rate-pill-btn" data-rate-set="xp:5">5x</button>
+                  <button class="rate-pill-btn" data-rate-set="xp:10">10x</button>
+                  <button class="rate-pill-btn" data-rate-set="xp:20">20x</button>
+                  <button class="rate-pill-btn" data-rate-set="xp:50">50x</button>
+                  <button class="rate-pill-btn" data-rate-set="xp:100">100x</button>
+                </div>
+                <div class="rate-custom-row">
+                  <input type="number" id="admin-rate-inp-xp" class="admin-num-input" placeholder="Multiplicador (ex: 15)" min="0.1" max="1000" step="0.5" />
+                  <button class="admin-apply-btn" data-rate-apply="xp">Aplicar</button>
+                </div>
               </div>
-              <button id="admin-spawn-btn" class="admin-btn primary" style="margin-top:10px; width:100%; padding:10px; font-weight:bold;">✨ Gerar Item na Mochila</button>
+
+              <!-- 2. SP Rate -->
+              <div class="admin-rate-card" data-rate-key="sp">
+                <div class="rate-card-header">
+                  <span class="rate-title">✦ Rate de Skill Points (SP)</span>
+                  <span id="rate-val-sp" class="rate-badge">x1.0</span>
+                </div>
+                <div class="rate-btn-row">
+                  <button class="rate-pill-btn" data-rate-set="sp:1">1x</button>
+                  <button class="rate-pill-btn" data-rate-set="sp:2">2x</button>
+                  <button class="rate-pill-btn" data-rate-set="sp:5">5x</button>
+                  <button class="rate-pill-btn" data-rate-set="sp:10">10x</button>
+                  <button class="rate-pill-btn" data-rate-set="sp:20">20x</button>
+                  <button class="rate-pill-btn" data-rate-set="sp:50">50x</button>
+                  <button class="rate-pill-btn" data-rate-set="sp:100">100x</button>
+                </div>
+                <div class="rate-custom-row">
+                  <input type="number" id="admin-rate-inp-sp" class="admin-num-input" placeholder="Multiplicador (ex: 15)" min="0.1" max="1000" step="0.5" />
+                  <button class="admin-apply-btn" data-rate-apply="sp">Aplicar</button>
+                </div>
+              </div>
+
+              <!-- 3. Adena Rate -->
+              <div class="admin-rate-card" data-rate-key="adena">
+                <div class="rate-card-header">
+                  <span class="rate-title">🪙 Rate de Adena (Gold)</span>
+                  <span id="rate-val-adena" class="rate-badge">x1.0</span>
+                </div>
+                <div class="rate-btn-row">
+                  <button class="rate-pill-btn" data-rate-set="adena:1">1x</button>
+                  <button class="rate-pill-btn" data-rate-set="adena:2">2x</button>
+                  <button class="rate-pill-btn" data-rate-set="adena:5">5x</button>
+                  <button class="rate-pill-btn" data-rate-set="adena:10">10x</button>
+                  <button class="rate-pill-btn" data-rate-set="adena:25">25x</button>
+                  <button class="rate-pill-btn" data-rate-set="adena:50">50x</button>
+                  <button class="rate-pill-btn" data-rate-set="adena:100">100x</button>
+                </div>
+                <div class="rate-custom-row">
+                  <input type="number" id="admin-rate-inp-adena" class="admin-num-input" placeholder="Multiplicador (ex: 20)" min="0.1" max="1000" step="0.5" />
+                  <button class="admin-apply-btn" data-rate-apply="adena">Aplicar</button>
+                </div>
+              </div>
+
+              <!-- 4. Drop Rate -->
+              <div class="admin-rate-card" data-rate-key="drop">
+                <div class="rate-card-header">
+                  <span class="rate-title">📦 Rate de Drop (Itens &amp; Equips)</span>
+                  <span id="rate-val-drop" class="rate-badge">x1.0</span>
+                </div>
+                <div class="rate-btn-row">
+                  <button class="rate-pill-btn" data-rate-set="drop:1">1x</button>
+                  <button class="rate-pill-btn" data-rate-set="drop:2">2x</button>
+                  <button class="rate-pill-btn" data-rate-set="drop:3">3x</button>
+                  <button class="rate-pill-btn" data-rate-set="drop:5">5x</button>
+                  <button class="rate-pill-btn" data-rate-set="drop:10">10x</button>
+                  <button class="rate-pill-btn" data-rate-set="drop:20">20x</button>
+                  <button class="rate-pill-btn" data-rate-set="drop:50">50x</button>
+                </div>
+                <div class="rate-custom-row">
+                  <input type="number" id="admin-rate-inp-drop" class="admin-num-input" placeholder="Multiplicador (ex: 5)" min="0.1" max="1000" step="0.5" />
+                  <button class="admin-apply-btn" data-rate-apply="drop">Aplicar</button>
+                </div>
+              </div>
+
+              <!-- 5. Spoil & Craft Rate -->
+              <div class="admin-rate-card" data-rate-key="spoil">
+                <div class="rate-card-header">
+                  <span class="rate-title">⚒️ Rate de Spoil &amp; Craft Points</span>
+                  <span id="rate-val-spoil" class="rate-badge">x1.0</span>
+                </div>
+                <div class="rate-btn-row">
+                  <button class="rate-pill-btn" data-rate-set="spoil:1">1x</button>
+                  <button class="rate-pill-btn" data-rate-set="spoil:2">2x</button>
+                  <button class="rate-pill-btn" data-rate-set="spoil:3">3x</button>
+                  <button class="rate-pill-btn" data-rate-set="spoil:5">5x</button>
+                  <button class="rate-pill-btn" data-rate-set="spoil:10">10x</button>
+                  <button class="rate-pill-btn" data-rate-set="spoil:20">20x</button>
+                </div>
+                <div class="rate-custom-row">
+                  <input type="number" id="admin-rate-inp-spoil" class="admin-num-input" placeholder="Multiplicador (ex: 5)" min="0.1" max="1000" step="0.5" />
+                  <button class="admin-apply-btn" data-rate-apply="spoil">Aplicar</button>
+                </div>
+              </div>
+
+              <!-- 6. Enchant Success Rate -->
+              <div class="admin-rate-card" data-rate-key="enchant">
+                <div class="rate-card-header">
+                  <span class="rate-title">✨ Rate de Encantamento (Enchant)</span>
+                  <span id="rate-val-enchant" class="rate-badge">x1.0</span>
+                </div>
+                <div class="rate-btn-row">
+                  <button class="rate-pill-btn" data-rate-set="enchant:1">1.0x (Padrão)</button>
+                  <button class="rate-pill-btn" data-rate-set="enchant:1.2">1.2x (+20%)</button>
+                  <button class="rate-pill-btn" data-rate-set="enchant:1.5">1.5x (+50%)</button>
+                  <button class="rate-pill-btn" data-rate-set="enchant:2">2.0x (2x)</button>
+                  <button class="rate-pill-btn" data-rate-set="enchant:3">3.0x (Ultra)</button>
+                </div>
+                <div class="rate-custom-row">
+                  <input type="number" id="admin-rate-inp-enchant" class="admin-num-input" placeholder="Multiplicador (ex: 1.5)" min="0.1" max="10" step="0.1" />
+                  <button class="admin-apply-btn" data-rate-apply="enchant">Aplicar</button>
+                </div>
+              </div>
+
+              <!-- 7. Spellbooks Drop Rate -->
+              <div class="admin-rate-card" data-rate-key="book">
+                <div class="rate-card-header">
+                  <span class="rate-title">📖 Rate de Drop de Grimórios (1★ a 4★)</span>
+                  <span id="rate-val-book" class="rate-badge">x1.0</span>
+                </div>
+                <div class="rate-btn-row">
+                  <button class="rate-pill-btn" data-rate-set="book:1">1x</button>
+                  <button class="rate-pill-btn" data-rate-set="book:2">2x</button>
+                  <button class="rate-pill-btn" data-rate-set="book:5">5x</button>
+                  <button class="rate-pill-btn" data-rate-set="book:10">10x</button>
+                  <button class="rate-pill-btn" data-rate-set="book:20">20x</button>
+                </div>
+                <div class="rate-custom-row">
+                  <input type="number" id="admin-rate-inp-book" class="admin-num-input" placeholder="Multiplicador (ex: 5)" min="0.1" max="100" step="0.5" />
+                  <button class="admin-apply-btn" data-rate-apply="book">Aplicar</button>
+                </div>
+              </div>
             </div>
           </div>
 
-          <!-- Section 4: Game Cheats & Progression -->
-          <div class="admin-section">
-            <h3>⚡ Cheats de Jogo &amp; Progressão</h3>
-            <div class="admin-btn-group">
-              <button class="admin-btn" data-admin-cmd="godmode">🛡️ Invencibilidade (God Mode)</button>
-              <button class="admin-btn" data-admin-cmd="healfull">❤️ Recuperar HP/MP Full</button>
-              <button class="admin-btn" data-admin-cmd="unlocksagas">📜 Desbloquear Sagas</button>
-              <button class="admin-btn" data-admin-cmd="completequest">✅ Concluir Missão</button>
-              <button class="admin-btn" data-admin-cmd="maxcraft">⚒️ Level Máx Crafting</button>
-              <button class="admin-btn" data-admin-cmd="maxskills">📖 Max Skills</button>
-              <button class="admin-btn" data-admin-cmd="killmonster">⚡ Derrotar Monstro</button>
-              <button class="admin-btn" data-admin-cmd="autoequip">⚔️ Auto-Equipar</button>
-              <button class="admin-btn danger" data-admin-cmd="resetsave">🗑️ Resetar Progresso</button>
+          <!-- TAB 2: LEVEL CAP & SEASONS -->
+          <div id="admin-tab-cap" class="admin-tab-panel">
+            <div class="admin-section" style="background: rgba(30, 20, 10, 0.6); border: 1px solid var(--border-gilt); border-radius: 8px; padding: 14px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <h3 style="margin:0; color:#ffd877; font-family:'Cinzel',serif; font-size:14px;">⏳ Gestão de Cap de Servidor &amp; Temporadas</h3>
+                <span id="admin-current-cap-badge" style="font-size:11px; padding:3px 8px; border-radius:4px; background:rgba(212,167,68,0.2); border:1px solid var(--border-gilt); color:#ffd877; font-weight:bold;">Cap Atual: Nível 60 (Fase 1)</span>
+              </div>
+              <p style="font-size:11px; color:#cbd5e1; margin-bottom:12px;">Defina o teto de nível máximo acessível para todos os jogadores do servidor:</p>
+              <div class="admin-btn-group" style="display:flex; flex-wrap:wrap; gap:8px;">
+                <button class="admin-btn" data-admin-cmd="setcap40">Cap Lv. 40 (Prelúdio)</button>
+                <button class="admin-btn primary" data-admin-cmd="setcap60">Cap Lv. 60 (Fase 1)</button>
+                <button class="admin-btn" data-admin-cmd="setcap75">Cap Lv. 75 (Fase 2)</button>
+                <button class="admin-btn" data-admin-cmd="setcap85">Cap Lv. 85 (Fase 3 - Noblesse)</button>
+                <button class="admin-btn" data-admin-cmd="setcap100">Cap Lv. 100 (Fase 4 - Imperial)</button>
+                <button class="admin-btn" data-admin-cmd="setcap120" style="background:#7c2d12; border-color:#f59e0b; color:#fbbf24; font-weight:bold;">👑 Cap Lv. 120 (Supremo)</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 3: ITEM SPAWNER -->
+          <div id="admin-tab-spawner" class="admin-tab-panel">
+            <div class="admin-section admin-spawner">
+              <h3>🎁 Gerador de Itens &amp; Relíquias</h3>
+              <div class="spawner-fields">
+                <div class="admin-search-wrapper" style="margin-bottom:8px; display:flex; gap:6px;">
+                  <input 
+                    type="text" 
+                    id="admin-item-search" 
+                    class="admin-num-input" 
+                    placeholder="🔍 Pesquisar item por nome, tipo ou slot (ex: bow, katana, dagger, ring)..." 
+                    style="flex:1; padding:8px 12px; font-size:13px; border-radius:6px; background:rgba(0,0,0,0.5); border:1px solid #4a5568; color:#f8fafc;" 
+                  />
+                  <button type="button" id="admin-item-search-clear" class="admin-btn" style="padding:4px 10px; font-size:12px;" title="Limpar busca">Limpar</button>
+                </div>
+                <label for="admin-item-select" class="sr-only" style="display:none;">Item para Gerar</label>
+                <select id="admin-item-select" name="adminItemSelect" class="admin-select" aria-label="Item para Gerar" style="width:100%; margin-bottom:8px;"></select>
+                <div class="spawner-row">
+                  <label for="admin-item-qty">Qtd: <input type="number" id="admin-item-qty" name="adminItemQty" value="1" min="1" max="999" class="admin-num-input" aria-label="Quantidade" style="width:65px;" /></label>
+                  <label for="admin-item-rarity">Raridade: 
+                    <select id="admin-item-rarity" name="adminItemRarity" class="admin-select" aria-label="Raridade do Item">
+                      <option value="common">Comum</option>
+                      <option value="uncommon">Incomum</option>
+                      <option value="rare">Raro</option>
+                      <option value="epic">Épico (Roxo)</option>
+                      <option value="legendary">Lendário (Dourado)</option>
+                      <option value="mythic">Místico (Vermelho)</option>
+                      <option value="s">Grau S Divine</option>
+                    </select>
+                  </label>
+                  <label for="admin-item-enchant">Encanto: 
+                    <select id="admin-item-enchant" name="adminItemEnchant" class="admin-select" aria-label="Nível de Encanto">
+                      <option value="0">+0</option>
+                      <option value="3">+3</option>
+                      <option value="7">+7</option>
+                      <option value="10">+10</option>
+                      <option value="16">+16 (L2 Classic)</option>
+                      <option value="20">+20</option>
+                      <option value="30">+30 (Godlike)</option>
+                    </select>
+                  </label>
+                  <label for="admin-item-affix">Afixo: 
+                    <select id="admin-item-affix" name="adminItemAffix" class="admin-select" aria-label="Afixo do Item">
+                      <option value="roll">🎲 Sortear da Raridade</option>
+                      <option value="none">Nenhum Afixo</option>
+                      <option value="crit_boost">✦ +% Crítico</option>
+                      <option value="eva_boost">✦ +% Evasão</option>
+                      <option value="lifesteal_boost">✦ +% Roubo de Vida</option>
+                      <option value="atk_boost">✦ +% Ataque</option>
+                      <option value="speed_boost">✦ +% Vel. de Ataque</option>
+                      <option value="boss_dmg">✦ +% Dano vs Chefes</option>
+                      <option value="on_kill_heal">✦ +% Cura ao Matar</option>
+                      <option value="stun_chance">✦ % Chance de Stun</option>
+                    </select>
+                  </label>
+                </div>
+                <div class="spawner-check-row" style="margin-top:6px; display:flex; align-items:center; gap:8px;">
+                  <label style="font-size:12px; color:var(--gilt-bright); cursor:pointer; display:flex; align-items:center; gap:6px;">
+                    <input type="checkbox" id="admin-item-foundation" style="accent-color:#d4a744; width:15px; height:15px; cursor:pointer;" />
+                    ✨ <strong>Item Foundation</strong> (Bônus Místico de Raridade &amp; Afixo Exclusivo)
+                  </label>
+                </div>
+                <button id="admin-spawn-btn" class="admin-btn primary" style="margin-top:10px; width:100%; padding:10px; font-weight:bold;">✨ Gerar Item na Mochila</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 4: PLAYER RESOURCES & LEVEL -->
+          <div id="admin-tab-player" class="admin-tab-panel">
+            <div class="admin-grid">
+              <!-- Section 1: Level & XP Controls -->
+              <div class="admin-section">
+                <h3>📊 Nível &amp; Experiência (XP)</h3>
+                <div class="admin-btn-group">
+                  <button class="admin-btn" data-admin-cmd="level20">Set Lv.20</button>
+                  <button class="admin-btn" data-admin-cmd="level40">Set Lv.40</button>
+                  <button class="admin-btn" data-admin-cmd="level76">Set Lv.76</button>
+                  <button class="admin-btn" data-admin-cmd="level85">Set Lv.85</button>
+                  <button class="admin-btn" data-admin-cmd="add1level">+1 Nível</button>
+                  <button class="admin-btn" data-admin-cmd="add5levels">+5 Níveis</button>
+                </div>
+                <div class="admin-input-row" style="margin-top:8px; display:flex; gap:6px;">
+                  <input type="number" id="admin-xp-custom" class="admin-num-input" placeholder="Qtd. XP (ex: 100000)" style="flex:1;" />
+                  <button id="admin-add-xp-btn" class="admin-btn primary">+ Conceder XP</button>
+                </div>
+              </div>
+
+              <!-- Section 2: Currency & Skill Points -->
+              <div class="admin-section">
+                <h3>🪙 Economia (Adena, SP &amp; Aden Coins)</h3>
+                <div class="admin-btn-group">
+                  <button class="admin-btn" data-admin-cmd="gold1m">+1M Adena</button>
+                  <button class="admin-btn" data-admin-cmd="gold10m">+10M Adena</button>
+                  <button class="admin-btn" data-admin-cmd="sp5k">+5K SP</button>
+                  <button class="admin-btn" data-admin-cmd="sp50k">+50K SP</button>
+                  <button class="admin-btn" data-admin-cmd="ac500" style="background:#7c2d12; border-color:#f59e0b; color:#fbbf24;">+500 AC</button>
+                  <button class="admin-btn" data-admin-cmd="ac2000" style="background:#7c2d12; border-color:#f59e0b; color:#fbbf24;">+2.000 AC</button>
+                </div>
+                <div class="admin-input-row" style="margin-top:8px; display:flex; gap:6px;">
+                  <input type="number" id="admin-gold-custom" class="admin-num-input" placeholder="Qtd. Adena (ex: 5000000)" style="flex:1;" />
+                  <button id="admin-add-gold-btn" class="admin-btn primary">+ Ouro</button>
+                </div>
+                <div class="admin-input-row" style="margin-top:6px; display:flex; gap:6px;">
+                  <input type="number" id="admin-sp-custom" class="admin-num-input" placeholder="Qtd. SP (ex: 25000)" style="flex:1;" />
+                  <button id="admin-add-sp-btn" class="admin-btn primary">+ SP</button>
+                </div>
+                <div class="admin-input-row" style="margin-top:6px; display:flex; gap:6px;">
+                  <input type="number" id="admin-ac-custom" class="admin-num-input" placeholder="Qtd. Aden Coins (ex: 1000)" style="flex:1;" />
+                  <button id="admin-add-ac-btn" class="admin-btn primary" style="background:linear-gradient(135deg,#b45309,#d97706); border-color:#f59e0b;">+ Aden Coins</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 5: CHEATS & PROGRESSION -->
+          <div id="admin-tab-cheats" class="admin-tab-panel">
+            <div class="admin-section">
+              <h3>⚡ Cheats de Jogo &amp; Progressão Imediata</h3>
+              <div class="admin-btn-group">
+                <button class="admin-btn" data-admin-cmd="godmode">🛡️ Invencibilidade (God Mode)</button>
+                <button class="admin-btn" data-admin-cmd="healfull">❤️ Recuperar HP/MP Full</button>
+                <button class="admin-btn" data-admin-cmd="unlocksagas">📜 Desbloquear Sagas</button>
+                <button class="admin-btn" data-admin-cmd="completequest">✅ Concluir Missão</button>
+                <button class="admin-btn" data-admin-cmd="maxcraft">⚒️ Level Máx Crafting</button>
+                <button class="admin-btn" data-admin-cmd="maxskills">📖 Max Skills</button>
+                <button class="admin-btn" data-admin-cmd="killmonster">⚡ Derrotar Monstro</button>
+                <button class="admin-btn" data-admin-cmd="autoequip">⚔️ Auto-Equipar</button>
+                <button class="admin-btn danger" data-admin-cmd="resetsave">🗑️ Resetar Progresso</button>
+              </div>
             </div>
           </div>
         </div>

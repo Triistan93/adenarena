@@ -3661,11 +3661,169 @@ select:focus-visible {
 
 /* ============ ADMIN MODAL CONTROL PANEL ============ */
 .admin-modal-box {
-  max-width: 650px !important;
-  width: 95%;
-  background: linear-gradient(180deg, #1e1814, #0f0a06) !important;
+  max-width: 820px !important;
+  width: min(820px, 95vw);
+  max-height: 88vh;
+  overflow-y: auto;
+  background: linear-gradient(180deg, #181c26, #0d111a) !important;
   border: 2px solid #d4a744 !important;
-  box-shadow: 0 0 30px rgba(212,167,68,0.3) !important;
+  border-radius: 12px;
+  padding: 16px !important;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.9), 0 0 25px rgba(212,167,68,0.3) !important;
+  box-sizing: border-box;
+}
+.admin-nav-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid rgba(212,167,68,0.25);
+  padding-bottom: 8px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.admin-tab-btn {
+  background: rgba(30,35,50,0.6);
+  border: 1px solid rgba(212,167,68,0.3);
+  color: #cbd5e1;
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+.admin-tab-btn:hover {
+  background: rgba(50,60,85,0.8);
+  border-color: #ffd877;
+  color: #fff;
+}
+.admin-tab-btn.active {
+  background: linear-gradient(180deg, #b45309, #78350f);
+  border-color: #f59e0b;
+  color: #fef08a;
+  box-shadow: 0 0 10px rgba(245,158,11,0.4);
+}
+.admin-tab-panel {
+  display: none;
+}
+.admin-tab-panel.active {
+  display: block;
+  animation: adminFadeIn 0.2s ease;
+}
+@keyframes adminFadeIn {
+  from { opacity: 0; transform: translateY(3px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.admin-preset-btn {
+  background: linear-gradient(180deg, #1e293b, #0f172a);
+  border: 1px solid #475569;
+  color: #e2e8f0;
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.admin-preset-btn:hover {
+  background: linear-gradient(180deg, #334155, #1e293b);
+  border-color: #38bdf8;
+  color: #38bdf8;
+  box-shadow: 0 0 8px rgba(56,189,248,0.3);
+}
+.admin-preset-btn.danger {
+  background: linear-gradient(180deg, #7f1d1d, #450a0a);
+  border-color: #ef4444;
+  color: #fecaca;
+}
+.admin-preset-btn.danger:hover {
+  background: linear-gradient(180deg, #991b1b, #7f1d1d);
+  border-color: #f87171;
+  color: #fff;
+  box-shadow: 0 0 8px rgba(239,68,68,0.4);
+}
+.admin-rate-card {
+  background: rgba(15, 20, 30, 0.85);
+  border: 1px solid rgba(212,167,68,0.25);
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: border-color 0.2s;
+}
+.admin-rate-card:hover {
+  border-color: rgba(212,167,68,0.6);
+}
+.rate-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.rate-title {
+  font-family: 'Cinzel', serif;
+  font-size: 11.5px;
+  font-weight: bold;
+  color: #ffd877;
+}
+.rate-badge {
+  background: rgba(212,167,68,0.2);
+  border: 1px solid #d4a744;
+  color: #ffd700;
+  font-size: 11.5px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+.rate-btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.rate-pill-btn {
+  background: rgba(30, 41, 59, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  color: #cbd5e1;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.rate-pill-btn:hover {
+  background: rgba(51, 65, 85, 1);
+  border-color: #38bdf8;
+  color: #38bdf8;
+}
+.rate-pill-btn.active {
+  background: #0284c7;
+  border-color: #38bdf8;
+  color: #fff;
+}
+.rate-custom-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.admin-apply-btn {
+  background: linear-gradient(180deg, #15803d, #14532d);
+  border: 1px solid #4ade80;
+  color: #fff;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.admin-apply-btn:hover {
+  background: linear-gradient(180deg, #16a34a, #15803d);
+  box-shadow: 0 0 6px rgba(74,222,128,0.4);
 }
 .admin-grid {
   display: grid;
@@ -3755,7 +3913,7 @@ select:focus-visible {
   border: 1px solid #5a462e;
   color: #f0d080;
   padding: 4px 6px;
-  width: 60px;
+  width: 80px;
   font-size: 11px;
   border-radius: 3px;
 }

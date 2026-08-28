@@ -2156,7 +2156,9 @@ function enchantItem(uid, useBlessed = false) {
   }
 
   const currentEnchant = item.enchant || 0;
-  const chance = currentEnchant < 3 ? 1.0 : Math.max(0.3, 1.0 - (currentEnchant - 3) * 0.1);
+  const enchantRate = Math.max(0.1, Number(state.serverRates?.enchant) || 1);
+  const baseChance = currentEnchant < 3 ? 1.0 : Math.max(0.3, 1.0 - (currentEnchant - 3) * 0.1);
+  const chance = Math.min(1.0, baseChance * enchantRate);
   
   if (Math.random() < chance) {
     item.enchant = currentEnchant + 1;
@@ -2976,6 +2978,13 @@ function _performFullUIUpdate() {
   safeUiUpdate('combat-controls', updateCombatControlsUI);
   safeUiUpdate('tab-badges', updateTabBadgesUI);
   safeUiUpdate('class-advancement', checkClassAdvancement);
+
+  // Sync Admin Top Button visibility
+  const adminBtn = el('admin-top-btn');
+  if (adminBtn) {
+    const currentPriv = Number(state?.privilegeLevel) || (state?.role === 'admin' ? 1 : 0) || (typeof window !== 'undefined' ? (Number(window.currentUserPrivilege) || (window.getGameState && window.getGameState().privilegeLevel) || 0) : 0);
+    adminBtn.style.display = currentPriv >= 1 ? 'inline-flex' : 'none';
+  }
 
   // Tab-specific heavy updates (only rendered if tab is currently active/visible)
   const isTabVisible = (panelId) => {
@@ -4170,13 +4179,22 @@ function attackMonster() {
       stageFloat(`🔥 STREAK x${state.killStreak}!`, 'sf-crit', 'right');
     }
 
+    const sRates = state.serverRates || { xp: 1, sp: 1, adena: 1, drop: 1, spoil: 1, enchant: 1, book: 1 };
+    const xpRate = Math.max(0.1, Number(sRates.xp) || 1);
+    const spRate = Math.max(0.1, Number(sRates.sp) || 1);
+    const adenaRate = Math.max(0.1, Number(sRates.adena) || 1);
+    const dropRate = Math.max(0.1, Number(sRates.drop) || 1);
+    const spoilRate = Math.max(0.1, Number(sRates.spoil) || 1);
+    const bookRate = Math.max(0.1, Number(sRates.book) || 1);
+
     const zoneLevel = ZONES[state.zone]?.level || 1;
     const zoneTier = getZoneDropTier(zoneLevel);
     const zoneMult = (D().ZONE_GOLD_MULT && D().ZONE_GOLD_MULT[zoneTier]) || 1;
-    const xpMult = 1 + (stats.xpBoost || 0);
+    const xpMult = (1 + (stats.xpBoost || 0)) * xpRate;
     const xpGain = Math.floor(monster.xp * xpMult);
-    // SP é concedido apenas em ocasiões especiais (Level Up, Quests, Raid Bosses)
-    const spGain = monster.isRaid ? 25 : (monster.boss ? 5 : (monster.isElite ? 2 : 0));
+    // SP é concedido proporcionalmente à rate do servidor
+    const baseSp = monster.isRaid ? 25 : (monster.boss ? 5 : (monster.isElite ? 2 : 1));
+    const spGain = Math.floor(baseSp * spRate);
     state.xp += xpGain;
     if (spGain > 0) state.sp += spGain;
     log(`Derrotou **${monster.name}**! Recebeu **+${xpGain.toLocaleString()} XP**${spGain > 0 ? ` e **+${spGain} SP**` : ''}`, 'xp', 'gold_xp');
@@ -4199,7 +4217,7 @@ function attackMonster() {
 
     // Acúmulo de Lâmpada Mágica & Craft Points por Abate
     state.magicLampExp = (state.magicLampExp || 0) + Math.floor(xpGain * 0.4);
-    state.craftPoints = (state.craftPoints || 0) + (monster.boss ? 50 : 10);
+    state.craftPoints = (state.craftPoints || 0) + Math.floor((monster.boss ? 50 : 10) * spoilRate);
 
     if (state.magicLampExp >= 50000) {
       state.magicLampExp -= 50000;
@@ -4217,7 +4235,7 @@ function attackMonster() {
     }
 
     const baseGold = monster.gold[0] + Math.random() * (monster.gold[1] - monster.gold[0]), jackpot = Math.random() < (monster.boss ? 0.08 : 0.015);
-    const goldMult = zoneMult * (1 + (stats.goldBoost || 0)) * (jackpot ? 10 : 1);
+    const goldMult = zoneMult * (1 + (stats.goldBoost || 0)) * (jackpot ? 10 : 1) * adenaRate;
     let gold = Math.floor(baseGold * stats.loot * goldMult); if (gold < 1) gold = 1;
     state.gold += gold; trackGold(gold);
     if (jackpot) { 
@@ -4239,7 +4257,7 @@ function attackMonster() {
       levelGapPenalty = 0.50; // -50% de drop
     }
 
-    const effectiveLootRate = stats.loot * levelGapPenalty;
+    const effectiveLootRate = stats.loot * levelGapPenalty * dropRate;
     const rawDrop = D().rollDrop(zoneTier, effectiveLootRate, !!(monster.boss || monster.elite));
     const drops = Array.isArray(rawDrop) ? rawDrop : (rawDrop && rawDrop.itemId ? [ { id: rawDrop.itemId, itemId: rawDrop.itemId, rarity: rawDrop.rarity, isEquipment: true, amount: 1 } ] : []);
     for (const drop of drops) {
@@ -4261,7 +4279,7 @@ function attackMonster() {
 
     // Drop de Livros de Magia (Spellbooks 1★, 2★, 3★)
     if (mLevel >= 38) {
-      const bookChance = (monster.isRaid ? 0.25 : (monster.boss ? 0.08 : 0.005)) * levelGapPenalty;
+      const bookChance = (monster.isRaid ? 0.25 : (monster.boss ? 0.08 : 0.005)) * levelGapPenalty * bookRate;
       if (Math.random() < bookChance) {
         let droppedBookId = 'book_1star';
         if (mLevel >= 56 || monster.isRaid) droppedBookId = 'book_3star';
@@ -4515,6 +4533,109 @@ function handleChatSubmit(inputStr) {
   log(`💬 [Global] ${heroName}: ${raw}`, 'system');
 }
 
+const RATE_PRESETS = {
+  classic: { name: '🛡️ Retail Classic (1x)', rates: { xp: 1, sp: 1, adena: 1, drop: 1, spoil: 1, enchant: 1, book: 1 } },
+  aden: { name: '⚔️ Aden Dynamic (3x)', rates: { xp: 3, sp: 3, adena: 2, drop: 2, spoil: 2, enchant: 1.2, book: 2 } },
+  mid: { name: '🔥 Mid-Rate Oficial (10x)', rates: { xp: 10, sp: 10, adena: 8, drop: 5, spoil: 5, enchant: 1.5, book: 5 } },
+  high: { name: '👑 High-Rate / Evento (50x)', rates: { xp: 50, sp: 50, adena: 25, drop: 15, spoil: 10, enchant: 2.0, book: 10 } },
+  turbo: { name: '⚡ Turbo PvP (100x)', rates: { xp: 100, sp: 100, adena: 50, drop: 30, spoil: 20, enchant: 2.5, book: 20 } },
+  reset: { name: '🔄 Padrão (1x)', rates: { xp: 1, sp: 1, adena: 1, drop: 1, spoil: 1, enchant: 1, book: 1 } }
+};
+
+function ensureServerRates() {
+  state.serverRates = state.serverRates || { xp: 1, sp: 1, adena: 1, drop: 1, spoil: 1, enchant: 1, book: 1 };
+  const keys = ['xp', 'sp', 'adena', 'drop', 'spoil', 'enchant', 'book'];
+  keys.forEach(k => {
+    if (state.serverRates[k] === undefined || isNaN(Number(state.serverRates[k]))) {
+      state.serverRates[k] = 1;
+    }
+  });
+}
+
+function setServerRate(key, val, silent = false) {
+  ensureServerRates();
+  const num = Math.max(0.1, parseFloat(val) || 1);
+  state.serverRates[key] = num;
+  if (!silent) {
+    const labels = {
+      xp: 'Rate de XP',
+      sp: 'Rate de SP',
+      adena: 'Rate de Adena',
+      drop: 'Rate de Drop de Itens',
+      spoil: 'Rate de Spoil & Craft',
+      enchant: 'Rate de Encantamento',
+      book: 'Rate de Grimórios'
+    };
+    const title = labels[key] || key.toUpperCase();
+    log(`⚡ [Admin] ${title} atualizada para **x${num}**! Efeito imediato aplicado.`, 'rarity-legendary');
+    if (typeof floatText === 'function') floatText(`⚡ ${title.toUpperCase()}: x${num}!`, 'float-jackpot');
+  }
+  syncAdminRatesUI();
+  updateAllUI();
+  save();
+}
+
+function applyServerRatePreset(presetKey) {
+  ensureServerRates();
+  const preset = RATE_PRESETS[presetKey];
+  if (!preset) return;
+  
+  Object.entries(preset.rates).forEach(([k, v]) => {
+    state.serverRates[k] = v;
+  });
+  
+  log(`🚀 [Admin] Preset aplicado: **${preset.name}**! Todas as rates foram reajustadas ao vivo.`, 'rarity-legendary');
+  if (typeof floatText === 'function') floatText(`🚀 PRESET ${presetKey.toUpperCase()} ATIVADO!`, 'float-jackpot');
+  
+  syncAdminRatesUI();
+  updateAllUI();
+  save();
+}
+
+function syncAdminRatesUI() {
+  ensureServerRates();
+  const r = state.serverRates;
+  
+  // Update header live summary
+  const summaryEl = el('admin-live-rates-summary');
+  if (summaryEl) {
+    summaryEl.textContent = `Rates Ativas: XP x${r.xp} · SP x${r.sp} · Adena x${r.adena} · Drop x${r.drop} · Spoil x${r.spoil} · Enchant x${r.enchant} · Grimórios x${r.book}`;
+  }
+  
+  // Update badges on rate cards
+  ['xp', 'sp', 'adena', 'drop', 'spoil', 'enchant', 'book'].forEach(k => {
+    const badge = el(`rate-val-${k}`);
+    if (badge) badge.textContent = `x${r[k]}`;
+    
+    // Highlight matching pill buttons
+    qsa(`[data-rate-set^="${k}:"]`).forEach(btn => {
+      const targetVal = parseFloat(btn.dataset.rateSet.split(':')[1]);
+      if (Math.abs(targetVal - r[k]) < 0.01) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+  });
+}
+
+function switchAdminTab(tabName) {
+  qsa('.admin-tab-btn').forEach(btn => {
+    if (btn.dataset.adminTab === tabName) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+  qsa('.admin-tab-panel').forEach(panel => {
+    if (panel.id === `admin-tab-${tabName}`) {
+      panel.classList.add('active');
+    } else {
+      panel.classList.remove('active');
+    }
+  });
+}
+
 function openAdminModal() {
   const currentPriv = Number(state?.privilegeLevel) || (state?.role === 'admin' ? 1 : 0) || (typeof window !== 'undefined' ? (Number(window.currentUserPrivilege) || (window.getGameState && window.getGameState().privilegeLevel) || 0) : 0);
   if (currentPriv < 1) {
@@ -4528,6 +4649,9 @@ function openAdminModal() {
   const searchInput = el('admin-item-search');
   if (searchInput) searchInput.value = '';
   populateAdminItemSelect('');
+  syncAdminRatesUI();
+  const capBadge = el('admin-current-cap-badge');
+  if (capBadge) capBadge.textContent = `Cap Atual: Nível ${state.serverMaxLevel || state.levelCap || 60}`;
   modal.classList.add('active');
 }
 
@@ -5944,6 +6068,11 @@ export function bindEvents() {
       };
     }
 
+    const adminTopBtn = el('admin-top-btn');
+    if (adminTopBtn) {
+      adminTopBtn.onclick = () => openAdminModal();
+    }
+
     const closeAdminBtn = el('close-admin-modal-btn');
     if (closeAdminBtn) {
       closeAdminBtn.onclick = () => {
@@ -5951,6 +6080,36 @@ export function bindEvents() {
         if (modal) modal.classList.remove('active');
       };
     }
+
+    // Admin Navigation Tabs
+    qsa('.admin-tab-btn').forEach(btn => {
+      btn.onclick = () => switchAdminTab(btn.dataset.adminTab);
+    });
+
+    // Admin Rate Presets (1-Click)
+    qsa('[data-rate-preset]').forEach(btn => {
+      btn.onclick = () => applyServerRatePreset(btn.dataset.ratePreset);
+    });
+
+    // Admin Rate Pill Buttons
+    qsa('[data-rate-set]').forEach(btn => {
+      btn.onclick = () => {
+        const [key, val] = (btn.dataset.rateSet || '').split(':');
+        if (key && val) setServerRate(key, parseFloat(val));
+      };
+    });
+
+    // Admin Rate Apply Buttons (Custom inputs)
+    qsa('[data-rate-apply]').forEach(btn => {
+      btn.onclick = () => {
+        const key = btn.dataset.rateApply;
+        const inp = el(`admin-rate-inp-${key}`);
+        if (inp && inp.value) {
+          setServerRate(key, parseFloat(inp.value));
+          inp.value = '';
+        }
+      };
+    });
 
     const closeClassBtn = el('close-class-modal-btn');
     if (closeClassBtn) {
@@ -8044,6 +8203,10 @@ export function init() {
 
     attachGlobalErrorHandlers();
     bindEvents();
+
+    window.openAdminModal = openAdminModal;
+    window.setServerRate = setServerRate;
+    window.applyServerRatePreset = applyServerRatePreset;
 
     state.startTime = Date.now(); 
     const hasSave = load();
