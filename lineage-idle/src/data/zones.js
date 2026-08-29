@@ -51,40 +51,41 @@ export const ZONES = {
  * Usado por updateZoneBackground() ao entrar em uma nova zona.
  */
 export const ZONE_BACKGROUNDS = {
-  // Vilas e bases
-  orcVillage:     '/img/Maps/orcVillage.png',
-  dwarvenMine:    '/img/Maps/dwarvenMine.png',
-  kamaelLair:     '/img/Maps/kamaelLair.png',
-
-  // Zonas regulares
+  // Vilas e bases iniciais
   talkingIsland:  '/img/Maps/talkingIsland.png',
   elvenForest:    '/img/Maps/elvenForest.png',
   darkForest:     '/img/Maps/DarkElvenForest.png',
+  orcVillage:     '/img/Maps/orcVillage.png',
+  dwarvenMine:    '/img/Maps/dwarvenMine.png',
+  kamaelLair:     '/img/Maps/kamaellair.jpg',
   ruinedOutpost:  '/img/ruinedOutpost.png',
-  howlingMoor:    '/img/Maps/howlingMoor.png',
-  giranOutskirts: '/img/Maps/giranOutskirts.png',
-  orcenRuins:     '/img/Maps/orcenRuins.png',
-  forsakenCrypt:  '/img/Maps/gludioCastle.png',
-  blackCitadel:   '/img/Maps/gludioCastle.png',
-  gludioCastle:   '/img/Maps/gludioCastle.png',
-  wolfMountain:   '/img/Maps/howlingMoor.png',
-  riftOfTheVoid:  '/img/Maps/map.png',
-  emeraldGrove:   '/img/Maps/elvenForest.png',
-  underworldGate: '/img/Maps/map.png',
-  valleyOfSaints: '/img/Maps/gludioCastle.png',
-  swampOfScreams: '/img/Maps/DarkElvenForest.png',
-  adenCity:       '/img/Maps/gludioCastle.png',
-  dragonValley:   '/img/Maps/map.png',
-  imperialTomb:   '/img/Maps/gludioCastle.png',
-  antharasLair:   '/img/Maps/map.png',
-  forgeOfGods:    '/img/Maps/map.png',
+  howlingMoor:    '/img/Maps/howlingmoor.jpg',
 
-  // Raid Bosses
-  queen_ant:  '/img/Maps/map.png',
-  zaken:      '/img/zaken.png',
-  frintezza:  '/img/Maps/gludioCastle.png',
-  baium:      '/img/Maps/gludioCastle.png',
-  antharas:   '/img/Maps/map.png',
-  valakas:    '/img/Maps/map.png',
-  barakiel:   '/img/Maps/gludioCastle.png'
+  // Zonas de caça e castelos
+  giranOutskirts: '/img/Maps/giraoutskirts.jpg',
+  orcenRuins:     '/img/Maps/orcenRuins.png',
+  forsakenCrypt:  '/img/Maps/forsakencrypt.jpg',
+  blackCitadel:   '/img/Maps/blackcitaddel.jpg',
+  gludioCastle:   '/img/Maps/gludiocastle.jpg',
+  wolfMountain:   '/img/Maps/howlingmoor.jpg',
+  riftOfTheVoid:  '/img/Maps/riftofthevoid.jpg',
+  emeraldGrove:   '/img/Maps/emeraldgrove.jpg',
+  underworldGate: '/img/Maps/gatesoftheunderworld.jpg',
+  valleyOfSaints: '/img/Maps/valleyofsaints.jpg',
+  swampOfScreams: '/img/Maps/swampofscreams.jpg',
+  adenCity:       '/img/Maps/adencity.jpg',
+  dragonValley:   '/img/Maps/dragonvalley.jpg',
+  imperialTomb:   '/img/Maps/imperialtomb.jpg',
+  antharasLair:   '/img/Maps/antharaslair.jpg',
+  forgeOfGods:    '/img/Maps/forgeofgods.jpg',
+
+  // Raid Bosses e Arenas Épicas
+  queen_ant:      '/img/Maps/queenant.jpg',
+  zaken:          '/img/Maps/zaken.jpg',
+  frintezza:      '/img/Maps/frintezza.jpg',
+  baium:          '/img/Maps/baium.jpg',
+  antharas:       '/img/Maps/antharaslair.jpg',
+  valakas:        '/img/Maps/forgeofgods.jpg',
+  barakiel:       '/img/Maps/valleyofsaints.jpg'
 };
+
