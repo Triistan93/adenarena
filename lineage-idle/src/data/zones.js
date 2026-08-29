@@ -67,7 +67,7 @@ export const ZONE_BACKGROUNDS = {
   forsakenCrypt:  '/img/Maps/forsakencrypt.jpg',
   blackCitadel:   '/img/Maps/blackcitaddel.jpg',
   gludioCastle:   '/img/Maps/gludiocastle.jpg',
-  wolfMountain:   '/img/Maps/howlingmoor.jpg',
+  wolfMountain:   '/img/Maps/wolfMountain.jpg',
   riftOfTheVoid:  '/img/Maps/riftofthevoid.jpg',
   emeraldGrove:   '/img/Maps/emeraldgrove.jpg',
   underworldGate: '/img/Maps/gatesoftheunderworld.jpg',
