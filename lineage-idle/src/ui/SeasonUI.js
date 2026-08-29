@@ -94,7 +94,12 @@ export function renderSeasonLockedPanel(paneEl, tabId) {
 }
 
 /**
- * Atualiza os botões de abas adicionando o ícone de cadeado nas abas bloqueadas por temporada.
+ * Atualiza a visibilidade dos botões de abas baseado na temporada ativa.
+ *
+ * Abas BLOQUEADAS → ficam completamente ocultas (display: none).
+ *   - Jogadores não veem nem o nome da aba, evitando a curiosidade do cadeado.
+ * Abas DESBLOQUEADAS → ficam visíveis normalmente.
+ *
  * @param {Document|ShadowRoot} root
  */
 export function updateSeasonTabBadges(root) {
@@ -104,22 +109,20 @@ export function updateSeasonTabBadges(root) {
     const tabId = btn.dataset?.tab;
     if (!tabId) return;
 
+    // Remove ícone de cadeado legado (se existia de versão anterior)
+    const oldLock = btn.querySelector('.season-lock-icon');
+    if (oldLock) oldLock.remove();
+    btn.classList.remove('season-locked-tab');
+
     const unlocked = isFeatureUnlocked(tabId);
-    if (!unlocked) {
-      btn.classList.add('season-locked-tab');
-      btn.title = `Desbloqueia em temporadas futuras`;
-      if (!btn.querySelector('.season-lock-icon')) {
-        const lockSpan = document.createElement('span');
-        lockSpan.className = 'season-lock-icon';
-        lockSpan.textContent = ' 🔒';
-        lockSpan.style.fontSize = '10px';
-        lockSpan.style.opacity = '0.7';
-        btn.appendChild(lockSpan);
-      }
+    if (unlocked) {
+      // Aba disponível — garante visibilidade
+      btn.style.display = '';
+      btn.removeAttribute('title');
     } else {
-      btn.classList.remove('season-locked-tab');
-      const lockSpan = btn.querySelector('.season-lock-icon');
-      if (lockSpan) lockSpan.remove();
+      // Aba bloqueada — ocultar completamente da barra de navegação
+      btn.style.display = 'none';
     }
   });
 }
+

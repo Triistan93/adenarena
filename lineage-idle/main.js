@@ -343,6 +343,10 @@ function load() {
     consolidateInventoryStacks(state);
     checkQuestResets();
     updateSagaProgress(true);
+    // Restaura o stage da temporada salvo no estado do servidor
+    if (state.serverSeason) {
+      window.__serverSeason = Number(state.serverSeason);
+    }
     log('✨ Atualização de versão carregada com sucesso! Seu progresso e itens foram 100% mantidos.', 'rarity-legendary');
     if (state.lastSaveTime) {
       setTimeout(() => checkOfflineProgress(state.lastSaveTime), 600);
@@ -4650,10 +4654,20 @@ function openAdminModal() {
   if (searchInput) searchInput.value = '';
   populateAdminItemSelect('');
   syncAdminRatesUI();
+
+  // Restaura o stage salvo no state para garantir visibilidade correta das abas
+  const savedSeason = Number(state.serverSeason) || 1;
+  window.__serverSeason = savedSeason;
+  updateSeasonTabBadges(ROOT);
+
+  const currentCap = state.serverMaxLevel || state.levelCap || 60;
+  const CAP_TO_SEASON = { 40: 1, 60: 1, 75: 2, 85: 3, 100: 3, 120: 4 };
+  const currentStage = CAP_TO_SEASON[currentCap] || savedSeason;
   const capBadge = el('admin-current-cap-badge');
-  if (capBadge) capBadge.textContent = `Cap Atual: Nível ${state.serverMaxLevel || state.levelCap || 60}`;
+  if (capBadge) capBadge.textContent = `Cap: Nível ${currentCap} | Stage ${currentStage} ativo`;
   modal.classList.add('active');
 }
+
 
 function populateAdminItemSelect(query = '') {
   const sel = el('admin-item-select');
@@ -4822,6 +4836,27 @@ function adminKillMonster() {
   }
 }
 
+function setServerSeason(seasonId) {
+  const sid = Number(seasonId) || 1;
+  state.serverSeason = sid;
+  window.__serverSeason = sid;
+
+  // Atualiza visibilidade das abas imediatamente
+  updateSeasonTabBadges(ROOT);
+
+  // Se o jogador está numa aba que ficou bloqueada pelo novo stage, volta para zones
+  const currentTab = state.activeTab || 'zones';
+  if (!isFeatureUnlocked(currentTab)) {
+    switchTab('zones');
+  }
+
+  log(`📜 [CRÔNICA REAL] Stage ${sid} ativado!`, 'rarity-legendary');
+  if (typeof floatText === 'function') floatText(`📜 CRÔNICA ${sid} DESBLOQUEADA!`, 'float-jackpot');
+
+  updateAllUI();
+  save();
+}
+
 function setServerLevelCap(cap) {
   state.serverMaxLevel = cap;
   state.levelCap = cap;
@@ -4830,11 +4865,25 @@ function setServerLevelCap(cap) {
   
   const capBadge = el('admin-current-cap-badge');
   if (capBadge) capBadge.textContent = `Cap Atual: Nível ${cap}`;
+
+  // Sincroniza o stage da temporada com o cap escolhido
+  const CAP_TO_SEASON = { 40: 1, 60: 1, 75: 2, 85: 3, 100: 3, 120: 4 };
+  const targetSeason = CAP_TO_SEASON[cap] || 1;
+  state.serverSeason = targetSeason;
+  window.__serverSeason = targetSeason;
+  updateSeasonTabBadges(ROOT);
+
+  // Se aba atual ficou bloqueada, navega para zones
+  const currentTab = state.activeTab || 'zones';
+  if (!isFeatureUnlocked(currentTab)) {
+    switchTab('zones');
+  }
   
   engineCheckLevelUp(state, { getStats, log, floatText, updateAllUI, save });
   updateAllUI();
   save();
 }
+
 
 function executeAdminCmd(cmd) {
   if (cmd === 'setcap40') { setServerLevelCap(40); }

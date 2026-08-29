@@ -61,7 +61,8 @@ export const DEFAULT_STATE = () => ({
     spoil: 1,
     enchant: 1,
     book: 1
-  }
+  },
+  serverSeason: 1,   // Stage/Crônica ativa — controlada pelo Admin Panel
 });
 
 let currentState = DEFAULT_STATE();

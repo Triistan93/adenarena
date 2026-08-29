@@ -3,9 +3,10 @@
  *
  * Controla a liberação progressiva de sistemas, limites de nível, regras de encantamento
  * e narrativa imersiva de cada temporada.
+ *
+ * SEASON DINÂMICA: O stage ativo é controlado via window.__serverSeason (definido pelo
+ * painel Admin em tempo real) — não é mais uma constante hardcoded.
  */
-
-export const CURRENT_SEASON = 1;
 
 export const SEASONS_DATA = {
   1: {
@@ -96,19 +97,37 @@ export const SEASONS_DATA = {
 };
 
 /**
- * Retorna as informações da temporada atual ativa.
+ * Retorna o ID da season ativa em tempo real.
+ * Prioridade: window.__serverSeason (definido pelo Admin) > state.serverSeason > 1
  */
-export function getCurrentSeason() {
-  return SEASONS_DATA[CURRENT_SEASON] || SEASONS_DATA[1];
+export function getCurrentSeasonId() {
+  if (typeof window !== 'undefined' && window.__serverSeason >= 1) {
+    return Number(window.__serverSeason);
+  }
+  // Tenta ler do estado global se disponível
+  try {
+    const gs = typeof window !== 'undefined' && window.getGameState && window.getGameState();
+    if (gs && gs.serverSeason >= 1) return Number(gs.serverSeason);
+  } catch (_) {}
+  return 1;
 }
 
 /**
- * Verifica se uma aba/recurso está desbloqueada na temporada atual.
+ * Retorna as informações da temporada atual ativa.
+ */
+export function getCurrentSeason() {
+  return SEASONS_DATA[getCurrentSeasonId()] || SEASONS_DATA[1];
+}
+
+/**
+ * Verifica se uma aba/recurso está desbloqueado na temporada ativa atual.
+ * Acumula: temporadas 1..currentSeason ficam todas desbloqueadas.
  * @param {string} tabId
  * @returns {boolean}
  */
 export function isFeatureUnlocked(tabId) {
-  for (let s = 1; s <= CURRENT_SEASON; s++) {
+  const currentId = getCurrentSeasonId();
+  for (let s = 1; s <= currentId; s++) {
     const season = SEASONS_DATA[s];
     if (season && season.unlockedTabs.includes(tabId)) {
       return true;
@@ -128,9 +147,22 @@ export function getSeasonForFeature(tabId) {
       return s;
     }
   }
-  return SEASONS_DATA[2]; // Default para próxima temporada
+  return SEASONS_DATA[2];
 }
 
 export function getSeasonMaxLevel() {
   return 120;
 }
+
+/**
+ * Mapa de level cap → season ID para o Admin Panel.
+ */
+export const CAP_TO_SEASON = {
+  40:  1,
+  60:  1,
+  75:  2,
+  85:  3,
+  100: 3,
+  120: 4,
+};
+
