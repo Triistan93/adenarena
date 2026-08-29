@@ -1,25 +1,67 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    
-    // Coleção Única de Usuários (Saves, Rankings, Status, PvP e Permissões)
+
+    // ─── Helpers ────────────────────────────────────────────────────────────
+
+    // Usuário tem qualquer sessão ativa (inclui anônimos)
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Usuário registrado (Google ou Email — NÃO anônimo)
+    function isRegistered() {
+      return isAuthenticated()
+          && request.auth.token.firebase.sign_in_provider != 'anonymous';
+    }
+
+    // O usuário é dono do documento
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Bloqueia tentativa de escalar privilégios via client-side write
+    function noPrivilegeEscalation() {
+      return !('privilegeLevel' in request.resource.data)
+          && !('role'           in request.resource.data);
+    }
+
+    // ─── Coleção de Usuários ─────────────────────────────────────────────────
+    // Saves, Rankings, Matchmaking, Perfis Públicos e Status PvP.
+    // • Leitura: qualquer autenticado (necessário para rankings e matchmaking).
+    // • Escrita: somente o próprio usuário — e NUNCA pode escrever
+    //   privilegeLevel ou role (esses campos são gerenciados pelo Firebase Console).
     match /users/{userId} {
-      allow read, write: if true;
+      allow read:  if isAuthenticated();
+      allow write: if isOwner(userId) && noPrivilegeEscalation();
     }
-    
-    // Clãs Imperiais e Guerras
+
+    // ─── Clãs Imperiais e Guerras ────────────────────────────────────────────
+    // Leitura pública para qualquer autenticado.
+    // Criação/Atualização/Exclusão requer conta registrada.
     match /clans/{clanId} {
-      allow read, write: if true;
+      allow read:  if isAuthenticated();
+      allow write: if isRegistered();
     }
 
-    // Mercado Central de Giran — Anúncios Globais em Tempo Real P2P
+    // ─── Mercado Central de Giran — Anúncios P2P ────────────────────────────
+    // • Leitura: qualquer autenticado (incluindo anônimos, para navegação).
+    // • Criação: somente conta registrada e o sellerId deve coincidir com o uid.
+    // • Atualização / Exclusão: somente o vendedor dono do anúncio.
     match /market_listings/{listingId} {
-      allow read, write: if true;
+      allow read:           if isAuthenticated();
+      allow create:         if isRegistered()
+                            && request.resource.data.sellerId == request.auth.uid;
+      allow update, delete: if isRegistered()
+                            && resource.data.sellerId == request.auth.uid;
     }
 
-    // Mercado Central de Giran — Registro de Vendas e Coleta de Lucros
+    // ─── Mercado Central de Giran — Registro de Vendas ──────────────────────
+    // Leitura e escrita restritas a contas registradas.
     match /market_sales/{sellerKey} {
-      allow read, write: if true;
+      allow read:  if isRegistered();
+      allow write: if isRegistered();
     }
   }
 }
+

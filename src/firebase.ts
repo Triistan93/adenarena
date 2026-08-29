@@ -26,15 +26,33 @@ import {
   where 
 } from 'firebase/firestore';
 
+const _missingVars = [
+  'VITE_FIREBASE_API_KEY',
+  'VITE_FIREBASE_AUTH_DOMAIN',
+  'VITE_FIREBASE_PROJECT_ID',
+  'VITE_FIREBASE_STORAGE_BUCKET',
+  'VITE_FIREBASE_MESSAGING_SENDER_ID',
+  'VITE_FIREBASE_APP_ID',
+].filter(key => !import.meta.env[key]);
+
+if (_missingVars.length > 0) {
+  console.error(
+    '[Security] Variáveis de ambiente Firebase ausentes:',
+    _missingVars.join(', '),
+    '\nCopie .env.example para .env.local e preencha os valores.',
+  );
+}
+
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyB36IqqrnZglElfM5kxsTi1S2Acclate9Y",
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "adenarena-6e448.firebaseapp.com",
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "adenarena-6e448",
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "adenarena-6e448.firebasestorage.app",
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "320732940839",
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:320732940839:web:99e037953e517d16b29c02",
-  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || "G-KQ280JBQDN"
+  apiKey:            import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain:        import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId:         import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket:     import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId:             import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId:     import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
+
 
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
@@ -60,70 +78,170 @@ export {
   User
 };
 
+// ═══════════════════════════════════════════════════════════════════════════
+// 🔒 SECURITY UTILITIES
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * sanitizeString — Remove tags HTML e caracteres de controle para prevenir XSS.
+ * Usado antes de salvar charName, clanName, sellerName e mensagens no Firestore.
+ */
+function sanitizeString(input: unknown, maxLength = 64): string {
+  if (typeof input !== 'string') return '';
+  return input
+    .trim()
+    .replace(/<[^>]*>/g, '')           // remove qualquer tag HTML
+    .replace(/[<>"'`]/g, '')           // remove caracteres de template injection
+    .replace(/[\x00-\x1F\x7F]/g, '')   // remove caracteres de controle ASCII
+    .slice(0, maxLength);
+}
+
+/**
+ * validateStateIntegrity — Anti-cheat: valida se os valores do estado são plausíveis
+ * antes de qualquer save no cloud.
+ * Retorna `true` se o estado for válido, `false` se detectar valores impossíveis.
+ */
+function validateStateIntegrity(state: any): { valid: boolean; reason?: string } {
+  const level  = Number(state?.level)  || 1;
+  const gold   = Number(state?.gold)   || 0;
+  const xp     = Number(state?.xp)     || 0;
+
+  if (level < 1 || level > 120) {
+    return { valid: false, reason: `level inválido: ${level}` };
+  }
+  if (gold > 999_999_999_999) {
+    return { valid: false, reason: `gold impossível: ${gold}` };
+  }
+  if (xp < 0) {
+    return { valid: false, reason: `xp negativo: ${xp}` };
+  }
+
+  // Verifica stats básicas (nível 1 não pode ter ATK > 50.000 × level)
+  const stats  = state?.stats  || state?.base || {};
+  const atk    = Number(stats.atk || stats.pAtk) || 0;
+  const maxAtk = Math.max(50_000, level * 50_000);
+  if (atk > maxAtk) {
+    return { valid: false, reason: `atk impossível para level ${level}: ${atk}` };
+  }
+
+  return { valid: true };
+}
+
+/**
+ * Rate Limiter de Saves — impede chamadas repetidas ao Firestore dentro de 30 s.
+ * Enfileira sempre o último estado para que nenhum progresso seja perdido.
+ */
+const _saveThrottle: Map<string, { lastSaveAt: number; pendingTimer: ReturnType<typeof setTimeout> | null }> = new Map();
+const SAVE_THROTTLE_MS = 30_000;
+
+function scheduleSave(
+  userId: string,
+  saveFn: () => Promise<boolean>,
+): void {
+  const now = Date.now();
+  let entry = _saveThrottle.get(userId);
+
+  if (!entry) {
+    entry = { lastSaveAt: 0, pendingTimer: null };
+    _saveThrottle.set(userId, entry);
+  }
+
+  // Cancela qualquer save pendente (será substituído por este, mais recente)
+  if (entry.pendingTimer !== null) {
+    clearTimeout(entry.pendingTimer);
+    entry.pendingTimer = null;
+  }
+
+  const elapsed = now - entry.lastSaveAt;
+  const delay   = elapsed >= SAVE_THROTTLE_MS ? 0 : SAVE_THROTTLE_MS - elapsed;
+
+  entry.pendingTimer = setTimeout(async () => {
+    entry!.lastSaveAt  = Date.now();
+    entry!.pendingTimer = null;
+    await saveFn();
+  }, delay);
+}
+
 export async function savePlayerStateToCloud(userId: string, stateData: any) {
-  try {
-    const userRef = doc(db, 'users', userId);
-    const cleanState = JSON.parse(JSON.stringify(stateData));
-    
-    // SECURITY: Never allow client-sent privilegeLevel to overwrite Firestore root privilege!
-    delete cleanState.privilegeLevel;
+  if (!userId) return false;
 
-    const stats = cleanState.stats || {};
-    const pAtk = Number(stats.atk || stats.pAtk) || 100;
-    const mAtk = Number(stats.matk || stats.mAtk) || 50;
-    const pDef = Number(stats.def || stats.pDef) || 80;
-    const mDef = Number(stats.mdef || stats.mDef) || 60;
-    const maxHp = Number(stats.maxHp || stats.hp) || 1000;
-    const level = Number(cleanState.level) || 1;
-    const cp = Number(stats.combatPower) || Math.floor(level * 150 + pAtk * 1.8 + pDef * 1.5 + mAtk * 1.6 + mDef * 1.5 + maxHp * 0.12);
-
-    let topWeaponName = 'Sem Arma';
-    let topWeaponGlow = null;
-    if (cleanState.equipment?.weapon) {
-      const wUid = cleanState.equipment.weapon;
-      const wItem = cleanState.inventory?.find((i: any) => i.uid === wUid || i.id === wUid);
-      if (wItem) {
-        const enc = Number(wItem.enchant || wItem.enchantLevel) || 0;
-        topWeaponName = enc > 0 ? `+${enc} ${wItem.name || 'Arma'}` : (wItem.name || 'Arma');
-        topWeaponGlow = wItem.augmentation?.glow || (enc >= 16 ? 'crimson-fire' : enc >= 10 ? 'golden-amber' : enc >= 4 ? 'blue-ice' : null);
-      }
-    }
-
-    const payload: any = {
-      userId,
-      charName: cleanState.name || cleanState.charName || cleanState.playerName || 'Hero',
-      race: cleanState.race || 'Human',
-      className: cleanState.className || cleanState.class || 'Warrior',
-      level,
-      combatPower: cp,
-      olympiadPoints: Number(cleanState.olympiad?.points || cleanState.olympiadPoints) || 1000,
-      olympiadWins: Number(cleanState.olympiad?.wins || cleanState.olympiadWins) || 0,
-      olympiadLosses: Number(cleanState.olympiad?.losses || cleanState.olympiadLosses) || 0,
-      duelWins: Number(cleanState.colosseum?.duelWins || cleanState.duelWins) || 0,
-      duelLosses: Number(cleanState.colosseum?.duelLosses || cleanState.duelLosses) || 0,
-      clanName: cleanState.clan?.name || 'Sem Clã',
-      castleLord: cleanState.clan?.castle || null,
-      isHero: Boolean(cleanState.olympiad?.isHero || cleanState.isHero),
-      topWeaponName,
-      topWeaponGlow,
-      statsSnapshot: {
-        hp: maxHp,
-        pAtk,
-        mAtk,
-        pDef,
-        mDef,
-        crit: Number(stats.crit) || 10
-      },
-      state: cleanState,
-      updatedAt: serverTimestamp()
-    };
-
-    await setDoc(userRef, payload, { merge: true });
-    return true;
-  } catch (err) {
-    console.error('Cloud Save Error:', err);
+  // ── Anti-Cheat: validação de integridade antes de qualquer I/O ──────────
+  const integrityCheck = validateStateIntegrity(stateData);
+  if (!integrityCheck.valid) {
+    console.warn(`[Security] savePlayerStateToCloud bloqueado — ${integrityCheck.reason}`);
     return false;
   }
+
+  // ── Rate Limiting: evita flood de saves ao Firestore ────────────────────
+  return new Promise<boolean>((resolve) => {
+    scheduleSave(userId, async () => {
+      try {
+        const userRef   = doc(db, 'users', userId);
+        const cleanState = JSON.parse(JSON.stringify(stateData));
+
+        // SECURITY: Never allow client-sent privilegeLevel to overwrite Firestore root privilege!
+        delete cleanState.privilegeLevel;
+        delete cleanState.role;
+
+        // ── XSS Sanitization ─────────────────────────────────────────────
+        if (cleanState.name)      cleanState.name      = sanitizeString(cleanState.name, 16);
+        if (cleanState.charName)  cleanState.charName  = sanitizeString(cleanState.charName, 16);
+        if (cleanState.playerName) cleanState.playerName = sanitizeString(cleanState.playerName, 16);
+        if (cleanState.clan?.name) cleanState.clan.name = sanitizeString(cleanState.clan.name, 24);
+
+        const stats   = cleanState.stats || {};
+        const pAtk    = Number(stats.atk  || stats.pAtk)  || 100;
+        const mAtk    = Number(stats.matk || stats.mAtk)  || 50;
+        const pDef    = Number(stats.def  || stats.pDef)  || 80;
+        const mDef    = Number(stats.mdef || stats.mDef)  || 60;
+        const maxHp   = Number(stats.maxHp || stats.hp)   || 1000;
+        const level   = Number(cleanState.level)           || 1;
+        const cp      = Number(stats.combatPower) || Math.floor(level * 150 + pAtk * 1.8 + pDef * 1.5 + mAtk * 1.6 + mDef * 1.5 + maxHp * 0.12);
+
+        let topWeaponName = 'Sem Arma';
+        let topWeaponGlow = null;
+        if (cleanState.equipment?.weapon) {
+          const wUid  = cleanState.equipment.weapon;
+          const wItem = cleanState.inventory?.find((i: any) => i.uid === wUid || i.id === wUid);
+          if (wItem) {
+            const enc     = Number(wItem.enchant || wItem.enchantLevel) || 0;
+            topWeaponName = enc > 0 ? `+${enc} ${sanitizeString(wItem.name || 'Arma', 40)}` : sanitizeString(wItem.name || 'Arma', 40);
+            topWeaponGlow = wItem.augmentation?.glow || (enc >= 16 ? 'crimson-fire' : enc >= 10 ? 'golden-amber' : enc >= 4 ? 'blue-ice' : null);
+          }
+        }
+
+        const payload: any = {
+          userId,
+          charName:        sanitizeString(cleanState.name || cleanState.charName || cleanState.playerName || 'Hero', 16),
+          race:            sanitizeString(cleanState.race || 'Human', 24),
+          className:       sanitizeString(cleanState.className || cleanState.class || 'Warrior', 32),
+          level,
+          combatPower:     cp,
+          olympiadPoints:  Number(cleanState.olympiad?.points  || cleanState.olympiadPoints)  || 1000,
+          olympiadWins:    Number(cleanState.olympiad?.wins    || cleanState.olympiadWins)    || 0,
+          olympiadLosses:  Number(cleanState.olympiad?.losses  || cleanState.olympiadLosses)  || 0,
+          duelWins:        Number(cleanState.colosseum?.duelWins  || cleanState.duelWins)     || 0,
+          duelLosses:      Number(cleanState.colosseum?.duelLosses || cleanState.duelLosses)  || 0,
+          clanName:        sanitizeString(cleanState.clan?.name || 'Sem Clã', 24),
+          castleLord:      cleanState.clan?.castle || null,
+          isHero:          Boolean(cleanState.olympiad?.isHero || cleanState.isHero),
+          topWeaponName,
+          topWeaponGlow,
+          statsSnapshot: { hp: maxHp, pAtk, mAtk, pDef, mDef, crit: Number(stats.crit) || 10 },
+          state:           cleanState,
+          updatedAt:       serverTimestamp(),
+        };
+
+        await setDoc(userRef, payload, { merge: true });
+        resolve(true);
+        return true;
+      } catch (err) {
+        console.error('Cloud Save Error:', err);
+        resolve(false);
+        return false;
+      }
+    });
+  });
 }
 
 export async function checkNicknameAvailability(nickname: string, currentUserId?: string | null): Promise<{ available: boolean; reason?: string }> {
@@ -321,26 +439,49 @@ export async function fetchPvPMatchmakingOpponents(playerCP: number = 10000, ran
  */
 
 /**
- * Salva um novo anúncio criado por um jogador no Firestore
+ * Salva um novo anúncio criado por um jogador no Firestore.
+ * Requer conta registrada (não anônima) — reforçado nas Firestore Rules.
  */
 export async function createMarketListingInCloud(listing: any): Promise<boolean> {
   try {
     if (!listing || !listing.id) return false;
-    const listingRef = doc(db, 'market_listings', listing.id);
+
+    // ── Verificação de autenticação no cliente (dupla camada com as Rules) ──
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+      console.warn('[Security] createMarketListing bloqueado — usuário não autenticado.');
+      return false;
+    }
+    const provider = (currentUser as any).providerData?.[0]?.providerId;
+    if (!provider && currentUser.isAnonymous) {
+      console.warn('[Security] createMarketListing bloqueado — conta anônima não pode postar no mercado.');
+      return false;
+    }
+
+    const listingRef   = doc(db, 'market_listings', listing.id);
     const cleanListing = JSON.parse(JSON.stringify(listing));
+
+    // Injeta o sellerId real para que a Rule valide ownership
+    cleanListing.sellerId        = currentUser.uid;
     cleanListing.isPlayerListing = true;
-    cleanListing.updatedAt = serverTimestamp();
+    cleanListing.updatedAt       = serverTimestamp();
+
+    // XSS sanitization em campos de texto do anúncio
+    if (cleanListing.sellerName) cleanListing.sellerName = sanitizeString(cleanListing.sellerName, 24);
+    if (cleanListing.item?.name) cleanListing.item.name  = sanitizeString(cleanListing.item.name, 60);
+
     await setDoc(listingRef, cleanListing);
     return true;
   } catch (err: any) {
     if (err?.code === 'permission-denied' || String(err).includes('permissions')) {
-      console.debug('[Firebase] market_listings requer permissão no Firestore Rules.');
+      console.debug('[Firebase] market_listings — permissão negada pelas Firestore Rules.');
     } else {
       console.warn('[Firebase] Erro ao criar anúncio no mercado:', err);
     }
     return false;
   }
 }
+
 
 /**
  * Busca todos os anúncios REAIS de jogadores ativos no mercado
