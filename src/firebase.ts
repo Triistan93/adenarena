@@ -26,31 +26,19 @@ import {
   where 
 } from 'firebase/firestore';
 
-const _missingVars = [
-  'VITE_FIREBASE_API_KEY',
-  'VITE_FIREBASE_AUTH_DOMAIN',
-  'VITE_FIREBASE_PROJECT_ID',
-  'VITE_FIREBASE_STORAGE_BUCKET',
-  'VITE_FIREBASE_MESSAGING_SENDER_ID',
-  'VITE_FIREBASE_APP_ID',
-].filter(key => !import.meta.env[key]);
-
-if (_missingVars.length > 0) {
-  console.error(
-    '[Security] Variáveis de ambiente Firebase ausentes:',
-    _missingVars.join(', '),
-    '\nCopie .env.example para .env.local e preencha os valores.',
-  );
-}
-
+// ── Firebase Configuration ───────────────────────────────────────────────────
+// NOTA DE SEGURANÇA: As API Keys do Firebase para aplicações web são PÚBLICAS
+// por design — elas apenas identificam o projeto Firebase, não concedem acesso.
+// A segurança real vem das Firestore Security Rules (firestore.rules).
+// Variáveis de ambiente são suportadas para sobrescrever em ambientes CI/CD.
 const firebaseConfig = {
-  apiKey:            import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain:        import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId:         import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket:     import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId:             import.meta.env.VITE_FIREBASE_APP_ID,
-  measurementId:     import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
+  apiKey:            import.meta.env.VITE_FIREBASE_API_KEY            || 'AIzaSyB36IqqrnZglElfM5kxsTi1S2Acclate9Y',
+  authDomain:        import.meta.env.VITE_FIREBASE_AUTH_DOMAIN        || 'adenarena-6e448.firebaseapp.com',
+  projectId:         import.meta.env.VITE_FIREBASE_PROJECT_ID         || 'adenarena-6e448',
+  storageBucket:     import.meta.env.VITE_FIREBASE_STORAGE_BUCKET     || 'adenarena-6e448.firebasestorage.app',
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || '320732940839',
+  appId:             import.meta.env.VITE_FIREBASE_APP_ID             || '1:320732940839:web:99e037953e517d16b29c02',
+  measurementId:     import.meta.env.VITE_FIREBASE_MEASUREMENT_ID     || 'G-KQ280JBQDN',
 };
 
 
