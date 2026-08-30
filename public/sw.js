@@ -1,12 +1,10 @@
 /**
  * Service Worker — Aden Arena PWA
- * Caching inteligente de assets estáticos com network-first para manifest
+ * Caching inteligente com prioridade de rede para scripts, HTML e dados atualizados
  */
 
-const CACHE_NAME = 'aden-arena-cache-v2';
+const CACHE_NAME = 'aden-arena-cache-v4';
 const STATIC_ASSETS = [
-  '/',
-  '/index.html',
   '/manifest.webmanifest',
   '/icon-192.png',
   '/icon-512.png',
@@ -14,12 +12,10 @@ const STATIC_ASSETS = [
 ];
 
 self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(STATIC_ASSETS);
-    })
-  );
   self.skipWaiting();
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(STATIC_ASSETS))
+  );
 });
 
 self.addEventListener('activate', (event) => {
@@ -39,13 +35,22 @@ self.addEventListener('fetch', (event) => {
 
   const url = new URL(event.request.url);
 
-  // Network-first para manifest e navegações para refletir atualizações na hora
-  if (url.pathname.includes('manifest') || event.request.mode === 'navigate') {
+  // Network-first para HTML, Scripts JS, CSS, Manifest e API para nunca servir código desatualizado
+  const isCodeOrDoc = event.request.mode === 'navigate' || 
+                      url.pathname.endsWith('.html') || 
+                      url.pathname.endsWith('.js') || 
+                      url.pathname.endsWith('.css') || 
+                      url.pathname.includes('/api/') || 
+                      url.pathname.includes('manifest');
+
+  if (isCodeOrDoc) {
     event.respondWith(
       fetch(event.request)
         .then((response) => {
-          const clone = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+          if (response && response.status === 200) {
+            const clone = response.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+          }
           return response;
         })
         .catch(() => caches.match(event.request))
@@ -53,7 +58,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Cache-first para assets estáticos
+  // Cache-first para imagens pesadas e fontes
   event.respondWith(
     caches.match(event.request).then((cached) => {
       if (cached) return cached;
@@ -65,9 +70,7 @@ self.addEventListener('fetch', (event) => {
           }
           return response;
         })
-        .catch(() => {
-          return new Response('', { status: 408, statusText: 'Offline' });
-        });
+        .catch(() => new Response('', { status: 408, statusText: 'Offline' }));
     })
   );
 });
