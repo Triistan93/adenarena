@@ -18,6 +18,66 @@ let _sellQuantity = 1;
 let _sellCurrency = 'adena'; // 'adena' | 'adencoin'
 let _sellPriceUnit = 1000;
 
+export function showMarketToast(msg, type = 'info') {
+  if (typeof document === 'undefined') return;
+  let toastEl = document.getElementById('market-toast');
+  if (!toastEl) {
+    toastEl = document.createElement('div');
+    toastEl.id = 'market-toast';
+    toastEl.style.cssText = `
+      position: fixed;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 99999;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.85);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      pointer-events: none;
+      text-align: center;
+      max-width: 90vw;
+    `;
+    document.body.appendChild(toastEl);
+  }
+
+  const bgMap = {
+    success: 'linear-gradient(135deg, rgba(20,80,45,0.96), rgba(10,40,25,0.98))',
+    warning: 'linear-gradient(135deg, rgba(120,60,10,0.96), rgba(60,30,5,0.98))',
+    gold: 'linear-gradient(135deg, rgba(140,100,20,0.96), rgba(80,50,10,0.98))',
+    info: 'linear-gradient(135deg, rgba(20,40,70,0.96), rgba(10,20,40,0.98))'
+  };
+  const borderMap = {
+    success: '#22c55e',
+    warning: '#f59e0b',
+    gold: '#ffd877',
+    info: '#60a5fa'
+  };
+  const colorMap = {
+    success: '#86efac',
+    warning: '#fde68a',
+    gold: '#ffd877',
+    info: '#bfdbfe'
+  };
+
+  toastEl.style.background = bgMap[type] || bgMap.info;
+  toastEl.style.border = `1px solid ${borderMap[type] || borderMap.info}`;
+  toastEl.style.color = colorMap[type] || colorMap.info;
+  toastEl.innerText = msg;
+  toastEl.style.opacity = '1';
+  toastEl.style.transform = 'translateX(-50%) translateY(0)';
+
+  clearTimeout(toastEl._timer);
+  toastEl._timer = setTimeout(() => {
+    toastEl.style.opacity = '0';
+    toastEl.style.transform = 'translateX(-50%) translateY(-10px)';
+  }, 3500);
+}
+
 export function setActiveMarketTab(tab) {
   _activeMarketTab = tab;
 }
@@ -539,12 +599,11 @@ function attachMarketEvents(container, state, callbacks = {}) {
       const listingId = btn.dataset.id;
       btn.disabled = true;
       const res = await MarketService.buyListing(state, listingId);
+      showMarketToast(res.msg, res.ok ? 'success' : 'warning');
       if (callbacks.log) callbacks.log(res.msg, res.ok ? 'success' : 'warning');
       if (res.ok) {
         if (callbacks.save) callbacks.save();
         if (callbacks.updateAllUI) callbacks.updateAllUI(true);
-      } else {
-        alert(res.msg);
       }
       renderMarketTab(container, state, callbacks);
     };
@@ -556,6 +615,7 @@ function attachMarketEvents(container, state, callbacks = {}) {
       const listingId = btn.dataset.id;
       btn.disabled = true;
       const res = await MarketService.cancelListing(state, listingId);
+      showMarketToast(res.msg, res.ok ? 'info' : 'warning');
       if (callbacks.log) callbacks.log(res.msg, res.ok ? 'info' : 'warning');
       if (res.ok) {
         if (callbacks.save) callbacks.save();
@@ -571,6 +631,7 @@ function attachMarketEvents(container, state, callbacks = {}) {
     btn.onclick = async () => {
       btn.disabled = true;
       const res = await MarketService.claimProfits(state);
+      showMarketToast(res.msg, res.ok ? 'gold' : 'info');
       if (callbacks.log) callbacks.log(res.msg, res.ok ? 'gold' : 'info');
       if (res.ok) {
         if (callbacks.save) callbacks.save();
@@ -628,7 +689,10 @@ function attachMarketEvents(container, state, callbacks = {}) {
   const submitBtn = container.querySelector('#btn-submit-listing');
   if (submitBtn) {
     submitBtn.onclick = async () => {
-      if (!_selectedSellItemUid) return alert('Selecione um item primeiro!');
+      if (!_selectedSellItemUid) {
+        showMarketToast('Selecione um item primeiro!', 'warning');
+        return;
+      }
       submitBtn.disabled = true;
       const res = await MarketService.createListing(state, {
         itemUid: _selectedSellItemUid,
@@ -637,14 +701,13 @@ function attachMarketEvents(container, state, callbacks = {}) {
         currency: _sellCurrency
       });
 
+      showMarketToast(res.msg, res.ok ? 'success' : 'warning');
       if (callbacks.log) callbacks.log(res.msg, res.ok ? 'success' : 'warning');
       if (res.ok) {
         _selectedSellItemUid = null;
         _activeMarketTab = 'my_sales';
         if (callbacks.save) callbacks.save();
         if (callbacks.updateAllUI) callbacks.updateAllUI(true);
-      } else {
-        alert(res.msg);
       }
       renderMarketTab(container, state, callbacks);
     };
