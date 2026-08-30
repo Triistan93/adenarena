@@ -602,8 +602,12 @@ function attachMarketEvents(container, state, callbacks = {}) {
       showMarketToast(res.msg, res.ok ? 'success' : 'warning');
       if (callbacks.log) callbacks.log(res.msg, res.ok ? 'success' : 'warning');
       if (res.ok) {
-        if (callbacks.save) callbacks.save();
-        if (callbacks.updateAllUI) callbacks.updateAllUI(true);
+        if (typeof callbacks.save === 'function') callbacks.save();
+        if (typeof callbacks.updateAllUI === 'function') callbacks.updateAllUI(true);
+        if (typeof window !== 'undefined') {
+          if (typeof window.saveGameState === 'function') window.saveGameState();
+          if (typeof window.updateInventoryUI === 'function') window.updateInventoryUI();
+        }
       }
       renderMarketTab(container, state, callbacks);
     };
@@ -618,8 +622,12 @@ function attachMarketEvents(container, state, callbacks = {}) {
       showMarketToast(res.msg, res.ok ? 'info' : 'warning');
       if (callbacks.log) callbacks.log(res.msg, res.ok ? 'info' : 'warning');
       if (res.ok) {
-        if (callbacks.save) callbacks.save();
-        if (callbacks.updateAllUI) callbacks.updateAllUI(true);
+        if (typeof callbacks.save === 'function') callbacks.save();
+        if (typeof callbacks.updateAllUI === 'function') callbacks.updateAllUI(true);
+        if (typeof window !== 'undefined') {
+          if (typeof window.saveGameState === 'function') window.saveGameState();
+          if (typeof window.updateInventoryUI === 'function') window.updateInventoryUI();
+        }
       }
       renderMarketTab(container, state, callbacks);
     };

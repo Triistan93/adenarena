@@ -469,8 +469,10 @@ export const MarketService = {
       quantity: qtyToSell,
       item: {
         id: item.itemId || item.id,
+        itemId: item.itemId || item.id,
         name: item.name || 'Item de Aden',
         slot: item.slot || 'material',
+        type: item.type || item.slot || 'item',
         tier: item.tier || 1,
         rarity: item.rarity || 'common',
         enchant: item.enchant || item.enchantLevel || 0,
@@ -546,22 +548,28 @@ export const MarketService = {
       state.gold = playerGold - totalCost;
     }
 
-    // Entrega o item comprado ao inventário do jogador
+    // Entrega o item comprado ao inventário do jogador com itemId explícito
+    const actualItemId = listing.item.itemId || listing.item.id;
     const boughtItem = {
       ...listing.item,
-      uid: 'item_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
-      count: listing.quantity,
-      quantity: listing.quantity
+      id: actualItemId,
+      itemId: actualItemId,
+      uid: 'item_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+      count: Number(listing.quantity) || 1,
+      quantity: Number(listing.quantity) || 1,
+      rarity: listing.item.rarity || 'common',
+      enchant: Number(listing.item.enchant) || 0,
+      equipped: false
     };
 
     state.inventory = state.inventory || [];
-    const isStackable = ['material', 'consumable', 'scroll', 'crystal'].includes(boughtItem.slot);
+    const isStackable = ['material', 'consumable', 'scroll', 'crystal', 'powerup', 'potion'].includes(String(boughtItem.slot || '').toLowerCase()) || String(boughtItem.type || '').toLowerCase() === 'consumable';
     const existingIndex = isStackable 
-      ? state.inventory.findIndex(i => (i.itemId === boughtItem.id || i.id === boughtItem.id) && !i.enchant) 
+      ? state.inventory.findIndex(i => (i.itemId === actualItemId || i.id === actualItemId) && !i.enchant && !i.equipped) 
       : -1;
 
     if (existingIndex !== -1) {
-      state.inventory[existingIndex].count = (Number(state.inventory[existingIndex].count) || 1) + listing.quantity;
+      state.inventory[existingIndex].count = (Number(state.inventory[existingIndex].count) || 1) + (Number(listing.quantity) || 1);
       state.inventory[existingIndex].quantity = state.inventory[existingIndex].count;
     } else {
       state.inventory.push(boughtItem);
@@ -649,21 +657,27 @@ export const MarketService = {
     markListingDeleted(listingId);
 
     // 2. Devolve o item cancelado ao inventário
+    const actualItemId = listing.item.itemId || listing.item.id;
     const returnedItem = {
       ...listing.item,
-      uid: 'item_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
-      count: listing.quantity,
-      quantity: listing.quantity
+      id: actualItemId,
+      itemId: actualItemId,
+      uid: 'item_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+      count: Number(listing.quantity) || 1,
+      quantity: Number(listing.quantity) || 1,
+      rarity: listing.item.rarity || 'common',
+      enchant: Number(listing.item.enchant) || 0,
+      equipped: false
     };
 
     state.inventory = state.inventory || [];
-    const isStackable = ['material', 'consumable', 'scroll', 'crystal'].includes(returnedItem.slot);
+    const isStackable = ['material', 'consumable', 'scroll', 'crystal', 'powerup', 'potion'].includes(String(returnedItem.slot || '').toLowerCase()) || String(returnedItem.type || '').toLowerCase() === 'consumable';
     const existingIndex = isStackable 
-      ? state.inventory.findIndex(i => (i.itemId === returnedItem.id || i.id === returnedItem.id) && !i.enchant) 
+      ? state.inventory.findIndex(i => (i.itemId === actualItemId || i.id === actualItemId) && !i.enchant && !i.equipped) 
       : -1;
 
     if (existingIndex !== -1) {
-      state.inventory[existingIndex].count = (Number(state.inventory[existingIndex].count) || 1) + listing.quantity;
+      state.inventory[existingIndex].count = (Number(state.inventory[existingIndex].count) || 1) + (Number(listing.quantity) || 1);
       state.inventory[existingIndex].quantity = state.inventory[existingIndex].count;
     } else {
       state.inventory.push(returnedItem);

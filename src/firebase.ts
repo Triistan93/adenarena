@@ -495,6 +495,7 @@ export async function fetchMarketListingsFromCloud(): Promise<any[]> {
         data && 
         data.item && 
         data.isPlayerListing !== false && 
+        data.isSold !== true &&
         !String(data.id || '').startsWith('seed_') &&
         !['Merchant Katrina', 'Blacksmith Pushkin', 'Trader Woody', 'Shadow Walker Ren', 'Priestess Chloe', 'Dwarf Master Bronze'].includes(data.sellerName)
       ) {
@@ -520,14 +521,16 @@ export async function deleteMarketListingInCloud(listingId: string): Promise<boo
   try {
     if (!listingId) return false;
     const listingRef = doc(db, 'market_listings', listingId);
-    await deleteDoc(listingRef);
-    return true;
-  } catch (err: any) {
-    if (err?.code === 'permission-denied' || String(err).includes('permissions')) {
-      console.debug('[Firebase] deleteMarketListing requer permissão no Firestore Rules.');
-    } else {
-      console.warn('[Firebase] Erro ao deletar anúncio:', err);
+    try {
+      await deleteDoc(listingRef);
+      return true;
+    } catch (delErr) {
+      // Se deleteDoc falhar por regra de permissão, marca como vendido para sumir do mercado imediatamente
+      await updateDoc(listingRef, { isSold: true, isPlayerListing: false });
+      return true;
     }
+  } catch (err: any) {
+    console.debug('[Firebase] deleteMarketListing notice:', err);
     return false;
   }
 }
