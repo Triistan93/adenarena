@@ -540,6 +540,25 @@ export async function deleteMarketListingInCloud(listingId: string): Promise<boo
   }
 }
 
+/**
+ * Verifica o status de um anúncio diretamente no Firestore antes de permitir cancelamento
+ */
+export async function checkListingStatusInCloud(listingId: string): Promise<'ACTIVE' | 'SOLD' | 'NOT_FOUND'> {
+  try {
+    if (!listingId) return 'NOT_FOUND';
+    const listingRef = doc(db, 'market_listings', listingId);
+    const snap = await getDoc(listingRef);
+    if (!snap.exists()) return 'NOT_FOUND';
+    const data = snap.data();
+    if (data.isSold === true || data.status === 'SOLD' || data.isPlayerListing === false) {
+      return 'SOLD';
+    }
+    return 'ACTIVE';
+  } catch (e) {
+    return 'ACTIVE';
+  }
+}
+
 function normalizeSellerKey(sellerName: string): string {
   if (!sellerName) return 'hero_default';
   return String(sellerName).trim().toLowerCase().replace(/[^a-z0-9_-]/g, '_');

@@ -10,6 +10,27 @@
  * - Coleta segura de lucros com histórico detalhado
  */
 
+import { D } from '../core/GameConfig.js';
+
+function getItemDefinition(itemId) {
+  if (!itemId) return null;
+  const data = (typeof D === 'function') ? D() : ((typeof window !== 'undefined' && window.GameData) ? window.GameData : null);
+  if (!data?.ALL_ITEMS) return null;
+  if (data.ALL_ITEMS[itemId]) return data.ALL_ITEMS[itemId];
+  const raw = String(itemId);
+  const keys = [
+    raw, raw.toLowerCase(),
+    raw.replace(/\s+/g, ''), raw.replace(/[-_]/g, '').toLowerCase(),
+    raw.replace(/([A-Z])/g, '_$1').toLowerCase().replace(/^_/, ''),
+    raw.replace(/_([a-z])/g, (m, c) => c.toUpperCase())
+  ];
+  for (const k of keys) {
+    if (data.ALL_ITEMS[k]) return data.ALL_ITEMS[k];
+  }
+  const normalized = raw.toLowerCase().replace(/\s+/g, '');
+  return Object.values(data.ALL_ITEMS).find(i => i.name?.toLowerCase().replace(/\s+/g, '') === normalized) || null;
+}
+
 const MARKET_STORAGE_KEY = 'l2_aden_market_listings_v2';
 const MARKET_SALES_KEY = 'l2_aden_market_sales_v2';
 const DELETED_IDS_KEY = 'l2_aden_market_deleted_ids_v2';
@@ -137,15 +158,18 @@ export const MarketService = {
         window.FirebaseBridge.subscribeMarketListings((remoteListings) => {
           if (Array.isArray(remoteListings)) {
             const cleanRemote = remoteListings.filter(item => this._isValidPlayerListing(item));
-            const localList = this.getListingsLocal().filter(item => this._isValidPlayerListing(item));
-            const myListings = localList.filter(l => this._isMyListing(l, state));
+            const now = Date.now();
+            const localList = this.getListingsLocal().filter(item => {
+              if (!this._isValidPlayerListing(item)) return false;
+              const inRemote = cleanRemote.some(r => r.id === item.id);
+              const isBrandNew = item.createdAt && (now - item.createdAt < 10000);
+              return inRemote || isBrandNew;
+            });
 
             const mergedMap = new Map();
-            myListings.forEach(l => {
-              if (this._isValidPlayerListing(l)) mergedMap.set(l.id, l);
-            });
-            cleanRemote.forEach(l => {
-              if (this._isValidPlayerListing(l)) mergedMap.set(l.id, l);
+            cleanRemote.forEach(l => mergedMap.set(l.id, l));
+            localList.forEach(l => {
+              if (!mergedMap.has(l.id)) mergedMap.set(l.id, l);
             });
 
             const mergedList = Array.from(mergedMap.values());
@@ -171,6 +195,16 @@ export const MarketService = {
             const adena = Number(remoteSales.pendingAdena || 0);
             const ac = Number(remoteSales.pendingAdenCoins || 0);
             const currentTotal = adena + ac;
+
+            // Purga imediatamente do cache todos os anúncios vendidos
+            if (Array.isArray(remoteSales.history)) {
+              remoteSales.history.forEach(h => {
+                if (h.listingId) markListingDeleted(h.listingId);
+              });
+              const current = this.getListingsLocal().filter(l => !_deletedListingIds.has(l.id));
+              _inMemoryListings = current;
+              this.saveListings(current, false);
+            }
 
             if (currentTotal > _lastPendingTotal && _lastPendingTotal !== 0) {
               if (callbacks.log) {
@@ -302,20 +336,23 @@ export const MarketService = {
 
     // 2. Atualiza memória e armazenamento local mesclando anúncios remotos com os do jogador local
     if (remoteList !== null) {
-      const localList = this.getListingsLocal().filter(item => this._isValidPlayerListing(item));
-      const myListings = localList.filter(l => this._isMyListing(l, state));
-      
+      const now = Date.now();
+      const localList = this.getListingsLocal().filter(item => {
+        if (!this._isValidPlayerListing(item)) return false;
+        const inRemote = remoteList.some(r => r.id === item.id);
+        const isBrandNew = item.createdAt && (now - item.createdAt < 10000);
+        return inRemote || isBrandNew;
+      });
+
       const mergedMap = new Map();
-      myListings.forEach(l => {
-        if (this._isValidPlayerListing(l)) mergedMap.set(l.id, l);
+      remoteList.forEach(l => mergedMap.set(l.id, l));
+      localList.forEach(l => {
+        if (!mergedMap.has(l.id)) mergedMap.set(l.id, l);
       });
-      remoteList.forEach(l => {
-        if (this._isValidPlayerListing(l)) mergedMap.set(l.id, l);
-      });
-      
+
       const mergedList = Array.from(mergedMap.values());
       mergedList.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-      
+
       _inMemoryListings = mergedList;
       this.saveListings(mergedList, false);
       this.notifyUI();
@@ -422,6 +459,17 @@ export const MarketService = {
     }
 
     const item = state.inventory[itemIndex];
+    const realItemId = item.itemId || (typeof item.id === 'string' && !item.id.startsWith('item_') && !item.id.includes('.') ? item.id : null);
+    const def = getItemDefinition(realItemId) || getItemDefinition(item.id) || {};
+    const finalItemId = def.id || realItemId || item.itemId || item.id || 'short_sword';
+    const finalName = item.name || def.name || finalItemId.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    const finalSlot = item.slot || def.slot || 'material';
+    const finalType = item.type || def.type || finalSlot || 'item';
+    const finalTier = Number(item.tier || def.tier) || 1;
+    const finalRarity = item.rarity || def.rarity || 'common';
+    const finalEnchant = Number(item.enchant || item.enchantLevel || 0);
+    const finalDesc = item.desc || def.desc || def.info || '';
+    const finalIcon = item.icon || def.icon || '';
 
     // Verifica se está equipado
     const isEquipped = Object.values(state.equipment || {}).includes(item.uid || item.id);
@@ -468,16 +516,16 @@ export const MarketService = {
       totalPrice: totalPrice,
       quantity: qtyToSell,
       item: {
-        id: item.itemId || item.id,
-        itemId: item.itemId || item.id,
-        name: item.name || 'Item de Aden',
-        slot: item.slot || 'material',
-        type: item.type || item.slot || 'item',
-        tier: item.tier || 1,
-        rarity: item.rarity || 'common',
-        enchant: item.enchant || item.enchantLevel || 0,
-        desc: item.desc || '',
-        icon: item.icon || ''
+        id: finalItemId,
+        itemId: finalItemId,
+        name: finalName,
+        slot: finalSlot,
+        type: finalType,
+        tier: finalTier,
+        rarity: finalRarity,
+        enchant: finalEnchant,
+        desc: finalDesc,
+        icon: finalIcon
       }
     };
 
@@ -670,16 +718,29 @@ export const MarketService = {
       return { ok: false, msg: 'Você só pode cancelar seus próprios anúncios!' };
     }
 
-    // 1. Marca como deletado no tombstone
+    // 1. Verifica no Firestore se o anúncio já foi vendido para impedir duplicação e resgate indevido
+    if (typeof window !== 'undefined' && window.FirebaseBridge?.checkListingStatus) {
+      try {
+        const status = await window.FirebaseBridge.checkListingStatus(listingId);
+        if (status === 'SOLD' || status === 'NOT_FOUND') {
+          markListingDeleted(listingId);
+          const updated = this.getListingsLocal().filter(l => l.id !== listingId);
+          _inMemoryListings = updated;
+          this.saveListings(updated, false);
+          this.notifyUI();
+          return { ok: false, msg: 'Este item já foi vendido para outro jogador! Os lucros da venda estão disponíveis para resgate na aba Minhas Vendas.' };
+        }
+      } catch (e) {}
+    }
+
+    // 2. Marca como deletado no tombstone
     markListingDeleted(listingId);
 
-    // 2. Devolve o item cancelado ao inventário
+    // 3. Devolve o item cancelado ao inventário
     const actualItemId = listing.item.itemId || listing.item.id;
     const returnedItem = {
-      ...listing.item,
-      id: actualItemId,
-      itemId: actualItemId,
       uid: 'item_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+      itemId: actualItemId,
       count: Number(listing.quantity) || 1,
       quantity: Number(listing.quantity) || 1,
       rarity: listing.item.rarity || 'common',
