@@ -12,7 +12,7 @@ import { AFFIX_MAP as AFFIX_MAP_IMPORT } from './data/affixes.js';
 // ─── Sprint 1: Importa módulos de dados extraídos ───────────────────────────
 import { RACE_BASE_ATTRIBUTES, RACES, CLASSES, DWARF_CLASS, KAMAEL_CLASS } from './src/data/races.js';
 import { resolveCanonicalClassId } from './src/data/classes/class_aliases.js';
-import { SAGAS, ZONES, ZONE_BACKGROUNDS }                                   from './src/data/zones.js';
+import { SAGAS, ZONES, ZONE_BACKGROUNDS, getSagaDef }                          from './src/data/zones.js';
 import { MONSTERS }                                                          from './src/data/monsters.js';
 import { RAID_BOSSES }                                                       from './src/data/raids.js';
 import { QUEST_DEFS, BATTLE_PASS_TIERS, PASS_DEFS, DAILY_COMPLETION_BONUS } from './src/data/quests.js';
@@ -248,7 +248,8 @@ import { CombatPowerService } from './src/services/CombatPowerService.js';
 import { RankingService } from './src/services/RankingService.js';
 import { MarketService } from './src/services/MarketService.js';
 import { SubclassCertificationService, EMERGENT_ABILITIES, MASTER_ABILITIES_BY_ARCHETYPE, DIVINE_TRANSFORMATIONS } from './src/services/SubclassCertificationService.js';
-import { ensureAppLayout, showMenuPanel } from './src/ui/AppLayout.js';
+import { CommunityCapService } from './src/services/CommunityCapService.js';
+import { ensureAppLayout, showMenuPanel, updateTabVisibilityByLevel } from './src/ui/AppLayout.js';
 import { checkTabGuide, closeTabGuideModal, openTabGuideModal } from './src/ui/TutorialGuide.js';
 import { isFeatureUnlocked, getCurrentSeason, getSeasonForFeature } from './src/core/SeasonConfig.js';
 import { renderSeasonLockedPanel, updateSeasonTabBadges } from './src/ui/SeasonUI.js';
@@ -1374,7 +1375,7 @@ function updateStatsUI() {
   const _clEl = el('craft-level-stat'); if (_clEl) _clEl.textContent = state.craftLevel;
   const _rcEl = el('race-text'); if (_rcEl) _rcEl.textContent = (state.race && RACES?.[state.race]?.name) || state.race || '-';
   const _csEl = el('class-text'); if (_csEl) _csEl.textContent = (state.class && getClass(state.class)?.name) || state.class || '-';
-  const _sgEl = el('saga-text'); if (_sgEl) _sgEl.textContent = (state.currentSaga && SAGAS?.[state.currentSaga]?.name) || state.currentSaga || '-';
+  const _sgEl = el('saga-text'); if (_sgEl) _sgEl.textContent = (state.currentSaga ? (getSagaDef(state.currentSaga)?.name || state.currentSaga) : '-');
   const _sz = el('stage-zone');
   if (_sz) { const _t = (state.zone && ZONES?.[state.zone]) ? ZONES[state.zone].name + (ZONES[state.zone].town ? ' · town' : '') : '—'; if (_sz.textContent !== _t) _sz.textContent = _t; }
   const _spaEl = el('sp-available'); if (_spaEl) _spaEl.textContent = state.sp;
@@ -2021,11 +2022,12 @@ function checkOfflineProgress(lastTime) {
   const kills = Math.floor(rawKills * OFFLINE_EFFICIENCY);
   const goldEarned = Math.floor(kills * (state.level * 6 + 10));
   const xpEarned = Math.floor(kills * (state.level * 12 + 15));
-  const spEarned = Math.floor(kills * (state.level * 4 + 5));
+  // SP Offline baseado exclusivamente na taxa de aparição de Elites (~5% dos abates)
+  const spEarned = Math.floor(kills * 0.05 * (state.level * 2 + 5));
   
   state.gold = Math.max(0, (state.gold || 0) + goldEarned);
   state.xp = Math.max(0, (state.xp || 0) + xpEarned);
-  state.sp = Math.max(0, (state.sp || 0) + spEarned);
+  if (spEarned > 0) state.sp = Math.max(0, (state.sp || 0) + spEarned);
   checkLevelUp();
   
   const rewardsEl = el('offline-rewards');
@@ -2982,6 +2984,7 @@ function _performFullUIUpdate() {
   safeUiUpdate('character', updateCharacterUI);
   safeUiUpdate('combat-controls', updateCombatControlsUI);
   safeUiUpdate('tab-badges', updateTabBadgesUI);
+  safeUiUpdate('tab-caps', () => updateTabVisibilityByLevel(state));
   safeUiUpdate('class-advancement', checkClassAdvancement);
 
   // Sync Admin Top Button visibility
@@ -3654,8 +3657,20 @@ function renderStageMonster() {
   return uiRenderStageMonster(state);
 }
 
-function updateMonsterHP() { const fill = el('m-hp-fill'), mon = state.activeMonster; if (!fill) return; if (!mon || !mon._maxHp) { fill.style.width = '100%'; return; } fill.style.width = Math.max(0, (mon.hp / mon._maxHp) * 100) + '%'; }
-
+function updateMonsterHP() {
+  const mon = state.activeMonster;
+  const fill = el('monster-hp-fill') || el('m-hp-fill') || document.querySelector('#monster-hp-fill, .stage-hp-fill');
+  const text = el('monster-hp-text') || el('m-hp-text') || document.querySelector('#monster-hp-text, .stage-hp-text');
+  if (!mon) {
+    if (fill) fill.style.width = '100%';
+    return;
+  }
+  const maxHp = Math.max(1, Math.round(mon._maxHp || mon.maxHp || 100));
+  const curHp = Math.max(0, Math.min(maxHp, Math.round(mon.hp !== undefined ? mon.hp : maxHp)));
+  const pct = Math.max(0, Math.min(100, (curHp / maxHp) * 100));
+  if (fill) fill.style.width = `${pct}%`;
+  if (text) text.textContent = `HP: ${curHp.toLocaleString()} / ${maxHp.toLocaleString()}`;
+}
 
 function reflow(n) { void n.offsetWidth; }
 function stageHeroAttack() { const st = el('stage'); if (!st) return; st.classList.remove('is-hero-atk'); reflow(st); st.classList.add('is-hero-atk'); }
@@ -3672,8 +3687,13 @@ function stageMonsterHurt(dmg, crit) {
   stageFloat((crit ? '💥 CRIT! ' : '') + Math.round(dmg), floatClass, 'right'); 
 }
 function stageMonsterDie() { 
-  const fill = el('m-hp-fill'); 
+  const fill = el('monster-hp-fill') || el('m-hp-fill') || document.querySelector('#monster-hp-fill, .stage-hp-fill');
+  const text = el('monster-hp-text') || el('m-hp-text') || document.querySelector('#monster-hp-text, .stage-hp-text');
   if (fill) fill.style.width = '0%'; 
+  if (text && state.activeMonster) {
+    const maxHp = Math.max(1, Math.round(state.activeMonster._maxHp || state.activeMonster.maxHp || 100));
+    text.textContent = `HP: 0 / ${maxHp.toLocaleString()}`;
+  }
   const m = el('stage-monster'); 
   if (m) { 
     m.classList.remove('is-dying'); 
@@ -4197,8 +4217,17 @@ function attackMonster() {
     const zoneMult = (D().ZONE_GOLD_MULT && D().ZONE_GOLD_MULT[zoneTier]) || 1;
     const xpMult = (1 + (stats.xpBoost || 0)) * xpRate;
     const xpGain = Math.floor(monster.xp * xpMult);
-    // SP é concedido proporcionalmente à rate do servidor
-    const baseSp = monster.isRaid ? 25 : (monster.boss ? 5 : (monster.isElite ? 2 : 1));
+    // SP é concedido exclusivamente por Elites, Chefes de Área, Raidbosses e Missões
+    let baseSp = 0;
+    if (monster.isRaid) {
+      baseSp = Math.max(50, Math.floor((monster.lvl || 40) * 4));
+    } else if (monster.boss || monster.isBoss) {
+      baseSp = Math.max(25, Math.floor((monster.lvl || 10) * 2.5));
+    } else if (monster.elite || monster.isElite) {
+      baseSp = Math.max(5, Math.floor((monster.lvl || 5) * 0.8) + 4);
+    } else {
+      baseSp = 0; // Monstros comuns NÃO dropam SP (Economia clássica)
+    }
     const spGain = Math.floor(baseSp * spRate);
     state.xp += xpGain;
     if (spGain > 0) state.sp += spGain;
@@ -4209,6 +4238,13 @@ function attackMonster() {
       serviceProcessSoulDrainOnKill(state, monster, { log, floatText, updateAllUI, save });
     } catch (e) {
       console.warn('Erro na drenagem de almas:', e);
+    }
+
+    // Registra abates para a Meta Comunitária Global de Nível (Cap 40 -> 45)
+    try {
+      CommunityCapService.recordBossKill(monster, state, { log, updateAllUI });
+    } catch (e) {
+      console.warn('Erro ao registrar meta de cap comunitária:', e);
     }
 
     // Drops Especiais de Chefe do Caos (Chaos Boss)
@@ -4351,11 +4387,47 @@ function monsterAttack(monster) {
   const now = combatTick * 200;
   if (monster._stunnedUntil && monster._stunnedUntil > now) return; 
   
-  const stats = getStats(); stageMonsterLunge();
-  if (Math.random() < stats.eva / 100) { log(`${monster.name} missed!`, 'combat'); stageFloat('DODGE', 'sf-miss', 'left'); return; }
+  const stats = getStats();
+  stageMonsterLunge();
+  if (Math.random() < stats.eva / 100) {
+    log(`${monster.name} errou o ataque!`, 'combat');
+    stageFloat('DODGE', 'sf-miss', 'left');
+    return;
+  }
   
-  const type = (monster.atkType === 'magical' || monster.isMage === true) ? 'magical' : 'physical';
-  let damage = dealDamage({ def: stats.def, mdef: stats.mdef }, monster.atk, type);
+  let type = (monster.atkType === 'magical' || monster.isMage === true || monster.magic === true) ? 'magical' : 'physical';
+  let atkVal = type === 'magical' ? (monster.matk || monster.atk) : monster.atk;
+  let isSkillCast = false;
+  let skillName = null;
+
+  // Monster Skill AI: executa habilidade se disponível e fora de recarga
+  if (monster.skill && (!monster._skillCooldownUntil || monster._skillCooldownUntil <= now)) {
+    if (Math.random() < 0.40 || monster.boss || monster.elite) {
+      isSkillCast = true;
+      const sk = monster.skill;
+      skillName = sk.name;
+      type = sk.type || type;
+      atkVal = Math.floor(atkVal * (sk.mult || 1.35));
+      monster._skillCooldownUntil = now + ((sk.cd || 4) * 1000);
+
+      // Efeitos secundários de skills de monstros
+      if (sk.effect === 'stun') {
+        stageFloat('💫 STUNNED', 'sf-crit', 'left');
+        log(`💫 **${monster.name}** usou [${skillName}] e te atordoou!`, 'warning');
+      } else if (sk.effect === 'root') {
+        stageFloat('🌿 PRESO', 'sf-block', 'left');
+        log(`🌿 **${monster.name}** usou [${skillName}] e enraizou seus pés!`, 'warning');
+      } else if (sk.effect === 'bleed') {
+        stageFloat('🩸 SANGRANDO', 'sf-hurt', 'left');
+        log(`🩸 **${monster.name}** usou [${skillName}] causando sangramento!`, 'warning');
+      } else if (sk.effect === 'poison') {
+        stageFloat('🧪 ENVENENADO', 'sf-hurt', 'left');
+        log(`🧪 **${monster.name}** usou [${skillName}] causando envenenamento!`, 'warning');
+      }
+    }
+  }
+
+  let damage = dealDamage({ def: stats.def, mdef: stats.mdef }, atkVal, type);
 
   // Level Gap Penalty: se o monstro tem nível muito superior ao jogador (+5 níveis), o dano recebido aumenta
   const levelDiff = (monster.lvl || 1) - (state.level || 1);
@@ -4365,8 +4437,19 @@ function monsterAttack(monster) {
   }
 
   if (state.godMode) damage = 0;
-  if (damage > 0) { state.hp -= damage; log(`${monster.name} hits for ${damage}`, 'damage'); stageHeroHurt(damage); }
-  if (state.hp <= 0) { state.hp = 0; playerDeath(monster); }
+  if (damage > 0) {
+    state.hp -= damage;
+    if (isSkillCast && skillName) {
+      log(`⚡ **${monster.name}** acertou [${skillName}] em você causando **${damage}** de dano!`, 'combat');
+    } else {
+      log(`${monster.name} te atingiu por ${damage} de dano`, 'damage');
+    }
+    stageHeroHurt(damage);
+  }
+  if (state.hp <= 0) {
+    state.hp = 0;
+    playerDeath(monster);
+  }
   updateStatsUI();
 }
 
@@ -5302,9 +5385,9 @@ function renderMonsterCardsCodex(container, summaryEl) {
     cardBox.innerHTML = `
       <div>
         <div style="display:flex; gap:12px; align-items:flex-start;">
-          <!-- Monster Icon Frame -->
-          <div style="width:52px; height:52px; min-width:52px; border-radius:10px; border:2px solid ${rStyle.border}; background:radial-gradient(circle, rgba(255,255,255,0.1), rgba(0,0,0,0.9)); display:flex; align-items:center; justify-content:center; overflow:hidden; box-shadow:0 0 10px ${rStyle.glow};">
-            <img src="${cardDef.icon || 'icons/general/card.png'}" alt="${cardDef.name}" style="width:40px; height:40px; image-rendering:pixelated; object-fit:contain;" onerror="this.src='icons/general/card.png'; this.onerror=null;" />
+          <!-- Monster Portrait / Card Frame -->
+          <div style="width:54px; height:54px; min-width:54px; border-radius:10px; border:2px solid ${rStyle.border}; background:#090d16; display:flex; align-items:center; justify-content:center; overflow:hidden; box-shadow:0 0 12px ${rStyle.glow}; position:relative;">
+            <img src="${cardDef.image || cardDef.icon || 'icons/general/card.png'}" alt="${cardDef.name}" style="width:100%; height:100%; object-fit:cover; object-position:center top; border-radius:8px;" onerror="this.src='${cardDef.icon || 'icons/general/card.png'}'; this.style.objectFit='contain'; this.onerror=null;" />
           </div>
 
           <div style="flex:1;">

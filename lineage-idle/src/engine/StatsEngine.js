@@ -564,7 +564,7 @@ export function getStats(state) {
   xpBoost += astralB.xpBoost;
   buffSpd += astralB.speed;
 
-  // Process Legacy Passives (Herança de Classes Passadas - 20% Eficácia)
+  // Process Legacy Passives (Herança de Classes Passadas - 25% Eficácia da Linhagem)
   let legacyCrit = 0;
   if (state.legacyPassives && typeof state.legacyPassives === 'object') {
     for (const p of Object.values(state.legacyPassives)) {
@@ -573,8 +573,13 @@ export function getStats(state) {
       if (p.stat === 'patk' || p.stat === 'atk') buffAtkMult += v;
       else if (p.stat === 'pdef' || p.stat === 'def') buffDef += Math.floor(baseDef * v);
       else if (p.stat === 'matk') buffMatk += Math.floor(baseMatk * v);
+      else if (p.stat === 'mdef') buffMdef += Math.floor(baseMdef * v);
+      else if (p.stat === 'maxHp' || p.stat === 'hp') elixirHpMult += v;
+      else if (p.stat === 'maxMp' || p.stat === 'mp') buffMp += Math.floor(baseMp * v);
+      else if (p.stat === 'mpRegen') mpRegenBonus += v;
       else if (p.stat === 'speed') buffSpd += Math.floor(v * 50);
       else if (p.stat === 'crit') legacyCrit += Math.floor(v * 50);
+      else if (p.stat === 'eva') buffEva += Math.floor(v * 20);
     }
   }
 

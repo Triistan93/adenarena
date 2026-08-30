@@ -13,7 +13,7 @@ export const SEASONS_DATA = {
     id: 1,
     title: "Temporada 1: O Despertar de Aden",
     subtitle: "Crônica I — Os Primeiros Passos dos Escolhidos",
-    maxLevel: 60,
+    maxLevel: 40,
     maxGrade: "B",
     active: true,
     releaseDate: "Ativa Agora",

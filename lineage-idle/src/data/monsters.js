@@ -19,43 +19,43 @@ export const MONSTERS = {
   // ──────────────────────────────────────────────────────────────────────────
   // 1. TALKING ISLAND (Level 1-5)
   // ──────────────────────────────────────────────────────────────────────────
-  goblin: { name: 'Goblin', lvl: 1, hp: 35, atk: 6, def: 2, eva: 2, matk: 0, mdef: 1, xp: 12, sp: 1, gold: [5, 12] },
-  goblinThief: { name: 'Goblin Thief', lvl: 2, hp: 45, atk: 9, def: 3, eva: 10, matk: 0, mdef: 2, xp: 18, sp: 1, gold: [8, 20], element: 'none', traits: ['ambush'], stealsGold: 0.15 },
-  armoredGoblin: { name: 'Armored Goblin', lvl: 3, hp: 60, atk: 11, def: 6, eva: 2, matk: 0, mdef: 3, xp: 22, sp: 1, gold: [10, 24] },
-  goblinMage: { name: 'Goblin Mage', lvl: 4, hp: 50, atk: 8, def: 3, eva: 3, matk: 16, mdef: 6, xp: 25, sp: 1, gold: [12, 28], element: 'fire', magic: true },
-  talkingIslandWerewolf: { name: 'Island Werewolf Leader', lvl: 5, hp: 130, atk: 17, def: 8, eva: 6, matk: 0, mdef: 4, xp: 60, sp: 2, gold: [30, 70], traits: ['bleed'], elite: true },
-  goblinKing: { name: 'Goblin King', lvl: 5, hp: 240, atk: 22, def: 10, eva: 3, matk: 0, mdef: 5, xp: 120, sp: 3, gold: [60, 140], boss: true },
+  goblin: { name: 'Goblin', lvl: 1, hp: 140, atk: 6, def: 6, eva: 2, matk: 0, mdef: 3, xp: 14, sp: 0, gold: [5, 12] },
+  goblinThief: { name: 'Goblin Thief', lvl: 2, hp: 180, atk: 9, def: 8, eva: 10, matk: 0, mdef: 4, xp: 20, sp: 0, gold: [8, 20], element: 'none', traits: ['ambush'], stealsGold: 0.15, skill: { name: 'Golpe Sorrateiro', type: 'physical', mult: 1.3, cd: 4, vfx: 'energy_slash' } },
+  armoredGoblin: { name: 'Armored Goblin', lvl: 3, hp: 240, atk: 11, def: 14, eva: 2, matk: 0, mdef: 6, xp: 26, sp: 0, gold: [10, 24], traits: ['block'], skill: { name: 'Postura Defensiva', type: 'buff', effect: 'def_boost', val: 0.3, cd: 6 } },
+  goblinMage: { name: 'Goblin Mage', lvl: 4, hp: 210, atk: 8, def: 9, eva: 3, matk: 16, mdef: 12, xp: 30, sp: 0, gold: [12, 28], element: 'fire', magic: true, skill: { name: 'Firebolt', type: 'magical', mult: 1.4, cd: 4, vfx: 'fireball' } },
+  talkingIslandWerewolf: { name: 'Island Werewolf Leader', lvl: 5, hp: 550, atk: 17, def: 18, eva: 8, matk: 0, mdef: 10, xp: 75, sp: 6, gold: [30, 70], traits: ['bleed'], elite: true, skill: { name: 'Uivo Dilacerante', type: 'physical', effect: 'bleed', mult: 1.4, cd: 5, vfx: 'slash' } },
+  goblinKing: { name: 'Goblin King', lvl: 5, hp: 1100, atk: 22, def: 25, eva: 4, matk: 0, mdef: 15, xp: 160, sp: 25, gold: [60, 140], boss: true, skill: { name: 'Ira do Rei Goblin', type: 'physical', effect: 'stun', mult: 1.6, cd: 6, vfx: 'spiral_spear' } },
 
   // ──────────────────────────────────────────────────────────────────────────
   // 2. ELVEN FOREST (Level 3-10)
   // ──────────────────────────────────────────────────────────────────────────
-  wolf: { name: 'Wolf', lvl: 3, hp: 55, atk: 10, def: 3, eva: 5, matk: 0, mdef: 2, xp: 20, sp: 1, gold: [9, 22] },
-  grayWolf: { name: 'Gray Wolf', lvl: 4, hp: 70, atk: 12, def: 4, eva: 6, matk: 0, mdef: 3, xp: 26, sp: 1, gold: [11, 25], traits: ['bleed'] },
-  rootWitch: { name: 'Root Witch', lvl: 5, hp: 85, atk: 14, def: 5, eva: 4, matk: 20, mdef: 8, xp: 32, sp: 2, gold: [15, 32], magic: true },
-  greenDryad: { name: 'Green Dryad', lvl: 8, hp: 150, atk: 22, def: 9, eva: 8, matk: 28, mdef: 12, xp: 55, sp: 3, gold: [24, 52], magic: true, traits: ['entangle'] },
-  sporeFungus: { name: 'Spore Fungus', lvl: 9, hp: 180, atk: 25, def: 11, eva: 4, matk: 35, mdef: 14, xp: 68, sp: 3, gold: [30, 65], element: 'earth', traits: ['poison'] },
-  kabooOrcFighter: { name: 'Kaboo Orc Champion', lvl: 10, hp: 320, atk: 35, def: 16, eva: 6, matk: 0, mdef: 9, xp: 130, sp: 4, gold: [55, 120], traits: ['enrage'], elite: true },
-  deathTrent: { name: 'Death Treant', lvl: 10, hp: 520, atk: 42, def: 20, eva: 3, matk: 25, mdef: 15, xp: 260, sp: 6, gold: [120, 280], boss: true },
+  wolf: { name: 'Wolf', lvl: 3, hp: 220, atk: 10, def: 8, eva: 6, matk: 0, mdef: 4, xp: 24, sp: 0, gold: [9, 22] },
+  grayWolf: { name: 'Gray Wolf', lvl: 4, hp: 280, atk: 12, def: 10, eva: 7, matk: 0, mdef: 5, xp: 30, sp: 0, gold: [11, 25], traits: ['bleed'], skill: { name: 'Mordida Voraz', type: 'physical', effect: 'bleed', mult: 1.3, cd: 4 } },
+  rootWitch: { name: 'Root Witch', lvl: 5, hp: 320, atk: 14, def: 11, eva: 5, matk: 20, mdef: 16, xp: 38, sp: 0, gold: [15, 32], magic: true, skill: { name: 'Raízes Prisioneiras', type: 'magical', effect: 'root', mult: 1.35, cd: 5, vfx: 'earth_spike' } },
+  greenDryad: { name: 'Green Dryad', lvl: 8, hp: 460, atk: 22, def: 16, eva: 9, matk: 28, mdef: 22, xp: 65, sp: 0, gold: [24, 52], magic: true, traits: ['entangle'], skill: { name: 'Espinhos da Floresta', type: 'magical', mult: 1.4, cd: 4, vfx: 'nature_blast' } },
+  sporeFungus: { name: 'Spore Fungus', lvl: 9, hp: 520, atk: 25, def: 18, eva: 5, matk: 35, mdef: 24, xp: 78, sp: 0, gold: [30, 65], element: 'earth', traits: ['poison'], skill: { name: 'Nuvem de Esporos', type: 'magical', effect: 'poison', mult: 1.3, cd: 5 } },
+  kabooOrcFighter: { name: 'Kaboo Orc Champion', lvl: 10, hp: 980, atk: 35, def: 26, eva: 7, matk: 0, mdef: 16, xp: 160, sp: 8, gold: [55, 120], traits: ['enrage'], elite: true, skill: { name: 'Machado Fendido', type: 'physical', effect: 'stun', mult: 1.5, cd: 5, vfx: 'energy_slash' } },
+  deathTrent: { name: 'Death Treant', lvl: 10, hp: 1950, atk: 42, def: 35, eva: 4, matk: 25, mdef: 28, xp: 320, sp: 35, gold: [120, 280], boss: true, skill: { name: 'Fúria da Natureza Ancestral', type: 'magical', effect: 'root', mult: 1.7, cd: 6 } },
 
   // ──────────────────────────────────────────────────────────────────────────
   // 3. DARK FOREST (Level 5-12)
   // ──────────────────────────────────────────────────────────────────────────
-  spider: { name: 'Cave Spider', lvl: 5, hp: 75, atk: 13, def: 4, eva: 8, matk: 0, mdef: 3, xp: 28, sp: 1, gold: [12, 28], traits: ['poison'] },
-  swampWalker: { name: 'Swamp Walker', lvl: 7, hp: 120, atk: 18, def: 7, eva: 5, matk: 10, mdef: 6, xp: 42, sp: 2, gold: [18, 40] },
-  lesserDarkHorror: { name: 'Lesser Dark Horror', lvl: 9, hp: 175, atk: 26, def: 10, eva: 7, matk: 32, mdef: 12, xp: 65, sp: 3, gold: [28, 60], element: 'dark', magic: true },
-  marshStalker: { name: 'Marsh Stalker', lvl: 11, hp: 230, atk: 33, def: 13, eva: 12, matk: 0, mdef: 8, xp: 85, sp: 3, gold: [36, 75], traits: ['ambush'] },
-  shadowFangWolf: { name: 'Shadowfang Dire Wolf', lvl: 12, hp: 420, atk: 45, def: 18, eva: 10, matk: 0, mdef: 10, xp: 180, sp: 5, gold: [75, 160], traits: ['bleed'], elite: true },
-  darkForestMatriarch: { name: 'Dark Forest Matriarch', lvl: 12, hp: 650, atk: 52, def: 24, eva: 8, matk: 30, mdef: 18, xp: 320, sp: 8, gold: [150, 320], boss: true },
+  spider: { name: 'Cave Spider', lvl: 5, hp: 320, atk: 13, def: 10, eva: 9, matk: 0, mdef: 6, xp: 32, sp: 0, gold: [12, 28], traits: ['poison'], skill: { name: 'Picada Venenosa', type: 'physical', effect: 'poison', mult: 1.3, cd: 4 } },
+  swampWalker: { name: 'Swamp Walker', lvl: 7, hp: 440, atk: 18, def: 14, eva: 6, matk: 10, mdef: 14, xp: 48, sp: 0, gold: [18, 40] },
+  lesserDarkHorror: { name: 'Lesser Dark Horror', lvl: 9, hp: 550, atk: 26, def: 18, eva: 8, matk: 32, mdef: 22, xp: 75, sp: 0, gold: [28, 60], element: 'dark', magic: true, skill: { name: 'Seta das Sombras', type: 'magical', mult: 1.45, cd: 4, vfx: 'dark_missile' } },
+  marshStalker: { name: 'Marsh Stalker', lvl: 11, hp: 680, atk: 33, def: 22, eva: 13, matk: 0, mdef: 14, xp: 95, sp: 0, gold: [36, 75], traits: ['ambush'], skill: { name: 'Ataque Furtivo', type: 'physical', mult: 1.5, cd: 4 } },
+  shadowFangWolf: { name: 'Shadowfang Dire Wolf', lvl: 12, hp: 1250, atk: 45, def: 30, eva: 12, matk: 0, mdef: 18, xp: 210, sp: 10, gold: [75, 160], traits: ['bleed'], elite: true, skill: { name: 'Despedaçar Sombrio', type: 'physical', effect: 'bleed', mult: 1.55, cd: 5 } },
+  darkForestMatriarch: { name: 'Dark Forest Matriarch', lvl: 12, hp: 2400, atk: 52, def: 40, eva: 10, matk: 30, mdef: 32, xp: 400, sp: 45, gold: [150, 320], boss: true, skill: { name: 'Teia Mortal da Matriarca', type: 'magical', effect: 'poison', mult: 1.8, cd: 6 } },
 
   // ──────────────────────────────────────────────────────────────────────────
   // 4. ORC VILLAGE (Level 7-15)
   // ──────────────────────────────────────────────────────────────────────────
-  orc: { name: 'Orc Warrior', lvl: 7, hp: 150, atk: 22, def: 9, eva: 4, matk: 0, mdef: 4, xp: 50, sp: 2, gold: [22, 48], traits: ['enrage'] },
-  kashaWolf: { name: 'Kasha Wolf', lvl: 9, hp: 185, atk: 27, def: 11, eva: 9, matk: 0, mdef: 5, xp: 68, sp: 2, gold: [30, 62], traits: ['bleed'] },
-  kashaBear: { name: 'Kasha Bear', lvl: 11, hp: 260, atk: 34, def: 15, eva: 4, matk: 0, mdef: 7, xp: 90, sp: 3, gold: [38, 82] },
-  kashaOrcArcher: { name: 'Kasha Orc Archer', lvl: 13, hp: 280, atk: 42, def: 14, eva: 8, matk: 0, mdef: 8, xp: 115, sp: 3, gold: [45, 95] },
-  kashaOrcBerserker: { name: 'Kasha Orc Berserker', lvl: 14, hp: 550, atk: 55, def: 22, eva: 6, matk: 0, mdef: 11, xp: 240, sp: 6, gold: [100, 210], traits: ['enrage'], elite: true },
-  kashaOrcOverlord: { name: 'Kasha Tribe Overlord', lvl: 15, hp: 850, atk: 65, def: 28, eva: 6, matk: 20, mdef: 15, xp: 400, sp: 10, gold: [180, 380], boss: true },
+  orc: { name: 'Orc Warrior', lvl: 7, hp: 480, atk: 22, def: 16, eva: 5, matk: 0, mdef: 8, xp: 58, sp: 0, gold: [22, 48], traits: ['enrage'] },
+  kashaWolf: { name: 'Kasha Wolf', lvl: 9, hp: 560, atk: 27, def: 18, eva: 10, matk: 0, mdef: 10, xp: 75, sp: 0, gold: [30, 62], traits: ['bleed'] },
+  kashaBear: { name: 'Kasha Bear', lvl: 11, hp: 750, atk: 34, def: 24, eva: 5, matk: 0, mdef: 12, xp: 105, sp: 0, gold: [38, 82], skill: { name: 'Pata Esmagadora', type: 'physical', effect: 'stun', mult: 1.4, cd: 5 } },
+  kashaOrcArcher: { name: 'Kasha Orc Archer', lvl: 13, hp: 620, atk: 42, def: 20, eva: 10, matk: 0, mdef: 14, xp: 125, sp: 0, gold: [45, 95], skill: { name: 'Tiro Duplo Kasha', type: 'physical', mult: 1.5, cd: 4, vfx: 'arrow' } },
+  kashaOrcBerserker: { name: 'Kasha Orc Berserker', lvl: 14, hp: 1550, atk: 55, def: 34, eva: 8, matk: 0, mdef: 18, xp: 280, sp: 12, gold: [100, 210], traits: ['enrage'], elite: true, skill: { name: 'Golpe Furioso Berserk', type: 'physical', mult: 1.65, cd: 5 } },
+  kashaOrcOverlord: { name: 'Kasha Tribe Overlord', lvl: 15, hp: 3100, atk: 65, def: 45, eva: 8, matk: 20, mdef: 28, xp: 520, sp: 60, gold: [180, 380], boss: true, skill: { name: 'Rugido Tribal do Overlord', type: 'physical', effect: 'stun', mult: 1.85, cd: 6 } },
 
   // ──────────────────────────────────────────────────────────────────────────
   // 5. DWARVEN MINE (Level 9-16)

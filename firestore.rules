@@ -64,6 +64,12 @@ service cloud.firestore {
       allow read:  if isRegistered();
       allow write: if isRegistered();
     }
+
+    // ─── Metadados Globais do Servidor e Metas Comunitárias ──────────────────
+    match /server_meta/{docId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated();
+    }
   }
 }
 

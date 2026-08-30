@@ -138,6 +138,66 @@ export function showMenuPanel(panelId) {
   });
 }
 
+export const TAB_UNLOCK_LEVELS = {
+  zones: 1,
+  character: 1,
+  inventory: 1,
+  skills: 1,
+  shop: 1,
+  market: 1,
+  warehouse: 1,
+  rankings: 1,
+  codex: 1,
+  dolls: 1,
+  quests: 5,
+  craft: 10,
+  forge: 10,
+  raids: 20,
+  magiclamp: 20,
+  clan: 20,
+  enchant: 20,
+  colosseum: 25,
+  tower: 40,
+  expeditions: 40,
+  alchemy: 40,
+  sevensigns: 60,
+  fortress: 70,
+  astral: 76,
+  olympiad: 76
+};
+
+export function updateTabVisibilityByLevel(state) {
+  const root = getShadowRoot();
+  const currentLvl = Number(state?.level) || 1;
+  const globalCap = Number(typeof window !== 'undefined' && window.globalServerCap) || Number(state?.serverCap) || 40;
+
+  const tabBtns = root.querySelectorAll('.tab-btn[data-tab]');
+  tabBtns.forEach(btn => {
+    const tabKey = btn.dataset?.tab;
+    const reqLvl = TAB_UNLOCK_LEVELS[tabKey] || 1;
+    const isLocked = currentLvl < reqLvl || reqLvl > globalCap;
+
+    if (isLocked) {
+      btn.classList.add('tab-locked-by-level');
+      btn.style.order = String(100 + reqLvl);
+      btn.style.opacity = '0.55';
+      if (!btn.querySelector('.tab-lock-indicator')) {
+        const lockSpan = document.createElement('span');
+        lockSpan.className = 'tab-lock-indicator';
+        lockSpan.style.cssText = 'font-size:9px; margin-left:4px; color:#94a3b8; font-weight:normal;';
+        lockSpan.textContent = `🔒Lv.${reqLvl}`;
+        btn.appendChild(lockSpan);
+      }
+    } else {
+      btn.classList.remove('tab-locked-by-level');
+      btn.style.order = '0';
+      btn.style.opacity = '1';
+      const lockSpan = btn.querySelector('.tab-lock-indicator');
+      if (lockSpan) lockSpan.remove();
+    }
+  });
+}
+
 // Expõe globalmente a troca manual de pilar com expansão/colapso reativo
 if (typeof window !== 'undefined') {
   window.switchPillar = function(pillarName) {

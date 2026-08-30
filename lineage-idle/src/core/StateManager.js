@@ -135,12 +135,12 @@ export function loadState() {
     // Valida integridade e sanidade dos dados
     const check = validateStateIntegrity(data);
     if (!check.valid) {
-      console.warn('[StateManager] Verificação de integridade:', check.reason);
       // Se os dados numéricos fundamentais existirem e forem válidos, preserva o save e atualiza o checksum
       if (typeof data.level === 'number' && data.level >= 1 && typeof data.gold === 'number') {
         data._chk = generateStateChecksum(data);
-        console.log('[StateManager] Checksum de segurança sincronizado com os dados atuais.');
+        console.debug('[StateManager] Checksum de segurança sincronizado com os dados atuais.');
       } else {
+        console.warn('[StateManager] Verificação de integridade:', check.reason);
         const backupRaw = localStorage.getItem(`${SAVE_KEY}_backup`);
         if (backupRaw && backupRaw !== raw) {
           try {

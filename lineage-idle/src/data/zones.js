@@ -15,6 +15,13 @@ export const SAGAS = [
   { id: 'saga3', name: 'Saga III: Realm of the Gods', level: 4, unlocksAt: 85, zones: ['imperialTomb', 'antharasLair', 'forgeOfGods'] }
 ];
 
+export function getSagaDef(idOrIndex) {
+  if (idOrIndex === undefined || idOrIndex === null) return SAGAS[0];
+  if (typeof idOrIndex === 'number') return SAGAS[idOrIndex] || SAGAS[0];
+  const sStr = String(idOrIndex).toLowerCase();
+  return SAGAS.find(s => s.id === sStr || s.name.toLowerCase() === sStr) || SAGAS[0];
+}
+
 /**
  * Mapa de zonas de caça.
  * Cada zona define: nome, nível mínimo, monstros, boss, shop e se é town.

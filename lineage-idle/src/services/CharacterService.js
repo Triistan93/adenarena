@@ -196,20 +196,53 @@ export function promoteClass(state, newClassId, selectedBuffIds = null, callback
     const lvl = state.skills?.[sId] || 1;
     const def = skillDefs[sId] || { name: sId };
 
-    const baseEffectVal = 0.15 + (lvl * 0.03); // ex: 30% no nível 5
-    const passiveVal = +(baseEffectVal * 0.20).toFixed(4); // 20% da eficácia = +6% permanente
-
     let statKey = 'patk';
+    let statLabel = 'P.ATK';
+    let baseVal = 0.06 + (lvl * 0.02);
+
     const sName = (def.name || '').toLowerCase();
-    if (sName.includes('def') || sName.includes('shield') || sName.includes('aegis') || sName.includes('iron') || sName.includes('will') || sName.includes('armor')) {
+    const sDesc = (def.desc || '').toLowerCase();
+    const sType = (def.type || '').toLowerCase();
+
+    if (sName.includes('hp') || sName.includes('life') || sName.includes('vital') || sName.includes('body') || sDesc.includes('hp') || sDesc.includes('vida')) {
+      statKey = 'maxHp';
+      statLabel = 'Max HP';
+      baseVal = 0.06 + (lvl * 0.02);
+    } else if (sName.includes('mdef') || sName.includes('magic def') || sName.includes('resist') || sName.includes('barrier') || sName.includes('ward')) {
+      statKey = 'mdef';
+      statLabel = 'M.DEF';
+      baseVal = 0.06 + (lvl * 0.02);
+    } else if (sName.includes('def') || sName.includes('shield') || sName.includes('aegis') || sName.includes('iron') || sName.includes('will') || sName.includes('armor') || sName.includes('guard')) {
       statKey = 'pdef';
-    } else if (sName.includes('magic') || sName.includes('mage') || sName.includes('mystic') || sName.includes('elem') || sName.includes('fire') || sName.includes('water') || sName.includes('wind') || sName.includes('mana')) {
+      statLabel = 'P.DEF';
+      baseVal = 0.06 + (lvl * 0.02);
+    } else if (sName.includes('mana') || sName.includes('mp') || sName.includes('clarity') || sName.includes('recovery') || sName.includes('mind')) {
+      statKey = 'mpRegen';
+      statLabel = 'Regen. MP';
+      baseVal = 0.08 + (lvl * 0.025);
+    } else if (sName.includes('magic') || sName.includes('mage') || sName.includes('mystic') || sName.includes('elem') || sName.includes('fire') || sName.includes('water') || sName.includes('wind') || sName.includes('spell') || sName.includes('empower') || sType === 'magic') {
       statKey = 'matk';
-    } else if (sName.includes('crit') || sName.includes('fury') || sName.includes('stance') || sName.includes('focus')) {
+      statLabel = 'M.ATK';
+      baseVal = 0.06 + (lvl * 0.02);
+    } else if (sName.includes('crit') || sName.includes('fury') || sName.includes('stance') || sName.includes('focus') || sName.includes('precision') || sName.includes('deadly')) {
       statKey = 'crit';
-    } else if (sName.includes('speed') || sName.includes('wind') || sName.includes('dash') || sName.includes('step') || sName.includes('haste') || sName.includes('agility')) {
+      statLabel = 'Taxa Crítica';
+      baseVal = 0.04 + (lvl * 0.015);
+    } else if (sName.includes('eva') || sName.includes('dodge') || sName.includes('shadow') || sName.includes('acrobat')) {
+      statKey = 'eva';
+      statLabel = 'Evasão';
+      baseVal = 0.04 + (lvl * 0.015);
+    } else if (sName.includes('speed') || sName.includes('dash') || sName.includes('step') || sName.includes('haste') || sName.includes('agility') || sName.includes('sprint')) {
       statKey = 'speed';
+      statLabel = 'Velocidade de Ataque';
+      baseVal = 0.05 + (lvl * 0.015);
+    } else {
+      statKey = 'patk';
+      statLabel = 'P.ATK';
+      baseVal = 0.06 + (lvl * 0.02);
     }
+
+    const passiveVal = +(baseVal).toFixed(4);
 
     state.legacyPassives[sId] = {
       id: sId,
@@ -219,7 +252,7 @@ export function promoteClass(state, newClassId, selectedBuffIds = null, callback
       lvl: lvl,
       stat: statKey,
       val: passiveVal,
-      desc: `Herança da Classe Anterior: +${(passiveVal * 100).toFixed(1)}% ${statKey.toUpperCase()}`
+      desc: `Herança de Linhagem (${def.name} Lv.${lvl}): +${(passiveVal * 100).toFixed(1)}% ${statLabel}`
     };
     convertedBuffsCount++;
   }

@@ -4,6 +4,7 @@
 
 import { MONSTERS } from '../data/monsters.js';
 import { RAID_BOSSES } from '../data/raids.js';
+import { MON_IMG } from '../../art.js';
 
 export const MONSTER_CARDS = {};
 
@@ -14,6 +15,7 @@ const EPIC_RAID_CARDS = {
     name: 'Carta Rainha Formiga (Queen Ant)',
     monster: 'Queen Ant',
     icon: '/assets/2d/monsters/chaos-32x/PNG/Transperent/Icon30.png',
+    image: '/img/Monsters/SemLocal/mon_queenant.png',
     rarity: 'epic',
     dropChance: 0.015,
     socketBonus: { critRate: 15, critDmg: 0.12 },
@@ -24,6 +26,7 @@ const EPIC_RAID_CARDS = {
     name: 'Carta Core da Torre Cruma',
     monster: 'Core',
     icon: '/assets/2d/monsters/chaos-32x/PNG/Transperent/Icon31.png',
+    image: '/img/Monsters/SemLocal/mon_core.png',
     rarity: 'epic',
     dropChance: 0.015,
     socketBonus: { mAtk: 40, castSpeed: 10 },
@@ -34,6 +37,7 @@ const EPIC_RAID_CARDS = {
     name: 'Carta Orfen do Mar de Esporos',
     monster: 'Orfen',
     icon: '/assets/2d/monsters/chaos-32x/PNG/Transperent/Icon32.png',
+    image: '/img/Monsters/SemLocal/mon_orfen.png',
     rarity: 'epic',
     dropChance: 0.015,
     socketBonus: { healPower: 25, maxMp: 200 },
@@ -44,6 +48,7 @@ const EPIC_RAID_CARDS = {
     name: 'Carta Capitão Pirata Zaken',
     monster: 'Zaken',
     icon: '/assets/2d/monsters/chaos-32x/PNG/Transperent/Icon33.png',
+    image: '/img/Monsters/SemLocal/mon_zaken.png',
     rarity: 'legendary',
     dropChance: 0.012,
     socketBonus: { lifesteal: 0.08, eva: 12 },
@@ -54,6 +59,7 @@ const EPIC_RAID_CARDS = {
     name: 'Carta Imperador Baium',
     monster: 'Baium',
     icon: '/assets/2d/monsters/chaos-32x/PNG/Transperent/Icon34.png',
+    image: '/img/Monsters/SemLocal/mon_baium.png',
     rarity: 'mythic',
     dropChance: 0.008,
     socketBonus: { pAtk: 120, atkSpeed: 15, critRate: 20 },
@@ -64,6 +70,7 @@ const EPIC_RAID_CARDS = {
     name: 'Carta Flame of Splendor Barakiel',
     monster: 'Flame of Splendor Barakiel',
     icon: '/assets/2d/monsters/chaos-32x/PNG/Transperent/Icon35.png',
+    image: '/img/Monsters/SemLocal/mon_barakiel.png',
     rarity: 'legendary',
     dropChance: 0.01,
     socketBonus: { holyDmg: 30, pAtk: 90 },
@@ -74,6 +81,7 @@ const EPIC_RAID_CARDS = {
     name: 'Carta Príncipe Frintezza & Halisha',
     monster: 'Frintezza',
     icon: '/assets/2d/monsters/chaos-32x/PNG/Transperent/Icon36.png',
+    image: '/img/Monsters/SemLocal/mon_frintezza.png',
     rarity: 'mythic',
     dropChance: 0.006,
     socketBonus: { darkDmg: 40, castSpeed: 15, critDmg: 0.15 },
@@ -84,6 +92,7 @@ const EPIC_RAID_CARDS = {
     name: 'Carta Dragão da Terra Antharas',
     monster: 'Antharas',
     icon: '/assets/2d/monsters/chaos-32x/PNG/Transperent/Icon37.png',
+    image: '/img/Monsters/SemLocal/mon_antharas.png',
     rarity: 'primordial',
     dropChance: 0.004,
     socketBonus: { pDef: 250, maxHp: 1500, earthResist: 40 },
@@ -94,6 +103,7 @@ const EPIC_RAID_CARDS = {
     name: 'Carta Dragão do Fogo Valakas',
     monster: 'Valakas',
     icon: '/assets/2d/monsters/chaos-32x/PNG/Transperent/Icon38.png',
+    image: '/img/Monsters/SemLocal/mon_valakas.png',
     rarity: 'sovereign',
     dropChance: 0.002,
     socketBonus: { pAtk: 350, mAtk: 350, fireDmg: 50 },
@@ -166,12 +176,15 @@ for (const [monId, m] of Object.entries(MONSTERS || {})) {
     maxHp: Math.max(20, Math.floor(lvl * 15))
   };
 
+  const monsterImg = (MON_IMG && (MON_IMG[monId] || MON_IMG[m.name])) || `/img/mon_${monId.toLowerCase()}.jpg`;
+
   MONSTER_CARDS[cardId] = {
     id: cardId,
     name: `Carta de ${m.name}`,
     monster: m.name,
     monsterId: monId,
     icon,
+    image: monsterImg,
     level: lvl,
     rarity,
     dropChance,

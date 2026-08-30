@@ -16,8 +16,8 @@ import { setRoot as setMainRoot, bindEvents } from '../../main.js';
 import { getState, setState, loadState, saveState, DEFAULT_STATE } from './StateManager.js';
 import { getStats, getClass } from '../engine/StatsEngine.js';
 import { RACES } from '../data/races.js';
-import { startCombat, stopCombat } from '../engine/CombatEngine.js';
 import { updateAllUI } from '../ui/index.js';
+import { CommunityCapService } from '../services/CommunityCapService.js';
 
 let isBootstrapped = false;
 
@@ -53,6 +53,13 @@ export async function bootstrap(shadowRoot) {
     }
 
     state.startTime = state.startTime || Date.now();
+
+    // Inicializa o Gerenciador de CAP Global e Metas Comunitárias
+    try {
+      CommunityCapService.init({ updateAllUI });
+    } catch (e) {
+      console.warn('[GameBootstrap] Erro ao iniciar CommunityCapService:', e);
+    }
 
     // 3. Conecta o EventBus para reatividade da UI passiva
     EventBus.off('state:updated');

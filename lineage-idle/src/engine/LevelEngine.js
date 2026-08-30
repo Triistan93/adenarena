@@ -106,7 +106,7 @@ export function checkLevelUp(state, callbacks = {}) {
   if (!state) return false;
   let leveledUp = false;
   const initialLevel = state.level || 1;
-  const MAX_LEVEL = state.serverMaxLevel || state.levelCap || getSeasonMaxLevel() || 60;
+  const MAX_LEVEL = (typeof window !== 'undefined' && Number(window.globalServerCap)) || state.serverMaxLevel || state.serverCap || state.levelCap || getSeasonMaxLevel() || 40;
   let totalSpReward = 0;
 
   // Processa subida de níveis respeitando o teto de servidor/temporada

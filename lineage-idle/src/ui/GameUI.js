@@ -42,6 +42,7 @@ import { ColosseumService } from '../services/ColosseumService.js';
 import { CombatPowerService } from '../services/CombatPowerService.js';
 import { renderRankingTab, setActiveRankingTab } from './RankingUI.js';
 import { renderMarketTab, setActiveMarketTab } from './MarketUI.js';
+import { CommunityCapService } from '../services/CommunityCapService.js';
 import { heroSVG, monsterSVG, MON_IMG } from '../../art.js';
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -1906,6 +1907,12 @@ export function renderZoneMap(state, callbacks = {}) {
   container.innerHTML = '';
   container.classList.add('zone-map-root');
 
+  // Renderiza a Meta Comunitária de CAP Global no topo do Mapa
+  const capWidget = document.createElement('div');
+  capWidget.className = 'community-cap-banner-wrap';
+  CommunityCapService.renderWidget(capWidget);
+  container.appendChild(capWidget);
+
   const sagasData = SAGAS || [
     { name: 'Interlude', unlocksAt: 1, zones: ['talking_island', 'elven_village', 'dark_elven_village', 'gludin', 'gludio'] }
   ];
@@ -1913,20 +1920,20 @@ export function renderZoneMap(state, callbacks = {}) {
   const sagaList = Array.isArray(sagasData) ? sagasData : Object.values(sagasData);
 
   for (const saga of sagaList) {
-    if (!saga) continue;
+    if (!saga || typeof saga !== 'object') continue;
 
     const block = document.createElement('div');
     block.className = 'saga-map-block';
 
-    const zonesList = saga.zones || [];
-    const cardsHtml = zonesList.map(zId => {
-      const zDef = ZONES[zId];
-      if (!zDef) return '';
+    const zonesList = Array.isArray(saga.zones) ? saga.zones : [];
+    const validCards = zonesList.map(zId => {
+      const zDef = ZONES && ZONES[zId];
+      if (!zDef || !zDef.name) return '';
 
       const isCurrent = (state.zone || state.currentZone) === zId;
       const reqLvl = zDef.level ?? zDef.minLevel ?? zDef.reqLvl ?? 1;
       const isLocked = (state.level || 1) < reqLvl;
-      const bgUrl = ZONE_BACKGROUNDS[zId] || zDef.background || '';
+      const bgUrl = (ZONE_BACKGROUNDS && ZONE_BACKGROUNDS[zId]) || zDef.background || '';
       const thumbStyle = bgUrl ? `style="background-image:url('${getAssetUrl(bgUrl)}')"` : '';
 
       const monsterCount = zDef.monsters?.length || zDef.monsterTypes?.length || 4;
@@ -1953,14 +1960,19 @@ export function renderZoneMap(state, callbacks = {}) {
           </div>
         </div>
       `;
-    }).join('');
+    }).filter(Boolean);
+
+    if (validCards.length === 0) continue;
+
+    const sagaName = saga.name || saga.id || 'Capítulo';
+    const sagaReq = saga.unlocksAt || saga.reqLvl || 1;
 
     block.innerHTML = `
       <div class="saga-header">
-        <span class="saga-title">🗺️ ${saga.name}</span>
-        <span class="saga-req">Lv. ${saga.unlocksAt || saga.reqLvl || 1}+</span>
+        <span class="saga-title">🗺️ ${sagaName}</span>
+        <span class="saga-req">Lv. ${sagaReq}+</span>
       </div>
-      <div class="saga-zones-grid">${cardsHtml}</div>
+      <div class="saga-zones-grid">${validCards.join('')}</div>
     `;
 
     container.appendChild(block);
