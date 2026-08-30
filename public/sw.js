@@ -28,9 +28,10 @@ self.addEventListener('activate', (event) => {
       return Promise.all(
         keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))
       );
+    }).then(() => {
+      return self.clients.claim();
     })
   );
-  self.clients.claim();
 });
 
 self.addEventListener('fetch', (event) => {

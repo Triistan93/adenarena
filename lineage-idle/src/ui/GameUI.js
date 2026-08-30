@@ -266,7 +266,7 @@ export function getItemIconUrl(itemOrDef, defParam) {
     if (!p.endsWith('.png') && !p.endsWith('.jpg') && !p.endsWith('.webp') && !p.endsWith('.svg')) {
       p += '.png';
     }
-    if (!p.startsWith('img/icons/') && !p.startsWith('img/')) {
+    if (!p.startsWith('img/icons/') && !p.startsWith('img/') && !p.startsWith('assets/') && !p.startsWith('icons/')) {
       p = `img/icons/${p}`;
     }
     return getAssetUrl(p);
