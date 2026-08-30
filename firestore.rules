@@ -22,8 +22,10 @@ service cloud.firestore {
 
     // Bloqueia tentativa de escalar privilégios via client-side write
     function noPrivilegeEscalation() {
-      return !('privilegeLevel' in request.resource.data)
-          && !('role'           in request.resource.data);
+      return resource == null 
+        ? (!('privilegeLevel' in request.resource.data) && !('role' in request.resource.data))
+        : ((!('privilegeLevel' in request.resource.data) || !('privilegeLevel' in resource.data) || request.resource.data.privilegeLevel == resource.data.privilegeLevel)
+           && (!('role' in request.resource.data) || !('role' in resource.data) || request.resource.data.role == resource.data.role));
     }
 
     // ─── Coleção de Usuários ─────────────────────────────────────────────────

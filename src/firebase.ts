@@ -150,7 +150,7 @@ function scheduleSave(
   }, delay);
 }
 
-export async function savePlayerStateToCloud(userId: string, stateData: any) {
+export async function savePlayerStateToCloud(userId: string, stateData: any, immediate = false) {
   if (!userId) return false;
   if (!auth.currentUser || auth.currentUser.uid !== userId) {
     return false;
@@ -163,78 +163,86 @@ export async function savePlayerStateToCloud(userId: string, stateData: any) {
     return false;
   }
 
-  // ── Rate Limiting: evita flood de saves ao Firestore ────────────────────
+  const executeSave = async (): Promise<boolean> => {
+    try {
+      const userRef   = doc(db, 'users', userId);
+      const cleanState = JSON.parse(JSON.stringify(stateData || {}));
+
+      // SECURITY: Never allow client-sent privilegeLevel to overwrite Firestore root privilege!
+      delete cleanState.privilegeLevel;
+      delete cleanState.role;
+
+      // ── XSS Sanitization ─────────────────────────────────────────────
+      if (cleanState.name)      cleanState.name      = sanitizeString(cleanState.name, 16);
+      if (cleanState.charName)  cleanState.charName  = sanitizeString(cleanState.charName, 16);
+      if (cleanState.playerName) cleanState.playerName = sanitizeString(cleanState.playerName, 16);
+      if (cleanState.clan?.name) cleanState.clan.name = sanitizeString(cleanState.clan.name, 24);
+
+      const stats   = cleanState.stats || {};
+      const pAtk    = Number(stats.atk  || stats.pAtk)  || 100;
+      const mAtk    = Number(stats.matk || stats.mAtk)  || 50;
+      const pDef    = Number(stats.def  || stats.pDef)  || 80;
+      const mDef    = Number(stats.mdef || stats.mDef)  || 60;
+      const maxHp   = Number(stats.maxHp || stats.hp)   || 1000;
+      const level   = Number(cleanState.level)           || 1;
+      const cp      = Number(stats.combatPower) || Math.floor(level * 150 + pAtk * 1.8 + pDef * 1.5 + mAtk * 1.6 + mDef * 1.5 + maxHp * 0.12);
+
+      let topWeaponName = 'Sem Arma';
+      let topWeaponGlow = null;
+      if (cleanState.equipment?.weapon) {
+        const wUid  = cleanState.equipment.weapon;
+        const wItem = cleanState.inventory?.find((i: any) => i.uid === wUid || i.id === wUid);
+        if (wItem) {
+          const enc     = Number(wItem.enchant || wItem.enchantLevel) || 0;
+          topWeaponName = enc > 0 ? `+${enc} ${sanitizeString(wItem.name || 'Arma', 40)}` : sanitizeString(wItem.name || 'Arma', 40);
+          topWeaponGlow = wItem.augmentation?.glow || (enc >= 16 ? 'crimson-fire' : enc >= 10 ? 'golden-amber' : enc >= 4 ? 'blue-ice' : null);
+        }
+      }
+
+      const payload: any = {
+        userId,
+        charName:        sanitizeString(cleanState.name || cleanState.charName || cleanState.playerName || 'Hero', 16),
+        race:            sanitizeString(cleanState.race || 'Human', 24),
+        className:       sanitizeString(cleanState.className || cleanState.class || 'Warrior', 32),
+        level,
+        combatPower:     cp,
+        olympiadPoints:  Number(cleanState.olympiad?.points  || cleanState.olympiadPoints)  || 1000,
+        olympiadWins:    Number(cleanState.olympiad?.wins    || cleanState.olympiadWins)    || 0,
+        olympiadLosses:  Number(cleanState.olympiad?.losses  || cleanState.olympiadLosses)  || 0,
+        duelWins:        Number(cleanState.colosseum?.duelWins  || cleanState.duelWins)     || 0,
+        duelLosses:      Number(cleanState.colosseum?.duelLosses || cleanState.duelLosses)  || 0,
+        clanName:        sanitizeString(cleanState.clan?.name || 'Sem Clã', 24),
+        castleLord:      cleanState.clan?.castle || null,
+        isHero:          Boolean(cleanState.olympiad?.isHero || cleanState.isHero),
+        topWeaponName,
+        topWeaponGlow,
+        statsSnapshot: { hp: maxHp, pAtk, mAtk, pDef, mDef, crit: Number(stats.crit) || 10 },
+        state:           cleanState,
+        updatedAt:       serverTimestamp(),
+      };
+
+      await setDoc(userRef, payload, { merge: true });
+      return true;
+    } catch (err: any) {
+      if (err?.code === 'permission-denied' || String(err).includes('permission')) {
+        console.warn('[CloudSave] Permissões insuficientes no Firestore para salvar estado na nuvem. Verifique as regras do Firebase.');
+      } else {
+        console.error('Cloud Save Error:', err);
+      }
+      return false;
+    }
+  };
+
+  if (immediate) {
+    return await executeSave();
+  }
+
+  // ── Rate Limiting: evita flood de saves periódicos ao Firestore ──────────
   return new Promise<boolean>((resolve) => {
     scheduleSave(userId, async () => {
-      try {
-        const userRef   = doc(db, 'users', userId);
-        const cleanState = JSON.parse(JSON.stringify(stateData));
-
-        // SECURITY: Never allow client-sent privilegeLevel to overwrite Firestore root privilege!
-        delete cleanState.privilegeLevel;
-        delete cleanState.role;
-
-        // ── XSS Sanitization ─────────────────────────────────────────────
-        if (cleanState.name)      cleanState.name      = sanitizeString(cleanState.name, 16);
-        if (cleanState.charName)  cleanState.charName  = sanitizeString(cleanState.charName, 16);
-        if (cleanState.playerName) cleanState.playerName = sanitizeString(cleanState.playerName, 16);
-        if (cleanState.clan?.name) cleanState.clan.name = sanitizeString(cleanState.clan.name, 24);
-
-        const stats   = cleanState.stats || {};
-        const pAtk    = Number(stats.atk  || stats.pAtk)  || 100;
-        const mAtk    = Number(stats.matk || stats.mAtk)  || 50;
-        const pDef    = Number(stats.def  || stats.pDef)  || 80;
-        const mDef    = Number(stats.mdef || stats.mDef)  || 60;
-        const maxHp   = Number(stats.maxHp || stats.hp)   || 1000;
-        const level   = Number(cleanState.level)           || 1;
-        const cp      = Number(stats.combatPower) || Math.floor(level * 150 + pAtk * 1.8 + pDef * 1.5 + mAtk * 1.6 + mDef * 1.5 + maxHp * 0.12);
-
-        let topWeaponName = 'Sem Arma';
-        let topWeaponGlow = null;
-        if (cleanState.equipment?.weapon) {
-          const wUid  = cleanState.equipment.weapon;
-          const wItem = cleanState.inventory?.find((i: any) => i.uid === wUid || i.id === wUid);
-          if (wItem) {
-            const enc     = Number(wItem.enchant || wItem.enchantLevel) || 0;
-            topWeaponName = enc > 0 ? `+${enc} ${sanitizeString(wItem.name || 'Arma', 40)}` : sanitizeString(wItem.name || 'Arma', 40);
-            topWeaponGlow = wItem.augmentation?.glow || (enc >= 16 ? 'crimson-fire' : enc >= 10 ? 'golden-amber' : enc >= 4 ? 'blue-ice' : null);
-          }
-        }
-
-        const payload: any = {
-          userId,
-          charName:        sanitizeString(cleanState.name || cleanState.charName || cleanState.playerName || 'Hero', 16),
-          race:            sanitizeString(cleanState.race || 'Human', 24),
-          className:       sanitizeString(cleanState.className || cleanState.class || 'Warrior', 32),
-          level,
-          combatPower:     cp,
-          olympiadPoints:  Number(cleanState.olympiad?.points  || cleanState.olympiadPoints)  || 1000,
-          olympiadWins:    Number(cleanState.olympiad?.wins    || cleanState.olympiadWins)    || 0,
-          olympiadLosses:  Number(cleanState.olympiad?.losses  || cleanState.olympiadLosses)  || 0,
-          duelWins:        Number(cleanState.colosseum?.duelWins  || cleanState.duelWins)     || 0,
-          duelLosses:      Number(cleanState.colosseum?.duelLosses || cleanState.duelLosses)  || 0,
-          clanName:        sanitizeString(cleanState.clan?.name || 'Sem Clã', 24),
-          castleLord:      cleanState.clan?.castle || null,
-          isHero:          Boolean(cleanState.olympiad?.isHero || cleanState.isHero),
-          topWeaponName,
-          topWeaponGlow,
-          statsSnapshot: { hp: maxHp, pAtk, mAtk, pDef, mDef, crit: Number(stats.crit) || 10 },
-          state:           cleanState,
-          updatedAt:       serverTimestamp(),
-        };
-
-        await setDoc(userRef, payload, { merge: true });
-        resolve(true);
-        return true;
-      } catch (err: any) {
-        if (err?.code === 'permission-denied' || String(err).includes('permission')) {
-          console.warn('[CloudSave] Permissões insuficientes no Firestore para salvar estado na nuvem. Verifique as regras do Firebase.');
-        } else {
-          console.error('Cloud Save Error:', err);
-        }
-        resolve(false);
-        return false;
-      }
+      const res = await executeSave();
+      resolve(res);
+      return res;
     });
   });
 }
@@ -287,8 +295,8 @@ export async function loadPlayerStateFromCloud(userId: string) {
     const snap = await getDoc(userRef);
     if (snap.exists()) {
       const docData = snap.data();
-      if (docData && docData.state) {
-        const stateObj = docData.state;
+      if (docData) {
+        const stateObj = docData.state ? { ...docData.state } : { ...docData };
         // SECURITY: privilegeLevel is strictly authorized from root document in Firestore
         const rootPrivilege = Number(docData.privilegeLevel) || (docData.role === 'admin' ? 1 : 0);
         stateObj.privilegeLevel = rootPrivilege;

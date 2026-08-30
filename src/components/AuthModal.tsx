@@ -169,29 +169,44 @@ export function AuthModal({ onCloudDataLoaded, getCurrentState }: AuthModalProps
   const handleManualSync = async () => {
     if (!user || !getCurrentState) return;
     setSyncing(true);
-    const currentState = getCurrentState();
-    const ok = await savePlayerStateToCloud(user.uid, currentState);
-    setSyncing(false);
-    if (ok) {
-      setMsg('☁️ Jogo salvo com sucesso no Firebase!');
-      setTimeout(() => setMsg(null), 4000);
-    } else {
-      setError('Falha ao salvar na nuvem.');
+    setError(null);
+    try {
+      const currentState = getCurrentState();
+      const ok = await savePlayerStateToCloud(user.uid, currentState, true);
+      if (ok) {
+        setMsg('☁️ Jogo salvo com sucesso no Firebase!');
+        setTimeout(() => setMsg(null), 4000);
+      } else {
+        setError('Falha ao salvar na nuvem. Verifique a conexão e as regras do Firebase.');
+        setTimeout(() => setError(null), 5000);
+      }
+    } catch (err: any) {
+      setError(err?.message || 'Erro ao salvar na nuvem.');
+      setTimeout(() => setError(null), 5000);
+    } finally {
+      setSyncing(false);
     }
   };
 
   const handleManualLoad = async () => {
     if (!user || !onCloudDataLoaded) return;
     setSyncing(true);
-    const cloudState = await loadPlayerStateFromCloud(user.uid);
-    setSyncing(false);
-    if (cloudState && cloudState.level !== undefined) {
-      onCloudDataLoaded(cloudState);
-      setMsg(`💾 Progresso de Nível ${cloudState.level} carregado da nuvem!`);
-      setTimeout(() => setMsg(null), 4000);
-    } else {
-      setError('Nenhum save encontrado na nuvem para este e-mail.');
-      setTimeout(() => setError(null), 4000);
+    setError(null);
+    try {
+      const cloudState = await loadPlayerStateFromCloud(user.uid);
+      if (cloudState && cloudState.level !== undefined) {
+        onCloudDataLoaded(cloudState);
+        setMsg(`💾 Progresso de Nível ${cloudState.level} carregado da nuvem!`);
+        setTimeout(() => setMsg(null), 4000);
+      } else {
+        setError('Nenhum save encontrado na nuvem para esta conta.');
+        setTimeout(() => setError(null), 5000);
+      }
+    } catch (err: any) {
+      setError(err?.message || 'Erro ao carregar da nuvem.');
+      setTimeout(() => setError(null), 5000);
+    } finally {
+      setSyncing(false);
     }
   };
 
@@ -263,6 +278,13 @@ export function AuthModal({ onCloudDataLoaded, getCurrentState }: AuthModalProps
       {msg && (
         <div className="fixed bottom-4 right-4 z-50 bg-slate-900 border border-emerald-500/50 text-emerald-300 px-4 py-2.5 rounded-xl shadow-2xl text-xs font-semibold flex items-center gap-2 animate-bounce">
           <span>{msg}</span>
+        </div>
+      )}
+
+      {/* Error Toast Notification */}
+      {error && !isOpen && (
+        <div className="fixed bottom-4 right-4 z-50 bg-slate-900 border border-red-500/50 text-red-300 px-4 py-2.5 rounded-xl shadow-2xl text-xs font-semibold flex items-center gap-2">
+          <span>⚠️ {error}</span>
         </div>
       )}
 
