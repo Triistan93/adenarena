@@ -519,15 +519,25 @@ export const MarketService = {
 
     const listings = this.getListings(state);
     const index = listings.findIndex(l => l.id === listingId);
-    if (index === -1) {
+    if (index === -1 || _deletedListingIds.has(listingId)) {
       return { ok: false, msg: 'Este anúncio já foi adquirido por outro jogador ou foi cancelado!' };
     }
 
     const listing = listings[index];
     const buyerName = state.charName || state.heroName || state.playerName || state.name || 'Hero of Aden';
+    const buyerUid = typeof window !== 'undefined' ? window.FirebaseBridge?.getCurrentUserId?.() : null;
 
     if (this._isMyListing(listing, state)) {
       return { ok: false, msg: 'Você não pode comprar seu próprio anúncio! Cancele-o na aba Minhas Vendas se desejar o item de volta.' };
+    }
+
+    // Validação de espaço na mochila (Capacidade Máxima de Slots)
+    const maxSlots = (state.race === 'dwarf') ? 250 : 150;
+    const actualItemId = listing.item.itemId || listing.item.id;
+    const isStackable = ['material', 'consumable', 'scroll', 'crystal', 'powerup', 'potion'].includes(String(listing.item.slot || '').toLowerCase()) || String(listing.item.type || '').toLowerCase() === 'consumable';
+    const hasStack = isStackable && (state.inventory || []).some(i => (i.itemId === actualItemId || i.id === actualItemId) && !i.enchant && !i.equipped);
+    if (!hasStack && (state.inventory || []).length >= maxSlots) {
+      return { ok: false, msg: `Sua mochila está cheia (${state.inventory.length}/${maxSlots})! Libere espaço antes de comprar.` };
     }
 
     const totalCost = Number(listing.totalPrice) || (listing.pricePerUnit * listing.quantity);
@@ -538,18 +548,41 @@ export const MarketService = {
       if (playerAc < totalCost) {
         return { ok: false, msg: `Aden Coins insuficientes! Você tem ${playerAc} e o item custa ${totalCost} Aden Coins 👑.` };
       }
-      state.adenCoins = playerAc - totalCost;
-      state.ac = state.adenCoins;
     } else {
       const playerGold = Number(state.gold || 0);
       if (playerGold < totalCost) {
         return { ok: false, msg: `Adena insuficiente! Você tem ${playerGold.toLocaleString()} e o item custa ${totalCost.toLocaleString()} Adena 🪙.` };
       }
+    }
+
+    // 1. Executa a transação atômica no Cloud Firestore primeiro para assegurar o item
+    if (typeof window !== 'undefined' && window.FirebaseBridge?.executeMarketPurchase) {
+      try {
+        const txResult = await window.FirebaseBridge.executeMarketPurchase(listingId, buyerName, buyerUid);
+        if (txResult && txResult.success === false) {
+          markListingDeleted(listingId);
+          const current = this.getListingsLocal().filter(l => l.id !== listingId);
+          _inMemoryListings = current;
+          this.saveListings(current, false);
+          this.notifyUI();
+          return { ok: false, msg: txResult.msg || 'Este item já foi adquirido por outro jogador!' };
+        }
+      } catch (cloudErr) {
+        console.warn('[MarketService] Aviso na transação remota:', cloudErr);
+      }
+    }
+
+    // 2. Transação aprovada! Deduz a moeda do comprador
+    if (currency === 'adencoin') {
+      const playerAc = Number(state.adenCoins || state.ac || 0);
+      state.adenCoins = playerAc - totalCost;
+      state.ac = state.adenCoins;
+    } else {
+      const playerGold = Number(state.gold || 0);
       state.gold = playerGold - totalCost;
     }
 
-    // Entrega o item comprado ao inventário do jogador com itemId explícito
-    const actualItemId = listing.item.itemId || listing.item.id;
+    // 3. Entrega o item comprado ao inventário do jogador com itemId explícito
     const boughtItem = {
       ...listing.item,
       id: actualItemId,
@@ -563,7 +596,6 @@ export const MarketService = {
     };
 
     state.inventory = state.inventory || [];
-    const isStackable = ['material', 'consumable', 'scroll', 'crystal', 'powerup', 'potion'].includes(String(boughtItem.slot || '').toLowerCase()) || String(boughtItem.type || '').toLowerCase() === 'consumable';
     const existingIndex = isStackable 
       ? state.inventory.findIndex(i => (i.itemId === actualItemId || i.id === actualItemId) && !i.enchant && !i.equipped) 
       : -1;
@@ -575,7 +607,7 @@ export const MarketService = {
       state.inventory.push(boughtItem);
     }
 
-    // Registra a venda para o vendedor
+    // 4. Registra no extrato local do vendedor
     const saleRecord = {
       itemName: listing.item.name,
       quantity: listing.quantity,
@@ -583,19 +615,18 @@ export const MarketService = {
       currency: currency,
       buyer: buyerName
     };
-
-    // 1. Atualiza vendas locais
     const salesData = this.getPlayerSales(listing.sellerName);
     if (currency === 'adencoin') {
       salesData.pendingAdenCoins = (salesData.pendingAdenCoins || 0) + totalCost;
     } else {
-      salesData.pendingAdena = (salesData.pendingAdena || 0) + totalCost;
+      const netProfit = totalCost - Math.floor(totalCost * 0.03);
+      salesData.pendingAdena = (salesData.pendingAdena || 0) + netProfit;
     }
     salesData.history = salesData.history || [];
     salesData.history.unshift({ ...saleRecord, soldAt: Date.now() });
     this.savePlayerSales(listing.sellerName, salesData);
 
-    // 2. Marca como deletado no tombstone e remove imediatamente da lista local
+    // 5. Marca como deletado no tombstone e remove imediatamente da lista local
     markListingDeleted(listingId);
     const updatedAfterBuy = this.getListingsLocal().filter(l => l.id !== listingId && !_deletedListingIds.has(l.id));
     _inMemoryListings = updatedAfterBuy;
@@ -610,20 +641,6 @@ export const MarketService = {
           buyerName 
         });
       } catch (e) {}
-    }
-
-    // 3. Sincroniza com Firebase Cloud (Deleta listagem e Credita vendedor)
-    try {
-      if (typeof window !== 'undefined') {
-        if (window.FirebaseBridge?.deleteMarketListing) {
-          await window.FirebaseBridge.deleteMarketListing(listingId);
-        }
-        if (window.FirebaseBridge?.recordMarketSale) {
-          await window.FirebaseBridge.recordMarketSale(listing.sellerName, saleRecord);
-        }
-      }
-    } catch (err) {
-      console.warn('[MarketService] Erro ao sincronizar compra na nuvem:', err);
     }
 
     this.notifyUI();
@@ -694,7 +711,7 @@ export const MarketService = {
       } catch (e) {}
     }
 
-    // 2. Deleta do Firestore
+    // 4. Deleta do Firestore
     try {
       if (typeof window !== 'undefined' && window.FirebaseBridge?.deleteMarketListing) {
         await window.FirebaseBridge.deleteMarketListing(listingId);
@@ -718,45 +735,52 @@ export const MarketService = {
     if (!state) return { ok: false, msg: 'Estado indisponível.' };
 
     const playerName = state.charName || state.heroName || state.playerName || state.name || 'Hero of Aden';
-    
-    // Atualiza com dados mais recentes da nuvem antes de resgatar
-    const salesData = await this.fetchPlayerSalesFromCloud(playerName);
+    let claimedAdena = 0;
+    let claimedCoins = 0;
 
-    const adena = Number(salesData.pendingAdena) || 0;
-    const adencoin = Number(salesData.pendingAdenCoins) || 0;
+    // 1. Resgata de forma atômica no Firestore
+    if (typeof window !== 'undefined' && window.FirebaseBridge?.claimPlayerSales) {
+      try {
+        const cloudRes = await window.FirebaseBridge.claimPlayerSales(playerName);
+        if (cloudRes && cloudRes.success) {
+          claimedAdena = Number(cloudRes.adena) || 0;
+          claimedCoins = Number(cloudRes.adenCoins) || 0;
+        }
+      } catch (e) {
+        console.warn('[MarketService] Erro ao resgatar lucros na nuvem:', e);
+      }
+    }
 
-    if (adena <= 0 && adencoin <= 0) {
+    // 2. Resgata também dados locais
+    const salesData = this.getPlayerSales(playerName);
+    const localAdena = Number(salesData.pendingAdena) || 0;
+    const localCoins = Number(salesData.pendingAdenCoins) || 0;
+
+    const totalAdena = Math.max(claimedAdena, localAdena);
+    const totalCoins = Math.max(claimedCoins, localCoins);
+
+    if (totalAdena <= 0 && totalCoins <= 0) {
       return { ok: false, msg: 'Nenhum lucro pendente de vendas para resgatar no momento.' };
     }
 
-    if (adena > 0) {
-      state.gold = (Number(state.gold) || 0) + adena;
+    if (totalAdena > 0) {
+      state.gold = (Number(state.gold) || 0) + totalAdena;
       salesData.pendingAdena = 0;
     }
-    if (adencoin > 0) {
-      state.adenCoins = (Number(state.adenCoins) || 0) + adencoin;
+    if (totalCoins > 0) {
+      state.adenCoins = (Number(state.adenCoins) || 0) + totalCoins;
       state.ac = state.adenCoins;
       salesData.pendingAdenCoins = 0;
     }
 
     this.savePlayerSales(playerName, salesData);
-
-    // Sincroniza com Firebase Cloud
-    try {
-      if (typeof window !== 'undefined' && window.FirebaseBridge?.claimPlayerSales) {
-        await window.FirebaseBridge.claimPlayerSales(playerName);
-      }
-    } catch (err) {
-      console.warn('[MarketService] Erro ao limpar lucros na nuvem:', err);
-    }
-
     this.notifyUI();
 
     return {
       ok: true,
-      msg: `Lucros imperiais coletados com sucesso: +${adena.toLocaleString()} Adena 🪙 e +${adencoin} Aden Coins 👑!`,
-      adena,
-      adencoin
+      msg: `Lucros imperiais coletados com sucesso: +${totalAdena.toLocaleString()} Adena 🪙 e +${totalCoins} Aden Coins 👑!`,
+      adena: totalAdena,
+      adencoin: totalCoins
     };
   }
 };

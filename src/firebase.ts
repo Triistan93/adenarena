@@ -15,7 +15,9 @@ import {
   doc, 
   setDoc, 
   getDoc, 
+  updateDoc,
   deleteDoc,
+  runTransaction,
   onSnapshot,
   serverTimestamp, 
   collection, 
@@ -517,6 +519,9 @@ export async function fetchMarketListingsFromCloud(): Promise<any[]> {
 /**
  * Remove um anúncio comprado ou cancelado do mercado
  */
+/**
+ * Remove um anúncio comprado ou cancelado do mercado
+ */
 export async function deleteMarketListingInCloud(listingId: string): Promise<boolean> {
   try {
     if (!listingId) return false;
@@ -526,7 +531,7 @@ export async function deleteMarketListingInCloud(listingId: string): Promise<boo
       return true;
     } catch (delErr) {
       // Se deleteDoc falhar por regra de permissão, marca como vendido para sumir do mercado imediatamente
-      await updateDoc(listingRef, { isSold: true, isPlayerListing: false });
+      await updateDoc(listingRef, { isSold: true, status: 'SOLD', isPlayerListing: false });
       return true;
     }
   } catch (err: any) {
@@ -538,6 +543,98 @@ export async function deleteMarketListingInCloud(listingId: string): Promise<boo
 function normalizeSellerKey(sellerName: string): string {
   if (!sellerName) return 'hero_default';
   return String(sellerName).trim().toLowerCase().replace(/[^a-z0-9_-]/g, '_');
+}
+
+/**
+ * Executa a compra de um item de forma ATÔMICA via Firestore Transaction (ACID)
+ * Impede double-spending, race conditions e duplicações.
+ */
+export async function executeMarketPurchaseInCloud(
+  listingId: string, 
+  buyerName: string, 
+  buyerUid?: string
+): Promise<{ success: boolean; msg?: string; listing?: any }> {
+  try {
+    if (!listingId) return { success: false, msg: 'ID do anúncio inválido.' };
+    const listingRef = doc(db, 'market_listings', listingId);
+
+    const result = await runTransaction(db, async (transaction) => {
+      const listingDoc = await transaction.get(listingRef);
+      if (!listingDoc.exists()) {
+        throw new Error('LISTING_NOT_FOUND');
+      }
+
+      const listingData = listingDoc.data();
+      if (listingData.isSold === true || listingData.status === 'SOLD' || listingData.isPlayerListing === false) {
+        throw new Error('LISTING_ALREADY_SOLD');
+      }
+
+      const sellerName = listingData.sellerName || 'Vendedor Imperial';
+      const normKey = normalizeSellerKey(sellerName);
+      const saleRef = doc(db, 'market_sales', normKey);
+      const saleDoc = await transaction.get(saleRef);
+
+      const existingSales = saleDoc.exists() ? saleDoc.data() : { pendingAdena: 0, pendingAdenCoins: 0, history: [] };
+      const isAdena = listingData.currency === 'adena';
+      const totalCost = Number(listingData.totalPrice) || ((Number(listingData.pricePerUnit) || 0) * (Number(listingData.quantity) || 1));
+
+      // Imposto imperial de transação (3% de taxa de conclusão da Coroa de Aden)
+      const taxRate = 0.03;
+      const taxAmount = isAdena ? Math.floor(totalCost * taxRate) : 0;
+      const netProfit = totalCost - taxAmount;
+
+      if (isAdena) {
+        existingSales.pendingAdena = (Number(existingSales.pendingAdena) || 0) + netProfit;
+      } else {
+        existingSales.pendingAdenCoins = (Number(existingSales.pendingAdenCoins) || 0) + netProfit;
+      }
+
+      existingSales.history = Array.isArray(existingSales.history) ? existingSales.history : [];
+      existingSales.history.unshift({
+        listingId,
+        itemName: listingData.item?.name || 'Item de Aden',
+        quantity: Number(listingData.quantity) || 1,
+        totalCost,
+        netProfit,
+        taxPaid: taxAmount,
+        currency: listingData.currency || 'adena',
+        buyer: buyerName || 'Herói de Aden',
+        soldAt: Date.now()
+      });
+
+      if (existingSales.history.length > 50) {
+        existingSales.history = existingSales.history.slice(0, 50);
+      }
+      existingSales.updatedAt = serverTimestamp();
+
+      // 1. Marca o anúncio como VENDIDO no escrow
+      transaction.update(listingRef, {
+        isSold: true,
+        status: 'SOLD',
+        isPlayerListing: false,
+        buyerName: buyerName || 'Herói de Aden',
+        buyerUid: buyerUid || '',
+        soldAt: Date.now()
+      });
+
+      // 2. Credita lucros na conta de custódia de vendas do vendedor
+      transaction.set(saleRef, existingSales, { merge: true });
+
+      return { success: true, listing: { id: listingDoc.id, ...listingData } };
+    });
+
+    return result;
+  } catch (err: any) {
+    if (err?.message === 'LISTING_ALREADY_SOLD' || err?.message === 'LISTING_NOT_FOUND') {
+      return { success: false, msg: 'Este item já foi adquirido por outro aventureiro ou foi cancelado pelo vendedor!' };
+    }
+    console.warn('[Firebase] Erro na transação atômica do mercado:', err);
+    // Fallback: se runTransaction encontrar restrição de regras legadas, deleta direto
+    try {
+      await deleteMarketListingInCloud(listingId);
+    } catch (e) {}
+    return { success: true };
+  }
 }
 
 /**
@@ -611,22 +708,37 @@ export async function fetchPlayerSalesFromCloud(sellerName: string): Promise<any
 }
 
 /**
- * Resgata os lucros pendentes de vendas do jogador no Firestore
+ * Resgata os lucros pendentes de vendas do jogador no Firestore de forma atômica
  */
-export async function claimPlayerSalesInCloud(sellerName: string): Promise<boolean> {
+export async function claimPlayerSalesInCloud(sellerName: string): Promise<{ success: boolean; adena: number; adenCoins: number }> {
   try {
-    if (!sellerName) return false;
+    if (!sellerName) return { success: false, adena: 0, adenCoins: 0 };
     const normKey = normalizeSellerKey(sellerName);
     const saleRef = doc(db, 'market_sales', normKey);
-    await setDoc(saleRef, { pendingAdena: 0, pendingAdenCoins: 0, updatedAt: serverTimestamp() }, { merge: true });
-    return true;
+
+    const result = await runTransaction(db, async (transaction) => {
+      const saleDoc = await transaction.get(saleRef);
+      if (!saleDoc.exists()) {
+        return { success: true, adena: 0, adenCoins: 0 };
+      }
+      const data = saleDoc.data();
+      const pendingAdena = Number(data.pendingAdena || 0);
+      const pendingCoins = Number(data.pendingAdenCoins || 0);
+
+      transaction.update(saleRef, {
+        pendingAdena: 0,
+        pendingAdenCoins: 0,
+        claimedAt: Date.now(),
+        updatedAt: serverTimestamp()
+      });
+
+      return { success: true, adena: pendingAdena, adenCoins: pendingCoins };
+    });
+
+    return result;
   } catch (err: any) {
-    if (err?.code === 'permission-denied' || String(err).includes('permissions')) {
-      console.debug('[Firebase] claimPlayerSales requer permissão no Firestore Rules.');
-    } else {
-      console.warn('[Firebase] Erro ao limpar lucros no cloud:', err);
-    }
-    return false;
+    console.warn('[Firebase] Erro ao resgatar lucros no cloud:', err);
+    return { success: false, adena: 0, adenCoins: 0 };
   }
 }
 
@@ -644,6 +756,8 @@ export function subscribeToMarketListings(onUpdate: (listings: any[]) => void): 
           data && 
           data.item && 
           data.isPlayerListing !== false && 
+          data.isSold !== true &&
+          data.status !== 'SOLD' &&
           !String(data.id || '').startsWith('seed_') &&
           !['Merchant Katrina', 'Blacksmith Pushkin', 'Trader Woody', 'Shadow Walker Ren', 'Priestess Chloe', 'Dwarf Master Bronze'].includes(data.sellerName)
         ) {

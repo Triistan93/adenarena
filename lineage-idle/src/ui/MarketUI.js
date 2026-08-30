@@ -407,6 +407,12 @@ function renderSellTab(state) {
                   🪙 ${listingFee.toLocaleString()} ${!canPayFee ? '(Saldo insuficiente)' : ''}
                 </span>
               </div>
+              <div style="display: flex; justify-content: space-between; color: #94a3b8;">
+                <span>Lucro Líquido Estimado (-3% Coroa):</span>
+                <span style="color: #34d399; font-weight: bold; font-family: 'IBM Plex Mono', monospace;">
+                  ${_sellCurrency === 'adena' ? `🪙 ${Math.floor(totalPrice * 0.97).toLocaleString()} Adena` : `👑 ${totalPrice.toLocaleString()} AC`}
+                </span>
+              </div>
             </div>
 
           ` : ''}

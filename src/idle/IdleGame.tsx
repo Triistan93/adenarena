@@ -32,6 +32,7 @@ import {
   createMarketListingInCloud,
   fetchMarketListingsFromCloud,
   deleteMarketListingInCloud,
+  executeMarketPurchaseInCloud,
   recordMarketSaleInCloud,
   fetchPlayerSalesFromCloud,
   claimPlayerSalesInCloud,
@@ -54,10 +55,11 @@ if (typeof window !== "undefined") {
     fetchMatchmakingOpponents: fetchPvPMatchmakingOpponents,
     getCurrentUserId: () => auth.currentUser?.uid || null,
 
-    // Métodos do Mercado Global P2P em Nuvem
+    // Métodos do Mercado Global P2P em Nuvem (Transações Atômicas & Custódia)
     createMarketListing: createMarketListingInCloud,
     fetchMarketListings: fetchMarketListingsFromCloud,
     deleteMarketListing: deleteMarketListingInCloud,
+    executeMarketPurchase: executeMarketPurchaseInCloud,
     recordMarketSale: recordMarketSaleInCloud,
     fetchPlayerSales: fetchPlayerSalesFromCloud,
     claimPlayerSales: claimPlayerSalesInCloud,
