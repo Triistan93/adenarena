@@ -47,22 +47,18 @@ service cloud.firestore {
     }
 
     // ─── Mercado Central de Giran — Anúncios P2P ────────────────────────────
-    // • Leitura: qualquer autenticado (incluindo anônimos, para navegação).
-    // • Criação: somente conta registrada e o sellerId deve coincidir com o uid.
-    // • Atualização / Exclusão: somente o vendedor dono do anúncio.
+    // • Leitura e negociação entre jogadores autenticados (inclui anônimos).
     match /market_listings/{listingId} {
-      allow read:           if isAuthenticated();
-      allow create:         if isRegistered()
-                            && request.resource.data.sellerId == request.auth.uid;
-      allow update, delete: if isRegistered()
-                            && resource.data.sellerId == request.auth.uid;
+      allow read:   if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated();
+      allow delete: if isAuthenticated();
     }
 
     // ─── Mercado Central de Giran — Registro de Vendas ──────────────────────
-    // Leitura e escrita restritas a contas registradas.
     match /market_sales/{sellerKey} {
-      allow read:  if isRegistered();
-      allow write: if isRegistered();
+      allow read:  if isAuthenticated();
+      allow write: if isAuthenticated();
     }
 
     // ─── Metadados Globais do Servidor e Metas Comunitárias ──────────────────

@@ -262,20 +262,7 @@ export const MarketService = {
       console.warn('[MarketService] Erro ao buscar anúncios do Firebase:', err);
     }
 
-    // 2. Se Firebase estiver offline ou falhar, tenta buscar da API Serverless /api/market
-    if (remoteList === null && typeof fetch !== 'undefined') {
-      try {
-        const res = await fetch('/api/market');
-        if (res.ok) {
-          const data = await res.json();
-          if (data.ok && Array.isArray(data.listings)) {
-            remoteList = data.listings.filter(this._isValidPlayerListing);
-          }
-        }
-      } catch (apiErr) {}
-    }
-
-    // 3. Atualiza memória e armazenamento local mesclando anúncios remotos com os do jogador local
+    // 2. Atualiza memória e armazenamento local mesclando anúncios remotos com os do jogador local
     if (remoteList !== null) {
       const localList = this.getListingsLocal();
       const myListings = localList.filter(l => this._isMyListing(l, state));
@@ -346,19 +333,6 @@ export const MarketService = {
       }
     } catch (err) {
       console.warn('[MarketService] Erro ao sincronizar vendas do Firebase:', err);
-    }
-
-    // 2. Tenta API Serverless
-    if (!remoteSales && typeof fetch !== 'undefined') {
-      try {
-        const res = await fetch(`/api/market?salesFor=${encodeURIComponent(charName)}`);
-        if (res.ok) {
-          const data = await res.json();
-          if (data.ok && data.sales) {
-            remoteSales = data.sales;
-          }
-        }
-      } catch (e) {}
     }
 
     if (remoteSales) {
@@ -475,18 +449,7 @@ export const MarketService = {
       } catch (e) {}
     }
 
-    // 3. Sincroniza com API Serverless /api/market
-    if (typeof fetch !== 'undefined') {
-      try {
-        fetch('/api/market', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'create', listing: newListing })
-        }).catch(() => {});
-      } catch (e) {}
-    }
-
-    // 4. Sincroniza com Firebase Cloud
+    // 3. Sincroniza com Firebase Cloud
     try {
       if (typeof window !== 'undefined' && window.FirebaseBridge?.createMarketListing) {
         await window.FirebaseBridge.createMarketListing(newListing);
@@ -597,18 +560,7 @@ export const MarketService = {
       } catch (e) {}
     }
 
-    // 3. Sincroniza com API Serverless
-    if (typeof fetch !== 'undefined') {
-      try {
-        fetch('/api/market', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'buy', listingId, buyerName })
-        }).catch(() => {});
-      } catch (e) {}
-    }
-
-    // 4. Sincroniza com Firebase Cloud (Deleta listagem e Credita vendedor)
+    // 3. Sincroniza com Firebase Cloud (Deleta listagem e Credita vendedor)
     try {
       if (typeof window !== 'undefined') {
         if (window.FirebaseBridge?.deleteMarketListing) {
@@ -649,6 +601,7 @@ export const MarketService = {
       return { ok: false, msg: 'Você só pode cancelar seus próprios anúncios!' };
     }
 
+    // Devolve o item cancelado ao inventário
     const returnedItem = {
       ...listing.item,
       uid: 'item_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
@@ -657,9 +610,19 @@ export const MarketService = {
     };
 
     state.inventory = state.inventory || [];
-    state.inventory.push(returnedItem);
+    const isStackable = ['material', 'consumable', 'scroll', 'crystal'].includes(returnedItem.slot);
+    const existingIndex = isStackable 
+      ? state.inventory.findIndex(i => (i.itemId === returnedItem.id || i.id === returnedItem.id) && !i.enchant) 
+      : -1;
 
-    // 1. Remove da lista local
+    if (existingIndex !== -1) {
+      state.inventory[existingIndex].count = (Number(state.inventory[existingIndex].count) || 1) + listing.quantity;
+      state.inventory[existingIndex].quantity = state.inventory[existingIndex].count;
+    } else {
+      state.inventory.push(returnedItem);
+    }
+
+    // Remove do mural
     listings.splice(index, 1);
     this.saveListings(listings, true);
 
@@ -669,18 +632,7 @@ export const MarketService = {
       } catch (e) {}
     }
 
-    // 2. Sincroniza com API Serverless
-    if (typeof fetch !== 'undefined') {
-      try {
-        fetch('/api/market', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'cancel', listingId })
-        }).catch(() => {});
-      } catch (e) {}
-    }
-
-    // 3. Deleta do Firestore
+    // 2. Deleta do Firestore
     try {
       if (typeof window !== 'undefined' && window.FirebaseBridge?.deleteMarketListing) {
         await window.FirebaseBridge.deleteMarketListing(listingId);
@@ -726,17 +678,6 @@ export const MarketService = {
     }
 
     this.savePlayerSales(playerName, salesData);
-
-    // Sincroniza com API Serverless
-    if (typeof fetch !== 'undefined') {
-      try {
-        fetch('/api/market', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'claim', sellerName: playerName })
-        }).catch(() => {});
-      } catch (e) {}
-    }
 
     // Sincroniza com Firebase Cloud
     try {

@@ -449,15 +449,10 @@ export async function createMarketListingInCloud(listing: any): Promise<boolean>
   try {
     if (!listing || !listing.id) return false;
 
-    // ── Verificação de autenticação no cliente (dupla camada com as Rules) ──
+    // ── Verificação de autenticação no cliente ──
     const currentUser = auth.currentUser;
     if (!currentUser) {
       console.warn('[Security] createMarketListing bloqueado — usuário não autenticado.');
-      return false;
-    }
-    const provider = (currentUser as any).providerData?.[0]?.providerId;
-    if (!provider && currentUser.isAnonymous) {
-      console.warn('[Security] createMarketListing bloqueado — conta anônima não pode postar no mercado.');
       return false;
     }
 
