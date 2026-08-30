@@ -104,8 +104,18 @@ export const MarketService = {
         window.FirebaseBridge.subscribeMarketListings((remoteListings) => {
           if (Array.isArray(remoteListings)) {
             const cleanRemote = remoteListings.filter(this._isValidPlayerListing);
-            _inMemoryListings = cleanRemote;
-            this.saveListings(cleanRemote, false);
+            const localList = this.getListingsLocal();
+            const myListings = localList.filter(l => this._isMyListing(l, state));
+
+            const mergedMap = new Map();
+            myListings.forEach(l => mergedMap.set(l.id, l));
+            cleanRemote.forEach(l => mergedMap.set(l.id, l));
+
+            const mergedList = Array.from(mergedMap.values());
+            mergedList.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+
+            _inMemoryListings = mergedList;
+            this.saveListings(mergedList, false);
             this.notifyUI();
             if (callbacks.updateAllUI) callbacks.updateAllUI(true);
           }
@@ -265,12 +275,22 @@ export const MarketService = {
       } catch (apiErr) {}
     }
 
-    // 3. Atualiza memória e armazenamento local de forma autoritativa
+    // 3. Atualiza memória e armazenamento local mesclando anúncios remotos com os do jogador local
     if (remoteList !== null) {
-      _inMemoryListings = remoteList;
-      this.saveListings(remoteList, false);
+      const localList = this.getListingsLocal();
+      const myListings = localList.filter(l => this._isMyListing(l, state));
+      
+      const mergedMap = new Map();
+      myListings.forEach(l => mergedMap.set(l.id, l));
+      remoteList.forEach(l => mergedMap.set(l.id, l));
+      
+      const mergedList = Array.from(mergedMap.values());
+      mergedList.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+      
+      _inMemoryListings = mergedList;
+      this.saveListings(mergedList, false);
       this.notifyUI();
-      return remoteList;
+      return mergedList;
     }
 
     return this.getListingsLocal();
