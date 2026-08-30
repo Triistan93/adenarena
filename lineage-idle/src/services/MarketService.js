@@ -12,6 +12,28 @@
 
 const MARKET_STORAGE_KEY = 'l2_aden_market_listings_v2';
 const MARKET_SALES_KEY = 'l2_aden_market_sales_v2';
+const DELETED_IDS_KEY = 'l2_aden_market_deleted_ids_v2';
+
+// Tombstone set para garantir que itens comprados/cancelados nunca reapareçam
+let _deletedListingIds = new Set();
+try {
+  const rawDeleted = localStorage.getItem(DELETED_IDS_KEY);
+  if (rawDeleted) {
+    const parsed = JSON.parse(rawDeleted);
+    if (Array.isArray(parsed)) {
+      parsed.forEach(id => _deletedListingIds.add(id));
+    }
+  }
+} catch (e) {}
+
+function markListingDeleted(listingId) {
+  if (!listingId) return;
+  _deletedListingIds.add(listingId);
+  try {
+    const arr = Array.from(_deletedListingIds).slice(-500);
+    localStorage.setItem(DELETED_IDS_KEY, JSON.stringify(arr));
+  } catch (e) {}
+}
 
 // Canal de sincronização instantânea entre abas e perfis no mesmo navegador
 let _marketBroadcastChannel = null;
@@ -73,21 +95,32 @@ export const MarketService = {
     if (msg.type === 'SYNC_LISTINGS' || msg.type === 'FORCE_UPDATE') {
       this.fetchRemoteListings();
     } else if (msg.type === 'LISTING_CREATED' && msg.listing) {
-      const current = this.getListingsLocal();
-      if (!current.some(l => l.id === msg.listing.id)) {
-        current.unshift(msg.listing);
-        this.saveListings(current, false);
-        this.notifyUI();
+      if (!_deletedListingIds.has(msg.listing.id)) {
+        const current = this.getListingsLocal();
+        if (!current.some(l => l.id === msg.listing.id)) {
+          current.unshift(msg.listing);
+          this.saveListings(current, false);
+          this.notifyUI();
+        }
       }
     } else if (msg.type === 'LISTING_REMOVED' && msg.listingId) {
+      markListingDeleted(msg.listingId);
       const current = this.getListingsLocal();
       const updated = current.filter(l => l.id !== msg.listingId);
+      _inMemoryListings = updated;
       this.saveListings(updated, false);
       this.notifyUI();
-    } else if (msg.type === 'ITEM_BOUGHT' && msg.sellerName) {
-      // Se meu item foi comprado, atualiza meus lucros imediatamente
-      this.fetchRemoteListings();
-      this.fetchPlayerSalesFromCloud(msg.sellerName);
+    } else if (msg.type === 'ITEM_BOUGHT' && msg.listingId) {
+      // Remove o item comprado de todas as abas e atualiza lucros
+      markListingDeleted(msg.listingId);
+      const current = this.getListingsLocal();
+      const updated = current.filter(l => l.id !== msg.listingId);
+      _inMemoryListings = updated;
+      this.saveListings(updated, false);
+      this.notifyUI();
+      if (msg.sellerName) {
+        this.fetchPlayerSalesFromCloud(msg.sellerName);
+      }
     }
   },
 
@@ -103,13 +136,17 @@ export const MarketService = {
       try {
         window.FirebaseBridge.subscribeMarketListings((remoteListings) => {
           if (Array.isArray(remoteListings)) {
-            const cleanRemote = remoteListings.filter(this._isValidPlayerListing);
-            const localList = this.getListingsLocal();
+            const cleanRemote = remoteListings.filter(item => this._isValidPlayerListing(item));
+            const localList = this.getListingsLocal().filter(item => this._isValidPlayerListing(item));
             const myListings = localList.filter(l => this._isMyListing(l, state));
 
             const mergedMap = new Map();
-            myListings.forEach(l => mergedMap.set(l.id, l));
-            cleanRemote.forEach(l => mergedMap.set(l.id, l));
+            myListings.forEach(l => {
+              if (this._isValidPlayerListing(l)) mergedMap.set(l.id, l);
+            });
+            cleanRemote.forEach(l => {
+              if (this._isValidPlayerListing(l)) mergedMap.set(l.id, l);
+            });
 
             const mergedList = Array.from(mergedMap.values());
             mergedList.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
@@ -169,8 +206,9 @@ export const MarketService = {
    * Valida se um anúncio é estritamente de um jogador real (sem sementes/NPCs)
    */
   _isValidPlayerListing(item) {
-    if (!item || !item.item) return false;
+    if (!item || !item.id || !item.item) return false;
     if (item.isPlayerListing === false) return false;
+    if (_deletedListingIds.has(item.id)) return false;
     if (String(item.id || '').startsWith('seed_')) return false;
     const ghostNpcNames = [
       'Merchant Katrina', 'Blacksmith Pushkin', 'Trader Woody', 
@@ -219,7 +257,7 @@ export const MarketService = {
       if (raw) {
         const parsed = JSON.parse(raw);
         if (Array.isArray(parsed)) {
-          return parsed.filter(this._isValidPlayerListing);
+          return parsed.filter(item => this._isValidPlayerListing(item));
         }
       }
     } catch (e) {
@@ -233,7 +271,7 @@ export const MarketService = {
    */
   getListings(state) {
     if (_inMemoryListings !== null) {
-      return _inMemoryListings;
+      return _inMemoryListings.filter(item => this._isValidPlayerListing(item));
     }
 
     const localList = this.getListingsLocal();
@@ -255,7 +293,7 @@ export const MarketService = {
       if (typeof window !== 'undefined' && window.FirebaseBridge?.fetchMarketListings) {
         const remote = await window.FirebaseBridge.fetchMarketListings();
         if (Array.isArray(remote)) {
-          remoteList = remote.filter(this._isValidPlayerListing);
+          remoteList = remote.filter(item => this._isValidPlayerListing(item));
         }
       }
     } catch (err) {
@@ -264,12 +302,16 @@ export const MarketService = {
 
     // 2. Atualiza memória e armazenamento local mesclando anúncios remotos com os do jogador local
     if (remoteList !== null) {
-      const localList = this.getListingsLocal();
+      const localList = this.getListingsLocal().filter(item => this._isValidPlayerListing(item));
       const myListings = localList.filter(l => this._isMyListing(l, state));
       
       const mergedMap = new Map();
-      myListings.forEach(l => mergedMap.set(l.id, l));
-      remoteList.forEach(l => mergedMap.set(l.id, l));
+      myListings.forEach(l => {
+        if (this._isValidPlayerListing(l)) mergedMap.set(l.id, l);
+      });
+      remoteList.forEach(l => {
+        if (this._isValidPlayerListing(l)) mergedMap.set(l.id, l);
+      });
       
       const mergedList = Array.from(mergedMap.values());
       mergedList.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
@@ -545,9 +587,11 @@ export const MarketService = {
     salesData.history.unshift({ ...saleRecord, soldAt: Date.now() });
     this.savePlayerSales(listing.sellerName, salesData);
 
-    // 2. Remove da lista local e transmite
-    listings.splice(index, 1);
-    this.saveListings(listings, true);
+    // 2. Marca como deletado no tombstone e remove imediatamente da lista local
+    markListingDeleted(listingId);
+    const updatedAfterBuy = this.getListingsLocal().filter(l => l.id !== listingId && !_deletedListingIds.has(l.id));
+    _inMemoryListings = updatedAfterBuy;
+    this.saveListings(updatedAfterBuy, true);
 
     if (_marketBroadcastChannel) {
       try {
@@ -591,7 +635,7 @@ export const MarketService = {
 
     const listings = this.getListings(state);
     const index = listings.findIndex(l => l.id === listingId);
-    if (index === -1) {
+    if (index === -1 || _deletedListingIds.has(listingId)) {
       return { ok: false, msg: 'Anúncio não encontrado ou já negociado.' };
     }
 
@@ -601,7 +645,10 @@ export const MarketService = {
       return { ok: false, msg: 'Você só pode cancelar seus próprios anúncios!' };
     }
 
-    // Devolve o item cancelado ao inventário
+    // 1. Marca como deletado no tombstone
+    markListingDeleted(listingId);
+
+    // 2. Devolve o item cancelado ao inventário
     const returnedItem = {
       ...listing.item,
       uid: 'item_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
@@ -622,9 +669,10 @@ export const MarketService = {
       state.inventory.push(returnedItem);
     }
 
-    // Remove do mural
-    listings.splice(index, 1);
-    this.saveListings(listings, true);
+    // 3. Remove do mural e salva
+    const updatedAfterCancel = this.getListingsLocal().filter(l => l.id !== listingId && !_deletedListingIds.has(l.id));
+    _inMemoryListings = updatedAfterCancel;
+    this.saveListings(updatedAfterCancel, true);
 
     if (_marketBroadcastChannel) {
       try {
