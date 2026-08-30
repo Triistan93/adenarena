@@ -15,7 +15,7 @@ import { setRoot as setDomRoot, _intervals, addTrackedListener, cleanupTracked, 
 import { setRoot as setMainRoot, bindEvents } from '../../main.js';
 import { getState, setState, loadState, saveState, DEFAULT_STATE } from './StateManager.js';
 import { getStats, getClass } from '../engine/StatsEngine.js';
-import { RACES } from '../data/races.js';
+import { startCombat, stopCombat } from '../engine/CombatEngine.js';
 import { updateAllUI } from '../ui/index.js';
 import { CommunityCapService } from '../services/CommunityCapService.js';
 

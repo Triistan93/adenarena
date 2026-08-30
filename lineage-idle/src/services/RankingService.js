@@ -100,6 +100,55 @@ export const RankingService = {
   },
 
   /**
+   * Obtém os quadros de líderes síncronos para renderização imediata na UI
+   * @param {Object} [state] - Estado atual do jogador
+   * @returns {Object} Quadros de líderes de CP, Olimpíadas, Duelos e Castelos
+   */
+  getLeaderboards(state = null) {
+    const cpList = (_cachedRankings.cp && _cachedRankings.cp.length > 0) ? _cachedRankings.cp : this._generateFallbackLeaderboard('cp', state);
+    const olyList = (_cachedRankings.olympiad && _cachedRankings.olympiad.length > 0) ? _cachedRankings.olympiad : this._generateFallbackLeaderboard('olympiad', state);
+    const duelList = (_cachedRankings.duels && _cachedRankings.duels.length > 0) ? _cachedRankings.duels : this._generateFallbackLeaderboard('duels', state);
+
+    return {
+      cp: this._mergeCurrentPlayer(cpList, state, 'cp'),
+      olympiad: this._mergeCurrentPlayer(olyList, state, 'olympiad'),
+      duels: this._mergeCurrentPlayer(duelList, state, 'duels'),
+      castles: _cachedRankings.castles || [
+        { castle: 'Castelo de Aden', lord: 'LordValen', clan: 'BloodThorn', tax: '15%' },
+        { castle: 'Castelo de Giran', lord: 'SirAres', clan: 'GloryKnights', tax: '10%' },
+        { castle: 'Castelo de Dion', lord: 'LadyElena', clan: 'SilverDawn', tax: '5%' }
+      ]
+    };
+  },
+
+  _generateFallbackLeaderboard(category, state) {
+    const playerCP = state ? CombatPowerService.calculateCombatPower(state) : 50000;
+    const baseCP = Math.max(10000, playerCP);
+    const archetypes = [
+      { name: 'KaiserValen', race: 'Human', class: 'Duelist', mult: 1.45, w: '+12 Dual Damascus', oly: 1450, wins: 45 },
+      { name: 'SylphAstra', race: 'Elf', class: 'Sagittarius', mult: 1.30, w: '+10 Soul Bow', oly: 1380, wins: 38 },
+      { name: 'MorriganDark', race: 'Dark Elf', class: 'Ghost Hunter', mult: 1.20, w: '+11 Angel Slayer', oly: 1320, wins: 32 },
+      { name: 'IgnisGrand', race: 'Human', class: 'Archmage', mult: 1.15, w: '+9 Arcana Mace', oly: 1280, wins: 28 },
+      { name: 'GrommBane', race: 'Orc', class: 'Titan', mult: 1.05, w: '+8 Dragon Slayer', oly: 1220, wins: 24 }
+    ];
+
+    return archetypes.map((a, i) => ({
+      userId: `bot_${category}_${i}`,
+      charName: a.name,
+      race: a.race,
+      className: a.class,
+      level: Math.max(40, Math.min(85, (state?.level || 40) + 5 - i)),
+      combatPower: Math.floor(baseCP * a.mult),
+      olympiadPoints: a.oly,
+      duelWins: a.wins,
+      clanName: i % 2 === 0 ? 'BloodThorn' : 'GloryKnights',
+      topWeaponName: a.w,
+      topWeaponGlow: i === 0 ? 'crimson-fire' : 'golden-amber',
+      statsSnapshot: { hp: 5000, pAtk: 1200, mAtk: 800, pDef: 900, mDef: 700, crit: 250 }
+    }));
+  },
+
+  /**
    * Obtém a lista de líderes para a categoria informada
    * @param {'cp' | 'olympiad' | 'duels' | 'castles'} category 
    * @param {Object} state - Estado atual do jogador para mesclar no ranking
