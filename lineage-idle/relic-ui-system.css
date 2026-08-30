@@ -1,0 +1,810 @@
+/* ================================================================
+   RELIC & SOUL-FORGED — DESIGN SYSTEM
+   Assinatura Visual Proprietária do Aden Arena
+   Substituição completa do padrão "gold frame genérico"
+   ================================================================ */
+
+/* ================================================================
+   TOKENS: Hierarquia de Materiais Fantasia
+   ================================================================ */
+:root {
+  /* ---- Material: Cold Iron (Ferro Forjado — base, monstros comuns) ---- */
+  --iron-dark:   #0f0d0a;
+  --iron-base:   #1c1712;
+  --iron-mid:    #2a231a;
+  --iron-edge:   #3d3225;
+  --iron-high:   #59493a;
+  --iron-spec:   rgba(255, 255, 255, 0.08);
+
+  /* ---- Material: Mithril (Aço Nobre — herói, UI primária) ---- */
+  --mith-dark:   #0b0e14;
+  --mith-base:   #141a24;
+  --mith-mid:    #1e2a3a;
+  --mith-edge:   #364b66;
+  --mith-high:   #5b7fa8;
+  --mith-glow:   rgba(91, 127, 168, 0.35);
+  --mith-spec:   rgba(180, 210, 240, 0.12);
+
+  /* ---- Material: Void Obsidian (Obsidiana — painéis, fundos) ---- */
+  --void-dark:   #08070a;
+  --void-base:   #0e0c12;
+  --void-mid:    #16131e;
+  --void-edge:   #231e30;
+  --void-high:   #362e48;
+
+  /* ---- Material: Star-Metal (Estelar — dourado nobre, élites) ---- */
+  --star-dark:   #2a1f0a;
+  --star-base:   #4d3812;
+  --star-mid:    #7a5a1e;
+  --star-high:   #b8892e;
+  --star-glow:   rgba(184, 137, 46, 0.35);
+  --star-bright: #e8b940;
+
+  /* ---- Material: Dragonbone (Osso de Dragão — bosses, épico) ---- */
+  --bone-dark:   #1a0c08;
+  --bone-base:   #3a1e10;
+  --bone-mid:    #6b3018;
+  --bone-high:   #a84820;
+  --bone-glow:   rgba(168, 72, 32, 0.4);
+  --bone-bright: #e86830;
+
+  /* ---- Acentos Funcionais ---- */
+  --relic-soulshot:  #00e5ff;
+  --relic-potion:    #10b981;
+  --relic-danger:    #ef4444;
+  --relic-speed:     #a78bfa;
+  --relic-xp:        #f59e0b;
+  --relic-mana:      #3b82f6;
+  --relic-hp:        #dc2626;
+
+  /* ---- Surfaces ---- */
+  --relic-glass:     rgba(10, 8, 6, 0.88);
+  --relic-blur:      blur(10px);
+
+  /* ---- Specular Highlight ---- */
+  --relic-bevel-top: 1px solid rgba(255, 255, 255, 0.14);
+  --relic-bevel-bot: 1px solid rgba(0, 0, 0, 0.6);
+
+  /* ---- Typography ---- */
+  --relic-font-display: 'Cinzel', serif;
+  --relic-font-body: 'IBM Plex Sans', sans-serif;
+  --relic-font-mono: 'IBM Plex Mono', monospace;
+}
+
+
+/* ================================================================
+   BUTTONS — Placa de Aço / Mithril Lapidada
+   ================================================================ */
+
+/* ---- Base Button (Cold Iron) ---- */
+.btn-relic {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 7px 14px;
+  background: linear-gradient(180deg, var(--iron-mid) 0%, var(--iron-dark) 100%);
+  border-top: var(--relic-bevel-top);
+  border-left: 1px solid rgba(255, 255, 255, 0.06);
+  border-right: 1px solid rgba(0, 0, 0, 0.4);
+  border-bottom: var(--relic-bevel-bot);
+  border-radius: 4px;
+  color: #c5bfb0;
+  font-family: var(--relic-font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.25, 1);
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  user-select: none;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.btn-relic:hover {
+  background: linear-gradient(180deg, var(--iron-edge) 0%, var(--iron-base) 100%);
+  color: #e8e0d0;
+  box-shadow:
+    0 3px 10px rgba(0, 0, 0, 0.8),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+}
+
+.btn-relic:active {
+  transform: translateY(0px);
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.9),
+    inset 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Specular sweep on hover */
+.btn-relic::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 50%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.06), transparent);
+  transition: left 0.5s ease;
+  pointer-events: none;
+}
+.btn-relic:hover::before { left: 150%; }
+
+
+/* ---- Primary Button (Star-Metal / Ouro Estelar) ---- */
+.btn-relic-primary {
+  background: linear-gradient(180deg, var(--star-mid) 0%, var(--star-dark) 100%) !important;
+  border-top: 1px solid rgba(232, 185, 64, 0.3) !important;
+  border-left: 1px solid rgba(232, 185, 64, 0.15) !important;
+  border-right: 1px solid rgba(0, 0, 0, 0.5) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.7) !important;
+  color: #f5e6c0 !important;
+  text-shadow: 0 0 6px rgba(232, 185, 64, 0.3) !important;
+}
+.btn-relic-primary:hover {
+  background: linear-gradient(180deg, var(--star-high) 0%, var(--star-mid) 100%) !important;
+  box-shadow:
+    0 0 14px rgba(184, 137, 46, 0.3),
+    0 3px 10px rgba(0, 0, 0, 0.8),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+  color: #fff8e0 !important;
+}
+
+
+/* ---- Toggle Button (Estado On/Off) ---- */
+.btn-relic-toggle {
+  position: relative;
+  background: linear-gradient(180deg, var(--iron-mid) 0%, var(--iron-dark) 100%);
+  border: 1px solid var(--iron-edge);
+  color: #8a8070;
+}
+
+.btn-relic-toggle.active {
+  border-color: var(--relic-soulshot);
+  color: #e0f8ff;
+  box-shadow:
+    0 0 12px rgba(0, 229, 255, 0.2),
+    inset 0 0 8px rgba(0, 229, 255, 0.08);
+}
+
+/* Toggle state variants */
+.btn-relic-toggle[data-relic="soulshot"].active {
+  border-color: var(--relic-soulshot) !important;
+  color: #d0f8ff !important;
+  box-shadow: 0 0 14px rgba(0, 229, 255, 0.25), inset 0 0 8px rgba(0, 229, 255, 0.1) !important;
+  animation: relicPulseCyan 2.5s ease-in-out infinite;
+}
+
+.btn-relic-toggle[data-relic="potion"].active {
+  border-color: var(--relic-potion) !important;
+  color: #c0f0e0 !important;
+  box-shadow: 0 0 14px rgba(16, 185, 129, 0.25), inset 0 0 8px rgba(16, 185, 129, 0.1) !important;
+  animation: relicPulseGreen 2.5s ease-in-out infinite;
+}
+
+.btn-relic-toggle[data-relic="stop"].active {
+  border-color: var(--relic-danger) !important;
+  color: #ffc0c0 !important;
+  box-shadow: 0 0 14px rgba(239, 68, 68, 0.25), inset 0 0 8px rgba(239, 68, 68, 0.1) !important;
+}
+
+.btn-relic-toggle[data-relic="speed"].active {
+  border-color: var(--relic-speed) !important;
+  color: #e0d0ff !important;
+  box-shadow: 0 0 14px rgba(167, 139, 250, 0.25), inset 0 0 8px rgba(167, 139, 250, 0.1) !important;
+}
+
+
+/* ---- Pillar / Tab Button (Mithril Forjado) ---- */
+.btn-relic-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 6px;
+  background: linear-gradient(180deg, var(--mith-mid) 0%, var(--mith-dark) 100%);
+  border-top: 1px solid rgba(180, 210, 240, 0.15);
+  border-left: 1px solid rgba(180, 210, 240, 0.06);
+  border-right: 1px solid rgba(0, 0, 0, 0.5);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.7);
+  border-radius: 5px;
+  color: #a0b0c4;
+  font-family: var(--relic-font-display);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.25, 1);
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 2px 6px rgba(0, 0, 0, 0.6);
+  user-select: none;
+}
+
+.btn-relic-tab:hover {
+  background: linear-gradient(180deg, var(--mith-edge) 0%, var(--mith-mid) 100%);
+  color: #d0e0f0;
+  border-top-color: rgba(180, 210, 240, 0.25);
+  transform: translateY(-1px);
+}
+
+.btn-relic-tab.active {
+  background: linear-gradient(180deg, var(--mith-high) 0%, var(--mith-edge) 100%);
+  color: #ffffff;
+  border-top-color: rgba(255, 255, 255, 0.3);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 0 16px var(--mith-glow);
+  text-shadow: 0 0 8px var(--mith-glow);
+}
+
+/* Active underline rune beam */
+.btn-relic-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 15%; width: 70%; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--mith-high), rgba(180, 210, 240, 0.8), var(--mith-high), transparent);
+  box-shadow: 0 0 8px var(--mith-glow);
+  animation: relicRuneBeam 3s ease-in-out infinite;
+}
+
+
+/* ---- Subtab / Chip Button (Iron Chip) ---- */
+.btn-relic-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 11px;
+  background: linear-gradient(180deg, var(--iron-base) 0%, var(--iron-dark) 100%);
+  border: 1px solid var(--iron-edge);
+  border-radius: 4px;
+  color: #908578;
+  font-family: var(--relic-font-body);
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  position: relative;
+  user-select: none;
+}
+
+.btn-relic-chip:hover {
+  background: linear-gradient(180deg, var(--iron-mid) 0%, var(--iron-base) 100%);
+  border-color: var(--iron-high);
+  color: #c5bfb0;
+  transform: translateY(-1px);
+}
+
+.btn-relic-chip.active {
+  background: linear-gradient(180deg, var(--mith-mid) 0%, var(--mith-dark) 100%);
+  border-color: var(--mith-high);
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 0 10px var(--mith-glow), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.btn-relic-chip.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 25%; width: 50%; height: 2px;
+  background: var(--mith-high);
+  box-shadow: 0 0 6px var(--mith-glow);
+}
+
+
+/* ================================================================
+   FRAMES — Molduras Arquitetônicas Relic (Chanfro Metálico)
+   ================================================================ */
+
+/* ---- Base Frame (Cold Iron — monstros comuns) ---- */
+.frame-relic {
+  position: relative;
+  background: var(--relic-glass);
+  backdrop-filter: var(--relic-blur);
+  border: 2px solid var(--iron-edge);
+  border-top-color: var(--iron-high);
+  border-radius: 4px;
+  box-shadow:
+    0 6px 20px rgba(0, 0, 0, 0.85),
+    inset 0 0 12px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 var(--iron-spec);
+  /* clip-path: chanfro sutil nos 4 cantos */
+  clip-path: polygon(
+    8px 0%, calc(100% - 8px) 0%,
+    100% 8px, 100% calc(100% - 8px),
+    calc(100% - 8px) 100%, 8px 100%,
+    0% calc(100% - 8px), 0% 8px
+  );
+}
+
+/* ---- Hero Frame (Mithril) ---- */
+.frame-relic-hero {
+  border-color: var(--mith-edge) !important;
+  border-top-color: var(--mith-high) !important;
+  box-shadow:
+    0 6px 20px rgba(0, 0, 0, 0.85),
+    inset 0 0 12px rgba(91, 127, 168, 0.08),
+    inset 0 1px 0 var(--mith-spec) !important;
+}
+
+/* Mana lines for hero frame */
+.frame-relic-hero::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border: 1px solid rgba(91, 127, 168, 0.12);
+  pointer-events: none;
+  clip-path: polygon(
+    6px 0%, calc(100% - 6px) 0%,
+    100% 6px, 100% calc(100% - 6px),
+    calc(100% - 6px) 100%, 6px 100%,
+    0% calc(100% - 6px), 0% 6px
+  );
+  animation: relicManaBreath 4s ease-in-out infinite;
+}
+
+
+/* ---- Monster Frame (Cold Iron — default) ---- */
+.frame-relic-monster {
+  border-color: var(--iron-edge) !important;
+  border-top-color: var(--iron-high) !important;
+}
+
+
+/* ---- Elite Frame (Star-Metal + Shadow) ---- */
+.frame-relic-elite {
+  border-color: var(--star-mid) !important;
+  border-top-color: var(--star-high) !important;
+  box-shadow:
+    0 6px 20px rgba(0, 0, 0, 0.85),
+    0 0 20px rgba(184, 137, 46, 0.15),
+    inset 0 0 12px rgba(184, 137, 46, 0.06),
+    inset 0 1px 0 rgba(232, 185, 64, 0.1) !important;
+}
+
+/* Corner claw marks on elite */
+.frame-relic-elite::before {
+  content: '◆';
+  position: absolute;
+  top: -4px; right: -4px;
+  font-size: 8px;
+  color: var(--star-bright);
+  text-shadow: 0 0 6px var(--star-glow);
+  pointer-events: none;
+  z-index: 5;
+}
+
+
+/* ---- Boss Frame (Dragonbone + Magma Core) ---- */
+.frame-relic-boss {
+  border-color: var(--bone-mid) !important;
+  border-top-color: var(--bone-high) !important;
+  box-shadow:
+    0 6px 20px rgba(0, 0, 0, 0.85),
+    0 0 24px var(--bone-glow),
+    inset 0 0 15px rgba(168, 72, 32, 0.08),
+    inset 0 1px 0 rgba(232, 104, 48, 0.12) !important;
+  animation: relicBossEmber 3s ease-in-out infinite;
+}
+
+.frame-relic-boss::before {
+  content: '🔥';
+  position: absolute;
+  top: -6px; right: -6px;
+  font-size: 10px;
+  filter: drop-shadow(0 0 4px rgba(232, 104, 48, 0.8));
+  pointer-events: none;
+  z-index: 5;
+  animation: relicEmberFlicker 2s ease-in-out infinite;
+}
+
+
+/* ================================================================
+   GAUGES — Barras de HP/MP/XP de Cristal Lapidado
+   ================================================================ */
+
+.gauge-relic {
+  position: relative;
+  width: 100%;
+  height: 14px;
+  background: rgba(8, 6, 4, 0.92);
+  border: 1px solid var(--iron-edge);
+  border-top-color: rgba(0, 0, 0, 0.7);
+  border-bottom-color: var(--iron-high);
+  border-radius: 2px;
+  overflow: hidden;
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.8),
+    0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.gauge-relic-fill {
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  height: 100%;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 1px;
+}
+
+/* Glass specular gloss on top */
+.gauge-relic-fill::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 40%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.02) 100%);
+  pointer-events: none;
+}
+
+/* HP variant */
+.gauge-relic-fill.hp {
+  background: linear-gradient(90deg, #8b1a1a, #cc2020, #e83030);
+  box-shadow: inset 0 -1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* MP variant */
+.gauge-relic-fill.mp {
+  background: linear-gradient(90deg, #152e6b, #2050b0, #3070e0);
+  box-shadow: inset 0 -1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* XP variant */
+.gauge-relic-fill.xp {
+  background: linear-gradient(90deg, #6b4810, #a87020, #d09030);
+  box-shadow: inset 0 -1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.gauge-relic-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--relic-font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  color: #ffffff;
+  text-shadow: 0 1px 2px #000, 0 0 4px #000;
+  pointer-events: none;
+  z-index: 2;
+}
+
+
+/* ================================================================
+   ZONE CARDS — Placa Chanfrada com Janela de Arte
+   ================================================================ */
+
+.zone-relic-card {
+  padding: 8px 10px;
+  background: linear-gradient(180deg, var(--iron-base) 0%, var(--iron-dark) 100%);
+  border: 1px solid var(--iron-edge);
+  border-top-color: rgba(255, 255, 255, 0.06);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.zone-relic-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--iron-edge);
+  transition: all 0.2s ease;
+}
+
+.zone-relic-card:hover:not(.locked) {
+  border-color: var(--mith-edge);
+  transform: translateX(2px);
+  background: linear-gradient(180deg, var(--iron-mid) 0%, var(--iron-base) 100%);
+}
+.zone-relic-card:hover:not(.locked)::before {
+  background: var(--mith-high);
+}
+
+.zone-relic-card.selected {
+  border-color: var(--star-mid);
+  background: linear-gradient(90deg, rgba(184, 137, 46, 0.08), var(--iron-dark));
+  box-shadow: 0 0 12px rgba(184, 137, 46, 0.1);
+}
+.zone-relic-card.selected::before {
+  background: var(--star-bright);
+  box-shadow: 0 0 8px var(--star-glow);
+}
+
+.zone-relic-card.locked {
+  opacity: 0.35;
+  cursor: not-allowed;
+  filter: saturate(0.3);
+}
+
+.zone-relic-card h4 {
+  font-family: var(--relic-font-display);
+  font-size: 12px;
+  font-weight: 700;
+  color: #c5bfb0;
+  letter-spacing: 0.06em;
+}
+.zone-relic-card.selected h4 {
+  color: var(--star-bright);
+  text-shadow: 0 0 6px rgba(184, 137, 46, 0.3);
+}
+.zone-relic-card p {
+  font-family: var(--relic-font-mono);
+  font-size: 10px;
+  color: #706858;
+  margin-top: 2px;
+  letter-spacing: 0.06em;
+}
+
+
+/* ================================================================
+   PANELS — Void Obsidian Panels (substituem l2-gold-frame)
+   ================================================================ */
+
+.panel-relic {
+  position: relative;
+  background: linear-gradient(180deg, var(--void-mid) 0%, var(--void-dark) 100%);
+  border: 1px solid var(--void-edge);
+  border-top-color: rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.9),
+    0 4px 16px rgba(0, 0, 0, 0.6),
+    inset 0 0 15px rgba(0, 0, 0, 0.5);
+}
+
+/* Inner border line like the old l2-gold-frame::before */
+.panel-relic::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border: 1px solid rgba(91, 127, 168, 0.08);
+  pointer-events: none;
+  border-radius: 3px;
+}
+
+
+/* ================================================================
+   PILLAR DOCK — Replaces golden pillar-dock-container
+   ================================================================ */
+.dock-relic {
+  display: flex;
+  flex-direction: column;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(91, 127, 168, 0.10), transparent 75%),
+    linear-gradient(180deg, var(--mith-mid) 0%, var(--void-dark) 100%);
+  border-bottom: 2px solid var(--mith-edge);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.8);
+  padding: 6px 8px 8px 8px;
+  gap: 8px;
+}
+
+
+/* ================================================================
+   STAT PANEL — Herói Stats (Cor Temática por Atributo)
+   ================================================================ */
+
+.stat-relic-atk   { color: #d08050 !important; }  /* P.Atk — bronze afiado */
+.stat-relic-def   { color: #7090b0 !important; }  /* Defesa — aço azulado */
+.stat-relic-matk  { color: #9070c0 !important; }  /* M.Atk — arcano roxo */
+.stat-relic-mdef  { color: #6090a0 !important; }  /* M.Def — mithril */
+.stat-relic-crit  { color: var(--star-bright) !important; }  /* Crítico — ouro estelar */
+.stat-relic-eva   { color: #60b090 !important; }  /* Evasão — verde ágil */
+.stat-relic-gold  { color: #c8a040 !important; }  /* Adena — moeda antiga */
+.stat-relic-loot  { color: #90b060 !important; }  /* Loot — colheita verde */
+
+
+/* ================================================================
+   LOG FILTER CHIPS — Cor por Categoria
+   ================================================================ */
+
+.log-chip-relic[data-filter="drops"].active {
+  border-color: #48bb78 !important;
+  color: #a0e8c0 !important;
+  box-shadow: 0 0 8px rgba(72, 187, 120, 0.2) !important;
+}
+.log-chip-relic[data-filter="xp"].active {
+  border-color: var(--relic-xp) !important;
+  color: #ffe0a0 !important;
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.2) !important;
+}
+.log-chip-relic[data-filter="combat"].active {
+  border-color: var(--relic-danger) !important;
+  color: #ffc0c0 !important;
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.2) !important;
+}
+.log-chip-relic[data-filter="system"].active {
+  border-color: var(--relic-soulshot) !important;
+  color: #c0f0ff !important;
+  box-shadow: 0 0 8px rgba(0, 229, 255, 0.2) !important;
+}
+
+
+/* ================================================================
+   VFX ANIMATIONS
+   ================================================================ */
+
+/* Soulshot sweep — pulsating cyan glow */
+@keyframes relicPulseCyan {
+  0%, 100% { box-shadow: 0 0 10px rgba(0, 229, 255, 0.15), inset 0 0 6px rgba(0, 229, 255, 0.05); }
+  50%      { box-shadow: 0 0 18px rgba(0, 229, 255, 0.3), inset 0 0 10px rgba(0, 229, 255, 0.12); }
+}
+
+/* Potion — pulsating green glow */
+@keyframes relicPulseGreen {
+  0%, 100% { box-shadow: 0 0 10px rgba(16, 185, 129, 0.15), inset 0 0 6px rgba(16, 185, 129, 0.05); }
+  50%      { box-shadow: 0 0 18px rgba(16, 185, 129, 0.3), inset 0 0 10px rgba(16, 185, 129, 0.12); }
+}
+
+/* Mana breathing on hero frame border */
+@keyframes relicManaBreath {
+  0%, 100% { border-color: rgba(91, 127, 168, 0.08); }
+  50%      { border-color: rgba(91, 127, 168, 0.2); }
+}
+
+/* Rune beam along active tab bottom */
+@keyframes relicRuneBeam {
+  0%, 100% { opacity: 0.6; }
+  50%      { opacity: 1; }
+}
+
+/* Boss ember pulsation */
+@keyframes relicBossEmber {
+  0%, 100% { box-shadow: 0 6px 20px rgba(0,0,0,0.85), 0 0 20px rgba(168,72,32,0.2), inset 0 0 12px rgba(168,72,32,0.05); }
+  50%      { box-shadow: 0 6px 20px rgba(0,0,0,0.85), 0 0 28px rgba(168,72,32,0.35), inset 0 0 16px rgba(168,72,32,0.1); }
+}
+
+/* Ember icon flicker */
+@keyframes relicEmberFlicker {
+  0%, 100% { opacity: 0.7; transform: scale(0.9); }
+  50%      { opacity: 1;   transform: scale(1.05); }
+}
+
+/* Damage shake — apply to .frame-relic-hero.hurt or .frame-relic-monster.hurt */
+@keyframes relicDamageShake {
+  0%, 100% { transform: translateX(0); }
+  10%      { transform: translateX(-4px); }
+  20%      { transform: translateX(4px); }
+  30%      { transform: translateX(-3px); }
+  40%      { transform: translateX(3px); }
+  50%      { transform: translateX(-2px); }
+  60%      { transform: translateX(2px); }
+  70%      { transform: translateX(-1px); }
+  80%      { transform: translateX(1px); }
+}
+
+/* Soulshot sweep effect on combat hit */
+@keyframes relicSoulshotSweep {
+  0%   { left: -30%; opacity: 0; }
+  50%  { opacity: 0.6; }
+  100% { left: 130%; opacity: 0; }
+}
+
+/* Specular glass gloss on gauges */
+@keyframes relicGlassSheen {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+
+/* ================================================================
+   OVERRIDE HELPERS — Seamless Migration from Gold System
+   ================================================================ */
+
+/* Override the old golden stage combatant frames */
+.stage-hero.frame-relic,
+.stage-monster.frame-relic {
+  border: none !important;
+  background: var(--relic-glass) !important;
+  box-shadow: none !important;
+  /* re-apply frame-relic shadows via the frame variant classes */
+}
+
+/* Override HP/MP bars within relic frames */
+.frame-relic .stage-hp-bar,
+.frame-relic .stage-mp-bar,
+.frame-relic .m-hp,
+.frame-relic .h-hp {
+  background: rgba(8, 6, 4, 0.92) !important;
+  border: 1px solid var(--iron-edge) !important;
+  border-top-color: rgba(0, 0, 0, 0.7) !important;
+  border-bottom-color: var(--iron-high) !important;
+  border-radius: 2px !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.8), 0 1px 0 rgba(255,255,255,0.04) !important;
+}
+
+/* Glass specular on HP fills */
+.frame-relic .stage-hp-fill::after,
+.frame-relic .stage-mp-fill::after,
+.frame-relic .stage-hp-fill-hero::after,
+.frame-relic .stage-mp-fill-hero::after {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important; left: 0 !important; right: 0 !important;
+  height: 40% !important;
+  background: linear-gradient(180deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.02) 100%) !important;
+  pointer-events: none !important;
+}
+
+/* Entity names within relic frames: use mithril for hero, iron for monster */
+.frame-relic-hero .stage-entity-name,
+.frame-relic-hero .stage-hero-name,
+.frame-relic-hero .h-name {
+  color: #b0c8e0 !important;
+  text-shadow: 0 0 6px var(--mith-glow), 0 1px 3px #000 !important;
+}
+
+.frame-relic-monster .stage-entity-name,
+.frame-relic-monster .m-name {
+  color: #c5bfb0 !important;
+  text-shadow: 0 1px 3px #000 !important;
+}
+
+.frame-relic-elite .stage-entity-name,
+.frame-relic-elite .m-name {
+  color: var(--star-bright) !important;
+  text-shadow: 0 0 6px var(--star-glow), 0 1px 3px #000 !important;
+}
+
+.frame-relic-boss .stage-entity-name,
+.frame-relic-boss .m-name {
+  color: var(--bone-bright) !important;
+  text-shadow: 0 0 6px var(--bone-glow), 0 1px 3px #000 !important;
+}
+
+
+/* ================================================================
+   TOP BAR — Replaces ts-cash-shop-btn golden style
+   ================================================================ */
+
+.top-bar .btn-relic {
+  padding: 3px 8px;
+  font-size: 11px;
+}
+
+.top-bar .btn-relic .btn-relic-tag {
+  display: inline-block;
+  background: rgba(91, 127, 168, 0.15);
+  border: 1px solid rgba(91, 127, 168, 0.3);
+  border-radius: 3px;
+  padding: 1px 5px;
+  font-size: 9px;
+  color: #b0c8e0;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+
+/* ================================================================
+   RESPONSIVE — Mobile Adjustments
+   ================================================================ */
+@media (max-width: 700px) {
+  .frame-relic {
+    clip-path: polygon(
+      5px 0%, calc(100% - 5px) 0%,
+      100% 5px, 100% calc(100% - 5px),
+      calc(100% - 5px) 100%, 5px 100%,
+      0% calc(100% - 5px), 0% 5px
+    );
+  }
+
+  .btn-relic-tab {
+    padding: 6px 4px;
+    font-size: 10px;
+  }
+
+  .btn-relic-chip {
+    padding: 4px 8px;
+    font-size: 10px;
+  }
+}

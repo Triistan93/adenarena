@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="theme-grimoire.css" />
   <link rel="stylesheet" href="src/ui/GameUI.css" />
+  <link rel="stylesheet" href="relic-ui-system.css" />
 </head>
 <body>
   <div id="game">
@@ -37,12 +38,12 @@
         </div>
       </div>
       <div class="top-stats">
-        <button class="ts-cash-shop-btn" id="top-cash-shop-btn" onclick="window.openCashShopModal && window.openCashShopModal()" title="Abrir Loja de Aden" style="display:flex; align-items:center; gap:6px; background:linear-gradient(135deg, rgba(212,175,55,0.2), rgba(0,0,0,0.6)); border:1px solid #ffd700; border-radius:6px; padding:3px 8px; cursor:pointer; color:#fff; font-family:'IBM Plex Sans',sans-serif; text-shadow:0 0 4px #000;">
-          <span style="font-size:14px;">🪙</span>
-          <span id="top-ac-amount" style="font-weight:bold; color:#ffd700; font-size:12px;">0 AC</span>
-          <span style="background:rgba(212,175,55,0.3); border:1px solid rgba(255,215,0,0.6); border-radius:3px; padding:1px 5px; font-size:9px; color:#fef08a; text-transform:uppercase; font-weight:700;">Loja</span>
+        <button class="btn-relic btn-relic-primary" id="top-cash-shop-btn" onclick="window.openCashShopModal && window.openCashShopModal()" title="Abrir Loja de Aden">
+          <span style="font-size:13px;">🪙</span>
+          <span id="top-ac-amount" style="font-weight:700; color:#f5e6c0; font-size:11px;">0 AC</span>
+          <span class="btn-relic-tag" style="background:rgba(232,185,64,0.2); border:1px solid rgba(232,185,64,0.4); border-radius:3px; padding:1px 5px; font-size:9px; color:#fdf3dc; text-transform:uppercase; font-weight:700;">Loja</span>
         </button>
-        <button id="btn-pwa-install" onclick="window.installPwaApp()" class="ts-cash-shop-btn" style="display:none; align-items:center; gap:4px; background:linear-gradient(135deg, rgba(59,130,246,0.3), rgba(0,0,0,0.6)); border:1px solid #60a5fa; border-radius:6px; padding:3px 8px; cursor:pointer; color:#93c5fd; font-size:11px; font-weight:bold;">
+        <button id="btn-pwa-install" onclick="window.installPwaApp()" class="btn-relic" style="display:none;">
           <span>📲</span> <span>Instalar App</span>
         </button>
         <span class="ts-zone"><span class="ts-label">Zone</span><span id="zone-name">Talking Island</span></span>
@@ -81,17 +82,17 @@
         <div class="stat-row"><label>Race</label><span id="race-text" class="stat-value">Human</span></div>
         <div class="stat-row"><label>Class</label><span id="class-text" class="stat-value">Fighter</span></div>
         <div class="stat-divider"></div>
-        <div class="stat-row"><label>ATK</label><span id="atk-text" class="stat-value">10</span></div>
-        <div class="stat-row"><label>DEF</label><span id="def-text" class="stat-value">5</span></div>
-        <div class="stat-row"><label>EVA</label><span id="eva-text" class="stat-value">0</span></div>
-        <div class="stat-row"><label>MATK</label><span id="matk-text" class="stat-value">0</span></div>
-        <div class="stat-row"><label>MDEF</label><span id="mdef-text" class="stat-value">0</span></div>
-        <div class="stat-row"><label>CRIT</label><span id="crit-text" class="stat-value">0%</span></div>
-        <div class="stat-row"><label>Loot</label><span id="loot-text" class="stat-value">100%</span></div>
+        <div class="stat-row"><label>ATK</label><span id="atk-text" class="stat-value stat-relic-atk">10</span></div>
+        <div class="stat-row"><label>DEF</label><span id="def-text" class="stat-value stat-relic-def">5</span></div>
+        <div class="stat-row"><label>EVA</label><span id="eva-text" class="stat-value stat-relic-eva">0</span></div>
+        <div class="stat-row"><label>MATK</label><span id="matk-text" class="stat-value stat-relic-matk">0</span></div>
+        <div class="stat-row"><label>MDEF</label><span id="mdef-text" class="stat-value stat-relic-mdef">0</span></div>
+        <div class="stat-row"><label>CRIT</label><span id="crit-text" class="stat-value stat-relic-crit">0%</span></div>
+        <div class="stat-row"><label>Loot</label><span id="loot-text" class="stat-value stat-relic-loot">100%</span></div>
         <div class="stat-divider"></div>
         <div class="stat-row"><label>SP</label><span id="sp-text" class="stat-value">0</span></div>
-        <div class="stat-row"><label>Adena</label><span id="gold-text-stat" class="stat-value gold">0</span></div>
-        <div class="stat-row"><label>Adena/s</label><span id="gps-text" class="stat-value gold-dim">—</span></div>
+        <div class="stat-row"><label>Adena</label><span id="gold-text-stat" class="stat-value stat-relic-gold">0</span></div>
+        <div class="stat-row"><label>Adena/s</label><span id="gps-text" class="stat-value stat-relic-gold">—</span></div>
         <div class="stat-row"><label>Craft Lv</label><span id="craft-level-stat" class="stat-value">1</span></div>
         <div class="stat-divider"></div>
         <div class="active-buffs" id="active-buffs"><span class="ab-empty">No active buffs</span></div>
@@ -120,7 +121,7 @@
           </div>
           <div class="stage-vs">VS</div>
           
-          <div class="stage-hero" id="stage-hero">
+          <div class="stage-hero frame-relic frame-relic-hero" id="stage-hero">
             <div class="stage-entity-name stage-hero-name" id="hero-name">Tristan</div>
             <div class="stage-entity-level stage-hero-level" id="hero-level">Level 1</div>
             <div class="stage-hp-bar stage-hp-bar-hero" id="hero-hp-bar">
@@ -133,7 +134,7 @@
             </div>
             <div class="hero-sprite-host" id="hero-sprite-container"></div>
           </div>
-          <div class="stage-monster" id="stage-monster">
+          <div class="stage-monster frame-relic frame-relic-monster" id="stage-monster">
             <div class="stage-entity-name" id="monster-name">Procurando Inimigo...</div>
             <div class="stage-entity-level stage-monster-level" id="monster-level">Level 1</div>
             <div class="stage-hp-bar" id="monster-hp-bar">
@@ -153,7 +154,7 @@
       </section>
 
       <!-- Right: Tabs -->
-      <aside class="panel tabs-panel l2-gold-frame">
+      <aside class="panel tabs-panel panel-relic">
         <!-- Master Navigation Dock: 4 Pillars of Aden -->
         <div class="pillar-dock-container" id="pillar-dock-container">
           <div class="pillar-master-tabs">
@@ -196,7 +197,7 @@
 
           <!-- Pillar 3 Subtabs: Império & Economia -->
           <div class="pillar-subtabs-strip" id="pillar-strip-economy" style="display:none;">
-            <button class="tab-btn subtab-pill-btn" data-tab="market" style="border-color:#ffd700; color:#fde047; font-weight:bold;">🏛 Mercado Giran (P2P)</button>
+            <button class="tab-btn subtab-pill-btn" data-tab="market" style="border-color:var(--star-high); color:var(--star-bright); font-weight:bold;">🏛 Mercado Giran (P2P)</button>
             <button class="tab-btn subtab-pill-btn" data-tab="shop">⚜ Mercador</button>
             <button class="tab-btn subtab-pill-btn" data-tab="craft">⚒ Forja Imperial <span id="tab-badge-craft" class="tab-badge" style="display:none">!</span></button>
             <button class="tab-btn subtab-pill-btn" data-tab="alchemy">🧪 Alquimia</button>
@@ -229,15 +230,15 @@
                 <div class="portrait-sub" id="portrait-sub">Awaiting the road</div>
               </div>
             <!-- Class Advancement Promotion Banner -->
-            <div id="class-advancement-banner" class="class-advancement-banner" style="display:none; margin:10px 0; padding:12px; background:linear-gradient(135deg,rgba(212,175,55,0.2),rgba(20,20,30,0.9)); border:1px solid #d4af37; border-radius:8px; align-items:center; justify-content:space-between; gap:10px;">
+            <div id="class-advancement-banner" class="class-advancement-banner" style="display:none; margin:10px 0; padding:12px; background:linear-gradient(135deg,rgba(91,127,168,0.15),rgba(14,18,24,0.95)); border:1px solid #364b66; border-radius:6px; align-items:center; justify-content:space-between; gap:10px;">
               <div style="display:flex; align-items:center; gap:10px;">
                 <div style="font-size:24px;">⚔️</div>
                 <div>
-                  <h4 id="class-advancement-title" style="margin:0; color:#fde047; font-size:13px; font-weight:bold;">1ª Troca de Classe Disponível!</h4>
-                  <p id="class-advancement-sub" style="margin:2px 0 0; color:#d1d5db; font-size:11px;">Atingiu Nível 20! Escolha a evolução da sua classe.</p>
+                  <h4 id="class-advancement-title" style="margin:0; color:#e0f0ff; font-size:13px; font-weight:bold;">1ª Troca de Classe Disponível!</h4>
+                  <p id="class-advancement-sub" style="margin:2px 0 0; color:#a0b0c4; font-size:11px;">Atingiu Nível 20! Escolha a evolução da sua classe.</p>
                 </div>
               </div>
-              <button id="class-advancement-btn" style="padding:8px 14px; background:linear-gradient(180deg,#d4af37,#997a15); border:1px solid #ffe885; border-radius:6px; color:#000; font-weight:bold; font-size:12px; cursor:pointer;">🎖️ Avançar Classe</button>
+              <button id="class-advancement-btn" class="btn-relic btn-relic-primary" style="padding:7px 14px; font-weight:bold; font-size:11px; cursor:pointer;">🎖️ Avançar Classe</button>
             </div>
 
             <div class="pane-section">
@@ -531,7 +532,7 @@
 
     <!-- Modal de Criação da Forja -->
     <div id="craft-modal" class="modal-overlay" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.75); backdrop-filter:blur(6px); z-index:9999; justify-content:center; align-items:center;">
-      <div class="craft-modal-content" style="background:linear-gradient(145deg, rgba(26,20,15,0.98), rgba(12,8,6,0.99)); border:1px solid rgba(212,175,55,0.5); border-radius:12px; width:92%; max-width:480px; padding:20px; box-shadow:0 10px 30px rgba(0,0,0,0.8); position:relative;">
+      <div class="craft-modal-content" style="background:linear-gradient(145deg, rgba(26,20,15,0.98), rgba(12,8,6,0.99)); border:1px solid #59493a; border-top-color:rgba(255,255,255,0.15); border-radius:8px; width:92%; max-width:480px; padding:20px; box-shadow:0 10px 30px rgba(0,0,0,0.85); position:relative;">
         <button id="craft-modal-close" style="position:absolute; top:12px; right:14px; background:none; border:none; color:#aaa; font-size:20px; cursor:pointer;">✖</button>
         <div id="craft-modal-body"></div>
       </div>
@@ -539,7 +540,7 @@
 
     <!-- Modal de Certificação de Subclasses -->
     <div id="cert-modal" class="modal-overlay" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.75); backdrop-filter:blur(6px); z-index:9999; justify-content:center; align-items:center;">
-      <div class="craft-modal-content" style="background:linear-gradient(145deg, rgba(20,24,35,0.98), rgba(10,12,18,0.99)); border:1px solid rgba(212,175,55,0.6); border-radius:12px; width:92%; max-width:520px; padding:20px; box-shadow:0 10px 35px rgba(0,0,0,0.85); position:relative;">
+      <div class="craft-modal-content" style="background:linear-gradient(145deg, rgba(20,24,35,0.98), rgba(10,12,18,0.99)); border:1px solid #364b66; border-top-color:rgba(180,210,240,0.25); border-radius:8px; width:92%; max-width:520px; padding:20px; box-shadow:0 10px 35px rgba(0,0,0,0.85); position:relative;">
         <button id="cert-modal-close" style="position:absolute; top:12px; right:14px; background:none; border:none; color:#aaa; font-size:20px; cursor:pointer;">✖</button>
         <div id="cert-modal-body"></div>
       </div>

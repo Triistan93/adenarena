@@ -1704,6 +1704,13 @@ export function renderStageMonster(state) {
     return;
   }
 
+  const isBoss = !!(m.isBoss || m.boss);
+  const isElite = !!(m.isElite || m.elite);
+  structure.card.classList.add('frame-relic');
+  structure.card.classList.toggle('frame-relic-boss', isBoss);
+  structure.card.classList.toggle('frame-relic-elite', !isBoss && isElite);
+  structure.card.classList.toggle('frame-relic-monster', !isBoss && !isElite);
+
   if (structure.name) {
     const badge = m.boss ? ' ★' : (m.isElite || m.elite ? ' ⚔' : '');
     structure.name.textContent = `${m.name || 'Monstro'}${badge}`;

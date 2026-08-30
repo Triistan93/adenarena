@@ -298,14 +298,15 @@ anel de runas, reveal on scroll, code tokens.
    Royal Gold Frames, Obsidian Stone, Glossy Gauges, +16 Auras, Master Dock
 ================================================================ */
 
-/* ---------- Molduras Reais em Ouro & Obsidiana ---------- */
+/* ---------- Molduras Reais em Obsidiana & Mithril ---------- */
 .l2-gold-frame {
   position: relative;
-  background: linear-gradient(180deg, rgba(22, 18, 14, 0.98) 0%, rgba(12, 10, 8, 0.99) 100%) !important;
-  border: 1px solid #c89e3a !important;
+  background: linear-gradient(180deg, #16131e 0%, #08070a 100%) !important;
+  border: 1px solid #364b66 !important;
+  border-top-color: rgba(180, 210, 240, 0.25) !important;
   box-shadow: 
     0 0 0 1px rgba(0, 0, 0, 0.9),
-    0 0 16px rgba(212, 169, 78, 0.18),
+    0 0 16px rgba(91, 127, 168, 0.15),
     inset 0 0 15px rgba(0, 0, 0, 0.8) !important;
   border-radius: 6px;
 }
@@ -314,7 +315,7 @@ anel de runas, reveal on scroll, code tokens.
   content: "";
   position: absolute;
   inset: 2px;
-  border: 1px solid rgba(212, 169, 78, 0.2);
+  border: 1px solid rgba(91, 127, 168, 0.12);
   pointer-events: none;
   border-radius: 4px;
 }
@@ -329,8 +330,8 @@ anel de runas, reveal on scroll, code tokens.
   top: -6px;
   right: -6px;
   font-size: 10px;
-  color: #d4a94e;
-  text-shadow: 0 0 6px rgba(212, 169, 78, 0.8);
+  color: #5b7fa8;
+  text-shadow: 0 0 6px rgba(91, 127, 168, 0.8);
   pointer-events: none;
 }
 
@@ -341,9 +342,9 @@ anel de runas, reveal on scroll, code tokens.
   display: flex !important;
   flex-direction: column !important;
   background: 
-    radial-gradient(ellipse at 50% 0%, rgba(212, 169, 78, 0.16), transparent 75%),
-    linear-gradient(180deg, #1e1811 0%, #0d0a07 100%) !important;
-  border-bottom: 2px solid #8a6a24 !important;
+    radial-gradient(ellipse at 50% 0%, rgba(91, 127, 168, 0.10), transparent 75%),
+    linear-gradient(180deg, #1e2a3a 0%, #08070a 100%) !important;
+  border-bottom: 2px solid #364b66 !important;
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.8) !important;
   padding: 6px 8px 8px 8px !important;
   gap: 8px !important;
@@ -367,10 +368,13 @@ anel de runas, reveal on scroll, code tokens.
   justify-content: center !important;
   gap: 7px !important;
   padding: 8px 6px !important;
-  background: linear-gradient(180deg, #2a2218 0%, #15110b 100%) !important;
-  border: 1px solid #5a4525 !important;
+  background: linear-gradient(180deg, #1e2a3a 0%, #0b0e14 100%) !important;
+  border-top: 1px solid rgba(180, 210, 240, 0.12) !important;
+  border-left: 1px solid rgba(180, 210, 240, 0.05) !important;
+  border-right: 1px solid rgba(0, 0, 0, 0.5) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.7) !important;
   border-radius: 5px !important;
-  color: #c5b89a !important;
+  color: #a0b0c4 !important;
   cursor: pointer !important;
   font-family: 'Cinzel', serif !important;
   font-size: 11px !important;
@@ -380,36 +384,36 @@ anel de runas, reveal on scroll, code tokens.
   transition: all 0.2s cubic-bezier(0.2, 0.8, 0.25, 1) !important;
   position: relative !important;
   overflow: hidden !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 2px 6px rgba(0, 0, 0, 0.6) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 2px 6px rgba(0, 0, 0, 0.6) !important;
   text-align: center !important;
   user-select: none !important;
 }
 
 .pillar-tab-btn:hover {
-  background: linear-gradient(180deg, #443420 0%, #221a10 100%) !important;
-  border-color: #d4a94e !important;
-  color: #fff4d4 !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 0 12px rgba(212, 169, 78, 0.4) !important;
+  background: linear-gradient(180deg, #364b66 0%, #1e2a3a 100%) !important;
+  border-top-color: rgba(180, 210, 240, 0.2) !important;
+  color: #d0e0f0 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 3px 8px rgba(0, 0, 0, 0.7) !important;
   transform: translateY(-1px) !important;
 }
 
 .pillar-tab-btn.active {
-  background: linear-gradient(180deg, #6e4e1a 0%, #301f09 100%) !important;
-  border-color: #ffd700 !important;
+  background: linear-gradient(180deg, #5b7fa8 0%, #364b66 100%) !important;
+  border-top-color: rgba(255, 255, 255, 0.25) !important;
   color: #ffffff !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 0 16px rgba(255, 215, 0, 0.5) !important;
-  text-shadow: 0 0 8px rgba(255, 215, 0, 0.6) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 0 16px rgba(91, 127, 168, 0.35) !important;
+  text-shadow: 0 0 8px rgba(91, 127, 168, 0.4) !important;
 }
 
 .pillar-tab-btn.active::after {
   content: "" !important;
   position: absolute !important;
   bottom: 0 !important;
-  left: 10% !important;
-  width: 80% !important;
+  left: 15% !important;
+  width: 70% !important;
   height: 2px !important;
-  background: linear-gradient(90deg, transparent, #ffe082, #ffd700, #ffe082, transparent) !important;
-  box-shadow: 0 0 8px #ffe082 !important;
+  background: linear-gradient(90deg, transparent, #5b7fa8, rgba(180, 210, 240, 0.8), #5b7fa8, transparent) !important;
+  box-shadow: 0 0 8px rgba(91, 127, 168, 0.35) !important;
 }
 
 .pillar-icon {
@@ -472,12 +476,12 @@ anel de runas, reveal on scroll, code tokens.
   overflow-x: auto !important;
   padding: 6px 4px 4px 4px !important;
   scrollbar-width: thin !important;
-  scrollbar-color: rgba(212, 169, 78, 0.3) transparent !important;
+  scrollbar-color: rgba(91, 127, 168, 0.3) transparent !important;
   animation: slideDownSubtabs 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
-  background: rgba(10, 8, 5, 0.75) !important;
+  background: rgba(10, 12, 16, 0.85) !important;
   border-radius: 5px !important;
-  border: 1px solid rgba(212, 169, 78, 0.15) !important;
-  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.6) !important;
+  border: 1px solid rgba(91, 127, 168, 0.18) !important;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.7) !important;
   box-sizing: border-box !important;
 }
 
@@ -487,7 +491,7 @@ anel de runas, reveal on scroll, code tokens.
 
 .pillar-subtabs-strip::-webkit-scrollbar { height: 4px !important; }
 .pillar-subtabs-strip::-webkit-scrollbar-thumb {
-  background: rgba(212, 169, 78, 0.4) !important;
+  background: rgba(91, 127, 168, 0.4) !important;
   border-radius: 4px !important;
 }
 
@@ -496,10 +500,10 @@ anel de runas, reveal on scroll, code tokens.
   align-items: center !important;
   gap: 6px !important;
   padding: 6px 12px !important;
-  background: linear-gradient(180deg, #221a11 0%, #120e09 100%) !important;
-  border: 1px solid #4a3820 !important;
+  background: linear-gradient(180deg, #1c1712 0%, #0f0d0a 100%) !important;
+  border: 1px solid #3d3225 !important;
   border-radius: 5px !important;
-  color: #a89a80 !important;
+  color: #908578 !important;
   font-family: 'IBM Plex Sans', sans-serif !important;
   font-size: 11px !important;
   font-weight: 600 !important;
@@ -512,19 +516,19 @@ anel de runas, reveal on scroll, code tokens.
 }
 
 .subtab-pill-btn:hover {
-  background: linear-gradient(180deg, #382a1b 0%, #1f170e 100%) !important;
-  border-color: #d4a94e !important;
-  color: #f0cd7e !important;
+  background: linear-gradient(180deg, #2a231a 0%, #1c1712 100%) !important;
+  border-color: #59493a !important;
+  color: #c5bfb0 !important;
   transform: translateY(-1px) !important;
   box-shadow: 0 3px 8px rgba(0,0,0,0.6) !important;
 }
 
 .subtab-pill-btn.active {
-  background: linear-gradient(180deg, #664d1c 0%, #33240a 100%) !important;
-  border-color: #ffd700 !important;
+  background: linear-gradient(180deg, #1e2a3a 0%, #0e1218 100%) !important;
+  border-color: #5b7fa8 !important;
   color: #ffffff !important;
   font-weight: 700 !important;
-  box-shadow: 0 0 10px rgba(212, 169, 78, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+  box-shadow: 0 0 10px rgba(91, 127, 168, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
 }
 
 .subtab-pill-btn.active::after {
@@ -534,8 +538,8 @@ anel de runas, reveal on scroll, code tokens.
   left: 20% !important;
   width: 60% !important;
   height: 2px !important;
-  background: #ffe082 !important;
-  box-shadow: 0 0 6px #ffe082 !important;
+  background: #5b7fa8 !important;
+  box-shadow: 0 0 6px rgba(91, 127, 168, 0.5) !important;
 }
 
 /* Badges de notificação estilizados como gemas */
