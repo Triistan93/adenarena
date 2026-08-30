@@ -618,18 +618,21 @@ export function getStats(state) {
     if (clanLvl >= 5) { mpRegenBonus += 0.20; buffSpd += 5; } // Clan Vitality (+20% Regen, +5 Spd)
   }
 
-  // Process Weapon Augmentation Stats
-  const equippedWeaponItem = state.equipment?.weapon ? (state.inventory?.find(i => i.uid === state.equipment.weapon) || state.equipment.weapon) : null;
-  const weaponAug = (equippedWeaponItem && typeof equippedWeaponItem === 'object') ? equippedWeaponItem.augmentation : null;
+  // Process Weapon Augmentation Stats (Weapon 1 and Weapon 2)
   let augCrit = 0;
-  if (weaponAug && weaponAug.stats) {
-    if (weaponAug.stats.atk) buffAtk += weaponAug.stats.atk;
-    if (weaponAug.stats.matk) buffMatk += weaponAug.stats.matk;
-    if (weaponAug.stats.def) buffDef += weaponAug.stats.def;
-    if (weaponAug.stats.mdef) buffMdef += weaponAug.stats.mdef;
-    if (weaponAug.stats.crit) augCrit += weaponAug.stats.crit;
-    if (weaponAug.stats.eva) baseEva += weaponAug.stats.eva;
-    if (weaponAug.stats.hp) elixirHpMult += (weaponAug.stats.hp / 2000);
+  for (const wpnKey of ['weapon', 'weapon2']) {
+    const wpnUid = state.equipment?.[wpnKey];
+    const equippedWeaponItem = wpnUid ? (state.inventory?.find(i => i.uid === wpnUid) || wpnUid) : null;
+    const weaponAug = (equippedWeaponItem && typeof equippedWeaponItem === 'object') ? equippedWeaponItem.augmentation : null;
+    if (weaponAug && weaponAug.stats) {
+      if (weaponAug.stats.atk) buffAtk += weaponAug.stats.atk;
+      if (weaponAug.stats.matk) buffMatk += weaponAug.stats.matk;
+      if (weaponAug.stats.def) buffDef += weaponAug.stats.def;
+      if (weaponAug.stats.mdef) buffMdef += weaponAug.stats.mdef;
+      if (weaponAug.stats.crit) augCrit += weaponAug.stats.crit;
+      if (weaponAug.stats.eva) baseEva += weaponAug.stats.eva;
+      if (weaponAug.stats.hp) elixirHpMult += (weaponAug.stats.hp / 2000);
+    }
   }
 
   // Process Fortress & Talisman Bonuses
@@ -649,7 +652,7 @@ export function getStats(state) {
   // Process Full Heirloom Sovereign Set Bonus (Pack Tier 3 Multi-Piece)
   let heirloomPiecesEquipped = 0;
   if (state.equipment) {
-    const allSlots = ['weapon', 'armor', 'legs', 'helmet', 'gloves', 'boots', 'shield', 'necklace', 'earring1', 'earring2', 'ring1', 'ring2', 'cloak', 'belt', 'hair'];
+    const allSlots = ['weapon', 'weapon2', 'armor', 'legs', 'helmet', 'gloves', 'boots', 'shield', 'necklace', 'earring1', 'earring2', 'ring1', 'ring2', 'cloak', 'belt', 'hair'];
     for (const slotKey of allSlots) {
       const uid = state.equipment[slotKey];
       if (!uid) continue;
@@ -690,19 +693,21 @@ export function getStats(state) {
   const cdr = sk('quickRecycle') * 0.10;
 
   const codexB = getCodexBonuses(state);
-  // Process Soul Crystal (SA) Bonus on Equipped Weapon
+  // Process Soul Crystal (SA) Bonus on Both Equipped Weapons (Dual Arsenal)
   let saCrit = 0, saPatkMult = 0, saMatkMult = 0, saSpeed = 0, saHpMult = 0;
-  const wpnUid = state.equipment?.weapon;
-  const socket = (wpnUid && state.weaponSockets) ? state.weaponSockets[wpnUid] : null;
-  if (socket) {
-    const stage = Math.min(13, Math.max(1, socket.stage || 1));
-    const mult = 1 + (stage - 1) * 0.15;
-    if (socket.effect === 'focus') saCrit += Math.floor(15 * mult);
-    else if (socket.effect === 'haste') buffSpd += Math.floor(12 * mult);
-    else if (socket.effect === 'acumen') buffMatk += Math.floor(baseMatk * 0.15 * mult);
-    else if (socket.effect === 'health') elixirHpMult += (0.15 * mult);
-    else if (socket.effect === 'might') buffAtkMult += (0.10 * mult);
-    else if (socket.effect === 'empower') buffMatk += Math.floor(baseMatk * 0.12 * mult);
+  for (const wpnKey of ['weapon', 'weapon2']) {
+    const wpnUid = state.equipment?.[wpnKey];
+    const socket = (wpnUid && state.weaponSockets) ? state.weaponSockets[wpnUid] : null;
+    if (socket) {
+      const stage = Math.min(13, Math.max(1, socket.stage || 1));
+      const mult = 1 + (stage - 1) * 0.15;
+      if (socket.effect === 'focus') saCrit += Math.floor(15 * mult);
+      else if (socket.effect === 'haste') buffSpd += Math.floor(12 * mult);
+      else if (socket.effect === 'acumen') buffMatk += Math.floor(baseMatk * 0.15 * mult);
+      else if (socket.effect === 'health') elixirHpMult += (0.15 * mult);
+      else if (socket.effect === 'might') buffAtkMult += (0.10 * mult);
+      else if (socket.effect === 'empower') buffMatk += Math.floor(baseMatk * 0.12 * mult);
+    }
   }
 
   // Process Tattoos / Dyes Bonuses via DyeService with +5 net cap

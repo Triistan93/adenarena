@@ -819,20 +819,21 @@ function withdrawFromWarehouse(uid, amount = 1) {
 }
 
 const ALL_EQUIP_SLOTS = [
-  'weapon', 'shield', 'helmet', 'armor', 'legs', 'gloves', 'boots',
+  'weapon', 'weapon2', 'shield', 'helmet', 'armor', 'legs', 'gloves', 'boots',
   'hair', 'hair2', 'necklace', 'earring1', 'earring2', 'ring', 'ring2',
   'belt', 'cloak', 'talisman', 'agathion'
 ];
 
 function resolveEquipSlot(slot) { return serviceResolveEquipSlot(slot, state.equipment); }
-function equipItem(a, b, silent = false) {
+function equipItem(a, b, c = null, silent = false) {
   if (typeof hideItemTooltip === 'function') hideItemTooltip();
   const uid = (typeof a === 'string' && a) ? a : (typeof b === 'string' ? b : null);
+  const targetSlot = (typeof b === 'string' && (b === 'weapon' || b === 'weapon2' || ALL_EQUIP_SLOTS.includes(b))) ? b : (typeof c === 'string' ? c : null);
   if (!uid) return;
   const callbacks = silent
     ? { log, classSatisfies, getClass }
     : { log, updateAllUI, save, classSatisfies, getClass };
-  return serviceEquipItem(state, uid, callbacks);
+  return serviceEquipItem(state, uid, targetSlot, callbacks);
 }
 function unequipItem(a, b, silent = false) {
   if (typeof hideItemTooltip === 'function') hideItemTooltip();

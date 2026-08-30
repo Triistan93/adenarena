@@ -42,57 +42,70 @@ export class CombatValidatorEngine {
   }
 
   /**
-   * Valida se a habilidade é compatível com a arma empunhada pelo personagem.
-   * @param {Object} weaponItem
+   * Valida se a habilidade é compatível com as armas empunhadas pelo personagem (Dual Arsenal).
+   * @param {Object|Array} weaponItemOrState
    * @param {Object} skillDef
    * @returns {{ valid: boolean, error?: string }}
    */
-  static validateWeaponMoveset(weaponItem, skillDef) {
+  static validateWeaponMoveset(weaponItemOrState, skillDef) {
     if (!skillDef) return { valid: false, error: 'Definição de habilidade inválida.' };
     
     // Skills genéricas ou buffs corporais que aceitam qualquer arma
-    if (skillDef.requiredWeaponType === 'any' || skillDef.type === 'Self-Buff' || skillDef.type === 'Passivo') {
+    if (skillDef.requiredWeaponType === 'any' || skillDef.requiredWeapon === 'any' || skillDef.type === 'Self-Buff' || skillDef.type === 'buff' || skillDef.type === 'Passivo' || skillDef.type === 'passive') {
       return { valid: true };
     }
 
-    const currentWeaponType = this.getWeaponType(weaponItem);
-
-    // Se a skill define explicitamente o tipo exigido
-    if (skillDef.requiredWeaponType) {
-      if (skillDef.requiredWeaponType !== currentWeaponType) {
-        return {
-          valid: false,
-          error: `Arma incompatível: [${skillDef.name}] exige [${skillDef.requiredWeaponType.toUpperCase()}], mas você está com [${currentWeaponType.toUpperCase()}].`
-        };
-      }
-      return { valid: true };
+    let weaponList = [];
+    if (Array.isArray(weaponItemOrState)) {
+      weaponList = weaponItemOrState.filter(Boolean);
+    } else if (weaponItemOrState && weaponItemOrState.equipment) {
+      const w1 = weaponItemOrState.equipment.weapon;
+      const w2 = weaponItemOrState.equipment.weapon2;
+      const inv = weaponItemOrState.inventory || [];
+      if (w1) weaponList.push(typeof w1 === 'object' ? w1 : inv.find(i => i.uid === w1));
+      if (w2) weaponList.push(typeof w2 === 'object' ? w2 : inv.find(i => i.uid === w2));
+    } else if (weaponItemOrState) {
+      weaponList.push(weaponItemOrState);
     }
 
-    // Inferência heurística de moveset baseada no nome/efeito da skill
+    if (weaponList.length === 0) {
+      const req = skillDef.requiredWeaponType || skillDef.requiredWeapon;
+      return { valid: false, error: `Requer ${req ? req.toUpperCase() : 'Arma'} equipada.` };
+    }
+
+    const currentTypes = weaponList.map(w => this.getWeaponType(w));
+    const req = skillDef.requiredWeaponType || skillDef.requiredWeapon;
+
+    if (req && req !== 'any') {
+      const match = currentTypes.some(t => {
+        if (t === req) return true;
+        if (req === 'sword' && (t === 'katana' || t === 'sword')) return true;
+        if (req === 'twohand' && (t === 'two_hand_sword' || t === 'twohand')) return true;
+        if (req === 'dual' && t === 'dual_swords') return true;
+        if (req === 'fist' && t === 'fists') return true;
+        if (req === 'staff' && (t === 'staff' || t === 'blunt')) return true;
+        return false;
+      });
+      if (match) return { valid: true };
+      return {
+        valid: false,
+        error: `Arma incompatível: [${skillDef.name}] exige [${req.toUpperCase()}], mas você está com [${currentTypes.join(', ').toUpperCase()}].`
+      };
+    }
+
+    // Inferência heurística
     const skillNameLower = (skillDef.name || '').toLowerCase();
     const skillEffectLower = (skillDef.effect || '').toLowerCase();
 
     if (skillNameLower.includes('shot') || skillNameLower.includes('arrow') || skillEffectLower.includes('arco')) {
-      if (currentWeaponType !== 'bow') {
+      if (!currentTypes.includes('bow')) {
         return { valid: false, error: `[${skillDef.name}] só pode ser disparada com um Arco equipado.` };
       }
     }
 
-    if (skillNameLower.includes('iaijutsu') || skillNameLower.includes('katana') || skillEffectLower.includes('katana')) {
-      if (currentWeaponType !== 'katana' && currentWeaponType !== 'sword') {
-        return { valid: false, error: `[${skillDef.name}] exige o empunhar de uma Katana ancestral.` };
-      }
-    }
-
-    if (skillNameLower.includes('dagger') || skillNameLower.includes('stab') || skillNameLower.includes('backstab')) {
-      if (currentWeaponType !== 'dagger') {
+    if (skillNameLower.includes('dagger') || skillNameLower.includes('stab') || skillNameLower.includes('backstab') || skillNameLower.includes('blow')) {
+      if (!currentTypes.includes('dagger')) {
         return { valid: false, error: `[${skillDef.name}] exige uma Adaga ágil para desferir golpes furtivos.` };
-      }
-    }
-
-    if (skillNameLower.includes('pummel') || skillNameLower.includes('kick') || skillEffectLower.includes('punhos') || skillEffectLower.includes('garras')) {
-      if (currentWeaponType !== 'fists' && currentWeaponType !== 'bare_hands') {
-        return { valid: false, error: `[${skillDef.name}] é uma arte marcial exclusiva para Garras/Punhos de combate.` };
       }
     }
 

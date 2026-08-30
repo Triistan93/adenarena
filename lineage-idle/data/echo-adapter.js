@@ -373,26 +373,45 @@ function buildEchoAdapter() {
         reqWeapon = sk.reqWeapon;
       } else {
         const sName = (rawName || '').toLowerCase();
+        const sEff = (sk.effect || '').toLowerCase();
         const arch = (classDef.archetype || classId || '').toLowerCase();
-        if (arch.includes('archer') || sName.includes('shot') || sName.includes('arrow') || sName.includes('bow')) {
+        const isGenericBuff = type === 'buff' || (sk.type || '').toLowerCase().includes('buff') || (sk.type || '').toLowerCase().includes('toggle');
+        const isPassive = type === 'passive' || (sk.type || '').toLowerCase().includes('passive');
+
+        // Buffs corporais universais (podem ser usados com qualquer arma)
+        const isUniversalBuff = /sprint|dash|iron body|battle roar|war cry|warcry|lionheart|guts|frenzy|ultimate defense|guidance|death whisper|focus|haste|acumen|empower|berserker|blessing|prayer|chant|song of|dance of|aura|rage|vigor|majesty|noble|holy light/.test(sName);
+
+        if (isUniversalBuff && !sName.includes('mastery') && !sName.includes('stance') && !sName.includes('snipe')) {
+          reqWeapon = null;
+        } else if (sName.includes('shot') || sName.includes('arrow') || sName.includes('bow') || sName.includes('snipe') || sName.includes('archery')) {
           reqWeapon = 'bow';
-        } else if (arch.includes('dagger') || arch.includes('assassin') || sName.includes('stab') || sName.includes('blow') || sName.includes('dagger')) {
+        } else if (sName.includes('stab') || sName.includes('blow') || sName.includes('dagger') || sName.includes('backstab') || sName.includes('shadow step') || sName.includes('blinding')) {
           reqWeapon = 'dagger';
-        } else if (arch.includes('tank') || arch.includes('knight') || arch.includes('paladin') || sName.includes('shield') || sName.includes('stun')) {
-          reqWeapon = 'sword';
-          if (sName.includes('shield') || arch.includes('knight')) reqShield = true;
-        } else if (arch.includes('mage') || arch.includes('healer') || arch.includes('summoner') || sName.includes('staff') || sName.includes('spell') || sName.includes('hydro') || sName.includes('prominence')) {
-          reqWeapon = 'staff';
-        } else if (sName.includes('dual') || sName.includes('sonic')) {
-          reqWeapon = 'dual';
-        } else if (sName.includes('spear') || sName.includes('polearm')) {
+        } else if (sName.includes('spear') || sName.includes('polearm') || sName.includes('whirlwind') || sName.includes('thunder storm') || sName.includes('wild sweep') || sName.includes('earth tremor') || sName.includes('wrath')) {
           reqWeapon = 'spear';
-        } else if (sName.includes('twohand') || sName.includes('crush_of_doom')) {
+        } else if (sName.includes('dual') || sName.includes('sonic') || sName.includes('triple slash') || sName.includes('double sonic')) {
+          reqWeapon = 'dual';
+        } else if (sName.includes('shield') || (sName.includes('stun') && !sName.includes('shot') && arch.includes('knight'))) {
+          reqShield = true;
+        } else if (sName.includes('twohand') || sName.includes('greatsword') || sName.includes('crush of doom') || sName.includes('power smash') || sName.includes('demolition')) {
           reqWeapon = 'twohand';
-        } else if (sName.includes('fist') || sName.includes('punch') || sName.includes('bison')) {
+        } else if (sName.includes('fist') || sName.includes('punch') || sName.includes('bison') || sName.includes('pummel') || sName.includes('force blaster') || sName.includes('hurricane fist')) {
           reqWeapon = 'fist';
-        } else if (sName.includes('ancientsword') || sName.includes('rush_impact')) {
+        } else if (sName.includes('ancientsword') || sName.includes('rush impact') || sName.includes('slashing blade')) {
           reqWeapon = 'ancientsword';
+        } else if (sName.includes('hammer') || sName.includes('blunt') || sName.includes('armor crush') || sName.includes('spoil')) {
+          reqWeapon = 'blunt';
+        } else if (sName.includes('staff') || sName.includes('hydro') || sName.includes('prominence') || sName.includes('hurricane') || sName.includes('solar flare') || sName.includes('vampiric')) {
+          reqWeapon = 'staff';
+        } else if (!isGenericBuff && !isPassive) {
+          // Se for ataque ativo de arquétipo especializado
+          if (arch.includes('archer')) reqWeapon = 'bow';
+          else if (arch.includes('dagger') || arch.includes('assassin')) reqWeapon = 'dagger';
+          else if (arch.includes('warlord')) reqWeapon = 'spear';
+          else if (arch.includes('gladiator')) reqWeapon = 'dual';
+          else if (arch.includes('titan') || arch.includes('destroyer') || arch.includes('berserker')) reqWeapon = 'twohand';
+          else if (arch.includes('tyrant')) reqWeapon = 'fist';
+          else if (arch.includes('mage') || arch.includes('wizard')) reqWeapon = 'staff';
         }
       }
 

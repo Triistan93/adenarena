@@ -152,6 +152,29 @@ export function resetSP(state, callbacks = {}) {
 
 /**
  * Valida se a habilidade pode ser conjurada com base na arma e escudo equipados.
+/**
+ * Detecta o tipo de arma normalizado a partir da definição ou item de inventário.
+ * @param {Object} itemDefOrInv
+ * @returns {string|null}
+ */
+export function detectItemWeaponType(itemDefOrInv) {
+  if (!itemDefOrInv) return null;
+  const s = `${itemDefOrInv.id || itemDefOrInv.itemId || ''} ${itemDefOrInv.name || ''} ${itemDefOrInv.type || ''} ${itemDefOrInv.weaponType || ''}`.toLowerCase();
+  if (/bow|crossbow/.test(s)) return 'bow';
+  if (/dagger|knife/.test(s)) return 'dagger';
+  if (/spear|lance|pike|halberd/.test(s)) return 'spear';
+  if (/dual/.test(s)) return 'dual';
+  if (/twohand|great_sword|great_axe|two_hand/.test(s)) return 'twohand';
+  if (/fist|knuckle|claw/.test(s)) return 'fist';
+  if (/ancientsword/.test(s)) return 'ancientsword';
+  if (/staff|wand|scepter|magicblunt|magic_sword|crucifix/.test(s)) return 'staff';
+  if (/hammer|blunt|mace/.test(s)) return 'blunt';
+  if (/sword|axe|blade|katana|longsword|rapier|saber|falchion/.test(s)) return 'sword';
+  return 'sword';
+}
+
+/**
+ * Valida se a habilidade pode ser conjurada com base nas armas equipadas em ambos os slots (Dual Arsenal) e escudo.
  * @param {Object} state
  * @param {Object} skillDef
  * @returns {{ ok: boolean, reason?: string }}
@@ -159,11 +182,25 @@ export function resetSP(state, callbacks = {}) {
 export function canCastSkillWeapon(state, skillDef) {
   if (!skillDef) return { ok: true };
 
-  // 1. Requisito de Arma
+  // 1. Requisito de Arma (Verifica Slot 1 e Slot 2 simultaneamente)
   const reqWeapon = skillDef.weaponType || skillDef.requiredWeapon;
   if (reqWeapon && reqWeapon !== 'any') {
-    const wpnUid = state.equipment?.weapon;
-    if (!wpnUid) {
+    const equippedWeaponTypes = [];
+    const gData = (typeof window !== 'undefined' && window.GameData) ? window.GameData : {};
+    const eData = (typeof window !== 'undefined' && window.EchoData) ? window.EchoData : {};
+    const allItems = gData.ALL_ITEMS || eData.ALL_ITEMS || {};
+
+    for (const wKey of ['weapon', 'weapon2']) {
+      const wpnUid = state.equipment?.[wKey];
+      if (!wpnUid) continue;
+      const wpnItem = (typeof wpnUid === 'object') ? wpnUid : state.inventory?.find(i => i.uid === wpnUid);
+      if (!wpnItem) continue;
+      const itemDef = (wpnItem.itemId && allItems[wpnItem.itemId]) || wpnItem || {};
+      const wType = detectItemWeaponType(itemDef);
+      if (wType) equippedWeaponTypes.push(wType);
+    }
+
+    if (equippedWeaponTypes.length === 0) {
       const labels = {
         bow: 'Arco', dagger: 'Adaga', staff: 'Cajado Mágico', sword: 'Espada',
         dual: 'Espadas Duplas', spear: 'Lança', twohand: 'Arma de 2 Mãos',
@@ -173,33 +210,23 @@ export function canCastSkillWeapon(state, skillDef) {
       return { ok: false, reason: `Requer ${reqLabel} equipado` };
     }
 
-    const wpnItem = (typeof wpnUid === 'object') ? wpnUid : state.inventory?.find(i => i.uid === wpnUid);
-    const gData = (typeof window !== 'undefined' && window.GameData) ? window.GameData : {};
-    const eData = (typeof window !== 'undefined' && window.EchoData) ? window.EchoData : {};
-    const allItems = gData.ALL_ITEMS || eData.ALL_ITEMS || {};
-    const itemDef = (wpnItem?.itemId && allItems[wpnItem.itemId]) || wpnItem || {};
+    // Match requirement across any of the 2 equipped weapons
+    const matches = equippedWeaponTypes.some(t => {
+      if (t === reqWeapon) return true;
+      if (reqWeapon === 'sword' && (t === 'katana' || t === 'sword')) return true;
+      if (reqWeapon === 'twohand' && (t === 'twohand' || t === 'ancientsword')) return true;
+      if (reqWeapon === 'staff' && (t === 'staff' || t === 'blunt')) return true;
+      return false;
+    });
 
-    const s = `${itemDef.id || wpnItem?.itemId || ''} ${itemDef.name || wpnItem?.name || ''} ${itemDef.type || ''} ${itemDef.weaponType || ''}`.toLowerCase();
-    let wpnType = null;
-    if (/bow|crossbow/.test(s)) wpnType = 'bow';
-    else if (/staff|wand|scepter|magicblunt|magic_sword|crucifix|mace/.test(s)) wpnType = 'staff';
-    else if (/hammer|blunt/.test(s)) wpnType = 'blunt';
-    else if (/dagger|knife/.test(s)) wpnType = 'dagger';
-    else if (/spear|lance|pike|halberd/.test(s)) wpnType = 'spear';
-    else if (/dual/.test(s)) wpnType = 'dual';
-    else if (/twohand|great_sword|great_axe/.test(s)) wpnType = 'twohand';
-    else if (/fist|knuckle|claw/.test(s)) wpnType = 'fist';
-    else if (/ancientsword/.test(s)) wpnType = 'ancientsword';
-    else if (/sword|axe|blade|katana|longsword|rapier|saber|falchion/.test(s)) wpnType = 'sword';
-
-    if (wpnType !== reqWeapon) {
+    if (!matches) {
       const labels = {
         bow: 'Arco', dagger: 'Adaga', staff: 'Cajado Mágico', sword: 'Espada',
         dual: 'Espadas Duplas', spear: 'Lança', twohand: 'Arma de 2 Mãos',
         fist: 'Manopla', ancientsword: 'Espada Anciã', blunt: 'Maça'
       };
       const reqLabel = labels[reqWeapon] || reqWeapon.toUpperCase();
-      return { ok: false, reason: `Requer ${reqLabel} equipado` };
+      return { ok: false, reason: `Requer ${reqLabel} em um dos slots` };
     }
   }
 

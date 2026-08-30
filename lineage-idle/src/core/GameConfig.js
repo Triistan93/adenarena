@@ -5,7 +5,7 @@ export const SAVE_KEY = 'lineageIdleSave_v2';
 export const D = () => (typeof window !== 'undefined' ? window.GameData : (globalThis.GameData || {}));
 export const TIER_NAMES = ['Foundation', 'Discipline', 'Mastery', 'Ascendancy', 'Legend'];
 export const ALL_EQUIP_SLOTS = [
-  'weapon', 'shield',
+  'weapon', 'weapon2', 'shield',
   'helmet', 'armor', 'gloves', 'legs', 'boots',
   'cloak', 'belt', 'necklace',
   'earring1', 'earring2', 'ring1', 'ring2',

@@ -2,12 +2,20 @@ import { D, ALL_EQUIP_SLOTS } from '../core/GameConfig.js';
 import { getStats } from '../engine/StatsEngine.js';
 import { canEquipByType } from '../data/items/item_class_rules.js';
 
-export function resolveEquipSlot(rawSlot, equipmentState = {}) {
+export function resolveEquipSlot(rawSlot, equipmentState = {}, preferredSlot = null) {
+  if (preferredSlot && ALL_EQUIP_SLOTS.includes(preferredSlot)) {
+    return preferredSlot;
+  }
+
   const slot = String(rawSlot || '').trim().toLowerCase();
   const firstEmpty = (...candidates) => {
     const valid = candidates.filter(c => ALL_EQUIP_SLOTS.includes(c));
     return valid.find(c => !equipmentState?.[c]) || valid[0] || candidates[0];
   };
+
+  if (slot === 'weapon' || slot === 'sword' || slot === 'bow' || slot === 'dagger' || slot === 'blunt' || slot === 'staff' || slot === 'spear' || slot === 'dual' || slot === 'twohand') {
+    return firstEmpty('weapon', 'weapon2');
+  }
 
   if (slot === 'earring' || slot === 'earrings') return firstEmpty('earring1', 'earring2');
   if (slot === 'ring' || slot === 'rings') return firstEmpty('ring1', 'ring2');
@@ -41,13 +49,19 @@ export function migrateEquipmentSlots(state) {
   delete state.equipment.hair;
   delete state.equipment.cape;
 }
-export function equipItem(state, uid, callbacks = {}) {
+
+export function equipItem(state, uid, targetSlotOrCallbacks = null, maybeCallbacks = {}) {
+  let explicitSlot = (typeof targetSlotOrCallbacks === 'string') ? targetSlotOrCallbacks : null;
+  let callbacks = (typeof targetSlotOrCallbacks === 'object' && targetSlotOrCallbacks !== null) ? targetSlotOrCallbacks : maybeCallbacks;
+
   const item = state.inventory.find(i => i.uid === uid);
   if (!item) return;
   const def = D()?.ALL_ITEMS?.[item.itemId];
   if (!def) return;
   migrateEquipmentSlots(state);
-  const targetSlot = resolveEquipSlot(def.slot, state.equipment);
+
+  const targetSlot = explicitSlot || resolveEquipSlot(def.slot, state.equipment);
+
   // Validate level
   if (def.req?.level && state.level < def.req.level) {
     if (callbacks.log) callbacks.log(`Nível insuficiente para equipar ${def.name}. (Req: Lv.${def.req.level})`, 'system');
@@ -63,21 +77,34 @@ export function equipItem(state, uid, callbacks = {}) {
     if (callbacks.log) callbacks.log(`${def.name} não pode ser equipado.`, 'system');
     return;
   }
+
+  // Se o item já estava equipado em outro slot (ex: weapon2 trocando para weapon), limpa o slot anterior
+  for (const slotKey of ALL_EQUIP_SLOTS) {
+    if (state.equipment[slotKey] === uid && slotKey !== targetSlot) {
+      state.equipment[slotKey] = null;
+    }
+  }
+
   const currentUid = state.equipment[targetSlot];
-  if (currentUid) {
+  if (currentUid && currentUid !== uid) {
     const current = state.inventory.find(i => i.uid === currentUid);
     if (current) current.equipped = false;
   }
+
   state.equipment[targetSlot] = uid;
   item.equipped = true;
   item.equippedSlot = targetSlot;
-  if (callbacks.log) callbacks.log(`Equipou ${def.name}`, 'loot');
+
+  const slotLabel = targetSlot === 'weapon2' ? 'Arma Secundária (Slot 2)' : (targetSlot === 'weapon' ? 'Arma Primária (Slot 1)' : targetSlot);
+  if (callbacks.log) callbacks.log(`Equipou ${def.name} [${slotLabel}]`, 'loot');
+
   const stats = getStats(state);
   state.maxHp = stats.maxHp; state.maxMp = stats.maxMp;
   state.hp = Math.min(state.hp, state.maxHp); state.mp = Math.min(state.mp, state.maxMp);
   if (callbacks.updateAllUI) callbacks.updateAllUI();
-  if (callbacks.save) callbacks.save();
+  if (callbacks.save) callbacks.save(true, true);
 }
+
 export function unequipItem(state, slot, callbacks = {}) {
   migrateEquipmentSlots(state);
   const uid = state.equipment[slot];
@@ -90,6 +117,7 @@ export function unequipItem(state, slot, callbacks = {}) {
   state.hp = Math.min(state.hp, state.maxHp); state.mp = Math.min(state.mp, state.maxMp);
   if (callbacks.log) callbacks.log(`Desequipou ${slot}`, 'system');
   if (callbacks.updateAllUI) callbacks.updateAllUI();
-  if (callbacks.save) callbacks.save();
+  if (callbacks.save) callbacks.save(true, true);
 }
+
 export { equipItem as equipItemToSlot };

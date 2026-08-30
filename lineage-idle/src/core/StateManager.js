@@ -23,7 +23,7 @@ export const DEFAULT_STATE = () => ({
   tower: { highestFloor: 0, currentFloor: 1, lastSweepTime: 0 },
   zone: 'talkingIsland', currentSaga: 0, gold: 2000, inventory: [],
   equipment: {
-    weapon: null, shield: null, helmet: null, armor: null, gloves: null, boots: null,
+    weapon: null, weapon2: null, shield: null, helmet: null, armor: null, gloves: null, boots: null,
     hair: null, hair2: null, necklace: null, earring1: null, earring2: null, ring: null, ring2: null,
     belt: null, cloak: null, talisman: null, agathion: null
   },

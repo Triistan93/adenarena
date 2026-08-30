@@ -577,17 +577,25 @@ export function showItemTooltip(arg1, arg2, state, callbacks = {}) {
     const isEquipSlot = ['weapon','armor','helmet','gloves','boots','ring','ring1','ring2','legs','shield',
       'cloak','belt','necklace','earring','earring1','earring2','hair','hair1','hair2','agathion','agathion_bracelet',
       'brooch','talisman_bracelet','talisman','jewel','sigil'].includes(def.slot);
-    const isConsumable = ['consumable','scroll','powerup','potion','food'].includes(def.slot);
+    const isWeapon = def.slot === 'weapon' || /weapon|sword|bow|dagger|blunt|staff|spear|dual|twohand/.test(String(def.slot || ''));
 
     if (isEquipSlot) {
       if (item.equipped) {
+        const slotLabel = item.equippedSlot === 'weapon2' ? 'Slot 2' : (item.equippedSlot === 'weapon' ? 'Slot 1' : 'Item');
         actionsHtml += `<button data-tt-action="unequip" data-uid="${item.uid}" data-slot="${item.equippedSlot || def.slot}"
           style="flex:1;padding:5px 8px;background:linear-gradient(180deg,#5a4020,#2a1a08);border:1px solid #a07030;
-          border-radius:4px;color:#e8c870;font-size:11px;cursor:pointer;font-weight:600;">⬆ Desequipar</button>`;
+          border-radius:4px;color:#e8c870;font-size:11px;cursor:pointer;font-weight:600;">⬆ Desequipar (${slotLabel})</button>`;
+      } else if (isWeapon) {
+        actionsHtml += `<button data-tt-action="equip" data-slot-target="weapon" data-uid="${item.uid}"
+          style="flex:1;padding:5px 6px;background:linear-gradient(180deg,#1a3a5a,#0a1a2a);border:1px solid #3a7ab0;
+          border-radius:4px;color:#70c8f8;font-size:10.5px;cursor:pointer;font-weight:600;" title="Equipar no Slot de Arma 1">⚔ Slot 1</button>`;
+        actionsHtml += `<button data-tt-action="equip" data-slot-target="weapon2" data-uid="${item.uid}"
+          style="flex:1;padding:5px 6px;background:linear-gradient(180deg,#3a1a5a,#1a0a2a);border:1px solid #7a3ab0;
+          border-radius:4px;color:#c870f8;font-size:10.5px;cursor:pointer;font-weight:600;" title="Equipar no Slot de Arma 2">🗡 Slot 2</button>`;
       } else {
         actionsHtml += `<button data-tt-action="equip" data-uid="${item.uid}"
           style="flex:1;padding:5px 8px;background:linear-gradient(180deg,#1a3a5a,#0a1a2a);border:1px solid #3a7ab0;
-          border-radius:4px;color:#70c8f8;font-size:11px;cursor:pointer;font-weight:600;">⚔ Equipar</button>`;
+          border-radius:4px;color:#70c8f8;font-size:11px;cursor:pointer;font-weight:600;">🛡 Equipar</button>`;
       }
     }
     if (isConsumable) {
@@ -718,7 +726,8 @@ export function showItemTooltip(arg1, arg2, state, callbacks = {}) {
       ev.stopPropagation();
       const action = btn.dataset.ttAction;
       const uid = btn.dataset.uid;
-      if (action === 'equip'   && callbacks.equipItem)   callbacks.equipItem(uid, state);
+      const slotTarget = btn.dataset.slotTarget || null;
+      if (action === 'equip'   && callbacks.equipItem)   callbacks.equipItem(uid, slotTarget, state);
       if (action === 'unequip' && callbacks.unequipItem) {
         const slot = btn.dataset.slot;
         callbacks.unequipItem(slot, state);
@@ -756,7 +765,7 @@ export function initTooltipEvents() {
 /* ═══════════════════════════════════════════════════════════════════════════
    3. INVENTORY & PAPERDOLL (6 LINHAS x 3 COLUNAS)
 ═══════════════════════════════════════════════════════════════════════════ */
-const GEAR_SLOTS = ['weapon', 'shield', 'armor', 'helmet', 'gloves', 'legs', 'boots', 'cloak', 'belt', 'necklace', 'earring', 'ring', 'hair', 'hair2', 'agathion', 'talisman'];
+const GEAR_SLOTS = ['weapon', 'weapon2', 'shield', 'armor', 'helmet', 'gloves', 'legs', 'boots', 'cloak', 'belt', 'necklace', 'earring', 'ring', 'hair', 'hair2', 'agathion', 'talisman'];
 const CONSUMABLE_SLOTS = ['consumable', 'potion', 'scroll', 'food', 'powerup', 'crystal'];
 const MATERIAL_SLOTS = ['material', 'gem', 'ore', 'craft', 'crystal'];
 
@@ -764,7 +773,7 @@ const SLOT_ICONS = {
   hair1: '👒', hair2: '🎭', helmet: '🪖',
   earring1: '💎', armor: '🛡️', earring2: '💎',
   necklace: '📿', legs: '👖', cloak: '🧥',
-  weapon: '⚔️', gloves: '🧤', shield: '🛡️',
+  weapon: '⚔️', weapon2: '🗡️', gloves: '🧤', shield: '🛡️',
   ring1: '💍', boots: '👢', ring2: '💍',
   brooch: '❇️', agathion_bracelet: '🧚‍♂️', talisman_bracelet: '🔮', belt: '🪢'
 };
