@@ -152,6 +152,9 @@ function scheduleSave(
 
 export async function savePlayerStateToCloud(userId: string, stateData: any) {
   if (!userId) return false;
+  if (!auth.currentUser || auth.currentUser.uid !== userId) {
+    return false;
+  }
 
   // ── Anti-Cheat: validação de integridade antes de qualquer I/O ──────────
   const integrityCheck = validateStateIntegrity(stateData);
@@ -223,8 +226,12 @@ export async function savePlayerStateToCloud(userId: string, stateData: any) {
         await setDoc(userRef, payload, { merge: true });
         resolve(true);
         return true;
-      } catch (err) {
-        console.error('Cloud Save Error:', err);
+      } catch (err: any) {
+        if (err?.code === 'permission-denied' || String(err).includes('permission')) {
+          console.warn('[CloudSave] Permissões insuficientes no Firestore para salvar estado na nuvem. Verifique as regras do Firebase.');
+        } else {
+          console.error('Cloud Save Error:', err);
+        }
         resolve(false);
         return false;
       }

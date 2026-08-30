@@ -258,6 +258,7 @@ import EventBus from './src/core/EventBus.js';
 import {
   getState,
   setState,
+  setState as managerSetState,
   saveState as managerSaveState,
   loadState as managerLoadState,
   resetState as managerResetState,
@@ -8243,7 +8244,7 @@ export function init() {
             rarity: cardDef.rarity || 'common',
             tier: cardDef.rarity === 'sovereign' ? 6 : (cardDef.rarity === 'primordial' ? 5 : (cardDef.rarity === 'mythic' ? 4 : (cardDef.rarity === 'legendary' ? 3 : 2))),
             price: cardDef.level ? cardDef.level * 250 : 2500,
-            icon: cardDef.icon || 'assets/2d/monsters/low-level-32x/PNG/Transperent/Icon1.png',
+            icon: cardDef.icon || '/assets/2d/monsters/low-level-32x/PNG/Transperent/Icon1.png',
             desc: `Carta Colecionável do Monstro ${cardDef.monster}. Absorva no Codex para bônus passivos permanentes em toda a conta!`
           };
         }
