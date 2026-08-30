@@ -608,10 +608,10 @@ function attachMarketEvents(container, state, callbacks = {}) {
       showMarketToast(res.msg, res.ok ? 'success' : 'warning');
       if (callbacks.log) callbacks.log(res.msg, res.ok ? 'success' : 'warning');
       if (res.ok) {
-        if (typeof callbacks.save === 'function') callbacks.save();
+        if (typeof callbacks.save === 'function') callbacks.save(true, true);
         if (typeof callbacks.updateAllUI === 'function') callbacks.updateAllUI(true);
         if (typeof window !== 'undefined') {
-          if (typeof window.saveGameState === 'function') window.saveGameState();
+          if (typeof window.saveGameState === 'function') window.saveGameState(true, true);
           if (typeof window.updateInventoryUI === 'function') window.updateInventoryUI();
         }
       }
@@ -628,10 +628,10 @@ function attachMarketEvents(container, state, callbacks = {}) {
       showMarketToast(res.msg, res.ok ? 'info' : 'warning');
       if (callbacks.log) callbacks.log(res.msg, res.ok ? 'info' : 'warning');
       if (res.ok) {
-        if (typeof callbacks.save === 'function') callbacks.save();
+        if (typeof callbacks.save === 'function') callbacks.save(true, true);
         if (typeof callbacks.updateAllUI === 'function') callbacks.updateAllUI(true);
         if (typeof window !== 'undefined') {
-          if (typeof window.saveGameState === 'function') window.saveGameState();
+          if (typeof window.saveGameState === 'function') window.saveGameState(true, true);
           if (typeof window.updateInventoryUI === 'function') window.updateInventoryUI();
         }
       }
@@ -648,8 +648,12 @@ function attachMarketEvents(container, state, callbacks = {}) {
       showMarketToast(res.msg, res.ok ? 'gold' : 'info');
       if (callbacks.log) callbacks.log(res.msg, res.ok ? 'gold' : 'info');
       if (res.ok) {
-        if (callbacks.save) callbacks.save();
+        if (callbacks.save) callbacks.save(true, true);
         if (callbacks.updateAllUI) callbacks.updateAllUI(true);
+        if (typeof window !== 'undefined') {
+          if (typeof window.saveGameState === 'function') window.saveGameState(true, true);
+          if (typeof window.updateInventoryUI === 'function') window.updateInventoryUI();
+        }
       }
       renderMarketTab(container, state, callbacks);
     };

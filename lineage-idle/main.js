@@ -321,20 +321,24 @@ const TIER_NAMES = ['Foundation', 'Discipline', 'Mastery', 'Ascendancy', 'Legend
 let state = getState();
 
 let _saveTimeout = null;
-function save(manual = false) {
-  if (manual) {
+function save(immediate = false, forceCloud = false) {
+  if (immediate) {
     if (_saveTimeout) { clearTimeout(_saveTimeout); _saveTimeout = null; }
-    managerSaveState(true);
+    managerSaveState(true, forceCloud);
     try { RankingService.syncToCloud(state, true); } catch (e) {}
-    log('Game saved successfully.', 'system');
-    floatText('SAVED', 'float-gold');
+    if (typeof window !== 'undefined' && typeof window.saveCloudNow === 'function') {
+      try { window.saveCloudNow(state, true); } catch (e) {}
+    }
     return;
   }
   if (_saveTimeout) return;
   _saveTimeout = setTimeout(() => {
     _saveTimeout = null;
-    managerSaveState(false);
+    managerSaveState(false, forceCloud);
     try { RankingService.syncToCloud(state, false); } catch (e) {}
+    if (typeof window !== 'undefined' && typeof window.saveCloudNow === 'function') {
+      try { window.saveCloudNow(state, false); } catch (e) {}
+    }
   }, 1000);
 }
 
@@ -7138,7 +7142,7 @@ function claimDailyRewardAction() {
 
   if (res.success) {
     updateAllUI();
-    save();
+    save(true, true);
     renderDailyRewardModal();
   } else {
     log(`⚠️ ${res.message}`, 'system');
@@ -8260,6 +8264,12 @@ export function init() {
       delete data._mpRegenAcc;
       return JSON.parse(JSON.stringify(data));
     };
+
+    window.saveGameState = (immediate = true, forceCloud = true) => {
+      save(immediate, forceCloud);
+      return true;
+    };
+    window.saveState = save;
 
     window.loadGameState = (cloudData) => {
       if (!cloudData || typeof cloudData !== 'object') return;

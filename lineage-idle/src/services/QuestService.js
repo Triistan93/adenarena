@@ -89,7 +89,7 @@ export function claimQuestReward(state, questId, callbacks = {}) {
   if (callbacks.floatText) callbacks.floatText(`🎁 MISSÃO CONCLUÍDA!`, 'float-jackpot');
 
   if (callbacks.updateAllUI) callbacks.updateAllUI();
-  if (callbacks.save) callbacks.save();
+  if (callbacks.save) callbacks.save(true, true);
   return true;
 }
 
@@ -121,7 +121,7 @@ export function claimDailyBonusChest(state, callbacks = {}) {
   if (callbacks.floatText) callbacks.floatText(`👑 BAÚ DIÁRIO RESGATADO!`, 'float-jackpot');
 
   if (callbacks.updateAllUI) callbacks.updateAllUI();
-  if (callbacks.save) callbacks.save();
+  if (callbacks.save) callbacks.save(true, true);
   return true;
 }
 
@@ -140,7 +140,7 @@ export function unlockPremiumPass(state, callbacks = {}) {
   if (callbacks.floatText) callbacks.floatText('👑 PASSE PREMIUM ATIVO!', 'float-jackpot');
 
   if (callbacks.updateAllUI) callbacks.updateAllUI();
-  if (callbacks.save) callbacks.save();
+  if (callbacks.save) callbacks.save(true, true);
 }
 
 /**
@@ -181,5 +181,5 @@ export function claimPassReward(state, tierLevel, passType = 'free', callbacks =
   }
 
   if (callbacks.updateAllUI) callbacks.updateAllUI();
-  if (callbacks.save) callbacks.save();
+  if (callbacks.save) callbacks.save(true, true);
 }

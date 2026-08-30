@@ -38,13 +38,13 @@ import {
   fetchPlayerSalesFromCloud,
   claimPlayerSalesInCloud,
   subscribeToMarketListings,
-  subscribeToPlayerSales,
+  savePlayerStateToCloud,
   loadPlayerStateFromCloud,
   onAuthStateChanged,
   auth 
 } from "../firebase";
 
-// Expondo FirebaseBridge para os serviços de Rankings, Matchmaking e Mercado Global P2P
+// Expondo FirebaseBridge para os serviços de Rankings, Matchmaking, Mercado Global P2P e Cloud Save
 if (typeof window !== "undefined") {
   (window as any).FirebaseBridge = {
     syncPublicProfile: async (profileData: any) => {
@@ -66,7 +66,29 @@ if (typeof window !== "undefined") {
     fetchPlayerSales: fetchPlayerSalesFromCloud,
     claimPlayerSales: claimPlayerSalesInCloud,
     subscribeMarketListings: subscribeToMarketListings,
-    subscribePlayerSales: subscribeToPlayerSales
+    subscribePlayerSales: subscribeToPlayerSales,
+
+    // Pipeline de Save em Nuvem
+    savePlayerState: savePlayerStateToCloud,
+    loadPlayerState: loadPlayerStateFromCloud
+  };
+
+  // Pipeline global de salvamento instantâneo em nuvem
+  (window as any).saveCloudNow = async (stateData?: any, immediate: boolean = false) => {
+    const user = auth.currentUser;
+    if (!user) return false;
+    const data = stateData || ((typeof (window as any).getGameState === 'function') ? (window as any).getGameState() : null);
+    if (!data) return false;
+    return await savePlayerStateToCloud(user.uid, data, immediate);
+  };
+
+  (window as any).saveCloudOnUnload = () => {
+    const user = auth.currentUser;
+    if (!user) return;
+    const data = (typeof (window as any).getGameState === 'function') ? (window as any).getGameState() : null;
+    if (data) {
+      savePlayerStateToCloud(user.uid, data, true);
+    }
   };
 }
 
@@ -116,7 +138,17 @@ export default function IdleGame() {
       }
     });
 
-    return () => unsub();
+    // Cloud Auto-Save loop periódico a cada 15 segundos
+    const cloudSaveInterval = setInterval(() => {
+      if (auth.currentUser && typeof (window as any).saveCloudNow === 'function') {
+        (window as any).saveCloudNow(undefined, false);
+      }
+    }, 15000);
+
+    return () => {
+      unsub();
+      clearInterval(cloudSaveInterval);
+    };
   }, []);
 
   useLayoutEffect(() => {

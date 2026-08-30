@@ -56,7 +56,7 @@ export function buyItem(state, itemId, qty = 1, rarity = 'common', callbacks = {
   if (callbacks.log) callbacks.log(`🎁 Comprou ${cleanQty}x ${def.name} por 💰 ${cost.toLocaleString()} Gold!`, 'loot');
 
   if (callbacks.updateAllUI) callbacks.updateAllUI(state);
-  if (callbacks.save) callbacks.save();
+  if (callbacks.save) callbacks.save(true, true);
   return true;
 }
 
@@ -107,7 +107,7 @@ export function buyMysticItem(state, itemId, rarity, callbacks = {}) {
   }
 
   if (callbacks.updateAllUI) callbacks.updateAllUI();
-  if (callbacks.save) callbacks.save();
+  if (callbacks.save) callbacks.save(true, true);
   return true;
 }
 
@@ -169,7 +169,7 @@ export function sellItem(state, uid, qty = 1, callbacks = {}) {
   }
 
   if (callbacks.updateAllUI) callbacks.updateAllUI(state);
-  if (callbacks.save) callbacks.save();
+  if (callbacks.save) callbacks.save(true, true);
   return true;
 }
 
@@ -250,7 +250,7 @@ export function sellAllJunk(state, callbacks = {}) {
   }
 
   if (callbacks.updateAllUI) callbacks.updateAllUI(state);
-  if (callbacks.save) callbacks.save();
+  if (callbacks.save) callbacks.save(true, true);
   return { count: itemsSold, goldGained: totalGold };
 }
 
@@ -285,7 +285,7 @@ export function buybackItem(state, buybackIndex, callbacks = {}) {
   }
 
   if (callbacks.updateAllUI) callbacks.updateAllUI(state);
-  if (callbacks.save) callbacks.save();
+  if (callbacks.save) callbacks.save(true, true);
   return true;
 }
 
@@ -313,7 +313,7 @@ export function rerollMysticStock(state, rollStockFn, callbacks = {}) {
   }
 
   if (callbacks.updateAllUI) callbacks.updateAllUI(state);
-  if (callbacks.save) callbacks.save();
+  if (callbacks.save) callbacks.save(true, true);
   return true;
 }
 

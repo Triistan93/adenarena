@@ -155,7 +155,7 @@ export function completeTowerFloor(state, floorNum, callbacks = {}) {
   }
 
   if (callbacks.updateAllUI) callbacks.updateAllUI();
-  if (callbacks.save) callbacks.save();
+  if (callbacks.save) callbacks.save(true, true);
 }
 
 /**
@@ -195,5 +195,5 @@ export function sweepTowerDaily(state, callbacks = {}) {
   if (callbacks.floatText) callbacks.floatText(`+${totalGold.toLocaleString()}g VARREDURA!`, 'float-jackpot');
 
   if (callbacks.updateAllUI) callbacks.updateAllUI();
-  if (callbacks.save) callbacks.save();
+  if (callbacks.save) callbacks.save(true, true);
 }

@@ -97,11 +97,11 @@ export async function bootstrap(shadowRoot) {
 
     _intervals.push(setInterval(() => {
       saveState(false);
-    }, 10000));
+    }, 5000));
 
-    // 7. Configura listeners de unload para salvamento na nuvem/local
+    // 7. Configura listeners de unload para salvamento na nuvem/local (Flash-Save Imediato)
     const syncOnUnload = () => {
-      saveState(true);
+      saveState(true, true);
       if (typeof window !== 'undefined' && typeof window.saveCloudOnUnload === 'function') {
         window.saveCloudOnUnload();
       }

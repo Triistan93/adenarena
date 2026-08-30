@@ -11,6 +11,7 @@
  */
 
 import { D } from '../core/GameConfig.js';
+import { saveState } from '../core/StateManager.js';
 
 function getItemDefinition(itemId) {
   if (!itemId) return null;
@@ -551,6 +552,7 @@ export const MarketService = {
     }
 
     this.notifyUI();
+    try { saveState(true, true); } catch (_) {}
 
     return { 
       ok: true, 
@@ -692,6 +694,7 @@ export const MarketService = {
     }
 
     this.notifyUI();
+    try { saveState(true, true); } catch (_) {}
 
     return {
       ok: true,
@@ -782,6 +785,7 @@ export const MarketService = {
     }
 
     this.notifyUI();
+    try { saveState(true, true); } catch (_) {}
 
     return {
       ok: true,
@@ -836,6 +840,7 @@ export const MarketService = {
 
     this.savePlayerSales(playerName, salesData);
     this.notifyUI();
+    try { saveState(true, true); } catch (_) {}
 
     return {
       ok: true,

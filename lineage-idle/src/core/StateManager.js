@@ -63,6 +63,7 @@ export const DEFAULT_STATE = () => ({
     book: 1
   },
   serverSeason: 1,   // Stage/Crônica ativa — controlada pelo Admin Panel
+  _saveVersion: 0,   // Número sequencial de transação do save
 });
 
 let currentState = DEFAULT_STATE();
@@ -85,11 +86,13 @@ export function setState(partialState) {
 }
 
 /**
- * Salva o estado atual no localStorage com Checksum de integridade e Backup de segurança.
- * @param {boolean} [manual=false]
+ * Salva o estado atual no localStorage com Checksum de integridade, Backup de segurança e Cloud Push.
+ * @param {boolean} [manual=false] Se true, executa flash-save imediato cancelando throttling
+ * @param {boolean} [forceCloud=false] Se true, dispara envio forçado imediato ao Firebase
  */
-export function saveState(manual = false) {
+export function saveState(manual = false, forceCloud = false) {
   currentState.lastSaveTime = Date.now();
+  currentState._saveVersion = (Number(currentState._saveVersion) || 0) + 1;
   sanitizeGameState(currentState);
 
   const data = {
@@ -108,7 +111,17 @@ export function saveState(manual = false) {
     // Grava também no slot de backup de segurança
     localStorage.setItem(`${SAVE_KEY}_backup`, serialized);
 
-    EventBus.emit('state:saved', { manual, time: currentState.lastSaveTime });
+    EventBus.emit('state:saved', { 
+      manual, 
+      forceCloud, 
+      version: currentState._saveVersion, 
+      time: currentState.lastSaveTime 
+    });
+
+    // Se solicitado ou se for save manual/crítico, dispara gravação imediata na nuvem
+    if (typeof window !== 'undefined' && typeof window.saveCloudNow === 'function') {
+      window.saveCloudNow(data, manual || forceCloud);
+    }
   } catch (err) {
     console.error('[StateManager] Erro ao salvar estado:', err);
   }
