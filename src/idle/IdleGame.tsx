@@ -38,6 +38,7 @@ import {
   fetchPlayerSalesFromCloud,
   claimPlayerSalesInCloud,
   subscribeToMarketListings,
+  subscribeToPlayerSales,
   savePlayerStateToCloud,
   loadPlayerStateFromCloud,
   onAuthStateChanged,
