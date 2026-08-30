@@ -10,6 +10,7 @@ import { MONSTERS } from '../data/monsters.js';
 import { RACES } from '../data/races.js';
 import { getStats } from './StatsEngine.js';
 import { rollChampionMonster } from './BalanceEngine.js';
+import { StaggerEngine } from './StaggerEngine.js';
 
 let combatInterval = null;
 let monsterAttackTimeout = null;
@@ -128,6 +129,7 @@ export function pickRandomMonster(state, callbacks = {}) {
       championColor: champion ? champion.color : null,
       _stunnedUntil: 0
     };
+    StaggerEngine.initMonsterStagger(state.activeMonster);
 
     if (isBossSpawn) {
       if (callbacks.log) callbacks.log(`🚨 CHEFÃO DA ZONA DESPERTADO! 👑 ${template.name} apareceu!`, 'boss', 'system');

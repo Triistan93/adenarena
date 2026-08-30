@@ -155,8 +155,12 @@ import {
   spendSP as engineSpendSP,
   resetSP as engineResetSP,
   getStarterSkillForClass,
-  canCastSkillWeapon
+  canCastSkillWeapon,
+  detectItemWeaponType
 } from './src/engine/SkillEngine.js';
+
+import { WeaponResonanceService } from './src/services/WeaponResonanceService.js';
+import { StaggerEngine } from './src/engine/StaggerEngine.js';
 // ─── Sprint 5: Importa serviços de Personagem, Quests, Torre e Raids ────────
 import {
   classSatisfies as serviceClassSatisfies,
@@ -3952,6 +3956,15 @@ function attackMonster() {
   }
   combatTick++;
 
+  // Processamento de Sangramento Contínuo (Bleed - Caçador das Sombras)
+  if (monster._bleedTicks && monster._bleedTicks > 0) {
+    monster._bleedTicks--;
+    const bDmg = monster._bleedDamage || 20;
+    monster.hp -= bDmg;
+    log(`🩸 Sangramento Profundo: ${monster.name} sofreu ${bDmg} de dano contínuo!`, 'combat');
+    if (typeof stageFloat === 'function') stageFloat(`-${bDmg} BLEED`, 'sf-crit', 'right');
+  }
+
   if (stats.regenHp > 0) {
     state._regenAcc = (state._regenAcc || 0) + 0.2; 
     if (state._regenAcc >= 10) { state._regenAcc = 0; const heal = Math.max(1, Math.floor(state.maxHp * stats.regenHp)); if (state.hp < state.maxHp) { state.hp = Math.min(state.maxHp, state.hp + heal); log(`Holy Light: +${heal} HP`, 'heal'); } }
@@ -4060,7 +4073,22 @@ function attackMonster() {
         const type = useMagicSkill ? 'magic' : 'physical';
         const baseSkillDmg = useMagicSkill ? stats.matk : stats.atk;
         const skillPwr = window.SkillScaling ? window.SkillScaling.getSkillPwrAtLevel(skill.def, skill.lvl) : (Number(skill.def.pwr) || 30);
-        const sDmg = dealDamage(monster, baseSkillDmg * (skillPwr / 10), type);
+        let rawSDmg = dealDamage(monster, baseSkillDmg * (skillPwr / 10), type);
+        
+        // Trigger de Ressonância de Habilidades
+        WeaponResonanceService.onSkillCast(state, skill.def, monster, { log, floatText });
+
+        const skillWeaponType = skill.def.weaponType || skill.def.requiredWeapon || (useMagicSkill ? 'staff' : 'sword');
+
+        // Aplica Dano de Postura e obtém Multiplicador de Break (2.0x se vulnerável)
+        const staggerResult = StaggerEngine.applyStaggerDamage(monster, rawSDmg, skillWeaponType, true, false, { log, floatText });
+        if (staggerResult.mult > 1.0) {
+          rawSDmg = Math.floor(rawSDmg * staggerResult.mult);
+        }
+
+        // Aplica Amplificação de Ressonância Cruzada (ex: Adaga consumindo Marca de Arco)
+        const resonanceResult = WeaponResonanceService.processAttackImpact(state, monster, skillWeaponType, rawSDmg, { log, floatText });
+        const sDmg = resonanceResult.finalDamage;
         
         monster.hp -= sDmg;
         stageHeroAttack();
@@ -4158,6 +4186,18 @@ function attackMonster() {
   }
 
   damage = Math.floor(damage * affixDmgMult);
+
+  const primaryWeaponType = WeaponResonanceService.getEquippedWeaponTypes(state).weap1 || (useMagic ? 'staff' : 'sword');
+
+  // Aplica Stagger Damage na barra de postura do monstro
+  const staggerResult = StaggerEngine.applyStaggerDamage(monster, damage, primaryWeaponType, false, wasCrit, { log, floatText });
+  if (staggerResult.mult > 1.0) {
+    damage = Math.floor(damage * staggerResult.mult);
+  }
+
+  // Aplica Amplificação de Ressonância Cruzada
+  const resonanceResult = WeaponResonanceService.processAttackImpact(state, monster, primaryWeaponType, damage, { log, floatText });
+  damage = resonanceResult.finalDamage;
 
   if (procBonuses.stun_chance > 0 && Math.random() * 100 < procBonuses.stun_chance) {
     const nowStun = combatTick * 200;
@@ -4390,7 +4430,9 @@ function attackMonster() {
 function monsterAttack(monster) {
   if (state.isCombatActive === false || !state.target || state.hp <= 0) return;
   const now = combatTick * 200;
+  const realNow = Date.now();
   if (monster._stunnedUntil && monster._stunnedUntil > now) return; 
+  if (monster.breakUntil && monster.breakUntil > realNow) return; // Chefe paralisado durante o BREAK!
   
   const stats = getStats();
   stageMonsterLunge();
@@ -8534,6 +8576,9 @@ export function init() {
 
       window.openMarketTab = () => openPanel('market');
       window.openMarket = () => openPanel('market');
+
+      window.WeaponResonanceService = WeaponResonanceService;
+      window.StaggerEngine = StaggerEngine;
 
       // Inicializa listeners em tempo real e sincronização do Mercado de Giran
       MarketService.initCloudSubscription(state, { log, updateAllUI, save });

@@ -1256,6 +1256,87 @@ const INJECTED_GAMEUI_CSS = `
   color: #12161f;
   background: #e8c37a;
 }
+
+/* === STAGGER & BREAK BAR STYLES === */
+.stage-stagger-bar {
+  position: relative;
+  width: 100%;
+  height: 10px;
+  background: rgba(15, 10, 6, 0.9);
+  border: 1px solid #78350f;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 4px;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.8);
+}
+.stage-stagger-fill {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, #f59e0b, #d97706);
+  box-shadow: 0 0 6px rgba(245, 158, 11, 0.6);
+  transition: width 0.2s ease;
+}
+.stage-stagger-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 8px;
+  font-weight: 800;
+  color: #fff;
+  text-shadow: 0 1px 2px #000;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.stage-stagger-bar.stage-stagger-break {
+  border-color: #ef4444;
+  animation: stagger-pulse 0.6s infinite alternate;
+}
+.stage-stagger-bar.stage-stagger-break .stage-stagger-fill {
+  background: linear-gradient(90deg, #ef4444, #f59e0b, #ef4444);
+  background-size: 200% 100%;
+  animation: stagger-shimmer 1s linear infinite;
+}
+@keyframes stagger-pulse {
+  from { box-shadow: 0 0 4px #ef4444; }
+  to { box-shadow: 0 0 12px #ef4444; }
+}
+@keyframes stagger-shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+/* === WEAPON RESONANCE BADGE === */
+.weapon-resonance-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(180deg, rgba(20, 15, 30, 0.95), rgba(10, 8, 18, 0.95));
+  border: 1px solid #a855f7;
+  border-radius: 6px;
+  padding: 6px 10px;
+  margin: 6px 0 10px 0;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.6);
+}
+.weapon-resonance-badge .res-icon {
+  font-size: 18px;
+  filter: drop-shadow(0 0 4px rgba(255,255,255,0.4));
+}
+.weapon-resonance-badge .res-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.weapon-resonance-badge .res-title {
+  font-size: 11px;
+  font-weight: 700;
+  font-family: 'Cinzel', serif;
+}
+.weapon-resonance-badge .res-desc {
+  font-size: 9.5px;
+  color: #cbd5e1;
+  line-height: 1.25;
+}
 `;
 
 export function ensureInventoryStyles() {
@@ -1581,6 +1662,36 @@ export function updateEquipmentUI(state, callbacks = {}) {
       slotEl.onclick = null;
     }
   }
+
+  // Renderiza o Badge de Ressonância Ativa do Dual Arsenal
+  const root = getRoot();
+  const activeRes = (typeof window !== 'undefined' && window.WeaponResonanceService)
+    ? window.WeaponResonanceService.getActiveResonance(state)
+    : null;
+
+  const equipContainer = root.querySelector('.paperdoll') || root.querySelector('#tab-inventory') || root.querySelector('.equip-bonuses');
+  if (equipContainer) {
+    let resBadge = root.querySelector('#weapon-resonance-badge');
+    if (!resBadge) {
+      resBadge = mkEl('div');
+      resBadge.id = 'weapon-resonance-badge';
+      resBadge.className = 'weapon-resonance-badge';
+      equipContainer.parentNode ? equipContainer.parentNode.insertBefore(resBadge, equipContainer) : equipContainer.prepend(resBadge);
+    }
+    if (activeRes) {
+      resBadge.style.display = 'flex';
+      resBadge.style.borderColor = activeRes.color || '#38bdf8';
+      resBadge.innerHTML = `
+        <span class="res-icon">${activeRes.icon}</span>
+        <div class="res-info">
+          <div class="res-title" style="color:${activeRes.color || '#38bdf8'}">Ressonância: ${activeRes.name}</div>
+          <div class="res-desc">${activeRes.pairName} — ${activeRes.desc}</div>
+        </div>
+      `;
+    } else {
+      resBadge.style.display = 'none';
+    }
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -1631,9 +1742,10 @@ function ensureMonsterStructure() {
   let name = monsterCard.querySelector('#monster-name, .stage-entity-name');
   let level = monsterCard.querySelector('#monster-level, .stage-monster-level');
   let hpBar = monsterCard.querySelector('#monster-hp-bar, .stage-hp-bar');
+  let staggerBar = monsterCard.querySelector('#monster-stagger-bar, .stage-stagger-bar');
   let sprite = monsterCard.querySelector('#monster-sprite-container, .monster-sprite-host');
 
-  if (!name || !level || !hpBar || !sprite) {
+  if (!name || !level || !hpBar || !sprite || !staggerBar) {
     monsterCard.innerHTML = `
       <div id="monster-name" class="stage-entity-name">—</div>
       <div id="monster-level" class="stage-entity-level stage-monster-level">Level 1</div>
@@ -1641,15 +1753,20 @@ function ensureMonsterStructure() {
         <div id="monster-hp-fill" class="stage-hp-fill"></div>
         <span id="monster-hp-text" class="stage-hp-text">HP: 0 / 0</span>
       </div>
+      <div id="monster-stagger-bar" class="stage-stagger-bar" style="display:none;">
+        <div id="monster-stagger-fill" class="stage-stagger-fill"></div>
+        <span id="monster-stagger-text" class="stage-stagger-text">POSTURA: 100%</span>
+      </div>
       <div id="monster-sprite-container" class="monster-sprite-host"></div>
     `;
     name = monsterCard.querySelector('#monster-name');
     level = monsterCard.querySelector('#monster-level');
     hpBar = monsterCard.querySelector('#monster-hp-bar');
+    staggerBar = monsterCard.querySelector('#monster-stagger-bar');
     sprite = monsterCard.querySelector('#monster-sprite-container');
   }
 
-  return { card: monsterCard, name, level, hpBar, sprite };
+  return { card: monsterCard, name, level, hpBar, staggerBar, sprite };
 }
 
 export function renderStageHero(state) {
@@ -1711,6 +1828,7 @@ export function renderStageMonster(state) {
     updateBar('monster-hp-bar', 0, 1);
     const mHpText = structure.card.querySelector('#monster-hp-text, .stage-hp-text');
     if (mHpText) mHpText.textContent = 'HP: 0';
+    if (structure.staggerBar) structure.staggerBar.style.display = 'none';
     return;
   }
 
@@ -1739,6 +1857,32 @@ export function renderStageMonster(state) {
 
   const monsterHpText = structure.card.querySelector('#monster-hp-text, .stage-hp-text');
   if (monsterHpText) monsterHpText.textContent = `HP: ${curHp} / ${maxHp}`;
+
+  // Atualização da Barra de Postura (Stagger Bar) dos Chefes e Elites
+  const sBar = structure.staggerBar || structure.card.querySelector('#monster-stagger-bar');
+  if (sBar) {
+    if (m.staggerMax && m.staggerMax > 0) {
+      sBar.style.display = 'block';
+      const sFill = sBar.querySelector('#monster-stagger-fill, .stage-stagger-fill');
+      const sText = sBar.querySelector('#monster-stagger-text, .stage-stagger-text');
+      const realNow = Date.now();
+      const isBreak = m.breakUntil && m.breakUntil > realNow;
+
+      if (isBreak) {
+        sBar.classList.add('stage-stagger-break');
+        const timeLeft = Math.max(1, Math.ceil((m.breakUntil - realNow) / 1000));
+        if (sFill) sFill.style.width = '100%';
+        if (sText) sText.textContent = `💥 VULNERÁVEL (2.0x DANO) [${timeLeft}s]`;
+      } else {
+        sBar.classList.remove('stage-stagger-break');
+        const pct = Math.max(0, Math.min(100, Math.round(((m.staggerCurrent ?? m.staggerMax) / m.staggerMax) * 100)));
+        if (sFill) sFill.style.width = `${pct}%`;
+        if (sText) sText.textContent = `POSTURA: ${pct}%`;
+      }
+    } else {
+      sBar.style.display = 'none';
+    }
+  }
 
   if (structure.sprite && typeof monsterSVG === 'function') {
     const mId = m.id || m.monsterId || m.key || m.name || 'goblin';
