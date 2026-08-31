@@ -1465,9 +1465,9 @@ function updateDetailedEquipStatsUI() {
   }
 
   const defaultSlotIcons = {
-    hair: '👒', gloves: '🧤', weapon: '⚔️', necklace: '📿', ring: '💍', belt: '🪢',
+    hair: '👒', gloves: '🧤', weapon: '⚔️', weapon2: '🗡️', necklace: '📿', ring: '💍', belt: '🪢',
     helmet: '⛑️', armor: '🛡️', legs: '👖', shield: '🛡️', boots: '👢',
-    hair2: '🎭', earring1: '💎', earring2: '💎', ring2: '💍', cloak: '🧥', talisman: '🔮', agathion: '🧚‍♂️'
+    hair2: '🎭', earring1: '💎', earring2: '💎', ring2: '💍', cloak: '🧥', talisman: '🔮', agathion: '🧚‍♂️', brooch: '❇️', talisman_bracelet: '🔮', agathion_bracelet: '🧚‍♂️'
   };
 
   for (const slot of ALL_EQUIP_SLOTS) {
