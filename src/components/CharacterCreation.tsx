@@ -42,12 +42,17 @@ const RACES_INFO: Record<string, {
       { id: 'assassinS0', name: 'Assassin 🗡️', desc: 'Caçador das sombras mortal com adagas velozes e clones sombrios.', icon: '🗡️' }
     ],
     image: {
-      fighter: { M: '/img/humanpalaM.png', F: '/img/humanpalaF.png' },
-      mage: { M: '/img/humanmageM.png', F: '/img/humanmageF.png' },
-      deathPilgrim: { M: '/img/humanpalaM.png', F: '/img/humanpalaF.png' },
-      wargBase: { M: '/img/humanpalaM.png', F: '/img/humanpalaF.png' },
-      assassinS0: { M: '/img/humanpalaM.png', F: '/img/humanpalaF.png' },
-      assassinBase: { M: '/img/humanpalaM.png', F: '/img/humanpalaF.png' }
+      fighter: { M: '/img/m_humanfighter.jpg', F: '/img/f_humanfighter.jpg' },
+      warrior: { M: '/img/m_humanwarrior.jpg', F: '/img/f_humanwarrior.jpg' },
+      knight: { M: '/img/m_humanknight.jpg', F: '/img/f_humanknight.jpg' },
+      rogue: { M: '/img/m_humanrogue.jpg', F: '/img/f_humanrogue.jpg' },
+      mage: { M: '/img/m_humanmistyc.jpg', F: '/img/f_humanmistyc.jpg' },
+      wizard: { M: '/img/m_humanwizard.jpg', F: '/img/f_humanwizard.jpg' },
+      cleric: { M: '/img/m_cleric.jpg', F: '/img/f_cleric.jpg' },
+      deathPilgrim: { M: '/img/m_darkavenger.jpg', F: '/img/f_darkavenger.jpg' },
+      wargBase: { M: '/img/m_humanwarrior.jpg', F: '/img/f_humanwarrior.jpg' },
+      assassinS0: { M: '/img/m_treasurehunter.jpg', F: '/img/f_treasurehunter.jpg' },
+      assassinBase: { M: '/img/m_treasurehunter.jpg', F: '/img/f_treasurehunter.jpg' }
     },
     startZoneName: 'Ilha de Falar (Talking Island)'
   },

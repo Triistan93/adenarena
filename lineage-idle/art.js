@@ -1,27 +1,120 @@
 // ================================================================
-// Aden / Lineage Idle — Visual Art Module v3
-// Painted 3D-figurine illustrations for heroes and monsters.
-// Falls back to the closest match when a specific combo isn't
-// available.  Pure functions — no DOM, no globals.
+// Aden / Lineage Idle — Visual Art Module v4 (Full Masterwork Edition)
+// Painted High-Definition illustrations for heroes, classes and monsters.
+// Supports 36 class variants (M/F) and 119 authentic monster artworks.
 // ================================================================
 
 const HERO_IMG = {
-  human_fighter: "/img/humanpalaM.png",
-  human_fighter_m: "/img/humanpalaM.png",
-  human_fighter_f: "/img/humanpalaF.png",
-  human_mage: "/img/humanmageF.png",
-  human_mage_m: "/img/humanmageM.png",
-  human_mage_f: "/img/humanmageF.png",
-  human_warrior: "/img/humanpalaM.png",
-  human_knight: "/img/humanpalaM.png",
-  human_rogue: "/img/humanpalaM.png",
-  human_wizard: "/img/humanmageM.png",
-  human_cleric: "/img/humanmageF.png",
-  human_deathpilgrim: "/img/humanpalaM.png",
-  human_wargbase: "/img/humanpalaM.png",
-  human_assassinbase: "/img/humanpalaM.png",
-  human_assassins0: "/img/humanpalaM.png",
+  // --- Human Classes (M / F) ---
+  human_fighter: "/img/m_humanfighter.jpg",
+  human_fighter_m: "/img/m_humanfighter.jpg",
+  human_fighter_f: "/img/f_humanfighter.jpg",
+  human_warrior: "/img/m_humanwarrior.jpg",
+  human_warrior_m: "/img/m_humanwarrior.jpg",
+  human_warrior_f: "/img/f_humanwarrior.jpg",
+  human_knight: "/img/m_humanknight.jpg",
+  human_knight_m: "/img/m_humanknight.jpg",
+  human_knight_f: "/img/f_humanknight.jpg",
+  human_rogue: "/img/m_humanrogue.jpg",
+  human_rogue_m: "/img/m_humanrogue.jpg",
+  human_rogue_f: "/img/f_humanrogue.jpg",
+  human_gladiator: "/img/m_gladiator.jpg",
+  human_gladiator_m: "/img/m_gladiator.jpg",
+  human_gladiator_f: "/img/f_gladiator.jpg",
+  human_warlord: "/img/m_warlord.jpg",
+  human_warlord_m: "/img/m_warlord.jpg",
+  human_warlord_f: "/img/f_warlord.jpg",
+  human_paladin: "/img/m_paladin.jpg",
+  human_paladin_m: "/img/m_paladin.jpg",
+  human_paladin_f: "/img/f_paladin.jpg",
+  human_darkavenger: "/img/m_darkavenger.jpg",
+  human_darkavenger_m: "/img/m_darkavenger.jpg",
+  human_darkavenger_f: "/img/f_darkavenger.jpg",
+  human_treasurehunter: "/img/m_treasurehunter.jpg",
+  human_treasurehunter_m: "/img/m_treasurehunter.jpg",
+  human_treasurehunter_f: "/img/f_treasurehunter.jpg",
+  human_hawkeye: "/img/m_hawkeye.jpg",
+  human_hawkeye_m: "/img/m_hawkeye.jpg",
+  human_hawkeye_f: "/img/f_hawkeye.jpg",
 
+  human_mage: "/img/m_humanmistyc.jpg",
+  human_mage_m: "/img/m_humanmistyc.jpg",
+  human_mage_f: "/img/f_humanmistyc.jpg",
+  human_mystic: "/img/m_humanmistyc.jpg",
+  human_mystic_m: "/img/m_humanmistyc.jpg",
+  human_mystic_f: "/img/f_humanmistyc.jpg",
+  human_humanmistyc: "/img/m_humanmistyc.jpg",
+  human_humanmistyc_m: "/img/m_humanmistyc.jpg",
+  human_humanmistyc_f: "/img/f_humanmistyc.jpg",
+  human_humanwizard: "/img/m_humanwizard.jpg",
+  human_humanwizard_m: "/img/m_humanwizard.jpg",
+  human_humanwizard_f: "/img/f_humanwizard.jpg",
+  human_wizard: "/img/m_humanwizard.jpg",
+  human_wizard_m: "/img/m_humanwizard.jpg",
+  human_wizard_f: "/img/f_humanwizard.jpg",
+  human_sorcerer: "/img/m_sorcerer.jpg",
+  human_sorcerer_m: "/img/m_sorcerer.jpg",
+  human_sorcerer_f: "/img/f_sorcerer.jpg",
+  human_necromancer: "/img/m_necromancer.jpg",
+  human_necromancer_m: "/img/m_necromancer.jpg",
+  human_necromancer_f: "/img/f_necromancer.jpg",
+  human_warlock: "/img/m_warlock.jpg",
+  human_warlock_m: "/img/m_warlock.jpg",
+  human_warlock_f: "/img/f_warlock.jpg",
+  human_cleric: "/img/m_cleric.jpg",
+  human_cleric_m: "/img/m_cleric.jpg",
+  human_cleric_f: "/img/f_cleric.jpg",
+  human_bishop: "/img/m_bishop.jpg",
+  human_bishop_m: "/img/m_bishop.jpg",
+  human_bishop_f: "/img/f_bishop.jpg",
+  human_prophet: "/img/m_prophet.jpg",
+  human_prophet_m: "/img/m_prophet.jpg",
+  human_prophet_f: "/img/f_prophet.jpg",
+
+  // Generic class aliases (without race prefix)
+  gladiator_m: "/img/m_gladiator.jpg",
+  gladiator_f: "/img/f_gladiator.jpg",
+  gladiator: "/img/m_gladiator.jpg",
+  warlord_m: "/img/m_warlord.jpg",
+  warlord_f: "/img/f_warlord.jpg",
+  warlord: "/img/m_warlord.jpg",
+  paladin_m: "/img/m_paladin.jpg",
+  paladin_f: "/img/f_paladin.jpg",
+  paladin: "/img/m_paladin.jpg",
+  darkavenger_m: "/img/m_darkavenger.jpg",
+  darkavenger_f: "/img/f_darkavenger.jpg",
+  darkavenger: "/img/m_darkavenger.jpg",
+  treasurehunter_m: "/img/m_treasurehunter.jpg",
+  treasurehunter_f: "/img/f_treasurehunter.jpg",
+  treasurehunter: "/img/m_treasurehunter.jpg",
+  hawkeye_m: "/img/m_hawkeye.jpg",
+  hawkeye_f: "/img/f_hawkeye.jpg",
+  hawkeye: "/img/m_hawkeye.jpg",
+  sorcerer_m: "/img/m_sorcerer.jpg",
+  sorcerer_f: "/img/f_sorcerer.jpg",
+  sorcerer: "/img/m_sorcerer.jpg",
+  necromancer_m: "/img/m_necromancer.jpg",
+  necromancer_f: "/img/f_necromancer.jpg",
+  necromancer: "/img/m_necromancer.jpg",
+  warlock_m: "/img/m_warlock.jpg",
+  warlock_f: "/img/f_warlock.jpg",
+  warlock: "/img/m_warlock.jpg",
+  cleric_m: "/img/m_cleric.jpg",
+  cleric_f: "/img/f_cleric.jpg",
+  cleric: "/img/m_cleric.jpg",
+  bishop_m: "/img/m_bishop.jpg",
+  bishop_f: "/img/f_bishop.jpg",
+  bishop: "/img/m_bishop.jpg",
+  prophet_m: "/img/m_prophet.jpg",
+  prophet_f: "/img/f_prophet.jpg",
+  prophet: "/img/m_prophet.jpg",
+
+  human_deathpilgrim: "/img/m_darkavenger.jpg",
+  human_wargbase: "/img/m_humanwarrior.jpg",
+  human_assassinbase: "/img/m_treasurehunter.jpg",
+  human_assassins0: "/img/m_treasurehunter.jpg",
+
+  // --- Elf Classes ---
   elf_fighter: "/img/elfwswM.png",
   elf_fighter_m: "/img/elfwswM.png",
   elf_fighter_f: "/img/elfswsF.png",
@@ -37,6 +130,7 @@ const HERO_IMG = {
   elf_oracle_m: "/img/elfmageM.png",
   elf_oracle_f: "/img/elfmageF.png",
 
+  // --- Dark Elf Classes ---
   darkelf_fighter: "/img/darkelfskM.png",
   darkelf_fighter_m: "/img/darkelfskM.png",
   darkelf_fighter_f: "/img/darkelfskF.png",
@@ -58,6 +152,7 @@ const HERO_IMG = {
   darkelf_bloodroses3: "/img/darkelfmageF.png",
   darkelf_bloodrose: "/img/darkelfmageF.png",
 
+  // --- Orc Classes ---
   orc_fighter: "/img/orcfighterM.png",
   orc_fighter_m: "/img/orcfighterM.png",
   orc_fighter_f: "/img/orcfighterF.png",
@@ -69,6 +164,7 @@ const HERO_IMG = {
   orc_orcrider: "/img/orcfighterM.png",
   orc_vanguardrider: "/img/orcfighterM.png",
 
+  // --- Dwarf Classes ---
   dwarf_artisan: "/img/dwarfmaestroM.png",
   dwarf_artisan_m: "/img/dwarfmaestroM.png",
   dwarf_artisan_f: "/img/dwarfmaestroF.png",
@@ -79,6 +175,7 @@ const HERO_IMG = {
   dwarf_shinemakers3: "/img/dwarfmaestroF.png",
   dwarf_shinemaker: "/img/dwarfmaestroF.png",
 
+  // --- Kamael Classes ---
   kamael_soulbreaker: "/img/kamaelshF.png",
   kamael_soulbreaker_m: "/img/kamaelshM.png",
   kamael_soulbreaker_f: "/img/kamaelshF.png",
@@ -91,16 +188,19 @@ const HERO_IMG = {
   kamael_ronin: "/img/kamaelDM.png",
   kamael_samurai: "/img/kamaelDM.png",
 
+  // --- Sylph Classes ---
   sylph_sylphgunner: "/img/sylphM.png",
   sylph_sylphgunner_m: "/img/sylphM.png",
   sylph_sylphgunner_f: "/img/sylphF.png",
   sylph_fighter: "/img/sylphM.png",
 
+  // --- High Elf Classes ---
   highelf_divinetemplars1: "/img/elfwswM.png",
   highelf_elementweavers1: "/img/elfmageM.png",
   highelf_fighter: "/img/elfwswM.png",
   highelf_mage: "/img/elfmageM.png",
 
+  // --- Ertheia Classes ---
   ertheia_marauderbase: "/img/elfwswM.png",
   ertheia_marauderbase_m: "/img/elfwswM.png",
   ertheia_marauderbase_f: "/img/elfswsF.png",
@@ -117,7 +217,7 @@ const HERO_IMG = {
 
 // Fallback by race only
 const RACE_FALLBACK = {
-  human: "/img/humanpalaM.png",
+  human: "/img/m_humanfighter.jpg",
   elf: "/img/elfwswM.png",
   darkelf: "/img/darkelfskM.png",
   orc: "/img/orcfighterM.png",
@@ -135,7 +235,7 @@ function resolveImg(path) {
   return path;
 }
 
-const MAGE_CLASSES = new Set(['mage', 'wizard', 'cleric', 'sorcerer', 'necromancer', 'bishop', 'prophet', 'spellsinger', 'spellhowler', 'shillien', 'overlord', 'darkwizard', 'elementweavers1', 'sayhaseer', 'bloodroses1']);
+const MAGE_CLASSES = new Set(['mage', 'wizard', 'cleric', 'sorcerer', 'necromancer', 'bishop', 'prophet', 'spellsinger', 'spellhowler', 'shillien', 'overlord', 'darkwizard', 'elementweavers1', 'sayhaseer', 'bloodroses1', 'humanmistyc', 'humanwizard']);
 
 function heroImgPath(race, cls, gender) {
   race = String(race || 'human').toLowerCase();
@@ -148,6 +248,11 @@ function heroImgPath(race, cls, gender) {
   const directKey = `${race}_${cls}`;
   if (HERO_IMG[directKey]) return resolveImg(HERO_IMG[directKey]);
 
+  const rawClsKey = `${cls}_${g}`;
+  if (HERO_IMG[rawClsKey]) return resolveImg(HERO_IMG[rawClsKey]);
+
+  if (HERO_IMG[cls]) return resolveImg(HERO_IMG[cls]);
+
   const archetype = MAGE_CLASSES.has(cls) ? 'mage' : 'fighter';
   const archGenderKey = `${race}_${archetype}_${g}`;
   if (HERO_IMG[archGenderKey]) return resolveImg(HERO_IMG[archGenderKey]);
@@ -155,11 +260,11 @@ function heroImgPath(race, cls, gender) {
   const archKey = `${race}_${archetype}`;
   if (HERO_IMG[archKey]) return resolveImg(HERO_IMG[archKey]);
 
-  const fallback = RACE_FALLBACK[race] || "/img/humanpalaM.png";
+  const fallback = RACE_FALLBACK[race] || "/img/m_humanfighter.jpg";
   return resolveImg(fallback);
 }
 
-// ---- Monster image map ----
+// ---- Monster image map (119 High-Definition Artworks) ----
 export const MON_IMG = {
   // Talking Island
   "goblin": "/img/mon_goblin.jpg",
@@ -167,15 +272,18 @@ export const MON_IMG = {
   "armoredGoblin": "/img/mon_armoredgoblin.jpg",
   "goblinMage": "/img/mon_goblinmage.jpg",
   "talkingIslandWerewolf": "/img/mon_islandwerewolfleader.jpg",
+  "islandWerewolfLeader": "/img/mon_islandwerewolfleader.jpg",
   "goblinKing": "/img/mon_goblinking.jpg",
 
   // Elven Forest
   "wolf": "/img/mon_wolf.jpg",
   "grayWolf": "/img/mon_graywolf.jpg",
   "rootWitch": "/img/mon_rootwitch.jpg",
+  "rootWolf": "/img/mon_rootwolf.jpg",
   "greenDryad": "/img/mon_greendryad.jpg",
   "sporeFungus": "/img/mon_sporefungus.jpg",
   "kabooOrcFighter": "/img/mon_kabooorcchampion.jpg",
+  "kabooOrcChampion": "/img/mon_kabooorcchampion.jpg",
   "deathTrent": "/img/mon_deathtreant.jpg",
   "deathTreant": "/img/mon_deathtreant.jpg",
 
@@ -183,9 +291,12 @@ export const MON_IMG = {
   "spider": "/img/mon_spider.jpg",
   "caveSpider": "/img/mon_spider.jpg",
   "swampWalker": "/img/mon_swampwalker.jpg",
+  "swampBeast": "/img/mon_swampbeast.jpg",
+  "swampAbomination": "/img/mon_swampbeast.jpg",
   "lesserDarkHorror": "/img/mon_lesserdarkhorror.jpg",
   "marshStalker": "/img/mon_marshstalker.jpg",
   "shadowFangWolf": "/img/mon_shadownfangdirewolf.jpg",
+  "shadowFangDireWolf": "/img/mon_shadownfangdirewolf.jpg",
   "darkForestMatriarch": "/img/mon_darkforestmatriarch.jpg",
 
   // Orc Village
@@ -200,19 +311,24 @@ export const MON_IMG = {
   // Dwarven Mine
   "kobold": "/img/mon_koboldminer.jpg",
   "koboldMiner": "/img/mon_koboldminer.jpg",
+  "koboldForeman": "/img/mon_koboldforeman.jpg",
+  "koboldLeader": "/img/mon_koboldforeman.jpg",
   "goblinBrigand": "/img/mon_goblinbrigand.jpg",
   "mineCaveBat": "/img/mon_mithrilcavebat.jpg",
+  "mithrilCaveBat": "/img/mon_mithrilcavebat.jpg",
   "mithrilGolem": "/img/mon_mithrilgolem.jpg",
-  "koboldLeader": "/img/mon_koboldforeman.jpg",
   "dwarvenEarthLord": "/img/mon_dwarvenmineguardian.jpg",
+  "dwarvenMineGuardian": "/img/mon_dwarvenmineguardian.jpg",
 
   // Kamael Lair
   "kamaelScout": "/img/mon_kamaelscout.jpg",
   "soullessScout": "/img/mon_soullessscout.jpg",
   "spitefulGhost": "/img/mon_spitefulsoulghost.jpg",
+  "spitefulSoulGhost": "/img/mon_spitefulsoulghost.jpg",
   "crimsonWarder": "/img/mon_crimsonwarder.jpg",
   "kamaelInfiltrator": "/img/mon_kamaelinfiltrator.jpg",
   "darkInquisitorKamael": "/img/mon_kamaelinquisitor.jpg",
+  "kamaelInquisitor": "/img/mon_kamaelinquisitor.jpg",
 
   // Ruined Outpost
   "ruinedGoblinThief": "/img/mon_ruinedgoblinthief.jpg",
@@ -223,7 +339,7 @@ export const MON_IMG = {
   "outpostFallenCaptain": "/img/mon_outpostfallencaptain.jpg",
 
   // Howling Moor
-  "direWolf": "/img/mon_direwolf.png",
+  "direWolf": "/img/mon_mountaindirewolf.jpg",
   "babyTiamat": "/img/mon_babytiamat.jpg",
   "crimsonBabyDragon": "/img/mon_crimsonbabydragon.jpg",
   "ancientSatyr": "/img/mon_ancientsatyr.jpg",
@@ -244,135 +360,149 @@ export const MON_IMG = {
   "ruinShamanOrc": "/img/mon_ruinshamanorc.jpg",
   "tombLooterOrc": "/img/mon_tomblooterorc.jpg",
   "ancientOrcExecutioner": "/img/mon_ancientorcexecutioner.jpg",
-  "orcenOverlord": "/img/mon_orcoverlord.jpg",
+  "orcenOverlord": "/img/mon_orcenoverlord.jpg",
 
   // Forsaken Crypt
-  "darkMage": "/img/mon_darkmage.png",
-  "corpseWorm": "/img/mon_corpseworm.png",
-  "furiousSouls": "/img/mon_furioussouls.png",
-  "cryptVampire": "/img/mon_cryptvampire.png",
-  "devilBone": "/img/mon_furioussouls.png",
-  "cryptLord": "/img/mon_cryptLord.png",
+  "darkMage": "/img/mon_darkmage.jpg",
+  "corpseWorm": "/img/mon_corpseworm.jpg",
+  "furiousSouls": "/img/mon_furioussoul.jpg",
+  "furiousSoul": "/img/mon_furioussoul.jpg",
+  "cryptVampire": "/img/mon_cryptvampire.jpg",
+  "devilBone": "/img/mon_devilbone.jpg",
+  "cryptLord": "/img/mon_cryptlord.jpg",
 
   // Black Citadel
-  "deathKnight": "/img/mon_deathknight.png",
-  "deathWizard": "/img/mon_deathwizard.png",
-  "citadelDarkPriest": "/img/mon_deathwizard.png",
-  "blackDragonWhelp": "/img/mon_blackdragon.png",
-  "blackDragon": "/img/mon_blackdragon.png",
-  "flamingDemonLord": "/img/mon_flamingdemonglord.png",
+  "deathKnight": "/img/mon_deathknight.jpg",
+  "deathWizard": "/img/mon_deathwizard.jpg",
+  "citadelDarkPriest": "/img/mon_citadeldarkpriest.jpg",
+  "blackDragonWhelp": "/img/mon_blackdragonwhelp.jpg",
+  "blackDragon": "/img/mon_blackdragon.jpg",
+  "flamingDemonLord": "/img/mon_flamingdemonlord.jpg",
 
   // Gludio Castle
-  "knight": "/img/mon_knight.png",
-  "cursedKnight": "/img/mon_cursedknight.png",
-  "gludioRoyalArcher": "/img/mon_knight.png",
-  "gludioSorcerer": "/img/mon_deathwizard.png",
-  "gludioShieldMaster": "/img/mon_knight.png",
-  "gludioCommander": "/img/mon_cursedknight.png",
+  "knight": "/img/mon_knight.jpg",
+  "cursedKnight": "/img/mon_cursedknight.jpg",
+  "mutantKnight": "/img/mon_mutantknight.jpg",
+  "gludioRoyalArcher": "/img/mon_gludioroyalarcher.jpg",
+  "gludioSorcerer": "/img/mon_gludiosorcerer.jpg",
+  "gludioShieldMaster": "/img/mon_gludioshieldmaster.jpg",
+  "gludioCommander": "/img/mon_gludiocommander.jpg",
 
   // Wolf Mountain
-  "mountainWolf": "/img/mon_snowwolf.jpg",
-  "mountainDireWolf": "/img/mon_snowwolf.jpg",
-  "frostStalkerWolf": "/img/mon_snowwolf.jpg",
-  "mountainSnowBear": "/img/mon_snowwolf.jpg",
-  "frostFangBehemoth": "/img/mon_snowwolf.jpg",
-  "mountainAlphaWolf": "/img/mon_snowwolf.jpg",
+  "mountainWolf": "/img/mon_mountainwolf.jpg",
+  "mountainDireWolf": "/img/mon_mountaindirewolf.jpg",
+  "frostStalkerWolf": "/img/mon_froststalkerwolf.jpg",
+  "mountainSnowBear": "/img/mon_mountainsnowbear.jpg",
+  "frostFangBehemoth": "/img/mon_frostfangbehemoth.jpg",
+  "mountainAlphaWolf": "/img/mon_mountainalphawolf.jpg",
+  "snowWolf": "/img/mon_snowwolf.jpg",
 
   // Rift of the Void
-  "voidCreature": "/img/mon_voidcreature.png",
-  "voidBrute": "/img/mon_voidbrute.png",
-  "voidStalker": "/img/mon_voidstalker.png",
-  "beholder": "/img/mon_beholder.png",
-  "voidArchonEntity": "/img/mon_voiddragonlord.png",
-  "voidDragonLord": "/img/mon_voiddragonlord.png",
+  "voidCreature": "/img/mon_voidcreature.jpg",
+  "voidBrute": "/img/mon_voidbrute.jpg",
+  "voidStalker": "/img/mon_voidstalker.jpg",
+  "beholder": "/img/mon_beholder.jpg",
+  "voidArchonEntity": "/img/mon_voidarchonentity.jpg",
+  "voidDragonLord": "/img/mon_voiddragonlord.jpg",
 
   // Emerald Grove
-  "emeraldSnake": "/img/mon_emeraldsnake.png",
-  "emeraldDrake": "/img/mon_emereldadragon.png",
-  "jadeGolem": "/img/mon_emereldadragon.png",
-  "groveSpiritMage": "/img/mon_rootwitch.jpg",
-  "emeraldDragon": "/img/mon_emereldadragon.png",
-  "fafurion": "/img/mon_fafurion.png",
+  "emeraldSnake": "/img/mon_emeraldsnake.jpg",
+  "emeraldDrake": "/img/mon_emeralddrake.jpg",
+  "jadeGolem": "/img/mon_jadegolem.jpg",
+  "groveSpiritMage": "/img/mon_grovespiritmage.jpg",
+  "emeraldDragon": "/img/mon_ancienteemeralddragon.jpg",
+  "ancientEmeraldDragon": "/img/mon_ancienteemeralddragon.jpg",
+  "fafurion": "/img/mon_fafurionwatersovereign.jpg",
+  "fafurionWaterSovereign": "/img/mon_fafurionwatersovereign.jpg",
 
   // Gates of the Underworld
-  "blazingWerewolf": "/img/mon_blazingwerefolf.png",
-  "swiftBlaze": "/img/mon_swiftblaze.png",
-  "infernalHound": "/img/mon_blazingwerefolf.png",
-  "lavaFiend": "/img/mon_flamingdemonglord.png",
-  "flameOverlordDemon": "/img/mon_flamingdemonglord.png",
-  "cerberus": "/img/mon_cerberus.png",
+  "blazingWerewolf": "/img/mon_blazingwerewolf.jpg",
+  "swiftBlaze": "/img/mon_swiftblaze.jpg",
+  "infernalHound": "/img/mon_infernalhound.jpg",
+  "lavaFiend": "/img/mon_lavafiend.jpg",
+  "flameOverlordDemon": "/img/mon_underworldflameoverlord.jpg",
+  "underworldFlameOverlord": "/img/mon_underworldflameoverlord.jpg",
+  "cerberus": "/img/mon_cerberus.jpg",
 
   // Valley of Saints
-  "saintEye": "/img/mon_beholder.png",
-  "saintGuardian": "/img/mon_knight.png",
-  "splendorLight": "/img/mon_furioussouls.png",
-  "celestialArchon": "/img/mon_darkmage.png",
-  "divineSeraphim": "/img/mon_deathknight.png",
-  "splendorKnight": "/img/mon_knight.png",
+  "saintEye": "/img/mon_beholder.jpg",
+  "saintGuardian": "/img/mon_knight.jpg",
+  "splendorLight": "/img/mon_furioussoul.jpg",
+  "celestialArchon": "/img/mon_darkmage.jpg",
+  "divineSeraphim": "/img/mon_deathknight.jpg",
+  "splendorKnight": "/img/mon_knight.jpg",
 
   // Swamp of Screams
   "swampStrikers": "/img/mon_swampwalker.jpg",
   "corruptedSpiders": "/img/mon_spider.jpg",
-  "screamingSouls": "/img/mon_furioussouls.png",
+  "screamingSouls": "/img/mon_furioussoul.jpg",
   "stakatoWarrior": "/img/mon_swampwalker.jpg",
   "stakatoQueenBrood": "/img/mon_swampbeast.jpg",
   "swampAbomination": "/img/mon_swampbeast.jpg",
 
   // Aden City
-  "royalKnight": "/img/mon_knight.png",
-  "highMage": "/img/mon_mage.png",
-  "adenCrossbowman": "/img/mon_scout.png",
-  "adenPaladin": "/img/mon_knight.png",
-  "adenHighJusticiar": "/img/mon_knight.png",
-  "adenCommander": "/img/mon_knight.png",
+  "royalKnight": "/img/mon_knight.jpg",
+  "highMage": "/img/mon_darkmage.jpg",
+  "adenCrossbowman": "/img/mon_outpostmarksman.jpg",
+  "adenPaladin": "/img/mon_knight.jpg",
+  "adenHighJusticiar": "/img/mon_gludiocommander.jpg",
+  "adenCommander": "/img/mon_gludiocommander.jpg",
 
   // Dragon Valley
-  "dragon": "/img/mon_dragon.png",
-  "dragonKnight": "/img/mon_dragonknight.png",
-  "frostKnight": "/img/mon_frostknight.png",
-  "frostLordDragon": "/img/mon_frostlorddragon.png",
-  "dragonValleyOverlord": "/img/mon_dragon.png",
-  "lindvior": "/img/mon_lidivior.png",
+  "dragon": "/img/mon_blackdragon.jpg",
+  "dragonKnight": "/img/mon_knight.jpg",
+  "frostKnight": "/img/mon_cursedknight.jpg",
+  "frostLordDragon": "/img/mon_blackdragon.jpg",
+  "dragonValleyOverlord": "/img/mon_blackdragon.jpg",
+  "lindvior": "/img/mon_voiddragonlord.jpg",
 
   // Imperial Tomb
-  "tombGuardian": "/img/mon_deathknight.png",
-  "sepulcherArchon": "/img/mon_darkmage.png",
-  "undeadKnight": "/img/mon_knight.png",
-  "imperialGhostMage": "/img/mon_darkmage.png",
-  "lichLord": "/img/mon_lichlord.png",
-  "deathKing": "/img/mon_deathking.png",
+  "tombGuardian": "/img/mon_deathknight.jpg",
+  "sepulcherArchon": "/img/mon_darkmage.jpg",
+  "undeadKnight": "/img/mon_skeleton.jpg",
+  "imperialGhostMage": "/img/mon_darkmage.jpg",
+  "lichLord": "/img/mon_darkmage.jpg",
+  "deathKing": "/img/mon_deathknight.jpg",
 
   // Antharas' Lair
-  "caveDrake": "/img/mon_dragon.png",
-  "magmaBeast": "/img/mon_blackdragon.png",
-  "earthDrake": "/img/mon_antharas.png",
-  "caveWyrmBehemoth": "/img/mon_antharas.png",
-  "antharasBehemoth": "/img/mon_antharas.png",
-  "antharas": "/img/mon_antharas.png",
+  "caveDrake": "/img/mon_ancienteemeralddragon.jpg",
+  "magmaBeast": "/img/mon_lavafiend.jpg",
+  "earthDrake": "/img/mon_ancienteemeralddragon.jpg",
+  "caveWyrmBehemoth": "/img/mon_antharas.jpg",
+  "antharasBehemoth": "/img/mon_antharas.jpg",
+  "antharas": "/img/mon_antharas.jpg",
 
   // Forge of the Gods
-  "valakasMinion": "/img/mon_valakasminion.png",
-  "lavaGolem": "/img/mon_flamingdemonglord.png",
-  "flameArchon": "/img/mon_flamegiantdragom.png",
-  "flameGiantDragon": "/img/mon_flamegiantdragom.png",
-  "vulcanLord": "/img/mon_valakas.png",
-  "valakas": "/img/mon_valakas.png"
+  "valakasMinion": "/img/mon_crimsonbabydragon.jpg",
+  "lavaGolem": "/img/mon_lavafiend.jpg",
+  "flameArchon": "/img/mon_underworldflameoverlord.jpg",
+  "flameGiantDragon": "/img/mon_valakas.jpg",
+  "vulcanLord": "/img/mon_valakas.jpg",
+  "valakas": "/img/mon_valakas.jpg",
+
+  // Epic Raid Bosses
+  "queenAnt": "/img/mon_queenant.jpg",
+  "queen_ant": "/img/mon_queenant.jpg",
+  "core": "/img/mon_core.jpg",
+  "orfen": "/img/mon_orfen.jpg",
+  "zaken": "/img/mon_zaken.jpg",
+  "baium": "/img/mon_baium.jpg",
+  "frintezza": "/img/mon_frintezza.jpg",
+  "freya": "/img/mon_freya.jpg",
+  "beleth": "/img/mon_beleth.jpg",
+  "demonKing": "/img/mon_demonking.jpg"
 };
 
 // Monsters without painted art get a tinted SVG silhouette
-// Deixado vazio intencionalmente, pois todos os monstros base agora possuem arte em PNG.
 const MON_SVG_FALLBACK = {};
 
 // ---- Shared map data ----
 export const ZONE_COORDS = {
   talkingIsland: { x: 45, y: 205 }, elvenForest: { x: 90, y: 160 },
   darkForest: { x: 115, y: 185 }, ruinedOutpost: { x: 140, y: 150 },
-  
-  // NÓS MOVIDOS PARA O CONTINENTE NORTE (Terreno)
   orcVillage: { x: 175, y: 35 }, 
   dwarvenMine: { x: 125, y: 25 },
   kamaelLair: { x: 80, y: 40 }, 
-  
   howlingMoor: { x: 150, y: 120 },
   giranOutskirts: { x: 200, y: 160 }, orcenRuins: { x: 225, y: 135 },
   forsakenCrypt: { x: 250, y: 165 }, blackCitadel: { x: 275, y: 140 },
@@ -389,7 +519,6 @@ export const ZONE_ORDER = [
   "underworldGate", "adenCity", "dragonValley"
 ];
 
-// Kept for palette references elsewhere
 export const RACE_COLOR = {
   human: "#e8c39a", elf: "#f0d8b0", darkelf: "#c9b0e8",
   orc: "#9c6b3f", dwarf: "#caa06a", kamael: "#e6d8c0", ertheia: "#d8b48a",
@@ -453,14 +582,14 @@ export function heroSVG(raceOrState, clsParam, genderParam, aura, mode) {
 
   if (mode === "bust") {
     return `<div class="hero-svg hero-bust" style="position:relative;width:100%;height:100%;overflow:hidden;border-radius:50%;">
-      <img src="${src}" alt="${race} ${cls}" draggable="false" onerror="this.onerror=null; this.src='${getAssetUrl('img/humanpalaM.png')}';"
+      <img src="${src}" alt="${race} ${cls}" draggable="false" onerror="this.onerror=null; this.src='${getAssetUrl('img/m_humanfighter.jpg')}';"
         style="width:100%;height:100%;object-fit:cover;object-position:center 15%;filter:drop-shadow(0 0 6px ${border});" />
       <div style="position:absolute;inset:0;border-radius:50%;border:2px solid ${border};box-shadow:inset 0 0 20px rgba(0,0,0,0.6);pointer-events:none;"></div>
     </div>`;
   }
 
   return `<div class="hero-svg hero-full" style="width:100%;height:100%;position:relative;">
-    <img src="${src}" alt="${race} ${cls}" draggable="false" onerror="this.onerror=null; this.src='${getAssetUrl('img/humanpalaM.png')}';"
+    <img src="${src}" alt="${race} ${cls}" draggable="false" onerror="this.onerror=null; this.src='${getAssetUrl('img/m_humanfighter.jpg')}';"
       style="width:100%;height:100%;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 8px 16px rgba(0,0,0,0.7)) drop-shadow(0 0 4px ${border || 'transparent'});" />
   </div>`;
 }
@@ -492,7 +621,7 @@ export function monsterSVG(idOrObj, opts) {
     || MON_IMG['mon_' + lowerCleanKey]
     || MON_IMG['mon_' + baseKey.toLowerCase()]
     || (Object.entries(MON_IMG).find(([k]) => k.toLowerCase() === lowerCleanKey || k.toLowerCase() === baseKey.toLowerCase())?.[1])
-    || '/img/mon_goblin.png';
+    || '/img/mon_goblin.jpg';
 
   const crown = isChaos
     ? `<div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);font-size:24px;filter:drop-shadow(0 0 10px #ef4444);z-index:2;animation:pulse 1.5s infinite;">🔥👑🔥</div>`
@@ -507,28 +636,12 @@ export function monsterSVG(idOrObj, opts) {
 
   return `<div class="mon-svg" style="width:100%;height:100%;position:relative;">
     ${crown}
-    <img src="${resolvedSrc}" alt="${safeId}" draggable="false" onerror="this.onerror=null; this.src='${getAssetUrl('img/mon_goblin.png')}';"
+    <img src="${resolvedSrc}" alt="${safeId}" draggable="false" onerror="this.onerror=null; this.src='${getAssetUrl('img/mon_goblin.jpg')}';"
       style="width:100%;height:100%;object-fit:contain;object-position:center bottom;filter:${glow};" />
   </div>`;
 }
 
-function darken(hex, f = 0.6) {
-  const m = hex.match(/[\da-f]{2}/gi);
-  if (!m) return hex;
-  return "#" + m.map(h => Math.round(parseInt(h, 16) * f).toString(16).padStart(2, "0")).join("");
-}
-function lighten(hex, f = 0.35) {
-  const m = hex.match(/[\da-f]{2}/gi);
-  if (!m) return hex;
-  return "#" + m.map(h => {
-    const v = parseInt(h, 16);
-    return Math.min(255, Math.round(v + (255 - v) * f)).toString(16).padStart(2, "0");
-  }).join("");
-}
-
 export function mapBackdrop() {
-  // Substitui os vetores antigos pela imagem do mapa oficial
-  // Nota: Certifique-se de que "map.png" está na pasta public/img/
   return `
     <image href="/img/map.png" x="0" y="0" width="360" height="240" preserveAspectRatio="none" opacity="0.9" />
     <rect width="360" height="240" fill="#1a1408" opacity="0.2" style="mix-blend-mode: multiply;" />
