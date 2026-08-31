@@ -524,17 +524,33 @@ function openClassTransferModal(classInfo) {
       };
       const archLabel = archetypeIcons[clsDef.archetype] || clsDef.archetype || 'Especialista';
 
+      const avatarHtml = (ART && typeof ART.heroSVG === 'function')
+        ? ART.heroSVG({
+            race: clsDef.race || state.race || 'human',
+            class: clsId,
+            gender: state.gender || state.charGender || 'M',
+            mode: 'bust'
+          })
+        : '';
+
       card.innerHTML = `
-        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:6px;">
-          <h3 style="margin:0; font-family:'Cinzel',serif; color:var(--gilt-bright); font-size:17px; display:flex; align-items:center; gap:8px;">
-            ${clsDef.name}
-          </h3>
-          <span style="padding:3px 10px; background:rgba(212,167,68,0.15); border:1px solid var(--border-gilt); border-radius:4px; font-size:11px; color:var(--gilt-bright); font-weight:bold;">
-            ${archLabel}
-          </span>
+        <div style="display:flex; gap:14px; align-items:center;">
+          <div style="width:72px; height:72px; min-width:72px; min-height:72px; border-radius:50%; border:2px solid var(--border-gilt); overflow:hidden; background:radial-gradient(circle, #2a1f14 0%, #0d0a06 100%); box-shadow:0 4px 12px rgba(0,0,0,0.8); position:relative; flex-shrink:0;">
+            ${avatarHtml}
+          </div>
+          <div style="flex:1; min-width:0;">
+            <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:6px;">
+              <h3 style="margin:0; font-family:'Cinzel',serif; color:var(--gilt-bright); font-size:17px; display:flex; align-items:center; gap:8px;">
+                ${clsDef.name}
+              </h3>
+              <span style="padding:3px 10px; background:rgba(212,167,68,0.15); border:1px solid var(--border-gilt); border-radius:4px; font-size:11px; color:var(--gilt-bright); font-weight:bold;">
+                ${archLabel}
+              </span>
+            </div>
+            <p style="margin:4px 0; font-size:12px; color:var(--text-muted); line-height:1.4;">${clsDef.desc || 'Evolução de ordem avançada.'}</p>
+            ${statsStr ? `<div style="font-size:11px; color:#6ee7b7; font-weight:bold; background:rgba(110,231,183,0.1); padding:4px 8px; border-radius:4px; border:1px solid rgba(110,231,183,0.2); margin-top:4px;">✨ Bônus de Atributos: ${statsStr}</div>` : ''}
+          </div>
         </div>
-        <p style="margin:4px 0; font-size:12px; color:var(--text-muted); line-height:1.4;">${clsDef.desc || 'Evolução de ordem avançada.'}</p>
-        ${statsStr ? `<div style="font-size:11px; color:#6ee7b7; font-weight:bold; background:rgba(110,231,183,0.1); padding:4px 8px; border-radius:4px; border:1px solid rgba(110,231,183,0.2);">✨ Bônus de Atributos: ${statsStr}</div>` : ''}
         <button class="action-btn action-btn--primary promote-btn" data-class-id="${clsId}" style="margin-top:8px; padding:10px; width:100%; font-weight:bold; font-family:'Cinzel',serif; font-size:13px; cursor:pointer;">
           ⚔️ Escolher &amp; Avançar para ${clsDef.name}
         </button>
@@ -573,7 +589,25 @@ function openClassTransferModal(classInfo) {
       titleEl.textContent = `🧬 Consagração de Linhagem: ${clsDef.name}`;
     }
 
+    const avatarHtml = (ART && typeof ART.heroSVG === 'function')
+      ? ART.heroSVG({
+          race: clsDef.race || state.race || 'human',
+          class: clsId,
+          gender: state.gender || state.charGender || 'M',
+          mode: 'bust'
+        })
+      : '';
+
     container.innerHTML = `
+      <div style="display:flex; align-items:center; gap:12px; background:rgba(24, 18, 12, 0.9); border:1px solid var(--border-gilt); border-radius:8px; padding:10px 14px; margin-bottom:12px;">
+        <div style="width:56px; height:56px; min-width:56px; min-height:56px; border-radius:50%; border:2px solid var(--border-gilt); overflow:hidden; background:radial-gradient(circle, #2a1f14 0%, #0d0a06 100%); flex-shrink:0;">
+          ${avatarHtml}
+        </div>
+        <div>
+          <h3 style="margin:0; font-family:'Cinzel',serif; color:var(--gilt-bright); font-size:16px;">${clsDef.name}</h3>
+          <span style="font-size:11px; color:#cbd5e1;">${clsDef.desc || 'Nova classe consagrada.'}</span>
+        </div>
+      </div>
       <div style="background:rgba(212,167,68,0.1); border:1px solid rgba(212,167,68,0.3); border-radius:8px; padding:12px; margin-bottom:12px; font-size:12px; color:#e2e8f0; line-height:1.5;">
         ✨ <strong>Consagração de Linhagem:</strong> Escolha <strong>até 2 habilidades</strong> da sua classe anterior para se tornarem <strong>Passivas de Linhagem Permanentes</strong> (com 20% da sua eficácia).<br>
         🔄 <em>O kit ativo anterior será purificado e todo o SP investido será 100% reembolsado para a nova jornada!</em><br>
