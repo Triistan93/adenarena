@@ -1,4 +1,4 @@
-# ⚔️ Aden Arena / Lineage Idle RPG
+# ⚔️ Aden Arena — Lineage Idle RPG
 
 > **Lineage Idle RPG** completo rodando na web como Progressive Web App (PWA). Desenvolvido com **React 19**, **Vite**, **TypeScript**, **Tailwind CSS**, **Vanilla JS Game Engine** isolada no Shadow DOM e **Firebase Realtime Database** para sincronização em nuvem e mercado global multiplayer.
 
@@ -6,32 +6,23 @@
 
 ## 📑 Sumário
 
-- [1. Visão Geral do Projeto](#1-visão-geral-do-projeto)
-- [2. Como Rodar Localmente](#2-como-rodar-localmente)
-- [3. Arquitetura do Projeto](#3-arquitetura-do-projeto)
-  - [Visão Macro: React vs Engine Vanilla](#visão-macro-react-vs-engine-vanilla)
-  - [⚠️ Regra de Ouro da Interface (Onde Editar o HTML)](#️-regra-de-ouro-da-interface-onde-editar-o-html)
-- [4. Guia Rápido: Onde Mexer em Cada Parte](#4-guia-rápido-onde-mexer-em-cada-parte)
-  - [Interface, Layouts e Estilos (UI/UX)](#interface-layouts-e-estilos-uiux)
-  - [Mecânicas de Combate, Postura e Dano](#mecânicas-de-combate-postura-e-dano)
-  - [Dual Arsenal & Ressonância de Armas](#dual-arsenal--ressonância-de-armas)
-  - [Classes, Habilidades e Mudança de Classe (20, 40, 76)](#classes-habilidades-e-mudança-de-classe-20-40-76)
-  - [Inventário, Itens, Equipamentos e Paperdoll](#inventário-itens-equipamentos-e-paperdoll)
-  - [Monstros, Chefes Épicos, Zonas e Drops](#monstros-chefes-épicos-zonas-e-drops)
-  - [Mercado Global & Firebase Sync](#mercado-global--firebase-sync)
-  - [Sistema de Save & Persistência](#sistema-de-save--persistência)
-  - [Sistema de Artes e Ilustrações](#sistema-de-artes-e-ilustrações)
-  - [Modo 2D Pixel Canvas](#modo-2d-pixel-canvas)
-- [5. Estrutura Completa de Pastas](#5-estrutura-completa-de-pastas)
-- [6. Comandos Úteis & Fluxo de Deploy](#6-comandos-úteis--fluxo-de-deploy)
+1. [Visão Geral do Projeto](#-visão-geral-do-projeto)
+2. [Como Rodar Localmente](#-como-rodar-localmente)
+3. [Arquitetura: React vs Engine](#-arquitetura-react-vs-engine)
+4. [A Regra de Ouro da Interface (UI)](#-a-regra-de-ouro-da-interface-ui)
+5. [Guia Rápido: Onde Mexer em Cada Parte](#-guia-rápido-onde-mexer-em-cada-parte)
+6. [Estrutura Completa de Pastas](#-estrutura-completa-de-pastas)
+7. [Mecânicas Centrais do Jogo](#-mecânicas-centrais-do-jogo)
+8. [Comandos & Deploy](#-comandos--deploy)
 
 ---
 
-## 1. Visão Geral do Projeto
+## 🎮 Visão Geral do Projeto
 
 O **Aden Arena** une a nostalgia e complexidade matemática do **Lineage II** com a dinâmica moderna dos RPGs ociosos (*Idle RPGs*):
+
 - **194 Classes & Subclasses** com árvores completas e canônicas.
-- **846 Habilidades Autênticas** com validação estrita de armas requeridas.
+- **846 Habilidades Autênticas** com validação canônica de armas requeridas.
 - **Dual Arsenal System**: 2 slots de armas equipadas simultaneamente com acúmulo de atributos e ressonâncias únicas.
 - **Barra de Quebra de Postura (Stagger)**: Quebra de guarda de chefes com multiplicador de 2.0x de dano.
 - **Mercado Global Realtime**: Compra e venda de itens entre jogadores via Firebase.
@@ -43,71 +34,77 @@ O **Aden Arena** une a nostalgia e complexidade matemática do **Lineage II** co
 
 ---
 
-## 2. Como Rodar Localmente
+## 🚀 Como Rodar Localmente
 
 ### Pré-requisitos
-- **Node.js**: Versão 18 ou superior (recomendado Node 20+ LTS).
-- **npm** ou **yarn/pnpm**.
+- **Node.js**: Versão 18 ou superior (recomendado 20+ LTS).
+- **npm** ou **pnpm/yarn**.
 
-### Passo a Passo
+```bash
+# 1. Clone o repositório
+git clone https://github.com/Triistan93/adenarena.git
+cd adenarena
 
-1. **Clone o repositório:**
-   \`\`\`bash
-   git clone https://github.com/Triistan93/adenarena.git
-   cd adenarena
-   \`\`\`
+# 2. Instale as dependências
+npm install
 
-2. **Instale as dependências:**
-   \`\`\`bash
-   npm install
-   \`\`\`
+# 3. Inicie o servidor de desenvolvimento
+npm run dev
+```
 
-3. **Inicie o servidor de desenvolvimento:**
-   \`\`\`bash
-   npm run dev
-   \`\`\`
-   O Vite iniciará o servidor local em `http://localhost:5173`.
+Acesse no navegador: `http://localhost:5173`
 
-4. **Gerar Build de Produção:**
-   \`\`\`bash
-   npm run build
-   \`\`\`
-   Gera a pasta `dist/` otimizada para produção.
+```bash
+# Gerar build de produção
+npm run build
+```
 
 ---
 
-## 3. Arquitetura do Projeto
-
-### Visão Macro: React vs Engine Vanilla
+## 🏛️ Arquitetura: React vs Engine
 
 O projeto possui uma arquitetura híbrida de alto desempenho:
-1. **Shell React (Vite + TypeScript + Tailwind)**:
-   - Controla autenticação, criação de personagem, modais modernos e alternância de modos de jogo (`src/App.tsx`, `src/components/`).
-   - Monta o jogo principal dentro de um contêiner no arquivo `src/idle/IdleGame.tsx`.
-2. **Motor do Jogo (Vanilla JS no Shadow DOM)**:
-   - Todo o loop do jogo, cálculos de combate, menus clássicos de Lineage, inventário e sistemas vivem na pasta `lineage-idle/` e são injetados de forma isolada dentro do Shadow DOM pelo `IdleGame.tsx`.
-   - Isso garante desempenho bruto de 60 FPS sem gargalos de re-render do React.
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                       REACT APPLICATION                         │
+│   src/App.tsx · src/components/ · Autenticação · Modais         │
+└───────────────────────────────┬─────────────────────────────────┘
+                                │ Monta via Shadow DOM
+                                ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                     VANILLA JS GAME ENGINE                      │
+│   lineage-idle/main.js · src/engine/ · src/services/ · 60 FPS   │
+└───────────────────────────────┬─────────────────────────────────┘
+                                │ Realtime Sync
+                                ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                    FIREBASE CLOUD DATABASE                      │
+│   Mercado Global P2P · Cloud Saves · Rankings Multiplayer       │
+└─────────────────────────────────────────────────────────────────┘
+```
 
 ---
 
-### ⚠️ Regra de Ouro da Interface (Onde Editar o HTML)
+## ⚠️ A Regra de Ouro da Interface (UI)
 
 > [!IMPORTANT]
 > **A INTERFACE DO JOGO É 100% DEFINIDA EM `src/idle/markup.ts`!**
-> Quando o jogo roda via React (`npm run dev`), o HTML da interface principal é carregado exclusivamente a partir de:
+> 
+> Quando o jogo roda, o HTML da interface principal é carregado exclusivamente a partir de:
 > 👉 `src/idle/markup.ts`
 > 
-> Qualquer novo botão, aba, modal ou slot de equipamento deve ser adicionado diretamente em `src/idle/markup.ts`. O antigo arquivo `index.html` estático que ficava em `lineage-idle/` foi isolado na pasta `legado/` para não gerar dúvidas.
+> Qualquer novo botão, aba, modal ou slot de equipamento deve ser adicionado diretamente em **`src/idle/markup.ts`**. O antigo arquivo estático solto na pasta da engine foi movido para `legado/` para evitar alterações no lugar errado.
 
 ---
 
-## 4. Guia Rápido: Onde Mexer em Cada Parte
+## 📍 Guia Rápido: Onde Mexer em Cada Parte
 
 | O que você quer alterar? | Arquivo Principal | Arquivos Secundários |
 |---|---|---|
 | **Estrutura HTML do Jogo** | `src/idle/markup.ts` | `src/idle/IdleGame.tsx` |
-| **Estilos Globais e Tema Clássico** | `lineage-idle/style.css` | `lineage-idle/src/ui/GameUI.css` |
-| **Combate & Ciclo de Ataque** | `lineage-idle/src/engine/CombatEngine.js` | `lineage-idle/main.js` (`attackMonster`) |
+| **Estilos Globais e Tema** | `lineage-idle/style.css` | `lineage-idle/src/ui/GameUI.css` |
+| **Combate & Ciclo de Ataque** | `lineage-idle/src/engine/CombatEngine.js` | `lineage-idle/main.js` |
 | **Stagger / Quebra de Postura** | `lineage-idle/src/engine/StaggerEngine.js` | `lineage-idle/src/ui/GameUI.js` |
 | **Dual Arsenal (2 Slots de Armas)** | `lineage-idle/src/services/EquipmentService.js` | `lineage-idle/src/engine/StatsEngine.js` |
 | **Ressonância de Armas** | `lineage-idle/src/services/WeaponResonanceService.js` | `lineage-idle/src/ui/GameUI.js` |
@@ -125,145 +122,117 @@ O projeto possui uma arquitetura híbrida de alto desempenho:
 
 ---
 
-### Detalhes das Principais Mecânicas
+## 📁 Estrutura Completa de Pastas
 
-#### ⚔️ Dual Arsenal & Ressonâncias
-- Os slots de armas ativos são `weapon` (Slot 1) e `weapon2` (Slot 2).
-- Ambos somam **P.Atk**, **M.Atk**, cristais de Soul Crystal (SA), encantamentos e aumentos em `StatsEngine.js`.
-- O serviço `WeaponResonanceService.js` detecta combinações ativas (ex: Arco + Adaga ativa *Caçador das Sombras*, Dual + Lança ativa *Senhor da Tempestade*, etc.) concedendo bônus passivos e efeitos de sangramento/vácuo durante o combate.
+### 1. Visão Geral dos Diretórios Principais
 
-#### 🛡️ Barra de Quebra de Postura (Stagger Bar)
-- Todo monstro Boss, Elite ou Raid possui uma barra amarela de postura abaixo da barra de HP (`StaggerEngine.js`).
-- Ao sofrer ataques físicos, críticos e magias de impacto, a postura cai até 0, entrando em estado de **BREAK**:
-  - O chefe fica paralisado e não contra-ataca por 5 segundos.
-  - Recebe **2.0x de dano crítico e vulnerabilidade total**.
-
-#### 📜 Mudança de Classe (Lv. 20, 40, 76)
-- Ao atingir os marcos de nível, o modal `class-transfer-modal` é invocado via `openClassTransferModal` em `lineage-idle/main.js`.
-- Exibe os **Avatares Ilustrados** de cada classe candidata, bônus de atributos e arquétipos.
-- A **Consagração de Linhagem** permite selecionar até 2 habilidades da classe anterior para se tornarem passivas permanentes, reembolsando 100% do SP investido.
-
-#### 🏪 Mercado Global (Firebase)
-- Configurado em `src/firebase.ts`.
-- Permite anunciar itens à venda em Adena ou Moedas de Ouro.
-- Compras e retiradas possuem travas de segurança atômicas para prevenir duplicação de itens.
-- As vendas ocorridas offline são sincronizadas automaticamente com o jogador ao abrir o jogo ou recolher as recompensas.
-
----
-
-## 5. Estrutura Completa de Pastas
-
-\`\`\`
+```text
 adenarena/
-├── dist/                          # Build final de produção
-├── public/                        # Arquivos estáticos servidos pelo Vite
-│   ├── assets/                    # Sprites 2D, ícones e efeitos
-│   │   ├── 2d/heroes/             # Spritesheets de heróis (Knight, Rogue, Mage, etc.)
-│   │   └── 2d/backgrounds/        # Cenários de batalha em pixel art
-│   ├── img/                       # 119 ilustrações de monstros e 36 de classes (M/F)
-│   ├── favicon.png
-│   └── manifest.webmanifest       # Configuração PWA
-│
-├── src/                           # Camada React & Integrações
-│   ├── App.tsx                    # Roteador de telas e controle de modos (Idle, 2D, 3D)
-│   ├── firebase.ts                # Conexão Firebase (Auth, Database, Mercado Realtime)
-│   ├── components/                # Componentes React
-│   │   ├── AuthModal.tsx          # Modal de Login / Registro
-│   │   ├── CharacterCreation.tsx  # Tela de criação e troca de classe/raça
-│   │   └── LoginScreen.tsx        # Tela inicial de entrada
-│   ├── idle/                      # Conexão do Modo Idle
-│   │   ├── IdleGame.tsx           # Monta a Engine Vanilla dentro do Shadow DOM
-│   │   ├── markup.ts              # 🚨 HTML COMPLETO DA UI DO JOGO IDLE
-│   │   └── heroImages.ts          # Registro e mapa de avatares
-│   ├── pixel2d/
-│   │   └── Aden2DGame.tsx         # Auto-battler 2D em HTML5 Canvas
-│   └── game/                      # Modo 3D Arena em Three.js
-│
-├── lineage-idle/                  # 🎮 ENGINE CLÁSSICA DO JOGO
-│   ├── main.js                    # Core principal, loop do jogo, saves e bindings
-│   ├── art.js                     # Resolução visual de avatares e monstros (heroSVG / monsterSVG)
-│   ├── style.css                  # Folha de estilos principal do jogo idle
-│   ├── relic-ui-system.css        # Estilos das relíquias e paperdoll
-│   ├── theme-grimoire.css         # Efeitos visuais sombrios de UI
-│   ├── vfx.js                     # Partículas, números flutuantes e animações
-│   │
-│   ├── data/                      # Dados legados e adaptadores
-│   │   ├── echo-adapter.js        # Gerador das 846 habilidades e 194 classes canônicas
-│   │   └── affixes.js             # Sufixos e afixos de itens raros
-│   │
-│   └── src/                       # Módulos modernos da Engine
-│       ├── core/                  # Gerenciador de estado reativo (StateManager.js)
-│       ├── engine/                # Motores de cálculo
-│       │   ├── CombatEngine.js    # Fórmulas de ataque e dano
-│       │   ├── StaggerEngine.js   # Sistema de quebra de postura e BREAK
-│       │   ├── StatsEngine.js     # Fórmulas de atributos, bônus de sets e itens
-│       │   ├── SkillEngine.js     # Validação e execução de habilidades
-│       │   ├── LevelEngine.js     # Curva de XP e subida de nível
-│       │   ├── BalanceEngine.js   # Penalidades de grau e monstros campeões
-│       │   └── SecurityEngine.js  # Sanitização e validação de saves
-│       ├── services/              # Serviços de negócio
-│       │   ├── EquipmentService.js        # Equipar/desequipar nos slots (Slot 1 e 2)
-│       │   ├── WeaponResonanceService.js  # Lógica de ressonâncias de armas
-│       │   ├── InventoryService.js        # Manipulação de itens e capacidade
-│       │   ├── CharacterService.js        # Promoção de classe e renascimento
-│       │   ├── MarketService.js           # Lógica do mercado global
-│       │   ├── CraftService.js            # Sistema de forja e receitas
-│       │   ├── DyeService.js              # Tatuagens e símbolos de Henna
-│       │   ├── PetService.js              # Invocação e bônus de mascotes
-│       │   └── QuestService.js            # Missões e conquistas
-│       ├── data/                  # Tabelas de dados
-│       │   ├── monsters.js        # Monstros normais e atributos
-│       │   ├── raids.js           # Chefes de Raid épicos (Antharas, Baium, etc.)
-│       │   ├── items/             # Catálogo de armas, armaduras e consumíveis
-│       │   ├── classes/           # Definições de classes
-│       │   └── zones.js           # Zonas de caça e níveis recomendados
-│       └── ui/                    # Renderizadores de UI específicos
-│           ├── GameUI.js          # Helpers de DOM e tooltips
-│           └── GameUI.css         # Estilos específicos de componentes
-│
-├── legado/                        # 📦 ARQUIVOS E MOCKUPS LEGADOS (Apenas Consulta)
-│   ├── README.md                  # Explicação dos arquivos históricos guardados
-│   ├── lineage-idle/              # Antigo mockup index.html e assets duplicados
-│   ├── scripts/                   # Scripts de sincronização monolíticos antigos
-│   └── scratch/                   # Scripts pontuais de testes de migração e auditorias
-│
-├── package.json                   # Dependências e scripts
-├── vite.config.ts                 # Configuração do Vite
-└── tsconfig.json                  # Configuração TypeScript
-\`\`\`
+├── public/          # Assets estáticos servidos pelo Vite (imagens, sprites, ícones)
+├── src/             # Frontend React (modais, auth, markup e modos 2D/3D)
+├── lineage-idle/    # Engine completa do jogo (combate, stats, lógica e dados)
+├── legado/          # Arquivos históricos e mockups antigos (apenas consulta)
+├── api/             # Webhooks serverless (Vercel)
+└── dist/            # Build compilado final de produção
+```
 
 ---
 
-## 6. Comandos Úteis & Fluxo de Deploy
+### 2. Detalhamento: `src/` (Camada React)
 
-### Scripts npm
-| Comando | O que faz |
+| Caminho | Descrição |
 |---|---|
-| `npm run dev` | Inicia o servidor local Vite com Hot Module Replacement. |
-| `npm run build` | Valida tipagens TypeScript e gera o bundle minificado em `dist/`. |
-| `npm run preview` | Testa localmente o build de produção gerado em `dist/`. |
-
-### Fluxo de Deploy (CI/CD Automático)
-O projeto está configurado com integração contínua na **Vercel**:
-- Todo push para a branch `main` dispara automaticamente um novo build e deploy em produção:
-  \`\`\`bash
-  git add .
-  git commit -m "feat(sistema): sua mensagem clara aqui"
-  git push origin main
-  \`\`\`
-- O link público atualiza automaticamente em poucos segundos.
-- Após o deploy, usuários podem atualizar a aba com `Ctrl + F5` para carregar a versão mais recente do Service Worker PWA.
+| `src/App.tsx` | Ponto de entrada React, roteamento de telas e seletor de modos (Idle, 2D, 3D). |
+| `src/firebase.ts` | Conexão com Firebase Authentication e Realtime Database (Mercado e Saves). |
+| `src/components/` | Telas React: `LoginScreen.tsx`, `AuthModal.tsx` e `CharacterCreation.tsx`. |
+| `src/idle/markup.ts` | **Arquivo-chave de UI**: contém o HTML completo da interface injetada no Shadow DOM. |
+| `src/idle/IdleGame.tsx` | Componente bridge que inicializa e gerencia a Engine dentro do Shadow DOM. |
+| `src/pixel2d/Aden2DGame.tsx` | Auto-battler 2D retro renderizado em HTML5 Canvas compartilhando o estado do jogo. |
+| `src/game/` | Modo 3D Arena em Three.js (`Game.ts`, `models.ts`). |
 
 ---
 
-### 💡 Dicas para Novos Desenvolvedores
+### 3. Detalhamento: `lineage-idle/` (Game Engine)
 
-1. **Sempre teste o build antes de commitar:**
-   Execute `npm run build` para garantir que nenhuma importação quebrada ou erro de tipagem passe batido.
-2. **Acesso ao Estado Global no Console:**
-   No navegador com o jogo aberto, você pode inspecionar e testar comandos no console via `window.getGameState()`, `window.state` ou `window.EchoData`.
-3. **Imagens e Assets:**
-   Ao adicionar novas imagens de monstros ou classes, coloque-as em `public/img/` e mapeie em `lineage-idle/art.js`. O Vite serve os arquivos de `public/` diretamente na raiz `/img/...`.
+| Subpasta / Arquivo | Função no Jogo |
+|---|---|
+| `main.js` | Core principal da engine, loop de jogo, eventos de clique e save. |
+| `art.js` | Sistema de renderização de avatares (`heroSVG`) e ilustrações de monstros (`monsterSVG`). |
+| `style.css` | Folha de estilos visual oficial com tema clássico de Lineage II. |
+| `src/engine/` | Motores matemáticos: `CombatEngine`, `StatsEngine`, `SkillEngine`, `StaggerEngine`, `LevelEngine`. |
+| `src/services/` | Serviços: `EquipmentService` (Dual Arsenal), `WeaponResonanceService`, `InventoryService`, `MarketService`, `CraftService`, `DyeService`, `PetService`. |
+| `src/data/` | Tabelas de monstros (`monsters.js`), raids épicos (`raids.js`), zonas (`zones.js`) e itens (`items/`). |
+| `data/echo-adapter.js` | Gerador canônico de todas as **846 habilidades** e **194 árvores de classes**. |
+
+---
+
+### 4. Detalhamento: `public/` (Assets & Ilustrações)
+
+| Pasta | Conteúdo |
+|---|---|
+| `public/img/` | **119 ilustrações de monstros** (`mon_*.jpg`) e **36 artes de classes** (M e F) em alta resolução. |
+| `public/assets/2d/` | Spritesheets de personagens (Knight, Rogue, etc.) e cenários de batalha para o modo 2D. |
+| `public/assets/skills/` | Ícones oficiais de habilidades e magias. |
+
+---
+
+### 5. Detalhamento: `legado/` (Apenas Consulta)
+
+| Pasta / Arquivo | O que é |
+|---|---|
+| `legado/lineage-idle/index.html` | Antigo mockup HTML estático do cliente standalone (substituído por `src/idle/markup.ts`). |
+| `legado/lineage-idle/public/` | Cópia antiga de assets da época anterior ao Vite. |
+| `legado/scripts/` | Scripts de sincronização de ícones pré-modularização (`sync-icons.js`, `validate-icons.js`). |
+| `legado/scratch/` | ~90 scripts de auditoria, testes e migração criados durante o desenvolvimento. |
+
+---
+
+## ⚔️ Mecânicas Centrais do Jogo
+
+### 1. Dual Arsenal & Ressonância de Armas
+- O jogador possui dois slots de armas ativos simultâneos: **Arma 1 (`weapon`)** e **Arma 2 (`weapon2`)**.
+- Ambos acumulam atributos (P.Atk, M.Atk), cristais de Soul Crystal (SA), encantamentos (+1 a +16) e augmentations.
+- Combinações de pares geram **Ressonâncias Ativas** (ex: *Arco + Adaga = Caçador das Sombras*, *Dual + Lança = Senhor da Tempestade*).
+- O motor de habilidades (`SkillEngine.js`) valida os requisitos de arma contra qualquer um dos dois slots equipados.
+
+### 2. Barra de Quebra de Postura (Stagger)
+- Chefes, Elites e Raids possuem uma barra amarela de postura abaixo do HP.
+- Golpes físicos, acertos críticos e magias de impacto reduzem a postura até zero, ativando o estado de **BREAK**:
+  - O monstro fica paralisado e impedido de contra-atacar por 5 segundos.
+  - Recebe **2.0x de dano crítico com vulnerabilidade total**.
+
+### 3. Mudança de Classe & Consagração de Linhagem (Lv. 20, 40, 76)
+- Ao atingir os níveis-chave, o modal de avanço de classe é aberto com as ilustrações completas de cada caminho.
+- O jogador pode consagrar até **2 habilidades da classe anterior** para se tornarem passivas permanentes, recebendo 100% de reembolso do SP investido para iniciar a nova jornada.
+
+### 4. Mercado Global Realtime
+- Venda e compra de itens entre jogadores em Adena ou Moedas de Ouro.
+- Trava de compra com confirmação transacional atômica no Firebase, impedindo duplicação de itens.
+- Vendas concluídas offline são automaticamente creditadas ao logar.
+
+---
+
+## 🛠️ Comandos & Deploy
+
+```bash
+# Iniciar servidor local
+npm run dev
+
+# Validar TypeScript e gerar build
+npm run build
+
+# Testar build localmente
+npm run preview
+```
+
+### Deploy Automático (CI/CD)
+O repositório está integrado com a **Vercel**. Todo commit enviado para a branch `main` gera um deploy automático em produção:
+
+```bash
+git add .
+git commit -m "feat: sua alteracao aqui"
+git push origin main
+```
 
 ---
 
