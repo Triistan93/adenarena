@@ -93,11 +93,11 @@ O projeto possui uma arquitetura híbrida de alto desempenho:
 ### ⚠️ Regra de Ouro da Interface (Onde Editar o HTML)
 
 > [!IMPORTANT]
-> **NÃO EDITE A INTERFACE EM `lineage-idle/index.html`!**
+> **A INTERFACE DO JOGO É 100% DEFINIDA EM `src/idle/markup.ts`!**
 > Quando o jogo roda via React (`npm run dev`), o HTML da interface principal é carregado exclusivamente a partir de:
 > 👉 `src/idle/markup.ts`
 > 
-> Se você adicionar um botão, aba ou slot de equipamento, adicione em `src/idle/markup.ts`. O arquivo `lineage-idle/index.html` é apenas um mockup estático legado.
+> Qualquer novo botão, aba, modal ou slot de equipamento deve ser adicionado diretamente em `src/idle/markup.ts`. O antigo arquivo `index.html` estático que ficava em `lineage-idle/` foi isolado na pasta `legado/` para não gerar dúvidas.
 
 ---
 
@@ -220,6 +220,12 @@ adenarena/
 │       └── ui/                    # Renderizadores de UI específicos
 │           ├── GameUI.js          # Helpers de DOM e tooltips
 │           └── GameUI.css         # Estilos específicos de componentes
+│
+├── legado/                        # 📦 ARQUIVOS E MOCKUPS LEGADOS (Apenas Consulta)
+│   ├── README.md                  # Explicação dos arquivos históricos guardados
+│   ├── lineage-idle/              # Antigo mockup index.html e assets duplicados
+│   ├── scripts/                   # Scripts de sincronização monolíticos antigos
+│   └── scratch/                   # Scripts pontuais de testes de migração e auditorias
 │
 ├── package.json                   # Dependências e scripts
 ├── vite.config.ts                 # Configuração do Vite
