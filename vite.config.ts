@@ -17,8 +17,15 @@ export default defineConfig({
   },
   build: {
     outDir: "dist",
-    // Raise the chunk-size warning threshold — this game has heavy 3-D assets
-    chunkSizeWarningLimit: 2000,
+    chunkSizeWarningLimit: 1500,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor-react': ['react', 'react-dom'],
+          'vendor-firebase': ['firebase/app', 'firebase/auth', 'firebase/firestore'],
+        },
+      },
+    },
   },
   server: {
     host: "0.0.0.0",
