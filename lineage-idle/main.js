@@ -875,12 +875,12 @@ function equipItem(a, b, c = null, silent = false) {
 }
 function unequipItem(a, b, silent = false) {
   if (typeof hideItemTooltip === 'function') hideItemTooltip();
-  const slot = (typeof a === 'string' && a) ? a : (typeof b === 'string' ? b : null);
-  if (!slot) return;
+  const slotOrUid = (typeof a === 'string' && a) ? a : ((typeof b === 'string' && b) ? b : (a?.uid || null));
+  if (!slotOrUid) return;
   const callbacks = silent
     ? { log }
     : { log, updateAllUI, save };
-  return serviceUnequipItem(state, slot, callbacks);
+  return serviceUnequipItem(state, slotOrUid, callbacks);
 }
 
 
@@ -1696,15 +1696,29 @@ const HEIRLOOM_ICON_MAP_MAIN = {
   jewelry_heirloom_ring_2: 'gradec/jewels/jewel_blessed_ring.png',
   cloak_heirloom_royal: 'gradec/armors/armor_full_plate_cloack.png',
   belt_heirloom_champion: 'gradec/armors/armor_full_plate_belt.png',
-  hair_heirloom_crown: 'acessories/noble_gold_crown.png'
+  hair_heirloom_crown: 'acessories/noble_gold_crown.png',
+  book_1star: 'spellbooks/spellbook_1star.png',
+  book_2star: 'spellbooks/spellbook_2star.png',
+  book_3star: 'spellbooks/spellbook_3star.png',
+  book_4star: 'spellbooks/spellbook_4star.png',
+  spellbook_1star: 'spellbooks/spellbook_1star.png',
+  spellbook_2star: 'spellbooks/spellbook_2star.png',
+  spellbook_3star: 'spellbooks/spellbook_3star.png',
+  spellbook_4star: 'spellbooks/spellbook_4star.png'
 };
+
+function isEmojiIconMain(icon) {
+  if (!icon || typeof icon !== 'string') return false;
+  if (/\.(png|jpg|jpeg|webp|svg|gif)$/i.test(icon) || icon.includes('/')) return false;
+  return /\p{Extended_Pictographic}/u.test(icon) || !/[a-zA-Z0-9]/.test(icon);
+}
 
 function getItemIcon(defOrId) { 
   if (!defOrId) return '📦';
   const def = (typeof defOrId === 'string') ? getItemDef(defOrId) : (defOrId.itemId ? getItemDef(defOrId.itemId) : defOrId);
   const slot = def?.slot || (typeof defOrId === 'object' ? defOrId.slot : '') || '';
   const fallbackIcons = { weapon: '⚔️', armor: '🛡️', helmet: '⛑️', gloves: '🧤', boots: '👢', ring: '💍', earring: '💎', necklace: '📿', consumable: '🧪', material: '💎', scroll: '📜', cloak: '🧣', belt: '🎗️', hair: '👑', hair1: '👑', agathion: '🐾' }; 
-  const emoji = fallbackIcons[slot] || '📦'; 
+  const emoji = (def?.icon && isEmojiIconMain(def.icon)) ? def.icon : (fallbackIcons[slot] || '📦'); 
 
   const itemId = typeof defOrId === 'string' ? defOrId : (def?.id || defOrId.itemId || '');
   if (HEIRLOOM_ICON_MAP_MAIN[itemId] || HEIRLOOM_ICON_MAP_MAIN[def?.id]) {
@@ -1713,11 +1727,16 @@ function getItemIcon(defOrId) {
   }
 
   let iconPath = def?.icon || '';
+  if (iconPath && isEmojiIconMain(iconPath)) {
+    return `<span class="item-icon-fallback" style="font-size:18px; line-height:1; vertical-align:middle;">${iconPath}</span>`;
+  }
+
   if (!iconPath) {
     const iconIndex = (typeof window !== 'undefined' && window.IconIndex) ? window.IconIndex : ((D() && D().ICON_MAP) ? D().ICON_MAP : {});
     iconPath = iconIndex[itemId] || iconIndex['armor_' + itemId] || iconIndex['jewel_' + itemId] || iconIndex['weapon_' + itemId] || iconIndex[String(itemId).replace(/^(armor_|jewel_|weapon_|shield_|wepoan_)/, '')] || '';
   }
-  if (!iconPath) return emoji;
+  if (!iconPath || isEmojiIconMain(iconPath)) return `<span class="item-icon-fallback" style="font-size:18px;">${emoji}</span>`;
+
   let p = String(iconPath).replace(/\\/g, '/').replace(/^\//, '');
   if (!p.endsWith('.png') && !p.endsWith('.jpg') && !p.endsWith('.webp') && !p.endsWith('.svg')) p += '.png';
   if (!p.startsWith('img/icons/') && !p.startsWith('img/') && !p.startsWith('assets/')) {

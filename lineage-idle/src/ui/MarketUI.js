@@ -6,7 +6,7 @@
  */
 
 import { MarketService, MARKET_CATEGORIES } from '../services/MarketService.js';
-import { getItemIconUrl } from './GameUI.js';
+import { getItemIconUrl, getItemIcon } from './GameUI.js';
 import { D } from '../core/GameConfig.js';
 
 let _activeMarketTab = 'buy'; // 'buy' | 'sell' | 'my_sales'
@@ -250,7 +250,7 @@ function renderBuyTab(state) {
               <!-- Item Info -->
               <div style="display: flex; gap: 12px; align-items: flex-start;">
                 <div style="width: 44px; height: 44px; background: #121620; border: 1px solid rgba(212,167,68,0.5); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: inset 0 0 6px rgba(0,0,0,0.8);">
-                  <img src="${iconUrl}" style="width: 34px; height: 34px; object-fit: contain;" onerror="this.style.display='none'" />
+                  ${getItemIcon(l.item)}
                 </div>
                 <div style="flex: 1; min-width: 0;">
                   <div style="font-size: 13px; font-weight: bold; color: #f4d58a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
@@ -333,11 +333,10 @@ function renderSellTab(state) {
             ${inventory.map(item => {
               const isSelected = (item.uid || item.id) === _selectedSellItemUid;
               const count = Number(item.count || item.quantity) || 1;
-              const iconUrl = getItemIconUrl(item);
 
               return `
                 <div class="market-select-item ${isSelected ? 'selected' : ''}" data-uid="${item.uid || item.id}" style="width: 44px; height: 44px; background: rgba(0,0,0,0.6); border: 2px solid ${isSelected ? '#ffd877' : 'rgba(255,255,255,0.1)'}; border-radius: 8px; position: relative; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: ${isSelected ? '0 0 10px rgba(253,224,71,0.4)' : 'none'};">
-                  <img src="${iconUrl}" style="width: 32px; height: 32px; object-fit: contain;" onerror="this.style.display='none'" />
+                  ${getItemIcon(item)}
                   ${count > 1 ? `<span style="position: absolute; bottom: 1px; right: 3px; font-size: 9px; font-weight: bold; color: #fff; background: rgba(0,0,0,0.8); padding: 0 3px; border-radius: 3px;">${count}</span>` : ''}
                 </div>
               `;
@@ -357,7 +356,7 @@ function renderSellTab(state) {
           ${selectedItem ? `
             <!-- Selected Item Card -->
             <div style="background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 10px; display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
-              <img src="${getItemIconUrl(selectedItem)}" style="width: 36px; height: 36px; object-fit: contain;" />
+              ${getItemIcon(selectedItem)}
               <div>
                 <div style="font-weight: bold; color: #ffd877; font-size: 13px;">
                   ${selectedItem.enchant > 0 ? '+' + selectedItem.enchant + ' ' : ''}${selectedItem.name}
@@ -481,7 +480,7 @@ function renderMySalesTab(state, salesData) {
               return `
                 <div style="background: rgba(0,0,0,0.4); border: 1px solid rgba(212,167,68,0.3); border-radius: 8px; padding: 10px; display: flex; justify-content: space-between; align-items: center; box-shadow: inset 0 0 10px rgba(0,0,0,0.5);">
                   <div style="display: flex; align-items: center; gap: 10px;">
-                    <img src="${getItemIconUrl(l.item)}" style="width: 34px; height: 34px; object-fit: contain;" />
+                    ${getItemIcon(l.item)}
                     <div>
                       <div style="font-weight: bold; color: #ffd877; font-size: 12px;">
                         ${l.item?.enchant > 0 ? `<span style="color:#60a5fa;">+${l.item.enchant}</span> ` : ''}${l.quantity}x ${l.item?.name}

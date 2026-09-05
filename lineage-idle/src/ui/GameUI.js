@@ -214,8 +214,22 @@ const HEIRLOOM_ICON_MAP = {
   jewelry_heirloom_ring_2: 'gradec/jewels/jewel_blessed_ring.png',
   cloak_heirloom_royal: 'gradec/armors/armor_full_plate_cloack.png',
   belt_heirloom_champion: 'gradec/armors/armor_full_plate_belt.png',
-  hair_heirloom_crown: 'acessories/noble_gold_crown.png'
+  hair_heirloom_crown: 'acessories/noble_gold_crown.png',
+  book_1star: 'spellbooks/spellbook_1star.png',
+  book_2star: 'spellbooks/spellbook_2star.png',
+  book_3star: 'spellbooks/spellbook_3star.png',
+  book_4star: 'spellbooks/spellbook_4star.png',
+  spellbook_1star: 'spellbooks/spellbook_1star.png',
+  spellbook_2star: 'spellbooks/spellbook_2star.png',
+  spellbook_3star: 'spellbooks/spellbook_3star.png',
+  spellbook_4star: 'spellbooks/spellbook_4star.png'
 };
+
+export function isEmojiIcon(icon) {
+  if (!icon || typeof icon !== 'string') return false;
+  if (/\.(png|jpg|jpeg|webp|svg|gif)$/i.test(icon) || icon.includes('/')) return false;
+  return /\p{Extended_Pictographic}/u.test(icon) || !/[a-zA-Z0-9]/.test(icon);
+}
 
 export function getItemIconUrl(itemOrDef, defParam) {
   if (!itemOrDef && !defParam) return null;
@@ -232,7 +246,7 @@ export function getItemIconUrl(itemOrDef, defParam) {
     if (!def) def = all[itemId] || itemOrDef;
   }
 
-  // Prioridade 1: Mapeamento de Herança resiliente
+  // Prioridade 1: Mapeamento de Herança e Livros de Habilidade resiliente
   if (HEIRLOOM_ICON_MAP[itemId] || HEIRLOOM_ICON_MAP[def?.id]) {
     const matchedPath = HEIRLOOM_ICON_MAP[itemId] || HEIRLOOM_ICON_MAP[def?.id];
     return getAssetUrl(`img/icons/${matchedPath}`);
@@ -244,6 +258,10 @@ export function getItemIconUrl(itemOrDef, defParam) {
 
   let rawPath = def?.icon || '';
 
+  if (rawPath && isEmojiIcon(rawPath)) {
+    rawPath = '';
+  }
+
   if (!rawPath && itemId) {
     const cleanId = String(itemId).trim();
     rawPath = iconIndex[cleanId]
@@ -253,6 +271,15 @@ export function getItemIconUrl(itemOrDef, defParam) {
       || iconIndex[`shield_${cleanId}`]
       || iconIndex[cleanId.replace(/^(weapon_|armor_|jewel_|shield_|consumable_|material_|scroll_)/, '')]
       || '';
+  }
+
+  if (rawPath && isEmojiIcon(rawPath)) {
+    rawPath = '';
+  }
+
+  // Se o item define emoji ou não possui ícone registrado, nunca crie URLs 404 para emojis
+  if (!rawPath && def?.icon && isEmojiIcon(def.icon)) {
+    return null;
   }
 
   if (!rawPath && itemId) {
@@ -288,12 +315,14 @@ export function getItemIcon(defOrId) {
     scroll: '📜', cloak: '🧣', cape: '🧣', belt: '🎗️', hair: '👑', agathion: '👼',
     crystal: '🔮'
   };
-  const emoji = fallbackIcons[slot] || '📦';
+  const emoji = (def?.icon && isEmojiIcon(def.icon)) ? def.icon : (fallbackIcons[slot] || '📦');
 
   const iconUrl = getItemIconUrl(defOrId, def);
-  if (!iconUrl) return emoji;
+  if (!iconUrl) {
+    return `<span class="inventory-item-emoji" style="display:inline-block; font-size:16px; line-height:1; vertical-align:middle;">${emoji}</span>`;
+  }
 
-  return `<img src="${iconUrl}" alt="${def?.name || ''}" class="inventory-item-image" onerror="this.style.display='none';if(this.nextElementSibling)this.nextElementSibling.style.display='inline-block';" style="width:24px; height:24px; object-fit:contain; vertical-align:middle; pointer-events:none;" /><span class="inventory-item-emoji" style="display:none; font-size:15px;">${emoji}</span>`;
+  return `<img src="${iconUrl}" alt="${def?.name || ''}" class="inventory-item-image" onerror="this.style.display='none';if(this.nextElementSibling)this.nextElementSibling.style.display='inline-block';" style="width:24px; height:24px; object-fit:contain; vertical-align:middle; pointer-events:none;" /><span class="inventory-item-emoji" style="display:none; font-size:16px;">${emoji}</span>`;
 }
 
 export function formatItemDisplayName(item, def) {
@@ -591,13 +620,26 @@ export function showItemTooltip(arg1, arg2, state, callbacks = {}) {
     actionsHtml = `<div style="display:flex;gap:4px;margin-top:8px;flex-wrap:wrap;">`;
     const isEquipSlot = ['weapon','armor','helmet','gloves','boots','ring','ring1','ring2','legs','shield',
       'cloak','belt','necklace','earring','earring1','earring2','hair','hair1','hair2','agathion','agathion_bracelet',
-      'brooch','talisman_bracelet','talisman','jewel','sigil'].includes(def.slot);
-    const isWeapon = def.slot === 'weapon' || /weapon|sword|bow|dagger|blunt|staff|spear|dual|twohand/.test(String(def.slot || ''));
+      'brooch','talisman_bracelet','talisman','jewel','sigil'].includes(def?.slot);
+    const isWeapon = def?.slot === 'weapon' || /weapon|sword|bow|dagger|blunt|staff|spear|dual|twohand/.test(String(def?.slot || ''));
+    const isConsumable = ['consumable', 'scroll', 'powerup', 'potion', 'food', 'crystal'].includes(def?.slot);
 
-    if (isEquipSlot) {
-      if (item.equipped) {
-        const slotLabel = item.equippedSlot === 'weapon2' ? 'Slot 2' : (item.equippedSlot === 'weapon' ? 'Slot 1' : 'Item');
-        actionsHtml += `<button data-tt-action="unequip" data-uid="${item.uid}" data-slot="${item.equippedSlot || def.slot}"
+    let equippedSlot = item.equippedSlot;
+    if (!equippedSlot && state?.equipment) {
+      for (const [s, u] of Object.entries(state.equipment)) {
+        if (u === item.uid) {
+          equippedSlot = s;
+          item.equippedSlot = s;
+          break;
+        }
+      }
+    }
+    const isItemEquipped = !!(item.equipped || equippedSlot || (state?.equipment && Object.values(state.equipment).includes(item.uid)));
+
+    if (isEquipSlot || isItemEquipped) {
+      if (isItemEquipped) {
+        const slotLabel = equippedSlot === 'weapon2' ? 'Slot 2' : (equippedSlot === 'weapon' ? 'Slot 1' : (equippedSlot || 'Item'));
+        actionsHtml += `<button data-tt-action="unequip" data-uid="${item.uid}" data-slot="${equippedSlot || def?.slot || ''}"
           style="flex:1;padding:5px 8px;background:linear-gradient(180deg,#5a4020,#2a1a08);border:1px solid #a07030;
           border-radius:4px;color:#e8c870;font-size:11px;cursor:pointer;font-weight:600;">⬆ Desequipar (${slotLabel})</button>`;
       } else if (isWeapon) {
@@ -618,7 +660,7 @@ export function showItemTooltip(arg1, arg2, state, callbacks = {}) {
         style="flex:1;padding:5px 8px;background:linear-gradient(180deg,#1a4a2a,#0a2010);border:1px solid #3ab070;
         border-radius:4px;color:#70e898;font-size:11px;cursor:pointer;font-weight:600;">▶ Usar</button>`;
     }
-    if (!item.equipped) {
+    if (!isItemEquipped) {
       const sellPrice = Math.floor((def.price || 10) * 0.4 * mult);
       actionsHtml += `<button data-tt-action="salvage" data-uid="${item.uid}"
         style="padding:5px 8px;background:linear-gradient(180deg,#4a2a1a,#200a0a);border:1px solid #b04a3a;
@@ -748,8 +790,9 @@ export function showItemTooltip(arg1, arg2, state, callbacks = {}) {
       }
       if (action === 'unequip') {
         const slot = btn.dataset.slot;
+        const uid = btn.dataset.uid;
         const unequipFn = callbacks.unequipItem || (typeof window !== 'undefined' ? window.unequipItem : null);
-        if (unequipFn) unequipFn(slot, state);
+        if (unequipFn) unequipFn(slot || uid, state);
       }
       if (action === 'sell') {
         const sellFn = callbacks.sellItem || (typeof window !== 'undefined' ? window.sellItem : null);
@@ -1516,9 +1559,10 @@ export function updateInventoryUI(state, callbacks = {}) {
     slotEl.oncontextmenu = (e) => {
       e.preventDefault();
       e.stopPropagation();
-      if (item.equipped) {
+      const isEquipped = !!(item.equipped || (state.equipment && Object.values(state.equipment).includes(item.uid)));
+      if (isEquipped) {
         const unequipFn = callbacks.unequipItem || (typeof window !== 'undefined' ? window.unequipItem : null);
-        if (unequipFn) unequipFn(item.equippedSlot || resolveEquipSlot(def.slot, state.equipment), state);
+        if (unequipFn) unequipFn(item.uid || item.equippedSlot || resolveEquipSlot(def.slot, state.equipment), state);
       } else {
         const equipFn = callbacks.equipItem || (typeof window !== 'undefined' ? window.equipItem : null);
         if (equipFn) equipFn(item.uid, state);
@@ -1527,16 +1571,15 @@ export function updateInventoryUI(state, callbacks = {}) {
 
     slotEl.ondblclick = (e) => {
       e.stopPropagation();
-      if (CONSUMABLE_SLOTS.includes(defSlot) && callbacks.useItem) {
+      const isEquipped = !!(item.equipped || (state.equipment && Object.values(state.equipment).includes(item.uid)));
+      if (isEquipped) {
+        const unequipFn = callbacks.unequipItem || (typeof window !== 'undefined' ? window.unequipItem : null);
+        if (unequipFn) unequipFn(item.uid || item.equippedSlot || resolveEquipSlot(def.slot, state.equipment), state);
+      } else if (CONSUMABLE_SLOTS.includes(defSlot) && callbacks.useItem) {
         callbacks.useItem(item.uid);
       } else if (GEAR_SLOTS.includes(defSlot)) {
-        if (item.equipped) {
-          const unequipFn = callbacks.unequipItem || (typeof window !== 'undefined' ? window.unequipItem : null);
-          if (unequipFn) unequipFn(item.equippedSlot || resolveEquipSlot(def.slot, state.equipment), state);
-        } else {
-          const equipFn = callbacks.equipItem || (typeof window !== 'undefined' ? window.equipItem : null);
-          if (equipFn) equipFn(item.uid, state);
-        }
+        const equipFn = callbacks.equipItem || (typeof window !== 'undefined' ? window.equipItem : null);
+        if (equipFn) equipFn(item.uid, state);
       }
     };
 

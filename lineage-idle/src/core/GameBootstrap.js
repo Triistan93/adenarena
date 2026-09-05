@@ -65,7 +65,11 @@ export async function bootstrap(shadowRoot) {
     EventBus.off('state:updated');
     EventBus.on('state:updated', (newState) => {
       try {
-        updateAllUI(newState);
+        if (typeof window !== 'undefined' && typeof window.updateAllUI === 'function') {
+          window.updateAllUI();
+        } else {
+          updateAllUI(newState);
+        }
       } catch (err) {
         console.warn('[GameBootstrap] Erro na atualização reativa da UI:', err);
       }

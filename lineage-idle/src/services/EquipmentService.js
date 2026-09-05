@@ -105,17 +105,74 @@ export function equipItem(state, uid, targetSlotOrCallbacks = null, maybeCallbac
   if (callbacks.save) callbacks.save(true, true);
 }
 
-export function unequipItem(state, slot, callbacks = {}) {
+export function unequipItem(state, slotOrUid, callbacks = {}) {
+  if (!state || !state.equipment) return;
   migrateEquipmentSlots(state);
-  const uid = state.equipment[slot];
-  if (!uid) return;
-  const item = state.inventory.find(i => i.uid === uid);
-  if (item) { item.equipped = false; delete item.equippedSlot; }
-  state.equipment[slot] = null;
+
+  let targetSlot = null;
+  let uid = null;
+
+  // 1. Direct match by equipment slot key
+  if (typeof slotOrUid === 'string' && state.equipment[slotOrUid]) {
+    targetSlot = slotOrUid;
+    uid = state.equipment[slotOrUid];
+  }
+
+  // 2. Match by UID in equipment
+  if (!targetSlot) {
+    for (const [s, u] of Object.entries(state.equipment)) {
+      if (u && (u === slotOrUid || String(u) === String(slotOrUid))) {
+        targetSlot = s;
+        uid = u;
+        break;
+      }
+    }
+  }
+
+  // 3. Generic slot names (e.g. 'ring', 'earring', 'hair', 'weapon')
+  if (!targetSlot && typeof slotOrUid === 'string') {
+    const candidateSlots = slotOrUid === 'ring' ? ['ring1', 'ring2']
+      : slotOrUid === 'earring' ? ['earring1', 'earring2']
+      : slotOrUid === 'hair' ? ['hair1', 'hair2']
+      : slotOrUid === 'weapon' ? ['weapon', 'weapon2']
+      : [slotOrUid];
+    for (const s of candidateSlots) {
+      if (state.equipment[s]) {
+        targetSlot = s;
+        uid = state.equipment[s];
+        break;
+      }
+    }
+  }
+
+  // 4. Match by item object or inventory lookup
+  if (!targetSlot && state.inventory) {
+    const targetItem = state.inventory.find(i => i && (i.uid === slotOrUid || i === slotOrUid));
+    if (targetItem) {
+      for (const [s, u] of Object.entries(state.equipment)) {
+        if (u === targetItem.uid) {
+          targetSlot = s;
+          uid = u;
+          break;
+        }
+      }
+    }
+  }
+
+  if (!targetSlot || !uid) return;
+
+  const item = (state.inventory || []).find(i => i.uid === uid);
+  if (item) {
+    item.equipped = false;
+    delete item.equippedSlot;
+  }
+  state.equipment[targetSlot] = null;
   const stats = getStats(state);
-  state.maxHp = stats.maxHp; state.maxMp = stats.maxMp;
-  state.hp = Math.min(state.hp, state.maxHp); state.mp = Math.min(state.mp, state.maxMp);
-  if (callbacks.log) callbacks.log(`Desequipou ${slot}`, 'system');
+  state.maxHp = stats.maxHp;
+  state.maxMp = stats.maxMp;
+  state.hp = Math.min(state.hp, state.maxHp);
+  state.mp = Math.min(state.mp, state.maxMp);
+  if (callbacks.log) callbacks.log(`Desequipou ${targetSlot}`, 'system');
   if (callbacks.updateAllUI) callbacks.updateAllUI();
   if (callbacks.save) callbacks.save(true, true);
 }

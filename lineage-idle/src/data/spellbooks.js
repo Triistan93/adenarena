@@ -7,7 +7,7 @@ export const SPELLBOOK_ITEMS = {
     category: 'spellbook',
     grade: 'D',
     stars: 1,
-    icon: '📖',
+    icon: 'spellbooks/spellbook_1star.png',
     desc: 'Livro sagrado de magia fundamental. Necessário para desbloquear e aprimorar habilidades iniciais da 2ª Classe (Nível 40+).',
     price: 25000,
     stackable: true
@@ -19,7 +19,7 @@ export const SPELLBOOK_ITEMS = {
     category: 'spellbook',
     grade: 'C',
     stars: 2,
-    icon: '📘',
+    icon: 'spellbooks/spellbook_2star.png',
     desc: 'Tomo ancestral de magia refinada. Necessário para habilidades nobres e buffs avançados da 2ª Classe (Nível 48+).',
     price: 75000,
     stackable: true
@@ -31,7 +31,7 @@ export const SPELLBOOK_ITEMS = {
     category: 'spellbook',
     grade: 'B',
     stars: 3,
-    icon: '📕',
+    icon: 'spellbooks/spellbook_3star.png',
     desc: 'Grimório lendário das grandes lendas de Aden. Necessário para habilidades de assinatura de B-Grade (Nível 56+).',
     price: 250000,
     stackable: true
@@ -43,7 +43,7 @@ export const SPELLBOOK_ITEMS = {
     category: 'spellbook',
     grade: 'A',
     stars: 4,
-    icon: '📜✨',
+    icon: 'spellbooks/spellbook_4star.png',
     desc: 'Tomo dos Deuses Antigos de Einhasad e Gran Kain. Necessário para habilidades supremas da 3ª e 4ª Classe.',
     price: 1000000,
     stackable: true

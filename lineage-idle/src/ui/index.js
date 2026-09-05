@@ -22,11 +22,11 @@ export * from './AppLayout.js';
  */
 export function updateAllUI(state, callbacks = {}) {
   if (!state) return;
-  renderStageHero(state);
-  renderStageMonster(state);
-  updateZoneUI(state, callbacks);
-  updateInventoryUI(state, callbacks);
-  updateSkillUI(state, callbacks);
-  updateShopUI(state, callbacks);
-  updateCharacterUI(state, callbacks);
+  try { renderStageHero(state); } catch (e) { console.warn('renderStageHero error:', e); }
+  try { renderStageMonster(state); } catch (e) { console.warn('renderStageMonster error:', e); }
+  try { updateZoneUI(state, callbacks); } catch (e) { console.warn('updateZoneUI error:', e); }
+  try { updateInventoryUI(state, callbacks); } catch (e) { console.warn('updateInventoryUI error:', e); }
+  try { updateSkillUI(state, callbacks); } catch (e) { console.warn('updateSkillUI error:', e); }
+  try { updateShopUI(state, callbacks); } catch (e) { console.warn('updateShopUI error:', e); }
+  try { updateCharacterUI(state, callbacks); } catch (e) { console.warn('updateCharacterUI error:', e); }
 }
