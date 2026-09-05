@@ -19,6 +19,8 @@ import { bootstrap, destroyBootstrap } from "../../lineage-idle/src/core/GameBoo
 import idleCss from "../../lineage-idle/style.css?raw";
 // @ts-ignore -- Grimoire theme CSS
 import grimoireCss from "../../lineage-idle/theme-grimoire.css?raw";
+// @ts-ignore -- GameUI consolidated CSS
+import gameUiCss from "../../lineage-idle/src/ui/GameUI.css?raw";
 
 import { IDLE_MARKUP } from "./markup";
 import "./heroImages";
@@ -157,7 +159,7 @@ export default function IdleGame() {
     if (!host) return;
 
     const shadow = host.shadowRoot ?? host.attachShadow({ mode: "open" });
-    shadow.innerHTML = `<style>${idleCss}\n${grimoireCss}</style>${IDLE_MARKUP}`;
+    shadow.innerHTML = `<style>${idleCss}\n${grimoireCss}\n${gameUiCss}</style>${IDLE_MARKUP}`;
     
     // Inicialização unificada via GameBootstrap
     bootstrap(shadow as unknown as Document);

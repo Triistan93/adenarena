@@ -1587,6 +1587,7 @@ function updateInventoryUI() {
   updateDetailedEquipStatsUI();
   return uiUpdateInventoryUI(state, {
     equipItem,
+    unequipItem,
     sellItem,
     salvageItem,
     useItem,
@@ -8347,6 +8348,8 @@ export function init() {
       return true;
     };
     window.saveState = save;
+    window.equipItem = equipItem;
+    window.unequipItem = unequipItem;
 
     window.loadGameState = (cloudData) => {
       if (!cloudData || typeof cloudData !== 'object') return;

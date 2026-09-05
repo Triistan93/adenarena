@@ -377,14 +377,29 @@ export function showItemTooltip(arg1, arg2, state, callbacks = {}) {
     mpRegen: 'Regen MP/s', critDmg: 'Dano Crítico', aoeTargets: 'Alvos em Área'
   };
 
+  if (!state || typeof state !== 'object') {
+    state = (typeof window !== 'undefined' && window.state) ? window.state : {};
+  }
+  if (!callbacks.unequipItem && typeof window !== 'undefined' && typeof window.unequipItem === 'function') {
+    callbacks.unequipItem = window.unequipItem;
+  }
+  if (!callbacks.equipItem && typeof window !== 'undefined' && typeof window.equipItem === 'function') {
+    callbacks.equipItem = window.equipItem;
+  }
+
   const enchant = item.enchant || 0;
   const enchantMult = 1 + (enchant <= 3 ? enchant * 0.12 : (0.36 + (enchant - 3) * 0.15));
   const foundationMult = item.foundation ? 1.3 : 1;
   const currentLvl = state?.level || 1;
   const isHeirloom = !!(def.isHeirloom || item.isHeirloom);
 
-  // Calcula atributos ativos (com suporte dinâmico a Herança)
-  let activeItemStats = { ...def };
+  // Calcula atributos ativos (com suporte dinâmico a Herança e múltiplos formatos de dados)
+  let activeItemStats = {
+    ...(def.base || {}),
+    ...(def.stats || {}),
+    ...(def.bonuses || {}),
+    ...def
+  };
   if (isHeirloom) {
     if (def.heirloomScaling) {
       if (currentLvl <= 19 && def.heirloomScaling.phase1) {
@@ -727,24 +742,64 @@ export function showItemTooltip(arg1, arg2, state, callbacks = {}) {
       const action = btn.dataset.ttAction;
       const uid = btn.dataset.uid;
       const slotTarget = btn.dataset.slotTarget || null;
-      if (action === 'equip'   && callbacks.equipItem)   callbacks.equipItem(uid, slotTarget, state);
-      if (action === 'unequip' && callbacks.unequipItem) {
-        const slot = btn.dataset.slot;
-        callbacks.unequipItem(slot, state);
+      if (action === 'equip') {
+        const equipFn = callbacks.equipItem || (typeof window !== 'undefined' ? window.equipItem : null);
+        if (equipFn) equipFn(uid, slotTarget, state);
       }
-      if (action === 'sell'    && callbacks.sellItem)    callbacks.sellItem(uid);
-      if (action === 'salvage' && callbacks.salvageItem) callbacks.salvageItem(uid);
-      if (action === 'use'     && callbacks.useItem)     callbacks.useItem(uid);
+      if (action === 'unequip') {
+        const slot = btn.dataset.slot;
+        const unequipFn = callbacks.unequipItem || (typeof window !== 'undefined' ? window.unequipItem : null);
+        if (unequipFn) unequipFn(slot, state);
+      }
+      if (action === 'sell') {
+        const sellFn = callbacks.sellItem || (typeof window !== 'undefined' ? window.sellItem : null);
+        if (sellFn) sellFn(uid);
+      }
+      if (action === 'salvage') {
+        const salvageFn = callbacks.salvageItem || (typeof window !== 'undefined' ? window.salvageItem : null);
+        if (salvageFn) salvageFn(uid);
+      }
+      if (action === 'use') {
+        const useFn = callbacks.useItem || (typeof window !== 'undefined' ? window.useItem : null);
+        if (useFn) useFn(uid);
+      }
       hideItemTooltip();
     };
   });
 
   tooltip.style.display = 'block';
+  tooltip.style.position = 'fixed';
+  tooltip.style.top = '0px';
+  tooltip.style.left = '0px';
+  tooltip.style.zIndex = '999999';
+  tooltip.style.pointerEvents = 'auto';
+
   const clientX = e?.clientX ?? (e?.pageX || 100);
   const clientY = e?.clientY ?? (e?.pageY || 100);
-  const posX = Math.min(window.innerWidth - 260, clientX + 15);
-  const posY = Math.max(10, Math.min(window.innerHeight - 250, clientY + 15));
-  tooltip.style.transform = `translate3d(${posX}px, ${posY}px, 0)`;
+
+  const rect = tooltip.getBoundingClientRect();
+  const tipW = rect.width || 270;
+  const tipH = rect.height || 280;
+
+  let posX = clientX + 16;
+  let posY = clientY + 12;
+
+  if (posX + tipW > window.innerWidth - 12) {
+    posX = Math.max(10, clientX - tipW - 14);
+  }
+  if (posY + tipH > window.innerHeight - 12) {
+    posY = Math.max(10, window.innerHeight - tipH - 12);
+  }
+
+  tooltip.style.transform = `translate3d(${Math.round(posX)}px, ${Math.round(posY)}px, 0)`;
+
+  tooltip.onmouseleave = (ev) => {
+    const rel = ev?.relatedTarget;
+    if (rel && (rel.classList?.contains('equip-slot') || rel.classList?.contains('inv-slot') || rel.closest?.('.equip-slot') || rel.closest?.('.inv-slot'))) {
+      return;
+    }
+    hideItemTooltip();
+  };
 }
 
 export function hideItemTooltip() {
@@ -1462,15 +1517,27 @@ export function updateInventoryUI(state, callbacks = {}) {
       e.preventDefault();
       e.stopPropagation();
       if (item.equipped) {
-        if (callbacks.unequipItem) callbacks.unequipItem(item.equippedSlot || resolveEquipSlot(def.slot, state.equipment), state);
+        const unequipFn = callbacks.unequipItem || (typeof window !== 'undefined' ? window.unequipItem : null);
+        if (unequipFn) unequipFn(item.equippedSlot || resolveEquipSlot(def.slot, state.equipment), state);
       } else {
-        if (callbacks.equipItem) callbacks.equipItem(item.uid, state);
+        const equipFn = callbacks.equipItem || (typeof window !== 'undefined' ? window.equipItem : null);
+        if (equipFn) equipFn(item.uid, state);
       }
     };
 
     slotEl.ondblclick = (e) => {
       e.stopPropagation();
-      if (CONSUMABLE_SLOTS.includes(defSlot) && callbacks.useItem) callbacks.useItem(item.uid);
+      if (CONSUMABLE_SLOTS.includes(defSlot) && callbacks.useItem) {
+        callbacks.useItem(item.uid);
+      } else if (GEAR_SLOTS.includes(defSlot)) {
+        if (item.equipped) {
+          const unequipFn = callbacks.unequipItem || (typeof window !== 'undefined' ? window.unequipItem : null);
+          if (unequipFn) unequipFn(item.equippedSlot || resolveEquipSlot(def.slot, state.equipment), state);
+        } else {
+          const equipFn = callbacks.equipItem || (typeof window !== 'undefined' ? window.equipItem : null);
+          if (equipFn) equipFn(item.uid, state);
+        }
+      }
     };
 
     grid.appendChild(slotEl);
@@ -1625,7 +1692,7 @@ export function updateEquipmentUI(state, callbacks = {}) {
       const penaltyCheck = (typeof window !== 'undefined' && window.BalanceEngine) ? window.BalanceEngine.checkGradePenalty(state.level || 1, def || item) : { hasPenalty: false };
       const enchantLevel = item.enchant || item.enchantLevel || 0;
 
-      let slotClasses = `equip-slot active rarity-${rarity}`;
+      let slotClasses = `l2inv-pd-slot equip-slot has-item active rarity-${rarity}`;
       if (penaltyCheck.hasPenalty) slotClasses += ' has-grade-penalty';
       if (enchantLevel >= 16) slotClasses += ' enchant-halo-16';
       else if (enchantLevel >= 10) slotClasses += ' enchant-halo-10';
@@ -1634,6 +1701,7 @@ export function updateEquipmentUI(state, callbacks = {}) {
       slotEl.className = slotClasses;
       slotEl.dataset.uid = uid;
       slotEl.dataset.slot = slot;
+      slotEl.removeAttribute('title'); // Remove native title so it doesn't block rich custom tooltip
 
       const penaltyBadge = penaltyCheck.hasPenalty ? `<span class="grade-penalty-badge" style="position:absolute; top:-3px; right:-3px; background:#dc2626; color:#fff; font-size:8px; padding:1px 2px; border-radius:2px; font-weight:bold; box-shadow:0 0 4px #000;" title="${penaltyCheck.reason}">⚠️</span>` : '';
       const enchantBadge = enchantLevel > 0 
@@ -1643,15 +1711,33 @@ export function updateEquipmentUI(state, callbacks = {}) {
       slotEl.innerHTML = `${penaltyBadge}${enchantBadge}<span class="equip-icon">${getItemIcon(def || item)}</span>`;
 
       slotEl.onmouseenter = (e) => showItemTooltip(e, item, state, callbacks);
-      slotEl.onmouseleave = () => hideItemTooltip();
-      slotEl.onclick = () => {
-        if (callbacks.unequipItem) callbacks.unequipItem(slot, state);
+      slotEl.onmouseleave = (ev) => {
+        const tip = findElement('item-tooltip');
+        const rel = ev?.relatedTarget;
+        if (tip && (tip === rel || tip.contains(rel))) return;
+        hideItemTooltip();
       };
+
+      const handleUnequip = (e) => {
+        if (e) {
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        hideItemTooltip();
+        const unequipFn = callbacks.unequipItem || (typeof window !== 'undefined' ? window.unequipItem : null);
+        if (unequipFn) {
+          unequipFn(slot, state);
+        }
+      };
+
+      slotEl.onclick = handleUnequip;
+      slotEl.oncontextmenu = handleUnequip;
+      slotEl.ondblclick = handleUnequip;
 
       item.equipped = true;
       item.equippedSlot = slot;
     } else {
-      slotEl.className = 'equip-slot empty';
+      slotEl.className = 'l2inv-pd-slot equip-slot empty';
       slotEl.dataset.slot = slot;
       delete slotEl.dataset.uid;
 
@@ -1660,6 +1746,8 @@ export function updateEquipmentUI(state, callbacks = {}) {
       slotEl.onmouseenter = null;
       slotEl.onmouseleave = null;
       slotEl.onclick = null;
+      slotEl.oncontextmenu = null;
+      slotEl.ondblclick = null;
     }
   }
 
