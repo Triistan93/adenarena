@@ -12,7 +12,7 @@ import {
 import { resolveEquipSlot, migrateEquipmentSlots, equipItem, unequipItem } from '../services/EquipmentService.js';
 import { getCraftLevelReq, getRecipeMaterials, canCraft, getRecipeDef, calculateMaxCraftableQty } from '../services/CraftService.js';
 import { rollMysticStock } from '../services/ShopService.js';
-import { classSatisfies, getClassSkills } from '../services/CharacterService.js';
+import { classSatisfies, getClassSkills, checkClassAdvancement } from '../services/CharacterService.js';
 import { AFFIX_MAP } from '../../data/affixes.js';
 import { getClass, getStats, getActiveSetBonuses } from '../engine/StatsEngine.js';
 import { getSkillCost } from '../engine/SkillEngine.js';
@@ -985,7 +985,7 @@ const INJECTED_GAMEUI_CSS = `
   user-select: none;
 }
 
-/* === GRID FIXO DE 10x8 COM BORDAS DEFINIDAS E SCROLLBAR VERTICAL === */
+/* === GRID RESPONSIVO E SIMÉTRICO COM BORDAS DEFINIDAS E SCROLLBAR VERTICAL === */
 #tab-inventory #inventory-grid,
 #tab-inventory .inventory-grid,
 #tab-inventory .l2inv-grid,
@@ -993,8 +993,8 @@ const INJECTED_GAMEUI_CSS = `
 .inventory-grid,
 .l2inv-grid {
   display: grid !important;
-  grid-template-columns: repeat(10, 38px) !important;
-  grid-auto-rows: 38px !important;
+  grid-template-columns: repeat(auto-fill, minmax(42px, 1fr)) !important;
+  grid-auto-rows: 42px !important;
   gap: 3px !important;
   padding: 6px !important;
   background: rgba(10, 7, 4, 0.85) !important;
@@ -1006,8 +1006,6 @@ const INJECTED_GAMEUI_CSS = `
   overflow-x: hidden !important;
   box-sizing: border-box !important;
   align-content: start !important;
-  justify-content: start !important;
-  flex: 0 0 auto !important;
   scrollbar-width: thin !important;
   scrollbar-color: #5a452a #120d08 !important;
 }
@@ -1029,17 +1027,16 @@ const INJECTED_GAMEUI_CSS = `
   border: 1px solid #7a5c38 !important;
 }
 
-/* === SLOTS DO INVENTÁRIO (38px x 38px) === */
+/* === SLOTS DO INVENTÁRIO (Adaptativos) === */
 /* NOTE: border is NOT set here with !important — rarity styles from style.css will apply */
 #tab-inventory .inv-slot,
 .inv-slot,
 .l2inv-slot {
-  width: 38px !important;
-  height: 38px !important;
-  min-width: 38px !important;
-  max-width: 38px !important;
-  min-height: 38px !important;
-  max-height: 38px !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  aspect-ratio: 1 !important;
   background: #241e16 !important;
   border-radius: 3px !important;
   box-sizing: border-box !important;
@@ -1479,6 +1476,12 @@ export function updateInventoryUI(state, callbacks = {}) {
   const equipFilter = state.equipFilter || 'all';
 
   const searchInput = findElement('inv-search-input');
+  if (searchInput && !searchInput.dataset.bound) {
+    searchInput.dataset.bound = 'true';
+    searchInput.addEventListener('input', () => {
+      updateInventoryUI(state, callbacks);
+    });
+  }
   const searchTerm = (searchInput?.value || '').trim().toLowerCase();
 
   const sorted = [...(state.inventory || [])]
@@ -1591,12 +1594,29 @@ export function updateInventoryUI(state, callbacks = {}) {
     grid.appendChild(slotEl);
   }
 
-  // Preenche os espaços em preto restantes com molduras de slots vazios até 80 slots (8 linhas x 10 colunas)
+  // Preenche os espaços vazios completando as linhas de forma perfeitamente simétrica
   const renderedCount = grid.children.length;
   const maxSlots = getMaxInventorySlots(state) || 80;
-  const totalDisplaySlots = Math.max(maxSlots, Math.ceil(renderedCount / 10) * 10, 80);
+  
+  // Detecta dinamicamente a quantidade de colunas do grid
+  let cols = 8;
+  try {
+    const comp = window.getComputedStyle(grid).gridTemplateColumns;
+    if (comp) {
+      const parts = comp.trim().split(/\s+/);
+      if (parts.length > 0 && !parts[0].includes('%')) cols = parts.length;
+    }
+  } catch (e) {
+    if (grid.clientWidth > 0) {
+      cols = Math.max(1, Math.floor((grid.clientWidth - 12) / 46));
+    }
+  }
 
-  for (let i = renderedCount; i < totalDisplaySlots; i++) {
+  // Preenche exatamente até completar a última linha sem deixar buracos na direita
+  const minRows = 4;
+  const targetSlots = Math.max(cols * minRows, Math.ceil(renderedCount / cols) * cols);
+
+  for (let i = renderedCount; i < targetSlots; i++) {
     const emptySlotEl = mkEl('div');
     emptySlotEl.className = 'inv-slot empty';
     grid.appendChild(emptySlotEl);
@@ -1941,6 +1961,23 @@ export function renderStageHero(state) {
   const heroMpText = structure.card.querySelector('#hero-mp-text, .stage-mp-text-hero');
   if (heroMpText) heroMpText.textContent = `MP: ${curMp} / ${maxMp}`;
 
+  const vitHpText = root.querySelector('#hero-vital-hp');
+  if (vitHpText) vitHpText.textContent = `${curHp.toLocaleString()} / ${maxHp.toLocaleString()}`;
+  const vitHpBar = root.querySelector('#hero-vital-bar-hp');
+  if (vitHpBar) vitHpBar.style.width = `${Math.max(0, Math.min(100, (curHp / maxHp) * 100))}%`;
+
+  const vitMpText = root.querySelector('#hero-vital-mp');
+  if (vitMpText) vitMpText.textContent = `${curMp.toLocaleString()} / ${maxMp.toLocaleString()}`;
+  const vitMpBar = root.querySelector('#hero-vital-bar-mp');
+  if (vitMpBar) vitMpBar.style.width = `${Math.max(0, Math.min(100, (curMp / maxMp) * 100))}%`;
+
+  const maxCp = Math.round(state.maxCp || Math.floor(maxHp * 0.6) || 60);
+  const curCp = Math.round(state.cp !== undefined ? Math.max(0, state.cp) : maxCp);
+  const vitCpText = root.querySelector('#hero-vital-cp');
+  if (vitCpText) vitCpText.textContent = `${curCp.toLocaleString()} / ${maxCp.toLocaleString()}`;
+  const vitCpBar = root.querySelector('#hero-vital-bar-cp');
+  if (vitCpBar) vitCpBar.style.width = `${Math.max(0, Math.min(100, (curCp / maxCp) * 100))}%`;
+
   if (structure.sprite && typeof heroSVG === 'function') {
     structure.sprite.innerHTML = heroSVG(state);
   }
@@ -2043,126 +2080,229 @@ export function updateCharacterUI(state) {
   const raceName = raceDef.name || race.toUpperCase();
   const className = classDef.name || cls.toUpperCase();
 
+  // 1. Nome do Herói
   const portraitName = root.querySelector('#portrait-name, .portrait-name');
   if (portraitName) portraitName.textContent = charName;
 
+  // 2. Selo de Nível
+  const levelSeal = root.querySelector('#hero-sheet-level');
+  if (levelSeal) levelSeal.textContent = level;
+
+  // 3. Linhagem e Ordem (Raça e Classe)
+  const raceClassDisp = root.querySelector('#hero-race-class-display');
+  if (raceClassDisp) raceClassDisp.textContent = `${raceName} · ${className}`;
+
+  // 4. Badge de Patente / Tier
+  const tierBadge = root.querySelector('#hero-tier-badge');
+  if (tierBadge) {
+    let tierText = 'Tier 0 · Noviço';
+    if (level >= 76) tierText = 'Tier 3 · Nobless';
+    else if (level >= 40) tierText = 'Tier 2 · Veterano';
+    else if (level >= 20) tierText = 'Tier 1 · Aspirante';
+    tierBadge.textContent = tierText;
+  }
+
+  // 5. Poder de Combate (CP) e Classificação
   const cp = CombatPowerService.calculateCombatPower(state);
   const cpTier = CombatPowerService.getCombatPowerTier(cp);
+
+  const heroCpVal = root.querySelector('#hero-cp-val');
+  if (heroCpVal) {
+    heroCpVal.textContent = CombatPowerService.formatCombatPower(cp);
+  }
 
   const portraitSub = root.querySelector('#portrait-sub, .portrait-sub');
   if (portraitSub) {
     portraitSub.innerHTML = `
-      <div style="font-weight: 500;">Level ${level} · ${raceName} ${className}</div>
-      <div style="margin-top: 3px; font-weight: bold; color: #38bdf8; font-size: 0.85rem; display: flex; align-items: center; gap: 4px;">
-        <span>${cpTier.badge}</span>
-        <span style="color: #f8fafc;">${CombatPowerService.formatCombatPower(cp)}</span>
-        <span style="font-size: 0.7rem; padding: 1px 4px; border-radius: 3px; background: rgba(56,189,248,0.15); color: ${cpTier.color};">${cpTier.name}</span>
+      <div style="display:flex; align-items:center; gap:6px;">
+        <span style="font-size:1.1rem;">${cpTier.badge}</span>
+        <span style="font-size:0.75rem; font-weight:700; padding:2px 6px; border-radius:4px; background:rgba(56,189,248,0.15); color:${cpTier.color}; border:1px solid rgba(56,189,248,0.3); font-family:'Cinzel',serif;">${cpTier.name}</span>
       </div>
     `;
   }
 
-  const raceClassDisp = root.querySelector('#hero-race-class-display');
-  if (raceClassDisp) raceClassDisp.textContent = `${raceName} — ${className}`;
-
+  // 6. Retrato Real em Alta Resolução (Modo Portrait HD)
   const portraitArt = root.querySelector('#portrait-art, .portrait-art');
   if (portraitArt && typeof heroSVG === 'function') {
-    portraitArt.innerHTML = heroSVG(state);
+    portraitArt.innerHTML = heroSVG({ ...state, mode: 'portrait' });
   }
 
-  const charStatsContainer = root.querySelector('#char-tab-stats-summary');
-  if (charStatsContainer) {
-    const stats = getStats(state);
-    const setRes = typeof getActiveSetBonuses === 'function' ? getActiveSetBonuses(state) : { primaryStats: {} };
-    const setPrim = setRes.primaryStats || {};
+  // 7. Medidores Vitais Nobres (HP / MP / CP)
+  const stats = getStats(state);
+  const curHp = Math.round(state.hp !== undefined ? Math.max(0, state.hp) : (stats.maxHp || 100));
+  const maxHp = Math.round(state.maxHp || stats.maxHp || curHp || 100);
+  const curMp = Math.round(state.mp !== undefined ? Math.max(0, state.mp) : (stats.maxMp || 50));
+  const maxMp = Math.round(state.maxMp || stats.maxMp || curMp || 50);
+  const maxCp = Math.round(state.maxCp || Math.floor(maxHp * 0.6) || 60);
+  const curCp = Math.round(state.cp !== undefined ? Math.max(0, state.cp) : maxCp);
 
-    // Calculate Tattoos Active Stat Deltas
-    let tatStr = 0, tatDex = 0, tatCon = 0, tatInt = 0, tatWit = 0, tatMen = 0;
-    const tattoos = state.tattoos || [];
-    for (const t of tattoos) {
-      if (!t) continue;
-      if (t.plusStat === 'str') tatStr += t.plusVal;
-      if (t.plusStat === 'dex') tatDex += t.plusVal;
-      if (t.plusStat === 'con') tatCon += t.plusVal;
-      if (t.plusStat === 'int') tatInt += t.plusVal;
-      if (t.plusStat === 'wit') tatWit += t.plusVal;
-      if (t.plusStat === 'men') tatMen += t.plusVal;
+  const hpValEl = root.querySelector('#hero-vital-hp');
+  if (hpValEl) hpValEl.textContent = `${curHp.toLocaleString()} / ${maxHp.toLocaleString()}`;
+  const hpBarEl = root.querySelector('#hero-vital-bar-hp');
+  if (hpBarEl) hpBarEl.style.width = `${Math.max(0, Math.min(100, (curHp / maxHp) * 100))}%`;
 
-      if (t.minusStat === 'str') tatStr -= t.minusVal;
-      if (t.minusStat === 'dex') tatDex -= t.minusVal;
-      if (t.minusStat === 'con') tatCon -= t.minusVal;
-      if (t.minusStat === 'int') tatInt -= t.minusVal;
-      if (t.minusStat === 'wit') tatWit -= t.minusVal;
-      if (t.minusStat === 'men') tatMen -= t.minusVal;
-    }
+  const mpValEl = root.querySelector('#hero-vital-mp');
+  if (mpValEl) mpValEl.textContent = `${curMp.toLocaleString()} / ${maxMp.toLocaleString()}`;
+  const mpBarEl = root.querySelector('#hero-vital-bar-mp');
+  if (mpBarEl) mpBarEl.style.width = `${Math.max(0, Math.min(100, (curMp / maxMp) * 100))}%`;
 
-    const renderStatBlock = (label, val, setVal, dyeVal) => {
+  const cpValEl = root.querySelector('#hero-vital-cp');
+  if (cpValEl) cpValEl.textContent = `${curCp.toLocaleString()} / ${maxCp.toLocaleString()}`;
+  const cpBarEl = root.querySelector('#hero-vital-bar-cp');
+  if (cpBarEl) cpBarEl.style.width = `${Math.max(0, Math.min(100, (curCp / maxCp) * 100))}%`;
+
+  // 8. Verificação de Avanço de Classe
+  try {
+    checkClassAdvancement(state, {
+      el: (id) => root.querySelector('#' + id) || document.getElementById(id),
+      openClassTransferModal: () => {
+        if (typeof window !== 'undefined' && window.openClassTransferModal) {
+          window.openClassTransferModal();
+        }
+      }
+    });
+  } catch (e) {
+    console.warn('checkClassAdvancement error:', e);
+  }
+
+  // 9. Cálculo de Bônus de Sets e Tatuagens (Dyes)
+  const setRes = typeof getActiveSetBonuses === 'function' ? getActiveSetBonuses(state) : { primaryStats: {} };
+  const setPrim = setRes.primaryStats || {};
+
+  let tatStr = 0, tatDex = 0, tatCon = 0, tatInt = 0, tatWit = 0, tatMen = 0;
+  const tattoos = state.tattoos || [];
+  for (const t of tattoos) {
+    if (!t) continue;
+    if (t.plusStat === 'str') tatStr += t.plusVal;
+    if (t.plusStat === 'dex') tatDex += t.plusVal;
+    if (t.plusStat === 'con') tatCon += t.plusVal;
+    if (t.plusStat === 'int') tatInt += t.plusVal;
+    if (t.plusStat === 'wit') tatWit += t.plusVal;
+    if (t.plusStat === 'men') tatMen += t.plusVal;
+
+    if (t.minusStat === 'str') tatStr -= t.minusVal;
+    if (t.minusStat === 'dex') tatDex -= t.minusVal;
+    if (t.minusStat === 'con') tatCon -= t.minusVal;
+    if (t.minusStat === 'int') tatInt -= t.minusVal;
+    if (t.minusStat === 'wit') tatWit -= t.minusVal;
+    if (t.minusStat === 'men') tatMen -= t.minusVal;
+  }
+
+  // 10. Renderizar os 6 Pilares Raciais Primários em #char-primary-stats-grid
+  const primContainer = root.querySelector('#char-primary-stats-grid');
+  if (primContainer) {
+    const renderTablet = (code, name, val, setVal, dyeVal, desc) => {
       const badges = [];
-      if (setVal) badges.push(`<span style="color:#4ade80; font-size:9px;">Set +${setVal}</span>`);
-      if (dyeVal) badges.push(dyeVal > 0 ? `<span style="color:#a78bfa; font-size:9px;">Dye +${dyeVal}</span>` : `<span style="color:#ef4444; font-size:9px;">Dye ${dyeVal}</span>`);
-      const badgesHtml = badges.length > 0 ? `<div style="display:flex; justify-content:center; gap:2px; flex-wrap:wrap; margin-top:2px;">${badges.join(' ')}</div>` : '';
+      if (setVal) badges.push(`<span class="l2-stat-chip-set">Set +${setVal}</span>`);
+      if (dyeVal) badges.push(dyeVal > 0 ? `<span class="l2-stat-chip-pos">Dye +${dyeVal}</span>` : `<span class="l2-stat-chip-neg">Dye ${dyeVal}</span>`);
+      const badgesHtml = badges.length > 0 ? `<div class="l2-stat-badges">${badges.join('')}</div>` : '';
       return `
-        <div style="background:rgba(0,0,0,0.3); padding:4px 2px; border-radius:4px;">
-          <div style="color:#aaa; font-size:10px;">${label}</div>
-          <strong style="color:#ffd877; font-size:13px;">${val}</strong>
+        <div class="l2-stat-tablet" title="${desc}">
+          <div class="l2-tablet-code">${code}</div>
+          <div class="l2-tablet-name">${name}</div>
+          <div class="l2-tablet-val">${val}</div>
           ${badgesHtml}
         </div>
       `;
     };
 
-    // Socket SA on Equipped Weapon
+    primContainer.innerHTML = `
+      ${renderTablet('STR', 'Força', state.primaryStats?.str || 40, setPrim.str || 0, tatStr, 'Poder de Ataque Físico')}
+      ${renderTablet('DEX', 'Destreza', state.primaryStats?.dex || 30, setPrim.dex || 0, tatDex, 'Velocidade, Crítico e Esquiva')}
+      ${renderTablet('CON', 'Vigor', state.primaryStats?.con || 43, setPrim.con || 0, tatCon, 'Pontos Máximos de HP e CP')}
+      ${renderTablet('INT', 'Mágica', state.primaryStats?.int || 21, setPrim.int || 0, tatInt, 'Poder de Ataque Mágico')}
+      ${renderTablet('WIT', 'Astúcia', state.primaryStats?.wit || 11, setPrim.wit || 0, tatWit, 'Velocidade de Conjuração e Crítico Mágico')}
+      ${renderTablet('MEN', 'Espírito', state.primaryStats?.men || 25, setPrim.men || 0, tatMen, 'Defesa Mágica e Pontos de MP')}
+    `;
+  }
+
+  // 11. Renderizar Matriz Tática de Combate em #char-tab-stats-summary
+  const charStatsContainer = root.querySelector('#char-tab-stats-summary');
+  if (charStatsContainer) {
     const wpnUid = state.equipment?.weapon;
     const socket = (wpnUid && state.weaponSockets) ? state.weaponSockets[wpnUid] : null;
 
     let tattoosHtml = '';
     if (tattoos.length > 0) {
-      tattoosHtml = tattoos.map(t => `<div style="font-size:11px; color:#d8b4fe;">🖊️ Tatuagem: +${t.plusVal} ${t.plusStat.toUpperCase()} / -${t.minusVal} ${t.minusStat.toUpperCase()}</div>`).join('');
+      tattoosHtml = tattoos.map(t => `<div class="l2-tatt-badge">🖋️ Tatuagem: +${t.plusVal} ${t.plusStat.toUpperCase()} / -${t.minusVal} ${t.minusStat.toUpperCase()}</div>`).join('');
     } else {
-      tattoosHtml = '<div style="font-size:11px; color:#aaa;">Nenhuma tatuagem instalada. (Instale na ⚒️ Forja)</div>';
+      tattoosHtml = '<div class="l2-tatt-empty">Nenhuma tatuagem gravada. (Adquira Dyes e grave no Mestre da Forja)</div>';
     }
 
     charStatsContainer.innerHTML = `
-      <div style="grid-column: 1 / -1; display:grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom:6px;">
-        <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(212,167,68,0.2); padding:6px 10px; border-radius:6px; font-size:11px;">
-          <span style="color:#a8a29e;">⚔️ P.Atk:</span> <strong style="color:#f59e0b; float:right;">${stats.atk || 0}</strong>
+      <!-- Coluna 1: Potência Ofensiva -->
+      <div class="l2-matrix-pillar offensive">
+        <div class="l2-pillar-title">
+          <span class="l2-pillar-icon">⚔️</span>
+          <span>Potência Ofensiva</span>
         </div>
-        <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(212,167,68,0.2); padding:6px 10px; border-radius:6px; font-size:11px;">
-          <span style="color:#a8a29e;">🛡️ P.Def:</span> <strong style="color:#60a5fa; float:right;">${stats.def || 0}</strong>
-        </div>
-        <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(212,167,68,0.2); padding:6px 10px; border-radius:6px; font-size:11px;">
-          <span style="color:#a8a29e;">👟 Esquiva:</span> <strong style="color:#34d399; float:right;">${stats.eva || 0}</strong>
-        </div>
-        <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(212,167,68,0.2); padding:6px 10px; border-radius:6px; font-size:11px;">
-          <span style="color:#a8a29e;">🔮 M.Atk:</span> <strong style="color:#a78bfa; float:right;">${stats.matk || 0}</strong>
-        </div>
-        <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(212,167,68,0.2); padding:6px 10px; border-radius:6px; font-size:11px;">
-          <span style="color:#a8a29e;">✨ M.Def:</span> <strong style="color:#f472b6; float:right;">${stats.mdef || 0}</strong>
-        </div>
-        <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(212,167,68,0.2); padding:6px 10px; border-radius:6px; font-size:11px;">
-          <span style="color:#a8a29e;">⚡ Crítico:</span> <strong style="color:#fbbf24; float:right;">${stats.crit || 0}%</strong>
-        </div>
-      </div>
-
-      <!-- Primary Stats with Set & Tattoo Influences -->
-      <div style="grid-column: 1 / -1; background:rgba(20,26,42,0.6); border:1px solid rgba(212,167,68,0.3); border-radius:8px; padding:10px; margin-bottom:8px;">
-        <h4 style="margin:0 0 6px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:12px;">📊 Atributos Primários (Sets, Dyes &amp; L2 Stats)</h4>
-        <div style="display:grid; grid-template-columns: repeat(6, 1fr); gap:4px; text-align:center; font-size:11px;">
-          ${renderStatBlock('STR', state.primaryStats?.str || 40, setPrim.str || 0, tatStr)}
-          ${renderStatBlock('DEX', state.primaryStats?.dex || 30, setPrim.dex || 0, tatDex)}
-          ${renderStatBlock('CON', state.primaryStats?.con || 43, setPrim.con || 0, tatCon)}
-          ${renderStatBlock('INT', state.primaryStats?.int || 21, setPrim.int || 0, tatInt)}
-          ${renderStatBlock('WIT', state.primaryStats?.wit || 11, setPrim.wit || 0, tatWit)}
-          ${renderStatBlock('MEN', state.primaryStats?.men || 25, setPrim.men || 0, tatMen)}
+        <div class="l2-pillar-rows">
+          <div class="l2-matrix-row">
+            <span class="l2-row-lbl">⚔️ P.Atk (Ataque Físico)</span>
+            <span class="l2-row-val val-patk">${(stats.atk || 0).toLocaleString()}</span>
+          </div>
+          <div class="l2-matrix-row">
+            <span class="l2-row-lbl">🔮 M.Atk (Ataque Mágico)</span>
+            <span class="l2-row-val val-matk">${(stats.matk || 0).toLocaleString()}</span>
+          </div>
+          <div class="l2-matrix-row">
+            <span class="l2-row-lbl">⚡ Taxa Crítica</span>
+            <span class="l2-row-val val-crit">${stats.crit || 0}%</span>
+          </div>
+          <div class="l2-matrix-row">
+            <span class="l2-row-lbl">🏹 Velocidade de Ação</span>
+            <span class="l2-row-val val-spd">${stats.spd || 100}</span>
+          </div>
+          <div class="l2-matrix-row">
+            <span class="l2-row-lbl">🎯 Precisão de Golpe</span>
+            <span class="l2-row-val val-acc">${stats.accuracy || (stats.eva ? stats.eva + 5 : 105)}</span>
+          </div>
         </div>
       </div>
 
-      <!-- Active Refinements & Dyes Summary Card -->
-      <div style="grid-column: 1 / -1; background:rgba(30,16,48,0.7); border:1px solid rgba(168,85,247,0.4); border-radius:8px; padding:10px;">
-        <h4 style="margin:0 0 6px 0; font-family:'Cinzel',serif; color:#d8b4fe; font-size:12px; display:flex; align-items:center; gap:6px;">
-          🔮 Refinamentos &amp; Dyes Gravados
-        </h4>
-        ${tattoosHtml}
-        <div style="font-size:11px; color:#34d399; margin-top:4px;">
-          ${socket ? `🔮 SA Arma: <strong>${socket.effect.toUpperCase()} Stage ${socket.stage}</strong>` : '🔮 SA Arma: Nenhum Soul Crystal engastado.'}
+      <!-- Coluna 2: Baluarte Defensivo -->
+      <div class="l2-matrix-pillar defensive">
+        <div class="l2-pillar-title">
+          <span class="l2-pillar-icon">🛡️</span>
+          <span>Baluarte Defensivo</span>
+        </div>
+        <div class="l2-pillar-rows">
+          <div class="l2-matrix-row">
+            <span class="l2-row-lbl">🛡️ P.Def (Defesa Física)</span>
+            <span class="l2-row-val val-pdef">${(stats.def || 0).toLocaleString()}</span>
+          </div>
+          <div class="l2-matrix-row">
+            <span class="l2-row-lbl">✨ M.Def (Defesa Mágica)</span>
+            <span class="l2-row-val val-mdef">${(stats.mdef || 0).toLocaleString()}</span>
+          </div>
+          <div class="l2-matrix-row">
+            <span class="l2-row-lbl">👟 Evasão / Esquiva</span>
+            <span class="l2-row-val val-eva">${stats.eva || 0}</span>
+          </div>
+          <div class="l2-matrix-row">
+            <span class="l2-row-lbl">🩸 Drenagem de Vida</span>
+            <span class="l2-row-val val-drain">${Math.round((stats.lifeDrain || 0) * 100)}%</span>
+          </div>
+          <div class="l2-matrix-row">
+            <span class="l2-row-lbl">🌿 Regeneração de HP</span>
+            <span class="l2-row-val val-regen">+${stats.regenHp ? Math.round(stats.regenHp * 100) : 5}% / tick</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card Místico: Refinamentos, Tatuagens & Soul Crystal (SA) -->
+      <div class="l2-mystic-card">
+        <div class="l2-mystic-header">
+          <span class="l2-mystic-icon">🔮</span>
+          <span class="l2-mystic-title">Refinamentos Místicos, Tatuagens &amp; Soul Crystal</span>
+        </div>
+        <div class="l2-mystic-content">
+          <div class="l2-mystic-dyes">
+            ${tattoosHtml}
+          </div>
+          <div class="l2-mystic-sa">
+            ${socket ? `🔮 SA da Arma: <strong style="color:#38bdf8;">${socket.effect.toUpperCase()} (Stage ${socket.stage})</strong>` : '🔮 SA da Arma: Nenhum Soul Crystal engastado.'}
+          </div>
         </div>
       </div>
     `;
@@ -3798,14 +3938,16 @@ export function updateCraftUI(state, callbacks = {}) {
       const count = invMap.get(m.matId) || 0;
       const isOk = count >= m.qty;
       if (!isOk) hasAllMats = false;
+      const matName = matDef ? matDef.name : m.matId;
 
       return `
-        <span style="display:inline-flex; align-items:center; gap:3px; margin-right:6px; color:${isOk ? '#4ade80' : '#ef4444'}; font-size:11px; font-weight:500;">
-          ${matDef ? matDef.name : m.matId}: ${count}/${m.qty}
-          ${!isOk ? `<button class="inv-batch-btn" data-open-locator="${m.matId}" title="Ver onde dropa este material" style="padding:1px 4px; font-size:9px; margin-left:2px; background:rgba(239,68,68,0.2); border-color:#ef4444; color:#fca5a5;">🔍</button>` : ''}
-        </span>
+        <div class="l2-mat-slot ${isOk ? 'is-satisfied' : 'is-lacking'}" data-open-locator="${m.matId}" title="${matName}: ${count}/${m.qty} (Clique p/ ver onde cai)">
+          <div class="l2-mat-icon-wrap">${getItemIcon(matDef || m.matId)}</div>
+          <div class="l2-mat-badge ${isOk ? 'badge-ok' : 'badge-lacking'}">${count}/${m.qty}</div>
+          <div class="l2-mat-name-tooltip">${matName}</div>
+        </div>
       `;
-    }).join(' · ');
+    }).join('');
 
     const isLvlOk = playerLvl >= itemReqLevel;
     const isForgeLvlOk = forgeLvl >= reqForgeLvl;
@@ -3816,22 +3958,32 @@ export function updateCraftUI(state, callbacks = {}) {
     else if (!isLvlOk) buttonText = `⚠️ Requer Lv.${itemReqLevel} p/ Usar`;
 
     return `
-      <div class="craft-recipe-card ${craftable ? 'craftable' : ''}" data-open-craft="${itemId}">
-        <div class="craft-recipe-header">
-          <div class="craft-recipe-icon-box">
+      <div class="l2-blueprint-card ${craftable ? 'craftable' : ''}" data-open-craft="${itemId}">
+        <div class="l2-blueprint-header">
+          <div class="l2-blueprint-socket" style="border-color:${gradeInfo.color};">
             ${getItemIcon(def)}
           </div>
-          <div style="flex:1;">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-              <div class="craft-recipe-title">${def.name}</div>
-              <span class="shop-grade-badge" style="background:${gradeInfo.color}; padding:2px 8px; border-radius:4px; font-size:10px; font-weight:bold; color:#fff;">${gradeInfo.label}</span>
+          <div style="flex:1; min-width:0;">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:6px;">
+              <div class="l2-blueprint-title" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${def.name}</div>
+              <span class="shop-grade-badge" style="background:${gradeInfo.color}; padding:2px 8px; border-radius:4px; font-size:10px; font-weight:bold; color:#fff; flex-shrink:0;">${gradeInfo.label}</span>
             </div>
-            <div class="craft-recipe-sub">Requer Forja Lv.${reqForgeLvl} · 🪙 ${baseAdena.toLocaleString()} Adena</div>
+            <div class="l2-blueprint-meta">
+              <span>⚒️ Forja Lv.${reqForgeLvl}</span>
+              <span>·</span>
+              <span style="color:#ffd877; font-weight:bold;">🪙 ${baseAdena.toLocaleString()} Adena</span>
+            </div>
           </div>
         </div>
-        ${statsSummary ? `<div class="craft-recipe-stats">📊 ${statsSummary}</div>` : ''}
-        <div class="craft-mats-line">${matsHtml}</div>
-        <button class="craft-item-btn" data-open-craft="${itemId}" style="width:100%; padding:10px 14px; font-family:'Cinzel',serif; font-weight:700; font-size:13px; background:${craftable ? 'linear-gradient(180deg,#d4a744,#8a641c)' : 'rgba(60,50,40,0.5)'}; border:1px solid ${craftable ? '#ffe699' : 'rgba(100,80,60,0.3)'}; color:${craftable ? '#000' : '#888'}; border-radius:6px; cursor:pointer; box-shadow:0 3px 10px rgba(0,0,0,0.4); margin-top:8px;">
+        ${statsSummary ? `
+          <div class="l2-blueprint-stats">
+            <span style="font-size:10px; color:#94a3b8; margin-right:4px;">📊 Atributos:</span>
+            <span class="l2-stat-pill">${statsSummary}</span>
+          </div>
+        ` : ''}
+        <div style="margin-bottom:4px; font-size:10px; color:#94a3b8; font-family:'Cinzel',serif; text-transform:uppercase; letter-spacing:0.05em;">📦 Materiais da Receita:</div>
+        <div class="l2-mat-matrix">${matsHtml}</div>
+        <button class="l2-forge-action-btn ${craftable ? 'is-ready' : 'is-disabled'}" data-open-craft="${itemId}">
           ${buttonText}
         </button>
       </div>
@@ -4650,80 +4802,87 @@ export function renderForgeSoulCrystals(container, state) {
   const reqSouls = crystalStage < 10 ? crystalStage * 10 : crystalStage * 20;
 
   container.innerHTML = `
-    <div style="padding:10px; color:#fff; font-family:sans-serif;">
-      <!-- Banner de Drenagem de Almas -->
-      <div style="background:linear-gradient(180deg, rgba(30,16,50,0.95), rgba(16,8,28,0.95)); border:1px solid rgba(168,85,247,0.5); border-radius:12px; padding:16px; margin-bottom:16px;">
+    <div class="l2-workshop-panel">
+      <!-- Altar de Ressonância de Almas -->
+      <div class="l2-workshop-altar">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
           <div>
-            <h3 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:18px;">🔮 Soul Crystal Ancestral &amp; Drenagem de Almas</h3>
-            <p style="margin:4px 0 0 0; font-size:12px; color:#aaa;">
-              Mantenha o Soul Crystal na mochila durante suas caçadas. Derrotar criaturas acumula almas e evolui o cristal do Estágio 1 até o lendário Estágio 15!
+            <h3 class="l2-workshop-title">🔮 Câmara de Ressonância de Soul Crystals</h3>
+            <p class="l2-workshop-subtitle">
+              Mantenha o cristal em sua bolsa durante as caçadas para absorver almas de monstros e evoluir do Estágio 1 até o Estágio 15.
             </p>
           </div>
           <div style="text-align:right;">
-            <div style="font-size:11px; color:#aaa;">Cristal na Mochila:</div>
-            <strong style="color:${crystalStage === 15 ? '#fbbf24' : '#c084fc'}; font-size:14px;">
+            <div style="font-size:10px; color:#94a3b8; font-family:'Cinzel',serif; text-transform:uppercase;">Cristal na Mochila:</div>
+            <strong style="color:${crystalStage === 15 ? '#fbbf24' : '#c084fc'}; font-size:14px; font-family:'Cinzel',serif;">
               ${crystal ? `Estágio ${crystalStage} ${crystalStage === 15 ? '👑 (MÁXIMO)' : ''}` : '❌ Nenhum Cristal'}
             </strong>
           </div>
         </div>
 
         ${crystal && crystalStage < 14 ? `
-          <div style="margin-top:12px; background:rgba(0,0,0,0.4); padding:10px; border-radius:8px; border:1px solid rgba(168,85,247,0.3);">
-            <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px;">
-              <span>Almas Absorvidas: <strong style="color:#a855f7;">${absorbedSouls} / ${reqSouls}</strong></span>
-              <span style="color:#aaa;">Meta p/ Estágio ${crystalStage + 1}</span>
+          <div style="margin-top:12px; background:rgba(8,11,16,0.85); padding:10px 12px; border-radius:6px; border:1px solid rgba(168,85,247,0.3);">
+            <div style="display:flex; justify-content:space-between; font-size:11px; margin-bottom:5px;">
+              <span>Almas Absorvidas: <strong style="color:#d8b4fe;">${absorbedSouls} / ${reqSouls}</strong></span>
+              <span style="color:#94a3b8;">Progresso p/ Estágio ${crystalStage + 1}</span>
             </div>
-            <div style="width:100%; height:8px; background:rgba(0,0,0,0.6); border-radius:4px; overflow:hidden;">
+            <div style="width:100%; height:8px; background:rgba(0,0,0,0.6); border-radius:4px; overflow:hidden; border:1px solid rgba(168,85,247,0.2);">
               <div style="height:100%; width:${Math.min(100, Math.floor((absorbedSouls / reqSouls) * 100))}%; background:linear-gradient(90deg,#a855f7,#ec4899);"></div>
             </div>
           </div>
         ` : ''}
 
         ${crystalStage === 14 ? `
-          <div style="margin-top:12px; background:rgba(239,68,68,0.15); border:1px solid #ef4444; padding:12px; border-radius:8px; font-size:12px; color:#fca5a5;">
-            ⚔️ <strong>DESAFIO LENDÁRIO (ESTÁGIO 14 ➔ 15):</strong><br>
-            Para ascender ao Estágio 15, derrote um <strong>Epic Boss</strong> (Valakas, Antharas, Baium, Frintezza). Há <strong>50% de chance canônica</strong> de ressonância da alma épica!
+          <div style="margin-top:12px; background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.4); padding:10px 14px; border-radius:6px; font-size:11px; color:#fca5a5;">
+            ⚔️ <strong>DESAFIO ÉPICO (ESTÁGIO 14 ➔ 15):</strong> Derrote um <strong>Epic Boss</strong> (Valakas, Antharas, Baium) com o cristal na mochila para a ressonância final (50% de chance canônica)!
           </div>
         ` : ''}
 
         ${!crystal ? `
-          <div style="margin-top:12px; display:flex; gap:10px;">
-            <button onclick="window.buyInitialSoulCrystal()" style="padding:10px 18px; font-family:'Cinzel',serif; font-weight:bold; font-size:12px; background:linear-gradient(180deg,#a855f7,#6b21a8); border:1px solid #c084fc; color:#fff; border-radius:6px; cursor:pointer;">
+          <div style="margin-top:12px;">
+            <button onclick="window.buyInitialSoulCrystal()" class="l2-forge-action-btn is-ready" style="max-width:320px;">
               🛒 Adquirir Soul Crystal Inicial (50.000 Adena)
             </button>
           </div>
         ` : ''}
       </div>
 
-      <!-- Socket na Arma Equipada -->
-      <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(212,167,68,0.3); border-radius:10px; padding:16px; margin-bottom:16px;">
-        <h4 style="margin:0 0 6px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:16px;">🗡️ Engaste de Habilidade Especial (Special Ability - SA)</h4>
-        <div style="font-size:12px; color:#aaa; margin-bottom:12px;">
-          Arma Equipada: <strong style="color:#ffd877;">${wpnDef ? wpnDef.name : 'Nenhuma Arma Equipada'}</strong>
-          ${wpnItem?.soulCrystal ? `<span style="color:#34d399; font-weight:bold; margin-left:8px;">[SA Ativo: ${wpnItem.soulCrystal.name} (Lv.${wpnItem.soulCrystal.level || 1})]</span>` : ''}
+      <!-- Bancada de Engaste de Habilidade Especial (SA) -->
+      <div class="l2-workshop-altar">
+        <h4 class="l2-workshop-title">🗡️ Bigorna de Engaste de Habilidade Especial (SA)</h4>
+        
+        <div style="display:flex; align-items:center; gap:12px; background:rgba(8,11,16,0.85); border:1px solid rgba(212,167,68,0.2); border-radius:6px; padding:10px 14px; margin-bottom:12px;">
+          <div class="l2-anvil-slot">
+            ${wpnDef ? getItemIcon(wpnDef) : '⚔️'}
+          </div>
+          <div style="flex:1;">
+            <div style="font-size:13px; font-weight:700; color:#ffd877; font-family:'Cinzel',serif;">${wpnDef ? wpnDef.name : 'Nenhuma Arma Equipada'}</div>
+            <div style="font-size:11px; color:#94a3b8; margin-top:2px;">
+              ${wpnItem?.soulCrystal ? `<span style="color:#34d399; font-weight:bold;">[SA Ativo: ${wpnItem.soulCrystal.name} (Lv.${wpnItem.soulCrystal.level || 1})]</span>` : 'Nenhuma Habilidade Especial engastada nesta arma.'}
+            </div>
+          </div>
         </div>
 
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:10px;">
-          <div style="background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); border-radius:8px; padding:12px;">
-            <strong style="color:#fca5a5; font-size:13px;">🔴 Soul Crystal Vermelho</strong>
-            <div style="font-size:11px; color:#aaa; margin:4px 0 8px 0;">Foco em Crítico e Ataque Físico.</div>
-            <button onclick="window.applySAAction('red', 'focus')" style="width:100%; padding:6px; font-weight:bold; font-size:11px; background:rgba(239,68,68,0.25); border:1px solid #ef4444; color:#fff; border-radius:4px; cursor:pointer; margin-bottom:4px;">Engastar Focus (+Crit)</button>
-            <button onclick="window.applySAAction('red', 'might')" style="width:100%; padding:6px; font-weight:bold; font-size:11px; background:rgba(239,68,68,0.25); border:1px solid #ef4444; color:#fff; border-radius:4px; cursor:pointer;">Engastar Might (+P.Atk)</button>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:10px;">
+          <div style="background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.25); border-radius:6px; padding:10px;">
+            <strong style="color:#fca5a5; font-size:12px; font-family:'Cinzel',serif;">🔴 Runa Rubra (Focus / Might)</strong>
+            <div style="font-size:10px; color:#94a3b8; margin:3px 0 8px 0;">Crítico e Ataque Físico.</div>
+            <button onclick="window.applySAAction('red', 'focus')" class="inv-batch-btn" style="width:100%; padding:6px; font-size:11px; margin-bottom:4px; font-weight:700;">Engastar Focus (+Crit)</button>
+            <button onclick="window.applySAAction('red', 'might')" class="inv-batch-btn" style="width:100%; padding:6px; font-size:11px; font-weight:700;">Engastar Might (+P.Atk)</button>
           </div>
 
-          <div style="background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.3); border-radius:8px; padding:12px;">
-            <strong style="color:#86efac; font-size:13px;">🟢 Soul Crystal Verde</strong>
-            <div style="font-size:11px; color:#aaa; margin:4px 0 8px 0;">Foco em Velocidade e Sobrevivência.</div>
-            <button onclick="window.applySAAction('green', 'acumen')" style="width:100%; padding:6px; font-weight:bold; font-size:11px; background:rgba(34,197,94,0.25); border:1px solid #22c55e; color:#fff; border-radius:4px; cursor:pointer; margin-bottom:4px;">Engastar Acumen (+CastSpd)</button>
-            <button onclick="window.applySAAction('green', 'health')" style="width:100%; padding:6px; font-weight:bold; font-size:11px; background:rgba(34,197,94,0.25); border:1px solid #22c55e; color:#fff; border-radius:4px; cursor:pointer;">Engastar Health (+Max HP)</button>
+          <div style="background:rgba(34,197,94,0.08); border:1px solid rgba(34,197,94,0.25); border-radius:6px; padding:10px;">
+            <strong style="color:#86efac; font-size:12px; font-family:'Cinzel',serif;">🟢 Runa Esmeralda (Acumen / Health)</strong>
+            <div style="font-size:10px; color:#94a3b8; margin:3px 0 8px 0;">Velocidade de Conjuração e Vida.</div>
+            <button onclick="window.applySAAction('green', 'acumen')" class="inv-batch-btn" style="width:100%; padding:6px; font-size:11px; margin-bottom:4px; font-weight:700;">Engastar Acumen (+CastSpd)</button>
+            <button onclick="window.applySAAction('green', 'health')" class="inv-batch-btn" style="width:100%; padding:6px; font-size:11px; font-weight:700;">Engastar Health (+Max HP)</button>
           </div>
 
-          <div style="background:rgba(56,189,248,0.1); border:1px solid rgba(56,189,248,0.3); border-radius:8px; padding:12px;">
-            <strong style="color:#7dd3fc; font-size:13px;">🔵 Soul Crystal Azul</strong>
-            <div style="font-size:11px; color:#aaa; margin:4px 0 8px 0;">Foco em Poder Mágico e Precisão.</div>
-            <button onclick="window.applySAAction('blue', 'empower')" style="width:100%; padding:6px; font-weight:bold; font-size:11px; background:rgba(56,189,248,0.25); border:1px solid #38bdf8; color:#fff; border-radius:4px; cursor:pointer; margin-bottom:4px;">Engastar Empower (+M.Atk)</button>
-            <button onclick="window.applySAAction('blue', 'guidance')" style="width:100%; padding:6px; font-weight:bold; font-size:11px; background:rgba(56,189,248,0.25); border:1px solid #38bdf8; color:#fff; border-radius:4px; cursor:pointer;">Engastar Guidance (+Precisão)</button>
+          <div style="background:rgba(56,189,248,0.08); border:1px solid rgba(56,189,248,0.25); border-radius:6px; padding:10px;">
+            <strong style="color:#7dd3fc; font-size:12px; font-family:'Cinzel',serif;">🔵 Runa Safira (Empower / Guidance)</strong>
+            <div style="font-size:10px; color:#94a3b8; margin:3px 0 8px 0;">Poder Mágico e Precisão.</div>
+            <button onclick="window.applySAAction('blue', 'empower')" class="inv-batch-btn" style="width:100%; padding:6px; font-size:11px; margin-bottom:4px; font-weight:700;">Engastar Empower (+M.Atk)</button>
+            <button onclick="window.applySAAction('blue', 'guidance')" class="inv-batch-btn" style="width:100%; padding:6px; font-size:11px; font-weight:700;">Engastar Guidance (+Precisão)</button>
           </div>
         </div>
       </div>
@@ -4737,29 +4896,41 @@ export function renderForgeMasterwork(container, state) {
   const foundationItems = inv.filter(i => i.foundation && !i.isMasterwork);
   const weapons = inv.filter(i => (getItemDef(i.itemId)?.slot || i.slot) === 'weapon');
 
-  let sealedHtml = sealedItems.map(item => `
-    <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(212,167,68,0.25); border-radius:8px; padding:10px 14px; display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-      <div>
-        <strong style="color:#ffd877;">🔒 ${item.name || item.itemId}</strong>
-        <div style="font-size:11px; color:#aaa;">Taxa de Quebra de Selo: 25.000 Adena</div>
+  let sealedHtml = sealedItems.map(item => {
+    const def = getItemDef(item.itemId) || item;
+    return `
+      <div style="background:rgba(18,24,34,0.9); border:1px solid rgba(212,167,68,0.25); border-radius:6px; padding:10px 14px; display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div class="l2-blueprint-socket" style="width:38px; height:38px; min-width:38px;">${getItemIcon(def)}</div>
+          <div>
+            <strong style="color:#ffd877; font-family:'Cinzel',serif; font-size:13px;">🔒 ${item.name || item.itemId}</strong>
+            <div style="font-size:10px; color:#94a3b8;">Taxa do Ferreiro: 25.000 Adena</div>
+          </div>
+        </div>
+        <button onclick="window.unsealItemAction('${item.uid}')" class="inv-batch-btn" style="padding:6px 14px; font-family:'Cinzel',serif; font-weight:bold; font-size:11px; color:#ffd877; border-color:#d4a744;">
+          🔓 Quebrar Selo
+        </button>
       </div>
-      <button onclick="window.unsealItemAction('${item.uid}')" style="padding:6px 14px; font-family:'Cinzel',serif; font-weight:bold; font-size:11px; background:linear-gradient(180deg,#d4a744,#8a641c); border:1px solid #ffe699; color:#000; border-radius:6px; cursor:pointer;">
-        🔓 Quebrar Selo
-      </button>
-    </div>
-  `).join('');
+    `;
+  }).join('');
 
-  let foundationHtml = foundationItems.map(item => `
-    <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(168,85,247,0.3); border-radius:8px; padding:10px 14px; display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-      <div>
-        <strong style="color:#d8b4fe;">✨ ${item.name || item.itemId} (Alma Ancestral)</strong>
-        <div style="font-size:11px; color:#aaa;">Custo de Polimento: 100.000 Adena</div>
+  let foundationHtml = foundationItems.map(item => {
+    const def = getItemDef(item.itemId) || item;
+    return `
+      <div style="background:rgba(18,24,34,0.9); border:1px solid rgba(168,85,247,0.3); border-radius:6px; padding:10px 14px; display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div class="l2-blueprint-socket" style="width:38px; height:38px; min-width:38px; border-color:#c084fc;">${getItemIcon(def)}</div>
+          <div>
+            <strong style="color:#d8b4fe; font-family:'Cinzel',serif; font-size:13px;">✨ ${item.name || item.itemId} (Alma Ancestral)</strong>
+            <div style="font-size:10px; color:#94a3b8;">Custo de Polimento: 100.000 Adena</div>
+          </div>
+        </div>
+        <button onclick="window.polishMasterworkAction('${item.uid}')" class="inv-batch-btn" style="padding:6px 14px; font-family:'Cinzel',serif; font-weight:bold; font-size:11px; color:#e9d5ff; border-color:#a855f7;">
+          👑 Polir p/ Masterwork
+        </button>
       </div>
-      <button onclick="window.polishMasterworkAction('${item.uid}')" style="padding:6px 14px; font-family:'Cinzel',serif; font-weight:bold; font-size:11px; background:linear-gradient(180deg,#a855f7,#6b21a8); border:1px solid #c084fc; color:#fff; border-radius:6px; cursor:pointer;">
-        👑 Polir p/ Masterwork
-      </button>
-    </div>
-  `).join('');
+    `;
+  }).join('');
 
   const eligibleWeapons = weapons.filter(w => !w.equipped);
   const allItems = D()?.ALL_ITEMS || {};
@@ -4794,24 +4965,27 @@ export function renderForgeMasterwork(container, state) {
     const options = uniqueTargets.map(t => `<option value="${t.id || t.itemId}">${t.name}</option>`).join('');
 
     return `
-      <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(59,130,246,0.3); border-radius:8px; padding:10px 14px; display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; flex-wrap:wrap; gap:10px;">
-        <div>
-          <div style="display:flex; align-items:center; gap:6px;">
-            <span style="font-size:10px; padding:1px 6px; border-radius:4px; background:${gInfo.color || '#888'}22; border:1px solid ${gInfo.color || '#888'}66; color:${gInfo.color || '#fff'}; font-weight:bold;">${gInfo.label || gCode.toUpperCase()}</span>
-            <strong style="color:#93c5fd;">${enchantText}${wName}</strong>
+      <div style="background:rgba(18,24,34,0.9); border:1px solid rgba(59,130,246,0.3); border-radius:6px; padding:10px 14px; display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; flex-wrap:wrap; gap:10px;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div class="l2-blueprint-socket" style="width:38px; height:38px; min-width:38px; border-color:${gInfo.color};">${getItemIcon(curDef)}</div>
+          <div>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <span style="font-size:9px; padding:1px 5px; border-radius:3px; background:${gInfo.color || '#888'}22; border:1px solid ${gInfo.color || '#888'}66; color:${gInfo.color || '#fff'}; font-weight:bold;">${gInfo.label || gCode.toUpperCase()}</span>
+              <strong style="color:#93c5fd; font-family:'Cinzel',serif; font-size:13px;">${enchantText}${wName}</strong>
+            </div>
+            <div style="font-size:10px; color:#94a3b8; margin-top:2px;">Custo de Troca: 150.000 Adena</div>
           </div>
-          <div style="font-size:11px; color:#aaa; margin-top:3px;">Custo de Troca: 150.000 Adena</div>
         </div>
         <div style="display:flex; gap:8px; align-items:center;">
           ${uniqueTargets.length > 0 ? `
-            <select id="swap-select-${w.uid}" style="background:rgba(0,0,0,0.6); border:1px solid rgba(59,130,246,0.5); color:#fff; padding:6px 10px; border-radius:6px; font-size:12px; max-width:200px;">
+            <select id="swap-select-${w.uid}" style="background:#0c1017; border:1px solid rgba(59,130,246,0.4); color:#ece4d3; padding:5px 8px; border-radius:4px; font-size:11px; max-width:180px;">
               ${options}
             </select>
-            <button onclick="const sel = document.getElementById('swap-select-${w.uid}'); if (sel && sel.value) { window.swapWeaponSameGradeAction('${w.uid}', sel.value); }" style="padding:6px 14px; font-family:'Cinzel',serif; font-weight:bold; font-size:11px; background:linear-gradient(180deg,#3b82f6,#1d4ed8); border:1px solid #60a5fa; color:#fff; border-radius:6px; cursor:pointer;">
+            <button onclick="const sel = document.getElementById('swap-select-${w.uid}'); if (sel && sel.value) { window.swapWeaponSameGradeAction('${w.uid}', sel.value); }" class="inv-batch-btn" style="padding:5px 12px; font-family:'Cinzel',serif; font-weight:bold; font-size:11px; color:#93c5fd; border-color:#3b82f6;">
               🔄 Trocar
             </button>
           ` : `
-            <span style="font-size:11px; color:#888;">Sem outras armas deste grau</span>
+            <span style="font-size:10px; color:#64748b;">Sem armas deste grau</span>
           `}
         </div>
       </div>
@@ -4819,31 +4993,31 @@ export function renderForgeMasterwork(container, state) {
   }).join('');
 
   container.innerHTML = `
-    <div style="padding:10px; color:#fff; font-family:sans-serif;">
-      <!-- Pushkin Banner -->
-      <div style="background:linear-gradient(180deg, rgba(20,26,42,0.95), rgba(10,14,24,0.95)); border:1px solid rgba(212,167,68,0.4); border-radius:12px; padding:16px; margin-bottom:16px;">
-        <h3 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:18px;">⚒️ Ferreiro Imperial Pushkin (Giran Square)</h3>
-        <p style="margin:4px 0 0 0; font-size:12px; color:#aaa;">
-          Mestre em metalurgia ancestral: quebra de selos de armaduras B/A/S, polimento de peças Foundation em Masterwork e troca de armas de mesmo grau.
+    <div class="l2-workshop-panel">
+      <!-- Banner Pushkin -->
+      <div class="l2-workshop-altar">
+        <h3 class="l2-workshop-title">⚒️ Bigorna do Ferreiro Imperial Pushkin (Giran)</h3>
+        <p class="l2-workshop-subtitle">
+          Mestre da metalurgia de Aden: quebra de selos de armaduras B/A/S, polimento de peças Foundation em Masterwork e troca de armas de mesmo grau.
         </p>
       </div>
 
       <!-- Unseal Section -->
-      <div style="margin-bottom:16px;">
-        <h4 style="margin:0 0 8px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">🔒 Deslacrar Equipamentos Selados (Unseal)</h4>
-        ${sealedHtml || '<div style="font-size:12px; color:#aaa; background:rgba(0,0,0,0.3); padding:10px; border-radius:6px;">Nenhum equipamento selado encontrado no inventário.</div>'}
+      <div style="margin-bottom:14px;">
+        <h4 style="margin:0 0 6px 0; font-family:'Cinzel',serif; color:#f5df93; font-size:13px; font-weight:700;">🔒 Deslacrar Equipamentos Selados (Unseal)</h4>
+        ${sealedHtml || '<div style="font-size:11px; color:#64748b; background:rgba(8,11,16,0.85); padding:10px 12px; border-radius:6px; border:1px dashed rgba(255,255,255,0.1);">Nenhum equipamento selado na mochila.</div>'}
       </div>
 
       <!-- Masterwork Section -->
-      <div style="margin-bottom:16px;">
-        <h4 style="margin:0 0 8px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">👑 Polimento Masterwork (Peças Foundation)</h4>
-        ${foundationHtml || '<div style="font-size:12px; color:#aaa; background:rgba(0,0,0,0.3); padding:10px; border-radius:6px;">Nenhuma peça com Alma Ancestral (Foundation) encontrada. Forje itens na aba Forja para obter Foundation!</div>'}
+      <div style="margin-bottom:14px;">
+        <h4 style="margin:0 0 6px 0; font-family:'Cinzel',serif; color:#f5df93; font-size:13px; font-weight:700;">👑 Polimento Masterwork (Peças Foundation)</h4>
+        ${foundationHtml || '<div style="font-size:11px; color:#64748b; background:rgba(8,11,16,0.85); padding:10px 12px; border-radius:6px; border:1px dashed rgba(255,255,255,0.1);">Nenhuma peça Foundation na mochila. Forje itens na aba Criação Geral para obter peças Foundation!</div>'}
       </div>
 
       <!-- Blacksmith Weapon Swap Section -->
       <div>
-        <h4 style="margin:0 0 8px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">🔄 Troca de Armas de Mesmo Grau (Blacksmith Weapon Swap)</h4>
-        ${swapHtml || '<div style="font-size:12px; color:#aaa; background:rgba(0,0,0,0.3); padding:10px; border-radius:6px;">Nenhuma arma desequipada no inventário disponível para troca.</div>'}
+        <h4 style="margin:0 0 6px 0; font-family:'Cinzel',serif; color:#f5df93; font-size:13px; font-weight:700;">🔄 Troca de Armas de Mesmo Grau (Blacksmith Swap)</h4>
+        ${swapHtml || '<div style="font-size:11px; color:#64748b; background:rgba(8,11,16,0.85); padding:10px 12px; border-radius:6px; border:1px dashed rgba(255,255,255,0.1);">Nenhuma arma desequipada na mochila disponível para troca.</div>'}
       </div>
     </div>
   `;
@@ -4855,31 +5029,37 @@ export function renderForgeTattoos(container, state) {
   let slotsHtml = dyes.map((d, idx) => {
     if (d) {
       const canUpgrade = d.stage < 5;
+      const plusStat = Object.keys(d.plus || {})[0] || 'str';
+      const plusVal = d.plus ? d.plus[plusStat] : 1;
+      const minusStat = Object.keys(d.minus || {})[0] || 'con';
+      const minusVal = d.minus ? d.minus[minusStat] : 1;
+
       return `
-        <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(168,85,247,0.4); border-radius:10px; padding:12px; display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <div style="background:rgba(18,24,34,0.9); border:1px solid rgba(168,85,247,0.4); border-radius:6px; padding:10px 12px; display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
           <div>
-            <strong style="color:#d8b4fe; font-size:13px;">Slot ${idx + 1}: ${d.name}</strong>
-            <div style="font-size:11px; color:#aaa; margin-top:2px;">
-              Bônus: <strong style="color:#4ade80;">${JSON.stringify(d.plus)}</strong> · Penalidade: <strong style="color:#ef4444;">${JSON.stringify(d.minus)}</strong>
+            <strong style="color:#d8b4fe; font-size:12px; font-family:'Cinzel',serif;">Nó ${idx + 1}: ${d.name} (Nv. ${d.stage}/5)</strong>
+            <div class="l2-stat-chip-row">
+              <span class="l2-stat-chip-pos">+${plusVal} ${plusStat.toUpperCase()}</span>
+              <span class="l2-stat-chip-neg">-${minusVal} ${minusStat.toUpperCase()}</span>
             </div>
           </div>
-          <div style="display:flex; gap:6px;">
+          <div style="display:flex; gap:5px;">
             ${canUpgrade ? `
-              <button onclick="window.upgradeDyeAction(${idx})" style="padding:6px 12px; font-weight:bold; font-size:11px; background:linear-gradient(180deg,#34d399,#059669); border:1px solid #6ee7b7; color:#000; border-radius:6px; cursor:pointer;">
-                ⚡ Evoluir p/ Estágio ${d.stage + 1}
+              <button onclick="window.upgradeDyeAction(${idx})" class="inv-batch-btn" style="padding:4px 8px; font-size:10px; color:#34d399; border-color:#10b981; font-weight:bold;">
+                ⚡ Nv. ${d.stage + 1}
               </button>
-            ` : '<span style="font-size:11px; color:#ffd877; font-weight:bold; padding:4px 8px;">👑 Estágio Máximo</span>'}
-            <button onclick="window.removeDyeAction(${idx})" style="padding:6px 10px; font-weight:bold; font-size:11px; background:rgba(239,68,68,0.2); border:1px solid #ef4444; color:#fca5a5; border-radius:6px; cursor:pointer;">
-              🗑️ Remover
+            ` : '<span style="font-size:10px; color:#ffd877; font-weight:bold; padding:2px 6px;">👑 Máximo</span>'}
+            <button onclick="window.removeDyeAction(${idx})" class="inv-batch-btn" style="padding:4px 8px; font-size:10px; color:#fca5a5; border-color:#ef4444;">
+              🗑️
             </button>
           </div>
         </div>
       `;
     } else {
       return `
-        <div style="background:rgba(0,0,0,0.3); border:1px dashed rgba(255,255,255,0.2); border-radius:10px; padding:12px; display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-          <span style="color:#aaa; font-size:13px;">Slot ${idx + 1}: [Vazio]</span>
-          <span style="font-size:11px; color:#777;">Grave uma tatuagem abaixo</span>
+        <div style="background:rgba(8,11,16,0.6); border:1px dashed rgba(212,167,68,0.25); border-radius:6px; padding:10px 12px; display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <span style="color:#94a3b8; font-size:12px; font-family:'Cinzel',serif;">Nó ${idx + 1}: [Vazio]</span>
+          <span style="font-size:10px; color:#64748b;">Grave uma tinta sagrada abaixo</span>
         </div>
       `;
     }
@@ -4895,31 +5075,31 @@ export function renderForgeTattoos(container, state) {
   ];
 
   const catalogHtml = catalog.map(c => `
-    <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(212,167,68,0.25); border-radius:8px; padding:10px 12px; display:flex; justify-content:space-between; align-items:center;">
+    <div style="background:rgba(18,24,34,0.9); border:1px solid rgba(212,167,68,0.2); border-radius:6px; padding:8px 12px; display:flex; justify-content:space-between; align-items:center;">
       <div>
-        <strong style="color:#f4d58a; font-size:13px;">${c.name}</strong>
-        <div style="font-size:11px; color:#aaa;">Inicia no Estágio 1 (+1 / -1) · Custo: 10.000 Adena</div>
+        <strong style="color:#f5df93; font-size:12px; font-family:'Cinzel',serif;">${c.name}</strong>
+        <div style="font-size:10px; color:#94a3b8;">Estágio 1 (+1 / -1) · Custo: 10.000 Adena</div>
       </div>
-      <button onclick="window.applyInitialDyeAction('${c.key}')" style="padding:6px 12px; font-weight:bold; font-size:11px; background:linear-gradient(180deg,#a855f7,#6b21a8); border:1px solid #c084fc; color:#fff; border-radius:6px; cursor:pointer;">
-        🖊️ Gravar no Slot Livre
+      <button onclick="window.applyInitialDyeAction('${c.key}')" class="inv-batch-btn" style="padding:5px 10px; font-size:10px; font-weight:bold; color:#d8b4fe; border-color:#a855f7;">
+        🖊️ Gravar
       </button>
     </div>
   `).join('');
 
   container.innerHTML = `
-    <div style="padding:10px; color:#fff; font-family:sans-serif;">
-      <div style="background:linear-gradient(180deg, rgba(30,16,48,0.95), rgba(14,8,26,0.95)); border:1px solid rgba(168,85,247,0.4); border-radius:12px; padding:16px; margin-bottom:16px;">
-        <h3 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:18px;">🖊️ Symbol Maker: Tatuagens Sagradas em Estágios (1 a 5)</h3>
-        <p style="margin:4px 0 0 0; font-size:12px; color:#aaa;">
-          Grave símbolos sagrados no corpo do herói. Inicie no Estágio 1 (+1/-1) e aprimore com pós mágicos até o Estágio 5 (+5/-5). Teto estrito de +5 por atributo líquido!
+    <div class="l2-workshop-panel">
+      <div class="l2-workshop-altar">
+        <h3 class="l2-workshop-title">🖊️ Altar de Tatuagens Sagradas (Symbol Maker)</h3>
+        <p class="l2-workshop-subtitle">
+          Grave até 3 símbolos rúnicos de Henna. Inicie no Estágio 1 (+1/-1) e aprimore até o Estágio 5 (+5/-5). Teto estrito de +5 por atributo líquido!
         </p>
       </div>
 
-      <h4 style="margin:0 0 8px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">✨ Slots de Símbolos Ativos (Máx 3)</h4>
-      <div style="margin-bottom:16px;">${slotsHtml}</div>
+      <h4 style="margin:0 0 6px 0; font-family:'Cinzel',serif; color:#f5df93; font-size:13px; font-weight:700;">✨ Nós Rúnicos do Herói (Máx 3)</h4>
+      <div style="margin-bottom:14px;">${slotsHtml}</div>
 
-      <h4 style="margin:0 0 8px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">🛍️ Tintas Sagradas Disponíveis</h4>
-      <div style="display:flex; flex-direction:column; gap:8px;">${catalogHtml}</div>
+      <h4 style="margin:0 0 6px 0; font-family:'Cinzel',serif; color:#f5df93; font-size:13px; font-weight:700;">🛍️ Tintas Sagradas de Aden</h4>
+      <div style="display:flex; flex-direction:column; gap:6px;">${catalogHtml}</div>
     </div>
   `;
 }
@@ -4936,53 +5116,49 @@ export function renderForgeElemental(container, state) {
     const s = getItemDef(item.itemId)?.slot || item.slot;
     const isWpn = s === 'weapon';
     const cap = isWpn ? 300 : 120;
-    const equippedBadge = item.equipped ? '<span style="color:#ffd877; font-size:11px; margin-left:6px; font-weight:bold;">[Equipado]</span>' : '';
+    const equippedBadge = item.equipped ? '<span style="color:#ffd877; font-size:10px; margin-left:6px; font-weight:bold;">[Equipado]</span>' : '';
+    const def = getItemDef(item.itemId) || item;
 
     return `
-      <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(212,167,68,0.25); border-radius:10px; padding:12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-        <div>
-          <strong style="color:#ffd877; font-size:14px;">${item.name || item.itemId}</strong>${equippedBadge}
-          <div style="font-size:11px; color:#aaa; margin-top:2px;">
-            Atributo Atual: <strong style="color:#38bdf8;">${elem.element.toUpperCase()} +${elem.val}</strong> (Teto: +${cap})
+      <div style="background:rgba(18,24,34,0.9); border:1px solid rgba(212,167,68,0.25); border-radius:6px; padding:10px 12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div class="l2-blueprint-socket" style="width:38px; height:38px; min-width:38px;">${getItemIcon(def)}</div>
+          <div>
+            <strong style="color:#ffd877; font-size:13px; font-family:'Cinzel',serif;">${item.name || item.itemId}</strong>${equippedBadge}
+            <div style="font-size:10px; color:#94a3b8; margin-top:2px;">
+              Atributo Atual: <strong style="color:#38bdf8;">${elem.element.toUpperCase()} +${elem.val}</strong> (Teto: +${cap})
+            </div>
           </div>
         </div>
-        <div style="display:flex; gap:6px; flex-wrap:wrap;">
-          <button onclick="window.applyElementalAction('${item.uid}', 'fire')" style="padding:6px 10px; font-weight:bold; font-size:11px; background:rgba(239,68,68,0.2); border:1px solid #ef4444; color:#fca5a5; border-radius:6px; cursor:pointer;">🔥 Fogo (+20)</button>
-          <button onclick="window.applyElementalAction('${item.uid}', 'water')" style="padding:6px 10px; font-weight:bold; font-size:11px; background:rgba(59,130,246,0.2); border:1px solid #3b82f6; color:#93c5fd; border-radius:6px; cursor:pointer;">💧 Água (+20)</button>
-          <button onclick="window.applyElementalAction('${item.uid}', 'wind')" style="padding:6px 10px; font-weight:bold; font-size:11px; background:rgba(34,197,94,0.2); border:1px solid #22c55e; color:#86efac; border-radius:6px; cursor:pointer;">🌪️ Vento (+20)</button>
-          <button onclick="window.applyElementalAction('${item.uid}', 'earth')" style="padding:6px 10px; font-weight:bold; font-size:11px; background:rgba(217,119,6,0.2); border:1px solid #d97706; color:#fde68a; border-radius:6px; cursor:pointer;">🌍 Terra (+20)</button>
-          <button onclick="window.applyElementalAction('${item.uid}', 'holy')" style="padding:6px 10px; font-weight:bold; font-size:11px; background:rgba(234,179,8,0.2); border:1px solid #eab308; color:#fef08a; border-radius:6px; cursor:pointer;">✨ Sagrado (+20)</button>
-          <button onclick="window.applyElementalAction('${item.uid}', 'dark')" style="padding:6px 10px; font-weight:bold; font-size:11px; background:rgba(168,85,247,0.2); border:1px solid #a855f7; color:#d8b4fe; border-radius:6px; cursor:pointer;">🌑 Trevas (+20)</button>
+        <div style="display:flex; gap:4px; flex-wrap:wrap;">
+          <button onclick="window.applyElementalAction('${item.uid}', 'fire')" class="inv-batch-btn" style="padding:4px 8px; font-size:10px; color:#fca5a5; border-color:#ef4444;">🔥 Fogo (+20)</button>
+          <button onclick="window.applyElementalAction('${item.uid}', 'water')" class="inv-batch-btn" style="padding:4px 8px; font-size:10px; color:#93c5fd; border-color:#3b82f6;">💧 Água (+20)</button>
+          <button onclick="window.applyElementalAction('${item.uid}', 'wind')" class="inv-batch-btn" style="padding:4px 8px; font-size:10px; color:#86efac; border-color:#22c55e;">🌪️ Vento (+20)</button>
+          <button onclick="window.applyElementalAction('${item.uid}', 'earth')" class="inv-batch-btn" style="padding:4px 8px; font-size:10px; color:#fde68a; border-color:#d97706;">🌍 Terra (+20)</button>
+          <button onclick="window.applyElementalAction('${item.uid}', 'holy')" class="inv-batch-btn" style="padding:4px 8px; font-size:10px; color:#fef08a; border-color:#eab308;">✨ Sagrado (+20)</button>
+          <button onclick="window.applyElementalAction('${item.uid}', 'dark')" class="inv-batch-btn" style="padding:4px 8px; font-size:10px; color:#d8b4fe; border-color:#a855f7;">🌑 Trevas (+20)</button>
         </div>
       </div>
     `;
   }).join('');
 
   container.innerHTML = `
-    <div style="padding:10px; color:#fff; font-family:sans-serif;">
-      <!-- Elemental Wheel Guide -->
-      <div style="background:linear-gradient(180deg, rgba(20,26,42,0.95), rgba(10,14,24,0.95)); border:1px solid rgba(212,167,68,0.4); border-radius:12px; padding:16px; margin-bottom:16px;">
-        <h3 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:18px;">🔥 Roda dos 6 Atributos Elementais</h3>
-        <p style="margin:4px 0 10px 0; font-size:12px; color:#aaa;">
-          Incuta atributos em armas (até 300) e armaduras (até 120). Elementos opostos causam dano massivo amplificado no PvE e PvP!
+    <div class="l2-workshop-panel">
+      <!-- Elemental Guide -->
+      <div class="l2-workshop-altar">
+        <h3 class="l2-workshop-title">🔥 Altar dos 6 Elementos Ancestrais</h3>
+        <p class="l2-workshop-subtitle">
+          Incuta atributos em armas (até +300) e armaduras (até +120). Elementos opostos causam dano amplificado:
         </p>
-
-        <!-- Drop Sources Guide -->
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:8px;">
-          <div style="background:rgba(239,68,68,0.15); border:1px solid #ef4444; padding:8px 10px; border-radius:6px; font-size:11px;">
-            🔥 <strong>Fogo ↔ Água 💧</strong><br><span style="color:#aaa;">Drop: Forge of the Gods / Garden of Eva</span>
-          </div>
-          <div style="background:rgba(34,197,94,0.15); border:1px solid #22c55e; padding:8px 10px; border-radius:6px; font-size:11px;">
-            🌪️ <strong>Vento ↔ Terra 🌍</strong><br><span style="color:#aaa;">Drop: Dragon Valley / Mithril Mines</span>
-          </div>
-          <div style="background:rgba(234,179,8,0.15); border:1px solid #eab308; padding:8px 10px; border-radius:6px; font-size:11px;">
-            ✨ <strong>Sagrado ↔ Trevas 🌑</strong><br><span style="color:#aaa;">Drop: Monastery of Silence / Imperial Tomb</span>
-          </div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;">
+          <span class="l2-stat-pill">🔥 Fogo ↔ Água 💧</span>
+          <span class="l2-stat-pill">🌪️ Vento ↔ Terra 🌍</span>
+          <span class="l2-stat-pill">✨ Sagrado ↔ Trevas 🌑</span>
         </div>
       </div>
 
-      <h4 style="margin:0 0 8px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">🗡️ Equipamentos no Inventário</h4>
-      ${equipsHtml || '<div style="font-size:12px; color:#aaa;">Nenhuma arma ou armadura livre no inventário.</div>'}
+      <h4 style="margin:0 0 6px 0; font-family:'Cinzel',serif; color:#f5df93; font-size:13px; font-weight:700;">🗡️ Equipamentos Elegíveis</h4>
+      ${equipsHtml || '<div style="font-size:11px; color:#64748b; background:rgba(8,11,16,0.85); padding:10px 12px; border-radius:6px;">Nenhuma arma ou armadura livre na mochila.</div>'}
     </div>
   `;
 }
@@ -4997,43 +5173,44 @@ export function renderForgeBelts(container, state) {
   let beltsOptionsHtml = belts.map(b => `<option value="${b.uid}">${b.name || b.itemId} (+${b.enchant || 0})${b.equipped ? ' [Equipado]' : ''}</option>`).join('');
 
   container.innerHTML = `
-    <div style="padding:10px; color:#fff; font-family:sans-serif;">
+    <div class="l2-workshop-panel">
       <!-- Belts Header -->
-      <div style="background:linear-gradient(180deg, rgba(20,26,42,0.95), rgba(10,14,24,0.95)); border:1px solid rgba(212,167,68,0.4); border-radius:12px; padding:16px; margin-bottom:16px;">
-        <h3 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:18px;">🎗️ Síntese de Cintos com Duplicatas (30% de Sucesso)</h3>
-        <p style="margin:4px 0 0 0; font-size:12px; color:#aaa;">
-          Junte <strong>2 Cintos Idênticos</strong> na bigorna imperial. Há <strong>30% de chance de sucesso</strong> para elevar o cinto e rolar bônus raros (+Max HP %, +P.Def, +Limite de Carga e +Dano PvP). Em caso de falha, apenas a cópia secundária é destruída!
+      <div class="l2-workshop-altar">
+        <h3 class="l2-workshop-title">🎗️ Bigorna de Síntese de Cintos</h3>
+        <p class="l2-workshop-subtitle">
+          Junte <strong>2 Cintos Idênticos</strong> na bigorna imperial. Há <strong>30% de chance canônica de sucesso</strong> para elevar o cinto e despertar bônus de Max HP %, P.Def e Dano PvP.
         </p>
       </div>
 
       ${belts.length >= 2 ? `
-        <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(212,167,68,0.3); border-radius:10px; padding:16px; max-width:500px; margin-bottom:16px;">
+        <div style="background:rgba(18,24,34,0.9); border:1px solid rgba(212,167,68,0.3); border-radius:8px; padding:14px; max-width:480px; margin-bottom:14px;">
+          <div style="margin-bottom:10px;">
+            <label style="font-size:11px; color:#94a3b8; display:block; margin-bottom:4px; font-family:'Cinzel',serif;">1. Cinto Primário (Alvo do Upgrade):</label>
+            <select id="belt-primary-select" style="width:100%; padding:6px 10px; background:#0c1017; color:#ece4d3; border:1px solid rgba(212,167,68,0.3); border-radius:4px; font-size:11px;">
+              ${beltsOptionsHtml}
+            </select>
+          </div>
+
           <div style="margin-bottom:12px;">
-            <label style="font-size:12px; color:#aaa; display:block; margin-bottom:4px;">1. Cinto Primário (Alvo do Upgrade):</label>
-            <select id="belt-primary-select" style="width:100%; padding:8px; background:#0e1320; color:#fff; border:1px solid rgba(212,167,68,0.3); border-radius:6px;">
+            <label style="font-size:11px; color:#94a3b8; display:block; margin-bottom:4px; font-family:'Cinzel',serif;">2. Cinto Secundário (Sacrifício Idêntico):</label>
+            <select id="belt-secondary-select" style="width:100%; padding:6px 10px; background:#0c1017; color:#ece4d3; border:1px solid rgba(212,167,68,0.3); border-radius:4px; font-size:11px;">
               ${beltsOptionsHtml}
             </select>
           </div>
 
-          <div style="margin-bottom:16px;">
-            <label style="font-size:12px; color:#aaa; display:block; margin-bottom:4px;">2. Cinto Secundário (Sacrifício Idêntico):</label>
-            <select id="belt-secondary-select" style="width:100%; padding:8px; background:#0e1320; color:#fff; border:1px solid rgba(212,167,68,0.3); border-radius:6px;">
-              ${beltsOptionsHtml}
-            </select>
+          <div style="font-size:11px; color:#ffd877; margin-bottom:12px; display:flex; justify-content:space-between;">
+            <span>🪙 Custo: <strong>100.000 Adena</strong></span>
+            <span>Chance: <strong style="color:#34d399;">30% Canônica</strong></span>
           </div>
 
-          <div style="font-size:12px; color:#ffd877; margin-bottom:14px;">
-            🪙 Custo de Síntese: <strong>100.000 Adena</strong> · Chance: <strong style="color:#34d399;">30%</strong>
-          </div>
-
-          <button onclick="window.compoundBeltsWithDuplicateAction()" style="width:100%; padding:12px; font-family:'Cinzel',serif; font-weight:bold; font-size:13px; background:linear-gradient(180deg,#d4a744,#8a641c); border:1px solid #ffe699; color:#000; border-radius:6px; cursor:pointer;">
-            ✨ SINTETIZAR CINTOS (30% CHANCE)
+          <button onclick="window.compoundBeltsWithDuplicateAction()" class="l2-forge-action-btn is-ready">
+            ✨ SINTETIZAR CINTOS
           </button>
         </div>
       ` : `
-        <div style="background:rgba(0,0,0,0.3); border:1px dashed rgba(212,167,68,0.3); border-radius:10px; padding:20px; text-align:center;">
-          <div style="font-size:14px; color:#ffd877; margin-bottom:4px;">Cintos Insuficientes na Mochila (${belts.length}/2)</div>
-          <div style="font-size:12px; color:#aaa;">Você precisa de ao menos 2 cintos idênticos no inventário para realizar a fusão.</div>
+        <div style="background:rgba(8,11,16,0.85); border:1px dashed rgba(212,167,68,0.25); border-radius:8px; padding:20px; text-align:center;">
+          <div style="font-size:13px; color:#ffd877; margin-bottom:4px; font-family:'Cinzel',serif;">Cintos Insuficientes na Mochila (${belts.length}/2)</div>
+          <div style="font-size:11px; color:#94a3b8;">Você precisa de ao menos 2 cintos idênticos no inventário para realizar a fusão.</div>
         </div>
       `}
     </div>
@@ -5047,43 +5224,29 @@ export function renderForgeLifestones(container, state) {
     return s === 'weapon';
   });
 
-  const dropTable = [
-    { grade: 'Comum', source: 'Monstros de Mapa Comum', glow: '1% Brilho', skill: '2% Chance de Skill' },
-    { grade: 'Mid-Grade', source: 'Monstros Campeões', glow: '5% Brilho', skill: '5% Chance de Skill' },
-    { grade: 'High-Grade', source: 'Chefes de Dungeon & Masmorras', glow: '15% Brilho', skill: '12% Chance de Skill' },
-    { grade: 'Top-Grade', source: 'Raid Bosses & Epic Bosses', glow: '40% Brilho', skill: '25% Chance de Skill' }
-  ];
-
-  const dropTableHtml = dropTable.map(d => `
-    <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(168,85,247,0.25); border-radius:8px; padding:10px 12px; display:flex; justify-content:space-between; align-items:center;">
-      <div>
-        <strong style="color:#d8b4fe; font-size:13px;">💎 Life Stone ${d.grade}</strong>
-        <div style="font-size:11px; color:#aaa;">Drop: ${d.source}</div>
-      </div>
-      <div style="text-align:right; font-size:11px;">
-        <span style="color:#38bdf8; font-weight:bold;">${d.glow}</span> · <span style="color:#34d399; font-weight:bold;">${d.skill}</span>
-      </div>
-    </div>
-  `).join('');
-
   let weaponsHtml = weapons.map(w => {
     const aug = w.augmentation;
-    const equippedBadge = w.equipped ? '<span style="color:#ffd877; font-size:11px; margin-left:6px; font-weight:bold;">[Equipada]</span>' : '';
+    const equippedBadge = w.equipped ? '<span style="color:#ffd877; font-size:10px; margin-left:6px; font-weight:bold;">[Equipada]</span>' : '';
+    const def = getItemDef(w.itemId) || w;
+
     return `
-      <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(212,167,68,0.25); border-radius:10px; padding:12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-        <div>
-          <strong style="color:#ffd877; font-size:14px;">${w.name || w.itemId}</strong>${equippedBadge}
-          <div style="font-size:11px; color:#aaa; margin-top:2px;">
-            Augment: <strong style="color:${aug ? '#c084fc' : '#777'};">${aug ? `+${aug.atkBonus} P.Atk, +${aug.critBonus} Crit ${aug.skill ? `[${aug.skill.name}]` : ''}` : 'Nenhum'}</strong>
+      <div style="background:rgba(18,24,34,0.9); border:1px solid rgba(212,167,68,0.25); border-radius:6px; padding:10px 12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div class="l2-blueprint-socket" style="width:38px; height:38px; min-width:38px;">${getItemIcon(def)}</div>
+          <div>
+            <strong style="color:#ffd877; font-size:13px; font-family:'Cinzel',serif;">${w.name || w.itemId}</strong>${equippedBadge}
+            <div style="font-size:10px; color:#94a3b8; margin-top:2px;">
+              Augment: <strong style="color:${aug ? '#c084fc' : '#64748b'};">${aug ? `+${aug.atkBonus} P.Atk, +${aug.critBonus} Crit ${aug.skill ? `[${aug.skill.name}]` : ''}` : 'Nenhum'}</strong>
+            </div>
           </div>
         </div>
-        <div style="display:flex; gap:6px;">
-          <button onclick="window.applyAugmentAction('${w.uid}', 'top')" style="padding:6px 12px; font-weight:bold; font-size:11px; background:linear-gradient(180deg,#a855f7,#6b21a8); border:1px solid #c084fc; color:#fff; border-radius:6px; cursor:pointer;">
+        <div style="display:flex; gap:5px;">
+          <button onclick="window.applyAugmentAction('${w.uid}', 'top')" class="inv-batch-btn" style="padding:5px 12px; font-size:10px; font-weight:bold; color:#e9d5ff; border-color:#a855f7;">
             💎 Augment Top-Grade
           </button>
           ${aug ? `
-            <button onclick="window.removeAugmentAction('${w.uid}')" style="padding:6px 10px; font-weight:bold; font-size:11px; background:rgba(239,68,68,0.2); border:1px solid #ef4444; color:#fca5a5; border-radius:6px; cursor:pointer;">
-              🗑️ Remover
+            <button onclick="window.removeAugmentAction('${w.uid}')" class="inv-batch-btn" style="padding:5px 8px; font-size:10px; color:#fca5a5; border-color:#ef4444;">
+              🗑️
             </button>
           ` : ''}
         </div>
@@ -5092,19 +5255,16 @@ export function renderForgeLifestones(container, state) {
   }).join('');
 
   container.innerHTML = `
-    <div style="padding:10px; color:#fff; font-family:sans-serif;">
-      <div style="background:linear-gradient(180deg, rgba(30,16,48,0.95), rgba(14,8,26,0.95)); border:1px solid rgba(168,85,247,0.4); border-radius:12px; padding:16px; margin-bottom:16px;">
-        <h3 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:18px;">💎 Augmentation &amp; Life Stones Ancestrais</h3>
-        <p style="margin:4px 0 0 0; font-size:12px; color:#aaa;">
+    <div class="l2-workshop-panel">
+      <div class="l2-workshop-altar">
+        <h3 class="l2-workshop-title">💎 Câmara de Augmentation (Life Stones)</h3>
+        <p class="l2-workshop-subtitle">
           Incuta Life Stones nas armas para despertar atributos passivos secundários e Item Skills poderosas.
         </p>
       </div>
 
-      <h4 style="margin:0 0 8px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">📊 Tabela de Life Stones &amp; Onde Obter</h4>
-      <div style="display:flex; flex-direction:column; gap:6px; margin-bottom:16px;">${dropTableHtml}</div>
-
-      <h4 style="margin:0 0 8px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">🗡️ Armas no Inventário</h4>
-      ${weaponsHtml || '<div style="font-size:12px; color:#aaa;">Nenhuma arma livre no inventário.</div>'}
+      <h4 style="margin:0 0 6px 0; font-family:'Cinzel',serif; color:#f5df93; font-size:13px; font-weight:700;">🗡️ Armas Disponíveis</h4>
+      ${weaponsHtml || '<div style="font-size:11px; color:#64748b; background:rgba(8,11,16,0.85); padding:10px 12px; border-radius:6px;">Nenhuma arma livre no inventário.</div>'}
     </div>
   `;
 }
@@ -5118,24 +5278,25 @@ export function renderForgeRandomCraft(container, state, callbacks = {}) {
   let slotsHtml = '';
   if (charge >= 100 && slots.length > 0) {
     slotsHtml = `
-      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:10px; margin-top:14px;">
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:10px; margin-top:12px;">
         ${slots.map((s, idx) => {
           const def = allItems[s.itemId] || { name: s.itemId, slot: 'relic' };
           const gradeInfo = getItemGrade(def);
           return `
-            <div style="background:rgba(0,0,0,0.6); border:1px solid ${gradeInfo.color}; border-radius:10px; padding:12px; text-align:center; display:flex; flex-direction:column; align-items:center; justify-content:space-between; gap:8px;">
-              <div style="width:48px; height:48px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.05); border-radius:8px;">
+            <div style="background:rgba(8,11,16,0.9); border:1px solid ${gradeInfo.color}; border-radius:8px; padding:12px; text-align:center; display:flex; flex-direction:column; align-items:center; justify-content:space-between; gap:8px;">
+              <div class="l2-blueprint-socket" style="border-color:${gradeInfo.color};">
                 ${getItemIcon(def)}
               </div>
               <div>
-                <div style="font-weight:bold; font-size:13px; color:#fff;">${def.name} ${s.count > 1 ? `(${s.count}x)` : ''}</div>
-                <div style="font-size:11px; color:${gradeInfo.color}; font-weight:bold;">${gradeInfo.label}</div>
+                <div style="font-weight:bold; font-size:12px; color:#f5df93; font-family:'Cinzel',serif;">${def.name} ${s.count > 1 ? `(${s.count}x)` : ''}</div>
+                <div style="font-size:10px; color:${gradeInfo.color}; font-weight:bold;">${gradeInfo.label}</div>
               </div>
               <button
                 onclick="window.claimRandomCraftReward(${idx})"
-                style="width:100%; padding:8px; font-family:'Cinzel',serif; font-weight:bold; font-size:11px; background:linear-gradient(180deg,#a855f7,#6b21a8); border:1px solid #c084fc; color:#fff; border-radius:6px; cursor:pointer;"
+                class="l2-forge-action-btn is-ready"
+                style="padding:6px 10px; font-size:10px;"
               >
-                🎁 RESGATAR ESTE ITEM
+                🎁 RESGATAR ITEM
               </button>
             </div>
           `;
@@ -5144,18 +5305,19 @@ export function renderForgeRandomCraft(container, state, callbacks = {}) {
     `;
   } else {
     slotsHtml = `
-      <div style="background:rgba(0,0,0,0.4); border:1px dashed rgba(168,85,247,0.3); border-radius:10px; padding:24px; text-align:center; margin-top:14px;">
-        <div style="font-size:32px; margin-bottom:8px;">🎲</div>
-        <div style="font-size:14px; font-weight:bold; color:#e9d5ff; margin-bottom:4px;">Roleta Mística em Carga (${charge}/100 Pontos)</div>
-        <div style="font-size:12px; color:var(--text-muted); max-width:500px; margin:0 auto 16px auto;">
+      <div style="background:rgba(8,11,16,0.85); border:1px dashed rgba(168,85,247,0.3); border-radius:8px; padding:20px; text-align:center; margin-top:12px;">
+        <div style="font-size:28px; margin-bottom:6px;">🎲</div>
+        <div style="font-size:13px; font-weight:bold; color:#e9d5ff; margin-bottom:4px; font-family:'Cinzel',serif;">Roleta Mística em Carga (${charge}/100 Pontos)</div>
+        <div style="font-size:11px; color:#94a3b8; max-width:460px; margin:0 auto 14px auto;">
           Recicle equipamentos indesejados da mochila ou invista Adena para acumular 100 pontos e invocar 5 relíquias da Forja!
         </div>
         <div style="display:flex; justify-content:center; gap:10px; flex-wrap:wrap;">
           <button
             onclick="window.chargeRandomCraftWithAdenaAction()"
-            style="padding:10px 18px; font-family:'Cinzel',serif; font-weight:bold; font-size:12px; background:linear-gradient(180deg,#d4a744,#8a641c); border:1px solid #ffe699; color:#000; border-radius:8px; cursor:pointer;"
+            class="l2-forge-action-btn is-ready"
+            style="max-width:280px; font-size:11px;"
           >
-            🪙 Carga por Adena (+20 Pontos - 200k g)
+            🪙 Carga por Adena (+20 Pts - 200k g)
           </button>
         </div>
       </div>
@@ -5163,23 +5325,23 @@ export function renderForgeRandomCraft(container, state, callbacks = {}) {
   }
 
   container.innerHTML = `
-    <div style="padding:10px; color:#fff; font-family:sans-serif;">
+    <div class="l2-workshop-panel">
       <!-- Banner -->
-      <div style="background:linear-gradient(180deg, rgba(30,16,48,0.95), rgba(14,8,26,0.95)); border:1px solid rgba(168,85,247,0.4); border-radius:12px; padding:16px; margin-bottom:16px;">
+      <div class="l2-workshop-altar">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
           <div>
-            <h3 style="margin:0; font-family:'Cinzel',serif; color:#e9d5ff; font-size:18px;">🎲 Roleta Imperial de Criação Aleatória (Random Craft)</h3>
-            <p style="margin:4px 0 0 0; font-size:12px; color:#aaa;">
-              Tabela Balanceada: 70% Consumíveis/Enchants, 25% Equipamentos B/A, 4.9% Equipamentos S e 0.1% Relíquias Raras.
+            <h3 class="l2-workshop-title">🎲 Roleta Imperial de Criação Anã (Random Craft)</h3>
+            <p class="l2-workshop-subtitle">
+              Acumule 100 pontos para liberar 5 relíquias secretas forjadas pelos anões de Giran.
             </p>
           </div>
-          <div style="font-size:14px; font-weight:bold; color:#ffd877;">
+          <div style="font-size:13px; font-weight:bold; color:#ffd877; font-family:'Cinzel',serif;">
             Carga: <strong style="color:#a855f7;">${charge}%</strong>
           </div>
         </div>
 
         <!-- Progress Bar -->
-        <div style="width:100%; height:10px; background:rgba(0,0,0,0.6); border-radius:5px; margin-top:12px; overflow:hidden; border:1px solid rgba(168,85,247,0.3);">
+        <div style="width:100%; height:8px; background:rgba(0,0,0,0.6); border-radius:4px; margin-top:10px; overflow:hidden; border:1px solid rgba(168,85,247,0.3);">
           <div style="height:100%; width:${charge}%; background:linear-gradient(90deg,#a855f7,#ec4899); transition:width 0.4s;"></div>
         </div>
       </div>

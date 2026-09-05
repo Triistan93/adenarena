@@ -3654,19 +3654,24 @@ select:focus-visible {
 }
 
 .class-transfer-box {
-  max-width: 580px !important;
+  max-width: 660px !important;
   width: 95%;
+  max-height: 92vh !important;
+  display: flex !important;
+  flex-direction: column !important;
   background: linear-gradient(180deg, #241c14, #120e0a) !important;
   border: 2px solid #8a6c40 !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.9), 0 0 24px rgba(212, 167, 68, 0.2) !important;
 }
-.modal-sub { font-size: 11px; color: #a89470; margin-bottom: 14px; line-height: 1.4; text-align: center; }
+.modal-sub { font-size: 11px; color: #cbd5e1; margin-bottom: 12px; line-height: 1.4; text-align: center; }
 .class-options-container {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  max-height: 380px;
+  max-height: 74vh;
+  min-height: 280px;
   overflow-y: auto;
-  padding-right: 4px;
+  padding-right: 6px;
 }
 .class-option-card {
   background: linear-gradient(180deg, rgba(38,28,18,0.9), rgba(18,12,8,0.95));
@@ -4830,24 +4835,128 @@ select:focus-visible {
    DIMENSIONAMENTO DOS CONTAINERS (Layout)
    ========================================================= */
 
-/* 1. Retrato (Tab Character) */
-.portrait {
+/* 1. Vitrine de Santuário de Aden (Tab Character Showroom) */
+.portrait.hero-sanctuary {
   width: 100%;
-  height: 154px;
-  margin-bottom: 20px;
+  min-height: 250px;
+  height: 260px;
   position: relative;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 16px;
+  padding: 0;
+  border-radius: 12px;
+  background: 
+    radial-gradient(ellipse at 50% 35%, rgba(35, 48, 72, 0.45) 0%, rgba(10, 12, 18, 0.98) 75%),
+    linear-gradient(180deg, #151a24 0%, #07090e 100%);
+  border: 1.5px solid rgba(212, 167, 68, 0.4);
+  box-shadow: 
+    0 12px 30px rgba(0, 0, 0, 0.8),
+    0 0 24px rgba(212, 167, 68, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  overflow: hidden;
 }
-.portrait-aura {
+
+.portrait.hero-sanctuary::before {
+  content: '';
   position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at center, rgba(212, 167, 68, 0.15) 0%, transparent 70%);
-  z-index: 0;
-  pointer-events: none;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #c5a059 30%, #f5df93 50%, #c5a059 70%, transparent);
+  box-shadow: 0 0 10px rgba(245, 223, 147, 0.6);
+  z-index: 3;
 }
-.portrait-art {
+
+.sanctuary-alcove {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  bottom: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   z-index: 1;
-  height: 100%;
+}
+
+.sanctuary-alcove .portrait-art {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 240px;
+  border-radius: 8px !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: visible !important;
+}
+
+.sanctuary-alcove .portrait-art .hero-svg {
+  width: 100% !important;
+  height: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.sanctuary-alcove .portrait-art img {
+  max-height: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  width: auto !important;
+  object-fit: contain !important;
+  object-position: center bottom !important;
+  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.85)) drop-shadow(0 0 10px rgba(212, 167, 68, 0.3)) !important;
+  transition: transform 0.3s ease !important;
+}
+
+.portrait.hero-sanctuary:hover .sanctuary-alcove .portrait-art img {
+  transform: scale(1.03);
+}
+
+.sanctuary-pedestal {
+  width: 100%;
+  height: 60px;
+  background: linear-gradient(180deg, #181d28 0%, #0d1017 60%, #06080d 100%);
+  border-top: 1px solid rgba(212, 167, 68, 0.4);
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.8), 0 -2px 10px rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+  padding: 4px 12px;
+  box-sizing: border-box;
+}
+
+.sanctuary-pedestal .portrait-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+}
+
+.sanctuary-pedestal .portrait-name {
+  font-family: "Cinzel", serif;
+  font-weight: 800;
+  font-size: 14px;
+  color: #f5df93;
+  letter-spacing: 0.08em;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9), 0 0 8px rgba(212, 167, 68, 0.4);
+  line-height: 1.2;
+}
+
+.sanctuary-pedestal .portrait-sub {
+  margin-top: 2px;
+  font-size: 11px;
 }
 
 /* 2. Paper Doll (Tab Equipment) */
@@ -4909,3 +5018,1090 @@ select:focus-visible {
 .z-drop-pill { display: flex; align-items: center; gap: 5px; background: rgba(212,167,68,0.08); border: 1px solid rgba(212,167,68,0.2); border-radius: 4px; padding: 3px 7px; font-size: 10px; color: var(--bone); }
 .z-drop-img { width: 14px; height: 14px; object-fit: contain; }
 .z-empty { font-size: 10px; color: var(--ink-dim); font-style: italic; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   IMPERIAL FORGE & TACTICAL STANCE OVERHAUL ("Dark Obsidian & Forged Bronze")
+   Transforma a Forja em Oficina Viva de MMORPG e Elimina a estética de Painel F1
+═══════════════════════════════════════════════════════════════════════════ */
+
+/* --- 1. Tactical Combat Stance Bar (Adeus Botões Plásticos de F1) --- */
+.combat-controls-bar {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 3px !important;
+  background: linear-gradient(180deg, #181d28 0%, #0c0f17 100%) !important;
+  border: 1px solid #5a4625 !important;
+  border-radius: 6px !important;
+  padding: 2px 4px !important;
+  box-shadow: inset 0 1px 0 rgba(255,215,0,0.15), 0 3px 10px rgba(0,0,0,0.6) !important;
+}
+
+.combat-ctrl-btn {
+  background: linear-gradient(180deg, #222836 0%, #121620 100%) !important;
+  border: 1px solid #4a3a22 !important;
+  color: #d8ceb8 !important;
+  font-family: 'Cinzel', serif !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.04em !important;
+  padding: 4px 9px !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+  transition: all 0.18s ease !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.8) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 2px 4px rgba(0,0,0,0.4) !important;
+}
+
+.combat-ctrl-btn:hover {
+  background: linear-gradient(180deg, #2f374a 0%, #191f2c 100%) !important;
+  border-color: #d4a744 !important;
+  color: #fff !important;
+  box-shadow: 0 0 8px rgba(212,167,68,0.3) !important;
+}
+
+.combat-ctrl-btn.active,
+.combat-ctrl-btn.is-active {
+  background: linear-gradient(180deg, #2d2616 0%, #19140a 100%) !important;
+  border-color: #d4a744 !important;
+  color: #ffd877 !important;
+  box-shadow: 0 0 10px rgba(212,167,68,0.4), inset 0 0 6px rgba(212,167,68,0.2) !important;
+}
+
+.combat-stance-gem {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+  background: #64748b;
+  box-shadow: 0 0 4px rgba(0,0,0,0.8);
+  transition: all 0.2s ease;
+}
+
+.combat-ctrl-btn.active .combat-stance-gem {
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981, 0 0 12px rgba(16,185,129,0.6);
+}
+
+.combat-ctrl-vfx select {
+  font-family: 'Cinzel', serif !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  color: #f5df93 !important;
+  background: #0d1017 !important;
+  border: 1px solid #4a3a22 !important;
+  border-radius: 3px !important;
+  padding: 1px 4px !important;
+  cursor: pointer !important;
+}
+
+/* --- 2. Inventory Toolbelt & Subbar Overhaul --- */
+.l2inv-subbar {
+  background: linear-gradient(180deg, #151a24 0%, #0d1017 100%) !important;
+  border: 1px solid #4a3820 !important;
+  border-radius: 6px !important;
+  padding: 6px 8px !important;
+  margin-bottom: 6px !important;
+  box-shadow: inset 0 1px 0 rgba(255,215,0,0.1) !important;
+}
+
+.l2inv-bottom-left-actions {
+  display: flex !important;
+  gap: 5px !important;
+  align-items: center !important;
+}
+
+.l2inv-icon-btn {
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 4px !important;
+  background: linear-gradient(180deg, #222938 0%, #10141d 100%) !important;
+  border: 1px solid #5a4625 !important;
+  color: #f3c669 !important;
+  font-size: 15px !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 2px 5px rgba(0,0,0,0.5) !important;
+  transition: all 0.15s ease !important;
+}
+
+.l2inv-icon-btn:hover {
+  background: linear-gradient(180deg, #323c52 0%, #1a202d 100%) !important;
+  border-color: #d4a744 !important;
+  color: #fff !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 0 10px rgba(212,167,68,0.4) !important;
+}
+
+/* --- 3. Imperial Forge & Dwarven Blueprint Tablets --- */
+.l2-blueprint-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: radial-gradient(circle at 50% 0%, #1b212f 0%, #0c0f16 90%);
+  border: 1px solid #5a4625;
+  border-radius: 8px;
+  padding: 12px 14px;
+  box-shadow: inset 0 1px 0 rgba(255,215,0,0.12), 0 4px 14px rgba(0,0,0,0.6);
+  position: relative;
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+
+.l2-blueprint-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #d4a744, transparent);
+  opacity: 0.5;
+}
+
+.l2-blueprint-card:hover {
+  border-color: #d4a744;
+  box-shadow: 0 6px 20px rgba(212,167,68,0.2), inset 0 1px 0 rgba(255,255,255,0.2);
+  transform: translateY(-2px);
+}
+
+.l2-blueprint-card.craftable {
+  border-color: #3b82f6;
+  box-shadow: inset 0 1px 0 rgba(59,130,246,0.25), 0 4px 16px rgba(0,0,0,0.6);
+}
+
+.l2-blueprint-card.craftable:hover {
+  border-color: #60a5fa;
+  box-shadow: 0 6px 22px rgba(59,130,246,0.35);
+}
+
+.l2-blueprint-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.l2-blueprint-socket {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  background: radial-gradient(circle at center, #242c3d 0%, #0d1118 100%);
+  border: 1px solid #8a6d3b;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.8), 0 2px 6px rgba(0,0,0,0.4);
+  position: relative;
+}
+
+.l2-blueprint-title {
+  font-family: 'Cinzel', serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #f5df93;
+  letter-spacing: 0.03em;
+  line-height: 1.2;
+}
+
+.l2-blueprint-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 3px;
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.l2-blueprint-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  background: rgba(0,0,0,0.35);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 4px;
+  padding: 5px 8px;
+  margin-bottom: 8px;
+  font-size: 11px;
+  color: #cbd5e1;
+}
+
+.l2-stat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: rgba(212,167,68,0.12);
+  border: 1px solid rgba(212,167,68,0.25);
+  border-radius: 3px;
+  padding: 1px 5px;
+  font-size: 10px;
+  color: #fde047;
+  font-weight: 600;
+}
+
+/* Matriz Visual de Materiais (Adeus iron_ore: 0/10 como texto de Word) */
+.l2-mat-matrix {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  background: rgba(10,13,18,0.7);
+  border: 1px solid rgba(212,167,68,0.2);
+  border-radius: 6px;
+  padding: 8px;
+  margin-bottom: 10px;
+}
+
+.l2-mat-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 52px;
+  background: rgba(18,24,34,0.9);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 5px;
+  padding: 4px 2px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.l2-mat-slot:hover {
+  transform: translateY(-2px);
+  border-color: #d4a744;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.5);
+}
+
+.l2-mat-slot.is-satisfied {
+  border-color: rgba(16,185,129,0.5);
+  background: rgba(16,185,129,0.08);
+}
+
+.l2-mat-slot.is-lacking {
+  border-color: rgba(239,68,68,0.5);
+  background: rgba(239,68,68,0.08);
+}
+
+.l2-mat-icon-wrap {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.l2-mat-badge {
+  font-size: 9px;
+  font-weight: 800;
+  padding: 1px 3px;
+  border-radius: 3px;
+  margin-top: 2px;
+  line-height: 1;
+}
+
+.l2-mat-badge.badge-ok {
+  background: rgba(16,185,129,0.25);
+  color: #34d399;
+  border: 1px solid rgba(16,185,129,0.4);
+}
+
+.l2-mat-badge.badge-lacking {
+  background: rgba(239,68,68,0.25);
+  color: #f87171;
+  border: 1px solid rgba(239,68,68,0.4);
+}
+
+.l2-mat-name-tooltip {
+  font-size: 8.5px;
+  color: #94a3b8;
+  max-width: 50px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-top: 2px;
+}
+
+/* Botão de Bigorna Imperial (Pesado e Nobre) */
+.l2-forge-action-btn {
+  width: 100%;
+  padding: 10px 14px;
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.18s ease;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+}
+
+.l2-forge-action-btn.is-ready {
+  background: linear-gradient(180deg, #d4a744 0%, #8a641c 100%);
+  border: 1px solid #ffe699;
+  color: #1a0f02;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), 0 3px 12px rgba(212,167,68,0.4);
+}
+
+.l2-forge-action-btn.is-ready:hover {
+  background: linear-gradient(180deg, #f5df93 0%, #a87922 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 5px 18px rgba(212,167,68,0.6);
+}
+
+.l2-forge-action-btn.is-disabled {
+  background: rgba(30,36,48,0.6);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #64748b;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* --- 4. Sub-abas da Forja como Bancadas de Trabalho de MMORPG --- */
+.l2-workshop-panel {
+  padding: 8px 4px;
+  color: #e2e8f0;
+}
+
+.l2-workshop-altar {
+  background: radial-gradient(circle at 50% 0%, #1e2638 0%, #0d111a 90%);
+  border: 1px solid #5a4625;
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 14px;
+  box-shadow: inset 0 1px 0 rgba(255,215,0,0.15), 0 6px 20px rgba(0,0,0,0.6);
+  position: relative;
+}
+
+.l2-workshop-altar::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #d4a744, transparent);
+}
+
+.l2-workshop-title {
+  font-family: 'Cinzel', serif;
+  font-size: 16px;
+  font-weight: 800;
+  color: #f5df93;
+  margin: 0 0 4px 0;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.l2-workshop-subtitle {
+  font-size: 11px;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.l2-anvil-station {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 16px;
+  background: rgba(8,11,16,0.85);
+  border: 1px solid rgba(212,167,68,0.25);
+  border-radius: 8px;
+  padding: 16px;
+  margin: 12px 0;
+}
+
+.l2-anvil-slot {
+  width: 58px;
+  height: 58px;
+  background: radial-gradient(circle at center, #232c3f 0%, #0c0f16 100%);
+  border: 1px solid #8a6d3b;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 0 12px rgba(0,0,0,0.8), 0 0 10px rgba(212,167,68,0.15);
+  position: relative;
+}
+
+.l2-anvil-slot-label {
+  font-size: 9px;
+  font-weight: 700;
+  color: #d4a744;
+  margin-top: 4px;
+  font-family: 'Cinzel', serif;
+  text-transform: uppercase;
+}
+
+.l2-stat-chip-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.l2-stat-chip-pos {
+  font-size: 10px;
+  font-weight: 700;
+  color: #34d399;
+  background: rgba(16,185,129,0.15);
+  border: 1px solid rgba(16,185,129,0.3);
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+.l2-stat-chip-neg {
+  font-size: 10px;
+  font-weight: 700;
+  color: #f87171;
+  background: rgba(239,68,68,0.15);
+  border: 1px solid rgba(239,68,68,0.3);
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+/* ================================================================
+   AUTHENTIC LINEAGE II HERO DOSSIER & CHARACTER SHEET
+   ================================================================ */
+
+.l2-hero-dossier {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 16px;
+  background:
+    radial-gradient(ellipse at 20% 0%, rgba(212,167,68,0.12) 0%, transparent 65%),
+    linear-gradient(135deg, rgba(16, 21, 32, 0.96) 0%, rgba(9, 11, 17, 0.98) 100%);
+  border: 1px solid #78623b;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.06),
+    inset 0 0 24px rgba(0,0,0,0.85),
+    0 8px 24px rgba(0,0,0,0.5);
+  position: relative;
+  overflow: hidden;
+}
+
+.l2-hero-dossier::before {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border: 1px solid rgba(212,167,68,0.12);
+  border-radius: 10px;
+  pointer-events: none;
+}
+
+/* Avatar Viewport & Sculpted Gilded Frame (Coluna Esquerda) */
+.l2-hero-avatar-frame {
+  flex: 0 0 215px;
+  height: 255px;
+  position: relative;
+  border: 2px solid #8a6d3b;
+  border-radius: 10px;
+  box-shadow:
+    0 0 0 1px #05070a,
+    inset 0 0 20px rgba(0,0,0,0.9),
+    0 8px 20px rgba(0,0,0,0.6);
+  background: radial-gradient(circle at 50% 25%, #222d42 0%, #080b12 85%);
+  overflow: hidden;
+}
+
+.l2-hero-avatar-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(245,223,147,0.25);
+  border-radius: 8px;
+  pointer-events: none;
+}
+
+.l2-hero-avatar-viewport {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Override the legacy 90px circular avatar inside dossier */
+.l2-hero-avatar-viewport .portrait-art {
+  width: 100% !important;
+  height: 100% !important;
+  flex: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  overflow: hidden !important;
+  position: absolute !important;
+  inset: 0 !important;
+}
+
+.l2-hero-avatar-viewport .portrait-art .hero-svg,
+.l2-hero-avatar-viewport .portrait-art .hero-portrait,
+.l2-hero-avatar-viewport .portrait-art .hero-bust,
+.l2-hero-avatar-viewport .portrait-art img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  object-position: center bottom !important;
+  display: block;
+}
+
+.l2-hero-avatar-shade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(to top, rgba(8,11,18,0.92) 0%, rgba(8,11,18,0.2) 30%, transparent 60%);
+  z-index: 5;
+}
+
+/* Coluna de Identidade & Vitals (Coluna Direita) */
+.l2-hero-identity-box {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.l2-hero-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid rgba(212,167,68,0.15);
+  padding-bottom: 8px;
+}
+
+.l2-hero-title-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.l2-hero-name {
+  font-family: 'Cinzel', serif;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #fef08a;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.9), 0 0 12px rgba(254,240,138,0.3);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.l2-hero-level-tag {
+  background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%);
+  border: 1px solid #f59e0b;
+  color: #fef08a;
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 2px 8px;
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.6);
+  text-transform: uppercase;
+}
+
+.l2-hero-lineage {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  color: #cbd5e1;
+}
+
+.l2-hero-tier-badge {
+  background: rgba(212,167,68,0.15);
+  border: 1px solid rgba(212,167,68,0.4);
+  color: #ffd877;
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+/* CP Plaque de Alto Prestígio */
+.l2-cp-plaque {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background:
+    radial-gradient(circle at 10% 50%, rgba(56,189,248,0.1) 0%, transparent 60%),
+    linear-gradient(90deg, rgba(20,28,44,0.85) 0%, rgba(12,16,25,0.95) 100%);
+  border: 1px solid rgba(56,189,248,0.3);
+  border-radius: 8px;
+  padding: 8px 14px;
+  box-shadow: inset 0 0 12px rgba(0,0,0,0.6);
+}
+
+.l2-cp-main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.l2-cp-rune {
+  font-size: 20px;
+  filter: drop-shadow(0 0 6px #38bdf8);
+}
+
+.l2-cp-caption {
+  display: block;
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #94a3b8;
+}
+
+.l2-cp-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 18px;
+  font-weight: 800;
+  color: #38bdf8;
+  text-shadow: 0 0 10px rgba(56,189,248,0.4);
+}
+
+.l2-cp-badge-wrap .portrait-sub {
+  margin: 0;
+}
+
+/* Medidores Vitais Reais (HP / MP / CP) */
+.l2-vitals-container {
+  width: 100%;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.l2-vital-meter {
+  background: rgba(10, 14, 22, 0.7);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 6px;
+  padding: 6px 10px;
+  box-shadow: inset 0 0 8px rgba(0,0,0,0.7);
+}
+
+.l2-vital-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.l2-vital-title.hp { color: #f87171; }
+.l2-vital-title.mp { color: #60a5fa; }
+.l2-vital-title.cp { color: #fde047; }
+
+.l2-vital-val {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.l2-vital-track {
+  height: 8px;
+  background: rgba(0,0,0,0.7);
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid rgba(0,0,0,0.9);
+  position: relative;
+}
+
+.l2-vital-bar {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.l2-vital-bar.hp {
+  background: linear-gradient(90deg, #dc2626, #ef4444);
+  box-shadow: 0 0 8px rgba(239,68,68,0.5);
+}
+
+.l2-vital-bar.mp {
+  background: linear-gradient(90deg, #2563eb, #3b82f6);
+  box-shadow: 0 0 8px rgba(59,130,246,0.5);
+}
+
+.l2-vital-bar.cp {
+  background: linear-gradient(90deg, #d97706, #fbbf24);
+  box-shadow: 0 0 8px rgba(251,191,36,0.5);
+}
+
+/* Card de Promoção de Classe */
+.l2-advancement-card {
+  background:
+    radial-gradient(circle at 15% 50%, rgba(245,158,11,0.15) 0%, transparent 60%),
+    linear-gradient(135deg, rgba(30,20,10,0.9) 0%, rgba(18,12,6,0.95) 100%);
+  border: 1px solid #f59e0b;
+  border-radius: 8px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 0 16px rgba(245,158,11,0.25);
+  animation: l2BannerPulse 2.5s infinite alternate;
+}
+
+@keyframes l2BannerPulse {
+  0% { border-color: #b45309; box-shadow: 0 0 10px rgba(245,158,11,0.2); }
+  100% { border-color: #fde047; box-shadow: 0 0 20px rgba(253,224,71,0.4); }
+}
+
+.l2-adv-icon {
+  font-size: 24px;
+}
+
+.l2-adv-info {
+  flex: 1;
+}
+
+.l2-adv-info h4 {
+  margin: 0 0 2px 0;
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  color: #fef08a;
+}
+
+.l2-adv-info p {
+  margin: 0;
+  font-size: 11px;
+  color: #cbd5e1;
+}
+
+.l2-adv-btn {
+  background: linear-gradient(135deg, #d97706, #b45309);
+  border: 1px solid #fde047;
+  color: #0f172a;
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+  transition: all 0.2s;
+}
+
+.l2-adv-btn:hover {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  transform: translateY(-1px);
+  box-shadow: 0 0 12px rgba(253,224,71,0.5);
+}
+
+/* ================================================================
+   SEÇÕES DA FICHA: PILARES RACIAIS & MATRIZ DE COMBATE
+   ================================================================ */
+
+.l2-char-section {
+  background: linear-gradient(180deg, rgba(19, 25, 38, 0.85) 0%, rgba(11, 14, 22, 0.95) 100%);
+  border: 1px solid #78623b;
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.05),
+    0 6px 18px rgba(0,0,0,0.4);
+}
+
+.l2-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(212,167,68,0.18);
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+}
+
+.l2-section-header h3 {
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #f5df93;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.l2-section-icon {
+  font-size: 15px;
+}
+
+.l2-section-tag {
+  font-size: 10px;
+  font-family: 'Cinzel', serif;
+  color: #94a3b8;
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.l2-section-desc {
+  font-size: 12px;
+  color: #94a3b8;
+  margin: 0 0 12px 0;
+  line-height: 1.4;
+}
+
+/* 6 Pilares Raciais (Tablets Esculpidos) */
+.l2-primary-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+}
+
+.l2-stat-tablet {
+  background: radial-gradient(circle at 50% 20%, #202838 0%, #0c1018 100%);
+  border: 1px solid #78623b;
+  border-radius: 8px;
+  padding: 10px 6px;
+  text-align: center;
+  box-shadow:
+    inset 0 0 12px rgba(0,0,0,0.85),
+    0 2px 8px rgba(0,0,0,0.4);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.l2-stat-tablet:hover {
+  transform: translateY(-2px);
+  border-color: #d4a744;
+  box-shadow:
+    inset 0 0 12px rgba(0,0,0,0.85),
+    0 4px 14px rgba(212,167,68,0.25);
+}
+
+.l2-tablet-code {
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  font-weight: 800;
+  color: #f5df93;
+  letter-spacing: 0.1em;
+}
+
+.l2-tablet-name {
+  font-size: 9px;
+  color: #94a3b8;
+  margin-top: 1px;
+  text-transform: uppercase;
+}
+
+.l2-tablet-val {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 18px;
+  font-weight: 800;
+  color: #ffd877;
+  text-shadow: 0 0 10px rgba(255,216,119,0.3);
+  margin: 4px 0;
+}
+
+.l2-stat-badges {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: center;
+  min-height: 16px;
+}
+
+.l2-stat-chip-set {
+  font-size: 9px;
+  font-weight: 700;
+  color: #4ade80;
+  background: rgba(34,197,94,0.15);
+  border: 1px solid rgba(34,197,94,0.3);
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+/* Matriz Tática de Combate (Duas Colunas) */
+.l2-combat-matrix-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.l2-matrix-pillar {
+  background: rgba(10, 14, 22, 0.7);
+  border: 1px solid rgba(212,167,68,0.2);
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: inset 0 0 12px rgba(0,0,0,0.6);
+}
+
+.l2-pillar-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.l2-matrix-pillar.offensive .l2-pillar-title { color: #f59e0b; }
+.l2-matrix-pillar.defensive .l2-pillar-title { color: #60a5fa; }
+
+.l2-pillar-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.l2-matrix-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 8px;
+  background: rgba(0,0,0,0.3);
+  border-radius: 4px;
+  border: 1px solid rgba(255,255,255,0.03);
+}
+
+.l2-row-lbl {
+  font-size: 11px;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.l2-row-val {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.l2-row-val.val-patk { color: #f59e0b; }
+.l2-row-val.val-matk { color: #c084fc; }
+.l2-row-val.val-crit { color: #fbbf24; }
+.l2-row-val.val-spd { color: #38bdf8; }
+.l2-row-val.val-acc { color: #fb923c; }
+
+.l2-row-val.val-pdef { color: #60a5fa; }
+.l2-row-val.val-mdef { color: #f472b6; }
+.l2-row-val.val-eva { color: #34d399; }
+.l2-row-val.val-drain { color: #ef4444; }
+.l2-row-val.val-regen { color: #a3e635; }
+
+/* Card Místico: Tatuagens & SA */
+.l2-mystic-card {
+  grid-column: 1 / -1;
+  background:
+    radial-gradient(circle at 10% 20%, rgba(147, 51, 234, 0.15) 0%, transparent 60%),
+    linear-gradient(135deg, rgba(24, 15, 38, 0.85) 0%, rgba(12, 8, 20, 0.95) 100%);
+  border: 1px solid rgba(168,85,247,0.35);
+  border-radius: 8px;
+  padding: 12px 14px;
+  box-shadow: inset 0 0 12px rgba(0,0,0,0.7);
+}
+
+.l2-mystic-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid rgba(168,85,247,0.2);
+  padding-bottom: 6px;
+}
+
+.l2-mystic-icon {
+  font-size: 14px;
+}
+
+.l2-mystic-title {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #d8b4fe;
+}
+
+.l2-mystic-content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.l2-tatt-badge {
+  font-size: 11px;
+  color: #e9d5ff;
+  background: rgba(168,85,247,0.15);
+  border: 1px solid rgba(168,85,247,0.3);
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.l2-tatt-empty {
+  font-size: 11px;
+  color: #94a3b8;
+  font-style: italic;
+}
+
+.l2-mystic-sa {
+  font-size: 11px;
+  color: #38bdf8;
+  padding-top: 4px;
+  border-top: 1px dashed rgba(168,85,247,0.2);
+}
+
+/* Card de Certificações */
+.l2-certifications-card {
+  background: rgba(10, 14, 22, 0.75);
+  border: 1px solid rgba(212,167,68,0.22);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-top: 10px;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.6);
+}
+
+/* Responsividade */
+@media (max-width: 640px) {
+  .l2-hero-dossier {
+    flex-direction: column;
+    align-items: center;
+  }
+  .l2-hero-avatar-frame {
+    width: 100%;
+    max-width: 220px;
+    height: 260px;
+  }
+  .l2-primary-stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .l2-combat-matrix-grid {
+    grid-template-columns: 1fr;
+  }
+  .l2-vitals-container {
+    grid-template-columns: 1fr;
+  }
+}

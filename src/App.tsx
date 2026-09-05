@@ -914,7 +914,8 @@ export default function Shell() {
               <IdleGame />
             </div>
           )}
-          <ModeSwitch mode={mode} setMode={setMode} />
+          {/* Modos alternativos desativados temporariamente; seletor removido para não cobrir o logotipo do jogo */}
+          {/* <ModeSwitch mode={mode} setMode={setMode} /> */}
           <div className="fixed top-[7px] right-[8px] z-40 flex items-center h-[28px]">
             <AuthModal 
               onCloudDataLoaded={(cloudState) => {

@@ -50,51 +50,96 @@ export const IDLE_MARKUP = `
     <main class="main-grid">
       <!-- Left: Character Stats -->
       <aside class="panel stats-panel l2-gold-frame">
-        <div style="display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(212,169,78,0.3); padding-bottom:6px; margin-bottom:10px;">
-          <h2 style="font-family:'Cinzel',serif; font-size:13px; font-weight:900; color:#ffd700; margin:0; letter-spacing:0.1em; text-transform:uppercase; text-shadow:0 0 8px rgba(255,215,0,0.3);">⚔️ Status do Herói</h2>
-          <span id="char-combat-power" style="font-family:'Cinzel',serif; font-size:11px; color:#60a5fa; font-weight:bold; background:rgba(30,58,138,0.3); border:1px solid rgba(96,165,250,0.3); padding:1px 6px; border-radius:4px;">CP: 120</span>
+        <!-- Header Nobre -->
+        <div style="display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(212,169,78,0.35); padding-bottom:6px; margin-bottom:8px;">
+          <h2 style="font-family:'Cinzel',serif; font-size:12px; font-weight:900; color:#f5df93; margin:0; letter-spacing:0.12em; text-transform:uppercase; text-shadow:0 0 8px rgba(212,167,68,0.3);">⚔️ Status de Aden</h2>
+          <span id="char-combat-power" style="font-family:'Cinzel',serif; font-size:10px; color:#60a5fa; font-weight:bold; background:rgba(30,58,138,0.4); border:1px solid rgba(96,165,250,0.4); padding:1px 6px; border-radius:4px;">CP: 120</span>
         </div>
-        <div class="stat-row l2-gauge-slot">
-          <label style="color:#ef4444; font-weight:bold; font-family:'Cinzel',serif;">HP</label>
-          <div class="bar-container l2-gauge-bezel">
-            <div id="hp-bar" class="bar hp l2-gauge-hp-fill" style="width:100%"></div>
-            <span id="hp-text" style="font-weight:700; text-shadow:1px 1px 2px #000;">100 / 100</span>
+
+        <!-- Identidade Resumida do Herói -->
+        <div style="background:rgba(0,0,0,0.45); border:1px solid rgba(212,167,68,0.2); border-radius:6px; padding:6px 8px; margin-bottom:6px; display:flex; flex-direction:column; gap:2px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:10px; color:#94a3b8; font-family:'Cinzel',serif;">NÍVEL</span>
+            <span id="level-text" class="stat-value" style="color:#ffd700; font-weight:bold; font-size:13px;">1</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; font-size:11px;">
+            <span id="race-text" class="stat-value" style="color:#e2e8f0; font-weight:600;">Human</span>
+            <span id="class-text" class="stat-value" style="color:#c5a059; font-weight:600;">Fighter</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; font-size:10px; color:#64748b; border-top:1px dashed rgba(255,255,255,0.06); padding-top:2px; margin-top:2px;">
+            <span>Crônica</span>
+            <span id="saga-text" class="stat-value" style="color:#94a3b8;">Interlude</span>
           </div>
         </div>
-        <div class="stat-row l2-gauge-slot">
-          <label style="color:#3b82f6; font-weight:bold; font-family:'Cinzel',serif;">MP</label>
-          <div class="bar-container l2-gauge-bezel">
-            <div id="mp-bar" class="bar mp l2-gauge-mp-fill" style="width:100%"></div>
-            <span id="mp-text" style="font-weight:700; text-shadow:1px 1px 2px #000;">50 / 50</span>
+
+        <!-- Medidores Nobres (HP / MP / XP) -->
+        <div style="background:rgba(0,0,0,0.35); border:1px solid rgba(212,167,68,0.15); border-radius:6px; padding:6px 8px; margin-bottom:6px; display:flex; flex-direction:column; gap:5px;">
+          <div class="stat-row l2-gauge-slot" style="padding:0; margin:0;">
+            <label style="color:#ef4444; font-weight:bold; font-family:'Cinzel',serif; font-size:10px; width:22px;">HP</label>
+            <div class="bar-container l2-gauge-bezel">
+              <div id="hp-bar" class="bar hp l2-gauge-hp-fill" style="width:100%"></div>
+              <span id="hp-text" style="font-weight:700; text-shadow:1px 1px 2px #000; font-size:9px;">100 / 100</span>
+            </div>
+          </div>
+          <div class="stat-row l2-gauge-slot" style="padding:0; margin:0;">
+            <label style="color:#3b82f6; font-weight:bold; font-family:'Cinzel',serif; font-size:10px; width:22px;">MP</label>
+            <div class="bar-container l2-gauge-bezel">
+              <div id="mp-bar" class="bar mp l2-gauge-mp-fill" style="width:100%"></div>
+              <span id="mp-text" style="font-weight:700; text-shadow:1px 1px 2px #000; font-size:9px;">50 / 50</span>
+            </div>
+          </div>
+          <div class="stat-row l2-gauge-slot" style="padding:0; margin:0;">
+            <label style="color:#c084fc; font-weight:bold; font-family:'Cinzel',serif; font-size:10px; width:22px;">XP</label>
+            <div class="bar-container l2-gauge-bezel">
+              <div id="xp-bar" class="bar xp l2-gauge-xp-fill" style="width:0%"></div>
+              <span id="xp-text" style="font-weight:700; text-shadow:1px 1px 2px #000; font-size:9px;">0 / 100</span>
+            </div>
           </div>
         </div>
-        <div class="stat-row l2-gauge-slot">
-          <label style="color:#c084fc; font-weight:bold; font-family:'Cinzel',serif;">XP</label>
-          <div class="bar-container l2-gauge-bezel">
-            <div id="xp-bar" class="bar xp l2-gauge-xp-fill" style="width:0%"></div>
-            <span id="xp-text" style="font-weight:700; text-shadow:1px 1px 2px #000;">0 / 100</span>
+
+        <!-- Bloco de Combate Físico -->
+        <div style="background:rgba(0,0,0,0.35); border:1px solid rgba(212,167,68,0.15); border-radius:6px; padding:6px 8px; margin-bottom:6px;">
+          <div style="font-size:9px; font-weight:bold; color:#d4a744; font-family:'Cinzel',serif; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:4px;">⚔️ Combate Físico</div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px;">
+            <div class="stat-row" style="padding:2px 4px;"><label style="font-size:9px;">ATK</label><span id="atk-text" class="stat-value" style="color:#f87171; font-weight:bold;">10</span></div>
+            <div class="stat-row" style="padding:2px 4px;"><label style="font-size:9px;">DEF</label><span id="def-text" class="stat-value" style="color:#60a5fa; font-weight:bold;">5</span></div>
+            <div class="stat-row" style="padding:2px 4px;"><label style="font-size:9px;">CRIT</label><span id="crit-text" class="stat-value" style="color:#fde047; font-weight:bold;">0%</span></div>
+            <div class="stat-row" style="padding:2px 4px;"><label style="font-size:9px;">EVA</label><span id="eva-text" class="stat-value" style="color:#a7f3d0; font-weight:bold;">0</span></div>
           </div>
         </div>
-        <div class="stat-divider"></div>
-        <div class="stat-row"><label>Level</label><span id="level-text" class="stat-value" style="color:#ffd700; font-weight:bold;">1</span></div>
-        <div class="stat-row"><label>Saga</label><span id="saga-text" class="stat-value">Interlude</span></div>
-        <div class="stat-row"><label>Race</label><span id="race-text" class="stat-value">Human</span></div>
-        <div class="stat-row"><label>Class</label><span id="class-text" class="stat-value">Fighter</span></div>
-        <div class="stat-divider"></div>
-        <div class="stat-row"><label>ATK</label><span id="atk-text" class="stat-value" style="color:#f87171; font-weight:bold;">10</span></div>
-        <div class="stat-row"><label>DEF</label><span id="def-text" class="stat-value" style="color:#60a5fa; font-weight:bold;">5</span></div>
-        <div class="stat-row"><label>EVA</label><span id="eva-text" class="stat-value">0</span></div>
-        <div class="stat-row"><label>MATK</label><span id="matk-text" class="stat-value" style="color:#a78bfa; font-weight:bold;">0</span></div>
-        <div class="stat-row"><label>MDEF</label><span id="mdef-text" class="stat-value">0</span></div>
-        <div class="stat-row"><label>CRIT</label><span id="crit-text" class="stat-value" style="color:#fde047; font-weight:bold;">0%</span></div>
-        <div class="stat-row"><label>Loot</label><span id="loot-text" class="stat-value" style="color:#34d399; font-weight:bold;">100%</span></div>
-        <div class="stat-divider"></div>
-        <div class="stat-row"><label>SP</label><span id="sp-text" class="stat-value" style="color:#67e8f9; font-weight:bold;">0</span></div>
-        <div class="stat-row"><label>Adena</label><span id="gold-text-stat" class="stat-value gold" style="color:#f59e0b; font-weight:bold; font-size:14px;">0</span></div>
-        <div class="stat-row"><label>Adena/s</label><span id="gps-text" class="stat-value gold-dim">—</span></div>
-        <div class="stat-row"><label>Craft Lv</label><span id="craft-level-stat" class="stat-value">1</span></div>
-        <div class="stat-divider"></div>
-        <div class="active-buffs" id="active-buffs"><span class="ab-empty">No active buffs</span></div>
+
+        <!-- Bloco de Poder Mágico & Sorte -->
+        <div style="background:rgba(0,0,0,0.35); border:1px solid rgba(212,167,68,0.15); border-radius:6px; padding:6px 8px; margin-bottom:6px;">
+          <div style="font-size:9px; font-weight:bold; color:#d4a744; font-family:'Cinzel',serif; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:4px;">🔮 Magia &amp; Forja</div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px;">
+            <div class="stat-row" style="padding:2px 4px;"><label style="font-size:9px;">M.ATK</label><span id="matk-text" class="stat-value" style="color:#c084fc; font-weight:bold;">0</span></div>
+            <div class="stat-row" style="padding:2px 4px;"><label style="font-size:9px;">M.DEF</label><span id="mdef-text" class="stat-value" style="color:#818cf8; font-weight:bold;">0</span></div>
+            <div class="stat-row" style="padding:2px 4px;"><label style="font-size:9px;">Drop</label><span id="loot-text" class="stat-value" style="color:#34d399; font-weight:bold;">100%</span></div>
+            <div class="stat-row" style="padding:2px 4px;"><label style="font-size:9px;">Forja</label><span id="craft-level-stat" class="stat-value" style="color:#fbbf24; font-weight:bold;">Nv 1</span></div>
+          </div>
+        </div>
+
+        <!-- Bloco de Tesouro & Recursos -->
+        <div style="background:rgba(0,0,0,0.45); border:1px solid rgba(212,167,68,0.25); border-radius:6px; padding:6px 8px; margin-bottom:6px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:10px; color:#ffd700; font-family:'Cinzel',serif; font-weight:bold;">🪙 ADENA</span>
+            <span id="gold-text-stat" class="stat-value gold" style="color:#f59e0b; font-weight:bold; font-size:13px;">0</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; font-size:10px; margin-top:2px;">
+            <span style="color:#64748b;">Renda/s:</span>
+            <span id="gps-text" class="stat-value gold-dim" style="font-size:10px;">—</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; font-size:10px; margin-top:2px; border-top:1px dashed rgba(255,255,255,0.06); padding-top:2px;">
+            <span style="color:#67e8f9;">✦ SP:</span>
+            <span id="sp-text" class="stat-value" style="color:#67e8f9; font-weight:bold;">0</span>
+          </div>
+        </div>
+
+        <!-- Efeitos & Bênçãos Ativas -->
+        <div style="margin-top:auto;">
+          <div style="font-size:9px; font-weight:bold; color:#94a3b8; font-family:'Cinzel',serif; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:3px;">✨ Bênçãos Ativas</div>
+          <div class="active-buffs" id="active-buffs"><span class="ab-empty">Nenhum buff ativo</span></div>
+        </div>
       </aside>
 
       <div class="grid-resizer grid-resizer-v" id="resizer-col-1" title="Arrastre para redimensionar painel de atributos"></div>
@@ -107,13 +152,13 @@ export const IDLE_MARKUP = `
           <div class="stage-header-bar">
             <div class="stage-zone" id="stage-zone">—</div>
             <div class="combat-controls-bar">
-              <button id="combat-toggle-btn" class="combat-ctrl-btn active" title="Pausar ou Iniciar Caça Automática (Tecla P)">🛑 Parar Caça</button>
-              <button id="soulshot-toggle-btn" class="combat-ctrl-btn" title="Ativar Soulshot no combate (+100% dano físico/mágico por golpe)">⚡ SS: OFF</button>
-              <button id="autopotion-toggle-btn" class="combat-ctrl-btn" title="Usar poções de HP automaticamente quando HP < 50%">🧪 Auto-HP: OFF</button>
-              <button id="speed-toggle-btn" class="combat-ctrl-btn" title="Velocidade do combate (1x Normal ou 2x Turbo)">⏩ 1x</button>
+              <button id="combat-toggle-btn" class="combat-ctrl-btn active" title="Pausar ou Iniciar Caça Automática (Tecla P)"><span class="combat-stance-gem"></span> <span>⚔️ Caçando</span></button>
+              <button id="soulshot-toggle-btn" class="combat-ctrl-btn" title="Ativar Soulshot no combate (+100% dano)"><span>⚡ SS</span> <span style="font-size:9px; color:#ffd877;">(OFF)</span></button>
+              <button id="autopotion-toggle-btn" class="combat-ctrl-btn" title="Usar poções de HP automaticamente quando HP < 50%"><span>🧪 Auto-HP</span> <span style="font-size:9px; color:#ffd877;">(OFF)</span></button>
+              <button id="speed-toggle-btn" class="combat-ctrl-btn" title="Velocidade do combate (1x Normal ou 2x Turbo)"><span>⏩ 1x</span></button>
               <label class="combat-ctrl-btn combat-ctrl-vfx" style="display:inline-flex; align-items:center; gap:4px; cursor:pointer;" title="Qualidade dos efeitos visuais">
                 <span>VFX</span>
-                <select id="vfx-quality-select" title="Qualidade dos efeitos visuais" style="background:transparent; color:inherit; border:none; outline:none; font-size:10px; cursor:pointer;">
+                <select id="vfx-quality-select" title="Qualidade dos efeitos visuais">
                   <option value="low">Baixo</option>
                   <option value="medium" selected>Médio</option>
                   <option value="high">Alto</option>
@@ -239,50 +284,118 @@ export const IDLE_MARKUP = `
           </div>
         </div>
         <div class="tab-content">
-          <!-- Character Tab -->
+          <!-- Character Tab — Ficha Real de Aden -->
           <div id="tab-character" class="tab-pane">
-            <div class="portrait" id="portrait">
-              <div class="portrait-aura" id="portrait-aura"></div>
-              <div class="portrait-art" id="portrait-art"></div>
-              <div class="portrait-meta">
-                <div class="portrait-name" id="portrait-name">Adventurer</div>
-                <div class="portrait-sub" id="portrait-sub">Choose your lineage</div>
-              </div>
-            </div>
-
-            <!-- Class Advancement Promotion Banner -->
-            <div id="class-advancement-banner" class="class-advancement-banner" style="display:none;">
-              <div class="banner-icon">⚔️</div>
-              <div class="banner-info">
-                <h4 id="class-advancement-title">1ª Troca de Classe Disponível!</h4>
-                <p id="class-advancement-sub">Atingiu Nível 20! Escolha a evolução da sua Ordem de Aden.</p>
-              </div>
-              <button id="class-advancement-btn" class="class-adv-action-btn">🎖️ Avançar Classe</button>
-            </div>
-            <div class="pane-section">
-              <h3>Raça &amp; Classe Atual</h3>
-              <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(212,167,68,0.25); border-radius: 14px; padding: 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px;">
-                <div>
-                  <div id="hero-race-class-display" style="font-weight: 800; color: var(--gilt-bright); font-size: 15px; text-transform: uppercase; letter-spacing: 0.05em;">Aventureiro de Aden</div>
-                  <p style="font-size: 11px; color: var(--text-muted); margin-top: 4px; line-height: 1.4;">Para trocar sua Raça e Classe, adquira e utilize o <strong>Scroll of Race &amp; Class Change</strong> no Inventário.</p>
+            
+            <!-- 1. Santuário do Herói: Vitrine & Identidade Integrada -->
+            <!-- 1. Santuário do Herói: Vitrine & Identidade Centralizada -->
+            <div class="l2-hero-dossier" id="portrait">
+              <!-- Retrato Real Centralizado com Moldura Nobre -->
+              <div class="l2-hero-avatar-frame">
+                <div class="portrait-aura" id="portrait-aura"></div>
+                <div class="l2-hero-avatar-viewport">
+                  <div class="portrait-art" id="portrait-art"></div>
                 </div>
-                <div style="font-size: 28px; background: rgba(212,167,68,0.1); padding: 8px 12px; border-radius: 12px; border: 1px solid rgba(212,167,68,0.2);">📜</div>
+                <div class="l2-hero-avatar-shade"></div>
+              </div>
+
+              <!-- Identidade, Poder de Combate & Vitals Centralizados -->
+              <div class="l2-hero-identity-box">
+                <div class="l2-hero-header-row">
+                  <div>
+                    <div class="l2-hero-title-group">
+                      <h2 class="l2-hero-name" id="portrait-name">Tristan</h2>
+                      <span class="l2-hero-level-tag">Nv. <span id="hero-sheet-level">1</span></span>
+                    </div>
+                    <div class="l2-hero-lineage" style="margin-top: 4px;">
+                      <span id="hero-race-class-display">Humano · Human Fighter</span>
+                      <span class="l2-hero-tier-badge" id="hero-tier-badge">Tier 1 · Iniciado</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- CP Plaque de Alto Prestígio -->
+                <div class="l2-cp-plaque">
+                  <div class="l2-cp-main">
+                    <span class="l2-cp-rune">⚡</span>
+                    <div class="l2-cp-data">
+                      <span class="l2-cp-caption">PODER DE COMBATE</span>
+                      <span class="l2-cp-num" id="hero-cp-val">0 CP</span>
+                    </div>
+                  </div>
+                  <div id="hero-cp-badge-wrap" class="l2-cp-badge-wrap">
+                    <span id="portrait-sub" class="portrait-sub"></span>
+                  </div>
+                </div>
+
+                <!-- Medidores Vitais Reais (HP / MP / CP) -->
+                <div class="l2-vitals-container">
+                  <div class="l2-vital-meter">
+                    <div class="l2-vital-head">
+                      <span class="l2-vital-title hp">❤️ HP</span>
+                      <span class="l2-vital-val" id="hero-vital-hp">0 / 0</span>
+                    </div>
+                    <div class="l2-vital-track">
+                      <div class="l2-vital-bar hp" id="hero-vital-bar-hp" style="width: 100%;"></div>
+                    </div>
+                  </div>
+                  <div class="l2-vital-meter">
+                    <div class="l2-vital-head">
+                      <span class="l2-vital-title mp">💙 MP</span>
+                      <span class="l2-vital-val" id="hero-vital-mp">0 / 0</span>
+                    </div>
+                    <div class="l2-vital-track">
+                      <div class="l2-vital-bar mp" id="hero-vital-bar-mp" style="width: 100%;"></div>
+                    </div>
+                  </div>
+                  <div class="l2-vital-meter">
+                    <div class="l2-vital-head">
+                      <span class="l2-vital-title cp">🛡️ CP</span>
+                      <span class="l2-vital-val" id="hero-vital-cp">0 / 0</span>
+                    </div>
+                    <div class="l2-vital-track">
+                      <div class="l2-vital-bar cp" id="hero-vital-bar-cp" style="width: 100%;"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Placeholder oculto para evitar erros de scripts legados -->
+                <div id="class-advancement-banner" style="display:none !important;">
+                  <span id="class-advancement-title"></span>
+                  <span id="class-advancement-sub"></span>
+                  <button id="class-advancement-btn"></button>
+                </div>
               </div>
             </div>
 
-            <!-- Character Combat Attr Summary Grid -->
-            <div class="pane-section" style="margin-top: 14px;">
-              <h3>⚔️ Atributos do Personagem</h3>
-              <div id="char-tab-stats-summary" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 6px;"></div>
+            <!-- 2. Os Seis Pilares Raciais (Atributos Primários Sagrados) -->
+            <div class="l2-char-section">
+              <div class="l2-section-header">
+                <span class="l2-section-icon">🏛️</span>
+                <h3>Atributos Primários de Aden (Linhagem &amp; Dyes)</h3>
+                <span class="l2-section-tag">Base + Bônus</span>
+              </div>
+              <div id="char-primary-stats-grid" class="l2-primary-stats-grid"></div>
             </div>
 
-            <!-- Subclass & Certification Management Panel -->
-            <div class="pane-section subclass-section" style="margin-top: 14px;">
-              <div style="display:flex; justify-content:space-between; align-items:center;">
-                <h3>📜 Subclasses &amp; Certificações de Aden</h3>
-                <span id="subclass-count-badge" style="font-size:11px; background:rgba(212,167,68,0.2); padding:2px 8px; border-radius:10px; color:var(--gilt-bright);">Lv. 75 Requerido</span>
+            <!-- 3. Matriz Tática de Combate (Ofensiva & Defensiva) -->
+            <div class="l2-char-section">
+              <div class="l2-section-header">
+                <span class="l2-section-icon">⚔️</span>
+                <h3>Matriz Tática de Combate</h3>
+                <span class="l2-section-tag">Status em Tempo Real</span>
               </div>
-              <p style="font-size:11px; color:var(--text-muted); margin:4px 0 10px 0;">Alterne livremente entre sua Classe Principal e até 3 Subclasses para acumular bônus de Certificação passivos!</p>
+              <div id="char-tab-stats-summary" class="l2-combat-matrix-grid"></div>
+            </div>
+
+            <!-- 4. Subclasses & Certificações de Aden -->
+            <div class="l2-char-section subclass-section">
+              <div class="l2-section-header">
+                <span class="l2-section-icon">📜</span>
+                <h3>Subclasses &amp; Certificações de Aden</h3>
+                <span id="subclass-count-badge" class="l2-section-tag">Lv. 75 Requerido</span>
+              </div>
+              <p class="l2-section-desc">Evolua até 3 subclasses nobres para desbloquear poderes de Certificação passivos permanentes para sua Classe Principal.</p>
               
               <div id="subclass-list-container" class="subclass-list-container" style="display:flex; flex-direction:column; gap:8px;"></div>
               
@@ -290,20 +403,21 @@ export const IDLE_MARKUP = `
                 <button id="add-subclass-btn" class="action-btn action-btn--primary" style="flex:1; font-size:11px;">➕ Adicionar Subclasse (Lv 75+)</button>
               </div>
 
-              <!-- Certifications Tree Summary -->
-              <div style="margin-top: 14px; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 6px; border: 1px solid var(--line);">
+              <!-- Certificações -->
+              <div class="l2-certifications-card">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                  <h4 style="margin:0 0 6px 0; font-size:12px; color:var(--gilt-bright);">✨ Certificações Passivas Adquiridas</h4>
+                  <h4 style="margin:0 0 4px 0; font-size:12px; color:#f5df93; font-family:'Cinzel',serif;">✨ Certificações Passivas Adquiridas</h4>
                   <span id="cert-total-cp-badge" style="font-size:11px; font-weight:bold; color:#fde047;">+0 CP</span>
                 </div>
-                <div id="certifications-summary" style="font-size:11px; color:var(--ink-dim);">Nenhuma certificação aprendida ainda. Suba suas subclasses aos Lvs. 65, 70, 75 e 80!</div>
+                <div id="certifications-summary" style="font-size:11px; color:#94a3b8;">Nenhuma certificação aprendida ainda. Suba suas subclasses aos Lvs. 65, 70, 75 e 80!</div>
               </div>
             </div>
 
-            <div class="char-actions">
-              <button id="save-btn" class="action-btn">Salvar Jogo</button>
-              <button id="start-btn" class="action-btn action-btn--primary">Iniciar Saga</button>
-              <button id="reset-btn" class="action-btn action-btn--danger">Reiniciar Personagem</button>
+            <!-- Rodapé de Ações do Herói -->
+            <div class="char-actions" style="margin-top: 20px;">
+              <button id="save-btn" class="action-btn">💾 Salvar Progresso</button>
+              <button id="start-btn" class="action-btn action-btn--primary">⚔️ Entrar na Caçada</button>
+              <button id="reset-btn" class="action-btn action-btn--danger">⚠️ Reiniciar Herói</button>
             </div>
           </div>
 
@@ -477,41 +591,50 @@ export const IDLE_MARKUP = `
               <!-- Right Panel: Items Grid and Tabs -->
               <div class="l2inv-right-grid-area">
                 <!-- L2 Metallic Filter Tabs -->
+                <!-- L2 Metallic Filter Tabs (4 Abas Nobres) -->
                 <div class="l2inv-tabs-header">
-                  <button class="l2inv-tab-btn filter-btn active" data-filter="all">All</button>
-                  <button class="l2inv-tab-btn filter-btn" data-filter="gear">Equip</button>
-                  <button class="l2inv-tab-btn filter-btn" data-filter="consumable">Supplies</button>
-                  <button class="l2inv-tab-btn filter-btn" data-filter="material">Crafting</button>
-                  <button class="l2inv-tab-btn filter-btn" data-filter="scroll">Quest</button>
+                  <button class="l2inv-tab-btn filter-btn active" data-filter="all">✨ Todos</button>
+                  <button class="l2inv-tab-btn filter-btn" data-filter="gear">⚔️ Equipamentos</button>
+                  <button class="l2inv-tab-btn filter-btn" data-filter="consumable">🧪 Consumíveis</button>
+                  <button class="l2inv-tab-btn filter-btn" data-filter="material">💎 Materiais</button>
                 </div>
 
-                <!-- Sub-filters Bar (Rarity & Batch Selection) -->
-                <div class="l2inv-subbar">
-                  <div class="l2inv-rarity-pills">
-                    <button class="rarity-filter-btn active" data-rarity="all">All</button>
-                    <button class="rarity-filter-btn r-common" data-rarity="common">C</button>
-                    <button class="rarity-filter-btn r-uncommon" data-rarity="uncommon">I</button>
-                    <button class="rarity-filter-btn r-rare" data-rarity="rare">R</button>
-                    <button class="rarity-filter-btn r-epic" data-rarity="epic">É</button>
-                    <button class="rarity-filter-btn r-legendary" data-rarity="legendary">L</button>
+                <!-- Subbar Reestruturada em 2 Linhas Elegantes sem Sobreposição -->
+                <div class="l2inv-subbar" style="display:flex; flex-direction:column; gap:6px; padding:8px; background:rgba(10,12,18,0.95); border:1px solid rgba(212,167,68,0.25); border-radius:6px; margin-bottom:8px;">
+                  <!-- Linha 1: Busca em Destaque + Auto-Venda + Filtro AFK -->
+                  <div style="display:flex; align-items:center; gap:8px; width:100%;">
+                    <div style="flex:1; position:relative;">
+                      <label for="inv-search-input" class="sr-only" style="display:none;">Buscar no inventário</label>
+                      <input type="text" id="inv-search-input" name="invSearch" aria-label="Filtrar inventário por nome de item" placeholder="🔍 Buscar no inventário..." style="width:100%; background:#090c12; color:#ece4d3; border:1px solid rgba(212,167,68,0.4); border-radius:4px; padding:5px 8px; font-size:11px; box-sizing:border-box;" title="Filtrar por nome de item" />
+                    </div>
+                    <div style="display:flex; align-items:center; gap:4px; font-size:10px; color:#fde047; flex-shrink:0;">
+                      <label for="auto-sell-rarity-select" style="font-weight:600; cursor:pointer;">Auto-Venda:</label>
+                      <select id="auto-sell-rarity-select" name="autoSellRarity" aria-label="Filtro de Auto-Venda por Raridade" style="background:#090b10; color:#fff; border:1px solid rgba(212,167,68,0.3); border-radius:4px; padding:3px 6px; font-size:10px; cursor:pointer;">
+                        <option value="off">OFF</option>
+                        <option value="common">≤ Comum</option>
+                        <option value="uncommon">≤ Incomum</option>
+                        <option value="rare">≤ Raro</option>
+                      </select>
+                    </div>
+                    <button id="open-auto-recycle-btn" class="l2inv-pill-btn" style="background:rgba(212,167,68,0.2); border-color:#fde047; color:#fef08a; font-weight:bold; flex-shrink:0; padding:4px 8px;" title="Configurar Filtro de Loot AFK & Auto-Recycle">⚙️ Filtro AFK</button>
                   </div>
-                  <div style="display:flex; align-items:center; gap:4px; font-size:10px; color:var(--gilt-bright);">
-                    <label for="auto-sell-rarity-select" style="font-weight:600; cursor:pointer;">Auto-Venda:</label>
-                    <select id="auto-sell-rarity-select" name="autoSellRarity" aria-label="Filtro de Auto-Venda por Raridade" style="background:#090b10; color:#fff; border:1px solid rgba(212,167,68,0.3); border-radius:4px; padding:2px 4px; font-size:10px; cursor:pointer;">
-                      <option value="off">Desativado</option>
-                      <option value="common">≤ Comum</option>
-                      <option value="uncommon">≤ Incomum</option>
-                      <option value="rare">≤ Raro</option>
-                    </select>
-                  </div>
-                  <label for="inv-search-input" class="sr-only" style="display:none;">Buscar no inventário</label>
-                  <input type="text" id="inv-search-input" name="invSearch" aria-label="Filtrar inventário por nome de item" placeholder="🔍 Buscar..." style="background:#090b10; color:#fff; border:1px solid rgba(212,167,68,0.3); border-radius:4px; padding:2px 6px; font-size:10px; width:80px;" title="Filtrar por nome de item" />
-                  <div class="l2inv-batch-pills">
-                    <button id="open-auto-recycle-btn" class="l2inv-pill-btn" style="background:rgba(212,167,68,0.2); border-color:#fde047; color:#fef08a; font-weight:bold;" title="Configurar Filtro de Loot AFK & Auto-Recycle">⚙️ Filtro AFK</button>
-                    <button id="select-commons-btn" class="l2inv-pill-btn" title="Selecionar comuns">✓ Comum</button>
-                    <button id="select-uncommons-btn" class="l2inv-pill-btn" title="Selecionar incomuns">✓ Incomum</button>
-                    <button id="select-all-btn" class="l2inv-pill-btn" title="Selecionar todos">✓ Todos</button>
-                    <button id="clear-selection-btn" class="l2inv-pill-btn" title="Limpar seleções">✕</button>
+
+                  <!-- Linha 2: Raridades + Seleção em Massa -->
+                  <div style="display:flex; align-items:center; justify-content:space-between; gap:6px; flex-wrap:wrap;">
+                    <div class="l2inv-rarity-pills" style="display:flex; gap:3px;">
+                      <button class="rarity-filter-btn active" data-rarity="all">Todos</button>
+                      <button class="rarity-filter-btn r-common" data-rarity="common">C</button>
+                      <button class="rarity-filter-btn r-uncommon" data-rarity="uncommon">I</button>
+                      <button class="rarity-filter-btn r-rare" data-rarity="rare">R</button>
+                      <button class="rarity-filter-btn r-epic" data-rarity="epic">É</button>
+                      <button class="rarity-filter-btn r-legendary" data-rarity="legendary">L</button>
+                    </div>
+                    <div class="l2inv-batch-pills" style="display:flex; gap:3px;">
+                      <button id="select-commons-btn" class="l2inv-pill-btn" title="Selecionar comuns">✓ Comum</button>
+                      <button id="select-uncommons-btn" class="l2inv-pill-btn" title="Selecionar incomuns">✓ Incomum</button>
+                      <button id="select-all-btn" class="l2inv-pill-btn" title="Selecionar todos">✓ Todos</button>
+                      <button id="clear-selection-btn" class="l2inv-pill-btn" title="Limpar seleções">✕</button>
+                    </div>
                   </div>
                 </div>
 
@@ -531,10 +654,10 @@ export const IDLE_MARKUP = `
                 <button class="l2inv-icon-btn" id="nav-craft-btn" title="Abrir Forja / Crafting">⚒️</button>
                 <button class="l2inv-icon-btn" id="auto-equip-btn" title="Equipar Melhores Itens">⚡</button>
                 <button class="l2inv-icon-btn" id="organize-inv-btn" title="Organizar Mochila (Fundir Pilhas e Ordenar)">🧹</button>
-                <button class="l2inv-icon-btn" id="open-compound-btn" onclick="window.openCompoundModal()" title="Abrir Sistema de Compound / Síntese" style="color:#c084fc;">🔮 Síntese</button>
-                <button class="l2inv-icon-btn" id="open-symbol-maker-btn" onclick="window.openSymbolMakerModal()" title="Abrir Gravador de Símbolos / Tatuagens de Henna" style="color:#fde047;">🎭 Tatuagens</button>
-                <button class="l2inv-icon-btn" id="open-pet-btn" onclick="window.openPetModal()" title="Companheiros &amp; Mascotes de Batalha (Lobo, Kookaburra, Buffalo, Dragão)" style="color:#6ee7b7;">🐾 Mascotes</button>
-                <button class="l2inv-icon-btn" id="open-manor-btn" onclick="window.openManorModal()" title="Sistema Manor de Sementes &amp; Colheita Agrícola" style="color:#86efac;">🌾 Manor</button>
+                <button class="l2inv-icon-btn" id="open-compound-btn" onclick="window.openCompoundModal()" title="🔮 Síntese &amp; Fusão de Joias e Talismãs" style="color:#c084fc;">🔮</button>
+                <button class="l2inv-icon-btn" id="open-symbol-maker-btn" onclick="window.openSymbolMakerModal()" title="🎭 Gravador de Símbolos &amp; Tatuagens de Henna" style="color:#fde047;">🎭</button>
+                <button class="l2inv-icon-btn" id="open-pet-btn" onclick="window.openPetModal()" title="🐾 Companheiros &amp; Mascotes de Batalha" style="color:#6ee7b7;">🐾</button>
+                <button class="l2inv-icon-btn" id="open-manor-btn" onclick="window.openManorModal()" title="🌾 Administrador de Manor &amp; Colheita Agrícola" style="color:#86efac;">🌾</button>
               </div>
 
               <div class="l2inv-bottom-right-info">
@@ -636,49 +759,51 @@ export const IDLE_MARKUP = `
 
           <!-- Craft Tab -->
           <div id="tab-craft" class="tab-pane">
-            <div class="craft-head" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
+            <div class="craft-head" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:14px; background:radial-gradient(circle at 50% 0%, #1c2333 0%, #0c0f16 100%); border:1px solid #5a4625; border-radius:10px; padding:14px 16px; box-shadow:inset 0 1px 0 rgba(255,215,0,0.15), 0 4px 16px rgba(0,0,0,0.6);">
               <div>
-                <h3 style="margin:0;">Forja Imperial &amp; Criação Universal</h3>
-                <p class="shop-info" style="margin:4px 0 0 0;">Forje qualquer equipamento do jogo: Armas, Armaduras, Joias, Capas, Agathions, Cintos, Talismãs e Consumíveis.</p>
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <span style="font-size:22px;">⚒️</span>
+                  <h3 style="margin:0; font-family:'Cinzel',serif; font-size:17px; font-weight:800; color:#f5df93; letter-spacing:0.06em;">Bigorna Imperial de Aden</h3>
+                </div>
+                <p style="margin:4px 0 0 0; font-size:11px; color:#94a3b8;">Oficina Ancestral de Armamentos, Aprimoramento de Almas e Engastes Místicos.</p>
               </div>
-              <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-                <div class="stat-value" style="font-size:13px; background:rgba(212,175,55,0.1); border:1px solid rgba(212,175,55,0.3); padding:6px 14px; border-radius:8px;">
-                  🔨 Nível de Forja: <strong id="craft-level" style="color:var(--gilt);">1</strong>
-                  <div style="width:120px; height:6px; background:rgba(0,0,0,0.5); border-radius:3px; margin-top:4px; overflow:hidden;">
-                    <div id="craft-forge-exp-bar" style="height:100%; width:0%; background:linear-gradient(90deg, #f59e0b, #10b981); transition:width 0.3s;"></div>
+              <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                <div class="stat-value" style="font-size:12px; font-family:'Cinzel',serif; background:rgba(18,24,36,0.9); border:1px solid #8a6d3b; padding:6px 14px; border-radius:6px; box-shadow:inset 0 1px 0 rgba(255,255,255,0.06);">
+                  🔨 Forja: <strong id="craft-level" style="color:#ffd877;">1</strong>
+                  <div style="width:110px; height:5px; background:rgba(0,0,0,0.6); border-radius:3px; margin-top:4px; overflow:hidden; border:1px solid rgba(212,167,68,0.3);">
+                    <div id="craft-forge-exp-bar" style="height:100%; width:0%; background:linear-gradient(90deg, #d4a744, #10b981); transition:width 0.3s;"></div>
                   </div>
                 </div>
-                <button onclick="window.openMarketTab ? window.openMarketTab() : (window.openPanel && window.openPanel('market'))" style="font-size:12px; font-weight:bold; padding:6px 14px; border-radius:8px; background:linear-gradient(135deg, rgba(234,179,8,0.25), rgba(0,0,0,0.6)); border:1px solid #ffd700; color:#fde047; cursor:pointer; font-family:'Cinzel',serif; display:flex; align-items:center; gap:6px; box-shadow:0 0 10px rgba(253,224,71,0.2);">
-                  🏛️ Mercado de Giran (P2P) ➔
+                <button onclick="window.openMarketTab ? window.openMarketTab() : (window.openPanel && window.openPanel('market'))" style="font-size:11px; font-weight:bold; padding:7px 14px; border-radius:6px; background:linear-gradient(180deg, #261f10 0%, #141008 100%); border:1px solid #d4a744; color:#fde047; cursor:pointer; font-family:'Cinzel',serif; display:flex; align-items:center; gap:6px; box-shadow:0 0 10px rgba(212,167,68,0.25);">
+                  🏛️ Mercado P2P ➔
                 </button>
               </div>
 
-              <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; width:100%; border-bottom:1px solid rgba(212,167,68,0.3); padding-bottom:10px;" id="forge-subtab-buttons">
-                <button onclick="window.setForgeSubTab('craft')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="craft" style="font-family:'Cinzel',serif; font-weight:bold;">⚒️ Crafting</button>
-                <button onclick="window.openMarketTab ? window.openMarketTab() : (window.openPanel && window.openPanel('market'))" class="inv-batch-btn forge-subtab-btn" style="font-family:'Cinzel',serif; font-weight:bold; background:rgba(234,179,8,0.2); border-color:#fde047; color:#fef08a;">🏛️ Mercado de Giran (P2P)</button>
-                <button onclick="window.setForgeSubTab('soulcrystal')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="soulcrystal" style="font-family:'Cinzel',serif; font-weight:bold;">🔮 Soul Crystals (SA)</button>
-                <button onclick="window.setForgeSubTab('masterwork')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="masterwork" style="font-family:'Cinzel',serif; font-weight:bold;">✨ Pushkin MW</button>
-                <button onclick="window.setForgeSubTab('tattoos')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="tattoos" style="font-family:'Cinzel',serif; font-weight:bold;">🖊️ Dyes / Tatuagens</button>
-                <button onclick="window.setForgeSubTab('elemental')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="elemental" style="font-family:'Cinzel',serif; font-weight:bold;">🔥 Atributos Elementais</button>
-                <button onclick="window.setForgeSubTab('belts')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="belts" style="font-family:'Cinzel',serif; font-weight:bold;">🎗️ Síntese de Cintos [S]</button>
-                <button onclick="window.setForgeSubTab('lifestones')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="lifestones" style="font-family:'Cinzel',serif; font-weight:bold;">💎 Augmentation / Life Stones</button>
-                <button onclick="window.setForgeSubTab('randomcraft')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="randomcraft" style="font-family:'Cinzel',serif; font-weight:bold; background:rgba(168,85,247,0.15); border-color:#a855f7; color:#e9d5ff;">🎲 Roleta Random Craft</button>
+              <div style="display:flex; gap:5px; flex-wrap:wrap; margin-top:10px; width:100%; border-top:1px solid rgba(212,167,68,0.2); padding-top:10px;" id="forge-subtab-buttons">
+                <button onclick="window.setForgeSubTab('craft')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="craft" style="font-family:'Cinzel',serif; font-weight:700; font-size:11px;">⚒️ Criação Geral</button>
+                <button onclick="window.setForgeSubTab('soulcrystal')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="soulcrystal" style="font-family:'Cinzel',serif; font-weight:700; font-size:11px;">🔮 Soul Crystals (SA)</button>
+                <button onclick="window.setForgeSubTab('masterwork')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="masterwork" style="font-family:'Cinzel',serif; font-weight:700; font-size:11px;">✨ Pushkin MW</button>
+                <button onclick="window.setForgeSubTab('tattoos')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="tattoos" style="font-family:'Cinzel',serif; font-weight:700; font-size:11px;">🖊️ Tatuagens &amp; Dyes</button>
+                <button onclick="window.setForgeSubTab('elemental')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="elemental" style="font-family:'Cinzel',serif; font-weight:700; font-size:11px;">🔥 Atributos Elementais</button>
+                <button onclick="window.setForgeSubTab('belts')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="belts" style="font-family:'Cinzel',serif; font-weight:700; font-size:11px;">🎗️ Síntese de Cintos</button>
+                <button onclick="window.setForgeSubTab('lifestones')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="lifestones" style="font-family:'Cinzel',serif; font-weight:700; font-size:11px;">💎 Life Stones</button>
+                <button onclick="window.setForgeSubTab('randomcraft')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="randomcraft" style="font-family:'Cinzel',serif; font-weight:700; font-size:11px; color:#e9d5ff;">🎲 Random Craft</button>
               </div>
             </div>
 
             <div class="craft-filters-bar" style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; align-items:center;">
-              <input type="text" id="craft-search-input" placeholder="🔍 Buscar receita por nome..." style="flex:1; min-width:200px; padding:7px 12px; border-radius:6px; border:1px solid rgba(255,255,255,0.15); background:rgba(0,0,0,0.5); color:#fff; font-size:13px;" />
-              <div style="display:flex; gap:6px; flex-wrap:wrap;" id="craft-category-filters">
+              <input type="text" id="craft-search-input" placeholder="🔍 Buscar receita por nome ou grau..." style="flex:1; min-width:200px; padding:7px 12px; border-radius:6px; border:1px solid rgba(212,167,68,0.35); background:#0c0f16; color:#ece4d3; font-size:12px; font-family:'Cinzel',serif;" />
+              <div style="display:flex; gap:5px; flex-wrap:wrap;" id="craft-category-filters">
                 <button class="inv-batch-btn active" data-craft-cat="all">🌟 Todos</button>
                 <button class="inv-batch-btn" data-craft-cat="weapon">⚔ Armas</button>
                 <button class="inv-batch-btn" data-craft-cat="armor">🛡 Armaduras</button>
                 <button class="inv-batch-btn" data-craft-cat="jewel">💍 Joias</button>
-                <button class="inv-batch-btn" data-craft-cat="relic">🧚 Agathions &amp; Relíquias</button>
+                <button class="inv-batch-btn" data-craft-cat="relic">🧚 Agathions</button>
                 <button class="inv-batch-btn" data-craft-cat="consumable">🧪 Consumíveis</button>
               </div>
             </div>
 
-            <div id="craft-subcategory-filters" style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px; padding:6px 10px; background:rgba(0,0,0,0.3); border-radius:6px; border:1px solid rgba(255,255,255,0.05);"></div>
+            <div id="craft-subcategory-filters" style="display:flex; gap:5px; flex-wrap:wrap; margin-bottom:12px; padding:6px 10px; background:rgba(12,15,22,0.85); border-radius:6px; border:1px solid rgba(212,167,68,0.15);"></div>
 
             <div id="craft-recipes-view" class="craft-view active">
               <div class="craft-list" id="craft-list"></div>

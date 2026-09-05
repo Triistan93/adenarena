@@ -245,7 +245,7 @@ function renderBuyTab(state) {
           const isOwnListing = MarketService._isMyListing(l, state);
 
           return `
-            <div style="background: rgba(18,24,36,0.9); border: 1px solid rgba(212,167,68,0.3); border-radius: 10px; padding: 12px; display: flex; flex-direction: column; justify-content: space-between; gap: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.4); transition: transform 0.15s ease;">
+            <div class="market-listing-card" data-search="${(l.item.name + ' ' + l.sellerName).toLowerCase()}" style="background: rgba(18,24,36,0.9); border: 1px solid rgba(212,167,68,0.3); border-radius: 10px; padding: 12px; display: flex; flex-direction: column; justify-content: space-between; gap: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.4); transition: transform 0.15s ease;">
               
               <!-- Item Info -->
               <div style="display: flex; gap: 12px; align-items: flex-start;">
@@ -290,6 +290,9 @@ function renderBuyTab(state) {
             </div>
           `;
         }).join('')}
+      </div>
+      <div id="market-empty-search-state" style="display: none; text-align: center; padding: 30px 16px; color: #94a3b8; font-size: 13px; font-family: 'Cinzel', serif; background: rgba(15,20,30,0.5); border: 1px dashed rgba(212,167,68,0.25); border-radius: 8px; margin-top: 10px;">
+        🔍 Nenhum item encontrado para esta busca.
       </div>
     `}
   `;
@@ -556,21 +559,23 @@ function attachMarketEvents(container, state, callbacks = {}) {
     };
   });
 
-  // Busca
+  // Busca instantânea em tempo real sem perda de foco
   const searchInput = container.querySelector('#market-search-input');
   if (searchInput) {
     searchInput.oninput = (e) => {
       _searchQuery = e.target.value;
-      // Re-renderiza somente o mural
-      const buyPanel = container.querySelector('.market-container');
-      if (buyPanel) {
-        renderMarketTab(container, state, callbacks);
-        // Mantém foco
-        const newSearch = container.querySelector('#market-search-input');
-        if (newSearch) {
-          newSearch.focus();
-          newSearch.selectionStart = newSearch.selectionEnd = newSearch.value.length;
-        }
+      const q = _searchQuery.trim().toLowerCase();
+      const cards = container.querySelectorAll('.market-listing-card');
+      let visibleCount = 0;
+      cards.forEach(card => {
+        const text = card.dataset.search || '';
+        const matches = !q || text.includes(q);
+        card.style.display = matches ? 'flex' : 'none';
+        if (matches) visibleCount++;
+      });
+      const emptyState = container.querySelector('#market-empty-search-state');
+      if (emptyState) {
+        emptyState.style.display = (visibleCount === 0 && cards.length > 0) ? 'block' : 'none';
       }
     };
   }

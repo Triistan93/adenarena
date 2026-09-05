@@ -485,6 +485,8 @@ function openClassTransferModal(classInfo) {
 
   function renderClassStep1() {
     container.innerHTML = '';
+    const closeBtn = el('close-class-modal-btn');
+    if (closeBtn) closeBtn.style.display = '';
     const titleEl = el('class-modal-heading');
     if (titleEl) {
       const stageNames = ['1ª Troca de Classe', '2ª Troca de Classe', '3ª Troca de Classe (3rd Job)'];
@@ -598,6 +600,10 @@ function openClassTransferModal(classInfo) {
       titleEl.textContent = `🧬 Consagração de Linhagem: ${clsDef.name}`;
     }
 
+    // Oculta o botão 'Fechar' genérico do rodapé para não duplicar ações com Voltar/Consagrar
+    const closeBtn = el('close-class-modal-btn');
+    if (closeBtn) closeBtn.style.display = 'none';
+
     const avatarHtml = (ART && typeof ART.heroSVG === 'function')
       ? ART.heroSVG({
           race: clsDef.race || state.race || 'human',
@@ -608,24 +614,28 @@ function openClassTransferModal(classInfo) {
       : '';
 
     container.innerHTML = `
-      <div style="display:flex; align-items:center; gap:12px; background:rgba(24, 18, 12, 0.9); border:1px solid var(--border-gilt); border-radius:8px; padding:10px 14px; margin-bottom:12px;">
-        <div style="width:56px; height:56px; min-width:56px; min-height:56px; border-radius:50%; border:2px solid var(--border-gilt); overflow:hidden; background:radial-gradient(circle, #2a1f14 0%, #0d0a06 100%); flex-shrink:0;">
+      <div style="display:flex; align-items:center; gap:14px; background:linear-gradient(135deg, rgba(32,24,18,0.95), rgba(15,12,8,0.98)); border:1px solid var(--border-gilt); border-radius:10px; padding:12px 16px; margin-bottom:12px; box-shadow:inset 0 1px 0 rgba(255,255,255,0.06);">
+        <div style="width:58px; height:58px; min-width:58px; min-height:58px; border-radius:50%; border:2px solid var(--border-gilt); overflow:hidden; background:radial-gradient(circle, #2a1f14 0%, #0d0a06 100%); flex-shrink:0; box-shadow:0 4px 10px rgba(0,0,0,0.6);">
           ${avatarHtml}
         </div>
-        <div>
-          <h3 style="margin:0; font-family:'Cinzel',serif; color:var(--gilt-bright); font-size:16px;">${clsDef.name}</h3>
-          <span style="font-size:11px; color:#cbd5e1;">${clsDef.desc || 'Nova classe consagrada.'}</span>
+        <div style="flex:1; min-width:0;">
+          <h3 style="margin:0; font-family:'Cinzel',serif; color:var(--gilt-bright); font-size:17px; letter-spacing:0.04em;">${clsDef.name}</h3>
+          <p style="margin:3px 0 0 0; font-size:11px; color:#cbd5e1; line-height:1.4;">${clsDef.desc || 'Nova classe consagrada de Aden.'}</p>
         </div>
       </div>
-      <div style="background:rgba(212,167,68,0.1); border:1px solid rgba(212,167,68,0.3); border-radius:8px; padding:12px; margin-bottom:12px; font-size:12px; color:#e2e8f0; line-height:1.5;">
-        ✨ <strong>Consagração de Linhagem:</strong> Escolha <strong>até 2 habilidades</strong> da sua classe anterior para se tornarem <strong>Passivas de Linhagem Permanentes</strong> (com 20% da sua eficácia).<br>
-        🔄 <em>O kit ativo anterior será purificado e todo o SP investido será 100% reembolsado para a nova jornada!</em><br>
-        📖 <strong style="color:#fde047;">Aviso dos Mestres de Aden:</strong> As habilidades da 2ª Classe (Lv. 40+) exigirão <strong>Livros de Magia (1★, 2★, 3★ e 4★)</strong> e SP para serem desbloqueadas. Obtenha-os em caçadas, instâncias solo, chefes épicos ou adquira de outros jogadores no <strong>Mercado Global</strong>!
+      <div style="background:rgba(212,167,68,0.08); border:1px solid rgba(212,167,68,0.25); border-radius:8px; padding:10px 14px; margin-bottom:14px; font-size:12px; color:#e2e8f0; line-height:1.45;">
+        <div style="font-weight:bold; color:#fde047; margin-bottom:4px; display:flex; align-items:center; gap:6px;">
+          <span>✨</span> <span>Selecione até 2 habilidades para eternizar como Passivas de Linhagem (20% de eficácia):</span>
+        </div>
+        <div style="font-size:11px; color:#94a3b8;">🔄 As habilidades ativas da classe anterior serão purificadas e todo o SP investido será 100% devolvido para a nova jornada.</div>
       </div>
-      <div id="legacy-skills-grid" style="display:flex; flex-direction:column; gap:8px; margin-bottom:14px; max-height:280px; overflow-y:auto; padding-right:4px;"></div>
-      <div style="display:flex; gap:10px; justify-content:space-between; margin-top:8px;">
-        <button id="legacy-back-btn" class="action-btn" style="flex:1;">⬅️ Voltar</button>
-        <button id="legacy-confirm-btn" class="action-btn action-btn--primary" style="flex:2; font-weight:bold; font-family:'Cinzel',serif;">✨ Consagrar Linhagem &amp; Evoluir</button>
+      <div id="legacy-skills-grid" style="display:flex; flex-direction:column; gap:10px; margin-bottom:14px; min-height:140px; max-height:360px; overflow-y:auto; padding-right:4px;"></div>
+      <div style="font-size:11px; color:#a1a1aa; text-align:center; margin-bottom:12px; line-height:1.4;">
+        📖 <em>Aviso: Habilidades de 2ª Classe (Lv. 40+) exigirão Livros de Magia (1★–4★) e SP para desbloqueio.</em>
+      </div>
+      <div style="display:flex; gap:12px; justify-content:space-between; margin-top:6px;">
+        <button id="legacy-back-btn" class="action-btn" style="flex:1; padding:10px; font-weight:bold;">⬅️ Voltar</button>
+        <button id="legacy-confirm-btn" class="action-btn action-btn--primary" style="flex:2; padding:10px; font-weight:bold; font-family:'Cinzel',serif; font-size:14px;">✨ Consagrar Linhagem &amp; Evoluir</button>
       </div>
     `;
 
@@ -660,26 +670,28 @@ function openClassTransferModal(classInfo) {
       row.className = 'legacy-skill-select-row';
       row.dataset.skillId = s.id;
       row.style.cssText = `
-        background: ${selected.has(s.id) ? 'rgba(212,167,68,0.2)' : 'rgba(0,0,0,0.5)'};
-        border: 1px solid ${selected.has(s.id) ? 'var(--border-gilt)' : 'rgba(255,255,255,0.1)'};
-        border-radius: 6px;
-        padding: 8px 12px;
+        background: ${selected.has(s.id) ? 'linear-gradient(90deg, rgba(212,167,68,0.22), rgba(28,20,14,0.92))' : 'rgba(16,20,28,0.85)'};
+        border: 1px solid ${selected.has(s.id) ? '#d4a744' : 'rgba(255,255,255,0.12)'};
+        border-radius: 8px;
+        padding: 10px 14px;
+        min-height: 52px;
         display: flex;
         align-items: center;
         justify-content: space-between;
         cursor: pointer;
         transition: all 0.2s ease;
+        box-shadow: ${selected.has(s.id) ? '0 0 10px rgba(212,167,68,0.2)' : 'none'};
       `;
 
       row.innerHTML = `
-        <div style="display:flex; align-items:center; gap:10px;">
-          <input type="checkbox" ${selected.has(s.id) ? 'checked' : ''} style="cursor:pointer; width:16px; height:16px;" />
+        <div style="display:flex; align-items:center; gap:12px;">
+          <input type="checkbox" ${selected.has(s.id) ? 'checked' : ''} style="cursor:pointer; width:18px; height:18px; accent-color:#f5df93;" />
           <div>
-            <div style="font-weight:bold; color:#ffd877; font-size:13px;">${def.name || s.id} (Lv. ${lvl})</div>
-            <div style="font-size:11px; color:#86efac;">🧬 Passiva de Linhagem: +${(passiveVal * 100).toFixed(1)}% ${statKey}</div>
+            <div style="font-weight:bold; color:#ffd877; font-size:13px; font-family:'Cinzel',serif;">${def.name || s.id} <span style="font-size:11px; color:#94a3b8; font-family:sans-serif; font-weight:normal;">(Nv. ${lvl})</span></div>
+            <div style="font-size:12px; color:#86efac; font-weight:600; margin-top:2px;">🧬 Passiva de Linhagem: +${(passiveVal * 100).toFixed(1)}% ${statKey}</div>
           </div>
         </div>
-        <span style="font-size:11px; color:#94a3b8;">${selected.has(s.id) ? '✅ Selecionado' : 'Clique para escolher'}</span>
+        <span style="font-size:11px; font-weight:bold; color:${selected.has(s.id) ? '#fde047' : '#64748b'};">${selected.has(s.id) ? '✅ Selecionado' : 'Clique para escolher'}</span>
       `;
 
       row.onclick = (e) => {
@@ -709,17 +721,25 @@ function openClassTransferModal(classInfo) {
       rows.forEach(r => {
         const sid = r.dataset.skillId;
         const isSel = selected.has(sid);
-        r.style.background = isSel ? 'rgba(212,167,68,0.2)' : 'rgba(0,0,0,0.5)';
-        r.style.borderColor = isSel ? 'var(--border-gilt)' : 'rgba(255,255,255,0.1)';
+        r.style.background = isSel ? 'linear-gradient(90deg, rgba(212,167,68,0.22), rgba(28,20,14,0.92))' : 'rgba(16,20,28,0.85)';
+        r.style.borderColor = isSel ? '#d4a744' : 'rgba(255,255,255,0.12)';
+        r.style.boxShadow = isSel ? '0 0 10px rgba(212,167,68,0.2)' : 'none';
         const chk = r.querySelector('input');
         if (chk) chk.checked = isSel;
         const statusSpan = r.querySelector('span:last-child');
-        if (statusSpan) statusSpan.textContent = isSel ? '✅ Selecionado' : 'Clique para escolher';
+        if (statusSpan) {
+          statusSpan.textContent = isSel ? '✅ Selecionado' : 'Clique para escolher';
+          statusSpan.style.color = isSel ? '#fde047' : '#64748b';
+        }
       });
     }
 
     const backBtn = el('legacy-back-btn');
-    if (backBtn) backBtn.onclick = () => renderClassStep1();
+    if (backBtn) backBtn.onclick = () => {
+      renderClassStep1();
+      const cb = el('close-class-modal-btn');
+      if (cb) cb.style.display = '';
+    };
 
     const confirmBtn = el('legacy-confirm-btn');
     if (confirmBtn) {
@@ -2123,29 +2143,34 @@ function updateCombatControlsUI() {
   if (combatBtn) {
     const isActive = state.isCombatActive !== false;
     combatBtn.classList.toggle('active', isActive);
-    combatBtn.textContent = isActive ? '🛑 Parar Caça' : '▶️ Iniciar Caça';
-    combatBtn.style.background = isActive ? 'rgba(239,68,68,0.2)' : 'rgba(34,197,94,0.2)';
-    combatBtn.style.borderColor = isActive ? '#ef4444' : '#22c55e';
-    combatBtn.style.color = isActive ? '#fca5a5' : '#86efac';
+    combatBtn.innerHTML = `<span class="combat-stance-gem"></span> <span>${isActive ? '⚔️ Caçando' : '⏸️ Parado'}</span>`;
+    combatBtn.style.removeProperty('background');
+    combatBtn.style.removeProperty('borderColor');
+    combatBtn.style.removeProperty('color');
   }
   const ssBtn = el('soulshot-toggle-btn');
   if (ssBtn) {
-    ssBtn.classList.toggle('active', !!state.soulshotActive);
+    const isSsActive = !!state.soulshotActive;
+    ssBtn.classList.toggle('active', isSsActive);
     const isMage = state.class === 'mage' || state.class === 'soulbreaker';
     const shotId = isMage ? 'spiritshot_ng' : 'soulshot_ng';
     const count = getInventoryCount(shotId);
-    ssBtn.textContent = `⚡ SS: ${state.soulshotActive ? 'ON' : 'OFF'} (${count})`;
+    ssBtn.innerHTML = `<span>⚡ SS</span> <span style="font-size:9px; color:${isSsActive ? '#ffd877' : '#94a3b8'};">(${count})</span>`;
+    ssBtn.title = `Soulshot: ${isSsActive ? 'LIGADO' : 'DESLIGADO'} (Estoque: ${count})`;
   }
   const apBtn = el('autopotion-toggle-btn');
   if (apBtn) {
-    apBtn.classList.toggle('active', !!state.autoPotionActive);
+    const isApActive = !!state.autoPotionActive;
+    apBtn.classList.toggle('active', isApActive);
     const potCount = getInventoryCount('hp_potion_s') + getInventoryCount('hp_potion_m') + getInventoryCount('hp_potion_l') + getInventoryCount('hp_potion_xl');
-    apBtn.textContent = `🧪 Auto-HP: ${state.autoPotionActive ? 'ON' : 'OFF'} (${potCount})`;
+    apBtn.innerHTML = `<span>🧪 Auto-HP</span> <span style="font-size:9px; color:${isApActive ? '#ffd877' : '#94a3b8'};">(${potCount})</span>`;
+    apBtn.title = `Auto-Poção: ${isApActive ? 'LIGADO' : 'DESLIGADO'} (Estoque: ${potCount})`;
   }
   const spdBtn = el('speed-toggle-btn');
   if (spdBtn) {
-    spdBtn.classList.toggle('active', state.combatSpeed === 2);
-    spdBtn.textContent = `⏩ ${state.combatSpeed || 1}x`;
+    const isFast = state.combatSpeed === 2;
+    spdBtn.classList.toggle('active', isFast);
+    spdBtn.innerHTML = `<span>⏩ ${state.combatSpeed || 1}x</span>`;
   }
 }
 

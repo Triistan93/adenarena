@@ -588,6 +588,18 @@ export function heroSVG(raceOrState, clsParam, genderParam, aura, mode) {
     </div>`;
   }
 
+  if (mode === "portrait") {
+    // For portrait frames, prefer the cropped artwork that eliminates side dead space
+    const originalPath = heroImgPath(race, cls, gender);
+    const croppedPath = originalPath.replace(/^\/img\//, '/img/heroes_cropped/');
+    const portraitSrc = getAssetUrl(croppedPath);
+
+    return `<div class="hero-svg hero-portrait" style="position:relative;width:100%;height:100%;overflow:hidden;display:flex;align-items:flex-end;justify-content:center;">
+      <img src="${portraitSrc}" alt="${race} ${cls}" draggable="false" onerror="this.onerror=null; this.src='${src}';"
+        style="width:100%;height:100%;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 8px 20px rgba(0,0,0,0.85)) drop-shadow(0 0 10px ${border || 'rgba(212,167,68,0.25)'});" />
+    </div>`;
+  }
+
   return `<div class="hero-svg hero-full" style="width:100%;height:100%;position:relative;">
     <img src="${src}" alt="${race} ${cls}" draggable="false" onerror="this.onerror=null; this.src='${getAssetUrl('img/m_humanfighter.jpg')}';"
       style="width:100%;height:100%;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 8px 16px rgba(0,0,0,0.7)) drop-shadow(0 0 4px ${border || 'transparent'});" />
