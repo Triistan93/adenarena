@@ -146,6 +146,7 @@ import {
   updateSagaProgress as engineUpdateSagaProgress,
   playerDeath as enginePlayerDeath,
   resurrect as engineResurrect,
+  getNearestTown,
   toggleSoulshot as engineToggleSoulshot,
   toggleAutoPotion as engineToggleAutoPotion
 } from './src/engine/CombatEngine.js';
@@ -1121,9 +1122,17 @@ function useItem(uid) {
   else if (def.type === 'autoPotion') { applyBuff('autoPotion', 1, def.duration); log(`Used ${def.name}: auto-potion active for ${fmtDur(def.duration)}`, 'heal'); } 
   else if (def.type === 'teleport') {
     state.hp = state.maxHp; state.mp = state.maxMp;
-    const town = state.race ? RACES[state.race].startZone : 'talkingIsland';
-    if (state.zone !== town) { state.zone = town; const zn = el('zone-name'); if (zn) zn.textContent = ZONES[state.zone]?.name || town; stopCombat(); setTimeout(startCombat, 300); }
+    const town = getNearestTown(state.zone);
+    if (state.zone !== town) {
+      state.zone = town;
+      state.currentZone = town;
+      const zn = el('zone-name');
+      if (zn) zn.textContent = ZONES[state.zone]?.name || town;
+      stopCombat();
+      setTimeout(startCombat, 300);
+    }
     log(`Used ${def.name}: returned to ${ZONES[town]?.name || town}, fully healed.`, 'heal');
+    updateAllUI();
   } else if (def.type === 'raceClassChange' || item.itemId === 'scroll_race_class_change') {
     if (typeof window !== 'undefined' && typeof window.onOpenRaceClassChangeModal === 'function') {
       window.onOpenRaceClassChangeModal({
@@ -1433,6 +1442,8 @@ function updateStatsUI() {
   const _sgEl = el('saga-text'); if (_sgEl) _sgEl.textContent = (state.currentSaga ? (getSagaDef(state.currentSaga)?.name || state.currentSaga) : '-');
   const _sz = el('stage-zone');
   if (_sz) { const _t = (state.zone && ZONES?.[state.zone]) ? ZONES[state.zone].name + (ZONES[state.zone].town ? ' · town' : '') : '—'; if (_sz.textContent !== _t) _sz.textContent = _t; }
+  const _zn = el('zone-name');
+  if (_zn) { const _tzn = (state.zone && ZONES?.[state.zone]) ? ZONES[state.zone].name : '—'; if (_zn.textContent !== _tzn) _zn.textContent = _tzn; }
   const _spaEl = el('sp-available'); if (_spaEl) _spaEl.textContent = state.sp;
   const _gtEl = el('gold-text'); if (_gtEl) _gtEl.textContent = state.gold.toLocaleString();
   const _sgdEl = el('shop-gold'); if (_sgdEl) _sgdEl.textContent = state.gold.toLocaleString();
@@ -2018,6 +2029,12 @@ function toggleCombatSpeed() {
 
 function toggleCombatState() {
   state.isCombatActive = state.isCombatActive === false ? true : false;
+  state.combatActive = state.isCombatActive;
+  if (state.isCombatActive) {
+    startCombat();
+  } else {
+    stopCombat();
+  }
   updateCombatControlsUI();
   const isActive = state.isCombatActive !== false;
   log(`Caça Automática **${isActive ? 'RETOMADA ▶️' : 'PAUSADA 🛑'}**.`, 'system');
@@ -3109,9 +3126,9 @@ function _performFullUIUpdate() {
   if (isTabVisible('colosseum')) safeUiUpdate('colosseum', updateColosseumUI);
   if (isTabVisible('market')) safeUiUpdate('market', updateMarketUI);
   if (isTabVisible('rankings')) safeUiUpdate('rankings', updateRankingsUI);
-  if (isTabVisible('stage') || isTabVisible('zone') || isTabVisible('zones')) {
-    safeUiUpdate('zone-bg', updateZoneBackground);
-    safeUiUpdate('zone', updateZoneUI);
+  safeUiUpdate('zone-bg', updateZoneBackground);
+  safeUiUpdate('zone', updateZoneUI);
+  if (isTabVisible('zone') || isTabVisible('zones')) {
     safeUiUpdate('zone-map', renderZoneMap);
   }
   if (isTabVisible('race-class')) safeUiUpdate('race-class', updateRaceClassUI);
@@ -3700,13 +3717,16 @@ let currentBgPath = '';
 let activeBgLayer = 'a';
 
 function updateZoneBackground() {
-  const currentKey = state.target && RAID_BOSSES[state.target] ? state.target : (state.zone || 'orcVillage');
+  const isRaid = state.isRaidActive && state.target && RAID_BOSSES[state.target];
+  const currentKey = isRaid ? state.target : (state.zone || 'talkingIsland');
   const bgPath = ZONE_BACKGROUNDS[currentKey] || '/img/' + currentKey + '.png';
 
   const logEl = el('log');
   const stageZone = el('stage-zone');
+  const zoneNameEl = el('zone-name');
   const bgA = el('stage-bg-a');
   const bgB = el('stage-bg-b');
+  const stageEl = el('stage');
 
   if (bgPath !== currentBgPath) {
     currentBgPath = bgPath;
@@ -3723,6 +3743,10 @@ function updateZoneBackground() {
         bgB.classList.remove('active');
         activeBgLayer = 'a';
       }
+    } else if (stageEl) {
+      stageEl.style.backgroundImage = bgUrl;
+      stageEl.style.backgroundSize = 'cover';
+      stageEl.style.backgroundPosition = 'center';
     }
   }
 
@@ -3730,14 +3754,20 @@ function updateZoneBackground() {
     logEl.style.backgroundImage = `linear-gradient(180deg, rgba(10,13,20,0.85), rgba(10,13,20,0.95)), url('${bgPath}')`;
   }
 
-  if (stageZone) {
-    let name = '';
-    if (state.target && RAID_BOSSES[state.target]) {
-      name = RAID_BOSSES[state.target].name;
-    } else if (state.zone && ZONES[state.zone]) {
-      name = ZONES[state.zone].name;
-    }
-    if (name) stageZone.textContent = name.toUpperCase();
+  let name = '';
+  if (isRaid) {
+    name = RAID_BOSSES[state.target].name;
+  } else if (state.zone && ZONES[state.zone]) {
+    name = ZONES[state.zone].name;
+  }
+
+  if (stageZone && name) {
+    const isTown = state.zone && ZONES[state.zone]?.town;
+    stageZone.textContent = name.toUpperCase() + (isTown ? ' · TOWN' : '');
+  }
+
+  if (zoneNameEl && name) {
+    zoneNameEl.textContent = name;
   }
 }
 
@@ -4026,6 +4056,7 @@ function attackMonster() {
       log('⏱️ Tempo de Instância Esgotado (60s)! Desafio da Torre Falhou!', 'warning');
       if (typeof window !== 'undefined' && window.floatText) window.floatText('⏱️ TEMPO ESGOTADO!', 'float-warning');
       state.activeMonster = null;
+      if (state.lastHuntingZone) state.zone = state.lastHuntingZone;
       pickRandomMonster();
       updateAllUI();
       return;
@@ -4515,13 +4546,16 @@ function attackMonster() {
       });
       state.isRaidActive = false;
       state.activeRaidId = null;
-      state.zone = state.lastSafeZone || (state.race ? (RACES[state.race]?.startZone || 'talkingIsland') : 'talkingIsland');
+      state.zone = state.lastHuntingZone || state.lastSafeZone || (state.race ? (RACES[state.race]?.startZone || 'talkingIsland') : 'talkingIsland');
       state.target = null;
       state.activeMonster = null;
     }
 
     checkLevelUp();
     if (state.isCombatActive !== false) {
+      if (monster.isTower && state.lastHuntingZone) {
+        state.zone = state.lastHuntingZone;
+      }
       pickRandomMonster();
     }
   } else { 

@@ -101,6 +101,9 @@ export function challengeTowerFloor(state, callbacks = {}) {
     _stunnedUntil: 0
   };
 
+  if (state.zone) {
+    state.lastHuntingZone = state.zone;
+  }
   state.towerCombatActive = true;
   state.towerStartTime = Date.now();
 
@@ -116,6 +119,8 @@ export function challengeTowerFloor(state, callbacks = {}) {
   if (callbacks.el) {
     const sz = callbacks.el('stage-zone');
     if (sz) sz.textContent = `🏰 INSTÂNCIA TORRE · Andar ${targetFloor} (60s)`;
+    const zn = callbacks.el('zone-name');
+    if (zn) zn.textContent = `Torre Andar ${targetFloor}`;
   }
 
   stopCombat(state);

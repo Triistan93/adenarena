@@ -221,8 +221,21 @@ const BATTLEGROUNDS = [
   '/assets/2d/backgrounds/battlegrounds/PNG/Battleground4/Bright/Battleground4.png',
 ];
 
-function getBattleground(zoneIndex: number): string {
-  return BATTLEGROUNDS[zoneIndex % BATTLEGROUNDS.length];
+function getBattleground(zone: string | number): string {
+  if (typeof zone === 'number') {
+    return BATTLEGROUNDS[zone % BATTLEGROUNDS.length];
+  }
+  const keys = [
+    'talkingIsland', 'elvenForest', 'darkForest', 'orcVillage', 'dwarvenMine', 'kamaelLair', 'ruinedOutpost', 'howlingMoor',
+    'giranOutskirts', 'orcenRuins', 'forsakenCrypt', 'blackCitadel',
+    'gludioCastle', 'wolfMountain', 'riftOfTheVoid', 'emeraldGrove', 'underworldGate', 'valleyOfSaints', 'swampOfScreams',
+    'adenCity', 'dragonValley', 'imperialTomb', 'antharasLair', 'forgeOfGods'
+  ];
+  const idx = keys.indexOf(zone);
+  if (idx !== -1) {
+    return BATTLEGROUNDS[idx % BATTLEGROUNDS.length];
+  }
+  return BATTLEGROUNDS[0];
 }
 
 // --- MAIN COMPONENT ---
@@ -277,10 +290,10 @@ export default function Aden2DGame() {
 
     const playerState = getState();
     const playerClass = playerState.class || 'fighter';
-    const zoneIndex = typeof playerState.zone === 'number' ? playerState.zone : 0;
+    const zoneId = playerState.zone || 'talkingIsland';
 
     // --- Load resources ---
-    const bgImage = new StaticImage(getBattleground(zoneIndex));
+    const bgImage = new StaticImage(getBattleground(zoneId));
     const heroSprites = buildHeroSprites(playerClass);
 
     // Pre-load a pool of monster icons (load 12 random ones)
@@ -724,7 +737,7 @@ export default function Aden2DGame() {
         onClick={handleExit}
         style={{
           position: 'absolute',
-          top: 12,
+          top: 50,
           right: 12,
           padding: '8px 16px',
           background: 'rgba(0,0,0,0.7)',

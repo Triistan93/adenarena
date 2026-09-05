@@ -20,6 +20,27 @@ function hasValidState(state) {
 }
 
 /**
+ * Retorna a cidade mais próxima / vila segura correspondente à zona informada.
+ * Evita que personagens avançados regridam para Talking Island ao morrer ou retornar.
+ * @param {string} zoneId
+ * @returns {string}
+ */
+export function getNearestTown(zoneId) {
+  if (!zoneId || !ZONES[zoneId]) return 'talkingIsland';
+  const current = ZONES[zoneId];
+  if (current.town) return zoneId;
+  if (current.shop && ZONES[current.shop]?.town) return current.shop;
+  if (current.shop && ZONES[current.shop]) return current.shop;
+  for (let i = SAGAS.length - 1; i >= 0; i--) {
+    if (SAGAS[i].zones.includes(zoneId)) {
+      const townInSaga = SAGAS[i].zones.find(z => ZONES[z]?.town);
+      if (townInSaga) return townInSaga;
+    }
+  }
+  return 'talkingIsland';
+}
+
+/**
  * Inicia o loop de combate na zona atual.
  * @param {Object} state — Estado do jogo
  * @param {Object} [callbacks] — { log, attackMonster }
@@ -27,6 +48,7 @@ function hasValidState(state) {
 export function startCombat(state, callbacks = {}) {
   if (!hasValidState(state)) return false;
   state.combatActive = true;
+  state.isCombatActive = true;
 
   if (!state.activeMonster && state.zone && ZONES[state.zone]) {
     if (callbacks.log) callbacks.log(`Entering ${ZONES[state.zone].name}...`, 'system');
@@ -48,6 +70,7 @@ export function startCombat(state, callbacks = {}) {
 export function stopCombat(state) {
   if (!hasValidState(state)) return false;
   state.combatActive = false;
+  state.isCombatActive = false;
   if (combatInterval) {
     clearInterval(combatInterval);
     combatInterval = null;
@@ -163,6 +186,14 @@ export function selectZone(state, zoneId, callbacks = {}) {
     return;
   }
   state.zone = zoneId;
+  state.currentZone = zoneId;
+  if (zone.town) {
+    state.lastSafeZone = zoneId;
+  } else {
+    state.lastHuntingZone = zoneId;
+  }
+  state.target = null;
+  state.activeMonster = null;
   stopCombat(state);
   startCombat(state, callbacks);
   if (callbacks.updateAllUI) callbacks.updateAllUI();
@@ -251,6 +282,7 @@ export function resurrect(state, useScroll = false, callbacks = {}) {
   }
   const loss = state._pendingLoss || 0.2;
   state.xp = Math.max(0, state.xp - Math.floor(state.xp * loss));
+  state._pendingLoss = 0;
 
   const stats = getStats(state);
   state.maxHp = stats.maxHp;
@@ -258,9 +290,27 @@ export function resurrect(state, useScroll = false, callbacks = {}) {
   state.hp = state.maxHp;
   state.mp = state.maxMp;
 
-  state.zone = state.race ? (RACES[state.race]?.startZone || 'talkingIsland') : 'talkingIsland';
+  // Limpa instâncias / raid / torre ao ressuscitar
+  state.isRaidActive = false;
+  state.activeRaidId = null;
+  state.towerCombatActive = false;
+  state.target = null;
+  state.activeMonster = null;
 
-  if (callbacks.log) callbacks.log('Resurrected!', 'system');
+  if (useScroll) {
+    state.zone = state.lastHuntingZone || state.zone || 'talkingIsland';
+  } else {
+    state.zone = getNearestTown(state.zone || state.lastHuntingZone || state.lastSafeZone);
+  }
+  state.currentZone = state.zone;
+  if (ZONES[state.zone]?.town) {
+    state.lastSafeZone = state.zone;
+  }
+
+  if (callbacks.log) {
+    const zoneName = ZONES[state.zone]?.name || state.zone;
+    callbacks.log(`Ressuscitou em ${zoneName}!`, 'system');
+  }
   if (callbacks.updateAllUI) callbacks.updateAllUI();
   if (callbacks.save) callbacks.save();
 

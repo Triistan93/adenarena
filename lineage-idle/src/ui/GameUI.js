@@ -2170,17 +2170,22 @@ export function updateCharacterUI(state) {
 }
 
 export function updateZoneUI(state, callbacks = {}) {
-  const zoneNameEl = findElement('zone-name') || findElement('stage-zone');
-  if (!state?.currentZone) return;
+  const currentZoneKey = state?.zone || state?.currentZone || 'talkingIsland';
+  const zDef = ZONES ? ZONES[currentZoneKey] : null;
 
-  const zDef = ZONES[state.currentZone];
-  if (zDef && zoneNameEl) {
+  const zoneNameEl = findElement('zone-name');
+  if (zoneNameEl && zDef) {
     zoneNameEl.textContent = zDef.name;
   }
 
+  const stageZoneEl = findElement('stage-zone');
+  if (stageZoneEl && zDef) {
+    stageZoneEl.textContent = zDef.name.toUpperCase() + (zDef.town ? ' · TOWN' : '');
+  }
+
   const stageEl = findElement('stage');
-  if (stageEl && state.currentZone) {
-    const bgUrl = ZONE_BACKGROUNDS[state.currentZone] || zDef?.background;
+  if (stageEl && currentZoneKey) {
+    const bgUrl = (ZONE_BACKGROUNDS && ZONE_BACKGROUNDS[currentZoneKey]) || zDef?.background;
     if (bgUrl) {
       stageEl.style.backgroundImage = `url('${getAssetUrl(bgUrl)}')`;
       stageEl.style.backgroundSize = 'cover';

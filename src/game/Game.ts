@@ -2138,9 +2138,11 @@ export class Game {
     ctx.lineWidth = 1.5;
     ctx.stroke();
     ctx.textAlign = "center";
-    ctx.font = "bold 12px Inter, sans-serif";
-    ctx.fillStyle = "#f4d58a";
-    ctx.fillText("📍 Town · Talking Island", bannerX + bannerW / 2, bannerY + 22);
+    const currentZoneId = (typeof window !== "undefined" && (window as any).getGameState?.()?.zone) || "talkingIsland";
+    const zoneDef = typeof window !== "undefined" && (window as any).GameData?.ZONES?.[currentZoneId];
+    const displayZoneName = zoneDef?.name || currentZoneId.replace(/([A-Z])/g, ' $1').replace(/^./, (s: string) => s.toUpperCase());
+    const isTownZone = zoneDef?.town ? "Town · " : "Zone · ";
+    ctx.fillText(`📍 ${isTownZone}${displayZoneName}`, bannerX + bannerW / 2, bannerY + 22);
 
     // --- Top-Left Ornate Circular Compass Dial & HP/MP Bars ---
     const cx = 56;

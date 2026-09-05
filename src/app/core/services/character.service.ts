@@ -51,6 +51,8 @@ export class CharacterService {
         this._state.adenCoins = gs.adenCoins || this._state.adenCoins;
         this._state.race = gs.race || this._state.race;
         this._state.className = gs.class || this._state.className;
+        this._state.activeZone = gs.zone || this._state.activeZone;
+        this._state.isCombatActive = gs.isCombatActive !== false;
       }
     }
     return { ...this._state };

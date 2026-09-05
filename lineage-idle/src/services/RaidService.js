@@ -105,6 +105,9 @@ export function startRaidBoss(state, raidId, callbacks = {}) {
   // Consome 1 ingresso diário
   state.dailyRaidTickets = Math.max(0, (state.dailyRaidTickets || DAILY_FREE_TICKETS) - 1);
 
+  if (state.zone) {
+    state.lastHuntingZone = state.zone;
+  }
   state.zone = null;
   state.target = raidId;
   state.isRaidActive = true;
@@ -123,6 +126,8 @@ export function startRaidBoss(state, raidId, callbacks = {}) {
   if (callbacks.el) {
     const sz = callbacks.el('stage-zone');
     if (sz) sz.textContent = `🐉 RAID ÉPICO · ${bossTemplate.name}`;
+    const zn = callbacks.el('zone-name');
+    if (zn) zn.textContent = bossTemplate.name;
   }
 
   stopCombat(state);
