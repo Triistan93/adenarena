@@ -5,7 +5,7 @@ export const IDLE_MARKUP = `
     <div class="ambient-layer" aria-hidden="true"></div>
     <div id="float-layer" class="float-layer" aria-hidden="true"></div>
     <!-- Top Bar -->
-    <header class="top-bar">
+    <header class="top-bar" style="padding-right: clamp(84px, 7vw, 110px);">
       <span id="game-title">LINEAGE <span class="title-idle-stamp"><span class="stamp-idle"><span class="stamp-idle-text">IDLE</span><span class="stamp-idle-sub">CHRONICLE</span></span></span></span>
       <div class="top-stats" style="display:flex; align-items:center; justify-content:space-between; width:100%; gap:12px;">
         <div class="top-stats-left" style="display:flex; align-items:center; gap:8px;">
@@ -98,20 +98,22 @@ export const IDLE_MARKUP = `
         <div class="stage" id="stage" data-state="idle">
           <div class="stage-bg stage-bg-a" id="stage-bg-a"></div>
           <div class="stage-bg stage-bg-b" id="stage-bg-b"></div>
-          <div class="stage-zone" id="stage-zone">—</div>
-          <div class="combat-controls-bar">
-            <button id="combat-toggle-btn" class="combat-ctrl-btn active" title="Pausar ou Iniciar Caça Automática (Tecla P)">🛑 Parar Caça</button>
-            <button id="soulshot-toggle-btn" class="combat-ctrl-btn" title="Ativar Soulshot no combate (+100% dano físico/mágico por golpe)">⚡ Soulshot: OFF</button>
-            <button id="autopotion-toggle-btn" class="combat-ctrl-btn" title="Usar poções de HP automaticamente quando HP < 50%">🧪 Auto-Poção: OFF</button>
-            <button id="speed-toggle-btn" class="combat-ctrl-btn" title="Velocidade do combate (1x Normal ou 2x Turbo)">⏩ Velocidade: 1x</button>
-            <label class="combat-ctrl-btn" style="display:inline-flex; align-items:center; gap:6px; cursor:pointer;">
-              <span>VFX</span>
-              <select id="vfx-quality-select" title="Qualidade dos efeitos visuais" style="background:transparent; color:inherit; border:none; outline:none;">
-                <option value="low">Baixo</option>
-                <option value="medium" selected>Médio</option>
-                <option value="high">Alto</option>
-              </select>
-            </label>
+          <div class="stage-header-bar">
+            <div class="stage-zone" id="stage-zone">—</div>
+            <div class="combat-controls-bar">
+              <button id="combat-toggle-btn" class="combat-ctrl-btn active" title="Pausar ou Iniciar Caça Automática (Tecla P)">🛑 Parar Caça</button>
+              <button id="soulshot-toggle-btn" class="combat-ctrl-btn" title="Ativar Soulshot no combate (+100% dano físico/mágico por golpe)">⚡ SS: OFF</button>
+              <button id="autopotion-toggle-btn" class="combat-ctrl-btn" title="Usar poções de HP automaticamente quando HP < 50%">🧪 Auto-HP: OFF</button>
+              <button id="speed-toggle-btn" class="combat-ctrl-btn" title="Velocidade do combate (1x Normal ou 2x Turbo)">⏩ 1x</button>
+              <label class="combat-ctrl-btn combat-ctrl-vfx" style="display:inline-flex; align-items:center; gap:4px; cursor:pointer;" title="Qualidade dos efeitos visuais">
+                <span>VFX</span>
+                <select id="vfx-quality-select" title="Qualidade dos efeitos visuais" style="background:transparent; color:inherit; border:none; outline:none; font-size:10px; cursor:pointer;">
+                  <option value="low">Baixo</option>
+                  <option value="medium" selected>Médio</option>
+                  <option value="high">Alto</option>
+                </select>
+              </label>
+            </div>
           </div>
           <div class="stage-vs" aria-hidden="true">&#9876;</div>
           <div class="stage-hero" id="stage-hero">

@@ -214,14 +214,19 @@ export function AuthModal({ onCloudDataLoaded, getCurrentState }: AuthModalProps
 
   return (
     <div className="relative inline-block text-left">
-      {/* Compact Floppy Disk Button */}
+      {/* Compact Floppy Disk Button styled to match Lineage Top Bar */}
       <button
         onClick={() => setShowPopover(!showPopover)}
-        className="flex items-center gap-1.5 bg-slate-900/90 hover:bg-slate-800 border border-amber-500/40 rounded-xl px-2.5 py-1.5 text-xs text-amber-300 shadow-lg shadow-black/60 transition cursor-pointer"
+        className="flex items-center gap-1.5 bg-gradient-to-b from-[#252f40] to-[#121824] hover:from-[#35435c] hover:to-[#1a2233] border border-amber-500/50 hover:border-amber-400 rounded px-2 h-[26px] text-xs font-serif font-bold text-amber-300 shadow-md shadow-black/70 transition cursor-pointer select-none"
         title="Menu de Salvamento na Nuvem (Clique para expandir)"
       >
-        <span className="text-base">💾</span>
-        {user && <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>}
+        <span className="text-sm leading-none">💾</span>
+        <span className="text-[10.5px] tracking-wide text-amber-200 uppercase leading-none">Nuvem</span>
+        {user ? (
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse ml-0.5" title="Conta Conectada"></span>
+        ) : (
+          <span className="w-2 h-2 rounded-full bg-amber-500/50 ml-0.5" title="Não conectado"></span>
+        )}
       </button>
 
       {/* Popover Dropdown Menu */}

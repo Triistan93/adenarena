@@ -350,6 +350,12 @@ function load() {
   const loaded = managerLoadState();
   if (loaded) {
     state = getState();
+    if (state.level && state.level > 1) {
+      const minXp = getTotalXP(state.level - 1);
+      if (state.xp == null || state.xp < minXp) {
+        state.xp = minXp;
+      }
+    }
     consolidateInventoryStacks(state);
     checkQuestResets();
     updateSagaProgress(true);
@@ -1396,8 +1402,14 @@ function updateStatsUI() {
   updateBar('hp-bar', state.hp, stats.maxHp); updateBar('mp-bar', state.mp, stats.maxMp);
   state.maxHp = stats.maxHp; state.maxMp = stats.maxMp;
   const xpForLevel = getXPForLevel(state.level);
-  updateBar('xp-bar', state.xp - getTotalXP(state.level - 1), xpForLevel);
-  const _xtEl = el('xp-text'); if (_xtEl) _xtEl.textContent = `${state.xp - getTotalXP(state.level - 1)} / ${xpForLevel}`;
+  const baseXP = state.level <= 1 ? 0 : getTotalXP(state.level - 1);
+  const curXP = Math.max(0, (state.xp || 0) - baseXP);
+  updateBar('xp-bar', curXP, xpForLevel);
+  const _xtEl = el('xp-text');
+  if (_xtEl) {
+    const pct = xpForLevel > 0 ? Math.min(100, (curXP / xpForLevel) * 100) : 100;
+    _xtEl.textContent = `${curXP.toLocaleString()} / ${xpForLevel.toLocaleString()} (${pct.toFixed(0)}%)`;
+  }
   const _spEl = el('sp-text'); if (_spEl) _spEl.textContent = state.sp;
   const _lvEl = el('level-text'); if (_lvEl) _lvEl.textContent = state.level;
   const _atkEl = el('atk-text'); if (_atkEl) _atkEl.textContent = stats.atk;
@@ -2031,18 +2043,18 @@ function updateCombatControlsUI() {
     const isMage = state.class === 'mage' || state.class === 'soulbreaker';
     const shotId = isMage ? 'spiritshot_ng' : 'soulshot_ng';
     const count = getInventoryCount(shotId);
-    ssBtn.textContent = `⚡ Soulshot: ${state.soulshotActive ? 'ON' : 'OFF'} (${count})`;
+    ssBtn.textContent = `⚡ SS: ${state.soulshotActive ? 'ON' : 'OFF'} (${count})`;
   }
   const apBtn = el('autopotion-toggle-btn');
   if (apBtn) {
     apBtn.classList.toggle('active', !!state.autoPotionActive);
     const potCount = getInventoryCount('hp_potion_s') + getInventoryCount('hp_potion_m') + getInventoryCount('hp_potion_l') + getInventoryCount('hp_potion_xl');
-    apBtn.textContent = `🧪 Auto-Poção: ${state.autoPotionActive ? 'ON' : 'OFF'} (${potCount})`;
+    apBtn.textContent = `🧪 Auto-HP: ${state.autoPotionActive ? 'ON' : 'OFF'} (${potCount})`;
   }
   const spdBtn = el('speed-toggle-btn');
   if (spdBtn) {
     spdBtn.classList.toggle('active', state.combatSpeed === 2);
-    spdBtn.textContent = `⏩ Velocidade: ${state.combatSpeed || 1}x`;
+    spdBtn.textContent = `⏩ ${state.combatSpeed || 1}x`;
   }
 }
 
@@ -8409,6 +8421,13 @@ export function init() {
       state.quests = cloudData.quests && typeof cloudData.quests === 'object' ? cloudData.quests : {};
       state.battlePass = cloudData.battlePass && typeof cloudData.battlePass === 'object' ? cloudData.battlePass : {};
       
+      if (state.level && state.level > 1) {
+        const minXp = getTotalXP(state.level - 1);
+        if (state.xp == null || state.xp < minXp) {
+          state.xp = minXp;
+        }
+      }
+
       updateAllUI();
       save();
       if (cloudData.lastSaveTime) {

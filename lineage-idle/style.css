@@ -212,7 +212,7 @@ select:focus-visible {
   justify-content: space-between;
   align-items: center;
   gap: 10px;
-  padding: max(8px, env(safe-area-inset-top, 8px)) clamp(10px, 2vw, 32px) 8px clamp(12px, 3.5vw, 64px);
+  padding: max(8px, env(safe-area-inset-top, 8px)) clamp(84px, 7vw, 110px) 8px clamp(12px, 3.5vw, 64px);
   background:
     linear-gradient(180deg, rgba(20, 23, 31, 0.98) 0%, rgba(9, 11, 16, 0.98) 100%),
     radial-gradient(circle at top left, rgba(212,167,68,0.12), transparent 45%);
@@ -382,7 +382,7 @@ select:focus-visible {
 /* ---- Main Grid & Resizable Panels ---- */
 .main-grid {
   --col1-w: 220px;
-  --col3-w: 680px;
+  --col3-w: clamp(480px, 36vw, 620px);
   display: grid;
   grid-template-columns: var(--col1-w) 6px 1fr 6px var(--col3-w);
   flex: 1 1 auto;
@@ -1024,13 +1024,16 @@ select:focus-visible {
 
 .pillar-subtabs-strip {
   display: flex !important;
-  gap: 6px !important;
+  gap: 4px !important;
   overflow-x: auto !important;
-  padding: 6px 4px 4px 4px !important;
+  overflow-y: hidden !important;
+  flex-wrap: nowrap !important;
+  width: 100% !important;
+  padding: 5px 4px !important;
   scrollbar-width: thin !important;
-  scrollbar-color: rgba(212, 169, 78, 0.3) transparent !important;
+  scrollbar-color: rgba(212, 169, 78, 0.4) transparent !important;
   animation: slideDownSubtabs 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
-  background: rgba(10, 8, 5, 0.75) !important;
+  background: rgba(10, 8, 5, 0.85) !important;
   border-radius: 5px !important;
   border: 1px solid rgba(212, 169, 78, 0.15) !important;
   box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.6) !important;
@@ -1050,8 +1053,8 @@ select:focus-visible {
 .subtab-pill-btn {
   display: inline-flex !important;
   align-items: center !important;
-  gap: 6px !important;
-  padding: 6px 12px !important;
+  gap: 5px !important;
+  padding: 5px 9px !important;
   background: linear-gradient(180deg, #221a11 0%, #120e09 100%) !important;
   border: 1px solid #4a3820 !important;
   border-radius: 5px !important;
@@ -1060,6 +1063,7 @@ select:focus-visible {
   font-size: 11px !important;
   font-weight: 600 !important;
   white-space: nowrap !important;
+  flex-shrink: 0 !important;
   cursor: pointer !important;
   transition: all 0.2s cubic-bezier(0.2, 0.8, 0.25, 1) !important;
   box-shadow: 0 1px 3px rgba(0,0,0,0.5) !important;
@@ -2659,49 +2663,106 @@ select:focus-visible {
 @keyframes fogDrift { from { background-position: 120% 0; } to { background-position: -120% 0; } }
 @keyframes emberRise { from { transform: translateY(8px); opacity: 0.4; } 50% { opacity: 1; } to { transform: translateY(-40px); opacity: 0; } }
 
-/* ---- stage chrome ---- */
+/* ---- stage header bar (integrated zone & combat controls) ---- */
+.stage-header-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 10px;
+  background: linear-gradient(180deg, rgba(8, 10, 16, 0.94) 0%, rgba(8, 10, 16, 0.65) 75%, transparent 100%);
+  pointer-events: none;
+}
+.stage-header-bar > * {
+  pointer-events: auto;
+}
+
 .stage-zone {
-  position: absolute; left: 12px; top: 12px; z-index: 5;
-  padding: 5px 14px; background: rgba(12, 16, 24, 0.85);
+  position: static !important;
+  left: auto !important;
+  top: auto !important;
+  margin: 0 !important;
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  background: rgba(12, 16, 24, 0.9);
   border: 1px solid var(--gilt-bright);
   border-radius: 4px;
-  font-family: "Cinzel", serif; font-size: 11px; font-weight: 700; letter-spacing: 0.15em;
-  color: var(--gilt-bright); text-transform: uppercase;
+  font-family: "Cinzel", serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--gilt-bright);
+  text-transform: uppercase;
   text-shadow: 0 1px 3px #000;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.7), inset 0 0 8px rgba(212,167,68,0.15);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.7), inset 0 0 8px rgba(212,167,68,0.15);
   backdrop-filter: blur(4px);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .stage .combat-controls-bar {
-  position: absolute; top: 12px; right: 12px; z-index: 5;
-  display: flex; gap: 8px;
+  position: static !important;
+  right: auto !important;
+  top: auto !important;
+  margin: 0 !important;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
 }
 
 .combat-ctrl-btn {
   background: linear-gradient(180deg, #1c1712 0%, #0f0d0a 100%);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  border-left: 1px solid rgba(255, 255, 255, 0.04);
-  border-right: 1px solid rgba(0, 0, 0, 0.4);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.6);
+  border: 1px solid #4a3820;
+  border-top-color: rgba(255, 255, 255, 0.12);
   color: #c5bfb0;
-  padding: 4px 10px; border-radius: 4px;
-  font-family: "IBM Plex Sans", sans-serif; font-size: 11px; font-weight: 600;
-  cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.6);
-  backdrop-filter: blur(4px); transition: all 0.2s ease;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 10.5px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.6);
+  backdrop-filter: blur(4px);
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+  line-height: 1.2;
 }
 
 .combat-ctrl-btn:hover {
   background: linear-gradient(180deg, #2a231a 0%, #1c1712 100%);
-  box-shadow: 0 3px 10px rgba(0,0,0,0.8);
+  border-color: #d4a94e;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.8);
   transform: translateY(-1px);
-  color: #e8e0d0;
+  color: #f0e6d2;
 }
 
 .combat-ctrl-btn.active {
   background: linear-gradient(180deg, #1e2a3a 0%, #141a24 100%);
   color: #e0f0ff;
   border-color: #5b7fa8;
-  box-shadow: 0 0 12px rgba(91, 127, 168, 0.3);
+  box-shadow: 0 0 10px rgba(91, 127, 168, 0.35);
+}
+
+.combat-ctrl-vfx select {
+  background: transparent;
+  color: inherit;
+  border: none;
+  outline: none;
+  font-size: 10px;
+  cursor: pointer;
+}
+.combat-ctrl-vfx select option {
+  background: #141a24;
+  color: #e0f0ff;
 }
 
 .stage-vs {

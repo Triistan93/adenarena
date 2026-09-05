@@ -915,7 +915,7 @@ export default function Shell() {
             </div>
           )}
           <ModeSwitch mode={mode} setMode={setMode} />
-          <div className="fixed top-[max(6px,env(safe-area-inset-top,6px))] right-[max(6px,env(safe-area-inset-right,6px))] z-40">
+          <div className="fixed top-[7px] right-[8px] z-40 flex items-center h-[28px]">
             <AuthModal 
               onCloudDataLoaded={(cloudState) => {
                 if (typeof window !== 'undefined' && (window as any).loadGameState) {
