@@ -224,11 +224,11 @@ export const CASH_SHOP_CATALOG = {
       desc: 'Encanta qualquer armadura, escudo ou joia (+1). Em caso de falha, o equipamento é 100% protegido (não perde níveis nem quebra).'
     },
     {
-      id: 'spellbook_4star_tome',
-      name: 'Tomo Ancestral de Habilidade 4★',
-      priceAC: 300,
-      icon: 'spellbooks/spellbook_4star.png',
-      desc: 'Tomo primordial necessário para desbloquear a Habilidade Suprema 4★ de Nível 80+ da sua 3ª Classe.'
+      id: 'pack_inventory_expand_30',
+      name: 'Expansor de Mochila (+30 Slots)',
+      priceAC: 120,
+      icon: 'materials/material_pouch.png',
+      desc: 'Bolsa dimensional de couro místico. Expande permanentemente o limite máximo da sua mochila em +30 slots adicionais.'
     },
     {
       id: 'elixir_vigor_bundle_5',
@@ -245,36 +245,40 @@ export const CASH_SHOP_CATALOG = {
       id: 'ac_pack_100',
       amountAC: 100,
       bonusAC: 0,
+      firstPurchaseBonusAC: 100,
       priceBRL: 'R$ 7,50',
       label: 'Pacote Pequeno',
-      desc: 'Ideal para adquirir o Starter Pack Tier 1 ou Passes Utilitários.'
+      desc: 'Ideal para adquirir o Starter Pack Tier 1 ou Passes Utilitários. 🎁 1ª Recarga: +100 AC Bônus!'
     },
     {
       id: 'ac_pack_250',
       amountAC: 250,
       bonusAC: 0,
+      firstPurchaseBonusAC: 250,
       priceBRL: 'R$ 15,00',
       label: 'Pacote Médio',
-      desc: 'Perfeito para o Starter Pack Tier 2 Campeão ou Aparência de Arma.'
+      desc: 'Perfeito para o Starter Pack Tier 2 Campeão ou Aparência de Arma. 🎁 1ª Recarga: +250 AC Bônus!'
     },
     {
       id: 'ac_pack_550',
       amountAC: 500,
       bonusAC: 50,
+      firstPurchaseBonusAC: 500,
       totalAC: 550,
       priceBRL: 'R$ 30,00',
       label: 'Pacote Lorde (+10% Bônus)',
       popular: true,
-      desc: 'Suficiente para o Starter Pack Tier 3 com todo o Conjunto de Herança + Título + Agathion.'
+      desc: 'Suficiente para o Starter Pack Tier 3 com Herança Completa + Título + Agathion. 🎁 1ª Recarga: +500 AC Bônus!'
     },
     {
       id: 'ac_pack_1200',
       amountAC: 1000,
       bonusAC: 200,
+      firstPurchaseBonusAC: 1000,
       totalAC: 1200,
       priceBRL: 'R$ 60,00',
       label: 'Cofre Real (+20% Bônus)',
-      desc: 'Máximo valor por moeda com bônus generoso para quem deseja desbloquear trajes, auras e tomos.'
+      desc: 'Máximo valor por moeda com bônus generoso para quem deseja desbloquear trajes e auras. 🎁 1ª Recarga: +1.000 AC Bônus!'
     }
   ]
 };

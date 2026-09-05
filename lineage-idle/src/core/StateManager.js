@@ -218,6 +218,12 @@ export function loadState() {
     currentState.battlePass = data.battlePass && typeof data.battlePass === 'object' ? data.battlePass : { xp: 0, claimedFree: [], claimedPremium: [], unlockedPremium: false };
     currentState.dailyRewards = data.dailyRewards && typeof data.dailyRewards === 'object' ? data.dailyRewards : { currentDay: 1, claimedDays: [], lastClaimDate: '', streak: 0, totalClaims: 0 };
     currentState.tower = data.tower && typeof data.tower === 'object' ? data.tower : { highestFloor: 0, currentFloor: 1, lastSweepTime: 0 };
+    currentState.bonusInventorySlots = Number(data.bonusInventorySlots) || 0;
+    currentState.vipTeleportUntil = Number(data.vipTeleportUntil) || 0;
+    currentState.referredBy = data.referredBy || (typeof localStorage !== 'undefined' ? localStorage.getItem('aden_referred_by') : null) || null;
+    currentState.referralRewardClaimed = Boolean(data.referralRewardClaimed);
+    currentState.referralsCount = Number(data.referralsCount) || 0;
+    currentState.referralRewardsClaimed = Number(data.referralRewardsClaimed) || 0;
 
     currentState.buffs = data.buffs || {};
     currentState.filter = data.filter || 'all';

@@ -49,6 +49,7 @@ function getHeroAvatar(state: any): string {
 export function LoginScreen({ onEnterGame }: LoginScreenProps) {
   const [user, setUser] = useState<User | null>(null);
   const [tab, setTab] = useState<'login' | 'register'>('login');
+  const [showCloudLogin, setShowCloudLogin] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -244,6 +245,18 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
   };
 
   const handlePlayGuest = () => {
+    try {
+      const localSave = localStorage.getItem('aden_idle_save') || localStorage.getItem('lineage_idle_save');
+      if (localSave) {
+        const parsed = JSON.parse(localSave);
+        if (parsed && (parsed.level || parsed.name || parsed.charName)) {
+          onEnterGame(parsed);
+          return;
+        }
+      }
+    } catch (e) {
+      console.warn('Falha ao restaurar save local de convidado:', e);
+    }
     setShowCreation(true);
   };
 
@@ -361,14 +374,30 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-400/25 to-transparent animate-shimmer" />
             
             <div className="relative z-10">
-              <div className="text-amber-200 text-[10px] sm:text-xs font-bold tracking-[0.35em] mb-1 animate-pulse-glow inline-block uppercase">
-                Lineage Chronicle
+              <div className="text-amber-200 text-[10px] sm:text-xs font-bold tracking-[0.25em] mb-1 animate-pulse-glow inline-block uppercase">
+                ✦ NOVO RPG DE NAVEGADOR · TEMPORADA 1 ✦
               </div>
               <h1 className="text-3xl sm:text-4xl font-black text-amber-300 drop-shadow-md leading-tight" style={{ fontFamily: 'serif' }}>
                 ADEN ARENA
               </h1>
+              <div className="text-amber-300 text-xs sm:text-sm font-black tracking-[0.2em] uppercase font-serif">
+                IDLE CHRONICLES
+              </div>
               <div className="text-amber-100/90 text-[10px] sm:text-[11px] mt-1 font-medium">
-                Portal de Autenticação & Progresso em Nuvem
+                Aventura Épica no Universo Clássico de Aden
+              </div>
+
+              {/* 3 Badges de Destaque */}
+              <div className="mt-3 flex flex-wrap items-center justify-center gap-1.5 text-[10px]">
+                <span className="bg-black/40 border border-amber-500/40 text-amber-200 px-2 py-0.5 rounded-full font-semibold shadow-sm">
+                  ⚡ 100% no Navegador
+                </span>
+                <span className="bg-black/40 border border-amber-500/40 text-amber-200 px-2 py-0.5 rounded-full font-semibold shadow-sm">
+                  🛡️ 20+ Classes & Forja
+                </span>
+                <span className="bg-black/40 border border-amber-500/40 text-amber-200 px-2 py-0.5 rounded-full font-semibold shadow-sm">
+                  🌙 Caça Offline
+                </span>
               </div>
             </div>
           </div>
@@ -459,37 +488,56 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
                 {/* Botão Trocar de Conta / Sair */}
                 <button
                   onClick={handleLogout}
-                  className="w-full bg-gray-800 hover:bg-gray-900 text-gray-300 hover:text-white font-semibold py-2.5 px-6 rounded-lg shadow transition-all duration-200 text-xs border border-gray-700 cursor-pointer"
+                  className="w-full bg-gray-800 hover:bg-gray-900 text-gray-300 hover:text-white font-semibold py-2 px-6 rounded-lg shadow transition-all duration-200 text-xs border border-gray-700 cursor-pointer"
                 >
                   Trocar de Conta / Sair
                 </button>
+
+                {/* Botão Discord Oficial */}
+                <div className="pt-2 border-t border-amber-600/20">
+                  <a
+                    href="https://discord.gg/adenarena"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full bg-[#5865F2] hover:bg-[#4752C4] text-white font-bold py-2 px-4 rounded-lg shadow flex items-center justify-center gap-2 text-xs transition-all duration-200 cursor-pointer text-decoration-none"
+                  >
+                    <span>💬</span>
+                    <span>Entrar no Discord Oficial da Comunidade</span>
+                  </a>
+                </div>
               </div>
             ) : (
               /* =============================================================== */
-              /* ESTADO 2: NÃO LOGADO (ABAS, GOOGLE LOGIN, EMAIL/SENHA)           */
+              /* ESTADO 2: NÃO LOGADO (ZERO ATTRITION CTA + OPÇÕES DE NUVEM)    */
               /* =============================================================== */
-              <div className="space-y-3.5">
-                {/* Abas Entrar / Criar Conta */}
-                <div className="flex border-b-2 border-amber-600/30 mb-2">
+              <div className="space-y-4">
+                {/* CTA PRIMÁRIO: ZERO ATRITO (JOGAR AGORA GRÁTIS) */}
+                <div className="bg-gradient-to-b from-amber-950/20 to-amber-900/10 border-2 border-amber-500/70 rounded-xl p-3 sm:p-4 text-center shadow-lg relative overflow-hidden">
+                  <div className="absolute -top-10 -right-10 w-24 h-24 bg-amber-400/10 rounded-full blur-xl pointer-events-none" />
+                  
                   <button
-                    className={`flex-1 py-1.5 text-xs sm:text-sm font-bold border-b-2 transition ${tab === 'login' ? 'border-amber-700 text-amber-900' : 'border-transparent text-gray-500 hover:text-gray-800'}`}
-                    onClick={() => { setTab('login'); setError(null); }}
+                    onClick={handlePlayGuest}
+                    className="w-full bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 hover:from-amber-600 hover:via-yellow-500 hover:to-amber-600 text-gray-950 font-black py-3.5 px-6 rounded-lg shadow-xl transform hover:scale-[1.02] active:scale-95 transition-all duration-200 border-2 border-amber-700 relative overflow-hidden group cursor-pointer"
+                    style={{ fontFamily: 'serif' }}
                   >
-                    Entrar
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+                    <span className="text-lg sm:text-xl relative z-10 flex items-center justify-center gap-2 drop-shadow-[0_1px_2px_rgba(255,255,255,0.6)]">
+                      ⚔️ JOGAR AGORA GRÁTIS ▶
+                    </span>
                   </button>
-                  <button
-                    className={`flex-1 py-1.5 text-xs sm:text-sm font-bold border-b-2 transition ${tab === 'register' ? 'border-amber-700 text-amber-900' : 'border-transparent text-gray-500 hover:text-gray-800'}`}
-                    onClick={() => { setTab('register'); setError(null); }}
-                  >
-                    Criar Conta
-                  </button>
+                  <p className="text-[11px] text-amber-950/80 font-semibold mt-2">
+                    Sem cadastro · Jogue direto no navegador · Salva automaticamente
+                  </p>
                 </div>
 
-                {error && (
-                  <div className="bg-red-950/80 border border-red-700 text-red-200 p-2.5 rounded-lg text-xs text-center font-medium">
-                    {error}
+                {/* Separador */}
+                <div className="flex items-center justify-center py-0.5">
+                  <div className="h-px bg-amber-600/30 flex-1"></div>
+                  <div className="mx-3 text-amber-800/70 text-[10px] font-bold uppercase tracking-wider">
+                    Ou sincronize em Nuvem
                   </div>
-                )}
+                  <div className="h-px bg-amber-600/30 flex-1"></div>
+                </div>
 
                 {/* Botão Google Login */}
                 <button
@@ -503,95 +551,112 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
                     <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.26C.46 8.17 0 10.03 0 12s.46 3.83 1.26 5.42l4.02-3.15z"/>
                     <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.37 0 3.26 2.7 1.26 6.58l4.02 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
                   </svg>
-                  <span>Entrar com o Google</span>
+                  <span>Sincronizar com Google</span>
                 </button>
 
-                {/* Separador */}
-                <div className="flex items-center justify-center py-0.5">
-                  <div className="h-px bg-amber-600/30 flex-1"></div>
-                  <div className="mx-3 text-amber-800/60 text-[10px] font-bold uppercase">ou e-mail</div>
-                  <div className="h-px bg-amber-600/30 flex-1"></div>
-                </div>
+                {/* Alternar login com E-mail / Senha */}
+                <div>
+                  <button
+                    type="button"
+                    onClick={() => setShowCloudLogin(!showCloudLogin)}
+                    className="w-full text-center text-xs text-amber-900/80 hover:text-amber-950 font-semibold py-1 flex items-center justify-center gap-1 cursor-pointer transition"
+                  >
+                    <span>{showCloudLogin ? '▲ Ocultar login por E-mail' : '▼ Entrar ou criar conta com E-mail / Senha'}</span>
+                  </button>
 
-                {/* Formulário de Email e Senha */}
-                <form onSubmit={tab === 'login' ? handleLogin : handleRegister} className="space-y-2.5 text-left">
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-800 mb-1">
-                      📧 E-mail
-                    </label>
-                    <input 
-                      type="email"
-                      required
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="seu.email@exemplo.com"
-                      className="w-full px-3.5 py-2 border-2 border-amber-600 rounded-md bg-white focus:outline-none focus:border-amber-800 focus:ring-1 focus:ring-amber-500 transition-all text-gray-900 placeholder-gray-400 text-xs"
-                    />
-                  </div>
+                  {showCloudLogin && (
+                    <div className="mt-3 pt-3 border-t border-amber-600/20 space-y-3">
+                      {/* Abas Entrar / Criar Conta */}
+                      <div className="flex border-b-2 border-amber-600/30 mb-2">
+                        <button
+                          className={`flex-1 py-1 text-xs font-bold border-b-2 transition ${tab === 'login' ? 'border-amber-700 text-amber-900' : 'border-transparent text-gray-500 hover:text-gray-800'}`}
+                          onClick={() => { setTab('login'); setError(null); }}
+                        >
+                          Entrar
+                        </button>
+                        <button
+                          className={`flex-1 py-1 text-xs font-bold border-b-2 transition ${tab === 'register' ? 'border-amber-700 text-amber-900' : 'border-transparent text-gray-500 hover:text-gray-800'}`}
+                          onClick={() => { setTab('register'); setError(null); }}
+                        >
+                          Criar Conta
+                        </button>
+                      </div>
 
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-800 mb-1">
-                      🔒 Senha
-                    </label>
-                    <input 
-                      type="password"
-                      required
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      placeholder="••••••••"
-                      className="w-full px-3.5 py-2 border-2 border-amber-600 rounded-md bg-white focus:outline-none focus:border-amber-800 focus:ring-1 focus:ring-amber-500 transition-all text-gray-900 placeholder-gray-400 text-xs"
-                    />
-                  </div>
+                      {error && (
+                        <div className="bg-red-950/80 border border-red-700 text-red-200 p-2 rounded-lg text-xs text-center font-medium">
+                          {error}
+                        </div>
+                      )}
 
-                  {tab === 'register' && (
-                    <div>
-                      <label className="block text-xs font-semibold text-gray-800 mb-1">
-                        🔒 Confirmar Senha
-                      </label>
-                      <input 
-                        type="password"
-                        required
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                        placeholder="••••••••"
-                        className="w-full px-3.5 py-2 border-2 border-amber-600 rounded-md bg-white focus:outline-none focus:border-amber-800 focus:ring-1 focus:ring-amber-500 transition-all text-gray-900 placeholder-gray-400 text-xs"
-                      />
+                      {/* Formulário de Email e Senha */}
+                      <form onSubmit={tab === 'login' ? handleLogin : handleRegister} className="space-y-2 text-left">
+                        <div>
+                          <label className="block text-[11px] font-semibold text-gray-800 mb-0.5">
+                            📧 E-mail
+                          </label>
+                          <input 
+                            type="email"
+                            required
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            placeholder="seu.email@exemplo.com"
+                            className="w-full px-3 py-1.5 border-2 border-amber-600 rounded-md bg-white focus:outline-none focus:border-amber-800 focus:ring-1 focus:ring-amber-500 transition-all text-gray-900 placeholder-gray-400 text-xs"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-[11px] font-semibold text-gray-800 mb-0.5">
+                            🔒 Senha
+                          </label>
+                          <input 
+                            type="password"
+                            required
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            placeholder="••••••••"
+                            className="w-full px-3 py-1.5 border-2 border-amber-600 rounded-md bg-white focus:outline-none focus:border-amber-800 focus:ring-1 focus:ring-amber-500 transition-all text-gray-900 placeholder-gray-400 text-xs"
+                          />
+                        </div>
+
+                        {tab === 'register' && (
+                          <div>
+                            <label className="block text-[11px] font-semibold text-gray-800 mb-0.5">
+                              🔒 Confirmar Senha
+                            </label>
+                            <input 
+                              type="password"
+                              required
+                              value={confirmPassword}
+                              onChange={(e) => setConfirmPassword(e.target.value)}
+                              placeholder="••••••••"
+                              className="w-full px-3 py-1.5 border-2 border-amber-600 rounded-md bg-white focus:outline-none focus:border-amber-800 focus:ring-1 focus:ring-amber-500 transition-all text-gray-900 placeholder-gray-400 text-xs"
+                            />
+                          </div>
+                        )}
+
+                        <button
+                          type="submit"
+                          disabled={loading}
+                          className="w-full bg-gradient-to-r from-amber-600 via-yellow-500 to-amber-600 hover:from-amber-700 hover:via-yellow-600 hover:to-amber-700 text-gray-950 font-black py-2.5 px-4 rounded-lg shadow transform hover:scale-[1.01] active:scale-95 transition-all duration-200 border-2 border-amber-800 disabled:opacity-50 text-xs cursor-pointer mt-2"
+                        >
+                          {loading ? 'PROCESSANDO...' : (tab === 'login' ? 'ENTRAR COM E-MAIL' : 'CRIAR CONTA')}
+                        </button>
+                      </form>
                     </div>
                   )}
+                </div>
 
-                  {/* Botão de Ação com Brilho Shimmer */}
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="w-full bg-gradient-to-r from-amber-600 via-yellow-500 to-amber-600 hover:from-amber-700 hover:via-yellow-600 hover:to-amber-700 text-gray-950 font-black py-3 px-6 rounded-lg shadow-lg transform hover:scale-[1.02] active:scale-95 transition-all duration-200 border-2 border-amber-800 disabled:opacity-50 relative overflow-hidden group cursor-pointer mt-3"
-                    style={{ fontFamily: 'serif' }}
+                {/* Botão Discord Oficial */}
+                <div className="pt-2 border-t border-amber-600/20">
+                  <a
+                    href="https://discord.gg/adenarena"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full bg-[#5865F2] hover:bg-[#4752C4] text-white font-bold py-2 px-4 rounded-lg shadow flex items-center justify-center gap-2 text-xs transition-all duration-200 cursor-pointer text-decoration-none"
                   >
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
-                    
-                    {loading ? (
-                      <span className="flex items-center justify-center relative z-10 text-xs sm:text-sm">
-                        <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-gray-950" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        PROCESSANDO...
-                      </span>
-                    ) : (
-                      <span className="text-sm sm:text-base relative z-10">
-                        {tab === 'login' ? '⚔️ ENTRAR EM ADEN ▶' : '⚔️ CRIAR CONTA E JOGAR ▶'}
-                      </span>
-                    )}
-                  </button>
-                </form>
-
-                {/* Opção Convidado */}
-                <div className="pt-2 text-center border-t border-amber-600/20">
-                  <button
-                    onClick={handlePlayGuest}
-                    className="text-xs text-amber-900 hover:text-amber-950 underline underline-offset-4 transition font-bold cursor-pointer"
-                  >
-                    🗡️ Jogar como Convidado (Save Local)
-                  </button>
+                    <span>💬</span>
+                    <span>Entrar no Discord Oficial da Comunidade</span>
+                  </a>
                 </div>
               </div>
             )}
@@ -602,7 +667,7 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
           <div className="bg-gradient-to-r from-[#5a3615] via-[#94551a] to-[#5a3615] p-2.5 text-center relative overflow-hidden border-t-2 border-amber-800">
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-400/10 to-transparent" />
             <div className="text-amber-200/90 text-[10px] relative z-10 font-serif">
-              © 2024 Lineage Chronicle - Aden Arena
+              © 2026 Aden Arena: Idle Chronicles. Jogo independente para fãs.
             </div>
           </div>
         </div>

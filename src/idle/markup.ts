@@ -6,11 +6,11 @@ export const IDLE_MARKUP = `
     <div id="float-layer" class="float-layer" aria-hidden="true"></div>
     <!-- Top Bar -->
     <header class="top-bar" style="padding-right: clamp(84px, 7vw, 110px);">
-      <span id="game-title">LINEAGE <span class="title-idle-stamp"><span class="stamp-idle"><span class="stamp-idle-text">IDLE</span><span class="stamp-idle-sub">CHRONICLE</span></span></span></span>
+      <span id="game-title">ADEN ARENA <span class="title-idle-stamp"><span class="stamp-idle"><span class="stamp-idle-text">IDLE</span><span class="stamp-idle-sub">CHRONICLES</span></span></span></span>
       <div class="top-stats" style="display:flex; align-items:center; justify-content:space-between; width:100%; gap:12px;">
         <div class="top-stats-left" style="display:flex; align-items:center; gap:8px;">
           <span class="ts-zone">
-            <span class="ts-label">Zone</span>
+            <span class="ts-label">Região</span>
             <span id="zone-name">Talking Island</span>
             <span id="zone-kill-progress" style="font-size:11px; color:#f59e0b; margin-left:8px; font-weight:800; background:rgba(0,0,0,0.5); padding:2px 8px; border-radius:4px; border:1px solid rgba(245,158,11,0.4);"><span style="color:#d4af37;">⚔</span> 0/50 Caçados</span>
             <span id="season-badge" style="font-size:10px; color:#93c5fd; margin-left:6px; font-weight:bold; background:rgba(30,58,138,0.25); padding:2px 8px; border-radius:4px; border:1px solid rgba(147,197,253,0.35); font-family:'Cinzel',serif;" title="Temporada 1: O Despertar de Aden (Cap Lv 60)">✦ Temp 1: Cap Lv 60</span>
@@ -23,6 +23,9 @@ export const IDLE_MARKUP = `
           <button id="admin-top-btn" class="admin-top-btn" onclick="window.openAdminModal && window.openAdminModal()" style="display:none; background:linear-gradient(180deg, rgba(160,30,30,0.85), rgba(90,15,15,0.98)); border:1px solid #ef4444; color:#fee2e2; border-radius:4px; padding:3px 10px; font-size:11px; font-weight:bold; font-family:'Cinzel',serif; cursor:pointer; align-items:center; gap:5px; transition:all 0.2s; box-shadow:0 0 10px rgba(239,68,68,0.35);">
             👑 Admin
           </button>
+          <button id="top-referral-btn" onclick="window.openReferralModal && window.openReferralModal()" style="background:linear-gradient(180deg, rgba(16,185,129,0.7), rgba(5,150,105,0.95)); border:1px solid #10b981; color:#ecfdf5; border-radius:4px; padding:3px 10px; font-size:11px; font-weight:bold; font-family:'Cinzel',serif; cursor:pointer; display:inline-flex; align-items:center; gap:5px; transition:all 0.2s; box-shadow:0 0 10px rgba(16,185,129,0.25);" title="Indique amigos e ganhe 50 Aden Coins + 5x Blessed Scrolls!">
+            🎁 Indicar Amigos
+          </button>
           <button id="top-market-btn" onclick="window.openMarketTab ? window.openMarketTab() : (window.openPanel && window.openPanel('market'))" style="background:linear-gradient(180deg, rgba(30,40,60,0.8), rgba(15,20,30,0.95)); border:1px solid #60a5fa; color:#93c5fd; border-radius:4px; padding:3px 10px; font-size:11px; font-weight:bold; font-family:'Cinzel',serif; cursor:pointer; display:inline-flex; align-items:center; gap:6px; transition:all 0.2s; box-shadow:0 0 10px rgba(96,165,250,0.25);">
             🏛️ Mercado
           </button>
@@ -33,7 +36,10 @@ export const IDLE_MARKUP = `
             🎁 Check-in
             <span id="daily-reward-dot" style="display:none; width:8px; height:8px; background:#ef4444; border-radius:50%; box-shadow:0 0 8px #ef4444; position:absolute; top:-2px; right:-2px;"></span>
           </button>
-          <span class="ts-clock" style="display:inline-flex; align-items:center; gap:4px;"><span class="ts-label">Session</span><span id="clock">00:00:00</span></span>
+          <a href="https://discord.gg/adenarena" target="_blank" rel="noopener noreferrer" id="top-discord-btn" style="background:linear-gradient(180deg, rgba(88,101,242,0.8), rgba(60,70,180,0.95)); border:1px solid #5865F2; color:#fff; border-radius:4px; padding:3px 10px; font-size:11px; font-weight:bold; font-family:'Cinzel',serif; text-decoration:none; display:inline-flex; align-items:center; gap:5px; transition:all 0.2s; box-shadow:0 0 10px rgba(88,101,242,0.35);">
+            💬 Discord
+          </a>
+          <span class="ts-clock" style="display:inline-flex; align-items:center; gap:4px;"><span class="ts-label">Sessão</span><span id="clock">00:00:00</span></span>
           <span id="save-status-badge" style="font-size:10px; background:rgba(16,185,129,0.15); border:1px solid rgba(16,185,129,0.4); color:#34d399; padding:2px 8px; border-radius:4px; font-weight:bold;">● Salvo</span>
           <button id="audio-mute-btn" onclick="window.toggleMuteAudio && window.toggleMuteAudio()" style="background:rgba(30,35,45,0.8);border:1px solid rgba(255,255,255,0.15);color:#ece4d3;border-radius:4px;padding:3px 10px;font-size:11px;font-weight:600;cursor:pointer;transition:background 0.2s;" onmouseover="this.style.background='rgba(50,55,70,0.9)'" onmouseout="this.style.background='rgba(30,35,45,0.8)'">♫ Audio</button>
         </div>

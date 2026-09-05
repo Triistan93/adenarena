@@ -5,6 +5,19 @@ import App from "./App";
 
 // Force purge stale Service Workers, Web Caches, and handle stale chunk reloads
 if (typeof window !== "undefined") {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const ref = params.get("ref");
+    if (ref && typeof ref === "string") {
+      const cleanRef = ref.trim().slice(0, 30);
+      if (cleanRef) {
+        localStorage.setItem("aden_referred_by", cleanRef);
+      }
+    }
+  } catch (e) {
+    console.warn("Falha ao capturar ref:", e);
+  }
+
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.getRegistrations().then((registrations) => {
       for (const registration of registrations) {

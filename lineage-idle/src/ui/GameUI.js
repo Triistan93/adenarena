@@ -5807,7 +5807,7 @@ export function renderCashShopModal(container) {
               <p style="font-size:11px; color:#bbb; line-height:1.3; margin:0 0 8px 0;">${d.desc}</p>
             </div>
             <button
-              onclick="window.executeDonationPix('${d.id}', ${d.totalAC || d.amountAC})"
+              onclick="window.openPixCheckoutModal('${d.id}')"
               style="width:100%; padding:10px; font-family:'Cinzel',serif; font-weight:bold; font-size:11px; background:linear-gradient(180deg,#10b981,#047857); border:1px solid #34d399; border-radius:6px; color:#fff; cursor:pointer;"
             >
               💳 RECARREGAR PIX (${d.priceBRL})
@@ -5839,6 +5839,164 @@ export function renderCashShopModal(container) {
       </div>
     </div>
   `;
+}
+
+export function uiOpenPixCheckoutModal(tierId, state) {
+  const catalog = (typeof window !== 'undefined' && window.EchoData?.CASH_SHOP_CATALOG) ? window.EchoData.CASH_SHOP_CATALOG : {};
+  const tiers = catalog.donation_tiers || [];
+  const tier = tiers.find(t => t.id === tierId) || tiers[0];
+  if (!tier) return;
+
+  let modal = document.getElementById('pix-checkout-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'pix-checkout-modal';
+    modal.className = 'modal-backdrop';
+    document.body.appendChild(modal);
+  }
+
+  const s = state || (typeof window !== 'undefined' ? (window.__GAME_STATE__ || window.gameState) : {});
+  const playerName = s?.name || s?.charName || 'Guerreiro';
+  const totalAC = tier.totalAC || tier.amountAC;
+  const pixKey = 'pix@adenarena.com';
+
+  modal.innerHTML = `
+    <div style="background:linear-gradient(180deg, rgba(20,16,10,0.98), rgba(10,8,6,0.98)); border:2px solid #ffd700; border-radius:14px; max-width:520px; width:92vw; padding:24px; color:#fff; font-family:sans-serif; box-shadow:0 0 40px rgba(255,215,0,0.3); position:relative;">
+      <button onclick="document.getElementById('pix-checkout-modal').classList.remove('active')" style="position:absolute; top:14px; right:16px; background:none; border:none; color:#aaa; font-size:22px; cursor:pointer;">✕</button>
+      
+      <div style="text-align:center; margin-bottom:16px;">
+        <span style="font-size:32px;">⚜️</span>
+        <h3 style="margin:6px 0 2px 0; font-family:'Cinzel',serif; color:#ffd700; font-size:20px;">Doação Pix · Aden Arena</h3>
+        <p style="margin:0; font-size:12px; color:#94a3b8;">Recarga rápida com segurança e liberação ágil</p>
+      </div>
+
+      <div style="background:rgba(0,0,0,0.6); border:1px solid rgba(255,215,0,0.3); border-radius:8px; padding:12px 16px; margin-bottom:16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <span style="font-size:13px; color:#cbd5e1; font-weight:600;">Pacote Selecionado:</span>
+          <span style="font-family:'Cinzel',serif; color:#ffd700; font-weight:bold; font-size:15px;">🪙 ${totalAC.toLocaleString()} AC</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <span style="font-size:13px; color:#cbd5e1; font-weight:600;">Valor da Doação:</span>
+          <span style="color:#34d399; font-weight:bold; font-size:16px;">${tier.priceBRL}</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span style="font-size:12px; color:#94a3b8;">Personagem Destino:</span>
+          <span style="color:#60a5fa; font-weight:bold; font-size:13px;">${playerName}</span>
+        </div>
+      </div>
+
+      <div style="margin-bottom:16px;">
+        <label style="display:block; font-size:11px; font-weight:bold; color:#ffd877; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.05em;">Chave Pix Oficial (E-mail):</label>
+        <div style="display:flex; gap:8px;">
+          <input id="pix-key-input" type="text" readonly value="${pixKey}" style="flex:1; background:#0f172a; border:1px solid #334155; border-radius:6px; padding:8px 12px; color:#38bdf8; font-family:monospace; font-size:13px; font-weight:bold; outline:none;" />
+          <button id="pix-copy-btn" onclick="navigator.clipboard.writeText('${pixKey}').then(() => { const b = document.getElementById('pix-copy-btn'); b.textContent = '✅ Copiado!'; b.style.background = '#10b981'; setTimeout(() => { b.textContent = '📋 Copiar'; b.style.background = '#d97706'; }, 3000); })" style="padding:8px 16px; background:#d97706; border:1px solid #f59e0b; border-radius:6px; color:#fff; font-weight:bold; font-size:12px; cursor:pointer; font-family:'Cinzel',serif; white-space:nowrap; transition:background 0.2s;">
+            📋 Copiar
+          </button>
+        </div>
+      </div>
+
+      <div style="background:rgba(30,41,59,0.5); border:1px solid rgba(148,163,184,0.2); border-radius:8px; padding:12px; font-size:11px; color:#cbd5e1; line-height:1.5; margin-bottom:16px;">
+        <div style="font-weight:bold; color:#fde047; margin-bottom:4px;">📌 Instruções de Ativação:</div>
+        1. Copie a chave Pix acima e faça o pagamento no valor de <strong>${tier.priceBRL}</strong>.<br/>
+        2. No campo de descrição/mensagem do Pix, coloque: <strong>${playerName}</strong>.<br/>
+        3. Envie o comprovante em nosso canal oficial no Discord na sala <strong>#recargas-pix</strong> para aprovação em minutos!
+      </div>
+
+      <div style="display:flex; gap:10px;">
+        <a href="https://discord.gg/adenarena" target="_blank" rel="noopener noreferrer" style="flex:1; text-decoration:none; padding:10px; background:linear-gradient(180deg,#5865F2,#4752c4); border:1px solid #5865F2; border-radius:6px; color:#fff; font-weight:bold; font-size:12px; font-family:'Cinzel',serif; text-align:center; display:flex; align-items:center; justify-content:center; gap:6px;">
+          💬 Enviar no Discord
+        </a>
+        <button onclick="document.getElementById('pix-checkout-modal').classList.remove('active')" style="padding:10px 18px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:6px; color:#ddd; font-weight:bold; font-size:12px; cursor:pointer;">
+          Fechar
+        </button>
+      </div>
+    </div>
+  `;
+
+  modal.classList.add('active');
+}
+
+export function uiOpenReferralModal(state) {
+  let modal = document.getElementById('referral-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'referral-modal';
+    modal.className = 'modal-backdrop';
+    document.body.appendChild(modal);
+  }
+
+  const s = state || (typeof window !== 'undefined' ? (window.__GAME_STATE__ || window.gameState) : {});
+  const heroNick = s?.name || s?.charName || 'Aventureiro';
+  const refCode = heroNick;
+  const baseUrl = (typeof window !== 'undefined') ? (window.location.origin + window.location.pathname) : 'https://adenarena.com';
+  const refUrl = `${baseUrl}?ref=${encodeURIComponent(refCode)}`;
+  const whatsappText = encodeURIComponent(`⚔️ Venha jogar comigo no Aden Arena: Idle Chronicles! Jogo épico direto no navegador, sem downloads. Crie seu herói com bônus de novato: ${refUrl}`);
+  const whatsappUrl = `https://api.whatsapp.com/send?text=${whatsappText}`;
+
+  const countInvited = s?.referralsCount || 0;
+  const rewardsClaimed = s?.referralRewardsClaimed || 0;
+  const referredBy = s?.referredBy || (typeof localStorage !== 'undefined' ? localStorage.getItem('aden_referred_by') : null) || null;
+
+  modal.innerHTML = `
+    <div style="background:linear-gradient(180deg, rgba(20,16,10,0.98), rgba(10,8,6,0.98)); border:2px solid #10b981; border-radius:14px; max-width:540px; width:92vw; padding:24px; color:#fff; font-family:sans-serif; box-shadow:0 0 40px rgba(16,185,129,0.3); position:relative;">
+      <button onclick="document.getElementById('referral-modal').classList.remove('active')" style="position:absolute; top:14px; right:16px; background:none; border:none; color:#aaa; font-size:22px; cursor:pointer;">✕</button>
+      
+      <div style="text-align:center; margin-bottom:16px;">
+        <span style="font-size:32px;">🎁</span>
+        <h3 style="margin:6px 0 2px 0; font-family:'Cinzel',serif; color:#34d399; font-size:20px;">Indique & Ganhe (Referral Viral)</h3>
+        <p style="margin:0; font-size:12px; color:#94a3b8;">Convide amigos para o Reino de Aden e ganhem recompensas juntos!</p>
+      </div>
+
+      ${referredBy ? `
+        <div style="background:rgba(16,185,129,0.15); border:1px solid rgba(16,185,129,0.4); border-radius:8px; padding:8px 12px; margin-bottom:14px; font-size:11px; color:#6ee7b7; display:flex; align-items:center; gap:8px;">
+          <span>✨</span>
+          <span>Você ingressou pela indicação de <strong>${referredBy}</strong>! Bônus de Novato ativo (+10% EXP permanente).</span>
+        </div>
+      ` : ''}
+
+      <div style="margin-bottom:16px;">
+        <label style="display:block; font-size:11px; font-weight:bold; color:#6ee7b7; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.05em;">Seu Link Exclusivo de Indicação:</label>
+        <div style="display:flex; gap:8px;">
+          <input id="ref-link-input" type="text" readonly value="${refUrl}" style="flex:1; background:#0f172a; border:1px solid #059669; border-radius:6px; padding:8px 12px; color:#34d399; font-family:monospace; font-size:12px; font-weight:bold; outline:none;" />
+          <button id="ref-copy-btn" onclick="navigator.clipboard.writeText('${refUrl}').then(() => { const b = document.getElementById('ref-copy-btn'); b.textContent = '✅ Copiado!'; b.style.background = '#059669'; setTimeout(() => { b.textContent = '📋 Copiar'; b.style.background = '#10b981'; }, 3000); })" style="padding:8px 16px; background:#10b981; border:1px solid #34d399; border-radius:6px; color:#000; font-weight:bold; font-size:12px; cursor:pointer; font-family:'Cinzel',serif; white-space:nowrap; transition:background 0.2s;">
+            📋 Copiar
+          </button>
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px;">
+        <div style="background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:10px; text-align:center;">
+          <div style="font-size:11px; color:#94a3b8;">Amigos Indicados</div>
+          <div style="font-size:20px; font-weight:bold; color:#34d399; font-family:'Cinzel',serif;">${countInvited}</div>
+        </div>
+        <div style="background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:10px; text-align:center;">
+          <div style="font-size:11px; color:#94a3b8;">Recompensas Resgatadas</div>
+          <div style="font-size:20px; font-weight:bold; color:#ffd700; font-family:'Cinzel',serif;">${rewardsClaimed}</div>
+        </div>
+      </div>
+
+      <div style="background:rgba(0,0,0,0.6); border:1px solid rgba(16,185,129,0.3); border-radius:8px; padding:12px; font-size:11.5px; line-height:1.5; margin-bottom:16px;">
+        <div style="font-weight:bold; color:#ffd700; margin-bottom:6px; font-family:'Cinzel',serif;">🏆 Como Funcionam as Recompensas:</div>
+        <div style="margin-bottom:6px;">
+          <strong style="color:#6ee7b7;">1. Entrada Imediata:</strong> Seu amigo cria o herói pelo seu link e recebe +10% EXP e 1.000 Shots iniciais.
+        </div>
+        <div>
+          <strong style="color:#ffd700;">2. Meta Nível 40 (2ª Classe):</strong> Quando seu amigo atinge o Nv. 40, você recebe automaticamente <strong style="color:#ffd700;">50 Aden Coins (AC)</strong> + <strong style="color:#38bdf8;">5x Pergaminhos Abençoados de Arma</strong>!
+        </div>
+      </div>
+
+      <div style="display:flex; gap:10px;">
+        <a href="${whatsappUrl}" target="_blank" rel="noopener noreferrer" style="flex:1; text-decoration:none; padding:10px; background:linear-gradient(180deg,#25D366,#128C7E); border:1px solid #25D366; border-radius:6px; color:#fff; font-weight:bold; font-size:12px; font-family:'Cinzel',serif; text-align:center; display:flex; align-items:center; justify-content:center; gap:6px;">
+          📲 Compartilhar no WhatsApp
+        </a>
+        <button onclick="document.getElementById('referral-modal').classList.remove('active')" style="padding:10px 18px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:6px; color:#ddd; font-weight:bold; font-size:12px; cursor:pointer;">
+          Fechar
+        </button>
+      </div>
+    </div>
+  `;
+
+  modal.classList.add('active');
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════

@@ -9,7 +9,7 @@ export const GUIDES_DATA = {
   zones: {
     id: 'zones',
     title: '⚔️ Zonas de Caça & Combate Automático',
-    subtitle: 'Aprenda como evoluir seu personagem e gerenciar suas caçadas em Lineage II Idle.',
+    subtitle: 'Aprenda como evoluir seu personagem e gerenciar suas caçadas em Aden Arena: Idle Chronicles.',
     icon: '⚔️',
     color: '#e8c39a',
     sections: [
@@ -101,7 +101,7 @@ export const GUIDES_DATA = {
       {
         heading: '📖 Árvore de Habilidades',
         text: 'Gaste seus Pontos de Habilidade (SP) para aprender e evoluir habilidades ativas e passivas da sua classe. Habilidades passivas concedem bônus permanentes.',
-        tip: 'Habilidades de dano utilizam a fórmula oficial de dano físico do Lineage 2 (Multiplicador de constante 77/70).'
+        tip: 'Habilidades de dano utilizam a autêntica fórmula de dano físico de RPG clássico (Multiplicador de constante 77/70).'
       },
       {
         heading: '⚡ Cargas de Habilidade (Charge Lv. 1-8)',

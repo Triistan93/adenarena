@@ -238,7 +238,9 @@ import {
   openCashShopModal,
   closeCashShopModal,
   renderCashShopModal,
-  showDropLocatorModal
+  showDropLocatorModal,
+  uiOpenPixCheckoutModal,
+  uiOpenReferralModal
 } from './src/ui/GameUI.js';
 import { CashShopService } from './src/services/CashShopService.js';
 import { NoblesseService } from './src/services/NoblesseService.js';
@@ -1133,6 +1135,55 @@ function useItem(uid) {
     }
     log(`Used ${def.name}: returned to ${ZONES[town]?.name || town}, fully healed.`, 'heal');
     updateAllUI();
+  } else if (def.type === 'elixir_vigor' || item.itemId === 'elixir_vigor_1h') {
+    applyBuff('xpBoost', 0.30, 3600);
+    applyBuff('goldBoost', 0.30, 3600);
+    log(`🧪 Usou ${def.name}: +30% EXP e +30% Adena por 1 hora!`, 'heal');
+    if (typeof floatText === 'function') floatText('🧪 VIGOR: +30% EXP & OURO (1h)', 'float-crit');
+  } else if (def.type === 'inventory_expand' || item.itemId === 'pack_inventory_expand_30') {
+    state.bonusInventorySlots = (state.bonusInventorySlots || 0) + 30;
+    const totalSlots = getMaxInventorySlots(state);
+    log(`🎒 Mochila Expandida! +30 slots permanentes adicionados (Capacidade Máxima: ${totalSlots} slots)!`, 'loot');
+    if (typeof floatText === 'function') floatText(`🎒 MOCHILA +30 SLOTS (${totalSlots})`, 'float-jackpot');
+  } else if (def.type === 'vip_pass' || item.itemId === 'pass_vip_teleport_30d') {
+    state.vipTeleportUntil = Math.max(Date.now(), state.vipTeleportUntil || 0) + (30 * 24 * 3600 * 1000);
+    log('🌟 Passe VIP de Teleporte ativado! Teleportes gratuitos liberados por 30 dias.', 'system');
+    if (typeof floatText === 'function') floatText('🌟 VIP 30 DIAS ATIVADO!', 'float-jackpot');
+  } else if (item.itemId === 'scroll_blessed_weapon' || item.itemId === 'scroll_blessed_armor') {
+    const isWpn = item.itemId.includes('weapon');
+    log(`📜 Pergaminho Abençoado de ${isWpn ? 'Arma' : 'Armadura'} selecionado! Abrindo Forja com Proteção Total (+100% de Segurança contra perdas).`, 'system');
+    if (typeof openPanel === 'function') openPanel('forge');
+    if (typeof window.switchForgeSubtab === 'function') window.switchForgeSubtab('enchant');
+    return;
+  } else if (def.type === 'skin_weapon' || item.itemId.startsWith('skin_weapon_')) {
+    state.activeSkin = (state.activeSkin === item.itemId) ? null : item.itemId;
+    log(`🎨 ${state.activeSkin ? 'Equipou' : 'Desequipou'} a ${def.name}!`, 'system');
+    updateAllUI(); save();
+    return;
+  } else if (def.type === 'costume' || item.itemId.startsWith('costume_')) {
+    state.activeCostume = (state.activeCostume === item.itemId) ? null : item.itemId;
+    log(`🥋 ${state.activeCostume ? 'Equipou' : 'Desequipou'} o ${def.name}!`, 'system');
+    updateAllUI(); save();
+    return;
+  } else if (def.type === 'title_token' || item.itemId.startsWith('title_')) {
+    const titleName = def.titleName || def.name.replace(/Certificado de Título: |Título: /g, '').replace(/[\[\]]/g, '');
+    state.title = titleName;
+    state.titleColor = def.titleColor || '#ffd700';
+    state.unlockedTitles = state.unlockedTitles || [];
+    if (!state.unlockedTitles.includes(titleName)) state.unlockedTitles.push(titleName);
+    log(`👑 Título [${titleName}] ativado no seu perfil e chat!`, 'system');
+    updateAllUI(); save();
+    return;
+  } else if (def.type === 'avatar_frame' || item.itemId.startsWith('frame_')) {
+    state.activeAvatarFrame = (state.activeAvatarFrame === item.itemId) ? null : item.itemId;
+    log(`🖼️ Moldura de Avatar atualizada!`, 'system');
+    updateAllUI(); save();
+    return;
+  } else if (def.type === 'combat_aura' || item.itemId.startsWith('aura_')) {
+    state.activeCombatAura = (state.activeCombatAura === item.itemId) ? null : item.itemId;
+    log(`🔥 Aura de Combate atualizada!`, 'system');
+    updateAllUI(); save();
+    return;
   } else if (def.type === 'raceClassChange' || item.itemId === 'scroll_race_class_change') {
     if (typeof window !== 'undefined' && typeof window.onOpenRaceClassChangeModal === 'function') {
       window.onOpenRaceClassChangeModal({
@@ -1218,7 +1269,30 @@ window.executeRaceClassChange = (scrollUid, newRace, newClass) => {
 
 // --------------------------- LEVEL UP wrapper ---------------------------
 // engineCheckLevelUp is imported from LevelEngine.js — provide local wrapper that other code can call
-function checkLevelUp() { return engineCheckLevelUp(state, { log, floatText, updateAllUI, checkClassAdvancement, updateSkillUI, updateRaceClassUI, getStats }); }
+function checkLevelUp() {
+  const leveled = engineCheckLevelUp(state, { log, floatText, updateAllUI, checkClassAdvancement, updateSkillUI, updateRaceClassUI, getStats });
+  if (state.level >= 40 && state.referredBy && !state.referralRewardClaimed) {
+    state.referralRewardClaimed = true;
+    CashShopService.addAdenCoins(state, 50, { log });
+    state.inventory = state.inventory || [];
+    const bScroll = state.inventory.find(i => i.itemId === 'scroll_blessed_weapon');
+    if (bScroll) {
+      bScroll.count = (bScroll.count || 1) + 5;
+    } else {
+      state.inventory.push({
+        uid: `ref_${Date.now()}`,
+        itemId: 'scroll_blessed_weapon',
+        name: 'Pergaminho Abençoado de Arma (Universal)',
+        count: 5
+      });
+    }
+    log(`🎉 **Parabéns pelo Nível 40!** Recompensa especial por ingressar pelo link de [${state.referredBy}] resgatada: **+50 AC** e **5x Pergaminhos Abençoados de Arma**!`, 'loot');
+    if (typeof floatText === 'function') floatText('🎁 RECOMPENSA DE INDICAÇÃO (50 AC)!', 'float-jackpot');
+    updateAllUI();
+    save();
+  }
+  return leveled;
+}
 
 // --------------------------- SELL ITEM ---------------------------
 function sellItem(uid) {
@@ -7932,10 +8006,14 @@ export function init() {
       }
       return success;
     };
-    window.executeDonationPix = (tierId, amount) => {
-      CashShopService.addAdenCoins(state, amount, { log, onUpdate: () => { updateAllUI(); save(); } });
-      const modal = document.getElementById('cash-shop-modal');
-      if (modal) renderCashShopModal(modal);
+    window.openPixCheckoutModal = (tierId) => {
+      uiOpenPixCheckoutModal(tierId, state);
+    };
+    window.openReferralModal = () => {
+      uiOpenReferralModal(state);
+    };
+    window.executeDonationPix = (tierId) => {
+      uiOpenPixCheckoutModal(tierId, state);
     };
 
     // Raids & Bosses Épicos

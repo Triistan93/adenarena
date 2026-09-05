@@ -13,7 +13,9 @@ import { D, HIGH_RARITIES, ALL_EQUIP_SLOTS } from '../core/GameConfig.js';
  * @returns {number}
  */
 export function getMaxInventorySlots(state) {
-  return (state.race === 'dwarf') ? 250 : 150;
+  const s = state || (typeof window !== 'undefined' ? window.state : null) || {};
+  const base = (s.race === 'dwarf') ? 250 : 150;
+  return base + (Number(s.bonusInventorySlots) || 0);
 }
 
 /**

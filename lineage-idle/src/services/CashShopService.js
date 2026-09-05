@@ -339,8 +339,21 @@ export class CashShopService {
     }
     state.activeSkin = skinId;
 
+    // Adiciona o item físico na mochila para o jogador gerenciar e ver seu colecionável
+    state.inventory = state.inventory || [];
+    const alreadyHas = state.inventory.some(i => i.itemId === skinId);
+    if (!alreadyHas) {
+      state.inventory.push({
+        uid: `cosm_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`,
+        itemId: skinId,
+        name: item.name,
+        icon: item.icon,
+        count: 1
+      });
+    }
+
     if (callbacks.log) {
-      callbacks.log(`🎨 **${item.name}** adquirida e equipada com sucesso!`, 'system');
+      callbacks.log(`🎨 **${item.name}** adquirida, entregue na sua mochila e equipada com sucesso!`, 'system');
     }
     if (callbacks.onUpdate) callbacks.onUpdate();
     return true;
@@ -376,15 +389,28 @@ export class CashShopService {
       state.activeCombatAura = item.id;
     }
 
+    // Entrega o certificado/item físico na mochila
+    state.inventory = state.inventory || [];
+    const alreadyHas = state.inventory.some(i => i.itemId === titleId);
+    if (!alreadyHas) {
+      state.inventory.push({
+        uid: `title_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`,
+        itemId: titleId,
+        name: item.name,
+        icon: item.icon || 'spellbooks/spellbook_4star.png',
+        count: 1
+      });
+    }
+
     if (callbacks.log) {
-      callbacks.log(`🏷️ **${item.name}** ativado no seu herói!`, 'system');
+      callbacks.log(`🏷️ **${item.name}** ativado e adicionado à sua mochila!`, 'system');
     }
     if (callbacks.onUpdate) callbacks.onUpdate();
     return true;
   }
 
   /**
-   * Compra item utilitário (Passe VIP, Blessed Scrolls, Tomo 4★).
+   * Compra item utilitário (Passe VIP, Blessed Scrolls, Elixires, Expansor de Mochila).
    * @param {Object} state
    * @param {string} utilityId
    * @param {Object} callbacks
@@ -404,21 +430,43 @@ export class CashShopService {
 
     if (utilityId === 'pass_vip_teleport_30d') {
       state.vipTeleportUntil = Math.max(Date.now(), state.vipTeleportUntil || 0) + (30 * 24 * 3600 * 1000);
-      if (callbacks.log) callbacks.log('🌟 **Passe VIP de Teleporte (30 Dias)** ativado! Teleportes livres liberados.', 'system');
+      const existing = state.inventory.find(i => i.itemId === 'pass_vip_teleport_30d');
+      if (existing) {
+        existing.count = (existing.count || 1) + 1;
+      } else {
+        state.inventory.push({
+          uid: `vip_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`,
+          itemId: 'pass_vip_teleport_30d',
+          count: 1
+        });
+      }
+      if (callbacks.log) callbacks.log('🌟 **Passe VIP de Teleporte (30 Dias)** entregue na mochila e ativado! Teleportes gratuitos habilitados.', 'system');
     } else if (utilityId === 'elixir_vigor_bundle_5') {
-      state.inventory.push({
-        uid: `util_${Date.now()}`,
-        itemId: 'elixir_vigor_1h',
-        count: 5
-      });
-      if (callbacks.log) callbacks.log('🧪 **5x Elixires de Vigor** entregues no seu inventário!', 'system');
+      const existing = state.inventory.find(i => i.itemId === 'elixir_vigor_1h');
+      if (existing) {
+        existing.count = (existing.count || 1) + 5;
+      } else {
+        state.inventory.push({
+          uid: `util_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`,
+          itemId: 'elixir_vigor_1h',
+          count: 5
+        });
+      }
+      if (callbacks.log) callbacks.log('🧪 **5x Elixires de Vigor** entregues na sua mochila!', 'system');
     } else {
-      state.inventory.push({
-        uid: `util_${Date.now()}`,
-        itemId: utilityId,
-        count: 1
-      });
-      if (callbacks.log) callbacks.log(`📦 **${item.name}** adicionado ao seu inventário!`, 'system');
+      const targetId = utilityId;
+      const isStackable = targetId.startsWith('scroll_') || targetId.startsWith('elixir_') || targetId.startsWith('pack_');
+      const existing = isStackable ? state.inventory.find(i => i.itemId === targetId) : null;
+      if (existing) {
+        existing.count = (existing.count || 1) + 1;
+      } else {
+        state.inventory.push({
+          uid: `util_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`,
+          itemId: targetId,
+          count: 1
+        });
+      }
+      if (callbacks.log) callbacks.log(`📦 **${item.name}** adicionado com sucesso à sua mochila!`, 'system');
     }
 
     if (callbacks.onUpdate) callbacks.onUpdate();
