@@ -2146,32 +2146,44 @@ function renderCraftRecipes() {
   return updateCraftUI();
 }
 
-function isEnchantScroll(itemId, isWeapon, isBlessed = false) {
+function isEnchantScroll(itemId, isWeapon, isBlessed = false, grade = null) {
   if (!itemId) return false;
   const id = String(itemId).toLowerCase();
   const matchesBlessed = id.includes('blessed');
   if (isBlessed !== matchesBlessed) return false;
 
-  if (isWeapon) {
-    return (id.includes('weapon') || id.includes('armas')) && (id.includes('enchant') || id.includes('scroll') || id.includes('blessed'));
-  } else {
-    return (id.includes('armor') || id.includes('shield') || id.includes('armadura')) && (id.includes('enchant') || id.includes('scroll') || id.includes('blessed'));
+  const matchesType = isWeapon 
+    ? (id.includes('weapon') || id.includes('armas'))
+    : (id.includes('armor') || id.includes('shield') || id.includes('armadura'));
+  if (!matchesType) return false;
+
+  const isScroll = id.includes('enchant') || id.includes('scroll') || id.includes('blessed');
+  if (!isScroll) return false;
+
+  if (grade && grade !== 'NG') {
+    const gLower = grade.toLowerCase();
+    const hasGradeSuffix = ['_d', '_c', '_b', '_a', '_s'].some(s => id.includes(s));
+    if (hasGradeSuffix && !id.includes('_' + gLower)) {
+      return false;
+    }
   }
+
+  return true;
 }
 
-function getEnchantScrollCount(isWeapon, isBlessed = false) {
+function getEnchantScrollCount(isWeapon, isBlessed = false, grade = null) {
   if (!state.inventory) return 0;
   return state.inventory.reduce((sum, item) => {
-    if (isEnchantScroll(item.itemId, isWeapon, isBlessed)) {
+    if (isEnchantScroll(item.itemId, isWeapon, isBlessed, grade)) {
       return sum + (item.count || 1);
     }
     return sum;
   }, 0);
 }
 
-function findEnchantScrollItem(isWeapon, isBlessed = false) {
+function findEnchantScrollItem(isWeapon, isBlessed = false, grade = null) {
   if (!state.inventory) return null;
-  return state.inventory.find(item => isEnchantScroll(item.itemId, isWeapon, isBlessed) && (item.count || 1) > 0);
+  return state.inventory.find(item => isEnchantScroll(item.itemId, isWeapon, isBlessed, grade) && (item.count || 1) > 0);
 }
 
 function updateEnchantUI() {
@@ -2193,14 +2205,17 @@ function updateEnchantUI() {
     for (const item of equippable) {
       const def = D().ALL_ITEMS[item.itemId];
       const isWeapon = def.slot === 'weapon';
-      const normalCount = getEnchantScrollCount(isWeapon, false);
-      const blessedCount = getEnchantScrollCount(isWeapon, true);
+      const grade = (def.grade || 'NG').toUpperCase();
+      const normalCount = getEnchantScrollCount(isWeapon, false, grade);
+      const blessedCount = getEnchantScrollCount(isWeapon, true, grade);
       const enchant = item.enchant || 0;
       const rarityColor = item.rarity ? (D().RARITY[item.rarity]?.color || 'var(--gilt)') : 'var(--gilt)';
+      const isFullBody = def.slot === 'fullbody' || (def.slot === 'chest' && (def.isOnePiece || def.name?.toLowerCase().includes('full body') || def.name?.toLowerCase().includes('robe')));
+      const safeLimit = isFullBody ? 4 : 3;
+      const safeMsg = enchant < safeLimit ? `100% Seguro (Até +${safeLimit})` : `Sucesso: ${Math.max(30, 100 - (enchant - safeLimit) * 10)}%`;
       
       const card = mkEl('div'); card.className = 'enchant-card';
       const title = (enchant > 0 ? `+${enchant} ` : '') + def.name + (item.rarity ? ` [${D().RARITY[item.rarity]?.name || item.rarity}]` : '');
-      const safeMsg = enchant < 3 ? '100% Seguro (Até +3)' : `Sucesso: ${Math.max(30, 100 - (enchant - 3) * 10)}%`;
       
       card.innerHTML = `
         <div class="enchant-card-info">
@@ -2225,9 +2240,10 @@ function enchantItem(uid, useBlessed = false) {
   const item = state.inventory.find(i => i.uid === uid); if (!item) return;
   const def = D().ALL_ITEMS[item.itemId]; if (!def) return;
   const isWeapon = def.slot === 'weapon';
-  const scrollItem = findEnchantScrollItem(isWeapon, useBlessed);
+  const grade = (def.grade || 'NG').toUpperCase();
+  const scrollItem = findEnchantScrollItem(isWeapon, useBlessed, grade);
   if (!scrollItem) { 
-    log(useBlessed ? 'Pergaminho Abençoado (Blessed) necessário!' : 'Pergaminho de encantamento necessário!', 'system'); 
+    log(useBlessed ? `Pergaminho Abençoado (Blessed ${grade}) necessário!` : `Pergaminho de encantamento (${grade}) necessário!`, 'system'); 
     return; 
   }
   
@@ -2239,7 +2255,9 @@ function enchantItem(uid, useBlessed = false) {
 
   const currentEnchant = item.enchant || 0;
   const enchantRate = Math.max(0.1, Number(state.serverRates?.enchant) || 1);
-  const baseChance = currentEnchant < 3 ? 1.0 : Math.max(0.3, 1.0 - (currentEnchant - 3) * 0.1);
+  const isFullBody = def.slot === 'fullbody' || (def.slot === 'chest' && (def.isOnePiece || def.name?.toLowerCase().includes('full body') || def.name?.toLowerCase().includes('robe')));
+  const safeLimit = isFullBody ? 4 : 3;
+  const baseChance = currentEnchant < safeLimit ? 1.0 : Math.max(0.3, 1.0 - (currentEnchant - safeLimit) * 0.1);
   const chance = Math.min(1.0, baseChance * enchantRate);
   
   if (Math.random() < chance) {
@@ -2251,8 +2269,7 @@ function enchantItem(uid, useBlessed = false) {
       log(`🛡️ [BLESSED PROTECTED] A tentativa de encanto falhou, mas ${def.name} manteve o nível +${currentEnchant} intacto!`, 'rarity-epic');
       if (typeof floatText === 'function') floatText(`🛡️ PROTEGIDO (+${currentEnchant})`, 'float-jackpot');
     } else {
-      const grade = (def.grade || 'NG').toUpperCase();
-      if (currentEnchant >= 3 && grade !== 'NG') {
+      if (currentEnchant >= safeLimit && grade !== 'NG') {
         const crystalMap = {
           'D': { id: 'crystal_d', name: 'Cristal: D-Grade', count: 25 + currentEnchant * 5 },
           'C': { id: 'crystal_c', name: 'Cristal: C-Grade', count: 35 + currentEnchant * 8 },
@@ -4154,7 +4171,13 @@ function attackMonster() {
 
         // Aplica Amplificação de Ressonância Cruzada (ex: Adaga consumindo Marca de Arco)
         const resonanceResult = WeaponResonanceService.processAttackImpact(state, monster, skillWeaponType, rawSDmg, { log, floatText });
-        const sDmg = resonanceResult.finalDamage;
+        let sDmg = resonanceResult.finalDamage;
+        const wpnUidForSkill = state.equipment?.weapon;
+        const wpnItemForSkill = wpnUidForSkill ? state.inventory?.find(i => i.uid === wpnUidForSkill) : null;
+        const wpnElemSkill = wpnItemForSkill?.elementalAttribute;
+        if (wpnElemSkill && wpnElemSkill.val > 0 && wpnElemSkill.element !== 'none') {
+          sDmg = Math.floor(sDmg * (1 + ((wpnElemSkill.val / 300) * 0.40)));
+        }
         
         monster.hp -= sDmg;
         stageHeroAttack();
@@ -4217,6 +4240,21 @@ function attackMonster() {
   
   let damage = dealDamage(monster, atkVal, atkType);
   let wasCrit = false;
+
+  // Bônus de Atributo Elemental da Arma Equipada (até +40% base, +70% contra elemento oposto/fraqueza)
+  const equippedWpnUid = state.equipment?.weapon;
+  const equippedWpn = equippedWpnUid ? state.inventory?.find(i => i.uid === equippedWpnUid) : null;
+  const wpnElem = equippedWpn?.elementalAttribute;
+  if (wpnElem && wpnElem.val > 0 && wpnElem.element !== 'none') {
+    let elemMult = 1 + ((wpnElem.val / 300) * 0.40);
+    const OPPOSITE_ELEMENTS = { fire: 'water', water: 'fire', wind: 'earth', earth: 'wind', holy: 'dark', dark: 'holy' };
+    const monElem = monster.element || (monster.category === 'undead' ? 'dark' : null);
+    if (monElem && OPPOSITE_ELEMENTS[wpnElem.element] === monElem) {
+      elemMult += 0.30;
+      if (typeof stageFloat === 'function') stageFloat(`💥 +${wpnElem.element.toUpperCase()}!`, 'sf-crit', 'right');
+    }
+    damage = Math.floor(damage * elemMult);
+  }
   
   if (state.soulshotActive) {
     const isMageClass = state.class === 'mage' || state.class === 'soulbreaker' || (getClass(state.class)?.archetype === 'mage');
@@ -4429,12 +4467,14 @@ function attackMonster() {
       }
     }
 
-    // Drop de Livros de Magia (Spellbooks 1★, 2★, 3★)
+    // Drop de Livros de Magia (Spellbooks 1★, 2★, 3★, 4★)
     if (mLevel >= 38) {
-      const bookChance = (monster.isRaid ? 0.25 : (monster.boss ? 0.08 : 0.005)) * levelGapPenalty * bookRate;
+      const bookChance = (monster.isRaid ? 0.30 : (monster.boss ? 0.08 : 0.005)) * levelGapPenalty * bookRate;
       if (Math.random() < bookChance) {
         let droppedBookId = 'book_1star';
-        if (mLevel >= 56 || monster.isRaid) droppedBookId = 'book_3star';
+        // Tomo 4★ é EXCLUSIVO de Epic Bosses, Raids e Chefes de Dungeon Lv 70+
+        if (monster.isRaid || (monster.boss && mLevel >= 70)) droppedBookId = 'book_4star';
+        else if (mLevel >= 56) droppedBookId = 'book_3star';
         else if (mLevel >= 48) droppedBookId = 'book_2star';
 
         const bookDef = D().ALL_ITEMS[droppedBookId];
@@ -4541,6 +4581,22 @@ function monsterAttack(monster) {
   }
 
   let damage = dealDamage({ def: stats.def, mdef: stats.mdef }, atkVal, type);
+
+  // Redução por Atributo Elemental das Armaduras Equipadas (até 30% mitigação)
+  if (state.equipment) {
+    let totalArmorElemResist = 0;
+    for (const slotKey of ['armor', 'chest', 'legs', 'helmet', 'gloves', 'boots', 'shield']) {
+      const aUid = state.equipment[slotKey];
+      const aItem = aUid ? state.inventory?.find(i => i.uid === aUid) : null;
+      if (aItem?.elementalAttribute?.val) {
+        totalArmorElemResist += aItem.elementalAttribute.val;
+      }
+    }
+    if (totalArmorElemResist > 0) {
+      const resistReduction = Math.min(0.30, (totalArmorElemResist / 600) * 0.30);
+      damage = Math.max(1, Math.floor(damage * (1 - resistReduction)));
+    }
+  }
 
   // Level Gap Penalty: se o monstro tem nível muito superior ao jogador (+5 níveis), o dano recebido aumenta
   const levelDiff = (monster.lvl || 1) - (state.level || 1);
@@ -8624,13 +8680,17 @@ export function init() {
       };
 
       window.compoundBeltsWithDuplicateAction = () => {
-        const pUid = document.getElementById('belt-primary-select')?.value;
-        const sUid = document.getElementById('belt-secondary-select')?.value;
+        const pUid = el('belt-primary-select')?.value;
+        const sUid = el('belt-secondary-select')?.value;
         if (!pUid || !sUid) {
           log('Selecione os dois cintos para a fusão!', 'system');
           return;
         }
         serviceCompoundBeltsWithDuplicates(state, pUid, sUid, { log, updateAllUI, save, floatText });
+      };
+
+      window.swapWeaponSameGradeAction = (weaponUid, targetId) => {
+        serviceSwapWeaponSameGrade(state, weaponUid, targetId, { log, updateAllUI, save });
       };
 
       window.applyAugmentAction = (uid, grade) => {

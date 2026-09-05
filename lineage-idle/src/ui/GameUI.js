@@ -222,7 +222,12 @@ const HEIRLOOM_ICON_MAP = {
   spellbook_1star: 'spellbooks/spellbook_1star.png',
   spellbook_2star: 'spellbooks/spellbook_2star.png',
   spellbook_3star: 'spellbooks/spellbook_3star.png',
-  spellbook_4star: 'spellbooks/spellbook_4star.png'
+  spellbook_4star: 'spellbooks/spellbook_4star.png',
+  crystal_d: 'materials/crystal_blue_d.png',
+  crystal_c: 'materials/crystal_green_c.png',
+  crystal_b: 'materials/crystal_red_b.png',
+  crystal_a: 'materials/crystal_silver_a.png',
+  crystal_s: 'materials/crystal_gold_s.png'
 };
 
 export function isEmojiIcon(icon) {
@@ -4723,9 +4728,9 @@ export function renderForgeSoulCrystals(container, state) {
 
 export function renderForgeMasterwork(container, state) {
   const inv = state.inventory || [];
-  const sealedItems = inv.filter(i => i.sealed);
+  const sealedItems = inv.filter(i => i.sealed || getItemDef(i.itemId)?.sealed);
   const foundationItems = inv.filter(i => i.foundation && !i.isMasterwork);
-  const weapons = inv.filter(i => i.slot === 'weapon' && !i.equipped);
+  const weapons = inv.filter(i => (getItemDef(i.itemId)?.slot || i.slot) === 'weapon');
 
   let sealedHtml = sealedItems.map(item => `
     <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(212,167,68,0.25); border-radius:8px; padding:10px 14px; display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
@@ -4751,6 +4756,63 @@ export function renderForgeMasterwork(container, state) {
     </div>
   `).join('');
 
+  const eligibleWeapons = weapons.filter(w => !w.equipped);
+  const allItems = D()?.ALL_ITEMS || {};
+
+  let swapHtml = eligibleWeapons.map(w => {
+    const curDef = getItemDef(w.itemId) || w;
+    const gCode = getItemGradeCode(curDef);
+    const gInfo = getItemGrade(curDef);
+    const wName = curDef.name || w.name || w.itemId;
+    const enchantText = (w.enchant && w.enchant > 0) ? `+${w.enchant} ` : '';
+
+    const targets = Object.values(allItems).filter(target => {
+      if (target.slot !== 'weapon') return false;
+      if (getItemGradeCode(target) !== gCode) return false;
+      const tid = target.id || target.itemId;
+      const curId = curDef.id || w.itemId;
+      return tid !== curId && target.name !== curDef.name;
+    });
+
+    const uniqueTargets = [];
+    const seen = new Set();
+    for (const t of targets) {
+      const tid = t.id || t.itemId;
+      if (tid && !seen.has(tid) && !seen.has(t.name)) {
+        seen.add(tid);
+        seen.add(t.name);
+        uniqueTargets.push(t);
+      }
+    }
+    uniqueTargets.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+
+    const options = uniqueTargets.map(t => `<option value="${t.id || t.itemId}">${t.name}</option>`).join('');
+
+    return `
+      <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(59,130,246,0.3); border-radius:8px; padding:10px 14px; display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; flex-wrap:wrap; gap:10px;">
+        <div>
+          <div style="display:flex; align-items:center; gap:6px;">
+            <span style="font-size:10px; padding:1px 6px; border-radius:4px; background:${gInfo.color || '#888'}22; border:1px solid ${gInfo.color || '#888'}66; color:${gInfo.color || '#fff'}; font-weight:bold;">${gInfo.label || gCode.toUpperCase()}</span>
+            <strong style="color:#93c5fd;">${enchantText}${wName}</strong>
+          </div>
+          <div style="font-size:11px; color:#aaa; margin-top:3px;">Custo de Troca: 150.000 Adena</div>
+        </div>
+        <div style="display:flex; gap:8px; align-items:center;">
+          ${uniqueTargets.length > 0 ? `
+            <select id="swap-select-${w.uid}" style="background:rgba(0,0,0,0.6); border:1px solid rgba(59,130,246,0.5); color:#fff; padding:6px 10px; border-radius:6px; font-size:12px; max-width:200px;">
+              ${options}
+            </select>
+            <button onclick="const sel = document.getElementById('swap-select-${w.uid}'); if (sel && sel.value) { window.swapWeaponSameGradeAction('${w.uid}', sel.value); }" style="padding:6px 14px; font-family:'Cinzel',serif; font-weight:bold; font-size:11px; background:linear-gradient(180deg,#3b82f6,#1d4ed8); border:1px solid #60a5fa; color:#fff; border-radius:6px; cursor:pointer;">
+              🔄 Trocar
+            </button>
+          ` : `
+            <span style="font-size:11px; color:#888;">Sem outras armas deste grau</span>
+          `}
+        </div>
+      </div>
+    `;
+  }).join('');
+
   container.innerHTML = `
     <div style="padding:10px; color:#fff; font-family:sans-serif;">
       <!-- Pushkin Banner -->
@@ -4771,6 +4833,12 @@ export function renderForgeMasterwork(container, state) {
       <div style="margin-bottom:16px;">
         <h4 style="margin:0 0 8px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">👑 Polimento Masterwork (Peças Foundation)</h4>
         ${foundationHtml || '<div style="font-size:12px; color:#aaa; background:rgba(0,0,0,0.3); padding:10px; border-radius:6px;">Nenhuma peça com Alma Ancestral (Foundation) encontrada. Forje itens na aba Forja para obter Foundation!</div>'}
+      </div>
+
+      <!-- Blacksmith Weapon Swap Section -->
+      <div>
+        <h4 style="margin:0 0 8px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">🔄 Troca de Armas de Mesmo Grau (Blacksmith Weapon Swap)</h4>
+        ${swapHtml || '<div style="font-size:12px; color:#aaa; background:rgba(0,0,0,0.3); padding:10px; border-radius:6px;">Nenhuma arma desequipada no inventário disponível para troca.</div>'}
       </div>
     </div>
   `;
@@ -4853,17 +4921,22 @@ export function renderForgeTattoos(container, state) {
 
 export function renderForgeElemental(container, state) {
   const inv = state.inventory || [];
-  const equips = inv.filter(i => (i.slot === 'weapon' || i.slot === 'armor' || i.slot === 'chest' || i.slot === 'legs') && !i.equipped);
+  const equips = inv.filter(i => {
+    const s = getItemDef(i.itemId)?.slot || i.slot;
+    return ['weapon', 'armor', 'chest', 'legs', 'head', 'helmet', 'gloves', 'boots', 'shield'].includes(s);
+  });
 
   let equipsHtml = equips.map(item => {
     const elem = item.elementalAttribute || { element: 'none', val: 0 };
-    const isWpn = item.slot === 'weapon';
+    const s = getItemDef(item.itemId)?.slot || item.slot;
+    const isWpn = s === 'weapon';
     const cap = isWpn ? 300 : 120;
+    const equippedBadge = item.equipped ? '<span style="color:#ffd877; font-size:11px; margin-left:6px; font-weight:bold;">[Equipado]</span>' : '';
 
     return `
       <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(212,167,68,0.25); border-radius:10px; padding:12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
         <div>
-          <strong style="color:#ffd877; font-size:14px;">${item.name || item.itemId}</strong>
+          <strong style="color:#ffd877; font-size:14px;">${item.name || item.itemId}</strong>${equippedBadge}
           <div style="font-size:11px; color:#aaa; margin-top:2px;">
             Atributo Atual: <strong style="color:#38bdf8;">${elem.element.toUpperCase()} +${elem.val}</strong> (Teto: +${cap})
           </div>
@@ -4911,9 +4984,12 @@ export function renderForgeElemental(container, state) {
 
 export function renderForgeBelts(container, state) {
   const inv = state.inventory || [];
-  const belts = inv.filter(i => (i.slot === 'belt' || i.itemId?.includes('belt')) && !i.equipped);
+  const belts = inv.filter(i => {
+    const s = getItemDef(i.itemId)?.slot || i.slot;
+    return s === 'belt' || i.itemId?.includes('belt');
+  });
 
-  let beltsOptionsHtml = belts.map(b => `<option value="${b.uid}">${b.name || b.itemId} (+${b.enchant || 0})</option>`).join('');
+  let beltsOptionsHtml = belts.map(b => `<option value="${b.uid}">${b.name || b.itemId} (+${b.enchant || 0})${b.equipped ? ' [Equipado]' : ''}</option>`).join('');
 
   container.innerHTML = `
     <div style="padding:10px; color:#fff; font-family:sans-serif;">
@@ -4961,7 +5037,10 @@ export function renderForgeBelts(container, state) {
 
 export function renderForgeLifestones(container, state) {
   const inv = state.inventory || [];
-  const weapons = inv.filter(i => i.slot === 'weapon' && !i.equipped);
+  const weapons = inv.filter(i => {
+    const s = getItemDef(i.itemId)?.slot || i.slot;
+    return s === 'weapon';
+  });
 
   const dropTable = [
     { grade: 'Comum', source: 'Monstros de Mapa Comum', glow: '1% Brilho', skill: '2% Chance de Skill' },
@@ -4984,10 +5063,11 @@ export function renderForgeLifestones(container, state) {
 
   let weaponsHtml = weapons.map(w => {
     const aug = w.augmentation;
+    const equippedBadge = w.equipped ? '<span style="color:#ffd877; font-size:11px; margin-left:6px; font-weight:bold;">[Equipada]</span>' : '';
     return `
       <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(212,167,68,0.25); border-radius:10px; padding:12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
         <div>
-          <strong style="color:#ffd877; font-size:14px;">${w.name || w.itemId}</strong>
+          <strong style="color:#ffd877; font-size:14px;">${w.name || w.itemId}</strong>${equippedBadge}
           <div style="font-size:11px; color:#aaa; margin-top:2px;">
             Augment: <strong style="color:${aug ? '#c084fc' : '#777'};">${aug ? `+${aug.atkBonus} P.Atk, +${aug.critBonus} Crit ${aug.skill ? `[${aug.skill.name}]` : ''}` : 'Nenhum'}</strong>
           </div>

@@ -579,7 +579,7 @@ export function getStats(state) {
       else if (p.stat === 'mpRegen') mpRegenBonus += v;
       else if (p.stat === 'speed') buffSpd += Math.floor(v * 50);
       else if (p.stat === 'crit') legacyCrit += Math.floor(v * 50);
-      else if (p.stat === 'eva') buffEva += Math.floor(v * 20);
+      else if (p.stat === 'eva') baseEva += Math.floor(v * 20);
     }
   }
 
@@ -624,14 +624,21 @@ export function getStats(state) {
     const wpnUid = state.equipment?.[wpnKey];
     const equippedWeaponItem = wpnUid ? (state.inventory?.find(i => i.uid === wpnUid) || wpnUid) : null;
     const weaponAug = (equippedWeaponItem && typeof equippedWeaponItem === 'object') ? equippedWeaponItem.augmentation : null;
-    if (weaponAug && weaponAug.stats) {
-      if (weaponAug.stats.atk) buffAtk += weaponAug.stats.atk;
-      if (weaponAug.stats.matk) buffMatk += weaponAug.stats.matk;
-      if (weaponAug.stats.def) buffDef += weaponAug.stats.def;
-      if (weaponAug.stats.mdef) buffMdef += weaponAug.stats.mdef;
-      if (weaponAug.stats.crit) augCrit += weaponAug.stats.crit;
-      if (weaponAug.stats.eva) baseEva += weaponAug.stats.eva;
-      if (weaponAug.stats.hp) elixirHpMult += (weaponAug.stats.hp / 2000);
+    if (weaponAug) {
+      const aAtk = weaponAug.atkBonus || weaponAug.stats?.atk || 0;
+      const aMatk = weaponAug.matkBonus || weaponAug.stats?.matk || 0;
+      const aDef = weaponAug.defBonus || weaponAug.stats?.def || 0;
+      const aMdef = weaponAug.mdefBonus || weaponAug.stats?.mdef || 0;
+      const aCrit = weaponAug.critBonus || weaponAug.stats?.crit || 0;
+      const aEva = weaponAug.evaBonus || weaponAug.stats?.eva || 0;
+      const aHp = weaponAug.hpBonus || weaponAug.stats?.hp || 0;
+      if (aAtk) buffAtk += aAtk;
+      if (aMatk) buffMatk += aMatk;
+      if (aDef) buffDef += aDef;
+      if (aMdef) buffMdef += aMdef;
+      if (aCrit) augCrit += aCrit;
+      if (aEva) baseEva += aEva;
+      if (aHp) elixirHpMult += (aHp / 2000);
     }
   }
 
@@ -688,7 +695,31 @@ export function getStats(state) {
     elixirHpMult += 0.25;
   }
 
-  const atkMult = 1 + buffAtkMult;
+  // Process Masterwork & Belt Bonuses on Equipped Items
+  if (state.equipment && typeof state.equipment === 'object') {
+    const processedEquipUids = new Set();
+    for (const [slot, eqVal] of Object.entries(state.equipment)) {
+      if (!eqVal) continue;
+      const item = (typeof eqVal === 'object') ? eqVal : state.inventory?.find(i => i.uid === eqVal || i.id === eqVal);
+      if (!item) continue;
+      const itemKey = item.uid || item.id || eqVal;
+      if (processedEquipUids.has(itemKey)) continue;
+      processedEquipUids.add(itemKey);
+
+      if (item.isMasterwork && item.masterworkBonus) {
+        buffSpd += (item.masterworkBonus.atkSpdPct || 0) * 100;
+        if (item.masterworkBonus.hpBonus) elixirHpMult += ((item.masterworkBonus.hpBonus || 0) / 2000);
+        mpRegenBonus += (item.masterworkBonus.mpRegenPct || 0);
+      }
+
+      if ((slot === 'belt' || item.beltBonuses) && item.beltBonuses) {
+        elixirHpMult += (item.beltBonuses.hpBonusPct || 0);
+        buffDef += (item.beltBonuses.pDefBonus || 0);
+      }
+    }
+  }
+
+  let atkMult = 1 + buffAtkMult;
   const defMult = 1 + sk('heavyArmor') * 0.05;
   const cdr = sk('quickRecycle') * 0.10;
 
@@ -707,6 +738,17 @@ export function getStats(state) {
       else if (socket.effect === 'health') elixirHpMult += (0.15 * mult);
       else if (socket.effect === 'might') buffAtkMult += (0.10 * mult);
       else if (socket.effect === 'empower') buffMatk += Math.floor(baseMatk * 0.12 * mult);
+    }
+
+    const equippedWeaponItem = wpnUid ? (state.inventory?.find(i => i.uid === wpnUid) || wpnUid) : null;
+    const itemSa = (equippedWeaponItem && typeof equippedWeaponItem === 'object') ? equippedWeaponItem.soulCrystal : null;
+    if (itemSa) {
+      if (itemSa.stat === 'crit' || itemSa.key === 'focus') saCrit += (itemSa.val || 0);
+      else if (itemSa.stat === 'patk' || itemSa.key === 'might') buffAtkMult += (typeof itemSa.val === 'number' && itemSa.val < 1 ? itemSa.val : (itemSa.val || 0) / 100);
+      else if (itemSa.stat === 'castSpd' || itemSa.key === 'acumen') buffSpd += Math.floor((itemSa.val || 0) * 50);
+      else if (itemSa.stat === 'hp' || itemSa.key === 'health') elixirHpMult += (typeof itemSa.val === 'number' && itemSa.val < 1 ? itemSa.val : (itemSa.val || 0) / 100);
+      else if (itemSa.stat === 'matk' || itemSa.key === 'empower') buffMatk += Math.floor(baseMatk * (typeof itemSa.val === 'number' && itemSa.val < 1 ? itemSa.val : (itemSa.val || 0) / 100));
+      else if (itemSa.stat === 'accuracy' || itemSa.key === 'guidance') baseEva += (itemSa.val || 0);
     }
   }
 
@@ -781,12 +823,13 @@ export function getStats(state) {
   const certHpMult   = 1 + (certB.hpPercent || 0);
   const certMpMult   = 1 + (certB.mpPercent || 0);
 
+  atkMult = 1 + buffAtkMult;
   const finalAtk  = Math.floor((baseAtk + (Number(eb.atk) || 0) + (Number(setB.atk) || 0) + buffAtk + codexB.atk + dollsB.atk + certB.atk) * atkMult * towerMult * certAtkMult);
   const finalDef  = Math.floor((baseDef + (Number(eb.def) || 0) + (Number(setB.def) || 0) + buffDef + codexB.def + dollsB.def + certB.def) * defMult * towerMult * certDefMult);
   const finalEva  = Math.floor(baseEva + (Number(eb.eva) || 0) + (Number(setB.eva) || 0) + codexB.eva + dollsB.eva + (certB.evaAdd || 0));
   const finalMatk = Math.floor((baseMatk + (Number(eb.matk) || 0) + (Number(setB.matk) || 0) + buffMatk + codexB.matk + dollsB.matk + certB.matk) * towerMult * certMatkMult);
   const finalMdef = Math.floor((baseMdef + (Number(eb.mdef) || 0) + (Number(setB.mdef) || 0) + buffMdef + codexB.mdef + dollsB.mdef + certB.mdef) * towerMult * certMdefMult);
-  const finalCrit = (Number(eb.crit) || 0) + (Number(setB.crit) || 0) + codexB.crit + dollsB.crit + certB.crit + astralB.crit + saCrit + augCrit;
+  const finalCrit = (Number(eb.crit) || 0) + (Number(setB.crit) || 0) + codexB.crit + dollsB.crit + certB.crit + astralB.crit + saCrit + augCrit + legacyCrit;
 
   const lootBonus  = (Number(race?.stats?.lootBonus) || 0) + (Number(cls?.base?.lootBonus) || 0) + itemLootBonus + luckBoost;
   const rawAtkSpd  = ((buffSpd + (dollsB.speed || 0)) / 100) + (certB.atkSpdPercent || 0);

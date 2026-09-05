@@ -391,8 +391,17 @@ export const ICON_MAP = {
   "crucifix_of_blessing_magicblunt": "nograde/weapons/weapon_crucifix_of_blessing_magicblunt.png",
   "crystal_blue_d": "materials/crystal_blue_d.png",
   "crystal_gold_s": "materials/crystal_gold_s.png",
+  "crystal_green_c": "materials/crystal_green_c.png",
   "crystal_red_b": "materials/crystal_red_b.png",
   "crystal_silver_a": "materials/crystal_silver_a.png",
+  "crystal_d": "materials/crystal_blue_d.png",
+  "crystal_c": "materials/crystal_green_c.png",
+  "crystal_b": "materials/crystal_red_b.png",
+  "crystal_a": "materials/crystal_silver_a.png",
+  "crystal_s": "materials/crystal_gold_s.png",
+  "book_1star": "spellbooks/spellbook_1star.png",
+  "book_2star": "spellbooks/spellbook_2star.png",
+  "book_3star": "spellbooks/spellbook_3star.png",
   "crystal_staff": "gradec/weapons/weapon_crystal_staff.png",
   "crystallized_ice_bow": "gradec/weapons/weapon_crystallized_ice_bow.png",
   "dark_crystal_heavy_armor": "gradea/armors/armor_dark_crystal_heavy_armor.png",
@@ -1227,6 +1236,8 @@ export function generateAllCraftingRecipes(allItemsParam = null) {
     if (def.slot === 'material') continue; // Materiais de craft brutos não são forjados de si mesmos
     const isHeirloom = def.isHeirloom || id.includes('heirloom') || (def.name && (def.name.toLowerCase().includes('herança') || def.name.toLowerCase().includes('heirloom')));
     if (isHeirloom) continue; // Itens de Herança são exclusivos dos Starter Packs do Cash Shop
+    // Tomos e Livros de Habilidade usam receitas dedicadas manuais com Cristais (Tomo 4★ é drop exclusivo de Epic Boss)
+    if (def.category === 'spellbook' || id.startsWith('book_') || id.startsWith('spellbook_')) continue;
 
     const normName = def.name.toLowerCase().trim();
     if (seenNames.has(normName)) continue;
@@ -1335,8 +1346,45 @@ const STATIC_CRAFTING_RECIPES = {
   "armor_full_plate_heavy_armor": { "id": "armor_full_plate_heavy_armor", "level": 40, "gold": 5000, "reqs": [{ "id": "iron_ore", "count": 50 }, { "id": "crafted_leather", "count": 20 }, { "id": "steel", "count": 10 }] },
   "armor_draconic_armor": { "id": "armor_draconic_armor", "level": 76, "gold": 50000, "reqs": [{ "id": "oriharukon_ore", "count": 100 }, { "id": "adamantite", "count": 50 }] },
   
-  // Crafts Especiais de Livros, Relíquias de Boss e Frost Lord TOP Tier
-  "spellbook_4star": { "id": "spellbook_4star", "level": 76, "craftLevel": 4, "gold": 500000, "reqs": [{ "id": "ancient_spellbook_page", "count": 10 }] },
+  // Tomos Sagrados de Habilidade (1★ a 3★ via Cristais na Forja; 4★ é drop exclusivo de Epic Bosses)
+  "book_1star": {
+    "id": "book_1star",
+    "itemId": "book_1star",
+    "name": "Tomo Sagrado: 1★ (Comum)",
+    "reqLvl": 40,
+    "level": 40,
+    "craftLevel": 4,
+    "materials": [{ "matId": "crystal_d", "qty": 20 }],
+    "reqs": [{ "id": "crystal_d", "matId": "crystal_d", "count": 20, "qty": 20 }],
+    "gold": 25000,
+    "result": "book_1star"
+  },
+  "book_2star": {
+    "id": "book_2star",
+    "itemId": "book_2star",
+    "name": "Tomo Sagrado: 2★ (Raro)",
+    "reqLvl": 48,
+    "level": 48,
+    "craftLevel": 5,
+    "materials": [{ "matId": "crystal_c", "qty": 25 }],
+    "reqs": [{ "id": "crystal_c", "matId": "crystal_c", "count": 25, "qty": 25 }],
+    "gold": 75000,
+    "result": "book_2star"
+  },
+  "book_3star": {
+    "id": "book_3star",
+    "itemId": "book_3star",
+    "name": "Tomo Sagrado: 3★ (Épico)",
+    "reqLvl": 56,
+    "level": 56,
+    "craftLevel": 6,
+    "materials": [{ "matId": "crystal_b", "qty": 35 }],
+    "reqs": [{ "id": "crystal_b", "matId": "crystal_b", "count": 35, "qty": 35 }],
+    "gold": 250000,
+    "result": "book_3star"
+  },
+
+  // Crafts Especiais de Relíquias de Boss e Frost Lord TOP Tier
   "weapon_zaken_sword": { "id": "weapon_zaken_sword", "level": 76, "craftLevel": 5, "gold": 750000, "reqs": [{ "id": "zaken_shard", "count": 10 }, { "id": "magic_dark_heart", "count": 1 }] },
   "weapon_core_bow": { "id": "weapon_core_bow", "level": 76, "craftLevel": 5, "gold": 750000, "reqs": [{ "id": "core_shard", "count": 10 }, { "id": "magic_dark_heart", "count": 1 }] },
   "weapon_orfen_dagger": { "id": "weapon_orfen_dagger", "level": 76, "craftLevel": 5, "gold": 750000, "reqs": [{ "id": "orfen_shard", "count": 10 }, { "id": "magic_dark_heart", "count": 1 }] },
@@ -1352,7 +1400,11 @@ function ensureAllRecipesGenerated() {
   const allItems = (typeof window !== 'undefined' && (window.GameData?.ALL_ITEMS || window.ALL_ITEMS)) || {};
   if (Object.keys(allItems).length > 0) {
     const generated = generateAllCraftingRecipes(allItems);
-    Object.assign(STATIC_CRAFTING_RECIPES, generated);
+    for (const [k, v] of Object.entries(generated)) {
+      if (!STATIC_CRAFTING_RECIPES[k]) {
+        STATIC_CRAFTING_RECIPES[k] = v;
+      }
+    }
     _allRecipesGenerated = true;
   }
 }

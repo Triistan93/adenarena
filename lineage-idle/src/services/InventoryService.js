@@ -136,7 +136,9 @@ export function processAutoRecycleItem(item, def, state, callbacks = {}) {
     else gradeCode = 'ng';
 
     let matId = 'iron_ore';
-    if (gradeCode === 'b') matId = 'crystal_b';
+    if (gradeCode === 's') matId = 'crystal_s';
+    else if (gradeCode === 'a') matId = 'crystal_a';
+    else if (gradeCode === 'b') matId = 'crystal_b';
     else if (gradeCode === 'c') matId = 'crystal_c';
     else if (gradeCode === 'd') matId = 'crystal_d';
     else matId = (def.slot === 'weapon') ? 'iron_ore' : 'suede';

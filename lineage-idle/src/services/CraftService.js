@@ -74,10 +74,10 @@ export function getRecipeDef(recipeId) {
 export function getRecipeMaterials(recipe) {
   if (!recipe) return [];
   if (Array.isArray(recipe.materials)) {
-    return recipe.materials.map(r => ({ matId: r.itemId || r.id, qty: r.count || r.qty || 1 }));
+    return recipe.materials.map(r => ({ matId: r.matId || r.itemId || r.id, qty: r.qty || r.count || 1 }));
   }
   if (Array.isArray(recipe.reqs)) {
-    return recipe.reqs.map(r => ({ matId: r.id || r.itemId, qty: r.count || r.qty || 1 }));
+    return recipe.reqs.map(r => ({ matId: r.matId || r.id || r.itemId, qty: r.qty || r.count || 1 }));
   }
   if (recipe.materials && typeof recipe.materials === 'object') {
     return Object.entries(recipe.materials).map(([matId, qty]) => ({ matId, qty: Number(qty) || 1 }));
@@ -200,7 +200,8 @@ export function craftItem(state, recipeId, qty = 1, callbacks = {}) {
   const rarityBoost = isDwarf ? 1 : 0;
   const rolledRarity = gData?.rollRarity ? gData.rollRarity(rarityBoost) : 'common';
 
-  addToInventory(state, recipeId, totalYield, rolledRarity, isFoundation, callbacks, true);
+  const targetItemId = recipe?.result || recipeId;
+  addToInventory(state, targetItemId, totalYield, rolledRarity, isFoundation, callbacks, true);
 
   // Mensagens e Notificações de Sucesso
   const displayName = itemDef?.name || recipeId;
