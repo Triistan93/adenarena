@@ -149,43 +149,13 @@ export function getPlayerArchetypes(playerClassId) {
 export function canEquipByType(playerClassId, itemDef, classSatisfiesFn) {
   if (!itemDef) return { ok: true, reason: null };
 
-  // 1. Requisito de classe explícito
+  // 1. Requisito de classe explícito (se especificado explicitamente no item)
   if (itemDef.classReq) {
     const ok = classSatisfiesFn ? classSatisfiesFn(playerClassId, itemDef.classReq) : true;
     if (!ok) return { ok: false, reason: `Requer classe: ${itemDef.classReq}` };
   }
 
-  const slot = (itemDef.slot || '').toLowerCase();
-  const archetypes = getPlayerArchetypes(playerClassId);
-
-  // Se archetypes é null = classe desconhecida = modo permissivo, pode equipar tudo
-  if (!archetypes) return { ok: true, reason: null };
-
-  // 2. Armaduras
-  if (['armor', 'helmet', 'boots', 'gloves', 'legs'].includes(slot)) {
-    const armorType = getArmorType(itemDef.id || '', itemDef.name || '');
-    if (armorType) {
-      const allowed = ARMOR_TYPE_ARCHETYPES[armorType] || [];
-      const ok = archetypes.some(a => allowed.includes(a));
-      if (!ok) {
-        const lbl = ARMOR_TYPE_LABEL[armorType];
-        return { ok: false, reason: `${lbl?.icon || ''} ${lbl?.name || armorType} · ${lbl?.hint || 'Classe incompatível'}` };
-      }
-    }
-  }
-
-  // 3. Armas
-  if (slot === 'weapon') {
-    const weaponType = getWeaponType(itemDef.id || '', itemDef.name || '');
-    if (weaponType) {
-      const allowed = WEAPON_TYPE_ARCHETYPES[weaponType] || [];
-      const ok = archetypes.some(a => allowed.includes(a));
-      if (!ok) {
-        const lbl = WEAPON_TYPE_LABEL[weaponType];
-        return { ok: false, reason: `${lbl?.icon || ''} ${lbl?.name || weaponType} · ${lbl?.hint || 'Classe incompatível'}` };
-      }
-    }
-  }
-
+  // 2. Armas e armaduras são 100% livres para todas as classes
+  // A única restrição restante no jogo é ao conjurar habilidades de arco (exige arco equipado)
   return { ok: true, reason: null };
 }

@@ -13,7 +13,7 @@
 import EventBus from './EventBus.js';
 import { setRoot as setDomRoot, _intervals, addTrackedListener, cleanupTracked, el } from './DomHelpers.js';
 import { setRoot as setMainRoot, bindEvents } from '../../main.js';
-import { getState, setState, loadState, saveState, DEFAULT_STATE } from './StateManager.js';
+import { getState, setState, loadState, saveState, DEFAULT_STATE, applyStarterKit } from './StateManager.js';
 import { getStats, getClass } from '../engine/StatsEngine.js';
 import { startCombat, stopCombat } from '../engine/CombatEngine.js';
 import { updateAllUI } from '../ui/index.js';
@@ -38,18 +38,28 @@ export async function bootstrap(shadowRoot) {
     const hasSave = loadState();
     let state = getState();
 
-    // 2. Se for novo jogador, define raça/classe padrão e calcula atributos base
-    if (!hasSave || !state.race || !state.class) {
+    // 2. Se for novo jogador ou personagem recém-resetado
+    const isPendingCreation = typeof localStorage !== 'undefined' && localStorage.getItem('aden_pending_char_creation') === '1';
+    if (!hasSave || !state.race || !state.class || isPendingCreation) {
+      if (typeof localStorage !== 'undefined') localStorage.removeItem('aden_pending_char_creation');
       state.race = state.race || 'human';
       state.class = state.class || 'fighter';
       
-      const raceDef = RACES[state.race] || { stats: {} };
-      const classDef = getClass(state.class) || { base: {} };
-      state.base = { atk: 0, def: 0, eva: 0, matk: 0, mdef: 0 };
-      for (const k of ['atk', 'def', 'eva', 'matk', 'mdef']) {
-        state.base[k] = (raceDef.stats?.[k] || 0) + (classDef.base?.[k] || 0);
-      }
+      applyStarterKit(state, state.race, state.class, state.charName || 'Tristan', state.gender || 'M');
       setState(state);
+      saveState(true);
+
+      // Dispara abertura imediata do seletor/criador de personagem
+      if (typeof window !== 'undefined' && typeof window.onOpenCharacterCreationModal === 'function') {
+        setTimeout(() => {
+          window.onOpenCharacterCreationModal({
+            charName: state.charName || 'Tristan',
+            race: state.race || 'human',
+            class: state.class || 'fighter',
+            gender: state.gender || 'M'
+          });
+        }, 150);
+      }
     }
 
     state.startTime = state.startTime || Date.now();

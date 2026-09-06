@@ -27,7 +27,39 @@
     holy_heal: { rgb: '100,255,160' },
     buff_aura: { rgb: '255,210,70' },
     whirlwind: { rgb: '180,225,255' },
-    lights: { rgb: '242,201,110' }
+    frost_slash: { rgb: '140,225,255' },
+    frost_blizzard: { rgb: '180,240,255' },
+    inferno_slash: { rgb: '255,100,40' },
+    inferno_dragon_breath: { rgb: '255,80,20' },
+    monster_inferno_pillar: { rgb: '255,80,20' },
+    monster_frost_freeze: { rgb: '160,230,255' },
+    celestial_strike: { rgb: '255,235,140' },
+    hero_skin_aura: { rgb: '140,225,255' },
+    lights: { rgb: '242,201,110' },
+
+    // NOVOS EFEITOS DISTINTOS DE MAGOS (Aéreos e Solo Realistas)
+    magic_prominence: { rgb: '255,90,20' },
+    magic_meteor: { rgb: '255,60,10' },
+    magic_hydro_blast: { rgb: '80,200,255' },
+    magic_hurricane: { rgb: '100,240,190' },
+    magic_lightning_surge: { rgb: '120,235,255' },
+    magic_death_spike: { rgb: '190,90,255' },
+    magic_vampiric_drain: { rgb: '230,50,110' },
+    magic_dark_mire: { rgb: '140,40,220' },
+    magic_solar_flare: { rgb: '255,235,120' },
+    magic_holy_sanctuary: { rgb: '255,245,160' },
+
+    // NOVOS EFEITOS DISTINTOS DE GUERREIROS & ARQUEIROS
+    snipe_shot: { rgb: '255,230,100' },
+    burst_fire: { rgb: '255,160,50' },
+    seven_arrow: { rgb: '255,225,120' },
+    warrior_backstab: { rgb: '220,30,60' },
+    warrior_deadly_blow: { rgb: '255,240,220' },
+    warrior_sonic_storm: { rgb: '140,210,255' },
+    warrior_triple_slash: { rgb: '200,230,255' },
+    warrior_earth_tremor: { rgb: '220,150,60' },
+    warrior_force_burst: { rgb: '255,165,40' },
+    warrior_spear_whirlwind: { rgb: '255,190,110' }
   };
 
   var QUALITY = {
@@ -119,13 +151,14 @@
     if (!this.canvas) {
       this.canvas = document.createElement('canvas');
       this._createdCanvas = true;
+      this.canvas.className = 'combat-vfx-canvas';
       this.canvas.setAttribute('aria-hidden', 'true');
       this.canvas.style.position = 'absolute';
       this.canvas.style.inset = '0';
       this.canvas.style.width = '100%';
       this.canvas.style.height = '100%';
       this.canvas.style.pointerEvents = 'none';
-      this.canvas.style.zIndex = String(this.container === document.body ? 20 : 2);
+      this.canvas.style.zIndex = String(this.container === document.body ? 20 : 5);
       if (this.container !== document.body && getComputedStyle(this.container).position === 'static') {
         this.container.style.position = 'relative';
       }
@@ -276,6 +309,295 @@
       e.maxAge = e.maxAge || 580;
       e.state.rotation = 0;
       this._ring(e.target.x, e.target.y, '180,225,255', 48, 5.5, 3);
+    }
+
+    if (e.type === 'frost_slash') {
+      e.maxAge = e.maxAge || 600;
+      e.state.impacted = false;
+      this._doFlash('140,225,255', 0.45);
+      this._ring(e.target.x, e.target.y, '160,235,255', 52, 6.5, 3.5);
+    }
+
+    if (e.type === 'frost_blizzard') {
+      e.maxAge = e.maxAge || 950;
+      e.state.impacted = false;
+      this._doFlash('180,240,255', 0.65);
+      this._ring(e.target.x, e.target.y, '200,245,255', 72, 7.5, 4);
+      this._ring(e.target.x, e.target.y, '130,210,255', 90, 4.2, 2.2);
+    }
+
+    if (e.type === 'inferno_slash') {
+      e.maxAge = e.maxAge || 650;
+      e.state.impacted = false;
+      this._doFlash('255,100,40', 0.55);
+      this._ring(e.target.x, e.target.y, '255,130,40', 58, 6.8, 3.8);
+      this._ring(e.target.x, e.target.y, '255,220,100', 76, 4.5, 2);
+    }
+
+    if (e.type === 'inferno_dragon_breath') {
+      e.maxAge = e.maxAge || 950;
+      e.state.impacted = false;
+      e.state.rotation = 0;
+      this._doFlash('255,100,20', 0.75);
+      this._ring(e.target.x, e.target.y, '255,80,20', 80, 7.8, 4.5);
+      this._ring(e.target.x, e.target.y, '255,180,40', 105, 5.2, 2.8);
+      this._ring(e.target.x, e.target.y, '255,240,120', 130, 3.6, 1.8);
+    }
+
+    if (e.type === 'monster_inferno_pillar') {
+      e.maxAge = e.maxAge || 1200;
+      e.state.lastFlameSpawn = 0;
+      e.state.rotation = 0;
+      var feetY = e.target.y;
+      this._doFlash('255,90,20', 0.5);
+      this._ring(e.target.x, feetY, '255,90,20', 75, 5.5, 4);
+      this._ring(e.target.x, feetY, '255,210,80', 95, 3.8, 2.5);
+      // Spawn burst of flames and magma sparks right at bottom edge of card
+      for (var fP = 0; fP < 36; fP += 1) {
+        var fAng = rand(-Math.PI * 0.85, -Math.PI * 0.15);
+        this._addParticle({
+          x: e.target.x + rand(-32, 32),
+          y: feetY + rand(-4, 4),
+          vx: Math.cos(fAng) * rand(1.5, 4.5),
+          vy: Math.sin(fAng) * rand(4, 9.5),
+          max: rand(50, 95),
+          radius: rand(12, 28),
+          rgb: '255,110,25',
+          rgbInner: '255,250,180',
+          kind: 'flame',
+          rotation: rand(-0.4, 0.4),
+          rotationSpeed: rand(-0.06, 0.06),
+          drag: 0.96,
+          additive: true
+        });
+      }
+      for (var sP = 0; sP < 28; sP += 1) {
+        this._addParticle({
+          x: e.target.x + rand(-26, 26),
+          y: feetY,
+          vx: rand(-2.2, 2.2),
+          vy: rand(-7, -2.5),
+          max: rand(35, 75),
+          radius: rand(2.5, 5.5),
+          rgb: '255,240,140',
+          kind: 'sparkle',
+          rotation: rand(0, 6.28),
+          rotationSpeed: rand(-0.3, 0.3),
+          additive: true
+        });
+      }
+    }
+
+    if (e.type === 'monster_frost_freeze') {
+      e.maxAge = e.maxAge || 1200;
+      e.state.lastCrystalSpawn = 0;
+      e.state.rotation = 0;
+      var feetYFrost = e.target.y;
+      this._doFlash('160,230,255', 0.5);
+      this._ring(e.target.x, feetYFrost, '180,240,255', 70, 5, 3.5);
+      this._ring(e.target.x, feetYFrost, '120,210,255', 90, 3.2, 2);
+      // Spawn burst of ice crystals wrapping the body from bottom edge up
+      for (var cP = 0; cP < 34; cP += 1) {
+        this._addParticle({
+          x: e.target.x + rand(-36, 36),
+          y: feetYFrost - rand(0, 110),
+          vx: rand(-1.2, 1.2),
+          vy: rand(-1.5, 0.5),
+          max: rand(60, 105),
+          radius: rand(7, 16),
+          rgb: Math.random() < 0.6 ? '200,245,255' : '140,225,255',
+          kind: 'ice_crystal',
+          rotation: rand(0, 6.28),
+          rotationSpeed: rand(-0.08, 0.08),
+          drag: 0.94,
+          additive: true
+        });
+      }
+      for (var icSp = 0; icSp < 28; icSp += 1) {
+        this._addParticle({
+          x: e.target.x + rand(-32, 32),
+          y: feetYFrost - rand(10, 100),
+          vx: rand(-1.5, 1.5),
+          vy: rand(-3, -0.6),
+          max: rand(45, 85),
+          radius: rand(2.8, 5.8),
+          rgb: '255,255,255',
+          kind: 'sparkle',
+          rotation: rand(0, 6.28),
+          rotationSpeed: rand(-0.25, 0.25),
+          additive: true
+        });
+      }
+    }
+
+    if (e.type === 'celestial_strike') {
+      e.maxAge = e.maxAge || 700;
+      e.state.impacted = false;
+      this._doFlash('255,245,180', 0.7);
+      this._ring(e.target.x, e.target.y, '255,230,120', 65, 5.8, 3.8);
+      this._ring(e.target.x, e.target.y, '255,255,255', 85, 3.5, 2);
+    }
+
+    if (e.type === 'hero_skin_aura') {
+      e.maxAge = e.maxAge || 800;
+    }
+
+    // NOVOS EFEITOS DE MAGOS
+    if (e.type === 'magic_prominence') {
+      e.maxAge = e.maxAge || 1050;
+      e.state.lastFlameSpawn = 0;
+      e.state.rotation = 0;
+      this._doFlash('255,100,20', 0.6);
+      this._ring(e.target.x, e.target.y, '255,90,20', 80, 5.8, 4.2);
+      this._ring(e.target.x, e.target.y, '255,210,80', 105, 4, 2.5);
+    }
+
+    if (e.type === 'magic_meteor') {
+      e.maxAge = e.maxAge || 1200;
+      e.state.impacted = false;
+      e.state.meteorX = e.target.x - 180;
+      e.state.meteorY = e.target.y - 320;
+    }
+
+    if (e.type === 'magic_hydro_blast') {
+      e.maxAge = e.maxAge || 850;
+      e.state.impacted = false;
+      this._doFlash('100,210,255', 0.5);
+      this._ring(e.target.x, e.target.y, '80,200,255', 75, 6.2, 3.8);
+    }
+
+    if (e.type === 'magic_hurricane') {
+      e.maxAge = e.maxAge || 1100;
+      e.state.rotation = 0;
+      this._doFlash('100,240,190', 0.45);
+      this._ring(e.target.x, e.target.y, '100,240,190', 70, 5.2, 3.2);
+    }
+
+    if (e.type === 'magic_lightning_surge') {
+      e.maxAge = e.maxAge || 950;
+      e.state.sparks = [];
+      this._doFlash('150,240,255', 0.7);
+      this._ring(e.target.x, e.target.y, '120,235,255', 85, 7.5, 4);
+    }
+
+    if (e.type === 'magic_death_spike') {
+      e.maxAge = e.maxAge || 750;
+      e.state.speed = e.speed || 8.5;
+      e.state.impacted = false;
+    }
+
+    if (e.type === 'magic_vampiric_drain') {
+      e.maxAge = e.maxAge || 950;
+      e.state.rotation = 0;
+      this._ring(e.target.x, e.target.y, '230,50,110', 65, 4.5, 3.2);
+    }
+
+    if (e.type === 'magic_dark_mire') {
+      e.maxAge = e.maxAge || 1200;
+      e.state.rotation = 0;
+      e.state.lastSoulSpawn = 0;
+      this._doFlash('140,40,220', 0.45);
+      this._ring(e.target.x, e.target.y, '140,40,220', 78, 4.2, 3.5);
+    }
+
+    if (e.type === 'magic_solar_flare') {
+      e.maxAge = e.maxAge || 750;
+      e.state.impacted = false;
+      this._doFlash('255,245,180', 0.85);
+      this._ring(e.target.x, e.target.y, '255,235,120', 85, 6.5, 4.5);
+    }
+
+    if (e.type === 'magic_holy_sanctuary') {
+      e.maxAge = e.maxAge || 1200;
+      e.state.rotation = 0;
+      this._doFlash('255,245,180', 0.55);
+      this._ring(e.target.x, e.target.y, '255,245,160', 80, 4.8, 3.5);
+    }
+
+    // NOVOS EFEITOS DE GUERREIROS & ARQUEIROS
+    if (e.type === 'snipe_shot') {
+      e.maxAge = e.maxAge || 550;
+      e.state.speed = e.speed || 16.0;
+      e.state.impacted = false;
+      this._doFlash('255,240,160', 0.55);
+    }
+
+    if (e.type === 'burst_fire') {
+      e.maxAge = e.maxAge || 700;
+      e.state.bullets = [
+        { active: true, done: false, x: e.source.x, y: e.source.y - 6, delay: 0 },
+        { active: false, done: false, x: e.source.x, y: e.source.y, delay: 80 },
+        { active: false, done: false, x: e.source.x, y: e.source.y + 6, delay: 160 }
+      ];
+      e.state.speed = e.speed || 11.5;
+    }
+
+    if (e.type === 'seven_arrow') {
+      e.maxAge = e.maxAge || 950;
+      e.state.arrows = [];
+      for (var saIdx = 0; saIdx < 7; saIdx++) {
+        var offsetAngle = (saIdx - 3) * 0.14;
+        e.state.arrows.push({
+          x: e.source.x,
+          y: e.source.y,
+          angleOffset: offsetAngle,
+          delay: saIdx * 45,
+          active: false,
+          done: false
+        });
+      }
+      e.state.speed = e.speed || 8.2;
+    }
+
+    if (e.type === 'warrior_backstab') {
+      e.maxAge = e.maxAge || 600;
+      e.state.impacted = false;
+      this._doFlash('220,30,60', 0.7);
+      this._ring(e.target.x, e.target.y, '220,30,60', 70, 7.5, 4);
+    }
+
+    if (e.type === 'warrior_deadly_blow') {
+      e.maxAge = e.maxAge || 550;
+      e.state.impacted = false;
+      this._doFlash('255,250,220', 0.6);
+      this._ring(e.target.x, e.target.y, '255,240,220', 65, 7.2, 3.8);
+    }
+
+    if (e.type === 'warrior_sonic_storm') {
+      e.maxAge = e.maxAge || 750;
+      e.state.rotation = 0;
+      this._doFlash('140,210,255', 0.6);
+      this._ring(e.target.x, e.target.y, '140,210,255', 80, 6.5, 3.5);
+    }
+
+    if (e.type === 'warrior_triple_slash') {
+      e.maxAge = e.maxAge || 650;
+      e.state.impacted = false;
+      this._doFlash('200,230,255', 0.55);
+      this._ring(e.target.x, e.target.y, '200,230,255', 68, 6.8, 3.6);
+    }
+
+    if (e.type === 'warrior_earth_tremor') {
+      e.maxAge = e.maxAge || 1050;
+      e.state.impacted = false;
+      this._doFlash('255,180,70', 0.6);
+      this._ring(e.target.x, e.target.y, '220,150,60', 90, 6.5, 4.5);
+      this._ring(e.target.x, e.target.y, '180,120,50', 115, 4.2, 2.8);
+    }
+
+    if (e.type === 'warrior_force_burst') {
+      e.maxAge = e.maxAge || 800;
+      e.state.rotation = 0;
+      this._doFlash('255,170,40', 0.75);
+      this._ring(e.target.x, e.target.y, '255,165,40', 75, 7.8, 4.2);
+      this._ring(e.target.x, e.target.y, '255,230,120', 100, 5, 2.5);
+    }
+
+    if (e.type === 'warrior_spear_whirlwind') {
+      e.maxAge = e.maxAge || 750;
+      e.state.rotation = 0;
+      this._doFlash('255,190,110', 0.55);
+      this._ring(e.target.x, e.target.y, '255,190,110', 76, 6.2, 3.6);
     }
 
     if (e.type === 'holy_heal') {
@@ -500,6 +822,194 @@
         this._addParticle({ x: x, y: y, vx: Math.cos(wAng) * rand(2, 6), vy: Math.sin(wAng) * rand(2, 6), max: rand(30, 60), radius: rand(2.2, 4.5), rgb: '170,220,255', kind: 'shard', rotation: rand(0, 6.28), rotationSpeed: rand(-0.35, 0.35) });
       }
     }
+    if (e.type === 'frost_slash') {
+      this._ring(x, y, '160,235,255', 58, 7.5, 3.8);
+      this._ring(x, y, '220,250,255', 78, 4.8, 2.2);
+      this._burst(x, y, '140,225,255', 65, 7.5);
+      for (var fs = 0; fs < 38; fs += 1) {
+        var fsAng = Math.random() * Math.PI * 2;
+        this._addParticle({
+          x: x, y: y,
+          vx: Math.cos(fsAng) * rand(2.5, 8.5),
+          vy: Math.sin(fsAng) * rand(2.5, 8.5) - 0.8,
+          max: rand(40, 80),
+          radius: rand(3.5, 8.5),
+          rgb: Math.random() < 0.6 ? '210,245,255' : '140,220,255',
+          gravity: 0.12,
+          drag: 0.98,
+          kind: 'shard',
+          rotation: rand(0, 6.28),
+          rotationSpeed: rand(-0.35, 0.35)
+        });
+      }
+      for (var fsSp = 0; fsSp < 24; fsSp += 1) {
+        this._addParticle({
+          x: x + rand(-20, 20), y: y + rand(-18, 18),
+          vx: rand(-1.5, 1.5), vy: rand(-3.2, -0.6),
+          max: rand(45, 85),
+          radius: rand(2.5, 5.2),
+          rgb: Math.random() < 0.5 ? '255,255,255' : '180,240,255',
+          kind: 'sparkle',
+          rotation: rand(0, 6.28),
+          rotationSpeed: rand(-0.2, 0.2),
+          additive: true
+        });
+      }
+      for (var fsm = 0; fsm < 18; fsm += 1) {
+        this._addParticle({
+          x: x + rand(-22, 22), y: y + rand(-20, 20),
+          vx: rand(-1.2, 1.2), vy: rand(-2, -0.2),
+          max: rand(45, 90), radius: rand(8, 18),
+          rgb: '180,240,255', kind: 'smoke', additive: true
+        });
+      }
+    }
+    if (e.type === 'frost_blizzard') {
+      this._ring(x, y, '200,245,255', 85, 8.5, 4.5);
+      this._ring(x, y, '130,210,255', 110, 5.8, 3);
+      this._ring(x, y, '255,255,255', 135, 3.8, 2);
+      this._burst(x, y, '180,240,255', 95, 10);
+      for (var fb = 0; fb < 60; fb += 1) {
+        var fbAng = Math.random() * Math.PI * 2;
+        this._addParticle({
+          x: x, y: y,
+          vx: Math.cos(fbAng) * rand(3.5, 11),
+          vy: Math.sin(fbAng) * rand(3.5, 11) - 1.5,
+          max: rand(50, 100),
+          radius: rand(4.5, 10),
+          rgb: Math.random() < 0.5 ? '235,250,255' : '150,230,255',
+          gravity: 0.14,
+          drag: 0.975,
+          kind: 'shard',
+          rotation: rand(0, 6.28),
+          rotationSpeed: rand(-0.4, 0.4)
+        });
+      }
+      for (var fbSp = 0; fbSp < 36; fbSp += 1) {
+        this._addParticle({
+          x: x + rand(-35, 35), y: y + rand(-25, 25),
+          vx: rand(-2.5, 2.5), vy: rand(-4.5, -1),
+          max: rand(50, 95),
+          radius: rand(3, 6.5),
+          rgb: Math.random() < 0.6 ? '255,255,255' : '160,235,255',
+          kind: 'sparkle',
+          rotation: rand(0, 6.28),
+          rotationSpeed: rand(-0.25, 0.25),
+          additive: true
+        });
+      }
+      for (var fbs = 0; fbs < 32; fbs += 1) {
+        this._addParticle({
+          x: x + rand(-35, 35), y: y + rand(-30, 30),
+          vx: rand(-2.5, 2.5), vy: rand(-3, -0.5),
+          max: rand(60, 120), radius: rand(12, 28),
+          rgb: '160,230,255', kind: 'smoke', additive: true
+        });
+      }
+    }
+    if (e.type === 'inferno_slash') {
+      this._ring(x, y, '255,100,40', 68, 8.2, 4.5);
+      this._ring(x, y, '255,220,90', 92, 5.2, 2.6);
+      this._burst(x, y, '255,120,40', 70, 9);
+      for (var inf = 0; inf < 45; inf += 1) {
+        var infAng = Math.random() * Math.PI * 2;
+        this._addParticle({
+          x: x, y: y,
+          vx: Math.cos(infAng) * rand(3, 9.8),
+          vy: Math.sin(infAng) * rand(3, 9.8) - 1.8,
+          max: rand(45, 90),
+          radius: rand(4, 9),
+          rgb: Math.random() < 0.6 ? '255,190,60' : '255,80,30',
+          gravity: 0.15,
+          drag: 0.97,
+          kind: 'shard',
+          rotation: rand(0, 6.28),
+          rotationSpeed: rand(-0.35, 0.35)
+        });
+      }
+      for (var infSp = 0; infSp < 28; infSp += 1) {
+        this._addParticle({
+          x: x + rand(-20, 20), y: y + rand(-15, 15),
+          vx: rand(-2, 2), vy: rand(-4, -1),
+          max: rand(40, 80),
+          radius: rand(2.8, 5.5),
+          rgb: Math.random() < 0.5 ? '255,245,180' : '255,140,40',
+          kind: 'sparkle',
+          rotation: rand(0, 6.28),
+          rotationSpeed: rand(-0.25, 0.25),
+          additive: true
+        });
+      }
+      for (var infS = 0; infS < 24; infS += 1) {
+        this._addParticle({
+          x: x + rand(-20, 20), y: y + rand(-18, 18),
+          vx: rand(-1.2, 1.2), vy: rand(-2.8, -1),
+          max: rand(50, 105), radius: rand(9, 22),
+          rgb: '255,90,30', kind: 'smoke', additive: true
+        });
+      }
+    }
+    if (e.type === 'inferno_dragon_breath') {
+      this._ring(x, y, '255,80,20', 88, 9, 5);
+      this._ring(x, y, '255,180,40', 115, 6, 3);
+      this._ring(x, y, '255,245,120', 140, 4.2, 2);
+      this._burst(x, y, '255,100,20', 90, 11);
+      for (var idb = 0; idb < 65; idb += 1) {
+        var idbAng = Math.random() * Math.PI * 2;
+        this._addParticle({
+          x: x, y: y,
+          vx: Math.cos(idbAng) * rand(3.5, 12),
+          vy: Math.sin(idbAng) * rand(3.5, 12) - 2.2,
+          max: rand(50, 105),
+          radius: rand(4.5, 10),
+          rgb: Math.random() < 0.5 ? '255,220,80' : (Math.random() < 0.8 ? '255,110,30' : '255,50,20'),
+          gravity: 0.16,
+          drag: 0.97,
+          kind: 'shard',
+          rotation: rand(0, 6.28),
+          rotationSpeed: rand(-0.4, 0.4)
+        });
+      }
+      for (var idbSp = 0; idbSp < 40; idbSp += 1) {
+        this._addParticle({
+          x: x + rand(-35, 35), y: y + rand(-25, 25),
+          vx: rand(-3, 3), vy: rand(-5, -1.2),
+          max: rand(45, 95),
+          radius: rand(3.2, 6.8),
+          rgb: Math.random() < 0.5 ? '255,255,200' : '255,160,50',
+          kind: 'sparkle',
+          rotation: rand(0, 6.28),
+          rotationSpeed: rand(-0.3, 0.3),
+          additive: true
+        });
+      }
+      for (var idbS = 0; idbS < 36; idbS += 1) {
+        this._addParticle({
+          x: x + rand(-30, 30), y: y + rand(-25, 25),
+          vx: rand(-2, 2), vy: rand(-3.5, -1),
+          max: rand(60, 130), radius: rand(14, 30),
+          rgb: '255,70,20', kind: 'smoke', additive: true
+        });
+      }
+    }
+    if (e.type === 'celestial_strike') {
+      this._ring(x, y, '255,245,180', 68, 6.4, 3.8);
+      this._ring(x, y, '255,220,100', 90, 4.2, 2);
+      this._burst(x, y, '255,235,140', 65, 7.2);
+      for (var cs = 0; cs < 28; cs += 1) {
+        this._addParticle({
+          x: x + rand(-20, 20), y: y + rand(-15, 15),
+          vx: rand(-2.5, 2.5), vy: rand(-4, -0.8),
+          max: rand(45, 85),
+          radius: rand(3, 6),
+          rgb: Math.random() < 0.6 ? '255,250,210' : '255,220,110',
+          kind: 'sparkle',
+          rotation: rand(0, 6.28),
+          rotationSpeed: rand(-0.2, 0.2),
+          additive: true
+        });
+      }
+    }
   };
 
   LineageVFX.prototype._drawCrossImpact = function (x, y, rgb) {
@@ -563,7 +1073,7 @@
     if (e.type === 'fireball' || e.type === 'ice_shards' || e.type === 'wind_blast' || e.type === 'arcane_missile' || e.type === 'energy_slash' || e.type === 'spiral_spear') {
       this._updateProjectile(e, dt);
     }
-    if (e.type === 'lightning' || e.type === 'holy_heal' || e.type === 'buff_aura' || e.type === 'power_smash' || e.type === 'holy_beam' || e.type === 'dark_vortex' || e.type === 'whirlwind') {
+    if (e.type === 'lightning' || e.type === 'holy_heal' || e.type === 'buff_aura' || e.type === 'power_smash' || e.type === 'holy_beam' || e.type === 'dark_vortex' || e.type === 'whirlwind' || e.type === 'frost_slash' || e.type === 'frost_blizzard' || e.type === 'inferno_slash' || e.type === 'celestial_strike' || e.type === 'hero_skin_aura') {
       if (e.age > e.maxAge) e.done = true;
     }
     if (e.type === 'arrow_rain') this._updateArrowRain(e, dt);
@@ -873,6 +1383,1452 @@
     ctx.restore();
   };
 
+  LineageVFX.prototype._drawFrostSlash = function (e) {
+    var ctx = this.ctx, p = e.target, progress = clamp(e.age / e.maxAge, 0, 1), fade = 1 - progress;
+    if (!e.state.impacted && e.age >= 60) {
+      e.state.impacted = true;
+      this._impact(e, p.x, p.y);
+    }
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.translate(p.x, p.y);
+    ctx.rotate(-0.45);
+
+    // Dynamic crystalline crescent slash
+    var slashLen = 65 * (0.4 + progress * 0.6);
+    var slashThick = 9 * (1 - Math.pow(progress, 2));
+
+    var grad = ctx.createLinearGradient(-slashLen, -slashLen * 0.4, slashLen, slashLen * 0.4);
+    grad.addColorStop(0, 'rgba(255,255,255,0)');
+    grad.addColorStop(0.3, rgba('180,240,255', fade * 0.95));
+    grad.addColorStop(0.5, rgba('255,255,255', fade));
+    grad.addColorStop(0.7, rgba('110,210,255', fade * 0.85));
+    grad.addColorStop(1, 'rgba(110,210,255,0)');
+
+    ctx.strokeStyle = grad;
+    ctx.lineWidth = slashThick;
+    ctx.lineCap = 'round';
+    ctx.shadowColor = 'rgba(140,225,255,0.95)';
+    ctx.shadowBlur = 24 * this.qualityConfig.blur;
+
+    ctx.beginPath();
+    ctx.arc(0, 0, slashLen, Math.PI * 0.75, Math.PI * 1.5);
+    ctx.stroke();
+
+    // Secondary ice crystal flare
+    ctx.lineWidth = slashThick * 0.4;
+    ctx.strokeStyle = rgba('255,255,255', fade * 0.9);
+    ctx.beginPath();
+    ctx.arc(0, 0, slashLen * 0.9, Math.PI * 0.8, Math.PI * 1.45);
+    ctx.stroke();
+
+    ctx.restore();
+  };
+
+  LineageVFX.prototype._drawFrostBlizzard = function (e) {
+    var ctx = this.ctx, p = e.target, progress = clamp(e.age / e.maxAge, 0, 1), fade = 1 - progress;
+    if (!e.state.impacted && e.age >= 80) {
+      e.state.impacted = true;
+      this._impact(e, p.x, p.y);
+    }
+    e.state.rotation += 0.16;
+
+    // Sub-zero frost storm ring and swirling blizzard winds
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.translate(p.x, p.y);
+
+    // Blizzard ground frost glyph
+    ctx.save();
+    ctx.scale(1, 0.45);
+    ctx.rotate(e.state.rotation * 0.4);
+    var stormGrad = ctx.createRadialGradient(0, 0, 10, 0, 0, 85);
+    stormGrad.addColorStop(0, rgba('210,245,255', fade * 0.7));
+    stormGrad.addColorStop(0.4, rgba('100,200,255', fade * 0.5));
+    stormGrad.addColorStop(0.8, rgba('50,150,255', fade * 0.25));
+    stormGrad.addColorStop(1, 'rgba(0,100,255,0)');
+    ctx.fillStyle = stormGrad;
+    ctx.beginPath();
+    ctx.arc(0, 0, 85, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Frost runes / spikes in hexagram pattern
+    ctx.strokeStyle = rgba('220,250,255', fade * 0.85);
+    ctx.lineWidth = 2.5;
+    ctx.shadowColor = 'rgba(140,225,255,0.9)';
+    ctx.shadowBlur = 14;
+    for (var r = 0; r < 6; r++) {
+      ctx.rotate(Math.PI / 3);
+      ctx.beginPath();
+      ctx.moveTo(0, 20);
+      ctx.lineTo(0, 75);
+      ctx.moveTo(-10, 50);
+      ctx.lineTo(0, 65);
+      ctx.lineTo(10, 50);
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    // Whirling sub-zero icy blades
+    ctx.rotate(e.state.rotation);
+    for (var b = 0; b < 4; b++) {
+      ctx.rotate(Math.PI / 2);
+      var bGrad = ctx.createLinearGradient(-45, 0, 45, 0);
+      bGrad.addColorStop(0, 'rgba(255,255,255,0)');
+      bGrad.addColorStop(0.5, rgba('180,240,255', fade * 0.95));
+      bGrad.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.strokeStyle = bGrad;
+      ctx.lineWidth = 4;
+      ctx.shadowColor = 'rgba(160,235,255,0.95)';
+      ctx.shadowBlur = 18;
+      ctx.beginPath();
+      ctx.arc(0, 0, 48 + b * 6, 0, Math.PI * 0.7);
+      ctx.stroke();
+    }
+
+    ctx.restore();
+  };
+
+  LineageVFX.prototype._drawInfernoSlash = function (e) {
+    var ctx = this.ctx, p = e.target, progress = clamp(e.age / e.maxAge, 0, 1), fade = 1 - progress;
+    if (!e.state.impacted && e.age >= 60) {
+      e.state.impacted = true;
+      this._impact(e, p.x, p.y);
+    }
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.translate(p.x, p.y);
+    ctx.rotate(0.38);
+
+    var slashLen = 70 * (0.4 + progress * 0.6);
+    var slashThick = 11 * (1 - Math.pow(progress, 2));
+
+    var grad = ctx.createLinearGradient(-slashLen, -slashLen * 0.3, slashLen, slashLen * 0.3);
+    grad.addColorStop(0, 'rgba(255,50,0,0)');
+    grad.addColorStop(0.25, rgba('255,120,40', fade * 0.95));
+    grad.addColorStop(0.5, rgba('255,245,180', fade));
+    grad.addColorStop(0.75, rgba('255,80,20', fade * 0.85));
+    grad.addColorStop(1, 'rgba(255,50,0,0)');
+
+    ctx.strokeStyle = grad;
+    ctx.lineWidth = slashThick;
+    ctx.lineCap = 'round';
+    ctx.shadowColor = 'rgba(255,100,20,0.95)';
+    ctx.shadowBlur = 26 * this.qualityConfig.blur;
+
+    ctx.beginPath();
+    ctx.arc(0, 0, slashLen, Math.PI * 0.7, Math.PI * 1.55);
+    ctx.stroke();
+
+    // Hot molten core line
+    ctx.lineWidth = slashThick * 0.35;
+    ctx.strokeStyle = rgba('255,255,220', fade * 0.95);
+    ctx.beginPath();
+    ctx.arc(0, 0, slashLen * 0.95, Math.PI * 0.75, Math.PI * 1.5);
+    ctx.stroke();
+
+    ctx.restore();
+  };
+
+  LineageVFX.prototype._drawInfernoDragonBreath = function (e) {
+    var ctx = this.ctx, p = e.target, progress = clamp(e.age / e.maxAge, 0, 1), fade = 1 - progress;
+    if (!e.state.impacted && e.age >= 75) {
+      e.state.impacted = true;
+      this._impact(e, p.x, p.y);
+    }
+    e.state.rotation += 0.14;
+
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.translate(p.x, p.y);
+
+    // 1. Molten Dragon Ground Rune (pentagram of magma fire)
+    ctx.save();
+    ctx.scale(1, 0.45);
+    ctx.rotate(e.state.rotation * 0.3);
+
+    var floorGrad = ctx.createRadialGradient(0, 0, 8, 0, 0, 95);
+    floorGrad.addColorStop(0, rgba('255,245,180', fade * 0.8));
+    floorGrad.addColorStop(0.35, rgba('255,120,30', fade * 0.6));
+    floorGrad.addColorStop(0.75, rgba('220,50,10', fade * 0.3));
+    floorGrad.addColorStop(1, 'rgba(180,20,0,0)');
+    ctx.fillStyle = floorGrad;
+    ctx.beginPath();
+    ctx.arc(0, 0, 95, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Dragon pentagram star in molten gold
+    ctx.strokeStyle = rgba('255,210,90', fade * 0.9);
+    ctx.lineWidth = 3;
+    ctx.shadowColor = 'rgba(255,100,20,0.95)';
+    ctx.shadowBlur = 18;
+    ctx.beginPath();
+    for (var d = 0; d < 5; d++) {
+      var dAng = (d * 4 * Math.PI) / 5 - Math.PI / 2;
+      var dx = Math.cos(dAng) * 75;
+      var dy = Math.sin(dAng) * 75;
+      if (d === 0) ctx.moveTo(dx, dy); else ctx.lineTo(dx, dy);
+    }
+    ctx.closePath();
+    ctx.stroke();
+    ctx.restore();
+
+    // 2. Swirling Dragon Fire Claws / Wings
+    ctx.rotate(e.state.rotation);
+    for (var c = 0; c < 3; c++) {
+      ctx.rotate((Math.PI * 2) / 3);
+      var clawGrad = ctx.createLinearGradient(-55, 0, 55, 0);
+      clawGrad.addColorStop(0, 'rgba(255,50,0,0)');
+      clawGrad.addColorStop(0.3, rgba('255,120,40', fade * 0.95));
+      clawGrad.addColorStop(0.6, rgba('255,240,180', fade));
+      clawGrad.addColorStop(1, 'rgba(255,60,0,0)');
+      ctx.strokeStyle = clawGrad;
+      ctx.lineWidth = 5.5;
+      ctx.shadowColor = 'rgba(255,90,20,0.95)';
+      ctx.shadowBlur = 22 * this.qualityConfig.blur;
+      ctx.beginPath();
+      ctx.arc(0, 0, 56 + c * 8, 0, Math.PI * 0.75);
+      ctx.stroke();
+    }
+
+    // 3. Central Dragon Eye Flare
+    var eyeGrad = ctx.createRadialGradient(0, 0, 0, 0, 0, 28 * (1 - progress * 0.4));
+    eyeGrad.addColorStop(0, rgba('255,255,230', fade));
+    eyeGrad.addColorStop(0.4, rgba('255,180,50', fade * 0.85));
+    eyeGrad.addColorStop(1, 'rgba(255,60,0,0)');
+    ctx.fillStyle = eyeGrad;
+    ctx.beginPath();
+    ctx.arc(0, 0, 28, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.restore();
+  };
+
+  LineageVFX.prototype._drawCelestialStrike = function (e) {
+    var ctx = this.ctx, p = e.target, progress = clamp(e.age / e.maxAge, 0, 1), fade = 1 - progress;
+    if (!e.state.impacted && e.age >= 60) {
+      e.state.impacted = true;
+      this._impact(e, p.x, p.y);
+    }
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+
+    // Golden divine pillar of light
+    var beamWidth = 46 * (1 - progress * 0.3);
+    var beamGrad = ctx.createLinearGradient(p.x - beamWidth / 2, 0, p.x + beamWidth / 2, 0);
+    beamGrad.addColorStop(0, 'rgba(255,220,100,0)');
+    beamGrad.addColorStop(0.3, rgba('255,235,140', fade * 0.85));
+    beamGrad.addColorStop(0.5, rgba('255,255,255', fade));
+    beamGrad.addColorStop(0.7, rgba('255,235,140', fade * 0.85));
+    beamGrad.addColorStop(1, 'rgba(255,220,100,0)');
+
+    ctx.fillStyle = beamGrad;
+    ctx.shadowColor = 'rgba(255,215,80,0.95)';
+    ctx.shadowBlur = 24 * this.qualityConfig.blur;
+    ctx.fillRect(p.x - beamWidth / 2, 0, beamWidth, p.y + 12);
+
+    // Divine rotating solar seal on the ground
+    ctx.save();
+    ctx.translate(p.x, p.y + 8);
+    ctx.scale(1, 0.38);
+    ctx.rotate(e.age * 0.006);
+    ctx.strokeStyle = rgba('255,235,120', fade * 0.95);
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.arc(0, 0, 52, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // 8-point celestial star
+    for (var s = 0; s < 4; s++) {
+      ctx.rotate(Math.PI / 4);
+      ctx.beginPath();
+      ctx.moveTo(-45, 0);
+      ctx.lineTo(45, 0);
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    ctx.restore();
+  };
+
+  LineageVFX.prototype._drawHeroSkinAura = function (e) {
+    var ctx = this.ctx, p = e.source, progress = clamp(e.age / e.maxAge, 0, 1), fade = 1 - progress;
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.translate(p.x, p.y + 20); // feet of hero
+    ctx.scale(1, 0.4);
+
+    var auraRad = 32 + Math.sin(e.age * 0.008) * 4;
+    var auraGrad = ctx.createRadialGradient(0, 0, 6, 0, 0, auraRad);
+    auraGrad.addColorStop(0, rgba(e.rgb, fade * 0.7));
+    auraGrad.addColorStop(0.6, rgba(e.rgb, fade * 0.3));
+    auraGrad.addColorStop(1, rgba(e.rgb, 0));
+
+    ctx.fillStyle = auraGrad;
+    ctx.beginPath();
+    ctx.arc(0, 0, auraRad, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.strokeStyle = rgba(e.rgb, fade * 0.8);
+    ctx.lineWidth = 1.8;
+    ctx.rotate(e.age * 0.003);
+    ctx.beginPath();
+    ctx.arc(0, 0, auraRad * 0.85, 0, Math.PI * 2);
+    ctx.stroke();
+
+    ctx.restore();
+  };
+
+  LineageVFX.prototype._drawMonsterInfernoPillar = function (e) {
+    var ctx = this.ctx, p = e.target, progress = clamp(e.age / e.maxAge, 0, 1), fade = 1 - progress;
+    var feetY = p.y;
+    e.state.rotation += 0.08;
+
+    // Continuously erupt flames from feet upwards while effect is active
+    if (e.age - e.state.lastFlameSpawn > 45 && progress < 0.75) {
+      e.state.lastFlameSpawn = e.age;
+      for (var f = 0; f < 6; f++) {
+        var ang = rand(-Math.PI * 0.85, -Math.PI * 0.15);
+        this._addParticle({
+          x: p.x + rand(-32, 32),
+          y: feetY + rand(-4, 8),
+          vx: Math.cos(ang) * rand(1, 3.8),
+          vy: Math.sin(ang) * rand(3.5, 9),
+          max: rand(45, 80),
+          radius: rand(11, 26),
+          rgb: '255,110,25',
+          rgbInner: '255,250,180',
+          kind: 'flame',
+          rotation: rand(-0.4, 0.4),
+          rotationSpeed: rand(-0.07, 0.07),
+          drag: 0.965,
+          additive: true
+        });
+      }
+      for (var sp = 0; sp < 4; sp++) {
+        this._addParticle({
+          x: p.x + rand(-25, 25),
+          y: feetY,
+          vx: rand(-2, 2),
+          vy: rand(-6.5, -2.5),
+          max: rand(35, 70),
+          radius: rand(2.2, 5),
+          rgb: '255,240,150',
+          kind: 'sparkle',
+          rotation: rand(0, 6.28),
+          rotationSpeed: rand(-0.25, 0.25),
+          additive: true
+        });
+      }
+      for (var sm = 0; sm < 3; sm++) {
+        this._addParticle({
+          x: p.x + rand(-28, 28),
+          y: feetY - rand(15, 60),
+          vx: rand(-1, 1),
+          vy: rand(-3.5, -1),
+          max: rand(55, 95),
+          radius: rand(14, 28),
+          rgb: '240,70,10',
+          kind: 'smoke',
+          additive: true
+        });
+      }
+    }
+
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+
+    // 1. Swirling Fire Cauldron Pool at Feet
+    ctx.save();
+    ctx.translate(p.x, feetY);
+    ctx.scale(1, 0.38);
+    ctx.rotate(e.state.rotation * 0.4);
+
+    var poolRad = 60 * (0.8 + Math.sin(e.age * 0.01) * 0.2);
+    var poolGrad = ctx.createRadialGradient(0, 0, 4, 0, 0, poolRad);
+    poolGrad.addColorStop(0, rgba('255,255,210', fade * 0.9));
+    poolGrad.addColorStop(0.35, rgba('255,140,30', fade * 0.75));
+    poolGrad.addColorStop(0.7, rgba('220,50,10', fade * 0.4));
+    poolGrad.addColorStop(1, 'rgba(180,20,0,0)');
+
+    ctx.fillStyle = poolGrad;
+    ctx.beginPath();
+    ctx.arc(0, 0, poolRad, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Fire rune circle around feet
+    ctx.strokeStyle = rgba('255,200,70', fade * 0.85);
+    ctx.lineWidth = 2.5;
+    ctx.shadowColor = 'rgba(255,90,20,0.95)';
+    ctx.shadowBlur = 18 * this.qualityConfig.blur;
+    ctx.beginPath();
+    ctx.arc(0, 0, poolRad * 0.82, 0, Math.PI * 2);
+    ctx.stroke();
+
+    for (var r = 0; r < 6; r++) {
+      ctx.rotate(Math.PI / 3);
+      ctx.beginPath();
+      ctx.moveTo(-poolRad * 0.82, 0);
+      ctx.lineTo(poolRad * 0.82, 0);
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    // 2. Rising Fire Column / Labaredas Verticais engolfando o monstro
+    var pillarH = 150 * (1 - Math.pow(progress, 3));
+    var pGrad = ctx.createLinearGradient(p.x, feetY, p.x, feetY - pillarH);
+    pGrad.addColorStop(0, rgba('255,255,220', fade * 0.85));
+    pGrad.addColorStop(0.25, rgba('255,140,30', fade * 0.75));
+    pGrad.addColorStop(0.65, rgba('240,60,10', fade * 0.45));
+    pGrad.addColorStop(1, 'rgba(200,30,0,0)');
+
+    ctx.fillStyle = pGrad;
+    ctx.shadowColor = 'rgba(255,100,20,0.95)';
+    ctx.shadowBlur = 24 * this.qualityConfig.blur;
+
+    var waveW = 48 + Math.sin(e.age * 0.02) * 8;
+    ctx.beginPath();
+    ctx.moveTo(p.x - waveW, feetY);
+    ctx.quadraticCurveTo(p.x - waveW * 1.3, feetY - pillarH * 0.5, p.x, feetY - pillarH);
+    ctx.quadraticCurveTo(p.x + waveW * 1.3, feetY - pillarH * 0.5, p.x + waveW, feetY);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.restore();
+  };
+
+  LineageVFX.prototype._drawMonsterFrostFreeze = function (e) {
+    var ctx = this.ctx, p = e.target, progress = clamp(e.age / e.maxAge, 0, 1), fade = 1 - progress;
+    var feetY = p.y;
+    e.state.rotation += 0.05;
+
+    // Spawn sharp ice shards and cold mist drifting around the body
+    if (e.age - e.state.lastCrystalSpawn > 50 && progress < 0.75) {
+      e.state.lastCrystalSpawn = e.age;
+      for (var c = 0; c < 5; c++) {
+        this._addParticle({
+          x: p.x + rand(-36, 36),
+          y: feetY - rand(0, 85),
+          vx: rand(-1.2, 1.2),
+          vy: rand(-1.5, 0.5),
+          max: rand(50, 90),
+          radius: rand(7, 15),
+          rgb: Math.random() < 0.6 ? '200,245,255' : '140,225,255',
+          kind: 'ice_crystal',
+          rotation: rand(0, 6.28),
+          rotationSpeed: rand(-0.07, 0.07),
+          drag: 0.94,
+          additive: true
+        });
+      }
+      for (var sm = 0; sm < 3; sm++) {
+        this._addParticle({
+          x: p.x + rand(-30, 30),
+          y: feetY - rand(5, 75),
+          vx: rand(-1, 1),
+          vy: rand(-2, -0.4),
+          max: rand(55, 100),
+          radius: rand(14, 28),
+          rgb: '160,230,255',
+          kind: 'smoke',
+          additive: true
+        });
+      }
+    }
+
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+
+    // 1. Frozen Ice Floor Sheet (gelo alastrando aos pés)
+    ctx.save();
+    ctx.translate(p.x, feetY);
+    ctx.scale(1, 0.38);
+
+    var iceFloorRad = 62 * (0.85 + Math.sin(e.age * 0.008) * 0.15);
+    var floorGrad = ctx.createRadialGradient(0, 0, 6, 0, 0, iceFloorRad);
+    floorGrad.addColorStop(0, rgba('240,252,255', fade * 0.95));
+    floorGrad.addColorStop(0.4, rgba('160,230,255', fade * 0.75));
+    floorGrad.addColorStop(0.8, rgba('90,190,255', fade * 0.35));
+    floorGrad.addColorStop(1, 'rgba(50,150,255,0)');
+
+    ctx.fillStyle = floorGrad;
+    ctx.beginPath();
+    ctx.arc(0, 0, iceFloorRad, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Hexagonal frost snowflake cracks
+    ctx.strokeStyle = rgba('230,250,255', fade * 0.9);
+    ctx.lineWidth = 2.5;
+    ctx.shadowColor = 'rgba(140,225,255,0.95)';
+    ctx.shadowBlur = 18 * this.qualityConfig.blur;
+    for (var i = 0; i < 6; i++) {
+      ctx.rotate(Math.PI / 3);
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(0, iceFloorRad * 0.85);
+      ctx.moveTo(-10, iceFloorRad * 0.55);
+      ctx.lineTo(0, iceFloorRad * 0.7);
+      ctx.lineTo(10, iceFloorRad * 0.55);
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    // 2. Glacial Crystal Spikes Cage (Espinhos de Gelo envolvendo o Monstro da base até o topo)
+    var cageH = 155 * Math.min(1, e.age / 110);
+    ctx.save();
+    ctx.translate(p.x, feetY);
+
+    var spikeCount = 7;
+    for (var s = 0; s < spikeCount; s++) {
+      var sX = ((s - (spikeCount - 1) / 2) / ((spikeCount - 1) / 2)) * 44;
+      var sH = (cageH * (0.75 + (Math.abs(sX) < 22 ? 0.25 : 0))) * (1 - progress * 0.22);
+      var sW = 9 + (s % 2) * 3;
+
+      var sGrad = ctx.createLinearGradient(sX, 0, sX, -sH);
+      sGrad.addColorStop(0, rgba('245,255,255', fade * 0.95));
+      sGrad.addColorStop(0.3, rgba('180,240,255', fade * 0.85));
+      sGrad.addColorStop(0.8, rgba('110,210,255', fade * 0.6));
+      sGrad.addColorStop(1, rgba('255,255,255', fade * 0.95));
+
+      ctx.fillStyle = sGrad;
+      ctx.shadowColor = 'rgba(140,230,255,0.95)';
+      ctx.shadowBlur = 16 * this.qualityConfig.blur;
+      ctx.beginPath();
+      ctx.moveTo(sX - sW, 0);
+      ctx.lineTo(sX, -sH);
+      ctx.lineTo(sX + sW, 0);
+      ctx.closePath();
+      ctx.fill();
+
+      // Sharp central highlight ridge
+      ctx.strokeStyle = rgba('255,255,255', fade * 0.95);
+      ctx.lineWidth = 1.6;
+      ctx.beginPath();
+      ctx.moveTo(sX, 0);
+      ctx.lineTo(sX, -sH);
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    ctx.restore();
+  };
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // NOVOS RENDERIZADORES DE MAGIAS E TÉCNICAS MARCIAIS (REALISTAS COM CHÃO/PÉS)
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  // 1. Prominence (Pilar vulcânico denso e ondas de magma aos pés)
+  LineageVFX.prototype._drawMagicProminence = function (e) {
+    var ctx = this.ctx, p = e.target, progress = clamp(e.age / e.maxAge, 0, 1), fade = 1 - progress;
+    var feetY = p.y;
+    e.state.rotation += 0.09;
+
+    if (e.age - e.state.lastFlameSpawn > 40 && progress < 0.8) {
+      e.state.lastFlameSpawn = e.age;
+      for (var f = 0; f < 5; f++) {
+        var fAng = rand(-Math.PI * 0.88, -Math.PI * 0.12);
+        this._addParticle({
+          x: p.x + rand(-38, 38),
+          y: feetY + rand(-3, 6),
+          vx: Math.cos(fAng) * rand(1.8, 4.8),
+          vy: Math.sin(fAng) * rand(4.5, 10),
+          max: rand(45, 85),
+          radius: rand(12, 28),
+          rgb: '255,100,20',
+          rgbInner: '255,250,180',
+          kind: 'flame',
+          rotation: rand(-0.4, 0.4),
+          rotationSpeed: rand(-0.08, 0.08),
+          drag: 0.96,
+          additive: true
+        });
+      }
+      for (var sp = 0; sp < 4; sp++) {
+        this._addParticle({
+          x: p.x + rand(-28, 28),
+          y: feetY,
+          vx: rand(-2.5, 2.5),
+          vy: rand(-8, -3),
+          max: rand(35, 75),
+          radius: rand(2.5, 5.5),
+          rgb: '255,245,160',
+          kind: 'sparkle',
+          rotation: rand(0, 6.28),
+          rotationSpeed: rand(-0.3, 0.3),
+          additive: true
+        });
+      }
+    }
+
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+
+    // Fissura de magma no chão aos pés
+    ctx.save();
+    ctx.translate(p.x, feetY);
+    ctx.scale(1, 0.38);
+    var pRad = 68 * (0.8 + Math.sin(e.age * 0.012) * 0.2);
+    var pGrad = ctx.createRadialGradient(0, 0, 4, 0, 0, pRad);
+    pGrad.addColorStop(0, rgba('255,255,220', fade * 0.95));
+    pGrad.addColorStop(0.35, rgba('255,120,20', fade * 0.8));
+    pGrad.addColorStop(0.7, rgba('220,40,10', fade * 0.45));
+    pGrad.addColorStop(1, 'rgba(180,20,0,0)');
+    ctx.fillStyle = pGrad;
+    ctx.beginPath();
+    ctx.arc(0, 0, pRad, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    // Coluna ascendente de fogo
+    var colH = 170 * (1 - Math.pow(progress, 2.5));
+    var colW = 54 + Math.sin(e.age * 0.02) * 10;
+    var colGrad = ctx.createLinearGradient(p.x, feetY, p.x, feetY - colH);
+    colGrad.addColorStop(0, rgba('255,255,220', fade * 0.9));
+    colGrad.addColorStop(0.25, rgba('255,130,25', fade * 0.8));
+    colGrad.addColorStop(0.7, rgba('230,50,10', fade * 0.5));
+    colGrad.addColorStop(1, 'rgba(180,20,0,0)');
+    ctx.fillStyle = colGrad;
+    ctx.shadowColor = 'rgba(255,100,20,0.95)';
+    ctx.shadowBlur = 26 * this.qualityConfig.blur;
+    ctx.beginPath();
+    ctx.moveTo(p.x - colW, feetY);
+    ctx.quadraticCurveTo(p.x - colW * 1.3, feetY - colH * 0.5, p.x, feetY - colH);
+    ctx.quadraticCurveTo(p.x + colW * 1.3, feetY - colH * 0.5, p.x + colW, feetY);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+  };
+
+  // 2. Meteor Strike (Meteoro caindo do céu, cratera ardente e estilhaços)
+  LineageVFX.prototype._drawMagicMeteor = function (e) {
+    var ctx = this.ctx, p = e.target, progress = clamp(e.age / e.maxAge, 0, 1), fade = 1 - progress;
+    var feetY = p.y;
+    var dropProgress = clamp(e.age / 380, 0, 1);
+
+    if (dropProgress < 1) {
+      // Meteoro caindo
+      var curX = (p.x - 160) + 160 * dropProgress;
+      var curY = (feetY - 320) + 320 * dropProgress;
+      ctx.save();
+      ctx.globalCompositeOperation = 'lighter';
+      // Rastro de fogo
+      var tailGrad = ctx.createLinearGradient(curX - 70, curY - 140, curX, curY);
+      tailGrad.addColorStop(0, 'rgba(255,50,0,0)');
+      tailGrad.addColorStop(0.5, rgba('255,120,20', 0.6));
+      tailGrad.addColorStop(1, rgba('255,255,200', 0.95));
+      ctx.strokeStyle = tailGrad;
+      ctx.lineWidth = 26;
+      ctx.shadowColor = 'rgba(255,100,20,0.95)';
+      ctx.shadowBlur = 24 * this.qualityConfig.blur;
+      ctx.beginPath();
+      ctx.moveTo(curX - 70, curY - 140);
+      ctx.lineTo(curX, curY);
+      ctx.stroke();
+
+      // Esfera incandescente do meteoro
+      var mGrad = ctx.createRadialGradient(curX, curY, 3, curX, curY, 26);
+      mGrad.addColorStop(0, 'rgba(255,255,255,1)');
+      mGrad.addColorStop(0.4, 'rgba(255,180,40,0.95)');
+      mGrad.addColorStop(0.8, 'rgba(240,60,10,0.8)');
+      mGrad.addColorStop(1, 'rgba(180,20,0,0)');
+      ctx.fillStyle = mGrad;
+      ctx.beginPath();
+      ctx.arc(curX, curY, 26, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    } else {
+      if (!e.state.impacted) {
+        e.state.impacted = true;
+        this._doFlash('255,140,40', 0.85);
+        this._ring(p.x, feetY, '255,100,20', 105, 8.5, 5);
+        this._ring(p.x, feetY, '255,230,100', 135, 5.5, 3);
+        // Expelir estilhaços e brasas
+        for (var r = 0; r < 28; r++) {
+          var rAng = Math.random() * Math.PI * 2;
+          this._addParticle({
+            x: p.x,
+            y: feetY,
+            vx: Math.cos(rAng) * rand(3, 9),
+            vy: Math.sin(rAng) * rand(3, 9) - 3,
+            max: rand(45, 90),
+            radius: rand(5, 12),
+            rgb: Math.random() < 0.5 ? '255,120,30' : '150,90,50',
+            kind: 'rock_debris',
+            rotation: rand(0, 6.28),
+            rotationSpeed: rand(-0.2, 0.2),
+            gravity: 0.2,
+            drag: 0.97
+          });
+        }
+      }
+
+      // Cratera de magma na base inferior
+      ctx.save();
+      ctx.globalCompositeOperation = 'lighter';
+      ctx.translate(p.x, feetY);
+      ctx.scale(1, 0.4);
+      var cRad = 85 * (1 - (progress - 0.3) * 0.5);
+      var cGrad = ctx.createRadialGradient(0, 0, 8, 0, 0, cRad);
+      cGrad.addColorStop(0, rgba('255,255,230', fade * 0.95));
+      cGrad.addColorStop(0.3, rgba('255,130,30', fade * 0.85));
+      cGrad.addColorStop(0.7, rgba('200,40,10', fade * 0.4));
+      cGrad.addColorStop(1, 'rgba(150,20,0,0)');
+      ctx.fillStyle = cGrad;
+      ctx.beginPath();
+      ctx.arc(0, 0, cRad, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+  };
+
+  // 3. Hydro Blast (Torrente gélida de alta pressão e ondas de espuma aos pés)
+  LineageVFX.prototype._drawMagicHydroBlast = function (e) {
+    var ctx = this.ctx, p = e.target, progress = clamp(e.age / e.maxAge, 0, 1), fade = 1 - progress;
+    var feetY = p.y;
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+
+    // Poça d'água turbulenta na base
+    ctx.save();
+    ctx.translate(p.x, feetY);
+    ctx.scale(1, 0.35);
+    var poolRad = 65 * (0.8 + Math.sin(e.age * 0.015) * 0.2);
+    var wGrad = ctx.createRadialGradient(0, 0, 6, 0, 0, poolRad);
+    wGrad.addColorStop(0, rgba('220,250,255', fade * 0.9));
+    wGrad.addColorStop(0.5, rgba('80,200,255', fade * 0.7));
+    wGrad.addColorStop(1, 'rgba(30,120,255,0)');
+    ctx.fillStyle = wGrad;
+    ctx.beginPath();
+    ctx.arc(0, 0, poolRad, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    // Geiser vertical de água e vapor
+    var hydrH = 155 * (1 - progress * 0.4);
+    var hydrW = 44 + Math.sin(e.age * 0.03) * 8;
+    var hGrad = ctx.createLinearGradient(p.x, feetY, p.x, feetY - hydrH);
+    hGrad.addColorStop(0, rgba('240,255,255', fade * 0.95));
+    hGrad.addColorStop(0.3, rgba('100,215,255', fade * 0.8));
+    hGrad.addColorStop(0.8, rgba('50,160,255', fade * 0.45));
+    hGrad.addColorStop(1, 'rgba(20,100,255,0)');
+    ctx.fillStyle = hGrad;
+    ctx.shadowColor = 'rgba(80,200,255,0.95)';
+    ctx.shadowBlur = 22 * this.qualityConfig.blur;
+    ctx.beginPath();
+    ctx.moveTo(p.x - hydrW, feetY);
+    ctx.lineTo(p.x - hydrW * 0.7, feetY - hydrH);
+    ctx.lineTo(p.x + hydrW * 0.7, feetY - hydrH);
+    ctx.lineTo(p.x + hydrW, feetY);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.restore();
+  };
+
+  // 4. Hurricane / Tempest Cyclone (Tufão giratório denso aos pés com folhas e poeira)
+  LineageVFX.prototype._drawMagicHurricane = function (e) {
+    var ctx = this.ctx, p = e.target, progress = clamp(e.age / e.maxAge, 0, 1), fade = 1 - progress;
+    var feetY = p.y;
+    e.state.rotation += 0.16;
+
+    if (e.age % 4 === 0 && progress < 0.75) {
+      for (var w = 0; w < 2; w++) {
+        var wAng = rand(0, 6.28);
+        this._addParticle({
+          x: p.x + Math.cos(wAng) * rand(10, 42),
+          y: feetY - rand(5, 110),
+          vx: -Math.sin(wAng) * rand(2.5, 6),
+          vy: rand(-3.5, -0.8),
+          max: rand(40, 75),
+          radius: rand(2.2, 4.5),
+          rgb: '150,240,200',
+          kind: 'leaf',
+          rotation: rand(0, 6.28),
+          rotationSpeed: rand(-0.3, 0.3),
+          drag: 0.97
+        });
+      }
+    }
+
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.translate(p.x, feetY);
+
+    // Ciclone cônico de vento
+    var coneH = 150 * (1 - progress * 0.3);
+    for (var layer = 0; layer < 6; layer++) {
+      var lY = -((layer / 6) * coneH);
+      var lW = 28 + (layer / 6) * 48;
+      ctx.save();
+      ctx.translate(0, lY);
+      ctx.scale(1, 0.36);
+      ctx.rotate(e.state.rotation + layer * 0.4);
+      ctx.strokeStyle = rgba('110,240,195', fade * 0.85);
+      ctx.lineWidth = 3.5;
+      ctx.shadowColor = 'rgba(90,240,190,0.9)';
+      ctx.shadowBlur = 16 * this.qualityConfig.blur;
+      ctx.beginPath();
+      ctx.arc(0, 0, lW, 0, Math.PI * 1.6);
+      ctx.stroke();
+      ctx.restore();
+    }
+    ctx.restore();
+  };
+
+  // 5. Lightning Surge / Thunder Storm (Rede elétrica e centelhas azuis crepitando no solo)
+  LineageVFX.prototype._drawMagicLightningSurge = function (e) {
+    var ctx = this.ctx, p = e.target, progress = clamp(e.age / e.maxAge, 0, 1), fade = 1 - progress;
+    var feetY = p.y;
+
+    if (e.age % 6 === 0 && progress < 0.8) {
+      for (var s = 0; s < 4; s++) {
+        this._addParticle({
+          x: p.x + rand(-38, 38),
+          y: feetY + rand(-6, 4),
+          vx: rand(-3, 3),
+          vy: rand(-6, -1),
+          max: rand(25, 55),
+          radius: rand(1.8, 4.2),
+          rgb: '160,240,255',
+          kind: 'sparkle',
+          rotation: rand(0, 6.28),
+          rotationSpeed: rand(-0.35, 0.35),
+          additive: true
+        });
+      }
+    }
+
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+
+    // Teia elétrica no solo aos pés
+    ctx.save();
+    ctx.translate(p.x, feetY);
+    ctx.scale(1, 0.38);
+    var surgeRad = 72 * (0.8 + Math.sin(e.age * 0.02) * 0.2);
+    ctx.strokeStyle = rgba('140,235,255', fade * 0.9);
+    ctx.lineWidth = 2.5;
+    ctx.shadowColor = 'rgba(110,231,255,0.95)';
+    ctx.shadowBlur = 20 * this.qualityConfig.blur;
+
+    for (var b = 0; b < 5; b++) {
+      var bAng = (b / 5) * Math.PI * 2 + (Math.sin(e.age * 0.05 + b) * 0.3);
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      var midR = surgeRad * 0.55;
+      ctx.lineTo(Math.cos(bAng) * midR + rand(-8, 8), Math.sin(bAng) * midR + rand(-8, 8));
+      ctx.lineTo(Math.cos(bAng) * surgeRad, Math.sin(bAng) * surgeRad);
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    // Raio vertical principal
+    var boltPoints = buildBolt({ x: p.x, y: 0 }, { x: p.x, y: feetY }, 28);
+    ctx.strokeStyle = rgba('245,252,255', fade);
+    ctx.lineWidth = 3.5;
+    ctx.shadowColor = 'rgba(120,235,255,0.95)';
+    ctx.shadowBlur = 22 * this.qualityConfig.blur;
+    ctx.beginPath();
+    ctx.moveTo(boltPoints[0].x, boltPoints[0].y);
+    for (var i = 1; i < boltPoints.length; i++) ctx.lineTo(boltPoints[i].x, boltPoints[i].y);
+    ctx.stroke();
+
+    ctx.restore();
+  };
+
+  // 6. Death Spike (Estaca óssea sombria veloz perfurando com rastro abissal)
+  LineageVFX.prototype._drawMagicDeathSpike = function (e) {
+    var ctx = this.ctx, s = e.state, dtProgress = clamp(e.age / 240, 0, 1);
+    var curX = e.source.x + (e.target.x - e.source.x) * dtProgress;
+    var curY = e.source.y + (e.target.y - e.source.y) * dtProgress;
+    var angle = Math.atan2(e.target.y - e.source.y, e.target.x - e.source.x);
+
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.translate(curX, curY);
+    ctx.rotate(angle);
+
+    // Rastro de almas
+    var trailGrad = ctx.createLinearGradient(-50, 0, 15, 0);
+    trailGrad.addColorStop(0, 'rgba(140,40,220,0)');
+    trailGrad.addColorStop(0.6, rgba('190,90,255', 0.85));
+    trailGrad.addColorStop(1, 'rgba(255,255,255,0.95)');
+    ctx.strokeStyle = trailGrad;
+    ctx.lineWidth = 6;
+    ctx.shadowColor = 'rgba(180,80,255,0.95)';
+    ctx.shadowBlur = 18 * this.qualityConfig.blur;
+    ctx.beginPath();
+    ctx.moveTo(-50, 0);
+    ctx.lineTo(15, 0);
+    ctx.stroke();
+
+    // Estaca óssea
+    ctx.fillStyle = 'rgba(245,240,255,0.98)';
+    ctx.beginPath();
+    ctx.moveTo(22, 0);
+    ctx.lineTo(0, -6);
+    ctx.lineTo(-12, 0);
+    ctx.lineTo(0, 6);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.restore();
+
+    if (dtProgress >= 1 && !e.state.impacted) {
+      e.state.impacted = true;
+      this._doFlash('180,80,255', 0.6);
+      this._ring(e.target.x, e.target.y, '180,80,255', 68, 6.5, 3.5);
+      for (var sp = 0; sp < 14; sp++) {
+        this._addParticle({
+          x: e.target.x,
+          y: e.target.y,
+          vx: rand(-3.5, 3.5),
+          vy: rand(-3.5, 3.5),
+          max: rand(35, 70),
+          radius: rand(3, 6.5),
+          rgb: '190,80,255',
+          kind: 'soul_mote',
+          additive: true
+        });
+      }
+    }
+  };
+
+  // 7. Vampiric Drain (Vórtice no monstro + fluxo de partículas vermelhas retornando ao herói)
+  LineageVFX.prototype._drawMagicVampiricDrain = function (e) {
+    var ctx = this.ctx, p = e.target, heroP = e.source, progress = clamp(e.age / e.maxAge, 0, 1), fade = 1 - progress;
+    e.state.rotation -= 0.12;
+
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+
+    // Vórtice no monstro
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    ctx.rotate(e.state.rotation);
+    for (var v = 0; v < 3; v++) {
+      ctx.rotate((Math.PI * 2) / 3);
+      var vGrad = ctx.createRadialGradient(0, 0, 4, 0, 0, 42);
+      vGrad.addColorStop(0, rgba('255,100,140', fade * 0.95));
+      vGrad.addColorStop(0.5, rgba('220,30,80', fade * 0.65));
+      vGrad.addColorStop(1, 'rgba(180,0,50,0)');
+      ctx.fillStyle = vGrad;
+      ctx.beginPath();
+      ctx.ellipse(20, 0, 26, 11, 0.4, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+
+    // Gotas de sangue/vida fluindo do monstro para o herói
+    var tProgress = clamp((e.age - 100) / 450, 0, 1);
+    if (tProgress > 0 && tProgress < 1) {
+      for (var d = 0; d < 3; d++) {
+        var offset = d * 0.15;
+        var subP = clamp(tProgress - offset, 0, 1);
+        var curX = p.x + (heroP.x - p.x) * subP;
+        var curY = p.y + (heroP.y - p.y) * subP + Math.sin(subP * Math.PI) * -38;
+        ctx.fillStyle = rgba('255,80,120', fade * 0.95);
+        ctx.shadowColor = 'rgba(230,30,80,0.95)';
+        ctx.shadowBlur = 14 * this.qualityConfig.blur;
+        ctx.beginPath();
+        ctx.arc(curX, curY, 5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    ctx.restore();
+  };
+
+  // 8. Dark Mire (Poça abissal escura no solo aos pés do monstro com almas subindo)
+  LineageVFX.prototype._drawMagicDarkMire = function (e) {
+    var ctx = this.ctx, p = e.target, progress = clamp(e.age / e.maxAge, 0, 1), fade = 1 - progress;
+    var feetY = p.y;
+    e.state.rotation += 0.04;
+
+    if (e.age - e.state.lastSoulSpawn > 60 && progress < 0.8) {
+      e.state.lastSoulSpawn = e.age;
+      for (var sm = 0; sm < 4; sm++) {
+        this._addParticle({
+          x: p.x + rand(-32, 32),
+          y: feetY - rand(0, 40),
+          vx: rand(-1, 1),
+          vy: rand(-3.5, -1.2),
+          max: rand(50, 95),
+          radius: rand(4, 8),
+          rgb: Math.random() < 0.5 ? '160,50,240' : '100,20,180',
+          kind: 'soul_mote',
+          additive: true
+        });
+      }
+    }
+
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.translate(p.x, feetY);
+    ctx.scale(1, 0.38);
+
+    var mireRad = 70 * (0.85 + Math.sin(e.age * 0.008) * 0.15);
+    var mGrad = ctx.createRadialGradient(0, 0, 6, 0, 0, mireRad);
+    mGrad.addColorStop(0, rgba('210,120,255', fade * 0.9));
+    mGrad.addColorStop(0.45, rgba('140,40,220', fade * 0.75));
+    mGrad.addColorStop(0.85, rgba('70,10,140', fade * 0.35));
+    mGrad.addColorStop(1, 'rgba(30,0,80,0)');
+    ctx.fillStyle = mGrad;
+    ctx.beginPath();
+    ctx.arc(0, 0, mireRad, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Rúnico sombrio
+    ctx.rotate(e.state.rotation);
+    ctx.strokeStyle = rgba('190,90,255', fade * 0.85);
+    ctx.lineWidth = 2.2;
+    ctx.beginPath();
+    ctx.arc(0, 0, mireRad * 0.8, 0, Math.PI * 2);
+    ctx.stroke();
+
+    ctx.restore();
+  };
+
+  // 9. Solar Flare (Feixe solar ofuscante com anéis dourados de refração)
+  LineageVFX.prototype._drawMagicSolarFlare = function (e) {
+    var ctx = this.ctx, p = e.target, progress = clamp(e.age / e.maxAge, 0, 1), fade = 1 - progress;
+    var feetY = p.y;
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+
+    // Feixe divino
+    var beamW = 56 * (1 - progress * 0.4);
+    var beamGrad = ctx.createLinearGradient(p.x - beamW / 2, 0, p.x + beamW / 2, 0);
+    beamGrad.addColorStop(0, 'rgba(255,235,140,0)');
+    beamGrad.addColorStop(0.3, rgba('255,245,180', fade * 0.95));
+    beamGrad.addColorStop(0.5, rgba('255,255,255', fade));
+    beamGrad.addColorStop(0.7, rgba('255,245,180', fade * 0.95));
+    beamGrad.addColorStop(1, 'rgba(255,235,140,0)');
+    ctx.fillStyle = beamGrad;
+    ctx.shadowColor = 'rgba(255,230,120,0.95)';
+    ctx.shadowBlur = 26 * this.qualityConfig.blur;
+    ctx.fillRect(p.x - beamW / 2, 0, beamW, feetY + 8);
+
+    // Selo solar na base
+    ctx.save();
+    ctx.translate(p.x, feetY);
+    ctx.scale(1, 0.38);
+    ctx.rotate(e.age * 0.008);
+    ctx.strokeStyle = rgba('255,235,120', fade * 0.95);
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.arc(0, 0, 58, 0, Math.PI * 2);
+    ctx.stroke();
+    for (var s = 0; s < 4; s++) {
+      ctx.rotate(Math.PI / 4);
+      ctx.beginPath();
+      ctx.moveTo(-50, 0);
+      ctx.lineTo(50, 0);
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    ctx.restore();
+  };
+
+  // 10. Holy Sanctuary (Selo sagrado rúnico e colunas de luz no solo)
+  LineageVFX.prototype._drawMagicHolySanctuary = function (e) {
+    var ctx = this.ctx, p = e.target, progress = clamp(e.age / e.maxAge, 0, 1), fade = 1 - progress;
+    var feetY = p.y;
+    e.state.rotation += 0.006;
+
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.translate(p.x, feetY);
+    ctx.scale(1, 0.38);
+
+    var sRad = 74 * (0.85 + Math.sin(e.age * 0.008) * 0.15);
+    var sGrad = ctx.createRadialGradient(0, 0, 8, 0, 0, sRad);
+    sGrad.addColorStop(0, rgba('255,255,230', fade * 0.95));
+    sGrad.addColorStop(0.4, rgba('255,235,140', fade * 0.8));
+    sGrad.addColorStop(0.8, rgba('255,210,90', fade * 0.4));
+    sGrad.addColorStop(1, 'rgba(255,200,50,0)');
+    ctx.fillStyle = sGrad;
+    ctx.beginPath();
+    ctx.arc(0, 0, sRad, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.rotate(e.state.rotation);
+    ctx.strokeStyle = rgba('255,245,180', fade * 0.95);
+    ctx.lineWidth = 2.8;
+    ctx.shadowColor = 'rgba(255,225,120,0.95)';
+    ctx.shadowBlur = 18 * this.qualityConfig.blur;
+    ctx.beginPath();
+    ctx.arc(0, 0, sRad * 0.82, 0, Math.PI * 2);
+    ctx.stroke();
+
+    for (var r = 0; r < 8; r++) {
+      ctx.rotate(Math.PI / 4);
+      ctx.beginPath();
+      ctx.moveTo(-sRad * 0.82, 0);
+      ctx.lineTo(sRad * 0.82, 0);
+      ctx.stroke();
+    }
+    ctx.restore();
+  };
+
+  // 11. Snipe Shot / Lethal Shot (Tiro hiper-supersônico em linha com anéis cônicos)
+  LineageVFX.prototype._drawSnipeShot = function (e) {
+    var ctx = this.ctx, s = e.state, progress = clamp(e.age / e.maxAge, 0, 1), fade = 1 - progress;
+    var targetDist = distance(e.source, e.target);
+    var angle = Math.atan2(e.target.y - e.source.y, e.target.x - e.source.x);
+    var curDist = Math.min(targetDist, (e.age / 16) * s.speed * 1.5);
+    var curX = e.source.x + Math.cos(angle) * curDist;
+    var curY = e.source.y + Math.sin(angle) * curDist;
+
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+
+    // Trilha de plasma perfurante
+    var tGrad = ctx.createLinearGradient(e.source.x, e.source.y, curX, curY);
+    tGrad.addColorStop(0, 'rgba(255,220,100,0)');
+    tGrad.addColorStop(0.7, rgba('255,240,160', fade * 0.9));
+    tGrad.addColorStop(1, 'rgba(255,255,255,1)');
+    ctx.strokeStyle = tGrad;
+    ctx.lineWidth = 4.5;
+    ctx.shadowColor = 'rgba(255,220,100,0.95)';
+    ctx.shadowBlur = 20 * this.qualityConfig.blur;
+    ctx.beginPath();
+    ctx.moveTo(e.source.x, e.source.y);
+    ctx.lineTo(curX, curY);
+    ctx.stroke();
+
+    // Flecha de energia de alta velocidade
+    this._drawArrow({ x: curX, y: curY, vx: Math.cos(angle) * 10, vy: Math.sin(angle) * 10 }, 1);
+
+    if (curDist >= targetDist && !s.impacted) {
+      s.impacted = true;
+      this._doFlash('255,245,180', 0.65);
+      this._ring(e.target.x, e.target.y, '255,230,100', 65, 7.8, 4);
+      for (var sp = 0; sp < 18; sp++) {
+        this._addParticle({
+          x: e.target.x,
+          y: e.target.y,
+          vx: rand(-4.5, 4.5),
+          vy: rand(-4.5, 4.5),
+          max: rand(25, 60),
+          radius: rand(2, 4.8),
+          rgb: '255,240,140',
+          kind: 'sparkle',
+          additive: true
+        });
+      }
+    }
+    ctx.restore();
+  };
+
+  // 12. Burst Fire / Sharpshooter (Rajada veloz de 3 projéteis de pólvora com faíscas)
+  LineageVFX.prototype._drawBurstFire = function (e, dt) {
+    var s = e.state, speed = s.speed * (dt / 16);
+    var targetDist = distance(e.source, e.target);
+    var angle = Math.atan2(e.target.y - e.source.y, e.target.x - e.source.x);
+
+    for (var b = 0; b < s.bullets.length; b++) {
+      var bullet = s.bullets[b];
+      if (!bullet.active && e.age >= bullet.delay) bullet.active = true;
+      if (bullet.active && !bullet.done) {
+        bullet.x += Math.cos(angle) * speed;
+        bullet.y += Math.sin(angle) * speed;
+        this._drawArrow({ x: bullet.x, y: bullet.y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed }, 1);
+        if (distance(e.source, bullet) >= targetDist) {
+          bullet.done = true;
+          this._impact(e, e.target.x, e.target.y + (b - 1) * 8);
+        }
+      }
+    }
+    if (s.bullets.every(function (bul) { return bul.done; })) e.done = true;
+  };
+
+  // 13. Seven Arrow (7 flechas disparadas em leque convergente estelar)
+  LineageVFX.prototype._drawSevenArrow = function (e, dt) {
+    var s = e.state, speed = s.speed * (dt / 16);
+    var targetDist = distance(e.source, e.target);
+    var baseAngle = Math.atan2(e.target.y - e.source.y, e.target.x - e.source.x);
+
+    for (var a = 0; a < s.arrows.length; a++) {
+      var arr = s.arrows[a];
+      if (!arr.active && e.age >= arr.delay) arr.active = true;
+      if (arr.active && !arr.done) {
+        var curAngle = baseAngle + arr.angleOffset * Math.max(0, 1 - (distance(e.source, arr) / targetDist));
+        arr.x += Math.cos(curAngle) * speed;
+        arr.y += Math.sin(curAngle) * speed;
+        this._drawArrow({ x: arr.x, y: arr.y, vx: Math.cos(curAngle) * speed, vy: Math.sin(curAngle) * speed }, 1);
+        if (distance(e.source, arr) >= targetDist) {
+          arr.done = true;
+          this._impact(e, e.target.x + rand(-10, 10), e.target.y + rand(-10, 10));
+        }
+      }
+    }
+    if (s.arrows.every(function (ar) { return ar.done; })) e.done = true;
+  };
+
+  // 14. Warrior Backstab (Rasgo em cruz escarlate de alta velocidade e sombras)
+  LineageVFX.prototype._drawWarriorBackstab = function (e) {
+    var ctx = this.ctx, p = e.target, progress = clamp(e.age / e.maxAge, 0, 1), fade = 1 - progress;
+    var feetY = p.y;
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+
+    // Fumaça de sombras aos pés
+    if (e.age < 150) {
+      for (var s = 0; s < 3; s++) {
+        this._addParticle({
+          x: p.x + rand(-24, 24),
+          y: feetY - rand(0, 40),
+          vx: rand(-1.2, 1.2),
+          vy: rand(-2, -0.5),
+          max: rand(40, 80),
+          radius: rand(10, 20),
+          rgb: '40,20,50',
+          kind: 'smoke'
+        });
+      }
+    }
+
+    // Rasgo escarlate brutal em cruz
+    var slashLen = 78 * clamp(e.age / 110, 0, 1);
+    ctx.save();
+    ctx.translate(p.x, p.y - 10);
+    ctx.rotate(-0.5);
+
+    var grad = ctx.createLinearGradient(-slashLen, 0, slashLen, 0);
+    grad.addColorStop(0, 'rgba(255,255,255,0)');
+    grad.addColorStop(0.3, rgba('255,50,80', fade * 0.95));
+    grad.addColorStop(0.5, rgba('255,255,255', fade));
+    grad.addColorStop(0.7, rgba('220,20,50', fade * 0.95));
+    grad.addColorStop(1, 'rgba(255,50,80,0)');
+
+    ctx.strokeStyle = grad;
+    ctx.lineWidth = 6 * (1 - progress * 0.5);
+    ctx.shadowColor = 'rgba(220,20,50,0.95)';
+    ctx.shadowBlur = 24 * this.qualityConfig.blur;
+
+    ctx.beginPath();
+    ctx.moveTo(-slashLen, 0);
+    ctx.lineTo(slashLen, 0);
+    ctx.stroke();
+
+    ctx.rotate(1.2);
+    ctx.beginPath();
+    ctx.moveTo(-slashLen * 0.8, 0);
+    ctx.lineTo(slashLen * 0.8, 0);
+    ctx.stroke();
+
+    ctx.restore();
+    ctx.restore();
+  };
+
+  // 15. Warrior Deadly Blow (Golpe frontal perfurante com centelhas e impacto)
+  LineageVFX.prototype._drawWarriorDeadlyBlow = function (e) {
+    var ctx = this.ctx, p = e.target, progress = clamp(e.age / e.maxAge, 0, 1), fade = 1 - progress;
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+
+    var thrustLen = 85 * clamp(e.age / 95, 0, 1);
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    var tGrad = ctx.createLinearGradient(-thrustLen, 0, thrustLen * 0.4, 0);
+    tGrad.addColorStop(0, 'rgba(255,255,255,0)');
+    tGrad.addColorStop(0.4, rgba('255,245,220', fade));
+    tGrad.addColorStop(1, rgba('255,210,120', fade * 0.9));
+    ctx.strokeStyle = tGrad;
+    ctx.lineWidth = 7 * (1 - progress * 0.6);
+    ctx.shadowColor = 'rgba(255,230,150,0.95)';
+    ctx.shadowBlur = 22 * this.qualityConfig.blur;
+    ctx.beginPath();
+    ctx.moveTo(-thrustLen, 0);
+    ctx.lineTo(thrustLen * 0.4, 0);
+    ctx.stroke();
+    ctx.restore();
+
+    ctx.restore();
+  };
+
+  // 16. Warrior Sonic Storm (Lâminas de vácuo das espadas duplas rasgando o solo)
+  LineageVFX.prototype._drawWarriorSonicStorm = function (e) {
+    var ctx = this.ctx, p = e.target, progress = clamp(e.age / e.maxAge, 0, 1), fade = 1 - progress;
+    var feetY = p.y;
+    e.state.rotation += 0.18;
+
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.translate(p.x, feetY);
+
+    // Três lâminas sônicas cortando o chão ao redor da base
+    for (var s = 0; s < 3; s++) {
+      ctx.save();
+      ctx.scale(1, 0.38);
+      ctx.rotate(e.state.rotation + (s * Math.PI * 2) / 3);
+      var sRad = 52 + s * 10;
+      var sGrad = ctx.createLinearGradient(-sRad, 0, sRad, 0);
+      sGrad.addColorStop(0, 'rgba(255,255,255,0)');
+      sGrad.addColorStop(0.4, rgba('140,210,255', fade * 0.95));
+      sGrad.addColorStop(0.6, rgba('245,252,255', fade));
+      sGrad.addColorStop(1, 'rgba(100,190,255,0)');
+      ctx.strokeStyle = sGrad;
+      ctx.lineWidth = 4.2;
+      ctx.shadowColor = 'rgba(120,205,255,0.95)';
+      ctx.shadowBlur = 18 * this.qualityConfig.blur;
+      ctx.beginPath();
+      ctx.arc(0, 0, sRad, 0, Math.PI * 0.85);
+      ctx.stroke();
+      ctx.restore();
+    }
+    ctx.restore();
+  };
+
+  // 17. Warrior Triple Slash (Três cortes ritmados velozes)
+  LineageVFX.prototype._drawWarriorTripleSlash = function (e) {
+    var ctx = this.ctx, p = e.target, progress = clamp(e.age / e.maxAge, 0, 1), fade = 1 - progress;
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.translate(p.x, p.y);
+
+    var angles = [-0.6, 0.2, 0.9];
+    var delays = [0, 80, 160];
+    for (var s = 0; s < 3; s++) {
+      if (e.age >= delays[s]) {
+        var sAge = e.age - delays[s];
+        var sFade = clamp(1 - sAge / 320, 0, 1);
+        var sLen = 72 * clamp(sAge / 90, 0, 1);
+        ctx.save();
+        ctx.rotate(angles[s]);
+        var slGrad = ctx.createLinearGradient(-sLen, 0, sLen, 0);
+        slGrad.addColorStop(0, 'rgba(255,255,255,0)');
+        slGrad.addColorStop(0.5, rgba('200,230,255', sFade * 0.95));
+        slGrad.addColorStop(1, 'rgba(255,255,255,0)');
+        ctx.strokeStyle = slGrad;
+        ctx.lineWidth = 4.5 * sFade;
+        ctx.shadowColor = 'rgba(180,225,255,0.95)';
+        ctx.shadowBlur = 20 * this.qualityConfig.blur;
+        ctx.beginPath();
+        ctx.moveTo(-sLen, 0);
+        ctx.lineTo(sLen, 0);
+        ctx.stroke();
+        ctx.restore();
+      }
+    }
+    ctx.restore();
+  };
+
+  // 18. Warrior Earth Tremor (Fendas na terra, pedregulhos e ondas sísmicas aos pés)
+  LineageVFX.prototype._drawWarriorEarthTremor = function (e) {
+    var ctx = this.ctx, p = e.target, progress = clamp(e.age / e.maxAge, 0, 1), fade = 1 - progress;
+    var feetY = p.y;
+
+    if (!e.state.impacted) {
+      e.state.impacted = true;
+      for (var r = 0; r < 24; r++) {
+        var rAng = Math.random() * Math.PI * 2;
+        this._addParticle({
+          x: p.x + rand(-20, 20),
+          y: feetY,
+          vx: Math.cos(rAng) * rand(2.5, 7.5),
+          vy: Math.sin(rAng) * rand(2.5, 7.5) - 3.5,
+          max: rand(40, 85),
+          radius: rand(4.5, 11),
+          rgb: '150,115,75',
+          kind: 'rock_debris',
+          rotation: rand(0, 6.28),
+          rotationSpeed: rand(-0.25, 0.25),
+          gravity: 0.22,
+          drag: 0.965
+        });
+      }
+    }
+
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.translate(p.x, feetY);
+    ctx.scale(1, 0.38);
+
+    // Fenda sísmica com brilho marrom/dourado
+    var cratRad = 80 * (0.9 + Math.sin(e.age * 0.01) * 0.1);
+    ctx.strokeStyle = rgba('255,180,70', fade * 0.95);
+    ctx.lineWidth = 3.8;
+    ctx.shadowColor = 'rgba(220,140,50,0.95)';
+    ctx.shadowBlur = 22 * this.qualityConfig.blur;
+
+    for (var f = 0; f < 6; f++) {
+      var fAng = (f / 6) * Math.PI * 2;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      var midX = Math.cos(fAng) * cratRad * 0.5 + rand(-6, 6);
+      var midY = Math.sin(fAng) * cratRad * 0.5 + rand(-6, 6);
+      ctx.lineTo(midX, midY);
+      ctx.lineTo(Math.cos(fAng) * cratRad, Math.sin(fAng) * cratRad);
+      ctx.stroke();
+    }
+    ctx.restore();
+  };
+
+  // 19. Warrior Force Burst (Detonação de chi marcial em esferas concêntricas de energia)
+  LineageVFX.prototype._drawWarriorForceBurst = function (e) {
+    var ctx = this.ctx, p = e.target, progress = clamp(e.age / e.maxAge, 0, 1), fade = 1 - progress;
+    e.state.rotation += 0.14;
+
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.translate(p.x, p.y);
+
+    var burstRad = 62 * (0.5 + progress * 0.7);
+    var bGrad = ctx.createRadialGradient(0, 0, 4, 0, 0, burstRad);
+    bGrad.addColorStop(0, rgba('255,255,220', fade));
+    bGrad.addColorStop(0.35, rgba('255,170,40', fade * 0.85));
+    bGrad.addColorStop(0.7, rgba('240,80,20', fade * 0.45));
+    bGrad.addColorStop(1, 'rgba(200,40,0,0)');
+    ctx.fillStyle = bGrad;
+    ctx.beginPath();
+    ctx.arc(0, 0, burstRad, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Anéis de chi giratórios
+    ctx.rotate(e.state.rotation);
+    ctx.strokeStyle = rgba('255,230,120', fade * 0.95);
+    ctx.lineWidth = 3.5;
+    ctx.shadowColor = 'rgba(255,160,30,0.95)';
+    ctx.shadowBlur = 20 * this.qualityConfig.blur;
+    ctx.beginPath();
+    ctx.arc(0, 0, burstRad * 0.85, 0, Math.PI * 1.8);
+    ctx.stroke();
+
+    ctx.restore();
+  };
+
+  // 20. Warrior Spear Whirlwind (Vórtice giratório de lança)
+  LineageVFX.prototype._drawWarriorSpearWhirlwind = function (e) {
+    var ctx = this.ctx, p = e.target, progress = clamp(e.age / e.maxAge, 0, 1), fade = 1 - progress;
+    var feetY = p.y;
+    e.state.rotation += 0.16;
+
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.translate(p.x, feetY);
+
+    for (var l = 0; l < 3; l++) {
+      var lY = -((l / 3) * 65);
+      ctx.save();
+      ctx.translate(0, lY);
+      ctx.scale(1, 0.38);
+      ctx.rotate(e.state.rotation + l * 0.6);
+      var wRad = 52 + l * 12;
+      ctx.strokeStyle = rgba('255,190,110', fade * 0.9);
+      ctx.lineWidth = 3.8;
+      ctx.shadowColor = 'rgba(255,170,80,0.95)';
+      ctx.shadowBlur = 18 * this.qualityConfig.blur;
+      ctx.beginPath();
+      ctx.arc(0, 0, wRad, 0, Math.PI * 1.5);
+      ctx.stroke();
+      ctx.restore();
+    }
+    ctx.restore();
+  };
+
   LineageVFX.prototype._drawLights = function (e) {
     var ctx = this.ctx;
     ctx.save(); ctx.globalCompositeOperation = 'lighter';
@@ -914,6 +2870,53 @@
       ctx.closePath();
       ctx.fill();
       ctx.restore();
+    } else if (p.kind === 'flame') {
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rotation || 0);
+      var fRad = p.radius * (0.6 + alpha * 0.7);
+      var fGrad = ctx.createRadialGradient(0, fRad * 0.4, 0, 0, 0, fRad * 1.8);
+      fGrad.addColorStop(0, rgba(p.rgbInner || '255,255,220', alpha * 0.95));
+      fGrad.addColorStop(0.35, rgba(p.rgb || '255,140,30', alpha * 0.85));
+      fGrad.addColorStop(0.75, rgba('240,50,10', alpha * 0.45));
+      fGrad.addColorStop(1, 'rgba(180,20,0,0)');
+      ctx.fillStyle = fGrad;
+      ctx.shadowColor = rgba(p.rgb || '255,120,30', 0.9);
+      ctx.shadowBlur = 14 * this.qualityConfig.blur;
+      ctx.beginPath();
+      // Teardrop / flickering flame polygon
+      ctx.moveTo(0, -fRad * 2.2);
+      ctx.bezierCurveTo(fRad * 1.2, -fRad * 0.8, fRad * 1.4, fRad * 0.9, 0, fRad * 1.3);
+      ctx.bezierCurveTo(-fRad * 1.4, fRad * 0.9, -fRad * 1.2, -fRad * 0.8, 0, -fRad * 2.2);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    } else if (p.kind === 'ice_crystal') {
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rotation || 0);
+      var iRad = p.radius * (0.8 + alpha * 0.3);
+      ctx.fillStyle = rgba(p.rgb || '180,240,255', alpha * 0.9);
+      ctx.shadowColor = 'rgba(140,230,255,0.95)';
+      ctx.shadowBlur = 10 * this.qualityConfig.blur;
+      // 6-pointed hexagonal ice crystal spike
+      ctx.beginPath();
+      ctx.moveTo(0, -iRad * 2.2);
+      ctx.lineTo(iRad * 0.55, -iRad * 0.55);
+      ctx.lineTo(iRad * 1.8, 0);
+      ctx.lineTo(iRad * 0.55, iRad * 0.55);
+      ctx.lineTo(0, iRad * 2.2);
+      ctx.lineTo(-iRad * 0.55, iRad * 0.55);
+      ctx.lineTo(-iRad * 1.8, 0);
+      ctx.lineTo(-iRad * 0.55, -iRad * 0.55);
+      ctx.closePath();
+      ctx.fill();
+      // Inner frozen core shine
+      ctx.fillStyle = rgba('255,255,255', alpha * 0.95);
+      ctx.beginPath();
+      ctx.arc(0, 0, iRad * 0.45, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
     } else if (p.kind === 'soul_mote') {
       ctx.save();
       ctx.translate(p.x, p.y);
@@ -922,6 +2925,32 @@
       ctx.shadowBlur = 12 * this.qualityConfig.blur;
       ctx.beginPath();
       ctx.arc(0, 0, p.radius * (1 + (1 - alpha)), 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    } else if (p.kind === 'rock_debris') {
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rotation || 0);
+      var rW = p.radius * (0.8 + alpha * 0.2);
+      ctx.fillStyle = rgba(p.rgb || '140,110,80', alpha * 0.95);
+      ctx.beginPath();
+      ctx.moveTo(-rW, -rW * 0.6);
+      ctx.lineTo(rW * 0.7, -rW);
+      ctx.lineTo(rW, rW * 0.5);
+      ctx.lineTo(-rW * 0.4, rW * 0.9);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    } else if (p.kind === 'blood_drop') {
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rotation || 0);
+      var bRad = p.radius * (0.8 + alpha * 0.4);
+      ctx.fillStyle = rgba(p.rgb || '220,20,50', alpha * 0.9);
+      ctx.shadowColor = 'rgba(180,10,30,0.8)';
+      ctx.shadowBlur = 6 * this.qualityConfig.blur;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, bRad, bRad * 0.45, 0, 0, Math.PI * 2);
       ctx.fill();
       ctx.restore();
     }
@@ -969,8 +2998,41 @@
       if (e.type === 'holy_heal') this._drawHolyHeal(e);
       if (e.type === 'buff_aura') this._drawBuffAura(e);
       if (e.type === 'whirlwind') this._drawWhirlwind(e);
+      if (e.type === 'frost_slash') this._drawFrostSlash(e);
+      if (e.type === 'frost_blizzard') this._drawFrostBlizzard(e);
+      if (e.type === 'inferno_slash') this._drawInfernoSlash(e);
+      if (e.type === 'inferno_dragon_breath') this._drawInfernoDragonBreath(e);
+      if (e.type === 'monster_inferno_pillar') this._drawMonsterInfernoPillar(e);
+      if (e.type === 'monster_frost_freeze') this._drawMonsterFrostFreeze(e);
+      if (e.type === 'celestial_strike') this._drawCelestialStrike(e);
+      if (e.type === 'hero_skin_aura') this._drawHeroSkinAura(e);
+
+      // NOVOS DISPATCHES DE MAGOS
+      if (e.type === 'magic_prominence') this._drawMagicProminence(e);
+      if (e.type === 'magic_meteor') this._drawMagicMeteor(e);
+      if (e.type === 'magic_hydro_blast') this._drawMagicHydroBlast(e);
+      if (e.type === 'magic_hurricane') this._drawMagicHurricane(e);
+      if (e.type === 'magic_lightning_surge') this._drawMagicLightningSurge(e);
+      if (e.type === 'magic_death_spike') this._drawMagicDeathSpike(e);
+      if (e.type === 'magic_vampiric_drain') this._drawMagicVampiricDrain(e);
+      if (e.type === 'magic_dark_mire') this._drawMagicDarkMire(e);
+      if (e.type === 'magic_solar_flare') this._drawMagicSolarFlare(e);
+      if (e.type === 'magic_holy_sanctuary') this._drawMagicHolySanctuary(e);
+
+      // NOVOS DISPATCHES DE GUERREIROS & ARQUEIROS
+      if (e.type === 'snipe_shot') this._drawSnipeShot(e);
+      if (e.type === 'burst_fire') this._drawBurstFire(e, dt);
+      if (e.type === 'seven_arrow') this._drawSevenArrow(e, dt);
+      if (e.type === 'warrior_backstab') this._drawWarriorBackstab(e);
+      if (e.type === 'warrior_deadly_blow') this._drawWarriorDeadlyBlow(e);
+      if (e.type === 'warrior_sonic_storm') this._drawWarriorSonicStorm(e);
+      if (e.type === 'warrior_triple_slash') this._drawWarriorTripleSlash(e);
+      if (e.type === 'warrior_earth_tremor') this._drawWarriorEarthTremor(e);
+      if (e.type === 'warrior_force_burst') this._drawWarriorForceBurst(e);
+      if (e.type === 'warrior_spear_whirlwind') this._drawWarriorSpearWhirlwind(e);
+
       if (e.type === 'fireball' || e.type === 'ice_shards' || e.type === 'wind_blast' || e.type === 'arcane_missile' || e.type === 'spiral_spear') this._drawProjectile(e);
-      if (e.type === 'energy_slash' || e.type === 'spiral_spear') this._drawCasterGlyph(e.source, e.rgb, clamp(1 - e.age / 500, 0, 1));
+      if (e.type === 'energy_slash' || e.type === 'spiral_spear' || e.type === 'frost_slash' || e.type === 'inferno_slash' || e.type === 'inferno_dragon_breath') this._drawCasterGlyph(e.source, e.rgb, clamp(1 - e.age / 500, 0, 1));
       if (e.done) {
         if (typeof e.options.onComplete === 'function') e.options.onComplete(e);
         this.effects.splice(i, 1);

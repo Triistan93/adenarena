@@ -182,9 +182,13 @@ export function detectItemWeaponType(itemDefOrInv) {
 export function canCastSkillWeapon(state, skillDef) {
   if (!skillDef) return { ok: true };
 
-  // 1. Requisito de Arma (Verifica Slot 1 e Slot 2 simultaneamente)
-  const reqWeapon = skillDef.weaponType || skillDef.requiredWeapon;
-  if (reqWeapon && reqWeapon !== 'any') {
+  // 1. Requisito de Arma: A ÚNICA restrição é que habilidades de arco exigem Arco equipado
+  const rawReqWeapon = skillDef.weaponType || skillDef.requiredWeapon;
+  const isBowSkill = rawReqWeapon === 'bow' || 
+    /bow|arrow|tiro|flecha/i.test(skillDef.id || '') || 
+    /arco|flecha|double shot|arrow rain|snipe|lethal shot/i.test(skillDef.name || '');
+
+  if (isBowSkill) {
     const equippedWeaponTypes = [];
     const gData = (typeof window !== 'undefined' && window.GameData) ? window.GameData : {};
     const eData = (typeof window !== 'undefined' && window.EchoData) ? window.EchoData : {};
@@ -200,33 +204,9 @@ export function canCastSkillWeapon(state, skillDef) {
       if (wType) equippedWeaponTypes.push(wType);
     }
 
-    if (equippedWeaponTypes.length === 0) {
-      const labels = {
-        bow: 'Arco', dagger: 'Adaga', staff: 'Cajado Mágico', sword: 'Espada',
-        dual: 'Espadas Duplas', spear: 'Lança', twohand: 'Arma de 2 Mãos',
-        fist: 'Manopla', ancientsword: 'Espada Anciã', blunt: 'Maça'
-      };
-      const reqLabel = labels[reqWeapon] || reqWeapon.toUpperCase();
-      return { ok: false, reason: `Requer ${reqLabel} equipado` };
-    }
-
-    // Match requirement across any of the 2 equipped weapons
-    const matches = equippedWeaponTypes.some(t => {
-      if (t === reqWeapon) return true;
-      if (reqWeapon === 'sword' && (t === 'katana' || t === 'sword')) return true;
-      if (reqWeapon === 'twohand' && (t === 'twohand' || t === 'ancientsword')) return true;
-      if (reqWeapon === 'staff' && (t === 'staff' || t === 'blunt')) return true;
-      return false;
-    });
-
-    if (!matches) {
-      const labels = {
-        bow: 'Arco', dagger: 'Adaga', staff: 'Cajado Mágico', sword: 'Espada',
-        dual: 'Espadas Duplas', spear: 'Lança', twohand: 'Arma de 2 Mãos',
-        fist: 'Manopla', ancientsword: 'Espada Anciã', blunt: 'Maça'
-      };
-      const reqLabel = labels[reqWeapon] || reqWeapon.toUpperCase();
-      return { ok: false, reason: `Requer ${reqLabel} em um dos slots` };
+    const hasBow = equippedWeaponTypes.includes('bow');
+    if (!hasBow) {
+      return { ok: false, reason: 'Requer Arco equipado para esta habilidade' };
     }
   }
 

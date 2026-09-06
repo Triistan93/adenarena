@@ -258,3 +258,165 @@ export function resetState() {
   currentState = DEFAULT_STATE();
   EventBus.emit('state:reset', currentState);
 }
+
+/**
+ * Concede o Starter Kit No-Grade e configura atributos e habilidades iniciais
+ * condizentes com a raça e classe escolhidas.
+ * @param {Object} state
+ * @param {string} race
+ * @param {string} classId
+ * @param {string} [charName]
+ * @param {'M'|'F'} [gender]
+ */
+export function applyStarterKit(state, race, classId, charName = null, gender = null) {
+  if (!state) return;
+  const canonicalRace = race || state.race || 'human';
+  const canonicalClass = classId || state.class || 'fighter';
+
+  state.race = canonicalRace;
+  state.class = canonicalClass;
+  if (gender) state.gender = gender;
+  if (charName) {
+    state.charName = charName;
+    state.heroName = charName;
+    state.playerName = charName;
+    state.name = charName;
+  }
+
+  // Reset de nível, atributos e ouro inicial
+  state.level = 1;
+  state.xp = 0;
+  state.sp = 50;
+  state.gold = Math.max(state.gold || 0, 2000);
+  state.zone = 'talkingIsland';
+  state.isCombatActive = true;
+
+  // Limpa inventário e equipamentos para um começo sem sobras
+  state.inventory = [];
+  state.equipment = {
+    weapon: null, weapon2: null, shield: null, helmet: null, armor: null, gloves: null, boots: null,
+    hair: null, hair2: null, necklace: null, earring1: null, earring2: null, ring: null, ring2: null,
+    belt: null, cloak: null, talisman: null, agathion: null
+  };
+  state.skills = {};
+
+  // Determina o arquétipo inicial (Mage, Bow/Gunner, Dagger/Assassin, ou Melee/Fighter/Tank)
+  const cLower = String(canonicalClass).toLowerCase();
+  const isMage = cLower.includes('mage') || cLower.includes('wizard') || cLower.includes('cleric') || 
+                 cLower.includes('elementweaver') || cLower.includes('sayha') || cLower.includes('bloodrose') ||
+                 cLower.includes('shinemaker');
+  const isBowOrGun = cLower.includes('bow') || cLower.includes('gun') || cLower.includes('sylph') || cLower.includes('archer') || cLower.includes('sniper');
+  const isDagger = cLower.includes('dagger') || cLower.includes('assassin') || cLower.includes('scavenger') || cLower.includes('bounty');
+
+  let starterWpnId = 'weapon_knight_sword';
+  let starterArmorId = 'armor_leather_vest_light';
+  let starterShotId = 'soulshot_ng';
+
+  if (isMage) {
+    starterWpnId = 'weapon_crucifix_of_blessing_magicblunt';
+    starterArmorId = 'armor_devotion_armor_robe';
+    starterShotId = 'spiritshot_ng';
+  } else if (isBowOrGun) {
+    starterWpnId = 'weapon_hunting_bow';
+    starterArmorId = 'armor_leather_vest_light';
+    starterShotId = 'soulshot_ng';
+  } else if (isDagger) {
+    starterWpnId = 'weapon_sword_breaker';
+    starterArmorId = 'armor_leather_vest_light';
+    starterShotId = 'soulshot_ng';
+  } else {
+    // Melee Fighter / Knight / Tank / Warg / Samurai / Artisan / Marauder
+    starterWpnId = 'weapon_knight_sword';
+    starterArmorId = 'armor_leather_vest_light';
+    starterShotId = 'soulshot_ng';
+  }
+
+  // Gera UIDs únicos para os itens equipados
+  const wpnUid = 'starter_wpn_' + Date.now();
+  const armorUid = 'starter_arm_' + (Date.now() + 1);
+
+  // Adiciona itens ao inventário
+  state.inventory.push({
+    uid: wpnUid,
+    itemId: starterWpnId,
+    count: 1,
+    rarity: 'common',
+    equipped: true,
+    equippedSlot: 'weapon',
+    foundation: false
+  });
+  state.equipment.weapon = wpnUid;
+
+  state.inventory.push({
+    uid: armorUid,
+    itemId: starterArmorId,
+    count: 1,
+    rarity: 'common',
+    equipped: true,
+    equippedSlot: 'armor',
+    foundation: false
+  });
+  state.equipment.armor = armorUid;
+
+  // Adiciona 500x Shots correspondentes (Soulshot ou Spiritshot No-Grade)
+  state.inventory.push({
+    uid: 'starter_shot_' + (Date.now() + 2),
+    itemId: starterShotId,
+    count: 500,
+    rarity: null,
+    equipped: false,
+    foundation: false
+  });
+
+  // Adiciona 20x Poções de Cura (HP Potion S)
+  state.inventory.push({
+    uid: 'starter_hp_' + (Date.now() + 3),
+    itemId: 'hp_potion_s',
+    count: 20,
+    rarity: null,
+    equipped: false,
+    foundation: false
+  });
+
+  // Se for classe mágica, também adiciona 20x Poções de Mana (MP Potion S)
+  if (isMage) {
+    state.inventory.push({
+      uid: 'starter_mp_' + (Date.now() + 4),
+      itemId: 'mp_potion_s',
+      count: 20,
+      rarity: null,
+      equipped: false,
+      foundation: false
+    });
+  }
+
+  // Habilita automaticamente Soulshot/Spiritshot
+  state.soulshotActive = true;
+
+  // Inicializa atributos base através dos registros da Raça e Classe
+  const gEcho = (typeof window !== 'undefined' && window.EchoData) ? window.EchoData : {};
+  const raceDef = gEcho.RACES_ECHO?.[canonicalRace] || {};
+  const classDef = gEcho.CLASSES_ECHO?.[canonicalClass] || {};
+  state.base = { atk: 0, def: 0, eva: 0, matk: 0, mdef: 0 };
+  for (const k of ['atk', 'def', 'eva', 'matk', 'mdef']) {
+    state.base[k] = (raceDef.stats?.[k] || 0) + (classDef.base?.[k] || 0);
+  }
+
+  // Desbloqueia as primeiras habilidades ativas/passivas da classe
+  if (Array.isArray(classDef.skills)) {
+    classDef.skills.forEach(s => {
+      if (s && s.name) {
+        state.skills[s.name] = 1;
+        if (!state.selectedSkill && (s.type === 'Ativo' || s.type === 'active')) {
+          state.selectedSkill = s.name;
+        }
+      }
+    });
+  }
+
+  // Configura HP e MP máximos
+  state.maxHp = Math.max(100, classDef.base?.hp || 100);
+  state.hp = state.maxHp;
+  state.maxMp = Math.max(50, classDef.base?.mp || 50);
+  state.mp = state.maxMp;
+}

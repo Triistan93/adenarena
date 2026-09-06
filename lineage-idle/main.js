@@ -270,7 +270,8 @@ import {
   saveState as managerSaveState,
   loadState as managerLoadState,
   resetState as managerResetState,
-  DEFAULT_STATE
+  DEFAULT_STATE,
+  applyStarterKit
 } from './src/core/StateManager.js';
 // ────────────────────────────────────────────────────────────────────────────
 // ────────────────────────────────────────────────────────────────────────────
@@ -376,8 +377,11 @@ function load() {
 
 
 function resetSave() {
-  if (confirm('Reset all progress? This cannot be undone.')) {
+  if (confirm('Deseja reiniciar o personagem por completo? Todo o progresso será zerado e você poderá escolher uma nova raça e classe.')) {
     managerResetState();
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem('aden_pending_char_creation', '1');
+    }
     if (typeof window !== 'undefined' && typeof window.resetCloudSave === 'function') {
       window.resetCloudSave();
     }
@@ -1178,6 +1182,11 @@ function useItem(uid) {
   } else if (def.type === 'skin_weapon' || item.itemId.startsWith('skin_weapon_')) {
     state.activeSkin = (state.activeSkin === item.itemId) ? null : item.itemId;
     log(`🎨 ${state.activeSkin ? 'Equipou' : 'Desequipou'} a ${def.name}!`, 'system');
+    if (state.activeSkin) {
+      const auraColor = state.activeSkin === 'skin_weapon_frost_lord' ? '140,225,255' : (state.activeSkin === 'skin_weapon_infernal_dragon' ? '255,120,40' : '255,235,140');
+      playCombatVFX('hero_skin_aura', { color: auraColor, duration: 1200 });
+      if (typeof floatText === 'function') floatText(`✨ ${def.name}`, 'float-jackpot');
+    }
     updateAllUI(); save();
     return;
   } else if (def.type === 'costume' || item.itemId.startsWith('costume_')) {
@@ -1285,6 +1294,17 @@ window.executeRaceClassChange = (scrollUid, newRace, newClass) => {
   updateAllUI();
   save();
   log(`✨ Troca de Raça & Classe realizada com sucesso para ${(raceObj.name || newRace).toUpperCase()} ${(clsObj?.name || newClass).toUpperCase()}! ${refundedSp} SP devolvidos e equipamentos guardados no inventário.`, 'rarity-legendary');
+};
+
+window.onCharacterCreated = (data) => {
+  if (!data || !data.race || !data.className) return;
+  applyStarterKit(state, data.race, data.className, data.charName, data.gender);
+  updateAllUI();
+  save(true, true);
+  if (typeof window !== 'undefined' && typeof window.saveCloudNow === 'function') {
+    window.saveCloudNow(state, true);
+  }
+  log(`🎉 Personagem criado com sucesso: ${data.charName || state.charName} (${data.race} - ${data.className})! Starter Kit No-Grade equipado!`, 'rarity-legendary');
 };
 
 // --------------------------- LEVEL UP wrapper ---------------------------
@@ -3895,13 +3915,18 @@ function updateMonsterHP() {
 
 function reflow(n) { void n.offsetWidth; }
 function stageHeroAttack() { const st = el('stage'); if (!st) return; st.classList.remove('is-hero-atk'); reflow(st); st.classList.add('is-hero-atk'); }
-function stageMonsterHurt(dmg, crit) { 
+function stageMonsterHurt(dmg, crit, reaction = null, reactionDuration = 450) { 
   updateMonsterHP(); 
   const m = el('stage-monster'); 
   if (m) { 
     m.classList.remove('hurt'); 
+    if (reaction) m.classList.remove(reaction);
     reflow(m); 
     m.classList.add('hurt'); 
+    if (reaction) {
+      m.classList.add(reaction);
+      setTimeout(() => m.classList.remove(reaction), reactionDuration);
+    }
     setTimeout(() => m.classList.remove('hurt'), 420); 
   } 
   const floatClass = crit ? 'sf-crit crit-hit-text' : 'sf-dmg';
@@ -3963,9 +3988,22 @@ function getCombatTargetPoint() {
   const monster = el('stage-monster');
   if (monster) {
     const box = monster.getBoundingClientRect();
-    return { x: box.left - rect.left + box.width * 0.45, y: box.top - rect.top + box.height * 0.45 };
+    return { x: box.left - rect.left + box.width * 0.5, y: box.top - rect.top + box.height * 0.45 };
   }
   return { x: rect.width * 0.72, y: rect.height * 0.48 };
+}
+
+function getCombatTargetBasePoint() {
+  const stage = el('stage');
+  if (!stage) return { x: 0, y: 0 };
+  const rect = stage.getBoundingClientRect();
+  const monster = el('stage-monster');
+  if (monster) {
+    const box = monster.getBoundingClientRect();
+    // Ponto alinhado exatamente na borda inferior do card do monstro
+    return { x: box.left - rect.left + box.width * 0.5, y: box.bottom - rect.top - 2 };
+  }
+  return { x: rect.width * 0.72, y: rect.height * 0.75 };
 }
 
 function playCombatVFX(type, options = {}) {
@@ -3998,76 +4036,205 @@ function getSkillVfxData(skillId, skillDef = null) {
   const desc = String(skillDef?.desc || skillDef?.info || '').toLowerCase();
   const combined = `${id} ${name} ${desc}`;
 
-  // 1. Holy / Divine / Solar / Beam
-  if (combined.includes('solar') || combined.includes('divine') || combined.includes('judgment') || combined.includes('holy_strike') || combined.includes('sanctuary') || combined.includes('radiant') || combined.includes('angel') || combined.includes('light_strike')) {
-    return { id: 'holy_beam', color: '#fef08a', duration: 650 };
+  // ─── 1. ARQUEIROS / ATIRADORES (DIFERENCIAÇÃO TOTAL) ───
+  // Arrow Rain e saraivadas em área (do céu ao solo)
+  if (combined.includes('arrow_rain') || combined.includes('rain') || combined.includes('shower') || combined.includes('arrow rain') || combined.includes('storm arrow rain') || combined.includes('flame arrow rain') || combined.includes('water arrow rain')) {
+    return { id: 'arrow_rain', groundVfx: null, color: '#ffd700', duration: 1200 };
+  }
+  // Seven Arrow (7 flechas estelares convergentes)
+  if (combined.includes('seven_arrow') || combined.includes('seven arrow')) {
+    return { id: 'seven_arrow', groundVfx: null, color: '#fef08a', duration: 950 };
+  }
+  // Snipe / Lethal Shot / Pinpoint Shot (Tiro hipersônico em linha direta com anéis)
+  if (combined.includes('snipe') || combined.includes('lethal_shot') || combined.includes('lethal shot') || combined.includes('pinpoint') || combined.includes('aimed shot') || combined.includes('piercing shot')) {
+    return { id: 'snipe_shot', groundVfx: null, color: '#fef08a', duration: 550 };
+  }
+  // Burst Fire / Sharpshooter / Rapid Shot / Quick Shot (Rajada tripla veloz de tiros de pólvora)
+  if (combined.includes('burst_fire') || combined.includes('burst') || combined.includes('rapid_shot') || combined.includes('rapid shot') || combined.includes('quick shot') || combined.includes('chain shot')) {
+    return { id: 'burst_fire', groundVfx: null, color: '#fb923c', duration: 700 };
+  }
+  // Double Shot padrão
+  if (combined.includes('double_shot') || combined.includes('double shot') || combined.includes('power_shot') || combined.includes('power shot') || combined.includes('arrow') || combined.includes('shot') || combined.includes('gun') || combined.includes('bullet')) {
+    return { id: 'double_shot', groundVfx: null, color: '#fef08a', duration: 800 };
   }
 
-  // 2. Dark / Necro / Drain / Vampire / Curse / Void / Death
-  if (combined.includes('drain') || combined.includes('vampir') || combined.includes('death_spike') || combined.includes('shadow') || combined.includes('abyss') || combined.includes('corpse') || combined.includes('curse') || combined.includes('void') || combined.includes('dark') || combined.includes('blood') || combined.includes('necro') || combined.includes('chaos')) {
-    return { id: 'dark_vortex', color: '#c084fc', duration: 850 };
+  // ─── 2. MAGOS: FOGO & METEOROS ───
+  // Meteoro massivo do céu abrindo cratera incandescente
+  if (combined.includes('meteor') || combined.includes('star fall') || combined.includes('starfall') || combined.includes('hell inferno') || combined.includes('flame explosion')) {
+    return { id: 'magic_meteor', groundVfx: 'magic_prominence', color: '#ff6610', duration: 1200 };
+  }
+  // Prominence e erupções vulcânicas de solo
+  if (combined.includes('prominence') || combined.includes('blaze') || combined.includes('fire spiral') || combined.includes('blazing circle') || combined.includes('flame strike') || combined.includes('flame burst') || combined.includes('fire weave')) {
+    return { id: 'magic_prominence', groundVfx: 'magic_prominence', color: '#ff7722', duration: 1050 };
+  }
+  // Fireball clássica
+  if (combined.includes('fire') || combined.includes('flame') || combined.includes('ignite') || combined.includes('burn') || combined.includes('magma') || combined.includes('lava') || combined.includes('pyro')) {
+    return { id: 'fireball', groundVfx: 'magic_prominence', color: '#ff7a45', duration: 900 };
   }
 
-  // 3. Fire / Flame / Prominence / Blaze / Meteor
-  if (combined.includes('fire') || combined.includes('flame') || combined.includes('blaze') || combined.includes('prominence') || combined.includes('meteor') || combined.includes('ignite') || combined.includes('burn') || combined.includes('magma') || combined.includes('lava') || combined.includes('pyro')) {
-    return { id: 'fireball', color: '#ff7a45', duration: 900 };
+  // ─── 3. MAGOS: ÁGUA & GELO ───
+  // Hydro Blast / Aqua Swirl / Torrente gélida de alta pressão
+  if (combined.includes('hydro') || combined.includes('aqua') || combined.includes('water') || combined.includes('surge')) {
+    return { id: 'magic_hydro_blast', groundVfx: 'magic_hydro_blast', color: '#67e8f9', duration: 850 };
+  }
+  // Blizzard e congelamento total com espinhos no solo
+  if (combined.includes('blizzard') || combined.includes('ice') || combined.includes('frost') || combined.includes('freeze') || combined.includes('cold') || combined.includes('glacier')) {
+    return { id: 'frost_blizzard', groundVfx: 'monster_frost_freeze', color: '#a5f3fc', duration: 1000 };
   }
 
-  // 4. Ice / Frost / Water / Hydro / Blizzard
-  if (combined.includes('ice') || combined.includes('frost') || combined.includes('freeze') || combined.includes('hydro') || combined.includes('blizzard') || combined.includes('aqua') || combined.includes('cold') || combined.includes('glacier')) {
-    return { id: 'ice_shards', color: '#8fe7ff', duration: 900 };
+  // ─── 4. MAGOS: VENTO & TEMPESTADE ───
+  // Hurricane / Tempest Cyclone / Tufão cônico vertical
+  if (combined.includes('hurricane') || combined.includes('tempest') || combined.includes('cyclone') || combined.includes('typhoon') || combined.includes('gale burst')) {
+    return { id: 'magic_hurricane', groundVfx: 'magic_hurricane', color: '#5eead4', duration: 1100 };
+  }
+  // Wind Blast / Twister / Rajada de ar
+  if (combined.includes('wind') || combined.includes('gale') || combined.includes('breeze') || combined.includes('twister') || combined.includes('aeroblaster')) {
+    return { id: 'wind_blast', groundVfx: 'magic_hurricane', color: '#72f3ca', duration: 850 };
   }
 
-  // 5. Wind / Tempest / Gale / Tornado / Aeroblaster
-  if (combined.includes('wind') || combined.includes('gale') || combined.includes('tempest') || combined.includes('cyclone') || combined.includes('breeze') || combined.includes('aeroblaster') || combined.includes('tornado') || combined.includes('storm')) {
-    return { id: 'wind_blast', color: '#72f3ca', duration: 850 };
+  // ─── 5. MAGOS: RAIO & TROVÃO ───
+  // Thunder Storm / Surto elétrico no chão
+  if (combined.includes('thunder') || combined.includes('shock') || combined.includes('surge') || combined.includes('volt') || combined.includes('plasma')) {
+    return { id: 'magic_lightning_surge', groundVfx: 'magic_lightning_surge', color: '#7dd3fc', duration: 950 };
+  }
+  if (combined.includes('lightning')) {
+    return { id: 'lightning', groundVfx: 'magic_lightning_surge', color: '#91f3ff', duration: 650 };
   }
 
-  // 6. Lightning / Thunder / Shock / Electric
-  if (combined.includes('lightning') || combined.includes('thunder') || combined.includes('shock') || combined.includes('spark') || combined.includes('volt') || combined.includes('electric') || combined.includes('plasma')) {
-    return { id: 'lightning', color: '#91f3ff', duration: 600 };
+  // ─── 6. MAGOS: TREVAS, NECROMANCIA & DRENO ───
+  // Death Spike (Estaca óssea sombria)
+  if (combined.includes('death_spike') || combined.includes('death spike') || combined.includes('bone') || combined.includes('spike')) {
+    return { id: 'magic_death_spike', groundVfx: 'magic_dark_mire', color: '#c084fc', duration: 750 };
+  }
+  // Vampirismo / Life Drain / Dreno de almas
+  if (combined.includes('drain') || combined.includes('vampir') || combined.includes('sanguine') || combined.includes('blood') || combined.includes('bite') || combined.includes('soul absorption')) {
+    return { id: 'magic_vampiric_drain', groundVfx: 'magic_dark_mire', color: '#f43f5e', duration: 950 };
+  }
+  // Dark Vortex / Maldições / Charco Abissal
+  if (combined.includes('curse') || combined.includes('shadow') || combined.includes('abyss') || combined.includes('corpse') || combined.includes('void') || combined.includes('dark') || combined.includes('necro') || combined.includes('chaos')) {
+    return { id: 'dark_vortex', groundVfx: 'magic_dark_mire', color: '#c084fc', duration: 850 };
   }
 
-  // 7. Bow / Arrows / Guns / Shot / Snipe
-  if (combined.includes('double_shot') || combined.includes('rapid_shot') || combined.includes('power_shot') || combined.includes('snipe') || combined.includes('burst_fire') || combined.includes('lethal_shot') || combined.includes('arrow') || combined.includes('shot') || combined.includes('gun') || combined.includes('bullet') || combined.includes('pierce')) {
-    if (combined.includes('rain') || combined.includes('shower') || combined.includes('storm')) {
-      return { id: 'arrow_rain', color: '#ffd700', duration: 1200 };
-    }
-    return { id: 'double_shot', color: '#fef08a', duration: 800 };
+  // ─── 7. MAGOS: SAGRADO & LUZ ───
+  // Solar Flare / Raio solar divino
+  if (combined.includes('solar') || combined.includes('solar_flare') || combined.includes('radiant') || combined.includes('light burst') || combined.includes('prismatic ray')) {
+    return { id: 'magic_solar_flare', groundVfx: 'magic_holy_sanctuary', color: '#fde047', duration: 750 };
+  }
+  // Sanctuary / Holy Strike / Julgamento
+  if (combined.includes('holy') || combined.includes('divine') || combined.includes('judgment') || combined.includes('sanctuary') || combined.includes('angel') || combined.includes('purifying')) {
+    return { id: 'holy_beam', groundVfx: 'magic_holy_sanctuary', color: '#fef08a', duration: 700 };
   }
 
-  // 8. Heavy Crush / Hammer / Shield Slam / Stun / Bash
-  if (combined.includes('crush') || combined.includes('hammer') || combined.includes('smash') || combined.includes('slam') || combined.includes('stun') || combined.includes('shield') || combined.includes('bash') || combined.includes('impact') || combined.includes('earthquake')) {
-    return { id: 'power_smash', color: '#fb923c', duration: 600 };
+  // ─── 8. GUERREIROS: ADAGAS & ASSASSINOS ───
+  // Backstab (Corte crítico sombrio em cruz)
+  if (combined.includes('backstab') || combined.includes('shadow step') || combined.includes('lethal shadow') || combined.includes('assassination') || combined.includes('chain kill')) {
+    return { id: 'warrior_backstab', groundVfx: null, color: '#e11d48', duration: 600 };
+  }
+  // Deadly Blow / Mortal Blow (Estocada frontal letal)
+  if (combined.includes('deadly blow') || combined.includes('deadly_blow') || combined.includes('mortal blow') || combined.includes('mortal_blow') || combined.includes('blinding blow') || combined.includes('dagger')) {
+    return { id: 'warrior_deadly_blow', groundVfx: null, color: '#fef08a', duration: 550 };
   }
 
-  // 9. Whirlwind / Spin / Blade Dance
-  if (combined.includes('whirlwind') || combined.includes('spin') || combined.includes('cyclone_slash') || combined.includes('blade_dance') || combined.includes('vortex_slash')) {
-    return { id: 'whirlwind', color: '#93c5fd', duration: 650 };
+  // ─── 9. GUERREIROS: ESPADAS DUPLAS & DUELISTAS ───
+  // Sonic Storm / Sonic Buster (Vácuo sônico que rasga o chão)
+  if (combined.includes('sonic storm') || combined.includes('sonic buster') || combined.includes('sonic_buster') || combined.includes('double sonic') || combined.includes('sonic rage') || combined.includes('dual blow')) {
+    return { id: 'warrior_sonic_storm', groundVfx: 'warrior_sonic_storm', color: '#93c5fd', duration: 750 };
+  }
+  // Triple Slash / Cortes múltiplos
+  if (combined.includes('triple slash') || combined.includes('triple_slash') || combined.includes('blade dance') || combined.includes('crescent blade') || combined.includes('iaijutsu')) {
+    return { id: 'warrior_triple_slash', groundVfx: null, color: '#e2e8f0', duration: 650 };
   }
 
-  // 10. Spear / Lance / Drill / Thrust
-  if (combined.includes('spear') || combined.includes('lance') || combined.includes('thrust') || combined.includes('drill')) {
-    return { id: 'spiral_spear', color: '#fdba74', duration: 750 };
+  // ─── 10. GUERREIROS: ARMAS PESADAS, MARTELOS & ESMAGAMENTO ───
+  // Earth Tremor / Earthquake / Fenda sísmica com pedregulhos aos pés
+  if (combined.includes('earthquake') || combined.includes('earth tremor') || combined.includes('earth') || combined.includes('tremor') || combined.includes('shock stomp') || combined.includes('crater')) {
+    return { id: 'warrior_earth_tremor', groundVfx: 'warrior_earth_tremor', color: '#d97706', duration: 1050 };
+  }
+  // Power Smash / Hammer Crush / Impacto pesado
+  if (combined.includes('crush') || combined.includes('hammer') || combined.includes('smash') || combined.includes('slam') || combined.includes('stun') || combined.includes('shield') || combined.includes('bash') || combined.includes('impact') || combined.includes('blunt')) {
+    return { id: 'power_smash', groundVfx: 'warrior_earth_tremor', color: '#f59e0b', duration: 650 };
   }
 
-  // 11. Cross Slash / Blade / Sword / Mortal Blow / Dual
-  if (combined.includes('cross') || combined.includes('slash') || combined.includes('blade') || combined.includes('strike') || combined.includes('blow') || combined.includes('sword') || combined.includes('cut') || combined.includes('cleave') || combined.includes('fatal')) {
-    return { id: 'cross_slash', color: '#e2e8f0', duration: 600 };
+  // ─── 11. GUERREIROS: MONGE / TYRANT (PUNHOS & CHI) ───
+  if (combined.includes('fist') || combined.includes('punch') || combined.includes('force blaster') || combined.includes('force storm') || combined.includes('force buster') || combined.includes('hurricane assault') || combined.includes('burning fist') || combined.includes('pummel') || combined.includes('claw')) {
+    return { id: 'warrior_force_burst', groundVfx: null, color: '#fb923c', duration: 800 };
   }
 
-  // 12. Arcane / Magic / Wave Fallback
-  if (skillDef?.type === 'magic' || combined.includes('magic') || combined.includes('mana') || combined.includes('energy') || combined.includes('wave') || combined.includes('flare')) {
-    return { id: 'arcane_missile', color: '#c084fc', duration: 800 };
+  // ─── 12. GUERREIROS: LANÇAS & POLARMS ───
+  if (combined.includes('whirlwind') || combined.includes('wild sweep') || combined.includes('wrath') || combined.includes('spin')) {
+    return { id: 'whirlwind', groundVfx: 'warrior_spear_whirlwind', color: '#93c5fd', duration: 650 };
+  }
+  if (combined.includes('spear') || combined.includes('lance') || combined.includes('thrust') || combined.includes('drill') || combined.includes('fellswoop')) {
+    return { id: 'warrior_spear_whirlwind', groundVfx: 'warrior_spear_whirlwind', color: '#fdba74', duration: 750 };
   }
 
-  // Default Physical Fallback
-  return { id: 'energy_slash', color: '#93c5fd', duration: 700 };
+  // ─── 13. CORTE GERAL / ESPADA ───
+  if (combined.includes('slash') || combined.includes('blade') || combined.includes('strike') || combined.includes('sword') || combined.includes('cleave')) {
+    return { id: 'cross_slash', groundVfx: null, color: '#e2e8f0', duration: 600 };
+  }
+
+  // ─── 14. FALLBACK MÁGICO OU FÍSICO ───
+  if (skillDef?.type === 'magic' || combined.includes('magic') || combined.includes('mana') || combined.includes('energy') || combined.includes('wave')) {
+    return { id: 'arcane_missile', groundVfx: null, color: '#c084fc', duration: 800 };
+  }
+
+  return { id: 'energy_slash', groundVfx: null, color: '#93c5fd', duration: 700 };
 }
 
 function getSkillVfxId(skillId, skillDef = null) {
   const data = getSkillVfxData(skillId, skillDef);
   return data ? data.id : null;
+}
+
+function getWeaponAttackVfx(isCrit = false, useMagic = false, weaponType = 'melee') {
+  const skin = state.activeSkin;
+  if (skin === 'skin_weapon_frost_lord') {
+    return isCrit
+      ? { id: 'frost_blizzard', color: '#bbf2ff', duration: 900, reaction: 'is-frozen', reactionDuration: 600 }
+      : { id: 'frost_slash', color: '#7dd3fc', duration: 650, reaction: 'is-frozen', reactionDuration: 350 };
+  }
+  if (skin === 'skin_weapon_infernal_dragon') {
+    return isCrit
+      ? { id: 'inferno_dragon_breath', color: '#ff7722', duration: 950, reaction: 'is-ignited', reactionDuration: 650 }
+      : { id: 'inferno_slash', color: '#fb923c', duration: 700, reaction: 'is-ignited', reactionDuration: 450 };
+  }
+  if (skin === 'skin_weapon_celestial_holy') {
+    return { id: 'celestial_strike', color: '#fef08a', duration: 800, reaction: 'is-consecrated', reactionDuration: 500 };
+  }
+
+  // Fallback para atributo elemental da arma equipada
+  const equippedWpnUid = state.equipment?.weapon;
+  const equippedWpn = equippedWpnUid ? state.inventory?.find(i => i.uid === equippedWpnUid) : null;
+  const elem = equippedWpn?.elementalAttribute?.element;
+  if (elem === 'water') {
+    return { id: 'frost_slash', color: '#7dd3fc', duration: 650, reaction: 'is-frozen', reactionDuration: 350 };
+  }
+  if (elem === 'fire') {
+    return { id: 'inferno_slash', color: '#fb923c', duration: 700, reaction: 'is-ignited', reactionDuration: 450 };
+  }
+  if (elem === 'holy') {
+    return { id: 'celestial_strike', color: '#fef08a', duration: 800, reaction: 'is-consecrated', reactionDuration: 450 };
+  }
+
+  // 1. Magos & Usuários de Magia / Cajados / Maças Mágicas
+  if (useMagic || weaponType === 'staff') {
+    return isCrit
+      ? { id: 'arcane_missile', color: '#c084fc', duration: 650, power: 2 }
+      : { id: 'arcane_missile', color: '#818cf8', duration: 520, power: 1 };
+  }
+
+  // 2. Arqueiros e Pistoleiros (Armas de disparo à distância)
+  if (weaponType === 'bow' || weaponType === 'gun') {
+    return isCrit
+      ? { id: 'snipe_shot', color: '#fde047', duration: 500, power: 2 }
+      : { id: 'snipe_shot', color: '#f59e0b', duration: 420, power: 1 };
+  }
+
+  // 3. Guerreiros / Corpo a corpo (Espadas, Adagas, Martelos, Lanças, Machados)
+  // Ataque físico direto: faíscas cortantes autênticas no alvo, e corte cruzado no crítico
+  return isCrit
+    ? { id: 'cross_slash', color: '#ffffff', duration: 500 }
+    : { id: 'particles', color: '#fde68a', duration: 350 };
 }
 
 function getMonsterCategory(monster) {
@@ -4310,10 +4477,11 @@ function attackMonster() {
         }
         
         monster.hp -= sDmg;
-        stageHeroAttack();
-        stageMonsterHurt(sDmg, false);
-        
         const vfxData = getSkillVfxData(skill.id, skill.def);
+        const skinReaction = state.activeSkin === 'skin_weapon_frost_lord' ? 'is-frozen' : (state.activeSkin === 'skin_weapon_infernal_dragon' ? 'is-ignited' : (state.activeSkin === 'skin_weapon_celestial_holy' ? 'is-consecrated' : null));
+        stageHeroAttack();
+        stageMonsterHurt(sDmg, false, skinReaction, 400);
+        
         if (vfxData && vfxData.id) {
           const source = getStagePositionRelative('hero');
           const target = getCombatTargetPoint();
@@ -4326,6 +4494,25 @@ function attackMonster() {
             arrowCount: vfxData.id === 'arrow_rain' ? 16 : undefined,
             targetArea: vfxData.id === 'arrow_rain' ? { x: target.x - 90, y: target.y - 40, width: 180, height: 70 } : undefined
           });
+
+          const baseTarget = getCombatTargetBasePoint();
+
+          // Dispara o efeito realista de solo ancorado na borda inferior do monstro
+          if (vfxData.groundVfx) {
+            playCombatVFX(vfxData.groundVfx, {
+              source,
+              target: baseTarget,
+              color: vfxData.color || '#ffd700',
+              power: Math.max(1, skill.lvl || 1),
+              duration: vfxData.duration || 900
+            });
+          }
+
+          if (skinReaction === 'is-ignited') {
+            playCombatVFX('monster_inferno_pillar', { source, target: baseTarget, color: '#ff7722', duration: 900 });
+          } else if (skinReaction === 'is-frozen') {
+            playCombatVFX('monster_frost_freeze', { source, target: baseTarget, color: '#a5f3fc', duration: 900 });
+          }
         }
 
         log(`💥 ${skill.def.name}! ${sDmg} ${type} damage`, 'rarity-epic');
@@ -4346,6 +4533,8 @@ function attackMonster() {
     }
   }
 
+  if (castedSkillThisTick) return;
+
   const atkInterval = Math.max(200, 1000 - stats.atkSpd * 600);
   if (combatTick % Math.max(1, Math.round(atkInterval / 200)) !== 0) return;
 
@@ -4362,7 +4551,7 @@ function attackMonster() {
     }
   }
 
-  if (!castedSkillThisTick) stageHeroAttack();
+  stageHeroAttack();
 
   const useMagic = stats.matk > stats.atk;
   const atkVal = useMagic ? stats.matk : stats.atk;
@@ -4450,7 +4639,42 @@ function attackMonster() {
     log(`🐾 [${activePetBonus.name}] Ataque de Mascote! ${petDmg} physical damage`, 'damage');
   }
 
-  if (monster.hp <= 0 && !castedSkillThisTick) stageMonsterDie(); else if (!castedSkillThisTick) stageMonsterHurt(damage, wasCrit);
+  const attackVfx = getWeaponAttackVfx(wasCrit, useMagic, primaryWeaponType);
+  if (attackVfx && attackVfx.id) {
+    const source = getStagePositionRelative('hero');
+    const target = getCombatTargetPoint();
+    playCombatVFX(attackVfx.id, {
+      source,
+      target,
+      color: attackVfx.color,
+      power: wasCrit ? 2 : 1,
+      duration: attackVfx.duration
+    });
+
+    // Efeitos Realistas Contínuos no Monstro (Fogo nos Pés / Envoltório de Gelo)
+    const baseTarget = getCombatTargetBasePoint();
+    if (attackVfx.reaction === 'is-ignited') {
+      playCombatVFX('monster_inferno_pillar', {
+        source,
+        target: baseTarget,
+        color: '#ff7722',
+        duration: wasCrit ? 1300 : 900
+      });
+    } else if (attackVfx.reaction === 'is-frozen') {
+      playCombatVFX('monster_frost_freeze', {
+        source,
+        target: baseTarget,
+        color: '#a5f3fc',
+        duration: wasCrit ? 1300 : 900
+      });
+    }
+  }
+
+  if (monster.hp <= 0) {
+    stageMonsterDie();
+  } else {
+    stageMonsterHurt(damage, wasCrit, attackVfx?.reaction, attackVfx?.reactionDuration);
+  }
   
   if (monster.hp <= 0) {
     // Evolução de XP do Mascote

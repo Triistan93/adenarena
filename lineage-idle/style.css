@@ -2941,6 +2941,56 @@ select:focus-visible {
 .stage-monster.lunge { animation: monLunge 0.42s cubic-bezier(0.3,0.8,0.3,1); }
 #m-art.swap { animation: monIn 0.4s ease; }
 
+/* Dynamic Skin VFX Monster Reactions */
+.stage-monster.is-frozen {
+  box-shadow: 0 0 30px rgba(56, 189, 248, 0.8), inset 0 0 25px rgba(186, 230, 253, 0.7) !important;
+  border-color: #7dd3fc !important;
+}
+
+.stage-monster.is-frozen .mon-svg,
+.stage-monster.is-frozen img {
+  filter: drop-shadow(0 0 22px rgba(56, 189, 248, 1)) brightness(1.6) contrast(1.3) saturate(1.8) hue-rotate(190deg) !important;
+  animation: frostTremble 0.35s ease-in-out infinite alternate !important;
+  transition: filter 0.15s ease;
+}
+
+.stage-monster.is-ignited {
+  box-shadow: 0 0 35px rgba(249, 115, 22, 0.85), inset 0 0 25px rgba(251, 146, 60, 0.65) !important;
+  border-color: #fb923c !important;
+}
+
+.stage-monster.is-ignited .mon-svg,
+.stage-monster.is-ignited img {
+  filter: drop-shadow(0 0 24px rgba(249, 115, 22, 1)) drop-shadow(0 -10px 20px rgba(239, 68, 68, 0.9)) brightness(1.7) contrast(1.25) saturate(2.2) hue-rotate(-22deg) !important;
+  animation: igniteFlicker 0.28s ease-in-out infinite alternate !important;
+  transition: filter 0.15s ease;
+}
+
+.stage-monster.is-consecrated {
+  box-shadow: 0 0 30px rgba(253, 224, 71, 0.75), inset 0 0 20px rgba(254, 240, 138, 0.5) !important;
+  border-color: #fde047 !important;
+}
+
+.stage-monster.is-consecrated .mon-svg,
+.stage-monster.is-consecrated img {
+  filter: drop-shadow(0 0 25px rgba(253, 224, 71, 1)) brightness(1.65) contrast(1.2) !important;
+  transition: filter 0.15s ease;
+}
+
+@keyframes frostTremble {
+  0% { transform: translate(0, 0) scale(0.97); }
+  25% { transform: translate(-2px, 1px) scale(0.97); }
+  50% { transform: translate(2px, -1px) scale(0.97); }
+  75% { transform: translate(-1px, -2px) scale(0.97); }
+  100% { transform: translate(1px, 2px) scale(0.97); }
+}
+
+@keyframes igniteFlicker {
+  0% { transform: translateY(0) scale(1.01); filter: drop-shadow(0 0 16px rgba(249, 115, 22, 0.85)) brightness(1.4); }
+  50% { transform: translateY(-3px) scale(1.03); filter: drop-shadow(0 -8px 24px rgba(239, 68, 68, 1)) brightness(1.75); }
+  100% { transform: translateY(-1px) scale(1.02); filter: drop-shadow(0 -4px 20px rgba(249, 115, 22, 0.95)) brightness(1.6); }
+}
+
 @keyframes monIdle {
   0%   { transform: translateY(0) scaleX(1) scaleY(1); }
   30%  { transform: translateY(-1px) scaleX(1.01) scaleY(1.008); }
@@ -3008,7 +3058,7 @@ select:focus-visible {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 4;
+  z-index: 5 !important;
 }
 .sf {
   position: absolute; bottom: 36%;

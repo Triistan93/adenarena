@@ -9,6 +9,7 @@ import {
   onAuthStateChanged, 
   loadPlayerStateFromCloud, 
   savePlayerStateToCloud, 
+  deletePlayerStateFromCloud,
   type User 
 } from '../firebase';
 import { CharacterCreation, CharacterCreationData } from './CharacterCreation';
@@ -166,16 +167,24 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
 
   // Monitorar autenticação no Firebase e carregar os dados reais do jogador em nuvem
   useEffect(() => {
+    const isPendingCreation = typeof localStorage !== 'undefined' && localStorage.getItem('aden_pending_char_creation') === '1';
+
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
       if (currentUser) {
         setLoading(true);
         try {
-          const stateData = await loadPlayerStateFromCloud(currentUser.uid);
-          if (stateData) {
-            setCloudState(stateData);
-          } else {
+          if (isPendingCreation) {
+            // Jogador solicitou reiniciar/criar novo herói explicitamente
+            setCloudState(null);
             setShowCreation(true);
+          } else {
+            const stateData = await loadPlayerStateFromCloud(currentUser.uid);
+            if (stateData) {
+              setCloudState(stateData);
+            } else {
+              setShowCreation(true);
+            }
           }
         } catch (err) {
           console.error('Error fetching cloud state on login screen:', err);
@@ -184,6 +193,9 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
         }
       } else {
         setCloudState(null);
+        if (isPendingCreation) {
+          setShowCreation(true);
+        }
       }
       setCheckingAuth(false);
     });
@@ -241,6 +253,10 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
       selectedSkill: kit.starterSkill,
       lastSaveTime: Date.now()
     };
+
+    if (typeof localStorage !== 'undefined') {
+      localStorage.removeItem('aden_pending_char_creation');
+    }
 
     if (user) {
       await savePlayerStateToCloud(user.uid, newCharState);
@@ -505,13 +521,28 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
                   <span>⚔️ ENTRAR NO JOGO ▶</span>
                 </button>
 
-                {/* Botão Trocar de Conta */}
-                <button
-                  onClick={handleLogout}
-                  className="w-full bg-[#121620] hover:bg-[#1a202d] text-[#94a3b8] hover:text-[#ece4d3] font-semibold py-2 px-6 rounded-lg text-xs border border-white/5 transition-all cursor-pointer font-serif"
-                >
-                  Trocar de Conta / Sair
-                </button>
+                {/* Botões Secundários */}
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => {
+                      if (confirm('Deseja criar um novo personagem ou escolher uma nova classe? O personagem atual será substituído após concluir a criação.')) {
+                        setShowCreation(true);
+                      }
+                    }}
+                    className="flex-1 bg-[#1a1710] hover:bg-[#2a2416] text-[#e8c870] hover:text-[#fde047] font-semibold py-2 px-3 rounded-lg text-xs border border-[#c5a059]/30 transition-all cursor-pointer font-serif flex items-center justify-center gap-1.5"
+                    title="Escolha uma nova raça e classe criando um novo herói"
+                  >
+                    <span>✨</span>
+                    <span>Novo Personagem</span>
+                  </button>
+
+                  <button
+                    onClick={handleLogout}
+                    className="flex-1 bg-[#121620] hover:bg-[#1a202d] text-[#94a3b8] hover:text-[#ece4d3] font-semibold py-2 px-3 rounded-lg text-xs border border-white/5 transition-all cursor-pointer font-serif"
+                  >
+                    Trocar de Conta
+                  </button>
+                </div>
 
                 {/* Botão Discord Oficial */}
                 <div className="pt-2 border-t border-white/5">

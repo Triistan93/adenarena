@@ -43,6 +43,7 @@ import {
   subscribeToPlayerSales,
   savePlayerStateToCloud,
   loadPlayerStateFromCloud,
+  deletePlayerStateFromCloud,
   onAuthStateChanged,
   auth 
 } from "../firebase";
@@ -93,6 +94,17 @@ if (typeof window !== "undefined") {
       savePlayerStateToCloud(user.uid, data, true);
     }
   };
+
+  (window as any).resetCloudSave = async () => {
+    const user = auth.currentUser;
+    if (!user) return;
+    try {
+      await deleteMarketListingInCloud(user.uid); // safety if needed
+      await deletePlayerStateFromCloud(user.uid);
+    } catch (e) {
+      console.debug('Reset cloud save notice:', e);
+    }
+  };
 }
 
 /**
@@ -108,6 +120,19 @@ export default function IdleGame() {
     race: string;
     class: string;
   } | null>(null);
+
+  const [isCreatingCharacter, setIsCreatingCharacter] = useState<boolean>(false);
+  const [creationInitialData, setCreationInitialData] = useState<{
+    charName: string;
+    race: string;
+    class: string;
+    gender: 'M' | 'F';
+  }>({
+    charName: 'Tristan',
+    race: 'human',
+    class: 'fighter',
+    gender: 'M'
+  });
 
   useEffect(() => {
     const syncAdminStatus = async (userUid: string) => {
@@ -195,9 +220,20 @@ export default function IdleGame() {
       setChangeScrollData(data);
     };
 
+    (window as any).onOpenCharacterCreationModal = (data: any) => {
+      setCreationInitialData({
+        charName: data?.charName || 'Tristan',
+        race: data?.race || 'human',
+        class: data?.class || 'fighter',
+        gender: data?.gender || 'M'
+      });
+      setIsCreatingCharacter(true);
+    };
+
     return () => {
       if (unsubDevice) unsubDevice();
       delete (window as any).onOpenRaceClassChangeModal;
+      delete (window as any).onOpenCharacterCreationModal;
       destroyBootstrap();
       destroy();
       if (host.shadowRoot) {
@@ -213,6 +249,13 @@ export default function IdleGame() {
     setChangeScrollData(null);
   };
 
+  const handleCompleteCreation = (data: CharacterCreationData) => {
+    if (typeof (window as any).onCharacterCreated === 'function') {
+      (window as any).onCharacterCreated(data);
+    }
+    setIsCreatingCharacter(false);
+  };
+
   return (
     <>
       <div ref={hostRef} id="idle-host" className="w-full h-full min-h-screen block overflow-hidden" />
@@ -224,6 +267,16 @@ export default function IdleGame() {
           initialClass={changeScrollData.class}
           onComplete={handleConfirmChange}
           onCancel={() => setChangeScrollData(null)}
+        />
+      )}
+      {isCreatingCharacter && (
+        <CharacterCreation
+          isChangeScroll={false}
+          initialCharName={creationInitialData.charName}
+          initialRace={creationInitialData.race}
+          initialClass={creationInitialData.class}
+          initialGender={creationInitialData.gender}
+          onComplete={handleCompleteCreation}
         />
       )}
     </>
