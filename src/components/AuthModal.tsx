@@ -231,7 +231,7 @@ export function AuthModal({ onCloudDataLoaded, getCurrentState }: AuthModalProps
 
       {/* Popover Dropdown Menu */}
       {showPopover && (
-        <div className="absolute right-0 mt-2 w-64 bg-[#0b0f1c] border border-amber-500/40 rounded-2xl p-3 shadow-2xl z-50 text-xs text-white space-y-2">
+        <div className="absolute left-0 mt-2 w-64 bg-[#0b0f1c] border border-amber-500/40 rounded-2xl p-3 shadow-2xl z-50 text-xs text-white space-y-2">
           {user ? (
             <>
               <div className="flex items-center justify-between pb-2 border-b border-amber-500/20">

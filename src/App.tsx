@@ -916,7 +916,7 @@ export default function Shell() {
           )}
           {/* Modos alternativos desativados temporariamente; seletor removido para não cobrir o logotipo do jogo */}
           {/* <ModeSwitch mode={mode} setMode={setMode} /> */}
-          <div className="fixed top-[7px] right-[8px] z-40 flex items-center h-[28px]">
+          <div className="fixed top-[4px] sm:top-[5px] left-[106px] sm:left-[118px] z-40 flex items-center h-[28px]">
             <AuthModal 
               onCloudDataLoaded={(cloudState) => {
                 if (typeof window !== 'undefined' && (window as any).loadGameState) {

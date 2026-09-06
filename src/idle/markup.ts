@@ -12,6 +12,8 @@ export const IDLE_MARKUP = `
 
       <div class="tb-left">
         <span class="tb-brand">ADEN ARENA<span class="tb-brand-sub">IDLE CHRONICLES</span></span>
+        <div id="cloud-save-slot" class="tb-cloud-slot" style="width: 78px; height: 26px; flex-shrink: 0;" aria-hidden="true"></div>
+        <span id="save-status-badge" style="display:none;">Salvo</span>
       </div>
 
       <div class="tb-center">
@@ -69,7 +71,6 @@ export const IDLE_MARKUP = `
           </button>
           
           <span class="tb-clock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> <span id="clock">00:00:00</span></span>
-          <span id="save-status-badge" class="tb-save">Salvo</span>
         </div>
       </div>
     </header>
