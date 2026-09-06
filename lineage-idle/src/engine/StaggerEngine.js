@@ -79,15 +79,28 @@ export class StaggerEngine {
     // Checagem de QUEBRA DE POSTURA (BREAK)
     if (monster.staggerCurrent <= 0 && !monster.isBreak) {
       monster.isBreak = true;
-      monster.breakUntil = now + 5000; // 5 segundos de vulnerabilidade máxima
+      const wasChannelingFatal = !!monster.isChannelingFatal;
+
+      if (wasChannelingFatal) {
+        monster.isChannelingFatal = false;
+        monster.fatalCastUntil = 0;
+        monster.breakUntil = now + 8000; // Janela estendida para 8 segundos de vulnerabilidade!
+
+        if (callbacks.floatText) callbacks.floatText('🚨 FATAL INTERROMPIDO! (8s BREAK)', 'float-jackpot');
+        if (callbacks.log) callbacks.log(`🚨 GOLPE FATAL INTERROMPIDO! 💥 A postura de **${monster.name}** colapsou durante a canalização! VULNERABILIDADE ESTENDIDA PARA 8 SEGUNDOS (200% DANO)!`, 'rarity-legendary');
+
+        return { didBreak: true, isBreak: true, mult: 2.0, interruptedFatal: true };
+      }
+
+      monster.breakUntil = now + 5000; // 5 segundos de vulnerabilidade padrão
 
       if (callbacks.floatText) callbacks.floatText('💥 BREAK! (2.0x DANO)', 'float-jackpot');
       if (callbacks.log) callbacks.log(`🚨 QUEBRA DE POSTURA! 💥 ${monster.name} está VULNERÁVEL por 5s! Todos os ataques causam 200% de DANO!`, 'rarity-legendary');
 
-      return { didBreak: true, isBreak: true, mult: 2.0 };
+      return { didBreak: true, isBreak: true, mult: 2.0, interruptedFatal: false };
     }
 
-    return { didBreak: false, isBreak: false, mult: 1.0 };
+    return { didBreak: false, isBreak: false, mult: 1.0, interruptedFatal: false };
   }
 
   /**

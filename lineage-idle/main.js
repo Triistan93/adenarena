@@ -4442,6 +4442,244 @@ function checkBuffsExpire() {
   }
 }
 
+/**
+ * Processa a derrota do monstro, cálculo de recompensas (XP/SP, Over-Hit, Drops, Quests)
+ * e o surgimento do próximo alvo.
+ * @param {Object} monster
+ * @param {Object|null} killingSkill
+ */
+function processMonsterDefeat(monster, killingSkill = null) {
+  stageMonsterDie();
+
+  // Evolução de XP do Mascote
+  PetService.addPetXp(state, monster.xp || 100, { log, floatText });
+
+  // Colheita Agrícola do Manor
+  ManorService.processHarvest(state, monster, { log });
+
+  // Conclusão de Instância Solo (Kamaloka / Pailaka)
+  if (monster.isInstanceBoss && monster.instanceId) {
+    InstanceService.onInstanceBossVictory(state, monster.instanceId, { log, floatText, updateAllUI, save });
+  }
+
+  const procBonuses = getEquippedProcBonuses();
+  if (procBonuses.on_kill_heal > 0) {
+    const killHeal = Math.floor(state.maxHp * (procBonuses.on_kill_heal / 100));
+    if (killHeal > 0) {
+      state.hp = Math.min(state.maxHp, state.hp + killHeal);
+      log(`🩸 Execução! Curou ${killHeal} HP ao derrotar ${monster.name}`, 'heal');
+      floatText(`+${killHeal} HP`, 'sf-heal');
+    }
+  }
+  if (!monster.boss && !monster.isTower && state.zone) {
+    state.zoneKills = state.zoneKills || {};
+    state.zoneKills[state.zone] = (state.zoneKills[state.zone] || 0) + 1;
+    updateZoneKillProgressUI();
+  }
+
+  state.killStreak = (state.killStreak || 0) + 1;
+  if (state.killStreak % 5 === 0 && state.killStreak >= 5) {
+    stageFloat(`🔥 STREAK x${state.killStreak}!`, 'sf-crit', 'right');
+  }
+
+  const sRates = state.serverRates || { xp: 1, sp: 1, adena: 1, drop: 1, spoil: 1, enchant: 1, book: 1 };
+  const xpRate = Math.max(0.1, Number(sRates.xp) || 1);
+  const spRate = Math.max(0.1, Number(sRates.sp) || 1);
+  const adenaRate = Math.max(0.1, Number(sRates.adena) || 1);
+  const dropRate = Math.max(0.1, Number(sRates.drop) || 1);
+  const spoilRate = Math.max(0.1, Number(sRates.spoil) || 1);
+  const bookRate = Math.max(0.1, Number(sRates.book) || 1);
+
+  const zoneLevel = ZONES[state.zone]?.level || 1;
+  const zoneTier = getZoneDropTier(zoneLevel);
+  const zoneMult = (D().ZONE_GOLD_MULT && D().ZONE_GOLD_MULT[zoneTier]) || 1;
+  const stats = getStats();
+
+  // OVER-HIT: Concede bônus de +25% a +50% de EXP/SP se derrotado por skill de impacto/finalização
+  let overhitBonusPct = 0;
+  const isOverhit = killingSkill && (killingSkill.def?.overhit || killingSkill.overhit);
+  if (isOverhit) {
+    const maxHp = monster._maxHp || monster.maxHp || monster.hp || 100;
+    const overkillDmg = monster._overkillDmg || (monster.hp < 0 ? Math.abs(monster.hp) : 10);
+    const overkillRatio = Math.min(1.0, overkillDmg / maxHp);
+    overhitBonusPct = Math.round(25 + (overkillRatio * 25)); // +25% a +50%
+  }
+
+  const overhitMult = 1 + (overhitBonusPct / 100);
+  const xpMult = (1 + (stats.xpBoost || 0)) * xpRate * overhitMult;
+  const xpGain = Math.floor(monster.xp * xpMult);
+
+  // SP é concedido exclusivamente por Elites, Chefes de Área, Raidbosses e Missões
+  let baseSp = 0;
+  if (monster.isRaid) {
+    baseSp = Math.max(50, Math.floor((monster.lvl || 40) * 4));
+  } else if (monster.boss || monster.isBoss) {
+    baseSp = Math.max(25, Math.floor((monster.lvl || 10) * 2.5));
+  } else if (monster.elite || monster.isElite) {
+    baseSp = Math.max(5, Math.floor((monster.lvl || 5) * 0.8) + 4);
+  } else {
+    baseSp = 0; // Monstros comuns NÃO dropam SP (Economia clássica)
+  }
+  const spGain = Math.floor(baseSp * spRate * overhitMult);
+  state.xp += xpGain;
+  if (spGain > 0) state.sp += spGain;
+
+  if (overhitBonusPct > 0) {
+    log(`💥 **OVER-HIT!** Golpe fatal com **${killingSkill.def?.name || killingSkill.name}**! Bônus de **+${overhitBonusPct}% EXP/SP** concedido!`, 'rarity-legendary', 'gold_xp');
+    if (typeof floatText === 'function') {
+      floatText(`💥 OVER-HIT! (+${overhitBonusPct}% EXP)`, 'float-jackpot');
+    }
+  }
+
+  log(`Derrotou **${monster.name}**! Recebeu **+${xpGain.toLocaleString()} XP**${spGain > 0 ? ` e **+${spGain} SP**` : ''}`, 'xp', 'gold_xp');
+
+  // Drenagem de Alma para Soul Crystals (Níveis 1 a 15 e Epic Bosses)
+  try {
+    serviceProcessSoulDrainOnKill(state, monster, { log, floatText, updateAllUI, save });
+  } catch (e) {
+    console.warn('Erro na drenagem de almas:', e);
+  }
+
+  // Registra abates para a Meta Comunitária Global de Nível (Cap 40 -> 45)
+  try {
+    CommunityCapService.recordBossKill(monster, state, { log, updateAllUI });
+  } catch (e) {
+    console.warn('Erro ao registrar meta de cap comunitária:', e);
+  }
+
+  // Drops Especiais de Chefe do Caos (Chaos Boss)
+  if (monster.isChaosBoss) {
+    try {
+      serviceProcessChaosBossLoot(state, monster, { log, floatText, updateAllUI, save });
+    } catch (e) {
+      console.warn('Erro ao processar loot do Chaos Boss:', e);
+    }
+  }
+
+  // Acúmulo de Lâmpada Mágica & Craft Points por Abate
+  state.magicLampExp = (state.magicLampExp || 0) + Math.floor(xpGain * 0.4);
+  state.craftPoints = (state.craftPoints || 0) + Math.floor((monster.boss ? 50 : 10) * spoilRate);
+
+  if (state.magicLampExp >= 50000) {
+    state.magicLampExp -= 50000;
+    state.magicLamps = (state.magicLamps || 0) + 1;
+    log(`🪔 NOVA LÂMPADA MÁGICA ACUMULADA! (Total: ${state.magicLamps})`, 'rarity-legendary');
+    if (typeof window !== 'undefined' && window.floatText) {
+      window.floatText('🪔 LÂMPADA MÁGICA +1!', 'float-jackpot');
+    }
+  }
+
+  if (state.craftPoints >= 1000) {
+    state.craftPoints -= 1000;
+    state.craftCharges = Math.min(100, (state.craftCharges || 0) + 1);
+    log(`🛠️ CARGA DE CRAFT ACUMULADA! (Total: ${state.craftCharges})`, 'rarity-rare');
+  }
+
+  const baseGold = monster.gold[0] + Math.random() * (monster.gold[1] - monster.gold[0]), jackpot = Math.random() < (monster.boss ? 0.08 : 0.015);
+  const goldMult = zoneMult * (1 + (stats.goldBoost || 0)) * (jackpot ? 10 : 1) * adenaRate;
+  let gold = Math.floor(baseGold * stats.loot * goldMult); if (gold < 1) gold = 1;
+  state.gold += gold; trackGold(gold);
+  if (jackpot) { 
+    log(`🪙 JACKPOT! Coletou **+${gold.toLocaleString()} Adena** (×10)!`, 'rarity-legendary', 'gold_xp'); 
+    floatText(`🪙 +${gold} Adena`, 'float-jackpot'); 
+  } else { 
+    log(`Coletou **+${gold.toLocaleString()} Adena** de ${monster.name}`, 'gold', 'gold_xp'); 
+    if (gold >= 20) floatText(`+${gold} Adena`, 'float-gold'); 
+  }
+
+  // Penalidade de Nível de Drop (Level-Gap Anti-Monopólio)
+  const mLevel = monster.lvl || monster.level || zoneLevel || 1;
+  const pLevel = state.level || 1;
+  const lvlDiff = Math.max(0, pLevel - mLevel);
+  let levelGapPenalty = 1.0;
+  if (lvlDiff > 10) {
+    levelGapPenalty = 0.15; // -85% de drop para veteranos caçando em áreas iniciais
+  } else if (lvlDiff > 5) {
+    levelGapPenalty = 0.50; // -50% de drop
+  }
+
+  const effectiveLootRate = stats.loot * levelGapPenalty * dropRate;
+  const rawDrop = D().rollDrop(zoneTier, effectiveLootRate, !!(monster.boss || monster.elite));
+  const drops = Array.isArray(rawDrop) ? rawDrop : (rawDrop && rawDrop.itemId ? [ { id: rawDrop.itemId, itemId: rawDrop.itemId, rarity: rawDrop.rarity, isEquipment: true, amount: 1 } ] : []);
+  for (const drop of drops) {
+    const dropId = drop.id || drop.itemId;
+    const def = D().ALL_ITEMS[dropId];
+    if (dropId && def) {
+      const isEquip = drop.isEquipment || !['material', 'potion', 'consumable', 'scroll', 'gem'].includes(def.slot);
+      if (isEquip) {
+        addToInventory(dropId, 1, drop.rarity || 'common');
+        const rName = D().RARITY[drop.rarity || 'common']?.name || (drop.rarity || 'common');
+        log(`✦ Obteve **${def.name}** [${rName}]!`, 'rarity-' + (drop.rarity || 'common'), 'loot');
+        floatText(`✦ ${rName}!`, 'float-' + (drop.rarity || 'common'));
+      } else {
+        addToInventory(dropId, drop.amount || 1);
+        log(`📦 Obteve **${drop.amount || 1}x ${def.name}**`, 'loot', 'loot');
+      }
+    }
+  }
+
+  // Drop de Livros de Magia (Spellbooks 1★, 2★, 3★, 4★)
+  if (mLevel >= 38) {
+    const bookChance = (monster.isRaid ? 0.30 : (monster.boss ? 0.08 : 0.005)) * levelGapPenalty * bookRate;
+    if (Math.random() < bookChance) {
+      let droppedBookId = 'book_1star';
+      // Tomo 4★ é EXCLUSIVO de Epic Bosses, Raids e Chefes de Dungeon Lv 70+
+      if (monster.isRaid || (monster.boss && mLevel >= 70)) droppedBookId = 'book_4star';
+      else if (mLevel >= 56) droppedBookId = 'book_3star';
+      else if (mLevel >= 48) droppedBookId = 'book_2star';
+
+      const bookDef = D().ALL_ITEMS[droppedBookId];
+      if (bookDef) {
+        addToInventory(droppedBookId, 1);
+        log(`📖 DROP DE GRIMÓRIO! Obteve **${bookDef.name}** de ${monster.name}!`, 'rarity-legendary', 'loot');
+        floatText(`📖 ${bookDef.name}!`, 'float-jackpot');
+      }
+    }
+  }
+
+  // Drop de Carta de Monstro Colecionável (0.05% comum, 0.15% elite, 0.8% boss)
+  const monKey = monster.id || monster.monsterId || monster.originalId;
+  const cardId = `card_${monKey}`;
+  const cardDef = MONSTER_CARDS[cardId] || MONSTER_CARDS[`card_${String(monKey).toLowerCase()}`];
+  if (cardDef) {
+    const dropChance = (cardDef.dropChance || (monster.isRaid ? 0.015 : (monster.boss ? 0.008 : 0.0005))) * levelGapPenalty;
+    if (Math.random() < dropChance) {
+      addToInventory(cardId, 1);
+      log(`🃏 DROP RARO! Obteve **${cardDef.name}** [${(cardDef.rarity || 'rare').toUpperCase()}]!`, 'rarity-' + (cardDef.rarity || 'rare'), 'loot');
+      floatText(`🃏 CARTA DE MONSTRO!`, 'float-jackpot');
+    }
+  }
+
+  triggerQuestEvent('kill', 1);
+  if (monster.boss || monster.elite) triggerQuestEvent('boss', 1);
+  triggerQuestEvent('gold', gold);
+  NoblesseService.recordKill(state, monster, { log });
+
+  if (monster.isTower) {
+    onTowerFloorVictory(monster.towerFloor);
+  }
+
+  if (monster.isRaid) {
+    serviceHandleRaidVictory(state, state.activeRaidId || state.target, {
+      log,
+      onUpdate: () => { updateAllUI(); save(); }
+    });
+    state.isRaidActive = false;
+    state.activeRaidId = null;
+    state.zone = state.lastHuntingZone || state.lastSafeZone || (state.race ? (RACES[state.race]?.startZone || 'talkingIsland') : 'talkingIsland');
+    state.target = null;
+    state.activeMonster = null;
+  }
+
+  checkLevelUp();
+  if (state.isCombatActive !== false) {
+    if (monster.isTower && state.lastHuntingZone) {
+      state.zone = state.lastHuntingZone;
+    }
+    pickRandomMonster();
+  }
+}
+
 function attackMonster() {
   if (state.isCombatActive === false) return;
   if ((!state.zone && !state.isRaidActive) || !state.target) return;
@@ -4463,7 +4701,18 @@ function attackMonster() {
   checkBuffsExpire();
   const stats = getStats(), monster = state.activeMonster || MONSTERS[state.target]; if (!monster) return;
   if (monster.isRaid) {
-    serviceProcessRaidBossMechanics(state, { log, floatText });
+    serviceProcessRaidBossMechanics(state, {
+      log,
+      floatText,
+      onFatalImpact: (dmg) => {
+        stageHeroHurt(dmg, true);
+        if (state.hp <= 0) {
+          state.hp = 0;
+          playerDeath(monster);
+        }
+        updateStatsUI();
+      }
+    });
   }
   combatTick++;
 
@@ -4608,6 +4857,11 @@ function attackMonster() {
         }
         
         monster.hp -= sDmg;
+        const killedBySkill = monster.hp <= 0;
+        if (killedBySkill) {
+          monster._killingSkill = skill;
+          monster._overkillDmg = Math.abs(monster.hp);
+        }
         const vfxData = getSkillVfxData(skill.id, skill.def);
         const skinReaction = state.activeSkin === 'skin_weapon_frost_lord' ? 'is-frozen' : (state.activeSkin === 'skin_weapon_infernal_dragon' ? 'is-ignited' : (state.activeSkin === 'skin_weapon_celestial_holy' ? 'is-consecrated' : null));
         stageHeroAttack();
@@ -4653,9 +4907,15 @@ function attackMonster() {
           log(`🦇 Vampirismo! Absorveu ${heal} HP`, 'heal');
           floatText(`+${heal} HP`, 'sf-heal');
         }
-        if (skill.def.effect === 'stun') {
+        if (skill.def.effect === 'stun' && !killedBySkill) {
            monster._stunnedUntil = now + 3500;
            log(`💫 ${monster.name} foi Atordoado!`, 'rarity-rare');
+        }
+
+        if (killedBySkill) {
+          processMonsterDefeat(monster, skill);
+          updateStatsUI();
+          return;
         }
       }
       
@@ -4839,217 +5099,11 @@ function attackMonster() {
   }
 
   if (monster.hp <= 0) {
-    stageMonsterDie();
+    processMonsterDefeat(monster, monster._killingSkill || null);
+    updateStatsUI();
+    return;
   } else {
     stageMonsterHurt(damage, wasCrit, attackVfx?.reaction, attackVfx?.reactionDuration);
-  }
-  
-  if (monster.hp <= 0) {
-    // Evolução de XP do Mascote
-    PetService.addPetXp(state, monster.xp || 100, { log, floatText });
-
-    // Colheita Agrícola do Manor
-    ManorService.processHarvest(state, monster, { log });
-
-    // Conclusão de Instância Solo (Kamaloka / Pailaka)
-    if (monster.isInstanceBoss && monster.instanceId) {
-      InstanceService.onInstanceBossVictory(state, monster.instanceId, { log, floatText, updateAllUI, save });
-    }
-
-    if (procBonuses.on_kill_heal > 0) {
-      const killHeal = Math.floor(state.maxHp * (procBonuses.on_kill_heal / 100));
-      if (killHeal > 0) {
-        state.hp = Math.min(state.maxHp, state.hp + killHeal);
-        log(`🩸 Execução! Curou ${killHeal} HP ao derrotar ${monster.name}`, 'heal');
-        floatText(`+${killHeal} HP`, 'sf-heal');
-      }
-    }
-    if (!monster.boss && !monster.isTower && state.zone) {
-      state.zoneKills = state.zoneKills || {};
-      state.zoneKills[state.zone] = (state.zoneKills[state.zone] || 0) + 1;
-      updateZoneKillProgressUI();
-    }
-
-    state.killStreak = (state.killStreak || 0) + 1;
-    if (state.killStreak % 5 === 0 && state.killStreak >= 5) {
-      stageFloat(`🔥 STREAK x${state.killStreak}!`, 'sf-crit', 'right');
-    }
-
-    const sRates = state.serverRates || { xp: 1, sp: 1, adena: 1, drop: 1, spoil: 1, enchant: 1, book: 1 };
-    const xpRate = Math.max(0.1, Number(sRates.xp) || 1);
-    const spRate = Math.max(0.1, Number(sRates.sp) || 1);
-    const adenaRate = Math.max(0.1, Number(sRates.adena) || 1);
-    const dropRate = Math.max(0.1, Number(sRates.drop) || 1);
-    const spoilRate = Math.max(0.1, Number(sRates.spoil) || 1);
-    const bookRate = Math.max(0.1, Number(sRates.book) || 1);
-
-    const zoneLevel = ZONES[state.zone]?.level || 1;
-    const zoneTier = getZoneDropTier(zoneLevel);
-    const zoneMult = (D().ZONE_GOLD_MULT && D().ZONE_GOLD_MULT[zoneTier]) || 1;
-    const xpMult = (1 + (stats.xpBoost || 0)) * xpRate;
-    const xpGain = Math.floor(monster.xp * xpMult);
-    // SP é concedido exclusivamente por Elites, Chefes de Área, Raidbosses e Missões
-    let baseSp = 0;
-    if (monster.isRaid) {
-      baseSp = Math.max(50, Math.floor((monster.lvl || 40) * 4));
-    } else if (monster.boss || monster.isBoss) {
-      baseSp = Math.max(25, Math.floor((monster.lvl || 10) * 2.5));
-    } else if (monster.elite || monster.isElite) {
-      baseSp = Math.max(5, Math.floor((monster.lvl || 5) * 0.8) + 4);
-    } else {
-      baseSp = 0; // Monstros comuns NÃO dropam SP (Economia clássica)
-    }
-    const spGain = Math.floor(baseSp * spRate);
-    state.xp += xpGain;
-    if (spGain > 0) state.sp += spGain;
-    log(`Derrotou **${monster.name}**! Recebeu **+${xpGain.toLocaleString()} XP**${spGain > 0 ? ` e **+${spGain} SP**` : ''}`, 'xp', 'gold_xp');
-
-    // Drenagem de Alma para Soul Crystals (Níveis 1 a 15 e Epic Bosses)
-    try {
-      serviceProcessSoulDrainOnKill(state, monster, { log, floatText, updateAllUI, save });
-    } catch (e) {
-      console.warn('Erro na drenagem de almas:', e);
-    }
-
-    // Registra abates para a Meta Comunitária Global de Nível (Cap 40 -> 45)
-    try {
-      CommunityCapService.recordBossKill(monster, state, { log, updateAllUI });
-    } catch (e) {
-      console.warn('Erro ao registrar meta de cap comunitária:', e);
-    }
-
-    // Drops Especiais de Chefe do Caos (Chaos Boss)
-    if (monster.isChaosBoss) {
-      try {
-        serviceProcessChaosBossLoot(state, monster, { log, floatText, updateAllUI, save });
-      } catch (e) {
-        console.warn('Erro ao processar loot do Chaos Boss:', e);
-      }
-    }
-
-    // Acúmulo de Lâmpada Mágica & Craft Points por Abate
-    state.magicLampExp = (state.magicLampExp || 0) + Math.floor(xpGain * 0.4);
-    state.craftPoints = (state.craftPoints || 0) + Math.floor((monster.boss ? 50 : 10) * spoilRate);
-
-    if (state.magicLampExp >= 50000) {
-      state.magicLampExp -= 50000;
-      state.magicLamps = (state.magicLamps || 0) + 1;
-      log(`🪔 NOVA LÂMPADA MÁGICA ACUMULADA! (Total: ${state.magicLamps})`, 'rarity-legendary');
-      if (typeof window !== 'undefined' && window.floatText) {
-        window.floatText('🪔 LÂMPADA MÁGICA +1!', 'float-jackpot');
-      }
-    }
-
-    if (state.craftPoints >= 1000) {
-      state.craftPoints -= 1000;
-      state.craftCharges = Math.min(100, (state.craftCharges || 0) + 1);
-      log(`🛠️ CARGA DE CRAFT ACUMULADA! (Total: ${state.craftCharges})`, 'rarity-rare');
-    }
-
-    const baseGold = monster.gold[0] + Math.random() * (monster.gold[1] - monster.gold[0]), jackpot = Math.random() < (monster.boss ? 0.08 : 0.015);
-    const goldMult = zoneMult * (1 + (stats.goldBoost || 0)) * (jackpot ? 10 : 1) * adenaRate;
-    let gold = Math.floor(baseGold * stats.loot * goldMult); if (gold < 1) gold = 1;
-    state.gold += gold; trackGold(gold);
-    if (jackpot) { 
-      log(`🪙 JACKPOT! Coletou **+${gold.toLocaleString()} Adena** (×10)!`, 'rarity-legendary', 'gold_xp'); 
-      floatText(`🪙 +${gold} Adena`, 'float-jackpot'); 
-    } else { 
-      log(`Coletou **+${gold.toLocaleString()} Adena** de ${monster.name}`, 'gold', 'gold_xp'); 
-      if (gold >= 20) floatText(`+${gold} Adena`, 'float-gold'); 
-    }
-
-    // Penalidade de Nível de Drop (Level-Gap Anti-Monopólio)
-    const mLevel = monster.lvl || monster.level || zoneLevel || 1;
-    const pLevel = state.level || 1;
-    const lvlDiff = Math.max(0, pLevel - mLevel);
-    let levelGapPenalty = 1.0;
-    if (lvlDiff > 10) {
-      levelGapPenalty = 0.15; // -85% de drop para veteranos caçando em áreas iniciais
-    } else if (lvlDiff > 5) {
-      levelGapPenalty = 0.50; // -50% de drop
-    }
-
-    const effectiveLootRate = stats.loot * levelGapPenalty * dropRate;
-    const rawDrop = D().rollDrop(zoneTier, effectiveLootRate, !!(monster.boss || monster.elite));
-    const drops = Array.isArray(rawDrop) ? rawDrop : (rawDrop && rawDrop.itemId ? [ { id: rawDrop.itemId, itemId: rawDrop.itemId, rarity: rawDrop.rarity, isEquipment: true, amount: 1 } ] : []);
-    for (const drop of drops) {
-      const dropId = drop.id || drop.itemId;
-      const def = D().ALL_ITEMS[dropId];
-      if (dropId && def) {
-        const isEquip = drop.isEquipment || !['material', 'potion', 'consumable', 'scroll', 'gem'].includes(def.slot);
-        if (isEquip) {
-          addToInventory(dropId, 1, drop.rarity || 'common');
-          const rName = D().RARITY[drop.rarity || 'common']?.name || (drop.rarity || 'common');
-          log(`✦ Obteve **${def.name}** [${rName}]!`, 'rarity-' + (drop.rarity || 'common'), 'loot');
-          floatText(`✦ ${rName}!`, 'float-' + (drop.rarity || 'common'));
-        } else {
-          addToInventory(dropId, drop.amount || 1);
-          log(`📦 Obteve **${drop.amount || 1}x ${def.name}**`, 'loot', 'loot');
-        }
-      }
-    }
-
-    // Drop de Livros de Magia (Spellbooks 1★, 2★, 3★, 4★)
-    if (mLevel >= 38) {
-      const bookChance = (monster.isRaid ? 0.30 : (monster.boss ? 0.08 : 0.005)) * levelGapPenalty * bookRate;
-      if (Math.random() < bookChance) {
-        let droppedBookId = 'book_1star';
-        // Tomo 4★ é EXCLUSIVO de Epic Bosses, Raids e Chefes de Dungeon Lv 70+
-        if (monster.isRaid || (monster.boss && mLevel >= 70)) droppedBookId = 'book_4star';
-        else if (mLevel >= 56) droppedBookId = 'book_3star';
-        else if (mLevel >= 48) droppedBookId = 'book_2star';
-
-        const bookDef = D().ALL_ITEMS[droppedBookId];
-        if (bookDef) {
-          addToInventory(droppedBookId, 1);
-          log(`📖 DROP DE GRIMÓRIO! Obteve **${bookDef.name}** de ${monster.name}!`, 'rarity-legendary', 'loot');
-          floatText(`📖 ${bookDef.name}!`, 'float-jackpot');
-        }
-      }
-    }
-
-    // Drop de Carta de Monstro Colecionável (0.05% comum, 0.15% elite, 0.8% boss)
-    const monKey = monster.id || monster.monsterId || monster.originalId;
-    const cardId = `card_${monKey}`;
-    const cardDef = MONSTER_CARDS[cardId] || MONSTER_CARDS[`card_${String(monKey).toLowerCase()}`];
-    if (cardDef) {
-      const dropChance = (cardDef.dropChance || (monster.isRaid ? 0.015 : (monster.boss ? 0.008 : 0.0005))) * levelGapPenalty;
-      if (Math.random() < dropChance) {
-        addToInventory(cardId, 1);
-        log(`🃏 DROP RARO! Obteve **${cardDef.name}** [${(cardDef.rarity || 'rare').toUpperCase()}]!`, 'rarity-' + (cardDef.rarity || 'rare'), 'loot');
-        floatText(`🃏 CARTA DE MONSTRO!`, 'float-jackpot');
-      }
-    }
-
-    triggerQuestEvent('kill', 1);
-    if (monster.boss || monster.elite) triggerQuestEvent('boss', 1);
-    triggerQuestEvent('gold', gold);
-    NoblesseService.recordKill(state, monster, { log });
-
-    if (monster.isTower) {
-      onTowerFloorVictory(monster.towerFloor);
-    }
-
-    if (monster.isRaid) {
-      serviceHandleRaidVictory(state, state.activeRaidId || state.target, {
-        log,
-        onUpdate: () => { updateAllUI(); save(); }
-      });
-      state.isRaidActive = false;
-      state.activeRaidId = null;
-      state.zone = state.lastHuntingZone || state.lastSafeZone || (state.race ? (RACES[state.race]?.startZone || 'talkingIsland') : 'talkingIsland');
-      state.target = null;
-      state.activeMonster = null;
-    }
-
-    checkLevelUp();
-    if (state.isCombatActive !== false) {
-      if (monster.isTower && state.lastHuntingZone) {
-        state.zone = state.lastHuntingZone;
-      }
-      pickRandomMonster();
-    }
-  } else { 
     if (monsterAttackTimeout) clearTimeout(monsterAttackTimeout);
     if (state.isCombatActive !== false) {
       monsterAttackTimeout = setTimeout(() => monsterAttack(monster), 500); 
@@ -5064,6 +5118,25 @@ function monsterAttack(monster) {
   const realNow = Date.now();
   if (monster._stunnedUntil && monster._stunnedUntil > now) return; 
   if (monster.breakUntil && monster.breakUntil > realNow) return; // Chefe paralisado durante o BREAK!
+  
+  // Se o Chefe estiver canalizando Golpe Fatal, não desfere ataques normais!
+  if (monster.isChannelingFatal) {
+    if (realNow >= monster.fatalCastUntil) {
+      serviceProcessRaidBossMechanics(state, {
+        log,
+        floatText,
+        onFatalImpact: (dmg) => {
+          stageHeroHurt(dmg, true);
+          if (state.hp <= 0) {
+            state.hp = 0;
+            playerDeath(monster);
+          }
+          updateStatsUI();
+        }
+      });
+    }
+    return;
+  }
   
   const stats = getStats();
   stageMonsterLunge();

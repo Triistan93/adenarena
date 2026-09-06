@@ -447,6 +447,9 @@ function buildEchoAdapter() {
         requiredBook = null;
       }
 
+      const isOverhitEligible = (type === 'active' && !sNameLower.includes('heal') && !sNameLower.includes('bandage')) &&
+        (is4Star || /blow|strike|crush|slam|shot|blast|prominence|hurricane|flare|spike|hydro|drain|judgment|sonic|force|fatal|mortal|backstab|deadly|smash|burst|hammer|break|shock|double|triple|penetration|puncture|sweep|cleave/i.test(sNameLower));
+
       SKILL_DEFS_ECHO[skillId] = {
         id:                   skillId,
         name:                 rawName,
@@ -467,7 +470,8 @@ function buildEchoAdapter() {
         requiredShield:       reqShield,
         requiredItemToUnlock: requiredBook,
         isUltimate:           is4Star,
-        starRank:             starRank
+        starRank:             starRank,
+        overhit:              isOverhitEligible
       };
 
       SKILL_REQS_ECHO[skillId] = {};

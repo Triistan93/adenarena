@@ -11,6 +11,7 @@
 import { RAID_BOSSES } from '../data/raids.js';
 import { MONSTERS } from '../data/monsters.js';
 import { stopCombat, startCombat } from '../engine/CombatEngine.js';
+import { StaggerEngine } from '../engine/StaggerEngine.js';
 
 const DAILY_FREE_TICKETS = 3;
 
@@ -120,8 +121,10 @@ export function startRaidBoss(state, raidId, callbacks = {}) {
     hp: bossTemplate.hp,
     _stunnedUntil: 0,
     isRaid: true,
-    _triggeredMechanics: {}
+    _triggeredMechanics: {},
+    _fatalTriggered: {}
   };
+  StaggerEngine.initMonsterStagger(state.activeMonster);
 
   if (callbacks.el) {
     const sz = callbacks.el('stage-zone');
@@ -145,36 +148,83 @@ export function startRaidBoss(state, raidId, callbacks = {}) {
 
 /**
  * Executa as mecânicas em tempo real do Chefe de Raid com base na porcentagem de vida.
+ * Inclui canalização de golpe fatal nos limiares 50% e 25% HP interrompível por Stagger Break.
  * @param {Object} state
  * @param {Object} callbacks
  */
 export function processRaidBossMechanics(state, callbacks = {}) {
   const m = state.activeMonster;
-  if (!m || !m.isRaid || !m.mechanics || !m._maxHp) return;
+  if (!m || !m.isRaid || !m._maxHp) return;
 
+  const now = Date.now();
   const hpRatio = m.hp / m._maxHp;
   m._triggeredMechanics = m._triggeredMechanics || {};
+  m._fatalTriggered = m._fatalTriggered || {};
 
-  for (let i = 0; i < m.mechanics.length; i++) {
-    const mech = m.mechanics[i];
-    if (hpRatio <= mech.triggerHp && !m._triggeredMechanics[i]) {
-      m._triggeredMechanics[i] = true;
+  // 1. Canalização de Habilidade Fatal (Epic Boss Fatal Channeling nos limiares 50% e 25% HP)
+  if (m.fatalSkill) {
+    const thresholds = m.fatalSkill.triggerHps || [0.50, 0.25];
+    for (const thresh of thresholds) {
+      if (hpRatio <= thresh && !m._fatalTriggered[thresh] && !m.isChannelingFatal && !m.isBreak) {
+        m._fatalTriggered[thresh] = true;
+        m.isChannelingFatal = true;
+        m.fatalCastStart = now;
+        m.fatalCastUntil = now + (m.fatalSkill.duration || 5000);
 
-      // Efeito de Dano em Área no Jogador
-      if (mech.damagePercent && state.hp) {
-        const dmg = Math.floor((state.maxHp || 100) * mech.damagePercent);
-        state.hp = Math.max(1, state.hp - dmg);
         if (callbacks.log) {
-          callbacks.log(`${mech.text} (Você sofreu ${dmg.toLocaleString()} de dano!)`, 'rarity-epic');
+          callbacks.log(`⚠️ **[CANALIZAÇÃO FATAL]** ${m.name} prepara **${m.fatalSkill.name}**! Quebre sua postura em 5s com Stagger Break!`, 'rarity-legendary');
+        }
+        if (callbacks.floatText) {
+          callbacks.floatText(`⚠️ CANALIZAÇÃO FATAL! (5s)`, 'sf-crit');
+        }
+        break;
+      }
+    }
+
+    // Se estiver canalizando e o tempo expirar sem ter sido interrompido
+    if (m.isChannelingFatal) {
+      if (now >= m.fatalCastUntil) {
+        m.isChannelingFatal = false;
+        const dmgPct = m.fatalSkill.damageHeroPercent || 0.60;
+        const fatalDmg = Math.floor((state.maxHp || 100) * dmgPct);
+        state.hp = Math.max(0, state.hp - fatalDmg);
+
+        if (callbacks.log) {
+          callbacks.log(`💀 **[FATAL NÃO INTERROMPIDO]** ${m.name} desferiu **${m.fatalSkill.name}** causando **${fatalDmg.toLocaleString()} de dano catastrófico** (60% Max HP)!`, 'rarity-legendary');
+        }
+        if (callbacks.floatText) {
+          callbacks.floatText(`💀 ${fatalDmg} FATAL!`, 'sf-crit');
+        }
+        if (callbacks.onFatalImpact) {
+          callbacks.onFatalImpact(fatalDmg);
         }
       }
+    }
+  }
 
-      // Efeito de Cura do Chefe
-      if (mech.healPercent) {
-        const heal = Math.floor(m._maxHp * mech.healPercent);
-        m.hp = Math.min(m._maxHp, m.hp + heal);
-        if (callbacks.log && !mech.damagePercent) {
-          callbacks.log(`${mech.text} (+${heal.toLocaleString()} HP)`, 'rarity-epic');
+  // 2. Mecânicas padrão do Chefe
+  if (m.mechanics) {
+    for (let i = 0; i < m.mechanics.length; i++) {
+      const mech = m.mechanics[i];
+      if (hpRatio <= mech.triggerHp && !m._triggeredMechanics[i]) {
+        m._triggeredMechanics[i] = true;
+
+        // Efeito de Dano em Área no Jogador
+        if (mech.damagePercent && state.hp) {
+          const dmg = Math.floor((state.maxHp || 100) * mech.damagePercent);
+          state.hp = Math.max(1, state.hp - dmg);
+          if (callbacks.log) {
+            callbacks.log(`${mech.text} (Você sofreu ${dmg.toLocaleString()} de dano!)`, 'rarity-epic');
+          }
+        }
+
+        // Efeito de Cura do Chefe
+        if (mech.healPercent) {
+          const heal = Math.floor(m._maxHp * mech.healPercent);
+          m.hp = Math.min(m._maxHp, m.hp + heal);
+          if (callbacks.log && !mech.damagePercent) {
+            callbacks.log(`${mech.text} (+${heal.toLocaleString()} HP)`, 'rarity-epic');
+          }
         }
       }
     }

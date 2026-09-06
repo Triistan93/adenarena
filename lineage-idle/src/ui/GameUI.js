@@ -1397,9 +1397,22 @@ const INJECTED_GAMEUI_CSS = `
   background-size: 200% 100%;
   animation: stagger-shimmer 1s linear infinite;
 }
+.stage-stagger-bar.stage-stagger-fatal {
+  border-color: #dc2626;
+  animation: fatal-channel-pulse 0.4s infinite alternate;
+}
+.stage-stagger-bar.stage-stagger-fatal .stage-stagger-fill {
+  background: linear-gradient(90deg, #b91c1c, #f87171, #b91c1c);
+  background-size: 200% 100%;
+  animation: stagger-shimmer 0.7s linear infinite;
+}
 @keyframes stagger-pulse {
   from { box-shadow: 0 0 4px #ef4444; }
   to { box-shadow: 0 0 12px #ef4444; }
+}
+@keyframes fatal-channel-pulse {
+  from { box-shadow: 0 0 6px #dc2626; }
+  to { box-shadow: 0 0 16px #ef4444, 0 0 24px rgba(239, 68, 68, 0.6); }
 }
 @keyframes stagger-shimmer {
   0% { background-position: 100% 0; }
@@ -2108,19 +2121,43 @@ export function renderStageMonster(state) {
       const sText = sBar.querySelector('#monster-stagger-text, .stage-stagger-text');
       const realNow = Date.now();
       const isBreak = m.breakUntil && m.breakUntil > realNow;
+      const isFatal = m.isChannelingFatal && m.fatalCastUntil && m.fatalCastUntil > realNow;
 
       if (isBreak) {
         sBar.classList.add('stage-stagger-break');
+        sBar.classList.remove('stage-stagger-fatal');
         structure.card.classList.add('stage-break-active');
+        structure.card.classList.remove('stage-fatal-active');
         const diffMs = Math.max(0, m.breakUntil - realNow);
         const timeLeft = (diffMs / 1000).toFixed(1);
-        if (sFill) sFill.style.width = '100%';
+        if (sFill) {
+          sFill.style.width = '100%';
+          sFill.style.background = '';
+        }
         if (sText) sText.textContent = `💥 VULNERÁVEL [${timeLeft}s] (2.0x DANO)`;
+      } else if (isFatal) {
+        sBar.classList.remove('stage-stagger-break');
+        sBar.classList.add('stage-stagger-fatal');
+        structure.card.classList.remove('stage-break-active');
+        structure.card.classList.add('stage-fatal-active');
+        const diffMs = Math.max(0, m.fatalCastUntil - realNow);
+        const timeLeft = (diffMs / 1000).toFixed(1);
+        const pct = Math.max(0, Math.min(100, Math.round(((m.staggerCurrent ?? m.staggerMax) / m.staggerMax) * 100)));
+        if (sFill) {
+          sFill.style.width = `${pct}%`;
+          sFill.style.background = 'linear-gradient(90deg, #ef4444, #dc2626)';
+        }
+        if (sText) sText.textContent = `⚠️ INTERROMPA: POSTURA [${pct}%] [${timeLeft}s]`;
       } else {
         sBar.classList.remove('stage-stagger-break');
+        sBar.classList.remove('stage-stagger-fatal');
         structure.card.classList.remove('stage-break-active');
+        structure.card.classList.remove('stage-fatal-active');
         const pct = Math.max(0, Math.min(100, Math.round(((m.staggerCurrent ?? m.staggerMax) / m.staggerMax) * 100)));
-        if (sFill) sFill.style.width = `${pct}%`;
+        if (sFill) {
+          sFill.style.width = `${pct}%`;
+          sFill.style.background = '';
+        }
         if (sText) sText.textContent = `POSTURA: ${pct}%`;
       }
     } else {
