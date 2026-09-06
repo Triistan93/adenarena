@@ -2508,46 +2508,150 @@
     }
   };
 
-  // 7. Vampiric Drain (Vórtice no monstro + fluxo de partículas vermelhas retornando ao herói)
+  // 7. Vampiric Drain / Life Drain (Vórtice no monstro + fluxo contínuo de energia vital carmesim sintonizada para o herói + aura de cura no herói)
   LineageVFX.prototype._drawMagicVampiricDrain = function (e) {
     var ctx = this.ctx, p = e.target, heroP = e.source, progress = clamp(e.age / e.maxAge, 0, 1), fade = 1 - progress;
-    e.state.rotation -= 0.12;
+    e.state.rotation = (e.state.rotation || 0) - 0.14;
 
     ctx.save();
     ctx.globalCompositeOperation = 'lighter';
 
-    // Vórtice no monstro
+    // ─── FASE 1: Vórtice Sombrio de Extração no Alvo (Monstro) ───
+    var targetPulse = Math.sin(progress * Math.PI * 6) * 0.15 + 0.85;
     ctx.save();
     ctx.translate(p.x, p.y);
+
+    // Halo avermelhado profundo e pulsante no peito do monstro
+    var coreGrad = ctx.createRadialGradient(0, 0, 2, 0, 0, 46 * targetPulse);
+    coreGrad.addColorStop(0, rgba('255,60,100', fade * 0.95));
+    coreGrad.addColorStop(0.35, rgba('210,25,75', fade * 0.75));
+    coreGrad.addColorStop(0.7, rgba('130,10,60', fade * 0.4));
+    coreGrad.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = coreGrad;
+    ctx.beginPath();
+    ctx.arc(0, 0, 46 * targetPulse, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Vórtice espiral de 4 lâminas girando para dentro (sugando a essência)
     ctx.rotate(e.state.rotation);
-    for (var v = 0; v < 3; v++) {
-      ctx.rotate((Math.PI * 2) / 3);
-      var vGrad = ctx.createRadialGradient(0, 0, 4, 0, 0, 42);
-      vGrad.addColorStop(0, rgba('255,100,140', fade * 0.95));
-      vGrad.addColorStop(0.5, rgba('220,30,80', fade * 0.65));
-      vGrad.addColorStop(1, 'rgba(180,0,50,0)');
+    for (var v = 0; v < 4; v++) {
+      ctx.rotate((Math.PI * 2) / 4);
+      var vGrad = ctx.createRadialGradient(0, 0, 3, 0, 0, 44);
+      vGrad.addColorStop(0, rgba('255,130,170', fade * 0.95));
+      vGrad.addColorStop(0.4, rgba('225,35,85', fade * 0.75));
+      vGrad.addColorStop(0.8, rgba('145,15,55', fade * 0.35));
+      vGrad.addColorStop(1, 'rgba(100,0,30,0)');
       ctx.fillStyle = vGrad;
       ctx.beginPath();
-      ctx.ellipse(20, 0, 26, 11, 0.4, 0, Math.PI * 2);
+      ctx.ellipse(18, 0, 24 * targetPulse, 9 * targetPulse, 0.45, 0, Math.PI * 2);
       ctx.fill();
     }
+
+    // Anel rúnico contraindo para o centro (implosão de vida)
+    var ringContract = (1 - ((e.age * 0.003) % 1)) * 34 + 6;
+    ctx.strokeStyle = rgba('255,90,130', fade * 0.75);
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(0, 0, ringContract, 0, Math.PI * 2);
+    ctx.stroke();
+
     ctx.restore();
 
-    // Gotas de sangue/vida fluindo do monstro para o herói
-    var tProgress = clamp((e.age - 100) / 450, 0, 1);
-    if (tProgress > 0 && tProgress < 1) {
-      for (var d = 0; d < 3; d++) {
-        var offset = d * 0.15;
-        var subP = clamp(tProgress - offset, 0, 1);
-        var curX = p.x + (heroP.x - p.x) * subP;
-        var curY = p.y + (heroP.y - p.y) * subP + Math.sin(subP * Math.PI) * -38;
-        ctx.fillStyle = rgba('255,80,120', fade * 0.95);
-        ctx.shadowColor = 'rgba(230,30,80,0.95)';
-        ctx.shadowBlur = 14 * this.qualityConfig.blur;
+    // ─── FASE 2: Feixes Sinuosos de Energia Vital (Monstro -> Herói) ───
+    var dx = heroP.x - p.x;
+    var dy = heroP.y - p.y;
+    var dist = Math.sqrt(dx * dx + dy * dy);
+
+    // Duas fitas entrelaçadas de luz carmesim fluindo do monstro para o herói
+    var streamAlpha = Math.sin(progress * Math.PI) * 0.9;
+    if (streamAlpha > 0.05) {
+      for (var ribbon = 0; ribbon < 2; ribbon++) {
+        var phase = (ribbon === 0 ? 0 : Math.PI) + (e.age * 0.018);
         ctx.beginPath();
-        ctx.arc(curX, curY, 5, 0, Math.PI * 2);
-        ctx.fill();
+        var steps = 24;
+        for (var s = 0; s <= steps; s++) {
+          var t = s / steps;
+          // Ondulação perpendicular ao feixe
+          var perpX = -dy / (dist || 1);
+          var perpY = dx / (dist || 1);
+          var wave = Math.sin(t * Math.PI * 4 + phase) * (18 * Math.sin(t * Math.PI));
+          var sx = p.x + dx * t + perpX * wave;
+          var sy = p.y + dy * t + perpY * wave - Math.sin(t * Math.PI) * 26; // leve arco superior
+          if (s === 0) ctx.moveTo(sx, sy);
+          else ctx.lineTo(sx, sy);
+        }
+        ctx.strokeStyle = ribbon === 0 ? rgba('255,70,120', streamAlpha * 0.85) : rgba('244,63,94', streamAlpha * 0.65);
+        ctx.lineWidth = ribbon === 0 ? 3 : 2;
+        ctx.shadowColor = 'rgba(230,20,70,0.9)';
+        ctx.shadowBlur = 12 * this.qualityConfig.blur;
+        ctx.stroke();
       }
+
+      // ─── Esferas / Gotas de Vida Drenada viajando continuamente do monstro para o herói ───
+      var numOrbs = 7;
+      for (var o = 0; o < numOrbs; o++) {
+        var orbT = ((e.age * 0.002) + (o / numOrbs)) % 1;
+        var perpX2 = -dy / (dist || 1);
+        var perpY2 = dx / (dist || 1);
+        var orbWave = Math.sin(orbT * Math.PI * 4 + (o % 2 === 0 ? 0 : Math.PI)) * (16 * Math.sin(orbT * Math.PI));
+        var ox = p.x + dx * orbT + perpX2 * orbWave;
+        var oy = p.y + dy * orbT + perpY2 * orbWave - Math.sin(orbT * Math.PI) * 26;
+
+        var orbFade = Math.sin(orbT * Math.PI) * fade;
+        var orbGrad = ctx.createRadialGradient(ox, oy, 1, ox, oy, 9);
+        orbGrad.addColorStop(0, rgba('255,255,255', orbFade));
+        orbGrad.addColorStop(0.3, rgba('255,100,140', orbFade * 0.95));
+        orbGrad.addColorStop(0.7, rgba('220,20,80', orbFade * 0.6));
+        orbGrad.addColorStop(1, 'rgba(180,0,50,0)');
+        ctx.fillStyle = orbGrad;
+        ctx.beginPath();
+        ctx.arc(ox, oy, 7, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Rastro luminoso da esfera mostrando a direção para o herói
+        var trailX = ox - (dx / (dist || 1)) * 14;
+        var trailY = oy - (dy / (dist || 1)) * 14;
+        ctx.strokeStyle = rgba('255,80,120', orbFade * 0.65);
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(trailX, trailY);
+        ctx.lineTo(ox, oy);
+        ctx.stroke();
+      }
+    }
+
+    // ─── FASE 3: Absorção e Restauração de Vida no Herói ───
+    if (progress > 0.2) {
+      var heroAbsorbProg = (progress - 0.2) / 0.8;
+      var heroPulse = Math.sin(heroAbsorbProg * Math.PI * 4) * 0.15 + 0.85;
+
+      ctx.save();
+      ctx.translate(heroP.x, heroP.y);
+
+      // Aura de vitalidade absorvida ao redor do herói (carmesim brilhante e esmeralda de cura)
+      var heroGrad = ctx.createRadialGradient(0, 0, 2, 0, 0, 44 * heroPulse);
+      heroGrad.addColorStop(0, rgba('255,120,160', fade * 0.8));
+      heroGrad.addColorStop(0.4, rgba('244,63,94', fade * 0.55));
+      heroGrad.addColorStop(0.75, rgba('52,211,153', fade * 0.4)); // brilho verde esmeralda de cura
+      heroGrad.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = heroGrad;
+      ctx.beginPath();
+      ctx.arc(0, 0, 44 * heroPulse, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Anéis de energia ascendendo pelo corpo do herói
+      for (var r = 0; r < 2; r++) {
+        var ringT = ((heroAbsorbProg * 2 + r * 0.5) % 1);
+        var ringY = -ringT * 38;
+        var ringR = (1 - ringT) * 22 + 4;
+        ctx.strokeStyle = rgba('255,140,180', (1 - ringT) * fade * 0.85);
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.ellipse(0, ringY, ringR, ringR * 0.45, 0, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      ctx.restore();
     }
 
     ctx.restore();

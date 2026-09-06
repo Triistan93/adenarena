@@ -4480,9 +4480,14 @@ function getSkillVfxData(skillId, skillDef = null) {
   const desc = String(skillDef?.desc || skillDef?.info || '').toLowerCase();
   const combined = `${id} ${name} ${desc}`;
 
+  // ─── 0. MAGOS / NECRO: VAMPIRISMO & DRENO DE VIDA (PRIORIDADE TOTAL PARA NUNCA COLIDIR COM 'rain' EM 'drain') ───
+  if (combined.includes('drain') || combined.includes('vampir') || combined.includes('sanguine') || combined.includes('lifesteal') || combined.includes('soul absorption') || combined.includes('drain health') || combined.includes('life drain')) {
+    return { id: 'magic_vampiric_drain', groundVfx: null, color: '#f43f5e', duration: 1000 };
+  }
+
   // ─── 1. ARQUEIROS / ATIRADORES (DIFERENCIAÇÃO TOTAL) ───
   // Arrow Rain e saraivadas em área (do céu ao solo)
-  if (combined.includes('arrow_rain') || combined.includes('rain') || combined.includes('shower') || combined.includes('arrow rain') || combined.includes('storm arrow rain') || combined.includes('flame arrow rain') || combined.includes('water arrow rain')) {
+  if (combined.includes('arrow_rain') || (/\brain\b/i.test(combined) && !combined.includes('drain')) || combined.includes('shower') || combined.includes('arrow rain') || combined.includes('storm arrow rain') || combined.includes('flame arrow rain') || combined.includes('water arrow rain')) {
     return { id: 'arrow_rain', groundVfx: null, color: '#ffd700', duration: 1200 };
   }
   // Seven Arrow (7 flechas estelares convergentes)
