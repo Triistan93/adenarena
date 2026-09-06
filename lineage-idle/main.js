@@ -4378,6 +4378,27 @@ function getHeroBasePoint() {
   return { x: rect.width * 0.28, y: rect.height * 0.75 };
 }
 
+const MONSTER_FEET_EFFECTS = new Set([
+  'flame_strike',
+  'magic_prominence',
+  'magic_meteor',
+  'magic_hydro_blast',
+  'magic_hurricane',
+  'magic_lightning_surge',
+  'magic_dark_mire',
+  'magic_solar_flare',
+  'magic_holy_sanctuary',
+  'warrior_earth_tremor',
+  'warrior_spear_whirlwind',
+  'warrior_sonic_storm',
+  'monster_inferno_pillar',
+  'monster_frost_freeze',
+  'celestial_strike',
+  'holy_beam',
+  'arrow_rain',
+  'dark_vortex'
+]);
+
 function getCombatTargetPoint() {
   const stage = el('stage');
   if (!stage) return { x: 0, y: 0 };
@@ -4385,10 +4406,10 @@ function getCombatTargetPoint() {
   const monster = el('stage-monster');
   if (monster) {
     const box = monster.getBoundingClientRect();
-    // Ponto alinhado exatamente nos pés / borda inferior do card do monstro
-    return { x: box.left - rect.left + box.width * 0.5, y: box.bottom - rect.top - 2 };
+    // Ponto no centro / peito do card do monstro (para ataques diretos, projéteis e slashes)
+    return { x: box.left - rect.left + box.width * 0.5, y: box.top - rect.top + box.height * 0.48 };
   }
-  return { x: rect.width * 0.72, y: rect.height * 0.78 };
+  return { x: rect.width * 0.72, y: rect.height * 0.48 };
 }
 
 function getCombatTargetBasePoint() {
@@ -4398,7 +4419,7 @@ function getCombatTargetBasePoint() {
   const monster = el('stage-monster');
   if (monster) {
     const box = monster.getBoundingClientRect();
-    // Ponto alinhado exatamente na borda inferior do card do monstro
+    // Ponto alinhado exatamente nos pés / borda inferior do card do monstro (para glifos e erupções)
     return { x: box.left - rect.left + box.width * 0.5, y: box.bottom - rect.top - 2 };
   }
   return { x: rect.width * 0.72, y: rect.height * 0.78 };
@@ -4408,8 +4429,19 @@ function playCombatVFX(type, options = {}) {
   if (!VFX || typeof VFX.play !== 'function') return null;
   const resolved = { ...options };
   const isHeroFeetEffect = ['holy_heal', 'buff_aura', 'hero_skin_aura'].includes(type);
-  if (!resolved.source) resolved.source = isHeroFeetEffect ? getHeroBasePoint() : getStagePositionRelative('hero');
-  if (!resolved.target) resolved.target = isHeroFeetEffect ? getHeroBasePoint() : getCombatTargetBasePoint();
+  const isMonsterFeetEffect = MONSTER_FEET_EFFECTS.has(type);
+  if (!resolved.source) {
+    resolved.source = isHeroFeetEffect ? getHeroBasePoint() : getStagePositionRelative('hero');
+  }
+  if (!resolved.target) {
+    if (isHeroFeetEffect) {
+      resolved.target = getHeroBasePoint();
+    } else if (isMonsterFeetEffect) {
+      resolved.target = getCombatTargetBasePoint();
+    } else {
+      resolved.target = getCombatTargetPoint();
+    }
+  }
   return VFX.play(type, resolved);
 }
 
@@ -5208,7 +5240,8 @@ function attackMonster() {
         
         if (vfxData && vfxData.id) {
           const source = getStagePositionRelative('hero');
-          const target = getCombatTargetPoint();
+          const isGroundFeet = MONSTER_FEET_EFFECTS.has(vfxData.id);
+          const target = isGroundFeet ? getCombatTargetBasePoint() : getCombatTargetPoint();
           playCombatVFX(vfxData.id, {
             source,
             target,
@@ -5216,7 +5249,7 @@ function attackMonster() {
             power: Math.max(1, skill.lvl || 1),
             duration: vfxData.duration || 800,
             arrowCount: vfxData.id === 'arrow_rain' ? 16 : undefined,
-            targetArea: vfxData.id === 'arrow_rain' ? { x: target.x - 90, y: target.y - 40, width: 180, height: 70 } : undefined
+            targetArea: vfxData.id === 'arrow_rain' ? { x: target.x - 90, y: getCombatTargetBasePoint().y - 40, width: 180, height: 70 } : undefined
           });
 
           const baseTarget = getCombatTargetBasePoint();
