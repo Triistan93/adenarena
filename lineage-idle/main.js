@@ -5174,6 +5174,7 @@ function attackMonster() {
 
         // Aplica Amplificação de Ressonância Cruzada (ex: Adaga consumindo Marca de Arco)
         const resonanceResult = WeaponResonanceService.processAttackImpact(state, monster, skillWeaponType, rawSDmg, { log, floatText });
+        let sDmg = (resonanceResult && typeof resonanceResult.finalDamage === 'number') ? resonanceResult.finalDamage : rawSDmg;
         const elemSkillRes = ElementalService.calculatePlayerElementalDamage(state, monster, sDmg);
         sDmg = elemSkillRes.finalDamage;
 
