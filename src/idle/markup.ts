@@ -14,6 +14,8 @@ export const IDLE_MARKUP = `
             <span id="zone-name">Talking Island</span>
             <span id="zone-kill-progress" style="font-size:11px; color:#f59e0b; margin-left:8px; font-weight:800; background:rgba(0,0,0,0.5); padding:2px 8px; border-radius:4px; border:1px solid rgba(245,158,11,0.4);"><span style="color:#d4af37;">⚔</span> 0/50 Caçados</span>
             <span id="season-badge" style="font-size:10px; color:#93c5fd; margin-left:6px; font-weight:bold; background:rgba(30,58,138,0.25); padding:2px 8px; border-radius:4px; border:1px solid rgba(147,197,253,0.35); font-family:'Cinzel',serif;" title="Temporada 1: O Despertar de Aden (Cap Lv 60)">✦ Temp 1: Cap Lv 60</span>
+            <span id="liveops-event-badge" style="font-size:10px; color:#fde047; margin-left:6px; font-weight:bold; background:rgba(202,138,4,0.25); padding:2px 8px; border-radius:4px; border:1px solid rgba(253,224,71,0.4); font-family:'Cinzel',serif; cursor:pointer;" onclick="window.openLiveOpsModal && window.openLiveOpsModal()" title="Clique para ver o evento Live-Ops ativo">🌟 Evento</span>
+            <span id="worldboss-top-badge" style="font-size:10px; color:#f87171; margin-left:6px; font-weight:bold; background:rgba(185,28,28,0.25); padding:2px 8px; border-radius:4px; border:1px solid rgba(239,68,68,0.4); font-family:'Cinzel',serif; cursor:pointer; display:inline-flex; align-items:center; gap:4px;" onclick="window.openWorldBossModal && window.openWorldBossModal()" title="Incursão Global de World Boss (Antharas, Valakas, Baium)">🚨 World Boss: --:--:--</span>
           </span>
           <div id="top-bar-guide-container" style="display:inline-flex;">
             <button id="top-bar-guide-btn" class="top-guide-btn" style="background:linear-gradient(180deg, rgba(70,55,25,0.7), rgba(30,22,10,0.9)); border:1px solid rgba(212, 167, 68, 0.6); color:#ffd877; border-radius:4px; padding:3px 10px; font-size:11px; font-weight:bold; font-family:'Cinzel',serif; cursor:pointer; display:inline-flex; align-items:center; gap:5px; transition:all 0.2s;" onclick="window.openCurrentTabGuide && window.openCurrentTabGuide()">📜 Guia</button>
@@ -25,6 +27,10 @@ export const IDLE_MARKUP = `
           </button>
           <button id="top-referral-btn" onclick="window.openReferralModal && window.openReferralModal()" style="background:linear-gradient(180deg, rgba(16,185,129,0.7), rgba(5,150,105,0.95)); border:1px solid #10b981; color:#ecfdf5; border-radius:4px; padding:3px 10px; font-size:11px; font-weight:bold; font-family:'Cinzel',serif; cursor:pointer; display:inline-flex; align-items:center; gap:5px; transition:all 0.2s; box-shadow:0 0 10px rgba(16,185,129,0.25);" title="Indique amigos e ganhe 50 Aden Coins + 5x Blessed Scrolls!">
             🎁 Indicar Amigos
+          </button>
+          <button id="starter-journey-btn" onclick="window.openStarterJourneyModal && window.openStarterJourneyModal()" style="background:linear-gradient(180deg, rgba(202,138,4,0.7), rgba(161,98,7,0.95)); border:1px solid #fde047; color:#fff; border-radius:4px; padding:3px 10px; font-size:11px; font-weight:bold; font-family:'Cinzel',serif; cursor:pointer; display:inline-flex; align-items:center; gap:5px; transition:all 0.2s; box-shadow:0 0 10px rgba(234,179,8,0.3); position:relative;" title="Jornada dos Pioneiros (Onboarding 7 Passos)">
+            🧭 Jornada
+            <span id="starter-journey-dot" style="display:none; width:8px; height:8px; background:#22c55e; border-radius:50%; box-shadow:0 0 8px #22c55e; position:absolute; top:-2px; right:-2px;"></span>
           </button>
           <button id="top-market-btn" onclick="window.openMarketTab ? window.openMarketTab() : (window.openPanel && window.openPanel('market'))" style="background:linear-gradient(180deg, rgba(30,40,60,0.8), rgba(15,20,30,0.95)); border:1px solid #60a5fa; color:#93c5fd; border-radius:4px; padding:3px 10px; font-size:11px; font-weight:bold; font-family:'Cinzel',serif; cursor:pointer; display:inline-flex; align-items:center; gap:6px; transition:all 0.2s; box-shadow:0 0 10px rgba(96,165,250,0.25);">
             🏛️ Mercado
@@ -57,9 +63,14 @@ export const IDLE_MARKUP = `
         </div>
 
         <!-- Identidade Resumida do Herói -->
-        <div style="background:rgba(0,0,0,0.45); border:1px solid rgba(212,167,68,0.2); border-radius:6px; padding:6px 8px; margin-bottom:6px; display:flex; flex-direction:column; gap:2px;">
+        <div id="hero-identity-card" style="background:rgba(0,0,0,0.45); border:1px solid rgba(212,167,68,0.2); border-radius:6px; padding:6px 8px; margin-bottom:6px; display:flex; flex-direction:column; gap:2px; position:relative;">
+          <div id="hero-card-aura" class="hero-card-aura" style="display:none; position:absolute; inset:-2px; border-radius:8px; pointer-events:none; border:2px solid #ffd700; box-shadow:0 0 15px rgba(255,215,0,0.8), inset 0 0 12px rgba(255,215,0,0.4); animation: heroAuraGlow 2s infinite alternate;"></div>
           <div style="display:flex; justify-content:space-between; align-items:center;">
-            <span style="font-size:10px; color:#94a3b8; font-family:'Cinzel',serif;">NÍVEL</span>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <span style="font-size:10px; color:#94a3b8; font-family:'Cinzel',serif;">NÍVEL</span>
+              <span id="hero-title-badge" style="display:none; color:#ffd700; font-size:10px; font-weight:bold; background:rgba(255,215,0,0.15); border:1px solid rgba(255,215,0,0.4); padding:1px 5px; border-radius:4px;">👑 HERÓI</span>
+              <span id="hero-custom-title-badge" style="display:none; font-size:10px; font-weight:bold; padding:1px 5px; border-radius:4px; border:1px solid currentColor;"></span>
+            </div>
             <span id="level-text" class="stat-value" style="color:#ffd700; font-weight:bold; font-size:13px;">1</span>
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; font-size:11px;">
@@ -156,6 +167,7 @@ export const IDLE_MARKUP = `
               <button id="soulshot-toggle-btn" class="combat-ctrl-btn" title="Ativar Soulshot no combate (+100% dano)"><span>⚡ SS</span> <span style="font-size:9px; color:#ffd877;">(OFF)</span></button>
               <button id="autopotion-toggle-btn" class="combat-ctrl-btn" title="Usar poções de HP automaticamente quando HP < 50%"><span>🧪 Auto-HP</span> <span style="font-size:9px; color:#ffd877;">(OFF)</span></button>
               <button id="speed-toggle-btn" class="combat-ctrl-btn" title="Velocidade do combate (1x Normal ou 2x Turbo)"><span>⏩ 1x</span></button>
+              <button id="macro-settings-btn" class="combat-ctrl-btn" onclick="window.openMacroSettingsModal && window.openMacroSettingsModal()" title="Configurações de Macro Idle: Gatilhos de HP/MP, Rotação de Skills e Auto-Recycle"><span>⚙️ Macro</span></button>
               <label class="combat-ctrl-btn combat-ctrl-vfx" style="display:inline-flex; align-items:center; gap:4px; cursor:pointer;" title="Qualidade dos efeitos visuais">
                 <span>VFX</span>
                 <select id="vfx-quality-select" title="Qualidade dos efeitos visuais">
@@ -263,6 +275,7 @@ export const IDLE_MARKUP = `
             <button class="tab-btn subtab-pill-btn" data-tab="skills">✦ Habilidades <span id="tab-badge-skills" class="tab-badge" style="display:none">!</span></button>
             <button class="tab-btn subtab-pill-btn" data-tab="astral">★ Maestria</button>
             <button class="tab-btn subtab-pill-btn" data-tab="dolls">🧸 Dolls &amp; Pets</button>
+            <button class="tab-btn subtab-pill-btn" data-tab="cosmetics">✨ Cosméticos</button>
             <button class="tab-btn subtab-pill-btn" data-tab="quests">🎯 Missões <span id="tab-badge-quests" class="tab-badge" style="display:none">!</span></button>
           </div>
 
@@ -810,10 +823,10 @@ export const IDLE_MARKUP = `
               <div style="display:flex; gap:5px; flex-wrap:wrap; margin-top:10px; width:100%; border-top:1px solid rgba(212,167,68,0.2); padding-top:10px;" id="forge-subtab-buttons">
                 <button onclick="window.setForgeSubTab('craft')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="craft" style="font-family:'Cinzel',serif; font-weight:700; font-size:11px;">⚒️ Criação Geral</button>
                 <button onclick="window.setForgeSubTab('soulcrystal')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="soulcrystal" style="font-family:'Cinzel',serif; font-weight:700; font-size:11px;">🔮 Soul Crystals (SA)</button>
+                <button onclick="window.setForgeSubTab('elemental')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="elemental" style="font-family:'Cinzel',serif; font-weight:700; font-size:11px; color:#fdba74;">🔥 Atributos Elementais</button>
                 <button onclick="window.setForgeSubTab('masterwork')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="masterwork" style="font-family:'Cinzel',serif; font-weight:700; font-size:11px;">✨ Pushkin MW</button>
                 <button onclick="window.setForgeSubTab('tattoos')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="tattoos" style="font-family:'Cinzel',serif; font-weight:700; font-size:11px;">🖊️ Tatuagens &amp; Dyes</button>
-                <button onclick="window.setForgeSubTab('elemental')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="elemental" style="font-family:'Cinzel',serif; font-weight:700; font-size:11px;">🔥 Atributos Elementais</button>
-                <button onclick="window.setForgeSubTab('belts')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="belts" style="font-family:'Cinzel',serif; font-weight:700; font-size:11px;">🎗️ Síntese de Cintos</button>
+                <button onclick="window.setForgeSubTab('synthesis')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="synthesis" style="font-family:'Cinzel',serif; font-weight:700; font-size:11px;">🔨 Síntese Imperial</button>
                 <button onclick="window.setForgeSubTab('lifestones')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="lifestones" style="font-family:'Cinzel',serif; font-weight:700; font-size:11px;">💎 Life Stones</button>
                 <button onclick="window.setForgeSubTab('randomcraft')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="randomcraft" style="font-family:'Cinzel',serif; font-weight:700; font-size:11px; color:#e9d5ff;">🎲 Random Craft</button>
               </div>
@@ -867,6 +880,9 @@ export const IDLE_MARKUP = `
 
           <!-- Global Rankings & Leaderboards Tab -->
           <div id="tab-rankings" class="tab-pane"></div>
+
+          <!-- Cosmetics Tab — Guarda-Roupa Real & Auras -->
+          <div id="tab-cosmetics" class="tab-pane"></div>
 
           <!-- Dedicated Enchantment Tab -->
           <div id="tab-enchant" class="tab-pane">
@@ -1164,6 +1180,88 @@ export const IDLE_MARKUP = `
           <button id="daily-claim-btn" class="action-btn action-btn--primary" style="font-family:'Cinzel',serif; font-size:13px; font-weight:bold; padding:8px 24px;" onclick="window.claimDailyRewardAction && window.claimDailyRewardAction()">
             ✨ Resgatar Presente do Dia
           </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Starter Journey Modal (Jornada dos Pioneiros - 7 Passos) -->
+    <div id="starter-journey-modal" class="modal">
+      <div class="modal-content" style="max-width:760px; width:95%; max-height:90vh; overflow-y:auto; background:linear-gradient(180deg, #181410 0%, #0d0a08 100%); border:2px solid rgba(212, 167, 68, 0.5); box-shadow:0 10px 40px rgba(0,0,0,0.8), 0 0 24px rgba(212,167,68,0.2); border-radius:12px; padding:20px;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px; border-bottom:1px solid rgba(212,167,68,0.25); padding-bottom:10px;">
+          <div>
+            <h2 style="margin:0; font-family:'Cinzel',serif; color:#fef08a; font-size:20px; display:flex; align-items:center; gap:8px;">
+              🧭 Jornada dos Pioneiros de Aden
+            </h2>
+            <p style="margin:4px 0 0 0; font-size:12px; color:#d1d5db;">Complete os 7 passos fundamentais do guerreiro para forjar seu destino e conquistar recompensas lendárias!</p>
+          </div>
+          <button style="background:transparent; border:none; color:#9ca3af; font-size:20px; cursor:pointer; padding:0 6px;" onclick="window.closeStarterJourneyModal && window.closeStarterJourneyModal()">✕</button>
+        </div>
+
+        <!-- Progress Overview Banner -->
+        <div id="starter-journey-overview" style="background:rgba(0,0,0,0.4); border:1px solid rgba(212,167,68,0.3); border-radius:8px; padding:12px 16px; margin-bottom:16px;">
+          <!-- Rendered dynamically -->
+        </div>
+
+        <!-- 7 Steps List -->
+        <div id="starter-journey-list" style="display:flex; flex-direction:column; gap:10px; margin-bottom:14px;">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+    </div>
+
+    <!-- LiveOps Active Event Modal -->
+    <div id="liveops-event-modal" class="modal">
+      <div class="modal-content" style="max-width:600px; width:95%; max-height:85vh; overflow-y:auto; background:linear-gradient(180deg, #16121e 0%, #0b0912 100%); border:2px solid rgba(234, 179, 8, 0.5); box-shadow:0 10px 40px rgba(0,0,0,0.8), 0 0 20px rgba(234,179,8,0.25); border-radius:12px; padding:20px;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px; border-bottom:1px solid rgba(234,179,8,0.2); padding-bottom:10px;">
+          <div>
+            <h2 id="liveops-modal-title" style="margin:0; font-family:'Cinzel',serif; color:#fde047; font-size:18px; display:flex; align-items:center; gap:8px;">
+              🌟 Evento Especial do Servidor
+            </h2>
+            <p id="liveops-modal-subtitle" style="margin:4px 0 0 0; font-size:12px; color:#cbd5e1;">Bônus e multiplicadores comemorativos ativos em Aden!</p>
+          </div>
+          <button style="background:transparent; border:none; color:#9ca3af; font-size:20px; cursor:pointer; padding:0 6px;" onclick="window.closeLiveOpsModal && window.closeLiveOpsModal()">✕</button>
+        </div>
+
+        <div id="liveops-modal-content" style="font-size:13px; line-height:1.6; color:#e2e8f0;">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+    </div>
+
+        <!-- Macro Idle & Automation Settings Modal -->
+    <div id="macro-settings-modal" class="modal">
+      <div class="modal-content" style="max-width:740px; width:95%; max-height:88vh; overflow-y:auto; background:linear-gradient(180deg, #181512 0%, #0d0a08 100%); border:2px solid rgba(212, 167, 68, 0.5); box-shadow:0 10px 40px rgba(0,0,0,0.8), 0 0 24px rgba(212,167,68,0.2); border-radius:12px; padding:20px;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px; border-bottom:1px solid rgba(212,167,68,0.25); padding-bottom:10px;">
+          <div>
+            <h2 style="margin:0; font-family:'Cinzel',serif; color:#fef08a; font-size:19px; display:flex; align-items:center; gap:8px;">
+              ⚙️ Central de Macro Idle &amp; Automação
+            </h2>
+            <p style="margin:4px 0 0 0; font-size:12px; color:#94a3b8;">Ajuste gatilhos de poções (HP/MP), defina a ordem de rotação das habilidades e configure o filtro de reciclagem AFK.</p>
+          </div>
+          <button style="background:transparent; border:none; color:#9ca3af; font-size:20px; cursor:pointer; padding:0 6px;" onclick="window.closeMacroSettingsModal && window.closeMacroSettingsModal()">✕</button>
+        </div>
+
+        <div id="macro-settings-content" style="display:flex; flex-direction:column; gap:16px;">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+    </div>
+
+        <!-- World Boss Global Incursion Modal -->
+    <div id="worldboss-modal" class="modal">
+      <div class="modal-content" style="max-width:760px; width:95%; max-height:88vh; overflow-y:auto; background:linear-gradient(180deg, #1b0e0e 0%, #0c0606 100%); border:2px solid rgba(239, 68, 68, 0.6); box-shadow:0 10px 40px rgba(0,0,0,0.85), 0 0 25px rgba(239,68,68,0.3); border-radius:12px; padding:20px;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px; border-bottom:1px solid rgba(239,68,68,0.3); padding-bottom:10px;">
+          <div>
+            <h2 id="worldboss-modal-title" style="margin:0; font-family:'Cinzel',serif; color:#fca5a5; font-size:20px; display:flex; align-items:center; gap:8px;">
+              🚨 Incursão Global de World Boss
+            </h2>
+            <p id="worldboss-modal-subtitle" style="margin:4px 0 0 0; font-size:12px; color:#cbd5e1;">Batalha monumental cooperativa contra os grandes dragões e tiranos milenares de Aden.</p>
+          </div>
+          <button style="background:transparent; border:none; color:#9ca3af; font-size:20px; cursor:pointer; padding:0 6px;" onclick="window.closeWorldBossModal && window.closeWorldBossModal()">✕</button>
+        </div>
+
+        <div id="worldboss-modal-content" style="display:flex; flex-direction:column; gap:14px;">
+          <!-- Rendered dynamically -->
         </div>
       </div>
     </div>

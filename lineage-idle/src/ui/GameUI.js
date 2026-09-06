@@ -27,7 +27,7 @@ import { NoblesseService } from '../services/NoblesseService.js';
 import { OlympiadService } from '../services/OlympiadService.js';
 import { CLAN_LEVEL_DATA, CLAN_SKILLS } from '../data/clan.js';
 import { CASTLES, CASTLE_SHOP_CATALOG } from '../data/castles.js';
-import { ClanService } from '../services/ClanService.js';
+import { ClanService, CLAN_HALL_BUFFS } from '../services/ClanService.js';
 import { ENCHANT_ROUTES, getEnchantLevelData, ENCHANT_ITEMS } from '../data/skill_enchant.js';
 import { SkillEnchantService } from '../services/SkillEnchantService.js';
 import { LIFE_STONES, ITEM_SKILLS } from '../data/augmentation.js';
@@ -43,6 +43,11 @@ import { CombatPowerService } from '../services/CombatPowerService.js';
 import { renderRankingTab, setActiveRankingTab } from './RankingUI.js';
 import { renderMarketTab, setActiveMarketTab } from './MarketUI.js';
 import { CommunityCapService } from '../services/CommunityCapService.js';
+import { AURAS_CATALOG, ITEM_FRAMES_CATALOG, TITLES_CATALOG, CosmeticService } from '../services/CosmeticService.js';
+import { AchievementService, ACHIEVEMENTS } from '../services/AchievementService.js';
+import { SynthesisService, SYNTHESIS_CONFIG } from '../services/SynthesisService.js';
+import { ElementalService, ELEMENT_DEFINITIONS, ELEMENTAL_GRADE_GATING, SOUL_CRYSTAL_GRADE_GATING, getElementalGating, getItemGrade as getElementalItemGrade } from '../services/ElementalService.js';
+import { MonsterAIEngine, ARCHETYPE_INFO, HUNTING_DIFFICULTIES } from '../engine/MonsterAIEngine.js';
 import { heroSVG, monsterSVG, MON_IMG } from '../../art.js';
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -1801,6 +1806,10 @@ export function updateEquipmentUI(state, callbacks = {}) {
       if (enchantLevel >= 16) slotClasses += ' enchant-halo-16';
       else if (enchantLevel >= 10) slotClasses += ' enchant-halo-10';
       else if (enchantLevel >= 4) slotClasses += ' enchant-halo-4';
+      if (state.cosmetics?.activeFrame && state.cosmetics.activeFrame !== 'frame_default') {
+        const frameClass = ITEM_FRAMES_CATALOG[state.cosmetics.activeFrame]?.cssClass || state.cosmetics.activeFrame;
+        slotClasses += ` ${frameClass}`;
+      }
 
       slotEl.className = slotClasses;
       slotEl.dataset.uid = uid;
@@ -2100,7 +2109,11 @@ export function renderStageMonster(state) {
 
   if (structure.level) {
     const mLvl = m.level || m.lvl || (ZONES[state?.zone]?.level || 1);
-    structure.level.textContent = `Level ${mLvl}`;
+    const archKey = m.archetype || MonsterAIEngine.getMonsterArchetype(m);
+    const arch = ARCHETYPE_INFO[archKey] || ARCHETYPE_INFO.berserker;
+    const diff = MonsterAIEngine.getDifficulty(state);
+    const diffText = (diff && diff.id !== 'normal') ? ` · <span style="color:${diff.color}; font-weight:700;">${diff.icon} ${diff.name}</span>` : '';
+    structure.level.innerHTML = `Lv.${mLvl} · <span style="color:${arch.color}; font-weight:bold;">${arch.icon} ${arch.label}</span>${diffText}`;
   }
 
   const curHp = Math.round(m.hp !== undefined ? m.hp : (m._maxHp || m.maxHp || 100));
@@ -2454,6 +2467,42 @@ export function renderZoneMap(state, callbacks = {}) {
   capWidget.className = 'community-cap-banner-wrap';
   CommunityCapService.renderWidget(capWidget);
   container.appendChild(capWidget);
+
+  // Seletor de Dificuldade de Caça Progressiva (NÍVEL 15.4 / 15.5)
+  const currentDiff = MonsterAIEngine.getDifficulty(state);
+  const diffBar = document.createElement('div');
+  diffBar.className = 'hunting-difficulty-banner-wrap';
+  diffBar.style.cssText = 'margin: 10px 0 14px 0; padding: 10px 14px; background: rgba(0,0,0,0.45); border: 1px solid rgba(212,167,68,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;';
+  
+  const diffButtonsHtml = Object.values(HUNTING_DIFFICULTIES).map(d => {
+    const isSelected = currentDiff.id === d.id;
+    const isLocked = (state.level || 1) < d.minLvl;
+    const activeBorder = isSelected ? `2px solid ${d.color}` : (isLocked ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(255,255,255,0.25)');
+    const activeBg = isSelected ? `linear-gradient(180deg, rgba(212,167,68,0.25), rgba(30,20,10,0.7))` : 'rgba(0,0,0,0.3)';
+    return `
+      <button class="diff-choice-btn ${isSelected ? 'active' : ''}"
+              data-diff="${d.id}"
+              ${isLocked ? 'disabled' : ''}
+              onclick="window.setHuntingDifficulty && window.setHuntingDifficulty('${d.id}')"
+              style="background:${activeBg}; border:${activeBorder}; color:${isLocked ? '#64748b' : (isSelected ? '#fff' : d.color)}; padding: 5px 12px; border-radius: 6px; font-size: 11px; font-family: 'Cinzel', serif; font-weight: bold; cursor: ${isLocked ? 'not-allowed' : 'pointer'}; display: inline-flex; align-items: center; gap: 5px; box-shadow: ${isSelected ? `0 0 10px ${d.color}44` : 'none'}; transition: all 0.2s;"
+              title="${isLocked ? `Requer Nível ${d.minLvl}+` : d.desc}">
+        <span>${d.icon}</span>
+        <span>${d.name}</span>
+        <span style="font-size: 10px; opacity: 0.85;">${isLocked ? `🔒 (Lv.${d.minLvl})` : `(${d.xpMult}x)`}</span>
+      </button>
+    `;
+  }).join('');
+
+  diffBar.innerHTML = `
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <span style="font-family: 'Cinzel', serif; font-size: 12px; font-weight: 800; color: #ffd877; letter-spacing: 0.05em;">⚡ Dificuldade de Caça:</span>
+      <span style="font-size: 11px; color: ${currentDiff.color}; font-weight: bold;">${currentDiff.icon} ${currentDiff.name} (${currentDiff.xpMult}x XP/Gold, ${currentDiff.dropMult}x Drops)</span>
+    </div>
+    <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+      ${diffButtonsHtml}
+    </div>
+  `;
+  container.appendChild(diffBar);
 
   const sagasData = SAGAS || [
     { name: 'Interlude', unlocksAt: 1, zones: ['talking_island', 'elven_village', 'dark_elven_village', 'gludin', 'gludio'] }
@@ -3884,8 +3933,8 @@ export function updateCraftUI(state, callbacks = {}) {
     renderForgeElemental(container, state);
     return;
   }
-  if (subTab === 'belts') {
-    renderForgeBelts(container, state);
+  if (subTab === 'synthesis' || subTab === 'belts') {
+    renderForgeSynthesis(container, state);
     return;
   }
   if (subTab === 'lifestones') {
@@ -4899,15 +4948,58 @@ export function renderExpeditionsUI(state) {
 ═══════════════════════════════════════════════════════════════════════════ */
 
 export function renderForgeSoulCrystals(container, state) {
-  const wpnUid = state.equipment?.weapon;
-  const wpnItem = wpnUid ? (state.inventory || []).find(i => i.uid === wpnUid) : null;
-  const wpnDef = wpnItem ? getItemDef(wpnItem.itemId) : null;
+  const inv = state.inventory || [];
+  
+  // Coleta armas disponíveis (Primária, Secundária/Arsenal e mochila)
+  const candidateWeapons = [];
+  const w1Uid = state.equipment?.weapon;
+  const w2Uid = state.equipment?.weapon2;
+
+  if (w1Uid) {
+    const it = inv.find(i => i.uid === w1Uid);
+    if (it) candidateWeapons.push({ ...it, equipSlotLabel: '⚔️ Arma Primária (Slot 1)' });
+  }
+  if (w2Uid && w2Uid !== w1Uid) {
+    const it = inv.find(i => i.uid === w2Uid);
+    if (it) candidateWeapons.push({ ...it, equipSlotLabel: '🗡️ Arma Secundária (Slot 2)' });
+  }
+  inv.forEach(i => {
+    const s = getItemDef(i.itemId)?.slot || i.slot;
+    if ((s === 'weapon' || s === 'weapon2') && i.uid !== w1Uid && i.uid !== w2Uid) {
+      candidateWeapons.push({ ...i, equipSlotLabel: 'Mochila' });
+    }
+  });
+
+  if (!window._selectedSAWeaponUid || !candidateWeapons.some(w => w.uid === window._selectedSAWeaponUid)) {
+    window._selectedSAWeaponUid = candidateWeapons[0]?.uid || null;
+  }
+
+  const selectedWpn = candidateWeapons.find(w => w.uid === window._selectedSAWeaponUid) || candidateWeapons[0];
+  const wpnDef = selectedWpn ? (getItemDef(selectedWpn.itemId) || selectedWpn) : null;
+  const grade = selectedWpn ? getElementalItemGrade(selectedWpn) : 'none';
+  const gating = SOUL_CRYSTAL_GRADE_GATING[grade] || SOUL_CRYSTAL_GRADE_GATING.d;
+  const playerLvl = Number(state.level || 1);
+  const isLvlReady = playerLvl >= gating.minLevel;
 
   // Busca cristal no inventário
-  const crystal = (state.inventory || []).find(i => (i.itemId?.startsWith('soul_crystal_') || i.isSoulCrystal) && !i.equipped);
+  const crystal = inv.find(i => (i.itemId?.startsWith('soul_crystal_') || i.isSoulCrystal) && !i.equipped);
   const crystalStage = crystal ? (crystal.stage || crystal.crystalLevel || 1) : 0;
   const absorbedSouls = crystal ? (crystal.absorbedSouls || 0) : 0;
   const reqSouls = crystalStage < 10 ? crystalStage * 10 : crystalStage * 20;
+
+  // Renderiza seletor de armas
+  const weaponSelectorTabs = candidateWeapons.map(w => {
+    const isSel = (w.uid === window._selectedSAWeaponUid);
+    const def = getItemDef(w.itemId) || w;
+    const saLabel = w.soulCrystal ? ` [SA: ${w.soulCrystal.name}]` : '';
+    return `
+      <button onclick="window._selectedSAWeaponUid = '${w.uid}'; renderForgeSoulCrystals(document.getElementById('craft-recipes-container') || document.getElementById('craft-list'), window.getGameState ? window.getGameState() : null);"
+        class="inv-batch-btn"
+        style="padding:5px 10px; font-size:11px; font-family:'Cinzel',serif; font-weight:700; border-radius:4px; ${isSel ? 'background:linear-gradient(180deg,#8b5cf6,#6d28d9); color:#fff; border-color:#c4b5fd;' : 'background:rgba(255,255,255,0.05); color:#c4b5fd; border-color:rgba(139,92,246,0.3);'}">
+        ${w.equipSlotLabel}: ${def.name || def.itemId}${saLabel}
+      </button>
+    `;
+  }).join('');
 
   container.innerHTML = `
     <div class="l2-workshop-panel">
@@ -4915,9 +5007,10 @@ export function renderForgeSoulCrystals(container, state) {
       <div class="l2-workshop-altar">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
           <div>
-            <h3 class="l2-workshop-title">🔮 Câmara de Ressonância de Soul Crystals</h3>
+            <h3 class="l2-workshop-title">🔮 Câmara de Ressonância de Soul Crystals (SA)</h3>
             <p class="l2-workshop-subtitle">
-              Mantenha o cristal em sua bolsa durante as caçadas para absorver almas de monstros e evoluir do Estágio 1 até o Estágio 15.
+              Mantenha o cristal na bolsa durante as caçadas para absorver almas e evoluir do Estágio 1 ao 15.
+              Permite imbuir Habilidade Especial (SA) em Armas Primárias e Secundárias (Dual Arsenal).
             </p>
           </div>
           <div style="text-align:right;">
@@ -4955,42 +5048,72 @@ export function renderForgeSoulCrystals(container, state) {
         ` : ''}
       </div>
 
+      <!-- Seletor de Arma Alvo -->
+      <div style="margin:14px 0 10px 0;">
+        <div style="font-size:11px; color:#c4b5fd; font-family:'Cinzel',serif; font-weight:700; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px;">
+          🎯 Selecione a Arma para Engaste (Primária ou Secundária):
+        </div>
+        <div style="display:flex; gap:6px; flex-wrap:wrap;">
+          ${weaponSelectorTabs || '<span style="font-size:11px; color:#64748b;">Nenhuma arma disponível na mochila ou equipada.</span>'}
+        </div>
+      </div>
+
       <!-- Bancada de Engaste de Habilidade Especial (SA) -->
       <div class="l2-workshop-altar">
         <h4 class="l2-workshop-title">🗡️ Bigorna de Engaste de Habilidade Especial (SA)</h4>
         
-        <div style="display:flex; align-items:center; gap:12px; background:rgba(8,11,16,0.85); border:1px solid rgba(212,167,68,0.2); border-radius:6px; padding:10px 14px; margin-bottom:12px;">
+        <div style="display:flex; align-items:center; gap:12px; background:rgba(8,11,16,0.85); border:1px solid rgba(212,167,68,0.2); border-radius:6px; padding:10px 14px; margin-bottom:12px; flex-wrap:wrap;">
           <div class="l2-anvil-slot">
             ${wpnDef ? getItemIcon(wpnDef) : '⚔️'}
           </div>
-          <div style="flex:1;">
-            <div style="font-size:13px; font-weight:700; color:#ffd877; font-family:'Cinzel',serif;">${wpnDef ? wpnDef.name : 'Nenhuma Arma Equipada'}</div>
-            <div style="font-size:11px; color:#94a3b8; margin-top:2px;">
-              ${wpnItem?.soulCrystal ? `<span style="color:#34d399; font-weight:bold;">[SA Ativo: ${wpnItem.soulCrystal.name} (Lv.${wpnItem.soulCrystal.level || 1})]</span>` : 'Nenhuma Habilidade Especial engastada nesta arma.'}
+          <div style="flex:1; min-width:200px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-size:13px; font-weight:700; color:#ffd877; font-family:'Cinzel',serif;">${wpnDef ? (selectedWpn.name || wpnDef.name) : 'Nenhuma Arma Selecionada'}</span>
+              <span class="l2-stat-pill" style="font-size:10px; color:#fde047;">${gating.label}</span>
+              <span style="font-size:10px; color:#94a3b8;">${selectedWpn?.equipSlotLabel || ''}</span>
+            </div>
+            <div style="font-size:11px; color:#94a3b8; margin-top:3px;">
+              ${selectedWpn?.soulCrystal
+                ? `<span style="color:#34d399; font-weight:bold;">[SA Ativo: ${selectedWpn.soulCrystal.name} (Lv.${selectedWpn.soulCrystal.level || 1})]</span> <span style="color:#a7f3d0;">${selectedWpn.soulCrystal.desc}</span>`
+                : 'Nenhuma Habilidade Especial engastada nesta arma.'}
+            </div>
+            <div style="font-size:10px; color:#cbd5e1; margin-top:4px;">
+              Requisito de Nível: <strong style="color:${isLvlReady ? '#34d399' : '#f87171'};">Lv. ${gating.minLevel}+</strong> | Taxa de Engaste: <strong style="color:#fde047;">${gating.adenaCost.toLocaleString()} Adena</strong>
             </div>
           </div>
+          ${selectedWpn?.soulCrystal ? `
+            <button onclick="window.removeSAAction('${selectedWpn.uid}')" class="inv-batch-btn" style="padding:6px 10px; font-size:10px; color:#fca5a5; border-color:#ef4444; font-weight:700;">
+              🧹 Extrair SA (20.000 Adena)
+            </button>
+          ` : ''}
         </div>
+
+        ${!isLvlReady ? `
+          <div style="background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.4); border-radius:6px; padding:8px 12px; margin-bottom:12px; font-size:11px; color:#fca5a5;">
+            🔒 Nível Insuficiente: Seu personagem é Nível ${playerLvl}. Itens de ${gating.label} requerem Nível ${gating.minLevel} para receber Special Ability (SA).
+          </div>
+        ` : ''}
 
         <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:10px;">
           <div style="background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.25); border-radius:6px; padding:10px;">
             <strong style="color:#fca5a5; font-size:12px; font-family:'Cinzel',serif;">🔴 Runa Rubra (Focus / Might)</strong>
             <div style="font-size:10px; color:#94a3b8; margin:3px 0 8px 0;">Crítico e Ataque Físico.</div>
-            <button onclick="window.applySAAction('red', 'focus')" class="inv-batch-btn" style="width:100%; padding:6px; font-size:11px; margin-bottom:4px; font-weight:700;">Engastar Focus (+Crit)</button>
-            <button onclick="window.applySAAction('red', 'might')" class="inv-batch-btn" style="width:100%; padding:6px; font-size:11px; font-weight:700;">Engastar Might (+P.Atk)</button>
+            <button ${!isLvlReady || !selectedWpn ? 'disabled' : ''} onclick="window.applySAAction('red', 'focus', '${selectedWpn?.uid}')" class="inv-batch-btn" style="width:100%; padding:6px; font-size:11px; margin-bottom:4px; font-weight:700; ${!isLvlReady ? 'opacity:0.4; cursor:not-allowed;' : ''}">Engastar Focus (+Crit)</button>
+            <button ${!isLvlReady || !selectedWpn ? 'disabled' : ''} onclick="window.applySAAction('red', 'might', '${selectedWpn?.uid}')" class="inv-batch-btn" style="width:100%; padding:6px; font-size:11px; font-weight:700; ${!isLvlReady ? 'opacity:0.4; cursor:not-allowed;' : ''}">Engastar Might (+P.Atk)</button>
           </div>
 
           <div style="background:rgba(34,197,94,0.08); border:1px solid rgba(34,197,94,0.25); border-radius:6px; padding:10px;">
             <strong style="color:#86efac; font-size:12px; font-family:'Cinzel',serif;">🟢 Runa Esmeralda (Acumen / Health)</strong>
             <div style="font-size:10px; color:#94a3b8; margin:3px 0 8px 0;">Velocidade de Conjuração e Vida.</div>
-            <button onclick="window.applySAAction('green', 'acumen')" class="inv-batch-btn" style="width:100%; padding:6px; font-size:11px; margin-bottom:4px; font-weight:700;">Engastar Acumen (+CastSpd)</button>
-            <button onclick="window.applySAAction('green', 'health')" class="inv-batch-btn" style="width:100%; padding:6px; font-size:11px; font-weight:700;">Engastar Health (+Max HP)</button>
+            <button ${!isLvlReady || !selectedWpn ? 'disabled' : ''} onclick="window.applySAAction('green', 'acumen', '${selectedWpn?.uid}')" class="inv-batch-btn" style="width:100%; padding:6px; font-size:11px; margin-bottom:4px; font-weight:700; ${!isLvlReady ? 'opacity:0.4; cursor:not-allowed;' : ''}">Engastar Acumen (+CastSpd)</button>
+            <button ${!isLvlReady || !selectedWpn ? 'disabled' : ''} onclick="window.applySAAction('green', 'health', '${selectedWpn?.uid}')" class="inv-batch-btn" style="width:100%; padding:6px; font-size:11px; font-weight:700; ${!isLvlReady ? 'opacity:0.4; cursor:not-allowed;' : ''}">Engastar Health (+Max HP)</button>
           </div>
 
           <div style="background:rgba(56,189,248,0.08); border:1px solid rgba(56,189,248,0.25); border-radius:6px; padding:10px;">
             <strong style="color:#7dd3fc; font-size:12px; font-family:'Cinzel',serif;">🔵 Runa Safira (Empower / Guidance)</strong>
             <div style="font-size:10px; color:#94a3b8; margin:3px 0 8px 0;">Poder Mágico e Precisão.</div>
-            <button onclick="window.applySAAction('blue', 'empower')" class="inv-batch-btn" style="width:100%; padding:6px; font-size:11px; margin-bottom:4px; font-weight:700;">Engastar Empower (+M.Atk)</button>
-            <button onclick="window.applySAAction('blue', 'guidance')" class="inv-batch-btn" style="width:100%; padding:6px; font-size:11px; font-weight:700;">Engastar Guidance (+Precisão)</button>
+            <button ${!isLvlReady || !selectedWpn ? 'disabled' : ''} onclick="window.applySAAction('blue', 'empower', '${selectedWpn?.uid}')" class="inv-batch-btn" style="width:100%; padding:6px; font-size:11px; margin-bottom:4px; font-weight:700; ${!isLvlReady ? 'opacity:0.4; cursor:not-allowed;' : ''}">Engastar Empower (+M.Atk)</button>
+            <button ${!isLvlReady || !selectedWpn ? 'disabled' : ''} onclick="window.applySAAction('blue', 'guidance', '${selectedWpn?.uid}')" class="inv-batch-btn" style="width:100%; padding:6px; font-size:11px; font-weight:700; ${!isLvlReady ? 'opacity:0.4; cursor:not-allowed;' : ''}">Engastar Guidance (+Precisão)</button>
           </div>
         </div>
       </div>
@@ -5214,113 +5337,401 @@ export function renderForgeTattoos(container, state) {
 
 export function renderForgeElemental(container, state) {
   const inv = state.inventory || [];
+  window._elementalForgeCategory = window._elementalForgeCategory || 'weapons';
+
+  const isWeaponsTab = window._elementalForgeCategory === 'weapons';
   const equips = inv.filter(i => {
     const s = getItemDef(i.itemId)?.slot || i.slot;
-    return ['weapon', 'armor', 'chest', 'legs', 'head', 'helmet', 'gloves', 'boots', 'shield'].includes(s);
+    if (isWeaponsTab) return s === 'weapon' || s === 'weapon2';
+    return ['armor', 'chest', 'legs', 'head', 'helmet', 'gloves', 'boots', 'shield'].includes(s);
   });
+
+  const playerLvl = Number(state.level || 1);
 
   let equipsHtml = equips.map(item => {
     const elem = item.elementalAttribute || { element: 'none', val: 0 };
-    const s = getItemDef(item.itemId)?.slot || item.slot;
-    const isWpn = s === 'weapon';
-    const cap = isWpn ? 300 : 120;
-    const equippedBadge = item.equipped ? '<span style="color:#ffd877; font-size:10px; margin-left:6px; font-weight:bold;">[Equipado]</span>' : '';
     const def = getItemDef(item.itemId) || item;
+    const gating = getElementalGating(item);
+    const isWpn = gating.isWeapon;
+    const cap = gating.maxCap;
+    const isLvlReady = playerLvl >= gating.minLevel;
+    const isAtCap = elem.val >= cap && cap > 0;
+    const isOverCap = elem.val > cap && cap > 0; // Regra 17.4
+    const elemColor = ELEMENT_DEFINITIONS[elem.element]?.color || '#38bdf8';
+    const elemName = ELEMENT_DEFINITIONS[elem.element]?.name || 'Nenhum';
+    const elemIcon = ELEMENT_DEFINITIONS[elem.element]?.icon || '⚪';
+
+    let equippedBadge = '';
+    if (state.equipment?.weapon === item.uid) {
+      equippedBadge = '<span style="color:#ffd877; font-size:10px; margin-left:6px; font-weight:bold; background:rgba(212,167,68,0.2); padding:2px 6px; border-radius:4px;">[⚔️ Slot 1]</span>';
+    } else if (state.equipment?.weapon2 === item.uid) {
+      equippedBadge = '<span style="color:#c084fc; font-size:10px; margin-left:6px; font-weight:bold; background:rgba(192,132,252,0.2); padding:2px 6px; border-radius:4px;">[🗡️ Slot 2]</span>';
+    } else if (item.equipped) {
+      equippedBadge = '<span style="color:#38bdf8; font-size:10px; margin-left:6px; font-weight:bold; background:rgba(56,189,248,0.2); padding:2px 6px; border-radius:4px;">[🛡️ Equipado]</span>';
+    }
+
+    const pct = (cap > 0) ? Math.min(100, Math.floor((elem.val / cap) * 100)) : 0;
+    const stepLabel = isWpn ? '+20' : '+6';
 
     return `
-      <div style="background:rgba(18,24,34,0.9); border:1px solid rgba(212,167,68,0.25); border-radius:6px; padding:10px 12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-        <div style="display:flex; align-items:center; gap:10px;">
-          <div class="l2-blueprint-socket" style="width:38px; height:38px; min-width:38px;">${getItemIcon(def)}</div>
-          <div>
-            <strong style="color:#ffd877; font-size:13px; font-family:'Cinzel',serif;">${item.name || item.itemId}</strong>${equippedBadge}
-            <div style="font-size:10px; color:#94a3b8; margin-top:2px;">
-              Atributo Atual: <strong style="color:#38bdf8;">${elem.element.toUpperCase()} +${elem.val}</strong> (Teto: +${cap})
+      <div style="background:rgba(18,24,34,0.9); border:1px solid rgba(212,167,68,0.25); border-radius:6px; padding:12px; margin-bottom:10px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:8px;">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <div class="l2-blueprint-socket" style="width:42px; height:42px; min-width:42px;">${getItemIcon(def)}</div>
+            <div>
+              <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+                <strong style="color:#ffd877; font-size:13px; font-family:'Cinzel',serif;">${item.name || def.name}</strong>
+                <span class="l2-stat-pill" style="font-size:10px; color:#fde047;">${gating.label}</span>
+                ${equippedBadge}
+              </div>
+              <div style="font-size:11px; color:#94a3b8; margin-top:2px;">
+                Atributo: <strong style="color:${elemColor};">${elemIcon} ${elemName.toUpperCase()} +${elem.val}</strong> / <span style="color:#e2e8f0;">+${cap}</span>
+                ${isOverCap ? '<span style="color:#f59e0b; font-size:10px; margin-left:4px; font-weight:bold;">(⚠️ Teto Excedido Preservado)</span>' : ''}
+              </div>
             </div>
           </div>
+          <div style="text-align:right;">
+            <div style="font-size:10px; color:#94a3b8;">Requisito: <strong style="color:${isLvlReady ? '#34d399' : '#f87171'};">Lv. ${gating.minLevel}+</strong></div>
+            <div style="font-size:10px; color:#cbd5e1;">Taxa: <strong style="color:#fde047;">${gating.stoneCost.toLocaleString()} Adena</strong></div>
+          </div>
         </div>
-        <div style="display:flex; gap:4px; flex-wrap:wrap;">
-          <button onclick="window.applyElementalAction('${item.uid}', 'fire')" class="inv-batch-btn" style="padding:4px 8px; font-size:10px; color:#fca5a5; border-color:#ef4444;">🔥 Fogo (+20)</button>
-          <button onclick="window.applyElementalAction('${item.uid}', 'water')" class="inv-batch-btn" style="padding:4px 8px; font-size:10px; color:#93c5fd; border-color:#3b82f6;">💧 Água (+20)</button>
-          <button onclick="window.applyElementalAction('${item.uid}', 'wind')" class="inv-batch-btn" style="padding:4px 8px; font-size:10px; color:#86efac; border-color:#22c55e;">🌪️ Vento (+20)</button>
-          <button onclick="window.applyElementalAction('${item.uid}', 'earth')" class="inv-batch-btn" style="padding:4px 8px; font-size:10px; color:#fde68a; border-color:#d97706;">🌍 Terra (+20)</button>
-          <button onclick="window.applyElementalAction('${item.uid}', 'holy')" class="inv-batch-btn" style="padding:4px 8px; font-size:10px; color:#fef08a; border-color:#eab308;">✨ Sagrado (+20)</button>
-          <button onclick="window.applyElementalAction('${item.uid}', 'dark')" class="inv-batch-btn" style="padding:4px 8px; font-size:10px; color:#d8b4fe; border-color:#a855f7;">🌑 Trevas (+20)</button>
+
+        <!-- Barra de Progresso Elemental em Relação ao Teto -->
+        <div style="width:100%; height:6px; background:rgba(0,0,0,0.6); border-radius:3px; overflow:hidden; border:1px solid rgba(255,255,255,0.08); margin-bottom:10px;">
+          <div style="height:100%; width:${pct}%; background:${elem.val > 0 ? elemColor : 'transparent'};"></div>
         </div>
+
+        ${!gating.eligible ? `
+          <div style="font-size:11px; color:#f87171; background:rgba(239,68,68,0.1); padding:6px 10px; border-radius:4px;">
+            ⚠️ Este item não suporta infusão elemental. Requer equipamento de Grau C, B, A ou S.
+          </div>
+        ` : (!isLvlReady ? `
+          <div style="font-size:11px; color:#f87171; background:rgba(239,68,68,0.1); padding:6px 10px; border-radius:4px;">
+            🔒 Nível insuficiente! Requer Nível ${gating.minLevel}+ para imbuir atributos em itens de ${gating.label}.
+          </div>
+        ` : (isAtCap ? `
+          <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(234,179,8,0.12); padding:6px 10px; border-radius:4px;">
+            <span style="font-size:11px; color:#fde047; font-weight:bold;">👑 Teto Elemental Atingido (+${cap})</span>
+            <button onclick="window.removeElementalAction('${item.uid}')" class="inv-batch-btn" style="padding:3px 8px; font-size:10px; color:#fca5a5; border-color:#ef4444;">
+              🌊 Purificar
+            </button>
+          </div>
+        ` : `
+          <div style="display:flex; gap:5px; flex-wrap:wrap; align-items:center; justify-content:space-between;">
+            <div style="display:flex; gap:4px; flex-wrap:wrap;">
+              <button onclick="window.applyElementalAction('${item.uid}', 'fire')" class="inv-batch-btn" style="padding:4px 8px; font-size:10px; color:#fca5a5; border-color:#ef4444;">🔥 Fogo (${stepLabel})</button>
+              <button onclick="window.applyElementalAction('${item.uid}', 'water')" class="inv-batch-btn" style="padding:4px 8px; font-size:10px; color:#93c5fd; border-color:#3b82f6;">💧 Água (${stepLabel})</button>
+              <button onclick="window.applyElementalAction('${item.uid}', 'wind')" class="inv-batch-btn" style="padding:4px 8px; font-size:10px; color:#86efac; border-color:#22c55e;">🌪️ Vento (${stepLabel})</button>
+              <button onclick="window.applyElementalAction('${item.uid}', 'earth')" class="inv-batch-btn" style="padding:4px 8px; font-size:10px; color:#fde68a; border-color:#d97706;">🌍 Terra (${stepLabel})</button>
+              <button onclick="window.applyElementalAction('${item.uid}', 'holy')" class="inv-batch-btn" style="padding:4px 8px; font-size:10px; color:#fef08a; border-color:#eab308;">✨ Sagrado (${stepLabel})</button>
+              <button onclick="window.applyElementalAction('${item.uid}', 'dark')" class="inv-batch-btn" style="padding:4px 8px; font-size:10px; color:#d8b4fe; border-color:#a855f7;">🌑 Trevas (${stepLabel})</button>
+            </div>
+            ${elem.val > 0 ? `
+              <button onclick="window.removeElementalAction('${item.uid}')" class="inv-batch-btn" style="padding:4px 8px; font-size:10px; color:#fca5a5; border-color:rgba(239,68,68,0.5);">
+                🌊 Purificar
+              </button>
+            ` : ''}
+          </div>
+        `))}
       </div>
     `;
   }).join('');
 
   container.innerHTML = `
     <div class="l2-workshop-panel">
-      <!-- Elemental Guide -->
+      <!-- Elemental Guide & Roda Canônica -->
       <div class="l2-workshop-altar">
         <h3 class="l2-workshop-title">🔥 Altar dos 6 Elementos Ancestrais</h3>
         <p class="l2-workshop-subtitle">
-          Incuta atributos em armas (até +300) e armaduras (até +120). Elementos opostos causam dano amplificado:
+          Incuta atributos em armas (até +300 no Grau S) e armaduras (até +120 no Grau S).
+          Ataques com elemento oposto causam <strong>+20% de dano amplificado</strong> e armas Sagradas causam <strong>+30% contra Mortos-Vivos/Demônios</strong>!
         </p>
         <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;">
-          <span class="l2-stat-pill">🔥 Fogo ↔ Água 💧</span>
-          <span class="l2-stat-pill">🌪️ Vento ↔ Terra 🌍</span>
-          <span class="l2-stat-pill">✨ Sagrado ↔ Trevas 🌑</span>
+          <span class="l2-stat-pill">🔥 Fogo ↔ Água 💧 (+20%)</span>
+          <span class="l2-stat-pill">🌪️ Vento ↔ Terra 🌍 (+20%)</span>
+          <span class="l2-stat-pill">✨ Sagrado ↔ Trevas 🌑 (+30% vs Undead)</span>
+        </div>
+        <div style="font-size:10px; color:#94a3b8; margin-top:8px; display:flex; gap:12px; flex-wrap:wrap;">
+          <span>• <strong>Grau C/B:</strong> Lv.40+ (Teto +60)</span>
+          <span>• <strong>Grau A:</strong> Lv.61+ (Teto +150)</span>
+          <span>• <strong>Grau S:</strong> Lv.76+ (Teto +300 Arma / +120 Armadura)</span>
         </div>
       </div>
 
-      <h4 style="margin:0 0 6px 0; font-family:'Cinzel',serif; color:#f5df93; font-size:13px; font-weight:700;">🗡️ Equipamentos Elegíveis</h4>
-      ${equipsHtml || '<div style="font-size:11px; color:#64748b; background:rgba(8,11,16,0.85); padding:10px 12px; border-radius:6px;">Nenhuma arma ou armadura livre na mochila.</div>'}
+      <!-- Filtro de Categorias -->
+      <div style="display:flex; gap:8px; margin-bottom:12px;">
+        <button onclick="window._elementalForgeCategory='weapons'; renderForgeElemental(document.getElementById('craft-recipes-container') || document.getElementById('craft-list'), window.getGameState ? window.getGameState() : null);"
+          class="inv-batch-btn"
+          style="padding:6px 14px; font-family:'Cinzel',serif; font-weight:700; font-size:11px; ${isWeaponsTab ? 'background:linear-gradient(180deg,#ea580c,#c2410c); color:#fff; border-color:#fdba74;' : 'background:rgba(255,255,255,0.05); color:#fdba74; border-color:rgba(234,88,12,0.3);'}">
+          ⚔️ Armas (Primária & Arsenal Slot 2)
+        </button>
+        <button onclick="window._elementalForgeCategory='armors'; renderForgeElemental(document.getElementById('craft-recipes-container') || document.getElementById('craft-list'), window.getGameState ? window.getGameState() : null);"
+          class="inv-batch-btn"
+          style="padding:6px 14px; font-family:'Cinzel',serif; font-weight:700; font-size:11px; ${!isWeaponsTab ? 'background:linear-gradient(180deg,#2563eb,#1d4ed8); color:#fff; border-color:#93c5fd;' : 'background:rgba(255,255,255,0.05); color:#93c5fd; border-color:rgba(37,99,235,0.3);'}">
+          🛡️ Armaduras & Escudos
+        </button>
+      </div>
+
+      <h4 style="margin:0 0 8px 0; font-family:'Cinzel',serif; color:#f5df93; font-size:13px; font-weight:700;">
+        ${isWeaponsTab ? '🗡️ Armas Disponíveis' : '🛡️ Armaduras e Escudos Disponíveis'}
+      </h4>
+      ${equipsHtml || `<div style="font-size:11px; color:#64748b; background:rgba(8,11,16,0.85); padding:10px 12px; border-radius:6px;">Nenhuma ${isWeaponsTab ? 'arma' : 'armadura ou escudo'} encontrada na mochila ou equipamento.</div>`}
     </div>
   `;
 }
 
 export function renderForgeBelts(container, state) {
+  return renderForgeSynthesis(container, state);
+}
+
+export function renderForgeSynthesis(container, state) {
   const inv = state.inventory || [];
-  const belts = inv.filter(i => {
-    const s = getItemDef(i.itemId)?.slot || i.slot;
-    return s === 'belt' || i.itemId?.includes('belt');
+  const forgeLvl = Number(state.craftLevel) || 1;
+  const isMasterSmith = forgeLvl >= 10;
+
+  const currentCategory = window._forgeSynthesisCategory || 'gear';
+
+  window.setForgeSynthesisCategory = (cat) => {
+    window._forgeSynthesisCategory = cat;
+    window._synthesisTargetUid = null;
+    window._synthesisIngredientUid = null;
+    renderForgeSynthesis(container, state);
+  };
+
+  // Filtrar itens da categoria
+  const eligibleItems = inv.filter(i => {
+    const s = getItemDef(i.itemId)?.slot || i.slot || '';
+    const id = (i.itemId || i.id || '').toLowerCase();
+    if (currentCategory === 'gear') {
+      return ['weapon', 'armor', 'chest', 'legs', 'head', 'helmet', 'gloves', 'boots', 'shield'].includes(s);
+    } else {
+      // Artefatos: cintos, talismãs, joias, agathions, capas, etc.
+      return s === 'belt' || s === 'cloak' || id.includes('belt') || id.includes('talisman') || id.includes('jewel') || id.includes('ruby') || id.includes('sapphire') || id.includes('emerald') || id.includes('opal') || id.includes('diamond') || id.includes('agathion');
+    }
   });
 
-  let beltsOptionsHtml = belts.map(b => `<option value="${b.uid}">${b.name || b.itemId} (+${b.enchant || 0})${b.equipped ? ' [Equipado]' : ''}</option>`).join('');
+  // Agrupar e verificar quem tem duplicata disponível
+  const itemsWithDupes = eligibleItems.map(item => {
+    const dupes = SynthesisService.getCompatibleIngredients(state, item);
+    return { item, dupes, hasDupe: dupes.length > 0 };
+  });
+
+  // Se nenhum alvo selecionado ainda, prioriza o primeiro que tem duplicata disponível
+  if (!window._synthesisTargetUid || !eligibleItems.some(i => i.uid === window._synthesisTargetUid)) {
+    const firstWithDupe = itemsWithDupes.find(x => x.hasDupe);
+    window._synthesisTargetUid = firstWithDupe ? firstWithDupe.item.uid : (eligibleItems[0]?.uid || null);
+  }
+
+  const selectedTargetItem = inv.find(i => i.uid === window._synthesisTargetUid) || null;
+  const compatibleIngredients = selectedTargetItem ? SynthesisService.getCompatibleIngredients(state, selectedTargetItem) : [];
+
+  if (!window._synthesisIngredientUid || !compatibleIngredients.some(i => i.uid === window._synthesisIngredientUid)) {
+    window._synthesisIngredientUid = compatibleIngredients[0]?.uid || null;
+  }
+
+  const selectedIngredientItem = inv.find(i => i.uid === window._synthesisIngredientUid) || null;
+
+  const curRank = selectedTargetItem ? SynthesisService.getItemSynthesisRank(selectedTargetItem) : 0;
+  const targetRank = curRank + 1;
+  const cfg = SYNTHESIS_CONFIG[targetRank] || SYNTHESIS_CONFIG[1];
+
+  const targetDef = selectedTargetItem ? getItemDef(selectedTargetItem.itemId || selectedTargetItem.id) : null;
+  const targetGrade = getItemGrade(targetDef?.req?.level || 1);
+  const reqGradeForge = SynthesisService.getReqForgeLevelForGrade(targetGrade);
+  const finalReqForge = Math.max(cfg.reqForgeLvl, reqGradeForge);
+  const isForgeOk = forgeLvl >= finalReqForge;
+
+  const baseRatePct = Math.round((cfg.successRate + (isMasterSmith ? 0.10 : 0)) * 100);
+  const costAdena = cfg.costAdena;
+  const canAfford = (state.gold || 0) >= costAdena;
+  const isMaxRank = curRank >= 5;
+  const canSynthesize = selectedTargetItem && selectedIngredientItem && isForgeOk && canAfford && !isMaxRank;
 
   container.innerHTML = `
     <div class="l2-workshop-panel">
-      <!-- Belts Header -->
+      <!-- Header da Síntese Imperial -->
       <div class="l2-workshop-altar">
-        <h3 class="l2-workshop-title">🎗️ Bigorna de Síntese de Cintos</h3>
+        <h3 class="l2-workshop-title">🔨 Bigorna de Síntese &amp; Fusão Imperial</h3>
         <p class="l2-workshop-subtitle">
-          Junte <strong>2 Cintos Idênticos</strong> na bigorna imperial. Há <strong>30% de chance canônica de sucesso</strong> para elevar o cinto e despertar bônus de Max HP %, P.Def e Dano PvP.
+          Funda <strong>duas cópias idênticas</strong> para aumentar o <strong>Rank de Síntese (1★ a 5★)</strong> em equipamentos (+10% de atributos base por Rank) e elevar artefatos de poder.
         </p>
+        <div style="margin-top:8px; display:inline-flex; align-items:center; gap:8px; padding:4px 10px; border-radius:4px; background:rgba(0,0,0,0.5); border:1px solid ${isMasterSmith ? '#ffd700' : 'rgba(212,167,68,0.3)'}; font-size:11px; font-family:'Cinzel',serif;">
+          <span>Forja Imperial: <strong style="color:#ffd700;">Nv. ${forgeLvl}</strong></span>
+          ${isMasterSmith ? '<span style="color:#34d399; font-weight:bold;">👑 Mestre Ferreiro (+10% Taxa de Sucesso Ativa!)</span>' : `<span style="color:#94a3b8;">(Mestre Ferreiro Nv. 10 desbloqueia +10% de taxa)</span>`}
+        </div>
       </div>
 
-      ${belts.length >= 2 ? `
-        <div style="background:rgba(18,24,34,0.9); border:1px solid rgba(212,167,68,0.3); border-radius:8px; padding:14px; max-width:480px; margin-bottom:14px;">
-          <div style="margin-bottom:10px;">
-            <label style="font-size:11px; color:#94a3b8; display:block; margin-bottom:4px; font-family:'Cinzel',serif;">1. Cinto Primário (Alvo do Upgrade):</label>
-            <select id="belt-primary-select" style="width:100%; padding:6px 10px; background:#0c1017; color:#ece4d3; border:1px solid rgba(212,167,68,0.3); border-radius:4px; font-size:11px;">
-              ${beltsOptionsHtml}
-            </select>
+      <!-- Abas de Categoria: Equipamentos vs Artefatos -->
+      <div style="display:flex; gap:8px; margin-bottom:14px; border-bottom:1px solid rgba(212,167,68,0.25); padding-bottom:8px;">
+        <button onclick="window.setForgeSynthesisCategory('gear')" class="inv-batch-btn ${currentCategory === 'gear' ? 'active' : ''}" style="font-size:11px; font-family:'Cinzel',serif; font-weight:bold; padding:6px 14px; ${currentCategory === 'gear' ? 'background:linear-gradient(180deg,#d4a744,#8a641c); color:#000;' : ''}">
+          ⚔️ Equipamentos (Armas &amp; Armaduras)
+        </button>
+        <button onclick="window.setForgeSynthesisCategory('artifact')" class="inv-batch-btn ${currentCategory === 'artifact' ? 'active' : ''}" style="font-size:11px; font-family:'Cinzel',serif; font-weight:bold; padding:6px 14px; ${currentCategory === 'artifact' ? 'background:linear-gradient(180deg,#d4a744,#8a641c); color:#000;' : ''}">
+          🎗️ Artefatos (Cintos, Talismãs, Joias &amp; Agathions)
+        </button>
+      </div>
+
+      <!-- Grid Principal da Síntese: Seleção de Alvo à Esquerda | Bigorna Central à Direita -->
+      <div style="display:grid; grid-template-columns:minmax(240px,1fr) minmax(320px,1.4fr); gap:16px;">
+        
+        <!-- Coluna 1: Lista de Itens Alvo -->
+        <div style="background:rgba(12,16,23,0.85); border:1px solid rgba(212,167,68,0.3); border-radius:8px; padding:10px; max-height:480px; overflow-y:auto; display:flex; flex-direction:column; gap:6px;">
+          <div style="font-size:11px; font-weight:bold; color:#ffd700; font-family:'Cinzel',serif; margin-bottom:4px; display:flex; justify-content:space-between;">
+            <span>Selecione o Item Alvo</span>
+            <span style="color:#94a3b8; font-size:10px;">(${eligibleItems.length} itens)</span>
           </div>
 
-          <div style="margin-bottom:12px;">
-            <label style="font-size:11px; color:#94a3b8; display:block; margin-bottom:4px; font-family:'Cinzel',serif;">2. Cinto Secundário (Sacrifício Idêntico):</label>
-            <select id="belt-secondary-select" style="width:100%; padding:6px 10px; background:#0c1017; color:#ece4d3; border:1px solid rgba(212,167,68,0.3); border-radius:4px; font-size:11px;">
-              ${beltsOptionsHtml}
-            </select>
-          </div>
+          ${eligibleItems.length === 0 ? `
+            <div style="padding:20px; text-align:center; color:#94a3b8; font-size:11px;">
+              Nenhum item desta categoria encontrado na mochila.
+            </div>
+          ` : itemsWithDupes.map(({ item, dupes, hasDupe }) => {
+            const isSelected = item.uid === window._synthesisTargetUid;
+            const def = getItemDef(item.itemId || item.id);
+            const rank = SynthesisService.getItemSynthesisRank(item);
+            const stars = rank > 0 ? '★'.repeat(rank) : '';
 
-          <div style="font-size:11px; color:#ffd877; margin-bottom:12px; display:flex; justify-content:space-between;">
-            <span>🪙 Custo: <strong>100.000 Adena</strong></span>
-            <span>Chance: <strong style="color:#34d399;">30% Canônica</strong></span>
-          </div>
-
-          <button onclick="window.compoundBeltsWithDuplicateAction()" class="l2-forge-action-btn is-ready">
-            ✨ SINTETIZAR CINTOS
-          </button>
+            return `
+              <div
+                onclick="window._synthesisTargetUid='${item.uid}'; window._synthesisIngredientUid=null; window.renderForgeSynthesis(document.getElementById('craft-recipes-container') || document.getElementById('craft-list'), window.state);"
+                style="padding:8px; border-radius:6px; background:${isSelected ? 'rgba(212,167,68,0.2)' : 'rgba(0,0,0,0.4)'}; border:1px solid ${isSelected ? '#ffd700' : hasDupe ? 'rgba(52,211,153,0.5)' : 'rgba(255,255,255,0.08)'}; cursor:pointer; display:flex; align-items:center; gap:8px; transition:all 0.2s;"
+              >
+                <div style="width:36px; height:36px; border-radius:4px; background:rgba(0,0,0,0.6); border:1px solid rgba(212,167,68,0.3); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                  <span class="equip-icon">${getItemIcon(def || item)}</span>
+                </div>
+                <div style="flex:1; min-width:0;">
+                  <div style="font-size:11px; font-weight:bold; color:${isSelected ? '#ffd700' : '#ece4d3'}; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                    ${def?.name || item.name || item.itemId} ${item.enchant ? `+${item.enchant}` : ''}
+                    ${item.equipped ? '<span style="color:#60a5fa; font-size:9px; margin-left:4px;">[Equipado]</span>' : ''}
+                  </div>
+                  <div style="font-size:10px; color:#94a3b8; display:flex; align-items:center; gap:6px;">
+                    ${rank > 0 ? `<span style="color:#ffd700; font-weight:bold;">Rank ${rank} ${stars}</span>` : '<span>Sem Rank</span>'}
+                    ${hasDupe ? `<span style="color:#34d399; font-weight:bold;">🔥 ${dupes.length} cópia(s)</span>` : '<span style="color:#64748b;">0 cópias</span>'}
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('')}
         </div>
-      ` : `
-        <div style="background:rgba(8,11,16,0.85); border:1px dashed rgba(212,167,68,0.25); border-radius:8px; padding:20px; text-align:center;">
-          <div style="font-size:13px; color:#ffd877; margin-bottom:4px; font-family:'Cinzel',serif;">Cintos Insuficientes na Mochila (${belts.length}/2)</div>
-          <div style="font-size:11px; color:#94a3b8;">Você precisa de ao menos 2 cintos idênticos no inventário para realizar a fusão.</div>
+
+        <!-- Coluna 2: A Bigorna de Fusão -->
+        <div style="background:rgba(18,24,34,0.9); border:1px solid rgba(212,167,68,0.35); border-radius:8px; padding:16px; display:flex; flex-direction:column; justify-content:space-between; gap:14px;">
+          ${!selectedTargetItem ? `
+            <div style="padding:40px; text-align:center; color:#94a3b8; font-size:12px;">
+              Selecione um item à esquerda para abrir o painel de forjamento.
+            </div>
+          ` : `
+            <div>
+              <!-- Alvo & Sacrifício Slots -->
+              <div style="display:flex; align-items:center; justify-content:space-around; background:rgba(0,0,0,0.5); border:1px dashed rgba(212,167,68,0.3); border-radius:8px; padding:14px; margin-bottom:14px;">
+                <!-- Slot 1: Alvo Primário -->
+                <div style="text-align:center; max-width:130px;">
+                  <div style="font-size:10px; color:#94a3b8; font-family:'Cinzel',serif; margin-bottom:4px;">1. ITEM ALVO</div>
+                  <div style="width:48px; height:48px; margin:0 auto; border-radius:6px; background:rgba(0,0,0,0.7); border:2px solid #ffd700; display:flex; align-items:center; justify-content:center; box-shadow:0 0 10px rgba(255,215,0,0.3);">
+                    <span class="equip-icon">${getItemIcon(targetDef || selectedTargetItem)}</span>
+                  </div>
+                  <div style="font-size:11px; font-weight:bold; color:#ffd700; margin-top:4px; line-height:1.2;">
+                    ${targetDef?.name || selectedTargetItem.name}
+                  </div>
+                  <div style="font-size:10px; color:#fde047; font-weight:bold;">
+                    ${curRank > 0 ? `Rank ${curRank} (${'★'.repeat(curRank)})` : 'Rank 0'}
+                  </div>
+                </div>
+
+                <div style="font-size:22px; color:#ffd700; animation:pulse 1.5s infinite;">➔ ⚔️ ➔</div>
+
+                <!-- Slot 2: Sacrifício Duplicado -->
+                <div style="text-align:center; max-width:130px;">
+                  <div style="font-size:10px; color:#94a3b8; font-family:'Cinzel',serif; margin-bottom:4px;">2. SACRIFÍCIO</div>
+                  <div style="width:48px; height:48px; margin:0 auto; border-radius:6px; background:rgba(0,0,0,0.7); border:2px solid ${compatibleIngredients.length > 0 ? '#10b981' : '#ef4444'}; display:flex; align-items:center; justify-content:center;">
+                    ${compatibleIngredients.length > 0 ? `
+                      <span class="equip-icon">${getItemIcon(targetDef || selectedTargetItem)}</span>
+                    ` : `
+                      <span style="color:#ef4444; font-size:20px;">✖</span>
+                    `}
+                  </div>
+                  <div style="font-size:11px; font-weight:bold; color:${compatibleIngredients.length > 0 ? '#34d399' : '#ef4444'}; margin-top:4px; line-height:1.2;">
+                    ${compatibleIngredients.length > 0 ? `Disponível (${compatibleIngredients.length})` : 'Falta Duplicata'}
+                  </div>
+                  <div style="font-size:10px; color:#94a3b8;">
+                    ${compatibleIngredients.length > 0 ? `Rank ${curRank}` : '0 no inventário'}
+                  </div>
+                </div>
+              </div>
+
+              <!-- Seletor do Ingrediente Específico -->
+              ${compatibleIngredients.length > 1 ? `
+                <div style="margin-bottom:12px;">
+                  <label style="font-size:11px; color:#94a3b8; display:block; margin-bottom:4px;">Escolher cópia de sacrifício:</label>
+                  <select
+                    onchange="window._synthesisIngredientUid=this.value;"
+                    style="width:100%; padding:6px 10px; background:#0c1017; color:#ece4d3; border:1px solid rgba(212,167,68,0.3); border-radius:4px; font-size:11px;"
+                  >
+                    ${compatibleIngredients.map(ing => `<option value="${ing.uid}" ${ing.uid === window._synthesisIngredientUid ? 'selected' : ''}>${targetDef?.name || ing.name} (UID: ${String(ing.uid).slice(-5)})</option>`).join('')}
+                  </select>
+                </div>
+              ` : ''}
+
+              <!-- Informações de Parâmetros de Síntese -->
+              <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(212,167,68,0.2); border-radius:6px; padding:10px; display:flex; flex-direction:column; gap:6px; font-size:11px;">
+                <div style="display:flex; justify-content:space-between;">
+                  <span style="color:#94a3b8;">Progressão Alvo:</span>
+                  <span style="color:#ffd700; font-weight:bold;">
+                    ${isMaxRank ? 'MAX RANK ★★★★★' : `Rank ${curRank} ➔ Rank ${targetRank} (${'★'.repeat(targetRank)})`}
+                  </span>
+                </div>
+                <div style="display:flex; justify-content:space-between;">
+                  <span style="color:#94a3b8;">Bônus ao Sucesso:</span>
+                  <span style="color:#34d399; font-weight:bold;">
+                    ${currentCategory === 'gear' ? `+${targetRank * 10}% Atributos Base` : 'Despertar Bônus de Artefato'}
+                  </span>
+                </div>
+                <div style="display:flex; justify-content:space-between;">
+                  <span style="color:#94a3b8;">Taxa de Sucesso:</span>
+                  <span style="color:#60a5fa; font-weight:bold; font-size:12px;">
+                    ${baseRatePct}% ${isMasterSmith ? '<span style="color:#ffd700;">(+10% Mestre)</span>' : ''}
+                  </span>
+                </div>
+                <div style="display:flex; justify-content:space-between;">
+                  <span style="color:#94a3b8;">Risco na Falha:</span>
+                  <span style="color:#f87171;">
+                    ${targetRank === 5 ? 'Sacrifício destruído + 50% chance de regredir para Rank 3' : 'Apenas o sacrifício é consumido'}
+                  </span>
+                </div>
+                <div style="display:flex; justify-content:space-between; border-top:1px dashed rgba(255,255,255,0.08); padding-top:4px;">
+                  <span style="color:#94a3b8;">Requisito de Forja:</span>
+                  <span style="color:${isForgeOk ? '#34d399' : '#ef4444'}; font-weight:bold;">
+                    Nv. ${finalReqForge} ${isForgeOk ? '✓ Liberado' : `(Atual: Nv. ${forgeLvl})`}
+                  </span>
+                </div>
+                <div style="display:flex; justify-content:space-between;">
+                  <span style="color:#94a3b8;">Custo de Forjamento:</span>
+                  <span style="color:${canAfford ? '#fde047' : '#ef4444'}; font-weight:bold;">
+                    ${costAdena.toLocaleString()} Adena ${canAfford ? '' : '(Insuficiente)'}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Botão de Ação -->
+            <div style="margin-top:8px;">
+              ${isMaxRank ? `
+                <button disabled style="width:100%; padding:12px; font-family:'Cinzel',serif; font-weight:bold; background:#1e293b; border:1px solid #ffd700; color:#ffd700; border-radius:6px;">
+                  👑 ITEM EM RANK MÁXIMO (5★)
+                </button>
+              ` : `
+                <button
+                  onclick="window.executeSynthesisAction('${selectedTargetItem.uid}', '${selectedIngredientItem ? selectedIngredientItem.uid : ''}')"
+                  ${!canSynthesize ? 'disabled' : ''}
+                  style="width:100%; padding:12px; font-family:'Cinzel',serif; font-weight:bold; font-size:12px; border-radius:6px; cursor:${canSynthesize ? 'pointer' : 'not-allowed'}; background:${canSynthesize ? 'linear-gradient(180deg,#eab308,#ca8a04)' : '#27272a'}; border:1px solid ${canSynthesize ? '#fde047' : '#3f3f46'}; color:${canSynthesize ? '#000' : '#71717a'}; box-shadow:${canSynthesize ? '0 0 15px rgba(234,179,8,0.4)' : 'none'}; transition:all 0.2s;"
+                >
+                  ${!selectedIngredientItem ? '🔒 Falta Cópia Duplicada' : !isForgeOk ? `🔒 Requer Forja Nv. ${finalReqForge}` : !canAfford ? '🪙 Adena Insuficiente' : '✨ REALIZAR SÍNTESE IMPERIAL'}
+                </button>
+              `}
+            </div>
+          `}
         </div>
-      `}
+      </div>
     </div>
   `;
 }
@@ -6993,6 +7404,154 @@ export function renderClanTab(container, state) {
 
     subContentHtml = `<div>${shopHtml}</div>`;
   }
+  // 5. Sub-aba: Membros & Doações
+  else if (activeSubTab === 'roster') {
+    const roster = ClanService.getClanRoster(state);
+    const motto = clan.motto || 'Pela Glória e Honra de Aden!';
+    const rep = clan.reputation || 100;
+    const adenaDonated = clan.donationsAdena || 0;
+    const spDonated = clan.donationsSp || 0;
+
+    const rosterRows = roster.map(m => `
+      <tr style="border-bottom:1px solid rgba(255,255,255,0.06); font-size:12px;">
+        <td style="padding:10px 8px; font-weight:bold; color:${m.isPlayer ? '#fde047' : '#e2e8f0'}; display:flex; align-items:center; gap:6px;">
+          ${m.isPlayer ? '👑 ' : ''}${m.name} ${m.isPlayer ? '<span style="font-size:10px; background:rgba(234,179,8,0.25); color:#fde047; padding:1px 5px; border-radius:4px;">Você</span>' : ''}
+        </td>
+        <td style="padding:10px 8px; color:#cbd5e1;">${m.rank}</td>
+        <td style="padding:10px 8px; color:#94a3b8;">Lv. ${m.level} (${m.className})</td>
+        <td style="padding:10px 8px; text-align:right; font-weight:bold; color:#a3e635;">${m.contribution.toLocaleString()}</td>
+      </tr>
+    `).join('');
+
+    subContentHtml = `
+      <!-- Motto & Renomear Clã Card -->
+      <div style="background:rgba(0,0,0,0.45); border:1px solid rgba(234,179,8,0.25); border-radius:8px; padding:14px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+        <div>
+          <div style="font-family:'Cinzel',serif; font-size:13.5px; font-weight:bold; color:#fde047; margin-bottom:4px;">
+            📜 Lema do Clã: <span style="font-style:italic; color:#e2e8f0;">"${motto}"</span>
+          </div>
+          <div style="font-size:11.5px; color:#94a3b8; display:flex; gap:16px; flex-wrap:wrap;">
+            <span>🛡️ Reputação de Clã: <strong style="color:#fde047;">${rep.toLocaleString()} CRP</strong></span>
+            <span>💰 Doação Total de Adena: <strong style="color:#a3e635;">${adenaDonated.toLocaleString()}</strong></span>
+            <span>✨ Doação Total de SP: <strong style="color:#38bdf8;">${spDonated.toLocaleString()}</strong></span>
+          </div>
+        </div>
+        <button
+          onclick="const n = prompt('Novo lema do clã:', '${motto}'); if (n) window.createOrEditClanAction('${clan.name}', n);"
+          style="padding:6px 14px; font-size:11px; font-weight:bold; background:linear-gradient(180deg,#ca8a04,#a16207); border:1px solid #fde047; color:#fff; border-radius:6px; cursor:pointer;"
+        >
+          ✏️ Editar Lema
+        </button>
+      </div>
+
+      <!-- Doações Rápidas -->
+      <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:14px; margin-bottom:14px;">
+        <div style="font-family:'Cinzel',serif; font-size:13px; font-weight:bold; color:#fde047; margin-bottom:8px;">
+          🤝 Fundo do Clã &amp; Doações
+        </div>
+        <div style="font-size:11.5px; color:#94a3b8; margin-bottom:10px;">
+          Doe Adena e Pontos de SP para aumentar a Reputação do Clã e financiar melhorias e bênçãos do Clan Hall.
+        </div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button
+            onclick="window.donateToClanAction(50000, 0)"
+            style="padding:6px 12px; font-size:11px; background:rgba(34,197,94,0.15); border:1px solid #22c55e; color:#4ade80; border-radius:6px; cursor:pointer;"
+          >
+            💰 Doar 50.000 Adena (+10 Rep)
+          </button>
+          <button
+            onclick="window.donateToClanAction(250000, 0)"
+            style="padding:6px 12px; font-size:11px; background:rgba(34,197,94,0.2); border:1px solid #22c55e; color:#4ade80; border-radius:6px; cursor:pointer;"
+          >
+            💰 Doar 250.000 Adena (+50 Rep)
+          </button>
+          <button
+            onclick="window.donateToClanAction(1000000, 0)"
+            style="padding:6px 12px; font-size:11px; background:rgba(34,197,94,0.3); border:1px solid #22c55e; color:#86efac; border-radius:6px; cursor:pointer; font-weight:bold;"
+          >
+            💰 Doar 1.000.000 Adena (+200 Rep)
+          </button>
+          <button
+            onclick="window.donateToClanAction(0, 5000)"
+            style="padding:6px 12px; font-size:11px; background:rgba(56,189,248,0.15); border:1px solid #38bdf8; color:#38bdf8; border-radius:6px; cursor:pointer;"
+          >
+            ✨ Doar 5.000 SP (+50 Rep)
+          </button>
+          <button
+            onclick="window.donateToClanAction(0, 20000)"
+            style="padding:6px 12px; font-size:11px; background:rgba(56,189,248,0.25); border:1px solid #38bdf8; color:#7dd3fc; border-radius:6px; cursor:pointer; font-weight:bold;"
+          >
+            ✨ Doar 20.000 SP (+200 Rep)
+          </button>
+        </div>
+      </div>
+
+      <!-- Tabela de Membros -->
+      <div style="background:rgba(0,0,0,0.45); border:1px solid rgba(255,255,255,0.08); border-radius:8px; overflow:hidden;">
+        <table style="width:100%; border-collapse:collapse; text-align:left;">
+          <thead>
+            <tr style="background:rgba(255,255,255,0.04); border-bottom:1px solid rgba(255,255,255,0.1); font-size:11px; color:#94a3b8;">
+              <th style="padding:8px;">Membro</th>
+              <th style="padding:8px;">Cargo</th>
+              <th style="padding:8px;">Classe &amp; Nível</th>
+              <th style="padding:8px; text-align:right;">Contribuição Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rosterRows}
+          </tbody>
+        </table>
+      </div>
+    `;
+  }
+  // 6. Sub-aba: Clan Hall & Bênçãos Mágicas
+  else if (activeSubTab === 'hall') {
+    const buffsHtml = Object.values(CLAN_HALL_BUFFS).map(b => {
+      const activeBuff = state.buffs && state.buffs['clan_hall_' + b.id];
+      const isBuffActive = activeBuff && (activeBuff.until || 0) > Date.now();
+      const remainingMin = isBuffActive ? Math.ceil((activeBuff.until - Date.now()) / 60000) : 0;
+
+      return `
+        <div style="background:rgba(0,0,0,0.45); border:1px solid ${isBuffActive ? 'rgba(74,222,128,0.5)' : 'rgba(255,255,255,0.08)'}; border-radius:8px; padding:14px; display:flex; justify-content:space-between; align-items:center; gap:12px;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:44px; height:44px; border-radius:8px; background:#18181b; border:1px solid ${isBuffActive ? '#4ade80' : '#3f3f46'}; display:flex; align-items:center; justify-content:center; font-size:24px;">
+              ${b.icon}
+            </div>
+            <div>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span style="font-family:'Cinzel',serif; font-size:14px; font-weight:bold; color:${isBuffActive ? '#86efac' : '#fde047'};">${b.name}</span>
+                ${isBuffActive ? `<span style="background:rgba(74,222,128,0.2); border:1px solid #4ade80; color:#86efac; font-size:10.5px; padding:1px 6px; border-radius:8px; font-weight:bold;">⏳ Ativo (${remainingMin}m)</span>` : ''}
+              </div>
+              <div style="font-size:11.5px; color:#cbd5e1; margin-top:2px;">${b.desc}</div>
+              <div style="font-size:11px; color:#a3e635; margin-top:2px;">Custo: <strong>${b.costAdena.toLocaleString()} Adena</strong> (Duração: 60 min)</div>
+            </div>
+          </div>
+          <div>
+            <button
+              onclick="window.activateClanHallBuffAction('${b.id}')"
+              style="padding:8px 16px; font-size:11px; font-weight:bold; background:${isBuffActive ? 'linear-gradient(180deg,#059669,#047857)' : 'linear-gradient(180deg,#ca8a04,#a16207)'}; border:1px solid ${isBuffActive ? '#34d399' : '#fde047'}; color:#fff; border-radius:6px; cursor:pointer;"
+            >
+              ${isBuffActive ? '🔄 Renovar Bênção' : '✨ Ativar Bênção'}
+            </button>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    subContentHtml = `
+      <div style="background:rgba(0,0,0,0.3); border:1px solid rgba(234,179,8,0.2); border-radius:8px; padding:14px; margin-bottom:14px;">
+        <div style="font-family:'Cinzel',serif; font-size:14px; font-weight:bold; color:#fde047; margin-bottom:4px;">
+          🏛️ Salão Comunal do Clã (Clan Hall Privado)
+        </div>
+        <div style="font-size:11.5px; color:#cbd5e1;">
+          Os membros do clã podem canalizar bênçãos ancestrais no salão comunal. Os bônus são aplicados a todas as atividades do seu guerreiro!
+        </div>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:12px;">
+        ${buffsHtml}
+      </div>
+    `;
+  }
 
   container.innerHTML = `
     <div style="padding:14px; color:#e2e8f0;">
@@ -7028,25 +7587,37 @@ export function renderClanTab(container, state) {
       <div style="display:flex; gap:8px; margin-bottom:14px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:8px; flex-wrap:wrap;">
         <button
           onclick="window.setClanSubTab('skills')"
-          style="padding:8px 16px; font-family:'Cinzel',serif; font-size:12px; font-weight:bold; background:${activeSubTab === 'skills' ? 'linear-gradient(180deg,#ca8a04,#a16207)' : 'rgba(0,0,0,0.4)'}; border:1px solid ${activeSubTab === 'skills' ? '#fde047' : 'rgba(255,255,255,0.1)'}; color:${activeSubTab === 'skills' ? '#fff' : '#cbd5e1'}; border-radius:6px; cursor:pointer;"
+          style="padding:8px 14px; font-family:'Cinzel',serif; font-size:11.5px; font-weight:bold; background:${activeSubTab === 'skills' ? 'linear-gradient(180deg,#ca8a04,#a16207)' : 'rgba(0,0,0,0.4)'}; border:1px solid ${activeSubTab === 'skills' ? '#fde047' : 'rgba(255,255,255,0.1)'}; color:${activeSubTab === 'skills' ? '#fff' : '#cbd5e1'}; border-radius:6px; cursor:pointer;"
         >
-          🛡️ Habilidades de Clã
+          🛡️ Habilidades
+        </button>
+        <button
+          onclick="window.setClanSubTab('roster')"
+          style="padding:8px 14px; font-family:'Cinzel',serif; font-size:11.5px; font-weight:bold; background:${activeSubTab === 'roster' ? 'linear-gradient(180deg,#ca8a04,#a16207)' : 'rgba(0,0,0,0.4)'}; border:1px solid ${activeSubTab === 'roster' ? '#fde047' : 'rgba(255,255,255,0.1)'}; color:${activeSubTab === 'roster' ? '#fff' : '#cbd5e1'}; border-radius:6px; cursor:pointer;"
+        >
+          👥 Membros &amp; Doações
+        </button>
+        <button
+          onclick="window.setClanSubTab('hall')"
+          style="padding:8px 14px; font-family:'Cinzel',serif; font-size:11.5px; font-weight:bold; background:${activeSubTab === 'hall' ? 'linear-gradient(180deg,#ca8a04,#a16207)' : 'rgba(0,0,0,0.4)'}; border:1px solid ${activeSubTab === 'hall' ? '#fde047' : 'rgba(255,255,255,0.1)'}; color:${activeSubTab === 'hall' ? '#fff' : '#cbd5e1'}; border-radius:6px; cursor:pointer;"
+        >
+          🏛️ Clan Hall
         </button>
         <button
           onclick="window.setClanSubTab('castles')"
-          style="padding:8px 16px; font-family:'Cinzel',serif; font-size:12px; font-weight:bold; background:${activeSubTab === 'castles' ? 'linear-gradient(180deg,#ca8a04,#a16207)' : 'rgba(0,0,0,0.4)'}; border:1px solid ${activeSubTab === 'castles' ? '#fde047' : 'rgba(255,255,255,0.1)'}; color:${activeSubTab === 'castles' ? '#fff' : '#cbd5e1'}; border-radius:6px; cursor:pointer;"
+          style="padding:8px 14px; font-family:'Cinzel',serif; font-size:11.5px; font-weight:bold; background:${activeSubTab === 'castles' ? 'linear-gradient(180deg,#ca8a04,#a16207)' : 'rgba(0,0,0,0.4)'}; border:1px solid ${activeSubTab === 'castles' ? '#fde047' : 'rgba(255,255,255,0.1)'}; color:${activeSubTab === 'castles' ? '#fff' : '#cbd5e1'}; border-radius:6px; cursor:pointer;"
         >
           🏰 Castelos &amp; Tributos
         </button>
         <button
           onclick="window.setClanSubTab('siege')"
-          style="padding:8px 16px; font-family:'Cinzel',serif; font-size:12px; font-weight:bold; background:${activeSubTab === 'siege' ? 'linear-gradient(180deg,#ca8a04,#a16207)' : 'rgba(0,0,0,0.4)'}; border:1px solid ${activeSubTab === 'siege' ? '#fde047' : 'rgba(255,255,255,0.1)'}; color:${activeSubTab === 'siege' ? '#fff' : '#cbd5e1'}; border-radius:6px; cursor:pointer;"
+          style="padding:8px 14px; font-family:'Cinzel',serif; font-size:11.5px; font-weight:bold; background:${activeSubTab === 'siege' ? 'linear-gradient(180deg,#ca8a04,#a16207)' : 'rgba(0,0,0,0.4)'}; border:1px solid ${activeSubTab === 'siege' ? '#fde047' : 'rgba(255,255,255,0.1)'}; color:${activeSubTab === 'siege' ? '#fff' : '#cbd5e1'}; border-radius:6px; cursor:pointer;"
         >
-          ⚔️ Guerra de Cerco (Siege)
+          ⚔️ Guerra de Cerco
         </button>
         <button
           onclick="window.setClanSubTab('shop')"
-          style="padding:8px 16px; font-family:'Cinzel',serif; font-size:12px; font-weight:bold; background:${activeSubTab === 'shop' ? 'linear-gradient(180deg,#ca8a04,#a16207)' : 'rgba(0,0,0,0.4)'}; border:1px solid ${activeSubTab === 'shop' ? '#fde047' : 'rgba(255,255,255,0.1)'}; color:${activeSubTab === 'shop' ? '#fff' : '#cbd5e1'}; border-radius:6px; cursor:pointer;"
+          style="padding:8px 14px; font-family:'Cinzel',serif; font-size:11.5px; font-weight:bold; background:${activeSubTab === 'shop' ? 'linear-gradient(180deg,#ca8a04,#a16207)' : 'rgba(0,0,0,0.4)'}; border:1px solid ${activeSubTab === 'shop' ? '#fde047' : 'rgba(255,255,255,0.1)'}; color:${activeSubTab === 'shop' ? '#fff' : '#cbd5e1'}; border-radius:6px; cursor:pointer;"
         >
           🛍️ Loja do Castelo
         </button>
@@ -7417,8 +7988,22 @@ function renderSevenSignsBossesView(ss, state) {
 }
 
 function renderSevenSignsMammonView(ss, state) {
+  const accessCheck = SevenSignsService.canAccessExclusiveBlacksmith(state);
   return `
     <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:14px;">
+      <!-- Exclusivity Status Banner -->
+      ${accessCheck.allowed ? `
+        <div style="grid-column:1/-1; background:rgba(34,197,94,0.15); border:1px solid #22c55e; border-radius:8px; padding:10px 14px; font-size:12px; color:#86efac; display:flex; align-items:center; gap:8px;">
+          <span>✅</span>
+          <div><strong>Bênção dos Selos Ativa:</strong> Sua facção [${(ss.winnerFaction || ss.faction || 'DAWN').toUpperCase()}] domina o ciclo semanal! Blacksmith of Mammon liberado para SA e deselamento de armaduras.</div>
+        </div>
+      ` : `
+        <div style="grid-column:1/-1; background:rgba(239,68,68,0.15); border:1px solid #ef4444; border-radius:8px; padding:10px 14px; font-size:12px; color:#fca5a5; display:flex; align-items:center; gap:8px;">
+          <span>🔒</span>
+          <div><strong>Acesso Exclusivo Bloqueado:</strong> ${accessCheck.message}</div>
+        </div>
+      `}
+
       <!-- Blacksmith of Mammon -->
       <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(168,85,247,0.3); border-radius:8px; padding:14px;">
         <h3 style="margin:0 0 10px 0; color:#fef08a; font-family:'Cinzel',serif; font-size:15px;">⚒️ Blacksmith of Mammon</h3>
@@ -7431,10 +8016,10 @@ function renderSevenSignsMammonView(ss, state) {
                 <div style="font-size:11px; color:#fde047; font-weight:bold; margin-top:2px;">${srv.costAA.toLocaleString()} AA</div>
               </div>
               <button
-                onclick="window.unsealArmorAction()"
-                style="padding:6px 12px; font-size:11px; font-weight:bold; background:#9333ea; border:1px solid #c084fc; color:#fff; border-radius:6px; cursor:pointer;"
+                ${accessCheck.allowed ? 'onclick="window.unsealArmorAction()"' : 'disabled'}
+                style="padding:6px 12px; font-size:11px; font-weight:bold; ${accessCheck.allowed ? 'background:#9333ea; border:1px solid #c084fc; color:#fff; cursor:pointer;' : 'background:#4b5563; border:1px solid #6b7280; color:#9ca3af; cursor:not-allowed; opacity:0.6;'} border-radius:6px;"
               >
-                Utilizar
+                ${accessCheck.allowed ? 'Utilizar' : '🔒 Bloqueado'}
               </button>
             </div>
           `).join('')}
@@ -7714,6 +8299,287 @@ export function renderColosseumTab(container, state) {
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  `;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   5. SISTEMA DE COSMÉTICOS VFX — 100% VISUAL / IDLE (NÍVEL 5)
+═══════════════════════════════════════════════════════════════════════════ */
+export function renderCosmeticsTab(container, state) {
+  if (!container || !state) return;
+  CosmeticService.ensureState(state);
+
+  const activeSubTab = window._activeCosmeticsSubTab || 'auras';
+
+  window.setCosmeticsSubTab = (subTab) => {
+    window._activeCosmeticsSubTab = subTab;
+    if (typeof window.updateCosmeticsUI === 'function') {
+      window.updateCosmeticsUI();
+    } else {
+      renderCosmeticsTab(container, state);
+    }
+  };
+
+  const auras = Object.values(AURAS_CATALOG);
+  const frames = Object.values(ITEM_FRAMES_CATALOG);
+  const titles = Object.values(TITLES_CATALOG);
+
+  const curAura = CosmeticService.getActiveAura(state);
+  const curFrame = CosmeticService.getActiveFrame(state);
+  const curTitle = CosmeticService.getActiveTitle(state);
+
+  let contentHtml = '';
+
+
+  const achStatus = AchievementService.getAchievementsStatus(state);
+
+  if (activeSubTab === 'achievements') {
+    contentHtml = `
+      <div style="display:flex; flex-direction:column; gap:10px;">
+        <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(212,167,68,0.3); border-radius:8px; padding:12px 16px; margin-bottom:6px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <span style="font-weight:bold; color:#fef08a; font-size:14px; font-family:'Cinzel',serif;">Progresso das Conquistas:</span>
+            <span style="font-weight:bold; color:#38bdf8; font-size:13px;">${achStatus.claimedCount} / ${achStatus.total} Resgatadas (${Math.round((achStatus.claimedCount / achStatus.total) * 100)}%)</span>
+          </div>
+          <div style="width:100%; height:8px; background:rgba(255,255,255,0.1); border-radius:4px; overflow:hidden;">
+            <div style="width:${Math.round((achStatus.claimedCount / achStatus.total) * 100)}%; height:100%; background:linear-gradient(90deg, #eab308, #22c55e); transition:width 0.3s;"></div>
+          </div>
+        </div>
+
+        <div class="cosmetics-grid">
+          ${achStatus.achievements.map(ach => {
+            const isDone = ach.isCompleted;
+            const isClaimed = ach.isClaimed;
+            const canClaim = ach.canClaim;
+            const pct = Math.min(100, Math.round((ach.currentProgress / ach.target) * 100));
+
+            return `
+              <div class="cosmetic-card ${isClaimed ? 'equipped' : ''}" style="border: 1px solid ${canClaim ? '#22c55e' : isClaimed ? 'rgba(255,255,255,0.15)' : 'rgba(212,167,68,0.25)'};">
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <div style="width:48px; height:48px; border-radius:8px; border:2px solid ${canClaim ? '#22c55e' : '#d4a744'}; background:rgba(0,0,0,0.6); display:flex; align-items:center; justify-content:center; font-size:24px;">
+                    ${ach.icon}
+                  </div>
+                  <div style="flex:1;">
+                    <div style="font-size:13px; font-weight:bold; color:#fef08a; display:flex; align-items:center; gap:6px;">
+                      ${ach.title}
+                      ${isClaimed ? '<span style="font-size:9px; background:#22c55e; color:#000; padding:1px 4px; border-radius:3px; font-weight:bold;">CONCLUÍDO</span>' : ''}
+                    </div>
+                    <div style="font-size:11px; color:#94a3b8; margin-top:2px;">${ach.desc}</div>
+                    <div style="display:flex; align-items:center; gap:8px; margin-top:6px;">
+                      <div style="flex:1; max-width:140px; height:6px; background:rgba(0,0,0,0.6); border-radius:3px; overflow:hidden;">
+                        <div style="width:${pct}%; height:100%; background:${isDone ? '#22c55e' : '#eab308'};"></div>
+                      </div>
+                      <span style="font-size:10px; color:#cbd5e1; font-weight:bold;">${ach.currentProgress} / ${ach.target}</span>
+                    </div>
+                    <div style="font-size:10px; color:#facc15; font-weight:bold; margin-top:4px;">🎁 ${ach.rewardText}</div>
+                  </div>
+                </div>
+
+                <div style="margin-top:8px;">
+                  ${isClaimed ? `
+                    <button disabled style="width:100%; padding:6px; font-size:11px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); color:#9ca3af; border-radius:4px; font-weight:bold;">
+                      ✓ Resgatado
+                    </button>
+                  ` : canClaim ? `
+                    <button onclick="window.claimAchievementAction('${ach.id}')" style="width:100%; padding:6px; font-size:11px; background:linear-gradient(180deg,#22c55e,#16a34a); border:1px solid #4ade80; color:#fff; border-radius:4px; font-weight:bold; cursor:pointer; box-shadow:0 0 10px rgba(34,197,94,0.4);">
+                      🎁 Resgatar Conquista
+                    </button>
+                  ` : `
+                    <button disabled style="width:100%; padding:6px; font-size:11px; background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.08); color:#64748b; border-radius:4px;">
+                      Em Progresso (${pct}%)
+                    </button>
+                  `}
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  if (activeSubTab === 'auras') {
+    contentHtml = `
+      <div class="cosmetics-grid">
+        ${auras.map(a => {
+          const isUnlocked = state.cosmetics.unlockedAuras.includes(a.id);
+          const isEquipped = state.cosmetics.activeAura === a.id || (a.id === 'aura_hero_golden' && state.isHero && state.cosmetics.activeAura === 'aura_none');
+          const isHeroLocked = a.reqHero && !state.isHero && !state.heroStatus?.isHero;
+          const canAfford = (state.gold || 0) >= a.costAdena;
+
+          return `
+            <div class="cosmetic-card ${isEquipped ? 'equipped' : ''}" style="border: 1px solid ${isEquipped ? '#ffd700' : 'rgba(212,167,68,0.25)'};">
+              <div style="display:flex; align-items:center; gap:10px;">
+                <div style="width:48px; height:48px; border-radius:8px; border:2px solid ${a.color || '#fff'}; background:rgba(0,0,0,0.6); display:flex; align-items:center; justify-content:center; font-size:24px; position:relative;" class="${a.cssClass}">
+                  ${a.icon}
+                </div>
+                <div style="flex:1;">
+                  <div style="font-size:13px; font-weight:bold; color:#fef08a; display:flex; align-items:center; gap:6px;">
+                    ${a.name}
+                    ${isEquipped ? '<span style="font-size:9px; background:#ffd700; color:#000; padding:1px 4px; border-radius:3px; font-weight:bold;">ATIVO</span>' : ''}
+                  </div>
+                  <div style="font-size:11px; color:#94a3b8; margin-top:2px;">${a.desc}</div>
+                  ${!isUnlocked && a.costAdena > 0 ? `<div style="font-size:11px; color:#f59e0b; font-weight:bold; margin-top:4px;">💰 ${a.costAdena.toLocaleString()} Adena</div>` : ''}
+                </div>
+              </div>
+
+              <div style="margin-top:6px;">
+                ${isEquipped ? `
+                  <button disabled style="width:100%; padding:6px; font-size:11px; background:#1e293b; border:1px solid #ffd700; color:#ffd700; border-radius:4px; font-weight:bold;">
+                    ✓ Equipada
+                  </button>
+                ` : isUnlocked ? `
+                  <button onclick="window.equipCosmeticAction('aura', '${a.id}')" style="width:100%; padding:6px; font-size:11px; background:#065f46; border:1px solid #10b981; color:#fff; border-radius:4px; font-weight:bold; cursor:pointer;">
+                    Equipar Aura
+                  </button>
+                ` : isHeroLocked ? `
+                  <button disabled style="width:100%; padding:6px; font-size:11px; background:#27272a; border:1px solid #3f3f46; color:#a1a1aa; border-radius:4px;">
+                    🔒 Exclusivo das Olimpíadas
+                  </button>
+                ` : `
+                  <button onclick="window.buyCosmeticAction('aura', '${a.id}')" ${!canAfford ? 'disabled' : ''} style="width:100%; padding:6px; font-size:11px; background:${canAfford ? 'linear-gradient(180deg,#d97706,#b45309)' : '#27272a'}; border:1px solid ${canAfford ? '#f59e0b' : '#3f3f46'}; color:${canAfford ? '#fff' : '#71717a'}; border-radius:4px; font-weight:bold; cursor:${canAfford ? 'pointer' : 'not-allowed'};">
+                    Desbloquear (${a.costAdena.toLocaleString()} Adena)
+                  </button>
+                `}
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `;
+  } else if (activeSubTab === 'frames') {
+    contentHtml = `
+      <div class="cosmetics-grid">
+        ${frames.map(f => {
+          const isUnlocked = state.cosmetics.unlockedFrames.includes(f.id);
+          const isEquipped = state.cosmetics.activeFrame === f.id;
+          const canAfford = (state.gold || 0) >= f.costAdena;
+
+          return `
+            <div class="cosmetic-card ${isEquipped ? 'equipped' : ''}" style="border: 1px solid ${isEquipped ? '#ffd700' : 'rgba(212,167,68,0.25)'};">
+              <div style="display:flex; align-items:center; gap:10px;">
+                <div style="width:48px; height:48px; border-radius:6px; border:2px solid rgba(255,255,255,0.2); background:rgba(0,0,0,0.6); display:flex; align-items:center; justify-content:center; font-size:24px;" class="${f.cssClass}">
+                  ${f.icon}
+                </div>
+                <div style="flex:1;">
+                  <div style="font-size:13px; font-weight:bold; color:#fef08a; display:flex; align-items:center; gap:6px;">
+                    ${f.name}
+                    ${isEquipped ? '<span style="font-size:9px; background:#ffd700; color:#000; padding:1px 4px; border-radius:3px; font-weight:bold;">ATIVO</span>' : ''}
+                  </div>
+                  <div style="font-size:11px; color:#94a3b8; margin-top:2px;">${f.desc}</div>
+                  ${!isUnlocked && f.costAdena > 0 ? `<div style="font-size:11px; color:#f59e0b; font-weight:bold; margin-top:4px;">💰 ${f.costAdena.toLocaleString()} Adena</div>` : ''}
+                </div>
+              </div>
+
+              <div style="margin-top:6px;">
+                ${isEquipped ? `
+                  <button disabled style="width:100%; padding:6px; font-size:11px; background:#1e293b; border:1px solid #ffd700; color:#ffd700; border-radius:4px; font-weight:bold;">
+                    ✓ Ativa nos Equipamentos
+                  </button>
+                ` : isUnlocked ? `
+                  <button onclick="window.equipCosmeticAction('frame', '${f.id}')" style="width:100%; padding:6px; font-size:11px; background:#065f46; border:1px solid #10b981; color:#fff; border-radius:4px; font-weight:bold; cursor:pointer;">
+                    Aplicar Moldura
+                  </button>
+                ` : `
+                  <button onclick="window.buyCosmeticAction('frame', '${f.id}')" ${!canAfford ? 'disabled' : ''} style="width:100%; padding:6px; font-size:11px; background:${canAfford ? 'linear-gradient(180deg,#d97706,#b45309)' : '#27272a'}; border:1px solid ${canAfford ? '#f59e0b' : '#3f3f46'}; color:${canAfford ? '#fff' : '#71717a'}; border-radius:4px; font-weight:bold; cursor:${canAfford ? 'pointer' : 'not-allowed'};">
+                    Desbloquear (${f.costAdena.toLocaleString()} Adena)
+                  </button>
+                `}
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `;
+  } else if (activeSubTab === 'titles') {
+    contentHtml = `
+      <div class="cosmetics-grid">
+        ${titles.map(t => {
+          const isUnlocked = state.cosmetics.unlockedTitles.includes(t.id);
+          const isEquipped = state.cosmetics.activeTitle === t.id;
+          const canAfford = (state.gold || 0) >= t.costAdena;
+
+          return `
+            <div class="cosmetic-card ${isEquipped ? 'equipped' : ''}" style="border: 1px solid ${isEquipped ? '#ffd700' : 'rgba(212,167,68,0.25)'};">
+              <div style="display:flex; align-items:center; gap:10px;">
+                <div style="min-width:70px; height:40px; border-radius:4px; background:rgba(0,0,0,0.7); border:1px solid ${t.color || '#94a3b8'}; display:flex; align-items:center; justify-content:center; padding:0 8px; font-size:11px; font-weight:bold; color:${t.color || '#94a3b8'};">
+                  ${t.titleText || '—'}
+                </div>
+                <div style="flex:1;">
+                  <div style="font-size:13px; font-weight:bold; color:#fef08a; display:flex; align-items:center; gap:6px;">
+                    ${t.name}
+                    ${isEquipped ? '<span style="font-size:9px; background:#ffd700; color:#000; padding:1px 4px; border-radius:3px; font-weight:bold;">ATIVO</span>' : ''}
+                  </div>
+                  <div style="font-size:11px; color:#94a3b8; margin-top:2px;">${t.desc}</div>
+                  ${!isUnlocked && t.costAdena > 0 ? `<div style="font-size:11px; color:#f59e0b; font-weight:bold; margin-top:4px;">💰 ${t.costAdena.toLocaleString()} Adena</div>` : ''}
+                </div>
+              </div>
+
+              <div style="margin-top:6px;">
+                ${isEquipped ? `
+                  <button disabled style="width:100%; padding:6px; font-size:11px; background:#1e293b; border:1px solid #ffd700; color:#ffd700; border-radius:4px; font-weight:bold;">
+                    ✓ Título em Exibição
+                  </button>
+                ` : isUnlocked ? `
+                  <button onclick="window.equipCosmeticAction('title', '${t.id}')" style="width:100%; padding:6px; font-size:11px; background:#065f46; border:1px solid #10b981; color:#fff; border-radius:4px; font-weight:bold; cursor:pointer;">
+                    Exibir Título
+                  </button>
+                ` : `
+                  <button onclick="window.buyCosmeticAction('title', '${t.id}')" ${!canAfford ? 'disabled' : ''} style="width:100%; padding:6px; font-size:11px; background:${canAfford ? 'linear-gradient(180deg,#d97706,#b45309)' : '#27272a'}; border:1px solid ${canAfford ? '#f59e0b' : '#3f3f46'}; color:${canAfford ? '#fff' : '#71717a'}; border-radius:4px; font-weight:bold; cursor:${canAfford ? 'pointer' : 'not-allowed'};">
+                    Desbloquear (${t.costAdena.toLocaleString()} Adena)
+                  </button>
+                `}
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `;
+  }
+
+  container.innerHTML = `
+    <div class="cosmetics-panel-container">
+      <!-- Header do Santuário de Cosméticos -->
+      <div style="background:rgba(0,0,0,0.5); border:1px solid rgba(212,167,68,0.3); border-radius:8px; padding:12px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+        <div>
+          <h3 style="margin:0; font-size:16px; color:#ffd700; letter-spacing:0.08em; display:flex; align-items:center; gap:8px;">
+            ✨ Guarda-Roupa &amp; Efeitos Visuais
+          </h3>
+          <p style="margin:4px 0 0 0; font-size:11px; color:#94a3b8;">
+            Personalize a aura mística, as molduras de inventário e os títulos de honra do seu campeão.
+          </p>
+        </div>
+        <div style="background:rgba(15,23,42,0.8); border:1px solid rgba(255,215,0,0.4); padding:6px 12px; border-radius:6px; text-align:right;">
+          <div style="font-size:10px; color:#cbd5e1;">AURA ATIVA: <span style="color:#ffd700; font-weight:bold;">${curAura.name}</span></div>
+          <div style="font-size:10px; color:#cbd5e1;">MOLDURA: <span style="color:#67e8f9; font-weight:bold;">${curFrame.name}</span></div>
+          <div style="font-size:10px; color:#cbd5e1;">TÍTULO: <span style="color:${curTitle.color || '#ffd700'}; font-weight:bold;">${curTitle.titleText || 'Nenhum'}</span></div>
+        </div>
+      </div>
+
+      <!-- Aviso de Regra Canônica Sem Status -->
+      <div style="background:rgba(59,130,246,0.1); border:1px solid rgba(59,130,246,0.3); border-radius:6px; padding:8px 12px; font-size:11px; color:#93c5fd; display:flex; align-items:center; gap:8px;">
+        <span>ℹ️</span>
+        <span><strong>100% Cosmético:</strong> Nenhum item deste guarda-roupa altera status, dano ou sobrevivência de combate.</span>
+      </div>
+
+      <!-- Navegação por Categorias -->
+      <div class="cosmetic-category-nav">
+        <button class="cosmetic-nav-btn ${activeSubTab === 'auras' ? 'active' : ''}" onclick="window.setCosmeticsSubTab('auras')">
+          👑 Auras Místicas (${state.cosmetics.unlockedAuras.length}/${auras.length})
+        </button>
+        <button class="cosmetic-nav-btn ${activeSubTab === 'frames' ? 'active' : ''}" onclick="window.setCosmeticsSubTab('frames')">
+          🔲 Molduras de Equipamento (${state.cosmetics.unlockedFrames.length}/${frames.length})
+        </button>
+        <button class="cosmetic-nav-btn ${activeSubTab === 'titles' ? 'active' : ''}" onclick="window.setCosmeticsSubTab('titles')">
+          📜 Títulos Honoríficos (${state.cosmetics.unlockedTitles.length}/${titles.length})
+        </button>
+      </div>
+
+      <!-- Grid de Itens da Categoria Ativa -->
+      <div style="max-height:540px; overflow-y:auto; padding-right:4px;">
+        ${contentHtml}
       </div>
     </div>
   `;

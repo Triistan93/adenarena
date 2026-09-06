@@ -89,6 +89,65 @@ export class OlympiadService {
   }
 
   /**
+   * Encontra um oponente para duelo na Olimpíada, priorizando snapshots de jogadores reais via Firebase
+   * com fallback transparente para gladiadores canônicos offline.
+   * @param {Object} state
+   * @returns {Promise<Object>}
+   */
+  static async getMatchmakingOpponent(state) {
+    const points = state.olympiadPoints ?? 1000;
+
+    // 1. Tenta matchmaking assíncrono com jogadores reais do Firebase
+    if (typeof window !== 'undefined' && window.FirebaseBridge?.fetchLeaderboard) {
+      try {
+        const rankings = await window.FirebaseBridge.fetchLeaderboard('olympiad', 25);
+        const myId = window.FirebaseBridge.getCurrentUserId?.();
+        const myName = state.charName || state.heroName || state.name;
+
+        const eligible = (rankings || []).filter(r => {
+          if (!r) return false;
+          if (myId && (r.id === myId || r.userId === myId)) return false;
+          if (myName && r.charName === myName) return false;
+          return true;
+        });
+
+        if (eligible.length > 0) {
+          // Ordena pelo competidor mais próximo em pontuação de Olimpíada
+          eligible.sort((a, b) => Math.abs((a.olympiadPoints || 1000) - points) - Math.abs((b.olympiadPoints || 1000) - points));
+          const chosen = eligible[0];
+          const snap = chosen.statsSnapshot || {};
+          const level = chosen.level || 76;
+          const hp = Math.max(snap.hp || 15000, 10000);
+          const atk = Math.max(snap.pAtk || 500, 250);
+          const def = Math.max(snap.pDef || 400, 200);
+          const matk = Math.max(snap.mAtk || 450, 220);
+          const mdef = Math.max(snap.mDef || 350, 180);
+
+          return {
+            id: chosen.id,
+            name: chosen.charName,
+            title: `Lv. ${level} ${chosen.className || 'Combatente'} [Player Real 🛡️]`,
+            clanName: chosen.clanName || 'Sem Clã',
+            hp,
+            currentHp: hp,
+            atk,
+            def,
+            matk,
+            mdef,
+            elo: chosen.olympiadPoints || 1000,
+            isRealPlayer: true
+          };
+        }
+      } catch (err) {
+        console.warn('[Olympiad] Falha ao carregar oponente real do Firebase, usando gladiador offline:', err);
+      }
+    }
+
+    // 2. Fallback para gladiadores offline
+    return this.getGladiatorOpponent(state);
+  }
+
+  /**
    * Executa um duelo 1v1 na arena mágica da Grand Olympiad.
    * @param {Object} state
    * @param {Object} callbacks
@@ -101,9 +160,9 @@ export class OlympiadService {
       return { ok: false, reason: check.reason };
     }
 
-    const gladiator = this.getGladiatorOpponent(state);
+    const gladiator = await this.getMatchmakingOpponent(state);
     if (callbacks.log) {
-      callbacks.log(`⚔️ [Grand Olympiad] **DUELO INICIADO:** ${state.heroName || 'Você'} vs ${gladiator.name} (${gladiator.title})!`, 'rarity-epic');
+      callbacks.log(`⚔️ [Grand Olympiad] **DUELO INICIADO:** ${state.heroName || state.charName || 'Você'} vs ${gladiator.name} (${gladiator.title})!`, gladiator.isRealPlayer ? 'rarity-legendary' : 'rarity-epic');
     }
 
     // Atributos do Herói
@@ -213,7 +272,8 @@ export class OlympiadService {
     }
 
     state.isHero = true;
-    state.heroTitle = 'Grand Olympiad Hero';
+    state.heroTitle = 'Grand Olympiad Hero 👑';
+    state.heroAura = 'golden_hero_aura';
 
     // Adiciona as 4 Habilidades Heroicas
     state.skills = state.skills || {};

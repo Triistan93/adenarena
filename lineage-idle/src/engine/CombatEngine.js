@@ -11,6 +11,7 @@ import { RACES } from '../data/races.js';
 import { getStats } from './StatsEngine.js';
 import { rollChampionMonster } from './BalanceEngine.js';
 import { StaggerEngine } from './StaggerEngine.js';
+import { MonsterAIEngine, ARCHETYPE_INFO, HUNTING_DIFFICULTIES } from './MonsterAIEngine.js';
 
 let combatInterval = null;
 let monsterAttackTimeout = null;
@@ -152,18 +153,30 @@ export function pickRandomMonster(state, callbacks = {}) {
       championColor: champion ? champion.color : null,
       _stunnedUntil: 0
     };
+
+    // Aplica Nível de Dificuldade de Caça Selecionado (NÍVEL 15.4 / 15.5)
+    const difficulty = MonsterAIEngine.getDifficulty(state);
+    if (difficulty && difficulty.id !== 'normal') {
+      MonsterAIEngine.applyDifficultyToMonster(state.activeMonster, difficulty);
+    }
+
+    // Inicializa IA Avançada de Combate & Archetype (NÍVEL 15.1 e 15.2)
+    MonsterAIEngine.initMonsterAI(state.activeMonster, state);
     StaggerEngine.initMonsterStagger(state.activeMonster);
 
+    const archInfo = ARCHETYPE_INFO[state.activeMonster.archetype] || ARCHETYPE_INFO.berserker;
+    const diffBadge = (difficulty && difficulty.id !== 'normal') ? ` [${difficulty.icon} ${difficulty.name}]` : '';
+
     if (isBossSpawn) {
-      if (callbacks.log) callbacks.log(`🚨 CHEFÃO DA ZONA DESPERTADO! 👑 ${template.name} apareceu!`, 'boss', 'system');
+      if (callbacks.log) callbacks.log(`🚨 CHEFÃO DA ZONA DESPERTADO! 👑 ${template.name}${diffBadge} apareceu!`, 'boss', 'system');
       if (callbacks.floatText) callbacks.floatText(`🚨 CHEFÃO APARECEU!`, 'float-jackpot');
     } else if (champion) {
-      if (callbacks.log) callbacks.log(`${champion.namePrefix}! ${template.name} apareceu com drops multiplicados!`, 'boss', 'system');
+      if (callbacks.log) callbacks.log(`${champion.namePrefix}! ${template.name}${diffBadge} [${archInfo.icon} ${archInfo.label}] surgiu!`, 'boss', 'system');
       if (callbacks.floatText) callbacks.floatText(champion.namePrefix, 'float-jackpot');
     } else if (isElite) {
-      if (callbacks.log) callbacks.log(`⚡ Monstro Élite ${template.name} (Miniboss) surgiu!`, 'boss', 'system');
+      if (callbacks.log) callbacks.log(`⚡ Monstro Élite ${template.name}${diffBadge} [${archInfo.icon} ${archInfo.label}] surgiu!`, 'boss', 'system');
     } else {
-      if (callbacks.log) callbacks.log(`Um ${template.name} selvagem apareceu!`, 'combat', 'combat');
+      if (callbacks.log) callbacks.log(`Um [${archInfo.icon} ${archInfo.label}] ${template.name}${diffBadge} selvagem apareceu!`, 'combat', 'combat');
     }
 
     if (callbacks.renderStageMonster) callbacks.renderStageMonster();

@@ -255,7 +255,58 @@ export const MONSTERS = {
   flameArchon: { name: 'Flame Archon', lvl: 97, hp: 125000, atk: 1300, def: 1100, eva: 14, matk: 3600, mdef: 1500, xp: 210000, sp: 1350, gold: [60000, 120000], element: 'fire', magic: true },
   flameGiantDragon: { name: 'Flame Giant Dragon', lvl: 98, hp: 180000, atk: 3800, def: 1550, eva: 15, xp: 320000, sp: 1900, gold: [90000, 180000], element: 'fire' },
   vulcanLord: { name: 'Vulcan Lord', lvl: 99, hp: 220000, atk: 4200, def: 1700, eva: 18, xp: 420000, sp: 2400, gold: [120000, 240000], element: 'fire', elite: true },
-  valakas: { name: 'Valakas Fire Sovereign Dragon', lvl: 100, hp: 450000, atk: 5500, def: 2200, eva: 20, xp: 800000, sp: 4500, gold: [250000, 500000], element: 'fire', boss: true }
+  valakas: { name: 'Valakas Fire Sovereign Dragon', lvl: 100, hp: 450000, atk: 5500, def: 2200, eva: 20, xp: 800000, sp: 4500, gold: [250000, 500000], element: 'fire', boss: true },
+
+  // ──────────────────────────────────────────────────────────────────────────
+  // 25. SEVEN SIGNS: NECROPOLIS & CATACOMBS
+  // ──────────────────────────────────────────────────────────────────────────
+  // Necropolis of Sacrifice (Lv 32)
+  necro_lilim_butcher: { name: 'Lilim Butcher', lvl: 31, hp: 1250, atk: 45, def: 38, eva: 8, matk: 0, mdef: 25, xp: 260, sp: 20, gold: [80, 160], traits: ['bleed'], element: 'dark' },
+  necro_nephilim_sentinel: { name: 'Nephilim Sentinel', lvl: 32, hp: 1350, atk: 48, def: 44, eva: 6, matk: 0, mdef: 28, xp: 290, sp: 22, gold: [90, 180], traits: ['block'], element: 'holy' },
+  necro_tomb_priest: { name: 'Tomb Inquisitor Priest', lvl: 33, hp: 1100, atk: 35, def: 32, eva: 7, matk: 60, mdef: 45, xp: 310, sp: 25, gold: [100, 200], magic: true, element: 'dark' },
+  necro_sacrifice_boss: { name: 'Archon of Sacrifice', lvl: 35, hp: 6500, atk: 85, def: 75, eva: 8, matk: 80, mdef: 65, xp: 1800, sp: 150, gold: [400, 900], boss: true, element: 'dark' },
+
+  // Necropolis of Pilgrims (Lv 42)
+  necro_lilim_assassin: { name: 'Lilim Assassin', lvl: 41, hp: 2200, atk: 95, def: 72, eva: 18, matk: 0, mdef: 55, xp: 620, sp: 45, gold: [180, 350], traits: ['ambush'], element: 'dark' },
+  necro_nephilim_guard: { name: 'Nephilim Royal Guard', lvl: 42, hp: 2500, atk: 105, def: 90, eva: 10, matk: 0, mdef: 65, xp: 680, sp: 50, gold: [200, 400], traits: ['block'], element: 'holy' },
+  necro_crypt_shaman: { name: 'Pilgrim Crypt Shaman', lvl: 43, hp: 2000, atk: 70, def: 68, eva: 12, matk: 120, mdef: 85, xp: 720, sp: 55, gold: [220, 450], magic: true, element: 'dark' },
+  necro_pilgrim_boss: { name: 'Pilgrim Shadow Lord', lvl: 45, hp: 12000, atk: 160, def: 140, eva: 12, matk: 150, mdef: 120, xp: 4500, sp: 400, gold: [800, 1800], boss: true, element: 'dark' },
+
+  // Necropolis of Worship (Lv 52)
+  necro_gargoyle_watcher: { name: 'Catacomb Gargoyle Watcher', lvl: 51, hp: 3800, atk: 160, def: 130, eva: 14, matk: 0, mdef: 95, xp: 1200, sp: 90, gold: [350, 700], element: 'earth' },
+  necro_lilim_magus: { name: 'Lilim Great Magus', lvl: 52, hp: 3400, atk: 110, def: 115, eva: 15, matk: 220, mdef: 150, xp: 1350, sp: 100, gold: [400, 800], magic: true, element: 'dark' },
+  necro_dusk_templar: { name: 'Dusk Reaver Templar', lvl: 53, hp: 4200, atk: 185, def: 165, eva: 12, matk: 0, mdef: 120, xp: 1450, sp: 110, gold: [420, 850], elite: true, element: 'dark' },
+  necro_worship_boss: { name: 'High Inquisitor of Worship', lvl: 55, hp: 24000, atk: 280, def: 230, eva: 15, matk: 290, mdef: 210, xp: 9500, sp: 850, gold: [1600, 3500], boss: true, element: 'dark' },
+
+  // Necropolis of Patriots (Lv 62)
+  necro_patriot_berserker: { name: 'Lilim Berserker Patriot', lvl: 61, hp: 5800, atk: 260, def: 210, eva: 15, matk: 0, mdef: 160, xp: 2200, sp: 180, gold: [600, 1200], traits: ['enrage'], element: 'dark' },
+  necro_patriot_bishop: { name: 'Nephilim Archbishop', lvl: 62, hp: 5200, atk: 180, def: 190, eva: 16, matk: 340, mdef: 240, xp: 2400, sp: 200, gold: [650, 1300], magic: true, element: 'holy' },
+  necro_patriot_drake: { name: 'Abyssal Catacomb Drake', lvl: 63, hp: 6800, atk: 290, def: 240, eva: 14, matk: 150, mdef: 190, xp: 2700, sp: 220, gold: [750, 1500], element: 'dark' },
+  necro_patriot_boss: { name: 'Dusk Patriot General', lvl: 65, hp: 42000, atk: 420, def: 350, eva: 18, matk: 380, mdef: 320, xp: 18000, sp: 1600, gold: [3000, 7000], boss: true, element: 'dark' },
+
+  // Catacomb of the Ascetics (Lv 72)
+  necro_ascetic_slayer: { name: 'Lilim Shadow Slayer', lvl: 71, hp: 8500, atk: 390, def: 310, eva: 24, matk: 0, mdef: 240, xp: 4200, sp: 350, gold: [1100, 2200], traits: ['bleed', 'ambush'], element: 'dark' },
+  necro_ascetic_crusader: { name: 'Nephilim Sacred Crusader', lvl: 72, hp: 9500, atk: 420, def: 370, eva: 16, matk: 0, mdef: 280, xp: 4600, sp: 390, gold: [1200, 2400], traits: ['block'], element: 'holy' },
+  necro_ascetic_seer: { name: 'Ascetic Void Seer', lvl: 73, hp: 7800, atk: 250, def: 280, eva: 18, matk: 520, mdef: 380, xp: 4900, sp: 420, gold: [1300, 2600], magic: true, element: 'dark' },
+  necro_ascetic_boss: { name: 'Grand Ascetic Master', lvl: 74, hp: 65000, atk: 620, def: 520, eva: 20, matk: 580, mdef: 480, xp: 32000, sp: 2800, gold: [5500, 12000], boss: true, element: 'dark' },
+
+  // Catacomb of the Martyrs (Lv 76)
+  necro_martyr_dreadnought: { name: 'Martyr Dreadnought', lvl: 76, hp: 12500, atk: 540, def: 460, eva: 18, matk: 0, mdef: 360, xp: 6800, sp: 580, gold: [1800, 3600], traits: ['enrage'], element: 'dark' },
+  necro_martyr_sorcerer: { name: 'Martyr Soul Sorcerer', lvl: 77, hp: 10500, atk: 320, def: 380, eva: 20, matk: 690, mdef: 490, xp: 7400, sp: 640, gold: [2000, 4000], magic: true, element: 'dark' },
+  necro_martyr_gargoyle: { name: 'Ancient Necro Gargoyle', lvl: 78, hp: 14000, atk: 590, def: 510, eva: 16, matk: 200, mdef: 420, xp: 8200, sp: 700, gold: [2200, 4500], element: 'earth' },
+  necro_martyr_boss: { name: 'Lord of the Martyrs', lvl: 78, hp: 95000, atk: 850, def: 720, eva: 22, matk: 780, mdef: 680, xp: 55000, sp: 4800, gold: [9000, 20000], boss: true, element: 'dark' },
+
+  // Catacomb of the Apostles (Lv 80)
+  necro_apostle_vanguard: { name: 'Apostle Dawn Vanguard', lvl: 80, hp: 16500, atk: 690, def: 590, eva: 22, matk: 0, mdef: 480, xp: 11000, sp: 950, gold: [2800, 5600], traits: ['block'], element: 'holy' },
+  necro_apostle_hierophant: { name: 'Apostle Grand Hierophant', lvl: 81, hp: 14000, atk: 410, def: 490, eva: 24, matk: 880, mdef: 650, xp: 12500, sp: 1100, gold: [3200, 6400], magic: true, element: 'holy' },
+  necro_apostle_behemoth: { name: 'Apostle Tomb Behemoth', lvl: 82, hp: 22000, atk: 780, def: 680, eva: 14, matk: 0, mdef: 540, xp: 14500, sp: 1250, gold: [3800, 7500], elite: true, element: 'dark' },
+  necro_apostle_boss: { name: 'Apostle High Templar', lvl: 83, hp: 140000, atk: 1100, def: 940, eva: 25, matk: 990, mdef: 860, xp: 90000, sp: 7800, gold: [15000, 32000], boss: true, element: 'holy' },
+
+  // Disciples Necropolis (Lv 84)
+  necro_disciple_knight: { name: 'Lilim Knight of Shilen', lvl: 84, hp: 22000, atk: 880, def: 750, eva: 26, matk: 0, mdef: 620, xp: 18000, sp: 1600, gold: [4500, 9000], traits: ['bleed'], element: 'dark' },
+  necro_disciple_sorceress: { name: 'Disciple Abyss Sorceress', lvl: 84, hp: 18500, atk: 520, def: 620, eva: 28, matk: 1150, mdef: 840, xp: 21000, sp: 1850, gold: [5000, 10000], magic: true, element: 'dark' },
+  necro_disciple_executioner: { name: 'Shilen Death Executioner', lvl: 85, hp: 28000, atk: 990, def: 860, eva: 22, matk: 0, mdef: 720, xp: 26000, sp: 2300, gold: [6000, 12000], elite: true, element: 'dark' },
+  necro_disciple_boss: { name: 'Disciple Gatekeeper Anais', lvl: 85, hp: 220000, atk: 1450, def: 1200, eva: 30, matk: 1350, mdef: 1100, xp: 150000, sp: 13000, gold: [25000, 55000], boss: true, element: 'dark' }
 };
 
 /* ─── Normalização automática ────────────────────────────────────────────

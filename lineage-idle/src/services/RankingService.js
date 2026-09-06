@@ -52,6 +52,7 @@ export const RankingService = {
       race: state.race || 'Human',
       className: state.className || state.class || 'Warrior',
       level: Number(state.level) || 1,
+      gold: Number(state.gold) || 0,
       combatPower: cp,
       olympiadPoints: Number(state.olympiad?.points) || 1000,
       olympiadWins: Number(state.olympiad?.wins) || 0,
@@ -62,6 +63,7 @@ export const RankingService = {
       castleLord: state.clan?.castle || null,
       isHero: Boolean(state.olympiad?.isHero),
       heroWeapon: state.olympiad?.heroWeapon || null,
+      isVerified: (Number(state.level) || 1) >= 20,
       topWeaponName,
       topWeaponEnchant,
       topWeaponGlow,
@@ -100,19 +102,89 @@ export const RankingService = {
   },
 
   /**
+   * Reivindica recompensa diária de classificação com cooldown de 24h
+   */
+  claimRankingReward(state, callbacks = {}) {
+    const { log = console.log, floatText = () => {}, onUpdate = () => {} } = callbacks;
+    if (!state) return { success: false };
+
+    const now = Date.now();
+    const cooldownMs = 24 * 60 * 60 * 1000;
+    const lastClaim = state.lastRankingRewardClaim || 0;
+
+    if (now - lastClaim < cooldownMs) {
+      const remainingHours = Math.ceil((cooldownMs - (now - lastClaim)) / (60 * 60 * 1000));
+      log(`Recompensa de Ranking diária já coletada. Retorne em ${remainingHours}h.`, 'warning');
+      return { success: false, reason: 'cooldown', remainingHours };
+    }
+
+    const leaderboards = this.getLeaderboards(state);
+    const cpList = leaderboards.cp || [];
+    const myProfile = this.buildPublicProfile(state);
+    const rankIndex = cpList.findIndex(p => p.charName === myProfile.charName);
+    const rank = rankIndex !== -1 ? rankIndex + 1 : 12;
+
+    let coins = 50;
+    let scrolls = 0;
+    let adena = 500000;
+
+    if (rank === 1) {
+      coins = 500;
+      scrolls = 5;
+      adena = 5000000;
+    } else if (rank <= 5) {
+      coins = 250;
+      scrolls = 3;
+      adena = 2500000;
+    } else if (rank <= 20) {
+      coins = 100;
+      scrolls = 1;
+      adena = 1000000;
+    }
+
+    state.lastRankingRewardClaim = now;
+    state.adenCoins = (state.adenCoins || 0) + coins;
+    state.gold = (state.gold || 0) + adena;
+
+    if (scrolls > 0) {
+      state.inventory = state.inventory || [];
+      const scrollItem = {
+        uid: 'b_scrl_' + Date.now(),
+        itemId: 'scrl_enchant_wp_b',
+        name: 'Scroll: Enchant Weapon (Grade B)',
+        grade: 'b',
+        qty: scrolls,
+        type: 'scroll'
+      };
+      state.inventory.push(scrollItem);
+    }
+
+    log(`🏆 **[Recompensa Diária de Ranking - Rank #${rank}]** Você recebeu ${coins} Aden Coins, ${adena.toLocaleString()} Adena${scrolls > 0 ? ` e ${scrolls}x Enchant Scrolls` : ''}!`, 'rarity-legendary');
+    floatText(`+${coins} COINS!`, 'float-jackpot');
+
+    onUpdate();
+    return { success: true, rank, coins, adena, scrolls };
+  },
+
+  /**
    * Obtém os quadros de líderes síncronos para renderização imediata na UI
    * @param {Object} [state] - Estado atual do jogador
-   * @returns {Object} Quadros de líderes de CP, Olimpíadas, Duelos e Castelos
+   * @returns {Object} Quadros de líderes
    */
   getLeaderboards(state = null) {
     const cpList = (_cachedRankings.cp && _cachedRankings.cp.length > 0) ? _cachedRankings.cp : this._generateFallbackLeaderboard('cp', state);
     const olyList = (_cachedRankings.olympiad && _cachedRankings.olympiad.length > 0) ? _cachedRankings.olympiad : this._generateFallbackLeaderboard('olympiad', state);
     const duelList = (_cachedRankings.duels && _cachedRankings.duels.length > 0) ? _cachedRankings.duels : this._generateFallbackLeaderboard('duels', state);
+    const wealthList = (_cachedRankings.wealth && _cachedRankings.wealth.length > 0) ? _cachedRankings.wealth : this._generateFallbackLeaderboard('wealth', state);
+    const clansList = (_cachedRankings.clans && _cachedRankings.clans.length > 0) ? _cachedRankings.clans : this._generateFallbackLeaderboard('clans', state);
 
     return {
       cp: this._mergeCurrentPlayer(cpList, state, 'cp'),
+      level: this._mergeCurrentPlayer(cpList.slice(), state, 'level'),
       olympiad: this._mergeCurrentPlayer(olyList, state, 'olympiad'),
       duels: this._mergeCurrentPlayer(duelList, state, 'duels'),
+      wealth: this._mergeCurrentPlayer(wealthList, state, 'wealth'),
+      clans: this._mergeCurrentPlayer(clansList, state, 'clans'),
       castles: _cachedRankings.castles || [
         { castle: 'Castelo de Aden', lord: 'LordValen', clan: 'BloodThorn', tax: '15%' },
         { castle: 'Castelo de Giran', lord: 'SirAres', clan: 'GloryKnights', tax: '10%' },
@@ -124,6 +196,49 @@ export const RankingService = {
   _generateFallbackLeaderboard(category, state) {
     const playerCP = state ? CombatPowerService.calculateCombatPower(state) : 50000;
     const baseCP = Math.max(10000, playerCP);
+
+    if (category === 'wealth') {
+      const wealthArchetypes = [
+        { name: 'MidasGoldhand', race: 'Dwarf', class: 'Fortune Seeker', gold: 250000000, clan: 'GoldenVault', lvl: 78 },
+        { name: 'BaronRothschild', race: 'Human', class: 'Duelist', gold: 180000000, clan: 'BloodThorn', lvl: 76 },
+        { name: 'LadyGiran', race: 'Elf', class: 'Eva Saint', gold: 120000000, clan: 'SilverDawn', lvl: 75 },
+        { name: 'KaelenMerchant', race: 'Dark Elf', class: 'Ghost Sentinel', gold: 95000000, clan: 'GloryKnights', lvl: 72 },
+        { name: 'ThorgarIronbank', race: 'Dwarf', class: 'Maestro', gold: 75000000, clan: 'IronGuild', lvl: 70 }
+      ];
+      return wealthArchetypes.map((a, i) => ({
+        userId: `bot_wealth_${i}`,
+        charName: a.name,
+        race: a.race,
+        className: a.class,
+        level: a.lvl,
+        gold: a.gold,
+        combatPower: Math.floor(baseCP * (1.1 - i * 0.08)),
+        clanName: a.clan,
+        isVerified: true
+      }));
+    }
+
+    if (category === 'clans') {
+      const clanArchetypes = [
+        { clanName: 'BloodThorn', leader: 'LordValen', level: 5, reputation: 125000, members: 40, castle: 'Castelo de Aden' },
+        { clanName: 'GloryKnights', leader: 'SirAres', level: 4, reputation: 82000, members: 35, castle: 'Castelo de Giran' },
+        { clanName: 'SilverDawn', leader: 'LadyElena', level: 4, reputation: 64000, members: 32, castle: 'Castelo de Dion' },
+        { clanName: 'IronGuild', leader: 'ThorgarIronbank', level: 3, reputation: 45000, members: 28, castle: null },
+        { clanName: 'ShadowLegion', leader: 'MorriganDark', level: 3, reputation: 38000, members: 25, castle: null }
+      ];
+      return clanArchetypes.map((c, i) => ({
+        userId: `clan_entry_${i}`,
+        charName: c.leader,
+        clanName: c.clanName,
+        level: c.level,
+        reputation: c.reputation,
+        membersCount: c.members,
+        castleLord: c.castle,
+        isClanEntry: true,
+        isVerified: true
+      }));
+    }
+
     const archetypes = [
       { name: 'KaiserValen', race: 'Human', class: 'Duelist', mult: 1.45, w: '+12 Dual Damascus', oly: 1450, wins: 45 },
       { name: 'SylphAstra', race: 'Elf', class: 'Sagittarius', mult: 1.30, w: '+10 Soul Bow', oly: 1380, wins: 38 },
@@ -144,13 +259,14 @@ export const RankingService = {
       clanName: i % 2 === 0 ? 'BloodThorn' : 'GloryKnights',
       topWeaponName: a.w,
       topWeaponGlow: i === 0 ? 'crimson-fire' : 'golden-amber',
+      isVerified: true,
       statsSnapshot: { hp: 5000, pAtk: 1200, mAtk: 800, pDef: 900, mDef: 700, crit: 250 }
     }));
   },
 
   /**
    * Obtém a lista de líderes para a categoria informada
-   * @param {'cp' | 'olympiad' | 'duels' | 'castles'} category 
+   * @param {'cp' | 'level' | 'olympiad' | 'duels' | 'wealth' | 'clans' | 'castles'} category 
    * @param {Object} state - Estado atual do jogador para mesclar no ranking
    * @returns {Promise<Array>} Lista ordenada de perfis
    */
@@ -182,6 +298,27 @@ export const RankingService = {
    */
   _mergeCurrentPlayer(list, state, category) {
     if (!state) return list;
+
+    if (category === 'clans') {
+      const clan = state.clan || { name: 'Os Guardiões de Aden', level: 1, reputation: 100 };
+      const myClanEntry = {
+        userId: 'player_clan',
+        charName: state.name || 'Tristan',
+        clanName: clan.name,
+        level: clan.level || 1,
+        reputation: clan.reputation || 100,
+        membersCount: 6,
+        castleLord: (clan.castles && clan.castles.length > 0) ? clan.castles.join(', ') : null,
+        isCurrentPlayer: true,
+        isClanEntry: true,
+        isVerified: (state.level || 1) >= 20
+      };
+      const mergedClans = list.filter(c => c.clanName !== myClanEntry.clanName);
+      mergedClans.push(myClanEntry);
+      mergedClans.sort((a, b) => (b.reputation || 0) - (a.reputation || 0));
+      return mergedClans;
+    }
+
     const myProfile = this.buildPublicProfile(state);
     if (!myProfile) return list;
 
@@ -192,10 +329,17 @@ export const RankingService = {
     const merged = list.filter(p => p.userId !== currentUserId && p.charName !== myProfile.charName);
     merged.push(myProfile);
 
-    if (category === 'olympiad') {
+    if (category === 'level') {
+      merged.sort((a, b) => {
+        if ((b.level || 0) !== (a.level || 0)) return (b.level || 0) - (a.level || 0);
+        return (b.combatPower || 0) - (a.combatPower || 0);
+      });
+    } else if (category === 'olympiad') {
       merged.sort((a, b) => (b.olympiadPoints || 0) - (a.olympiadPoints || 0));
     } else if (category === 'duels') {
       merged.sort((a, b) => (b.duelWins || 0) - (a.duelWins || 0));
+    } else if (category === 'wealth') {
+      merged.sort((a, b) => (b.gold || 0) - (a.gold || 0));
     } else {
       merged.sort((a, b) => (b.combatPower || 0) - (a.combatPower || 0));
     }

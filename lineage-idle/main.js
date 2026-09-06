@@ -52,8 +52,16 @@ import {
   checkGradePenalty,
   getPlayerTotalGradePenalty,
   rollChampionMonster,
-  ZONE_GRADE_MULTIPLIERS
+  ZONE_GRADE_MULTIPLIERS,
+  getLevelGapModifiers,
+  getWealthTaxMultiplier
 } from './src/engine/BalanceEngine.js';
+
+import {
+  MonsterAIEngine,
+  ARCHETYPE_INFO,
+  HUNTING_DIFFICULTIES
+} from './src/engine/MonsterAIEngine.js';
 
 import {
   validateOfflineTime,
@@ -222,6 +230,7 @@ import {
   renderSevenSignsTab as uiRenderSevenSignsTab,
   renderFortressTab as uiRenderFortressTab,
   renderColosseumTab as uiRenderColosseumTab,
+  renderCosmeticsTab as uiRenderCosmeticsTab,
   renderRankingTab as uiRenderRankingTab,
   setActiveRankingTab as uiSetActiveRankingTab,
   renderMarketTab as uiRenderMarketTab,
@@ -249,11 +258,19 @@ import { ClanService } from './src/services/ClanService.js';
 import { SkillEnchantService } from './src/services/SkillEnchantService.js';
 import { AugmentationService } from './src/services/AugmentationService.js';
 import { SevenSignsService } from './src/services/SevenSignsService.js';
+import { SEAL_STONES, NECROPOLIS_ZONES } from './src/data/seven_signs.js';
 import { FortressService } from './src/services/FortressService.js';
 import { ColosseumService } from './src/services/ColosseumService.js';
 import { CombatPowerService } from './src/services/CombatPowerService.js';
 import { RankingService } from './src/services/RankingService.js';
 import { MarketService } from './src/services/MarketService.js';
+import { CosmeticService } from './src/services/CosmeticService.js';
+import { AchievementService } from './src/services/AchievementService.js';
+import { WorldBossService } from './src/services/WorldBossService.js';
+import { SynthesisService } from './src/services/SynthesisService.js';
+import { ElementalService } from './src/services/ElementalService.js';
+import { StarterJourneyService } from './src/services/StarterJourneyService.js';
+import { LiveOpsService } from './src/services/LiveOpsService.js';
 import { SubclassCertificationService, EMERGENT_ABILITIES, MASTER_ABILITIES_BY_ARCHETYPE, DIVINE_TRANSFORMATIONS } from './src/services/SubclassCertificationService.js';
 import { CommunityCapService } from './src/services/CommunityCapService.js';
 import { ensureAppLayout, showMenuPanel, updateTabVisibilityByLevel } from './src/ui/AppLayout.js';
@@ -904,7 +921,21 @@ function equipItem(a, b, c = null, silent = false) {
   const callbacks = silent
     ? { log, classSatisfies, getClass }
     : { log, updateAllUI, save, classSatisfies, getClass };
-  return serviceEquipItem(state, uid, targetSlot, callbacks);
+  const res = serviceEquipItem(state, uid, targetSlot, callbacks);
+  if (res && !silent) {
+    // 5.4 VFX de Equipar — Pulsação instantânea do slot e brilho áureo
+    try {
+      const equipSlot = targetSlot || (state.inventory?.find(i => i.uid === uid)?.slot);
+      const slotEl = equipSlot ? (document.querySelector(`.equip-slot[data-slot="${equipSlot}"]`) || document.querySelector(`#slot-${equipSlot}`)) : null;
+      if (slotEl) {
+        slotEl.classList.remove('slot-equip-pulse');
+        void slotEl.offsetWidth;
+        slotEl.classList.add('slot-equip-pulse');
+      }
+      playCombatVFX('buff_aura', { color: '#ffd700', duration: 550 });
+    } catch (_) {}
+  }
+  return res;
 }
 function unequipItem(a, b, silent = false) {
   if (typeof hideItemTooltip === 'function') hideItemTooltip();
@@ -1637,7 +1668,29 @@ function updateStatsUI() {
   
   const _clEl = el('craft-level-stat'); if (_clEl) _clEl.textContent = state.craftLevel;
   const _rcEl = el('race-text'); if (_rcEl) _rcEl.textContent = (state.race && RACES?.[state.race]?.name) || state.race || '-';
-  const _csEl = el('class-text'); if (_csEl) _csEl.textContent = (state.class && getClass(state.class)?.name) || state.class || '-';
+  // 5.1 & 5.3 Cosméticos — Auras & Títulos Honoríficos
+  CosmeticService.ensureState(state);
+  const activeAura = CosmeticService.getActiveAura(state);
+  const _heroAura = el('hero-card-aura');
+  if (_heroAura) {
+    _heroAura.className = `hero-card-aura ${activeAura.cssClass || ''}`;
+    _heroAura.style.display = (activeAura.id !== 'aura_none') ? 'block' : 'none';
+  }
+  const _heroBadge = el('hero-title-badge');
+  if (_heroBadge) _heroBadge.style.display = (state.isHero || state.heroStatus?.isHero) ? 'inline-block' : 'none';
+  const _customTitleBadge = el('hero-custom-title-badge');
+  const activeTitle = CosmeticService.getActiveTitle(state);
+  if (_customTitleBadge) {
+    if (activeTitle && activeTitle.id !== 'title_none') {
+      _customTitleBadge.style.display = 'inline-block';
+      _customTitleBadge.textContent = activeTitle.titleText;
+      _customTitleBadge.style.color = activeTitle.color || '#ffd700';
+      _customTitleBadge.style.borderColor = activeTitle.color || '#ffd700';
+      _customTitleBadge.style.background = 'rgba(0,0,0,0.55)';
+    } else {
+      _customTitleBadge.style.display = 'none';
+    }
+  }
   const _sgEl = el('saga-text'); if (_sgEl) _sgEl.textContent = (state.currentSaga ? (getSagaDef(state.currentSaga)?.name || state.currentSaga) : '-');
   const _sz = el('stage-zone');
   if (_sz) { const _t = (state.zone && ZONES?.[state.zone]) ? ZONES[state.zone].name + (ZONES[state.zone].town ? ' · town' : '') : '—'; if (_sz.textContent !== _t) _sz.textContent = _t; }
@@ -2211,7 +2264,9 @@ function toggleSoulshot() {
 function toggleAutoPotion() {
   state.autoPotionActive = !state.autoPotionActive;
   updateCombatControlsUI();
-  log(`Auto-Poção ${state.autoPotionActive ? 'ATIVADA (Bebe poção quando HP < 50%)' : 'DESATIVADA'}.`, 'system');
+  const hpPct = Math.round((state.autoPotionSettings?.hpThreshold || 0.6) * 100);
+  const mpPct = Math.round((state.autoPotionSettings?.mpThreshold || 0.4) * 100);
+  log(`Auto-Poções ${state.autoPotionActive ? `ATIVADAS (Gatilhos: HP < ${hpPct}%, MP < ${mpPct}%)` : 'DESATIVADAS'}.`, 'system');
   save();
 }
 
@@ -2286,9 +2341,11 @@ function updateCombatControlsUI() {
   if (apBtn) {
     const isApActive = !!state.autoPotionActive;
     apBtn.classList.toggle('active', isApActive);
-    const potCount = getInventoryCount('hp_potion_s') + getInventoryCount('hp_potion_m') + getInventoryCount('hp_potion_l') + getInventoryCount('hp_potion_xl');
-    apBtn.innerHTML = `<span>🧪 Auto-HP</span> <span style="font-size:9px; color:${isApActive ? '#ffd877' : '#94a3b8'};">(${potCount})</span>`;
-    apBtn.title = `Auto-Poção: ${isApActive ? 'LIGADO' : 'DESLIGADO'} (Estoque: ${potCount})`;
+    const hpCount = getInventoryCount('hp_potion_s') + getInventoryCount('hp_potion_m') + getInventoryCount('hp_potion_l') + getInventoryCount('hp_potion_xl');
+    const mpCount = getInventoryCount('mp_potion_s') + getInventoryCount('mp_potion_m') + getInventoryCount('mp_potion_l') + getInventoryCount('mp_potion_xl');
+    const hpPct = Math.round((state.autoPotionSettings?.hpThreshold || 0.6) * 100);
+    apBtn.innerHTML = `<span>🧪 Auto-Pot</span> <span style="font-size:9px; color:${isApActive ? '#ffd877' : '#94a3b8'};">(${hpCount} HP / ${mpCount} MP)</span>`;
+    apBtn.title = `Auto-Poções: ${isApActive ? 'LIGADO' : 'DESLIGADO'} (HP < ${hpPct}%) - Clique para alternar ou configure no botão Macro ⚙️`;
   }
   const spdBtn = el('speed-toggle-btn');
   if (spdBtn) {
@@ -2343,6 +2400,22 @@ function checkOfflineProgress(lastTime) {
   state.gold = Math.max(0, (state.gold || 0) + goldEarned);
   state.xp = Math.max(0, (state.xp || 0) + xpEarned);
   if (spEarned > 0) state.sp = Math.max(0, (state.sp || 0) + spEarned);
+  
+  // Bônus de Retorno para jogadores ausentes há mais de 24 horas (Retenção & Onboarding NÍVEL 7)
+  const isReturnPlayer = minutesOffline >= 1440;
+  if (isReturnPlayer) {
+    state.buffs = state.buffs || {};
+    state.buffs['rested_warrior'] = {
+      until: Date.now() + (2 * 3600 * 1000),
+      name: 'Bênção do Guerreiro Retornado (+50% EXP)',
+      amount: 1
+    };
+    state.gold = (state.gold || 0) + 250000;
+    serviceAddToInventory(state, 'soulshot_ng', 1000);
+    serviceAddToInventory(state, 'hp_potion_xl', 100);
+    log('👑 **[Tributo de Retorno]** Bem-vindo de volta a Aden! Bênção de +50% EXP por 2h e suprimentos imperiais creditados!', 'rarity-legendary');
+  }
+
   checkLevelUp();
   
   const rewardsEl = el('offline-rewards');
@@ -2355,6 +2428,19 @@ function checkOfflineProgress(lastTime) {
       <div>💰 Ouro Ganho: <strong style="color:var(--gilt-bright);">+${goldEarned.toLocaleString()}g</strong></div>
       <div>📘 XP Ganho: <strong style="color:#60a5fa;">+${xpEarned.toLocaleString()} XP</strong></div>
       <div>✨ SP Ganho: <strong style="color:#a855f7;">+${spEarned.toLocaleString()} SP</strong></div>
+      ${isReturnPlayer ? `
+        <div style="background:linear-gradient(135deg,rgba(234,179,8,0.2),rgba(0,0,0,0.5)); border:1px solid #fde047; border-radius:8px; padding:10px; margin-top:10px; text-align:center;">
+          <div style="font-family:'Cinzel',serif; font-size:13px; font-weight:bold; color:#fde047; margin-bottom:4px;">
+            👑 TRIBUTO DO GUERREIRO RETORNADO!
+          </div>
+          <div style="font-size:11.5px; color:#e2e8f0; margin-bottom:6px;">
+            Você esteve ausente por mais de 24 horas! As deusas de Aden te agraciam com suprimentos de retorno:
+          </div>
+          <div style="font-size:11px; color:#a3e635; font-weight:bold;">
+            ✨ +50% Bônus de EXP por 2 Horas · 💰 +250.000 Adena · ⚡ 1.000x Soulshots · 🧪 100x Poções XL
+          </div>
+        </div>
+      ` : ''}
     `;
     modalEl.style.display = 'flex';
     modalEl.classList.add('active');
@@ -2590,14 +2676,18 @@ function renderZoneInfoCard() {
   const monsterIds = [...(z.monsters || [])];
   if (z.boss && !monsterIds.includes(z.boss)) monsterIds.push(z.boss);
 
+  const curDiff = MonsterAIEngine.getDifficulty(state);
   const monsterHtml = monsterIds.map(mId => {
     const mon = MONSTERS[mId];
     if (!mon) return '';
     const badge = mon.boss ? '<span class="z-badge boss">★ Boss</span>' : (mon.elite ? '<span class="z-badge elite">⚔ Elite</span>' : '');
     const mLvl = mon.lvl || z.level;
+    const archKey = mon.archetype || MonsterAIEngine.getMonsterArchetype(mon);
+    const arch = ARCHETYPE_INFO[archKey] || ARCHETYPE_INFO.berserker;
+    const archBadge = `<span class="z-badge arch" style="background:${arch.bg}; color:${arch.color}; border:1px solid ${arch.border}; padding:1px 5px; border-radius:3px; font-size:10px; margin-left:4px;" title="${arch.desc}">${arch.icon} ${arch.label}</span>`;
     return `
       <div class="z-mon-item">
-        <span class="z-mon-name"><span class="z-mon-lvl">Lv.${mLvl}</span> ${mon.name} ${badge}</span>
+        <span class="z-mon-name"><span class="z-mon-lvl">Lv.${mLvl}</span> ${mon.name} ${badge} ${archBadge}</span>
         <span class="z-mon-stats">❤️ ${mon.hp.toLocaleString()} HP | ⚔️ ${mon.atk} ATK</span>
       </div>
     `;
@@ -2619,8 +2709,11 @@ function renderZoneInfoCard() {
       <div class="z-card-title">
         <h3>🗺️ ${z.name}</h3>
         <span class="z-card-req">Requisito: Lv. ${z.level}</span>
+        <div style="margin-top:4px; font-size:11px; color:${curDiff.color}; font-weight:bold;">
+          ${curDiff.icon} Dificuldade: <strong>${curDiff.name}</strong> (${curDiff.xpMult}x XP/Gold · ${curDiff.dropMult}x Drops)
+        </div>
       </div>
-      <div class="z-card-kills">⚔️ Caça: ${currentKills}/15 (Chefão)</div>
+      <div class="z-card-kills">⚔️ Caça: ${currentKills}/50 (Chefão)</div>
     </div>
 
     <div class="z-card-body">
@@ -3294,6 +3387,12 @@ function updateRankingsUI() {
   if (pane) uiRenderRankingTab(pane, state);
 }
 
+function updateCosmeticsUI() {
+  const pane = el('tab-cosmetics');
+  if (pane) uiRenderCosmeticsTab(pane, state);
+}
+window.updateCosmeticsUI = updateCosmeticsUI;
+
 let _uiUpdateRafId = null;
 function updateAllUI(immediate = false) {
   // 1. Atualizações instantâneas e leves de números para feedback imediato ao clique
@@ -3327,6 +3426,45 @@ function updateAllUI(immediate = false) {
     _uiUpdateRafId = null;
     _performFullUIUpdate();
   });
+}
+
+
+
+function updateWorldBossBadgeUI() {
+  try {
+    const badge = el('worldboss-top-badge');
+    if (badge && WorldBossService) {
+      const status = WorldBossService.getStatus();
+      if (status.isActive) {
+        badge.innerHTML = `🚨 <strong>${status.currentBoss.name}</strong> (${status.timeFormatted})`;
+        badge.style.background = 'rgba(220,38,38,0.5)';
+        badge.style.borderColor = '#ef4444';
+        badge.style.color = '#fee2e2';
+      } else {
+        badge.innerHTML = `⏳ World Boss: ${status.timeFormatted}`;
+        badge.style.background = 'rgba(30,41,59,0.5)';
+        badge.style.borderColor = 'rgba(255,255,255,0.2)';
+        badge.style.color = '#94a3b8';
+      }
+    }
+  } catch (e) {}
+}
+
+function updateLiveOpsUI() {
+  try {
+    const badge = el('liveops-event-badge');
+    if (badge && LiveOpsService) {
+      const evt = LiveOpsService.getActiveEvent();
+      badge.textContent = `${evt.icon} ${evt.badge}`;
+      badge.title = evt.desc;
+    }
+    const dot = el('starter-journey-dot');
+    if (dot && StarterJourneyService) {
+      const status = StarterJourneyService.getJourneyStatus(state);
+      const hasClaimable = status.steps.some(s => s.canClaim);
+      dot.style.display = hasClaimable ? 'block' : 'none';
+    }
+  } catch (e) {}
 }
 
 function _performFullUIUpdate() {
@@ -3376,6 +3514,9 @@ function _performFullUIUpdate() {
   if (isTabVisible('colosseum')) safeUiUpdate('colosseum', updateColosseumUI);
   if (isTabVisible('market')) safeUiUpdate('market', updateMarketUI);
   if (isTabVisible('rankings')) safeUiUpdate('rankings', updateRankingsUI);
+  if (isTabVisible('cosmetics')) safeUiUpdate('cosmetics', updateCosmeticsUI);
+  safeUiUpdate('liveops', updateLiveOpsUI);
+  safeUiUpdate('worldboss', updateWorldBossBadgeUI);
   safeUiUpdate('zone-bg', updateZoneBackground);
   safeUiUpdate('zone', updateZoneUI);
   if (isTabVisible('zone') || isTabVisible('zones')) {
@@ -4495,6 +4636,10 @@ function processMonsterDefeat(monster, killingSkill = null) {
   const zoneMult = (D().ZONE_GOLD_MULT && D().ZONE_GOLD_MULT[zoneTier]) || 1;
   const stats = getStats();
 
+  const mLevel = monster.lvl || monster.level || zoneLevel || 1;
+  const pLevel = state.level || 1;
+  const gapMods = getLevelGapModifiers(pLevel, mLevel);
+
   // OVER-HIT: Concede bônus de +25% a +50% de EXP/SP se derrotado por skill de impacto/finalização
   let overhitBonusPct = 0;
   const isOverhit = killingSkill && (killingSkill.def?.overhit || killingSkill.overhit);
@@ -4505,9 +4650,10 @@ function processMonsterDefeat(monster, killingSkill = null) {
     overhitBonusPct = Math.round(25 + (overkillRatio * 25)); // +25% a +50%
   }
 
+  const liveOpsBonuses = LiveOpsService.getLiveOpsBonuses();
   const overhitMult = 1 + (overhitBonusPct / 100);
-  const xpMult = (1 + (stats.xpBoost || 0)) * xpRate * overhitMult;
-  const xpGain = Math.floor(monster.xp * xpMult);
+  const xpMult = (1 + (stats.xpBoost || 0)) * xpRate * overhitMult * gapMods.xpMultiplier * (liveOpsBonuses.xpMult || 1.0);
+  const xpGain = Math.max(1, Math.floor(monster.xp * xpMult));
 
   // SP é concedido exclusivamente por Elites, Chefes de Área, Raidbosses e Missões
   let baseSp = 0;
@@ -4520,9 +4666,11 @@ function processMonsterDefeat(monster, killingSkill = null) {
   } else {
     baseSp = 0; // Monstros comuns NÃO dropam SP (Economia clássica)
   }
-  const spGain = Math.floor(baseSp * spRate * overhitMult);
+  const spGain = Math.floor(baseSp * spRate * overhitMult * gapMods.xpMultiplier * (liveOpsBonuses.spMult || 1.0));
   state.xp += xpGain;
   if (spGain > 0) state.sp += spGain;
+  state.stats = state.stats || {};
+  state.stats.monstersKilled = (state.stats.monstersKilled || 0) + 1;
 
   if (overhitBonusPct > 0) {
     log(`💥 **OVER-HIT!** Golpe fatal com **${killingSkill.def?.name || killingSkill.name}**! Bônus de **+${overhitBonusPct}% EXP/SP** concedido!`, 'rarity-legendary', 'gold_xp');
@@ -4531,7 +4679,7 @@ function processMonsterDefeat(monster, killingSkill = null) {
     }
   }
 
-  log(`Derrotou **${monster.name}**! Recebeu **+${xpGain.toLocaleString()} XP**${spGain > 0 ? ` e **+${spGain} SP**` : ''}`, 'xp', 'gold_xp');
+  log(`Derrotou **${monster.name}**! Recebeu **+${xpGain.toLocaleString()} XP**${spGain > 0 ? ` e **+${spGain} SP**` : ''}${gapMods.isTough ? ' (🔥 Desafio de Alto Risco)' : ''}`, 'xp', 'gold_xp');
 
   // Drenagem de Alma para Soul Crystals (Níveis 1 a 15 e Epic Bosses)
   try {
@@ -4576,10 +4724,15 @@ function processMonsterDefeat(monster, killingSkill = null) {
   }
 
   const baseGold = monster.gold[0] + Math.random() * (monster.gold[1] - monster.gold[0]), jackpot = Math.random() < (monster.boss ? 0.08 : 0.015);
-  const goldMult = zoneMult * (1 + (stats.goldBoost || 0)) * (jackpot ? 10 : 1) * adenaRate;
-  let gold = Math.floor(baseGold * stats.loot * goldMult); if (gold < 1) gold = 1;
-  state.gold += gold; trackGold(gold);
-  if (jackpot) { 
+  const goldMult = zoneMult * (1 + (stats.goldBoost || 0)) * (jackpot ? 10 : 1) * adenaRate * (liveOpsBonuses.goldMult || 1.0);
+  let gold = Math.floor(baseGold * stats.loot * goldMult * gapMods.adenaMultiplier);
+  if (gapMods.isGrey) gold = 0; // Monstro cinza: zero adena
+  else if (gold < 1) gold = 1;
+  state.gold += gold;
+  if (gold > 0) trackGold(gold);
+  if (gapMods.isGrey) {
+    log(`⚠️ [Penalidade de Nível] Monstro insignificante (${gapMods.reason}). 0 Adena coletada.`, 'warning', 'gold_xp');
+  } else if (jackpot) { 
     log(`🪙 JACKPOT! Coletou **+${gold.toLocaleString()} Adena** (×10)!`, 'rarity-legendary', 'gold_xp'); 
     floatText(`🪙 +${gold} Adena`, 'float-jackpot'); 
   } else { 
@@ -4587,18 +4740,11 @@ function processMonsterDefeat(monster, killingSkill = null) {
     if (gold >= 20) floatText(`+${gold} Adena`, 'float-gold'); 
   }
 
-  // Penalidade de Nível de Drop (Level-Gap Anti-Monopólio)
-  const mLevel = monster.lvl || monster.level || zoneLevel || 1;
-  const pLevel = state.level || 1;
-  const lvlDiff = Math.max(0, pLevel - mLevel);
-  let levelGapPenalty = 1.0;
-  if (lvlDiff > 10) {
-    levelGapPenalty = 0.15; // -85% de drop para veteranos caçando em áreas iniciais
-  } else if (lvlDiff > 5) {
-    levelGapPenalty = 0.50; // -50% de drop
-  }
-
-  const effectiveLootRate = stats.loot * levelGapPenalty * dropRate;
+  // Penalidade de Nível Canônica para Drop + Bônus de Dificuldade de Caça (15.5)
+  const huntingDiff = MonsterAIEngine.getDifficulty(state);
+  const diffDropMult = (huntingDiff && huntingDiff.dropMult) || 1.0;
+  const levelGapPenalty = gapMods.dropMultiplier;
+  const effectiveLootRate = stats.loot * levelGapPenalty * dropRate * diffDropMult;
   const rawDrop = D().rollDrop(zoneTier, effectiveLootRate, !!(monster.boss || monster.elite));
   const drops = Array.isArray(rawDrop) ? rawDrop : (rawDrop && rawDrop.itemId ? [ { id: rawDrop.itemId, itemId: rawDrop.itemId, rarity: rawDrop.rarity, isEquipment: true, amount: 1 } ] : []);
   for (const drop of drops) {
@@ -4647,6 +4793,24 @@ function processMonsterDefeat(monster, killingSkill = null) {
       addToInventory(cardId, 1);
       log(`🃏 DROP RARO! Obteve **${cardDef.name}** [${(cardDef.rarity || 'rare').toUpperCase()}]!`, 'rarity-' + (cardDef.rarity || 'rare'), 'loot');
       floatText(`🃏 CARTA DE MONSTRO!`, 'float-jackpot');
+    }
+  }
+
+  // Drop Canônico de Seal Stones (Seven Signs) em Zonas de Necrópole e Catacumbas
+  const isNecroZone = state.zone && (state.zone.startsWith('necro_') || state.zone.includes('necropolis') || state.zone.includes('catacomb'));
+  if (isNecroZone) {
+    const necroDef = NECROPOLIS_ZONES.find(nz => nz.id === state.zone);
+    const eligibleStones = necroDef?.stones || (mLevel >= 75 ? ['seal_stone_red'] : (mLevel >= 50 ? ['seal_stone_green'] : ['seal_stone_blue']));
+    const stoneChance = (monster.boss ? 0.90 : (monster.elite ? 0.60 : 0.35)) * levelGapPenalty * dropRate;
+    if (Math.random() < stoneChance) {
+      const pickedStone = eligibleStones[Math.floor(Math.random() * eligibleStones.length)];
+      const stoneDef = SEAL_STONES[pickedStone];
+      const count = monster.boss ? (Math.floor(Math.random() * 4) + 3) : (monster.elite ? 2 : 1);
+      if (stoneDef) {
+        addToInventory(pickedStone, count);
+        log(`🔷 [Seven Signs] Coletou **${count}x ${stoneDef.name}**!`, 'gain', 'loot');
+        floatText(`🔷 +${count} ${stoneDef.name}`, 'float-jackpot');
+      }
     }
   }
 
@@ -4733,25 +4897,44 @@ function attackMonster() {
     state._mpRegenAcc = (state._mpRegenAcc || 0) + 0.2;
     if (state._mpRegenAcc >= 5) { state._mpRegenAcc = 0; if (state.mp < state.maxMp) { state.mp = Math.min(state.maxMp, state.mp + stats.mpRegen); } }
   }
+  const apSettings = state.autoPotionSettings = state.autoPotionSettings || {
+    hpThreshold: 0.6,
+    mpThreshold: 0.4,
+    autoHp: true,
+    autoMp: true
+  };
   const shouldAutoPot = stats.autoPotion || state.autoPotionActive;
-  if (shouldAutoPot && state.hp < state.maxHp * 0.5) {
-    const potIds = ['hp_potion_xl','hp_potion_l','hp_potion_m','hp_potion_s'];
-    for (const pid of potIds) { 
-      const it = state.inventory.find(i => i.itemId === pid && (i.count || 1) > 0); 
-      if (it) { useItem(it.uid); break; } 
+  if (shouldAutoPot) {
+    if (apSettings.autoHp !== false && state.hp < state.maxHp * (apSettings.hpThreshold || 0.6)) {
+      const potIds = ['hp_potion_xl','hp_potion_l','hp_potion_m','hp_potion_s'];
+      for (const pid of potIds) {
+        const it = state.inventory.find(i => i.itemId === pid && (i.count || 1) > 0);
+        if (it) { useItem(it.uid); break; }
+      }
+    }
+    if (apSettings.autoMp !== false && state.mp < state.maxMp * (apSettings.mpThreshold || 0.4)) {
+      const mpPotIds = ['mp_potion_xl','mp_potion_l','mp_potion_m','mp_potion_s'];
+      for (const pid of mpPotIds) {
+        const it = state.inventory.find(i => i.itemId === pid && (i.count || 1) > 0);
+        if (it) { useItem(it.uid); break; }
+      }
     }
   }
-  
+
   if (!state._cds) state._cds = {};
-  const now = combatTick * 200; 
-  
+  const now = combatTick * 200;
+
   const activeSkills = [];
   const classSkillIds = getClassSkills(state.class);
+  const autoCastSettings = state.skillAutoCast || {};
+  const priorityOrder = state.skillPriorityOrder || [];
+
   for(const [sId, lvl] of Object.entries(state.skills)) {
     const def = SKILL_DEFS[sId];
     if(lvl > 0 && def) {
       const isPassive = def.type === 'passive' || def.type === 'stat';
       if (!isPassive) {
+        if (autoCastSettings[sId] === false) continue;
         const belongsToClass = (classSkillIds && classSkillIds.includes(sId)) || classSatisfies(state.class, def.classReq);
         if (belongsToClass) {
           activeSkills.push({ id: sId, lvl, def });
@@ -4760,7 +4943,14 @@ function attackMonster() {
     }
   }
 
-  activeSkills.sort((a, b) => (b.def.tier || 0) - (a.def.tier || 0));
+  activeSkills.sort((a, b) => {
+    const pA = priorityOrder.indexOf(a.id);
+    const pB = priorityOrder.indexOf(b.id);
+    if (pA !== -1 && pB !== -1) return pA - pB;
+    if (pA !== -1) return -1;
+    if (pB !== -1) return 1;
+    return (b.def.tier || 0) - (a.def.tier || 0);
+  });
 
   const realNow = Date.now();
   let castedSkillThisTick = false;
@@ -4848,12 +5038,23 @@ function attackMonster() {
 
         // Aplica Amplificação de Ressonância Cruzada (ex: Adaga consumindo Marca de Arco)
         const resonanceResult = WeaponResonanceService.processAttackImpact(state, monster, skillWeaponType, rawSDmg, { log, floatText });
-        let sDmg = resonanceResult.finalDamage;
-        const wpnUidForSkill = state.equipment?.weapon;
-        const wpnItemForSkill = wpnUidForSkill ? state.inventory?.find(i => i.uid === wpnUidForSkill) : null;
-        const wpnElemSkill = wpnItemForSkill?.elementalAttribute;
-        if (wpnElemSkill && wpnElemSkill.val > 0 && wpnElemSkill.element !== 'none') {
-          sDmg = Math.floor(sDmg * (1 + ((wpnElemSkill.val / 300) * 0.40)));
+        const elemSkillRes = ElementalService.calculatePlayerElementalDamage(state, monster, sDmg);
+        sDmg = elemSkillRes.finalDamage;
+
+        // IA do Monstro: Reações defensivas (Bloqueio, Esquiva Ladina, Barreira, Enrage)
+        const aiSkillReaction = MonsterAIEngine.processIncomingDamage(monster, sDmg, !useMagicSkill, state);
+        sDmg = aiSkillReaction.finalDamage;
+        if (aiSkillReaction.reflectedDamage > 0) {
+          state.hp = Math.max(0, state.hp - aiSkillReaction.reflectedDamage);
+          stageHeroHurt(aiSkillReaction.reflectedDamage);
+        }
+        for (const ev of (aiSkillReaction.events || [])) {
+          if (ev.floatText && typeof stageFloat === 'function') stageFloat(ev.floatText, ev.floatStyle || 'sf-crit', 'right');
+          if (ev.log) log(ev.log, 'warning');
+        }
+        if (aiSkillReaction.wasDodged) {
+          stageMonsterHurt(0, false, null, 200);
+          return;
         }
         
         monster.hp -= sDmg;
@@ -4951,19 +5152,11 @@ function attackMonster() {
   let damage = dealDamage(monster, atkVal, atkType);
   let wasCrit = false;
 
-  // Bônus de Atributo Elemental da Arma Equipada (até +40% base, +70% contra elemento oposto/fraqueza)
-  const equippedWpnUid = state.equipment?.weapon;
-  const equippedWpn = equippedWpnUid ? state.inventory?.find(i => i.uid === equippedWpnUid) : null;
-  const wpnElem = equippedWpn?.elementalAttribute;
-  if (wpnElem && wpnElem.val > 0 && wpnElem.element !== 'none') {
-    let elemMult = 1 + ((wpnElem.val / 300) * 0.40);
-    const OPPOSITE_ELEMENTS = { fire: 'water', water: 'fire', wind: 'earth', earth: 'wind', holy: 'dark', dark: 'holy' };
-    const monElem = monster.element || (monster.category === 'undead' ? 'dark' : null);
-    if (monElem && OPPOSITE_ELEMENTS[wpnElem.element] === monElem) {
-      elemMult += 0.30;
-      if (typeof stageFloat === 'function') stageFloat(`💥 +${wpnElem.element.toUpperCase()}!`, 'sf-crit', 'right');
-    }
-    damage = Math.floor(damage * elemMult);
+  // Bônus de Atributo Elemental das Armas Equipadas (Primária + Arsenal Secundário via ElementalService)
+  const elemAtkRes = ElementalService.calculatePlayerElementalDamage(state, monster, damage);
+  damage = elemAtkRes.finalDamage;
+  if (elemAtkRes.bonusText && typeof stageFloat === 'function') {
+    stageFloat(elemAtkRes.bonusText, 'sf-crit', 'right');
   }
   
   let soulshotCritBonus = 0;
@@ -5055,6 +5248,39 @@ function attackMonster() {
     monster._stunnedUntil = nowStun + 1500;
     log(`💫 Stun Proc! ${monster.name} foi Atordoado por 1.5s`, 'rarity-rare');
     floatText('STUN!', 'float-epic');
+  }
+
+  // Procs de Certificação de Subclasse ao Atacar (Warrior: Counter Haste, Rogue: Chance Critical)
+  const realNowAttack = Date.now();
+  if (stats.hasteProc && Math.random() < 0.06) {
+    state.buffs = state.buffs || {};
+    state.buffs['counter_haste'] = { amount: 32, until: realNowAttack + 10000 };
+    log(`⚡ **[Subclasse] Counter Haste ativado!** +32% Atk.Spd por 10s!`, 'rarity-legendary');
+    if (typeof stageFloat === 'function') stageFloat('⚡ HASTE!', 'sf-crit', 'left');
+    else if (typeof floatText === 'function') floatText('⚡ HASTE!', 'float-jackpot');
+  }
+  if (stats.critProc && Math.random() < 0.06) {
+    state.buffs = state.buffs || {};
+    state.buffs['chance_critical'] = { amount: 35, until: realNowAttack + 10000 };
+    log(`💥 **[Subclasse] Chance Critical ativado!** +35 Crit Rate & +10% Crit Dmg por 10s!`, 'rarity-legendary');
+    if (typeof stageFloat === 'function') stageFloat('💥 CRITICAL!', 'sf-crit', 'left');
+    else if (typeof floatText === 'function') floatText('💥 CRITICAL!', 'float-jackpot');
+  }
+
+  // IA do Monstro: Reações defensivas (Bloqueio, Esquiva Ladina, Barreira, Enrage)
+  const aiAutoReaction = MonsterAIEngine.processIncomingDamage(monster, damage, !useMagic, state);
+  damage = aiAutoReaction.finalDamage;
+  if (aiAutoReaction.reflectedDamage > 0) {
+    state.hp = Math.max(0, state.hp - aiAutoReaction.reflectedDamage);
+    stageHeroHurt(aiAutoReaction.reflectedDamage);
+  }
+  for (const ev of (aiAutoReaction.events || [])) {
+    if (ev.floatText && typeof stageFloat === 'function') stageFloat(ev.floatText, ev.floatStyle || 'sf-crit', 'right');
+    if (ev.log) log(ev.log, 'warning');
+  }
+  if (aiAutoReaction.wasDodged) {
+    stageMonsterHurt(0, false, null, 200);
+    return;
   }
 
   monster.hp -= damage;
@@ -5180,21 +5406,31 @@ function monsterAttack(monster) {
 
   let damage = dealDamage({ def: stats.def, mdef: stats.mdef }, atkVal, type);
 
-  // Redução por Atributo Elemental das Armaduras Equipadas (até 30% mitigação)
-  if (state.equipment) {
-    let totalArmorElemResist = 0;
-    for (const slotKey of ['armor', 'chest', 'legs', 'helmet', 'gloves', 'boots', 'shield']) {
-      const aUid = state.equipment[slotKey];
-      const aItem = aUid ? state.inventory?.find(i => i.uid === aUid) : null;
-      if (aItem?.elementalAttribute?.val) {
-        totalArmorElemResist += aItem.elementalAttribute.val;
-      }
-    }
-    if (totalArmorElemResist > 0) {
-      const resistReduction = Math.min(0.30, (totalArmorElemResist / 600) * 0.30);
-      damage = Math.max(1, Math.floor(damage * (1 - resistReduction)));
-    }
+  // IA do Monstro: Modificadores de Ataque por Archetype e Traços de Campeão (NÍVEL 15.1 e 15.2)
+  const aiAttack = MonsterAIEngine.processMonsterAttack(monster, stats, state);
+  if (aiAttack.spellName && !isSkillCast) {
+    isSkillCast = true;
+    skillName = aiAttack.spellName;
+    type = aiAttack.atkType;
+    atkVal = aiAttack.baseAtk;
+    damage = dealDamage({ def: stats.def, mdef: stats.mdef }, atkVal, type);
   }
+  if (aiAttack.isCrit) {
+    damage = Math.floor(damage * aiAttack.critMultiplier);
+    stageFloat('💥 CRITICAL!', 'sf-crit', 'left');
+  }
+  if (aiAttack.manaBurnAmt > 0 && state.mp > 0) {
+    state.mp = Math.max(0, state.mp - aiAttack.manaBurnAmt);
+    log(`🔥 [Mana Burn] **${monster.name}** drenou ${aiAttack.manaBurnAmt} MP seu!`, 'warning');
+    stageFloat(`-${aiAttack.manaBurnAmt} MP`, 'sf-hurt', 'left');
+  }
+  if (aiAttack.appliedDebuff) {
+    log(`🔮 [Maldição] **${monster.name}** conjurou ${aiAttack.appliedDebuff.name}!`, 'warning');
+    stageFloat(aiAttack.appliedDebuff.name, 'sf-block', 'left');
+  }
+
+  // Redução por Atributo Elemental das Armaduras Equipadas (via ElementalService mitigação canônica)
+  damage = ElementalService.calculateArmorElementalMitigation(state, monster, damage);
 
   // Level Gap Penalty: se o monstro tem nível muito superior ao jogador (+5 níveis), o dano recebido aumenta
   const levelDiff = (monster.lvl || 1) - (state.level || 1);
@@ -5204,7 +5440,39 @@ function monsterAttack(monster) {
   }
 
   if (state.godMode) damage = 0;
+
+  // Counter Barrier (Celestial Shield - Invulnerabilidade Total L2)
+  if (state.buffs?.['counter_barrier'] && state.buffs['counter_barrier'].until > realNow) {
+    damage = 0;
+    if (typeof stageFloat === 'function') stageFloat('🌟 INVULNERÁVEL', 'sf-block', 'left');
+    else if (typeof floatText === 'function') floatText('🌟 INVULNERÁVEL', 'float-jackpot');
+    log('🌟 [Celestial Shield] Escudo Divino absorveu todo o impacto!', 'rarity-legendary');
+  }
+
   if (damage > 0) {
+    // Procs de Certificação de Subclasse ao Receber Dano
+    if (stats.celestial && Math.random() < 0.05) {
+      state.buffs = state.buffs || {};
+      state.buffs['counter_barrier'] = { until: realNow + 5000 };
+      log('🌟 **[Subclasse] Counter Barrier ativado!** Imunidade total por 5 segundos!', 'rarity-legendary');
+      if (typeof stageFloat === 'function') stageFloat('🌟 CELESTIAL!', 'sf-heal', 'left');
+      else if (typeof floatText === 'function') floatText('🌟 CELESTIAL SHIELD!', 'float-jackpot');
+    }
+    if (stats.defenceProc && Math.random() < 0.06) {
+      state.buffs = state.buffs || {};
+      state.buffs['counter_defense'] = { amount: 25, until: realNow + 10000 };
+      log('🛡️ **[Subclasse] Counter Defense ativado!** +25% P.Def & +25% M.Def por 10s!', 'rarity-epic');
+      if (typeof stageFloat === 'function') stageFloat('🛡️ COUNTER DEF!', 'sf-block', 'left');
+      else if (typeof floatText === 'function') floatText('🛡️ COUNTER DEFENSE!', 'float-epic');
+    }
+    if (stats.spiritProc && Math.random() < 0.05) {
+      state.buffs = state.buffs || {};
+      state.buffs['counter_spirit'] = { amount: 10, until: realNow + 10000 };
+      log('👻 **[Subclasse] Counter Spirit ativado!** +10% P.Atk, M.Atk e Atk.Spd por 10s!', 'rarity-epic');
+      if (typeof stageFloat === 'function') stageFloat('👻 COUNTER SPIRIT!', 'sf-crit', 'left');
+      else if (typeof floatText === 'function') floatText('👻 COUNTER SPIRIT!', 'float-epic');
+    }
+
     state.hp -= damage;
     if (isSkillCast && skillName) {
       log(`⚡ **${monster.name}** acertou [${skillName}] em você causando **${damage}** de dano!`, 'combat');
@@ -5212,6 +5480,12 @@ function monsterAttack(monster) {
       log(`${monster.name} te atingiu por ${damage} de dano`, 'damage');
     }
     stageHeroHurt(damage);
+    if (aiAttack.vampiricHeal > 0) {
+      const vHeal = Math.max(1, Math.floor(damage * aiAttack.vampiricHeal));
+      monster.hp = Math.min(monster._maxHp, monster.hp + vHeal);
+      log(`🦇 [Vampirismo] **${monster.name}** absorveu ${vHeal} de vida de você!`, 'warning');
+      stageFloat(`+${vHeal} HP`, 'sf-heal', 'right');
+    }
   }
   if (state.hp <= 0) {
     state.hp = 0;
@@ -6676,6 +6950,7 @@ export function openPanel(tabName) {
   else if (targetTab === 'zones') safeUiUpdate('zones', updateZoneUI);
   else if (targetTab === 'codex') safeUiUpdate('codex', updateCodexUI);
   else if (targetTab === 'dolls') safeUiUpdate('dolls', updateDollsUI);
+  else if (targetTab === 'cosmetics') safeUiUpdate('cosmetics', updateCosmeticsUI);
   else if (targetTab === 'magiclamp') safeUiUpdate('magiclamp', updateMagicLampUI);
   else if (targetTab === 'quests') safeUiUpdate('quests', updateQuestsUI);
   else if (targetTab === 'tower') safeUiUpdate('tower', updateTowerUI);
@@ -8776,6 +9051,36 @@ export function init() {
       save();
       return res;
     };
+    window.createOrEditClanAction = (name, motto) => {
+      const res = ClanService.createOrEditClan(state, name, motto, {
+        log,
+        floatText,
+        onUpdate: () => { updateAllUI(); save(); }
+      });
+      updateAllUI();
+      save();
+      return res;
+    };
+    window.donateToClanAction = (adenaAmt, spAmt) => {
+      const res = ClanService.donateToClan(state, adenaAmt, spAmt, {
+        log,
+        floatText,
+        onUpdate: () => { updateAllUI(); save(); }
+      });
+      updateAllUI();
+      save();
+      return res;
+    };
+    window.activateClanHallBuffAction = (buffId) => {
+      const res = ClanService.activateClanHallBuff(state, buffId, {
+        log,
+        floatText,
+        onUpdate: () => { updateAllUI(); save(); }
+      });
+      updateAllUI();
+      save();
+      return res;
+    };
 
     // Skill Enchantment Actions
     window.openSkillEnchantModalAction = (skillId, skillName) => {
@@ -9018,6 +9323,382 @@ export function init() {
       save();
       return res;
     };
+    
+    
+    window.openMacroSettingsModal = () => {
+      const modal = el('macro-settings-modal');
+      if (!modal) return;
+      window.renderMacroSettingsModal();
+      modal.classList.add('active');
+    };
+
+    window.closeMacroSettingsModal = () => {
+      const modal = el('macro-settings-modal');
+      if (modal) modal.classList.remove('active');
+    };
+
+    window.renderMacroSettingsModal = () => {
+      const contentEl = el('macro-settings-content');
+      if (!contentEl) return;
+
+      state.autoPotionSettings = state.autoPotionSettings || {
+        hpThreshold: 0.6,
+        mpThreshold: 0.4,
+        autoHp: true,
+        autoMp: true
+      };
+      state.skillAutoCast = state.skillAutoCast || {};
+      state.skillPriorityOrder = state.skillPriorityOrder || [];
+
+      const ap = state.autoPotionSettings;
+      const hpVal = Math.round((ap.hpThreshold || 0.6) * 100);
+      const mpVal = Math.round((ap.mpThreshold || 0.4) * 100);
+
+      const classSkillIds = getClassSkills(state.class) || [];
+      const knownActiveSkills = [];
+      for (const [sId, lvl] of Object.entries(state.skills || {})) {
+        const def = SKILL_DEFS[sId];
+        if (lvl > 0 && def && def.type !== 'passive' && def.type !== 'stat') {
+          if (classSkillIds.includes(sId) || classSatisfies(state.class, def.classReq)) {
+            knownActiveSkills.push({ id: sId, lvl, def });
+          }
+        }
+      }
+
+      knownActiveSkills.sort((a, b) => {
+        const pA = state.skillPriorityOrder.indexOf(a.id);
+        const pB = state.skillPriorityOrder.indexOf(b.id);
+        if (pA !== -1 && pB !== -1) return pA - pB;
+        if (pA !== -1) return -1;
+        if (pB !== -1) return 1;
+        return (b.def.tier || 0) - (a.def.tier || 0);
+      });
+
+      contentEl.innerHTML = `
+        <!-- Section 1: Auto-Poções Avançadas -->
+        <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(212,167,68,0.3); border-radius:10px; padding:14px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <div style="font-family:'Cinzel',serif; font-size:14px; font-weight:bold; color:#ffd877; display:flex; align-items:center; gap:8px;">
+              <span>🧪 Gatilhos de Auto-Poção</span>
+            </div>
+            <button onclick="window.toggleCombatAutoPotionAction()" style="background:${state.autoPotionActive ? 'linear-gradient(180deg,#22c55e,#15803d)' : 'rgba(255,255,255,0.1)'}; border:1px solid ${state.autoPotionActive ? '#86efac' : 'rgba(255,255,255,0.2)'}; color:#fff; border-radius:6px; padding:4px 12px; font-size:12px; font-weight:bold; cursor:pointer;">
+              ${state.autoPotionActive ? '🟢 Ativado' : '⚪ Desativado'}
+            </button>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+            <!-- HP Trigger Card -->
+            <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(239,68,68,0.3); border-radius:8px; padding:10px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                <label style="display:flex; align-items:center; gap:6px; cursor:pointer; font-weight:bold; font-size:12px; color:#fca5a5;">
+                  <input type="checkbox" ${ap.autoHp !== false ? 'checked' : ''} onchange="window.setMacroToggleHp(this.checked)" />
+                  Auto-Poção de Vida (HP)
+                </label>
+                <span style="font-weight:bold; color:#ef4444; font-size:12px;">&lt; ${hpVal}%</span>
+              </div>
+              <input type="range" min="20" max="90" step="5" value="${hpVal}" oninput="window.setMacroHpThreshold(this.value)" style="width:100%; accent-color:#ef4444; cursor:pointer;" />
+              <div style="display:flex; justify-content:space-between; font-size:10px; color:#94a3b8; margin-top:2px;">
+                <span>20% (Crítico)</span>
+                <span>50%</span>
+                <span>90% (Seguro)</span>
+              </div>
+            </div>
+
+            <!-- MP Trigger Card -->
+            <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(59,130,246,0.3); border-radius:8px; padding:10px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                <label style="display:flex; align-items:center; gap:6px; cursor:pointer; font-weight:bold; font-size:12px; color:#93c5fd;">
+                  <input type="checkbox" ${ap.autoMp !== false ? 'checked' : ''} onchange="window.setMacroToggleMp(this.checked)" />
+                  Auto-Poção de Mana (MP)
+                </label>
+                <span style="font-weight:bold; color:#3b82f6; font-size:12px;">&lt; ${mpVal}%</span>
+              </div>
+              <input type="range" min="15" max="85" step="5" value="${mpVal}" oninput="window.setMacroMpThreshold(this.value)" style="width:100%; accent-color:#3b82f6; cursor:pointer;" />
+              <div style="display:flex; justify-content:space-between; font-size:10px; color:#94a3b8; margin-top:2px;">
+                <span>15% (Baixo)</span>
+                <span>40%</span>
+                <span>85% (Alto)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2: Fila de Prioridade & Rotação de Habilidades -->
+        <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(212,167,68,0.3); border-radius:10px; padding:14px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <div>
+              <div style="font-family:'Cinzel',serif; font-size:14px; font-weight:bold; color:#ffd877;">
+                ⚡ Rotação &amp; Prioridade de Habilidades
+              </div>
+              <div style="font-size:11px; color:#94a3b8;">
+                Defina a ordem de execução do combate automático. O herói tentará usar as primeiras skills da lista sempre que o tempo de recarga (CD) estiver disponível.
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:6px; max-height:260px; overflow-y:auto; padding-right:4px;">
+            ${knownActiveSkills.length === 0 ? '<div style="color:#94a3b8; font-size:12px; text-align:center; padding:16px;">Nenhuma habilidade ativa aprendida ainda.</div>' : knownActiveSkills.map((sk, idx) => {
+              const isAuto = state.skillAutoCast[sk.id] !== false;
+              const cdSec = Math.round((sk.def.baseCd || 5000) / 1000);
+              const mpCost = sk.def.mpCost || 0;
+              return `
+                <div style="background:rgba(255,255,255,0.03); border:1px solid ${isAuto ? 'rgba(212,167,68,0.25)' : 'rgba(255,255,255,0.08)'}; border-radius:6px; padding:8px 12px; display:flex; justify-content:space-between; align-items:center; opacity:${isAuto ? 1 : 0.6};">
+                  <div style="display:flex; align-items:center; gap:10px;">
+                    <span style="font-size:12px; font-weight:bold; color:#ffd877; width:20px; text-align:center;">#${idx + 1}</span>
+                    <div>
+                      <div style="font-weight:bold; font-size:13px; color:#f8fafc; font-family:'Cinzel',serif;">${sk.def.name} <span style="font-size:11px; color:#86efac;">(Nv. ${sk.lvl})</span></div>
+                      <div style="font-size:10px; color:#94a3b8;">Recarga: ${cdSec}s | MP: ${mpCost} | Tier: ${sk.def.tier || 1}</div>
+                    </div>
+                  </div>
+
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <label style="display:flex; align-items:center; gap:4px; font-size:11px; cursor:pointer; color:${isAuto ? '#86efac' : '#94a3b8'};">
+                      <input type="checkbox" ${isAuto ? 'checked' : ''} onchange="window.toggleSkillAutoCastAction('${sk.id}')" />
+                      Auto-Usar
+                    </label>
+                    <div style="display:flex; gap:3px;">
+                      <button ${idx === 0 ? 'disabled' : ''} onclick="window.moveSkillPriorityAction('${sk.id}', -1)" style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); color:#fff; border-radius:4px; padding:2px 6px; cursor:${idx === 0 ? 'default' : 'pointer'}; opacity:${idx === 0 ? 0.3 : 1};" title="Subir prioridade">▲</button>
+                      <button ${idx === knownActiveSkills.length - 1 ? 'disabled' : ''} onclick="window.moveSkillPriorityAction('${sk.id}', 1)" style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); color:#fff; border-radius:4px; padding:2px 6px; cursor:${idx === knownActiveSkills.length - 1 ? 'default' : 'pointer'}; opacity:${idx === knownActiveSkills.length - 1 ? 0.3 : 1};" title="Descer prioridade">▼</button>
+                    </div>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+
+        <!-- Section 3: Filtro AFK & Auto-Recycle -->
+        <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(212,167,68,0.3); border-radius:10px; padding:14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+          <div>
+            <div style="font-family:'Cinzel',serif; font-size:14px; font-weight:bold; color:#ffd877;">
+              ♻️ Filtro de Descarte &amp; Auto-Recycle AFK
+            </div>
+            <div style="font-size:11px; color:#94a3b8;">
+              Status atual: <strong>${state.autoRecycle?.enabled ? '🟢 ATIVADO (' + (state.autoRecycle.mode === 'sell' ? 'Auto-Venda' : 'Desmanche em Cristais') + ')' : '⚪ DESATIVADO'}</strong>. Suporta No-Grade até Grade A com salvaguarda inviolável de itens +enchant e raros.
+            </div>
+          </div>
+          <button onclick="window.openAutoRecycleModal()" style="background:linear-gradient(180deg,#d4a744,#8a641c); border:1px solid #ffe699; color:#000; font-family:'Cinzel',serif; font-weight:bold; font-size:12px; border-radius:6px; padding:8px 16px; cursor:pointer;">
+            Configurar Filtro AFK ⚙️
+          </button>
+        </div>
+      `;
+    };
+
+    window.setMacroHpThreshold = (val) => {
+      state.autoPotionSettings = state.autoPotionSettings || {};
+      state.autoPotionSettings.hpThreshold = parseFloat(val) / 100;
+      updateCombatControlsUI();
+      save();
+    };
+
+    window.setMacroMpThreshold = (val) => {
+      state.autoPotionSettings = state.autoPotionSettings || {};
+      state.autoPotionSettings.mpThreshold = parseFloat(val) / 100;
+      updateCombatControlsUI();
+      save();
+    };
+
+    window.setMacroToggleHp = (checked) => {
+      state.autoPotionSettings = state.autoPotionSettings || {};
+      state.autoPotionSettings.autoHp = !!checked;
+      save();
+    };
+
+    window.setMacroToggleMp = (checked) => {
+      state.autoPotionSettings = state.autoPotionSettings || {};
+      state.autoPotionSettings.autoMp = !!checked;
+      save();
+    };
+
+    window.toggleCombatAutoPotionAction = () => {
+      toggleAutoPotion();
+      window.renderMacroSettingsModal();
+    };
+
+    window.toggleSkillAutoCastAction = (skillId) => {
+      state.skillAutoCast = state.skillAutoCast || {};
+      state.skillAutoCast[skillId] = state.skillAutoCast[skillId] === false ? true : false;
+      window.renderMacroSettingsModal();
+      save();
+    };
+
+    window.moveSkillPriorityAction = (skillId, dir) => {
+      state.skillPriorityOrder = state.skillPriorityOrder || [];
+      const classSkillIds = getClassSkills(state.class) || [];
+      const allActive = [];
+      for (const [sId, lvl] of Object.entries(state.skills || {})) {
+        const def = SKILL_DEFS[sId];
+        if (lvl > 0 && def && def.type !== 'passive' && def.type !== 'stat') {
+          if (classSkillIds.includes(sId) || classSatisfies(state.class, def.classReq)) {
+            allActive.push(sId);
+          }
+        }
+      }
+      const currentList = state.skillPriorityOrder.filter(id => allActive.includes(id));
+      for (const id of allActive) {
+        if (!currentList.includes(id)) currentList.push(id);
+      }
+      const idx = currentList.indexOf(skillId);
+      if (idx === -1) return;
+      const targetIdx = idx + dir;
+      if (targetIdx >= 0 && targetIdx < currentList.length) {
+        const temp = currentList[idx];
+        currentList[idx] = currentList[targetIdx];
+        currentList[targetIdx] = temp;
+        state.skillPriorityOrder = currentList;
+        window.renderMacroSettingsModal();
+        save();
+      }
+    };
+
+    window.openLiveOpsModal = () => {
+      const modal = el('liveops-event-modal');
+      if (!modal) return;
+      const evt = LiveOpsService.getActiveEvent();
+      const titleEl = el('liveops-modal-title');
+      const subEl = el('liveops-modal-subtitle');
+      const contentEl = el('liveops-modal-content');
+      if (titleEl) titleEl.innerHTML = `${evt.icon} ${evt.title}`;
+      if (subEl) subEl.textContent = evt.desc;
+      if (contentEl) {
+        contentEl.innerHTML = `
+          <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(234,179,8,0.3); border-radius:8px; padding:14px; margin-bottom:14px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <span style="font-weight:bold; color:#fde047; font-size:14px;">Status do Evento:</span>
+              <span style="background:rgba(34,197,94,0.2); color:#4ade80; border:1px solid #22c55e; padding:2px 8px; border-radius:4px; font-size:11px; font-weight:bold;">● ATIVO AGORA</span>
+            </div>
+            <p style="margin:0 0 10px 0; font-size:12px; color:#cbd5e1;">${evt.desc}</p>
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:8px;">
+              <div style="background:rgba(0,0,0,0.5); padding:8px; border-radius:6px; text-align:center; border:1px solid rgba(255,255,255,0.1);">
+                <div style="font-size:11px; color:#94a3b8;">Bônus Adena</div>
+                <div style="font-size:15px; font-weight:bold; color:#facc15;">+${Math.round((evt.modifiers.goldMult - 1) * 100)}%</div>
+              </div>
+              <div style="background:rgba(0,0,0,0.5); padding:8px; border-radius:6px; text-align:center; border:1px solid rgba(255,255,255,0.1);">
+                <div style="font-size:11px; color:#94a3b8;">Bônus EXP</div>
+                <div style="font-size:15px; font-weight:bold; color:#38bdf8;">+${Math.round((evt.modifiers.xpMult - 1) * 100)}%</div>
+              </div>
+              <div style="background:rgba(0,0,0,0.5); padding:8px; border-radius:6px; text-align:center; border:1px solid rgba(255,255,255,0.1);">
+                <div style="font-size:11px; color:#94a3b8;">Bônus SP</div>
+                <div style="font-size:15px; font-weight:bold; color:#c084fc;">+${Math.round((evt.modifiers.spMult - 1) * 100)}%</div>
+              </div>
+              <div style="background:rgba(0,0,0,0.5); padding:8px; border-radius:6px; text-align:center; border:1px solid rgba(255,255,255,0.1);">
+                <div style="font-size:11px; color:#94a3b8;">Forja / Síntese</div>
+                <div style="font-size:15px; font-weight:bold; color:#fb923c;">+${Math.round(evt.modifiers.enchantBonus * 100)}%</div>
+              </div>
+            </div>
+          </div>
+          <div style="font-size:11px; color:#94a3b8; text-align:center; font-style:italic;">
+            Os eventos de Live-Ops atualizam automaticamente em tempo real com base no calendário do reino.
+          </div>
+        `;
+      }
+      modal.classList.add('active');
+    };
+
+    window.closeLiveOpsModal = () => {
+      const modal = el('liveops-event-modal');
+      if (modal) modal.classList.remove('active');
+    };
+
+    window.renderStarterJourneyModal = () => {
+      const status = StarterJourneyService.getJourneyStatus(state);
+      const overviewEl = el('starter-journey-overview');
+      const listEl = el('starter-journey-list');
+
+      if (overviewEl) {
+        const pct = Math.round((status.claimedCount / 7) * 100);
+        overviewEl.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <span style="font-weight:bold; color:#fef08a; font-size:14px; font-family:'Cinzel',serif;">Progresso dos 7 Passos:</span>
+            <span style="font-weight:bold; color:#38bdf8; font-size:13px;">${status.claimedCount} / 7 Concluídos (${pct}%)</span>
+          </div>
+          <div style="width:100%; height:8px; background:rgba(255,255,255,0.1); border-radius:4px; overflow:hidden;">
+            <div style="width:${pct}%; height:100%; background:linear-gradient(90deg, #eab308, #22c55e); transition:width 0.3s;"></div>
+          </div>
+        `;
+      }
+
+      if (listEl) {
+        listEl.innerHTML = status.steps.map(step => {
+          const isDone = step.isCompleted;
+          const isClaimed = step.isClaimed;
+          const canClaim = step.canClaim;
+          const pct = Math.min(100, Math.round((step.currentProgress / step.targetCount) * 100));
+
+          let btnHtml = '';
+          if (isClaimed) {
+            btnHtml = `<button disabled style="background:rgba(255,255,255,0.05); color:#9ca3af; border:1px solid rgba(255,255,255,0.15); border-radius:6px; padding:6px 12px; font-size:12px; cursor:default;">✅ Resgatado</button>`;
+          } else if (canClaim) {
+            btnHtml = `<button onclick="window.claimStarterJourneyStepAction('${step.id}')" style="background:linear-gradient(180deg, #22c55e, #16a34a); color:#fff; border:1px solid #4ade80; border-radius:6px; padding:6px 14px; font-size:12px; font-weight:bold; cursor:pointer; box-shadow:0 0 10px rgba(34,197,94,0.4);">🎁 Resgatar</button>`;
+          } else {
+            btnHtml = `<button disabled style="background:rgba(0,0,0,0.4); color:#64748b; border:1px solid rgba(255,255,255,0.08); border-radius:6px; padding:6px 12px; font-size:12px; cursor:not-allowed;">Em Progresso</button>`;
+          }
+
+          return `
+            <div style="background:rgba(255,255,255,0.03); border:1px solid ${canClaim ? 'rgba(34,197,94,0.6)' : isClaimed ? 'rgba(255,255,255,0.1)' : 'rgba(212,167,68,0.2)'}; border-radius:8px; padding:12px; display:flex; justify-content:space-between; align-items:center; gap:12px; transition:border-color 0.2s;">
+              <div style="display:flex; align-items:center; gap:12px; flex:1;">
+                <div style="font-size:26px; width:44px; height:44px; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.3); border-radius:8px; border:1px solid rgba(255,255,255,0.1);">${step.icon}</div>
+                <div style="flex:1;">
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <span style="font-size:11px; background:rgba(234,179,8,0.2); color:#fde047; padding:1px 6px; border-radius:4px; font-weight:bold;">Passo ${step.stepNumber}</span>
+                    <span style="font-weight:bold; color:#f8fafc; font-size:14px; font-family:'Cinzel',serif;">${step.title}</span>
+                  </div>
+                  <div style="font-size:12px; color:#94a3b8; margin:3px 0 6px 0;">${step.desc}</div>
+                  <div style="display:flex; align-items:center; gap:10px;">
+                    <div style="flex:1; max-width:180px; height:6px; background:rgba(0,0,0,0.5); border-radius:3px; overflow:hidden;">
+                      <div style="width:${pct}%; height:100%; background:${isDone ? '#22c55e' : '#eab308'};"></div>
+                    </div>
+                    <span style="font-size:11px; color:#cbd5e1; font-weight:bold;">${step.currentProgress}/${step.targetCount}</span>
+                    <span style="font-size:11px; color:#facc15; margin-left:auto;">🏆 ${step.rewardText}</span>
+                  </div>
+                </div>
+              </div>
+              <div>${btnHtml}</div>
+            </div>
+          `;
+        }).join('');
+      }
+    };
+
+    window.openStarterJourneyModal = () => {
+      const modal = el('starter-journey-modal');
+      if (!modal) return;
+      window.renderStarterJourneyModal();
+      modal.classList.add('active');
+    };
+
+    window.closeStarterJourneyModal = () => {
+      const modal = el('starter-journey-modal');
+      if (modal) modal.classList.remove('active');
+    };
+
+    window.claimStarterJourneyStepAction = (stepId) => {
+      const res = StarterJourneyService.claimStepReward(state, stepId, {
+        log,
+        floatText,
+        onUpdate: () => {
+          updateAllUI();
+          save();
+        }
+      });
+      if (res.success) {
+        window.renderStarterJourneyModal();
+        updateLiveOpsUI();
+      }
+      return res;
+    };
+
+    window.claimRankingRewardAction = () => {
+      const res = RankingService.claimRankingReward(state, {
+        log,
+        floatText,
+        onUpdate: () => { updateRankingsUI(); updateAllUI(); save(); }
+      });
+      updateRankingsUI();
+      updateAllUI();
+      save();
+      return res;
+    };
 
     window.getGameState = () => {
       const data = { 
@@ -9238,13 +9919,21 @@ export function init() {
         save();
       };
 
-      window.applySAAction = (color, saKey) => {
-        const wpnUid = state.equipment?.weapon;
+      window.applySAAction = (color, saKey, targetUid) => {
+        const wpnUid = targetUid || window._selectedSAWeaponUid || state.equipment?.weapon;
         if (!wpnUid) {
-          log('Equipe uma arma primeiro para engastar o Soul Crystal!', 'system');
+          log('Selecione ou equipe uma arma para engastar o Soul Crystal!', 'system');
           return;
         }
-        serviceApplySoulCrystal(state, wpnUid, color, saKey, { log, updateAllUI, save, floatText });
+        ElementalService.applySoulCrystalToWeapon(state, wpnUid, color, saKey, { log, updateAllUI, save, floatText });
+        updateCraftUI();
+      };
+
+      window.removeSAAction = (targetUid) => {
+        const wpnUid = targetUid || window._selectedSAWeaponUid || state.equipment?.weapon;
+        if (!wpnUid) return;
+        ElementalService.removeSoulCrystalFromWeapon(state, wpnUid, { log, updateAllUI, save });
+        updateCraftUI();
       };
 
       window.unsealItemAction = (uid) => {
@@ -9279,18 +9968,32 @@ export function init() {
         serviceRemoveDyeSymbol(state, slotIdx, { log, updateAllUI, save });
       };
 
+      window.ElementalService = ElementalService;
       window.applyElementalAction = (uid, elem) => {
-        serviceApplyElementalStone(state, uid, elem, { log, updateAllUI, save });
+        ElementalService.applyElementalInfusion(state, uid, elem, { log, updateAllUI, save });
+        updateCraftUI();
       };
 
-      window.compoundBeltsWithDuplicateAction = () => {
-        const pUid = el('belt-primary-select')?.value;
-        const sUid = el('belt-secondary-select')?.value;
-        if (!pUid || !sUid) {
-          log('Selecione os dois cintos para a fusão!', 'system');
+      window.removeElementalAction = (uid) => {
+        ElementalService.removeElementalInfusion(state, uid, { log, updateAllUI, save });
+        updateCraftUI();
+      };
+
+      window.SynthesisService = SynthesisService;
+      window.executeSynthesisAction = (primaryUid, secondaryUid) => {
+        const res = SynthesisService.executeSynthesis(state, primaryUid, secondaryUid, { log, updateAllUI, save, playCombatVFX });
+        updateCraftUI();
+        return res;
+      };
+
+      window.compoundBeltsWithDuplicateAction = (pUid, sUid) => {
+        const primary = pUid || el('belt-primary-select')?.value || window._synthesisTargetUid;
+        const secondary = sUid || el('belt-secondary-select')?.value || window._synthesisIngredientUid;
+        if (!primary || !secondary) {
+          log('Selecione os dois itens para a síntese!', 'system');
           return;
         }
-        serviceCompoundBeltsWithDuplicates(state, pUid, sUid, { log, updateAllUI, save, floatText });
+        return window.executeSynthesisAction(primary, secondary);
       };
 
       window.swapWeaponSameGradeAction = (weaponUid, targetId) => {
@@ -9318,6 +10021,163 @@ export function init() {
 
       window.WeaponResonanceService = WeaponResonanceService;
       window.StaggerEngine = StaggerEngine;
+      window.CosmeticService = CosmeticService;
+      window.MonsterAIEngine = MonsterAIEngine;
+
+      window.setHuntingDifficulty = (diffId) => {
+        const res = MonsterAIEngine.setDifficulty(state, diffId);
+        if (!res.success) {
+          log(`⚠️ ${res.reason}`, 'warning');
+          floatText(res.reason, 'float-warning');
+          return;
+        }
+        log(`⚡ Dificuldade de Caça ajustada para **${res.difficulty.name}** (${res.difficulty.xpMult}x XP/Adena, ${res.difficulty.dropMult}x Drops)!`, 'rarity-epic');
+        floatText(`⚡ MODO ${res.difficulty.name.toUpperCase()}!`, 'float-jackpot');
+        state.activeMonster = null;
+        pickRandomMonster();
+        renderZoneMap();
+        renderZoneInfoCard();
+        save();
+      };
+
+      
+    window.AchievementService = AchievementService;
+    
+    window.WorldBossService = WorldBossService;
+
+    window.openWorldBossModal = () => {
+      const modal = el('worldboss-modal');
+      if (!modal) return;
+      window.renderWorldBossModal();
+      modal.classList.add('active');
+    };
+
+    window.closeWorldBossModal = () => {
+      const modal = el('worldboss-modal');
+      if (modal) modal.classList.remove('active');
+    };
+
+    window.renderWorldBossModal = () => {
+      const contentEl = el('worldboss-modal-content');
+      if (!contentEl || !WorldBossService) return;
+
+      const status = WorldBossService.getStatus();
+      const boss = status.isActive ? status.currentBoss : status.nextBoss;
+
+      contentEl.innerHTML = `
+        <!-- Banner de Status & Contagem Regressiva -->
+        <div style="background:${status.isActive ? 'rgba(220,38,38,0.25)' : 'rgba(0,0,0,0.5)'}; border:1px solid ${status.isActive ? '#ef4444' : 'rgba(212,167,68,0.3)'}; border-radius:10px; padding:14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+          <div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-size:12px; font-weight:bold; background:${status.isActive ? '#ef4444' : '#3b82f6'}; color:#fff; padding:2px 8px; border-radius:4px;">
+                ${status.isActive ? '● INVASÃO ATIVA AGORA' : '⏳ AGUARDANDO DESPERTAR'}
+              </span>
+              <span style="font-size:13px; color:#cbd5e1; font-weight:bold;">
+                ${status.isActive ? 'Tempo restante no reino:' : 'Próxima Incursão em:'}
+              </span>
+            </div>
+            <div style="font-size:24px; font-family:'Cinzel',serif; font-weight:bold; color:${status.isActive ? '#f87171' : '#fde047'}; margin-top:4px;">
+              ${status.timeFormatted}
+            </div>
+          </div>
+
+          <div>
+            ${status.isActive ? `
+              <button onclick="window.joinWorldBossFightAction()" style="padding:10px 20px; font-family:'Cinzel',serif; font-weight:bold; font-size:14px; background:linear-gradient(180deg,#ef4444,#991b1b); border:1px solid #fca5a5; color:#fff; border-radius:6px; cursor:pointer; box-shadow:0 0 16px rgba(239,68,68,0.6); animation:pulse 1.5s infinite;">
+                ⚔️ ENTRAR NA INCURSÃO AGORA!
+              </button>
+            ` : `
+              <button disabled style="padding:10px 18px; font-family:'Cinzel',serif; font-size:12px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); color:#9ca3af; border-radius:6px; cursor:not-allowed;">
+                Aguardando Invasão (A cada 3h)
+              </button>
+            `}
+          </div>
+        </div>
+
+        <!-- Perfil do Chefe em Destaque -->
+        <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:16px; display:flex; gap:16px; align-items:flex-start;">
+          <div style="width:72px; height:72px; border-radius:10px; border:2px solid #ef4444; background:#120707; display:flex; align-items:center; justify-content:center; font-size:36px; box-shadow:0 0 15px rgba(239,68,68,0.4);">
+            🐉
+          </div>
+          <div style="flex:1;">
+            <div style="display:flex; justify-content:space-between; align-items:baseline;">
+              <div>
+                <h3 style="margin:0; font-family:'Cinzel',serif; font-size:18px; color:#fca5a5;">${boss.name}</h3>
+                <div style="font-size:12px; color:#ffd877; font-weight:bold;">${boss.title} (Nível ${boss.lvl})</div>
+              </div>
+              <div style="font-size:13px; font-weight:bold; color:#ef4444;">HP: ${boss.hp.toLocaleString()}</div>
+            </div>
+            <p style="margin:8px 0; font-size:12px; line-height:1.5; color:#94a3b8;">${boss.lore}</p>
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(110px, 1fr)); gap:6px; background:rgba(0,0,0,0.5); padding:8px; border-radius:6px; font-size:11px;">
+              <div>ATK: <strong style="color:#f87171;">${boss.atk}</strong></div>
+              <div>DEF: <strong style="color:#60a5fa;">${boss.def}</strong></div>
+              <div>M.DEF: <strong style="color:#c084fc;">${boss.mdef}</strong></div>
+              <div>Adena: <strong style="color:#facc15;">${boss.goldReward.toLocaleString()}</strong></div>
+              <div>Aden Coins: <strong style="color:#ffd700;">+${boss.adenCoinsReward} AC</strong></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recompensas Épicas da Incursão -->
+        <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(212,167,68,0.25); border-radius:10px; padding:14px;">
+          <div style="font-family:'Cinzel',serif; font-size:13px; font-weight:bold; color:#fef08a; margin-bottom:8px;">
+            🏆 Recompensas &amp; Drops de Participação Global:
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:8px;">
+            ${boss.drops.map(d => `
+              <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(212,167,68,0.2); border-radius:6px; padding:8px; display:flex; align-items:center; gap:8px; font-size:11px;">
+                <span style="font-size:16px;">${d.isEpicJewel ? '💎' : d.itemId.includes('book') ? '📜' : '⚡'}</span>
+                <div>
+                  <div style="font-weight:bold; color:${d.isEpicJewel ? '#d8b4fe' : '#f8fafc'};">${d.name}</div>
+                  <div style="color:#94a3b8; font-size:10px;">Chance: ${Math.round(d.chance * 100)}%</div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    };
+
+    window.joinWorldBossFightAction = () => {
+      const res = WorldBossService.joinWorldBoss(state, {
+        log,
+        floatText,
+        renderStageMonster,
+        attackMonster,
+        save
+      });
+      if (res.success) {
+        window.closeWorldBossModal();
+        updateAllUI();
+      }
+      return res;
+    };
+
+    window.claimAchievementAction = (achId) => {
+      const res = AchievementService.claimAchievement(state, achId, {
+        log,
+        floatText,
+        onUpdate: () => {
+          updateCosmeticsUI();
+          updateAllUI();
+          save();
+        }
+      });
+      if (res.success) {
+        updateCosmeticsUI();
+      }
+      return res;
+    };
+
+      window.buyCosmeticAction = (category, itemId) => {
+        CosmeticService.buyCosmetic(state, category, itemId, { log, save, updateAllUI });
+        updateCosmeticsUI();
+      };
+
+      window.equipCosmeticAction = (category, itemId) => {
+        CosmeticService.equipCosmetic(state, category, itemId, { log, save, updateAllUI });
+        updateCosmeticsUI();
+      };
 
       // Inicializa listeners em tempo real e sincronização do Mercado de Giran
       MarketService.initCloudSubscription(state, { log, updateAllUI, save });

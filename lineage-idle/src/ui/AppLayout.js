@@ -37,7 +37,8 @@ export const PANEL_SELECTORS = {
   colosseum: ['#tab-colosseum', '#colosseum-panel', '[data-panel="colosseum"]'],
   rankings: ['#tab-rankings', '#rankings-panel', '[data-panel="rankings"]'],
   forge: ['#tab-forge', '#forge-panel', '[data-panel="forge"]'],
-  codex: ['#tab-codex', '#codex-panel', '[data-panel="codex"]']
+  codex: ['#tab-codex', '#codex-panel', '[data-panel="codex"]'],
+  cosmetics: ['#tab-cosmetics', '#cosmetics-panel', '[data-panel="cosmetics"]']
 };
 
 function getShadowRoot() {

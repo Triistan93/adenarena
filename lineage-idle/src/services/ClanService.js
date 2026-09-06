@@ -328,4 +328,152 @@ export class ClanService {
     onUpdate();
     return { success: true };
   }
+
+  /**
+   * Cria ou edita as informações do Clã (Nome, Lema, Brasão).
+   */
+  static createOrEditClan(state, name, motto, callbacks = {}) {
+    const { log = console.log, onUpdate = () => {}, floatText = () => {} } = callbacks;
+    const cleanName = String(name || '').trim();
+    if (!cleanName || cleanName.length < 3) {
+      log('O nome do Clã deve ter pelo menos 3 caracteres.', 'error');
+      return { success: false, reason: 'name_too_short' };
+    }
+    const isNew = !state.clan || !state.clan.name || state.clan.name === 'Os Guardiões de Aden';
+    const cost = isNew ? 100000 : 250000;
+    if ((state.gold || 0) < cost) {
+      log(`Adena insuficiente para fundar/renomear o Clã (${cost.toLocaleString()} Adena necessária).`, 'error');
+      return { success: false, reason: 'gold_low' };
+    }
+    state.gold -= cost;
+    if (!state.clan) {
+      state.clan = { level: 1, castles: [], lastTaxTimestamp: Date.now(), accumulatedTaxes: {} };
+    }
+    state.clan.name = cleanName;
+    state.clan.motto = motto || 'Pela Glória de Aden!';
+    state.clan.reputation = state.clan.reputation || 100;
+    state.clan.donationsAdena = state.clan.donationsAdena || 0;
+    state.clan.donationsSp = state.clan.donationsSp || 0;
+
+    log(`🏰 Clã **[${cleanName}]** ${isNew ? 'fundado com sucesso' : 'atualizado'}! Lema: "${state.clan.motto}"`, 'rarity-legendary');
+    floatText(`🏰 CLÃ FUNDADO!`, 'float-jackpot');
+    onUpdate();
+    return { success: true, clan: state.clan };
+  }
+
+  /**
+   * Realiza doação de Adena/SP para o avanço da Reputação e EXP do Clã.
+   */
+  static donateToClan(state, adenaAmt = 0, spAmt = 0, callbacks = {}) {
+    const { log = console.log, onUpdate = () => {}, floatText = () => {} } = callbacks;
+    if (adenaAmt <= 0 && spAmt <= 0) return { success: false };
+
+    if ((state.gold || 0) < adenaAmt) {
+      log('Adena insuficiente para realizar a doação.', 'error');
+      return { success: false, reason: 'gold_low' };
+    }
+    if ((state.sp || 0) < spAmt) {
+      log('SP insuficiente para realizar a doação.', 'error');
+      return { success: false, reason: 'sp_low' };
+    }
+
+    state.gold -= adenaAmt;
+    state.sp -= spAmt;
+    if (!state.clan) this.getClanStatus(state);
+
+    const repGained = Math.floor(adenaAmt / 5000) + Math.floor(spAmt / 100);
+    state.clan.reputation = (state.clan.reputation || 0) + repGained;
+    state.clan.donationsAdena = (state.clan.donationsAdena || 0) + adenaAmt;
+    state.clan.donationsSp = (state.clan.donationsSp || 0) + spAmt;
+
+    log(`🛡️ Doação de Clã concluída: +${adenaAmt.toLocaleString()} Adena, +${spAmt.toLocaleString()} SP. Reputação do Clã: **+${repGained}**!`, 'rarity-epic');
+    floatText(`+${repGained} Reputação`, 'float-epic');
+    onUpdate();
+    return { success: true, repGained };
+  }
+
+  /**
+   * Ativa bênçãos mágicas do Clan Hall.
+   */
+  static activateClanHallBuff(state, buffId, callbacks = {}) {
+    const { log = console.log, onUpdate = () => {}, floatText = () => {} } = callbacks;
+    const buff = CLAN_HALL_BUFFS[buffId];
+    if (!buff) return { success: false, reason: 'invalid_buff' };
+
+    if ((state.gold || 0) < buff.costAdena) {
+      log(`Adena insuficiente para ativar ${buff.name} (${buff.costAdena.toLocaleString()} Adena).`, 'error');
+      return { success: false, reason: 'gold_low' };
+    }
+
+    state.gold -= buff.costAdena;
+    state.buffs = state.buffs || {};
+    state.buffs['clan_hall_' + buffId] = {
+      until: Date.now() + buff.durationMs,
+      amount: 1,
+      name: buff.name
+    };
+
+    log(`✨ **[Clan Hall]** ${buff.name} ativada por 1 hora! (${buff.desc})`, 'rarity-legendary');
+    floatText(`✨ ${buff.name.toUpperCase()}!`, 'float-jackpot');
+    onUpdate();
+    return { success: true };
+  }
+
+  /**
+   * Retorna os membros do Clã (incluindo o jogador e veteranos simulados).
+   */
+  static getClanRoster(state) {
+    const clan = (state && state.clan) ? state.clan : { name: 'Os Guardiões de Aden', level: 1, reputation: 100 };
+    const pName = state?.name || 'Tristan';
+    const pLvl = state?.level || 1;
+    const pClass = state?.className || state?.class || 'Guerreiro';
+
+    return [
+      { name: pName, rank: '👑 Líder do Clã', level: pLvl, className: pClass, contribution: (clan.donationsAdena || 0) + (clan.donationsSp || 0) * 10, isPlayer: true },
+      { name: 'SirGalahad', rank: '⚔️ General', level: Math.max(40, pLvl + 2), className: 'Paladin', contribution: 350000, isPlayer: false },
+      { name: 'ElenaMoonsong', rank: '🔮 Feiticeira Real', level: Math.max(38, pLvl + 1), className: 'Spellsinger', contribution: 280000, isPlayer: false },
+      { name: 'KaelenShadow', rank: '🗡️ Assassino Sênior', level: Math.max(35, pLvl), className: 'Abyss Walker', contribution: 210000, isPlayer: false },
+      { name: 'ThorgarIron', rank: '🛡️ Mestre Artesão', level: Math.max(32, pLvl - 2), className: 'Bounty Hunter', contribution: 190000, isPlayer: false },
+      { name: 'LyraSunwhisper', rank: '✨ Sacerdotisa', level: Math.max(30, pLvl - 3), className: 'Bishop', contribution: 150000, isPlayer: false }
+    ];
+  }
 }
+
+export const CLAN_HALL_BUFFS = {
+  eva_blessing: {
+    id: 'eva_blessing',
+    name: 'Bênção de Eva',
+    icon: '💧',
+    desc: '+20% MP Regen e -10% Consumo de Mana',
+    costAdena: 50000,
+    durationMs: 3600000,
+    stats: { mpRegenPercent: 0.20 }
+  },
+  paagrio_protection: {
+    id: 'paagrio_protection',
+    name: "Proteção de Pa'agrio",
+    icon: '🔥',
+    desc: '+12% P.Def e +12% M.Def',
+    costAdena: 75000,
+    durationMs: 3600000,
+    stats: { pDefPercent: 0.12, mDefPercent: 0.12 }
+  },
+  shilen_harmony: {
+    id: 'shilen_harmony',
+    name: 'Harmonia de Shilen',
+    icon: '🌑',
+    desc: '+15% EXP em Caça e +10% Drop de Adena',
+    costAdena: 100000,
+    durationMs: 3600000,
+    stats: { xpBoost: 0.15, goldBoost: 0.10 }
+  },
+  royal_teleport: {
+    id: 'royal_teleport',
+    name: 'Portal Arcano do Clã',
+    icon: '🌀',
+    desc: 'Viagem instantânea com custo reduzido e +10 Velocidade',
+    costAdena: 60000,
+    durationMs: 3600000,
+    stats: { speedBonus: 10 }
+  }
+};

@@ -47,10 +47,16 @@ export const CONSUMABLES = {
   "teleport_scroll": {"id":"teleport_scroll","name":"Teleport Scroll","slot":"consumable","tier":1,"healAmt":0,"stack":99999,"price":200,"icon":"scrolls/teleport_scroll.png","desc":"Teleporta para uma cidade."},
   "scroll_teleport": {"id":"scroll_teleport","name":"Pergaminho de Teleporte","slot":"consumable","tier":1,"healAmt":0,"stack":99999,"price":200,"icon":"scrolls/teleport_scroll.png","desc":"Teleporta instantaneamente para uma cidade segura."},
   "xp_boost_1h": {"id":"xp_boost_1h","name":"Xp Boost 1h","slot":"consumable","tier":1,"healAmt":0,"stack":99999,"price":200,"icon":"scrolls/xp_boost_1h.png","desc":"Aumenta XP ganho temporariamente."},
-  "xp_boost_4h": {"id":"xp_boost_4h","name":"Xp Boost 4h","slot":"consumable","tier":1,"healAmt":0,"stack":99999,"price":200,"icon":"scrolls/xp_boost_4h.png","desc":"Aumenta XP ganho temporariamente."}
+  "xp_boost_4h": {"id":"xp_boost_4h","name":"Xp Boost 4h","slot":"consumable","tier":1,"healAmt":0,"stack":99999,"price":200,"icon":"scrolls/xp_boost_4h.png","desc":"Aumenta XP ganho temporariamente."},
+  "seal_stone_blue": {"id":"seal_stone_blue","name":"Blue Seal Stone 🔷","slot":"consumable","tier":2,"healAmt":0,"stack":99999,"price":30,"icon":"materials/crystal_blue_d.png","desc":"Pedra de selo elemental das Catacumbas. Vale 3 Ancient Adena."},
+  "seal_stone_green": {"id":"seal_stone_green","name":"Green Seal Stone 🟢","slot":"consumable","tier":3,"healAmt":0,"stack":99999,"price":50,"icon":"materials/crystal_green_c.png","desc":"Pedra de selo pura de Necrópoles intermediárias. Vale 5 Ancient Adena."},
+  "seal_stone_red": {"id":"seal_stone_red","name":"Red Seal Stone 🔴","slot":"consumable","tier":4,"healAmt":0,"stack":99999,"price":100,"icon":"materials/crystal_red_b.png","desc":"Pedra de selo suprema concentrada com sangue antigo. Vale 10 Ancient Adena."}
 };
 
 export const MATERIALS = {
+  "seal_stone_blue": {"id":"seal_stone_blue","name":"Blue Seal Stone 🔷","slot":"material","tier":2,"stack":99999,"price":30,"icon":"materials/crystal_blue_d.png","desc":"Pedra de selo elemental das Catacumbas. Vale 3 Ancient Adena."},
+  "seal_stone_green": {"id":"seal_stone_green","name":"Green Seal Stone 🟢","slot":"material","tier":3,"stack":99999,"price":50,"icon":"materials/crystal_green_c.png","desc":"Pedra de selo pura de Necrópoles intermediárias. Vale 5 Ancient Adena."},
+  "seal_stone_red": {"id":"seal_stone_red","name":"Red Seal Stone 🔴","slot":"material","tier":4,"stack":99999,"price":100,"icon":"materials/crystal_red_b.png","desc":"Pedra de selo suprema concentrada com sangue antigo. Vale 10 Ancient Adena."},
   "adamantite": {"id":"adamantite","name":"Adamantite","slot":"material","tier":1,"stack":99999,"price":10,"icon":"materials/adamantite.png","desc":"Material: Adamantite."},
   "ancient_relic": {"id":"ancient_relic","name":"Ancient Relic","slot":"material","tier":1,"stack":99999,"price":10,"icon":"materials/ancient_relic.png","desc":"Material: Ancient Relic."},
   "beast_blood": {"id":"beast_blood","name":"Beast Blood","slot":"material","tier":1,"stack":99999,"price":10,"icon":"materials/beast_blood.png","desc":"Material: Beast Blood."},

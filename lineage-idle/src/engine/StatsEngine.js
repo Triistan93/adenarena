@@ -514,6 +514,7 @@ export function getStats(state) {
 
   const now = Date.now();
   let buffAtk = 0, buffDef = 0, buffSpd = 0, buffMatk = 0, buffMdef = 0, buffAtkMult = 0;
+  let buffCrit = 0, buffCritDmg = 0;
 
   let xpBoost = 0, goldBoost = 0, luckBoost = 0, autoPotion = false;
   state.buffs = state.buffs || {};
@@ -529,6 +530,17 @@ export function getStats(state) {
     else if (k === 'goldBoost') goldBoost = Math.max(goldBoost, Number(b.amount) || 0);
     else if (k === 'luckBoost') luckBoost = Math.max(luckBoost, Number(b.amount) || 0);
     else if (k === 'autoPotion') autoPotion = true;
+    else if (k === 'counter_haste') buffSpd += Number(b.amount) || 32;
+    else if (k === 'counter_defense') { buffDef += Math.floor(baseDef * 0.25); buffMdef += Math.floor(baseMdef * 0.25); }
+    else if (k === 'counter_spirit') { buffAtkMult += 0.10; buffMatk += Math.floor(baseMatk * 0.10); buffSpd += 10; }
+    else if (k === 'chance_critical') { buffCrit += Number(b.amount) || 35; buffCritDmg += 0.10; }
+    else if (k === 'heroic_valor') { buffAtk += 250; buffMatk += 300; buffDef += 500; }
+    else if (k === 'heroic_miracle') { buffDef += 5400; buffMdef += 4050; }
+    else if (k === 'heroic_berserker') { buffSpd += 50; }
+    else if (k === 'clan_hall_eva_blessing') { mpRegenBonus += 0.20; }
+    else if (k === 'clan_hall_paagrio_protection') { buffDef += Math.floor(baseDef * 0.12); buffMdef += Math.floor(baseMdef * 0.12); }
+    else if (k === 'clan_hall_shilen_harmony') { xpBoost += 0.15; goldBoost += 0.10; }
+    else if (k === 'clan_hall_royal_teleport') { buffSpd += 10; }
   }
 
   // Process Active Elixirs from Alchemy System
@@ -716,6 +728,22 @@ export function getStats(state) {
         elixirHpMult += (item.beltBonuses.hpBonusPct || 0);
         buffDef += (item.beltBonuses.pDefBonus || 0);
       }
+
+      // 16.1 Synthesis Rank (Fusão de Duplicatas na Forja: Rank 1 a 5, +10% stats base por rank)
+      const synthRank = Number(item.synthesisRank || item.compoundRank) || 0;
+      if (synthRank > 0) {
+        const synthMult = synthRank * 0.10;
+        if (slot === 'weapon' || slot === 'weapon2') {
+          buffAtkMult += synthMult;
+          buffMatk += Math.floor(baseMatk * synthMult);
+        } else if (['armor', 'chest', 'legs', 'head', 'helmet', 'gloves', 'boots', 'shield'].includes(slot)) {
+          buffDef += Math.floor(baseDef * synthMult);
+          buffMdef += Math.floor(baseMdef * synthMult);
+        } else {
+          elixirHpMult += (synthMult * 0.5);
+          buffDef += Math.floor(baseDef * (synthMult * 0.5));
+        }
+      }
     }
   }
 
@@ -829,14 +857,14 @@ export function getStats(state) {
   const finalEva  = Math.floor(baseEva + (Number(eb.eva) || 0) + (Number(setB.eva) || 0) + codexB.eva + dollsB.eva + (certB.evaAdd || 0));
   const finalMatk = Math.floor((baseMatk + (Number(eb.matk) || 0) + (Number(setB.matk) || 0) + buffMatk + codexB.matk + dollsB.matk + certB.matk) * towerMult * certMatkMult);
   const finalMdef = Math.floor((baseMdef + (Number(eb.mdef) || 0) + (Number(setB.mdef) || 0) + buffMdef + codexB.mdef + dollsB.mdef + certB.mdef) * towerMult * certMdefMult);
-  const finalCrit = (Number(eb.crit) || 0) + (Number(setB.crit) || 0) + codexB.crit + dollsB.crit + certB.crit + astralB.crit + saCrit + augCrit + legacyCrit;
+  const finalCrit = (Number(eb.crit) || 0) + (Number(setB.crit) || 0) + codexB.crit + dollsB.crit + certB.crit + astralB.crit + saCrit + augCrit + legacyCrit + buffCrit;
 
   const lootBonus  = (Number(race?.stats?.lootBonus) || 0) + (Number(cls?.base?.lootBonus) || 0) + itemLootBonus + luckBoost;
   const rawAtkSpd  = ((buffSpd + (dollsB.speed || 0)) / 100) + (certB.atkSpdPercent || 0);
   const lifeDrain  = ((Number(eb.lifesteal) || 0) + (dollsB.lifesteal || 0) + ((setB.lifesteal || 0) / 100));
   const craftBonus = itemCraftBonus;
 
-  const baseCritDmg = 1 + sk('executioner') * 0.15 + astralB.critDmg;
+  const baseCritDmg = 1 + sk('executioner') * 0.15 + astralB.critDmg + buffCritDmg;
   const regenHp   = sk('holylight') * 0.01;
   const meteorLvl = sk('meteor');
   const execute   = sk('assassinate') * 0.02;

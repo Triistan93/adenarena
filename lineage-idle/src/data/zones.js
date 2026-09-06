@@ -11,8 +11,9 @@ export const SAGAS = [
   { id: 'interlude', name: 'Interlude', level: 0, unlocksAt: 0, zones: ['talkingIsland', 'elvenForest', 'darkForest', 'orcVillage', 'dwarvenMine', 'kamaelLair', 'ruinedOutpost', 'howlingMoor'] },
   { id: 'prelude', name: 'Prelude of War', level: 1, unlocksAt: 20, zones: ['giranOutskirts', 'orcenRuins', 'forsakenCrypt', 'blackCitadel'] },
   { id: 'saga1', name: 'Saga I: The Awakening', level: 2, unlocksAt: 40, zones: ['gludioCastle', 'wolfMountain', 'riftOfTheVoid', 'emeraldGrove', 'underworldGate', 'valleyOfSaints', 'swampOfScreams'] },
-  { id: 'saga2', name: 'Saga II: The Shadow', level: 3, unlocksAt: 76, zones: ['adenCity', 'dragonValley'] },
-  { id: 'saga3', name: 'Saga III: Realm of the Gods', level: 4, unlocksAt: 85, zones: ['imperialTomb', 'antharasLair', 'forgeOfGods'] }
+  { id: 'sevensigns', name: 'Seven Signs: Catacombs & Necropolis', level: 3, unlocksAt: 30, zones: ['necro_sacrifice', 'necro_pilgrim', 'necro_worship', 'necro_patriot', 'necro_ascetics', 'necro_martyrs', 'necro_apostles', 'necro_disciple'] },
+  { id: 'saga2', name: 'Saga II: The Shadow', level: 4, unlocksAt: 76, zones: ['adenCity', 'dragonValley'] },
+  { id: 'saga3', name: 'Saga III: Realm of the Gods', level: 5, unlocksAt: 85, zones: ['imperialTomb', 'antharasLair', 'forgeOfGods'] }
 ];
 
 export function getSagaDef(idOrIndex) {
@@ -50,7 +51,19 @@ export const ZONES = {
   dragonValley:    { name: 'Dragon Valley', level: 80, monsters: ['dragon', 'dragonKnight', 'frostKnight', 'frostLordDragon', 'dragonValleyOverlord'], boss: 'lindvior', shop: 'dragonValley', town: true },
   imperialTomb:    { name: 'Imperial Tomb', level: 85, monsters: ['tombGuardian', 'sepulcherArchon', 'undeadKnight', 'imperialGhostMage', 'lichLord'], boss: 'deathKing', shop: 'adenCity', town: false },
   antharasLair:    { name: "Antharas' Lair", level: 90, monsters: ['caveDrake', 'magmaBeast', 'earthDrake', 'caveWyrmBehemoth', 'antharasBehemoth'], boss: 'antharas', shop: 'dragonValley', town: false },
-  forgeOfGods:     { name: 'Forge of the Gods', level: 95, monsters: ['valakasMinion', 'lavaGolem', 'flameArchon', 'flameGiantDragon', 'vulcanLord'], boss: 'valakas', shop: 'dragonValley', town: false }
+  forgeOfGods:     { name: 'Forge of the Gods', level: 95, monsters: ['valakasMinion', 'lavaGolem', 'flameArchon', 'flameGiantDragon', 'vulcanLord'], boss: 'valakas', shop: 'dragonValley', town: false },
+
+  // ═══════════════════════════════════════════════════════════════════════
+  // SEVEN SIGNS: NECROPOLIS & CATACOMBS (Drops Canônicos de Seal Stones)
+  // ═══════════════════════════════════════════════════════════════════════
+  necro_sacrifice: { name: 'Necropolis of Sacrifice', level: 32, monsters: ['necro_lilim_butcher', 'necro_nephilim_sentinel', 'necro_tomb_priest'], boss: 'necro_sacrifice_boss', shop: 'giranOutskirts', town: false },
+  necro_pilgrim:   { name: 'Necropolis of Pilgrims', level: 42, monsters: ['necro_lilim_assassin', 'necro_nephilim_guard', 'necro_crypt_shaman'], boss: 'necro_pilgrim_boss', shop: 'gludioCastle', town: false },
+  necro_worship:   { name: 'Necropolis of Worship', level: 52, monsters: ['necro_gargoyle_watcher', 'necro_lilim_magus', 'necro_dusk_templar'], boss: 'necro_worship_boss', shop: 'gludioCastle', town: false },
+  necro_patriot:   { name: 'Necropolis of Patriots', level: 62, monsters: ['necro_patriot_berserker', 'necro_patriot_bishop', 'necro_patriot_drake'], boss: 'necro_patriot_boss', shop: 'dragonValley', town: false },
+  necro_ascetics:  { name: 'Catacomb of the Ascetics', level: 72, monsters: ['necro_ascetic_slayer', 'necro_ascetic_crusader', 'necro_ascetic_seer'], boss: 'necro_ascetic_boss', shop: 'adenCity', town: false },
+  necro_martyrs:   { name: 'Catacomb of the Martyrs', level: 76, monsters: ['necro_martyr_dreadnought', 'necro_martyr_sorcerer', 'necro_martyr_gargoyle'], boss: 'necro_martyr_boss', shop: 'adenCity', town: false },
+  necro_apostles:  { name: 'Catacomb of the Apostles', level: 80, monsters: ['necro_apostle_vanguard', 'necro_apostle_hierophant', 'necro_apostle_behemoth'], boss: 'necro_apostle_boss', shop: 'adenCity', town: false },
+  necro_disciple:  { name: 'Disciples Necropolis', level: 84, monsters: ['necro_disciple_knight', 'necro_disciple_sorceress', 'necro_disciple_executioner'], boss: 'necro_disciple_boss', shop: 'adenCity', town: false }
 };
 
 /**
@@ -85,6 +98,16 @@ export const ZONE_BACKGROUNDS = {
   imperialTomb:   '/img/Maps/imperialtomb.jpg',
   antharasLair:   '/img/Maps/antharaslair.jpg',
   forgeOfGods:    '/img/Maps/forgeofgods.jpg',
+
+  // Zonas dos Sete Selos (Necrópoles e Catacumbas)
+  necro_sacrifice: '/img/Maps/forsakencrypt.jpg',
+  necro_pilgrim:   '/img/Maps/riftofthevoid.jpg',
+  necro_worship:   '/img/Maps/orcenRuins.png',
+  necro_patriot:   '/img/Maps/blackcitaddel.jpg',
+  necro_ascetics:  '/img/Maps/imperialtomb.jpg',
+  necro_martyrs:   '/img/Maps/imperialtomb.jpg',
+  necro_apostles:  '/img/Maps/gatesoftheunderworld.jpg',
+  necro_disciple:  '/img/Maps/antharaslair.jpg',
 
   // Raid Bosses e Arenas Épicas
   queen_ant:      '/img/Maps/queenant.jpg',

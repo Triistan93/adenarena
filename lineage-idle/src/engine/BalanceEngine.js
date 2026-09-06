@@ -205,6 +205,77 @@ export function rollChampionMonster() {
   return null;
 }
 
+/**
+ * ═══════════════════════════════════════════════════════════════════════════
+ * NÍVEL 6.2: CURVA DE DESCOMPASSO DE NÍVEL (LEVEL GAP PENALTY CANÔNICA L2)
+ * ═══════════════════════════════════════════════════════════════════════════
+ * Evita farm predatório de monstros iniciantes por personagens avançados (anti-bot)
+ * e premia caçadas de alto risco contra monstros mais fortes.
+ */
+export function getLevelGapModifiers(playerLevel = 1, monsterLevel = 1) {
+  const pLvl = Math.max(1, Number(playerLevel) || 1);
+  const mLvl = Math.max(1, Number(monsterLevel) || 1);
+  const diff = mLvl - pLvl; // positivo = monstro mais forte, negativo = monstro mais fraco
+
+  // 1. Faixa Equilibrada: -3 a +3 níveis (100% de recompensas)
+  if (diff >= -3 && diff <= 3) {
+    return {
+      xpMultiplier: 1.0,
+      adenaMultiplier: 1.0,
+      dropMultiplier: 1.0,
+      isTough: false,
+      isGrey: false,
+      reason: 'Equilibrado'
+    };
+  }
+
+  // 2. Monstro Mais Forte (+4 a +8 níveis): Desafio com Bônus de Risco
+  if (diff >= 4) {
+    const bonusXp = Math.min(0.35, (diff - 3) * 0.07);
+    return {
+      xpMultiplier: 1.0 + bonusXp,
+      adenaMultiplier: 1.0,
+      dropMultiplier: 1.10,
+      isTough: true,
+      isGrey: false,
+      reason: `Desafio de Alto Risco (+${Math.round(bonusXp * 100)}% XP)`
+    };
+  }
+
+  // 3. Monstro Mais Fraco (-4 a -8 níveis): Decaimento canônico progressivo
+  if (diff === -4) return { xpMultiplier: 0.85, adenaMultiplier: 0.85, dropMultiplier: 0.85, isTough: false, isGrey: false, reason: 'Monstro Fraco (-15% Recompensas)' };
+  if (diff === -5) return { xpMultiplier: 0.70, adenaMultiplier: 0.70, dropMultiplier: 0.70, isTough: false, isGrey: false, reason: 'Monstro Fraco (-30% Recompensas)' };
+  if (diff === -6) return { xpMultiplier: 0.50, adenaMultiplier: 0.50, dropMultiplier: 0.50, isTough: false, isGrey: false, reason: 'Monstro Fraco (-50% Recompensas)' };
+  if (diff === -7) return { xpMultiplier: 0.30, adenaMultiplier: 0.30, dropMultiplier: 0.30, isTough: false, isGrey: false, reason: 'Monstro Fraco (-70% Recompensas)' };
+  if (diff === -8) return { xpMultiplier: 0.15, adenaMultiplier: 0.15, dropMultiplier: 0.15, isTough: false, isGrey: false, reason: 'Monstro Fraco (-85% Recompensas)' };
+
+  // 4. Monstro Cinza (-9 níveis ou inferior): Regra clássica L2 (Zero Adena para evitar farm em low-level)
+  return {
+    xpMultiplier: 0.05,
+    adenaMultiplier: 0.0,
+    dropMultiplier: 0.05,
+    isTough: false,
+    isGrey: true,
+    reason: 'Monstro Insignificante (Cinza: 0 Adena)'
+  };
+}
+
+/**
+ * ═══════════════════════════════════════════════════════════════════════════
+ * NÍVEL 6.1: SORVEDOURO DE ADENA POR ACÚMULO DE RIQUEZA (WEALTH TAX)
+ * ═══════════════════════════════════════════════════════════════════════════
+ * Escala logarítmica para serviços básicos (Forja, Teleporte, etc.) quando o jogador
+ * atinge status de magnata/bilionário em Adena, mantendo a inflação sob controle.
+ */
+export function getWealthTaxMultiplier(goldAmount = 0) {
+  const g = Math.max(0, Number(goldAmount) || 0);
+  if (g <= 10000000) return 1.0; // Até 10M: normal (1.0x)
+  if (g <= 100000000) return 1.15; // 10M a 100M: +15%
+  if (g <= 1000000000) return 1.30; // 100M a 1B: +30%
+  if (g <= 10000000000) return 1.60; // 1B a 10B: +60%
+  return 2.0; // Acima de 10B: 2.0x (Teto de imposto imperial)
+}
+
 if (typeof window !== 'undefined') {
   window.BalanceEngine = {
     GRADE_REQUIREMENTS,
@@ -214,6 +285,8 @@ if (typeof window !== 'undefined') {
     getPlayerTotalGradePenalty,
     calcPhysicalDamage,
     calcMagicDamage,
-    rollChampionMonster
+    rollChampionMonster,
+    getLevelGapModifiers,
+    getWealthTaxMultiplier
   };
 }

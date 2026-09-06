@@ -20,3 +20,12 @@ export * from './AugmentationService.js';
 export * from './RankingService.js';
 export * from './AlchemyService.js';
 export * from './MarketService.js';
+export * from './CosmeticService.js';
+export * from './SynthesisService.js';
+export * from './ElementalService.js';
+export * from './StarterJourneyService.js';
+export * from './LiveOpsService.js';
+
+export * from './AchievementService.js';
+
+export * from './WorldBossService.js';
