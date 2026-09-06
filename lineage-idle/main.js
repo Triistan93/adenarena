@@ -4365,6 +4365,19 @@ function getStagePositionRelative(side) {
   };
 }
 
+function getHeroBasePoint() {
+  const stage = el('stage');
+  if (!stage) return { x: 0, y: 0 };
+  const rect = stage.getBoundingClientRect();
+  const hero = el('stage-hero');
+  if (hero) {
+    const box = hero.getBoundingClientRect();
+    // Ponto alinhado exatamente nos pés / base inferior do card do herói
+    return { x: box.left - rect.left + box.width * 0.5, y: box.bottom - rect.top - 4 };
+  }
+  return { x: rect.width * 0.28, y: rect.height * 0.75 };
+}
+
 function getCombatTargetPoint() {
   const stage = el('stage');
   if (!stage) return { x: 0, y: 0 };
@@ -4393,8 +4406,9 @@ function getCombatTargetBasePoint() {
 function playCombatVFX(type, options = {}) {
   if (!VFX || typeof VFX.play !== 'function') return null;
   const resolved = { ...options };
-  if (!resolved.source) resolved.source = getStagePositionRelative('hero');
-  if (!resolved.target) resolved.target = getCombatTargetPoint();
+  const isHeroFeetEffect = ['holy_heal', 'buff_aura', 'hero_skin_aura'].includes(type);
+  if (!resolved.source) resolved.source = isHeroFeetEffect ? getHeroBasePoint() : getStagePositionRelative('hero');
+  if (!resolved.target) resolved.target = isHeroFeetEffect ? getHeroBasePoint() : getCombatTargetPoint();
   return VFX.play(type, resolved);
 }
 
@@ -4443,12 +4457,16 @@ function getSkillVfxData(skillId, skillDef = null) {
   }
 
   // ─── 2. MAGOS: FOGO & METEOROS ───
+  // Flame Strike (Chama ardente e erupção vulcânica clássica)
+  if (combined.includes('flame strike') || combined.includes('flame_strike') || id.includes('flame_strike')) {
+    return { id: 'flame_strike', groundVfx: 'magic_prominence', color: '#ff7722', duration: 1050 };
+  }
   // Meteoro massivo do céu abrindo cratera incandescente
   if (combined.includes('meteor') || combined.includes('star fall') || combined.includes('starfall') || combined.includes('hell inferno') || combined.includes('flame explosion')) {
     return { id: 'magic_meteor', groundVfx: 'magic_prominence', color: '#ff6610', duration: 1200 };
   }
   // Prominence e erupções vulcânicas de solo
-  if (combined.includes('prominence') || combined.includes('blaze') || combined.includes('fire spiral') || combined.includes('blazing circle') || combined.includes('flame strike') || combined.includes('flame burst') || combined.includes('fire weave')) {
+  if (combined.includes('prominence') || combined.includes('blaze') || combined.includes('fire spiral') || combined.includes('blazing circle') || combined.includes('flame burst') || combined.includes('fire weave')) {
     return { id: 'magic_prominence', groundVfx: 'magic_prominence', color: '#ff7722', duration: 1050 };
   }
   // Fireball clássica
@@ -4467,6 +4485,10 @@ function getSkillVfxData(skillId, skillDef = null) {
   }
 
   // ─── 4. MAGOS: VENTO & TEMPESTADE ───
+  // Wind Strike (Lâmina mágica cortante de vento de alta velocidade)
+  if (combined.includes('wind strike') || combined.includes('wind_strike') || id.includes('wind_strike')) {
+    return { id: 'wind_strike', groundVfx: 'magic_hurricane', color: '#72f3ca', duration: 750 };
+  }
   // Hurricane / Tempest Cyclone / Tufão cônico vertical
   if (combined.includes('hurricane') || combined.includes('tempest') || combined.includes('cyclone') || combined.includes('typhoon') || combined.includes('gale burst')) {
     return { id: 'magic_hurricane', groundVfx: 'magic_hurricane', color: '#5eead4', duration: 1100 };
@@ -5100,8 +5122,8 @@ function attackMonster() {
         log(`🗣 ${skill.def.name}! ${skill.def.info || 'Buff Ativo por 60s'}`, 'rarity-rare');
         floatText(skill.def.name, 'float-epic');
 
-        // Dispara VFX Premium de Aura de Buff
-        const source = getStagePositionRelative('hero');
+        // Dispara VFX Premium de Aura de Buff (ancorado aos pés do herói)
+        const source = getHeroBasePoint();
         let buffColor = '#ffd700'; // Ouro / Âmbar padrão
         const lowerName = String(skill.def.name || skill.id).toLowerCase();
         if (lowerName.includes('berserk') || lowerName.includes('frenzy') || lowerName.includes('rage') || lowerName.includes('guts')) buffColor = '#ef4444';
@@ -5112,6 +5134,7 @@ function attackMonster() {
 
         playCombatVFX('buff_aura', {
           source,
+          target: source,
           color: buffColor,
           power: Math.max(1, skill.lvl || 1),
           duration: 1100
@@ -5122,10 +5145,11 @@ function attackMonster() {
         log(`✨ ${skill.def.name}! Curou ${healAmt} HP`, 'heal');
         floatText(`+${healAmt} HP`, 'sf-heal');
 
-        // Dispara VFX Premium de Cura Sagrada
-        const source = getStagePositionRelative('hero');
+        // Dispara VFX Premium de Cura Sagrada (ancorado aos pés do herói)
+        const source = getHeroBasePoint();
         playCombatVFX('holy_heal', {
           source,
+          target: source,
           color: '#4ade80',
           power: Math.max(1, skill.lvl || 1),
           duration: 950

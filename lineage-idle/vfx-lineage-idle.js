@@ -37,6 +37,10 @@
     hero_skin_aura: { rgb: '140,225,255' },
     lights: { rgb: '242,201,110' },
 
+    // NOVOS EFEITOS ESPECÍFICOS DE MAGOS
+    wind_strike: { rgb: '110,245,205' },
+    flame_strike: { rgb: '255,115,25' },
+
     // NOVOS EFEITOS DISTINTOS DE MAGOS (Aéreos e Solo Realistas)
     magic_prominence: { rgb: '255,90,20' },
     magic_meteor: { rgb: '255,60,10' },
@@ -274,6 +278,20 @@
     if (e.type === 'fireball') e.state.speed = e.speed || 5.4;
     if (e.type === 'ice_shards') e.state.speed = e.speed || 6.2;
     if (e.type === 'wind_blast') e.state.speed = e.speed || 7.5;
+    if (e.type === 'wind_strike') {
+      e.state.speed = e.speed || 8.6;
+      e.maxAge = e.maxAge || 750;
+      this._doFlash('120,250,210', 0.4);
+      this._ring(e.source.x, e.source.y, '110,245,205', 40, 4.5, 2.5);
+    }
+    if (e.type === 'flame_strike') {
+      e.maxAge = e.maxAge || 1050;
+      e.state.lastFlameSpawn = 0;
+      e.state.rotation = 0;
+      this._doFlash('255,100,20', 0.65);
+      this._ring(e.target.x, e.target.y, '255,90,20', 80, 5.8, 4.2);
+      this._ring(e.target.x, e.target.y, '255,210,80', 105, 4, 2.5);
+    }
     if (e.type === 'arcane_missile') e.state.speed = e.speed || 5.4;
     if (e.type === 'energy_slash') e.state.speed = e.speed || 6.4;
     if (e.type === 'spiral_spear') e.state.speed = e.speed || 7.2;
@@ -764,6 +782,28 @@
       this._burst(x, y, '126,240,200', 42, 5.2);
       for (var w = 0; w < 12; w += 1) this._addParticle({ x: x, y: y, vx: rand(-3.2, 3.2), vy: rand(-3.2, 1.3), max: rand(48, 86), radius: rand(3.1, 5.4), rgb: '150,220,180', additive: false, kind: 'leaf', gravity: 0.03, drag: 0.98, rotation: rand(0, 6.28), rotationSpeed: rand(-0.34, 0.34) });
     }
+    if (e.type === 'wind_strike') {
+      this._ring(x, y, '110,245,205', 52, 5.8, 3.2);
+      this._ring(x, y, '210,255,235', 70, 3.6, 1.8);
+      this._burst(x, y, '110,245,205', 60, 6.2);
+      for (var ws = 0; ws < 16; ws += 1) {
+        this._addParticle({
+          x: x + rand(-12, 12),
+          y: y + rand(-12, 12),
+          vx: rand(-4.5, 4.5),
+          vy: rand(-4.5, 2.0),
+          max: rand(40, 75),
+          radius: rand(2.8, 5.5),
+          rgb: '150,245,215',
+          additive: true,
+          kind: 'leaf',
+          gravity: 0.04,
+          drag: 0.96,
+          rotation: rand(0, 6.28),
+          rotationSpeed: rand(-0.3, 0.3)
+        });
+      }
+    }
     if (e.type === 'arcane_missile') {
       this._ring(x, y, rgb, 44, 5.8, 3);
       this._ring(x, y, '230,220,255', 58, 3.2, 1.3);
@@ -1070,21 +1110,19 @@
 
   LineageVFX.prototype._update = function (e, dt) {
     e.age += dt;
-    if (e.type === 'fireball' || e.type === 'ice_shards' || e.type === 'wind_blast' || e.type === 'arcane_missile' || e.type === 'energy_slash' || e.type === 'spiral_spear') {
+    if (e.type === 'fireball' || e.type === 'ice_shards' || e.type === 'wind_blast' || e.type === 'wind_strike' || e.type === 'arcane_missile' || e.type === 'energy_slash' || e.type === 'spiral_spear' || e.type === 'snipe_shot' || e.type === 'magic_death_spike') {
       this._updateProjectile(e, dt);
-    }
-    if (e.type === 'lightning' || e.type === 'holy_heal' || e.type === 'buff_aura' || e.type === 'power_smash' || e.type === 'holy_beam' || e.type === 'dark_vortex' || e.type === 'whirlwind' || e.type === 'frost_slash' || e.type === 'frost_blizzard' || e.type === 'inferno_slash' || e.type === 'celestial_strike' || e.type === 'hero_skin_aura') {
-      if (e.age > e.maxAge) e.done = true;
-    }
-    if (e.type === 'arrow_rain') this._updateArrowRain(e, dt);
-    if (e.type === 'cross_slash') {
+    } else if (e.type === 'arrow_rain') {
+      this._updateArrowRain(e, dt);
+    } else if (e.type === 'cross_slash') {
       if (!e.state.impacted && e.age >= 255) {
         e.state.impacted = true;
         this._impact(e, e.target.x, e.target.y);
       }
       if (e.age > (e.maxAge || 560)) e.done = true;
+    } else if (e.maxAge && e.age >= e.maxAge) {
+      e.done = true;
     }
-    if (e.type === 'lights' && e.age > e.maxAge) e.done = true;
   };
 
   LineageVFX.prototype._drawProjectile = function (e) {
@@ -1190,29 +1228,32 @@
     ctx.save();
     ctx.globalCompositeOperation = 'lighter';
     var angle = e.age * 0.003;
+    
+    // Círculo mágico de cura no chão (aos pés do herói)
     ctx.save();
-    ctx.translate(p.x, p.y + 14);
-    ctx.scale(1, 0.4);
+    ctx.translate(p.x, p.y);
+    ctx.scale(1, 0.36);
     ctx.rotate(angle);
-    ctx.strokeStyle = rgba('100,255,160', fade * 0.85);
-    ctx.lineWidth = 2;
-    ctx.shadowColor = 'rgba(100,255,160,0.9)';
-    ctx.shadowBlur = 14;
-    ctx.beginPath(); ctx.arc(0, 0, 36, 0, Math.PI * 2); ctx.stroke();
+    ctx.strokeStyle = rgba('100,255,160', fade * 0.9);
+    ctx.lineWidth = 2.4;
+    ctx.shadowColor = 'rgba(100,255,160,0.95)';
+    ctx.shadowBlur = 16;
+    ctx.beginPath(); ctx.arc(0, 0, 44, 0, Math.PI * 2); ctx.stroke();
     for (var i = 0; i < 4; i++) {
       ctx.rotate(Math.PI / 2);
-      ctx.beginPath(); ctx.moveTo(-36, 0); ctx.lineTo(36, 0); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(-44, 0); ctx.lineTo(44, 0); ctx.stroke();
     }
     ctx.restore();
 
+    // Pilares sagrados de luz ascendente subindo dos pés
     for (var b = -1; b <= 1; b++) {
-      var bx = p.x + b * 16, h = 120 * clamp(e.age / 250, 0, 1);
-      var beam = ctx.createLinearGradient(bx, p.y + 20, bx, p.y + 20 - h);
-      beam.addColorStop(0, rgba('100,255,160', fade * 0.7));
-      beam.addColorStop(0.5, rgba('255,245,180', fade * 0.9));
+      var bx = p.x + b * 18, h = 135 * clamp(e.age / 240, 0, 1);
+      var beam = ctx.createLinearGradient(bx, p.y, bx, p.y - h);
+      beam.addColorStop(0, rgba('100,255,160', fade * 0.8));
+      beam.addColorStop(0.45, rgba('255,245,180', fade * 0.95));
       beam.addColorStop(1, 'rgba(255,255,255,0)');
       ctx.fillStyle = beam;
-      ctx.fillRect(bx - 6, p.y + 20 - h, 12, h);
+      ctx.fillRect(bx - 6, p.y - h, 12, h);
     }
     ctx.restore();
   };
@@ -1221,7 +1262,7 @@
     var ctx = this.ctx, p = e.source, progress = clamp(e.age / e.maxAge, 0, 1), fade = 1 - progress;
     ctx.save();
     ctx.globalCompositeOperation = 'lighter';
-    var waveY = p.y + 16 - (progress * 55);
+    var waveY = p.y - (progress * 60);
     ctx.save();
     ctx.translate(p.x, waveY);
     ctx.scale(1, 0.35);
@@ -1233,7 +1274,7 @@
     ctx.restore();
 
     ctx.save();
-    ctx.translate(p.x, p.y + 16);
+    ctx.translate(p.x, p.y);
     ctx.scale(1, 0.35);
     ctx.rotate(e.age * 0.004);
     ctx.strokeStyle = rgba(e.rgb, fade * 0.6);
@@ -1655,7 +1696,7 @@
     var ctx = this.ctx, p = e.source, progress = clamp(e.age / e.maxAge, 0, 1), fade = 1 - progress;
     ctx.save();
     ctx.globalCompositeOperation = 'lighter';
-    ctx.translate(p.x, p.y + 20); // feet of hero
+    ctx.translate(p.x, p.y); // feet of hero
     ctx.scale(1, 0.4);
 
     var auraRad = 32 + Math.sin(e.age * 0.008) * 4;
@@ -2173,6 +2214,72 @@
       ctx.restore();
     }
     ctx.restore();
+  };
+
+  // Wind Strike (Lâmina mágica cortante de vento supersônica com vórtices de ar e corte de alta precisão)
+  LineageVFX.prototype._drawWindStrike = function (e) {
+    var ctx = this.ctx, s = e.state, rgb = e.rgb;
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+
+    // Rastro de micro-ciclones e folhas mágicas
+    if (Math.random() < 0.65) {
+      this._addParticle({
+        x: s.x + rand(-10, 10),
+        y: s.y + rand(-8, 8),
+        vx: -Math.cos(s.angle) * rand(2, 5) + rand(-1, 1),
+        vy: -Math.sin(s.angle) * rand(2, 5) + rand(-1.2, 1.2),
+        max: rand(25, 48),
+        radius: rand(1.8, 3.8),
+        rgb: '130,245,210',
+        kind: 'leaf',
+        rotation: rand(0, 6.28),
+        rotationSpeed: rand(-0.25, 0.25),
+        drag: 0.95
+      });
+    }
+
+    // Lâmina cortante em arco de vento
+    ctx.save();
+    ctx.translate(s.x, s.y);
+    ctx.rotate(s.angle);
+
+    var bladeLen = 42;
+    var bladeWidth = 15;
+    var grad = ctx.createLinearGradient(-bladeLen * 0.6, 0, bladeLen * 0.4, 0);
+    grad.addColorStop(0, 'rgba(100,255,200,0)');
+    grad.addColorStop(0.5, 'rgba(240,255,250,0.98)');
+    grad.addColorStop(1, 'rgba(80,240,190,0.85)');
+
+    ctx.fillStyle = grad;
+    ctx.shadowColor = 'rgba(110,245,205,0.95)';
+    ctx.shadowBlur = 18 * this.qualityConfig.blur;
+
+    // Crescente aerodinâmico
+    ctx.beginPath();
+    ctx.moveTo(bladeLen * 0.5, 0);
+    ctx.quadraticCurveTo(0, -bladeWidth, -bladeLen * 0.6, -bladeWidth * 0.4);
+    ctx.quadraticCurveTo(-bladeLen * 0.2, 0, -bladeLen * 0.6, bladeWidth * 0.4);
+    ctx.quadraticCurveTo(0, bladeWidth, bladeLen * 0.5, 0);
+    ctx.closePath();
+    ctx.fill();
+
+    // Arcos de vento giratórios duplos
+    for (var w = -1; w <= 1; w += 2) {
+      ctx.strokeStyle = 'rgba(190,255,235,0.75)';
+      ctx.lineWidth = 1.8;
+      ctx.beginPath();
+      ctx.arc(-bladeLen * 0.1, w * 7, 11, 0, Math.PI * 1.5);
+      ctx.stroke();
+    }
+
+    ctx.restore();
+    ctx.restore();
+  };
+
+  // Flame Strike (Explosão ígnea e coluna vulcânica devastadora no alvo)
+  LineageVFX.prototype._drawFlameStrike = function (e) {
+    this._drawMagicProminence(e);
   };
 
   // 5. Lightning Surge / Thunder Storm (Rede elétrica e centelhas azuis crepitando no solo)
@@ -3008,6 +3115,8 @@
       if (e.type === 'hero_skin_aura') this._drawHeroSkinAura(e);
 
       // NOVOS DISPATCHES DE MAGOS
+      if (e.type === 'wind_strike') this._drawWindStrike(e);
+      if (e.type === 'flame_strike') this._drawFlameStrike(e);
       if (e.type === 'magic_prominence') this._drawMagicProminence(e);
       if (e.type === 'magic_meteor') this._drawMagicMeteor(e);
       if (e.type === 'magic_hydro_blast') this._drawMagicHydroBlast(e);
@@ -3031,7 +3140,7 @@
       if (e.type === 'warrior_force_burst') this._drawWarriorForceBurst(e);
       if (e.type === 'warrior_spear_whirlwind') this._drawWarriorSpearWhirlwind(e);
 
-      if (e.type === 'fireball' || e.type === 'ice_shards' || e.type === 'wind_blast' || e.type === 'arcane_missile' || e.type === 'spiral_spear') this._drawProjectile(e);
+      if (e.type === 'fireball' || e.type === 'ice_shards' || e.type === 'wind_blast' || e.type === 'wind_strike' || e.type === 'arcane_missile' || e.type === 'spiral_spear') this._drawProjectile(e);
       if (e.type === 'energy_slash' || e.type === 'spiral_spear' || e.type === 'frost_slash' || e.type === 'inferno_slash' || e.type === 'inferno_dragon_breath') this._drawCasterGlyph(e.source, e.rgb, clamp(1 - e.age / 500, 0, 1));
       if (e.done) {
         if (typeof e.options.onComplete === 'function') e.options.onComplete(e);
