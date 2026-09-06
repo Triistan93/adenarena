@@ -1395,11 +1395,11 @@
     beamGrad.addColorStop(0.5, rgba('255,245,200', fade * 0.95));
     beamGrad.addColorStop(1, 'rgba(255,255,255,0)');
     ctx.fillStyle = beamGrad;
-    ctx.fillRect(p.x - 24, 0, 48, p.y + 10);
+    ctx.fillRect(p.x - 24, 0, 48, p.y);
     ctx.fillStyle = rgba('255,255,255', fade);
-    ctx.fillRect(p.x - 8, 0, 16, p.y + 10);
+    ctx.fillRect(p.x - 8, 0, 16, p.y);
     ctx.save();
-    ctx.translate(p.x, p.y + 8);
+    ctx.translate(p.x, p.y);
     ctx.scale(1, 0.35);
     ctx.rotate(e.age * 0.005);
     ctx.strokeStyle = rgba('255,220,100', fade * 0.9);
@@ -1667,7 +1667,7 @@
 
     // Soft radiant column of divine sunlight (translucent, non-blinding)
     var beamWidth = 40 * (1 - progress * 0.25);
-    var beamH = p.y + 10;
+    var beamH = p.y;
     var beamGrad = ctx.createLinearGradient(p.x - beamWidth / 2, 0, p.x + beamWidth / 2, 0);
     beamGrad.addColorStop(0, 'rgba(255,220,100,0)');
     beamGrad.addColorStop(0.3, rgba('255,235,140', fade * 0.38));
@@ -1682,7 +1682,7 @@
 
     // Divine rotating solar seal on the ground
     ctx.save();
-    ctx.translate(p.x, p.y + 8);
+    ctx.translate(p.x, p.y);
     ctx.scale(1, 0.38);
     ctx.rotate(e.age * 0.006);
     ctx.strokeStyle = rgba('255,235,120', fade * 0.95);

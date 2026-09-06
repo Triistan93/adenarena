@@ -4385,9 +4385,10 @@ function getCombatTargetPoint() {
   const monster = el('stage-monster');
   if (monster) {
     const box = monster.getBoundingClientRect();
-    return { x: box.left - rect.left + box.width * 0.5, y: box.top - rect.top + box.height * 0.45 };
+    // Ponto alinhado exatamente nos pés / borda inferior do card do monstro
+    return { x: box.left - rect.left + box.width * 0.5, y: box.bottom - rect.top - 2 };
   }
-  return { x: rect.width * 0.72, y: rect.height * 0.48 };
+  return { x: rect.width * 0.72, y: rect.height * 0.78 };
 }
 
 function getCombatTargetBasePoint() {
@@ -4400,7 +4401,7 @@ function getCombatTargetBasePoint() {
     // Ponto alinhado exatamente na borda inferior do card do monstro
     return { x: box.left - rect.left + box.width * 0.5, y: box.bottom - rect.top - 2 };
   }
-  return { x: rect.width * 0.72, y: rect.height * 0.75 };
+  return { x: rect.width * 0.72, y: rect.height * 0.78 };
 }
 
 function playCombatVFX(type, options = {}) {
@@ -4408,7 +4409,7 @@ function playCombatVFX(type, options = {}) {
   const resolved = { ...options };
   const isHeroFeetEffect = ['holy_heal', 'buff_aura', 'hero_skin_aura'].includes(type);
   if (!resolved.source) resolved.source = isHeroFeetEffect ? getHeroBasePoint() : getStagePositionRelative('hero');
-  if (!resolved.target) resolved.target = isHeroFeetEffect ? getHeroBasePoint() : getCombatTargetPoint();
+  if (!resolved.target) resolved.target = isHeroFeetEffect ? getHeroBasePoint() : getCombatTargetBasePoint();
   return VFX.play(type, resolved);
 }
 
