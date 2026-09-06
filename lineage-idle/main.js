@@ -1255,13 +1255,118 @@ function useItem(uid) {
   };
   const fmtDur = (s) => s >= 3600 ? `${(s/3600).toFixed(s%3600?1:0)}h` : s >= 60 ? `${Math.round(s/60)}m` : `${s}s`;
   
-  if (def.type === 'heal') { state.hp = Math.min(state.maxHp, state.hp + def.amount); log(`Used ${def.name}: +${def.amount} HP`, 'heal'); } 
-  else if (def.type === 'mana') { state.mp = Math.min(state.maxMp, state.mp + def.amount); log(`Used ${def.name}: +${def.amount} MP`, 'heal'); } 
-  else if (def.type === 'buff') { applyBuff(def.stat, def.amount, def.duration); log(`Used ${def.name}: +${def.amount} ${def.stat.toUpperCase()} for ${fmtDur(def.duration)}`, 'heal'); } 
-  else if (def.type === 'xpBoost') { applyBuff('xpBoost', def.amount, def.duration); log(`Used ${def.name}: +${Math.round(def.amount*100)}% XP for ${fmtDur(def.duration)}`, 'xp'); } 
-  else if (def.type === 'goldBoost') { applyBuff('goldBoost', def.amount, def.duration); log(`Used ${def.name}: +${Math.round(def.amount*100)}% gold for ${fmtDur(def.duration)}`, 'loot'); } 
-  else if (def.type === 'luckBoost') { applyBuff('luckBoost', def.amount, def.duration); log(`Used ${def.name}: +${Math.round(def.amount*100)}% luck for ${fmtDur(def.duration)}`, 'loot'); } 
-  else if (def.type === 'autoPotion') { applyBuff('autoPotion', 1, def.duration); log(`Used ${def.name}: auto-potion active for ${fmtDur(def.duration)}`, 'heal'); } 
+  // ── HP Potions ─────────────────────────────────────────────────────────────
+  if (def.type === 'heal' || item.itemId.startsWith('hp_potion')) {
+    const healAmt = def.amount || def.healAmt || 100;
+    state.hp = Math.min(state.maxHp, state.hp + healAmt);
+    log(`✨ Usou ${def.name}: +${healAmt} HP`, 'heal');
+    if (typeof floatText === 'function') floatText(`+${healAmt} HP`, 'sf-heal');
+  }
+  // ── MP Potions ─────────────────────────────────────────────────────────────
+  else if (def.type === 'mana' || item.itemId.startsWith('mp_potion')) {
+    const manaAmt = def.amount || def.healAmt || 80;
+    state.mp = Math.min(state.maxMp, state.mp + manaAmt);
+    log(`💧 Usou ${def.name}: +${manaAmt} MP`, 'heal');
+    if (typeof floatText === 'function') floatText(`+${manaAmt} MP`, 'sf-heal');
+  }
+  // ── Buff Potions ───────────────────────────────────────────────────────────
+  else if (def.type === 'buff') {
+    applyBuff(def.stat, def.amount, def.duration || 1800);
+    log(`⚡ Usou ${def.name}: +${def.amount} ${def.stat.toUpperCase()} por ${fmtDur(def.duration || 1800)}`, 'heal');
+    if (typeof floatText === 'function') floatText(`⚡ +${def.amount} ${def.stat.toUpperCase()}`, 'sf-heal');
+  }
+  else if (item.itemId === 'attack_potion') {
+    applyBuff('atk', 0.20, 1800); log(`⚡ Usou ${def.name}: +20% ATK por 30min`, 'heal');
+    if (typeof floatText === 'function') floatText('⚡ +20% ATK (30m)', 'sf-heal');
+  }
+  else if (item.itemId === 'defense_potion') {
+    applyBuff('def', 0.20, 1800); log(`🛡️ Usou ${def.name}: +20% DEF por 30min`, 'heal');
+    if (typeof floatText === 'function') floatText('🛡️ +20% DEF (30m)', 'sf-heal');
+  }
+  else if (item.itemId === 'speed_potion') {
+    applyBuff('spd', 0.15, 1800); log(`💨 Usou ${def.name}: +15% SPD por 30min`, 'heal');
+    if (typeof floatText === 'function') floatText('💨 +15% SPD (30m)', 'sf-heal');
+  }
+  else if (item.itemId === 'potion_haste') {
+    applyBuff('atkSpd', 0.15, 1800); applyBuff('spd', 0.15, 1800);
+    log(`⚡ Usou ${def.name}: +15% AtkSpd/SPD por 30min`, 'heal');
+    if (typeof floatText === 'function') floatText('⚡ HASTE +15% (30m)', 'sf-heal');
+  }
+  else if (item.itemId === 'aegis_draught') {
+    applyBuff('def', 0.25, 3600); applyBuff('magicRes', 0.20, 3600);
+    log(`🛡️ Usou ${def.name}: +25% DEF, +20% Resistência Mágica por 1h`, 'heal');
+    if (typeof floatText === 'function') floatText('🛡️ AEGIS +25% DEF (1h)', 'sf-heal');
+  }
+  else if (item.itemId === 'berserker_elixir') {
+    applyBuff('atk', 0.30, 3600); applyBuff('critRate', 0.15, 3600);
+    log(`🔥 Usou ${def.name}: +30% ATK, +15% Crit por 1h`, 'heal');
+    if (typeof floatText === 'function') floatText('🔥 BERSERKER +30% ATK (1h)', 'float-crit');
+  }
+  else if (item.itemId === 'sages_tea') {
+    applyBuff('mpRegen', 5, 3600);
+    log(`🍵 Usou ${def.name}: +5 MP/tick por 1h`, 'heal');
+    if (typeof floatText === 'function') floatText('🍵 SAGES TEA: MP REGEN (1h)', 'sf-heal');
+  }
+  else if (item.itemId === 'antidote') {
+    state.poisoned = false; state.bled = false;
+    state.poisonTicks = 0; state.bleedTicks = 0;
+    log(`🧪 Usou ${def.name}: Envenenamento e Sangramento curados!`, 'heal');
+    if (typeof floatText === 'function') floatText('🧪 ANTÍDOTO', 'sf-heal');
+  }
+  // ── Boosts ─────────────────────────────────────────────────────────────────
+  else if (def.type === 'xpBoost' || item.itemId === 'xp_boost_1h' || item.itemId === 'exp_boost_1h') {
+    const pct = def.amount || 0.50; const dur = def.duration || 3600;
+    applyBuff('xpBoost', pct, dur);
+    log(`📖 Usou ${def.name}: +${Math.round(pct*100)}% XP por ${fmtDur(dur)}`, 'xp');
+    if (typeof floatText === 'function') floatText(`📖 +${Math.round(pct*100)}% XP (${fmtDur(dur)})`, 'float-jackpot');
+  }
+  else if (def.type === 'goldBoost' || item.itemId === 'gold_boost_1h' || item.itemId === 'gold_boost_4h') {
+    const pct = def.amount || 0.50; const dur = def.duration || (item.itemId === 'gold_boost_4h' ? 14400 : 3600);
+    applyBuff('goldBoost', pct, dur);
+    log(`💰 Usou ${def.name}: +${Math.round(pct*100)}% Adena por ${fmtDur(dur)}`, 'loot');
+    if (typeof floatText === 'function') floatText(`💰 +${Math.round(pct*100)}% ADENA (${fmtDur(dur)})`, 'float-jackpot');
+  }
+  else if (def.type === 'luckBoost' || item.itemId === 'luck_boost_1h') {
+    const pct = def.amount || 0.50; const dur = def.duration || 3600;
+    applyBuff('luckBoost', pct, dur);
+    log(`🍀 Usou ${def.name}: +${Math.round(pct*100)}% Sorte por ${fmtDur(dur)}`, 'loot');
+    if (typeof floatText === 'function') floatText(`🍀 +${Math.round(pct*100)}% SORTE (${fmtDur(dur)})`, 'float-jackpot');
+  }
+  else if (def.type === 'autoPotion') { applyBuff('autoPotion', 1, def.duration); log(`Used ${def.name}: auto-potion active for ${fmtDur(def.duration)}`, 'heal'); }
+  // ── EXP Scroll ────────────────────────────────────────────────────────────
+  else if (item.itemId === 'exp_scroll') {
+    const xpGain = def.amount || (state.level * 2500);
+    state.xp = (state.xp || 0) + xpGain;
+    log(`📜 Usou ${def.name}: +${xpGain.toLocaleString()} XP`, 'xp');
+    if (typeof floatText === 'function') floatText(`+${xpGain.toLocaleString()} XP`, 'float-jackpot');
+    if (typeof checkLevelUp === 'function') checkLevelUp();
+  }
+  // ── Elixirs ───────────────────────────────────────────────────────────────
+  else if (item.itemId === 'elixir_berserker') {
+    applyBuff('atk', 0.15, 3600); applyBuff('atkSpd', 0.15, 3600);
+    log(`🧪 Usou ${def.name}: +15% P.Atk, +15% AtkSpd por 1h`, 'heal');
+    if (typeof floatText === 'function') floatText('🧪 BERSERKER ELIXIR (1h)', 'float-crit');
+  }
+  else if (item.itemId === 'elixir_arcanist') {
+    applyBuff('matk', 0.20, 3600); applyBuff('mpRegen', 3, 3600);
+    log(`🧪 Usou ${def.name}: +20% M.Atk, +MP Regen por 1h`, 'heal');
+    if (typeof floatText === 'function') floatText('🧪 ARCANIST ELIXIR (1h)', 'sf-heal');
+  }
+  else if (item.itemId === 'elixir_fortune') {
+    applyBuff('goldBoost', 0.25, 3600); applyBuff('luckBoost', 0.25, 3600);
+    log(`🧪 Usou ${def.name}: +25% Adena, +25% Sorte por 1h`, 'loot');
+    if (typeof floatText === 'function') floatText('🧪 FORTUNE ELIXIR (1h)', 'float-jackpot');
+  }
+  else if (item.itemId === 'elixir_titan') {
+    applyBuff('maxHpBonus', 0.25, 3600); applyBuff('def', 0.25, 3600);
+    log(`🧪 Usou ${def.name}: +25% MaxHP, +25% DEF por 1h`, 'heal');
+    if (typeof floatText === 'function') floatText('🧪 TITAN ELIXIR (1h)', 'sf-heal');
+  }
+  else if (item.itemId === 'elixir_transcendence') {
+    applyBuff('xpBoost', 0.20, 3600); applyBuff('spBoost', 0.20, 3600);
+    log(`🧪 Usou ${def.name}: +20% EXP, +20% SP por 1h`, 'xp');
+    if (typeof floatText === 'function') floatText('🧪 TRANSCENDENCE ELIXIR (1h)', 'float-jackpot');
+  } 
   else if (def.type === 'teleport') {
     state.hp = state.maxHp; state.mp = state.maxMp;
     const town = getNearestTown(state.zone);
@@ -1344,7 +1449,14 @@ function useItem(uid) {
   } else if (def.type === 'resurrect') { log('Scrolls auto-use on death.', 'system'); return; } 
   else { log(`Used ${def.name}`, 'heal'); }
   
-  if (item.count > 1) item.count--; else state.inventory.splice(idx, 1);
+  // Robust stack deduction — handles both item.count and item.qty
+  const currentQty = (item.count != null ? item.count : item.qty) ?? 1;
+  if (currentQty > 1) {
+    if (item.count != null) item.count--;
+    if (item.qty != null) item.qty--;
+  } else {
+    state.inventory.splice(idx, 1);
+  }
   updateAllUI(); save();
 }
 
@@ -4908,14 +5020,14 @@ function attackMonster() {
     if (apSettings.autoHp !== false && state.hp < state.maxHp * (apSettings.hpThreshold || 0.6)) {
       const potIds = ['hp_potion_xl','hp_potion_l','hp_potion_m','hp_potion_s'];
       for (const pid of potIds) {
-        const it = state.inventory.find(i => i.itemId === pid && (i.count || 1) > 0);
+        const it = state.inventory.find(i => i.itemId === pid && ((i.count ?? i.qty ?? 1) > 0));
         if (it) { useItem(it.uid); break; }
       }
     }
     if (apSettings.autoMp !== false && state.mp < state.maxMp * (apSettings.mpThreshold || 0.4)) {
       const mpPotIds = ['mp_potion_xl','mp_potion_l','mp_potion_m','mp_potion_s'];
       for (const pid of mpPotIds) {
-        const it = state.inventory.find(i => i.itemId === pid && (i.count || 1) > 0);
+        const it = state.inventory.find(i => i.itemId === pid && ((i.count ?? i.qty ?? 1) > 0));
         if (it) { useItem(it.uid); break; }
       }
     }
