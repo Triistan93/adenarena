@@ -279,18 +279,18 @@
     if (e.type === 'ice_shards') e.state.speed = e.speed || 6.2;
     if (e.type === 'wind_blast') e.state.speed = e.speed || 7.5;
     if (e.type === 'wind_strike') {
-      e.state.speed = e.speed || 8.6;
+      e.state.speed = e.speed || 6.8;
       e.maxAge = e.maxAge || 750;
-      this._doFlash('120,250,210', 0.4);
-      this._ring(e.source.x, e.source.y, '110,245,205', 40, 4.5, 2.5);
+      this._doFlash('120,250,210', 0.25);
+      this._ring(e.source.x, e.source.y, '110,245,205', 30, 4.0, 2.0);
     }
     if (e.type === 'flame_strike') {
-      e.maxAge = e.maxAge || 1050;
+      e.maxAge = e.maxAge || 850;
       e.state.lastFlameSpawn = 0;
       e.state.rotation = 0;
-      this._doFlash('255,100,20', 0.65);
-      this._ring(e.target.x, e.target.y, '255,90,20', 80, 5.8, 4.2);
-      this._ring(e.target.x, e.target.y, '255,210,80', 105, 4, 2.5);
+      this._doFlash('255,120,30', 0.4);
+      this._ring(e.target.x, e.target.y, '255,120,30', 48, 4.8, 2.8);
+      this._ring(e.target.x, e.target.y, '255,210,80', 68, 3.2, 1.8);
     }
     if (e.type === 'arcane_missile') e.state.speed = e.speed || 5.4;
     if (e.type === 'energy_slash') e.state.speed = e.speed || 6.4;
@@ -755,6 +755,17 @@
       max: rand(36, 64), radius: rand(2, 3.6), rgb: '150,220,180', additive: false,
       kind: 'leaf', gravity: 0.03, drag: 0.98, rotation: rand(0, 6.28), rotationSpeed: rand(-0.35, 0.35)
     });
+    if (e.type === 'wind_strike') {
+      for (var ws = 0; ws < 2; ws += 1) {
+        this._addParticle({
+          x: s.x + rand(-4, 4), y: s.y + rand(-4, 4),
+          vx: -Math.cos(angle) * rand(0.8, 2.4) + rand(-0.4, 0.4),
+          vy: -Math.sin(angle) * rand(0.8, 2.4) + rand(-0.4, 0.4),
+          max: rand(16, 32), radius: rand(1.2, 2.5),
+          rgb: '130,245,210', drag: 0.95, kind: 'sparkle', additive: true
+        });
+      }
+    }
     if (e.type === 'arcane_missile') for (var k = 0; k < 2; k += 1) this._addParticle({
       x: s.x + rand(-3, 3), y: s.y + rand(-3, 3), vx: rand(-0.5, 0.5), vy: rand(-0.5, 0.5),
       max: rand(16, 34), radius: rand(0.7, 1.9), rgb: Math.random() < 0.5 ? e.rgb : '235,225,255', drag: 0.95
@@ -1654,19 +1665,20 @@
     ctx.save();
     ctx.globalCompositeOperation = 'lighter';
 
-    // Golden divine pillar of light
-    var beamWidth = 46 * (1 - progress * 0.3);
+    // Soft radiant column of divine sunlight (translucent, non-blinding)
+    var beamWidth = 40 * (1 - progress * 0.25);
+    var beamH = p.y + 10;
     var beamGrad = ctx.createLinearGradient(p.x - beamWidth / 2, 0, p.x + beamWidth / 2, 0);
     beamGrad.addColorStop(0, 'rgba(255,220,100,0)');
-    beamGrad.addColorStop(0.3, rgba('255,235,140', fade * 0.85));
-    beamGrad.addColorStop(0.5, rgba('255,255,255', fade));
-    beamGrad.addColorStop(0.7, rgba('255,235,140', fade * 0.85));
+    beamGrad.addColorStop(0.3, rgba('255,235,140', fade * 0.38));
+    beamGrad.addColorStop(0.5, rgba('255,255,240', fade * 0.52));
+    beamGrad.addColorStop(0.7, rgba('255,235,140', fade * 0.38));
     beamGrad.addColorStop(1, 'rgba(255,220,100,0)');
 
     ctx.fillStyle = beamGrad;
-    ctx.shadowColor = 'rgba(255,215,80,0.95)';
-    ctx.shadowBlur = 24 * this.qualityConfig.blur;
-    ctx.fillRect(p.x - beamWidth / 2, 0, beamWidth, p.y + 12);
+    ctx.shadowColor = 'rgba(255,215,80,0.8)';
+    ctx.shadowBlur = 18 * this.qualityConfig.blur;
+    ctx.fillRect(p.x - beamWidth / 2, 0, beamWidth, beamH);
 
     // Divine rotating solar seal on the ground
     ctx.save();
@@ -2218,20 +2230,20 @@
 
   // Wind Strike (Lâmina mágica cortante de vento supersônica com vórtices de ar e corte de alta precisão)
   LineageVFX.prototype._drawWindStrike = function (e) {
-    var ctx = this.ctx, s = e.state, rgb = e.rgb;
+    var ctx = this.ctx, s = e.state;
     ctx.save();
     ctx.globalCompositeOperation = 'lighter';
 
     // Rastro de micro-ciclones e folhas mágicas
-    if (Math.random() < 0.65) {
+    if (Math.random() < 0.7) {
       this._addParticle({
-        x: s.x + rand(-10, 10),
+        x: s.x + rand(-8, 8),
         y: s.y + rand(-8, 8),
-        vx: -Math.cos(s.angle) * rand(2, 5) + rand(-1, 1),
-        vy: -Math.sin(s.angle) * rand(2, 5) + rand(-1.2, 1.2),
-        max: rand(25, 48),
-        radius: rand(1.8, 3.8),
-        rgb: '130,245,210',
+        vx: -Math.cos(s.angle) * rand(1.5, 4) + rand(-0.8, 0.8),
+        vy: -Math.sin(s.angle) * rand(1.5, 4) + rand(-0.8, 0.8),
+        max: rand(20, 42),
+        radius: rand(1.8, 3.5),
+        rgb: '120,245,205',
         kind: 'leaf',
         rotation: rand(0, 6.28),
         rotationSpeed: rand(-0.25, 0.25),
@@ -2244,32 +2256,43 @@
     ctx.translate(s.x, s.y);
     ctx.rotate(s.angle);
 
-    var bladeLen = 42;
-    var bladeWidth = 15;
-    var grad = ctx.createLinearGradient(-bladeLen * 0.6, 0, bladeLen * 0.4, 0);
-    grad.addColorStop(0, 'rgba(100,255,200,0)');
-    grad.addColorStop(0.5, 'rgba(240,255,250,0.98)');
-    grad.addColorStop(1, 'rgba(80,240,190,0.85)');
+    var bladeLen = 52;
+    var bladeWidth = 20;
 
-    ctx.fillStyle = grad;
-    ctx.shadowColor = 'rgba(110,245,205,0.95)';
-    ctx.shadowBlur = 18 * this.qualityConfig.blur;
+    // Halo externo esmeralda
+    var haloGrad = ctx.createLinearGradient(-bladeLen * 0.7, 0, bladeLen * 0.5, 0);
+    haloGrad.addColorStop(0, 'rgba(80,240,180,0)');
+    haloGrad.addColorStop(0.5, 'rgba(110,250,210,0.5)');
+    haloGrad.addColorStop(1, 'rgba(200,255,240,0.9)');
 
-    // Crescente aerodinâmico
+    ctx.fillStyle = haloGrad;
+    ctx.shadowColor = 'rgba(90,245,200,0.95)';
+    ctx.shadowBlur = 20 * this.qualityConfig.blur;
+
+    // Crescente aerodinâmico afiado
     ctx.beginPath();
-    ctx.moveTo(bladeLen * 0.5, 0);
-    ctx.quadraticCurveTo(0, -bladeWidth, -bladeLen * 0.6, -bladeWidth * 0.4);
-    ctx.quadraticCurveTo(-bladeLen * 0.2, 0, -bladeLen * 0.6, bladeWidth * 0.4);
-    ctx.quadraticCurveTo(0, bladeWidth, bladeLen * 0.5, 0);
+    ctx.moveTo(bladeLen * 0.55, 0);
+    ctx.quadraticCurveTo(0, -bladeWidth, -bladeLen * 0.7, -bladeWidth * 0.35);
+    ctx.quadraticCurveTo(-bladeLen * 0.25, 0, -bladeLen * 0.7, bladeWidth * 0.35);
+    ctx.quadraticCurveTo(0, bladeWidth, bladeLen * 0.55, 0);
     ctx.closePath();
     ctx.fill();
 
+    // Núcleo branco brilhante da lâmina cortante
+    ctx.strokeStyle = 'rgba(255,255,255,0.95)';
+    ctx.lineWidth = 2.2;
+    ctx.beginPath();
+    ctx.moveTo(bladeLen * 0.5, 0);
+    ctx.quadraticCurveTo(0, -bladeWidth * 0.5, -bladeLen * 0.4, 0);
+    ctx.quadraticCurveTo(0, bladeWidth * 0.5, bladeLen * 0.5, 0);
+    ctx.stroke();
+
     // Arcos de vento giratórios duplos
     for (var w = -1; w <= 1; w += 2) {
-      ctx.strokeStyle = 'rgba(190,255,235,0.75)';
-      ctx.lineWidth = 1.8;
+      ctx.strokeStyle = 'rgba(170,255,230,0.85)';
+      ctx.lineWidth = 1.6;
       ctx.beginPath();
-      ctx.arc(-bladeLen * 0.1, w * 7, 11, 0, Math.PI * 1.5);
+      ctx.arc(-bladeLen * 0.15, w * 9, 13, -0.4, Math.PI * 1.3);
       ctx.stroke();
     }
 
@@ -2277,9 +2300,93 @@
     ctx.restore();
   };
 
-  // Flame Strike (Explosão ígnea e coluna vulcânica devastadora no alvo)
+  // Flame Strike (Explosão ígnea concentrada: anel rúnico no solo, vórtice de labaredas e brasas crepitantes)
   LineageVFX.prototype._drawFlameStrike = function (e) {
-    this._drawMagicProminence(e);
+    var ctx = this.ctx, p = e.target, progress = clamp(e.age / e.maxAge, 0, 1), fade = 1 - progress;
+    var feetY = p.y;
+    e.state.rotation = (e.state.rotation || 0) + 0.08;
+
+    // Partículas de brasas e faíscas subindo
+    if (e.age % 3 === 0 && progress < 0.75) {
+      for (var f = 0; f < 3; f++) {
+        var fAngle = rand(0, 6.28);
+        var fDist = rand(6, 30);
+        this._addParticle({
+          x: p.x + Math.cos(fAngle) * fDist,
+          y: feetY - rand(2, 22),
+          vx: Math.cos(fAngle) * rand(0.5, 2.0),
+          vy: rand(-5.5, -2.0),
+          max: rand(28, 55),
+          radius: rand(1.8, 3.6),
+          rgb: Math.random() < 0.6 ? '255,210,80' : '255,90,20',
+          kind: 'sparkle',
+          rotation: rand(0, 6.28),
+          rotationSpeed: rand(-0.25, 0.25),
+          additive: true
+        });
+      }
+    }
+
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+
+    // 1. Círculo de invocação ígneo no solo (duplo anel com raios)
+    ctx.save();
+    ctx.translate(p.x, feetY);
+    ctx.scale(1, 0.36);
+
+    var ringRad = 46 * (0.8 + Math.sin(e.age * 0.015) * 0.2);
+    ctx.strokeStyle = rgba('255,140,30', fade * 0.9);
+    ctx.lineWidth = 2.2;
+    ctx.shadowColor = 'rgba(255,100,20,0.9)';
+    ctx.shadowBlur = 16 * this.qualityConfig.blur;
+    ctx.beginPath();
+    ctx.arc(0, 0, ringRad, 0, Math.PI * 2);
+    ctx.stroke();
+
+    ctx.strokeStyle = rgba('255,230,100', fade * 0.7);
+    ctx.lineWidth = 1.4;
+    ctx.beginPath();
+    ctx.arc(0, 0, ringRad * 0.65, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // Glifos rotativos do círculo de fogo
+    ctx.rotate(e.state.rotation);
+    for (var g = 0; g < 6; g++) {
+      var gAng = (g / 6) * Math.PI * 2;
+      ctx.beginPath();
+      ctx.moveTo(Math.cos(gAng) * ringRad * 0.65, Math.sin(gAng) * ringRad * 0.65);
+      ctx.lineTo(Math.cos(gAng) * ringRad, Math.sin(gAng) * ringRad);
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    // 2. Labaredas estilizadas espiralando para cima
+    var flameH = 90 * (1 - Math.pow(progress, 2.0));
+    var flameW = 26 + Math.sin(e.age * 0.04) * 6;
+
+    for (var layer = 0; layer < 3; layer++) {
+      var lAngle = e.state.rotation * (layer % 2 === 0 ? 1 : -1) + layer * 2.1;
+      var offsetX = Math.sin(lAngle) * 7;
+      var fGrad = ctx.createLinearGradient(p.x + offsetX, feetY, p.x, feetY - flameH * (0.8 + layer * 0.1));
+      fGrad.addColorStop(0, rgba('255,255,220', fade * 0.95));
+      fGrad.addColorStop(0.25, rgba('255,160,30', fade * 0.85));
+      fGrad.addColorStop(0.65, rgba('235,60,15', fade * 0.5));
+      fGrad.addColorStop(1, 'rgba(180,20,0,0)');
+
+      ctx.fillStyle = fGrad;
+      ctx.shadowColor = 'rgba(255,90,20,0.9)';
+      ctx.shadowBlur = 18 * this.qualityConfig.blur;
+
+      ctx.beginPath();
+      ctx.moveTo(p.x - flameW * 0.8 + offsetX, feetY);
+      ctx.quadraticCurveTo(p.x + offsetX * 2, feetY - flameH * 0.55, p.x, feetY - flameH * (0.8 + layer * 0.1));
+      ctx.quadraticCurveTo(p.x - offsetX, feetY - flameH * 0.5, p.x + flameW * 0.8 + offsetX, feetY);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    ctx.restore();
   };
 
   // 5. Lightning Surge / Thunder Storm (Rede elétrica e centelhas azuis crepitando no solo)
@@ -3140,7 +3247,7 @@
       if (e.type === 'warrior_force_burst') this._drawWarriorForceBurst(e);
       if (e.type === 'warrior_spear_whirlwind') this._drawWarriorSpearWhirlwind(e);
 
-      if (e.type === 'fireball' || e.type === 'ice_shards' || e.type === 'wind_blast' || e.type === 'wind_strike' || e.type === 'arcane_missile' || e.type === 'spiral_spear') this._drawProjectile(e);
+      if (e.type === 'fireball' || e.type === 'ice_shards' || e.type === 'wind_blast' || e.type === 'arcane_missile' || e.type === 'spiral_spear') this._drawProjectile(e);
       if (e.type === 'energy_slash' || e.type === 'spiral_spear' || e.type === 'frost_slash' || e.type === 'inferno_slash' || e.type === 'inferno_dragon_breath') this._drawCasterGlyph(e.source, e.rgb, clamp(1 - e.age / 500, 0, 1));
       if (e.done) {
         if (typeof e.options.onComplete === 'function') e.options.onComplete(e);

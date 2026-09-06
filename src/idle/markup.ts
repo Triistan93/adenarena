@@ -5,49 +5,71 @@ export const IDLE_MARKUP = `
     <div class="ambient-layer" aria-hidden="true"></div>
     <div id="float-layer" class="float-layer" aria-hidden="true"></div>
     <!-- Top Bar -->
-    <header class="top-bar" style="padding-right: clamp(84px, 7vw, 110px);">
-      <span id="game-title">ADEN ARENA <span class="title-idle-stamp"><span class="stamp-idle"><span class="stamp-idle-text">IDLE</span><span class="stamp-idle-sub">CHRONICLES</span></span></span></span>
-      <div class="top-stats" style="display:flex; align-items:center; justify-content:space-between; width:100%; gap:12px;">
-        <div class="top-stats-left" style="display:flex; align-items:center; gap:8px;">
-          <span class="ts-zone">
-            <span class="ts-label">Região</span>
-            <span id="zone-name">Talking Island</span>
-            <span id="zone-kill-progress" style="font-size:11px; color:#f59e0b; margin-left:8px; font-weight:800; background:rgba(0,0,0,0.5); padding:2px 8px; border-radius:4px; border:1px solid rgba(245,158,11,0.4);"><span style="color:#d4af37;">⚔</span> 0/50 Caçados</span>
-            <span id="season-badge" style="font-size:10px; color:#93c5fd; margin-left:6px; font-weight:bold; background:rgba(30,58,138,0.25); padding:2px 8px; border-radius:4px; border:1px solid rgba(147,197,253,0.35); font-family:'Cinzel',serif;" title="Temporada 1: O Despertar de Aden (Cap Lv 60)">✦ Temp 1: Cap Lv 60</span>
-            <span id="liveops-event-badge" style="font-size:10px; color:#fde047; margin-left:6px; font-weight:bold; background:rgba(202,138,4,0.25); padding:2px 8px; border-radius:4px; border:1px solid rgba(253,224,71,0.4); font-family:'Cinzel',serif; cursor:pointer;" onclick="window.openLiveOpsModal && window.openLiveOpsModal()" title="Clique para ver o evento Live-Ops ativo">🌟 Evento</span>
-            <span id="worldboss-top-badge" style="font-size:10px; color:#f87171; margin-left:6px; font-weight:bold; background:rgba(185,28,28,0.25); padding:2px 8px; border-radius:4px; border:1px solid rgba(239,68,68,0.4); font-family:'Cinzel',serif; cursor:pointer; display:inline-flex; align-items:center; gap:4px;" onclick="window.openWorldBossModal && window.openWorldBossModal()" title="Incursão Global de World Boss (Antharas, Valakas, Baium)">🚨 World Boss: --:--:--</span>
-          </span>
-          <div id="top-bar-guide-container" style="display:inline-flex;">
-            <button id="top-bar-guide-btn" class="top-guide-btn" style="background:linear-gradient(180deg, rgba(70,55,25,0.7), rgba(30,22,10,0.9)); border:1px solid rgba(212, 167, 68, 0.6); color:#ffd877; border-radius:4px; padding:3px 10px; font-size:11px; font-weight:bold; font-family:'Cinzel',serif; cursor:pointer; display:inline-flex; align-items:center; gap:5px; transition:all 0.2s;" onclick="window.openCurrentTabGuide && window.openCurrentTabGuide()">📜 Guia</button>
-          </div>
+    <header class="top-bar">
+      <!-- Hidden elements for JS compatibility -->
+      <span id="zone-name" style="display:none;">Talking Island</span>
+      <span id="zone-kill-progress" style="display:none;">0/50</span>
+
+      <div class="tb-left">
+        <span class="tb-brand">ADEN ARENA<span class="tb-brand-sub">IDLE CHRONICLES</span></span>
+      </div>
+
+      <div class="tb-center">
+        <span id="season-badge" class="tb-pill tb-pill--season" title="Temporada 1: O Despertar de Aden (Cap Lv 60)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><path d="M12 2l3 6 6 1-4 4 1 6-6-3-6 3 1-6-4-4 6-1z"/></svg> Temp 1: Cap Lv 60
+        </span>
+        <span id="liveops-event-badge" class="tb-pill tb-pill--event" onclick="window.openLiveOpsModal && window.openLiveOpsModal()" title="Clique para ver o evento Live-Ops ativo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Evento
+        </span>
+        <span id="worldboss-top-badge" class="tb-pill tb-pill--boss" onclick="window.openWorldBossModal && window.openWorldBossModal()" title="Incursão Global de World Boss (Antharas, Valakas, Baium)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><path d="M12 2a10 10 0 1 0 10 10H12V2z"/><path d="M12 12L2.1 14.8"/><path d="M12 12l7.1 7.1"/></svg> World Boss: --:--:--
+        </span>
+      </div>
+
+      <div class="tb-right">
+        <div id="top-bar-guide-container" style="display:inline-flex;">
+          <button id="top-bar-guide-btn" class="tb-btn" onclick="window.openCurrentTabGuide && window.openCurrentTabGuide()" title="Guia">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg> <span>Guia</span>
+          </button>
         </div>
-        <div class="top-stats-right" style="display:flex; align-items:center; gap:10px; margin-left:auto;">
-          <button id="admin-top-btn" class="admin-top-btn" onclick="window.openAdminModal && window.openAdminModal()" style="display:none; background:linear-gradient(180deg, rgba(160,30,30,0.85), rgba(90,15,15,0.98)); border:1px solid #ef4444; color:#fee2e2; border-radius:4px; padding:3px 10px; font-size:11px; font-weight:bold; font-family:'Cinzel',serif; cursor:pointer; align-items:center; gap:5px; transition:all 0.2s; box-shadow:0 0 10px rgba(239,68,68,0.35);">
-            👑 Admin
+        
+        <button id="admin-top-btn" class="tb-btn tb-btn--admin" onclick="window.openAdminModal && window.openAdminModal()" title="Admin">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4l3 12h14l3-12-6 7-4-7-4 7-6-7z"/><path d="M3 20h18v2H3z"/></svg> <span>Admin</span>
+        </button>
+
+        <button id="top-referral-btn" class="tb-btn tb-btn--referral" onclick="window.openReferralModal && window.openReferralModal()" title="Indique amigos e ganhe 50 Aden Coins + 5x Blessed Scrolls!">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="14" rx="2" ry="2"/><path d="M12 5H8a2 2 0 1 0 0 4h4z"/><path d="M12 5h4a2 2 0 1 1 0 4h-4z"/><path d="M12 9v13"/></svg> <span>Indicar Amigos</span>
+        </button>
+
+        <button id="starter-journey-btn" class="tb-btn tb-btn--journey" onclick="window.openStarterJourneyModal && window.openStarterJourneyModal()" title="Jornada dos Pioneiros (Onboarding 7 Passos)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg> <span>Jornada</span>
+          <span id="starter-journey-dot" class="tb-dot tb-dot--green"></span>
+        </button>
+
+        <button id="top-market-btn" class="tb-btn tb-btn--market" onclick="window.openMarketTab ? window.openMarketTab() : (window.openPanel && window.openPanel('market'))" title="Mercado">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.29 5.17c-.22.5.15 1.13.71 1.13h13.14c.55 0 .91-.6.71-1.1L17 13M9 21a1 1 0 1 0 0-2 1 1 0 0 0 0 2zM15 21a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/></svg> <span>Mercado</span>
+        </button>
+
+        <button id="cash-shop-btn" class="tb-btn tb-btn--shop" onclick="window.openCashShopModal && window.openCashShopModal()" title="Loja">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg> <span id="top-ac-amount">0 AC</span> <span>Loja</span>
+        </button>
+
+        <button id="daily-reward-btn" class="tb-btn" onclick="window.openDailyRewardModal && window.openDailyRewardModal()" title="Check-in Diário">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> <span>Check-in</span>
+          <span id="daily-reward-dot" class="tb-dot tb-dot--red"></span>
+        </button>
+
+        <a href="https://discord.gg/adenarena" target="_blank" rel="noopener noreferrer" id="top-discord-btn" class="tb-btn tb-btn--discord" title="Junte-se ao Discord">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> <span>Discord</span>
+        </a>
+
+        <div class="tb-util">
+          <button id="audio-mute-btn" class="tb-btn tb-btn--audio" onclick="window.toggleMuteAudio && window.toggleMuteAudio()" title="Mudo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg> <span>Audio</span>
           </button>
-          <button id="top-referral-btn" onclick="window.openReferralModal && window.openReferralModal()" style="background:linear-gradient(180deg, rgba(16,185,129,0.7), rgba(5,150,105,0.95)); border:1px solid #10b981; color:#ecfdf5; border-radius:4px; padding:3px 10px; font-size:11px; font-weight:bold; font-family:'Cinzel',serif; cursor:pointer; display:inline-flex; align-items:center; gap:5px; transition:all 0.2s; box-shadow:0 0 10px rgba(16,185,129,0.25);" title="Indique amigos e ganhe 50 Aden Coins + 5x Blessed Scrolls!">
-            🎁 Indicar Amigos
-          </button>
-          <button id="starter-journey-btn" onclick="window.openStarterJourneyModal && window.openStarterJourneyModal()" style="background:linear-gradient(180deg, rgba(202,138,4,0.7), rgba(161,98,7,0.95)); border:1px solid #fde047; color:#fff; border-radius:4px; padding:3px 10px; font-size:11px; font-weight:bold; font-family:'Cinzel',serif; cursor:pointer; display:inline-flex; align-items:center; gap:5px; transition:all 0.2s; box-shadow:0 0 10px rgba(234,179,8,0.3); position:relative;" title="Jornada dos Pioneiros (Onboarding 7 Passos)">
-            🧭 Jornada
-            <span id="starter-journey-dot" style="display:none; width:8px; height:8px; background:#22c55e; border-radius:50%; box-shadow:0 0 8px #22c55e; position:absolute; top:-2px; right:-2px;"></span>
-          </button>
-          <button id="top-market-btn" onclick="window.openMarketTab ? window.openMarketTab() : (window.openPanel && window.openPanel('market'))" style="background:linear-gradient(180deg, rgba(30,40,60,0.8), rgba(15,20,30,0.95)); border:1px solid #60a5fa; color:#93c5fd; border-radius:4px; padding:3px 10px; font-size:11px; font-weight:bold; font-family:'Cinzel',serif; cursor:pointer; display:inline-flex; align-items:center; gap:6px; transition:all 0.2s; box-shadow:0 0 10px rgba(96,165,250,0.25);">
-            🏛️ Mercado
-          </button>
-          <button id="cash-shop-btn" onclick="window.openCashShopModal && window.openCashShopModal()" style="background:linear-gradient(180deg, rgba(138,106,36,0.6), rgba(48,35,15,0.95)); border:1px solid #ffd700; color:#fde047; border-radius:4px; padding:3px 10px; font-size:11px; font-weight:bold; font-family:'Cinzel',serif; cursor:pointer; display:inline-flex; align-items:center; gap:6px; transition:all 0.2s; box-shadow:0 0 10px rgba(255,215,0,0.25);">
-            <span style="color:#ffd700; font-size:12px;">⚜</span> <span id="top-ac-amount" style="font-weight:bold; color:#ffd700;">0 AC</span> <span style="background:rgba(212,175,55,0.3); border:1px solid rgba(255,215,0,0.6); border-radius:3px; padding:1px 5px; font-size:9px; color:#fef08a; text-transform:uppercase; font-weight:700;">Loja</span>
-          </button>
-          <button id="daily-reward-btn" onclick="window.openDailyRewardModal && window.openDailyRewardModal()" style="background:linear-gradient(180deg, rgba(80,55,20,0.7), rgba(35,22,10,0.9)); border:1px solid rgba(234, 179, 8, 0.6); color:#fef08a; border-radius:4px; padding:3px 10px; font-size:11px; font-weight:bold; font-family:'Cinzel',serif; cursor:pointer; display:inline-flex; align-items:center; gap:6px; transition:all 0.2s; position:relative;">
-            🎁 Check-in
-            <span id="daily-reward-dot" style="display:none; width:8px; height:8px; background:#ef4444; border-radius:50%; box-shadow:0 0 8px #ef4444; position:absolute; top:-2px; right:-2px;"></span>
-          </button>
-          <a href="https://discord.gg/adenarena" target="_blank" rel="noopener noreferrer" id="top-discord-btn" style="background:linear-gradient(180deg, rgba(88,101,242,0.8), rgba(60,70,180,0.95)); border:1px solid #5865F2; color:#fff; border-radius:4px; padding:3px 10px; font-size:11px; font-weight:bold; font-family:'Cinzel',serif; text-decoration:none; display:inline-flex; align-items:center; gap:5px; transition:all 0.2s; box-shadow:0 0 10px rgba(88,101,242,0.35);">
-            💬 Discord
-          </a>
-          <span class="ts-clock" style="display:inline-flex; align-items:center; gap:4px;"><span class="ts-label">Sessão</span><span id="clock">00:00:00</span></span>
-          <span id="save-status-badge" style="font-size:10px; background:rgba(16,185,129,0.15); border:1px solid rgba(16,185,129,0.4); color:#34d399; padding:2px 8px; border-radius:4px; font-weight:bold;">● Salvo</span>
-          <button id="audio-mute-btn" onclick="window.toggleMuteAudio && window.toggleMuteAudio()" style="background:rgba(30,35,45,0.8);border:1px solid rgba(255,255,255,0.15);color:#ece4d3;border-radius:4px;padding:3px 10px;font-size:11px;font-weight:600;cursor:pointer;transition:background 0.2s;" onmouseover="this.style.background='rgba(50,55,70,0.9)'" onmouseout="this.style.background='rgba(30,35,45,0.8)'">♫ Audio</button>
+          
+          <span class="tb-clock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> <span id="clock">00:00:00</span></span>
+          <span id="save-status-badge" class="tb-save">Salvo</span>
         </div>
       </div>
     </header>

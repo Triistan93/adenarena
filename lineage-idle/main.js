@@ -4459,76 +4459,76 @@ function getSkillVfxData(skillId, skillDef = null) {
   // ─── 2. MAGOS: FOGO & METEOROS ───
   // Flame Strike (Chama ardente e erupção vulcânica clássica)
   if (combined.includes('flame strike') || combined.includes('flame_strike') || id.includes('flame_strike')) {
-    return { id: 'flame_strike', groundVfx: 'magic_prominence', color: '#ff7722', duration: 1050 };
+    return { id: 'flame_strike', groundVfx: null, color: '#ff7722', duration: 1050 };
   }
   // Meteoro massivo do céu abrindo cratera incandescente
   if (combined.includes('meteor') || combined.includes('star fall') || combined.includes('starfall') || combined.includes('hell inferno') || combined.includes('flame explosion')) {
-    return { id: 'magic_meteor', groundVfx: 'magic_prominence', color: '#ff6610', duration: 1200 };
+    return { id: 'magic_meteor', groundVfx: null, color: '#ff6610', duration: 1200 };
   }
   // Prominence e erupções vulcânicas de solo
   if (combined.includes('prominence') || combined.includes('blaze') || combined.includes('fire spiral') || combined.includes('blazing circle') || combined.includes('flame burst') || combined.includes('fire weave')) {
-    return { id: 'magic_prominence', groundVfx: 'magic_prominence', color: '#ff7722', duration: 1050 };
+    return { id: 'magic_prominence', groundVfx: null, color: '#ff7722', duration: 1050 };
   }
   // Fireball clássica
   if (combined.includes('fire') || combined.includes('flame') || combined.includes('ignite') || combined.includes('burn') || combined.includes('magma') || combined.includes('lava') || combined.includes('pyro')) {
-    return { id: 'fireball', groundVfx: 'magic_prominence', color: '#ff7a45', duration: 900 };
+    return { id: 'fireball', groundVfx: null, color: '#ff7a45', duration: 900 };
   }
 
   // ─── 3. MAGOS: ÁGUA & GELO ───
   // Hydro Blast / Aqua Swirl / Torrente gélida de alta pressão
   if (combined.includes('hydro') || combined.includes('aqua') || combined.includes('water') || combined.includes('surge')) {
-    return { id: 'magic_hydro_blast', groundVfx: 'magic_hydro_blast', color: '#67e8f9', duration: 850 };
+    return { id: 'magic_hydro_blast', groundVfx: null, color: '#67e8f9', duration: 850 };
   }
   // Blizzard e congelamento total com espinhos no solo
   if (combined.includes('blizzard') || combined.includes('ice') || combined.includes('frost') || combined.includes('freeze') || combined.includes('cold') || combined.includes('glacier')) {
-    return { id: 'frost_blizzard', groundVfx: 'monster_frost_freeze', color: '#a5f3fc', duration: 1000 };
+    return { id: 'frost_blizzard', groundVfx: null, color: '#a5f3fc', duration: 1000 };
   }
 
   // ─── 4. MAGOS: VENTO & TEMPESTADE ───
   // Wind Strike (Lâmina mágica cortante de vento de alta velocidade)
   if (combined.includes('wind strike') || combined.includes('wind_strike') || id.includes('wind_strike')) {
-    return { id: 'wind_strike', groundVfx: 'magic_hurricane', color: '#72f3ca', duration: 750 };
+    return { id: 'wind_strike', groundVfx: null, color: '#72f3ca', duration: 750 };
   }
   // Hurricane / Tempest Cyclone / Tufão cônico vertical
   if (combined.includes('hurricane') || combined.includes('tempest') || combined.includes('cyclone') || combined.includes('typhoon') || combined.includes('gale burst')) {
-    return { id: 'magic_hurricane', groundVfx: 'magic_hurricane', color: '#5eead4', duration: 1100 };
+    return { id: 'magic_hurricane', groundVfx: null, color: '#5eead4', duration: 1100 };
   }
   // Wind Blast / Twister / Rajada de ar
   if (combined.includes('wind') || combined.includes('gale') || combined.includes('breeze') || combined.includes('twister') || combined.includes('aeroblaster')) {
-    return { id: 'wind_blast', groundVfx: 'magic_hurricane', color: '#72f3ca', duration: 850 };
+    return { id: 'wind_blast', groundVfx: null, color: '#72f3ca', duration: 850 };
   }
 
   // ─── 5. MAGOS: RAIO & TROVÃO ───
   // Thunder Storm / Surto elétrico no chão
   if (combined.includes('thunder') || combined.includes('shock') || combined.includes('surge') || combined.includes('volt') || combined.includes('plasma')) {
-    return { id: 'magic_lightning_surge', groundVfx: 'magic_lightning_surge', color: '#7dd3fc', duration: 950 };
+    return { id: 'magic_lightning_surge', groundVfx: null, color: '#7dd3fc', duration: 950 };
   }
   if (combined.includes('lightning')) {
-    return { id: 'lightning', groundVfx: 'magic_lightning_surge', color: '#91f3ff', duration: 650 };
+    return { id: 'lightning', groundVfx: null, color: '#91f3ff', duration: 650 };
   }
 
   // ─── 6. MAGOS: TREVAS, NECROMANCIA & DRENO ───
   // Death Spike (Estaca óssea sombria)
   if (combined.includes('death_spike') || combined.includes('death spike') || combined.includes('bone') || combined.includes('spike')) {
-    return { id: 'magic_death_spike', groundVfx: 'magic_dark_mire', color: '#c084fc', duration: 750 };
+    return { id: 'magic_death_spike', groundVfx: null, color: '#c084fc', duration: 750 };
   }
   // Vampirismo / Life Drain / Dreno de almas
   if (combined.includes('drain') || combined.includes('vampir') || combined.includes('sanguine') || combined.includes('blood') || combined.includes('bite') || combined.includes('soul absorption')) {
-    return { id: 'magic_vampiric_drain', groundVfx: 'magic_dark_mire', color: '#f43f5e', duration: 950 };
+    return { id: 'magic_vampiric_drain', groundVfx: null, color: '#f43f5e', duration: 950 };
   }
   // Dark Vortex / Maldições / Charco Abissal
   if (combined.includes('curse') || combined.includes('shadow') || combined.includes('abyss') || combined.includes('corpse') || combined.includes('void') || combined.includes('dark') || combined.includes('necro') || combined.includes('chaos')) {
-    return { id: 'dark_vortex', groundVfx: 'magic_dark_mire', color: '#c084fc', duration: 850 };
+    return { id: 'dark_vortex', groundVfx: null, color: '#c084fc', duration: 850 };
   }
 
   // ─── 7. MAGOS: SAGRADO & LUZ ───
   // Solar Flare / Raio solar divino
   if (combined.includes('solar') || combined.includes('solar_flare') || combined.includes('radiant') || combined.includes('light burst') || combined.includes('prismatic ray')) {
-    return { id: 'magic_solar_flare', groundVfx: 'magic_holy_sanctuary', color: '#fde047', duration: 750 };
+    return { id: 'magic_solar_flare', groundVfx: null, color: '#fde047', duration: 750 };
   }
   // Sanctuary / Holy Strike / Julgamento
   if (combined.includes('holy') || combined.includes('divine') || combined.includes('judgment') || combined.includes('sanctuary') || combined.includes('angel') || combined.includes('purifying')) {
-    return { id: 'holy_beam', groundVfx: 'magic_holy_sanctuary', color: '#fef08a', duration: 700 };
+    return { id: 'holy_beam', groundVfx: null, color: '#fef08a', duration: 700 };
   }
 
   // ─── 8. GUERREIROS: ADAGAS & ASSASSINOS ───
@@ -4544,7 +4544,7 @@ function getSkillVfxData(skillId, skillDef = null) {
   // ─── 9. GUERREIROS: ESPADAS DUPLAS & DUELISTAS ───
   // Sonic Storm / Sonic Buster (Vácuo sônico que rasga o chão)
   if (combined.includes('sonic storm') || combined.includes('sonic buster') || combined.includes('sonic_buster') || combined.includes('double sonic') || combined.includes('sonic rage') || combined.includes('dual blow')) {
-    return { id: 'warrior_sonic_storm', groundVfx: 'warrior_sonic_storm', color: '#93c5fd', duration: 750 };
+    return { id: 'warrior_sonic_storm', groundVfx: null, color: '#93c5fd', duration: 750 };
   }
   // Triple Slash / Cortes múltiplos
   if (combined.includes('triple slash') || combined.includes('triple_slash') || combined.includes('blade dance') || combined.includes('crescent blade') || combined.includes('iaijutsu')) {
@@ -4554,11 +4554,11 @@ function getSkillVfxData(skillId, skillDef = null) {
   // ─── 10. GUERREIROS: ARMAS PESADAS, MARTELOS & ESMAGAMENTO ───
   // Earth Tremor / Earthquake / Fenda sísmica com pedregulhos aos pés
   if (combined.includes('earthquake') || combined.includes('earth tremor') || combined.includes('earth') || combined.includes('tremor') || combined.includes('shock stomp') || combined.includes('crater')) {
-    return { id: 'warrior_earth_tremor', groundVfx: 'warrior_earth_tremor', color: '#d97706', duration: 1050 };
+    return { id: 'warrior_earth_tremor', groundVfx: null, color: '#d97706', duration: 1050 };
   }
   // Power Smash / Hammer Crush / Impacto pesado
   if (combined.includes('crush') || combined.includes('hammer') || combined.includes('smash') || combined.includes('slam') || combined.includes('stun') || combined.includes('shield') || combined.includes('bash') || combined.includes('impact') || combined.includes('blunt')) {
-    return { id: 'power_smash', groundVfx: 'warrior_earth_tremor', color: '#f59e0b', duration: 650 };
+    return { id: 'power_smash', groundVfx: null, color: '#f59e0b', duration: 650 };
   }
 
   // ─── 11. GUERREIROS: MONGE / TYRANT (PUNHOS & CHI) ───
@@ -4568,10 +4568,10 @@ function getSkillVfxData(skillId, skillDef = null) {
 
   // ─── 12. GUERREIROS: LANÇAS & POLARMS ───
   if (combined.includes('whirlwind') || combined.includes('wild sweep') || combined.includes('wrath') || combined.includes('spin')) {
-    return { id: 'whirlwind', groundVfx: 'warrior_spear_whirlwind', color: '#93c5fd', duration: 650 };
+    return { id: 'whirlwind', groundVfx: null, color: '#93c5fd', duration: 650 };
   }
   if (combined.includes('spear') || combined.includes('lance') || combined.includes('thrust') || combined.includes('drill') || combined.includes('fellswoop')) {
-    return { id: 'warrior_spear_whirlwind', groundVfx: 'warrior_spear_whirlwind', color: '#fdba74', duration: 750 };
+    return { id: 'warrior_spear_whirlwind', groundVfx: null, color: '#fdba74', duration: 750 };
   }
 
   // ─── 13. CORTE GERAL / ESPADA ───
@@ -5231,11 +5231,7 @@ function attackMonster() {
             });
           }
 
-          if (skinReaction === 'is-ignited') {
-            playCombatVFX('monster_inferno_pillar', { source, target: baseTarget, color: '#ff7722', duration: 900 });
-          } else if (skinReaction === 'is-frozen') {
-            playCombatVFX('monster_frost_freeze', { source, target: baseTarget, color: '#a5f3fc', duration: 900 });
-          }
+          // Skin reaction VFX only on auto-attacks, not on skills
         }
 
         log(`💥 ${skill.def.name}! ${sDmg} ${type} damage`, 'rarity-epic');
