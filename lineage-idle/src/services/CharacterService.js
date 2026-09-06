@@ -101,10 +101,6 @@ export function checkClassAdvancement(state, callbacks = {}) {
   const currentClassDef = getClass(state.class);
   const currentStage = currentClassDef?.stage || 0;
 
-  if (!callbacks.el) return;
-  const banner = callbacks.el('class-advancement-banner');
-  if (!banner) return;
-
   let canAdvance = false;
   let advTitle = '';
   let advSub = '';
@@ -123,16 +119,59 @@ export function checkClassAdvancement(state, callbacks = {}) {
     advSub = `Atingiu o Nível ${state.level}! Torne-se um Mestre Sagrado da 3ª Transferência e alcance o poder dos Noblesses!`;
   }
 
-  if (canAdvance) {
-    banner.style.display = 'flex';
-    const titleEl = callbacks.el('class-advancement-title');
-    const subEl = callbacks.el('class-advancement-sub');
-    if (titleEl) titleEl.textContent = advTitle;
-    if (subEl) subEl.textContent = advSub;
-    const btn = callbacks.el('class-advancement-btn');
-    if (btn && callbacks.openClassTransferModal) btn.onclick = () => callbacks.openClassTransferModal();
-  } else {
-    banner.style.display = 'none';
+  const el = callbacks.el || ((id) => (typeof document !== 'undefined' ? document.getElementById(id) : null));
+  if (!el) return;
+
+  const openModal = () => {
+    if (typeof callbacks.openClassTransferModal === 'function') {
+      callbacks.openClassTransferModal();
+    } else if (typeof window !== 'undefined' && typeof window.openClassTransferModal === 'function') {
+      window.openClassTransferModal();
+    }
+  };
+
+  // 1. Botão permanente no Painel Esquerdo de Status (sempre visível ao jogador)
+  const statsBtn = el('stats-class-adv-btn');
+  if (statsBtn) {
+    if (canAdvance) {
+      statsBtn.style.display = 'block';
+      statsBtn.textContent = currentStage === 0 ? '⚡ 1ª Troca de Classe' : currentStage === 1 ? '⚔️ 2ª Troca de Classe' : '👑 3ª Troca de Classe';
+      statsBtn.onclick = openModal;
+    } else {
+      statsBtn.style.display = 'none';
+    }
+  }
+
+  // 2. Banner completo na Aba Personagem
+  const banner = el('class-advancement-banner');
+  if (banner) {
+    if (canAdvance) {
+      banner.style.display = 'flex';
+      const titleEl = el('class-advancement-title');
+      const subEl = el('class-advancement-sub');
+      if (titleEl) titleEl.textContent = advTitle;
+      if (subEl) subEl.textContent = advSub;
+      const btn = el('class-advancement-btn');
+      if (btn) btn.onclick = openModal;
+    } else {
+      banner.style.display = 'none';
+    }
+  }
+
+  // 3. Banner na Aba de Habilidades
+  const skillsBanner = el('skills-class-adv-banner');
+  if (skillsBanner) {
+    if (canAdvance) {
+      skillsBanner.style.display = 'flex';
+      const sTitle = el('skills-class-adv-title');
+      const sSub = el('skills-class-adv-sub');
+      if (sTitle) sTitle.textContent = advTitle;
+      if (sSub) sSub.textContent = advSub;
+      const sBtn = el('skills-class-adv-btn');
+      if (sBtn) sBtn.onclick = openModal;
+    } else {
+      skillsBanner.style.display = 'none';
+    }
   }
 }
 

@@ -100,6 +100,9 @@ export const IDLE_MARKUP = `
             <span id="race-text" class="stat-value" style="color:#e2e8f0; font-weight:600;">Human</span>
             <span id="class-text" class="stat-value" style="color:#c5a059; font-weight:600;">Fighter</span>
           </div>
+          <button id="stats-class-adv-btn" class="class-adv-action-btn" style="display:none; width:100%; margin-top:5px; font-size:10px; padding:5px 8px; animation: banner-pulse 1.5s infinite alternate; cursor:pointer;" onclick="window.openClassTransferModal && window.openClassTransferModal()">
+            ⚡ Trocar de Classe
+          </button>
           <div style="display:flex; justify-content:space-between; align-items:center; font-size:10px; color:#64748b; border-top:1px dashed rgba(255,255,255,0.06); padding-top:2px; margin-top:2px;">
             <span>Crônica</span>
             <span id="saga-text" class="stat-value" style="color:#94a3b8;">Interlude</span>
@@ -399,11 +402,14 @@ export const IDLE_MARKUP = `
                   </div>
                 </div>
 
-                <!-- Placeholder oculto para evitar erros de scripts legados -->
-                <div id="class-advancement-banner" style="display:none !important;">
-                  <span id="class-advancement-title"></span>
-                  <span id="class-advancement-sub"></span>
-                  <button id="class-advancement-btn"></button>
+                <!-- Banner de Avanço / Troca de Classe -->
+                <div id="class-advancement-banner" class="class-advancement-banner" style="display:none;">
+                  <span class="banner-icon">📜</span>
+                  <div class="banner-info">
+                    <h4 id="class-advancement-title">⚡ 1ª Troca de Classe Disponível!</h4>
+                    <p id="class-advancement-sub">Escolha o seu caminho de evolução.</p>
+                  </div>
+                  <button id="class-advancement-btn" class="class-adv-action-btn">Evoluir Classe</button>
                 </div>
               </div>
             </div>
@@ -469,6 +475,15 @@ export const IDLE_MARKUP = `
                 <span class="sp-pill"><span class="sp-icon">✦</span> <span id="sp-available">0</span> SP Disponível</span>
                 <button id="reset-sp-btn" class="inv-batch-btn" title="Redistribuir todos os pontos de habilidade investidos">🔄 Resetar SP</button>
               </div>
+            </div>
+            <!-- Banner de Troca de Classe na Aba de Habilidades -->
+            <div id="skills-class-adv-banner" class="class-advancement-banner" style="display:none; margin: 8px 0 12px 0;">
+              <span class="banner-icon">⚡</span>
+              <div class="banner-info">
+                <h4 id="skills-class-adv-title">1ª Troca de Classe Disponível!</h4>
+                <p id="skills-class-adv-sub">Evolua sua classe para desbloquear novos poderes e árvores de talentos.</p>
+              </div>
+              <button id="skills-class-adv-btn" class="class-adv-action-btn" onclick="window.openClassTransferModal && window.openClassTransferModal()">Evoluir Classe</button>
             </div>
             <!-- Passivas de Linhagem de Classes Passadas -->
             <div id="legacy-passives-container" style="display:none; background:rgba(0,0,0,0.4); border:1px solid rgba(212,175,55,0.25); border-radius:8px; padding:10px 14px; margin-bottom:10px;"></div>

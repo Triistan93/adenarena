@@ -449,6 +449,16 @@ function openClassTransferModal(classInfo) {
   const modal = el('class-transfer-modal');
   if (!modal) return;
 
+  const closeBtn = el('close-class-modal-btn');
+  if (closeBtn) {
+    closeBtn.onclick = () => {
+      modal.classList.remove('active');
+    };
+  }
+  modal.onclick = (e) => {
+    if (e.target === modal) modal.classList.remove('active');
+  };
+
   const currentClassDef = getClass(state.class);
   const currentStage = currentClassDef?.stage || 0;
   const targetStage = currentStage + 1;
@@ -775,6 +785,9 @@ function openClassTransferModal(classInfo) {
 
 function checkClassAdvancement() { return serviceCheckClassAdvancement(state, { el, openClassTransferModal }); }
 function promoteClass(newClassId, selectedIds = null) { return servicePromoteClass(state, newClassId, selectedIds, { log, floatText, el, updateAllUI, save }); }
+if (typeof window !== 'undefined') {
+  window.openClassTransferModal = openClassTransferModal;
+}
 
 
 // --------------------------- INVENTORY / SALVAGE (Sprint 3: Delegados) ---------------------------
