@@ -1474,6 +1474,7 @@ export function updateInventoryUI(state, callbacks = {}) {
   const filter = state.inventoryFilter || state.filter || 'all';
   const rarityFilter = state.rarityFilter || 'all';
   const equipFilter = state.equipFilter || 'all';
+  const gradeFilter = (typeof window !== 'undefined' && window.currentGradeFilter) || state.gradeFilter || 'all';
 
   const searchInput = findElement('inv-search-input');
   if (searchInput && !searchInput.dataset.bound) {
@@ -1511,6 +1512,28 @@ export function updateInventoryUI(state, callbacks = {}) {
     if (rarityFilter !== 'all' && rarity !== rarityFilter) continue;
     if (equipFilter === 'equipped' && !item.equipped) continue;
     if (equipFilter === 'bag' && item.equipped) continue;
+
+    if (gradeFilter !== 'all') {
+      const reqLvl = def.req ? def.req.level : 1;
+      let itemGrade = (def.grade || '').toLowerCase();
+      if (!itemGrade) {
+        if (def.tier === 1) itemGrade = 'ng';
+        else if (def.tier === 2) itemGrade = 'd';
+        else if (def.tier === 3) itemGrade = 'c';
+        else if (def.tier === 4) itemGrade = 'b';
+        else if (def.tier === 4.5) itemGrade = 'a';
+        else if (def.tier === 5 || def.tier === 6) itemGrade = 's';
+        else {
+          if (reqLvl < 20) itemGrade = 'ng';
+          else if (reqLvl < 40) itemGrade = 'd';
+          else if (reqLvl < 52) itemGrade = 'c';
+          else if (reqLvl < 61) itemGrade = 'b';
+          else if (reqLvl < 76) itemGrade = 'a';
+          else itemGrade = 's';
+        }
+      }
+      if (!itemGrade.includes(gradeFilter.toLowerCase())) continue;
+    }
 
     const isSelected = selectedSet.has(item.uid);
     const qty = (item.count || 1) > 1 ? `<span class="qty">${item.count}</span>` : '';
@@ -1848,6 +1871,51 @@ export function updateEquipmentUI(state, callbacks = {}) {
       resBadge.style.display = 'none';
     }
   }
+
+  // Atualiza o Orbe Central de Ressonância Dupla (#dual-resonance-orb)
+  const dualOrb = root.querySelector('#dual-resonance-orb');
+  const dualOrbCore = root.querySelector('#resonance-orb-core');
+  const dualTitle = root.querySelector('#resonance-hud-title');
+  const dualDesc = root.querySelector('#resonance-hud-desc');
+  const dualContainer = root.querySelector('#dual-resonance-hud-container');
+
+  if (dualOrb && dualOrbCore) {
+    if (activeRes) {
+      dualOrb.classList.add('active');
+      dualOrb.style.borderColor = activeRes.color || '#38bdf8';
+      dualOrb.style.boxShadow = `0 0 16px ${activeRes.color || '#38bdf8'}aa, inset 0 0 10px ${activeRes.color || '#38bdf8'}55`;
+      dualOrbCore.textContent = activeRes.icon || '⚔️';
+      dualOrb.title = `✨ Ressonância Ativa: ${activeRes.name}\nCombinação: ${activeRes.pairName}\nBônus: ${activeRes.desc}`;
+      if (dualTitle) {
+        dualTitle.textContent = `Ressonância: ${activeRes.name}`;
+        dualTitle.style.color = activeRes.color || '#38bdf8';
+      }
+      if (dualDesc) {
+        dualDesc.textContent = `${activeRes.pairName} — ${activeRes.desc}`;
+      }
+      if (dualContainer) {
+        dualContainer.style.borderColor = activeRes.color || 'rgba(212,167,68,0.4)';
+        dualContainer.style.boxShadow = `0 0 12px ${activeRes.color || '#38bdf8'}33`;
+      }
+    } else {
+      dualOrb.classList.remove('active');
+      dualOrb.style.removeProperty('border-color');
+      dualOrb.style.removeProperty('box-shadow');
+      dualOrbCore.textContent = '⚔️';
+      dualOrb.title = 'Ressonância Dupla: Equipe duas armas compatíveis para ativar sinergia!';
+      if (dualTitle) {
+        dualTitle.textContent = 'Ressonância: Inativa';
+        dualTitle.style.color = 'var(--gilt)';
+      }
+      if (dualDesc) {
+        dualDesc.textContent = 'Equipe Arma 1 e Arma 2 para sinergia';
+      }
+      if (dualContainer) {
+        dualContainer.style.borderColor = 'rgba(212,167,68,0.3)';
+        dualContainer.style.boxShadow = 'none';
+      }
+    }
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -2043,11 +2111,14 @@ export function renderStageMonster(state) {
 
       if (isBreak) {
         sBar.classList.add('stage-stagger-break');
-        const timeLeft = Math.max(1, Math.ceil((m.breakUntil - realNow) / 1000));
+        structure.card.classList.add('stage-break-active');
+        const diffMs = Math.max(0, m.breakUntil - realNow);
+        const timeLeft = (diffMs / 1000).toFixed(1);
         if (sFill) sFill.style.width = '100%';
-        if (sText) sText.textContent = `💥 VULNERÁVEL (2.0x DANO) [${timeLeft}s]`;
+        if (sText) sText.textContent = `💥 VULNERÁVEL [${timeLeft}s] (2.0x DANO)`;
       } else {
         sBar.classList.remove('stage-stagger-break');
+        structure.card.classList.remove('stage-break-active');
         const pct = Math.max(0, Math.min(100, Math.round(((m.staggerCurrent ?? m.staggerMax) / m.staggerMax) * 100)));
         if (sFill) sFill.style.width = `${pct}%`;
         if (sText) sText.textContent = `POSTURA: ${pct}%`;

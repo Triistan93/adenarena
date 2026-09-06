@@ -1118,6 +1118,91 @@ function salvageSelectedItems() {
   updateAllUI();
   save();
 }
+
+function crystallizeSelectedItems() {
+  const set = getSelectedSet();
+  let itemsToCrystallize = [];
+  if (set.size > 0) {
+    itemsToCrystallize = Array.from(set)
+      .map(uid => state.inventory?.find(i => String(i.uid) === String(uid)))
+      .filter(Boolean);
+  } else {
+    // Se nenhum item foi marcado via checkbox, seleciona itens de Grau D a S desequipados respeitando o filtro de grau atual
+    const currentGrade = (typeof window !== 'undefined' && window.currentGradeFilter) || state.gradeFilter || 'all';
+    itemsToCrystallize = (state.inventory || []).filter(item => {
+      if (!item || item.equipped) return false;
+      const def = D().ALL_ITEMS[item.itemId];
+      if (!def) return false;
+      const targetSlot = resolveEquipSlot(def.slot);
+      const isEquip = (def.slot && def.slot !== 'consumable' && def.slot !== 'material' && def.slot !== 'scroll' && def.slot !== 'powerup') || ALL_EQUIP_SLOTS.includes(targetSlot);
+      if (!isEquip) return false;
+      const reqLvl = def.req ? def.req.level : 1;
+      const gName = (def.grade || getItemGrade(reqLvl)).toUpperCase();
+      if (gName === 'NG' || gName.includes('NO-GRADE')) return false;
+      if (currentGrade !== 'all' && !gName.toLowerCase().includes(currentGrade.toLowerCase())) return false;
+      return true;
+    });
+  }
+
+  if (itemsToCrystallize.length === 0) {
+    log('Nenhum equipamento de Grau D a S disponível para cristalização.', 'system');
+    return;
+  }
+
+  const hasHighValue = itemsToCrystallize.some(i => isHighValueItem(i));
+  if (hasHighValue) {
+    if (!confirm(`💎 A seleção contém ${itemsToCrystallize.length} equipamento(s), incluindo peças de alta raridade (Raro ou superior). Deseja realmente cristalizá-las em Cristais elementares?`)) {
+      return;
+    }
+  }
+
+  let count = 0;
+  const yieldSummary = {};
+
+  for (const item of itemsToCrystallize) {
+    if (!item || item.equipped) continue;
+    const def = D().ALL_ITEMS[item.itemId];
+    if (!def) continue;
+
+    const reqLvl = def.req ? def.req.level : 1;
+    const gName = (def.grade || getItemGrade(reqLvl)).toUpperCase();
+    const rarityMult = item.rarity ? (D().RARITY[item.rarity]?.mult || 1) : 1;
+    const enchant = item.enchant || 0;
+
+    let cId = null;
+    let baseCrystals = 15;
+    if (gName.includes('S') || def.tier === 6) { cId = 'crystal_s'; baseCrystals = 70 + enchant * 15; }
+    else if (gName.includes('A') || def.tier === 5) { cId = 'crystal_a'; baseCrystals = 45 + enchant * 10; }
+    else if (gName.includes('B') || def.tier === 4) { cId = 'crystal_b'; baseCrystals = 30 + enchant * 8; }
+    else if (gName.includes('C') || def.tier === 3) { cId = 'crystal_c'; baseCrystals = 20 + enchant * 6; }
+    else if (gName.includes('D') || def.tier === 2) { cId = 'crystal_d'; baseCrystals = 15 + enchant * 4; }
+
+    if (!cId) continue; // Pula itens sem grau cristalizável
+
+    const finalAmount = Math.max(5, Math.floor(baseCrystals * rarityMult));
+    removeFromInventory(item.uid, 1);
+    addToInventory(cId, finalAmount);
+
+    yieldSummary[cId] = (yieldSummary[cId] || 0) + finalAmount;
+    count++;
+  }
+
+  set.clear();
+  const summaryStr = Object.entries(yieldSummary)
+    .map(([mId, amt]) => `${amt}x ${D().ALL_ITEMS[mId]?.name || mId}`)
+    .join(', ');
+
+  if (count > 0) {
+    log(`💎 Cristalizou ${count} equipamento(s) com sucesso e obteve: **${summaryStr}**!`, 'rarity-legendary');
+    if (typeof floatText === 'function') floatText(`💎 CRISTALIZADO (+${count}x)`, 'float-jackpot');
+  } else {
+    log('Nenhum item válido para cristalização.', 'system');
+  }
+  updateAllUI();
+  save();
+}
+window.crystallizeSelectedItems = crystallizeSelectedItems;
+
 function useItem(uid) {
   if (typeof hideItemTooltip === 'function') hideItemTooltip();
   const idx = state.inventory.findIndex(i => i.uid === uid);
@@ -2172,11 +2257,30 @@ function updateCombatControlsUI() {
   if (ssBtn) {
     const isSsActive = !!state.soulshotActive;
     ssBtn.classList.toggle('active', isSsActive);
-    const isMage = state.class === 'mage' || state.class === 'soulbreaker';
-    const shotId = isMage ? 'spiritshot_ng' : 'soulshot_ng';
-    const count = getInventoryCount(shotId);
-    ssBtn.innerHTML = `<span>⚡ SS</span> <span style="font-size:9px; color:${isSsActive ? '#ffd877' : '#94a3b8'};">(${count})</span>`;
-    ssBtn.title = `Soulshot: ${isSsActive ? 'LIGADO' : 'DESLIGADO'} (Estoque: ${count})`;
+    ssBtn.classList.toggle('autoshot-active', isSsActive);
+    const isMage = state.class === 'mage' || state.class === 'soulbreaker' || (getClass(state.class)?.archetype === 'mage');
+    
+    // Contagem total de tiros no inventário (universais + legado por grau)
+    let shotCount = 0;
+    if (state.inventory && Array.isArray(state.inventory)) {
+      for (const item of state.inventory) {
+        if (!item || (item.count || 1) <= 0) continue;
+        const id = String(item.itemId || '');
+        if (isMage) {
+          if (id === 'blessed_spiritshot_universal' || id === 'spiritshot_universal' || id.startsWith('spiritshot')) {
+            shotCount += (item.count || 1);
+          }
+        } else {
+          if (id === 'soulshot_universal' || id.startsWith('soulshot')) {
+            shotCount += (item.count || 1);
+          }
+        }
+      }
+    }
+    
+    const shotLabel = isMage ? '✨ SPS' : '⚡ SS';
+    ssBtn.innerHTML = `<span>${shotLabel}</span> <span style="font-size:9px; color:${isSsActive ? '#fef08a' : '#94a3b8'};">(${shotCount})</span>`;
+    ssBtn.title = `${isMage ? 'Spiritshot Abençoado' : 'Soulshot'}: ${isSsActive ? 'LIGADO' : 'DESLIGADO'} (Estoque: ${shotCount})`;
   }
   const apBtn = el('autopotion-toggle-btn');
   if (apBtn) {
@@ -2285,6 +2389,11 @@ function renderCraftRecipes() {
 function isEnchantScroll(itemId, isWeapon, isBlessed = false, grade = null) {
   if (!itemId) return false;
   const id = String(itemId).toLowerCase();
+
+  // Pergaminhos universais absolutos (arma ou armadura)
+  if (id === 'scroll_universal' && !isBlessed) return true;
+  if (id === 'scroll_blessed_universal' && isBlessed) return true;
+
   const matchesBlessed = id.includes('blessed');
   if (isBlessed !== matchesBlessed) return false;
 
@@ -2296,6 +2405,7 @@ function isEnchantScroll(itemId, isWeapon, isBlessed = false, grade = null) {
   const isScroll = id.includes('enchant') || id.includes('scroll') || id.includes('blessed');
   if (!isScroll) return false;
 
+  // Se o pergaminho tiver um sufixo explícito de grau (_d, _c, etc.), valida. Se for universal, aceita qualquer grau!
   if (grade && grade !== 'NG') {
     const gLower = grade.toLowerCase();
     const hasGradeSuffix = ['_d', '_c', '_b', '_a', '_s'].some(s => id.includes(s));
@@ -2305,6 +2415,26 @@ function isEnchantScroll(itemId, isWeapon, isBlessed = false, grade = null) {
   }
 
   return true;
+}
+
+function getEnchantSuccessChance(grade, currentEnchant, safeLimit) {
+  if (currentEnchant < safeLimit) return 1.0;
+  const g = (grade || 'NG').toUpperCase();
+  // Taxas balanceadas do Plano Mestre v5 (Nível 14):
+  if (g === 'D' || g === 'C' || g === 'NG') {
+    if (currentEnchant <= 3) return 0.90;
+    if (currentEnchant <= 6) return 0.70;
+    return 0.50;
+  } else if (g === 'B' || g === 'A') {
+    if (currentEnchant <= 3) return 0.80;
+    if (currentEnchant <= 6) return 0.60;
+    return 0.40;
+  } else if (g === 'S') {
+    if (currentEnchant <= 3) return 0.70;
+    if (currentEnchant <= 6) return 0.50;
+    return 0.30;
+  }
+  return Math.max(0.3, 1.0 - (currentEnchant - safeLimit) * 0.1);
 }
 
 function getEnchantScrollCount(isWeapon, isBlessed = false, grade = null) {
@@ -2348,7 +2478,8 @@ function updateEnchantUI() {
       const rarityColor = item.rarity ? (D().RARITY[item.rarity]?.color || 'var(--gilt)') : 'var(--gilt)';
       const isFullBody = def.slot === 'fullbody' || (def.slot === 'chest' && (def.isOnePiece || def.name?.toLowerCase().includes('full body') || def.name?.toLowerCase().includes('robe')));
       const safeLimit = isFullBody ? 4 : 3;
-      const safeMsg = enchant < safeLimit ? `100% Seguro (Até +${safeLimit})` : `Sucesso: ${Math.max(30, 100 - (enchant - safeLimit) * 10)}%`;
+      const baseProb = getEnchantSuccessChance(grade, enchant, safeLimit);
+      const safeMsg = enchant < safeLimit ? `100% Seguro (Até +${safeLimit})` : `Sucesso: ${Math.round(baseProb * 100)}% (Grau ${grade})`;
       
       const card = mkEl('div'); card.className = 'enchant-card';
       const title = (enchant > 0 ? `+${enchant} ` : '') + def.name + (item.rarity ? ` [${D().RARITY[item.rarity]?.name || item.rarity}]` : '');
@@ -2393,7 +2524,7 @@ function enchantItem(uid, useBlessed = false) {
   const enchantRate = Math.max(0.1, Number(state.serverRates?.enchant) || 1);
   const isFullBody = def.slot === 'fullbody' || (def.slot === 'chest' && (def.isOnePiece || def.name?.toLowerCase().includes('full body') || def.name?.toLowerCase().includes('robe')));
   const safeLimit = isFullBody ? 4 : 3;
-  const baseChance = currentEnchant < safeLimit ? 1.0 : Math.max(0.3, 1.0 - (currentEnchant - safeLimit) * 0.1);
+  const baseChance = getEnchantSuccessChance(grade, currentEnchant, safeLimit);
   const chance = Math.min(1.0, baseChance * enchantRate);
   
   if (Math.random() < chance) {
@@ -4575,20 +4706,57 @@ function attackMonster() {
     damage = Math.floor(damage * elemMult);
   }
   
+  let soulshotCritBonus = 0;
   if (state.soulshotActive) {
     const isMageClass = state.class === 'mage' || state.class === 'soulbreaker' || (getClass(state.class)?.archetype === 'mage');
-    const shotId = isMageClass ? 'spiritshot_ng' : 'soulshot_ng';
-    const shotItem = state.inventory.find(i => (i.itemId === shotId || i.itemId.startsWith('soulshot') || i.itemId.startsWith('spiritshot')) && (i.count || 1) > 0);
+    const shotItem = state.inventory?.find(i => {
+      if (!i || (i.count || 1) <= 0) return false;
+      const iId = String(i.itemId || '');
+      if (isMageClass) {
+        return iId === 'blessed_spiritshot_universal' || iId === 'spiritshot_universal' || iId.startsWith('spiritshot');
+      } else {
+        return iId === 'soulshot_universal' || iId.startsWith('soulshot');
+      }
+    });
+
     if (shotItem) {
       if ((shotItem.count || 1) > 1) shotItem.count--;
       else removeFromInventory(shotItem.uid, 1);
-      damage = Math.floor(damage * 2);
-      stageFloat('⚡ SHOT', 'sf-crit', 'left');
+
+      // Detecta a Grade da Arma equipada para escalonar o dano
+      let weaponGrade = 'NG';
+      if (state.equipment?.weapon) {
+        const wpnItem = state.inventory?.find(i => i.uid === state.equipment.weapon);
+        const wpnDef = wpnItem ? D().ALL_ITEMS[wpnItem.itemId] : null;
+        if (wpnDef?.grade) weaponGrade = String(wpnDef.grade).toUpperCase();
+        else if (wpnDef?.tier) {
+          const TIER_GRADE = { 1: 'NG', 2: 'D', 3: 'C', 4: 'B', 5: 'A', 6: 'S' };
+          weaponGrade = TIER_GRADE[wpnDef.tier] || 'NG';
+        }
+      }
+
+      let shotMult = 2.0;
+      if (isMageClass) {
+        // Multiplicador Mágico (Spiritshot): NG 2.0x, D 2.10x, C 2.20x, B 2.30x, A 2.40x, S 2.50x + 10% MCrit
+        const spsGradeMap = { 'NG': 2.0, 'D': 2.10, 'C': 2.20, 'B': 2.30, 'A': 2.40, 'S': 2.50 };
+        shotMult = spsGradeMap[weaponGrade] || 2.0;
+        if (weaponGrade === 'S') soulshotCritBonus = 10;
+        damage = Math.floor(damage * shotMult);
+        const bonusPct = Math.round((shotMult - 1) * 100);
+        stageFloat(`✨ SPS (+${bonusPct}%)`, 'sf-crit', 'left');
+      } else {
+        // Multiplicador Físico (Soulshot): NG 2.0x, D 2.05x, C 2.10x, B 2.15x, A 2.20x, S 2.25x
+        const ssGradeMap = { 'NG': 2.0, 'D': 2.05, 'C': 2.10, 'B': 2.15, 'A': 2.20, 'S': 2.25 };
+        shotMult = ssGradeMap[weaponGrade] || 2.0;
+        damage = Math.floor(damage * shotMult);
+        const bonusPct = Math.round((shotMult - 1) * 100);
+        stageFloat(`⚡ SS (+${bonusPct}%)`, 'sf-crit', 'left');
+      }
       updateCombatControlsUI();
     }
   }
 
-  if (Math.random() < stats.crit / 100) { 
+  if (Math.random() < (stats.crit + soulshotCritBonus) / 100) { 
     damage = Math.floor(damage * 1.5 * stats.critDmg); 
     wasCrit = true; 
     log(`CRIT! ${damage} damage to ${monster.name}`, 'combat'); 
@@ -6642,6 +6810,7 @@ export function bindEvents() {
     qsa('.class-btn').forEach(btn => btn.onclick = () => setClass(btn.dataset.class));
     qsa('.filter-btn').forEach(btn => { btn.onclick = () => { state.filter = btn.dataset.filter; qsa('.filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); updateInventoryUI(); }; });
     qsa('.rarity-filter-btn').forEach(btn => { btn.onclick = () => { state.rarityFilter = btn.dataset.rarity; qsa('.rarity-filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); updateInventoryUI(); }; });
+    qsa('.grade-filter-btn').forEach(btn => { btn.onclick = () => { state.gradeFilter = btn.dataset.grade; window.currentGradeFilter = btn.dataset.grade; qsa('.grade-filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); updateInventoryUI(); }; });
     qsa('.equip-filter-btn').forEach(btn => { btn.onclick = () => { state.equipFilter = btn.dataset.equipfilter; qsa('.equip-filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); updateInventoryUI(); }; });
     
     qsa('.zone-subtab').forEach(btn => {
@@ -6677,6 +6846,7 @@ export function bindEvents() {
     const clearSelBtn = el('clear-selection-btn'); if (clearSelBtn) clearSelBtn.onclick = clearItemSelection;
     const sellSelBtn = el('sell-selected-btn'); if (sellSelBtn) sellSelBtn.onclick = sellSelectedItems;
     const salvSelBtn = el('salvage-selected-btn'); if (salvSelBtn) salvSelBtn.onclick = salvageSelectedItems;
+    const crystSelBtn = el('crystallize-selected-btn'); if (crystSelBtn) crystSelBtn.onclick = crystallizeSelectedItems;
     const combatToggleBtn = el('combat-toggle-btn'); if (combatToggleBtn) combatToggleBtn.onclick = toggleCombatState;
     const ssToggleBtn = el('soulshot-toggle-btn'); if (ssToggleBtn) ssToggleBtn.onclick = toggleSoulshot;
     const apToggleBtn = el('autopotion-toggle-btn'); if (apToggleBtn) apToggleBtn.onclick = toggleAutoPotion;

@@ -187,6 +187,10 @@ export const IDLE_MARKUP = `
               <div class="stage-hp-fill" id="monster-hp-fill"></div>
               <span class="stage-hp-text" id="monster-hp-text">HP: 0 / 0</span>
             </div>
+            <div class="stage-stagger-bar" id="monster-stagger-bar" style="display:none;">
+              <div class="stage-stagger-fill" id="monster-stagger-fill"></div>
+              <span class="stage-stagger-text" id="monster-stagger-text">POSTURA: 100%</span>
+            </div>
             <div class="monster-sprite-host" id="monster-sprite-container"></div>
           </div>
           <div class="stage-floats" id="stage-floats"></div>
@@ -461,6 +465,17 @@ export const IDLE_MARKUP = `
             <div class="l2inv-main-container">
               <!-- Left Panel: 3-column Paperdoll Equipment Grid + Stats -->
               <div class="l2inv-left-paperdoll">
+                <!-- Dual Weapon Resonance HUD Bar & Orb -->
+                <div class="dual-resonance-hud-container" id="dual-resonance-hud-container" style="display:flex; align-items:center; justify-content:center; gap:8px; padding:6px; margin-bottom:8px; background:rgba(15,23,42,0.85); border:1px solid rgba(212,167,68,0.3); border-radius:6px;">
+                  <div class="dual-resonance-orb" id="dual-resonance-orb" title="Ressonância Dupla: Equipe duas armas compatíveis para ativar sinergia!">
+                    <div class="resonance-orb-core" id="resonance-orb-core">⚔️</div>
+                  </div>
+                  <div class="resonance-hud-info" style="flex:1; min-width:0;">
+                    <div class="resonance-hud-title" id="resonance-hud-title" style="font-size:11px; font-weight:bold; color:var(--gilt); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Ressonância: Inativa</div>
+                    <div class="resonance-hud-desc" id="resonance-hud-desc" style="font-size:10px; color:#94a3b8; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Equipe Arma 1 e Arma 2 para sinergia</div>
+                  </div>
+                </div>
+
                 <div class="l2inv-paperdoll-grid">
                   <!-- Column 1 (Left - 7 slots) -->
                   <div class="l2inv-doll-col">
@@ -636,14 +651,27 @@ export const IDLE_MARKUP = `
                       <button id="clear-selection-btn" class="l2inv-pill-btn" title="Limpar seleções">✕</button>
                     </div>
                   </div>
+
+                  <!-- Linha 3: Filtro por Grau (NG, D, C, B, A, S) -->
+                  <div class="l2inv-grade-pills" style="display:flex; align-items:center; gap:3px; padding-top:2px; border-top:1px solid rgba(212,167,68,0.15); flex-wrap:wrap;">
+                    <span style="font-size:10px; color:var(--gilt); font-weight:600; margin-right:4px;">Grau:</span>
+                    <button class="grade-filter-btn active" data-grade="all" style="padding:2px 7px; font-size:10px; border-radius:3px; cursor:pointer; background:#1e293b; color:#cbd5e1; border:1px solid rgba(212,167,68,0.3);">Todos</button>
+                    <button class="grade-filter-btn" data-grade="ng" style="padding:2px 7px; font-size:10px; border-radius:3px; cursor:pointer; background:#0f172a; color:#94a3b8; border:1px solid rgba(148,163,184,0.3);">NG</button>
+                    <button class="grade-filter-btn" data-grade="d" style="padding:2px 7px; font-size:10px; border-radius:3px; cursor:pointer; background:#0f172a; color:#38bdf8; border:1px solid rgba(56,189,248,0.3);">D</button>
+                    <button class="grade-filter-btn" data-grade="c" style="padding:2px 7px; font-size:10px; border-radius:3px; cursor:pointer; background:#0f172a; color:#4ade80; border:1px solid rgba(74,222,128,0.3);">C</button>
+                    <button class="grade-filter-btn" data-grade="b" style="padding:2px 7px; font-size:10px; border-radius:3px; cursor:pointer; background:#0f172a; color:#f87171; border:1px solid rgba(248,113,113,0.3);">B</button>
+                    <button class="grade-filter-btn" data-grade="a" style="padding:2px 7px; font-size:10px; border-radius:3px; cursor:pointer; background:#0f172a; color:#e2e8f0; border:1px solid rgba(226,232,240,0.4);">A</button>
+                    <button class="grade-filter-btn" data-grade="s" style="padding:2px 7px; font-size:10px; border-radius:3px; cursor:pointer; background:#0f172a; color:#facc15; border:1px solid rgba(250,204,21,0.5); font-weight:bold;">S</button>
+                  </div>
                 </div>
 
                 <!-- Item Slots Grid (8 columns x 7 rows dark reddish-brown slots) -->
                 <div class="l2inv-slots-grid" id="inventory-grid"></div>
 
-                <div class="l2inv-trash-actions">
+                <div class="l2inv-trash-actions" style="display:flex; gap:6px; flex-wrap:wrap;">
                   <button id="sell-selected-btn" class="l2inv-trash-btn sell" disabled title="Vender Itens Selecionados">💰 Vender</button>
                   <button id="salvage-selected-btn" class="l2inv-trash-btn salvage" disabled title="Desmontar Selecionados">🔨 Desmontar</button>
+                  <button id="crystallize-selected-btn" class="l2inv-trash-btn crystallize" style="background:linear-gradient(135deg, #1e3a8a, #2563eb); border:1px solid #60a5fa; color:#fff; border-radius:4px; padding:4px 10px; font-size:11px; cursor:pointer; font-weight:600;" title="Cristalizar Equipamentos Selecionados de Grau D a S">💎 Cristalizar Lote</button>
                 </div>
               </div>
             </div>
