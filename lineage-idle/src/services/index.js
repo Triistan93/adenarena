@@ -29,3 +29,7 @@ export * from './LiveOpsService.js';
 export * from './AchievementService.js';
 
 export * from './WorldBossService.js';
+export * from './ElementalSkillMatrixValidator.js';
+export * from './SkillVfxValidator.js';
+export * from './ElementalSkillAuditor.js';
+export * from './ElementalSkillFixer.js';
