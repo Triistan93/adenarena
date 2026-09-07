@@ -2194,12 +2194,12 @@ export function updateCharacterUI(state) {
   const race = state.race || 'human';
   const cls = state.class || 'fighter';
 
+  const clsObj = getClass(cls);
   const gData = typeof window !== 'undefined' ? (window.EchoData || window.GameData) : null;
-  const raceDef = (gData && gData.RACES_ECHO && gData.RACES_ECHO[race]) || { name: race.toUpperCase() };
-  const classDef = (gData && gData.CLASSES_ECHO && gData.CLASSES_ECHO[cls]) || { name: cls.toUpperCase() };
+  const raceDef = (typeof RACES !== 'undefined' && RACES[race]) || (gData && gData.RACES_ECHO && gData.RACES_ECHO[race]) || { name: race.toUpperCase() };
 
   const raceName = raceDef.name || race.toUpperCase();
-  const className = classDef.name || cls.toUpperCase();
+  const className = clsObj ? clsObj.name : ((gData && gData.CLASSES_ECHO && gData.CLASSES_ECHO[cls])?.name || cls.toUpperCase());
 
   // 1. Nome do Herói
   const portraitName = root.querySelector('#portrait-name, .portrait-name');
@@ -2212,6 +2212,12 @@ export function updateCharacterUI(state) {
   // 3. Linhagem e Ordem (Raça e Classe)
   const raceClassDisp = root.querySelector('#hero-race-class-display');
   if (raceClassDisp) raceClassDisp.textContent = `${raceName} · ${className}`;
+
+  const raceText = root.querySelector('#race-text');
+  if (raceText) raceText.textContent = raceName;
+
+  const classText = root.querySelector('#class-text');
+  if (classText) classText.textContent = className;
 
   // 4. Badge de Patente / Tier
   const tierBadge = root.querySelector('#hero-tier-badge');

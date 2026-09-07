@@ -30,13 +30,40 @@ const HERO_IMG = {
   human_darkavenger: "/img/m_darkavenger.jpg",
   human_darkavenger_m: "/img/m_darkavenger.jpg",
   human_darkavenger_f: "/img/f_darkavenger.jpg",
+  human_dark_avenger: "/img/m_darkavenger.jpg",
+  human_dark_avenger_m: "/img/m_darkavenger.jpg",
+  human_dark_avenger_f: "/img/f_darkavenger.jpg",
   human_treasurehunter: "/img/m_treasurehunter.jpg",
   human_treasurehunter_m: "/img/m_treasurehunter.jpg",
   human_treasurehunter_f: "/img/f_treasurehunter.jpg",
+  human_treasure_hunter: "/img/m_treasurehunter.jpg",
+  human_treasure_hunter_m: "/img/m_treasurehunter.jpg",
+  human_treasure_hunter_f: "/img/f_treasurehunter.jpg",
   human_hawkeye: "/img/m_hawkeye.jpg",
   human_hawkeye_m: "/img/m_hawkeye.jpg",
   human_hawkeye_f: "/img/f_hawkeye.jpg",
 
+  // Human 3rd Job / Awakened
+  human_duelist: "/img/m_gladiator.jpg",
+  human_duelist_m: "/img/m_gladiator.jpg",
+  human_duelist_f: "/img/f_gladiator.jpg",
+  human_dreadnought: "/img/m_warlord.jpg",
+  human_dreadnought_m: "/img/m_warlord.jpg",
+  human_dreadnought_f: "/img/f_warlord.jpg",
+  human_phoenix_knight: "/img/m_paladin.jpg",
+  human_phoenix_knight_m: "/img/m_paladin.jpg",
+  human_phoenix_knight_f: "/img/f_paladin.jpg",
+  human_hell_knight: "/img/m_darkavenger.jpg",
+  human_hell_knight_m: "/img/m_darkavenger.jpg",
+  human_hell_knight_f: "/img/f_darkavenger.jpg",
+  human_adventurer: "/img/m_treasurehunter.jpg",
+  human_adventurer_m: "/img/m_treasurehunter.jpg",
+  human_adventurer_f: "/img/f_treasurehunter.jpg",
+  human_sagittarius: "/img/m_hawkeye.jpg",
+  human_sagittarius_m: "/img/m_hawkeye.jpg",
+  human_sagittarius_f: "/img/f_hawkeye.jpg",
+
+  // Human Mages
   human_mage: "/img/m_humanmistyc.jpg",
   human_mage_m: "/img/m_humanmistyc.jpg",
   human_mage_f: "/img/f_humanmistyc.jpg",
@@ -55,64 +82,97 @@ const HERO_IMG = {
   human_sorcerer: "/img/m_sorcerer.jpg",
   human_sorcerer_m: "/img/m_sorcerer.jpg",
   human_sorcerer_f: "/img/f_sorcerer.jpg",
+  human_archmage: "/img/m_sorcerer.jpg",
+  human_archmage_m: "/img/m_sorcerer.jpg",
+  human_archmage_f: "/img/f_sorcerer.jpg",
   human_necromancer: "/img/m_necromancer.jpg",
   human_necromancer_m: "/img/m_necromancer.jpg",
   human_necromancer_f: "/img/f_necromancer.jpg",
+  human_soultaker: "/img/m_necromancer.jpg",
+  human_soultaker_m: "/img/m_necromancer.jpg",
+  human_soultaker_f: "/img/f_necromancer.jpg",
   human_warlock: "/img/m_warlock.jpg",
   human_warlock_m: "/img/m_warlock.jpg",
   human_warlock_f: "/img/f_warlock.jpg",
+  human_arcana_lord: "/img/m_warlock.jpg",
+  human_arcana_lord_m: "/img/m_warlock.jpg",
+  human_arcana_lord_f: "/img/f_warlock.jpg",
   human_cleric: "/img/m_cleric.jpg",
   human_cleric_m: "/img/m_cleric.jpg",
   human_cleric_f: "/img/f_cleric.jpg",
   human_bishop: "/img/m_bishop.jpg",
   human_bishop_m: "/img/m_bishop.jpg",
   human_bishop_f: "/img/f_bishop.jpg",
+  human_cardinal: "/img/m_bishop.jpg",
+  human_cardinal_m: "/img/m_bishop.jpg",
+  human_cardinal_f: "/img/f_bishop.jpg",
   human_prophet: "/img/m_prophet.jpg",
   human_prophet_m: "/img/m_prophet.jpg",
   human_prophet_f: "/img/f_prophet.jpg",
+  human_hierophant: "/img/m_prophet.jpg",
+  human_hierophant_m: "/img/m_prophet.jpg",
+  human_hierophant_f: "/img/f_prophet.jpg",
+
+  human_deathpilgrim: "/img/m_darkavenger.jpg",
+  human_death_knight: "/img/m_darkavenger.jpg",
+  human_wargbase: "/img/m_humanwarrior.jpg",
+  human_warg: "/img/m_humanwarrior.jpg",
+  human_assassinbase: "/img/m_treasurehunter.jpg",
+  human_assassins0: "/img/m_treasurehunter.jpg",
+  human_assassin: "/img/m_treasurehunter.jpg",
 
   // Generic class aliases (without race prefix)
   gladiator_m: "/img/m_gladiator.jpg",
   gladiator_f: "/img/f_gladiator.jpg",
   gladiator: "/img/m_gladiator.jpg",
+  duelist_m: "/img/m_gladiator.jpg",
+  duelist_f: "/img/f_gladiator.jpg",
+  duelist: "/img/m_gladiator.jpg",
   warlord_m: "/img/m_warlord.jpg",
   warlord_f: "/img/f_warlord.jpg",
   warlord: "/img/m_warlord.jpg",
+  dreadnought_m: "/img/m_warlord.jpg",
+  dreadnought_f: "/img/f_warlord.jpg",
+  dreadnought: "/img/m_warlord.jpg",
   paladin_m: "/img/m_paladin.jpg",
   paladin_f: "/img/f_paladin.jpg",
   paladin: "/img/m_paladin.jpg",
+  phoenixknight: "/img/m_paladin.jpg",
   darkavenger_m: "/img/m_darkavenger.jpg",
   darkavenger_f: "/img/f_darkavenger.jpg",
   darkavenger: "/img/m_darkavenger.jpg",
+  hellknight: "/img/m_darkavenger.jpg",
   treasurehunter_m: "/img/m_treasurehunter.jpg",
   treasurehunter_f: "/img/f_treasurehunter.jpg",
   treasurehunter: "/img/m_treasurehunter.jpg",
+  adventurer: "/img/m_treasurehunter.jpg",
   hawkeye_m: "/img/m_hawkeye.jpg",
   hawkeye_f: "/img/f_hawkeye.jpg",
   hawkeye: "/img/m_hawkeye.jpg",
+  sagittarius: "/img/m_hawkeye.jpg",
   sorcerer_m: "/img/m_sorcerer.jpg",
   sorcerer_f: "/img/f_sorcerer.jpg",
   sorcerer: "/img/m_sorcerer.jpg",
+  archmage: "/img/m_sorcerer.jpg",
   necromancer_m: "/img/m_necromancer.jpg",
   necromancer_f: "/img/f_necromancer.jpg",
   necromancer: "/img/m_necromancer.jpg",
+  soultaker: "/img/m_necromancer.jpg",
   warlock_m: "/img/m_warlock.jpg",
   warlock_f: "/img/f_warlock.jpg",
   warlock: "/img/m_warlock.jpg",
+  arcanalord: "/img/m_warlock.jpg",
   cleric_m: "/img/m_cleric.jpg",
   cleric_f: "/img/f_cleric.jpg",
   cleric: "/img/m_cleric.jpg",
   bishop_m: "/img/m_bishop.jpg",
   bishop_f: "/img/f_bishop.jpg",
   bishop: "/img/m_bishop.jpg",
+  cardinal: "/img/m_bishop.jpg",
   prophet_m: "/img/m_prophet.jpg",
   prophet_f: "/img/f_prophet.jpg",
   prophet: "/img/m_prophet.jpg",
-
-  human_deathpilgrim: "/img/m_darkavenger.jpg",
-  human_wargbase: "/img/m_humanwarrior.jpg",
-  human_assassinbase: "/img/m_treasurehunter.jpg",
-  human_assassins0: "/img/m_treasurehunter.jpg",
+  hierophant: "/img/m_prophet.jpg",
 
   // --- Elf Classes ---
   elf_fighter: "/img/elfwswM.png",
@@ -121,31 +181,79 @@ const HERO_IMG = {
   elf_mage: "/img/elfmageM.png",
   elf_mage_m: "/img/elfmageM.png",
   elf_mage_f: "/img/elfmageF.png",
+  elf_death_knight: "/img/elfwswM.png",
+  elf_death_knight_m: "/img/elfwswM.png",
+  elf_death_knight_f: "/img/elfswsF.png",
+  elf_knight: "/img/elfwswM.png",
+  elf_temple_knight: "/img/elfwswM.png",
+  elf_evas_templar: "/img/elfwswM.png",
+  elf_swordsinger: "/img/elfwswM.png",
+  elf_sword_muse: "/img/elfwswM.png",
+  elf_scout: "/img/elfswsF.png",
+  elf_plainswalker: "/img/elfswsF.png",
+  elf_wind_rider: "/img/elfswsF.png",
+  elf_silver_ranger: "/img/elfswsF.png",
+  elf_moonlight_sentinel: "/img/elfswsF.png",
   elf_elvenknight: "/img/elfwswM.png",
   elf_elvenscout: "/img/elfswsF.png",
   elf_elvenwizard: "/img/elfmageM.png",
   elf_elvenwizard_m: "/img/elfmageM.png",
   elf_elvenwizard_f: "/img/elfmageF.png",
+  elf_wizard: "/img/elfmageM.png",
+  elf_wizard_m: "/img/elfmageM.png",
+  elf_wizard_f: "/img/elfmageF.png",
+  elf_spellsinger: "/img/elfmageM.png",
+  elf_mystic_muse: "/img/elfmageM.png",
+  elf_elemental_summoner: "/img/elfmageM.png",
+  elf_elemental_master: "/img/elfmageM.png",
   elf_oracle: "/img/elfmageF.png",
   elf_oracle_m: "/img/elfmageM.png",
   elf_oracle_f: "/img/elfmageF.png",
+  elf_elder: "/img/elfmageF.png",
+  elf_evas_saint: "/img/elfmageF.png",
 
   // --- Dark Elf Classes ---
   darkelf_fighter: "/img/darkelfskM.png",
   darkelf_fighter_m: "/img/darkelfskM.png",
-  darkelf_fighter_f: "/img/darkelfskF.png",
+  darkelf_fighter_f: "/img/darkelfskM.png",
+  dark_elf_fighter: "/img/darkelfskM.png",
+  dark_elf_fighter_m: "/img/darkelfskM.png",
+  dark_elf_fighter_f: "/img/darkelfskM.png",
   darkelf_mage: "/img/darkelfmageF.png",
   darkelf_mage_m: "/img/darkelfmageM.png",
   darkelf_mage_f: "/img/darkelfmageF.png",
+  dark_elf_mage: "/img/darkelfmageF.png",
+  dark_elf_mage_m: "/img/darkelfmageM.png",
+  dark_elf_mage_f: "/img/darkelfmageF.png",
+  dark_elf_death_knight: "/img/darkelfskM.png",
+  dark_elf_assassin: "/img/darkelfskM.png",
+  dark_elf_blood_rose: "/img/darkelfmageF.png",
   darkelf_palusknight: "/img/darkelfskM.png",
+  dark_elf_palus_knight: "/img/darkelfskM.png",
+  dark_elf_shillien_knight: "/img/darkelfskM.png",
+  dark_elf_shillien_templar: "/img/darkelfskM.png",
+  dark_elf_abyss_walker: "/img/darkelfskM.png",
+  dark_elf_ghost_hunter: "/img/darkelfskM.png",
+  dark_elf_phantom_ranger: "/img/darkelfskM.png",
+  dark_elf_ghost_sentinel: "/img/darkelfskM.png",
+  dark_elf_bladedancer: "/img/darkelfskM.png",
+  dark_elf_spectral_dancer: "/img/darkelfskM.png",
   darkelf_darkwizard: "/img/darkelfmageM.png",
   darkelf_darkwizard_m: "/img/darkelfmageM.png",
   darkelf_darkwizard_f: "/img/darkelfmageF.png",
+  dark_elf_wizard: "/img/darkelfmageM.png",
+  dark_elf_spellhowler: "/img/darkelfmageM.png",
+  dark_elf_storm_screamer: "/img/darkelfmageM.png",
+  dark_elf_phantom_summoner: "/img/darkelfmageF.png",
+  dark_elf_spectral_master: "/img/darkelfmageF.png",
   darkelf_shillienoracle: "/img/darkelfmageF.png",
+  dark_elf_shillien_oracle: "/img/darkelfmageF.png",
+  dark_elf_shillien_elder: "/img/darkelfmageF.png",
+  dark_elf_shillien_saint: "/img/darkelfmageF.png",
   darkelf_elfdeathpilgrim: "/img/darkelfskM.png",
   darkelf_deathpilgrim: "/img/darkelfskM.png",
-  darkelf_assassinbase: "/img/darkelfskF.png",
-  darkelf_assassins0: "/img/darkelfskF.png",
+  darkelf_assassinbase: "/img/darkelfskM.png",
+  darkelf_assassins0: "/img/darkelfskM.png",
   darkelf_bloodrosebase: "/img/darkelfmageF.png",
   darkelf_bloodroses1: "/img/darkelfmageF.png",
   darkelf_bloodroses2: "/img/darkelfmageF.png",
@@ -156,13 +264,25 @@ const HERO_IMG = {
   orc_fighter: "/img/orcfighterM.png",
   orc_fighter_m: "/img/orcfighterM.png",
   orc_fighter_f: "/img/orcfighterF.png",
-  orc_mage: "/img/orc_mage.png",
   orc_orcraider: "/img/orcfighterM.png",
+  orc_raider: "/img/orcfighterM.png",
+  orc_destroyer: "/img/orcfighterM.png",
+  orc_titan: "/img/orcfighterM.png",
   orc_monk: "/img/orcfighterM.png",
-  orc_shaman: "/img/orc_mage.png",
+  orc_tyrant: "/img/orcfighterM.png",
+  orc_grand_khavatari: "/img/orcfighterM.png",
   orc_rider: "/img/orcfighterM.png",
   orc_orcrider: "/img/orcfighterM.png",
   orc_vanguardrider: "/img/orcfighterM.png",
+  orc_vanguard_rider: "/img/orcfighterM.png",
+  orc_mage: "/img/orc_mage.png",
+  orc_mage_m: "/img/orc_mage.png",
+  orc_mage_f: "/img/orc_mage.png",
+  orc_shaman: "/img/orc_mage.png",
+  orc_overlord: "/img/orc_mage.png",
+  orc_dominator: "/img/orc_mage.png",
+  orc_warcryer: "/img/orc_mage.png",
+  orc_doomcryer: "/img/orc_mage.png",
 
   // --- Dwarf Classes ---
   dwarf_artisan: "/img/dwarfmaestroM.png",
@@ -174,6 +294,7 @@ const HERO_IMG = {
   dwarf_shinemakers2: "/img/dwarfmaestroF.png",
   dwarf_shinemakers3: "/img/dwarfmaestroF.png",
   dwarf_shinemaker: "/img/dwarfmaestroF.png",
+  dwarf_mage: "/img/dwarfmaestroM.png",
 
   // --- Kamael Classes ---
   kamael_soulbreaker: "/img/kamaelshF.png",
@@ -183,7 +304,7 @@ const HERO_IMG = {
   kamael_fighter: "/img/kamaelDM.png",
   kamael_samuraibase: "/img/kamaelDM.png",
   kamael_samuraibase_m: "/img/kamaelDM.png",
-  kamael_samuraibase_f: "/img/kamaelDF.png",
+  kamael_samuraibase_f: "/img/kamaelDM.png",
   kamael_hatamoto: "/img/kamaelDM.png",
   kamael_ronin: "/img/kamaelDM.png",
   kamael_samurai: "/img/kamaelDM.png",
@@ -192,11 +313,14 @@ const HERO_IMG = {
   sylph_sylphgunner: "/img/sylphM.png",
   sylph_sylphgunner_m: "/img/sylphM.png",
   sylph_sylphgunner_f: "/img/sylphF.png",
+  sylph_gunner: "/img/sylphM.png",
   sylph_fighter: "/img/sylphM.png",
 
   // --- High Elf Classes ---
   highelf_divinetemplars1: "/img/elfwswM.png",
   highelf_elementweavers1: "/img/elfmageM.png",
+  high_elf_divine_templar: "/img/elfwswM.png",
+  high_elf_element_weaver: "/img/elfmageM.png",
   highelf_fighter: "/img/elfwswM.png",
   highelf_mage: "/img/elfmageM.png",
 
@@ -211,6 +335,7 @@ const HERO_IMG = {
   ertheia_sayhamagebase_f: "/img/elfmageF.png",
   ertheia_sayhaseer: "/img/elfmageF.png",
   ertheia_sayhaseeker: "/img/elfmageF.png",
+  ertheia_storm_blaster: "/img/elfmageF.png",
   ertheia_fighter: "/img/elfwswM.png",
   ertheia_mage: "/img/elfmageF.png"
 };
@@ -235,32 +360,69 @@ function resolveImg(path) {
   return path;
 }
 
-const MAGE_CLASSES = new Set(['mage', 'wizard', 'cleric', 'sorcerer', 'necromancer', 'bishop', 'prophet', 'spellsinger', 'spellhowler', 'shillien', 'overlord', 'darkwizard', 'elementweavers1', 'sayhaseer', 'bloodroses1', 'humanmistyc', 'humanwizard']);
+const MAGE_CLASSES = new Set([
+  'mage', 'wizard', 'mystic', 'cleric', 'sorcerer', 'archmage', 'necromancer', 'soultaker', 
+  'warlock', 'arcanalord', 'arcana_lord', 'bishop', 'cardinal', 'prophet', 'hierophant',
+  'elvenwizard', 'spellsinger', 'mysticmuse', 'mystic_muse', 'elementalsummoner', 'elemental_summoner', 
+  'elementalmaster', 'elemental_master', 'oracle', 'elvenoracle', 'elder', 'elvenelder', 'evassaint', 'evas_saint',
+  'darkwizard', 'spellhowler', 'stormscreamer', 'storm_screamer', 'phantomsummoner', 'phantom_summoner', 
+  'spectralmaster', 'spectral_master', 'shillienoracle', 'shillienelder', 'shilliensaint', 'shillien_saint', 'shillien',
+  'bloodrose', 'bloodroses0', 'bloodroses1', 'bloodroses2', 'bloodroses3', 'dark_elf_blood_rose',
+  'orcmage', 'orc_mage', 'shaman', 'orc_shaman', 'overlord', 'dominator', 'warcryer', 'doomcryer',
+  'dwarfmage', 'dwarf_mage', 'shinemaker', 'shinemakerbase', 'dwarf_shinemaker',
+  'soulbreaker', 'soulbreakerkamael', 'kamael_soulbreaker',
+  'sayhamagebase', 'sayhaseer', 'sayhaseeker', 'ertheia_sayhamage', 'ertheia_mage',
+  'stormblaster', 'ertheia_storm_blaster',
+  'elementweaver', 'elementweavers1', 'high_elf_element_weaver', 'highelf_elementweavers1', 'highelf_mage',
+  'humanmistyc', 'humanwizard', 'human_mystic', 'human_wizard', 'human_sorcerer', 'human_archmage',
+  'human_necromancer', 'human_soultaker', 'human_warlock', 'human_arcana_lord', 'human_cleric',
+  'human_bishop', 'human_cardinal', 'human_prophet', 'human_hierophant',
+  'elf_mage', 'elf_wizard', 'elf_spellsinger', 'elf_mystic_muse', 'elf_elemental_summoner',
+  'elf_elemental_master', 'elf_oracle', 'elf_elder', 'elf_evas_saint',
+  'dark_elf_mage', 'dark_elf_wizard', 'dark_elf_spellhowler', 'dark_elf_storm_screamer',
+  'dark_elf_phantom_summoner', 'dark_elf_spectral_master', 'dark_elf_shillien_oracle',
+  'dark_elf_shillien_elder', 'dark_elf_shillien_saint'
+]);
+
+function normalizeRace(race) {
+  const r = String(race || 'human').toLowerCase().replace(/[\s_-]+/g, '');
+  if (r.includes('dark')) return 'darkelf';
+  if (r.includes('high')) return 'highelf';
+  if (r.includes('orc')) return 'orc';
+  if (r.includes('dwarf')) return 'dwarf';
+  if (r.includes('kamael')) return 'kamael';
+  if (r.includes('sylph')) return 'sylph';
+  if (r.includes('ertheia')) return 'ertheia';
+  if (r.includes('elf')) return 'elf';
+  return 'human';
+}
 
 function heroImgPath(race, cls, gender) {
-  race = String(race || 'human').toLowerCase();
-  cls = String(cls || 'fighter').toLowerCase();
+  const r = normalizeRace(race);
+  const c = String(cls || 'fighter').toLowerCase().replace(/[\s-]+/g, '_');
   const g = String(gender || 'M').toLowerCase();
+  const isFemale = g === 'f';
 
-  const genderKey = `${race}_${cls}_${g}`;
+  const genderKey = `${r}_${c}_${isFemale ? 'f' : 'm'}`;
   if (HERO_IMG[genderKey]) return resolveImg(HERO_IMG[genderKey]);
 
-  const directKey = `${race}_${cls}`;
+  const directKey = `${r}_${c}`;
   if (HERO_IMG[directKey]) return resolveImg(HERO_IMG[directKey]);
 
-  const rawClsKey = `${cls}_${g}`;
+  const rawClsKey = `${c}_${isFemale ? 'f' : 'm'}`;
   if (HERO_IMG[rawClsKey]) return resolveImg(HERO_IMG[rawClsKey]);
 
-  if (HERO_IMG[cls]) return resolveImg(HERO_IMG[cls]);
+  if (HERO_IMG[c]) return resolveImg(HERO_IMG[c]);
 
-  const archetype = MAGE_CLASSES.has(cls) ? 'mage' : 'fighter';
-  const archGenderKey = `${race}_${archetype}_${g}`;
+  const isMage = MAGE_CLASSES.has(c) || MAGE_CLASSES.has(c.replace(/^human_|^elf_|^dark_elf_|^darkelf_|^orc_|^dwarf_|^kamael_|^ertheia_|^highelf_|^high_elf_/, ''));
+  const archetype = isMage ? 'mage' : 'fighter';
+  const archGenderKey = `${r}_${archetype}_${isFemale ? 'f' : 'm'}`;
   if (HERO_IMG[archGenderKey]) return resolveImg(HERO_IMG[archGenderKey]);
 
-  const archKey = `${race}_${archetype}`;
+  const archKey = `${r}_${archetype}`;
   if (HERO_IMG[archKey]) return resolveImg(HERO_IMG[archKey]);
 
-  const fallback = RACE_FALLBACK[race] || "/img/m_humanfighter.jpg";
+  const fallback = RACE_FALLBACK[r] || "/img/m_humanfighter.jpg";
   return resolveImg(fallback);
 }
 

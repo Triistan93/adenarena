@@ -17,6 +17,9 @@ import { DyeService } from '../services/DyeService.js';
 import { DYES_CATALOG } from '../data/dyes.js';
 import { PetService } from '../services/PetService.js';
 import { resolveCanonicalClassId } from '../data/classes/class_aliases.js';
+import { CLASSES_ECHO } from '../data/classes/classes_echo_defs.js';
+import { HISTORICAL_CLASSES } from '../data/elemental/HistoricalClasses.js';
+import { NATIVE_SKILL_TREES } from '../data/elemental/NativeSkillTrees.js';
 
 export const STR_MODIFIERS = {
   10: 0.42, 11: 0.43, 12: 0.45, 13: 0.46, 14: 0.48, 15: 0.50,
@@ -104,9 +107,37 @@ export function getAstralMasteryBonuses(state) {
  */
 export function getClass(classId) {
   if (!classId) return null;
-  const canonicalId = resolveCanonicalClassId(classId);
-  const classes = (typeof window !== 'undefined' && window.EchoData) ? window.EchoData.CLASSES_ECHO : CLASSES;
-  let def = classes[canonicalId] || classes[classId] || classes[String(canonicalId).toLowerCase()] || classes[String(classId).toLowerCase()] || null;
+  const rawId = String(classId).trim();
+  const canonicalId = resolveCanonicalClassId(rawId);
+  const classes = (typeof window !== 'undefined' && window.EchoData && window.EchoData.CLASSES_ECHO) ? window.EchoData.CLASSES_ECHO : CLASSES_ECHO;
+  let def = classes[rawId] || classes[canonicalId] || classes[String(rawId).toLowerCase()] || classes[String(canonicalId).toLowerCase()] || CLASSES[rawId] || CLASSES[canonicalId] || null;
+
+  if (!def) {
+    const hCls = Object.values(HISTORICAL_CLASSES).find(c => c.id === rawId || c.id === canonicalId || c.sourceClassId === rawId || c.sourceClassId === canonicalId);
+    if (hCls) {
+      const isMage = hCls.name.toLowerCase().includes('mage') || hCls.name.toLowerCase().includes('wizard') || hCls.name.toLowerCase().includes('sorcerer') || hCls.name.toLowerCase().includes('cleric') || hCls.name.toLowerCase().includes('bishop') || hCls.name.toLowerCase().includes('oracle') || hCls.name.toLowerCase().includes('elder') || hCls.name.toLowerCase().includes('shaman') || hCls.name.toLowerCase().includes('summoner') || hCls.name.toLowerCase().includes('saint') || hCls.name.toLowerCase().includes('hierophant') || hCls.name.toLowerCase().includes('cardinal') || hCls.name.toLowerCase().includes('soultaker') || hCls.name.toLowerCase().includes('screamer') || hCls.name.toLowerCase().includes('archmage') || hCls.name.toLowerCase().includes('muse');
+      def = {
+        name: hCls.name,
+        race: hCls.race.toLowerCase(),
+        archetype: isMage ? 'mage' : 'fighter',
+        stage: hCls.stage || (hCls.lineageType === 'THIRD_CLASS_AWAKENING' ? 3 : hCls.lineageType === 'SECOND_CLASS_TRANSFER' ? 2 : hCls.lineageType === 'FIRST_CLASS_TRANSFER' ? 1 : 0),
+        id: hCls.id
+      };
+    }
+  }
+
+  if (!def && NATIVE_SKILL_TREES[rawId]) {
+    const parts = rawId.split('_');
+    const isMage = rawId.includes('mage') || rawId.includes('sorcerer') || rawId.includes('shaman') || rawId.includes('weaver') || rawId.includes('blood_rose');
+    def = {
+      name: rawId.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
+      race: parts[0],
+      archetype: isMage ? 'mage' : 'fighter',
+      stage: 1,
+      id: rawId
+    };
+  }
+
   if (!def) return null;
 
   if (def.archetype === undefined && def.parent) {

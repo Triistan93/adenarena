@@ -1793,6 +1793,7 @@ function updateStatsUI() {
   
   const _clEl = el('craft-level-stat'); if (_clEl) _clEl.textContent = state.craftLevel;
   const _rcEl = el('race-text'); if (_rcEl) _rcEl.textContent = (state.race && RACES?.[state.race]?.name) || state.race || '-';
+  const _clsEl = el('class-text'); if (_clsEl) _clsEl.textContent = (getClass(state.class)?.name) || state.class || '-';
   // 5.1 & 5.3 Cosméticos — Auras & Títulos Honoríficos
   CosmeticService.ensureState(state);
   const activeAura = CosmeticService.getActiveAura(state);
@@ -2884,13 +2885,15 @@ function startRaidBoss(raidId) {
 
 function updateRaceClassUI() {
   const display = el('hero-race-class-display');
+  const raceObj = RACES[state.race];
+  const clsObj = getClass(state.class);
+  const rName = raceObj ? raceObj.name : (state.race || 'Humano');
+  const cName = clsObj ? clsObj.name : (state.class || 'Guerreiro');
   if (display) {
-    const raceObj = RACES[state.race];
-    const clsObj = getClass(state.class);
-    const rName = raceObj ? raceObj.name : (state.race || 'Humano');
-    const cName = clsObj ? clsObj.name : (state.class || 'Guerreiro');
     display.textContent = `${rName} · ${cName} (Nv. ${state.level})`;
   }
+  const _rcEl = el('race-text'); if (_rcEl) _rcEl.textContent = rName;
+  const _clsEl = el('class-text'); if (_clsEl) _clsEl.textContent = cName;
   renderStageHero(); updateSkillUI(); checkClassAdvancement();
 }
 
