@@ -38,10 +38,27 @@ import {
   NATIVE_SKILL_TREES,
   NATIVE_SKILLS_BY_ID,
   CANONICAL_SKILL_ROLES,
+  ALL_ENDGAME_SKILLS,
+  ALL_CANONICAL_ACTIVE_SKILLS,
+  getAllSkillsForClass,
   getNativeSkillsByClass,
   getNativeSkillById,
   isNativeToClass
 } from '../data/elemental/NativeSkillTrees.js';
+
+import {
+  getProgressionStage,
+  PROGRESSION_STAGES,
+  ROLE_REGISTRY,
+  normalizeRole
+} from '../data/elemental/SkillProgression.js';
+
+import {
+  getClassIdentity,
+  getAllowedElementsByLevel,
+  getSignatureSkills,
+  getForbiddenElements
+} from '../data/elemental/ClassIdentity.js';
 
 import {
   getSkillVfx,
@@ -61,12 +78,20 @@ import { validateSkillVfx } from './SkillVfxValidator.js';
 const REVERSE_OWNERSHIP_INDEX = new Map();
 const DYNAMIC_SHARED_SKILLS = new Map();
 
-// Initialize reverse index from all native active skills
-for (const skill of ALL_NATIVE_SKILLS) {
+// Initialize reverse index from all native active skills and endgame skills
+for (const skill of [...ALL_NATIVE_SKILLS, ...ALL_ENDGAME_SKILLS]) {
   if (!REVERSE_OWNERSHIP_INDEX.has(skill.id)) {
     REVERSE_OWNERSHIP_INDEX.set(skill.id, new Set());
   }
-  REVERSE_OWNERSHIP_INDEX.get(skill.id).add(skill.classId);
+  if (Array.isArray(skill.nativeClasses)) {
+    for (const c of skill.nativeClasses) REVERSE_OWNERSHIP_INDEX.get(skill.id).add(c);
+  }
+  if (Array.isArray(skill.availableTo)) {
+    for (const c of skill.availableTo) REVERSE_OWNERSHIP_INDEX.get(skill.id).add(c);
+  }
+  if (skill.classId) {
+    REVERSE_OWNERSHIP_INDEX.get(skill.id).add(skill.classId);
+  }
 }
 
 /**
@@ -93,16 +118,29 @@ export function registerSharedSkillOwnership(skillId, classId) {
  * @param {string} classId
  * @returns {{ isAllowed: boolean, ownershipType: 'NATIVE' | 'SHARED' | 'NONE' }}
  */
-export function checkSkillOwnership(skillId, classId) {
+export function checkSkillOwnership(skillId, classId, level = 80) {
   const nativeClasses = REVERSE_OWNERSHIP_INDEX.get(skillId);
-  if (!nativeClasses || !nativeClasses.has(classId)) {
-    return { isAllowed: false, ownershipType: 'NONE' };
+  if (nativeClasses && nativeClasses.has(classId)) {
+    const isDirectNative = isNativeToClass(skillId, classId);
+    return {
+      isAllowed: true,
+      ownershipType: (nativeClasses.size > 1 && !isDirectNative) ? 'SHARED' : (isDirectNative ? 'NATIVE' : 'SHARED')
+    };
   }
-  const isDirectNative = isNativeToClass(skillId, classId);
-  return {
-    isAllowed: true,
-    ownershipType: (nativeClasses.size > 1 && !isDirectNative) ? 'SHARED' : (isDirectNative ? 'NATIVE' : 'SHARED')
-  };
+
+  // Check ClassIdentity skill pools
+  const classIdentity = getClassIdentity(classId);
+  if (classIdentity?.skillPools) {
+    for (const [poolLvl, skills] of Object.entries(classIdentity.skillPools)) {
+      if (Array.isArray(skills) && skills.includes(skillId)) {
+        if (Number(poolLvl) <= level) {
+          return { isAllowed: true, ownershipType: 'NATIVE' };
+        }
+      }
+    }
+  }
+
+  return { isAllowed: false, ownershipType: 'NONE' };
 }
 
 /**
@@ -171,16 +209,33 @@ export function resolveActiveClass(rawClassId) {
  * @param {object} targetSkillDef - The skill being replaced
  * @returns {object|null} The chosen substitute skill definition or null
  */
-export function findBestSubstituteSkill(classId, currentlyEquippedIds, targetSkillDef = null) {
-  const nativeSkills = getNativeSkillsByClass(classId);
-  if (!nativeSkills || nativeSkills.length === 0) return null;
-
-  const equippedSet = new Set(currentlyEquippedIds);
+export function findBestSubstituteSkill(classId, currentlyEquippedIds, targetSkillDef = null, options = {}) {
+  const charLevel = Number(options.level ?? 76);
+  const classIdentity = getClassIdentity(classId);
   const classDef = getActiveClass(classId);
   if (!classDef) return null;
 
-  // Filter available candidates not yet equipped
-  const candidates = nativeSkills.filter(s => !equippedSet.has(s.id));
+  const allowedElements = classIdentity ? getAllowedElementsByLevel(classId, charLevel) : classDef.allowedElements;
+  const equippedSet = new Set(currentlyEquippedIds);
+  const targetStage = targetSkillDef?.progressionStage;
+
+  // Anti-downgrade (Section 44):
+  // An Ultimate cannot be replaced by a normal skill.
+  // A Master Ultimate cannot be replaced by an Ultimate or normal skill.
+  let pool = getNativeSkillsByClass(classId);
+  if (targetStage === 'ULTIMATE' || targetStage === 'MASTER_ULTIMATE') {
+    pool = getAllSkillsForClass(classId).filter(s => s.progressionStage === targetStage);
+    if (pool.length === 0) {
+      return null; // CONTENT_GAP
+    }
+  }
+
+  // Filter available candidates not yet equipped and matching level
+  const candidates = pool.filter(s => {
+    if (equippedSet.has(s.id)) return false;
+    if (s.requiredLevel && charLevel < s.requiredLevel) return false;
+    return true;
+  });
   if (candidates.length === 0) return null;
 
   // Score each candidate
@@ -188,16 +243,18 @@ export function findBestSubstituteSkill(classId, currentlyEquippedIds, targetSki
   let highestScore = -1;
 
   for (const cand of candidates) {
-    // Candidates MUST pass element validation against the class
-    const elementPass = validateElementalTags(cand.elements, classDef.allowedElements);
+    // Candidates MUST pass element validation against the class at character level
+    const elementPass = validateElementalTags(cand.elements, allowedElements);
     if (!elementPass) continue;
 
     let score = 0;
     if (targetSkillDef) {
+      // Stage match priority (only when level is explicitly provided)
+      if (options.level !== undefined && cand.progressionStage === targetSkillDef.progressionStage) score += 200;
       // Tier match priority
       if (cand.tier === targetSkillDef.tier) score += 100;
       // Role match priority
-      if (cand.role === targetSkillDef.role) score += 50;
+      if (cand.role === targetSkillDef.role || (normalizeRole(cand.role) === normalizeRole(targetSkillDef.role))) score += 50;
       // Elemental tags similarity
       if (Array.isArray(targetSkillDef.elements)) {
         const sharedTags = cand.elements.filter(e => targetSkillDef.elements.includes(e));
@@ -317,6 +374,14 @@ export function auditCharacterSkills(character, options = {}) {
 
   const canonicalClassId = classDef.id;
   const isExceptionClass = Boolean(classDef.isException);
+  const hasExplicitLevel = Boolean(options.level !== undefined || character.level !== undefined);
+  const charLevel = hasExplicitLevel ? Number(options.level ?? character.level) : 76;
+  const progressionStage = getProgressionStage(charLevel);
+  const classIdentity = getClassIdentity(canonicalClassId);
+  const allowedAtLevel = (hasExplicitLevel && classIdentity)
+    ? getAllowedElementsByLevel(canonicalClassId, charLevel)
+    : classDef.allowedElements;
+  const maxAllowedElements = classIdentity ? getAllowedElementsByLevel(canonicalClassId, 90) : classDef.allowedElements;
 
   // ─── Per-Skill Evaluation ─────────────────────────────────────────────────
   const diagnostics = [];
@@ -352,35 +417,73 @@ export function auditCharacterSkills(character, options = {}) {
       continue;
     }
 
-    // Ownership & Reverse Index Check
-    const ownership = checkSkillOwnership(skillId, canonicalClassId);
+    // Stage & Required Level Check
+    if (hasExplicitLevel && skillDef.requiredLevel && charLevel < skillDef.requiredLevel) {
+      skillDiags.push({
+        skillId,
+        code: 'STAGE_REQUIREMENT',
+        message: `Skill '${skillId}' requires level ${skillDef.requiredLevel} (${skillDef.progressionStage || 'STAGE'}). Character is Lv${charLevel} (${progressionStage}).`
+      });
+    }
+
+    // Availability & Ownership Check
+    const ownership = checkSkillOwnership(skillId, canonicalClassId, charLevel);
     if (!ownership.isAllowed) {
       skillDiags.push({
         skillId,
         code: 'OWNERSHIP_MISMATCH',
         message: `Skill '${skillId}' is not native or authorized for class '${canonicalClassId}'.`
       });
-    }
-
-    // Elemental Compatibility — ALL TAGS Strict Rule (.every())
-    const skillElements = skillDef.elements || (skillDef.tags ? skillDef.tags : ['Physical']);
-    const elementsPass = validateElementalTags(skillElements, classDef.allowedElements);
-    if (!elementsPass) {
+    } else if (hasExplicitLevel && skillDef.availableTo && Array.isArray(skillDef.availableTo) && !skillDef.availableTo.includes(canonicalClassId)) {
       skillDiags.push({
         skillId,
-        code: 'ELEMENT_MISMATCH',
-        message: `Skill '${skillId}' required elements [${skillElements.join(', ')}] violate class '${canonicalClassId}' allowed elements [${classDef.allowedElements.join(', ')}].`
+        code: 'AVAILABILITY_MISMATCH',
+        message: `Skill '${skillId}' is not available to class '${canonicalClassId}'.`
       });
+    }
+
+    // Elemental Compatibility Check — ALL TAGS Strict Rule (.every())
+    const skillElements = skillDef.elements || (skillDef.tags ? skillDef.tags : ['Physical']);
+    const passesAtLevel = validateElementalTags(skillElements, allowedAtLevel);
+    if (!passesAtLevel) {
+      const passesAtMax = validateElementalTags(skillElements, maxAllowedElements);
+      if (passesAtMax) {
+        skillDiags.push({
+          skillId,
+          code: 'STAGE_REQUIREMENT',
+          message: `Skill '${skillId}' required elements [${skillElements.join(', ')}] require higher progression stage/level. Unlocked at Lv76+. Character is Lv${charLevel} (${progressionStage}).`
+        });
+      } else {
+        skillDiags.push({
+          skillId,
+          code: 'ELEMENT_MISMATCH',
+          message: `Skill '${skillId}' required elements [${skillElements.join(', ')}] violate class '${canonicalClassId}' allowed elements [${allowedAtLevel.join(', ')}].`
+        });
+      }
     }
 
     // Role Validation
     if (skillDef.role) {
-      const allowedRoles = CANONICAL_SKILL_ROLES;
-      if (!allowedRoles.includes(skillDef.role)) {
+      const normRole = normalizeRole(skillDef.role);
+      const isAllowedRole = CANONICAL_SKILL_ROLES.includes(normRole) || ROLE_REGISTRY[normRole] || CANONICAL_SKILL_ROLES.includes(skillDef.role);
+      if (!isAllowedRole) {
         skillDiags.push({
           skillId,
           code: 'ROLE_MISMATCH',
           message: `Skill '${skillId}' declares unknown role '${skillDef.role}'.`
+        });
+      }
+    }
+
+    // Item / Book Requirements Check
+    if (skillDef.bookRequirement) {
+      const bookRequired = options.requireBooks || options.checkBooks || character.checkBooks || (options.hasBook === false);
+      const hasBook = options.hasBook ?? character.hasUltimateBook ?? character.unlockedBooks?.includes(skillDef.bookRequirement) ?? (!bookRequired);
+      if (bookRequired && !hasBook) {
+        skillDiags.push({
+          skillId,
+          code: 'REQUIREMENT_UNMET',
+          message: `Skill '${skillId}' requires item '${skillDef.bookRequirement}' (Tomo Sagrado ★★★★) to unlock.`
         });
       }
     }
@@ -432,14 +535,15 @@ export function auditCharacterSkills(character, options = {}) {
   const plannedEquipped = [...keepSkills];
   for (const inv of invalidSkills) {
     if (isBlocked) break;
-    const substitute = findBestSubstituteSkill(canonicalClassId, plannedEquipped, inv.skillDef);
+    const substitute = findBestSubstituteSkill(canonicalClassId, plannedEquipped, inv.skillDef, hasExplicitLevel ? { level: charLevel } : {});
     if (substitute) {
       addSkills.push(substitute.id);
       plannedEquipped.push(substitute.id);
     } else {
       // Cannot safely replace
       isBlocked = true;
-      blockedReason = `NO_ELIGIBLE_NATIVE_SUBSTITUTE_FOR_${inv.skillId}`;
+      const isUlt = inv.skillDef?.progressionStage === 'ULTIMATE' || inv.skillDef?.progressionStage === 'MASTER_ULTIMATE';
+      blockedReason = isUlt ? 'CONTENT_GAP' : `NO_ELIGIBLE_NATIVE_SUBSTITUTE_FOR_${inv.skillId}`;
       break;
     }
   }
@@ -468,8 +572,10 @@ export function auditCharacterSkills(character, options = {}) {
     version: CONTRACT_VERSION,
     characterId: rawCharId,
     classId: canonicalClassId,
+    level: charLevel,
+    progressionStage,
     status: overallStatus,
-    allowedElements: classDef.allowedElements,
+    allowedElements: allowedAtLevel,
     summary: {
       total: equippedSkillIds.length,
       valid: validSkills.length,

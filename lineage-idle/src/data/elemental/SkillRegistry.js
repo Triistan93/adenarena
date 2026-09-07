@@ -11,7 +11,14 @@
  */
 
 import { CLASSES_ECHO } from '../classes/classes_echo_defs.js';
-import { ALL_NATIVE_SKILLS, NATIVE_SKILL_TREES, NATIVE_SKILLS_BY_ID } from './NativeSkillTrees.js';
+import {
+  ALL_NATIVE_SKILLS,
+  NATIVE_SKILL_TREES,
+  NATIVE_SKILLS_BY_ID,
+  ALL_ENDGAME_SKILLS,
+  ALL_CANONICAL_ACTIVE_SKILLS,
+  getAllSkillsForClass
+} from './NativeSkillTrees.js';
 
 // Index structures
 const activeSkillsMap = new Map();
@@ -43,6 +50,19 @@ for (const skill of ALL_NATIVE_SKILLS) {
   }]);
 }
 
+function extractElementsFromHistorical(s) {
+  const text = `${s.name || ''} ${s.effect || ''} ${s.desc || ''}`.toLowerCase();
+  const elems = [];
+  if (text.includes('fogo') || text.includes('fire') || text.includes('flame')) elems.push('Fire');
+  if (text.includes('vento') || text.includes('wind')) elems.push('Wind');
+  if (text.includes('gelo') || text.includes('ice') || text.includes('água') || text.includes('agua') || text.includes('water') || text.includes('hídrica')) elems.push('Water');
+  if (text.includes('terra') || text.includes('earth')) elems.push('Earth');
+  if (text.includes('sagrado') || text.includes('holy') || text.includes('luz')) elems.push('Holy');
+  if (text.includes('trevas') || text.includes('dark') || text.includes('sombrio')) elems.push('Dark');
+  if (text.includes('magma')) elems.push('Magma');
+  return elems.length > 0 ? elems : ['Physical'];
+}
+
 // 2. Ingest Historical Classes Skills from CLASSES_ECHO
 if (CLASSES_ECHO && typeof CLASSES_ECHO === 'object') {
   for (const [classKey, classObj] of Object.entries(CLASSES_ECHO)) {
@@ -51,6 +71,7 @@ if (CLASSES_ECHO && typeof CLASSES_ECHO === 'object') {
     for (const s of classObj.skills) {
       if (!s || !s.name) continue;
       const normalizedId = s.name.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
+      const parsedElements = extractElementsFromHistorical(s);
 
       const instance = {
         skillId: normalizedId,
@@ -61,6 +82,8 @@ if (CLASSES_ECHO && typeof CLASSES_ECHO === 'object') {
         effect: s.effect || '',
         cooldown: s.cooldown || '',
         desc: s.desc || '',
+        elements: parsedElements,
+        tags: parsedElements,
         category: 'HISTORICAL'
       };
 
@@ -85,6 +108,8 @@ if (CLASSES_ECHO && typeof CLASSES_ECHO === 'object') {
           name: s.name,
           type: s.type || 'Ativo',
           category: 'HISTORICAL',
+          elements: parsedElements,
+          tags: parsedElements,
           instanceCount: 1
         });
       } else {
@@ -98,22 +123,34 @@ if (CLASSES_ECHO && typeof CLASSES_ECHO === 'object') {
   }
 }
 
+// Endgame definitions map (25 Ultimates + 25 Master Ultimates)
+const endgameSkillsMap = new Map(ALL_ENDGAME_SKILLS.map(s => [s.id, {
+  ...s,
+  category: 'ENDGAME_ACTIVE',
+  instanceCount: 1
+}]));
+
 /**
- * Retrieves a skill definition by ID (checks active first, then historical/shared).
+ * Retrieves a skill definition by ID (checks active first, then endgame, then historical/shared).
  * @param {string} skillId
  * @returns {object|null}
  */
 export function getSkill(skillId) {
-  return uniqueDefinitions.get(skillId) || null;
+  return uniqueDefinitions.get(skillId) || endgameSkillsMap.get(skillId) || null;
 }
 
 /**
  * Retrieves all skills belonging to a given class ID.
  * Returns native active skills if classId is an active class, or historical instances if historical.
+ * If options.includeEndgame is true, includes Lv80/Lv90 skills.
  * @param {string} classId
+ * @param {object} [options]
  * @returns {object[]}
  */
-export function getSkillsByClass(classId) {
+export function getSkillsByClass(classId, options = {}) {
+  if (options.includeEndgame) {
+    return getAllSkillsForClass(classId);
+  }
   if (NATIVE_SKILL_TREES[classId]) {
     return NATIVE_SKILL_TREES[classId];
   }
@@ -121,11 +158,27 @@ export function getSkillsByClass(classId) {
 }
 
 /**
- * Returns all 100 active skills.
+ * Returns all 100 baseline active skills.
  * @returns {object[]}
  */
 export function getActiveSkills() {
   return ALL_NATIVE_SKILLS;
+}
+
+/**
+ * Returns all 50 endgame skills (25 Ultimates + 25 Master Ultimates).
+ * @returns {object[]}
+ */
+export function getEndgameSkills() {
+  return ALL_ENDGAME_SKILLS;
+}
+
+/**
+ * Returns all 150 canonical active skills (100 baseline + 50 endgame).
+ * @returns {object[]}
+ */
+export function getAllActiveSkills() {
+  return ALL_CANONICAL_ACTIVE_SKILLS;
 }
 
 /**

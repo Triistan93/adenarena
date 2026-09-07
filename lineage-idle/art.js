@@ -421,7 +421,7 @@ function normalizeRace(race) {
   return 'human';
 }
 
-function heroImgPath(race, cls, gender) {
+export function heroImgPath(race, cls, gender) {
   const r = normalizeRace(race);
   const c = String(cls || 'fighter').toLowerCase().replace(/[\s-]+/g, '_');
   const g = String(gender || 'M').toLowerCase();

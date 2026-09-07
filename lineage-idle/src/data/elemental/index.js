@@ -8,3 +8,5 @@ export * from './NativeSkillTrees.js';
 export * from './HistoricalClasses.js';
 export * from './ClassLineage.js';
 export * from './SkillRegistry.js';
+export * from './SkillProgression.js';
+export * from './ClassIdentity.js';

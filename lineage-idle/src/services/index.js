@@ -33,3 +33,6 @@ export * from './ElementalSkillMatrixValidator.js';
 export * from './SkillVfxValidator.js';
 export * from './ElementalSkillAuditor.js';
 export * from './ElementalSkillFixer.js';
+export * from './ClassIdentityAuditor.js';
+export * from './ArtworkSemanticAuditor.js';
+export * from './VfxVisualAuditor.js';
