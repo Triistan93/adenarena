@@ -18,19 +18,17 @@ if (typeof window !== "undefined") {
     console.warn("Falha ao capturar ref:", e);
   }
 
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.getRegistrations().then((registrations) => {
-      for (const registration of registrations) {
-        registration.unregister();
-      }
-    });
-  }
-  if ("caches" in window) {
-    caches.keys().then((names) => {
-      for (const name of names) {
-        caches.delete(name);
-      }
-    });
+  // Purge legacy caches on version change without disrupting active PWA registration
+  const APP_VERSION = "3.3.3";
+  if (localStorage.getItem("aden_app_version") !== APP_VERSION) {
+    if ("caches" in window) {
+      caches.keys().then((names) => {
+        for (const name of names) {
+          caches.delete(name);
+        }
+      });
+    }
+    localStorage.setItem("aden_app_version", APP_VERSION);
   }
 
   window.addEventListener("error", (e) => {

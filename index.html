@@ -48,12 +48,16 @@
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js').then((reg) => {
-            console.log('[PWA] Service Worker registrado:', reg.scope);
-            reg.update();
-          }).catch((err) => {
-            console.warn('[PWA] Falha ao registrar Service Worker:', err);
-          });
+          navigator.serviceWorker.register('/sw.js', { updateViaCache: 'none' })
+            .then((reg) => {
+              console.log('[PWA] Service Worker registrado:', reg.scope);
+              if (reg && typeof reg.update === 'function') {
+                reg.update().catch(() => {});
+              }
+            })
+            .catch((err) => {
+              console.warn('[PWA] Falha ao registrar Service Worker:', err);
+            });
         });
       }
     </script>
