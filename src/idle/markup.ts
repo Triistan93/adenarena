@@ -79,6 +79,21 @@ export const IDLE_MARKUP = `
     <main class="main-grid">
       <!-- Left: Character Stats -->
       <aside class="panel stats-panel l2-gold-frame">
+        <!-- Mobile Navigation Return Header -->
+        <div class="mobile-top-nav-bar">
+          <button type="button" class="mobile-back-to-battle-btn" onclick="window.setMobileView && window.setMobileView('battle')" title="Voltar ao Combate">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+            <span>⚔️ Voltar ao Combate</span>
+          </button>
+          <div class="mobile-mini-combat-status" onclick="window.setMobileView && window.setMobileView('battle')" title="Clique para ver o combate">
+            <span class="mini-target-name">⚔️ Em Combate</span>
+            <div class="mini-target-bar-wrap">
+              <div class="mini-target-bar-fill" style="width: 100%;"></div>
+            </div>
+          </div>
+          <span class="mobile-current-tab-badge">Herói</span>
+        </div>
+
         <!-- Header Nobre -->
         <div style="display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(212,169,78,0.35); padding-bottom:6px; margin-bottom:8px;">
           <h2 style="font-family:'Cinzel',serif; font-size:12px; font-weight:900; color:#f5df93; margin:0; letter-spacing:0.12em; text-transform:uppercase; text-shadow:0 0 8px rgba(212,167,68,0.3);">⚔️ Status de Aden</h2>
@@ -264,6 +279,21 @@ export const IDLE_MARKUP = `
 
       <!-- Right: Main Menu Workspace (Expanded with Master 4-Pillar Dock) -->
       <aside class="panel tabs-panel l2-gold-frame">
+        <!-- Mobile Navigation Return Header -->
+        <div class="mobile-top-nav-bar">
+          <button type="button" class="mobile-back-to-battle-btn" onclick="window.setMobileView && window.setMobileView('battle')" title="Voltar ao Combate">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+            <span>⚔️ Voltar ao Combate</span>
+          </button>
+          <div class="mobile-mini-combat-status" onclick="window.setMobileView && window.setMobileView('battle')" title="Clique para ver o combate">
+            <span class="mini-target-name">⚔️ Em Combate</span>
+            <div class="mini-target-bar-wrap">
+              <div class="mini-target-bar-fill" style="width: 100%;"></div>
+            </div>
+          </div>
+          <span class="mobile-current-tab-badge" id="mobile-tabs-current-badge">Menu</span>
+        </div>
+
         <!-- Master Navigation Dock: 4 Pillars of Aden -->
         <div class="pillar-dock-container" id="pillar-dock-container">
           <div class="pillar-master-tabs">
@@ -1795,6 +1825,12 @@ export const IDLE_MARKUP = `
 
     <!-- Item Tooltip -->
     <div id="item-tooltip" class="item-tooltip"></div>
+
+    <!-- Floating Return to Combat Button for Mobile -->
+    <button id="mobile-combat-fab" class="mobile-combat-fab" onclick="window.setMobileView && window.setMobileView('battle')" title="Voltar para a Arena de Combate">
+      <span class="mobile-combat-fab-icon">⚔️</span>
+      <span class="mobile-combat-fab-text">Combate</span>
+    </button>
 
     <!-- Mobile Bottom Dock Navigation -->
     <nav class="mobile-bottom-nav">

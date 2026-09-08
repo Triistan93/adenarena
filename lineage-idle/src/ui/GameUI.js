@@ -2092,6 +2092,12 @@ export function renderStageMonster(state) {
     const mHpText = structure.card.querySelector('#monster-hp-text, .stage-hp-text');
     if (mHpText) mHpText.textContent = 'HP: 0';
     if (structure.staggerBar) structure.staggerBar.style.display = 'none';
+    const emptyMiniNames = document.querySelectorAll('.mini-target-name');
+    const emptyMiniFills = document.querySelectorAll('.mini-target-bar-fill');
+    if (emptyMiniNames.length > 0) {
+      emptyMiniNames.forEach(el => el.textContent = '⚔️ Procurando Inimigo...');
+      emptyMiniFills.forEach(el => el.style.width = '0%');
+    }
     return;
   }
 
@@ -2124,6 +2130,16 @@ export function renderStageMonster(state) {
 
   const monsterHpText = structure.card.querySelector('#monster-hp-text, .stage-hp-text');
   if (monsterHpText) monsterHpText.textContent = `HP: ${curHp} / ${maxHp}`;
+
+  const liveMiniNames = document.querySelectorAll('.mini-target-name');
+  const liveMiniFills = document.querySelectorAll('.mini-target-bar-fill');
+  if (liveMiniNames.length > 0) {
+    const hpPct = Math.max(0, Math.min(100, Math.round((curHp / (maxHp || 1)) * 100)));
+    const badge = isBoss ? '👑 ' : (isElite ? '★ ' : '');
+    const displayName = `${badge}${m.name || 'Monstro'} (${hpPct}%)`;
+    liveMiniNames.forEach(el => el.textContent = `⚔️ ${displayName}`);
+    liveMiniFills.forEach(el => el.style.width = `${hpPct}%`);
+  }
 
   // Atualização da Barra de Postura (Stagger Bar) dos Chefes e Elites
   const sBar = structure.staggerBar || structure.card.querySelector('#monster-stagger-bar');

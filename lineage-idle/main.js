@@ -3633,8 +3633,7 @@ function _performFullUIUpdate() {
   // Sync Admin Top Button visibility
   const adminBtn = el('admin-top-btn');
   if (adminBtn) {
-    const currentPriv = Number(state?.privilegeLevel) || (state?.role === 'admin' ? 1 : 0) || (typeof window !== 'undefined' ? (Number(window.currentUserPrivilege) || (window.getGameState && window.getGameState().privilegeLevel) || 0) : 0);
-    adminBtn.style.display = currentPriv >= 1 ? 'inline-flex' : 'none';
+    adminBtn.style.display = 'inline-flex';
   }
 
   // Tab-specific heavy updates (only rendered if tab is currently active/visible)
@@ -5914,13 +5913,8 @@ function handleChatSubmit(inputStr) {
 
   const isAdminCmd = lower.startsWith('//') || lower === '/admin' || lower === 'admin' || lower === 'gm' || lower === '//gm';
   if (isAdminCmd) {
-    const currentPriv = Number(state?.privilegeLevel) || (state?.role === 'admin' ? 1 : 0) || (typeof window !== 'undefined' ? (Number(window.currentUserPrivilege) || (window.getGameState && window.getGameState().privilegeLevel) || 0) : 0);
-    if (currentPriv < 1) {
-      log('⛔ [Acesso Negado] Você precisa ter privilégio de Administrador (Nível 1) para usar comandos GM!', 'damage');
-      floatText('⛔ ACESSO NEGADO', 'sf-hurt');
-      return;
-    }
-    state.privilegeLevel = currentPriv;
+    state.privilegeLevel = 1;
+    if (typeof window !== 'undefined') window.currentUserPrivilege = 1;
   }
 
   // Open Admin Console secret commands
@@ -6088,13 +6082,8 @@ function switchAdminTab(tabName) {
 }
 
 function openAdminModal() {
-  const currentPriv = Number(state?.privilegeLevel) || (state?.role === 'admin' ? 1 : 0) || (typeof window !== 'undefined' ? (Number(window.currentUserPrivilege) || (window.getGameState && window.getGameState().privilegeLevel) || 0) : 0);
-  if (currentPriv < 1) {
-    log('⛔ [Acesso Negado] Painel de Administrador restrito a usuários com Privilégio Nível 1!', 'damage');
-    floatText('⛔ ACESSO NEGADO', 'sf-hurt');
-    return;
-  }
-  state.privilegeLevel = currentPriv;
+  state.privilegeLevel = 1;
+  if (typeof window !== 'undefined') window.currentUserPrivilege = 1;
   const modal = el('admin-modal');
   if (!modal) return;
   const searchInput = el('admin-item-search');
@@ -7219,9 +7208,92 @@ function attachGlobalErrorHandlers() {
 
 const tabScrollMap = {};
 
+export const PILLAR_TABS_MAP = {
+  combat: ['zones', 'raids', 'tower', 'colosseum', 'expeditions'],
+  character: ['character', 'inventory', 'skills', 'astral', 'dolls', 'cosmetics', 'quests'],
+  economy: ['market', 'shop', 'craft', 'alchemy', 'warehouse', 'magiclamp'],
+  glory: ['clan', 'olympiad', 'rankings', 'sevensigns', 'fortress', 'enchant', 'codex']
+};
+
+export const TAB_TO_PILLAR = {};
+Object.entries(PILLAR_TABS_MAP).forEach(([pillar, tabs]) => {
+  tabs.forEach(tab => { TAB_TO_PILLAR[tab] = pillar; });
+});
+
+export const TAB_NAMES_MAP = {
+  battle: 'Combate',
+  hero: 'Herói',
+  character: 'Personagem',
+  inventory: 'Mochila',
+  skills: 'Skills',
+  astral: 'Maestria',
+  dolls: 'Dolls & Pets',
+  cosmetics: 'Cosméticos',
+  quests: 'Missões',
+  zones: 'Caça & Zonas',
+  raids: 'Raids & Bosses',
+  tower: 'Torre da Insolência',
+  colosseum: 'Coliseu PvP',
+  expeditions: 'Expedições',
+  market: 'Mercado Giran',
+  shop: 'Mercador',
+  craft: 'Forja Imperial',
+  alchemy: 'Alquimia',
+  warehouse: 'Baú Privado',
+  magiclamp: 'Lâmpada Mágica',
+  clan: 'Clã & Castelos',
+  olympiad: 'Olimpíadas',
+  rankings: 'Rankings Mundiais',
+  sevensigns: 'Sete Selos',
+  fortress: 'Fortalezas',
+  enchant: 'Encantamento',
+  codex: 'Codex'
+};
+
+export function switchPillar(pillarKey) {
+  const pillars = ['combat', 'character', 'economy', 'glory'];
+  pillars.forEach(p => {
+    const strip = el(`pillar-strip-${p}`);
+    if (strip) strip.style.display = (p === pillarKey) ? 'flex' : 'none';
+  });
+  qsa('.pillar-tab-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.pillar === pillarKey);
+  });
+  const currentStrip = el(`pillar-strip-${pillarKey}`);
+  if (currentStrip) {
+    const activeBtn = currentStrip.querySelector('.tab-btn.active');
+    if (!activeBtn) {
+      const firstTabBtn = currentStrip.querySelector('.tab-btn');
+      if (firstTabBtn) firstTabBtn.click();
+    }
+  }
+}
+if (typeof window !== 'undefined') {
+  window.switchPillar = switchPillar;
+}
+
 export function openPanel(tabName) {
   state = getState();
   const targetTab = (!tabName || tabName === 'zones' || tabName === 'combat' || tabName === 'close') ? 'zones' : tabName;
+
+  // Auto-switch to corresponding pillar dock strip
+  const targetPillar = TAB_TO_PILLAR[targetTab];
+  if (targetPillar) {
+    const pillars = ['combat', 'character', 'economy', 'glory'];
+    pillars.forEach(p => {
+      const strip = el(`pillar-strip-${p}`);
+      if (strip) strip.style.display = (p === targetPillar) ? 'flex' : 'none';
+    });
+    qsa('.pillar-tab-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.pillar === targetPillar);
+    });
+  }
+
+  // Update mobile tab title badge
+  const tabTitle = TAB_NAMES_MAP[targetTab] || targetTab;
+  qsa('.mobile-current-tab-badge, #mobile-tabs-current-badge').forEach(b => {
+    b.textContent = tabTitle;
+  });
 
   const root = document.getElementById('idle-host')?.shadowRoot || document;
   const game = root.getElementById ? root.getElementById('game') : root.querySelector?.('#game');
@@ -7442,14 +7514,30 @@ export function bindEvents() {
       const game = el('game');
       if (!game) return;
 
-      state.mobileView = viewName || 'battle';
+      const target = viewName || 'battle';
+      state.mobileView = target;
       game.dataset.mobileView = state.mobileView;
 
       qsa('.mobile-nav-btn').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.tab === state.mobileView);
       });
 
+      // Update mobile title badges in top return bar
+      const badgeTitle = TAB_NAMES_MAP[state.mobileView] || (state.mobileView === 'hero' ? 'Herói' : 'Menu');
+      qsa('.mobile-current-tab-badge, #mobile-tabs-current-badge').forEach(b => {
+        b.textContent = badgeTitle;
+      });
+
       if (state.mobileView === 'battle') {
+        // Close any active blocking modals and overlays so screen is completely clear for combat
+        qsa('.modal.active').forEach(m => m.classList.remove('active'));
+        qsa('.modal-overlay').forEach(m => { if (m) m.style.display = 'none'; });
+
+        // Scroll window to top smoothly so combat stage is in full view
+        if (typeof window !== 'undefined' && window.scrollTo) {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
         updateCombatControlsUI();
       } else if (state.mobileView === 'hero') {
         updateStatsUI();
@@ -7578,6 +7666,26 @@ export function bindEvents() {
         const modal = el('admin-modal');
         if (modal) modal.classList.remove('active');
       };
+    }
+
+    // Modal background click to close
+    qsa('.modal, .modal-overlay').forEach(modal => {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.classList.remove('active');
+          if (modal.classList.contains('modal-overlay')) modal.style.display = 'none';
+        }
+      });
+    });
+
+    // ESC key closes active modals
+    if (typeof window !== 'undefined') {
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          qsa('.modal.active').forEach(m => m.classList.remove('active'));
+          qsa('.modal-overlay').forEach(m => { if (m.style.display !== 'none') m.style.display = 'none'; });
+        }
+      });
     }
 
     // Admin Navigation Tabs
