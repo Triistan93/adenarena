@@ -277,6 +277,7 @@ import { CommunityCapService } from './src/services/CommunityCapService.js';
 import { ensureAppLayout, showMenuPanel, updateTabVisibilityByLevel } from './src/ui/AppLayout.js';
 import { checkTabGuide, closeTabGuideModal, openTabGuideModal } from './src/ui/TutorialGuide.js';
 import { isFeatureUnlocked, getCurrentSeason, getSeasonForFeature } from './src/core/SeasonConfig.js';
+import { updateSeasonTabBadges } from './src/ui/SeasonUI.js';
 import { VFX, initializeVFX } from './vfx.js';
 import { globalVFXOrchestrator } from './src/vfx/VFXOrchestrator.js';
 import { combatEvents, CombatEventType } from './src/vfx/CombatEvent.js';
@@ -5311,6 +5312,7 @@ function attackMonster() {
         
         const sourcePt = getStagePositionRelative('hero');
         const isGroundFeet = MONSTER_FEET_EFFECTS.has(skill.id) || (vfxData && MONSTER_FEET_EFFECTS.has(vfxData.id));
+        const targetPt = isGroundFeet ? getCombatTargetBasePoint() : getCombatTargetPoint();
         const orchestratorDef = globalVFXOrchestrator._skillDefRegistry.get(skill.id);
         const skillDefForVfx = orchestratorDef || skill.def;
 
