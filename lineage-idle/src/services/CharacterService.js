@@ -11,6 +11,27 @@ import { getClass } from '../engine/StatsEngine.js';
 import { getSkillCost } from '../engine/SkillEngine.js';
 import { resolveCanonicalClassId } from '../data/classes/class_aliases.js';
 
+export const SHARED_SKILL_IDS = [
+  'wind_strike',
+  'flame_strike',
+  'hydro_strike',
+  'power_strike',
+  'mortal_blow',
+  'iron_punch',
+  'heal_light',
+  'energy_burst'
+];
+
+/**
+ * Retorna as definições completas das 8 habilidades compartilhadas.
+ * @returns {Array<Object>}
+ */
+export function getSharedSkills() {
+  const E = typeof window !== 'undefined' ? window.EchoData : null;
+  const defs = E?.SKILL_DEFS_ECHO || D()?.SKILL_DEFS || {};
+  return SHARED_SKILL_IDS.map(id => defs[id]).filter(Boolean);
+}
+
 /**
  * Verifica se a classe atual do jogador satisfaz um requisito de classe (percorrendo a árvore de herança).
  * @param {string} playerClass
@@ -18,7 +39,7 @@ import { resolveCanonicalClassId } from '../data/classes/class_aliases.js';
  * @returns {boolean}
  */
 export function classSatisfies(playerClass, reqClass) {
-  if (!reqClass) return true;
+  if (!reqClass || reqClass === 'all' || reqClass === 'shared') return true;
   if (!playerClass) return false;
   const canonReq = (typeof resolveCanonicalClassId === 'function' ? resolveCanonicalClassId(reqClass) : null) || reqClass;
   const canonPlayer = (typeof resolveCanonicalClassId === 'function' ? resolveCanonicalClassId(playerClass) : null) || playerClass;
@@ -80,6 +101,12 @@ export function getClassSkills(classId) {
   const lowerClass = String(classId).toLowerCase();
   if (CS[lowerCanon]) return CS[lowerCanon];
   if (CS[lowerClass]) return CS[lowerClass];
+
+  // Linhagem do Mago Humano: se não resolvido diretamente, recorre às 6 habilidades canônicas de Sorcerer
+  if (['mage', 'human_mage', 'wizard'].includes(lowerClass) || ['mage', 'human_mage', 'wizard'].includes(lowerCanon)) {
+    if (CS['human_sorcerer']) return CS['human_sorcerer'];
+    if (CS['sorcerer']) return CS['sorcerer'];
+  }
 
   const def = getClass(canonicalId) || getClass(classId) || getClass(lowerCanon) || getClass(lowerClass);
   if (def?.skillTree && CS[def.skillTree]) return CS[def.skillTree];

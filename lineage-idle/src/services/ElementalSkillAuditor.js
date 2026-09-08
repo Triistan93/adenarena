@@ -112,6 +112,11 @@ export function registerSharedSkillOwnership(skillId, classId) {
   REVERSE_OWNERSHIP_INDEX.get(skillId).add(classId);
 }
 
+const CANONICAL_SHARED_SKILL_IDS = new Set([
+  'wind_strike', 'flame_strike', 'hydro_strike', 'power_strike',
+  'mortal_blow', 'iron_punch', 'heal_light', 'energy_burst'
+]);
+
 /**
  * Checks if a skill is native or shared-authorized for a given class ID.
  * @param {string} skillId
@@ -119,6 +124,10 @@ export function registerSharedSkillOwnership(skillId, classId) {
  * @returns {{ isAllowed: boolean, ownershipType: 'NATIVE' | 'SHARED' | 'NONE' }}
  */
 export function checkSkillOwnership(skillId, classId, level = 80) {
+  if (CANONICAL_SHARED_SKILL_IDS.has(skillId)) {
+    return { isAllowed: true, ownershipType: 'SHARED' };
+  }
+
   const nativeClasses = REVERSE_OWNERSHIP_INDEX.get(skillId);
   if (nativeClasses && nativeClasses.has(classId)) {
     const isDirectNative = isNativeToClass(skillId, classId);

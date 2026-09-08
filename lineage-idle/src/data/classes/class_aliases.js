@@ -333,7 +333,12 @@ const EXTENDED_FALLBACKS = {
   'elfdeathknight': 'deathPilgrim',
   'elf_death_knight': 'deathPilgrim',
   'elvendeathknight': 'deathPilgrim',
-  'elven_death_knight': 'deathPilgrim'
+  'elven_death_knight': 'deathPilgrim',
+  'dwarfmage': 'dwarf_mage',
+  'dwarf_mage': 'dwarf_mage',
+  'dwarf-mage': 'dwarf_mage',
+  'dwarf_magician': 'dwarf_mage',
+  'dwarfmagician': 'dwarf_mage'
 };
 
 /**
@@ -361,6 +366,10 @@ export function resolveCanonicalClassId(classId) {
   // 4. Remoção inteligente de prefixos de raça
   for (const prefix of RACE_PREFIXES) {
     if (lower.startsWith(prefix)) {
+      if (prefix.startsWith('dwarf')) {
+        const after = lower.slice(prefix.length).replace(/^[-_\s]+/, '');
+        if (after === 'mage' || after === 'magician') return 'dwarf_mage';
+      }
       const stripped = lower.slice(prefix.length).replace(/^[-_\s]+/, '');
       if (CLASS_ALIASES[stripped]) return CLASS_ALIASES[stripped];
       const strippedClean = stripped.replace(/[-_\s]+/g, '');

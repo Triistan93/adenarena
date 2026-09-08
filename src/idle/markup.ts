@@ -487,6 +487,8 @@ export const IDLE_MARKUP = `
             </div>
             <!-- Passivas de Linhagem de Classes Passadas -->
             <div id="legacy-passives-container" style="display:none; background:rgba(0,0,0,0.4); border:1px solid rgba(212,175,55,0.25); border-radius:8px; padding:10px 14px; margin-bottom:10px;"></div>
+            <!-- Habilidades Gerais Compartilhadas (Lv. 1–39) -->
+            <div id="shared-skills-container" class="shared-skills-container" style="margin-bottom:12px;"></div>
             <div class="skills-body">
               <div class="skill-tree-scroll">
                 <div class="skill-tree" id="skill-tree"></div>

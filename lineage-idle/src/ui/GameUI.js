@@ -12,7 +12,7 @@ import {
 import { resolveEquipSlot, migrateEquipmentSlots, equipItem, unequipItem } from '../services/EquipmentService.js';
 import { getCraftLevelReq, getRecipeMaterials, canCraft, getRecipeDef, calculateMaxCraftableQty } from '../services/CraftService.js';
 import { rollMysticStock } from '../services/ShopService.js';
-import { classSatisfies, getClassSkills, checkClassAdvancement } from '../services/CharacterService.js';
+import { classSatisfies, getClassSkills, checkClassAdvancement, SHARED_SKILL_IDS, getSharedSkills } from '../services/CharacterService.js';
 import { AFFIX_MAP } from '../../data/affixes.js';
 import { getClass, getStats, getActiveSetBonuses } from '../engine/StatsEngine.js';
 import { getSkillCost } from '../engine/SkillEngine.js';
@@ -2630,6 +2630,51 @@ export function updateSkillUI(state, callbacks = {}) {
   const SKILL_DEFS = echoData?.SKILL_DEFS_ECHO || D()?.SKILL_DEFS || {};
   const SKILL_REQS = echoData?.SKILL_REQS_ECHO || D()?.SKILL_REQS || {};
   const SKILL_TREE_LAYOUT = echoData?.SKILL_TREE_LAYOUT_ECHO || D()?.SKILL_TREE_LAYOUT || {};
+
+  // ─── Renderização das 8 Habilidades Gerais Compartilhadas (Lv 1–39) ───
+  const sharedContainer = findElement('shared-skills-container');
+  if (sharedContainer) {
+    const sharedList = SHARED_SKILL_IDS.map(id => [id, SKILL_DEFS[id]]).filter(([id, def]) => def != null);
+    if (sharedList.length > 0) {
+      sharedContainer.style.display = 'block';
+      sharedContainer.innerHTML = `
+        <div class="shared-skills-header">
+          <div class="shared-skills-title">
+            <span>🌐 Habilidades Gerais Compartilhadas</span>
+            <span class="shared-skills-subtitle">(Lv. 1–39 — Acessíveis para todas as classes)</span>
+          </div>
+        </div>
+        <div class="shared-skills-grid">
+          ${sharedList.map(([id, def]) => {
+            const lvl = state.skills[id] || 0;
+            const max = def.max || def.maxLevel || 5;
+            const canBuy = state.level >= (def.reqLvl || 1) && state.sp >= getSkillCost(id, lvl) && lvl < max;
+            const btnClass = canBuy ? 'skill-btn can-buy' : 'skill-btn';
+            let iconVal = def.icon || '✦';
+            if (iconVal.endsWith('.jpg') && !iconVal.includes('/')) {
+              iconVal = `/assets/skills/${iconVal}`;
+            }
+            const isIconImg = iconVal.endsWith('.jpg') || iconVal.endsWith('.png') || iconVal.includes('/');
+            const iconHtml = isIconImg
+              ? `<img src="${getAssetUrl(iconVal)}" class="skill-icon-img" alt="${def.name}" style="width:24px; height:24px; object-fit:cover; border-radius:4px; border:1px solid rgba(255,255,255,0.2);" onerror="this.style.display='none'" />`
+              : `<span class="skill-icon">${iconVal}</span>`;
+
+            return `
+              <div class="skill-node tier-0 ${lvl > 0 ? 'owned' : ''} ${lvl === max ? 'maxed' : ''}">
+                <button class="${btnClass}" data-skill="${id}">
+                  ${iconHtml}
+                  <span class="skill-name">${def.name}</span>
+                  <span class="skill-lvl-num">${lvl}/${max}</span>
+                </button>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+    } else {
+      sharedContainer.style.display = 'none';
+    }
+  }
 
   const pos = {};
 

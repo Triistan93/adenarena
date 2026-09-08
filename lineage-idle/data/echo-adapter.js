@@ -762,17 +762,46 @@ function buildEchoAdapter() {
     CLASS_SKILLS_ECHO[classId] = [...skills];
     const canonicalTarget = MERGED_ALIASES[classId] || (typeof resolveCanonicalClassId === 'function' ? resolveCanonicalClassId(classId) : null);
     if (canonicalTarget && !ACTIVE_CLASS_SKILLS[canonicalTarget]) {
-      CLASS_SKILLS_ECHO[canonicalTarget] = [...skills];
+      // Proteção rigorosa: dwarf_mage nunca pode sobrescrever classes da linhagem de magos humanos
+      if (classId === 'dwarf_mage' && ['mage', 'human_mage', 'sorcerer', 'archmage', 'wizard'].includes(canonicalTarget)) {
+        // não sobrescreve
+      } else {
+        CLASS_SKILLS_ECHO[canonicalTarget] = [...skills];
+      }
     }
     for (const [alias, target] of Object.entries(MERGED_ALIASES)) {
       // Nunca sobrescrever outra classe ativa distinta
       if (ACTIVE_CLASS_SKILLS[alias] && alias !== classId) continue;
+      // Proteção rigorosa: dwarf_mage nunca pode sobrescrever classes da linhagem de magos humanos
+      if (classId === 'dwarf_mage' && ['mage', 'human_mage', 'sorcerer', 'archmage', 'wizard'].includes(alias)) continue;
 
       if (target === classId || alias === classId) {
         CLASS_SKILLS_ECHO[alias] = [...skills];
       }
     }
   }
+
+  // Garantia canônica da linhagem do Mago Humano (Sorcerer / Mage)
+  if (ACTIVE_CLASS_SKILLS['human_sorcerer']) {
+    const sorcererSkills = [...ACTIVE_CLASS_SKILLS['human_sorcerer']];
+    ['human_sorcerer', 'sorcerer', 'archmage', 'wizard', 'mage', 'human_mage'].forEach(alias => {
+      CLASS_SKILLS_ECHO[alias] = [...sorcererSkills];
+    });
+  }
+
+  // Registro explícito do pool compartilhado (Lv 1–39)
+  const SHARED_SKILL_IDS = [
+    'wind_strike', 'flame_strike', 'hydro_strike', 'power_strike',
+    'mortal_blow', 'iron_punch', 'heal_light', 'energy_burst'
+  ];
+  CLASS_SKILLS_ECHO['shared'] = [...SHARED_SKILL_IDS];
+
+  // Coordenadas fixas para as 8 shared skills (Grid 4x2)
+  SHARED_SKILL_IDS.forEach((sid, idx) => {
+    const col = idx % 4;
+    const row = Math.floor(idx / 4);
+    SKILL_TREE_LAYOUT_ECHO[sid] = { col, row };
+  });
 
   // 3. Monta layouts para todas as classes
   for (const [classId, skillIds] of Object.entries(CLASS_SKILLS_ECHO)) {
@@ -801,6 +830,13 @@ function buildEchoAdapter() {
     }
   }
 
+  // Propagação explícita de layouts para a linhagem do Mago Humano
+  if (SKILL_TREE_LAYOUT_ECHO['human_sorcerer']) {
+    ['sorcerer', 'archmage', 'wizard', 'mage', 'human_mage'].forEach(alias => {
+      SKILL_TREE_LAYOUT_ECHO[alias] = SKILL_TREE_LAYOUT_ECHO['human_sorcerer'];
+    });
+  }
+
   // Publica em window.EchoData (o que main.js lê)
   E.SKILL_DEFS_ECHO        = SKILL_DEFS_ECHO;
   E.SKILL_REQS_ECHO        = SKILL_REQS_ECHO;
@@ -808,6 +844,7 @@ function buildEchoAdapter() {
   E.SKILL_TREE_LAYOUT_ECHO = SKILL_TREE_LAYOUT_ECHO;
   E.CASH_SHOP_CATALOG      = CASH_SHOP_CATALOG;
   E.HEIRLOOM_ITEMS         = HEIRLOOM_ITEMS;
+  E.SHARED_SKILL_IDS       = SHARED_SKILL_IDS;
 
   console.log(
     '[echo-adapter] Skills autênticas geradas:', Object.keys(SKILL_DEFS_ECHO).length,
