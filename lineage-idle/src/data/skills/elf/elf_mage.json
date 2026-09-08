@@ -1,0 +1,1105 @@
+{
+  "classId": "elf_mage",
+  "skills": [
+    {
+      "identity": {
+        "id": "hydro_blast",
+        "name": "Explosão Hídrica",
+        "classId": "elf_mage",
+        "race": "elf",
+        "tier": "core_1",
+        "unlockLevel": 40,
+        "element": "Water",
+        "role": "burst",
+        "tags": [
+          "Water"
+        ],
+        "description": "Explosão Hídrica — Habilidade Especialista de elf_mage."
+      },
+      "gameplay": {
+        "castTime": 200,
+        "cooldown": 4000,
+        "mpCost": 15,
+        "damageMultiplier": 1.4,
+        "hitCount": 1,
+        "staggerDamage": 25,
+        "critModifier": 1.4,
+        "targetType": "single",
+        "range": 130,
+        "requiredWeapon": [
+          "staff",
+          "wand"
+        ],
+        "statusEffects": []
+      },
+      "hitbox": {
+        "type": "point",
+        "radius": 35,
+        "offset": {
+          "x": 20,
+          "y": 0
+        }
+      },
+      "timeline": {
+        "totalDuration": 450,
+        "phases": [
+          {
+            "name": "anticipation",
+            "start": 0,
+            "duration": 100,
+            "actions": [
+              {
+                "time": 0,
+                "type": "animation",
+                "params": {
+                  "trigger": "skill_windup"
+                }
+              },
+              {
+                "time": 30,
+                "type": "lighting",
+                "params": {
+                  "type": "cast_glow",
+                  "color": "#38bdf8",
+                  "radius": 80,
+                  "intensity": 0.7
+                }
+              }
+            ]
+          },
+          {
+            "name": "impact",
+            "start": 100,
+            "duration": 350,
+            "actions": [
+              {
+                "time": 0,
+                "type": "vfx",
+                "params": {
+                  "type": "impact_burst",
+                  "color": "#0284c7",
+                  "particleCount": 16,
+                  "radius": 70
+                }
+              },
+              {
+                "time": 0,
+                "type": "camera_fx",
+                "params": {
+                  "shake": 0.25,
+                  "hitStop": 50,
+                  "zoom": 1.03
+                }
+              },
+              {
+                "time": 0,
+                "type": "lighting",
+                "params": {
+                  "type": "impact_flash",
+                  "color": "#e0f2fe",
+                  "radius": 120,
+                  "intensity": 1,
+                  "duration": 200
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "game_feel": {
+        "hitStop": {
+          "duration": 50,
+          "timeScale": 0.05,
+          "target": "all"
+        },
+        "cameraShake": {
+          "intensity": 0.25,
+          "decay": 1.8,
+          "duration": 180,
+          "direction": "horizontal"
+        },
+        "cameraZoom": {
+          "factor": 1.03,
+          "duration": 180,
+          "ease": "ease-out"
+        },
+        "screenFlash": {
+          "color": "#e0f2fe",
+          "duration": 90,
+          "opacity": 0.2
+        }
+      },
+      "lighting": {
+        "castGlow": {
+          "color": "#38bdf8",
+          "radius": 80,
+          "intensity": 0.7
+        },
+        "impactFlash": {
+          "color": "#e0f2fe",
+          "radius": 120,
+          "intensity": 1
+        }
+      },
+      "hud": {
+        "damageNumbers": {
+          "style": "heavy",
+          "scale": 1.1,
+          "animation": "bounce",
+          "color": "#0284c7"
+        },
+        "statusIcons": []
+      },
+      "performance": {
+        "particleBudget": 45,
+        "drawCalls": 3,
+        "layerPriority": 3,
+        "poolKey": "pool_hydro_blast",
+        "allowConcurrent": true
+      },
+      "signature": {
+        "author": "AdenArenaEngine",
+        "version": "1.0.0",
+        "uniqueVfxSignature": "vfx_sig_elf_mage_hydro_blast_0"
+      }
+    },
+    {
+      "identity": {
+        "id": "blizzard",
+        "name": "Nevasca",
+        "classId": "elf_mage",
+        "race": "elf",
+        "tier": "core_2",
+        "unlockLevel": 40,
+        "element": "Ice",
+        "role": "area",
+        "tags": [
+          "Ice"
+        ],
+        "description": "Nevasca — Habilidade Especialista de elf_mage."
+      },
+      "gameplay": {
+        "castTime": 240,
+        "cooldown": 5000,
+        "mpCost": 19,
+        "damageMultiplier": 1.5999999999999999,
+        "hitCount": 1,
+        "staggerDamage": 33,
+        "critModifier": 1.5,
+        "targetType": "aoe_circle",
+        "range": 220,
+        "requiredWeapon": [
+          "staff",
+          "wand"
+        ],
+        "statusEffects": []
+      },
+      "hitbox": {
+        "type": "circle",
+        "radius": 90,
+        "offset": {
+          "x": 20,
+          "y": 0
+        }
+      },
+      "timeline": {
+        "totalDuration": 490,
+        "phases": [
+          {
+            "name": "anticipation",
+            "start": 0,
+            "duration": 120,
+            "actions": [
+              {
+                "time": 0,
+                "type": "animation",
+                "params": {
+                  "trigger": "skill_windup"
+                }
+              },
+              {
+                "time": 30,
+                "type": "lighting",
+                "params": {
+                  "type": "cast_glow",
+                  "color": "#fef08a",
+                  "radius": 80,
+                  "intensity": 0.7
+                }
+              }
+            ]
+          },
+          {
+            "name": "impact",
+            "start": 120,
+            "duration": 370,
+            "actions": [
+              {
+                "time": 0,
+                "type": "vfx",
+                "params": {
+                  "type": "slash_arc",
+                  "color": "#fbbf24",
+                  "particleCount": 19,
+                  "radius": 70
+                }
+              },
+              {
+                "time": 0,
+                "type": "camera_fx",
+                "params": {
+                  "shake": 0.33,
+                  "hitStop": 60,
+                  "zoom": 1.03
+                }
+              },
+              {
+                "time": 0,
+                "type": "lighting",
+                "params": {
+                  "type": "impact_flash",
+                  "color": "#fef3c7",
+                  "radius": 135,
+                  "intensity": 1,
+                  "duration": 200
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "game_feel": {
+        "hitStop": {
+          "duration": 60,
+          "timeScale": 0.05,
+          "target": "all"
+        },
+        "cameraShake": {
+          "intensity": 0.33,
+          "decay": 1.8,
+          "duration": 180,
+          "direction": "horizontal"
+        },
+        "cameraZoom": {
+          "factor": 1.03,
+          "duration": 180,
+          "ease": "ease-out"
+        },
+        "screenFlash": {
+          "color": "#fef3c7",
+          "duration": 90,
+          "opacity": 0.2
+        }
+      },
+      "lighting": {
+        "castGlow": {
+          "color": "#fef08a",
+          "radius": 80,
+          "intensity": 0.7
+        },
+        "impactFlash": {
+          "color": "#fef3c7",
+          "radius": 120,
+          "intensity": 1
+        }
+      },
+      "hud": {
+        "damageNumbers": {
+          "style": "heavy",
+          "scale": 1.1,
+          "animation": "bounce",
+          "color": "#fbbf24"
+        },
+        "statusIcons": []
+      },
+      "performance": {
+        "particleBudget": 55,
+        "drawCalls": 3,
+        "layerPriority": 4,
+        "poolKey": "pool_blizzard",
+        "allowConcurrent": true
+      },
+      "signature": {
+        "author": "AdenArenaEngine",
+        "version": "1.0.0",
+        "uniqueVfxSignature": "vfx_sig_elf_mage_blizzard_1"
+      }
+    },
+    {
+      "identity": {
+        "id": "healing_wave",
+        "name": "Onda Curativa",
+        "classId": "elf_mage",
+        "race": "elf",
+        "tier": "specialization",
+        "unlockLevel": 40,
+        "element": "Holy",
+        "role": "heal",
+        "tags": [
+          "Holy",
+          "Water"
+        ],
+        "description": "Onda Curativa — Habilidade Especialista de elf_mage."
+      },
+      "gameplay": {
+        "castTime": 280,
+        "cooldown": 6000,
+        "mpCost": 23,
+        "damageMultiplier": 1.7999999999999998,
+        "hitCount": 1,
+        "staggerDamage": 41,
+        "critModifier": 1.5999999999999999,
+        "targetType": "single",
+        "range": 130,
+        "requiredWeapon": [
+          "staff",
+          "wand"
+        ],
+        "statusEffects": []
+      },
+      "hitbox": {
+        "type": "point",
+        "radius": 35,
+        "offset": {
+          "x": 20,
+          "y": 0
+        }
+      },
+      "timeline": {
+        "totalDuration": 530,
+        "phases": [
+          {
+            "name": "anticipation",
+            "start": 0,
+            "duration": 140,
+            "actions": [
+              {
+                "time": 0,
+                "type": "animation",
+                "params": {
+                  "trigger": "skill_windup"
+                }
+              },
+              {
+                "time": 30,
+                "type": "lighting",
+                "params": {
+                  "type": "cast_glow",
+                  "color": "#fde047",
+                  "radius": 80,
+                  "intensity": 0.7
+                }
+              }
+            ]
+          },
+          {
+            "name": "impact",
+            "start": 140,
+            "duration": 390,
+            "actions": [
+              {
+                "time": 0,
+                "type": "vfx",
+                "params": {
+                  "type": "impact_burst",
+                  "color": "#eab308",
+                  "particleCount": 22,
+                  "radius": 70
+                }
+              },
+              {
+                "time": 0,
+                "type": "camera_fx",
+                "params": {
+                  "shake": 0.41000000000000003,
+                  "hitStop": 70,
+                  "zoom": 1.03
+                }
+              },
+              {
+                "time": 0,
+                "type": "lighting",
+                "params": {
+                  "type": "impact_flash",
+                  "color": "#ffffff",
+                  "radius": 150,
+                  "intensity": 1,
+                  "duration": 200
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "game_feel": {
+        "hitStop": {
+          "duration": 70,
+          "timeScale": 0.05,
+          "target": "all"
+        },
+        "cameraShake": {
+          "intensity": 0.41000000000000003,
+          "decay": 1.8,
+          "duration": 180,
+          "direction": "horizontal"
+        },
+        "cameraZoom": {
+          "factor": 1.03,
+          "duration": 180,
+          "ease": "ease-out"
+        },
+        "screenFlash": {
+          "color": "#ffffff",
+          "duration": 90,
+          "opacity": 0.2
+        }
+      },
+      "lighting": {
+        "castGlow": {
+          "color": "#fde047",
+          "radius": 80,
+          "intensity": 0.7
+        },
+        "impactFlash": {
+          "color": "#ffffff",
+          "radius": 120,
+          "intensity": 1
+        }
+      },
+      "hud": {
+        "damageNumbers": {
+          "style": "heavy",
+          "scale": 1.1,
+          "animation": "bounce",
+          "color": "#eab308"
+        },
+        "statusIcons": []
+      },
+      "performance": {
+        "particleBudget": 65,
+        "drawCalls": 3,
+        "layerPriority": 5,
+        "poolKey": "pool_healing_wave",
+        "allowConcurrent": true
+      },
+      "signature": {
+        "author": "AdenArenaEngine",
+        "version": "1.0.0",
+        "uniqueVfxSignature": "vfx_sig_elf_mage_healing_wave_2"
+      }
+    },
+    {
+      "identity": {
+        "id": "tidal_surge",
+        "name": "Surto de Maré",
+        "classId": "elf_mage",
+        "race": "elf",
+        "tier": "elemental_specialization",
+        "unlockLevel": 40,
+        "element": "Water",
+        "role": "finisher",
+        "tags": [
+          "Water"
+        ],
+        "description": "Surto de Maré — Habilidade Especialista de elf_mage."
+      },
+      "gameplay": {
+        "castTime": 320,
+        "cooldown": 7000,
+        "mpCost": 27,
+        "damageMultiplier": 2,
+        "hitCount": 1,
+        "staggerDamage": 49,
+        "critModifier": 1.7,
+        "targetType": "single",
+        "range": 130,
+        "requiredWeapon": [
+          "staff",
+          "wand"
+        ],
+        "statusEffects": []
+      },
+      "hitbox": {
+        "type": "point",
+        "radius": 35,
+        "offset": {
+          "x": 20,
+          "y": 0
+        }
+      },
+      "timeline": {
+        "totalDuration": 570,
+        "phases": [
+          {
+            "name": "anticipation",
+            "start": 0,
+            "duration": 160,
+            "actions": [
+              {
+                "time": 0,
+                "type": "animation",
+                "params": {
+                  "trigger": "skill_windup"
+                }
+              },
+              {
+                "time": 30,
+                "type": "lighting",
+                "params": {
+                  "type": "cast_glow",
+                  "color": "#38bdf8",
+                  "radius": 80,
+                  "intensity": 0.7
+                }
+              }
+            ]
+          },
+          {
+            "name": "impact",
+            "start": 160,
+            "duration": 410,
+            "actions": [
+              {
+                "time": 0,
+                "type": "vfx",
+                "params": {
+                  "type": "impact_burst",
+                  "color": "#0284c7",
+                  "particleCount": 25,
+                  "radius": 70
+                }
+              },
+              {
+                "time": 0,
+                "type": "camera_fx",
+                "params": {
+                  "shake": 0.49,
+                  "hitStop": 80,
+                  "zoom": 1.03
+                }
+              },
+              {
+                "time": 0,
+                "type": "lighting",
+                "params": {
+                  "type": "impact_flash",
+                  "color": "#e0f2fe",
+                  "radius": 165,
+                  "intensity": 1,
+                  "duration": 200
+                }
+              },
+              {
+                "time": 20,
+                "type": "shader",
+                "params": {
+                  "type": "shockwave",
+                  "maxRadius": 120,
+                  "speed": 550
+                }
+              },
+              {
+                "time": 20,
+                "type": "shader",
+                "params": {
+                  "type": "chromatic",
+                  "offset": 5,
+                  "duration": 200
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "game_feel": {
+        "hitStop": {
+          "duration": 80,
+          "timeScale": 0.05,
+          "target": "all"
+        },
+        "cameraShake": {
+          "intensity": 0.49,
+          "decay": 1.8,
+          "duration": 180,
+          "direction": "horizontal"
+        },
+        "cameraZoom": {
+          "factor": 1.03,
+          "duration": 180,
+          "ease": "ease-out"
+        },
+        "screenFlash": {
+          "color": "#e0f2fe",
+          "duration": 90,
+          "opacity": 0.2
+        }
+      },
+      "lighting": {
+        "castGlow": {
+          "color": "#38bdf8",
+          "radius": 80,
+          "intensity": 0.7
+        },
+        "impactFlash": {
+          "color": "#e0f2fe",
+          "radius": 120,
+          "intensity": 1
+        }
+      },
+      "hud": {
+        "damageNumbers": {
+          "style": "heavy",
+          "scale": 1.1,
+          "animation": "bounce",
+          "color": "#0284c7"
+        },
+        "statusIcons": []
+      },
+      "performance": {
+        "particleBudget": 75,
+        "drawCalls": 4,
+        "layerPriority": 6,
+        "poolKey": "pool_tidal_surge",
+        "allowConcurrent": true
+      },
+      "signature": {
+        "author": "AdenArenaEngine",
+        "version": "1.0.0",
+        "uniqueVfxSignature": "vfx_sig_elf_mage_tidal_surge_3"
+      }
+    },
+    {
+      "identity": {
+        "id": "glacial_cataclysm",
+        "name": "Glacial Cataclysm",
+        "classId": "elf_mage",
+        "race": "elf",
+        "tier": "ultimate",
+        "unlockLevel": 80,
+        "element": "Water",
+        "role": "area",
+        "tags": [
+          "Water"
+        ],
+        "description": "Glacial Cataclysm — Habilidade Ultimate (★★★★) de elf_mage."
+      },
+      "gameplay": {
+        "castTime": 450,
+        "cooldown": 25000,
+        "mpCost": 60,
+        "damageMultiplier": 3.6,
+        "hitCount": 3,
+        "staggerDamage": 100,
+        "critModifier": 2,
+        "targetType": "aoe_circle",
+        "range": 220,
+        "requiredWeapon": [
+          "staff",
+          "wand"
+        ],
+        "statusEffects": [
+          {
+            "effect": "stun",
+            "chance": 0.9,
+            "duration": 3000,
+            "value": 1
+          }
+        ]
+      },
+      "hitbox": {
+        "type": "circle",
+        "radius": 90,
+        "offset": {
+          "x": 20,
+          "y": 0
+        }
+      },
+      "timeline": {
+        "totalDuration": 1100,
+        "phases": [
+          {
+            "name": "anticipation",
+            "start": 0,
+            "duration": 300,
+            "actions": [
+              {
+                "time": 0,
+                "type": "lighting",
+                "params": {
+                  "type": "ambient_dim",
+                  "color": "rgba(0,0,0,0.65)",
+                  "duration": 600,
+                  "restoreDuration": 400
+                }
+              },
+              {
+                "time": 0,
+                "type": "animation",
+                "params": {
+                  "trigger": "ultimate_charge"
+                }
+              },
+              {
+                "time": 30,
+                "type": "lighting",
+                "params": {
+                  "type": "cast_glow",
+                  "color": "#38bdf8",
+                  "radius": 150,
+                  "intensity": 1.2
+                }
+              },
+              {
+                "time": 100,
+                "type": "shader",
+                "params": {
+                  "type": "bloom",
+                  "intensity": 1.2,
+                  "duration": 400
+                }
+              }
+            ]
+          },
+          {
+            "name": "impact",
+            "start": 300,
+            "duration": 800,
+            "actions": [
+              {
+                "time": 0,
+                "type": "vfx",
+                "params": {
+                  "type": "impact_burst",
+                  "color": "#0284c7",
+                  "particleCount": 35,
+                  "radius": 140
+                }
+              },
+              {
+                "time": 0,
+                "type": "camera_fx",
+                "params": {
+                  "shake": 0.8,
+                  "hitStop": 120,
+                  "zoom": 1.08
+                }
+              },
+              {
+                "time": 0,
+                "type": "lighting",
+                "params": {
+                  "type": "impact_flash",
+                  "color": "#e0f2fe",
+                  "radius": 220,
+                  "intensity": 1.5,
+                  "duration": 200
+                }
+              },
+              {
+                "time": 20,
+                "type": "shader",
+                "params": {
+                  "type": "shockwave",
+                  "maxRadius": 220,
+                  "speed": 650
+                }
+              },
+              {
+                "time": 20,
+                "type": "shader",
+                "params": {
+                  "type": "chromatic",
+                  "offset": 9,
+                  "duration": 200
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "game_feel": {
+        "hitStop": {
+          "duration": 120,
+          "timeScale": 0.03,
+          "target": "all"
+        },
+        "cameraShake": {
+          "intensity": 0.8,
+          "decay": 1.8,
+          "duration": 300,
+          "direction": "omni"
+        },
+        "cameraZoom": {
+          "factor": 1.08,
+          "duration": 300,
+          "ease": "ease-out"
+        },
+        "screenFlash": {
+          "color": "#e0f2fe",
+          "duration": 160,
+          "opacity": 0.4
+        }
+      },
+      "lighting": {
+        "ambientDim": {
+          "targetColor": "rgba(0,0,0,0.65)",
+          "duration": 600,
+          "restoreDuration": 400
+        },
+        "castGlow": {
+          "color": "#38bdf8",
+          "radius": 150,
+          "intensity": 1.2
+        },
+        "impactFlash": {
+          "color": "#e0f2fe",
+          "radius": 220,
+          "intensity": 1.5
+        }
+      },
+      "hud": {
+        "damageNumbers": {
+          "style": "colossal",
+          "scale": 1.5,
+          "animation": "slam_explode",
+          "color": "#0284c7"
+        },
+        "statusIcons": [],
+        "announcement": {
+          "text": "GLACIAL CATACLYSM!",
+          "style": "gold_banner",
+          "banner": true
+        }
+      },
+      "performance": {
+        "particleBudget": 160,
+        "drawCalls": 6,
+        "layerPriority": 8,
+        "poolKey": "pool_glacial_cataclysm",
+        "allowConcurrent": false
+      },
+      "signature": {
+        "author": "AdenArenaEngine",
+        "version": "1.0.0",
+        "uniqueVfxSignature": "vfx_sig_elf_mage_glacial_cataclysm_4"
+      }
+    },
+    {
+      "identity": {
+        "id": "master_glacial_cataclysm",
+        "name": "Master: Glacial Cataclysm",
+        "classId": "elf_mage",
+        "race": "elf",
+        "tier": "master_ultimate",
+        "unlockLevel": 90,
+        "element": "Water",
+        "role": "area",
+        "tags": [
+          "Water"
+        ],
+        "description": "Master: Glacial Cataclysm — Habilidade Master Ultimate (★★★★★) de elf_mage."
+      },
+      "gameplay": {
+        "castTime": 600,
+        "cooldown": 40000,
+        "mpCost": 90,
+        "damageMultiplier": 5.2,
+        "hitCount": 5,
+        "staggerDamage": 180,
+        "critModifier": 2.5,
+        "targetType": "all_enemies",
+        "range": 220,
+        "requiredWeapon": [
+          "staff",
+          "wand"
+        ],
+        "statusEffects": [
+          {
+            "effect": "obliterate",
+            "chance": 1,
+            "duration": 6000,
+            "value": 0.4
+          }
+        ]
+      },
+      "hitbox": {
+        "type": "screen",
+        "width": 600,
+        "height": 400,
+        "offset": {
+          "x": 20,
+          "y": 0
+        }
+      },
+      "timeline": {
+        "totalDuration": 1500,
+        "phases": [
+          {
+            "name": "anticipation",
+            "start": 0,
+            "duration": 400,
+            "actions": [
+              {
+                "time": 0,
+                "type": "lighting",
+                "params": {
+                  "type": "ambient_dim",
+                  "color": "rgba(0,0,0,0.85)",
+                  "duration": 900,
+                  "restoreDuration": 500
+                }
+              },
+              {
+                "time": 0,
+                "type": "animation",
+                "params": {
+                  "trigger": "genesis_channel"
+                }
+              },
+              {
+                "time": 30,
+                "type": "lighting",
+                "params": {
+                  "type": "cast_glow",
+                  "color": "#38bdf8",
+                  "radius": 220,
+                  "intensity": 1.8
+                }
+              },
+              {
+                "time": 100,
+                "type": "shader",
+                "params": {
+                  "type": "bloom",
+                  "intensity": 2,
+                  "duration": 400
+                }
+              }
+            ]
+          },
+          {
+            "name": "impact",
+            "start": 400,
+            "duration": 1100,
+            "actions": [
+              {
+                "time": 0,
+                "type": "vfx",
+                "params": {
+                  "type": "titanbreaker",
+                  "color": "#0284c7",
+                  "particleCount": 50,
+                  "radius": 200
+                }
+              },
+              {
+                "time": 0,
+                "type": "camera_fx",
+                "params": {
+                  "shake": 1,
+                  "hitStop": 160,
+                  "zoom": 1.12
+                }
+              },
+              {
+                "time": 0,
+                "type": "lighting",
+                "params": {
+                  "type": "impact_flash",
+                  "color": "#e0f2fe",
+                  "radius": 300,
+                  "intensity": 2,
+                  "duration": 350
+                }
+              },
+              {
+                "time": 20,
+                "type": "shader",
+                "params": {
+                  "type": "shockwave",
+                  "maxRadius": 320,
+                  "speed": 800
+                }
+              },
+              {
+                "time": 20,
+                "type": "shader",
+                "params": {
+                  "type": "chromatic",
+                  "offset": 14,
+                  "duration": 350
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "game_feel": {
+        "hitStop": {
+          "duration": 160,
+          "timeScale": 0.01,
+          "target": "all"
+        },
+        "cameraShake": {
+          "intensity": 1,
+          "decay": 1.8,
+          "duration": 400,
+          "direction": "omni"
+        },
+        "cameraZoom": {
+          "factor": 1.12,
+          "duration": 400,
+          "ease": "ease-out"
+        },
+        "screenFlash": {
+          "color": "#e0f2fe",
+          "duration": 220,
+          "opacity": 0.55
+        }
+      },
+      "lighting": {
+        "ambientDim": {
+          "targetColor": "rgba(0,0,0,0.85)",
+          "duration": 900,
+          "restoreDuration": 500
+        },
+        "castGlow": {
+          "color": "#38bdf8",
+          "radius": 220,
+          "intensity": 1.8
+        },
+        "impactFlash": {
+          "color": "#e0f2fe",
+          "radius": 300,
+          "intensity": 2
+        }
+      },
+      "hud": {
+        "damageNumbers": {
+          "style": "colossal",
+          "scale": 1.8,
+          "animation": "slam_explode",
+          "color": "#0284c7"
+        },
+        "statusIcons": [],
+        "announcement": {
+          "text": "MASTER: GLACIAL CATACLYSM!",
+          "style": "mythic_banner",
+          "banner": true
+        }
+      },
+      "performance": {
+        "particleBudget": 220,
+        "drawCalls": 8,
+        "layerPriority": 10,
+        "poolKey": "pool_master_glacial_cataclysm",
+        "allowConcurrent": false
+      },
+      "signature": {
+        "author": "AdenArenaEngine",
+        "version": "1.0.0",
+        "uniqueVfxSignature": "vfx_sig_elf_mage_master_glacial_cataclysm_5"
+      }
+    }
+  ]
+}

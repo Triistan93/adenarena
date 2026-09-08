@@ -276,8 +276,9 @@ import { CommunityCapService } from './src/services/CommunityCapService.js';
 import { ensureAppLayout, showMenuPanel, updateTabVisibilityByLevel } from './src/ui/AppLayout.js';
 import { checkTabGuide, closeTabGuideModal, openTabGuideModal } from './src/ui/TutorialGuide.js';
 import { isFeatureUnlocked, getCurrentSeason, getSeasonForFeature } from './src/core/SeasonConfig.js';
-import { renderSeasonLockedPanel, updateSeasonTabBadges } from './src/ui/SeasonUI.js';
 import { VFX, initializeVFX } from './vfx.js';
+import { globalVFXOrchestrator } from './src/vfx/VFXOrchestrator.js';
+import { combatEvents, CombatEventType } from './src/vfx/CombatEvent.js';
 // ─── Sprint 7: Importa EventBus e StateManager (Wiring & State) ───────────
 import EventBus from './src/core/EventBus.js';
 import {
@@ -1616,6 +1617,14 @@ let ROOT = document; let _intervals = []; let _listeners = [];
 export function setRoot(r) {
   ROOT = r || document;
   initializeVFX(ROOT);
+  try {
+    const stageEl = el('stage');
+    if (stageEl) {
+      globalVFXOrchestrator.mount(stageEl);
+    }
+  } catch (err) {
+    console.debug('VFXOrchestrator setRoot mount notice:', err);
+  }
 }
 export function addTrackedListener(target, event, handler, opts) {
   if (target && target.addEventListener) {
@@ -1631,9 +1640,12 @@ export function destroy() {
     try { target.removeEventListener(event, handler, opts); } catch(e) {}
   });
   _listeners = [];
+  try {
+    globalVFXOrchestrator.unmount();
+  } catch (e) {}
 }
 
-function playSfx(type, arg) {
+function playSfx(type, arg, extra) {
   try {
     if (typeof window !== 'undefined' && window.idleAudio) {
       if (type === 'click') window.idleAudio.playClick();
@@ -1642,6 +1654,11 @@ function playSfx(type, arg) {
       else if (type === 'critical') window.idleAudio.playCritical();
       else if (type === 'drop') window.idleAudio.playDrop(arg);
       else if (type === 'levelUp') window.idleAudio.playLevelUp();
+      else if (type === 'staggerBreak') window.idleAudio.playStaggerBreak?.();
+      else if (type === 'bossRoar') window.idleAudio.playBossRoar?.();
+      else if (type === 'elementalImpact') window.idleAudio.playElementalImpact?.(arg, extra);
+      else if (type === 'windup') window.idleAudio.playWindup?.(arg, extra);
+      else if (type === 'ultimate') window.idleAudio.playUltimateFanfare?.(arg);
     }
   } catch(e) {}
 }
@@ -5193,6 +5210,19 @@ function attackMonster() {
           power: Math.max(1, skill.lvl || 1),
           duration: 1100
         });
+
+        const orchestratorDef = globalVFXOrchestrator._skillDefRegistry.get(skill.id);
+        const skillDefForVfx = orchestratorDef || skill.def;
+
+        combatEvents.emit(CombatEventType.SKILL_CAST, {
+          skillId: skill.id,
+          skillName: skillDefForVfx.identity?.name || skill.def.name,
+          caster: 'hero',
+          target: 'hero',
+          sourcePos: source,
+          targetPos: source,
+          def: skillDefForVfx
+        });
       } else if (isHeal) {
         const healAmt = window.SkillScaling ? window.SkillScaling.getSkillHealAtLevel(stats.maxHp, skill.lvl) : Math.floor(stats.maxHp * (0.25 + skill.lvl * 0.05));
         state.hp = Math.min(stats.maxHp, state.hp + healAmt);
@@ -5207,6 +5237,19 @@ function attackMonster() {
           color: '#4ade80',
           power: Math.max(1, skill.lvl || 1),
           duration: 950
+        });
+
+        const orchestratorDef = globalVFXOrchestrator._skillDefRegistry.get(skill.id);
+        const skillDefForVfx = orchestratorDef || skill.def;
+
+        combatEvents.emit(CombatEventType.SKILL_CAST, {
+          skillId: skill.id,
+          skillName: skillDefForVfx.identity?.name || skill.def.name,
+          caster: 'hero',
+          target: 'hero',
+          sourcePos: source,
+          targetPos: source,
+          def: skillDefForVfx
         });
       } else {
         const useMagicSkill = stats.matk > stats.atk;
@@ -5224,6 +5267,13 @@ function attackMonster() {
         const staggerResult = StaggerEngine.applyStaggerDamage(monster, rawSDmg, skillWeaponType, true, false, { log, floatText });
         if (staggerResult.mult > 1.0) {
           rawSDmg = Math.floor(rawSDmg * staggerResult.mult);
+        }
+        if (staggerResult && staggerResult.isBreak) {
+          combatEvents.emit(CombatEventType.SKILL_STAGGER, {
+            target: 'monster',
+            targetPos: getCombatTargetPoint(),
+            isBreak: true
+          });
         }
 
         // Aplica Amplificação de Ressonância Cruzada (ex: Adaga consumindo Marca de Arco)
@@ -5259,10 +5309,49 @@ function attackMonster() {
         stageHeroAttack();
         stageMonsterHurt(sDmg, false, skinReaction, 400);
         
+        const sourcePt = getStagePositionRelative('hero');
+        const isGroundFeet = MONSTER_FEET_EFFECTS.has(skill.id) || (vfxData && MONSTER_FEET_EFFECTS.has(vfxData.id));
+        const orchestratorDef = globalVFXOrchestrator._skillDefRegistry.get(skill.id);
+        const skillDefForVfx = orchestratorDef || skill.def;
+
+        combatEvents.emit(CombatEventType.SKILL_CAST, {
+          skillId: skill.id,
+          skillName: skillDefForVfx.identity?.name || skill.def.name,
+          caster: 'hero',
+          target: 'monster',
+          sourcePos: sourcePt,
+          targetPos: targetPt,
+          def: skillDefForVfx
+        });
+
+        combatEvents.emit(CombatEventType.SKILL_HIT, {
+          skillId: skill.id,
+          target: 'monster',
+          targetPos: targetPt,
+          isCrit: false,
+          damage: sDmg
+        });
+
+        combatEvents.emit(CombatEventType.SKILL_DAMAGE, {
+          skillId: skill.id,
+          target: 'monster',
+          targetPos: targetPt,
+          damage: sDmg,
+          isCrit: false,
+          element: elemSkillRes?.element || null
+        });
+
+        if (staggerResult && staggerResult.isBreak) {
+          combatEvents.emit(CombatEventType.SKILL_STAGGER, {
+            target: 'monster',
+            targetPos: targetPt,
+            isBreak: true
+          });
+        }
+        
         if (vfxData && vfxData.id) {
-          const source = getStagePositionRelative('hero');
-          const isGroundFeet = MONSTER_FEET_EFFECTS.has(vfxData.id);
-          const target = isGroundFeet ? getCombatTargetBasePoint() : getCombatTargetPoint();
+          const source = sourcePt;
+          const target = targetPt;
           playCombatVFX(vfxData.id, {
             source,
             target,
@@ -5302,6 +5391,12 @@ function attackMonster() {
         }
 
         if (killedBySkill) {
+          combatEvents.emit(CombatEventType.SKILL_KILL, {
+            skillId: skill.id,
+            target: 'monster',
+            targetPos: targetPt,
+            overkill: monster._overkillDmg || 0
+          });
           processMonsterDefeat(monster, skill);
           updateStatsUI();
           return;
@@ -5421,10 +5516,16 @@ function attackMonster() {
 
   const primaryWeaponType = WeaponResonanceService.getEquippedWeaponTypes(state).weap1 || (useMagic ? 'staff' : 'sword');
 
-  // Aplica Stagger Damage na barra de postura do monstro
   const staggerResult = StaggerEngine.applyStaggerDamage(monster, damage, primaryWeaponType, false, wasCrit, { log, floatText });
   if (staggerResult.mult > 1.0) {
     damage = Math.floor(damage * staggerResult.mult);
+  }
+  if (staggerResult && staggerResult.isBreak) {
+    combatEvents.emit(CombatEventType.SKILL_STAGGER, {
+      target: 'monster',
+      targetPos: getCombatTargetPoint(),
+      isBreak: true
+    });
   }
 
   // Aplica Amplificação de Ressonância Cruzada
@@ -5512,7 +5613,39 @@ function attackMonster() {
     }
   }
 
+  const autoTargetPt = getCombatTargetPoint();
+  if (wasCrit) {
+    let critTier = 'normal';
+    if (damage >= (stats.atk || stats.matk || 100) * 4) critTier = 'colossal';
+    else if (damage >= (stats.atk || stats.matk || 100) * 2.5) critTier = 'heavy';
+    combatEvents.emit(CombatEventType.SKILL_CRIT, {
+      critTier,
+      target: 'monster',
+      targetPos: autoTargetPt,
+      damage
+    });
+  } else {
+    combatEvents.emit(CombatEventType.SKILL_HIT, {
+      target: 'monster',
+      targetPos: autoTargetPt,
+      isCrit: false,
+      damage
+    });
+  }
+  combatEvents.emit(CombatEventType.SKILL_DAMAGE, {
+    target: 'monster',
+    targetPos: autoTargetPt,
+    damage,
+    isCrit: wasCrit,
+    element: elemAtkRes?.element || null
+  });
+
   if (monster.hp <= 0) {
+    combatEvents.emit(CombatEventType.SKILL_KILL, {
+      target: 'monster',
+      targetPos: autoTargetPt,
+      overkill: Math.abs(monster.hp)
+    });
     processMonsterDefeat(monster, monster._killingSkill || null);
     updateStatsUI();
     return;
@@ -9993,10 +10126,21 @@ export function init() {
 
     attachGlobalErrorHandlers();
     bindEvents();
+    try {
+      const stageEl = el('stage');
+      if (stageEl) {
+        globalVFXOrchestrator.mount(stageEl);
+      }
+    } catch (err) {
+      console.debug('VFXOrchestrator init mount notice:', err);
+    }
 
     window.openAdminModal = openAdminModal;
     window.setServerRate = setServerRate;
     window.applyServerRatePreset = applyServerRatePreset;
+    window.toggleVFXProfiler = (enable) => globalVFXOrchestrator.toggleProfiler(enable);
+    window.getVFXMetrics = () => globalVFXOrchestrator.getPerformanceMetrics();
+    window.globalVFXOrchestrator = globalVFXOrchestrator;
 
     state.startTime = Date.now(); 
     const hasSave = load();

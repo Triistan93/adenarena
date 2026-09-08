@@ -2643,14 +2643,14 @@ export function updateSkillUI(state, callbacks = {}) {
     classSkills = Object.entries(SKILL_DEFS).filter(([id, def]) => classSatisfies(state.class, def.classReq));
   }
 
-  const skillsByTier = { 0: [], 1: [], 2: [], 3: [], 4: [] };
+  const skillsByTier = { 0: [], 1: [], 2: [], 3: [], 4: [], 5: [] };
   for (const [id, def] of classSkills) {
     const t = def.tier !== undefined ? def.tier : 0;
     if (skillsByTier[t]) skillsByTier[t].push([id, def]);
   }
 
   const usedPositions = new Set();
-  for (let c = 0; c < 5; c++) {
+  for (let c = 0; c <= 5; c++) {
     const list = skillsByTier[c] || [];
     list.forEach(([id, def]) => {
       const explicit = SKILL_TREE_LAYOUT[id];
@@ -2666,8 +2666,8 @@ export function updateSkillUI(state, callbacks = {}) {
     });
   }
 
-  const colCounters = [0, 0, 0, 0, 0];
-  for (let c = 0; c < 5; c++) {
+  const colCounters = [0, 0, 0, 0, 0, 0];
+  for (let c = 0; c <= 5; c++) {
     const list = skillsByTier[c] || [];
     list.forEach(([id, def]) => {
       if (pos[id]) return;
@@ -2770,16 +2770,20 @@ export function updateSkillUI(state, callbacks = {}) {
     const wpnCheck = (typeof canCastSkillWeapon === 'function') ? canCastSkillWeapon(state, def) : { ok: true };
     const isWpnBlocked = !wpnCheck.ok;
 
-    // Check 4-Star Ultimate Book Unlock Requirement (Apenas Ultimates 4★ exigem Livro Ancestral)
-    const bookReq = (def.starRank === 4 || def.isUltimate) ? 'spellbook_4star' : null;
-    const hasBook = bookReq ? state.inventory?.some(i => i.itemId === bookReq && (i.count || 1) > 0) : true;
+    // Check Book Unlock Requirement using canonical requiredItemToUnlock
+    const bookReq = def.requiredItemToUnlock || ((def.starRank === 4 || def.tier === 4) ? 'book_4star' : (def.starRank === 5 || def.tier === 5) ? 'book_5star' : null);
+    const hasBook = bookReq ? state.inventory?.some(i => (i.itemId === bookReq || i.itemId === bookReq.replace('book_', 'spellbook_')) && (i.count || 1) > 0) : true;
     const isBookLocked = bookReq && lvl === 0 && !hasBook;
+
+    const isMasterUlt = def.tier === 5 || def.starRank === 5;
+    const isUlt = (def.tier === 4 || def.starRank === 4 || def.isUltimate) && !isMasterUlt;
 
     let nodeClass = `skill-node tier-${def.tier || 0}`;
     if (lvl > 0) nodeClass += ' owned';
     if (lvl === max) nodeClass += ' maxed';
     if (isWpnBlocked) nodeClass += ' weapon-blocked';
-    if (def.isUltimate || def.starRank === 4) nodeClass += ' ultimate-4star';
+    if (isMasterUlt) nodeClass += ' master-ultimate-5star';
+    else if (isUlt) nodeClass += ' ultimate-4star';
     if (isBookLocked) nodeClass += ' book-locked';
     else if (bookReq && lvl === 0 && hasBook) nodeClass += ' book-ready';
 
@@ -2799,7 +2803,8 @@ export function updateSkillUI(state, callbacks = {}) {
     if (isWpnBlocked) {
       badgeHtml = `<span style="position:absolute; top:-6px; right:-4px; background:#dc2626; color:#fff; font-size:9px; padding:1px 3px; border-radius:3px; font-weight:bold; box-shadow:0 0 4px #000;">🚫 ${wpnCheck.reason || 'Arma'}</span>`;
     } else if (isBookLocked) {
-      badgeHtml = `<span style="position:absolute; top:-6px; right:-4px; background:#7c3aed; color:#fff; font-size:9px; padding:1px 3px; border-radius:3px; font-weight:bold; box-shadow:0 0 4px #000;">🔒 Livro 4★</span>`;
+      const bookStar = def.starRank || (def.tier === 5 ? 5 : def.tier === 4 ? 4 : def.tier === 3 ? 3 : 2);
+      badgeHtml = `<span style="position:absolute; top:-6px; right:-4px; background:#7c3aed; color:#fff; font-size:9px; padding:1px 3px; border-radius:3px; font-weight:bold; box-shadow:0 0 4px #000;">🔒 Livro ${bookStar}★</span>`;
     } else if (bookReq && lvl === 0 && hasBook) {
       badgeHtml = `<span style="position:absolute; top:-6px; right:-4px; background:#f59e0b; color:#000; font-size:9px; padding:1px 3px; border-radius:3px; font-weight:bold; box-shadow:0 0 6px #f59e0b; animation:pulse 1.2s infinite;">⭐ Livro OK</span>`;
     }
@@ -2908,7 +2913,7 @@ export function updateSkillInfoPanel(state, callbacks = {}) {
     `;
   }
 
-  const reqBookId = def.requiredItemToUnlock || (def.starRank === 4 ? 'book_4star' : null);
+  const reqBookId = def.requiredItemToUnlock || (def.starRank === 5 ? 'book_5star' : (def.starRank === 4 ? 'book_4star' : null));
   const requiresBookNow = !!reqBookId && lvl === 0;
   const hasRequiredBook = reqBookId ? (state.inventory?.some(i => (i.itemId === reqBookId || (reqBookId === 'book_4star' && i.itemId === 'spellbook_4star')) && (i.count || 1) > 0)) : true;
 
@@ -2916,7 +2921,8 @@ export function updateSkillInfoPanel(state, callbacks = {}) {
     'book_1star': 'Tomo 1★ (Comum)',
     'book_2star': 'Tomo 2★ (Raro)',
     'book_3star': 'Tomo 3★ (Épico)',
-    'book_4star': 'Tomo 4★ (Lendário)'
+    'book_4star': 'Tomo 4★ (Lendário)',
+    'book_5star': 'Tomo 5★ (Transcendente)'
   };
   const bName = reqBookId ? (bookNames[reqBookId] || 'Livro de Magia') : '';
 
@@ -2979,7 +2985,7 @@ export function updateSkillInfoPanel(state, callbacks = {}) {
     ${star4BoxHtml}
     <p class="si-desc">${def.desc || def.note || ''}</p><div class="si-effect">${effectText}</div>
     <div class="si-reqs"><span class="si-label">Requires</span>${reqHtml}</div>
-    <button class="si-btn" data-skillup="${id}" ${!canLearn ? 'disabled' : ''} style="${requiresBookNow && has4StarBook ? 'background:linear-gradient(180deg,#f59e0b,#b45309); color:#fff; font-weight:bold;' : ''}">${btnLabel}</button>
+    <button class="si-btn" data-skillup="${id}" ${!canLearn ? 'disabled' : ''} style="${requiresBookNow && hasRequiredBook ? 'background:linear-gradient(180deg,#f59e0b,#b45309); color:#fff; font-weight:bold;' : ''}">${btnLabel}</button>
     <p class="si-sp">SP available: <strong>${(state.sp || 0).toLocaleString()}</strong></p>
     ${legacySectionHtml}
   `;

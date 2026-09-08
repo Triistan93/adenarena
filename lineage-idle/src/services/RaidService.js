@@ -136,6 +136,11 @@ export function startRaidBoss(state, raidId, callbacks = {}) {
   stopCombat(state);
   startCombat(state, callbacks);
 
+  // Apresentação Cinemática de Entrada de Chefe de Raid / World Boss
+  if (typeof window !== 'undefined' && window.globalVFXOrchestrator?.triggerBossIntro) {
+    window.globalVFXOrchestrator.triggerBossIntro(bossTemplate);
+  }
+
   if (callbacks.log) {
     callbacks.log(`⚔️ **DESAFIO DE RAID INICIADO!** Você adentrou o domínio de **${bossTemplate.name}** (${bossTemplate.title})!`, 'rarity-legendary');
     callbacks.log(`🎟️ Ingressos restantes hoje: **${state.dailyRaidTickets}/${DAILY_FREE_TICKETS}**`, 'system');
@@ -148,7 +153,8 @@ export function startRaidBoss(state, raidId, callbacks = {}) {
 
 /**
  * Executa as mecânicas em tempo real do Chefe de Raid com base na porcentagem de vida.
- * Inclui canalização de golpe fatal nos limiares 50% e 25% HP interrompível por Stagger Break.
+ * Inclui canalização de golpe fatal nos limiares 50% e 25% HP interrompível por Stagger Break,
+ * telegrafia visual no solo e ativação de Enrage abaixo de 30% HP.
  * @param {Object} state
  * @param {Object} callbacks
  */
@@ -169,13 +175,26 @@ export function processRaidBossMechanics(state, callbacks = {}) {
         m._fatalTriggered[thresh] = true;
         m.isChannelingFatal = true;
         m.fatalCastStart = now;
-        m.fatalCastUntil = now + (m.fatalSkill.duration || 5000);
+        const fatalDuration = m.fatalSkill.duration || 5000;
+        m.fatalCastUntil = now + fatalDuration;
+
+        // Runa de Telegrafia Visual no Solo (Canvas 2D)
+        if (typeof window !== 'undefined' && window.globalVFXOrchestrator?.spawnTelegraphCircle) {
+          window.globalVFXOrchestrator.spawnTelegraphCircle({
+            x: 380,
+            y: 310,
+            radius: 120,
+            duration: fatalDuration,
+            color: '#ef4444',
+            label: m.fatalSkill.name || 'CANALIZAÇÃO FATAL'
+          });
+        }
 
         if (callbacks.log) {
-          callbacks.log(`⚠️ **[CANALIZAÇÃO FATAL]** ${m.name} prepara **${m.fatalSkill.name}**! Quebre sua postura em 5s com Stagger Break!`, 'rarity-legendary');
+          callbacks.log(`⚠️ **[CANALIZAÇÃO FATAL]** ${m.name} prepara **${m.fatalSkill.name}**! Quebre sua postura em ${Math.round(fatalDuration / 1000)}s com Stagger Break!`, 'rarity-legendary');
         }
         if (callbacks.floatText) {
-          callbacks.floatText(`⚠️ CANALIZAÇÃO FATAL! (5s)`, 'sf-crit');
+          callbacks.floatText(`⚠️ CANALIZAÇÃO FATAL! (${Math.round(fatalDuration / 1000)}s)`, 'sf-crit');
         }
         break;
       }
@@ -199,6 +218,27 @@ export function processRaidBossMechanics(state, callbacks = {}) {
           callbacks.onFatalImpact(fatalDmg);
         }
       }
+    }
+  }
+
+  // 1.5 Fase de ENRAGE (< 30% HP)
+  if (hpRatio <= 0.30 && !m._isEnraged) {
+    m._isEnraged = true;
+    m.atk = Math.floor((m.atk || 100) * 1.30);
+    m.attackSpeed = (m.attackSpeed || 1.0) * 1.25;
+    if (m.attackInterval) {
+      m.attackInterval = Math.max(700, Math.floor(m.attackInterval * 0.75));
+    }
+
+    if (typeof window !== 'undefined' && window.globalVFXOrchestrator?.triggerBossEnrage) {
+      window.globalVFXOrchestrator.triggerBossEnrage({ x: 380, y: 300 });
+    }
+
+    if (callbacks.log) {
+      callbacks.log(`🔥 **[FÚRIA EXTREMA / ENRAGE]** ${m.name} entrou em estado de ENRAGE! Poder destrutivo aumentado (+30% ATK, +25% VEL)!`, 'rarity-legendary');
+    }
+    if (callbacks.floatText) {
+      callbacks.floatText('🔥 ENRAGE ATIVADO!', 'sf-crit');
     }
   }
 
@@ -247,6 +287,14 @@ export function handleRaidVictory(state, raidId, callbacks = {}) {
   state.totalRaidKills = (state.totalRaidKills || 0) + 1;
   state.isRaidActive = false;
   state.activeRaidId = null;
+
+  // Limpa telegrafias e aura de enrage
+  if (typeof window !== 'undefined' && window.globalVFXOrchestrator?.clearTelegraphs) {
+    window.globalVFXOrchestrator.clearTelegraphs();
+  }
+  if (typeof document !== 'undefined') {
+    document.querySelectorAll('.is-enraged').forEach(el => el.classList.remove('is-enraged'));
+  }
 
   const droppedItems = [];
 

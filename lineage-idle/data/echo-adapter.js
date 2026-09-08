@@ -17,6 +17,8 @@
 import "../src/data/classes/index.js";
 import { CASH_SHOP_CATALOG } from "../src/data/shop/cash_shop_catalog.js";
 import { HEIRLOOM_ITEMS } from "../src/data/items/heirloom_items.js";
+import { ALL_LOADED_SKILLS } from "../src/data/skills/index.js";
+import { CLASS_ALIASES as UNIVERSAL_CLASS_ALIASES, resolveCanonicalClassId } from "../src/data/classes/index.js";
 
 
 /** Transforma string em slug snake_case */
@@ -578,7 +580,9 @@ function buildEchoAdapter() {
     'eviscerator': 'eviscerator'
   };
 
-  for (const [alias, target] of Object.entries(CLASS_ALIASES)) {
+  const MERGED_ALIASES = { ...(UNIVERSAL_CLASS_ALIASES || {}), ...CLASS_ALIASES };
+
+  for (const [alias, target] of Object.entries(MERGED_ALIASES)) {
     if (CLASS_SKILLS_ECHO[target] && !CLASS_SKILLS_ECHO[alias]) {
       CLASS_SKILLS_ECHO[alias] = [...CLASS_SKILLS_ECHO[target]];
     }
@@ -587,23 +591,211 @@ function buildEchoAdapter() {
     }
   }
 
-  // ─── LAYOUT DA ÁRVORE DE HABILIDADES (2 Colunas Limpas e Elegantes) ───
+  // ─── INTEGRAÇÃO DAS 158 HABILIDADES OFICIAIS (25 Classes Ativas + Shared) ───
+  if (ALL_LOADED_SKILLS && ALL_LOADED_SKILLS.size > 0) {
+    for (const [skillId, s] of ALL_LOADED_SKILLS.entries()) {
+      const id = s.identity?.id || skillId;
+      const classId = s.identity?.classId;
+      const tierStr = s.identity?.tier;
+      const unlockLvl = s.identity?.unlockLevel || 40;
+
+      let tierNum = 1;
+      let reqBook = null;
+      let starRank = 1;
+      let isUlt = false;
+
+      if (tierStr === 'core_1') {
+        tierNum = 1;
+        reqBook = null;
+        starRank = 1;
+      } else if (tierStr === 'core_2') {
+        tierNum = 2;
+        reqBook = 'book_1star';
+        starRank = 1;
+      } else if (tierStr === 'specialization_1' || tierStr === 'specialization') {
+        tierNum = 2;
+        reqBook = 'book_2star';
+        starRank = 2;
+      } else if (tierStr === 'specialization_2' || tierStr === 'elemental_specialization') {
+        tierNum = 3;
+        reqBook = 'book_3star';
+        starRank = 3;
+      } else if (tierStr === 'ultimate') {
+        tierNum = 4;
+        reqBook = 'book_4star';
+        starRank = 4;
+        isUlt = true;
+      } else if (tierStr === 'master_ultimate') {
+        tierNum = 5;
+        reqBook = 'book_5star';
+        starRank = 5;
+        isUlt = true;
+      }
+
+      const rawName = s.identity?.name || id;
+      const icon = resolveSkillIcon(rawName, s, null, classId);
+      const isBuff = s.identity?.role === 'buff' || s.identity?.role === 'tank';
+      const dmgMult = s.gameplay?.damageMultiplier || 1.4;
+      const staggerDmg = s.gameplay?.staggerDamage || 25;
+      const cd = s.gameplay?.cooldown || 5000;
+      const spCost = isUlt ? (tierNum === 5 ? 150 : 100) : (tierNum >= 3 ? 60 : 30);
+
+      SKILL_DEFS_ECHO[id] = {
+        id,
+        name: rawName,
+        type: isBuff ? 'buff' : 'active',
+        tier: tierNum,
+        cost: spCost,
+        max: 5,
+        pwr: Math.round(dmgMult * 10),
+        baseCd: cd,
+        effect: isBuff ? 'warcry' : 'dmg',
+        info: s.identity?.description || rawName,
+        desc: s.identity?.description || '',
+        effectText: `Multiplicador: ${dmgMult.toFixed(1)}x | Stagger: ${staggerDmg}`,
+        icon,
+        classReq: classId,
+        reqLvl: unlockLvl,
+        requiredWeapon: s.gameplay?.requiredWeapon?.[0] || 'any',
+        requiredShield: s.gameplay?.requiredWeapon?.includes('shield') || false,
+        requiredItemToUnlock: reqBook,
+        isUltimate: isUlt,
+        starRank,
+        overhit: true
+      };
+
+      SKILL_REQS_ECHO[id] = { reqLvl: unlockLvl };
+
+      if (classId) {
+        CLASS_SKILLS_ECHO[classId] = CLASS_SKILLS_ECHO[classId] || [];
+        if (!CLASS_SKILLS_ECHO[classId].includes(id)) {
+          CLASS_SKILLS_ECHO[classId].push(id);
+        }
+
+        const canonicalTarget = MERGED_ALIASES[classId] || (typeof resolveCanonicalClassId === 'function' ? resolveCanonicalClassId(classId) : null);
+        if (canonicalTarget) {
+          CLASS_SKILLS_ECHO[canonicalTarget] = CLASS_SKILLS_ECHO[canonicalTarget] || [];
+          if (!CLASS_SKILLS_ECHO[canonicalTarget].includes(id)) {
+            CLASS_SKILLS_ECHO[canonicalTarget].push(id);
+          }
+        }
+        for (const [alias, target] of Object.entries(MERGED_ALIASES)) {
+          if (target === classId || alias === classId) {
+            CLASS_SKILLS_ECHO[alias] = CLASS_SKILLS_ECHO[alias] || [];
+            if (!CLASS_SKILLS_ECHO[alias].includes(id)) {
+              CLASS_SKILLS_ECHO[alias].push(id);
+            }
+          }
+        }
+      }
+    }
+
+    // Anti-pollution strict enforcement: each active class must contain ONLY its canonical skills
+    for (const [skillId, s] of ALL_LOADED_SKILLS.entries()) {
+      const cid = s.identity?.classId;
+      if (cid && Array.isArray(CLASS_SKILLS_ECHO[cid])) {
+        CLASS_SKILLS_ECHO[cid] = CLASS_SKILLS_ECHO[cid].filter(sid => {
+          const def = ALL_LOADED_SKILLS.get(sid);
+          return def && def.identity?.classId === cid;
+        });
+      }
+    }
+  }
+
+  // ─── LAYOUT E ORDENAÇÃO DE HABILIDADES (2 Colunas Limpas e Elegantes) ───
+  const TIER_ORDER = {
+    core_1: 0,
+    core_2: 1,
+    specialization: 2,
+    specialization_1: 2,
+    elemental_specialization: 3,
+    specialization_2: 3,
+    ultimate: 4,
+    master_ultimate: 5
+  };
+  const TIER_COORDS = {
+    core_1: { col: 0, row: 0 },
+    core_2: { col: 1, row: 0 },
+    specialization: { col: 0, row: 1 },
+    specialization_1: { col: 0, row: 1 },
+    elemental_specialization: { col: 1, row: 1 },
+    specialization_2: { col: 1, row: 1 },
+    ultimate: { col: 0, row: 2 },
+    master_ultimate: { col: 1, row: 2 }
+  };
+
   const SKILL_TREE_LAYOUT_ECHO = {};
+
+  // 1. Coordenadas fixas para as 150 skills oficiais
+  if (ALL_LOADED_SKILLS && ALL_LOADED_SKILLS.size > 0) {
+    for (const [skillId, s] of ALL_LOADED_SKILLS.entries()) {
+      const coords = TIER_COORDS[s.identity?.tier];
+      if (coords) {
+        SKILL_TREE_LAYOUT_ECHO[skillId] = { ...coords };
+      }
+    }
+  }
+
+  // 2. Mapeamento canônico estrito para as 25 classes ativas (EXATAMENTE 6 habilidades por classe)
+  const ACTIVE_CLASS_SKILLS = {};
+  if (ALL_LOADED_SKILLS && ALL_LOADED_SKILLS.size > 0) {
+    for (const [skillId, s] of ALL_LOADED_SKILLS.entries()) {
+      const classId = s.identity?.classId;
+      if (classId && classId !== 'shared') {
+        if (!ACTIVE_CLASS_SKILLS[classId]) ACTIVE_CLASS_SKILLS[classId] = [];
+        ACTIVE_CLASS_SKILLS[classId].push(skillId);
+      }
+    }
+  }
+
+  for (const [classId, skills] of Object.entries(ACTIVE_CLASS_SKILLS)) {
+    // Ordenação canônica estrita: Core 1, Core 2, Spec 1, Spec 2, Ultimate, Master Ultimate
+    skills.sort((a, b) => {
+      const sA = ALL_LOADED_SKILLS.get(a);
+      const sB = ALL_LOADED_SKILLS.get(b);
+      const orderA = sA?.identity?.tier && TIER_ORDER[sA.identity.tier] !== undefined ? TIER_ORDER[sA.identity.tier] : 99;
+      const orderB = sB?.identity?.tier && TIER_ORDER[sB.identity.tier] !== undefined ? TIER_ORDER[sB.identity.tier] : 99;
+      return orderA - orderB;
+    });
+
+    // Sobrescreve com exatamente as 6 habilidades canônicas (elimina poluição legada)
+    CLASS_SKILLS_ECHO[classId] = [...skills];
+    const canonicalTarget = MERGED_ALIASES[classId] || (typeof resolveCanonicalClassId === 'function' ? resolveCanonicalClassId(classId) : null);
+    if (canonicalTarget && !ACTIVE_CLASS_SKILLS[canonicalTarget]) {
+      CLASS_SKILLS_ECHO[canonicalTarget] = [...skills];
+    }
+    for (const [alias, target] of Object.entries(MERGED_ALIASES)) {
+      // Nunca sobrescrever outra classe ativa distinta
+      if (ACTIVE_CLASS_SKILLS[alias] && alias !== classId) continue;
+
+      if (target === classId || alias === classId) {
+        CLASS_SKILLS_ECHO[alias] = [...skills];
+      }
+    }
+  }
+
+  // 3. Monta layouts para todas as classes
   for (const [classId, skillIds] of Object.entries(CLASS_SKILLS_ECHO)) {
     const layout = {};
     skillIds.forEach((sid, idx) => {
-      const col = idx % 2;
-      const row = Math.floor(idx / 2);
-      layout[sid] = { col, row };
-      if (!SKILL_TREE_LAYOUT_ECHO[sid]) {
-        SKILL_TREE_LAYOUT_ECHO[sid] = { col, row };
+      const explicit = SKILL_TREE_LAYOUT_ECHO[sid];
+      if (explicit) {
+        layout[sid] = explicit;
+      } else {
+        const col = idx % 2;
+        const row = Math.floor(idx / 2) + 3;
+        layout[sid] = { col, row };
+        if (!SKILL_TREE_LAYOUT_ECHO[sid]) {
+          SKILL_TREE_LAYOUT_ECHO[sid] = { col, row };
+        }
       }
     });
 
     SKILL_TREE_LAYOUT_ECHO[classId] = layout;
   }
 
-  for (const [alias, target] of Object.entries(CLASS_ALIASES)) {
+  // 4. Propaga layouts para todos os aliases
+  for (const [alias, target] of Object.entries(MERGED_ALIASES)) {
     if (SKILL_TREE_LAYOUT_ECHO[target] && !SKILL_TREE_LAYOUT_ECHO[alias]) {
       SKILL_TREE_LAYOUT_ECHO[alias] = SKILL_TREE_LAYOUT_ECHO[target];
     }

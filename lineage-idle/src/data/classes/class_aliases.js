@@ -319,9 +319,22 @@ export const CLASS_ALIASES = {
 };
 
 const RACE_PREFIXES = [
-  'human_', 'darkelf_', 'dark_elf_', 'elf_', 'orc_', 'dwarf_', 'kamael_', 'sylph_', 'highelf_', 'high_elf_', 'ertheia_',
-  'human', 'darkelf', 'elf', 'orc', 'dwarf', 'kamael', 'sylph', 'highelf', 'ertheia'
+  'human_', 'darkelf_', 'dark_elf_', 'elf_', 'elven_', 'orc_', 'dwarf_', 'kamael_', 'sylph_', 'highelf_', 'high_elf_', 'ertheia_',
+  'human', 'darkelf', 'elf', 'elven', 'orc', 'dwarf', 'kamael', 'sylph', 'highelf', 'ertheia'
 ];
+
+const EXTENDED_FALLBACKS = {
+  'elvenmage': 'elfMage',
+  'elven_mage': 'elfMage',
+  'elvenwizard': 'elfMage',
+  'elven_wizard': 'elfMage',
+  'elvenfighter': 'elfFighter',
+  'elven_fighter': 'elfFighter',
+  'elfdeathknight': 'deathPilgrim',
+  'elf_death_knight': 'deathPilgrim',
+  'elvendeathknight': 'deathPilgrim',
+  'elven_death_knight': 'deathPilgrim'
+};
 
 /**
  * Resolve o ID canônico de uma classe através do mapa de aliases de forma extremamente resiliente.
@@ -333,14 +346,17 @@ export function resolveCanonicalClassId(classId) {
   
   // 1. Verificação direta
   if (CLASS_ALIASES[classId]) return CLASS_ALIASES[classId];
+  if (EXTENDED_FALLBACKS[classId]) return EXTENDED_FALLBACKS[classId];
 
   // 2. Normalização em minúsculas
   const lower = String(classId).toLowerCase().trim();
   if (CLASS_ALIASES[lower]) return CLASS_ALIASES[lower];
+  if (EXTENDED_FALLBACKS[lower]) return EXTENDED_FALLBACKS[lower];
 
   // 3. Normalização removendo separadores (underscores, hífens, espaços)
   const cleaned = lower.replace(/[-_\s]+/g, '');
   if (CLASS_ALIASES[cleaned]) return CLASS_ALIASES[cleaned];
+  if (EXTENDED_FALLBACKS[cleaned]) return EXTENDED_FALLBACKS[cleaned];
 
   // 4. Remoção inteligente de prefixos de raça
   for (const prefix of RACE_PREFIXES) {

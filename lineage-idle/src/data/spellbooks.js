@@ -55,6 +55,20 @@ export const SPELLBOOK_ITEMS = {
     desc: 'Tomo dos Deuses Antigos de Einhasad e Gran Kain. Necessário para habilidades supremas da 3ª e 4ª Classe.',
     price: 1000000,
     stackable: true
+  },
+  book_5star: {
+    id: 'book_5star',
+    name: 'Tomo Sagrado: 5★ (Transcendente Primordial)',
+    slot: 'consumable',
+    category: 'spellbook',
+    grade: 'S',
+    stars: 5,
+    level: 90,
+    req: { level: 90 },
+    icon: 'spellbooks/spellbook_4star.png',
+    desc: 'Tomo supremo de poder primordial e cósmico. Necessário para despertar a Master Ultimate (Lv90).',
+    price: 5000000,
+    stackable: true
   }
 };
 

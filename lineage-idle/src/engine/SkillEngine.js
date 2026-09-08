@@ -78,8 +78,8 @@ export function spendSP(state, skillId, callbacks = {}) {
     return false;
   }
 
-  // Requisito de livro de habilidade (Spellbooks 1★ a 4★) para habilidades de Lv. 40+ no primeiro nível (lvl === 0)
-  const reqBookId = def.requiredItemToUnlock || (def.starRank === 4 ? 'book_4star' : null);
+  // Requisito de livro de habilidade (Spellbooks 1★ a 5★) para habilidades de Lv. 40+ no primeiro nível (lvl === 0)
+  const reqBookId = def.requiredItemToUnlock || (def.starRank === 5 ? 'book_5star' : (def.starRank === 4 ? 'book_4star' : null));
   if (reqBookId && lvl === 0) {
     const bookItem = state.inventory?.find(i => (i.itemId === reqBookId || (reqBookId === 'book_4star' && i.itemId === 'spellbook_4star')) && (i.count || 1) > 0);
     if (!bookItem) {
@@ -87,7 +87,8 @@ export function spendSP(state, skillId, callbacks = {}) {
         'book_1star': 'Tomo Sagrado: 1★ (Comum)',
         'book_2star': 'Tomo Sagrado: 2★ (Raro)',
         'book_3star': 'Tomo Sagrado: 3★ (Épico)',
-        'book_4star': 'Tomo Sagrado: 4★ (Lendário Divino)'
+        'book_4star': 'Tomo Sagrado: 4★ (Lendário Divino)',
+        'book_5star': 'Tomo Sagrado: 5★ (Transcendente Primordial)'
       };
       const bName = bookNames[reqBookId] || reqBookId;
       if (callbacks.log) callbacks.log(`🔒 Exige o **${bName}** na mochila para desbloquear esta habilidade! (Encontre em caçadas/instâncias ou compre no Mercado Global)`, 'warning');

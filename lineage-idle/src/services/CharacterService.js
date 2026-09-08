@@ -20,15 +20,20 @@ import { resolveCanonicalClassId } from '../data/classes/class_aliases.js';
 export function classSatisfies(playerClass, reqClass) {
   if (!reqClass) return true;
   if (!playerClass) return false;
+  const canonReq = (typeof resolveCanonicalClassId === 'function' ? resolveCanonicalClassId(reqClass) : null) || reqClass;
+  const canonPlayer = (typeof resolveCanonicalClassId === 'function' ? resolveCanonicalClassId(playerClass) : null) || playerClass;
+  if (canonReq === canonPlayer || reqClass === playerClass) return true;
+
   let current = playerClass;
   const visited = new Set();
   while (current && !visited.has(current)) {
     visited.add(current);
-    if (current === reqClass) return true;
-    const def = getClass(current);
+    const canonCurrent = (typeof resolveCanonicalClassId === 'function' ? resolveCanonicalClassId(current) : null) || current;
+    if (current === reqClass || canonCurrent === canonReq) return true;
+    const def = getClass(current) || getClass(canonCurrent);
     if (!def) break;
-    if (def.archetype === reqClass) return true;
-    if (def.skillTree === reqClass) return true;
+    if (def.archetype === reqClass || def.archetype === canonReq) return true;
+    if (def.skillTree === reqClass || def.skillTree === canonReq) return true;
     current = def.parent;
   }
   return false;

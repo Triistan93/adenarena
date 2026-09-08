@@ -12,6 +12,26 @@ import { getStats } from './StatsEngine.js';
 import { rollChampionMonster } from './BalanceEngine.js';
 import { StaggerEngine } from './StaggerEngine.js';
 import { MonsterAIEngine, ARCHETYPE_INFO, HUNTING_DIFFICULTIES } from './MonsterAIEngine.js';
+import { combatEvents, CombatEventType, CombatEventFactory } from '../vfx/CombatEvent.js';
+
+export { combatEvents, CombatEventType, CombatEventFactory };
+
+/**
+ * Dispatches a combat event both to callbacks and the decoupled combatEvents bus.
+ * @param {string} type 
+ * @param {Object} payload 
+ * @param {Object} [callbacks]
+ */
+export function dispatchCombatEvent(type, payload = {}, callbacks = {}) {
+  combatEvents.emit(type, payload);
+  if (typeof callbacks.onCombatEvent === 'function') {
+    try {
+      callbacks.onCombatEvent(type, payload);
+    } catch (err) {
+      console.error('[CombatEngine] Error in onCombatEvent callback:', err);
+    }
+  }
+}
 
 let combatInterval = null;
 let monsterAttackTimeout = null;

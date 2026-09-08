@@ -1,0 +1,420 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AdenArenaSkillDefinition",
+  "description": "Standard schema for all skills in Aden Arena Idle 2D Combat Presentation System",
+  "type": "object",
+  "required": [
+    "identity",
+    "gameplay",
+    "hitbox",
+    "timeline",
+    "game_feel",
+    "lighting",
+    "hud",
+    "performance",
+    "signature"
+  ],
+  "properties": {
+    "identity": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "classId",
+        "race",
+        "tier",
+        "unlockLevel",
+        "element",
+        "role",
+        "tags",
+        "description"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9_]+$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 2
+        },
+        "classId": {
+          "type": "string"
+        },
+        "race": {
+          "type": "string",
+          "enum": [
+            "human",
+            "elf",
+            "dark_elf",
+            "orc",
+            "dwarf",
+            "kamael",
+            "ertheia",
+            "high_elf",
+            "sylph",
+            "death_knight",
+            "all"
+          ]
+        },
+        "tier": {
+          "type": "string",
+          "enum": [
+            "core_1",
+            "core_2",
+            "specialization",
+            "elemental_specialization",
+            "ultimate",
+            "master_ultimate",
+            "shared"
+          ]
+        },
+        "unlockLevel": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 120
+        },
+        "element": {
+          "type": "string",
+          "enum": [
+            "Physical",
+            "Fire",
+            "Magma",
+            "Water",
+            "Ice",
+            "Wind",
+            "Lightning",
+            "Earth",
+            "Metal",
+            "Crystal",
+            "Holy",
+            "Light",
+            "Dark",
+            "Poison",
+            "Blood",
+            "Neutral"
+          ]
+        },
+        "role": {
+          "type": "string",
+          "enum": [
+            "damage",
+            "burst",
+            "tank",
+            "debuff",
+            "control",
+            "finisher",
+            "area",
+            "heal",
+            "buff",
+            "mobility",
+            "summon"
+          ]
+        },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "gameplay": {
+      "type": "object",
+      "required": [
+        "castTime",
+        "cooldown",
+        "mpCost",
+        "damageMultiplier",
+        "hitCount",
+        "staggerDamage",
+        "critModifier",
+        "targetType",
+        "range",
+        "requiredWeapon"
+      ],
+      "properties": {
+        "castTime": { "type": "number", "minimum": 0 },
+        "cooldown": { "type": "number", "minimum": 0 },
+        "mpCost": { "type": "number", "minimum": 0 },
+        "damageMultiplier": { "type": "number", "minimum": 0 },
+        "hitCount": { "type": "integer", "minimum": 1, "maximum": 20 },
+        "staggerDamage": { "type": "number", "minimum": 0 },
+        "critModifier": { "type": "number" },
+        "targetType": {
+          "type": "string",
+          "enum": ["single", "aoe_circle", "aoe_line", "aoe_cone", "self", "all_enemies"]
+        },
+        "range": { "type": "number", "minimum": 0 },
+        "requiredWeapon": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "statusEffects": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["effect", "chance", "duration"],
+            "properties": {
+              "effect": { "type": "string" },
+              "chance": { "type": "number", "minimum": 0, "maximum": 1 },
+              "duration": { "type": "number", "minimum": 0 },
+              "value": { "type": ["number", "string", "object"] }
+            }
+          }
+        }
+      }
+    },
+    "hitbox": {
+      "type": "object",
+      "required": ["type", "offset"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["point", "circle", "box", "line", "cone", "screen"]
+        },
+        "radius": { "type": "number" },
+        "width": { "type": "number" },
+        "height": { "type": "number" },
+        "length": { "type": "number" },
+        "angle": { "type": "number" },
+        "offset": {
+          "type": "object",
+          "required": ["x", "y"],
+          "properties": {
+            "x": { "type": "number" },
+            "y": { "type": "number" }
+          }
+        }
+      }
+    },
+    "timeline": {
+      "type": "object",
+      "required": ["totalDuration", "phases"],
+      "properties": {
+        "totalDuration": { "type": "number", "minimum": 50 },
+        "phases": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["name", "start", "duration", "actions"],
+            "properties": {
+              "name": { "type": "string" },
+              "start": { "type": "number", "minimum": 0 },
+              "duration": { "type": "number", "minimum": 0 },
+              "actions": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["time", "type", "params"],
+                  "properties": {
+                    "time": { "type": "number", "minimum": 0 },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "animation",
+                        "vfx",
+                        "sfx",
+                        "hitbox_activate",
+                        "camera_fx",
+                        "shake",
+                        "lighting",
+                        "shader",
+                        "status_apply",
+                        "projectile_spawn",
+                        "screen_overlay"
+                      ]
+                    },
+                    "params": { "type": "object" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "game_feel": {
+      "type": "object",
+      "required": ["hitStop", "cameraShake"],
+      "properties": {
+        "hitStop": {
+          "type": "object",
+          "required": ["duration", "timeScale"],
+          "properties": {
+            "duration": { "type": "number", "minimum": 0 },
+            "timeScale": { "type": "number", "minimum": 0, "maximum": 1 },
+            "target": { "type": "string" }
+          }
+        },
+        "cameraShake": {
+          "type": "object",
+          "required": ["intensity", "decay", "duration"],
+          "properties": {
+            "intensity": { "type": "number", "minimum": 0 },
+            "decay": { "type": "number", "minimum": 0 },
+            "duration": { "type": "number", "minimum": 0 },
+            "direction": { "type": "string" }
+          }
+        },
+        "cameraZoom": {
+          "type": "object",
+          "properties": {
+            "factor": { "type": "number" },
+            "duration": { "type": "number" },
+            "ease": { "type": "string" }
+          }
+        },
+        "slowMo": {
+          "type": "object",
+          "properties": {
+            "scale": { "type": "number" },
+            "duration": { "type": "number" }
+          }
+        },
+        "screenFlash": {
+          "type": "object",
+          "properties": {
+            "color": { "type": "string" },
+            "duration": { "type": "number" },
+            "opacity": { "type": "number" }
+          }
+        },
+        "rumble": {
+          "type": "object",
+          "properties": {
+            "weak": { "type": "number" },
+            "strong": { "type": "number" },
+            "duration": { "type": "number" }
+          }
+        }
+      }
+    },
+    "lighting": {
+      "type": "object",
+      "required": ["castGlow", "impactFlash"],
+      "properties": {
+        "ambientDim": {
+          "type": "object",
+          "properties": {
+            "targetColor": { "type": "string" },
+            "duration": { "type": "number" },
+            "restoreDuration": { "type": "number" }
+          }
+        },
+        "castGlow": {
+          "type": "object",
+          "required": ["color", "radius", "intensity"],
+          "properties": {
+            "color": { "type": "string" },
+            "radius": { "type": "number" },
+            "intensity": { "type": "number" }
+          }
+        },
+        "impactFlash": {
+          "type": "object",
+          "required": ["color", "radius", "intensity"],
+          "properties": {
+            "color": { "type": "string" },
+            "radius": { "type": "number" },
+            "intensity": { "type": "number" }
+          }
+        },
+        "shadows": {
+          "type": "object",
+          "properties": {
+            "dynamic": { "type": "boolean" },
+            "casterShadow": { "type": "boolean" }
+          }
+        }
+      }
+    },
+    "hud": {
+      "type": "object",
+      "required": ["damageNumbers"],
+      "properties": {
+        "damageNumbers": {
+          "type": "object",
+          "required": ["style", "scale", "animation", "color"],
+          "properties": {
+            "style": { "type": "string" },
+            "scale": { "type": "number" },
+            "animation": { "type": "string" },
+            "color": { "type": "string" }
+          }
+        },
+        "statusIcons": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "screenOverlay": {
+          "type": "object",
+          "properties": {
+            "type": { "type": "string" },
+            "asset": { "type": "string" },
+            "duration": { "type": "number" }
+          }
+        },
+        "announcement": {
+          "type": "object",
+          "properties": {
+            "text": { "type": "string" },
+            "style": { "type": "string" },
+            "banner": { "type": "boolean" }
+          }
+        }
+      }
+    },
+    "performance": {
+      "type": "object",
+      "required": [
+        "particleBudget",
+        "drawCalls",
+        "layerPriority",
+        "poolKey",
+        "allowConcurrent"
+      ],
+      "properties": {
+        "particleBudget": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 250
+        },
+        "drawCalls": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 12
+        },
+        "layerPriority": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "poolKey": {
+          "type": "string"
+        },
+        "allowConcurrent": {
+          "type": "boolean"
+        }
+      }
+    },
+    "signature": {
+      "type": "object",
+      "required": [
+        "author",
+        "version",
+        "uniqueVfxSignature"
+      ],
+      "properties": {
+        "author": { "type": "string" },
+        "version": { "type": "string" },
+        "uniqueVfxSignature": {
+          "type": "string",
+          "minLength": 8
+        }
+      }
+    }
+  }
+}

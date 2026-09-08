@@ -1,0 +1,964 @@
+{
+  "schemaVersion": "1.0.0",
+  "gameVersion": "3.2.0",
+  "totalClasses": 25,
+  "totalSkills": 150,
+  "races": [
+    "human",
+    "elf",
+    "dark_elf",
+    "orc",
+    "dwarf",
+    "kamael",
+    "ertheia",
+    "high_elf"
+  ],
+  "sharedSkillsFile": "lineage-idle/src/data/skills/shared/general-skills.json",
+  "classes": [
+    {
+      "classId": "human_fighter",
+      "race": "human",
+      "primaryRole": "burst_damage",
+      "allowedElements": {
+        "1": [
+          "Physical"
+        ],
+        "40": [
+          "Physical"
+        ],
+        "76": [
+          "Physical"
+        ],
+        "80": [
+          "Physical"
+        ],
+        "90": [
+          "Physical"
+        ]
+      },
+      "filePath": "lineage-idle/src/data/skills/human/human_fighter.json",
+      "skillsCount": 6,
+      "skills": [
+        "shield_bash",
+        "cleave_strike",
+        "iron_stance",
+        "concussive_stun",
+        "titanbreaker",
+        "master_titanbreaker"
+      ],
+      "ultimateSkill": "titanbreaker",
+      "masterUltimateSkill": "master_titanbreaker"
+    },
+    {
+      "classId": "human_sorcerer",
+      "race": "human",
+      "primaryRole": "burst_damage",
+      "allowedElements": {
+        "1": [
+          "*magic*"
+        ],
+        "40": [
+          "Fire"
+        ],
+        "76": [
+          "Fire",
+          "Magma"
+        ],
+        "80": [
+          "Fire",
+          "Magma"
+        ],
+        "90": [
+          "Fire",
+          "Magma"
+        ]
+      },
+      "filePath": "lineage-idle/src/data/skills/human/human_sorcerer.json",
+      "skillsCount": 6,
+      "skills": [
+        "fireball",
+        "magma_spike",
+        "holy_bolt",
+        "flame_nova",
+        "meteor",
+        "master_meteor"
+      ],
+      "ultimateSkill": "meteor",
+      "masterUltimateSkill": "master_meteor"
+    },
+    {
+      "classId": "human_death_knight",
+      "race": "human",
+      "primaryRole": "finisher",
+      "allowedElements": {
+        "1": [
+          "Physical",
+          "Dark"
+        ],
+        "40": [
+          "Fire",
+          "Dark"
+        ],
+        "76": [
+          "Fire",
+          "Dark"
+        ],
+        "80": [
+          "Fire",
+          "Dark"
+        ],
+        "90": [
+          "Fire",
+          "Dark"
+        ]
+      },
+      "filePath": "lineage-idle/src/data/skills/human/human_death_knight.json",
+      "skillsCount": 6,
+      "skills": [
+        "cinderblade",
+        "hellfire_grasp",
+        "ashen_shroud",
+        "infernal_judgment",
+        "infernal_apocalypse",
+        "master_infernal_apocalypse"
+      ],
+      "ultimateSkill": "infernal_apocalypse",
+      "masterUltimateSkill": "master_infernal_apocalypse"
+    },
+    {
+      "classId": "human_warg",
+      "race": "human",
+      "primaryRole": "mobility",
+      "allowedElements": {
+        "1": [
+          "Physical"
+        ],
+        "40": [
+          "Physical"
+        ],
+        "76": [
+          "Physical"
+        ],
+        "80": [
+          "Physical"
+        ],
+        "90": [
+          "Physical"
+        ]
+      },
+      "filePath": "lineage-idle/src/data/skills/human/human_warg.json",
+      "skillsCount": 6,
+      "skills": [
+        "savage_bite",
+        "pack_howl",
+        "feral_pounce",
+        "beast_form",
+        "primal_overrun",
+        "master_primal_overrun"
+      ],
+      "ultimateSkill": "primal_overrun",
+      "masterUltimateSkill": "master_primal_overrun"
+    },
+    {
+      "classId": "human_assassin",
+      "race": "human",
+      "primaryRole": "finisher",
+      "allowedElements": {
+        "1": [
+          "Physical"
+        ],
+        "40": [
+          "Dark",
+          "Physical"
+        ],
+        "76": [
+          "Dark",
+          "Physical"
+        ],
+        "80": [
+          "Dark",
+          "Physical"
+        ],
+        "90": [
+          "Dark",
+          "Physical"
+        ]
+      },
+      "filePath": "lineage-idle/src/data/skills/human/human_assassin.json",
+      "skillsCount": 6,
+      "skills": [
+        "shadow_clone",
+        "gloom_strike",
+        "veil_step",
+        "night_execution",
+        "nightfall_execution",
+        "master_nightfall_execution"
+      ],
+      "ultimateSkill": "nightfall_execution",
+      "masterUltimateSkill": "master_nightfall_execution"
+    },
+    {
+      "classId": "elf_fighter",
+      "race": "elf",
+      "primaryRole": "mobility",
+      "allowedElements": {
+        "1": [
+          "Physical"
+        ],
+        "40": [
+          "Water",
+          "Physical"
+        ],
+        "76": [
+          "Water",
+          "Ice",
+          "Physical"
+        ],
+        "80": [
+          "Water",
+          "Ice",
+          "Physical"
+        ],
+        "90": [
+          "Water",
+          "Ice",
+          "Physical"
+        ]
+      },
+      "filePath": "lineage-idle/src/data/skills/elf/elf_fighter.json",
+      "skillsCount": 6,
+      "skills": [
+        "aqua_arrow",
+        "tide_step",
+        "mist_guard",
+        "riptide_volley",
+        "tidal_ascension",
+        "master_tidal_ascension"
+      ],
+      "ultimateSkill": "tidal_ascension",
+      "masterUltimateSkill": "master_tidal_ascension"
+    },
+    {
+      "classId": "elf_mage",
+      "race": "elf",
+      "primaryRole": "aoe_damage",
+      "allowedElements": {
+        "1": [
+          "*magic*"
+        ],
+        "40": [
+          "Water"
+        ],
+        "76": [
+          "Water",
+          "Ice"
+        ],
+        "80": [
+          "Water",
+          "Ice"
+        ],
+        "90": [
+          "Water",
+          "Ice"
+        ]
+      },
+      "filePath": "lineage-idle/src/data/skills/elf/elf_mage.json",
+      "skillsCount": 6,
+      "skills": [
+        "hydro_blast",
+        "blizzard",
+        "healing_wave",
+        "tidal_surge",
+        "glacial_cataclysm",
+        "master_glacial_cataclysm"
+      ],
+      "ultimateSkill": "glacial_cataclysm",
+      "masterUltimateSkill": "master_glacial_cataclysm"
+    },
+    {
+      "classId": "elf_death_knight",
+      "race": "elf",
+      "primaryRole": "finisher",
+      "allowedElements": {
+        "1": [
+          "Physical",
+          "Dark"
+        ],
+        "40": [
+          "Ice",
+          "Dark"
+        ],
+        "76": [
+          "Ice",
+          "Dark"
+        ],
+        "80": [
+          "Ice",
+          "Dark"
+        ],
+        "90": [
+          "Ice",
+          "Dark"
+        ]
+      },
+      "filePath": "lineage-idle/src/data/skills/elf/elf_death_knight.json",
+      "skillsCount": 6,
+      "skills": [
+        "frost_edge",
+        "shattering_gaze",
+        "cursed_frost_veil",
+        "glacial_judgment",
+        "frostmourne_judgment",
+        "master_frostmourne_judgment"
+      ],
+      "ultimateSkill": "frostmourne_judgment",
+      "masterUltimateSkill": "master_frostmourne_judgment"
+    },
+    {
+      "classId": "dark_elf_fighter",
+      "race": "dark_elf",
+      "primaryRole": "dot",
+      "allowedElements": {
+        "1": [
+          "Physical"
+        ],
+        "40": [
+          "Dark",
+          "Poison"
+        ],
+        "76": [
+          "Dark",
+          "Poison"
+        ],
+        "80": [
+          "Dark",
+          "Poison"
+        ],
+        "90": [
+          "Dark",
+          "Poison"
+        ]
+      },
+      "filePath": "lineage-idle/src/data/skills/dark_elf/dark_elf_fighter.json",
+      "skillsCount": 6,
+      "skills": [
+        "venom_edge",
+        "life_siphon",
+        "umbral_dash",
+        "crippling_slash",
+        "abyssal_rupture",
+        "master_abyssal_rupture"
+      ],
+      "ultimateSkill": "abyssal_rupture",
+      "masterUltimateSkill": "master_abyssal_rupture"
+    },
+    {
+      "classId": "dark_elf_mage",
+      "race": "dark_elf",
+      "primaryRole": "aoe_damage",
+      "allowedElements": {
+        "1": [
+          "*magic*"
+        ],
+        "40": [
+          "Wind",
+          "Dark"
+        ],
+        "76": [
+          "Wind",
+          "Lightning",
+          "Dark"
+        ],
+        "80": [
+          "Wind",
+          "Lightning",
+          "Dark"
+        ],
+        "90": [
+          "Wind",
+          "Lightning",
+          "Dark"
+        ]
+      },
+      "filePath": "lineage-idle/src/data/skills/dark_elf/dark_elf_mage.json",
+      "skillsCount": 6,
+      "skills": [
+        "hurricane",
+        "chain_lightning",
+        "curse_of_shadow",
+        "gale_slash",
+        "tempest_of_the_abyss",
+        "master_tempest_of_the_abyss"
+      ],
+      "ultimateSkill": "tempest_of_the_abyss",
+      "masterUltimateSkill": "master_tempest_of_the_abyss"
+    },
+    {
+      "classId": "dark_elf_death_knight",
+      "race": "dark_elf",
+      "primaryRole": "burst_damage",
+      "allowedElements": {
+        "1": [
+          "Physical",
+          "Dark"
+        ],
+        "40": [
+          "Lightning",
+          "Dark"
+        ],
+        "76": [
+          "Lightning",
+          "Dark"
+        ],
+        "80": [
+          "Lightning",
+          "Dark"
+        ],
+        "90": [
+          "Lightning",
+          "Dark"
+        ]
+      },
+      "filePath": "lineage-idle/src/data/skills/dark_elf/dark_elf_death_knight.json",
+      "skillsCount": 6,
+      "skills": [
+        "voltaic_edge",
+        "storm_judgment",
+        "thunder_veil",
+        "shocking_grasp",
+        "voltaic_requiem",
+        "master_voltaic_requiem"
+      ],
+      "ultimateSkill": "voltaic_requiem",
+      "masterUltimateSkill": "master_voltaic_requiem"
+    },
+    {
+      "classId": "dark_elf_assassin",
+      "race": "dark_elf",
+      "primaryRole": "dot",
+      "allowedElements": {
+        "1": [
+          "Physical"
+        ],
+        "40": [
+          "Dark",
+          "Poison"
+        ],
+        "76": [
+          "Dark",
+          "Poison"
+        ],
+        "80": [
+          "Dark",
+          "Poison"
+        ],
+        "90": [
+          "Dark",
+          "Poison"
+        ]
+      },
+      "filePath": "lineage-idle/src/data/skills/dark_elf/dark_elf_assassin.json",
+      "skillsCount": 6,
+      "skills": [
+        "toxic_flurry",
+        "venom_fang",
+        "shadow_toxin",
+        "lethal_dose",
+        "venomous_eclipse",
+        "master_venomous_eclipse"
+      ],
+      "ultimateSkill": "venomous_eclipse",
+      "masterUltimateSkill": "master_venomous_eclipse"
+    },
+    {
+      "classId": "dark_elf_blood_rose",
+      "race": "dark_elf",
+      "primaryRole": "debuff_hex",
+      "allowedElements": {
+        "1": [
+          "Dark"
+        ],
+        "40": [
+          "Dark",
+          "Blood"
+        ],
+        "76": [
+          "Dark",
+          "Blood"
+        ],
+        "80": [
+          "Dark",
+          "Blood"
+        ],
+        "90": [
+          "Dark",
+          "Blood"
+        ]
+      },
+      "filePath": "lineage-idle/src/data/skills/dark_elf/dark_elf_blood_rose.json",
+      "skillsCount": 6,
+      "skills": [
+        "thorned_hex",
+        "crimson_drain",
+        "wilting_touch",
+        "rose_requiem",
+        "crimson_requiem",
+        "master_crimson_requiem"
+      ],
+      "ultimateSkill": "crimson_requiem",
+      "masterUltimateSkill": "master_crimson_requiem"
+    },
+    {
+      "classId": "orc_fighter",
+      "race": "orc",
+      "primaryRole": "finisher",
+      "allowedElements": {
+        "1": [
+          "Physical"
+        ],
+        "40": [
+          "Physical",
+          "Fire"
+        ],
+        "76": [
+          "Physical",
+          "Fire"
+        ],
+        "80": [
+          "Physical",
+          "Fire"
+        ],
+        "90": [
+          "Physical",
+          "Fire"
+        ]
+      },
+      "filePath": "lineage-idle/src/data/skills/orc/orc_fighter.json",
+      "skillsCount": 6,
+      "skills": [
+        "totem_rage",
+        "brutal_cleave",
+        "war_stomp",
+        "blood_frenzy",
+        "worldbreaker_roar",
+        "master_worldbreaker_roar"
+      ],
+      "ultimateSkill": "worldbreaker_roar",
+      "masterUltimateSkill": "master_worldbreaker_roar"
+    },
+    {
+      "classId": "orc_shaman",
+      "race": "orc",
+      "primaryRole": "buff_support",
+      "allowedElements": {
+        "1": [
+          "*magic*"
+        ],
+        "40": [
+          "Fire"
+        ],
+        "76": [
+          "Fire"
+        ],
+        "80": [
+          "Fire"
+        ],
+        "90": [
+          "Fire"
+        ]
+      },
+      "filePath": "lineage-idle/src/data/skills/orc/orc_shaman.json",
+      "skillsCount": 6,
+      "skills": [
+        "flame_totem",
+        "war_chant",
+        "ember_bolt",
+        "scorching_ground",
+        "apocalypse_totem",
+        "master_apocalypse_totem"
+      ],
+      "ultimateSkill": "apocalypse_totem",
+      "masterUltimateSkill": "master_apocalypse_totem"
+    },
+    {
+      "classId": "orc_vanguard_rider",
+      "race": "orc",
+      "primaryRole": "mobility",
+      "allowedElements": {
+        "1": [
+          "Physical"
+        ],
+        "40": [
+          "Physical",
+          "Fire"
+        ],
+        "76": [
+          "Physical",
+          "Fire"
+        ],
+        "80": [
+          "Physical",
+          "Fire"
+        ],
+        "90": [
+          "Physical",
+          "Fire"
+        ]
+      },
+      "filePath": "lineage-idle/src/data/skills/orc/orc_vanguard_rider.json",
+      "skillsCount": 6,
+      "skills": [
+        "flaming_charge",
+        "spear_of_embers",
+        "trample",
+        "wildfire_lance",
+        "inferno_charge",
+        "master_inferno_charge"
+      ],
+      "ultimateSkill": "inferno_charge",
+      "masterUltimateSkill": "master_inferno_charge"
+    },
+    {
+      "classId": "dwarf_artisan",
+      "race": "dwarf",
+      "primaryRole": "utility",
+      "allowedElements": {
+        "1": [
+          "Physical"
+        ],
+        "40": [
+          "Earth",
+          "Physical"
+        ],
+        "76": [
+          "Earth",
+          "Metal",
+          "Physical"
+        ],
+        "80": [
+          "Earth",
+          "Metal",
+          "Physical"
+        ],
+        "90": [
+          "Earth",
+          "Metal",
+          "Physical"
+        ]
+      },
+      "filePath": "lineage-idle/src/data/skills/dwarf/dwarf_artisan.json",
+      "skillsCount": 6,
+      "skills": [
+        "hammer_slam",
+        "construct_summon",
+        "reinforced_plating",
+        "seismic_stun",
+        "forge_colossus",
+        "master_forge_colossus"
+      ],
+      "ultimateSkill": "forge_colossus",
+      "masterUltimateSkill": "master_forge_colossus"
+    },
+    {
+      "classId": "dwarf_mage",
+      "race": "dwarf",
+      "primaryRole": "aoe_damage",
+      "allowedElements": {
+        "1": [
+          "Earth"
+        ],
+        "40": [
+          "Earth",
+          "Metal"
+        ],
+        "76": [
+          "Earth",
+          "Metal",
+          "Crystal"
+        ],
+        "80": [
+          "Earth",
+          "Metal",
+          "Crystal"
+        ],
+        "90": [
+          "Earth",
+          "Metal",
+          "Crystal"
+        ]
+      },
+      "filePath": "lineage-idle/src/data/skills/dwarf/dwarf_mage.json",
+      "skillsCount": 6,
+      "skills": [
+        "terremoto",
+        "rochedo",
+        "golem_de_metal",
+        "garra_metalica",
+        "earthforge_cataclysm",
+        "master_earthforge_cataclysm"
+      ],
+      "ultimateSkill": "earthforge_cataclysm",
+      "masterUltimateSkill": "master_earthforge_cataclysm"
+    },
+    {
+      "classId": "dwarf_shinemaker",
+      "race": "dwarf",
+      "primaryRole": "buff_support",
+      "allowedElements": {
+        "1": [
+          "Physical"
+        ],
+        "40": [
+          "Holy"
+        ],
+        "76": [
+          "Holy"
+        ],
+        "80": [
+          "Holy"
+        ],
+        "90": [
+          "Holy"
+        ]
+      },
+      "filePath": "lineage-idle/src/data/skills/dwarf/dwarf_shinemaker.json",
+      "skillsCount": 6,
+      "skills": [
+        "radiant_hammer",
+        "guiding_light",
+        "celestial_forge",
+        "sunfall_smash",
+        "divine_forge",
+        "master_divine_forge"
+      ],
+      "ultimateSkill": "divine_forge",
+      "masterUltimateSkill": "master_divine_forge"
+    },
+    {
+      "classId": "kamael_soulbreaker",
+      "race": "kamael",
+      "primaryRole": "sustain_heal",
+      "allowedElements": {
+        "1": [
+          "Physical"
+        ],
+        "40": [
+          "Dark",
+          "Physical"
+        ],
+        "76": [
+          "Dark",
+          "Physical"
+        ],
+        "80": [
+          "Dark",
+          "Physical"
+        ],
+        "90": [
+          "Dark",
+          "Physical"
+        ]
+      },
+      "filePath": "lineage-idle/src/data/skills/kamael/kamael_soulbreaker.json",
+      "skillsCount": 6,
+      "skills": [
+        "soul_rend",
+        "abyssal_pierce",
+        "essence_drain",
+        "shadowmark",
+        "soul_devastation",
+        "master_soul_devastation"
+      ],
+      "ultimateSkill": "soul_devastation",
+      "masterUltimateSkill": "master_soul_devastation"
+    },
+    {
+      "classId": "kamael_samurai",
+      "race": "kamael",
+      "primaryRole": "burst_damage",
+      "allowedElements": {
+        "1": [
+          "Physical"
+        ],
+        "40": [
+          "Physical",
+          "Wind"
+        ],
+        "76": [
+          "Physical",
+          "Wind"
+        ],
+        "80": [
+          "Physical",
+          "Wind"
+        ],
+        "90": [
+          "Physical",
+          "Wind"
+        ]
+      },
+      "filePath": "lineage-idle/src/data/skills/kamael/kamael_samurai.json",
+      "skillsCount": 6,
+      "skills": [
+        "iaijutsu_strike",
+        "gale_step",
+        "silent_edge",
+        "tempest_form",
+        "heaven_cutting_tempest",
+        "master_heaven_cutting_tempest"
+      ],
+      "ultimateSkill": "heaven_cutting_tempest",
+      "masterUltimateSkill": "master_heaven_cutting_tempest"
+    },
+    {
+      "classId": "ertheia_storm_blaster",
+      "race": "ertheia",
+      "primaryRole": "aoe_damage",
+      "allowedElements": {
+        "1": [
+          "Wind"
+        ],
+        "40": [
+          "Wind"
+        ],
+        "76": [
+          "Wind"
+        ],
+        "80": [
+          "Wind"
+        ],
+        "90": [
+          "Wind"
+        ]
+      },
+      "filePath": "lineage-idle/src/data/skills/ertheia/ertheia_storm_blaster.json",
+      "skillsCount": 6,
+      "skills": [
+        "gale_shot",
+        "cyclone_trap",
+        "sky_dance",
+        "tempest_barrage",
+        "cyclone_barrage",
+        "master_cyclone_barrage"
+      ],
+      "ultimateSkill": "cyclone_barrage",
+      "masterUltimateSkill": "master_cyclone_barrage"
+    },
+    {
+      "classId": "ertheia_marauder",
+      "race": "ertheia",
+      "primaryRole": "mobility",
+      "allowedElements": {
+        "1": [
+          "Physical"
+        ],
+        "40": [
+          "Wind",
+          "Physical"
+        ],
+        "76": [
+          "Wind",
+          "Physical"
+        ],
+        "80": [
+          "Wind",
+          "Physical"
+        ],
+        "90": [
+          "Wind",
+          "Physical"
+        ]
+      },
+      "filePath": "lineage-idle/src/data/skills/ertheia/ertheia_marauder.json",
+      "skillsCount": 6,
+      "skills": [
+        "whirlwind_dash",
+        "spirit_gale",
+        "twin_gust_slash",
+        "tempest_veil",
+        "tempest_breaker",
+        "master_tempest_breaker"
+      ],
+      "ultimateSkill": "tempest_breaker",
+      "masterUltimateSkill": "master_tempest_breaker"
+    },
+    {
+      "classId": "high_elf_divine_templar",
+      "race": "high_elf",
+      "primaryRole": "defensive_shield",
+      "allowedElements": {
+        "1": [
+          "Holy"
+        ],
+        "40": [
+          "Holy"
+        ],
+        "76": [
+          "Holy"
+        ],
+        "80": [
+          "Holy"
+        ],
+        "90": [
+          "Holy"
+        ]
+      },
+      "filePath": "lineage-idle/src/data/skills/high_elf/high_elf_divine_templar.json",
+      "skillsCount": 6,
+      "skills": [
+        "divine_bulwark",
+        "retribution_flare",
+        "sacred_ward",
+        "light_point_judgment",
+        "heavens_aegis",
+        "master_heavens_aegis"
+      ],
+      "ultimateSkill": "heavens_aegis",
+      "masterUltimateSkill": "master_heavens_aegis"
+    },
+    {
+      "classId": "high_elf_element_weaver",
+      "race": "high_elf",
+      "primaryRole": "aoe_damage",
+      "allowedElements": {
+        "1": [
+          "Fire",
+          "Water",
+          "Wind"
+        ],
+        "40": [
+          "Fire",
+          "Water",
+          "Wind"
+        ],
+        "76": [
+          "Fire",
+          "Water",
+          "Wind"
+        ],
+        "80": [
+          "Fire",
+          "Water",
+          "Wind"
+        ],
+        "90": [
+          "Fire",
+          "Water",
+          "Wind"
+        ]
+      },
+      "filePath": "lineage-idle/src/data/skills/high_elf/high_elf_element_weaver.json",
+      "skillsCount": 6,
+      "skills": [
+        "triad_combo",
+        "elemental_fusion",
+        "cascading_storm",
+        "phoenix_tide",
+        "prismatic_genesis",
+        "master_prismatic_genesis"
+      ],
+      "ultimateSkill": "prismatic_genesis",
+      "masterUltimateSkill": "master_prismatic_genesis"
+    }
+  ]
+}

@@ -86,6 +86,10 @@ export class StaggerEngine {
         monster.fatalCastUntil = 0;
         monster.breakUntil = now + 8000; // Janela estendida para 8 segundos de vulnerabilidade!
 
+        if (typeof window !== 'undefined' && window.globalVFXOrchestrator?.clearTelegraphs) {
+          window.globalVFXOrchestrator.clearTelegraphs();
+        }
+
         if (callbacks.floatText) callbacks.floatText('🚨 FATAL INTERROMPIDO! (8s BREAK)', 'float-jackpot');
         if (callbacks.log) callbacks.log(`🚨 GOLPE FATAL INTERROMPIDO! 💥 A postura de **${monster.name}** colapsou durante a canalização! VULNERABILIDADE ESTENDIDA PARA 8 SEGUNDOS (200% DANO)!`, 'rarity-legendary');
 
