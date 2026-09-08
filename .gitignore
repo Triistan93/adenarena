@@ -23,7 +23,6 @@ Thumbs.db
 .gemini/
 .vscode/
 .idea/
-.agents/
 /skills/
 skills-lock.json
 /scratch/
