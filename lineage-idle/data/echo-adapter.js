@@ -19,6 +19,7 @@ import { CASH_SHOP_CATALOG } from "../src/data/shop/cash_shop_catalog.js";
 import { HEIRLOOM_ITEMS } from "../src/data/items/heirloom_items.js";
 import { ALL_LOADED_SKILLS } from "../src/data/skills/index.js";
 import { CLASS_ALIASES as UNIVERSAL_CLASS_ALIASES, resolveCanonicalClassId } from "../src/data/classes/index.js";
+import { getSkillIcon } from "../src/services/SkillIconRegistry.js";
 
 
 /** Transforma string em slug snake_case */
@@ -200,6 +201,16 @@ function curateClassSkills(skills) {
  * Garante que NENHUMA habilidade caia em ícones genéricos repetidos.
  */
 function resolveSkillIcon(rawName, sk, classDef, classId) {
+  const sId = sk?.id || sk?.identity?.id || (classId && rawName ? toSkillId(classId, rawName) : null);
+  if (sId) {
+    const regIcon = getSkillIcon(sId, sk);
+    if (regIcon && regIcon.iconPath) return regIcon.iconPath;
+  }
+  if (rawName) {
+    const nameHit = getSkillIcon(slugify(rawName), sk);
+    if (nameHit && nameHit.iconPath && nameHit.iconId !== 'power_strike') return nameHit.iconPath;
+  }
+
   const name = (rawName || '').toLowerCase().replace(/[^a-z0-9]+/g, '_');
   const arch = (classDef?.archetype || classId || '').toLowerCase();
   const race = (classDef?.race || '').toLowerCase();

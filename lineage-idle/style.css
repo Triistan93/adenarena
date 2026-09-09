@@ -7171,6 +7171,557 @@ select:focus-visible {
   }
 }
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   UNIFIED MMORPG SKILL WINDOW (HOTFIX 02)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.skill-window {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Header */
+.skill-window-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.85));
+  border: 1px solid var(--element-accent, rgba(212, 167, 68, 0.4));
+  border-radius: 8px;
+  box-shadow: 0 4px 14px var(--element-glow, rgba(0, 0, 0, 0.4));
+}
+
+.skill-header-crest {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1.5px solid var(--element-accent, #d4a744);
+  box-shadow: 0 0 10px var(--element-glow, rgba(212, 167, 68, 0.2));
+  flex-shrink: 0;
+}
+
+.skill-header-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.skill-header-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.skill-header-class {
+  margin: 0;
+  font-family: 'Cinzel', serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #f8fafc;
+  letter-spacing: 0.05em;
+}
+
+.skill-header-badge {
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.level-badge {
+  background: rgba(59, 130, 246, 0.2);
+  border: 1px solid #3b82f6;
+  color: #93c5fd;
+}
+
+.theme-badge {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid currentColor;
+}
+
+.skill-header-sub-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 11px;
+}
+
+.skill-header-stage {
+  color: #94a3b8;
+  font-family: 'Cinzel', serif;
+}
+
+.skill-header-sp {
+  color: #fbbf24;
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 600;
+}
+
+/* Tabs */
+.skill-window-tabs {
+  display: flex;
+  gap: 6px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+  padding-bottom: 4px;
+}
+
+.skill-subtab-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 10px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-bottom: 2px solid transparent;
+  border-radius: 6px 6px 0 0;
+  color: #94a3b8;
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.skill-subtab-btn:hover {
+  color: #f1f5f9;
+  background: rgba(30, 41, 59, 0.8);
+  border-color: rgba(212, 167, 68, 0.4);
+}
+
+.skill-subtab-btn.active {
+  color: #ffd877;
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.9));
+  border-color: rgba(212, 167, 68, 0.5);
+  border-bottom: 2px solid #ffd877;
+  box-shadow: 0 -2px 10px rgba(212, 167, 68, 0.15);
+}
+
+.tab-lock-pill {
+  font-size: 9px;
+  padding: 1px 4px;
+  background: #334155;
+  color: #94a3b8;
+  border-radius: 3px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* Content Area */
+.skill-window-content {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 2px 0;
+}
+
+/* Category Block */
+.skill-category-block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: rgba(15, 23, 42, 0.55);
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 6px;
+  padding: 10px;
+}
+
+.skill-category-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.category-icon {
+  color: var(--element-accent, #d4a744);
+  font-size: 13px;
+}
+
+.category-title {
+  margin: 0;
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: #e2e8f0;
+  letter-spacing: 0.04em;
+  flex: 1;
+}
+
+.category-count {
+  font-size: 10px;
+  background: rgba(0, 0, 0, 0.4);
+  color: #94a3b8;
+  padding: 1px 6px;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* Dense Grid */
+.skill-grid-dense {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 8px;
+}
+
+/* Skill Node Card (48x48 icon-dominant) */
+.skill-node-card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  user-select: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.skill-node-card:hover {
+  transform: translateY(-1px);
+  border-color: rgba(212, 167, 68, 0.5);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
+}
+
+.skill-node-card.is-learned {
+  border-color: rgba(212, 167, 68, 0.45);
+  background: linear-gradient(135deg, rgba(45, 35, 20, 0.75), rgba(20, 16, 10, 0.9));
+}
+
+.skill-node-card.is-maxed {
+  border-color: #ffd877;
+  box-shadow: 0 0 8px rgba(255, 216, 119, 0.25);
+}
+
+.skill-node-card.can-afford:not(.is-maxed) {
+  box-shadow: inset 0 0 8px rgba(52, 211, 153, 0.15);
+  border-color: rgba(52, 211, 153, 0.4);
+}
+
+.skill-node-card.is-selected {
+  outline: 2px solid #ffd877;
+  outline-offset: 1px;
+  box-shadow: 0 0 12px rgba(255, 216, 119, 0.35);
+}
+
+.skill-node-card.book-locked {
+  border-color: #7c3aed;
+  opacity: 0.8;
+}
+
+.skill-node-card.is-ultimate {
+  border-color: #f59e0b;
+  background: linear-gradient(135deg, rgba(43, 23, 60, 0.8), rgba(19, 10, 28, 0.9));
+}
+
+/* 48x48 Icon Frame */
+.skill-icon-frame-48 {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  border-radius: 6px;
+  position: relative;
+  background: #090d16;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.skill-icon-frame-48 .skill-icon-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.skill-rank-badge {
+  position: absolute;
+  bottom: 1px;
+  right: 1px;
+  background: rgba(0, 0, 0, 0.85);
+  color: #ffd877;
+  font-size: 9px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  padding: 1px 3px;
+  border-radius: 3px;
+  border: 1px solid rgba(212, 167, 68, 0.4);
+  line-height: 1;
+}
+
+.skill-rank-badge.maxed {
+  color: #34d399;
+  border-color: #34d399;
+}
+
+.skill-star-pill {
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  background: #f59e0b;
+  color: #000;
+  font-size: 8.5px;
+  font-weight: 800;
+  padding: 1px 3px;
+  border-radius: 2px;
+  line-height: 1;
+}
+
+/* Card Body */
+.skill-card-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.skill-card-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: #f1f5f9;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: 'Cinzel', serif;
+  line-height: 1.2;
+}
+
+.skill-card-tags {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.skill-element-tag {
+  font-size: 8.5px;
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-weight: 600;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
+}
+
+.skill-element-tag.element-fire { color: #f97316; background: rgba(249, 115, 22, 0.15); }
+.skill-element-tag.element-water { color: #38bdf8; background: rgba(56, 189, 248, 0.15); }
+.skill-element-tag.element-wind { color: #22c55e; background: rgba(34, 197, 94, 0.15); }
+.skill-element-tag.element-earth { color: #eab308; background: rgba(234, 179, 8, 0.15); }
+.skill-element-tag.element-holy { color: #facc15; background: rgba(250, 204, 21, 0.15); }
+.skill-element-tag.element-dark { color: #a855f7; background: rgba(168, 85, 247, 0.15); }
+.skill-element-tag.element-physical { color: #e2e8f0; background: rgba(226, 232, 240, 0.12); }
+
+.skill-role-tag {
+  font-size: 8.5px;
+  color: #94a3b8;
+  text-transform: uppercase;
+}
+
+.skill-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 1px;
+}
+
+.skill-cost-badge {
+  font-size: 9px;
+  font-family: 'IBM Plex Mono', monospace;
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-weight: 600;
+}
+
+.skill-cost-badge.cost-affordable {
+  background: rgba(52, 211, 153, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(52, 211, 153, 0.3);
+}
+
+.skill-cost-badge.cost-expensive {
+  background: rgba(239, 68, 68, 0.12);
+  color: #fca5a5;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+.skill-cost-badge.cost-maxed {
+  background: rgba(250, 204, 21, 0.15);
+  color: #facc15;
+  border: 1px solid rgba(250, 204, 21, 0.3);
+}
+
+.skill-cost-badge.cost-book {
+  background: rgba(124, 58, 237, 0.2);
+  color: #c084fc;
+  border: 1px solid rgba(124, 58, 237, 0.4);
+}
+
+/* Empty and Locked Panels */
+.skill-empty-panel, .skill-locked-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 20px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px dashed rgba(148, 163, 184, 0.25);
+  border-radius: 8px;
+  text-align: center;
+  color: #94a3b8;
+  gap: 8px;
+}
+
+.locked-icon-large, .empty-icon {
+  font-size: 32px;
+}
+
+.locked-title {
+  margin: 0;
+  font-family: 'Cinzel', serif;
+  font-size: 14px;
+  color: #ffd877;
+}
+
+.locked-desc {
+  margin: 0;
+  font-size: 11px;
+  max-width: 400px;
+  line-height: 1.5;
+  color: #cbd5e1;
+}
+
+.locked-progress-wrap {
+  width: 100%;
+  max-width: 280px;
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.locked-progress-bar {
+  width: 100%;
+  height: 6px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.locked-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #f59e0b, #ffd877);
+  transition: width 0.3s ease;
+}
+
+.locked-progress-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: #94a3b8;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* Legacy passives in passive tab */
+.legacy-passives-dense-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 8px;
+}
+
+.legacy-passive-node {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(212, 167, 68, 0.3);
+  border-radius: 6px;
+}
+
+.legacy-passive-icon {
+  font-size: 14px;
+  color: #ffd877;
+}
+
+.legacy-passive-name {
+  font-size: 11px;
+  font-weight: 700;
+  color: #86efac;
+}
+
+.legacy-passive-effect {
+  font-size: 10px;
+  color: #cbd5e1;
+}
+
+/* Tooltip Badges */
+.tt-elem-pill {
+  font-size: 9px;
+  padding: 1px 4px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #f1f5f9;
+  font-weight: 600;
+}
+.tt-elem-pill.elem-fire { background: rgba(249, 115, 22, 0.2); color: #f97316; }
+.tt-elem-pill.elem-water { background: rgba(56, 189, 248, 0.2); color: #38bdf8; }
+.tt-elem-pill.elem-wind { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
+.tt-elem-pill.elem-earth { background: rgba(234, 179, 8, 0.2); color: #eab308; }
+.tt-elem-pill.elem-holy { background: rgba(250, 204, 21, 0.2); color: #facc15; }
+.tt-elem-pill.elem-dark { background: rgba(168, 85, 247, 0.2); color: #c084fc; }
+.tt-elem-pill.elem-physical { background: rgba(226, 232, 240, 0.15); color: #e2e8f0; }
+
+.tt-role-pill {
+  font-size: 9px;
+  padding: 1px 4px;
+  border-radius: 3px;
+  background: rgba(148, 163, 184, 0.15);
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.tt-star-pill {
+  font-size: 9px;
+  padding: 1px 4px;
+  border-radius: 3px;
+  background: #f59e0b;
+  color: #000;
+  font-weight: 700;
+}
+
+.tt-cd-badge {
+  font-size: 9px;
+  padding: 1px 4px;
+  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.4);
+  color: #cbd5e1;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
 
 
 

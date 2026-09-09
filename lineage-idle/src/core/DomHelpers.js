@@ -8,7 +8,7 @@
  */
 
 /** @type {Document|ShadowRoot} Root do Shadow DOM */
-let ROOT = document;
+let ROOT = typeof document !== 'undefined' ? document : null;
 
 /** @type {number[]} IDs de setInterval rastreados para limpeza no destroy() */
 export const _intervals = [];
@@ -38,22 +38,22 @@ export function addTrackedListener(target, event, handler, opts) {
 }
 
 /** Retorna o elemento pelo ID dentro do Shadow DOM */
-export const el  = id  => ROOT.getElementById(id);
+export const el  = id  => ROOT?.getElementById ? ROOT.getElementById(id) : null;
 
 /** querySelector no Shadow DOM */
-export const qs  = sel => ROOT.querySelector(sel);
+export const qs  = sel => ROOT?.querySelector ? ROOT.querySelector(sel) : null;
 
 /** querySelectorAll no Shadow DOM */
-export const qsa = sel => ROOT.querySelectorAll(sel);
+export const qsa = sel => ROOT?.querySelectorAll ? ROOT.querySelectorAll(sel) : [];
 
 /** Retorna o documento raiz (para eventos globais) */
-export const doc = ()  => ROOT.ownerDocument || document;
+export const doc = ()  => ROOT?.ownerDocument || (typeof document !== 'undefined' ? document : null);
 
 /** Cria um elemento HTML */
-export const mkEl = tag => document.createElement(tag);
+export const mkEl = tag => (typeof document !== 'undefined' ? document.createElement(tag) : null);
 
 /** Cria um elemento SVG/namespace */
-export const mkNS = (ns, tag) => document.createElementNS(ns, tag);
+export const mkNS = (ns, tag) => (typeof document !== 'undefined' ? document.createElementNS(ns, tag) : null);
 
 /**
  * Atualiza a barra de progresso (HP, MP, XP).

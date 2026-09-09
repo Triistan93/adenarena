@@ -16,6 +16,8 @@ import { classSatisfies, getClassSkills, checkClassAdvancement, SHARED_SKILL_IDS
 import { AFFIX_MAP } from '../../data/affixes.js';
 import { getClass, getStats, getActiveSetBonuses } from '../engine/StatsEngine.js';
 import { getSkillCost } from '../engine/SkillEngine.js';
+import { getSkillTreeViewModel, SKILL_TABS, SKILL_CATEGORIES } from '../services/SkillTreeViewModel.js';
+import { getSkillIcon, getSkillSemanticData } from '../services/SkillIconRegistry.js';
 import { ZONES, SAGAS, ZONE_BACKGROUNDS } from '../data/zones.js';
 import { MONSTERS, MONSTER_BY_NAME } from '../data/monsters.js';
 import { ZONE_CONSUMABLES, MONSTER_DROPS, getZoneDropTier } from '../data/items/recipes_drops.js';
@@ -2604,341 +2606,320 @@ export function renderZoneMap(state, callbacks = {}) {
 /* ═══════════════════════════════════════════════════════════════════════════
    5. SKILLS
 ═══════════════════════════════════════════════════════════════════════════ */
-const TREE_NODE_W = 110;
-const TREE_NODE_H = 78;
-const TREE_PAD_X = 14;
-const TREE_PAD_Y = 14;
+function renderSkillCard(skill, state) {
+  const isSelected = state.selectedSkill === skill.skillId;
+  const rank = skill.rank;
+  const cost = skill.cost;
+  const isMaxed = rank.isMaxed;
+  const isLearned = skill.isLearned;
+  const canAfford = cost.canAfford;
+  const isBookLocked = cost.isBookLocked;
+  const isUlt = skill.ultimate;
+
+  const cardClasses = ['skill-node-card'];
+  if (isLearned) cardClasses.push('is-learned');
+  else cardClasses.push('is-available');
+  if (isMaxed) cardClasses.push('is-maxed');
+  if (canAfford) cardClasses.push('can-afford');
+  if (isSelected) cardClasses.push('is-selected');
+  if (isBookLocked) cardClasses.push('book-locked');
+  if (isUlt) cardClasses.push('is-ultimate');
+
+  const starPill = skill.starRank >= 4
+    ? `<span class="skill-star-pill">${skill.starRank}★</span>`
+    : '';
+
+  const rankBadge = `
+    <span class="skill-rank-badge ${isMaxed ? 'maxed' : ''}">
+      ${isMaxed ? 'MAX' : `${rank.current}/${rank.max}`}
+    </span>
+  `;
+
+  const elemClass = `element-${String(skill.element || 'physical').toLowerCase()}`;
+  const costBadge = isMaxed
+    ? `<span class="skill-cost-badge cost-maxed">MAX</span>`
+    : isBookLocked
+      ? `<span class="skill-cost-badge cost-book">🔒 Livro ${skill.starRank || 4}★</span>`
+      : `<span class="skill-cost-badge ${canAfford ? 'cost-affordable' : 'cost-expensive'}">✦ ${cost.sp} SP</span>`;
+
+  const iconUrl = getAssetUrl(skill.iconPath || '/assets/skills/icons/power_strike.png');
+
+  return `
+    <div class="${cardClasses.join(' ')}"
+         data-skill-id="${skill.skillId}"
+         role="button"
+         tabindex="0"
+         title="${skill.name} (${skill.element})">
+      <div class="skill-icon-frame-48">
+        <img src="${iconUrl}" class="skill-icon-img" alt="${skill.name}" onerror="this.src='${getAssetUrl('/assets/skills/icons/power_strike.png')}'; this.onerror=null;" />
+        ${starPill}
+        ${rankBadge}
+      </div>
+      <div class="skill-card-body">
+        <div class="skill-card-title">${skill.name}</div>
+        <div class="skill-card-tags">
+          <span class="skill-element-tag ${elemClass}">${skill.element}</span>
+          <span class="skill-role-tag">${skill.role}</span>
+        </div>
+        <div class="skill-card-footer">
+          ${costBadge}
+        </div>
+      </div>
+    </div>
+  `;
+}
 
 export function updateSkillUI(state, callbacks = {}) {
   const wrap = findElement('skill-tree');
   if (!wrap) return;
 
-  const legacyContainer = findElement('legacy-passives-container');
-  if (legacyContainer) {
-    const legacyPassives = Object.values(state.legacyPassives || {});
-    if (legacyPassives.length > 0) {
-      legacyContainer.style.display = 'block';
-      legacyContainer.innerHTML = `
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-          <div style="font-family:'Cinzel',serif; font-size:12px; font-weight:bold; color:#ffd877; display:flex; align-items:center; gap:6px;">
-            <span>🧬 Passivas de Linhagem Herdadas</span>
-            <span style="font-size:10px; font-weight:normal; color:#94a3b8;">(20% da eficácia original de classes passadas)</span>
-          </div>
-        </div>
-        <div style="display:flex; flex-wrap:wrap; gap:8px;">
-          ${legacyPassives.map(p => `
-            <div style="background:rgba(0,0,0,0.5); border:1px solid rgba(212,167,68,0.4); border-radius:6px; padding:6px 10px; display:flex; align-items:center; gap:8px; font-size:11px; box-shadow:0 2px 8px rgba(0,0,0,0.4);">
-              <span style="font-size:14px;">✦</span>
-              <div>
-                <div style="font-weight:bold; color:#86efac;">${p.name}</div>
-                <div style="color:#cbd5e1; font-size:10px;">${p.desc || `+${(p.val * 100).toFixed(1)}% ${p.stat?.toUpperCase()}`}</div>
-              </div>
-            </div>
-          `).join('')}
-        </div>
-      `;
-    } else {
-      legacyContainer.style.display = 'none';
-    }
-  }
-
-  const echoData = typeof window !== 'undefined' ? window.EchoData : null;
-  const SKILL_DEFS = echoData?.SKILL_DEFS_ECHO || D()?.SKILL_DEFS || {};
-  const SKILL_REQS = echoData?.SKILL_REQS_ECHO || D()?.SKILL_REQS || {};
-  const SKILL_TREE_LAYOUT = echoData?.SKILL_TREE_LAYOUT_ECHO || D()?.SKILL_TREE_LAYOUT || {};
-
-  // ─── Renderização das Habilidades Gerais Compartilhadas por Arquétipo (Lv 1–39) ───
+  // 1. Cleanly suppress visual islands (shared container & legacy container outside window)
   const sharedContainer = findElement('shared-skills-container');
   if (sharedContainer) {
-    const isMage = isMageClass(state.class);
-    const relevantSharedIds = getSharedSkillIdsForClass(state.class);
-    const sharedList = relevantSharedIds.map(id => [id, SKILL_DEFS[id]]).filter(([id, def]) => def != null);
-    if (sharedList.length > 0) {
-      sharedContainer.style.display = 'block';
-      const titleLabel = isMage ? '🌐 Habilidades Gerais — Mago / Místico' : '🌐 Habilidades Gerais — Guerreiro / Combatente';
-      const subtitleLabel = isMage ? '(Lv. 1–39 — Exclusivas para classes mágicas)' : '(Lv. 1–39 — Exclusivas para classes de combate físico)';
-      sharedContainer.innerHTML = `
-        <div class="shared-skills-header">
-          <div class="shared-skills-title">
-            <span>${titleLabel}</span>
-            <span class="shared-skills-subtitle">${subtitleLabel}</span>
+    sharedContainer.style.display = 'none';
+    sharedContainer.innerHTML = '';
+  }
+
+  const legacyContainer = findElement('legacy-passives-container');
+  if (legacyContainer) {
+    legacyContainer.style.display = 'none';
+    legacyContainer.innerHTML = '';
+  }
+
+  // 2. Sync SP counter in skills-head
+  const spAvailableEl = findElement('sp-available');
+  if (spAvailableEl) {
+    spAvailableEl.textContent = (state.sp || 0).toLocaleString();
+  }
+
+  // 3. Obtain authoritative ViewModel
+  const activeTab = state.activeSkillTab || SKILL_TABS.ACTIVE;
+  const viewModel = getSkillTreeViewModel(state, {
+    activeTab,
+    selectedSkillId: state.selectedSkill
+  });
+
+  if (!state.selectedSkill && viewModel.selectedSkillId) {
+    state.selectedSkill = viewModel.selectedSkillId;
+  }
+
+  // 4. Ensure container styling for full-width responsive window
+  wrap.style.width = '100%';
+  wrap.style.height = 'auto';
+
+  // 5. Generate content according to active tab
+  let contentHtml = '';
+
+  if (activeTab === SKILL_TABS.ACTIVE) {
+    const categories = viewModel.tabs[SKILL_TABS.ACTIVE].categories || [];
+    if (categories.length > 0) {
+      contentHtml = categories.map(cat => `
+        <div class="skill-category-block">
+          <div class="skill-category-header">
+            <span class="category-icon">✦</span>
+            <h4 class="category-title">${cat.title}</h4>
+            <span class="category-count">${cat.skills.length}</span>
+          </div>
+          <div class="skill-grid-dense">
+            ${cat.skills.map(s => renderSkillCard(s, state)).join('')}
           </div>
         </div>
-        <div class="shared-skills-grid">
-          ${sharedList.map(([id, def]) => {
-            const lvl = state.skills[id] || 0;
-            const max = def.max || def.maxLevel || 5;
-            const canBuy = state.level >= (def.reqLvl || 1) && state.sp >= getSkillCost(id, lvl) && lvl < max;
-            const btnClass = canBuy ? 'skill-btn can-buy' : 'skill-btn';
-            let iconVal = def.icon || '✦';
-            if (iconVal.endsWith('.jpg') && !iconVal.includes('/')) {
-              iconVal = `/assets/skills/${iconVal}`;
-            }
-            const isIconImg = iconVal.endsWith('.jpg') || iconVal.endsWith('.png') || iconVal.includes('/');
-            const iconHtml = isIconImg
-              ? `<img src="${getAssetUrl(iconVal)}" class="skill-icon-img" alt="${def.name}" style="width:24px; height:24px; object-fit:cover; border-radius:4px; border:1px solid rgba(255,255,255,0.2);" onerror="this.style.display='none'" />`
-              : `<span class="skill-icon">${iconVal}</span>`;
+      `).join('');
+    } else {
+      contentHtml = `
+        <div class="skill-empty-panel">
+          <span class="empty-icon">📜</span>
+          <p>Nenhuma habilidade ativa disponível para o estágio atual.</p>
+        </div>
+      `;
+    }
+  } else if (activeTab === SKILL_TABS.PASSIVE) {
+    const passiveSkills = viewModel.tabs[SKILL_TABS.PASSIVE].skills || [];
+    const legacyPassives = viewModel.tabs[SKILL_TABS.PASSIVE].legacyPassives || [];
 
-            return `
-              <div class="skill-node tier-0 ${lvl > 0 ? 'owned' : ''} ${lvl === max ? 'maxed' : ''}">
-                <button class="${btnClass}" data-skill="${id}">
-                  ${iconHtml}
-                  <span class="skill-name">${def.name}</span>
-                  <span class="skill-lvl-num">${lvl}/${max}</span>
-                </button>
+    const passiveBlocks = [];
+    if (passiveSkills.length > 0) {
+      passiveBlocks.push(`
+        <div class="skill-category-block">
+          <div class="skill-category-header">
+            <span class="category-icon">🛡️</span>
+            <h4 class="category-title">Habilidades Passivas da Classe</h4>
+            <span class="category-count">${passiveSkills.length}</span>
+          </div>
+          <div class="skill-grid-dense">
+            ${passiveSkills.map(s => renderSkillCard(s, state)).join('')}
+          </div>
+        </div>
+      `);
+    }
+    if (legacyPassives.length > 0) {
+      passiveBlocks.push(`
+        <div class="skill-category-block legacy-passives-block">
+          <div class="skill-category-header">
+            <span class="category-icon">🧬</span>
+            <h4 class="category-title">Passivas de Linhagem Herdadas (20% Eficácia)</h4>
+            <span class="category-count">${legacyPassives.length}</span>
+          </div>
+          <div class="legacy-passives-dense-grid">
+            ${legacyPassives.map(p => `
+              <div class="legacy-passive-node">
+                <span class="legacy-passive-icon">✦</span>
+                <div class="legacy-passive-body">
+                  <div class="legacy-passive-name">${p.name || p.originalSkill}</div>
+                  <div class="legacy-passive-effect">${p.desc || `+${((p.val || 0) * 100).toFixed(1)}% ${p.stat?.toUpperCase() || ''}`}</div>
+                </div>
               </div>
-            `;
-          }).join('')}
+            `).join('')}
+          </div>
+        </div>
+      `);
+    }
+
+    if (passiveBlocks.length > 0) {
+      contentHtml = passiveBlocks.join('');
+    } else {
+      contentHtml = `
+        <div class="skill-empty-panel">
+          <span class="empty-icon">🛡️</span>
+          <p>Nenhuma habilidade passiva desbloqueada no estágio atual.</p>
+        </div>
+      `;
+    }
+  } else if (activeTab === SKILL_TABS.ULTIMATE) {
+    const ultTab = viewModel.tabs[SKILL_TABS.ULTIMATE];
+    if (!ultTab.isUnlocked) {
+      const pct = Math.min(100, Math.round(((state.level || 1) / 80) * 100));
+      contentHtml = `
+        <div class="skill-locked-panel">
+          <div class="locked-icon-large">🌟</div>
+          <h4 class="locked-title">Habilidades Supremas &amp; Transcendentais</h4>
+          <p class="locked-desc">
+            O despertar transcendental é concedido aos guerreiros que alcançam o <strong>Nível 80</strong> (Estágio 4 — Despertar Supremo) e <strong>Nível 90</strong> (Estágio 5 — Mestre Supremo).
+          </p>
+          <div class="locked-progress-wrap">
+            <div class="locked-progress-bar">
+              <div class="locked-progress-fill" style="width: ${pct}%;"></div>
+            </div>
+            <div class="locked-progress-labels">
+              <span>Nível Atual: <strong>Lv. ${state.level || 1}</strong></span>
+              <span>Requisito: <strong>Lv. 80</strong></span>
+            </div>
+          </div>
         </div>
       `;
     } else {
-      sharedContainer.style.display = 'none';
-    }
-  }
-
-  const pos = {};
-
-  // Canonical visible skills (Learned, Available, Locked) excluding Hidden
-  const visibleItems = getVisibleSkillsForCharacter(state);
-  const sharedIds = new Set(getSharedSkillIdsForClass(state.class) || []);
-  const visibleList = Array.isArray(visibleItems)
-    ? visibleItems
-    : (visibleItems?.visibleList || [
-        ...(visibleItems?.learned || []).map(d => ({ skillId: d.id, skillDef: d, visibility: SKILL_VISIBILITY_STATES.LEARNED })),
-        ...(visibleItems?.available || []).map(d => ({ skillId: d.id, skillDef: d, visibility: SKILL_VISIBILITY_STATES.AVAILABLE })),
-        ...(visibleItems?.locked || []).map(d => ({ skillId: d.id, skillDef: d, visibility: SKILL_VISIBILITY_STATES.LOCKED }))
-      ]);
-
-  let classSkills;
-  if (visibleList && visibleList.length > 0) {
-    classSkills = visibleList
-      .filter(item => !sharedIds.has(item.skillId))
-      .map(item => [item.skillId, SKILL_DEFS[item.skillId] || item.skillDef, item.visibility])
-      .filter(([id, def]) => def != null);
-  } else {
-    const classSkillIds = getClassSkills(state.class);
-    if (classSkillIds && classSkillIds.length > 0) {
-      classSkills = classSkillIds
-        .map(id => [id, SKILL_DEFS[id], getSkillVisibility(state, SKILL_DEFS[id])])
-        .filter(([id, def]) => def != null && isSkillAllowedForClass(state.class, id) && !sharedIds.has(id));
-    } else {
-      classSkills = Object.entries(SKILL_DEFS)
-        .filter(([id, def]) => isSkillAllowedForClass(state.class, id) && !sharedIds.has(id))
-        .map(([id, def]) => [id, def, getSkillVisibility(state, def)]);
-    }
-  }
-
-  const skillsByTier = { 0: [], 1: [], 2: [], 3: [], 4: [], 5: [] };
-  for (const [id, def] of classSkills) {
-    const t = def.tier !== undefined ? def.tier : 0;
-    if (skillsByTier[t]) skillsByTier[t].push([id, def]);
-  }
-
-  const usedPositions = new Set();
-  for (let c = 0; c <= 5; c++) {
-    const list = skillsByTier[c] || [];
-    list.forEach(([id, def]) => {
-      const explicit = SKILL_TREE_LAYOUT[id];
-      if (explicit && explicit.col !== undefined && explicit.row !== undefined) {
-        const col = explicit.col;
-        const row = explicit.row;
-        pos[id] = {
-          x: TREE_PAD_X + col * TREE_NODE_W + TREE_NODE_W / 2,
-          y: TREE_PAD_Y + row * TREE_NODE_H + TREE_NODE_H / 2
-        };
-        usedPositions.add(`${col},${row}`);
+      const ultSkills = ultTab.skills || [];
+      if (ultSkills.length > 0) {
+        contentHtml = `
+          <div class="skill-category-block">
+            <div class="skill-category-header">
+              <span class="category-icon">🌟</span>
+              <h4 class="category-title">Habilidades Supremas Desbloqueadas</h4>
+              <span class="category-count">${ultSkills.length}</span>
+            </div>
+            <div class="skill-grid-dense">
+              ${ultSkills.map(s => renderSkillCard(s, state)).join('')}
+            </div>
+          </div>
+        `;
+      } else {
+        contentHtml = `
+          <div class="skill-empty-panel">
+            <span class="empty-icon">🌟</span>
+            <p>Nenhuma habilidade suprema disponível para esta classe no momento.</p>
+          </div>
+        `;
       }
-    });
-  }
-
-  const colCounters = [0, 0, 0, 0, 0, 0];
-  for (let c = 0; c <= 5; c++) {
-    const list = skillsByTier[c] || [];
-    list.forEach(([id, def]) => {
-      if (pos[id]) return;
-      let row = colCounters[c];
-      while (usedPositions.has(`${c},${row}`)) row++;
-      colCounters[c] = row + 1;
-      usedPositions.add(`${c},${row}`);
-      pos[id] = {
-        x: TREE_PAD_X + c * TREE_NODE_W + TREE_NODE_W / 2,
-        y: TREE_PAD_Y + row * TREE_NODE_H + TREE_NODE_H / 2
-      };
-    });
-  }
-
-  const maxCol = Object.values(pos).reduce((m, p) => {
-    const col = Math.round((p.x - TREE_PAD_X - TREE_NODE_W / 2) / TREE_NODE_W);
-    return Math.max(m, col);
-  }, 1);
-  const cols = Math.max(2, maxCol + 1);
-
-  const maxRow = Object.values(pos).reduce((m, p) => {
-    const row = Math.round((p.y - TREE_PAD_Y - TREE_NODE_H / 2) / TREE_NODE_H);
-    return Math.max(m, row);
-  }, 2);
-  const rows = maxRow + 1;
-  const W = Math.max(300, cols * TREE_NODE_W + TREE_PAD_X * 2);
-  const H = Math.max(260, rows * TREE_NODE_H + TREE_PAD_Y * 2);
-  wrap.style.width = W + 'px';
-  wrap.style.height = H + 'px';
-
-  let lines = '';
-  for (const [id, reqs] of Object.entries(SKILL_REQS)) {
-    const childPos = pos[id];
-    if (!childPos) continue;
-    for (const parentId of Object.keys(reqs)) {
-      if (parentId === 'reqLvl' || parentId === 'level' || parentId === 'sp') continue;
-      const parentPos = pos[parentId];
-      if (!parentPos) continue;
-      const parentLevel = state.skills[parentId] || 0;
-      const reqLevel = reqs[parentId];
-      const owned = parentLevel >= reqLevel;
-      const cls = owned ? 'link link-owned' : 'link';
-
-      const midX = (parentPos.x + childPos.x) / 2;
-      lines += `<path class="${cls}" d="M ${parentPos.x} ${parentPos.y} C ${midX} ${parentPos.y}, ${midX} ${childPos.y}, ${childPos.x} ${childPos.y}" fill="none" />`;
     }
   }
 
-  let tierLabels = '';
-  if (cols >= 4) {
-    for (let c = 0; c < cols; c++) {
-      const x = TREE_PAD_X + c * TREE_NODE_W + TREE_NODE_W / 2;
-      tierLabels += `<text class="tier-label" x="${x}" y="${H - 6}">${TIER_NAMES[c] || ''}</text>`;
-    }
-  }
+  // 6. Build unified SkillWindow DOM
+  wrap.innerHTML = `
+    <div class="skill-window" style="--element-accent: ${viewModel.header.accentColor}; --element-glow: ${viewModel.header.bgGlow};">
+      <div class="skill-window-header">
+        <div class="skill-header-crest">
+          <span class="crest-icon">${viewModel.header.icon}</span>
+        </div>
+        <div class="skill-header-info">
+          <div class="skill-header-title-row">
+            <h3 class="skill-header-class">${viewModel.header.race} ${viewModel.header.className}</h3>
+            <span class="skill-header-badge level-badge">Lv. ${viewModel.header.level}</span>
+            <span class="skill-header-badge theme-badge" style="border-color:${viewModel.header.accentColor}; color:${viewModel.header.accentColor};">
+              ${viewModel.header.elementalTheme}
+            </span>
+          </div>
+          <div class="skill-header-sub-row">
+            <span class="skill-header-stage">${viewModel.header.stageTitle}</span>
+            <span class="skill-header-sp">✦ <strong>${(state.sp || 0).toLocaleString()}</strong> SP</span>
+          </div>
+        </div>
+      </div>
 
-  const defsSvg = `
-    <defs>
-      <linearGradient id="linkGradientOwned" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#ffd877" stop-opacity="0.9" />
-        <stop offset="100%" stop-color="#34d399" stop-opacity="0.9" />
-      </linearGradient>
-      <linearGradient id="linkGradientLocked" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#64748b" stop-opacity="0.4" />
-        <stop offset="100%" stop-color="#334155" stop-opacity="0.4" />
-      </linearGradient>
-      <filter id="glowGold" x="-20%" y="-20%" width="140%" height="140%">
-        <feGaussianBlur stdDeviation="3" result="blur" />
-        <feComposite in="SourceGraphic" in2="blur" operator="over" />
-      </filter>
-    </defs>
+      <div class="skill-window-tabs">
+        <button class="skill-subtab-btn ${activeTab === SKILL_TABS.ACTIVE ? 'active' : ''}" data-tab="${SKILL_TABS.ACTIVE}">
+          <span class="tab-icon">⚔️</span>
+          <span class="tab-label">ATIVAS</span>
+          <span class="tab-count">(${viewModel.tabs[SKILL_TABS.ACTIVE].count})</span>
+        </button>
+        <button class="skill-subtab-btn ${activeTab === SKILL_TABS.PASSIVE ? 'active' : ''}" data-tab="${SKILL_TABS.PASSIVE}">
+          <span class="tab-icon">🛡️</span>
+          <span class="tab-label">PASSIVAS</span>
+          <span class="tab-count">(${viewModel.tabs[SKILL_TABS.PASSIVE].count})</span>
+        </button>
+        <button class="skill-subtab-btn ${activeTab === SKILL_TABS.ULTIMATE ? 'active' : ''} ${!viewModel.tabs[SKILL_TABS.ULTIMATE].isUnlocked ? 'tab-locked' : ''}" data-tab="${SKILL_TABS.ULTIMATE}">
+          <span class="tab-icon">🌟</span>
+          <span class="tab-label">ULTIMATE</span>
+          <span class="tab-count">(${viewModel.tabs[SKILL_TABS.ULTIMATE].count})</span>
+          ${!viewModel.tabs[SKILL_TABS.ULTIMATE].isUnlocked ? '<span class="tab-lock-pill">Lv.80</span>' : ''}
+        </button>
+      </div>
+
+      <div class="skill-window-content">
+        ${contentHtml}
+      </div>
+    </div>
   `;
 
-  wrap.querySelector('svg')?.remove();
-  const svg = mkNS('http://www.w3.org/2000/svg', 'svg');
-  svg.setAttribute('class', 'skill-tree-svg');
-  svg.setAttribute('width', W);
-  svg.setAttribute('height', H);
-  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
-  svg.innerHTML = defsSvg + lines + tierLabels;
-  wrap.insertBefore(svg, wrap.firstChild);
-
-  let nodesLayer = wrap.querySelector('.skill-tree-nodes');
-  if (!nodesLayer) {
-    nodesLayer = mkEl('div');
-    nodesLayer.className = 'skill-tree-nodes';
-    wrap.appendChild(nodesLayer);
-  }
-  nodesLayer.innerHTML = '';
-
-  for (const [id, def, skillVisibility] of classSkills) {
-    if (!def) continue;
-    const p = pos[id];
-    if (!p) continue;
-    const node = mkEl('div');
-    const lvl = state.skills[id] || 0;
-    const max = def.max || def.maxLevel || 5;
-
-    // Check weapon restriction
-    const wpnCheck = (typeof canCastSkillWeapon === 'function') ? canCastSkillWeapon(state, def) : { ok: true };
-    const isWpnBlocked = !wpnCheck.ok;
-
-    // Visibility state (LEARNED, AVAILABLE, LOCKED)
-    const visibility = skillVisibility || getSkillVisibility(state, def);
-    const isLocked = visibility === SKILL_VISIBILITY_STATES.LOCKED;
-
-    // Check Book Unlock Requirement using canonical requiredItemToUnlock
-    const bookReq = def.requiredItemToUnlock || ((def.starRank === 4 || def.tier === 4) ? 'book_4star' : (def.starRank === 5 || def.tier === 5) ? 'book_5star' : null);
-    const hasBook = bookReq ? state.inventory?.some(i => (i.itemId === bookReq || i.itemId === bookReq.replace('book_', 'spellbook_')) && (i.count || 1) > 0) : true;
-    const isBookLocked = bookReq && lvl === 0 && !hasBook;
-
-    const isMasterUlt = def.tier === 5 || def.starRank === 5;
-    const isUlt = (def.tier === 4 || def.starRank === 4 || def.isUltimate) && !isMasterUlt;
-
-    let nodeClass = `skill-node tier-${def.tier || 0}`;
-    if (isLocked) nodeClass += ' locked-future';
-    if (lvl > 0) nodeClass += ' owned';
-    if (lvl === max) nodeClass += ' maxed';
-    if (isWpnBlocked) nodeClass += ' weapon-blocked';
-    if (isMasterUlt) nodeClass += ' master-ultimate-5star';
-    else if (isUlt) nodeClass += ' ultimate-4star';
-    if (isBookLocked) nodeClass += ' book-locked';
-    else if (bookReq && lvl === 0 && hasBook) nodeClass += ' book-ready';
-
-    node.className = nodeClass;
-    node.style.left = (p.x - TREE_NODE_W / 2) + 'px';
-    node.style.top = (p.y - TREE_NODE_H / 2) + 'px';
-    node.style.width = TREE_NODE_W + 'px';
-    node.style.height = TREE_NODE_H + 'px';
-
-    const reqs = SKILL_REQS[id];
-    const reqOk = !reqs || Object.entries(reqs).every(([s, v]) => s === 'level' || s === 'sp' || s === 'reqLvl' || (state.skills[s] || 0) >= v);
-    const minLvl = Number(def.requiredLevel || def.reqLvl) || 1;
-    const lvlOk = state.level >= minLvl;
-    const canBuy = !isLocked && reqOk && lvlOk && state.sp >= getSkillCost(id, lvl) && lvl < max && !isBookLocked;
-    let btnClass = canBuy ? 'skill-btn can-buy' : 'skill-btn';
-    if (isLocked) btnClass += ' btn-locked';
-
-    let badgeHtml = '';
-    if (isLocked) {
-      badgeHtml = `<span class="skill-locked-badge" style="position:absolute; top:-6px; right:-4px; background:#334155; color:#cbd5e1; font-size:9px; padding:1px 4px; border-radius:3px; font-weight:bold; box-shadow:0 0 4px #000; border:1px solid #64748b;">🔒 [LOCKED — Lv. ${minLvl}]</span>`;
-    } else if (isWpnBlocked) {
-      badgeHtml = `<span style="position:absolute; top:-6px; right:-4px; background:#dc2626; color:#fff; font-size:9px; padding:1px 3px; border-radius:3px; font-weight:bold; box-shadow:0 0 4px #000;">🚫 ${wpnCheck.reason || 'Arma'}</span>`;
-    } else if (isBookLocked) {
-      const bookStar = def.starRank || (def.tier === 5 ? 5 : def.tier === 4 ? 4 : def.tier === 3 ? 3 : 2);
-      badgeHtml = `<span style="position:absolute; top:-6px; right:-4px; background:#7c3aed; color:#fff; font-size:9px; padding:1px 3px; border-radius:3px; font-weight:bold; box-shadow:0 0 4px #000;">🔒 Livro ${bookStar}★</span>`;
-    } else if (bookReq && lvl === 0 && hasBook) {
-      badgeHtml = `<span style="position:absolute; top:-6px; right:-4px; background:#f59e0b; color:#000; font-size:9px; padding:1px 3px; border-radius:3px; font-weight:bold; box-shadow:0 0 6px #f59e0b; animation:pulse 1.2s infinite;">⭐ Livro OK</span>`;
-    }
-
-    let iconVal = def.icon || '✦';
-    if (iconVal.endsWith('.jpg') && !iconVal.includes('/')) {
-      iconVal = `/assets/skills/${iconVal}`;
-    }
-    const isIconImg = iconVal.endsWith('.jpg') || iconVal.endsWith('.png') || iconVal.includes('/');
-    const iconHtml = isIconImg 
-      ? `<img src="${getAssetUrl(iconVal)}" class="skill-icon-img" alt="${def.name}" style="width:24px; height:24px; object-fit:cover; border-radius:4px; border:1px solid rgba(255,255,255,0.2);" onerror="this.style.display='none'" />` 
-      : `<span class="skill-icon">${iconVal}</span>`;
-
-    node.innerHTML = `
-      ${badgeHtml}
-      <button class="${btnClass}" data-skill="${id}" ${isLocked ? 'title="Bloqueado até nível ' + minLvl + '"' : ''}>
-        ${iconHtml}
-        <span class="skill-name">${def.name}</span>
-        <span class="skill-lvl-num">${lvl}/${max}</span>
-      </button>
-    `;
-    nodesLayer.appendChild(node);
-  }
-
-  qsa('.skill-btn').forEach(btn => {
-    const sId = btn.dataset.skill;
-    const def = SKILL_DEFS[sId];
-    if (!def) return;
-    if (callbacks.showSkillTooltip) btn.onmouseenter = (e) => callbacks.showSkillTooltip(sId, e);
-    if (callbacks.hideSkillTooltip) btn.onmouseleave = callbacks.hideSkillTooltip;
-    btn.onclick = () => {
-      state.selectedSkill = sId;
-      const vis = getSkillVisibility(state, def);
-      if (vis !== SKILL_VISIBILITY_STATES.LOCKED && callbacks.spendSP) {
-        callbacks.spendSP(sId);
+  // 7. Wire Sub-tabs
+  wrap.querySelectorAll('.skill-subtab-btn').forEach(btn => {
+    btn.onclick = (e) => {
+      e.preventDefault();
+      const targetTab = btn.dataset.tab;
+      if (targetTab && targetTab !== state.activeSkillTab) {
+        state.activeSkillTab = targetTab;
+        updateSkillUI(state, callbacks);
       }
-      updateSkillUI(state, callbacks);
     };
   });
 
+  // 8. Wire Skill Cards
+  wrap.querySelectorAll('.skill-node-card').forEach(card => {
+    const sId = card.dataset.skillId;
+    if (!sId) return;
+
+    if (callbacks.showSkillTooltip) {
+      card.onmouseenter = (e) => callbacks.showSkillTooltip(sId, e);
+    }
+    if (callbacks.hideSkillTooltip) {
+      card.onmouseleave = callbacks.hideSkillTooltip;
+    }
+
+    card.onclick = () => {
+      state.selectedSkill = sId;
+      wrap.querySelectorAll('.skill-node-card').forEach(c => {
+        c.classList.toggle('is-selected', c.dataset.skillId === sId);
+      });
+
+      if (callbacks.spendSP && card.classList.contains('can-afford') && !card.classList.contains('is-maxed') && !card.classList.contains('book-locked')) {
+        callbacks.spendSP(sId);
+      }
+
+      updateSkillUI(state, callbacks);
+      updateSkillInfoPanel(state, callbacks);
+    };
+  });
+
+  // 9. Update info panel
   updateSkillInfoPanel(state, callbacks);
 }
 
@@ -3072,17 +3053,20 @@ export function updateSkillInfoPanel(state, callbacks = {}) {
     btnLabel = hasRequiredBook ? `📖 Consumir ${bName} & Aprender (${cost.toLocaleString()} SP)` : `🔒 Falta ${bName}`;
   }
 
-  let siIconVal = def.icon || '✦';
-  if (siIconVal.endsWith('.jpg') && !siIconVal.includes('/')) {
-    siIconVal = `/assets/skills/${siIconVal}`;
-  }
+  const iconData = getSkillIcon(id, def);
+  const semantic = getSkillSemanticData(id);
+  const siIconVal = iconData?.iconPath || def.icon || '✦';
   const isSiIconImg = siIconVal.endsWith('.jpg') || siIconVal.endsWith('.png') || siIconVal.includes('/');
   const siIconHtml = isSiIconImg
-    ? `<img src="${getAssetUrl(siIconVal)}" class="skill-icon-img" alt="${def.name}" style="width:32px; height:32px; object-fit:cover; border-radius:6px; border:1px solid rgba(255,255,255,0.2); vertical-align:middle;" onerror="this.style.display='none'" />`
+    ? `<img src="${getAssetUrl(siIconVal)}" class="skill-icon-img" alt="${def.name}" style="width:36px; height:36px; object-fit:cover; border-radius:6px; border:1px solid rgba(255,255,255,0.2); vertical-align:middle;" onerror="this.style.display='none'" />`
     : `<span class="si-icon">${siIconVal}</span>`;
 
+  const elemClass = `element-${String(semantic.element || def.element || 'physical').toLowerCase()}`;
+  const elemTag = `<span class="skill-element-tag ${elemClass}" style="margin-left:4px;">${semantic.element || def.element || 'Physical'}</span>`;
+  const roleTag = `<span class="skill-role-tag" style="margin-left:4px;">${semantic.role || def.type || 'Skill'}</span>`;
+
   panel.innerHTML = `
-    <div class="si-head">${siIconHtml}<div class="si-title"><h3>${def.name}</h3><p class="si-tier">${tier} · Lv.${lvl}/${max}</p></div></div>
+    <div class="si-head">${siIconHtml}<div class="si-title"><h3>${def.name}</h3><div style="display:flex; align-items:center; gap:4px; margin-top:2px;"><p class="si-tier">${tier} · Lv.${lvl}/${max}</p>${elemTag}${roleTag}</div></div></div>
     ${weaponReqBadge}
     ${star4BoxHtml}
     <p class="si-desc">${def.desc || def.note || ''}</p><div class="si-effect">${effectText}</div>

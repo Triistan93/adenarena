@@ -6,6 +6,7 @@ import "./data/affixes.js";
 import "./src/data/items/index.js";
 import { getArmorType, getWeaponType, canEquipByType, ARMOR_TYPE_LABEL, WEAPON_TYPE_LABEL } from './src/data/items/item_class_rules.js';
 import { AFFIX_MAP as AFFIX_MAP_IMPORT } from './data/affixes.js';
+import { getSkillIcon, getSkillSemanticData } from './src/services/SkillIconRegistry.js';
 
 
 
@@ -2214,28 +2215,52 @@ function showSkillTooltip(skillId, e) {
   if (!tt) return;
 
   const lvl = state.skills[skillId] || 0;
-  const max = def.max;
+  const max = def.max || def.maxLevel || 5;
   const reqs = SKILL_REQS[skillId];
   const reqText = reqs ? Object.entries(reqs).map(([s, v]) => `${SKILL_DEFS[s]?.name || s} ${v}`).join(', ') : 'Nenhum';
   const tier = TIER_NAMES[def.tier] || '';
 
-  const isImg = def.icon && (def.icon.includes('/') || def.icon.endsWith('.png') || def.icon.endsWith('.jpg'));
-  const iconHtml = isImg
-    ? `<img src="${getAssetUrl(def.icon)}" class="skill-icon-img" alt="${def.name}" style="width:28px; height:28px; object-fit:cover; border-radius:4px; border:1px solid rgba(255,255,255,0.2); vertical-align:middle;" onerror="this.style.display='none'" />`
+  const iconData = getSkillIcon(skillId, def);
+  const semantic = getSkillSemanticData(skillId);
+  const iconPath = iconData?.iconPath || (def.icon ? getAssetUrl(def.icon) : '');
+
+  const iconHtml = iconPath
+    ? `<img src="${getAssetUrl(iconPath)}" class="skill-icon-img" alt="${def.name}" style="width:36px; height:36px; object-fit:cover; border-radius:6px; border:1px solid rgba(255,255,255,0.2); vertical-align:middle;" onerror="this.style.display='none'" />`
     : `<span class="tt-icon">${def.icon || '✦'}</span>`;
+
+  const elemBadge = semantic?.element
+    ? `<span class="tt-elem-pill elem-${semantic.element.toLowerCase()}">${semantic.element}</span>`
+    : '';
+  const roleBadge = semantic?.role
+    ? `<span class="tt-role-pill">${semantic.role.toUpperCase()}</span>`
+    : '';
+  const starBadge = (def.starRank >= 4 || def.tier >= 4)
+    ? `<span class="tt-star-pill">${def.starRank || (def.tier === 5 ? 5 : 4)}★</span>`
+    : '';
+  const cdText = (def.baseCd || def.gameplay?.cooldown)
+    ? `<span class="tt-cd-badge">⏱️ ${((def.baseCd || def.gameplay?.cooldown) / 1000).toFixed(1)}s</span>`
+    : '';
 
   tt.innerHTML = `
     <div class="tt-header rarity-epic">
       <span class="tt-icon">${iconHtml}</span>
       <div class="tt-title">
-        <div class="tt-name" style="color:var(--gilt); font-weight:700;">${def.name}</div>
-        <div class="tt-slot">${tier} · Lv.${lvl}/${max}</div>
+        <div class="tt-name" style="color:var(--gilt); font-weight:700; display:flex; align-items:center; gap:6px;">
+          <span>${def.name}</span>
+          ${starBadge}
+        </div>
+        <div class="tt-slot" style="display:flex; align-items:center; gap:6px; margin-top:2px;">
+          <span>${tier} · Lv.${lvl}/${max}</span>
+          ${elemBadge}
+          ${roleBadge}
+          ${cdText}
+        </div>
       </div>
     </div>
     <div class="tt-body" style="padding-top:6px;">
-      <p class="tt-desc">${def.desc || ''}</p>
+      <p class="tt-desc">${def.desc || def.info || ''}</p>
       <div class="tt-effect" style="margin-top:6px; color:#f0d080; font-weight:600;">${window.SkillScaling ? window.SkillScaling.buildSkillEffectText(def, lvl) : (def.info || '')}</div>
-      <div style="margin-top:6px; font-size:10px; color:#888;">Requisitos: ${reqText} (Lv.${def.reqLvl || 1})</div>
+      <div style="margin-top:6px; font-size:10px; color:#888;">Requisitos: ${reqText} (Lv.${def.reqLvl || def.requiredLevel || 1})</div>
     </div>
   `;
 
