@@ -177,7 +177,10 @@ import {
   getClassSkills as serviceGetClassSkills,
   checkClassAdvancement as serviceCheckClassAdvancement,
   promoteClass as servicePromoteClass,
-  SHARED_SKILL_IDS
+  SHARED_SKILL_IDS,
+  isSkillAllowedForClass,
+  isMageClass,
+  getSharedSkillIdsForClass
 } from './src/services/CharacterService.js';
 
 import {
@@ -5141,7 +5144,7 @@ function attackMonster() {
       const isPassive = def.type === 'passive' || def.type === 'stat';
       if (!isPassive) {
         if (autoCastSettings[sId] === false) continue;
-        const belongsToClass = (classSkillIds && classSkillIds.includes(sId)) || (SHARED_SKILL_IDS && SHARED_SKILL_IDS.includes(sId)) || classSatisfies(state.class, def.classReq);
+        const belongsToClass = (classSkillIds && classSkillIds.includes(sId)) || isSkillAllowedForClass(state.class, sId) || classSatisfies(state.class, def.classReq);
         if (belongsToClass) {
           activeSkills.push({ id: sId, lvl, def });
         }
@@ -9791,7 +9794,7 @@ export function init() {
       for (const [sId, lvl] of Object.entries(state.skills || {})) {
         const def = SKILL_DEFS[sId];
         if (lvl > 0 && def && def.type !== 'passive' && def.type !== 'stat') {
-          if (classSkillIds.includes(sId) || (SHARED_SKILL_IDS && SHARED_SKILL_IDS.includes(sId)) || classSatisfies(state.class, def.classReq)) {
+          if (classSkillIds.includes(sId) || isSkillAllowedForClass(state.class, sId) || classSatisfies(state.class, def.classReq)) {
             knownActiveSkills.push({ id: sId, lvl, def });
           }
         }
@@ -9961,7 +9964,7 @@ export function init() {
       for (const [sId, lvl] of Object.entries(state.skills || {})) {
         const def = SKILL_DEFS[sId];
         if (lvl > 0 && def && def.type !== 'passive' && def.type !== 'stat') {
-          if (classSkillIds.includes(sId) || (SHARED_SKILL_IDS && SHARED_SKILL_IDS.includes(sId)) || classSatisfies(state.class, def.classReq)) {
+          if (classSkillIds.includes(sId) || isSkillAllowedForClass(state.class, sId) || classSatisfies(state.class, def.classReq)) {
             allActive.push(sId);
           }
         }

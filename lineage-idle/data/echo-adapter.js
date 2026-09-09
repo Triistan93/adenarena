@@ -789,14 +789,22 @@ function buildEchoAdapter() {
     });
   }
 
-  // Registro explícito do pool compartilhado (Lv 1–39)
+  // Registro explícito do pool compartilhado por Arquétipo (Lv 1–39)
+  const SHARED_MAGE_SKILL_IDS = [
+    'wind_strike', 'flame_strike', 'hydro_strike', 'heal_light', 'energy_burst'
+  ];
+  const SHARED_FIGHTER_SKILL_IDS = [
+    'power_strike', 'mortal_blow', 'iron_punch'
+  ];
   const SHARED_SKILL_IDS = [
     'wind_strike', 'flame_strike', 'hydro_strike', 'power_strike',
     'mortal_blow', 'iron_punch', 'heal_light', 'energy_burst'
   ];
   CLASS_SKILLS_ECHO['shared'] = [...SHARED_SKILL_IDS];
+  CLASS_SKILLS_ECHO['shared_mage'] = [...SHARED_MAGE_SKILL_IDS];
+  CLASS_SKILLS_ECHO['shared_fighter'] = [...SHARED_FIGHTER_SKILL_IDS];
 
-  // Coordenadas fixas para as 8 shared skills (Grid 4x2)
+  // Coordenadas fixas para as shared skills (Grid 4x2)
   SHARED_SKILL_IDS.forEach((sid, idx) => {
     const col = idx % 4;
     const row = Math.floor(idx / 4);
@@ -844,7 +852,9 @@ function buildEchoAdapter() {
   E.SKILL_TREE_LAYOUT_ECHO = SKILL_TREE_LAYOUT_ECHO;
   E.CASH_SHOP_CATALOG      = CASH_SHOP_CATALOG;
   E.HEIRLOOM_ITEMS         = HEIRLOOM_ITEMS;
-  E.SHARED_SKILL_IDS       = SHARED_SKILL_IDS;
+  E.SHARED_SKILL_IDS         = SHARED_SKILL_IDS;
+  E.SHARED_MAGE_SKILL_IDS    = SHARED_MAGE_SKILL_IDS;
+  E.SHARED_FIGHTER_SKILL_IDS = SHARED_FIGHTER_SKILL_IDS;
 
   console.log(
     '[echo-adapter] Skills autênticas geradas:', Object.keys(SKILL_DEFS_ECHO).length,

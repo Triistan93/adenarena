@@ -12,7 +12,7 @@ import {
 import { resolveEquipSlot, migrateEquipmentSlots, equipItem, unequipItem } from '../services/EquipmentService.js';
 import { getCraftLevelReq, getRecipeMaterials, canCraft, getRecipeDef, calculateMaxCraftableQty } from '../services/CraftService.js';
 import { rollMysticStock } from '../services/ShopService.js';
-import { classSatisfies, getClassSkills, checkClassAdvancement, SHARED_SKILL_IDS, getSharedSkills } from '../services/CharacterService.js';
+import { classSatisfies, getClassSkills, checkClassAdvancement, SHARED_SKILL_IDS, getSharedSkills, isMageClass, getSharedSkillIdsForClass } from '../services/CharacterService.js';
 import { AFFIX_MAP } from '../../data/affixes.js';
 import { getClass, getStats, getActiveSetBonuses } from '../engine/StatsEngine.js';
 import { getSkillCost } from '../engine/SkillEngine.js';
@@ -2647,17 +2647,21 @@ export function updateSkillUI(state, callbacks = {}) {
   const SKILL_REQS = echoData?.SKILL_REQS_ECHO || D()?.SKILL_REQS || {};
   const SKILL_TREE_LAYOUT = echoData?.SKILL_TREE_LAYOUT_ECHO || D()?.SKILL_TREE_LAYOUT || {};
 
-  // ─── Renderização das 8 Habilidades Gerais Compartilhadas (Lv 1–39) ───
+  // ─── Renderização das Habilidades Gerais Compartilhadas por Arquétipo (Lv 1–39) ───
   const sharedContainer = findElement('shared-skills-container');
   if (sharedContainer) {
-    const sharedList = SHARED_SKILL_IDS.map(id => [id, SKILL_DEFS[id]]).filter(([id, def]) => def != null);
+    const isMage = isMageClass(state.class);
+    const relevantSharedIds = getSharedSkillIdsForClass(state.class);
+    const sharedList = relevantSharedIds.map(id => [id, SKILL_DEFS[id]]).filter(([id, def]) => def != null);
     if (sharedList.length > 0) {
       sharedContainer.style.display = 'block';
+      const titleLabel = isMage ? '🌐 Habilidades Gerais — Mago / Místico' : '🌐 Habilidades Gerais — Guerreiro / Combatente';
+      const subtitleLabel = isMage ? '(Lv. 1–39 — Exclusivas para classes mágicas)' : '(Lv. 1–39 — Exclusivas para classes de combate físico)';
       sharedContainer.innerHTML = `
         <div class="shared-skills-header">
           <div class="shared-skills-title">
-            <span>🌐 Habilidades Gerais Compartilhadas</span>
-            <span class="shared-skills-subtitle">(Lv. 1–39 — Acessíveis para todas as classes)</span>
+            <span>${titleLabel}</span>
+            <span class="shared-skills-subtitle">${subtitleLabel}</span>
           </div>
         </div>
         <div class="shared-skills-grid">

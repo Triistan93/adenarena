@@ -112,9 +112,17 @@ export function registerSharedSkillOwnership(skillId, classId) {
   REVERSE_OWNERSHIP_INDEX.get(skillId).add(classId);
 }
 
+const CANONICAL_SHARED_MAGE_SKILL_IDS = new Set([
+  'wind_strike', 'flame_strike', 'hydro_strike', 'energy_burst', 'heal_light'
+]);
+
+const CANONICAL_SHARED_FIGHTER_SKILL_IDS = new Set([
+  'power_strike', 'mortal_blow', 'iron_punch'
+]);
+
 const CANONICAL_SHARED_SKILL_IDS = new Set([
-  'wind_strike', 'flame_strike', 'hydro_strike', 'power_strike',
-  'mortal_blow', 'iron_punch', 'heal_light', 'energy_burst'
+  ...CANONICAL_SHARED_MAGE_SKILL_IDS,
+  ...CANONICAL_SHARED_FIGHTER_SKILL_IDS
 ]);
 
 /**
@@ -125,6 +133,15 @@ const CANONICAL_SHARED_SKILL_IDS = new Set([
  */
 export function checkSkillOwnership(skillId, classId, level = 80) {
   if (CANONICAL_SHARED_SKILL_IDS.has(skillId)) {
+    const raw = String(classId || '').toLowerCase();
+    const isMage = raw.includes('mage') || raw.includes('wizard') || raw.includes('sorcerer') || raw.includes('cleric') || raw.includes('bishop') || raw.includes('oracle') || raw.includes('elder') || raw.includes('shaman') || raw.includes('summoner') || raw.includes('saint') || raw.includes('hierophant') || raw.includes('cardinal') || raw.includes('soultaker') || raw.includes('screamer') || raw.includes('archmage') || raw.includes('spellsinger') || raw.includes('spellhowler') || raw.includes('mystic') || raw.includes('warlock') || raw.includes('weaver') || raw.includes('necromancer');
+    
+    if (CANONICAL_SHARED_MAGE_SKILL_IDS.has(skillId) && !isMage) {
+      return { isAllowed: false, ownershipType: 'NONE' };
+    }
+    if (CANONICAL_SHARED_FIGHTER_SKILL_IDS.has(skillId) && isMage) {
+      return { isAllowed: false, ownershipType: 'NONE' };
+    }
     return { isAllowed: true, ownershipType: 'SHARED' };
   }
 

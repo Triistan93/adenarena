@@ -17,7 +17,16 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { ALL_LOADED_SKILLS } from '../lineage-idle/src/data/skills/index.js';
-import { classSatisfies, SHARED_SKILL_IDS, getSharedSkills } from '../lineage-idle/src/services/CharacterService.js';
+import {
+  classSatisfies,
+  SHARED_SKILL_IDS,
+  SHARED_MAGE_SKILL_IDS,
+  SHARED_FIGHTER_SKILL_IDS,
+  getSharedSkills,
+  getSharedSkillIdsForClass,
+  isMageClass,
+  isSkillAllowedForClass
+} from '../lineage-idle/src/services/CharacterService.js';
 import { spendSP, getSkillCost } from '../lineage-idle/src/engine/SkillEngine.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -180,3 +189,41 @@ test('6. Total Catalog Count: 150 Class Skills + 8 Shared = 158 Total Skills', (
   assert.equal(sharedCount, 8, 'Must have exactly 8 shared skills');
   assert.equal(classCount, 150, 'Must have exactly 150 class skills');
 });
+
+test('7. Archetype Separation: Mage classes receive exactly 5 magic skills, Fighters receive exactly 3 physical skills', () => {
+  assert.equal(SHARED_MAGE_SKILL_IDS.length, 5, 'Must have 5 shared mage skills');
+  assert.equal(SHARED_FIGHTER_SKILL_IDS.length, 3, 'Must have 3 shared fighter skills');
+
+  // Mages
+  const mageClasses = ['human_sorcerer', 'sorcerer', 'archmage', 'elf_mage', 'spellsinger', 'dark_elf_mage', 'spellhowler', 'orc_shaman', 'cardinal', 'bishop'];
+  for (const mCls of mageClasses) {
+    assert.equal(isMageClass(mCls), true, `Class ${mCls} must be identified as Mage`);
+    const mSkills = getSharedSkillIdsForClass(mCls);
+    assert.deepEqual(mSkills, SHARED_MAGE_SKILL_IDS, `Mage class ${mCls} must receive exact 5 mage shared skills`);
+    
+    // Check permission
+    for (const sid of SHARED_MAGE_SKILL_IDS) {
+      assert.equal(isSkillAllowedForClass(mCls, sid), true, `Mage ${mCls} must be allowed to use ${sid}`);
+    }
+    for (const sid of SHARED_FIGHTER_SKILL_IDS) {
+      assert.equal(isSkillAllowedForClass(mCls, sid), false, `Mage ${mCls} must NOT be allowed to use physical skill ${sid}`);
+    }
+  }
+
+  // Fighters
+  const fighterClasses = ['human_fighter', 'warrior', 'gladiator', 'paladin', 'elf_fighter', 'dark_elf_fighter', 'orc_fighter', 'dreadnought'];
+  for (const fCls of fighterClasses) {
+    assert.equal(isMageClass(fCls), false, `Class ${fCls} must NOT be identified as Mage`);
+    const fSkills = getSharedSkillIdsForClass(fCls);
+    assert.deepEqual(fSkills, SHARED_FIGHTER_SKILL_IDS, `Fighter class ${fCls} must receive exact 3 fighter shared skills`);
+    
+    // Check permission
+    for (const sid of SHARED_FIGHTER_SKILL_IDS) {
+      assert.equal(isSkillAllowedForClass(fCls, sid), true, `Fighter ${fCls} must be allowed to use ${sid}`);
+    }
+    for (const sid of SHARED_MAGE_SKILL_IDS) {
+      assert.equal(isSkillAllowedForClass(fCls, sid), false, `Fighter ${fCls} must NOT be allowed to use magic skill ${sid}`);
+    }
+  }
+});
+

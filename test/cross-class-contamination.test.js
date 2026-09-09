@@ -161,14 +161,19 @@ test('6. Auditor Verification: checkSkillOwnership blocks cross-class skill equi
     );
   }
 
-  // Shared skills must be allowed on both
-  for (const sid of ['wind_strike', 'power_strike']) {
-    const checkH = checkSkillOwnership(sid, 'human_sorcerer');
-    assert.equal(checkH.isAllowed, true, `Shared skill ${sid} must be allowed on human_sorcerer`);
-    assert.equal(checkH.ownershipType, 'SHARED');
+  // Shared skills must respect archetype boundaries
+  const checkMage = checkSkillOwnership('wind_strike', 'human_sorcerer');
+  assert.equal(checkMage.isAllowed, true, 'Magic shared skill wind_strike must be allowed on human_sorcerer');
+  assert.equal(checkMage.ownershipType, 'SHARED');
 
-    const checkD = checkSkillOwnership(sid, 'dwarf_mage');
-    assert.equal(checkD.isAllowed, true, `Shared skill ${sid} must be allowed on dwarf_mage`);
-    assert.equal(checkD.ownershipType, 'SHARED');
-  }
+  const checkMageDwarf = checkSkillOwnership('wind_strike', 'dwarf_mage');
+  assert.equal(checkMageDwarf.isAllowed, true, 'Magic shared skill wind_strike must be allowed on dwarf_mage');
+  assert.equal(checkMageDwarf.ownershipType, 'SHARED');
+
+  const checkFighterOnMage = checkSkillOwnership('power_strike', 'human_sorcerer');
+  assert.equal(checkFighterOnMage.isAllowed, false, 'Physical shared skill power_strike must NOT be allowed on human_sorcerer');
+
+  const checkFighterOnFighter = checkSkillOwnership('power_strike', 'human_fighter');
+  assert.equal(checkFighterOnFighter.isAllowed, true, 'Physical shared skill power_strike must be allowed on human_fighter');
+  assert.equal(checkFighterOnFighter.ownershipType, 'SHARED');
 });

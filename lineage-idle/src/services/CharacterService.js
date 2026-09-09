@@ -11,6 +11,20 @@ import { getClass } from '../engine/StatsEngine.js';
 import { getSkillCost } from '../engine/SkillEngine.js';
 import { resolveCanonicalClassId } from '../data/classes/class_aliases.js';
 
+export const SHARED_MAGE_SKILL_IDS = [
+  'wind_strike',
+  'flame_strike',
+  'hydro_strike',
+  'heal_light',
+  'energy_burst'
+];
+
+export const SHARED_FIGHTER_SKILL_IDS = [
+  'power_strike',
+  'mortal_blow',
+  'iron_punch'
+];
+
 export const SHARED_SKILL_IDS = [
   'wind_strike',
   'flame_strike',
@@ -23,13 +37,89 @@ export const SHARED_SKILL_IDS = [
 ];
 
 /**
- * Retorna as definições completas das 8 habilidades compartilhadas.
+ * Determina se a classe informada pertence ao arquétipo Mago / Místico.
+ * @param {string} classId
+ * @returns {boolean}
+ */
+export function isMageClass(classId) {
+  if (!classId) return false;
+  const raw = String(classId).trim().toLowerCase();
+  const canonical = (typeof resolveCanonicalClassId === 'function' ? resolveCanonicalClassId(raw) : raw).toLowerCase();
+
+  const def = getClass(raw) || getClass(canonical);
+  if (def?.archetype) {
+    const arch = def.archetype.toLowerCase();
+    if (['mage', 'caster', 'healer', 'buffer', 'summoner', 'support', 'shaman', 'cleric', 'mystic'].includes(arch)) {
+      return true;
+    }
+    if (['fighter', 'warrior', 'knight', 'rogue', 'archer', 'tank', 'berserker', 'assassin'].includes(arch)) {
+      return false;
+    }
+  }
+
+  const mageKeywords = [
+    'mage', 'wizard', 'sorcerer', 'cleric', 'bishop', 'oracle', 'elder',
+    'shaman', 'summoner', 'saint', 'hierophant', 'cardinal', 'soultaker',
+    'screamer', 'archmage', 'spellsinger', 'spellhowler', 'mystic', 'warlock',
+    'necromancer', 'storm_screamer', 'elemental_master', 'arcana_lord', 'spectral_master',
+    'eva_saint', 'shillien_saint', 'dominator', 'doomcryer', 'soulbreaker', 'prophet', 'warcryer', 'overlord'
+  ];
+
+  return mageKeywords.some(k => raw.includes(k) || canonical.includes(k));
+}
+
+/**
+ * Retorna os IDs das habilidades gerais compartilhadas aplicáveis à classe informada.
+ * Magos recebem apenas magias; Guerreiros recebem apenas golpes físicos.
+ * @param {string} [playerClass]
+ * @returns {Array<string>}
+ */
+export function getSharedSkillIdsForClass(playerClass) {
+  if (!playerClass) return [...SHARED_SKILL_IDS];
+  return isMageClass(playerClass) ? [...SHARED_MAGE_SKILL_IDS] : [...SHARED_FIGHTER_SKILL_IDS];
+}
+
+/**
+ * Retorna as definições completas das habilidades compartilhadas autorizadas para a classe.
+ * @param {string} [playerClass]
  * @returns {Array<Object>}
  */
-export function getSharedSkills() {
+export function getSharedSkills(playerClass) {
   const E = typeof window !== 'undefined' ? window.EchoData : null;
   const defs = E?.SKILL_DEFS_ECHO || D()?.SKILL_DEFS || {};
-  return SHARED_SKILL_IDS.map(id => defs[id]).filter(Boolean);
+  const ids = playerClass ? getSharedSkillIdsForClass(playerClass) : SHARED_SKILL_IDS;
+  return ids.map(id => defs[id]).filter(Boolean);
+}
+
+/**
+ * Verifica se uma habilidade específica é permitida para a classe informada (respeitando Mago vs Guerreiro).
+ * @param {string} playerClass
+ * @param {string} skillId
+ * @returns {boolean}
+ */
+export function isSkillAllowedForClass(playerClass, skillId) {
+  if (!playerClass || !skillId) return false;
+
+  if (SHARED_MAGE_SKILL_IDS.includes(skillId)) {
+    return isMageClass(playerClass);
+  }
+  if (SHARED_FIGHTER_SKILL_IDS.includes(skillId)) {
+    return !isMageClass(playerClass);
+  }
+
+  const classSkills = getClassSkills(playerClass);
+  if (classSkills && classSkills.includes(skillId)) {
+    return true;
+  }
+
+  const E = typeof window !== 'undefined' ? window.EchoData : null;
+  const defs = E?.SKILL_DEFS_ECHO || D()?.SKILL_DEFS || {};
+  const def = defs[skillId];
+  if (def && def.classReq) {
+    return classSatisfies(playerClass, def.classReq);
+  }
+
+  return false;
 }
 
 /**
