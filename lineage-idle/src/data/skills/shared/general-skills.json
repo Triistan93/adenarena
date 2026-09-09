@@ -510,6 +510,365 @@
     },
     {
       "identity": {
+        "id": "heal_light",
+        "name": "Luz Curativa",
+        "classId": "shared",
+        "race": "all",
+        "tier": "shared",
+        "unlockLevel": 1,
+        "element": "Holy",
+        "role": "heal",
+        "tags": [
+          "magic",
+          "holy",
+          "heal"
+        ],
+        "description": "Invoca raios solares regenerativos para restaurar a integridade física."
+      },
+      "gameplay": {
+        "castTime": 500,
+        "cooldown": 8000,
+        "mpCost": 20,
+        "damageMultiplier": 0,
+        "hitCount": 1,
+        "staggerDamage": 0,
+        "critModifier": 1,
+        "targetType": "self",
+        "range": 0,
+        "requiredWeapon": [
+          "staff",
+          "any"
+        ],
+        "statusEffects": [
+          {
+            "effect": "heal",
+            "chance": 1,
+            "duration": 0,
+            "value": 0.25
+          }
+        ]
+      },
+      "hitbox": {
+        "type": "circle",
+        "radius": 45,
+        "offset": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      "timeline": {
+        "totalDuration": 600,
+        "phases": [
+          {
+            "name": "prayer",
+            "start": 0,
+            "duration": 300,
+            "actions": [
+              {
+                "time": 0,
+                "type": "vfx",
+                "params": {
+                  "type": "ground_rune",
+                  "color": "#4ade80",
+                  "radius": 50,
+                  "duration": 550
+                }
+              },
+              {
+                "time": 50,
+                "type": "lighting",
+                "params": {
+                  "type": "cast_glow",
+                  "color": "#4ade80",
+                  "radius": 110,
+                  "intensity": 0.9
+                }
+              }
+            ]
+          },
+          {
+            "name": "burst",
+            "start": 300,
+            "duration": 300,
+            "actions": [
+              {
+                "time": 0,
+                "type": "vfx",
+                "params": {
+                  "type": "ground_pillar",
+                  "color": "#22c55e",
+                  "height": 180,
+                  "width": 40,
+                  "particleCount": 25
+                }
+              },
+              {
+                "time": 0,
+                "type": "lighting",
+                "params": {
+                  "type": "impact_flash",
+                  "color": "#86efac",
+                  "radius": 150,
+                  "intensity": 1,
+                  "duration": 200
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "game_feel": {
+        "hitStop": {
+          "duration": 0,
+          "timeScale": 1,
+          "target": "none"
+        },
+        "cameraShake": {
+          "intensity": 0.05,
+          "decay": 2.5,
+          "duration": 100,
+          "direction": "vertical"
+        },
+        "cameraZoom": {
+          "factor": 1.02,
+          "duration": 150,
+          "ease": "ease-out"
+        },
+        "screenFlash": {
+          "color": "#4ade80",
+          "duration": 120,
+          "opacity": 0.2
+        }
+      },
+      "lighting": {
+        "castGlow": {
+          "color": "#4ade80",
+          "radius": 110,
+          "intensity": 0.9
+        },
+        "impactFlash": {
+          "color": "#86efac",
+          "radius": 150,
+          "intensity": 1
+        }
+      },
+      "hud": {
+        "damageNumbers": {
+          "style": "heal",
+          "scale": 1.15,
+          "animation": "rise_fade",
+          "color": "#4ade80"
+        },
+        "statusIcons": [
+          "icon_heal"
+        ]
+      },
+      "performance": {
+        "particleBudget": 50,
+        "drawCalls": 3,
+        "layerPriority": 4,
+        "poolKey": "pool_heal_light",
+        "allowConcurrent": true
+      },
+      "signature": {
+        "author": "AdenArenaEngine",
+        "version": "1.0.0",
+        "uniqueVfxSignature": "vfx_sig_heal_light_generalist_07"
+      }
+    },
+    {
+      "identity": {
+        "id": "ice_bolt",
+        "name": "Dardo de Gelo",
+        "classId": "shared",
+        "race": "all",
+        "tier": "shared",
+        "unlockLevel": 1,
+        "element": "Water",
+        "role": "control",
+        "tags": [
+          "magic",
+          "water",
+          "projectile",
+          "slow"
+        ],
+        "description": "Dispara uma flecha de gelo congelante que causa dano mágico e reduz a velocidade do alvo."
+      },
+      "gameplay": {
+        "castTime": 400,
+        "cooldown": 3800,
+        "mpCost": 13,
+        "damageMultiplier": 1.35,
+        "hitCount": 1,
+        "staggerDamage": 14,
+        "critModifier": 1.5,
+        "targetType": "single",
+        "range": 450,
+        "requiredWeapon": [
+          "staff",
+          "any"
+        ],
+        "statusEffects": [
+          {
+            "type": "slow",
+            "duration": 4000,
+            "potency": 0.2
+          }
+        ]
+      },
+      "hitbox": {
+        "type": "point",
+        "radius": 20,
+        "offset": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      "timeline": {
+        "totalDuration": 550,
+        "phases": [
+          {
+            "name": "anticipation",
+            "start": 0,
+            "duration": 150,
+            "actions": [
+              {
+                "time": 0,
+                "type": "vfx",
+                "params": {
+                  "type": "ground_rune",
+                  "color": "#38bdf8",
+                  "radius": 35,
+                  "duration": 400
+                }
+              },
+              {
+                "time": 50,
+                "type": "lighting",
+                "params": {
+                  "type": "cast_glow",
+                  "color": "#0ea5e9",
+                  "radius": 80,
+                  "intensity": 0.7
+                }
+              }
+            ]
+          },
+          {
+            "name": "release",
+            "start": 150,
+            "duration": 250,
+            "actions": [
+              {
+                "time": 0,
+                "type": "vfx",
+                "params": {
+                  "type": "projectile",
+                  "type_id": "ice_shard",
+                  "color": "#38bdf8",
+                  "speed": 850
+                }
+              }
+            ]
+          },
+          {
+            "name": "impact",
+            "start": 400,
+            "duration": 150,
+            "actions": [
+              {
+                "time": 0,
+                "type": "vfx",
+                "params": {
+                  "type": "impact_burst",
+                  "color": "#bae6fd",
+                  "particleCount": 18
+                }
+              },
+              {
+                "time": 0,
+                "type": "camera_fx",
+                "params": {
+                  "shake": 0.18,
+                  "hitStop": 40
+                }
+              },
+              {
+                "time": 0,
+                "type": "lighting",
+                "params": {
+                  "type": "impact_flash",
+                  "color": "#e0f2fe",
+                  "radius": 100,
+                  "intensity": 0.8,
+                  "duration": 150
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "game_feel": {
+        "hitStop": {
+          "duration": 40,
+          "timeScale": 0.1,
+          "target": "enemy"
+        },
+        "cameraShake": {
+          "intensity": 0.18,
+          "decay": 2,
+          "duration": 150,
+          "direction": "horizontal"
+        },
+        "cameraZoom": {
+          "factor": 1.02,
+          "duration": 120,
+          "ease": "ease-out"
+        },
+        "screenFlash": {
+          "color": "#38bdf8",
+          "duration": 80,
+          "opacity": 0.15
+        }
+      },
+      "lighting": {
+        "castGlow": {
+          "color": "#0ea5e9",
+          "radius": 80,
+          "intensity": 0.7
+        },
+        "impactFlash": {
+          "color": "#e0f2fe",
+          "radius": 100,
+          "intensity": 0.8
+        }
+      },
+      "hud": {
+        "damageNumbers": {
+          "style": "normal",
+          "scale": 1,
+          "animation": "rise_fade",
+          "color": "#38bdf8"
+        },
+        "statusIcons": [
+          "icon_slow"
+        ]
+      },
+      "performance": {
+        "particleBudget": 45,
+        "drawCalls": 3,
+        "layerPriority": 2,
+        "poolKey": "pool_ice_bolt",
+        "allowConcurrent": true
+      },
+      "signature": {
+        "author": "AdenArenaEngine",
+        "version": "1.0.0",
+        "uniqueVfxSignature": "vfx_sig_ice_bolt_generalist_10"
+      }
+    },
+    {
+      "identity": {
         "id": "power_strike",
         "name": "Ataque Poderoso",
         "classId": "shared",
@@ -977,188 +1336,21 @@
     },
     {
       "identity": {
-        "id": "heal_light",
-        "name": "Luz Curativa",
-        "classId": "shared",
-        "race": "all",
-        "tier": "shared",
-        "unlockLevel": 1,
-        "element": "Holy",
-        "role": "heal",
-        "tags": [
-          "magic",
-          "holy",
-          "heal"
-        ],
-        "description": "Invoca raios solares regenerativos para restaurar a integridade física."
-      },
-      "gameplay": {
-        "castTime": 500,
-        "cooldown": 8000,
-        "mpCost": 20,
-        "damageMultiplier": 0,
-        "hitCount": 1,
-        "staggerDamage": 0,
-        "critModifier": 1,
-        "targetType": "self",
-        "range": 0,
-        "requiredWeapon": [
-          "staff",
-          "any"
-        ],
-        "statusEffects": [
-          {
-            "effect": "heal",
-            "chance": 1,
-            "duration": 0,
-            "value": 0.25
-          }
-        ]
-      },
-      "hitbox": {
-        "type": "circle",
-        "radius": 45,
-        "offset": {
-          "x": 0,
-          "y": 0
-        }
-      },
-      "timeline": {
-        "totalDuration": 600,
-        "phases": [
-          {
-            "name": "prayer",
-            "start": 0,
-            "duration": 300,
-            "actions": [
-              {
-                "time": 0,
-                "type": "vfx",
-                "params": {
-                  "type": "ground_rune",
-                  "color": "#4ade80",
-                  "radius": 50,
-                  "duration": 550
-                }
-              },
-              {
-                "time": 50,
-                "type": "lighting",
-                "params": {
-                  "type": "cast_glow",
-                  "color": "#4ade80",
-                  "radius": 110,
-                  "intensity": 0.9
-                }
-              }
-            ]
-          },
-          {
-            "name": "burst",
-            "start": 300,
-            "duration": 300,
-            "actions": [
-              {
-                "time": 0,
-                "type": "vfx",
-                "params": {
-                  "type": "ground_pillar",
-                  "color": "#22c55e",
-                  "height": 180,
-                  "width": 40,
-                  "particleCount": 25
-                }
-              },
-              {
-                "time": 0,
-                "type": "lighting",
-                "params": {
-                  "type": "impact_flash",
-                  "color": "#86efac",
-                  "radius": 150,
-                  "intensity": 1,
-                  "duration": 200
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "game_feel": {
-        "hitStop": {
-          "duration": 0,
-          "timeScale": 1,
-          "target": "none"
-        },
-        "cameraShake": {
-          "intensity": 0.05,
-          "decay": 2.5,
-          "duration": 100,
-          "direction": "vertical"
-        },
-        "cameraZoom": {
-          "factor": 1.02,
-          "duration": 150,
-          "ease": "ease-out"
-        },
-        "screenFlash": {
-          "color": "#4ade80",
-          "duration": 120,
-          "opacity": 0.2
-        }
-      },
-      "lighting": {
-        "castGlow": {
-          "color": "#4ade80",
-          "radius": 110,
-          "intensity": 0.9
-        },
-        "impactFlash": {
-          "color": "#86efac",
-          "radius": 150,
-          "intensity": 1
-        }
-      },
-      "hud": {
-        "damageNumbers": {
-          "style": "heal",
-          "scale": 1.15,
-          "animation": "rise_fade",
-          "color": "#4ade80"
-        },
-        "statusIcons": [
-          "icon_heal"
-        ]
-      },
-      "performance": {
-        "particleBudget": 50,
-        "drawCalls": 3,
-        "layerPriority": 4,
-        "poolKey": "pool_heal_light",
-        "allowConcurrent": true
-      },
-      "signature": {
-        "author": "AdenArenaEngine",
-        "version": "1.0.0",
-        "uniqueVfxSignature": "vfx_sig_heal_light_generalist_07"
-      }
-    },
-    {
-      "identity": {
         "id": "energy_burst",
         "name": "Explosão de Energia",
         "classId": "shared",
         "race": "all",
         "tier": "shared",
         "unlockLevel": 1,
-        "element": "Neutral",
+        "element": "Physical",
         "role": "burst",
         "tags": [
-          "magic",
+          "physical",
           "neutral",
+          "burst",
           "aoe"
         ],
-        "description": "Libera uma onda esférica de energia pura ao redor do conjurador."
+        "description": "Libera uma onda esférica de impacto e choque físico condensado ao redor do guerreiro."
       },
       "gameplay": {
         "castTime": 350,
@@ -1304,6 +1496,180 @@
         "author": "AdenArenaEngine",
         "version": "1.0.0",
         "uniqueVfxSignature": "vfx_sig_energy_burst_generalist_08"
+      }
+    },
+    {
+      "identity": {
+        "id": "power_shot",
+        "name": "Disparo Poderoso",
+        "classId": "shared",
+        "race": "all",
+        "tier": "shared",
+        "unlockLevel": 1,
+        "element": "Physical",
+        "role": "damage",
+        "tags": [
+          "physical",
+          "ranged",
+          "bow",
+          "crit"
+        ],
+        "description": "Dispara um tiro concentrado e potente à distância contra o inimigo."
+      },
+      "gameplay": {
+        "castTime": 350,
+        "cooldown": 4000,
+        "mpCost": 12,
+        "damageMultiplier": 1.45,
+        "hitCount": 1,
+        "staggerDamage": 18,
+        "critModifier": 1.6,
+        "targetType": "single",
+        "range": 500,
+        "requiredWeapon": [
+          "bow",
+          "crossbow",
+          "any"
+        ],
+        "statusEffects": []
+      },
+      "hitbox": {
+        "type": "point",
+        "radius": 18,
+        "offset": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      "timeline": {
+        "totalDuration": 500,
+        "phases": [
+          {
+            "name": "draw",
+            "start": 0,
+            "duration": 150,
+            "actions": [
+              {
+                "time": 0,
+                "type": "lighting",
+                "params": {
+                  "type": "cast_glow",
+                  "color": "#f59e0b",
+                  "radius": 60,
+                  "intensity": 0.7
+                }
+              }
+            ]
+          },
+          {
+            "name": "release",
+            "start": 150,
+            "duration": 200,
+            "actions": [
+              {
+                "time": 0,
+                "type": "vfx",
+                "params": {
+                  "type": "projectile",
+                  "type_id": "arrow_trail",
+                  "color": "#fbbf24",
+                  "speed": 1100
+                }
+              }
+            ]
+          },
+          {
+            "name": "impact",
+            "start": 350,
+            "duration": 150,
+            "actions": [
+              {
+                "time": 0,
+                "type": "vfx",
+                "params": {
+                  "type": "impact_burst",
+                  "color": "#f59e0b",
+                  "particleCount": 16
+                }
+              },
+              {
+                "time": 0,
+                "type": "camera_fx",
+                "params": {
+                  "shake": 0.2,
+                  "hitStop": 45
+                }
+              },
+              {
+                "time": 0,
+                "type": "lighting",
+                "params": {
+                  "type": "impact_flash",
+                  "color": "#fef3c7",
+                  "radius": 110,
+                  "intensity": 0.9,
+                  "duration": 140
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "game_feel": {
+        "hitStop": {
+          "duration": 45,
+          "timeScale": 0.1,
+          "target": "enemy"
+        },
+        "cameraShake": {
+          "intensity": 0.2,
+          "decay": 2,
+          "duration": 150,
+          "direction": "horizontal"
+        },
+        "cameraZoom": {
+          "factor": 1.02,
+          "duration": 120,
+          "ease": "ease-out"
+        },
+        "screenFlash": {
+          "color": "#f59e0b",
+          "duration": 80,
+          "opacity": 0.15
+        }
+      },
+      "lighting": {
+        "castGlow": {
+          "color": "#f59e0b",
+          "radius": 60,
+          "intensity": 0.7
+        },
+        "impactFlash": {
+          "color": "#fef3c7",
+          "radius": 110,
+          "intensity": 0.9
+        }
+      },
+      "hud": {
+        "damageNumbers": {
+          "style": "critical",
+          "scale": 1.1,
+          "animation": "rise_fade",
+          "color": "#fbbf24"
+        },
+        "statusIcons": []
+      },
+      "performance": {
+        "particleBudget": 45,
+        "drawCalls": 3,
+        "layerPriority": 2,
+        "poolKey": "pool_power_shot",
+        "allowConcurrent": true
+      },
+      "signature": {
+        "author": "AdenArenaEngine",
+        "version": "1.0.0",
+        "uniqueVfxSignature": "vfx_sig_power_shot_generalist_09"
       }
     }
   ]

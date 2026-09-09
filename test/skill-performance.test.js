@@ -15,7 +15,7 @@
  * 3. Concurrency Protection:
  *    - Ultimates and Master Ultimates enforce allowConcurrent = false to prevent GPU overload.
  * 4. Object Pool Enforcement:
- *    - All 158 skills declare a valid poolKey starting with 'pool_'.
+ *    - All 160 skills declare a valid poolKey starting with 'pool_'.
  * 5. Frame Timing:
  *    - All skill durations <= 3000ms.
  */
@@ -51,7 +51,7 @@ function getAllSkills() {
 test('Automated Compliance Auditor 4 — Performance Budgets & Memory Pooling Suite', async (t) => {
 
   const skills = getAllSkills();
-  assert.equal(skills.length, 158, 'Exactly 158 skills to audit for performance compliance');
+  assert.equal(skills.length, 160, 'Exactly 160 skills to audit for performance compliance');
 
   await t.test('1. Particle budget tiers strictly enforced (Normal <= 80, Heavy <= 120, Ult <= 180, Master <= 250)', () => {
     for (const s of skills) {

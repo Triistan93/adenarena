@@ -113,11 +113,11 @@ export function registerSharedSkillOwnership(skillId, classId) {
 }
 
 const CANONICAL_SHARED_MAGE_SKILL_IDS = new Set([
-  'wind_strike', 'flame_strike', 'hydro_strike', 'energy_burst', 'heal_light'
+  'wind_strike', 'flame_strike', 'hydro_strike', 'heal_light', 'ice_bolt'
 ]);
 
 const CANONICAL_SHARED_FIGHTER_SKILL_IDS = new Set([
-  'power_strike', 'mortal_blow', 'iron_punch'
+  'power_strike', 'mortal_blow', 'iron_punch', 'energy_burst', 'power_shot'
 ]);
 
 const CANONICAL_SHARED_SKILL_IDS = new Set([

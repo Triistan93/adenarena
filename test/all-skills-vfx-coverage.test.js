@@ -2,7 +2,7 @@
  * test/all-skills-vfx-coverage.test.js — Automated Auditor 2: 100% VFX Coverage & Timeline Verification
  * 
  * Verifies that:
- * 1. 100% of all 150 skills + 8 shared skills have non-empty, multi-phase timelines.
+ * 1. 100% of all 150 skills + 10 shared skills have non-empty, multi-phase timelines.
  * 2. Every skill contains anticipation, release/impact, and recovery/settle actions.
  * 3. Every VFX action references a registered component in VFXComponentLibrary.
  * 4. Camera FX (shake, hitStop, zoom, flash) are appropriately configured per tier.
@@ -67,7 +67,7 @@ test('Automated Compliance Auditor 2 — 100% VFX Coverage & Timeline Verificati
       }
     }
 
-    assert.equal(totalSkillsChecked, 158, 'Exactly 158 skills verified for complete timeline structure');
+    assert.equal(totalSkillsChecked, 160, 'Exactly 160 skills verified for complete timeline structure');
   });
 
   await t.test('2. Every skill contains supported VFX and Camera Juice actions', () => {
@@ -129,6 +129,6 @@ test('Automated Compliance Auditor 2 — 100% VFX Coverage & Timeline Verificati
         poolKeys.add(pk);
       }
     }
-    assert.equal(poolKeys.size, 158, 'All 158 skills declare distinct object pool keys');
+    assert.equal(poolKeys.size, 160, 'All 160 skills declare distinct object pool keys');
   });
 });

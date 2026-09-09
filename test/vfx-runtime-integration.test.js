@@ -2,7 +2,7 @@
  * test/vfx-runtime-integration.test.js — Runtime Integration Test for 2D Combat Presentation System
  * 
  * Verifies that:
- * 1. All 158 skills are registered and accessible in VFXOrchestrator.
+ * 1. All 160 skills are registered and accessible in VFXOrchestrator.
  * 2. VFXOrchestrator mounts properly to the stage element and creates .vfx-stage-canvas.
  * 3. Combat events (SKILL_CAST, SKILL_HIT, SKILL_CRIT, SKILL_DAMAGE, SKILL_STAGGER, SKILL_KILL)
  *    trigger proper visual, camera, lighting, and shader responses.
@@ -20,8 +20,8 @@ import { globalLightingFX } from '../lineage-idle/src/vfx/LightingFX.js';
 import { globalShaderSystem } from '../lineage-idle/src/vfx/ShaderSystem.js';
 import { ALL_LOADED_SKILLS } from '../lineage-idle/src/data/skills/index.js';
 
-test('1. VFXOrchestrator registers all 158 skill definitions on initialization', () => {
-  assert.ok(globalVFXOrchestrator._skillDefRegistry.size >= 158, `Expected at least 158 skills, found ${globalVFXOrchestrator._skillDefRegistry.size}`);
+test('1. VFXOrchestrator registers all 160 skill definitions on initialization', () => {
+  assert.ok(globalVFXOrchestrator._skillDefRegistry.size >= 160, `Expected at least 160 skills, found ${globalVFXOrchestrator._skillDefRegistry.size}`);
   
   // Verify key ultimates are in registry
   const titanbreaker = globalVFXOrchestrator._skillDefRegistry.get('titanbreaker');

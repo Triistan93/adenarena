@@ -16,24 +16,20 @@ export const SHARED_MAGE_SKILL_IDS = [
   'flame_strike',
   'hydro_strike',
   'heal_light',
-  'energy_burst'
+  'ice_bolt'
 ];
 
 export const SHARED_FIGHTER_SKILL_IDS = [
   'power_strike',
   'mortal_blow',
-  'iron_punch'
+  'iron_punch',
+  'energy_burst',
+  'power_shot'
 ];
 
 export const SHARED_SKILL_IDS = [
-  'wind_strike',
-  'flame_strike',
-  'hydro_strike',
-  'power_strike',
-  'mortal_blow',
-  'iron_punch',
-  'heal_light',
-  'energy_burst'
+  ...SHARED_MAGE_SKILL_IDS,
+  ...SHARED_FIGHTER_SKILL_IDS
 ];
 
 /**

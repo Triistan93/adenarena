@@ -3,7 +3,7 @@
  * 
  * Verifies:
  * 1. Exactly 25 active classes each have exactly 6 canonical skills in CLASS_SKILLS_ECHO (150 skills).
- * 2. Total registered skills in ALL_LOADED_SKILLS equals 158 (150 class skills + 8 shared).
+ * 2. Total registered skills in ALL_LOADED_SKILLS equals 160 (150 class skills + 10 shared).
  * 3. Zero orphan or legacy skills polluting the 25 active classes.
  * 4. VFX Feature Catalog Coverage: spawnMeteorRain, spawnArrowRain, spawnHolySwordRain, spawnIceShardRain,
  *    spawnDarkSpearRain, spawnEnergyBeam, spawnTornadoVortex, spawnGroundFissure, spawnHolyMandala,
@@ -60,9 +60,9 @@ test('1. 25 Classes x 6 Skills: Exactly 150 class skills mapped in CLASS_SKILLS_
   assert.equal(totalMapped, 150, 'Total canonical class skills must be exactly 150');
 });
 
-test('2. Total Catalog Integrity: 150 Class Skills + 8 Shared = 158 Total Loaded', () => {
+test('2. Total Catalog Integrity: 150 Class Skills + 10 Shared = 160 Total Loaded', () => {
   const allSkills = new Map(ALL_LOADED_SKILLS);
-  assert.equal(allSkills.size, 158, 'ALL_LOADED_SKILLS must contain exactly 158 skills');
+  assert.equal(allSkills.size, 160, 'ALL_LOADED_SKILLS must contain exactly 160 skills');
 });
 
 test('3. Zero Orphan or Legacy Pollution in 25 Active Classes', () => {

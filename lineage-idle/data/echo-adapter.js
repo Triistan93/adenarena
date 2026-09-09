@@ -791,23 +791,23 @@ function buildEchoAdapter() {
 
   // Registro explícito do pool compartilhado por Arquétipo (Lv 1–39)
   const SHARED_MAGE_SKILL_IDS = [
-    'wind_strike', 'flame_strike', 'hydro_strike', 'heal_light', 'energy_burst'
+    'wind_strike', 'flame_strike', 'hydro_strike', 'heal_light', 'ice_bolt'
   ];
   const SHARED_FIGHTER_SKILL_IDS = [
-    'power_strike', 'mortal_blow', 'iron_punch'
+    'power_strike', 'mortal_blow', 'iron_punch', 'energy_burst', 'power_shot'
   ];
   const SHARED_SKILL_IDS = [
-    'wind_strike', 'flame_strike', 'hydro_strike', 'power_strike',
-    'mortal_blow', 'iron_punch', 'heal_light', 'energy_burst'
+    ...SHARED_MAGE_SKILL_IDS,
+    ...SHARED_FIGHTER_SKILL_IDS
   ];
   CLASS_SKILLS_ECHO['shared'] = [...SHARED_SKILL_IDS];
   CLASS_SKILLS_ECHO['shared_mage'] = [...SHARED_MAGE_SKILL_IDS];
   CLASS_SKILLS_ECHO['shared_fighter'] = [...SHARED_FIGHTER_SKILL_IDS];
 
-  // Coordenadas fixas para as shared skills (Grid 4x2)
+  // Coordenadas fixas para as 10 shared skills (Grid 5x2)
   SHARED_SKILL_IDS.forEach((sid, idx) => {
-    const col = idx % 4;
-    const row = Math.floor(idx / 4);
+    const col = idx % 5;
+    const row = Math.floor(idx / 5);
     SKILL_TREE_LAYOUT_ECHO[sid] = { col, row };
   });
 

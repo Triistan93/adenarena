@@ -2,12 +2,12 @@
  * test/shared-skills-integrity.test.js — Formal Test Suite for Shared Skills (Lv 1–39)
  * 
  * Verifies:
- * 1. Exactly 8 canonical shared skills exist in general-skills.json and ALL_LOADED_SKILLS with unlockLevel: 1.
+ * 1. Exactly 10 canonical shared skills exist in general-skills.json and ALL_LOADED_SKILLS with unlockLevel: 1.
  * 2. Shared skills registration in CharacterService and EchoData (CLASS_SKILLS_ECHO['shared']).
  * 3. Universality: classSatisfies returns true for 'shared' and 'all' for every active class.
  * 4. Learning & SP Investment: Shared skills can be leveled from Lv 1 with SP.
  * 5. Cross-class persistence: Shared skills are never lost when changing classes.
- * 6. Total catalog check: 150 class skills + 8 shared = 158 total skills.
+ * 6. Total catalog check: 150 class skills + 10 shared = 160 total skills.
  */
 
 import test from 'node:test';
@@ -45,18 +45,20 @@ const EXPECTED_SHARED_IDS = [
   'wind_strike',
   'flame_strike',
   'hydro_strike',
+  'heal_light',
+  'ice_bolt',
   'power_strike',
   'mortal_blow',
   'iron_punch',
-  'heal_light',
-  'energy_burst'
+  'energy_burst',
+  'power_shot'
 ];
 
-test('1. Canonical Source: Exactly 8 shared skills in general-skills.json with unlockLevel 1', () => {
+test('1. Canonical Source: Exactly 10 shared skills in general-skills.json with unlockLevel 1', () => {
   const sharedJsonPath = path.join(rootDir, 'lineage-idle', 'src', 'data', 'skills', 'shared', 'general-skills.json');
   const sharedData = JSON.parse(fs.readFileSync(sharedJsonPath, 'utf8'));
 
-  assert.equal(sharedData.skills.length, 8, 'general-skills.json must have exactly 8 skills');
+  assert.equal(sharedData.skills.length, 10, 'general-skills.json must have exactly 10 skills');
   
   const ids = sharedData.skills.map(s => s.identity.id);
   assert.deepEqual(ids, EXPECTED_SHARED_IDS, 'Shared skill IDs must match expected canonical list');
@@ -69,16 +71,16 @@ test('1. Canonical Source: Exactly 8 shared skills in general-skills.json with u
   }
 });
 
-test('2. Registration: CharacterService & EchoData expose exact 8 shared skills', () => {
-  assert.equal(SHARED_SKILL_IDS.length, 8, 'SHARED_SKILL_IDS must contain 8 skills');
+test('2. Registration: CharacterService & EchoData expose exact 10 shared skills', () => {
+  assert.equal(SHARED_SKILL_IDS.length, 10, 'SHARED_SKILL_IDS must contain 10 skills');
   assert.deepEqual(SHARED_SKILL_IDS, EXPECTED_SHARED_IDS, 'SHARED_SKILL_IDS must match expected list');
 
   const sharedDefs = getSharedSkills();
-  assert.equal(sharedDefs.length, 8, 'getSharedSkills() must return 8 definitions');
+  assert.equal(sharedDefs.length, 10, 'getSharedSkills() must return 10 definitions');
 
   const echoSkills = window.EchoData.CLASS_SKILLS_ECHO['shared'];
   assert.ok(echoSkills, 'EchoData.CLASS_SKILLS_ECHO must have "shared" key');
-  assert.equal(echoSkills.length, 8, 'CLASS_SKILLS_ECHO["shared"] must contain 8 skills');
+  assert.equal(echoSkills.length, 10, 'CLASS_SKILLS_ECHO["shared"] must contain 10 skills');
   assert.deepEqual(echoSkills, EXPECTED_SHARED_IDS);
 
   const echoLayout = window.EchoData.SKILL_TREE_LAYOUT_ECHO;
@@ -138,10 +140,11 @@ test('4. Learning & SP Investment: Any class can learn shared skills from Lv 1',
   assert.equal(testState.skills['wind_strike'], 1, 'wind_strike must now be level 1');
   assert.equal(testState.sp, 500 - cost1, 'SP must be correctly deducted');
 
-  // Invest in power_strike
-  const ok2 = spendSP(testState, 'power_strike', dummyCallbacks);
-  assert.equal(ok2, true, 'spendSP on power_strike must succeed at Lv 1');
-  assert.equal(testState.skills['power_strike'], 1, 'power_strike must now be level 1');
+  // Invest in ice_bolt
+  const cost2 = getSkillCost('ice_bolt', 0);
+  const ok2 = spendSP(testState, 'ice_bolt', dummyCallbacks);
+  assert.equal(ok2, true, 'spendSP on ice_bolt must succeed at Lv 1');
+  assert.equal(testState.skills['ice_bolt'], 1, 'ice_bolt must now be level 1');
 });
 
 test('5. Cross-Class Persistence: Shared skills are retained on class changes', () => {
@@ -173,8 +176,8 @@ test('5. Cross-Class Persistence: Shared skills are retained on class changes', 
   assert.equal(character.skills['heal_light'], 2);
 });
 
-test('6. Total Catalog Count: 150 Class Skills + 8 Shared = 158 Total Skills', () => {
-  assert.equal(ALL_LOADED_SKILLS.size, 158, 'ALL_LOADED_SKILLS must contain exactly 158 skills');
+test('6. Total Catalog Count: 150 Class Skills + 10 Shared = 160 Total Skills', () => {
+  assert.equal(ALL_LOADED_SKILLS.size, 160, 'ALL_LOADED_SKILLS must contain exactly 160 skills');
 
   let sharedCount = 0;
   let classCount = 0;
@@ -186,13 +189,13 @@ test('6. Total Catalog Count: 150 Class Skills + 8 Shared = 158 Total Skills', (
     }
   }
 
-  assert.equal(sharedCount, 8, 'Must have exactly 8 shared skills');
+  assert.equal(sharedCount, 10, 'Must have exactly 10 shared skills');
   assert.equal(classCount, 150, 'Must have exactly 150 class skills');
 });
 
-test('7. Archetype Separation: Mage classes receive exactly 5 magic skills, Fighters receive exactly 3 physical skills', () => {
+test('7. Archetype Separation: Mage classes receive exactly 5 magic skills, Fighters receive exactly 5 physical skills', () => {
   assert.equal(SHARED_MAGE_SKILL_IDS.length, 5, 'Must have 5 shared mage skills');
-  assert.equal(SHARED_FIGHTER_SKILL_IDS.length, 3, 'Must have 3 shared fighter skills');
+  assert.equal(SHARED_FIGHTER_SKILL_IDS.length, 5, 'Must have 5 shared fighter skills');
 
   // Mages
   const mageClasses = ['human_sorcerer', 'sorcerer', 'archmage', 'elf_mage', 'spellsinger', 'dark_elf_mage', 'spellhowler', 'orc_shaman', 'cardinal', 'bishop'];
@@ -215,7 +218,7 @@ test('7. Archetype Separation: Mage classes receive exactly 5 magic skills, Figh
   for (const fCls of fighterClasses) {
     assert.equal(isMageClass(fCls), false, `Class ${fCls} must NOT be identified as Mage`);
     const fSkills = getSharedSkillIdsForClass(fCls);
-    assert.deepEqual(fSkills, SHARED_FIGHTER_SKILL_IDS, `Fighter class ${fCls} must receive exact 3 fighter shared skills`);
+    assert.deepEqual(fSkills, SHARED_FIGHTER_SKILL_IDS, `Fighter class ${fCls} must receive exact 5 fighter shared skills`);
     
     // Check permission
     for (const sid of SHARED_FIGHTER_SKILL_IDS) {

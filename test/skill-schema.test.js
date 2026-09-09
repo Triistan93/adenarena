@@ -1,7 +1,7 @@
 /**
  * test/skill-schema.test.js — Automated Auditor 1: Skill Schema Compliance
  * 
- * Verifies that all 150 class skills across 25 classes and all 8 shared generalist skills
+ * Verifies that all 150 class skills across 25 classes and all 10 shared generalist skills
  * adhere 100% to the official schema: lineage-idle/src/data/skills/schema/skill.schema.json
  * 
  * Validates:
@@ -140,11 +140,11 @@ function validateSkillObject(skill, filename) {
 
 test('Automated Compliance Auditor 1 — Skill Schema Validation Suite', async (t) => {
 
-  await t.test('1. Shared generalist skills conform strictly to schema (8 skills)', () => {
+  await t.test('1. Shared generalist skills conform strictly to schema (10 skills)', () => {
     const sharedFile = path.resolve('lineage-idle/src/data/skills/shared/general-skills.json');
     assert.ok(fs.existsSync(sharedFile), 'general-skills.json must exist');
     const { skills } = JSON.parse(fs.readFileSync(sharedFile, 'utf8'));
-    assert.equal(skills.length, 8, 'Exactly 8 generalist skills');
+    assert.equal(skills.length, 10, 'Exactly 10 generalist skills');
 
     for (const skill of skills) {
       validateSkillObject(skill, 'general-skills.json');
@@ -178,7 +178,7 @@ test('Automated Compliance Auditor 1 — Skill Schema Validation Suite', async (
     assert.equal(totalSkills, 150, 'Exactly 150 class skills validated');
   });
 
-  await t.test('3. Unique VFX Signature audit — 0 collision across 158 total skills', () => {
+  await t.test('3. Unique VFX Signature audit — 0 collision across 160 total skills', () => {
     const signatures = new Set();
     const allFiles = [];
 
@@ -204,7 +204,7 @@ test('Automated Compliance Auditor 1 — Skill Schema Validation Suite', async (
       }
     }
 
-    assert.equal(checkedCount, 158, 'Exactly 158 total skill signatures checked');
-    assert.equal(signatures.size, 158, 'All 158 skill signatures are strictly unique');
+    assert.equal(checkedCount, 160, 'Exactly 160 total skill signatures checked');
+    assert.equal(signatures.size, 160, 'All 160 skill signatures are strictly unique');
   });
 });

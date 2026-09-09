@@ -2,7 +2,7 @@
  * test/all-classes-full-rollout.test.js — 150 Skills Full Rollout & Elemental Presentation Test Suite
  * 
  * Verifies:
- * 1. All 25 active classes and all 150 skills (+ 8 shared = 158) are registered in VFXOrchestrator.
+ * 1. All 25 active classes and all 150 skills (+ 10 shared = 160) are registered in VFXOrchestrator.
  * 2. All 25 Lv80 Ultimates trigger the cinematic banner with '★★★★ ULTIMATE'.
  * 3. All 25 Lv90 Master Ultimates trigger the cinematic banner with '★★★★★ MASTER ULTIMATE'.
  * 4. spawnTitanbreakerVFX respects elemental colors and particle counts across varied archetypes.
@@ -98,9 +98,9 @@ function createMockStage() {
   return { mockStage, children };
 }
 
-test('1. Registry Coverage: All 25 classes and 158 skills loaded in VFXOrchestrator', () => {
+test('1. Registry Coverage: All 25 classes and 160 skills loaded in VFXOrchestrator', () => {
   const orchestrator = new VFXOrchestrator();
-  assert.equal(orchestrator._skillDefRegistry.size, 158, 'Registry must contain exactly 158 total skills');
+  assert.equal(orchestrator._skillDefRegistry.size, 160, 'Registry must contain exactly 160 total skills');
 
   // Verify skills from all races are present
   const sampleSkills = [
