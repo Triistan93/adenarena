@@ -789,7 +789,10 @@ function buildEchoAdapter() {
     });
     CLASS_SKILLS_ECHO['mage'] = ['wind_strike', 'flame_strike', 'hydro_strike', 'heal_light', 'ice_bolt'];
     CLASS_SKILLS_ECHO['human_mage'] = ['wind_strike', 'flame_strike', 'hydro_strike', 'heal_light', 'ice_bolt'];
-    CLASS_SKILLS_ECHO['wizard'] = ['wind_strike', 'flame_strike', 'hydro_strike', 'heal_light', 'ice_bolt'];
+    // Reconstrução dinâmica do pool de Wizard a partir dos dados canônicos existentes (CLASSES_ECHO)
+    if (CLASS_SKILLS_ECHO['wizard'] && CLASS_SKILLS_ECHO['wizard'].length > 0) {
+      CLASS_SKILLS_ECHO['human_wizard'] = [...CLASS_SKILLS_ECHO['wizard']];
+    }
   }
 
   // Registro explícito do pool compartilhado por Arquétipo (Lv 1–39)

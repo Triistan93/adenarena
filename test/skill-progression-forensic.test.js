@@ -55,7 +55,12 @@ import {
   isMageClass,
   isSkillAllowedForClass,
   canAdvance,
-  promoteClass
+  promoteClass,
+  getClassSkills,
+  validateAndFixCharacterClass,
+  resolveCanonicalDagClassId,
+  resolveCanonicalClassId,
+  getCanonicalCharacterClass
 } from '../lineage-idle/src/services/CharacterService.js';
 
 import {
@@ -375,5 +380,223 @@ test('Forensic 12: SKILL_REGISTRY Isolation — Global pool never exposed in cha
   // Verify that visible does NOT contain the whole registry
   const totalAllSkills = Object.keys(window.EchoData?.SKILL_DEFS_ECHO || {}).length;
   assert.ok(visible.length < totalAllSkills / 2, `Visible skills (${visible.length}) must be a clean subset of total (${totalAllSkills})`);
+});
+
+// ---------------------------------------------------------------------------
+// 8. Canonical Disambiguation & Race-Aware Resolution (Hotfix Requirement 9)
+// ---------------------------------------------------------------------------
+test('Forensic 13: Same short runtime ID + different race resolves to distinct canonical IDs', () => {
+  // Fighter resolution across races
+  assert.strictEqual(resolveCanonicalDagClassId('fighter', 'human'), 'human_fighter');
+  assert.strictEqual(resolveCanonicalDagClassId('fighter', 'elf'), 'elf_fighter');
+  assert.strictEqual(resolveCanonicalDagClassId('fighter', 'darkelf'), 'dark_elf_fighter');
+  assert.strictEqual(resolveCanonicalDagClassId('fighter', 'orc'), 'orc_fighter');
+
+  // Mage resolution across races
+  assert.strictEqual(resolveCanonicalDagClassId('mage', 'human'), 'human_mystic');
+  assert.strictEqual(resolveCanonicalDagClassId('mage', 'elf'), 'elf_mage');
+  assert.strictEqual(resolveCanonicalDagClassId('mage', 'darkelf'), 'dark_elf_mage');
+  assert.strictEqual(resolveCanonicalDagClassId('mage', 'orc'), 'orc_mage');
+
+  // Dwarf Artisan
+  assert.strictEqual(resolveCanonicalDagClassId('artisan', 'dwarf'), 'dwarf_artisan');
+
+  // getCanonicalCharacterClass helper
+  assert.strictEqual(getCanonicalCharacterClass({ class: 'fighter', race: 'human' }), 'human_fighter');
+  assert.strictEqual(getCanonicalCharacterClass({ class: 'fighter', race: 'elf' }), 'elf_fighter');
+  assert.strictEqual(getCanonicalCharacterClass({ class: 'mage', race: 'human' }), 'human_mystic');
+  assert.strictEqual(getCanonicalCharacterClass({ class: 'mage', race: 'darkelf' }), 'dark_elf_mage');
+});
+
+// ---------------------------------------------------------------------------
+// 9. Full Evolution Pipeline & Save/Load JSON Persistence (Hotfix Requirement 10 & 5)
+// ---------------------------------------------------------------------------
+test('Forensic 14: Full Progression Lifecycle & Save/Load JSON Persistence (Lv20 -> Lv40 -> Lv76)', () => {
+  const character = {
+    class: 'mage',
+    race: 'human',
+    level: 20,
+    sp: 200,
+    skills: { wind_strike: 1, flame_strike: 1 },
+    legacyPassives: {}
+  };
+
+  // Step 1: Lv 20 First Transfer
+  const advLv20 = canAdvance(character, 20);
+  assert.ok(advLv20.length > 0, 'Character at Lv 20 must have advancement options');
+  const hasWizard = advLv20.some(opt => opt.id === 'human_wizard' || opt.sourceClassId === 'wizard' || opt.id === 'wizard');
+  assert.strictEqual(hasWizard, true, 'Wizard must be an advancement option for Human Mage');
+
+  // Promote to wizard
+  const promoteOk1 = promoteClass(character, 'wizard');
+  assert.strictEqual(promoteOk1, true, 'promoteClass to wizard must succeed');
+  assert.strictEqual(character.class, 'wizard', 'Class state must be mutated to wizard');
+
+  // Save/Load JSON cycle 1
+  let serialized = JSON.stringify(character);
+  let loadedChar = JSON.parse(serialized);
+  normalizeAndValidateSkills(loadedChar);
+  assert.strictEqual(loadedChar.class, 'wizard', 'Class must persist as wizard across JSON save/load');
+  assert.strictEqual(loadedChar.race, 'human', 'Race must persist as human');
+
+  // Step 2: Lv 40 Second Transfer
+  loadedChar.level = 40;
+  const advLv40 = canAdvance(loadedChar, 40);
+  assert.ok(advLv40.length > 0, 'Character at Lv 40 must have advancement options');
+  const hasSorcerer = advLv40.some(opt => opt.id === 'human_sorcerer' || opt.sourceClassId === 'sorcerer' || opt.id === 'sorcerer');
+  assert.strictEqual(hasSorcerer, true, 'Sorcerer must be an advancement option for Wizard');
+
+  // Promote to sorcerer
+  const promoteOk2 = promoteClass(loadedChar, 'sorcerer');
+  assert.strictEqual(promoteOk2, true, 'promoteClass to sorcerer must succeed');
+  assert.strictEqual(loadedChar.class, 'sorcerer', 'Class state must be mutated to sorcerer');
+
+  // Save/Load JSON cycle 2
+  serialized = JSON.stringify(loadedChar);
+  loadedChar = JSON.parse(serialized);
+  normalizeAndValidateSkills(loadedChar);
+  assert.strictEqual(loadedChar.class, 'sorcerer', 'Class must persist as sorcerer across JSON save/load');
+
+  // Step 3: Lv 76 Third Transfer / Awakening
+  loadedChar.level = 76;
+  const advLv76 = canAdvance(loadedChar, 76);
+  assert.ok(advLv76.length > 0, 'Character at Lv 76 must have advancement options');
+  const hasArchmage = advLv76.some(opt => opt.id === 'human_archmage' || opt.sourceClassId === 'archmage' || opt.id === 'archmage');
+  assert.strictEqual(hasArchmage, true, 'Archmage must be an advancement option for Sorcerer');
+
+  // Promote to archmage
+  const promoteOk3 = promoteClass(loadedChar, 'archmage');
+  assert.strictEqual(promoteOk3, true, 'promoteClass to archmage must succeed');
+  assert.strictEqual(loadedChar.class, 'archmage', 'Class state must be mutated to archmage');
+
+  // Save/Load JSON cycle 3
+  serialized = JSON.stringify(loadedChar);
+  loadedChar = JSON.parse(serialized);
+  normalizeAndValidateSkills(loadedChar);
+  assert.strictEqual(loadedChar.class, 'archmage', 'Class must persist as archmage across JSON save/load');
+});
+
+// ---------------------------------------------------------------------------
+// 10. Strict Skill Tree Gating & Ultimates Gating (Hotfix Requirements 11 & 12)
+// ---------------------------------------------------------------------------
+test('Forensic 15: Strict Skill Tree Gating (Lv1, 40, 75 have 0 skills >= 76; Lv76 has ONLY >=76 of class; Lv80/90 Ultimates strictly gated)', () => {
+  // Test character at Lv 1
+  const charLv1 = { class: 'mage', race: 'human', level: 1, skills: {} };
+  const visibleLv1 = getVisibleSkillsForCharacter(charLv1);
+  const endgameInLv1 = visibleLv1.filter(s => {
+    const def = window.EchoData?.SKILL_DEFS_ECHO?.[s.skillId] || {};
+    return (def.reqLvl || def.requiredLevel || 1) >= 76;
+  });
+  assert.strictEqual(endgameInLv1.length, 0, 'Lv 1 visible skills must contain ZERO skills with requiredLevel >= 76');
+
+  // Test character at Lv 40 (Sorcerer)
+  const charLv40 = { class: 'sorcerer', race: 'human', level: 40, skills: {} };
+  const visibleLv40 = getVisibleSkillsForCharacter(charLv40);
+  const endgameInLv40 = visibleLv40.filter(s => {
+    const def = window.EchoData?.SKILL_DEFS_ECHO?.[s.skillId] || {};
+    return (def.reqLvl || def.requiredLevel || 1) >= 76;
+  });
+  assert.strictEqual(endgameInLv40.length, 0, 'Lv 40 visible skills must contain ZERO skills with requiredLevel >= 76');
+
+  // Test character at Lv 75 (Sorcerer)
+  const charLv75 = { class: 'sorcerer', race: 'human', level: 75, skills: {} };
+  const visibleLv75 = getVisibleSkillsForCharacter(charLv75);
+  const endgameInLv75 = visibleLv75.filter(s => {
+    const def = window.EchoData?.SKILL_DEFS_ECHO?.[s.skillId] || {};
+    return (def.reqLvl || def.requiredLevel || 1) >= 76;
+  });
+  assert.strictEqual(endgameInLv75.length, 0, 'Lv 75 visible skills must contain ZERO skills with requiredLevel >= 76');
+
+  // Test character at Lv 76 (Duelist)
+  const charLv76 = { class: 'duelist', race: 'human', level: 76, skills: {} };
+  const visibleLv76 = getVisibleSkillsForCharacter(charLv76);
+  const lv76Skills = visibleLv76.filter(s => {
+    const def = window.EchoData?.SKILL_DEFS_ECHO?.[s.skillId] || {};
+    return (def.reqLvl || def.requiredLevel || 1) >= 76;
+  });
+  assert.ok(lv76Skills.length > 0, 'Lv 76 character must have Lv >=76 skills visible');
+  for (const s of lv76Skills) {
+    assert.strictEqual(isSkillInProgressionPath('duelist', s.skillId), true, `Skill ${s.skillId} must belong to duelist progression path`);
+  }
+
+  // Gating of Ultimates: Lv 79 vs Lv 80 (human_sorcerer)
+  const charLv79 = { class: 'human_sorcerer', race: 'human', level: 79, skills: {} };
+  const visibleLv79 = getVisibleSkillsForCharacter(charLv79);
+  const ultInLv79 = visibleLv79.filter(s => {
+    const def = window.EchoData?.SKILL_DEFS_ECHO?.[s.skillId] || {};
+    return (def.reqLvl || def.requiredLevel || 1) >= 80;
+  });
+  assert.strictEqual(ultInLv79.length, 0, 'Lv 79 visible skills must contain ZERO Ultimate skills (>= 80)');
+
+  const charLv80 = { class: 'human_sorcerer', race: 'human', level: 80, skills: {} };
+  const visibleLv80 = getVisibleSkillsForCharacter(charLv80);
+  const ultInLv80 = visibleLv80.filter(s => {
+    const def = window.EchoData?.SKILL_DEFS_ECHO?.[s.skillId] || {};
+    return (def.reqLvl || def.requiredLevel || 1) === 80;
+  });
+  assert.ok(ultInLv80.length > 0, 'Lv 80 character must have Lv 80 Ultimate visible');
+
+  // Gating of Master Ultimates: Lv 89 vs Lv 90 (human_sorcerer)
+  const charLv89 = { class: 'human_sorcerer', race: 'human', level: 89, skills: {} };
+  const visibleLv89 = getVisibleSkillsForCharacter(charLv89);
+  const masterUltInLv89 = visibleLv89.filter(s => {
+    const def = window.EchoData?.SKILL_DEFS_ECHO?.[s.skillId] || {};
+    return (def.reqLvl || def.requiredLevel || 1) >= 90;
+  });
+  assert.strictEqual(masterUltInLv89.length, 0, 'Lv 89 visible skills must contain ZERO Master Ultimate skills (>= 90)');
+
+  const charLv90 = { class: 'human_sorcerer', race: 'human', level: 90, skills: {} };
+  const visibleLv90 = getVisibleSkillsForCharacter(charLv90);
+  const masterUltInLv90 = visibleLv90.filter(s => {
+    const def = window.EchoData?.SKILL_DEFS_ECHO?.[s.skillId] || {};
+    return (def.reqLvl || def.requiredLevel || 1) === 90;
+  });
+  assert.ok(masterUltInLv90.length > 0, 'Lv 90 character must have Lv 90 Master Ultimate visible');
+});
+
+// ---------------------------------------------------------------------------
+// 11. Dynamic Wizard Lv 20 Skill Pool (Hotfix Requirement 4)
+// ---------------------------------------------------------------------------
+test('Forensic 16: Wizard Lv20 receives authentic dynamic class skill pool from canonical data', () => {
+  const wizardSkills = getClassSkills('wizard');
+  assert.ok(Array.isArray(wizardSkills) && wizardSkills.length > 0, 'Wizard must possess class skills');
+  
+  // Must have authentic class skills
+  const echoClassSkills = window.EchoData?.CLASS_SKILLS_ECHO?.['wizard'] || [];
+  assert.ok(echoClassSkills.length >= 6, `Wizard pool (${echoClassSkills.length}) must have authentic class skills`);
+
+  // Ensure human_wizard alias also receives the dynamic pool
+  const humanWizardSkills = window.EchoData?.CLASS_SKILLS_ECHO?.['human_wizard'] || [];
+  assert.deepEqual(humanWizardSkills, echoClassSkills, 'human_wizard and wizard must share the identical dynamic pool');
+});
+
+// ---------------------------------------------------------------------------
+// 12. validateAndFixCharacterClass Fallback Protection (Hotfix Requirements 6 & 7)
+// ---------------------------------------------------------------------------
+test('Forensic 17: validateAndFixCharacterClass does not revert valid advanced classes without race in Echo', () => {
+  // Test advanced classes with various race scenarios
+  const testStates = [
+    { class: 'archmage', race: 'human', level: 76 },
+    { class: 'sorcerer', race: 'human', level: 40 },
+    { class: 'wizard', race: 'human', level: 20 },
+    { class: 'titan', race: 'orc', level: 76 },
+    { class: 'duelist', race: 'human', level: 76 },
+    { class: 'elf_mage', race: 'elf', level: 1 }
+  ];
+
+  for (const s of testStates) {
+    const expectedClass = s.class;
+    validateAndFixCharacterClass(s);
+    assert.strictEqual(
+      s.class,
+      expectedClass,
+      `validateAndFixCharacterClass must NOT revert valid class ${expectedClass} to fighter/mage`
+    );
+  }
+
+  // Corrupted / unknown class ID should safely trigger fallback
+  const corruptedState = { class: 'completely_corrupt_class_xyz', race: 'human' };
+  validateAndFixCharacterClass(corruptedState);
+  assert.strictEqual(corruptedState.class, 'fighter', 'Corrupted class must safely fallback to fighter');
 });
 

@@ -9,9 +9,10 @@ import { D } from '../core/GameConfig.js';
 import { RACES, CLASSES } from '../data/races.js';
 import { getClass } from '../engine/StatsEngine.js';
 import { getSkillCost } from '../engine/SkillEngine.js';
-import { resolveCanonicalClassId } from '../data/classes/class_aliases.js';
-import { STAGE_LEVEL_THRESHOLDS, getProgressionStage } from '../data/elemental/SkillProgression.js';
-import { getAncestors, getDescendants, getLineage, getSuccessors, canAdvance } from '../data/elemental/ClassLineage.js';
+import { resolveCanonicalClassId, resolveCanonicalDagClassId, getCanonicalCharacterClass } from '../data/classes/class_aliases.js';
+import { getAncestors, getDescendants, getLineage, getSuccessors, canAdvance, getClassEntity } from '../data/elemental/ClassLineage.js';
+import { HISTORICAL_CLASS_MAP } from '../data/elemental/HistoricalClasses.js';
+import { CLASS_IDENTITIES } from '../data/elemental/ClassIdentity.js';
 
 import {
   SHARED_MAGE_SKILL_IDS,
@@ -55,8 +56,70 @@ export {
   getDescendants,
   getLineage,
   getSuccessors,
-  canAdvance
+  canAdvance,
+  resolveCanonicalClassId,
+  resolveCanonicalDagClassId,
+  getCanonicalCharacterClass
 };
+
+/**
+ * Valida a integridade da classe e raça do personagem com resolução canônica defensiva.
+ * Não reverte classes para fighter/mage se a identidade puder ser confirmada em qualquer registro canônico ou histórico.
+ * @param {Object} state
+ * @returns {Object} state
+ */
+export function validateAndFixCharacterClass(state) {
+  if (!state) return state;
+  if (!state.race) state.race = 'human';
+  
+  const raceDefaults = {
+    human: 'fighter',
+    elf: 'elfFighter',
+    darkelf: 'darkElfFighter',
+    orc: 'orcBase',
+    dwarf: 'artisan',
+    kamael: 'soulbreaker',
+    sylph: 'sylphGunner',
+    highelf: 'highElfBase',
+    ertheia: 'bloodRoseBase'
+  };
+
+  if (!state.class) {
+    state.class = raceDefaults[state.race] || 'fighter';
+    return state;
+  }
+
+  // 1. Tenta resolver canonicamente pelo DAG e raça
+  const canonDagId = resolveCanonicalDagClassId(state.class, state.race);
+  const canonId = resolveCanonicalClassId(state.class, state.race);
+
+  // 2. Consulta todas as fontes canônicas e históricas
+  const classDef = getClass(state.class) || (canonDagId ? getClass(canonDagId) : null);
+  const lineageEntity = getClassEntity(canonDagId) || getClassEntity(state.class);
+  const historicalEntity = HISTORICAL_CLASS_MAP[canonDagId] || HISTORICAL_CLASS_MAP[state.class];
+  const identityEntity = CLASS_IDENTITIES[canonDagId] || CLASS_IDENTITIES[state.class];
+  const echoDefs = (typeof window !== 'undefined' && window.EchoData?.CLASSES_ECHO) ? window.EchoData.CLASSES_ECHO : null;
+  const echoDef = echoDefs ? (echoDefs[state.class] || echoDefs[canonDagId] || echoDefs[canonId]) : null;
+
+  // Se qualquer fonte confirmar a existência e identidade da classe, ela é legítima
+  const isClassValid = Boolean(classDef || lineageEntity || historicalEntity || identityEntity || echoDef || CLASSES[state.class]);
+
+  if (isClassValid) {
+    // Reconciliação opcional de raça via entidade canônica sem nunca reverter a classe
+    const knownRace = (lineageEntity?.race || historicalEntity?.race || identityEntity?.race || classDef?.race || echoDef?.race);
+    if (knownRace && typeof knownRace === 'string') {
+      const normalizedKnownRace = knownRace.toLowerCase().replace(/[^a-z]/g, '');
+      if (state.race === 'human' && normalizedKnownRace !== 'human' && raceDefaults[normalizedKnownRace]) {
+        state.race = normalizedKnownRace;
+      }
+    }
+    return state; // Classe validada com sucesso, NENHUM fallback executado
+  }
+
+  // Fallback seguro de último recurso apenas para IDs completamente desconhecidos/corrompidos
+  state.class = raceDefaults[state.race] || 'fighter';
+  return state;
+}
 
 /**
  * Retorna os IDs das habilidades gerais compartilhadas aplicáveis à classe informada.
@@ -285,12 +348,13 @@ export function promoteClass(state, newClassId, selectedBuffIds = null, callback
 
   // 1. Validação estrita do Grafo DAG de Linhagem (User Correction 3)
   const currentClass = state.class;
-  const canonCurrent = resolveCanonicalClassId(currentClass) || currentClass;
-  const canonNew = resolveCanonicalClassId(newClassId) || newClassId;
-  const successors = getSuccessors(currentClass).concat(getSuccessors(canonCurrent));
+  const currentRace = state.race;
+  const canonCurrent = resolveCanonicalDagClassId(currentClass, currentRace) || resolveCanonicalClassId(currentClass, currentRace) || currentClass;
+  const canonNew = resolveCanonicalDagClassId(newClassId, currentRace) || resolveCanonicalClassId(newClassId, currentRace) || newClassId;
+  const successors = getSuccessors(currentClass, currentRace).concat(getSuccessors(canonCurrent, currentRace));
 
   const isAuthorizedSuccessor = successors.length === 0 ||
-    successors.some(s => s === newClassId || s === canonNew || resolveCanonicalClassId(s) === canonNew) ||
+    successors.some(s => s === newClassId || s === canonNew || resolveCanonicalDagClassId(s, currentRace) === canonNew || resolveCanonicalClassId(s, currentRace) === canonNew) ||
     callbacks.allowAdminOverride;
 
   if (!isAuthorizedSuccessor) {
@@ -299,9 +363,16 @@ export function promoteClass(state, newClassId, selectedBuffIds = null, callback
   }
 
   // 2. Validação de Nível de Requisito de Avanço
-  const eligibleAdvancements = canAdvance(currentClass, state.level).concat(canAdvance(canonCurrent, state.level));
+  const eligibleAdvancements = canAdvance(currentClass, state.level, currentRace).concat(canAdvance(canonCurrent, state.level, currentRace));
   if (eligibleAdvancements.length > 0 && !callbacks.allowAdminOverride) {
-    const isLevelEligible = eligibleAdvancements.some(e => e.id === newClassId || e.id === canonNew || e.sourceClassId === newClassId || e.sourceClassId === canonNew);
+    const isLevelEligible = eligibleAdvancements.some(e => 
+      e.id === newClassId || 
+      e.id === canonNew || 
+      e.sourceClassId === newClassId || 
+      e.sourceClassId === canonNew ||
+      resolveCanonicalDagClassId(e.id, currentRace) === canonNew ||
+      resolveCanonicalDagClassId(e.sourceClassId, currentRace) === canonNew
+    );
     if (!isLevelEligible) {
       if (callbacks.log) callbacks.log(`🔒 Nível insuficiente (${state.level}) para avançar para ${newClassDef.name || newClassId}.`, 'warning');
       return false;

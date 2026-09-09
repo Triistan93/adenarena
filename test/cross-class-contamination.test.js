@@ -53,7 +53,7 @@ const HUMAN_SORCERER_SKILLS = [
 test('1. Human Sorcerer / Mage: ZERO Dwarf Mage skills present', () => {
   const classSkills = window.EchoData.CLASS_SKILLS_ECHO;
   const sorcererAliases = ['human_sorcerer', 'sorcerer', 'archmage'];
-  const baseMageAliases = ['wizard', 'mage', 'human_mage'];
+  const baseMageAliases = ['mage', 'human_mage'];
 
   // Sorcerer specialization and awakening: must have the 6 canonical Sorcerer skills
   for (const alias of sorcererAliases) {
@@ -72,7 +72,7 @@ test('1. Human Sorcerer / Mage: ZERO Dwarf Mage skills present', () => {
     }
   }
 
-  // Base mage and wizard classes: must have base mage skills and ZERO dwarf skills
+  // Base mage classes: must have base mage skills and ZERO dwarf skills
   for (const alias of baseMageAliases) {
     const list = classSkills[alias] || getClassSkills(alias);
     assert.ok(list, `Skills for ${alias} must exist`);
@@ -85,6 +85,17 @@ test('1. Human Sorcerer / Mage: ZERO Dwarf Mage skills present', () => {
         `Contamination detected: ${alias} must NOT contain dwarf skill "${dwarfSkill}"`
       );
     }
+  }
+
+  // Wizard (Lv20 1st Transfer): has dynamic class skill pool and ZERO dwarf skills
+  const wizardList = classSkills['wizard'] || getClassSkills('wizard');
+  assert.ok(wizardList && wizardList.length > 0, 'Wizard skills must exist');
+  for (const dwarfSkill of DWARF_MAGE_SKILLS) {
+    assert.equal(
+      wizardList.includes(dwarfSkill),
+      false,
+      `Contamination detected: wizard must NOT contain dwarf skill "${dwarfSkill}"`
+    );
   }
 });
 

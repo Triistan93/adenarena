@@ -5,7 +5,7 @@
  * e resolveCanonicalClassId a partir do módulo central src/data/classes/index.js.
  */
 
-import { RACES_ECHO, CLASSES_ECHO, CLASS_ALIASES, resolveCanonicalClassId } from '../src/data/classes/index.js';
+import { RACES_ECHO, CLASSES_ECHO, CLASS_ALIASES, resolveCanonicalClassId, resolveCanonicalDagClassId, getCanonicalCharacterClass } from '../src/data/classes/index.js';
 
 if (typeof window !== 'undefined') {
   window.EchoData = window.EchoData || {};
@@ -13,12 +13,17 @@ if (typeof window !== 'undefined') {
   window.EchoData.CLASSES_ECHO = CLASSES_ECHO;
   window.EchoData.CLASS_ALIASES = CLASS_ALIASES;
   window.EchoData.resolveCanonicalClassId = resolveCanonicalClassId;
+  window.EchoData.resolveCanonicalDagClassId = resolveCanonicalDagClassId;
+  window.EchoData.getCanonicalCharacterClass = getCanonicalCharacterClass;
 
   window.GameData = window.GameData || {};
   window.GameData.RACES_ECHO = RACES_ECHO;
   window.GameData.CLASSES_ECHO = CLASSES_ECHO;
   window.GameData.CLASS_ALIASES = CLASS_ALIASES;
   window.GameData.resolveCanonicalClassId = resolveCanonicalClassId;
+  window.GameData.resolveCanonicalDagClassId = resolveCanonicalDagClassId;
+  window.GameData.getCanonicalCharacterClass = getCanonicalCharacterClass;
 }
 
-export { RACES_ECHO, CLASSES_ECHO, CLASS_ALIASES, resolveCanonicalClassId };
+export { RACES_ECHO, CLASSES_ECHO, CLASS_ALIASES, resolveCanonicalClassId, resolveCanonicalDagClassId, getCanonicalCharacterClass };
+

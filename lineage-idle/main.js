@@ -11,7 +11,10 @@ import { AFFIX_MAP as AFFIX_MAP_IMPORT } from './data/affixes.js';
 
 // ─── Sprint 1: Importa módulos de dados extraídos ───────────────────────────
 import { RACE_BASE_ATTRIBUTES, RACES, CLASSES, DWARF_CLASS, KAMAEL_CLASS } from './src/data/races.js';
-import { resolveCanonicalClassId } from './src/data/classes/class_aliases.js';
+import { resolveCanonicalClassId, resolveCanonicalDagClassId, getCanonicalCharacterClass } from './src/data/classes/class_aliases.js';
+import { getClassEntity } from './src/data/elemental/ClassLineage.js';
+import { HISTORICAL_CLASS_MAP } from './src/data/elemental/HistoricalClasses.js';
+import { CLASS_IDENTITIES } from './src/data/elemental/ClassIdentity.js';
 import { SAGAS, ZONES, ZONE_BACKGROUNDS, getSagaDef }                          from './src/data/zones.js';
 import { MONSTERS }                                                          from './src/data/monsters.js';
 import { RAID_BOSSES }                                                       from './src/data/raids.js';
@@ -185,7 +188,8 @@ import {
   getCharacterProgressionState,
   isSkillAvailableForCharacter,
   getVisibleSkillsForCharacter,
-  SKILL_VISIBILITY_STATES
+  SKILL_VISIBILITY_STATES,
+  validateAndFixCharacterClass as serviceValidateAndFixCharacterClass
 } from './src/services/CharacterService.js';
 
 import {
@@ -433,25 +437,11 @@ function getStats() { return engineGetStats(state); }
 function classSatisfies(playerClass, reqClass) { return serviceClassSatisfies(playerClass, reqClass); }
 function getSkillTreeKey(classId) { return serviceGetSkillTreeKey(classId); }
 function getClassSkills(classId) { return serviceGetClassSkills(classId); }
-function validateAndFixCharacterClass() {
-  if (!state.race) state.race = 'human';
-  
-  const raceDefaults = {
-    human: 'fighter',
-    elf: 'elfFighter',
-    darkelf: 'darkElfFighter',
-    orc: 'orcBase',
-    dwarf: 'artisan',
-    kamael: 'soulbreaker',
-    sylph: 'sylphGunner',
-    highelf: 'highElfBase',
-    ertheia: 'bloodRoseBase'
-  };
-
-  const currentClassDef = getClass(state.class);
-  if (!currentClassDef || (currentClassDef.stage === 0 && currentClassDef.race && currentClassDef.race !== state.race)) {
-    state.class = raceDefaults[state.race] || 'fighter';
-  }
+function validateAndFixCharacterClass(targetState = null) {
+  return serviceValidateAndFixCharacterClass(targetState || state);
+}
+if (typeof window !== 'undefined') {
+  window.validateAndFixCharacterClass = validateAndFixCharacterClass;
 }
 
 // Opens the Class Transfer modal — declared before checkClassAdvancement uses it

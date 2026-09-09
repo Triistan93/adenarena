@@ -13,7 +13,7 @@
 
 import { D } from '../core/GameConfig.js';
 import { getClass } from '../engine/StatsEngine.js';
-import { resolveCanonicalClassId } from '../data/classes/class_aliases.js';
+import { resolveCanonicalClassId, resolveCanonicalDagClassId, getCanonicalCharacterClass } from '../data/classes/class_aliases.js';
 import {
   PROGRESSION_STAGES,
   STAGE_LEVEL_THRESHOLDS,
@@ -61,6 +61,21 @@ export const SKILL_VISIBILITY_STATES = Object.freeze({
   AVAILABLE: 'AVAILABLE',
   LEARNED: 'LEARNED'
 });
+
+export const SKILL_DETAILED_VISIBILITY_STATES = Object.freeze({
+  HIDDEN: 'HIDDEN',
+  HIDDEN_FUTURE: 'HIDDEN_FUTURE',
+  HIDDEN_FOREIGN: 'HIDDEN_FOREIGN',
+  HIDDEN_SIBLING_BRANCH: 'HIDDEN_SIBLING_BRANCH',
+  LOCKED: 'LOCKED',
+  AVAILABLE: 'AVAILABLE',
+  LEARNED: 'LEARNED'
+});
+
+export const HIDDEN_FUTURE = 'HIDDEN_FUTURE';
+export const HIDDEN_FOREIGN = 'HIDDEN_FOREIGN';
+export const HIDDEN_SIBLING_BRANCH = 'HIDDEN_SIBLING_BRANCH';
+
 
 // ─── Archetype & Sibling Branch Detectors ──────────────────────────────────────
 
@@ -349,7 +364,78 @@ export function isSkillInProgressionPath(character, skill) {
 // ─── Four-State Visibility & Availability Gate ────────────────────────────────
 
 /**
- * Computes the exact, non-overlapping lifecycle visibility state for a skill on a character.
+ * Computes the fine-grained internal lifecycle visibility state for a skill on a character.
+ * Returns: 'LEARNED' | 'AVAILABLE' | 'LOCKED' | 'HIDDEN_FUTURE' | 'HIDDEN_FOREIGN' | 'HIDDEN_SIBLING_BRANCH'
+ *
+ * Evaluates simultaneously: level + progressionStage + canonicalClass + lineage + availability.
+ *
+ * @param {object|string} character — Character state object { class, race, level, skills, ... }
+ * @param {object|string} skill — Skill definition or ID
+ * @returns {string} One of SKILL_DETAILED_VISIBILITY_STATES
+ */
+export function getSkillDetailedVisibility(character, skill) {
+  const def = resolveSkillDef(skill);
+  if (!def) return SKILL_DETAILED_VISIBILITY_STATES.HIDDEN_FOREIGN;
+
+  const charClass = (typeof character === 'string') ? character : character?.class;
+  if (!charClass) return SKILL_DETAILED_VISIBILITY_STATES.HIDDEN_FOREIGN;
+
+  const charRace = (typeof character === 'object' && character?.race) ? character.race : null;
+  const charLevel = (typeof character === 'object' && typeof character.level === 'number') ? character.level : 1;
+  const charSkills = (typeof character === 'object' && character.skills) ? character.skills : {};
+
+  // 1. LEARNED check (owned by character)
+  if ((charSkills[def.id] || 0) > 0 || (def.name && (charSkills[def.name] || 0) > 0)) {
+    return SKILL_DETAILED_VISIBILITY_STATES.LEARNED;
+  }
+
+  // 2. Foreign Archetype check
+  const charIsMage = isMageClass(charClass);
+  if (SHARED_MAGE_SKILL_IDS.includes(def.id) && !charIsMage) {
+    return SKILL_DETAILED_VISIBILITY_STATES.HIDDEN_FOREIGN;
+  }
+  if (SHARED_FIGHTER_SKILL_IDS.includes(def.id) && charIsMage) {
+    return SKILL_DETAILED_VISIBILITY_STATES.HIDDEN_FOREIGN;
+  }
+
+  // 3. Sibling Branch check
+  const canonicalDagClass = resolveCanonicalDagClassId(charClass, charRace);
+  const skillClass = def.classId || (Array.isArray(def.nativeClasses) ? def.nativeClasses[0] : null);
+  if (skillClass) {
+    const canonSkillClass = resolveCanonicalDagClassId(skillClass);
+    if (areSiblingBranches(canonicalDagClass, canonSkillClass)) {
+      const isAllowedExplicitly = Array.isArray(def.availableTo) && (def.availableTo.includes(charClass) || def.availableTo.includes(canonicalDagClass));
+      if (!isAllowedExplicitly) {
+        return SKILL_DETAILED_VISIBILITY_STATES.HIDDEN_SIBLING_BRANCH;
+      }
+    }
+  }
+
+  // 4. Progression Path check
+  if (!isSkillInProgressionPath(character, def)) {
+    return SKILL_DETAILED_VISIBILITY_STATES.HIDDEN_FOREIGN;
+  }
+
+  // 5. Level & Stage Gate -> HIDDEN_FUTURE (Zero vazamento para DOM)
+  const reqLvl = Number(def.requiredLevel || def.reqLvl || def.identity?.unlockLevel) || 1;
+  const skillStage = def.progressionStage || def.identity?.progressionStage;
+  const stageReq = (skillStage && STAGE_LEVEL_THRESHOLDS[skillStage]) ? STAGE_LEVEL_THRESHOLDS[skillStage] : 1;
+
+  if (charLevel < reqLvl || charLevel < stageReq) {
+    return SKILL_DETAILED_VISIBILITY_STATES.HIDDEN_FUTURE;
+  }
+
+  // 6. Immediate Class Authorization Gate (e.g. 2nd Job skill before transfer)
+  const isImmediatelyEligible = isSkillNativeOrAvailableNow(charClass, def);
+  if (!isImmediatelyEligible) {
+    return SKILL_DETAILED_VISIBILITY_STATES.LOCKED;
+  }
+
+  return SKILL_DETAILED_VISIBILITY_STATES.AVAILABLE;
+}
+
+/**
+ * Computes the exact, non-overlapping 4-state lifecycle visibility state for a skill on a character.
  * Returns: 'HIDDEN' | 'LOCKED' | 'AVAILABLE' | 'LEARNED'
  *
  * @param {object} character — Character state object { class, level, skills, ... }
@@ -357,47 +443,15 @@ export function isSkillInProgressionPath(character, skill) {
  * @returns {string} One of SKILL_VISIBILITY_STATES
  */
 export function getSkillVisibility(character, skill) {
-  const def = resolveSkillDef(skill);
-  if (!def) return SKILL_VISIBILITY_STATES.HIDDEN;
-
-  const charClass = (typeof character === 'string') ? character : character?.class;
-  if (!charClass) return SKILL_VISIBILITY_STATES.HIDDEN;
-
-  const charLevel = (typeof character === 'object' && typeof character.level === 'number') ? character.level : 1;
-  const charSkills = (typeof character === 'object' && character.skills) ? character.skills : {};
-
-  // 1. LEARNED check (owned by character)
-  if ((charSkills[def.id] || 0) > 0 || (def.name && (charSkills[def.name] || 0) > 0)) {
-    return SKILL_VISIBILITY_STATES.LEARNED;
-  }
-
-  // 2. Progression Path check
-  if (!isSkillInProgressionPath(character, def)) {
-    return SKILL_VISIBILITY_STATES.HIDDEN;
-  }
-
-  // 3. Level Gate
-  const reqLvl = Number(def.requiredLevel || def.reqLvl || def.identity?.unlockLevel) || 1;
-  if (charLevel < reqLvl) {
+  const detailed = getSkillDetailedVisibility(character, skill);
+  if (detailed === SKILL_DETAILED_VISIBILITY_STATES.LEARNED) return SKILL_VISIBILITY_STATES.LEARNED;
+  if (detailed === SKILL_DETAILED_VISIBILITY_STATES.AVAILABLE) return SKILL_VISIBILITY_STATES.AVAILABLE;
+  if (detailed === SKILL_DETAILED_VISIBILITY_STATES.LOCKED) return SKILL_VISIBILITY_STATES.LOCKED;
+  if (detailed === SKILL_DETAILED_VISIBILITY_STATES.HIDDEN_FUTURE) {
+    // In canonical 4-state contract, skills in progression path but gated by level are classified as LOCKED
     return SKILL_VISIBILITY_STATES.LOCKED;
   }
-
-  // 4. Progression Stage Gate
-  const skillStage = def.progressionStage || def.identity?.progressionStage;
-  if (skillStage && STAGE_LEVEL_THRESHOLDS[skillStage]) {
-    const stageReq = STAGE_LEVEL_THRESHOLDS[skillStage];
-    if (charLevel < stageReq) {
-      return SKILL_VISIBILITY_STATES.LOCKED;
-    }
-  }
-
-  // 5. Immediate Class Authorization Gate (e.g. 2nd Job skill before transfer)
-  const isImmediatelyEligible = isSkillNativeOrAvailableNow(charClass, def);
-  if (!isImmediatelyEligible) {
-    return SKILL_VISIBILITY_STATES.LOCKED;
-  }
-
-  return SKILL_VISIBILITY_STATES.AVAILABLE;
+  return SKILL_VISIBILITY_STATES.HIDDEN;
 }
 
 /**
@@ -409,8 +463,8 @@ export function getSkillVisibility(character, skill) {
  * @returns {boolean}
  */
 export function isSkillAvailableForCharacter(character, skill) {
-  const visibility = getSkillVisibility(character, skill);
-  return visibility === SKILL_VISIBILITY_STATES.AVAILABLE || visibility === SKILL_VISIBILITY_STATES.LEARNED;
+  const detailed = getSkillDetailedVisibility(character, skill);
+  return detailed === SKILL_DETAILED_VISIBILITY_STATES.AVAILABLE || detailed === SKILL_DETAILED_VISIBILITY_STATES.LEARNED;
 }
 
 // ─── Character Skill Partitioning & Aggregation ────────────────────────────────
@@ -421,12 +475,18 @@ export function isSkillAvailableForCharacter(character, skill) {
  * Architectural Invariant: Never iterates Object.values(SKILL_REGISTRY) directly.
  * Traverses: Character -> ClassIdentity -> Lineage -> Stage -> Eligibility -> Skill Pool.
  *
+ * Strict Visibility Rule: HIDDEN_FUTURE, HIDDEN_FOREIGN, and HIDDEN_SIBLING_BRANCH
+ * NEVER enter visibleList.
+ *
  * @param {object} character
- * @returns {{ learned: object[], available: object[], locked: object[], hidden: object[] }}
+ * @returns {{ learned: object[], available: object[], locked: object[], future: object[], hidden: object[], visibleList: object[] }}
  */
 export function getVisibleSkillsForCharacter(character) {
   const charClass = (typeof character === 'string') ? character : character?.class;
-  const canonicalClass = resolveCanonicalClassId(charClass) || charClass;
+  const charRace = (typeof character === 'object' && character?.race) ? character.race : null;
+  const canonicalClass = resolveCanonicalClassId(charClass, charRace) || charClass;
+  const canonicalDagClass = resolveCanonicalDagClassId(charClass, charRace);
+  const charLevel = (typeof character === 'object' && typeof character.level === 'number') ? character.level : 1;
 
   // Build targeted candidate list from:
   // 1. Shared skills for character's archetype
@@ -435,7 +495,7 @@ export function getVisibleSkillsForCharacter(character) {
   for (const sid of sharedIds) candidateIds.add(sid);
 
   // 2. ClassIdentity skillPools for character's class
-  const identity = CLASS_IDENTITIES[canonicalClass] || CLASS_IDENTITIES[charClass];
+  const identity = CLASS_IDENTITIES[canonicalDagClass] || CLASS_IDENTITIES[canonicalClass] || CLASS_IDENTITIES[charClass];
   if (identity?.skillPools) {
     for (const pool of Object.values(identity.skillPools)) {
       if (Array.isArray(pool)) {
@@ -445,7 +505,7 @@ export function getVisibleSkillsForCharacter(character) {
   }
 
   // 3. Native skill trees for character's class
-  const nativeSkills = NATIVE_SKILL_TREES[canonicalClass] || NATIVE_SKILL_TREES[charClass] || [];
+  const nativeSkills = NATIVE_SKILL_TREES[canonicalDagClass] || NATIVE_SKILL_TREES[canonicalClass] || NATIVE_SKILL_TREES[charClass] || [];
   for (const s of nativeSkills) {
     candidateIds.add(s.id);
   }
@@ -455,10 +515,11 @@ export function getVisibleSkillsForCharacter(character) {
     const classSet = new Set([
       charClass,
       canonicalClass,
-      ...getLineage(charClass),
-      ...getLineage(canonicalClass),
-      ...getDescendants(charClass),
-      ...getDescendants(canonicalClass)
+      canonicalDagClass,
+      ...getLineage(charClass, charRace),
+      ...getLineage(canonicalDagClass, charRace),
+      ...getDescendants(charClass, charRace),
+      ...getDescendants(canonicalDagClass, charRace)
     ]);
     for (const c of classSet) {
       const skills = window.EchoData.CLASS_SKILLS_ECHO[c] || [];
@@ -477,6 +538,7 @@ export function getVisibleSkillsForCharacter(character) {
     learned: [],
     available: [],
     locked: [],
+    future: [],
     hidden: []
   };
 
@@ -484,22 +546,29 @@ export function getVisibleSkillsForCharacter(character) {
     const def = resolveSkillDef(sId);
     if (!def) continue;
 
-    const visibility = getSkillVisibility(character, def);
-    if (visibility === SKILL_VISIBILITY_STATES.LEARNED) {
+    const detailed = getSkillDetailedVisibility(character, def);
+    if (detailed === SKILL_DETAILED_VISIBILITY_STATES.LEARNED) {
       result.learned.push(def);
-    } else if (visibility === SKILL_VISIBILITY_STATES.AVAILABLE) {
+    } else if (detailed === SKILL_DETAILED_VISIBILITY_STATES.AVAILABLE) {
       result.available.push(def);
-    } else if (visibility === SKILL_VISIBILITY_STATES.LOCKED) {
+    } else if (detailed === SKILL_DETAILED_VISIBILITY_STATES.LOCKED) {
       result.locked.push(def);
+    } else if (detailed === SKILL_DETAILED_VISIBILITY_STATES.HIDDEN_FUTURE) {
+      result.future.push(def);
     } else {
       result.hidden.push(def);
     }
   }
 
+  // visibleList contains STRICTLY skills that are learned, available, or current-level locked.
+  // Future skills (requiredLevel > charLevel) and hidden skills NEVER enter visibleList.
   result.visibleList = [
     ...result.learned.map(def => ({ skillId: def.id, skillDef: def, visibility: SKILL_VISIBILITY_STATES.LEARNED })),
     ...result.available.map(def => ({ skillId: def.id, skillDef: def, visibility: SKILL_VISIBILITY_STATES.AVAILABLE })),
-    ...result.locked.map(def => ({ skillId: def.id, skillDef: def, visibility: SKILL_VISIBILITY_STATES.LOCKED }))
+    ...result.locked.filter(def => {
+      const reqLvl = Number(def.requiredLevel || def.reqLvl || def.identity?.unlockLevel) || 1;
+      return charLevel >= reqLvl;
+    }).map(def => ({ skillId: def.id, skillDef: def, visibility: SKILL_VISIBILITY_STATES.LOCKED }))
   ];
 
   // Make result directly iterable and Array-compatible over visible skills [learned, available, locked]
@@ -550,14 +619,16 @@ export function getHiddenSkillsForCharacter(character) {
 export function getCharacterProgressionState(character) {
   const charClass = (typeof character === 'string') ? character : character?.class;
   const level = (typeof character === 'object' && typeof character.level === 'number') ? character.level : 1;
-  const canonicalId = resolveCanonicalClassId(charClass) || charClass;
+  const race = (typeof character === 'object' && character?.race) ? character.race : null;
+  const canonicalId = resolveCanonicalClassId(charClass, race) || charClass;
+  const canonicalDagId = resolveCanonicalDagClassId(charClass, race);
   const stage = getProgressionStage(level);
   const stageNumber = level >= 90 ? 5 : level >= 80 ? 4 : level >= 76 ? 3 : level >= 40 ? 2 : level >= 20 ? 1 : 0;
-  const lineageNode = getClassEntity(canonicalId) || getClass(charClass) || null;
-  const availableAdvancements = canAdvance(charClass, level);
+  const lineageNode = getClassEntity(canonicalDagId, race) || getClassEntity(canonicalId) || getClass(charClass) || null;
+  const availableAdvancements = canAdvance(canonicalDagId, level, race);
   const canAdvanceNow = availableAdvancements.length > 0;
 
-  const classIdentity = CLASS_IDENTITIES[canonicalId] || null;
+  const classIdentity = CLASS_IDENTITIES[canonicalDagId] || CLASS_IDENTITIES[canonicalId] || CLASS_IDENTITIES[charClass] || null;
   const ultimateSkill = classIdentity?.ultimateSkill || null;
   const masterUltimateSkill = classIdentity?.masterUltimateSkill || null;
 
@@ -575,7 +646,7 @@ export function getCharacterProgressionState(character) {
   return {
     level,
     classId: charClass,
-    canonicalClassId: canonicalId,
+    canonicalClassId: canonicalDagId || canonicalId,
     stage,
     stageName: stage,
     stageNumber,

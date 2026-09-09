@@ -5,6 +5,9 @@
  * e chaves de imagens/sprites para os IDs canônicos oficiais definidos em CLASSES_ECHO.
  */
 
+import { ACTIVE_CLASSES } from '../elemental/ElementMatrix.js';
+import { HISTORICAL_CLASSES } from '../elemental/HistoricalClasses.js';
+
 export const CLASS_ALIASES = {
   // 🗡️ Assassin (Humano e Elfo Negro)
   'assassinbase': 'assassinS0',
@@ -341,25 +344,216 @@ const EXTENDED_FALLBACKS = {
   'dwarfmagician': 'dwarf_mage'
 };
 
+// ─── Mapeamento Canônico de Classes Base por Raça (Nível 1) ─────────────────
+const BASE_CLASS_RACE_MAP = {
+  human: {
+    fighter: 'human_fighter',
+    humanfighter: 'human_fighter',
+    mage: 'human_mystic',
+    humanmage: 'human_mystic',
+    mystic: 'human_mystic',
+    humanmystic: 'human_mystic'
+  },
+  elf: {
+    fighter: 'elf_fighter',
+    elffighter: 'elf_fighter',
+    elvenfighter: 'elf_fighter',
+    mage: 'elf_mage',
+    elfmage: 'elf_mage',
+    elvenmage: 'elf_mage',
+    wizard: 'elf_mage'
+  },
+  darkelf: {
+    fighter: 'dark_elf_fighter',
+    darkelffighter: 'dark_elf_fighter',
+    palusknight: 'dark_elf_palus_knight',
+    mage: 'dark_elf_mage',
+    darkelfmage: 'dark_elf_mage',
+    darkwizard: 'dark_elf_wizard'
+  },
+  dark_elf: {
+    fighter: 'dark_elf_fighter',
+    darkelffighter: 'dark_elf_fighter',
+    palusknight: 'dark_elf_palus_knight',
+    mage: 'dark_elf_mage',
+    darkelfmage: 'dark_elf_mage',
+    darkwizard: 'dark_elf_wizard'
+  },
+  orc: {
+    fighter: 'orc_fighter',
+    orcfighter: 'orc_fighter',
+    orcbase: 'orc_fighter',
+    raider: 'orc_raider',
+    orcraider: 'orc_raider',
+    monk: 'orc_monk',
+    orcmonk: 'orc_monk',
+    mage: 'orc_mage',
+    orcmage: 'orc_mage',
+    shaman: 'orc_shaman',
+    orcshaman: 'orc_shaman'
+  },
+  dwarf: {
+    artisan: 'dwarf_artisan',
+    artisandwarf: 'dwarf_artisan',
+    fighter: 'dwarf_artisan',
+    dwarffighter: 'dwarf_artisan',
+    scavenger: 'dwarf_scavenger',
+    mage: 'dwarf_mage'
+  },
+  kamael: {
+    soulbreaker: 'kamael_soulbreaker',
+    soulbreakerkamael: 'kamael_soulbreaker',
+    fighter: 'kamael_soulbreaker',
+    samurai: 'kamael_samurai'
+  },
+  sylph: {
+    gunner: 'ertheia_storm_blaster',
+    sylphgunner: 'ertheia_storm_blaster',
+    fighter: 'ertheia_storm_blaster'
+  },
+  highelf: {
+    base: 'high_elf_divine_templar',
+    highelfbase: 'high_elf_divine_templar',
+    fighter: 'high_elf_divine_templar',
+    mage: 'high_elf_element_weaver'
+  },
+  high_elf: {
+    base: 'high_elf_divine_templar',
+    highelfbase: 'high_elf_divine_templar',
+    fighter: 'high_elf_divine_templar',
+    mage: 'high_elf_element_weaver'
+  },
+  ertheia: {
+    marauder: 'ertheia_marauder',
+    bloodrose: 'dark_elf_blood_rose',
+    bloodrosebase: 'dark_elf_blood_rose',
+    fighter: 'ertheia_marauder',
+    mage: 'dark_elf_blood_rose'
+  }
+};
+
+// Índice dinâmico de todos os 98 nós oficiais do Grafo DAG de Linhagem
+const ALL_DAG_CLASS_IDS = new Set([
+  ...ACTIVE_CLASSES.map(c => c.id),
+  ...HISTORICAL_CLASSES.map(c => c.id)
+]);
+
+// Mapa reverso dinâmico de sourceClassId e classes ativas para IDs canônicos do DAG
+const DAG_LOOKUP = new Map();
+
+for (const cls of ACTIVE_CLASSES) {
+  DAG_LOOKUP.set(cls.id, cls.id);
+  DAG_LOOKUP.set(cls.id.toLowerCase(), cls.id);
+  DAG_LOOKUP.set(cls.id.toLowerCase().replace(/[-_\s]+/g, ''), cls.id);
+  if (cls.id.startsWith('human_')) {
+    const short = cls.id.replace('human_', '');
+    DAG_LOOKUP.set(short, cls.id);
+    DAG_LOOKUP.set(short.replace(/[-_\s]+/g, ''), cls.id);
+  }
+}
+
+for (const cls of HISTORICAL_CLASSES) {
+  DAG_LOOKUP.set(cls.id, cls.id);
+  DAG_LOOKUP.set(cls.id.toLowerCase(), cls.id);
+  DAG_LOOKUP.set(cls.id.toLowerCase().replace(/[-_\s]+/g, ''), cls.id);
+  if (cls.sourceClassId) {
+    DAG_LOOKUP.set(cls.sourceClassId, cls.id);
+    DAG_LOOKUP.set(cls.sourceClassId.toLowerCase(), cls.id);
+    DAG_LOOKUP.set(cls.sourceClassId.toLowerCase().replace(/[-_\s]+/g, ''), cls.id);
+  }
+}
+
+/**
+ * Resolve qualquer identificador de classe de runtime (curto, legado ou Echo)
+ * para o nó canônico correspondente no Grafo DAG de Linhagem (98 entidades canônicas).
+ *
+ * @param {string|object} classId - Identificador original ou objeto de personagem
+ * @param {string} [race] - Raça do personagem para desambiguação
+ * @returns {string} ID do nó no DAG (ex: 'human_fighter', 'human_mystic', etc.)
+ */
+export function resolveCanonicalDagClassId(classId, race = null) {
+  if (typeof classId === 'object' && classId !== null) {
+    race = race || classId.race;
+    classId = classId.class;
+  }
+  if (!classId) return 'human_fighter';
+
+  if (ALL_DAG_CLASS_IDS.has(classId)) return classId;
+
+  const raw = String(classId).trim();
+  const lower = raw.toLowerCase();
+  const cleaned = lower.replace(/[-_\s]+/g, '');
+
+  if (ALL_DAG_CLASS_IDS.has(lower)) return lower;
+
+  // 1. Desambiguação de IDs base através da raça
+  const normRace = race ? String(race).toLowerCase().trim().replace(/[-_\s]+/g, '') : null;
+  if (normRace && BASE_CLASS_RACE_MAP[normRace]) {
+    const racePool = BASE_CLASS_RACE_MAP[normRace];
+    if (racePool[lower]) return racePool[lower];
+    if (racePool[cleaned]) return racePool[cleaned];
+  }
+
+  // 2. Mapeamento direto de classes históricas e ativas
+  if (DAG_LOOKUP.has(classId)) return DAG_LOOKUP.get(classId);
+  if (DAG_LOOKUP.has(lower)) return DAG_LOOKUP.get(lower);
+  if (DAG_LOOKUP.has(cleaned)) return DAG_LOOKUP.get(cleaned);
+
+  // 3. Fallbacks de classes base por convenção
+  if (cleaned === 'fighter') {
+    if (normRace && BASE_CLASS_RACE_MAP[normRace]?.fighter) {
+      return BASE_CLASS_RACE_MAP[normRace].fighter;
+    }
+    return 'human_fighter';
+  }
+  if (cleaned === 'mage') {
+    if (normRace && BASE_CLASS_RACE_MAP[normRace]?.mage) {
+      return BASE_CLASS_RACE_MAP[normRace].mage;
+    }
+    return 'human_mystic';
+  }
+
+  return classId;
+}
+
 /**
  * Resolve o ID canônico de uma classe através do mapa de aliases de forma extremamente resiliente.
- * @param {string} classId - Identificador original ou apelido
+ * Suporta desambiguação por raça para IDs de runtime curtos (ex: fighter, mage).
+ *
+ * @param {string|object} classId - Identificador original, apelido ou objeto de personagem
+ * @param {string} [race] - Raça opcional do personagem
  * @returns {string} ID canônico reconhecido no sistema
  */
-export function resolveCanonicalClassId(classId) {
+export function resolveCanonicalClassId(classId, race = null) {
+  if (typeof classId === 'object' && classId !== null) {
+    race = race || classId.race;
+    classId = classId.class;
+  }
   if (!classId) return 'fighter';
-  
+
+  const raw = String(classId).trim();
+  const lower = raw.toLowerCase();
+  const cleaned = lower.replace(/[-_\s]+/g, '');
+
+  // Desambiguação de ID curto com raça explícita (Item 9 das Diretrizes)
+  if (race) {
+    const normRace = String(race).toLowerCase().trim().replace(/[-_\s]+/g, '');
+    if (BASE_CLASS_RACE_MAP[normRace]) {
+      const racePool = BASE_CLASS_RACE_MAP[normRace];
+      if (racePool[lower]) return racePool[lower];
+      if (racePool[cleaned]) return racePool[cleaned];
+    }
+  }
+
   // 1. Verificação direta
   if (CLASS_ALIASES[classId]) return CLASS_ALIASES[classId];
   if (EXTENDED_FALLBACKS[classId]) return EXTENDED_FALLBACKS[classId];
 
   // 2. Normalização em minúsculas
-  const lower = String(classId).toLowerCase().trim();
   if (CLASS_ALIASES[lower]) return CLASS_ALIASES[lower];
   if (EXTENDED_FALLBACKS[lower]) return EXTENDED_FALLBACKS[lower];
 
   // 3. Normalização removendo separadores (underscores, hífens, espaços)
-  const cleaned = lower.replace(/[-_\s]+/g, '');
   if (CLASS_ALIASES[cleaned]) return CLASS_ALIASES[cleaned];
   if (EXTENDED_FALLBACKS[cleaned]) return EXTENDED_FALLBACKS[cleaned];
 
@@ -380,3 +574,14 @@ export function resolveCanonicalClassId(classId) {
 
   return classId;
 }
+
+/**
+ * Retorna o ID canônico de personagem a partir do estado do personagem.
+ * @param {object} character - Objeto de estado { class, race, ... }
+ * @returns {string} ID canônico
+ */
+export function getCanonicalCharacterClass(character) {
+  if (!character) return 'human_fighter';
+  return resolveCanonicalDagClassId(character.class || character, character.race);
+}
+
