@@ -7,6 +7,11 @@
 
 import { D } from '../core/GameConfig.js';
 import { getStats, getClass } from './StatsEngine.js';
+import {
+  isSkillAvailableForCharacter,
+  getSkillVisibility,
+  getStarterSkillsForClass
+} from '../services/SkillEligibility.js';
 
 /**
  * Retorna a skill inicial base correspondente à classe/arquétipo do jogador.
@@ -14,23 +19,8 @@ import { getStats, getClass } from './StatsEngine.js';
  * @returns {string}
  */
 export function getStarterSkillForClass(classId) {
-  const cls = getClass(classId);
-  const arch = cls?.archetype || 'fighter';
-  switch (arch) {
-    case 'deathknight': return 'death_spike_dk';
-    case 'warg': return 'warg_will';
-    case 'assassin': return 'assassin_harmony';
-    case 'gunner': return 'burst_fire';
-    case 'divinetemplar': return 'divine_templar_harmony';
-    case 'elementweaver': return 'element_weaver_harmony';
-    case 'highelf': return 'divine_templar_harmony';
-    case 'bloodrose': return 'blood_rose_harmony';
-    case 'soulbreaker': return 'samurai_harmony';
-    case 'shinemaker': return 'shinemaker_harmony';
-    case 'artisan': return 'shinemaker_harmony';
-    case 'mage': return 'energy_bolt_m';
-    default: return 'power_strike_f';
-  }
+  const starters = getStarterSkillsForClass(classId);
+  return starters[0] || 'power_strike';
 }
 
 /**
@@ -64,6 +54,18 @@ export function spendSP(state, skillId, callbacks = {}) {
 
   if (lvl >= max) {
     if (callbacks.log) callbacks.log(`${def.name} já atingiu o nível máximo.`, 'system');
+    return false;
+  }
+
+  // Validação estrita de elegibilidade através de SkillEligibility
+  if (!isSkillAvailableForCharacter(state, def)) {
+    const visibility = getSkillVisibility(state, def);
+    if (visibility === 'LOCKED') {
+      const reqLvl = def.requiredLevel || def.reqLvl || 1;
+      if (callbacks.log) callbacks.log(`🔒 Habilidade bloqueada. Exige Nível ${reqLvl} e estágio de progressão compatível.`, 'system');
+    } else {
+      if (callbacks.log) callbacks.log(`❌ Esta habilidade não pertence à linhagem ou classe do seu personagem.`, 'system');
+    }
     return false;
   }
 

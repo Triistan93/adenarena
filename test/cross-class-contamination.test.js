@@ -52,15 +52,32 @@ const HUMAN_SORCERER_SKILLS = [
 
 test('1. Human Sorcerer / Mage: ZERO Dwarf Mage skills present', () => {
   const classSkills = window.EchoData.CLASS_SKILLS_ECHO;
-  const humanMageAliases = ['human_sorcerer', 'sorcerer', 'archmage', 'wizard', 'mage', 'human_mage'];
+  const sorcererAliases = ['human_sorcerer', 'sorcerer', 'archmage'];
+  const baseMageAliases = ['wizard', 'mage', 'human_mage'];
 
-  for (const alias of humanMageAliases) {
+  // Sorcerer specialization and awakening: must have the 6 canonical Sorcerer skills
+  for (const alias of sorcererAliases) {
     const list = classSkills[alias] || getClassSkills(alias);
     assert.ok(list, `Skills for ${alias} must exist`);
     assert.equal(list.length, 6, `Class ${alias} must have exactly 6 skills`);
     assert.deepEqual(list, HUMAN_SORCERER_SKILLS, `${alias} must have the 6 canonical sorcerer skills`);
 
     // Verify 0 dwarf_mage skills
+    for (const dwarfSkill of DWARF_MAGE_SKILLS) {
+      assert.equal(
+        list.includes(dwarfSkill),
+        false,
+        `Contamination detected: ${alias} must NOT contain dwarf skill "${dwarfSkill}"`
+      );
+    }
+  }
+
+  // Base mage and wizard classes: must have base mage skills and ZERO dwarf skills
+  for (const alias of baseMageAliases) {
+    const list = classSkills[alias] || getClassSkills(alias);
+    assert.ok(list, `Skills for ${alias} must exist`);
+    assert.equal(list.length, 5, `Base class ${alias} must have 5 shared mage skills`);
+
     for (const dwarfSkill of DWARF_MAGE_SKILLS) {
       assert.equal(
         list.includes(dwarfSkill),

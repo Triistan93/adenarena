@@ -12,7 +12,7 @@ import {
 import { resolveEquipSlot, migrateEquipmentSlots, equipItem, unequipItem } from '../services/EquipmentService.js';
 import { getCraftLevelReq, getRecipeMaterials, canCraft, getRecipeDef, calculateMaxCraftableQty } from '../services/CraftService.js';
 import { rollMysticStock } from '../services/ShopService.js';
-import { classSatisfies, getClassSkills, checkClassAdvancement, SHARED_SKILL_IDS, getSharedSkills, isMageClass, getSharedSkillIdsForClass } from '../services/CharacterService.js';
+import { classSatisfies, getClassSkills, checkClassAdvancement, SHARED_SKILL_IDS, getSharedSkills, isMageClass, getSharedSkillIdsForClass, getVisibleSkillsForCharacter, getSkillVisibility, SKILL_VISIBILITY_STATES, getCharacterProgressionState, isSkillAvailableForCharacter, isSkillAllowedForClass } from '../services/CharacterService.js';
 import { AFFIX_MAP } from '../../data/affixes.js';
 import { getClass, getStats, getActiveSetBonuses } from '../engine/StatsEngine.js';
 import { getSkillCost } from '../engine/SkillEngine.js';
@@ -2698,14 +2698,26 @@ export function updateSkillUI(state, callbacks = {}) {
 
   const pos = {};
 
-  const classSkillIds = getClassSkills(state.class);
+  // Canonical visible skills (Learned, Available, Locked) excluding Hidden
+  const visibleItems = getVisibleSkillsForCharacter(state);
+  const sharedIds = new Set(getSharedSkillIdsForClass(state.class) || []);
   let classSkills;
-  if (classSkillIds && classSkillIds.length > 0) {
-    classSkills = classSkillIds
-      .map(id => [id, SKILL_DEFS[id]])
+  if (visibleItems && visibleItems.length > 0) {
+    classSkills = visibleItems
+      .filter(item => !sharedIds.has(item.skillId))
+      .map(item => [item.skillId, SKILL_DEFS[item.skillId] || item.skillDef, item.visibility])
       .filter(([id, def]) => def != null);
   } else {
-    classSkills = Object.entries(SKILL_DEFS).filter(([id, def]) => classSatisfies(state.class, def.classReq));
+    const classSkillIds = getClassSkills(state.class);
+    if (classSkillIds && classSkillIds.length > 0) {
+      classSkills = classSkillIds
+        .map(id => [id, SKILL_DEFS[id], getSkillVisibility(state, SKILL_DEFS[id])])
+        .filter(([id, def]) => def != null && isSkillAllowedForClass(state.class, id) && !sharedIds.has(id));
+    } else {
+      classSkills = Object.entries(SKILL_DEFS)
+        .filter(([id, def]) => isSkillAllowedForClass(state.class, id) && !sharedIds.has(id))
+        .map(([id, def]) => [id, def, getSkillVisibility(state, def)]);
+    }
   }
 
   const skillsByTier = { 0: [], 1: [], 2: [], 3: [], 4: [], 5: [] };
@@ -2823,7 +2835,7 @@ export function updateSkillUI(state, callbacks = {}) {
   }
   nodesLayer.innerHTML = '';
 
-  for (const [id, def] of classSkills) {
+  for (const [id, def, skillVisibility] of classSkills) {
     if (!def) continue;
     const p = pos[id];
     if (!p) continue;
@@ -2835,6 +2847,10 @@ export function updateSkillUI(state, callbacks = {}) {
     const wpnCheck = (typeof canCastSkillWeapon === 'function') ? canCastSkillWeapon(state, def) : { ok: true };
     const isWpnBlocked = !wpnCheck.ok;
 
+    // Visibility state (LEARNED, AVAILABLE, LOCKED)
+    const visibility = skillVisibility || getSkillVisibility(state, def);
+    const isLocked = visibility === SKILL_VISIBILITY_STATES.LOCKED;
+
     // Check Book Unlock Requirement using canonical requiredItemToUnlock
     const bookReq = def.requiredItemToUnlock || ((def.starRank === 4 || def.tier === 4) ? 'book_4star' : (def.starRank === 5 || def.tier === 5) ? 'book_5star' : null);
     const hasBook = bookReq ? state.inventory?.some(i => (i.itemId === bookReq || i.itemId === bookReq.replace('book_', 'spellbook_')) && (i.count || 1) > 0) : true;
@@ -2844,6 +2860,7 @@ export function updateSkillUI(state, callbacks = {}) {
     const isUlt = (def.tier === 4 || def.starRank === 4 || def.isUltimate) && !isMasterUlt;
 
     let nodeClass = `skill-node tier-${def.tier || 0}`;
+    if (isLocked) nodeClass += ' locked-future';
     if (lvl > 0) nodeClass += ' owned';
     if (lvl === max) nodeClass += ' maxed';
     if (isWpnBlocked) nodeClass += ' weapon-blocked';
@@ -2860,12 +2877,16 @@ export function updateSkillUI(state, callbacks = {}) {
 
     const reqs = SKILL_REQS[id];
     const reqOk = !reqs || Object.entries(reqs).every(([s, v]) => s === 'level' || s === 'sp' || s === 'reqLvl' || (state.skills[s] || 0) >= v);
-    const lvlOk = state.level >= (def.reqLvl || 1);
-    const canBuy = reqOk && lvlOk && state.sp >= getSkillCost(id, lvl) && lvl < max && !isBookLocked;
-    const btnClass = canBuy ? 'skill-btn can-buy' : 'skill-btn';
+    const minLvl = Number(def.requiredLevel || def.reqLvl) || 1;
+    const lvlOk = state.level >= minLvl;
+    const canBuy = !isLocked && reqOk && lvlOk && state.sp >= getSkillCost(id, lvl) && lvl < max && !isBookLocked;
+    let btnClass = canBuy ? 'skill-btn can-buy' : 'skill-btn';
+    if (isLocked) btnClass += ' btn-locked';
 
     let badgeHtml = '';
-    if (isWpnBlocked) {
+    if (isLocked) {
+      badgeHtml = `<span class="skill-locked-badge" style="position:absolute; top:-6px; right:-4px; background:#334155; color:#cbd5e1; font-size:9px; padding:1px 4px; border-radius:3px; font-weight:bold; box-shadow:0 0 4px #000; border:1px solid #64748b;">🔒 [LOCKED — Lv. ${minLvl}]</span>`;
+    } else if (isWpnBlocked) {
       badgeHtml = `<span style="position:absolute; top:-6px; right:-4px; background:#dc2626; color:#fff; font-size:9px; padding:1px 3px; border-radius:3px; font-weight:bold; box-shadow:0 0 4px #000;">🚫 ${wpnCheck.reason || 'Arma'}</span>`;
     } else if (isBookLocked) {
       const bookStar = def.starRank || (def.tier === 5 ? 5 : def.tier === 4 ? 4 : def.tier === 3 ? 3 : 2);
@@ -2885,7 +2906,7 @@ export function updateSkillUI(state, callbacks = {}) {
 
     node.innerHTML = `
       ${badgeHtml}
-      <button class="${btnClass}" data-skill="${id}">
+      <button class="${btnClass}" data-skill="${id}" ${isLocked ? 'title="Bloqueado até nível ' + minLvl + '"' : ''}>
         ${iconHtml}
         <span class="skill-name">${def.name}</span>
         <span class="skill-lvl-num">${lvl}/${max}</span>
@@ -2902,7 +2923,10 @@ export function updateSkillUI(state, callbacks = {}) {
     if (callbacks.hideSkillTooltip) btn.onmouseleave = callbacks.hideSkillTooltip;
     btn.onclick = () => {
       state.selectedSkill = sId;
-      if (callbacks.spendSP) callbacks.spendSP(sId);
+      const vis = getSkillVisibility(state, def);
+      if (vis !== SKILL_VISIBILITY_STATES.LOCKED && callbacks.spendSP) {
+        callbacks.spendSP(sId);
+      }
       updateSkillUI(state, callbacks);
     };
   });
@@ -2921,9 +2945,9 @@ export function updateSkillInfoPanel(state, callbacks = {}) {
   let id = state.selectedSkill;
   if (!id || !SKILL_DEFS[id]) {
     const firstApplicable = Object.keys(SKILL_DEFS).find(sid =>
-      classSatisfies(state.class, SKILL_DEFS[sid].classReq) && (state.skills[sid] || 0) > 0
+      isSkillAllowedForClass(state.class, sid) && (state.skills[sid] || 0) > 0
     ) || Object.keys(SKILL_DEFS).find(sid =>
-      classSatisfies(state.class, SKILL_DEFS[sid].classReq)
+      isSkillAllowedForClass(state.class, sid)
     );
     id = firstApplicable || null;
   }
@@ -3028,10 +3052,15 @@ export function updateSkillInfoPanel(state, callbacks = {}) {
     `;
   }
 
-  const canLearn = canAfford && meetsReqs && lvlOk && (!requiresBookNow || hasRequiredBook);
+  const visibility = getSkillVisibility(state, def);
+  const isLocked = visibility === SKILL_VISIBILITY_STATES.LOCKED;
+  const canLearn = !isLocked && canAfford && meetsReqs && lvlOk && (!requiresBookNow || hasRequiredBook);
 
   let btnLabel = maxed ? '✦ MAXED' : `Invest ${cost.toLocaleString()} SP`;
-  if (!maxed && requiresBookNow) {
+  if (isLocked) {
+    const minLvl = Number(def.requiredLevel || def.reqLvl) || 1;
+    btnLabel = `🔒 [LOCKED — Lv. ${minLvl}]`;
+  } else if (!maxed && requiresBookNow) {
     btnLabel = hasRequiredBook ? `📖 Consumir ${bName} & Aprender (${cost.toLocaleString()} SP)` : `🔒 Falta ${bName}`;
   }
 

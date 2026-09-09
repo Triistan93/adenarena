@@ -9,6 +9,7 @@ import EventBus from './EventBus.js';
 import { SAVE_KEY, D } from './GameConfig.js';
 import { getSelectedSet } from '../services/InventoryService.js';
 import { generateStateChecksum, validateStateIntegrity, sanitizeGameState } from '../engine/SecurityEngine.js';
+import { getStarterSkillsForClass, normalizeAndValidateSkills } from '../services/SkillEligibility.js';
 
 export const DEFAULT_STATE = () => ({
   race: null, class: null, gender: 'M',
@@ -241,6 +242,9 @@ export function loadState() {
       saveState(false);
     }
 
+    // Normalização e auditoria defensiva de habilidades contra corrupções ou dados obsoletos
+    normalizeAndValidateSkills(currentState);
+
     EventBus.emit('state:loaded', currentState);
     return true;
   } catch (err) {
@@ -402,17 +406,13 @@ export function applyStarterKit(state, race, classId, charName = null, gender = 
     state.base[k] = (raceDef.stats?.[k] || 0) + (classDef.base?.[k] || 0);
   }
 
-  // Desbloqueia as primeiras habilidades ativas/passivas da classe
-  if (Array.isArray(classDef.skills)) {
-    classDef.skills.forEach(s => {
-      if (s && s.name) {
-        state.skills[s.name] = 1;
-        if (!state.selectedSkill && (s.type === 'Ativo' || s.type === 'active')) {
-          state.selectedSkill = s.name;
-        }
-      }
-    });
-  }
+  // Desbloqueia estritamente a habilidade inicial canônica de Nível 1 da classe/arquétipo
+  state.skills = {};
+  const starterSkillIds = getStarterSkillsForClass(classId || canonicalClass);
+  starterSkillIds.forEach(sId => {
+    state.skills[sId] = 1;
+  });
+  state.selectedSkill = starterSkillIds[0] || null;
 
   // Configura HP e MP máximos
   state.maxHp = Math.max(100, classDef.base?.hp || 100);

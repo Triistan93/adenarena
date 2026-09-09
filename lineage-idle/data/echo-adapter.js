@@ -781,12 +781,15 @@ function buildEchoAdapter() {
     }
   }
 
-  // Garantia canônica da linhagem do Mago Humano (Sorcerer / Mage)
+  // Garantia canônica da linhagem do Mago Humano (Sorcerer / Archmage)
   if (ACTIVE_CLASS_SKILLS['human_sorcerer']) {
     const sorcererSkills = [...ACTIVE_CLASS_SKILLS['human_sorcerer']];
-    ['human_sorcerer', 'sorcerer', 'archmage', 'wizard', 'mage', 'human_mage'].forEach(alias => {
+    ['human_sorcerer', 'sorcerer', 'archmage'].forEach(alias => {
       CLASS_SKILLS_ECHO[alias] = [...sorcererSkills];
     });
+    CLASS_SKILLS_ECHO['mage'] = ['wind_strike', 'flame_strike', 'hydro_strike', 'heal_light', 'ice_bolt'];
+    CLASS_SKILLS_ECHO['human_mage'] = ['wind_strike', 'flame_strike', 'hydro_strike', 'heal_light', 'ice_bolt'];
+    CLASS_SKILLS_ECHO['wizard'] = ['wind_strike', 'flame_strike', 'hydro_strike', 'heal_light', 'ice_bolt'];
   }
 
   // Registro explícito do pool compartilhado por Arquétipo (Lv 1–39)
@@ -838,9 +841,9 @@ function buildEchoAdapter() {
     }
   }
 
-  // Propagação explícita de layouts para a linhagem do Mago Humano
+  // Propagação explícita de layouts para a linhagem do Mago Humano (Sorcerer / Archmage)
   if (SKILL_TREE_LAYOUT_ECHO['human_sorcerer']) {
-    ['sorcerer', 'archmage', 'wizard', 'mage', 'human_mage'].forEach(alias => {
+    ['sorcerer', 'archmage'].forEach(alias => {
       SKILL_TREE_LAYOUT_ECHO[alias] = SKILL_TREE_LAYOUT_ECHO['human_sorcerer'];
     });
   }

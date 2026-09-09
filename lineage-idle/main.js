@@ -180,7 +180,12 @@ import {
   SHARED_SKILL_IDS,
   isSkillAllowedForClass,
   isMageClass,
-  getSharedSkillIdsForClass
+  getSharedSkillIdsForClass,
+  normalizeAndValidateSkills,
+  getCharacterProgressionState,
+  isSkillAvailableForCharacter,
+  getVisibleSkillsForCharacter,
+  SKILL_VISIBILITY_STATES
 } from './src/services/CharacterService.js';
 
 import {
@@ -482,33 +487,32 @@ function openClassTransferModal(classInfo) {
   const canonStateClass = resolveCanonicalClassId(state.class);
   const seenClassIds = new Set();
 
+  const progState = getCharacterProgressionState(state);
+  const eligibleAdvancements = progState.availableAdvancements || [];
+
   const candidates = [];
-  for (const [clsId, clsDef] of Object.entries(allClasses)) {
-    if (!clsDef || clsDef.stage !== targetStage) continue;
-    
-    // Race filter: if class specifies a race, it must match character's race
-    if (clsDef.race && clsDef.race !== state.race) continue;
+  for (const succ of eligibleAdvancements) {
+    const succId = succ.id || succ.sourceClassId;
+    const succDef = getClass(succId) || getClass(succ.sourceClassId) || succ;
+    const canonId = resolveCanonicalClassId(succId) || succId;
+    if (!seenClassIds.has(canonId)) {
+      seenClassIds.add(canonId);
+      candidates.push({ id: succId, def: succDef });
+    }
+  }
 
-    const parentCanon = resolveCanonicalClassId(clsDef.parent);
-    const clsCanon = resolveCanonicalClassId(clsId);
-
-    // Parent matching check
-    const matchesParent = (clsDef.parent === state.class)
-      || (clsDef.parent === canonStateClass)
-      || (parentCanon === canonStateClass)
-      || (parentCanon === state.class)
-      || (clsDef.parent === 'highElfBase' && (canonStateClass === 'highElfBase' || canonStateClass === 'highelf' || canonStateClass === 'templar'))
-      || (clsDef.parent === 'divineTemplarS1' && (canonStateClass === 'divineTemplarS1' || canonStateClass === 'lightTemplar'))
-      || (clsDef.parent === 'divineTemplarS2' && (canonStateClass === 'divineTemplarS2' || canonStateClass === 'holyTemplar'))
-      || (clsDef.parent === 'fighter' && (canonStateClass === 'elfFighter' || canonStateClass === 'darkElfFighter' || canonStateClass === 'orcBase' || canonStateClass === 'fighter'))
-      || (clsDef.parent === 'mage' && (canonStateClass === 'elfMage' || canonStateClass === 'darkElfMage' || canonStateClass === 'mage'))
-      || (clsDef.parent === 'elfFighter' && (canonStateClass === 'fighter' || canonStateClass === 'elfFighter') && state.race === 'elf')
-      || (clsDef.parent === 'darkElfFighter' && (canonStateClass === 'fighter' || canonStateClass === 'darkElfFighter') && state.race === 'darkelf')
-      || (clsDef.parent === 'artisan' && state.race === 'dwarf')
-      || (clsDef.parent === 'soulbreaker' && state.race === 'kamael');
-
-    if (matchesParent) {
-      if (!seenClassIds.has(clsCanon)) {
+  // Fallback para classes ainda não mapeadas no DAG histórico
+  if (candidates.length === 0) {
+    for (const [clsId, clsDef] of Object.entries(allClasses)) {
+      if (!clsDef || clsDef.stage !== targetStage) continue;
+      if (clsDef.race && clsDef.race !== state.race) continue;
+      const parentCanon = resolveCanonicalClassId(clsDef.parent);
+      const clsCanon = resolveCanonicalClassId(clsId);
+      const matchesParent = (clsDef.parent === state.class)
+        || (clsDef.parent === canonStateClass)
+        || (parentCanon === canonStateClass)
+        || (parentCanon === state.class);
+      if (matchesParent && !seenClassIds.has(clsCanon)) {
         seenClassIds.add(clsCanon);
         candidates.push({ id: clsCanon, def: clsDef });
       }
@@ -5144,7 +5148,7 @@ function attackMonster() {
       const isPassive = def.type === 'passive' || def.type === 'stat';
       if (!isPassive) {
         if (autoCastSettings[sId] === false) continue;
-        const belongsToClass = (classSkillIds && classSkillIds.includes(sId)) || isSkillAllowedForClass(state.class, sId) || classSatisfies(state.class, def.classReq);
+        const belongsToClass = isSkillAllowedForClass(state.class, sId) && (Number(def.requiredLevel || def.reqLvl) || 1) <= state.level;
         if (belongsToClass) {
           activeSkills.push({ id: sId, lvl, def });
         }
@@ -9794,7 +9798,7 @@ export function init() {
       for (const [sId, lvl] of Object.entries(state.skills || {})) {
         const def = SKILL_DEFS[sId];
         if (lvl > 0 && def && def.type !== 'passive' && def.type !== 'stat') {
-          if (classSkillIds.includes(sId) || isSkillAllowedForClass(state.class, sId) || classSatisfies(state.class, def.classReq)) {
+          if (isSkillAllowedForClass(state.class, sId) && (Number(def.requiredLevel || def.reqLvl) || 1) <= state.level) {
             knownActiveSkills.push({ id: sId, lvl, def });
           }
         }
@@ -9964,7 +9968,7 @@ export function init() {
       for (const [sId, lvl] of Object.entries(state.skills || {})) {
         const def = SKILL_DEFS[sId];
         if (lvl > 0 && def && def.type !== 'passive' && def.type !== 'stat') {
-          if (classSkillIds.includes(sId) || isSkillAllowedForClass(state.class, sId) || classSatisfies(state.class, def.classReq)) {
+          if (isSkillAllowedForClass(state.class, sId) && (Number(def.requiredLevel || def.reqLvl) || 1) <= state.level) {
             allActive.push(sId);
           }
         }
@@ -10204,6 +10208,9 @@ export function init() {
         }
       }
 
+      // Normalização defensiva de habilidades contra corrupções ou vazamento legado
+      normalizeAndValidateSkills(state, { log });
+
       updateAllUI();
       save();
       if (cloudData.lastSaveTime) {
@@ -10255,6 +10262,28 @@ export function init() {
     window.toggleVFXProfiler = (enable) => globalVFXOrchestrator.toggleProfiler(enable);
     window.getVFXMetrics = () => globalVFXOrchestrator.getPerformanceMetrics();
     window.globalVFXOrchestrator = globalVFXOrchestrator;
+    window.diagnoseSkillTree = (classId = state.class, level = state.level) => {
+      const char = { class: classId, level, skills: state.skills || {} };
+      const visible = getVisibleSkillsForCharacter(char);
+      const learned = [];
+      const available = [];
+      const locked = [];
+      for (const item of visible) {
+        if (item.visibility === SKILL_VISIBILITY_STATES.LEARNED) learned.push(item.skillId);
+        else if (item.visibility === SKILL_VISIBILITY_STATES.AVAILABLE) available.push(item.skillId);
+        else if (item.visibility === SKILL_VISIBILITY_STATES.LOCKED) locked.push(item.skillId);
+      }
+      const prog = getCharacterProgressionState(char);
+      return {
+        class: classId,
+        level,
+        stage: prog.currentStage,
+        learned,
+        available,
+        locked,
+        totalVisible: visible.length
+      };
+    };
 
     state.startTime = Date.now(); 
     const hasSave = load();

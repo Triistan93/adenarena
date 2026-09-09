@@ -1436,6 +1436,34 @@ select:focus-visible {
 }
 .skill-node.locked { opacity: 0.35; cursor: not-allowed; }
 .skill-node.locked .skill-icon { filter: grayscale(1); }
+.skill-node.locked-future {
+  opacity: 0.42;
+  cursor: not-allowed;
+  border-color: #475569 !important;
+  background: rgba(15, 23, 42, 0.65) !important;
+  box-shadow: none !important;
+}
+.skill-node.locked-future:hover {
+  transform: none !important;
+  border-color: #64748b !important;
+}
+.skill-node.locked-future .skill-icon {
+  filter: grayscale(1) contrast(0.75);
+  opacity: 0.55;
+}
+.skill-node.locked-future .skill-name {
+  color: #94a3b8;
+}
+.skill-btn.btn-locked {
+  cursor: not-allowed !important;
+  pointer-events: auto;
+  opacity: 0.7;
+}
+.skill-locked-badge {
+  font-family: 'Cinzel', 'Inter', serif;
+  letter-spacing: 0.04em;
+  pointer-events: none;
+}
 .skill-node.available {
   border-color: var(--gilt-deep);
   color: var(--gilt-bright);

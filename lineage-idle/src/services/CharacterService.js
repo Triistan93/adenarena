@@ -10,59 +10,53 @@ import { RACES, CLASSES } from '../data/races.js';
 import { getClass } from '../engine/StatsEngine.js';
 import { getSkillCost } from '../engine/SkillEngine.js';
 import { resolveCanonicalClassId } from '../data/classes/class_aliases.js';
+import { STAGE_LEVEL_THRESHOLDS, getProgressionStage } from '../data/elemental/SkillProgression.js';
+import { getAncestors, getDescendants, getLineage, getSuccessors, canAdvance } from '../data/elemental/ClassLineage.js';
 
-export const SHARED_MAGE_SKILL_IDS = [
-  'wind_strike',
-  'flame_strike',
-  'hydro_strike',
-  'heal_light',
-  'ice_bolt'
-];
+import {
+  SHARED_MAGE_SKILL_IDS,
+  SHARED_FIGHTER_SKILL_IDS,
+  SHARED_SKILL_IDS,
+  SKILL_VISIBILITY_STATES,
+  isMageClass,
+  areSiblingBranches,
+  getStarterSkillsForClass,
+  resolveSkillDef,
+  isSkillInProgressionPath,
+  getSkillVisibility,
+  isSkillAvailableForCharacter,
+  getVisibleSkillsForCharacter,
+  getLearnableSkillsForCharacter,
+  getLockedSkillsForCharacter,
+  getHiddenSkillsForCharacter,
+  getCharacterProgressionState,
+  normalizeAndValidateSkills
+} from './SkillEligibility.js';
 
-export const SHARED_FIGHTER_SKILL_IDS = [
-  'power_strike',
-  'mortal_blow',
-  'iron_punch',
-  'energy_burst',
-  'power_shot'
-];
-
-export const SHARED_SKILL_IDS = [
-  ...SHARED_MAGE_SKILL_IDS,
-  ...SHARED_FIGHTER_SKILL_IDS
-];
-
-/**
- * Determina se a classe informada pertence ao arquétipo Mago / Místico.
- * @param {string} classId
- * @returns {boolean}
- */
-export function isMageClass(classId) {
-  if (!classId) return false;
-  const raw = String(classId).trim().toLowerCase();
-  const canonical = (typeof resolveCanonicalClassId === 'function' ? resolveCanonicalClassId(raw) : raw).toLowerCase();
-
-  const def = getClass(raw) || getClass(canonical);
-  if (def?.archetype) {
-    const arch = def.archetype.toLowerCase();
-    if (['mage', 'caster', 'healer', 'buffer', 'summoner', 'support', 'shaman', 'cleric', 'mystic'].includes(arch)) {
-      return true;
-    }
-    if (['fighter', 'warrior', 'knight', 'rogue', 'archer', 'tank', 'berserker', 'assassin'].includes(arch)) {
-      return false;
-    }
-  }
-
-  const mageKeywords = [
-    'mage', 'wizard', 'sorcerer', 'cleric', 'bishop', 'oracle', 'elder',
-    'shaman', 'summoner', 'saint', 'hierophant', 'cardinal', 'soultaker',
-    'screamer', 'archmage', 'spellsinger', 'spellhowler', 'mystic', 'warlock',
-    'necromancer', 'storm_screamer', 'elemental_master', 'arcana_lord', 'spectral_master',
-    'eva_saint', 'shillien_saint', 'dominator', 'doomcryer', 'soulbreaker', 'prophet', 'warcryer', 'overlord'
-  ];
-
-  return mageKeywords.some(k => raw.includes(k) || canonical.includes(k));
-}
+export {
+  SHARED_MAGE_SKILL_IDS,
+  SHARED_FIGHTER_SKILL_IDS,
+  SHARED_SKILL_IDS,
+  SKILL_VISIBILITY_STATES,
+  isMageClass,
+  areSiblingBranches,
+  getStarterSkillsForClass,
+  resolveSkillDef,
+  isSkillInProgressionPath,
+  getSkillVisibility,
+  isSkillAvailableForCharacter,
+  getVisibleSkillsForCharacter,
+  getLearnableSkillsForCharacter,
+  getLockedSkillsForCharacter,
+  getHiddenSkillsForCharacter,
+  getCharacterProgressionState,
+  normalizeAndValidateSkills,
+  getAncestors,
+  getDescendants,
+  getLineage,
+  getSuccessors,
+  canAdvance
+};
 
 /**
  * Retorna os IDs das habilidades gerais compartilhadas aplicáveis à classe informada.
@@ -88,34 +82,14 @@ export function getSharedSkills(playerClass) {
 }
 
 /**
- * Verifica se uma habilidade específica é permitida para a classe informada (respeitando Mago vs Guerreiro).
+ * Verifica se uma habilidade específica é permitida para a classe informada (respeitando Mago vs Guerreiro e Linhagem).
  * @param {string} playerClass
  * @param {string} skillId
  * @returns {boolean}
  */
 export function isSkillAllowedForClass(playerClass, skillId) {
   if (!playerClass || !skillId) return false;
-
-  if (SHARED_MAGE_SKILL_IDS.includes(skillId)) {
-    return isMageClass(playerClass);
-  }
-  if (SHARED_FIGHTER_SKILL_IDS.includes(skillId)) {
-    return !isMageClass(playerClass);
-  }
-
-  const classSkills = getClassSkills(playerClass);
-  if (classSkills && classSkills.includes(skillId)) {
-    return true;
-  }
-
-  const E = typeof window !== 'undefined' ? window.EchoData : null;
-  const defs = E?.SKILL_DEFS_ECHO || D()?.SKILL_DEFS || {};
-  const def = defs[skillId];
-  if (def && def.classReq) {
-    return classSatisfies(playerClass, def.classReq);
-  }
-
-  return false;
+  return isSkillInProgressionPath(playerClass, skillId);
 }
 
 /**
@@ -188,12 +162,6 @@ export function getClassSkills(classId) {
   if (CS[lowerCanon]) return CS[lowerCanon];
   if (CS[lowerClass]) return CS[lowerClass];
 
-  // Linhagem do Mago Humano: se não resolvido diretamente, recorre às 6 habilidades canônicas de Sorcerer
-  if (['mage', 'human_mage', 'wizard'].includes(lowerClass) || ['mage', 'human_mage', 'wizard'].includes(lowerCanon)) {
-    if (CS['human_sorcerer']) return CS['human_sorcerer'];
-    if (CS['sorcerer']) return CS['sorcerer'];
-  }
-
   const def = getClass(canonicalId) || getClass(classId) || getClass(lowerCanon) || getClass(lowerClass);
   if (def?.skillTree && CS[def.skillTree]) return CS[def.skillTree];
   let current = def?.parent;
@@ -207,7 +175,9 @@ export function getClassSkills(classId) {
     if (pd?.skillTree && CS[pd.skillTree]) return CS[pd.skillTree];
     current = pd?.parent;
   }
-  return null;
+
+  // Fallback para pool de habilidades compartilhado por arquétipo
+  return isMageClass(classId) ? [...SHARED_MAGE_SKILL_IDS] : [...SHARED_FIGHTER_SKILL_IDS];
 }
 
 /**
@@ -307,8 +277,36 @@ export function promoteClass(state, newClassId, selectedBuffIds = null, callback
     selectedBuffIds = null;
   }
 
-  const newClassDef = getClass(newClassId);
-  if (!newClassDef) return;
+  const newClassDef = getClass(newClassId) || getClass(resolveCanonicalClassId(newClassId));
+  if (!newClassDef) {
+    if (callbacks.log) callbacks.log(`❌ Classe de destino inválida: ${newClassId}`, 'warning');
+    return false;
+  }
+
+  // 1. Validação estrita do Grafo DAG de Linhagem (User Correction 3)
+  const currentClass = state.class;
+  const canonCurrent = resolveCanonicalClassId(currentClass) || currentClass;
+  const canonNew = resolveCanonicalClassId(newClassId) || newClassId;
+  const successors = getSuccessors(currentClass).concat(getSuccessors(canonCurrent));
+
+  const isAuthorizedSuccessor = successors.length === 0 ||
+    successors.some(s => s === newClassId || s === canonNew || resolveCanonicalClassId(s) === canonNew) ||
+    callbacks.allowAdminOverride;
+
+  if (!isAuthorizedSuccessor) {
+    if (callbacks.log) callbacks.log(`❌ Transferência inválida: ${newClassId} não é uma evolução autorizada de ${currentClass} no grafo de linhagem.`, 'warning');
+    return false;
+  }
+
+  // 2. Validação de Nível de Requisito de Avanço
+  const eligibleAdvancements = canAdvance(currentClass, state.level).concat(canAdvance(canonCurrent, state.level));
+  if (eligibleAdvancements.length > 0 && !callbacks.allowAdminOverride) {
+    const isLevelEligible = eligibleAdvancements.some(e => e.id === newClassId || e.id === canonNew || e.sourceClassId === newClassId || e.sourceClassId === canonNew);
+    if (!isLevelEligible) {
+      if (callbacks.log) callbacks.log(`🔒 Nível insuficiente (${state.level}) para avançar para ${newClassDef.name || newClassId}.`, 'warning');
+      return false;
+    }
+  }
 
   state.class = newClassId;
 
@@ -327,19 +325,25 @@ export function promoteClass(state, newClassId, selectedBuffIds = null, callback
 
   state.legacyPassives = state.legacyPassives || {};
 
-  // 1. Reembolsa 100% do SP investido em TODAS as habilidades da classe anterior
+  // Preserva habilidades compartilhadas aplicáveis ao novo arquétipo; reembolsa as específicas da classe anterior
+  const allowedSharedIds = getSharedSkillIdsForClass(newClassId);
+  const preservedSkills = {};
+
   for (const [sId, lvl] of Object.entries(state.skills || {})) {
     if (lvl > 0) {
-      for (let l = 0; l < lvl; l++) {
-        totalRefunded += getSkillCost(sId, l);
+      if (allowedSharedIds.includes(sId)) {
+        preservedSkills[sId] = lvl;
+      } else {
+        for (let l = 0; l < lvl; l++) {
+          totalRefunded += getSkillCost(sId, l);
+        }
       }
     }
   }
 
-  // 2. Converte as habilidades/buffs selecionados (ou automáticos) em Passivas de Linhagem
+  // Converte as habilidades/buffs selecionados (ou automáticos) em Passivas de Linhagem
   let chosenSkills = Array.isArray(selectedBuffIds) && selectedBuffIds.length > 0 ? selectedBuffIds : [];
   if (!chosenSkills.length) {
-    // Fallback: seleciona automaticamente até 2 buffs aprendidos
     for (const [sId, lvl] of Object.entries(state.skills || {})) {
       if (lvl > 0 && skillDefs[sId] && chosenSkills.length < 2) {
         const def = skillDefs[sId];
@@ -414,8 +418,17 @@ export function promoteClass(state, newClassId, selectedBuffIds = null, callback
     convertedBuffsCount++;
   }
 
-  // 3. Reseta o kit de habilidades ativas anteriores para abrir espaço limpo para a nova classe
-  state.skills = {};
+  // Aplica as habilidades preservadas + habilidades iniciais da nova classe
+  state.skills = { ...preservedSkills };
+  const starterSkills = getStarterSkillsForClass(newClassId);
+  for (const sid of starterSkills) {
+    if (!state.skills[sid]) {
+      state.skills[sid] = 1;
+    }
+  }
+  if (!state.selectedSkill || !state.skills[state.selectedSkill]) {
+    state.selectedSkill = starterSkills[0] || Object.keys(state.skills)[0] || null;
+  }
 
   // Bônus Nobre de SP por conclusão da Cerimônia de Avanço de Classe
   const stage = Number(newClassDef.stage) || 1;
@@ -445,4 +458,5 @@ export function promoteClass(state, newClassId, selectedBuffIds = null, callback
 
   if (callbacks.updateAllUI) callbacks.updateAllUI();
   if (callbacks.save) callbacks.save();
+  return true;
 }
