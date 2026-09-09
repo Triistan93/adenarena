@@ -2701,9 +2701,17 @@ export function updateSkillUI(state, callbacks = {}) {
   // Canonical visible skills (Learned, Available, Locked) excluding Hidden
   const visibleItems = getVisibleSkillsForCharacter(state);
   const sharedIds = new Set(getSharedSkillIdsForClass(state.class) || []);
+  const visibleList = Array.isArray(visibleItems)
+    ? visibleItems
+    : (visibleItems?.visibleList || [
+        ...(visibleItems?.learned || []).map(d => ({ skillId: d.id, skillDef: d, visibility: SKILL_VISIBILITY_STATES.LEARNED })),
+        ...(visibleItems?.available || []).map(d => ({ skillId: d.id, skillDef: d, visibility: SKILL_VISIBILITY_STATES.AVAILABLE })),
+        ...(visibleItems?.locked || []).map(d => ({ skillId: d.id, skillDef: d, visibility: SKILL_VISIBILITY_STATES.LOCKED }))
+      ]);
+
   let classSkills;
-  if (visibleItems && visibleItems.length > 0) {
-    classSkills = visibleItems
+  if (visibleList && visibleList.length > 0) {
+    classSkills = visibleList
       .filter(item => !sharedIds.has(item.skillId))
       .map(item => [item.skillId, SKILL_DEFS[item.skillId] || item.skillDef, item.visibility])
       .filter(([id, def]) => def != null);

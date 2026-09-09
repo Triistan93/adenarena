@@ -496,18 +496,22 @@ export function getVisibleSkillsForCharacter(character) {
     }
   }
 
-  // Make result directly iterable over visible skills [learned, available, locked]
-  result[Symbol.iterator] = function* () {
-    for (const def of this.learned) yield { skillId: def.id, skillDef: def, visibility: SKILL_VISIBILITY_STATES.LEARNED };
-    for (const def of this.available) yield { skillId: def.id, skillDef: def, visibility: SKILL_VISIBILITY_STATES.AVAILABLE };
-    for (const def of this.locked) yield { skillId: def.id, skillDef: def, visibility: SKILL_VISIBILITY_STATES.LOCKED };
-  };
   result.visibleList = [
     ...result.learned.map(def => ({ skillId: def.id, skillDef: def, visibility: SKILL_VISIBILITY_STATES.LEARNED })),
     ...result.available.map(def => ({ skillId: def.id, skillDef: def, visibility: SKILL_VISIBILITY_STATES.AVAILABLE })),
     ...result.locked.map(def => ({ skillId: def.id, skillDef: def, visibility: SKILL_VISIBILITY_STATES.LOCKED }))
   ];
-  result.length = result.learned.length + result.available.length + result.locked.length;
+
+  // Make result directly iterable and Array-compatible over visible skills [learned, available, locked]
+  result[Symbol.iterator] = function* () {
+    for (const item of this.visibleList) yield item;
+  };
+  result.filter = function (fn) { return this.visibleList.filter(fn); };
+  result.map = function (fn) { return this.visibleList.map(fn); };
+  result.forEach = function (fn) { return this.visibleList.forEach(fn); };
+  result.some = function (fn) { return this.visibleList.some(fn); };
+  result.find = function (fn) { return this.visibleList.find(fn); };
+  result.length = result.visibleList.length;
 
   return result;
 }
