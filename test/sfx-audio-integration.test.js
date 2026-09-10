@@ -23,6 +23,7 @@ test('1. SoundFX safe execution in headless / node environment', () => {
 });
 
 test('2. SoundFX delegates calls accurately to window.idleAudio', () => {
+  SoundFX.enabled = true;
   const mockCalls = [];
   global.window = {
     idleAudio: {
@@ -192,4 +193,7 @@ test('5. Timeline action "sfx" execution in VFXOrchestrator', () => {
   assert.equal(timelineAudio[2].type, 'ultimate');
   assert.equal(timelineAudio[3].type, 'stagger_break');
   assert.equal(timelineAudio[4].type, 'boss_roar');
+
+  // Restore default production state (disabled for max performance)
+  SoundFX.enabled = false;
 });

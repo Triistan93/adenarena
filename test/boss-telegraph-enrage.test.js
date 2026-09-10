@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 
 import { VFXOrchestrator } from '../lineage-idle/src/vfx/VFXOrchestrator.js';
+import { SoundFX } from '../lineage-idle/src/vfx/SoundFX.js';
 import { processRaidBossMechanics, handleRaidVictory, startRaidBoss } from '../lineage-idle/src/services/RaidService.js';
 import { StaggerEngine } from '../lineage-idle/src/engine/StaggerEngine.js';
 
@@ -54,6 +55,8 @@ test('1. VFXOrchestrator Telegraph Lifecycle (Circle & Cone)', () => {
 });
 
 test('2. World Boss Cinematic Intro & Enrage Phase in VFXOrchestrator', () => {
+  const prevSoundEnabled = SoundFX.enabled;
+  SoundFX.enabled = true;
   const audioCalls = [];
   global.window = {
     idleAudio: {
@@ -77,6 +80,8 @@ test('2. World Boss Cinematic Intro & Enrage Phase in VFXOrchestrator', () => {
   orchestrator.triggerBossEnrage({ x: 380, y: 300 });
   assert.ok(orchestrator.camera.flashAlpha > 0, 'Camera should flash on enrage');
   assert.equal(audioCalls.filter(c => c === 'boss_roar').length, 2);
+
+  SoundFX.enabled = prevSoundEnabled;
 });
 
 test('3. RaidService Enrage activation at <= 30% HP', () => {

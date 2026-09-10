@@ -54,10 +54,37 @@ export class VFXOrchestrator {
     this._bannerElement = null;
     this._bannerTimeout = null;
 
+    // VFX Quality / LOD
+    this.quality = (options.quality || 'HIGH').toUpperCase();
+    this.qualityMultiplier = this.quality === 'LOW' ? 0.5 : (this.quality === 'MEDIUM' ? 0.75 : 1.0);
+    this._hasWillChange = false;
+    this._f3KeyHandler = null;
+
     // Telegraphs & Warning Zones
     this._activeTelegraphs = [];
 
     this._bindCombatEvents();
+  }
+
+  /**
+   * Returns whether a skill has an active multi-phase timeline in this orchestrator
+   * @param {string} skillId 
+   * @returns {boolean}
+   */
+  hasSkill(skillId) {
+    return this._skillDefRegistry.has(skillId);
+  }
+
+  /**
+   * Sets LOD / VFX Quality level dynamically
+   * @param {'LOW'|'MEDIUM'|'HIGH'|'ULTRA'} level 
+   */
+  setQuality(level) {
+    const q = String(level || 'HIGH').toUpperCase();
+    this.quality = q;
+    if (q === 'LOW') this.qualityMultiplier = 0.50;
+    else if (q === 'MEDIUM') this.qualityMultiplier = 0.75;
+    else this.qualityMultiplier = 1.0;
   }
 
   /**
@@ -122,6 +149,19 @@ export class VFXOrchestrator {
       this._createProfilerDOM();
     }
 
+    if (typeof window !== 'undefined') {
+      window.toggleVFXProfiler = (enable) => this.toggleProfiler(enable);
+      if (!this._f3KeyHandler) {
+        this._f3KeyHandler = (e) => {
+          if (e && e.key === 'F3') {
+            e.preventDefault();
+            this.toggleProfiler();
+          }
+        };
+        window.addEventListener('keydown', this._f3KeyHandler);
+      }
+    }
+
     // Start 60 FPS animation and physics loop
     this._running = true;
     this._lastFrameTime = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
@@ -148,10 +188,18 @@ export class VFXOrchestrator {
       // Apply camera shake, zoom, and rotation transform directly to #stage
       if (this.stageElement && this.stageElement.style) {
         const { offsetX, offsetY, zoom, rotation } = this.camera;
-        if (zoom !== 1 || Math.abs(offsetX) > 0.05 || Math.abs(offsetY) > 0.05 || Math.abs(rotation) > 0.001) {
-          this.stageElement.style.transform = `translate(${offsetX.toFixed(2)}px, ${offsetY.toFixed(2)}px) scale(${zoom.toFixed(4)}) rotate(${rotation.toFixed(4)}rad)`;
+        if (zoom !== 1 || Math.abs(offsetX) > 0.01 || Math.abs(offsetY) > 0.01 || Math.abs(rotation) > 0.0005) {
+          this.stageElement.style.transform = `translate3d(${offsetX.toFixed(2)}px, ${offsetY.toFixed(2)}px, 0) scale(${zoom.toFixed(4)}) rotate(${rotation.toFixed(4)}rad)`;
+          if (!this._hasWillChange) {
+            this.stageElement.style.willChange = 'transform';
+            this._hasWillChange = true;
+          }
         } else if (this.stageElement.style.transform) {
           this.stageElement.style.transform = '';
+          if (this._hasWillChange) {
+            this.stageElement.style.willChange = '';
+            this._hasWillChange = false;
+          }
         }
 
         // Ambient dimming class for stage
@@ -207,6 +255,10 @@ export class VFXOrchestrator {
     if (this._resizeObserver) {
       this._resizeObserver.disconnect();
       this._resizeObserver = null;
+    }
+    if (typeof window !== 'undefined' && this._f3KeyHandler) {
+      window.removeEventListener('keydown', this._f3KeyHandler);
+      this._f3KeyHandler = null;
     }
     if (this._bannerTimeout) {
       clearTimeout(this._bannerTimeout);
@@ -1110,20 +1162,23 @@ export class VFXOrchestrator {
       ctx.restore();
     }
 
-    // 3. Render Particles
+    // 3. Render Particles (Batched without per-particle save/restore for dots)
+    ctx.globalCompositeOperation = 'lighter';
     for (const p of this.pool.particles._active) {
-      ctx.save();
-      ctx.globalCompositeOperation = p.blendMode;
-      ctx.globalAlpha = p.alpha;
-      ctx.fillStyle = p.color;
-
       if (p.shape === 'spark') {
         const angle = Math.atan2(p.vy, p.vx);
         const len = Math.max(p.size * 2, Math.sqrt(p.vx * p.vx + p.vy * p.vy) * 0.05);
+        ctx.save();
+        ctx.globalAlpha = p.alpha;
+        ctx.fillStyle = p.color;
         ctx.translate(p.x, p.y);
         ctx.rotate(angle);
         ctx.fillRect(-len / 2, -p.size / 2, len, p.size);
+        ctx.restore();
       } else if (p.shape === 'shard') {
+        ctx.save();
+        ctx.globalAlpha = p.alpha;
+        ctx.fillStyle = p.color;
         ctx.translate(p.x, p.y);
         ctx.rotate(p.rotation || 0);
         ctx.beginPath();
@@ -1133,45 +1188,43 @@ export class VFXOrchestrator {
         ctx.lineTo(0, -p.size * 0.7);
         ctx.closePath();
         ctx.fill();
+        ctx.restore();
       } else {
+        // High-performance hot path for circular dot particles (no save/restore)
+        ctx.globalAlpha = p.alpha;
+        ctx.fillStyle = p.color;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size * p.scale, 0, Math.PI * 2);
         ctx.fill();
       }
-      ctx.restore();
     }
+    ctx.globalCompositeOperation = 'source-over';
 
-    // 4. Render Projectiles
+    // 4. Render Projectiles (Batched)
     for (const proj of this.pool.projectiles._active) {
-      ctx.save();
       ctx.fillStyle = proj.color;
       ctx.beginPath();
       ctx.arc(proj.x, proj.y, 5, 0, Math.PI * 2);
       ctx.fill();
-      ctx.restore();
     }
 
-    // 5. Render Shockwaves
+    // 5. Render Shockwaves (Batched)
     for (const sw of this.pool.shockwaves._active) {
-      ctx.save();
       ctx.strokeStyle = sw.color;
       ctx.globalAlpha = sw.alpha;
       ctx.lineWidth = sw.width * (1 - (sw.life / sw.duration));
       ctx.beginPath();
       ctx.arc(sw.x, sw.y, sw.radius, 0, Math.PI * 2);
       ctx.stroke();
-      ctx.restore();
     }
 
-    // 6. Render Floating Damage Numbers
+    // 6. Render Floating Damage Numbers (Single font state setup)
+    ctx.textAlign = 'center';
     for (const ft of this.pool.floatingText._active) {
-      ctx.save();
       ctx.globalAlpha = ft.alpha;
       ctx.fillStyle = ft.color;
       ctx.font = ft.style === 'crit' ? 'bold 16px "Cinzel", sans-serif' : '14px "Cinzel", sans-serif';
-      ctx.textAlign = 'center';
       ctx.fillText(ft.text, ft.x, ft.y);
-      ctx.restore();
     }
 
     // 7. Render Shader Post-Processing (Canvas fallback)

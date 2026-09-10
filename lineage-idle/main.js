@@ -4353,21 +4353,30 @@ function updateMonsterHP() {
   if (text) text.textContent = `HP: ${curHp.toLocaleString()} / ${maxHp.toLocaleString()}`;
 }
 
-function reflow(n) { void n.offsetWidth; }
-function stageHeroAttack() { const st = el('stage'); if (!st) return; st.classList.remove('is-hero-atk'); reflow(st); st.classList.add('is-hero-atk'); }
+function reflow(n) { /* non-blocking no-op to eliminate layout thrashing */ }
+function stageHeroAttack() {
+  const st = el('stage');
+  if (!st) return;
+  st.classList.remove('is-hero-atk');
+  requestAnimationFrame(() => {
+    if (st) st.classList.add('is-hero-atk');
+  });
+}
 function stageMonsterHurt(dmg, crit, reaction = null, reactionDuration = 450) { 
   updateMonsterHP(); 
   const m = el('stage-monster'); 
   if (m) { 
     m.classList.remove('hurt'); 
     if (reaction) m.classList.remove(reaction);
-    reflow(m); 
-    m.classList.add('hurt'); 
-    if (reaction) {
-      m.classList.add(reaction);
-      setTimeout(() => m.classList.remove(reaction), reactionDuration);
-    }
-    setTimeout(() => m.classList.remove('hurt'), 420); 
+    requestAnimationFrame(() => {
+      if (!m) return;
+      m.classList.add('hurt'); 
+      if (reaction) {
+        m.classList.add(reaction);
+        setTimeout(() => m.classList.remove(reaction), reactionDuration);
+      }
+      setTimeout(() => m.classList.remove('hurt'), 420); 
+    });
   } 
   const floatClass = crit ? 'sf-crit crit-hit-text' : 'sf-dmg';
   stageFloat((crit ? '💥 CRIT! ' : '') + Math.round(dmg), floatClass, 'right'); 
@@ -4383,14 +4392,36 @@ function stageMonsterDie() {
   const m = el('stage-monster'); 
   if (m) { 
     m.classList.remove('is-dying'); 
-    reflow(m); 
-    m.classList.add('is-dying'); 
-    setTimeout(() => m.classList.remove('is-dying'), 350); 
+    requestAnimationFrame(() => {
+      if (!m) return;
+      m.classList.add('is-dying'); 
+      setTimeout(() => m.classList.remove('is-dying'), 350); 
+    });
   } 
   stageFloat('SLAIN', 'sf-slain', 'right'); 
 }
-function stageMonsterLunge() { const m = el('stage-monster'); if (!m) return; m.classList.remove('lunge'); reflow(m); m.classList.add('lunge'); setTimeout(() => m.classList.remove('lunge'), 440); }
-function stageHeroHurt(dmg) { const h = el('stage-hero'); if (h) { h.classList.remove('hurt'); reflow(h); h.classList.add('hurt'); setTimeout(() => h.classList.remove('hurt'), 420); } stageFloat('-' + Math.round(dmg), 'sf-hurt', 'left'); }
+function stageMonsterLunge() {
+  const m = el('stage-monster');
+  if (!m) return;
+  m.classList.remove('lunge');
+  requestAnimationFrame(() => {
+    if (!m) return;
+    m.classList.add('lunge');
+    setTimeout(() => m.classList.remove('lunge'), 440);
+  });
+}
+function stageHeroHurt(dmg) {
+  const h = el('stage-hero');
+  if (h) {
+    h.classList.remove('hurt');
+    requestAnimationFrame(() => {
+      if (!h) return;
+      h.classList.add('hurt');
+      setTimeout(() => h.classList.remove('hurt'), 420);
+    });
+  }
+  stageFloat('-' + Math.round(dmg), 'sf-hurt', 'left');
+}
 function stageHeroBlock() { stageFloat('BLOCK', 'sf-block', 'left'); }
 const MAX_FLOAT_ITEMS = 12;
 function stageFloat(text, cls, side) {
@@ -4408,28 +4439,56 @@ function stageFloat(text, cls, side) {
 // --------------------------- COMBAT ---------------------------
 let combatInterval = null; let combatTick = 0; let monsterAttackTimeout = null;
 
+let _cachedHeroCenter = null;
+let _cachedHeroBase = null;
+let _cachedMonsterCenter = null;
+let _cachedMonsterBase = null;
+let _lastCoordCacheTime = 0;
+
+function invalidateCombatCoordinates() {
+  _cachedHeroCenter = null;
+  _cachedHeroBase = null;
+  _cachedMonsterCenter = null;
+  _cachedMonsterBase = null;
+}
+
+if (typeof window !== 'undefined') {
+  window.addEventListener('resize', invalidateCombatCoordinates);
+}
+
 function getStagePositionRelative(side) {
+  const now = Date.now();
+  if (side === 'hero' && _cachedHeroCenter && (now - _lastCoordCacheTime) < 1500) return _cachedHeroCenter;
+  if (side !== 'hero' && _cachedMonsterCenter && (now - _lastCoordCacheTime) < 1500) return _cachedMonsterCenter;
+
   const stage = el('stage');
   if (!stage) return { x: 0, y: 0 };
   const rect = stage.getBoundingClientRect();
   const host = el(side === 'hero' ? 'stage-hero' : 'stage-monster');
   if (!host) return { x: rect.width * 0.5, y: rect.height * 0.5 };
   const box = host.getBoundingClientRect();
-  return {
+  const pt = {
     x: box.left - rect.left + box.width * 0.5,
     y: box.top - rect.top + box.height * 0.5
   };
+  _lastCoordCacheTime = now;
+  if (side === 'hero') _cachedHeroCenter = pt;
+  else _cachedMonsterCenter = pt;
+  return pt;
 }
 
 function getHeroBasePoint() {
+  const now = Date.now();
+  if (_cachedHeroBase && (now - _lastCoordCacheTime) < 1500) return _cachedHeroBase;
   const stage = el('stage');
   if (!stage) return { x: 0, y: 0 };
   const rect = stage.getBoundingClientRect();
   const hero = el('stage-hero');
   if (hero) {
     const box = hero.getBoundingClientRect();
-    // Ponto alinhado exatamente nos pés / base inferior do card do herói
-    return { x: box.left - rect.left + box.width * 0.5, y: box.bottom - rect.top - 4 };
+    _cachedHeroBase = { x: box.left - rect.left + box.width * 0.5, y: box.bottom - rect.top - 4 };
+    _lastCoordCacheTime = now;
+    return _cachedHeroBase;
   }
   return { x: rect.width * 0.28, y: rect.height * 0.75 };
 }
@@ -4456,27 +4515,33 @@ const MONSTER_FEET_EFFECTS = new Set([
 ]);
 
 function getCombatTargetPoint() {
+  const now = Date.now();
+  if (_cachedMonsterCenter && (now - _lastCoordCacheTime) < 1500) return _cachedMonsterCenter;
   const stage = el('stage');
   if (!stage) return { x: 0, y: 0 };
   const rect = stage.getBoundingClientRect();
   const monster = el('stage-monster');
   if (monster) {
     const box = monster.getBoundingClientRect();
-    // Ponto no centro / peito do card do monstro (para ataques diretos, projéteis e slashes)
-    return { x: box.left - rect.left + box.width * 0.5, y: box.top - rect.top + box.height * 0.48 };
+    _cachedMonsterCenter = { x: box.left - rect.left + box.width * 0.5, y: box.top - rect.top + box.height * 0.48 };
+    _lastCoordCacheTime = now;
+    return _cachedMonsterCenter;
   }
   return { x: rect.width * 0.72, y: rect.height * 0.48 };
 }
 
 function getCombatTargetBasePoint() {
+  const now = Date.now();
+  if (_cachedMonsterBase && (now - _lastCoordCacheTime) < 1500) return _cachedMonsterBase;
   const stage = el('stage');
   if (!stage) return { x: 0, y: 0 };
   const rect = stage.getBoundingClientRect();
   const monster = el('stage-monster');
   if (monster) {
     const box = monster.getBoundingClientRect();
-    // Ponto alinhado exatamente nos pés / borda inferior do card do monstro (para glifos e erupções)
-    return { x: box.left - rect.left + box.width * 0.5, y: box.bottom - rect.top - 2 };
+    _cachedMonsterBase = { x: box.left - rect.left + box.width * 0.5, y: box.bottom - rect.top - 2 };
+    _lastCoordCacheTime = now;
+    return _cachedMonsterBase;
   }
   return { x: rect.width * 0.72, y: rect.height * 0.78 };
 }
@@ -5226,13 +5291,15 @@ function attackMonster() {
         else if (lowerName.includes('haste') || lowerName.includes('wind') || lowerName.includes('agility') || lowerName.includes('speed')) buffColor = '#22c55e';
         else if (lowerName.includes('acumen') || lowerName.includes('empower') || lowerName.includes('clarity') || lowerName.includes('mana')) buffColor = '#06b6d4';
 
-        playCombatVFX('buff_aura', {
-          source,
-          target: source,
-          color: buffColor,
-          power: Math.max(1, skill.lvl || 1),
-          duration: 1100
-        });
+        if (!globalVFXOrchestrator.hasSkill(skill.id)) {
+          playCombatVFX('buff_aura', {
+            source,
+            target: source,
+            color: buffColor,
+            power: Math.max(1, skill.lvl || 1),
+            duration: 1100
+          });
+        }
 
         const orchestratorDef = globalVFXOrchestrator._skillDefRegistry.get(skill.id);
         const skillDefForVfx = orchestratorDef || skill.def;
@@ -5254,13 +5321,15 @@ function attackMonster() {
 
         // Dispara VFX Premium de Cura Sagrada (ancorado aos pés do herói)
         const source = getHeroBasePoint();
-        playCombatVFX('holy_heal', {
-          source,
-          target: source,
-          color: '#4ade80',
-          power: Math.max(1, skill.lvl || 1),
-          duration: 950
-        });
+        if (!globalVFXOrchestrator.hasSkill(skill.id)) {
+          playCombatVFX('holy_heal', {
+            source,
+            target: source,
+            color: '#4ade80',
+            power: Math.max(1, skill.lvl || 1),
+            duration: 950
+          });
+        }
 
         const orchestratorDef = globalVFXOrchestrator._skillDefRegistry.get(skill.id);
         const skillDefForVfx = orchestratorDef || skill.def;
@@ -5373,7 +5442,7 @@ function attackMonster() {
           });
         }
         
-        if (vfxData && vfxData.id) {
+        if (vfxData && vfxData.id && !globalVFXOrchestrator.hasSkill(skill.id)) {
           const source = sourcePt;
           const target = targetPt;
           playCombatVFX(vfxData.id, {
@@ -5398,8 +5467,6 @@ function attackMonster() {
               duration: vfxData.duration || 900
             });
           }
-
-          // Skin reaction VFX only on auto-attacks, not on skills
         }
 
         log(`💥 ${skill.def.name}! ${sDmg} ${type} damage`, 'rarity-epic');
@@ -6398,8 +6465,8 @@ function updateZoneKillProgressUI() {
 
 function startCombat() { return engineStartCombat(state, { log, attackMonster }); }
 function stopCombat() { return engineStopCombat(state); }
-function pickRandomMonster() { return enginePickRandomMonster(state, { log, floatText, renderStageMonster, updateZoneKillProgressUI }); }
-function selectZone(zoneId) { return engineSelectZone(state, zoneId, { log, updateAllUI, save, attackMonster }); }
+function pickRandomMonster() { invalidateCombatCoordinates(); return enginePickRandomMonster(state, { log, floatText, renderStageMonster, updateZoneKillProgressUI }); }
+function selectZone(zoneId) { invalidateCombatCoordinates(); return engineSelectZone(state, zoneId, { log, updateAllUI, save, attackMonster }); }
 // Shows the Saga Unlock modal with saga name/description
 function showSagaModal(saga) {
   const modal = el('saga-modal');
@@ -7844,6 +7911,7 @@ export function bindEvents() {
     EventBus.on('ui:update', () => updateAllUI());
     EventBus.on('log', (data) => log(data.msg || data, data.type || 'system'));
     EventBus.on('quest:trigger', (data) => triggerQuestEvent(data.type, data.count || 1));
+    EventBus.off('state:updated');
     EventBus.on('state:updated', () => updateAllUI());
     // ───────────────────────────────────────────────────────────────────
 

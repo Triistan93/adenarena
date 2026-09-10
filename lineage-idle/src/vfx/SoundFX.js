@@ -7,9 +7,15 @@
 
 export class SoundFX {
   /**
+   * Sound effects toggle (disabled for maximum performance as requested)
+   */
+  static enabled = false;
+
+  /**
    * Retrieves window.idleAudio safely
    */
   static get audio() {
+    if (!this.enabled) return null;
     if (typeof window !== 'undefined' && window.idleAudio) {
       return window.idleAudio;
     }

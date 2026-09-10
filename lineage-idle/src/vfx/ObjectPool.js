@@ -142,6 +142,12 @@ export class VFXPoolManager {
         if (!data) {
           p.active = false;
           p.life = 0;
+          p.x = 0; p.y = 0;
+          p.vx = 0; p.vy = 0;
+          p.ax = 0; p.ay = 0;
+          p.rotation = 0; p.vRot = 0;
+          p.scale = 1;
+          p.alpha = 1;
           return;
         }
         p.x = data.x || 0;

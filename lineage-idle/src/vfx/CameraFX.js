@@ -9,16 +9,18 @@
  * - Accessibility controls (shake toggle, flash toggle, intensity sliders)
  */
 
+export const SCREEN_SHAKE_INTENSITY = 0.10;
+
 export class CameraFX {
   constructor(options = {}) {
     // Accessibility & Settings
     this.shakeEnabled = options.shakeEnabled !== false;
-    this.shakeMultiplier = options.shakeMultiplier !== undefined ? options.shakeMultiplier : 1.0;
+    this.shakeMultiplier = options.shakeMultiplier !== undefined ? options.shakeMultiplier : SCREEN_SHAKE_INTENSITY;
     this.flashEnabled = options.flashEnabled !== false;
 
     // Shake trauma state
     this.trauma = 0.0;
-    this.decay = options.decay || 1.8; // trauma lost per second
+    this.decay = options.decay || 2.2; // trauma lost per second (crisp settle)
     this.maxOffsetX = options.maxOffsetX || 18.0; // pixels
     this.maxOffsetY = options.maxOffsetY || 12.0; // pixels
     this.maxRoll = options.maxRoll || 0.04; // radians
@@ -55,7 +57,7 @@ export class CameraFX {
    */
   addTrauma(amount) {
     if (!this.shakeEnabled || this.shakeMultiplier <= 0) return;
-    const added = Math.max(0, Number(amount) || 0) * this.shakeMultiplier;
+    const added = Math.max(0, Number(amount) || 0);
     this.trauma = Math.min(1.0, this.trauma + added);
   }
 
@@ -146,10 +148,10 @@ export class CameraFX {
       const shake = this.trauma * this.trauma; // Quadratic: subtle at low trauma, punchy at high
       this._time += dt * 32.0;
 
-      // Smooth harmonics via sin waves (no harsh random jitter)
-      this.offsetX = this.maxOffsetX * shake * Math.sin(this._time * 1.73);
-      this.offsetY = this.maxOffsetY * shake * Math.sin(this._time * 2.37);
-      this.rotation = this.maxRoll * shake * Math.sin(this._time * 1.15);
+      // Smooth harmonics via sin waves scaled by SCREEN_SHAKE_INTENSITY (0.10)
+      this.offsetX = this.maxOffsetX * shake * Math.sin(this._time * 1.73) * this.shakeMultiplier;
+      this.offsetY = this.maxOffsetY * shake * Math.sin(this._time * 2.37) * this.shakeMultiplier;
+      this.rotation = this.maxRoll * shake * Math.sin(this._time * 1.15) * this.shakeMultiplier;
     } else {
       this.offsetX = 0;
       this.offsetY = 0;

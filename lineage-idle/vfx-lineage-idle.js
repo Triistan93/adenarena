@@ -67,9 +67,9 @@
   };
 
   var QUALITY = {
-    low: { particles: 0.65, blur: 0.7 },
-    medium: { particles: 1, blur: 0.95 },
-    high: { particles: 1.45, blur: 1.2 }
+    low: { particles: 0.5, blur: 0 },
+    medium: { particles: 0.8, blur: 0 },
+    high: { particles: 1.0, blur: 0 }
   };
 
   function rand(a, b) {
@@ -126,7 +126,7 @@
     this.canvas = options.canvas || null;
     this.quality = QUALITY[options.quality] ? options.quality : 'high';
     this.qualityConfig = QUALITY[this.quality];
-    this.maxParticles = options.maxParticles || 2200;
+    this.maxParticles = options.maxParticles || 350;
     this.effects = [];
     this.particles = [];
     this.rings = [];
@@ -190,7 +190,7 @@
   };
 
   LineageVFX.prototype._seedAmbient = function () {
-    for (var i = 0; i < 60; i += 1) {
+    for (var i = 0; i < 16; i += 1) {
       this.ambientParticles.push({
         x: Math.random(), y: Math.random(), r: rand(0.6, 2.4),
         speed: rand(0.15, 0.55), sway: rand(0.3, 0.9), phase: rand(0, Math.PI * 2),
@@ -200,12 +200,12 @@
   };
 
   LineageVFX.prototype._seedLights = function () {
-    for (var i = 0; i < 5; i += 1) {
+    for (var i = 0; i < 2; i += 1) {
       this.lightOrbs.push({
-        ax: 0.2 + i * 0.15, ay: 0.3 + (i % 3) * 0.18,
+        ax: 0.2 + i * 0.35, ay: 0.3 + (i % 2) * 0.25,
         rx: rand(0.14, 0.34), ry: rand(0.1, 0.26), speed: rand(0.25, 0.65),
-        phase: rand(0, Math.PI * 2), rgb: ['242,201,110', '110,231,255', '167,139,250'][i % 3],
-        radius: rand(55, 125)
+        phase: rand(0, Math.PI * 2), rgb: ['242,201,110', '110,231,255'][i % 2],
+        radius: rand(55, 110)
       });
     }
   };
@@ -3368,9 +3368,10 @@
     }
     ctx.globalCompositeOperation = 'lighter';
     for (var r = this.rings.length - 1; r >= 0; r -= 1) {
-      var ring = this.rings[r]; ring.age += dt; ring.radius += ring.speed * dt / 16; var ringAlpha = 1 - ring.age / ring.max;
-      if (ringAlpha <= 0) { this.rings.splice(r, 1); continue; }
-      ctx.strokeStyle = rgba(ring.rgb, ringAlpha * 0.85); ctx.lineWidth = ring.width; ctx.shadowColor = rgba(ring.rgb, 0.9); ctx.shadowBlur = 14 * this.qualityConfig.blur; ctx.beginPath(); ctx.arc(ring.x, ring.y, ring.radius, 0, Math.PI * 2); ctx.stroke(); ctx.shadowBlur = 0;
+      // Outer radiant halo (zero GPU Gaussian blur penalty)
+      ctx.strokeStyle = rgba(ring.rgb, ringAlpha * 0.25); ctx.lineWidth = ring.width * 2.5; ctx.beginPath(); ctx.arc(ring.x, ring.y, ring.radius, 0, Math.PI * 2); ctx.stroke();
+      // Core sharp brilliant ring
+      ctx.strokeStyle = rgba(ring.rgb, ringAlpha * 0.90); ctx.lineWidth = ring.width; ctx.beginPath(); ctx.arc(ring.x, ring.y, ring.radius, 0, Math.PI * 2); ctx.stroke();
     }
     ctx.restore();
 
