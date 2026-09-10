@@ -40,6 +40,7 @@ export function getTowerFloorDef(floorNum) {
   const baseAtk = Math.floor(18 * Math.pow(1.09, f - 1) * (isBoss ? 1.4 : 1));
   const baseDef = Math.floor(10 * Math.pow(1.08, f - 1));
 
+  const mdef = Math.floor(8 * Math.pow(1.07, f - 1));
   const goldReward = Math.floor(300 * Math.pow(1.10, f - 1) * (isBoss ? 3 : 1));
   const spReward = Math.floor(12 * f * (isBoss ? 2 : 1));
 
@@ -51,12 +52,35 @@ export function getTowerFloorDef(floorNum) {
     hp: baseHp,
     atk: baseAtk,
     def: baseDef,
+    mdef,
     xp: Math.floor(120 * f * 1.5),
     sp: spReward,
     gold: goldReward,
     rewardLamps: isBoss ? Math.floor(f / 10) : 0,
     rewardCrystals: isBoss ? (f >= 50 ? 'crystal_s' : 'crystal_a') : null
   };
+}
+
+/**
+ * Calculates the minimum CP required to enter a tower floor.
+ * Scales exponentially with floor number to match monster stat growth.
+ * @param {number} floorNum
+ * @returns {number} Minimum CP
+ */
+export function getTowerFloorMinimumCP(floorNum) {
+  const f = Math.max(1, Math.min(100, Number(floorNum) || 1));
+  // Base CP of 500 scaling at 1.10× per floor
+  return Math.floor(500 * Math.pow(1.10, f - 1));
+}
+
+/**
+ * Calculates the recommended CP for comfortable tower floor clearing.
+ * Approximately 1.45× the minimum CP.
+ * @param {number} floorNum
+ * @returns {number} Recommended CP
+ */
+export function getTowerFloorRecommendedCP(floorNum) {
+  return Math.floor(getTowerFloorMinimumCP(floorNum) * 1.45);
 }
 
 /**

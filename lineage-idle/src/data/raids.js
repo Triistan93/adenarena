@@ -12,6 +12,8 @@
  * 8. Dragão Valakas (Lv. 100 - Vulcão Forja dos Deuses)
  */
 
+import { RAID_BOSS_BALANCE } from './balance/bossBalance.js';
+
 export const RAID_BOSSES = {
   queen_ant: {
     id: 'queen_ant',
@@ -359,3 +361,20 @@ export const RAID_BOSSES = {
     ]
   }
 };
+
+// Merge calibrated stats, minimumCP, and recommendedCP from RAID_BOSS_BALANCE
+for (const [key, balancedBoss] of Object.entries(RAID_BOSS_BALANCE)) {
+  if (RAID_BOSSES[key]) {
+    Object.assign(RAID_BOSSES[key], {
+      minimumCP: balancedBoss.minimumCP,
+      recommendedCP: balancedBoss.recommendedCP,
+      hp: balancedBoss.hp,
+      atk: balancedBoss.atk,
+      def: balancedBoss.def,
+      mdef: balancedBoss.mdef,
+      fatalSkill: balancedBoss.fatalSkill || RAID_BOSSES[key].fatalSkill,
+      mechanics: balancedBoss.mechanics || RAID_BOSSES[key].mechanics,
+      targetMetrics: balancedBoss.targetMetrics
+    });
+  }
+}

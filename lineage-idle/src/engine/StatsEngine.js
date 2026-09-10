@@ -216,7 +216,9 @@ export function getEquipBonus(state, slot) {
 
   const rarityMult = inv.rarity ? (gData?.RARITY?.[inv.rarity]?.mult || 1) : 1;
   const enchant = inv.enchant || 0;
-  const enchantMult = 1 + (enchant <= 3 ? enchant * 0.3 : (0.36 + (enchant - 3) * 0.5));
+  // Enchant multiplier: +1=1.30, +2=1.60, +3=1.90, +4=2.40, ..., +16=8.40
+  // Fix: 0.36 was a typo causing +4 (1.86×) < +3 (1.90×) inversion. Corrected to 0.90.
+  const enchantMult = 1 + (enchant <= 3 ? enchant * 0.3 : (0.90 + (enchant - 3) * 0.5));
   const foundationMult = inv.foundation ? 1.3 : 1;
 
   let out = { ...def };

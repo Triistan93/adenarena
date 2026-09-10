@@ -12,6 +12,7 @@ import { getStats } from './StatsEngine.js';
 import { rollChampionMonster } from './BalanceEngine.js';
 import { StaggerEngine } from './StaggerEngine.js';
 import { MonsterAIEngine, ARCHETYPE_INFO, HUNTING_DIFFICULTIES } from './MonsterAIEngine.js';
+import { getMonsterSpawnMultipliers } from '../data/balance/monsterBalance.js';
 import { combatEvents, CombatEventType, CombatEventFactory } from '../vfx/CombatEvent.js';
 
 export { combatEvents, CombatEventType, CombatEventFactory };
@@ -138,10 +139,11 @@ export function pickRandomMonster(state, callbacks = {}) {
     let champion = null;
 
     if (isBossSpawn || template.boss) {
-      hpMult = 4.5;
-      atkMult = 2.0;
-      xpMult = 6.0;
-      goldMult = 6.0;
+      const bossMults = getMonsterSpawnMultipliers('zone_boss');
+      hpMult = bossMults.hpMult;
+      atkMult = bossMults.atkMult;
+      xpMult = bossMults.xpMult;
+      goldMult = bossMults.goldMult;
       isBossSpawn = true;
     } else {
       champion = rollChampionMonster();
@@ -151,10 +153,11 @@ export function pickRandomMonster(state, callbacks = {}) {
         xpMult = champion.xpMult;
         goldMult = champion.goldMult;
       } else if (Math.random() < 0.08) {
-        hpMult = 1.8;
-        atkMult = 1.3;
-        xpMult = 2.5;
-        goldMult = 3.0;
+        const eliteMults = getMonsterSpawnMultipliers('elite');
+        hpMult = eliteMults.hpMult;
+        atkMult = eliteMults.atkMult;
+        xpMult = eliteMults.xpMult;
+        goldMult = eliteMults.goldMult;
         isElite = true;
       }
     }

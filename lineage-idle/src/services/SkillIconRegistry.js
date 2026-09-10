@@ -1671,68 +1671,6 @@ export const SKILL_ICON_REGISTRY = Object.freeze({
     role: 'area',
     shared: false
   },
-
-  // ─── Wizard Stage 1 Canonical Skills ──────────────────────────────────────
-  wizard_blaze: {
-    skillId: 'wizard_blaze',
-    iconId: 'fire_strike',
-    iconPath: '/assets/skills/icons/fire_strike.png',
-    source: 'l2_authentic',
-    semanticCategory: 'fire_magic',
-    element: 'Fire',
-    role: 'damage',
-    shared: false
-  },
-  wizard_aqua_swirl: {
-    skillId: 'wizard_aqua_swirl',
-    iconId: 'water_wave',
-    iconPath: '/assets/skills/water_wave.jpg',
-    source: 'l2_authentic',
-    semanticCategory: 'water_magic',
-    element: 'Water',
-    role: 'damage',
-    shared: false
-  },
-  wizard_twister: {
-    skillId: 'wizard_twister',
-    iconId: 'cyclone',
-    iconPath: '/assets/skills/icons/cyclone.png',
-    source: 'l2_authentic',
-    semanticCategory: 'wind_magic',
-    element: 'Wind',
-    role: 'damage',
-    shared: false
-  },
-  wizard_life_drain: {
-    skillId: 'wizard_life_drain',
-    iconId: 'dark_drain',
-    iconPath: '/assets/skills/icons/dark_drain.png',
-    source: 'l2_authentic',
-    semanticCategory: 'dark_drain',
-    element: 'Dark',
-    role: 'drain',
-    shared: false
-  },
-  wizard_aura_burn: {
-    skillId: 'wizard_aura_burn',
-    iconId: 'mystic_burst',
-    iconPath: '/assets/skills/icons/mystic_burst.png',
-    source: 'l2_authentic',
-    semanticCategory: 'arcane_magic',
-    element: 'Fire',
-    role: 'burst',
-    shared: false
-  },
-  wizard_wizards_harmony: {
-    skillId: 'wizard_wizards_harmony',
-    iconId: 'wizard_harmony',
-    iconPath: '/assets/skills/icons/wizard_harmony.png',
-    source: 'l2_authentic',
-    semanticCategory: 'buff_support',
-    element: 'Arcane',
-    role: 'buff',
-    shared: false
-  }
 });
 
 /**

@@ -174,6 +174,18 @@ import {
 
 import { WeaponResonanceService } from './src/services/WeaponResonanceService.js';
 import { StaggerEngine } from './src/engine/StaggerEngine.js';
+import {
+  COMBAT_CONFIG,
+  calculateDefenseMitigation,
+  calculatePhysicalDamage,
+  calculateMagicDamage,
+  calculateHealAmount,
+  calculateVampiricHeal,
+  canCastSkill,
+  consumeSkillMp,
+  getSkillMpCost,
+  calculateCombatPower
+} from './src/data/balance/index.js';
 // ─── Sprint 5: Importa serviços de Personagem, Quests, Torre e Raids ────────
 import {
   classSatisfies as serviceClassSatisfies,
@@ -1271,6 +1283,11 @@ function useItem(uid) {
   
   // ── HP Potions ─────────────────────────────────────────────────────────────
   if (def.type === 'heal' || item.itemId.startsWith('hp_potion')) {
+    const potNow = Date.now();
+    if (state._lastHpPotTime && (potNow - state._lastHpPotTime) < 1500) {
+      return false; // Respeita GCD de 1.5s
+    }
+    state._lastHpPotTime = potNow;
     const healAmt = def.amount || def.healAmt || 100;
     state.hp = Math.min(state.maxHp, state.hp + healAmt);
     log(`✨ Usou ${def.name}: +${healAmt} HP`, 'heal');
@@ -1278,6 +1295,11 @@ function useItem(uid) {
   }
   // ── MP Potions ─────────────────────────────────────────────────────────────
   else if (def.type === 'mana' || item.itemId.startsWith('mp_potion')) {
+    const potNow = Date.now();
+    if (state._lastMpPotTime && (potNow - state._lastMpPotTime) < 1500) {
+      return false; // Respeita GCD de 1.5s
+    }
+    state._lastMpPotTime = potNow;
     const manaAmt = def.amount || def.healAmt || 80;
     state.mp = Math.min(state.maxMp, state.mp + manaAmt);
     log(`💧 Usou ${def.name}: +${manaAmt} MP`, 'heal');
@@ -4847,8 +4869,9 @@ function getEquippedProcBonuses() {
 
 function dealDamage(target, amount, type = 'physical') { 
   const rawAmount = Number(amount) || 0;
-  const def = type === 'physical' ? (Number(target.def) || 0) : (Number(target.mdef) || 0); 
-  return Math.max(1, Math.floor(rawAmount * (1 - def / (def + 50)))); 
+  const isMagic = type === 'magic';
+  const def = isMagic ? (Number(target.mdef) || 0) : (Number(target.def) || 0); 
+  return calculateDefenseMitigation(rawAmount, def, isMagic);
 }
 
 const goldEvents = []; 
@@ -5198,18 +5221,23 @@ function attackMonster() {
   };
   const shouldAutoPot = stats.autoPotion || state.autoPotionActive;
   if (shouldAutoPot) {
+    const potNow = Date.now();
     if (apSettings.autoHp !== false && state.hp < state.maxHp * (apSettings.hpThreshold || 0.6)) {
-      const potIds = ['hp_potion_xl','hp_potion_l','hp_potion_m','hp_potion_s'];
-      for (const pid of potIds) {
-        const it = state.inventory.find(i => i.itemId === pid && ((i.count ?? i.qty ?? 1) > 0));
-        if (it) { useItem(it.uid); break; }
+      if (!state._lastHpPotTime || (potNow - state._lastHpPotTime) >= 1500) {
+        const potIds = ['hp_potion_xl','hp_potion_l','hp_potion_m','hp_potion_s'];
+        for (const pid of potIds) {
+          const it = state.inventory.find(i => i.itemId === pid && ((i.count ?? i.qty ?? 1) > 0));
+          if (it) { useItem(it.uid); break; }
+        }
       }
     }
     if (apSettings.autoMp !== false && state.mp < state.maxMp * (apSettings.mpThreshold || 0.4)) {
-      const mpPotIds = ['mp_potion_xl','mp_potion_l','mp_potion_m','mp_potion_s'];
-      for (const pid of mpPotIds) {
-        const it = state.inventory.find(i => i.itemId === pid && ((i.count ?? i.qty ?? 1) > 0));
-        if (it) { useItem(it.uid); break; }
+      if (!state._lastMpPotTime || (potNow - state._lastMpPotTime) >= 1500) {
+        const mpPotIds = ['mp_potion_xl','mp_potion_l','mp_potion_m','mp_potion_s'];
+        for (const pid of mpPotIds) {
+          const it = state.inventory.find(i => i.itemId === pid && ((i.count ?? i.qty ?? 1) > 0));
+          if (it) { useItem(it.uid); break; }
+        }
       }
     }
   }
@@ -5266,12 +5294,18 @@ function attackMonster() {
       }
     }
 
-    const cd = (skill.def.baseCd || 5000) * (1 - (stats.cdr || 0)); 
-    const lastCast = state._cds[skill.id] || 0;
-    if ((realNow - lastCast) >= cd) {
-      state._cds[skill.id] = realNow;
+    state.stats = stats;
+    const canCast = canCastSkill(state, skill.def, realNow, state._cds);
+    if (!canCast.canCast) {
+      continue;
+    }
+
+    const consumed = consumeSkillMp(state, skill.def, realNow, state._cds);
+    if (!consumed.success) {
+      continue;
+    }
       
-      if (isBuff) {
+    if (isBuff) {
         state.buffs = state.buffs || {};
         const buffDuration = 60000; // 60 segundos de efeito
         const buffAmt = window.SkillScaling ? window.SkillScaling.getSkillBuffAtLevel(skill.lvl) : (0.20 + (skill.lvl * 0.05));
@@ -5314,7 +5348,7 @@ function attackMonster() {
           def: skillDefForVfx
         });
       } else if (isHeal) {
-        const healAmt = window.SkillScaling ? window.SkillScaling.getSkillHealAtLevel(stats.maxHp, skill.lvl) : Math.floor(stats.maxHp * (0.25 + skill.lvl * 0.05));
+        const healAmt = window.SkillScaling ? window.SkillScaling.getSkillHealAtLevel(stats.maxHp, skill.lvl, stats.matk) : Math.floor(stats.maxHp * (0.25 + skill.lvl * 0.05));
         state.hp = Math.min(stats.maxHp, state.hp + healAmt);
         log(`✨ ${skill.def.name}! Curou ${healAmt} HP`, 'heal');
         floatText(`+${healAmt} HP`, 'sf-heal');
@@ -5397,6 +5431,14 @@ function attackMonster() {
           monster._overkillDmg = Math.abs(monster.hp);
         }
         const vfxData = getSkillVfxData(skill.id, skill.def);
+        if (skill.def.effect === 'vampiric' || skill.def.effect === 'drain' || skill.id.includes('vampir') || skill.id.includes('drain') || (vfxData && vfxData.id === 'magic_vampiric_drain')) {
+          const vHeal = calculateVampiricHeal(sDmg, stats.maxHp || state.maxHp, COMBAT_CONFIG.lifestealRatioDefault);
+          if (vHeal > 0) {
+            state.hp = Math.min(stats.maxHp || state.maxHp, state.hp + vHeal);
+            if (typeof floatText === 'function') floatText(`+${vHeal} HP`, 'sf-heal');
+            log(`🦇 Vampirismo! Absorveu ${vHeal} HP`, 'heal');
+          }
+        }
         const skinReaction = state.activeSkin === 'skin_weapon_frost_lord' ? 'is-frozen' : (state.activeSkin === 'skin_weapon_infernal_dragon' ? 'is-ignited' : (state.activeSkin === 'skin_weapon_celestial_holy' ? 'is-consecrated' : null));
         stageHeroAttack();
         stageMonsterHurt(sDmg, false, skinReaction, 400);
@@ -5470,12 +5512,6 @@ function attackMonster() {
         }
 
         log(`💥 ${skill.def.name}! ${sDmg} ${type} damage`, 'rarity-epic');
-        if (skill.def.effect === 'vampiric' || skill.def.effect === 'drain' || skill.id.includes('vampir') || skill.id.includes('drain') || skill.id.includes('bite')) {
-          const heal = Math.max(1, Math.floor(sDmg * 0.40));
-          state.hp = Math.min(stats.maxHp, state.hp + heal);
-          log(`🦇 Vampirismo! Absorveu ${heal} HP`, 'heal');
-          floatText(`+${heal} HP`, 'sf-heal');
-        }
         if (skill.def.effect === 'stun' && !killedBySkill) {
            monster._stunnedUntil = now + 3500;
            log(`💫 ${monster.name} foi Atordoado!`, 'rarity-rare');
@@ -5497,7 +5533,6 @@ function attackMonster() {
       castedSkillThisTick = true;
       break; 
     }
-  }
 
   if (castedSkillThisTick) return;
 
@@ -5591,7 +5626,12 @@ function attackMonster() {
     log(`${damage} basic damage to ${monster.name}`, 'damage'); 
   }
   
-  if (stats.lifeDrain > 0) { const heal = Math.floor(damage * stats.lifeDrain); if (heal > 0) { state.hp = Math.min(state.maxHp, state.hp + heal); } }
+  if (stats.lifeDrain > 0) {
+    const rawHeal = Math.floor(damage * stats.lifeDrain);
+    const maxHeal = Math.floor((stats.maxHp || state.maxHp || 100) * 0.30);
+    const heal = Math.min(rawHeal, maxHeal);
+    if (heal > 0) { state.hp = Math.min(state.maxHp, state.hp + heal); }
+  }
   
   const procBonuses = getEquippedProcBonuses();
   let affixDmgMult = 1.0;

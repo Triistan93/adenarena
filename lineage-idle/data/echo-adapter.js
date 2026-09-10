@@ -20,6 +20,8 @@ import { HEIRLOOM_ITEMS } from "../src/data/items/heirloom_items.js";
 import { ALL_LOADED_SKILLS } from "../src/data/skills/index.js";
 import { CLASS_ALIASES as UNIVERSAL_CLASS_ALIASES, resolveCanonicalClassId } from "../src/data/classes/index.js";
 import { getSkillIcon } from "../src/services/SkillIconRegistry.js";
+import { getSkillMpCost } from "../src/data/balance/skillBalance.js";
+import { calculateHealAmount } from "../src/data/balance/combatBalance.js";
 
 
 /** Transforma string em slug snake_case */
@@ -90,10 +92,11 @@ function getSkillPwrAtLevel(def, lvl) {
 
 /**
  * Calcula heal amount no nível investido.
- * Fórmula mantida do original: maxHp * (0.25 + lvl * 0.05)
+ * Integra com calculateHealAmount (M.Atk + MaxHP%) e respeita cap estrito em maxHp.
  */
-function getSkillHealAtLevel(maxHp, lvl) {
-  return Math.floor(maxHp * (0.25 + Math.max(1, lvl) * 0.05));
+function getSkillHealAtLevel(maxHp, lvl, matk = 0) {
+  const heal = calculateHealAmount({ maxHp, matk, skillLvl: lvl });
+  return Math.min(Math.max(1, Number(maxHp) || 100), heal);
 }
 
 /**
@@ -463,6 +466,18 @@ function buildEchoAdapter() {
       const isOverhitEligible = (type === 'active' && !sNameLower.includes('heal') && !sNameLower.includes('bandage')) &&
         (is4Star || /blow|strike|crush|slam|shot|blast|prominence|hurricane|flare|spike|hydro|drain|judgment|sonic|force|fatal|mortal|backstab|deadly|smash|burst|hammer|break|shock|double|triple|penetration|puncture|sweep|cleave/i.test(sNameLower));
 
+      let mpCost = 0;
+      if (type !== 'passive') {
+        const canonical = ALL_LOADED_SKILLS.get(skillId) || ALL_LOADED_SKILLS.get(slugify(rawName));
+        if (typeof sk.mpCost === 'number' && sk.mpCost > 0) {
+          mpCost = sk.mpCost;
+        } else if (canonical && typeof canonical.gameplay?.mpCost === 'number' && canonical.gameplay.mpCost > 0) {
+          mpCost = canonical.gameplay.mpCost;
+        } else {
+          mpCost = getSkillMpCost({ tier, isUltimate: is4Star, starRank, type });
+        }
+      }
+
       SKILL_DEFS_ECHO[skillId] = {
         id:                   skillId,
         name:                 rawName,
@@ -472,6 +487,7 @@ function buildEchoAdapter() {
         max:                  5,
         pwr:                  pwr,
         baseCd:               cd,
+        mpCost:               mpCost,
         effect:               type === 'buff' ? 'warcry' : (type === 'passive' ? 'stat' : (sNameLower.includes('heal') || sNameLower.includes('bandage') ? 'heal' : 'dmg')),
         info:                 sk.desc || sk.effect || rawName,
         desc:                 sk.desc || '',
@@ -646,10 +662,21 @@ function buildEchoAdapter() {
       const rawName = s.identity?.name || id;
       const icon = resolveSkillIcon(rawName, s, null, classId);
       const isBuff = s.identity?.role === 'buff' || s.identity?.role === 'tank';
+      const isHeal = s.identity?.role === 'heal' || /heal|cura|curativa/i.test(rawName);
+      const isVampiric = /drain|dreno|siphon|sifão|vampir/i.test(id) || /drain|dreno|siphon|sifão|vampir/i.test(rawName);
       const dmgMult = s.gameplay?.damageMultiplier || 1.4;
       const staggerDmg = s.gameplay?.staggerDamage || 25;
       const cd = s.gameplay?.cooldown || 5000;
       const spCost = isUlt ? (tierNum === 5 ? 150 : 100) : (tierNum >= 3 ? 60 : 30);
+
+      let mpCost = 0;
+      if (s.identity?.role !== 'passive') {
+        if (typeof s.gameplay?.mpCost === 'number' && s.gameplay.mpCost > 0) {
+          mpCost = s.gameplay.mpCost;
+        } else {
+          mpCost = getSkillMpCost({ tier: tierNum, isUltimate: isUlt, starRank, type: isBuff ? 'buff' : 'active' });
+        }
+      }
 
       SKILL_DEFS_ECHO[id] = {
         id,
@@ -660,7 +687,8 @@ function buildEchoAdapter() {
         max: 5,
         pwr: Math.round(dmgMult * 10),
         baseCd: cd,
-        effect: isBuff ? 'warcry' : 'dmg',
+        mpCost,
+        effect: isBuff ? 'warcry' : (isHeal ? 'heal' : (isVampiric ? 'vampiric' : 'dmg')),
         info: s.identity?.description || rawName,
         desc: s.identity?.description || '',
         effectText: `Multiplicador: ${dmgMult.toFixed(1)}x | Stagger: ${staggerDmg}`,

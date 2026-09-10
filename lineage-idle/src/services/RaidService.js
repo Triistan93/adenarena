@@ -79,6 +79,14 @@ export function canEnterRaid(state, raidId) {
     return { canEnter: false, reason: `Nível ${boss.reqLvl} necessário para este Raid!` };
   }
 
+  const playerCP = state.stats?.combatPower || state.combatPower || 0;
+  if (boss.minimumCP && playerCP < boss.minimumCP) {
+    return {
+      canEnter: false,
+      reason: `Poder de Combate insuficiente! Mínimo necessário: ${boss.minimumCP.toLocaleString('pt-BR')} CP (Seu CP: ${playerCP.toLocaleString('pt-BR')}).`
+    };
+  }
+
   if ((state.dailyRaidTickets || 0) <= 0) {
     return { canEnter: false, reason: 'Você não possui Ingressos Diários de Raid restantes hoje (3/3 utilizados).' };
   }
