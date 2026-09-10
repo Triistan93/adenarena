@@ -964,24 +964,21 @@ export const IDLE_MARKUP = `
             <div class="enchant-workspace" id="enchant-workspace-dedicated"></div>
           </div>
 
-          <!-- Zones & Raids Tab -->
+          <!-- Hunting Zones Tab -->
           <div id="tab-zones" class="tab-pane active">
-            <div class="zone-head-tabs" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:6px;">
-              <div style="display:flex; gap:6px;">
-                <button class="zone-subtab active" data-zonetab="map">🗺️ Zonas de Caça</button>
-                <button class="zone-subtab" data-zonetab="raids">🐉 Raids de Chefões Epicos</button>
+            <div class="zone-head-tabs" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-bottom:8px; padding-bottom:6px; border-bottom:1px solid rgba(212,167,68,0.2);">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span style="font-family:'Cinzel',serif; font-size:13px; font-weight:bold; color:#ffd700; letter-spacing:0.06em; text-shadow:0 0 8px rgba(255,215,0,0.3);">🗺️ Zonas de Caça de Aden</span>
+                <span class="z-badge" style="background:rgba(212,167,68,0.15); color:#f5df93; border:1px solid rgba(212,167,68,0.3); padding:2px 8px; border-radius:4px; font-size:11px;">Mundo Aberto</span>
               </div>
-              <button class="action-btn" onclick="window.openInstancesModal()" style="padding:4px 10px; font-size:11px; background:linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); border:1px solid #818cf8; color:#e0e7ff; font-weight:bold;">🌀 Instâncias Solo (Kamaloka &amp; Pailaka)</button>
+              <button class="action-btn" onclick="window.openInstancesModal()" style="padding:6px 14px; font-size:11px; background:linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); border:1px solid #818cf8; color:#e0e7ff; font-weight:bold; border-radius:6px; box-shadow:0 0 10px rgba(129,140,248,0.3); cursor:pointer; display:flex; align-items:center; gap:6px; transition:all 0.2s;" onmouseover="this.style.filter='brightness(1.15)'" onmouseout="this.style.filter='none'">
+                <span>🌀</span> <span>Menu Exclusivo: Kamaloka &amp; Pailaka</span>
+              </button>
             </div>
 
             <div id="zone-map-view" class="zone-view active">
               <div class="zone-list" id="zone-list"></div>
               <div class="zone-info-card" id="zone-info-card"></div>
-            </div>
-
-            <div id="zone-raids-view" class="zone-view">
-              <p class="shop-info">Desafie Chefões Épicos de Aden para obter recompensas e itens lendários!</p>
-              <div class="raid-boss-list" id="raid-boss-list"></div>
             </div>
           </div>
 

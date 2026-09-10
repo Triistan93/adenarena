@@ -2923,22 +2923,7 @@ function renderZoneInfoCard() {
 
 
 function updateRaidUI() {
-  const list = el('raid-boss-list'); if (!list) return; list.innerHTML = '';
-  for (const [id, boss] of Object.entries(RAID_BOSSES)) {
-    const card = mkEl('div'); card.className = 'raid-card';
-    const reqOk = state.level >= boss.reqLvl;
-    card.innerHTML = `
-      <div>
-        <div class="raid-card-title">${boss.name}</div>
-        <div class="raid-card-desc">${boss.desc} · Lv.${boss.lvl}</div>
-      </div>
-      <button class="raid-btn" data-raid="${id}" ${!reqOk ? 'disabled' : ''}>${reqOk ? 'Desafiar Raid ⚔️' : `Lv.${boss.reqLvl} Req`}</button>
-    `;
-    list.appendChild(card);
-  }
-  list.querySelectorAll('[data-raid]').forEach(btn => {
-    btn.onclick = () => startRaidBoss(btn.dataset.raid);
-  });
+  updateRaidsUI();
 }
 
 function startRaidBoss(raidId) {
