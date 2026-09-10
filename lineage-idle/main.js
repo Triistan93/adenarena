@@ -415,6 +415,9 @@ function load() {
       window.__serverSeason = Number(state.serverSeason);
     }
     log('✨ Atualização de versão carregada com sucesso! Seu progresso e itens foram 100% mantidos.', 'rarity-legendary');
+    if (state.godMode) {
+      log('🛡️ [AVISO ADMIN] God Mode (Invencibilidade) está ATIVADO neste save! Digite //god no chat para desativar.', 'warning');
+    }
     if (state.lastSaveTime) {
       setTimeout(() => checkOfflineProgress(state.lastSaveTime), 600);
     }
@@ -5829,7 +5832,22 @@ function monsterAttack(monster) {
   
   const stats = getStats();
   stageMonsterLunge();
-  if (Math.random() < stats.eva / 100) {
+
+  // Avaliação Canônica de Esquiva: Precisão do Monstro vs Evasão do Jogador
+  const zoneProg = state.zone ? getZoneProgression(state.zone) : null;
+  const targetMinCp = zoneProg?.minCp || monster.minCp || 0;
+  const currentCp = stats.combatPower || state.combatPower || 0;
+  const cpRatio = (targetMinCp > 0) ? Math.min(1.0, currentCp / targetMinCp) : 1.0;
+
+  const mobLvl = monster.lvl || 1;
+  const mobAccuracy = mobLvl * 1.5 + (monster.acc || 40);
+  // Se o jogador estiver em déficit severo de CP (ex: No-Grade em Lv96+), a esquiva sofre atenuação quadrática
+  const effectiveEva = (stats.eva || 10) * Math.pow(cpRatio, 2);
+  const evaDiff = effectiveEva - mobAccuracy;
+  // Chance de esquiva: se CP < 60% do requerido, chance de esquiva é praticamente zero (2% teto)
+  const dodgeChance = (cpRatio < 0.6) ? 0.02 : Math.max(0.02, Math.min(0.65, 0.15 + (evaDiff * 0.01)));
+
+  if (Math.random() < dodgeChance) {
     log(`${monster.name} errou o ataque!`, 'combat');
     stageFloat('DODGE', 'sf-miss', 'left');
     return;
@@ -5903,18 +5921,20 @@ function monsterAttack(monster) {
   }
 
   // Under-geared / CP Deficit Penalty: Se o jogador estiver abaixo do CP Mínimo da zona/conteúdo
-  const zoneProg = state.zone ? getZoneProgression(state.zone) : null;
-  const targetMinCp = zoneProg?.minCp || monster.minCp || 0;
-  const currentCp = stats.combatPower || state.combatPower || 0;
+  let isCrushingHit = false;
   if (targetMinCp > 0 && currentCp < targetMinCp) {
-    const cpRatio = Math.max(0.05, currentCp / targetMinCp);
-    const crushMult = 1.0 + (1.0 - cpRatio) * 2.5;
+    const rawCpRatio = Math.max(0.05, currentCp / targetMinCp);
+    const crushMult = 1.0 + (1.0 - rawCpRatio) * 2.5;
     damage = Math.max(1, Math.floor(damage * crushMult));
-    log(`⚠️ [EQUIPAMENTO OBSOLETO] ${monster.name} desferiu Golpe Esmagador! (${Math.round(crushMult * 100)}% dano)`, 'warning');
+    isCrushingHit = true;
+    log(`⚠️ [EQUIPAMENTO OBSOLETO] **${monster.name}** desferiu Golpe Esmagador! Causou **${damage}** de dano (${Math.round(crushMult * 100)}% de impacto)!`, 'warning');
     if (typeof stageFloat === 'function') stageFloat('CRUSHING!', 'sf-crit', 'left');
   }
 
-  if (state.godMode) damage = 0;
+  if (state.godMode) {
+    log(`🛡️ [GOD MODE ATIVADO] ${monster.name} causaria ${damage} de dano (anulado por Invencibilidade de Admin)! Digite //god para desativar.`, 'warning');
+    damage = 0;
+  }
 
   // Counter Barrier (Celestial Shield - Invulnerabilidade Total L2)
   if (state.buffs?.['counter_barrier'] && state.buffs['counter_barrier'].until > realNow) {
@@ -5951,7 +5971,7 @@ function monsterAttack(monster) {
     state.hp -= damage;
     if (isSkillCast && skillName) {
       log(`⚡ **${monster.name}** acertou [${skillName}] em você causando **${damage}** de dano!`, 'combat');
-    } else {
+    } else if (!isCrushingHit) {
       log(`${monster.name} te atingiu por ${damage} de dano`, 'damage');
     }
     stageHeroHurt(damage);
@@ -8798,6 +8818,13 @@ export function init() {
     window.spinRandomCraft = spinRandomCraft;
     window.selectZone = selectZone;
     window.startRaidBoss = startRaidBoss;
+    window.toggleGodMode = () => {
+      state.godMode = !state.godMode;
+      log(`🛡️ [Admin] God Mode (Invencibilidade): ${state.godMode ? 'ATIVADO' : 'DESATIVADO'}`, 'rarity-legendary');
+      save();
+      return state.godMode;
+    };
+    window.state = state;
     window.openAddSubclassModal = openAddSubclassModal;
     window.openCertificationModal = openCertificationModal;
     window.closeCertificationModal = closeCertificationModal;

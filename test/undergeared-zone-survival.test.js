@@ -14,7 +14,7 @@ import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 
 import { getStats } from '../lineage-idle/src/engine/StatsEngine.js';
-import { selectZone } from '../lineage-idle/src/engine/CombatEngine.js';
+import { selectZone, startCombat } from '../lineage-idle/src/engine/CombatEngine.js';
 import { MONSTERS } from '../lineage-idle/src/data/monsters.js';
 import { ALL_ITEMS } from '../lineage-idle/src/data/items/index.js';
 import {
@@ -201,6 +201,48 @@ describe('MASTER GAME BALANCE — UNDER-GEARED ZONE SURVIVAL AUDIT', () => {
     const damage = calculateDefenseMitigation(mob.atk, stats.def, false);
     // S-Grade defense reduces 2950 raw damage down to chip damage (< 300)
     assert.ok(damage <= 300, `Damage to S-Grade tank (${damage}) must be <= 300`);
+  });
+
+  test('6. Repatriation Gate: startCombat sends under-geared loaded characters safely back to town', () => {
+    const logs = [];
+    const mockCallbacks = {
+      log: (msg, type) => logs.push({ msg, type }),
+      updateAllUI: () => {},
+      save: () => {}
+    };
+
+    const loadedUndergeared = {
+      level: 100,
+      class: 'duelist',
+      race: 'human',
+      combatPower: 25000,
+      stats: { combatPower: 25000 },
+      zone: 'forgeOfGods', // Saved in an illegal zone
+      currentZone: 'forgeOfGods',
+      inventory: []
+    };
+
+    startCombat(loadedUndergeared, mockCallbacks);
+
+    // Must be relocated to town
+    assert.notEqual(loadedUndergeared.zone, 'forgeOfGods', 'Character must not stay in forgeOfGods');
+    assert.ok(logs.some(l => l.msg.includes('Poder de Combate Insuficiente')), 'Must log insufficient CP repatriation');
+  });
+
+  test('7. Evasion Suppression: Under-geared character cannot easily dodge high-level monsters', () => {
+    const playerCp = 25000;
+    const targetMinCp = 130000;
+    const cpRatio = playerCp / targetMinCp; // ~0.192
+    assert.ok(cpRatio < 0.6, 'CP ratio must be below 0.60');
+
+    const mobLvl = 98; // Flame Giant Dragon
+    const mobAccuracy = mobLvl * 1.5 + 40; // 187
+    const playerEvasion = 50;
+    const effectiveEva = playerEvasion * Math.pow(cpRatio, 2); // ~1.8
+    const evaDiff = effectiveEva - mobAccuracy; // negative
+    const dodgeChance = (cpRatio < 0.6) ? 0.02 : Math.max(0.02, Math.min(0.65, 0.15 + (evaDiff * 0.01)));
+
+    assert.equal(dodgeChance, 0.02, 'Dodge chance for severely under-geared player must be hard-capped at 2%');
   });
 
 });

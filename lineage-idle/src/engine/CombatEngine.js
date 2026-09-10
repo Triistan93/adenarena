@@ -73,6 +73,20 @@ export function startCombat(state, callbacks = {}) {
   state.combatActive = true;
   state.isCombatActive = true;
 
+  // Validação preventiva de CP Mínimo ao iniciar combate (ex: save carregado em zona onde não tem CP suficiente)
+  const zoneProg = state.zone ? getZoneProgression(state.zone) : null;
+  const playerCp = state.stats?.combatPower || state.combatPower || 0;
+  if (zoneProg && zoneProg.minCp && playerCp < zoneProg.minCp && state.zone !== 'talkingIsland') {
+    const safeTown = getNearestTown(state.zone);
+    if (callbacks.log) {
+      callbacks.log(`🔒 Poder de Combate Insuficiente para ${ZONES[state.zone]?.name || state.zone}! Requer ${zoneProg.minCp.toLocaleString()} CP (Seu CP: ${playerCp.toLocaleString()}). Retornando para ${ZONES[safeTown]?.name || safeTown}...`, 'warning');
+    }
+    state.zone = safeTown;
+    state.currentZone = safeTown;
+    if (callbacks.updateAllUI) callbacks.updateAllUI();
+    if (callbacks.save) callbacks.save();
+  }
+
   if (!state.activeMonster && state.zone && ZONES[state.zone]) {
     if (callbacks.log) callbacks.log(`Entering ${ZONES[state.zone].name}...`, 'system');
     pickRandomMonster(state, callbacks);
