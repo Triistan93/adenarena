@@ -19,6 +19,7 @@ import { getSkillCost } from '../engine/SkillEngine.js';
 import { getSkillTreeViewModel, SKILL_TABS, SKILL_CATEGORIES } from '../services/SkillTreeViewModel.js';
 import { getSkillIcon, getSkillSemanticData } from '../services/SkillIconRegistry.js';
 import { ZONES, SAGAS, ZONE_BACKGROUNDS } from '../data/zones.js';
+import { getZoneProgression } from '../data/balance/progressionBalance.js';
 import { MONSTERS, MONSTER_BY_NAME } from '../data/monsters.js';
 import { ZONE_CONSUMABLES, MONSTER_DROPS, getZoneDropTier } from '../data/items/recipes_drops.js';
 import { RAID_BOSSES } from '../data/raids.js';
@@ -2547,12 +2548,17 @@ export function renderZoneMap(state, callbacks = {}) {
 
       const isCurrent = (state.zone || state.currentZone) === zId;
       const reqLvl = zDef.level ?? zDef.minLevel ?? zDef.reqLvl ?? 1;
-      const isLocked = (state.level || 1) < reqLvl;
+      const zoneProg = getZoneProgression(zId);
+      const playerCp = state.stats?.combatPower || state.combatPower || 0;
+      const isLvlLocked = (state.level || 1) < reqLvl;
+      const isCpLocked = zId !== 'talkingIsland' && playerCp < (zoneProg?.minCp || 0);
+      const isLocked = isLvlLocked || isCpLocked;
       const bgUrl = (ZONE_BACKGROUNDS && ZONE_BACKGROUNDS[zId]) || zDef.background || '';
       const thumbStyle = bgUrl ? `style="background-image:url('${getAssetUrl(bgUrl)}')"` : '';
 
       const monsterCount = zDef.monsters?.length || zDef.monsterTypes?.length || 4;
       const bossName = zDef.boss || zDef.bossName || 'Chefão';
+      const cpText = (zoneProg?.minCp) ? ` · ⚔️ ${zoneProg.minCp.toLocaleString()} CP` : '';
 
       return `
         <div class="zone-card ${isCurrent ? 'active' : ''} ${isLocked ? 'locked' : ''}" data-zone="${zId}" data-locked="${isLocked}" data-current="${isCurrent}">
@@ -2564,13 +2570,13 @@ export function renderZoneMap(state, callbacks = {}) {
           <div class="zone-card-body">
             <div class="zone-card-header">
               <span class="zone-card-title">${zDef.name}</span>
-              <span class="zone-card-lvl">Lv.${reqLvl}+</span>
+              <span class="zone-card-lvl ${isCpLocked ? 'cp-warning' : ''}">Lv.${reqLvl}+${cpText}</span>
             </div>
             <div class="zone-card-desc">
               ${monsterCount} espécie${monsterCount === 1 ? '' : 's'} · 👑 ${bossName}
             </div>
             <button class="select-zone-btn" ${isLocked || isCurrent ? 'disabled' : ''}>
-              ${isCurrent ? '★ Caçando Aqui' : isLocked ? `🔒 Requer Lv.${reqLvl}` : 'Caçar nesta Área'}
+              ${isCurrent ? '★ Caçando Aqui' : isLvlLocked ? `🔒 Requer Lv.${reqLvl}` : isCpLocked ? `🔒 Requer ${(zoneProg?.minCp || 0).toLocaleString()} CP` : 'Caçar nesta Área'}
             </button>
           </div>
         </div>

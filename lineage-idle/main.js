@@ -184,7 +184,9 @@ import {
   canCastSkill,
   consumeSkillMp,
   getSkillMpCost,
-  calculateCombatPower
+  calculateCombatPower,
+  getZoneProgression,
+  ZONE_CP_REQUIREMENTS
 } from './src/data/balance/index.js';
 // ─── Sprint 5: Importa serviços de Personagem, Quests, Torre e Raids ────────
 import {
@@ -5227,6 +5229,16 @@ function attackMonster() {
     }
   }
 
+  // 3. Ação Autônoma Periódica do Monstro (Cadência própria de ataque desacoplada do jogador)
+  if (monster && monster.hp > 0 && !monster.isRaid) {
+    const enemyAtkInterval = Math.max(400, Math.round(1500 / (monster.atkSpd || 1.0)));
+    const enemyAtkTicks = Math.max(1, Math.round(enemyAtkInterval / 200));
+    if (combatTick % enemyAtkTicks === 0) {
+      monsterAttack(monster);
+      if (state.hp <= 0) return;
+    }
+  }
+
   if (!state._cds) state._cds = {};
   const now = combatTick * 200;
 
@@ -5407,6 +5419,15 @@ function attackMonster() {
         if (aiSkillReaction.wasDodged) {
           stageMonsterHurt(0, false, null, 200);
           return;
+        }
+
+        // Penalidade de CP / Equipamento Insuficiente contra monstros de alta graduação
+        const zoneProg = state.zone ? getZoneProgression(state.zone) : null;
+        const targetMinCp = zoneProg?.minCp || monster.minCp || 0;
+        const currentCp = stats.combatPower || state.combatPower || 0;
+        if (targetMinCp > 0 && currentCp < targetMinCp) {
+          const cpRatio = Math.max(0.05, currentCp / targetMinCp);
+          sDmg = Math.max(1, Math.floor(sDmg * cpRatio));
         }
         
         monster.hp -= sDmg;
@@ -5688,6 +5709,15 @@ function attackMonster() {
     return;
   }
 
+  // Penalidade de CP / Equipamento Insuficiente contra monstros de alta graduação
+  const zoneProg = state.zone ? getZoneProgression(state.zone) : null;
+  const targetMinCp = zoneProg?.minCp || monster.minCp || 0;
+  const currentCp = stats.combatPower || state.combatPower || 0;
+  if (targetMinCp > 0 && currentCp < targetMinCp) {
+    const cpRatio = Math.max(0.05, currentCp / targetMinCp);
+    damage = Math.max(1, Math.floor(damage * cpRatio));
+  }
+
   monster.hp -= damage;
 
   // Ataque Conjunto do Mascote de Batalha (Pet)
@@ -5767,10 +5797,6 @@ function attackMonster() {
     return;
   } else {
     stageMonsterHurt(damage, wasCrit, attackVfx?.reaction, attackVfx?.reactionDuration);
-    if (monsterAttackTimeout) clearTimeout(monsterAttackTimeout);
-    if (state.isCombatActive !== false) {
-      monsterAttackTimeout = setTimeout(() => monsterAttack(monster), 500); 
-    }
   }
   updateStatsUI();
 }
@@ -5874,6 +5900,18 @@ function monsterAttack(monster) {
   if (levelDiff > 5) {
     const extraDmgMult = 1 + Math.min(1.5, (levelDiff - 5) * 0.15);
     damage = Math.floor(damage * extraDmgMult);
+  }
+
+  // Under-geared / CP Deficit Penalty: Se o jogador estiver abaixo do CP Mínimo da zona/conteúdo
+  const zoneProg = state.zone ? getZoneProgression(state.zone) : null;
+  const targetMinCp = zoneProg?.minCp || monster.minCp || 0;
+  const currentCp = stats.combatPower || state.combatPower || 0;
+  if (targetMinCp > 0 && currentCp < targetMinCp) {
+    const cpRatio = Math.max(0.05, currentCp / targetMinCp);
+    const crushMult = 1.0 + (1.0 - cpRatio) * 2.5;
+    damage = Math.max(1, Math.floor(damage * crushMult));
+    log(`⚠️ [EQUIPAMENTO OBSOLETO] ${monster.name} desferiu Golpe Esmagador! (${Math.round(crushMult * 100)}% dano)`, 'warning');
+    if (typeof stageFloat === 'function') stageFloat('CRUSHING!', 'sf-crit', 'left');
   }
 
   if (state.godMode) damage = 0;

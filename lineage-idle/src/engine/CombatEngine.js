@@ -13,6 +13,7 @@ import { rollChampionMonster } from './BalanceEngine.js';
 import { StaggerEngine } from './StaggerEngine.js';
 import { MonsterAIEngine, ARCHETYPE_INFO, HUNTING_DIFFICULTIES } from './MonsterAIEngine.js';
 import { getMonsterSpawnMultipliers } from '../data/balance/monsterBalance.js';
+import { getZoneProgression } from '../data/balance/progressionBalance.js';
 import { combatEvents, CombatEventType, CombatEventFactory } from '../vfx/CombatEvent.js';
 
 export { combatEvents, CombatEventType, CombatEventFactory };
@@ -216,10 +217,17 @@ export function pickRandomMonster(state, callbacks = {}) {
 export function selectZone(state, zoneId, callbacks = {}) {
   if (!hasValidState(state)) return false;
   const zone = ZONES[zoneId];
-  if (!zone) return;
+  if (!zone) return false;
   if (zone.level > state.level) {
     if (callbacks.log) callbacks.log(`Level ${zone.level} required.`, 'system');
-    return;
+    return false;
+  }
+  const zoneProg = getZoneProgression(zoneId);
+  const playerCp = state.stats?.combatPower || state.combatPower || 0;
+  if (zoneProg && zoneProg.minCp && playerCp < zoneProg.minCp && zoneId !== 'talkingIsland') {
+    if (callbacks.log) callbacks.log(`🔒 Poder de Combate Insuficiente para ${zone.name}! Requer no mínimo ${zoneProg.minCp.toLocaleString()} CP (Seu CP: ${playerCp.toLocaleString()}).`, 'warning');
+    if (callbacks.floatText) callbacks.floatText(`🔒 REQUER ${zoneProg.minCp.toLocaleString()} CP`, 'float-warning');
+    return false;
   }
   state.zone = zoneId;
   state.currentZone = zoneId;
@@ -234,6 +242,7 @@ export function selectZone(state, zoneId, callbacks = {}) {
   startCombat(state, callbacks);
   if (callbacks.updateAllUI) callbacks.updateAllUI();
   if (callbacks.save) callbacks.save();
+  return true;
 }
 
 /**
