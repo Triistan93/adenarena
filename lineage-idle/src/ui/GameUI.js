@@ -13,8 +13,8 @@ import { resolveEquipSlot, migrateEquipmentSlots, equipItem, unequipItem } from 
 import { getCraftLevelReq, getRecipeMaterials, canCraft, getRecipeDef, calculateMaxCraftableQty } from '../services/CraftService.js';
 import { rollMysticStock } from '../services/ShopService.js';
 import { classSatisfies, getClassSkills, checkClassAdvancement, SHARED_SKILL_IDS, getSharedSkills, isMageClass, getSharedSkillIdsForClass, getVisibleSkillsForCharacter, getSkillVisibility, SKILL_VISIBILITY_STATES, getCharacterProgressionState, isSkillAvailableForCharacter, isSkillAllowedForClass } from '../services/CharacterService.js';
-import { AFFIX_MAP } from '../../data/affixes.js';
-import { getClass, getStats, getActiveSetBonuses } from '../engine/StatsEngine.js';
+import { getClass, getStats, getActiveSetBonuses, getBaseAttributes } from '../engine/StatsEngine.js';
+import { CP_WEIGHTS } from '../data/balance/cpBalance.js';
 import { getSkillCost } from '../engine/SkillEngine.js';
 import { getSkillTreeViewModel, SKILL_TABS, SKILL_CATEGORIES } from '../services/SkillTreeViewModel.js';
 import { getSkillIcon, getSkillSemanticData } from '../services/SkillIconRegistry.js';
@@ -2248,8 +2248,9 @@ export function updateCharacterUI(state) {
     tierBadge.textContent = tierText;
   }
 
-  // 5. Poder de Combate (CP) e Classificação
-  const cp = CombatPowerService.calculateCombatPower(state);
+  // 5. Poder de Combate (CP) Canônico & Detalhamento Auditado
+  const detailedCp = CombatPowerService.calculateDetailedCombatPower(state);
+  const cp = detailedCp.totalCp;
   const cpTier = CombatPowerService.getCombatPowerTier(cp);
 
   const heroCpVal = root.querySelector('#hero-cp-val');
@@ -2267,20 +2268,50 @@ export function updateCharacterUI(state) {
     `;
   }
 
+  // 5.1 Barra Proporcional de Power Breakdown
+  const comps = detailedCp.components || {};
+  const totalCpVal = Math.max(1, cp);
+  const equipTotalCp = (comps.equipmentCp || 0) + (comps.enchantCp || 0) + (comps.jewelryCp || 0) + (comps.accessoryCp || 0) + (comps.beltCp || 0) + (comps.agathionCp || 0) + (comps.braceletCp || 0) + (comps.talismanCp || 0);
+  const attrsCp = comps.baseCp || 0;
+  const skillsCp = (comps.skillCp || 0) + (comps.passiveCp || 0);
+  const specialsCp = (comps.artifactCp || 0) + (comps.specialEffectCp || 0) + (comps.setBonusCp || 0);
+
+  const equipPct = Math.round((equipTotalCp / totalCpVal) * 100);
+  const attrsPct = Math.round((attrsCp / totalCpVal) * 100);
+  const skillsPct = Math.round((skillsCp / totalCpVal) * 100);
+  const specialsPct = Math.max(0, 100 - equipPct - attrsPct - skillsPct);
+
+  const barEquip = root.querySelector('#hero-cp-bar-equip');
+  if (barEquip) barEquip.style.width = `${equipPct}%`;
+  const barAttrs = root.querySelector('#hero-cp-bar-attrs');
+  if (barAttrs) barAttrs.style.width = `${attrsPct}%`;
+  const barSkills = root.querySelector('#hero-cp-bar-skills');
+  if (barSkills) barSkills.style.width = `${skillsPct}%`;
+  const barSpecials = root.querySelector('#hero-cp-bar-specials');
+  if (barSpecials) barSpecials.style.width = `${specialsPct}%`;
+
+  const legendContainer = root.querySelector('#hero-cp-breakdown-legend');
+  if (legendContainer) {
+    legendContainer.innerHTML = `
+      <div class="l2-legend-item"><span class="l2-legend-dot" style="background:#f59e0b;"></span><span>Equipamentos: <strong>${equipPct}%</strong></span></div>
+      <div class="l2-legend-item"><span class="l2-legend-dot" style="background:#38bdf8;"></span><span>Atributos: <strong>${attrsPct}%</strong></span></div>
+      <div class="l2-legend-item"><span class="l2-legend-dot" style="background:#c084fc;"></span><span>Habilidades: <strong>${skillsPct}%</strong></span></div>
+      <div class="l2-legend-item"><span class="l2-legend-dot" style="background:#34d399;"></span><span>Especiais: <strong>${specialsPct}%</strong></span></div>
+    `;
+  }
+
   // 6. Retrato Real em Alta Resolução (Modo Portrait HD)
   const portraitArt = root.querySelector('#portrait-art, .portrait-art');
   if (portraitArt && typeof heroSVG === 'function') {
     portraitArt.innerHTML = heroSVG({ ...state, mode: 'portrait' });
   }
 
-  // 7. Medidores Vitais Nobres (HP / MP / CP)
+  // 7. Medidores Vitais Reais (HP & MP apenas — CP é indicador de poder)
   const stats = getStats(state);
   const curHp = Math.round(state.hp !== undefined ? Math.max(0, state.hp) : (stats.maxHp || 100));
   const maxHp = Math.round(state.maxHp || stats.maxHp || curHp || 100);
   const curMp = Math.round(state.mp !== undefined ? Math.max(0, state.mp) : (stats.maxMp || 50));
   const maxMp = Math.round(state.maxMp || stats.maxMp || curMp || 50);
-  const maxCp = Math.round(state.maxCp || Math.floor(maxHp * 0.6) || 60);
-  const curCp = Math.round(state.cp !== undefined ? Math.max(0, state.cp) : maxCp);
 
   const hpValEl = root.querySelector('#hero-vital-hp');
   if (hpValEl) hpValEl.textContent = `${curHp.toLocaleString()} / ${maxHp.toLocaleString()}`;
@@ -2292,12 +2323,22 @@ export function updateCharacterUI(state) {
   const mpBarEl = root.querySelector('#hero-vital-bar-mp');
   if (mpBarEl) mpBarEl.style.width = `${Math.max(0, Math.min(100, (curMp / maxMp) * 100))}%`;
 
-  const cpValEl = root.querySelector('#hero-vital-cp');
-  if (cpValEl) cpValEl.textContent = `${curCp.toLocaleString()} / ${maxCp.toLocaleString()}`;
-  const cpBarEl = root.querySelector('#hero-vital-bar-cp');
-  if (cpBarEl) cpBarEl.style.width = `${Math.max(0, Math.min(100, (curCp / maxCp) * 100))}%`;
+  // 8. Desempenho em Combate & Sumário de Poder (Métricas Reais Canônicas)
+  const perf = CombatPowerService.getPerformanceMetrics(state, stats);
+  const dpsEl = root.querySelector('#perf-dps-sustained');
+  if (dpsEl) dpsEl.textContent = perf.sustainedDps.toLocaleString();
+  const burstEl = root.querySelector('#perf-dps-burst');
+  if (burstEl) burstEl.textContent = perf.burstDps.toLocaleString();
+  const ehpEl = root.querySelector('#perf-ehp');
+  if (ehpEl) ehpEl.textContent = perf.ehp.toLocaleString();
+  const hpsEl = root.querySelector('#perf-hps');
+  if (hpsEl) hpsEl.textContent = `+${perf.hps}/s`;
+  const mpsEl = root.querySelector('#perf-mp-sustain');
+  if (mpsEl) mpsEl.textContent = `+${perf.mpRegen}/s`;
+  const evaEl = root.querySelector('#perf-dodge-rate');
+  if (evaEl) evaEl.textContent = `${perf.evasionDodgePct}%`;
 
-  // 8. Verificação de Avanço de Classe
+  // 9. Verificação de Avanço de Classe
   try {
     checkClassAdvancement(state, {
       el: (id) => root.querySelector('#' + id) || document.getElementById(id),
@@ -2311,9 +2352,10 @@ export function updateCharacterUI(state) {
     console.warn('checkClassAdvancement error:', e);
   }
 
-  // 9. Cálculo de Bônus de Sets e Tatuagens (Dyes)
+  // 10. Cálculo de Atributos Primários Sagrados (Base + Bônus = Final)
   const setRes = typeof getActiveSetBonuses === 'function' ? getActiveSetBonuses(state) : { primaryStats: {} };
   const setPrim = setRes.primaryStats || {};
+  const baseAttrs = getBaseAttributes ? getBaseAttributes(race, cls) : { str: 40, dex: 30, con: 43, int: 21, wit: 11, men: 25 };
 
   let tatStr = 0, tatDex = 0, tatCon = 0, tatInt = 0, tatWit = 0, tatMen = 0;
   const tattoos = state.tattoos || [];
@@ -2334,10 +2376,12 @@ export function updateCharacterUI(state) {
     if (t.minusStat === 'men') tatMen -= t.minusVal;
   }
 
-  // 10. Renderizar os 6 Pilares Raciais Primários em #char-primary-stats-grid
+  // Renderizar os 6 Pilares Raciais Primários em #char-primary-stats-grid
   const primContainer = root.querySelector('#char-primary-stats-grid');
   if (primContainer) {
-    const renderTablet = (code, name, val, setVal, dyeVal, desc) => {
+    const renderTablet = (code, name, baseVal, finalVal, setVal, dyeVal, desc) => {
+      const bonusVal = finalVal - baseVal;
+      const bonusStr = bonusVal >= 0 ? `+${bonusVal}` : `${bonusVal}`;
       const badges = [];
       if (setVal) badges.push(`<span class="l2-stat-chip-set">Set +${setVal}</span>`);
       if (dyeVal) badges.push(dyeVal > 0 ? `<span class="l2-stat-chip-pos">Dye +${dyeVal}</span>` : `<span class="l2-stat-chip-neg">Dye ${dyeVal}</span>`);
@@ -2346,19 +2390,23 @@ export function updateCharacterUI(state) {
         <div class="l2-stat-tablet" title="${desc}">
           <div class="l2-tablet-code">${code}</div>
           <div class="l2-tablet-name">${name}</div>
-          <div class="l2-tablet-val">${val}</div>
+          <div class="l2-tablet-val">${finalVal}</div>
+          <div class="l2-tablet-breakdown">
+            <span class="l2-tablet-base">${baseVal}</span>
+            <span class="l2-tablet-bonus">${bonusStr}</span>
+          </div>
           ${badgesHtml}
         </div>
       `;
     };
 
     primContainer.innerHTML = `
-      ${renderTablet('STR', 'Força', state.primaryStats?.str || 40, setPrim.str || 0, tatStr, 'Poder de Ataque Físico')}
-      ${renderTablet('DEX', 'Destreza', state.primaryStats?.dex || 30, setPrim.dex || 0, tatDex, 'Velocidade, Crítico e Esquiva')}
-      ${renderTablet('CON', 'Vigor', state.primaryStats?.con || 43, setPrim.con || 0, tatCon, 'Pontos Máximos de HP e CP')}
-      ${renderTablet('INT', 'Mágica', state.primaryStats?.int || 21, setPrim.int || 0, tatInt, 'Poder de Ataque Mágico')}
-      ${renderTablet('WIT', 'Astúcia', state.primaryStats?.wit || 11, setPrim.wit || 0, tatWit, 'Velocidade de Conjuração e Crítico Mágico')}
-      ${renderTablet('MEN', 'Espírito', state.primaryStats?.men || 25, setPrim.men || 0, tatMen, 'Defesa Mágica e Pontos de MP')}
+      ${renderTablet('STR', 'Força', baseAttrs.str || 40, state.primaryStats?.str || 40, setPrim.str || 0, tatStr, 'STR: Aumenta o P.Atk em +0.5% por ponto e escalonamento de habilidades físicas')}
+      ${renderTablet('DEX', 'Destreza', baseAttrs.dex || 30, state.primaryStats?.dex || 30, setPrim.dex || 0, tatDex, 'DEX: Aumenta Velocidade de Ataque, Taxa Crítica Física e Esquiva')}
+      ${renderTablet('CON', 'Vigor', baseAttrs.con || 43, state.primaryStats?.con || 43, setPrim.con || 0, tatCon, 'CON: Aumenta Max HP em +1.0% por ponto e regeneração de vida')}
+      ${renderTablet('INT', 'Mágica', baseAttrs.int || 21, state.primaryStats?.int || 21, setPrim.int || 0, tatInt, 'INT: Aumenta o M.Atk em +0.5% por ponto e dano de feitiços')}
+      ${renderTablet('WIT', 'Astúcia', baseAttrs.wit || 11, state.primaryStats?.wit || 11, setPrim.wit || 0, tatWit, 'WIT: Aumenta Velocidade de Conjuração e Taxa Crítica Mágica')}
+      ${renderTablet('MEN', 'Espírito', baseAttrs.men || 25, state.primaryStats?.men || 25, setPrim.men || 0, tatMen, 'MEN: Aumenta M.Def em +0.5% por ponto, Max MP em +0.2% e resistências')}
     `;
   }
 
@@ -2396,6 +2444,10 @@ export function updateCharacterUI(state) {
             <span class="l2-row-val val-crit">${stats.crit || 0}%</span>
           </div>
           <div class="l2-matrix-row">
+            <span class="l2-row-lbl">💥 Multiplicador Crítico</span>
+            <span class="l2-row-val val-crit">${stats.critDmg ? stats.critDmg.toFixed(2) : '1.50'}x</span>
+          </div>
+          <div class="l2-matrix-row">
             <span class="l2-row-lbl">🏹 Velocidade de Ação</span>
             <span class="l2-row-val val-spd">${stats.spd || 100}</span>
           </div>
@@ -2406,11 +2458,11 @@ export function updateCharacterUI(state) {
         </div>
       </div>
 
-      <!-- Coluna 2: Baluarte Defensivo -->
+      <!-- Coluna 2: Baluarte Defensivo & Sustentação -->
       <div class="l2-matrix-pillar defensive">
         <div class="l2-pillar-title">
           <span class="l2-pillar-icon">🛡️</span>
-          <span>Baluarte Defensivo</span>
+          <span>Baluarte Defensivo &amp; Sustentação</span>
         </div>
         <div class="l2-pillar-rows">
           <div class="l2-matrix-row">
@@ -2423,7 +2475,11 @@ export function updateCharacterUI(state) {
           </div>
           <div class="l2-matrix-row">
             <span class="l2-row-lbl">👟 Evasão / Esquiva</span>
-            <span class="l2-row-val val-eva">${stats.eva || 0}</span>
+            <span class="l2-row-val val-eva">${stats.eva || 0}%</span>
+          </div>
+          <div class="l2-matrix-row">
+            <span class="l2-row-lbl">🛡️ Bloqueio com Escudo</span>
+            <span class="l2-row-val val-pdef">${stats.block || 0}%</span>
           </div>
           <div class="l2-matrix-row">
             <span class="l2-row-lbl">🩸 Drenagem de Vida</span>
@@ -2431,7 +2487,7 @@ export function updateCharacterUI(state) {
           </div>
           <div class="l2-matrix-row">
             <span class="l2-row-lbl">🌿 Regeneração de HP</span>
-            <span class="l2-row-val val-regen">+${stats.regenHp ? Math.round(stats.regenHp * 100) : 5}% / tick</span>
+            <span class="l2-row-val val-regen">+${stats.regenHp ? Math.round(stats.regenHp * 100) : 1}% / tick</span>
           </div>
         </div>
       </div>
@@ -2452,6 +2508,124 @@ export function updateCharacterUI(state) {
         </div>
       </div>
     `;
+  }
+
+  // 12. Renderizar Equipment Power Section (#char-equipped-power-list)
+  const equipContainer = root.querySelector('#char-equipped-power-list');
+  if (equipContainer && state.equipment) {
+    const slotNames = {
+      weapon: { label: 'Arma Principal', icon: '⚔️' },
+      weapon2: { label: 'Arma Secundária', icon: '🗡️' },
+      shield: { label: 'Escudo / Sigil', icon: '🛡️' },
+      helmet: { label: 'Capacete', icon: '🪖' },
+      armor: { label: 'Peitoral', icon: '🛡️' },
+      legs: { label: 'Perneiras', icon: '👖' },
+      gloves: { label: 'Luvas', icon: '🧤' },
+      boots: { label: 'Botas', icon: '👢' },
+      necklace: { label: 'Colar', icon: '📿' },
+      earring1: { label: 'Brinco 1', icon: '💎' },
+      earring2: { label: 'Brinco 2', icon: '💎' },
+      ring1: { label: 'Anel 1', icon: '💍' },
+      ring2: { label: 'Anel 2', icon: '💍' },
+      cloak: { label: 'Capa', icon: '🧥' },
+      belt: { label: 'Cinto', icon: '🪢' }
+    };
+
+    const equipCards = [];
+    const allItems = (D && D().ALL_ITEMS) || {};
+
+    for (const [slotKey, meta] of Object.entries(slotNames)) {
+      const uid = state.equipment[slotKey];
+      if (!uid) continue;
+      const invItem = state.inventory?.find(i => i.uid === uid || i.id === uid) || (typeof uid === 'object' ? uid : null);
+      if (!invItem) continue;
+      const def = allItems[invItem.itemId || invItem.id] || invItem;
+
+      const tier = Number(def.tier || invItem.tier) || 1;
+      const tierBase = (CP_WEIGHTS && CP_WEIGHTS.equipmentTierBase && CP_WEIGHTS.equipmentTierBase[tier]) || 150;
+      const enc = Number(invItem.enchant || invItem.enchantLevel) || 0;
+      const encCp = enc > 0 ? Math.floor(tierBase * (Math.pow(enc, 1.4) * 0.14)) : 0;
+      let specCp = 0;
+      if (invItem.sa || invItem.soulCrystal) specCp += (CP_WEIGHTS?.specialBonuses?.soulCrystal || 1200);
+      if (invItem.augmentation?.stats) specCp += (CP_WEIGHTS?.specialBonuses?.augmentationStats || 1500);
+      if (invItem.isEpic || def.isEpic) specCp += (CP_WEIGHTS?.specialBonuses?.epicJewel || 3500);
+
+      const itemCp = tierBase + encCp + specCp;
+      const grade = def.grade || (tier === 6 ? 'S' : tier === 5 ? 'A' : tier === 4 ? 'B' : tier === 3 ? 'C' : tier === 2 ? 'D' : 'NG');
+      const encPrefix = enc > 0 ? `+${enc} ` : '';
+
+      equipCards.push(`
+        <div class="l2-equip-power-card">
+          <div class="l2-ep-slot-icon">${meta.icon}</div>
+          <div class="l2-ep-info">
+            <div class="l2-ep-name">${encPrefix}${def.name || invItem.name || slotKey}</div>
+            <div class="l2-ep-stats">${meta.label} · Grau ${grade.toUpperCase()}</div>
+          </div>
+          <div class="l2-ep-cp-chip">+${itemCp.toLocaleString()} CP</div>
+        </div>
+      `);
+    }
+
+    equipContainer.innerHTML = equipCards.length > 0 
+      ? equipCards.join('') 
+      : '<div style="font-size:11px; color:#94a3b8; font-style:italic; padding:10px;">Nenhum equipamento empunhado no momento. Equipe itens no inventário para ampliar seu CP.</div>';
+
+    // Bônus de Set Ativos
+    const setContainer = root.querySelector('#char-set-bonuses-container');
+    if (setContainer) {
+      if (setRes && setRes.name) {
+        setContainer.innerHTML = `
+          <div style="background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.3); border-radius:6px; padding:8px 12px; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <span style="font-family:'Cinzel',serif; font-size:11px; font-weight:bold; color:#4ade80;">✨ Conjunto Ativo: ${setRes.name}</span>
+              <div style="font-size:10px; color:#94a3b8; margin-top:2px;">${setRes.desc || 'Bônus integral de armadura ativado com sucesso.'}</div>
+            </div>
+            <span style="font-size:10px; color:#4ade80; font-weight:bold; background:rgba(34,197,94,0.2); padding:2px 6px; border-radius:4px;">SET COMPLETO</span>
+          </div>
+        `;
+      } else {
+        setContainer.innerHTML = '';
+      }
+    }
+  }
+
+  // 13. Renderizar Power Insights (#char-power-insights-list)
+  const insightsContainer = root.querySelector('#char-power-insights-list');
+  if (insightsContainer) {
+    const insights = CombatPowerService.getPowerInsights(state, stats, detailedCp);
+    insightsContainer.innerHTML = insights.map(i => `
+      <div class="l2-insight-card type-${i.type}">
+        <span class="l2-insight-icon">${i.icon}</span>
+        <div class="l2-insight-body">
+          <div class="l2-insight-title">${i.title}</div>
+          <div class="l2-insight-desc">${i.desc}</div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // 14. Renderizar Progression Milestone (#char-next-milestone-card)
+  const milestoneContainer = root.querySelector('#char-next-milestone-card');
+  if (milestoneContainer) {
+    const m = CombatPowerService.getNextMilestone(cp);
+    milestoneContainer.innerHTML = `
+      <div class="l2-milestone-head">
+        <span class="l2-milestone-title">Próximo Marco: ${CombatPowerService.formatCombatPower(m.nextMilestone)}</span>
+        <span class="l2-milestone-delta">Faltam ${m.remainingCp.toLocaleString()} CP</span>
+      </div>
+      <div class="l2-milestone-bar-wrap">
+        <div class="l2-milestone-bar" style="width: ${m.progressPct}%;"></div>
+      </div>
+      <div class="l2-milestone-footer">
+        <span>Progresso: <strong>${m.progressPct}%</strong></span>
+        <span>Meta: <strong>${CombatPowerService.formatCombatPower(m.nextMilestone)}</strong></span>
+      </div>
+    `;
+  }
+
+  // 15. Atualizar Subclasses e Certificações se a função estiver disponível
+  if (typeof window !== 'undefined' && typeof window.renderSubclassesUI === 'function') {
+    try { window.renderSubclassesUI(); } catch (e) {}
   }
 }
 

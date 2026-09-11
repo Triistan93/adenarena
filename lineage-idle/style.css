@@ -5766,12 +5766,84 @@ select:focus-visible {
   margin: 0;
 }
 
-/* Medidores Vitais Reais (HP / MP / CP) */
+/* CP Power Breakdown Card */
+.l2-cp-breakdown-card {
+  width: 100%;
+  box-sizing: border-box;
+  background: rgba(10, 14, 22, 0.75);
+  border: 1px solid rgba(212,167,68,0.25);
+  border-radius: 6px;
+  padding: 6px 10px;
+}
+
+.l2-cp-breakdown-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 10px;
+  margin-bottom: 4px;
+}
+
+.l2-breakdown-title {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  color: #fde047;
+  letter-spacing: 0.05em;
+}
+
+.l2-breakdown-subtitle {
+  color: #94a3b8;
+  font-size: 9px;
+}
+
+.l2-cp-breakdown-bar {
+  width: 100%;
+  height: 6px;
+  background: rgba(0,0,0,0.8);
+  border-radius: 3px;
+  overflow: hidden;
+  display: flex;
+  border: 1px solid rgba(0,0,0,0.9);
+}
+
+.l2-cp-seg {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.l2-cp-seg.seg-equip { background: linear-gradient(90deg, #f59e0b, #d97706); }
+.l2-cp-seg.seg-attrs { background: linear-gradient(90deg, #38bdf8, #2563eb); }
+.l2-cp-seg.seg-skills { background: linear-gradient(90deg, #c084fc, #9333ea); }
+.l2-cp-seg.seg-specials { background: linear-gradient(90deg, #34d399, #10b981); }
+
+.l2-cp-breakdown-legend {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+  font-size: 9px;
+}
+
+.l2-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #cbd5e1;
+}
+
+.l2-legend-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* Medidores Vitais Reais (HP / MP apenas — CP é poder canônico, não reserva) */
 .l2-vitals-container {
   width: 100%;
   box-sizing: border-box;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 8px;
 }
 
@@ -5794,7 +5866,6 @@ select:focus-visible {
 
 .l2-vital-title.hp { color: #f87171; }
 .l2-vital-title.mp { color: #60a5fa; }
-.l2-vital-title.cp { color: #fde047; }
 
 .l2-vital-val {
   font-family: 'IBM Plex Mono', monospace;
@@ -5828,9 +5899,234 @@ select:focus-visible {
   box-shadow: 0 0 8px rgba(59,130,246,0.5);
 }
 
-.l2-vital-bar.cp {
+/* ================================================================
+   POWER SUMMARY & COMBAT PERFORMANCE GRID
+   ================================================================ */
+
+.l2-performance-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.l2-perf-card {
+  background: rgba(10, 14, 22, 0.7);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 6px;
+  padding: 8px 10px;
+  text-align: center;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.6);
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.l2-perf-card:hover {
+  border-color: rgba(212,167,68,0.4);
+  transform: translateY(-1px);
+}
+
+.l2-perf-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 2px;
+}
+
+.l2-perf-val {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 15px;
+  font-weight: 800;
+  margin: 2px 0;
+}
+
+.l2-perf-val.val-dps { color: #f59e0b; }
+.l2-perf-val.val-burst { color: #f87171; }
+.l2-perf-val.val-ehp { color: #38bdf8; }
+.l2-perf-val.val-hps { color: #34d399; }
+.l2-perf-val.val-mps { color: #60a5fa; }
+.l2-perf-val.val-eva { color: #fbbf24; }
+
+.l2-perf-sub {
+  font-size: 9px;
+  color: #64748b;
+}
+
+/* ================================================================
+   EQUIPMENT POWER SECTION
+   ================================================================ */
+
+.l2-equip-power-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 8px;
+}
+
+.l2-equip-power-card {
+  background: rgba(10, 14, 22, 0.8);
+  border: 1px solid rgba(212,167,68,0.2);
+  border-radius: 6px;
+  padding: 8px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.l2-ep-slot-icon {
+  font-size: 20px;
+  width: 32px;
+  height: 32px;
+  background: rgba(0,0,0,0.5);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255,255,255,0.08);
+  flex-shrink: 0;
+}
+
+.l2-ep-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.l2-ep-name {
+  font-size: 11px;
+  font-weight: 700;
+  color: #e2e8f0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.l2-ep-stats {
+  font-size: 9px;
+  color: #94a3b8;
+  margin-top: 1px;
+}
+
+.l2-ep-cp-chip {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  background: rgba(56,189,248,0.15);
+  border: 1px solid rgba(56,189,248,0.3);
+  color: #38bdf8;
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ================================================================
+   POWER INSIGHTS SECTION
+   ================================================================ */
+
+.l2-insights-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.l2-insight-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(10, 14, 22, 0.8);
+  border-radius: 6px;
+  padding: 8px 12px;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+.l2-insight-card.type-impact { border-left: 3px solid #f59e0b; }
+.l2-insight-card.type-warning { border-left: 3px solid #ef4444; }
+.l2-insight-card.type-recommendation { border-left: 3px solid #10b981; }
+
+.l2-insight-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.l2-insight-body {
+  flex: 1;
+}
+
+.l2-insight-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: #fef08a;
+  font-family: 'Cinzel', serif;
+}
+
+.l2-insight-desc {
+  font-size: 10px;
+  color: #94a3b8;
+  margin-top: 1px;
+  line-height: 1.3;
+}
+
+/* ================================================================
+   PROGRESSION & NEXT MILESTONE
+   ================================================================ */
+
+.l2-milestone-card {
+  background: linear-gradient(135deg, rgba(16,24,39,0.9) 0%, rgba(9,12,18,0.95) 100%);
+  border: 1px solid rgba(212,167,68,0.3);
+  border-radius: 8px;
+  padding: 12px 14px;
+  box-shadow: inset 0 0 12px rgba(0,0,0,0.6);
+}
+
+.l2-milestone-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.l2-milestone-title {
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fef08a;
+}
+
+.l2-milestone-delta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: #38bdf8;
+  background: rgba(56,189,248,0.15);
+  border: 1px solid rgba(56,189,248,0.3);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.l2-milestone-bar-wrap {
+  width: 100%;
+  height: 8px;
+  background: rgba(0,0,0,0.8);
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid rgba(0,0,0,0.9);
+  margin: 6px 0;
+}
+
+.l2-milestone-bar {
+  height: 100%;
   background: linear-gradient(90deg, #d97706, #fbbf24);
   box-shadow: 0 0 8px rgba(251,191,36,0.5);
+  transition: width 0.3s ease;
+}
+
+.l2-milestone-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 10px;
+  color: #94a3b8;
+  margin-top: 4px;
 }
 
 /* Card de Promoção de Classe */
@@ -6182,10 +6478,16 @@ select:focus-visible {
   .l2-primary-stats-grid {
     grid-template-columns: repeat(3, 1fr);
   }
+  .l2-performance-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
   .l2-combat-matrix-grid {
     grid-template-columns: 1fr;
   }
   .l2-vitals-container {
+    grid-template-columns: 1fr;
+  }
+  .l2-equip-power-grid {
     grid-template-columns: 1fr;
   }
 }

@@ -357,13 +357,12 @@ export const IDLE_MARKUP = `
           </div>
         </div>
         <div class="tab-content">
-          <!-- Character Tab — Ficha Real de Aden -->
+          <!-- Character Tab — Ficha Real de Aden & Power Progression Hub -->
           <div id="tab-character" class="tab-pane">
             
-            <!-- 1. Santuário do Herói: Vitrine & Identidade Integrada -->
-            <!-- 1. Santuário do Herói: Vitrine & Identidade Centralizada -->
+            <!-- 1. HERO IDENTITY HEADER -->
             <div class="l2-hero-dossier" id="portrait">
-              <!-- Retrato Real Centralizado com Moldura Nobre -->
+              <!-- Retrato Real com Moldura Nobre -->
               <div class="l2-hero-avatar-frame">
                 <div class="portrait-aura" id="portrait-aura"></div>
                 <div class="l2-hero-avatar-viewport">
@@ -372,7 +371,7 @@ export const IDLE_MARKUP = `
                 <div class="l2-hero-avatar-shade"></div>
               </div>
 
-              <!-- Identidade, Poder de Combate & Vitals Centralizados -->
+              <!-- Identidade, Combat Power Hero Card, Breakdown & Vitals -->
               <div class="l2-hero-identity-box">
                 <div class="l2-hero-header-row">
                   <div>
@@ -387,12 +386,12 @@ export const IDLE_MARKUP = `
                   </div>
                 </div>
 
-                <!-- CP Plaque de Alto Prestígio -->
+                <!-- CP Hero Card Premium (Única Fonte da Verdade para Combat Power) -->
                 <div class="l2-cp-plaque">
                   <div class="l2-cp-main">
                     <span class="l2-cp-rune">⚡</span>
                     <div class="l2-cp-data">
-                      <span class="l2-cp-caption">PODER DE COMBATE</span>
+                      <span class="l2-cp-caption">PODER DE COMBATE CANÔNICO</span>
                       <span class="l2-cp-num" id="hero-cp-val">0 CP</span>
                     </div>
                   </div>
@@ -401,11 +400,26 @@ export const IDLE_MARKUP = `
                   </div>
                 </div>
 
-                <!-- Medidores Vitais Reais (HP / MP / CP) -->
+                <!-- CP Power Breakdown (Composição Proporcional Auditada) -->
+                <div class="l2-cp-breakdown-card" id="hero-cp-breakdown-wrap">
+                  <div class="l2-cp-breakdown-head">
+                    <span class="l2-breakdown-title">Origem do Poder:</span>
+                    <span class="l2-breakdown-subtitle" id="hero-cp-breakdown-summary">Arsenal, Atributos &amp; Talentos</span>
+                  </div>
+                  <div class="l2-cp-breakdown-bar">
+                    <div id="hero-cp-bar-equip" class="l2-cp-seg seg-equip" style="width: 40%;" title="Equipamentos"></div>
+                    <div id="hero-cp-bar-attrs" class="l2-cp-seg seg-attrs" style="width: 30%;" title="Atributos"></div>
+                    <div id="hero-cp-bar-skills" class="l2-cp-seg seg-skills" style="width: 20%;" title="Habilidades"></div>
+                    <div id="hero-cp-bar-specials" class="l2-cp-seg seg-specials" style="width: 10%;" title="Especiais"></div>
+                  </div>
+                  <div class="l2-cp-breakdown-legend" id="hero-cp-breakdown-legend"></div>
+                </div>
+
+                <!-- Medidores Vitais Reais (HP / MP apenas — CP é poder, não reserva de vida) -->
                 <div class="l2-vitals-container">
                   <div class="l2-vital-meter">
                     <div class="l2-vital-head">
-                      <span class="l2-vital-title hp">❤️ HP</span>
+                      <span class="l2-vital-title hp">❤️ HP (Vida)</span>
                       <span class="l2-vital-val" id="hero-vital-hp">0 / 0</span>
                     </div>
                     <div class="l2-vital-track">
@@ -414,25 +428,16 @@ export const IDLE_MARKUP = `
                   </div>
                   <div class="l2-vital-meter">
                     <div class="l2-vital-head">
-                      <span class="l2-vital-title mp">💙 MP</span>
+                      <span class="l2-vital-title mp">💙 MP (Mana)</span>
                       <span class="l2-vital-val" id="hero-vital-mp">0 / 0</span>
                     </div>
                     <div class="l2-vital-track">
                       <div class="l2-vital-bar mp" id="hero-vital-bar-mp" style="width: 100%;"></div>
                     </div>
                   </div>
-                  <div class="l2-vital-meter">
-                    <div class="l2-vital-head">
-                      <span class="l2-vital-title cp">🛡️ CP</span>
-                      <span class="l2-vital-val" id="hero-vital-cp">0 / 0</span>
-                    </div>
-                    <div class="l2-vital-track">
-                      <div class="l2-vital-bar cp" id="hero-vital-bar-cp" style="width: 100%;"></div>
-                    </div>
-                  </div>
                 </div>
 
-                <!-- Banner de Avanço / Troca de Classe -->
+                <!-- Banner Contextual de Avanço de Classe -->
                 <div id="class-advancement-banner" class="class-advancement-banner" style="display:none;">
                   <span class="banner-icon">📜</span>
                   <div class="banner-info">
@@ -444,17 +449,58 @@ export const IDLE_MARKUP = `
               </div>
             </div>
 
-            <!-- 2. Os Seis Pilares Raciais (Atributos Primários Sagrados) -->
+            <!-- 2. POWER SUMMARY & COMBAT PERFORMANCE -->
+            <div class="l2-char-section" id="char-performance-section">
+              <div class="l2-section-header">
+                <span class="l2-section-icon">⚡</span>
+                <h3>Desempenho em Combate &amp; Sumário de Poder</h3>
+                <span class="l2-section-tag">Métricas Reais</span>
+              </div>
+              <div id="char-performance-grid" class="l2-performance-grid">
+                <div class="l2-perf-card">
+                  <div class="l2-perf-label">⚔️ DPS Sustentado</div>
+                  <div class="l2-perf-val val-dps" id="perf-dps-sustained">0</div>
+                  <div class="l2-perf-sub">Dano Médio / seg</div>
+                </div>
+                <div class="l2-perf-card">
+                  <div class="l2-perf-label">💥 Burst DPS</div>
+                  <div class="l2-perf-val val-burst" id="perf-dps-burst">0</div>
+                  <div class="l2-perf-sub">Pico Crítico</div>
+                </div>
+                <div class="l2-perf-card">
+                  <div class="l2-perf-label">🛡️ Vida Efetiva (EHP)</div>
+                  <div class="l2-perf-val val-ehp" id="perf-ehp">0</div>
+                  <div class="l2-perf-sub">HP com Def &amp; Evasão</div>
+                </div>
+                <div class="l2-perf-card">
+                  <div class="l2-perf-label">🩸 Sustentação (HPS)</div>
+                  <div class="l2-perf-val val-hps" id="perf-hps">+0/s</div>
+                  <div class="l2-perf-sub">Regen + Life Drain</div>
+                </div>
+                <div class="l2-perf-card">
+                  <div class="l2-perf-label">💧 MP Sustain</div>
+                  <div class="l2-perf-val val-mps" id="perf-mp-sustain">+0/s</div>
+                  <div class="l2-perf-sub">Recuperação / seg</div>
+                </div>
+                <div class="l2-perf-card">
+                  <div class="l2-perf-label">👟 Evasão Efetiva</div>
+                  <div class="l2-perf-val val-eva" id="perf-dodge-rate">0%</div>
+                  <div class="l2-perf-sub">Chance Real de Esquiva</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 3. CORE ATTRIBUTES (Os Seis Pilares Raciais: Base + Bônus = Final) -->
             <div class="l2-char-section">
               <div class="l2-section-header">
                 <span class="l2-section-icon">🏛️</span>
-                <h3>Atributos Primários de Aden (Linhagem &amp; Dyes)</h3>
-                <span class="l2-section-tag">Base + Bônus</span>
+                <h3>Atributos Primários de Aden (Linhagem, Equipamentos &amp; Dyes)</h3>
+                <span class="l2-section-tag">Base + Bônus = Final</span>
               </div>
               <div id="char-primary-stats-grid" class="l2-primary-stats-grid"></div>
             </div>
 
-            <!-- 3. Matriz Tática de Combate (Ofensiva & Defensiva) -->
+            <!-- 4. COMBAT STATS MATRIX (Ofensiva, Defensiva & Sustentação) -->
             <div class="l2-char-section">
               <div class="l2-section-header">
                 <span class="l2-section-icon">⚔️</span>
@@ -464,19 +510,51 @@ export const IDLE_MARKUP = `
               <div id="char-tab-stats-summary" class="l2-combat-matrix-grid"></div>
             </div>
 
-            <!-- 4. Subclasses & Certificações de Aden -->
+            <!-- 5. EQUIPMENT POWER (Poder e Contribuição de Equipamentos) -->
+            <div class="l2-char-section" id="char-equipment-power-section">
+              <div class="l2-section-header">
+                <span class="l2-section-icon">🛡️</span>
+                <h3>Poder e Contribuição dos Equipamentos</h3>
+                <span class="l2-section-tag">Arsenal Auditado</span>
+              </div>
+              <p class="l2-section-desc">Impacto de cada item equipado, grau, refinamento (+0 a +16) e bônus de conjunto no seu Poder de Combate.</p>
+              <div id="char-equipped-power-list" class="l2-equip-power-grid"></div>
+              <div id="char-set-bonuses-container" style="margin-top: 10px;"></div>
+            </div>
+
+            <!-- 6. POWER INSIGHTS (Assistente Tático de Build) -->
+            <div class="l2-char-section" id="char-power-insights-section">
+              <div class="l2-section-header">
+                <span class="l2-section-icon">💡</span>
+                <h3>Power Insights &amp; Diagnóstico de Build</h3>
+                <span class="l2-section-tag">Análise Dinâmica</span>
+              </div>
+              <div id="char-power-insights-list" class="l2-insights-container"></div>
+            </div>
+
+            <!-- 7. PROGRESSION (Próximo Marco de Poder & Recomendações) -->
+            <div class="l2-char-section" id="char-progression-section">
+              <div class="l2-section-header">
+                <span class="l2-section-icon">🎯</span>
+                <h3>Progressão de Poder &amp; Próximo Marco</h3>
+                <span class="l2-section-tag">Metas de Aden</span>
+              </div>
+              <div id="char-next-milestone-card" class="l2-milestone-card"></div>
+            </div>
+
+            <!-- 8. SUBCLASSES & CERTIFICAÇÕES DE ADEN -->
             <div class="l2-char-section subclass-section">
               <div class="l2-section-header">
                 <span class="l2-section-icon">📜</span>
                 <h3>Subclasses &amp; Certificações de Aden</h3>
-                <span id="subclass-count-badge" class="l2-section-tag">Lv. 75 Requerido</span>
+                <span id="subclass-count-badge" class="l2-section-tag">Lv. 52+ Requerido</span>
               </div>
               <p class="l2-section-desc">Evolua até 3 subclasses nobres para desbloquear poderes de Certificação passivos permanentes para sua Classe Principal.</p>
               
               <div id="subclass-list-container" class="subclass-list-container" style="display:flex; flex-direction:column; gap:8px;"></div>
               
               <div style="display:flex; gap:8px; margin-top:10px;">
-                <button id="add-subclass-btn" class="action-btn action-btn--primary" style="flex:1; font-size:11px;">➕ Adicionar Subclasse (Lv 75+)</button>
+                <button id="add-subclass-btn" class="action-btn action-btn--primary" style="flex:1; font-size:11px;">➕ Adicionar Subclasse</button>
               </div>
 
               <!-- Certificações -->
@@ -489,7 +567,7 @@ export const IDLE_MARKUP = `
               </div>
             </div>
 
-            <!-- Rodapé de Ações do Herói -->
+            <!-- 9. AÇÕES DO RODAPÉ -->
             <div class="char-actions" style="margin-top: 20px;">
               <button id="save-btn" class="action-btn">💾 Salvar Progresso</button>
               <button id="start-btn" class="action-btn action-btn--primary">⚔️ Entrar na Caçada</button>
