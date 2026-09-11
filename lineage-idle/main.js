@@ -304,7 +304,7 @@ import { CommunityCapService } from './src/services/CommunityCapService.js';
 import { ensureAppLayout, showMenuPanel, updateTabVisibilityByLevel } from './src/ui/AppLayout.js';
 import { checkTabGuide, closeTabGuideModal, openTabGuideModal } from './src/ui/TutorialGuide.js';
 import { isFeatureUnlocked, getCurrentSeason, getSeasonForFeature } from './src/core/SeasonConfig.js';
-import { updateSeasonTabBadges } from './src/ui/SeasonUI.js';
+import { renderSeasonLockedPanel, updateSeasonTabBadges } from './src/ui/SeasonUI.js';
 import { VFX, initializeVFX } from './vfx.js';
 import { globalVFXOrchestrator } from './src/vfx/VFXOrchestrator.js';
 import { combatEvents, CombatEventType } from './src/vfx/CombatEvent.js';
@@ -2870,22 +2870,22 @@ function renderZoneInfoCard() {
   const monsterIds = [...(z.monsters || [])];
   if (z.boss && !monsterIds.includes(z.boss)) monsterIds.push(z.boss);
 
-  const curDiff = MonsterAIEngine.getDifficulty(state);
+  const curDiff = MonsterAIEngine.getDifficulty(state) || { color: '#10b981', icon: '🟢', name: 'Normal', xpMult: 1, dropMult: 1 };
   const monsterHtml = monsterIds.map(mId => {
     const mon = MONSTERS[mId];
     if (!mon) return '';
     const badge = mon.boss ? '<span class="z-badge boss">★ Boss</span>' : (mon.elite ? '<span class="z-badge elite">⚔ Elite</span>' : '');
-    const mLvl = mon.lvl || z.level;
+    const mLvl = mon.lvl || z.level || 1;
     const archKey = mon.archetype || MonsterAIEngine.getMonsterArchetype(mon);
     const arch = ARCHETYPE_INFO[archKey] || ARCHETYPE_INFO.berserker;
     const archBadge = `<span class="z-badge arch" style="background:${arch.bg}; color:${arch.color}; border:1px solid ${arch.border}; padding:1px 5px; border-radius:3px; font-size:10px; margin-left:4px;" title="${arch.desc}">${arch.icon} ${arch.label}</span>`;
     return `
       <div class="z-mon-item">
-        <span class="z-mon-name"><span class="z-mon-lvl">Lv.${mLvl}</span> ${mon.name} ${badge} ${archBadge}</span>
-        <span class="z-mon-stats">❤️ ${mon.hp.toLocaleString()} HP | ⚔️ ${mon.atk} ATK</span>
+        <span class="z-mon-name"><span class="z-mon-lvl">Lv.${mLvl}</span> ${mon.name || mId} ${badge} ${archBadge}</span>
+        <span class="z-mon-stats">❤️ ${(mon.hp || 0).toLocaleString()} HP | ⚔️ ${mon.atk || 0} ATK</span>
       </div>
     `;
-  }).join('');
+  }).filter(Boolean).join('');
 
   // Drop Items preview
   const equipDrops = (D().MONSTER_DROPS && D().MONSTER_DROPS[zoneId]) || [];
@@ -2893,18 +2893,19 @@ function renderZoneInfoCard() {
   const allDropIds = [...new Set([...equipDrops, ...matDrops])];
 
   const dropsHtml = allDropIds.map(id => {
-    const def = D().ALL_ITEMS ? D().ALL_ITEMS[id] : null;
-    const icon = getItemIcon(def);
-    return `<div class="z-drop-pill" title="${def.name}">${icon} <span>${def.name}</span></div>`;
-  }).join('');
+    const def = (typeof getItemDef === 'function' ? getItemDef(id) : null) || (D().ALL_ITEMS ? D().ALL_ITEMS[id] : null);
+    const name = def?.name || id;
+    const icon = def ? getItemIcon(def) : '📦';
+    return `<div class="z-drop-pill" title="${name}">${icon} <span>${name}</span></div>`;
+  }).filter(Boolean).join('');
 
   container.innerHTML = `
     <div class="z-card-header">
       <div class="z-card-title">
         <h3>🗺️ ${z.name}</h3>
         <span class="z-card-req">Requisito: Lv. ${z.level}</span>
-        <div style="margin-top:4px; font-size:11px; color:${curDiff.color}; font-weight:bold;">
-          ${curDiff.icon} Dificuldade: <strong>${curDiff.name}</strong> (${curDiff.xpMult}x XP/Gold · ${curDiff.dropMult}x Drops)
+        <div style="margin-top:4px; font-size:11px; color:${curDiff.color || '#10b981'}; font-weight:bold;">
+          ${curDiff.icon || '🟢'} Dificuldade: <strong>${curDiff.name || 'Normal'}</strong> (${curDiff.xpMult || 1}x XP/Gold · ${curDiff.dropMult || 1}x Drops)
         </div>
       </div>
       <div class="z-card-kills">⚔️ Caça: ${currentKills}/50 (Chefão)</div>

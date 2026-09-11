@@ -3367,11 +3367,25 @@
       ctx.globalCompositeOperation = particle.additive ? 'lighter' : 'source-over'; this._drawParticle(particle, alpha);
     }
     ctx.globalCompositeOperation = 'lighter';
-    for (var r = this.rings.length - 1; r >= 0; r -= 1) {
-      // Outer radiant halo (zero GPU Gaussian blur penalty)
-      ctx.strokeStyle = rgba(ring.rgb, ringAlpha * 0.25); ctx.lineWidth = ring.width * 2.5; ctx.beginPath(); ctx.arc(ring.x, ring.y, ring.radius, 0, Math.PI * 2); ctx.stroke();
-      // Core sharp brilliant ring
-      ctx.strokeStyle = rgba(ring.rgb, ringAlpha * 0.90); ctx.lineWidth = ring.width; ctx.beginPath(); ctx.arc(ring.x, ring.y, ring.radius, 0, Math.PI * 2); ctx.stroke();
+    if (this.rings && this.rings.length > 0) {
+      for (var r = this.rings.length - 1; r >= 0; r -= 1) {
+        var ring = this.rings[r];
+        if (!ring) continue;
+        var ringAlpha = 1 - (ring.age || 0) / (ring.max || 1);
+        if (ringAlpha <= 0) { this.rings.splice(r, 1); continue; }
+        // Outer radiant halo (zero GPU Gaussian blur penalty)
+        ctx.strokeStyle = rgba(ring.rgb || '255,255,255', ringAlpha * 0.25);
+        ctx.lineWidth = (ring.width || 2) * 2.5;
+        ctx.beginPath();
+        ctx.arc(ring.x || 0, ring.y || 0, ring.radius || 10, 0, Math.PI * 2);
+        ctx.stroke();
+        // Core sharp brilliant ring
+        ctx.strokeStyle = rgba(ring.rgb || '255,255,255', ringAlpha * 0.90);
+        ctx.lineWidth = ring.width || 2;
+        ctx.beginPath();
+        ctx.arc(ring.x || 0, ring.y || 0, ring.radius || 10, 0, Math.PI * 2);
+        ctx.stroke();
+      }
     }
     ctx.restore();
 

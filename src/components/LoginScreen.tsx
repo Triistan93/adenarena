@@ -36,10 +36,10 @@ function getHeroAvatar(state: any): string {
     return gender === 'F' ? '/img/orcmageF.png' : '/img/orcmageM.png';
   }
   if (race === 'dwarf' || cls.includes('dwarf')) {
-    return gender === 'F' ? '/img/f_bountyhunter.jpg' : '/img/m_warsmith.jpg';
+    return gender === 'F' ? '/img/dwarfmaestroF.png' : '/img/dwarfmaestroM.png';
   }
   if (race === 'kamael' || cls.includes('kamael')) {
-    return gender === 'F' ? '/img/f_soultaker.jpg' : '/img/m_berserker.jpg';
+    return gender === 'F' ? '/img/kamaelshF.png' : '/img/kamaelDM.png';
   }
   if (cls.includes('mage') || cls.includes('wizard') || cls.includes('cleric')) {
     return gender === 'F' ? '/img/f_humanwizard.jpg' : '/img/m_humanwizard.jpg';

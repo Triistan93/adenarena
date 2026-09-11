@@ -2494,34 +2494,35 @@ export function renderZoneMap(state, callbacks = {}) {
   container.appendChild(capWidget);
 
   // Seletor de Dificuldade de Caça Progressiva (NÍVEL 15.4 / 15.5)
-  const currentDiff = MonsterAIEngine.getDifficulty(state);
+  const currentDiff = MonsterAIEngine.getDifficulty(state) || { id: 'normal', name: 'Normal', icon: '🟢', color: '#10b981', xpMult: 1, dropMult: 1, minLvl: 1 };
   const diffBar = document.createElement('div');
   diffBar.className = 'hunting-difficulty-banner-wrap';
   diffBar.style.cssText = 'margin: 10px 0 14px 0; padding: 10px 14px; background: rgba(0,0,0,0.45); border: 1px solid rgba(212,167,68,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;';
   
-  const diffButtonsHtml = Object.values(HUNTING_DIFFICULTIES).map(d => {
-    const isSelected = currentDiff.id === d.id;
-    const isLocked = (state.level || 1) < d.minLvl;
-    const activeBorder = isSelected ? `2px solid ${d.color}` : (isLocked ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(255,255,255,0.25)');
+  const diffButtonsHtml = Object.values(HUNTING_DIFFICULTIES || {}).map(d => {
+    if (!d || !d.id) return '';
+    const isSelected = currentDiff?.id === d.id;
+    const isLocked = ((state?.level) || 1) < (d.minLvl || 1);
+    const activeBorder = isSelected ? `2px solid ${d.color || '#ffd877'}` : (isLocked ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(255,255,255,0.25)');
     const activeBg = isSelected ? `linear-gradient(180deg, rgba(212,167,68,0.25), rgba(30,20,10,0.7))` : 'rgba(0,0,0,0.3)';
     return `
       <button class="diff-choice-btn ${isSelected ? 'active' : ''}"
               data-diff="${d.id}"
               ${isLocked ? 'disabled' : ''}
               onclick="window.setHuntingDifficulty && window.setHuntingDifficulty('${d.id}')"
-              style="background:${activeBg}; border:${activeBorder}; color:${isLocked ? '#64748b' : (isSelected ? '#fff' : d.color)}; padding: 5px 12px; border-radius: 6px; font-size: 11px; font-family: 'Cinzel', serif; font-weight: bold; cursor: ${isLocked ? 'not-allowed' : 'pointer'}; display: inline-flex; align-items: center; gap: 5px; box-shadow: ${isSelected ? `0 0 10px ${d.color}44` : 'none'}; transition: all 0.2s;"
-              title="${isLocked ? `Requer Nível ${d.minLvl}+` : d.desc}">
-        <span>${d.icon}</span>
-        <span>${d.name}</span>
-        <span style="font-size: 10px; opacity: 0.85;">${isLocked ? `🔒 (Lv.${d.minLvl})` : `(${d.xpMult}x)`}</span>
+              style="background:${activeBg}; border:${activeBorder}; color:${isLocked ? '#64748b' : (isSelected ? '#fff' : (d.color || '#fff'))}; padding: 5px 12px; border-radius: 6px; font-size: 11px; font-family: 'Cinzel', serif; font-weight: bold; cursor: ${isLocked ? 'not-allowed' : 'pointer'}; display: inline-flex; align-items: center; gap: 5px; box-shadow: ${isSelected ? `0 0 10px ${d.color || '#ffd877'}44` : 'none'}; transition: all 0.2s;"
+              title="${isLocked ? `Requer Nível ${d.minLvl || 1}+` : (d.desc || '')}">
+        <span>${d.icon || '⚔️'}</span>
+        <span>${d.name || d.id}</span>
+        <span style="font-size: 10px; opacity: 0.85;">${isLocked ? `🔒 (Lv.${d.minLvl || 1})` : `(${d.xpMult || 1}x)`}</span>
       </button>
     `;
-  }).join('');
+  }).filter(Boolean).join('');
 
   diffBar.innerHTML = `
     <div style="display: flex; align-items: center; gap: 10px;">
       <span style="font-family: 'Cinzel', serif; font-size: 12px; font-weight: 800; color: #ffd877; letter-spacing: 0.05em;">⚡ Dificuldade de Caça:</span>
-      <span style="font-size: 11px; color: ${currentDiff.color}; font-weight: bold;">${currentDiff.icon} ${currentDiff.name} (${currentDiff.xpMult}x XP/Gold, ${currentDiff.dropMult}x Drops)</span>
+      <span style="font-size: 11px; color: ${currentDiff.color || '#10b981'}; font-weight: bold;">${currentDiff.icon || '🟢'} ${currentDiff.name || 'Normal'} (${currentDiff.xpMult || 1}x XP/Gold, ${currentDiff.dropMult || 1}x Drops)</span>
     </div>
     <div style="display: flex; gap: 6px; flex-wrap: wrap;">
       ${diffButtonsHtml}
