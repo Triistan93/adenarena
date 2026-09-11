@@ -472,14 +472,16 @@ anel de runas, reveal on scroll, code tokens.
 
 .pillar-subtabs-strip {
   display: none;
-  gap: 6px !important;
-  overflow-x: auto !important;
-  padding: 6px 4px 4px 4px !important;
-  scrollbar-width: thin !important;
-  scrollbar-color: rgba(91, 127, 168, 0.3) transparent !important;
+  gap: 4px 6px !important;
+  overflow: visible !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100% !important;
+  padding: 6px 6px !important;
   animation: slideDownSubtabs 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
   background: rgba(10, 12, 16, 0.85) !important;
-  border-radius: 5px !important;
+  border-radius: 6px !important;
   border: 1px solid rgba(91, 127, 168, 0.18) !important;
   box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.7) !important;
   box-sizing: border-box !important;
@@ -504,8 +506,9 @@ anel de runas, reveal on scroll, code tokens.
 .subtab-pill-btn {
   display: inline-flex !important;
   align-items: center !important;
+  justify-content: center !important;
   gap: 6px !important;
-  padding: 6px 12px !important;
+  padding: 5px 11px !important;
   background: linear-gradient(180deg, #1c1712 0%, #0f0d0a 100%) !important;
   border: 1px solid #3d3225 !important;
   border-radius: 5px !important;
@@ -514,6 +517,7 @@ anel de runas, reveal on scroll, code tokens.
   font-size: 11px !important;
   font-weight: 600 !important;
   white-space: nowrap !important;
+  flex: 0 1 auto !important;
   cursor: pointer !important;
   transition: all 0.2s cubic-bezier(0.2, 0.8, 0.25, 1) !important;
   box-shadow: 0 1px 3px rgba(0,0,0,0.5) !important;
