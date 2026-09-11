@@ -471,7 +471,7 @@ anel de runas, reveal on scroll, code tokens.
 }
 
 .pillar-subtabs-strip {
-  display: flex !important;
+  display: none;
   gap: 6px !important;
   overflow-x: auto !important;
   padding: 6px 4px 4px 4px !important;
@@ -485,7 +485,13 @@ anel de runas, reveal on scroll, code tokens.
   box-sizing: border-box !important;
 }
 
-.pillar-subtabs-strip.collapsed {
+.pillar-subtabs-strip.active {
+  display: flex !important;
+}
+
+.pillar-subtabs-strip.collapsed,
+.pillar-subtabs-strip[style*="display: none"],
+.pillar-subtabs-strip[style*="display:none"] {
   display: none !important;
 }
 

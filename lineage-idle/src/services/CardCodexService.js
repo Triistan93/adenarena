@@ -242,19 +242,40 @@ export class CardCodexService {
    * Absorve uma carta no Codex da Conta, garantindo bônus passivos permanentes.
    * @param {Object} accountState
    * @param {string} cardId
-   * @param {Object} hooks
-   * @returns {{ success: boolean, message: string }}
+   * @param {number|Object} [count=1]
+   * @param {Object} [hooks={}]
+   * @returns {{ success: boolean, message?: string, rank?: number, totalCards?: number }}
    */
-  static absorbCardIntoCodex(accountState, cardId, hooks = {}) {
+  static absorbCardIntoCodex(accountState, cardId, count = 1, hooks = {}) {
+    if (typeof count === 'object' && count !== null) {
+      hooks = count;
+      count = 1;
+    }
+    const numToAbsorb = typeof count === 'number' && count > 0 ? count : 1;
     const cardDef = MONSTER_CARDS[cardId];
     if (!cardDef) return { success: false, message: 'Carta de monstro desconhecida.' };
+
+    if (Array.isArray(accountState.inventory)) {
+      const invItemIdx = accountState.inventory.findIndex(i => (i.id === cardId || i.itemId === cardId));
+      if (invItemIdx !== -1) {
+        const item = accountState.inventory[invItemIdx];
+        if ((item.count || 1) <= numToAbsorb) {
+          accountState.inventory.splice(invItemIdx, 1);
+        } else {
+          item.count -= numToAbsorb;
+        }
+      }
+    }
 
     if (!accountState.cardCodex) accountState.cardCodex = {};
     const current = accountState.cardCodex[cardId] || { rank: 0, count: 0 };
 
-    current.count += 1;
+    current.count += numToAbsorb;
     current.rank = CardCodexService.getRankFromCount(current.count);
     accountState.cardCodex[cardId] = current;
+    if (accountState.codex && typeof accountState.codex === 'object') {
+      accountState.codex[cardId] = current;
+    }
 
     hooks.log?.(`🃏 Carta **${cardDef.name}** absorvida no Codex! (${current.count} cópias · Rank ${current.rank}/5)`, 'gain');
     hooks.onUpdate?.();
@@ -269,7 +290,9 @@ export class CardCodexService {
    */
   static getCodexPassiveBonuses(accountState) {
     const totals = { pAtk: 0, mAtk: 0, pDef: 0, mDef: 0, maxHp: 0, maxMp: 0, critRate: 0, critDmg: 0, lifesteal: 0, allStats: 0 };
-    const cardCodex = accountState?.cardCodex || {};
+    const cardCodex = (accountState?.cardCodex && Object.keys(accountState.cardCodex).length > 0)
+      ? accountState.cardCodex
+      : (accountState?.codex || {});
 
     for (const [cardId, data] of Object.entries(cardCodex)) {
       if (!data || data.rank <= 0) continue;

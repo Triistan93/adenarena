@@ -1,0 +1,975 @@
+{
+  "meta": {
+    "title": "GLORY PILLAR METROLOGICAL FEATURE CATALOG",
+    "version": "5.0.0-phase5-metrology",
+    "generatedAt": "2026-09-11T02:18:57.281Z"
+  },
+  "subtabs": {
+    "G1": {
+      "id": "G1",
+      "name": "Clan & Castles",
+      "ownerKey": "clan",
+      "domSelector": "#tab-clan",
+      "features": [
+        {
+          "featureId": "g1_clan_creation_and_naming",
+          "name": "Clan Creation & Name Validation",
+          "criticality": "CRITICAL",
+          "trigger": "Create Clan Button",
+          "handler": "ClanService.createOrEditClan",
+          "service": "ClanService",
+          "statePaths": [
+            "state.clan.id",
+            "state.clan.name",
+            "state.clan.level",
+            "state.gold"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g1_clan_level_upgrade",
+          "name": "Clan Level Upgrade (Lv. 1-5)",
+          "criticality": "CRITICAL",
+          "trigger": "Upgrade Clan Level",
+          "handler": "ClanService.upgradeClan",
+          "service": "ClanService",
+          "statePaths": [
+            "state.clan.level",
+            "state.clan.reputation",
+            "state.gold",
+            "state.sp"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g1_clan_resource_donation",
+          "name": "Resource & Adena Clan Donation",
+          "criticality": "CRITICAL",
+          "trigger": "Donate Adena / Materials",
+          "handler": "ClanService.donateToClan",
+          "service": "ClanService",
+          "statePaths": [
+            "state.gold",
+            "state.clan.reputation",
+            "state.clan.treasury"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g1_clan_roster_management",
+          "name": "Clan Roster & Member Capacity",
+          "criticality": "STANDARD",
+          "trigger": "Roster View / Member Update",
+          "handler": "ClanService.getClanRoster",
+          "service": "ClanService",
+          "statePaths": [
+            "state.clan.members",
+            "state.clan.level"
+          ],
+          "evidenceLevel": "L3",
+          "verified": true
+        },
+        {
+          "featureId": "g1_clan_castle_siege_declaration",
+          "name": "Castle Siege Declaration & Entry",
+          "criticality": "CRITICAL",
+          "trigger": "Declare Siege / Challenge Castle",
+          "handler": "ClanService.startSiege",
+          "service": "ClanService",
+          "statePaths": [
+            "state.clan.activeSiege",
+            "state.clan.castle"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g1_clan_castle_siege_combat_turns",
+          "name": "Castle Siege Turn Combat & Guard Defense",
+          "criticality": "CRITICAL",
+          "trigger": "Execute Siege Turn",
+          "handler": "ClanService.executeSiegeTurn",
+          "service": "ClanService",
+          "statePaths": [
+            "state.clan.activeSiege",
+            "state.clan.castle",
+            "state.hp"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g1_clan_castle_tax_system",
+          "name": "Castle Tax Collection & Revenue Tick",
+          "criticality": "CRITICAL",
+          "trigger": "Claim Taxes / Background Tick",
+          "handler": "ClanService.claimCastleTaxes / updateTaxesTick",
+          "service": "ClanService",
+          "statePaths": [
+            "state.clan.castle",
+            "state.clan.taxVault",
+            "state.gold"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g1_clan_castle_exclusive_shop",
+          "name": "Castle Exclusive Lord Shop",
+          "criticality": "CRITICAL",
+          "trigger": "Buy Castle Item",
+          "handler": "ClanService.buyCastleShopItem",
+          "service": "ClanService",
+          "statePaths": [
+            "state.inventory",
+            "state.gold",
+            "state.clan.castle"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g1_clan_hall_buff_activation",
+          "name": "Clan Hall Buffs (Atk, Def, Regen, XP)",
+          "criticality": "CRITICAL",
+          "trigger": "Activate Clan Hall Buff",
+          "handler": "ClanService.activateClanHallBuff",
+          "service": "ClanService",
+          "statePaths": [
+            "state.buffs",
+            "state.gold",
+            "state.clan.activeBuffs"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g1_clan_ui_rendering",
+          "name": "Clan & Castle Dashboard UI View",
+          "criticality": "VISUAL",
+          "trigger": "Open Clan Tab",
+          "handler": "renderClanTab",
+          "service": "GameUI",
+          "statePaths": [
+            "state.clan"
+          ],
+          "evidenceLevel": "L1",
+          "verified": true
+        }
+      ]
+    },
+    "G2": {
+      "id": "G2",
+      "name": "Olympiad & Noblesse",
+      "ownerKey": "olympiad",
+      "domSelector": "#tab-olympiad",
+      "features": [
+        {
+          "featureId": "g2_noblesse_eligibility_check",
+          "name": "Noblesse Quest & Subclass Lv.75 Gating",
+          "criticality": "CRITICAL",
+          "trigger": "Check Noblesse / Enter Olympiad",
+          "handler": "NoblesseService.getNoblesseStatus / canAdvanceStep",
+          "service": "NoblesseService",
+          "statePaths": [
+            "state.noblesse",
+            "state.subclasses",
+            "state.level"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g2_noblesse_quest_progression",
+          "name": "Noblesse Multi-Step Quest Completion",
+          "criticality": "CRITICAL",
+          "trigger": "Complete Noblesse Step / Boss Kill",
+          "handler": "NoblesseService.completeStep / recordKill",
+          "service": "NoblesseService",
+          "statePaths": [
+            "state.noblesse.step",
+            "state.noblesse.isNoblesse",
+            "state.noblesse.tiaraClaimed"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g2_olympiad_registration_gating",
+          "name": "Olympiad Match Registration & Ticket Limits",
+          "criticality": "CRITICAL",
+          "trigger": "Register for Olympiad Match",
+          "handler": "OlympiadService.canJoinMatch",
+          "service": "OlympiadService",
+          "statePaths": [
+            "state.olympiad.matchesToday",
+            "state.noblesse.isNoblesse"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g2_olympiad_matchmaking_resolution",
+          "name": "CP-Balanced Matchmaking & Gladiator Battle",
+          "criticality": "CRITICAL",
+          "trigger": "Find Match / Fight Gladiator",
+          "handler": "OlympiadService.getGladiatorOpponent",
+          "service": "OlympiadService",
+          "statePaths": [
+            "state.olympiad.points",
+            "state.olympiad.wins",
+            "state.olympiad.losses",
+            "state.olympiad.tokens"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g2_olympiad_points_transfer_formula",
+          "name": "Olympiad Points Win/Loss Transfer Pipeline",
+          "criticality": "CRITICAL",
+          "trigger": "Match End",
+          "handler": "OlympiadService.resolveMatchResult",
+          "service": "OlympiadService",
+          "statePaths": [
+            "state.olympiad.points",
+            "state.olympiad.tokens"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g2_olympiad_hero_status_claim",
+          "name": "Grand Olympiad Hero Status & Prestige",
+          "criticality": "CRITICAL",
+          "trigger": "Claim Hero Status",
+          "handler": "OlympiadService.claimHeroStatus",
+          "service": "OlympiadService",
+          "statePaths": [
+            "state.olympiad.isHero",
+            "state.olympiad.heroTitle",
+            "state.olympiad.heroWeapon"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g2_olympiad_hero_weapon_aura",
+          "name": "Hero Weapon Selection & Radiant Hero Aura",
+          "criticality": "CRITICAL",
+          "trigger": "Equip Hero Weapon / Hero Aura Glow",
+          "handler": "OlympiadService.claimHeroStatus / equipItem",
+          "service": "OlympiadService / EquipmentService",
+          "statePaths": [
+            "state.olympiad.heroWeapon",
+            "state.equipment.weapon"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g2_olympiad_token_shop",
+          "name": "Olympiad Noblesse & Token Shop",
+          "criticality": "CRITICAL",
+          "trigger": "Buy Olympiad Item",
+          "handler": "OlympiadService.buyShopItem",
+          "service": "OlympiadService",
+          "statePaths": [
+            "state.olympiad.tokens",
+            "state.inventory"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g2_olympiad_ui_rendering",
+          "name": "Olympiad Arena Dashboard UI",
+          "criticality": "VISUAL",
+          "trigger": "Open Olympiad Tab",
+          "handler": "renderOlympiadTab",
+          "service": "GameUI",
+          "statePaths": [
+            "state.olympiad",
+            "state.noblesse"
+          ],
+          "evidenceLevel": "L1",
+          "verified": true
+        }
+      ]
+    },
+    "G3": {
+      "id": "G3",
+      "name": "World Rankings",
+      "ownerKey": "rankings",
+      "domSelector": "#tab-rankings",
+      "features": [
+        {
+          "featureId": "g3_rankings_cp_leaderboard",
+          "name": "Top Combat Power (CP) Global Leaderboard",
+          "criticality": "CRITICAL",
+          "trigger": "View CP Ranking",
+          "handler": "RankingService.getLeaderboards",
+          "service": "RankingService",
+          "statePaths": [
+            "state.stats.combatPower",
+            "state.heroName"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g3_rankings_level_xp_leaderboard",
+          "name": "Top Level & Total XP Leaderboard",
+          "criticality": "CRITICAL",
+          "trigger": "View Level Ranking",
+          "handler": "RankingService.getLeaderboards",
+          "service": "RankingService",
+          "statePaths": [
+            "state.level",
+            "state.xp"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g3_rankings_olympiad_pvp_leaderboard",
+          "name": "Top Olympiad PvP Points Leaderboard",
+          "criticality": "CRITICAL",
+          "trigger": "View PvP Ranking",
+          "handler": "RankingService.getLeaderboards",
+          "service": "RankingService",
+          "statePaths": [
+            "state.olympiad.points",
+            "state.olympiad.wins"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g3_rankings_wealth_adena_leaderboard",
+          "name": "Top Wealth & Adena Tycoons Leaderboard",
+          "criticality": "STANDARD",
+          "trigger": "View Wealth Ranking",
+          "handler": "RankingService.getLeaderboards",
+          "service": "RankingService",
+          "statePaths": [
+            "state.gold",
+            "state.bankAdena"
+          ],
+          "evidenceLevel": "L3",
+          "verified": true
+        },
+        {
+          "featureId": "g3_rankings_clans_and_castles_board",
+          "name": "Top Clans & Castle Lords Directory",
+          "criticality": "STANDARD",
+          "trigger": "View Clans / Castles Ranking",
+          "handler": "RankingService.getLeaderboards",
+          "service": "RankingService",
+          "statePaths": [
+            "state.clan.name",
+            "state.clan.castle"
+          ],
+          "evidenceLevel": "L3",
+          "verified": true
+        },
+        {
+          "featureId": "g3_rankings_public_profile_snapshot",
+          "name": "Player Public Profile Snapshot Builder",
+          "criticality": "CRITICAL",
+          "trigger": "Build Profile / Inspect Player",
+          "handler": "RankingService.buildPublicProfile",
+          "service": "RankingService",
+          "statePaths": [
+            "state.name",
+            "state.race",
+            "state.class",
+            "state.level",
+            "state.stats"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g3_rankings_cloud_sync_pipeline",
+          "name": "Ranking Cloud Sync & Debounce Protection",
+          "criticality": "CRITICAL",
+          "trigger": "State Change / Periodic Sync",
+          "handler": "RankingService.syncToCloud",
+          "service": "RankingService",
+          "statePaths": [
+            "state.lastProfileSync"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g3_rankings_daily_tribute_rewards",
+          "name": "Daily Ranking Tribute Claim & 24h Cooldown",
+          "criticality": "CRITICAL",
+          "trigger": "Claim Ranking Daily Tribute",
+          "handler": "RankingService.claimRankingReward",
+          "service": "RankingService",
+          "statePaths": [
+            "state.lastRankingRewardClaim",
+            "state.adenCoins",
+            "state.gold",
+            "state.inventory"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g3_rankings_ui_category_switch",
+          "name": "Ranking UI Multi-Category Dashboard",
+          "criticality": "VISUAL",
+          "trigger": "Switch Ranking Category Tab",
+          "handler": "renderRankingTab / setActiveRankingTab",
+          "service": "RankingUI",
+          "statePaths": [
+            "_activeTab"
+          ],
+          "evidenceLevel": "L1",
+          "verified": true
+        }
+      ]
+    },
+    "G4": {
+      "id": "G4",
+      "name": "Seven Signs & Mammon",
+      "ownerKey": "sevensigns",
+      "domSelector": "#tab-sevensigns",
+      "features": [
+        {
+          "featureId": "g4_sevensigns_faction_allegiance",
+          "name": "Dusk vs Dawn Faction Allegiance Choice",
+          "criticality": "CRITICAL",
+          "trigger": "Join Faction (Dusk or Dawn)",
+          "handler": "SevenSignsService.joinFaction",
+          "service": "SevenSignsService",
+          "statePaths": [
+            "state.sevensigns.faction",
+            "state.sevensigns.joinedCycle"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g4_sevensigns_stone_deposit",
+          "name": "Seal Stones Deposit (Blue, Green, Red)",
+          "criticality": "CRITICAL",
+          "trigger": "Deposit Seal Stones",
+          "handler": "SevenSignsService.depositStones",
+          "service": "SevenSignsService",
+          "statePaths": [
+            "state.sevensigns.contributedStones",
+            "state.inventory"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g4_sevensigns_ancient_adena_exchange",
+          "name": "Ancient Adena Conversion & Priest of Mammon",
+          "criticality": "CRITICAL",
+          "trigger": "Exchange Stones for Ancient Adena",
+          "handler": "SevenSignsService.exchangeStonesForAncientAdena",
+          "service": "SevenSignsService",
+          "statePaths": [
+            "state.ancientAdena",
+            "state.inventory"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g4_sevensigns_weekly_cycle_resolution",
+          "name": "Seven Signs Weekly Cycle & Winner Determination",
+          "criticality": "CRITICAL",
+          "trigger": "Resolve Cycle / Cycle Tick",
+          "handler": "SevenSignsService.resolveWeeklyCycle",
+          "service": "SevenSignsService",
+          "statePaths": [
+            "state.sevensigns.winningFaction",
+            "state.sevensigns.cyclePhase"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g4_sevensigns_lilith_anakim_boss_raids",
+          "name": "Lilith & Anakim Catacomb Epic Boss Raids",
+          "criticality": "CRITICAL",
+          "trigger": "Start Boss Fight / Turn Combat",
+          "handler": "SevenSignsService.startBossFight / executeBossTurn",
+          "service": "SevenSignsService",
+          "statePaths": [
+            "state.sevensigns.activeBoss",
+            "state.hp",
+            "state.inventory"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g4_sevensigns_merchant_of_mammon",
+          "name": "Merchant of Mammon Exotic Artifacts Shop",
+          "criticality": "CRITICAL",
+          "trigger": "Buy Mammon Item",
+          "handler": "SevenSignsService.buyMammonItem",
+          "service": "SevenSignsService",
+          "statePaths": [
+            "state.ancientAdena",
+            "state.inventory"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g4_sevensigns_blacksmith_unseal_a_grade",
+          "name": "Blacksmith of Mammon: A-Grade Armor Unsealing",
+          "criticality": "CRITICAL",
+          "trigger": "Unseal A-Grade Armor",
+          "handler": "SevenSignsService.unsealArmor",
+          "service": "SevenSignsService",
+          "statePaths": [
+            "state.ancientAdena",
+            "state.inventory"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g4_sevensigns_blacksmith_weapon_swap",
+          "name": "Blacksmith of Mammon: Same-Grade Weapon Swap",
+          "criticality": "CRITICAL",
+          "trigger": "Swap Weapon Grade",
+          "handler": "CraftService.swapWeaponSameGrade",
+          "service": "CraftService / SevenSignsService",
+          "statePaths": [
+            "state.ancientAdena",
+            "state.inventory"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g4_sevensigns_ui_rendering",
+          "name": "Seven Signs Faction & Mammon Dashboard UI",
+          "criticality": "VISUAL",
+          "trigger": "Open Seven Signs Tab",
+          "handler": "renderSevenSignsTab",
+          "service": "GameUI",
+          "statePaths": [
+            "state.sevensigns"
+          ],
+          "evidenceLevel": "L1",
+          "verified": true
+        }
+      ]
+    },
+    "G5": {
+      "id": "G5",
+      "name": "Fortresses",
+      "ownerKey": "fortress",
+      "domSelector": "#tab-fortress",
+      "features": [
+        {
+          "featureId": "g5_fortress_claiming_and_siege",
+          "name": "Fortress Claiming & Siege Declaration",
+          "criticality": "CRITICAL",
+          "trigger": "Start Fortress Siege",
+          "handler": "FortressService.startFortressSiege",
+          "service": "FortressService",
+          "statePaths": [
+            "state.fortress.activeSiege",
+            "state.fortress.ownedFortId"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g5_fortress_commander_turn_battle",
+          "name": "Fortress Commander Boss Battle Mechanics",
+          "criticality": "CRITICAL",
+          "trigger": "Execute Fortress Siege Turn",
+          "handler": "FortressService.executeSiegeTurn",
+          "service": "FortressService",
+          "statePaths": [
+            "state.fortress.activeSiege",
+            "state.hp",
+            "state.fortress.ownedFortId"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g5_fortress_epaulettes_and_oath_production",
+          "name": "Knight Epaulettes & Blood Oath Production Tick",
+          "criticality": "CRITICAL",
+          "trigger": "Periodic Tick / Claim Production",
+          "handler": "FortressService.updateProductionTick",
+          "service": "FortressService",
+          "statePaths": [
+            "state.fortress.epaulettes",
+            "state.fortress.bloodOath",
+            "state.fortress.lastProductionTick"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g5_fortress_talisman_bracelet_purchasing",
+          "name": "Talisman Bracelet Purchasing & Slot Unlocks",
+          "criticality": "CRITICAL",
+          "trigger": "Buy Bracelet (1-4 Talisman Slots)",
+          "handler": "FortressService.buyBracelet",
+          "service": "FortressService",
+          "statePaths": [
+            "state.fortress.epaulettes",
+            "state.inventory"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g5_fortress_talisman_equipping",
+          "name": "Talisman Equipping & Bracelet Capacity Gating",
+          "criticality": "CRITICAL",
+          "trigger": "Equip Talisman to Sub-Slot",
+          "handler": "FortressService.equipTalisman",
+          "service": "FortressService",
+          "statePaths": [
+            "state.fortress.equippedTalismans",
+            "state.inventory"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g5_fortress_talisman_unequipping",
+          "name": "Talisman Unequipping & Clean Rollback",
+          "criticality": "CRITICAL",
+          "trigger": "Unequip Talisman",
+          "handler": "FortressService.unequipTalisman",
+          "service": "FortressService",
+          "statePaths": [
+            "state.fortress.equippedTalismans",
+            "state.inventory"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g5_fortress_talisman_stat_accumulation",
+          "name": "Talisman Passive Combat Stat Accumulation",
+          "criticality": "CRITICAL",
+          "trigger": "Stats Engine Calculation",
+          "handler": "FortressService.getBonuses",
+          "service": "FortressService / StatsEngine",
+          "statePaths": [
+            "state.fortress.equippedTalismans"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g5_fortress_ui_rendering",
+          "name": "Fortress Command Center Dashboard UI",
+          "criticality": "VISUAL",
+          "trigger": "Open Fortress Tab",
+          "handler": "renderFortressTab",
+          "service": "GameUI",
+          "statePaths": [
+            "state.fortress"
+          ],
+          "evidenceLevel": "L1",
+          "verified": true
+        }
+      ]
+    },
+    "G6": {
+      "id": "G6",
+      "name": "Equipment Enchantment",
+      "ownerKey": "enchant",
+      "domSelector": "#tab-enchant",
+      "features": [
+        {
+          "featureId": "g6_enchant_scroll_grade_matching",
+          "name": "Enchant Scroll Type & Grade Matching (D/C/B/A/S)",
+          "criticality": "CRITICAL",
+          "trigger": "Select Item to Enchant",
+          "handler": "findEnchantScrollItem / getEnchantScrollCount",
+          "service": "EquipmentService / main.js",
+          "statePaths": [
+            "state.inventory"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g6_enchant_safe_limit_guarantee",
+          "name": "Safe Enchant Limit Guarantee (+3 Normal, +4 FullBody)",
+          "criticality": "CRITICAL",
+          "trigger": "Enchant Item (0 -> +3/+4)",
+          "handler": "getEnchantSuccessChance",
+          "service": "BalanceEngine / main.js",
+          "statePaths": [
+            "item.enchant"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g6_enchant_probabilistic_success_scaling",
+          "name": "Probabilistic Success Curve Above Safe Limit",
+          "criticality": "CRITICAL",
+          "trigger": "Enchant Item (> Safe Limit)",
+          "handler": "getEnchantSuccessChance / enchantItem",
+          "service": "BalanceEngine / main.js",
+          "statePaths": [
+            "item.enchant"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g6_enchant_normal_scroll_failure_crystallization",
+          "name": "Normal Scroll Failure: Item Crystallization into Crystals",
+          "criticality": "CRITICAL",
+          "trigger": "Enchant Failure with Normal Scroll",
+          "handler": "enchantItem",
+          "service": "EquipmentService / main.js",
+          "statePaths": [
+            "state.inventory",
+            "state.equipment"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g6_enchant_blessed_scroll_failure_protection",
+          "name": "Blessed Scroll Failure: Safe Reset Without Crystallization",
+          "criticality": "CRITICAL",
+          "trigger": "Enchant Failure with Blessed Scroll",
+          "handler": "enchantItem",
+          "service": "EquipmentService / main.js",
+          "statePaths": [
+            "item.enchant"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g6_enchant_stat_bonus_scaling",
+          "name": "Enchant Stat Bonus Pipeline (+P.Atk, +P.Def, +M.Def)",
+          "criticality": "CRITICAL",
+          "trigger": "StatsEngine.getEquipBonus",
+          "handler": "getEquipBonus",
+          "service": "StatsEngine",
+          "statePaths": [
+            "item.enchant",
+            "state.stats"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g6_enchant_weapon_glow_visual_tiers",
+          "name": "Weapon Glow VFX Thresholds (+4 Blue, +10 Gold, +16 Crimson)",
+          "criticality": "CRITICAL",
+          "trigger": "Weapon Enchant Recalc / Stage Render",
+          "handler": "RankingService.buildPublicProfile / renderStageHero",
+          "service": "GameUI / RankingService",
+          "statePaths": [
+            "item.enchant"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g6_enchant_set_enchant_bonus_trigger",
+          "name": "Full Armor Set Enchantment (+4 to +10) Bonus Trigger",
+          "criticality": "CRITICAL",
+          "trigger": "Check Full Set Enchant",
+          "handler": "StatsEngine.getStats (checkSetEnchant)",
+          "service": "StatsEngine",
+          "statePaths": [
+            "state.equipment"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g6_enchant_ui_rendering",
+          "name": "Dedicated Enchantment Workspace UI",
+          "criticality": "VISUAL",
+          "trigger": "Open Enchant Tab",
+          "handler": "updateEnchantUI",
+          "service": "main.js / GameUI",
+          "statePaths": [
+            "state.inventory"
+          ],
+          "evidenceLevel": "L1",
+          "verified": true
+        }
+      ]
+    },
+    "G7": {
+      "id": "G7",
+      "name": "Monster Card Codex",
+      "ownerKey": "codex",
+      "domSelector": "#tab-codex",
+      "features": [
+        {
+          "featureId": "g7_codex_card_absorption_transaction",
+          "name": "Monster Card Drop Absorption into Codex",
+          "criticality": "CRITICAL",
+          "trigger": "Absorb Card Button",
+          "handler": "CardCodexService.absorbCardIntoCodex",
+          "service": "CardCodexService",
+          "statePaths": [
+            "state.codex",
+            "state.inventory"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g7_codex_rank_mastery_progression",
+          "name": "Card Mastery Rank Progression (Novice to Mythic)",
+          "criticality": "CRITICAL",
+          "trigger": "Absorb Cards / Rank Up",
+          "handler": "CardCodexService.getRankFromCount / getNextRankRequirement",
+          "service": "CardCodexService",
+          "statePaths": [
+            "state.codex[cardId].count",
+            "state.codex[cardId].rank"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g7_codex_rank_multiplier_scaling",
+          "name": "Rank Stat Multiplier Scaling (1.0x to 3.0x)",
+          "criticality": "CRITICAL",
+          "trigger": "Stats Calculation",
+          "handler": "CardCodexService.getRankMultiplier",
+          "service": "CardCodexService",
+          "statePaths": [
+            "state.codex"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g7_codex_passive_stat_accumulation",
+          "name": "Codex Passive Stat Accumulation (+Atk, +Def, +HP, +Crit, +Speed)",
+          "criticality": "CRITICAL",
+          "trigger": "StatsEngine.getStats (codexB)",
+          "handler": "CardCodexService.getCodexPassiveBonuses",
+          "service": "CardCodexService / StatsEngine",
+          "statePaths": [
+            "state.codex",
+            "state.stats"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g7_codex_card_socketing_into_gear",
+          "name": "Card Socketing into Equipment Slots",
+          "criticality": "CRITICAL",
+          "trigger": "Socket Card to Item",
+          "handler": "CardCodexService.socketCardToItem",
+          "service": "CardCodexService",
+          "statePaths": [
+            "item.cardSocket",
+            "state.inventory"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g7_codex_persistence_and_reborn_preservation",
+          "name": "Codex Save/Load & Reborn Prestige Preservation",
+          "criticality": "CRITICAL",
+          "trigger": "Save / Load / Reborn Reset",
+          "handler": "managerSaveState / managerLoadState",
+          "service": "StateManager",
+          "statePaths": [
+            "state.codex"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "g7_codex_ui_rendering",
+          "name": "Monster Card Codex Album UI",
+          "criticality": "VISUAL",
+          "trigger": "Open Codex Tab",
+          "handler": "updateCodexUI",
+          "service": "main.js / GameUI",
+          "statePaths": [
+            "state.codex"
+          ],
+          "evidenceLevel": "L1",
+          "verified": true
+        }
+      ]
+    }
+  },
+  "globalIntegrationPaths": [
+    {
+      "id": "int_clan_castle_siege_taxes_treasury",
+      "sourceSubtab": "G1",
+      "name": "Clan Level Upgrade -> Castle Siege Victory -> Lord Tax Accumulation -> Treasury Claim",
+      "verified": true
+    },
+    {
+      "id": "int_noblesse_olympiad_hero_weapon_aura",
+      "sourceSubtab": "G2",
+      "name": "Subclass Lv.75 -> Noblesse Quest -> Olympiad Registration -> Points Win -> Hero Status & Aura",
+      "verified": true
+    },
+    {
+      "id": "int_rankings_profile_cloud_daily_tribute",
+      "sourceSubtab": "G3",
+      "name": "Player CP & Stats -> Public Profile Snapshot -> Firestore Sync -> Daily Tribute 24h Claim",
+      "verified": true
+    },
+    {
+      "id": "int_sevensigns_deposit_ancient_adena_mammon",
+      "sourceSubtab": "G4",
+      "name": "Necropolis Seal Stones -> Faction Deposit -> Ancient Adena -> Blacksmith A-Grade Unseal",
+      "verified": true
+    },
+    {
+      "id": "int_fortress_siege_production_talismans",
+      "sourceSubtab": "G5",
+      "name": "Fortress Siege -> Commander Kill -> Epaulettes Tick -> Buy Bracelet -> Equip Talismans -> StatsEngine",
+      "verified": true
+    },
+    {
+      "id": "int_enchant_safe_failure_crystals_glow",
+      "sourceSubtab": "G6",
+      "name": "Scroll Inventory -> Enchant Item -> Safe Limit (+3/+4) -> +4/+10/+16 Glow VFX -> Crystallization on Break",
+      "verified": true
+    },
+    {
+      "id": "int_codex_absorption_ranks_stats_engine",
+      "sourceSubtab": "G7",
+      "name": "Monster Drop Cards -> Codex Absorption -> Mythic Rank -> Passive Stats -> StatsEngine CP",
+      "verified": true
+    },
+    {
+      "id": "int_glory_save_load_deep_roundtrip",
+      "sourceSubtab": "G1",
+      "name": "All Glory Subtabs State -> JSON Deep Serialization -> Complete Roundtrip Restoration",
+      "verified": true
+    }
+  ]
+}

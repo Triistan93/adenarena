@@ -316,7 +316,7 @@ export const IDLE_MARKUP = `
           </div>
 
           <!-- Pillar 1 Subtabs: Combate -->
-          <div class="pillar-subtabs-strip" id="pillar-strip-combat">
+          <div class="pillar-subtabs-strip active" id="pillar-strip-combat">
             <button class="tab-btn active subtab-pill-btn" data-tab="zones">⚔ Caça &amp; Zonas</button>
             <button class="tab-btn subtab-pill-btn" data-tab="raids">🐉 Raids &amp; Bosses</button>
             <button class="tab-btn subtab-pill-btn" data-tab="tower">🏰 Torre da Insolência</button>
@@ -325,7 +325,7 @@ export const IDLE_MARKUP = `
           </div>
 
           <!-- Pillar 2 Subtabs: Herói -->
-          <div class="pillar-subtabs-strip" id="pillar-strip-character" style="display:none;">
+          <div class="pillar-subtabs-strip collapsed" id="pillar-strip-character" style="display:none;">
             <button class="tab-btn subtab-pill-btn" data-tab="character">🛡 Personagem</button>
             <button class="tab-btn subtab-pill-btn" data-tab="inventory">🎒 Mochila <span id="tab-badge-inventory" class="tab-badge" style="display:none">!</span></button>
             <button class="tab-btn subtab-pill-btn" data-tab="skills">✦ Habilidades <span id="tab-badge-skills" class="tab-badge" style="display:none">!</span></button>
@@ -336,7 +336,7 @@ export const IDLE_MARKUP = `
           </div>
 
           <!-- Pillar 3 Subtabs: Império & Economia -->
-          <div class="pillar-subtabs-strip" id="pillar-strip-economy" style="display:none;">
+          <div class="pillar-subtabs-strip collapsed" id="pillar-strip-economy" style="display:none;">
             <button class="tab-btn subtab-pill-btn" data-tab="market" style="border-color:#ffd700; color:#fde047; font-weight:bold;">🏛 Mercado Giran (P2P)</button>
             <button class="tab-btn subtab-pill-btn" data-tab="shop">⚜ Mercador</button>
             <button class="tab-btn subtab-pill-btn" data-tab="craft">⚒ Forja Imperial <span id="tab-badge-craft" class="tab-badge" style="display:none">!</span></button>
@@ -346,7 +346,7 @@ export const IDLE_MARKUP = `
           </div>
 
           <!-- Pillar 4 Subtabs: Glória & Sociedade -->
-          <div class="pillar-subtabs-strip" id="pillar-strip-glory" style="display:none;">
+          <div class="pillar-subtabs-strip collapsed" id="pillar-strip-glory" style="display:none;">
             <button class="tab-btn subtab-pill-btn" data-tab="clan">🛡 Clã &amp; Castelos</button>
             <button class="tab-btn subtab-pill-btn" data-tab="olympiad">🏆 Olimpíadas</button>
             <button class="tab-btn subtab-pill-btn" data-tab="rankings">🏆 Rankings Mundiais</button>

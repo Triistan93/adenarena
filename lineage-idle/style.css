@@ -1023,7 +1023,7 @@ select:focus-visible {
 }
 
 .pillar-subtabs-strip {
-  display: flex !important;
+  display: none;
   gap: 4px !important;
   overflow-x: auto !important;
   overflow-y: hidden !important;
@@ -1040,7 +1040,13 @@ select:focus-visible {
   box-sizing: border-box !important;
 }
 
-.pillar-subtabs-strip.collapsed {
+.pillar-subtabs-strip.active {
+  display: flex !important;
+}
+
+.pillar-subtabs-strip.collapsed,
+.pillar-subtabs-strip[style*="display: none"],
+.pillar-subtabs-strip[style*="display:none"] {
   display: none !important;
 }
 

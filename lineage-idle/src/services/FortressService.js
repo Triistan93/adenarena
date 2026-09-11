@@ -242,6 +242,12 @@ export class FortressService {
       }
     }
 
-    return res;
+    return {
+      ...res,
+      pAtk: res.pAtkMult,
+      mAtk: res.mAtkMult,
+      pDef: res.pDefMult,
+      mDef: res.mDefMult
+    };
   }
 }

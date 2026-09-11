@@ -64,6 +64,49 @@ export const DEFAULT_STATE = () => ({
   craftFoundationPity: 0, warehouse: [], maxWarehouseSlots: 100,
   essences: { fire: 0, earth: 0, wind: 0, astral: 0 }, activeElixirs: {},
   prestigeLevel: 0, astralShards: 0, astralMastery: {},
+  clan: {
+    name: 'Os Guardiões de Aden',
+    level: 1,
+    reputation: 0,
+    castles: [],
+    lastTaxTimestamp: 0,
+    accumulatedTaxes: {}
+  },
+  olympiad: {
+    points: 1000,
+    wins: 0,
+    losses: 0,
+    tokens: 0,
+    matchesToday: 0,
+    isHero: false,
+    heroTitle: null,
+    heroWeapon: null
+  },
+  noblesse: {
+    isNoblesse: false,
+    step: 0,
+    tiaraClaimed: false,
+    bossKills: {}
+  },
+  sevenSigns: {
+    faction: null,
+    playerScore: 0,
+    dawnScore: 250000,
+    duskScore: 240000,
+    ancientAdena: 0,
+    stonesDeposited: { seal_stone_blue: 0, seal_stone_green: 0, seal_stone_red: 0 },
+    activeBossFight: null,
+    bossDefeats: { lilith: 0, anakim: 0 }
+  },
+  fortresses: {
+    owned: [],
+    epaulettes: 0,
+    lastCollectionTime: 0,
+    equippedBracelet: 'bracelet_steel',
+    equippedTalismans: ['talisman_power'],
+    activeSiege: null
+  },
+  lastRankingRewardClaim: 0,
   expeditions: [], castles: {}, manorSeeds: {}, manorCrops: {},
   soulCrystals: {}, weaponSockets: {}, tattoos: [],
   fateWhisperQuest: false, masterAbilities: [], activeTransformation: null,

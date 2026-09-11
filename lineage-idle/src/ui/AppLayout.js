@@ -77,11 +77,13 @@ const PILLAR_MAP = {
   skills: 'character',
   astral: 'character',
   dolls: 'character',
+  cosmetics: 'character',
   quests: 'character',
   
   market: 'economy',
   shop: 'economy',
   craft: 'economy',
+  forge: 'economy',
   alchemy: 'economy',
   warehouse: 'economy',
   magiclamp: 'economy',
@@ -135,7 +137,10 @@ export function showMenuPanel(panelId) {
 
   const strips = root.querySelectorAll('.pillar-subtabs-strip');
   strips.forEach(strip => {
-    strip.style.display = strip.id === `pillar-strip-${pillar}` ? 'flex' : 'none';
+    const isTarget = strip.id === `pillar-strip-${pillar}`;
+    strip.style.display = isTarget ? 'flex' : 'none';
+    strip.classList.toggle('active', isTarget);
+    strip.classList.toggle('collapsed', !isTarget);
   });
 }
 
@@ -203,22 +208,8 @@ export function updateTabVisibilityByLevel(state) {
 if (typeof window !== 'undefined') {
   window.switchPillar = function(pillarName) {
     const root = getShadowRoot();
-    const activePillarBtn = root.querySelector(`.pillar-tab-btn[data-pillar="${pillarName}"]`);
-    const isCurrentlyActive = activePillarBtn && activePillarBtn.classList.contains('active');
-    const strip = root.getElementById(`pillar-strip-${pillarName}`);
-    const isStripVisible = strip && strip.style.display !== 'none' && !strip.classList.contains('collapsed');
 
-    // Se já está aberto e clicou novamente no mesmo pilar, fecha/recolhe o menu de sub-opções!
-    if (isCurrentlyActive && isStripVisible) {
-      if (strip) {
-        strip.style.display = 'none';
-        strip.classList.add('collapsed');
-      }
-      if (activePillarBtn) activePillarBtn.classList.remove('active');
-      return;
-    }
-
-    // Caso contrário, ativa o pilar e expande suas sub-opções
+    // Ativa o pilar e expande estritamente suas sub-opções
     const pillarBtns = root.querySelectorAll('.pillar-tab-btn');
     pillarBtns.forEach(btn => {
       btn.classList.toggle('active', btn.dataset?.pillar === pillarName);
@@ -228,13 +219,21 @@ if (typeof window !== 'undefined') {
     strips.forEach(s => {
       const isTarget = s.id === `pillar-strip-${pillarName}`;
       s.style.display = isTarget ? 'flex' : 'none';
+      s.classList.toggle('active', isTarget);
       s.classList.toggle('collapsed', !isTarget);
     });
 
     const targetStrip = root.getElementById(`pillar-strip-${pillarName}`);
     if (targetStrip) {
       const activeTab = targetStrip.querySelector('.tab-btn.active') || targetStrip.querySelector('.tab-btn');
-      if (activeTab) activeTab.click();
+      if (activeTab) {
+        const tabId = activeTab.dataset?.tab;
+        if (tabId && typeof window.openPanel === 'function') {
+          window.openPanel(tabId);
+        } else {
+          activeTab.click();
+        }
+      }
     }
   };
 }

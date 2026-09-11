@@ -211,7 +211,7 @@ export function getEquipBonus(state, slot) {
   const inv = state.inventory?.find(i => i.uid === itemId);
   if (!inv) return null;
   const gData = D();
-  const def = gData?.ALL_ITEMS?.[inv.itemId] || (typeof window !== 'undefined' && window.ALL_ITEMS?.[inv.itemId]);
+  const def = gData?.ALL_ITEMS?.[inv.itemId] || (typeof window !== 'undefined' && window.ALL_ITEMS?.[inv.itemId]) || inv;
   if (!def) return null;
 
   const rarityMult = inv.rarity ? (gData?.RARITY?.[inv.rarity]?.mult || 1) : 1;
@@ -222,6 +222,11 @@ export function getEquipBonus(state, slot) {
   const foundationMult = inv.foundation ? 1.3 : 1;
 
   let out = { ...def };
+  if (out.pAtk && !out.atk) out.atk = out.pAtk;
+  if (out.pDef && !out.def) out.def = out.pDef;
+  if (out.mAtk && !out.matk) out.matk = out.mAtk;
+  if (out.mDef && !out.mdef) out.mdef = out.mDef;
+
   if (def.isHeirloom || inv.isHeirloom) {
     const scaled = getHeirloomScaledStats(def, state.level || 1);
     out = { ...out, ...scaled };

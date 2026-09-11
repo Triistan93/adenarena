@@ -7426,18 +7426,29 @@ export const TAB_NAMES_MAP = {
 };
 
 export function switchPillar(pillarKey) {
+  const root = document.getElementById('idle-host')?.shadowRoot || document;
   const pillars = ['combat', 'character', 'economy', 'glory'];
   pillars.forEach(p => {
-    const strip = el(`pillar-strip-${p}`);
-    if (strip) strip.style.display = (p === pillarKey) ? 'flex' : 'none';
+    const strip = root.getElementById ? root.getElementById(`pillar-strip-${p}`) : el(`pillar-strip-${p}`);
+    if (strip) {
+      const isTarget = (p === pillarKey);
+      strip.style.display = isTarget ? 'flex' : 'none';
+      strip.classList.toggle('active', isTarget);
+      strip.classList.toggle('collapsed', !isTarget);
+    }
   });
-  qsa('.pillar-tab-btn').forEach(btn => {
+  const pillarBtns = root.querySelectorAll ? root.querySelectorAll('.pillar-tab-btn') : qsa('.pillar-tab-btn');
+  pillarBtns.forEach(btn => {
     btn.classList.toggle('active', btn.dataset.pillar === pillarKey);
   });
-  const currentStrip = el(`pillar-strip-${pillarKey}`);
+  const currentStrip = root.getElementById ? root.getElementById(`pillar-strip-${pillarKey}`) : el(`pillar-strip-${pillarKey}`);
   if (currentStrip) {
     const activeBtn = currentStrip.querySelector('.tab-btn.active');
-    if (!activeBtn) {
+    if (activeBtn) {
+      const tabId = activeBtn.dataset?.tab;
+      if (tabId) openPanel(tabId);
+      else activeBtn.click();
+    } else {
       const firstTabBtn = currentStrip.querySelector('.tab-btn');
       if (firstTabBtn) firstTabBtn.click();
     }
@@ -7451,15 +7462,23 @@ export function openPanel(tabName) {
   state = getState();
   const targetTab = (!tabName || tabName === 'zones' || tabName === 'combat' || tabName === 'close') ? 'zones' : tabName;
 
+  const root = document.getElementById('idle-host')?.shadowRoot || document;
+
   // Auto-switch to corresponding pillar dock strip
-  const targetPillar = TAB_TO_PILLAR[targetTab];
+  const targetPillar = TAB_TO_PILLAR[targetTab] || PILLAR_MAP[targetTab];
   if (targetPillar) {
     const pillars = ['combat', 'character', 'economy', 'glory'];
     pillars.forEach(p => {
-      const strip = el(`pillar-strip-${p}`);
-      if (strip) strip.style.display = (p === targetPillar) ? 'flex' : 'none';
+      const strip = root.getElementById ? root.getElementById(`pillar-strip-${p}`) : el(`pillar-strip-${p}`);
+      if (strip) {
+        const isTarget = (p === targetPillar);
+        strip.style.display = isTarget ? 'flex' : 'none';
+        strip.classList.toggle('active', isTarget);
+        strip.classList.toggle('collapsed', !isTarget);
+      }
     });
-    qsa('.pillar-tab-btn').forEach(btn => {
+    const pillarBtns = root.querySelectorAll ? root.querySelectorAll('.pillar-tab-btn') : qsa('.pillar-tab-btn');
+    pillarBtns.forEach(btn => {
       btn.classList.toggle('active', btn.dataset.pillar === targetPillar);
     });
   }
@@ -7470,7 +7489,6 @@ export function openPanel(tabName) {
     b.textContent = tabTitle;
   });
 
-  const root = document.getElementById('idle-host')?.shadowRoot || document;
   const game = root.getElementById ? root.getElementById('game') : root.querySelector?.('#game');
   if (game && (game.classList.contains('device-mobile') || window.innerWidth <= 768)) {
     game.dataset.mobileView = targetTab;

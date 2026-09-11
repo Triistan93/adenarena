@@ -48,7 +48,7 @@ export const RankingService = {
     }
 
     return {
-      charName: state.name || state.charName || 'Hero of Aden',
+      charName: state.heroName || state.name || state.charName || 'Hero of Aden',
       race: state.race || 'Human',
       className: state.className || state.class || 'Warrior',
       level: Number(state.level) || 1,
@@ -60,9 +60,9 @@ export const RankingService = {
       duelWins: Number(state.colosseum?.duelWins) || 0,
       duelLosses: Number(state.colosseum?.duelLosses) || 0,
       clanName: state.clan?.name || 'Sem Clã',
-      castleLord: state.clan?.castle || null,
-      isHero: Boolean(state.olympiad?.isHero),
-      heroWeapon: state.olympiad?.heroWeapon || null,
+      castleLord: state.clan?.castle || (state.clan?.castles && state.clan.castles[0]) || null,
+      isHero: Boolean(state.isHero || state.olympiad?.isHero),
+      heroWeapon: state.olympiad?.heroWeapon || state.heroWeapon || null,
       isVerified: (Number(state.level) || 1) >= 20,
       topWeaponName,
       topWeaponEnchant,
@@ -99,6 +99,33 @@ export const RankingService = {
     } catch (err) {
       console.warn('Sync Profile Notice:', err);
     }
+  },
+
+  /**
+   * Obtém os quadros de líderes compilados mesclando dados da nuvem com o jogador atual
+   * @param {Object} state - Estado atual para posicionamento relativo
+   * @returns {Object} Dicionário de leaderboards por categoria
+   */
+  getLeaderboards(state) {
+    const cpList = _cachedRankings.cp?.length ? _cachedRankings.cp : this._generateFallbackLeaderboard('cp', state);
+    const olyList = _cachedRankings.olympiad?.length ? _cachedRankings.olympiad : this._generateFallbackLeaderboard('olympiad', state);
+    const duelList = _cachedRankings.duels?.length ? _cachedRankings.duels : this._generateFallbackLeaderboard('duels', state);
+    const wealthList = this._generateFallbackLeaderboard('wealth', state);
+    const clansList = this._generateFallbackLeaderboard('clans', state);
+
+    return {
+      cp: this._mergeCurrentPlayer(cpList, state, 'cp'),
+      level: this._mergeCurrentPlayer(cpList.slice(), state, 'level'),
+      olympiad: this._mergeCurrentPlayer(olyList, state, 'olympiad'),
+      duels: this._mergeCurrentPlayer(duelList, state, 'duels'),
+      wealth: this._mergeCurrentPlayer(wealthList, state, 'wealth'),
+      clans: this._mergeCurrentPlayer(clansList, state, 'clans'),
+      castles: (_cachedRankings.castles && _cachedRankings.castles.length > 0) ? _cachedRankings.castles : [
+        { castle: 'Castelo de Aden', lord: 'LordValen', clan: 'BloodThorn', tax: '15%' },
+        { castle: 'Castelo de Giran', lord: 'SirAres', clan: 'GloryKnights', tax: '10%' },
+        { castle: 'Castelo de Dion', lord: 'LadyElena', clan: 'SilverDawn', tax: '5%' }
+      ]
+    };
   },
 
   /**
@@ -164,33 +191,6 @@ export const RankingService = {
 
     onUpdate();
     return { success: true, rank, coins, adena, scrolls };
-  },
-
-  /**
-   * Obtém os quadros de líderes síncronos para renderização imediata na UI
-   * @param {Object} [state] - Estado atual do jogador
-   * @returns {Object} Quadros de líderes
-   */
-  getLeaderboards(state = null) {
-    const cpList = (_cachedRankings.cp && _cachedRankings.cp.length > 0) ? _cachedRankings.cp : this._generateFallbackLeaderboard('cp', state);
-    const olyList = (_cachedRankings.olympiad && _cachedRankings.olympiad.length > 0) ? _cachedRankings.olympiad : this._generateFallbackLeaderboard('olympiad', state);
-    const duelList = (_cachedRankings.duels && _cachedRankings.duels.length > 0) ? _cachedRankings.duels : this._generateFallbackLeaderboard('duels', state);
-    const wealthList = (_cachedRankings.wealth && _cachedRankings.wealth.length > 0) ? _cachedRankings.wealth : this._generateFallbackLeaderboard('wealth', state);
-    const clansList = (_cachedRankings.clans && _cachedRankings.clans.length > 0) ? _cachedRankings.clans : this._generateFallbackLeaderboard('clans', state);
-
-    return {
-      cp: this._mergeCurrentPlayer(cpList, state, 'cp'),
-      level: this._mergeCurrentPlayer(cpList.slice(), state, 'level'),
-      olympiad: this._mergeCurrentPlayer(olyList, state, 'olympiad'),
-      duels: this._mergeCurrentPlayer(duelList, state, 'duels'),
-      wealth: this._mergeCurrentPlayer(wealthList, state, 'wealth'),
-      clans: this._mergeCurrentPlayer(clansList, state, 'clans'),
-      castles: _cachedRankings.castles || [
-        { castle: 'Castelo de Aden', lord: 'LordValen', clan: 'BloodThorn', tax: '15%' },
-        { castle: 'Castelo de Giran', lord: 'SirAres', clan: 'GloryKnights', tax: '10%' },
-        { castle: 'Castelo de Dion', lord: 'LadyElena', clan: 'SilverDawn', tax: '5%' }
-      ]
-    };
   },
 
   _generateFallbackLeaderboard(category, state) {
