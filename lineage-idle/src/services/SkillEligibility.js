@@ -205,6 +205,13 @@ export function resolveSkillDef(skillOrId) {
   const nativeDef = ALL_NATIVE_SKILLS.find(s => s.id === sId);
   if (nativeDef) return nativeDef;
 
+  if (SHARED_MAGE_SKILL_IDS.includes(sId)) {
+    return { id: sId, name: sId, type: 'magic', reqLvl: 1, availableTo: ['mage', 'wizard', 'cleric', 'oracle', 'shaman'] };
+  }
+  if (SHARED_FIGHTER_SKILL_IDS.includes(sId)) {
+    return { id: sId, name: sId, type: 'physical', reqLvl: 1, availableTo: ['fighter', 'warrior', 'knight', 'rogue'] };
+  }
+
   return null;
 }
 

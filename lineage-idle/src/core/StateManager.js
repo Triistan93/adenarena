@@ -24,10 +24,23 @@ export const DEFAULT_STATE = () => ({
   tower: { highestFloor: 0, currentFloor: 1, lastSweepTime: 0 },
   zone: 'talkingIsland', currentSaga: 0, gold: 2000, inventory: [],
   equipment: {
-    weapon: null, weapon2: null, shield: null, helmet: null, armor: null, gloves: null, boots: null,
-    hair: null, hair2: null, necklace: null, earring1: null, earring2: null, ring: null, ring2: null,
-    belt: null, cloak: null, talisman: null, agathion: null
+    weapon: null, weapon2: null, shield: null,
+    helmet: null, armor: null, gloves: null, legs: null, boots: null,
+    cloak: null, belt: null, necklace: null,
+    earring1: null, earring2: null, ring1: null, ring2: null,
+    hair1: null, hair2: null,
+    brooch: null, agathion_bracelet: null, talisman_bracelet: null
   },
+  cosmetics: {
+    unlockedAuras: ['aura_none'],
+    activeAura: 'aura_none',
+    unlockedFrames: ['frame_default'],
+    activeFrame: 'frame_default',
+    unlockedTitles: ['title_none'],
+    activeTitle: 'title_none'
+  },
+  achievements: { claimed: [] },
+  petData: { activePetId: null, pets: {}, lastFeedTime: 0 },
   codex: {}, dolls: [], synthSelected: [null, null],
   magicLampExp: 0, magicLamps: 0, craftPoints: 0, craftCharges: 0, randomCraftWheel: [],
   subclasses: [], activeSubclassIndex: null, certifications: {}, mainClassData: null,

@@ -249,7 +249,7 @@ export function getEquipBonus(state, slot) {
  * @returns {Object}
  */
 export function getTotalEquipBonuses(state) {
-  const totals = { atk: 0, def: 0, matk: 0, mdef: 0, hp: 0, mp: 0, eva: 0, crit: 0, speed: 0, lifesteal: 0, xpBoost: 0, goldBoost: 0, adenaBoost: 0 };
+  const totals = { atk: 0, def: 0, matk: 0, mdef: 0, hp: 0, mp: 0, eva: 0, crit: 0, speed: 0, lifesteal: 0, xpBoost: 0, goldBoost: 0, adenaBoost: 0, str: 0, dex: 0, con: 0, int: 0, wit: 0, men: 0 };
   if (!state.equipment) return totals;
   for (const slot of Object.keys(state.equipment)) {
     const b = getEquipBonus(state, slot);
@@ -822,13 +822,6 @@ export function getStats(state) {
   const tatWit = netDyes.wit || 0;
   const tatMen = netDyes.men || 0;
 
-  if (tatStr > 0) buffAtkMult += tatStr * 0.015;
-  if (tatDex > 0) { buffSpd += tatDex * 1.5; baseEva += tatDex; }
-  if (tatCon > 0) elixirHpMult += tatCon * 0.03;
-  if (tatInt > 0) buffMatk += Math.floor(baseMatk * tatInt * 0.02);
-  if (tatWit > 0) buffMatk += Math.floor(baseMatk * tatWit * 0.025);
-  if (tatMen > 0) buffMdef += Math.floor(baseMdef * tatMen * 0.02);
-
   // Calculate consolidated primary attributes (Base Race + Tattoos/Dyes + Equipment + Set Bonuses)
   const baseAttrs = getBaseAttributes(state.race, state.class);
   const primaryStats = {
@@ -844,9 +837,9 @@ export function getStats(state) {
   // Process Set Enchantment Bonuses (+4 to +10)
   let minSetEnchant = 999;
   let setPiecesCount = 0;
-  const armorSlots = ['head', 'chest', 'legs', 'gloves', 'boots'];
+  const armorSlots = ['helmet', 'armor', 'legs', 'gloves', 'boots'];
   for (const s of armorSlots) {
-    const uid = state.equipment?.[s];
+    const uid = state.equipment?.[s] || (s === 'helmet' ? state.equipment?.head : (s === 'armor' ? state.equipment?.chest : null));
     if (uid) {
       const it = state.inventory?.find(i => i.uid === uid);
       if (it) {

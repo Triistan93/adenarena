@@ -44,10 +44,14 @@ export function migrateEquipmentSlots(state) {
   if (state.equipment.ring && !state.equipment.ring1) state.equipment.ring1 = state.equipment.ring;
   if (state.equipment.hair && !state.equipment.hair1) state.equipment.hair1 = state.equipment.hair;
   if (state.equipment.cape && !state.equipment.cloak) state.equipment.cloak = state.equipment.cape;
+  if (state.equipment.talisman && !state.equipment.talisman_bracelet) state.equipment.talisman_bracelet = state.equipment.talisman;
+  if (state.equipment.agathion && !state.equipment.agathion_bracelet) state.equipment.agathion_bracelet = state.equipment.agathion;
   delete state.equipment.earring;
   delete state.equipment.ring;
   delete state.equipment.hair;
   delete state.equipment.cape;
+  delete state.equipment.talisman;
+  delete state.equipment.agathion;
 }
 
 export function equipItem(state, uid, targetSlotOrCallbacks = null, maybeCallbacks = {}) {

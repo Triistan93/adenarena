@@ -1,0 +1,1994 @@
+{
+  "meta": {
+    "title": "HERO PILLAR METROLOGICAL FEATURE CATALOG",
+    "version": "4.0.0-phase4-metrology",
+    "generatedAt": "2026-09-11T01:38:44.661Z"
+  },
+  "subtabs": {
+    "S1": {
+      "id": "S1",
+      "name": "Character",
+      "ownerKey": "character",
+      "domSelector": "#tab-character",
+      "features": [
+        {
+          "featureId": "s1_char_name_race_class",
+          "name": "Identity Header (Name, Race, Class, Tier)",
+          "criticality": "CRITICAL",
+          "trigger": "State Load / Class Transfer",
+          "handler": "renderCharacterProfile",
+          "service": "StatsEngine",
+          "statePaths": [
+            "state.heroName",
+            "state.race",
+            "state.class",
+            "state.level"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s1_char_portrait_render",
+          "name": "Dynamic Character Portrait",
+          "criticality": "VISUAL",
+          "trigger": "Profile Update",
+          "handler": "updatePortrait",
+          "service": "GameUI",
+          "statePaths": [
+            "state.race",
+            "state.class",
+            "state.gender"
+          ],
+          "evidenceLevel": "L1",
+          "verified": true
+        },
+        {
+          "featureId": "s1_char_vitals_hp",
+          "name": "HP Vitals Gauge & Limits",
+          "criticality": "CRITICAL",
+          "trigger": "Damage / Heal / Stats Recalc",
+          "handler": "updateVitalsUI",
+          "service": "StatsEngine / CombatEngine",
+          "statePaths": [
+            "state.hp",
+            "state.maxHp"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s1_char_vitals_mp",
+          "name": "MP Vitals Gauge & Limits",
+          "criticality": "CRITICAL",
+          "trigger": "Skill Cast / Regen",
+          "handler": "updateVitalsUI",
+          "service": "StatsEngine / CombatEngine",
+          "statePaths": [
+            "state.mp",
+            "state.maxMp"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s1_char_vitals_cp",
+          "name": "CP Combat Points Gauge",
+          "criticality": "CRITICAL",
+          "trigger": "Damage Absorption / CP Regen",
+          "handler": "updateVitalsUI",
+          "service": "StatsEngine / CombatEngine",
+          "statePaths": [
+            "state.cp",
+            "state.maxCp"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s1_char_primary_str",
+          "name": "STR Stat & P.Atk Scaling (+0.5%/pt)",
+          "criticality": "CRITICAL",
+          "trigger": "Gear / Dye / Subclass Change",
+          "handler": "applyPrimaryStats",
+          "service": "StatsEngine",
+          "statePaths": [
+            "state.primaryStats.str"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s1_char_primary_dex",
+          "name": "DEX Stat & Crit/Eva/Spd Scaling",
+          "criticality": "CRITICAL",
+          "trigger": "Gear / Dye / Subclass Change",
+          "handler": "applyPrimaryStats",
+          "service": "StatsEngine",
+          "statePaths": [
+            "state.primaryStats.dex"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s1_char_primary_con",
+          "name": "CON Stat & MaxHP Scaling (+1.0%/pt)",
+          "criticality": "CRITICAL",
+          "trigger": "Gear / Dye / Subclass Change",
+          "handler": "applyPrimaryStats",
+          "service": "StatsEngine",
+          "statePaths": [
+            "state.primaryStats.con"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s1_char_primary_int",
+          "name": "INT Stat & M.Atk Scaling (+0.5%/pt)",
+          "criticality": "CRITICAL",
+          "trigger": "Gear / Dye / Subclass Change",
+          "handler": "applyPrimaryStats",
+          "service": "StatsEngine",
+          "statePaths": [
+            "state.primaryStats.int"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s1_char_primary_wit",
+          "name": "WIT Stat & MaxMP Scaling (+0.3%/pt)",
+          "criticality": "CRITICAL",
+          "trigger": "Gear / Dye / Subclass Change",
+          "handler": "applyPrimaryStats",
+          "service": "StatsEngine",
+          "statePaths": [
+            "state.primaryStats.wit"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s1_char_primary_men",
+          "name": "MEN Stat & M.Def (+0.5%) / MaxMP (+0.2%)",
+          "criticality": "CRITICAL",
+          "trigger": "Gear / Dye / Subclass Change",
+          "handler": "applyPrimaryStats",
+          "service": "StatsEngine",
+          "statePaths": [
+            "state.primaryStats.men"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s1_char_patk_calc",
+          "name": "P.Atk Unified Consolidation",
+          "criticality": "CRITICAL",
+          "trigger": "Stat Recalculation",
+          "handler": "getStats",
+          "service": "StatsEngine",
+          "statePaths": [
+            "state.stats.atk"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s1_char_matk_calc",
+          "name": "M.Atk Unified Consolidation",
+          "criticality": "CRITICAL",
+          "trigger": "Stat Recalculation",
+          "handler": "getStats",
+          "service": "StatsEngine",
+          "statePaths": [
+            "state.stats.matk"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s1_char_pdef_calc",
+          "name": "P.Def Unified Consolidation",
+          "criticality": "CRITICAL",
+          "trigger": "Stat Recalculation",
+          "handler": "getStats",
+          "service": "StatsEngine",
+          "statePaths": [
+            "state.stats.def"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s1_char_mdef_calc",
+          "name": "M.Def Unified Consolidation",
+          "criticality": "CRITICAL",
+          "trigger": "Stat Recalculation",
+          "handler": "getStats",
+          "service": "StatsEngine",
+          "statePaths": [
+            "state.stats.mdef"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s1_char_crit_rate_cap",
+          "name": "Critical Rate 500 Soft-Cap & Overflow",
+          "criticality": "CRITICAL",
+          "trigger": "Stat Recalculation",
+          "handler": "getStats",
+          "service": "StatsEngine",
+          "statePaths": [
+            "state.stats.crit",
+            "state.stats.critDmg"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s1_char_atk_spd_diminishing",
+          "name": "Attack Speed 2.0x Diminishing Returns",
+          "criticality": "CRITICAL",
+          "trigger": "Stat Recalculation",
+          "handler": "getStats",
+          "service": "StatsEngine",
+          "statePaths": [
+            "state.stats.atkSpd"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s1_char_evasion_cap",
+          "name": "Evasion 80% Hard Cap",
+          "criticality": "CRITICAL",
+          "trigger": "Stat Recalculation",
+          "handler": "getStats",
+          "service": "StatsEngine",
+          "statePaths": [
+            "state.stats.eva"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s1_char_life_drain",
+          "name": "Vampiric Life Drain Consolidation",
+          "criticality": "MAJOR",
+          "trigger": "Stat Recalculation",
+          "handler": "getStats",
+          "service": "StatsEngine",
+          "statePaths": [
+            "state.stats.lifeDrain"
+          ],
+          "evidenceLevel": "L4",
+          "verified": true
+        },
+        {
+          "featureId": "s1_char_regen_rates",
+          "name": "HP & MP Regeneration Rate",
+          "criticality": "MAJOR",
+          "trigger": "Stat Recalculation",
+          "handler": "getStats",
+          "service": "StatsEngine",
+          "statePaths": [
+            "state.stats.regenHp",
+            "state.stats.mpRegen"
+          ],
+          "evidenceLevel": "L4",
+          "verified": true
+        },
+        {
+          "featureId": "s1_char_cp_calculation",
+          "name": "Combat Power (CP) Canonical Sum",
+          "criticality": "CRITICAL",
+          "trigger": "Stat Update",
+          "handler": "calculateCombatPower",
+          "service": "CombatPowerService",
+          "statePaths": [
+            "state.stats.combatPower"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s1_char_subclass_creation",
+          "name": "Subclass Acquisition (Up to 3 at Lv75+)",
+          "criticality": "CRITICAL",
+          "trigger": "Player Choice",
+          "handler": "addSubclass",
+          "service": "SubclassCertificationService",
+          "statePaths": [
+            "state.subclasses"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s1_char_subclass_switch",
+          "name": "Subclass Switching & State Swap",
+          "criticality": "CRITICAL",
+          "trigger": "Player Choice",
+          "handler": "switchSubclass",
+          "service": "SubclassCertificationService",
+          "statePaths": [
+            "state.activeSubclassIndex"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s1_char_cert_lv65_emergent",
+          "name": "Lv65 Emergent Certification Milestone",
+          "criticality": "CRITICAL",
+          "trigger": "Milestone Reach",
+          "handler": "learnCertification",
+          "service": "SubclassCertificationService",
+          "statePaths": [
+            "state.subclassCertifications"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s1_char_cert_lv70_emergent",
+          "name": "Lv70 Emergent Certification Milestone",
+          "criticality": "CRITICAL",
+          "trigger": "Milestone Reach",
+          "handler": "learnCertification",
+          "service": "SubclassCertificationService",
+          "statePaths": [
+            "state.subclassCertifications"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s1_char_cert_lv75_master",
+          "name": "Lv75 Master Archetype Ability Milestone",
+          "criticality": "CRITICAL",
+          "trigger": "Milestone Reach",
+          "handler": "learnCertification",
+          "service": "SubclassCertificationService",
+          "statePaths": [
+            "state.subclassCertifications"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s1_char_cert_lv80_divine",
+          "name": "Lv80 Divine Transformation Milestone",
+          "criticality": "CRITICAL",
+          "trigger": "Milestone Reach",
+          "handler": "learnCertification",
+          "service": "SubclassCertificationService",
+          "statePaths": [
+            "state.subclassCertifications"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s1_char_cert_reset",
+          "name": "Subclass Certification Reset (1kk Adena)",
+          "criticality": "MAJOR",
+          "trigger": "Reset Action",
+          "handler": "resetSubclassCertifications",
+          "service": "SubclassCertificationService",
+          "statePaths": [
+            "state.subclassCertifications",
+            "state.gold"
+          ],
+          "evidenceLevel": "L4",
+          "verified": true
+        },
+        {
+          "featureId": "s1_char_dyes_symbol_maker",
+          "name": "Symbol Maker Henna Tattoo Drawing (Slots 1, 2, 3)",
+          "criticality": "CRITICAL",
+          "trigger": "Dye Draw",
+          "handler": "drawDye",
+          "service": "DyeService",
+          "statePaths": [
+            "state.tattoos",
+            "state.gold"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s1_char_dyes_net_cap",
+          "name": "Net +5 Stat Increase Cap Enforcement",
+          "criticality": "CRITICAL",
+          "trigger": "Dye Calculation",
+          "handler": "calculateNetDyeBonuses",
+          "service": "DyeService",
+          "statePaths": [
+            "state.tattoos"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        }
+      ]
+    },
+    "S2": {
+      "id": "S2",
+      "name": "Inventory",
+      "ownerKey": "inventory",
+      "domSelector": "#tab-inventory",
+      "features": [
+        {
+          "featureId": "s2_inv_paperdoll_weapon_main",
+          "name": "Paperdoll Slot: Weapon (Mainhand)",
+          "criticality": "CRITICAL",
+          "trigger": "Equip/Unequip",
+          "handler": "equipItem / unequipItem",
+          "service": "EquipmentService",
+          "statePaths": [
+            "state.equipment.weapon"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s2_inv_paperdoll_weapon_offhand",
+          "name": "Paperdoll Slot: Weapon2 (Offhand/Dual)",
+          "criticality": "CRITICAL",
+          "trigger": "Equip/Unequip",
+          "handler": "equipItem / unequipItem",
+          "service": "EquipmentService",
+          "statePaths": [
+            "state.equipment.weapon2"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s2_inv_paperdoll_shield",
+          "name": "Paperdoll Slot: Shield / Sigil",
+          "criticality": "CRITICAL",
+          "trigger": "Equip/Unequip",
+          "handler": "equipItem / unequipItem",
+          "service": "EquipmentService",
+          "statePaths": [
+            "state.equipment.shield"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s2_inv_paperdoll_helmet",
+          "name": "Paperdoll Slot: Helmet (Head)",
+          "criticality": "CRITICAL",
+          "trigger": "Equip/Unequip",
+          "handler": "equipItem / unequipItem",
+          "service": "EquipmentService",
+          "statePaths": [
+            "state.equipment.helmet"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s2_inv_paperdoll_armor",
+          "name": "Paperdoll Slot: Armor (Chest/Body)",
+          "criticality": "CRITICAL",
+          "trigger": "Equip/Unequip",
+          "handler": "equipItem / unequipItem",
+          "service": "EquipmentService",
+          "statePaths": [
+            "state.equipment.armor"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s2_inv_paperdoll_gloves",
+          "name": "Paperdoll Slot: Gloves (Hands)",
+          "criticality": "CRITICAL",
+          "trigger": "Equip/Unequip",
+          "handler": "equipItem / unequipItem",
+          "service": "EquipmentService",
+          "statePaths": [
+            "state.equipment.gloves"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s2_inv_paperdoll_legs",
+          "name": "Paperdoll Slot: Legs (Gaiters/Pants)",
+          "criticality": "CRITICAL",
+          "trigger": "Equip/Unequip",
+          "handler": "equipItem / unequipItem",
+          "service": "EquipmentService",
+          "statePaths": [
+            "state.equipment.legs"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s2_inv_paperdoll_boots",
+          "name": "Paperdoll Slot: Boots (Feet)",
+          "criticality": "CRITICAL",
+          "trigger": "Equip/Unequip",
+          "handler": "equipItem / unequipItem",
+          "service": "EquipmentService",
+          "statePaths": [
+            "state.equipment.boots"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s2_inv_paperdoll_cloak",
+          "name": "Paperdoll Slot: Cloak (Cape/Back)",
+          "criticality": "CRITICAL",
+          "trigger": "Equip/Unequip",
+          "handler": "equipItem / unequipItem",
+          "service": "EquipmentService",
+          "statePaths": [
+            "state.equipment.cloak"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s2_inv_paperdoll_belt",
+          "name": "Paperdoll Slot: Belt (Waist)",
+          "criticality": "CRITICAL",
+          "trigger": "Equip/Unequip",
+          "handler": "equipItem / unequipItem",
+          "service": "EquipmentService",
+          "statePaths": [
+            "state.equipment.belt"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s2_inv_paperdoll_necklace",
+          "name": "Paperdoll Slot: Necklace",
+          "criticality": "CRITICAL",
+          "trigger": "Equip/Unequip",
+          "handler": "equipItem / unequipItem",
+          "service": "EquipmentService",
+          "statePaths": [
+            "state.equipment.necklace"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s2_inv_paperdoll_earring1",
+          "name": "Paperdoll Slot: Earring 1",
+          "criticality": "CRITICAL",
+          "trigger": "Equip/Unequip",
+          "handler": "equipItem / unequipItem",
+          "service": "EquipmentService",
+          "statePaths": [
+            "state.equipment.earring1"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s2_inv_paperdoll_earring2",
+          "name": "Paperdoll Slot: Earring 2",
+          "criticality": "CRITICAL",
+          "trigger": "Equip/Unequip",
+          "handler": "equipItem / unequipItem",
+          "service": "EquipmentService",
+          "statePaths": [
+            "state.equipment.earring2"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s2_inv_paperdoll_ring1",
+          "name": "Paperdoll Slot: Ring 1",
+          "criticality": "CRITICAL",
+          "trigger": "Equip/Unequip",
+          "handler": "equipItem / unequipItem",
+          "service": "EquipmentService",
+          "statePaths": [
+            "state.equipment.ring1"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s2_inv_paperdoll_ring2",
+          "name": "Paperdoll Slot: Ring 2",
+          "criticality": "CRITICAL",
+          "trigger": "Equip/Unequip",
+          "handler": "equipItem / unequipItem",
+          "service": "EquipmentService",
+          "statePaths": [
+            "state.equipment.ring2"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s2_inv_paperdoll_hair1",
+          "name": "Paperdoll Slot: Hair 1 (Tiara/Hat)",
+          "criticality": "CRITICAL",
+          "trigger": "Equip/Unequip",
+          "handler": "equipItem / unequipItem",
+          "service": "EquipmentService",
+          "statePaths": [
+            "state.equipment.hair1"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s2_inv_paperdoll_hair2",
+          "name": "Paperdoll Slot: Hair 2 (Mask)",
+          "criticality": "CRITICAL",
+          "trigger": "Equip/Unequip",
+          "handler": "equipItem / unequipItem",
+          "service": "EquipmentService",
+          "statePaths": [
+            "state.equipment.hair2"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s2_inv_paperdoll_brooch",
+          "name": "Paperdoll Slot: Brooch Bracelet",
+          "criticality": "CRITICAL",
+          "trigger": "Equip/Unequip",
+          "handler": "equipItem / unequipItem",
+          "service": "EquipmentService",
+          "statePaths": [
+            "state.equipment.brooch"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s2_inv_paperdoll_agathion_bracelet",
+          "name": "Paperdoll Slot: Agathion Bracelet",
+          "criticality": "CRITICAL",
+          "trigger": "Equip/Unequip",
+          "handler": "equipItem / unequipItem",
+          "service": "EquipmentService",
+          "statePaths": [
+            "state.equipment.agathion_bracelet"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s2_inv_paperdoll_talisman_bracelet",
+          "name": "Paperdoll Slot: Talisman Bracelet",
+          "criticality": "CRITICAL",
+          "trigger": "Equip/Unequip",
+          "handler": "equipItem / unequipItem",
+          "service": "EquipmentService",
+          "statePaths": [
+            "state.equipment.talisman_bracelet"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s2_inv_subslots_jewels",
+          "name": "Brooch Sub-Slots: Jewel 1 to 6",
+          "criticality": "CRITICAL",
+          "trigger": "Modal Equip/Unequip",
+          "handler": "equipSubSlot",
+          "service": "EquipmentService",
+          "statePaths": [
+            "state.equipment.jewel1",
+            "state.equipment.jewel6"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s2_inv_subslots_agathions",
+          "name": "Agathion Sub-Slots: Agathion 1 to 6",
+          "criticality": "CRITICAL",
+          "trigger": "Modal Equip/Unequip",
+          "handler": "equipSubSlot",
+          "service": "EquipmentService",
+          "statePaths": [
+            "state.equipment.agathion1",
+            "state.equipment.agathion6"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s2_inv_subslots_talismans",
+          "name": "Talisman Sub-Slots: Talisman 1 to 6",
+          "criticality": "CRITICAL",
+          "trigger": "Modal Equip/Unequip",
+          "handler": "equipSubSlot",
+          "service": "EquipmentService",
+          "statePaths": [
+            "state.equipment.talisman1",
+            "state.equipment.talisman6"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s2_inv_equip_action",
+          "name": "Equip Item with Armor Type / Level Validation",
+          "criticality": "CRITICAL",
+          "trigger": "Item Click",
+          "handler": "equipItem",
+          "service": "EquipmentService",
+          "statePaths": [
+            "state.equipment",
+            "state.inventory"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s2_inv_unequip_action",
+          "name": "Unequip Item Return to Inventory",
+          "criticality": "CRITICAL",
+          "trigger": "Slot Click",
+          "handler": "unequipItem",
+          "service": "EquipmentService",
+          "statePaths": [
+            "state.equipment",
+            "state.inventory"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s2_inv_replace_action",
+          "name": "Atomic Item Replacement without Item Loss",
+          "criticality": "CRITICAL",
+          "trigger": "Equip On Occupied Slot",
+          "handler": "equipItem",
+          "service": "EquipmentService",
+          "statePaths": [
+            "state.equipment",
+            "state.inventory"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s2_inv_unequip_all",
+          "name": "Bulk Unequip All Gear Action",
+          "criticality": "MAJOR",
+          "trigger": "Button Click",
+          "handler": "unequipAll",
+          "service": "EquipmentService",
+          "statePaths": [
+            "state.equipment"
+          ],
+          "evidenceLevel": "L4",
+          "verified": true
+        },
+        {
+          "featureId": "s2_inv_dual_resonance",
+          "name": "Dual Weapon Resonance Detection & Orb",
+          "criticality": "MAJOR",
+          "trigger": "Weapon Change",
+          "handler": "checkResonance",
+          "service": "WeaponResonanceService",
+          "statePaths": [
+            "state.equipment.weapon",
+            "state.equipment.weapon2"
+          ],
+          "evidenceLevel": "L4",
+          "verified": true
+        },
+        {
+          "featureId": "s2_inv_filter_all",
+          "name": "Inventory Filter: All Items",
+          "criticality": "MINOR",
+          "trigger": "Tab Filter Click",
+          "handler": "filterInventory",
+          "service": "InventoryService",
+          "statePaths": [
+            "state.filter"
+          ],
+          "evidenceLevel": "L2",
+          "verified": true
+        },
+        {
+          "featureId": "s2_inv_filter_gear",
+          "name": "Inventory Filter: Gear / Weapons & Armors",
+          "criticality": "MINOR",
+          "trigger": "Tab Filter Click",
+          "handler": "filterInventory",
+          "service": "InventoryService",
+          "statePaths": [
+            "state.filter"
+          ],
+          "evidenceLevel": "L2",
+          "verified": true
+        },
+        {
+          "featureId": "s2_inv_filter_consumables",
+          "name": "Inventory Filter: Consumables & Potions",
+          "criticality": "MINOR",
+          "trigger": "Tab Filter Click",
+          "handler": "filterInventory",
+          "service": "InventoryService",
+          "statePaths": [
+            "state.filter"
+          ],
+          "evidenceLevel": "L2",
+          "verified": true
+        },
+        {
+          "featureId": "s2_inv_filter_materials",
+          "name": "Inventory Filter: Materials & Recipes",
+          "criticality": "MINOR",
+          "trigger": "Tab Filter Click",
+          "handler": "filterInventory",
+          "service": "InventoryService",
+          "statePaths": [
+            "state.filter"
+          ],
+          "evidenceLevel": "L2",
+          "verified": true
+        },
+        {
+          "featureId": "s2_inv_search_query",
+          "name": "Semantic Case-Insensitive Search",
+          "criticality": "MINOR",
+          "trigger": "Search Input",
+          "handler": "filterInventory",
+          "service": "InventoryService",
+          "statePaths": [
+            "state.searchQuery"
+          ],
+          "evidenceLevel": "L2",
+          "verified": true
+        },
+        {
+          "featureId": "s2_inv_auto_recycle_toggle",
+          "name": "Auto-Recycle Mode Toggle (Sell / Dismantle)",
+          "criticality": "CRITICAL",
+          "trigger": "Settings Toggle",
+          "handler": "toggleAutoRecycle",
+          "service": "InventoryService",
+          "statePaths": [
+            "state.autoRecycle.enabled",
+            "state.autoRecycle.mode"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s2_inv_auto_recycle_grade_guards",
+          "name": "Auto-Recycle Grade Permissions (NG..B / A..S Locked)",
+          "criticality": "CRITICAL",
+          "trigger": "Drop Event",
+          "handler": "isEligibleForAutoRecycle",
+          "service": "InventoryService",
+          "statePaths": [
+            "state.autoRecycle.grades"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s2_inv_auto_recycle_whitelist_guards",
+          "name": "Auto-Recycle Whitelist Guards (Heirloom, Enchanted, Locked)",
+          "criticality": "CRITICAL",
+          "trigger": "Drop Event",
+          "handler": "isEligibleForAutoRecycle",
+          "service": "InventoryService",
+          "statePaths": [
+            "state.inventory"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s2_inv_auto_sell_rarity",
+          "name": "Auto-Sell by Rarity Threshold",
+          "criticality": "MAJOR",
+          "trigger": "Drop Event",
+          "handler": "autoSellItem",
+          "service": "InventoryService",
+          "statePaths": [
+            "state.autoSellRarity"
+          ],
+          "evidenceLevel": "L4",
+          "verified": true
+        },
+        {
+          "featureId": "s2_inv_capacity_dwarf",
+          "name": "Dwarf Bonus Bag Capacity (250 Slots)",
+          "criticality": "MAJOR",
+          "trigger": "Capacity Check",
+          "handler": "getMaxInventorySlots",
+          "service": "InventoryService",
+          "statePaths": [
+            "state.race"
+          ],
+          "evidenceLevel": "L4",
+          "verified": true
+        },
+        {
+          "featureId": "s2_inv_capacity_standard",
+          "name": "Standard Bag Capacity (150 Slots)",
+          "criticality": "MAJOR",
+          "trigger": "Capacity Check",
+          "handler": "getMaxInventorySlots",
+          "service": "InventoryService",
+          "statePaths": [
+            "state.race"
+          ],
+          "evidenceLevel": "L4",
+          "verified": true
+        },
+        {
+          "featureId": "s2_inv_warehouse_storage",
+          "name": "Warehouse Storage Deposit / Withdraw (300 Slots)",
+          "criticality": "CRITICAL",
+          "trigger": "Warehouse Modal",
+          "handler": "depositWarehouse / withdrawWarehouse",
+          "service": "InventoryService",
+          "statePaths": [
+            "state.warehouse"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s2_inv_item_locking",
+          "name": "Item Protection Lock Flag",
+          "criticality": "CRITICAL",
+          "trigger": "Lock Toggle",
+          "handler": "toggleItemLock",
+          "service": "InventoryService",
+          "statePaths": [
+            "state.inventory[i].isProtected"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        }
+      ]
+    },
+    "S3": {
+      "id": "S3",
+      "name": "Skills",
+      "ownerKey": "skills",
+      "domSelector": "#tab-skills",
+      "features": [
+        {
+          "featureId": "s3_skill_dag_presentation",
+          "name": "Skill Tree DAG Presentation Model",
+          "criticality": "CRITICAL",
+          "trigger": "Skill Tab Open",
+          "handler": "getVisibleSkillsForCharacter",
+          "service": "SkillEligibility",
+          "statePaths": [
+            "state.skills",
+            "state.class"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s3_skill_gating_levels",
+          "name": "Strict Skill Level Gating (Omit Future > Level Skills)",
+          "criticality": "CRITICAL",
+          "trigger": "Skill Eligibility Check",
+          "handler": "getSkillDetailedVisibility",
+          "service": "SkillEligibility",
+          "statePaths": [
+            "state.level"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s3_skill_archetype_mage",
+          "name": "Mage Archetype Isolation (Shared Mage Pool)",
+          "criticality": "CRITICAL",
+          "trigger": "Skill Filter",
+          "handler": "isSkillInProgressionPath",
+          "service": "SkillEligibility",
+          "statePaths": [
+            "state.class"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s3_skill_archetype_fighter",
+          "name": "Fighter Archetype Isolation (Shared Fighter Pool)",
+          "criticality": "CRITICAL",
+          "trigger": "Skill Filter",
+          "handler": "isSkillInProgressionPath",
+          "service": "SkillEligibility",
+          "statePaths": [
+            "state.class"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s3_skill_learn_sp",
+          "name": "Learn New Skill via SP Deduction",
+          "criticality": "CRITICAL",
+          "trigger": "Learn Button Click",
+          "handler": "learnSkill",
+          "service": "SkillEngine",
+          "statePaths": [
+            "state.skills",
+            "state.sp"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s3_skill_upgrade_level",
+          "name": "Upgrade Skill Level via SP Deduction",
+          "criticality": "CRITICAL",
+          "trigger": "Upgrade Button Click",
+          "handler": "upgradeSkill",
+          "service": "SkillEngine",
+          "statePaths": [
+            "state.skills",
+            "state.sp"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s3_skill_mp_consumption",
+          "name": "Skill MP Consumption in Combat Runtime",
+          "criticality": "CRITICAL",
+          "trigger": "Skill Execution",
+          "handler": "executeSkillCast",
+          "service": "CombatEngine",
+          "statePaths": [
+            "state.mp"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s3_skill_cooldown_tracking",
+          "name": "Skill Cooldown Tracking & Locking",
+          "criticality": "CRITICAL",
+          "trigger": "Skill Execution",
+          "handler": "registerCooldown",
+          "service": "CombatEngine",
+          "statePaths": [
+            "state._cds"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s3_skill_damage_scaling",
+          "name": "Physical & Magical Skill Damage Formulas",
+          "criticality": "CRITICAL",
+          "trigger": "Combat Round",
+          "handler": "calculatePhysicalSkillDamage",
+          "service": "StatsEngine",
+          "statePaths": [
+            "state.stats.atk"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s3_skill_buff_proc",
+          "name": "Skill Buffs, Debuffs & Procs in Combat",
+          "criticality": "CRITICAL",
+          "trigger": "Proc Trigger",
+          "handler": "applyBuff",
+          "service": "CombatEngine",
+          "statePaths": [
+            "state.buffs"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s3_skill_reset_refund",
+          "name": "Skill Tree Reset (100% SP Refunded)",
+          "criticality": "CRITICAL",
+          "trigger": "Reset Button Click",
+          "handler": "resetSkills",
+          "service": "SkillEngine",
+          "statePaths": [
+            "state.skills",
+            "state.sp"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s3_skill_legacy_passives",
+          "name": "Legacy Passives Inheritance Across Transfers",
+          "criticality": "CRITICAL",
+          "trigger": "Class Transfer",
+          "handler": "getStats",
+          "service": "StatsEngine",
+          "statePaths": [
+            "state.skills"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        }
+      ]
+    },
+    "S4": {
+      "id": "S4",
+      "name": "Astral Mastery",
+      "ownerKey": "astral",
+      "domSelector": "#tab-astral",
+      "features": [
+        {
+          "featureId": "s4_astral_unlock_req",
+          "name": "Astral Mastery Unlock Requirement (Lv75+ / Reborn)",
+          "criticality": "MAJOR",
+          "trigger": "Tab Open",
+          "handler": "renderAstralTab",
+          "service": "StatsEngine",
+          "statePaths": [
+            "state.level",
+            "state.prestigeLevel"
+          ],
+          "evidenceLevel": "L4",
+          "verified": true
+        },
+        {
+          "featureId": "s4_astral_shards_accumulation",
+          "name": "Astral Shards Currency Economy",
+          "criticality": "CRITICAL",
+          "trigger": "Boss / Reborn / Playtime",
+          "handler": "addAstralShards",
+          "service": "StateManager",
+          "statePaths": [
+            "state.astralShards"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s4_astral_const_dragon_patk",
+          "name": "Dragon Node 1: Titanic Fury (+3% P.Atk/lvl, max 10)",
+          "criticality": "CRITICAL",
+          "trigger": "Purchase / Calc",
+          "handler": "getAstralMasteryBonuses",
+          "service": "StatsEngine",
+          "statePaths": [
+            "state.astralMastery.dragon_1"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s4_astral_const_dragon_matk",
+          "name": "Dragon Node 2: Arcane Flame (+3% M.Atk/lvl, max 10)",
+          "criticality": "CRITICAL",
+          "trigger": "Purchase / Calc",
+          "handler": "getAstralMasteryBonuses",
+          "service": "StatsEngine",
+          "statePaths": [
+            "state.astralMastery.dragon_2"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s4_astral_const_dragon_crit",
+          "name": "Dragon Node 3: Mortal Strike (+2% Crit/lvl, max 5)",
+          "criticality": "CRITICAL",
+          "trigger": "Purchase / Calc",
+          "handler": "getAstralMasteryBonuses",
+          "service": "StatsEngine",
+          "statePaths": [
+            "state.astralMastery.dragon_3"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s4_astral_const_dragon_critdmg",
+          "name": "Dragon Node 4: Supreme Blade (+5% Crit Dmg/lvl, max 10)",
+          "criticality": "CRITICAL",
+          "trigger": "Purchase / Calc",
+          "handler": "getAstralMasteryBonuses",
+          "service": "StatsEngine",
+          "statePaths": [
+            "state.astralMastery.dragon_4"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s4_astral_const_phoenix_hp",
+          "name": "Phoenix Node 1: Phoenix Blood (+5% Max HP/lvl, max 10)",
+          "criticality": "CRITICAL",
+          "trigger": "Purchase / Calc",
+          "handler": "getAstralMasteryBonuses",
+          "service": "StatsEngine",
+          "statePaths": [
+            "state.astralMastery.phoenix_1"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s4_astral_const_phoenix_mp",
+          "name": "Phoenix Node 2: Enlightened Mind (+5% Max MP/lvl, max 10)",
+          "criticality": "CRITICAL",
+          "trigger": "Purchase / Calc",
+          "handler": "getAstralMasteryBonuses",
+          "service": "StatsEngine",
+          "statePaths": [
+            "state.astralMastery.phoenix_2"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s4_astral_const_phoenix_regen",
+          "name": "Phoenix Node 3: Sacred Ether (+10% MP Regen/lvl, max 10)",
+          "criticality": "CRITICAL",
+          "trigger": "Purchase / Calc",
+          "handler": "getAstralMasteryBonuses",
+          "service": "StatsEngine",
+          "statePaths": [
+            "state.astralMastery.phoenix_3"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s4_astral_const_phoenix_def",
+          "name": "Phoenix Node 4: Divine Shield (+3% Def/lvl, max 10)",
+          "criticality": "CRITICAL",
+          "trigger": "Purchase / Calc",
+          "handler": "getAstralMasteryBonuses",
+          "service": "StatsEngine",
+          "statePaths": [
+            "state.astralMastery.phoenix_4"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s4_astral_const_midas_gold",
+          "name": "Midas Node 1: Midas Touch (+5% Gold/lvl, max 10)",
+          "criticality": "CRITICAL",
+          "trigger": "Purchase / Calc",
+          "handler": "getAstralMasteryBonuses",
+          "service": "StatsEngine",
+          "statePaths": [
+            "state.astralMastery.midas_1"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s4_astral_const_midas_luck",
+          "name": "Midas Node 2: Luck of Gods (+3% Drop/lvl, max 10)",
+          "criticality": "CRITICAL",
+          "trigger": "Purchase / Calc",
+          "handler": "getAstralMasteryBonuses",
+          "service": "StatsEngine",
+          "statePaths": [
+            "state.astralMastery.midas_2"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s4_astral_const_midas_xp",
+          "name": "Midas Node 3: Ancestral Wisdom (+5% XP/lvl, max 10)",
+          "criticality": "CRITICAL",
+          "trigger": "Purchase / Calc",
+          "handler": "getAstralMasteryBonuses",
+          "service": "StatsEngine",
+          "statePaths": [
+            "state.astralMastery.midas_3"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s4_astral_const_midas_speed",
+          "name": "Midas Node 4: Temporal Haste (+2% Atk Spd/lvl, max 10)",
+          "criticality": "CRITICAL",
+          "trigger": "Purchase / Calc",
+          "handler": "getAstralMasteryBonuses",
+          "service": "StatsEngine",
+          "statePaths": [
+            "state.astralMastery.midas_4"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s4_astral_purchase_transaction",
+          "name": "Node Upgrade Transaction & Cap Validation",
+          "criticality": "CRITICAL",
+          "trigger": "Node Buy Click",
+          "handler": "upgradeAstralNode",
+          "service": "StateManager",
+          "statePaths": [
+            "state.astralShards",
+            "state.astralMastery"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s4_astral_reborn_persistence",
+          "name": "Astral Mastery Preservation Across Reborn",
+          "criticality": "CRITICAL",
+          "trigger": "Reborn Action",
+          "handler": "performReborn",
+          "service": "CharacterService",
+          "statePaths": [
+            "state.astralMastery",
+            "state.prestigeLevel"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        }
+      ]
+    },
+    "S5": {
+      "id": "S5",
+      "name": "Dolls & Pets",
+      "ownerKey": "dolls",
+      "domSelector": "#tab-dolls",
+      "features": [
+        {
+          "featureId": "s5_doll_core_collection",
+          "name": "Core Doll (Lv1-5: M.Atk +20..200, MP +50..500)",
+          "criticality": "CRITICAL",
+          "trigger": "Doll Ownership",
+          "handler": "getDollsBonuses",
+          "service": "StatsEngine",
+          "statePaths": [
+            "state.dolls"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s5_doll_orfen_collection",
+          "name": "Orfen Doll (Lv1-5: M.Atk +20..180, M.Crit +3%..25%)",
+          "criticality": "CRITICAL",
+          "trigger": "Doll Ownership",
+          "handler": "getDollsBonuses",
+          "service": "StatsEngine",
+          "statePaths": [
+            "state.dolls"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s5_doll_zaken_collection",
+          "name": "Zaken Doll (Lv1-5: Def +25..200, Lifesteal +3%..18%)",
+          "criticality": "CRITICAL",
+          "trigger": "Doll Ownership",
+          "handler": "getDollsBonuses",
+          "service": "StatsEngine",
+          "statePaths": [
+            "state.dolls"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s5_doll_baium_collection",
+          "name": "Baium Doll (Lv1-5: Speed +5%..30%)",
+          "criticality": "CRITICAL",
+          "trigger": "Doll Ownership",
+          "handler": "getDollsBonuses",
+          "service": "StatsEngine",
+          "statePaths": [
+            "state.dolls"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s5_doll_antharas_collection",
+          "name": "Antharas Doll (Lv1-5: HP +200..2000, Def +40..350)",
+          "criticality": "CRITICAL",
+          "trigger": "Doll Ownership",
+          "handler": "getDollsBonuses",
+          "service": "StatsEngine",
+          "statePaths": [
+            "state.dolls"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s5_doll_valakas_collection",
+          "name": "Valakas Doll (Lv1-5: P/M.Atk +80..800, Crit +5%..40%)",
+          "criticality": "CRITICAL",
+          "trigger": "Doll Ownership",
+          "handler": "getDollsBonuses",
+          "service": "StatsEngine",
+          "statePaths": [
+            "state.dolls"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s5_doll_queen_ant_collection",
+          "name": "Queen Ant Doll (Lv1-5: P.Atk +30..250, Crit Dmg +5%..30%)",
+          "criticality": "CRITICAL",
+          "trigger": "Doll Ownership",
+          "handler": "getDollsBonuses",
+          "service": "StatsEngine",
+          "statePaths": [
+            "state.dolls"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s5_doll_synthesis_compound",
+          "name": "Doll Fusion Synthesis (Combine 2 of same level)",
+          "criticality": "CRITICAL",
+          "trigger": "Synth Button Click",
+          "handler": "synthesizeDolls",
+          "service": "CompoundService",
+          "statePaths": [
+            "state.dolls",
+            "state.gold"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s5_pet_adoption",
+          "name": "Pet Adoption (Level req, cost & uniqueness)",
+          "criticality": "CRITICAL",
+          "trigger": "Adopt Button Click",
+          "handler": "PetService.adoptPet",
+          "service": "PetService",
+          "statePaths": [
+            "state.petData.pets",
+            "state.gold"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s5_pet_summon_toggle",
+          "name": "Pet Summoning & Dismissal Toggle",
+          "criticality": "CRITICAL",
+          "trigger": "Summon Button Click",
+          "handler": "PetService.summonPet",
+          "service": "PetService",
+          "statePaths": [
+            "state.petData.activePetId"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s5_pet_combat_buff",
+          "name": "Pet Active Combat Buff (P.Atk / M.Atk / HP)",
+          "criticality": "CRITICAL",
+          "trigger": "Combat Round",
+          "handler": "PetService.getActivePetBonus",
+          "service": "PetService",
+          "statePaths": [
+            "state.petData.activePetId"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s5_pet_combat_attack",
+          "name": "Pet Combat Attack Participation",
+          "criticality": "MAJOR",
+          "trigger": "Combat Round",
+          "handler": "processPetCombat",
+          "service": "CombatEngine",
+          "statePaths": [
+            "state.petData.pets"
+          ],
+          "evidenceLevel": "L4",
+          "verified": true
+        },
+        {
+          "featureId": "s5_pet_feeding",
+          "name": "Pet Feeding & Hunger Satiety Restoration",
+          "criticality": "MAJOR",
+          "trigger": "Feed Button Click",
+          "handler": "PetService.feedPet",
+          "service": "PetService",
+          "statePaths": [
+            "state.petData.pets",
+            "state.gold"
+          ],
+          "evidenceLevel": "L4",
+          "verified": true
+        },
+        {
+          "featureId": "s5_pet_xp_leveling",
+          "name": "Pet Combat XP Gain & Level Progression",
+          "criticality": "CRITICAL",
+          "trigger": "Monster Kill",
+          "handler": "PetService.addPetXp",
+          "service": "PetService",
+          "statePaths": [
+            "state.petData.pets"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        }
+      ]
+    },
+    "S6": {
+      "id": "S6",
+      "name": "Cosmetics & Achievements",
+      "ownerKey": "cosmetics",
+      "domSelector": "#tab-cosmetics",
+      "features": [
+        {
+          "featureId": "s6_cosmetic_auras_catalog",
+          "name": "Auras Catalog (7 Styles)",
+          "criticality": "VISUAL",
+          "trigger": "Cosmetic Tab Open",
+          "handler": "renderCosmeticsTab",
+          "service": "CosmeticService",
+          "statePaths": [
+            "state.cosmetics.unlockedAuras"
+          ],
+          "evidenceLevel": "L1",
+          "verified": true
+        },
+        {
+          "featureId": "s6_cosmetic_frames_catalog",
+          "name": "Frames Catalog (5 Styles)",
+          "criticality": "VISUAL",
+          "trigger": "Cosmetic Tab Open",
+          "handler": "renderCosmeticsTab",
+          "service": "CosmeticService",
+          "statePaths": [
+            "state.cosmetics.unlockedFrames"
+          ],
+          "evidenceLevel": "L1",
+          "verified": true
+        },
+        {
+          "featureId": "s6_cosmetic_titles_catalog",
+          "name": "Honorific Titles Catalog",
+          "criticality": "VISUAL",
+          "trigger": "Cosmetic Tab Open",
+          "handler": "renderCosmeticsTab",
+          "service": "CosmeticService",
+          "statePaths": [
+            "state.cosmetics.unlockedTitles"
+          ],
+          "evidenceLevel": "L1",
+          "verified": true
+        },
+        {
+          "featureId": "s6_cosmetic_zero_combat_stat",
+          "name": "Strict Zero-Combat-Stat / Zero-CP Invariant",
+          "criticality": "CRITICAL",
+          "trigger": "Cosmetic Change",
+          "handler": "getStats",
+          "service": "CosmeticService",
+          "statePaths": [
+            "state.cosmetics"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s6_cosmetic_equip_switch",
+          "name": "Cosmetic Style Equipping & Persistence",
+          "criticality": "MAJOR",
+          "trigger": "Style Select",
+          "handler": "equipAura / equipFrame / equipTitle",
+          "service": "CosmeticService",
+          "statePaths": [
+            "state.cosmetics.activeAura",
+            "state.cosmetics.activeFrame",
+            "state.cosmetics.activeTitle"
+          ],
+          "evidenceLevel": "L4",
+          "verified": true
+        },
+        {
+          "featureId": "s6_ach_kill_tracking",
+          "name": "Kill Achievements Tracking (100, 2500 kills)",
+          "criticality": "CRITICAL",
+          "trigger": "Monster Kill",
+          "handler": "checkProgress",
+          "service": "AchievementService",
+          "statePaths": [
+            "state.stats.monstersKilled"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s6_ach_enchant_tracking",
+          "name": "Enchant Achievements Tracking (+10, +16)",
+          "criticality": "CRITICAL",
+          "trigger": "Item Enchant",
+          "handler": "checkProgress",
+          "service": "AchievementService",
+          "statePaths": [
+            "state.inventory"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s6_ach_boss_tracking",
+          "name": "Raid Boss Achievements Tracking (10 raids)",
+          "criticality": "CRITICAL",
+          "trigger": "Raid Clear",
+          "handler": "checkProgress",
+          "service": "AchievementService",
+          "statePaths": [
+            "state.dailyRaidClears"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s6_ach_tower_tracking",
+          "name": "Tower Floor Achievements Tracking (15 floors)",
+          "criticality": "CRITICAL",
+          "trigger": "Tower Clear",
+          "handler": "checkProgress",
+          "service": "AchievementService",
+          "statePaths": [
+            "state.tower.highestFloor"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s6_ach_feudal_tracking",
+          "name": "Feudal Castle / Fort Achievement Tracking",
+          "criticality": "MAJOR",
+          "trigger": "Siege Clear",
+          "handler": "checkProgress",
+          "service": "AchievementService",
+          "statePaths": [
+            "state.castles",
+            "state.fortress"
+          ],
+          "evidenceLevel": "L4",
+          "verified": true
+        },
+        {
+          "featureId": "s6_ach_pvp_tracking",
+          "name": "PVP Olympiad / Colosseum Achievement Tracking",
+          "criticality": "MAJOR",
+          "trigger": "PVP Win",
+          "handler": "checkProgress",
+          "service": "AchievementService",
+          "statePaths": [
+            "state.olympiad.wins",
+            "state.colosseum.duelWins"
+          ],
+          "evidenceLevel": "L4",
+          "verified": true
+        },
+        {
+          "featureId": "s6_ach_level_tracking",
+          "name": "Level Milestone Achievements Tracking (Lv75, Lv80)",
+          "criticality": "CRITICAL",
+          "trigger": "Level Up",
+          "handler": "checkProgress",
+          "service": "AchievementService",
+          "statePaths": [
+            "state.level"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s6_ach_idempotent_claim",
+          "name": "Strict Idempotent Achievement Claiming (Anti-Double Claim)",
+          "criticality": "CRITICAL",
+          "trigger": "Claim Click",
+          "handler": "AchievementService.claimAchievement",
+          "service": "AchievementService",
+          "statePaths": [
+            "state.achievements.claimed",
+            "state.gold"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        }
+      ]
+    },
+    "S7": {
+      "id": "S7",
+      "name": "Quests & Battle Pass",
+      "ownerKey": "quests",
+      "domSelector": "#tab-quests",
+      "features": [
+        {
+          "featureId": "s7_quest_daily_kills",
+          "name": "Daily Quest 1: Monster Hunter (50 kills)",
+          "criticality": "CRITICAL",
+          "trigger": "Kill Event",
+          "handler": "triggerQuestEvent",
+          "service": "QuestService",
+          "statePaths": [
+            "state.quests.progress.d_kills"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s7_quest_daily_boss",
+          "name": "Daily Quest 2: Elite Challenger (2 bosses)",
+          "criticality": "CRITICAL",
+          "trigger": "Boss Event",
+          "handler": "triggerQuestEvent",
+          "service": "QuestService",
+          "statePaths": [
+            "state.quests.progress.d_boss"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s7_quest_daily_craft",
+          "name": "Daily Quest 3: Forge Master (2 crafts/recycles)",
+          "criticality": "CRITICAL",
+          "trigger": "Craft Event",
+          "handler": "triggerQuestEvent",
+          "service": "QuestService",
+          "statePaths": [
+            "state.quests.progress.d_craft"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s7_quest_daily_codex",
+          "name": "Daily Quest 4: Relic of Aden (1 codex/card)",
+          "criticality": "CRITICAL",
+          "trigger": "Codex Event",
+          "handler": "triggerQuestEvent",
+          "service": "QuestService",
+          "statePaths": [
+            "state.quests.progress.d_codex"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s7_quest_daily_tower",
+          "name": "Daily Quest 5: Tower Conqueror (1 tower)",
+          "criticality": "CRITICAL",
+          "trigger": "Tower Event",
+          "handler": "triggerQuestEvent",
+          "service": "QuestService",
+          "statePaths": [
+            "state.quests.progress.d_tower"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s7_quest_grand_chest_lock",
+          "name": "Grand Daily Chest (Strict 5/5 Quests Required)",
+          "criticality": "CRITICAL",
+          "trigger": "Claim Click",
+          "handler": "claimDailyBonusChest",
+          "service": "QuestService",
+          "statePaths": [
+            "state.quests.dailyBonusClaimed"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s7_quest_24h_reset",
+          "name": "24h Daily Quest Cycle & Reset Boundaries",
+          "criticality": "CRITICAL",
+          "trigger": "Timer Check",
+          "handler": "checkQuestResets",
+          "service": "QuestService",
+          "statePaths": [
+            "state.quests.lastDailyReset"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s7_quest_weekly_missions",
+          "name": "Weekly Quests (500 kills, 10 bosses, 250k gold, 10 crafts)",
+          "criticality": "MAJOR",
+          "trigger": "Weekly Events",
+          "handler": "triggerQuestEvent",
+          "service": "QuestService",
+          "statePaths": [
+            "state.quests.progress",
+            "state.quests.lastWeeklyReset"
+          ],
+          "evidenceLevel": "L4",
+          "verified": true
+        },
+        {
+          "featureId": "s7_bp_xp_accumulation",
+          "name": "Battle Pass XP Progression from Quests",
+          "criticality": "CRITICAL",
+          "trigger": "Quest Claim",
+          "handler": "claimQuestReward",
+          "service": "QuestService",
+          "statePaths": [
+            "state.battlePass.xp"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s7_bp_free_track_tiers",
+          "name": "Battle Pass Free Track Tiers 1..10 Claims",
+          "criticality": "CRITICAL",
+          "trigger": "Tier Claim Click",
+          "handler": "claimPassReward",
+          "service": "QuestService",
+          "statePaths": [
+            "state.battlePass.claimedFree"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s7_bp_premium_unlock",
+          "name": "Battle Pass Premium Track Unlock",
+          "criticality": "CRITICAL",
+          "trigger": "Shop Unlock",
+          "handler": "unlockPremiumPass",
+          "service": "QuestService",
+          "statePaths": [
+            "state.battlePass.unlockedPremium"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s7_bp_premium_track_tiers",
+          "name": "Battle Pass Premium Track Tiers 1..10 Claims",
+          "criticality": "CRITICAL",
+          "trigger": "Tier Claim Click",
+          "handler": "claimPassReward",
+          "service": "QuestService",
+          "statePaths": [
+            "state.battlePass.claimedPremium"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        },
+        {
+          "featureId": "s7_bp_idempotent_claim",
+          "name": "Strict Idempotent Battle Pass Claiming",
+          "criticality": "CRITICAL",
+          "trigger": "Tier Claim Click",
+          "handler": "claimPassReward",
+          "service": "QuestService",
+          "statePaths": [
+            "state.battlePass"
+          ],
+          "evidenceLevel": "L5",
+          "verified": true
+        }
+      ]
+    }
+  },
+  "globalIntegrationPaths": [
+    {
+      "id": "int_equip_stats_cp_combat",
+      "sourceSubtab": "S2",
+      "name": "Equipment -> StatsEngine -> CP -> CombatEngine",
+      "verified": true
+    },
+    {
+      "id": "int_dyes_primary_stats",
+      "sourceSubtab": "S1",
+      "name": "Dyes -> PrimaryStats -> Final Combat Stats",
+      "verified": true
+    },
+    {
+      "id": "int_subclass_cert_passives",
+      "sourceSubtab": "S1",
+      "name": "Subclasses -> Certifications -> Main Class Passives & CP",
+      "verified": true
+    },
+    {
+      "id": "int_skills_sp_combat_cast",
+      "sourceSubtab": "S3",
+      "name": "Skill Tree -> SP -> MP -> Combat Damage / Buffs",
+      "verified": true
+    },
+    {
+      "id": "int_astral_stats_combat",
+      "sourceSubtab": "S4",
+      "name": "Astral Nodes -> Multipliers -> StatsEngine -> Combat & CP",
+      "verified": true
+    },
+    {
+      "id": "int_dolls_stats_cp",
+      "sourceSubtab": "S5",
+      "name": "Boss Dolls -> Global Collection Passives -> Stats & CP",
+      "verified": true
+    },
+    {
+      "id": "int_pets_combat_xp",
+      "sourceSubtab": "S5",
+      "name": "Pet Summon -> Combat Buffs -> Kill XP -> Pet Level Up",
+      "verified": true
+    },
+    {
+      "id": "int_cosmetics_zero_impact",
+      "sourceSubtab": "S6",
+      "name": "Cosmetic Selection -> Visual DOM -> Zero Stat/CP Delta",
+      "verified": true
+    },
+    {
+      "id": "int_achievements_rewards_state",
+      "sourceSubtab": "S6",
+      "name": "Achievement Progress -> Claim -> Gold/AdenCoins/Titles",
+      "verified": true
+    },
+    {
+      "id": "int_quests_progress_pass_xp",
+      "sourceSubtab": "S7",
+      "name": "Combat Kills/Craft -> Quest Progress -> Claim -> Battle Pass XP",
+      "verified": true
+    },
+    {
+      "id": "int_battlepass_tier_rewards",
+      "sourceSubtab": "S7",
+      "name": "Pass XP -> Tier Unlock -> Claim Rewards -> Inventory/Gold/SP",
+      "verified": true
+    },
+    {
+      "id": "int_grand_chest_unlock",
+      "sourceSubtab": "S7",
+      "name": "5/5 Daily Quests Claimed -> Grand Chest Unlock -> Epic Reward",
+      "verified": true
+    },
+    {
+      "id": "int_reborn_astral_preservation",
+      "sourceSubtab": "S4",
+      "name": "Character Reborn -> Level 1 -> Prestige++ -> Astral Preserved",
+      "verified": true
+    },
+    {
+      "id": "int_save_load_deep_roundtrip",
+      "sourceSubtab": "S1",
+      "name": "Full State -> JSON Serialization -> Complete State Restoration",
+      "verified": true
+    }
+  ]
+}
