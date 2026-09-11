@@ -20,6 +20,7 @@ import { resolveCanonicalClassId } from '../data/classes/class_aliases.js';
 import { CLASSES_ECHO } from '../data/classes/classes_echo_defs.js';
 import { HISTORICAL_CLASSES } from '../data/elemental/HistoricalClasses.js';
 import { NATIVE_SKILL_TREES } from '../data/elemental/NativeSkillTrees.js';
+import { WeaponResonanceService } from '../services/WeaponResonanceService.js';
 
 export const STR_MODIFIERS = {
   10: 0.42, 11: 0.43, 12: 0.45, 13: 0.46, 14: 0.48, 15: 0.50,
@@ -745,6 +746,23 @@ export function getStats(state) {
     elixirHpMult += 0.25;
   }
 
+  // Process Dual Weapon Resonance Passive Stats (Ressonância de Armas Ativa)
+  let resonanceLifeDrain = 0;
+  let resonanceCrit = 0;
+  try {
+    const resPassives = WeaponResonanceService?.getPassiveStats ? WeaponResonanceService.getPassiveStats(state) : null;
+    if (resPassives) {
+      if (resPassives.critChance) resonanceCrit += resPassives.critChance * 10;
+      if (resPassives.eva) baseEva += resPassives.eva;
+      if (resPassives.atkSpd) buffSpd += resPassives.atkSpd;
+      if (resPassives.castSpd) buffSpd += Math.floor(resPassives.castSpd * 0.5);
+      if (resPassives.critDmgPct) buffCritDmg += resPassives.critDmgPct / 100;
+      if (resPassives.lifeDrain) resonanceLifeDrain += resPassives.lifeDrain / 100;
+    }
+  } catch (e) {
+    console.warn('WeaponResonanceService error:', e);
+  }
+
   // Process Masterwork & Belt Bonuses on Equipped Items
   if (state.equipment && typeof state.equipment === 'object') {
     const processedEquipUids = new Set();
@@ -888,11 +906,11 @@ export function getStats(state) {
   const finalEva  = Math.floor(baseEva + (Number(eb.eva) || 0) + (Number(setB.eva) || 0) + codexB.eva + dollsB.eva + (certB.evaAdd || 0));
   const finalMatk = Math.floor((baseMatk + (Number(eb.matk) || 0) + (Number(setB.matk) || 0) + buffMatk + codexB.matk + dollsB.matk + certB.matk) * towerMult * certMatkMult);
   const finalMdef = Math.floor((baseMdef + (Number(eb.mdef) || 0) + (Number(setB.mdef) || 0) + buffMdef + codexB.mdef + dollsB.mdef + certB.mdef) * towerMult * certMdefMult);
-  const finalCrit = (Number(eb.crit) || 0) + (Number(setB.crit) || 0) + codexB.crit + dollsB.crit + certB.crit + astralB.crit + saCrit + augCrit + legacyCrit + buffCrit;
+  const finalCrit = (Number(eb.crit) || 0) + (Number(setB.crit) || 0) + codexB.crit + dollsB.crit + certB.crit + astralB.crit + saCrit + augCrit + legacyCrit + buffCrit + resonanceCrit;
 
   const lootBonus  = (Number(race?.stats?.lootBonus) || 0) + (Number(cls?.base?.lootBonus) || 0) + itemLootBonus + luckBoost;
   const rawAtkSpd  = ((buffSpd + (dollsB.speed || 0)) / 100) + (certB.atkSpdPercent || 0);
-  const lifeDrain  = ((Number(eb.lifesteal) || 0) + (dollsB.lifesteal || 0) + ((setB.lifesteal || 0) / 100));
+  const lifeDrain  = ((Number(eb.lifesteal) || 0) + (dollsB.lifesteal || 0) + ((setB.lifesteal || 0) / 100)) + resonanceLifeDrain;
   const craftBonus = itemCraftBonus;
 
   const baseCritDmg = 1 + sk('executioner') * 0.15 + astralB.critDmg + buffCritDmg;

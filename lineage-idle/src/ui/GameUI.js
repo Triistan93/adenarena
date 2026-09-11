@@ -7,9 +7,15 @@ import { D, ALL_EQUIP_SLOTS, TIER_NAMES } from '../core/GameConfig.js';
 import { el, qsa, mkEl, mkNS, updateBar } from '../core/DomHelpers.js';
 import {
   getMaxInventorySlots, getMaxWarehouseSlots, getSelectedSet,
-  toggleSelectItem, selectItemsByFilter, clearItemSelection, getInventoryCount
+  toggleSelectItem, selectItemsByFilter, clearItemSelection, getInventoryCount,
+  calculateInventoryPressure, organizeInventory, sortInventoryItems,
+  getBatchSellPreview, getBatchSalvagePreview, getCrystallizationPreview,
+  isItemProtected, isEquipmentItem, addToInventory, removeFromInventory
 } from '../services/InventoryService.js';
-import { resolveEquipSlot, migrateEquipmentSlots, equipItem, unequipItem } from '../services/EquipmentService.js';
+import {
+  resolveEquipSlot, migrateEquipmentSlots, equipItem, unequipItem,
+  generateAutoEquipProposal, isTwoHandedWeapon, calculateEquipmentRecommendationScore
+} from '../services/EquipmentService.js';
 import { getCraftLevelReq, getRecipeMaterials, canCraft, getRecipeDef, calculateMaxCraftableQty } from '../services/CraftService.js';
 import { rollMysticStock } from '../services/ShopService.js';
 import { classSatisfies, getClassSkills, checkClassAdvancement, SHARED_SKILL_IDS, getSharedSkills, isMageClass, getSharedSkillIdsForClass, getVisibleSkillsForCharacter, getSkillVisibility, SKILL_VISIBILITY_STATES, getCharacterProgressionState, isSkillAvailableForCharacter, isSkillAllowedForClass } from '../services/CharacterService.js';
@@ -1481,6 +1487,23 @@ export function updateInventoryUI(state, callbacks = {}) {
   ensureInventoryStyles();
   updateEquipmentUI(state, callbacks);
 
+  // 1. Atualiza Indicador e Pressão de Capacidade da Mochila
+  const pressure = calculateInventoryPressure(state);
+  const pressBar = findElement('inv-capacity-pressure-bar');
+  const pressLabel = findElement('inv-capacity-pressure-label');
+  const fullBanner = findElement('inv-full-alert-banner');
+  if (pressBar) {
+    pressBar.style.width = `${Math.min(100, pressure.pct)}%`;
+    pressBar.style.backgroundColor = pressure.color;
+  }
+  if (pressLabel) {
+    pressLabel.textContent = `${pressure.count}/${pressure.max} (${pressure.pct}%) ${pressure.label}`;
+    pressLabel.style.color = pressure.color;
+  }
+  if (fullBanner) {
+    fullBanner.style.display = pressure.isFull ? 'block' : 'none';
+  }
+
   const grid = findElement('inventory-grid');
   if (!grid) return;
   grid.innerHTML = '';
@@ -1506,14 +1529,21 @@ export function updateInventoryUI(state, callbacks = {}) {
   }
   const searchTerm = (searchInput?.value || '').trim().toLowerCase();
 
-  const sorted = [...(state.inventory || [])]
-    .filter(i => i?.itemId)
-    .sort((a, b) => {
-      const da = getItemDef(a.itemId);
-      const db = getItemDef(b.itemId);
-      if (!da || !db) return 0;
-      return (db.tier || 0) - (da.tier || 0);
-    });
+  const sortSelect = findElement('inv-sort-select');
+  if (sortSelect) {
+    if (state.inventorySortCriteria) {
+      sortSelect.value = state.inventorySortCriteria;
+    }
+    if (!sortSelect.dataset.bound) {
+      sortSelect.dataset.bound = 'true';
+      sortSelect.addEventListener('change', (e) => {
+        state.inventorySortCriteria = e.target.value;
+        updateInventoryUI(state, callbacks);
+      });
+    }
+  }
+
+  const sorted = sortInventoryItems([...(state.inventory || [])].filter(i => i?.itemId), state.inventorySortCriteria || 'recommended', state);
 
   for (const item of sorted) {
     const def = getItemDef(item.itemId);
@@ -1557,9 +1587,11 @@ export function updateInventoryUI(state, callbacks = {}) {
     }
 
     const isSelected = selectedSet.has(item.uid);
+    const isInspected = window._inspectedItemUid === item.uid;
     const qty = (item.count || 1) > 1 ? `<span class="qty">${item.count}</span>` : '';
     const equippedTag = item.equipped ? `<span class="equipped-badge">E</span>` : '';
     const check = `<span class="inv-check">${isSelected ? '✓' : ''}</span>`;
+    const favTag = (item.isFavorite || item.favorite) ? `<span class="fav-badge" style="position:absolute; top:2px; left:2px; font-size:9px; z-index:5;">⭐</span>` : '';
 
     const tierNum = def.tier || 0;
     const GRADE_LABELS = { 0: '', 1: 'NG', 2: 'D', 3: 'C', 4: 'B', 5: 'S', 6: 'FL' };
@@ -1568,7 +1600,7 @@ export function updateInventoryUI(state, callbacks = {}) {
       ? `<span class="tier-badge tier-${tierNum}">${gradeLabel}</span>` : '';
 
     const enchantLevel = item.enchant || item.enchantLevel || 0;
-    let invSlotClasses = `inv-slot rarity-${rarity}` + (item.equipped ? ' is-equipped' : '') + (isSelected ? ' is-selected' : '');
+    let invSlotClasses = `inv-slot rarity-${rarity}` + (item.equipped ? ' is-equipped' : '') + (isSelected ? ' is-selected' : '') + (isInspected ? ' is-inspected' : '');
     if (enchantLevel >= 16) invSlotClasses += ' enchant-halo-16';
     else if (enchantLevel >= 10) invSlotClasses += ' enchant-halo-10';
     else if (enchantLevel >= 4) invSlotClasses += ' enchant-halo-4';
@@ -1583,6 +1615,7 @@ export function updateInventoryUI(state, callbacks = {}) {
 
     slotEl.innerHTML = `
       ${check}
+      ${favTag}
       <span class="item-icon">${getItemIcon(def || item)}</span>
       ${enchantBadge}
       ${qty}
@@ -1602,10 +1635,12 @@ export function updateInventoryUI(state, callbacks = {}) {
 
     slotEl.onclick = (e) => {
       e.stopPropagation();
-      if (callbacks.toggleSelectItem) {
+      window._inspectedItemUid = item.uid;
+      if (e.target.closest('.inv-check') && callbacks.toggleSelectItem) {
         callbacks.toggleSelectItem(item.uid);
-        updateInventoryUI(state, callbacks);
       }
+      renderItemDetailAndComparison(item, state, callbacks);
+      updateInventoryUI(state, callbacks);
     };
 
     slotEl.oncontextmenu = (e) => {
@@ -1642,7 +1677,6 @@ export function updateInventoryUI(state, callbacks = {}) {
   const renderedCount = grid.children.length;
   const maxSlots = getMaxInventorySlots(state) || 80;
   
-  // Detecta dinamicamente a quantidade de colunas do grid
   let cols = 8;
   try {
     const comp = window.getComputedStyle(grid).gridTemplateColumns;
@@ -1656,7 +1690,6 @@ export function updateInventoryUI(state, callbacks = {}) {
     }
   }
 
-  // Preenche exatamente até completar a última linha sem deixar buracos na direita
   const minRows = 4;
   const targetSlots = Math.max(cols * minRows, Math.ceil(renderedCount / cols) * cols);
 
@@ -1688,10 +1721,10 @@ export function updateInventoryUI(state, callbacks = {}) {
     `;
 
     const btnSell = actionBar.querySelector('#btn-sell-selected');
-    if (btnSell) btnSell.onclick = () => { if (callbacks.sellSelectedItems) callbacks.sellSelectedItems(); };
+    if (btnSell) btnSell.onclick = () => openBatchSellModal(state, callbacks);
 
     const btnSalvage = actionBar.querySelector('#btn-salvage-selected');
-    if (btnSalvage) btnSalvage.onclick = () => { if (callbacks.salvageSelectedItems) callbacks.salvageSelectedItems(); };
+    if (btnSalvage) btnSalvage.onclick = () => openBatchSalvageModal(state, callbacks);
 
     const btnJunk = actionBar.querySelector('#btn-select-junk');
     if (btnJunk) btnJunk.onclick = () => { if (callbacks.selectJunkItems) callbacks.selectJunkItems(); };
@@ -1700,10 +1733,774 @@ export function updateInventoryUI(state, callbacks = {}) {
     if (btnClear) btnClear.onclick = () => { if (callbacks.clearItemSelection) callbacks.clearItemSelection(); };
   }
 
+  // Vincula botões da barra inferior e botões de lote
+  const organizeBtn = findElement('organize-inv-btn');
+  if (organizeBtn && !organizeBtn.dataset.bound) {
+    organizeBtn.dataset.bound = 'true';
+    organizeBtn.onclick = () => {
+      const res = organizeInventory(state, state.inventorySortCriteria || 'recommended');
+      if (callbacks.log) callbacks.log(`🧹 Mochila organizada: ${res.freedSlots} espaço(s) liberado(s)!`, 'loot');
+      updateInventoryUI(state, callbacks);
+      if (callbacks.save) callbacks.save();
+    };
+  }
+
+  const autoEquipBtn = findElement('auto-equip-btn');
+  if (autoEquipBtn && !autoEquipBtn.dataset.bound) {
+    autoEquipBtn.dataset.bound = 'true';
+    autoEquipBtn.onclick = () => {
+      openAutoEquipPreviewModal(state, callbacks);
+    };
+  }
+
+  const sellSelBtn = findElement('sell-selected-btn');
+  if (sellSelBtn && !sellSelBtn.dataset.boundPreview) {
+    sellSelBtn.dataset.boundPreview = 'true';
+    sellSelBtn.onclick = () => openBatchSellModal(state, callbacks);
+  }
+
+  const salvSelBtn = findElement('salvage-selected-btn');
+  if (salvSelBtn && !salvSelBtn.dataset.boundPreview) {
+    salvSelBtn.dataset.boundPreview = 'true';
+    salvSelBtn.onclick = () => openBatchSalvageModal(state, callbacks);
+  }
+
+  const crystSelBtn = findElement('crystallize-selected-btn');
+  if (crystSelBtn && !crystSelBtn.dataset.boundPreview) {
+    crystSelBtn.dataset.boundPreview = 'true';
+    crystSelBtn.onclick = () => openBatchCrystallizeModal(state, callbacks);
+  }
+
   const cnt = findElement('inv-count') || findElement('inv-slots');
   if (cnt) cnt.textContent = `${state.inventory?.length || 0}/${maxSlots}`;
   const l2cnt = findElement('l2inv-counter');
   if (l2cnt) l2cnt.textContent = `(${state.inventory?.length || 0}/${maxSlots})`;
+}
+
+function getRarityColor(rarity) {
+  const r = String(rarity || 'common').toLowerCase();
+  const colors = {
+    common: '#cbd5e1',
+    uncommon: '#4ade80',
+    rare: '#38bdf8',
+    epic: '#c084fc',
+    legendary: '#f59e0b',
+    mythic: '#ef4444'
+  };
+  return colors[r] || '#cbd5e1';
+}
+
+function renderItemStatsTable(item, def) {
+  const mult = (1 + (Number(item?.enchant) || 0) * 0.1);
+  const rows = [
+    { label: 'P.Atk', val: def?.atk ? Math.floor(def.atk * mult) : 0 },
+    { label: 'M.Atk', val: def?.matk ? Math.floor(def.matk * mult) : 0 },
+    { label: 'P.Def', val: def?.def ? Math.floor(def.def * mult) : 0 },
+    { label: 'M.Def', val: def?.mdef ? Math.floor(def.mdef * mult) : 0 },
+    { label: 'HP', val: def?.hp ? Math.floor(def.hp * mult) : 0 },
+    { label: 'MP', val: def?.mp ? Math.floor(def.mp * mult) : 0 },
+    { label: 'Crítico', val: def?.crit || 0 },
+  ].filter(r => r.val > 0);
+
+  if (rows.length === 0) return '<div style="font-size:10px; color:#64748b;">Sem atributos base adicionais</div>';
+
+  return `
+    <table class="stat-comparison-table">
+      ${rows.map(r => `
+        <tr>
+          <td class="stat-label">${r.label}</td>
+          <td class="stat-cand-val" style="text-align:right;">+${r.val.toLocaleString()}</td>
+        </tr>
+      `).join('')}
+    </table>
+  `;
+}
+
+function renderComparisonStatsTable(curItem, curDef, candItem, candDef) {
+  const curMult = (1 + (Number(curItem?.enchant) || 0) * 0.1);
+  const candMult = (1 + (Number(candItem?.enchant) || 0) * 0.1);
+
+  const statsList = [
+    { label: 'P.Atk', cur: Math.floor((curDef?.atk || 0) * curMult), cand: Math.floor((candDef?.atk || 0) * candMult) },
+    { label: 'M.Atk', cur: Math.floor((curDef?.matk || 0) * curMult), cand: Math.floor((candDef?.matk || 0) * candMult) },
+    { label: 'P.Def', cur: Math.floor((curDef?.def || 0) * curMult), cand: Math.floor((candDef?.def || 0) * candMult) },
+    { label: 'M.Def', cur: Math.floor((curDef?.mdef || 0) * curMult), cand: Math.floor((candDef?.mdef || 0) * candMult) },
+    { label: 'HP', cur: Math.floor((curDef?.hp || 0) * curMult), cand: Math.floor((candDef?.hp || 0) * candMult) },
+    { label: 'MP', cur: Math.floor((curDef?.mp || 0) * curMult), cand: Math.floor((candDef?.mp || 0) * candMult) },
+    { label: 'Crítico', cur: curDef?.crit || 0, cand: candDef?.crit || 0 },
+  ].filter(s => s.cur > 0 || s.cand > 0);
+
+  if (statsList.length === 0) return '<div style="font-size:10px; color:#64748b;">Sem atributos para comparar</div>';
+
+  return `
+    <table class="stat-comparison-table">
+      ${statsList.map(s => {
+        const delta = s.cand - s.cur;
+        let deltaHtml = '';
+        if (delta > 0) {
+          deltaHtml = `<span class="delta-tag delta-positive">+${delta.toLocaleString()}</span>`;
+        } else if (delta < 0) {
+          deltaHtml = `<span class="delta-tag delta-negative">${delta.toLocaleString()}</span>`;
+        } else {
+          deltaHtml = `<span class="delta-tag delta-neutral">=</span>`;
+        }
+        return `
+          <tr>
+            <td class="stat-label">${s.label}</td>
+            <td class="stat-cand-val">${s.cand.toLocaleString()} ${deltaHtml}</td>
+          </tr>
+        `;
+      }).join('')}
+    </table>
+  `;
+}
+
+/**
+ * Renderiza o Dock de Comparação e Inspeção Inteligente (#l2inv-detail-panel)
+ */
+export function renderItemDetailAndComparison(item, state, callbacks = {}) {
+  const dock = findElement('l2inv-detail-panel');
+  if (!dock) return;
+  if (!item) {
+    dock.style.display = 'none';
+    return;
+  }
+
+  const def = getItemDef(item.itemId) || item;
+  if (!def) {
+    dock.style.display = 'none';
+    return;
+  }
+
+  dock.style.display = 'flex';
+
+  const isGear = isEquipmentItem(def);
+  const targetSlot = isGear ? resolveEquipSlot(def.slot, state?.equipment || {}) : null;
+  const currentEquippedUid = (isGear && targetSlot) ? state?.equipment?.[targetSlot] : null;
+  const currentEquippedItem = currentEquippedUid ? (state?.inventory || []).find(i => i.uid === currentEquippedUid) : null;
+  const currentEquippedDef = currentEquippedItem ? (getItemDef(currentEquippedItem.itemId) || currentEquippedItem) : null;
+
+  const isCurrentItemEquipped = item.equipped || (currentEquippedUid === item.uid);
+  const isComparing = isGear && !isCurrentItemEquipped && currentEquippedItem;
+
+  // Cálculo de Real Combat Impact & CP Delta
+  let cpDelta = 0;
+  let cpPct = '0.0';
+  let impactClass = 'impact-neutral';
+  let impactLabel = '◆ EQUIVALENTE';
+
+  if (isComparing) {
+    const curCp = CombatPowerService.calculateCombatPower(state);
+    const simEquip = { ...(state.equipment || {}), [targetSlot]: item.uid };
+    if (isTwoHandedWeapon(def)) {
+      if (simEquip.shield) simEquip.shield = null;
+      if (simEquip.weapon2) simEquip.weapon2 = null;
+    }
+    const simCp = CombatPowerService.calculateCombatPower({ ...state, equipment: simEquip });
+    cpDelta = simCp - curCp;
+    cpPct = curCp > 0 ? ((cpDelta / curCp) * 100).toFixed(1) : '0.0';
+
+    if (cpDelta > 0) {
+      impactClass = 'impact-upgrade';
+      impactLabel = `▲ UPGRADE RECOMENDADO (+${cpDelta.toLocaleString()} CP / +${cpPct}% Impacto Real)`;
+    } else if (cpDelta < 0) {
+      impactClass = 'impact-downgrade';
+      impactLabel = `▼ REDUÇÃO DE PODER (${cpDelta.toLocaleString()} CP / ${cpPct}% Impacto Real)`;
+    }
+  } else if (isGear && !isCurrentItemEquipped && !currentEquippedItem) {
+    const curCp = CombatPowerService.calculateCombatPower(state);
+    const simEquip = { ...(state.equipment || {}), [targetSlot]: item.uid };
+    if (isTwoHandedWeapon(def)) {
+      if (simEquip.shield) simEquip.shield = null;
+      if (simEquip.weapon2) simEquip.weapon2 = null;
+    }
+    const simCp = CombatPowerService.calculateCombatPower({ ...state, equipment: simEquip });
+    cpDelta = simCp - curCp;
+    cpPct = curCp > 0 ? ((cpDelta / curCp) * 100).toFixed(1) : '0.0';
+    impactClass = 'impact-upgrade';
+    impactLabel = `▲ SLOT VAZIO: GANHO DIRETO (+${cpDelta.toLocaleString()} CP / +${cpPct}% Impacto Real)`;
+  }
+
+  let html = `
+    <div class="detail-dock-header">
+      <div class="detail-dock-title">
+        <span>🔎</span>
+        <span>${isComparing ? 'Comparação Inteligente de Equipamentos' : 'Detalhes do Item'}</span>
+        ${targetSlot ? `<span style="font-size:10px; color:#94a3b8; font-weight:normal;">[Slot: ${targetSlot}]</span>` : ''}
+      </div>
+      <button class="detail-dock-close-btn" id="dock-close-btn" title="Fechar painel de detalhes">✕</button>
+    </div>
+  `;
+
+  if (isComparing) {
+    html += `
+      <div class="detail-comparison-grid">
+        <!-- Card 1: Equipado Atualmente -->
+        <div class="detail-card current">
+          <div class="detail-card-badge-row">
+            <span class="detail-card-role equipped">🛡️ Atual (Equipado)</span>
+            <span class="tier-badge">${(currentEquippedDef.grade || 'NG').toUpperCase()}</span>
+          </div>
+          <div class="detail-item-identity">
+            <div class="detail-item-icon-box rarity-${currentEquippedItem.rarity || 'common'}">
+              ${getItemIcon(currentEquippedDef)}
+            </div>
+            <div class="detail-item-info">
+              <div class="detail-item-name" style="color:${getRarityColor(currentEquippedItem.rarity)}">
+                ${(currentEquippedItem.enchant ? `+${currentEquippedItem.enchant} ` : '') + currentEquippedDef.name}
+              </div>
+              <div class="detail-item-submeta">
+                <span>${currentEquippedItem.rarity ? currentEquippedItem.rarity.toUpperCase() : 'COMUM'}</span>
+                <span>• Nível ${currentEquippedDef.req?.level || currentEquippedDef.level || 1}</span>
+              </div>
+            </div>
+          </div>
+          ${renderItemStatsTable(currentEquippedItem, currentEquippedDef)}
+        </div>
+
+        <!-- Card 2: Item Selecionado / Proposto -->
+        <div class="detail-card candidate">
+          <div class="detail-card-badge-row">
+            <span class="detail-card-role selected">⚡ Proposta / Selecionado</span>
+            <span class="tier-badge">${(def.grade || 'NG').toUpperCase()}</span>
+          </div>
+          <div class="detail-item-identity">
+            <div class="detail-item-icon-box rarity-${item.rarity || 'common'}">
+              ${getItemIcon(def)}
+            </div>
+            <div class="detail-item-info">
+              <div class="detail-item-name" style="color:${getRarityColor(item.rarity)}">
+                ${(item.enchant ? `+${item.enchant} ` : '') + def.name}
+              </div>
+              <div class="detail-item-submeta">
+                <span>${item.rarity ? item.rarity.toUpperCase() : 'COMUM'}</span>
+                <span>• Nível ${def.req?.level || def.level || 1}</span>
+              </div>
+            </div>
+          </div>
+          ${renderComparisonStatsTable(currentEquippedItem, currentEquippedDef, item, def)}
+        </div>
+      </div>
+
+      <div class="impact-decision-banner ${impactClass}">
+        <span>${impactLabel}</span>
+        <span>ΔCP: ${cpDelta >= 0 ? '+' : ''}${cpDelta.toLocaleString()}</span>
+      </div>
+    `;
+  } else {
+    html += `
+      <div class="detail-card candidate" style="max-width:100%;">
+        <div class="detail-card-badge-row">
+          <span class="detail-card-role ${isCurrentItemEquipped ? 'equipped' : 'selected'}">
+            ${isCurrentItemEquipped ? '🛡️ Equipado' : '🎒 Na Mochila'}
+          </span>
+          ${def.grade ? `<span class="tier-badge">${def.grade.toUpperCase()}</span>` : ''}
+        </div>
+        <div class="detail-item-identity">
+          <div class="detail-item-icon-box rarity-${item.rarity || 'common'}">
+            ${getItemIcon(def)}
+          </div>
+          <div class="detail-item-info">
+            <div class="detail-item-name" style="color:${getRarityColor(item.rarity)}">
+              ${(item.enchant ? `+${item.enchant} ` : '') + def.name}
+            </div>
+            <div class="detail-item-submeta">
+              <span>${item.rarity ? item.rarity.toUpperCase() : 'COMUM'}</span>
+              <span>• Qtd: ${item.count || 1}</span>
+              ${def.req?.level ? `<span>• Nível ${def.req.level}</span>` : ''}
+            </div>
+          </div>
+        </div>
+        ${isGear ? renderItemStatsTable(item, def) : `<div style="font-size:11px; color:#94a3b8; font-style:italic;">${def.desc || 'Consumível ou material de Aden.'}</div>`}
+      </div>
+      ${isGear && !isCurrentItemEquipped ? `
+        <div class="impact-decision-banner ${impactClass}">
+          <span>${impactLabel}</span>
+          <span>ΔCP: +${cpDelta.toLocaleString()}</span>
+        </div>
+      ` : ''}
+    `;
+  }
+
+  const isFav = !!(item.isFavorite || item.favorite);
+  const reqLvl = def.req ? (def.req.level || 1) : (def.level || 1);
+  const canCrystallize = isGear && !isCurrentItemEquipped && (reqLvl >= 20 || (def.tier || 1) >= 2);
+  const isConsumable = ['consumable', 'potion', 'scroll', 'powerup', 'food'].includes(String(def.slot || '').toLowerCase());
+
+  html += `
+    <div class="detail-actions-row">
+      ${isGear && !isCurrentItemEquipped ? `
+        <button class="detail-action-btn equip" id="dock-btn-equip">⚡ Equipar Agora</button>
+      ` : ''}
+      ${isCurrentItemEquipped ? `
+        <button class="detail-action-btn unequip" id="dock-btn-unequip">❌ Desequipar</button>
+      ` : ''}
+      ${isConsumable ? `
+        <button class="detail-action-btn equip" id="dock-btn-use">🧪 Usar Consumível</button>
+      ` : ''}
+      <button class="detail-action-btn favorite ${isFav ? 'active' : ''}" id="dock-btn-favorite" title="${isFav ? 'Remover favorito' : 'Proteger contra venda/desmanche'}">
+        ${isFav ? '⭐ Favorito (Protegido)' : '☆ Favoritar'}
+      </button>
+      ${!isCurrentItemEquipped && isGear ? `
+        <button class="detail-action-btn salvage" id="dock-btn-salvage" title="Desmanchar em materiais">🔨 Desmanchar</button>
+      ` : ''}
+      ${canCrystallize ? `
+        <button class="detail-action-btn crystallize" id="dock-btn-crystallize" title="Cristalizar em cristais elementares">💎 Cristalizar</button>
+      ` : ''}
+      ${!isCurrentItemEquipped ? `
+        <button class="detail-action-btn sell" id="dock-btn-sell" title="Vender por Adena">💰 Vender</button>
+      ` : ''}
+    </div>
+  `;
+
+  dock.innerHTML = html;
+
+  const closeBtn = dock.querySelector('#dock-close-btn');
+  if (closeBtn) closeBtn.onclick = () => {
+    dock.style.display = 'none';
+    window._inspectedItemUid = null;
+    updateInventoryUI(state, callbacks);
+  };
+
+  const btnEquip = dock.querySelector('#dock-btn-equip');
+  if (btnEquip) btnEquip.onclick = () => {
+    const equipFn = callbacks.equipItem || (typeof window !== 'undefined' ? window.equipItem : null);
+    if (equipFn) equipFn(item.uid, state);
+    dock.style.display = 'none';
+    window._inspectedItemUid = null;
+  };
+
+  const btnUnequip = dock.querySelector('#dock-btn-unequip');
+  if (btnUnequip) btnUnequip.onclick = () => {
+    const unequipFn = callbacks.unequipItem || (typeof window !== 'undefined' ? window.unequipItem : null);
+    if (unequipFn) unequipFn(item.equippedSlot || targetSlot, state);
+    dock.style.display = 'none';
+    window._inspectedItemUid = null;
+  };
+
+  const btnUse = dock.querySelector('#dock-btn-use');
+  if (btnUse) btnUse.onclick = () => {
+    if (callbacks.useItem) callbacks.useItem(item.uid);
+    else if (window.useItem) window.useItem(item.uid);
+  };
+
+  const btnFav = dock.querySelector('#dock-btn-favorite');
+  if (btnFav) btnFav.onclick = () => {
+    item.isFavorite = !item.isFavorite;
+    item.favorite = item.isFavorite;
+    if (callbacks.log) {
+      callbacks.log(item.isFavorite ? `⭐ "${def.name}" marcado como Favorito (Protegido).` : `☆ "${def.name}" desmarcado de Favorito.`, 'system');
+    }
+    renderItemDetailAndComparison(item, state, callbacks);
+    updateInventoryUI(state, callbacks);
+    if (callbacks.save) callbacks.save();
+  };
+
+  const btnSalvage = dock.querySelector('#dock-btn-salvage');
+  if (btnSalvage) btnSalvage.onclick = () => {
+    openBatchSalvageModal(state, callbacks, [item.uid]);
+  };
+
+  const btnCryst = dock.querySelector('#dock-btn-crystallize');
+  if (btnCryst) btnCryst.onclick = () => {
+    openBatchCrystallizeModal(state, callbacks, [item.uid]);
+  };
+
+  const btnSell = dock.querySelector('#dock-btn-sell');
+  if (btnSell) btnSell.onclick = () => {
+    openBatchSellModal(state, callbacks, [item.uid]);
+  };
+}
+
+export function closeInventoryPreviewModal() {
+  const overlay = findElement('inv-preview-modal-overlay');
+  if (overlay) overlay.style.display = 'none';
+}
+
+export function openAutoEquipPreviewModal(state, callbacks = {}) {
+  const proposal = generateAutoEquipProposal(state);
+  if (!proposal || proposal.changes.length === 0) {
+    if (callbacks.log) {
+      callbacks.log('✨ Seus equipamentos já estão perfeitamente otimizados pelo algoritmo ERS!', 'system');
+    }
+    alert('✨ Seus equipamentos já estão perfeitamente otimizados para sua classe e build!');
+    return;
+  }
+
+  const overlay = findElement('inv-preview-modal-overlay');
+  const title = findElement('inv-modal-title');
+  const body = findElement('inv-modal-body');
+  const confirmBtn = findElement('inv-modal-confirm-btn');
+  const cancelBtn = findElement('inv-modal-cancel-btn');
+  const closeBtn = findElement('inv-modal-close-btn');
+
+  if (!overlay || !body) return;
+
+  if (title) title.innerHTML = '⚡ Proposta de Otimização de Equipamentos (ERS)';
+
+  const allItems = D()?.ALL_ITEMS || {};
+  const d = proposal.deltas;
+  const cpGain = proposal.proposedCp - proposal.currentCp;
+
+  let bodyHtml = `
+    <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(212,167,68,0.3); border-radius:6px; padding:10px; margin-bottom:12px;">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+        <span style="font-weight:bold; color:var(--gilt-bright);">Poder de Combate (CP):</span>
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:13px; font-weight:bold;">
+          ${proposal.currentCp.toLocaleString()} → <span style="color:#4ade80;">${proposal.proposedCp.toLocaleString()}</span>
+          <span style="color:#4ade80; margin-left:6px;">(+${cpGain.toLocaleString()} CP)</span>
+        </span>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:6px; font-size:10px;">
+        <div>P.Atk: <strong style="color:${d.atkDelta >= 0 ? '#4ade80' : '#f87171'}">${d.atkDelta >= 0 ? '+' : ''}${d.atkDelta}</strong></div>
+        <div>M.Atk: <strong style="color:${d.matkDelta >= 0 ? '#4ade80' : '#f87171'}">${d.matkDelta >= 0 ? '+' : ''}${d.matkDelta}</strong></div>
+        <div>P.Def: <strong style="color:${d.defDelta >= 0 ? '#4ade80' : '#f87171'}">${d.defDelta >= 0 ? '+' : ''}${d.defDelta}</strong></div>
+        <div>M.Def: <strong style="color:${d.mdefDelta >= 0 ? '#4ade80' : '#f87171'}">${d.mdefDelta >= 0 ? '+' : ''}${d.mdefDelta}</strong></div>
+        <div>Max HP: <strong style="color:${d.hpDelta >= 0 ? '#4ade80' : '#f87171'}">${d.hpDelta >= 0 ? '+' : ''}${d.hpDelta}</strong></div>
+        <div>Crítico: <strong style="color:${d.critDelta >= 0 ? '#4ade80' : '#f87171'}">${d.critDelta >= 0 ? '+' : ''}${d.critDelta}%</strong></div>
+      </div>
+    </div>
+
+    <div style="font-weight:bold; color:#cbd5e1; margin-bottom:6px;">Alterações Propostas (${proposal.changes.length}):</div>
+    <div style="display:flex; flex-direction:column; gap:6px;">
+  `;
+
+  for (const chg of proposal.changes) {
+    const curDef = chg.currentItem ? (allItems[chg.currentItem.itemId] || chg.currentItem) : null;
+    const propDef = chg.proposedItem ? (allItems[chg.proposedItem.itemId] || chg.proposedItem) : null;
+
+    bodyHtml += `
+      <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:4px; padding:6px 10px; display:flex; align-items:center; justify-content:space-between; font-size:11px;">
+        <span style="font-weight:bold; color:var(--gilt); text-transform:uppercase; font-size:10px; min-width:80px;">${chg.slot}:</span>
+        <span style="color:#94a3b8; flex:1; text-align:right; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+          ${curDef ? curDef.name : '<span style="color:#64748b;">(Vazio)</span>'}
+        </span>
+        <span style="margin:0 8px; color:var(--gilt-bright);">➔</span>
+        <span style="color:#86efac; font-weight:600; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+          ${propDef ? propDef.name : `<span style="color:#f87171;">${chg.reason || 'Desequipado'}</span>`}
+        </span>
+      </div>
+    `;
+  }
+
+  bodyHtml += `</div>`;
+  body.innerHTML = bodyHtml;
+
+  overlay.style.display = 'flex';
+
+  confirmBtn.textContent = '⚡ Confirmar Otimização';
+  confirmBtn.onclick = () => {
+    state.equipment = proposal.proposedLoadout;
+    closeInventoryPreviewModal();
+    if (callbacks.log) {
+      callbacks.log(`⚡ Equipamentos otimizados com sucesso! (+${cpGain.toLocaleString()} CP)`, 'rarity-legendary');
+    }
+    updateInventoryUI(state, callbacks);
+    if (callbacks.save) callbacks.save();
+  };
+
+  cancelBtn.onclick = closeInventoryPreviewModal;
+  if (closeBtn) closeBtn.onclick = closeInventoryPreviewModal;
+}
+
+export function openBatchSellModal(state, callbacks = {}, uids) {
+  const uidsToUse = uids || getSelectedSet(state);
+  const preview = getBatchSellPreview(state, uidsToUse);
+
+  if (preview.items.length === 0) {
+    if (preview.protectedCount > 0) {
+      alert(`🛡️ Todos os itens selecionados (${preview.protectedCount}) estão protegidos (equipados, favoritos ou missões) e não podem ser vendidos.`);
+    } else {
+      alert('Nenhum item selecionado para venda.');
+    }
+    return;
+  }
+
+  const overlay = findElement('inv-preview-modal-overlay');
+  const title = findElement('inv-modal-title');
+  const body = findElement('inv-modal-body');
+  const confirmBtn = findElement('inv-modal-confirm-btn');
+  const cancelBtn = findElement('inv-modal-cancel-btn');
+  const closeBtn = findElement('inv-modal-close-btn');
+
+  if (!overlay || !body) return;
+
+  if (title) title.innerHTML = `💰 Venda em Lote (${preview.totalCount} itens)`;
+
+  let bodyHtml = '';
+
+  if (preview.hasHighValue) {
+    bodyHtml += `
+      <div class="preview-high-value-warning">
+        <span>⚠️</span>
+        <span>ATENÇÃO: A seleção inclui itens de alta raridade (Raro ou superior)! Deseja realmente vendê-los?</span>
+      </div>
+    `;
+  }
+
+  bodyHtml += `
+    <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(212,167,68,0.3); border-radius:6px; padding:10px; margin-bottom:12px; display:flex; align-items:center; justify-content:space-between;">
+      <span style="font-size:12px; color:#cbd5e1;">Ouro Total a Receber:</span>
+      <span style="font-size:14px; font-weight:bold; color:var(--gilt-bright);">🪙 ${preview.totalGold.toLocaleString()} Adena</span>
+    </div>
+  `;
+
+  if (preview.protectedCount > 0) {
+    bodyHtml += `
+      <div style="font-size:10px; color:#38bdf8; margin-bottom:8px;">
+        🛡️ ${preview.protectedCount} item(ns) protegidos foram automaticamente preservados.
+      </div>
+    `;
+  }
+
+  bodyHtml += `
+    <div style="max-height:220px; overflow-y:auto; border:1px solid rgba(255,255,255,0.08); border-radius:4px;">
+      <table style="width:100%; border-collapse:collapse; font-size:11px;">
+        <thead>
+          <tr style="background:rgba(0,0,0,0.4); border-bottom:1px solid rgba(212,167,68,0.2);">
+            <th style="padding:6px; text-align:left;">Item</th>
+            <th style="padding:6px; text-align:center;">Qtd</th>
+            <th style="padding:6px; text-align:right;">Valor</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${preview.items.map(it => `
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+              <td style="padding:6px; color:${getRarityColor(it.rarity)};">
+                ${it.enchant ? `+${it.enchant} ` : ''}${it.name}
+              </td>
+              <td style="padding:6px; text-align:center; color:#94a3b8;">${it.count}</td>
+              <td style="padding:6px; text-align:right; color:#fde047;">🪙 ${it.gold.toLocaleString()}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  body.innerHTML = bodyHtml;
+  overlay.style.display = 'flex';
+
+  confirmBtn.textContent = `💰 Confirmar Venda (+${preview.totalGold.toLocaleString()}g)`;
+  confirmBtn.onclick = () => {
+    for (const uid of preview.uidsToSell) {
+      removeFromInventory(state, uid);
+    }
+    state.gold = (Number(state.gold) || 0) + preview.totalGold;
+    clearItemSelection(state);
+    closeInventoryPreviewModal();
+    if (callbacks.log) {
+      callbacks.log(`💰 Vendeu ${preview.totalCount} itens por ${preview.totalGold.toLocaleString()} Adena!`, 'loot');
+    }
+    updateInventoryUI(state, callbacks);
+    if (callbacks.save) callbacks.save();
+  };
+
+  cancelBtn.onclick = closeInventoryPreviewModal;
+  if (closeBtn) closeBtn.onclick = closeInventoryPreviewModal;
+}
+
+export function openBatchSalvageModal(state, callbacks = {}, uids) {
+  const uidsToUse = uids || getSelectedSet(state);
+  const preview = getBatchSalvagePreview(state, uidsToUse);
+
+  if (preview.items.length === 0) {
+    if (preview.protectedCount > 0) {
+      alert(`🛡️ Todos os itens selecionados (${preview.protectedCount}) estão protegidos e não podem ser desmontados.`);
+    } else {
+      alert('Nenhum equipamento selecionado para desmontar.');
+    }
+    return;
+  }
+
+  const overlay = findElement('inv-preview-modal-overlay');
+  const title = findElement('inv-modal-title');
+  const body = findElement('inv-modal-body');
+  const confirmBtn = findElement('inv-modal-confirm-btn');
+  const cancelBtn = findElement('inv-modal-cancel-btn');
+  const closeBtn = findElement('inv-modal-close-btn');
+
+  if (!overlay || !body) return;
+
+  if (title) title.innerHTML = `🔨 Desmanche em Lote (${preview.totalCount} equipamentos)`;
+
+  let bodyHtml = '';
+
+  if (preview.hasHighValue) {
+    bodyHtml += `
+      <div class="preview-high-value-warning">
+        <span>⚠️</span>
+        <span>ATENÇÃO: A seleção inclui itens de alta raridade (Raro ou superior)! Deseja realmente desmontá-los?</span>
+      </div>
+    `;
+  }
+
+  const allItems = D()?.ALL_ITEMS || {};
+  bodyHtml += `
+    <div style="margin-bottom:12px;">
+      <div style="font-weight:bold; color:var(--gilt-bright); margin-bottom:6px;">Rendimento Estimado de Materiais:</div>
+      <div class="preview-yield-pills">
+        ${Object.entries(preview.yieldSummary).map(([matId, amt]) => `
+          <div class="preview-yield-pill">
+            <span>📦</span>
+            <span>+${amt}x ${allItems[matId]?.name || matId}</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+
+    <div style="max-height:200px; overflow-y:auto; border:1px solid rgba(255,255,255,0.08); border-radius:4px;">
+      <table style="width:100%; border-collapse:collapse; font-size:11px;">
+        <thead>
+          <tr style="background:rgba(0,0,0,0.4); border-bottom:1px solid rgba(212,167,68,0.2);">
+            <th style="padding:6px; text-align:left;">Equipamento</th>
+            <th style="padding:6px; text-align:right;">Material Gerado</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${preview.items.map(it => `
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+              <td style="padding:6px; color:${getRarityColor(it.rarity)};">
+                ${it.enchant ? `+${it.enchant} ` : ''}${it.name}
+              </td>
+              <td style="padding:6px; text-align:right; color:#93c5fd;">
+                +${it.amount}x ${allItems[it.matId]?.name || it.matId}
+              </td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  body.innerHTML = bodyHtml;
+  overlay.style.display = 'flex';
+
+  confirmBtn.textContent = `🔨 Confirmar Desmanche (${preview.totalCount} itens)`;
+  confirmBtn.onclick = () => {
+    for (const uid of preview.uidsToSalvage) {
+      removeFromInventory(state, uid);
+    }
+    for (const [matId, amt] of Object.entries(preview.yieldSummary)) {
+      addToInventory(state, matId, amt);
+    }
+    clearItemSelection(state);
+    closeInventoryPreviewModal();
+    if (callbacks.log) {
+      callbacks.log(`🔨 Desmontou ${preview.totalCount} equipamento(s) e obteve materiais!`, 'loot');
+    }
+    updateInventoryUI(state, callbacks);
+    if (callbacks.save) callbacks.save();
+  };
+
+  cancelBtn.onclick = closeInventoryPreviewModal;
+  if (closeBtn) closeBtn.onclick = closeInventoryPreviewModal;
+}
+
+export function openBatchCrystallizeModal(state, callbacks = {}, uids) {
+  const uidsToUse = uids || getSelectedSet(state);
+  const preview = getCrystallizationPreview(state, uidsToUse);
+
+  if (preview.items.length === 0) {
+    if (preview.protectedCount > 0) {
+      alert(`🛡️ Todos os itens selecionados (${preview.protectedCount}) estão protegidos e não podem ser cristalizados.`);
+    } else {
+      alert('Nenhum equipamento de Grau D a S disponível para cristalização.');
+    }
+    return;
+  }
+
+  const overlay = findElement('inv-preview-modal-overlay');
+  const title = findElement('inv-modal-title');
+  const body = findElement('inv-modal-body');
+  const confirmBtn = findElement('inv-modal-confirm-btn');
+  const cancelBtn = findElement('inv-modal-cancel-btn');
+  const closeBtn = findElement('inv-modal-close-btn');
+
+  if (!overlay || !body) return;
+
+  if (title) title.innerHTML = `💎 Cristalização em Lote (${preview.totalCount} equipamentos)`;
+
+  let bodyHtml = '';
+
+  if (preview.hasHighValue) {
+    bodyHtml += `
+      <div class="preview-high-value-warning">
+        <span>⚠️</span>
+        <span>ATENÇÃO: A seleção inclui equipamentos de alta raridade (Raro ou superior)! Deseja realmente cristalizá-los?</span>
+      </div>
+    `;
+  }
+
+  const allItems = D()?.ALL_ITEMS || {};
+  bodyHtml += `
+    <div style="margin-bottom:12px;">
+      <div style="font-weight:bold; color:var(--gilt-bright); margin-bottom:6px;">Cristais Elementares Gerados:</div>
+      <div class="preview-yield-pills">
+        ${Object.entries(preview.yieldSummary).map(([cId, amt]) => `
+          <div class="preview-yield-pill" style="border-color:#60a5fa; color:#93c5fd;">
+            <span>💎</span>
+            <span>+${amt}x ${allItems[cId]?.name || cId}</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+
+    <div style="max-height:200px; overflow-y:auto; border:1px solid rgba(255,255,255,0.08); border-radius:4px;">
+      <table style="width:100%; border-collapse:collapse; font-size:11px;">
+        <thead>
+          <tr style="background:rgba(0,0,0,0.4); border-bottom:1px solid rgba(212,167,68,0.2);">
+            <th style="padding:6px; text-align:left;">Equipamento</th>
+            <th style="padding:6px; text-align:right;">Cristais Gerados</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${preview.items.map(it => `
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.04);">
+              <td style="padding:6px; color:${getRarityColor(it.rarity)};">
+                ${it.enchant ? `+${it.enchant} ` : ''}${it.name}
+              </td>
+              <td style="padding:6px; text-align:right; color:#60a5fa; font-weight:bold;">
+                +${it.amount}x ${allItems[it.crystalId]?.name || it.crystalId}
+              </td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  body.innerHTML = bodyHtml;
+  overlay.style.display = 'flex';
+
+  confirmBtn.textContent = `💎 Confirmar Cristalização (${preview.totalCount} itens)`;
+  confirmBtn.onclick = () => {
+    for (const uid of preview.uidsToCrystallize) {
+      removeFromInventory(state, uid);
+    }
+    for (const [cId, amt] of Object.entries(preview.yieldSummary)) {
+      addToInventory(state, cId, amt);
+    }
+    clearItemSelection(state);
+    closeInventoryPreviewModal();
+    if (callbacks.log) {
+      callbacks.log(`💎 Cristalizou ${preview.totalCount} equipamento(s) com sucesso!`, 'rarity-legendary');
+    }
+    updateInventoryUI(state, callbacks);
+    if (callbacks.save) callbacks.save();
+  };
+
+  cancelBtn.onclick = closeInventoryPreviewModal;
+  if (closeBtn) closeBtn.onclick = closeInventoryPreviewModal;
+}
+
+if (typeof window !== 'undefined') {
+  window.openAutoEquipPreviewModal = openAutoEquipPreviewModal;
+  window.openBatchSellModal = openBatchSellModal;
+  window.openBatchSalvageModal = openBatchSalvageModal;
+  window.openBatchCrystallizeModal = openBatchCrystallizeModal;
+  window.closeInventoryPreviewModal = closeInventoryPreviewModal;
+  window.renderItemDetailAndComparison = renderItemDetailAndComparison;
 }
 
 export function updateWarehouseUI(state, callbacks = {}) {
@@ -1834,6 +2631,13 @@ export function updateEquipmentUI(state, callbacks = {}) {
         hideItemTooltip();
       };
 
+      const handleInspect = (e) => {
+        if (e) e.stopPropagation();
+        window._inspectedItemUid = item.uid;
+        renderItemDetailAndComparison(item, state, callbacks);
+        updateInventoryUI(state, callbacks);
+      };
+
       const handleUnequip = (e) => {
         if (e) {
           e.stopPropagation();
@@ -1846,7 +2650,7 @@ export function updateEquipmentUI(state, callbacks = {}) {
         }
       };
 
-      slotEl.onclick = handleUnequip;
+      slotEl.onclick = handleInspect;
       slotEl.oncontextmenu = handleUnequip;
       slotEl.ondblclick = handleUnequip;
 

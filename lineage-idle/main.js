@@ -89,7 +89,10 @@ import {
   toggleSelectItem as serviceToggleSelectItem,
   selectItemsByFilter as serviceSelectItemsByFilter,
   clearItemSelection as serviceClearItemSelection,
-  consolidateInventoryStacks
+  consolidateInventoryStacks,
+  organizeInventory,
+  calculateInventoryPressure,
+  isItemProtected
 } from './src/services/InventoryService.js';
 
 import {
@@ -101,7 +104,8 @@ import {
 import {
   resolveEquipSlot as serviceResolveEquipSlot,
   equipItem as serviceEquipItem,
-  unequipItem as serviceUnequipItem
+  unequipItem as serviceUnequipItem,
+  generateAutoEquipProposal
 } from './src/services/EquipmentService.js';
 
 import {
@@ -277,7 +281,12 @@ import {
   renderCashShopModal,
   showDropLocatorModal,
   uiOpenPixCheckoutModal,
-  uiOpenReferralModal
+  uiOpenReferralModal,
+  openAutoEquipPreviewModal,
+  openBatchSellModal,
+  openBatchSalvageModal,
+  openBatchCrystallizeModal,
+  renderItemDetailAndComparison
 } from './src/ui/GameUI.js';
 import { CashShopService } from './src/services/CashShopService.js';
 import { NoblesseService } from './src/services/NoblesseService.js';
@@ -7795,9 +7804,9 @@ export function bindEvents() {
     const selUncommonsBtn = el('select-uncommons-btn'); if (selUncommonsBtn) selUncommonsBtn.onclick = () => selectItemsByFilter(i => i.rarity === 'uncommon');
     const selAllBtn = el('select-all-btn'); if (selAllBtn) selAllBtn.onclick = () => selectItemsByFilter(() => true);
     const clearSelBtn = el('clear-selection-btn'); if (clearSelBtn) clearSelBtn.onclick = clearItemSelection;
-    const sellSelBtn = el('sell-selected-btn'); if (sellSelBtn) sellSelBtn.onclick = sellSelectedItems;
-    const salvSelBtn = el('salvage-selected-btn'); if (salvSelBtn) salvSelBtn.onclick = salvageSelectedItems;
-    const crystSelBtn = el('crystallize-selected-btn'); if (crystSelBtn) crystSelBtn.onclick = crystallizeSelectedItems;
+    const sellSelBtn = el('sell-selected-btn'); if (sellSelBtn) sellSelBtn.onclick = () => { if (typeof openBatchSellModal === 'function') openBatchSellModal(state, { updateAllUI, save, log }); else sellSelectedItems(); };
+    const salvSelBtn = el('salvage-selected-btn'); if (salvSelBtn) salvSelBtn.onclick = () => { if (typeof openBatchSalvageModal === 'function') openBatchSalvageModal(state, { updateAllUI, save, log, addToInventory }); else salvageSelectedItems(); };
+    const crystSelBtn = el('crystallize-selected-btn'); if (crystSelBtn) crystSelBtn.onclick = () => { if (typeof openBatchCrystallizeModal === 'function') openBatchCrystallizeModal(state, { updateAllUI, save, log, addToInventory }); else crystallizeSelectedItems(); };
     const combatToggleBtn = el('combat-toggle-btn'); if (combatToggleBtn) combatToggleBtn.onclick = toggleCombatState;
     const ssToggleBtn = el('soulshot-toggle-btn'); if (ssToggleBtn) ssToggleBtn.onclick = toggleSoulshot;
     const apToggleBtn = el('autopotion-toggle-btn'); if (apToggleBtn) apToggleBtn.onclick = toggleAutoPotion;
@@ -7824,7 +7833,13 @@ export function bindEvents() {
       };
     }
     const resetSpBtn = el('reset-sp-btn'); if (resetSpBtn) resetSpBtn.onclick = resetSP;
-    const autoEquipBtn = el('auto-equip-btn'); if (autoEquipBtn) autoEquipBtn.onclick = autoEquipBest;
+    const autoEquipBtn = el('auto-equip-btn'); if (autoEquipBtn) autoEquipBtn.onclick = () => { if (typeof openAutoEquipPreviewModal === 'function') openAutoEquipPreviewModal(state, { updateAllUI, save, log }); else autoEquipBest(); };
+    const organizeInvBtn = el('organize-inv-btn'); if (organizeInvBtn) organizeInvBtn.onclick = () => {
+      const res = organizeInventory(state, state.inventorySortCriteria || 'recommended');
+      log(`🧹 Mochila organizada: ${res.freedSlots} espaço(s) liberado(s)!`, 'loot');
+      updateAllUI();
+      save();
+    };
     const startBtn = el('start-btn'); if (startBtn) startBtn.onclick = startGame;
     const resetBtn = el('reset-btn'); if (resetBtn) resetBtn.onclick = resetSave;
     const resFree = el('res-free'); if (resFree) resFree.onclick = () => resurrect(false);
@@ -8920,6 +8935,12 @@ export function init() {
     window.openCompoundModal = openCompoundModal;
     window.closeCompoundModal = closeCompoundModal;
     window.renderCompoundModal = renderCompoundModal;
+    window.openAutoEquipPreviewModal = () => openAutoEquipPreviewModal(state, { updateAllUI, save, log });
+    window.openBatchSellModal = (uids) => openBatchSellModal(state, { updateAllUI, save, log }, uids);
+    window.openBatchSalvageModal = (uids) => openBatchSalvageModal(state, { updateAllUI, save, log, addToInventory }, uids);
+    window.openBatchCrystallizeModal = (uids) => openBatchCrystallizeModal(state, { updateAllUI, save, log, addToInventory }, uids);
+    window.closeInventoryPreviewModal = closeInventoryPreviewModal;
+    window.organizeInventory = (criteria) => organizeInventory(state, criteria);
 
     // Symbol Maker (Dyes & Henna Tattoos)
     function openSymbolMakerModal() {

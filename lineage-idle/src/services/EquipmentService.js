@@ -1,6 +1,10 @@
 import { D, ALL_EQUIP_SLOTS } from '../core/GameConfig.js';
 import { getStats } from '../engine/StatsEngine.js';
 import { canEquipByType } from '../data/items/item_class_rules.js';
+import { detectItemWeaponType } from '../engine/SkillEngine.js';
+import { isMageClass } from './SkillEligibility.js';
+import { CombatPowerService } from './CombatPowerService.js';
+import { CP_WEIGHTS } from '../data/balance/cpBalance.js';
 
 export function resolveEquipSlot(rawSlot, equipmentState = {}, preferredSlot = null) {
   if (preferredSlot && ALL_EQUIP_SLOTS.includes(preferredSlot)) {
@@ -182,3 +186,248 @@ export function unequipItem(state, slotOrUid, callbacks = {}) {
 }
 
 export { equipItem as equipItemToSlot };
+
+/**
+ * Detecta se uma arma requer empunhadura de duas mãos (2-Handed).
+ * Em Lineage 2 canon: Arcos, Bestas, Espadas 2H, Lanças/Piques, Ancient Swords e Dual Swords ocupam 2 mãos.
+ * @param {Object} itemDef
+ * @returns {boolean}
+ */
+export function isTwoHandedWeapon(itemDef) {
+  if (!itemDef) return false;
+  const s = `${itemDef.id || itemDef.itemId || ''} ${itemDef.name || ''} ${itemDef.type || ''} ${itemDef.weaponType || ''} ${itemDef.slot || ''}`.toLowerCase();
+  return /bow|crossbow|twohand|great_sword|great_axe|two_hand|spear|lance|pike|halberd|pole|polearm|dual|ancientsword/.test(s) || itemDef.isTwoHanded === true || itemDef.hands === 2;
+}
+
+/**
+ * Valida a compatibilidade de mãos entre arma principal e secundária/escudo.
+ * @param {Object} weaponDef
+ * @param {Object} offhandDef
+ * @returns {boolean}
+ */
+export function isWeaponCompatibleWithOffhand(weaponDef, offhandDef) {
+  if (!weaponDef) return true;
+  if (!offhandDef) return true;
+  if (isTwoHandedWeapon(weaponDef)) {
+    return false;
+  }
+  return true;
+}
+
+/**
+ * Calcula o Equipment Recommendation Score (ERS) multicritério para um item.
+ * NÃO utiliza apenas CP — avalia papel da classe, sinergia de sets, compatibilidade e impacto real.
+ * @param {Object} state
+ * @param {Object} item
+ * @param {string} [targetSlot]
+ * @returns {number}
+ */
+export function calculateEquipmentRecommendationScore(state, item, targetSlot = null) {
+  if (!item || !state) return -999999;
+  const gData = D() || {};
+  const allItems = gData.ALL_ITEMS || {};
+  const def = allItems[item.itemId] || item;
+  if (!def) return -999999;
+
+  // Level gate
+  const reqLvl = def.req?.level || def.level || 1;
+  if (state.level < reqLvl) return -999999;
+
+  // Class / Armor type compatibility
+  const equipCheck = canEquipByType(state.class, def);
+  if (!equipCheck.ok) return -999999;
+
+  // Multiplicador de raridade e refino
+  const rarityMult = item.rarity ? (gData.RARITY?.[item.rarity]?.mult || 1) : 1;
+  const enchant = Number(item.enchant || item.enchantLevel) || 0;
+  const enchantMult = 1 + (enchant <= 3 ? enchant * 0.12 : (0.36 + (enchant - 3) * 0.15));
+  const mult = rarityMult * enchantMult;
+
+  const itemAtk = (Number(def.atk) || 0) * mult;
+  const itemMatk = (Number(def.matk) || 0) * mult;
+  const itemDef = (Number(def.def) || 0) * mult;
+  const itemMdef = (Number(def.mdef) || 0) * mult;
+  const itemHp = (Number(def.hp) || 0) * mult;
+  const itemMp = (Number(def.mp) || 0) * mult;
+  const itemCrit = Number(def.crit) || 0;
+
+  // 1. Relevância do Papel de Classe (Role Relevance)
+  let roleScore = 0;
+  const isMage = isMageClass(state.class);
+  const wType = detectItemWeaponType(def);
+  const slot = String(def.slot || '').toLowerCase();
+
+  if (isMage) {
+    if (slot === 'weapon' || slot === 'weapon2') {
+      if (itemMatk > 0) {
+        roleScore += itemMatk * 2.8 + itemMp * 0.6;
+        if (wType === 'staff') roleScore += 600;
+      } else {
+        roleScore -= 3000; // Penaliza severamente armas puramente físicas para magos!
+      }
+    } else {
+      roleScore += itemDef * 0.8 + itemMdef * 1.6 + itemMp * 0.5 + itemHp * 0.3;
+    }
+  } else {
+    // Arquétipos físicos
+    const className = String(state.class || '').toLowerCase();
+    const isArcher = className.includes('archer') || className.includes('hawkeye') || className.includes('sagittarius') || className.includes('ranger') || className.includes('sentinel') || className.includes('sniper') || className.includes('trickster') || className.includes('arbalester') || className.includes('blaster');
+    const isDagger = className.includes('rogue') || className.includes('dagger') || className.includes('assassin') || className.includes('hunter') || className.includes('walker');
+    const isTank = className.includes('knight') || className.includes('paladin') || className.includes('templar');
+
+    if (slot === 'weapon' || slot === 'weapon2') {
+      if (isArcher) {
+        if (wType === 'bow') roleScore += itemAtk * 2.5 + itemCrit * 25 + 1000;
+        else roleScore += itemAtk * 0.4 - 800;
+      } else if (isDagger) {
+        if (wType === 'dagger' || wType === 'dual') roleScore += itemAtk * 2.0 + itemCrit * 35 + 800;
+        else roleScore += itemAtk * 0.7;
+      } else if (isTank) {
+        if (wType === 'sword' || wType === 'blunt') roleScore += itemAtk * 1.5 + itemDef * 1.5 + 700;
+        else if (isTwoHandedWeapon(def)) roleScore += itemAtk * 1.1; // Tanks preferem 1H + Escudo
+      } else {
+        roleScore += itemAtk * 1.8 + itemCrit * 15;
+      }
+    } else {
+      roleScore += itemDef * 1.4 + itemMdef * 1.0 + itemHp * 0.4;
+    }
+  }
+
+  // 2. Sinergia de Conjunto (Set Synergy)
+  let setScore = 0;
+  const setName = def.setName || def.set;
+  if (setName) {
+    let setPieces = 0;
+    for (const eqUid of Object.values(state.equipment || {})) {
+      if (!eqUid) continue;
+      const eqItem = state.inventory?.find(i => i.uid === eqUid);
+      if (!eqItem) continue;
+      const eqDef = allItems[eqItem.itemId] || eqItem;
+      if ((eqDef.setName || eqDef.set) === setName) setPieces++;
+    }
+    if (setPieces >= 2) setScore += 400;
+    if (setPieces >= 3) setScore += 900; // Quase completo ou completa o set!
+  }
+
+  // 3. Portão de Compatibilidade de 2 Mãos
+  if (targetSlot === 'shield' || targetSlot === 'weapon2') {
+    const mainWpnUid = state.equipment?.weapon;
+    const mainWpnItem = mainWpnUid ? state.inventory?.find(i => i.uid === mainWpnUid) : null;
+    const mainWpnDef = mainWpnItem ? (allItems[mainWpnItem.itemId] || mainWpnItem) : null;
+    if (mainWpnDef && isTwoHandedWeapon(mainWpnDef)) {
+      return -999999;
+    }
+  }
+
+  // 4. Sinal secundário de CP auditado
+  const tier = Number(def.tier || item.tier) || 1;
+  const tierBase = (CP_WEIGHTS?.equipmentTierBase?.[tier]) || 150;
+  const encCp = enchant > 0 ? Math.floor(tierBase * (Math.pow(enchant, 1.4) * 0.14)) : 0;
+  const itemCp = tierBase + encCp;
+
+  return Math.round(roleScore + setScore + itemCp * 0.1);
+}
+
+/**
+ * Gera proposta completa de Auto-Equip com análise ERS e deltas antes da confirmação.
+ * @param {Object} state
+ * @returns {{ currentLoadout: Object, proposedLoadout: Object, changes: Array, deltas: Object, currentCp: number, proposedCp: number }}
+ */
+export function generateAutoEquipProposal(state) {
+  if (!state || !state.inventory) return { currentLoadout: {}, proposedLoadout: {}, deltas: {}, changes: [] };
+  const allItems = D()?.ALL_ITEMS || {};
+  const currentEquip = { ...(state.equipment || {}) };
+  const proposedEquip = { ...currentEquip };
+  const usedUids = new Set();
+  const changes = [];
+
+  const slotsToEvaluate = [
+    'weapon', 'shield', 'weapon2',
+    'helmet', 'armor', 'legs', 'gloves', 'boots',
+    'necklace', 'earring1', 'earring2', 'ring1', 'ring2',
+    'cloak', 'belt', 'hair1', 'hair2',
+    'brooch', 'agathion_bracelet', 'talisman_bracelet'
+  ];
+
+  for (const slot of slotsToEvaluate) {
+    const currentUid = currentEquip[slot];
+    const currentItem = currentUid ? state.inventory.find(i => i.uid === currentUid) : null;
+    const currentScore = currentItem ? calculateEquipmentRecommendationScore(state, currentItem, slot) : -99999;
+
+    const candidates = state.inventory.filter(i => {
+      if (!i || usedUids.has(i.uid)) return false;
+      const def = allItems[i.itemId] || i;
+      if (!def) return false;
+      const resolved = resolveEquipSlot(def.slot, currentEquip, slot);
+      return resolved === slot || (slot === 'weapon2' && (def.slot === 'weapon' || def.slot === 'sword' || def.slot === 'dagger'));
+    });
+
+    let bestItem = currentItem;
+    let bestScore = currentScore;
+
+    for (const cand of candidates) {
+      const score = calculateEquipmentRecommendationScore(state, cand, slot);
+      if (score > bestScore) {
+        bestScore = score;
+        bestItem = cand;
+      }
+    }
+
+    if (bestItem && bestItem.uid !== currentUid) {
+      proposedEquip[slot] = bestItem.uid;
+      usedUids.add(bestItem.uid);
+      changes.push({
+        slot,
+        currentUid,
+        proposedUid: bestItem.uid,
+        currentItem,
+        proposedItem: bestItem
+      });
+    } else if (currentUid) {
+      usedUids.add(currentUid);
+    }
+  }
+
+  // Limpeza de offhand para armas de duas mãos
+  const propMainUid = proposedEquip.weapon;
+  const propMainItem = propMainUid ? state.inventory.find(i => i.uid === propMainUid) : null;
+  const propMainDef = propMainItem ? (allItems[propMainItem.itemId] || propMainItem) : null;
+  if (propMainDef && isTwoHandedWeapon(propMainDef)) {
+    if (proposedEquip.shield) {
+      changes.push({ slot: 'shield', currentUid: proposedEquip.shield, proposedUid: null, currentItem: state.inventory.find(i => i.uid === proposedEquip.shield), proposedItem: null, reason: 'Desequipado (Arma de 2 Mãos)' });
+      proposedEquip.shield = null;
+    }
+    if (proposedEquip.weapon2) {
+      changes.push({ slot: 'weapon2', currentUid: proposedEquip.weapon2, proposedUid: null, currentItem: state.inventory.find(i => i.uid === proposedEquip.weapon2), proposedItem: null, reason: 'Desequipado (Arma de 2 Mãos)' });
+      proposedEquip.weapon2 = null;
+    }
+  }
+
+  const currentCp = CombatPowerService.calculateCombatPower(state);
+  const currentStats = getStats(state);
+
+  const mockState = { ...state, equipment: proposedEquip };
+  const proposedCp = CombatPowerService.calculateCombatPower(mockState);
+  const proposedStats = getStats(mockState);
+
+  const deltas = {
+    cpDelta: proposedCp - currentCp,
+    atkDelta: (proposedStats.atk || 0) - (currentStats.atk || 0),
+    matkDelta: (proposedStats.matk || 0) - (currentStats.matk || 0),
+    defDelta: (proposedStats.def || 0) - (currentStats.def || 0),
+    mdefDelta: (proposedStats.mdef || 0) - (currentStats.mdef || 0),
+    hpDelta: (proposedStats.maxHp || 0) - (currentStats.maxHp || 0),
+    mpDelta: (proposedStats.maxMp || 0) - (currentStats.maxMp || 0),
+    critDelta: (proposedStats.crit || 0) - (currentStats.crit || 0),
+    speedDelta: (proposedStats.speed || 0) - (currentStats.speed || 0),
+  };
+
+  return {
+    currentLoadout: currentEquip,
+    proposedLoadout: proposedEquip,
+    changes,
+    deltas,
+    currentCp,
+    proposedCp
+  };
+}

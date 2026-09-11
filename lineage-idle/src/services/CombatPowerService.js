@@ -11,6 +11,7 @@ import { calculateDetailedCombatPower as calculateDetailedCpCanonical } from '..
 import { calculateEHP } from '../data/balance/phase4Model.js';
 import { SubclassCertificationService } from './SubclassCertificationService.js';
 import { isMageClass } from './SkillEligibility.js';
+import { WeaponResonanceService } from './WeaponResonanceService.js';
 
 export const CombatPowerService = {
   /**
@@ -22,7 +23,9 @@ export const CombatPowerService = {
   calculateCombatPower(state) {
     if (!state) return 100;
     const certCp = SubclassCertificationService.calculateCertificationCP(state);
-    const detailed = calculateDetailedCpCanonical({ ...state, _certificationCp: certCp });
+    const activeRes = WeaponResonanceService?.getActiveResonance ? WeaponResonanceService.getActiveResonance(state) : null;
+    const resCp = activeRes ? 1240 : 0;
+    const detailed = calculateDetailedCpCanonical({ ...state, _certificationCp: certCp + resCp });
     return detailed.totalCp;
   },
 
@@ -35,7 +38,26 @@ export const CombatPowerService = {
   calculateDetailedCombatPower(state) {
     if (!state) return { totalCp: 100, components: {}, trail: [] };
     const certCp = SubclassCertificationService.calculateCertificationCP(state);
-    return calculateDetailedCpCanonical({ ...state, _certificationCp: certCp });
+    const activeRes = WeaponResonanceService?.getActiveResonance ? WeaponResonanceService.getActiveResonance(state) : null;
+    const resCp = activeRes ? 1240 : 0;
+    return calculateDetailedCpCanonical({ ...state, _certificationCp: certCp + resCp });
+  },
+
+  /**
+   * Realiza auditoria matemática das componentes do Combat Power, verificando deriva zero.
+   * @param {Object} state 
+   * @returns {{ pass: boolean, drift: number, totalCp: number, sumComponents: number }}
+   */
+  auditCombatPower(state) {
+    const detailed = this.calculateDetailedCombatPower(state);
+    const sum = Object.values(detailed.components || {}).reduce((s, v) => s + v, 0);
+    const drift = Math.abs(detailed.totalCp - Math.max(100, Math.floor(sum)));
+    return {
+      pass: detailed.auditPass ?? (drift <= 1),
+      drift,
+      totalCp: detailed.totalCp,
+      sumComponents: detailed.sumComponents ?? Math.floor(sum)
+    };
   },
 
   /**

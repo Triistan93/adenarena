@@ -347,6 +347,19 @@ export const RESONANCE_DEFINITIONS = {
     weap2: 'any',
     reqShield: true,
     passives: { castSpd: 25, damageReductionPct: 15 }
+  },
+
+  // 27. Espada + Espada (Sinfonia das Lâminas)
+  blade_symphony: {
+    id: 'blade_symphony',
+    name: 'Sinfonia das Lâminas',
+    pairName: 'Espada + Espada',
+    icon: '⚔️⚔️',
+    color: '#3b82f6',
+    desc: 'Cadência perfeita de combate com lâminas duplas: +15% Velocidade de Ataque (Atk.Spd) e +10% de Chance de Crítico.',
+    weap1: 'sword',
+    weap2: 'sword',
+    passives: { atkSpd: 15, critChance: 10 }
   }
 };
 

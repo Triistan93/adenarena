@@ -614,12 +614,23 @@ export const IDLE_MARKUP = `
                 <span class="l2inv-window-title">Inventory</span>
                 <span class="l2inv-counter" id="l2inv-counter">(<span id="inv-slots-count">0</span>/<span id="max-inv-slots">150</span>)</span>
               </div>
+              <div class="inv-capacity-pressure-widget" id="inv-capacity-pressure-widget" style="display:flex; align-items:center; gap:8px; margin-left:auto; margin-right:12px;" title="Pressão de Capacidade da Mochila">
+                <div class="inv-pressure-bar-track" style="width:110px; height:8px; background:rgba(0,0,0,0.7); border:1px solid rgba(212,167,68,0.3); border-radius:4px; overflow:hidden; position:relative;">
+                  <div class="inv-pressure-bar-fill" id="inv-capacity-pressure-bar" style="width:0%; height:100%; background:#c8aa6e; transition:width 0.3s ease, background 0.3s ease;"></div>
+                </div>
+                <span class="inv-pressure-bar-label" id="inv-capacity-pressure-label" style="font-size:10px; font-weight:bold; color:#cbd5e1; min-width:80px;">0% Normal</span>
+              </div>
               <div class="l2inv-window-controls">
                 <button class="l2inv-win-btn" title="Ajuda">?</button>
                 <button class="l2inv-win-btn" title="Gênero">♂</button>
                 <button class="l2inv-win-btn" title="Minimizar">_</button>
                 <button class="l2inv-win-btn close" title="Fechar">✕</button>
               </div>
+            </div>
+
+            <!-- Full Inventory Alert Banner (100% capacity) -->
+            <div class="inv-full-alert-banner" id="inv-full-alert-banner" style="display:none; background:linear-gradient(90deg, #7f1d1d, #991b1b, #7f1d1d); color:#fecaca; border:1px solid #ef4444; padding:6px 12px; font-size:11px; font-weight:bold; text-align:center; box-shadow:0 0 12px rgba(239,68,68,0.4); animation:l2-pulse-alert 2s infinite;">
+              ⚠️ MOCHILA CHEIA! A capacidade de carga atingiu 100%. Novos itens não poderão ser recolhidos até liberar espaço.
             </div>
 
             <!-- Two-panel layout -->
@@ -777,11 +788,23 @@ export const IDLE_MARKUP = `
 
                 <!-- Subbar Reestruturada em 2 Linhas Elegantes sem Sobreposição -->
                 <div class="l2inv-subbar" style="display:flex; flex-direction:column; gap:6px; padding:8px; background:rgba(10,12,18,0.95); border:1px solid rgba(212,167,68,0.25); border-radius:6px; margin-bottom:8px;">
-                  <!-- Linha 1: Busca em Destaque + Auto-Venda + Filtro AFK -->
-                  <div style="display:flex; align-items:center; gap:8px; width:100%;">
-                    <div style="flex:1; position:relative;">
+                  <!-- Linha 1: Busca em Destaque + Ordenação + Auto-Venda + Filtro AFK -->
+                  <div style="display:flex; align-items:center; gap:8px; width:100%; flex-wrap:wrap;">
+                    <div style="flex:1; min-width:140px; position:relative;">
                       <label for="inv-search-input" class="sr-only" style="display:none;">Buscar no inventário</label>
                       <input type="text" id="inv-search-input" name="invSearch" aria-label="Filtrar inventário por nome de item" placeholder="🔍 Buscar no inventário..." style="width:100%; background:#090c12; color:#ece4d3; border:1px solid rgba(212,167,68,0.4); border-radius:4px; padding:5px 8px; font-size:11px; box-sizing:border-box;" title="Filtrar por nome de item" />
+                    </div>
+                    <div style="display:flex; align-items:center; gap:4px; font-size:10px; color:#cbd5e1; flex-shrink:0;">
+                      <label for="inv-sort-select" style="font-weight:600; cursor:pointer; color:var(--gilt);">Ordenar:</label>
+                      <select id="inv-sort-select" name="invSort" aria-label="Ordenação do inventário" style="background:#090b10; color:#fff; border:1px solid rgba(212,167,68,0.3); border-radius:4px; padding:3px 6px; font-size:10px; cursor:pointer;">
+                        <option value="recommended">✨ Recomendado</option>
+                        <option value="cp">⚡ Maior CP</option>
+                        <option value="grade">🎖️ Grau (S→NG)</option>
+                        <option value="rarity">🌟 Raridade</option>
+                        <option value="enchant">✨ Encantamento</option>
+                        <option value="name">🔤 Nome (A-Z)</option>
+                        <option value="count">🔢 Quantidade</option>
+                      </select>
                     </div>
                     <div style="display:flex; align-items:center; gap:4px; font-size:10px; color:#fde047; flex-shrink:0;">
                       <label for="auto-sell-rarity-select" style="font-weight:600; cursor:pointer;">Auto-Venda:</label>
@@ -834,6 +857,11 @@ export const IDLE_MARKUP = `
                   <button id="salvage-selected-btn" class="l2inv-trash-btn salvage" disabled title="Desmontar Selecionados">🔨 Desmontar</button>
                   <button id="crystallize-selected-btn" class="l2inv-trash-btn crystallize" style="background:linear-gradient(135deg, #1e3a8a, #2563eb); border:1px solid #60a5fa; color:#fff; border-radius:4px; padding:4px 10px; font-size:11px; cursor:pointer; font-weight:600;" title="Cristalizar Equipamentos Selecionados de Grau D a S">💎 Cristalizar Lote</button>
                 </div>
+
+                <!-- Intelligent Comparison Dock: Detail & Side-by-Side Comparison -->
+                <div class="l2inv-detail-panel" id="l2inv-detail-panel" style="display:none; margin-top:10px; background:rgba(8,12,18,0.95); border:1px solid rgba(212,167,68,0.35); border-radius:6px; padding:10px; box-shadow:0 4px 20px rgba(0,0,0,0.8);">
+                  <!-- Populated dynamically by GameUI.js -->
+                </div>
               </div>
             </div>
 
@@ -857,6 +885,23 @@ export const IDLE_MARKUP = `
                 <div class="l2inv-weight-gauge" title="Capacidade da Mochila">
                   <span class="l2inv-weight-icon">🎒</span>
                   <span id="inv-slots">0/150</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Modal de Prévia e Confirmação de Ações da Mochila -->
+            <div class="inv-preview-modal-overlay" id="inv-preview-modal-overlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:99999; align-items:center; justify-content:center; padding:16px;">
+              <div class="inv-preview-modal-card" id="inv-preview-modal-card" style="background:linear-gradient(180deg, #161c28, #0b0f16); border:1px solid rgba(212,167,68,0.5); border-radius:8px; width:100%; max-width:540px; max-height:85vh; display:flex; flex-direction:column; box-shadow:0 0 30px rgba(0,0,0,0.9), 0 0 15px rgba(212,167,68,0.2);">
+                <div class="inv-modal-header" id="inv-modal-header" style="display:flex; align-items:center; justify-content:space-between; padding:10px 14px; border-bottom:1px solid rgba(212,167,68,0.3); background:rgba(0,0,0,0.4);">
+                  <h4 id="inv-modal-title" style="margin:0; font-size:13px; color:var(--gilt-bright); font-family:'Cinzel',serif; letter-spacing:0.5px;">Prévia da Ação</h4>
+                  <button id="inv-modal-close-btn" style="background:none; border:none; color:#94a3b8; font-size:16px; cursor:pointer; padding:2px 6px;">✕</button>
+                </div>
+                <div class="inv-modal-body" id="inv-modal-body" style="padding:14px; overflow-y:auto; flex:1; font-size:12px; color:#e2e8f0;">
+                  <!-- Conteúdo dinâmico -->
+                </div>
+                <div class="inv-modal-footer" id="inv-modal-footer" style="display:flex; justify-content:flex-end; gap:8px; padding:10px 14px; border-top:1px solid rgba(212,167,68,0.25); background:rgba(0,0,0,0.3);">
+                  <button id="inv-modal-cancel-btn" style="background:#1e293b; border:1px solid #475569; color:#cbd5e1; border-radius:4px; padding:6px 12px; font-size:11px; cursor:pointer;">Cancelar</button>
+                  <button id="inv-modal-confirm-btn" style="background:linear-gradient(180deg, #b45309, #78350f); border:1px solid #d97706; color:#fef3c7; border-radius:4px; padding:6px 14px; font-size:11px; font-weight:bold; cursor:pointer;">Confirmar</button>
                 </div>
               </div>
             </div>

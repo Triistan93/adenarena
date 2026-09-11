@@ -27,13 +27,14 @@ export function getMaxWarehouseSlots() {
 }
 
 /**
- * Verifica se um item possui alta raridade e exige confirmação prévia para venda/desmanche.
+ * Verifica se um item possui alta raridade (Raro ou superior) e exige confirmação prévia para venda/desmanche/cristalização.
  * @param {Object} item
  * @returns {boolean}
  */
 export function isHighValueItem(item) {
   if (!item || !item.rarity) return false;
-  return HIGH_RARITIES.includes(item.rarity.toLowerCase());
+  const r = String(item.rarity).toLowerCase();
+  return ['rare', 'epic', 'legendary', 'mythic'].includes(r) || HIGH_RARITIES.includes(r);
 }
 
 /**
@@ -599,4 +600,470 @@ export function selectItemsByFilter(state, filterFn) {
 export function clearItemSelection(state) {
   const set = getSelectedSet(state);
   set.clear();
+}
+
+/**
+ * Calcula a pressão de capacidade do inventário/mochila.
+ * Retorna os dados para renderização da barra de capacidade e banner de alerta.
+ * @param {Object} state
+ * @returns {{ count: number, max: number, pct: number, status: 'normal'|'warning'|'critical'|'full', label: string, color: string, isFull: boolean }}
+ */
+export function calculateInventoryPressure(state) {
+  const inv = state?.inventory || [];
+  const count = inv.length;
+  const max = getMaxInventorySlots(state);
+  const pct = max > 0 ? Math.round((count / max) * 100) : 0;
+
+  let status = 'normal';
+  let label = 'Normal';
+  let color = '#c8aa6e';
+
+  if (pct >= 100) {
+    status = 'full';
+    label = 'Mochila Cheia';
+    color = '#ff2a2a';
+  } else if (pct >= 90) {
+    status = 'critical';
+    label = 'Crítico';
+    color = '#ef4444';
+  } else if (pct >= 75) {
+    status = 'warning';
+    label = 'Alerta';
+    color = '#f59e0b';
+  }
+
+  return {
+    count,
+    max,
+    pct,
+    status,
+    label,
+    color,
+    isFull: count >= max
+  };
+}
+
+/**
+ * Avalia se um item está protegido contra qualquer ação destrutiva (Venda, Desmanche, Cristalização).
+ * Blindagem obrigatória: Itens equipados, favoritos, trancados, protegidos, itens de missão e herança.
+ * @param {Object} item
+ * @param {Object} [def]
+ * @returns {boolean}
+ */
+export function isItemProtected(item, def) {
+  if (!item) return true;
+  if (!def) {
+    const gData = D();
+    def = gData?.ALL_ITEMS?.[item.itemId] || item;
+  }
+
+  // 1. Equipado no personagem
+  if (item.equipped) return true;
+
+  // 2. Favorito ou Trancado (Travamento de segurança manual do usuário)
+  if (item.isFavorite || item.favorite || item.isLocked || item.locked || item.isProtected) return true;
+
+  // 3. Itens de Missão / Quest
+  const slot = String(def?.slot || item.slot || '').toLowerCase();
+  const type = String(def?.type || item.type || '').toLowerCase();
+  const id = String(def?.id || item.itemId || '').toLowerCase();
+  const name = String(def?.name || '').toLowerCase();
+
+  if (def?.isQuestItem || item.isQuestItem || slot === 'quest' || slot === 'quest_item' || type === 'quest' || id.startsWith('quest_')) {
+    return true;
+  }
+
+  // 4. Itens de Herança (Heirloom / Starter)
+  if (def?.isHeirloom || item.isHeirloom || id.includes('heirloom') || name.includes('herança')) {
+    return true;
+  }
+
+  return false;
+}
+
+/**
+ * Organiza a mochila do jogador:
+ * 1. Agrupa consumíveis e materiais idênticos não-encantados em pilhas completas.
+ * 2. Ordena os itens contextualmente respeitando a regra comercial (equipados sempre no topo, seguidos por critério).
+ * @param {Object} state
+ * @param {string} [sortCriteria='recommended']
+ * @returns {{ freedSlots: number, originalCount: number, newCount: number }}
+ */
+export function organizeInventory(state, sortCriteria = 'recommended') {
+  if (!state || !Array.isArray(state.inventory)) {
+    return { freedSlots: 0, originalCount: 0, newCount: 0 };
+  }
+
+  const allItems = D()?.ALL_ITEMS || {};
+  const originalCount = state.inventory.length;
+
+  // Fase 1: Fusão de pilhas (Stacking) de itens compatíveis
+  const unstacked = [];
+  const stackMap = new Map(); // key -> Array<item>
+
+  for (const item of state.inventory) {
+    if (!item) continue;
+    const def = allItems[item.itemId] || item;
+    const slot = String(def.slot || item.slot || '').toLowerCase();
+    const type = String(def.type || item.type || '').toLowerCase();
+    const isInherentlyStackable = ['consumable', 'material', 'scroll', 'powerup', 'potion', 'coin', 'essence', 'crystal'].includes(slot) ||
+      ['consumable', 'material', 'scroll', 'powerup', 'potion', 'coin', 'essence', 'crystal'].includes(type) ||
+      def.isStackable === true || def.stackable === true || (Number(item.count) > 1);
+
+    const maxStack = Number(def.stack) || (isInherentlyStackable ? 99999 : 1);
+    const canStack = (maxStack > 1 || isInherentlyStackable) &&
+      !item.equipped &&
+      (!item.enchant || item.enchant === 0) &&
+      !item.augmented &&
+      !item.soulCrystal &&
+      !item.foundation;
+
+    if (canStack) {
+      const rarity = String(item.rarity || 'common').toLowerCase();
+      const key = `${item.itemId}__${rarity}`;
+      if (!stackMap.has(key)) {
+        stackMap.set(key, []);
+      }
+      stackMap.get(key).push(item);
+    } else {
+      unstacked.push(item);
+    }
+  }
+
+  const consolidated = [...unstacked];
+
+  for (const [key, items] of stackMap.entries()) {
+    const firstItem = items[0];
+    const def = allItems[firstItem.itemId] || firstItem;
+    const maxStack = Number(def.stack) || 99999;
+
+    let totalCount = items.reduce((acc, it) => acc + (Number(it.count) || 1), 0);
+
+    while (totalCount > 0) {
+      const thisBatch = Math.min(totalCount, maxStack);
+      consolidated.push({
+        ...firstItem,
+        uid: items.length === 1 && totalCount === thisBatch ? firstItem.uid : (Date.now() + '_' + Math.random().toString(36).slice(2, 8)),
+        count: thisBatch,
+        equipped: false
+      });
+      totalCount -= thisBatch;
+    }
+  }
+
+  // Fase 2: Ordenação determinística
+  state.inventory = sortInventoryItems(consolidated, sortCriteria, state);
+
+  const newCount = state.inventory.length;
+  const freedSlots = Math.max(0, originalCount - newCount);
+
+  return { freedSlots, originalCount, newCount };
+}
+
+/**
+ * Ordena os itens do inventário de acordo com o critério escolhido.
+ * @param {Array} items
+ * @param {string} criteria
+ * @param {Object} state
+ * @returns {Array}
+ */
+export function sortInventoryItems(items, criteria = 'recommended', state = {}) {
+  const allItems = D()?.ALL_ITEMS || {};
+  const RARITY_VAL = { 'mythic': 6, 'legendary': 5, 'epic': 4, 'rare': 3, 'uncommon': 2, 'common': 1 };
+  const GRADE_VAL = { 's': 6, 'a': 5, 'b': 4, 'c': 3, 'd': 2, 'ng': 1 };
+
+  return [...items].sort((a, b) => {
+    // Equipados sempre têm prioridade no topo da mochila
+    if (a.equipped && !b.equipped) return -1;
+    if (!a.equipped && b.equipped) return 1;
+
+    const da = allItems[a.itemId] || a;
+    const db = allItems[b.itemId] || b;
+
+    const ra = RARITY_VAL[String(a.rarity || 'common').toLowerCase()] || 1;
+    const rb = RARITY_VAL[String(b.rarity || 'common').toLowerCase()] || 1;
+
+    const ga = GRADE_VAL[String(da.grade || '').toLowerCase()] || (da.tier || 1);
+    const gb = GRADE_VAL[String(db.grade || '').toLowerCase()] || (db.tier || 1);
+
+    const ea = Number(a.enchant || a.enchantLevel) || 0;
+    const eb = Number(b.enchant || b.enchantLevel) || 0;
+
+    const nameA = String(da.name || a.itemId || '').toLowerCase();
+    const nameB = String(db.name || b.itemId || '').toLowerCase();
+
+    switch (criteria) {
+      case 'cp': {
+        const cpa = (da.atk || 0) * 1.5 + (da.matk || 0) * 1.5 + (da.def || 0) * 1.2 + (da.mdef || 0) * 1.2 + ea * 25 + ra * 50;
+        const cpb = (db.atk || 0) * 1.5 + (db.matk || 0) * 1.5 + (db.def || 0) * 1.2 + (db.mdef || 0) * 1.2 + eb * 25 + rb * 50;
+        if (cpb !== cpa) return cpb - cpa;
+        return nameA.localeCompare(nameB);
+      }
+      case 'grade': {
+        if (gb !== ga) return gb - ga;
+        if (rb !== ra) return rb - ra;
+        if (eb !== ea) return eb - ea;
+        return nameA.localeCompare(nameB);
+      }
+      case 'rarity': {
+        if (rb !== ra) return rb - ra;
+        if (gb !== ga) return gb - ga;
+        if (eb !== ea) return eb - ea;
+        return nameA.localeCompare(nameB);
+      }
+      case 'enchant': {
+        if (eb !== ea) return eb - ea;
+        if (gb !== ga) return gb - ga;
+        return nameA.localeCompare(nameB);
+      }
+      case 'name': {
+        return nameA.localeCompare(nameB);
+      }
+      case 'count': {
+        const ca = Number(a.count) || 1;
+        const cb = Number(b.count) || 1;
+        if (cb !== ca) return cb - ca;
+        return nameA.localeCompare(nameB);
+      }
+      case 'recommended':
+      default: {
+        if (gb !== ga) return gb - ga;
+        if (rb !== ra) return rb - ra;
+        if (eb !== ea) return eb - ea;
+        const la = Number(da.req?.level || da.level) || 0;
+        const lb = Number(db.req?.level || db.level) || 0;
+        if (lb !== la) return lb - la;
+        return nameA.localeCompare(nameB);
+      }
+    }
+  });
+}
+
+/**
+ * Gera a prévia para venda em lote (Batch Sell Preview)
+ * @param {Object} state
+ * @param {Array<string>|Set<string>} uids
+ * @returns {{ items: Array, totalGold: number, totalCount: number, hasHighValue: boolean, protectedCount: number, uidsToSell: Array<string> }}
+ */
+export function getBatchSellPreview(state, uids) {
+  const uidList = Array.from(uids || []);
+  const allItems = D()?.ALL_ITEMS || {};
+  const items = [];
+  let totalGold = 0;
+  let totalCount = 0;
+  let hasHighValue = false;
+  let protectedCount = 0;
+  const uidsToSell = [];
+
+  for (const uid of uidList) {
+    const item = state.inventory?.find(i => String(i.uid) === String(uid));
+    if (!item) continue;
+    const def = allItems[item.itemId] || item;
+
+    if (isItemProtected(item, def) || isProtectedFromAutoSell(item, def)) {
+      protectedCount++;
+      continue;
+    }
+
+    const itemQty = Number(item.count) || 1;
+    const basePrice = Number(def.price) || 10;
+    const mult = item.rarity ? (D()?.RARITY?.[item.rarity]?.mult || 1) : 1;
+    const enchant = Number(item.enchant) || 0;
+    const enchantMult = 1 + enchant * 0.1;
+    const goldEarned = Math.floor(basePrice * mult * enchantMult * 0.4) * itemQty;
+
+    if (isHighValueItem(item)) {
+      hasHighValue = true;
+    }
+
+    totalGold += goldEarned;
+    totalCount += itemQty;
+    uidsToSell.push(item.uid);
+
+    items.push({
+      uid: item.uid,
+      itemId: item.itemId,
+      name: def.name || item.itemId,
+      count: itemQty,
+      enchant,
+      rarity: item.rarity || 'common',
+      gold: goldEarned,
+      icon: def.icon || 'item_default.png'
+    });
+  }
+
+  return {
+    items,
+    totalGold,
+    totalCount,
+    hasHighValue,
+    protectedCount,
+    uidsToSell
+  };
+}
+
+/**
+ * Gera a prévia para desmanche em lote (Batch Salvage Preview)
+ * @param {Object} state
+ * @param {Array<string>|Set<string>} uids
+ * @returns {{ items: Array, yieldSummary: Record<string, number>, totalCount: number, hasHighValue: boolean, protectedCount: number, uidsToSalvage: Array<string> }}
+ */
+export function getBatchSalvagePreview(state, uids) {
+  const uidList = Array.from(uids || []);
+  const allItems = D()?.ALL_ITEMS || {};
+  const items = [];
+  const yieldSummary = {};
+  let totalCount = 0;
+  let hasHighValue = false;
+  let protectedCount = 0;
+  const uidsToSalvage = [];
+
+  for (const uid of uidList) {
+    const item = state.inventory?.find(i => String(i.uid) === String(uid));
+    if (!item) continue;
+    const def = allItems[item.itemId] || item;
+
+    if (isItemProtected(item, def)) {
+      protectedCount++;
+      continue;
+    }
+
+    const slot = String(def.slot || '').toLowerCase();
+    const isEquip = slot && !['consumable', 'material', 'scroll', 'powerup', 'quest'].includes(slot);
+    if (!isEquip) continue;
+
+    if (isHighValueItem(item)) {
+      hasHighValue = true;
+    }
+
+    const reqLvl = def.req ? (def.req.level || 1) : (def.level || 1);
+    const rarityMult = item.rarity ? (D()?.RARITY?.[item.rarity]?.mult || 1) : 1;
+
+    let matId = 'iron_ore';
+    const tier = Number(def.tier) || 1;
+    if (tier >= 6 || reqLvl >= 76) matId = 'crystal_s';
+    else if (tier === 5 || reqLvl >= 62) matId = 'crystal_a';
+    else if (tier === 4 || reqLvl >= 52) matId = 'crystal_b';
+    else if (tier === 3 || reqLvl >= 40) matId = 'crystal_c';
+    else if (tier === 2 || reqLvl >= 20) matId = 'crystal_d';
+    else matId = (slot === 'weapon') ? 'iron_ore' : 'cloth';
+
+    const amount = Math.max(1, Math.floor((reqLvl / 5 + 1) * rarityMult));
+
+    yieldSummary[matId] = (yieldSummary[matId] || 0) + amount;
+    totalCount++;
+    uidsToSalvage.push(item.uid);
+
+    items.push({
+      uid: item.uid,
+      itemId: item.itemId,
+      name: def.name || item.itemId,
+      rarity: item.rarity || 'common',
+      enchant: Number(item.enchant) || 0,
+      matId,
+      amount,
+      icon: def.icon || 'item_default.png'
+    });
+  }
+
+  return {
+    items,
+    yieldSummary,
+    totalCount,
+    hasHighValue,
+    protectedCount,
+    uidsToSalvage
+  };
+}
+
+/**
+ * Gera a prévia para cristalização em lote (Crystallization Preview)
+ * @param {Object} state
+ * @param {Array<string>|Set<string>} [uids]
+ * @returns {{ items: Array, yieldSummary: Record<string, number>, totalCount: number, hasHighValue: boolean, protectedCount: number, uidsToCrystallize: Array<string> }}
+ */
+export function getCrystallizationPreview(state, uids) {
+  let uidList = uids ? Array.from(uids) : [];
+  const allItems = D()?.ALL_ITEMS || {};
+  const items = [];
+  const yieldSummary = {};
+  let totalCount = 0;
+  let hasHighValue = false;
+  let protectedCount = 0;
+  const uidsToCrystallize = [];
+
+  // Se nenhum UID fornecido, busca itens de Grau D a S desequipados
+  if (uidList.length === 0) {
+    uidList = (state.inventory || [])
+      .filter(item => {
+        if (!item || item.equipped) return false;
+        const def = allItems[item.itemId] || item;
+        const slot = String(def.slot || '').toLowerCase();
+        const isEquip = slot && !['consumable', 'material', 'scroll', 'powerup', 'quest'].includes(slot);
+        if (!isEquip) return false;
+        const reqLvl = def.req ? (def.req.level || 1) : (def.level || 1);
+        const tier = Number(def.tier) || 1;
+        return tier >= 2 || reqLvl >= 20; // Grau D ou superior
+      })
+      .map(i => i.uid);
+  }
+
+  for (const uid of uidList) {
+    const item = state.inventory?.find(i => String(i.uid) === String(uid));
+    if (!item) continue;
+    const def = allItems[item.itemId] || item;
+
+    if (isItemProtected(item, def)) {
+      protectedCount++;
+      continue;
+    }
+
+    const slot = String(def.slot || '').toLowerCase();
+    const isEquip = slot && !['consumable', 'material', 'scroll', 'powerup', 'quest'].includes(slot);
+    if (!isEquip) continue;
+
+    const reqLvl = def.req ? (def.req.level || 1) : (def.level || 1);
+    const tier = Number(def.tier) || 1;
+    const rarityMult = item.rarity ? (D()?.RARITY?.[item.rarity]?.mult || 1) : 1;
+    const enchant = Number(item.enchant) || 0;
+
+    let cId = null;
+    let baseCrystals = 15;
+    if (tier >= 6 || reqLvl >= 76) { cId = 'crystal_s'; baseCrystals = 70 + enchant * 15; }
+    else if (tier === 5 || reqLvl >= 62) { cId = 'crystal_a'; baseCrystals = 45 + enchant * 10; }
+    else if (tier === 4 || reqLvl >= 52) { cId = 'crystal_b'; baseCrystals = 30 + enchant * 8; }
+    else if (tier === 3 || reqLvl >= 40) { cId = 'crystal_c'; baseCrystals = 20 + enchant * 6; }
+    else if (tier === 2 || reqLvl >= 20) { cId = 'crystal_d'; baseCrystals = 15 + enchant * 4; }
+
+    if (!cId) continue;
+
+    if (isHighValueItem(item)) {
+      hasHighValue = true;
+    }
+
+    const finalAmount = Math.max(5, Math.floor(baseCrystals * rarityMult));
+    yieldSummary[cId] = (yieldSummary[cId] || 0) + finalAmount;
+    totalCount++;
+    uidsToCrystallize.push(item.uid);
+
+    items.push({
+      uid: item.uid,
+      itemId: item.itemId,
+      name: def.name || item.itemId,
+      rarity: item.rarity || 'common',
+      enchant,
+      crystalId: cId,
+      amount: finalAmount,
+      icon: def.icon || 'item_default.png'
+    });
+  }
+
+  return {
+    items,
+    yieldSummary,
+    totalCount,
+    hasHighValue,
+    protectedCount,
+    uidsToCrystallize
+  };
 }
