@@ -323,7 +323,7 @@ export function calculateEquipmentRecommendationScore(state, item, targetSlot = 
 
   // 4. Sinal secundário de CP auditado
   const tier = Number(def.tier || item.tier) || 1;
-  const tierBase = (CP_WEIGHTS?.equipmentTierBase?.[tier]) || 150;
+  const tierBase = (CP_WEIGHTS?.equipmentTierBase?.[tier]) || 60;
   const encCp = enchant > 0 ? Math.floor(tierBase * (Math.pow(enchant, 1.4) * 0.14)) : 0;
   const itemCp = tierBase + encCp;
 

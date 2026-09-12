@@ -207,11 +207,7 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
 
     const inventoryItems: any[] = [
       { uid: 'init_w', itemId: kit.weapon, count: 1, rarity: 'common', enchant: 0 },
-      { uid: 'init_h', itemId: kit.helmet, count: 1, rarity: 'common', enchant: 0 },
       { uid: 'init_a', itemId: kit.armor, count: 1, rarity: 'common', enchant: 0 },
-      { uid: 'init_l', itemId: kit.legs, count: 1, rarity: 'common', enchant: 0 },
-      { uid: 'init_g', itemId: kit.gloves, count: 1, rarity: 'common', enchant: 0 },
-      { uid: 'init_b', itemId: kit.boots, count: 1, rarity: 'common', enchant: 0 },
       { uid: 'init_pot', itemId: kit.potions.itemId, count: kit.potions.count },
       { uid: 'init_shots', itemId: kit.shotType, count: kit.shotsCount }
     ];
@@ -219,11 +215,11 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
     const equipmentMap: Record<string, string | null> = {
       weapon: 'init_w',
       weapon2: null,
-      helmet: 'init_h',
+      helmet: null,
       armor: 'init_a',
-      legs: 'init_l',
-      gloves: 'init_g',
-      boots: 'init_b',
+      legs: null,
+      gloves: null,
+      boots: null,
       shield: null
     };
 
@@ -244,6 +240,7 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
       xp: 0,
       sp: 10,
       gold: 2000,
+      base: { atk: 0, def: 0, eva: 0, matk: 0, mdef: 0 },
       zone: 'talkingIsland',
       inventory: inventoryItems,
       equipment: equipmentMap,

@@ -9,47 +9,47 @@ import { ALL_ITEMS } from '../items/index.js';
 import { BRACELETS } from '../talismans.js';
 
 export const CP_WEIGHTS = {
-  levelMultiplier: 150,
-  classTierMultiplier: 1200,
+  levelMultiplier: 20,
+  classTierMultiplier: 250,
 
   stats: {
-    atk: 1.8,
-    matk: 1.6,
-    def: 1.5,
-    mdef: 1.5,
-    maxHp: 0.12,
-    maxMp: 0.08,
-    crit: 15,
-    speed: 6,
-    eva: 8
+    atk: 0.45,
+    matk: 0.35,
+    def: 0.40,
+    mdef: 0.35,
+    maxHp: 0.08,
+    maxMp: 0.05,
+    crit: 1.8,
+    speed: 2.0,
+    eva: 0.7
   },
 
   equipmentTierBase: {
-    1: 150,   // No Grade
-    2: 350,   // D Grade
-    3: 750,   // C Grade
-    4: 1600,  // B Grade
-    5: 3200,  // A Grade
-    6: 6500   // S Grade / Frost Lord / Apex
+    1: 60,    // No Grade (2 peças no spawn = 120 CP)
+    2: 85,    // D Grade
+    3: 200,   // C Grade
+    4: 450,   // B Grade
+    5: 1000,  // A Grade
+    6: 2200   // S Grade / Frost Lord / Apex
   },
 
   specialBonuses: {
-    soulCrystal: 1200,
-    augmentationStats: 1500,
-    augmentationSkill: 1000,
-    unsealed: 800,
-    epicJewel: 3500,
-    heroWeapon: 5000,
-    skillEnchantLevel: 120,
-    clanLevel: 600,
-    clanCastle: 2500,
-    fortressOwned: 800,
-    fortressTalisman: 600,
-    noblesse: 2000,
-    hero: 5000,
-    codexSet: 500,
-    bossDoll: 800,
-    sevenSigns: 500
+    soulCrystal: 300,
+    augmentationStats: 350,
+    augmentationSkill: 250,
+    unsealed: 200,
+    epicJewel: 1000,
+    heroWeapon: 1500,
+    skillEnchantLevel: 50,
+    clanLevel: 150,
+    clanCastle: 600,
+    fortressOwned: 200,
+    fortressTalisman: 150,
+    noblesse: 500,
+    hero: 1500,
+    codexSet: 150,
+    bossDoll: 200,
+    sevenSigns: 150
   }
 };
 
@@ -184,7 +184,7 @@ export function calculateDetailedCombatPower(state) {
       if (!invItem) return;
       const def = ALL_ITEMS?.[invItem.itemId || invItem.id] || invItem;
       const tier = Number(def.tier || invItem.tier) || 1;
-      const tierBase = CP_WEIGHTS.equipmentTierBase[tier] || 150;
+      const tierBase = CP_WEIGHTS.equipmentTierBase[tier] || 60;
 
       // Enchant CP (separate from tier base)
       const enchant = Number(invItem.enchant || invItem.enchantLevel) || 0;

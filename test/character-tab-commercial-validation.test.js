@@ -184,14 +184,14 @@ describe('Commercial Hero Profile & Power Progression Hub (#tab-character)', () 
   it('7. Equipment Power: Item CP contribution correctly applies tier base, enchant scaling, and SA', () => {
     const tier = 5;
     const tierBase = CP_WEIGHTS.equipmentTierBase[tier];
-    assert.strictEqual(tierBase, 3200, 'Tier 5 base CP must be 3200');
+    assert.strictEqual(tierBase, 1000, 'Tier 5 base CP must be 1000');
 
     const enchant = 8;
     const expectedEnchantCp = Math.floor(tierBase * (Math.pow(enchant, 1.4) * 0.14));
     assert.ok(expectedEnchantCp > 0, 'Enchant CP must be positive');
 
     const saCp = CP_WEIGHTS.specialBonuses.soulCrystal;
-    assert.strictEqual(saCp, 1200, 'Soul Crystal SA must provide 1200 CP');
+    assert.strictEqual(saCp, 300, 'Soul Crystal SA must provide 300 CP');
 
     const totalItemCp = tierBase + expectedEnchantCp + saCp;
     assert.ok(totalItemCp > tierBase, 'Item CP must grow with enchant and SA');

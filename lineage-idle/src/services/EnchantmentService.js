@@ -158,7 +158,7 @@ export function getEnchantPreview(state, targetUid, scrollUid) {
 
   // Delta de Combat Power Canônico
   const tier = Number(targetDef.tier) || 1;
-  const tierBase = (CP_WEIGHTS?.equipmentTierBase?.[tier]) || 150;
+  const tierBase = (CP_WEIGHTS?.equipmentTierBase?.[tier]) || 60;
   const prevEncCp = currentEnchant > 0 ? Math.floor(tierBase * (Math.pow(currentEnchant, 1.4) * 0.14)) : 0;
   const nextEncCp = Math.floor(tierBase * (Math.pow(targetEnchant, 1.4) * 0.14));
   const cpDelta = nextEncCp - prevEncCp;

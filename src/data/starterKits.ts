@@ -7,13 +7,13 @@
 
 export interface StarterKitConfig {
   weapon: string;
-  shield?: string;
+  shield?: string | null;
   armorType: 'heavy' | 'light' | 'robe';
-  helmet: string;
+  helmet?: string | null;
   armor: string;
-  legs: string;
-  gloves: string;
-  boots: string;
+  legs?: string | null;
+  gloves?: string | null;
+  boots?: string | null;
   starterSkill: string;
   shotType: 'soulshot_ng' | 'spiritshot_ng';
   potions: { itemId: string; count: number };
@@ -24,29 +24,32 @@ export function getStarterKit(race: string, className: string): StarterKitConfig
   const r = (race || '').toLowerCase();
   const c = (className || '').toLowerCase();
 
-  // 1. Definições de Sets de Armadura No-Grade
-  const HEAVY_SET = {
-    helmet: 'bronze_helmet',
+  // 1. Definições Canônicas de Armadura No-Grade (Nível 1 clássico: apenas peito/veste)
+  const HEAVY_STARTER = {
     armor: 'bronze_breastplate_heavy',
-    legs: 'bronze_gaiters_heavy',
-    gloves: 'bronze_gloves',
-    boots: 'lether_boots'
+    helmet: null,
+    legs: null,
+    gloves: null,
+    boots: null,
+    shield: null
   };
 
-  const LIGHT_SET = {
-    helmet: 'leather_helmet',
+  const LIGHT_STARTER = {
     armor: 'leather_vest_light',
-    legs: 'leather_pants_light',
-    gloves: 'leather_gloves',
-    boots: 'lether_boots'
+    helmet: null,
+    legs: null,
+    gloves: null,
+    boots: null,
+    shield: null
   };
 
-  const ROBE_SET = {
-    helmet: 'devotion_helmet',
+  const ROBE_STARTER = {
     armor: 'devotion_armor_robe',
-    legs: 'devotion_pants_robe',
-    gloves: 'devotion_gloves',
-    boots: 'devotion_boots'
+    helmet: null,
+    legs: null,
+    gloves: null,
+    boots: null,
+    shield: null
   };
 
   // 2. Mapeamento Específico por Classe / Especialização
@@ -56,10 +59,10 @@ export function getStarterKit(race: string, className: string): StarterKitConfig
     return {
       weapon: 'short_spear',
       armorType: 'heavy',
-      ...HEAVY_SET,
-      starterSkill: 'thrust_spear',
+      ...HEAVY_STARTER,
+      starterSkill: 'flaming_charge',
       shotType: 'soulshot_ng',
-      potions: { itemId: 'hp_potion_s', count: 100 },
+      potions: { itemId: 'hp_potion_s', count: 20 },
       shotsCount: 500
     };
   }
@@ -69,11 +72,11 @@ export function getStarterKit(race: string, className: string): StarterKitConfig
     return {
       weapon: 'tomahawk_axe',
       armorType: 'heavy',
-      ...HEAVY_SET,
-      starterSkill: 'warg_will',
+      ...HEAVY_STARTER,
+      starterSkill: 'savage_bite',
       shotType: 'soulshot_ng',
-      potions: { itemId: 'hp_potion_s', count: 100 },
-      shotsCount: 400
+      potions: { itemId: 'hp_potion_s', count: 20 },
+      shotsCount: 500
     };
   }
 
@@ -82,11 +85,11 @@ export function getStarterKit(race: string, className: string): StarterKitConfig
     return {
       weapon: 'falchion_sword',
       armorType: 'heavy',
-      ...HEAVY_SET,
-      starterSkill: 'death_spike_dk',
+      ...HEAVY_STARTER,
+      starterSkill: 'cinderblade',
       shotType: 'soulshot_ng',
-      potions: { itemId: 'hp_potion_s', count: 100 },
-      shotsCount: 400
+      potions: { itemId: 'hp_potion_s', count: 20 },
+      shotsCount: 500
     };
   }
 
@@ -95,11 +98,11 @@ export function getStarterKit(race: string, className: string): StarterKitConfig
     return {
       weapon: 'sword_breaker',
       armorType: 'light',
-      ...LIGHT_SET,
-      starterSkill: 'assassin_harmony',
+      ...LIGHT_STARTER,
+      starterSkill: 'gloom_strike',
       shotType: 'soulshot_ng',
-      potions: { itemId: 'hp_potion_s', count: 100 },
-      shotsCount: 400
+      potions: { itemId: 'hp_potion_s', count: 20 },
+      shotsCount: 500
     };
   }
 
@@ -108,25 +111,24 @@ export function getStarterKit(race: string, className: string): StarterKitConfig
     return {
       weapon: 'sword_breaker',
       armorType: 'light',
-      ...LIGHT_SET,
-      starterSkill: 'warg_harmony',
+      ...LIGHT_STARTER,
+      starterSkill: 'savage_bite',
       shotType: 'soulshot_ng',
-      potions: { itemId: 'hp_potion_s', count: 100 },
-      shotsCount: 400
+      potions: { itemId: 'hp_potion_s', count: 20 },
+      shotsCount: 500
     };
   }
 
-  // 🐉 Orc Vanguard Rider — Lança e Escudo / Armadura Pesada
+  // 🐉 Orc Vanguard Rider — Lança e Armadura Pesada
   if (c.includes('rider') || c.includes('vanguard')) {
     return {
-      weapon: 'falchion_sword',
-      shield: 'shield_small_shield',
+      weapon: 'short_spear',
       armorType: 'heavy',
-      ...HEAVY_SET,
-      starterSkill: 'power_strike_f',
+      ...HEAVY_STARTER,
+      starterSkill: 'flaming_charge',
       shotType: 'soulshot_ng',
-      potions: { itemId: 'hp_potion_s', count: 100 },
-      shotsCount: 400
+      potions: { itemId: 'hp_potion_s', count: 20 },
+      shotsCount: 500
     };
   }
 
@@ -135,10 +137,10 @@ export function getStarterKit(race: string, className: string): StarterKitConfig
     return {
       weapon: 'sword_breaker',
       armorType: 'light',
-      ...LIGHT_SET,
-      starterSkill: 'burst_fire',
+      ...LIGHT_STARTER,
+      starterSkill: 'gale_shot',
       shotType: 'soulshot_ng',
-      potions: { itemId: 'hp_potion_s', count: 100 },
+      potions: { itemId: 'hp_potion_s', count: 20 },
       shotsCount: 500
     };
   }
@@ -148,11 +150,11 @@ export function getStarterKit(race: string, className: string): StarterKitConfig
     return {
       weapon: 'iron_hammer',
       armorType: 'heavy',
-      ...HEAVY_SET,
-      starterSkill: c.includes('shine') ? 'shinemaker_harmony' : 'power_strike_f',
+      ...HEAVY_STARTER,
+      starterSkill: c.includes('shine') ? 'radiant_hammer' : 'hammer_slam',
       shotType: 'soulshot_ng',
-      potions: { itemId: 'hp_potion_s', count: 100 },
-      shotsCount: 400
+      potions: { itemId: 'hp_potion_s', count: 20 },
+      shotsCount: 500
     };
   }
 
@@ -161,10 +163,10 @@ export function getStarterKit(race: string, className: string): StarterKitConfig
     return {
       weapon: 'crucifix_of_blessing_magicblunt',
       armorType: 'robe',
-      ...ROBE_SET,
-      starterSkill: 'blood_rose_harmony',
+      ...ROBE_STARTER,
+      starterSkill: 'thorned_hex',
       shotType: 'spiritshot_ng',
-      potions: { itemId: 'hp_potion_s', count: 100 },
+      potions: { itemId: 'hp_potion_s', count: 20 },
       shotsCount: 500
     };
   }
@@ -174,25 +176,24 @@ export function getStarterKit(race: string, className: string): StarterKitConfig
     return {
       weapon: 'sword_breaker',
       armorType: 'light',
-      ...LIGHT_SET,
-      starterSkill: 'sayha_harmony',
+      ...LIGHT_STARTER,
+      starterSkill: 'whirlwind_dash',
       shotType: 'soulshot_ng',
-      potions: { itemId: 'hp_potion_s', count: 100 },
-      shotsCount: 400
+      potions: { itemId: 'hp_potion_s', count: 20 },
+      shotsCount: 500
     };
   }
 
-  // 🛡️ High Elf Divine Templar — Espada e Escudo Sagrado
+  // 🛡️ High Elf Divine Templar — Espada Sagrada
   if (c === 'highelfbase' || c === 'divinetemplars1' || c === 'divinetemplar') {
     return {
       weapon: 'falchion_sword',
-      shield: 'shield_small_shield',
       armorType: 'heavy',
-      ...HEAVY_SET,
-      starterSkill: 'divine_templar_harmony',
+      ...HEAVY_STARTER,
+      starterSkill: 'divine_bulwark',
       shotType: 'soulshot_ng',
-      potions: { itemId: 'hp_potion_s', count: 100 },
-      shotsCount: 400
+      potions: { itemId: 'hp_potion_s', count: 20 },
+      shotsCount: 500
     };
   }
 
@@ -201,10 +202,10 @@ export function getStarterKit(race: string, className: string): StarterKitConfig
     return {
       weapon: 'crucifix_of_blessing_magicblunt',
       armorType: 'robe',
-      ...ROBE_SET,
-      starterSkill: 'element_weaver_harmony',
+      ...ROBE_STARTER,
+      starterSkill: 'triad_combo',
       shotType: 'spiritshot_ng',
-      potions: { itemId: 'hp_potion_s', count: 100 },
+      potions: { itemId: 'hp_potion_s', count: 20 },
       shotsCount: 500
     };
   }
@@ -214,11 +215,11 @@ export function getStarterKit(race: string, className: string): StarterKitConfig
     return {
       weapon: 'sword_breaker',
       armorType: 'light',
-      ...LIGHT_SET,
-      starterSkill: 'samurai_harmony',
+      ...LIGHT_STARTER,
+      starterSkill: 'iaijutsu_strike',
       shotType: 'soulshot_ng',
-      potions: { itemId: 'hp_potion_s', count: 100 },
-      shotsCount: 400
+      potions: { itemId: 'hp_potion_s', count: 20 },
+      shotsCount: 500
     };
   }
 
@@ -228,10 +229,10 @@ export function getStarterKit(race: string, className: string): StarterKitConfig
     return {
       weapon: 'crucifix_of_blessing_magicblunt',
       armorType: 'robe',
-      ...ROBE_SET,
-      starterSkill: 'energy_bolt_m',
+      ...ROBE_STARTER,
+      starterSkill: 'wind_strike',
       shotType: 'spiritshot_ng',
-      potions: { itemId: 'hp_potion_s', count: 100 },
+      potions: { itemId: 'hp_potion_s', count: 20 },
       shotsCount: 500
     };
   }
@@ -241,10 +242,10 @@ export function getStarterKit(race: string, className: string): StarterKitConfig
     return {
       weapon: 'hunting_bow',
       armorType: 'light',
-      ...LIGHT_SET,
-      starterSkill: 'double_shot_f',
+      ...LIGHT_STARTER,
+      starterSkill: 'aqua_arrow',
       shotType: 'soulshot_ng',
-      potions: { itemId: 'hp_potion_s', count: 100 },
+      potions: { itemId: 'hp_potion_s', count: 20 },
       shotsCount: 500
     };
   }
@@ -254,11 +255,11 @@ export function getStarterKit(race: string, className: string): StarterKitConfig
     return {
       weapon: 'sword_breaker',
       armorType: 'light',
-      ...LIGHT_SET,
-      starterSkill: 'power_strike_f',
+      ...LIGHT_STARTER,
+      starterSkill: 'venom_fang',
       shotType: 'soulshot_ng',
-      potions: { itemId: 'hp_potion_s', count: 100 },
-      shotsCount: 400
+      potions: { itemId: 'hp_potion_s', count: 20 },
+      shotsCount: 500
     };
   }
 
@@ -267,23 +268,22 @@ export function getStarterKit(race: string, className: string): StarterKitConfig
     return {
       weapon: 'tomahawk_axe',
       armorType: 'heavy',
-      ...HEAVY_SET,
-      starterSkill: 'power_strike_f',
+      ...HEAVY_STARTER,
+      starterSkill: 'brutal_cleave',
       shotType: 'soulshot_ng',
-      potions: { itemId: 'hp_potion_s', count: 100 },
-      shotsCount: 400
+      potions: { itemId: 'hp_potion_s', count: 20 },
+      shotsCount: 500
     };
   }
 
   // ⚔️ Human Fighter / Default
   return {
     weapon: 'knight_sword',
-    shield: 'shield_small_shield',
     armorType: 'heavy',
-    ...HEAVY_SET,
-    starterSkill: 'power_strike_f',
+    ...HEAVY_STARTER,
+    starterSkill: 'shield_bash',
     shotType: 'soulshot_ng',
-    potions: { itemId: 'hp_potion_s', count: 100 },
-    shotsCount: 400
+    potions: { itemId: 'hp_potion_s', count: 20 },
+    shotsCount: 500
   };
 }

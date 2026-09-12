@@ -3411,13 +3411,13 @@ export function updateCharacterUI(state) {
       const def = allItems[invItem.itemId || invItem.id] || invItem;
 
       const tier = Number(def.tier || invItem.tier) || 1;
-      const tierBase = (CP_WEIGHTS && CP_WEIGHTS.equipmentTierBase && CP_WEIGHTS.equipmentTierBase[tier]) || 150;
+      const tierBase = (CP_WEIGHTS && CP_WEIGHTS.equipmentTierBase && CP_WEIGHTS.equipmentTierBase[tier]) || 60;
       const enc = Number(invItem.enchant || invItem.enchantLevel) || 0;
       const encCp = enc > 0 ? Math.floor(tierBase * (Math.pow(enc, 1.4) * 0.14)) : 0;
       let specCp = 0;
-      if (invItem.sa || invItem.soulCrystal) specCp += (CP_WEIGHTS?.specialBonuses?.soulCrystal || 1200);
-      if (invItem.augmentation?.stats) specCp += (CP_WEIGHTS?.specialBonuses?.augmentationStats || 1500);
-      if (invItem.isEpic || def.isEpic) specCp += (CP_WEIGHTS?.specialBonuses?.epicJewel || 3500);
+      if (invItem.sa || invItem.soulCrystal) specCp += (CP_WEIGHTS?.specialBonuses?.soulCrystal || 300);
+      if (invItem.augmentation?.stats) specCp += (CP_WEIGHTS?.specialBonuses?.augmentationStats || 350);
+      if (invItem.isEpic || def.isEpic) specCp += (CP_WEIGHTS?.specialBonuses?.epicJewel || 1000);
 
       const itemCp = tierBase + encCp + specCp;
       const grade = def.grade || (tier === 6 ? 'S' : tier === 5 ? 'A' : tier === 4 ? 'B' : tier === 3 ? 'C' : tier === 2 ? 'D' : 'NG');

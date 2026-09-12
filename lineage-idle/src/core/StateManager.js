@@ -453,14 +453,10 @@ export function applyStarterKit(state, race, classId, charName = null, gender = 
   // Habilita automaticamente Soulshot/Spiritshot
   state.soulshotActive = true;
 
-  // Inicializa atributos base através dos registros da Raça e Classe
+  // Inicializa atributos base zerados (raceStats e clsBase são calculados dinamicamente em StatsEngine)
   const gEcho = (typeof window !== 'undefined' && window.EchoData) ? window.EchoData : {};
-  const raceDef = gEcho.RACES_ECHO?.[canonicalRace] || {};
   const classDef = gEcho.CLASSES_ECHO?.[canonicalClass] || {};
   state.base = { atk: 0, def: 0, eva: 0, matk: 0, mdef: 0 };
-  for (const k of ['atk', 'def', 'eva', 'matk', 'mdef']) {
-    state.base[k] = (raceDef.stats?.[k] || 0) + (classDef.base?.[k] || 0);
-  }
 
   // Desbloqueia estritamente a habilidade inicial canônica de Nível 1 da classe/arquétipo
   state.skills = {};

@@ -164,7 +164,7 @@ test('5.1. calculateCombatPower produces deterministic and positive CP across st
   const cp1 = calculateCombatPower(testStats);
   const cp2 = calculateCombatPower(testStats);
   assert.equal(cp1, cp2, 'CP must be strictly deterministic');
-  assert.ok(cp1 > 3000 && cp1 < 12000, 'CP is in expected Lv. 40 range');
+  assert.ok(cp1 > 1000 && cp1 < 5000, 'CP is in expected Lv. 40 range');
 });
 
 test('5.2. evaluateDifficulty correctly categorizes zone and boss CP thresholds', () => {
