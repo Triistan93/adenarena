@@ -1387,8 +1387,8 @@ const STATIC_CRAFTING_RECIPES = {
   // Crafts Especiais de Relíquias de Boss e Frost Lord TOP Tier
   "weapon_zaken_sword": { "id": "weapon_zaken_sword", "level": 76, "craftLevel": 5, "gold": 750000, "reqs": [{ "id": "zaken_shard", "count": 10 }, { "id": "magic_dark_heart", "count": 1 }] },
   "weapon_core_bow": { "id": "weapon_core_bow", "level": 76, "craftLevel": 5, "gold": 750000, "reqs": [{ "id": "core_shard", "count": 10 }, { "id": "magic_dark_heart", "count": 1 }] },
-  "weapon_orfen_dagger": { "id": "weapon_orfen_dagger", "level": 76, "craftLevel": 5, "gold": 750000, "reqs": [{ "id": "orfen_shard", "count": 10 }, { "id": "magic_dark_heart", "count": 1 }] },
-  "jewel_baium_ring": { "id": "jewel_baium_ring", "level": 76, "craftLevel": 5, "gold": 1000000, "reqs": [{ "id": "baium_shard", "count": 10 }, { "id": "magic_dark_heart", "count": 1 }] },
+  "weapon_orfen_twohanded_sword": { "id": "weapon_orfen_twohanded_sword", "level": 76, "craftLevel": 5, "gold": 750000, "reqs": [{ "id": "orfen_shard", "count": 10 }, { "id": "magic_dark_heart", "count": 1 }] },
+  "jewel_ring_of_baium": { "id": "jewel_ring_of_baium", "level": 76, "craftLevel": 5, "gold": 1000000, "reqs": [{ "id": "baium_shard", "count": 10 }, { "id": "magic_dark_heart", "count": 1 }] },
   "weapon_frost_lord_sword": { "id": "weapon_frost_lord_sword", "level": 76, "craftLevel": 6, "gold": 1500000, "reqs": [{ "id": "frost_fragment", "count": 100 }, { "id": "frost_lord_dark_heart", "count": 1 }] },
   "weapon_frost_lord_bow": { "id": "weapon_frost_lord_bow", "level": 76, "craftLevel": 6, "gold": 1500000, "reqs": [{ "id": "frost_fragment", "count": 100 }, { "id": "frost_lord_dark_heart", "count": 1 }] },
   "weapon_frost_lord_staff": { "id": "weapon_frost_lord_staff", "level": 76, "craftLevel": 6, "gold": 1500000, "reqs": [{ "id": "frost_fragment", "count": 100 }, { "id": "frost_lord_dark_heart", "count": 1 }] }
@@ -1425,18 +1425,37 @@ export const CRAFTING_RECIPES = new Proxy(STATIC_CRAFTING_RECIPES, {
   }
 });
 
-export const SHOP_INVENTORY = [
-  "hp_potion_s",
-  "hp_potion_m",
-  "hp_potion_l",
-  "hp_potion_xl",
-  "mp_potion_s",
-  "mp_potion_m",
-  "mp_potion_l",
-  "mp_potion_xl",
-  "soulshot_ng",
-  "spiritshot_ng"
-];
+export const SHOP_INVENTORY = {
+  talkingIsland: [
+    { id: "weapon_falchion_sword" },
+    { id: "weapon_composition_bow" },
+    { id: "weapon_iron_hammer" },
+    { id: "weapon_crucifix_of_blessing_magicblunt" },
+    { id: "hp_potion_s" },
+    { id: "mp_potion_s" },
+    { id: "soulshot_ng" }
+  ],
+  gludioCastle: [
+    { id: "hp_potion_m" },
+    { id: "mp_potion_m" },
+    { id: "soulshot_d" }
+  ],
+  giranOutskirts: [
+    { id: "hp_potion_l" },
+    { id: "mp_potion_l" },
+    { id: "soulshot_c" }
+  ],
+  dragonValley: [
+    { id: "hp_potion_xl" },
+    { id: "mp_potion_xl" },
+    { id: "soulshot_b" }
+  ],
+  adenCity: [
+    { id: "hp_potion_xl" },
+    { id: "mp_potion_xl" },
+    { id: "soulshot_a" }
+  ]
+};
 
 export const ZONE_GOLD_MULT = {
   zone1: 1.0, zone2: 1.5, zone3: 2.2, zone4: 3.5, zone5: 5.5, zone6: 9.0, zone7: 14.0,

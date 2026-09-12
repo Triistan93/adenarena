@@ -24,8 +24,8 @@ export const STARTER_JOURNEY_STEPS = [
     icon: '⭐',
     targetCount: 20,
     checkProgress: (state) => Math.min(20, state.level || 1),
-    rewardText: '50.000 Adena + 5x Scrolls Enchant Weapon (D)',
-    reward: { adena: 50000, itemId: 'scrl_enchant_wp_d', qty: 5 }
+    rewardText: '50.000 Adena + 5x Pergaminhos de Encantamento de Arma',
+    reward: { adena: 50000, itemId: 'scroll_of_enchant_weapon', qty: 5 }
   },
   {
     id: 'step_3_first_forge',
@@ -40,8 +40,8 @@ export const STARTER_JOURNEY_STEPS = [
       const hasEnchantedWeapon = Boolean(state.equipment?.weapon && (state.inventory?.find(i => i.uid === state.equipment.weapon)?.enchantLevel > 0));
       return (enchants > 0 || fusions > 0 || hasEnchantedWeapon) ? 1 : 0;
     },
-    rewardText: '1x Life Stone (Mid-Grade) + 50.000 Adena',
-    reward: { adena: 50000, itemId: 'ls_mid_76', qty: 1 }
+    rewardText: '1x Pedra de Vida (Grau Médio) + 50.000 Adena',
+    reward: { adena: 50000, itemId: 'life_stone_mid', qty: 1 }
   },
   {
     id: 'step_4_skill_mastery',

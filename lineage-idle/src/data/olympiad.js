@@ -187,28 +187,28 @@ export const OLYMPIAD_GLADIATORS = [
 
 export const OLYMPIAD_SHOP_CATALOG = [
   {
-    id: 'giants_codex',
-    name: "Giant's Codex",
+    id: 'scroll_blessed_universal',
+    name: "Pergaminho Abençoado Universal",
     priceTokens: 500,
-    icon: 'gradespecial/items/giants_codex.png',
-    desc: 'Livro lendário dos Gigantes necessário para encantar habilidades além do limite máximo.',
-    reward: { itemId: 'giants_codex', count: 1 }
+    icon: 'scrolls/scroll_of_enchant_weapon_.png',
+    desc: 'Pergaminho Abençoado Universal: encanta qualquer equipamento (+1) com proteção total contra quebra em caso de falha.',
+    reward: { itemId: 'scroll_blessed_universal', count: 1 }
   },
   {
     id: 'blessed_scroll_weapon_s',
-    name: 'Blessed Scroll: Enchant Weapon (S-Grade)',
+    name: 'Pergaminho Abençoado de Arma',
     priceTokens: 1200,
-    icon: 'gradespecial/scrolls/scroll_enchant_weapon_s.png',
-    desc: 'Pergaminho Abençoado de Arma S-Grade. Em caso de falha, o item preserva o nível e não se destrói.',
-    reward: { itemId: 'blessed_scroll_weapon_s', count: 1 }
+    icon: 'scrolls/scroll_of_enchant_weapon_.png',
+    desc: 'Pergaminho Abençoado de Arma. Em caso de falha, o item preserva o nível e não se destrói.',
+    reward: { itemId: 'scroll_blessed_weapon', count: 1 }
   },
   {
     id: 'blessed_scroll_armor_s',
-    name: 'Blessed Scroll: Enchant Armor (S-Grade)',
+    name: 'Pergaminho Abençoado de Armadura',
     priceTokens: 600,
-    icon: 'gradespecial/scrolls/scroll_enchant_armor_s.png',
-    desc: 'Pergaminho Abençoado de Armadura S-Grade. Preserva o equipamento com segurança.',
-    reward: { itemId: 'blessed_scroll_armor_s', count: 1 }
+    icon: 'scrolls/scroll_of_enchant_armor.png',
+    desc: 'Pergaminho Abençoado de Armadura. Preserva o equipamento com segurança.',
+    reward: { itemId: 'scroll_blessed_armor', count: 1 }
   },
   {
     id: 'hero_cp_potion_bundle',

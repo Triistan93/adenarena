@@ -74,7 +74,7 @@ export const SEVEN_SIGNS_BOSSES = {
       aa: 150000,
       xp: 2500000,
       sp: 500000,
-      items: ['scroll_enchant_weapon_s', 'giants_codex_mastery', 'life_stone_top_76']
+      items: ['scroll_blessed_weapon', 'scroll_blessed_universal', 'life_stone_mid']
     }
   },
   anakim: {
@@ -93,7 +93,7 @@ export const SEVEN_SIGNS_BOSSES = {
       aa: 150000,
       xp: 2500000,
       sp: 500000,
-      items: ['scroll_enchant_weapon_s', 'giants_codex_mastery', 'life_stone_top_76']
+      items: ['scroll_blessed_weapon', 'scroll_blessed_universal', 'life_stone_mid']
     }
   }
 };
@@ -121,52 +121,31 @@ export const MAMMON_BLACKSMITH_SERVICES = [
 
 export const MAMMON_MERCHANT_CATALOG = [
   {
-    id: 'scroll_enchant_weapon_a',
-    name: 'Scroll: Enchant Weapon (A-Grade) 📜',
+    id: 'scroll_of_enchant_weapon',
+    name: 'Pergaminho de Encantar Arma (Universal) 📜',
     costAA: 30000,
-    icon: '📜',
-    desc: 'Pergaminho sagrado para encantar armas A-Grade.'
+    icon: 'scrolls/scroll_of_enchant_weapon_.png',
+    desc: 'Pergaminho universal para encantar armas com segurança.'
   },
   {
-    id: 'scroll_enchant_weapon_s',
-    name: 'Scroll: Enchant Weapon (S-Grade) 📜',
-    costAA: 100000,
-    icon: '📜',
-    desc: 'Pergaminho supremo para encantar armas S-Grade.'
-  },
-  {
-    id: 'giants_codex',
-    name: "Giant's Codex 📜",
+    id: 'scroll_blessed_weapon',
+    name: 'Pergaminho Abençoado de Arma 📜',
     costAA: 80000,
-    icon: '📜',
-    desc: 'Tomo ancestral dos Gigantes para encantar habilidades de classe.'
+    icon: 'scrolls/scroll_of_enchant_weapon_.png',
+    desc: 'Pergaminho supremo que preserva o nível da arma em caso de falha.'
   },
   {
-    id: 'giants_codex_mastery',
-    name: "Giant's Codex - Mastery 🌟",
-    costAA: 250000,
-    icon: '🌟',
-    desc: 'Tomo consagrado para encantar habilidades com 100% de segurança contra perda de níveis.'
-  },
-  {
-    id: 'life_stone_top_76',
-    name: 'Top-Grade Life Stone: Level 76 💎',
+    id: 'scroll_blessed_universal',
+    name: 'Pergaminho Abençoado Universal 🌟',
     costAA: 150000,
-    icon: '💎',
-    desc: 'Pedra da vida suprema com 100% de garantia de Glow e alta chance de Item Skill.'
+    icon: 'scrolls/scroll_of_enchant_weapon_.png',
+    desc: 'Encanta qualquer equipamento com proteção absoluta contra quebra ou redução.'
   },
   {
-    id: 'ancient_dye_str_con',
-    name: 'Greater Dye of STR (+4 STR / -4 CON) 🩸',
+    id: 'life_stone_mid',
+    name: 'Pedra de Vida (Grau Médio) 💎',
     costAA: 60000,
-    icon: '🩸',
-    desc: 'Tintura arcana dos Gigantes para forjar tatuagens de combate físico.'
-  },
-  {
-    id: 'ancient_dye_int_men',
-    name: 'Greater Dye of INT (+4 INT / -4 MEN) 🔮',
-    costAA: 60000,
-    icon: '🔮',
-    desc: 'Tintura mágica pura para potencializar o poder de conjuração arcano.'
+    icon: 'scrolls/exp_scroll.png',
+    desc: 'Pedra de Vida para adicionar Augment com propriedades e habilidades especiais.'
   }
 ];
