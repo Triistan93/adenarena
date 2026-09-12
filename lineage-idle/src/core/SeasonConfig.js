@@ -151,7 +151,10 @@ export function getSeasonForFeature(tabId) {
 }
 
 export function getSeasonMaxLevel() {
-  return 120;
+  // Lê o cap da season ativa — não retorna 120 hardcoded
+  // Season 1 → 40, Season 2 → 75, Season 3 → 80, Season 4 → 85
+  const season = getCurrentSeason();
+  return season?.maxLevel ?? 40;
 }
 
 /**

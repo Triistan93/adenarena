@@ -65,15 +65,15 @@ export const DEFAULT_STATE = () => ({
   essences: { fire: 0, earth: 0, wind: 0, astral: 0 }, activeElixirs: {},
   prestigeLevel: 0, astralShards: 0, astralMastery: {},
   clan: {
-    name: 'Os Guardiões de Aden',
-    level: 1,
+    name: null,         // sem clã ao nascer — jogador cria/nomeia no Lv 20
+    level: 0,           // contribuição de clan no CP é zero até o clan existir
     reputation: 0,
     castles: [],
     lastTaxTimestamp: 0,
     accumulatedTaxes: {}
   },
   olympiad: {
-    points: 1000,
+    points: 0,
     wins: 0,
     losses: 0,
     tokens: 0,
@@ -102,8 +102,8 @@ export const DEFAULT_STATE = () => ({
     owned: [],
     epaulettes: 0,
     lastCollectionTime: 0,
-    equippedBracelet: 'bracelet_steel',
-    equippedTalismans: ['talisman_power'],
+    equippedBracelet: null,        // conquistado via sistema de Fortalezas — não pré-equipado
+    equippedTalismans: [],         // conquistado via sistema de Fortalezas — não pré-equipado
     activeSiege: null
   },
   lastRankingRewardClaim: 0,
