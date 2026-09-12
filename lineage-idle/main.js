@@ -5112,6 +5112,27 @@ function processMonsterDefeat(monster, killingSkill = null) {
     }
   }
 
+  // Drop de Monster Dolls Colecionáveis (Lv 1+)
+  const monNameLower = String(monster.name || monKey || '').toLowerCase();
+  let candidateDollId = null;
+  if (monNameLower.includes('goblin')) candidateDollId = 'doll_goblin';
+  else if (monNameLower.includes('wolf')) candidateDollId = 'doll_wolf';
+  else if (monNameLower.includes('skeleton')) candidateDollId = 'doll_skeleton';
+  else if (monNameLower.includes('orc')) candidateDollId = 'doll_orc';
+  else if (monNameLower.includes('dryad') || monNameLower.includes('fungus') || monNameLower.includes('spore')) candidateDollId = 'doll_dryad';
+
+  if (candidateDollId && BOSS_DOLLS[candidateDollId]) {
+    const dollChance = (monster.isRaid ? 0.08 : (monster.boss ? 0.04 : (monster.elite ? 0.015 : 0.003))) * levelGapPenalty;
+    if (Math.random() < dollChance) {
+      state.dolls = state.dolls || [];
+      const dollDef = BOSS_DOLLS[candidateDollId];
+      state.dolls.push({ uid: 'doll_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4), dollId: candidateDollId, level: 1 });
+      log(`🧸 DROP DE DOLL! Conquistou **${dollDef.name}** [Lv.1]!`, 'rarity-rare', 'loot');
+      floatText(`🧸 ${dollDef.name}!`, 'float-jackpot');
+      if (typeof updateDollsUI === 'function') updateDollsUI();
+    }
+  }
+
   // Drop Canônico de Seal Stones (Seven Signs) em Zonas de Necrópole e Catacumbas
   const isNecroZone = state.zone && (state.zone.startsWith('necro_') || state.zone.includes('necropolis') || state.zone.includes('catacomb'));
   if (isNecroZone) {

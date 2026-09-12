@@ -20,13 +20,14 @@ export const SEASONS_DATA = {
     description: "Os heróis iniciam sua jornada pelo Reino de Aden. Domine as artes fundamentais da sua classe, forje seus primeiros equipamentos e dispute as riquezas iniciais.",
     unlockedTabs: [
       "zones", "character", "inventory", "warehouse", "skills",
-      "shop", "market", "craft", "alchemy", "astral", "quests", "rankings", "enchant"
+      "shop", "market", "craft", "alchemy", "astral", "quests", "rankings", "enchant", "dolls"
     ],
     features: [
       "⚔️ Zonas de Caça Iniciais (Gludio, Dion, Giran)",
       "👤 1ª e 2ª Evoluções de Classe (Níveis 20 e 40)",
       "🎒 Equipamentos NoGrade, D-Grade, C-Grade e B-Grade inicial",
       "✦ Árvore de Habilidades Básica da Classe",
+      "🧸 Monster & Boss Dolls Colecionáveis",
       "⚒️ Forja e Alquimia de Elixires Básica",
       "✨ Encantamento até +7 Seguro",
       "🎯 Missões Diárias & Passe de Batalha Temporada 1",
@@ -43,7 +44,7 @@ export const SEASONS_DATA = {
     releaseDate: "Em Breve",
     description: "Alianças se formam e as primeiras trombetas de guerra ecoam pelos vales. A disputa pelo domínio dos grandes castelos e pela Torre da Insolência começou!",
     unlockedTabs: [
-      "clan", "tower", "dolls", "magiclamp", "expeditions", "raids"
+      "clan", "tower", "magiclamp", "expeditions", "raids"
     ],
     features: [
       "🛡️ Fundação e Evolução de Clãs (Níveis 1 a 10)",

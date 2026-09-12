@@ -84,6 +84,66 @@ export const CODEX_SETS = {
  * Boss Dolls — Bonificações por nível e fontes de obtenção.
  */
 export const BOSS_DOLLS = {
+  doll_goblin: {
+    name: '👺 Goblin Doll', icon: '👺', rarity: 'common',
+    source: '🌲 Drop de Caçadas em Talking Island (0.8%) · 🎲 Altar de Síntese',
+    desc: 'Totem rústico esculpido por Goblins. Concede bônus inicial de P. Atk e Pontos de Vida.',
+    statsByLvl: {
+      1: { atk: 5,  hp: 30,  label: '+5 P. Atk, +30 Max HP'   },
+      2: { atk: 12, hp: 70,  label: '+12 P. Atk, +70 Max HP'  },
+      3: { atk: 22, hp: 130, label: '+22 P. Atk, +130 Max HP' },
+      4: { atk: 35, hp: 220, label: '+35 P. Atk, +220 Max HP' },
+      5: { atk: 55, hp: 350, label: '+55 P. Atk, +350 Max HP' }
+    }
+  },
+  doll_wolf: {
+    name: '🐺 Dire Wolf Doll', icon: '🐺', rarity: 'common',
+    source: '🌲 Drop de Caçadas em Elven Forest & Gludio (0.8%) · 🎲 Altar de Síntese',
+    desc: 'Amuleto talhado com presas de lobo alfa. Concede taxa crítica e velocidade de movimento.',
+    statsByLvl: {
+      1: { crit: 2, speed: 2,  label: '+2% Crit, +2% Speed'   },
+      2: { crit: 4, speed: 4,  label: '+4% Crit, +4% Speed'   },
+      3: { crit: 7, speed: 6,  label: '+7% Crit, +6% Speed'   },
+      4: { crit: 11, speed: 9, label: '+11% Crit, +9% Speed'  },
+      5: { crit: 16, speed: 12, label: '+16% Crit, +12% Speed' }
+    }
+  },
+  doll_skeleton: {
+    name: '💀 Skeleton Archer Doll', icon: '💀', rarity: 'common',
+    source: '🌲 Drop de Caçadas nas Ruínas de Despair (0.8%) · 🎲 Altar de Síntese',
+    desc: 'Crânio imbuído de energia profana. Aumenta poder de precisão, ataque e esquiva.',
+    statsByLvl: {
+      1: { atk: 6,  eva: 2,  label: '+6 P. Atk, +2 Eva'   },
+      2: { atk: 14, eva: 4,  label: '+14 P. Atk, +4 Eva'  },
+      3: { atk: 25, eva: 7,  label: '+25 P. Atk, +7 Eva'  },
+      4: { atk: 40, eva: 11, label: '+40 P. Atk, +11 Eva' },
+      5: { atk: 60, eva: 16, label: '+60 P. Atk, +16 Eva' }
+    }
+  },
+  doll_orc: {
+    name: '🧌 Orc Raider Doll', icon: '🧌', rarity: 'common',
+    source: '🌲 Drop de Caçadas em Orc Village & Gludin (0.8%) · 🎲 Altar de Síntese',
+    desc: 'Efigie de guerra da tribo Orc. Concede robustez defensiva e vida reforçada.',
+    statsByLvl: {
+      1: { def: 8,  hp: 40,  label: '+8 Def, +40 Max HP'   },
+      2: { def: 18, hp: 90,  label: '+18 Def, +90 Max HP'  },
+      3: { def: 32, hp: 170, label: '+32 Def, +170 Max HP' },
+      4: { def: 50, hp: 280, label: '+50 Def, +280 Max HP' },
+      5: { def: 75, hp: 420, label: '+75 Def, +420 Max HP' }
+    }
+  },
+  doll_dryad: {
+    name: '🌿 Forest Dryad Doll', icon: '🌿', rarity: 'common',
+    source: '🌲 Drop de Caçadas em Florestas & Pântanos (0.8%) · 🎲 Altar de Síntese',
+    desc: 'Ramo vivo de dríade milenar. Potencializa poder mágico místico e reserva de MP.',
+    statsByLvl: {
+      1: { matk: 8,  mp: 30,  label: '+8 M. Atk, +30 MP'   },
+      2: { matk: 18, mp: 70,  label: '+18 M. Atk, +70 MP'  },
+      3: { matk: 32, mp: 130, label: '+32 M. Atk, +130 MP' },
+      4: { matk: 50, mp: 210, label: '+50 M. Atk, +210 MP' },
+      5: { matk: 75, mp: 320, label: '+75 M. Atk, +320 MP' }
+    }
+  },
   doll_queen_ant: {
     name: '🐜 Queen Ant Doll', icon: '🐜', rarity: 'rare',
     source: '👑 Drop do Chefe Queen Ant (5%) · 🎲 Roleta Craft',
