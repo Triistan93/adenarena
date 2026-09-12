@@ -7732,7 +7732,7 @@ export function uiOpenPixCheckoutModal(tierId, state) {
       </div>
 
       <div style="display:flex; gap:10px;">
-        <a href="https://discord.gg/adenarena" target="_blank" rel="noopener noreferrer" style="flex:1; text-decoration:none; padding:10px; background:linear-gradient(180deg,#5865F2,#4752c4); border:1px solid #5865F2; border-radius:6px; color:#fff; font-weight:bold; font-size:12px; font-family:'Cinzel',serif; text-align:center; display:flex; align-items:center; justify-content:center; gap:6px;">
+        <a href="https://discord.gg/R7rwB5uCc" target="_blank" rel="noopener noreferrer" style="flex:1; text-decoration:none; padding:10px; background:linear-gradient(180deg,#5865F2,#4752c4); border:1px solid #5865F2; border-radius:6px; color:#fff; font-weight:bold; font-size:12px; font-family:'Cinzel',serif; text-align:center; display:flex; align-items:center; justify-content:center; gap:6px;">
           💬 Enviar no Discord
         </a>
         <button onclick="document.getElementById('pix-checkout-modal').classList.remove('active')" style="padding:10px 18px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:6px; color:#ddd; font-weight:bold; font-size:12px; cursor:pointer;">
@@ -7781,7 +7781,19 @@ export function uiOpenReferralModal(state) {
           <span>✨</span>
           <span>Você ingressou pela indicação de <strong>${referredBy}</strong>! Bônus de Novato ativo (+10% EXP permanente).</span>
         </div>
-      ` : ''}
+      ` : `
+        <div style="background:rgba(30,41,59,0.7); border:1px solid rgba(52,211,153,0.3); border-radius:8px; padding:12px; margin-bottom:14px;">
+          <div style="font-size:11px; font-weight:bold; color:#6ee7b7; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.04em;">
+            Não usou link de indicação? Insira o código de quem te indicou (Até Nv. 20):
+          </div>
+          <div style="display:flex; gap:8px;">
+            <input id="ref-friend-code-input" type="text" placeholder="Nome do amigo (ex: Vaelin)" style="flex:1; background:#0f172a; border:1px solid #334155; border-radius:6px; padding:8px 12px; color:#fff; font-size:12px; outline:none;" />
+            <button onclick="window.submitReferralCodeAction && window.submitReferralCodeAction()" style="padding:8px 16px; background:#10b981; border:1px solid #34d399; border-radius:6px; color:#000; font-weight:bold; font-size:12px; cursor:pointer; font-family:'Cinzel',serif; white-space:nowrap;">
+              Vincular
+            </button>
+          </div>
+        </div>
+      `}
 
       <div style="margin-bottom:16px;">
         <label style="display:block; font-size:11px; font-weight:bold; color:#6ee7b7; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.05em;">Seu Link Exclusivo de Indicação:</label>
@@ -7793,7 +7805,7 @@ export function uiOpenReferralModal(state) {
         </div>
       </div>
 
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px;">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;">
         <div style="background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:10px; text-align:center;">
           <div style="font-size:11px; color:#94a3b8;">Amigos Indicados</div>
           <div style="font-size:20px; font-weight:bold; color:#34d399; font-family:'Cinzel',serif;">${countInvited}</div>
@@ -7804,13 +7816,19 @@ export function uiOpenReferralModal(state) {
         </div>
       </div>
 
+      <div style="margin-bottom:16px;">
+        <button id="ref-check-rewards-btn" onclick="window.claimReferralRewardsAction && window.claimReferralRewardsAction()" style="width:100%; padding:10px 16px; background:linear-gradient(180deg,#059669,#047857); border:1px solid #34d399; border-radius:8px; color:#fff; font-weight:bold; font-size:12px; cursor:pointer; font-family:'Cinzel',serif; display:flex; align-items:center; justify-content:center; gap:8px; box-shadow:0 0 15px rgba(16,185,129,0.25); transition:all 0.2s;">
+          🔄 Verificar & Resgatar Recompensas de Amigos
+        </button>
+      </div>
+
       <div style="background:rgba(0,0,0,0.6); border:1px solid rgba(16,185,129,0.3); border-radius:8px; padding:12px; font-size:11.5px; line-height:1.5; margin-bottom:16px;">
         <div style="font-weight:bold; color:#ffd700; margin-bottom:6px; font-family:'Cinzel',serif;">🏆 Como Funcionam as Recompensas:</div>
         <div style="margin-bottom:6px;">
-          <strong style="color:#6ee7b7;">1. Entrada Imediata:</strong> Seu amigo cria o herói pelo seu link e recebe +10% EXP e 1.000 Shots iniciais.
+          <strong style="color:#6ee7b7;">1. Entrada Imediata:</strong> Seu amigo cria o herói pelo seu link/código e recebe +10% EXP permanente e 1.000 Shots iniciais.
         </div>
         <div>
-          <strong style="color:#ffd700;">2. Meta Nível 40 (2ª Classe):</strong> Quando seu amigo atinge o Nv. 40, você recebe automaticamente <strong style="color:#ffd700;">50 Aden Coins (AC)</strong> + <strong style="color:#38bdf8;">5x Pergaminhos Abençoados de Arma</strong>!
+          <strong style="color:#ffd700;">2. Meta Nível 40 (2ª Classe):</strong> Quando seu amigo atinge o Nv. 40, você recebe <strong style="color:#ffd700;">50 Aden Coins (AC)</strong> + <strong style="color:#38bdf8;">5x Pergaminhos Abençoados de Arma</strong>!
         </div>
       </div>
 

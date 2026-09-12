@@ -4,6 +4,8 @@
  * Guia passo a passo para iniciantes com recompensas progressivas para garantir retenção e engajamento nos primeiros 7 marcos.
  */
 
+import { CashShopService } from './CashShopService.js';
+
 export const STARTER_JOURNEY_STEPS = [
   {
     id: 'step_1_first_blood',
@@ -93,17 +95,18 @@ export const STARTER_JOURNEY_STEPS = [
   {
     id: 'step_7_arena_glory',
     stepNumber: 7,
-    title: 'A Glória da Arena',
-    desc: 'Dispute uma partida de Duelo no Coliseu ou nas Olimpíadas.',
+    title: 'A Glória da 2ª Classe & Arena',
+    desc: 'Alcance o Nível 40 ou dispute uma partida no Coliseu / Olimpíadas.',
     icon: '👑',
     targetCount: 1,
     checkProgress: (state) => {
       const oly = (state.olympiad?.wins || 0) + (state.olympiad?.losses || 0);
       const col = (state.colosseum?.duelWins || 0) + (state.colosseum?.duelLosses || 0);
-      return (oly > 0 || col > 0) ? 1 : 0;
+      const lvl40 = (state.level || 1) >= 40 ? 1 : 0;
+      return (oly > 0 || col > 0 || lvl40 > 0) ? 1 : 0;
     },
-    rewardText: '100 Aden Coins + Título: Pioneiro de Aden',
-    reward: { adenCoins: 100, cosmeticTitle: 'Pioneiro de Aden' }
+    rewardText: '100 Aden Coins (AC) + 10x Pergaminhos de Encantamento de Arma + Título: Pioneiro de Aden',
+    reward: { adenCoins: 100, itemId: 'scroll_of_enchant_weapon', qty: 10, cosmeticTitle: 'Pioneiro de Aden' }
   }
 ];
 
@@ -167,7 +170,9 @@ export const StarterJourneyService = {
 
     if (rew.adena) state.gold = (state.gold || 0) + rew.adena;
     if (rew.sp) state.sp = (state.sp || 0) + rew.sp;
-    if (rew.adenCoins) state.adenCoins = (state.adenCoins || 0) + rew.adenCoins;
+    if (rew.adenCoins) {
+      CashShopService.addAdenCoins(state, rew.adenCoins, { log });
+    }
     if (rew.raidTickets) state.dailyRaidTickets = (state.dailyRaidTickets || 3) + rew.raidTickets;
     if (rew.clanRep && state.clan) state.clan.reputation = (state.clan.reputation || 100) + rew.clanRep;
     if (rew.cosmeticTitle) {
@@ -179,13 +184,21 @@ export const StarterJourneyService = {
     }
     if (rew.itemId && rew.qty) {
       state.inventory = state.inventory || [];
-      state.inventory.push({
-        uid: 'sj_' + Date.now() + '_' + Math.floor(Math.random() * 1000),
-        itemId: rew.itemId,
-        name: rew.itemId.toUpperCase(),
-        qty: rew.qty,
-        type: 'consumable'
-      });
+      const existing = state.inventory.find(i => i.itemId === rew.itemId);
+      if (existing) {
+        existing.count = (existing.count || existing.qty || 1) + rew.qty;
+        existing.qty = existing.count;
+      } else {
+        state.inventory.push({
+          uid: 'sj_' + Date.now() + '_' + Math.floor(Math.random() * 1000),
+          itemId: rew.itemId,
+          name: rew.itemId.toUpperCase(),
+          count: rew.qty,
+          qty: rew.qty,
+          rarity: 'common',
+          type: 'consumable'
+        });
+      }
     }
 
     log(`🎉 **[Jornada dos Pioneiros - Passo ${step.stepNumber}]** Você concluiu '${step.title}'! Recompensa: ${step.rewardText}!`, 'rarity-legendary');

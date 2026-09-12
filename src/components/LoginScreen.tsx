@@ -228,6 +228,18 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
       equipmentMap.shield = 'init_sh';
     }
 
+    const savedRef = typeof localStorage !== 'undefined' ? localStorage.getItem('aden_referred_by') : null;
+    const cleanRef = savedRef ? savedRef.trim().slice(0, 30) : null;
+    const isSelfRef = cleanRef && cleanRef.toLowerCase() === data.charName.toLowerCase();
+    const effectiveRef = (cleanRef && !isSelfRef) ? cleanRef : null;
+
+    if (effectiveRef) {
+      const shotsItem = inventoryItems.find(i => i.uid === 'init_shots');
+      if (shotsItem) shotsItem.count = (shotsItem.count || 0) + 1000;
+      const potItem = inventoryItems.find(i => i.uid === 'init_pot');
+      if (potItem) potItem.count = (potItem.count || 0) + 10;
+    }
+
     const newCharState: any = {
       charName: data.charName,
       heroName: data.charName,
@@ -248,8 +260,18 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
         [kit.starterSkill]: 1
       },
       selectedSkill: kit.starterSkill,
-      lastSaveTime: Date.now()
+      lastSaveTime: Date.now(),
+      referredBy: effectiveRef || null,
+      referralStarterGranted: Boolean(effectiveRef)
     };
+
+    if (effectiveRef && typeof window !== 'undefined' && (window as any).lineageIdleCloud?.recordReferral) {
+      try {
+        (window as any).lineageIdleCloud.recordReferral(effectiveRef, data.charName, 1);
+      } catch (e) {
+        console.debug('Cloud record referral notice:', e);
+      }
+    }
 
     if (typeof localStorage !== 'undefined') {
       localStorage.removeItem('aden_pending_char_creation');
@@ -544,7 +566,7 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
                 {/* Botão Discord Oficial */}
                 <div className="pt-2 border-t border-white/5">
                   <a
-                    href="https://discord.gg/adenarena"
+                    href="https://discord.gg/R7rwB5uCc"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-full bg-[#5865F2]/20 hover:bg-[#5865F2]/30 border border-[#5865F2]/40 text-[#c7d2fe] hover:text-white font-semibold py-2 px-4 rounded-lg flex items-center justify-center gap-2 text-xs transition-all cursor-pointer text-decoration-none"
@@ -689,7 +711,7 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
                 {/* Botão Discord Oficial */}
                 <div className="pt-2 border-t border-white/5">
                   <a
-                    href="https://discord.gg/adenarena"
+                    href="https://discord.gg/R7rwB5uCc"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-full bg-[#5865F2]/20 hover:bg-[#5865F2]/30 border border-[#5865F2]/40 text-[#c7d2fe] hover:text-white font-semibold py-2 px-4 rounded-lg flex items-center justify-center gap-2 text-xs transition-all cursor-pointer text-decoration-none"

@@ -819,3 +819,77 @@ export function subscribeToPlayerSales(sellerName: string, onUpdate: (sales: any
   }
 }
 
+// ═══════════════════════════════════════════════════════════════════════════
+// 🎁 SISTEMA DE INDICAÇÃO DE AMIGOS (REFERRAL VIRAL)
+// ═══════════════════════════════════════════════════════════════════════════
+
+export async function recordReferralInCloud(
+  referrerNick: string,
+  invitedNick: string,
+  invitedLevel: number = 1
+): Promise<boolean> {
+  if (!referrerNick || !invitedNick) return false;
+  const refClean = sanitizeString(referrerNick, 20).toLowerCase();
+  const invClean = sanitizeString(invitedNick, 20).toLowerCase();
+  if (refClean === invClean) return false;
+
+  try {
+    const refDocId = `${refClean}_${invClean}`;
+    const referralRef = doc(db, 'referrals', refDocId);
+    await setDoc(
+      referralRef,
+      {
+        referrer: refClean,
+        invited: invClean,
+        level: invitedLevel,
+        rewardEligible: invitedLevel >= 40,
+        rewardClaimed: false,
+        updatedAt: serverTimestamp(),
+      },
+      { merge: true }
+    );
+    return true;
+  } catch (e) {
+    console.debug('[Referral] recordReferralInCloud notice:', e);
+    return false;
+  }
+}
+
+export async function checkReferralRewardsInCloud(
+  charNick: string
+): Promise<{ count: number; claimableRewards: number }> {
+  if (!charNick) return { count: 0, claimableRewards: 0 };
+  const cleanNick = sanitizeString(charNick, 20).toLowerCase();
+  try {
+    const q = query(collection(db, 'referrals'), where('referrer', '==', cleanNick));
+    const snapshot = await getDocs(q);
+    const totalCount = snapshot.size;
+    let claimable = 0;
+    const toUpdate: string[] = [];
+
+    snapshot.forEach((d) => {
+      const data = d.data();
+      if ((data.level >= 40 || data.rewardEligible) && !data.rewardClaimed) {
+        claimable++;
+        toUpdate.push(d.id);
+      }
+    });
+
+    for (const docId of toUpdate) {
+      try {
+        await updateDoc(doc(db, 'referrals', docId), {
+          rewardClaimed: true,
+          claimedAt: serverTimestamp(),
+        });
+      } catch (e) {
+        console.debug('[Referral] update claim error:', e);
+      }
+    }
+
+    return { count: totalCount, claimableRewards: claimable };
+  } catch (e) {
+    console.debug('[Referral] checkReferralRewardsInCloud notice:', e);
+    return { count: 0, claimableRewards: 0 };
+  }
+}
+

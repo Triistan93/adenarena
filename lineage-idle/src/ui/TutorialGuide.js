@@ -19,6 +19,11 @@ export const GUIDES_DATA = {
         tip: 'Dica: Zonas marcadas em verde garantem taxa máxima de XP sem risco de morte!'
       },
       {
+        heading: '⚡ Combat Power (CP) Canônico & Gates',
+        text: 'Cada zona de caça possui uma meta de Poder de Combate (CP). Se o seu CP estiver abaixo do recomendado, o combate será muito perigoso. Suba seu CP aprimorando armas, conjuntos de armadura, Soul Crystals e elixires.',
+        tip: 'O CP considera 15 pilares do seu personagem para refletir seu verdadeiro poder de batalha.'
+      },
+      {
         heading: '🧪 Auto-Poções & Soulshots',
         text: 'No topo da tela de combate, ative Poções Automáticas de HP/MP e Soulshots/Spiritshots. Soulshots dobram seu P.Atk e Spiritshots dobram seu M.Atk em cada golpe.',
         tip: 'Mantenha seus shots ativos durante lutas contra Chefes e Raids para máximo dano!'
@@ -34,7 +39,7 @@ export const GUIDES_DATA = {
   character: {
     id: 'character',
     title: '👤 Personagem, Atributos & Subclasses',
-    subtitle: 'Entenda como funcionam os atributos primários, dyes de tatuagem e o sistema de subclasses.',
+    subtitle: 'Entenda como funcionam os atributos primários, avanço de classes e certificações de subclasse.',
     icon: '👤',
     color: '#ffd877',
     sections: [
@@ -44,9 +49,14 @@ export const GUIDES_DATA = {
         tip: 'Você pode usar Tatuagens (Dyes) na Forja para transferir até +5 pontos em um atributo!'
       },
       {
-        heading: '🛡️ Subclasses (Nível 75+)',
-        text: 'Ao atingir o Nível 75 com sua classe principal, você pode desbloquear até 3 Subclasses. Cada Subclasse concederá **Certificados de Habilidade** que acumulam bônus na sua classe principal!',
-        tip: 'Alterne livremente entre subclasses sem perder o progresso de nenhuma delas.'
+        heading: '⚡ Avanço de Classes Canônico',
+        text: '• **1ª Mudança de Classe**: Nível 20 (Libera novas perícias e equipamentos D-Grade)\n• **2ª Mudança de Classe**: Nível 40 (Especialização avançada e equipamentos C-Grade)\n• **3ª Classe & Awakening**: Nível 76+ (Poder total de mestre e armas S-Grade)\n• **Subclasses (Lv. 75+)**: Desbloqueie até 3 subclasses adicionais!',
+        tip: 'Ao evoluir subclasses até os níveis 65, 75 e 80, você conquista Certificados de Subclasse que transferem atributos permanentes para sua classe principal!'
+      },
+      {
+        heading: '💎 Poder de Combate Canônico (CP)',
+        text: 'O CP do herói reflete fielmente a soma de:\n1. Atributos Base por Raça/Classe\n2. Nível do Herói\n3. Poder de Ataque & Magia das Armas\n4. Defesa Física & Mágica do Set\n5. Níveis de Encantamento (+1 a +16)\n6. Soul Crystals (SA - Focus, Health, Acumen)\n7. Joias Épicas de Boss (Queen Ant, Baium, Valakas)\n8. Atributos Elementais de Arma e Armadura\n9. Habilidades Passivas e Mestrias de Arma\n10. Maestria Astral (Dragão & Fênix)\n11. Elixires Permanentes de Alquimia\n12. Habilidades de Clã (Imperium, Might, Shield)\n13. Coleções Completas no Codex\n14. Boss Dolls Equipadas & Sintetizadas\n15. Certificações de Subclasse',
+        tip: 'Foque em equilibrar todos os 15 pilares para alcançar os tiers Prata, Ouro, Platina e Diamante!'
       }
     ]
   },
@@ -309,13 +319,103 @@ export const GUIDES_DATA = {
         tip: 'Quanto mais alto você subir na torre, maior será a quantidade diária de Adena e SP coletada!'
       }
     ]
+  },
+
+  raids: {
+    id: 'raids',
+    title: '🏰 Masmorras Diárias & Epic Raid Bosses',
+    subtitle: 'Enfrente os maiores terrores de Aden em batalhas com mecânicas de Break e drops lendários.',
+    icon: '🏰',
+    color: '#ef4444',
+    sections: [
+      {
+        heading: '👹 Chefes Épicos Clássicos (Queen Ant, Baium, Valakas...)',
+        text: 'Desafie chefes lendários como Queen Ant, Core, Orfen, Zaken, Baium, Antharas e Valakas. Cada chefe possui atributos elementais e resistências próprias.',
+        tip: 'Bosses concedem Joias Épicas, Pergaminhos Abençoados, Life Stones e SP massivo!'
+      },
+      {
+        heading: '⚡ Mecânica de Postura & Janela de BREAK',
+        text: 'Ataques contínuos e habilidades com atributos elementais reduzem a postura do Boss. Ao esvaziar a barra de postura, o Boss entra em **BREAK**: fica atordoado por 4 segundos e recebe **+50% de dano amplificado**!',
+        tip: 'Guarde suas habilidades mais destrutivas e Soulshots para descarregar durante o BREAK!'
+      },
+      {
+        heading: '🎫 Ingressos Diários de Raid',
+        text: 'Você recebe 3 Ingressos Diários de Raid a cada reset diário. Ingressos extras podem ser obtidos na Jornada dos Pioneiros, Missões Diárias ou no Passe de Batalha.',
+        tip: 'Mantenha os ingressos sempre em uso para maximizar seus fragmentos de Joias de Boss!'
+      }
+    ]
+  },
+
+  colosseum: {
+    id: 'colosseum',
+    title: '👑 Coliseu, Duelos & Grande Olimpíada',
+    subtitle: 'Prove seu valor contra outros aventureiros e busque o título de Herói Nobre de Aden.',
+    icon: '👑',
+    color: '#f59e0b',
+    sections: [
+      {
+        heading: '⚔️ Duelos 1v1 do Coliseu',
+        text: 'Enfrente cópias em tempo real de outros jogadores baseadas em Combat Power (CP) e Ranking. Vencer duelos concede Pontos de Honra e melhora seu posicionamento.',
+        tip: 'Ajuste seus equipamentos e ative auto-shots antes de iniciar qualquer combate na arena!'
+      },
+      {
+        heading: '🏛️ A Grande Olimpíada (Ciclos Mensais)',
+        text: 'Disputas ranqueadas exclusivas para Noblesses e Guerreiros de elite. Cada vitória soma pontos ao seu Rank de Classe.',
+        tip: 'No final de cada ciclo, o 1º colocado de cada classe torna-se o HERÓI DE ADEN, recebendo Aura Dourada, Título Luminoso e Armas Heroicas!'
+      }
+    ]
+  },
+
+  clan: {
+    id: 'clan',
+    title: '🛡️ Clãs, Alianças & Habilidades de Clã',
+    subtitle: 'Junte-se a uma irmandade para dominar Aden e desbloquear bônus passivos de equipe.',
+    icon: '🛡️',
+    color: '#3b82f6',
+    sections: [
+      {
+        heading: '🏰 Níveis de Clã & Habilidades Passivas',
+        text: 'Conforme os membros doam Adena e SP, o nível do Clã sobe (Nv. 1 ao Nv. 5), desbloqueando habilidades para TODOS os membros:\n• **Nv. 1 Clan Imperium**: +10% Max HP\n• **Nv. 2 Clan Might**: +8% P.Atk\n• **Nv. 3 Clan Shield**: +10% P.Def\n• **Nv. 4 Clan Empower**: +10% M.Atk e +12% M.Def\n• **Nv. 5 Clan Vitality**: +20% Regen MP e +5 Velocidade',
+        tip: 'Participar de um Clã ativo é um dos maiores saltos de poder para o seu Combat Power (CP)!'
+      },
+      {
+        heading: '💎 Doações Diárias & Reputação',
+        text: 'Faça doações de Adena ou SP para o cofre do clã todos os dias para acumular Pontos de Reputação. A reputação é necessária para manter bônus e evoluir o clã.',
+        tip: 'Doar também completa passos da Jornada dos Pioneiros e do Passe de Batalha!'
+      }
+    ]
+  },
+
+  referral: {
+    id: 'referral',
+    title: '🎁 Sistema de Indicação & Comunidade Discord',
+    subtitle: 'Traga amigos para jogar no navegador e ganhem recompensas épicas juntos!',
+    icon: '🎁',
+    color: '#10b981',
+    sections: [
+      {
+        heading: '🚀 Como Convidar e Ganhar Juntos',
+        text: 'Compartilhe seu link exclusivo (`?ref=SeuNome`) ou seu apelido no WhatsApp e redes sociais. Quando seu amigo cria uma conta:\n• **O Amigo Convidado:** Recebe imediatamente **+10% EXP permanente** e **1.000 Shots No-Grade**!\n• **No Nível 40 (2ª Classe):** Ambos recebem **50 Aden Coins (AC)** + **5x Pergaminhos Abençoados de Arma**!',
+        tip: 'Amigos que esqueceram de entrar pelo link podem registrar o código manualmente no modal de indicação até o Nível 20!'
+      },
+      {
+        heading: '💬 Comunidade Oficial no Discord',
+        text: 'Entre no Discord oficial do Aden Arena: converse com outros jogadores, compartilhe builds, participe de sorteios e tire dúvidas diretamente com os desenvolvedores!\n\n🔗 Link Oficial: **https://discord.gg/R7rwB5uCc**',
+        tip: 'Fique atento ao canal de avisos no Discord para resgatar Cupons de Presente com itens exclusivos!'
+      }
+    ]
   }
 };
 
 // Aliases: mapeia chaves de abas alternativas para as chaves primárias de guia
-// O guia de 'craft' está definido como 'craft' (não 'forge')
 GUIDES_DATA['forge'] = GUIDES_DATA['craft'];       // forge → craft
 GUIDES_DATA['equipment'] = GUIDES_DATA['inventory']; // equipment → inventory
+GUIDES_DATA['bosses'] = GUIDES_DATA['raids'];
+GUIDES_DATA['raid'] = GUIDES_DATA['raids'];
+GUIDES_DATA['olympiad'] = GUIDES_DATA['colosseum'];
+GUIDES_DATA['pvp'] = GUIDES_DATA['colosseum'];
+GUIDES_DATA['clans'] = GUIDES_DATA['clan'];
+GUIDES_DATA['community'] = GUIDES_DATA['referral'];
 
 // Tabela de resolução de chaves (tab-name → guide-key)
 const TAB_TO_GUIDE = {};
@@ -405,6 +505,25 @@ export function openTabGuideModal(guideKey) {
         <button onclick="window.closeTabGuideModal()" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: #ccc; font-size: 16px; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;">✕</button>
       </div>
 
+      <!-- Category Selector Tabs -->
+      <div style="padding: 8px 16px; background: rgba(0, 0, 0, 0.4); border-bottom: 1px solid rgba(212, 167, 68, 0.25); display: flex; gap: 6px; overflow-x: auto; scrollbar-width: thin;">
+        ${[
+          'zones', 'character', 'inventory', 'skills', 'craft',
+          'raids', 'colosseum', 'clan', 'alchemy', 'astral',
+          'codex', 'dolls', 'shop', 'quests', 'tower', 'referral'
+        ].map(k => {
+          const g = GUIDES_DATA[k];
+          if (!g) return '';
+          const isSel = (k === (data.id || guideKey));
+          const shortTitle = g.title.split('&')[0].split('(')[0].replace(/[^\w\sÀ-ú]/g, '').trim();
+          return `
+            <button onclick="window.openTabGuideModal('${k}')" style="padding: 4px 10px; font-size: 11px; font-family: 'Cinzel', serif; font-weight: bold; border-radius: 12px; white-space: nowrap; cursor: pointer; transition: all 0.2s; border: 1px solid ${isSel ? (g.color || '#d4a744') : 'rgba(255,255,255,0.15)'}; background: ${isSel ? 'rgba(212, 167, 68, 0.25)' : 'rgba(20,24,36,0.6)'}; color: ${isSel ? (g.color || '#f4d58a') : '#aaa'};">
+              ${g.icon} ${shortTitle}
+            </button>
+          `;
+        }).join('')}
+      </div>
+
       <!-- Body Content -->
       <div style="padding: 16px 20px; overflow-y: auto; flex: 1;">
         ${sectionsHtml}
@@ -413,7 +532,7 @@ export function openTabGuideModal(guideKey) {
       <!-- Footer -->
       <div style="padding: 12px 20px; border-top: 1px solid rgba(212, 167, 68, 0.2); background: rgba(0, 0, 0, 0.4); border-radius: 0 0 14px 14px; display: flex; justify-content: space-between; align-items: center;">
         <span style="font-size: 11px; color: #888;">
-          ❓ Você pode reabrir este guia a qualquer momento no botão <strong>Guia da Aba</strong>.
+          ❓ Você pode reabrir este guia a qualquer momento no botão <strong>Guia da Aba</strong> ou no topo da tela.
         </span>
         <button onclick="window.closeTabGuideModal()" style="padding: 8px 20px; font-family: 'Cinzel', serif; font-weight: bold; font-size: 12px; background: linear-gradient(180deg, #d4a744, #8a641c); border: 1px solid #ffe699; color: #000; border-radius: 6px; cursor: pointer; box-shadow: 0 2px 10px rgba(212, 167, 68, 0.3);">
           ENTENDI, CONTINUAR JOGO!
@@ -423,6 +542,11 @@ export function openTabGuideModal(guideKey) {
   `;
 
   overlay.style.display = 'flex';
+}
+
+if (typeof window !== 'undefined') {
+  window.openTabGuideModal = openTabGuideModal;
+  window.closeTabGuideModal = closeTabGuideModal;
 }
 
 /**

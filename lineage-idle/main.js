@@ -1627,6 +1627,13 @@ function checkLevelUp() {
         count: 5
       });
     }
+    if (typeof window !== 'undefined' && window.lineageIdleCloud?.recordReferral) {
+      try {
+        window.lineageIdleCloud.recordReferral(state.referredBy, state.name || state.charName, state.level);
+      } catch (e) {
+        console.debug('Record referral level 40 error:', e);
+      }
+    }
     log(`🎉 **Parabéns pelo Nível 40!** Recompensa especial por ingressar pelo link de [${state.referredBy}] resgatada: **+50 AC** e **5x Pergaminhos Abençoados de Arma**!`, 'loot');
     if (typeof floatText === 'function') floatText('🎁 RECOMPENSA DE INDICAÇÃO (50 AC)!', 'float-jackpot');
     updateAllUI();
@@ -9467,6 +9474,131 @@ export function init() {
     };
     window.openReferralModal = () => {
       uiOpenReferralModal(state);
+    };
+    window.submitReferralCodeAction = () => {
+      const input = document.getElementById('ref-friend-code-input');
+      const rawCode = input ? input.value : '';
+      const code = (rawCode || '').trim();
+
+      if (!code) {
+        log('⚠️ Por favor, digite o nome do aventureiro que te indicou.', 'warning');
+        return;
+      }
+      if ((state.level || 1) > 20) {
+        log('⚠️ O vínculo manual de código de indicação só é permitido até o Nível 20.', 'warning');
+        return;
+      }
+      if (state.referredBy) {
+        log(`⚠️ Você já possui uma indicação vinculada a [${state.referredBy}].`, 'warning');
+        return;
+      }
+      const myName = (state.name || state.charName || '').trim().toLowerCase();
+      if (code.toLowerCase() === myName) {
+        log('⚠️ Você não pode indicar a si mesmo!', 'warning');
+        return;
+      }
+
+      state.referredBy = code;
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem('aden_referred_by', code);
+      }
+
+      // Concede o Pacote de Novato se ainda não concedido
+      if (!state.referralStarterGranted) {
+        state.inventory = state.inventory || [];
+        const shots = state.inventory.find(i => i.itemId === 'soulshot_ng' || i.itemId === 'spiritshot_ng' || (i.itemId && i.itemId.includes('shot')));
+        if (shots) {
+          shots.count = (shots.count || 0) + 1000;
+        } else {
+          state.inventory.push({
+            uid: `ref_shots_${Date.now()}`,
+            itemId: 'soulshot_ng',
+            name: 'Soulshot: No-Grade',
+            count: 1000,
+            rarity: 'common',
+            type: 'consumable'
+          });
+        }
+        const pots = state.inventory.find(i => i.itemId === 'hp_potion_s' || i.itemId === 'hp_potion_m' || (i.itemId && i.itemId.includes('potion')));
+        if (pots) {
+          pots.count = (pots.count || 0) + 10;
+        }
+        state.referralStarterGranted = true;
+      }
+
+      if (typeof window !== 'undefined' && window.lineageIdleCloud?.recordReferral) {
+        try {
+          window.lineageIdleCloud.recordReferral(code, state.name || state.charName, state.level || 1);
+        } catch (e) {
+          console.debug('Error registering referral in cloud:', e);
+        }
+      }
+
+      log(`✨ **Vínculo Confirmado!** Você foi indicado por **${code}**! Bônus de novato ativado: **+10% EXP permanente** e **+1.000 Shots** concedidos!`, 'rarity-legendary');
+      if (typeof floatText === 'function') floatText('✨ VÍNCULO DE INDICAÇÃO ATIVADO (+10% EXP)!', 'float-jackpot');
+      updateAllUI();
+      save();
+      uiOpenReferralModal(state);
+    };
+
+    window.claimReferralRewardsAction = async () => {
+      const myName = (state.name || state.charName || '').trim();
+      if (!myName) return;
+
+      const btn = document.getElementById('ref-check-rewards-btn');
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '⏳ Verificando no servidor...';
+      }
+
+      try {
+        let result = { count: state.referralsCount || 0, claimableRewards: 0 };
+        if (typeof window !== 'undefined' && window.lineageIdleCloud?.checkReferralRewards) {
+          result = await window.lineageIdleCloud.checkReferralRewards(myName);
+        }
+
+        if (result.count > (state.referralsCount || 0)) {
+          state.referralsCount = result.count;
+        }
+
+        if (result.claimableRewards > 0) {
+          const totalAC = result.claimableRewards * 50;
+          const totalScrolls = result.claimableRewards * 5;
+          CashShopService.addAdenCoins(state, totalAC, { log });
+
+          state.inventory = state.inventory || [];
+          const bScroll = state.inventory.find(i => i.itemId === 'scroll_blessed_weapon');
+          if (bScroll) {
+            bScroll.count = (bScroll.count || 1) + totalScrolls;
+          } else {
+            state.inventory.push({
+              uid: `ref_${Date.now()}`,
+              itemId: 'scroll_blessed_weapon',
+              name: 'Pergaminho Abençoado de Arma (Universal)',
+              count: totalScrolls,
+              rarity: 'rare',
+              type: 'consumable'
+            });
+          }
+
+          state.referralRewardsClaimed = (state.referralRewardsClaimed || 0) + result.claimableRewards;
+          log(`🎉 **Recompensa de Indicação Resgatada!** Seus amigos indicados atingiram o Nv. 40! Você recebeu **+${totalAC} AC** e **${totalScrolls}x Pergaminhos Abençoados de Arma**!`, 'rarity-legendary');
+          if (typeof floatText === 'function') floatText(`🎁 +${totalAC} AC DE INDICAÇÃO!`, 'float-jackpot');
+          updateAllUI();
+          save();
+        } else {
+          log('ℹ️ Nenhuma recompensa pendente no momento. Quando seus amigos indicados alcançarem o Nível 40, suas 50 AC e 5x Blessed Scrolls estarão disponíveis aqui!', 'info');
+          if (typeof floatText === 'function') floatText('Nenhuma recompensa pendente', 'float-normal');
+        }
+      } catch (err) {
+        console.error('Erro ao verificar recompensas de indicação:', err);
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = '🔄 Verificar & Resgatar Recompensas de Amigos';
+        }
+        uiOpenReferralModal(state);
+      }
     };
     window.executeDonationPix = (tierId) => {
       uiOpenPixCheckoutModal(tierId, state);

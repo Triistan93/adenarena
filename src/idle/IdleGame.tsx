@@ -44,6 +44,8 @@ import {
   savePlayerStateToCloud,
   loadPlayerStateFromCloud,
   deletePlayerStateFromCloud,
+  recordReferralInCloud,
+  checkReferralRewardsInCloud,
   onAuthStateChanged,
   auth 
 } from "../firebase";
@@ -56,7 +58,7 @@ if (typeof window !== "undefined") {
       if (!user) return false;
       return await syncPlayerPublicProfile(user.uid, profileData);
     },
-    fetchLeaderboard: fetchLeaderboardRankings,
+    fetchRankings: fetchLeaderboardRankings,
     fetchMatchmakingOpponents: fetchPvPMatchmakingOpponents,
     getCurrentUserId: () => auth.currentUser?.uid || null,
 
@@ -72,10 +74,16 @@ if (typeof window !== "undefined") {
     subscribeMarketListings: subscribeToMarketListings,
     subscribePlayerSales: subscribeToPlayerSales,
 
+    // Sistema de Indicação de Amigos (Referral Viral)
+    recordReferral: recordReferralInCloud,
+    checkReferralRewards: checkReferralRewardsInCloud,
+
     // Pipeline de Save em Nuvem
     savePlayerState: savePlayerStateToCloud,
     loadPlayerState: loadPlayerStateFromCloud
   };
+
+  (window as any).lineageIdleCloud = (window as any).FirebaseBridge;
 
   // Pipeline global de salvamento instantâneo em nuvem
   (window as any).saveCloudNow = async (stateData?: any, immediate: boolean = false) => {

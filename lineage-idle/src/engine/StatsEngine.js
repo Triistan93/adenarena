@@ -659,6 +659,11 @@ export function getStats(state) {
   xpBoost += (Number(eb.xpBoost) || 0) + (Number(setB.xpBoost) || 0);
   goldBoost += (Number(eb.goldBoost || eb.adenaBoost) || 0) + (Number(setB.goldBoost || setB.adenaBoost) || 0);
 
+  // Referral Bonus (+10% EXP permanente para aventureiros indicados por um amigo)
+  if (state.referredBy) {
+    xpBoost += 0.10;
+  }
+
   // Process Clan Skills Bonuses
   if (state.clan && state.clan.level) {
     const clanLvl = state.clan.level;

@@ -61,7 +61,7 @@ export const IDLE_MARKUP = `
           <span id="daily-reward-dot" class="tb-dot tb-dot--red"></span>
         </button>
 
-        <a href="https://discord.gg/adenarena" target="_blank" rel="noopener noreferrer" id="top-discord-btn" class="tb-btn tb-btn--discord" title="Junte-se ao Discord">
+        <a href="https://discord.gg/R7rwB5uCc" target="_blank" rel="noopener noreferrer" id="top-discord-btn" class="tb-btn tb-btn--discord" title="Junte-se ao Discord">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> <span>Discord</span>
         </a>
 
