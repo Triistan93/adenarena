@@ -41,6 +41,40 @@
       href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
+    <script>
+      // Early capture-phase error listener for stale chunk 404s (e.g. after new deployments)
+      window.addEventListener('error', function (e) {
+        var target = e.target;
+        if (target && (target.tagName === 'SCRIPT' || target.tagName === 'LINK')) {
+          var src = target.src || target.href || '';
+          if (src.indexOf('/assets/') !== -1 || src.indexOf('.js') !== -1) {
+            console.warn('[PWA/CDN] Falha ao carregar chunk:', src);
+            var lock = sessionStorage.getItem('chunk_recovery_reloaded');
+            if (!lock) {
+              sessionStorage.setItem('chunk_recovery_reloaded', '1');
+              if ('caches' in window) {
+                caches.keys().then(function (names) {
+                  return Promise.all(names.map(function (n) { return caches.delete(n); }));
+                }).then(function () {
+                  if ('serviceWorker' in navigator) {
+                    navigator.serviceWorker.getRegistrations().then(function (regs) {
+                      regs.forEach(function (r) { r.unregister(); });
+                      window.location.reload(true);
+                    });
+                  } else {
+                    window.location.reload(true);
+                  }
+                }).catch(function () {
+                  window.location.reload(true);
+                });
+              } else {
+                window.location.reload(true);
+              }
+            }
+          }
+        }
+      }, true);
+    </script>
   </head>
   <body>
     <div id="root"></div>

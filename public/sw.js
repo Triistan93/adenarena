@@ -3,7 +3,7 @@
  * Caching inteligente com prioridade de rede para scripts, HTML e dados atualizados
  */
 
-const CACHE_NAME = 'aden-arena-cache-v4';
+const CACHE_NAME = 'aden-arena-cache-v7';
 const STATIC_ASSETS = [
   '/manifest.webmanifest',
   '/icon-192.png',
@@ -50,6 +50,9 @@ self.addEventListener('fetch', (event) => {
           if (response && response.status === 200) {
             const clone = response.clone();
             caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+          } else if (response && response.status === 404 && url.pathname.includes('/assets/')) {
+            // Se um chunk JS do Vite retornou 404, o HTML em cache é obsoleto!
+            caches.open(CACHE_NAME).then((cache) => cache.delete(event.request));
           }
           return response;
         })

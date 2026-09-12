@@ -19,7 +19,7 @@ if (typeof window !== "undefined") {
   }
 
   // Purge legacy caches on version change without disrupting active PWA registration
-  const APP_VERSION = "3.3.3";
+  const APP_VERSION = "3.3.7";
   if (localStorage.getItem("aden_app_version") !== APP_VERSION) {
     if ("caches" in window) {
       caches.keys().then((names) => {
@@ -30,6 +30,10 @@ if (typeof window !== "undefined") {
     }
     localStorage.setItem("aden_app_version", APP_VERSION);
   }
+
+  // Clear chunk recovery lock on successful script execution
+  sessionStorage.removeItem("chunk_recovery_reloaded");
+  sessionStorage.removeItem("chunk_reload_lock");
 
   window.addEventListener("error", (e) => {
     const msg = e.message || "";
