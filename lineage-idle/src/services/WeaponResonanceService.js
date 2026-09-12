@@ -8,6 +8,15 @@
 import { D } from '../core/GameConfig.js';
 import { detectItemWeaponType } from '../engine/SkillEngine.js';
 
+export const RESONANCE_STATES = {
+  LOCKED: 'LOCKED',
+  INACTIVE: 'INACTIVE',
+  READY: 'READY',
+  ACTIVE: 'ACTIVE',
+  ARMED: 'ARMED',
+  COOLDOWN: 'COOLDOWN'
+};
+
 export const RESONANCE_DEFINITIONS = {
   // 1. Arco + Adaga
   shadow_stalker: {
@@ -134,9 +143,19 @@ export const RESONANCE_DEFINITIONS = {
     icon: '🔱⚔️',
     color: '#eab308',
     desc: 'Postura de Falange: +20% P.Def. Espada aplica Fratura Tática, garantindo que o próximo ataque de Lança desfira um Cleave com +45% de dano.',
+    description: 'Postura de Falange: +20% P.Def. Espada aplica Fratura Tática, garantindo que o próximo ataque de Lança desfira um Cleave com +45% de dano.',
     weap1: 'spear',
     weap2: 'sword',
-    passives: { pDefPct: 20, pAtkPct: 8 }
+    requirements: ['spear', 'sword'],
+    activationRule: 'Equipar Lança e Espada 1H nos slots de armamento',
+    passives: { pDefPct: 20, pAtkPct: 8 },
+    passiveEffects: { pDefPct: 20, pAtkPct: 8 },
+    triggerEffects: [
+      { trigger: 'sword_hit', effect: 'ARM_TACTICAL_FRACTURE', description: 'Arma Fratura Tática' },
+      { trigger: 'spear_hit', effect: 'CLEAVE_BONUS_45', description: 'Cleave com +45% de dano (+45% BaseSpearDamage)' }
+    ],
+    cooldowns: { tacticalFracture: 0 },
+    visual: { icon: '🔱⚔️', color: '#eab308', badge: 'Falange' }
   },
 
   // 11. Lança + Dual Swords
@@ -433,6 +452,81 @@ export class WeaponResonanceService {
   }
 
   /**
+   * Determina o estado atual do ciclo de vida da Ressonância Ativa.
+   * Estados canônicos: LOCKED | INACTIVE | READY | ACTIVE | ARMED | COOLDOWN
+   * @param {Object} state
+   * @returns {string}
+   */
+  static getResonanceState(state) {
+    const resonance = this.getActiveResonance(state);
+    if (!resonance) return RESONANCE_STATES.LOCKED;
+
+    const rState = state?.resonanceState || {};
+    if (resonance.id === 'phalanx_warlord') {
+      if (rState.tacticalFracture === 'ARMED') {
+        return RESONANCE_STATES.ARMED;
+      }
+      return RESONANCE_STATES.ACTIVE;
+    }
+
+    if ((rState.holyVengeanceUntil && rState.holyVengeanceUntil > Date.now()) ||
+        (rState.stormFury && rState.stormFury > 0) ||
+        rState.arcaneBlade) {
+      return RESONANCE_STATES.ARMED;
+    }
+
+    return RESONANCE_STATES.ACTIVE;
+  }
+
+  /**
+   * Retorna o contrato completo e enriquecido da ressonância com estado atual.
+   * @param {Object} state
+   * @returns {Object}
+   */
+  static getResonanceContract(state) {
+    const resonance = this.getActiveResonance(state);
+    if (!resonance) {
+      return {
+        id: null,
+        name: 'Nenhuma Ressonância',
+        state: RESONANCE_STATES.LOCKED,
+        requirements: [],
+        activationRule: 'Equipe armas complementares nos slots 1 e 2',
+        passiveEffects: {},
+        triggerEffects: [],
+        cooldowns: {},
+        visual: { icon: '⚔️', color: '#64748b', badge: 'Bloqueado' },
+        description: 'Equipe armas sinérgicas para desbloquear ressonâncias de combate.'
+      };
+    }
+
+    const currentLifecycleState = this.getResonanceState(state);
+    return {
+      ...resonance,
+      state: currentLifecycleState,
+      requirements: resonance.requirements || [resonance.weap1, resonance.weap2].flat(),
+      activationRule: resonance.activationRule || `Equipar ${resonance.pairName}`,
+      passiveEffects: resonance.passiveEffects || resonance.passives || {},
+      triggerEffects: resonance.triggerEffects || [],
+      cooldowns: resonance.cooldowns || {},
+      visual: resonance.visual || { icon: resonance.icon || '⚔️', color: resonance.color || '#eab308', badge: resonance.name },
+      description: resonance.description || resonance.desc || ''
+    };
+  }
+
+  /**
+   * Retorna um ícone ou SVG seguro para ressonância, garantindo que nunca quebre.
+   * @param {Object} resDef
+   * @returns {string}
+   */
+  static getResonanceIcon(resDef) {
+    if (!resDef) return '⚔️';
+    if (resDef.visual?.icon) return resDef.visual.icon;
+    if (resDef.icon) return resDef.icon;
+    return '✨';
+  }
+
+  /**
    * Processa o disparo de habilidades com efeitos de ressonância cruzada.
    * @param {Object} state
    * @param {Object} skillDef
@@ -512,6 +606,17 @@ export class WeaponResonanceService {
     if (resonance.id === 'mystic_brawler' && (reqWeapon === 'fist' || skillNameLower.includes('punch') || skillNameLower.includes('fist') || skillNameLower.includes('force'))) {
       state.resonanceState.brawlerChi = Math.min(5, (state.resonanceState.brawlerChi || 0) + 1);
     }
+
+    // 8. Comandante de Falange: Habilidade de Espada arma Fratura Tática
+    if (resonance.id === 'phalanx_warlord') {
+      if (reqWeapon === 'sword' || skillNameLower.includes('slash') || skillNameLower.includes('strike') || skillNameLower.includes('triple') || skillNameLower.includes('sonic')) {
+        state.resonanceState.tacticalFracture = 'ARMED';
+        state.resonanceState.state = 'ARMED';
+        state.resonanceState.phalanxCleave = true;
+        if (callbacks.floatText) callbacks.floatText('⚔ TACTICAL FRACTURE (ARMED)', 'float-epic');
+        if (callbacks.log) callbacks.log('⚔ Fratura Tática armada! Próximo ataque de Lança causará Cleave com +45% de dano!', 'combat');
+      }
+    }
   }
 
   /**
@@ -583,15 +688,27 @@ export class WeaponResonanceService {
       }
     }
 
-    // 5. Comandante de Falange: Espada 1H prepara Cleave de Lança
+    // 5. Comandante de Falange: Espada 1H arma Fratura Tática, Lança detona Cleave (+45% BaseSpearDamage)
     if (resonance.id === 'phalanx_warlord') {
       if (weaponTypeUsed === 'sword') {
+        state.resonanceState.tacticalFracture = 'ARMED';
+        state.resonanceState.state = 'ARMED';
         state.resonanceState.phalanxCleave = true;
-      } else if (weaponTypeUsed === 'spear' && state.resonanceState.phalanxCleave) {
-        state.resonanceState.phalanxCleave = false;
-        finalDamage = Math.floor(finalDamage * 1.45);
-        extraEffects.push('phalanx_cleave');
-        if (callbacks.floatText) callbacks.floatText('🛡️ VARREDURA DE FALANGE (+45%)!', 'float-jackpot');
+        extraEffects.push('tactical_fracture_armed');
+        if (callbacks.floatText) callbacks.floatText('⚔ TACTICAL FRACTURE (ARMED)', 'float-epic');
+        if (callbacks.log) callbacks.log('⚔ Comandante de Falange: Fratura Tática armada pela Espada! Próximo ataque de Lança desfere Cleave (+45%)!', 'combat');
+      } else if (weaponTypeUsed === 'spear') {
+        if (state.resonanceState.tacticalFracture === 'ARMED' || state.resonanceState.phalanxCleave) {
+          state.resonanceState.tacticalFracture = 'INACTIVE';
+          state.resonanceState.state = 'ACTIVE';
+          state.resonanceState.phalanxCleave = false;
+          const BaseSpearDamage = baseDamage;
+          const CleaveDamage = Math.floor(BaseSpearDamage * 1.45);
+          finalDamage = CleaveDamage;
+          extraEffects.push('phalanx_cleave');
+          if (callbacks.floatText) callbacks.floatText('🔱 CLEAVE (+45%)', 'float-jackpot');
+          if (callbacks.log) callbacks.log(`🔱 Fratura Tática detonada! Cleave de Lança desferido: ${CleaveDamage.toLocaleString()} (+45%)!`, 'rarity-legendary');
+        }
       }
     }
 

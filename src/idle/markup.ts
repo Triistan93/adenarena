@@ -449,6 +449,9 @@ export const IDLE_MARKUP = `
               </div>
             </div>
 
+            <!-- Commercial Player Journey & Next Action Advisor Widget -->
+            <div id="next-action-advisor-char" class="next-action-advisor-container" style="display:none; margin: 12px 0;"></div>
+
             <!-- 2. POWER SUMMARY & COMBAT PERFORMANCE -->
             <div class="l2-char-section" id="char-performance-section">
               <div class="l2-section-header">
@@ -621,6 +624,7 @@ export const IDLE_MARKUP = `
                 <span class="inv-pressure-bar-label" id="inv-capacity-pressure-label" style="font-size:10px; font-weight:bold; color:#cbd5e1; min-width:80px;">0% Normal</span>
               </div>
               <div class="l2inv-window-controls">
+                <button class="l2inv-win-btn forge-shortcut-btn" id="btn-inv-open-forge" title="Abrir Forja Imperial (Crafting de Armas &amp; Armaduras)" style="background:rgba(212,167,68,0.2); color:#ffd700; border:1px solid rgba(212,167,68,0.4); font-size:11px; padding:2px 8px; border-radius:4px; cursor:pointer; font-weight:bold;">⚒ Forja</button>
                 <button class="l2inv-win-btn" title="Ajuda">?</button>
                 <button class="l2inv-win-btn" title="Gênero">♂</button>
                 <button class="l2inv-win-btn" title="Minimizar">_</button>
@@ -632,6 +636,9 @@ export const IDLE_MARKUP = `
             <div class="inv-full-alert-banner" id="inv-full-alert-banner" style="display:none; background:linear-gradient(90deg, #7f1d1d, #991b1b, #7f1d1d); color:#fecaca; border:1px solid #ef4444; padding:6px 12px; font-size:11px; font-weight:bold; text-align:center; box-shadow:0 0 12px rgba(239,68,68,0.4); animation:l2-pulse-alert 2s infinite;">
               ⚠️ MOCHILA CHEIA! A capacidade de carga atingiu 100%. Novos itens não poderão ser recolhidos até liberar espaço.
             </div>
+
+            <!-- Commercial Player Journey & Next Action Advisor Widget (Inventory View) -->
+            <div id="next-action-advisor-inv" class="next-action-advisor-container" style="display:none; margin: 8px 0;"></div>
 
             <!-- Two-panel layout -->
             <div class="l2inv-main-container">
@@ -1940,6 +1947,20 @@ export const IDLE_MARKUP = `
       <div class="craft-modal-content" style="background:linear-gradient(145deg, rgba(20,24,35,0.98), rgba(10,12,18,0.99)); border:1px solid #d4a744; border-radius:12px; width:92%; max-width:540px; padding:22px; box-shadow:0 10px 40px rgba(0,0,0,0.9); position:relative; font-family:'Cinzel',serif; color:#f8fafc;">
         <button id="close-auto-recycle-modal-btn" style="position:absolute; top:12px; right:14px; background:none; border:none; color:#aaa; font-size:20px; cursor:pointer;" onclick="const m=document.getElementById('auto-recycle-modal'); if(m) m.style.display='none';">✖</button>
         <div id="auto-recycle-modal-body"></div>
+      </div>
+    </div>
+
+    <!-- Modal Canônico de Encantamento de Equipamento -->
+    <div id="enchant-flow-modal" class="modal-overlay" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.85); backdrop-filter:blur(8px); z-index:99999; justify-content:center; align-items:center;">
+      <div class="enchant-flow-modal-content" style="background:linear-gradient(145deg, rgba(18,22,34,0.98), rgba(10,12,18,0.99)); border:1px solid rgba(212,167,68,0.6); border-radius:12px; width:94%; max-width:560px; padding:22px; box-shadow:0 12px 48px rgba(0,0,0,0.9); position:relative; font-family:'Cinzel',serif; color:#f8fafc;">
+        <button id="enchant-modal-close-btn" style="position:absolute; top:12px; right:14px; background:none; border:none; color:#94a3b8; font-size:20px; cursor:pointer; transition:color 0.2s;">✕</button>
+        <div class="enchant-flow-header" style="margin-bottom:16px; border-bottom:1px solid rgba(212,167,68,0.25); padding-bottom:10px;">
+          <h3 style="margin:0; font-size:16px; color:#ffd700; display:flex; align-items:center; gap:8px;">
+            <span>✦</span> <span>Encantamento de Equipamento Ancestral</span>
+          </h3>
+          <span style="font-size:11px; color:#94a3b8; font-family:sans-serif;">Fluxo canônico: Seleção → Alvo → Pré-visualização → Transação Atômica</span>
+        </div>
+        <div id="enchant-modal-body"></div>
       </div>
     </div>
 

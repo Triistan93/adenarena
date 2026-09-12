@@ -5,6 +5,7 @@ import { detectItemWeaponType } from '../engine/SkillEngine.js';
 import { isMageClass } from './SkillEligibility.js';
 import { CombatPowerService } from './CombatPowerService.js';
 import { CP_WEIGHTS } from '../data/balance/cpBalance.js';
+import { isEquippableItem } from './ItemClassificationService.js';
 
 export function resolveEquipSlot(rawSlot, equipmentState = {}, preferredSlot = null) {
   if (preferredSlot && ALL_EQUIP_SLOTS.includes(preferredSlot)) {
@@ -228,6 +229,7 @@ export function calculateEquipmentRecommendationScore(state, item, targetSlot = 
   const allItems = gData.ALL_ITEMS || {};
   const def = allItems[item.itemId] || item;
   if (!def) return -999999;
+  if (!isEquippableItem(def)) return -999999;
 
   // Level gate
   const reqLvl = def.req?.level || def.level || 1;
@@ -358,8 +360,17 @@ export function generateAutoEquipProposal(state) {
       if (!i || usedUids.has(i.uid)) return false;
       const def = allItems[i.itemId] || i;
       if (!def) return false;
-      const resolved = resolveEquipSlot(def.slot, currentEquip, slot);
-      return resolved === slot || (slot === 'weapon2' && (def.slot === 'weapon' || def.slot === 'sword' || def.slot === 'dagger'));
+      if (!isEquippableItem(def)) return false;
+      const rawSlot = String(def.slot || '').toLowerCase();
+      const isSlotMatch =
+        (slot === 'weapon' && (rawSlot === 'weapon' || rawSlot === 'twohand' || rawSlot === 'bow' || rawSlot === 'spear' || rawSlot === 'staff' || rawSlot === 'dual' || rawSlot === 'dagger' || rawSlot === 'sword' || rawSlot === 'blunt')) ||
+        (slot === 'weapon2' && ['weapon', 'sword', 'dagger'].includes(rawSlot) && !isTwoHandedWeapon(def)) ||
+        (slot === 'shield' && (rawSlot === 'shield' || rawSlot === 'shield_or_sigil' || rawSlot === 'offhand' || rawSlot === 'sigil')) ||
+        ((slot === 'ring1' || slot === 'ring2') && rawSlot.includes('ring')) ||
+        ((slot === 'earring1' || slot === 'earring2') && rawSlot.includes('earring')) ||
+        ((slot === 'hair1' || slot === 'hair2') && (rawSlot.includes('hair') || rawSlot === 'headgear' || rawSlot === 'mask')) ||
+        (rawSlot === slot);
+      return isSlotMatch;
     });
 
     let bestItem = currentItem;
@@ -430,4 +441,70 @@ export function generateAutoEquipProposal(state) {
     currentCp,
     proposedCp
   };
+}
+
+/**
+ * Aplica atômica e definitivamente a proposta de Auto-Equip ao estado do jogo.
+ * @param {Object} state
+ * @param {Object} proposal
+ * @param {Object} callbacks
+ * @returns {{ success: boolean, appliedChanges: number, reason?: string }}
+ */
+export function commitAutoEquipProposal(state, proposal, callbacks = {}) {
+  if (!state || !proposal || !proposal.proposedLoadout) {
+    return { success: false, appliedChanges: 0, reason: 'Proposta de Auto-Equip inválida.' };
+  }
+
+  const allItems = D()?.ALL_ITEMS || {};
+
+  // Validação prévia de integridade de todos os itens do novo loadout
+  for (const [slot, uid] of Object.entries(proposal.proposedLoadout)) {
+    if (uid) {
+      const item = state.inventory?.find(i => i.uid === uid);
+      if (!item) {
+        return { success: false, appliedChanges: 0, reason: `Item ${uid} não encontrado na mochila.` };
+      }
+      const def = allItems[item.itemId] || item;
+      if (!isEquippableItem(def)) {
+        return { success: false, appliedChanges: 0, reason: `Item não-equipável detectado: ${def.name || item.itemId}` };
+      }
+    }
+  }
+
+  // 1. Reseta status de equipado
+  for (const item of (state.inventory || [])) {
+    item.equipped = false;
+    delete item.equippedSlot;
+  }
+
+  // 2. Aplica novo loadout atômico
+  state.equipment = { ...proposal.proposedLoadout };
+  for (const [slot, uid] of Object.entries(state.equipment)) {
+    if (uid) {
+      const item = state.inventory?.find(i => i.uid === uid);
+      if (item) {
+        item.equipped = true;
+        item.equippedSlot = slot;
+      }
+    }
+  }
+
+  // 3. Recalcula vitais e atributos
+  const stats = getStats(state);
+  state.maxHp = stats.maxHp;
+  state.maxMp = stats.maxMp;
+  state.hp = Math.min(state.hp || state.maxHp, state.maxHp);
+  state.mp = Math.min(state.mp || state.maxMp, state.maxMp);
+
+  const changesCount = proposal.changes?.length || 0;
+  if (callbacks.log) {
+    callbacks.log(`⚡ Auto-Equip aplicado! (${changesCount} alteraç${changesCount === 1 ? 'ão' : 'ões'})`, 'rarity-legendary');
+  }
+  if (callbacks.floatText) {
+    callbacks.floatText('⚡ EQUIPADO!', 'float-jackpot');
+  }
+  if (callbacks.updateAllUI) callbacks.updateAllUI();
+  if (callbacks.save) callbacks.save(true, true);
+
+  return { success: true, appliedChanges: changesCount };
 }

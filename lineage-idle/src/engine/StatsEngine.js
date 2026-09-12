@@ -749,8 +749,9 @@ export function getStats(state) {
   // Process Dual Weapon Resonance Passive Stats (Ressonância de Armas Ativa)
   let resonanceLifeDrain = 0;
   let resonanceCrit = 0;
+  let resPassives = null;
   try {
-    const resPassives = WeaponResonanceService?.getPassiveStats ? WeaponResonanceService.getPassiveStats(state) : null;
+    resPassives = WeaponResonanceService?.getPassiveStats ? WeaponResonanceService.getPassiveStats(state) : null;
     if (resPassives) {
       if (resPassives.critChance) resonanceCrit += resPassives.critChance * 10;
       if (resPassives.eva) baseEva += resPassives.eva;
@@ -900,12 +901,17 @@ export function getStats(state) {
   const certHpMult   = 1 + (certB.hpPercent || 0);
   const certMpMult   = 1 + (certB.mpPercent || 0);
 
+  const resAtkMult  = 1 + ((resPassives?.pAtkPct || 0) / 100);
+  const resDefMult  = 1 + ((resPassives?.pDefPct || 0) / 100);
+  const resMatkMult = 1 + ((resPassives?.mAtkPct || 0) / 100);
+  const resMdefMult = 1 + ((resPassives?.mDefPct || 0) / 100);
+
   atkMult = 1 + buffAtkMult;
-  const finalAtk  = Math.floor((baseAtk + (Number(eb.atk) || 0) + (Number(setB.atk) || 0) + buffAtk + codexB.atk + dollsB.atk + certB.atk) * atkMult * towerMult * certAtkMult);
-  const finalDef  = Math.floor((baseDef + (Number(eb.def) || 0) + (Number(setB.def) || 0) + buffDef + codexB.def + dollsB.def + certB.def) * defMult * towerMult * certDefMult);
+  const finalAtk  = Math.floor((baseAtk + (Number(eb.atk) || 0) + (Number(setB.atk) || 0) + buffAtk + codexB.atk + dollsB.atk + certB.atk) * atkMult * towerMult * certAtkMult * resAtkMult);
+  const finalDef  = Math.floor((baseDef + (Number(eb.def) || 0) + (Number(setB.def) || 0) + buffDef + codexB.def + dollsB.def + certB.def) * defMult * towerMult * certDefMult * resDefMult);
   const finalEva  = Math.floor(baseEva + (Number(eb.eva) || 0) + (Number(setB.eva) || 0) + codexB.eva + dollsB.eva + (certB.evaAdd || 0));
-  const finalMatk = Math.floor((baseMatk + (Number(eb.matk) || 0) + (Number(setB.matk) || 0) + buffMatk + codexB.matk + dollsB.matk + certB.matk) * towerMult * certMatkMult);
-  const finalMdef = Math.floor((baseMdef + (Number(eb.mdef) || 0) + (Number(setB.mdef) || 0) + buffMdef + codexB.mdef + dollsB.mdef + certB.mdef) * towerMult * certMdefMult);
+  const finalMatk = Math.floor((baseMatk + (Number(eb.matk) || 0) + (Number(setB.matk) || 0) + buffMatk + codexB.matk + dollsB.matk + certB.matk) * towerMult * certMatkMult * resMatkMult);
+  const finalMdef = Math.floor((baseMdef + (Number(eb.mdef) || 0) + (Number(setB.mdef) || 0) + buffMdef + codexB.mdef + dollsB.mdef + certB.mdef) * towerMult * certMdefMult * resMdefMult);
   const finalCrit = (Number(eb.crit) || 0) + (Number(setB.crit) || 0) + codexB.crit + dollsB.crit + certB.crit + astralB.crit + saCrit + augCrit + legacyCrit + buffCrit + resonanceCrit;
 
   const lootBonus  = (Number(race?.stats?.lootBonus) || 0) + (Number(cls?.base?.lootBonus) || 0) + itemLootBonus + luckBoost;

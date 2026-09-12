@@ -14,7 +14,8 @@ import {
 } from '../services/InventoryService.js';
 import {
   resolveEquipSlot, migrateEquipmentSlots, equipItem, unequipItem,
-  generateAutoEquipProposal, isTwoHandedWeapon, calculateEquipmentRecommendationScore
+  generateAutoEquipProposal, isTwoHandedWeapon, calculateEquipmentRecommendationScore,
+  commitAutoEquipProposal
 } from '../services/EquipmentService.js';
 import { getCraftLevelReq, getRecipeMaterials, canCraft, getRecipeDef, calculateMaxCraftableQty } from '../services/CraftService.js';
 import { rollMysticStock } from '../services/ShopService.js';
@@ -49,6 +50,9 @@ import { FortressService } from '../services/FortressService.js';
 import { DUEL_BET_TIERS, DUEL_OPPONENT_ARCHETYPES, SURVIVAL_WAVES, COLOSSEUM_SHOP_CATALOG } from '../data/colosseum.js';
 import { ColosseumService } from '../services/ColosseumService.js';
 import { CombatPowerService } from '../services/CombatPowerService.js';
+import { EnchantmentService } from '../services/EnchantmentService.js';
+import { NextActionAdvisor } from '../services/NextActionAdvisor.js';
+import { parseEnchantScroll, isItemCompatibleWithScroll, isEquippableItem } from '../services/ItemClassificationService.js';
 import { renderRankingTab, setActiveRankingTab } from './RankingUI.js';
 import { renderMarketTab, setActiveMarketTab } from './MarketUI.js';
 import { CommunityCapService } from '../services/CommunityCapService.js';
@@ -1504,6 +1508,22 @@ export function updateInventoryUI(state, callbacks = {}) {
     fullBanner.style.display = pressure.isFull ? 'block' : 'none';
   }
 
+  // 1.1 Atalho Direto para a Forja Imperial & NextActionAdvisor na Mochila
+  const forgeBtn = findElement('btn-inv-open-forge');
+  if (forgeBtn && !forgeBtn.dataset.bound) {
+    forgeBtn.dataset.bound = 'true';
+    forgeBtn.onclick = (e) => {
+      e.preventDefault();
+      if (callbacks.switchTab) callbacks.switchTab('craft');
+      else if (typeof window !== 'undefined' && typeof window.switchTab === 'function') window.switchTab('craft');
+    };
+  }
+
+  const advisorInv = findElement('next-action-advisor-inv');
+  if (advisorInv) {
+    NextActionAdvisor.render(state, advisorInv, callbacks);
+  }
+
   const grid = findElement('inventory-grid');
   if (!grid) return;
   grid.innerHTML = '';
@@ -2027,6 +2047,14 @@ export function renderItemDetailAndComparison(item, state, callbacks = {}) {
   const canCrystallize = isGear && !isCurrentItemEquipped && (reqLvl >= 20 || (def.tier || 1) >= 2);
   const isConsumable = ['consumable', 'potion', 'scroll', 'powerup', 'food'].includes(String(def.slot || '').toLowerCase());
 
+  const sMeta = parseEnchantScroll(def);
+  const isEnchantScrollItem = sMeta && sMeta.isScroll;
+  const hasCompatibleEnchantScroll = isGear && (state.inventory || []).some(i => {
+    const sDef = getItemDef(i.itemId) || i;
+    const meta = parseEnchantScroll(sDef);
+    return meta && meta.isScroll && isItemCompatibleWithScroll(def, sDef).ok;
+  });
+
   html += `
     <div class="detail-actions-row">
       ${isGear && !isCurrentItemEquipped ? `
@@ -2035,8 +2063,13 @@ export function renderItemDetailAndComparison(item, state, callbacks = {}) {
       ${isCurrentItemEquipped ? `
         <button class="detail-action-btn unequip" id="dock-btn-unequip">❌ Desequipar</button>
       ` : ''}
-      ${isConsumable ? `
+      ${isEnchantScrollItem ? `
+        <button class="detail-action-btn equip" id="dock-btn-enchant-scroll" style="background:linear-gradient(135deg, #7e22ce, #b45309); color:#fff; border:1px solid #f59e0b; font-weight:bold;">✨ Encantar Equipamento</button>
+      ` : (isConsumable ? `
         <button class="detail-action-btn equip" id="dock-btn-use">🧪 Usar Consumível</button>
+      ` : '')}
+      ${hasCompatibleEnchantScroll ? `
+        <button class="detail-action-btn enchant" id="dock-btn-enchant" style="background:linear-gradient(135deg, #0284c7, #2563eb); color:#fff; border:1px solid #38bdf8; font-weight:bold;">✨ Encantar</button>
       ` : ''}
       <button class="detail-action-btn favorite ${isFav ? 'active' : ''}" id="dock-btn-favorite" title="${isFav ? 'Remover favorito' : 'Proteger contra venda/desmanche'}">
         ${isFav ? '⭐ Favorito (Protegido)' : '☆ Favoritar'}
@@ -2082,6 +2115,18 @@ export function renderItemDetailAndComparison(item, state, callbacks = {}) {
   if (btnUse) btnUse.onclick = () => {
     if (callbacks.useItem) callbacks.useItem(item.uid);
     else if (window.useItem) window.useItem(item.uid);
+  };
+
+  const btnEnchantScroll = dock.querySelector('#dock-btn-enchant-scroll');
+  if (btnEnchantScroll) btnEnchantScroll.onclick = () => {
+    openEnchantFlowModal(null, item.uid, state, callbacks);
+    dock.style.display = 'none';
+  };
+
+  const btnEnchant = dock.querySelector('#dock-btn-enchant');
+  if (btnEnchant) btnEnchant.onclick = () => {
+    openEnchantFlowModal(item.uid, null, state, callbacks);
+    dock.style.display = 'none';
   };
 
   const btnFav = dock.querySelector('#dock-btn-favorite');
@@ -2190,13 +2235,15 @@ export function openAutoEquipPreviewModal(state, callbacks = {}) {
 
   confirmBtn.textContent = '⚡ Confirmar Otimização';
   confirmBtn.onclick = () => {
-    state.equipment = proposal.proposedLoadout;
+    const res = commitAutoEquipProposal(state, proposal, callbacks);
     closeInventoryPreviewModal();
-    if (callbacks.log) {
-      callbacks.log(`⚡ Equipamentos otimizados com sucesso! (+${cpGain.toLocaleString()} CP)`, 'rarity-legendary');
+    if (res && res.success) {
+      if (callbacks.log) {
+        callbacks.log(`⚡ Equipamentos otimizados com sucesso! (+${cpGain.toLocaleString()} CP)`, 'rarity-legendary');
+      }
+      updateInventoryUI(state, callbacks);
+      if (callbacks.save) callbacks.save();
     }
-    updateInventoryUI(state, callbacks);
-    if (callbacks.save) callbacks.save();
   };
 
   cancelBtn.onclick = closeInventoryPreviewModal;
@@ -3035,6 +3082,12 @@ export function updateCharacterUI(state) {
   // 3. Linhagem e Ordem (Raça e Classe)
   const raceClassDisp = root.querySelector('#hero-race-class-display');
   if (raceClassDisp) raceClassDisp.textContent = `${raceName} · ${className}`;
+
+  // NextActionAdvisor no topo da ficha do personagem
+  const advisorChar = root.querySelector('#next-action-advisor-char');
+  if (advisorChar) {
+    NextActionAdvisor.render(state, advisorChar);
+  }
 
   const raceText = root.querySelector('#race-text');
   if (raceText) raceText.textContent = raceName;
@@ -9666,6 +9719,295 @@ export function renderCosmeticsTab(container, state) {
       </div>
     </div>
   `;
+}
+
+/**
+ * Modal Canônico de Encantamento de Equipamento (#enchant-flow-modal).
+ * Implementa o contrato sagrado: Scroll → Modal → Target → Preview → Atomic Enchant → Stats → CP
+ * @param {string|null} initialTargetUid
+ * @param {string|null} initialScrollUid
+ * @param {Object|null} state
+ * @param {Object} callbacks
+ */
+export function openEnchantFlowModal(initialTargetUid = null, initialScrollUid = null, state = null, callbacks = {}) {
+  const root = getRoot();
+  const modal = root.querySelector('#enchant-flow-modal');
+  if (!modal) return;
+  const body = modal.querySelector('#enchant-modal-body');
+  if (!body) return;
+
+  const closeBtn = modal.querySelector('#enchant-modal-close-btn');
+  if (closeBtn) {
+    closeBtn.onclick = () => {
+      modal.style.display = 'none';
+      if (callbacks.updateAllUI) callbacks.updateAllUI();
+    };
+  }
+
+  const gState = state || (typeof window !== 'undefined' ? window.state : null);
+  if (!gState) return;
+
+  let selectedScrollUid = initialScrollUid;
+  let selectedTargetUid = initialTargetUid;
+
+  const renderModalContent = () => {
+    const allItems = D()?.ALL_ITEMS || {};
+    const inventory = gState.inventory || [];
+
+    // Localiza todos os scrolls disponíveis
+    const scrolls = inventory.filter(i => {
+      if (!i || (i.count || 1) <= 0) return false;
+      const def = allItems[i.itemId] || i;
+      const meta = parseEnchantScroll(def);
+      return meta && meta.isScroll;
+    });
+
+    // Se nenhum scroll estiver explicitamente selecionado mas temos target, encontra o primeiro compatível
+    let scrollItem = selectedScrollUid ? inventory.find(i => i.uid === selectedScrollUid) : null;
+    if (!scrollItem && scrolls.length > 0 && !selectedScrollUid) {
+      if (selectedTargetUid) {
+        const tItem = inventory.find(i => i.uid === selectedTargetUid);
+        const tDef = tItem ? (allItems[tItem.itemId] || tItem) : null;
+        if (tDef) {
+          scrollItem = scrolls.find(s => {
+            const sDef = allItems[s.itemId] || s;
+            return isItemCompatibleWithScroll(tDef, sDef).ok;
+          }) || null;
+          if (scrollItem) selectedScrollUid = scrollItem.uid;
+        }
+      }
+      if (!scrollItem && scrolls.length === 1) {
+        scrollItem = scrolls[0];
+        selectedScrollUid = scrollItem.uid;
+      }
+    }
+
+    const scrollDef = scrollItem ? (allItems[scrollItem.itemId] || scrollItem) : null;
+
+    // Alvos elegíveis
+    let eligibleTargets = [];
+    if (scrollItem) {
+      eligibleTargets = EnchantmentService.getEnchantableItems(gState, scrollItem.uid);
+    } else {
+      eligibleTargets = inventory.filter(i => isEquippableItem(allItems[i.itemId] || i));
+    }
+
+    // Se temos um target selecionado, valida compatibilidade
+    let targetItem = selectedTargetUid ? inventory.find(i => i.uid === selectedTargetUid) : null;
+    if (targetItem && scrollDef) {
+      const tDef = allItems[targetItem.itemId] || targetItem;
+      if (!isItemCompatibleWithScroll(tDef, scrollDef).ok) {
+        targetItem = null;
+        selectedTargetUid = null;
+      }
+    }
+    if (!targetItem && eligibleTargets.length > 0 && !selectedTargetUid) {
+      const eqTarget = eligibleTargets.find(t => t.equipped);
+      targetItem = eqTarget || eligibleTargets[0];
+      selectedTargetUid = targetItem.uid;
+    }
+
+    const targetDef = targetItem ? (allItems[targetItem.itemId] || targetItem) : null;
+
+    let html = '';
+
+    // 1. SCROLL SELECTION BAR
+    html += `
+      <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(212,167,68,0.25); border-radius:8px; padding:10px 12px; margin-bottom:12px;">
+        <div style="font-size:11px; font-weight:bold; color:#ffd700; margin-bottom:6px; display:flex; justify-content:space-between;">
+          <span>📜 Pergaminho de Encantamento</span>
+          <span>\${scrolls.length} tipos na mochila</span>
+        </div>
+    `;
+
+    if (scrolls.length === 0) {
+      html += `
+        <div style="font-size:11px; color:#f87171; padding:6px 0;">
+          ❌ Nenhum pergaminho de encantamento encontrado na sua mochila.
+        </div>
+      `;
+    } else {
+      html += '<div style="display:flex; gap:8px; overflow-x:auto; padding-bottom:4px;">';
+      for (const s of scrolls) {
+        const sDef = allItems[s.itemId] || s;
+        const sInfo = parseEnchantScroll(sDef);
+        const isSelected = (s.uid === selectedScrollUid);
+        html += `
+          <div class="enchant-scroll-pill \${isSelected ? 'selected' : ''}" data-select-scroll="\${s.uid}" style="display:flex; align-items:center; gap:6px; padding:6px 10px; border-radius:6px; cursor:pointer; min-width:max-content; transition:all 0.15s; \${isSelected ? 'background:linear-gradient(135deg, rgba(212,167,68,0.35), rgba(212,167,68,0.15)); border:1px solid #ffd700; box-shadow:0 0 10px rgba(255,215,0,0.3);' : 'background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);'}">
+            <span style="font-size:14px;">📜</span>
+            <div style="display:flex; flex-direction:column;">
+              <span style="font-size:11px; font-weight:bold; color:\${isSelected ? '#ffd700' : '#e2e8f0'};">\${sDef.name}</span>
+              <span style="font-size:9.5px; color:#94a3b8;">Grau: \${sInfo.grade || 'NG'} · Qtd: \${s.count || 1} \${sInfo.isBlessed ? '· ✨ Blessed' : ''}</span>
+            </div>
+          </div>
+        `;
+      }
+      html += '</div>';
+    }
+    html += '</div>';
+
+    // 2. TARGET SELECTION LIST
+    html += `
+      <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(212,167,68,0.25); border-radius:8px; padding:10px 12px; margin-bottom:12px;">
+        <div style="font-size:11px; font-weight:bold; color:#ffd700; margin-bottom:6px; display:flex; justify-content:space-between;">
+          <span>🎯 Equipamento Alvo (\${eligibleTargets.length} compatíveis)</span>
+          \${targetItem?.equipped ? '<span style="color:#6ee7b7; font-size:10px;">⚡ Equipado Atualmente</span>' : ''}
+        </div>
+    `;
+
+    if (eligibleTargets.length === 0) {
+      html += `
+        <div style="font-size:11px; color:#94a3b8; padding:6px 0;">
+          Nenhum equipamento compatível com este pergaminho foi encontrado na sua mochila ou corpo.
+        </div>
+      `;
+    } else {
+      html += '<div style="display:flex; gap:8px; overflow-x:auto; padding-bottom:4px;">';
+      for (const t of eligibleTargets) {
+        const tDef = allItems[t.itemId] || t;
+        const isSelected = (t.uid === selectedTargetUid);
+        const encLevel = Number(t.enchant || t.enchantLevel) || 0;
+        html += `
+          <div class="enchant-target-pill \${isSelected ? 'selected' : ''}" data-select-target="\${t.uid}" style="display:flex; align-items:center; gap:6px; padding:6px 10px; border-radius:6px; cursor:pointer; min-width:max-content; transition:all 0.15s; \${isSelected ? 'background:linear-gradient(135deg, rgba(56,189,248,0.3), rgba(14,165,233,0.1)); border:1px solid #38bdf8; box-shadow:0 0 10px rgba(56,189,248,0.3);' : 'background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);'}">
+            <span style="font-size:14px;">\${tDef.slot === 'weapon' ? '⚔️' : '🛡️'}</span>
+            <div style="display:flex; flex-direction:column;">
+              <span style="font-size:11px; font-weight:bold; color:\${isSelected ? '#38bdf8' : '#e2e8f0'};">\${encLevel > 0 ? '+' + encLevel + ' ' : ''}\${tDef.name}</span>
+              <span style="font-size:9.5px; color:#94a3b8;">\${(tDef.grade || 'NG').toUpperCase()}-Grade \${t.equipped ? '· ⚡ Equipado' : ''}</span>
+            </div>
+          </div>
+        `;
+      }
+      html += '</div>';
+    }
+    html += '</div>';
+
+    // 3. CANONICAL PREVIEW
+    if (scrollItem && targetItem) {
+      const preview = EnchantmentService.getEnchantPreview(gState, targetItem.uid, scrollItem.uid);
+      if (preview && preview.valid) {
+        const curEnc = preview.currentEnchant;
+        const nxtEnc = preview.targetEnchant;
+        const chancePct = Math.round(preview.successChance * 100);
+        const isSafe = preview.isSafe;
+        const isBlessed = preview.isBlessed;
+
+        let riskLabel = '';
+        let riskColor = '';
+        if (isSafe) {
+          riskLabel = '🛡️ Seguro (100% de Sucesso até o Limite Seguro)';
+          riskColor = '#10b981';
+        } else if (isBlessed) {
+          riskLabel = '✨ Blessed Protegido (Em caso de falha, mantém o nível atual)';
+          riskColor = '#a855f7';
+        } else {
+          riskLabel = `⚠️ Risco de Cristalização (Em caso de falha, se estilhaça em cristais)`;
+          riskColor = '#ef4444';
+        }
+
+        html += `
+          <div style="background:linear-gradient(135deg, rgba(30,41,59,0.9), rgba(15,23,42,0.95)); border:1px solid rgba(212,167,68,0.5); border-radius:8px; padding:14px; margin-bottom:14px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span style="font-size:20px;">✨</span>
+                <div>
+                  <div style="font-size:14px; font-weight:bold; color:#ffd700;">
+                    +${curEnc} → <span style="color:#38bdf8; font-size:16px;">+${nxtEnc}</span> \${targetDef.name}
+                  </div>
+                  <div style="font-size:10px; color:#94a3b8;">Grau \${(targetDef.grade || 'NG').toUpperCase()} · Limite Seguro: +\${preview.safeLimit}</div>
+                </div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:18px; font-weight:bold; color:\${isSafe ? '#10b981' : (chancePct >= 50 ? '#ffd700' : '#f87171')};">
+                  \${chancePct}%
+                </div>
+                <div style="font-size:9.5px; color:#94a3b8;">Chance de Sucesso</div>
+              </div>
+            </div>
+
+            <!-- Risk Banner -->
+            <div style="background:rgba(0,0,0,0.5); border-left:3px solid \${riskColor}; padding:6px 10px; font-size:10.5px; color:\${riskColor}; margin-bottom:10px; border-radius:0 4px 4px 0;">
+              \${riskLabel}
+            </div>
+
+            <!-- Stats Deltas -->
+            <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; text-align:center; background:rgba(0,0,0,0.3); padding:8px; border-radius:6px; margin-bottom:10px; font-size:11px;">
+              <div>
+                <div style="color:#94a3b8; font-size:10px;">P.Atk / M.Atk</div>
+                <div style="color:#38bdf8; font-weight:bold;">\${preview.statDeltas?.atk > 0 ? '+' + preview.statDeltas.atk : (preview.statDeltas?.matk > 0 ? '+' + preview.statDeltas.matk : '--')}</div>
+              </div>
+              <div>
+                <div style="color:#94a3b8; font-size:10px;">P.Def / M.Def</div>
+                <div style="color:#38bdf8; font-weight:bold;">\${preview.statDeltas?.def > 0 ? '+' + preview.statDeltas.def : (preview.statDeltas?.mdef > 0 ? '+' + preview.statDeltas.mdef : '--')}</div>
+              </div>
+              <div>
+                <div style="color:#94a3b8; font-size:10px;">Ganho de CP</div>
+                <div style="color:#ffd700; font-weight:bold;">+\${(preview.statDeltas?.cp || 0).toLocaleString()} CP</div>
+              </div>
+            </div>
+
+            <!-- Action Button -->
+            <div style="display:flex; justify-content:flex-end; gap:8px;">
+              <button id="enchant-modal-confirm-btn" style="background:linear-gradient(180deg, #d4a744, #8a641c); color:#000; font-family:'Cinzel',serif; font-size:12px; font-weight:bold; padding:8px 18px; border:1px solid #ffe699; border-radius:6px; cursor:pointer; box-shadow:0 0 12px rgba(212,167,68,0.4); transition:all 0.15s;">
+                ✨ Confirmar Encantamento (+\${nxtEnc})
+              </button>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    body.innerHTML = html;
+
+    // Conecta cliques de seleção de scrolls
+    body.querySelectorAll('[data-select-scroll]').forEach(btn => {
+      btn.onclick = () => {
+        selectedScrollUid = btn.dataset.selectScroll;
+        renderModalContent();
+      };
+    });
+
+    // Conecta cliques de seleção de targets
+    body.querySelectorAll('[data-select-target]').forEach(btn => {
+      btn.onclick = () => {
+        selectedTargetUid = btn.dataset.selectTarget;
+        renderModalContent();
+      };
+    });
+
+    // Conecta o botão de confirmação de encantamento atômico
+    const confirmBtn = body.querySelector('#enchant-modal-confirm-btn');
+    if (confirmBtn) {
+      confirmBtn.onclick = () => {
+        confirmBtn.disabled = true;
+        confirmBtn.textContent = '⏳ Encantando...';
+
+        const result = EnchantmentService.executeAtomicEnchant(gState, selectedTargetUid, selectedScrollUid, callbacks);
+        if (result.success) {
+          if (callbacks.updateAllUI) callbacks.updateAllUI();
+          if (callbacks.save) callbacks.save(true, true);
+          setTimeout(() => {
+            renderModalContent();
+          }, 300);
+        } else {
+          confirmBtn.disabled = false;
+          confirmBtn.textContent = '✨ Confirmar Encantamento';
+        }
+      };
+    }
+  };
+
+  modal.style.display = 'flex';
+  renderModalContent();
+}
+
+if (typeof window !== 'undefined') {
+  window.openEnchantFlowModal = openEnchantFlowModal;
+  window.openEnchantModalWithScroll = (scrollUid) => {
+    openEnchantFlowModal(null, scrollUid, window.state, window._callbacks || {});
+  };
+  window.openEnchantModalForTarget = (targetUid) => {
+    openEnchantFlowModal(targetUid, null, window.state, window._callbacks || {});
+  };
 }
 
 export { renderRankingTab, setActiveRankingTab, renderMarketTab, setActiveMarketTab };

@@ -105,8 +105,11 @@ import {
   resolveEquipSlot as serviceResolveEquipSlot,
   equipItem as serviceEquipItem,
   unequipItem as serviceUnequipItem,
-  generateAutoEquipProposal
+  generateAutoEquipProposal,
+  commitAutoEquipProposal
 } from './src/services/EquipmentService.js';
+import * as EnchantmentService from './src/services/EnchantmentService.js';
+import { parseEnchantScroll } from './src/services/ItemClassificationService.js';
 
 import {
   buyItem as serviceBuyItem,
@@ -1281,6 +1284,24 @@ function useItem(uid) {
   const item = state.inventory[idx];
   const def = D().ALL_ITEMS[item.itemId];
   if (!def) return;
+
+  // Intercepta Pergaminhos de Encantamento (Normal / Blessed) para abertura canônica de modal
+  const scrollMeta = parseEnchantScroll(def);
+  if (scrollMeta && scrollMeta.isScroll) {
+    if (typeof window !== 'undefined' && typeof window.openEnchantModalWithScroll === 'function') {
+      window.openEnchantModalWithScroll(uid);
+    } else if (typeof window !== 'undefined' && typeof window.openEnchantFlowModal === 'function') {
+      window.openEnchantFlowModal(null, uid, state, {
+        updateAllUI,
+        save,
+        log,
+        floatText: typeof floatText === 'function' ? floatText : null
+      });
+    } else {
+      log('Abra o menu de Encantamento para utilizar este pergaminho.', 'system');
+    }
+    return;
+  }
   const usable = def.slot === 'consumable' || def.slot === 'scroll' || def.slot === 'powerup';
   if (!usable) { if (ALL_EQUIP_SLOTS.includes(resolveEquipSlot(def.slot))) equipItem(uid); return; }
   
@@ -2803,57 +2824,12 @@ function enchantItem(uid, useBlessed = false) {
     return; 
   }
   
-  if ((scrollItem.count || 1) > 1) {
-    scrollItem.count--;
-  } else {
-    removeFromInventory(scrollItem.uid, 1);
-  }
-
-  const currentEnchant = item.enchant || 0;
-  const enchantRate = Math.max(0.1, Number(state.serverRates?.enchant) || 1);
-  const isFullBody = def.slot === 'fullbody' || (def.slot === 'chest' && (def.isOnePiece || def.name?.toLowerCase().includes('full body') || def.name?.toLowerCase().includes('robe')));
-  const safeLimit = isFullBody ? 4 : 3;
-  const baseChance = getEnchantSuccessChance(grade, currentEnchant, safeLimit);
-  const chance = Math.min(1.0, baseChance * enchantRate);
-  
-  if (Math.random() < chance) {
-    item.enchant = currentEnchant + 1;
-    log(`✨ ENCHANT SUCCESS! ${def.name} agora está +${item.enchant}!`, 'rarity-legendary');
-    if (typeof floatText === 'function') floatText(`✨ +${item.enchant} SUCESSO!`, 'float-jackpot');
-  } else {
-    if (useBlessed) {
-      log(`🛡️ [BLESSED PROTECTED] A tentativa de encanto falhou, mas ${def.name} manteve o nível +${currentEnchant} intacto!`, 'rarity-epic');
-      if (typeof floatText === 'function') floatText(`🛡️ PROTEGIDO (+${currentEnchant})`, 'float-jackpot');
-    } else {
-      if (currentEnchant >= safeLimit && grade !== 'NG') {
-        const crystalMap = {
-          'D': { id: 'crystal_d', name: 'Cristal: D-Grade', count: 25 + currentEnchant * 5 },
-          'C': { id: 'crystal_c', name: 'Cristal: C-Grade', count: 35 + currentEnchant * 8 },
-          'B': { id: 'crystal_b', name: 'Cristal: B-Grade', count: 50 + currentEnchant * 12 },
-          'A': { id: 'crystal_a', name: 'Cristal: A-Grade', count: 80 + currentEnchant * 15 },
-          'S': { id: 'crystal_s', name: 'Cristal: S-Grade', count: 120 + currentEnchant * 20 }
-        };
-        const cInfo = crystalMap[grade] || { id: 'crystal_d', name: 'Cristal: D-Grade', count: 25 };
-        
-        if (state.equipment) {
-          for (const [slotKey, uidEquipped] of Object.entries(state.equipment)) {
-            if (uidEquipped === item.uid) {
-              state.equipment[slotKey] = null;
-            }
-          }
-        }
-        removeFromInventory(item.uid, 1);
-        addToInventory(cInfo.id, cInfo.count);
-        log(`💥 FALHA CRÍTICA! ${def.name} +${currentEnchant} se estilhaçou e foi cristalizado em **${cInfo.count}x ${cInfo.name}**!`, 'rarity-legendary');
-        if (typeof floatText === 'function') floatText(`💥 CRISTALIZADO (+${cInfo.count}x)`, 'float-crit');
-      } else {
-        item.enchant = Math.max(0, currentEnchant - 1);
-        log(`💥 Encantamento falhou! ${def.name} reduziu para +${item.enchant}.`, 'system');
-        if (typeof floatText === 'function') floatText(`💥 FALHOU (-1)`, 'float-crit');
-      }
-    }
-  }
-  
+  EnchantmentService.executeAtomicEnchant(state, item.uid, scrollItem.uid, {
+    log,
+    floatText: typeof floatText === 'function' ? floatText : null,
+    updateAllUI,
+    save
+  });
   updateAllUI(); save();
 }
 
@@ -6580,59 +6556,27 @@ function resetSP() { return engineResetSP(state, { log, floatText, updateAllUI, 
 
 
 function autoEquipBest() {
-  let equippedCount = 0;
-  
-  for (const slot of ALL_EQUIP_SLOTS) {
-    const candidates = state.inventory.filter(i => {
-      if (i.equipped) return false;
-      const def = D().ALL_ITEMS[i.itemId];
-      if (!def) return false;
-      const targetSlot = resolveEquipSlot(def.slot);
-      if (targetSlot !== slot) return false;
-      if (def.req && def.req.level > state.level) return false;
-      if (def.classReq && !classSatisfies(state.class, def.classReq)) return false;
-      return true;
-    });
-    
-    if (!candidates.length) continue;
-    
-    candidates.sort((a, b) => {
-      const defA = D().ALL_ITEMS[a.itemId], defB = D().ALL_ITEMS[b.itemId];
-      const multA = (a.rarity ? D().RARITY[a.rarity].mult : 1) * (1 + (a.enchant || 0) * 0.1);
-      const multB = (b.rarity ? D().RARITY[b.rarity].mult : 1) * (1 + (b.enchant || 0) * 0.1);
-      const scoreA = ((defA.atk || 0) + (defA.matk || 0) + (defA.def || 0) * 0.8 + (defA.mdef || 0) * 0.5 + (defA.hp || 0) * 0.1) * multA;
-      const scoreB = ((defB.atk || 0) + (defB.matk || 0) + (defB.def || 0) * 0.8 + (defB.mdef || 0) * 0.5 + (defB.hp || 0) * 0.1) * multB;
-      return scoreB - scoreA;
-    });
-    
-    const bestItem = candidates[0];
-    const currentUid = state.equipment[slot];
-    if (currentUid) {
-      const currentItem = state.inventory.find(i => i.uid === currentUid);
-      if (currentItem) {
-        const defCurr = D().ALL_ITEMS[currentItem.itemId];
-        const multCurr = (currentItem.rarity ? D().RARITY[currentItem.rarity].mult : 1) * (1 + (currentItem.enchant || 0) * 0.1);
-        const scoreCurr = ((defCurr.atk || 0) + (defCurr.matk || 0) + (defCurr.def || 0) * 0.8 + (defCurr.mdef || 0) * 0.5 + (defCurr.hp || 0) * 0.1) * multCurr;
-        
-        const defBest = D().ALL_ITEMS[bestItem.itemId];
-        const multBest = (bestItem.rarity ? D().RARITY[bestItem.rarity].mult : 1) * (1 + (bestItem.enchant || 0) * 0.1);
-        const scoreBest = ((defBest.atk || 0) + (defBest.matk || 0) + (defBest.def || 0) * 0.8 + (defBest.mdef || 0) * 0.5 + (defBest.hp || 0) * 0.1) * multBest;
-        
-        if (scoreBest <= scoreCurr) continue;
-      }
-    }
-    
-    equipItem(bestItem.uid, null, true);
-    equippedCount++;
+  const proposal = generateAutoEquipProposal(state);
+  if (!proposal || !proposal.changes || proposal.changes.length === 0) {
+    log('Você já está usando os melhores equipamentos da mochila!', 'system');
+    return;
   }
-  
-  if (equippedCount > 0) {
-    log(`⚡ Auto-equipped ${equippedCount} superior item(s)!`, 'rarity-legendary');
-    floatText('⚡ EQUIPADO!', 'float-jackpot');
+  const res = commitAutoEquipProposal(state, proposal, {
+    onStatsChanged: () => {
+      if (typeof updateStats === 'function') updateStats();
+      if (typeof calculateCombatPower === 'function') state.combatPower = calculateCombatPower(state);
+    },
+    updateAllUI,
+    save,
+    log,
+    floatText: typeof floatText === 'function' ? floatText : null
+  });
+  if (res.success) {
+    log(`⚡ Auto-equipado: ${res.appliedChanges} equipamento(s) atualizado(s)! (CP: ${proposal.deltas.cpDelta >= 0 ? '+' : ''}${proposal.deltas.cpDelta})`, 'rarity-legendary');
     updateAllUI();
     save();
   } else {
-    log('Você já está usando os melhores equipamentos da mochila!', 'system');
+    log(`Falha no auto-equip: ${res.reason}`, 'system');
   }
 }
 
@@ -8941,6 +8885,16 @@ export function init() {
     window.openBatchCrystallizeModal = (uids) => openBatchCrystallizeModal(state, { updateAllUI, save, log, addToInventory }, uids);
     window.closeInventoryPreviewModal = closeInventoryPreviewModal;
     window.organizeInventory = (criteria) => organizeInventory(state, criteria);
+    window.autoEquipBest = autoEquipBest;
+    window._callbacks = {
+      updateAllUI,
+      save,
+      log,
+      floatText: typeof floatText === 'function' ? floatText : null,
+      equipItem,
+      unequipItem,
+      useItem
+    };
 
     // Symbol Maker (Dyes & Henna Tattoos)
     function openSymbolMakerModal() {
