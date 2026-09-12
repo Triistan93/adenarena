@@ -1104,6 +1104,27 @@ select:focus-visible {
   box-shadow: 0 0 6px #ffe082 !important;
 }
 
+/* Abas bloqueadas por nível ou temporada (Anti-sobrecarga) */
+.tab-btn.tab-locked-by-level,
+.subtab-pill-btn.tab-locked-by-level {
+  opacity: 0.45 !important;
+  filter: grayscale(0.7) !important;
+  cursor: not-allowed !important;
+  border-color: rgba(255, 255, 255, 0.06) !important;
+  background: rgba(15, 17, 23, 0.7) !important;
+  color: #64748b !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+.tab-btn.tab-locked-by-level:hover,
+.subtab-pill-btn.tab-locked-by-level:hover {
+  background: rgba(15, 17, 23, 0.7) !important;
+  border-color: rgba(255, 255, 255, 0.06) !important;
+  color: #64748b !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
 /* Badges de notificação estilizados como gemas */
 .tab-badge {
   display: inline-flex !important;

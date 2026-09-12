@@ -150,18 +150,19 @@ export const TAB_UNLOCK_LEVELS = {
   inventory: 1,
   skills: 1,
   shop: 1,
-  market: 1,
-  warehouse: 1,
-  rankings: 1,
-  codex: 1,
-  dolls: 1,
+  cosmetics: 1,
   quests: 5,
   craft: 10,
   forge: 10,
-  raids: 20,
-  magiclamp: 20,
+  dolls: 10,
+  market: 15,
+  warehouse: 15,
+  codex: 15,
   clan: 20,
+  magiclamp: 20,
   enchant: 20,
+  raids: 20,
+  rankings: 20,
   colosseum: 25,
   tower: 40,
   expeditions: 40,
@@ -187,6 +188,9 @@ export function updateTabVisibilityByLevel(state) {
       btn.classList.add('tab-locked-by-level');
       btn.style.order = String(100 + reqLvl);
       btn.style.opacity = '0.55';
+      btn.title = currentLvl < reqLvl
+        ? `Desbloqueia no Nível ${reqLvl}`
+        : `Bloqueado na Temporada Atual (Cap Lv. ${globalCap})`;
       if (!btn.querySelector('.tab-lock-indicator')) {
         const lockSpan = document.createElement('span');
         lockSpan.className = 'tab-lock-indicator';
@@ -198,6 +202,7 @@ export function updateTabVisibilityByLevel(state) {
       btn.classList.remove('tab-locked-by-level');
       btn.style.order = '0';
       btn.style.opacity = '1';
+      btn.removeAttribute('title');
       const lockSpan = btn.querySelector('.tab-lock-indicator');
       if (lockSpan) lockSpan.remove();
     }
@@ -225,7 +230,9 @@ if (typeof window !== 'undefined') {
 
     const targetStrip = root.getElementById(`pillar-strip-${pillarName}`);
     if (targetStrip) {
-      const activeTab = targetStrip.querySelector('.tab-btn.active') || targetStrip.querySelector('.tab-btn');
+      const activeTab = targetStrip.querySelector('.tab-btn.active:not(.tab-locked-by-level)')
+        || targetStrip.querySelector('.tab-btn:not(.tab-locked-by-level)')
+        || targetStrip.querySelector('.tab-btn');
       if (activeTab) {
         const tabId = activeTab.dataset?.tab;
         if (tabId && typeof window.openPanel === 'function') {

@@ -314,7 +314,7 @@ import { StarterJourneyService } from './src/services/StarterJourneyService.js';
 import { LiveOpsService } from './src/services/LiveOpsService.js';
 import { SubclassCertificationService, EMERGENT_ABILITIES, MASTER_ABILITIES_BY_ARCHETYPE, DIVINE_TRANSFORMATIONS } from './src/services/SubclassCertificationService.js';
 import { CommunityCapService } from './src/services/CommunityCapService.js';
-import { ensureAppLayout, showMenuPanel, updateTabVisibilityByLevel } from './src/ui/AppLayout.js';
+import { ensureAppLayout, showMenuPanel, updateTabVisibilityByLevel, TAB_UNLOCK_LEVELS } from './src/ui/AppLayout.js';
 import { checkTabGuide, closeTabGuideModal, openTabGuideModal } from './src/ui/TutorialGuide.js';
 import { isFeatureUnlocked, getCurrentSeason, getSeasonForFeature } from './src/core/SeasonConfig.js';
 import { renderSeasonLockedPanel, updateSeasonTabBadges } from './src/ui/SeasonUI.js';
@@ -7460,6 +7460,20 @@ export function openPanel(tabName) {
   state = getState();
   const targetTab = (!tabName || tabName === 'zones' || tabName === 'combat' || tabName === 'close') ? 'zones' : tabName;
 
+  // Level Lock & Season Cap Guard
+  const currentLvl = Number(state?.level) || 1;
+  const globalCap = Number(typeof window !== 'undefined' && window.globalServerCap) || Number(state?.serverCap) || 40;
+  const reqLvl = TAB_UNLOCK_LEVELS[targetTab] || 1;
+  if (targetTab !== 'zones' && (currentLvl < reqLvl || reqLvl > globalCap)) {
+    const tabLabel = TAB_NAMES_MAP[targetTab] || targetTab;
+    const msg = currentLvl < reqLvl 
+      ? `🔒 Aba [${tabLabel}] desbloqueia no Nível ${reqLvl}!` 
+      : `🔒 Aba [${tabLabel}] bloqueada pelo Cap da Temporada Atual (Lv. ${globalCap})!`;
+    if (typeof showToast === 'function') showToast(msg, 'warning');
+    else if (typeof log === 'function') log(`❌ ${msg}`, 'system');
+    return;
+  }
+
   const root = document.getElementById('idle-host')?.shadowRoot || document;
 
   // Auto-switch to corresponding pillar dock strip
@@ -7689,6 +7703,17 @@ export function bindEvents() {
     qsa('.tab-btn').forEach(btn => {
       btn.onclick = () => {
         const tabName = btn.dataset.tab;
+        if (btn.classList.contains('tab-locked-by-level')) {
+          const reqLvl = TAB_UNLOCK_LEVELS[tabName] || 1;
+          const globalCap = Number(window.globalServerCap) || Number(state?.serverCap) || 40;
+          const msg = (state.level || 1) < reqLvl
+            ? `🔒 Esta aba requer Nível ${reqLvl} para ser desbloqueada.`
+            : `🔒 Conteúdo bloqueado na Temporada Atual (Cap Lv. ${globalCap}).`;
+          if (typeof showToast === 'function') showToast(msg, 'warning');
+          else log(`❌ ${msg}`, 'system');
+          return;
+        }
+
         const isCurrentlyActive = btn.classList.contains('active');
         const isFullWindowActive = qs('.tabs-panel')?.classList.contains('full-window-active');
 
