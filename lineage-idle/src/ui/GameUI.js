@@ -4,6 +4,8 @@
  */
 
 import { D, ALL_EQUIP_SLOTS, TIER_NAMES } from '../core/GameConfig.js';
+import { ALL_ITEMS } from '../data/items/index.js';
+import { getState } from '../core/StateManager.js';
 import { el, qsa, mkEl, mkNS, updateBar } from '../core/DomHelpers.js';
 import {
   getMaxInventorySlots, getMaxWarehouseSlots, getSelectedSet,
@@ -679,7 +681,12 @@ export function showItemTooltip(arg1, arg2, state, callbacks = {}) {
           border-radius:4px;color:#70c8f8;font-size:11px;cursor:pointer;font-weight:600;">🛡 Equipar</button>`;
       }
     }
-    if (isConsumable) {
+    const sMeta = parseEnchantScroll(def);
+    if (sMeta && sMeta.isScroll) {
+      actionsHtml += `<button data-tt-action="enchant-flow" data-uid="${item.uid}"
+        style="flex:1;padding:5px 8px;background:linear-gradient(180deg,#7e22ce,#4c1d95);border:1px solid #c084fc;
+        border-radius:4px;color:#f3e8ff;font-size:11px;cursor:pointer;font-weight:600;">✨ Encantar</button>`;
+    } else if (isConsumable) {
       actionsHtml += `<button data-tt-action="use" data-uid="${item.uid}"
         style="flex:1;padding:5px 8px;background:linear-gradient(180deg,#1a4a2a,#0a2010);border:1px solid #3ab070;
         border-radius:4px;color:#70e898;font-size:11px;cursor:pointer;font-weight:600;">▶ Usar</button>`;
@@ -825,6 +832,10 @@ export function showItemTooltip(arg1, arg2, state, callbacks = {}) {
       if (action === 'salvage') {
         const salvageFn = callbacks.salvageItem || (typeof window !== 'undefined' ? window.salvageItem : null);
         if (salvageFn) salvageFn(uid);
+      }
+      if (action === 'enchant-flow') {
+        const liveState = (typeof getState === 'function' ? getState() : null) || state;
+        openEnchantFlowModal(null, uid, liveState, callbacks);
       }
       if (action === 'use') {
         const useFn = callbacks.useItem || (typeof window !== 'undefined' ? window.useItem : null);
@@ -9745,33 +9756,40 @@ export function openEnchantFlowModal(initialTargetUid = null, initialScrollUid =
     };
   }
 
-  const gState = state || (typeof window !== 'undefined' ? window.state : null);
+  let gState = state;
+  if (!gState || !Array.isArray(gState.inventory) || gState.inventory.length === 0) {
+    gState = (typeof getState === 'function' ? getState() : null) || (typeof window !== 'undefined' ? (window.getGameState ? window.getGameState() : window.state) : null);
+  }
   if (!gState) return;
 
   let selectedScrollUid = initialScrollUid;
   let selectedTargetUid = initialTargetUid;
 
   const renderModalContent = () => {
-    const allItems = D()?.ALL_ITEMS || {};
+    const allItems = D()?.ALL_ITEMS || ALL_ITEMS || (typeof window !== 'undefined' ? window.ALL_ITEMS : {}) || {};
     const inventory = gState.inventory || [];
 
     // Localiza todos os scrolls disponíveis
     const scrolls = inventory.filter(i => {
       if (!i || (i.count || 1) <= 0) return false;
-      const def = allItems[i.itemId] || i;
+      const def = allItems[i.itemId] || getItemDef(i.itemId) || i;
       const meta = parseEnchantScroll(def);
       return meta && meta.isScroll;
     });
 
     // Se nenhum scroll estiver explicitamente selecionado mas temos target, encontra o primeiro compatível
     let scrollItem = selectedScrollUid ? inventory.find(i => i.uid === selectedScrollUid) : null;
+    if (!scrollItem && selectedScrollUid) {
+      scrollItem = inventory.find(i => i.itemId === selectedScrollUid && (parseEnchantScroll(allItems[i.itemId] || getItemDef(i.itemId) || i)).isScroll) || null;
+      if (scrollItem) selectedScrollUid = scrollItem.uid;
+    }
     if (!scrollItem && scrolls.length > 0 && !selectedScrollUid) {
       if (selectedTargetUid) {
-        const tItem = inventory.find(i => i.uid === selectedTargetUid);
-        const tDef = tItem ? (allItems[tItem.itemId] || tItem) : null;
+        const tItem = inventory.find(i => i.uid === selectedTargetUid) || (gState.equipment && gState.equipment[selectedTargetUid] ? inventory.find(i => i.uid === gState.equipment[selectedTargetUid]) : null);
+        const tDef = tItem ? (allItems[tItem.itemId] || getItemDef(tItem.itemId) || tItem) : null;
         if (tDef) {
           scrollItem = scrolls.find(s => {
-            const sDef = allItems[s.itemId] || s;
+            const sDef = allItems[s.itemId] || getItemDef(s.itemId) || s;
             return isItemCompatibleWithScroll(tDef, sDef).ok;
           }) || null;
           if (scrollItem) selectedScrollUid = scrollItem.uid;
@@ -9783,20 +9801,20 @@ export function openEnchantFlowModal(initialTargetUid = null, initialScrollUid =
       }
     }
 
-    const scrollDef = scrollItem ? (allItems[scrollItem.itemId] || scrollItem) : null;
+    const scrollDef = scrollItem ? (allItems[scrollItem.itemId] || getItemDef(scrollItem.itemId) || scrollItem) : null;
 
     // Alvos elegíveis
     let eligibleTargets = [];
     if (scrollItem) {
       eligibleTargets = EnchantmentService.getEnchantableItems(gState, scrollItem.uid);
     } else {
-      eligibleTargets = inventory.filter(i => isEquippableItem(allItems[i.itemId] || i));
+      eligibleTargets = inventory.filter(i => isEquippableItem(allItems[i.itemId] || getItemDef(i.itemId) || i));
     }
 
     // Se temos um target selecionado, valida compatibilidade
-    let targetItem = selectedTargetUid ? inventory.find(i => i.uid === selectedTargetUid) : null;
+    let targetItem = selectedTargetUid ? (inventory.find(i => i.uid === selectedTargetUid) || (gState.equipment && gState.equipment[selectedTargetUid] ? inventory.find(i => i.uid === gState.equipment[selectedTargetUid]) : null)) : null;
     if (targetItem && scrollDef) {
-      const tDef = allItems[targetItem.itemId] || targetItem;
+      const tDef = allItems[targetItem.itemId] || getItemDef(targetItem.itemId) || targetItem;
       if (!isItemCompatibleWithScroll(tDef, scrollDef).ok) {
         targetItem = null;
         selectedTargetUid = null;
@@ -10005,10 +10023,12 @@ export function openEnchantFlowModal(initialTargetUid = null, initialScrollUid =
 if (typeof window !== 'undefined') {
   window.openEnchantFlowModal = openEnchantFlowModal;
   window.openEnchantModalWithScroll = (scrollUid) => {
-    openEnchantFlowModal(null, scrollUid, window.state, window._callbacks || {});
+    const liveState = (typeof getState === 'function' ? getState() : null) || window.state;
+    openEnchantFlowModal(null, scrollUid, liveState, window._callbacks || {});
   };
   window.openEnchantModalForTarget = (targetUid) => {
-    openEnchantFlowModal(targetUid, null, window.state, window._callbacks || {});
+    const liveState = (typeof getState === 'function' ? getState() : null) || window.state;
+    openEnchantFlowModal(targetUid, null, liveState, window._callbacks || {});
   };
 }
 

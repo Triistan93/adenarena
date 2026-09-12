@@ -285,7 +285,9 @@ export class NextActionAdvisor {
           commitAutoEquipProposal(state, proposal, callbacks);
           if (callbacks.updateAllUI) callbacks.updateAllUI();
         } else if (advice.actionType === 'ENCHANT') {
-          if (typeof window !== 'undefined' && typeof window.openEnchantModalWithScroll === 'function') {
+          if (typeof window !== 'undefined' && typeof window.openEnchantFlowModal === 'function') {
+            window.openEnchantFlowModal(advice.actionPayload?.targetUid, advice.actionPayload?.scrollUid, state, callbacks);
+          } else if (typeof window !== 'undefined' && typeof window.openEnchantModalWithScroll === 'function') {
             window.openEnchantModalWithScroll(advice.actionPayload?.scrollUid);
           } else if (callbacks.switchTab) {
             callbacks.switchTab('inventory');

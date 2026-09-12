@@ -9,6 +9,7 @@
  */
 
 import { D } from '../core/GameConfig.js';
+import { ALL_ITEMS } from '../data/items/index.js';
 import { getStats } from '../engine/StatsEngine.js';
 import { CombatPowerService } from './CombatPowerService.js';
 import { CP_WEIGHTS } from '../data/balance/cpBalance.js';
@@ -88,7 +89,7 @@ export function getEnchantSuccessChance(grade, currentEnchant, safeLimit) {
  */
 export function getEnchantableItems(state, scrollItemOrUid) {
   if (!state || !Array.isArray(state.inventory)) return [];
-  const allItems = D()?.ALL_ITEMS || {};
+  const allItems = D()?.ALL_ITEMS || ALL_ITEMS || {};
 
   const scrollItem = (typeof scrollItemOrUid === 'string')
     ? state.inventory.find(i => i.uid === scrollItemOrUid)
@@ -116,7 +117,7 @@ export function getEnchantableItems(state, scrollItemOrUid) {
  */
 export function getEnchantPreview(state, targetUid, scrollUid) {
   if (!state || !targetUid || !scrollUid) return null;
-  const allItems = D()?.ALL_ITEMS || {};
+  const allItems = D()?.ALL_ITEMS || ALL_ITEMS || {};
 
   const targetItem = state.inventory?.find(i => i.uid === targetUid);
   const scrollItem = state.inventory?.find(i => i.uid === scrollUid);
@@ -248,7 +249,7 @@ export function executeAtomicEnchant(state, targetUid, scrollUid, callbacks = {}
     return { ok: false, state: ENCHANT_STATES.INVALID, reason: 'Estado de inventário inválido.' };
   }
 
-  const allItems = D()?.ALL_ITEMS || {};
+  const allItems = D()?.ALL_ITEMS || ALL_ITEMS || {};
   const targetIndex = state.inventory.findIndex(i => i.uid === targetUid);
   const scrollIndex = state.inventory.findIndex(i => i.uid === scrollUid);
 

@@ -289,6 +289,7 @@ import {
   openBatchSellModal,
   openBatchSalvageModal,
   openBatchCrystallizeModal,
+  closeInventoryPreviewModal,
   renderItemDetailAndComparison
 } from './src/ui/GameUI.js';
 import { CashShopService } from './src/services/CashShopService.js';
@@ -1288,15 +1289,16 @@ function useItem(uid) {
   // Intercepta Pergaminhos de Encantamento (Normal / Blessed) para abertura canônica de modal
   const scrollMeta = parseEnchantScroll(def);
   if (scrollMeta && scrollMeta.isScroll) {
-    if (typeof window !== 'undefined' && typeof window.openEnchantModalWithScroll === 'function') {
-      window.openEnchantModalWithScroll(uid);
-    } else if (typeof window !== 'undefined' && typeof window.openEnchantFlowModal === 'function') {
-      window.openEnchantFlowModal(null, uid, state, {
+    const liveState = (typeof getState === 'function' ? getState() : state) || state;
+    if (typeof window !== 'undefined' && typeof window.openEnchantFlowModal === 'function') {
+      window.openEnchantFlowModal(null, uid, liveState, {
         updateAllUI,
         save,
         log,
         floatText: typeof floatText === 'function' ? floatText : null
       });
+    } else if (typeof window !== 'undefined' && typeof window.openEnchantModalWithScroll === 'function') {
+      window.openEnchantModalWithScroll(uid);
     } else {
       log('Abra o menu de Encantamento para utilizar este pergaminho.', 'system');
     }
@@ -8802,7 +8804,20 @@ export function init() {
       save();
       return state.godMode;
     };
-    window.state = state;
+    state = getState();
+    try {
+      Object.defineProperty(window, 'state', {
+        get: () => getState(),
+        set: (val) => { state = val; },
+        configurable: true
+      });
+    } catch (e) {
+      window.state = state;
+    }
+    EventBus.off('state:updated:window_sync');
+    EventBus.on('state:updated', (newState) => {
+      state = newState;
+    });
     window.openAddSubclassModal = openAddSubclassModal;
     window.openCertificationModal = openCertificationModal;
     window.closeCertificationModal = closeCertificationModal;
