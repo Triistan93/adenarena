@@ -62,6 +62,7 @@ import { SynthesisService, SYNTHESIS_CONFIG } from '../services/SynthesisService
 import { ElementalService, ELEMENT_DEFINITIONS, ELEMENTAL_GRADE_GATING, SOUL_CRYSTAL_GRADE_GATING, getElementalGating, getItemGrade as getElementalItemGrade } from '../services/ElementalService.js';
 import { MonsterAIEngine, ARCHETYPE_INFO, HUNTING_DIFFICULTIES } from '../engine/MonsterAIEngine.js';
 import { heroSVG, monsterSVG, MON_IMG } from '../../art.js';
+import { AFFIX_MAP } from '../../data/affixes.js';
 
 /* ═══════════════════════════════════════════════════════════════════════════
    1. DOM ROOT & HELPERS
@@ -618,7 +619,7 @@ export function showItemTooltip(arg1, arg2, state, callbacks = {}) {
   let affixesStr = '';
   if (item.affixes && item.affixes.length > 0) {
     const affixLines = item.affixes.map(a => {
-      const affDef = (AFFIX_MAP || {})[a.id] || (gData?.AFFIX_MAP || {})[a.id];
+      const affDef = (typeof AFFIX_MAP !== 'undefined' ? AFFIX_MAP[a.id] : null) || (gData?.AFFIX_MAP || {})[a.id] || (typeof window !== 'undefined' && window.GameData?.AFFIX_MAP?.[a.id]);
       if (affDef && affDef.name) {
         const label = affDef.name.replace('{value}', a.value ?? a.val ?? '');
         return `<div style="color:#f0cd7e;font-size:11px;font-weight:600;margin:1px 0;">✦ ${label}</div>`;
@@ -9816,7 +9817,7 @@ export function openEnchantFlowModal(initialTargetUid = null, initialScrollUid =
       <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(212,167,68,0.25); border-radius:8px; padding:10px 12px; margin-bottom:12px;">
         <div style="font-size:11px; font-weight:bold; color:#ffd700; margin-bottom:6px; display:flex; justify-content:space-between;">
           <span>📜 Pergaminho de Encantamento</span>
-          <span>\${scrolls.length} tipos na mochila</span>
+          <span>${scrolls.length} tipos na mochila</span>
         </div>
     `;
 
@@ -9833,11 +9834,11 @@ export function openEnchantFlowModal(initialTargetUid = null, initialScrollUid =
         const sInfo = parseEnchantScroll(sDef);
         const isSelected = (s.uid === selectedScrollUid);
         html += `
-          <div class="enchant-scroll-pill \${isSelected ? 'selected' : ''}" data-select-scroll="\${s.uid}" style="display:flex; align-items:center; gap:6px; padding:6px 10px; border-radius:6px; cursor:pointer; min-width:max-content; transition:all 0.15s; \${isSelected ? 'background:linear-gradient(135deg, rgba(212,167,68,0.35), rgba(212,167,68,0.15)); border:1px solid #ffd700; box-shadow:0 0 10px rgba(255,215,0,0.3);' : 'background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);'}">
+          <div class="enchant-scroll-pill ${isSelected ? 'selected' : ''}" data-select-scroll="${s.uid}" style="display:flex; align-items:center; gap:6px; padding:6px 10px; border-radius:6px; cursor:pointer; min-width:max-content; transition:all 0.15s; ${isSelected ? 'background:linear-gradient(135deg, rgba(212,167,68,0.35), rgba(212,167,68,0.15)); border:1px solid #ffd700; box-shadow:0 0 10px rgba(255,215,0,0.3);' : 'background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);'}">
             <span style="font-size:14px;">📜</span>
             <div style="display:flex; flex-direction:column;">
-              <span style="font-size:11px; font-weight:bold; color:\${isSelected ? '#ffd700' : '#e2e8f0'};">\${sDef.name}</span>
-              <span style="font-size:9.5px; color:#94a3b8;">Grau: \${sInfo.grade || 'NG'} · Qtd: \${s.count || 1} \${sInfo.isBlessed ? '· ✨ Blessed' : ''}</span>
+              <span style="font-size:11px; font-weight:bold; color:${isSelected ? '#ffd700' : '#e2e8f0'};">${sDef.name}</span>
+              <span style="font-size:9.5px; color:#94a3b8;">Grau: ${sInfo.grade || 'NG'} · Qtd: ${s.count || 1} ${sInfo.isBlessed ? '· ✨ Blessed' : ''}</span>
             </div>
           </div>
         `;
@@ -9850,8 +9851,8 @@ export function openEnchantFlowModal(initialTargetUid = null, initialScrollUid =
     html += `
       <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(212,167,68,0.25); border-radius:8px; padding:10px 12px; margin-bottom:12px;">
         <div style="font-size:11px; font-weight:bold; color:#ffd700; margin-bottom:6px; display:flex; justify-content:space-between;">
-          <span>🎯 Equipamento Alvo (\${eligibleTargets.length} compatíveis)</span>
-          \${targetItem?.equipped ? '<span style="color:#6ee7b7; font-size:10px;">⚡ Equipado Atualmente</span>' : ''}
+          <span>🎯 Equipamento Alvo (${eligibleTargets.length} compatíveis)</span>
+          ${targetItem?.equipped ? '<span style="color:#6ee7b7; font-size:10px;">⚡ Equipado Atualmente</span>' : ''}
         </div>
     `;
 
@@ -9868,11 +9869,11 @@ export function openEnchantFlowModal(initialTargetUid = null, initialScrollUid =
         const isSelected = (t.uid === selectedTargetUid);
         const encLevel = Number(t.enchant || t.enchantLevel) || 0;
         html += `
-          <div class="enchant-target-pill \${isSelected ? 'selected' : ''}" data-select-target="\${t.uid}" style="display:flex; align-items:center; gap:6px; padding:6px 10px; border-radius:6px; cursor:pointer; min-width:max-content; transition:all 0.15s; \${isSelected ? 'background:linear-gradient(135deg, rgba(56,189,248,0.3), rgba(14,165,233,0.1)); border:1px solid #38bdf8; box-shadow:0 0 10px rgba(56,189,248,0.3);' : 'background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);'}">
-            <span style="font-size:14px;">\${tDef.slot === 'weapon' ? '⚔️' : '🛡️'}</span>
+          <div class="enchant-target-pill ${isSelected ? 'selected' : ''}" data-select-target="${t.uid}" style="display:flex; align-items:center; gap:6px; padding:6px 10px; border-radius:6px; cursor:pointer; min-width:max-content; transition:all 0.15s; ${isSelected ? 'background:linear-gradient(135deg, rgba(56,189,248,0.3), rgba(14,165,233,0.1)); border:1px solid #38bdf8; box-shadow:0 0 10px rgba(56,189,248,0.3);' : 'background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);'}">
+            <span style="font-size:14px;">${tDef.slot === 'weapon' ? '⚔️' : '🛡️'}</span>
             <div style="display:flex; flex-direction:column;">
-              <span style="font-size:11px; font-weight:bold; color:\${isSelected ? '#38bdf8' : '#e2e8f0'};">\${encLevel > 0 ? '+' + encLevel + ' ' : ''}\${tDef.name}</span>
-              <span style="font-size:9.5px; color:#94a3b8;">\${(tDef.grade || 'NG').toUpperCase()}-Grade \${t.equipped ? '· ⚡ Equipado' : ''}</span>
+              <span style="font-size:11px; font-weight:bold; color:${isSelected ? '#38bdf8' : '#e2e8f0'};">${encLevel > 0 ? '+' + encLevel + ' ' : ''}${tDef.name}</span>
+              <span style="font-size:9.5px; color:#94a3b8;">${(tDef.grade || 'NG').toUpperCase()}-Grade ${t.equipped ? '· ⚡ Equipado' : ''}</span>
             </div>
           </div>
         `;
@@ -9884,12 +9885,13 @@ export function openEnchantFlowModal(initialTargetUid = null, initialScrollUid =
     // 3. CANONICAL PREVIEW
     if (scrollItem && targetItem) {
       const preview = EnchantmentService.getEnchantPreview(gState, targetItem.uid, scrollItem.uid);
-      if (preview && preview.valid) {
-        const curEnc = preview.currentEnchant;
-        const nxtEnc = preview.targetEnchant;
-        const chancePct = Math.round(preview.successChance * 100);
-        const isSafe = preview.isSafe;
-        const isBlessed = preview.isBlessed;
+      if (preview && (preview.ok || preview.valid)) {
+        const curEnc = preview.currentEnchant ?? preview.targetItem?.currentEnchant ?? 0;
+        const nxtEnc = preview.targetEnchant ?? preview.targetItem?.targetEnchant ?? (curEnc + 1);
+        const chancePct = Math.round((preview.successChance ?? 1) * 100);
+        const isSafe = preview.isSafe ?? (curEnc < preview.safeLimit);
+        const isBlessed = preview.isBlessed ?? preview.scrollItem?.isBlessed;
+        const d = preview.statDeltas || preview.deltas || {};
 
         let riskLabel = '';
         let riskColor = '';
@@ -9911,44 +9913,44 @@ export function openEnchantFlowModal(initialTargetUid = null, initialScrollUid =
                 <span style="font-size:20px;">✨</span>
                 <div>
                   <div style="font-size:14px; font-weight:bold; color:#ffd700;">
-                    +${curEnc} → <span style="color:#38bdf8; font-size:16px;">+${nxtEnc}</span> \${targetDef.name}
+                    +${curEnc} → <span style="color:#38bdf8; font-size:16px;">+${nxtEnc}</span> ${targetDef.name}
                   </div>
-                  <div style="font-size:10px; color:#94a3b8;">Grau \${(targetDef.grade || 'NG').toUpperCase()} · Limite Seguro: +\${preview.safeLimit}</div>
+                  <div style="font-size:10px; color:#94a3b8;">Grau ${(targetDef.grade || 'NG').toUpperCase()} · Limite Seguro: +${preview.safeLimit}</div>
                 </div>
               </div>
               <div style="text-align:right;">
-                <div style="font-size:18px; font-weight:bold; color:\${isSafe ? '#10b981' : (chancePct >= 50 ? '#ffd700' : '#f87171')};">
-                  \${chancePct}%
+                <div style="font-size:18px; font-weight:bold; color:${isSafe ? '#10b981' : (chancePct >= 50 ? '#ffd700' : '#f87171')};">
+                  ${chancePct}%
                 </div>
                 <div style="font-size:9.5px; color:#94a3b8;">Chance de Sucesso</div>
               </div>
             </div>
 
             <!-- Risk Banner -->
-            <div style="background:rgba(0,0,0,0.5); border-left:3px solid \${riskColor}; padding:6px 10px; font-size:10.5px; color:\${riskColor}; margin-bottom:10px; border-radius:0 4px 4px 0;">
-              \${riskLabel}
+            <div style="background:rgba(0,0,0,0.5); border-left:3px solid ${riskColor}; padding:6px 10px; font-size:10.5px; color:${riskColor}; margin-bottom:10px; border-radius:0 4px 4px 0;">
+              ${riskLabel}
             </div>
 
             <!-- Stats Deltas -->
             <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; text-align:center; background:rgba(0,0,0,0.3); padding:8px; border-radius:6px; margin-bottom:10px; font-size:11px;">
               <div>
                 <div style="color:#94a3b8; font-size:10px;">P.Atk / M.Atk</div>
-                <div style="color:#38bdf8; font-weight:bold;">\${preview.statDeltas?.atk > 0 ? '+' + preview.statDeltas.atk : (preview.statDeltas?.matk > 0 ? '+' + preview.statDeltas.matk : '--')}</div>
+                <div style="color:#38bdf8; font-weight:bold;">${(d.atk || d.pAtk) > 0 ? '+' + (d.atk || d.pAtk) : ((d.matk || d.mAtk) > 0 ? '+' + (d.matk || d.mAtk) : '--')}</div>
               </div>
               <div>
                 <div style="color:#94a3b8; font-size:10px;">P.Def / M.Def</div>
-                <div style="color:#38bdf8; font-weight:bold;">\${preview.statDeltas?.def > 0 ? '+' + preview.statDeltas.def : (preview.statDeltas?.mdef > 0 ? '+' + preview.statDeltas.mdef : '--')}</div>
+                <div style="color:#38bdf8; font-weight:bold;">${(d.def || d.pDef) > 0 ? '+' + (d.def || d.pDef) : ((d.mdef || d.mDef) > 0 ? '+' + (d.mdef || d.mDef) : '--')}</div>
               </div>
               <div>
                 <div style="color:#94a3b8; font-size:10px;">Ganho de CP</div>
-                <div style="color:#ffd700; font-weight:bold;">+\${(preview.statDeltas?.cp || 0).toLocaleString()} CP</div>
+                <div style="color:#ffd700; font-weight:bold;">+${(d.cp || 0).toLocaleString()} CP</div>
               </div>
             </div>
 
             <!-- Action Button -->
             <div style="display:flex; justify-content:flex-end; gap:8px;">
               <button id="enchant-modal-confirm-btn" style="background:linear-gradient(180deg, #d4a744, #8a641c); color:#000; font-family:'Cinzel',serif; font-size:12px; font-weight:bold; padding:8px 18px; border:1px solid #ffe699; border-radius:6px; cursor:pointer; box-shadow:0 0 12px rgba(212,167,68,0.4); transition:all 0.15s;">
-                ✨ Confirmar Encantamento (+\${nxtEnc})
+                ✨ Confirmar Encantamento (+${nxtEnc})
               </button>
             </div>
           </div>
@@ -9982,7 +9984,7 @@ export function openEnchantFlowModal(initialTargetUid = null, initialScrollUid =
         confirmBtn.textContent = '⏳ Encantando...';
 
         const result = EnchantmentService.executeAtomicEnchant(gState, selectedTargetUid, selectedScrollUid, callbacks);
-        if (result.success) {
+        if (result && (result.success || result.ok)) {
           if (callbacks.updateAllUI) callbacks.updateAllUI();
           if (callbacks.save) callbacks.save(true, true);
           setTimeout(() => {

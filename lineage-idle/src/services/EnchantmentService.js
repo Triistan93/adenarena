@@ -184,6 +184,11 @@ export function getEnchantPreview(state, targetUid, scrollUid) {
 
   return {
     ok: true,
+    valid: true,
+    currentEnchant,
+    targetEnchant,
+    isSafe: currentEnchant < safeLimit,
+    isBlessed: scrollInfo.isBlessed,
     state: ENCHANT_STATES.READY,
     targetItem: {
       uid: targetItem.uid,
@@ -210,6 +215,13 @@ export function getEnchantPreview(state, targetUid, scrollUid) {
     isCrystallizable,
     crystalYield,
     crystalName,
+    statDeltas: {
+      atk: pAtkDelta,
+      matk: mAtkDelta,
+      def: pDefDelta,
+      mdef: mDefDelta,
+      cp: cpDelta
+    },
     deltas: {
       pAtk: pAtkDelta,
       mAtk: mAtkDelta,
@@ -365,6 +377,7 @@ export function executeAtomicEnchant(state, targetUid, scrollUid, callbacks = {}
 
   return {
     ok: true,
+    success: isSuccess,
     state: isSuccess ? ENCHANT_STATES.SUCCESS : ENCHANT_STATES.FAILURE,
     result: outcomeType,
     details: {
@@ -381,6 +394,7 @@ export const EnchantmentService = {
   getEnchantSuccessChance,
   getSafeEnchantLimit,
   getEnchantPreview,
+  getEnchantableItems,
   executeAtomicEnchant
 };
 
