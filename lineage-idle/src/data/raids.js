@@ -49,7 +49,7 @@ export const RAID_BOSSES = {
       { itemId: 'jewel_ring_queen_ant', name: 'Ring of Queen Ant', chance: 0.25, isEpicJewel: true },
       { itemId: 'scroll_blessed_armor', name: 'Blessed Scroll: Enchant Armor', chance: 0.40 },
       { itemId: 'scroll_blessed_weapon', name: 'Blessed Scroll: Enchant Weapon', chance: 0.25 },
-      { itemId: 'adena', count: 10, name: '10x Adena', chance: 0.50 }
+      { itemId: 'adena_coins', count: 10, name: '10x Aden Coins (AC)', chance: 0.50 }
     ]
   },
 
@@ -87,7 +87,7 @@ export const RAID_BOSSES = {
       { itemId: 'jewel_ring_core', name: 'Ring of Core', chance: 0.25, isEpicJewel: true },
       { itemId: 'scroll_blessed_armor', name: 'Blessed Scroll: Enchant Armor', chance: 0.45 },
       { itemId: 'scroll_blessed_weapon', name: 'Blessed Scroll: Enchant Weapon', chance: 0.30 },
-      { itemId: 'adena', count: 15, name: '15x Adena', chance: 0.50 }
+      { itemId: 'adena_coins', count: 15, name: '15x Aden Coins (AC)', chance: 0.50 }
     ]
   },
 
@@ -125,7 +125,7 @@ export const RAID_BOSSES = {
       { itemId: 'jewel_earring_orfen', name: 'Earring of Orfen', chance: 0.25, isEpicJewel: true },
       { itemId: 'scroll_blessed_armor', name: 'Blessed Scroll: Enchant Armor', chance: 0.50 },
       { itemId: 'scroll_blessed_weapon', name: 'Blessed Scroll: Enchant Weapon', chance: 0.35 },
-      { itemId: 'adena', count: 20, name: '20x Adena', chance: 0.50 }
+      { itemId: 'adena_coins', count: 20, name: '20x Aden Coins (AC)', chance: 0.50 }
     ]
   },
 
@@ -163,7 +163,7 @@ export const RAID_BOSSES = {
       { itemId: 'jewel_earring_of_zaken', name: 'Earring of Zaken', chance: 0.25, isEpicJewel: true },
       { itemId: 'armor_zaken_cloack', name: 'Capa Pirata de Zaken', chance: 0.30 },
       { itemId: 'scroll_blessed_weapon', name: 'Blessed Scroll: Enchant Weapon', chance: 0.40 },
-      { itemId: 'adena', count: 25, name: '25x Adena', chance: 0.50 }
+      { itemId: 'adena_coins', count: 25, name: '25x Aden Coins (AC)', chance: 0.50 }
     ]
   },
 
@@ -201,7 +201,7 @@ export const RAID_BOSSES = {
       { itemId: 'jewel_ring_of_baium', name: 'Ring of Baium', chance: 0.25, isEpicJewel: true },
       { itemId: 'weapon_samurai_longsword', name: 'Samurai Longsword +5', chance: 0.35 },
       { itemId: 'scroll_blessed_weapon', name: 'Blessed Scroll: Enchant Weapon', chance: 0.50 },
-      { itemId: 'adena', count: 50, name: '50x Adena', chance: 0.50 }
+      { itemId: 'adena_coins', count: 50, name: '50x Aden Coins (AC)', chance: 0.50 }
     ]
   },
 
@@ -239,7 +239,7 @@ export const RAID_BOSSES = {
       { itemId: 'jewel_necklace_of_frintezza', name: 'Necklace of Frintezza', chance: 0.25, isEpicJewel: true },
       { itemId: 'weapon_frost_lord_sword', name: 'Frost Lord Sword (Tier 6 Apex)', chance: 0.20 },
       { itemId: 'scroll_blessed_weapon', name: 'Blessed Scroll: Enchant Weapon', chance: 0.55 },
-      { itemId: 'adena', count: 75, name: '75x Adena', chance: 0.50 }
+      { itemId: 'adena_coins', count: 75, name: '75x Aden Coins (AC)', chance: 0.50 }
     ]
   },
 
@@ -277,7 +277,7 @@ export const RAID_BOSSES = {
       { itemId: 'jewel_earring_of_antharas', name: 'Earring of Antharas', chance: 0.25, isEpicJewel: true },
       { itemId: 'weapon_frost_lord_two_hand_sword', name: 'Frost Lord Greatsword (Tier 6 Apex)', chance: 0.25 },
       { itemId: 'scroll_blessed_weapon', name: 'Blessed Scroll: Enchant Weapon', chance: 0.60 },
-      { itemId: 'adena', count: 100, name: '100x Adena', chance: 0.50 }
+      { itemId: 'adena_coins', count: 100, name: '100x Aden Coins (AC)', chance: 0.50 }
     ]
   },
 
@@ -300,7 +300,7 @@ export const RAID_BOSSES = {
     reqLvl: 90,
     icon: 'gradespecial/jewels/jewel_necklace_of_valakas.png',
     bg: 'dungeon_valakas_volcano',
-    desc: 'A criatura mais poderosa de Aden. Habita a caldeira de lava da Forja dos Deuses, incinerando quem ousa desafiá-lo.',
+    desc: 'A criatura mais poderosa de Aden. Habita a caldeira de lava da Forja dos Deuses, incinerando quem ousa desafi-lo.',
     fatalSkill: {
       name: 'Extinção Solar do Dragão Flamejante',
       triggerHps: [0.50, 0.25],
@@ -318,7 +318,7 @@ export const RAID_BOSSES = {
       { itemId: 'armor_valakas_cloack', name: 'Valakas Dragon Cloak', chance: 0.35 },
       { itemId: 'valakas_mask', name: 'Máscara Flamejante de Valakas', chance: 0.40 },
       { itemId: 'scroll_blessed_weapon', name: 'Blessed Scroll: Enchant Weapon', chance: 0.75 },
-      { itemId: 'adena', count: 150, name: '150x Adena', chance: 0.60 }
+      { itemId: 'adena_coins', count: 150, name: '150x Aden Coins (AC)', chance: 0.60 }
     ]
   },
 
@@ -354,9 +354,10 @@ export const RAID_BOSSES = {
       { name: 'Barreira de Fogo Puro', triggerHp: 0.25, healPercent: 0.15, text: '🛡️ Barakiel invocou a Barreira de Fogo Puro!' }
     ],
     drops: [
+      { itemId: 'staff_goddess_rain_song', name: 'Staff of Goddess: Rain Song', chance: 1.0 },
       { itemId: 'scroll_blessed_universal', name: 'Pergaminho Abençoado Universal', chance: 1.0 },
       { itemId: 'scroll_blessed_weapon', name: 'Pergaminho Abençoado de Arma', chance: 0.50 },
-      { itemId: 'adena', count: 20, name: '20x Adena', chance: 0.80 }
+      { itemId: 'adena_coins', count: 30, name: '30x Aden Coins (AC)', chance: 0.50 }
     ]
   }
 };
