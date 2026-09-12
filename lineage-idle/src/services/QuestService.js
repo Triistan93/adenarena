@@ -103,7 +103,9 @@ export function claimDailyBonusChest(state, callbacks = {}) {
   checkQuestResets(state);
   if (state.quests.dailyBonusClaimed) return false;
 
-  const allCompleted = (QUEST_DEFS.daily || []).every(q => state.quests.claimed.includes(q.id));
+  const currentLevel = state.level || 1;
+  const availableQuests = (QUEST_DEFS.daily || []).filter(q => !q.unlockLevel || q.unlockLevel <= currentLevel);
+  const allCompleted = availableQuests.length > 0 && availableQuests.every(q => state.quests.claimed.includes(q.id));
   if (!allCompleted) return false;
 
   state.quests.dailyBonusClaimed = true;

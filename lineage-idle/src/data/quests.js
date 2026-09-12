@@ -9,18 +9,18 @@
  */
 export const DAILY_COMPLETION_BONUS = {
   name: 'Baú da Guilda dos Aventureiros de Aden',
-  desc: 'Conclua todas as 5 missões diárias para receber o tesouro máximo da guilda.',
+  desc: 'Conclua todas as missões diárias disponíveis para o seu nível para receber o tesouro supremo da guilda.',
   reward: { gold: 50000, sp: 500, magicLamps: 2, passXp: 250 },
   icon: '🎁'
 };
 
 export const QUEST_DEFS = {
   daily: [
-    { id: 'd_kills',  name: 'Caçador de Monstros',      desc: 'Derrote 50 monstros nas zonas de caça',          target: 50,     type: 'kill',   reward: { gold: 15000, sp: 150, passXp: 100 },               icon: '⚔️' },
-    { id: 'd_boss',   name: 'Desafiador de Elites',      desc: 'Derrote 2 Chefes ou Monstros de Elite',          target: 2,      type: 'boss',   reward: { gold: 30000, sp: 250, magicLamps: 1, passXp: 150 }, icon: '🐉' },
-    { id: 'd_craft',  name: 'Mestre da Forja',           desc: 'Realize 2 criações ou reciclagens na Forja',     target: 2,      type: 'craft',  reward: { gold: 10000, sp: 100, craftPoints: 25, passXp: 100 }, icon: '🔨' },
-    { id: 'd_codex',  name: 'Relíquia de Aden',          desc: 'Registre 1 item ou absorva 1 Carta no Codex',   target: 1,      type: 'codex',  reward: { gold: 15000, sp: 150, magicLamps: 1, passXp: 100 }, icon: '📜' },
-    { id: 'd_tower',  name: 'Conquistador da Torre',     desc: 'Desafie ou faça a Varredura da Torre',           target: 1,      type: 'tower',  reward: { gold: 25000, sp: 200, passXp: 100 },               icon: '🏰' }
+    { id: 'd_kills',  name: 'Caçador de Monstros',      desc: 'Derrote 50 monstros nas zonas de caça',          target: 50,     type: 'kill',   unlockLevel: 1,  reward: { gold: 15000, sp: 150, passXp: 100 },               icon: '⚔️' },
+    { id: 'd_boss',   name: 'Desafiador de Elites',      desc: 'Derrote 2 Chefes ou Monstros de Elite',          target: 2,      type: 'boss',   unlockLevel: 1,  reward: { gold: 30000, sp: 250, magicLamps: 1, passXp: 150 }, icon: '🐉' },
+    { id: 'd_craft',  name: 'Mestre da Forja',           desc: 'Realize 2 criações ou reciclagens na Forja',     target: 2,      type: 'craft',  unlockLevel: 10, reward: { gold: 10000, sp: 100, craftPoints: 25, passXp: 100 }, icon: '🔨' },
+    { id: 'd_codex',  name: 'Relíquia de Aden',          desc: 'Registre 1 item ou absorva 1 Carta no Codex',   target: 1,      type: 'codex',  unlockLevel: 1,  reward: { gold: 15000, sp: 150, magicLamps: 1, passXp: 100 }, icon: '📜' },
+    { id: 'd_tower',  name: 'Conquistador da Torre',     desc: 'Desafie ou faça a Varredura da Torre',           target: 1,      type: 'tower',  unlockLevel: 40, reward: { gold: 25000, sp: 200, passXp: 100 },               icon: '🏰' }
   ],
   weekly: [
     { id: 'w_kills',  name: 'Exterminador de Aden',      desc: 'Derrote 500 monstros nas zonas de caça',         target: 500,    type: 'kill',   reward: { gold: 150000, sp: 1500, passXp: 500 },              icon: '☠️' },

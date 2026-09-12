@@ -3111,10 +3111,39 @@ function updateQuestsUI() {
 
   if (dailyContainer) {
     let dailyClaimedCount = 0;
-    const allDailyDone = QUEST_DEFS.daily.every(q => state.quests.claimed.includes(q.id));
+    const currentLvl = state.level || 1;
+    const availableDaily = QUEST_DEFS.daily.filter(q => !q.unlockLevel || q.unlockLevel <= currentLvl);
+    const allDailyDone = availableDaily.length > 0 && availableDaily.every(q => state.quests.claimed.includes(q.id));
     const isDailyBonusClaimed = Boolean(state.quests.dailyBonusClaimed);
 
     const cardsHtml = QUEST_DEFS.daily.map(q => {
+      const isLocked = q.unlockLevel && currentLvl < q.unlockLevel;
+      const rewardsText = [];
+      if (q.reward.gold) rewardsText.push(`💰 +${q.reward.gold.toLocaleString()}g`);
+      if (q.reward.sp) rewardsText.push(`✦ +${q.reward.sp} SP`);
+      if (q.reward.craftPoints) rewardsText.push(`⚒️ +${q.reward.craftPoints} Craft`);
+      if (q.reward.magicLamps) rewardsText.push(`🪔 +${q.reward.magicLamps} Lâmpada`);
+      if (q.reward.passXp) rewardsText.push(`🎫 +${q.reward.passXp} XP Passe`);
+
+      if (isLocked) {
+        return `
+          <div class="quest-card locked" style="opacity:0.6; filter:grayscale(0.5); border:1px dashed rgba(255,255,255,0.15);">
+            <div class="quest-info-group">
+              <span class="quest-icon">🔒</span>
+              <div class="quest-details">
+                <span class="quest-name" style="color:#94a3b8;">${q.name} <span style="font-size:10px; color:#f87171; font-weight:bold;">(Requer Nível ${q.unlockLevel})</span></span>
+                <span class="quest-desc" style="color:#64748b;">${q.desc}</span>
+                <div class="quest-rewards-line" style="opacity:0.7;">${rewardsText.join(' · ')}</div>
+              </div>
+            </div>
+            <div class="quest-action-group">
+              <span class="quest-progress-num" style="color:#f87171;">Bloqueada</span>
+              <button class="claim-quest-btn" disabled style="opacity:0.4; cursor:not-allowed;">🔒 Nv. ${q.unlockLevel}</button>
+            </div>
+          </div>
+        `;
+      }
+
       const progress = Math.min(q.target, state.quests.progress[q.id] || 0);
       const isCompleted = progress >= q.target;
       const isClaimed = state.quests.claimed.includes(q.id);
@@ -3122,13 +3151,6 @@ function updateQuestsUI() {
 
       const pct = Math.floor((progress / q.target) * 100);
       const cardClass = isClaimed ? 'quest-card completed' : (isCompleted ? 'quest-card can-claim' : 'quest-card');
-
-      const rewardsText = [];
-      if (q.reward.gold) rewardsText.push(`💰 +${q.reward.gold.toLocaleString()}g`);
-      if (q.reward.sp) rewardsText.push(`✦ +${q.reward.sp} SP`);
-      if (q.reward.craftPoints) rewardsText.push(`⚒️ +${q.reward.craftPoints} Craft`);
-      if (q.reward.magicLamps) rewardsText.push(`🪔 +${q.reward.magicLamps} Lâmpada`);
-      if (q.reward.passXp) rewardsText.push(`🎫 +${q.reward.passXp} XP Passe`);
 
       const btnLabel = isClaimed ? '✓ Reclamado' : (isCompleted ? '🎁 Reclamar' : 'Em Progresso');
       const btnDisabled = !isCompleted || isClaimed ? 'disabled' : '';
@@ -3160,7 +3182,7 @@ function updateQuestsUI() {
               ${DAILY_COMPLETION_BONUS.name}
             </div>
             <div style="font-size:11px; color:#94a3b8; margin:2px 0 4px 0;">
-              Conclua as 5 caçadas diárias (${dailyClaimedCount}/${QUEST_DEFS.daily.length}) para resgatar o tesouro supremo.
+              Conclua as caçadas diárias ativas (${dailyClaimedCount}/${availableDaily.length}) para resgatar o tesouro supremo.
             </div>
             <div style="font-size:11px; color:#86efac; font-weight:bold;">
               ✦ +500 SP Extra · 💰 +50.000g · 🪔 +2 Lâmpadas Mágicas · 🎫 +250 XP Passe
@@ -3172,7 +3194,7 @@ function updateQuestsUI() {
             <span style="font-size:11px; color:#10b981; font-weight:bold; padding:6px 14px; border:1px solid #10b981; border-radius:6px; background:rgba(16,185,129,0.15);">✓ Resgatado Hoje</span>
           ` : `
             <button id="claim-grand-daily-btn" class="action-btn action-btn--primary" style="padding:8px 18px; font-weight:bold; font-size:12px; ${allDailyDone ? 'background:linear-gradient(180deg,#d4a744,#8a641c); border:1px solid #ffe699; color:#000; box-shadow:0 0 12px rgba(234,179,8,0.5); cursor:pointer;' : 'opacity:0.5; cursor:not-allowed;'}" ${!allDailyDone ? 'disabled' : ''}>
-              ${allDailyDone ? '🎁 Resgatar Baú (+500 SP)' : `${dailyClaimedCount}/${QUEST_DEFS.daily.length} Diárias`}
+              ${allDailyDone ? '🎁 Resgatar Baú (+500 SP)' : `${dailyClaimedCount}/${availableDaily.length} Diárias`}
             </button>
           `}
         </div>
@@ -3181,7 +3203,7 @@ function updateQuestsUI() {
 
     dailyContainer.innerHTML = grandBonusHtml + cardsHtml;
 
-    if (dailyBadge) dailyBadge.textContent = `${dailyClaimedCount}/${QUEST_DEFS.daily.length} Concluídas`;
+    if (dailyBadge) dailyBadge.textContent = `${dailyClaimedCount}/${availableDaily.length} Concluídas`;
 
     dailyContainer.querySelectorAll('[data-quest]').forEach(btn => {
       btn.onclick = () => claimQuestReward(btn.dataset.quest);

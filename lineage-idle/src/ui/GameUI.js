@@ -7960,7 +7960,7 @@ export function renderRaidsTab(container, state) {
               <span>🐉 Masmorras Diárias &amp; Epic Raid Bosses</span>
             </h2>
             <p style="margin:0; font-size:12px; color:#cbd5e1; line-height:1.4;">
-              Enfrente as lendas de Lineage II para conquistar <strong>Joias de Chefe Lendárias</strong> (+Crit Dmg, +Lifesteal, +Stats), <strong>Blessed Scrolls</strong> e <strong>Aden Coins</strong>!
+              Enfrente as lendas de Lineage II para conquistar <strong>Joias de Chefe Lendárias</strong> (+Crit Dmg, +Lifesteal, +Stats), <strong>Blessed Scrolls</strong> e <strong>Adena</strong>!
             </p>
           </div>
           <div style="display:flex; gap:10px; align-items:center;">
@@ -7975,6 +7975,18 @@ export function renderRaidsTab(container, state) {
           </div>
         </div>
       </div>
+
+      ${currentHeroLvl < 30 ? `
+        <div style="background:linear-gradient(135deg, rgba(35,25,12,0.95), rgba(20,15,5,0.98)); border:1px solid #eab308; border-radius:10px; padding:14px 18px; margin-bottom:16px; display:flex; align-items:center; gap:14px; box-shadow:0 4px 15px rgba(0,0,0,0.4);">
+          <div style="font-size:32px; background:rgba(0,0,0,0.4); border-radius:8px; padding:6px 10px; border:1px solid rgba(234,179,8,0.3);">👑</div>
+          <div>
+            <div style="font-family:'Cinzel',serif; font-weight:bold; color:#fde047; font-size:14px;">Primeira Raid Desbloqueia no Nível 30!</div>
+            <div style="font-size:12px; color:#cbd5e1; margin-top:3px; line-height:1.4;">
+              As Raids Mundiais foram reveladas na sua jornada no Nível 20. Sua primeira batalha colossal será contra a <strong>Rainha Formiga (Queen Ant)</strong>, disponível no <strong>Nível 30</strong>. Continue evoluindo seu personagem pelas zonas de caça e fortalecendo seus equipamentos para encarar o desafio!
+            </div>
+          </div>
+        </div>
+      ` : ''}
 
       <!-- Grid de Bosses -->
       <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(290px, 1fr)); gap:14px;">
