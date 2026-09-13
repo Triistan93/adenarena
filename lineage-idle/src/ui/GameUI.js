@@ -1471,32 +1471,37 @@ const INJECTED_GAMEUI_CSS = `
 .weapon-resonance-badge {
   display: flex;
   align-items: center;
-  gap: 8px;
-  background: linear-gradient(180deg, rgba(20, 15, 30, 0.95), rgba(10, 8, 18, 0.95));
-  border: 1px solid #a855f7;
-  border-radius: 6px;
-  padding: 6px 10px;
+  gap: 12px;
+  background: linear-gradient(180deg, rgba(22, 27, 42, 0.95), rgba(12, 16, 26, 0.98));
+  border: 1px solid rgba(212, 167, 68, 0.45);
+  border-radius: 8px;
+  padding: 8px 14px;
   margin: 6px 0 10px 0;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.6);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.6), inset 0 0 12px rgba(212, 167, 68, 0.08);
+  transition: all 0.25s ease;
 }
 .weapon-resonance-badge .res-icon {
-  font-size: 18px;
-  filter: drop-shadow(0 0 4px rgba(255,255,255,0.4));
+  font-size: 22px;
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.4));
+  flex-shrink: 0;
 }
 .weapon-resonance-badge .res-info {
   display: flex;
   flex-direction: column;
   flex: 1;
+  min-width: 0;
 }
 .weapon-resonance-badge .res-title {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   font-family: 'Cinzel', serif;
+  letter-spacing: 0.06em;
 }
 .weapon-resonance-badge .res-desc {
-  font-size: 9.5px;
+  font-size: 10.5px;
   color: #cbd5e1;
-  line-height: 1.25;
+  line-height: 1.35;
+  margin-top: 2px;
 }
 `;
 
@@ -2782,12 +2787,13 @@ export function updateEquipmentUI(state, callbacks = {}) {
     }
     if (activeRes) {
       resBadge.style.display = 'flex';
-      resBadge.style.borderColor = activeRes.color || '#38bdf8';
+      resBadge.style.borderColor = activeRes.color || '#eab308';
+      resBadge.style.boxShadow = `0 4px 14px rgba(0,0,0,0.6), 0 0 10px ${(activeRes.color || '#eab308')}33`;
       resBadge.innerHTML = `
-        <span class="res-icon">${activeRes.icon}</span>
+        <span class="res-icon">${activeRes.icon || '⚔️'}</span>
         <div class="res-info">
-          <div class="res-title" style="color:${activeRes.color || '#38bdf8'}">Ressonância: ${activeRes.name}</div>
-          <div class="res-desc">${activeRes.pairName} — ${activeRes.desc}</div>
+          <div class="res-title" style="color:${activeRes.color || '#eab308'}">RESSONÂNCIA: ${activeRes.name.toUpperCase()}</div>
+          <div class="res-desc"><strong style="color:#f8fafc;">${activeRes.pairName}</strong> — ${activeRes.desc}</div>
         </div>
       `;
     } else {
@@ -2795,49 +2801,10 @@ export function updateEquipmentUI(state, callbacks = {}) {
     }
   }
 
-  // Atualiza o Orbe Central de Ressonância Dupla (#dual-resonance-orb)
-  const dualOrb = root.querySelector('#dual-resonance-orb');
-  const dualOrbCore = root.querySelector('#resonance-orb-core');
-  const dualTitle = root.querySelector('#resonance-hud-title');
-  const dualDesc = root.querySelector('#resonance-hud-desc');
-  const dualContainer = root.querySelector('#dual-resonance-hud-container');
-
-  if (dualOrb && dualOrbCore) {
-    if (activeRes) {
-      dualOrb.classList.add('active');
-      dualOrb.style.borderColor = activeRes.color || '#38bdf8';
-      dualOrb.style.boxShadow = `0 0 16px ${activeRes.color || '#38bdf8'}aa, inset 0 0 10px ${activeRes.color || '#38bdf8'}55`;
-      dualOrbCore.textContent = activeRes.icon || '⚔️';
-      dualOrb.title = `✨ Ressonância Ativa: ${activeRes.name}\nCombinação: ${activeRes.pairName}\nBônus: ${activeRes.desc}`;
-      if (dualTitle) {
-        dualTitle.textContent = `Ressonância: ${activeRes.name}`;
-        dualTitle.style.color = activeRes.color || '#38bdf8';
-      }
-      if (dualDesc) {
-        dualDesc.textContent = `${activeRes.pairName} — ${activeRes.desc}`;
-      }
-      if (dualContainer) {
-        dualContainer.style.borderColor = activeRes.color || 'rgba(212,167,68,0.4)';
-        dualContainer.style.boxShadow = `0 0 12px ${activeRes.color || '#38bdf8'}33`;
-      }
-    } else {
-      dualOrb.classList.remove('active');
-      dualOrb.style.removeProperty('border-color');
-      dualOrb.style.removeProperty('box-shadow');
-      dualOrbCore.textContent = '⚔️';
-      dualOrb.title = 'Ressonância Dupla: Equipe duas armas compatíveis para ativar sinergia!';
-      if (dualTitle) {
-        dualTitle.textContent = 'Ressonância: Inativa';
-        dualTitle.style.color = 'var(--gilt)';
-      }
-      if (dualDesc) {
-        dualDesc.textContent = 'Equipe Arma 1 e Arma 2 para sinergia';
-      }
-      if (dualContainer) {
-        dualContainer.style.borderColor = 'rgba(212,167,68,0.3)';
-        dualContainer.style.boxShadow = 'none';
-      }
-    }
+  // Remove qualquer resquício do antigo container comprimido acima dos itens equipados
+  const oldDualContainer = root.querySelector('#dual-resonance-hud-container');
+  if (oldDualContainer) {
+    oldDualContainer.remove();
   }
 }
 

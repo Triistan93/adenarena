@@ -656,17 +656,6 @@ export const IDLE_MARKUP = `
             <div class="l2inv-main-container">
               <!-- Left Panel: 3-column Paperdoll Equipment Grid + Stats -->
               <div class="l2inv-left-paperdoll">
-                <!-- Dual Weapon Resonance HUD Bar & Orb -->
-                <div class="dual-resonance-hud-container" id="dual-resonance-hud-container" style="display:flex; align-items:center; justify-content:center; gap:8px; padding:6px; margin-bottom:8px; background:rgba(15,23,42,0.85); border:1px solid rgba(212,167,68,0.3); border-radius:6px;">
-                  <div class="dual-resonance-orb" id="dual-resonance-orb" title="Ressonância Dupla: Equipe duas armas compatíveis para ativar sinergia!">
-                    <div class="resonance-orb-core" id="resonance-orb-core">⚔️</div>
-                  </div>
-                  <div class="resonance-hud-info" style="flex:1; min-width:0;">
-                    <div class="resonance-hud-title" id="resonance-hud-title" style="font-size:11px; font-weight:bold; color:var(--gilt); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Ressonância: Inativa</div>
-                    <div class="resonance-hud-desc" id="resonance-hud-desc" style="font-size:10px; color:#94a3b8; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Equipe Arma 1 e Arma 2 para sinergia</div>
-                  </div>
-                </div>
-
                 <div class="l2inv-paperdoll-grid">
                   <!-- Column 1 (Left - 7 slots) -->
                   <div class="l2inv-doll-col">

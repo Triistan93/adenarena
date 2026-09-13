@@ -876,6 +876,7 @@ export function getBatchSellPreview(state, uids) {
     totalGold += goldEarned;
     totalCount += itemQty;
     uidsToSell.push(item.uid);
+    const enchant = item.enchant || 0;
 
     items.push({
       uid: item.uid,
