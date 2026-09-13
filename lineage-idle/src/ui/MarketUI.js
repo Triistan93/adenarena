@@ -78,8 +78,52 @@ export function showMarketToast(msg, type = 'info') {
   }, 3500);
 }
 
+if (typeof window !== 'undefined') {
+  window.showMarketToast = showMarketToast;
+}
+
 export function setActiveMarketTab(tab) {
   _activeMarketTab = tab;
+}
+
+export const WT_CATEGORIES = [
+  { id: 'all', name: 'All Goods', icon: '🌐' },
+  { id: 'adena', name: 'Adena', icon: '🪙' },
+  { id: 'equipment', name: 'Equipment', icon: '⚔️' },
+  { id: 'artifact', name: 'Artifact', icon: '💍' },
+  { id: 'scrolls', name: 'Scrolls', icon: '📜' },
+  { id: 'supplies', name: 'Supplies', icon: '🧪' },
+  { id: 'misc', name: 'Misc.', icon: '📦' },
+  { id: 'collection', name: 'Collection', icon: '🏛️', soon: true }
+];
+
+function matchesCategory(item, category) {
+  if (!category || category === 'all') return true;
+  if (category === 'collection') return false;
+
+  const slot = (item.item?.slot || '').toLowerCase();
+  const name = (item.item?.name || '').toLowerCase();
+  const id = (item.item?.id || item.item?.itemId || '').toLowerCase();
+
+  if (category === 'adena') {
+    return item.currency === 'adena' || id.includes('adena') || id.includes('coin') || name.includes('adena') || name.includes('coin');
+  }
+  if (category === 'equipment') {
+    return ['weapon', 'armor', 'chest', 'legs', 'head', 'helmet', 'gloves', 'boots', 'shield', 'lower', 'upper', 'full'].includes(slot);
+  }
+  if (category === 'artifact') {
+    return ['ring', 'earring', 'necklace', 'belt', 'talisman', 'cloak', 'brooch', 'bracelet', 'jewel', 'artifact'].includes(slot) || name.includes('talisman') || name.includes('belt') || name.includes('artifact');
+  }
+  if (category === 'scrolls') {
+    return slot === 'scroll' || slot === 'spellbook' || name.includes('scroll') || name.includes('spellbook') || name.includes('enchant') || name.includes('tome') || id.startsWith('book_');
+  }
+  if (category === 'supplies') {
+    return ['potion', 'consumable', 'powerup'].includes(slot) || name.includes('potion') || name.includes('shot') || name.includes('soulshot') || name.includes('spiritshot') || name.includes('elixir');
+  }
+  if (category === 'misc') {
+    return ['material', 'dye', 'relic'].includes(slot) || name.includes('ore') || name.includes('crystal') || name.includes('feather') || name.includes('thread') || name.includes('leather') || name.includes('suede');
+  }
+  return true;
 }
 
 export function renderMarketTab(container, state, callbacks = {}) {
@@ -95,66 +139,89 @@ export function renderMarketTab(container, state, callbacks = {}) {
   const pendingAc = Number(salesData.pendingAdenCoins || 0);
   const hasProfits = pendingAdena > 0 || pendingAc > 0;
 
-  // Header com tema de Giran
   let html = `
-    <div class="market-container" style="padding: 10px; max-width: 1100px; margin: 0 auto; font-family: 'Cinzel', serif;">
+    <div class="l2wt-window-frame" style="max-width: 1040px; margin: 0 auto; min-height: 540px;">
       
-      <!-- Top Header & Player Balance -->
-      <div style="background: linear-gradient(135deg, rgba(20,25,35,0.95), rgba(10,12,18,0.98)); border: 1px solid rgba(212,167,68,0.4); border-radius: 12px; padding: 16px; margin-bottom: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.6); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+      <!-- Top Banner (Image 1) -->
+      <div class="l2wt-banner">
         <div style="display: flex; align-items: center; gap: 14px;">
-          <div style="font-size: 36px; background: rgba(0,0,0,0.4); border: 1px solid rgba(212,167,68,0.4); border-radius: 10px; width: 54px; height: 54px; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 0 10px rgba(212,167,68,0.2);">
+          <div style="font-size: 28px; background: rgba(0,0,0,0.5); border: 1px solid rgba(212,167,68,0.4); border-radius: 8px; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 0 10px rgba(212,167,68,0.2);">
             🏛️
           </div>
           <div>
-            <h2 style="margin: 0; color: #f4d58a; font-size: 20px; font-weight: bold; letter-spacing: 0.5px;">Mercado Central de Giran</h2>
-            <p style="margin: 2px 0 0 0; color: #94a3b8; font-size: 12px; font-family: 'Inter', sans-serif;">Comércio P2P Global 100% entre jogadores reais · Negocie em Adena (🪙) ou Aden Coins (👑)</p>
+            <div class="l2wt-banner-title">World Trade</div>
+            <p style="margin: 2px 0 0 0; color: #94a3b8; font-size: 11px; font-family: 'Inter', sans-serif;">Comércio Global P2P · Sistema Oficial entre Jogadores Reais de Aden</p>
           </div>
         </div>
 
-        <!-- Balances, Sync & Claim Button -->
-        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-          <div style="background: rgba(0,0,0,0.5); border: 1px solid rgba(234,179,8,0.3); border-radius: 8px; padding: 8px 14px; display: flex; gap: 14px; font-family: 'IBM Plex Mono', monospace; font-size: 13px;">
-            <div style="color: #ffd877; display: flex; align-items: center; gap: 6px;">
-              🪙 <span>${playerGold.toLocaleString()}</span>
-            </div>
-            <div style="color: #60a5fa; display: flex; align-items: center; gap: 6px;">
-              👑 <span>${playerAc.toLocaleString()} AC</span>
-            </div>
+        <!-- Balances and Action Button -->
+        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+          <div style="background: rgba(0,0,0,0.6); border: 1px solid rgba(212,167,68,0.35); border-radius: 6px; padding: 6px 14px; display: flex; gap: 14px; font-family: 'IBM Plex Mono', monospace; font-size: 12px;">
+            <span style="color: #ffd877; display: flex; align-items: center; gap: 5px;">🪙 ${playerGold.toLocaleString()}</span>
+            <span style="color: #60a5fa; display: flex; align-items: center; gap: 5px;">👑 ${playerAc.toLocaleString()} AC</span>
           </div>
 
-          <button id="btn-market-refresh" class="action-btn" title="Sincronizar com a Nuvem" style="background: rgba(30,40,60,0.8); border: 1px solid #60a5fa; color: #93c5fd; border-radius: 8px; padding: 8px 12px; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 6px;">
-            🔄 Atualizar
-          </button>
-
-          ${hasProfits ? `
-            <button id="btn-market-claim" class="action-btn" style="background: linear-gradient(135deg, #15803d, #22c55e); color: #fff; font-weight: bold; border: 1px solid #4ade80; border-radius: 8px; padding: 8px 16px; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 0 12px rgba(34,197,94,0.4); animation: pulse 1.5s infinite;">
-              🎁 Coletar Lucros: ${pendingAdena > 0 ? pendingAdena.toLocaleString() + ' 🪙 ' : ''}${pendingAc > 0 ? pendingAc + ' 👑' : ''}
+          ${_activeMarketTab === 'buy' ? `
+            <button id="btn-world-trade-my-items" class="l2wt-my-items-btn" title="Gerenciar meus anúncios e lucros">
+              📦 My items
             </button>
-          ` : ''}
+          ` : `
+            <button id="btn-world-trade-back-market" class="l2wt-my-items-btn" style="background: linear-gradient(180deg, #1e293b, #0f172a); border-color: #94a3b8; color: #f1f5f9; box-shadow: none;">
+              ← Back to World Trade
+            </button>
+          `}
         </div>
-      </div>
-
-      <!-- Navigation Tabs -->
-      <div style="display: flex; gap: 8px; margin-bottom: 16px; border-bottom: 1px solid rgba(212,167,68,0.2); padding-bottom: 8px;">
-        <button class="market-nav-btn ${_activeMarketTab === 'buy' ? 'active' : ''}" data-tab="buy" style="background: ${_activeMarketTab === 'buy' ? 'rgba(212,167,68,0.25)' : 'rgba(0,0,0,0.4)'}; border: 1px solid ${_activeMarketTab === 'buy' ? '#ffd877' : 'rgba(255,255,255,0.1)'}; color: ${_activeMarketTab === 'buy' ? '#ffd877' : '#94a3b8'}; padding: 8px 18px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 13px; display: flex; align-items: center; gap: 6px;">
-          🛒 Comprar (Mural)
-        </button>
-        <button class="market-nav-btn ${_activeMarketTab === 'sell' ? 'active' : ''}" data-tab="sell" style="background: ${_activeMarketTab === 'sell' ? 'rgba(212,167,68,0.25)' : 'rgba(0,0,0,0.4)'}; border: 1px solid ${_activeMarketTab === 'sell' ? '#ffd877' : 'rgba(255,255,255,0.1)'}; color: ${_activeMarketTab === 'sell' ? '#ffd877' : '#94a3b8'}; padding: 8px 18px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 13px; display: flex; align-items: center; gap: 6px;">
-          🏷️ Criar Anúncio
-        </button>
-        <button class="market-nav-btn ${_activeMarketTab === 'my_sales' ? 'active' : ''}" data-tab="my_sales" style="background: ${_activeMarketTab === 'my_sales' ? 'rgba(212,167,68,0.25)' : 'rgba(0,0,0,0.4)'}; border: 1px solid ${_activeMarketTab === 'my_sales' ? '#ffd877' : 'rgba(255,255,255,0.1)'}; color: ${_activeMarketTab === 'my_sales' ? '#ffd877' : '#94a3b8'}; padding: 8px 18px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 13px; display: flex; align-items: center; gap: 6px;">
-          📜 Minhas Vendas (${MarketService.getMyListings(state).length})
-        </button>
       </div>
   `;
 
-  // Conteúdo por Sub-Aba
   if (_activeMarketTab === 'buy') {
+    // Abas de Categoria Autênticas do World Trade
+    html += `
+      <div class="l2wt-tabs-bar">
+        ${WT_CATEGORIES.map(cat => `
+          <button class="l2wt-tab ${_selectedCategory === cat.id ? 'active' : ''}" data-cat="${cat.id}">
+            <span>${cat.icon}</span>
+            <span>${cat.name}</span>
+            ${cat.soon ? '<span class="l2wt-soon-badge">SOON</span>' : ''}
+          </button>
+        `).join('')}
+      </div>
+
+      <!-- Subbar com Filtro de Moeda, Busca e Refresh -->
+      <div class="l2wt-subbar">
+        <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+          <span style="font-size: 11px; color: #94a3b8; font-family: 'Inter', sans-serif; margin-right: 4px;">Moeda:</span>
+          <button class="l2wt-cur-filter ${_currencyFilter === 'all' ? 'active' : ''}" data-cur="all" style="background: ${_currencyFilter === 'all' ? 'rgba(212,167,68,0.25)' : 'rgba(0,0,0,0.4)'}; color: ${_currencyFilter === 'all' ? '#ffd877' : '#94a3b8'}; border: 1px solid ${_currencyFilter === 'all' ? '#ffd877' : 'rgba(255,255,255,0.1)'}; border-radius: 4px; padding: 4px 10px; font-size: 11px; font-family: 'Cinzel', serif; font-weight: bold; cursor: pointer;">🌐 Todas</button>
+          <button class="l2wt-cur-filter ${_currencyFilter === 'adena' ? 'active' : ''}" data-cur="adena" style="background: ${_currencyFilter === 'adena' ? 'rgba(234,179,8,0.25)' : 'rgba(0,0,0,0.4)'}; color: ${_currencyFilter === 'adena' ? '#fde047' : '#94a3b8'}; border: 1px solid ${_currencyFilter === 'adena' ? '#fde047' : 'rgba(255,255,255,0.1)'}; border-radius: 4px; padding: 4px 10px; font-size: 11px; font-family: 'Cinzel', serif; font-weight: bold; cursor: pointer;">🪙 Adena</button>
+          <button class="l2wt-cur-filter ${_currencyFilter === 'adencoin' ? 'active' : ''}" data-cur="adencoin" style="background: ${_currencyFilter === 'adencoin' ? 'rgba(59,130,246,0.25)' : 'rgba(0,0,0,0.4)'}; color: ${_currencyFilter === 'adencoin' ? '#93c5fd' : '#94a3b8'}; border: 1px solid ${_currencyFilter === 'adencoin' ? '#93c5fd' : 'rgba(255,255,255,0.1)'}; border-radius: 4px; padding: 4px 10px; font-size: 11px; font-family: 'Cinzel', serif; font-weight: bold; cursor: pointer;">👑 Aden Coin</button>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 8px; flex: 1; max-width: 420px; justify-content: flex-end;">
+          <input type="text" id="market-search-input" value="${_searchQuery}" placeholder="🔍 Buscar item ou vendedor..." style="flex: 1; background: rgba(0,0,0,0.6); border: 1px solid rgba(212,167,68,0.3); border-radius: 4px; padding: 5px 10px; color: #fff; font-size: 11px; font-family: 'Inter', sans-serif;" />
+          <button id="btn-market-refresh" class="l2wt-refresh-btn" title="Sincronizar ofertas">
+            🔄 Refresh
+          </button>
+        </div>
+      </div>
+    `;
     html += renderBuyTab(state);
-  } else if (_activeMarketTab === 'sell') {
-    html += renderSellTab(state);
-  } else if (_activeMarketTab === 'my_sales') {
-    html += renderMySalesTab(state, salesData);
+  } else {
+    // Navigation Subtabs for My Items
+    html += `
+      <div class="l2contacts-tabs-bar" style="background: #11141d; border-bottom: 1px solid rgba(212,167,68,0.2);">
+        <button class="l2contacts-tab ${_activeMarketTab === 'my_sales' ? 'active' : ''} market-nav-btn" data-tab="my_sales">
+          📜 Meus Anúncios (${MarketService.getMyListings(state).length})
+        </button>
+        <button class="l2contacts-tab ${_activeMarketTab === 'sell' ? 'active' : ''} market-nav-btn" data-tab="sell">
+          🏷️ Criar Anúncio (Vender)
+        </button>
+      </div>
+    `;
+    if (_activeMarketTab === 'sell') {
+      html += renderSellTab(state);
+    } else {
+      html += renderMySalesTab(state, salesData);
+    }
   }
 
   html += '</div>';
@@ -164,137 +231,113 @@ export function renderMarketTab(container, state, callbacks = {}) {
 }
 
 /**
- * Renderiza o mural de compras com filtros e busca
+ * Renderiza a tabela MMO oficial do World Trade (Imagem 1)
  */
 function renderBuyTab(state) {
   const allListings = MarketService.getListings();
 
   // Filtragem
   const filtered = allListings.filter(item => {
-    // Categoria
-    if (_selectedCategory !== 'all') {
-      const slot = item.item?.slot || '';
-      if (_selectedCategory === 'weapon' && slot !== 'weapon') return false;
-      if (_selectedCategory === 'armor' && !['armor', 'shield', 'helmet', 'gloves', 'boots'].includes(slot)) return false;
-      if (_selectedCategory === 'jewel' && !['ring', 'earring', 'necklace', 'belt', 'talisman'].includes(slot)) return false;
-      if (_selectedCategory === 'spellbook' && !item.item?.name?.toLowerCase().includes('spellbook') && slot !== 'spellbook' && !item.item?.id?.startsWith('book_')) return false;
-      if (_selectedCategory === 'scroll' && slot !== 'scroll' && !item.item?.name?.toLowerCase().includes('scroll') && !item.item?.name?.toLowerCase().includes('enchant')) return false;
-      if (_selectedCategory === 'material' && slot !== 'material') return false;
-      if (_selectedCategory === 'consumable' && slot !== 'consumable' && slot !== 'powerup') return false;
-    }
-
-    // Moeda
+    if (!matchesCategory(item, _selectedCategory)) return false;
     if (_currencyFilter !== 'all' && item.currency !== _currencyFilter) return false;
-
-    // Busca textual
     if (_searchQuery.trim()) {
       const q = _searchQuery.toLowerCase().trim();
       const matchName = (item.item?.name || '').toLowerCase().includes(q);
-      const matchDesc = (item.item?.desc || '').toLowerCase().includes(q);
       const matchSeller = (item.sellerName || '').toLowerCase().includes(q);
-      if (!matchName && !matchDesc && !matchSeller) return false;
+      if (!matchName && !matchSeller) return false;
     }
-
     return true;
   });
 
   return `
-    <!-- Filters Bar -->
-    <div style="background: rgba(15,20,30,0.85); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 12px; margin-bottom: 16px; display: flex; flex-direction: column; gap: 10px;">
-      
-      <!-- Category Pills -->
-      <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-        ${MARKET_CATEGORIES.map(cat => `
-          <button class="market-cat-btn ${_selectedCategory === cat.id ? 'active' : ''}" data-cat="${cat.id}" style="background: ${_selectedCategory === cat.id ? '#ca8a04' : 'rgba(0,0,0,0.4)'}; color: ${_selectedCategory === cat.id ? '#000' : '#cbd5e1'}; border: 1px solid ${_selectedCategory === cat.id ? '#fde047' : 'rgba(255,255,255,0.06)'}; border-radius: 6px; padding: 5px 12px; font-size: 11px; font-family: 'Inter', sans-serif; font-weight: ${_selectedCategory === cat.id ? 'bold' : 'normal'}; cursor: pointer;">
-            ${cat.icon} ${cat.name}
-          </button>
-        `).join('')}
-      </div>
-
-      <!-- Currency Filter & Search Input -->
-      <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;">
-        <div style="display: flex; gap: 6px; align-items: center;">
-          <span style="font-size: 11px; color: #94a3b8; font-family: 'Inter', sans-serif;">Moeda:</span>
-          <button class="market-cur-filter ${_currencyFilter === 'all' ? 'active' : ''}" data-cur="all" style="background: ${_currencyFilter === 'all' ? 'rgba(212,167,68,0.3)' : 'rgba(0,0,0,0.3)'}; color: ${_currencyFilter === 'all' ? '#ffd877' : '#aaa'}; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 4px 10px; font-size: 11px; cursor: pointer;">🌐 Todas</button>
-          <button class="market-cur-filter ${_currencyFilter === 'adena' ? 'active' : ''}" data-cur="adena" style="background: ${_currencyFilter === 'adena' ? 'rgba(234,179,8,0.3)' : 'rgba(0,0,0,0.3)'}; color: ${_currencyFilter === 'adena' ? '#fde047' : '#aaa'}; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 4px 10px; font-size: 11px; cursor: pointer;">🪙 Adena</button>
-          <button class="market-cur-filter ${_currencyFilter === 'adencoin' ? 'active' : ''}" data-cur="adencoin" style="background: ${_currencyFilter === 'adencoin' ? 'rgba(59,130,246,0.3)' : 'rgba(0,0,0,0.3)'}; color: ${_currencyFilter === 'adencoin' ? '#93c5fd' : '#aaa'}; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 4px 10px; font-size: 11px; cursor: pointer;">👑 Aden Coin</button>
-        </div>
-
-        <div style="flex: 1; max-width: 320px; min-width: 200px;">
-          <input type="text" id="market-search-input" value="${_searchQuery}" placeholder="🔍 Buscar por nome do item ou vendedor..." style="width: 100%; background: rgba(0,0,0,0.6); border: 1px solid rgba(212,167,68,0.3); border-radius: 6px; padding: 6px 12px; color: #fff; font-size: 12px; font-family: 'Inter', sans-serif; box-sizing: border-box;" />
-        </div>
-      </div>
-    </div>
-
-    <!-- Listings Grid / List -->
-    ${filtered.length === 0 ? `
-      <div style="text-align: center; padding: 40px 20px; background: rgba(15,20,30,0.6); border: 1px dashed rgba(212,167,68,0.3); border-radius: 10px; color: #cbd5e1; font-family: 'Cinzel', serif;">
-        <div style="font-size: 38px; margin-bottom: 8px;">🏛️</div>
-        <h3 style="margin: 0 0 6px 0; color: #ffd877; font-size: 16px;">O Mercado de Giran está pronto para novas ofertas!</h3>
-        <p style="margin: 0 0 16px 0; font-size: 12px; color: #94a3b8; font-family: 'Inter', sans-serif;">Nenhum item anunciado nesta categoria no momento. Todos os itens deste mercado vêm 100% de jogadores reais de Aden.</p>
-        <button id="btn-market-empty-sell" class="action-btn action-btn--primary" style="padding: 8px 20px; font-weight: bold; cursor: pointer; font-size: 12px; font-family: 'Cinzel', serif;">🏷️ Seja o Primeiro a Criar um Anúncio</button>
-      </div>
-    ` : `
-      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px;">
-        ${filtered.map(l => {
-          const isAdena = l.currency === 'adena';
-          const currencyIcon = isAdena ? '🪙' : '👑';
-          const currencyColor = isAdena ? '#ffd877' : '#60a5fa';
-          const totalCost = Number(l.totalPrice) || (l.pricePerUnit * l.quantity);
-          const iconUrl = getItemIconUrl(l.item);
-          const isOwnListing = MarketService._isMyListing(l, state);
-
-          return `
-            <div class="market-listing-card" data-search="${(l.item.name + ' ' + l.sellerName).toLowerCase()}" style="background: rgba(18,24,36,0.9); border: 1px solid rgba(212,167,68,0.3); border-radius: 10px; padding: 12px; display: flex; flex-direction: column; justify-content: space-between; gap: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.4); transition: transform 0.15s ease;">
-              
-              <!-- Item Info -->
-              <div style="display: flex; gap: 12px; align-items: flex-start;">
-                <div style="width: 44px; height: 44px; background: #121620; border: 1px solid rgba(212,167,68,0.5); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: inset 0 0 6px rgba(0,0,0,0.8);">
-                  ${getItemIcon(l.item)}
+    <div style="overflow-x: auto; min-height: 380px; background: #080a0f;">
+      <table class="l2wt-table">
+        <thead>
+          <tr>
+            <th style="width: 46%;">Goods</th>
+            <th style="width: 14%; text-align: center;">Total</th>
+            <th style="width: 25%; text-align: right;">Price</th>
+            <th style="width: 15%; text-align: center;">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${filtered.length === 0 ? `
+            <tr>
+              <td colspan="4" style="text-align: center; padding: 48px 16px; color: #94a3b8; font-family: 'Cinzel', serif;">
+                <div style="font-size: 32px; margin-bottom: 8px;">🏛️</div>
+                <div style="font-size: 15px; color: #ffd877; margin-bottom: 4px; font-weight: bold;">Nenhum item anunciado nesta categoria</div>
+                <div style="font-size: 11px; color: #64748b; font-family: 'Inter', sans-serif;">
+                  Todos os itens deste mercado vêm de jogadores reais. Clique em <strong style="color: #67e8f9;">'My items'</strong> no topo para anunciar o seu!
                 </div>
-                <div style="flex: 1; min-width: 0;">
-                  <div style="font-size: 13px; font-weight: bold; color: #f4d58a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                    ${l.item.enchant > 0 ? `<span style="color:#60a5fa;">+${l.item.enchant}</span> ` : ''}${l.item.name}
-                  </div>
-                  <div style="font-size: 11px; color: #94a3b8; font-family: 'Inter', sans-serif; margin-top: 2px;">
-                    Qtd: <strong style="color:#fff;">${l.quantity}x</strong> · Vendedor: <span style="color:${l.isPlayerListing ? '#34d399' : '#a78bfa'}; font-weight:bold;">${l.sellerName}</span>
-                  </div>
-                </div>
-              </div>
+              </td>
+            </tr>
+          ` : filtered.map(l => {
+            const isAdena = l.currency === 'adena';
+            const currencyIcon = isAdena ? '🪙' : '👑';
+            const currencyColor = isAdena ? '#ffd877' : '#60a5fa';
+            const totalCost = Number(l.totalPrice) || (l.pricePerUnit * l.quantity);
+            const isOwnListing = MarketService._isMyListing(l, state);
+            const enchantStr = (l.item?.enchant && l.item.enchant > 0) ? `<span style="color: #38bdf8; font-weight: bold; margin-right: 4px;">+${l.item.enchant}</span>` : '';
 
-              <!-- Price & Buy Button -->
-              <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.06); pt: 8px; margin-top: 4px; padding-top: 8px;">
-                <div>
-                  <div style="font-size: 10px; color: #94a3b8; font-family: 'Inter', sans-serif;">Preço Total:</div>
-                  <div style="font-size: 14px; font-weight: bold; color: ${currencyColor}; font-family: 'IBM Plex Mono', monospace;">
-                    ${currencyIcon} ${totalCost.toLocaleString()} ${isAdena ? 'Adena' : 'AC'}
+            return `
+              <tr class="l2wt-listing-row" data-search="${(l.item.name + ' ' + l.sellerName).toLowerCase()}">
+                <!-- Goods: Authentic Radial Slot + Enchant + Name + Seller -->
+                <td>
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 36px; height: 36px; background: radial-gradient(circle at 50% 35%, #56161b 0%, #200608 100%); border: 1px solid rgba(212,167,68,0.45); border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: inset 0 0 6px rgba(0,0,0,0.8);">
+                      ${getItemIcon(l.item)}
+                    </div>
+                    <div style="min-width: 0;">
+                      <div style="font-size: 12px; font-weight: bold; color: #f4d58a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                        ${enchantStr}${l.item.name}
+                      </div>
+                      <div style="font-size: 10px; color: #94a3b8; font-family: 'Inter', sans-serif; margin-top: 1px;">
+                        Vendedor: <span style="color: ${l.isPlayerListing ? '#34d399' : '#a78bfa'}; font-weight: 600;">${l.sellerName}</span>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+
+                <!-- Total Quantity -->
+                <td style="text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #cbd5e1; font-weight: 600;">
+                  ${Number(l.quantity).toLocaleString()}
+                </td>
+
+                <!-- Unit Price / Total Price -->
+                <td style="text-align: right; font-family: 'IBM Plex Mono', monospace; font-size: 12px;">
+                  <div style="color: ${currencyColor}; font-weight: bold;">
+                    ${currencyIcon} ${totalCost.toLocaleString()}
                   </div>
                   ${l.quantity > 1 ? `
-                    <div style="font-size: 10px; color: #64748b; font-family: 'IBM Plex Mono', monospace;">
-                      (${l.pricePerUnit.toLocaleString()} / un)
+                    <div style="font-size: 10px; color: #64748b;">
+                      (${Number(l.pricePerUnit).toLocaleString()} /un)
                     </div>
                   ` : ''}
-                </div>
+                </td>
 
-                ${isOwnListing ? `
-                  <button class="market-cancel-btn action-btn" data-id="${l.id}" style="background: rgba(239,68,68,0.2); border: 1px solid #ef4444; color: #fca5a5; padding: 6px 12px; border-radius: 6px; font-size: 11px; cursor: pointer; font-weight: bold;">
-                    ✕ Cancelar
-                  </button>
-                ` : `
-                  <button class="market-buy-btn action-btn action-btn--primary" data-id="${l.id}" style="padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; font-family: 'Cinzel', serif;">
-                    🛒 Comprar
-                  </button>
-                `}
-              </div>
-
-            </div>
-          `;
-        }).join('')}
-      </div>
-      <div id="market-empty-search-state" style="display: none; text-align: center; padding: 30px 16px; color: #94a3b8; font-size: 13px; font-family: 'Cinzel', serif; background: rgba(15,20,30,0.5); border: 1px dashed rgba(212,167,68,0.25); border-radius: 8px; margin-top: 10px;">
-        🔍 Nenhum item encontrado para esta busca.
-      </div>
-    `}
+                <!-- Action: Buy or Cancel -->
+                <td style="text-align: center;">
+                  ${isOwnListing ? `
+                    <button class="market-cancel-btn action-btn" data-id="${l.id}" style="background: rgba(239,68,68,0.2); border: 1px solid #ef4444; color: #fca5a5; padding: 4px 10px; border-radius: 4px; font-size: 11px; cursor: pointer; font-weight: bold;">
+                      ✕ Cancelar
+                    </button>
+                  ` : `
+                    <button class="l2wt-buy-btn market-buy-btn" data-id="${l.id}">
+                      Buy
+                    </button>
+                  `}
+                </td>
+              </tr>
+            `;
+          }).join('')}
+          <tr id="l2wt-empty-search-row" style="display: none;">
+            <td colspan="4" style="text-align: center; padding: 30px 16px; color: #94a3b8; font-size: 12px; font-family: 'Cinzel', serif;">
+              🔍 Nenhum item encontrado para esta busca.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   `;
 }
 
@@ -535,6 +578,44 @@ function renderMySalesTab(state, salesData) {
  * Event Listeners da Interface do Mercado
  */
 function attachMarketEvents(container, state, callbacks = {}) {
+  // World Trade Banner: Alternar para "My items" e voltar
+  const myItemsBtn = container.querySelector('#btn-world-trade-my-items');
+  if (myItemsBtn) {
+    myItemsBtn.onclick = () => {
+      _activeMarketTab = 'my_sales';
+      renderMarketTab(container, state, callbacks);
+    };
+  }
+
+  const backMarketBtn = container.querySelector('#btn-world-trade-back-market');
+  if (backMarketBtn) {
+    backMarketBtn.onclick = () => {
+      _activeMarketTab = 'buy';
+      renderMarketTab(container, state, callbacks);
+    };
+  }
+
+  // World Trade: Abas de Categoria (Imagem 1)
+  container.querySelectorAll('.l2wt-tab').forEach(btn => {
+    btn.onclick = () => {
+      const cat = btn.dataset.cat;
+      if (cat === 'collection') {
+        showMarketToast('O sistema de Coleções estará disponível no próximo Chronicle!', 'info');
+        return;
+      }
+      _selectedCategory = cat;
+      renderMarketTab(container, state, callbacks);
+    };
+  });
+
+  // World Trade: Filtro de Moeda
+  container.querySelectorAll('.l2wt-cur-filter').forEach(btn => {
+    btn.onclick = () => {
+      _currencyFilter = btn.dataset.cur;
+      renderMarketTab(container, state, callbacks);
+    };
+  });
+
   // Troca de sub-abas do Mercado
   container.querySelectorAll('.market-nav-btn').forEach(btn => {
     btn.onclick = () => {
@@ -543,7 +624,7 @@ function attachMarketEvents(container, state, callbacks = {}) {
     };
   });
 
-  // Filtro de Categoria
+  // Filtro de Categoria Legado (se houver)
   container.querySelectorAll('.market-cat-btn').forEach(btn => {
     btn.onclick = () => {
       _selectedCategory = btn.dataset.cat;
@@ -551,7 +632,7 @@ function attachMarketEvents(container, state, callbacks = {}) {
     };
   });
 
-  // Filtro de Moeda
+  // Filtro de Moeda Legado
   container.querySelectorAll('.market-cur-filter').forEach(btn => {
     btn.onclick = () => {
       _currencyFilter = btn.dataset.cur;
@@ -565,6 +646,22 @@ function attachMarketEvents(container, state, callbacks = {}) {
     searchInput.oninput = (e) => {
       _searchQuery = e.target.value;
       const q = _searchQuery.trim().toLowerCase();
+      
+      // Busca nas linhas da tabela World Trade
+      const rows = container.querySelectorAll('.l2wt-listing-row');
+      let visibleRowCount = 0;
+      rows.forEach(row => {
+        const text = row.dataset.search || '';
+        const matches = !q || text.includes(q);
+        row.style.display = matches ? '' : 'none';
+        if (matches) visibleRowCount++;
+      });
+      const emptySearchRow = container.querySelector('#l2wt-empty-search-row');
+      if (emptySearchRow) {
+        emptySearchRow.style.display = (visibleRowCount === 0 && rows.length > 0) ? '' : 'none';
+      }
+
+      // Busca nos cards legados (se houver)
       const cards = container.querySelectorAll('.market-listing-card');
       let visibleCount = 0;
       cards.forEach(card => {

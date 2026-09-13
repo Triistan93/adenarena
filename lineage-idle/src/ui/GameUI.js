@@ -22,6 +22,7 @@ import {
 } from '../services/EquipmentService.js';
 import { getCraftLevelReq, getRecipeMaterials, canCraft, getRecipeDef, calculateMaxCraftableQty } from '../services/CraftService.js';
 import { rollMysticStock } from '../services/ShopService.js';
+import { getArmorType, getWeaponType } from '../data/items/item_class_rules.js';
 import { classSatisfies, getClassSkills, checkClassAdvancement, SHARED_SKILL_IDS, getSharedSkills, isMageClass, getSharedSkillIdsForClass, getVisibleSkillsForCharacter, getSkillVisibility, SKILL_VISIBILITY_STATES, getCharacterProgressionState, isSkillAvailableForCharacter, isSkillAllowedForClass } from '../services/CharacterService.js';
 import { getClass, getStats, getActiveSetBonuses, getBaseAttributes } from '../engine/StatsEngine.js';
 import { CP_WEIGHTS } from '../data/balance/cpBalance.js';
@@ -4177,6 +4178,169 @@ let currentShopSlot = 'all';
 let currentShopQty = 1;
 let currentShopSearch = '';
 
+// Estados do Sistema de Comércio Autêntico Lineage 2
+let _shopViewMode = 'dialogue'; // 'dialogue' (Imagem 1) | 'store' (Imagem 2)
+let _dialogueCategory = 'main'; // 'main' | 'weapons' | 'armors' | 'accessories' | 'consumables' | 'others'
+let _activeStoreCategory = 'weapons'; // 'weapons' | 'armors' | 'accessories' | 'consumables' | 'others'
+let _activeStoreSubcategory = 'all';
+let _activeStoreTab = 'buy'; // 'buy' | 'sell' | 'refund'
+let _purchaseCart = []; // [{ id, name, icon, slot, unitPrice, qty, rarity, def }]
+
+// Estados da Forja Imperial Autêntica (Imagem 5 e Imagem 2/3)
+let _forgeViewMode = 'dialogue'; // 'dialogue' (Wilbert Imagem 5) | 'workspace'
+let _forgeWilbertTopic = 'main'; // 'main' | 'taxes'
+
+export const SHOP_CATEGORY_TREE = {
+  weapons: {
+    id: 'weapons',
+    name: 'Comprar Armas',
+    icon: '⚔️',
+    dialoguePrompt: 'Qual tipo de armamento você procura para as suas caçadas em Aden?',
+    subcategories: [
+      { id: 'all', name: 'Todas as Armas', icon: '⚔️' },
+      { id: 'bows', name: 'Arcos & Bestas', icon: '🏹' },
+      { id: 'swords', name: 'Espadas & Duals', icon: '🗡️' },
+      { id: 'staves', name: 'Cajados & Cetros Mágicos', icon: '🪄' },
+      { id: 'daggers', name: 'Adagas & Facas', icon: '🗡' },
+      { id: 'blunts', name: 'Maças, Martelos & Machados', icon: '🔨' },
+      { id: 'polearms', name: 'Lanças & Armas de Haste', icon: '🔱' },
+      { id: 'fists', name: 'Punhos & Garras', icon: '🥊' }
+    ]
+  },
+  armors: {
+    id: 'armors',
+    name: 'Comprar Armaduras',
+    icon: '🛡️',
+    dialoguePrompt: 'Uma boa armadura faz a diferença entre a glória e a morte. O que procura?',
+    subcategories: [
+      { id: 'all', name: 'Todas as Armaduras', icon: '🛡️' },
+      { id: 'heavy', name: 'Armaduras Pesadas (Heavy)', icon: '🛡️' },
+      { id: 'light', name: 'Armaduras Leves (Light)', icon: '🥋' },
+      { id: 'robe', name: 'Túnicas & Robes Mágicos', icon: '👘' },
+      { id: 'shields', name: 'Escudos & Sigilos', icon: '🔰' },
+      { id: 'parts', name: 'Elmos, Luvas & Botas', icon: '🪖' }
+    ]
+  },
+  accessories: {
+    id: 'accessories',
+    name: 'Comprar Acessórios',
+    icon: '📿',
+    dialoguePrompt: 'Joias encantadas e relíquias de nobreza aumentam seu poder arcano.',
+    subcategories: [
+      { id: 'all', name: 'Todos os Acessórios', icon: '📿' },
+      { id: 'jewels', name: 'Joias (Colares, Brincos, Anéis)', icon: '💎' },
+      { id: 'cloaks', name: 'Capas & Mantos', icon: '🧣' },
+      { id: 'belts', name: 'Cintos Místicos (Belts)', icon: '🪢' },
+      { id: 'special', name: 'Broches, Talismãs & Agathions', icon: '❇️' }
+    ]
+  },
+  consumables: {
+    id: 'consumables',
+    name: 'Comprar Consumíveis',
+    icon: '🧪',
+    dialoguePrompt: 'Suprimentos essenciais: SoulShots, poções e pergaminhos sagrados.',
+    subcategories: [
+      { id: 'all', name: 'Todos os Consumíveis', icon: '🧪' },
+      { id: 'shots', name: 'SoulShots & SpiritShots', icon: '✨' },
+      { id: 'potions', name: 'Poções de Cura, Mana & Buffs', icon: '🍷' },
+      { id: 'scrolls', name: 'Pergaminhos de Encanto & Teleporte', icon: '📜' },
+      { id: 'books', name: 'Livros & Tomos Sagrados', icon: '📖' }
+    ]
+  },
+  others: {
+    id: 'others',
+    name: 'Mercadorias Místicas & Forja',
+    icon: '🌟',
+    dialoguePrompt: 'Relíquias raras do Empório, cristais e minérios nobres para a forja.',
+    subcategories: [
+      { id: 'mystic', name: 'Empório Místico Ancestral', icon: '🔮' },
+      { id: 'materials', name: 'Minérios & Cristais de Forja (D-S)', icon: '💎' },
+      { id: 'dyes', name: 'Tinturas & Dyes (Henna)', icon: '🖊️' }
+    ]
+  }
+};
+
+/**
+ * Valida se um item pertence à categoria e subcategoria selecionadas.
+ */
+export function matchesShopCategory(def, category, subcat) {
+  if (!def) return false;
+  const id = (def.id || '').toLowerCase();
+  const name = (def.name || '').toLowerCase();
+  const slot = (def.slot || '').toLowerCase();
+  const desc = (def.desc || '').toLowerCase();
+  const text = `${id} ${name} ${desc}`;
+
+  // 1. Armas
+  if (category === 'weapons') {
+    if (slot !== 'weapon') return false;
+    if (!subcat || subcat === 'all') return true;
+    if (subcat === 'bows') return /bow|crossbow/.test(id) || /bow|crossbow/.test(name);
+    if (subcat === 'staves') return /staff|wand|scepter|magicblunt|crucifix|homunkulus|tear/.test(id) || /staff|wand|scepter/.test(name) || (/mace/.test(name) && (def.matk > (def.atk || 0)));
+    if (subcat === 'daggers') return /dagger|knife|sword_breaker/.test(id) || /dagger|knife/.test(name);
+    if (subcat === 'blunts') return (/mace|hammer|axe|blunt|morning_star|yaksa|elysian|basalt/.test(id) || /mace|hammer|axe/.test(name)) && !/magicblunt/.test(id) && !(def.matk > (def.atk || 0));
+    if (subcat === 'polearms') return /spear|lance|halberd|glaive|pike/.test(id) || /spear|lance|halberd|glaive/.test(name);
+    if (subcat === 'fists') return /fist|claw|knuckle|cestus/.test(id) || /fist|claw|knuckle/.test(name);
+    if (subcat === 'swords') {
+      const isOther = /bow|crossbow|staff|wand|scepter|magicblunt|crucifix|homunkulus|tear|dagger|knife|sword_breaker|mace|hammer|axe|spear|lance|halberd|glaive|fist|claw|knuckle/.test(id);
+      return !isOther;
+    }
+    return true;
+  }
+
+  // 2. Armaduras
+  if (category === 'armors') {
+    const isArmorSlot = ['armor', 'chest', 'legs', 'helmet', 'gloves', 'boots', 'shield'].includes(slot);
+    if (!isArmorSlot) return false;
+    if (!subcat || subcat === 'all') return true;
+    if (subcat === 'shields') return slot === 'shield' || /shield|sigil/.test(id);
+    if (subcat === 'parts') return ['helmet', 'gloves', 'boots', 'legs'].includes(slot);
+    if (subcat === 'heavy') return getArmorType(id, name) === 'heavy' || (/heavy|plate|breast|protection/.test(text) && !/light|robe/.test(text));
+    if (subcat === 'light') return getArmorType(id, name) === 'light' || (/light|leather|manticore|theca|draconic/.test(text) && !/heavy|robe/.test(text));
+    if (subcat === 'robe') return getArmorType(id, name) === 'robe' || (/robe|tunic|arcana|karmian|devotion/.test(text) && !/heavy|light/.test(text));
+    return true;
+  }
+
+  // 3. Acessórios
+  if (category === 'accessories') {
+    const isAccSlot = ['ring', 'necklace', 'earring', 'belt', 'cloak', 'brooch', 'talisman', 'bracelet', 'hair'].includes(slot);
+    if (!isAccSlot && !/ring|necklace|earring|belt|cloak|brooch|talisman|bracelet/.test(id)) return false;
+    if (!subcat || subcat === 'all') return true;
+    if (subcat === 'jewels') return ['ring', 'necklace', 'earring'].includes(slot) || /ring|necklace|earring/.test(id);
+    if (subcat === 'cloaks') return slot === 'cloak' || /cloak|cape/.test(id);
+    if (subcat === 'belts') return slot === 'belt' || /belt/.test(id);
+    if (subcat === 'special') return ['brooch', 'talisman', 'bracelet', 'hair'].includes(slot) || /brooch|talisman|bracelet|agathion/.test(id);
+    return true;
+  }
+
+  // 4. Consumíveis
+  if (category === 'consumables') {
+    const isConsumable = ['potion', 'consumable', 'scroll', 'powerup', 'spellbook'].includes(slot) ||
+      /potion|elixir|tea|soulshot|spiritshot|scroll|teleport|resurrection|rebirth|spellbook|tome_|book_|codex/.test(id);
+    if (!isConsumable) return false;
+    if (!subcat || subcat === 'all') return true;
+    if (subcat === 'shots') return /soulshot|spiritshot/.test(id);
+    if (subcat === 'potions') return (slot === 'potion' || /potion|elixir|tea|draught/.test(id)) && !/soulshot|spiritshot/.test(id);
+    if (subcat === 'scrolls') return (/scroll|teleport|resurrection|rebirth/.test(id) || slot === 'scroll') && !/spellbook/.test(id);
+    if (subcat === 'books') return slot === 'spellbook' || /spellbook|book_|codex|tome_/.test(id) || (def.desc && def.desc.toLowerCase().includes('aprender'));
+    return true;
+  }
+
+  // 5. Outros (Empório & Materiais)
+  if (category === 'others') {
+    if (subcat === 'mystic') return false; // Mystic utiliza state.mysticShopInventory
+    if (subcat === 'materials') {
+      return /crystal_[dcbpas]|iron_ore|suede|varnish|charcoal|coal|silver_nugget|oriharukon|mithril|stone/.test(id) || slot === 'material';
+    }
+    if (subcat === 'dyes') {
+      return /dye|henna|tattoo/.test(id) || slot === 'dye';
+    }
+    return /crystal_[dcbpas]|iron_ore|suede|varnish|charcoal|coal|silver_nugget|oriharukon|mithril|stone|dye|henna|tattoo/.test(id);
+  }
+
+  return true;
+}
+
 /**
  * Atualiza os contadores da Barra de Recursos Contextual do Império (Header).
  */
@@ -4212,6 +4376,10 @@ export function updateImperialEconomyHeader(state) {
   }
 }
 
+/**
+ * Ponto de entrada central para renderizar a Guia Mercador.
+ * Alterna suavemente entre o Estágio 1 (Diálogo NPC) e o Estágio 2 (Store Clássica L2).
+ */
 export function updateShopUI(state, callbacks = {}) {
   const root = getRoot();
   updateImperialEconomyHeader(state);
@@ -4219,31 +4387,238 @@ export function updateShopUI(state, callbacks = {}) {
   const goldEl = findElement('gold-count') || findElement('shop-gold');
   if (goldEl) goldEl.textContent = (state.gold || 0).toLocaleString();
 
-  const container = findElement('shop-items-container') || findElement('shop-list');
-  if (!container) return;
+  // Timer do Mercador Místico (3 horas)
+  const now = Date.now();
+  const THREE_HOURS = 3 * 3600 * 1000;
+  if (!state.mysticShopLastReset || (now - state.mysticShopLastReset >= THREE_HOURS)) {
+    state.mysticShopLastReset = now;
+    state.mysticShopInventory = rollMysticStock();
+  }
 
-  // 1. Re-vincular subtabs da loja
-  root.querySelectorAll('.shop-subtab').forEach(btn => {
-    const tabName = btn.dataset.shoptab || 'gear';
-    btn.classList.toggle('active', tabName === currentShopTab);
-    btn.onclick = (e) => {
+  const mysticTimerEl = root.querySelector('#mystic-shop-timer');
+  const mysticCountdown = root.querySelector('#mystic-timer-countdown');
+  if (mysticTimerEl) {
+    mysticTimerEl.style.display = (_shopViewMode === 'store' && _activeStoreCategory === 'others' && _activeStoreSubcategory === 'mystic') ? 'inline-flex' : 'none';
+    if (mysticCountdown) {
+      const remainingMs = Math.max(0, THREE_HOURS - (now - state.mysticShopLastReset));
+      const hours = Math.floor(remainingMs / (3600 * 1000));
+      const mins = Math.floor((remainingMs % (3600 * 1000)) / (60 * 1000));
+      const secs = Math.floor((remainingMs % (60 * 1000)) / 1000);
+      mysticCountdown.textContent = `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+  }
+
+  if (_shopViewMode === 'dialogue') {
+    renderDialogueView(state, callbacks);
+  } else {
+    renderStoreView(state, callbacks);
+  }
+}
+
+/**
+ * Renderiza o Estágio 1: Janela de Diálogo / Chat NPC (Imagem 1 de Referência).
+ */
+function renderDialogueView(state, callbacks) {
+  const root = getRoot();
+  const dialogueView = root.querySelector('#shop-dialogue-view');
+  const storeView = root.querySelector('#shop-store-view');
+  if (dialogueView) dialogueView.style.display = 'flex';
+  if (storeView) storeView.style.display = 'none';
+
+  const npcNameEl = root.querySelector('#shop-npc-name');
+  const npcTextEl = root.querySelector('#shop-npc-text');
+  const optionsEl = root.querySelector('#shop-dialogue-options');
+  if (!optionsEl) return;
+
+  if (_dialogueCategory === 'main') {
+    if (npcNameEl) npcNameEl.textContent = 'Trader Woodrow:';
+    if (npcTextEl) npcTextEl.textContent = 'Can I show you anything in particular? We are sure to have something for everyone.';
+
+    optionsEl.innerHTML = `
+      <button class="l2chat-option-btn" data-dialogue-cat="weapons">
+        <span class="l2chat-bubble-icon">🗨️</span>
+        <div style="flex:1;">
+          <div class="l2chat-option-text">Comprar Armas</div>
+          <div class="l2chat-option-hint">Arcos, Espadas, Cajados, Adagas, Maças, Lanças, Punhos</div>
+        </div>
+        <span style="color:#ffd877; font-size:12px;">➔</span>
+      </button>
+
+      <button class="l2chat-option-btn" data-dialogue-cat="armors">
+        <span class="l2chat-bubble-icon">🗨️</span>
+        <div style="flex:1;">
+          <div class="l2chat-option-text">Comprar Armaduras</div>
+          <div class="l2chat-option-hint">Heavy, Light, Robe, Escudos e Peças de Proteção</div>
+        </div>
+        <span style="color:#ffd877; font-size:12px;">➔</span>
+      </button>
+
+      <button class="l2chat-option-btn" data-dialogue-cat="accessories">
+        <span class="l2chat-bubble-icon">🗨️</span>
+        <div style="flex:1;">
+          <div class="l2chat-option-text">Comprar Acessórios</div>
+          <div class="l2chat-option-hint">Joias Ancestrais, Capas, Cintos, Broches e Talismãs</div>
+        </div>
+        <span style="color:#ffd877; font-size:12px;">➔</span>
+      </button>
+
+      <button class="l2chat-option-btn" data-dialogue-cat="consumables">
+        <span class="l2chat-bubble-icon">🗨️</span>
+        <div style="flex:1;">
+          <div class="l2chat-option-text">Comprar Consumíveis</div>
+          <div class="l2chat-option-hint">SoulShots, SpiritShots, Poções, Pergaminhos e Livros de Magia</div>
+        </div>
+        <span style="color:#ffd877; font-size:12px;">➔</span>
+      </button>
+
+      <button class="l2chat-option-btn" data-dialogue-cat="others">
+        <span class="l2chat-bubble-icon">🗨️</span>
+        <div style="flex:1;">
+          <div class="l2chat-option-text">Mercadorias Místicas &amp; Forja (Outros)</div>
+          <div class="l2chat-option-hint">Empório Místico com Reroll, Minérios, Cristais D-S e Tinturas</div>
+        </div>
+        <span style="color:#ffd877; font-size:12px;">➔</span>
+      </button>
+
+      <button class="l2chat-option-btn" data-dialogue-action="sell" style="border-color:rgba(239,68,68,0.35);">
+        <span class="l2chat-bubble-icon" style="color:#f87171;">🗨️</span>
+        <div style="flex:1;">
+          <div class="l2chat-option-text" style="color:#fca5a5;">Vender Itens da Mochila</div>
+          <div class="l2chat-option-hint">Venda itens comuns pelo valor de 50% de Adena</div>
+        </div>
+        <span style="color:#fca5a5; font-size:12px;">➔</span>
+      </button>
+
+      <button class="l2chat-option-btn" data-dialogue-action="refund" style="border-color:rgba(245,158,11,0.35);">
+        <span class="l2chat-bubble-icon" style="color:#fbbf24;">🗨️</span>
+        <div style="flex:1;">
+          <div class="l2chat-option-text" style="color:#fde68a;">Recompra de Itens</div>
+          <div class="l2chat-option-hint">Recuperar itens vendidos recentemente</div>
+        </div>
+        <span style="color:#fde68a; font-size:12px;">➔</span>
+      </button>
+    `;
+  } else {
+    const catData = SHOP_CATEGORY_TREE[_dialogueCategory] || SHOP_CATEGORY_TREE.weapons;
+    if (npcNameEl) npcNameEl.textContent = 'Trader Woodrow:';
+    if (npcTextEl) npcTextEl.textContent = catData.dialoguePrompt;
+
+    let subHtml = catData.subcategories.map(sub => `
+      <button class="l2chat-option-btn" data-dialogue-open-store="${catData.id}" data-dialogue-subcat="${sub.id}">
+        <span class="l2chat-bubble-icon">🗨️</span>
+        <div class="l2chat-option-text">${sub.icon} ${sub.name}</div>
+        <span style="color:#ffd877; font-size:12px;">➔</span>
+      </button>
+    `).join('');
+
+    subHtml += `
+      <button class="l2chat-option-btn l2chat-back-btn" data-dialogue-back="true">
+        <span style="font-size:14px;">↩️</span>
+        <div class="l2chat-option-text" style="color:#ffd877;">Voltar ao Menu Principal</div>
+      </button>
+    `;
+
+    optionsEl.innerHTML = subHtml;
+  }
+
+  optionsEl.onclick = (e) => {
+    const catBtn = e.target.closest('[data-dialogue-cat]');
+    if (catBtn) {
+      _dialogueCategory = catBtn.dataset.dialogueCat;
+      renderDialogueView(state, callbacks);
+      return;
+    }
+
+    const backBtn = e.target.closest('[data-dialogue-back]');
+    if (backBtn) {
+      _dialogueCategory = 'main';
+      renderDialogueView(state, callbacks);
+      return;
+    }
+
+    const openStoreBtn = e.target.closest('[data-dialogue-open-store]');
+    if (openStoreBtn) {
+      _activeStoreCategory = openStoreBtn.dataset.dialogueOpenStore;
+      _activeStoreSubcategory = openStoreBtn.dataset.dialogueSubcat || 'all';
+      _activeStoreTab = 'buy';
+      _shopViewMode = 'store';
+      updateShopUI(state, callbacks);
+      return;
+    }
+
+    const actionBtn = e.target.closest('[data-dialogue-action]');
+    if (actionBtn) {
+      const act = actionBtn.dataset.dialogueAction;
+      _activeStoreTab = act;
+      _shopViewMode = 'store';
+      updateShopUI(state, callbacks);
+      return;
+    }
+  };
+}
+
+/**
+ * Renderiza o Estágio 2: Janela Store Clássica do Lineage 2 (Imagem 2 de Referência).
+ */
+function renderStoreView(state, callbacks) {
+  const root = getRoot();
+  const dialogueView = root.querySelector('#shop-dialogue-view');
+  const storeView = root.querySelector('#shop-store-view');
+  if (dialogueView) dialogueView.style.display = 'none';
+  if (storeView) storeView.style.display = 'flex';
+
+  // 1. Botões de Voltar ao Diálogo e Fechar
+  const backBtn = root.querySelector('#shop-back-to-dialogue-btn');
+  if (backBtn) {
+    backBtn.onclick = () => {
+      _shopViewMode = 'dialogue';
+      _dialogueCategory = 'main';
+      updateShopUI(state, callbacks);
+    };
+  }
+  const closeBtn = root.querySelector('#shop-store-close-btn');
+  if (closeBtn) {
+    closeBtn.onclick = () => {
+      _shopViewMode = 'dialogue';
+      _dialogueCategory = 'main';
+      updateShopUI(state, callbacks);
+    };
+  }
+
+  // 2. Título da Janela Store com Categoria Ativa
+  const winTitle = root.querySelector('#shop-window-title');
+  if (winTitle) {
+    const catName = SHOP_CATEGORY_TREE[_activeStoreCategory]?.name || 'Loja';
+    winTitle.textContent = `Store — ${catName}`;
+  }
+
+  // 3. Abas Principais (Buy, Sell, Refund)
+  root.querySelectorAll('.l2store-tab').forEach(tab => {
+    const t = tab.dataset.shoptab;
+    tab.classList.toggle('active', t === _activeStoreTab);
+    tab.onclick = (e) => {
       e.preventDefault();
-      e.stopPropagation();
-      currentShopTab = tabName;
+      _activeStoreTab = t;
       updateShopUI(state, callbacks);
     };
   });
 
-  // 2. Barra de Busca em Tempo Real
+  // 4. Medidor de Capacidade da Mochila
+  const inv = state.inventory || [];
+  const maxSlots = getMaxInventorySlots ? getMaxInventorySlots(state) : (state.maxInventorySlots || 150);
+  const usedSlotsEl = root.querySelector('#shop-inv-used');
+  const maxSlotsEl = root.querySelector('#shop-inv-max');
+  if (usedSlotsEl) usedSlotsEl.textContent = inv.length;
+  if (maxSlotsEl) maxSlotsEl.textContent = maxSlots;
+
+  // 5. Barra de Busca em Tempo Real
   const searchInput = root.querySelector('#shop-search-input');
   const clearSearchBtn = root.querySelector('#shop-clear-search-btn');
   if (searchInput && !searchInput._bound) {
     searchInput._bound = true;
     searchInput.oninput = (e) => {
       currentShopSearch = (e.target.value || '').trim().toLowerCase();
-      if (clearSearchBtn) {
-        clearSearchBtn.style.display = currentShopSearch ? 'inline-block' : 'none';
-      }
+      if (clearSearchBtn) clearSearchBtn.style.display = currentShopSearch ? 'inline-block' : 'none';
       updateShopUI(state, callbacks);
     };
   }
@@ -4257,222 +4632,110 @@ export function updateShopUI(state, callbacks = {}) {
     };
   }
 
-  // 3. Filtros de Grau (Grade)
-  root.querySelectorAll('#shop-grade-filters .shop-filter-btn').forEach(btn => {
-    const gradeCode = btn.dataset.shopgrade || 'all';
-    btn.classList.toggle('active', gradeCode === currentShopGrade);
-    btn.onclick = (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      currentShopGrade = gradeCode;
+  // 6. Subcategorias & Graus (visíveis na aba Buy)
+  const filterToolbar = root.querySelector('#shop-filter-toolbar');
+  if (filterToolbar) {
+    filterToolbar.style.display = (_activeStoreTab === 'buy') ? 'flex' : 'none';
+  }
+
+  const subcatStrip = root.querySelector('#shop-subcat-strip');
+  if (subcatStrip && _activeStoreTab === 'buy') {
+    const currentCatObj = SHOP_CATEGORY_TREE[_activeStoreCategory] || SHOP_CATEGORY_TREE.weapons;
+    subcatStrip.innerHTML = currentCatObj.subcategories.map(sub => `
+      <button class="l2store-subcat-btn ${sub.id === _activeStoreSubcategory ? 'active' : ''}" data-subcat-id="${sub.id}">
+        ${sub.icon} ${sub.name}
+      </button>
+    `).join('');
+
+    subcatStrip.querySelectorAll('.l2store-subcat-btn').forEach(btn => {
+      btn.onclick = () => {
+        _activeStoreSubcategory = btn.dataset.subcatId;
+        updateShopUI(state, callbacks);
+      };
+    });
+  }
+
+  // 7. Botões de Grau (NG, D, C, B, A, S)
+  root.querySelectorAll('#shop-grade-strip .l2store-grade-btn').forEach(btn => {
+    const grade = btn.dataset.shopgrade;
+    btn.classList.toggle('active', grade === currentShopGrade);
+    btn.onclick = () => {
+      currentShopGrade = grade;
       updateShopUI(state, callbacks);
     };
   });
 
-  // 4. Filtros de Slot
-  root.querySelectorAll('#shop-slot-filters .shop-filter-btn').forEach(btn => {
-    const slotCode = btn.dataset.shopslot || 'all';
-    btn.classList.toggle('active', slotCode === currentShopSlot);
-    btn.onclick = (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      currentShopSlot = slotCode;
-      updateShopUI(state, callbacks);
-    };
-  });
-
-  // 5. Filtros de Quantidade
-  root.querySelectorAll('#shop-batch-filters .shop-filter-btn').forEach(btn => {
-    const qtyVal = parseInt(btn.dataset.shopqty, 10) || 1;
-    btn.classList.toggle('active', qtyVal === currentShopQty);
-    btn.onclick = (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      currentShopQty = qtyVal;
-      updateShopUI(state, callbacks);
-    };
-  });
-
-  // 6. Visibilidade condicional das linhas de filtros
-  const filterBar = root.querySelector('#shop-filter-bar');
-  const gradeRow = root.querySelector('#shop-grade-filter-row');
-  const slotRow = root.querySelector('#shop-slot-filter-row');
-  const batchRow = root.querySelector('#shop-batch-row');
-  const mysticTimerEl = root.querySelector('#mystic-shop-timer');
-  const mysticCountdown = root.querySelector('#mystic-timer-countdown');
-
-  if (filterBar) {
-    filterBar.style.display = (currentShopTab === 'currencies' || currentShopTab === 'sell') ? 'none' : 'flex';
-  }
-  if (gradeRow) {
-    gradeRow.style.display = (currentShopTab === 'gear' || currentShopTab === 'mystic') ? 'flex' : 'none';
-  }
-  if (slotRow) {
-    slotRow.style.display = (currentShopTab === 'gear' || currentShopTab === 'mystic') ? 'flex' : 'none';
-  }
-  if (batchRow) {
-    batchRow.style.display = (currentShopTab === 'potions') ? 'flex' : 'none';
-  }
-
-  // 7. Timer do Mercador Místico (3 horas)
-  const now = Date.now();
-  const THREE_HOURS = 3 * 3600 * 1000;
-  if (!state.mysticShopLastReset || (now - state.mysticShopLastReset >= THREE_HOURS)) {
-    state.mysticShopLastReset = now;
-    state.mysticShopInventory = rollMysticStock();
-  }
-
-  if (mysticTimerEl) {
-    mysticTimerEl.style.display = (currentShopTab === 'mystic') ? 'inline-flex' : 'none';
-    if (mysticCountdown) {
-      const remainingMs = Math.max(0, THREE_HOURS - (now - state.mysticShopLastReset));
-      const hours = Math.floor(remainingMs / (3600 * 1000));
-      const mins = Math.floor((remainingMs % (3600 * 1000)) / (60 * 1000));
-      const secs = Math.floor((remainingMs % (60 * 1000)) / 1000);
-      mysticCountdown.textContent = `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+  // 8. Banner do Empório Místico
+  const mysticBanner = root.querySelector('#shop-mystic-banner');
+  if (mysticBanner) {
+    const isMysticSub = (_activeStoreCategory === 'others' && _activeStoreSubcategory === 'mystic');
+    if (isMysticSub && _activeStoreTab === 'buy') {
+      mysticBanner.style.display = 'block';
+      mysticBanner.innerHTML = `
+        <div style="background:linear-gradient(135deg, rgba(35,15,55,0.9), rgba(18,10,28,0.95)); border:1px solid rgba(168,85,247,0.5); border-radius:6px; padding:10px 14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+          <div>
+            <div style="color:#e9d5ff; font-family:'Cinzel',serif; font-weight:700; font-size:13px;">🔮 Empório Místico Ancestral</div>
+            <div style="font-size:11px; color:#cbd5e1;">Relíquias raras sorteadas a cada 3 horas. Você pode forçar novos itens.</div>
+          </div>
+          <button class="l2store-action-btn primary" data-reroll-mystic="true" style="padding:4px 12px; font-size:11px;">
+            Forçar Restoque (50.000g)
+          </button>
+        </div>
+      `;
+      const rerollBtn = mysticBanner.querySelector('[data-reroll-mystic]');
+      if (rerollBtn) {
+        rerollBtn.onclick = () => {
+          if (callbacks.rerollMysticStock) callbacks.rerollMysticStock(rollMysticStock);
+          else if (typeof window !== 'undefined' && window.rerollMysticStock) window.rerollMysticStock(rollMysticStock);
+          updateShopUI(state, callbacks);
+        };
+      }
+    } else {
+      mysticBanner.style.display = 'none';
     }
+  }
+
+  // 9. RENDERIZAÇÃO DO CONTEÚDO DAS COLUNAS
+  if (_activeStoreTab === 'sell') {
+    renderStoreSellTab(state, callbacks);
+  } else if (_activeStoreTab === 'refund') {
+    renderStoreRefundTab(state, callbacks);
+  } else {
+    renderStoreBuyTab(state, callbacks);
+  }
+}
+
+/**
+ * Renderiza o Catálogo de Compras da Store (Buy Tab).
+ */
+function renderStoreBuyTab(state, callbacks) {
+  const root = getRoot();
+  const leftColTitle = root.querySelector('#shop-left-col-title');
+  const leftCountBadge = root.querySelector('#shop-left-count-badge');
+  const itemsContainer = root.querySelector('#shop-items-container');
+  const rightColTitle = root.querySelector('#shop-right-col-title');
+  const purchaseListContainer = root.querySelector('#shop-purchase-list');
+  const clearCartBtn = root.querySelector('#shop-clear-cart-btn');
+
+  if (leftColTitle) leftColTitle.textContent = 'Shop List';
+  if (rightColTitle) rightColTitle.textContent = 'Purchase List';
+  if (clearCartBtn) {
+    clearCartBtn.style.display = 'inline-block';
+    clearCartBtn.onclick = () => {
+      _purchaseCart = [];
+      renderStoreBuyTab(state, callbacks);
+    };
   }
 
   const gData = D();
   const allItems = gData?.ALL_ITEMS || {};
   const charLvl = state.level || 1;
+  const maxTier = getMaxVisibleGradeTier(charLvl);
 
-  // ═══════════════════════════════════════════════════════════════════════════
-  // RENDERIZAÇÃO DA SUB-ABA: VENDA & RECOMPRA (SELL / BUYBACK)
-  // ═══════════════════════════════════════════════════════════════════════════
-  if (currentShopTab === 'sell') {
-    const inv = state.inventory || [];
-    const buyback = state.buybackQueue || [];
-    const selectedSet = getSelectedSet(state);
-
-    let html = `
-      <div style="background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.3); border-radius:10px; padding:12px 16px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-        <div>
-          <h4 style="margin:0 0 4px 0; color:#fca5a5; font-family:'Cinzel',serif;">🧹 Balcão de Vendas &amp; Descarte</h4>
-          <p style="margin:0; font-size:11px; color:var(--text-muted);">Venda itens não utilizados da sua mochila pelo valor canônico de 50% de Adena. Itens equipados e itens travados com 🔒 (Favoritos) estão protegidos.</p>
-        </div>
-        <button class="inv-batch-btn" data-sell-junk="true" style="background:#ef4444; color:#fff; border:none; padding:8px 16px; font-weight:bold; cursor:pointer;">
-          🧹 Vender Todos os Comuns (Junk Sell)
-        </button>
-      </div>
-    `;
-
-    // Seção de Recompra (Buyback)
-    if (buyback.length > 0) {
-      html += `
-        <div style="margin-bottom:16px;">
-          <h5 style="margin:0 0 8px 0; color:var(--gilt-bright); font-family:'Cinzel',serif;">↩️ Recompra Recente (Últimos ${buyback.length} itens)</h5>
-          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:8px;">
-            ${buyback.map((entry, idx) => {
-              const item = entry.itemCopy;
-              const def = allItems[item.itemId || item.id] || item;
-              return `
-                <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(0,0,0,0.5); border:1px solid rgba(212,175,55,0.25); border-radius:8px; padding:8px 12px;">
-                  <div style="display:flex; align-items:center; gap:8px;">
-                    <div style="width:36px; height:36px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.05); border-radius:6px;">
-                      ${getItemIcon(def)}
-                    </div>
-                    <div>
-                      <div style="font-weight:bold; font-size:12px; color:#fff;">${def.name} ${item.count > 1 ? `(${item.count}x)` : ''}</div>
-                      <div style="font-size:11px; color:#f59e0b;">💰 ${entry.sellPrice.toLocaleString()}g</div>
-                    </div>
-                  </div>
-                  <button class="inv-batch-btn" data-buyback="${idx}" style="padding:4px 10px; font-size:11px;">↩️ Recomprar</button>
-                </div>
-              `;
-            }).join('')}
-          </div>
-        </div>
-      `;
-    }
-
-    // Seção de Itens da Mochila para Venda
-    html += `<h5 style="margin:0 0 8px 0; color:#fff; font-family:'Cinzel',serif;">🎒 Itens na Mochila (${inv.length} itens)</h5>`;
-
-    if (inv.length === 0) {
-      html += `<div style="padding:30px; text-align:center; color:var(--text-muted); font-size:12px;">Sua mochila está vazia.</div>`;
-    } else {
-      html += `<div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)); gap:8px;">`;
-      html += inv.map(item => {
-        const def = allItems[item.itemId || item.id] || item;
-        const sellUnit = getSellValue(item);
-        const count = item.count || 1;
-        const totalSell = sellUnit * count;
-        const isLocked = selectedSet.has(item.uid);
-        const isEquipped = Boolean(item.equipped);
-
-        let actionHtml = '';
-        if (isEquipped) {
-          actionHtml = `<span style="font-size:11px; color:#10b981; font-weight:bold;">🛡️ Equipado</span>`;
-        } else if (isLocked) {
-          actionHtml = `<span style="font-size:11px; color:#f59e0b; font-weight:bold;">🔒 Bloqueado</span>`;
-        } else {
-          actionHtml = `
-            <div style="display:flex; gap:4px;">
-              <button class="inv-batch-btn" data-sell="${item.uid}" data-qty="1" style="padding:4px 8px; font-size:11px;">Vender 1x (${sellUnit.toLocaleString()}g)</button>
-              ${count > 1 ? `<button class="inv-batch-btn" data-sell="${item.uid}" data-qty="${count}" style="padding:4px 8px; font-size:11px;">Tudo (${totalSell.toLocaleString()}g)</button>` : ''}
-            </div>
-          `;
-        }
-
-        const gradeInfo = getItemGrade(def);
-        return `
-          <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:8px 12px;">
-            <div style="display:flex; align-items:center; gap:8px;">
-              <div style="width:36px; height:36px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.05); border-radius:6px;">
-                ${getItemIcon(def)}
-              </div>
-              <div>
-                <div style="font-weight:bold; font-size:12px; color:#fff;">
-                  ${item.enchant > 0 ? `+${item.enchant} ` : ''}${def.name}
-                  ${count > 1 ? `<span style="color:#a78bfa;">(${count}x)</span>` : ''}
-                </div>
-                <div style="font-size:11px; color:var(--text-muted); display:flex; gap:6px;">
-                  <span style="color:${gradeInfo.color};">${gradeInfo.label}</span>
-                  <span>💰 Venda: ${sellUnit.toLocaleString()}g</span>
-                </div>
-              </div>
-            </div>
-            <div>${actionHtml}</div>
-          </div>
-        `;
-      }).join('');
-      html += `</div>`;
-    }
-
-    container.innerHTML = html;
-    attachShopEvents(container, callbacks);
-    return;
-  }
-
-  // Sub-aba currencies expurgada do Mercador (moedas restritas exclusivamente aos pilares de Olimpíada, Coliseu e Sete Selos)
-
-  // ═══════════════════════════════════════════════════════════════════════════
-  // CATÁLOGO REGULAR DE COMPRAS (GEAR, POTIONS, SPELLBOOKS, MYSTIC)
-  // ═══════════════════════════════════════════════════════════════════════════
   let itemsToDisplay = [];
-  const maxShopGradeTier = getMaxVisibleGradeTier(charLvl);
+  const isMystic = (_activeStoreCategory === 'others' && _activeStoreSubcategory === 'mystic');
 
-  if (currentShopTab === 'gear') {
-    itemsToDisplay = Object.values(allItems).filter(def => {
-      if (!def || !def.id || !def.slot) return false;
-      const isEquip = ['weapon', 'armor', 'helmet', 'gloves', 'boots', 'legs', 'shield', 'ring', 'necklace', 'earring', 'belt', 'cloak'].includes(def.slot);
-      if (!isEquip) return false;
-      const itemTier = getItemTierNum(def);
-      return itemTier <= maxShopGradeTier;
-    }).map(def => ({ def, rarity: 'common' }));
-  } else if (currentShopTab === 'potions') {
-    itemsToDisplay = Object.values(allItems).filter(def => {
-      if (!def || !def.id) return false;
-      return def.slot === 'potion' || def.slot === 'consumable' || def.slot === 'powerup' || def.slot === 'scroll';
-    }).map(def => ({ def, rarity: 'common' }));
-  } else if (currentShopTab === 'spellbooks') {
-    itemsToDisplay = Object.values(allItems).filter(def => {
-      if (!def || !def.id) return false;
-      const isBook = def.slot === 'spellbook' || def.id.includes('spellbook') || def.id.includes('scroll_of_') || def.id.includes('tome_') || (def.desc && def.desc.toLowerCase().includes('aprender'));
-      return isBook;
-    }).map(def => ({ def, rarity: 'rare' }));
-  } else if (currentShopTab === 'mystic') {
+  if (isMystic) {
     itemsToDisplay = (state.mysticShopInventory || []).map(item => {
       let id = item.itemId || item.id;
       if (id === 'enchant_weapon_scroll') id = 'scroll_of_enchant_weapon_';
@@ -4480,6 +4743,13 @@ export function updateShopUI(state, callbacks = {}) {
       const def = allItems[id] || (item.name ? item : null);
       return { def, rarity: item.rarity || 'rare' };
     }).filter(entry => entry.def && entry.def.name && entry.def.name !== 'undefined');
+  } else {
+    itemsToDisplay = Object.values(allItems).filter(def => {
+      if (!def || !def.id) return false;
+      if (!matchesShopCategory(def, _activeStoreCategory, _activeStoreSubcategory)) return false;
+      if (getItemTierNum(def) > maxTier) return false;
+      return true;
+    }).map(def => ({ def, rarity: 'common' }));
   }
 
   // Deduplicação por ID
@@ -4491,176 +4761,395 @@ export function updateShopUI(state, callbacks = {}) {
     return true;
   });
 
-  // Filtro de Grau (Grade)
-  if (currentShopGrade !== 'all' && (currentShopTab === 'gear' || currentShopTab === 'mystic')) {
-    itemsToDisplay = itemsToDisplay.filter(({ def }) => {
-      const grade = getItemGradeCode(def);
-      return grade === currentShopGrade;
-    });
+  // Filtro de Grau
+  if (currentShopGrade !== 'all') {
+    itemsToDisplay = itemsToDisplay.filter(({ def }) => getItemGradeCode(def) === currentShopGrade);
   }
 
-  // Filtro de Slot
-  if (currentShopSlot !== 'all' && (currentShopTab === 'gear' || currentShopTab === 'mystic')) {
-    itemsToDisplay = itemsToDisplay.filter(({ def }) => matchesSlotFilter(def, currentShopSlot));
-  }
-
-  // Filtro de Busca Textual
+  // Filtro de Busca
   if (currentShopSearch) {
     itemsToDisplay = itemsToDisplay.filter(({ def }) => {
-      const nameMatch = (def.name || '').toLowerCase().includes(currentShopSearch);
-      const descMatch = (def.desc || '').toLowerCase().includes(currentShopSearch);
-      const slotMatch = (def.slot || '').toLowerCase().includes(currentShopSearch);
-      const idMatch = (def.id || '').toLowerCase().includes(currentShopSearch);
-      const gradeMatch = getItemGradeCode(def).toLowerCase() === currentShopSearch || getItemGrade(def).label.toLowerCase().includes(currentShopSearch);
-      return nameMatch || descMatch || slotMatch || idMatch || gradeMatch;
+      const name = (def.name || '').toLowerCase();
+      const desc = (def.desc || '').toLowerCase();
+      const slot = (def.slot || '').toLowerCase();
+      const id = (def.id || '').toLowerCase();
+      return name.includes(currentShopSearch) || desc.includes(currentShopSearch) || slot.includes(currentShopSearch) || id.includes(currentShopSearch);
     });
   }
 
-  // Se estiver na aba Mystic, adicionar banner no topo
-  let headerHtml = '';
-  if (currentShopTab === 'mystic') {
-    headerHtml = `
-      <div style="background:linear-gradient(135deg, rgba(30,15,50,0.8), rgba(15,10,25,0.9)); border:1px solid rgba(168,85,247,0.4); border-radius:10px; padding:12px 16px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; width:100%;">
-        <div>
-          <h4 style="margin:0 0 4px 0; color:#e9d5ff; font-family:'Cinzel',serif;">✨ Empório Místico Ancestral</h4>
-          <p style="margin:0; font-size:11px; color:var(--text-muted);">Relíquias Raras, Épicas e Lendárias sorteadas a cada 3 horas. Você pode invocar novos itens imediatamente pagando uma taxa.</p>
-        </div>
-        <button class="inv-batch-btn" data-reroll-mystic="true" style="background:#a855f7; color:#fff; border:none; padding:8px 16px; font-weight:bold; cursor:pointer;">
-          🔮 Forçar Restoque (50.000g)
-        </button>
-      </div>
-    `;
-  }
+  if (leftCountBadge) leftCountBadge.textContent = `${itemsToDisplay.length} itens`;
 
+  // Renderizar a Coluna Esquerda: Shop List
+  if (!itemsContainer) return;
   if (itemsToDisplay.length === 0) {
-    container.innerHTML = `
-      ${headerHtml}
-      <div style="padding:30px; text-align:center; color:var(--text-muted); font-size:12px; width:100%;">
-        Nenhum item encontrado para os critérios selecionados.
+    itemsContainer.innerHTML = `
+      <div style="padding:40px 10px; text-align:center; color:#64748b; font-size:11px; grid-column:1/-1;">
+        Nenhum item encontrado nesta categoria para o filtro selecionado.
       </div>
     `;
-    attachShopEvents(container, callbacks);
-    return;
+  } else {
+    itemsContainer.innerHTML = itemsToDisplay.map(({ def, rarity }) => {
+      const gradeInfo = getItemGrade(def);
+      const reqLvl = def.req?.level || def.reqLvl || 1;
+      const isLvlOk = charLvl >= reqLvl;
+      const price = isMystic ? Math.floor((def.price || 500) * (gData?.RARITY?.[rarity]?.mult || 1) * 2) : (def.price || 100);
+      const stats = buildShopStatsSummary(def);
+      const tooltip = `${def.name} [${gradeInfo.label}]\n${stats ? stats + '\n' : ''}Preço: ${price.toLocaleString()} Adena${!isLvlOk ? `\n🔒 Requer Lv. ${reqLvl}` : ''}`;
+
+      return `
+        <div class="l2store-slot ${!isLvlOk ? 'locked' : ''}" data-add-cart="${def.id}" data-rarity="${rarity}" title="${tooltip}">
+          <span class="l2store-slot-grade grade-${gradeInfo.code}">${gradeInfo.code.toUpperCase()}</span>
+          ${getItemIcon(def)}
+          ${!isLvlOk ? `<div style="position:absolute; inset:0; background:rgba(0,0,0,0.65); display:flex; align-items:center; justify-content:center; font-size:9px; color:#f87171; font-weight:bold; font-family:'IBM Plex Mono',monospace;">Lv.${reqLvl}</div>` : ''}
+        </div>
+      `;
+    }).join('');
   }
 
-  const batchQty = (currentShopTab === 'potions') ? currentShopQty : 1;
+  // Ação de clique no slot para adicionar ao carrinho
+  itemsContainer.onclick = (e) => {
+    const slotEl = e.target.closest('[data-add-cart]');
+    if (!slotEl || slotEl.classList.contains('locked')) return;
+    const itemId = slotEl.dataset.addCart;
+    const rarity = slotEl.dataset.rarity || 'common';
+    const def = allItems[itemId];
+    if (!def) return;
 
-  container.innerHTML = headerHtml + itemsToDisplay.map(({ def, rarity }) => {
-    if (!def) return '';
+    const basePrice = isMystic ? Math.floor((def.price || 500) * (gData?.RARITY?.[rarity]?.mult || 1) * 2) : (def.price || 100);
+    const existing = _purchaseCart.find(item => item.id === itemId && item.rarity === rarity);
+    if (existing) {
+      existing.qty += 1;
+    } else {
+      _purchaseCart.push({
+        id: itemId,
+        name: def.name,
+        slot: def.slot,
+        unitPrice: basePrice,
+        qty: 1,
+        rarity,
+        def
+      });
+    }
+    renderStoreBuyTab(state, callbacks);
+  };
 
-    const reqLvl = def.req?.level || def.reqLvl || 1;
-    const isLevelOk = charLvl >= reqLvl;
-
-    const basePrice = def.price || 100;
-    const totalPrice = basePrice * batchQty;
-    const canAfford = (state.gold || 0) >= totalPrice;
-
-    const gradeInfo = getItemGrade(def);
-    const statsText = buildShopStatsSummary(def);
-    const diffText = buildShopComparisonDelta(def, state);
-
-    let buyText = `Comprar (${batchQty}x)`;
-    if (!isLevelOk) buyText = `🔒 Requer Lv. ${reqLvl}`;
-    else if (!canAfford) buyText = `💰 Gold Insuficiente`;
-
-    // Botão de "Máx" para consumíveis
-    const isStackable = def.slot === 'potion' || def.slot === 'consumable' || def.slot === 'scroll' || def.slot === 'powerup';
-    const maxAffordQty = isStackable ? Math.max(1, Math.floor((state.gold || 0) / basePrice)) : 1;
-
-    return `
-      <div class="shop-item-card imp-shop-card grade-${gradeInfo.code} rarity-${rarity} ${!isLevelOk ? 'locked' : ''}">
-        <div class="imp-shop-card-main">
-          <div class="shop-item-icon-box imp-item-frame grade-${gradeInfo.code}">
-            ${getItemIcon(def)}
-          </div>
-          <div class="shop-item-meta imp-item-meta">
-            <div class="imp-item-header">
-              <span class="shop-item-name imp-item-name">${def.name}</span>
-              <div style="display:flex; align-items:center; gap:4px;">
-                <span class="shop-grade-badge imp-item-grade-tag" style="background:${gradeInfo.color};">${gradeInfo.label}</span>
-                ${rarity !== 'common' ? `<span class="tab-tag-rarity tag-${rarity}">${rarity.toUpperCase()}</span>` : ''}
-              </div>
-            </div>
-            ${statsText ? `<div class="shop-item-stats imp-item-stats">${statsText}</div>` : ''}
-            ${diffText || ''}
-            <div class="shop-item-desc" style="font-size:11px; color:var(--imp-text-muted); margin-top:2px;">${def.desc || ''}</div>
-          </div>
-        </div>
-        <div class="shop-item-action imp-shop-footer">
-          <div class="shop-item-price-tag imp-price-pill">🪙 ${totalPrice.toLocaleString()} <span style="font-size:10px; color:#cbd5e1;">Adena</span></div>
-          <div style="display:flex; gap:6px; align-items:center;">
-            <button class="buy-item-btn imp-btn-primary" data-buy="${def.id}" data-qty="${batchQty}" data-rarity="${rarity}" ${(!canAfford || !isLevelOk) ? 'disabled' : ''}>
-              ${buyText}
-            </button>
-            ${isStackable && canAfford && maxAffordQty > batchQty ? `
-              <button class="inv-batch-btn" data-buy="${def.id}" data-qty="${maxAffordQty}" data-rarity="${rarity}" title="Comprar máximo possível (${maxAffordQty.toLocaleString()}x)" style="padding:7px 11px; font-size:11px; font-weight:bold; background:rgba(30,41,59,0.9); border:1px solid rgba(255,255,255,0.2); color:#fff; border-radius:5px; cursor:pointer;">
-                Máx
-              </button>
-            ` : ''}
-          </div>
-        </div>
+  // Renderizar a Coluna Direita: Purchase List (Carrinho)
+  if (!purchaseListContainer) return;
+  if (_purchaseCart.length === 0) {
+    purchaseListContainer.innerHTML = `
+      <div style="padding:40px 10px; text-align:center; color:#64748b; font-size:11px; grid-column:1/-1;">
+        Clique nos itens da <strong>Shop List</strong> à esquerda para adicionar à lista de compra.
       </div>
     `;
-  }).join('');
+  } else {
+    purchaseListContainer.innerHTML = _purchaseCart.map(cartItem => {
+      const subtotal = cartItem.unitPrice * cartItem.qty;
+      return `
+        <div class="l2store-cart-item">
+          <div class="l2store-cart-item-info">
+            <div style="width:30px; height:30px; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.5); border-radius:4px; flex-shrink:0;">
+              ${getItemIcon(cartItem.def || cartItem)}
+            </div>
+            <div style="min-width:0; flex:1;">
+              <div class="l2store-cart-item-name" title="${cartItem.name}">${cartItem.name}</div>
+              <div class="l2store-cart-item-price">🪙 ${subtotal.toLocaleString()} (${cartItem.unitPrice.toLocaleString()}g un)</div>
+            </div>
+          </div>
+          <div class="l2store-cart-controls">
+            <button class="l2store-cart-btn" data-cart-minus="${cartItem.id}">-</button>
+            <span class="l2store-cart-qty">${cartItem.qty}</span>
+            <button class="l2store-cart-btn" data-cart-plus="${cartItem.id}">+</button>
+            <button class="l2store-cart-btn" data-cart-max="${cartItem.id}" title="Comprar Máximo Possível" style="width:auto; padding:0 4px; font-size:9px;">Máx</button>
+            <button class="l2store-cart-btn remove" data-cart-remove="${cartItem.id}" title="Remover da lista">✕</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
 
-  attachShopEvents(container, callbacks);
-}
-
-/**
- * Vincula a delegação centralizada de eventos para ações do Mercador.
- */
-function attachShopEvents(container, callbacks) {
-  container.onclick = (e) => {
-    // 1. Ação de Compra
-    const buyBtn = e.target.closest('[data-buy]');
-    if (buyBtn && !buyBtn.disabled) {
-      const qty = parseInt(buyBtn.dataset.qty, 10) || 1;
-      const rarity = buyBtn.dataset.rarity || 'common';
-      const itemId = buyBtn.dataset.buy;
-      if (callbacks.buyItem) callbacks.buyItem(itemId, qty, rarity);
-      else if (typeof window !== 'undefined' && typeof window.buyItem === 'function') window.buyItem(itemId, qty, rarity);
+  // Delegação de controles do carrinho
+  purchaseListContainer.onclick = (e) => {
+    const minusBtn = e.target.closest('[data-cart-minus]');
+    if (minusBtn) {
+      const id = minusBtn.dataset.cartMinus;
+      const it = _purchaseCart.find(c => c.id === id);
+      if (it) {
+        it.qty -= 1;
+        if (it.qty <= 0) _purchaseCart = _purchaseCart.filter(c => c.id !== id);
+        renderStoreBuyTab(state, callbacks);
+      }
       return;
     }
 
-    // 2. Ação de Venda Individual
-    const sellBtn = e.target.closest('[data-sell]');
-    if (sellBtn && !sellBtn.disabled) {
-      const uid = sellBtn.dataset.sell;
-      const qty = parseInt(sellBtn.dataset.qty, 10) || 1;
-      if (callbacks.sellItem) callbacks.sellItem(uid, qty);
+    const plusBtn = e.target.closest('[data-cart-plus]');
+    if (plusBtn) {
+      const id = plusBtn.dataset.cartPlus;
+      const it = _purchaseCart.find(c => c.id === id);
+      if (it) {
+        it.qty += 1;
+        renderStoreBuyTab(state, callbacks);
+      }
       return;
     }
 
-    // 3. Venda em Massa de Lixo
-    const junkBtn = e.target.closest('[data-sell-junk]');
-    if (junkBtn) {
-      if (callbacks.sellAllJunk) callbacks.sellAllJunk();
+    const maxBtn = e.target.closest('[data-cart-max]');
+    if (maxBtn) {
+      const id = maxBtn.dataset.cartMax;
+      const it = _purchaseCart.find(c => c.id === id);
+      if (it) {
+        const affordable = Math.max(1, Math.floor((state.gold || 0) / it.unitPrice));
+        it.qty = affordable;
+        renderStoreBuyTab(state, callbacks);
+      }
       return;
     }
 
-    // 4. Recompra (Buyback)
-    const buybackBtn = e.target.closest('[data-buyback]');
-    if (buybackBtn) {
-      const idx = parseInt(buybackBtn.dataset.buyback, 10);
-      if (callbacks.buybackItem) callbacks.buybackItem(idx);
-      return;
-    }
-
-    // 5. Reroll Místico
-    const rerollBtn = e.target.closest('[data-reroll-mystic]');
-    if (rerollBtn) {
-      if (callbacks.rerollMysticStock) callbacks.rerollMysticStock(rollMysticStock);
-      return;
-    }
-
-    // 6. Ir para Aba Especial
-    const gotoBtn = e.target.closest('[data-goto-tab]');
-    if (gotoBtn) {
-      const target = gotoBtn.dataset.gotoTab;
-      if (callbacks.switchTab) callbacks.switchTab(target);
+    const removeBtn = e.target.closest('[data-cart-remove]');
+    if (removeBtn) {
+      const id = removeBtn.dataset.cartRemove;
+      _purchaseCart = _purchaseCart.filter(c => c.id !== id);
+      renderStoreBuyTab(state, callbacks);
       return;
     }
   };
+
+  // Barra Inferior de Status (Adena, Weight, Price e Botões Buy/Cancel)
+  const totalPrice = _purchaseCart.reduce((sum, item) => sum + (item.unitPrice * item.qty), 0);
+  const totalCartCount = _purchaseCart.reduce((sum, item) => sum + item.qty, 0);
+
+  const bottomAdena = root.querySelector('#shop-bottom-adena');
+  const bottomPrice = root.querySelector('#shop-bottom-price');
+  const weightBar = root.querySelector('#shop-bottom-weight-bar');
+  const weightText = root.querySelector('#shop-bottom-weight-text');
+  const confirmBtn = root.querySelector('#shop-action-confirm-btn');
+  const cancelBtn = root.querySelector('#shop-action-cancel-btn');
+
+  if (bottomAdena) bottomAdena.textContent = (state.gold || 0).toLocaleString();
+  if (bottomPrice) bottomPrice.textContent = totalPrice.toLocaleString();
+
+  const invCount = (state.inventory || []).length;
+  const maxSlots = getMaxInventorySlots ? getMaxInventorySlots(state) : (state.maxInventorySlots || 150);
+  const weightPct = Math.min(100, Math.round((invCount / maxSlots) * 100));
+  if (weightBar) weightBar.style.width = `${weightPct}%`;
+  if (weightText) weightText.textContent = `${(weightPct * 0.78).toFixed(2).replace('.', ',')}%`;
+
+  if (confirmBtn) {
+    confirmBtn.textContent = totalCartCount > 0 ? `Buy (${totalCartCount})` : 'Buy';
+    confirmBtn.disabled = _purchaseCart.length === 0 || (state.gold || 0) < totalPrice;
+    confirmBtn.onclick = () => {
+      if (_purchaseCart.length === 0) return;
+      if ((state.gold || 0) < totalPrice) return;
+
+      for (const item of _purchaseCart) {
+        if (item.rarity !== 'common' && callbacks.buyMysticItem) {
+          callbacks.buyMysticItem(item.id, item.rarity);
+        } else if (callbacks.buyItem) {
+          callbacks.buyItem(item.id, item.qty, item.rarity);
+        } else if (typeof window !== 'undefined' && window.buyItem) {
+          window.buyItem(item.id, item.qty, item.rarity);
+        }
+      }
+      _purchaseCart = [];
+      updateShopUI(state, callbacks);
+    };
+  }
+
+  if (cancelBtn) {
+    cancelBtn.onclick = () => {
+      _purchaseCart = [];
+      renderStoreBuyTab(state, callbacks);
+    };
+  }
+}
+
+/**
+ * Renderiza a Aba de Venda de Itens (Sell Tab).
+ */
+function renderStoreSellTab(state, callbacks) {
+  const root = getRoot();
+  const leftColTitle = root.querySelector('#shop-left-col-title');
+  const leftCountBadge = root.querySelector('#shop-left-count-badge');
+  const itemsContainer = root.querySelector('#shop-items-container');
+  const rightColTitle = root.querySelector('#shop-right-col-title');
+  const purchaseListContainer = root.querySelector('#shop-purchase-list');
+  const clearCartBtn = root.querySelector('#shop-clear-cart-btn');
+
+  if (leftColTitle) leftColTitle.textContent = 'Itens na Mochila';
+  if (rightColTitle) rightColTitle.textContent = 'Ações de Venda & Descarte';
+  if (clearCartBtn) clearCartBtn.style.display = 'none';
+
+  const inv = state.inventory || [];
+  const gData = D();
+  const allItems = gData?.ALL_ITEMS || {};
+  const selectedSet = getSelectedSet ? getSelectedSet(state) : new Set();
+
+  if (leftCountBadge) leftCountBadge.textContent = `${inv.length} itens`;
+
+  if (!itemsContainer) return;
+  if (inv.length === 0) {
+    itemsContainer.innerHTML = `
+      <div style="padding:40px 10px; text-align:center; color:#64748b; font-size:11px; grid-column:1/-1;">
+        Sua mochila está vazia.
+      </div>
+    `;
+  } else {
+    itemsContainer.innerHTML = inv.map(item => {
+      const def = allItems[item.itemId || item.id] || item;
+      const gradeInfo = getItemGrade(def);
+      const sellUnit = getSellValue(item);
+      const count = item.count || 1;
+      const isEquipped = Boolean(item.equipped);
+      const isLocked = selectedSet.has(item.uid);
+
+      return `
+        <div class="l2store-slot ${isEquipped || isLocked ? 'locked' : ''}" data-sell-item="${item.uid}" title="${item.enchant > 0 ? `+${item.enchant} ` : ''}${def.name}\nValor de Venda: ${sellUnit.toLocaleString()}g">
+          <span class="l2store-slot-grade grade-${gradeInfo.code}">${gradeInfo.code.toUpperCase()}</span>
+          ${getItemIcon(def)}
+          ${count > 1 ? `<span class="l2store-slot-qty">${count}</span>` : ''}
+          ${isEquipped ? `<div style="position:absolute; inset:0; background:rgba(16,185,129,0.5); display:flex; align-items:center; justify-content:center; font-size:8px; color:#fff; font-weight:bold;">EQUIP</div>` : ''}
+          ${isLocked ? `<div style="position:absolute; inset:0; background:rgba(245,158,11,0.5); display:flex; align-items:center; justify-content:center; font-size:10px;">🔒</div>` : ''}
+        </div>
+      `;
+    }).join('');
+  }
+
+  // Painel Direito: Ações de Venda Rápida
+  if (purchaseListContainer) {
+    purchaseListContainer.innerHTML = `
+      <div style="grid-column:1/-1; display:flex; flex-direction:column; gap:10px; padding:8px;">
+        <div style="background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.3); border-radius:6px; padding:10px;">
+          <h5 style="margin:0 0 4px 0; color:#fca5a5; font-family:'Cinzel',serif;">🧹 Venda de Lixo (Junk Sell)</h5>
+          <p style="margin:0 0 8px 0; font-size:11px; color:#cbd5e1;">Venda instantaneamente todos os itens comuns não bloqueados da mochila pelo valor de 50% de Adena.</p>
+          <button class="l2store-action-btn primary" data-sell-junk="true" style="width:100%; background:linear-gradient(180deg,#ef4444,#991b1b); border-color:#f87171; color:#fff;">
+            🧹 Vender Todos os Comuns
+          </button>
+        </div>
+
+        <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:6px; padding:10px; font-size:11px; color:#94a3b8;">
+          <strong style="color:#ffd877;">Dica de Mercador:</strong> Clique diretamente em qualquer item na coluna à esquerda para vendê-lo individualmente. Itens equipados e protegidos por trava (🔒) não podem ser vendidos.
+        </div>
+      </div>
+    `;
+
+    const junkBtn = purchaseListContainer.querySelector('[data-sell-junk]');
+    if (junkBtn) {
+      junkBtn.onclick = () => {
+        if (callbacks.sellAllJunk) callbacks.sellAllJunk();
+        else if (typeof window !== 'undefined' && window.sellAllJunk) window.sellAllJunk();
+        updateShopUI(state, callbacks);
+      };
+    }
+  }
+
+  itemsContainer.onclick = (e) => {
+    const slotEl = e.target.closest('[data-sell-item]');
+    if (!slotEl || slotEl.classList.contains('locked')) return;
+    const uid = slotEl.dataset.sellItem;
+    if (callbacks.sellItem) callbacks.sellItem(uid, 1);
+    else if (typeof window !== 'undefined' && window.sellItem) window.sellItem(uid, 1);
+    updateShopUI(state, callbacks);
+  };
+
+  // Barra Inferior
+  const bottomAdena = root.querySelector('#shop-bottom-adena');
+  const bottomPrice = root.querySelector('#shop-bottom-price');
+  const confirmBtn = root.querySelector('#shop-action-confirm-btn');
+  const cancelBtn = root.querySelector('#shop-action-cancel-btn');
+
+  if (bottomAdena) bottomAdena.textContent = (state.gold || 0).toLocaleString();
+  if (bottomPrice) bottomPrice.textContent = '0';
+  if (confirmBtn) {
+    confirmBtn.textContent = 'Sell';
+    confirmBtn.disabled = true;
+  }
+  if (cancelBtn) {
+    cancelBtn.onclick = () => {
+      _shopViewMode = 'dialogue';
+      updateShopUI(state, callbacks);
+    };
+  }
+}
+
+/**
+ * Renderiza a Aba de Recompra (Refund Tab).
+ */
+function renderStoreRefundTab(state, callbacks) {
+  const root = getRoot();
+  const leftColTitle = root.querySelector('#shop-left-col-title');
+  const leftCountBadge = root.querySelector('#shop-left-count-badge');
+  const itemsContainer = root.querySelector('#shop-items-container');
+  const rightColTitle = root.querySelector('#shop-right-col-title');
+  const purchaseListContainer = root.querySelector('#shop-purchase-list');
+  const clearCartBtn = root.querySelector('#shop-clear-cart-btn');
+
+  if (leftColTitle) leftColTitle.textContent = 'Fila de Recompra (Últimos 10)';
+  if (rightColTitle) rightColTitle.textContent = 'Informações de Recompra';
+  if (clearCartBtn) clearCartBtn.style.display = 'none';
+
+  const buyback = state.buybackQueue || [];
+  const gData = D();
+  const allItems = gData?.ALL_ITEMS || {};
+
+  if (leftCountBadge) leftCountBadge.textContent = `${buyback.length} itens`;
+
+  if (!itemsContainer) return;
+  if (buyback.length === 0) {
+    itemsContainer.innerHTML = `
+      <div style="padding:40px 10px; text-align:center; color:#64748b; font-size:11px; grid-column:1/-1;">
+        Nenhum item vendido recentemente para recompra.
+      </div>
+    `;
+  } else {
+    itemsContainer.innerHTML = buyback.map((entry, idx) => {
+      const item = entry.itemCopy;
+      const def = allItems[item.itemId || item.id] || item;
+      const gradeInfo = getItemGrade(def);
+      return `
+        <div class="l2store-slot" data-buyback-idx="${idx}" title="${def.name}\nRecomprar por: ${entry.sellPrice.toLocaleString()}g">
+          <span class="l2store-slot-grade grade-${gradeInfo.code}">${gradeInfo.code.toUpperCase()}</span>
+          ${getItemIcon(def)}
+          ${item.count > 1 ? `<span class="l2store-slot-qty">${item.count}</span>` : ''}
+        </div>
+      `;
+    }).join('');
+
+    itemsContainer.onclick = (e) => {
+      const slotEl = e.target.closest('[data-buyback-idx]');
+      if (!slotEl) return;
+      const idx = parseInt(slotEl.dataset.buybackIdx, 10);
+      if (callbacks.buybackItem) callbacks.buybackItem(idx);
+      else if (typeof window !== 'undefined' && window.buybackItem) window.buybackItem(idx);
+      updateShopUI(state, callbacks);
+    };
+  }
+
+  if (purchaseListContainer) {
+    purchaseListContainer.innerHTML = `
+      <div style="grid-column:1/-1; padding:12px; font-size:11px; color:#cbd5e1; line-height:1.5;">
+        <h5 style="margin:0 0 6px 0; color:#ffd877; font-family:'Cinzel',serif;">↩️ Como funciona a Recompra?</h5>
+        <p style="margin:0 0 8px 0;">O Mercador de Aden mantém em estoque os últimos 10 itens que você vendeu. Você pode recomprá-los exatamente pelo mesmo valor recebido.</p>
+        <p style="margin:0; color:#94a3b8;">Clique em qualquer item na coluna à esquerda para resgatá-lo de volta para a sua mochila.</p>
+      </div>
+    `;
+  }
+
+  const bottomAdena = root.querySelector('#shop-bottom-adena');
+  const bottomPrice = root.querySelector('#shop-bottom-price');
+  const confirmBtn = root.querySelector('#shop-action-confirm-btn');
+  const cancelBtn = root.querySelector('#shop-action-cancel-btn');
+
+  if (bottomAdena) bottomAdena.textContent = (state.gold || 0).toLocaleString();
+  if (bottomPrice) bottomPrice.textContent = '0';
+  if (confirmBtn) {
+    confirmBtn.textContent = 'Refund';
+    confirmBtn.disabled = true;
+  }
+  if (cancelBtn) {
+    cancelBtn.onclick = () => {
+      _shopViewMode = 'dialogue';
+      updateShopUI(state, callbacks);
+    };
+  }
 }
 
 /**
@@ -5013,8 +5502,208 @@ export function matchesCraftSubcategory(itemId, def, subcat) {
   }
 }
 
+/**
+ * Renderiza o Estágio 1 da Forja Imperial: Diálogo NPC com Blacksmith Wilbert (Imagem 5).
+ */
+export function renderForgeDialogueView(state, callbacks = {}) {
+  const root = getRoot();
+  if (!root) return;
+  const dialogueView = root.querySelector('#forge-dialogue-view');
+  const workspaceView = root.querySelector('#forge-workspace-view');
+  if (dialogueView) dialogueView.style.display = 'flex';
+  if (workspaceView) workspaceView.style.display = 'none';
+
+  const npcNameEl = root.querySelector('#forge-npc-name');
+  const npcTextEl = root.querySelector('#forge-npc-text');
+  const optionsEl = root.querySelector('#forge-dialogue-options');
+  const closeBtn = root.querySelector('#forge-dialogue-close-btn');
+
+  if (closeBtn && !closeBtn._bound) {
+    closeBtn._bound = true;
+    closeBtn.onclick = () => {
+      // Abre a criação geral como padrão se fechar
+      _forgeViewMode = 'workspace';
+      updateCraftUI(state, callbacks);
+    };
+  }
+
+  if (!optionsEl) return;
+
+  if (_forgeWilbertTopic === 'main') {
+    if (npcNameEl) npcNameEl.textContent = 'Blacksmith Wilbert:';
+    if (npcTextEl) {
+      npcTextEl.innerHTML = `
+        Haha! Blacksmiths do so much more than just craft armor, spears, axes and the like. The town of Aden wouldn't even exist without our Black Anvil Guild.<br><br>
+        Oh, by the way, it's only rumors, but... I've heard that golems which were used to banish humans from our lands were constructed by our guild too. Who else could have invented such outstanding technology?
+      `;
+    }
+
+    optionsEl.innerHTML = `
+      <button class="l2chat-option-btn" data-forge-target="soulcrystal">
+        <span class="l2chat-bubble-icon">🗨️</span>
+        <div style="flex:1;">
+          <div class="l2chat-option-text">Imbue a weapon/armor with Soul Crystal Effect or change SA</div>
+          <div class="l2chat-option-hint">Despertar Focus, Acumen, Health ou Might na arma</div>
+        </div>
+        <span style="color:#ffd877; font-size:12px;">➔</span>
+      </button>
+
+      <button class="l2chat-option-btn" data-forge-target="soulcrystal" style="border-color:rgba(239,68,68,0.35);">
+        <span class="l2chat-bubble-icon" style="color:#f87171;">🗨️</span>
+        <div style="flex:1;">
+          <div class="l2chat-option-text" style="color:#fca5a5;">Revoke the Soul Crystal Effect from a weapon/armor</div>
+          <div class="l2chat-option-hint">Remover e purificar o efeito de Soul Crystal da arma</div>
+        </div>
+        <span style="color:#fca5a5; font-size:12px;">➔</span>
+      </button>
+
+      <button class="l2chat-option-btn" data-forge-target="lifestones">
+        <span class="l2chat-bubble-icon">🗨️</span>
+        <div style="flex:1;">
+          <div class="l2chat-option-text">Augment (Life Stones)</div>
+          <div class="l2chat-option-hint">Altar de Augmentation com Life Stones e Gemstones</div>
+        </div>
+        <span style="color:#ffd877; font-size:12px;">➔</span>
+      </button>
+
+      <button class="l2chat-option-btn" data-forge-target="masterwork">
+        <span class="l2chat-bubble-icon">🗨️</span>
+        <div style="flex:1;">
+          <div class="l2chat-option-text">Upgrade items of R-grade or higher (Masterwork &amp; Troca)</div>
+          <div class="l2chat-option-hint">Restauração Pushkin, Masterwork e troca de armas de mesmo grau</div>
+        </div>
+        <span style="color:#ffd877; font-size:12px;">➔</span>
+      </button>
+
+      <button class="l2chat-option-btn" data-forge-target="elemental">
+        <span class="l2chat-bubble-icon" style="color:#fdba74;">🗨️</span>
+        <div style="flex:1;">
+          <div class="l2chat-option-text" style="color:#fed7aa;">Atributos Elementais (Fire, Water, Wind, Earth, Holy, Dark)</div>
+          <div class="l2chat-option-hint">Engastes de pedras elementais em armas e armaduras</div>
+        </div>
+        <span style="color:#fdba74; font-size:12px;">➔</span>
+      </button>
+
+      <button class="l2chat-option-btn" data-forge-target="synthesis">
+        <span class="l2chat-bubble-icon">🗨️</span>
+        <div style="flex:1;">
+          <div class="l2chat-option-text">Síntese Imperial (Compounding)</div>
+          <div class="l2chat-option-hint">Altar arcano de fusão para elevar o Rank de equipamentos e artefatos</div>
+        </div>
+        <span style="color:#ffd877; font-size:12px;">➔</span>
+      </button>
+
+      <button class="l2chat-option-btn" data-forge-target="craft">
+        <span class="l2chat-bubble-icon">🗨️</span>
+        <div style="flex:1;">
+          <div class="l2chat-option-text">Craft items (Criação Geral de Receitas)</div>
+          <div class="l2chat-option-hint">Forjar armas, armaduras, joias e consumíveis ancestrais</div>
+        </div>
+        <span style="color:#ffd877; font-size:12px;">➔</span>
+      </button>
+
+      <button class="l2chat-option-btn" data-forge-target="tattoos">
+        <span class="l2chat-bubble-icon">🗨️</span>
+        <div style="flex:1;">
+          <div class="l2chat-option-text">Tatuagens &amp; Dyes (Henna)</div>
+          <div class="l2chat-option-hint">Gravar símbolos arcanos com Dyes para alterar atributos base</div>
+        </div>
+        <span style="color:#ffd877; font-size:12px;">➔</span>
+      </button>
+
+      <button class="l2chat-option-btn" data-forge-action="taxes" style="border-color:rgba(212,167,68,0.25);">
+        <span class="l2chat-bubble-icon">🗨️</span>
+        <div style="flex:1;">
+          <div class="l2chat-option-text" style="color:#cbd5e1;">Ask about local governor and taxes</div>
+          <div class="l2chat-option-hint">Saber sobre o Lorde do Castelo e as taxas da guilda</div>
+        </div>
+        <span style="color:#94a3b8; font-size:12px;">➔</span>
+      </button>
+    `;
+  } else if (_forgeWilbertTopic === 'taxes') {
+    if (npcNameEl) npcNameEl.textContent = 'Blacksmith Wilbert:';
+    if (npcTextEl) {
+      npcTextEl.innerHTML = `
+        Taxes? Hmph! The Lord of Aden Castle and Giran Castle enforce a reasonable tribute of 5% on trade and market transactions.<br><br>
+        Thanks to our Black Anvil Guild treaty, the imperial forge operates independently. Every hero who swings an anvil here keeps their crafted spoils free from imperial excise!
+      `;
+    }
+
+    optionsEl.innerHTML = `
+      <button class="l2chat-option-btn l2chat-back-btn" data-forge-action="back">
+        <span style="font-size:14px;">↩️</span>
+        <div class="l2chat-option-text" style="color:#ffd877;">Voltar às Opções do Ferreiro</div>
+      </button>
+    `;
+  }
+
+  optionsEl.onclick = (e) => {
+    const targetBtn = e.target.closest('[data-forge-target]');
+    if (targetBtn) {
+      const tab = targetBtn.dataset.forgeTarget;
+      _forgeViewMode = 'workspace';
+      if (typeof window !== 'undefined' && typeof window.setForgeSubTab === 'function') {
+        window.setForgeSubTab(tab);
+      } else {
+        window._forgeSubTab = tab;
+        updateCraftUI(state, callbacks);
+      }
+      return;
+    }
+
+    const actionBtn = e.target.closest('[data-forge-action]');
+    if (actionBtn) {
+      const act = actionBtn.dataset.forgeAction;
+      if (act === 'taxes') {
+        _forgeWilbertTopic = 'taxes';
+        renderForgeDialogueView(state, callbacks);
+      } else if (act === 'back') {
+        _forgeWilbertTopic = 'main';
+        renderForgeDialogueView(state, callbacks);
+      }
+    }
+  };
+}
+
 export function updateCraftUI(state, callbacks = {}) {
   updateImperialEconomyHeader(state);
+  const root = getRoot();
+  if (!root) return;
+
+  const dialogueView = root.querySelector('#forge-dialogue-view');
+  const workspaceView = root.querySelector('#forge-workspace-view');
+
+  // Configurar botões de navegação e retorno
+  const backToDialogueBtn = root.querySelector('#forge-back-to-dialogue-btn');
+  if (backToDialogueBtn && !backToDialogueBtn._bound) {
+    backToDialogueBtn._bound = true;
+    backToDialogueBtn.onclick = () => {
+      _forgeViewMode = 'dialogue';
+      _forgeWilbertTopic = 'main';
+      updateCraftUI(state, callbacks);
+    };
+  }
+
+  const workspaceCloseBtn = root.querySelector('#forge-workspace-close-btn');
+  if (workspaceCloseBtn && !workspaceCloseBtn._bound) {
+    workspaceCloseBtn._bound = true;
+    workspaceCloseBtn.onclick = () => {
+      _forgeViewMode = 'dialogue';
+      _forgeWilbertTopic = 'main';
+      updateCraftUI(state, callbacks);
+    };
+  }
+
+  if (_forgeViewMode === 'dialogue') {
+    if (dialogueView) dialogueView.style.display = 'flex';
+    if (workspaceView) workspaceView.style.display = 'none';
+    renderForgeDialogueView(state, callbacks);
+    return;
+  }
+
+  if (dialogueView) dialogueView.style.display = 'none';
+  if (workspaceView) workspaceView.style.display = 'flex';
+
   const forgeLvl = state.accountForgeLevel || state.craftLevel || 1;
   const forgeExp = state.accountForgeExp || 0;
   const reqExpForNext = forgeLvl * 100;
@@ -5042,7 +5731,6 @@ export function updateCraftUI(state, callbacks = {}) {
   }
 
   const subTab = window._forgeSubTab || 'craft';
-  const root = getRoot();
 
   root.querySelectorAll('#forge-subtab-buttons [data-forge-tab], .forge-subtab-btn').forEach(btn => {
     const isActive = (btn.dataset.forgeTab === subTab);
@@ -5053,6 +5741,7 @@ export function updateCraftUI(state, callbacks = {}) {
     btn.onclick = (e) => {
       e.preventDefault();
       const targetTab = btn.dataset.forgeTab;
+      _forgeViewMode = 'workspace';
       if (typeof window !== 'undefined' && typeof window.setForgeSubTab === 'function') {
         window.setForgeSubTab(targetTab);
       } else {
@@ -6661,34 +7350,22 @@ export function renderForgeSynthesis(container, state) {
   const forgeLvl = Number(state.craftLevel) || 1;
   const isMasterSmith = forgeLvl >= 10;
 
-  const currentCategory = window._forgeSynthesisCategory || 'gear';
-
-  window.setForgeSynthesisCategory = (cat) => {
-    window._forgeSynthesisCategory = cat;
-    window._synthesisTargetUid = null;
-    window._synthesisIngredientUid = null;
-    renderForgeSynthesis(container, state);
-  };
-
-  // Filtrar itens da categoria
+  // Filtrar itens elegíveis da mochila para Síntese
   const eligibleItems = inv.filter(i => {
     const s = getItemDef(i.itemId)?.slot || i.slot || '';
     const id = (i.itemId || i.id || '').toLowerCase();
-    if (currentCategory === 'gear') {
-      return ['weapon', 'armor', 'chest', 'legs', 'head', 'helmet', 'gloves', 'boots', 'shield'].includes(s);
-    } else {
-      // Artefatos: cintos, talismãs, joias, agathions, capas, etc.
-      return s === 'belt' || s === 'cloak' || id.includes('belt') || id.includes('talisman') || id.includes('jewel') || id.includes('ruby') || id.includes('sapphire') || id.includes('emerald') || id.includes('opal') || id.includes('diamond') || id.includes('agathion');
-    }
+    const isGear = ['weapon', 'armor', 'chest', 'legs', 'head', 'helmet', 'gloves', 'boots', 'shield'].includes(s);
+    const isArtifact = s === 'belt' || s === 'cloak' || id.includes('belt') || id.includes('talisman') || id.includes('jewel') || id.includes('ruby') || id.includes('sapphire') || id.includes('emerald') || id.includes('opal') || id.includes('diamond') || id.includes('agathion') || id.includes('brooch') || id.includes('bracelet');
+    return isGear || isArtifact;
   });
 
-  // Agrupar e verificar quem tem duplicata disponível
+  // Agrupar itens com cópias duplicadas disponíveis
   const itemsWithDupes = eligibleItems.map(item => {
     const dupes = SynthesisService.getCompatibleIngredients(state, item);
     return { item, dupes, hasDupe: dupes.length > 0 };
   });
 
-  // Se nenhum alvo selecionado ainda, prioriza o primeiro que tem duplicata disponível
+  // Auto-selecionar o primeiro com duplicata se nada foi selecionado
   if (!window._synthesisTargetUid || !eligibleItems.some(i => i.uid === window._synthesisTargetUid)) {
     const firstWithDupe = itemsWithDupes.find(x => x.hasDupe);
     window._synthesisTargetUid = firstWithDupe ? firstWithDupe.item.uid : (eligibleItems[0]?.uid || null);
@@ -6719,189 +7396,164 @@ export function renderForgeSynthesis(container, state) {
   const isMaxRank = curRank >= 5;
   const canSynthesize = selectedTargetItem && selectedIngredientItem && isForgeOk && canAfford && !isMaxRank;
 
-  container.innerHTML = `
-    <div class="l2-workshop-panel">
-      <!-- Header da Síntese Imperial -->
-      <div class="l2-workshop-altar">
-        <h3 class="l2-workshop-title">🔨 Bigorna de Síntese &amp; Fusão Imperial</h3>
-        <p class="l2-workshop-subtitle">
-          Funda <strong>duas cópias idênticas</strong> para aumentar o <strong>Rank de Síntese (1★ a 5★)</strong> em equipamentos (+10% de atributos base por Rank) e elevar artefatos de poder.
-        </p>
-        <div style="margin-top:8px; display:inline-flex; align-items:center; gap:8px; padding:4px 10px; border-radius:4px; background:rgba(0,0,0,0.5); border:1px solid ${isMasterSmith ? '#ffd700' : 'rgba(212,167,68,0.3)'}; font-size:11px; font-family:'Cinzel',serif;">
-          <span>Forja Imperial: <strong style="color:#ffd700;">Nv. ${forgeLvl}</strong></span>
-          ${isMasterSmith ? '<span style="color:#34d399; font-weight:bold;">👑 Mestre Ferreiro (+10% Taxa de Sucesso Ativa!)</span>' : `<span style="color:#94a3b8;">(Mestre Ferreiro Nv. 10 desbloqueia +10% de taxa)</span>`}
+  window.synthesisSelectAllPairs = () => {
+    const pair = itemsWithDupes.find(x => x.hasDupe);
+    if (pair) {
+      window._synthesisTargetUid = pair.item.uid;
+      window._synthesisIngredientUid = pair.dupes[0].uid;
+      renderForgeSynthesis(container, state);
+    }
+  };
+
+  // Montar 49 slots da grade 7x7
+  const TOTAL_GRID_SLOTS = 49;
+  let materialsGridHtml = '';
+  for (let idx = 0; idx < TOTAL_GRID_SLOTS; idx++) {
+    const itemEntry = eligibleItems[idx];
+    if (itemEntry) {
+      const def = getItemDef(itemEntry.itemId || itemEntry.id);
+      const isTarget = itemEntry.uid === window._synthesisTargetUid;
+      const isIng = itemEntry.uid === window._synthesisIngredientUid;
+      const rank = SynthesisService.getItemSynthesisRank(itemEntry);
+
+      materialsGridHtml += `
+        <div
+          class="l2comp-mat-slot ${isTarget ? 'active-selected' : ''}"
+          style="${isIng ? 'border-color:#34d399;' : ''}"
+          onclick="
+            if (window._synthesisTargetUid === '${itemEntry.uid}') {
+              window._synthesisTargetUid = null;
+              window._synthesisIngredientUid = null;
+            } else if (!window._synthesisTargetUid) {
+              window._synthesisTargetUid = '${itemEntry.uid}';
+              window._synthesisIngredientUid = null;
+            } else if (window._synthesisTargetUid !== '${itemEntry.uid}') {
+              window._synthesisIngredientUid = '${itemEntry.uid}';
+            }
+            renderForgeSynthesis(document.getElementById('craft-recipes-container') || document.getElementById('craft-list'), window.state);
+          "
+          title="${def?.name || itemEntry.name || itemEntry.itemId} (Clique para selecionar)"
+        >
+          <div class="equip-icon" style="font-size:22px;">${getItemIcon(def || itemEntry)}</div>
+          ${itemEntry.count && itemEntry.count > 1 ? `<span class="l2comp-mat-count">${itemEntry.count}</span>` : ''}
+          ${rank > 0 ? `<span class="l2comp-mat-lvl">Lv.${rank}</span>` : ''}
         </div>
-      </div>
+      `;
+    } else {
+      materialsGridHtml += `<div class="l2comp-mat-slot"></div>`;
+    }
+  }
 
-      <!-- Abas de Categoria: Equipamentos vs Artefatos -->
-      <div style="display:flex; gap:8px; margin-bottom:14px; border-bottom:1px solid rgba(212,167,68,0.25); padding-bottom:8px;">
-        <button onclick="window.setForgeSynthesisCategory('gear')" class="inv-batch-btn ${currentCategory === 'gear' ? 'active' : ''}" style="font-size:11px; font-family:'Cinzel',serif; font-weight:bold; padding:6px 14px; ${currentCategory === 'gear' ? 'background:linear-gradient(180deg,#d4a744,#8a641c); color:#000;' : ''}">
-          ⚔️ Equipamentos (Armas &amp; Armaduras)
-        </button>
-        <button onclick="window.setForgeSynthesisCategory('artifact')" class="inv-batch-btn ${currentCategory === 'artifact' ? 'active' : ''}" style="font-size:11px; font-family:'Cinzel',serif; font-weight:bold; padding:6px 14px; ${currentCategory === 'artifact' ? 'background:linear-gradient(180deg,#d4a744,#8a641c); color:#000;' : ''}">
-          🎗️ Artefatos (Cintos, Talismãs, Joias &amp; Agathions)
-        </button>
-      </div>
+  container.innerHTML = `
+    <div class="l2comp-container">
+      <!-- Coluna 1: Altar de Síntese (Imagem 2) -->
+      <div class="l2comp-panel">
+        <div class="l2comp-header">
+          <div class="l2comp-header-title">Compounding</div>
+          <div class="l2comp-header-controls">
+            <button class="l2comp-icon-btn" title="Ajuda sobre Síntese">?</button>
+            <button class="l2comp-icon-btn close" onclick="_forgeViewMode='dialogue'; window.updateCraftUI && window.updateCraftUI(window.state);" title="Fechar Síntese">✕</button>
+          </div>
+        </div>
 
-      <!-- Grid Principal da Síntese: Seleção de Alvo à Esquerda | Bigorna Central à Direita -->
-      <div style="display:grid; grid-template-columns:minmax(240px,1fr) minmax(320px,1.4fr); gap:16px;">
-        
-        <!-- Coluna 1: Lista de Itens Alvo -->
-        <div style="background:rgba(12,16,23,0.85); border:1px solid rgba(212,167,68,0.3); border-radius:8px; padding:10px; max-height:480px; overflow-y:auto; display:flex; flex-direction:column; gap:6px;">
-          <div style="font-size:11px; font-weight:bold; color:#ffd700; font-family:'Cinzel',serif; margin-bottom:4px; display:flex; justify-content:space-between;">
-            <span>Selecione o Item Alvo</span>
-            <span style="color:#94a3b8; font-size:10px;">(${eligibleItems.length} itens)</span>
+        <div class="l2comp-subtitle">Common compounding</div>
+
+        <!-- Círculo Arcano Central com Dual Anvil Slots e Arcos Elétricos -->
+        <div class="l2comp-stage">
+          <div class="l2comp-arcane-ring"></div>
+          <div class="l2comp-arcane-ring-inner"></div>
+          <div class="l2comp-vortex-center"></div>
+          ${selectedTargetItem && selectedIngredientItem ? '<div class="l2comp-lightning"></div>' : ''}
+
+          <div class="l2comp-slots-row">
+            <!-- Slot 1: Base Target Item -->
+            <div class="l2comp-slot-wrap">
+              <div class="l2comp-slot-pointer">▼</div>
+              <div class="l2comp-anvil-slot ${!selectedTargetItem ? 'empty' : ''}" id="comp-slot-base" title="${targetDef?.name || 'Selecione o Item Base na grade de materiais'}">
+                ${selectedTargetItem ? `<div class="equip-icon" style="font-size:28px;">${getItemIcon(targetDef || selectedTargetItem)}</div>` : ''}
+              </div>
+            </div>
+
+            <!-- Slot 2: Catalyst/Sacrificial Item -->
+            <div class="l2comp-slot-wrap">
+              <div style="height:15px;"></div>
+              <div class="l2comp-anvil-slot ${!selectedIngredientItem ? 'empty' : ''}" id="comp-slot-ingredient" title="${selectedIngredientItem ? (targetDef?.name || 'Item de sacrifício selecionado') : 'Selecione a duplicata para sacrifício'}">
+                ${selectedIngredientItem ? `<div class="equip-icon" style="font-size:28px;">${getItemIcon(targetDef || selectedIngredientItem)}</div>` : ''}
+              </div>
+            </div>
           </div>
 
-          ${eligibleItems.length === 0 ? `
-            <div style="padding:20px; text-align:center; color:#94a3b8; font-size:11px;">
-              Nenhum item desta categoria encontrado na mochila.
-            </div>
-          ` : itemsWithDupes.map(({ item, dupes, hasDupe }) => {
-            const isSelected = item.uid === window._synthesisTargetUid;
-            const def = getItemDef(item.itemId || item.id);
-            const rank = SynthesisService.getItemSynthesisRank(item);
-            const stars = rank > 0 ? '★'.repeat(rank) : '';
-
-            return `
-              <div
-                onclick="window._synthesisTargetUid='${item.uid}'; window._synthesisIngredientUid=null; window.renderForgeSynthesis(document.getElementById('craft-recipes-container') || document.getElementById('craft-list'), window.state);"
-                style="padding:8px; border-radius:6px; background:${isSelected ? 'rgba(212,167,68,0.2)' : 'rgba(0,0,0,0.4)'}; border:1px solid ${isSelected ? '#ffd700' : hasDupe ? 'rgba(52,211,153,0.5)' : 'rgba(255,255,255,0.08)'}; cursor:pointer; display:flex; align-items:center; gap:8px; transition:all 0.2s;"
-              >
-                <div style="width:36px; height:36px; border-radius:4px; background:rgba(0,0,0,0.6); border:1px solid rgba(212,167,68,0.3); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-                  <span class="equip-icon">${getItemIcon(def || item)}</span>
-                </div>
-                <div style="flex:1; min-width:0;">
-                  <div style="font-size:11px; font-weight:bold; color:${isSelected ? '#ffd700' : '#ece4d3'}; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
-                    ${def?.name || item.name || item.itemId} ${item.enchant ? `+${item.enchant}` : ''}
-                    ${item.equipped ? '<span style="color:#60a5fa; font-size:9px; margin-left:4px;">[Equipado]</span>' : ''}
-                  </div>
-                  <div style="font-size:10px; color:#94a3b8; display:flex; align-items:center; gap:6px;">
-                    ${rank > 0 ? `<span style="color:#ffd700; font-weight:bold;">Rank ${rank} ${stars}</span>` : '<span>Sem Rank</span>'}
-                    ${hasDupe ? `<span style="color:#34d399; font-weight:bold;">🔥 ${dupes.length} cópia(s)</span>` : '<span style="color:#64748b;">0 cópias</span>'}
-                  </div>
-                </div>
-              </div>
-            `;
-          }).join('')}
+          <div class="l2comp-status-text">
+            ${!selectedTargetItem ? 'Select items for compounding.' : !selectedIngredientItem ? 'Select a duplicate item for compounding.' : `Progress: Rank ${curRank} ➔ Rank ${targetRank} (${baseRatePct}% Success Rate)`}
+          </div>
         </div>
 
-        <!-- Coluna 2: A Bigorna de Fusão -->
-        <div style="background:rgba(18,24,34,0.9); border:1px solid rgba(212,167,68,0.35); border-radius:8px; padding:16px; display:flex; flex-direction:column; justify-content:space-between; gap:14px;">
-          ${!selectedTargetItem ? `
-            <div style="padding:40px; text-align:center; color:#94a3b8; font-size:12px;">
-              Selecione um item à esquerda para abrir o painel de forjamento.
+        <!-- Barra de Progresso Dourada de Taxa de Sucesso -->
+        <div class="l2comp-progress-wrap">
+          <div class="l2comp-progress-track">
+            <div class="l2comp-progress-fill" style="width:${selectedTargetItem && selectedIngredientItem ? baseRatePct : 0}%;"></div>
+          </div>
+        </div>
+
+        <!-- Faixa de Autocompounding -->
+        <div class="l2comp-auto-bar">
+          <button class="l2comp-auto-btn" id="comp-auto-toggle-btn" onclick="window.synthesisSelectAllPairs && window.synthesisSelectAllPairs();">
+            <span>🔄</span> Autocompounding
+          </button>
+          <button class="l2comp-reset-btn" onclick="window._synthesisTargetUid=null; window._synthesisIngredientUid=null; renderForgeSynthesis(document.getElementById('craft-recipes-container') || document.getElementById('craft-list'), window.state);">Reset</button>
+        </div>
+
+        <!-- Rodapé com Fee, Checkbox e Botões de Ação -->
+        <div class="l2comp-bottom-area">
+          <div class="l2comp-fee-row">
+            <span class="l2comp-fee-label">Fee</span>
+            <div class="l2comp-fee-val-box">
+              <span>🪙</span>
+              <span>${selectedTargetItem ? costAdena.toLocaleString() : '0'}</span>
             </div>
-          ` : `
-            <div>
-              <!-- Alvo & Sacrifício Slots -->
-              <div style="display:flex; align-items:center; justify-content:space-around; background:rgba(0,0,0,0.5); border:1px dashed rgba(212,167,68,0.3); border-radius:8px; padding:14px; margin-bottom:14px;">
-                <!-- Slot 1: Alvo Primário -->
-                <div style="text-align:center; max-width:130px;">
-                  <div style="font-size:10px; color:#94a3b8; font-family:'Cinzel',serif; margin-bottom:4px;">1. ITEM ALVO</div>
-                  <div style="width:48px; height:48px; margin:0 auto; border-radius:6px; background:rgba(0,0,0,0.7); border:2px solid #ffd700; display:flex; align-items:center; justify-content:center; box-shadow:0 0 10px rgba(255,215,0,0.3);">
-                    <span class="equip-icon">${getItemIcon(targetDef || selectedTargetItem)}</span>
-                  </div>
-                  <div style="font-size:11px; font-weight:bold; color:#ffd700; margin-top:4px; line-height:1.2;">
-                    ${targetDef?.name || selectedTargetItem.name}
-                  </div>
-                  <div style="font-size:10px; color:#fde047; font-weight:bold;">
-                    ${curRank > 0 ? `Rank ${curRank} (${'★'.repeat(curRank)})` : 'Rank 0'}
-                  </div>
-                </div>
+          </div>
 
-                <div style="font-size:22px; color:#ffd700; animation:pulse 1.5s infinite;">➔ ⚔️ ➔</div>
-
-                <!-- Slot 2: Sacrifício Duplicado -->
-                <div style="text-align:center; max-width:130px;">
-                  <div style="font-size:10px; color:#94a3b8; font-family:'Cinzel',serif; margin-bottom:4px;">2. SACRIFÍCIO</div>
-                  <div style="width:48px; height:48px; margin:0 auto; border-radius:6px; background:rgba(0,0,0,0.7); border:2px solid ${compatibleIngredients.length > 0 ? '#10b981' : '#ef4444'}; display:flex; align-items:center; justify-content:center;">
-                    ${compatibleIngredients.length > 0 ? `
-                      <span class="equip-icon">${getItemIcon(targetDef || selectedTargetItem)}</span>
-                    ` : `
-                      <span style="color:#ef4444; font-size:20px;">✖</span>
-                    `}
-                  </div>
-                  <div style="font-size:11px; font-weight:bold; color:${compatibleIngredients.length > 0 ? '#34d399' : '#ef4444'}; margin-top:4px; line-height:1.2;">
-                    ${compatibleIngredients.length > 0 ? `Disponível (${compatibleIngredients.length})` : 'Falta Duplicata'}
-                  </div>
-                  <div style="font-size:10px; color:#94a3b8;">
-                    ${compatibleIngredients.length > 0 ? `Rank ${curRank}` : '0 no inventário'}
-                  </div>
-                </div>
-              </div>
-
-              <!-- Seletor do Ingrediente Específico -->
-              ${compatibleIngredients.length > 1 ? `
-                <div style="margin-bottom:12px;">
-                  <label style="font-size:11px; color:#94a3b8; display:block; margin-bottom:4px;">Escolher cópia de sacrifício:</label>
-                  <select
-                    onchange="window._synthesisIngredientUid=this.value;"
-                    style="width:100%; padding:6px 10px; background:#0c1017; color:#ece4d3; border:1px solid rgba(212,167,68,0.3); border-radius:4px; font-size:11px;"
-                  >
-                    ${compatibleIngredients.map(ing => `<option value="${ing.uid}" ${ing.uid === window._synthesisIngredientUid ? 'selected' : ''}>${targetDef?.name || ing.name} (UID: ${String(ing.uid).slice(-5)})</option>`).join('')}
-                  </select>
-                </div>
-              ` : ''}
-
-              <!-- Informações de Parâmetros de Síntese -->
-              <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(212,167,68,0.2); border-radius:6px; padding:10px; display:flex; flex-direction:column; gap:6px; font-size:11px;">
-                <div style="display:flex; justify-content:space-between;">
-                  <span style="color:#94a3b8;">Progressão Alvo:</span>
-                  <span style="color:#ffd700; font-weight:bold;">
-                    ${isMaxRank ? 'MAX RANK ★★★★★' : `Rank ${curRank} ➔ Rank ${targetRank} (${'★'.repeat(targetRank)})`}
-                  </span>
-                </div>
-                <div style="display:flex; justify-content:space-between;">
-                  <span style="color:#94a3b8;">Bônus ao Sucesso:</span>
-                  <span style="color:#34d399; font-weight:bold;">
-                    ${currentCategory === 'gear' ? `+${targetRank * 10}% Atributos Base` : 'Despertar Bônus de Artefato'}
-                  </span>
-                </div>
-                <div style="display:flex; justify-content:space-between;">
-                  <span style="color:#94a3b8;">Taxa de Sucesso:</span>
-                  <span style="color:#60a5fa; font-weight:bold; font-size:12px;">
-                    ${baseRatePct}% ${isMasterSmith ? '<span style="color:#ffd700;">(+10% Mestre)</span>' : ''}
-                  </span>
-                </div>
-                <div style="display:flex; justify-content:space-between;">
-                  <span style="color:#94a3b8;">Risco na Falha:</span>
-                  <span style="color:#f87171;">
-                    ${targetRank === 5 ? 'Sacrifício destruído + 50% chance de regredir para Rank 3' : 'Apenas o sacrifício é consumido'}
-                  </span>
-                </div>
-                <div style="display:flex; justify-content:space-between; border-top:1px dashed rgba(255,255,255,0.08); padding-top:4px;">
-                  <span style="color:#94a3b8;">Requisito de Forja:</span>
-                  <span style="color:${isForgeOk ? '#34d399' : '#ef4444'}; font-weight:bold;">
-                    Nv. ${finalReqForge} ${isForgeOk ? '✓ Liberado' : `(Atual: Nv. ${forgeLvl})`}
-                  </span>
-                </div>
-                <div style="display:flex; justify-content:space-between;">
-                  <span style="color:#94a3b8;">Custo de Forjamento:</span>
-                  <span style="color:${canAfford ? '#fde047' : '#ef4444'}; font-weight:bold;">
-                    ${costAdena.toLocaleString()} Adena ${canAfford ? '' : '(Insuficiente)'}
-                  </span>
-                </div>
-              </div>
+          <div class="l2comp-actions-row">
+            <label class="l2comp-checkbox-wrap">
+              <input type="checkbox" id="comp-no-vfx" ${window._synthesisNoVfx ? 'checked' : ''} onchange="window._synthesisNoVfx=this.checked;" />
+              <span>No visual effect</span>
+            </label>
+            <div class="l2comp-btn-group">
+              <button
+                class="l2comp-btn primary"
+                ${!canSynthesize ? 'disabled' : ''}
+                onclick="window.executeSynthesisAction('${selectedTargetItem ? selectedTargetItem.uid : ''}', '${selectedIngredientItem ? selectedIngredientItem.uid : ''}')"
+              >
+                Compound
+              </button>
+              <button
+                class="l2comp-btn"
+                onclick="window._synthesisTargetUid=null; window._synthesisIngredientUid=null; renderForgeSynthesis(document.getElementById('craft-recipes-container') || document.getElementById('craft-list'), window.state);"
+              >
+                Cancel
+              </button>
             </div>
+          </div>
+        </div>
+      </div>
 
-            <!-- Botão de Ação -->
-            <div style="margin-top:8px;">
-              ${isMaxRank ? `
-                <button disabled style="width:100%; padding:12px; font-family:'Cinzel',serif; font-weight:bold; background:#1e293b; border:1px solid #ffd700; color:#ffd700; border-radius:6px;">
-                  👑 ITEM EM RANK MÁXIMO (5★)
-                </button>
-              ` : `
-                <button
-                  onclick="window.executeSynthesisAction('${selectedTargetItem.uid}', '${selectedIngredientItem ? selectedIngredientItem.uid : ''}')"
-                  ${!canSynthesize ? 'disabled' : ''}
-                  style="width:100%; padding:12px; font-family:'Cinzel',serif; font-weight:bold; font-size:12px; border-radius:6px; cursor:${canSynthesize ? 'pointer' : 'not-allowed'}; background:${canSynthesize ? 'linear-gradient(180deg,#eab308,#ca8a04)' : '#27272a'}; border:1px solid ${canSynthesize ? '#fde047' : '#3f3f46'}; color:${canSynthesize ? '#000' : '#71717a'}; box-shadow:${canSynthesize ? '0 0 15px rgba(234,179,8,0.4)' : 'none'}; transition:all 0.2s;"
-                >
-                  ${!selectedIngredientItem ? '🔒 Falta Cópia Duplicada' : !isForgeOk ? `🔒 Requer Forja Nv. ${finalReqForge}` : !canAfford ? '🪙 Adena Insuficiente' : '✨ REALIZAR SÍNTESE IMPERIAL'}
-                </button>
-              `}
-            </div>
-          `}
+      <!-- Coluna 2: Painel de Materiais (Grade 7x7) -->
+      <div class="l2comp-panel">
+        <div class="l2comp-header">
+          <div class="l2comp-header-title">
+            <span style="font-size:15px;">🎒</span> Materials (${eligibleItems.length})
+          </div>
+          <button class="l2comp-icon-btn" title="Itens elegíveis para Síntese na mochila">?</button>
+        </div>
+
+        <div class="l2comp-materials-grid">
+          ${materialsGridHtml}
+        </div>
+
+        <div style="padding: 10px;">
+          <button class="l2comp-select-all-btn" onclick="window.synthesisSelectAllPairs && window.synthesisSelectAllPairs();">
+            <span style="color:#34d399; font-size:14px;">🔄</span> Select all
+          </button>
         </div>
       </div>
     </div>
@@ -6915,47 +7567,148 @@ export function renderForgeLifestones(container, state) {
     return s === 'weapon';
   });
 
-  let weaponsHtml = weapons.map(w => {
-    const aug = w.augmentation;
-    const equippedBadge = w.equipped ? '<span style="color:#ffd877; font-size:10px; margin-left:6px; font-weight:bold;">[Equipada]</span>' : '';
-    const def = getItemDef(w.itemId) || w;
+  // Auto-selecionar a primeira arma se nenhuma estiver selecionada
+  if (!window._enhanceTargetUid || !weapons.some(w => w.uid === window._enhanceTargetUid)) {
+    window._enhanceTargetUid = weapons[0]?.uid || null;
+  }
 
-    return `
-      <div style="background:rgba(18,24,34,0.9); border:1px solid rgba(212,167,68,0.25); border-radius:6px; padding:10px 12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-        <div style="display:flex; align-items:center; gap:10px;">
-          <div class="l2-blueprint-socket" style="width:38px; height:38px; min-width:38px;">${getItemIcon(def)}</div>
-          <div>
-            <strong style="color:#ffd877; font-size:13px; font-family:'Cinzel',serif;">${w.name || w.itemId}</strong>${equippedBadge}
-            <div style="font-size:10px; color:#94a3b8; margin-top:2px;">
-              Augment: <strong style="color:${aug ? '#c084fc' : '#64748b'};">${aug ? `+${aug.atkBonus} P.Atk, +${aug.critBonus} Crit ${aug.skill ? `[${aug.skill.name}]` : ''}` : 'Nenhum'}</strong>
+  const selectedWeapon = weapons.find(w => w.uid === window._enhanceTargetUid) || null;
+  const def = selectedWeapon ? (getItemDef(selectedWeapon.itemId) || selectedWeapon) : null;
+  const aug = selectedWeapon?.augmentation || null;
+
+  // 49 slots para a grade 7x7 de materiais / equipamentos
+  const TOTAL_GRID_SLOTS = 49;
+  let materialsGridHtml = '';
+  for (let idx = 0; idx < TOTAL_GRID_SLOTS; idx++) {
+    const w = weapons[idx];
+    if (w) {
+      const itemDef = getItemDef(w.itemId) || w;
+      const isSelected = w.uid === window._enhanceTargetUid;
+      materialsGridHtml += `
+        <div
+          class="l2comp-mat-slot ${isSelected ? 'active-selected' : ''}"
+          onclick="
+            window._enhanceTargetUid = '${w.uid}';
+            renderForgeLifestones(document.getElementById('craft-recipes-container') || document.getElementById('craft-list'), window.state);
+          "
+          title="${w.name || w.itemId} ${w.enchant ? `+${w.enchant}` : ''} ${w.equipped ? '[Equipada]' : ''}"
+        >
+          <div class="equip-icon" style="font-size:24px;">${getItemIcon(itemDef)}</div>
+          ${w.enchant ? `<span class="l2comp-mat-lvl">+${w.enchant}</span>` : ''}
+          ${w.equipped ? '<span style="position:absolute; top:2px; left:2px; font-size:8px; color:#38bdf8; font-weight:bold;">EQ</span>' : ''}
+        </div>
+      `;
+    } else {
+      materialsGridHtml += `<div class="l2comp-mat-slot"></div>`;
+    }
+  }
+
+  container.innerHTML = `
+    <div class="l2enh-container">
+      <!-- Coluna 1: Altar Triquetra de Aprimoramento / Augment (Imagem 3) -->
+      <div class="l2comp-panel">
+        <div class="l2comp-header">
+          <div class="l2comp-header-title">Enhance Artifact / Equipment</div>
+          <button class="l2comp-icon-btn close" onclick="_forgeViewMode='dialogue'; window.updateCraftUI && window.updateCraftUI(window.state);" title="Fechar Aprimoramento">✕</button>
+        </div>
+
+        <!-- Palco do Altar com Triquetra Celta em Pedra e Slots Catalisadores -->
+        <div class="l2enh-stage">
+          <svg class="l2enh-triquetra-bg" viewBox="0 0 100 100" fill="none" stroke="#d4a744" stroke-width="2.5">
+            <path d="M50 14 A 32 32 0 0 1 78 62 A 32 32 0 0 1 22 62 A 32 32 0 0 1 50 14 Z" />
+            <circle cx="50" cy="50" r="28" stroke="#d4a744" stroke-width="1.8" stroke-dasharray="4 2" />
+          </svg>
+
+          <!-- Slot Central: Equipamento / Artefato com Ponteiro Dourado -->
+          <div class="l2comp-slot-wrap" style="position:relative; z-index:3;">
+            <div class="l2comp-slot-pointer">▼</div>
+            <div
+              class="l2enh-center-slot"
+              id="enh-center-slot"
+              title="${def?.name || 'Selecione uma arma no painel de materiais à direita'}"
+            >
+              ${selectedWeapon ? `<div class="equip-icon" style="font-size:32px;">${getItemIcon(def)}</div>` : '<span style="font-size:26px; opacity:0.35;">🗡️</span>'}
+            </div>
+          </div>
+
+          <!-- Catalisador 1 (Top-Left): Life Stone Top-Grade -->
+          <div class="l2enh-catalyst-slot l2enh-cat-top-left" title="Catalisador Primário: Life Stone Top-Grade">
+            <span style="font-size:22px;">💎</span>
+          </div>
+
+          <!-- Catalisador 2 (Top-Right): Gemstones -->
+          <div class="l2enh-catalyst-slot l2enh-cat-top-right" title="Catalisador Secundário: Gemstones">
+            <span style="font-size:22px;">🔮</span>
+          </div>
+
+          <!-- Catalisador 3 (Bottom): Essência Ancestral -->
+          <div class="l2enh-catalyst-slot l2enh-cat-bottom" title="Catalisador Místico: Essência da Forja">
+            <span style="font-size:22px;">✨</span>
+          </div>
+
+          <div class="l2comp-status-text">
+            ${!selectedWeapon ? 'Add an item to upgrade.' : aug ? `Augment: +${aug.atkBonus || 0} P.Atk, +${aug.critBonus || 0} Crit ${aug.skill ? `[${aug.skill.name}]` : ''}` : `${def?.name || selectedWeapon.itemId} pronto para Despertar Life Stone`}
+          </div>
+        </div>
+
+        <!-- Barra de Progresso Dourada -->
+        <div class="l2comp-progress-wrap">
+          <div class="l2comp-progress-track">
+            <div class="l2comp-progress-fill" style="width:${selectedWeapon ? 100 : 0}%;"></div>
+          </div>
+        </div>
+
+        <!-- Botões de Ação Inferiores (Imagem 3) -->
+        <div class="l2comp-bottom-area">
+          <div class="l2comp-actions-row">
+            <button
+              class="l2comp-btn"
+              onclick="window._enhanceTargetUid=null; renderForgeLifestones(document.getElementById('craft-recipes-container') || document.getElementById('craft-list'), window.state);"
+            >
+              Reset
+            </button>
+            <div class="l2comp-btn-group">
+              <button
+                class="l2comp-btn primary"
+                ${!selectedWeapon ? 'disabled' : ''}
+                onclick="window.applyAugmentAction('${selectedWeapon?.uid}', 'top')"
+              >
+                Enhancement
+              </button>
+              ${aug ? `
+                <button
+                  class="l2comp-btn"
+                  style="border-color:#ef4444; color:#fca5a5;"
+                  onclick="window.removeAugmentAction('${selectedWeapon.uid}')"
+                  title="Remover Augmentation"
+                >
+                  Cleanse
+                </button>
+              ` : ''}
+              <button
+                class="l2comp-btn"
+                onclick="_forgeViewMode='dialogue'; window.updateCraftUI && window.updateCraftUI(window.state);"
+              >
+                Cancel
+              </button>
             </div>
           </div>
         </div>
-        <div style="display:flex; gap:5px;">
-          <button onclick="window.applyAugmentAction('${w.uid}', 'top')" class="inv-batch-btn" style="padding:5px 12px; font-size:10px; font-weight:bold; color:#e9d5ff; border-color:#a855f7;">
-            💎 Augment Top-Grade
-          </button>
-          ${aug ? `
-            <button onclick="window.removeAugmentAction('${w.uid}')" class="inv-batch-btn" style="padding:5px 8px; font-size:10px; color:#fca5a5; border-color:#ef4444;">
-              🗑️
-            </button>
-          ` : ''}
+      </div>
+
+      <!-- Coluna 2: Painel de Materiais / Equipamentos (Grade 7x7) -->
+      <div class="l2comp-panel">
+        <div class="l2comp-header">
+          <div class="l2comp-header-title">
+            <span style="font-size:15px;">🗡️</span> Artifact / Equipment (${weapons.length})
+          </div>
+          <button class="l2comp-icon-btn" title="Armas elegíveis para Encanto e Augment">?</button>
+        </div>
+
+        <div class="l2comp-materials-grid">
+          ${materialsGridHtml}
         </div>
       </div>
-    `;
-  }).join('');
-
-  container.innerHTML = `
-    <div class="l2-workshop-panel">
-      <div class="l2-workshop-altar">
-        <h3 class="l2-workshop-title">💎 Câmara de Augmentation (Life Stones)</h3>
-        <p class="l2-workshop-subtitle">
-          Incuta Life Stones nas armas para despertar atributos passivos secundários e Item Skills poderosas.
-        </p>
-      </div>
-
-      <h4 style="margin:0 0 6px 0; font-family:'Cinzel',serif; color:#f5df93; font-size:13px; font-weight:700;">🗡️ Armas Disponíveis</h4>
-      ${weaponsHtml || '<div style="font-size:11px; color:#64748b; background:rgba(8,11,16,0.85); padding:10px 12px; border-radius:6px;">Nenhuma arma livre no inventário.</div>'}
     </div>
   `;
 }
@@ -7806,6 +8559,9 @@ export function uiOpenPixCheckoutModal(tierId, state) {
   modal.classList.add('active');
 }
 
+let _contactsActiveTab = 'friends'; // 'friends' | 'block' | 'mentorship'
+let _contactsSelectedFriendName = null;
+
 export function uiOpenReferralModal(state) {
   let modal = document.getElementById('referral-modal');
   if (!modal) {
@@ -7827,84 +8583,366 @@ export function uiOpenReferralModal(state) {
   const rewardsClaimed = s?.referralRewardsClaimed || 0;
   const referredBy = s?.referredBy || (typeof localStorage !== 'undefined' ? localStorage.getItem('aden_referred_by') : null) || null;
 
-  modal.innerHTML = `
-    <div style="background:linear-gradient(180deg, rgba(20,16,10,0.98), rgba(10,8,6,0.98)); border:2px solid #10b981; border-radius:14px; max-width:540px; width:92vw; padding:24px; color:#fff; font-family:sans-serif; box-shadow:0 0 40px rgba(16,185,129,0.3); position:relative;">
-      <button onclick="document.getElementById('referral-modal').classList.remove('active')" style="position:absolute; top:14px; right:16px; background:none; border:none; color:#aaa; font-size:22px; cursor:pointer;">✕</button>
-      
-      <div style="text-align:center; margin-bottom:16px;">
-        <span style="font-size:32px;">🎁</span>
-        <h3 style="margin:6px 0 2px 0; font-family:'Cinzel',serif; color:#34d399; font-size:20px;">Indique & Ganhe (Referral Viral)</h3>
-        <p style="margin:0; font-size:12px; color:#94a3b8;">Convide amigos para o Reino de Aden e ganhem recompensas juntos!</p>
-      </div>
+  if (!Array.isArray(s.friends)) {
+    s.friends = [
+      { name: 'Vaelin', level: 78, classTitle: 'Duelist', online: true },
+      { name: 'Elwen', level: 75, classTitle: 'Moonlight Sentinel', online: false },
+      { name: 'SirGalahad', level: 80, classTitle: 'Phoenix Knight', online: true }
+    ];
+  }
+  if (!Array.isArray(s.blocked)) {
+    s.blocked = [];
+  }
 
-      ${referredBy ? `
-        <div style="background:rgba(16,185,129,0.15); border:1px solid rgba(16,185,129,0.4); border-radius:8px; padding:8px 12px; margin-bottom:14px; font-size:11px; color:#6ee7b7; display:flex; align-items:center; gap:8px;">
-          <span>✨</span>
-          <span>Você ingressou pela indicação de <strong>${referredBy}</strong>! Bônus de Novato ativo (+10% EXP permanente).</span>
-        </div>
-      ` : `
-        <div style="background:rgba(30,41,59,0.7); border:1px solid rgba(52,211,153,0.3); border-radius:8px; padding:12px; margin-bottom:14px;">
-          <div style="font-size:11px; font-weight:bold; color:#6ee7b7; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.04em;">
-            Não usou link de indicação? Insira o código de quem te indicou (Até Nv. 20):
-          </div>
-          <div style="display:flex; gap:8px;">
-            <input id="ref-friend-code-input" type="text" placeholder="Nome do amigo (ex: Vaelin)" style="flex:1; background:#0f172a; border:1px solid #334155; border-radius:6px; padding:8px 12px; color:#fff; font-size:12px; outline:none;" />
-            <button onclick="window.submitReferralCodeAction && window.submitReferralCodeAction()" style="padding:8px 16px; background:#10b981; border:1px solid #34d399; border-radius:6px; color:#000; font-weight:bold; font-size:12px; cursor:pointer; font-family:'Cinzel',serif; white-space:nowrap;">
-              Vincular
-            </button>
-          </div>
-        </div>
-      `}
+  let contentHtml = '';
 
-      <div style="margin-bottom:16px;">
-        <label style="display:block; font-size:11px; font-weight:bold; color:#6ee7b7; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.05em;">Seu Link Exclusivo de Indicação:</label>
-        <div style="display:flex; gap:8px;">
-          <input id="ref-link-input" type="text" readonly value="${refUrl}" style="flex:1; background:#0f172a; border:1px solid #059669; border-radius:6px; padding:8px 12px; color:#34d399; font-family:monospace; font-size:12px; font-weight:bold; outline:none;" />
-          <button id="ref-copy-btn" onclick="navigator.clipboard.writeText('${refUrl}').then(() => { const b = document.getElementById('ref-copy-btn'); b.textContent = '✅ Copiado!'; b.style.background = '#059669'; setTimeout(() => { b.textContent = '📋 Copiar'; b.style.background = '#10b981'; }, 3000); })" style="padding:8px 16px; background:#10b981; border:1px solid #34d399; border-radius:6px; color:#000; font-weight:bold; font-size:12px; cursor:pointer; font-family:'Cinzel',serif; white-space:nowrap; transition:background 0.2s;">
-            📋 Copiar
+  if (_contactsActiveTab === 'friends') {
+    contentHtml = `
+      <!-- Subbar: Friend List Counter + Top Action Buttons -->
+      <div class="l2contacts-subbar">
+        <div class="l2contacts-counter">
+          Friend List (${s.friends.length}/128)
+        </div>
+        <div class="l2contacts-top-actions">
+          <button id="btn-contact-add-friend" class="l2contacts-add-btn">
+            + Add
+          </button>
+          <button id="btn-contact-del-friend" class="l2contacts-del-btn">
+            - Delete
           </button>
         </div>
       </div>
 
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;">
-        <div style="background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:10px; text-align:center;">
-          <div style="font-size:11px; color:#94a3b8;">Amigos Indicados</div>
-          <div style="font-size:20px; font-weight:bold; color:#34d399; font-family:'Cinzel',serif;">${countInvited}</div>
+      <!-- Friends Table (Image 4) -->
+      <div style="max-height: 280px; overflow-y: auto; background: #080a0f;">
+        <table class="l2contacts-table">
+          <thead>
+            <tr>
+              <th style="width: 32%;">Name</th>
+              <th style="width: 12%; text-align: center;">Lv.</th>
+              <th style="width: 26%;">Class</th>
+              <th style="width: 16%;">Status</th>
+              <th style="width: 7%; text-align: center;">Msg</th>
+              <th style="width: 7%; text-align: center;">Mail</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${s.friends.length === 0 ? `
+              <tr>
+                <td colspan="6" style="text-align: center; padding: 40px 14px; color: #94a3b8; font-size: 11px;">
+                  Nenhum amigo registrado na lista.<br />
+                  <span style="color: #64748b; font-size: 10px;">Clique no botão <strong style="color:#60a5fa;">'+ Add'</strong> acima para adicionar um amigo pelo nome!</span>
+                </td>
+              </tr>
+            ` : s.friends.map(f => {
+              const isSelected = _contactsSelectedFriendName === f.name;
+              return `
+                <tr class="contact-friend-row" data-name="${f.name}" style="cursor: pointer; ${isSelected ? 'background: rgba(212,167,68,0.2) !important; outline: 1px solid rgba(212,167,68,0.4);' : ''}">
+                  <td style="font-weight: bold; color: ${isSelected ? '#ffd877' : '#f1f5f9'};">
+                    ${f.name}
+                  </td>
+                  <td style="text-align: center; font-family: 'IBM Plex Mono', monospace; color: #94a3b8;">
+                    ${f.level}
+                  </td>
+                  <td style="color: #cbd5e1; font-size: 10.5px;">
+                    ${f.classTitle || 'Adventurer'}
+                  </td>
+                  <td>
+                    ${f.online ? '<span style="color: #22c55e; font-size: 10px; font-weight: bold;">● Online</span>' : '<span style="color: #64748b; font-size: 10px;">○ Offline</span>'}
+                  </td>
+                  <td style="text-align: center;">
+                    <button class="btn-friend-msg" data-name="${f.name}" style="background: none; border: none; cursor: pointer; color: #38bdf8; font-size: 12px;" title="Enviar mensagem privada">💬</button>
+                  </td>
+                  <td style="text-align: center;">
+                    <button class="btn-friend-mail" data-name="${f.name}" style="background: none; border: none; cursor: pointer; color: #ffd877; font-size: 12px;" title="Enviar correio">✉️</button>
+                  </td>
+                </tr>
+              `;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Bottom Actions Bar (Image 4) -->
+      <div class="l2contacts-bottom-bar">
+        <button id="btn-friend-party-invite" class="l2contacts-action-btn">
+          📢 Invite to party
+        </button>
+        <button id="btn-friend-clan-invite" class="l2contacts-action-btn">
+          ⚑ Invite to clan
+        </button>
+        <button id="btn-friend-detailed-info" class="l2contacts-action-btn">
+          🗎 Detailed Info
+        </button>
+      </div>
+    `;
+  } else if (_contactsActiveTab === 'block') {
+    contentHtml = `
+      <div class="l2contacts-subbar">
+        <div class="l2contacts-counter">
+          Block List (${s.blocked.length}/64)
         </div>
-        <div style="background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:10px; text-align:center;">
-          <div style="font-size:11px; color:#94a3b8;">Recompensas Resgatadas</div>
-          <div style="font-size:20px; font-weight:bold; color:#ffd700; font-family:'Cinzel',serif;">${rewardsClaimed}</div>
+        <div class="l2contacts-top-actions">
+          <button id="btn-contact-add-block" class="l2contacts-add-btn">
+            + Block
+          </button>
         </div>
       </div>
 
-      <div style="margin-bottom:16px;">
-        <button id="ref-check-rewards-btn" onclick="window.claimReferralRewardsAction && window.claimReferralRewardsAction()" style="width:100%; padding:10px 16px; background:linear-gradient(180deg,#059669,#047857); border:1px solid #34d399; border-radius:8px; color:#fff; font-weight:bold; font-size:12px; cursor:pointer; font-family:'Cinzel',serif; display:flex; align-items:center; justify-content:center; gap:8px; box-shadow:0 0 15px rgba(16,185,129,0.25); transition:all 0.2s;">
-          🔄 Verificar & Resgatar Recompensas de Amigos
+      <div style="min-height: 220px; max-height: 280px; overflow-y: auto; background: #080a0f;">
+        <table class="l2contacts-table">
+          <thead>
+            <tr>
+              <th style="width: 50%;">Name</th>
+              <th style="width: 30%;">Status</th>
+              <th style="width: 20%; text-align: center;">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${s.blocked.length === 0 ? `
+              <tr>
+                <td colspan="3" style="text-align: center; padding: 40px 14px; color: #94a3b8; font-size: 11px;">
+                  Nenhum jogador na lista de bloqueio.
+                </td>
+              </tr>
+            ` : s.blocked.map(bName => `
+              <tr>
+                <td style="color: #fca5a5; font-weight: bold;">${bName}</td>
+                <td style="color: #64748b; font-size: 10px;">Bloqueado</td>
+                <td style="text-align: center;">
+                  <button class="btn-unblock-player" data-name="${bName}" style="background: rgba(239,68,68,0.2); border: 1px solid #ef4444; color: #fca5a5; border-radius: 4px; padding: 2px 8px; font-size: 10px; cursor: pointer;">
+                    Desbloquear
+                  </button>
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
+  } else if (_contactsActiveTab === 'mentorship') {
+    contentHtml = `
+      <div style="padding: 16px; background: #080a0f;">
+        ${referredBy ? `
+          <div style="background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.4); border-radius: 8px; padding: 8px 12px; margin-bottom: 12px; font-size: 11px; color: #6ee7b7; display: flex; align-items: center; gap: 8px;">
+            <span>✨</span>
+            <span>Você ingressou pela indicação de <strong>${referredBy}</strong>! Bônus de Novato ativo (+10% EXP permanente).</span>
+          </div>
+        ` : `
+          <div style="background: rgba(20,26,38,0.85); border: 1px solid rgba(52,211,153,0.3); border-radius: 8px; padding: 10px; margin-bottom: 12px;">
+            <div style="font-size: 10.5px; font-weight: bold; color: #6ee7b7; margin-bottom: 6px; text-transform: uppercase;">
+              Vincular Mentor (Até Nv. 20):
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <input id="ref-friend-code-input" type="text" placeholder="Nome do mentor..." style="flex: 1; background: #0b0d13; border: 1px solid #334155; border-radius: 4px; padding: 6px 10px; color: #fff; font-size: 11px;" />
+              <button onclick="window.submitReferralCodeAction && window.submitReferralCodeAction()" style="padding: 6px 14px; background: #10b981; border: 1px solid #34d399; border-radius: 4px; color: #000; font-weight: bold; font-size: 11px; cursor: pointer; font-family: 'Cinzel', serif;">
+                Vincular
+              </button>
+            </div>
+          </div>
+        `}
+
+        <div style="margin-bottom: 14px;">
+          <label style="display: block; font-size: 10.5px; font-weight: bold; color: #6ee7b7; margin-bottom: 4px; text-transform: uppercase;">Seu Link Exclusivo de Indicação:</label>
+          <div style="display: flex; gap: 8px;">
+            <input id="ref-link-input" type="text" readonly value="${refUrl}" style="flex: 1; background: #0b0d13; border: 1px solid #059669; border-radius: 4px; padding: 6px 10px; color: #34d399; font-family: monospace; font-size: 11px; font-weight: bold;" />
+            <button id="ref-copy-btn" onclick="navigator.clipboard.writeText('${refUrl}').then(() => { const b = document.getElementById('ref-copy-btn'); b.textContent = '✅ Copiado!'; setTimeout(() => { b.textContent = '📋 Copiar'; }, 2500); })" style="padding: 6px 14px; background: #10b981; border: 1px solid #34d399; border-radius: 4px; color: #000; font-weight: bold; font-size: 11px; cursor: pointer; font-family: 'Cinzel', serif;">
+              📋 Copiar
+            </button>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;">
+          <div style="background: rgba(14,18,26,0.8); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; padding: 8px; text-align: center;">
+            <div style="font-size: 10px; color: #94a3b8;">Amigos Indicados</div>
+            <div style="font-size: 18px; font-weight: bold; color: #34d399; font-family: 'Cinzel', serif;">${countInvited}</div>
+          </div>
+          <div style="background: rgba(14,18,26,0.8); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; padding: 8px; text-align: center;">
+            <div style="font-size: 10px; color: #94a3b8;">Recompensas Resgatadas</div>
+            <div style="font-size: 18px; font-weight: bold; color: #ffd700; font-family: 'Cinzel', serif;">${rewardsClaimed}</div>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 12px;">
+          <button id="ref-check-rewards-btn" onclick="window.claimReferralRewardsAction && window.claimReferralRewardsAction()" style="width: 100%; padding: 8px 14px; background: linear-gradient(180deg, #059669, #047857); border: 1px solid #34d399; border-radius: 6px; color: #fff; font-weight: bold; font-size: 11px; cursor: pointer; font-family: 'Cinzel', serif; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 0 12px rgba(16,185,129,0.25);">
+            🔄 Verificar & Resgatar Recompensas de Amigos
+          </button>
+        </div>
+
+        <div style="display: flex; gap: 8px;">
+          <a href="${whatsappUrl}" target="_blank" rel="noopener noreferrer" style="flex: 1; text-decoration: none; padding: 8px; background: linear-gradient(180deg, #25D366, #128C7E); border: 1px solid #25D366; border-radius: 4px; color: #fff; font-weight: bold; font-size: 11px; font-family: 'Cinzel', serif; text-align: center; display: flex; align-items: center; justify-content: center; gap: 6px;">
+            📲 Compartilhar no WhatsApp
+          </a>
+        </div>
+      </div>
+    `;
+  }
+
+  modal.innerHTML = `
+    <div class="l2contacts-window-frame" style="max-width: 580px; width: 94vw; position: relative;">
+      <!-- Title Bar -->
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; background: linear-gradient(180deg, #181d2a 0%, #0d1017 100%); border-bottom: 1px solid rgba(212,167,68,0.35);">
+        <div style="font-family: 'Cinzel', serif; font-size: 14px; font-weight: bold; color: #f5df93; display: flex; align-items: center; gap: 8px;">
+          👥 Contacts
+        </div>
+        <button onclick="document.getElementById('referral-modal').classList.remove('active')" style="background: none; border: none; color: #94a3b8; font-size: 18px; cursor: pointer; padding: 0 4px; line-height: 1;">✕</button>
+      </div>
+
+      <!-- Tabs Bar (Image 4) -->
+      <div class="l2contacts-tabs-bar">
+        <button class="l2contacts-tab ${_contactsActiveTab === 'friends' ? 'active' : ''}" data-ctab="friends">
+          Friends
+        </button>
+        <button class="l2contacts-tab ${_contactsActiveTab === 'block' ? 'active' : ''}" data-ctab="block">
+          Block
+        </button>
+        <button class="l2contacts-tab ${_contactsActiveTab === 'mentorship' ? 'active' : ''}" data-ctab="mentorship">
+          Mentorship / Indicação
         </button>
       </div>
 
-      <div style="background:rgba(0,0,0,0.6); border:1px solid rgba(16,185,129,0.3); border-radius:8px; padding:12px; font-size:11.5px; line-height:1.5; margin-bottom:16px;">
-        <div style="font-weight:bold; color:#ffd700; margin-bottom:6px; font-family:'Cinzel',serif;">🏆 Como Funcionam as Recompensas:</div>
-        <div style="margin-bottom:6px;">
-          <strong style="color:#6ee7b7;">1. Entrada Imediata:</strong> Seu amigo cria o herói pelo seu link/código e recebe +10% EXP permanente e 1.000 Shots iniciais.
-        </div>
-        <div>
-          <strong style="color:#ffd700;">2. Meta Nível 40 (2ª Classe):</strong> Quando seu amigo atinge o Nv. 40, você recebe <strong style="color:#ffd700;">50 Aden Coins (AC)</strong> + <strong style="color:#38bdf8;">5x Pergaminhos Abençoados de Arma</strong>!
-        </div>
-      </div>
-
-      <div style="display:flex; gap:10px;">
-        <a href="${whatsappUrl}" target="_blank" rel="noopener noreferrer" style="flex:1; text-decoration:none; padding:10px; background:linear-gradient(180deg,#25D366,#128C7E); border:1px solid #25D366; border-radius:6px; color:#fff; font-weight:bold; font-size:12px; font-family:'Cinzel',serif; text-align:center; display:flex; align-items:center; justify-content:center; gap:6px;">
-          📲 Compartilhar no WhatsApp
-        </a>
-        <button onclick="document.getElementById('referral-modal').classList.remove('active')" style="padding:10px 18px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:6px; color:#ddd; font-weight:bold; font-size:12px; cursor:pointer;">
-          Fechar
-        </button>
-      </div>
+      ${contentHtml}
     </div>
   `;
 
+  // Attach Event Handlers
+  modal.querySelectorAll('.l2contacts-tab').forEach(tBtn => {
+    tBtn.onclick = () => {
+      _contactsActiveTab = tBtn.dataset.ctab;
+      uiOpenReferralModal(s);
+    };
+  });
+
+  modal.querySelectorAll('.contact-friend-row').forEach(row => {
+    row.onclick = (e) => {
+      if (e.target.closest('button')) return;
+      _contactsSelectedFriendName = row.dataset.name;
+      uiOpenReferralModal(s);
+    };
+  });
+
+  const addFriendBtn = modal.querySelector('#btn-contact-add-friend');
+  if (addFriendBtn) {
+    addFriendBtn.onclick = () => {
+      const name = prompt('Digite o nome do personagem para adicionar aos amigos:');
+      if (name && name.trim()) {
+        const cleanName = name.trim();
+        if (s.friends.some(f => f.name.toLowerCase() === cleanName.toLowerCase())) {
+          if (window.showMarketToast) window.showMarketToast('Este amigo já está na sua lista!', 'warning');
+          return;
+        }
+        s.friends.push({
+          name: cleanName,
+          level: Math.floor(Math.random() * 35) + 45,
+          classTitle: ['Duelist', 'Archmage', 'Moonlight Sentinel', 'Titan', 'Ghost Hunter', 'Dominator'][Math.floor(Math.random() * 6)],
+          online: true
+        });
+        if (typeof window.saveGameState === 'function') window.saveGameState();
+        if (window.showMarketToast) window.showMarketToast(`Amigo ${cleanName} adicionado com sucesso!`, 'success');
+        uiOpenReferralModal(s);
+      }
+    };
+  }
+
+  const delFriendBtn = modal.querySelector('#btn-contact-del-friend');
+  if (delFriendBtn) {
+    delFriendBtn.onclick = () => {
+      if (!_contactsSelectedFriendName) {
+        if (window.showMarketToast) window.showMarketToast('Selecione um amigo na tabela para remover.', 'warning');
+        return;
+      }
+      s.friends = s.friends.filter(f => f.name !== _contactsSelectedFriendName);
+      if (window.showMarketToast) window.showMarketToast(`Amigo ${_contactsSelectedFriendName} removido da lista.`, 'info');
+      _contactsSelectedFriendName = null;
+      if (typeof window.saveGameState === 'function') window.saveGameState();
+      uiOpenReferralModal(s);
+    };
+  }
+
+  const partyInviteBtn = modal.querySelector('#btn-friend-party-invite');
+  if (partyInviteBtn) {
+    partyInviteBtn.onclick = () => {
+      const target = _contactsSelectedFriendName || (s.friends[0] && s.friends[0].name);
+      if (!target) {
+        if (window.showMarketToast) window.showMarketToast('Adicione ou selecione um amigo para convidar!', 'warning');
+        return;
+      }
+      if (window.showMarketToast) window.showMarketToast(`📢 Convite de grupo enviado para ${target}!`, 'success');
+    };
+  }
+
+  const clanInviteBtn = modal.querySelector('#btn-friend-clan-invite');
+  if (clanInviteBtn) {
+    clanInviteBtn.onclick = () => {
+      const target = _contactsSelectedFriendName || (s.friends[0] && s.friends[0].name);
+      if (!target) {
+        if (window.showMarketToast) window.showMarketToast('Adicione ou selecione um amigo para convidar!', 'warning');
+        return;
+      }
+      if (window.showMarketToast) window.showMarketToast(`⚑ Convite de clã enviado para ${target}!`, 'success');
+    };
+  }
+
+  const detailedInfoBtn = modal.querySelector('#btn-friend-detailed-info');
+  if (detailedInfoBtn) {
+    detailedInfoBtn.onclick = () => {
+      const friend = s.friends.find(f => f.name === _contactsSelectedFriendName) || s.friends[0];
+      if (!friend) {
+        if (window.showMarketToast) window.showMarketToast('Selecione um amigo para ver informações detalhadas.', 'warning');
+        return;
+      }
+      if (window.showMarketToast) window.showMarketToast(`🗎 [${friend.name}] Nv. ${friend.level} · Classe: ${friend.classTitle} · ${friend.online ? 'Online' : 'Offline'}`, 'info');
+    };
+  }
+
+  modal.querySelectorAll('.btn-friend-msg').forEach(b => {
+    b.onclick = (e) => {
+      e.stopPropagation();
+      const n = b.dataset.name;
+      if (window.showMarketToast) window.showMarketToast(`💬 Sussurro enviado para ${n}: "Olá companheiro!"`, 'info');
+    };
+  });
+
+  modal.querySelectorAll('.btn-friend-mail').forEach(b => {
+    b.onclick = (e) => {
+      e.stopPropagation();
+      const n = b.dataset.name;
+      if (window.showMarketToast) window.showMarketToast(`✉️ Correio expresso enviado para ${n}!`, 'gold');
+    };
+  });
+
+  const addBlockBtn = modal.querySelector('#btn-contact-add-block');
+  if (addBlockBtn) {
+    addBlockBtn.onclick = () => {
+      const name = prompt('Digite o nome do jogador para bloquear:');
+      if (name && name.trim()) {
+        const cleanName = name.trim();
+        if (!s.blocked.includes(cleanName)) {
+          s.blocked.push(cleanName);
+          if (typeof window.saveGameState === 'function') window.saveGameState();
+          if (window.showMarketToast) window.showMarketToast(`Jogador ${cleanName} bloqueado.`, 'info');
+          uiOpenReferralModal(s);
+        }
+      }
+    };
+  }
+
+  modal.querySelectorAll('.btn-unblock-player').forEach(b => {
+    b.onclick = () => {
+      const name = b.dataset.name;
+      s.blocked = s.blocked.filter(n => n !== name);
+      if (typeof window.saveGameState === 'function') window.saveGameState();
+      if (window.showMarketToast) window.showMarketToast(`Jogador ${name} desbloqueado.`, 'success');
+      uiOpenReferralModal(s);
+    };
+  });
+
   modal.classList.add('active');
+}
+
+if (typeof window !== 'undefined') {
+  window.openContactsModal = () => uiOpenReferralModal();
+  window.openReferralModal = () => uiOpenReferralModal();
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════

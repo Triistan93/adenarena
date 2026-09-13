@@ -926,12 +926,13 @@ export const IDLE_MARKUP = `
             </div>
           </div>
 
-          <!-- Shop Tab -->
+          <!-- Authentic Lineage 2 Shop Tab -->
           <div id="tab-shop" class="tab-pane">
-            <div class="shop-head">
+            <!-- Global Shop Header (Compact) -->
+            <div class="shop-head" style="margin-bottom: 8px;">
               <div>
                 <h3 style="margin:0; font-family:'Cinzel',serif; color:var(--gilt-bright);">Guilda dos Mercadores de Aden</h3>
-                <p style="margin:2px 0 0 0; font-size:11px; color:var(--text-muted);">Comércio imperial de equipamentos, consumíveis, tomos arcanos e relíquias místicas</p>
+                <p style="margin:2px 0 0 0; font-size:11px; color:var(--text-muted);">Comércio imperial de armas, armaduras, consumíveis e relíquias de Aden</p>
               </div>
               <div style="display:flex; flex-direction:column; align-items:flex-end; gap:4px;">
                 <span class="shop-gold-pill">🪙 <span id="shop-gold">0</span> Adena</span>
@@ -939,71 +940,156 @@ export const IDLE_MARKUP = `
               </div>
             </div>
 
-            <!-- Subtabs: Main Category Tabs -->
-            <div class="shop-subtabs">
-              <button class="shop-subtab active" data-shoptab="gear">⚔️ Armaria Imperial</button>
-              <button class="shop-subtab" data-shoptab="potions">🧪 Mercearia &amp; Shots</button>
-              <button class="shop-subtab" data-shoptab="spellbooks">📜 Livraria Arcana</button>
-              <button class="shop-subtab" data-shoptab="mystic">🌟 Empório Místico</button>
-              <button class="shop-subtab" data-shoptab="sell" style="border-color:rgba(239,68,68,0.4); color:#fca5a5;">💰 Venda &amp; Recompra</button>
-            </div>
-
-            <!-- Search & Filters Bar -->
-            <div class="shop-filter-bar" id="shop-filter-bar" style="display:flex; flex-direction:column; gap:8px; margin-bottom:12px;">
-              <!-- Global Real-Time Search Bar -->
-              <div style="display:flex; gap:8px; align-items:center; width:100%;">
-                <input type="text" id="shop-search-input" placeholder="🔍 Buscar por nome (ex: Bow, Potion, Soulshot, Zubei, Spellbook)..." style="flex:1; min-width:200px; padding:8px 14px; border-radius:6px; border:1px solid rgba(212,175,55,0.3); background:rgba(0,0,0,0.6); color:#fff; font-size:13px;" />
-                <button id="shop-clear-search-btn" class="inv-batch-btn" style="display:none; padding:7px 12px;">✕ Limpar</button>
+            <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+            <!-- STAGE 1: JANELA DE DIÁLOGO / CHAT NPC (IMAGEM 1 DE REFERÊNCIA)           -->
+            <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+            <div id="shop-dialogue-view" class="l2chat-window-frame">
+              <div class="l2chat-window-header">
+                <span class="l2chat-title">Chat</span>
+                <button class="l2chat-close-btn" id="shop-dialogue-close-btn" title="Fechar" onclick="window.switchTab ? window.switchTab('inventory') : null">✕</button>
               </div>
-
-              <!-- Grade Filter Row -->
-              <div class="filter-row" id="shop-grade-filter-row">
-                <span class="filter-label">Nível / Grau:</span>
-                <div class="filter-group" id="shop-grade-filters">
-                  <button class="shop-filter-btn active" data-shopgrade="all">Todos</button>
-                  <button class="shop-filter-btn grade-btn-ng" data-shopgrade="ng">No-Grade (1-19)</button>
-                  <button class="shop-filter-btn grade-btn-d" data-shopgrade="d">D-Grade (20-39)</button>
-                  <button class="shop-filter-btn grade-btn-c" data-shopgrade="c">C-Grade (40-51)</button>
-                  <button class="shop-filter-btn grade-btn-b" data-shopgrade="b">B-Grade (52-60)</button>
-                  <button class="shop-filter-btn grade-btn-a" data-shopgrade="a">A-Grade (61-75)</button>
-                  <button class="shop-filter-btn grade-btn-s" data-shopgrade="s">S-Grade (76+)</button>
+              <div class="l2chat-inner-panel">
+                <div class="l2chat-npc-speech">
+                  <div class="l2chat-npc-name" id="shop-npc-name">Trader Woodrow:</div>
+                  <div class="l2chat-npc-text" id="shop-npc-text">Can I show you anything in particular? We are sure to have something for everyone.</div>
                 </div>
-              </div>
-
-              <!-- Slot Filter Row -->
-              <div class="filter-row" id="shop-slot-filter-row">
-                <span class="filter-label">Tipo de Item:</span>
-                <div class="filter-group" id="shop-slot-filters">
-                  <button class="shop-filter-btn active" data-shopslot="all">Todos os Tipos</button>
-                  <button class="shop-filter-btn" data-shopslot="weapon">⚔️ Armas Físicas</button>
-                  <button class="shop-filter-btn" data-shopslot="mweapon">🔮 Armas Mágicas</button>
-                  <button class="shop-filter-btn" data-shopslot="heavy">🛡️ Pesada</button>
-                  <button class="shop-filter-btn" data-shopslot="light">🥋 Leve</button>
-                  <button class="shop-filter-btn" data-shopslot="robe">👘 Robe Mágico</button>
-                  <button class="shop-filter-btn" data-shopslot="helmet">🪖 Capacetes</button>
-                  <button class="shop-filter-btn" data-shopslot="gloves">🥊 Luvas</button>
-                  <button class="shop-filter-btn" data-shopslot="boots">🥾 Botas</button>
-                  <button class="shop-filter-btn" data-shopslot="legs">👖 Calças</button>
-                  <button class="shop-filter-btn" data-shopslot="shield">🛡️ Escudos</button>
-                  <button class="shop-filter-btn" data-shopslot="jewel">📿 Joias &amp; Acessórios</button>
-                </div>
-              </div>
-
-              <!-- Batch Quantity Row for Potions & Consumables -->
-              <div class="filter-row" id="shop-batch-row" style="display:none;">
-                <span class="filter-label">Quantidade:</span>
-                <div class="filter-group" id="shop-batch-filters" style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
-                  <button class="shop-filter-btn active" data-shopqty="1">1x</button>
-                  <button class="shop-filter-btn" data-shopqty="10">10x</button>
-                  <button class="shop-filter-btn" data-shopqty="100">100x</button>
-                  <button class="shop-filter-btn" data-shopqty="1000">1000x</button>
-                  <button class="shop-filter-btn" data-shopqty="5000">5000x</button>
+                <div class="l2chat-options-container" id="shop-dialogue-options">
+                  <!-- Dynamic dialogue options rendered by GameUI.js -->
                 </div>
               </div>
             </div>
 
-            <!-- Merchant Content List Container -->
-            <div class="shop-list" id="shop-list"></div>
+            <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+            <!-- STAGE 2: JANELA STORE CLÁSSICA DO LINEAGE 2 (IMAGEM 2 DE REFERÊNCIA)      -->
+            <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+            <div id="shop-store-view" class="l2store-window-frame" style="display:none;">
+              <!-- Store Window Header -->
+              <div class="l2store-window-header">
+                <div class="l2store-header-left">
+                  <button class="l2store-back-btn" id="shop-back-to-dialogue-btn" title="Voltar ao Diálogo">
+                    ← Diálogo
+                  </button>
+                  <span class="l2store-window-title" id="shop-window-title">Store</span>
+                </div>
+                
+                <!-- Central Search Bar with clear button (Image 2) -->
+                <div class="l2store-search-bar">
+                  <input type="text" id="shop-search-input" placeholder="Buscar por nome (ex: Bow, Potion, Zubei)..." autocomplete="off" />
+                  <button id="shop-clear-search-btn" class="l2store-clear-search" style="display:none;">✕</button>
+                </div>
+
+                <!-- Window Right Controls -->
+                <div class="l2store-header-right">
+                  <button class="l2store-icon-btn" id="shop-view-toggle-btn" title="Alternar Modo Grade/Lista">🔲</button>
+                  <button class="l2store-icon-btn close" id="shop-store-close-btn" title="Voltar ao Diálogo">✕</button>
+                </div>
+              </div>
+
+              <!-- Store Primary Tabs: Buy / Sell / Refund + Slot Gauge -->
+              <div class="l2store-tabs-bar">
+                <div class="l2store-tabs">
+                  <button class="l2store-tab active" data-shoptab="buy">Buy</button>
+                  <button class="l2store-tab" data-shoptab="sell">Sell</button>
+                  <button class="l2store-tab" data-shoptab="refund">Refund</button>
+                </div>
+                <div class="l2store-slot-counter" id="shop-slot-counter">
+                  (<span id="shop-inv-used">0</span>/<span id="shop-inv-max">150</span>)
+                </div>
+              </div>
+
+              <!-- Subcategory & Grade Filter Toolbar -->
+              <div class="l2store-filter-toolbar" id="shop-filter-toolbar">
+                <!-- Subcategory quick pill selector -->
+                <div class="l2store-subcat-strip" id="shop-subcat-strip">
+                  <!-- Gerado dinamicamente: Todos, Arcos, Espadas, etc. -->
+                </div>
+
+                <!-- Grade Filter Row: NG, D, C, B, A, S -->
+                <div class="l2store-grade-strip" id="shop-grade-strip">
+                  <button class="l2store-grade-btn active" data-shopgrade="all">Todos</button>
+                  <button class="l2store-grade-btn grade-ng" data-shopgrade="ng">NG</button>
+                  <button class="l2store-grade-btn grade-d" data-shopgrade="d">D</button>
+                  <button class="l2store-grade-btn grade-c" data-shopgrade="c">C</button>
+                  <button class="l2store-grade-btn grade-b" data-shopgrade="b">B</button>
+                  <button class="l2store-grade-btn grade-a" data-shopgrade="a">A</button>
+                  <button class="l2store-grade-btn grade-s" data-shopgrade="s">S</button>
+                </div>
+              </div>
+
+              <!-- Mystic Emporium Special Header (Banner) -->
+              <div id="shop-mystic-banner" style="display:none; padding: 6px 12px; margin-bottom: 8px;"></div>
+
+              <!-- Store Two-Column Layout (Signature Lineage 2 Store) -->
+              <div class="l2store-main-body">
+                <!-- Left Column: Shop Catalog -->
+                <div class="l2store-col l2store-left-col">
+                  <div class="l2store-col-header">
+                    <span id="shop-left-col-title">Shop List</span>
+                    <span class="l2store-count-badge" id="shop-left-count-badge">0 itens</span>
+                  </div>
+                  <div class="l2store-grid-scroll" id="shop-items-container">
+                    <!-- Itens da loja preenchidos dinamicamente -->
+                  </div>
+                </div>
+
+                <!-- Center Transfer Indicator Arrow -->
+                <div class="l2store-transfer-arrow" title="Transferir item para a Lista de Compra">
+                  <span>▶</span>
+                </div>
+
+                <!-- Right Column: Purchase List / Cart -->
+                <div class="l2store-col l2store-right-col">
+                  <div class="l2store-col-header">
+                    <span id="shop-right-col-title">Purchase List</span>
+                    <button class="l2store-clear-cart-btn" id="shop-clear-cart-btn" title="Limpar lista">Limpar</button>
+                  </div>
+                  <div class="l2store-grid-scroll" id="shop-purchase-list">
+                    <!-- Itens no carrinho / selecionados para compra ou venda -->
+                  </div>
+                </div>
+              </div>
+
+              <!-- Store Bottom Status & Actions Bar (Identical to Image 2) -->
+              <div class="l2store-bottom-bar">
+                <div class="l2store-status-left">
+                  <!-- Adena Row -->
+                  <div class="l2store-status-row">
+                    <span class="l2store-label">Adena</span>
+                    <span class="l2store-coin-icon">🪙</span>
+                    <div class="l2store-val-box">
+                      <span id="shop-bottom-adena">0</span>
+                    </div>
+                  </div>
+                  <!-- Weight Row -->
+                  <div class="l2store-status-row">
+                    <span class="l2store-label">Weight</span>
+                    <span class="l2store-scale-icon">⚖️</span>
+                    <div class="l2store-weight-box">
+                      <div class="l2store-weight-track">
+                        <div class="l2store-weight-fill" id="shop-bottom-weight-bar" style="width:0%;"></div>
+                      </div>
+                      <span class="l2store-weight-text" id="shop-bottom-weight-text">0,00%</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="l2store-status-right">
+                  <!-- Price Row -->
+                  <div class="l2store-status-row">
+                    <span class="l2store-label">Price</span>
+                    <span class="l2store-coin-icon">🪙</span>
+                    <div class="l2store-val-box">
+                      <span id="shop-bottom-price">0</span>
+                    </div>
+                  </div>
+                  <!-- Action Buttons -->
+                  <div class="l2store-actions-row">
+                    <button class="l2store-action-btn primary" id="shop-action-confirm-btn">Buy</button>
+                    <button class="l2store-action-btn" id="shop-action-cancel-btn">Cancel</button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           <!-- Market Tab (Mercado de Giran) -->
@@ -1011,54 +1097,103 @@ export const IDLE_MARKUP = `
 
           <!-- Craft Tab -->
           <div id="tab-craft" class="tab-pane">
-            <div class="craft-head" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:14px; background:radial-gradient(circle at 50% 0%, #1c2333 0%, #0c0f16 100%); border:1px solid #5a4625; border-radius:10px; padding:14px 16px; box-shadow:inset 0 1px 0 rgba(255,215,0,0.15), 0 4px 16px rgba(0,0,0,0.6);">
-              <div>
+            <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+            <!-- STAGE 1: JANELA DE DIÁLOGO / CHAT NPC BLACKSMITH WILBERT (IMAGEM 5)       -->
+            <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+            <div id="forge-dialogue-view" class="l2chat-window-frame">
+              <!-- NPC Dialogue Window Header -->
+              <div class="l2chat-window-header">
                 <div style="display:flex; align-items:center; gap:8px;">
-                  <span style="font-size:22px;">⚒️</span>
-                  <h3 style="margin:0; font-family:'Cinzel',serif; font-size:17px; font-weight:800; color:#f5df93; letter-spacing:0.06em;">Bigorna Imperial de Aden</h3>
+                  <span style="font-size:16px;">💬</span>
+                  <span class="l2chat-title">Chat</span>
                 </div>
-                <p style="margin:4px 0 0 0; font-size:11px; color:#94a3b8;">Oficina Ancestral de Armamentos, Aprimoramento de Almas e Engastes Místicos.</p>
+                <button class="l2chat-close-btn" id="forge-dialogue-close-btn" title="Fechar Diálogo">✕</button>
               </div>
-              <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
-                <div class="stat-value" style="font-size:12px; font-family:'Cinzel',serif; background:rgba(18,24,36,0.9); border:1px solid #8a6d3b; padding:6px 14px; border-radius:6px; box-shadow:inset 0 1px 0 rgba(255,255,255,0.06);">
-                  🔨 Forja: <strong id="craft-level" style="color:#ffd877;">1</strong>
-                  <div style="width:110px; height:5px; background:rgba(0,0,0,0.6); border-radius:3px; margin-top:4px; overflow:hidden; border:1px solid rgba(212,167,68,0.3);">
-                    <div id="craft-forge-exp-bar" style="height:100%; width:0%; background:linear-gradient(90deg, #d4a744, #10b981); transition:width 0.3s;"></div>
+
+              <!-- NPC Speech Box & Story Lore (Wilbert from Image 5) -->
+              <div class="l2chat-inner-panel">
+                <div class="l2chat-npc-speech">
+                  <div class="l2chat-npc-name" id="forge-npc-name">Blacksmith Wilbert:</div>
+                  <div class="l2chat-npc-text" id="forge-npc-text">
+                    Haha! Blacksmiths do so much more than just craft armor, spears, axes and the like. The town of Aden wouldn't even exist without our Black Anvil Guild.<br><br>
+                    Oh, by the way, it's only rumors, but... I've heard that golems which were used to banish humans from our lands were constructed by our guild too. Who else could have invented such outstanding technology?
                   </div>
                 </div>
-                <button onclick="window.openMarketTab ? window.openMarketTab() : (window.openPanel && window.openPanel('market'))" style="font-size:11px; font-weight:bold; padding:7px 14px; border-radius:6px; background:linear-gradient(180deg, #261f10 0%, #141008 100%); border:1px solid #d4a744; color:#fde047; cursor:pointer; font-family:'Cinzel',serif; display:flex; align-items:center; gap:6px; box-shadow:0 0 10px rgba(212,167,68,0.25);">
-                  🏛️ Mercado P2P ➔
-                </button>
-              </div>
 
-              <div style="display:flex; gap:5px; flex-wrap:wrap; margin-top:10px; width:100%; border-top:1px solid rgba(212,167,68,0.2); padding-top:10px;" id="forge-subtab-buttons">
-                <button onclick="window.setForgeSubTab('craft')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="craft" style="font-family:'Cinzel',serif; font-weight:700; font-size:11px;">⚒️ Criação Geral</button>
-                <button onclick="window.setForgeSubTab('soulcrystal')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="soulcrystal" style="font-family:'Cinzel',serif; font-weight:700; font-size:11px;">🔮 Soul Crystals (SA)</button>
-                <button onclick="window.setForgeSubTab('elemental')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="elemental" style="font-family:'Cinzel',serif; font-weight:700; font-size:11px; color:#fdba74;">🔥 Atributos Elementais</button>
-                <button onclick="window.setForgeSubTab('masterwork')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="masterwork" style="font-family:'Cinzel',serif; font-weight:700; font-size:11px;">✨ Pushkin MW</button>
-                <button onclick="window.setForgeSubTab('tattoos')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="tattoos" style="font-family:'Cinzel',serif; font-weight:700; font-size:11px;">🖊️ Tatuagens &amp; Dyes</button>
-                <button onclick="window.setForgeSubTab('synthesis')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="synthesis" style="font-family:'Cinzel',serif; font-weight:700; font-size:11px;">🔨 Síntese Imperial</button>
-                <button onclick="window.setForgeSubTab('lifestones')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="lifestones" style="font-family:'Cinzel',serif; font-weight:700; font-size:11px;">💎 Life Stones</button>
-                <button onclick="window.setForgeSubTab('randomcraft')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="randomcraft" style="font-family:'Cinzel',serif; font-weight:700; font-size:11px; color:#e9d5ff;">🎲 Random Craft</button>
+                <!-- NPC Options Strip with speech bubbles (Image 5) -->
+                <div class="l2chat-options-container" id="forge-dialogue-options">
+                  <!-- Gerado dinamicamente via renderForgeDialogueView() -->
+                </div>
               </div>
             </div>
 
-            <div class="craft-filters-bar" style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; align-items:center;">
-              <input type="text" id="craft-search-input" placeholder="🔍 Buscar receita por nome ou grau..." style="flex:1; min-width:200px; padding:7px 12px; border-radius:6px; border:1px solid rgba(212,167,68,0.35); background:#0c0f16; color:#ece4d3; font-size:12px; font-family:'Cinzel',serif;" />
-              <div style="display:flex; gap:5px; flex-wrap:wrap;" id="craft-category-filters">
-                <button class="inv-batch-btn active" data-craft-cat="all">🌟 Todos</button>
-                <button class="inv-batch-btn" data-craft-cat="weapon">⚔ Armas</button>
-                <button class="inv-batch-btn" data-craft-cat="armor">🛡 Armaduras</button>
-                <button class="inv-batch-btn" data-craft-cat="jewel">💍 Joias</button>
-                <button class="inv-batch-btn" data-craft-cat="relic">🧚 Agathions</button>
-                <button class="inv-batch-btn" data-craft-cat="consumable">🧪 Consumíveis</button>
+            <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+            <!-- STAGE 2: WORKSPACE DA FORJA IMPERIAL (SUBFERRAMENTAS)                     -->
+            <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+            <div id="forge-workspace-view" class="l2store-window-frame" style="display:none;">
+              <!-- Workspace Top Header with Back to Dialogue Button -->
+              <div class="l2store-window-header">
+                <div class="l2store-header-left">
+                  <button class="l2store-back-btn" id="forge-back-to-dialogue-btn" title="Voltar ao Diálogo com Wilbert">
+                    ← Diálogo
+                  </button>
+                  <span class="l2store-window-title" id="forge-window-title">Forja Imperial de Aden</span>
+                </div>
+
+                <div class="l2store-header-right">
+                  <button class="l2store-icon-btn close" id="forge-workspace-close-btn" title="Voltar ao Diálogo">✕</button>
+                </div>
               </div>
-            </div>
 
-            <div id="craft-subcategory-filters" style="display:flex; gap:5px; flex-wrap:wrap; margin-bottom:12px; padding:6px 10px; background:rgba(12,15,22,0.85); border-radius:6px; border:1px solid rgba(212,167,68,0.15);"></div>
+              <div class="craft-head" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:14px; background:radial-gradient(circle at 50% 0%, #1c2333 0%, #0c0f16 100%); border:1px solid #5a4625; border-radius:10px; padding:14px 16px; box-shadow:inset 0 1px 0 rgba(255,215,0,0.15), 0 4px 16px rgba(0,0,0,0.6);">
+                <div>
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <span style="font-size:22px;">⚒️</span>
+                    <h3 style="margin:0; font-family:'Cinzel',serif; font-size:17px; font-weight:800; color:#f5df93; letter-spacing:0.06em;">Bigorna Imperial de Aden</h3>
+                  </div>
+                  <p style="margin:4px 0 0 0; font-size:11px; color:#94a3b8;">Oficina Ancestral de Armamentos, Aprimoramento de Almas e Engastes Místicos.</p>
+                </div>
+                <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                  <div class="stat-value" style="font-size:12px; font-family:'Cinzel',serif; background:rgba(18,24,36,0.9); border:1px solid #8a6d3b; padding:6px 14px; border-radius:6px; box-shadow:inset 0 1px 0 rgba(255,255,255,0.06);">
+                    🔨 Forja: <strong id="craft-level" style="color:#ffd877;">1</strong>
+                    <div style="width:110px; height:5px; background:rgba(0,0,0,0.6); border-radius:3px; margin-top:4px; overflow:hidden; border:1px solid rgba(212,167,68,0.3);">
+                      <div id="craft-forge-exp-bar" style="height:100%; width:0%; background:linear-gradient(90deg, #d4a744, #10b981); transition:width 0.3s;"></div>
+                    </div>
+                  </div>
+                  <button onclick="window.openMarketTab ? window.openMarketTab() : (window.openPanel && window.openPanel('market'))" style="font-size:11px; font-weight:bold; padding:7px 14px; border-radius:6px; background:linear-gradient(180deg, #261f10 0%, #141008 100%); border:1px solid #d4a744; color:#fde047; cursor:pointer; font-family:'Cinzel',serif; display:flex; align-items:center; gap:6px; box-shadow:0 0 10px rgba(212,167,68,0.25);">
+                    🏛️ Mercado P2P ➔
+                  </button>
+                </div>
 
-            <div id="craft-recipes-view" class="craft-view active">
-              <div class="craft-list" id="craft-list"></div>
+                <div style="display:flex; gap:5px; flex-wrap:wrap; margin-top:10px; width:100%; border-top:1px solid rgba(212,167,68,0.2); padding-top:10px;" id="forge-subtab-buttons">
+                  <button onclick="window.setForgeSubTab('craft')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="craft" style="font-family:'Cinzel',serif; font-weight:700; font-size:11px;">⚒️ Criação Geral</button>
+                  <button onclick="window.setForgeSubTab('soulcrystal')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="soulcrystal" style="font-family:'Cinzel',serif; font-weight:700; font-size:11px;">🔮 Soul Crystals (SA)</button>
+                  <button onclick="window.setForgeSubTab('elemental')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="elemental" style="font-family:'Cinzel',serif; font-weight:700; font-size:11px; color:#fdba74;">🔥 Atributos Elementais</button>
+                  <button onclick="window.setForgeSubTab('masterwork')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="masterwork" style="font-family:'Cinzel',serif; font-weight:700; font-size:11px;">✨ Pushkin MW</button>
+                  <button onclick="window.setForgeSubTab('tattoos')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="tattoos" style="font-family:'Cinzel',serif; font-weight:700; font-size:11px;">🖊️ Tatuagens &amp; Dyes</button>
+                  <button onclick="window.setForgeSubTab('synthesis')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="synthesis" style="font-family:'Cinzel',serif; font-weight:700; font-size:11px;">🔨 Síntese Imperial</button>
+                  <button onclick="window.setForgeSubTab('lifestones')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="lifestones" style="font-family:'Cinzel',serif; font-weight:700; font-size:11px;">💎 Life Stones</button>
+                  <button onclick="window.setForgeSubTab('randomcraft')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="randomcraft" style="font-family:'Cinzel',serif; font-weight:700; font-size:11px; color:#e9d5ff;">🎲 Random Craft</button>
+                </div>
+              </div>
+
+              <div class="craft-filters-bar" id="craft-filters-bar" style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; align-items:center;">
+                <input type="text" id="craft-search-input" placeholder="🔍 Buscar receita por nome ou grau..." style="flex:1; min-width:200px; padding:7px 12px; border-radius:6px; border:1px solid rgba(212,167,68,0.35); background:#0c0f16; color:#ece4d3; font-size:12px; font-family:'Cinzel',serif;" />
+                <div style="display:flex; gap:5px; flex-wrap:wrap;" id="craft-category-filters">
+                  <button class="inv-batch-btn active" data-craft-cat="all">🌟 Todos</button>
+                  <button class="inv-batch-btn" data-craft-cat="weapon">⚔ Armas</button>
+                  <button class="inv-batch-btn" data-craft-cat="armor">🛡 Armaduras</button>
+                  <button class="inv-batch-btn" data-craft-cat="jewel">💍 Joias</button>
+                  <button class="inv-batch-btn" data-craft-cat="relic">🧚 Agathions</button>
+                  <button class="inv-batch-btn" data-craft-cat="consumable">🧪 Consumíveis</button>
+                </div>
+              </div>
+
+              <div id="craft-subcategory-filters" style="display:flex; gap:5px; flex-wrap:wrap; margin-bottom:12px; padding:6px 10px; background:rgba(12,15,22,0.85); border-radius:6px; border:1px solid rgba(212,167,68,0.15);"></div>
+
+              <div id="craft-recipes-view" class="craft-view active">
+                <div class="craft-list" id="craft-list"></div>
+              </div>
             </div>
           </div>
 
