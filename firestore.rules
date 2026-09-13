@@ -41,15 +41,22 @@ service cloud.firestore {
           && request.resource.data.createdAt == resource.data.createdAt;
     }
 
+    function isServerAdmin() {
+      return isAuthenticated() && (
+        request.auth.token.email in ['duuh.alaminos@gmail.com', 'eduardol.alaminos@gmail.com'] ||
+        request.auth.token.admin == true
+      );
+    }
+
     // ─── Contas de Usuário (accounts) ────────────────────────────────────────
     match /accounts/{accountId} {
-      allow read: if isAuthenticated() && (resource.data.ownerUid == request.auth.uid);
+      allow read: if isAuthenticated() && (resource.data.ownerUid == request.auth.uid || isServerAdmin());
       allow create: if isAuthenticated() && request.resource.data.ownerUid == request.auth.uid && noPrivilegeEscalation();
       allow update: if isAuthenticated() && resource.data.ownerUid == request.auth.uid 
                     && request.resource.data.ownerUid == resource.data.ownerUid 
                     && request.resource.data.accountId == resource.data.accountId 
                     && noPrivilegeEscalation();
-      allow delete: if false; // Contas não podem ser deletadas diretamente pelo cliente
+      allow delete: if isServerAdmin(); // Permite exclusão exclusivamente em manutenção administrativa
     }
 
     // ─── Reserva Canônica de Nomes (character_names) ─────────────────────────
@@ -58,7 +65,7 @@ service cloud.firestore {
       // Criação atômica: só permite criar se não existir previamente
       allow create: if isAuthenticated() && request.resource.data.ownerUid == request.auth.uid;
       allow update: if false; // Nome reservado é estritamente imutável
-      allow delete: if isAuthenticated() && resource.data.ownerUid == request.auth.uid;
+      allow delete: if (isAuthenticated() && resource.data.ownerUid == request.auth.uid) || isServerAdmin();
     }
 
     // ─── Identidade Canônica do Personagem (characters) ───────────────────────
@@ -70,7 +77,7 @@ service cloud.firestore {
       allow update: if isAuthenticated() && resource.data.ownerUid == request.auth.uid 
                     && immutableCharacterFieldsUnchanged() 
                     && noPrivilegeEscalation();
-      allow delete: if isAuthenticated() && resource.data.ownerUid == request.auth.uid;
+      allow delete: if (isAuthenticated() && resource.data.ownerUid == request.auth.uid) || isServerAdmin();
     }
 
     // ─── Presença em Tempo Real (presence) — Gate 1 ──────────────────────────
@@ -79,103 +86,99 @@ service cloud.firestore {
       allow create: if isAuthenticated() && request.resource.data.ownerUid == request.auth.uid;
       allow update: if isAuthenticated() && resource.data.ownerUid == request.auth.uid 
                     && request.resource.data.ownerUid == resource.data.ownerUid;
-      allow delete: if isAuthenticated() && resource.data.ownerUid == request.auth.uid;
+      allow delete: if (isAuthenticated() && resource.data.ownerUid == request.auth.uid) || isServerAdmin();
     }
 
     // ─── Relações de Amizade (friends) ───────────────────────────────────────
     match /friends/{friendshipId} {
       allow read: if isAuthenticated();
-      allow create: if isAuthenticated();
-      allow update: if isAuthenticated();
-      allow delete: if isAuthenticated();
+      allow create, update, delete: if isAuthenticated() || isServerAdmin();
     }
 
     match /friend_requests/{requestId} {
       allow read: if isAuthenticated();
-      allow create, update, delete: if isAuthenticated();
+      allow create, update, delete: if isAuthenticated() || isServerAdmin();
     }
 
     // ─── Mentoria Oficial (mentorships) ─────────────────────────────────────
     match /mentorships/{mentorshipId} {
       allow read: if isAuthenticated();
-      allow create: if isAuthenticated();
-      allow update: if isAuthenticated();
-      allow delete: if isAuthenticated();
+      allow create, update, delete: if isAuthenticated() || isServerAdmin();
     }
 
     match /mentorship_requests/{requestId} {
       allow read: if isAuthenticated();
-      allow create, update, delete: if isAuthenticated();
+      allow create, update, delete: if isAuthenticated() || isServerAdmin();
     }
 
     // ─── Sistema de Indicação / Referral (referrals) ─────────────────────────
     match /referrals/{referralId} {
       allow read: if isAuthenticated();
-      allow create: if isAuthenticated();
-      allow update: if isAuthenticated();
+      allow create, update, delete: if isAuthenticated() || isServerAdmin();
     }
 
     // ─── Lista de Bloqueio (blocks) ──────────────────────────────────────────
     match /blocks/{blockId} {
-      allow read: if isAuthenticated() && (resource == null || resource.data.ownerUid == request.auth.uid);
+      allow read: if isAuthenticated() && (resource == null || resource.data.ownerUid == request.auth.uid || isServerAdmin());
       allow create: if isAuthenticated() && request.resource.data.ownerUid == request.auth.uid;
-      allow delete: if isAuthenticated() && resource.data.ownerUid == request.auth.uid;
+      allow delete: if (isAuthenticated() && resource.data.ownerUid == request.auth.uid) || isServerAdmin();
     }
 
     // ─── Clãs Imperiais e Membros ────────────────────────────────────────────
     match /clans/{clanId} {
       allow read: if isAuthenticated();
-      allow write: if isRegistered();
+      allow write, delete: if isRegistered() || isServerAdmin();
     }
 
     match /clan_members/{membershipId} {
       allow read: if isAuthenticated();
-      allow write: if isRegistered();
+      allow write, delete: if isRegistered() || isServerAdmin();
     }
 
     // ─── Snapshot Competitivo de Rankings (pvp_rankings) ────────────────────
     match /pvp_rankings/{entryId} {
       allow read: if isAuthenticated();
       allow create, update: if isAuthenticated();
+      allow delete: if isServerAdmin();
     }
 
     // ─── Inscrições na Grand Olympiad ───────────────────────────────────────
     match /olympiad_registrations/{regId} {
       allow read: if isAuthenticated();
-      allow create, update: if isAuthenticated();
+      allow create, update, delete: if isAuthenticated() || isServerAdmin();
     }
 
     // ─── Mercado Central de Giran — Anúncios P2P ────────────────────────────
     match /market_listings/{listingId} {
       allow read: if isAuthenticated();
-      allow create: if isAuthenticated();
-      allow update: if isAuthenticated();
-      allow delete: if isAuthenticated();
+      allow create, update, delete: if isAuthenticated() || isServerAdmin();
     }
 
     // ─── Mercado Central de Giran — Registro de Vendas ──────────────────────
     match /market_sales/{sellerKey} {
       allow read: if isAuthenticated();
-      allow write: if isAuthenticated();
+      allow write, delete: if isAuthenticated() || isServerAdmin();
     }
 
     // ─── Metadados Globais do Servidor ──────────────────────────────────────
     match /server_meta/{docId} {
       allow read: if isAuthenticated();
-      allow write: if isAuthenticated();
+      allow write, delete: if isAuthenticated() || isServerAdmin();
     }
 
     // ─── Logs de Auditoria do Sistema ───────────────────────────────────────
     match /audit_logs/{logId} {
-      allow read: if false; // Apenas backend/console
+      allow read: if isServerAdmin();
       allow create: if isAuthenticated();
+      allow delete: if isServerAdmin();
     }
 
     // ─── Coleção Legada de Usuários (Fase 1 de Migração) ─────────────────────
     // Mantida para compatibilidade transitória não-destrutiva
     match /users/{userId} {
       allow read: if isAuthenticated();
-      allow write: if isOwner(userId) && noPrivilegeEscalation();
+      allow write: if (isOwner(userId) && noPrivilegeEscalation()) || isServerAdmin();
+      allow delete: if (isAuthenticated() && isOwner(userId)) || isServerAdmin();
     }
   }
 }

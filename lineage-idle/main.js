@@ -8008,6 +8008,73 @@ export function bindEvents() {
       btn.onclick = () => executeAdminCmd(btn.dataset.adminCmd);
     });
 
+    const adminWipeBtn = el('admin-wipe-database-btn');
+    if (adminWipeBtn) {
+      adminWipeBtn.onclick = async () => {
+        const confirm1 = confirm(
+          '🚨 ATENÇÃO CRÍTICA: Deseja realmente executar o WIPE GERAL do servidor?\n\n' +
+          'Esta ação irá DELETAR TODAS as 17 coleções canônicas do Cloud Firestore:\n' +
+          '• Contas, Personagens, Nomes de Heróis\n' +
+          '• Clãs e Membros de Clã\n' +
+          '• Rankings PvP, Registros de Olimpíadas e Mercado\n' +
+          '• Presença, Amizades, Pedidos de Amizade, Mentorias e Bloqueios\n\n' +
+          'Todos os jogadores serão desconectados e iniciarão do zero na Criação de Personagem.\n\n' +
+          'Pressione OK se você tem certeza absoluta.'
+        );
+        if (!confirm1) return;
+
+        const confirm2 = prompt('Para confirmar a destruição de dados, digite exatamente "WIPE ZERO":');
+        if (confirm2 !== 'WIPE ZERO') {
+          alert('Operação cancelada. O texto digitado não confere com "WIPE ZERO".');
+          return;
+        }
+
+        try {
+          adminWipeBtn.disabled = true;
+          adminWipeBtn.textContent = '⏳ Executando Wipe Geral nas 17 coleções do Firestore...';
+
+          const wipeFn = (typeof window !== 'undefined' && window.FirebaseBridge?.wipeEntireGameDatabase) || 
+                         (typeof window !== 'undefined' && window.wipeEntireGameDatabase);
+          if (typeof wipeFn !== 'function') {
+            throw new Error('Função wipeEntireGameDatabase não encontrada. Verifique se o módulo Firebase está inicializado.');
+          }
+
+          const result = await wipeFn();
+          console.log('[Admin Wipe] Concluído com sucesso:', result);
+
+          let msg = '✅ WIPE DO BANCO DE DADOS CONCLUÍDO COM SUCESSO!\n\nDocumentos deletados por coleção:\n';
+          let totalDeleted = 0;
+          for (const [col, count] of Object.entries(result.deletedCounts || {})) {
+            if (count > 0) {
+              msg += `• ${col}: ${count} doc(s)\n`;
+              totalDeleted += count;
+            }
+          }
+          if (totalDeleted === 0) {
+            msg += '• (Nenhum documento residual nas coleções)\n';
+          }
+
+          if (result.errors && result.errors.length > 0) {
+            msg += `\nAvisos encontrados (${result.errors.length}):\n${result.errors.join('\n')}`;
+          }
+
+          alert(msg + '\n\nO servidor está zerado. A aplicação será reiniciada na Criação de Personagem.');
+
+          if (typeof localStorage !== 'undefined') {
+            localStorage.setItem('aden_pending_char_creation', '1');
+            localStorage.removeItem('aden_wipe_epoch');
+          }
+          if (typeof sessionStorage !== 'undefined') sessionStorage.clear();
+          location.reload();
+        } catch (err) {
+          console.error('[Admin Wipe] Erro na execução:', err);
+          alert(`❌ Falha ao executar o Wipe Geral: ${err.message || err}\n\nCertifique-se de estar autenticado com a conta administrativa duuh.alaminos@gmail.com.`);
+          adminWipeBtn.disabled = false;
+          adminWipeBtn.textContent = '🔥 WIPE GERAL DO BANCO DE DADOS (SERVIDOR ZERO)';
+        }
+      };
+    }
+
     const addXpBtn = el('admin-add-xp-btn');
     if (addXpBtn) {
       addXpBtn.onclick = () => {

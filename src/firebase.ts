@@ -26,7 +26,8 @@ import {
   orderBy, 
   limit, 
   where,
-  documentId
+  documentId,
+  writeBatch
 } from 'firebase/firestore';
 
 export {
@@ -44,7 +45,8 @@ export {
   orderBy, 
   limit, 
   where,
-  documentId
+  documentId,
+  writeBatch
 };
 
 // ── Firebase Configuration ───────────────────────────────────────────────────
@@ -1108,4 +1110,78 @@ export async function checkReferralRewardsInCloud(
     return { count: 0, claimableRewards: 0 };
   }
 }
+
+/**
+ * Wipe Geral de todas as coleções do Cloud Firestore
+ * Apenas executável por administradores autenticados autorizados
+ */
+export async function wipeEntireFirestoreDatabase(): Promise<{
+  success: boolean;
+  deletedCounts: Record<string, number>;
+  errors: string[];
+}> {
+  const result: { success: boolean; deletedCounts: Record<string, number>; errors: string[] } = {
+    success: true,
+    deletedCounts: {},
+    errors: []
+  };
+
+  const collectionsToWipe = [
+    'characters',
+    'character_names',
+    'presence',
+    'accounts',
+    'friends',
+    'friend_requests',
+    'mentorships',
+    'mentorship_requests',
+    'referrals',
+    'blocks',
+    'clans',
+    'clan_members',
+    'pvp_rankings',
+    'olympiad_registrations',
+    'market_listings',
+    'market_sales',
+    'server_meta',
+    'users'
+  ];
+
+  console.warn('🚨 [WIPE DATABASE] Iniciando limpeza geral do Cloud Firestore...');
+
+  for (const colName of collectionsToWipe) {
+    try {
+      let totalDeleted = 0;
+      let hasMore = true;
+      while (hasMore) {
+        const snap = await getDocs(query(collection(db, colName), limit(200)));
+        if (snap.empty) {
+          hasMore = false;
+          break;
+        }
+        const batch = writeBatch(db);
+        snap.docs.forEach((d) => batch.delete(d.ref));
+        await batch.commit();
+        totalDeleted += snap.size;
+        if (snap.size < 200) {
+          hasMore = false;
+        }
+      }
+      result.deletedCounts[colName] = totalDeleted;
+      console.log(`🧹 [WIPE] Coleção "${colName}": ${totalDeleted} documentos removidos.`);
+    } catch (err: any) {
+      result.success = false;
+      result.errors.push(`Erro na coleção ${colName}: ${err?.message || err}`);
+      console.error(`❌ [WIPE] Falha ao limpar ${colName}:`, err);
+    }
+  }
+
+  console.warn('🏁 [WIPE DATABASE] Processo finalizado com resultado:', result);
+  return result;
+}
+
+if (typeof window !== 'undefined') {
+  (window as any).wipeEntireGameDatabase = wipeEntireFirestoreDatabase;
+}
+
 

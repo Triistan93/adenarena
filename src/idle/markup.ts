@@ -2067,6 +2067,19 @@ export const IDLE_MARKUP = `
                 <button class="admin-btn danger" data-admin-cmd="resetsave">🗑️ Resetar Progresso</button>
               </div>
             </div>
+
+            <!-- Danger Zone: Database & Server Zero Wipe -->
+            <div class="admin-section" style="margin-top: 14px; border: 1px solid rgba(239, 68, 68, 0.5); background: rgba(127, 29, 29, 0.2); border-radius: 6px; padding: 12px;">
+              <h3 style="color: #f87171; display:flex; align-items:center; gap:6px; margin-top:0;">
+                🔥 Zona Crítica: Wipe de Servidor &amp; Cloud Firestore
+              </h3>
+              <p style="font-size: 11px; color: #fca5a5; line-height: 1.4; margin: 4px 0 10px 0;">
+                Apaga completamente TODAS as 17 coleções canônicas do Cloud Firestore (contas, personagens, clãs, mercado, rankings) e força o reset global para todos os jogadores retornarem à Criação de Personagem. Ação restrita ao Administrador Oficial (<code>duuh.alaminos@gmail.com</code>).
+              </p>
+              <button id="admin-wipe-database-btn" class="admin-preset-btn danger" style="background:rgba(220,38,38,0.4); border-color:#ef4444; color:#fee2e2; font-weight:bold; width:100%; padding:10px; font-size:12px; cursor:pointer;">
+                🔥 WIPE GERAL DO BANCO DE DADOS (SERVIDOR ZERO)
+              </button>
+            </div>
           </div>
         </div>
       </div>

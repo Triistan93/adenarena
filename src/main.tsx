@@ -18,17 +18,61 @@ if (typeof window !== "undefined") {
     console.warn("Falha ao capturar ref:", e);
   }
 
-  // Purge legacy caches on version change without disrupting active PWA registration
-  const APP_VERSION = "3.3.7";
-  if (localStorage.getItem("aden_app_version") !== APP_VERSION) {
+  // ── PROTOCOLO DE WIPE GERAL DO SERVIDOR & PURGA TOTAL DE CACHE ──────────────
+  const WIPE_EPOCH = "2026-09-13_WIPE_ZERO_V1";
+  const APP_VERSION = "4.0.0";
+
+  const currentWipe = localStorage.getItem("aden_wipe_epoch");
+  if (currentWipe !== WIPE_EPOCH) {
+    console.warn("🚨 [WIPE PROTOCOL] Disparando purga completa de cache e armazenamento local...");
+
+    // 1. Limpa todas as instâncias de CacheStorage do navegador / PWA
     if ("caches" in window) {
-      caches.keys().then((names) => {
-        for (const name of names) {
-          caches.delete(name);
-        }
-      });
+      try {
+        caches.keys().then((names) => {
+          for (const name of names) {
+            caches.delete(name);
+          }
+        });
+      } catch (e) {
+        console.debug("CacheStorage wipe notice:", e);
+      }
     }
+
+    // 2. Limpa bancos de dados locais IndexedDB (incluindo cache offline do Firestore)
+    if ("indexedDB" in window && typeof indexedDB.databases === "function") {
+      try {
+        indexedDB.databases().then((dbs) => {
+          for (const dbInfo of dbs) {
+            if (dbInfo.name) {
+              indexedDB.deleteDatabase(dbInfo.name);
+            }
+          }
+        });
+      } catch (e) {
+        console.debug("IndexedDB wipe notice:", e);
+      }
+    }
+
+    // 3. Expurgo minucioso do localStorage
+    const preserveKeys = new Set(["aden_wipe_epoch", "aden_app_version", "aden_pending_char_creation"]);
+    const keysToRemove: string[] = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && !preserveKeys.has(key)) {
+        keysToRemove.push(key);
+      }
+    }
+    keysToRemove.forEach((k) => localStorage.removeItem(k));
+
+    // 4. Limpa sessionStorage
+    sessionStorage.clear();
+
+    // 5. Marca a época do wipe e direciona imediatamente para Criação de Personagem
+    localStorage.setItem("aden_wipe_epoch", WIPE_EPOCH);
     localStorage.setItem("aden_app_version", APP_VERSION);
+    localStorage.setItem("aden_pending_char_creation", "1");
+    console.log("✅ [WIPE PROTOCOL] Cache, IndexedDB e LocalStorage zerados com sucesso. Redirecionando para Criação de Personagem.");
   }
 
   // Clear chunk recovery lock on successful script execution

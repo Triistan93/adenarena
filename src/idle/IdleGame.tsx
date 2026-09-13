@@ -46,6 +46,7 @@ import {
   deletePlayerStateFromCloud,
   recordReferralInCloud,
   checkReferralRewardsInCloud,
+  wipeEntireFirestoreDatabase,
   onAuthStateChanged,
   auth 
 } from "../firebase";
@@ -99,7 +100,10 @@ if (typeof window !== "undefined") {
     bindMentorship: (apprenticeId: string, level: number, mentorName: string) => SocialIntegrityService.bindMentorship(apprenticeId, level, mentorName),
     blockPlayer: (myCharId: string, ownerUid: string, targetName: string) => SocialIntegrityService.blockPlayer(myCharId, ownerUid, targetName),
     unblockPlayer: (myCharId: string, blockedName: string) => SocialIntegrityService.unblockPlayer(myCharId, blockedName),
-    getBlocked: (myCharId: string) => SocialIntegrityService.getBlocked(myCharId)
+    getBlocked: (myCharId: string) => SocialIntegrityService.getBlocked(myCharId),
+
+    // Manutenção e Reset Administrativo do Servidor
+    wipeEntireGameDatabase: wipeEntireFirestoreDatabase
   };
 
   (window as any).lineageIdleCloud = (window as any).FirebaseBridge;

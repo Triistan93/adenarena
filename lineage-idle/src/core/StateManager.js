@@ -205,7 +205,10 @@ export function loadState() {
   if (!raw) {
     // Tenta carregar do backup se o primário estiver ausente
     raw = localStorage.getItem(`${SAVE_KEY}_backup`);
-    if (!raw) return false;
+    if (!raw) {
+      currentState = DEFAULT_STATE();
+      return false;
+    }
     isBackupRestore = true;
   }
 
