@@ -2759,20 +2759,25 @@ export function updateEquipmentUI(state, callbacks = {}) {
     }
   }
 
-  // Renderiza o Badge de Ressonância Ativa do Dual Arsenal
+  // Renderiza o Badge de Ressonância Ativa do Dual Arsenal (estritamente dentro da Mochila)
   const root = getRoot();
   const activeRes = (typeof window !== 'undefined' && window.WeaponResonanceService)
     ? window.WeaponResonanceService.getActiveResonance(state)
     : null;
 
-  const equipContainer = root.querySelector('.paperdoll') || root.querySelector('#tab-inventory') || root.querySelector('.equip-bonuses');
-  if (equipContainer) {
-    let resBadge = root.querySelector('#weapon-resonance-badge');
+  // Limpa qualquer badge órfão inserido fora de tab-inventory
+  const rogueBadges = root.querySelectorAll('.tab-content > #weapon-resonance-badge, #center-panel > #weapon-resonance-badge');
+  rogueBadges.forEach(b => b.remove());
+
+  const invTab = root.querySelector('#tab-inventory');
+  if (invTab) {
+    let resBadge = invTab.querySelector('#weapon-resonance-badge');
     if (!resBadge) {
       resBadge = mkEl('div');
       resBadge.id = 'weapon-resonance-badge';
       resBadge.className = 'weapon-resonance-badge';
-      equipContainer.parentNode ? equipContainer.parentNode.insertBefore(resBadge, equipContainer) : equipContainer.prepend(resBadge);
+      const anchor = invTab.querySelector('.l2inv-main-container') || invTab.firstChild;
+      invTab.insertBefore(resBadge, anchor);
     }
     if (activeRes) {
       resBadge.style.display = 'flex';

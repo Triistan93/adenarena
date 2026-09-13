@@ -343,27 +343,6 @@ export const IDLE_MARKUP = `
             <button class="tab-btn subtab-pill-btn" data-tab="warehouse" data-min-level="15">📦 Baú Privado</button>
             <button class="tab-btn subtab-pill-btn" data-tab="magiclamp" data-min-level="20">🪔 Lâmpada Mágica</button>
             <button class="tab-btn subtab-pill-btn" data-tab="alchemy" data-min-level="40">🧪 Alquimia</button>
-
-            <!-- Imperial Pillar Header & Contextual Resource HUD Ribbon -->
-            <div class="imperial-pillar-header" id="imperial-pillar-header" style="width: 100%; margin-top: 6px;">
-              <div class="imp-header-top">
-                <div class="imp-title-group">
-                  <span class="imp-title-icon">🏛️</span>
-                  <div>
-                    <h4 class="imp-title-text">IMPÉRIO DE ADEN — COMÉRCIO, FORJA &amp; ARCANO</h4>
-                    <p class="imp-subtitle-text">Ala Imperial de Manufatura, Transações Comerciais e Relíquias Místicas</p>
-                  </div>
-                </div>
-              </div>
-              <div class="imp-resource-ribbon">
-                <span class="imp-res-chip imp-res-chip--gold" title="Adena Real"><span class="chip-icon">🪙</span> <span id="imp-res-gold" class="res-val">0</span> Adena</span>
-                <span class="imp-res-chip imp-res-chip--ac" title="Aden Coins"><span class="chip-icon">💎</span> <span id="imp-res-ac" class="res-val">0</span> AC</span>
-                <span class="imp-res-chip imp-res-chip--aa" title="Ancient Adena (Sete Selos)"><span class="chip-icon">🏛️</span> <span id="imp-res-aa" class="res-val">0</span> AA</span>
-                <span class="imp-res-chip imp-res-chip--sp" title="Skill Points"><span class="chip-icon">✦</span> <span id="imp-res-sp" class="res-val">0</span> SP</span>
-                <span class="imp-res-chip imp-res-chip--forge" title="Nível da Forja Imperial"><span class="chip-icon">🔨</span> Forja: <span id="imp-res-forge" class="res-val">Lv. 1</span></span>
-                <span class="imp-res-chip imp-res-chip--charges" title="Cargas da Roleta Imperial"><span class="chip-icon">🎲</span> Roleta: <span id="imp-res-charges" class="res-val">0 Cargas</span></span>
-              </div>
-            </div>
           </div>
 
           <!-- Pillar 4 Subtabs: Glória & Sociedade -->
@@ -375,6 +354,18 @@ export const IDLE_MARKUP = `
             <button class="tab-btn subtab-pill-btn" data-tab="fortress">⚔ Fortalezas</button>
             <button class="tab-btn subtab-pill-btn" data-tab="enchant">✦ Encantamento</button>
             <button class="tab-btn subtab-pill-btn" data-tab="codex">📜 Codex</button>
+          </div>
+
+          <!-- Imperial Economy Resource Ribbon (Contextual HUD for Economy Pillar) -->
+          <div class="imperial-pillar-header" id="imperial-pillar-header" style="display:none;">
+            <div class="imp-resource-ribbon">
+              <span class="imp-res-chip imp-res-chip--gold" title="Adena Real"><span class="chip-icon">🪙</span> <span id="imp-res-gold" class="res-val">0</span> Adena</span>
+              <span class="imp-res-chip imp-res-chip--ac" title="Aden Coins"><span class="chip-icon">💎</span> <span id="imp-res-ac" class="res-val">0</span> AC</span>
+              <span class="imp-res-chip imp-res-chip--aa" title="Ancient Adena (Sete Selos)"><span class="chip-icon">🏛️</span> <span id="imp-res-aa" class="res-val">0</span> AA</span>
+              <span class="imp-res-chip imp-res-chip--sp" title="Skill Points"><span class="chip-icon">✦</span> <span id="imp-res-sp" class="res-val">0</span> SP</span>
+              <span class="imp-res-chip imp-res-chip--forge" title="Nível da Forja Imperial"><span class="chip-icon">🔨</span> Forja: <span id="imp-res-forge" class="res-val">Lv. 1</span></span>
+              <span class="imp-res-chip imp-res-chip--charges" title="Cargas da Roleta Imperial"><span class="chip-icon">🎲</span> Roleta: <span id="imp-res-charges" class="res-val">0 Cargas</span></span>
+            </div>
           </div>
         </div>
         <div class="tab-content">

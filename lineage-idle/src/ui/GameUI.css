@@ -1161,72 +1161,29 @@
   --motion-special: 800ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* ─── IMPERIAL PILLAR MASTER CONTAINER ─── */
+/* ─── IMPERIAL PILLAR MASTER CONTAINER (SLIM CONTEXTUAL HUD RIBBON) ─── */
 .imperial-pillar-header {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
-  background: var(--imp-surface-panel);
-  border: 1px solid var(--imp-border-accent);
-  border-radius: 8px;
-  padding: 10px 14px;
-  margin-bottom: 12px;
-  box-shadow: var(--imp-shadow-panel);
-  position: relative;
-  overflow: hidden;
-}
-
-.imperial-pillar-header::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, #f5df93 30%, #d4a744 70%, transparent);
-}
-
-.imp-header-top {
-  display: flex;
-  justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.imp-title-group {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.imp-title-icon {
-  font-size: 22px;
-  filter: drop-shadow(0 0 8px rgba(212, 167, 68, 0.4));
-}
-
-.imp-title-text {
-  font-family: 'Cinzel', serif;
-  font-size: 15px;
-  font-weight: 800;
-  color: var(--imp-text-gold-bright);
-  letter-spacing: 0.08em;
-  text-shadow: 0 0 10px rgba(212, 167, 68, 0.3);
-  margin: 0;
-}
-
-.imp-subtitle-text {
-  font-size: 11px;
-  color: var(--imp-text-muted);
-  margin: 2px 0 0 0;
+  justify-content: center;
+  background: rgba(12, 10, 8, 0.88);
+  border: 1px solid rgba(212, 169, 78, 0.25);
+  border-radius: 6px;
+  padding: 4px 8px;
+  margin: 4px 0 0 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* Contextual Resource HUD Ribbon */
 .imp-resource-ribbon {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
   flex-wrap: wrap;
-  padding-top: 6px;
-  border-top: 1px solid rgba(212, 167, 68, 0.15);
+  width: 100%;
 }
 
 .imp-res-chip {

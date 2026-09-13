@@ -142,6 +142,11 @@ export function showMenuPanel(panelId) {
     strip.classList.toggle('active', isTarget);
     strip.classList.toggle('collapsed', !isTarget);
   });
+
+  const impHeader = root.querySelector('#imperial-pillar-header');
+  if (impHeader) {
+    impHeader.style.display = (pillar === 'economy') ? 'flex' : 'none';
+  }
 }
 
 export const TAB_UNLOCK_LEVELS = {
@@ -227,6 +232,11 @@ if (typeof window !== 'undefined') {
       s.classList.toggle('active', isTarget);
       s.classList.toggle('collapsed', !isTarget);
     });
+
+    const impHeader = root.querySelector('#imperial-pillar-header');
+    if (impHeader) {
+      impHeader.style.display = (pillarName === 'economy') ? 'flex' : 'none';
+    }
 
     const targetStrip = root.getElementById(`pillar-strip-${pillarName}`);
     if (targetStrip) {

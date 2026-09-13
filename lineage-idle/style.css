@@ -1018,7 +1018,7 @@ select:focus-visible {
   to {
     opacity: 1;
     transform: translateY(0) scaleY(1);
-    max-height: 80px;
+    max-height: 300px;
   }
 }
 
@@ -1041,6 +1041,7 @@ select:focus-visible {
 
 .pillar-subtabs-strip.active {
   display: flex !important;
+  max-height: none !important;
 }
 
 .pillar-subtabs-strip.collapsed,

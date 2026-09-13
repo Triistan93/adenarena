@@ -7462,6 +7462,10 @@ export function switchPillar(pillarKey) {
   pillarBtns.forEach(btn => {
     btn.classList.toggle('active', btn.dataset.pillar === pillarKey);
   });
+  const impHeader = root.getElementById ? root.getElementById('imperial-pillar-header') : el('imperial-pillar-header');
+  if (impHeader) {
+    impHeader.style.display = (pillarKey === 'economy') ? 'flex' : 'none';
+  }
   const currentStrip = root.getElementById ? root.getElementById(`pillar-strip-${pillarKey}`) : el(`pillar-strip-${pillarKey}`);
   if (currentStrip) {
     const activeBtn = currentStrip.querySelector('.tab-btn.active');
@@ -7516,6 +7520,10 @@ export function openPanel(tabName) {
     pillarBtns.forEach(btn => {
       btn.classList.toggle('active', btn.dataset.pillar === targetPillar);
     });
+    const impHeader = root.getElementById ? root.getElementById('imperial-pillar-header') : el('imperial-pillar-header');
+    if (impHeader) {
+      impHeader.style.display = (targetPillar === 'economy') ? 'flex' : 'none';
+    }
   }
 
   // Update mobile tab title badge
