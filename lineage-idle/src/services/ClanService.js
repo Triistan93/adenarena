@@ -350,6 +350,7 @@ export class ClanService {
       state.clan = { level: 1, castles: [], lastTaxTimestamp: Date.now(), accumulatedTaxes: {} };
     }
     state.clan.name = cleanName;
+    state.clan.level = Math.max(state.clan.level || 0, 1);
     state.clan.motto = motto || 'Pela Glória de Aden!';
     state.clan.reputation = state.clan.reputation || 100;
     state.clan.donationsAdena = state.clan.donationsAdena || 0;

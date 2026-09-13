@@ -8595,11 +8595,10 @@ export function uiOpenReferralModal(state, defaultTab) {
   const referredBy = s?.referredBy || (typeof localStorage !== 'undefined' ? localStorage.getItem('aden_referred_by') : null) || null;
 
   if (!Array.isArray(s.friends)) {
-    s.friends = [
-      { name: 'Vaelin', level: 78, classTitle: 'Duelist', online: true },
-      { name: 'Elwen', level: 75, classTitle: 'Moonlight Sentinel', online: false },
-      { name: 'SirGalahad', level: 80, classTitle: 'Phoenix Knight', online: true }
-    ];
+    s.friends = [];
+  } else {
+    // Gate 10 Purge: remove any legacy ghost friends permanently
+    s.friends = s.friends.filter(f => !['vaelin', 'elwen', 'sirgalahad'].includes(String(f?.name || f || '').toLowerCase()));
   }
   if (!Array.isArray(s.blocked)) {
     s.blocked = [];
@@ -8868,7 +8867,7 @@ export function uiOpenReferralModal(state, defaultTab) {
 
   const addFriendBtn = modal.querySelector('#btn-contact-add-friend');
   if (addFriendBtn) {
-    addFriendBtn.onclick = () => {
+    addFriendBtn.onclick = async () => {
       const name = prompt('Digite o nome do personagem para adicionar aos amigos:');
       if (name && name.trim()) {
         const cleanName = name.trim();
@@ -8876,27 +8875,58 @@ export function uiOpenReferralModal(state, defaultTab) {
           if (window.showMarketToast) window.showMarketToast('Este amigo já está na sua lista!', 'warning');
           return;
         }
-        s.friends.push({
-          name: cleanName,
-          level: Math.floor(Math.random() * 35) + 45,
-          classTitle: ['Duelist', 'Archmage', 'Moonlight Sentinel', 'Titan', 'Ghost Hunter', 'Dominator'][Math.floor(Math.random() * 6)],
-          online: true
-        });
-        if (typeof window.saveGameState === 'function') window.saveGameState();
-        if (window.showMarketToast) window.showMarketToast(`Amigo ${cleanName} adicionado com sucesso!`, 'success');
-        uiOpenReferralModal(s);
+        const myName = (s.name || s.charName || s.heroName || '').trim();
+        if (cleanName.toLowerCase() === myName.toLowerCase()) {
+          if (window.showMarketToast) window.showMarketToast('Você não pode adicionar a si mesmo!', 'warning');
+          return;
+        }
+
+        try {
+          addFriendBtn.disabled = true;
+          let newFriend = null;
+
+          if (typeof window !== 'undefined' && window.FirebaseBridge?.addFriend) {
+            const myId = s.characterId || `char_${(window.FirebaseBridge?.getCurrentUserId?.() || 'me').slice(0, 16)}`;
+            newFriend = await window.FirebaseBridge.addFriend(myId, cleanName);
+          } else {
+            throw new Error('Serviço de busca de aventureiros indisponível no momento.');
+          }
+
+          if (newFriend) {
+            s.friends.push(newFriend);
+            if (typeof window.saveGameState === 'function') window.saveGameState();
+            if (window.showMarketToast) window.showMarketToast(`Amigo ${newFriend.name} adicionado com sucesso!`, 'success');
+            uiOpenReferralModal(s);
+          }
+        } catch (err) {
+          const msg = err?.code === 'PLAYER_NOT_FOUND' 
+            ? `O aventureiro "${cleanName}" não existe no mundo de Aden.`
+            : (err?.message || 'Não foi possível adicionar o aventureiro.');
+          if (window.showMarketToast) window.showMarketToast(msg, 'error');
+        } finally {
+          addFriendBtn.disabled = false;
+        }
       }
     };
   }
 
   const delFriendBtn = modal.querySelector('#btn-contact-del-friend');
   if (delFriendBtn) {
-    delFriendBtn.onclick = () => {
+    delFriendBtn.onclick = async () => {
       if (!_contactsSelectedFriendName) {
         if (window.showMarketToast) window.showMarketToast('Selecione um amigo na tabela para remover.', 'warning');
         return;
       }
+      const targetFriend = s.friends.find(f => f.name === _contactsSelectedFriendName);
       s.friends = s.friends.filter(f => f.name !== _contactsSelectedFriendName);
+      
+      if (typeof window !== 'undefined' && window.FirebaseBridge?.removeFriend && targetFriend?.characterId) {
+        try {
+          const myId = s.characterId || `char_${(window.FirebaseBridge?.getCurrentUserId?.() || 'me').slice(0, 16)}`;
+          await window.FirebaseBridge.removeFriend(myId, targetFriend.characterId);
+        } catch (e) {}
+      }
+
       if (window.showMarketToast) window.showMarketToast(`Amigo ${_contactsSelectedFriendName} removido da lista.`, 'info');
       _contactsSelectedFriendName = null;
       if (typeof window.saveGameState === 'function') window.saveGameState();

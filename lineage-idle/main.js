@@ -9533,7 +9533,7 @@ export function init() {
     window.closeReferralModal = () => {
       closeContactsModal();
     };
-    window.submitReferralCodeAction = () => {
+    window.submitReferralCodeAction = async () => {
       const input = document.getElementById('ref-friend-code-input');
       const rawCode = input ? input.value : '';
       const code = (rawCode || '').trim();
@@ -9556,9 +9556,24 @@ export function init() {
         return;
       }
 
-      state.referredBy = code;
+      // Validação Canônica (Gate 8): O herói indicador deve ser um jogador real existente
+      let resolvedReferrerName = code;
+      if (typeof window !== 'undefined' && window.FirebaseBridge?.getPlayerByName) {
+        try {
+          const referrerPlayer = await window.FirebaseBridge.getPlayerByName(code);
+          if (!referrerPlayer) {
+            log(`⚠️ O herói [${code}] não foi encontrado em Aden. Verifique a grafia do nome.`, 'error');
+            return;
+          }
+          resolvedReferrerName = referrerPlayer.name;
+        } catch (e) {
+          console.debug('Referral verification notice:', e);
+        }
+      }
+
+      state.referredBy = resolvedReferrerName;
       if (typeof localStorage !== 'undefined') {
-        localStorage.setItem('aden_referred_by', code);
+        localStorage.setItem('aden_referred_by', resolvedReferrerName);
       }
 
       // Concede o Pacote de Novato se ainda não concedido

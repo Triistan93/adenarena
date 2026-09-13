@@ -25,8 +25,27 @@ import {
   query, 
   orderBy, 
   limit, 
-  where 
+  where,
+  documentId
 } from 'firebase/firestore';
+
+export {
+  doc, 
+  setDoc, 
+  getDoc, 
+  updateDoc,
+  deleteDoc,
+  runTransaction,
+  onSnapshot,
+  serverTimestamp, 
+  collection, 
+  getDocs, 
+  query, 
+  orderBy, 
+  limit, 
+  where,
+  documentId
+};
 
 // ── Firebase Configuration ───────────────────────────────────────────────────
 // NOTA DE SEGURANÇA: As API Keys do Firebase para aplicações web são PÚBLICAS
@@ -201,9 +220,30 @@ export async function savePlayerStateToCloud(userId: string, stateData: any, imm
         }
       }
 
+      const charName = sanitizeString(cleanState.name || cleanState.charName || cleanState.playerName || 'Hero', 16);
+      const charId = cleanState.characterId || `char_${userId.slice(0, 16)}`;
+      const accId = cleanState.accountId || `acc_${userId.slice(0, 16)}`;
+
+      cleanState.characterId = charId;
+      cleanState.accountId = accId;
+      cleanState.ownerUid = userId;
+      cleanState.entityType = 'player';
+      cleanState.playerType = 'real';
+
+      // ── Gate 10 Purge: Remove legacy fake friends permanently ───────────
+      if (Array.isArray(cleanState.friends)) {
+        cleanState.friends = cleanState.friends.filter((f: any) => {
+          const fn = String(f?.name || f || '').toLowerCase();
+          return !['vaelin', 'elwen', 'sirgalahad'].includes(fn);
+        });
+      } else {
+        cleanState.friends = [];
+      }
+
       const payload: any = {
         userId,
-        charName:        sanitizeString(cleanState.name || cleanState.charName || cleanState.playerName || 'Hero', 16),
+        charId,
+        charName,
         race:            sanitizeString(cleanState.race || 'Human', 24),
         className:       sanitizeString(cleanState.className || cleanState.class || 'Warrior', 32),
         level,
@@ -223,7 +263,66 @@ export async function savePlayerStateToCloud(userId: string, stateData: any, imm
         updatedAt:       serverTimestamp(),
       };
 
+      // 1. Grava no monólito legado users (Fase 1 de Migração)
       await setDoc(userRef, payload, { merge: true });
+
+      // 2. Grava na entidade canônica characters (Gate 2 & 4)
+      try {
+        const charRef = doc(db, 'characters', charId);
+        await setDoc(charRef, {
+          characterId: charId,
+          accountId: accId,
+          ownerUid: userId,
+          name: charName,
+          nameLower: charName.toLowerCase(),
+          raceId: sanitizeString(cleanState.race || 'Human', 24),
+          classId: sanitizeString(cleanState.className || cleanState.class || 'Warrior', 32),
+          level,
+          experience: Number(cleanState.xp) || 0,
+          cp,
+          entityType: 'player',
+          playerType: 'real',
+          status: 'active',
+          isDiscoverable: true,
+          clanName: sanitizeString(cleanState.clan?.name || 'Sem Clã', 24),
+          topWeaponName,
+          topWeaponGlow,
+          statsSnapshot: { hp: maxHp, pAtk, mAtk, pDef, mDef, crit: Number(stats.crit) || 10 },
+          lastOnlineAt: Date.now(),
+          updatedAt: serverTimestamp(),
+          createdAt: cleanState.createdAt || Date.now()
+        }, { merge: true });
+
+        // 3. Atualiza presença online (Gate 1: Existência != Presença)
+        const presenceRef = doc(db, 'presence', charId);
+        await setDoc(presenceRef, {
+          characterId: charId,
+          ownerUid: userId,
+          online: true,
+          lastSeenAt: Date.now(),
+          heartbeatAt: Date.now()
+        }, { merge: true });
+
+        // 4. Grava snapshot de ranking competitivo (Gate 7)
+        const rankingRef = doc(db, 'pvp_rankings', `s1_cp_${charId}`);
+        await setDoc(rankingRef, {
+          entryId: `s1_cp_${charId}`,
+          seasonId: 1,
+          category: 'cp',
+          characterId: charId,
+          characterName: charName,
+          className: sanitizeString(cleanState.className || cleanState.class || 'Warrior', 32),
+          raceId: sanitizeString(cleanState.race || 'Human', 24),
+          score: cp,
+          rank: 1,
+          wins: Number(cleanState.colosseum?.duelWins || cleanState.duelWins) || 0,
+          losses: Number(cleanState.colosseum?.duelLosses || cleanState.duelLosses) || 0,
+          updatedAt: Date.now()
+        }, { merge: true });
+      } catch (canonErr) {
+        console.debug('[CanonicalSave] Aviso de gravação canônica transitória:', canonErr);
+      }
+
       return true;
     } catch (err: any) {
       if (err?.code === 'permission-denied' || String(err).includes('permission')) {
@@ -249,6 +348,100 @@ export async function savePlayerStateToCloud(userId: string, stateData: any, imm
   });
 }
 
+/**
+ * Gate 5: Reserva Atômica de Nomes e Criação Canônica de Personagem
+ */
+export async function reserveCharacterNameAndCreate(
+  ownerUid: string,
+  characterData: { charName: string; race: string; className: string; gender?: string }
+): Promise<{ success: boolean; characterId?: string; accountId?: string; reason?: string }> {
+  try {
+    const rawName = String(characterData.charName || '').trim();
+    if (rawName.length < 3 || rawName.length > 16) {
+      return { success: false, reason: 'O nome deve ter entre 3 e 16 caracteres.' };
+    }
+
+    const normNick = rawName.toLowerCase();
+    const nameRef = doc(db, 'character_names', normNick);
+    const charId = `char_${ownerUid.slice(0, 8)}_${Date.now().toString(36)}`;
+    const accId = `acc_${ownerUid.slice(0, 16)}`;
+    const charRef = doc(db, 'characters', charId);
+    const accRef = doc(db, 'accounts', accId);
+    const presenceRef = doc(db, 'presence', charId);
+
+    await runTransaction(db, async (transaction) => {
+      const nameDoc = await transaction.get(nameRef);
+      if (nameDoc.exists()) {
+        const d = nameDoc.data();
+        if (d.ownerUid !== ownerUid) {
+          throw new Error('NICKNAME_TAKEN');
+        }
+      }
+
+      const now = Date.now();
+
+      // 1. Reserva atômica do nome
+      transaction.set(nameRef, {
+        nameLower: normNick,
+        name: rawName,
+        characterId: charId,
+        ownerUid,
+        reservedAt: now
+      });
+
+      // 2. Criação da conta se não existir
+      transaction.set(accRef, {
+        accountId: accId,
+        ownerUid,
+        status: 'active',
+        createdAt: now,
+        updatedAt: now
+      }, { merge: true });
+
+      // 3. Criação da identidade canônica do personagem
+      transaction.set(charRef, {
+        characterId: charId,
+        accountId: accId,
+        ownerUid,
+        name: rawName,
+        nameLower: normNick,
+        raceId: characterData.race,
+        classId: characterData.className,
+        level: 1,
+        experience: 0,
+        cp: 1500,
+        entityType: 'player',
+        playerType: 'real',
+        status: 'active',
+        isDiscoverable: true,
+        clanName: 'Sem Clã',
+        topWeaponName: 'Sem Arma',
+        topWeaponGlow: null,
+        statsSnapshot: { hp: 1000, pAtk: 100, mAtk: 50, pDef: 80, mDef: 60, crit: 10 },
+        createdAt: now,
+        updatedAt: now
+      });
+
+      // 4. Inicializa presença
+      transaction.set(presenceRef, {
+        characterId: charId,
+        ownerUid,
+        online: true,
+        lastSeenAt: now,
+        heartbeatAt: now
+      });
+    });
+
+    return { success: true, characterId: charId, accountId: accId };
+  } catch (err: any) {
+    if (err?.message === 'NICKNAME_TAKEN') {
+      return { success: false, reason: `O nome "${characterData.charName}" já está em uso por outro herói.` };
+    }
+    console.warn('[reserveCharacterNameAndCreate] Transação falhou:', err);
+    return { success: false, reason: err?.message || 'Erro ao registrar nome do personagem.' };
+  }
+}
+
 export async function checkNicknameAvailability(nickname: string, currentUserId?: string | null): Promise<{ available: boolean; reason?: string }> {
   try {
     const cleanNick = String(nickname || '').trim();
@@ -261,7 +454,19 @@ export async function checkNicknameAvailability(nickname: string, currentUserId?
 
     const normNick = cleanNick.toLowerCase();
 
-    // Consulta unificada na coleção users
+    // 1. Verificação primária na coleção canônica de reservas
+    try {
+      const nameRef = doc(db, 'character_names', normNick);
+      const nameSnap = await getDoc(nameRef);
+      if (nameSnap.exists()) {
+        const data = nameSnap.data();
+        if (!currentUserId || (data?.ownerUid !== currentUserId)) {
+          return { available: false, reason: `O nome "${cleanNick}" já está reservado por outro herói em Aden!` };
+        }
+      }
+    } catch (e) {}
+
+    // 2. Consulta unificada na coleção users (compatibilidade legada)
     const usersCol = collection(db, 'users');
     const snap = await getDocs(usersCol);
     let isTaken = false;
@@ -302,6 +507,17 @@ export async function loadPlayerStateFromCloud(userId: string) {
         // SECURITY: privilegeLevel is strictly authorized from root document in Firestore
         const rootPrivilege = Number(docData.privilegeLevel) || (docData.role === 'admin' ? 1 : 0);
         stateObj.privilegeLevel = rootPrivilege;
+
+        // Gate 10 Purge: limpa qualquer amigo fake carregado do legado
+        if (Array.isArray(stateObj.friends)) {
+          stateObj.friends = stateObj.friends.filter((f: any) => {
+            const fn = String(f?.name || f || '').toLowerCase();
+            return !['vaelin', 'elwen', 'sirgalahad'].includes(fn);
+          });
+        } else {
+          stateObj.friends = [];
+        }
+
         return stateObj;
       }
     }

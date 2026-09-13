@@ -107,11 +107,11 @@ export const RankingService = {
    * @returns {Object} Dicionário de leaderboards por categoria
    */
   getLeaderboards(state) {
-    const cpList = _cachedRankings.cp?.length ? _cachedRankings.cp : this._generateFallbackLeaderboard('cp', state);
-    const olyList = _cachedRankings.olympiad?.length ? _cachedRankings.olympiad : this._generateFallbackLeaderboard('olympiad', state);
-    const duelList = _cachedRankings.duels?.length ? _cachedRankings.duels : this._generateFallbackLeaderboard('duels', state);
-    const wealthList = this._generateFallbackLeaderboard('wealth', state);
-    const clansList = this._generateFallbackLeaderboard('clans', state);
+    const cpList = _cachedRankings.cp?.length ? _cachedRankings.cp : [];
+    const olyList = _cachedRankings.olympiad?.length ? _cachedRankings.olympiad : [];
+    const duelList = _cachedRankings.duels?.length ? _cachedRankings.duels : [];
+    const wealthList = _cachedRankings.wealth?.length ? _cachedRankings.wealth : [];
+    const clansList = _cachedRankings.clans?.length ? _cachedRankings.clans : [];
 
     return {
       cp: this._mergeCurrentPlayer(cpList, state, 'cp'),
@@ -193,75 +193,12 @@ export const RankingService = {
     return { success: true, rank, coins, adena, scrolls };
   },
 
+  /**
+   * Invariante Canônica (Gates 13, 14, 15):
+   * NUNCA sintetiza bots nem jogadores fictícios. Se não houver dados, retorna lista vazia autêntica.
+   */
   _generateFallbackLeaderboard(category, state) {
-    const playerCP = state ? CombatPowerService.calculateCombatPower(state) : 50000;
-    const baseCP = Math.max(10000, playerCP);
-
-    if (category === 'wealth') {
-      const wealthArchetypes = [
-        { name: 'MidasGoldhand', race: 'Dwarf', class: 'Fortune Seeker', gold: 250000000, clan: 'GoldenVault', lvl: 78 },
-        { name: 'BaronRothschild', race: 'Human', class: 'Duelist', gold: 180000000, clan: 'BloodThorn', lvl: 76 },
-        { name: 'LadyGiran', race: 'Elf', class: 'Eva Saint', gold: 120000000, clan: 'SilverDawn', lvl: 75 },
-        { name: 'KaelenMerchant', race: 'Dark Elf', class: 'Ghost Sentinel', gold: 95000000, clan: 'GloryKnights', lvl: 72 },
-        { name: 'ThorgarIronbank', race: 'Dwarf', class: 'Maestro', gold: 75000000, clan: 'IronGuild', lvl: 70 }
-      ];
-      return wealthArchetypes.map((a, i) => ({
-        userId: `bot_wealth_${i}`,
-        charName: a.name,
-        race: a.race,
-        className: a.class,
-        level: a.lvl,
-        gold: a.gold,
-        combatPower: Math.floor(baseCP * (1.1 - i * 0.08)),
-        clanName: a.clan,
-        isVerified: true
-      }));
-    }
-
-    if (category === 'clans') {
-      const clanArchetypes = [
-        { clanName: 'BloodThorn', leader: 'LordValen', level: 5, reputation: 125000, members: 40, castle: 'Castelo de Aden' },
-        { clanName: 'GloryKnights', leader: 'SirAres', level: 4, reputation: 82000, members: 35, castle: 'Castelo de Giran' },
-        { clanName: 'SilverDawn', leader: 'LadyElena', level: 4, reputation: 64000, members: 32, castle: 'Castelo de Dion' },
-        { clanName: 'IronGuild', leader: 'ThorgarIronbank', level: 3, reputation: 45000, members: 28, castle: null },
-        { clanName: 'ShadowLegion', leader: 'MorriganDark', level: 3, reputation: 38000, members: 25, castle: null }
-      ];
-      return clanArchetypes.map((c, i) => ({
-        userId: `clan_entry_${i}`,
-        charName: c.leader,
-        clanName: c.clanName,
-        level: c.level,
-        reputation: c.reputation,
-        membersCount: c.members,
-        castleLord: c.castle,
-        isClanEntry: true,
-        isVerified: true
-      }));
-    }
-
-    const archetypes = [
-      { name: 'KaiserValen', race: 'Human', class: 'Duelist', mult: 1.45, w: '+12 Dual Damascus', oly: 1450, wins: 45 },
-      { name: 'SylphAstra', race: 'Elf', class: 'Sagittarius', mult: 1.30, w: '+10 Soul Bow', oly: 1380, wins: 38 },
-      { name: 'MorriganDark', race: 'Dark Elf', class: 'Ghost Hunter', mult: 1.20, w: '+11 Angel Slayer', oly: 1320, wins: 32 },
-      { name: 'IgnisGrand', race: 'Human', class: 'Archmage', mult: 1.15, w: '+9 Arcana Mace', oly: 1280, wins: 28 },
-      { name: 'GrommBane', race: 'Orc', class: 'Titan', mult: 1.05, w: '+8 Dragon Slayer', oly: 1220, wins: 24 }
-    ];
-
-    return archetypes.map((a, i) => ({
-      userId: `bot_${category}_${i}`,
-      charName: a.name,
-      race: a.race,
-      className: a.class,
-      level: Math.max(40, Math.min(85, (state?.level || 40) + 5 - i)),
-      combatPower: Math.floor(baseCP * a.mult),
-      olympiadPoints: a.oly,
-      duelWins: a.wins,
-      clanName: i % 2 === 0 ? 'BloodThorn' : 'GloryKnights',
-      topWeaponName: a.w,
-      topWeaponGlow: i === 0 ? 'crimson-fire' : 'golden-amber',
-      isVerified: true,
-      statsSnapshot: { hp: 5000, pAtk: 1200, mAtk: 800, pDef: 900, mDef: 700, crit: 250 }
-    }));
+    return [];
   },
 
   /**
@@ -303,11 +240,11 @@ export const RankingService = {
       const clan = state.clan || { name: 'Os Guardiões de Aden', level: 1, reputation: 100 };
       const myClanEntry = {
         userId: 'player_clan',
-        charName: state.name || 'Tristan',
+        charName: state.heroName || state.name || state.charName || 'Hero of Aden',
         clanName: clan.name,
         level: clan.level || 1,
         reputation: clan.reputation || 100,
-        membersCount: 6,
+        membersCount: Number(clan.membersCount || (Array.isArray(clan.members) ? clan.members.length : 1)),
         castleLord: (clan.castles && clan.castles.length > 0) ? clan.castles.join(', ') : null,
         isCurrentPlayer: true,
         isClanEntry: true,
@@ -370,47 +307,6 @@ export const RankingService = {
 
     // Filtra para não lutar contra si mesmo
     let pool = (remoteOpponents || []).filter(o => o.userId !== currentUserId && o.charName !== myName);
-
-    // Se houver poucos no banco remoto, completa com clones de arquétipos autênticos de L2 ajustados pelo CP
-    if (pool.length < count) {
-      const archetypes = [
-        { name: 'AresGladiator', race: 'Human', class: 'Duelist', icon: '⚔️', w: '+7 Dual Damascus' },
-        { name: 'SylphHunter', race: 'Elf', class: 'Sagittarius', icon: '🏹', w: '+6 Soul Bow' },
-        { name: 'AbyssReaper', race: 'Dark Elf', class: 'Ghost Hunter', icon: '🗡️', w: '+8 Angel Slayer' },
-        { name: 'ArcaneIgnis', race: 'Human', class: 'Archmage', icon: '🔥', w: '+5 Arcana Mace' },
-        { name: 'KhavatariBane', race: 'Orc', class: 'Grand Khavatari', icon: '🥊', w: '+6 Dragon Grinder' },
-        { name: 'DreadnoughtRex', race: 'Human', class: 'Dreadnought', icon: '🔱', w: '+7 Saint Spear' }
-      ];
-
-      for (let i = 0; pool.length < count; i++) {
-        const arch = archetypes[i % archetypes.length];
-        // CP com variação suave de -15% a +15%
-        const variance = 0.85 + Math.random() * 0.30;
-        const targetCP = Math.max(500, Math.floor(playerCP * variance));
-        const estLevel = Math.max(20, Math.min(85, Math.floor((state.level || 40) + (Math.random() * 6 - 3))));
-
-        pool.push({
-          userId: `ai_match_${i}_${Date.now()}`,
-          charName: `${arch.name}`,
-          race: arch.race,
-          className: arch.class,
-          level: estLevel,
-          combatPower: targetCP,
-          olympiadPoints: Math.max(900, Math.floor((state.olympiad?.points || 1000) + (Math.random() * 100 - 50))),
-          clanName: 'GloryKnights',
-          topWeaponName: arch.w,
-          topWeaponGlow: targetCP > 100000 ? 'golden-amber' : targetCP > 40000 ? 'blue-ice' : null,
-          statsSnapshot: {
-            hp: Math.floor(targetCP * 0.08),
-            pAtk: Math.floor(targetCP * 0.06),
-            mAtk: Math.floor(targetCP * 0.05),
-            pDef: Math.floor(targetCP * 0.04),
-            mDef: Math.floor(targetCP * 0.035),
-            crit: Math.floor(Math.random() * 200 + 100)
-          }
-        });
-      }
-    }
 
     return pool.slice(0, count);
   }

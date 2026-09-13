@@ -10,6 +10,7 @@ import {
   loadPlayerStateFromCloud, 
   savePlayerStateToCloud, 
   deletePlayerStateFromCloud,
+  reserveCharacterNameAndCreate,
   type User 
 } from '../firebase';
 import { CharacterCreation, CharacterCreationData } from './CharacterCreation';
@@ -240,7 +241,32 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
       if (potItem) potItem.count = (potItem.count || 0) + 10;
     }
 
+    let reservedCharId = `char_${user ? user.uid.slice(0, 16) : Date.now().toString(36)}`;
+    let reservedAccId = user ? `acc_${user.uid.slice(0, 16)}` : null;
+
+    if (user) {
+      const reservation = await reserveCharacterNameAndCreate(user.uid, {
+        charName: data.charName,
+        race: data.race,
+        className: data.className,
+        gender: data.gender,
+      });
+      if (reservation.success && reservation.characterId) {
+        reservedCharId = reservation.characterId;
+        if (reservation.accountId) reservedAccId = reservation.accountId;
+      }
+    }
+
     const newCharState: any = {
+      characterId: reservedCharId,
+      accountId: reservedAccId,
+      ownerUid: user ? user.uid : null,
+      entityType: 'player',
+      playerType: 'real',
+      status: 'active',
+      isDiscoverable: true,
+      friends: [],
+      blocked: [],
       charName: data.charName,
       heroName: data.charName,
       playerName: data.charName,

@@ -49,6 +49,8 @@ import {
   onAuthStateChanged,
   auth 
 } from "../firebase";
+import { PlayerRegistry } from "../services/PlayerRegistry";
+import { SocialIntegrityService } from "../services/SocialIntegrityService";
 
 // Expondo FirebaseBridge para os serviços de Rankings, Matchmaking, Mercado Global P2P e Cloud Save
 if (typeof window !== "undefined") {
@@ -80,7 +82,24 @@ if (typeof window !== "undefined") {
 
     // Pipeline de Save em Nuvem
     savePlayerState: savePlayerStateToCloud,
-    loadPlayerState: loadPlayerStateFromCloud
+    loadPlayerState: loadPlayerStateFromCloud,
+
+    // Registro Canônico de Jogadores (PlayerRegistry)
+    getPlayer: (id: string) => PlayerRegistry.getPlayer(id),
+    getPlayerByName: (name: string) => PlayerRegistry.getPlayerByName(name),
+    getPlayersBatch: (ids: string[]) => PlayerRegistry.getPlayersBatch(ids),
+    getDiscoverablePlayers: (limit?: number) => PlayerRegistry.getDiscoverablePlayers(limit),
+    isValidPlayer: (id: string) => PlayerRegistry.isValidPlayer(id),
+    isRealPlayer: (id: string) => PlayerRegistry.isRealPlayer(id),
+
+    // Integridade Social (SocialIntegrityService)
+    addFriend: (myCharId: string, targetName: string) => SocialIntegrityService.addFriend(myCharId, targetName),
+    removeFriend: (myCharId: string, targetCharId: string) => SocialIntegrityService.removeFriend(myCharId, targetCharId),
+    getFriends: (myCharId: string) => SocialIntegrityService.getFriends(myCharId),
+    bindMentorship: (apprenticeId: string, level: number, mentorName: string) => SocialIntegrityService.bindMentorship(apprenticeId, level, mentorName),
+    blockPlayer: (myCharId: string, ownerUid: string, targetName: string) => SocialIntegrityService.blockPlayer(myCharId, ownerUid, targetName),
+    unblockPlayer: (myCharId: string, blockedName: string) => SocialIntegrityService.unblockPlayer(myCharId, blockedName),
+    getBlocked: (myCharId: string) => SocialIntegrityService.getBlocked(myCharId)
   };
 
   (window as any).lineageIdleCloud = (window as any).FirebaseBridge;

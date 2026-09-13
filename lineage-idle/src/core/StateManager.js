@@ -12,6 +12,14 @@ import { generateStateChecksum, validateStateIntegrity, sanitizeGameState } from
 import { getStarterSkillsForClass, normalizeAndValidateSkills } from '../services/SkillEligibility.js';
 
 export const DEFAULT_STATE = () => ({
+  characterId: null,
+  accountId: null,
+  ownerUid: null,
+  entityType: 'player',
+  playerType: 'real',
+  isDiscoverable: true,
+  friends: [], // Gate 10: Cache local de UI; a fonte canônica é a coleção 'friends' do Firestore
+  blocked: [],
   race: null, class: null, gender: 'M',
   charName: 'Tristan', heroName: 'Tristan', playerName: 'Tristan', name: 'Tristan',
   level: 1, xp: 0, sp: 10,
@@ -437,6 +445,15 @@ export function applyStarterKit(state, race, classId, charName = null, gender = 
     state.playerName = charName;
     state.name = charName;
   }
+
+  // Identidade canônica persistente
+  state.characterId = state.characterId || `char_${Date.now().toString(36)}`;
+  state.entityType = 'player';
+  state.playerType = 'real';
+  state.status = 'active';
+  state.isDiscoverable = true;
+  state.friends = Array.isArray(state.friends) ? state.friends : [];
+  state.blocked = Array.isArray(state.blocked) ? state.blocked : [];
 
   // Reset de nível, atributos e ouro inicial
   state.level = 1;

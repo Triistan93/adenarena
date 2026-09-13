@@ -11,6 +11,7 @@ describe('Glory Pillar — Subtab 1: Clan & Castles (Clã & Castelos)', () => {
     const state = DEFAULT_STATE();
     state.gold = 500000;
     
+    ClanService.createOrEditClan(state, 'Os Guardiões de Aden', 'Pela Glória de Aden!');
     const status = ClanService.getClanStatus(state);
     assert.equal(status.clan.level, 1);
     assert.equal(status.clan.name, 'Os Guardiões de Aden');
@@ -20,6 +21,7 @@ describe('Glory Pillar — Subtab 1: Clan & Castles (Clã & Castelos)', () => {
 
   it('2. Clan Level Progression: Upgrades clan from Level 1 to 5 with requirements', () => {
     const state = DEFAULT_STATE();
+    state.clan.level = 1;
     state.level = 80;
     state.gold = 100000000;
     state.sp = 50000000;

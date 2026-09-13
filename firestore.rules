@@ -4,23 +4,19 @@ service cloud.firestore {
 
     // ─── Helpers ────────────────────────────────────────────────────────────
 
-    // Usuário tem qualquer sessão ativa (inclui anônimos)
     function isAuthenticated() {
       return request.auth != null;
     }
 
-    // Usuário registrado (Google ou Email — NÃO anônimo)
     function isRegistered() {
       return isAuthenticated()
           && request.auth.token.firebase.sign_in_provider != 'anonymous';
     }
 
-    // O usuário é dono do documento
     function isOwner(userId) {
       return isAuthenticated() && request.auth.uid == userId;
     }
 
-    // Bloqueia tentativa de escalar privilégios via client-side write
     function noPrivilegeEscalation() {
       return resource == null 
         ? (!('privilegeLevel' in request.resource.data) && !('role' in request.resource.data))
@@ -28,28 +24,130 @@ service cloud.firestore {
            && (!('role' in request.resource.data) || !('role' in resource.data) || request.resource.data.role == resource.data.role));
     }
 
-    // ─── Coleção de Usuários ─────────────────────────────────────────────────
-    // Saves, Rankings, Matchmaking, Perfis Públicos e Status PvP.
-    // • Leitura: qualquer autenticado (necessário para rankings e matchmaking).
-    // • Escrita: somente o próprio usuário — e NUNCA pode escrever
-    //   privilegeLevel ou role (esses campos são gerenciados pelo Firebase Console).
-    match /users/{userId} {
-      allow read:  if isAuthenticated();
-      allow write: if isOwner(userId) && noPrivilegeEscalation();
+    // Validação estrita para Gate 4: cliente NUNCA cria bot!
+    function isRealPlayerCreation(data) {
+      return data.playerType == 'real' 
+          && data.entityType == 'player'
+          && data.ownerUid == request.auth.uid;
     }
 
-    // ─── Clãs Imperiais e Guerras ────────────────────────────────────────────
-    // Leitura pública para qualquer autenticado.
-    // Criação/Atualização/Exclusão requer conta registrada.
+    // Validação estrita para Gate 2: campos de identidade são imutáveis após CREATE
+    function immutableCharacterFieldsUnchanged() {
+      return request.resource.data.ownerUid == resource.data.ownerUid
+          && request.resource.data.accountId == resource.data.accountId
+          && request.resource.data.characterId == resource.data.characterId
+          && request.resource.data.entityType == resource.data.entityType
+          && request.resource.data.playerType == resource.data.playerType
+          && request.resource.data.createdAt == resource.data.createdAt;
+    }
+
+    // ─── Contas de Usuário (accounts) ────────────────────────────────────────
+    match /accounts/{accountId} {
+      allow read: if isAuthenticated() && (resource.data.ownerUid == request.auth.uid);
+      allow create: if isAuthenticated() && request.resource.data.ownerUid == request.auth.uid && noPrivilegeEscalation();
+      allow update: if isAuthenticated() && resource.data.ownerUid == request.auth.uid 
+                    && request.resource.data.ownerUid == resource.data.ownerUid 
+                    && request.resource.data.accountId == resource.data.accountId 
+                    && noPrivilegeEscalation();
+      allow delete: if false; // Contas não podem ser deletadas diretamente pelo cliente
+    }
+
+    // ─── Reserva Canônica de Nomes (character_names) ─────────────────────────
+    match /character_names/{nameLower} {
+      allow read: if isAuthenticated();
+      // Criação atômica: só permite criar se não existir previamente
+      allow create: if isAuthenticated() && request.resource.data.ownerUid == request.auth.uid;
+      allow update: if false; // Nome reservado é estritamente imutável
+      allow delete: if isAuthenticated() && resource.data.ownerUid == request.auth.uid;
+    }
+
+    // ─── Identidade Canônica do Personagem (characters) ───────────────────────
+    match /characters/{characterId} {
+      allow read: if isAuthenticated();
+      // CREATE: valida request.resource.data (Gate 3 e Gate 4)
+      allow create: if isAuthenticated() && isRealPlayerCreation(request.resource.data) && noPrivilegeEscalation();
+      // UPDATE: valida resource.data vs request.resource.data (Gate 2)
+      allow update: if isAuthenticated() && resource.data.ownerUid == request.auth.uid 
+                    && immutableCharacterFieldsUnchanged() 
+                    && noPrivilegeEscalation();
+      allow delete: if isAuthenticated() && resource.data.ownerUid == request.auth.uid;
+    }
+
+    // ─── Presença em Tempo Real (presence) — Gate 1 ──────────────────────────
+    match /presence/{characterId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && request.resource.data.ownerUid == request.auth.uid;
+      allow update: if isAuthenticated() && resource.data.ownerUid == request.auth.uid 
+                    && request.resource.data.ownerUid == resource.data.ownerUid;
+      allow delete: if isAuthenticated() && resource.data.ownerUid == request.auth.uid;
+    }
+
+    // ─── Relações de Amizade (friends) ───────────────────────────────────────
+    match /friends/{friendshipId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated();
+      allow delete: if isAuthenticated();
+    }
+
+    match /friend_requests/{requestId} {
+      allow read: if isAuthenticated();
+      allow create, update, delete: if isAuthenticated();
+    }
+
+    // ─── Mentoria Oficial (mentorships) ─────────────────────────────────────
+    match /mentorships/{mentorshipId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated();
+      allow delete: if isAuthenticated();
+    }
+
+    match /mentorship_requests/{requestId} {
+      allow read: if isAuthenticated();
+      allow create, update, delete: if isAuthenticated();
+    }
+
+    // ─── Sistema de Indicação / Referral (referrals) ─────────────────────────
+    match /referrals/{referralId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated();
+    }
+
+    // ─── Lista de Bloqueio (blocks) ──────────────────────────────────────────
+    match /blocks/{blockId} {
+      allow read: if isAuthenticated() && (resource == null || resource.data.ownerUid == request.auth.uid);
+      allow create: if isAuthenticated() && request.resource.data.ownerUid == request.auth.uid;
+      allow delete: if isAuthenticated() && resource.data.ownerUid == request.auth.uid;
+    }
+
+    // ─── Clãs Imperiais e Membros ────────────────────────────────────────────
     match /clans/{clanId} {
-      allow read:  if isAuthenticated();
+      allow read: if isAuthenticated();
       allow write: if isRegistered();
     }
 
+    match /clan_members/{membershipId} {
+      allow read: if isAuthenticated();
+      allow write: if isRegistered();
+    }
+
+    // ─── Snapshot Competitivo de Rankings (pvp_rankings) ────────────────────
+    match /pvp_rankings/{entryId} {
+      allow read: if isAuthenticated();
+      allow create, update: if isAuthenticated();
+    }
+
+    // ─── Inscrições na Grand Olympiad ───────────────────────────────────────
+    match /olympiad_registrations/{regId} {
+      allow read: if isAuthenticated();
+      allow create, update: if isAuthenticated();
+    }
+
     // ─── Mercado Central de Giran — Anúncios P2P ────────────────────────────
-    // • Leitura e negociação entre jogadores autenticados (inclui anônimos).
     match /market_listings/{listingId} {
-      allow read:   if isAuthenticated();
+      allow read: if isAuthenticated();
       allow create: if isAuthenticated();
       allow update: if isAuthenticated();
       allow delete: if isAuthenticated();
@@ -57,15 +155,27 @@ service cloud.firestore {
 
     // ─── Mercado Central de Giran — Registro de Vendas ──────────────────────
     match /market_sales/{sellerKey} {
-      allow read:  if isAuthenticated();
+      allow read: if isAuthenticated();
       allow write: if isAuthenticated();
     }
 
-    // ─── Metadados Globais do Servidor e Metas Comunitárias ──────────────────
+    // ─── Metadados Globais do Servidor ──────────────────────────────────────
     match /server_meta/{docId} {
       allow read: if isAuthenticated();
       allow write: if isAuthenticated();
     }
+
+    // ─── Logs de Auditoria do Sistema ───────────────────────────────────────
+    match /audit_logs/{logId} {
+      allow read: if false; // Apenas backend/console
+      allow create: if isAuthenticated();
+    }
+
+    // ─── Coleção Legada de Usuários (Fase 1 de Migração) ─────────────────────
+    // Mantida para compatibilidade transitória não-destrutiva
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow write: if isOwner(userId) && noPrivilegeEscalation();
+    }
   }
 }
-
