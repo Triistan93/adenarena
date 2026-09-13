@@ -5,6 +5,89 @@
  * Mantém um botão permanente ("❓ Guia da Aba") no canto de cada painel para tirar dúvidas a qualquer momento.
  */
 
+import { RESONANCE_DEFINITIONS } from '../services/WeaponResonanceService.js';
+
+function formatPassiveLabel(statKey, val) {
+  const map = {
+    pDefPct: `+${val}% P.Def`,
+    pAtkPct: `+${val}% P.Atk`,
+    mAtkPct: `+${val}% M.Atk`,
+    mDefPct: `+${val}% M.Def`,
+    critChance: `+${val}% Crit`,
+    critDmgPct: `+${val}% Crit Dmg`,
+    atkSpd: `+${val}% Atk.Spd`,
+    castSpd: `+${val}% Cast.Spd`,
+    eva: `+${val} Evasão`,
+    staggerDmgPct: `+${val}% Stagger`,
+    bossDmgPct: `+${val}% Boss Dmg`,
+    lifeDrain: `+${val}% Life Drain`,
+    healBoostPct: `+${val}% Cura`,
+    damageReductionPct: `-${val}% Dano Recebido`,
+    mCrit: `+${val}% M.Crit`
+  };
+  return map[statKey] || `+${val} ${statKey}`;
+}
+
+function renderResonancesCatalogHtml() {
+  const entries = Object.values(RESONANCE_DEFINITIONS || {});
+  if (!entries.length) return '<p style="color:#aaa;">Nenhuma ressonância cadastrada.</p>';
+
+  const cards = entries.map((res, idx) => {
+    const passives = res.passives || {};
+    const passivePills = Object.entries(passives).map(([k, v]) => `
+      <span style="background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.35); color: #38bdf8; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; display: inline-flex; align-items: center;">
+        ${formatPassiveLabel(k, v)}
+      </span>
+    `).join('');
+
+    const color = res.color || '#eab308';
+
+    return `
+      <div class="res-guide-card" style="background: rgba(15, 20, 32, 0.88); border: 1px solid ${color}55; border-left: 4px solid ${color}; border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.5);">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px; margin-bottom: 6px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 20px; filter: drop-shadow(0 0 4px ${color}88);">${res.icon || '⚔️'}</span>
+            <strong style="font-family: 'Cinzel', serif; font-size: 13px; color: ${color}; letter-spacing: 0.03em;">
+              ${idx + 1}. ${res.name}
+            </strong>
+          </div>
+          <span style="background: rgba(212, 167, 68, 0.15); border: 1px solid rgba(212, 167, 68, 0.4); color: #ffd877; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 6px; font-family: 'Cinzel', serif;">
+            ${res.pairName}
+          </span>
+        </div>
+
+        ${passivePills ? `
+          <div style="display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 6px; align-items: center;">
+            <span style="font-size: 10px; color: #94a3b8; font-weight: 600; margin-right: 2px;">Passivas:</span>
+            ${passivePills}
+          </div>
+        ` : ''}
+
+        <div style="font-size: 11.5px; color: #e2e8f0; line-height: 1.45; background: rgba(0, 0, 0, 0.25); padding: 7px 9px; border-radius: 6px; border: 1px solid rgba(255, 255, 255, 0.05);">
+          ${res.desc}
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  return `
+    <div style="margin-top: 4px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; padding: 6px 10px; background: rgba(212,167,68,0.1); border: 1px solid rgba(212,167,68,0.25); border-radius: 6px; flex-wrap: wrap; gap: 6px;">
+        <span style="font-size: 11px; color: #f5df93; font-weight: 600;">
+          Total: <strong>27 Combinações de Armas</strong> balanceadas para combate 1v1
+        </span>
+        <span style="font-size: 10px; color: #38bdf8; background: rgba(56,189,248,0.1); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(56,189,248,0.25);">
+          +1.240 CP Canônico por par ativo
+        </span>
+      </div>
+      <input type="text" placeholder="🔍 Filtrar por nome da ressonância ou arma (ex: Arco, Cajado, Lança, Adaga)..." oninput="const q = this.value.toLowerCase(); this.parentElement.querySelectorAll('.res-guide-card').forEach(c => { c.style.display = c.textContent.toLowerCase().includes(q) ? 'block' : 'none'; });" style="width: 100%; box-sizing: border-box; padding: 7px 10px; font-size: 11px; background: rgba(0,0,0,0.5); border: 1px solid rgba(212,167,68,0.3); border-radius: 6px; color: #fff; margin-bottom: 8px; font-family: sans-serif; outline: none;" />
+      <div style="max-height: 480px; overflow-y: auto; padding-right: 4px; scrollbar-width: thin;">
+        ${cards}
+      </div>
+    </div>
+  `;
+}
+
 export const GUIDES_DATA = {
   zones: {
     id: 'zones',
@@ -82,6 +165,36 @@ export const GUIDES_DATA = {
         heading: '🧹 Auto-Venda & Desmontar',
         text: 'Utilize os botões de seleção no rodapé para marcar itens Comuns e Incomuns em lote para Vender ou Desmontar em materiais de criação.',
         tip: 'Ative a Auto-Venda no topo para vender automaticamente equipamentos comuns obtidos na caça.'
+      },
+      {
+        heading: '⚡ Dual Arsenal & Ressonância de Armas',
+        text: 'Equipar duas armas sinérgicas ativa a **Ressonância de Armas**, concedendo **+1.240 CP**, bônus passivos e procs de combate.\n\nConsulte a aba **⚡ Ressonâncias** no topo deste modal para ver o catálogo completo com todas as 27 combinações!',
+        tip: 'O banner dourado no topo do inventário mostra qual ressonância está ativa no momento.'
+      }
+    ]
+  },
+
+  resonance: {
+    id: 'resonance',
+    title: '⚡ Ressonâncias do Dual Arsenal (27 Combinações)',
+    subtitle: 'Equipe armas sinérgicas no Slot 1 e Slot 2 para desbloquear passivas únicas e procs de combate.',
+    icon: '⚡',
+    color: '#eab308',
+    sections: [
+      {
+        heading: '⚔️ Como Funciona a Ressonância de Armas?',
+        text: 'O sistema de **Dual Arsenal** permite que o herói equipe uma arma primária no **Slot 1 (Arma)** e uma arma secundária ou escudo no **Slot 2 (Secundária / Escudo)**.\n\nQuando as armas equipadas formam uma combinação compatível, a Ressonância é ativada instantaneamente:\n• **+1.240 Pontos de Combat Power (CP)** no cálculo canônico do personagem.\n• **Bônus de Atributos Passivos** (+20% P.Def, +15% Atk.Spd, +12% Cast.Spd, Evasão, Chance Crítica, etc.).\n• **Procs Táticos de Combate** aplicados no monstro em tempo real (Fratura Tática, Estocada Perfurante, Lentidão, Detonação de Toxinas, Redução de Armadura e Dano Elemental Híbrido).\n• **Balanceamento Focado 1v1**: Todas as 27 ressonâncias foram calibradas para combate individual focado, sem habilidades de área (AoE) quebradas.',
+        tip: 'Verifique sua ressonância ativa no banner dourado no topo da Mochila (Inventário)!'
+      },
+      {
+        heading: '📜 Catálogo das 27 Ressonâncias de Armas',
+        customHtml: renderResonancesCatalogHtml(),
+        tip: 'Experimente trocar sua arma secundária: use Escudo para defesa ou Adaga/Dual para críticos rápidos!'
+      },
+      {
+        heading: '🛡️ Regras de Compatibilidade & Dicas Táticas',
+        text: '• **Armas de 2 Mãos e Arco**: Arcos, Espadas de 2 Mãos e Lanças têm regras especiais de compatibilidade com secundárias leves para liberar ressonâncias únicas.\n• **Grau das Armas**: A ressonância independe do grau (No-Grade ao S-Grade). Qualquer nível de arma ativa a sinergia.\n• **Troca Instantânea**: Ao desequipar ou trocar de arma, os bônus e o CP são recalculados imediatamente no StatsEngine.',
+        tip: 'Armas com Soul Crystals (SA), Atributos Elementais e Augmentations somam seus bônus integralmente à ressonância ativa!'
       }
     ]
   },
@@ -416,6 +529,8 @@ GUIDES_DATA['olympiad'] = GUIDES_DATA['colosseum'];
 GUIDES_DATA['pvp'] = GUIDES_DATA['colosseum'];
 GUIDES_DATA['clans'] = GUIDES_DATA['clan'];
 GUIDES_DATA['community'] = GUIDES_DATA['referral'];
+GUIDES_DATA['resonances'] = GUIDES_DATA['resonance'];
+GUIDES_DATA['dual_resonance'] = GUIDES_DATA['resonance'];
 
 // Tabela de resolução de chaves (tab-name → guide-key)
 const TAB_TO_GUIDE = {};
@@ -475,9 +590,11 @@ export function openTabGuideModal(guideKey) {
       <h4 style="margin: 0 0 6px 0; font-family: 'Cinzel', serif; color: ${data.color || '#f4d58a'}; font-size: 15px; display: flex; align-items: center; gap: 6px;">
         ${s.heading}
       </h4>
-      <p style="margin: 0; font-size: 12px; color: #ddd; line-height: 1.6; whitespace: pre-line;">
-        ${s.text.replace(/\n/g, '<br/>')}
-      </p>
+      ${s.customHtml ? s.customHtml : `
+        <p style="margin: 0; font-size: 12px; color: #ddd; line-height: 1.6; whitespace: pre-line;">
+          ${(s.text || '').replace(/\n/g, '<br/>')}
+        </p>
+      `}
       ${s.tip ? `
         <div style="margin-top: 8px; font-size: 11px; color: #34d399; background: rgba(52, 211, 153, 0.1); border-left: 3px solid #34d399; padding: 6px 10px; border-radius: 0 6px 6px 0;">
           💡 <strong>Dica Estratégica:</strong> ${s.tip}
@@ -508,14 +625,14 @@ export function openTabGuideModal(guideKey) {
       <!-- Category Selector Tabs -->
       <div style="padding: 8px 16px; background: rgba(0, 0, 0, 0.4); border-bottom: 1px solid rgba(212, 167, 68, 0.25); display: flex; gap: 6px; overflow-x: auto; scrollbar-width: thin;">
         ${[
-          'zones', 'character', 'inventory', 'skills', 'craft',
+          'zones', 'character', 'inventory', 'resonance', 'skills', 'craft',
           'raids', 'colosseum', 'clan', 'alchemy', 'astral',
           'codex', 'dolls', 'shop', 'quests', 'tower', 'referral'
         ].map(k => {
           const g = GUIDES_DATA[k];
           if (!g) return '';
           const isSel = (k === (data.id || guideKey));
-          const shortTitle = g.title.split('&')[0].split('(')[0].replace(/[^\w\sÀ-ú]/g, '').trim();
+          const shortTitle = (k === 'resonance') ? 'Ressonâncias' : g.title.split('&')[0].split('(')[0].replace(/[^\w\sÀ-ú]/g, '').trim();
           return `
             <button onclick="window.openTabGuideModal('${k}')" style="padding: 4px 10px; font-size: 11px; font-family: 'Cinzel', serif; font-weight: bold; border-radius: 12px; white-space: nowrap; cursor: pointer; transition: all 0.2s; border: 1px solid ${isSel ? (g.color || '#d4a744') : 'rgba(255,255,255,0.15)'}; background: ${isSel ? 'rgba(212, 167, 68, 0.25)' : 'rgba(20,24,36,0.6)'}; color: ${isSel ? (g.color || '#f4d58a') : '#aaa'};">
               ${g.icon} ${shortTitle}

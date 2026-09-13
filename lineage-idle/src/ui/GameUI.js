@@ -2795,6 +2795,9 @@ export function updateEquipmentUI(state, callbacks = {}) {
           <div class="res-title" style="color:${activeRes.color || '#eab308'}">RESSONÂNCIA: ${activeRes.name.toUpperCase()}</div>
           <div class="res-desc"><strong style="color:#f8fafc;">${activeRes.pairName}</strong> — ${activeRes.desc}</div>
         </div>
+        <button onclick="window.openTabGuideModal && window.openTabGuideModal('resonance')" title="Ver catálogo de todas as 27 Ressonâncias no Guia" style="background: rgba(212,167,68,0.18); border: 1px solid rgba(212,167,68,0.45); color: #ffd877; font-family: 'Cinzel', serif; font-size: 10px; font-weight: bold; padding: 4px 8px; border-radius: 6px; cursor: pointer; white-space: nowrap; transition: all 0.2s; margin-left: 8px; display: inline-flex; align-items: center; gap: 4px; flex-shrink: 0;">
+          📖 Guia
+        </button>
       `;
     } else {
       resBadge.style.display = 'none';
