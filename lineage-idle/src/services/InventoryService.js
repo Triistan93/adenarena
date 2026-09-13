@@ -6,6 +6,7 @@
  */
 
 import { D, HIGH_RARITIES, ALL_EQUIP_SLOTS } from '../core/GameConfig.js';
+import { getSellValue } from '../data/economy/economyBalance.js';
 
 /**
  * Retorna o número máximo de slots na mochila do personagem (250 para Dwarf, 150 para demais).
@@ -120,9 +121,8 @@ export function processAutoRecycleItem(item, def, state, callbacks = {}) {
   const mult = gData?.RARITY?.[itemRarity]?.mult || 1;
 
   if (mode === 'sell') {
-    // Modo 1: Auto-Venda por Adena
-    const basePrice = def.price || (reqLvl * 15 + 20);
-    const goldGain = Math.max(5, Math.floor(basePrice * 0.4 * mult));
+    // Modo 1: Auto-Venda por Adena (50% Canônico)
+    const goldGain = getSellValue(item);
     state.gold = (state.gold || 0) + goldGain;
     if (callbacks.log) {
       callbacks.log(`🪙 [Auto-Venda AFK] ${def.name} vendido automaticamente por +${goldGain.toLocaleString()} Adena`, 'loot');
@@ -866,11 +866,8 @@ export function getBatchSellPreview(state, uids) {
     }
 
     const itemQty = Number(item.count) || 1;
-    const basePrice = Number(def.price) || 10;
-    const mult = item.rarity ? (D()?.RARITY?.[item.rarity]?.mult || 1) : 1;
-    const enchant = Number(item.enchant) || 0;
-    const enchantMult = 1 + enchant * 0.1;
-    const goldEarned = Math.floor(basePrice * mult * enchantMult * 0.4) * itemQty;
+    const unitGold = getSellValue(item);
+    const goldEarned = unitGold * itemQty;
 
     if (isHighValueItem(item)) {
       hasHighValue = true;

@@ -4,6 +4,7 @@
  */
 
 import { D, ALL_EQUIP_SLOTS, TIER_NAMES } from '../core/GameConfig.js';
+import { getSellValue } from '../data/economy/economyBalance.js';
 import { ALL_ITEMS } from '../data/items/index.js';
 import { getState } from '../core/StateManager.js';
 import { el, qsa, mkEl, mkNS, updateBar } from '../core/DomHelpers.js';
@@ -4324,8 +4325,7 @@ export function updateShopUI(state, callbacks = {}) {
       html += `<div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)); gap:8px;">`;
       html += inv.map(item => {
         const def = allItems[item.itemId || item.id] || item;
-        const basePrice = def?.price || 100;
-        const sellUnit = Math.max(1, Math.floor(basePrice * 0.5));
+        const sellUnit = getSellValue(item);
         const count = item.count || 1;
         const totalSell = sellUnit * count;
         const isLocked = selectedSet.has(item.uid);
@@ -4375,89 +4375,7 @@ export function updateShopUI(state, callbacks = {}) {
     return;
   }
 
-  // ═══════════════════════════════════════════════════════════════════════════
-  // RENDERIZAÇÃO DA SUB-ABA: CÂMBIO & MOEDAS ESPECIAIS (CURRENCIES)
-  // ═══════════════════════════════════════════════════════════════════════════
-  if (currentShopTab === 'currencies') {
-    const aaCount = Number(state.sevenSigns?.ancientAdena) || 0;
-    const olyTokens = Number(state.olympiadTokens) || 0;
-    const gladBadges = Number(state.colosseum?.badges) || 0;
-    const fortEpaulettes = Number(state.fortresses?.epaulettes) || 0;
-
-    container.innerHTML = `
-      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:12px; width:100%;">
-        <!-- Mammon & Sete Selos -->
-        <div style="background:rgba(30,20,50,0.6); border:1px solid rgba(168,85,247,0.4); border-radius:10px; padding:16px;">
-          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
-            <div>
-              <h4 style="margin:0; color:#c084fc; font-family:'Cinzel',serif;">🏛️ Mercador &amp; Ferreiro de Mammon</h4>
-              <p style="margin:2px 0 0 0; font-size:11px; color:var(--text-muted);">Comércio exclusivo de Pedras Seladas e Ancient Adena (AA)</p>
-            </div>
-            <span style="font-size:20px;">🔮</span>
-          </div>
-          <div style="background:rgba(0,0,0,0.4); padding:8px 12px; border-radius:6px; margin-bottom:12px; font-size:13px; color:#fff;">
-            Saldo: <strong style="color:#a855f7;">${aaCount.toLocaleString()} Ancient Adena</strong>
-          </div>
-          <button class="inv-batch-btn" data-goto-tab="sevensigns" style="width:100%; padding:8px; font-weight:bold; background:rgba(168,85,247,0.2); border-color:#a855f7; color:#e9d5ff;">
-            Acessar Sete Selos &amp; Mammon ➔
-          </button>
-        </div>
-
-        <!-- Grand Olympiad -->
-        <div style="background:rgba(40,30,10,0.6); border:1px solid rgba(245,158,11,0.4); border-radius:10px; padding:16px;">
-          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
-            <div>
-              <h4 style="margin:0; color:#fbbf24; font-family:'Cinzel',serif;">👑 Monumento de Heróis da Olimpíada</h4>
-              <p style="margin:2px 0 0 0; font-size:11px; color:var(--text-muted);">Armas da Infinidade, Mantos e Bênçãos de Nobre</p>
-            </div>
-            <span style="font-size:20px;">🏆</span>
-          </div>
-          <div style="background:rgba(0,0,0,0.4); padding:8px 12px; border-radius:6px; margin-bottom:12px; font-size:13px; color:#fff;">
-            Saldo: <strong style="color:#f59e0b;">${olyTokens.toLocaleString()} Olympiad Tokens</strong>
-          </div>
-          <button class="inv-batch-btn" data-goto-tab="olympiad" style="width:100%; padding:8px; font-weight:bold; background:rgba(245,158,11,0.2); border-color:#f59e0b; color:#fef3c7;">
-            Acessar Loja de Olimpíada ➔
-          </button>
-        </div>
-
-        <!-- Coliseu de Gladiadores -->
-        <div style="background:rgba(40,15,15,0.6); border:1px solid rgba(239,68,68,0.4); border-radius:10px; padding:16px;">
-          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
-            <div>
-              <h4 style="margin:0; color:#f87171; font-family:'Cinzel',serif;">⚔️ Intendência dos Gladiadores</h4>
-              <p style="margin:2px 0 0 0; font-size:11px; color:var(--text-muted);">Joias de Sangue, Poções de Fúria e Títulos da Arena</p>
-            </div>
-            <span style="font-size:20px;">🛡️</span>
-          </div>
-          <div style="background:rgba(0,0,0,0.4); padding:8px 12px; border-radius:6px; margin-bottom:12px; font-size:13px; color:#fff;">
-            Saldo: <strong style="color:#ef4444;">${gladBadges.toLocaleString()} Gladiator Badges</strong>
-          </div>
-          <button class="inv-batch-btn" data-goto-tab="colosseum" style="width:100%; padding:8px; font-weight:bold; background:rgba(239,68,68,0.2); border-color:#ef4444; color:#fee2e2;">
-            Acessar Quartel do Coliseu ➔
-          </button>
-        </div>
-
-        <!-- Fortalezas -->
-        <div style="background:rgba(20,35,25,0.6); border:1px solid rgba(34,197,94,0.4); border-radius:10px; padding:16px;">
-          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
-            <div>
-              <h4 style="margin:0; color:#4ade80; font-family:'Cinzel',serif;">🏰 Quartel-General de Fronteira</h4>
-              <p style="margin:2px 0 0 0; font-size:11px; color:var(--text-muted);">Braceletes de Aço, Mithril e Talismãs Militares</p>
-            </div>
-            <span style="font-size:20px;">🎖️</span>
-          </div>
-          <div style="background:rgba(0,0,0,0.4); padding:8px 12px; border-radius:6px; margin-bottom:12px; font-size:13px; color:#fff;">
-            Saldo: <strong style="color:#22c55e;">${fortEpaulettes.toLocaleString()} Knight's Epaulettes</strong>
-          </div>
-          <button class="inv-batch-btn" data-goto-tab="fortress" style="width:100%; padding:8px; font-weight:bold; background:rgba(34,197,94,0.2); border-color:#22c55e; color:#dcfce7;">
-            Acessar Quartel de Fortaleza ➔
-          </button>
-        </div>
-      </div>
-    `;
-    attachShopEvents(container, callbacks);
-    return;
-  }
+  // Sub-aba currencies expurgada do Mercador (moedas restritas exclusivamente aos pilares de Olimpíada, Coliseu e Sete Selos)
 
   // ═══════════════════════════════════════════════════════════════════════════
   // CATÁLOGO REGULAR DE COMPRAS (GEAR, POTIONS, SPELLBOOKS, MYSTIC)
@@ -5558,13 +5476,13 @@ export function renderAlchemyUI(state) {
 
     const grade = getItemGradeCode(selectedDef);
     const yields = {
-      ng: { fire: 1, earth: 1, wind: 1, astral: 0, fee: 50 },
-      d:  { fire: 3, earth: 3, wind: 3, astral: 1, fee: 150 },
-      c:  { fire: 8, earth: 8, wind: 8, astral: 2, fee: 400 },
-      b:  { fire: 20, earth: 20, wind: 20, astral: 5, fee: 1000 },
-      a:  { fire: 50, earth: 50, wind: 50, astral: 15, fee: 2500 },
-      s:  { fire: 120, earth: 120, wind: 120, astral: 40, fee: 6000 }
-    }[grade] || { fire: 1, earth: 1, wind: 1, astral: 0, fee: 50 };
+      ng: { fire: 1, earth: 1, wind: 1, water: 0, fee: 50 },
+      d:  { fire: 3, earth: 3, wind: 3, water: 1, fee: 150 },
+      c:  { fire: 8, earth: 8, wind: 8, water: 2, fee: 400 },
+      b:  { fire: 20, earth: 20, wind: 20, water: 5, fee: 1000 },
+      a:  { fire: 50, earth: 50, wind: 50, water: 15, fee: 2500 },
+      s:  { fire: 120, earth: 120, wind: 120, water: 40, fee: 6000 }
+    }[grade] || { fire: 1, earth: 1, wind: 1, water: 0, fee: 50 };
 
     const optionsHtml = inventoryItems.map(item => {
       const def = getItemDef(item.itemId);
@@ -5608,7 +5526,7 @@ export function renderAlchemyUI(state) {
             <span style="color:#fca5a5;">🔥 +${yields.fire}</span>
             <span style="color:#86efac;">🛡️ +${yields.earth}</span>
             <span style="color:#7dd3fc;">🍃 +${yields.wind}</span>
-            <span style="color:#d8b4fe;">✨ +${yields.astral}</span>
+            <span style="color:#38bdf8;">💧 +${yields.water ?? yields.astral ?? 0}</span>
           </div>
         </div>
       </div>
@@ -5642,10 +5560,10 @@ export function renderAlchemyUI(state) {
             <div style="font-size:10px; text-transform:uppercase; color:#7dd3fc; font-weight:bold;">Vento</div>
             <div style="font-size:16px; font-weight:bold; color:#fff;">${(essences.wind || 0).toLocaleString()}</div>
           </div>
-          <div style="background:rgba(168,85,247,0.12); border:1px solid rgba(168,85,247,0.3); border-radius:8px; padding:8px;">
-            <div style="font-size:18px;">✨</div>
-            <div style="font-size:10px; text-transform:uppercase; color:#d8b4fe; font-weight:bold;">Astral</div>
-            <div style="font-size:16px; font-weight:bold; color:#fff;">${(essences.astral || 0).toLocaleString()}</div>
+          <div style="background:rgba(14,165,233,0.12); border:1px solid rgba(14,165,233,0.3); border-radius:8px; padding:8px;">
+            <div style="font-size:18px;">💧</div>
+            <div style="font-size:10px; text-transform:uppercase; color:#38bdf8; font-weight:bold;">Água</div>
+            <div style="font-size:16px; font-weight:bold; color:#fff;">${((essences.water ?? essences.astral) || 0).toLocaleString()}</div>
           </div>
         </div>
       </div>
@@ -5669,7 +5587,7 @@ export function renderAlchemyUI(state) {
           </span>
         </div>
         <p style="margin:0 0 12px 0; font-size:12px; color:#cbd5e1; line-height:1.4;">
-          Rasgue o tecido do espaço no combate idle para convocar uma versão <strong>[CHAOS]</strong> de um Boss Épico. Chefes do Caos possuem +150% HP e concedem <strong>Drops Garantidos de Pergaminhos Abençoados, Top Life Stones e Relíquias</strong>!
+          Rasgue o tecido do espaço no combate idle para convocar uma versão <strong>[CHAOS]</strong> de um Boss Épico. Chefes do Caos possuem stats aumentados e concedem <strong>Drops Especiais e +100 Pontos para a Forja Imperial (Random Craft)</strong>!
         </p>
         <button
           onclick="if (window.useChaosBossSummonStoneAction) window.useChaosBossSummonStoneAction();"
@@ -6937,34 +6855,38 @@ export function renderForgeLifestones(container, state) {
 }
 
 export function renderForgeRandomCraft(container, state, callbacks = {}) {
-  const charge = state.randomCraftCharge || 0;
-  const slots = state.randomCraftSlots || [];
+  const rc = (state.randomCraft && typeof state.randomCraft === 'object') ? state.randomCraft : {};
+  const points = Number(rc.points ?? state.randomCraftCharge ?? state.craftPoints ?? 0);
+  const charges = Number(rc.charge ?? state.craftCharges ?? 0);
+  const slots = (Array.isArray(rc.slots) && rc.slots.length > 0) ? rc.slots : (state.randomCraftSlots || []);
   const gData = D();
   const allItems = gData?.ALL_ITEMS || {};
 
   let slotsHtml = '';
-  if (charge >= 100 && slots.length > 0) {
+  if (slots.length > 0) {
     slotsHtml = `
-      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:10px; margin-top:12px;">
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:10px; margin-top:14px;">
         ${slots.map((s, idx) => {
           const def = allItems[s.itemId] || { name: s.itemId, slot: 'relic' };
           const gradeInfo = getItemGrade(def);
+          const isSPlus = gradeInfo.code === 's' || gradeInfo.code === 'boss' || gradeInfo.code === 'frostlord';
           return `
-            <div style="background:rgba(8,11,16,0.9); border:1px solid ${gradeInfo.color}; border-radius:8px; padding:12px; text-align:center; display:flex; flex-direction:column; align-items:center; justify-content:space-between; gap:8px;">
-              <div class="l2-blueprint-socket" style="border-color:${gradeInfo.color};">
+            <div style="background:rgba(8,11,16,0.92); border:1px solid ${isSPlus ? '#f59e0b' : gradeInfo.color}; border-radius:8px; padding:12px; text-align:center; display:flex; flex-direction:column; align-items:center; justify-content:space-between; gap:6px; box-shadow:${isSPlus ? '0 0 12px rgba(245,158,11,0.25)' : 'none'}; position:relative;">
+              <div style="position:absolute; top:4px; right:6px; font-size:9px; color:#94a3b8; font-family:'Cinzel',serif;">Slot ${idx+1}</div>
+              <div class="l2-blueprint-socket" style="border-color:${isSPlus ? '#f59e0b' : gradeInfo.color}; margin-top:6px;">
                 ${getItemIcon(def)}
               </div>
               <div>
-                <div style="font-weight:bold; font-size:12px; color:#f5df93; font-family:'Cinzel',serif;">${def.name} ${s.count > 1 ? `(${s.count}x)` : ''}</div>
-                <div style="font-size:10px; color:${gradeInfo.color}; font-weight:bold;">${gradeInfo.label}</div>
+                <div style="font-weight:bold; font-size:11px; color:#f5df93; font-family:'Cinzel',serif; min-height:28px; display:flex; align-items:center; justify-content:center;">
+                  ${def.name} ${s.count > 1 ? `(${s.count}x)` : ''}
+                </div>
+                <div style="font-size:10px; color:${isSPlus ? '#fde047' : gradeInfo.color}; font-weight:bold;">
+                  ${gradeInfo.label} ${isSPlus ? '★' : ''}
+                </div>
               </div>
-              <button
-                onclick="window.claimRandomCraftReward(${idx})"
-                class="l2-forge-action-btn is-ready"
-                style="padding:6px 10px; font-size:10px;"
-              >
-                🎁 RESGATAR ITEM
-              </button>
+              <div style="font-size:9px; color:#38bdf8; background:rgba(56,189,248,0.1); padding:2px 6px; border-radius:4px; border:1px solid rgba(56,189,248,0.2);">
+                Sorteio: 20%
+              </div>
             </div>
           `;
         }).join('')}
@@ -6974,22 +6896,15 @@ export function renderForgeRandomCraft(container, state, callbacks = {}) {
     slotsHtml = `
       <div style="background:rgba(8,11,16,0.85); border:1px dashed rgba(168,85,247,0.3); border-radius:8px; padding:20px; text-align:center; margin-top:12px;">
         <div style="font-size:28px; margin-bottom:6px;">🎲</div>
-        <div style="font-size:13px; font-weight:bold; color:#e9d5ff; margin-bottom:4px; font-family:'Cinzel',serif;">Roleta Mística em Carga (${charge}/100 Pontos)</div>
+        <div style="font-size:13px; font-weight:bold; color:#e9d5ff; margin-bottom:4px; font-family:'Cinzel',serif;">Nenhum Slot Carregado</div>
         <div style="font-size:11px; color:#94a3b8; max-width:460px; margin:0 auto 14px auto;">
-          Recicle equipamentos indesejados da mochila ou invista Adena para acumular 100 pontos e invocar 5 relíquias da Forja!
-        </div>
-        <div style="display:flex; justify-content:center; gap:10px; flex-wrap:wrap;">
-          <button
-            onclick="window.chargeRandomCraftWithAdenaAction()"
-            class="l2-forge-action-btn is-ready"
-            style="max-width:280px; font-size:11px;"
-          >
-            🪙 Carga por Adena (+20 Pts - 200k g)
-          </button>
+          Clique em Atualizar para invocar 5 novas relíquias da Forja Imperial!
         </div>
       </div>
     `;
   }
+
+  const canSpin = charges >= 1;
 
   container.innerHTML = `
     <div class="l2-workshop-panel">
@@ -6999,21 +6914,54 @@ export function renderForgeRandomCraft(container, state, callbacks = {}) {
           <div>
             <h3 class="l2-workshop-title">🎲 Roleta Imperial de Criação Anã (Random Craft)</h3>
             <p class="l2-workshop-subtitle">
-              Acumule 100 pontos para liberar 5 relíquias secretas forjadas pelos anões de Giran.
+              Acumule 100 pontos para gerar 1 Carga Imperial. Ao girar a roleta, 1 dos 5 itens é forjado aleatoriamente (20% por slot)!
             </p>
           </div>
-          <div style="font-size:13px; font-weight:bold; color:#ffd877; font-family:'Cinzel',serif;">
-            Carga: <strong style="color:#a855f7;">${charge}%</strong>
+          <div style="text-align:right;">
+            <div style="font-size:13px; font-weight:bold; color:#ffd877; font-family:'Cinzel',serif;">
+              Cargas: <strong style="color:#22c55e; font-size:16px;">${charges}</strong>
+            </div>
+            <div style="font-size:10px; color:#94a3b8;">
+              Próxima: <strong style="color:#a855f7;">${points}/100 Pts</strong>
+            </div>
           </div>
         </div>
 
         <!-- Progress Bar -->
         <div style="width:100%; height:8px; background:rgba(0,0,0,0.6); border-radius:4px; margin-top:10px; overflow:hidden; border:1px solid rgba(168,85,247,0.3);">
-          <div style="height:100%; width:${charge}%; background:linear-gradient(90deg,#a855f7,#ec4899); transition:width 0.4s;"></div>
+          <div style="height:100%; width:${Math.min(100, points)}%; background:linear-gradient(90deg,#a855f7,#ec4899); transition:width 0.4s;"></div>
         </div>
       </div>
 
       ${slotsHtml}
+
+      <!-- Controles de Ação Canônicos -->
+      <div style="display:flex; justify-content:center; gap:10px; flex-wrap:wrap; margin-top:16px; padding-top:14px; border-top:1px solid rgba(212,167,68,0.2);">
+        <button
+          onclick="window.spinRandomCraftAction()"
+          class="l2-forge-action-btn ${canSpin ? 'is-ready' : ''}"
+          style="min-width:220px; font-size:12px; font-weight:bold; padding:8px 16px; ${!canSpin ? 'opacity:0.5; cursor:not-allowed;' : 'background:linear-gradient(135deg,#7c3aed,#db2777);'}"
+          ${!canSpin ? 'disabled' : ''}
+        >
+          🎲 GIRAR ROLETA IMPERIAL ${canSpin ? `(${charges} Disponíveis)` : '(Requer 1 Carga)'}
+        </button>
+
+        <button
+          onclick="window.refreshRandomCraftSlotsAction()"
+          class="l2-forge-action-btn"
+          style="min-width:180px; font-size:11px; padding:8px 12px; background:rgba(30,41,59,0.8); border:1px solid rgba(148,163,184,0.3);"
+        >
+          🔄 Atualizar Slots (50.000 Adena)
+        </button>
+
+        <button
+          onclick="window.chargeRandomCraftWithAdenaAction()"
+          class="l2-forge-action-btn"
+          style="min-width:180px; font-size:11px; padding:8px 12px; background:rgba(180,83,9,0.25); border:1px solid rgba(245,158,11,0.4); color:#fde047;"
+        >
+          🪙 Comprar Carga (+20 Pts - 200k)
+        </button>
+      </div>
     </div>
   `;
 }

@@ -337,12 +337,12 @@ export const IDLE_MARKUP = `
 
           <!-- Pillar 3 Subtabs: Império & Economia -->
           <div class="pillar-subtabs-strip collapsed" id="pillar-strip-economy" style="display:none;">
-            <button class="tab-btn subtab-pill-btn" data-tab="market" style="border-color:#ffd700; color:#fde047; font-weight:bold;">🏛 Mercado Giran (P2P)</button>
-            <button class="tab-btn subtab-pill-btn" data-tab="shop">⚜ Mercador</button>
-            <button class="tab-btn subtab-pill-btn" data-tab="craft">⚒ Forja Imperial <span id="tab-badge-craft" class="tab-badge" style="display:none">!</span></button>
-            <button class="tab-btn subtab-pill-btn" data-tab="alchemy">🧪 Alquimia</button>
-            <button class="tab-btn subtab-pill-btn" data-tab="warehouse">📦 Baú Privado</button>
-            <button class="tab-btn subtab-pill-btn" data-tab="magiclamp">🪔 Lâmpada Mágica</button>
+            <button class="tab-btn subtab-pill-btn" data-tab="market" data-min-level="1" style="border-color:#ffd700; color:#fde047; font-weight:bold;">🏛 Mercado Giran (P2P)</button>
+            <button class="tab-btn subtab-pill-btn" data-tab="shop" data-min-level="1">⚜ Mercador</button>
+            <button class="tab-btn subtab-pill-btn" data-tab="craft" data-min-level="10">⚒ Forja Imperial <span id="tab-badge-craft" class="tab-badge" style="display:none">!</span></button>
+            <button class="tab-btn subtab-pill-btn" data-tab="warehouse" data-min-level="15">📦 Baú Privado</button>
+            <button class="tab-btn subtab-pill-btn" data-tab="magiclamp" data-min-level="20">🪔 Lâmpada Mágica</button>
+            <button class="tab-btn subtab-pill-btn" data-tab="alchemy" data-min-level="40">🧪 Alquimia</button>
           </div>
 
           <!-- Pillar 4 Subtabs: Glória & Sociedade -->
@@ -933,7 +933,6 @@ export const IDLE_MARKUP = `
               <button class="shop-subtab" data-shoptab="potions">🧪 Mercearia &amp; Shots</button>
               <button class="shop-subtab" data-shoptab="spellbooks">📜 Livraria Arcana</button>
               <button class="shop-subtab" data-shoptab="mystic">🌟 Empório Místico</button>
-              <button class="shop-subtab" data-shoptab="currencies">💎 Câmbio de Moedas</button>
               <button class="shop-subtab" data-shoptab="sell" style="border-color:rgba(239,68,68,0.4); color:#fca5a5;">💰 Venda &amp; Recompra</button>
             </div>
 
@@ -1142,43 +1141,17 @@ export const IDLE_MARKUP = `
             <div id="dolls-encyclopedia" style="margin-top: 20px;"></div>
           </div>
 
-          <!-- Magic Lamp & Special Craft Tab -->
+          <!-- Magic Lamp Tab -->
           <div id="tab-magiclamp" class="tab-pane">
             <div class="lamp-box">
               <h3>🪔 Lâmpada Mágica &amp; Cartas de EXP</h3>
-              <p class="shop-info">Ao derrotar monstros, a barra da Lâmpada Mágica acumula experiência. Use lâmpadas para sortear cartas mágicas e receber EXP &amp; SP massivos!</p>
+              <p class="shop-info">Ao derrotar monstros, a barra da Lâmpada Mágica acumula experiência. Use lâmpadas para sortear cartas mágicas e receber EXP &amp; SP massivos escalonados pelo seu nível!</p>
               <div class="lamp-gauge-container" style="margin: 12px 0;">
                 <div class="lamp-progress-bar" id="lamp-progress-bar" style="height: 10px; background: linear-gradient(90deg, #3b82f6, #8b5cf6); width: 0%; border-radius: 5px; transition: width 0.3s;"></div>
                 <span class="lamp-count-label" id="lamp-count-label" style="display: block; font-weight: bold; margin-top: 6px; color: var(--gilt-bright);">0 Lâmpadas Mágicas Disponíveis</span>
               </div>
               <button class="action-btn action-btn--primary" id="use-magic-lamp-btn">Sortear Carta Mágica 🪔</button>
               <div class="lamp-result-card" id="lamp-result-card" style="margin-top: 12px;"></div>
-            </div>
-
-            <hr style="border-color: var(--border-gilt); margin: 20px 0;" />
-
-            <div class="craft-box">
-              <h3>🛠️ Random Craft &amp; Special Craft</h3>
-              <div class="craft-gauge-container" style="margin: 12px 0;">
-                <div class="craft-progress-bar" id="craft-progress-bar" style="height: 10px; background: linear-gradient(90deg, #10b981, #f59e0b); width: 0%; border-radius: 5px; transition: width 0.3s;"></div>
-                <span class="craft-count-label" id="craft-count-label" style="display: block; font-weight: bold; margin-top: 6px; color: var(--gilt-bright);">0 Pontos / Cargas de Craft</span>
-              </div>
-
-              <!-- Random Craft Section -->
-              <div class="random-craft-section">
-                <h4>🎰 Roleta Random Craft (5 Slot Wheel)</h4>
-                <div class="random-wheel-slots" id="random-wheel-slots" style="display: flex; gap: 8px; margin: 12px 0; overflow-x: auto;"></div>
-                <div class="random-craft-actions" style="display: flex; gap: 10px;">
-                  <button class="action-btn" id="refresh-random-craft-btn">Recarregar Roleta 🔄</button>
-                  <button class="action-btn action-btn--primary" id="spin-random-craft-btn">Crafting! (1 Carga) ⚡</button>
-                </div>
-              </div>
-
-              <!-- Special Craft Section -->
-              <div class="special-craft-section" style="margin-top: 20px;">
-                <h4>✨ Special Crafting Recipes</h4>
-                <div class="special-craft-grid" id="special-craft-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-top: 10px;"></div>
-              </div>
             </div>
           </div>
 

@@ -5,6 +5,13 @@
 import { D } from '../core/GameConfig.js';
 import { ALL_ITEMS as CATALOG_ALL_ITEMS } from '../data/items/index.js';
 import { addToInventory, getInventoryCount } from './InventoryService.js';
+import {
+  CHAOS_BOSS_SUMMON_COST,
+  CHAOS_BOSS_STAT_MULTIPLIERS,
+  CHAOS_BOSS_DROPLIST_BY_SEASON,
+  getSeasonForLevel
+} from '../data/economy/chaosBossBalance.js';
+import { chargeRandomCraft } from './CraftService.js';
 
 export function getItemDef(itemId) {
   if (!itemId) return null;
@@ -53,7 +60,7 @@ export const ALCHEMY_RECIPES = {
     name: 'Elixir do Arcanista',
     icon: '🔮',
     desc: '+20% M.Atk e +50% Regeneração de Mana por 1 hora',
-    cost: { astral: 15, fire: 10 },
+    cost: { water: 15, fire: 10 },
     gold: 2500,
     duration: 3600000
   },
@@ -62,7 +69,7 @@ export const ALCHEMY_RECIPES = {
     name: 'Elixir da Fortuna',
     icon: '💰',
     desc: '+25% Taxa de Drop e +30% Ouro Ganho por 1 hora',
-    cost: { earth: 20, astral: 15 },
+    cost: { earth: 20, water: 15 },
     gold: 5000,
     duration: 3600000
   },
@@ -80,7 +87,7 @@ export const ALCHEMY_RECIPES = {
     name: 'Elixir da Transcendência',
     icon: '✨',
     desc: '+20% EXP e +20% SP Ganho por 1 hora',
-    cost: { astral: 25, wind: 20 },
+    cost: { water: 25, wind: 20 },
     gold: 10000,
     duration: 3600000
   },
@@ -89,7 +96,7 @@ export const ALCHEMY_RECIPES = {
     name: 'Pedra de Convocação Abissal',
     icon: '🌀',
     desc: 'Rasga o tecido do espaço no modo idle e invoca um Boss do Caos [CHAOS] com drops supremos!',
-    cost: { fire: 50, astral: 50 },
+    cost: { fire: 50, water: 50 },
     gold: 25000,
     duration: 0,
     isItem: true,
@@ -104,17 +111,22 @@ export function getEssenceTypeForItem(def) {
   if (!def) return 'fire';
   const slot = String(def.slot || '').toLowerCase();
   const type = String(def.type || '').toLowerCase();
-  if (['weapon', 'sword', 'mace', 'dagger', 'bow', 'staff', 'spear', 'dualsword', 'kris', 'axe', 'hammer', 'fist', 'rapier'].some(x => slot.includes(x) || type.includes(x))) {
+  const element = String(def.element || def.elemental || '').toLowerCase();
+
+  if (element === 'water' || slot.includes('robe') || type.includes('robe')) {
+    return 'water';
+  }
+  if (element === 'fire' || ['weapon', 'sword', 'mace', 'dagger', 'bow', 'staff', 'spear', 'dualsword', 'kris', 'axe', 'hammer', 'fist', 'rapier'].some(x => slot.includes(x) || type.includes(x))) {
     return 'fire';
   }
-  if (['armor', 'shield', 'helmet', 'chest', 'legs', 'sigil'].some(x => slot.includes(x) || type.includes(x))) {
+  if (element === 'earth' || ['armor', 'shield', 'helmet', 'chest', 'legs', 'sigil'].some(x => slot.includes(x) || type.includes(x))) {
     return 'earth';
   }
-  if (['boots', 'gloves', 'cloak', 'belt', 'hair'].some(x => slot.includes(x) || type.includes(x))) {
+  if (element === 'wind' || ['boots', 'gloves', 'cloak', 'belt', 'hair'].some(x => slot.includes(x) || type.includes(x))) {
     return 'wind';
   }
   if (['ring', 'necklace', 'earring', 'talisman', 'agathion', 'accessory'].some(x => slot.includes(x) || type.includes(x))) {
-    return 'astral';
+    return 'water';
   }
   return 'fire';
 }
@@ -174,7 +186,7 @@ export function getDissolveYield(inv, def) {
       fire: essenceType === 'fire' ? count : 0,
       earth: essenceType === 'earth' ? count : 0,
       wind: essenceType === 'wind' ? count : 0,
-      astral: essenceType === 'astral' ? count : 0
+      water: essenceType === 'water' ? count : 0
     }
   };
 }
@@ -220,10 +232,14 @@ export function dissolveItem(state, uid, callbacks = {}) {
   state.gold -= yieldData.fee;
   state.inventory.splice(idx, 1);
 
-  if (!state.essences) state.essences = { fire: 0, earth: 0, wind: 0, astral: 0 };
+  if (!state.essences) state.essences = { fire: 0, earth: 0, wind: 0, water: 0 };
+  if (state.essences.astral !== undefined) {
+    state.essences.water = (state.essences.water || 0) + state.essences.astral;
+    delete state.essences.astral;
+  }
   state.essences[yieldData.essenceType] = (state.essences[yieldData.essenceType] || 0) + yieldData.count;
 
-  const typeLabels = { fire: 'Fogo 🔥', earth: 'Terra 🛡️', wind: 'Vento 🍃', astral: 'Astral ✨' };
+  const typeLabels = { fire: 'Fogo 🔥', earth: 'Terra 🛡️', wind: 'Vento 🍃', water: 'Água 💧' };
   log(`🔥 Cadinho de Almas: Desintegrou [${def.name}] (+${yieldData.count} Essência de ${typeLabels[yieldData.essenceType] || yieldData.essenceType})!`, 'loot');
 
   updateAllUI();
@@ -272,7 +288,7 @@ export function dissolveItemsByGrade(state, targetGrade = 'all', callbacks = {})
   }
 
   let totalFee = 0;
-  let totalEssences = { fire: 0, earth: 0, wind: 0, astral: 0 };
+  let totalEssences = { fire: 0, earth: 0, wind: 0, water: 0 };
   let count = 0;
 
   for (const { inv, def, grade } of toDissolve) {
@@ -295,12 +311,16 @@ export function dissolveItemsByGrade(state, targetGrade = 'all', callbacks = {})
   }
 
   state.gold -= totalFee;
-  if (!state.essences) state.essences = { fire: 0, earth: 0, wind: 0, astral: 0 };
+  if (!state.essences) state.essences = { fire: 0, earth: 0, wind: 0, water: 0 };
+  if (state.essences.astral !== undefined) {
+    state.essences.water = (state.essences.water || 0) + state.essences.astral;
+    delete state.essences.astral;
+  }
   for (const [type, amt] of Object.entries(totalEssences)) {
     if (amt > 0) state.essences[type] = (state.essences[type] || 0) + amt;
   }
 
-  log(`🔥 Cadinho de Almas: Dissolveu ${count} equipamentos (+${totalEssences.fire} 🔥, +${totalEssences.earth} 🛡️, +${totalEssences.wind} 🍃, +${totalEssences.astral} ✨)!`, 'rarity-legendary');
+  log(`🔥 Cadinho de Almas: Dissolveu ${count} equipamentos (+${totalEssences.fire} 🔥, +${totalEssences.earth} 🛡️, +${totalEssences.wind} 🍃, +${totalEssences.water} 💧)!`, 'rarity-legendary');
   updateAllUI();
   save();
   return count;
@@ -336,7 +356,11 @@ export function craftElixir(state, recipeId, qty = 1, callbacks = {}) {
     return false;
   }
 
-  if (!state.essences) state.essences = { fire: 0, earth: 0, wind: 0, astral: 0 };
+  if (!state.essences) state.essences = { fire: 0, earth: 0, wind: 0, water: 0 };
+  if (state.essences.astral !== undefined) {
+    state.essences.water = (state.essences.water || 0) + state.essences.astral;
+    delete state.essences.astral;
+  }
   for (const [type, amt] of Object.entries(recipe.cost)) {
     const required = amt * count;
     if ((state.essences[type] || 0) < required) {
@@ -423,7 +447,7 @@ export function useChaosBossSummonStone(state, callbacks = {}) {
     ? eligibleBosses[Math.floor(Math.random() * eligibleBosses.length)]
     : bosses[0];
 
-  const chaosHp = Math.floor(baseBoss.hp * 2.5);
+  const chaosHp = Math.floor(baseBoss.hp * CHAOS_BOSS_STAT_MULTIPLIERS.hp);
   const chaosBoss = {
     ...baseBoss,
     id: `chaos_${baseBoss.id}`,
@@ -441,11 +465,11 @@ export function useChaosBossSummonStone(state, callbacks = {}) {
     _maxHp: chaosHp,
     _stunnedUntil: 0,
     _triggeredMechanics: {},
-    atk: Math.floor(baseBoss.atk * 1.5),
-    def: Math.floor(baseBoss.def * 1.3),
-    exp: Math.floor(baseBoss.exp * 3),
-    sp: Math.floor(baseBoss.sp * 3),
-    gold: Math.floor(baseBoss.gold * 3),
+    atk: Math.floor(baseBoss.atk * CHAOS_BOSS_STAT_MULTIPLIERS.atk),
+    def: Math.floor(baseBoss.def * CHAOS_BOSS_STAT_MULTIPLIERS.def),
+    exp: Math.floor(baseBoss.exp * CHAOS_BOSS_STAT_MULTIPLIERS.exp),
+    sp: Math.floor(baseBoss.sp * CHAOS_BOSS_STAT_MULTIPLIERS.sp),
+    gold: Math.floor(baseBoss.gold * CHAOS_BOSS_STAT_MULTIPLIERS.gold),
     icon: baseBoss.icon
   };
 
@@ -476,31 +500,36 @@ export function processChaosBossLoot(state, monster, callbacks = {}) {
 
   log(`👑 VITÓRIA HISTÓRICA! O Chefe do Caos ${monster.name} sucumbiu ao seu poder!`, 'rarity-legendary');
 
-  // 1. Drop Garantido 1: Pergaminho Abençoado ou Livro Ancestral
-  const guaranteedPool = ['scroll_blessed_weapon', 'scroll_blessed_armor', 'ancient_spellbook_page', 'scroll_of_enchant_weapon_'];
-  const gDrop = guaranteedPool[Math.floor(Math.random() * guaranteedPool.length)];
-  addToInventory(state, gDrop, 1, 'legendary', false, callbacks, true);
+  const season = getSeasonForLevel(state.level || 1);
+  const droplist = CHAOS_BOSS_DROPLIST_BY_SEASON[season] || CHAOS_BOSS_DROPLIST_BY_SEASON[1];
 
-  // 2. Drop de Alta Probabilidade (50%): Top Life Stone ou High Life Stone
-  if (Math.random() < 0.50) {
-    const ls = Math.random() < 0.40 ? 'lifestone_top' : 'lifestone_high';
-    addToInventory(state, ls, 1, 'sovereign', false, callbacks, true);
-    log(`💎 Drop do Caos: Resgatou [${ls === 'lifestone_top' ? 'Top-Grade Life Stone' : 'High-Grade Life Stone'}]!`, 'loot');
+  // 1. Drops Garantidos da Temporada
+  if (Array.isArray(droplist.guaranteed)) {
+    for (const drop of droplist.guaranteed) {
+      addToInventory(state, drop.itemId, drop.count || 1, drop.rarity || 'rare', false, callbacks, true);
+      const def = getItemDef(drop.itemId) || { name: drop.itemId };
+      log(`🎁 Drop do Caos Garantido: Obteve ${drop.count || 1}x [${def.name}]!`, 'loot');
+    }
   }
 
-  // 3. Drop Épico de Relíquia (20%): Coração das Trevas ou Fragmento Épico
-  if (Math.random() < 0.20) {
-    const shardPool = ['magic_dark_heart', 'baium_shard', 'zaken_shard', 'core_shard', 'orfen_shard'];
-    const shard = shardPool[Math.floor(Math.random() * shardPool.length)];
-    addToInventory(state, shard, 1, 'epic', false, callbacks, true);
-    log(`✨ Drop do Caos: Relíquia Épica [${shard}] resgatada!`, 'loot');
+  // 2. Adena da Temporada
+  const goldReward = Math.floor(droplist.goldMin + Math.random() * (droplist.goldMax - droplist.goldMin + 1));
+  state.gold = (state.gold || 0) + goldReward;
+  log(`🪙 Ouro do Caos: +${goldReward.toLocaleString()} Adena recolhida do chefe derrotado!`, 'loot');
+
+  // 3. Drops com Probabilidade da Temporada
+  if (Array.isArray(droplist.chanceDrops)) {
+    for (const cd of droplist.chanceDrops) {
+      if (Math.random() < cd.chance) {
+        addToInventory(state, cd.itemId, cd.count || 1, cd.rarity || 'epic', false, callbacks, true);
+        const def = getItemDef(cd.itemId) || { name: cd.itemId };
+        log(`💎 Drop Raro do Caos (${Math.round(cd.chance * 100)}%): Resgatou [${def.name}]!`, 'rarity-legendary');
+      }
+    }
   }
 
-  // 4. Concede 100 Pontos de Carga do Random Craft
-  if (state.randomCraftCharge !== undefined) {
-    state.randomCraftCharge = Math.min(100, (state.randomCraftCharge || 0) + 100);
-    log('🎲 Random Craft: Carga do Caos +100% preenchida instantaneamente!', 'rarity-epic');
-  }
+  // 4. Concede 100 Pontos de Carga do Random Craft Canônico
+  chargeRandomCraft(state, 100, callbacks);
 
   updateAllUI();
   save();

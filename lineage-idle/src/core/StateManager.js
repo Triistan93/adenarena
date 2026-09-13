@@ -22,10 +22,10 @@ export const DEFAULT_STATE = () => ({
   battlePass: { xp: 0, claimedFree: [], claimedPremium: [], unlockedPremium: false },
   dailyRewards: { currentDay: 1, claimedDays: [], lastClaimDate: '', streak: 0, totalClaims: 0 },
   tower: { highestFloor: 0, currentFloor: 1, lastSweepTime: 0 },
-  zone: 'talkingIsland', currentSaga: 0, gold: 2000, inventory: [],
+  zone: 'talkingIsland', currentSaga: 0, gold: 2000, adenCoins: 0, dailyRaidTickets: 3, inventory: [],
   equipment: {
     weapon: null, weapon2: null, shield: null,
-    helmet: null, armor: null, gloves: null, legs: null, boots: null,
+    helmet: null, chest: null, gloves: null, legs: null, boots: null,
     cloak: null, belt: null, necklace: null,
     earring1: null, earring2: null, ring1: null, ring2: null,
     hair1: null, hair2: null,
@@ -42,7 +42,9 @@ export const DEFAULT_STATE = () => ({
   achievements: { claimed: [] },
   petData: { activePetId: null, pets: {}, lastFeedTime: 0 },
   codex: {}, dolls: [], synthSelected: [null, null],
-  magicLampExp: 0, magicLamps: 0, craftPoints: 0, craftCharges: 0, randomCraftWheel: [],
+  magicLampExp: 0, magicLamps: 0,
+  randomCraft: { points: 0, charge: 0, slots: [], history: [] },
+  craftPoints: 0, craftCharges: 0, randomCraftWheel: [],
   subclasses: [], activeSubclassIndex: null, certifications: {}, mainClassData: null,
   craftLevel: 1, craftXp: 0, shopTab: 'gear', selectedSkill: null, filter: 'all',
   craftTab: 'recipes', zoneTab: 'map', soulshotActive: false, isCombatActive: true, combatSpeed: 1,
@@ -62,7 +64,7 @@ export const DEFAULT_STATE = () => ({
     }
   },
   craftFoundationPity: 0, warehouse: [], maxWarehouseSlots: 100,
-  essences: { fire: 0, earth: 0, wind: 0, astral: 0 }, activeElixirs: {},
+  essences: { fire: 0, earth: 0, wind: 0, water: 0 }, activeElixirs: {},
   prestigeLevel: 0, astralShards: 0, astralMastery: {},
   clan: {
     name: null,         // sem clã ao nascer — jogador cria/nomeia no Lv 20
@@ -252,6 +254,82 @@ export function loadState() {
     currentState.inventory = safeInventory;
     currentState.selectedUids = new Set(Array.isArray(data.selectedUids) ? data.selectedUids : []);
 
+    // ─── Migrações Canônicas de Save / Namespaces ───
+    if (data.ac !== undefined && !data.adenCoins) {
+      currentState.adenCoins = Number(data.ac) || 0;
+    }
+    if (data.raidTickets !== undefined && data.dailyRaidTickets === undefined) {
+      currentState.dailyRaidTickets = Number(data.raidTickets) || 3;
+    }
+    if (data.ancientAdena !== undefined && (!data.sevenSigns || !data.sevenSigns.ancientAdena)) {
+      currentState.sevenSigns = currentState.sevenSigns || {};
+      currentState.sevenSigns.ancientAdena = Number(data.ancientAdena) || 0;
+    }
+
+    // Normalização de Equipamentos (20 Slots Canônicos com chest e shield)
+    if (currentState.equipment) {
+      if (currentState.equipment.armor && !currentState.equipment.chest) {
+        currentState.equipment.chest = currentState.equipment.armor;
+      }
+      if (currentState.equipment.chest) {
+        currentState.equipment.armor = currentState.equipment.chest;
+      }
+      if (currentState.equipment.head && !currentState.equipment.helmet) {
+        currentState.equipment.helmet = currentState.equipment.head;
+      }
+      if ((currentState.equipment.offhand || currentState.equipment.sigil) && !currentState.equipment.shield) {
+        currentState.equipment.shield = currentState.equipment.offhand || currentState.equipment.sigil;
+      }
+      if (currentState.equipment.dual && !currentState.equipment.weapon2) {
+        currentState.equipment.weapon2 = currentState.equipment.dual;
+      }
+      if (currentState.equipment.hair && !currentState.equipment.hair1) {
+        currentState.equipment.hair1 = currentState.equipment.hair;
+      }
+      if (currentState.equipment.ring && !currentState.equipment.ring1) {
+        currentState.equipment.ring1 = currentState.equipment.ring;
+      }
+      if (currentState.equipment.cape && !currentState.equipment.cloak) {
+        currentState.equipment.cloak = currentState.equipment.cape;
+      }
+      if (currentState.equipment.talisman && !currentState.equipment.talisman_bracelet) {
+        currentState.equipment.talisman_bracelet = currentState.equipment.talisman;
+      }
+      if (currentState.equipment.agathion && !currentState.equipment.agathion_bracelet) {
+        currentState.equipment.agathion_bracelet = currentState.equipment.agathion;
+      }
+      const canonical20 = [
+        'weapon', 'weapon2', 'shield', 'helmet', 'chest', 'gloves', 'legs', 'boots',
+        'cloak', 'belt', 'necklace', 'earring1', 'earring2', 'ring1', 'ring2',
+        'hair1', 'hair2', 'brooch', 'agathion_bracelet', 'talisman_bracelet'
+      ];
+      for (const slot of canonical20) {
+        if (currentState.equipment[slot] === undefined) currentState.equipment[slot] = null;
+      }
+    }
+
+    // Migração de Random Craft para namespace unificado state.randomCraft
+    currentState.randomCraft = (data.randomCraft && typeof data.randomCraft === 'object') ? data.randomCraft : {
+      points: Number(data.randomCraftCharge || data.craftPoints) || 0,
+      charge: Number(data.craftCharges) || (Number(data.randomCraftCharge) >= 100 ? 1 : 0),
+      slots: Array.isArray(data.randomCraftSlots) ? data.randomCraftSlots : [],
+      history: Array.isArray(data.randomCraftHistory) ? data.randomCraftHistory : []
+    };
+
+    // Migração de Essência Astral -> Essência da Água
+    if (Array.isArray(currentState.inventory)) {
+      for (const it of currentState.inventory) {
+        if (it && (it.itemId === 'essence_astral' || it.id === 'essence_astral')) {
+          it.itemId = 'essence_water';
+          it.id = 'essence_water';
+        }
+      }
+    }
+    if (currentState.alchemy && currentState.alchemy.essence_astral) {
+      currentState.alchemy.essence_water = (currentState.alchemy.essence_water || 0) + currentState.alchemy.essence_astral;
+      delete currentState.alchemy.essence_astral;
+    }
+
     currentState.codex = data.codex && typeof data.codex === 'object' ? data.codex : {};
     currentState.dolls = Array.isArray(data.dolls) ? data.dolls : [];
     currentState.synthSelected = Array.isArray(data.synthSelected) ? data.synthSelected : [null, null];
@@ -354,10 +432,12 @@ export function applyStarterKit(state, race, classId, charName = null, gender = 
   // Limpa inventário e equipamentos para um começo sem sobras
   state.inventory = [];
   state.equipment = {
-    weapon: null, weapon2: null, shield: null, helmet: null, armor: null, gloves: null, boots: null,
-    hair: null, hair2: null, necklace: null, earring1: null, earring2: null, ring: null, ring2: null,
-    belt: null, cloak: null, talisman: null, agathion: null
+    weapon: null, weapon2: null, shield: null,
+    helmet: null, chest: null, armor: null, gloves: null, legs: null, boots: null,
+    hair1: null, hair2: null, necklace: null, earring1: null, earring2: null, ring1: null, ring2: null,
+    belt: null, cloak: null, brooch: null, agathion_bracelet: null, talisman_bracelet: null
   };
+  state.randomCraft = { points: 0, charge: 0, slots: [], history: [] };
   state.skills = {};
 
   // Determina o arquétipo inicial (Mage, Bow/Gunner, Dagger/Assassin, ou Melee/Fighter/Tank)

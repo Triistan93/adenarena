@@ -117,8 +117,10 @@ import {
   sellItem as serviceSellItem,
   sellAllJunk as serviceSellAllJunk,
   buybackItem as serviceBuybackItem,
-  rerollMysticStock as serviceRerollMysticStock
+  rerollMysticStock as serviceRerollMysticStock,
+  getSellValue
 } from './src/services/ShopService.js';
+import { ALL_EQUIP_SLOTS, CANONICAL_PAPERDOLL_20_SLOTS } from './src/core/GameConfig.js';
 
 import {
   getCraftLevelReq,
@@ -145,8 +147,11 @@ import {
   chargeRandomCraftWithAdena as serviceChargeRandomCraftWithAdena,
   chargeRandomCraftWithItem as serviceChargeRandomCraftWithItem,
   rollRandomCraftSlots as serviceRollRandomCraftSlots,
+  refreshRandomCraftSlots as serviceRefreshRandomCraftSlots,
+  spinRandomCraft as serviceSpinRandomCraft,
   claimRandomCraft as serviceClaimRandomCraft
 } from './src/services/CraftService.js';
+import { rollMagicLampCard } from './src/data/economy/magicLampBalance.js';
 import {
   ALCHEMY_RECIPES,
   dissolveItem as serviceDissolveItem,
@@ -950,12 +955,6 @@ function withdrawFromWarehouse(uid, amount = 1) {
   return true;
 }
 
-const ALL_EQUIP_SLOTS = [
-  'weapon', 'weapon2', 'shield', 'helmet', 'armor', 'legs', 'gloves', 'boots',
-  'hair', 'hair2', 'necklace', 'earring1', 'earring2', 'ring', 'ring2',
-  'belt', 'cloak', 'talisman', 'agathion'
-];
-
 function resolveEquipSlot(slot) { return serviceResolveEquipSlot(slot, state.equipment); }
 function equipItem(a, b, c = null, silent = false) {
   if (typeof hideItemTooltip === 'function') hideItemTooltip();
@@ -1115,10 +1114,7 @@ function sellSelectedItems() {
     if (!def) continue;
     if (isProtectedFromAutoSell(item, def)) continue;
     const itemQty = item.count || 1;
-    const basePrice = def.price || 10;
-    const mult = item.rarity ? (D().RARITY[item.rarity]?.mult || 1) : 1;
-    const enchantMult = 1 + (item.enchant || 0) * 0.1;
-    const goldEarned = Math.floor(basePrice * mult * enchantMult * 0.4) * itemQty;
+    const goldEarned = getSellValue(item) * itemQty;
     
     totalGold += goldEarned;
     count += itemQty;
@@ -1657,10 +1653,19 @@ function sellItem(uid) {
   }
 
   const qty = item.count || 1;
-  const basePrice = def.price || 10;
-  const mult = item.rarity ? (D().RARITY[item.rarity]?.mult || 1) : 1;
-  const enchantMult = 1 + (item.enchant || 0) * 0.1;
-  const goldEarned = Math.floor(basePrice * mult * enchantMult * 0.4) * qty;
+  const goldEarned = getSellValue(item) * qty;
+
+  // Registrar na fila de Buyback (Canônico)
+  state.buybackQueue = state.buybackQueue || [];
+  state.buybackQueue.unshift({
+    itemCopy: { ...item, count: qty },
+    sellPrice: goldEarned,
+    soldAt: Date.now()
+  });
+  if (state.buybackQueue.length > 10) {
+    state.buybackQueue.pop();
+  }
+
   state.inventory.splice(idx, 1);
   state.gold += goldEarned;
   const name = uiFormatItemDisplayName(item, def);
@@ -7242,7 +7247,7 @@ function synthesizeDolls() {
   updateAllUI(); save();
 }
 
-// --------------------------- MAGIC LAMP & CRAFT GAUGE ---------------------------
+// --------------------------- MAGIC LAMP ---------------------------
 function updateMagicLampUI() {
   const bar = el('lamp-progress-bar');
   const countLabel = el('lamp-count-label');
@@ -7252,103 +7257,53 @@ function updateMagicLampUI() {
 
   const btn = el('use-magic-lamp-btn');
   if (btn) btn.onclick = useMagicLamp;
-
-  updateCraftGaugeUI();
 }
 
 function useMagicLamp() {
-  if (!state.magicLamps || state.magicLamps < 1) { log('Você não possui Lâmpadas Mágicas para sortear!', 'system'); return; }
-
-  state.magicLamps -= 1;
-  const roll = Math.random();
-  let cardType = 'blue', expWon = 50000, spWon = 5000, cardName = '🟦 Carta Azul (Normal)';
-
-  if (roll < 0.05) {
-    cardType = 'red'; expWon = 500000; spWon = 50000; cardName = '🟥 Carta Vermelha (SUPER JACKPOT!)';
-  } else if (roll < 0.25) {
-    cardType = 'purple'; expWon = 150000; spWon = 15000; cardName = '🟪 Carta Roxa (Bônus Alto)';
+  if (!state.magicLamps || state.magicLamps < 1) {
+    log('Você não possui Lâmpadas Mágicas para sortear!', 'system');
+    return;
   }
 
-  state.xp += expWon; state.sp += spWon;
+  state.magicLamps -= 1;
+  const result = rollMagicLampCard(state.level || 1);
+
+  state.xp += result.expWon;
+  state.sp += result.spWon;
   checkLevelUp();
 
   const cardRes = el('lamp-result-card');
   if (cardRes) {
     cardRes.innerHTML = `
       <div style="border:2px solid var(--gilt-bright); padding:16px; border-radius:10px; background:rgba(10,15,25,0.9); text-align:center;">
-        <h4 style="margin:0; font-size:18px;">${cardName}</h4>
-        <p style="font-size:16px; color:#60a5fa; margin:8px 0 0 0;">+${expWon.toLocaleString()} XP &amp; +${spWon.toLocaleString()} SP!</p>
+        <h4 style="margin:0; font-size:18px;">${result.cardName}</h4>
+        <p style="font-size:16px; color:#60a5fa; margin:8px 0 0 0;">+${result.expWon.toLocaleString()} XP &amp; +${result.spWon.toLocaleString()} SP!</p>
+        <span style="font-size:11px; color:#94a3b8;">Faixa: ${result.bracket}</span>
       </div>
     `;
   }
 
-  log(`🪔 Lâmpada Mágica utilizada! Sorteou **${cardName}** (+${expWon.toLocaleString()} XP, +${spWon.toLocaleString()} SP)!`, 'rarity-legendary');
-  floatText(`🪔 +${expWon.toLocaleString()} XP!`, 'float-jackpot');
+  log(`🪔 Lâmpada Mágica utilizada! Sorteou **${result.cardName}** (+${result.expWon.toLocaleString()} XP, +${result.spWon.toLocaleString()} SP) [${result.bracket}]!`, 'rarity-legendary');
+  floatText(`🪔 +${result.expWon.toLocaleString()} XP!`, 'float-jackpot');
 
-  updateAllUI(); save();
+  updateAllUI();
+  save();
 }
 
 function updateCraftGaugeUI() {
-  const bar = el('craft-progress-bar');
-  const label = el('craft-count-label');
-  const pct = Math.min(100, Math.floor(((state.craftPoints || 0) / 100) * 100));
-  if (bar) bar.style.width = pct + '%';
-  if (label) label.textContent = `${state.craftCharges || 0} Cargas de Craft Disponíveis (${pct}%)`;
-
-  const refBtn = el('refresh-random-craft-btn');
-  const spinBtn = el('spin-random-craft-btn');
-  if (refBtn) refBtn.onclick = refreshRandomCraftWheel;
-  if (spinBtn) spinBtn.onclick = spinRandomCraft;
-
-  renderRandomCraftWheelUI();
-  renderSpecialCraftRecipes();
+  // Desacoplado da Lâmpada: Random Craft unificado na Forja Imperial (#tab-craft)
 }
 
 function refreshRandomCraftWheel() {
-  const pool = Object.keys(D().ALL_ITEMS);
-  const selected = [];
-  for (let i = 0; i < 5; i++) {
-    const itemKey = pool[Math.floor(Math.random() * pool.length)];
-    selected.push(itemKey);
-  }
-  state.randomCraftWheel = selected;
-  log('🎰 Roleta Random Craft atualizada com 5 novos itens!', 'system');
-  renderRandomCraftWheelUI(); save();
+  return serviceRefreshRandomCraftSlots(state, { log, updateAllUI, save });
 }
 
 function renderRandomCraftWheelUI() {
-  const container = el('random-wheel-slots'); if (!container) return;
-  container.innerHTML = '';
-  if (!state.randomCraftWheel || !state.randomCraftWheel.length) refreshRandomCraftWheel();
-
-  state.randomCraftWheel.forEach((itemId, idx) => {
-    const def = D().ALL_ITEMS[itemId] || { name: itemId };
-    const div = mkEl('div');
-    div.style.cssText = 'border:1px solid var(--border-gilt); padding:10px; border-radius:8px; min-width:110px; text-align:center; background:rgba(0,0,0,0.4);';
-    div.innerHTML = `<div style="font-size:11px; color:var(--text-muted);">Slot ${idx+1}</div><div style="font-weight:bold; font-size:12px; margin-top:4px; color:var(--gilt-bright);">${def.name}</div>`;
-    container.appendChild(div);
-  });
+  // Desacoplado da Lâmpada: Renderizado na Forja Imperial
 }
 
 function spinRandomCraft() {
-  if (!state.craftCharges || state.craftCharges < 1) { log('Você não possui Cargas de Craft suficientes!', 'system'); return; }
-  if (!state.randomCraftWheel || !state.randomCraftWheel.length) refreshRandomCraftWheel();
-
-  state.craftCharges -= 1;
-  const wonId = state.randomCraftWheel[Math.floor(Math.random() * state.randomCraftWheel.length)];
-  const def = D().ALL_ITEMS[wonId];
-
-  if (def && ['weapon','armor','helmet','gloves','boots','ring','necklace','earring','belt','cloak','talisman','legs','shield','hair','hair2'].includes(def.slot)) {
-    addToInventory(wonId, 1, 'rare', false, {}, true);
-  } else {
-    addToInventory(wonId, 1, null, false, {}, true);
-  }
-
-  log(`🎰 RANDOM CRAFT! Você criou com sucesso: **${def?.name || wonId}**!`, 'rarity-legendary');
-  floatText(`🎰 ${def?.name || wonId}!`, 'float-jackpot');
-  triggerQuestEvent('craft', 1);
-  refreshRandomCraftWheel();
-  updateAllUI(); save();
+  return serviceSpinRandomCraft(state, { log, updateAllUI, save, floatText });
 }
 
 function renderSpecialCraftRecipes() {
@@ -10914,7 +10869,15 @@ export function init() {
       };
 
       window.claimRandomCraftReward = (idx) => {
-        serviceClaimRandomCraft(state, idx, { log, updateAllUI, save });
+        serviceSpinRandomCraft(state, { log, updateAllUI, save, floatText });
+      };
+
+      window.spinRandomCraftAction = () => {
+        serviceSpinRandomCraft(state, { log, updateAllUI, save, floatText });
+      };
+
+      window.refreshRandomCraftSlotsAction = () => {
+        serviceRefreshRandomCraftSlots(state, { log, updateAllUI, save });
       };
 
       window.openMarketTab = () => openPanel('market');

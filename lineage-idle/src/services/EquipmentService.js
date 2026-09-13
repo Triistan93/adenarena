@@ -31,7 +31,7 @@ export function resolveEquipSlot(rawSlot, equipmentState = {}, preferredSlot = n
 
   const ALIAS = {
     sword: 'weapon', bow: 'weapon', dagger: 'weapon', blunt: 'weapon', staff: 'weapon',
-    chest: 'armor', body: 'armor', breastplate: 'armor', robe: 'armor',
+    armor: 'chest', chest: 'chest', body: 'chest', breastplate: 'chest', robe: 'chest',
     helm: 'helmet', head: 'helmet', glove: 'gloves', hands: 'gloves',
     boot: 'boots', feet: 'boots', pants: 'legs', gaiters: 'legs',
     offhand: 'shield', sigil: 'shield', cape: 'cloak', back: 'cloak',
@@ -45,12 +45,23 @@ export function resolveEquipSlot(rawSlot, equipmentState = {}, preferredSlot = n
 
 export function migrateEquipmentSlots(state) {
   if (!state?.equipment) return;
+  if (state.equipment.armor && !state.equipment.chest) state.equipment.chest = state.equipment.armor;
+  if (state.equipment.chest && !state.equipment.armor) state.equipment.armor = state.equipment.chest;
+  if (state.equipment.head && !state.equipment.helmet) state.equipment.helmet = state.equipment.head;
+  if ((state.equipment.offhand || state.equipment.sigil) && !state.equipment.shield) {
+    state.equipment.shield = state.equipment.offhand || state.equipment.sigil;
+  }
+  if (state.equipment.dual && !state.equipment.weapon2) state.equipment.weapon2 = state.equipment.dual;
   if (state.equipment.earring && !state.equipment.earring1) state.equipment.earring1 = state.equipment.earring;
   if (state.equipment.ring && !state.equipment.ring1) state.equipment.ring1 = state.equipment.ring;
   if (state.equipment.hair && !state.equipment.hair1) state.equipment.hair1 = state.equipment.hair;
   if (state.equipment.cape && !state.equipment.cloak) state.equipment.cloak = state.equipment.cape;
   if (state.equipment.talisman && !state.equipment.talisman_bracelet) state.equipment.talisman_bracelet = state.equipment.talisman;
   if (state.equipment.agathion && !state.equipment.agathion_bracelet) state.equipment.agathion_bracelet = state.equipment.agathion;
+  delete state.equipment.head;
+  delete state.equipment.offhand;
+  delete state.equipment.sigil;
+  delete state.equipment.dual;
   delete state.equipment.earring;
   delete state.equipment.ring;
   delete state.equipment.hair;
@@ -101,6 +112,8 @@ export function equipItem(state, uid, targetSlotOrCallbacks = null, maybeCallbac
   }
 
   state.equipment[targetSlot] = uid;
+  if (targetSlot === 'chest') state.equipment.armor = uid;
+  if (targetSlot === 'armor') state.equipment.chest = uid;
   item.equipped = true;
   item.equippedSlot = targetSlot;
 
@@ -176,6 +189,8 @@ export function unequipItem(state, slotOrUid, callbacks = {}) {
     delete item.equippedSlot;
   }
   state.equipment[targetSlot] = null;
+  if (targetSlot === 'chest') state.equipment.armor = null;
+  if (targetSlot === 'armor') state.equipment.chest = null;
   const stats = getStats(state);
   state.maxHp = stats.maxHp;
   state.maxMp = stats.maxMp;

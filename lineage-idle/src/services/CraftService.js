@@ -16,6 +16,14 @@
 
 import { D } from '../core/GameConfig.js';
 import { addToInventory, getInventoryCount, getSelectedSet } from './InventoryService.js';
+import {
+  RANDOM_CRAFT_POINTS_PER_CHARGE,
+  RANDOM_CRAFT_REROLL_COST,
+  RANDOM_CRAFT_ADENA_CHARGE_COST,
+  RANDOM_CRAFT_ADENA_CHARGE_POINTS,
+  RECYCLE_POINTS_BY_TIER,
+  rollCanonicalRandomCraftSlots
+} from '../data/economy/randomCraftBalance.js';
 
 /**
  * Retorna o nível de personagem necessário para cada nível de receita de craft.
@@ -821,9 +829,51 @@ export function removeAugment(state, weaponUid, callbacks = {}) {
 
 /**
  * ═══════════════════════════════════════════════════════════════════════════
- * SUBSISTEMA 8: RANDOM CRAFT BALANCEADO (SEM OVERPOWER & CUSTO REAL)
+ * SUBSISTEMA 8: RANDOM CRAFT CANÔNICO DA FORJA IMPERIAL
  * ═══════════════════════════════════════════════════════════════════════════
  */
+
+/**
+ * Normaliza e sincroniza o namespace canônico state.randomCraft.
+ * @param {Object} state
+ * @returns {{ points: number, charge: number, slots: Array, history: Array }}
+ */
+export function getNormalizedRandomCraft(state) {
+  if (!state.randomCraft || typeof state.randomCraft !== 'object') {
+    state.randomCraft = {
+      points: Number(state.randomCraftCharge || state.craftPoints) || 0,
+      charge: Number(state.craftCharges) || 0,
+      slots: Array.isArray(state.randomCraftSlots) ? state.randomCraftSlots : [],
+      history: []
+    };
+  }
+  if (state.randomCraft.points === undefined) state.randomCraft.points = Number(state.randomCraftCharge || state.craftPoints) || 0;
+  if (state.randomCraft.charge === undefined) state.randomCraft.charge = Number(state.craftCharges) || 0;
+  if (!Array.isArray(state.randomCraft.slots)) state.randomCraft.slots = Array.isArray(state.randomCraftSlots) ? state.randomCraftSlots : [];
+  if (!Array.isArray(state.randomCraft.history)) state.randomCraft.history = [];
+
+  // Garante que se houver cargas ou slots vazios com carga ativa, 5 slots existam
+  if (state.randomCraft.slots.length === 0) {
+    state.randomCraft.slots = rollCanonicalRandomCraftSlots();
+  }
+
+  // Sincroniza campos legados para backward compatibility
+  state.randomCraftCharge = state.randomCraft.points;
+  state.randomCraftSlots = state.randomCraft.slots;
+  state.craftPoints = state.randomCraft.points;
+  state.craftCharges = state.randomCraft.charge;
+
+  return state.randomCraft;
+}
+
+export function syncRandomCraftLegacy(state) {
+  const rc = getNormalizedRandomCraft(state);
+  state.randomCraftCharge = rc.points;
+  state.randomCraftSlots = rc.slots;
+  state.craftPoints = rc.points;
+  state.craftCharges = rc.charge;
+}
+
 export function chargeRandomCraftWithItem(state, itemUid, callbacks = {}) {
   const inv = state.inventory || [];
   const itemIdx = inv.findIndex(i => (i.uid === itemUid || i.id === itemUid) && !i.equipped);
@@ -843,109 +893,115 @@ export function chargeRandomCraftWithItem(state, itemUid, callbacks = {}) {
   const def = gData?.ALL_ITEMS?.[item.itemId || item.id] || item;
   const tier = Number(def.tier) || 1;
 
-  // Carga proporcional ao Grau do item:
-  // No-Grade: +2%, D-Grade: +5%, C-Grade: +10%, B-Grade: +20%, A-Grade: +35%, S-Grade: +60%
-  const chargePoints = tier >= 5 ? 35 : tier >= 4 ? 20 : tier >= 3 ? 10 : tier >= 2 ? 5 : 2;
+  const chargePoints = RECYCLE_POINTS_BY_TIER[tier] || 2;
 
   inv.splice(itemIdx, 1);
   return chargeRandomCraft(state, chargePoints, callbacks);
 }
 
 export function chargeRandomCraftWithAdena(state, callbacks = {}) {
-  const feeAdena = 200000;
+  const feeAdena = RANDOM_CRAFT_ADENA_CHARGE_COST;
   if ((state.gold || 0) < feeAdena) {
-    if (callbacks.log) callbacks.log(`Requer ${feeAdena.toLocaleString()} Adena para carregar +20% de pontos.`, 'system');
+    if (callbacks.log) callbacks.log(`Requer ${feeAdena.toLocaleString()} Adena para carregar +${RANDOM_CRAFT_ADENA_CHARGE_POINTS} pontos.`, 'system');
     return false;
   }
 
   state.gold -= feeAdena;
-  return chargeRandomCraft(state, 20, callbacks);
+  return chargeRandomCraft(state, RANDOM_CRAFT_ADENA_CHARGE_POINTS, callbacks);
 }
 
 export function chargeRandomCraft(state, pointsToAdd = 20, callbacks = {}) {
-  state.randomCraftCharge = (state.randomCraftCharge || 0) + pointsToAdd;
-  if (state.randomCraftCharge >= 100) {
-    state.randomCraftCharge = 100;
-    rollRandomCraftSlots(state);
-    if (callbacks.log) callbacks.log('🎲 RANDOM CRAFT 100% CARREGADO! 5 relíquias foram invocadas na Roleta Imperial.', 'rarity-legendary');
+  const rc = getNormalizedRandomCraft(state);
+  rc.points = (rc.points || 0) + pointsToAdd;
+
+  while (rc.points >= RANDOM_CRAFT_POINTS_PER_CHARGE) {
+    rc.points -= RANDOM_CRAFT_POINTS_PER_CHARGE;
+    rc.charge = (rc.charge || 0) + 1;
+    if (callbacks.log) {
+      callbacks.log(`🛠️ RANDOM CRAFT: +1 Carga Imperial gerada! (Total: ${rc.charge} Cargas)`, 'rarity-legendary');
+    }
   }
+
+  if (!rc.slots || rc.slots.length === 0) {
+    rc.slots = rollCanonicalRandomCraftSlots();
+  }
+
+  syncRandomCraftLegacy(state);
 
   if (callbacks.updateAllUI) callbacks.updateAllUI();
   if (callbacks.save) callbacks.save();
   return true;
 }
 
-/**
- * Tabela Ponderada Anti-Overpower para o Random Craft:
- * 70% Consumíveis/Enchant Scrolls, 25% Gear B/A, 4.9% Gear S, 0.1% Rare Jewel
- */
-export function rollRandomCraftSlots(state) {
-  const poolConsumables = [
-    'scroll_enchant_weapon_s', 'scroll_enchant_armor_s', 'scroll_enchant_weapon_a', 'scroll_enchant_armor_a',
-    'giants_codex', 'soulshot_s', 'spiritshot_s', 'hp_potion_xl', 'mp_potion_xl'
-  ];
-  const poolGearBA = [
-    'weapon_keshanberk', 'weapon_damascus', 'weapon_tallum_blade', 'weapon_dragon_slayer',
-    'armor_tallum_heavy_armor', 'armor_majestic_light', 'armor_dark_crystal_robe'
-  ];
-  const poolGearS = [
-    'weapon_draconic_bow', 'weapon_angel_slayer', 'weapon_arcana_mace', 'weapon_saint_spear',
-    'armor_imperial_crusader_armor', 'armor_draconic_leather_armor', 'armor_major_arcana_robe'
-  ];
-  const poolJackpot = [
-    'ring_core', 'jewel_ring_core', 'ring_queen_ant'
-  ];
-
-  state.randomCraftSlots = [];
-  for (let i = 0; i < 5; i++) {
-    const roll = Math.random();
-    let chosenId = 'scroll_enchant_weapon_a';
-    let rarity = 'common';
-    let count = 1;
-
-    if (roll < 0.70) {
-      chosenId = poolConsumables[Math.floor(Math.random() * poolConsumables.length)];
-      rarity = 'rare';
-      count = chosenId.includes('shot') ? 500 : (chosenId.includes('potion') ? 20 : 1);
-    } else if (roll < 0.95) {
-      chosenId = poolGearBA[Math.floor(Math.random() * poolGearBA.length)];
-      rarity = 'epic';
-    } else if (roll < 0.999) {
-      chosenId = poolGearS[Math.floor(Math.random() * poolGearS.length)];
-      rarity = 'legendary';
-    } else {
-      chosenId = poolJackpot[Math.floor(Math.random() * poolJackpot.length)];
-      rarity = 'sovereign';
-    }
-
-    state.randomCraftSlots.push({
-      itemId: chosenId,
-      count,
-      rarity
-    });
-  }
-}
-
-export function claimRandomCraft(state, slotIdx = 0, callbacks = {}) {
-  if ((state.randomCraftCharge || 0) < 100 || !state.randomCraftSlots || !state.randomCraftSlots[slotIdx]) {
-    if (callbacks.log) callbacks.log('A Roleta precisa atingir 100% de carga para resgatar o item!', 'system');
+export function refreshRandomCraftSlots(state, callbacks = {}) {
+  const feeAdena = RANDOM_CRAFT_REROLL_COST;
+  if ((state.gold || 0) < feeAdena) {
+    if (callbacks.log) callbacks.log(`Requer ${feeAdena.toLocaleString()} Adena para atualizar os 5 slots da Roleta.`, 'system');
     return false;
   }
 
-  const reward = state.randomCraftSlots[slotIdx];
-  addToInventory(state, reward.itemId, reward.count || 1, reward.rarity || 'rare', false, callbacks);
+  state.gold -= feeAdena;
+  const rc = getNormalizedRandomCraft(state);
+  rc.slots = rollCanonicalRandomCraftSlots();
+  syncRandomCraftLegacy(state);
 
-  state.randomCraftCharge = 0;
-  state.randomCraftSlots = [];
+  if (callbacks.log) callbacks.log('🎰 Roleta Imperial Random Craft atualizada com 5 novos itens!', 'system');
+  if (callbacks.updateAllUI) callbacks.updateAllUI();
+  if (callbacks.save) callbacks.save();
+  return true;
+}
+
+export function rollRandomCraftSlots(state) {
+  const rc = getNormalizedRandomCraft(state);
+  rc.slots = rollCanonicalRandomCraftSlots();
+  syncRandomCraftLegacy(state);
+  return rc.slots;
+}
+
+export function spinRandomCraft(state, callbacks = {}) {
+  const rc = getNormalizedRandomCraft(state);
+  if (!rc.charge || rc.charge < 1) {
+    if (callbacks.log) callbacks.log('Você não possui Cargas de Random Craft suficientes (requer 1 Carga = 100 Pts)!', 'system');
+    return false;
+  }
+
+  if (!rc.slots || rc.slots.length === 0) {
+    rc.slots = rollCanonicalRandomCraftSlots();
+  }
+
+  // Sorteio aleatório uniforme entre os 5 slots (20% para cada item gerado, sem escolha manual do jogador)
+  rc.charge -= 1;
+  const wonIdx = Math.floor(Math.random() * rc.slots.length);
+  const reward = rc.slots[wonIdx];
 
   const gData = D();
   const def = gData?.ALL_ITEMS?.[reward.itemId] || { name: reward.itemId };
 
+  // Adiciona a recompensa ao inventário
+  addToInventory(state, reward.itemId, reward.count || 1, reward.rarity || 'rare', false, callbacks);
+
+  rc.history.unshift({
+    itemId: reward.itemId,
+    count: reward.count || 1,
+    rarity: reward.rarity || 'rare',
+    timestamp: Date.now()
+  });
+  if (rc.history.length > 20) rc.history.pop();
+
   if (callbacks.log) {
-    callbacks.log(`🎉 RECOMPENSA DA ROLETA: Você resgatou [${def.name}]!`, 'rarity-legendary');
+    callbacks.log(`🎰 RANDOM CRAFT! A Roleta sorteou o Slot ${wonIdx + 1}: **${def.name}** ${reward.count > 1 ? `(${reward.count}x)` : ''}!`, 'rarity-legendary');
   }
+
+  // Renova automaticamente os 5 slots para o próximo giro
+  rc.slots = rollCanonicalRandomCraftSlots();
+  syncRandomCraftLegacy(state);
 
   if (callbacks.updateAllUI) callbacks.updateAllUI();
   if (callbacks.save) callbacks.save();
-  return true;
+  return reward;
+}
+
+export function claimRandomCraft(state, slotIdx = 0, callbacks = {}) {
+  // Alias compatível: gira a roleta imperial
+  return spinRandomCraft(state, callbacks);
 }

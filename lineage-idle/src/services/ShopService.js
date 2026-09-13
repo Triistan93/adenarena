@@ -11,9 +11,9 @@
 
 import { D } from '../core/GameConfig.js';
 import { addToInventory, removeFromInventory, getSelectedSet } from './InventoryService.js';
+import { SELL_RATIO, MYSTIC_REROLL_COST, MAX_BUYBACK_ITEMS, getSellValue } from '../data/economy/economyBalance.js';
 
-const MAX_BUYBACK_ITEMS = 10;
-const MYSTIC_REROLL_COST = 50000;
+export { SELL_RATIO, MYSTIC_REROLL_COST, MAX_BUYBACK_ITEMS, getSellValue };
 
 /**
  * Realiza a compra de um item regular da loja.
@@ -139,8 +139,7 @@ export function sellItem(state, uid, qty = 1, callbacks = {}) {
 
   const gData = D();
   const def = gData?.ALL_ITEMS?.[item.itemId || item.id];
-  const basePrice = def?.price || 100;
-  const sellUnitVal = Math.max(1, Math.floor(basePrice * 0.5));
+  const sellUnitVal = getSellValue(item);
   const sellCount = Math.min(item.count || 1, Math.max(1, parseInt(qty, 10) || 1));
   const totalAdena = sellUnitVal * sellCount;
 
@@ -216,8 +215,7 @@ export function sellAllJunk(state, callbacks = {}) {
       continue;
     }
 
-    const basePrice = def?.price || 100;
-    const sellUnitVal = Math.max(1, Math.floor(basePrice * 0.5));
+    const sellUnitVal = getSellValue(item);
     const count = item.count || 1;
     const itemGold = sellUnitVal * count;
 
@@ -321,15 +319,42 @@ export function rerollMysticStock(state, rollStockFn, callbacks = {}) {
  * Gera um lote de itens para o estoque do Mercador Místico.
  * @returns {Array<Object>}
  */
-export function rollMysticStock() {
+export function rollMysticStock(stateOrLevel) {
   const gData = D();
+  const level = typeof stateOrLevel === 'number' ? stateOrLevel : (stateOrLevel?.level || 1);
+  const rarities = ['rare', 'epic', 'legendary'];
+
+  // Season Gating Canônico para o Estoque Místico:
+  // Season 1 (Lv 1-40): No-Grade, D-Grade, C-Grade
+  // Season 2 (Lv 41-80): B-Grade (52+), A-Grade (62+), S-Grade (76+)
+  // Season 3 (Lv 81+): S80, S84, Top
+  let allowedMaxGrade = 'c';
+  if (level >= 81) allowedMaxGrade = 's84';
+  else if (level >= 76) allowedMaxGrade = 's';
+  else if (level >= 62) allowedMaxGrade = 'a';
+  else if (level >= 52) allowedMaxGrade = 'b';
+  else if (level >= 40) allowedMaxGrade = 'c';
+  else if (level >= 20) allowedMaxGrade = 'd';
+  else allowedMaxGrade = 'ng';
+
+  const GRADE_ORDER = { ng: 0, d: 1, c: 2, b: 3, a: 4, s: 5, s80: 6, s84: 7 };
+  const maxGradeIdx = GRADE_ORDER[allowedMaxGrade] ?? 2;
+
+  const baseConsumables = ['enchant_weapon_scroll', 'enchant_armor_scroll', 'scroll_of_resurrection', 'teleport_scroll'];
   const pool = gData?.MYSTIC_POOL || ["weapon_anais_first", "weapon_anakim_pistols", "jewel_ring_core"];
-  const rarities = ['rare', 'epic', 'legendary', 'mythic'];
-  const candidateIds = [...pool, 'enchant_weapon_scroll', 'enchant_armor_scroll', 'scroll_of_resurrection', 'teleport_scroll'];
-  
+
+  const filteredPool = pool.filter(id => {
+    const itDef = gData?.ALL_ITEMS?.[id];
+    if (!itDef) return false;
+    const itGrade = String(itDef.grade || 'ng').toLowerCase();
+    const gIdx = GRADE_ORDER[itGrade] ?? 0;
+    return gIdx <= maxGradeIdx;
+  });
+
+  const candidateIds = [...(filteredPool.length > 0 ? filteredPool : pool.slice(0, 3)), ...baseConsumables];
   const stock = [];
   const chosen = new Set();
-  
+
   for (let i = 0; i < 6; i++) {
     const randomId = candidateIds[Math.floor(Math.random() * candidateIds.length)];
     if (chosen.has(randomId) && candidateIds.length > 6) continue;
