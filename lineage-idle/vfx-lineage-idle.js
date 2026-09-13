@@ -122,7 +122,7 @@
 
   function LineageVFX(options) {
     options = options || {};
-    this.container = options.container || document.body;
+    this.container = options.container || (typeof document !== 'undefined' ? document.body : null);
     this.canvas = options.canvas || null;
     this.quality = QUALITY[options.quality] ? options.quality : 'high';
     this.qualityConfig = QUALITY[this.quality];
@@ -152,7 +152,7 @@
   }
 
   LineageVFX.prototype._setupCanvas = function () {
-    if (!this.canvas) {
+    if (!this.canvas && typeof document !== 'undefined') {
       this.canvas = document.createElement('canvas');
       this._createdCanvas = true;
       this.canvas.className = 'combat-vfx-canvas';
@@ -163,30 +163,44 @@
       this.canvas.style.height = '100%';
       this.canvas.style.pointerEvents = 'none';
       this.canvas.style.zIndex = String(this.container === document.body ? 20 : 5);
-      if (this.container !== document.body && getComputedStyle(this.container).position === 'static') {
+      if (this.container && this.container !== document.body && typeof getComputedStyle !== 'undefined' && getComputedStyle(this.container).position === 'static') {
         this.container.style.position = 'relative';
       }
-      this.container.appendChild(this.canvas);
+      if (this.container && typeof this.container.appendChild === 'function') {
+        this.container.appendChild(this.canvas);
+      }
     }
-    this.ctx = this.canvas.getContext('2d');
-    if (!this.ctx) throw new Error('LineageVFX requires a 2D canvas context.');
+    if (this.canvas && typeof this.canvas.getContext === 'function') {
+      this.ctx = this.canvas.getContext('2d');
+    }
+    if (!this.ctx) {
+      if (typeof window !== 'undefined') console.warn('LineageVFX: 2D canvas context not available.');
+    }
     var self = this;
     this._onResize = function () { self.resize(); };
-    window.addEventListener('resize', this._onResize);
-    if (typeof ResizeObserver !== 'undefined') {
+    if (typeof window !== 'undefined' && typeof window.addEventListener === 'function') {
+      window.addEventListener('resize', this._onResize);
+    }
+    if (typeof ResizeObserver !== 'undefined' && this.container) {
       this.resizeObserver = new ResizeObserver(this._onResize);
       this.resizeObserver.observe(this.container);
     }
   };
 
   LineageVFX.prototype.resize = function () {
-    var rect = this.canvas.getBoundingClientRect();
-    this.width = rect.width || this.container.clientWidth || window.innerWidth;
-    this.height = rect.height || this.container.clientHeight || window.innerHeight;
-    this.dpr = Math.min(window.devicePixelRatio || 1, 2);
-    this.canvas.width = Math.max(1, Math.floor(this.width * this.dpr));
-    this.canvas.height = Math.max(1, Math.floor(this.height * this.dpr));
-    this.ctx.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
+    var rect = this.canvas && typeof this.canvas.getBoundingClientRect === 'function' ? this.canvas.getBoundingClientRect() : { width: 800, height: 450 };
+    var winW = (typeof window !== 'undefined' && window.innerWidth) || 800;
+    var winH = (typeof window !== 'undefined' && window.innerHeight) || 450;
+    this.width = rect.width || (this.container && this.container.clientWidth) || winW;
+    this.height = rect.height || (this.container && this.container.clientHeight) || winH;
+    this.dpr = Math.min((typeof window !== 'undefined' && window.devicePixelRatio) || 1, 2);
+    if (this.canvas) {
+      this.canvas.width = Math.max(1, Math.floor(this.width * this.dpr));
+      this.canvas.height = Math.max(1, Math.floor(this.height * this.dpr));
+    }
+    if (this.ctx && typeof this.ctx.setTransform === 'function') {
+      this.ctx.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
+    }
   };
 
   LineageVFX.prototype._seedAmbient = function () {
@@ -275,9 +289,9 @@
     e.state.x = e.source.x;
     e.state.y = e.source.y;
 
-    if (e.type === 'fireball') e.state.speed = e.speed || 5.4;
-    if (e.type === 'ice_shards') e.state.speed = e.speed || 6.2;
-    if (e.type === 'wind_blast') e.state.speed = e.speed || 7.5;
+    if (e.type === 'fireball') { e.state.speed = e.speed || 5.4; e.maxAge = e.maxAge || 900; }
+    if (e.type === 'ice_shards') { e.state.speed = e.speed || 6.2; e.maxAge = e.maxAge || 900; }
+    if (e.type === 'wind_blast') { e.state.speed = e.speed || 7.5; e.maxAge = e.maxAge || 850; }
     if (e.type === 'wind_strike') {
       e.state.speed = e.speed || 6.8;
       e.maxAge = e.maxAge || 750;
@@ -292,10 +306,10 @@
       this._ring(e.target.x, e.target.y, '255,120,30', 48, 4.8, 2.8);
       this._ring(e.target.x, e.target.y, '255,210,80', 68, 3.2, 1.8);
     }
-    if (e.type === 'arcane_missile') e.state.speed = e.speed || 5.4;
-    if (e.type === 'energy_slash') e.state.speed = e.speed || 6.4;
-    if (e.type === 'spiral_spear') e.state.speed = e.speed || 7.2;
-    if (e.type === 'cross_slash') e.state.age = 0;
+    if (e.type === 'arcane_missile') { e.state.speed = e.speed || 5.4; e.maxAge = e.maxAge || 900; }
+    if (e.type === 'energy_slash') { e.state.speed = e.speed || 6.4; e.maxAge = e.maxAge || 700; }
+    if (e.type === 'spiral_spear') { e.state.speed = e.speed || 7.2; e.maxAge = e.maxAge || 800; }
+    if (e.type === 'cross_slash') { e.state.age = 0; e.maxAge = e.maxAge || 560; }
 
     if (e.type === 'double_shot') {
       e.state.speed = e.speed || 9.2;
@@ -1083,10 +1097,16 @@
 
   LineageVFX.prototype._updateProjectile = function (e, dt) {
     var s = e.state;
+    if (!s || isNaN(s.x) || isNaN(s.y) || !isFinite(s.x) || !isFinite(s.y) || isNaN(s.speed)) {
+      e.done = true;
+      return;
+    }
     s.x += Math.cos(s.angle) * s.speed * (dt / 16);
     s.y += Math.sin(s.angle) * s.speed * (dt / 16);
     this._trail(e);
-    if (distance({ x: s.x, y: s.y }, e.target) < s.speed + 5 || distance(e.source, { x: s.x, y: s.y }) > s.distance + 50) {
+    var dTarget = distance({ x: s.x, y: s.y }, e.target);
+    var dSource = distance(e.source, { x: s.x, y: s.y });
+    if (dTarget < s.speed + 8 || dSource > (s.distance || 300) + 50 || e.age >= (e.maxAge || 900)) {
       this._impact(e, e.target.x, e.target.y);
       e.done = true;
     }
@@ -1094,7 +1114,8 @@
 
   LineageVFX.prototype._updateArrowRain = function (e, dt) {
     var s = e.state;
-    var spawnEvery = (e.maxAge * 0.55) / s.count;
+    var maxAge = e.maxAge || 1800;
+    var spawnEvery = (maxAge * 0.55) / (s.count || 12);
     while (s.spawned < s.count && e.age > s.spawned * spawnEvery) {
       s.spawned += 1;
       s.arrows.push({
@@ -1114,13 +1135,19 @@
     }
     for (var j = s.stuck.length - 1; j >= 0; j -= 1) {
       s.stuck[j].age += dt;
-      if (s.stuck[j].age > 2200) s.stuck.splice(j, 1);
+      if (s.stuck[j].age > 1200) s.stuck.splice(j, 1);
     }
-    if (e.age > e.maxAge && s.arrows.length === 0) e.done = true;
+    if (e.age >= maxAge || (e.age > 800 && s.arrows.length === 0)) e.done = true;
   };
 
   LineageVFX.prototype._update = function (e, dt) {
     e.age += dt;
+    var maxLife = (e.maxAge && e.maxAge > 0) ? e.maxAge : 1200;
+    if (isNaN(e.age) || !isFinite(e.age) || e.age >= maxLife) {
+      e.done = true;
+      return;
+    }
+
     if (e.type === 'fireball' || e.type === 'ice_shards' || e.type === 'wind_blast' || e.type === 'wind_strike' || e.type === 'arcane_missile' || e.type === 'energy_slash' || e.type === 'spiral_spear' || e.type === 'snipe_shot' || e.type === 'magic_death_spike') {
       this._updateProjectile(e, dt);
     } else if (e.type === 'arrow_rain') {
@@ -1132,8 +1159,7 @@
       }
       if (e.age > (e.maxAge || 560)) e.done = true;
     } else {
-      if (!e.maxAge || isNaN(e.maxAge)) e.maxAge = 2500;
-      if (isNaN(e.age) || e.age >= e.maxAge) {
+      if (e.age >= (e.maxAge || 1200)) {
         e.done = true;
       }
     }
@@ -3364,29 +3390,46 @@
 
     ctx.save();
     for (var p = this.particles.length - 1; p >= 0; p -= 1) {
-      var particle = this.particles[p]; particle.age += dt; particle.vx *= Math.pow(particle.drag, dt / 16); particle.vy = particle.vy * Math.pow(particle.drag, dt / 16) + particle.gravity * (dt / 16); particle.x += particle.vx * (dt / 16); particle.y += particle.vy * (dt / 16); particle.rotation += particle.rotationSpeed * (dt / 16);
-      var alpha = 1 - particle.age / particle.max;
-      if (alpha <= 0 || isNaN(alpha) || !isFinite(alpha) || isNaN(particle.x) || isNaN(particle.y)) { this.particles.splice(p, 1); continue; }
-      ctx.globalCompositeOperation = particle.additive ? 'lighter' : 'source-over'; this._drawParticle(particle, alpha);
+      var particle = this.particles[p];
+      if (!particle) { this.particles.splice(p, 1); continue; }
+      particle.age += dt;
+      particle.vx *= Math.pow(particle.drag, dt / 16);
+      particle.vy = particle.vy * Math.pow(particle.drag, dt / 16) + particle.gravity * (dt / 16);
+      particle.x += particle.vx * (dt / 16);
+      particle.y += particle.vy * (dt / 16);
+      particle.rotation += particle.rotationSpeed * (dt / 16);
+      var alpha = 1 - particle.age / (particle.max || 60);
+      if (alpha <= 0 || isNaN(alpha) || !isFinite(alpha) || isNaN(particle.x) || isNaN(particle.y) || particle.age > 2000) {
+        this.particles.splice(p, 1);
+        continue;
+      }
+      ctx.globalCompositeOperation = particle.additive ? 'lighter' : 'source-over';
+      this._drawParticle(particle, alpha);
     }
     ctx.globalCompositeOperation = 'lighter';
     if (this.rings && this.rings.length > 0) {
       for (var r = this.rings.length - 1; r >= 0; r -= 1) {
         var ring = this.rings[r];
-        if (!ring) continue;
-        var ringAlpha = 1 - (ring.age || 0) / (ring.max || 1);
-        if (ringAlpha <= 0 || isNaN(ringAlpha) || !isFinite(ringAlpha)) { this.rings.splice(r, 1); continue; }
+        if (!ring) { this.rings.splice(r, 1); continue; }
+        ring.age = (ring.age || 0) + dt;
+        ring.radius = (ring.radius || 4) + (ring.speed || 4) * (dt / 16);
+        var ringMax = ring.max || 36;
+        var ringAlpha = Math.max(0, 1 - ring.radius / ringMax);
+        if (ring.radius >= ringMax || ringAlpha <= 0 || isNaN(ringAlpha) || !isFinite(ringAlpha) || ring.age > 800 || isNaN(ring.radius) || isNaN(ring.x) || isNaN(ring.y)) {
+          this.rings.splice(r, 1);
+          continue;
+        }
         // Outer radiant halo (zero GPU Gaussian blur penalty)
         ctx.strokeStyle = rgba(ring.rgb || '255,255,255', ringAlpha * 0.25);
         ctx.lineWidth = (ring.width || 2) * 2.5;
         ctx.beginPath();
-        ctx.arc(ring.x || 0, ring.y || 0, ring.radius || 10, 0, Math.PI * 2);
+        ctx.arc(ring.x || 0, ring.y || 0, ring.radius, 0, Math.PI * 2);
         ctx.stroke();
         // Core sharp brilliant ring
         ctx.strokeStyle = rgba(ring.rgb || '255,255,255', ringAlpha * 0.90);
         ctx.lineWidth = ring.width || 2;
         ctx.beginPath();
-        ctx.arc(ring.x || 0, ring.y || 0, ring.radius || 10, 0, Math.PI * 2);
+        ctx.arc(ring.x || 0, ring.y || 0, ring.radius, 0, Math.PI * 2);
         ctx.stroke();
       }
     }
@@ -3395,19 +3438,25 @@
     this.flash *= Math.pow(0.88, dt / 16);
     if (this.flash > 0.02) { ctx.fillStyle = rgba(this.flashRgb, this.flash * 0.1); ctx.fillRect(0, 0, this.width, this.height); }
     var self = this;
-    this.raf = requestAnimationFrame(function (next) { self._frame(next); });
+    if (typeof requestAnimationFrame !== 'undefined') {
+      this.raf = requestAnimationFrame(function (next) { self._frame(next); });
+    }
   };
 
   LineageVFX.prototype.start = function () {
     if (this.running) return;
     this.running = true;
     var self = this;
-    this.raf = requestAnimationFrame(function (now) { self._frame(now); });
+    if (typeof requestAnimationFrame !== 'undefined') {
+      this.raf = requestAnimationFrame(function (now) { self._frame(now); });
+    }
   };
 
   LineageVFX.prototype.stop = function () {
     this.running = false;
-    cancelAnimationFrame(this.raf);
+    if (typeof cancelAnimationFrame !== 'undefined' && this.raf) {
+      cancelAnimationFrame(this.raf);
+    }
   };
 
   LineageVFX.prototype.clear = function () {
@@ -3418,11 +3467,21 @@
   };
 
   LineageVFX.prototype.destroy = function () {
-    this.stop(); this.clear(); window.removeEventListener('resize', this._onResize);
-    if (this.resizeObserver) this.resizeObserver.disconnect();
-    if (this._createdCanvas && this.canvas.parentNode) this.canvas.parentNode.removeChild(this.canvas);
+    this.stop(); this.clear();
+    if (typeof window !== 'undefined' && typeof window.removeEventListener === 'function') {
+      window.removeEventListener('resize', this._onResize);
+    }
+    if (this.resizeObserver && typeof this.resizeObserver.disconnect === 'function') {
+      this.resizeObserver.disconnect();
+    }
+    if (this._createdCanvas && this.canvas && this.canvas.parentNode && typeof this.canvas.parentNode.removeChild === 'function') {
+      this.canvas.parentNode.removeChild(this.canvas);
+    }
   };
 
   global.LineageVFX = LineageVFX;
   global.LINEAGE_VFX_META = META;
-})(window);
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { LineageVFX: LineageVFX, LINEAGE_VFX_META: META };
+  }
+})(typeof window !== 'undefined' ? window : (typeof globalThis !== 'undefined' ? globalThis : this));

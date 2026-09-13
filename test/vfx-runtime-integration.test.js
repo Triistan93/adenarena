@@ -256,3 +256,122 @@ test('7. Monster death / transition lifecycle clears all lingering visual residu
 
   assert.equal(globalVFXPool.particles._active.size, 0, 'Active particles must drop to 0 on monster death');
 });
+
+test('8. LineageVFX shockwave rings expand, fade out, and purge cleanly without residue', async () => {
+  await import('../lineage-idle/vfx-lineage-idle.js');
+  const LineageVFX = globalThis.LineageVFX;
+  assert.ok(LineageVFX, 'LineageVFX constructor should be available');
+
+  const mockCtx = {
+    save: () => {}, restore: () => {}, clearRect: () => {}, fillRect: () => {},
+    beginPath: () => {}, arc: () => {}, stroke: () => {}, fill: () => {},
+    setTransform: () => {}, createRadialGradient: () => ({ addColorStop: () => {} }),
+    createLinearGradient: () => ({ addColorStop: () => {} }),
+    translate: () => {}, rotate: () => {}, setLineDash: () => {}
+  };
+  const mockCanvas = {
+    getContext: () => mockCtx,
+    getBoundingClientRect: () => ({ width: 800, height: 450 }),
+    style: {}
+  };
+
+  const vfx = new LineageVFX({ canvas: mockCanvas, ambient: false });
+  vfx.running = true;
+
+  // Spawn shockwave ring (radius 4, speed 5, max 50)
+  vfx._ring(200, 200, '180,90,255', 50, 5, 2.5);
+  assert.equal(vfx.rings.length, 1, 'One ring should be spawned');
+  assert.equal(vfx.rings[0].radius, 4, 'Initial radius must be 4');
+  assert.equal(vfx.rings[0].age, 0, 'Initial age must be 0');
+
+  // Advance 5 frames (80ms) -> ring must expand
+  for (let f = 1; f <= 5; f++) {
+    vfx._frame(f * 16);
+  }
+  assert.equal(vfx.rings.length, 1, 'Ring must still be alive during expansion');
+  assert.ok(vfx.rings[0].radius > 20, 'Ring radius must have expanded past 20px');
+  assert.ok(vfx.rings[0].age >= 80, 'Ring age must have advanced');
+
+  // Advance another 8 frames (total 13 frames / ~208ms) -> radius reaches max (50) and must be purged
+  for (let f = 6; f <= 15; f++) {
+    vfx._frame(f * 16);
+  }
+  assert.equal(vfx.rings.length, 0, 'Ring must be completely spliced out after reaching max radius');
+});
+
+test('9. LineageVFX arcane_missile and projectiles terminate on impact or maxAge timeout', async () => {
+  await import('../lineage-idle/vfx-lineage-idle.js');
+  const LineageVFX = globalThis.LineageVFX;
+
+  const mockCtx = {
+    save: () => {}, restore: () => {}, clearRect: () => {}, fillRect: () => {},
+    beginPath: () => {}, arc: () => {}, stroke: () => {}, fill: () => {},
+    setTransform: () => {}, createRadialGradient: () => ({ addColorStop: () => {} }),
+    createLinearGradient: () => ({ addColorStop: () => {} }),
+    translate: () => {}, rotate: () => {}, setLineDash: () => {}
+  };
+  const mockCanvas = {
+    getContext: () => mockCtx,
+    getBoundingClientRect: () => ({ width: 800, height: 450 }),
+    style: {}
+  };
+
+  const vfx = new LineageVFX({ canvas: mockCanvas, ambient: false });
+  vfx.running = true;
+
+  // Case A: normal missile reaches target
+  const missile = vfx.play('arcane_missile', { source: { x: 50, y: 100 }, target: { x: 250, y: 100 } });
+  assert.ok(missile, 'Missile effect should be created');
+  assert.equal(missile.maxAge, 900, 'Missile must have default maxAge of 900ms');
+  assert.equal(vfx.effects.length, 1, 'One effect should be active');
+
+  // Advance frames until impact
+  for (let f = 1; f <= 50; f++) {
+    vfx._frame(f * 16);
+  }
+  assert.equal(vfx.effects.length, 0, 'Missile must complete and be removed upon hitting target');
+
+  // Case B: unreachable missile with speed 0 must terminate at maxAge timeout
+  const stuckMissile = vfx.play('arcane_missile', { source: { x: 50, y: 100 }, target: { x: 99999, y: 99999 }, speed: 0 });
+  assert.equal(vfx.effects.length, 1);
+  for (let f = 1; f <= 70; f++) {
+    vfx._frame(1000 + f * 16);
+  }
+  assert.equal(vfx.effects.length, 0, 'Unreachable missile must terminate when exceeding maxAge');
+});
+
+test('10. LineageVFX.prototype.clear() flushes rings, effects, particles, and flash', async () => {
+  await import('../lineage-idle/vfx-lineage-idle.js');
+  const LineageVFX = globalThis.LineageVFX;
+
+  const mockCtx = {
+    save: () => {}, restore: () => {}, clearRect: () => {}, fillRect: () => {},
+    beginPath: () => {}, arc: () => {}, stroke: () => {}, fill: () => {},
+    setTransform: () => {}, createRadialGradient: () => ({ addColorStop: () => {} }),
+    createLinearGradient: () => ({ addColorStop: () => {} }),
+    translate: () => {}, rotate: () => {}, setLineDash: () => {}
+  };
+  const mockCanvas = {
+    getContext: () => mockCtx,
+    getBoundingClientRect: () => ({ width: 800, height: 450 }),
+    style: {}
+  };
+
+  const vfx = new LineageVFX({ canvas: mockCanvas, ambient: false });
+  vfx._ring(100, 100, '255,255,255', 40, 4, 2);
+  vfx.particles.push({ x: 50, y: 50, age: 0, max: 50 });
+  vfx.play('power_smash', { target: { x: 100, y: 100 } });
+  vfx.flash = 0.8;
+
+  assert.ok(vfx.rings.length > 0, 'Rings should be populated');
+  assert.ok(vfx.particles.length > 0, 'Particles should be populated');
+  assert.ok(vfx.effects.length > 0, 'Effects should be populated');
+  assert.ok(vfx.flash > 0, 'Flash should be active');
+
+  vfx.clear();
+
+  assert.equal(vfx.rings.length, 0, 'Rings must be 0 after clear()');
+  assert.equal(vfx.particles.length, 0, 'Particles must be 0 after clear()');
+  assert.equal(vfx.effects.length, 0, 'Effects must be 0 after clear()');
+  assert.equal(vfx.flash, 0, 'Flash must be 0 after clear()');
+});
