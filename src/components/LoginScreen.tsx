@@ -254,6 +254,13 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
       if (reservation.success && reservation.characterId) {
         reservedCharId = reservation.characterId;
         if (reservation.accountId) reservedAccId = reservation.accountId;
+      } else {
+        console.error('[CharacterCreation] Falha ao registrar personagem canônico:', reservation.reason);
+        alert(
+          `❌ Não foi possível criar o personagem no Firestore:\n\n${reservation.reason}\n\n` +
+          `Aviso de Segurança: Certifique-se de que as Regras do Firestore (firestore.rules) foram publicadas na aba "Regras" do Firebase Console.`
+        );
+        return;
       }
     }
 

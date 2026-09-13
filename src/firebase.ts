@@ -322,7 +322,7 @@ export async function savePlayerStateToCloud(userId: string, stateData: any, imm
           updatedAt: Date.now()
         }, { merge: true });
       } catch (canonErr) {
-        console.debug('[CanonicalSave] Aviso de gravação canônica transitória:', canonErr);
+        console.error('[CanonicalSave] Erro ao gravar nas coleções canônicas (characters, presence, pvp_rankings):', canonErr);
       }
 
       return true;

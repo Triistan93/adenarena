@@ -8040,7 +8040,18 @@ export function bindEvents() {
           }
 
           const result = await wipeFn();
-          console.log('[Admin Wipe] Concluído com sucesso:', result);
+          console.log('[Admin Wipe] Resultado da operação:', result);
+
+          if (!result.success || (result.errors && result.errors.length > 0)) {
+            let errorMsg = `❌ O Firestore bloqueou a exclusão por falta de permissão!\n\n`;
+            errorMsg += `Erros retornados (${result.errors.length}):\n${result.errors.slice(0, 4).join('\n')}\n\n`;
+            errorMsg += `⚠️ MOTIVO: As Regras do Firestore (firestore.rules) ainda NÃO foram publicadas no Firebase Console!\n\n`;
+            errorMsg += `👉 SOLUÇÃO:\n1. Acesse o Firebase Console.\n2. Vá na aba "Regras" (ao lado de "Dados").\n3. Cole as regras do arquivo firestore.rules e clique em "Publicar".`;
+            alert(errorMsg);
+            adminWipeBtn.disabled = false;
+            adminWipeBtn.textContent = '🔥 WIPE GERAL DO BANCO DE DADOS (SERVIDOR ZERO)';
+            return;
+          }
 
           let msg = '✅ WIPE DO BANCO DE DADOS CONCLUÍDO COM SUCESSO!\n\nDocumentos deletados por coleção:\n';
           let totalDeleted = 0;
@@ -8052,10 +8063,6 @@ export function bindEvents() {
           }
           if (totalDeleted === 0) {
             msg += '• (Nenhum documento residual nas coleções)\n';
-          }
-
-          if (result.errors && result.errors.length > 0) {
-            msg += `\nAvisos encontrados (${result.errors.length}):\n${result.errors.join('\n')}`;
           }
 
           alert(msg + '\n\nO servidor está zerado. A aplicação será reiniciada na Criação de Personagem.');
