@@ -9496,8 +9496,11 @@ export function init() {
     window.openPixCheckoutModal = (tierId) => {
       uiOpenPixCheckoutModal(tierId, state);
     };
-    window.openReferralModal = () => {
-      uiOpenReferralModal(state);
+    window.openReferralModal = (tab) => {
+      uiOpenReferralModal(state, tab);
+    };
+    window.openContactsModal = (tab) => {
+      uiOpenReferralModal(state, tab);
     };
     window.submitReferralCodeAction = () => {
       const input = document.getElementById('ref-friend-code-input');

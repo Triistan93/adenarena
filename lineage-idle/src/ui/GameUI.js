@@ -8532,13 +8532,17 @@ export function uiOpenPixCheckoutModal(tierId, state) {
 let _contactsActiveTab = 'friends'; // 'friends' | 'block' | 'mentorship'
 let _contactsSelectedFriendName = null;
 
-export function uiOpenReferralModal(state) {
+export function uiOpenReferralModal(state, defaultTab) {
   let modal = document.getElementById('referral-modal');
   if (!modal) {
     modal = document.createElement('div');
     modal.id = 'referral-modal';
     modal.className = 'modal-backdrop';
     document.body.appendChild(modal);
+  }
+
+  if (defaultTab && ['friends', 'block', 'mentorship'].includes(defaultTab)) {
+    _contactsActiveTab = defaultTab;
   }
 
   const s = state || (typeof window !== 'undefined' ? (window.__GAME_STATE__ || window.gameState) : {});
@@ -8571,29 +8575,29 @@ export function uiOpenReferralModal(state) {
       <!-- Subbar: Friend List Counter + Top Action Buttons -->
       <div class="l2contacts-subbar">
         <div class="l2contacts-counter">
-          Friend List (${s.friends.length}/128)
+          Lista de Amigos (${s.friends.length}/128)
         </div>
         <div class="l2contacts-top-actions">
           <button id="btn-contact-add-friend" class="l2contacts-add-btn">
-            + Add
+            + Adicionar
           </button>
           <button id="btn-contact-del-friend" class="l2contacts-del-btn">
-            - Delete
+            - Remover
           </button>
         </div>
       </div>
 
-      <!-- Friends Table (Image 4) -->
+      <!-- Friends Table -->
       <div style="max-height: 280px; overflow-y: auto; background: #080a0f;">
         <table class="l2contacts-table">
           <thead>
             <tr>
-              <th style="width: 32%;">Name</th>
-              <th style="width: 12%; text-align: center;">Lv.</th>
-              <th style="width: 26%;">Class</th>
+              <th style="width: 32%;">Nome</th>
+              <th style="width: 12%; text-align: center;">Nv.</th>
+              <th style="width: 26%;">Classe</th>
               <th style="width: 16%;">Status</th>
-              <th style="width: 7%; text-align: center;">Msg</th>
-              <th style="width: 7%; text-align: center;">Mail</th>
+              <th style="width: 7%; text-align: center;" title="Mensagem Privada">Msg</th>
+              <th style="width: 7%; text-align: center;" title="Enviar Correio">Mail</th>
             </tr>
           </thead>
           <tbody>
@@ -8601,7 +8605,7 @@ export function uiOpenReferralModal(state) {
               <tr>
                 <td colspan="6" style="text-align: center; padding: 40px 14px; color: #94a3b8; font-size: 11px;">
                   Nenhum amigo registrado na lista.<br />
-                  <span style="color: #64748b; font-size: 10px;">Clique no botão <strong style="color:#60a5fa;">'+ Add'</strong> acima para adicionar um amigo pelo nome!</span>
+                  <span style="color: #64748b; font-size: 10px;">Clique no botão <strong style="color:#60a5fa;">'+ Adicionar'</strong> acima para adicionar um amigo pelo nome!</span>
                 </td>
               </tr>
             ` : s.friends.map(f => {
@@ -8633,16 +8637,19 @@ export function uiOpenReferralModal(state) {
         </table>
       </div>
 
-      <!-- Bottom Actions Bar (Image 4) -->
+      <!-- Bottom Actions Bar -->
       <div class="l2contacts-bottom-bar">
-        <button id="btn-friend-party-invite" class="l2contacts-action-btn">
-          📢 Invite to party
+        <button id="btn-friend-party-invite" class="l2contacts-action-btn" title="Convidar amigo selecionado para o Grupo">
+          📢 Convidar Grupo
         </button>
-        <button id="btn-friend-clan-invite" class="l2contacts-action-btn">
-          ⚑ Invite to clan
+        <button id="btn-friend-clan-invite" class="l2contacts-action-btn" title="Convidar amigo selecionado para o Clã">
+          ⚑ Convidar Clã
         </button>
-        <button id="btn-friend-detailed-info" class="l2contacts-action-btn">
-          🗎 Detailed Info
+        <button id="btn-friend-detailed-info" class="l2contacts-action-btn" title="Ver ficha e detalhes do amigo">
+          🗎 Detalhes
+        </button>
+        <button id="btn-friend-make-mentor" class="l2contacts-action-btn" style="border-color: rgba(52,211,153,0.4); color: #6ee7b7;" title="Vincular este amigo como seu Mentor (até Nv. 20)">
+          🎓 Tornar Mentor
         </button>
       </div>
     `;
@@ -8650,11 +8657,11 @@ export function uiOpenReferralModal(state) {
     contentHtml = `
       <div class="l2contacts-subbar">
         <div class="l2contacts-counter">
-          Block List (${s.blocked.length}/64)
+          Lista de Bloqueados (${s.blocked.length}/64)
         </div>
         <div class="l2contacts-top-actions">
           <button id="btn-contact-add-block" class="l2contacts-add-btn">
-            + Block
+            + Bloquear
           </button>
         </div>
       </div>
@@ -8663,9 +8670,9 @@ export function uiOpenReferralModal(state) {
         <table class="l2contacts-table">
           <thead>
             <tr>
-              <th style="width: 50%;">Name</th>
+              <th style="width: 50%;">Nome</th>
               <th style="width: 30%;">Status</th>
-              <th style="width: 20%; text-align: center;">Action</th>
+              <th style="width: 20%; text-align: center;">Ação</th>
             </tr>
           </thead>
           <tbody>
@@ -8693,55 +8700,78 @@ export function uiOpenReferralModal(state) {
   } else if (_contactsActiveTab === 'mentorship') {
     contentHtml = `
       <div style="padding: 16px; background: #080a0f;">
-        ${referredBy ? `
-          <div style="background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.4); border-radius: 8px; padding: 8px 12px; margin-bottom: 12px; font-size: 11px; color: #6ee7b7; display: flex; align-items: center; gap: 8px;">
-            <span>✨</span>
-            <span>Você ingressou pela indicação de <strong>${referredBy}</strong>! Bônus de Novato ativo (+10% EXP permanente).</span>
+        <!-- Header Info Banner -->
+        <div style="background: linear-gradient(135deg, rgba(16,185,129,0.15) 0%, rgba(6,78,59,0.25) 100%); border: 1px solid rgba(52,211,153,0.35); border-radius: 8px; padding: 12px; margin-bottom: 14px;">
+          <div style="font-family: 'Cinzel', serif; font-size: 13px; font-weight: bold; color: #a7f3d0; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+            <span>🎓</span> Programa de Mentoria de Aden
           </div>
-        ` : `
-          <div style="background: rgba(20,26,38,0.85); border: 1px solid rgba(52,211,153,0.3); border-radius: 8px; padding: 10px; margin-bottom: 12px;">
-            <div style="font-size: 10.5px; font-weight: bold; color: #6ee7b7; margin-bottom: 6px; text-transform: uppercase;">
-              Vincular Mentor (Até Nv. 20):
+          <div style="font-size: 11px; color: #cbd5e1; line-height: 1.5;">
+            Jogadores veteranos guiam novos aventureiros até a 2ª classe. Ambos recebem bônus e tesouros lendários!
+          </div>
+        </div>
+
+        ${referredBy ? `
+          <div style="background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.5); border-radius: 8px; padding: 10px 14px; margin-bottom: 14px; font-size: 11px; color: #6ee7b7; display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 20px;">✨</span>
+            <div>
+              <div>Mentor Vinculado: <strong style="color:#ffd877; font-size: 12px;">${referredBy}</strong></div>
+              <div style="font-size: 10px; color: #a7f3d0; margin-top: 2px;">Bônus ativo: <strong>+10% EXP permanente</strong> e Pacote de Boas-Vindas concedido.</div>
+            </div>
+          </div>
+        ` : ((s.level || 1) <= 20 ? `
+          <div style="background: rgba(20,26,38,0.9); border: 1px solid rgba(52,211,153,0.4); border-radius: 8px; padding: 12px; margin-bottom: 14px; box-shadow: 0 4px 14px rgba(0,0,0,0.5);">
+            <div style="font-size: 11px; font-weight: bold; color: #6ee7b7; margin-bottom: 4px; text-transform: uppercase; font-family: 'Cinzel', serif;">
+              🎯 Vincular seu Mentor (Disponível até Nível 20):
+            </div>
+            <div style="font-size: 10.5px; color: #94a3b8; margin-bottom: 8px; line-height: 1.4;">
+              Ao vincular um mentor, você ganha imediatamente <strong style="color:#6ee7b7;">+10% EXP permanente</strong>, <strong>1.000 Soulshots</strong> e <strong>10 Poções de Vida</strong>! No Nível 40, ambos ganham <strong>50 AC</strong> e <strong>5x Blessed Scrolls</strong>.
             </div>
             <div style="display: flex; gap: 8px;">
-              <input id="ref-friend-code-input" type="text" placeholder="Nome do mentor..." style="flex: 1; background: #0b0d13; border: 1px solid #334155; border-radius: 4px; padding: 6px 10px; color: #fff; font-size: 11px;" />
-              <button onclick="window.submitReferralCodeAction && window.submitReferralCodeAction()" style="padding: 6px 14px; background: #10b981; border: 1px solid #34d399; border-radius: 4px; color: #000; font-weight: bold; font-size: 11px; cursor: pointer; font-family: 'Cinzel', serif;">
+              <input id="ref-friend-code-input" type="text" placeholder="Digite o nome do seu mentor..." style="flex: 1; background: #0b0d13; border: 1px solid #334155; border-radius: 4px; padding: 7px 10px; color: #fff; font-size: 11px;" />
+              <button onclick="window.submitReferralCodeAction && window.submitReferralCodeAction()" style="padding: 7px 16px; background: linear-gradient(180deg, #10b981, #059669); border: 1px solid #34d399; border-radius: 4px; color: #052e16; font-weight: bold; font-size: 11px; cursor: pointer; font-family: 'Cinzel', serif; box-shadow: 0 2px 8px rgba(16,185,129,0.3);">
                 Vincular
               </button>
             </div>
           </div>
-        `}
+        ` : `
+          <div style="background: rgba(30,41,59,0.4); border: 1px solid rgba(148,163,184,0.25); border-radius: 8px; padding: 10px 14px; margin-bottom: 14px; font-size: 11px; color: #cbd5e1; display: flex; align-items: center; gap: 8px;">
+            <span>🛡️</span>
+            <span>Você já atingiu o Nível ${s.level || 1}! Compartilhe seu código abaixo para ser o <strong>Mentor</strong> de novos aventureiros e receber recompensas quando eles chegarem ao Nível 40.</span>
+          </div>
+        `)}
 
         <div style="margin-bottom: 14px;">
-          <label style="display: block; font-size: 10.5px; font-weight: bold; color: #6ee7b7; margin-bottom: 4px; text-transform: uppercase;">Seu Link Exclusivo de Indicação:</label>
+          <label style="display: block; font-size: 10.5px; font-weight: bold; color: #6ee7b7; margin-bottom: 6px; text-transform: uppercase; font-family: 'Cinzel', serif;">
+            Seu Código / Link de Indicação &amp; Mentoria:
+          </label>
           <div style="display: flex; gap: 8px;">
-            <input id="ref-link-input" type="text" readonly value="${refUrl}" style="flex: 1; background: #0b0d13; border: 1px solid #059669; border-radius: 4px; padding: 6px 10px; color: #34d399; font-family: monospace; font-size: 11px; font-weight: bold;" />
-            <button id="ref-copy-btn" onclick="navigator.clipboard.writeText('${refUrl}').then(() => { const b = document.getElementById('ref-copy-btn'); b.textContent = '✅ Copiado!'; setTimeout(() => { b.textContent = '📋 Copiar'; }, 2500); })" style="padding: 6px 14px; background: #10b981; border: 1px solid #34d399; border-radius: 4px; color: #000; font-weight: bold; font-size: 11px; cursor: pointer; font-family: 'Cinzel', serif;">
+            <input id="ref-link-input" type="text" readonly value="${refUrl}" style="flex: 1; background: #0b0d13; border: 1px solid #059669; border-radius: 4px; padding: 7px 10px; color: #34d399; font-family: monospace; font-size: 11px; font-weight: bold;" />
+            <button id="ref-copy-btn" onclick="navigator.clipboard.writeText('${refUrl}').then(() => { const b = document.getElementById('ref-copy-btn'); b.textContent = '✅ Copiado!'; setTimeout(() => { b.textContent = '📋 Copiar'; }, 2500); })" style="padding: 7px 14px; background: #10b981; border: 1px solid #34d399; border-radius: 4px; color: #052e16; font-weight: bold; font-size: 11px; cursor: pointer; font-family: 'Cinzel', serif;">
               📋 Copiar
             </button>
           </div>
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;">
-          <div style="background: rgba(14,18,26,0.8); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; padding: 8px; text-align: center;">
-            <div style="font-size: 10px; color: #94a3b8;">Amigos Indicados</div>
-            <div style="font-size: 18px; font-weight: bold; color: #34d399; font-family: 'Cinzel', serif;">${countInvited}</div>
+          <div style="background: rgba(14,18,26,0.8); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; padding: 10px; text-align: center;">
+            <div style="font-size: 10px; color: #94a3b8; font-family: 'Cinzel', serif;">Pupilos &amp; Amigos Indicados</div>
+            <div style="font-size: 18px; font-weight: bold; color: #34d399; font-family: 'Cinzel', serif; margin-top: 2px;">${countInvited}</div>
           </div>
-          <div style="background: rgba(14,18,26,0.8); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; padding: 8px; text-align: center;">
-            <div style="font-size: 10px; color: #94a3b8;">Recompensas Resgatadas</div>
-            <div style="font-size: 18px; font-weight: bold; color: #ffd700; font-family: 'Cinzel', serif;">${rewardsClaimed}</div>
+          <div style="background: rgba(14,18,26,0.8); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; padding: 10px; text-align: center;">
+            <div style="font-size: 10px; color: #94a3b8; font-family: 'Cinzel', serif;">Recompensas Resgatadas</div>
+            <div style="font-size: 18px; font-weight: bold; color: #ffd700; font-family: 'Cinzel', serif; margin-top: 2px;">${rewardsClaimed}</div>
           </div>
         </div>
 
-        <div style="margin-bottom: 12px;">
-          <button id="ref-check-rewards-btn" onclick="window.claimReferralRewardsAction && window.claimReferralRewardsAction()" style="width: 100%; padding: 8px 14px; background: linear-gradient(180deg, #059669, #047857); border: 1px solid #34d399; border-radius: 6px; color: #fff; font-weight: bold; font-size: 11px; cursor: pointer; font-family: 'Cinzel', serif; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 0 12px rgba(16,185,129,0.25);">
-            🔄 Verificar & Resgatar Recompensas de Amigos
+        <div style="margin-bottom: 10px;">
+          <button id="ref-check-rewards-btn" onclick="window.claimReferralRewardsAction && window.claimReferralRewardsAction()" style="width: 100%; padding: 9px 14px; background: linear-gradient(180deg, #059669, #047857); border: 1px solid #34d399; border-radius: 6px; color: #fff; font-weight: bold; font-size: 11px; cursor: pointer; font-family: 'Cinzel', serif; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 0 12px rgba(16,185,129,0.25);">
+            🔄 Verificar &amp; Resgatar Recompensas (50 AC + 5 Scrolls por pupilo Lv. 40)
           </button>
         </div>
 
         <div style="display: flex; gap: 8px;">
           <a href="${whatsappUrl}" target="_blank" rel="noopener noreferrer" style="flex: 1; text-decoration: none; padding: 8px; background: linear-gradient(180deg, #25D366, #128C7E); border: 1px solid #25D366; border-radius: 4px; color: #fff; font-weight: bold; font-size: 11px; font-family: 'Cinzel', serif; text-align: center; display: flex; align-items: center; justify-content: center; gap: 6px;">
-            📲 Compartilhar no WhatsApp
+            📲 Convidar Amigos no WhatsApp
           </a>
         </div>
       </div>
@@ -8753,21 +8783,21 @@ export function uiOpenReferralModal(state) {
       <!-- Title Bar -->
       <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; background: linear-gradient(180deg, #181d2a 0%, #0d1017 100%); border-bottom: 1px solid rgba(212,167,68,0.35);">
         <div style="font-family: 'Cinzel', serif; font-size: 14px; font-weight: bold; color: #f5df93; display: flex; align-items: center; gap: 8px;">
-          👥 Contacts
+          👥 Contatos, Amigos &amp; Mentoria
         </div>
         <button onclick="document.getElementById('referral-modal').classList.remove('active')" style="background: none; border: none; color: #94a3b8; font-size: 18px; cursor: pointer; padding: 0 4px; line-height: 1;">✕</button>
       </div>
 
-      <!-- Tabs Bar (Image 4) -->
+      <!-- Tabs Bar -->
       <div class="l2contacts-tabs-bar">
         <button class="l2contacts-tab ${_contactsActiveTab === 'friends' ? 'active' : ''}" data-ctab="friends">
-          Friends
+          👥 Amigos (${s.friends.length}/128)
         </button>
         <button class="l2contacts-tab ${_contactsActiveTab === 'block' ? 'active' : ''}" data-ctab="block">
-          Block
+          🚫 Bloqueados (${s.blocked.length}/64)
         </button>
         <button class="l2contacts-tab ${_contactsActiveTab === 'mentorship' ? 'active' : ''}" data-ctab="mentorship">
-          Mentorship / Indicação
+          🎓 Mentoria &amp; Indicação
         </button>
       </div>
 
@@ -8865,6 +8895,34 @@ export function uiOpenReferralModal(state) {
     };
   }
 
+  const makeMentorBtn = modal.querySelector('#btn-friend-make-mentor');
+  if (makeMentorBtn) {
+    makeMentorBtn.onclick = () => {
+      const friend = s.friends.find(f => f.name === _contactsSelectedFriendName) || s.friends[0];
+      if (!friend) {
+        if (window.showMarketToast) window.showMarketToast('Selecione um amigo na lista para tornar seu mentor.', 'warning');
+        return;
+      }
+      if ((s.level || 1) > 20) {
+        if (window.showMarketToast) window.showMarketToast('Apenas heróis até o Nível 20 podem vincular um Mentor. Você já é experiente!', 'warning');
+        return;
+      }
+      if (s.referredBy) {
+        if (window.showMarketToast) window.showMarketToast(`Você já possui o mentor [${s.referredBy}] vinculado!`, 'warning');
+        return;
+      }
+      _contactsActiveTab = 'mentorship';
+      uiOpenReferralModal(s);
+      setTimeout(() => {
+        const inp = document.getElementById('ref-friend-code-input');
+        if (inp) {
+          inp.value = friend.name;
+          inp.focus();
+        }
+      }, 50);
+    };
+  }
+
   modal.querySelectorAll('.btn-friend-msg').forEach(b => {
     b.onclick = (e) => {
       e.stopPropagation();
@@ -8911,8 +8969,8 @@ export function uiOpenReferralModal(state) {
 }
 
 if (typeof window !== 'undefined') {
-  window.openContactsModal = () => uiOpenReferralModal();
-  window.openReferralModal = () => uiOpenReferralModal();
+  window.openContactsModal = (tab) => uiOpenReferralModal(undefined, tab);
+  window.openReferralModal = (tab) => uiOpenReferralModal(undefined, tab);
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════

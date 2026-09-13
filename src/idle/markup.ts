@@ -39,8 +39,8 @@ export const IDLE_MARKUP = `
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4l3 12h14l3-12-6 7-4-7-4 7-6-7z"/><path d="M3 20h18v2H3z"/></svg> <span>Admin</span>
         </button>
 
-        <button id="top-referral-btn" class="tb-btn tb-btn--referral" onclick="window.openReferralModal && window.openReferralModal()" title="Indique amigos e ganhe 50 Aden Coins + 5x Blessed Scrolls!">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="14" rx="2" ry="2"/><path d="M12 5H8a2 2 0 1 0 0 4h4z"/><path d="M12 5h4a2 2 0 1 1 0 4h-4z"/><path d="M12 9v13"/></svg> <span>Indicar Amigos</span>
+        <button id="top-referral-btn" class="tb-btn tb-btn--referral" onclick="window.openContactsModal ? window.openContactsModal() : (window.openReferralModal && window.openReferralModal())" title="Contatos, Lista de Amigos &amp; Mentoria">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> <span>Contatos</span>
         </button>
 
         <button id="starter-journey-btn" class="tb-btn tb-btn--journey" onclick="window.openStarterJourneyModal && window.openStarterJourneyModal()" title="Jornada dos Pioneiros (Onboarding 7 Passos)">
@@ -354,6 +354,7 @@ export const IDLE_MARKUP = `
             <button class="tab-btn subtab-pill-btn" data-tab="fortress">⚔ Fortalezas</button>
             <button class="tab-btn subtab-pill-btn" data-tab="enchant">✦ Encantamento</button>
             <button class="tab-btn subtab-pill-btn" data-tab="codex">📜 Codex</button>
+            <button class="tab-btn subtab-pill-btn" id="pillar-contacts-btn" onclick="window.openContactsModal ? window.openContactsModal() : (window.openReferralModal && window.openReferralModal())" style="border-color:rgba(52,211,153,0.4); color:#6ee7b7; font-weight:bold;">👥 Contatos &amp; Mentoria</button>
           </div>
 
           <!-- Imperial Economy Resource Ribbon (Contextual HUD for Economy Pillar) -->

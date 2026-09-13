@@ -501,20 +501,25 @@ export const GUIDES_DATA = {
 
   referral: {
     id: 'referral',
-    title: '🎁 Sistema de Indicação & Comunidade Discord',
-    subtitle: 'Traga amigos para jogar no navegador e ganhem recompensas épicas juntos!',
-    icon: '🎁',
-    color: '#10b981',
+    title: '👥 Contatos, Amigos, Mentoria & Indicação',
+    subtitle: 'Gerencie sua rede de contatos, vincule mentores, envie sussurros e receba recompensas épicas!',
+    icon: '👥',
+    color: '#34d399',
     sections: [
       {
-        heading: '🚀 Como Convidar e Ganhar Juntos',
-        text: 'Compartilhe seu link exclusivo (`?ref=SeuNome`) ou seu apelido no WhatsApp e redes sociais. Quando seu amigo cria uma conta:\n• **O Amigo Convidado:** Recebe imediatamente **+10% EXP permanente** e **1.000 Shots No-Grade**!\n• **No Nível 40 (2ª Classe):** Ambos recebem **50 Aden Coins (AC)** + **5x Pergaminhos Abençoados de Arma**!',
-        tip: 'Amigos que esqueceram de entrar pelo link podem registrar o código manualmente no modal de indicação até o Nível 20!'
+        heading: '👥 Gerenciador de Contatos & Lista de Amigos',
+        text: 'O menu de Contatos permite gerenciar sua rede social completa dentro do Aden Arena:\n• **Adicionar Amigos (+ Adicionar):** Registre até 128 amigos pelo nome de personagem para acompanhar seu nível, classe e status (Online/Offline).\n• **Comunicação Direta:** Envie **Sussurros instantâneos (💬 Msg)** ou envie cartas via **Correio Expresso (✉️ Mail)**.\n• **Ações Rápidas de Grupo e Clã:** Convide facilmente seus companheiros para seu **Grupo (Party)** de caça ou para o seu **Clã**.\n• **Lista de Bloqueados:** Bloqueie até 64 jogadores indesejados para manter seu foco e tranquilidade nas batalhas.',
+        tip: 'Acesse o menu a qualquer momento clicando no botão "👥 Contatos" na barra superior ou na aba "Glória & Sociedade"!'
       },
       {
-        heading: '💬 Comunidade Oficial no Discord',
-        text: 'Entre no Discord oficial do Aden Arena: converse com outros jogadores, compartilhe builds, participe de sorteios e tire dúvidas diretamente com os desenvolvedores!\n\n🔗 Link Oficial: **https://discord.gg/R7rwB5uCc**',
-        tip: 'Fique atento ao canal de avisos no Discord para resgatar Cupons de Presente com itens exclusivos!'
+        heading: '🎓 Sistema de Mentoria (Iniciantes até o Nível 20)',
+        text: 'A mentoria fortalece os laços entre guerreiros veteranos e novatos:\n• **Sou Novato (Até Nv. 20):** Vincule um mentor experiente para receber imediatamente **+10% EXP permanente**, **1.000 Soulshots/Spiritshots No-Grade** e **10 Poções de Vida**!\n• **Marco de Evolução (Nível 40):** Ao atingir a 2ª Troca de Classe (Nv. 40), o Pupilo e o Mentor são recompensados com **50 Aden Coins (AC)** + **5x Pergaminhos Abençoados de Arma (Blessed Scrolls)**!\n• **Vínculo Rápido:** Selecione qualquer amigo na sua lista e clique em **"🎓 Tornar Mentor"** para vinculá-lo instantaneamente.',
+        tip: 'O vínculo de mentor deve ser realizado antes do Nível 20. Aproveite esse impulso inicial para acelerar sua jornada!'
+      },
+      {
+        heading: '🎁 Link Exclusivo, WhatsApp & Comunidade Discord',
+        text: 'Traga amigos para jogar no navegador e ganhem recompensas juntos:\n• **Link Exclusivo:** Copie seu link pessoal (`?ref=SeuNome`) ou use o botão de **Compartilhar no WhatsApp** com 1 clique.\n• **Resgate de Recompensas:** Use o botão **"Verificar & Resgatar Recompensas"** para coletar os prêmios conforme seus pupilos alcançam o Nível 40.\n• **Discord Oficial:** Junte-se à comunidade oficial para negociar itens, participar de eventos e tirar dúvidas!\n\n🔗 Link Oficial: **https://discord.gg/R7rwB5uCc**',
+        tip: 'Fique atento aos canais de avisos no Discord para resgatar Cupons de Presente com bônus exclusivos!'
       }
     ]
   }
@@ -529,6 +534,11 @@ GUIDES_DATA['olympiad'] = GUIDES_DATA['colosseum'];
 GUIDES_DATA['pvp'] = GUIDES_DATA['colosseum'];
 GUIDES_DATA['clans'] = GUIDES_DATA['clan'];
 GUIDES_DATA['community'] = GUIDES_DATA['referral'];
+GUIDES_DATA['contacts'] = GUIDES_DATA['referral'];
+GUIDES_DATA['friends'] = GUIDES_DATA['referral'];
+GUIDES_DATA['mentorship'] = GUIDES_DATA['referral'];
+GUIDES_DATA['mentoria'] = GUIDES_DATA['referral'];
+GUIDES_DATA['amigos'] = GUIDES_DATA['referral'];
 GUIDES_DATA['resonances'] = GUIDES_DATA['resonance'];
 GUIDES_DATA['dual_resonance'] = GUIDES_DATA['resonance'];
 
