@@ -54,7 +54,11 @@ export const CONSUMABLES = {
   "xp_boost_4h": {"id":"xp_boost_4h","name":"Xp Boost 4h","slot":"consumable","tier":1,"healAmt":0,"stack":99999,"price":200,"icon":"scrolls/xp_boost_4h.png","desc":"Aumenta XP ganho temporariamente."},
   "seal_stone_blue": {"id":"seal_stone_blue","name":"Blue Seal Stone 🔷","slot":"consumable","tier":2,"healAmt":0,"stack":99999,"price":30,"icon":"materials/crystal_blue_d.png","desc":"Pedra de selo elemental das Catacumbas. Vale 3 Ancient Adena."},
   "seal_stone_green": {"id":"seal_stone_green","name":"Green Seal Stone 🟢","slot":"consumable","tier":3,"healAmt":0,"stack":99999,"price":50,"icon":"materials/crystal_green_c.png","desc":"Pedra de selo pura de Necrópoles intermediárias. Vale 5 Ancient Adena."},
-  "seal_stone_red": {"id":"seal_stone_red","name":"Red Seal Stone 🔴","slot":"consumable","tier":4,"healAmt":0,"stack":99999,"price":100,"icon":"materials/crystal_red_b.png","desc":"Pedra de selo suprema concentrada com sangue antigo. Vale 10 Ancient Adena."}
+  "seal_stone_red": {"id":"seal_stone_red","name":"Red Seal Stone 🔴","slot":"consumable","tier":4,"healAmt":0,"stack":99999,"price":100,"icon":"materials/crystal_red_b.png","desc":"Pedra de selo suprema concentrada com sangue antigo. Vale 10 Ancient Adena."},
+  "scroll_of_resurrection": {"id":"scroll_of_resurrection","name":"Pergaminho de Ressurreição","slot":"consumable","tier":1,"healAmt":0,"stack":99999,"price":500,"icon":"scrolls/scroll_of_resurrection.png","desc":"Ressuscita o personagem em caso de morte, reduzindo a penalidade de XP."},
+  "scroll_of_rebirth": {"id":"scroll_of_rebirth","name":"Pergaminho do Renascimento","slot":"consumable","tier":3,"healAmt":0,"stack":99999,"price":2500,"icon":"scrolls/scroll_of_rebirth.png","desc":"Ressuscita o personagem instantaneamente sem qualquer perda de XP."},
+  "enchant_weapon_scroll": {"id":"enchant_weapon_scroll","name":"Scroll Of Enchant Weapon","slot":"consumable","tier":1,"healAmt":0,"stack":99999,"price":200,"icon":"scrolls/scroll_of_enchant_weapon_.png","desc":"Encanta uma arma (+1 enchant)."},
+  "enchant_armor_scroll": {"id":"enchant_armor_scroll","name":"Scroll Of Enchant Armor","slot":"consumable","tier":1,"healAmt":0,"stack":99999,"price":200,"icon":"scrolls/scroll_of_enchant_armor.png","desc":"Encanta uma armadura (+1 enchant)."}
 };
 
 export const MATERIALS = {

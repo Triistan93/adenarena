@@ -330,6 +330,23 @@ export function loadState() {
       delete currentState.alchemy.essence_astral;
     }
 
+    // Sanitização e migração do estoque do Empório Místico (Mystic Shop)
+    if (Array.isArray(currentState.mysticShopInventory)) {
+      currentState.mysticShopInventory = currentState.mysticShopInventory.map(item => {
+        if (!item) return null;
+        let id = item.itemId || item.id;
+        if (id === 'enchant_weapon_scroll') id = 'scroll_of_enchant_weapon_';
+        if (id === 'enchant_armor_scroll') id = 'scroll_of_enchant_armor';
+        return { ...item, id, itemId: id };
+      }).filter(item => {
+        if (!item || !item.itemId) return false;
+        if (hasItemsDict && !allItems[item.itemId]) return false;
+        return true;
+      });
+    } else {
+      currentState.mysticShopInventory = [];
+    }
+
     currentState.codex = data.codex && typeof data.codex === 'object' ? data.codex : {};
     currentState.dolls = Array.isArray(data.dolls) ? data.dolls : [];
     currentState.synthSelected = Array.isArray(data.synthSelected) ? data.synthSelected : [null, null];

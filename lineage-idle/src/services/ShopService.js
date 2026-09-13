@@ -340,7 +340,7 @@ export function rollMysticStock(stateOrLevel) {
   const GRADE_ORDER = { ng: 0, d: 1, c: 2, b: 3, a: 4, s: 5, s80: 6, s84: 7 };
   const maxGradeIdx = GRADE_ORDER[allowedMaxGrade] ?? 2;
 
-  const baseConsumables = ['enchant_weapon_scroll', 'enchant_armor_scroll', 'scroll_of_resurrection', 'teleport_scroll'];
+  const baseConsumables = ['scroll_of_enchant_weapon_', 'scroll_of_enchant_armor', 'scroll_of_resurrection', 'teleport_scroll'];
   const pool = gData?.MYSTIC_POOL || ["weapon_anais_first", "weapon_anakim_pistols", "jewel_ring_core"];
 
   const filteredPool = pool.filter(id => {

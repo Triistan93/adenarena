@@ -249,7 +249,15 @@ const HEIRLOOM_ICON_MAP = {
   crystal_c: 'materials/crystal_green_c.png',
   crystal_b: 'materials/crystal_red_b.png',
   crystal_a: 'materials/crystal_silver_a.png',
-  crystal_s: 'materials/crystal_gold_s.png'
+  crystal_s: 'materials/crystal_gold_s.png',
+  scroll_of_resurrection: 'scrolls/scroll_of_resurrection.png',
+  scroll_of_rebirth: 'scrolls/scroll_of_rebirth.png',
+  enchant_weapon_scroll: 'scrolls/scroll_of_enchant_weapon_.png',
+  enchant_armor_scroll: 'scrolls/scroll_of_enchant_armor.png',
+  scroll_of_enchant_weapon_: 'scrolls/scroll_of_enchant_weapon_.png',
+  scroll_of_enchant_weapon: 'scrolls/scroll_of_enchant_weapon_.png',
+  scroll_of_enchant_armor: 'scrolls/scroll_of_enchant_armor.png',
+  teleport_scroll: 'scrolls/teleport_scroll.png'
 };
 
 export function isEmojiIcon(icon) {
@@ -310,7 +318,15 @@ export function getItemIconUrl(itemOrDef, defParam) {
   }
 
   if (!rawPath && itemId) {
-    rawPath = `${itemId}.png`;
+    const clean = String(itemId).trim().toLowerCase();
+    if (clean.includes('resurrection')) rawPath = 'scrolls/scroll_of_resurrection.png';
+    else if (clean.includes('enchant_weapon')) rawPath = 'scrolls/scroll_of_enchant_weapon_.png';
+    else if (clean.includes('enchant_armor')) rawPath = 'scrolls/scroll_of_enchant_armor.png';
+    else if (clean.includes('teleport')) rawPath = 'scrolls/teleport_scroll.png';
+    else if (clean.includes('rebirth')) rawPath = 'scrolls/scroll_of_rebirth.png';
+    else {
+      return null;
+    }
   }
 
   if (rawPath) {
@@ -4404,9 +4420,12 @@ export function updateShopUI(state, callbacks = {}) {
     }).map(def => ({ def, rarity: 'rare' }));
   } else if (currentShopTab === 'mystic') {
     itemsToDisplay = (state.mysticShopInventory || []).map(item => {
-      const def = allItems[item.itemId || item.id] || item;
+      let id = item.itemId || item.id;
+      if (id === 'enchant_weapon_scroll') id = 'scroll_of_enchant_weapon_';
+      if (id === 'enchant_armor_scroll') id = 'scroll_of_enchant_armor';
+      const def = allItems[id] || (item.name ? item : null);
       return { def, rarity: item.rarity || 'rare' };
-    });
+    }).filter(entry => entry.def && entry.def.name && entry.def.name !== 'undefined');
   }
 
   // Deduplicação por ID
