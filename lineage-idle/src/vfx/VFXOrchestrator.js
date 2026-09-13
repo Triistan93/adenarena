@@ -387,6 +387,40 @@ export class VFXOrchestrator {
   }
 
   /**
+   * Clears all active VFX, particles, projectiles, telegraphs, and resets active visual state.
+   * Invoked on monster defeat, zone transition, or stage reset to prevent visual residue artifacts.
+   */
+  clear() {
+    this.pool.releaseAll();
+    this._activeTelegraphs = [];
+    if (this.timelines && typeof this.timelines.cancelAll === 'function') {
+      this.timelines.cancelAll();
+    }
+    if (this.camera && typeof this.camera.reset === 'function') {
+      this.camera.reset();
+    }
+    if (this.lighting && typeof this.lighting.reset === 'function') {
+      this.lighting.reset();
+    }
+    if (this.shaders && typeof this.shaders.reset === 'function') {
+      this.shaders.reset();
+    }
+    if (this.stageElement && this.stageElement.style) {
+      this.stageElement.style.transform = '';
+      if (this._hasWillChange) {
+        this.stageElement.style.willChange = '';
+        this._hasWillChange = false;
+      }
+    }
+    if (this.stageElement && this.stageElement.classList) {
+      this.stageElement.classList.remove('stage-dimmed');
+    }
+    if (this.ctx && this.canvas) {
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+  }
+
+  /**
    * Triggers a cinematic entrance presentation for Epic & World Bosses
    * @param {Object} boss 
    */
@@ -887,30 +921,39 @@ export class VFXOrchestrator {
     // Advance active particles in pool
     for (const p of this.pool.particles._active) {
       p.life += dtMs;
-      if (p.life >= p.maxLife) {
+      if (!Number.isFinite(p.life) || !Number.isFinite(p.maxLife) || p.maxLife <= 0 || p.life >= p.maxLife || !Number.isFinite(p.x) || !Number.isFinite(p.y)) {
         this.pool.particles.release(p);
         continue;
       }
-      p.vx += p.ax * dt;
-      p.vy += p.ay * dt;
+      p.vx += (p.ax || 0) * dt;
+      p.vy += (p.ay || 0) * dt;
       p.x += p.vx * dt;
       p.y += p.vy * dt;
-      p.rotation += p.vRot * dt;
+      p.rotation += (p.vRot || 0) * dt;
       p.alpha = Math.max(0, 1 - (p.life / p.maxLife));
+      if (p.alpha <= 0) {
+        this.pool.particles.release(p);
+      }
     }
 
     // Advance active projectiles
     for (const proj of this.pool.projectiles._active) {
+      proj.life = (proj.life || 0) + dtMs;
+      const maxLife = proj.maxLife || 3000;
+      if (!Number.isFinite(proj.x) || !Number.isFinite(proj.y) || !Number.isFinite(proj.targetX) || !Number.isFinite(proj.targetY) || proj.life >= maxLife) {
+        this.pool.projectiles.release(proj);
+        continue;
+      }
       const dx = proj.targetX - proj.x;
       const dy = proj.targetY - proj.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
-      const step = proj.speed * dt;
+      const step = (proj.speed || 800) * dt;
 
-      if (dist <= step || dist < 8) {
+      if (!Number.isFinite(dist) || dist <= step || dist < 8) {
         proj.x = proj.targetX;
         proj.y = proj.targetY;
         if (typeof proj.onHit === 'function') {
-          proj.onHit(proj);
+          try { proj.onHit(proj); } catch (_) {}
         }
         this.pool.projectiles.release(proj);
       } else {
@@ -922,35 +965,41 @@ export class VFXOrchestrator {
     // Advance shockwaves
     for (const sw of this.pool.shockwaves._active) {
       sw.life += dtMs;
-      if (sw.life >= sw.duration) {
+      if (!Number.isFinite(sw.life) || !sw.duration || sw.life >= sw.duration || !Number.isFinite(sw.x) || !Number.isFinite(sw.y)) {
         this.pool.shockwaves.release(sw);
         continue;
       }
-      const prog = sw.life / sw.duration;
+      const prog = Math.min(1, sw.life / sw.duration);
       sw.radius = sw.maxRadius * prog;
-      sw.alpha = 1 - prog;
+      sw.alpha = Math.max(0, 1 - prog);
     }
 
     // Advance floating text
     for (const ft of this.pool.floatingText._active) {
       ft.life += dtMs;
-      if (ft.life >= ft.maxLife) {
+      if (!Number.isFinite(ft.life) || !ft.maxLife || ft.life >= ft.maxLife || !Number.isFinite(ft.x) || !Number.isFinite(ft.y)) {
         this.pool.floatingText.release(ft);
         continue;
       }
-      ft.y += ft.vy * dt;
+      ft.y += (ft.vy || -40) * dt;
       ft.alpha = Math.max(0, 1 - (ft.life / ft.maxLife));
     }
 
     // Advance falling projectiles (Meteors, Arrows, Swords, Shards)
     for (const fp of this.pool.fallingProjectiles._active) {
+      fp.life = (fp.life || 0) + dtMs;
+      const maxLife = fp.maxLife || 4000;
+      if (!Number.isFinite(fp.x) || !Number.isFinite(fp.y) || !Number.isFinite(fp.targetX) || !Number.isFinite(fp.targetY) || fp.life >= maxLife) {
+        this.pool.fallingProjectiles.release(fp);
+        continue;
+      }
       if (fp.delay > 0) {
         fp.delay -= dtMs;
         continue;
       }
       if (fp.stuck) {
-        fp.stuckTime += dtMs;
-        if (fp.stuckTime >= fp.maxStuckTime) {
+        fp.stuckTime = (fp.stuckTime || 0) + dtMs;
+        if (fp.stuckTime >= (fp.maxStuckTime || 1200)) {
           this.pool.fallingProjectiles.release(fp);
         }
         continue;
@@ -958,13 +1007,13 @@ export class VFXOrchestrator {
       const dx = fp.targetX - fp.x;
       const dy = fp.targetY - fp.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
-      const step = fp.speed * dt;
+      const step = (fp.speed || 900) * dt;
 
-      if (dist <= step || dist < 12) {
+      if (!Number.isFinite(dist) || dist <= step || dist < 12) {
         fp.x = fp.targetX;
         fp.y = fp.targetY;
         if (typeof fp.onImpact === 'function') {
-          fp.onImpact(fp);
+          try { fp.onImpact(fp); } catch (_) {}
         }
         if (fp.type === 'arrow') {
           fp.stuck = true;
@@ -982,7 +1031,7 @@ export class VFXOrchestrator {
     // Advance spectral weapons
     for (const sw of this.pool.spectralWeapons._active) {
       sw.life += dtMs;
-      if (sw.life >= sw.duration) {
+      if (!Number.isFinite(sw.life) || !sw.duration || sw.life >= sw.duration) {
         this.pool.spectralWeapons.release(sw);
         continue;
       }
@@ -997,7 +1046,7 @@ export class VFXOrchestrator {
     // Advance beams
     for (const b of this.pool.beams._active) {
       b.life += dtMs;
-      if (b.life >= b.duration) {
+      if (!Number.isFinite(b.life) || !b.duration || b.life >= b.duration) {
         this.pool.beams.release(b);
         continue;
       }
@@ -1007,7 +1056,7 @@ export class VFXOrchestrator {
     // Advance environmental fields
     for (const ef of this.pool.environmentalFields._active) {
       ef.life += dtMs;
-      if (ef.life >= ef.duration) {
+      if (!Number.isFinite(ef.life) || !ef.duration || ef.life >= ef.duration) {
         this.pool.environmentalFields.release(ef);
         continue;
       }
@@ -1018,20 +1067,20 @@ export class VFXOrchestrator {
     // Advance slashes
     for (const sl of this.pool.slashes._active) {
       sl.life += dtMs;
-      if (sl.life >= sl.duration) {
+      if (!Number.isFinite(sl.life) || !sl.duration || sl.life >= sl.duration) {
         this.pool.slashes.release(sl);
         continue;
       }
-      sl.progress = sl.life / sl.duration;
+      sl.progress = Math.min(1, sl.life / sl.duration);
     }
 
     // Advance active telegraphs
     for (let i = this._activeTelegraphs.length - 1; i >= 0; i--) {
       const tg = this._activeTelegraphs[i];
       tg.life += dtMs;
-      if (tg.life >= tg.duration) {
+      if (!Number.isFinite(tg.life) || !tg.duration || tg.life >= tg.duration) {
         if (typeof tg.onComplete === 'function') {
-          tg.onComplete(tg);
+          try { tg.onComplete(tg); } catch (_) {}
         }
         this._activeTelegraphs.splice(i, 1);
       }

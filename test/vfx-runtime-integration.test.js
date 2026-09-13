@@ -170,3 +170,89 @@ test('4. Update loop decays trauma and updates pool without memory allocation', 
   assert.equal(globalVFXPool.floatingText._active.size, 0);
   assert.equal(globalCameraFX.trauma, 0);
 });
+
+test('5. globalVFXOrchestrator.clear() flushes all active pools, telegraphs, and canvas state', () => {
+  // Populate pools with dummy effects
+  globalVFXPool.particles.acquire({ x: 100, y: 100, color: '#ffffff' });
+  globalVFXPool.particles.acquire({ x: 200, y: 200, color: '#ff0000' });
+  globalVFXPool.projectiles.acquire({ x: 50, y: 50, targetX: 150, targetY: 150 });
+  globalVFXPool.fallingProjectiles.acquire({ startX: 100, startY: -50, targetX: 100, targetY: 200, type: 'meteor' });
+  globalVFXPool.shockwaves.acquire({ x: 100, y: 100, maxRadius: 50 });
+  globalVFXPool.floatingText.acquire({ text: '999', x: 100, y: 100 });
+  globalVFXPool.beams.acquire({ startX: 0, startY: 0, targetX: 100, targetY: 100 });
+  globalVFXPool.environmentalFields.acquire({ x: 100, y: 100 });
+  globalVFXPool.slashes.acquire({ x: 100, y: 100 });
+  globalVFXPool.spectralWeapons.acquire({ x: 100, y: 100 });
+  globalVFXOrchestrator.spawnTelegraphCircle({ x: 100, y: 100, radius: 60 });
+
+  assert.equal(globalVFXPool.particles._active.size, 2);
+  assert.equal(globalVFXPool.fallingProjectiles._active.size, 1);
+  assert.equal(globalVFXOrchestrator._activeTelegraphs.length, 1);
+
+  // Invoke clear
+  globalVFXOrchestrator.clear();
+
+  assert.equal(globalVFXPool.particles._active.size, 0, 'Particles must be 0 after clear()');
+  assert.equal(globalVFXPool.projectiles._active.size, 0, 'Projectiles must be 0 after clear()');
+  assert.equal(globalVFXPool.fallingProjectiles._active.size, 0, 'Falling projectiles must be 0 after clear()');
+  assert.equal(globalVFXPool.shockwaves._active.size, 0, 'Shockwaves must be 0 after clear()');
+  assert.equal(globalVFXPool.floatingText._active.size, 0, 'Floating text must be 0 after clear()');
+  assert.equal(globalVFXPool.beams._active.size, 0, 'Beams must be 0 after clear()');
+  assert.equal(globalVFXPool.environmentalFields._active.size, 0, 'Fields must be 0 after clear()');
+  assert.equal(globalVFXPool.slashes._active.size, 0, 'Slashes must be 0 after clear()');
+  assert.equal(globalVFXPool.spectralWeapons._active.size, 0, 'Spectral weapons must be 0 after clear()');
+  assert.equal(globalVFXOrchestrator._activeTelegraphs.length, 0, 'Telegraphs must be 0 after clear()');
+});
+
+test('6. Update loop safely purges NaN and corrupted objects without leaking pools', () => {
+  globalVFXOrchestrator.clear();
+
+  // Acquire and inject NaN / corrupted values into runtime objects
+  const badParticle1 = globalVFXPool.particles.acquire({ x: 100, y: 100, color: '#ffffff' });
+  badParticle1.x = NaN;
+
+  const badParticle2 = globalVFXPool.particles.acquire({ x: 100, y: 100 });
+  badParticle2.life = NaN;
+
+  const expiredParticle = globalVFXPool.particles.acquire({ x: 100, y: 100, maxLife: 300 });
+  expiredParticle.life = 350;
+
+  const badProj = globalVFXPool.projectiles.acquire({ x: 100, y: 100, targetX: 200, targetY: 200 });
+  badProj.targetX = NaN;
+
+  const badFallingProj = globalVFXPool.fallingProjectiles.acquire({ startX: 100, startY: 0, targetX: 100, targetY: 100, type: 'meteor' });
+  badFallingProj.targetX = NaN;
+
+  assert.equal(globalVFXPool.particles._active.size, 3);
+  assert.equal(globalVFXPool.projectiles._active.size, 1);
+  assert.equal(globalVFXPool.fallingProjectiles._active.size, 1);
+
+  // Update tick
+  globalVFXOrchestrator.update(16);
+
+  // All corrupted and expired elements must be immediately detected and reclaimed
+  assert.equal(globalVFXPool.particles._active.size, 0, 'Corrupted and expired particles must be released');
+  assert.equal(globalVFXPool.projectiles._active.size, 0, 'Corrupted projectiles must be released');
+  assert.equal(globalVFXPool.fallingProjectiles._active.size, 0, 'Corrupted falling projectiles must be released');
+});
+
+test('7. Monster death / transition lifecycle clears all lingering visual residue', () => {
+  globalVFXOrchestrator.clear();
+
+  // Simulate combat hit with particles orbiting target
+  for (let i = 0; i < 9; i++) {
+    globalVFXPool.particles.acquire({
+      x: 846 + (i % 2 === 0 ? -13 : 13),
+      y: 294,
+      color: '#ffffff',
+      size: 9,
+      maxLife: 2000
+    });
+  }
+  assert.equal(globalVFXPool.particles._active.size, 9, 'Should have exactly 9 particles active (reproducing user case)');
+
+  // Monster dies -> clear() is called
+  globalVFXOrchestrator.clear();
+
+  assert.equal(globalVFXPool.particles._active.size, 0, 'Active particles must drop to 0 on monster death');
+});

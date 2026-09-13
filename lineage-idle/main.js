@@ -4364,6 +4364,14 @@ function renderStageHero() {
   return uiRenderStageHero(state);
 }
 function renderStageMonster() {
+  try {
+    if (globalVFXOrchestrator && typeof globalVFXOrchestrator.clear === 'function') {
+      globalVFXOrchestrator.clear();
+    }
+    if (VFX && typeof VFX.clear === 'function') {
+      VFX.clear();
+    }
+  } catch (_) {}
   return uiRenderStageMonster(state);
 }
 
@@ -4428,6 +4436,16 @@ function stageMonsterDie() {
     });
   } 
   stageFloat('SLAIN', 'sf-slain', 'right'); 
+  try {
+    if (globalVFXOrchestrator && typeof globalVFXOrchestrator.clear === 'function') {
+      globalVFXOrchestrator.clear();
+    }
+    if (VFX && typeof VFX.clear === 'function') {
+      VFX.clear();
+    }
+  } catch (err) {
+    console.debug('VFX cleanup on monster death notice:', err);
+  }
 }
 function stageMonsterLunge() {
   const m = el('stage-monster');
@@ -6585,9 +6603,29 @@ function updateZoneKillProgressUI() {
 }
 
 function startCombat() { return engineStartCombat(state, { log, attackMonster }); }
-function stopCombat() { return engineStopCombat(state); }
-function pickRandomMonster() { invalidateCombatCoordinates(); return enginePickRandomMonster(state, { log, floatText, renderStageMonster, updateZoneKillProgressUI }); }
-function selectZone(zoneId) { invalidateCombatCoordinates(); return engineSelectZone(state, zoneId, { log, updateAllUI, save, attackMonster }); }
+function stopCombat() {
+  try {
+    if (globalVFXOrchestrator && typeof globalVFXOrchestrator.clear === 'function') globalVFXOrchestrator.clear();
+    if (VFX && typeof VFX.clear === 'function') VFX.clear();
+  } catch (_) {}
+  return engineStopCombat(state);
+}
+function pickRandomMonster() {
+  invalidateCombatCoordinates();
+  try {
+    if (globalVFXOrchestrator && typeof globalVFXOrchestrator.clear === 'function') globalVFXOrchestrator.clear();
+    if (VFX && typeof VFX.clear === 'function') VFX.clear();
+  } catch (_) {}
+  return enginePickRandomMonster(state, { log, floatText, renderStageMonster, updateZoneKillProgressUI });
+}
+function selectZone(zoneId) {
+  invalidateCombatCoordinates();
+  try {
+    if (globalVFXOrchestrator && typeof globalVFXOrchestrator.clear === 'function') globalVFXOrchestrator.clear();
+    if (VFX && typeof VFX.clear === 'function') VFX.clear();
+  } catch (_) {}
+  return engineSelectZone(state, zoneId, { log, updateAllUI, save, attackMonster });
+}
 // Shows the Saga Unlock modal with saga name/description
 function showSagaModal(saga) {
   const modal = el('saga-modal');
@@ -6600,7 +6638,13 @@ function showSagaModal(saga) {
 }
 
 function updateSagaProgress(silent = true) { return engineUpdateSagaProgress(state, silent, { log, floatText, showSagaModal }); }
-function playerDeath(monster) { return enginePlayerDeath(state, monster, { log, el }); }
+function playerDeath(monster) {
+  try {
+    if (globalVFXOrchestrator && typeof globalVFXOrchestrator.clear === 'function') globalVFXOrchestrator.clear();
+    if (VFX && typeof VFX.clear === 'function') VFX.clear();
+  } catch (_) {}
+  return enginePlayerDeath(state, monster, { log, el });
+}
 function resurrect(useScroll = false) { return engineResurrect(state, useScroll, { log, el, updateAllUI, save, attackMonster }); }
 
 function spendSP(skillId) { return engineSpendSP(state, skillId, { log, floatText, classSatisfies, removeFromInventory, updateAllUI, save }); }

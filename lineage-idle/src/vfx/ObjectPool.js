@@ -178,6 +178,8 @@ export class VFXPoolManager {
         targetX: 0, targetY: 0,
         speed: 800,
         progress: 0,
+        life: 0,
+        maxLife: 3000,
         type: 'arrow',
         color: '#ffffff',
         trail: [],
@@ -189,6 +191,7 @@ export class VFXPoolManager {
           proj.active = false;
           proj.trail = [];
           proj.onHit = null;
+          proj.life = 0;
           return;
         }
         proj.x = data.x || 0;
@@ -197,6 +200,8 @@ export class VFXPoolManager {
         proj.targetY = data.targetY || 0;
         proj.speed = data.speed || 800;
         proj.progress = 0;
+        proj.life = 0;
+        proj.maxLife = data.maxLife || 3000;
         proj.type = data.type || 'arrow';
         proj.color = data.color || '#ffffff';
         proj.trail = [];
@@ -315,6 +320,8 @@ export class VFXPoolManager {
         speed: 800,
         progress: 0,
         delay: 0,
+        life: 0,
+        maxLife: 4000,
         type: 'meteor', // 'meteor' | 'arrow' | 'holy_sword' | 'ice_shard' | 'dark_spear'
         color: '#ff4400',
         secondaryColor: '#ffbb00',
@@ -331,6 +338,7 @@ export class VFXPoolManager {
           fp.active = false;
           fp.trail = [];
           fp.onImpact = null;
+          fp.life = 0;
           return;
         }
         fp.x = data.startX || 0;
@@ -345,6 +353,8 @@ export class VFXPoolManager {
         fp.speed = data.speed || 900;
         fp.progress = 0;
         fp.delay = data.delay || 0;
+        fp.life = 0;
+        fp.maxLife = data.maxLife || 4000;
         fp.type = data.type || 'meteor';
         fp.color = data.color || '#ff4400';
         fp.secondaryColor = data.secondaryColor || '#ffbb00';

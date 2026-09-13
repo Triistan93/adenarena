@@ -1131,8 +1131,11 @@
         this._impact(e, e.target.x, e.target.y);
       }
       if (e.age > (e.maxAge || 560)) e.done = true;
-    } else if (e.maxAge && e.age >= e.maxAge) {
-      e.done = true;
+    } else {
+      if (!e.maxAge || isNaN(e.maxAge)) e.maxAge = 2500;
+      if (isNaN(e.age) || e.age >= e.maxAge) {
+        e.done = true;
+      }
     }
   };
 
@@ -3363,7 +3366,7 @@
     for (var p = this.particles.length - 1; p >= 0; p -= 1) {
       var particle = this.particles[p]; particle.age += dt; particle.vx *= Math.pow(particle.drag, dt / 16); particle.vy = particle.vy * Math.pow(particle.drag, dt / 16) + particle.gravity * (dt / 16); particle.x += particle.vx * (dt / 16); particle.y += particle.vy * (dt / 16); particle.rotation += particle.rotationSpeed * (dt / 16);
       var alpha = 1 - particle.age / particle.max;
-      if (alpha <= 0) { this.particles.splice(p, 1); continue; }
+      if (alpha <= 0 || isNaN(alpha) || !isFinite(alpha) || isNaN(particle.x) || isNaN(particle.y)) { this.particles.splice(p, 1); continue; }
       ctx.globalCompositeOperation = particle.additive ? 'lighter' : 'source-over'; this._drawParticle(particle, alpha);
     }
     ctx.globalCompositeOperation = 'lighter';
@@ -3372,7 +3375,7 @@
         var ring = this.rings[r];
         if (!ring) continue;
         var ringAlpha = 1 - (ring.age || 0) / (ring.max || 1);
-        if (ringAlpha <= 0) { this.rings.splice(r, 1); continue; }
+        if (ringAlpha <= 0 || isNaN(ringAlpha) || !isFinite(ringAlpha)) { this.rings.splice(r, 1); continue; }
         // Outer radiant halo (zero GPU Gaussian blur penalty)
         ctx.strokeStyle = rgba(ring.rgb || '255,255,255', ringAlpha * 0.25);
         ctx.lineWidth = (ring.width || 2) * 2.5;
@@ -3409,6 +3412,9 @@
 
   LineageVFX.prototype.clear = function () {
     this.effects.length = 0; this.particles.length = 0; this.rings.length = 0; this.flash = 0;
+    if (this.ctx && this.canvas) {
+      this.ctx.clearRect(0, 0, this.width, this.height);
+    }
   };
 
   LineageVFX.prototype.destroy = function () {
