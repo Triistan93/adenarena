@@ -1122,3 +1122,618 @@
   color: #cbd5e1;
   font-family: 'IBM Plex Mono', monospace;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   19. IMPERIAL PILLAR & ECONOMY DESIGN SYSTEM (PREMIUM MMO REDESIGN)
+═══════════════════════════════════════════════════════════════════════════ */
+
+:host, body, .tab-content {
+  --imp-bg-base: #0b0e14;
+  --imp-surface-panel: linear-gradient(180deg, rgba(20, 26, 38, 0.96) 0%, rgba(11, 14, 22, 0.98) 100%);
+  --imp-surface-card: linear-gradient(145deg, rgba(24, 31, 46, 0.92) 0%, rgba(14, 18, 28, 0.95) 100%);
+  --imp-surface-card-hover: linear-gradient(145deg, rgba(32, 42, 64, 0.95) 0%, rgba(18, 24, 36, 0.98) 100%);
+  --imp-surface-inset: rgba(6, 8, 14, 0.85);
+  --imp-surface-elevated: linear-gradient(180deg, rgba(34, 44, 66, 0.95) 0%, rgba(20, 26, 40, 0.98) 100%);
+  
+  --imp-border-subtle: rgba(212, 167, 68, 0.2);
+  --imp-border-accent: rgba(212, 167, 68, 0.45);
+  --imp-border-gold: #d4a744;
+  --imp-border-gold-bright: #f5df93;
+  --imp-gold-glow: 0 0 14px rgba(212, 167, 68, 0.28);
+  --imp-shadow-panel: 0 6px 24px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
+  --imp-text-primary: #f8fafc;
+  --imp-text-secondary: #cbd5e1;
+  --imp-text-muted: #94a3b8;
+  --imp-text-gold: #f5df93;
+  --imp-text-gold-bright: #fef08a;
+
+  --imp-r-common: #94a3b8;
+  --imp-r-uncommon: #34d399;
+  --imp-r-rare: #60a5fa;
+  --imp-r-epic: #c084fc;
+  --imp-r-legendary: #f59e0b;
+  --imp-r-mythic: #ec4899;
+
+  --motion-micro: 120ms cubic-bezier(0.16, 1, 0.3, 1);
+  --motion-standard: 220ms cubic-bezier(0.16, 1, 0.3, 1);
+  --motion-reward: 450ms cubic-bezier(0.16, 1, 0.3, 1);
+  --motion-special: 800ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ─── IMPERIAL PILLAR MASTER CONTAINER ─── */
+.imperial-pillar-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--imp-surface-panel);
+  border: 1px solid var(--imp-border-accent);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  box-shadow: var(--imp-shadow-panel);
+  position: relative;
+  overflow: hidden;
+}
+
+.imperial-pillar-header::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #f5df93 30%, #d4a744 70%, transparent);
+}
+
+.imp-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.imp-title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.imp-title-icon {
+  font-size: 22px;
+  filter: drop-shadow(0 0 8px rgba(212, 167, 68, 0.4));
+}
+
+.imp-title-text {
+  font-family: 'Cinzel', serif;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--imp-text-gold-bright);
+  letter-spacing: 0.08em;
+  text-shadow: 0 0 10px rgba(212, 167, 68, 0.3);
+  margin: 0;
+}
+
+.imp-subtitle-text {
+  font-size: 11px;
+  color: var(--imp-text-muted);
+  margin: 2px 0 0 0;
+}
+
+/* Contextual Resource HUD Ribbon */
+.imp-resource-ribbon {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding-top: 6px;
+  border-top: 1px solid rgba(212, 167, 68, 0.15);
+}
+
+.imp-res-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(8, 11, 18, 0.7);
+  border: 1px solid rgba(212, 167, 68, 0.25);
+  border-radius: 5px;
+  padding: 3px 8px;
+  font-size: 11px;
+  color: var(--imp-text-secondary);
+  font-family: 'IBM Plex Mono', monospace;
+  transition: all var(--motion-micro);
+}
+
+.imp-res-chip:hover {
+  border-color: var(--imp-border-gold);
+  background: rgba(20, 26, 40, 0.85);
+}
+
+.imp-res-chip .res-val {
+  color: #fff;
+  font-weight: 700;
+}
+
+.imp-res-chip--gold .res-val { color: #fde047; }
+.imp-res-chip--ac .res-val { color: #67e8f9; }
+.imp-res-chip--aa .res-val { color: #f472b6; }
+.imp-res-chip--sp .res-val { color: #c084fc; }
+.imp-res-chip--forge .res-val { color: #34d399; }
+.imp-res-chip--charges .res-val { color: #fbbf24; }
+
+/* ─── MERCADOR (IMPERIAL MARKETPLACE) ─── */
+.imp-shop-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.imp-shop-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--imp-surface-card);
+  border: 1px solid var(--imp-border-subtle);
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+  transition: transform var(--motion-standard), border-color var(--motion-standard), box-shadow var(--motion-standard);
+  position: relative;
+  overflow: hidden;
+}
+
+.imp-shop-card:hover {
+  border-color: var(--imp-border-accent);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6), 0 0 10px rgba(212, 167, 68, 0.15);
+  transform: translateY(-2px);
+}
+
+.imp-shop-card.locked {
+  opacity: 0.65;
+  filter: grayscale(0.2);
+}
+
+.imp-shop-card-main {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.imp-item-frame {
+  width: 52px;
+  height: 52px;
+  min-width: 52px;
+  border-radius: 8px;
+  background: var(--imp-surface-inset);
+  border: 2px solid var(--imp-border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.7);
+}
+
+.imp-item-frame.grade-ng { border-color: #64748b; }
+.imp-item-frame.grade-d  { border-color: #3b82f6; }
+.imp-item-frame.grade-c  { border-color: #10b981; }
+.imp-item-frame.grade-b  { border-color: #ef4444; }
+.imp-item-frame.grade-a  { border-color: #a855f7; }
+.imp-item-frame.grade-s  { border-color: #f59e0b; box-shadow: 0 0 10px rgba(245, 158, 11, 0.35); }
+
+.imp-item-meta {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.imp-item-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.imp-item-name {
+  font-family: 'Cinzel', serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--imp-text-gold-bright);
+}
+
+.imp-item-grade-tag {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: #fff;
+  letter-spacing: 0.05em;
+}
+
+.imp-item-stats {
+  font-size: 11px;
+  color: #cbd5e1;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* Item Comparison Delta */
+.imp-comparison-box {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding: 4px 8px;
+  background: rgba(12, 16, 26, 0.8);
+  border-radius: 4px;
+  border: 1px solid rgba(212, 167, 68, 0.2);
+  margin-top: 4px;
+  font-size: 11px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+.stat-delta {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-weight: 600;
+}
+
+.stat-delta--up { color: #4ade80; }
+.stat-delta--down { color: #f87171; }
+.stat-delta--same { color: #94a3b8; }
+
+.imp-shop-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.imp-price-pill {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 13px;
+  color: #fde047;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.imp-btn-primary {
+  padding: 7px 16px;
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  font-weight: 700;
+  background: linear-gradient(180deg, #d4a744 0%, #8a641c 100%);
+  border: 1px solid #ffe699;
+  color: #0b0e14;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all var(--motion-micro);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.imp-btn-primary:hover:not(:disabled) {
+  filter: brightness(1.15);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(212, 167, 68, 0.35);
+}
+
+.imp-btn-primary:disabled {
+  background: rgba(45, 55, 72, 0.6);
+  border-color: rgba(100, 116, 139, 0.4);
+  color: #64748b;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+/* ─── FORJA IMPERIAL (DWARVEN WORKSHOP & RANDOM CRAFT) ─── */
+.imp-forge-container {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.imp-forge-altar {
+  background: radial-gradient(circle at 50% 0%, #202a3c 0%, #0d121c 100%);
+  border: 1px solid var(--imp-border-accent);
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: var(--imp-shadow-panel);
+  position: relative;
+}
+
+.imp-forge-subtabs-row {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  padding-top: 10px;
+  margin-top: 12px;
+  border-top: 1px solid rgba(212, 167, 68, 0.2);
+}
+
+.imp-forge-subtab-btn {
+  padding: 6px 12px;
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  font-weight: 700;
+  background: rgba(18, 24, 36, 0.85);
+  border: 1px solid rgba(212, 167, 68, 0.25);
+  color: #cbd5e1;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all var(--motion-micro);
+}
+
+.imp-forge-subtab-btn:hover {
+  background: rgba(30, 40, 60, 0.95);
+  border-color: var(--imp-border-gold);
+  color: #f5df93;
+}
+
+.imp-forge-subtab-btn.active {
+  background: linear-gradient(180deg, #d4a744 0%, #8a641c 100%);
+  border-color: #ffe699;
+  color: #0b0e14;
+  box-shadow: 0 0 10px rgba(212, 167, 68, 0.3);
+}
+
+/* Random Craft 5-Pedestals Reel */
+.imp-rc-reel {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  margin: 16px 0;
+}
+
+@media (max-width: 800px) {
+  .imp-rc-reel {
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  }
+}
+
+.imp-rc-pedestal {
+  background: var(--imp-surface-card);
+  border: 1px solid var(--imp-border-subtle);
+  border-radius: 8px;
+  padding: 12px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  text-align: center;
+  position: relative;
+  transition: all var(--motion-standard);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.imp-rc-pedestal::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: transparent;
+  transition: background var(--motion-standard);
+}
+
+.imp-rc-pedestal.is-splus {
+  border-color: #f59e0b;
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.35), inset 0 0 12px rgba(245, 158, 11, 0.15);
+}
+
+.imp-rc-pedestal.is-splus::before {
+  background: linear-gradient(90deg, transparent, #fde047, transparent);
+}
+
+.imp-rc-slot-number {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  font-size: 9px;
+  font-family: 'Cinzel', serif;
+  color: var(--imp-text-muted);
+}
+
+.imp-rc-pedestal.is-active-pulse {
+  transform: scale(1.04);
+  border-color: #fde047;
+  box-shadow: 0 0 20px rgba(253, 224, 71, 0.6);
+}
+
+.imp-rc-pedestal.is-winner {
+  transform: scale(1.08);
+  border-color: #10b981;
+  background: linear-gradient(145deg, rgba(16, 185, 129, 0.2), rgba(10, 20, 25, 0.95));
+  box-shadow: 0 0 25px rgba(16, 185, 129, 0.7);
+  animation: rcWinnerGlow 1.2s infinite alternate;
+}
+
+@keyframes rcWinnerGlow {
+  0% { box-shadow: 0 0 15px rgba(16, 185, 129, 0.5); }
+  100% { box-shadow: 0 0 30px rgba(16, 185, 129, 0.9); }
+}
+
+/* ─── ALQUIMIA (ARCANE LABORATORY) ─── */
+.imp-alchemy-dashboard {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 700px) {
+  .imp-alchemy-dashboard {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.imp-essence-orb {
+  background: var(--imp-surface-card);
+  border: 1px solid var(--imp-border-subtle);
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 4px;
+  transition: all var(--motion-micro);
+}
+
+.imp-essence-orb:hover {
+  transform: translateY(-2px);
+}
+
+.imp-essence-orb.orb-fire  { border-color: rgba(239, 68, 68, 0.4); box-shadow: inset 0 0 10px rgba(239, 68, 68, 0.15); }
+.imp-essence-orb.orb-earth { border-color: rgba(34, 197, 94, 0.4); box-shadow: inset 0 0 10px rgba(34, 197, 94, 0.15); }
+.imp-essence-orb.orb-wind  { border-color: rgba(56, 189, 248, 0.4); box-shadow: inset 0 0 10px rgba(56, 189, 248, 0.15); }
+.imp-essence-orb.orb-water { border-color: rgba(14, 165, 233, 0.4); box-shadow: inset 0 0 10px rgba(14, 165, 233, 0.15); }
+
+/* Cadinho de Almas */
+.imp-crucible-box {
+  background: linear-gradient(135deg, rgba(28, 18, 38, 0.95), rgba(14, 10, 22, 0.98));
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 18px rgba(168, 85, 247, 0.15);
+}
+
+/* ─── BAÚ PRIVADO (IMPERIAL VAULT 50/50 SPLIT) ─── */
+.imp-vault-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  width: 100%;
+}
+
+@media (max-width: 800px) {
+  .imp-vault-split {
+    grid-template-columns: 1fr;
+  }
+}
+
+.imp-vault-panel {
+  background: var(--imp-surface-panel);
+  border: 1px solid var(--imp-border-accent);
+  border-radius: 10px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--imp-shadow-panel);
+}
+
+.imp-vault-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid rgba(212, 167, 68, 0.25);
+}
+
+.imp-slot-gauge-bar {
+  width: 100%;
+  height: 4px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.imp-slot-gauge-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #d4a744, #10b981);
+  transition: width var(--motion-standard);
+}
+
+/* ─── LÂMPADA MÁGICA (GENIE ALTAR & 3D REVEAL) ─── */
+.imp-lamp-altar {
+  background: radial-gradient(circle at 50% 20%, rgba(30, 42, 70, 0.95) 0%, rgba(10, 14, 24, 0.98) 100%);
+  border: 1px solid var(--imp-border-accent);
+  border-radius: 12px;
+  padding: 24px 16px;
+  text-align: center;
+  box-shadow: var(--imp-shadow-panel);
+  position: relative;
+  overflow: hidden;
+}
+
+.imp-lamp-centerpiece {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin: 14px 0;
+}
+
+.imp-lamp-vessel {
+  font-size: 56px;
+  filter: drop-shadow(0 0 20px rgba(245, 158, 11, 0.6));
+  animation: impLampFloat 3s ease-in-out infinite;
+  user-select: none;
+}
+
+@keyframes impLampFloat {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(2deg); }
+}
+
+.imp-lamp-card-reveal-area {
+  min-height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 14px;
+  perspective: 1000px;
+}
+
+.imp-magic-card {
+  width: 100%;
+  max-width: 380px;
+  border-radius: 10px;
+  padding: 16px;
+  text-align: center;
+  position: relative;
+  animation: cardFlipIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8);
+}
+
+@keyframes cardFlipIn {
+  0% { transform: rotateY(90deg) scale(0.85); opacity: 0; }
+  100% { transform: rotateY(0deg) scale(1); opacity: 1; }
+}
+
+.imp-magic-card.card-blue {
+  background: linear-gradient(145deg, rgba(20, 35, 60, 0.95), rgba(10, 16, 30, 0.98));
+  border: 2px solid #3b82f6;
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+}
+
+.imp-magic-card.card-purple {
+  background: linear-gradient(145deg, rgba(40, 20, 60, 0.95), rgba(16, 10, 30, 0.98));
+  border: 2px solid #a855f7;
+  box-shadow: 0 0 25px rgba(168, 85, 247, 0.5);
+}
+
+.imp-magic-card.card-red {
+  background: linear-gradient(145deg, rgba(65, 15, 25, 0.95), rgba(25, 8, 12, 0.98));
+  border: 2px solid #ef4444;
+  box-shadow: 0 0 35px rgba(239, 68, 68, 0.7);
+  animation: cardFlipIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards, cardJackpotPulse 1.5s infinite alternate;
+}
+
+@keyframes cardJackpotPulse {
+  0% { box-shadow: 0 0 25px rgba(239, 68, 68, 0.6); }
+  100% { box-shadow: 0 0 45px rgba(245, 158, 11, 0.9); }
+}
+

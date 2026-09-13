@@ -2583,6 +2583,7 @@ export function updateWarehouseUI(state, callbacks = {}) {
   if (!state || typeof state !== 'object') {
     state = (typeof window !== 'undefined' && window.state) ? window.state : {};
   }
+  updateImperialEconomyHeader(state);
   ensureInventoryStyles();
   const whStorageGrid = findElement('wh-storage-grid') || findElement('warehouse-grid');
   const whInvGrid = findElement('wh-inventory-grid');
@@ -2597,6 +2598,17 @@ export function updateWarehouseUI(state, callbacks = {}) {
 
   if (storageCountEl) storageCountEl.textContent = `${state.warehouse.length} / ${maxWhSlots} slots`;
   if (invCountEl) invCountEl.textContent = `${state.inventory?.length || 0} / ${maxInvSlots} slots`;
+
+  const invGaugeFill = findElement('wh-inv-gauge-fill');
+  const storageGaugeFill = findElement('wh-storage-gauge-fill');
+  if (invGaugeFill) {
+    const invPct = Math.min(100, Math.round(((state.inventory?.length || 0) / (maxInvSlots || 1)) * 100));
+    invGaugeFill.style.width = `${invPct}%`;
+  }
+  if (storageGaugeFill) {
+    const stPct = Math.min(100, Math.round(((state.warehouse?.length || 0) / (maxWhSlots || 1)) * 100));
+    storageGaugeFill.style.width = `${stPct}%`;
+  }
 
   // 1. Render Right Side: Warehouse Items
   if (whStorageGrid) {
@@ -4160,8 +4172,45 @@ let currentShopSlot = 'all';
 let currentShopQty = 1;
 let currentShopSearch = '';
 
+/**
+ * Atualiza os contadores da Barra de Recursos Contextual do Império (Header).
+ */
+export function updateImperialEconomyHeader(state) {
+  if (!state) return;
+  const root = getRoot();
+  if (!root) return;
+
+  const goldEl = root.querySelector('#imp-res-gold');
+  if (goldEl) goldEl.textContent = (state.gold || 0).toLocaleString();
+
+  const acEl = root.querySelector('#imp-res-ac');
+  if (acEl) acEl.textContent = (state.adenCoins || 0).toLocaleString();
+
+  const aaEl = root.querySelector('#imp-res-aa');
+  if (aaEl) aaEl.textContent = ((state.sevenSigns && state.sevenSigns.ancientAdena) || 0).toLocaleString();
+
+  const spEl = root.querySelector('#imp-res-sp');
+  if (spEl) spEl.textContent = (state.sp || 0).toLocaleString();
+
+  const forgeEl = root.querySelector('#imp-res-forge');
+  if (forgeEl) {
+    const forgeLvl = state.accountForgeLevel || state.craftLevel || 1;
+    forgeEl.textContent = `Lv. ${forgeLvl}`;
+  }
+
+  const chargesEl = root.querySelector('#imp-res-charges');
+  if (chargesEl) {
+    const rc = state.randomCraft || {};
+    const charges = Number(rc.charge ?? state.craftCharges ?? 0);
+    const points = Number(rc.points ?? state.randomCraftCharge ?? state.craftPoints ?? 0);
+    chargesEl.textContent = `${charges} Carga${charges !== 1 ? 's' : ''} (${points}/100)`;
+  }
+}
+
 export function updateShopUI(state, callbacks = {}) {
   const root = getRoot();
+  updateImperialEconomyHeader(state);
+
   const goldEl = findElement('gold-count') || findElement('shop-gold');
   if (goldEl) goldEl.textContent = (state.gold || 0).toLocaleString();
 
@@ -4514,28 +4563,32 @@ export function updateShopUI(state, callbacks = {}) {
     const maxAffordQty = isStackable ? Math.max(1, Math.floor((state.gold || 0) / basePrice)) : 1;
 
     return `
-      <div class="shop-item-card grade-${gradeInfo.code} rarity-${rarity}">
-        <div class="shop-item-icon-box">
-          ${getItemIcon(def)}
-        </div>
-        <div class="shop-item-meta">
-          <div class="shop-item-title-line">
-            <span class="shop-item-name">${def.name}</span>
-            <span class="shop-grade-badge" style="background:${gradeInfo.color};">${gradeInfo.label}</span>
-            ${rarity !== 'common' ? `<span class="tab-tag-rarity tag-${rarity}">${rarity.toUpperCase()}</span>` : ''}
+      <div class="shop-item-card imp-shop-card grade-${gradeInfo.code} rarity-${rarity} ${!isLevelOk ? 'locked' : ''}">
+        <div class="imp-shop-card-main">
+          <div class="shop-item-icon-box imp-item-frame grade-${gradeInfo.code}">
+            ${getItemIcon(def)}
           </div>
-          ${statsText ? `<div class="shop-item-stats">${statsText}</div>` : ''}
-          ${diffText ? `<div class="shop-item-diff" style="margin-top:2px; font-size:11px;">${diffText}</div>` : ''}
-          <div class="shop-item-desc">${def.desc || ''}</div>
+          <div class="shop-item-meta imp-item-meta">
+            <div class="imp-item-header">
+              <span class="shop-item-name imp-item-name">${def.name}</span>
+              <div style="display:flex; align-items:center; gap:4px;">
+                <span class="shop-grade-badge imp-item-grade-tag" style="background:${gradeInfo.color};">${gradeInfo.label}</span>
+                ${rarity !== 'common' ? `<span class="tab-tag-rarity tag-${rarity}">${rarity.toUpperCase()}</span>` : ''}
+              </div>
+            </div>
+            ${statsText ? `<div class="shop-item-stats imp-item-stats">${statsText}</div>` : ''}
+            ${diffText || ''}
+            <div class="shop-item-desc" style="font-size:11px; color:var(--imp-text-muted); margin-top:2px;">${def.desc || ''}</div>
+          </div>
         </div>
-        <div class="shop-item-action">
-          <div class="shop-item-price-tag">💰 ${totalPrice.toLocaleString()} Gold</div>
-          <div style="display:flex; gap:4px; align-items:center;">
-            <button class="buy-item-btn" data-buy="${def.id}" data-qty="${batchQty}" data-rarity="${rarity}" ${(!canAfford || !isLevelOk) ? 'disabled' : ''}>
+        <div class="shop-item-action imp-shop-footer">
+          <div class="shop-item-price-tag imp-price-pill">🪙 ${totalPrice.toLocaleString()} <span style="font-size:10px; color:#cbd5e1;">Adena</span></div>
+          <div style="display:flex; gap:6px; align-items:center;">
+            <button class="buy-item-btn imp-btn-primary" data-buy="${def.id}" data-qty="${batchQty}" data-rarity="${rarity}" ${(!canAfford || !isLevelOk) ? 'disabled' : ''}>
               ${buyText}
             </button>
             ${isStackable && canAfford && maxAffordQty > batchQty ? `
-              <button class="inv-batch-btn" data-buy="${def.id}" data-qty="${maxAffordQty}" data-rarity="${rarity}" title="Comprar máximo possível (${maxAffordQty.toLocaleString()}x)" style="padding:6px 10px; font-size:11px; font-weight:bold;">
+              <button class="inv-batch-btn" data-buy="${def.id}" data-qty="${maxAffordQty}" data-rarity="${rarity}" title="Comprar máximo possível (${maxAffordQty.toLocaleString()}x)" style="padding:7px 11px; font-size:11px; font-weight:bold; background:rgba(30,41,59,0.9); border:1px solid rgba(255,255,255,0.2); color:#fff; border-radius:5px; cursor:pointer;">
                 Máx
               </button>
             ` : ''}
@@ -4636,17 +4689,25 @@ export function buildShopStatsSummary(def) {
 
 /**
  * Compara atributos de um item da loja com o item atualmente equipado no mesmo slot.
+ * Exibe P.Atk, M.Atk, P.Def, M.Def, HP, MP, Crit, Speed, Element
+ * com indicadores: ↑ improvement, ↓ downgrade, = neutral (cor e símbolo simultâneos).
  */
 function buildShopComparisonDelta(def, state) {
   if (!def || !def.slot || !state || !state.equipment) return '';
-  const isEquip = ['weapon', 'armor', 'helmet', 'gloves', 'boots', 'legs', 'shield', 'ring', 'necklace', 'earring'].includes(def.slot);
+  const isEquip = ['weapon', 'armor', 'chest', 'legs', 'helmet', 'gloves', 'boots', 'shield', 'ring', 'ring1', 'ring2', 'necklace', 'earring', 'earring1', 'earring2'].includes(def.slot);
   if (!isEquip) return '';
 
   let equipSlotKey = def.slot;
-  if (def.slot === 'weapon' || def.slot === 'bow' || def.slot === 'dagger' || def.slot === 'staff') equipSlotKey = 'weapon';
+  if (def.slot === 'weapon' || def.slot === 'bow' || def.slot === 'dagger' || def.slot === 'staff' || def.slot === 'blunt' || def.slot === 'dual') equipSlotKey = 'weapon';
+  else if (def.slot === 'armor' || def.slot === 'chest') equipSlotKey = 'chest';
+  else if (def.slot === 'head' || def.slot === 'helmet') equipSlotKey = 'helmet';
+  else if (def.slot === 'ring') equipSlotKey = 'ring1';
+  else if (def.slot === 'earring') equipSlotKey = 'earring1';
 
   const equippedUid = state.equipment[equipSlotKey];
-  if (!equippedUid) return '<span style="color:#10b981; font-weight:bold;">✨ Novo Slot</span>';
+  if (!equippedUid) {
+    return `<div class="imp-comparison-box"><span style="color:#10b981; font-weight:bold;">✨ [Slot Vazio no Herói]</span></div>`;
+  }
 
   const equippedItem = (state.inventory || []).find(i => i.uid === equippedUid || i.id === equippedUid);
   if (!equippedItem) return '';
@@ -4656,37 +4717,49 @@ function buildShopComparisonDelta(def, state) {
   if (!eqDef) return '';
 
   const diffs = [];
-
-  if (def.atk != null && eqDef.atk != null) {
-    const delta = (def.atk || 0) - (eqDef.atk || 0);
-    if (delta !== 0) {
-      diffs.push(`<span style="color:${delta > 0 ? '#10b981' : '#ef4444'}; font-weight:bold;">${delta > 0 ? '+' : ''}${delta} P.Atk</span>`);
+  const formatDelta = (statLabel, icon, newStat, oldStat) => {
+    const n = Number(newStat) || 0;
+    const o = Number(oldStat) || 0;
+    if (n === 0 && o === 0) return;
+    const delta = n - o;
+    if (delta > 0) {
+      diffs.push(`<span class="stat-delta stat-delta--up" title="${statLabel}">${icon} ${statLabel} +${delta} ↑</span>`);
+    } else if (delta < 0) {
+      diffs.push(`<span class="stat-delta stat-delta--down" title="${statLabel}">${icon} ${statLabel} ${delta} ↓</span>`);
+    } else {
+      diffs.push(`<span class="stat-delta stat-delta--same" title="${statLabel}">${icon} ${statLabel} =</span>`);
     }
-  }
+  };
 
-  if (def.def != null && eqDef.def != null) {
-    const delta = (def.def || 0) - (eqDef.def || 0);
-    if (delta !== 0) {
-      diffs.push(`<span style="color:${delta > 0 ? '#10b981' : '#ef4444'}; font-weight:bold;">${delta > 0 ? '+' : ''}${delta} P.Def</span>`);
-    }
-  }
+  formatDelta('P.Atk', '⚔', def.atk, eqDef.atk);
+  formatDelta('M.Atk', '✦', def.matk, eqDef.matk);
+  formatDelta('P.Def', '🛡', def.def, eqDef.def);
+  formatDelta('M.Def', '🔷', def.mdef, eqDef.mdef);
+  formatDelta('HP', '❤', def.hp, eqDef.hp);
+  formatDelta('MP', '💧', def.mp, eqDef.mp);
+  formatDelta('Crit', '💥', def.crit, eqDef.crit);
+  formatDelta('Speed', '⚡', def.speed, eqDef.speed);
 
-  if (def.matk != null && eqDef.matk != null) {
-    const delta = (def.matk || 0) - (eqDef.matk || 0);
-    if (delta !== 0) {
-      diffs.push(`<span style="color:${delta > 0 ? '#10b981' : '#ef4444'}; font-weight:bold;">${delta > 0 ? '+' : ''}${delta} M.Atk</span>`);
-    }
-  }
-
-  if (def.mdef != null && eqDef.mdef != null) {
-    const delta = (def.mdef || 0) - (eqDef.mdef || 0);
-    if (delta !== 0) {
-      diffs.push(`<span style="color:${delta > 0 ? '#10b981' : '#ef4444'}; font-weight:bold;">${delta > 0 ? '+' : ''}${delta} M.Def</span>`);
+  // Elemental comparison
+  const newElem = def.element || def.elemType || null;
+  const oldElem = eqDef.element || eqDef.elemType || null;
+  if (newElem || oldElem) {
+    if (newElem && !oldElem) {
+      diffs.push(`<span class="stat-delta stat-delta--up" title="Elemento">🔮 ${newElem} ↑</span>`);
+    } else if (!newElem && oldElem) {
+      diffs.push(`<span class="stat-delta stat-delta--down" title="Elemento">🔮 Sem Elem ↓</span>`);
+    } else if (newElem !== oldElem) {
+      diffs.push(`<span class="stat-delta stat-delta--same" title="Elemento">🔮 ${oldElem} ➔ ${newElem}</span>`);
     }
   }
 
   if (diffs.length === 0) return '';
-  return `<span style="color:var(--text-muted); font-size:10px;">Comparado ao equipado:</span> ` + diffs.join(' · ');
+  return `
+    <div class="imp-comparison-box">
+      <span style="color:var(--imp-text-muted); font-size:10px; font-weight:bold; margin-right:4px;">VS EQUIPADO:</span>
+      ${diffs.join(' ')}
+    </div>
+  `;
 }
 
 function isItemInCraftCategory(itemId, def, cat) {
@@ -4936,6 +5009,7 @@ export function matchesCraftSubcategory(itemId, def, subcat) {
 }
 
 export function updateCraftUI(state, callbacks = {}) {
+  updateImperialEconomyHeader(state);
   const forgeLvl = state.accountForgeLevel || state.craftLevel || 1;
   const forgeExp = state.accountForgeExp || 0;
   const reqExpForNext = forgeLvl * 100;
@@ -5396,6 +5470,7 @@ export function renderAlchemyUI(state) {
     window.renderAlchemyUI = renderAlchemyUI;
     window._lastState = state;
   }
+  updateImperialEconomyHeader(state);
   const root = getRoot();
   const container = root.querySelector('#tab-alchemy, .tab-alchemy');
   if (!container) return;
@@ -5418,15 +5493,15 @@ export function renderAlchemyUI(state) {
         : `${mins}m ${secs < 10 ? '0' : ''}${secs}s`;
 
       activeBuffsHtml += `
-        <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(212,167,68,0.15); border:1px solid rgba(212,167,68,0.4); padding:8px 12px; border-radius:8px; margin-bottom:8px;">
-          <div style="display:flex; align-items:center; gap:8px;">
-            <span style="font-size:22px;">${recipe?.icon || '🧪'}</span>
+        <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(212,167,68,0.12); border:1px solid var(--imp-border-accent, rgba(212,167,68,0.4)); padding:8px 12px; border-radius:8px; margin-bottom:8px;">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-size:22px; filter:drop-shadow(0 0 6px rgba(212,167,68,0.4));">${recipe?.icon || '🧪'}</span>
             <div>
-              <div style="font-weight:bold; color:#ffd877; font-size:13px;">${recipe?.name || rId}</div>
-              <div style="font-size:11px; color:#aaa;">${recipe?.desc || ''}</div>
+              <div style="font-family:'Cinzel',serif; font-weight:700; color:#ffd877; font-size:13px;">${recipe?.name || rId}</div>
+              <div style="font-size:11px; color:#cbd5e1;">${recipe?.desc || ''}</div>
             </div>
           </div>
-          <span style="font-family:monospace; font-weight:bold; color:#34d399; font-size:13px; background:rgba(0,0,0,0.5); padding:3px 8px; border-radius:4px;">⏱️ ${timeStr}</span>
+          <span style="font-family:'IBM Plex Mono',monospace; font-weight:bold; color:#34d399; font-size:12px; background:rgba(0,0,0,0.6); padding:4px 8px; border-radius:4px; border:1px solid rgba(52,211,153,0.3);">⏱️ ${timeStr}</span>
         </div>
       `;
     }
@@ -5444,28 +5519,37 @@ export function renderAlchemyUI(state) {
       const hasEnough = owned >= amt;
       if (!hasEnough) canAfford = false;
       const typeIcons = { fire: '🔥', earth: '🛡️', wind: '🍃', astral: '✨' };
-      costHtml += `<span style="color:${hasEnough ? '#4ade80' : '#ef4444'}; font-weight:bold; margin-right:8px;">${typeIcons[type] || ''} ${owned}/${amt}</span>`;
+      costHtml += `<span style="color:${hasEnough ? '#4ade80' : '#ef4444'}; font-weight:600; margin-right:8px;">${typeIcons[type] || ''} ${owned}/${amt}</span>`;
     }
 
     recipesHtml += `
-      <div style="background:rgba(18,22,34,0.85); border:1px solid ${canAfford ? 'rgba(212,167,68,0.4)' : 'rgba(255,255,255,0.08)'}; border-radius:10px; padding:12px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; gap:12px;">
-        <div style="display:flex; align-items:center; gap:12px;">
-          <div style="width:46px; height:46px; background:rgba(0,0,0,0.5); border:1px solid rgba(212,167,68,0.3); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:24px;">
+      <div class="imp-shop-card" style="margin-bottom:10px;">
+        <div class="imp-shop-card-main" style="align-items:center;">
+          <div class="imp-item-frame" style="border-color:rgba(212,167,68,0.4); font-size:24px;">
             ${rec.icon}
           </div>
+          <div class="imp-item-meta">
+            <div class="imp-item-header">
+              <span class="imp-item-name">${rec.name}</span>
+              <span class="imp-item-grade-tag" style="background:rgba(168,85,247,0.25); border:1px solid rgba(168,85,247,0.5); color:#c084fc;">ELIXIR</span>
+            </div>
+            <p style="margin:2px 0 4px 0; font-size:11px; color:#94a3b8;">${rec.desc}</p>
+            <div style="font-size:11px; font-family:'IBM Plex Mono',monospace;">
+              ${costHtml}
+              <span style="color:${(state.gold || 0) >= rec.gold ? '#ffd877' : '#ef4444'}; font-weight:700;">🪙 ${rec.gold.toLocaleString()} Adena</span>
+            </div>
+          </div>
           <div>
-            <h4 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:15px;">${rec.name}</h4>
-            <p style="margin:2px 0 6px 0; font-size:11px; color:#aaa;">${rec.desc}</p>
-            <div style="font-size:11px;">${costHtml} <span style="color:${(state.gold || 0) >= rec.gold ? '#ffd877' : '#ef4444'};">🪙 ${rec.gold.toLocaleString()}g</span></div>
+            <button
+              class="imp-btn-primary"
+              onclick="window.craftElixir('${rId}', 1)"
+              ${!canAfford ? 'disabled' : ''}
+              style="min-width:100px; white-space:nowrap;"
+            >
+              🧪 TRANSMUTAR
+            </button>
           </div>
         </div>
-        <button
-          onclick="window.craftElixir('${rId}', 1)"
-          ${!canAfford ? 'disabled' : ''}
-          style="padding:8px 16px; font-family:'Cinzel',serif; font-weight:bold; font-size:12px; background:${canAfford ? 'linear-gradient(180deg,#d4a744,#8a641c)' : 'rgba(60,50,40,0.5)'}; border:1px solid ${canAfford ? '#ffe699' : 'rgba(100,80,60,0.3)'}; color:${canAfford ? '#000' : '#777'}; border-radius:6px; cursor:${canAfford ? 'pointer' : 'not-allowed'}; min-width:90px;"
-        >
-          🧪 CRIAR
-        </button>
       </div>
     `;
   }
@@ -5484,7 +5568,7 @@ export function renderAlchemyUI(state) {
   let crucibleSelectHtml = '';
   if (inventoryItems.length === 0) {
     crucibleSelectHtml = `
-      <div style="background:rgba(15,20,32,0.8); border:1px dashed rgba(255,255,255,0.15); border-radius:10px; padding:14px; margin-bottom:16px; text-align:center; color:#aaa; font-size:12px;">
+      <div class="imp-crucible-box" style="text-align:center; color:#94a3b8; font-size:12px; padding:20px;">
         📦 Nenhum equipamento desequipado na mochila para desintegrar no Cadinho.
       </div>
     `;
@@ -5511,37 +5595,38 @@ export function renderAlchemyUI(state) {
     }).join('');
 
     crucibleSelectHtml = `
-      <div style="background:linear-gradient(135deg, rgba(30,20,40,0.9), rgba(15,10,24,0.9)); border:1px solid rgba(168,85,247,0.4); border-radius:10px; padding:14px; margin-bottom:16px; box-shadow:0 4px 16px rgba(168,85,247,0.15);">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-          <h4 style="margin:0; font-family:'Cinzel',serif; color:#c084fc; font-size:14px; display:flex; align-items:center; gap:6px;">
+      <div class="imp-crucible-box">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <h4 style="margin:0; font-family:'Cinzel',serif; color:#c084fc; font-size:14px; display:flex; align-items:center; gap:8px;">
             🔮 Cadinho de Almas — Inspeção &amp; Preview
           </h4>
-          <span style="font-size:10px; background:rgba(168,85,247,0.2); border:1px solid rgba(168,85,247,0.4); padding:2px 8px; border-radius:10px; color:#e9d5ff; font-weight:bold;">${inventoryItems.length} Equipamento(s) Disponível(is)</span>
+          <span style="font-size:10px; background:rgba(168,85,247,0.2); border:1px solid rgba(168,85,247,0.4); padding:2px 8px; border-radius:10px; color:#e9d5ff; font-weight:700; font-family:'IBM Plex Mono',monospace;">${inventoryItems.length} EQUIPAMENTOS DISPONÍVEIS</span>
         </div>
 
-        <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:12px;">
-          <select id="crucible-item-select" style="flex:1; min-width:220px; padding:8px 12px; background:rgba(0,0,0,0.6); border:1px solid rgba(168,85,247,0.5); color:#fff; border-radius:6px; font-size:12px;" onchange="window._selectedCrucibleUid = this.value; if (window.renderAlchemyUI) window.renderAlchemyUI(window._lastState);">
+        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:12px;">
+          <select id="crucible-item-select" style="flex:1; min-width:220px; padding:8px 12px; background:rgba(10,12,20,0.8); border:1px solid rgba(168,85,247,0.5); color:#fff; border-radius:6px; font-size:12px;" onchange="window._selectedCrucibleUid = this.value; if (window.renderAlchemyUI) window.renderAlchemyUI(window._lastState);">
             ${optionsHtml}
           </select>
           <button
+            class="imp-btn-primary"
             onclick="if (window.dissolveItem) window.dissolveItem('${selectedItem.uid}');"
-            style="padding:8px 18px; font-family:'Cinzel',serif; font-weight:bold; font-size:12px; background:linear-gradient(180deg, #a855f7, #6b21a8); border:1px solid #c084fc; color:#fff; border-radius:6px; cursor:pointer;"
+            style="background:linear-gradient(180deg, #a855f7, #6b21a8); border-color:#c084fc; color:#fff;"
           >
             🔥 Dissolver Item
           </button>
         </div>
 
-        <div style="background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:10px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;">
+        <div style="background:rgba(0,0,0,0.45); border:1px solid rgba(255,255,255,0.06); border-radius:8px; padding:10px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;">
           <div style="display:flex; align-items:center; gap:10px;">
-            <div style="font-size:24px; width:36px; height:36px; background:rgba(0,0,0,0.6); border:1px solid rgba(168,85,247,0.4); border-radius:6px; display:flex; align-items:center; justify-content:center;">
+            <div class="imp-item-frame grade-${grade}" style="width:42px; height:42px; min-width:42px; font-size:22px;">
               ${getItemIcon(selectedDef)}
             </div>
             <div>
-              <div style="font-weight:bold; color:#f4d58a; font-size:13px;">${selectedDef?.name || 'Item'}</div>
-              <div style="font-size:11px; color:#aaa;">Rendimento estimado ao dissolver no Cadinho (Taxa: 🪙 ${yields.fee}g):</div>
+              <div style="font-weight:700; color:#f4d58a; font-size:13px; font-family:'Cinzel',serif;">${selectedDef?.name || 'Item'}</div>
+              <div style="font-size:11px; color:#94a3b8;">Rendimento estimado ao dissolver no Cadinho (Taxa: 🪙 ${yields.fee}g):</div>
             </div>
           </div>
-          <div style="display:flex; gap:10px; font-size:12px; font-weight:bold;">
+          <div style="display:flex; gap:10px; font-size:12px; font-weight:700; font-family:'IBM Plex Mono',monospace;">
             <span style="color:#fca5a5;">🔥 +${yields.fire}</span>
             <span style="color:#86efac;">🛡️ +${yields.earth}</span>
             <span style="color:#7dd3fc;">🍃 +${yields.wind}</span>
@@ -5554,36 +5639,27 @@ export function renderAlchemyUI(state) {
 
   container.innerHTML = `
     <div style="padding:16px; font-family:sans-serif; color:#fff;">
-      <!-- Essence Header -->
-      <div style="background:linear-gradient(180deg, rgba(20,26,42,0.9), rgba(10,14,24,0.9)); border:1px solid rgba(212,167,68,0.4); border-radius:12px; padding:14px; margin-bottom:16px; box-shadow:0 4px 20px rgba(0,0,0,0.5);">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-          <h3 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:18px; display:flex; align-items:center; gap:8px;">
-            🧪 Cadinho de Almas & Alquimia
-          </h3>
-          <span style="font-size:12px; color:#aaa;">Extraia essências de itens e fabrique elixires místicos</span>
+      <!-- Essence Dashboard -->
+      <div class="imp-alchemy-dashboard">
+        <div class="imp-essence-orb orb-fire">
+          <div style="font-size:22px; filter: drop-shadow(0 0 6px rgba(239,68,68,0.5));">🔥</div>
+          <div style="font-size:10px; text-transform:uppercase; color:#fca5a5; font-weight:700; font-family:'Cinzel',serif;">Fogo</div>
+          <div style="font-size:18px; font-weight:700; color:#fff; font-family:'IBM Plex Mono',monospace;">${(essences.fire || 0).toLocaleString()}</div>
         </div>
-
-        <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:8px; text-align:center;">
-          <div style="background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.3); border-radius:8px; padding:8px;">
-            <div style="font-size:18px;">🔥</div>
-            <div style="font-size:10px; text-transform:uppercase; color:#fca5a5; font-weight:bold;">Fogo</div>
-            <div style="font-size:16px; font-weight:bold; color:#fff;">${(essences.fire || 0).toLocaleString()}</div>
-          </div>
-          <div style="background:rgba(34,197,94,0.12); border:1px solid rgba(34,197,94,0.3); border-radius:8px; padding:8px;">
-            <div style="font-size:18px;">🛡️</div>
-            <div style="font-size:10px; text-transform:uppercase; color:#86efac; font-weight:bold;">Terra</div>
-            <div style="font-size:16px; font-weight:bold; color:#fff;">${(essences.earth || 0).toLocaleString()}</div>
-          </div>
-          <div style="background:rgba(56,189,248,0.12); border:1px solid rgba(56,189,248,0.3); border-radius:8px; padding:8px;">
-            <div style="font-size:18px;">🍃</div>
-            <div style="font-size:10px; text-transform:uppercase; color:#7dd3fc; font-weight:bold;">Vento</div>
-            <div style="font-size:16px; font-weight:bold; color:#fff;">${(essences.wind || 0).toLocaleString()}</div>
-          </div>
-          <div style="background:rgba(14,165,233,0.12); border:1px solid rgba(14,165,233,0.3); border-radius:8px; padding:8px;">
-            <div style="font-size:18px;">💧</div>
-            <div style="font-size:10px; text-transform:uppercase; color:#38bdf8; font-weight:bold;">Água</div>
-            <div style="font-size:16px; font-weight:bold; color:#fff;">${((essences.water ?? essences.astral) || 0).toLocaleString()}</div>
-          </div>
+        <div class="imp-essence-orb orb-earth">
+          <div style="font-size:22px; filter: drop-shadow(0 0 6px rgba(34,197,94,0.5));">🛡️</div>
+          <div style="font-size:10px; text-transform:uppercase; color:#86efac; font-weight:700; font-family:'Cinzel',serif;">Terra</div>
+          <div style="font-size:18px; font-weight:700; color:#fff; font-family:'IBM Plex Mono',monospace;">${(essences.earth || 0).toLocaleString()}</div>
+        </div>
+        <div class="imp-essence-orb orb-wind">
+          <div style="font-size:22px; filter: drop-shadow(0 0 6px rgba(56,189,248,0.5));">🍃</div>
+          <div style="font-size:10px; text-transform:uppercase; color:#7dd3fc; font-weight:700; font-family:'Cinzel',serif;">Vento</div>
+          <div style="font-size:18px; font-weight:700; color:#fff; font-family:'IBM Plex Mono',monospace;">${(essences.wind || 0).toLocaleString()}</div>
+        </div>
+        <div class="imp-essence-orb orb-water">
+          <div style="font-size:22px; filter: drop-shadow(0 0 6px rgba(14,165,233,0.5));">💧</div>
+          <div style="font-size:10px; text-transform:uppercase; color:#38bdf8; font-weight:700; font-family:'Cinzel',serif;">Água</div>
+          <div style="font-size:18px; font-weight:700; color:#fff; font-family:'IBM Plex Mono',monospace;">${((essences.water ?? essences.astral) || 0).toLocaleString()}</div>
         </div>
       </div>
 
@@ -5596,13 +5672,13 @@ export function renderAlchemyUI(state) {
       ` : ''}
 
       <!-- Chaos Boss Summoning Portal -->
-      <div style="background:linear-gradient(135deg, rgba(60,20,30,0.9), rgba(20,10,30,0.9)); border:1px solid rgba(239,68,68,0.5); border-radius:10px; padding:14px; margin-bottom:16px; box-shadow:0 4px 16px rgba(239,68,68,0.2);">
+      <div style="background:linear-gradient(135deg, rgba(50,15,25,0.92), rgba(20,8,16,0.95)); border:1px solid rgba(239,68,68,0.5); border-radius:10px; padding:14px; margin-bottom:16px; box-shadow:0 4px 18px rgba(239,68,68,0.2);">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
           <h4 style="margin:0; font-family:'Cinzel',serif; color:#fca5a5; font-size:15px; display:flex; align-items:center; gap:8px;">
             🌀 Fenda do Caos — Invocação de Boss Abissal
           </h4>
-          <span style="font-size:11px; background:rgba(239,68,68,0.2); border:1px solid rgba(239,68,68,0.4); padding:3px 10px; border-radius:12px; color:#fecaca; font-weight:bold;">
-            Pedras na Mochila: ${chaosStoneCount}x
+          <span style="font-size:10px; background:rgba(239,68,68,0.25); border:1px solid rgba(239,68,68,0.45); padding:3px 10px; border-radius:12px; color:#fecaca; font-weight:700; font-family:'IBM Plex Mono',monospace;">
+            PEDRAS: ${chaosStoneCount}x
           </span>
         </div>
         <p style="margin:0 0 12px 0; font-size:12px; color:#cbd5e1; line-height:1.4;">
@@ -5611,7 +5687,8 @@ export function renderAlchemyUI(state) {
         <button
           onclick="if (window.useChaosBossSummonStoneAction) window.useChaosBossSummonStoneAction();"
           ${chaosStoneCount <= 0 ? 'disabled' : ''}
-          style="width:100%; padding:10px 16px; font-family:'Cinzel',serif; font-weight:bold; font-size:13px; background:${chaosStoneCount > 0 ? 'linear-gradient(180deg, #ef4444, #991b1b)' : 'rgba(80,40,40,0.5)'}; border:1px solid ${chaosStoneCount > 0 ? '#fca5a5' : 'rgba(120,60,60,0.4)'}; color:#fff; border-radius:6px; cursor:${chaosStoneCount > 0 ? 'pointer' : 'not-allowed'}; display:flex; align-items:center; justify-content:center; gap:8px;"
+          class="imp-btn-primary"
+          style="width:100%; padding:10px 16px; font-size:13px; background:${chaosStoneCount > 0 ? 'linear-gradient(180deg, #ef4444, #991b1b)' : 'rgba(80,40,40,0.5)'}; border-color:${chaosStoneCount > 0 ? '#fca5a5' : 'rgba(120,60,60,0.4)'}; color:#fff; display:flex; align-items:center; justify-content:center; gap:8px;"
         >
           🌀 INVOCAÇÃO ABISSAL: ABRIR FENDA DO CAOS
         </button>
@@ -5621,38 +5698,43 @@ export function renderAlchemyUI(state) {
       ${crucibleSelectHtml}
 
       <!-- Fast Dissolve Controls -->
-      <div style="background:rgba(15,20,32,0.8); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:12px; margin-bottom:16px;">
-        <h4 style="margin:0 0 8px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px; display:flex; align-items:center; gap:6px;">
+      <div style="background:var(--imp-surface-panel, rgba(15,20,32,0.85)); border:1px solid var(--imp-border-subtle, rgba(255,255,255,0.08)); border-radius:10px; padding:12px; margin-bottom:16px;">
+        <h4 style="margin:0 0 10px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px; display:flex; align-items:center; gap:6px;">
           🔥 Dissolução em Lote no Cadinho de Almas
         </h4>
         <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap:8px;">
           <button
             onclick="if (window.dissolveItemsByFilter) window.dissolveItemsByFilter('nograde');"
-            style="padding:10px; font-weight:bold; font-size:11px; background:rgba(148,163,184,0.15); border:1px solid rgba(148,163,184,0.4); color:#e2e8f0; border-radius:6px; cursor:pointer;"
+            class="imp-forge-subtab-btn"
+            style="color:#e2e8f0; border-color:rgba(148,163,184,0.4);"
           >
             🔥 No-Grade
           </button>
           <button
             onclick="if (window.dissolveItemsByFilter) window.dissolveItemsByFilter('d');"
-            style="padding:10px; font-weight:bold; font-size:11px; background:rgba(59,130,246,0.2); border:1px solid rgba(59,130,246,0.5); color:#93c5fd; border-radius:6px; cursor:pointer;"
+            class="imp-forge-subtab-btn"
+            style="color:#93c5fd; border-color:rgba(59,130,246,0.4);"
           >
             🔥 D-Grade
           </button>
           <button
             onclick="if (window.dissolveItemsByFilter) window.dissolveItemsByFilter('c');"
-            style="padding:10px; font-weight:bold; font-size:11px; background:rgba(34,197,94,0.2); border:1px solid rgba(34,197,94,0.5); color:#86efac; border-radius:6px; cursor:pointer;"
+            class="imp-forge-subtab-btn"
+            style="color:#86efac; border-color:rgba(34,197,94,0.4);"
           >
             🔥 C-Grade
           </button>
           <button
             onclick="if (window.dissolveItemsByFilter) window.dissolveItemsByFilter('b');"
-            style="padding:10px; font-weight:bold; font-size:11px; background:rgba(168,85,247,0.2); border:1px solid rgba(168,85,247,0.5); color:#d8b4fe; border-radius:6px; cursor:pointer;"
+            class="imp-forge-subtab-btn"
+            style="color:#d8b4fe; border-color:rgba(168,85,247,0.4);"
           >
             🔥 B-Grade
           </button>
           <button
             onclick="if (window.dissolveAllJunkAction) window.dissolveAllJunkAction();"
-            style="padding:10px; font-weight:bold; font-size:11px; background:rgba(239,68,68,0.2); border:1px solid rgba(239,68,68,0.5); color:#fca5a5; border-radius:6px; cursor:pointer;"
+            class="imp-forge-subtab-btn"
+            style="color:#fca5a5; border-color:rgba(239,68,68,0.5); background:rgba(239,68,68,0.15);"
           >
             🔥 Lixo Geral (NG/D/C)
           </button>
@@ -6874,6 +6956,8 @@ export function renderForgeLifestones(container, state) {
 }
 
 export function renderForgeRandomCraft(container, state, callbacks = {}) {
+  updateImperialEconomyHeader(state);
+
   const rc = (state.randomCraft && typeof state.randomCraft === 'object') ? state.randomCraft : {};
   const points = Number(rc.points ?? state.randomCraftCharge ?? state.craftPoints ?? 0);
   const charges = Number(rc.charge ?? state.craftCharges ?? 0);
@@ -6884,26 +6968,29 @@ export function renderForgeRandomCraft(container, state, callbacks = {}) {
   let slotsHtml = '';
   if (slots.length > 0) {
     slotsHtml = `
-      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:10px; margin-top:14px;">
+      <div class="imp-rc-reel" id="imp-rc-reel">
         ${slots.map((s, idx) => {
           const def = allItems[s.itemId] || { name: s.itemId, slot: 'relic' };
           const gradeInfo = getItemGrade(def);
           const isSPlus = gradeInfo.code === 's' || gradeInfo.code === 'boss' || gradeInfo.code === 'frostlord';
           return `
-            <div style="background:rgba(8,11,16,0.92); border:1px solid ${isSPlus ? '#f59e0b' : gradeInfo.color}; border-radius:8px; padding:12px; text-align:center; display:flex; flex-direction:column; align-items:center; justify-content:space-between; gap:6px; box-shadow:${isSPlus ? '0 0 12px rgba(245,158,11,0.25)' : 'none'}; position:relative;">
-              <div style="position:absolute; top:4px; right:6px; font-size:9px; color:#94a3b8; font-family:'Cinzel',serif;">Slot ${idx+1}</div>
-              <div class="l2-blueprint-socket" style="border-color:${isSPlus ? '#f59e0b' : gradeInfo.color}; margin-top:6px;">
+            <div class="imp-rc-pedestal ${isSPlus ? 'is-splus' : ''}" data-rc-slot="${idx}">
+              <div class="imp-rc-slot-number">Slot ${idx + 1}</div>
+              <div class="imp-item-frame grade-${gradeInfo.code}" style="margin-top:8px;">
                 ${getItemIcon(def)}
               </div>
-              <div>
-                <div style="font-weight:bold; font-size:11px; color:#f5df93; font-family:'Cinzel',serif; min-height:28px; display:flex; align-items:center; justify-content:center;">
+              <div style="flex:1; display:flex; flex-direction:column; justify-content:center; gap:2px; width:100%;">
+                <div style="font-weight:700; font-size:11px; color:#f5df93; font-family:'Cinzel',serif; min-height:28px; display:flex; align-items:center; justify-content:center; line-height:1.2;">
                   ${def.name} ${s.count > 1 ? `(${s.count}x)` : ''}
                 </div>
-                <div style="font-size:10px; color:${isSPlus ? '#fde047' : gradeInfo.color}; font-weight:bold;">
-                  ${gradeInfo.label} ${isSPlus ? '★' : ''}
+                <div style="display:flex; align-items:center; justify-content:center; gap:4px;">
+                  <span class="imp-item-grade-tag" style="background:${gradeInfo.color}; font-size:9px;">
+                    ${gradeInfo.label}
+                  </span>
+                  ${isSPlus ? '<span style="color:#fde047; font-size:10px; font-weight:bold;">★ S+</span>' : ''}
                 </div>
               </div>
-              <div style="font-size:9px; color:#38bdf8; background:rgba(56,189,248,0.1); padding:2px 6px; border-radius:4px; border:1px solid rgba(56,189,248,0.2);">
+              <div style="font-size:9px; color:#38bdf8; background:rgba(56,189,248,0.1); padding:2px 8px; border-radius:4px; border:1px solid rgba(56,189,248,0.25); font-family:'IBM Plex Mono',monospace;">
                 Sorteio: 20%
               </div>
             </div>
@@ -6913,9 +7000,9 @@ export function renderForgeRandomCraft(container, state, callbacks = {}) {
     `;
   } else {
     slotsHtml = `
-      <div style="background:rgba(8,11,16,0.85); border:1px dashed rgba(168,85,247,0.3); border-radius:8px; padding:20px; text-align:center; margin-top:12px;">
-        <div style="font-size:28px; margin-bottom:6px;">🎲</div>
-        <div style="font-size:13px; font-weight:bold; color:#e9d5ff; margin-bottom:4px; font-family:'Cinzel',serif;">Nenhum Slot Carregado</div>
+      <div style="background:rgba(8,11,16,0.85); border:1px dashed rgba(168,85,247,0.3); border-radius:8px; padding:24px; text-align:center; margin:16px 0;">
+        <div style="font-size:32px; margin-bottom:8px;">🎲</div>
+        <div style="font-size:14px; font-weight:bold; color:#e9d5ff; margin-bottom:4px; font-family:'Cinzel',serif;">Nenhum Slot Carregado</div>
         <div style="font-size:11px; color:#94a3b8; max-width:460px; margin:0 auto 14px auto;">
           Clique em Atualizar para invocar 5 novas relíquias da Forja Imperial!
         </div>
@@ -6926,13 +7013,15 @@ export function renderForgeRandomCraft(container, state, callbacks = {}) {
   const canSpin = charges >= 1;
 
   container.innerHTML = `
-    <div class="l2-workshop-panel">
+    <div class="l2-workshop-panel imp-forge-container">
       <!-- Banner -->
-      <div class="l2-workshop-altar">
+      <div class="imp-forge-altar">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
           <div>
-            <h3 class="l2-workshop-title">🎲 Roleta Imperial de Criação Anã (Random Craft)</h3>
-            <p class="l2-workshop-subtitle">
+            <h3 class="l2-workshop-title" style="margin:0; font-family:'Cinzel',serif; color:#f5df93; font-size:16px; font-weight:800; display:flex; align-items:center; gap:8px;">
+              🎲 Roleta Imperial de Criação Anã (Random Craft)
+            </h3>
+            <p class="l2-workshop-subtitle" style="margin:4px 0 0 0; font-size:11px; color:#94a3b8;">
               Acumule 100 pontos para gerar 1 Carga Imperial. Ao girar a roleta, 1 dos 5 itens é forjado aleatoriamente (20% por slot)!
             </p>
           </div>
@@ -6940,14 +7029,14 @@ export function renderForgeRandomCraft(container, state, callbacks = {}) {
             <div style="font-size:13px; font-weight:bold; color:#ffd877; font-family:'Cinzel',serif;">
               Cargas: <strong style="color:#22c55e; font-size:16px;">${charges}</strong>
             </div>
-            <div style="font-size:10px; color:#94a3b8;">
+            <div style="font-size:10px; color:#94a3b8; font-family:'IBM Plex Mono',monospace;">
               Próxima: <strong style="color:#a855f7;">${points}/100 Pts</strong>
             </div>
           </div>
         </div>
 
         <!-- Progress Bar -->
-        <div style="width:100%; height:8px; background:rgba(0,0,0,0.6); border-radius:4px; margin-top:10px; overflow:hidden; border:1px solid rgba(168,85,247,0.3);">
+        <div style="width:100%; height:8px; background:rgba(0,0,0,0.6); border-radius:4px; margin-top:12px; overflow:hidden; border:1px solid rgba(168,85,247,0.3);">
           <div style="height:100%; width:${Math.min(100, points)}%; background:linear-gradient(90deg,#a855f7,#ec4899); transition:width 0.4s;"></div>
         </div>
       </div>
@@ -6958,8 +7047,8 @@ export function renderForgeRandomCraft(container, state, callbacks = {}) {
       <div style="display:flex; justify-content:center; gap:10px; flex-wrap:wrap; margin-top:16px; padding-top:14px; border-top:1px solid rgba(212,167,68,0.2);">
         <button
           onclick="window.spinRandomCraftAction()"
-          class="l2-forge-action-btn ${canSpin ? 'is-ready' : ''}"
-          style="min-width:220px; font-size:12px; font-weight:bold; padding:8px 16px; ${!canSpin ? 'opacity:0.5; cursor:not-allowed;' : 'background:linear-gradient(135deg,#7c3aed,#db2777);'}"
+          class="l2-forge-action-btn imp-btn-primary ${canSpin ? 'is-ready' : ''}"
+          style="min-width:240px; font-size:12px; font-weight:bold; padding:9px 18px; ${canSpin ? 'background:linear-gradient(135deg,#7c3aed,#db2777); border-color:#f472b6; color:#fff;' : ''}"
           ${!canSpin ? 'disabled' : ''}
         >
           🎲 GIRAR ROLETA IMPERIAL ${canSpin ? `(${charges} Disponíveis)` : '(Requer 1 Carga)'}
@@ -6967,15 +7056,15 @@ export function renderForgeRandomCraft(container, state, callbacks = {}) {
 
         <button
           onclick="window.refreshRandomCraftSlotsAction()"
-          class="l2-forge-action-btn"
-          style="min-width:180px; font-size:11px; padding:8px 12px; background:rgba(30,41,59,0.8); border:1px solid rgba(148,163,184,0.3);"
+          class="imp-forge-subtab-btn"
+          style="min-width:180px; font-size:11px; padding:8px 12px; background:rgba(30,41,59,0.85); border:1px solid rgba(148,163,184,0.3); color:#cbd5e1;"
         >
           🔄 Atualizar Slots (50.000 Adena)
         </button>
 
         <button
           onclick="window.chargeRandomCraftWithAdenaAction()"
-          class="l2-forge-action-btn"
+          class="imp-forge-subtab-btn"
           style="min-width:180px; font-size:11px; padding:8px 12px; background:rgba(180,83,9,0.25); border:1px solid rgba(245,158,11,0.4); color:#fde047;"
         >
           🪙 Comprar Carga (+20 Pts - 200k)

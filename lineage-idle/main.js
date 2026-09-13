@@ -261,6 +261,7 @@ import {
   openCraftModal as uiOpenCraftModal,
   closeCraftModal as uiCloseCraftModal,
   updateCharacterUI as uiUpdateCharacterUI,
+  updateImperialEconomyHeader,
   renderAlchemyUI as uiRenderAlchemyUI,
   renderAstralMasteryUI as uiRenderAstralMasteryUI,
   renderExpeditionsUI as uiRenderExpeditionsUI,
@@ -3729,6 +3730,7 @@ function _performFullUIUpdate() {
   if (isTabVisible('quests')) safeUiUpdate('quests', updateQuestsUI);
   if (isTabVisible('tower')) safeUiUpdate('tower', updateTowerUI);
   if (isTabVisible('warehouse')) safeUiUpdate('warehouse', updateWarehouseUI);
+  if (isTabVisible('magiclamp')) safeUiUpdate('magiclamp', updateMagicLampUI);
 
   setupVfxQualityControl();
 }
@@ -7249,14 +7251,20 @@ function synthesizeDolls() {
 
 // --------------------------- MAGIC LAMP ---------------------------
 function updateMagicLampUI() {
+  updateImperialEconomyHeader(state);
   const bar = el('lamp-progress-bar');
   const countLabel = el('lamp-count-label');
   const pct = Math.min(100, Math.floor(((state.magicLampExp || 0) / 50000) * 100));
   if (bar) bar.style.width = pct + '%';
-  if (countLabel) countLabel.textContent = `${state.magicLamps || 0} Lâmpadas Mágicas Disponíveis (${pct}% para a próxima)`;
+  if (countLabel) {
+    countLabel.textContent = `${state.magicLamps || 0} Lâmpadas Prontas (${pct}% para a próxima)`;
+  }
 
   const btn = el('use-magic-lamp-btn');
-  if (btn) btn.onclick = useMagicLamp;
+  if (btn) {
+    btn.onclick = useMagicLamp;
+    btn.disabled = (!state.magicLamps || state.magicLamps < 1);
+  }
 }
 
 function useMagicLamp() {
@@ -7274,11 +7282,20 @@ function useMagicLamp() {
 
   const cardRes = el('lamp-result-card');
   if (cardRes) {
+    const cardClass = result.cardType === 'red' ? 'card-red' : (result.cardType === 'purple' ? 'card-purple' : 'card-blue');
+    const badgeText = result.cardType === 'red' ? '🔥 REVELAÇÃO JACKPOT!' : (result.cardType === 'purple' ? '✨ CARTA RARA' : '🌟 CARTA MÁGICA');
+    const badgeColor = result.cardType === 'red' ? '#ef4444' : (result.cardType === 'purple' ? '#a855f7' : '#3b82f6');
+
     cardRes.innerHTML = `
-      <div style="border:2px solid var(--gilt-bright); padding:16px; border-radius:10px; background:rgba(10,15,25,0.9); text-align:center;">
-        <h4 style="margin:0; font-size:18px;">${result.cardName}</h4>
-        <p style="font-size:16px; color:#60a5fa; margin:8px 0 0 0;">+${result.expWon.toLocaleString()} XP &amp; +${result.spWon.toLocaleString()} SP!</p>
-        <span style="font-size:11px; color:#94a3b8;">Faixa: ${result.bracket}</span>
+      <div class="imp-magic-card ${cardClass}">
+        <div style="font-size:11px; font-weight:800; letter-spacing:0.12em; color:${badgeColor}; text-transform:uppercase; margin-bottom:8px; font-family:'Cinzel',serif;">
+          ${badgeText}
+        </div>
+        <h4 style="margin:0; font-size:18px; font-family:'Cinzel',serif; color:#ffd877;">${result.cardName}</h4>
+        <div style="font-size:16px; font-family:'IBM Plex Mono',monospace; font-weight:bold; color:#67e8f9; margin:10px 0 6px 0;">
+          +${result.expWon.toLocaleString()} EXP &bull; +${result.spWon.toLocaleString()} SP
+        </div>
+        <span style="font-size:11px; color:#94a3b8; font-family:'IBM Plex Mono',monospace;">Faixa de Nível: ${result.bracket}</span>
       </div>
     `;
   }
@@ -10873,7 +10890,36 @@ export function init() {
       };
 
       window.spinRandomCraftAction = () => {
-        serviceSpinRandomCraft(state, { log, updateAllUI, save, floatText });
+        const rc = state.randomCraft;
+        if (!rc || !rc.charge || rc.charge < 1) {
+          serviceSpinRandomCraft(state, { log, updateAllUI, save, floatText });
+          return;
+        }
+
+        const root = ROOT || (typeof document !== 'undefined' ? document : null);
+        const pedestals = root ? Array.from(root.querySelectorAll('.imp-rc-pedestal')) : [];
+        if (pedestals.length > 0 && !window._rcSpinning) {
+          window._rcSpinning = true;
+          let step = 0;
+          const interval = setInterval(() => {
+            pedestals.forEach((p, i) => {
+              if (i === (step % pedestals.length)) {
+                p.classList.add('is-active-pulse');
+              } else {
+                p.classList.remove('is-active-pulse');
+              }
+            });
+            step++;
+            if (step > 9) {
+              clearInterval(interval);
+              pedestals.forEach(p => p.classList.remove('is-active-pulse'));
+              window._rcSpinning = false;
+              serviceSpinRandomCraft(state, { log, updateAllUI, save, floatText });
+            }
+          }, 45);
+        } else if (!window._rcSpinning) {
+          serviceSpinRandomCraft(state, { log, updateAllUI, save, floatText });
+        }
       };
 
       window.refreshRandomCraftSlotsAction = () => {

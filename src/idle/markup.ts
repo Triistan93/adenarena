@@ -343,6 +343,27 @@ export const IDLE_MARKUP = `
             <button class="tab-btn subtab-pill-btn" data-tab="warehouse" data-min-level="15">📦 Baú Privado</button>
             <button class="tab-btn subtab-pill-btn" data-tab="magiclamp" data-min-level="20">🪔 Lâmpada Mágica</button>
             <button class="tab-btn subtab-pill-btn" data-tab="alchemy" data-min-level="40">🧪 Alquimia</button>
+
+            <!-- Imperial Pillar Header & Contextual Resource HUD Ribbon -->
+            <div class="imperial-pillar-header" id="imperial-pillar-header" style="width: 100%; margin-top: 6px;">
+              <div class="imp-header-top">
+                <div class="imp-title-group">
+                  <span class="imp-title-icon">🏛️</span>
+                  <div>
+                    <h4 class="imp-title-text">IMPÉRIO DE ADEN — COMÉRCIO, FORJA &amp; ARCANO</h4>
+                    <p class="imp-subtitle-text">Ala Imperial de Manufatura, Transações Comerciais e Relíquias Místicas</p>
+                  </div>
+                </div>
+              </div>
+              <div class="imp-resource-ribbon">
+                <span class="imp-res-chip imp-res-chip--gold" title="Adena Real"><span class="chip-icon">🪙</span> <span id="imp-res-gold" class="res-val">0</span> Adena</span>
+                <span class="imp-res-chip imp-res-chip--ac" title="Aden Coins"><span class="chip-icon">💎</span> <span id="imp-res-ac" class="res-val">0</span> AC</span>
+                <span class="imp-res-chip imp-res-chip--aa" title="Ancient Adena (Sete Selos)"><span class="chip-icon">🏛️</span> <span id="imp-res-aa" class="res-val">0</span> AA</span>
+                <span class="imp-res-chip imp-res-chip--sp" title="Skill Points"><span class="chip-icon">✦</span> <span id="imp-res-sp" class="res-val">0</span> SP</span>
+                <span class="imp-res-chip imp-res-chip--forge" title="Nível da Forja Imperial"><span class="chip-icon">🔨</span> Forja: <span id="imp-res-forge" class="res-val">Lv. 1</span></span>
+                <span class="imp-res-chip imp-res-chip--charges" title="Cargas da Roleta Imperial"><span class="chip-icon">🎲</span> Roleta: <span id="imp-res-charges" class="res-val">0 Cargas</span></span>
+              </div>
+            </div>
           </div>
 
           <!-- Pillar 4 Subtabs: Glória & Sociedade -->
@@ -1141,17 +1162,36 @@ export const IDLE_MARKUP = `
             <div id="dolls-encyclopedia" style="margin-top: 20px;"></div>
           </div>
 
-          <!-- Magic Lamp Tab -->
+          <!-- Magic Lamp Tab (Imperial Genie Altar) -->
           <div id="tab-magiclamp" class="tab-pane">
-            <div class="lamp-box">
-              <h3>🪔 Lâmpada Mágica &amp; Cartas de EXP</h3>
-              <p class="shop-info">Ao derrotar monstros, a barra da Lâmpada Mágica acumula experiência. Use lâmpadas para sortear cartas mágicas e receber EXP &amp; SP massivos escalonados pelo seu nível!</p>
-              <div class="lamp-gauge-container" style="margin: 12px 0;">
-                <div class="lamp-progress-bar" id="lamp-progress-bar" style="height: 10px; background: linear-gradient(90deg, #3b82f6, #8b5cf6); width: 0%; border-radius: 5px; transition: width 0.3s;"></div>
-                <span class="lamp-count-label" id="lamp-count-label" style="display: block; font-weight: bold; margin-top: 6px; color: var(--gilt-bright);">0 Lâmpadas Mágicas Disponíveis</span>
+            <div class="imp-lamp-altar" style="max-width: 900px; margin: 0 auto;">
+              <div class="imp-lamp-centerpiece">
+                <div class="imp-lamp-vessel">🪔</div>
+                <h3 style="margin: 0; font-family: 'Cinzel', serif; font-size: 20px; color: var(--imp-text-gold-bright, #f5df93); letter-spacing: 0.08em; text-shadow: 0 0 12px rgba(212,167,68,0.4);">
+                  Lâmpada Mágica de Aden
+                </h3>
+                <p style="margin: 0; font-size: 12px; color: var(--imp-text-muted, #94a3b8); max-width: 520px; line-height: 1.5;">
+                  Conforme seu herói abate monstros no combate idle, a essência arcana da Lâmpada Mágica é carregada. Sorteie Cartas Mágicas para colher montantes épicos de EXP &amp; SP proporcionais ao seu nível!
+                </p>
               </div>
-              <button class="action-btn action-btn--primary" id="use-magic-lamp-btn">Sortear Carta Mágica 🪔</button>
-              <div class="lamp-result-card" id="lamp-result-card" style="margin-top: 12px;"></div>
+
+              <div style="max-width: 480px; margin: 16px auto; background: rgba(8,11,18,0.7); border: 1px solid var(--imp-border-subtle, rgba(212,167,68,0.25)); border-radius: 8px; padding: 12px;">
+                <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 6px; font-family: 'Cinzel', serif; font-weight: 700;">
+                  <span style="color: #ffd877;">Carregamento Místico</span>
+                  <span id="lamp-count-label" style="color: #67e8f9; font-family: 'IBM Plex Mono', monospace;">0 Lâmpadas Prontas</span>
+                </div>
+                <div style="width: 100%; height: 8px; background: rgba(0,0,0,0.6); border-radius: 4px; overflow: hidden; border: 1px solid rgba(255,255,255,0.06);">
+                  <div class="lamp-progress-bar" id="lamp-progress-bar" style="height: 100%; background: linear-gradient(90deg, #3b82f6, #a855f7, #f59e0b); width: 0%; border-radius: 4px; transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);"></div>
+                </div>
+              </div>
+
+              <div style="margin: 16px 0;">
+                <button class="imp-btn-primary" id="use-magic-lamp-btn" style="font-size: 14px; padding: 10px 28px; box-shadow: 0 4px 18px rgba(212,167,68,0.3);">
+                  🪔 Invocar Carta Mágica
+                </button>
+              </div>
+
+              <div class="imp-lamp-card-reveal-area" id="lamp-result-card"></div>
             </div>
           </div>
 
@@ -1250,31 +1290,45 @@ export const IDLE_MARKUP = `
             </div>
           </div>
 
-          <!-- Warehouse Tab Pane (50/50 Split View: Mochila ↔ Baú) -->
+          <!-- Warehouse Tab Pane (Imperial Vault 50/50 Split View: Mochila ↔ Baú) -->
           <div id="tab-warehouse" class="tab-pane">
-            <div class="warehouse-split-view" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; width: 100%; max-width: 1200px; margin: 0 auto;">
+            <div class="imp-vault-split" style="max-width: 1200px; margin: 0 auto;">
               <!-- Left Side: Inventory (Mochila) -->
-              <div class="wh-side-panel" style="background: rgba(18, 22, 32, 0.95); border: 1px solid rgba(212,167,68,0.4); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; box-shadow: 0 4px 20px rgba(0,0,0,0.6);">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid rgba(212,167,68,0.25);">
-                  <div>
-                    <h4 style="margin: 0; color: var(--gilt-bright); font-size: 14px; font-weight: bold;">🎒 Mochila (Inventário)</h4>
-                    <span id="wh-inv-count" style="font-size: 11px; color: var(--text-muted);">0/150 slots</span>
+              <div class="imp-vault-panel">
+                <div class="imp-vault-panel-header">
+                  <div style="flex: 1; margin-right: 12px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                      <h4 style="margin: 0; font-family: 'Cinzel', serif; color: var(--imp-text-gold-bright, #ffd877); font-size: 14px; font-weight: bold; display: flex; align-items: center; gap: 6px;">
+                        🎒 Mochila (Inventário)
+                      </h4>
+                      <span id="wh-inv-count" style="font-size: 11px; color: var(--imp-text-muted, #94a3b8); font-family: 'IBM Plex Mono', monospace;">0/150 slots</span>
+                    </div>
+                    <div class="imp-slot-gauge-bar">
+                      <div id="wh-inv-gauge-fill" class="imp-slot-gauge-fill" style="width: 0%;"></div>
+                    </div>
                   </div>
-                  <button id="deposit-all-btn" class="action-btn action-btn--primary" style="font-size: 11px; padding: 4px 12px; font-weight: bold;" onclick="depositAllToWarehouse()">📥 Guardar Tudo</button>
+                  <button id="deposit-all-btn" class="imp-btn-primary" style="font-size: 11px; padding: 6px 14px; font-weight: bold; white-space: nowrap;" onclick="depositAllToWarehouse()">📥 Guardar Tudo</button>
                 </div>
-                <div id="wh-inventory-grid" class="l2inv-slots-grid" style="flex: 1; max-height: 480px; min-height: 320px; overflow-y: auto;"></div>
+                <div id="wh-inventory-grid" class="l2inv-slots-grid" style="flex: 1; max-height: 480px; min-height: 320px; overflow-y: auto; background: rgba(0,0,0,0.3); border-radius: 6px; padding: 8px; border: 1px solid rgba(255,255,255,0.04);"></div>
               </div>
 
               <!-- Right Side: Warehouse (Baú) -->
-              <div class="wh-side-panel" style="background: rgba(18, 22, 32, 0.95); border: 1px solid rgba(212,167,68,0.4); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; box-shadow: 0 4px 20px rgba(0,0,0,0.6);">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid rgba(212,167,68,0.25);">
-                  <div>
-                    <h4 style="margin: 0; color: var(--gilt-bright); font-size: 14px; font-weight: bold;">📦 Baú do Personagem</h4>
-                    <span id="wh-storage-count" style="font-size: 11px; color: var(--text-muted);">0/100 slots</span>
+              <div class="imp-vault-panel">
+                <div class="imp-vault-panel-header">
+                  <div style="flex: 1; margin-right: 12px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                      <h4 style="margin: 0; font-family: 'Cinzel', serif; color: var(--imp-text-gold-bright, #ffd877); font-size: 14px; font-weight: bold; display: flex; align-items: center; gap: 6px;">
+                        📦 Baú do Personagem
+                      </h4>
+                      <span id="wh-storage-count" style="font-size: 11px; color: var(--imp-text-muted, #94a3b8); font-family: 'IBM Plex Mono', monospace;">0/100 slots</span>
+                    </div>
+                    <div class="imp-slot-gauge-bar">
+                      <div id="wh-storage-gauge-fill" class="imp-slot-gauge-fill" style="width: 0%;"></div>
+                    </div>
                   </div>
-                  <button id="withdraw-all-btn" class="action-btn action-btn--primary" style="font-size: 11px; padding: 4px 12px; font-weight: bold;" onclick="withdrawAllFromWarehouse()">📤 Retirar Tudo</button>
+                  <button id="withdraw-all-btn" class="imp-btn-primary" style="font-size: 11px; padding: 6px 14px; font-weight: bold; white-space: nowrap;" onclick="withdrawAllFromWarehouse()">📤 Retirar Tudo</button>
                 </div>
-                <div id="wh-storage-grid" class="l2inv-slots-grid" style="flex: 1; max-height: 480px; min-height: 320px; overflow-y: auto;"></div>
+                <div id="wh-storage-grid" class="l2inv-slots-grid" style="flex: 1; max-height: 480px; min-height: 320px; overflow-y: auto; background: rgba(0,0,0,0.3); border-radius: 6px; padding: 8px; border: 1px solid rgba(255,255,255,0.04);"></div>
               </div>
             </div>
           </div>
