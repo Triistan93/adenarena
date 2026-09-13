@@ -1524,6 +1524,9 @@ export const IDLE_MARKUP = `
       </div>
     </div>
 
+    <!-- Contacts, Friends & Mentorship Modal -->
+    <div id="referral-modal" class="modal"></div>
+
     <!-- Starter Journey Modal (Jornada dos Pioneiros - 7 Passos) -->
     <div id="starter-journey-modal" class="modal">
       <div class="modal-content" style="max-width:760px; width:95%; max-height:90vh; overflow-y:auto; background:linear-gradient(180deg, #181410 0%, #0d0a08 100%); border:2px solid rgba(212, 167, 68, 0.5); box-shadow:0 10px 40px rgba(0,0,0,0.8), 0 0 24px rgba(212,167,68,0.2); border-radius:12px; padding:20px;">

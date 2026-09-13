@@ -8450,6 +8450,193 @@ select:focus-visible {
   color: #fef08a;
 }
 
+/* ═══════════ CONTACTS, FRIENDS & MENTORSHIP MODAL ═══════════ */
+#referral-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 999999;
+  backdrop-filter: blur(6px);
+  padding: 16px;
+}
+
+#referral-modal.active {
+  display: flex !important;
+  animation: modal-in 0.25s ease-out;
+}
+
+.l2contacts-window-frame {
+  background: #0b0d13;
+  border: 1px solid rgba(212, 167, 68, 0.35);
+  border-radius: 8px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.9), 0 0 20px rgba(212, 167, 68, 0.15);
+  max-width: 580px;
+  width: 95vw;
+  margin: 0 auto;
+  overflow: hidden;
+  font-family: 'Cinzel', serif;
+  position: relative;
+  z-index: 1000000;
+}
+
+.l2contacts-tabs-bar {
+  display: flex;
+  background: #121622;
+  border-bottom: 1px solid rgba(212, 167, 68, 0.25);
+}
+
+.l2contacts-tab {
+  flex: 1;
+  padding: 9px 12px;
+  text-align: center;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: #94a3b8;
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.l2contacts-tab:hover {
+  color: #f1f5f9;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.l2contacts-tab.active {
+  color: #ffd877;
+  border-bottom-color: #ffd877;
+  background: rgba(212, 167, 68, 0.1);
+}
+
+.l2contacts-subbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  background: rgba(14, 18, 26, 0.7);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.l2contacts-counter {
+  font-size: 11px;
+  color: #cbd5e1;
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 600;
+}
+
+.l2contacts-top-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.l2contacts-add-btn {
+  background: linear-gradient(180deg, #1e3a5f 0%, #0f223a 100%);
+  border: 1px solid #3b82f6;
+  border-radius: 4px;
+  padding: 4px 12px;
+  color: #93c5fd;
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.l2contacts-add-btn:hover {
+  background: linear-gradient(180deg, #254b7d 0%, #152f50 100%);
+  border-color: #60a5fa;
+  color: #fff;
+}
+
+.l2contacts-del-btn {
+  background: linear-gradient(180deg, #4c1d24 0%, #290f13 100%);
+  border: 1px solid #ef4444;
+  border-radius: 4px;
+  padding: 4px 12px;
+  color: #fca5a5;
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.l2contacts-del-btn:hover {
+  background: linear-gradient(180deg, #6b2530 0%, #3d141b 100%);
+  border-color: #f87171;
+  color: #fff;
+}
+
+.l2contacts-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+
+.l2contacts-table th {
+  background: #111520;
+  padding: 6px 10px;
+  text-align: left;
+  font-size: 10px;
+  color: #94a3b8;
+  border-bottom: 1px solid rgba(212, 167, 68, 0.2);
+}
+
+.l2contacts-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  color: #ece4d3;
+}
+
+.l2contacts-table tr:nth-child(even) td {
+  background: rgba(14, 18, 26, 0.35);
+}
+
+.l2contacts-table tr:hover td {
+  background: rgba(212, 167, 68, 0.08);
+}
+
+.l2contacts-bottom-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 10px 14px;
+  background: #10131c;
+  border-top: 1px solid rgba(212, 167, 68, 0.2);
+}
+
+.l2contacts-action-btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 7px 8px;
+  background: linear-gradient(180deg, #1c2230 0%, #10131c 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  color: #cbd5e1;
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.l2contacts-action-btn:hover {
+  background: linear-gradient(180deg, #293245 0%, #161c28 100%);
+  border-color: rgba(212, 167, 68, 0.4);
+  color: #ffd877;
+}
+
 
 
 

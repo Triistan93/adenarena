@@ -8532,14 +8532,51 @@ export function uiOpenPixCheckoutModal(tierId, state) {
 let _contactsActiveTab = 'friends'; // 'friends' | 'block' | 'mentorship'
 let _contactsSelectedFriendName = null;
 
+function getContactsUiRoot() {
+  if (typeof document === 'undefined') return null;
+  const host = document.getElementById('idle-host') || document.querySelector('#idle-host') || document.querySelector('[id*="idle"]');
+  return host?.shadowRoot || (typeof window !== 'undefined' && window.__SHADOW_ROOT__) || (typeof ROOT !== 'undefined' && ROOT) || document;
+}
+
+export function closeContactsModal() {
+  const root = getContactsUiRoot() || document;
+  const modal = (root.getElementById ? root.getElementById('referral-modal') : null) || (root.querySelector ? root.querySelector('#referral-modal') : null) || document.getElementById('referral-modal');
+  if (modal) {
+    modal.classList.remove('active');
+    modal.style.display = 'none';
+  }
+}
+
 export function uiOpenReferralModal(state, defaultTab) {
-  let modal = document.getElementById('referral-modal');
+  const root = getContactsUiRoot() || document;
+  let modal = (root.getElementById ? root.getElementById('referral-modal') : null) || (root.querySelector ? root.querySelector('#referral-modal') : null) || document.getElementById('referral-modal');
   if (!modal) {
     modal = document.createElement('div');
     modal.id = 'referral-modal';
-    modal.className = 'modal-backdrop';
-    document.body.appendChild(modal);
+    modal.className = 'modal';
+    if (root && root.appendChild) {
+      root.appendChild(modal);
+    } else {
+      document.body.appendChild(modal);
+    }
   }
+
+  modal.style.position = 'fixed';
+  modal.style.inset = '0';
+  modal.style.background = 'rgba(0, 0, 0, 0.85)';
+  modal.style.display = 'flex';
+  modal.style.alignItems = 'center';
+  modal.style.justifyContent = 'center';
+  modal.style.zIndex = '999999';
+  modal.style.backdropFilter = 'blur(6px)';
+  modal.style.padding = '16px';
+  modal.classList.add('active');
+
+  modal.onclick = (e) => {
+    if (e.target === modal) {
+      closeContactsModal();
+    }
+  };
 
   if (defaultTab && ['friends', 'block', 'mentorship'].includes(defaultTab)) {
     _contactsActiveTab = defaultTab;
@@ -8785,7 +8822,7 @@ export function uiOpenReferralModal(state, defaultTab) {
         <div style="font-family: 'Cinzel', serif; font-size: 14px; font-weight: bold; color: #f5df93; display: flex; align-items: center; gap: 8px;">
           👥 Contatos, Amigos &amp; Mentoria
         </div>
-        <button onclick="document.getElementById('referral-modal').classList.remove('active')" style="background: none; border: none; color: #94a3b8; font-size: 18px; cursor: pointer; padding: 0 4px; line-height: 1;">✕</button>
+        <button id="close-referral-modal-btn" onclick="window.closeContactsModal ? window.closeContactsModal() : window.closeReferralModal()" style="background: none; border: none; color: #94a3b8; font-size: 20px; cursor: pointer; padding: 2px 6px; line-height: 1;" title="Fechar">✕</button>
       </div>
 
       <!-- Tabs Bar -->
@@ -8812,6 +8849,14 @@ export function uiOpenReferralModal(state, defaultTab) {
       uiOpenReferralModal(s);
     };
   });
+
+  const closeBtn = modal.querySelector('#close-referral-modal-btn');
+  if (closeBtn) {
+    closeBtn.onclick = (e) => {
+      e.stopPropagation();
+      closeContactsModal();
+    };
+  }
 
   modal.querySelectorAll('.contact-friend-row').forEach(row => {
     row.onclick = (e) => {
@@ -8964,11 +9009,11 @@ export function uiOpenReferralModal(state, defaultTab) {
       uiOpenReferralModal(s);
     };
   });
-
-  modal.classList.add('active');
 }
 
 if (typeof window !== 'undefined') {
+  window.closeContactsModal = closeContactsModal;
+  window.closeReferralModal = closeContactsModal;
   window.openContactsModal = (tab) => uiOpenReferralModal(undefined, tab);
   window.openReferralModal = (tab) => uiOpenReferralModal(undefined, tab);
 }

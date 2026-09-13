@@ -192,6 +192,7 @@ export default function IdleGame() {
     if (!host) return;
 
     const shadow = host.shadowRoot ?? host.attachShadow({ mode: "open" });
+    (window as any).__SHADOW_ROOT__ = shadow;
     shadow.innerHTML = `<style>${idleCss}\n${grimoireCss}\n${gameUiCss}</style>${IDLE_MARKUP}`;
     
     // Inicialização unificada via GameBootstrap

@@ -291,6 +291,7 @@ import {
   showDropLocatorModal,
   uiOpenPixCheckoutModal,
   uiOpenReferralModal,
+  closeContactsModal,
   openAutoEquipPreviewModal,
   openBatchSellModal,
   openBatchSalvageModal,
@@ -7921,6 +7922,30 @@ export function bindEvents() {
       };
     }
 
+    const topReferralBtn = el('top-referral-btn');
+    if (topReferralBtn) {
+      topReferralBtn.onclick = (e) => {
+        if (e) { e.preventDefault(); e.stopPropagation(); }
+        uiOpenReferralModal(state);
+      };
+    }
+
+    const pillarContactsBtn = el('pillar-contacts-btn');
+    if (pillarContactsBtn) {
+      pillarContactsBtn.onclick = (e) => {
+        if (e) { e.preventDefault(); e.stopPropagation(); }
+        uiOpenReferralModal(state);
+      };
+    }
+
+    const closeReferralBtn = el('close-referral-modal-btn');
+    if (closeReferralBtn) {
+      closeReferralBtn.onclick = (e) => {
+        if (e) { e.preventDefault(); e.stopPropagation(); }
+        closeContactsModal();
+      };
+    }
+
     // Modal background click to close
     qsa('.modal, .modal-overlay').forEach(modal => {
       modal.addEventListener('click', (e) => {
@@ -9501,6 +9526,12 @@ export function init() {
     };
     window.openContactsModal = (tab) => {
       uiOpenReferralModal(state, tab);
+    };
+    window.closeContactsModal = () => {
+      closeContactsModal();
+    };
+    window.closeReferralModal = () => {
+      closeContactsModal();
     };
     window.submitReferralCodeAction = () => {
       const input = document.getElementById('ref-friend-code-input');
