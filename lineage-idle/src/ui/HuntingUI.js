@@ -10,6 +10,7 @@ import {
   KNIVES_CATALOG,
   LURES_CATALOG,
   APPROACH_TACTICS,
+  WIND_DIRECTIONS,
   getHuntingZonesList,
   getHuntingXpForLevel
 } from '../data/hunting.js';
@@ -179,7 +180,23 @@ export function renderHuntingUI(state) {
 
   // 4. PALCO DE CAÇA (STAGE CENTRAL)
   let stageHtml = '';
-  if (hState.isHunting && hState.trackedPreyId) {
+  if (hState.awaitingButchering && hState.slainPreyData) {
+    const prey = PREY_CATALOG[hState.slainPreyData.preyId];
+    stageHtml = `
+      <div style="text-align:center; padding:20px; background:radial-gradient(circle, rgba(50,20,20,0.85) 0%, rgba(20,10,10,0.95) 100%); border:1px solid rgba(248,113,113,0.4); border-radius:12px; box-shadow:0 0 20px rgba(0,0,0,0.7);">
+        <div style="font-size:52px; margin-bottom:8px;">${prey?.icon || '💀'}</div>
+        <h3 style="margin:0 0 4px 0; font-family:'Cinzel',serif; color:#fca5a5; font-size:18px;">
+          ${prey?.name || 'Carcaça Abatida'}
+        </h3>
+        <p style="margin:0 0 16px 0; font-size:12px; color:#aaa;">Presa abatida! Escolha o método de descarne no campo.</p>
+        
+        <div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap;">
+          <button onclick="window.executeFieldButchering('pelt')" style="padding:12px 20px; font-family:'Cinzel',serif; font-size:13px; font-weight:bold; background:rgba(20,50,30,0.8); border:1px solid #34d399; color:#6ee7b7; border-radius:8px; cursor:pointer;">✂️ Esfolar Couro Intacto</button>
+          <button onclick="window.executeFieldButchering('trophy')" style="padding:12px 20px; font-family:'Cinzel',serif; font-size:13px; font-weight:bold; background:rgba(50,40,20,0.8); border:1px solid #fbbf24; color:#fde047; border-radius:8px; cursor:pointer;">🦴 Extrair Ossos & Troféus</button>
+        </div>
+      </div>
+    `;
+  } else if (hState.isHunting && hState.trackedPreyId) {
     const prey = PREY_CATALOG[hState.trackedPreyId];
     const now = Date.now();
     const elapsed = now - (hState.trackStartTime || now);
@@ -187,6 +204,11 @@ export function renderHuntingUI(state) {
     const isReady = elapsed >= needed;
     const progressPct = Math.min(100, Math.floor((elapsed / needed) * 100));
     const activeTacticDef = APPROACH_TACTICS[hState.activeTactic] || APPROACH_TACTICS.ambush;
+    
+    const windDef = WIND_DIRECTIONS[hState.windDirection] || WIND_DIRECTIONS.crosswind;
+    const alertLvl = Math.round(hState.alertLevel || 0);
+    const alertColor = alertLvl < 40 ? '#34d399' : alertLvl <= 75 ? '#fbbf24' : '#ef4444';
+    const alertText = alertLvl > 75 ? 'ALERTA CRÍTICO!' : 'Alerta';
 
     stageHtml = `
       <div style="text-align:center; padding:20px; background:radial-gradient(circle, rgba(30,50,40,0.85) 0%, rgba(12,18,24,0.95) 100%); border:1px solid rgba(52,211,153,0.4); border-radius:12px; box-shadow:0 0 20px rgba(0,0,0,0.7);">
@@ -202,6 +224,19 @@ export function renderHuntingUI(state) {
         <p style="margin:0 0 12px 0; font-size:11px; color:#aaa;">
           Peso estimado: <strong style="color:#f4d58a;">${prey?.weightRange}</strong> | Rendimento: <strong style="color:#cbd5e1;">${prey?.skinYield?.primary?.toUpperCase()}</strong>
         </p>
+
+        <div style="margin-bottom:12px; display:flex; justify-content:center; gap:16px;">
+          <div style="font-size:12px; font-weight:bold; color:#93c5fd;">
+            ${windDef.icon} Vento: ${windDef.name}
+          </div>
+          <div style="font-size:12px; font-weight:bold; color:${alertColor};">
+            ⚠️ ${alertText} (${alertLvl}%)
+          </div>
+        </div>
+
+        <div style="width:100%; height:4px; background:rgba(0,0,0,0.6); border-radius:2px; overflow:hidden; border:1px solid rgba(255,255,255,0.1); margin-bottom:16px;">
+          <div style="width:${alertLvl}%; height:100%; background:${alertColor}; transition:width 0.3s ease;"></div>
+        </div>
 
         <!-- Barra de Progresso de Rastreio -->
         <div style="width:100%; height:8px; background:rgba(0,0,0,0.6); border-radius:4px; overflow:hidden; border:1px solid rgba(52,211,153,0.3); margin-bottom:16px;">
@@ -226,7 +261,7 @@ export function renderHuntingUI(state) {
               letter-spacing: 0.05em;
             "
           >
-            ${isReady ? '🔪 ESFOLAR CARCAÇA' : '🐾 ENCURRALANDO A PRESA...'}
+            ${isReady ? '🔪 ABATER PRESA' : '🐾 ENCURRALANDO...'}
           </button>
         </div>
       </div>

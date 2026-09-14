@@ -1,5 +1,32 @@
 // expeditions.js — Catálogo de Destinos, Perigos e Fases de Expedição (Exploration 2.0)
+export const RISK_DIRECTIVES = {
+  cautious: { id: 'cautious', name: 'Cautelosa', hazardDamage: -0.25, loyaltyBonus: 1, lootMult: -0.15 },
+  balanced: { id: 'balanced', name: 'Equilibrada', hazardDamage: 0, loyaltyBonus: 0, lootMult: 0 },
+  reckless: { id: 'reckless', name: 'Audaciosa', hazardDamage: 0.60, loyaltyBonus: -5, lootMult: 0.45 }
+};
 
+export const EXPEDITION_DILEMMAS = {
+  dilemma_altar: {
+    id: 'dilemma_altar',
+    name: 'Altar Profanado de Shilen',
+    desc: 'Um altar de pedra negra exsudando magia corrompida. O que fazer?',
+    options: {
+      saquear: { name: 'Saquear Altar', reqTrait: 'greedy', desc: '+Adena, sofre dano', result: 'gold' },
+      purificar: { name: 'Purificar Altar', reqSpecs: ['veteran', 'medic'], desc: '+EXP Esquadrão', result: 'xp' },
+      evitar: { name: 'Evitar', reqDirective: 'cautious', desc: 'Passa sem interagir', result: 'skip' }
+    }
+  },
+  dilemma_chest: {
+    id: 'dilemma_chest',
+    name: 'Arca Ancestral Trancada',
+    desc: 'Um pesado baú de carvalho e ferro com uma armadilha evidente.',
+    options: {
+      forcar: { name: 'Forçar Trinco', reqSpec: 'striker', desc: '65% chance de sucesso', result: 'force' },
+      destrancar: { name: 'Destrancar com Gazuá', reqSpec: 'scout', desc: '90% chance de sucesso', result: 'pick' },
+      ignorar: { name: 'Ignorar Armadilha', reqDirective: 'cautious', desc: 'Não corre o risco', result: 'skip' }
+    }
+  }
+};
 export const EXPEDITION_DESTINATIONS = {
   gludio_ruins: {
     id: 'gludio_ruins',

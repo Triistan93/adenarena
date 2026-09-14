@@ -73,33 +73,54 @@ export function getMiningZonesList() {
   return Object.values(MINING_ZONES);
 }
 
+export const MINE_HAZARDS = {
+  none: { id: 'none', name: 'Rocha Estável', desc: 'Sem perigos ocultos.' },
+  gas_pocket: { id: 'gas_pocket', name: 'Bolsão de Gás', desc: 'Gás inflamável. Golpes pesados causam explosão (10% HP dano, desgaste extra).' },
+  seismic_fault: { id: 'seismic_fault', name: 'Falha Sísmica', desc: 'Rocha fraturada. Perda de estabilidade acelerada (2x).' },
+  dense_crystal: { id: 'dense_crystal', name: 'Veio Cristalino', desc: 'Cristal puro. Mineração precisa dobra o rendimento.' }
+};
+
 export const MINING_TACTICS = {
   precision: {
     id: 'precision',
-    name: 'Escavação de Precisão',
+    name: 'Cinzelamento Preciso',
     icon: '🎯',
-    desc: 'Golpes cirúrgicos nas juntas naturais da rocha. +25% chance de Pepita Pura, tempo +20%.',
+    desc: 'Golpes cirúrgicos nas juntas naturais da rocha. +25% chance de Pepita Pura, perda de estabilidade -5%.',
     timeMult: 1.2,
     qualityBonus: 0.25,
-    durabilityCost: 1
+    durabilityCost: 1,
+    stabilityLoss: 5
   },
   standard: {
     id: 'standard',
     name: 'Mineração Padrão',
     icon: '⛏️',
-    desc: 'Ritmo firme e cadenciado de picareta. Rendimento e velocidade equilibrados.',
+    desc: 'Ritmo firme e cadenciado de picareta. Rendimento e perda de estabilidade moderados (-12%).',
     timeMult: 1.0,
     qualityBonus: 0.0,
-    durabilityCost: 1
+    durabilityCost: 1,
+    stabilityLoss: 12
   },
   heavy: {
     id: 'heavy',
     name: 'Golpe Demolidor',
     icon: '💥',
-    desc: 'Martelada potente para quebrar a camada externa. -35% no tempo de extração, -15% pureza.',
+    desc: 'Martelada potente para quebrar a camada externa. -35% no tempo, perda drástica de estabilidade (-28%!). Risco de explosão de gás.',
     timeMult: 0.65,
     qualityBonus: -0.15,
-    durabilityCost: 1
+    durabilityCost: 1,
+    stabilityLoss: 28
+  },
+  probe: {
+    id: 'probe',
+    name: 'Sondagem Acústica',
+    icon: '🔍',
+    desc: 'Revela perigo do veio sem causar vibração na galeria.',
+    timeMult: 0,
+    qualityBonus: 0,
+    durabilityCost: 0,
+    stabilityLoss: 0,
+    isInstant: true
   }
 };
 

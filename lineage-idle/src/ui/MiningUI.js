@@ -235,62 +235,81 @@ export function renderMiningUI(state) {
       </div>
     `;
   } else {
-    let tacticsHtml = '';
-    for (const [tId, tDef] of Object.entries(MINING_TACTICS)) {
-      const isSelected = (mState.selectedTactic || 'standard') === tId;
-      tacticsHtml += `
-        <button 
-          onclick="window.selectMiningTactic('${tId}')"
-          style="
-            flex: 1; min-width: 130px; padding: 6px 10px; border-radius: 6px; cursor: pointer; text-align: left;
-            background: ${isSelected ? 'rgba(245,158,11,0.2)' : 'rgba(255,255,255,0.05)'};
-            border: 1px solid ${isSelected ? '#f59e0b' : 'rgba(255,255,255,0.1)'};
-            color: ${isSelected ? '#fbbf24' : '#cbd5e1'};
-            transition: all 0.2s ease;
-          "
-        >
-          <div style="font-size: 11px; font-weight: bold; font-family:'Cinzel',serif;">${tDef.icon} ${tDef.name}</div>
-          <div style="font-size: 9px; color: #94a3b8; margin-top: 2px;">${tDef.desc}</div>
-        </button>
-      `;
-    }
+    const hazardName = mState.veinHazard === 'gas_pocket' ? 'Bolsão de Gás' 
+                     : mState.veinHazard === 'seismic_fault' ? 'Falha Sísmica' 
+                     : mState.veinHazard === 'dense_crystal' ? 'Veio Cristalino' : 'Rocha Estável';
+    const hazardDisplay = mState.veinProbed ? `[Perigo: ${hazardName}]` : '[Composição: Desconhecida (Sondar Veio)]';
+    const hazardColor = mState.veinProbed && mState.veinHazard !== 'none' ? '#ef4444' : '#cbd5e1';
 
+    const stability = mState.galleryStability ?? 100;
+    const stabilityColor = stability > 60 ? 'linear-gradient(90deg, #34d399, #10b981)' 
+                         : stability >= 25 ? 'linear-gradient(90deg, #fbbf24, #d97706)' 
+                         : 'linear-gradient(90deg, #ef4444, #b91c1c)';
+    const stabilityText = stability > 60 ? 'Galeria Firme' : stability >= 25 ? 'Instabilidade Moderada' : 'Risco Crítico de Desabamento!';
+    
     stageHtml = `
       <div style="text-align:center; padding:20px; background:radial-gradient(circle, rgba(35,20,12,0.85) 0%, rgba(15,10,8,0.95) 100%); border:1px solid rgba(212,167,68,0.3); border-radius:12px;">
-        <div style="font-size:42px; margin-bottom:8px;">
+        
+        <!-- Stability Gauge -->
+        <div style="margin-bottom:12px; text-align:left;">
+          <div style="display:flex; justify-content:space-between; font-size:11px; font-weight:bold; margin-bottom:4px; font-family:'Cinzel',serif;">
+            <span style="color:#f4d58a;">🏛️ Estabilidade da Galeria: ${stability}%</span>
+            <span style="color:${stability > 60 ? '#34d399' : stability >= 25 ? '#fbbf24' : '#ef4444'};">${stabilityText}</span>
+          </div>
+          <div style="width:100%; height:8px; background:rgba(0,0,0,0.6); border-radius:4px; border:1px solid rgba(212,167,68,0.2); overflow:hidden;">
+            <div style="width:${stability}%; height:100%; background:${stabilityColor}; transition:width 0.3s ease;"></div>
+          </div>
+        </div>
+
+        <div style="font-size:42px; margin-bottom:4px;">
           ⚒️
         </div>
-        <h3 style="margin:0 0 6px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:16px;">
+        <h3 style="margin:0 0 4px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:16px;">
           Frente de Extração em ${activeZone.name}
         </h3>
-        <p style="margin:0 0 14px 0; font-size:11px; color:#aaa; max-width:400px; margin-left:auto; margin-right:auto; line-height:1.4;">
-          ${activeZone.description} Escolha a intensidade do golpe de picareta e extraia minérios preciosos.
-        </p>
-
-        <!-- Táticas de Mineração -->
-        <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-bottom:16px;">
-          ${tacticsHtml}
+        
+        <!-- Vein Hazard -->
+        <div style="margin-bottom:14px; font-size:12px; font-weight:bold; color:${hazardColor};">
+          ${hazardDisplay}
         </div>
 
-        <button 
-          onclick="window.startMiningHarvest()"
-          ${isPickaxeDull ? 'disabled' : ''}
-          style="
-            padding: 12px 28px;
-            font-family: 'Cinzel', serif;
-            font-size: 14px;
-            font-weight: bold;
-            background: ${!isPickaxeDull ? 'linear-gradient(180deg, #d4a744, #8a641c)' : 'rgba(60,50,40,0.5)'};
-            border: 1px solid ${!isPickaxeDull ? '#ffe699' : '#555'};
-            color: ${!isPickaxeDull ? '#000' : '#777'};
-            border-radius: 8px;
-            cursor: ${!isPickaxeDull ? 'pointer' : 'not-allowed'};
-            box-shadow: ${!isPickaxeDull ? '0 0 16px rgba(212,167,68,0.4)' : 'none'};
-            letter-spacing: 0.05em;
-          "
-        >
-          ${isPickaxeDull ? '⚠️ PICARETA CEGA (REFORJAR PRIMEIRO)' : '⛏️ ESCAVAR VEIO'}
-        </button>
+        <p style="margin:0 0 14px 0; font-size:11px; color:#aaa; max-width:400px; margin-left:auto; margin-right:auto; line-height:1.4;">
+          Escolha como abordar este veio mineral.
+        </p>
+
+        <!-- Action Buttons -->
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-bottom:16px;">
+          <button 
+            onclick="window.probeMiningVein()"
+            ${mState.veinProbed ? 'disabled' : ''}
+            style="padding:10px; font-family:'Cinzel',serif; font-size:11px; font-weight:bold; background:rgba(30,40,50,0.8); border:1px solid #3b82f6; color:#93c5fd; border-radius:6px; cursor:${mState.veinProbed ? 'not-allowed' : 'pointer'}; opacity:${mState.veinProbed ? '0.5' : '1'};"
+          >
+            🔍 Sondagem Acústica
+          </button>
+          
+          <button 
+            onclick="window.shoreUpMiningGallery()"
+            style="padding:10px; font-family:'Cinzel',serif; font-size:11px; font-weight:bold; background:rgba(50,30,20,0.8); border:1px solid #d97706; color:#fcd34d; border-radius:6px; cursor:pointer;"
+          >
+            🪵 Escorar Galeria (+35%)
+          </button>
+
+          <button 
+            onclick="window.selectMiningTactic('precision'); window.startMiningHarvest();"
+            ${isPickaxeDull ? 'disabled' : ''}
+            style="padding:10px; font-family:'Cinzel',serif; font-size:11px; font-weight:bold; background:${isPickaxeDull ? 'rgba(60,50,40,0.5)' : 'rgba(20,50,20,0.8)'}; border:1px solid ${isPickaxeDull ? '#555' : '#22c55e'}; color:${isPickaxeDull ? '#777' : '#86efac'}; border-radius:6px; cursor:${isPickaxeDull ? 'not-allowed' : 'pointer'};"
+          >
+            🎯 Cinzelamento Preciso
+          </button>
+
+          <button 
+            onclick="window.selectMiningTactic('heavy'); window.startMiningHarvest();"
+            ${isPickaxeDull ? 'disabled' : ''}
+            style="padding:10px; font-family:'Cinzel',serif; font-size:11px; font-weight:bold; background:${isPickaxeDull ? 'rgba(60,50,40,0.5)' : 'rgba(60,20,20,0.8)'}; border:1px solid ${isPickaxeDull ? '#555' : '#ef4444'}; color:${isPickaxeDull ? '#777' : '#fca5a5'}; border-radius:6px; cursor:${isPickaxeDull ? 'not-allowed' : 'pointer'};"
+          >
+            💥 Golpe Demolidor
+          </button>
+        </div>
       </div>
     `;
   }

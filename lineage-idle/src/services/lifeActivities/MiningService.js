@@ -6,7 +6,7 @@ import {
   LAMPS_CATALOG,
   MINING_TACTICS
 } from '../../data/mining.js';
-import { addToInventory } from '../InventoryService.js';
+import { addToInventory, removeFromInventory } from '../InventoryService.js';
 import { LifeActivityCore } from './LifeActivityCore.js';
 import { RewardEngine } from './RewardEngine.js';
 import { resolveCanonicalResourceId } from './ResourceDictionary.js';
@@ -60,6 +60,16 @@ export const MiningService = {
     if (!state.mining.activeZone) {
       state.mining.activeZone = 'zone_abandoned_coal';
     }
+    if (state.mining.galleryStability === undefined) {
+      state.mining.galleryStability = 100;
+    }
+    if (!state.mining.veinHazard) {
+      const hazards = ['none', 'none', 'none', 'gas_pocket', 'seismic_fault', 'dense_crystal'];
+      state.mining.veinHazard = hazards[Math.floor(Math.random() * hazards.length)];
+    }
+    if (state.mining.veinProbed === undefined) {
+      state.mining.veinProbed = false;
+    }
 
     return state.mining;
   },
@@ -67,6 +77,49 @@ export const MiningService = {
   getAvailableZones(state) {
     const playerLvl = Number(state?.level) || 1;
     return Object.values(MINING_ZONES).filter(zone => playerLvl >= zone.minLevel);
+  },
+
+  probeVein(state, callbacks = {}) {
+    const mState = this.getMiningState(state);
+    mState.veinProbed = true;
+    if (callbacks.log) callbacks.log("🔍 O eco metálico revela a estrutura interna da rocha...", 'system');
+    if (callbacks.updateAllUI) callbacks.updateAllUI();
+    if (callbacks.save) callbacks.save();
+    return true;
+  },
+
+  shoreUpGallery(state, callbacks = {}) {
+    const mState = this.getMiningState(state);
+    const branchItem = state.inventory?.find(i => (i.itemId || i.id) === 'branch' && (i.qty || i.count) > 0);
+    const woodItem = state.inventory?.find(i => (i.itemId || i.id) === 'compressed_wood' && (i.qty || i.count) > 0);
+
+    const targetMatId = branchItem ? 'branch' : (woodItem ? 'compressed_wood' : null);
+    if (!targetMatId) {
+      if (callbacks.log) callbacks.log('⚠️ Você não possui Madeira (Branch ou Compressed Wood) para escorar a galeria!', 'warning');
+      return false;
+    }
+
+    let toDeduct = 1;
+    for (let i = state.inventory.length - 1; i >= 0 && toDeduct > 0; i--) {
+      const item = state.inventory[i];
+      if ((item.id === targetMatId || item.itemId === targetMatId) && !item.equipped) {
+        const currentStack = item.count || item.qty || 1;
+        if (currentStack <= toDeduct) {
+          toDeduct -= currentStack;
+          state.inventory.splice(i, 1);
+        } else {
+          if (item.count !== undefined) item.count = currentStack - toDeduct;
+          if (item.qty !== undefined) item.qty = currentStack - toDeduct;
+          toDeduct = 0;
+        }
+      }
+    }
+
+    mState.galleryStability = Math.min(100, (mState.galleryStability ?? 100) + 35);
+    if (callbacks.log) callbacks.log('🪵 Você escorou as vigas da galeria! Estabilidade +35%.', 'system');
+    if (callbacks.updateAllUI) callbacks.updateAllUI();
+    if (callbacks.save) callbacks.save();
+    return true;
   },
 
   selectZone(state, zoneId, callbacks = {}) {
@@ -367,6 +420,22 @@ export const MiningService = {
     }
 
     const tactic = MINING_TACTICS[mState.activeTactic] || MINING_TACTICS.standard;
+    let stabilityLoss = tactic.stabilityLoss || 12;
+    if (mState.veinHazard === 'seismic_fault') {
+      stabilityLoss *= 2;
+    }
+    mState.galleryStability = Math.max(0, mState.galleryStability - stabilityLoss);
+
+    if (mState.galleryStability <= 15) {
+      if (callbacks.log) callbacks.log('⚠️ DESABAMENTO PARCIAL NA MINA! Pedras caem do teto, você perdeu 50% dos minérios do veio.', 'error');
+    }
+
+    if (mState.veinHazard === 'gas_pocket' && tactic.id === 'heavy') {
+      state.hp = Math.max(1, state.hp - Math.floor(state.maxHp * 0.10));
+      mState.pickaxeDurability[activePickaxeId] = Math.max(0, mState.pickaxeDurability[activePickaxeId] - 2);
+      if (callbacks.log) callbacks.log('💥 EXPLOSÃO DE GÁS! Suas faíscas detonaram um bolsão de gás. -10% HP e dano extra na picareta!', 'error');
+    }
+
     const pickBonus = pickDef?.qualityBonus || 0.0;
     const qualityMod = pickBonus + (tactic.qualityBonus || 0.0);
 
@@ -377,10 +446,21 @@ export const MiningService = {
     const primaryMat = resolveCanonicalResourceId(primaryMatRaw);
     const secMat = secMatRaw ? resolveCanonicalResourceId(secMatRaw) : null;
 
-    const basePrimaryQty = node.yields.primaryQty || 1;
-    const primaryQty = RewardEngine.calculateYield(basePrimaryQty, quality);
+    let basePrimaryQty = node.yields.primaryQty || 1;
+    let baseSecQty = node.yields.secondaryQty || 0;
 
-    const baseSecQty = node.yields.secondaryQty || 0;
+    if (mState.veinHazard === 'dense_crystal' && tactic.id === 'precision') {
+      basePrimaryQty *= 2;
+      baseSecQty *= 2;
+      if (callbacks.log) callbacks.log('✨ Extração cirúrgica de Veio Cristalino bem-sucedida! Rendimento DOBRADO.', 'system');
+    }
+
+    if (mState.galleryStability <= 15) {
+      basePrimaryQty = Math.max(1, Math.floor(basePrimaryQty * 0.5));
+      baseSecQty = Math.floor(baseSecQty * 0.5);
+    }
+
+    const primaryQty = RewardEngine.calculateYield(basePrimaryQty, quality);
     const secQty = baseSecQty > 0 ? RewardEngine.calculateYield(baseSecQty, quality) : 0;
 
     addToInventory(state, primaryMat, primaryQty, node.rarity, false, callbacks, true);
@@ -400,6 +480,11 @@ export const MiningService = {
 
     mState.isMining = false;
     mState.targetedNodeId = null;
+    mState.veinProbed = false;
+    
+    // Rola próximo hazard
+    const hazards = ['none', 'none', 'none', 'gas_pocket', 'seismic_fault', 'dense_crystal'];
+    mState.veinHazard = hazards[Math.floor(Math.random() * hazards.length)];
 
     if (callbacks.log) {
       const qualityPrefix = quality.tier === 'perfect' ? '💎 **MINÉRIO IMACULADO!**'

@@ -76,9 +76,9 @@ export function getGatheringZonesList() {
 export const GATHERING_TACTICS = {
   delicate: {
     id: 'delicate',
-    name: 'Poda Cuidadosa',
+    name: 'Poda Cirúrgica',
     icon: '✂️',
-    desc: 'Colheita paciente sem danificar as raízes. +25% chance de Qualidade Nobre, tempo +20%.',
+    desc: 'Colheita paciente sem danificar as raízes. +25% chance de Qualidade Nobre, ignora perigos de espinhos e toxinas.',
     timeMult: 1.2,
     qualityBonus: 0.25,
     durabilityCost: 1
@@ -94,13 +94,36 @@ export const GATHERING_TACTICS = {
   },
   cleave: {
     id: 'cleave',
-    name: 'Colheita Acelerada',
+    name: 'Ceifa Rápida',
     icon: '⚡',
-    desc: 'Golpe vigoroso para extrair brotos rapidamente. -35% no tempo de poda, -15% na pureza.',
+    desc: 'Golpe vigoroso para extrair brotos rapidamente. -35% no tempo de poda, -15% na pureza. Perigoso se houver espinhos.',
     timeMult: 0.65,
     qualityBonus: -0.15,
     durabilityCost: 1
+  },
+  inspect: {
+    id: 'inspect',
+    name: 'Examinar Broto',
+    icon: '🔍',
+    desc: 'Revela pureza e perigos. Garante +20% na pureza se colhido depois. Instantâneo.',
+    timeMult: 0,
+    qualityBonus: 0.2,
+    durabilityCost: 0
   }
+};
+
+export const BOTANICAL_HAZARDS = {
+  none: 'Sem perigo.',
+  thorn: 'Espinhos afiados (ao colher descuidadamente com ceifa rápida, causa perda de 5% HP).',
+  toxin: 'Esporos venenosos (reduz pureza em 25% e causa debuff temporário).',
+  resin: 'Seiva resinosa densa (cola na foice e consome +1 durabilidade se colhido sem cuidado).'
+};
+
+export const BOTANICAL_SIGNALS = {
+  thorn: 'Pequenos espinhos negros pontilham o caule.',
+  toxin: 'Névoa sulfurosa tênue exala das folhas úmidas.',
+  resin: 'Gomos densos de seiva âmbar brilham sob o sol.',
+  none: 'Gotas cristalinas de orvalho ornam as pétalas perfeitas.'
 };
 
 export const FLORA_NODES_CATALOG = {

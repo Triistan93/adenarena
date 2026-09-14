@@ -202,6 +202,14 @@ export function renderGatheringUI(state) {
             ${activeTacticDef.icon} ${activeTacticDef.name}
           </span>
         </h3>
+        <p style="margin:0 0 6px 0; font-size:11px; color:#aaa; font-style:italic;">
+          "${gState.targetedNodeSignal || 'Gotas cristalinas de orvalho ornam as pétalas perfeitas'}"
+        </p>
+        <div style="margin-bottom:12px; font-size:12px; font-family:'Cinzel',serif;">
+          ${gState.inspected 
+            ? `<span style="color:#f4d58a;">[Pureza: ${gState.targetedNodePurity}% - Perigo: ${gState.targetedNodeHazard.toUpperCase()}]</span>` 
+            : `<span style="color:#94a3b8;">[Pureza: Oculta (Examinar Broto)]</span>`}
+        </div>
         <p style="margin:0 0 12px 0; font-size:11px; color:#aaa;">
           Insumos: <strong style="color:#cbd5e1;">${node?.yields?.primary?.toUpperCase()}</strong> ${node?.yields?.secondary ? `+ <strong style="color:#94a3b8;">${node?.yields?.secondary?.toUpperCase()}</strong>` : ''}
         </p>
@@ -211,47 +219,49 @@ export function renderGatheringUI(state) {
           <div style="width:${progressPct}%; height:100%; background:linear-gradient(90deg, #34d399, #10b981); transition:width 0.2s ease;"></div>
         </div>
 
-        <div>
+        ${isReady ? `
+        <div style="display:flex; justify-content:center; gap:8px;">
           <button 
             onclick="window.finishGatheringHarvest()"
-            ${!isReady ? 'disabled' : ''}
             style="
               padding: 10px 24px;
               font-family: 'Cinzel', serif;
               font-size: 14px;
               font-weight: bold;
-              background: ${isReady ? 'linear-gradient(180deg, #34d399, #059669)' : 'rgba(50,60,50,0.5)'};
-              border: 1px solid ${isReady ? '#6ee7b7' : '#444'};
-              color: ${isReady ? '#000' : '#777'};
+              background: linear-gradient(180deg, #34d399, #059669);
+              border: 1px solid #6ee7b7;
+              color: #000;
               border-radius: 8px;
-              cursor: ${isReady ? 'pointer' : 'not-allowed'};
-              box-shadow: ${isReady ? '0 0 16px rgba(52,211,153,0.5)' : 'none'};
+              cursor: pointer;
+              box-shadow: 0 0 16px rgba(52,211,153,0.5);
               letter-spacing: 0.05em;
             "
           >
-            ${isReady ? '✂️ EXTRAIR BOTÂNICA' : '🌿 PODANDO BROTOS...'}
+            ✂️ EXTRAIR BOTÂNICA
           </button>
         </div>
+        ` : `
+        <div style="display:flex; justify-content:center; gap:8px;">
+          <button style="padding:10px 24px; font-family:'Cinzel',serif; font-size:14px; font-weight:bold; background:rgba(50,60,50,0.5); border:1px solid #444; color:#777; border-radius:8px; cursor:not-allowed;">🌿 PODANDO BROTOS...</button>
+        </div>
+        `}
       </div>
     `;
   } else {
-    let tacticsHtml = '';
-    for (const [tId, tDef] of Object.entries(GATHERING_TACTICS)) {
-      const isSelected = (gState.selectedTactic || 'standard') === tId;
-      tacticsHtml += `
-        <button 
-          onclick="window.selectGatheringTactic('${tId}')"
-          style="
-            flex: 1; min-width: 130px; padding: 6px 10px; border-radius: 6px; cursor: pointer; text-align: left;
-            background: ${isSelected ? 'rgba(52,211,153,0.2)' : 'rgba(255,255,255,0.05)'};
-            border: 1px solid ${isSelected ? '#34d399' : 'rgba(255,255,255,0.1)'};
-            color: ${isSelected ? '#6ee7b7' : '#cbd5e1'};
-            transition: all 0.2s ease;
-          "
-        >
-          <div style="font-size: 11px; font-weight: bold; font-family:'Cinzel',serif;">${tDef.icon} ${tDef.name}</div>
-          <div style="font-size: 9px; color: #94a3b8; margin-top: 2px;">${tDef.desc}</div>
-        </button>
+    const node = gState.targetedNodeId ? FLORA_NODES_CATALOG[gState.targetedNodeId] : null;
+    let targetCardHtml = '';
+    if (node) {
+      targetCardHtml = `
+        <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(212,167,68,0.2); border-radius:8px; padding:12px; margin-bottom:16px;">
+          <div style="font-size:24px; margin-bottom:4px;">${node.icon}</div>
+          <h4 style="margin:0 0 4px 0; color:#f4d58a; font-family:'Cinzel',serif;">${node.name}</h4>
+          <p style="margin:0 0 6px 0; font-size:11px; color:#aaa; font-style:italic;">"${gState.targetedNodeSignal}"</p>
+          <div style="font-size:11px; font-weight:bold;">
+            ${gState.inspected 
+              ? `<span style="color:${gState.targetedNodeHazard === 'none' ? '#6ee7b7' : gState.targetedNodeHazard === 'thorn' ? '#f87171' : gState.targetedNodeHazard === 'toxin' ? '#a78bfa' : '#fbbf24'};">[Pureza: ${gState.targetedNodePurity}% - Perigo: ${gState.targetedNodeHazard.toUpperCase()}]</span>` 
+              : `<span style="color:#94a3b8;">[Pureza: Oculta (Examinar Broto)]</span>`}
+          </div>
+        </div>
       `;
     }
 
@@ -260,37 +270,18 @@ export function renderGatheringUI(state) {
         <div style="font-size:42px; margin-bottom:8px;">
           🧺
         </div>
-        <h3 style="margin:0 0 6px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:16px;">
+        <h3 style="margin:0 0 12px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:16px;">
           Clareira Botânica em ${activeZone.name}
         </h3>
-        <p style="margin:0 0 14px 0; font-size:11px; color:#aaa; max-width:400px; margin-left:auto; margin-right:auto; line-height:1.4;">
-          ${activeZone.description} Escolha a técnica de poda e inicie a colheita de insumos nobres.
-        </p>
+        
+        ${targetCardHtml || `<p style="color:#888; font-size:12px; margin-bottom:16px;">Nenhum broto na mira. Clique em Buscar Outro.</p>`}
 
-        <!-- Táticas de Poda -->
-        <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-bottom:16px;">
-          ${tacticsHtml}
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+          <button onclick="window.inspectGatheringNode()" style="padding:10px; background:rgba(30,40,50,0.8); border:1px solid #60a5fa; color:#93c5fd; border-radius:6px; cursor:pointer; font-weight:bold; font-size:12px; font-family:'Cinzel',serif;">🔍 Examinar Broto</button>
+          <button onclick="window.skipGatheringNode()" style="padding:10px; background:rgba(40,40,40,0.8); border:1px solid #aaa; color:#ddd; border-radius:6px; cursor:pointer; font-weight:bold; font-size:12px; font-family:'Cinzel',serif;">⏭️ Buscar Outro</button>
+          <button onclick="window.selectGatheringTactic('delicate'); window.startGatheringHarvest()" ${isSickleDull ? 'disabled' : ''} style="padding:10px; background:rgba(20,50,30,0.8); border:1px solid #34d399; color:#6ee7b7; border-radius:6px; cursor:${isSickleDull ? 'not-allowed' : 'pointer'}; font-weight:bold; font-size:12px; font-family:'Cinzel',serif;">🌿 Poda Cirúrgica</button>
+          <button onclick="window.selectGatheringTactic('cleave'); window.startGatheringHarvest()" ${isSickleDull ? 'disabled' : ''} style="padding:10px; background:rgba(50,20,20,0.8); border:1px solid #f87171; color:#fca5a5; border-radius:6px; cursor:${isSickleDull ? 'not-allowed' : 'pointer'}; font-weight:bold; font-size:12px; font-family:'Cinzel',serif;">⚡ Ceifa Rápida</button>
         </div>
-
-        <button 
-          onclick="window.startGatheringHarvest()"
-          ${isSickleDull ? 'disabled' : ''}
-          style="
-            padding: 12px 28px;
-            font-family: 'Cinzel', serif;
-            font-size: 14px;
-            font-weight: bold;
-            background: ${!isSickleDull ? 'linear-gradient(180deg, #d4a744, #8a641c)' : 'rgba(60,50,40,0.5)'};
-            border: 1px solid ${!isSickleDull ? '#ffe699' : '#555'};
-            color: ${!isSickleDull ? '#000' : '#777'};
-            border-radius: 8px;
-            cursor: ${!isSickleDull ? 'pointer' : 'not-allowed'};
-            box-shadow: ${!isSickleDull ? '0 0 16px rgba(212,167,68,0.4)' : 'none'};
-            letter-spacing: 0.05em;
-          "
-        >
-          ${isSickleDull ? '⚠️ FOICE CEGA (AMOLAR PRIMEIRO)' : '🌿 COLHER FLORA'}
-        </button>
       </div>
     `;
   }

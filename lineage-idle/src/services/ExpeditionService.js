@@ -2,9 +2,9 @@
 import { addToInventory } from './InventoryService.js';
 import { MercenaryService } from './MercenaryService.js';
 import { MERCENARY_SPECIALIZATIONS, MERCENARY_TRAITS, calculateMercenaryPower } from '../data/mercenaries.js';
-import { EXPEDITION_DESTINATIONS } from '../data/expeditions.js';
+import { EXPEDITION_DESTINATIONS, RISK_DIRECTIVES, EXPEDITION_DILEMMAS } from '../data/expeditions.js';
 
-export { EXPEDITION_DESTINATIONS };
+export { EXPEDITION_DESTINATIONS, RISK_DIRECTIVES, EXPEDITION_DILEMMAS };
 
 export const ExpeditionService = {
   getExpeditions(state) {
@@ -113,7 +113,7 @@ export const ExpeditionService = {
     return synergies;
   },
 
-  startExpedition(state, destId, squadUids = [], callbacks = {}) {
+  startExpedition(state, destId, squadUids = [], directive = 'balanced', callbacks = {}) {
     const dest = EXPEDITION_DESTINATIONS[destId];
     if (!dest) return false;
 
@@ -156,12 +156,16 @@ export const ExpeditionService = {
 
     state.gold -= dest.cost;
     const now = Date.now();
+    const activeDilemmaId = Math.random() > 0.5 ? 'dilemma_altar' : 'dilemma_chest';
     const expObj = {
       id: 'exp_' + now + '_' + Math.floor(Math.random() * 10000),
       destId,
       startTime: now,
       duration: finalDuration,
       squad: validSquadUids,
+      directive,
+      activeDilemmaId,
+      dilemmaResolved: false,
       claimed: false,
       synergies,
       phases: dest.phases || [
@@ -177,7 +181,8 @@ export const ExpeditionService = {
       const hours = (finalDuration / 3600000).toFixed(1);
       const squadCount = validSquadUids.length;
       const squadInfo = squadCount > 0 ? `com ${squadCount} mercenário(s) escalado(s)` : `em expedição solo`;
-      callbacks.log(`🧭 Esquadrão despachado para **${dest.name}** ${squadInfo}! Duração estimada: ${hours}h.`, 'loot');
+      const dirName = RISK_DIRECTIVES[directive]?.name || 'Equilibrada';
+      callbacks.log(`🧭 Esquadrão despachado para **${dest.name}** ${squadInfo} [Diretriz: ${dirName}]! Duração estimada: ${hours}h.`, 'loot');
       if (synergies.activePerks.length > 0) {
         callbacks.log(`⚡ Sinergias & Traços: ${synergies.activePerks.join(' | ')}`, 'system');
       }
@@ -205,17 +210,21 @@ export const ExpeditionService = {
       return false;
     }
 
+    // Multiplicadores da Diretriz
+    const directive = exp.directive || 'balanced';
+    const directiveDef = RISK_DIRECTIVES[directive] || RISK_DIRECTIVES.balanced;
+    const lootMult = directiveDef.lootMult || 0;
+    
     // 1. Saque de Ouro
     const baseGold = Math.floor(dest.minGold + Math.random() * (dest.maxGold - dest.minGold));
-    const goldBonusPct = exp.synergies?.goldBonusPct || 0;
-    const goldEarned = Math.floor(baseGold * (1 + goldBonusPct));
+    const goldBonusPct = (exp.synergies?.goldBonusPct || 0) + lootMult;
+    const goldEarned = Math.max(0, Math.floor(baseGold * (1 + goldBonusPct)));
     state.gold = (state.gold || 0) + goldEarned;
 
     // 2. Cacos Astrais
     let shards = dest.shards || 3;
-    if (exp.synergies?.extraShardsPct) {
-      shards = Math.floor(shards * (1 + exp.synergies.extraShardsPct));
-    }
+    const shardBonusPct = (exp.synergies?.extraShardsPct || 0) + lootMult;
+    shards = Math.max(1, Math.floor(shards * (1 + shardBonusPct)));
     state.astralShards = (state.astralShards || 0) + shards;
 
     // 3. Materiais Canônicos da Tabela do Destino
@@ -226,6 +235,11 @@ export const ExpeditionService = {
         if (exp.synergies?.extraMaterialChance && Math.random() < exp.synergies.extraMaterialChance) {
           qty += 2; // Bônus de Rastreador
         }
+        if (lootMult > 0 && Math.random() < lootMult) {
+          qty += Math.ceil(qty * lootMult);
+        } else if (lootMult < 0) {
+          qty = Math.floor(qty * (1 + lootMult));
+        }
         if (qty > 0) {
           addToInventory(state, m.matId, qty, 'common', false, callbacks, true);
           materialsRewarded.push({ matId: m.matId, qty });
@@ -235,7 +249,10 @@ export const ExpeditionService = {
 
     // 4. Scroll de Encantamento do Grau do Destino
     if (dest.scrollReward) {
-      addToInventory(state, dest.scrollReward, 1, 'uncommon', false, callbacks, true);
+      const scrollQty = 1 + (lootMult > 0 && Math.random() < lootMult ? 1 : 0);
+      if (scrollQty > 0) {
+        addToInventory(state, dest.scrollReward, scrollQty, 'uncommon', false, callbacks, true);
+      }
     }
 
     // 5. Baú de Tesouro Bônus (Ladino / Traço Sortudo)
@@ -257,10 +274,15 @@ export const ExpeditionService = {
     const baseMercXp = Math.max(50, Math.floor((dest.duration / 60000) * 10));
     const xpBonusPct = exp.synergies?.extraXpPct || 0;
     const mercXpGained = Math.floor(baseMercXp * (1 + xpBonusPct));
+    const loyaltyBonus = directiveDef.loyaltyBonus || 0;
 
     if (Array.isArray(exp.squad)) {
       for (const mercUid of exp.squad) {
         MercenaryService.addMercenaryXp(state, mercUid, mercXpGained, callbacks);
+        const merc = MercenaryService.getMercenaryByUid(state, mercUid);
+        if (merc && loyaltyBonus !== 0) {
+          merc.loyalty = Math.min(100, Math.max(0, (merc.loyalty || 50) + loyaltyBonus));
+        }
       }
     }
 
@@ -291,5 +313,45 @@ export const ExpeditionService = {
       materialsRewarded,
       bonusChestAwarded
     };
+  },
+
+  resolveDilemma(state, destId, optionKey, callbacks = {}) {
+    const list = this.getExpeditions(state);
+    const activeExp = list.find(e => e.destId === destId && !e.claimed);
+    if (!activeExp || !activeExp.activeDilemmaId || activeExp.dilemmaResolved) return false;
+
+    const dilemma = EXPEDITION_DILEMMAS[activeExp.activeDilemmaId];
+    if (!dilemma) return false;
+
+    const option = dilemma.options[optionKey];
+    if (!option) return false;
+
+    // TODO: Verify requirements (squad specs/traits or directive) here if needed.
+    // Assuming UI handles disabling invalid options.
+
+    activeExp.dilemmaResolved = true;
+
+    if (option.result === 'gold') {
+      const bonusGold = 15000;
+      state.gold = (state.gold || 0) + bonusGold;
+      if (callbacks.log) callbacks.log(`⚖️ Dilema Resolvido (${dilemma.name}): ${option.name}! +${bonusGold.toLocaleString()} Adena.`, 'loot');
+    } else if (option.result === 'xp') {
+      if (Array.isArray(activeExp.squad)) {
+        for (const mercUid of activeExp.squad) {
+          MercenaryService.addMercenaryXp(state, mercUid, 300, callbacks);
+        }
+      }
+      if (callbacks.log) callbacks.log(`⚖️ Dilema Resolvido (${dilemma.name}): ${option.name}! Mercenários ganharam bônus de EXP.`, 'system');
+    } else if (option.result === 'force' || option.result === 'pick') {
+      const bonusShards = option.result === 'pick' ? 5 : 2;
+      state.astralShards = (state.astralShards || 0) + bonusShards;
+      if (callbacks.log) callbacks.log(`⚖️ Dilema Resolvido (${dilemma.name}): ${option.name}! +${bonusShards} Cacos Astrais.`, 'loot');
+    } else {
+      if (callbacks.log) callbacks.log(`⚖️ Dilema Resolvido (${dilemma.name}): A caravana prosseguiu com segurança.`, 'system');
+    }
+
+    if (callbacks.updateAllUI) callbacks.updateAllUI();
+    if (callbacks.save) callbacks.save();
+    return true;
   }
 };

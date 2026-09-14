@@ -35,7 +35,7 @@ import { HuntingService }                                                     fr
 import { GatheringService }                                                   from './src/services/lifeActivities/GatheringService.js';
 import { MiningService }                                                      from './src/services/lifeActivities/MiningService.js';
 import { MercenaryService }                                                   from './src/services/MercenaryService.js';
-import { ExpeditionService, EXPEDITION_DESTINATIONS as CANONICAL_EXPEDITION_DESTINATIONS } from './src/services/ExpeditionService.js';
+import { ExpeditionService, EXPEDITION_DESTINATIONS as CANONICAL_EXPEDITION_DESTINATIONS, EXPEDITION_DILEMMAS, RISK_DIRECTIVES } from './src/services/ExpeditionService.js';
 import { renderFishingUI }                                                    from './src/ui/FishingUI.js';
 import { renderHuntingUI }                                                    from './src/ui/HuntingUI.js';
 import { renderGatheringUI }                                                  from './src/ui/GatheringUI.js';
@@ -9195,6 +9195,7 @@ export function init() {
     window.selectHuntingTactic = (tId) => HuntingService.selectTactic(state, tId, { log, updateAllUI, save });
     window.startHuntingTrack = (tId) => HuntingService.startTracking(state, tId, { log, updateAllUI, save });
     window.skinHuntingPrey = () => HuntingService.finishSkinning(state, { log, updateAllUI, save, floatText });
+    window.executeFieldButchering = (choice) => HuntingService.executeFieldButchering(state, choice, { log, updateAllUI, save, floatText });
     window.toggleAutoHunting = () => HuntingService.toggleAutoHunting(state, { log, updateAllUI, save, floatText });
     window.exchangeHuntingPelts = (pId, qty) => HuntingService.exchangePelts(state, pId, qty, { log, updateAllUI, save, floatText });
     window.HuntingService = HuntingService;
@@ -9208,6 +9209,8 @@ export function init() {
     window.selectGatheringTactic = (tId) => GatheringService.selectTactic(state, tId, { log, updateAllUI, save });
     window.startGatheringHarvest = (nId) => (typeof GatheringService.startHarvest === 'function' ? GatheringService.startHarvest(state, nId, { log, updateAllUI, save }) : GatheringService.startGathering(state, nId, { log, updateAllUI, save }));
     window.finishGatheringHarvest = () => (typeof GatheringService.finishHarvest === 'function' ? GatheringService.finishHarvest(state, { log, updateAllUI, save, floatText }) : GatheringService.finishGathering(state, { log, updateAllUI, save, floatText }));
+    window.inspectGatheringNode = () => GatheringService.inspectNode(state, { log, updateAllUI, save, floatText });
+    window.skipGatheringNode = () => GatheringService.skipNode(state, { log, updateAllUI, save, floatText });
     window.toggleAutoGathering = () => GatheringService.toggleAutoGathering(state, { log, updateAllUI, save, floatText });
     window.exchangeGatheringHerbs = (hId, qty) => (typeof GatheringService.exchangeHerbs === 'function' ? GatheringService.exchangeHerbs(state, hId, qty, { log, updateAllUI, save, floatText }) : false);
     window.GatheringService = GatheringService;
@@ -9221,6 +9224,8 @@ export function init() {
     window.selectMiningTactic = (tId) => MiningService.selectTactic(state, tId, { log, updateAllUI, save });
     window.startMiningHarvest = (nId) => MiningService.startMining(state, nId, { log, updateAllUI, save });
     window.finishMiningHarvest = () => MiningService.finishMining(state, { log, updateAllUI, save, floatText });
+    window.probeMiningVein = () => MiningService.probeVein(state, { log, updateAllUI, save });
+    window.shoreUpMiningGallery = () => MiningService.shoreUpGallery(state, { log, updateAllUI, save });
     window.toggleAutoMining = () => MiningService.toggleAutoMining(state, { log, updateAllUI, save, floatText });
     window.exchangeMiningOres = (oId, qty) => MiningService.exchangeOres(state, oId, qty, { log, updateAllUI, save, floatText });
     window.MiningService = MiningService;
@@ -9247,11 +9252,20 @@ export function init() {
     };
     window.startStrategicExpedition = (destId) => {
       const squad = (window._expeditionSquadSelections && window._expeditionSquadSelections[destId]) || [];
-      const res = ExpeditionService.startExpedition(state, destId, squad, { log, updateAllUI, save, floatText });
+      const directive = (window._selectedExpeditionDirective && window._selectedExpeditionDirective[destId]) || 'balanced';
+      const res = ExpeditionService.startExpedition(state, destId, squad, directive, { log, updateAllUI, save, floatText });
       if (res && window._expeditionSquadSelections) {
         delete window._expeditionSquadSelections[destId];
       }
       return res;
+    };
+    window.setExpeditionDirective = (destId, directive) => {
+      if (!window._selectedExpeditionDirective) window._selectedExpeditionDirective = {};
+      window._selectedExpeditionDirective[destId] = directive;
+      updateAllUI();
+    };
+    window.resolveExpeditionDilemma = (destId, optionKey) => {
+      ExpeditionService.resolveDilemma(state, destId, optionKey, { log, updateAllUI, save, floatText });
     };
     window.MercenaryService = MercenaryService;
     window.ExpeditionService = ExpeditionService;
@@ -10859,8 +10873,16 @@ export function init() {
       });
       updateRankingsUI();
       updateAllUI();
-      save();
       return res;
+    };
+
+    window.GameData = {
+      ALL_ITEMS,
+      MERCENARY_RARITIES,
+      MERCENARY_SPECIALIZATIONS,
+      MERCENARY_TRAITS,
+      EXPEDITION_DILEMMAS,
+      RISK_DIRECTIVES
     };
 
     window.getGameState = () => {

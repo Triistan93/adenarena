@@ -78,29 +78,48 @@ export const APPROACH_TACTICS = {
     id: 'stalk',
     name: 'Aproximação Furtiva',
     icon: '👣',
-    desc: 'Move-se contra o vento nas folhagens. +25% chance de Pele Perfeita, tempo +20%.',
+    desc: 'Move-se contra o vento. +15% de chance de captura, alerta sobe devagar (+10).',
     timeMult: 1.2,
-    qualityBonus: 0.25,
-    durabilityCost: 1
+    qualityBonus: 0.15,
+    durabilityCost: 1,
+    alertChange: 10
   },
   ambush: {
     id: 'ambush',
-    name: 'Emboscada Equilibrada',
+    name: 'Emboscada nas Sombras',
     icon: '🎯',
-    desc: 'Aguarda o momento exato em ponto cego. Rendimento e tempo balanceados.',
-    timeMult: 1.0,
+    desc: 'Espera paciente. Reduz alerta em 20, golpe crítico se alerta < 40.',
+    timeMult: 1.3,
     qualityBonus: 0.0,
-    durabilityCost: 1
+    durabilityCost: 1,
+    alertChange: -20
   },
   rush: {
     id: 'rush',
-    name: 'Investida Rápida',
+    name: 'Investida Imediata',
     icon: '⚡',
-    desc: 'Dispara com ímpeto para encurralar sem hesitar. -35% de tempo de rastreio, -15% qualidade.',
+    desc: 'Dispara com ímpeto. -35% de tempo de rastreio, mas alerta salta (+45).',
     timeMult: 0.65,
     qualityBonus: -0.15,
-    durabilityCost: 1
+    durabilityCost: 1,
+    alertChange: 45
+  },
+  lure: {
+    id: 'lure',
+    name: 'Lançar Atrativo/Isca',
+    icon: '🥩',
+    desc: 'Consome 1 atrativo. Reduz alerta em 35 e estabiliza vento para Contra o Vento.',
+    timeMult: 1.0,
+    qualityBonus: 0.0,
+    durabilityCost: 0,
+    alertChange: -35
   }
+};
+
+export const WIND_DIRECTIONS = {
+  headwind: { id: 'headwind', name: 'Contra o Vento', icon: '🌬️⬇️', desc: 'Ruído reduzido 50%, presas calmas, alerta sobe devagar.', alertMult: 0.5 },
+  crosswind: { id: 'crosswind', name: 'Vento Lateral', icon: '🌬️➡️', desc: 'Vento equilibrado, sem bônus ou penalidade.', alertMult: 1.0 },
+  tailwind: { id: 'tailwind', name: 'A Favor do Vento', icon: '🌬️⬆️', desc: 'O cheiro avança; alerta da presa sobe 35% mais rápido.', alertMult: 1.35 }
 };
 
 export const PREY_CATALOG = {

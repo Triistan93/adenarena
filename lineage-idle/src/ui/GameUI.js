@@ -6896,6 +6896,57 @@ export function renderExpeditionsUI(state) {
       `;
     }
 
+    let directiveHtml = '';
+    if (!active && isUnlocked) {
+      const currentDir = (window._selectedExpeditionDirective && window._selectedExpeditionDirective[dId]) || 'balanced';
+      const dirs = [
+        { id: 'cautious', icon: '🛡️', name: 'Cautelosa' },
+        { id: 'balanced', icon: '⚖️', name: 'Equilibrada' },
+        { id: 'reckless', icon: '🔥', name: 'Audaciosa' }
+      ];
+      directiveHtml = `
+        <div style="margin-top:12px; padding-top:8px; border-top:1px solid rgba(212,167,68,0.2);">
+          <div style="font-size:11px; color:#f4d58a; margin-bottom:6px;">Diretriz de Risco:</div>
+          <div style="display:flex; gap:8px;">
+            ${dirs.map(d => `
+              <button 
+                onclick="window.setExpeditionDirective('${dId}', '${d.id}')"
+                style="flex:1; padding:6px; font-family:'Cinzel',serif; font-size:10px; font-weight:bold; background:${currentDir === d.id ? 'rgba(245,158,11,0.2)' : 'rgba(255,255,255,0.05)'}; border:1px solid ${currentDir === d.id ? '#f59e0b' : 'rgba(255,255,255,0.1)'}; color:${currentDir === d.id ? '#fbbf24' : '#cbd5e1'}; border-radius:4px; cursor:pointer;"
+              >
+                ${d.icon} ${d.name}
+              </button>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    let dilemmaHtml = '';
+    if (active && active.activeDilemmaId && !active.dilemmaResolved) {
+      // Need to dynamically import or reference EXPEDITION_DILEMMAS
+      const dDef = window.GameData?.EXPEDITION_DILEMMAS ? window.GameData.EXPEDITION_DILEMMAS[active.activeDilemmaId] : null;
+      if (dDef) {
+        dilemmaHtml = `
+          <div style="margin-top:12px; padding:10px; background:radial-gradient(circle, rgba(50,20,10,0.85) 0%, rgba(20,10,5,0.95) 100%); border:1px solid #ef4444; border-radius:8px; box-shadow:0 0 10px rgba(239,68,68,0.3);">
+            <div style="font-family:'Cinzel',serif; font-size:13px; font-weight:bold; color:#fca5a5; margin-bottom:4px;">
+              ⚠️ Dilema de Marcha: ${dDef.name}
+            </div>
+            <p style="font-size:10px; color:#aaa; margin:0 0 8px 0;">${dDef.desc}</p>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              ${Object.entries(dDef.options).map(([k, o]) => `
+                <button 
+                  onclick="window.resolveExpeditionDilemma('${dId}', '${k}')"
+                  style="flex:1; padding:6px; font-size:10px; font-weight:bold; background:rgba(0,0,0,0.5); border:1px solid #f87171; color:#fecaca; border-radius:4px; cursor:pointer;"
+                >
+                  ${o.name}<br/><span style="font-size:8px; color:#fca5a5; font-weight:normal;">${o.desc}</span>
+                </button>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+    }
+
     expHtml += `
       <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(212,167,68,0.3); border-radius:10px; padding:14px; margin-bottom:12px; box-shadow:0 2px 10px rgba(0,0,0,0.4);">
         <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px; flex-wrap:wrap;">
@@ -6920,7 +6971,9 @@ export function renderExpeditionsUI(state) {
           </div>
         </div>
         ${squadSelectorHtml}
+        ${directiveHtml}
         ${phasesHtml}
+        ${dilemmaHtml}
       </div>
     `;
   }

@@ -5,6 +5,7 @@ import {
   KNIVES_CATALOG,
   LURES_CATALOG,
   APPROACH_TACTICS,
+  WIND_DIRECTIONS,
   getHuntingXpForLevel
 } from '../data/hunting.js';
 import { addToInventory } from './InventoryService.js';
@@ -28,6 +29,10 @@ export const HuntingService = {
         isHunting: false,
         trackStartTime: 0,
         trackedPreyId: null,
+        alertLevel: 0,
+        windDirection: 'crosswind',
+        awaitingButchering: false,
+        slainPreyData: null,
         totalHunted: 0,
         huntingLog: {},
         autoHunting: false,
@@ -306,6 +311,21 @@ export const HuntingService = {
     const zone = HUNTING_ZONES[hState.activeZone] || HUNTING_ZONES.zone_talking_forest;
     const prey = this.pickPreyForZone(hState.activeZone, hState.activeLure);
 
+    // Wind and Alert logic
+    const winds = Object.keys(WIND_DIRECTIONS);
+    hState.windDirection = winds[Math.floor(Math.random() * winds.length)];
+    const baseAlert = 15 + (zone.difficulty * 3);
+    hState.alertLevel = baseAlert + Math.floor(Math.random() * 11);
+
+    if (tactic.id === 'lure') {
+      hState.windDirection = 'headwind';
+      hState.alertLevel = Math.max(0, hState.alertLevel - 35);
+    } else {
+      let alertMult = WIND_DIRECTIONS[hState.windDirection]?.alertMult || 1.0;
+      let alertChange = tactic.alertChange || 0;
+      hState.alertLevel = Math.max(0, Math.min(100, hState.alertLevel + (alertChange * alertMult)));
+    }
+
     let trackDuration = prey.baseTrackTime || zone.baseTrackTime || 3000;
     trackDuration = Math.max(1200, Math.floor((trackDuration * (tactic.timeMult || 1.0)) / lureSpeedMult));
 
@@ -345,9 +365,38 @@ export const HuntingService = {
       return false;
     }
 
-    // Consome durabilidade através do LifeActivityCore
     const activeKnifeId = hState.knife || 'knife_none';
     const knifeDef = KNIVES_CATALOG[activeKnifeId];
+
+    if (hState.alertLevel >= 100) {
+      hState.isHunting = false;
+      hState.trackedPreyId = null;
+      hState.autoHunting = false;
+      if (hState.knifeDurability[activeKnifeId] !== undefined) {
+        hState.knifeDurability[activeKnifeId] = Math.max(0, hState.knifeDurability[activeKnifeId] - 1);
+      }
+      if (callbacks.log) callbacks.log(`💨 A presa escapou no último segundo! (Faca perdeu 1 durabilidade no tropeço)`, 'warning');
+      if (callbacks.updateAllUI) callbacks.updateAllUI();
+      if (callbacks.save) callbacks.save();
+      return false;
+    }
+
+    const tactic = APPROACH_TACTICS[hState.activeTactic] || APPROACH_TACTICS.ambush;
+    const knifeBonus = knifeDef?.perfectSkinBonus || 0.0;
+    const qualityMod = knifeBonus + (tactic.qualityBonus || 0.0);
+
+    if (!hState.autoHunting) {
+      hState.awaitingButchering = true;
+      hState.slainPreyData = { preyId: prey.id, qualityMod, tactic: tactic.id };
+      hState.isHunting = false;
+      hState.trackedPreyId = null;
+      if (callbacks.log) callbacks.log(`🐾 Presa abatida! Aguardando decisão de descarne...`, 'system');
+      if (callbacks.updateAllUI) callbacks.updateAllUI();
+      if (callbacks.save) callbacks.save();
+      return true;
+    }
+
+    // Lógica AFK (Balanced Yield)
     if (hState.knifeDurability[activeKnifeId] !== undefined) {
       hState.knifeDurability[activeKnifeId] = Math.max(0, hState.knifeDurability[activeKnifeId] - 1);
     }
@@ -358,15 +407,11 @@ export const HuntingService = {
       hState.isHunting = false;
       hState.trackedPreyId = null;
       hState.autoHunting = false;
-      if (callbacks.log) callbacks.log(`💥 **LÂMINA CEGA!** Sua ${knifeDef?.name || 'faca'} perdeu completamente o fio. Afie-a para continuar.`, 'error');
+      if (callbacks.log) callbacks.log(`💥 **LÂMINA CEGA!** Sua ${knifeDef?.name || 'faca'} perdeu completamente o fio.`, 'error');
       if (callbacks.updateAllUI) callbacks.updateAllUI();
       if (callbacks.save) callbacks.save();
       return false;
     }
-
-    const tactic = APPROACH_TACTICS[hState.activeTactic] || APPROACH_TACTICS.ambush;
-    const knifeBonus = knifeDef?.perfectSkinBonus || 0.0;
-    const qualityMod = knifeBonus + (tactic.qualityBonus || 0.0);
 
     // Rola qualidade e rendimento pelo RewardEngine
     const quality = RewardEngine.rollQuality(hState.skillLevel, qualityMod);
@@ -411,6 +456,66 @@ export const HuntingService = {
       callbacks.floatText(`+${primaryQty}x ${primaryMat.toUpperCase()}`, 'float-gold');
     }
 
+    if (callbacks.updateAllUI) callbacks.updateAllUI();
+    if (callbacks.save) callbacks.save();
+    return true;
+  },
+
+  executeFieldButchering(state, choice, callbacks = {}) {
+    const hState = this.getHuntingState(state);
+    if (!hState.awaitingButchering || !hState.slainPreyData) return false;
+
+    const activeKnifeId = hState.knife || 'knife_none';
+    const knifeDef = KNIVES_CATALOG[activeKnifeId];
+    if (hState.knifeDurability[activeKnifeId] !== undefined) {
+      hState.knifeDurability[activeKnifeId] = Math.max(0, hState.knifeDurability[activeKnifeId] - 1);
+    }
+    const actState = LifeActivityCore.getActivityState(state, 'hunting');
+    actState.toolDurability = hState.knifeDurability[activeKnifeId] ?? 0;
+
+    const { preyId, qualityMod } = hState.slainPreyData;
+    const prey = PREY_CATALOG[preyId];
+    
+    const quality = RewardEngine.rollQuality(hState.skillLevel, qualityMod);
+    
+    let primaryMatRaw, secMatRaw;
+    let basePrimaryQty = 1, baseSecQty = 0;
+
+    if (choice === 'pelt') {
+      primaryMatRaw = prey.skinYield.primary;
+      basePrimaryQty = (prey.skinYield.primaryQty || 1) + 1;
+      secMatRaw = null; 
+    } else {
+      primaryMatRaw = 'bone';
+      basePrimaryQty = (prey.skinYield.primaryQty || 1);
+      secMatRaw = prey.skinYield.secondary || 'coarse_bone_powder';
+      baseSecQty = (prey.skinYield.secondaryQty || 1) + 1;
+    }
+
+    const primaryMat = resolveCanonicalResourceId(primaryMatRaw);
+    const primaryQty = RewardEngine.calculateYield(basePrimaryQty, quality);
+    addToInventory(state, primaryMat, primaryQty, prey.rarity, false, callbacks, true);
+
+    if (secMatRaw && baseSecQty > 0) {
+      const secMat = resolveCanonicalResourceId(secMatRaw);
+      const secQty = RewardEngine.calculateYield(baseSecQty, quality);
+      addToInventory(state, secMat, secQty, prey.rarity, false, callbacks, true);
+    }
+
+    hState.huntingLog[prey.id] = (hState.huntingLog[prey.id] || 0) + 1;
+    hState.totalHunted = (hState.totalHunted || 0) + 1;
+    LifeActivityCore.recordCodexDiscovery(state, 'hunting', prey.id);
+
+    const xpBase = prey.xpReward || 10;
+    const finalXp = Math.round(xpBase * quality.mult);
+    LifeActivityCore.addXp(state, 'hunting', finalXp, callbacks);
+
+    hState.awaitingButchering = false;
+    hState.slainPreyData = null;
+
+    if (callbacks.log) {
+      callbacks.log(`🔪 Descarne (${choice === 'pelt' ? 'Foco em Peles' : 'Foco em Ossos'}): Obteve ${primaryQty}x ${primaryMat.toUpperCase()}! (+${finalXp} XP)`, 'loot');
+    }
     if (callbacks.updateAllUI) callbacks.updateAllUI();
     if (callbacks.save) callbacks.save();
     return true;

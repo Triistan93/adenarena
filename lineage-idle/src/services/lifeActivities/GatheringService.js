@@ -4,7 +4,9 @@ import {
   FLORA_NODES_CATALOG,
   SICKLES_CATALOG,
   POUCHES_CATALOG,
-  GATHERING_TACTICS
+  GATHERING_TACTICS,
+  BOTANICAL_HAZARDS,
+  BOTANICAL_SIGNALS
 } from '../../data/gathering.js';
 import { addToInventory } from '../InventoryService.js';
 import { LifeActivityCore } from './LifeActivityCore.js';
@@ -27,6 +29,10 @@ export const GatheringService = {
         isGathering: false,
         harvestStartTime: 0,
         targetedNodeId: null,
+        targetedNodePurity: 0,
+        targetedNodeHazard: 'none',
+        targetedNodeSignal: '',
+        inspected: false,
         harvestDuration: 3000,
         totalHarvested: 0,
         gatheringLog: {},
@@ -273,6 +279,35 @@ export const GatheringService = {
     return nodes[Math.floor(Math.random() * nodes.length)];
   },
 
+  inspectNode(state, callbacks = {}) {
+    const gState = this.getGatheringState(state);
+    if (!gState.targetedNodeId) return false;
+    if (gState.inspected) return false;
+    
+    gState.inspected = true;
+    if (callbacks.log) callbacks.log(`🔍 Exame Botânico: A pureza é de ${gState.targetedNodePurity}%. ${gState.targetedNodeSignal} Perigo: ${BOTANICAL_HAZARDS[gState.targetedNodeHazard]}`, 'system');
+    if (callbacks.updateAllUI) callbacks.updateAllUI();
+    if (callbacks.save) callbacks.save();
+    return true;
+  },
+
+  skipNode(state, callbacks = {}) {
+    const gState = this.getGatheringState(state);
+    const node = this.pickNodeForZone(gState.activeZone, gState.activePouch);
+    gState.targetedNodeId = node.id;
+    gState.targetedNodePurity = 50 + Math.floor(Math.random() * 51);
+    const hazards = Object.keys(BOTANICAL_HAZARDS);
+    gState.targetedNodeHazard = hazards[Math.floor(Math.random() * hazards.length)];
+    gState.targetedNodeSignal = BOTANICAL_SIGNALS[gState.targetedNodeHazard];
+    gState.inspected = false;
+    gState.isGathering = false;
+    
+    if (callbacks.log) callbacks.log(`⏭️ Você descarta o broto atual e busca um novo em ${GATHERING_ZONES[gState.activeZone].name}...`, 'system');
+    if (callbacks.updateAllUI) callbacks.updateAllUI();
+    if (callbacks.save) callbacks.save();
+    return true;
+  },
+
   startHarvest(state, tacticId = null, callbacks = {}) {
     const gState = this.getGatheringState(state);
     const activeSickleId = gState.sickle || 'sickle_none';
@@ -306,7 +341,21 @@ export const GatheringService = {
     }
 
     const zone = GATHERING_ZONES[gState.activeZone] || GATHERING_ZONES.zone_gludio_fields;
-    const node = this.pickNodeForZone(gState.activeZone, gState.activePouch);
+    
+    let node;
+    if (gState.targetedNodeId && !gState.isGathering) {
+        node = FLORA_NODES_CATALOG[gState.targetedNodeId];
+    } else {
+        node = this.pickNodeForZone(gState.activeZone, gState.activePouch);
+        gState.targetedNodeId = node.id;
+        gState.targetedNodePurity = 50 + Math.floor(Math.random() * 51);
+        const hazards = Object.keys(BOTANICAL_HAZARDS);
+        gState.targetedNodeHazard = hazards[Math.floor(Math.random() * hazards.length)];
+        gState.targetedNodeSignal = BOTANICAL_SIGNALS[gState.targetedNodeHazard];
+        gState.inspected = false;
+    }
+
+    if (!node) node = this.pickNodeForZone(gState.activeZone, gState.activePouch);
 
     let harvestDuration = node.baseTime || zone.baseGatherTime || 3200;
     harvestDuration = Math.max(1200, Math.floor((harvestDuration * (tactic.timeMult || 1.0)) / pouchSpeedMult));
@@ -368,7 +417,31 @@ export const GatheringService = {
 
     const tactic = GATHERING_TACTICS[gState.activeTactic] || GATHERING_TACTICS.standard;
     const sickleBonus = sickleDef?.qualityBonus || 0.0;
-    const qualityMod = sickleBonus + (tactic.qualityBonus || 0.0);
+    
+    let hazardPenalty = 0;
+    if (gState.activeTactic !== 'delicate') {
+      if (gState.targetedNodeHazard === 'thorn' && gState.activeTactic === 'cleave') {
+        const dmg = Math.floor((state.maxHp || 100) * 0.05);
+        state.hp = Math.max(1, (state.hp || 100) - dmg);
+        if (callbacks.log) callbacks.log(`🩸 Os espinhos afiados perfuraram sua pele! (${dmg} dano)`, 'error');
+      }
+      if (gState.targetedNodeHazard === 'resin' && gState.activeTactic === 'cleave') {
+        gState.sickleDurability[activeSickleId] = Math.max(0, gState.sickleDurability[activeSickleId] - 1);
+        if (callbacks.log) callbacks.log(`⚠️ A seiva pegajosa grudou na foice! (-1 Durabilidade)`, 'warning');
+      }
+      if (gState.targetedNodeHazard === 'toxin') {
+        hazardPenalty = 0.25;
+        if (callbacks.log) callbacks.log(`🤢 Esporos venenosos cobriram a planta, reduzindo sua pureza!`, 'warning');
+      }
+    }
+
+    let nodePurity = (gState.targetedNodePurity || 100) / 100;
+    if (gState.inspected && gState.activeTactic !== 'inspect') {
+      nodePurity += 0.20;
+    }
+    nodePurity = Math.max(0, Math.min(1.0, nodePurity - hazardPenalty));
+
+    const qualityMod = sickleBonus + (tactic.qualityBonus || 0.0) + (nodePurity - 1.0);
 
     const quality = RewardEngine.rollQuality(gState.skillLevel, qualityMod);
     const primaryMatRaw = node.yields.primary;
