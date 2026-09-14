@@ -298,8 +298,12 @@ export async function savePlayerStateToCloud(userId: string, stateData: any, imm
           charPayload.createdAt = cleanState.createdAt;
         }
         await setDoc(charRef, charPayload, { merge: true });
-      } catch (charErr) {
-        console.error(`[CanonicalSave:characters] Erro ao gravar characters/${charId}:`, charErr);
+      } catch (charErr: any) {
+        if (charErr?.code === 'permission-denied' || String(charErr).includes('permission')) {
+          console.warn(`[CanonicalSave:characters] Permissão restrita no Firestore para characters/${charId} (dados salvos no perfil de usuário).`);
+        } else {
+          console.error(`[CanonicalSave:characters] Erro ao gravar characters/${charId}:`, charErr);
+        }
       }
 
       // 3. Atualiza presença online (Gate 1: Existência != Presença)
@@ -312,8 +316,12 @@ export async function savePlayerStateToCloud(userId: string, stateData: any, imm
           lastSeenAt: Date.now(),
           heartbeatAt: Date.now()
         }, { merge: true });
-      } catch (presenceErr) {
-        console.error(`[CanonicalSave:presence] Erro ao gravar presence/${charId}:`, presenceErr);
+      } catch (presenceErr: any) {
+        if (presenceErr?.code === 'permission-denied' || String(presenceErr).includes('permission')) {
+          console.warn(`[CanonicalSave:presence] Permissão restrita no Firestore para presence/${charId}.`);
+        } else {
+          console.error(`[CanonicalSave:presence] Erro ao gravar presence/${charId}:`, presenceErr);
+        }
       }
 
       // 4. Grava snapshot de ranking competitivo (Gate 7)
@@ -333,8 +341,12 @@ export async function savePlayerStateToCloud(userId: string, stateData: any, imm
           losses: Number(cleanState.colosseum?.duelLosses || cleanState.duelLosses) || 0,
           updatedAt: Date.now()
         }, { merge: true });
-      } catch (rankingErr) {
-        console.error(`[CanonicalSave:pvp_rankings] Erro ao gravar pvp_rankings/s1_cp_${charId}:`, rankingErr);
+      } catch (rankingErr: any) {
+        if (rankingErr?.code === 'permission-denied' || String(rankingErr).includes('permission')) {
+          console.warn(`[CanonicalSave:pvp_rankings] Permissão restrita no Firestore para pvp_rankings/s1_cp_${charId}.`);
+        } else {
+          console.error(`[CanonicalSave:pvp_rankings] Erro ao gravar pvp_rankings/s1_cp_${charId}:`, rankingErr);
+        }
       }
 
       return true;

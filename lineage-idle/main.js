@@ -5209,6 +5209,7 @@ function processMonsterDefeat(monster, killingSkill = null) {
   const huntingDiff = MonsterAIEngine.getDifficulty(state);
   const diffDropMult = (huntingDiff && huntingDiff.dropMult) || 1.0;
   const levelGapPenalty = gapMods.dropMultiplier;
+  const effectiveLootRate = (stats.loot || 1) * levelGapPenalty * dropRate * diffDropMult;
   const dropRollFn = (typeof D === 'function' && typeof D()?.rollDrop === 'function') ? D().rollDrop : rollDrop;
   const rawDrop = dropRollFn(zoneTier, effectiveLootRate, !!(monster.boss || monster.elite));
   const drops = Array.isArray(rawDrop) ? rawDrop : (rawDrop && rawDrop.itemId ? [ { id: rawDrop.itemId, itemId: rawDrop.itemId, rarity: rawDrop.rarity, isEquipment: true, amount: 1 } ] : []);
