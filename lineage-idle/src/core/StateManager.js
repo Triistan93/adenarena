@@ -133,6 +133,13 @@ export const DEFAULT_STATE = () => ({
     baitInventory: {},
   },
   expeditions: [], castles: {}, manorSeeds: {}, manorCrops: {},
+  quests: {
+    progress: {},
+    claimed: [],
+    lastDailyReset: 0,
+    lastWeeklyReset: 0,
+    dailyBonusClaimed: false
+  },
   soulCrystals: {}, weaponSockets: {}, tattoos: [],
   fateWhisperQuest: false, masterAbilities: [], activeTransformation: null,
   serverRates: {
@@ -378,6 +385,12 @@ export function loadState() {
 
     // Migração de Pesca — garante que saves antigos sem fishing recebam defaults
     currentState.fishing = { ...def.fishing, ...(data.fishing || {}) };
+
+    // Migração de Quests — garante integridade de claimed array e progress object
+    currentState.quests = data.quests && typeof data.quests === 'object' ? data.quests : {};
+    if (!currentState.quests.progress || typeof currentState.quests.progress !== 'object') currentState.quests.progress = {};
+    if (!Array.isArray(currentState.quests.claimed)) currentState.quests.claimed = [];
+    if (currentState.quests.dailyBonusClaimed === undefined) currentState.quests.dailyBonusClaimed = false;
     currentState.synthSelected = Array.isArray(data.synthSelected) ? data.synthSelected : [null, null];
     currentState.magicLampExp = Number(data.magicLampExp) || 0;
     currentState.magicLamps = Number(data.magicLamps) || 0;

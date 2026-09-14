@@ -3086,8 +3086,9 @@ function checkQuestResets() {
   if (!state.quests) {
     state.quests = { progress: {}, claimed: [], lastDailyReset: now, lastWeeklyReset: now };
   }
-  if (!state.quests.progress) state.quests.progress = {};
-  if (!state.quests.claimed) state.quests.claimed = [];
+  if (!state.quests.progress || typeof state.quests.progress !== 'object') state.quests.progress = {};
+  if (!Array.isArray(state.quests.claimed)) state.quests.claimed = [];
+  if (state.quests.dailyBonusClaimed === undefined) state.quests.dailyBonusClaimed = false;
 
   if (!state.quests.lastDailyReset || (now - state.quests.lastDailyReset) >= ONE_DAY) {
     state.quests.lastDailyReset = now;
@@ -3131,6 +3132,11 @@ function unlockPremiumPass() {
 function updateQuestsUI() {
   checkQuestResets();
 
+  if (!state.quests) state.quests = { progress: {}, claimed: [] };
+  if (!state.quests.progress || typeof state.quests.progress !== 'object') state.quests.progress = {};
+  if (!Array.isArray(state.quests.claimed)) state.quests.claimed = [];
+  if (state.quests.dailyBonusClaimed === undefined) state.quests.dailyBonusClaimed = false;
+
   const dailyContainer = el('daily-quests-list');
   const weeklyContainer = el('weekly-quests-list');
   const dailyBadge = el('daily-progress-badge');
@@ -3140,7 +3146,7 @@ function updateQuestsUI() {
     let dailyClaimedCount = 0;
     const currentLvl = state.level || 1;
     const availableDaily = QUEST_DEFS.daily.filter(q => !q.unlockLevel || q.unlockLevel <= currentLvl);
-    const allDailyDone = availableDaily.length > 0 && availableDaily.every(q => state.quests.claimed.includes(q.id));
+    const allDailyDone = availableDaily.length > 0 && availableDaily.every(q => Array.isArray(state.quests.claimed) && state.quests.claimed.includes(q.id));
     const isDailyBonusClaimed = Boolean(state.quests.dailyBonusClaimed);
 
     const cardsHtml = QUEST_DEFS.daily.map(q => {
@@ -3173,7 +3179,7 @@ function updateQuestsUI() {
 
       const progress = Math.min(q.target, state.quests.progress[q.id] || 0);
       const isCompleted = progress >= q.target;
-      const isClaimed = state.quests.claimed.includes(q.id);
+      const isClaimed = Array.isArray(state.quests.claimed) && state.quests.claimed.includes(q.id);
       if (isClaimed) dailyClaimedCount++;
 
       const pct = Math.floor((progress / q.target) * 100);
@@ -3249,7 +3255,7 @@ function updateQuestsUI() {
     weeklyContainer.innerHTML = QUEST_DEFS.weekly.map(q => {
       const progress = Math.min(q.target, state.quests.progress[q.id] || 0);
       const isCompleted = progress >= q.target;
-      const isClaimed = state.quests.claimed.includes(q.id);
+      const isClaimed = Array.isArray(state.quests.claimed) && state.quests.claimed.includes(q.id);
       if (isClaimed) weeklyClaimedCount++;
 
       const pct = Math.floor((progress / q.target) * 100);
@@ -7425,7 +7431,7 @@ function attachGlobalErrorHandlers() {
 const tabScrollMap = {};
 
 export const PILLAR_TABS_MAP = {
-  combat: ['zones', 'raids', 'tower', 'colosseum', 'expeditions'],
+  combat: ['zones', 'raids', 'tower', 'colosseum', 'expeditions', 'fishing'],
   character: ['character', 'inventory', 'skills', 'astral', 'dolls', 'cosmetics', 'quests'],
   economy: ['market', 'shop', 'craft', 'alchemy', 'warehouse', 'magiclamp'],
   glory: ['clan', 'olympiad', 'rankings', 'sevensigns', 'fortress', 'enchant', 'codex']
@@ -7451,6 +7457,7 @@ export const TAB_NAMES_MAP = {
   tower: 'Torre da Insolência',
   colosseum: 'Coliseu PvP',
   expeditions: 'Expedições',
+  fishing: 'Pesca',
   market: 'Mercado Giran',
   shop: 'Mercador',
   craft: 'Forja Imperial',
@@ -7524,7 +7531,7 @@ export function openPanel(tabName) {
   const root = document.getElementById('idle-host')?.shadowRoot || document;
 
   // Auto-switch to corresponding pillar dock strip
-  const targetPillar = TAB_TO_PILLAR[targetTab] || PILLAR_MAP[targetTab];
+  const targetPillar = TAB_TO_PILLAR[targetTab] || (typeof PILLAR_MAP !== 'undefined' ? PILLAR_MAP[targetTab] : null) || 'combat';
   if (targetPillar) {
     const pillars = ['combat', 'character', 'economy', 'glory'];
     pillars.forEach(p => {

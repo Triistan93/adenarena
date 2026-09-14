@@ -14,7 +14,12 @@ import { addToInventory } from './InventoryService.js';
  * @param {Object} state
  */
 export function checkQuestResets(state) {
-  state.quests = state.quests || { progress: {}, claimed: [], lastDailyReset: 0, lastWeeklyReset: 0, dailyBonusClaimed: false };
+  state.quests = state.quests || {};
+  if (!state.quests.progress || typeof state.quests.progress !== 'object') state.quests.progress = {};
+  if (!Array.isArray(state.quests.claimed)) state.quests.claimed = [];
+  if (state.quests.dailyBonusClaimed === undefined) state.quests.dailyBonusClaimed = false;
+  if (!state.quests.lastDailyReset) state.quests.lastDailyReset = 0;
+  if (!state.quests.lastWeeklyReset) state.quests.lastWeeklyReset = 0;
   const now = Date.now();
   const ONE_DAY = 24 * 60 * 60 * 1000;
   const SEVEN_DAYS = 7 * ONE_DAY;
@@ -64,7 +69,7 @@ export function triggerQuestEvent(state, type, amount = 1) {
  */
 export function claimQuestReward(state, questId, callbacks = {}) {
   checkQuestResets(state);
-  if (state.quests.claimed.includes(questId)) return false;
+  if (Array.isArray(state.quests.claimed) && state.quests.claimed.includes(questId)) return false;
 
   const allQuests = [...(QUEST_DEFS.daily || []), ...(QUEST_DEFS.weekly || [])];
   const qDef = allQuests.find(q => q.id === questId);
@@ -105,7 +110,7 @@ export function claimDailyBonusChest(state, callbacks = {}) {
 
   const currentLevel = state.level || 1;
   const availableQuests = (QUEST_DEFS.daily || []).filter(q => !q.unlockLevel || q.unlockLevel <= currentLevel);
-  const allCompleted = availableQuests.length > 0 && availableQuests.every(q => state.quests.claimed.includes(q.id));
+  const allCompleted = availableQuests.length > 0 && availableQuests.every(q => Array.isArray(state.quests.claimed) && state.quests.claimed.includes(q.id));
   if (!allCompleted) return false;
 
   state.quests.dailyBonusClaimed = true;
