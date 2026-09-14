@@ -5757,19 +5757,24 @@ function attackMonster() {
         }
       }
 
+      // Determina a grade efetiva: universal escala com a arma; shot por grau usa o teto do próprio tiro
+      const isUniversalShot = shotItem.itemId.includes('universal');
+      const specificShotGrade = (shotItem.itemId.split('_')[1] || 'NG').toUpperCase();
+      const effectiveGrade = isUniversalShot ? weaponGrade : specificShotGrade;
+
       let shotMult = 2.0;
       if (isMageClass) {
         // Multiplicador Mágico (Spiritshot): NG 2.0x, D 2.10x, C 2.20x, B 2.30x, A 2.40x, S 2.50x + 10% MCrit
         const spsGradeMap = { 'NG': 2.0, 'D': 2.10, 'C': 2.20, 'B': 2.30, 'A': 2.40, 'S': 2.50 };
-        shotMult = spsGradeMap[weaponGrade] || 2.0;
-        if (weaponGrade === 'S') soulshotCritBonus = 10;
+        shotMult = spsGradeMap[effectiveGrade] || 2.0;
+        if (effectiveGrade === 'S') soulshotCritBonus = 10;
         damage = Math.floor(damage * shotMult);
         const bonusPct = Math.round((shotMult - 1) * 100);
         stageFloat(`✨ SPS (+${bonusPct}%)`, 'sf-crit', 'left');
       } else {
         // Multiplicador Físico (Soulshot): NG 2.0x, D 2.05x, C 2.10x, B 2.15x, A 2.20x, S 2.25x
         const ssGradeMap = { 'NG': 2.0, 'D': 2.05, 'C': 2.10, 'B': 2.15, 'A': 2.20, 'S': 2.25 };
-        shotMult = ssGradeMap[weaponGrade] || 2.0;
+        shotMult = ssGradeMap[effectiveGrade] || 2.0;
         damage = Math.floor(damage * shotMult);
         const bonusPct = Math.round((shotMult - 1) * 100);
         stageFloat(`⚡ SS (+${bonusPct}%)`, 'sf-crit', 'left');
@@ -8634,9 +8639,9 @@ function claimExpeditionReward(expId) {
     state.astralShards = (state.astralShards || 0) + 10;
     addToInventory('jewel_tateossian_ring', 1, 'legendary');
   } else if (exp.destId === 'martyrs') {
-    addToInventory('scroll_enchant_weapon_a', 2);
+    addToInventory('scroll_of_enchant_weapon', 2);
   } else {
-    addToInventory('scroll_enchant_weapon_d', 3);
+    addToInventory('scroll_of_enchant_weapon', 3);
   }
 
   const seedKeys = Object.keys(MANOR_SEEDS);

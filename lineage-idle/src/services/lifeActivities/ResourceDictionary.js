@@ -29,6 +29,15 @@ export const CANONICAL_RESOURCES = {
     price: 15,
     desc: 'Fragmento de osso de fera silvestre. Usado na confecção de pós e armas de haste.'
   },
+  pelt: {
+    itemId: 'pelt',
+    name: 'Pele Animal Bruta',
+    category: RESOURCE_CATEGORIES.RAW_HUNT,
+    grade: 'none',
+    icon: 'materials/suede.png',
+    price: 25,
+    desc: 'Pele crua retirada de feras caçadas antes do processo de salga e curtume.'
+  },
   suede: {
     itemId: 'suede',
     name: 'Camurça Macia',
@@ -48,6 +57,15 @@ export const CANONICAL_RESOURCES = {
     icon: 'materials/branch.png',
     price: 12,
     desc: 'Madeira flexível e resistente colhida das árvores anciãs de Gludio e Dion. Usada em cajados e arcos.'
+  },
+  stem: {
+    itemId: 'stem',
+    name: 'Caule Silvestre',
+    category: RESOURCE_CATEGORIES.RAW_FLORA,
+    grade: 'none',
+    icon: 'materials/branch.png',
+    price: 15,
+    desc: 'Haste flexível e rica em seiva colhida de plantas silvestres de Aden.'
   },
   charcoal: {
     itemId: 'charcoal',

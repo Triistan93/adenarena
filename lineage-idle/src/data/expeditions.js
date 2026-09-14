@@ -19,7 +19,7 @@ export const EXPEDITION_DESTINATIONS = {
       { matId: 'bone', min: 2, max: 5 },
       { matId: 'iron_ore', min: 2, max: 4 }
     ],
-    scrollReward: 'scroll_enchant_armor_d',
+    scrollReward: 'scroll_of_enchant_armor',
     phases: [
       { name: 'Infiltração', desc: 'Batedoria silenciosa pelas muralhas em ruínas.' },
       { name: 'Perigo', desc: 'Vanguarda de guerreiros gnolls patrulhando o portão leste.' },
@@ -37,14 +37,14 @@ export const EXPEDITION_DESTINATIONS = {
     shards: 4,
     recommendedSpecs: ['healer', 'thief'],
     threat: 'Mortos-Vivos & Armadilhas Antigas',
-    rewardDesc: 'Pó de Osso Grosso, Scrolls D/C e Cacos Astrais',
+    rewardDesc: 'Pó de Osso Grosso, Scrolls Universais e Cacos Astrais',
     desc: 'Criptas subterrâneas infestadas de mortos-vivos. Ladinos desarmam armadilhas e Curandeiros expurgam maldições.',
     materialRewards: [
       { matId: 'coarse_bone_powder', min: 1, max: 3 },
       { matId: 'cotton_thread', min: 3, max: 8 },
       { matId: 'bone', min: 4, max: 10 }
     ],
-    scrollReward: 'scroll_enchant_weapon_d',
+    scrollReward: 'scroll_of_enchant_weapon',
     phases: [
       { name: 'Infiltração', desc: 'Descida cautelosa pelas escadarias de pedra cobertas de lodo.' },
       { name: 'Perigo', desc: 'Armadilha mecânica de lâminas ancestrais e espectros vingativos.' },
@@ -62,14 +62,14 @@ export const EXPEDITION_DESTINATIONS = {
     shards: 6,
     recommendedSpecs: ['guardian', 'tracker'],
     threat: 'Desmoronamentos e Golens de Pedra',
-    rewardDesc: 'Aço, Minério de Mithril, Carvão e Scrolls D/C',
+    rewardDesc: 'Aço, Minério de Mithril, Carvão e Scrolls Universais',
     desc: 'Galerias profundas escavadas há séculos. Golens desgovernados protegem veios ricos de aço e mithril.',
     materialRewards: [
       { matId: 'steel', min: 1, max: 4 },
       { matId: 'mithril_ore', min: 2, max: 6 },
       { matId: 'coal', min: 4, max: 10 }
     ],
-    scrollReward: 'scroll_enchant_armor_d',
+    scrollReward: 'scroll_of_enchant_armor',
     phases: [
       { name: 'Infiltração', desc: 'Navegação pelos túneis estreitos e poços de ventilação.' },
       { name: 'Perigo', desc: 'Vibração tectônica e ataque surpresa de golens de basalto.' },
@@ -87,14 +87,14 @@ export const EXPEDITION_DESTINATIONS = {
     shards: 9,
     recommendedSpecs: ['healer', 'mage'],
     threat: 'Labirinto das Sombras & Ecos Malditos',
-    rewardDesc: 'Couro Refinado, Linha Trançada, Cacos e Scrolls C',
+    rewardDesc: 'Couro Refinado, Linha Trançada, Cacos e Scrolls Universais',
     desc: 'Santuário sombrio onde sacerdotes fanáticos foram sacrificados. Requer magia sagrada e arcana.',
     materialRewards: [
       { matId: 'crafted_leather', min: 1, max: 3 },
       { matId: 'braided_hemp', min: 2, max: 6 },
       { matId: 'silver_nugget', min: 3, max: 8 }
     ],
-    scrollReward: 'scroll_enchant_weapon_c',
+    scrollReward: 'scroll_of_enchant_weapon',
     phases: [
       { name: 'Infiltração', desc: 'Cruzando o labirinto de colunas fúnebres sob névoa profana.' },
       { name: 'Perigo', desc: 'Clamor das almas penadas drenando a energia vital da caravana.' },
@@ -112,14 +112,14 @@ export const EXPEDITION_DESTINATIONS = {
     shards: 14,
     recommendedSpecs: ['mage', 'guardian'],
     threat: 'Dragões de Sangue & Chuva Sulfúrica',
-    rewardDesc: 'Enria, Coque Sintético, Cacos Astrais e Scrolls C/B',
+    rewardDesc: 'Enria, Coque Sintético, Cacos Astrais e Scrolls Universais',
     desc: 'Desfiladeiro causticante dominado por crias de Antaras. Guardiões absorvem fogo e Magos quebram escamas.',
     materialRewards: [
       { matId: 'enria', min: 1, max: 3 },
       { matId: 'synthetic_cokes', min: 1, max: 4 },
       { matId: 'iron_ore', min: 6, max: 14 }
     ],
-    scrollReward: 'scroll_enchant_weapon_c',
+    scrollReward: 'scroll_of_enchant_weapon',
     phases: [
       { name: 'Infiltração', desc: 'Escalada por fendas de enxofre em território aéreo dos dragões.' },
       { name: 'Perigo', desc: 'Baforada de chamas sulfúricas e emboscada de dracos alados.' },
@@ -137,14 +137,14 @@ export const EXPEDITION_DESTINATIONS = {
     shards: 22,
     recommendedSpecs: ['mage', 'healer', 'thief'],
     threat: 'Magia de Sangue, Demônios Maiores & Barreiras Seladas',
-    rewardDesc: 'Fibra Metálica, Enria, Scrolls B e Relíquias Astrais',
+    rewardDesc: 'Fibra Metálica, Enria, Scrolls Abençoados e Relíquias Astrais',
     desc: 'O ápice da exploração da Temporada 1. Fortaleza profana onde se ocultam as maiores relíquias de Aden.',
     materialRewards: [
       { matId: 'metallic_fiber', min: 2, max: 5 },
       { matId: 'enria', min: 2, max: 5 },
       { matId: 'crafted_leather', min: 2, max: 5 }
     ],
-    scrollReward: 'scroll_enchant_weapon_b',
+    scrollReward: 'scroll_blessed_weapon',
     phases: [
       { name: 'Infiltração', desc: 'Quebra dos três selos arcanos de sangue na entrada do templo.' },
       { name: 'Perigo', desc: 'Manifestação de um Arquidemônio de Shilen em fúria.' },

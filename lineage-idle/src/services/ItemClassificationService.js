@@ -172,10 +172,8 @@ export function parseEnchantScroll(itemOrDef) {
   const gradeMatches = id.match(/_([dcbans])(?:_|$)/) || name.match(/\b([dcbans])-?grade\b/i) || name.match(/grau\s+([dcbans])\b/i);
   if (gradeMatches) {
     grade = gradeMatches[1].toUpperCase();
-  } else if (id.includes('crystal_scroll') || id.includes('universal') || name.includes('universal') || id.includes('scroll_blessed_universal')) {
+  } else if (id.includes('crystal_scroll') || id.includes('universal') || name.includes('universal') || id.includes('scroll_blessed') || id.startsWith('scroll_of_enchant_') || id.startsWith('scroll_blessed_')) {
     grade = 'ANY';
-  } else if (id === 'scroll_of_enchant_weapon' || id === 'scroll_of_enchant_weapon_' || id === 'scroll_of_enchant_armor' || id === 'scroll_of_enchant_armor_') {
-    grade = (id.includes('universal') || name.includes('universal')) ? 'ANY' : 'NG';
   } else if (itemOrDef.tier === 1) {
     grade = 'NG';
   }

@@ -1,3 +1,5 @@
+import { getArmorType, getWeaponType } from './item_class_rules.js';
+
 export const ICON_MAP = {
   "accessory_cat_ear_i00": "acessories/accessory_cat_ear_i00.png",
   "accessory_noblesse_tiara": "acessories/hero_circlet.png",
@@ -1273,33 +1275,62 @@ export function generateAllCraftingRecipes(allItemsParam = null) {
       baseGold = 90000;
     }
 
+    const aType = getArmorType(id, def.name);
+    const wType = getWeaponType(id, def.name);
+
     if (slot === 'weapon') {
       if (level < 20) reqs = [{ id: 'iron_ore', count: 10 }, { id: 'suede', count: 5 }];
-      else if (level < 40) reqs = [{ id: 'iron_ore', count: 25 }, { id: 'steel', count: 10 }];
-      else if (level < 52) reqs = [{ id: 'steel', count: 30 }, { id: 'coarse_bone_powder', count: 15 }];
-      else if (level < 62) reqs = [{ id: 'mithril_ore', count: 40 }, { id: 'enchanted_stone', count: 20 }];
-      else if (level < 76) reqs = [{ id: 'oriharukon_ore', count: 60 }, { id: 'adamantite', count: 30 }];
-      else if (level < 80) reqs = [{ id: 'oriharukon_ore', count: 100 }, { id: 'adamantite', count: 50 }];
-      else reqs = [{ id: 'oriharukon_ore', count: 150 }, { id: 'adamantite', count: 80 }, { id: 'frost_crystal', count: 15 }];
+      else if (level < 40) reqs = [{ id: 'iron_ore', count: 25 }, { id: 'steel', count: 10 }, { id: 'compressed_wood', count: 4 }];
+      else if (level < 52) reqs = [{ id: 'steel', count: 30 }, { id: 'coarse_bone_powder', count: 15 }, { id: 'compressed_wood', count: 8 }, { id: 'varnish_of_purity', count: 4 }];
+      else if (level < 62) reqs = [{ id: 'mithril_ore', count: 40 }, { id: 'enchanted_stone', count: 20 }, { id: 'compressed_wood', count: 12 }, { id: 'mithril_alloy', count: 6 }, { id: 'synthetic_cokes', count: 5 }];
+      else if (level < 76) reqs = [{ id: 'oriharukon_ore', count: 60 }, { id: 'adamantite', count: 30 }, { id: 'compressed_wood', count: 16 }, { id: 'enria', count: 6 }];
+      else if (level < 80) reqs = [{ id: 'oriharukon_ore', count: 100 }, { id: 'adamantite', count: 50 }, { id: 'compressed_wood', count: 20 }, { id: 'enria', count: 10 }];
+      else reqs = [{ id: 'oriharukon_ore', count: 150 }, { id: 'adamantite', count: 80 }, { id: 'frost_crystal', count: 15 }, { id: 'compressed_wood', count: 25 }, { id: 'enria', count: 15 }];
     } else if (['armor', 'helmet', 'boots', 'gloves', 'legs', 'shield', 'sigil'].includes(slot)) {
-      if (level < 20) reqs = [{ id: 'iron_ore', count: 8 }, { id: 'suede', count: 6 }];
-      else if (level < 40) reqs = [{ id: 'iron_ore', count: 20 }, { id: 'crafted_leather', count: 10 }];
-      else if (level < 52) reqs = [{ id: 'steel', count: 25 }, { id: 'crafted_leather', count: 15 }];
-      else if (level < 62) reqs = [{ id: 'mithril_ore', count: 35 }, { id: 'steel_ingot', count: 20 }];
-      else if (level < 76) reqs = [{ id: 'oriharukon_ore', count: 50 }, { id: 'adamantite', count: 25 }];
-      else if (level < 80) reqs = [{ id: 'oriharukon_ore', count: 80 }, { id: 'adamantite', count: 40 }];
-      else reqs = [{ id: 'oriharukon_ore', count: 120 }, { id: 'adamantite', count: 60 }, { id: 'frost_crystal', count: 10 }];
+      if (level < 20) {
+        reqs = [{ id: 'iron_ore', count: 8 }, { id: 'suede', count: 6 }];
+      } else if (level < 40) {
+        reqs = [{ id: 'iron_ore', count: 20 }, { id: 'crafted_leather', count: 10 }];
+        if (aType === 'robe') reqs.push({ id: 'silver_thread', count: 4 });
+        else if (aType === 'light') reqs.push({ id: 'braided_hemp', count: 5 });
+        else reqs.push({ id: 'metallic_fiber', count: 4 });
+      } else if (level < 52) {
+        reqs = [{ id: 'steel', count: 25 }, { id: 'crafted_leather', count: 15 }, { id: 'varnish_of_purity', count: 3 }];
+        if (aType === 'robe') reqs.push({ id: 'silver_thread', count: 8 });
+        else if (aType === 'light') reqs.push({ id: 'braided_hemp', count: 8 });
+        else reqs.push({ id: 'metallic_fiber', count: 8 });
+      } else if (level < 62) {
+        reqs = [{ id: 'mithril_ore', count: 35 }, { id: 'steel', count: 20 }, { id: 'durable_metal_plate', count: 5 }];
+        if (aType === 'robe') reqs.push({ id: 'silver_thread', count: 12 });
+        else if (aType === 'light') reqs.push({ id: 'braided_hemp', count: 12 });
+        else reqs.push({ id: 'metallic_fiber', count: 12 });
+      } else if (level < 76) {
+        reqs = [{ id: 'oriharukon_ore', count: 50 }, { id: 'adamantite', count: 25 }, { id: 'durable_metal_plate', count: 8 }, { id: 'enria', count: 4 }];
+        if (aType === 'robe') reqs.push({ id: 'silver_thread', count: 16 });
+        else if (aType === 'light') reqs.push({ id: 'braided_hemp', count: 16 });
+        else reqs.push({ id: 'metallic_fiber', count: 16 });
+      } else if (level < 80) {
+        reqs = [{ id: 'oriharukon_ore', count: 80 }, { id: 'adamantite', count: 40 }, { id: 'durable_metal_plate', count: 12 }, { id: 'enria', count: 8 }];
+        if (aType === 'robe') reqs.push({ id: 'silver_thread', count: 20 });
+        else if (aType === 'light') reqs.push({ id: 'braided_hemp', count: 20 });
+        else reqs.push({ id: 'metallic_fiber', count: 20 });
+      } else {
+        reqs = [{ id: 'oriharukon_ore', count: 120 }, { id: 'adamantite', count: 60 }, { id: 'frost_crystal', count: 10 }, { id: 'durable_metal_plate', count: 15 }];
+        if (aType === 'robe') reqs.push({ id: 'silver_thread', count: 25 });
+        else if (aType === 'light') reqs.push({ id: 'braided_hemp', count: 25 });
+        else reqs.push({ id: 'metallic_fiber', count: 25 });
+      }
     } else if (['ring', 'earring', 'necklace'].includes(slot)) {
       if (level < 20) reqs = [{ id: 'silver_nugget', count: 6 }, { id: 'charcoal', count: 5 }];
-      else if (level < 40) reqs = [{ id: 'silver_nugget', count: 15 }, { id: 'enchanted_stone', count: 8 }];
-      else if (level < 62) reqs = [{ id: 'silver_nugget', count: 30 }, { id: 'enchanted_stone', count: 15 }];
-      else reqs = [{ id: 'silver_nugget', count: 50 }, { id: 'divine_crystal', count: 8 }];
+      else if (level < 40) reqs = [{ id: 'silver_nugget', count: 15 }, { id: 'enchanted_stone', count: 8 }, { id: 'silver_mold', count: 2 }];
+      else if (level < 62) reqs = [{ id: 'silver_nugget', count: 30 }, { id: 'enchanted_stone', count: 15 }, { id: 'silver_mold', count: 4 }];
+      else reqs = [{ id: 'silver_nugget', count: 50 }, { id: 'divine_crystal', count: 8 }, { id: 'silver_mold', count: 6 }];
     } else if (slot === 'agathion' || id.includes('agathion') || id.includes('doll')) {
       reqs = [{ id: 'divine_crystal', count: 5 }, { id: 'adamantite', count: 20 }, { id: 'magic_powder', count: 30 }];
       baseGold = Math.max(baseGold, 25000);
       craftLevel = Math.max(craftLevel, 5);
     } else if (slot === 'cloak') {
-      reqs = [{ id: 'suede', count: 30 }, { id: 'thread', count: 25 }, { id: 'crafted_leather', count: 15 }];
+      reqs = [{ id: 'suede', count: 30 }, { id: 'thread', count: 25 }, { id: 'crafted_leather', count: 15 }, { id: 'braided_hemp', count: 6 }];
       craftLevel = Math.max(craftLevel, 3);
     } else if (slot === 'belt') {
       reqs = [{ id: 'crafted_leather', count: 25 }, { id: 'steel', count: 15 }, { id: 'iron_ore', count: 20 }];
@@ -1316,7 +1347,7 @@ export function generateAllCraftingRecipes(allItemsParam = null) {
       reqs = [{ id: 'holy_water', count: 5 }, { id: 'fire_reagent', count: 3 }];
       baseGold = 200;
     } else if (slot === 'scroll' || id.includes('scroll')) {
-      reqs = [{ id: 'magic_powder', count: 15 }, { id: 'crystal_blue_d', count: 5 }];
+      reqs = [{ id: 'magic_powder', count: 15 }, { id: 'crystal_d', count: 5 }];
       baseGold = 1800;
     } else {
       reqs = [{ id: 'iron_ore', count: 10 }, { id: 'suede', count: 5 }];

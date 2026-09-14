@@ -244,11 +244,11 @@ export const ExpeditionService = {
     if (exp.synergies?.bonusChestChance && Math.random() < exp.synergies.bonusChestChance) {
       bonusChestAwarded = true;
       if (dest.minLevel >= 38) {
-        bonusScrollId = 'scroll_enchant_weapon_b';
+        bonusScrollId = 'scroll_blessed_weapon';
       } else if (dest.minLevel >= 28) {
-        bonusScrollId = 'scroll_enchant_weapon_c';
+        bonusScrollId = 'scroll_of_enchant_weapon';
       } else {
-        bonusScrollId = 'scroll_enchant_weapon_d';
+        bonusScrollId = 'scroll_of_enchant_weapon';
       }
       addToInventory(state, bonusScrollId, 2, 'rare', false, callbacks, true);
     }
