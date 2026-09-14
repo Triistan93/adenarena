@@ -35,6 +35,7 @@ import { HuntingService }                                                     fr
 import { GatheringService }                                                   from './src/services/lifeActivities/GatheringService.js';
 import { MiningService }                                                      from './src/services/lifeActivities/MiningService.js';
 import { MercenaryService }                                                   from './src/services/MercenaryService.js';
+import { MERCENARY_RARITIES, MERCENARY_SPECIALIZATIONS, MERCENARY_TRAITS }           from './src/data/mercenaries.js';
 import { ExpeditionService, EXPEDITION_DESTINATIONS as CANONICAL_EXPEDITION_DESTINATIONS, EXPEDITION_DILEMMAS, RISK_DIRECTIVES } from './src/services/ExpeditionService.js';
 import { renderFishingUI }                                                    from './src/ui/FishingUI.js';
 import { renderHuntingUI }                                                    from './src/ui/HuntingUI.js';
