@@ -3190,11 +3190,22 @@ const ZONE_GOLD_MULT = { zone1: 1.0, zone2: 1.5, zone3: 2.2, zone4: 3.5, zone5: 
 const MYSTIC_POOL = ["anais_first","weapon_anais_first","anakim_pistols","weapon_anakim_pistols","jewel_ring_core","ring_core"];
 
 function rollRarity(bonus = 0) {
+  const r = (typeof RARITY !== 'undefined' && RARITY) ? RARITY : ((typeof window !== 'undefined' && window.GameData?.RARITY) ? window.GameData.RARITY : {
+    common: { dropWeight: 70 },
+    uncommon: { dropWeight: 20 },
+    rare: { dropWeight: 7 },
+    epic: { dropWeight: 2.5 },
+    legendary: { dropWeight: 0.5 }
+  });
   const rand = Math.random() * 100 - bonus;
-  if (rand <= RARITY.legendary.dropWeight) return 'legendary';
-  if (rand <= RARITY.legendary.dropWeight + RARITY.epic.dropWeight) return 'epic';
-  if (rand <= RARITY.legendary.dropWeight + RARITY.epic.dropWeight + RARITY.rare.dropWeight) return 'rare';
-  if (rand <= RARITY.legendary.dropWeight + RARITY.epic.dropWeight + RARITY.rare.dropWeight + RARITY.uncommon.dropWeight) return 'uncommon';
+  const legW = r.legendary?.dropWeight || 0.5;
+  const epicW = r.epic?.dropWeight || 2.5;
+  const rareW = r.rare?.dropWeight || 7;
+  const uncW = r.uncommon?.dropWeight || 20;
+  if (rand <= legW) return 'legendary';
+  if (rand <= legW + epicW) return 'epic';
+  if (rand <= legW + epicW + rareW) return 'rare';
+  if (rand <= legW + epicW + rareW + uncW) return 'uncommon';
   return 'common';
 }
 

@@ -60,4 +60,6 @@ if (typeof window !== 'undefined') {
   window.GameData.ARMOR_SETS = ARMOR_SETS;
   window.GameData.RARITY = RARITY;
   window.GameData.SLOT = SLOT;
+  window.RARITY = RARITY;
+  window.SLOT = SLOT;
 }

@@ -1639,4 +1639,12 @@ if (typeof window !== 'undefined') {
   window.GameData = window.GameData || {};
   window.GameData.CRAFTING_RECIPES = CRAFTING_RECIPES;
   window.GameData.SHOP_INVENTORY = SHOP_INVENTORY;
+  window.GameData.rollDrop = rollDrop;
+  window.GameData.rollRarity = rollRarity;
+  window.GameData.rollDropLegacy = rollDropLegacy;
+  window.GameData.MONSTER_DROPS = MONSTER_DROPS;
+  window.GameData.ZONE_GOLD_MULT = ZONE_GOLD_MULT;
+  window.GameData.MYSTIC_POOL = MYSTIC_POOL;
+  window.GameData.ZONE_CONSUMABLES = ZONE_CONSUMABLES;
+  window.GameData.getZoneDropTier = getZoneDropTier;
 }

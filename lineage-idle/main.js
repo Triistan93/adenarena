@@ -2,8 +2,8 @@ import * as ART from "./art.js";
 // echo-adapter garante que SKILL_DEFS_ECHO, CLASS_SKILLS_ECHO e SKILL_TREE_LAYOUT_ECHO
 // existam em window.EchoData antes das constantes globais serem lidas abaixo.
 import "./data/echo-adapter.js";
-import "./data/affixes.js";
 import "./src/data/items/index.js";
+import { RARITY, ALL_ITEMS, rollDrop, rollRarity } from './src/data/items/index.js';
 import { getArmorType, getWeaponType, canEquipByType, ARMOR_TYPE_LABEL, WEAPON_TYPE_LABEL } from './src/data/items/item_class_rules.js';
 import { AFFIX_MAP as AFFIX_MAP_IMPORT } from './data/affixes.js';
 import { getSkillIcon, getSkillSemanticData } from './src/services/SkillIconRegistry.js';
@@ -378,8 +378,19 @@ try {
 // Lineage Idle - Main Game Logic
 // ========================================
 
-const SAVE_KEY = 'lineageIdleSave_v2';
-const D = () => window.GameData;
+const D = () => {
+  const gd = (typeof window !== 'undefined') ? window.GameData : null;
+  if (gd && gd.RARITY && gd.ALL_ITEMS && typeof gd.rollDrop === 'function') {
+    return gd;
+  }
+  return {
+    ...(gd || {}),
+    RARITY: (gd && gd.RARITY) || RARITY,
+    ALL_ITEMS: (gd && gd.ALL_ITEMS) || ALL_ITEMS,
+    rollDrop: (gd && typeof gd.rollDrop === 'function') ? gd.rollDrop : rollDrop,
+    rollRarity: (gd && typeof gd.rollRarity === 'function') ? gd.rollRarity : rollRarity
+  };
+};
 
 // ========== ECHO OF ELEMENTS — Skill bridges ==========
 const SKILL_DEFS = new Proxy({}, {
@@ -1041,7 +1052,7 @@ function salvageItem(uid) {
   }
 
   if (isHighValueItem(item)) {
-    const rarityName = D().RARITY[item.rarity]?.name || item.rarity;
+    const rarityName = D().RARITY?.[item.rarity]?.name || item.rarity;
     if (!confirm(`⚠️ Deseja realmente SUCATEAR o item valioso "${def.name}" [${rarityName}]?`)) {
       return;
     }
@@ -1049,7 +1060,7 @@ function salvageItem(uid) {
 
   const reqLvl = def.req ? def.req.level : 1;
   const grade = getItemGrade(reqLvl);
-  const rarityMult = item.rarity ? (D().RARITY[item.rarity]?.mult || 1) : 1;
+  const rarityMult = item.rarity ? (D().RARITY?.[item.rarity]?.mult || 1) : 1;
 
   let matId = 'iron_ore';
   if (grade === 'S Grade' || def.tier === 6) matId = 'crystal_s';
@@ -1190,7 +1201,7 @@ function salvageSelectedItems() {
     
     const reqLvl = def.req ? def.req.level : 1;
     const grade = getItemGrade(reqLvl);
-    const rarityMult = item.rarity ? (D().RARITY[item.rarity]?.mult || 1) : 1;
+    const rarityMult = item.rarity ? (D().RARITY?.[item.rarity]?.mult || 1) : 1;
 
     let matId = 'iron_ore';
     if (grade === 'S Grade' || def.tier === 6) matId = 'crystal_s';
@@ -1269,7 +1280,7 @@ function crystallizeSelectedItems() {
 
     const reqLvl = def.req ? def.req.level : 1;
     const gName = (def.grade || getItemGrade(reqLvl)).toUpperCase();
-    const rarityMult = item.rarity ? (D().RARITY[item.rarity]?.mult || 1) : 1;
+    const rarityMult = item.rarity ? (D().RARITY?.[item.rarity]?.mult || 1) : 1;
     const enchant = item.enchant || 0;
 
     let cId = null;
@@ -1680,7 +1691,7 @@ function sellItem(uid) {
   if (!def) return;
 
   if (isHighValueItem(item)) {
-    const rarityName = D().RARITY[item.rarity]?.name || item.rarity;
+    const rarityName = D().RARITY?.[item.rarity]?.name || item.rarity;
     if (!confirm(`⚠️ Deseja realmente VENDER o item valioso "${def.name}" [${rarityName}]?`)) return;
   }
 
@@ -2061,7 +2072,7 @@ function updateDetailedEquipStatsUI() {
     const rarity = item.rarity || 'common';
     const enchantStr = item.enchant ? `+${item.enchant}` : '';
     const full = uiFormatItemDisplayName(item, def);
-    const col = item.rarity ? D().RARITY[rarity]?.color : 'var(--gilt)';
+    const col = item.rarity ? (D().RARITY?.[rarity]?.color || 'var(--gilt)') : 'var(--gilt)';
 
     if (pdSlot) {
       pdSlot.className = `l2inv-pd-slot equip-slot has-item rarity-${rarity}`;
@@ -2488,8 +2499,8 @@ function renderShopMystic(list) {
   list.appendChild(hdr);
   
   for (const pick of rot) {
-    const def = D().ALL_ITEMS[pick.id]; if (!def) continue;
-    const price = Math.floor((def.price || 500) * D().RARITY[pick.rarity].mult * 2);
+    const rMult = D().RARITY?.[pick.rarity]?.mult || 1;
+    const price = Math.floor((def.price || 500) * rMult * 2);
     const cloned = D().rollItemWithRarity(pick.id, pick.rarity);
     const canAfford = state.gold >= price;
     const lockLvl = def.req && def.req.level > state.level;
@@ -2497,7 +2508,8 @@ function renderShopMystic(list) {
     const row = mkEl('div');
     row.className = `shop-item rarity-${pick.rarity}` + (lockLvl || lockCls ? ' locked' : '');
     const statsLine = buildStatLine(cloned);
-    row.innerHTML = `<div class="item-info"><div class="item-name rarity-${pick.rarity}">${def.name} <span class="rarity-tag">${D().RARITY[pick.rarity].name}</span></div><div class="item-desc">${def.desc || ''}</div>${statsLine ? `<div class="item-stats">${statsLine}</div>` : ''}</div><button class="item-action mystic-buy" data-buy-rarity="${pick.id}" data-rarity="${pick.rarity}" ${(!canAfford || lockLvl || lockCls) ? 'disabled' : ''}>${price.toLocaleString()}g</button>`;
+    const rLabel = D().RARITY?.[pick.rarity]?.name || pick.rarity;
+    row.innerHTML = `<div class="item-info"><div class="item-name rarity-${pick.rarity}">${def.name} <span class="rarity-tag">${rLabel}</span></div><div class="item-desc">${def.desc || ''}</div>${statsLine ? `<div class="item-stats">${statsLine}</div>` : ''}</div><button class="item-action mystic-buy" data-buy-rarity="${pick.id}" data-rarity="${pick.rarity}" ${(!canAfford || lockLvl || lockCls) ? 'disabled' : ''}>${price.toLocaleString()}g</button>`;
     list.appendChild(row);
   }
 
@@ -2871,14 +2883,14 @@ function updateEnchantUI() {
       const normalCount = getEnchantScrollCount(isWeapon, false, grade);
       const blessedCount = getEnchantScrollCount(isWeapon, true, grade);
       const enchant = item.enchant || 0;
-      const rarityColor = item.rarity ? (D().RARITY[item.rarity]?.color || 'var(--gilt)') : 'var(--gilt)';
+      const rarityColor = item.rarity ? (D().RARITY?.[item.rarity]?.color || 'var(--gilt)') : 'var(--gilt)';
       const isFullBody = def.slot === 'fullbody' || (def.slot === 'chest' && (def.isOnePiece || def.name?.toLowerCase().includes('full body') || def.name?.toLowerCase().includes('robe')));
       const safeLimit = isFullBody ? 4 : 3;
       const baseProb = getEnchantSuccessChance(grade, enchant, safeLimit);
       const safeMsg = enchant < safeLimit ? `100% Seguro (Até +${safeLimit})` : `Sucesso: ${Math.round(baseProb * 100)}% (Grau ${grade})`;
       
       const card = mkEl('div'); card.className = 'enchant-card';
-      const title = (enchant > 0 ? `+${enchant} ` : '') + def.name + (item.rarity ? ` [${D().RARITY[item.rarity]?.name || item.rarity}]` : '');
+      const title = (enchant > 0 ? `+${enchant} ` : '') + def.name + (item.rarity ? ` [${D().RARITY?.[item.rarity]?.name || item.rarity}]` : '');
       
       card.innerHTML = `
         <div class="enchant-card-info">
@@ -4471,7 +4483,7 @@ function updateZoneBackground() {
   }
 }
 
-function topEquipRarityColor() { const rank = { common: 0, uncommon: 1, rare: 2, epic: 3, legendary: 4 }; let best = -1, col = ''; for (const s of Object.keys(state.equipment)) { const uid = state.equipment[s]; if (!uid) continue; const it = state.inventory.find(i => i.uid === uid); if (!it || !it.rarity) continue; const r = rank[it.rarity] ?? -1; if (r > best) { best = r; col = D().RARITY[it.rarity].color; } } return col; }
+function topEquipRarityColor() { const rank = { common: 0, uncommon: 1, rare: 2, epic: 3, legendary: 4 }; let best = -1, col = ''; for (const s of Object.keys(state.equipment || {})) { const uid = state.equipment[s]; if (!uid) continue; const it = (state.inventory || []).find(i => i.uid === uid); if (!it || !it.rarity) continue; const r = rank[it.rarity] ?? -1; if (r > best) { best = r; col = D().RARITY?.[it.rarity]?.color || ''; } } return col; }
 function renderStageHero() {
   return uiRenderStageHero(state);
 }
@@ -5197,17 +5209,18 @@ function processMonsterDefeat(monster, killingSkill = null) {
   const huntingDiff = MonsterAIEngine.getDifficulty(state);
   const diffDropMult = (huntingDiff && huntingDiff.dropMult) || 1.0;
   const levelGapPenalty = gapMods.dropMultiplier;
-  const effectiveLootRate = stats.loot * levelGapPenalty * dropRate * diffDropMult;
-  const rawDrop = D().rollDrop(zoneTier, effectiveLootRate, !!(monster.boss || monster.elite));
+  const dropRollFn = (typeof D === 'function' && typeof D()?.rollDrop === 'function') ? D().rollDrop : rollDrop;
+  const rawDrop = dropRollFn(zoneTier, effectiveLootRate, !!(monster.boss || monster.elite));
   const drops = Array.isArray(rawDrop) ? rawDrop : (rawDrop && rawDrop.itemId ? [ { id: rawDrop.itemId, itemId: rawDrop.itemId, rarity: rawDrop.rarity, isEquipment: true, amount: 1 } ] : []);
   for (const drop of drops) {
     const dropId = drop.id || drop.itemId;
-    const def = D().ALL_ITEMS[dropId];
+    const allDict = (typeof D === 'function' && D()?.ALL_ITEMS) ? D().ALL_ITEMS : ALL_ITEMS;
+    const def = allDict ? allDict[dropId] : null;
     if (dropId && def) {
       const isEquip = drop.isEquipment || !['material', 'potion', 'consumable', 'scroll', 'gem'].includes(def.slot);
       if (isEquip) {
         addToInventory(dropId, 1, drop.rarity || 'common');
-        const rName = D().RARITY[drop.rarity || 'common']?.name || (drop.rarity || 'common');
+        const rName = D()?.RARITY?.[drop.rarity || 'common']?.name || (drop.rarity || 'common');
         log(`✦ Obteve **${def.name}** [${rName}]!`, 'rarity-' + (drop.rarity || 'common'), 'loot');
         floatText(`✦ ${rName}!`, 'float-' + (drop.rarity || 'common'));
       } else {
@@ -11095,13 +11108,22 @@ export function init() {
     };
 
     window.GameData = {
-      ALL_ITEMS,
+      ...(window.GameData || {}),
+      ALL_ITEMS: window.GameData?.ALL_ITEMS || ALL_ITEMS,
+      RARITY: window.GameData?.RARITY || RARITY,
+      rollDrop: (window.GameData && typeof window.GameData.rollDrop === 'function') ? window.GameData.rollDrop : rollDrop,
+      rollRarity: (window.GameData && typeof window.GameData.rollRarity === 'function') ? window.GameData.rollRarity : rollRarity,
       MERCENARY_RARITIES,
       MERCENARY_SPECIALIZATIONS,
       MERCENARY_TRAITS,
       EXPEDITION_DILEMMAS,
       RISK_DIRECTIVES
     };
+    window.MERCENARY_RARITIES = MERCENARY_RARITIES;
+    window.MERCENARY_SPECIALIZATIONS = MERCENARY_SPECIALIZATIONS;
+    window.MERCENARY_TRAITS = MERCENARY_TRAITS;
+    window.EXPEDITION_DILEMMAS = EXPEDITION_DILEMMAS;
+    window.RISK_DIRECTIVES = RISK_DIRECTIVES;
 
     window.getGameState = () => {
       const data = { 
