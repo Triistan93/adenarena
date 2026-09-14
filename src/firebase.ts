@@ -30,6 +30,9 @@ import {
   writeBatch
 } from 'firebase/firestore';
 
+// @ts-ignore
+import { CombatPowerService } from '../lineage-idle/src/services/CombatPowerService.js';
+
 export {
   doc, 
   setDoc, 
@@ -55,13 +58,13 @@ export {
 // A segurança real vem das Firestore Security Rules (firestore.rules).
 // Variáveis de ambiente são suportadas para sobrescrever em ambientes CI/CD.
 const firebaseConfig = {
-  apiKey:            import.meta.env.VITE_FIREBASE_API_KEY            || 'AIzaSyB36IqqrnZglElfM5kxsTi1S2Acclate9Y',
-  authDomain:        import.meta.env.VITE_FIREBASE_AUTH_DOMAIN        || 'adenarena-6e448.firebaseapp.com',
-  projectId:         import.meta.env.VITE_FIREBASE_PROJECT_ID         || 'adenarena-6e448',
-  storageBucket:     import.meta.env.VITE_FIREBASE_STORAGE_BUCKET     || 'adenarena-6e448.firebasestorage.app',
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || '320732940839',
-  appId:             import.meta.env.VITE_FIREBASE_APP_ID             || '1:320732940839:web:99e037953e517d16b29c02',
-  measurementId:     import.meta.env.VITE_FIREBASE_MEASUREMENT_ID     || 'G-KQ280JBQDN',
+  apiKey:            import.meta.env?.VITE_FIREBASE_API_KEY            || 'AIzaSyB36IqqrnZglElfM5kxsTi1S2Acclate9Y',
+  authDomain:        import.meta.env?.VITE_FIREBASE_AUTH_DOMAIN        || 'adenarena-6e448.firebaseapp.com',
+  projectId:         import.meta.env?.VITE_FIREBASE_PROJECT_ID         || 'adenarena-6e448',
+  storageBucket:     import.meta.env?.VITE_FIREBASE_STORAGE_BUCKET     || 'adenarena-6e448.firebasestorage.app',
+  messagingSenderId: import.meta.env?.VITE_FIREBASE_MESSAGING_SENDER_ID || '320732940839',
+  appId:             import.meta.env?.VITE_FIREBASE_APP_ID             || '1:320732940839:web:99e037953e517d16b29c02',
+  measurementId:     import.meta.env?.VITE_FIREBASE_MEASUREMENT_ID     || 'G-KQ280JBQDN',
 };
 
 
@@ -86,7 +89,7 @@ export {
   signInAnonymously,
   signOut, 
   onAuthStateChanged,
-  User
+  type User
 };
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -136,6 +139,48 @@ function validateStateIntegrity(state: any): { valid: boolean; reason?: string }
   }
 
   return { valid: true };
+}
+
+/**
+ * computeAuthoritativeRankingCP — Anti-Cheat: Valida o CP submetido contra o cálculo canônico.
+ * Impede que injeções de CP arbitrário (ex: 5.000.000 ou 10.000.000) sejam gravadas nos rankings.
+ * rankingCP não pode exceder canonicalCP * 1.10.
+ */
+export function computeAuthoritativeRankingCP(
+  cleanState: any, 
+  submittedCP?: number
+): { canonicalCP: number; rankingCP: number; authoritativeCP: number } {
+  const stats = cleanState?.stats || {};
+  const pAtk = Number(stats.atk || stats.pAtk) || 100;
+  const mAtk = Number(stats.matk || stats.mAtk) || 50;
+  const pDef = Number(stats.def || stats.pDef) || 80;
+  const mDef = Number(stats.mdef || stats.mDef) || 60;
+  const maxHp = Number(stats.maxHp || stats.hp) || 1000;
+  const level = Number(cleanState?.level) || 1;
+
+  let canonicalCP = 0;
+  try {
+    if (typeof CombatPowerService !== 'undefined' && CombatPowerService?.calculateCombatPower) {
+      canonicalCP = CombatPowerService.calculateCombatPower(cleanState);
+    } else if (typeof window !== 'undefined' && (window as any).CombatPowerService?.calculateCombatPower) {
+      canonicalCP = (window as any).CombatPowerService.calculateCombatPower(cleanState);
+    }
+  } catch (e) {
+    console.warn('[Security] CombatPowerService.calculateCombatPower error:', e);
+  }
+
+  if (!canonicalCP || canonicalCP <= 0) {
+    // Fallback canônico em caso de ausência do serviço
+    canonicalCP = Math.floor(level * 150 + pAtk * 1.8 + pDef * 1.5 + mAtk * 1.6 + mDef * 1.5 + maxHp * 0.12);
+  }
+
+  const rawCP = submittedCP !== undefined
+    ? Number(submittedCP)
+    : Number(cleanState?.cp ?? cleanState?.combatPower ?? stats?.combatPower ?? 0);
+  const rankingCP = rawCP > 0 ? rawCP : canonicalCP;
+  const authoritativeCP = Math.floor(Math.min(rankingCP, canonicalCP * 1.10));
+
+  return { canonicalCP, rankingCP, authoritativeCP };
 }
 
 /**
@@ -208,7 +253,10 @@ export async function savePlayerStateToCloud(userId: string, stateData: any, imm
       const mDef    = Number(stats.mdef || stats.mDef)  || 60;
       const maxHp   = Number(stats.maxHp || stats.hp)   || 1000;
       const level   = Number(cleanState.level)           || 1;
-      const cp      = Number(stats.combatPower) || Math.floor(level * 150 + pAtk * 1.8 + pDef * 1.5 + mAtk * 1.6 + mDef * 1.5 + maxHp * 0.12);
+
+      // Anti-Cheat: Autoridade de CP — nunca confiar cegamente em cleanState.cp ou cleanState.combatPower
+      const { canonicalCP, rankingCP, authoritativeCP } = computeAuthoritativeRankingCP(cleanState);
+      const cp      = authoritativeCP;
 
       let topWeaponName = 'Sem Arma';
       let topWeaponGlow = null;
@@ -327,6 +375,7 @@ export async function savePlayerStateToCloud(userId: string, stateData: any, imm
       // 4. Grava snapshot de ranking competitivo (Gate 7)
       try {
         const rankingRef = doc(db, 'pvp_rankings', `s1_cp_${charId}`);
+        const authoritativeScore = Math.floor(Math.min(rankingCP, canonicalCP * 1.10));
         await setDoc(rankingRef, {
           entryId: `s1_cp_${charId}`,
           seasonId: 1,
@@ -336,7 +385,8 @@ export async function savePlayerStateToCloud(userId: string, stateData: any, imm
           characterName: charName,
           className: sanitizeString(cleanState.className || cleanState.class || 'Warrior', 32),
           raceId: sanitizeString(cleanState.race || 'Human', 24),
-          score: cp,
+          cp: authoritativeScore,
+          score: authoritativeScore,
           rank: 1,
           wins: Number(cleanState.colosseum?.duelWins || cleanState.duelWins) || 0,
           losses: Number(cleanState.colosseum?.duelLosses || cleanState.duelLosses) || 0,

@@ -20,9 +20,23 @@ export default defineConfig({
     chunkSizeWarningLimit: 1500,
     rollupOptions: {
       output: {
-        manualChunks: {
-          'vendor-react': ['react', 'react-dom'],
-          'vendor-firebase': ['firebase/app', 'firebase/auth', 'firebase/firestore'],
+        manualChunks(id) {
+          const normalized = id.replace(/\\/g, '/');
+          if (normalized.includes('node_modules/three')) {
+            return 'vendor-three';
+          }
+          if (normalized.includes('node_modules/react') || normalized.includes('node_modules/react-dom')) {
+            return 'vendor-react';
+          }
+          if (normalized.includes('node_modules/firebase')) {
+            return 'vendor-firebase';
+          }
+          if (normalized.includes('lineage-idle/src/data/classes') || normalized.includes('lineage-idle/data/echo-adapter')) {
+            return 'game-data-classes';
+          }
+          if (normalized.includes('lineage-idle/src/data/items')) {
+            return 'game-data-items';
+          }
         },
       },
     },

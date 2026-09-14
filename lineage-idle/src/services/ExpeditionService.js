@@ -194,20 +194,46 @@ export const ExpeditionService = {
   },
 
   claimReward(state, expId, callbacks = {}) {
+    return this.claimExpedition(state, expId, callbacks);
+  },
+
+  claimExpedition(state, expeditionId, callbacks = {}) {
     const list = this.getExpeditions(state);
-    const expIdx = list.findIndex(e => e.id === expId);
-    if (expIdx < 0) return false;
+    const expIdx = list.findIndex(e => e.id === expeditionId);
+    if (expIdx < 0) {
+      if (Array.isArray(state.claimedExpeditionIds) && state.claimedExpeditionIds.includes(expeditionId)) {
+        if (callbacks.log) callbacks.log('⚠️ As recompensas desta expedição já foram resgatadas!', 'warning');
+        return { success: false, reason: 'already_claimed' };
+      }
+      return { success: false, reason: 'not_found' };
+    }
 
     const exp = list[expIdx];
+    if (exp.claimed) {
+      if (callbacks.log) callbacks.log('⚠️ As recompensas desta expedição já foram resgatadas!', 'warning');
+      return { success: false, reason: 'already_claimed' };
+    }
+
     const dest = EXPEDITION_DESTINATIONS[exp.destId];
-    if (!dest) return false;
+    if (!dest) return { success: false, reason: 'invalid_destination' };
 
     const now = Date.now();
-    if (now < exp.startTime + exp.duration) {
+    if (now - exp.startTime < exp.duration) {
       const remainingSec = Math.ceil((exp.startTime + exp.duration - now) / 1000);
       const mins = Math.ceil(remainingSec / 60);
       if (callbacks.log) callbacks.log(`⚠️ Este esquadrão ainda está explorando! Retorno em aproximadamente ${mins} minutos.`, 'warning');
-      return false;
+      return { success: false, reason: 'in_progress' };
+    }
+
+    // Ensure exp.claimed is set to true atomically before distributing rewards to prevent double-claim race conditions
+    exp.claimed = true;
+    exp.claimedAt = now;
+
+    if (!Array.isArray(state.claimedExpeditionIds)) {
+      state.claimedExpeditionIds = [];
+    }
+    if (!state.claimedExpeditionIds.includes(expeditionId)) {
+      state.claimedExpeditionIds.push(expeditionId);
     }
 
     // Multiplicadores da Diretriz
