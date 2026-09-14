@@ -29,6 +29,7 @@ export const PANEL_SELECTORS = {
   alchemy: ['#tab-alchemy', '#alchemy-panel', '[data-panel="alchemy"]'],
   astral: ['#tab-astral', '#astral-panel', '[data-panel="astral"]'],
   expeditions: ['#tab-expeditions', '#expeditions-panel', '[data-panel="expeditions"]'],
+  fishing: ['#tab-fishing', '#fishing-panel', '[data-panel="fishing"]'],
   raids: ['#tab-raids', '#raids-panel', '[data-panel="raids"]'],
   olympiad: ['#tab-olympiad', '#olympiad-panel', '[data-panel="olympiad"]'],
   clan: ['#tab-clan', '#clan-panel', '[data-panel="clan"]'],
@@ -71,6 +72,7 @@ const PILLAR_MAP = {
   tower: 'combat',
   colosseum: 'combat',
   expeditions: 'combat',
+  fishing: 'combat',
   
   character: 'character',
   inventory: 'character',
@@ -161,6 +163,7 @@ export const TAB_UNLOCK_LEVELS = {
   forge: 10,
   dolls: 10,
   market: 15,
+  fishing: 15,
   warehouse: 15,
   codex: 15,
   clan: 20,

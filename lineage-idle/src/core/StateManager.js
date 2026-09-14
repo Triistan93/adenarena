@@ -117,6 +117,21 @@ export const DEFAULT_STATE = () => ({
     activeSiege: null
   },
   lastRankingRewardClaim: 0,
+  fishing: {
+    skillLevel: 1,
+    skillXp: 0,
+    rod: null,
+    activeBait: null,
+    activeZone: null,
+    isFishing: false,
+    castStartTime: 0,
+    totalCaught: 0,
+    fishLog: {},
+    autoFishing: false,
+    lastAutoTick: 0,
+    rodDurability: {},
+    baitInventory: {},
+  },
   expeditions: [], castles: {}, manorSeeds: {}, manorCrops: {},
   soulCrystals: {}, weaponSockets: {}, tattoos: [],
   fateWhisperQuest: false, masterAbilities: [], activeTransformation: null,
@@ -360,6 +375,9 @@ export function loadState() {
 
     currentState.codex = data.codex && typeof data.codex === 'object' ? data.codex : {};
     currentState.dolls = Array.isArray(data.dolls) ? data.dolls : [];
+
+    // Migração de Pesca — garante que saves antigos sem fishing recebam defaults
+    currentState.fishing = { ...def.fishing, ...(data.fishing || {}) };
     currentState.synthSelected = Array.isArray(data.synthSelected) ? data.synthSelected : [null, null];
     currentState.magicLampExp = Number(data.magicLampExp) || 0;
     currentState.magicLamps = Number(data.magicLamps) || 0;

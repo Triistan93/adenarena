@@ -11265,3 +11265,4 @@ if (typeof window !== 'undefined') {
 }
 
 export { renderRankingTab, setActiveRankingTab, renderMarketTab, setActiveMarketTab };
+export { renderFishingUI } from './FishingUI.js';

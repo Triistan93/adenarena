@@ -322,6 +322,7 @@ export const IDLE_MARKUP = `
             <button class="tab-btn subtab-pill-btn" data-tab="tower">🏰 Torre da Insolência</button>
             <button class="tab-btn subtab-pill-btn" data-tab="colosseum">⚔ Coliseu PvP</button>
             <button class="tab-btn subtab-pill-btn" data-tab="expeditions">🏰 Expedições</button>
+            <button class="tab-btn subtab-pill-btn" data-tab="fishing">🎣 Pesca</button>
           </div>
 
           <!-- Pillar 2 Subtabs: Herói -->
@@ -1195,6 +1196,9 @@ export const IDLE_MARKUP = `
 
           <!-- Expeditions & Manor Tab -->
           <div id="tab-expeditions" class="tab-pane"></div>
+
+          <!-- Fishing & Aquatic Life Tab -->
+          <div id="tab-fishing" class="tab-pane"></div>
 
           <!-- Raids & Bosses Tab -->
           <div id="tab-raids" class="tab-pane"></div>

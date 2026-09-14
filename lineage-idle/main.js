@@ -30,6 +30,9 @@ import { SOLO_INSTANCES }                                                     fr
 import { InstanceService }                                                    from './src/services/InstanceService.js';
 import { MANOR_PROVINCES }                                                    from './src/data/manor.js';
 import { ManorService }                                                       from './src/services/ManorService.js';
+import { FishingService }                                                     from './src/services/FishingService.js';
+import { ExpeditionService }                                                  from './src/services/ExpeditionService.js';
+import { renderFishingUI }                                                    from './src/ui/FishingUI.js';
 // ─── Sprint 2: Importa motores de Stats e Nível ────────────────────────────
 import {
   getStats as engineGetStats,
@@ -2657,6 +2660,13 @@ function checkOfflineProgress(lastTime) {
   }
 
   checkLevelUp();
+
+  let fishOfflineResult = null;
+  if (FishingService && state.fishing?.autoFishing) {
+    try {
+      fishOfflineResult = FishingService.processOfflineFish(state, minutesOffline, { log, updateAllUI: () => {}, save: () => {} });
+    } catch (e) {}
+  }
   
   const rewardsEl = el('offline-rewards');
   const modalEl = el('offline-modal');
@@ -2668,6 +2678,9 @@ function checkOfflineProgress(lastTime) {
       <div>💰 Ouro Ganho: <strong style="color:var(--gilt-bright);">+${goldEarned.toLocaleString()}g</strong></div>
       <div>📘 XP Ganho: <strong style="color:#60a5fa;">+${xpEarned.toLocaleString()} XP</strong></div>
       <div>✨ SP Ganho: <strong style="color:#a855f7;">+${spEarned.toLocaleString()} SP</strong></div>
+      ${fishOfflineResult && fishOfflineResult.totalCaught > 0 ? `
+        <div style="color:#38bdf8; margin-top:4px; font-weight:bold;">🎣 Pescados Coletados (AFK): <strong>+${fishOfflineResult.totalCaught} peixes (+${fishOfflineResult.xpGained} XP Pesca)</strong></div>
+      ` : ''}
       ${isReturnPlayer ? `
         <div style="background:linear-gradient(135deg,rgba(234,179,8,0.2),rgba(0,0,0,0.5)); border:1px solid #fde047; border-radius:8px; padding:10px; margin-top:10px; text-align:center;">
           <div style="font-family:'Cinzel',serif; font-size:13px; font-weight:bold; color:#fde047; margin-bottom:4px;">
@@ -3550,6 +3563,10 @@ function updateExpeditionsUI() {
   uiRenderExpeditionsUI(state);
 }
 
+function updateFishingUI() {
+  renderFishingUI(state);
+}
+
 function updateRaidsUI() {
   const pane = el('tab-raids');
   if (pane) uiRenderRaidsTab(pane, state);
@@ -3677,6 +3694,7 @@ function _performFullUIUpdate() {
   uiInitTooltipEvents();
   updateGameModeUI();
   try { FortressService.updateProductionTick(state); } catch (e) {}
+  try { if (FishingService && state.fishing?.autoFishing) FishingService.processAutoFish(state, { log, updateAllUI: () => {}, save, floatText }); } catch (e) {}
 
   // Fast core components (always update on action)
   safeUiUpdate('stats', updateStatsUI);
@@ -3710,6 +3728,7 @@ function _performFullUIUpdate() {
   if (isTabVisible('alchemy')) safeUiUpdate('alchemy', updateAlchemyUI);
   if (isTabVisible('astral')) safeUiUpdate('astral', updateAstralUI);
   if (isTabVisible('expeditions')) safeUiUpdate('expeditions', updateExpeditionsUI);
+  if (isTabVisible('fishing')) safeUiUpdate('fishing', updateFishingUI);
   if (isTabVisible('raids')) safeUiUpdate('raids', updateRaidsUI);
   if (isTabVisible('olympiad')) safeUiUpdate('olympiad', updateOlympiadUI);
   if (isTabVisible('clan')) safeUiUpdate('clan', updateClanUI);
@@ -7570,6 +7589,7 @@ export function openPanel(tabName) {
   else if (targetTab === 'alchemy') safeUiUpdate('alchemy', updateAlchemyUI);
   else if (targetTab === 'astral') safeUiUpdate('astral', updateAstralUI);
   else if (targetTab === 'expeditions') safeUiUpdate('expeditions', updateExpeditionsUI);
+  else if (targetTab === 'fishing') safeUiUpdate('fishing', updateFishingUI);
   else if (targetTab === 'raids') safeUiUpdate('raids', updateRaidsUI);
   else if (targetTab === 'olympiad') safeUiUpdate('olympiad', updateOlympiadUI);
   else if (targetTab === 'clan') safeUiUpdate('clan', updateClanUI);
@@ -9064,6 +9084,25 @@ export function init() {
     window.MANOR_SEEDS = MANOR_SEEDS;
     window.CASTLES_DEFS = CASTLES_DEFS;
     window.EXPEDITION_DESTINATIONS = EXPEDITION_DESTINATIONS;
+    window.selectFishingZone = (zId) => FishingService.selectZone(state, zId, { log, updateAllUI, save });
+    window.selectFishingBait = (bId) => FishingService.selectBait(state, bId, { log, updateAllUI, save });
+    window.buyFishingBait = (bId, qty) => FishingService.buyBait(state, bId, qty, { log, updateAllUI, save });
+    window.buyFishingRod = (rId) => FishingService.buyRod(state, rId, { log, updateAllUI, save });
+    window.equipFishingRod = (rId) => FishingService.equipRod(state, rId, { log, updateAllUI, save });
+    window.repairFishingRod = (rId) => FishingService.repairRod(state, rId, { log, updateAllUI, save });
+    window.castFishingLine = () => {
+      const res = FishingService.castLine(state, { log, updateAllUI, save });
+      if (res && res.success) {
+        setTimeout(() => {
+          updateAllUI();
+        }, (res.castTime || 3000) * 0.5);
+      }
+    };
+    window.reelInFishingLine = (timing) => FishingService.reelIn(state, timing, { log, updateAllUI, save, floatText });
+    window.toggleAutoFishing = () => FishingService.toggleAutoFish(state, { log, updateAllUI, save, floatText });
+    window.exchangeFishForMaterials = (fId, qty) => FishingService.exchangeFish(state, fId, qty, { log, updateAllUI, save, floatText });
+    window.FishingService = FishingService;
+    window.ExpeditionService = ExpeditionService;
     window.setForgeSubTab = (tabKey) => {
       window._forgeSubTab = tabKey;
       updateAllUI();

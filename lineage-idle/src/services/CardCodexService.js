@@ -307,7 +307,25 @@ export class CardCodexService {
       }
     }
 
+    const aquatic = CardCodexService.getAquaticCodexBonuses(accountState);
+    totals.maxHp += aquatic.maxHp;
+    totals.pDef += aquatic.pDef;
+
     return totals;
+  }
+
+  /**
+   * Bônus passivos concedidos pela descoberta e catalogação de espécies de peixes de Aden.
+   * @param {Object} accountState
+   * @returns {{ maxHp: number, pDef: number }}
+   */
+  static getAquaticCodexBonuses(accountState) {
+    const fLog = accountState?.fishing?.fishLog || {};
+    const speciesDiscovered = Object.keys(fLog).length;
+    return {
+      maxHp: speciesDiscovered * 15,
+      pDef: speciesDiscovered * 2
+    };
   }
 
   /**
