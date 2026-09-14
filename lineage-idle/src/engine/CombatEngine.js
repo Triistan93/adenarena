@@ -97,6 +97,9 @@ export function startCombat(state, callbacks = {}) {
   if (typeof callbacks.attackMonster === 'function') {
     const spd = Math.max(1, state.combatSpeed || 1);
     combatInterval = setInterval(() => callbacks.attackMonster(), Math.round(200 / spd));
+    if (combatInterval && typeof combatInterval.unref === 'function') {
+      combatInterval.unref();
+    }
   }
 }
 

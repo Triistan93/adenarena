@@ -419,6 +419,9 @@ const TIER_NAMES = ['Foundation', 'Discipline', 'Mastery', 'Ascendancy', 'Legend
 
 // --------------------------- STATE ---------------------------
 let state = getState();
+// Ferramentas de GM só existem em desenvolvimento local e exigem opt-in explícito.
+// O cliente nunca é uma fonte de autoridade para permissões de produção.
+const ADMIN_CONSOLE_ENABLED = import.meta.env.DEV && import.meta.env.VITE_ENABLE_DEV_ADMIN === 'true';
 
 let _saveTimeout = null;
 function save(immediate = false, forceCloud = false) {
@@ -6281,13 +6284,18 @@ function handleChatSubmit(inputStr) {
   const lower = raw.toLowerCase();
 
   const isAdminCmd = lower.startsWith('//') || lower === '/admin' || lower === 'admin' || lower === 'gm' || lower === '//gm';
-  if (isAdminCmd) {
+  if (ADMIN_CONSOLE_ENABLED && isAdminCmd) {
     state.privilegeLevel = 1;
     if (typeof window !== 'undefined') window.currentUserPrivilege = 1;
   }
 
+  if (lower.startsWith('//') && !ADMIN_CONSOLE_ENABLED) {
+    log('Comandos administrativos não estão disponíveis nesta versão.', 'system');
+    return;
+  }
+
   // Open Admin Console secret commands
-  if (lower === '//admin' || lower === '/admin' || lower === '//gm' || lower === 'admin' || lower === 'gm') {
+  if (ADMIN_CONSOLE_ENABLED && (lower === '//admin' || lower === '/admin' || lower === '//gm' || lower === 'admin' || lower === 'gm')) {
     openAdminModal();
     log('🛡️ [GM Console] Acesso Concedido! Painel de Administrador desbloqueado.', 'rarity-legendary');
     return;
@@ -6493,6 +6501,7 @@ function switchAdminTab(tabName) {
 }
 
 function openAdminModal() {
+  if (!ADMIN_CONSOLE_ENABLED) return;
   state.privilegeLevel = 1;
   if (typeof window !== 'undefined') window.currentUserPrivilege = 1;
   const modal = el('admin-modal');
@@ -8229,7 +8238,11 @@ export function bindEvents() {
 
     const adminTopBtn = el('admin-top-btn');
     if (adminTopBtn) {
-      adminTopBtn.onclick = () => openAdminModal();
+      if (!ADMIN_CONSOLE_ENABLED) {
+        adminTopBtn.style.display = 'none';
+      } else {
+        adminTopBtn.onclick = () => openAdminModal();
+      }
     }
 
     const closeAdminBtn = el('close-admin-modal-btn');

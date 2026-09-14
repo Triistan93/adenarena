@@ -234,6 +234,19 @@ export const MarketService = {
           }
         } catch (e) {}
       }, 3000);
+      if (_pollingTimer && typeof _pollingTimer.unref === 'function') {
+        _pollingTimer.unref();
+      }
+    }
+  },
+
+  /**
+   * Encerra o polling ativo do mercado (útil em testes e desmontagem)
+   */
+  stopPolling() {
+    if (_pollingTimer) {
+      clearInterval(_pollingTimer);
+      _pollingTimer = null;
     }
   },
 

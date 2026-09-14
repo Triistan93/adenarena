@@ -79,7 +79,7 @@ describe('Glory Pillar — Subtab 2: Olympiad & Noblesse (Olimpíadas & Nobreza)
     state.olympiadTokens = 5000;
     state.inventory = [];
 
-    const buyRes = OlympiadService.buyShopItem(state, 'giants_codex', 1);
+    const buyRes = OlympiadService.buyShopItem(state, 'scroll_blessed_universal');
     assert.equal(Boolean(buyRes), true);
     assert.ok(state.olympiadTokens < 5000);
     assert.ok(state.inventory.length > 0);

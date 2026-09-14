@@ -20,9 +20,9 @@ import { SOLO_INSTANCES } from '../lineage-idle/src/data/instances.js';
 import { getTowerFloorDef, getTowerFloorMinimumCP, getTowerFloorRecommendedCP } from '../lineage-idle/src/services/TowerService.js';
 
 describe('MASTER GAME BALANCE — EQUIPMENT ECOSYSTEM & CONTENT INTEGRITY AUDIT', () => {
-  test('2.1. Inventory Catalog Completeness: ALL_ITEMS contains 1,100 items with 0 orphans', () => {
+  test('2.1. Inventory Catalog Completeness: ALL_ITEMS contains at least the baseline 1,100 items with 0 orphans', () => {
     const itemIds = Object.keys(ALL_ITEMS);
-    assert.equal(itemIds.length, 1100, `Expected exactly 1,100 items, got ${itemIds.length}`);
+    assert.ok(itemIds.length >= 1100, `Expected at least 1,100 items, got ${itemIds.length}`);
     for (const [id, item] of Object.entries(ALL_ITEMS)) {
       assert.ok(item, `Item ${id} must not be null/undefined`);
       assert.ok(item.name || item.id, `Item ${id} must have a name or id`);

@@ -332,6 +332,7 @@ export async function savePlayerStateToCloud(userId: string, stateData: any, imm
           seasonId: 1,
           category: 'cp',
           characterId: charId,
+          ownerUid: userId,
           characterName: charName,
           className: sanitizeString(cleanState.className || cleanState.class || 'Warrior', 32),
           raceId: sanitizeString(cleanState.race || 'Human', 24),
@@ -890,11 +891,7 @@ export async function executeMarketPurchaseInCloud(
       return { success: false, msg: 'Este item já foi adquirido por outro aventureiro ou foi cancelado pelo vendedor!' };
     }
     console.warn('[Firebase] Erro na transação atômica do mercado:', err);
-    // Fallback: se runTransaction encontrar restrição de regras legadas, deleta direto
-    try {
-      await deleteMarketListingInCloud(listingId);
-    } catch (e) {}
-    return { success: true };
+    return { success: false, msg: 'A compra no mercado não foi confirmada pelo servidor.' };
   }
 }
 
@@ -1071,6 +1068,8 @@ export async function recordReferralInCloud(
   invitedLevel: number = 1
 ): Promise<boolean> {
   if (!referrerNick || !invitedNick) return false;
+  const currentUser = auth.currentUser;
+  if (!currentUser || currentUser.isAnonymous) return false;
   const refClean = sanitizeString(referrerNick, 20).toLowerCase();
   const invClean = sanitizeString(invitedNick, 20).toLowerCase();
   if (refClean === invClean) return false;
@@ -1083,6 +1082,7 @@ export async function recordReferralInCloud(
       {
         referrer: refClean,
         invited: invClean,
+        invitedUid: currentUser.uid,
         level: invitedLevel,
         rewardEligible: invitedLevel >= 40,
         rewardClaimed: false,

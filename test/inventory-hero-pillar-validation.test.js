@@ -28,7 +28,7 @@ describe('Hero Pillar — Subtab 2: Inventory & Paperdoll (Mochila)', () => {
     assert.strictEqual(resolveEquipSlot('earring', emptyState), 'earring1');
     assert.strictEqual(resolveEquipSlot('ring', emptyState), 'ring1');
     assert.strictEqual(resolveEquipSlot('hair', emptyState), 'hair1');
-    assert.strictEqual(resolveEquipSlot('chest', emptyState), 'armor');
+    assert.strictEqual(resolveEquipSlot('chest', emptyState), 'chest');
     assert.strictEqual(resolveEquipSlot('pants', emptyState), 'legs');
     assert.strictEqual(resolveEquipSlot('cape', emptyState), 'cloak');
     assert.strictEqual(resolveEquipSlot('waist', emptyState), 'belt');

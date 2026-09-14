@@ -17,6 +17,12 @@ service cloud.firestore {
       return isAuthenticated() && request.auth.uid == userId;
     }
 
+    function ownsCharacter(characterId) {
+      return isAuthenticated()
+          && exists(/databases/$(database)/documents/characters/$(characterId))
+          && get(/databases/$(database)/documents/characters/$(characterId)).data.ownerUid == request.auth.uid;
+    }
+
     function noPrivilegeEscalation() {
       return resource == null 
         ? (!('privilegeLevel' in request.resource.data) && !('role' in request.resource.data))
@@ -93,29 +99,36 @@ service cloud.firestore {
     // ─── Relações de Amizade (friends) ───────────────────────────────────────
     match /friends/{friendshipId} {
       allow read: if isAuthenticated();
-      allow create, update, delete: if isAuthenticated() || isServerAdmin();
+      allow create: if isServerAdmin() || (isRegistered()
+                    && request.resource.data.characterAId != request.resource.data.characterBId
+                    && (ownsCharacter(request.resource.data.characterAId) || ownsCharacter(request.resource.data.characterBId)));
+      allow update: if isServerAdmin();
+      allow delete: if isServerAdmin() || (isRegistered()
+                    && (ownsCharacter(resource.data.characterAId) || ownsCharacter(resource.data.characterBId)));
     }
 
     match /friend_requests/{requestId} {
       allow read: if isAuthenticated();
-      allow create, update, delete: if isAuthenticated() || isServerAdmin();
+      allow create, update, delete: if isServerAdmin();
     }
 
     // ─── Mentoria Oficial (mentorships) ─────────────────────────────────────
     match /mentorships/{mentorshipId} {
       allow read: if isAuthenticated();
-      allow create, update, delete: if isAuthenticated() || isServerAdmin();
+      allow create: if isServerAdmin() || (isRegistered() && ownsCharacter(request.resource.data.apprenticeCharacterId));
+      allow update, delete: if isServerAdmin() || (isRegistered() && ownsCharacter(resource.data.apprenticeCharacterId));
     }
 
     match /mentorship_requests/{requestId} {
       allow read: if isAuthenticated();
-      allow create, update, delete: if isAuthenticated() || isServerAdmin();
+      allow create, update, delete: if isServerAdmin();
     }
 
     // ─── Sistema de Indicação / Referral (referrals) ─────────────────────────
     match /referrals/{referralId} {
       allow read: if isAuthenticated();
-      allow create, update, delete: if isAuthenticated() || isServerAdmin();
+      allow create: if isServerAdmin() || (isRegistered() && request.resource.data.invitedUid == request.auth.uid);
+      allow update, delete: if isServerAdmin();
     }
 
     // ─── Lista de Bloqueio (blocks) ──────────────────────────────────────────
@@ -128,43 +141,50 @@ service cloud.firestore {
     // ─── Clãs Imperiais e Membros ────────────────────────────────────────────
     match /clans/{clanId} {
       allow read: if isAuthenticated();
-      allow write, delete: if isRegistered() || isServerAdmin();
+      allow write, delete: if isServerAdmin();
     }
 
     match /clan_members/{membershipId} {
       allow read: if isAuthenticated();
-      allow write, delete: if isRegistered() || isServerAdmin();
+      allow write, delete: if isServerAdmin();
     }
 
     // ─── Snapshot Competitivo de Rankings (pvp_rankings) ────────────────────
     match /pvp_rankings/{entryId} {
       allow read: if isAuthenticated();
-      allow create, update: if isAuthenticated();
+      allow create: if isServerAdmin() || (isRegistered() && request.resource.data.ownerUid == request.auth.uid);
+      allow update: if isServerAdmin() || (isRegistered()
+                    && resource.data.ownerUid == request.auth.uid
+                    && request.resource.data.ownerUid == resource.data.ownerUid);
       allow delete: if isServerAdmin();
     }
 
     // ─── Inscrições na Grand Olympiad ───────────────────────────────────────
     match /olympiad_registrations/{regId} {
       allow read: if isAuthenticated();
-      allow create, update, delete: if isAuthenticated() || isServerAdmin();
+      allow create, update, delete: if isServerAdmin();
     }
 
     // ─── Mercado Central de Giran — Anúncios P2P ────────────────────────────
     match /market_listings/{listingId} {
       allow read: if isAuthenticated();
-      allow create, update, delete: if isAuthenticated() || isServerAdmin();
+      allow create: if isServerAdmin() || (isRegistered() && request.resource.data.sellerId == request.auth.uid);
+      allow update: if isServerAdmin() || (isRegistered()
+                    && resource.data.sellerId == request.auth.uid
+                    && request.resource.data.sellerId == resource.data.sellerId);
+      allow delete: if isServerAdmin() || (isRegistered() && resource.data.sellerId == request.auth.uid);
     }
 
     // ─── Mercado Central de Giran — Registro de Vendas ──────────────────────
     match /market_sales/{sellerKey} {
       allow read: if isAuthenticated();
-      allow write, delete: if isAuthenticated() || isServerAdmin();
+      allow write, delete: if isServerAdmin();
     }
 
     // ─── Metadados Globais do Servidor ──────────────────────────────────────
     match /server_meta/{docId} {
       allow read: if isAuthenticated();
-      allow write, delete: if isAuthenticated() || isServerAdmin();
+      allow write, delete: if isServerAdmin();
     }
 
     // ─── Logs de Auditoria do Sistema ───────────────────────────────────────

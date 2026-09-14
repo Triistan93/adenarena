@@ -20,6 +20,14 @@ describe('Glory Pillar — Suite 8: Cross-System Triangulation & Holistic Integr
     state.level = 80;
     state.gold = 50000000;
     state.sp = 10000000;
+    state.clan = {
+      name: 'Os Guardiões de Aden',
+      level: 1,
+      castles: [],
+      reputation: 0,
+      lastTaxTimestamp: 0,
+      accumulatedTaxes: {}
+    };
 
     // 1. Clan Lv.5 + Castle Lord
     for (let l = 2; l <= 5; l++) ClanService.upgradeClan(state);

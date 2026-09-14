@@ -46,7 +46,6 @@ export function resolveEquipSlot(rawSlot, equipmentState = {}, preferredSlot = n
 export function migrateEquipmentSlots(state) {
   if (!state?.equipment) return;
   if (state.equipment.armor && !state.equipment.chest) state.equipment.chest = state.equipment.armor;
-  if (state.equipment.chest && !state.equipment.armor) state.equipment.armor = state.equipment.chest;
   if (state.equipment.head && !state.equipment.helmet) state.equipment.helmet = state.equipment.head;
   if ((state.equipment.offhand || state.equipment.sigil) && !state.equipment.shield) {
     state.equipment.shield = state.equipment.offhand || state.equipment.sigil;
@@ -59,6 +58,7 @@ export function migrateEquipmentSlots(state) {
   if (state.equipment.talisman && !state.equipment.talisman_bracelet) state.equipment.talisman_bracelet = state.equipment.talisman;
   if (state.equipment.agathion && !state.equipment.agathion_bracelet) state.equipment.agathion_bracelet = state.equipment.agathion;
   delete state.equipment.head;
+  delete state.equipment.armor;
   delete state.equipment.offhand;
   delete state.equipment.sigil;
   delete state.equipment.dual;
@@ -112,8 +112,6 @@ export function equipItem(state, uid, targetSlotOrCallbacks = null, maybeCallbac
   }
 
   state.equipment[targetSlot] = uid;
-  if (targetSlot === 'chest') state.equipment.armor = uid;
-  if (targetSlot === 'armor') state.equipment.chest = uid;
   item.equipped = true;
   item.equippedSlot = targetSlot;
 
@@ -189,8 +187,6 @@ export function unequipItem(state, slotOrUid, callbacks = {}) {
     delete item.equippedSlot;
   }
   state.equipment[targetSlot] = null;
-  if (targetSlot === 'chest') state.equipment.armor = null;
-  if (targetSlot === 'armor') state.equipment.chest = null;
   const stats = getStats(state);
   state.maxHp = stats.maxHp;
   state.maxMp = stats.maxMp;

@@ -166,12 +166,26 @@ export default function IdleGame() {
   });
 
   useEffect(() => {
-    const syncAdminStatus = async (userUid: string) => {
+    const syncAdminStatus = async (user: any) => {
       try {
-        const cloudState = await loadPlayerStateFromCloud(userUid);
+        let isAdmin = false;
+        if (user && !user.isAnonymous) {
+          const tokenRes = await user.getIdTokenResult().catch(() => null);
+          const email = (user.email || '').toLowerCase();
+          const adminEmails = ['duuh.alaminos@gmail.com', 'eduardol.alaminos@gmail.com'];
+          isAdmin = Boolean(tokenRes?.claims?.admin === true || adminEmails.includes(email));
+        }
+
+        const priv = isAdmin ? 1 : 0;
+        (window as any).currentUserIsAdmin = isAdmin;
+        (window as any).currentUserPrivilege = priv;
+
+        const cloudState = await loadPlayerStateFromCloud(user.uid);
         if (cloudState) {
-          const priv = Number(cloudState.privilegeLevel) || (cloudState.role === 'admin' ? 1 : 0) || 0;
-          (window as any).currentUserPrivilege = priv;
+          cloudState.privilegeLevel = priv;
+          if (cloudState.role === 'admin' && !isAdmin) {
+            cloudState.role = 'player';
+          }
           if (typeof (window as any).getGameState === 'function') {
             const st = (window as any).getGameState();
             if (st) {
@@ -188,12 +202,12 @@ export default function IdleGame() {
     };
 
     if (auth.currentUser) {
-      syncAdminStatus(auth.currentUser.uid);
+      syncAdminStatus(auth.currentUser);
     }
 
     const unsub = onAuthStateChanged(auth, (user) => {
       if (user) {
-        syncAdminStatus(user.uid);
+        syncAdminStatus(user);
       }
     });
 

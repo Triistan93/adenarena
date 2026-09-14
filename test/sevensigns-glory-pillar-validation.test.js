@@ -53,7 +53,7 @@ describe('Glory Pillar — Subtab 4: Seven Signs & Mammon (Sete Selos & Mammon)'
     state.sevenSigns.ancientAdena = 500000;
     state.inventory = [];
 
-    const buyRes = SevenSignsService.buyMammonItem(state, 'scroll_enchant_weapon_a');
+    const buyRes = SevenSignsService.buyMammonItem(state, 'scroll_of_enchant_weapon');
     assert.equal(buyRes.success, true);
     assert.ok(state.sevenSigns.ancientAdena < 500000);
     assert.ok(state.inventory.length > 0);
