@@ -419,8 +419,36 @@ const TIER_NAMES = ['Foundation', 'Discipline', 'Mastery', 'Ascendancy', 'Legend
 
 // --------------------------- STATE ---------------------------
 let state = getState();
-// Ferramentas de GM só existem em desenvolvimento local e exigem opt-in explícito.
-// O cliente nunca é uma fonte de autoridade para permissões de produção.
+// Whitelist canônica de administradores autorizados para testes e operações GM
+const AUTHORIZED_ADMIN_EMAILS = ['duuh.alaminos@gmail.com', 'eduardol.alaminos@gmail.com'];
+
+function isAuthorizedAdmin() {
+  if (typeof window === 'undefined') return false;
+
+  // 1. Verificação direta do status autenticado pelo Firebase Auth no shell React
+  if (window.currentUserIsAdmin === true) return true;
+
+  // 2. Verificação de e-mail na whitelist autorizada
+  const email = (
+    window.currentUserEmail ||
+    window.FirebaseBridge?.getCurrentUserEmail?.() ||
+    window.lineageIdleCloud?.getCurrentUserEmail?.() ||
+    ''
+  ).toLowerCase().trim();
+
+  if (email && AUTHORIZED_ADMIN_EMAILS.includes(email)) {
+    window.currentUserIsAdmin = true;
+    return true;
+  }
+
+  // 3. Opt-in de desenvolvimento local (se configurado explicitamente)
+  if (typeof import.meta !== 'undefined' && import.meta.env?.DEV && import.meta.env?.VITE_ENABLE_DEV_ADMIN === 'true') {
+    return true;
+  }
+
+  return false;
+}
+
 const ADMIN_CONSOLE_ENABLED = import.meta.env.DEV && import.meta.env.VITE_ENABLE_DEV_ADMIN === 'true';
 
 let _saveTimeout = null;
@@ -3804,10 +3832,10 @@ function _performFullUIUpdate() {
   safeUiUpdate('tab-caps', () => updateTabVisibilityByLevel(state));
   safeUiUpdate('class-advancement', checkClassAdvancement);
 
-  // Sync Admin Top Button visibility
+  // Sync Admin Top Button visibility - STRICTLY restricted to authorized admins
   const adminBtn = el('admin-top-btn');
   if (adminBtn) {
-    adminBtn.style.display = 'inline-flex';
+    adminBtn.style.display = isAuthorizedAdmin() ? 'inline-flex' : 'none';
   }
 
   // Tab-specific heavy updates (only rendered if tab is currently active/visible)
@@ -6183,6 +6211,10 @@ function monsterAttack(monster) {
 function generateUid() { return 'item_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9); }
 
 function spawnAdminItem(itemId, qty = 1, rarity = 'common', enchant = 0, affixChoice = 'roll', isFoundation = false) {
+  if (!isAuthorizedAdmin()) {
+    console.warn('[Admin Security] Acesso negado a spawnAdminItem.');
+    return;
+  }
   const def = getItemDef(itemId);
   if (!def) { log(`[Admin] Item '${itemId}' não encontrado.`, 'system'); return; }
   const realId = def.id || itemId;
@@ -6229,6 +6261,10 @@ function spawnAdminItem(itemId, qty = 1, rarity = 'common', enchant = 0, affixCh
 
 
 function applyAdminLevelChange(targetLevel) {
+  if (!isAuthorizedAdmin()) {
+    console.warn('[Admin Security] Acesso negado a applyAdminLevelChange.');
+    return;
+  }
   const newLvl = Math.max(1, Math.min(120, targetLevel));
   state.level = newLvl;
   state.xp = getTotalXP(newLvl - 1);
@@ -6284,18 +6320,17 @@ function handleChatSubmit(inputStr) {
   const lower = raw.toLowerCase();
 
   const isAdminCmd = lower.startsWith('//') || lower === '/admin' || lower === 'admin' || lower === 'gm' || lower === '//gm';
-  if (ADMIN_CONSOLE_ENABLED && isAdminCmd) {
+  if (isAdminCmd) {
+    if (!isAuthorizedAdmin()) {
+      log('⛔ Acesso negado: comandos administrativos são restritos aos administradores autorizados.', 'system');
+      return;
+    }
     state.privilegeLevel = 1;
     if (typeof window !== 'undefined') window.currentUserPrivilege = 1;
   }
 
-  if (lower.startsWith('//') && !ADMIN_CONSOLE_ENABLED) {
-    log('Comandos administrativos não estão disponíveis nesta versão.', 'system');
-    return;
-  }
-
   // Open Admin Console secret commands
-  if (ADMIN_CONSOLE_ENABLED && (lower === '//admin' || lower === '/admin' || lower === '//gm' || lower === 'admin' || lower === 'gm')) {
+  if (isAuthorizedAdmin() && (lower === '//admin' || lower === '/admin' || lower === '//gm' || lower === 'admin' || lower === 'gm')) {
     openAdminModal();
     log('🛡️ [GM Console] Acesso Concedido! Painel de Administrador desbloqueado.', 'rarity-legendary');
     return;
@@ -6407,6 +6442,7 @@ function ensureServerRates() {
 }
 
 function setServerRate(key, val, silent = false) {
+  if (!isAuthorizedAdmin()) return;
   ensureServerRates();
   const num = Math.max(0.1, parseFloat(val) || 1);
   state.serverRates[key] = num;
@@ -6435,6 +6471,7 @@ function setServerRate(key, val, silent = false) {
 }
 
 function applyServerRatePreset(presetKey) {
+  if (!isAuthorizedAdmin()) return;
   ensureServerRates();
   const preset = RATE_PRESETS[presetKey];
   if (!preset) return;
@@ -6501,7 +6538,10 @@ function switchAdminTab(tabName) {
 }
 
 function openAdminModal() {
-  if (!ADMIN_CONSOLE_ENABLED) return;
+  if (!isAuthorizedAdmin()) {
+    console.warn('[Admin Security] Acesso negado ao painel administrativo.');
+    return;
+  }
   state.privilegeLevel = 1;
   if (typeof window !== 'undefined') window.currentUserPrivilege = 1;
   const modal = el('admin-modal');
@@ -6585,6 +6625,7 @@ function populateAdminItemSelect(query = '') {
 }
 
 function addAdminXP(amount) {
+  if (!isAuthorizedAdmin()) return;
   const amt = parseInt(amount) || 0;
   if (amt <= 0) return;
   state.xp = (state.xp || 0) + amt;
@@ -6599,6 +6640,7 @@ function addAdminXP(amount) {
 }
 
 function addAdminGold(amount) {
+  if (!isAuthorizedAdmin()) return;
   const amt = parseInt(amount) || 0;
   if (amt <= 0) return;
   state.gold = (state.gold || 0) + amt;
@@ -6610,6 +6652,7 @@ function addAdminGold(amount) {
 }
 
 function addAdminSP(amount) {
+  if (!isAuthorizedAdmin()) return;
   const amt = parseInt(amount) || 0;
   if (amt <= 0) return;
   state.sp = (state.sp || 0) + amt;
@@ -6621,6 +6664,7 @@ function addAdminSP(amount) {
 }
 
 function addAdminAC(amount) {
+  if (!isAuthorizedAdmin()) return;
   const amt = parseInt(amount) || 0;
   if (amt <= 0) return;
   state.adenCoins = (state.adenCoins || 0) + amt;
@@ -6631,6 +6675,7 @@ function addAdminAC(amount) {
 }
 
 function adminUnlockSagas() {
+  if (!isAuthorizedAdmin()) return;
   const sagas = D().SAGAS || {};
   state.unlockedSagas = state.unlockedSagas || {};
   for (const sagaId of Object.keys(sagas)) {
@@ -6643,6 +6688,7 @@ function adminUnlockSagas() {
 }
 
 function adminCompleteQuest() {
+  if (!isAuthorizedAdmin()) return;
   if (state.quests && state.quests.length > 0) {
     for (const q of state.quests) {
       q.progress = q.target;
@@ -6659,6 +6705,7 @@ function adminCompleteQuest() {
 }
 
 function adminMaxCraft() {
+  if (!isAuthorizedAdmin()) return;
   state.craftLevel = 50;
   state.craftXp = 0;
   state.craftCharges = 100;
@@ -6670,6 +6717,7 @@ function adminMaxCraft() {
 }
 
 function adminMaxSkills() {
+  if (!isAuthorizedAdmin()) return;
   const skillDefs = D().SKILL_DEFS || {};
   for (const [skillId, def] of Object.entries(skillDefs)) {
     if (def && classSatisfies(state.class, def.classReq)) {
@@ -6684,6 +6732,7 @@ function adminMaxSkills() {
 }
 
 function adminKillMonster() {
+  if (!isAuthorizedAdmin()) return;
   const monster = state.currentMonster;
   if (monster) {
     log(`⚡ [Admin] Matou o monstro ${monster.name} instantaneamente!`, 'rarity-legendary');
@@ -6760,6 +6809,7 @@ function syncAdminSeasonAndCapUI() {
 }
 
 function setServerSeason(seasonId) {
+  if (!isAuthorizedAdmin()) return;
   const sid = Number(seasonId) || 1;
   state.serverSeason = sid;
   state.adminUnlockedAll = false;
@@ -6802,6 +6852,7 @@ function setServerSeason(seasonId) {
 }
 
 function unlockAllSeasons() {
+  if (!isAuthorizedAdmin()) return;
   state.serverSeason = 4;
   state.adminUnlockedAll = true;
   window.__serverSeason = 4;
@@ -6831,6 +6882,7 @@ function unlockAllSeasons() {
 }
 
 function setServerLevelCap(cap) {
+  if (!isAuthorizedAdmin()) return;
   const nCap = Math.max(1, Math.min(120, Number(cap) || 60));
   state.serverMaxLevel = nCap;
   state.levelCap = nCap;
@@ -6864,6 +6916,7 @@ function setServerLevelCap(cap) {
 
 
 function executeAdminCmd(cmd) {
+  if (!isAuthorizedAdmin()) return;
   if (cmd === 'setseason1') { setServerSeason(1); }
   else if (cmd === 'setseason2') { setServerSeason(2); }
   else if (cmd === 'setseason3') { setServerSeason(3); }
@@ -8238,11 +8291,15 @@ export function bindEvents() {
 
     const adminTopBtn = el('admin-top-btn');
     if (adminTopBtn) {
-      if (!ADMIN_CONSOLE_ENABLED) {
-        adminTopBtn.style.display = 'none';
-      } else {
-        adminTopBtn.onclick = () => openAdminModal();
-      }
+      adminTopBtn.onclick = () => {
+        if (isAuthorizedAdmin()) {
+          openAdminModal();
+        } else {
+          adminTopBtn.style.display = 'none';
+          log('⛔ Acesso negado: comandos administrativos são restritos aos administradores autorizados.', 'system');
+        }
+      };
+      adminTopBtn.style.display = isAuthorizedAdmin() ? 'inline-flex' : 'none';
     }
 
     const closeAdminBtn = el('close-admin-modal-btn');
@@ -11180,7 +11237,11 @@ export function init() {
       if (state.hp <= 0) {
         state.hp = state.maxHp || 100;
       }
-      state.privilegeLevel = Number(cloudData.privilegeLevel) || (cloudData.role === 'admin' ? 1 : 0) || 0;
+      const rawPriv = Number(cloudData.privilegeLevel) || (cloudData.role === 'admin' ? 1 : 0) || 0;
+      state.privilegeLevel = isAuthorizedAdmin() ? rawPriv : 0;
+      if (!isAuthorizedAdmin() && state.role === 'admin') {
+        state.role = 'player';
+      }
       if (typeof window !== 'undefined') {
         window.currentUserPrivilege = state.privilegeLevel;
       }
@@ -11278,6 +11339,8 @@ export function init() {
     }
 
     window.openAdminModal = openAdminModal;
+    window.isAuthorizedAdmin = isAuthorizedAdmin;
+    window.AUTHORIZED_ADMIN_EMAILS = AUTHORIZED_ADMIN_EMAILS;
     window.setServerRate = setServerRate;
     window.applyServerRatePreset = applyServerRatePreset;
     window.toggleVFXProfiler = (enable) => globalVFXOrchestrator.toggleProfiler(enable);

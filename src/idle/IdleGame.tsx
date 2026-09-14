@@ -64,6 +64,11 @@ if (typeof window !== "undefined") {
     fetchRankings: fetchLeaderboardRankings,
     fetchMatchmakingOpponents: fetchPvPMatchmakingOpponents,
     getCurrentUserId: () => auth.currentUser?.uid || null,
+    getCurrentUserEmail: () => auth.currentUser?.email || (window as any).currentUserEmail || null,
+    isCurrentUserAdmin: () => {
+      const email = (auth.currentUser?.email || (window as any).currentUserEmail || '').toLowerCase().trim();
+      return ['duuh.alaminos@gmail.com', 'eduardol.alaminos@gmail.com'].includes(email) || (window as any).currentUserIsAdmin === true;
+    },
 
     // Métodos do Mercado Global P2P em Nuvem (Transações Atômicas & Custódia)
     createMarketListing: createMarketListingInCloud,
@@ -169,18 +174,19 @@ export default function IdleGame() {
     const syncAdminStatus = async (user: any) => {
       try {
         let isAdmin = false;
+        const email = (user?.email || '').toLowerCase().trim();
+        const adminEmails = ['duuh.alaminos@gmail.com', 'eduardol.alaminos@gmail.com'];
         if (user && !user.isAnonymous) {
           const tokenRes = await user.getIdTokenResult().catch(() => null);
-          const email = (user.email || '').toLowerCase();
-          const adminEmails = ['duuh.alaminos@gmail.com', 'eduardol.alaminos@gmail.com'];
           isAdmin = Boolean(tokenRes?.claims?.admin === true || adminEmails.includes(email));
         }
 
         const priv = isAdmin ? 1 : 0;
         (window as any).currentUserIsAdmin = isAdmin;
+        (window as any).currentUserEmail = email;
         (window as any).currentUserPrivilege = priv;
 
-        const cloudState = await loadPlayerStateFromCloud(user.uid);
+        const cloudState = await loadPlayerStateFromCloud(user?.uid);
         if (cloudState) {
           cloudState.privilegeLevel = priv;
           if (cloudState.role === 'admin' && !isAdmin) {
@@ -195,6 +201,20 @@ export default function IdleGame() {
           if (typeof (window as any).loadGameState === 'function') {
             (window as any).loadGameState(cloudState);
           }
+        }
+
+        // Atualiza a visibilidade do botão Admin no Shadow DOM
+        const host = hostRef.current;
+        const root = host?.shadowRoot || (window as any).__shadowRoot || (typeof document !== 'undefined' ? document : null);
+        if (root) {
+          const adminBtn = root.getElementById ? root.getElementById('admin-top-btn') : root.querySelector('#admin-top-btn');
+          if (adminBtn) {
+            adminBtn.style.display = isAdmin ? 'inline-flex' : 'none';
+          }
+        }
+
+        if (typeof (window as any).updateAllUI === 'function') {
+          (window as any).updateAllUI();
         }
       } catch (e) {
         console.debug('IdleGame admin cloud sync notice:', e);

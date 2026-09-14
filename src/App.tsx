@@ -3,6 +3,7 @@ import { cn } from "./utils/cn";
 import IdleGame from "./idle/IdleGame";
 import { AuthModal } from "./components/AuthModal";
 import { LoginScreen } from "./components/LoginScreen";
+import { auth } from "./firebase";
 
 const ArenaApp = lazy(() => import("./ArenaApp"));
 const Aden2DGame = lazy(() => import("./pixel2d/Aden2DGame"));
@@ -168,9 +169,17 @@ export default function Shell() {
   const handleEnterGame = (cloudState?: any) => {
     if (cloudState && typeof cloudState === 'object') {
       try {
-        const priv = Number(cloudState.privilegeLevel) || (cloudState.role === 'admin' ? 1 : 0) || 0;
+        const email = (auth.currentUser?.email || '').toLowerCase().trim();
+        const adminEmails = ['duuh.alaminos@gmail.com', 'eduardol.alaminos@gmail.com'];
+        const isAdmin = Boolean(adminEmails.includes(email) || (window as any).currentUserIsAdmin);
+        const priv = isAdmin ? (Number(cloudState.privilegeLevel) || 1) : 0;
+        (window as any).currentUserIsAdmin = isAdmin;
+        (window as any).currentUserEmail = email;
         (window as any).currentUserPrivilege = priv;
         cloudState.privilegeLevel = priv;
+        if (!isAdmin && cloudState.role === 'admin') {
+          cloudState.role = 'player';
+        }
         localStorage.setItem('lineageIdleSave_v2', JSON.stringify(cloudState));
       } catch (e) {
         console.error('Error saving cloudState to localStorage:', e);
