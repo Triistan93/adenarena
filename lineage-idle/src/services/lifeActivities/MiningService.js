@@ -520,5 +520,17 @@ export const MiningService = {
     }
 
     return { actualMines, matsGained, totalXp };
+  },
+
+  startHarvest(state, tacticId = null, callbacks = {}) {
+    return this.startMining(state, tacticId, callbacks);
+  },
+
+  finishHarvest(state, callbacks = {}) {
+    return this.finishMining(state, callbacks);
+  },
+
+  exchangeOres(state, oreId, qty = 1, callbacks = {}) {
+    return false;
   }
 };

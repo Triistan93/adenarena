@@ -520,5 +520,17 @@ export const GatheringService = {
     }
 
     return { actualHarvests, matsGained, totalXp };
+  },
+
+  startGathering(state, tacticId = null, callbacks = {}) {
+    return this.startHarvest(state, tacticId, callbacks);
+  },
+
+  finishGathering(state, callbacks = {}) {
+    return this.finishHarvest(state, callbacks);
+  },
+
+  exchangeHerbs(state, herbId, qty = 1, callbacks = {}) {
+    return false;
   }
 };

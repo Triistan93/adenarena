@@ -9201,10 +9201,10 @@ export function init() {
     window.equipGatheringSickle = (sId) => GatheringService.equipSickle(state, sId, { log, updateAllUI, save });
     window.repairGatheringSickle = (sId) => GatheringService.repairSickle(state, sId, { log, updateAllUI, save });
     window.selectGatheringTactic = (tId) => GatheringService.selectTactic(state, tId, { log, updateAllUI, save });
-    window.startGatheringHarvest = (nId) => GatheringService.startGathering(state, nId, { log, updateAllUI, save });
-    window.finishGatheringHarvest = () => GatheringService.finishGathering(state, { log, updateAllUI, save, floatText });
+    window.startGatheringHarvest = (nId) => (typeof GatheringService.startHarvest === 'function' ? GatheringService.startHarvest(state, nId, { log, updateAllUI, save }) : GatheringService.startGathering(state, nId, { log, updateAllUI, save }));
+    window.finishGatheringHarvest = () => (typeof GatheringService.finishHarvest === 'function' ? GatheringService.finishHarvest(state, { log, updateAllUI, save, floatText }) : GatheringService.finishGathering(state, { log, updateAllUI, save, floatText }));
     window.toggleAutoGathering = () => GatheringService.toggleAutoGathering(state, { log, updateAllUI, save, floatText });
-    window.exchangeGatheringHerbs = (hId, qty) => GatheringService.exchangeHerbs(state, hId, qty, { log, updateAllUI, save, floatText });
+    window.exchangeGatheringHerbs = (hId, qty) => (typeof GatheringService.exchangeHerbs === 'function' ? GatheringService.exchangeHerbs(state, hId, qty, { log, updateAllUI, save, floatText }) : false);
     window.GatheringService = GatheringService;
 
     window.selectMiningZone = (zId) => MiningService.selectZone(state, zId, { log, updateAllUI, save });
