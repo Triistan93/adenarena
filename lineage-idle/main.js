@@ -31,8 +31,17 @@ import { InstanceService }                                                    fr
 import { MANOR_PROVINCES }                                                    from './src/data/manor.js';
 import { ManorService }                                                       from './src/services/ManorService.js';
 import { FishingService }                                                     from './src/services/FishingService.js';
+import { HuntingService }                                                     from './src/services/HuntingService.js';
+import { GatheringService }                                                   from './src/services/lifeActivities/GatheringService.js';
+import { MiningService }                                                      from './src/services/lifeActivities/MiningService.js';
+import { MercenaryService }                                                   from './src/services/MercenaryService.js';
 import { ExpeditionService }                                                  from './src/services/ExpeditionService.js';
 import { renderFishingUI }                                                    from './src/ui/FishingUI.js';
+import { renderHuntingUI }                                                    from './src/ui/HuntingUI.js';
+import { renderGatheringUI }                                                  from './src/ui/GatheringUI.js';
+import { renderMiningUI }                                                     from './src/ui/MiningUI.js';
+import { RefineryService }                                                    from './src/services/lifeActivities/RefineryService.js';
+import { setRefineryCategory }                                                from './src/ui/RefineryUI.js';
 // ─── Sprint 2: Importa motores de Stats e Nível ────────────────────────────
 import {
   getStats as engineGetStats,
@@ -2668,6 +2677,27 @@ function checkOfflineProgress(lastTime) {
       fishOfflineResult = FishingService.processOfflineFish(state, minutesOffline, { log, updateAllUI: () => {}, save: () => {} });
     } catch (e) {}
   }
+
+  let huntOfflineResult = null;
+  if (HuntingService && state.hunting?.autoHunting) {
+    try {
+      huntOfflineResult = HuntingService.processOfflineHunting(state, minutesOffline, { log, updateAllUI: () => {}, save: () => {} });
+    } catch (e) {}
+  }
+
+  let gatherOfflineResult = null;
+  if (GatheringService && state.gathering?.autoGathering) {
+    try {
+      gatherOfflineResult = GatheringService.processOfflineGathering(state, minutesOffline, { log, updateAllUI: () => {}, save: () => {} });
+    } catch (e) {}
+  }
+
+  let mineOfflineResult = null;
+  if (MiningService && state.mining?.autoMining) {
+    try {
+      mineOfflineResult = MiningService.processOfflineMining(state, minutesOffline, { log, updateAllUI: () => {}, save: () => {} });
+    } catch (e) {}
+  }
   
   const rewardsEl = el('offline-rewards');
   const modalEl = el('offline-modal');
@@ -2681,6 +2711,15 @@ function checkOfflineProgress(lastTime) {
       <div>✨ SP Ganho: <strong style="color:#a855f7;">+${spEarned.toLocaleString()} SP</strong></div>
       ${fishOfflineResult && fishOfflineResult.totalCaught > 0 ? `
         <div style="color:#38bdf8; margin-top:4px; font-weight:bold;">🎣 Pescados Coletados (AFK): <strong>+${fishOfflineResult.totalCaught} peixes (+${fishOfflineResult.xpGained} XP Pesca)</strong></div>
+      ` : ''}
+      ${huntOfflineResult && huntOfflineResult.actualHunts > 0 ? `
+        <div style="color:#34d399; margin-top:4px; font-weight:bold;">🐾 Peles & Couros (Caça AFK): <strong>+${huntOfflineResult.actualHunts} presas (+${huntOfflineResult.totalXp} XP Caça)</strong></div>
+      ` : ''}
+      ${gatherOfflineResult && gatherOfflineResult.actualHarvests > 0 ? `
+        <div style="color:#a3e635; margin-top:4px; font-weight:bold;">🌿 Ervas & Madeira (Coleta AFK): <strong>+${gatherOfflineResult.actualHarvests} colheitas (+${gatherOfflineResult.totalXp} XP Coleta)</strong></div>
+      ` : ''}
+      ${mineOfflineResult && mineOfflineResult.actualMines > 0 ? `
+        <div style="color:#fbbf24; margin-top:4px; font-weight:bold;">⛏️ Minérios & Gemas (Mineração AFK): <strong>+${mineOfflineResult.actualMines} extrações (+${mineOfflineResult.totalXp} XP Mineração)</strong></div>
       ` : ''}
       ${isReturnPlayer ? `
         <div style="background:linear-gradient(135deg,rgba(234,179,8,0.2),rgba(0,0,0,0.5)); border:1px solid #fde047; border-radius:8px; padding:10px; margin-top:10px; text-align:center;">
@@ -3578,6 +3617,18 @@ function updateFishingUI() {
   renderFishingUI(state);
 }
 
+function updateHuntingUI() {
+  renderHuntingUI(state);
+}
+
+function updateGatheringUI() {
+  renderGatheringUI(state);
+}
+
+function updateMiningUI() {
+  renderMiningUI(state);
+}
+
 function updateRaidsUI() {
   const pane = el('tab-raids');
   if (pane) uiRenderRaidsTab(pane, state);
@@ -3706,6 +3757,9 @@ function _performFullUIUpdate() {
   updateGameModeUI();
   try { FortressService.updateProductionTick(state); } catch (e) {}
   try { if (FishingService && state.fishing?.autoFishing) FishingService.processAutoFish(state, { log, updateAllUI: () => {}, save, floatText }); } catch (e) {}
+  try { if (HuntingService && state.hunting?.autoHunting) HuntingService.processAutoHunt(state, { log, updateAllUI: () => {}, save, floatText }); } catch (e) {}
+  try { if (GatheringService && state.gathering?.autoGathering) GatheringService.processAutoGather(state, { log, updateAllUI: () => {}, save, floatText }); } catch (e) {}
+  try { if (MiningService && state.mining?.autoMining) MiningService.processAutoMine(state, { log, updateAllUI: () => {}, save, floatText }); } catch (e) {}
 
   // Fast core components (always update on action)
   safeUiUpdate('stats', updateStatsUI);
@@ -3740,6 +3794,9 @@ function _performFullUIUpdate() {
   if (isTabVisible('astral')) safeUiUpdate('astral', updateAstralUI);
   if (isTabVisible('expeditions')) safeUiUpdate('expeditions', updateExpeditionsUI);
   if (isTabVisible('fishing')) safeUiUpdate('fishing', updateFishingUI);
+  if (isTabVisible('hunting')) safeUiUpdate('hunting', updateHuntingUI);
+  if (isTabVisible('gathering')) safeUiUpdate('gathering', updateGatheringUI);
+  if (isTabVisible('mining')) safeUiUpdate('mining', updateMiningUI);
   if (isTabVisible('raids')) safeUiUpdate('raids', updateRaidsUI);
   if (isTabVisible('olympiad')) safeUiUpdate('olympiad', updateOlympiadUI);
   if (isTabVisible('clan')) safeUiUpdate('clan', updateClanUI);
@@ -7602,6 +7659,9 @@ export function openPanel(tabName) {
   else if (targetTab === 'astral') safeUiUpdate('astral', updateAstralUI);
   else if (targetTab === 'expeditions') safeUiUpdate('expeditions', updateExpeditionsUI);
   else if (targetTab === 'fishing') safeUiUpdate('fishing', updateFishingUI);
+  else if (targetTab === 'hunting') safeUiUpdate('hunting', updateHuntingUI);
+  else if (targetTab === 'gathering') safeUiUpdate('gathering', updateGatheringUI);
+  else if (targetTab === 'mining') safeUiUpdate('mining', updateMiningUI);
   else if (targetTab === 'raids') safeUiUpdate('raids', updateRaidsUI);
   else if (targetTab === 'olympiad') safeUiUpdate('olympiad', updateOlympiadUI);
   else if (targetTab === 'clan') safeUiUpdate('clan', updateClanUI);
@@ -9112,14 +9172,62 @@ export function init() {
       }
     };
     window.reelInFishingLine = (timing) => FishingService.reelIn(state, timing, { log, updateAllUI, save, floatText });
+    window.fishingAction = (actionType) => {
+      if (actionType === 'reel') return FishingService.actionReel(state, { log, updateAllUI, save, floatText });
+      if (actionType === 'yield') return FishingService.actionYield(state, { log, updateAllUI, save, floatText });
+      if (actionType === 'force') return FishingService.actionForce(state, { log, updateAllUI, save, floatText });
+      if (actionType === 'rest') return FishingService.actionRest(state, { log, updateAllUI, save, floatText });
+    };
     window.toggleAutoFishing = () => FishingService.toggleAutoFish(state, { log, updateAllUI, save, floatText });
     window.exchangeFishForMaterials = (fId, qty) => FishingService.exchangeFish(state, fId, qty, { log, updateAllUI, save, floatText });
     window.FishingService = FishingService;
+    window.selectHuntingZone = (zId) => HuntingService.selectZone(state, zId, { log, updateAllUI, save });
+    window.selectHuntingLure = (lId) => HuntingService.selectLure(state, lId, { log, updateAllUI, save });
+    window.buyHuntingLure = (lId, qty) => HuntingService.buyLure(state, lId, qty, { log, updateAllUI, save });
+    window.buyHuntingKnife = (kId) => HuntingService.buyKnife(state, kId, { log, updateAllUI, save });
+    window.equipHuntingKnife = (kId) => HuntingService.equipKnife(state, kId, { log, updateAllUI, save });
+    window.repairHuntingKnife = (kId) => HuntingService.repairKnife(state, kId, { log, updateAllUI, save });
+    window.selectHuntingTactic = (tId) => HuntingService.selectTactic(state, tId, { log, updateAllUI, save });
+    window.startHuntingTrack = (tId) => HuntingService.startTracking(state, tId, { log, updateAllUI, save });
+    window.skinHuntingPrey = () => HuntingService.finishSkinning(state, { log, updateAllUI, save, floatText });
+    window.toggleAutoHunting = () => HuntingService.toggleAutoHunting(state, { log, updateAllUI, save, floatText });
+    window.exchangeHuntingPelts = (pId, qty) => HuntingService.exchangePelts(state, pId, qty, { log, updateAllUI, save, floatText });
+    window.HuntingService = HuntingService;
+
+    window.selectGatheringZone = (zId) => GatheringService.selectZone(state, zId, { log, updateAllUI, save });
+    window.selectGatheringPouch = (pId) => GatheringService.selectPouch(state, pId, { log, updateAllUI, save });
+    window.buyGatheringPouch = (pId, qty) => GatheringService.buyPouch(state, pId, qty, { log, updateAllUI, save });
+    window.buyGatheringSickle = (sId) => GatheringService.buySickle(state, sId, { log, updateAllUI, save });
+    window.equipGatheringSickle = (sId) => GatheringService.equipSickle(state, sId, { log, updateAllUI, save });
+    window.repairGatheringSickle = (sId) => GatheringService.repairSickle(state, sId, { log, updateAllUI, save });
+    window.selectGatheringTactic = (tId) => GatheringService.selectTactic(state, tId, { log, updateAllUI, save });
+    window.startGatheringHarvest = (nId) => GatheringService.startGathering(state, nId, { log, updateAllUI, save });
+    window.finishGatheringHarvest = () => GatheringService.finishGathering(state, { log, updateAllUI, save, floatText });
+    window.toggleAutoGathering = () => GatheringService.toggleAutoGathering(state, { log, updateAllUI, save, floatText });
+    window.exchangeGatheringHerbs = (hId, qty) => GatheringService.exchangeHerbs(state, hId, qty, { log, updateAllUI, save, floatText });
+    window.GatheringService = GatheringService;
+
+    window.selectMiningZone = (zId) => MiningService.selectZone(state, zId, { log, updateAllUI, save });
+    window.selectMiningLamp = (lId) => MiningService.selectLamp(state, lId, { log, updateAllUI, save });
+    window.buyMiningLamp = (lId, qty) => MiningService.buyLamp(state, lId, qty, { log, updateAllUI, save });
+    window.buyMiningPickaxe = (pId) => MiningService.buyPickaxe(state, pId, { log, updateAllUI, save });
+    window.equipMiningPickaxe = (pId) => MiningService.equipPickaxe(state, pId, { log, updateAllUI, save });
+    window.repairMiningPickaxe = (pId) => MiningService.repairPickaxe(state, pId, { log, updateAllUI, save });
+    window.selectMiningTactic = (tId) => MiningService.selectTactic(state, tId, { log, updateAllUI, save });
+    window.startMiningHarvest = (nId) => MiningService.startMining(state, nId, { log, updateAllUI, save });
+    window.finishMiningHarvest = () => MiningService.finishMining(state, { log, updateAllUI, save, floatText });
+    window.toggleAutoMining = () => MiningService.toggleAutoMining(state, { log, updateAllUI, save, floatText });
+    window.exchangeMiningOres = (oId, qty) => MiningService.exchangeOres(state, oId, qty, { log, updateAllUI, save, floatText });
+    window.MiningService = MiningService;
     window.ExpeditionService = ExpeditionService;
     window.setForgeSubTab = (tabKey) => {
       window._forgeSubTab = tabKey;
       updateAllUI();
     };
+    window.RefineryService = RefineryService;
+    window.refineMaterial = (recipeId, times = 1) => RefineryService.refine(state, recipeId, times, window._callbacks);
+    window.refineMaterialMax = (recipeId) => RefineryService.refineAll(state, recipeId, window._callbacks);
+    window.setRefineryCategory = setRefineryCategory;
     window.updateAllUI = updateAllUI;
     window.buySoulCrystal = buySoulCrystal;
     window.fuseSoulCrystals = fuseSoulCrystals;

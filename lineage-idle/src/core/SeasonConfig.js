@@ -20,7 +20,8 @@ export const SEASONS_DATA = {
     description: "Os heróis iniciam sua jornada pelo Reino de Aden. Domine as artes fundamentais da sua classe, forje seus primeiros equipamentos e dispute as riquezas iniciais.",
     unlockedTabs: [
       "zones", "character", "inventory", "warehouse", "skills",
-      "shop", "market", "craft", "alchemy", "astral", "quests", "rankings", "enchant", "dolls", "fishing"
+      "shop", "market", "craft", "alchemy", "astral", "quests", "rankings", "enchant", "dolls", "fishing",
+      "hunting", "expeditions"
     ],
     features: [
       "⚔️ Zonas de Caça Iniciais (Gludio, Dion, Giran)",

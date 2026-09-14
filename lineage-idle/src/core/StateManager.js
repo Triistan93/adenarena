@@ -118,6 +118,44 @@ export const DEFAULT_STATE = () => ({
     activeSiege: null
   },
   lastRankingRewardClaim: 0,
+  lifeActivities: {
+    fishing: {
+      level: 1, xp: 0,
+      tool: 'rod_novice', toolDurability: 50, maxDurability: 50,
+      consumable: 'bait_worm', consumableCount: 20,
+      zoneId: 'talking_island_coast',
+      isWorking: false, autoMode: false,
+      lastTick: 0, consecutiveFailures: 0,
+      codexDiscoveries: {}
+    },
+    hunting: {
+      level: 1, xp: 0,
+      tool: 'knife_none', toolDurability: 50, maxDurability: 50,
+      consumable: null, consumableCount: 0,
+      zoneId: 'zone_talking_forest',
+      isWorking: false, autoMode: false,
+      lastTick: 0, consecutiveFailures: 0,
+      codexDiscoveries: {}
+    },
+    gathering: {
+      level: 1, xp: 0,
+      tool: 'sickle_novice', toolDurability: 50, maxDurability: 50,
+      consumable: null, consumableCount: 0,
+      zoneId: 'zone_gludio_plains',
+      isWorking: false, autoMode: false,
+      lastTick: 0, consecutiveFailures: 0,
+      codexDiscoveries: {}
+    },
+    mining: {
+      level: 1, xp: 0,
+      tool: 'pickaxe_novice', toolDurability: 50, maxDurability: 50,
+      consumable: null, consumableCount: 0,
+      zoneId: 'zone_dwarven_veins',
+      isWorking: false, autoMode: false,
+      lastTick: 0, consecutiveFailures: 0,
+      codexDiscoveries: {}
+    }
+  },
   fishing: {
     skillLevel: 1,
     skillXp: 0,
@@ -132,6 +170,27 @@ export const DEFAULT_STATE = () => ({
     lastAutoTick: 0,
     rodDurability: {},
     baitInventory: {},
+  },
+  hunting: {
+    skillLevel: 1,
+    skillXp: 0,
+    knife: 'knife_none',
+    activeLure: null,
+    activeZone: 'zone_talking_forest',
+    isHunting: false,
+    trackStartTime: 0,
+    trackedPreyId: null,
+    totalHunted: 0,
+    huntingLog: {},
+    autoHunting: false,
+    lastAutoTick: 0,
+    knifeDurability: { knife_none: 50 },
+    lureInventory: {},
+  },
+  mercenaries: {
+    owned: [],
+    tavernPool: [],
+    lastTavernRefresh: 0
   },
   expeditions: [], castles: {}, manorSeeds: {}, manorCrops: {},
   quests: {
@@ -300,6 +359,21 @@ export function loadState() {
       currentState.sevenSigns.ancientAdena = Number(data.ancientAdena) || 0;
     }
 
+    // ─── Migrações Canônicas: Life Activities ───
+    if (!currentState.lifeActivities) {
+      currentState.lifeActivities = def.lifeActivities;
+    }
+    if (data.fishing) {
+      currentState.lifeActivities.fishing = currentState.lifeActivities.fishing || def.lifeActivities.fishing;
+      currentState.lifeActivities.fishing.level = data.fishing.skillLevel || currentState.lifeActivities.fishing.level;
+      currentState.lifeActivities.fishing.xp = data.fishing.skillXp || currentState.lifeActivities.fishing.xp;
+    }
+    if (data.hunting) {
+      currentState.lifeActivities.hunting = currentState.lifeActivities.hunting || def.lifeActivities.hunting;
+      currentState.lifeActivities.hunting.level = data.hunting.skillLevel || currentState.lifeActivities.hunting.level;
+      currentState.lifeActivities.hunting.xp = data.hunting.skillXp || currentState.lifeActivities.hunting.xp;
+    }
+
     // Normalização de Equipamentos (20 Slots Canônicos com chest e shield)
     if (currentState.equipment) {
       if (currentState.equipment.armor && !currentState.equipment.chest) {
@@ -386,6 +460,10 @@ export function loadState() {
 
     // Migração de Pesca — garante que saves antigos sem fishing recebam defaults
     currentState.fishing = { ...def.fishing, ...(data.fishing || {}) };
+
+    // Migração de Caça Silvestre e Mercenários — garante defaults para saves legados
+    currentState.hunting = { ...def.hunting, ...(data.hunting || {}) };
+    currentState.mercenaries = { ...def.mercenaries, ...(data.mercenaries || {}) };
 
     // Migração de Quests — garante integridade de claimed array e progress object
     currentState.quests = data.quests && typeof data.quests === 'object' ? data.quests : {};

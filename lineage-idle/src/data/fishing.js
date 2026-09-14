@@ -73,176 +73,241 @@ export function getFishingZonesList() {
   return Object.values(FISHING_ZONES);
 }
 
+export const FIGHT_PROFILES = {
+  calm: {
+    id: 'calm', name: 'Calmo',
+    staminaMult: 0.8, tensionRate: 1.0, recoverRate: 0.7, burstChance: 0.05,
+    desc: 'Peixe dócil. Cansa com facilidade e oferece resistência previsível.'
+  },
+  erratic: {
+    id: 'erratic', name: 'Errático',
+    staminaMult: 1.1, tensionRate: 1.4, recoverRate: 1.1, burstChance: 0.25,
+    desc: 'Muda de direção subitamente, gerando picos rápidos de tensão na linha.'
+  },
+  aggressive: {
+    id: 'aggressive', name: 'Agressivo',
+    staminaMult: 1.3, tensionRate: 1.6, recoverRate: 1.0, burstChance: 0.35,
+    desc: 'Puxa a linha com violência contínua exigindo controle apurado de freio.'
+  },
+  deepDiver: {
+    id: 'deepDiver', name: 'Mergulhador Abissal',
+    staminaMult: 1.5, tensionRate: 1.2, recoverRate: 1.4, burstChance: 0.15,
+    desc: 'Mergulha para o fundo, recuperando fôlego se o pescador aliviar demais.'
+  },
+  surfaceRunner: {
+    id: 'surfaceRunner', name: 'Corredor de Superfície',
+    staminaMult: 1.0, tensionRate: 1.5, recoverRate: 0.9, burstChance: 0.40,
+    desc: 'Dispara em alta velocidade pela superfície, ameaçando arrebentar a linha.'
+  },
+  heavy: {
+    id: 'heavy', name: 'Titã Pesado',
+    staminaMult: 1.8, tensionRate: 1.8, recoverRate: 1.1, burstChance: 0.10,
+    desc: 'Peso maciço e enorme resistência. Cada metro puxado consome grande esforço.'
+  },
+  burstRunner: {
+    id: 'burstRunner', name: 'Explosivo',
+    staminaMult: 1.2, tensionRate: 2.2, recoverRate: 1.3, burstChance: 0.50,
+    desc: 'Alterna momentos de calmaria com arrancadas brutais que partem linhas despreparadas.'
+  }
+};
+
 export const FISH_CATALOG = {
   // Comum (50%)
   fish_carp: {
     id: "fish_carp", name: "Carpa-Cruzeiro", icon: "🐟", rarity: "common",
-    baseWeight: { min: 0.5, max: 2.0 }, xpReward: 5, sellPrice: 20,
-    exchangeRate: 5, materialReward: "stem", materialName: "Stem",
+    fightProfile: "calm", baseStamina: 40,
+    baseWeight: { min: 0.5, max: 2.0 }, xpReward: 15, sellPrice: 20,
+    exchangeRate: 5, materialReward: "branch", materialName: "Galho Silvestre",
     zones: ["zone_talking_island", "zone_gludin"]
   },
   fish_goby: {
     id: "fish_goby", name: "Góbio Comum", icon: "🐠", rarity: "common",
-    baseWeight: { min: 0.2, max: 0.8 }, xpReward: 5, sellPrice: 15,
-    exchangeRate: 5, materialReward: "animal_skin", materialName: "Animal Skin",
+    fightProfile: "calm", baseStamina: 35,
+    baseWeight: { min: 0.2, max: 0.8 }, xpReward: 15, sellPrice: 15,
+    exchangeRate: 5, materialReward: "leather", materialName: "Couro Curtido",
     zones: ["zone_talking_island"]
   },
   fish_starfish: {
     id: "fish_starfish", name: "Estrela-do-Mar", icon: "⭐", rarity: "common",
-    baseWeight: { min: 0.1, max: 0.5 }, xpReward: 6, sellPrice: 25,
-    exchangeRate: 5, materialReward: "thread", materialName: "Thread",
+    fightProfile: "calm", baseStamina: 30,
+    baseWeight: { min: 0.1, max: 0.5 }, xpReward: 18, sellPrice: 25,
+    exchangeRate: 5, materialReward: "cotton_thread", materialName: "Linha de Algodão",
     zones: ["zone_talking_island"]
   },
   fish_mud_catfish: {
     id: "fish_mud_catfish", name: "Bagre da Lama", icon: "🐟", rarity: "common",
-    baseWeight: { min: 2.0, max: 5.0 }, xpReward: 10, sellPrice: 40,
-    exchangeRate: 5, materialReward: "animal_bone", materialName: "Animal Bone",
+    fightProfile: "heavy", baseStamina: 60,
+    baseWeight: { min: 2.0, max: 5.0 }, xpReward: 25, sellPrice: 40,
+    exchangeRate: 5, materialReward: "bone", materialName: "Osso Animal",
     zones: ["zone_dion"]
   },
   fish_tuna: {
     id: "fish_tuna", name: "Atum Prateado", icon: "🐟", rarity: "common",
-    baseWeight: { min: 5.0, max: 15.0 }, xpReward: 12, sellPrice: 60,
-    exchangeRate: 5, materialReward: "coal", materialName: "Coal",
+    fightProfile: "heavy", baseStamina: 70,
+    baseWeight: { min: 5.0, max: 15.0 }, xpReward: 30, sellPrice: 60,
+    exchangeRate: 5, materialReward: "coal", materialName: "Carvão Mineral",
     zones: ["zone_giran"]
   },
   fish_silver_bass: {
     id: "fish_silver_bass", name: "Robalo Prateado", icon: "🐟", rarity: "common",
-    baseWeight: { min: 1.0, max: 3.5 }, xpReward: 8, sellPrice: 35,
-    exchangeRate: 5, materialReward: "charcoal", materialName: "Charcoal",
+    fightProfile: "erratic", baseStamina: 50,
+    baseWeight: { min: 1.0, max: 3.5 }, xpReward: 22, sellPrice: 35,
+    exchangeRate: 5, materialReward: "charcoal", materialName: "Carvão Vegetal",
     zones: ["zone_elven_village"]
   },
 
   // Incomum (25%)
   fish_talking_squid: {
     id: "fish_talking_squid", name: "Lula de Talking", icon: "🦑", rarity: "uncommon",
-    baseWeight: { min: 0.5, max: 1.5 }, xpReward: 10, sellPrice: 50,
-    exchangeRate: 3, materialReward: "varnish", materialName: "Varnish",
+    fightProfile: "erratic", baseStamina: 55,
+    baseWeight: { min: 0.5, max: 1.5 }, xpReward: 35, sellPrice: 50,
+    exchangeRate: 3, materialReward: "charcoal", materialName: "Carvão Vegetal",
     zones: ["zone_talking_island"]
   },
   fish_gludin_puffer: {
     id: "fish_gludin_puffer", name: "Baiacu de Gludin", icon: "🐡", rarity: "uncommon",
-    baseWeight: { min: 1.0, max: 2.5 }, xpReward: 15, sellPrice: 70,
-    exchangeRate: 3, materialReward: "suede", materialName: "Suede",
+    fightProfile: "erratic", baseStamina: 65,
+    baseWeight: { min: 1.0, max: 2.5 }, xpReward: 45, sellPrice: 70,
+    exchangeRate: 3, materialReward: "suede", materialName: "Camurça Macia",
     zones: ["zone_gludin"]
   },
   fish_elven_trout: {
     id: "fish_elven_trout", name: "Truta Élfica", icon: "🐠", rarity: "uncommon",
-    baseWeight: { min: 1.5, max: 3.0 }, xpReward: 18, sellPrice: 90,
-    exchangeRate: 3, materialReward: "iron_ore", materialName: "Iron Ore",
+    fightProfile: "calm", baseStamina: 50,
+    baseWeight: { min: 1.5, max: 3.0 }, xpReward: 50, sellPrice: 90,
+    exchangeRate: 3, materialReward: "iron_ore", materialName: "Minério de Ferro",
     zones: ["zone_elven_village"]
   },
   fish_river_crab: {
     id: "fish_river_crab", name: "Caranguejo de Rio", icon: "🦀", rarity: "uncommon",
-    baseWeight: { min: 0.3, max: 1.2 }, xpReward: 20, sellPrice: 110,
-    exchangeRate: 3, materialReward: "crafted_leather", materialName: "Crafted Leather",
+    fightProfile: "calm", baseStamina: 55,
+    baseWeight: { min: 0.3, max: 1.2 }, xpReward: 55, sellPrice: 110,
+    exchangeRate: 3, materialReward: "crafted_leather", materialName: "Couro Trabalhado",
     zones: ["zone_dion"]
   },
   fish_swordfish: {
     id: "fish_swordfish", name: "Peixe-Espada", icon: "🗡️", rarity: "uncommon",
-    baseWeight: { min: 20.0, max: 45.0 }, xpReward: 25, sellPrice: 150,
-    exchangeRate: 3, materialReward: "silver_nugget", materialName: "Silver Nugget",
+    fightProfile: "surfaceRunner", baseStamina: 80,
+    baseWeight: { min: 20.0, max: 45.0 }, xpReward: 70, sellPrice: 150,
+    exchangeRate: 3, materialReward: "silver_nugget", materialName: "Pepita de Prata",
     zones: ["zone_giran"]
   },
   fish_rainbow_trout: {
     id: "fish_rainbow_trout", name: "Truta Arco-íris", icon: "🐠", rarity: "uncommon",
-    baseWeight: { min: 2.0, max: 6.0 }, xpReward: 30, sellPrice: 200,
-    exchangeRate: 3, materialReward: "steel", materialName: "Steel",
+    fightProfile: "surfaceRunner", baseStamina: 75,
+    baseWeight: { min: 2.0, max: 6.0 }, xpReward: 80, sellPrice: 200,
+    exchangeRate: 3, materialReward: "steel", materialName: "Aço Forjado",
     zones: ["zone_innadril"]
   },
 
   // Raro (15%)
   fish_octopus: {
     id: "fish_octopus", name: "Polvo das Sombras", icon: "🐙", rarity: "rare",
-    baseWeight: { min: 3.0, max: 8.0 }, xpReward: 25, sellPrice: 120,
-    exchangeRate: 2, materialReward: "mithril_ore", materialName: "Mithril Ore",
+    fightProfile: "deepDiver", baseStamina: 95,
+    baseWeight: { min: 3.0, max: 8.0 }, xpReward: 90, sellPrice: 120,
+    exchangeRate: 2, materialReward: "mithril_ore", materialName: "Minério de Mithril",
     zones: ["zone_gludin"]
   },
   fish_crystal_salmon: {
     id: "fish_crystal_salmon", name: "Salmão de Cristal", icon: "🐟", rarity: "rare",
-    baseWeight: { min: 5.0, max: 12.0 }, xpReward: 35, sellPrice: 180,
-    exchangeRate: 2, materialReward: "cokes", materialName: "Cokes",
+    fightProfile: "surfaceRunner", baseStamina: 100,
+    baseWeight: { min: 5.0, max: 12.0 }, xpReward: 110, sellPrice: 180,
+    exchangeRate: 2, materialReward: "coal", materialName: "Carvão Mineral",
     zones: ["zone_elven_village"]
   },
   fish_dion_eel: {
     id: "fish_dion_eel", name: "Enguia de Dion", icon: "🐍", rarity: "rare",
-    baseWeight: { min: 1.5, max: 4.5 }, xpReward: 40, sellPrice: 220,
-    exchangeRate: 2, materialReward: "braided_hemp", materialName: "Braided Hemp",
+    fightProfile: "erratic", baseStamina: 90,
+    baseWeight: { min: 1.5, max: 4.5 }, xpReward: 120, sellPrice: 220,
+    exchangeRate: 2, materialReward: "braided_hemp", materialName: "Cânhamo Trançado",
     zones: ["zone_dion"]
   },
   fish_giran_manta: {
     id: "fish_giran_manta", name: "Jamanta de Giran", icon: "🦇", rarity: "rare",
-    baseWeight: { min: 50.0, max: 120.0 }, xpReward: 50, sellPrice: 350,
-    exchangeRate: 2, materialReward: "steel_mold", materialName: "Steel Mold",
+    fightProfile: "deepDiver", baseStamina: 130,
+    baseWeight: { min: 50.0, max: 120.0 }, xpReward: 150, sellPrice: 350,
+    exchangeRate: 2, materialReward: "silver_mold", materialName: "Molde de Prata",
     zones: ["zone_giran"]
   },
   fish_abyssal_angler: {
     id: "fish_abyssal_angler", name: "Pescador Abissal", icon: "🏮", rarity: "rare",
-    baseWeight: { min: 8.0, max: 18.0 }, xpReward: 60, sellPrice: 450,
-    exchangeRate: 2, materialReward: "mithril_alloy", materialName: "Mithril Alloy",
+    fightProfile: "deepDiver", baseStamina: 120,
+    baseWeight: { min: 8.0, max: 18.0 }, xpReward: 170, sellPrice: 450,
+    exchangeRate: 2, materialReward: "mithril_ore", materialName: "Minério de Mithril",
     zones: ["zone_innadril"]
   },
 
   // Épico (8%)
   fish_ray: {
     id: "fish_ray", name: "Arraia Elétrica", icon: "⚡", rarity: "epic",
-    baseWeight: { min: 15.0, max: 35.0 }, xpReward: 50, sellPrice: 300,
-    exchangeRate: 1, materialReward: "enria", materialName: "Enria",
+    fightProfile: "aggressive", baseStamina: 140,
+    baseWeight: { min: 15.0, max: 35.0 }, xpReward: 200, sellPrice: 300,
+    exchangeRate: 1, materialReward: "silver_thread", materialName: "Fio de Prata",
     zones: ["zone_gludin", "zone_giran"]
   },
   fish_elven_goldfish: {
     id: "fish_elven_goldfish", name: "Peixe-Dourado Élfico", icon: "🪙", rarity: "epic",
-    baseWeight: { min: 0.5, max: 1.5 }, xpReward: 65, sellPrice: 400,
-    exchangeRate: 1, materialReward: "metallic_thread", materialName: "Metallic Thread",
+    fightProfile: "calm", baseStamina: 100,
+    baseWeight: { min: 0.5, max: 1.5 }, xpReward: 230, sellPrice: 400,
+    exchangeRate: 1, materialReward: "metallic_fiber", materialName: "Fibra Metálica",
     zones: ["zone_elven_village"]
   },
   fish_mandragora_fish: {
     id: "fish_mandragora_fish", name: "Peixe-Mandrágora", icon: "🌱", rarity: "epic",
-    baseWeight: { min: 2.0, max: 5.0 }, xpReward: 80, sellPrice: 550,
-    exchangeRate: 1, materialReward: "var_of_purity", materialName: "Varnish of Purity",
+    fightProfile: "burstRunner", baseStamina: 135,
+    baseWeight: { min: 2.0, max: 5.0 }, xpReward: 260, sellPrice: 550,
+    exchangeRate: 1, materialReward: "steel_ingot", materialName: "Lingote de Aço",
     zones: ["zone_dion"]
   },
   fish_giran_dragonfish: {
     id: "fish_giran_dragonfish", name: "Peixe-Dragão de Giran", icon: "🐉", rarity: "epic",
-    baseWeight: { min: 30.0, max: 80.0 }, xpReward: 100, sellPrice: 800,
-    exchangeRate: 1, materialReward: "asofe", materialName: "Asofe",
+    fightProfile: "burstRunner", baseStamina: 160,
+    baseWeight: { min: 30.0, max: 80.0 }, xpReward: 300, sellPrice: 800,
+    exchangeRate: 1, materialReward: "oriharukon_ore", materialName: "Minério de Oriharukon",
     zones: ["zone_giran"]
   },
 
   // Lendário (2%)
   fish_gludin_shark: {
     id: "fish_gludin_shark", name: "Tubarão Branco de Gludin", icon: "🦈", rarity: "legendary",
-    baseWeight: { min: 100.0, max: 300.0 }, xpReward: 150, sellPrice: 1500,
-    exchangeRate: 1, materialReward: "oriharukon_ore", materialName: "Oriharukon Ore",
+    fightProfile: "aggressive", baseStamina: 200,
+    baseWeight: { min: 100.0, max: 300.0 }, xpReward: 400, sellPrice: 1500,
+    exchangeRate: 1, materialReward: "oriharukon_ore", materialName: "Minério de Oriharukon",
     zones: ["zone_gludin"]
   },
   fish_dion_pike: {
     id: "fish_dion_pike", name: "Pique Escamas-de-Aço", icon: "⚜️", rarity: "legendary",
-    baseWeight: { min: 25.0, max: 60.0 }, xpReward: 200, sellPrice: 2000,
-    exchangeRate: 1, materialReward: "durable_metal_plate", materialName: "Durable Metal Plate",
+    fightProfile: "aggressive", baseStamina: 190,
+    baseWeight: { min: 25.0, max: 60.0 }, xpReward: 500, sellPrice: 2000,
+    exchangeRate: 1, materialReward: "steel", materialName: "Aço Forjado",
     zones: ["zone_dion"]
   },
   fish_kraken_tentacle: {
     id: "fish_kraken_tentacle", name: "Tentáculo do Kraken", icon: "🦑", rarity: "legendary",
-    baseWeight: { min: 50.0, max: 150.0 }, xpReward: 300, sellPrice: 4000,
-    exchangeRate: 1, materialReward: "craftsman_mold", materialName: "Craftsman Mold",
+    fightProfile: "heavy", baseStamina: 240,
+    baseWeight: { min: 50.0, max: 150.0 }, xpReward: 650, sellPrice: 4000,
+    exchangeRate: 1, materialReward: "silver_mold", materialName: "Molde de Prata",
     zones: ["zone_giran"]
   },
   fish_innadril_sunfish: {
     id: "fish_innadril_sunfish", name: "Peixe-Lua de Innadril", icon: "☀️", rarity: "legendary",
-    baseWeight: { min: 400.0, max: 1000.0 }, xpReward: 400, sellPrice: 6000,
-    exchangeRate: 1, materialReward: "thons", materialName: "Thons",
+    fightProfile: "deepDiver", baseStamina: 250,
+    baseWeight: { min: 400.0, max: 1000.0 }, xpReward: 800, sellPrice: 6000,
+    exchangeRate: 1, materialReward: "mithril_ore", materialName: "Minério de Mithril",
     zones: ["zone_innadril"]
   },
   fish_siren_scale: {
     id: "fish_siren_scale", name: "Escama de Sirene", icon: "🧜‍♀️", rarity: "legendary",
-    baseWeight: { min: 0.1, max: 0.5 }, xpReward: 450, sellPrice: 8000,
-    exchangeRate: 1, materialReward: "mold_lubricant", materialName: "Mold Lubricant",
+    fightProfile: "burstRunner", baseStamina: 180,
+    baseWeight: { min: 0.1, max: 0.5 }, xpReward: 900, sellPrice: 8000,
+    exchangeRate: 1, materialReward: "crafted_leather", materialName: "Couro Trabalhado",
     zones: ["zone_innadril"]
   },
   fish_water_dragon_fry: {
     id: "fish_water_dragon_fry", name: "Filhote do Dragão da Água", icon: "🐲", rarity: "legendary",
-    baseWeight: { min: 10.0, max: 30.0 }, xpReward: 500, sellPrice: 10000,
-    exchangeRate: 1, materialReward: "adamantite", materialName: "Adamantite",
+    fightProfile: "heavy", baseStamina: 280,
+    baseWeight: { min: 10.0, max: 30.0 }, xpReward: 1200, sellPrice: 10000,
+    exchangeRate: 1, materialReward: "adamantite", materialName: "Bloco de Adamantite",
     zones: ["zone_innadril"]
   }
 };

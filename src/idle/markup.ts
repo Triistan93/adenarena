@@ -317,12 +317,15 @@ export const IDLE_MARKUP = `
 
           <!-- Pillar 1 Subtabs: Combate -->
           <div class="pillar-subtabs-strip active" id="pillar-strip-combat">
-            <button class="tab-btn active subtab-pill-btn" data-tab="zones">⚔ Caça &amp; Zonas</button>
+            <button class="tab-btn active subtab-pill-btn" data-tab="zones">⚔ Combate &amp; Zonas</button>
             <button class="tab-btn subtab-pill-btn" data-tab="raids">🐉 Raids &amp; Bosses</button>
             <button class="tab-btn subtab-pill-btn" data-tab="tower">🏰 Torre da Insolência</button>
             <button class="tab-btn subtab-pill-btn" data-tab="colosseum">⚔ Coliseu PvP</button>
             <button class="tab-btn subtab-pill-btn" data-tab="expeditions">🏰 Expedições</button>
             <button class="tab-btn subtab-pill-btn" data-tab="fishing">🎣 Pesca</button>
+            <button class="tab-btn subtab-pill-btn" data-tab="hunting">🐾 Caça Silvestre</button>
+            <button class="tab-btn subtab-pill-btn" data-tab="gathering">🌿 Coleta</button>
+            <button class="tab-btn subtab-pill-btn" data-tab="mining">⛏️ Mineração</button>
           </div>
 
           <!-- Pillar 2 Subtabs: Herói -->
@@ -1158,6 +1161,7 @@ export const IDLE_MARKUP = `
 
                 <div style="display:flex; gap:5px; flex-wrap:wrap; margin-top:10px; width:100%; border-top:1px solid rgba(212,167,68,0.2); padding-top:10px;" id="forge-subtab-buttons">
                   <button onclick="window.setForgeSubTab('craft')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="craft" style="font-family:'Cinzel',serif; font-weight:700; font-size:11px;">⚒️ Criação Geral</button>
+                  <button onclick="window.setForgeSubTab('refinery')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="refinery" style="font-family:'Cinzel',serif; font-weight:700; font-size:11px; color:#a7f3d0; border-color:rgba(52,211,153,0.4);">⚗️ Bancada de Refino</button>
                   <button onclick="window.setForgeSubTab('soulcrystal')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="soulcrystal" style="font-family:'Cinzel',serif; font-weight:700; font-size:11px;">🔮 Soul Crystals (SA)</button>
                   <button onclick="window.setForgeSubTab('elemental')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="elemental" style="font-family:'Cinzel',serif; font-weight:700; font-size:11px; color:#fdba74;">🔥 Atributos Elementais</button>
                   <button onclick="window.setForgeSubTab('masterwork')" class="inv-batch-btn forge-subtab-btn" data-forge-tab="masterwork" style="font-family:'Cinzel',serif; font-weight:700; font-size:11px;">✨ Pushkin MW</button>
@@ -1199,6 +1203,15 @@ export const IDLE_MARKUP = `
 
           <!-- Fishing & Aquatic Life Tab -->
           <div id="tab-fishing" class="tab-pane"></div>
+
+          <!-- Hunting & Wildlife Life Tab -->
+          <div id="tab-hunting" class="tab-pane"></div>
+
+          <!-- Gathering & Flora Life Tab -->
+          <div id="tab-gathering" class="tab-pane"></div>
+
+          <!-- Mining & Ores Life Tab -->
+          <div id="tab-mining" class="tab-pane"></div>
 
           <!-- Raids & Bosses Tab -->
           <div id="tab-raids" class="tab-pane"></div>

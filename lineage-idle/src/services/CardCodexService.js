@@ -311,6 +311,10 @@ export class CardCodexService {
     totals.maxHp += aquatic.maxHp;
     totals.pDef += aquatic.pDef;
 
+    const wildlife = CardCodexService.getWildlifeCodexBonuses(accountState);
+    totals.pAtk += wildlife.pAtk;
+    totals.maxHp += wildlife.maxHp;
+
     return totals;
   }
 
@@ -325,6 +329,20 @@ export class CardCodexService {
     return {
       maxHp: speciesDiscovered * 15,
       pDef: speciesDiscovered * 2
+    };
+  }
+
+  /**
+   * Bônus passivos concedidos pelo abate e catalogação de espécies silvestres no Bestiário de Caça.
+   * @param {Object} accountState
+   * @returns {{ pAtk: number, maxHp: number }}
+   */
+  static getWildlifeCodexBonuses(accountState) {
+    const hLog = accountState?.hunting?.huntingLog || {};
+    const speciesDiscovered = Object.keys(hLog).length;
+    return {
+      pAtk: speciesDiscovered * 4,
+      maxHp: speciesDiscovered * 10
     };
   }
 

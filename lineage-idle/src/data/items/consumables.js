@@ -82,6 +82,7 @@ export const MATERIALS = {
   "compressed_stone": {"id":"compressed_stone","name":"Compressed Stone","slot":"material","tier":1,"stack":99999,"price":10,"icon":"materials/compressed_stone.png","desc":"Material: Compressed Stone."},
   "compressed_wood": {"id":"compressed_wood","name":"Compressed Wood","slot":"material","tier":1,"stack":99999,"price":10,"icon":"materials/compressed_wood.png","desc":"Material: Compressed Wood."},
   "cord": {"id":"cord","name":"Cord","slot":"material","tier":1,"stack":99999,"price":10,"icon":"materials/cord.png","desc":"Material: Cord."},
+  "cotton_thread": {"id":"cotton_thread","name":"Cotton Thread","slot":"material","tier":1,"stack":99999,"price":10,"icon":"materials/cotton_thread.png","desc":"Material: Linha de Algodão."},
   "iron_ore": {"id":"iron_ore","name":"Iron Ore","slot":"material","tier":1,"stack":99999,"price":10,"icon":"materials/iron_ore.png","desc":"Material: Minério de Ferro."},
   "coarse_bone_powder": {"id":"coarse_bone_powder","name":"Coarse Bone Powder","slot":"material","tier":1,"stack":99999,"price":10,"icon":"materials/coarse_bone_powder.png","desc":"Material: Pó de Osso Grosso."},
   "steel": {"id":"steel","name":"Steel","slot":"material","tier":1,"stack":99999,"price":10,"icon":"materials/steel.png","desc":"Material: Aço."},

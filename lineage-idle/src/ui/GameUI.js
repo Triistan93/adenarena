@@ -67,6 +67,10 @@ import { ElementalService, ELEMENT_DEFINITIONS, ELEMENTAL_GRADE_GATING, SOUL_CRY
 import { MonsterAIEngine, ARCHETYPE_INFO, HUNTING_DIFFICULTIES } from '../engine/MonsterAIEngine.js';
 import { heroSVG, monsterSVG, MON_IMG } from '../../art.js';
 import { AFFIX_MAP } from '../../data/affixes.js';
+import { MercenaryService } from '../services/MercenaryService.js';
+import { MERCENARY_RARITIES, MERCENARY_SPECIALIZATIONS, MERCENARY_TRAITS, calculateMercenaryPower, getMercenaryXpForLevel } from '../data/mercenaries.js';
+import { EXPEDITION_DESTINATIONS, ExpeditionService } from '../services/ExpeditionService.js';
+import { renderForgeRefinery, setRefineryCategory } from './RefineryUI.js';
 
 /* ═══════════════════════════════════════════════════════════════════════════
    1. DOM ROOT & HELPERS
@@ -5572,6 +5576,15 @@ export function renderForgeDialogueView(state, callbacks = {}) {
         <span style="color:#ffd877; font-size:12px;">➔</span>
       </button>
 
+      <button class="l2chat-option-btn" data-forge-target="refinery" style="border-color:rgba(52,211,153,0.35);">
+        <span class="l2chat-bubble-icon" style="color:#6ee7b7;">⚗️</span>
+        <div style="flex:1;">
+          <div class="l2chat-option-text" style="color:#a7f3d0;">Bancada de Refino (Life Activities Refinery)</div>
+          <div class="l2chat-option-hint">Processar madeira, couros, minérios e ervas em materiais nobres de forja</div>
+        </div>
+        <span style="color:#6ee7b7; font-size:12px;">➔</span>
+      </button>
+
       <button class="l2chat-option-btn" data-forge-target="tattoos">
         <span class="l2chat-bubble-icon">🗨️</span>
         <div style="flex:1;">
@@ -5740,6 +5753,10 @@ export function updateCraftUI(state, callbacks = {}) {
   const container = findElement('craft-recipes-container') || findElement('craft-list');
   if (!container) return;
 
+  if (subTab === 'refinery') {
+    renderForgeRefinery(container, state, callbacks);
+    return;
+  }
   if (subTab === 'soulcrystal') {
     renderForgeSoulCrystals(container, state);
     return;
@@ -6572,7 +6589,7 @@ export function renderExpeditionsUI(state) {
   if (!container) return;
 
   const now = Date.now();
-  const dests = (typeof window !== 'undefined' && window.EXPEDITION_DESTINATIONS) ? window.EXPEDITION_DESTINATIONS : {};
+  const dests = (typeof window !== 'undefined' && window.EXPEDITION_DESTINATIONS) ? window.EXPEDITION_DESTINATIONS : EXPEDITION_DESTINATIONS;
   const castles = (typeof window !== 'undefined' && window.CASTLES_DEFS) ? window.CASTLES_DEFS : {};
   const seeds = (typeof window !== 'undefined' && window.MANOR_SEEDS) ? window.MANOR_SEEDS : {};
 
@@ -6581,10 +6598,163 @@ export function renderExpeditionsUI(state) {
   const ownedCrops = state.manorCrops || {};
   const currentLvl = state.level || 1;
 
+  // Estado dos Mercenários
+  const mState = MercenaryService.getMercenariesState(state);
+  if (mState.tavernPool.length === 0) {
+    MercenaryService.refreshTavern(state);
+  }
+
+  if (typeof window !== 'undefined' && !window._expeditionSquadSelections) {
+    window._expeditionSquadSelections = {};
+  }
+
+  // 1. TAVERNA DE MERCENÁRIOS (RECRUTAMENTO)
+  let tavernHtml = '';
+  for (const cand of mState.tavernPool) {
+    const rarityDef = MERCENARY_RARITIES[cand.rarity] || MERCENARY_RARITIES.common;
+    const specDef = MERCENARY_SPECIALIZATIONS[cand.spec] || { name: cand.spec, icon: '⚔️', synergyDesc: '' };
+    const canAfford = (state.gold || 0) >= cand.hireCost;
+
+    tavernHtml += `
+      <div style="
+        flex: 1 1 210px;
+        min-width: 200px;
+        background: rgba(18, 22, 34, 0.85);
+        border: 1px solid ${rarityDef.border};
+        border-radius: 8px;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        position: relative;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+      ">
+        <div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+            <span style="font-size:10px; background:${rarityDef.bgBadge}; color:${rarityDef.color}; border:1px solid ${rarityDef.border}; padding:1px 6px; border-radius:4px; font-weight:bold;">
+              ${rarityDef.name.toUpperCase()}
+            </span>
+            <span style="font-size:11px; color:#ffd877; font-weight:bold;">Poder: ${cand.basePower}</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px; margin:4px 0;">
+            <div style="font-size:24px;">${cand.icon || '⚔️'}</div>
+            <div>
+              <strong style="font-size:13px; color:#f4d58a; font-family:'Cinzel',serif;">${cand.name}</strong>
+              <div style="font-size:10px; color:#94a3b8;">${cand.title}</div>
+            </div>
+          </div>
+          <div style="font-size:10px; background:rgba(0,0,0,0.4); border-radius:4px; padding:4px 6px; margin:6px 0; color:#cbd5e1;">
+            <strong style="color:#6ee7b7;">${specDef.icon} ${specDef.name}:</strong> ${specDef.synergyDesc}
+          </div>
+          ${cand.trait && MERCENARY_TRAITS[cand.trait] ? `
+            <div style="font-size:10px; color:${MERCENARY_TRAITS[cand.trait].color}; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); border-radius:4px; padding:3px 6px; margin-bottom:6px;">
+              ${MERCENARY_TRAITS[cand.trait].icon} <strong>Traço: ${MERCENARY_TRAITS[cand.trait].name}</strong> — ${MERCENARY_TRAITS[cand.trait].desc}
+            </div>
+          ` : ''}
+          <p style="font-size:10px; color:#888; font-style:italic; margin:0 0 8px 0; line-height:1.2;">
+            "${cand.quote}"
+          </p>
+        </div>
+        <button
+          onclick="window.recruitMercenary('${cand.uid}')"
+          ${!canAfford ? 'disabled' : ''}
+          style="
+            width: 100%;
+            padding: 6px 10px;
+            font-size: 11px;
+            font-weight: bold;
+            background: ${canAfford ? 'linear-gradient(180deg,#d4a744,#8a641c)' : 'rgba(50,50,50,0.4)'};
+            border: 1px solid ${canAfford ? '#ffe699' : '#555'};
+            color: ${canAfford ? '#000' : '#777'};
+            border-radius: 6px;
+            cursor: ${canAfford ? 'pointer' : 'not-allowed'};
+          "
+        >
+          CONTRATAR (${(cand.hireCost / 1000).toFixed(0)}k Adena)
+        </button>
+      </div>
+    `;
+  }
+
+  // 2. QUARTEL DOS MERCENÁRIOS CONTRATADOS
+  let rosterHtml = '';
+  if (mState.owned.length === 0) {
+    rosterHtml = `
+      <div style="background:rgba(18,22,34,0.6); border:1px dashed rgba(212,167,68,0.3); border-radius:8px; padding:16px; text-align:center; color:#94a3b8; font-size:12px;">
+        🛡️ Seu Quartel está vazio. Visite a Taverna acima para recrutar mercenários e compor seu esquadrão de expedição!
+      </div>
+    `;
+  } else {
+    rosterHtml = `<div style="display:flex; gap:10px; flex-wrap:wrap;">`;
+    for (const merc of mState.owned) {
+      const isBusy = MercenaryService.isMercenaryBusy(state, merc.uid);
+      const rarityDef = MERCENARY_RARITIES[merc.rarity] || MERCENARY_RARITIES.common;
+      const specDef = MERCENARY_SPECIALIZATIONS[merc.spec] || { name: merc.spec, icon: '⚔️' };
+      const mercPower = calculateMercenaryPower(merc);
+      const neededXp = getMercenaryXpForLevel(merc.level || 1);
+      const xpPct = Math.min(100, Math.floor(((merc.xp || 0) / neededXp) * 100));
+
+      rosterHtml += `
+        <div style="
+          flex: 1 1 180px;
+          min-width: 170px;
+          background: rgba(18, 22, 34, 0.85);
+          border: 1px solid ${rarityDef.border};
+          border-radius: 8px;
+          padding: 8px 10px;
+          position: relative;
+        ">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+            <span style="font-size:9px; background:${rarityDef.bgBadge}; color:${rarityDef.color}; padding:1px 5px; border-radius:3px; font-weight:bold;">
+              Nv. ${merc.level || 1}
+            </span>
+            <span style="font-size:10px; color:${isBusy ? '#fbbf24' : '#34d399'}; font-weight:bold;">
+              ${isBusy ? '🧭 EM MARCHA' : '✓ PRONTO'}
+            </span>
+          </div>
+          <div style="display:flex; align-items:center; gap:6px; margin:4px 0;">
+            <span style="font-size:20px;">${merc.icon || '⚔️'}</span>
+            <div>
+              <strong style="font-size:12px; color:#f4d58a;">${merc.name}</strong>
+              <div style="font-size:10px; color:#cbd5e1;">${specDef.icon} ${specDef.name} | Poder: ${mercPower}</div>
+            </div>
+          </div>
+          <!-- Barra de XP -->
+          <div style="width:100%; height:4px; background:rgba(0,0,0,0.6); border-radius:2px; overflow:hidden; margin:4px 0;">
+            <div style="width:${xpPct}%; height:100%; background:#3b82f6;"></div>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; font-size:9px; margin:3px 0;">
+            <span style="color:${(merc.loyalty ?? 50) >= 80 ? '#34d399' : ((merc.loyalty ?? 50) >= 50 ? '#60a5fa' : '#f87171')}; font-weight:bold;">
+              🤝 Lealdade: ${merc.loyalty ?? 50}%
+            </span>
+            ${merc.trait && MERCENARY_TRAITS[merc.trait] ? `
+              <span style="color:${MERCENARY_TRAITS[merc.trait].color};" title="${MERCENARY_TRAITS[merc.trait].desc}">
+                ${MERCENARY_TRAITS[merc.trait].icon} ${MERCENARY_TRAITS[merc.trait].name}
+              </span>
+            ` : ''}
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
+            <span style="font-size:9px; color:#888;">XP: ${merc.xp || 0}/${neededXp}</span>
+            <button
+              onclick="window.dismissMercenary('${merc.uid}')"
+              ${isBusy ? 'disabled' : ''}
+              style="padding:2px 6px; font-size:9px; background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.3); color:#fca5a5; border-radius:3px; cursor:${isBusy ? 'not-allowed' : 'pointer'};"
+            >
+              Dispensar
+            </button>
+          </div>
+        </div>
+      `;
+    }
+    rosterHtml += `</div>`;
+  }
+
+  // 3. EXPEDIÇÕES ESTRATÉGICAS
   let expHtml = '';
   for (const [dId, dDef] of Object.entries(dests)) {
     const active = activeExpeditions.find(e => e.destId === dId);
     let statusBtn = '';
+    const isUnlocked = currentLvl >= (dDef.minLevel || 20);
 
     if (active) {
       const finishTime = active.startTime + active.duration;
@@ -6592,7 +6762,7 @@ export function renderExpeditionsUI(state) {
         statusBtn = `
           <button
             onclick="window.claimExpeditionReward('${active.id}')"
-            style="padding:8px 14px; font-weight:bold; font-size:12px; background:linear-gradient(180deg,#34d399,#059669); border:1px solid #6ee7b7; color:#000; border-radius:6px; cursor:pointer; box-shadow:0 0 10px rgba(52,211,153,0.4);"
+            style="padding:10px 16px; font-weight:bold; font-size:12px; background:linear-gradient(180deg,#34d399,#059669); border:1px solid #6ee7b7; color:#000; border-radius:6px; cursor:pointer; box-shadow:0 0 12px rgba(52,211,153,0.5);"
           >
             🎁 COLETAR SAQUE
           </button>
@@ -6605,7 +6775,7 @@ export function renderExpeditionsUI(state) {
         const timeStr = `${hours}h ${mins}m ${secs < 10 ? '0' : ''}${secs}s`;
 
         statusBtn = `
-          <span style="font-family:monospace; font-weight:bold; color:#fbbf24; background:rgba(0,0,0,0.5); padding:6px 12px; border-radius:6px; border:1px solid rgba(251,191,36,0.3);">
+          <span style="font-family:monospace; font-weight:bold; color:#fbbf24; background:rgba(0,0,0,0.6); padding:8px 14px; border-radius:6px; border:1px solid rgba(251,191,36,0.4); font-size:12px;">
             ⏱️ ${timeStr}
           </span>
         `;
@@ -6614,38 +6784,148 @@ export function renderExpeditionsUI(state) {
       const canAfford = (state.gold || 0) >= dDef.cost;
       statusBtn = `
         <button
-          onclick="window.startExpedition('${dId}')"
-          ${!canAfford ? 'disabled' : ''}
-          style="padding:8px 14px; font-family:'Cinzel',serif; font-weight:bold; font-size:12px; background:${canAfford ? 'linear-gradient(180deg,#d4a744,#8a641c)' : 'rgba(60,50,40,0.5)'}; border:1px solid ${canAfford ? '#ffe699' : 'rgba(100,80,60,0.3)'}; color:${canAfford ? '#000' : '#777'}; border-radius:6px; cursor:${canAfford ? 'pointer' : 'not-allowed'};"
+          onclick="window.startStrategicExpedition('${dId}')"
+          ${(!isUnlocked || !canAfford) ? 'disabled' : ''}
+          style="
+            padding:10px 16px;
+            font-family:'Cinzel',serif;
+            font-weight:bold;
+            font-size:12px;
+            background:${isUnlocked && canAfford ? 'linear-gradient(180deg,#d4a744,#8a641c)' : 'rgba(60,50,40,0.5)'};
+            border:1px solid ${isUnlocked && canAfford ? '#ffe699' : 'rgba(100,80,60,0.3)'};
+            color:${isUnlocked && canAfford ? '#000' : '#777'};
+            border-radius:6px;
+            cursor:${isUnlocked && canAfford ? 'pointer' : 'not-allowed'};
+          "
         >
-          🧭 ENVIAR (${(dDef.cost / 1000).toFixed(0)}k gold)
+          ${!isUnlocked ? `🔒 Nv. ${dDef.minLevel}+` : `🧭 ENVIAR (${(dDef.cost / 1000).toFixed(0)}k)`}
         </button>
+      `;
+    }
+
+    // Seletor de esquadrão para esta expedição
+    const selectedUids = (window._expeditionSquadSelections && window._expeditionSquadSelections[dId]) || [];
+    const selectedMercs = selectedUids.map(uid => MercenaryService.getMercenaryByUid(state, uid)).filter(Boolean);
+    const synergies = ExpeditionService.calculateSquadSynergies(dId, selectedMercs);
+
+    let squadSelectorHtml = '';
+    if (!active && isUnlocked) {
+      if (mState.owned.length > 0) {
+        squadSelectorHtml = `
+          <div style="margin-top:8px; padding-top:8px; border-top:1px solid rgba(212,167,68,0.2);">
+            <div style="font-size:11px; color:#f4d58a; margin-bottom:4px; display:flex; justify-content:space-between;">
+              <span>Escalar Mercenários (${selectedUids.length}/3):</span>
+              <span style="color:#6ee7b7; font-weight:bold;">Poder do Esquadrão: ${synergies.totalSquadPower}</span>
+            </div>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+        `;
+
+        for (const merc of mState.owned) {
+          const isSelected = selectedUids.includes(merc.uid);
+          const isBusyOther = !isSelected && MercenaryService.isMercenaryBusy(state, merc.uid);
+          const specDef = MERCENARY_SPECIALIZATIONS[merc.spec] || { icon: '⚔️' };
+
+          squadSelectorHtml += `
+            <button
+              onclick="window.toggleMercenaryInExpeditionSquad('${dId}', '${merc.uid}')"
+              ${isBusyOther ? 'disabled' : ''}
+              style="
+                padding: 4px 8px;
+                font-size: 10px;
+                font-weight: bold;
+                background: ${isSelected ? 'rgba(52,211,153,0.3)' : isBusyOther ? 'rgba(40,40,40,0.4)' : 'rgba(20,25,35,0.8)'};
+                border: 1px solid ${isSelected ? '#34d399' : isBusyOther ? '#444' : 'rgba(212,167,68,0.3)'};
+                color: ${isSelected ? '#6ee7b7' : isBusyOther ? '#666' : '#cbd5e1'};
+                border-radius: 4px;
+                cursor: ${isBusyOther ? 'not-allowed' : 'pointer'};
+                box-shadow: ${isSelected ? '0 0 6px rgba(52,211,153,0.4)' : 'none'};
+              "
+            >
+              ${specDef.icon} ${merc.name} (Nv. ${merc.level || 1}) ${isSelected ? '✓' : ''}
+            </button>
+          `;
+        }
+
+        squadSelectorHtml += `</div>`;
+
+        if (synergies.activePerks.length > 0) {
+          squadSelectorHtml += `
+            <div style="margin-top:6px; font-size:10px; color:#6ee7b7; background:rgba(52,211,153,0.1); border:1px solid rgba(52,211,153,0.25); border-radius:4px; padding:3px 6px;">
+              ⚡ Sinergias: ${synergies.activePerks.join(' | ')}
+            </div>
+          `;
+        }
+        squadSelectorHtml += `</div>`;
+      } else {
+        squadSelectorHtml = `
+          <div style="margin-top:6px; font-size:10px; color:#94a3b8; font-style:italic;">
+            💡 Contrate mercenários na Taverna para reduzir o tempo da expedição em até 20% e liberar baús bônus!
+          </div>
+        `;
+      }
+    } else if (active && Array.isArray(active.squad) && active.squad.length > 0) {
+      const activeMercs = active.squad.map(uid => MercenaryService.getMercenaryByUid(state, uid)).filter(Boolean);
+      squadSelectorHtml = `
+        <div style="margin-top:8px; font-size:10px; color:#94a3b8; border-top:1px solid rgba(212,167,68,0.15); padding-top:6px;">
+          Mercenários na vanguarda: <strong style="color:#6ee7b7;">${activeMercs.map(m => m.name).join(', ')}</strong>
+          ${active.synergies?.activePerks?.length ? `<span style="color:#ffd877; margin-left:6px;">(${active.synergies.activePerks.join(', ')})</span>` : ''}
+        </div>
       `;
     }
 
     const minG = dDef.minGold ? (dDef.minGold / 1000).toFixed(0) + 'k' : '20k';
     const maxG = dDef.maxGold ? (dDef.maxGold / 1000).toFixed(0) + 'k' : '30k';
-    const shards = dDef.shards || (dId === 'branded' ? 2 : dId === 'martyrs' ? 5 : dId === 'dragon_valley' ? 12 : 25);
-    const chestName = dId === 'branded' ? 'Scroll de Encantamento D/C' : dId === 'martyrs' ? 'Baú de Equipamento C/B' : dId === 'dragon_valley' ? 'Baú Relíquia A/S' : '👑 Baú Supremo Frost Lord';
+    const shards = dDef.shards || 3;
+    const chestName = dDef.rewardDesc || 'Baú de Espólios';
 
-    expHtml += `
-      <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(212,167,68,0.3); border-radius:10px; padding:14px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
-        <div style="flex:1; min-width:220px;">
-          <h4 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:14px;">${dDef.name}</h4>
-          <p style="margin:2px 0 6px 0; font-size:11px; color:#aaa;">${dDef.desc}</p>
-          <div style="display:flex; gap:6px; flex-wrap:wrap; align-items:center;">
-            <span style="font-size:10px; background:rgba(212,167,68,0.15); border:1px solid rgba(212,167,68,0.3); padding:2px 8px; border-radius:6px; color:#ffd877; font-weight:bold;">🪙 ${minG}-${maxG} Gold</span>
-            <span style="font-size:10px; background:rgba(168,85,247,0.15); border:1px solid rgba(168,85,247,0.3); padding:2px 8px; border-radius:6px; color:#d8b4fe; font-weight:bold;">✨ +${shards} Cacos Astrais</span>
-            <span style="font-size:10px; background:rgba(59,130,246,0.15); border:1px solid rgba(59,130,246,0.3); padding:2px 8px; border-radius:6px; color:#93c5fd; font-weight:bold;">📦 ${chestName}</span>
+    let phasesHtml = '';
+    if (active) {
+      const elapsed = Math.min(active.duration, now - active.startTime);
+      const progress = Math.min(1, elapsed / active.duration);
+      phasesHtml = `
+        <div style="margin-top:8px; background:rgba(0,0,0,0.4); border-radius:6px; padding:8px 10px; border:1px solid rgba(212,167,68,0.2);">
+          <div style="display:flex; justify-content:space-between; font-size:10px; font-weight:bold; margin-bottom:4px;">
+            <span style="color:${progress >= 0.33 ? '#34d399' : '#94a3b8'};">1. Infiltração ${progress >= 0.33 ? '✓' : '⏳'}</span>
+            <span style="color:${progress >= 0.66 ? '#34d399' : (progress >= 0.33 ? '#fbbf24' : '#94a3b8')};">2. Perigo & Combate ${progress >= 0.66 ? '✓' : (progress >= 0.33 ? '⚡' : '⏳')}</span>
+            <span style="color:${progress >= 1.0 ? '#34d399' : (progress >= 0.66 ? '#fbbf24' : '#94a3b8')};">3. Câmara do Tesouro ${progress >= 1.0 ? '✓' : (progress >= 0.66 ? '🗝️' : '⏳')}</span>
+          </div>
+          <div style="width:100%; height:5px; background:rgba(255,255,255,0.1); border-radius:3px; overflow:hidden;">
+            <div style="width:${Math.floor(progress * 100)}%; height:100%; background:linear-gradient(90deg,#38bdf8,#34d399);"></div>
           </div>
         </div>
-        <div>
-          ${statusBtn}
+      `;
+    }
+
+    expHtml += `
+      <div style="background:rgba(18,22,34,0.85); border:1px solid rgba(212,167,68,0.3); border-radius:10px; padding:14px; margin-bottom:12px; box-shadow:0 2px 10px rgba(0,0,0,0.4);">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px; flex-wrap:wrap;">
+          <div style="flex:1; min-width:220px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <h4 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:15px;">${dDef.name}</h4>
+              <span style="font-size:10px; background:rgba(0,0,0,0.5); padding:1px 6px; border-radius:4px; color:#ffd877; font-weight:bold;">Lv. ${dDef.minLevel || 20}+</span>
+            </div>
+            <p style="margin:4px 0 6px 0; font-size:11px; color:#aaa; line-height:1.3;">${dDef.desc}</p>
+            <div style="font-size:10px; color:#fca5a5; margin-bottom:6px;">
+              <strong>⚠️ Ameaça:</strong> ${dDef.threat || 'Perigos Ancestrais'}
+              <span style="color:#94a3b8; margin-left:6px;">(Recomendados: ${dDef.recommendedSpecs?.map(s => MERCENARY_SPECIALIZATIONS[s]?.name || s).join(', ') || 'Qualquer'})</span>
+            </div>
+            <div style="display:flex; gap:6px; flex-wrap:wrap; align-items:center;">
+              <span style="font-size:10px; background:rgba(212,167,68,0.15); border:1px solid rgba(212,167,68,0.3); padding:2px 8px; border-radius:6px; color:#ffd877; font-weight:bold;">🪙 ${minG}-${maxG} Adena</span>
+              <span style="font-size:10px; background:rgba(168,85,247,0.15); border:1px solid rgba(168,85,247,0.3); padding:2px 8px; border-radius:6px; color:#d8b4fe; font-weight:bold;">✨ +${shards} Cacos Astrais</span>
+              <span style="font-size:10px; background:rgba(59,130,246,0.15); border:1px solid rgba(59,130,246,0.3); padding:2px 8px; border-radius:6px; color:#93c5fd; font-weight:bold;">📦 ${chestName}</span>
+            </div>
+          </div>
+          <div>
+            ${statusBtn}
+          </div>
         </div>
+        ${squadSelectorHtml}
+        ${phasesHtml}
       </div>
     `;
   }
 
+  // 4. CASTELOS DE ADEN
   let castlesHtml = '';
   for (const [cId, cDef] of Object.entries(castles)) {
     const cData = playerCastles[cId];
@@ -6694,6 +6974,7 @@ export function renderExpeditionsUI(state) {
     `;
   }
 
+  // 5. MANOR FARMING
   let manorHtml = '';
   for (const [sId, sDef] of Object.entries(seeds)) {
     const cropsCount = ownedCrops[sId] || 0;
@@ -6740,32 +7021,58 @@ export function renderExpeditionsUI(state) {
       <!-- Header Banner -->
       <div style="background:linear-gradient(180deg, rgba(20,26,42,0.95), rgba(10,14,24,0.95)); border:1px solid rgba(212,167,68,0.4); border-radius:12px; padding:16px; margin-bottom:18px; box-shadow:0 4px 20px rgba(0,0,0,0.5);">
         <h3 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:20px; display:flex; align-items:center; gap:8px;">
-          🏰 Expedições de Mercenários, Castelos & Manor
+          🏰 Salão dos Mercenários & Expedições de Aden
         </h3>
         <p style="margin:4px 0 0 0; font-size:12px; color:#aaa;">
-          Envie expedições passivas, conquiste castelos para impostos e negocie colheitas do Manor por materiais nobres de craft!
+          Contrate mercenários especializados na Taverna, treine seu esquadrão e envie-os em expedições estratégicas com sinergias táticas!
         </p>
       </div>
 
-      <!-- Expeditions Section -->
-      <div style="margin-bottom:20px;">
-        <h4 style="margin:0 0 8px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:15px;">
-          🧭 Expedições Passivas de Mercenários
+      <!-- 1. Taverna de Mercenários -->
+      <div style="margin-bottom:22px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <h4 style="margin:0; font-family:'Cinzel',serif; color:#f4d58a; font-size:15px; display:flex; align-items:center; gap:6px;">
+            🍺 Taverna dos Mercenários (Contratos Disponíveis)
+          </h4>
+          <button
+            onclick="window.refreshMercenaryTavern()"
+            style="padding:5px 12px; font-size:11px; font-weight:bold; background:rgba(212,167,68,0.15); border:1px solid rgba(212,167,68,0.4); color:#ffd877; border-radius:6px; cursor:pointer;"
+          >
+            🔄 Renovar Contratos (10.000g)
+          </button>
+        </div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          ${tavernHtml}
+        </div>
+      </div>
+
+      <!-- 2. Quartel dos Mercenários -->
+      <div style="margin-bottom:22px;">
+        <h4 style="margin:0 0 10px 0; font-family:'Cinzel',serif; color:#6ee7b7; font-size:15px; display:flex; align-items:center; gap:6px;">
+          🛡️ Seu Quartel de Mercenários (${mState.owned.length}/12)
+        </h4>
+        ${rosterHtml}
+      </div>
+
+      <!-- 3. Expedições Estratégicas -->
+      <div style="margin-bottom:22px;">
+        <h4 style="margin:0 0 10px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:15px; display:flex; align-items:center; gap:6px;">
+          🧭 Missões de Expedição Estratégicas
         </h4>
         ${expHtml}
       </div>
 
-      <!-- Castles Section -->
-      <div style="margin-bottom:20px;">
-        <h4 style="margin:0 0 8px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:15px;">
+      <!-- 4. Domínio dos Castelos -->
+      <div style="margin-bottom:22px;">
+        <h4 style="margin:0 0 10px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:15px;">
           🏰 Domínio dos Castelos de Aden (Impostos Passivos)
         </h4>
         ${castlesHtml}
       </div>
 
-      <!-- Manor Farming Section -->
+      <!-- 5. Manor Farming -->
       <div>
-        <h4 style="margin:0 0 8px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:15px;">
+        <h4 style="margin:0 0 10px 0; font-family:'Cinzel',serif; color:#f4d58a; font-size:15px;">
           🌾 Manor Manager & Mercado de Colheita
         </h4>
         ${manorHtml}
@@ -11266,3 +11573,6 @@ if (typeof window !== 'undefined') {
 
 export { renderRankingTab, setActiveRankingTab, renderMarketTab, setActiveMarketTab };
 export { renderFishingUI } from './FishingUI.js';
+export { renderHuntingUI } from './HuntingUI.js';
+export { renderGatheringUI } from './GatheringUI.js';
+export { renderMiningUI } from './MiningUI.js';

@@ -160,7 +160,126 @@ export function renderFishingUI(state) {
   const canAutoFish = fState.skillLevel >= 5;
 
   let fishingActionContent = '';
-  if (isFishingNow) {
+  if (isFishingNow && fState.activeFight && fState.activeFight.status === 'fighting') {
+    const fight = fState.activeFight;
+    const fDef = fight.fishDef || {};
+    const profile = fight.profile || {};
+
+    const staminaPct = Math.max(0, Math.min(100, Math.round((fight.fishStamina / (fight.maxStamina || 1)) * 100)));
+    const tensionPct = Math.max(0, Math.min(100, fight.lineTension));
+    const controlPct = Math.max(0, Math.min(100, fight.playerControl));
+
+    let tensionColor = '#22c55e';
+    let tensionStatus = 'Segura';
+    let tensionPulse = '';
+    if (tensionPct >= 90) {
+      tensionColor = '#ef4444';
+      tensionStatus = '⚠️ PERIGO CRÍTICO DE QUEBRA!';
+      tensionPulse = 'animation: pulse 0.6s infinite;';
+    } else if (tensionPct >= 75) {
+      tensionColor = '#f97316';
+      tensionStatus = 'Tensão Elevada';
+    } else if (tensionPct >= 50) {
+      tensionColor = '#eab308';
+      tensionStatus = 'Moderada';
+    }
+
+    let controlColor = controlPct > 50 ? '#3b82f6' : controlPct >= 25 ? '#eab308' : '#ef4444';
+    let controlStatus = controlPct > 50 ? 'Firme' : controlPct >= 25 ? 'Sob Disputa' : '⚠️ PEIXE ESCAPANDO!';
+    let controlPulse = controlPct < 25 ? 'animation: pulse 0.6s infinite;' : '';
+
+    fishingActionContent = `
+      <div style="padding:16px; background:linear-gradient(180deg, rgba(15,23,42,0.9), rgba(10,14,26,0.98)); border-radius:12px; border:1px solid #3b82f6; box-shadow:0 0 20px rgba(59,130,246,0.3);">
+        <!-- Top info bar do peixe fisgado -->
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:8px;">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <div style="font-size:32px; filter:drop-shadow(0 0 8px rgba(96,165,250,0.5));">${fDef.icon || '🐟'}</div>
+            <div>
+              <div style="font-family:'Cinzel',serif; font-size:15px; font-weight:bold; color:#f8fafc;">
+                ${fDef.name || 'Peixe Misterioso'} <span style="font-size:10px; padding:2px 6px; border-radius:4px; background:rgba(59,130,246,0.2); border:1px solid #60a5fa; color:#93c5fd;">${profile.name || 'Padrão'}</span>
+              </div>
+              <div style="font-size:11px; color:#94a3b8;">${profile.desc || 'Comportamento aquático sob análise'}</div>
+            </div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:10px; color:#94a3b8;">Turno de Disputa</div>
+            <div style="font-size:14px; font-weight:bold; color:#ffd700; font-family:monospace;">#${(fight.turns || 0) + 1}</div>
+          </div>
+        </div>
+
+        <!-- Gauges & Barras de Combate Aquático -->
+        <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:16px;">
+          <!-- 1. Stamina do Peixe -->
+          <div style="background:rgba(0,0,0,0.4); padding:8px 12px; border-radius:6px; border:1px solid rgba(255,255,255,0.05);">
+            <div style="display:flex; justify-content:space-between; font-size:11px; margin-bottom:4px;">
+              <span style="color:#f87171; font-weight:bold;">🐟 Resistência / Stamina do Peixe:</span>
+              <span style="font-family:monospace; color:#fca5a5; font-weight:bold;">${fight.fishStamina} / ${fight.maxStamina} (${staminaPct}%)</span>
+            </div>
+            <div style="background:#1e293b; height:10px; border-radius:5px; overflow:hidden;">
+              <div style="background:linear-gradient(90deg, #ef4444, #f87171); width:${staminaPct}%; height:100%; transition:width 0.2s ease;"></div>
+            </div>
+          </div>
+
+          <!-- 2. Tensão da Linha -->
+          <div style="background:rgba(0,0,0,0.4); padding:8px 12px; border-radius:6px; border:1px solid rgba(255,255,255,0.05);">
+            <div style="display:flex; justify-content:space-between; font-size:11px; margin-bottom:4px;">
+              <span style="color:${tensionColor}; font-weight:bold; ${tensionPulse}">⚡ Tensão da Linha: ${tensionStatus}</span>
+              <span style="font-family:monospace; color:${tensionColor}; font-weight:bold;">${tensionPct} / 100%</span>
+            </div>
+            <div style="background:#1e293b; height:10px; border-radius:5px; overflow:hidden;">
+              <div style="background:${tensionColor}; width:${tensionPct}%; height:100%; transition:width 0.2s ease; ${tensionPulse}"></div>
+            </div>
+          </div>
+
+          <!-- 3. Controle do Pescador -->
+          <div style="background:rgba(0,0,0,0.4); padding:8px 12px; border-radius:6px; border:1px solid rgba(255,255,255,0.05);">
+            <div style="display:flex; justify-content:space-between; font-size:11px; margin-bottom:4px;">
+              <span style="color:${controlColor}; font-weight:bold; ${controlPulse}">🎯 Controle da Carretilha: ${controlStatus}</span>
+              <span style="font-family:monospace; color:${controlColor}; font-weight:bold;">${controlPct} / 100%</span>
+            </div>
+            <div style="background:#1e293b; height:10px; border-radius:5px; overflow:hidden;">
+              <div style="background:${controlColor}; width:${controlPct}%; height:100%; transition:width 0.2s ease; ${controlPulse}"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 Ações Táticas da Luta -->
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap:8px;">
+          <button 
+            onclick="window.fishingAction('reel')"
+            style="padding:10px 8px; font-family:'Cinzel',serif; font-size:11px; font-weight:bold; background:linear-gradient(180deg,#2563eb,#1d4ed8); border:1px solid #93c5fd; color:#fff; border-radius:6px; cursor:pointer; text-align:center;"
+          >
+            🎣 Recolher (Reel)
+            <div style="font-size:9px; color:#cbd5e1; font-family:sans-serif; margin-top:2px; font-weight:normal;">+Controle, +Tensão</div>
+          </button>
+
+          <button 
+            onclick="window.fishingAction('yield')"
+            style="padding:10px 8px; font-family:'Cinzel',serif; font-size:11px; font-weight:bold; background:linear-gradient(180deg,#0891b2,#0e7490); border:1px solid #67e8f9; color:#fff; border-radius:6px; cursor:pointer; text-align:center;"
+          >
+            🌊 Ceder Linha (Yield)
+            <div style="font-size:9px; color:#cffafe; font-family:sans-serif; margin-top:2px; font-weight:normal;">-Tensão drástica, -Controle</div>
+          </button>
+
+          <button 
+            onclick="window.fishingAction('force')"
+            style="padding:10px 8px; font-family:'Cinzel',serif; font-size:11px; font-weight:bold; background:linear-gradient(180deg,#dc2626,#991b1b); border:1px solid #fca5a5; color:#fff; border-radius:6px; cursor:pointer; text-align:center;"
+          >
+            ⚡ Puxão Forte (Force)
+            <div style="font-size:9px; color:#fee2e2; font-family:sans-serif; margin-top:2px; font-weight:normal;">--Stamina, ++Tensão Alta!</div>
+          </button>
+
+          <button 
+            onclick="window.fishingAction('rest')"
+            style="padding:10px 8px; font-family:'Cinzel',serif; font-size:11px; font-weight:bold; background:linear-gradient(180deg,#059669,#047857); border:1px solid #6ee7b7; color:#fff; border-radius:6px; cursor:pointer; text-align:center;"
+          >
+            🧘 Estabilizar (Rest)
+            <div style="font-size:9px; color:#d1fae5; font-family:sans-serif; margin-top:2px; font-weight:normal;">-Tensão moderada</div>
+          </button>
+        </div>
+      </div>
+    `;
+  } else if (isFishingNow) {
     const elapsed = Date.now() - (fState.castStartTime || Date.now());
     const catchTime = activeZone.baseCatchTime || 4000;
     const isBiting = elapsed >= (catchTime * 0.5);
@@ -171,7 +290,7 @@ export function renderFishingUI(state) {
           ${isBiting ? '🌊🐟 💥 FISGOU!' : '🌊🎣 ... Aguardando ...'}
         </div>
         <div style="font-family:'Cinzel',serif; font-size:14px; font-weight:bold; color:${isBiting ? '#fde047' : '#93c5fd'}; margin-bottom:12px;">
-          ${isBiting ? 'A BOIA AFUNDOU! RECOLHA A LINHA AGORA!' : 'A linha repousa sobre a correnteza...'}
+          ${isBiting ? 'A BOIA AFUNDOU! INICIE A DISPUTA AGORA!' : 'A linha repousa sobre a correnteza...'}
         </div>
         <button 
           onclick="window.reelInFishingLine(1.0)"

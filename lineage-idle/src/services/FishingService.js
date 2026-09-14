@@ -1,10 +1,17 @@
 // FishingService.js — Motor Central de Pesca de Aden (Lineage II Style)
-import { FISHING_ZONES, FISH_CATALOG, RODS_CATALOG, BAIT_CATALOG, getFishingXpForLevel } from '../data/fishing.js';
+import { FISHING_ZONES, FISH_CATALOG, RODS_CATALOG, BAIT_CATALOG, FIGHT_PROFILES, getFishingXpForLevel } from '../data/fishing.js';
 import { FISHING_BALANCE, calculateCatchChance, rollFishRarity, calculateFishValue } from '../data/economy/fishingBalance.js';
 import { addToInventory, removeFromInventoryByItemId, getInventoryCount } from './InventoryService.js';
+import { LifeActivityCore } from './lifeActivities/LifeActivityCore.js';
+import { RewardEngine } from './lifeActivities/RewardEngine.js';
+import { resolveCanonicalResourceId } from './lifeActivities/ResourceDictionary.js';
 
 export const FishingService = {
   getFishingState(state) {
+    // Sincroniza e garante LifeActivities canônico
+    if (state) {
+      LifeActivityCore.getActivityState(state, 'fishing');
+    }
     if (!state.fishing) {
       state.fishing = {
         skillLevel: 1,
@@ -13,6 +20,7 @@ export const FishingService = {
         activeBait: null,
         activeZone: 'zone_talking_island',
         isFishing: false,
+        activeFight: null,
         castStartTime: 0,
         totalCaught: 0,
         fishLog: {},
@@ -43,6 +51,15 @@ export const FishingService = {
     return state.fishing;
   },
 
+  resolveZoneId(zoneId) {
+    if (!zoneId) return 'zone_talking_island';
+    if (FISHING_ZONES[zoneId]) return zoneId;
+    const stripped = String(zoneId).replace(/^(fish_|fishing_)/, '');
+    if (FISHING_ZONES[stripped]) return stripped;
+    if (FISHING_ZONES['zone_' + stripped]) return 'zone_' + stripped;
+    return null;
+  },
+
   getAvailableZones(state) {
     const playerLvl = Number(state?.level) || 1;
     return Object.values(FISHING_ZONES).filter(zone => playerLvl >= zone.minLevel);
@@ -50,7 +67,8 @@ export const FishingService = {
 
   selectZone(state, zoneId, callbacks = {}) {
     const fState = this.getFishingState(state);
-    const zone = FISHING_ZONES[zoneId];
+    const resolvedId = this.resolveZoneId(zoneId);
+    const zone = FISHING_ZONES[resolvedId];
     if (!zone) return false;
 
     const playerLvl = Number(state?.level) || 1;
@@ -59,7 +77,7 @@ export const FishingService = {
       return false;
     }
 
-    fState.activeZone = zoneId;
+    fState.activeZone = resolvedId;
     fState.isFishing = false;
 
     if (callbacks.log) callbacks.log(`📍 Você se deslocou para **${zone.name}** com suas tralhas de pesca.`, 'system');
@@ -189,14 +207,29 @@ export const FishingService = {
     return true;
   },
 
-  castLine(state, callbacks = {}) {
+  castLine(state, zoneIdOrCallback = {}, maybeCallbacks = {}) {
+    let callbacks = zoneIdOrCallback;
     const fState = this.getFishingState(state);
+    if (typeof zoneIdOrCallback === 'string') {
+      const resolved = this.resolveZoneId(zoneIdOrCallback);
+      fState.activeZone = resolved || zoneIdOrCallback;
+      callbacks = maybeCallbacks || {};
+    }
+    callbacks = callbacks || {};
 
     if (fState.isFishing) {
       return { success: false, reason: 'already_fishing' };
     }
 
-    const zoneId = fState.activeZone || 'zone_talking_island';
+    // Valida durabilidade da vara (regra estrita de quebra de ferramenta)
+    const currentRodKey = fState.rod || 'rod_none';
+    const currentDurability = fState.rodDurability[currentRodKey] ?? 0;
+    if (currentRodKey !== 'rod_none' && currentDurability <= 0) {
+      if (callbacks.log) callbacks.log(`⚠️ Sua vara de pesca quebrou ou está com 0 de durabilidade! Conserte-a no ferreiro para lançar a linha.`, 'warning');
+      return { success: false, reason: 'broken_tool' };
+    }
+
+    const zoneId = this.resolveZoneId(fState.activeZone) || 'zone_talking_island';
     const zone = FISHING_ZONES[zoneId];
     if (!zone) {
       if (callbacks.log) callbacks.log(`⚠️ Selecione uma zona de pesca primeiro.`, 'warning');
@@ -229,12 +262,8 @@ export const FishingService = {
     fState.baitInventory[fState.activeBait]--;
 
     // Consome durabilidade da vara se equipada
-    const currentRodKey = fState.rod || 'rod_none';
-    const currentDurability = fState.rodDurability[currentRodKey] || 0;
     if (currentDurability > 0) {
       fState.rodDurability[currentRodKey]--;
-    } else {
-      if (callbacks.log) callbacks.log(`⚠️ Sua vara está desgastada/quebrada! Penalidade de captura aplicada.`, 'warning');
     }
 
     fState.isFishing = true;
@@ -254,86 +283,208 @@ export const FishingService = {
       return { caught: false, reason: 'not_fishing' };
     }
 
-    fState.isFishing = false;
-    const zoneId = fState.activeZone || 'zone_talking_island';
-    const zone = FISHING_ZONES[zoneId] || FISHING_ZONES.zone_talking_island;
-    const rod = RODS_CATALOG[fState.rod] || RODS_CATALOG.rod_none;
-    const bait = BAIT_CATALOG[fState.activeBait] || null;
-
-    const isBrokenRod = (fState.rodDurability[fState.rod] || 0) <= 0;
-    const rodBonus = (rod.catchBonus - 1.0) * (isBrokenRod ? FISHING_BALANCE.BROKEN_ROD_CATCH_PENALTY : 1.0);
-    const baitBonus = bait ? (bait.catchBonus - 1.0) : 0;
-    const zoneDiffMod = -(zone.difficulty - 1) * 0.05;
-
-    const catchProbability = calculateCatchChance(fState.skillLevel, rodBonus, baitBonus, zoneDiffMod);
-    const roll = Math.random();
-
-    // Falha na captura
-    if (roll > catchProbability) {
-      if (callbacks.log) callbacks.log(`💨 O peixe deu um puxão brusco e escapou do anzol! Tente novamente.`, 'warning');
-      if (callbacks.updateAllUI) callbacks.updateAllUI();
-      if (callbacks.save) callbacks.save();
-      return { caught: false, reason: 'escaped' };
+    // Se já está numa luta ativa, delega para actionReel
+    if (fState.activeFight && fState.activeFight.status === 'fighting') {
+      return this.actionReel(state, callbacks);
     }
 
-    // Sucesso na captura: Rola a raridade
+    // Inicia a luta interativa com o peixe
+    return this.startFight(state, callbacks);
+  },
+
+  startFight(state, callbacks = {}) {
+    const fState = this.getFishingState(state);
+    if (!fState.isFishing) return { success: false, reason: 'not_fishing' };
+
+    const zoneId = fState.activeZone || 'zone_talking_island';
+    const zone = FISHING_ZONES[zoneId] || FISHING_ZONES.zone_talking_island;
+    const bait = BAIT_CATALOG[fState.activeBait] || null;
     const baitRarityBoost = bait ? bait.rarityBoost : 0;
     const rolledRarity = rollFishRarity(fState.skillLevel, baitRarityBoost, false);
 
-    // Filtra peixes da zona com essa raridade (fallback para qualquer peixe da zona se não houver match)
-    let candidateFishIds = zone.availableFish.filter(fId => {
-      const def = FISH_CATALOG[fId];
-      return def && def.rarity === rolledRarity;
-    });
-
-    if (candidateFishIds.length === 0) {
-      candidateFishIds = zone.availableFish;
-    }
+    let candidateFishIds = zone.availableFish.filter(fId => FISH_CATALOG[fId]?.rarity === rolledRarity);
+    if (candidateFishIds.length === 0) candidateFishIds = zone.availableFish;
 
     const chosenFishId = candidateFishIds[Math.floor(Math.random() * candidateFishIds.length)];
     const fishDef = FISH_CATALOG[chosenFishId] || FISH_CATALOG.fish_carp;
+    const profile = FIGHT_PROFILES[fishDef.fightProfile] || FIGHT_PROFILES.calm;
 
-    // Calcula peso realista
+    const baseStamina = fishDef.baseStamina || 50;
+    const maxStamina = Math.round(baseStamina * (profile.staminaMult || 1.0));
+
+    fState.activeFight = {
+      fishId: chosenFishId,
+      fishDef,
+      profile,
+      maxStamina,
+      fishStamina: maxStamina,
+      lineTension: 20,
+      playerControl: 50,
+      turns: 0,
+      status: 'fighting'
+    };
+
+    if (callbacks.log) {
+      callbacks.log(`🌊🎣 **PEIXE FISGADO!** Um **${fishDef.name}** [${profile.name}] mordeu a isca! Equilibre a tensão e esgote a stamina!`, 'rarity-epic');
+    }
+    if (callbacks.updateAllUI) callbacks.updateAllUI();
+    return { success: true, fight: fState.activeFight };
+  },
+
+  actionReel(state, callbacks = {}) {
+    const fState = this.getFishingState(state);
+    const fight = fState.activeFight;
+    if (!fight || fight.status !== 'fighting') return { success: false };
+
+    fight.playerControl = Math.min(100, fight.playerControl + 16);
+    fight.fishStamina = Math.max(0, fight.fishStamina - 12);
+    fight.lineTension += Math.round(18 * (fight.profile.tensionRate || 1.0));
+    fight.turns++;
+
+    return this._resolveFightTurn(state, fState, fight, 'Você recolheu a linha (+Controle, +Tensão).', callbacks);
+  },
+
+  actionYield(state, callbacks = {}) {
+    const fState = this.getFishingState(state);
+    const fight = fState.activeFight;
+    if (!fight || fight.status !== 'fighting') return { success: false };
+
+    fight.lineTension = Math.max(5, fight.lineTension - 32);
+    fight.playerControl = Math.max(0, fight.playerControl - 10);
+    fight.fishStamina = Math.min(fight.maxStamina, fight.fishStamina + Math.round(7 * (fight.profile.recoverRate || 1.0)));
+    fight.turns++;
+
+    return this._resolveFightTurn(state, fState, fight, 'Você cedeu linha para aliviar o freio (-Tensão, Peixe recuperou fôlego).', callbacks);
+  },
+
+  actionForce(state, callbacks = {}) {
+    const fState = this.getFishingState(state);
+    const fight = fState.activeFight;
+    if (!fight || fight.status !== 'fighting') return { success: false };
+
+    fight.fishStamina = Math.max(0, fight.fishStamina - 26);
+    fight.playerControl = Math.min(100, fight.playerControl + 22);
+    fight.lineTension += Math.round(42 * (fight.profile.tensionRate || 1.0));
+    fight.turns++;
+
+    return this._resolveFightTurn(state, fState, fight, '⚡ PUXÃO FORTE! Dano massivo na stamina do peixe, mas a linha esticou ao limite!', callbacks);
+  },
+
+  actionRest(state, callbacks = {}) {
+    const fState = this.getFishingState(state);
+    const fight = fState.activeFight;
+    if (!fight || fight.status !== 'fighting') return { success: false };
+
+    fight.lineTension = Math.max(10, fight.lineTension - 18);
+    fight.fishStamina = Math.min(fight.maxStamina, fight.fishStamina + 3);
+    fight.turns++;
+
+    return this._resolveFightTurn(state, fState, fight, 'Você estabilizou a postura (-Tensão moderada).', callbacks);
+  },
+
+  _resolveFightTurn(state, fState, fight, actionMsg, callbacks = {}) {
+    const log = callbacks.log || (() => {});
+    const floatText = callbacks.floatText || (() => {});
+
+    // Fish AI reaction
+    const profile = fight.profile;
+    const isBurst = Math.random() < (profile.burstChance || 0.15);
+    if (isBurst) {
+      const burstTension = Math.round(16 * (profile.tensionRate || 1.0));
+      fight.lineTension += burstTension;
+      log(`⚠️ O peixe deu uma arrancada violenta! (+${burstTension}% Tensão)`, 'warning');
+      if (floatText) floatText('ARRANCADA DO PEIXE!', 'float-damage');
+    } else {
+      fight.playerControl = Math.max(0, fight.playerControl - 4);
+    }
+
+    // 1. Checa quebra de linha
+    if (fight.lineTension >= 100) {
+      fight.status = 'line_broken';
+      fState.isFishing = false;
+      fState.activeFight = null;
+      log('💥 **A LINHA ARREBENTOU!** A tensão passou do limite suportado. O peixe escapou com o anzol!', 'error');
+      if (floatText) floatText('💥 LINHA ARREBENTOU!', 'float-damage');
+      LifeActivityCore.consumeDurability(state, 'fishing', callbacks);
+      if (callbacks.updateAllUI) callbacks.updateAllUI();
+      if (callbacks.save) callbacks.save();
+      return { status: 'line_broken', message: 'A linha arrebentou!' };
+    }
+
+    // 2. Checa fuga do peixe por perda de controle
+    if (fight.playerControl <= 0) {
+      fight.status = 'fish_escaped';
+      fState.isFishing = false;
+      fState.activeFight = null;
+      log('💨 **O PEIXE ESCAPOU!** Você perdeu o controle da carretilha e o peixe se desvencilhou.', 'warning');
+      if (floatText) floatText('💨 PEIXE ESCAPOU!', 'float-miss');
+      if (callbacks.updateAllUI) callbacks.updateAllUI();
+      if (callbacks.save) callbacks.save();
+      return { status: 'fish_escaped', message: 'O peixe escapou!' };
+    }
+
+    // 3. Checa captura com sucesso
+    if (fight.fishStamina <= 0) {
+      fight.status = 'caught';
+      fState.isFishing = false;
+      fState.activeFight = null;
+      return this._finalizeFightCatch(state, fState, fight, callbacks);
+    }
+
+    if (callbacks.updateAllUI) callbacks.updateAllUI();
+    return { status: 'fighting', message: actionMsg, fight };
+  },
+
+  _finalizeFightCatch(state, fState, fight, callbacks = {}) {
+    const log = callbacks.log || (() => {});
+    const floatText = callbacks.floatText || (() => {});
+    const fishDef = fight.fishDef;
+
+    // Consome durabilidade através do LifeActivityCore
+    LifeActivityCore.consumeDurability(state, 'fishing', callbacks);
+
+    // Rola qualidade e tamanho via RewardEngine
+    const quality = RewardEngine.rollQuality(fState.skillLevel);
+    const size = RewardEngine.rollFishSize();
+
+    // Calcula peso realista modulado pelo tamanho
     const weightMin = fishDef.baseWeight?.min || 0.5;
     const weightMax = fishDef.baseWeight?.max || 2.0;
-    const rolledWeight = Number((weightMin + Math.random() * (weightMax - weightMin)).toFixed(2));
+    const baseW = weightMin + Math.random() * (weightMax - weightMin);
+    const finalWeight = Number((baseW * size.weightMult).toFixed(2));
 
-    // XP de pesca com bônus de timing perfeito
-    const isPerfect = timingAccuracy >= 0.90;
-    const xpMult = isPerfect ? FISHING_BALANCE.PERFECT_CATCH_BONUS : 1.0;
-    const xpEarned = Math.floor(fishDef.xpReward * xpMult);
+    // Concede XP modulado
+    const xpBase = fishDef.xpReward || 20;
+    const finalXp = Math.round(xpBase * quality.mult * size.valueMult);
+    LifeActivityCore.addXp(state, 'fishing', finalXp, callbacks);
 
-    fState.skillXp += xpEarned;
     fState.totalCaught = (fState.totalCaught || 0) + 1;
-    fState.fishLog[chosenFishId] = (fState.fishLog[chosenFishId] || 0) + 1;
+    fState.fishLog = fState.fishLog || {};
+    fState.fishLog[fishDef.id] = (fState.fishLog[fishDef.id] || 0) + 1;
 
-    // Adiciona o peixe ao inventário canônico de Aden
-    addToInventory(state, chosenFishId, 1, fishDef.rarity, false, callbacks, true);
+    // Adiciona ao inventário
+    addToInventory(state, fishDef.id, 1, fishDef.rarity, false, callbacks, true);
 
-    const leveledUp = this._checkLevelUp(state, fState, callbacks);
+    // Registra no Codex
+    LifeActivityCore.recordCodexDiscovery(state, 'fishing', fishDef.id);
 
     const rarityClass = fishDef.rarity === 'legendary' ? 'rarity-legendary'
       : fishDef.rarity === 'epic' ? 'rarity-epic'
-      : fishDef.rarity === 'rare' ? 'rarity-rare'
-      : 'loot';
+      : fishDef.rarity === 'rare' ? 'rarity-rare' : 'loot';
 
-    if (callbacks.log) {
-      const perfectTag = isPerfect ? ' 🎯 [FISGADA PERFEITA!]' : '';
-      callbacks.log(`🎣 Pescou **${fishDef.name}** (${rolledWeight}kg)${perfectTag}! (+${xpEarned} XP de Pesca).`, rarityClass);
-    }
-    if (callbacks.floatText) {
-      callbacks.floatText(`+1 ${fishDef.icon} ${fishDef.name}!`, isPerfect ? 'float-crit' : 'float-gold');
-    }
+    log(`🎣 **CAPTURA GLORIOSA!** Pescou **${fishDef.name}** [${quality.name} · ${size.name}] (${finalWeight}kg)! (+${finalXp} XP de Pesca).`, rarityClass);
+    if (floatText) floatText(`+1 ${fishDef.icon} ${fishDef.name}!`, 'float-crit');
 
     if (callbacks.updateAllUI) callbacks.updateAllUI();
     if (callbacks.save) callbacks.save();
 
     return {
-      caught: true,
+      status: 'caught',
       fish: fishDef,
-      weight: rolledWeight,
-      xpGained: xpEarned,
-      leveledUp
+      quality,
+      size,
+      weight: finalWeight,
+      xpGained: finalXp
     };
   },
 
@@ -393,14 +544,15 @@ export const FishingService = {
       // Consome 1 isca
       fState.baitInventory[fState.activeBait]--;
 
-      // Consome 1 durabilidade da vara
-      const currentRodKey = fState.rod || 'rod_none';
-      if ((fState.rodDurability[currentRodKey] || 0) > 0) {
-        fState.rodDurability[currentRodKey]--;
+      // Consome durabilidade através do LifeActivityCore
+      const duraRes = LifeActivityCore.consumeDurability(state, 'fishing', callbacks);
+      if (duraRes.broken) {
+        fState.autoFishing = false;
+        break;
       }
 
       const bait = BAIT_CATALOG[fState.activeBait] || null;
-      const isBrokenRod = (fState.rodDurability[currentRodKey] || 0) <= 0;
+      const isBrokenRod = (fState.rodDurability[fState.rod || 'rod_none'] || 0) <= 0;
       const rodBonus = (rod.catchBonus - 1.0) * (isBrokenRod ? FISHING_BALANCE.BROKEN_ROD_CATCH_PENALTY : 1.0);
       const baitBonus = bait ? (bait.catchBonus - 1.0) : 0;
       const zoneDiffMod = -(zone.difficulty - 1) * 0.05;
@@ -458,13 +610,14 @@ export const FishingService = {
       fState.baitInventory[baitKey]--;
 
       // Consome durabilidade
-      const currentRodKey = fState.rod || 'rod_none';
-      if ((fState.rodDurability[currentRodKey] || 0) > 0) {
-        fState.rodDurability[currentRodKey]--;
+      const duraRes = LifeActivityCore.consumeDurability(state, 'fishing', callbacks);
+      if (duraRes.broken) {
+        fState.autoFishing = false;
+        break;
       }
 
       const bait = BAIT_CATALOG[baitKey];
-      const isBrokenRod = (fState.rodDurability[currentRodKey] || 0) <= 0;
+      const isBrokenRod = (fState.rodDurability[fState.rod || 'rod_none'] || 0) <= 0;
       const effRodBonus = rodBonus * (isBrokenRod ? FISHING_BALANCE.BROKEN_ROD_CATCH_PENALTY : 1.0);
       const baitBonus = bait ? (bait.catchBonus - 1.0) : 0;
       const zoneDiffMod = -(zone.difficulty - 1) * 0.05;
@@ -518,9 +671,9 @@ export const FishingService = {
     // Remove os peixes do inventário
     removeFromInventoryByItemId(state, fishId, countToExchange);
 
-    // Adiciona o material de recompensa
-    const rewardMatId = fish.materialReward;
-    addToInventory(state, rewardMatId, packages, 'common', false, callbacks, true);
+    // Adiciona o material de recompensa canônico
+    const canonicalMatId = resolveCanonicalResourceId(fish.materialReward);
+    addToInventory(state, canonicalMatId, packages, 'common', false, callbacks, true);
 
     if (callbacks.log) {
       callbacks.log(`📦 Entregou **${countToExchange}x ${fish.name}** e recebeu **${packages}x ${fish.materialName}** para sua Forja!`, 'rarity-legendary');
