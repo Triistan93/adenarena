@@ -232,6 +232,7 @@ import {
 } from './src/services/QuestService.js';
 
 import {
+  getTowerFloorDef,
   getTowerFloorDef as serviceGetTowerFloorDef,
   challengeTowerFloor as serviceChallengeTowerFloor,
   completeTowerFloor as serviceCompleteTowerFloor,
@@ -9068,6 +9069,7 @@ export function init() {
     window.unlockPremiumPass = unlockPremiumPass;
     window.challengeTowerFloor = challengeTowerFloor;
     window.sweepTowerDaily = sweepTowerDaily;
+    window.getTowerFloorDef = getTowerFloorDef;
     window.checkDailyReset = checkDailyReset;
     window.checkQuestProgress = checkQuestProgress;
     window.dissolveItem = (uid) => serviceDissolveItem(state, uid, { log, updateAllUI, save });
