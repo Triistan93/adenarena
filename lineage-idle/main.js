@@ -3299,7 +3299,11 @@ function updateQuestsUI() {
 }
 
 function renderBattlePassUI() {
-  if (!state.battlePass) state.battlePass = { xp: 0, claimedFree: [], claimedPremium: [], unlockedPremium: false };
+  if (!state.battlePass || typeof state.battlePass !== 'object') state.battlePass = {};
+  if (!Array.isArray(state.battlePass.claimedFree)) state.battlePass.claimedFree = [];
+  if (!Array.isArray(state.battlePass.claimedPremium)) state.battlePass.claimedPremium = [];
+  if (state.battlePass.unlockedPremium === undefined) state.battlePass.unlockedPremium = false;
+  if (typeof state.battlePass.xp !== 'number') state.battlePass.xp = 0;
 
   const currentXp = state.battlePass.xp || 0;
   let currentLvl = 1;
@@ -3348,8 +3352,8 @@ function renderBattlePassUI() {
   if (trackList) {
     trackList.innerHTML = BATTLE_PASS_TIERS.map(tier => {
       const isUnlocked = currentXp >= tier.reqXp;
-      const freeClaimed = state.battlePass.claimedFree.includes(tier.level);
-      const premClaimed = state.battlePass.claimedPremium.includes(tier.level);
+      const freeClaimed = Array.isArray(state.battlePass.claimedFree) && state.battlePass.claimedFree.includes(tier.level);
+      const premClaimed = Array.isArray(state.battlePass.claimedPremium) && state.battlePass.claimedPremium.includes(tier.level);
 
       const freeLabel = freeClaimed ? '✓' : (isUnlocked ? 'Reclamar' : 'Tranca');
       const premLabel = premClaimed ? '✓' : (isUnlocked && state.battlePass.unlockedPremium ? 'Reclamar' : (state.battlePass.unlockedPremium ? 'Tranca' : '👑 R$ 15'));

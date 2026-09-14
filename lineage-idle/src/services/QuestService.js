@@ -158,7 +158,11 @@ export function unlockPremiumPass(state, callbacks = {}) {
  * @param {Object} [callbacks]
  */
 export function claimPassReward(state, tierLevel, passType = 'free', callbacks = {}) {
-  state.battlePass = state.battlePass || { xp: 0, claimedFree: [], claimedPremium: [], unlockedPremium: false };
+  state.battlePass = state.battlePass && typeof state.battlePass === 'object' ? state.battlePass : {};
+  if (!Array.isArray(state.battlePass.claimedFree)) state.battlePass.claimedFree = [];
+  if (!Array.isArray(state.battlePass.claimedPremium)) state.battlePass.claimedPremium = [];
+  if (state.battlePass.unlockedPremium === undefined) state.battlePass.unlockedPremium = false;
+  if (typeof state.battlePass.xp !== 'number') state.battlePass.xp = 0;
   const tier = BATTLE_PASS_TIERS.find(t => t.level === tierLevel);
   if (!tier) return;
 

@@ -15,6 +15,7 @@ export const DEFAULT_STATE = () => ({
   characterId: null,
   accountId: null,
   ownerUid: null,
+  createdAt: 0,
   entityType: 'player',
   playerType: 'real',
   isDiscoverable: true,
@@ -409,7 +410,12 @@ export function loadState() {
     currentState.mainClassData = data.mainClassData || null;
 
     currentState.quests = data.quests && typeof data.quests === 'object' ? data.quests : { progress: {}, claimed: [], lastDailyReset: 0, lastWeeklyReset: 0 };
-    currentState.battlePass = data.battlePass && typeof data.battlePass === 'object' ? data.battlePass : { xp: 0, claimedFree: [], claimedPremium: [], unlockedPremium: false };
+    currentState.battlePass = data.battlePass && typeof data.battlePass === 'object' ? data.battlePass : {};
+    if (!Array.isArray(currentState.battlePass.claimedFree)) currentState.battlePass.claimedFree = [];
+    if (!Array.isArray(currentState.battlePass.claimedPremium)) currentState.battlePass.claimedPremium = [];
+    if (currentState.battlePass.unlockedPremium === undefined) currentState.battlePass.unlockedPremium = false;
+    if (typeof currentState.battlePass.xp !== 'number') currentState.battlePass.xp = 0;
+    currentState.createdAt = Number(data.createdAt) || (currentState.createdAt || Date.now());
     currentState.dailyRewards = data.dailyRewards && typeof data.dailyRewards === 'object' ? data.dailyRewards : { currentDay: 1, claimedDays: [], lastClaimDate: '', streak: 0, totalClaims: 0 };
     currentState.tower = data.tower && typeof data.tower === 'object' ? data.tower : { highestFloor: 0, currentFloor: 1, lastSweepTime: 0 };
     currentState.bonusInventorySlots = Number(data.bonusInventorySlots) || 0;

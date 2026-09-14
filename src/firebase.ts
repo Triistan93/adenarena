@@ -271,7 +271,7 @@ export async function savePlayerStateToCloud(userId: string, stateData: any, imm
       // 2. Grava na entidade canônica characters (Gate 2 & 4)
       try {
         const charRef = doc(db, 'characters', charId);
-        await setDoc(charRef, {
+        const charPayload: any = {
           characterId: charId,
           accountId: accId,
           ownerUid: userId,
@@ -291,9 +291,12 @@ export async function savePlayerStateToCloud(userId: string, stateData: any, imm
           topWeaponGlow,
           statsSnapshot: { hp: maxHp, pAtk, mAtk, pDef, mDef, crit: Number(stats.crit) || 10 },
           lastOnlineAt: Date.now(),
-          updatedAt: serverTimestamp(),
-          createdAt: cleanState.createdAt || Date.now()
-        }, { merge: true });
+          updatedAt: serverTimestamp()
+        };
+        if (cleanState.createdAt) {
+          charPayload.createdAt = cleanState.createdAt;
+        }
+        await setDoc(charRef, charPayload, { merge: true });
 
         // 3. Atualiza presença online (Gate 1: Existência != Presença)
         const presenceRef = doc(db, 'presence', charId);

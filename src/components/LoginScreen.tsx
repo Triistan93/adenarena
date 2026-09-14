@@ -268,6 +268,7 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
       characterId: reservedCharId,
       accountId: reservedAccId,
       ownerUid: user ? user.uid : null,
+      createdAt: Date.now(),
       entityType: 'player',
       playerType: 'real',
       status: 'active',
