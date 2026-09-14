@@ -211,7 +211,11 @@ export const DEFAULT_STATE = () => ({
     enchant: 1,
     book: 1
   },
-  serverSeason: 1,   // Stage/Crônica ativa — controlada pelo Admin Panel
+  serverSeason: (typeof localStorage !== 'undefined' && Number(localStorage.getItem('aden_server_season'))) || 1,   // Stage/Crônica ativa — controlada pelo Admin Panel
+  serverMaxLevel: (typeof localStorage !== 'undefined' && Number(localStorage.getItem('aden_server_cap'))) || 40,
+  levelCap: (typeof localStorage !== 'undefined' && Number(localStorage.getItem('aden_server_cap'))) || 40,
+  serverCap: (typeof localStorage !== 'undefined' && Number(localStorage.getItem('aden_server_cap'))) || 40,
+  adminUnlockedAll: (typeof localStorage !== 'undefined' && localStorage.getItem('aden_admin_unlock_all') === 'true') || false,
   _saveVersion: 0,   // Número sequencial de transação do save
 });
 
@@ -243,6 +247,20 @@ export function saveState(manual = false, forceCloud = false) {
   currentState.lastSaveTime = Date.now();
   currentState._saveVersion = (Number(currentState._saveVersion) || 0) + 1;
   sanitizeGameState(currentState);
+
+  // Sincroniza chaves dedicadas de controle administrativo de alta autoridade
+  try {
+    if (currentState.serverSeason) {
+      localStorage.setItem('aden_server_season', String(currentState.serverSeason));
+      localStorage.setItem('aden_admin_season', String(currentState.serverSeason));
+    }
+    if (currentState.serverMaxLevel) {
+      localStorage.setItem('aden_server_cap', String(currentState.serverMaxLevel));
+    }
+    if (currentState.adminUnlockedAll) {
+      localStorage.setItem('aden_admin_unlock_all', 'true');
+    }
+  } catch (_) {}
 
   const data = {
     ...currentState,
@@ -372,6 +390,26 @@ export function loadState() {
       currentState.lifeActivities.hunting = currentState.lifeActivities.hunting || def.lifeActivities.hunting;
       currentState.lifeActivities.hunting.level = data.hunting.skillLevel || currentState.lifeActivities.hunting.level;
       currentState.lifeActivities.hunting.xp = data.hunting.skillXp || currentState.lifeActivities.hunting.xp;
+    }
+
+    // ─── Autoridade Administrativa Absoluta (Seasons & Caps) ───
+    if (typeof localStorage !== 'undefined') {
+      const savedAdminSeason = Number(localStorage.getItem('aden_server_season') || localStorage.getItem('aden_admin_season'));
+      if (savedAdminSeason >= 1) {
+        currentState.serverSeason = savedAdminSeason;
+        if (typeof window !== 'undefined') window.__serverSeason = savedAdminSeason;
+      }
+      const savedAdminCap = Number(localStorage.getItem('aden_server_cap'));
+      if (savedAdminCap >= 40) {
+        currentState.serverMaxLevel = savedAdminCap;
+        currentState.levelCap = savedAdminCap;
+        currentState.serverCap = savedAdminCap;
+        if (typeof window !== 'undefined') window.globalServerCap = savedAdminCap;
+      }
+      if (localStorage.getItem('aden_admin_unlock_all') === 'true') {
+        currentState.adminUnlockedAll = true;
+        if (typeof window !== 'undefined') window.__adminUnlockedAll = true;
+      }
     }
 
     // Normalização de Equipamentos (20 Slots Canônicos com chest e shield)

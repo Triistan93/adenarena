@@ -444,10 +444,26 @@ function load() {
     consolidateInventoryStacks(state);
     checkQuestResets();
     updateSagaProgress(true);
-    // Restaura o stage da temporada salvo no estado do servidor
-    if (state.serverSeason) {
-      window.__serverSeason = Number(state.serverSeason);
+    // Restaura o stage da temporada e caps salvos com autoridade absoluta
+    const savedSeason = (typeof localStorage !== 'undefined' && Number(localStorage.getItem('aden_server_season'))) || Number(state.serverSeason) || 1;
+    state.serverSeason = savedSeason;
+    window.__serverSeason = savedSeason;
+
+    const savedCap = (typeof localStorage !== 'undefined' && Number(localStorage.getItem('aden_server_cap'))) || Number(state.serverMaxLevel) || Number(state.levelCap) || 60;
+    state.serverMaxLevel = savedCap;
+    state.levelCap = savedCap;
+    state.serverCap = savedCap;
+    window.globalServerCap = savedCap;
+
+    if ((typeof localStorage !== 'undefined' && localStorage.getItem('aden_admin_unlock_all') === 'true') || state.adminUnlockedAll) {
+      state.adminUnlockedAll = true;
+      window.__adminUnlockedAll = true;
     }
+
+    try {
+      updateSeasonTabBadges(ROOT);
+      updateTabVisibilityByLevel(state);
+    } catch (_) {}
     log('✨ Atualização de versão carregada com sucesso! Seu progresso e itens foram 100% mantidos.', 'rarity-legendary');
     if (state.godMode) {
       log('🛡️ [AVISO ADMIN] God Mode (Invencibilidade) está ATIVADO neste save! Digite //god no chat para desativar.', 'warning');
@@ -6189,16 +6205,24 @@ function spawnAdminItem(itemId, qty = 1, rarity = 'common', enchant = 0, affixCh
   log(`🎁 [Admin] ${qty}x ${foundationStr}${enchantStr}${def.name} [${rarity}] gerado(s) na mochila!`, 'rarity-legendary');
   floatText('🎁 ITEM GERADO!', 'float-jackpot');
   updateAllUI();
-  save();
+  save(true, true);
 }
 
 // calcSpForLevel importado do LevelEngine.js (Sprint 2)
 
 
 function applyAdminLevelChange(targetLevel) {
-  const newLvl = Math.max(1, Math.min(100, targetLevel));
+  const newLvl = Math.max(1, Math.min(120, targetLevel));
   state.level = newLvl;
   state.xp = getTotalXP(newLvl - 1);
+
+  if (newLvl > (state.serverMaxLevel || 40)) {
+    state.serverMaxLevel = Math.max(newLvl, 60);
+    state.levelCap = state.serverMaxLevel;
+    state.serverCap = state.serverMaxLevel;
+    window.globalServerCap = state.serverMaxLevel;
+    if (typeof localStorage !== 'undefined') localStorage.setItem('aden_server_cap', String(state.serverMaxLevel));
+  }
 
   // 1. Concede SP proporcional ao nível + 1000 SP de bônus para testes de habilidades
   const cumulativeSp = calcSpForLevel(newLvl);
@@ -6234,7 +6258,7 @@ function applyAdminLevelChange(targetLevel) {
   updateQuestsUI();
   renderBattlePassUI();
   updateAllUI();
-  save();
+  save(true, true);
 }
 
 function handleChatSubmit(inputStr) {
@@ -6258,8 +6282,29 @@ function handleChatSubmit(inputStr) {
   // Direct Admin Cheats
   if (lower.startsWith('//level ')) {
     const lvl = parseInt(lower.replace('//level ', '').trim());
-    if (!isNaN(lvl) && lvl > 0 && lvl <= 100) {
+    if (!isNaN(lvl) && lvl > 0 && lvl <= 120) {
       applyAdminLevelChange(lvl);
+    }
+    return;
+  }
+
+  if (lower.startsWith('//season ')) {
+    const s = parseInt(lower.replace('//season ', '').trim());
+    if (!isNaN(s) && s >= 1 && s <= 4) {
+      setServerSeason(s);
+    }
+    return;
+  }
+
+  if (lower === '//unlockall' || lower === '//allseasons' || lower === '//unlockallseasons') {
+    unlockAllSeasons();
+    return;
+  }
+
+  if (lower.startsWith('//cap ')) {
+    const c = parseInt(lower.replace('//cap ', '').trim());
+    if (!isNaN(c) && c >= 1 && c <= 120) {
+      setServerLevelCap(c);
     }
     return;
   }
@@ -6271,7 +6316,7 @@ function handleChatSubmit(inputStr) {
       triggerQuestEvent('gold', amt);
       log(`🪙 [Admin] +${amt.toLocaleString()} Gold concedido!`, 'rarity-legendary');
       updateAllUI();
-      save();
+      save(true, true);
     }
     return;
   }
@@ -6283,7 +6328,15 @@ function handleChatSubmit(inputStr) {
       log(`✦ [Admin] +${amt.toLocaleString()} SP concedido!`, 'rarity-legendary');
       updateSkillUI();
       updateAllUI();
-      save();
+      save(true, true);
+    }
+    return;
+  }
+
+  if (lower.startsWith('//ac ')) {
+    const amt = parseInt(lower.replace('//ac ', '').trim());
+    if (!isNaN(amt)) {
+      addAdminAC(amt);
     }
     return;
   }
@@ -6291,6 +6344,9 @@ function handleChatSubmit(inputStr) {
   if (lower === '//god') {
     state.godMode = !state.godMode;
     log(`🛡️ [Admin] God Mode (Invencibilidade): ${state.godMode ? 'ATIVADO' : 'DESATIVADO'}`, 'rarity-legendary');
+    if (typeof floatText === 'function') floatText(`🛡️ GOD MODE: ${state.godMode ? 'ON' : 'OFF'}`, 'float-jackpot');
+    updateAllUI();
+    save(true, true);
     return;
   }
 
@@ -6346,9 +6402,14 @@ function setServerRate(key, val, silent = false) {
     log(`⚡ [Admin] ${title} atualizada para **x${num}**! Efeito imediato aplicado.`, 'rarity-legendary');
     if (typeof floatText === 'function') floatText(`⚡ ${title.toUpperCase()}: x${num}!`, 'float-jackpot');
   }
+  try {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem('aden_server_rates', JSON.stringify(state.serverRates));
+    }
+  } catch (_) {}
   syncAdminRatesUI();
   updateAllUI();
-  save();
+  save(true, true);
 }
 
 function applyServerRatePreset(presetKey) {
@@ -6363,9 +6424,14 @@ function applyServerRatePreset(presetKey) {
   log(`🚀 [Admin] Preset aplicado: **${preset.name}**! Todas as rates foram reajustadas ao vivo.`, 'rarity-legendary');
   if (typeof floatText === 'function') floatText(`🚀 PRESET ${presetKey.toUpperCase()} ATIVADO!`, 'float-jackpot');
   
+  try {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem('aden_server_rates', JSON.stringify(state.serverRates));
+    }
+  } catch (_) {}
   syncAdminRatesUI();
   updateAllUI();
-  save();
+  save(true, true);
 }
 
 function syncAdminRatesUI() {
@@ -6422,16 +6488,18 @@ function openAdminModal() {
   populateAdminItemSelect('');
   syncAdminRatesUI();
 
-  // Restaura o stage salvo no state para garantir visibilidade correta das abas
-  const savedSeason = Number(state.serverSeason) || 1;
+  // Restaura o stage salvo com prioridade absoluta
+  const savedSeason = (typeof localStorage !== 'undefined' && Number(localStorage.getItem('aden_server_season'))) || Number(state.serverSeason) || 1;
+  state.serverSeason = savedSeason;
   window.__serverSeason = savedSeason;
+  if ((typeof localStorage !== 'undefined' && localStorage.getItem('aden_admin_unlock_all') === 'true') || state.adminUnlockedAll) {
+    state.adminUnlockedAll = true;
+    window.__adminUnlockedAll = true;
+  }
   updateSeasonTabBadges(ROOT);
+  updateTabVisibilityByLevel(state);
 
-  const currentCap = state.serverMaxLevel || state.levelCap || 60;
-  const CAP_TO_SEASON = { 40: 1, 60: 1, 75: 2, 85: 3, 100: 3, 120: 4 };
-  const currentStage = CAP_TO_SEASON[currentCap] || savedSeason;
-  const capBadge = el('admin-current-cap-badge');
-  if (capBadge) capBadge.textContent = `Cap: Nível ${currentCap} | Stage ${currentStage} ativo`;
+  syncAdminSeasonAndCapUI();
   modal.classList.add('active');
 }
 
@@ -6504,7 +6572,7 @@ function addAdminXP(amount) {
   log(`🌟 [Admin] +${amt.toLocaleString()} XP concedido(s)! (Nível atual: ${state.level})`, 'rarity-legendary');
   floatText(`🌟 +${amt.toLocaleString()} XP!`, 'float-jackpot');
   updateAllUI();
-  save();
+  save(true, true);
 }
 
 function addAdminGold(amount) {
@@ -6515,7 +6583,7 @@ function addAdminGold(amount) {
   log(`🪙 [Admin] +${amt.toLocaleString()} Adena concedido(s)!`, 'rarity-legendary');
   floatText(`🪙 +${amt.toLocaleString()} Adena!`, 'float-gold');
   updateAllUI();
-  save();
+  save(true, true);
 }
 
 function addAdminSP(amount) {
@@ -6526,7 +6594,7 @@ function addAdminSP(amount) {
   floatText(`✦ +${amt.toLocaleString()} SP!`, 'float-jackpot');
   updateSkillUI();
   updateAllUI();
-  save();
+  save(true, true);
 }
 
 function addAdminAC(amount) {
@@ -6536,7 +6604,7 @@ function addAdminAC(amount) {
   log(`🪙 [Admin] +${amt.toLocaleString()} Aden Coins (AC) concedida(s)!`, 'rarity-legendary');
   floatText(`🪙 +${amt.toLocaleString()} AC!`, 'float-gold');
   updateAllUI();
-  save();
+  save(true, true);
 }
 
 function adminUnlockSagas() {
@@ -6548,7 +6616,7 @@ function adminUnlockSagas() {
   log('📜 [Admin] Todas as Sagas foram DESBLOQUEADAS!', 'rarity-legendary');
   floatText('📜 SAGAS DESBLOQUEADAS', 'float-jackpot');
   updateAllUI();
-  save();
+  save(true, true);
 }
 
 function adminCompleteQuest() {
@@ -6561,7 +6629,7 @@ function adminCompleteQuest() {
     floatText('✅ MISSÕES CONCLUÍDAS', 'float-jackpot');
     updateQuestUI();
     updateAllUI();
-    save();
+    save(true, true);
   } else {
     log('Nenhuma missão ativa encontrada para concluir.', 'system');
   }
@@ -6575,7 +6643,7 @@ function adminMaxCraft() {
   log('⚒️ [Admin] Forja no Level Máximo (50) + 100 Cargas de Random Craft!', 'rarity-legendary');
   floatText('⚒️ CRAFT MÁXIMO', 'float-jackpot');
   updateAllUI();
-  save();
+  save(true, true);
 }
 
 function adminMaxSkills() {
@@ -6589,7 +6657,7 @@ function adminMaxSkills() {
   floatText('📖 SKILLS MÁXIMAS', 'float-jackpot');
   updateSkillUI();
   updateAllUI();
-  save();
+  save(true, true);
 }
 
 function adminKillMonster() {
@@ -6603,57 +6671,182 @@ function adminKillMonster() {
   }
 }
 
+function syncAdminSeasonAndCapUI() {
+  const isUnlockedAll = typeof window !== 'undefined' && (window.__adminUnlockedAll || (typeof localStorage !== 'undefined' && localStorage.getItem('aden_admin_unlock_all') === 'true') || state.adminUnlockedAll);
+  const curSeason = isUnlockedAll ? 4 : (Number(state.serverSeason) || 1);
+  const curCap = Number(state.serverMaxLevel) || Number(state.levelCap) || 60;
+
+  const seasonBadge = el('admin-current-season-badge');
+  if (seasonBadge) {
+    if (isUnlockedAll) {
+      seasonBadge.textContent = 'Crônicas: TODAS DESBLOQUEADAS (God Mode)';
+      seasonBadge.style.color = '#34d399';
+      seasonBadge.style.borderColor = '#34d399';
+      seasonBadge.style.background = 'rgba(16,185,129,0.2)';
+    } else {
+      const titles = {
+        1: 'Crônica I: O Despertar (Lv.40)',
+        2: 'Crônica II: Clãs & Castelos (Lv.75)',
+        3: 'Crônica III: Sete Selos (Lv.85)',
+        4: 'Crônica IV: High Five (Lv.120)'
+      };
+      seasonBadge.textContent = `Crônica Ativa: ${titles[curSeason] || 'Stage ' + curSeason}`;
+      seasonBadge.style.color = '#38bdf8';
+      seasonBadge.style.borderColor = '#38bdf8';
+      seasonBadge.style.background = 'rgba(56,189,248,0.2)';
+    }
+  }
+
+  const capBadge = el('admin-current-cap-badge');
+  if (capBadge) {
+    capBadge.textContent = `Cap Atual: Nível ${curCap}`;
+  }
+
+  // Atualiza destaque visual dos botões de temporada
+  qsa('[data-admin-cmd^="setseason"]').forEach(btn => {
+    const sNum = parseInt(btn.dataset.adminCmd.replace('setseason', ''));
+    if (!isUnlockedAll && sNum === curSeason) {
+      btn.classList.add('primary');
+      btn.style.boxShadow = '0 0 8px rgba(56,189,248,0.5)';
+    } else {
+      btn.classList.remove('primary');
+      btn.style.boxShadow = '';
+    }
+  });
+
+  const unlockAllBtn = qs('[data-admin-cmd="unlockallseasons"]');
+  if (unlockAllBtn) {
+    if (isUnlockedAll) {
+      unlockAllBtn.style.boxShadow = '0 0 12px rgba(52,211,153,0.8)';
+      unlockAllBtn.textContent = '🌟 TODAS AS CRÔNICAS & ABAS ESTÃO DESBLOQUEADAS (ATIVO)';
+    } else {
+      unlockAllBtn.style.boxShadow = '';
+      unlockAllBtn.textContent = '🔓 Desbloquear TODAS as Crônicas & Abas (100% Liberado / Modo Teste)';
+    }
+  }
+
+  // Atualiza destaque visual dos botões de cap
+  qsa('[data-admin-cmd^="setcap"]').forEach(btn => {
+    const cNum = parseInt(btn.dataset.adminCmd.replace('setcap', ''));
+    if (cNum === curCap) {
+      btn.classList.add('primary');
+    } else {
+      btn.classList.remove('primary');
+    }
+  });
+}
+
 function setServerSeason(seasonId) {
   const sid = Number(seasonId) || 1;
   state.serverSeason = sid;
+  state.adminUnlockedAll = false;
   window.__serverSeason = sid;
+  window.__adminUnlockedAll = false;
 
-  // Atualiza visibilidade das abas imediatamente
-  updateSeasonTabBadges(ROOT);
-
-  // Se o jogador está numa aba que ficou bloqueada pelo novo stage, volta para zones
-  const currentTab = state.activeTab || 'zones';
-  if (!isFeatureUnlocked(currentTab)) {
-    switchTab('zones');
+  const SEASON_CAPS = { 1: 60, 2: 75, 3: 85, 4: 120 };
+  const targetCap = SEASON_CAPS[sid] || 60;
+  if (!state.serverMaxLevel || state.serverMaxLevel < targetCap) {
+    state.serverMaxLevel = targetCap;
+    state.levelCap = targetCap;
+    state.serverCap = targetCap;
+    window.globalServerCap = targetCap;
   }
 
-  log(`📜 [CRÔNICA REAL] Stage ${sid} ativado!`, 'rarity-legendary');
+  if (typeof localStorage !== 'undefined') {
+    localStorage.setItem('aden_server_season', String(sid));
+    localStorage.setItem('aden_admin_season', String(sid));
+    localStorage.setItem('aden_server_cap', String(state.serverMaxLevel));
+    localStorage.removeItem('aden_admin_unlock_all');
+  }
+
+  // Atualiza visibilidade e estado das abas imediatamente
+  updateSeasonTabBadges(ROOT);
+  updateTabVisibilityByLevel(state);
+
+  const seasonNames = {
+    1: 'Crônica I: O Despertar de Aden',
+    2: 'Crônica II: A Era dos Clãs & Castelos',
+    3: 'Crônica III: Os Sete Selos & Olimpíadas',
+    4: 'Crônica IV: A Fúria dos Dragões & Multiverso'
+  };
+
+  log(`📜 [CRÔNICA REAL] ${seasonNames[sid] || 'Stage ' + sid} ativado! Todas as abas e sistemas foram sincronizados permanentemente.`, 'rarity-legendary');
   if (typeof floatText === 'function') floatText(`📜 CRÔNICA ${sid} DESBLOQUEADA!`, 'float-jackpot');
 
+  syncAdminSeasonAndCapUI();
   updateAllUI();
-  save();
+  save(true, true);
+}
+
+function unlockAllSeasons() {
+  state.serverSeason = 4;
+  state.adminUnlockedAll = true;
+  window.__serverSeason = 4;
+  window.__adminUnlockedAll = true;
+
+  state.serverMaxLevel = 120;
+  state.levelCap = 120;
+  state.serverCap = 120;
+  window.globalServerCap = 120;
+
+  if (typeof localStorage !== 'undefined') {
+    localStorage.setItem('aden_server_season', '4');
+    localStorage.setItem('aden_admin_season', '4');
+    localStorage.setItem('aden_server_cap', '120');
+    localStorage.setItem('aden_admin_unlock_all', 'true');
+  }
+
+  updateSeasonTabBadges(ROOT);
+  updateTabVisibilityByLevel(state);
+
+  log('🌟 [Admin] TODAS AS TEMPORADAS, CRÔNICAS E ABAS FORAM 100% DESBLOQUEADAS! Acesso irrestrito a todo o conteúdo do jogo.', 'rarity-legendary');
+  if (typeof floatText === 'function') floatText('🌟 TODAS AS ABAS LIBERADAS!', 'float-jackpot');
+
+  syncAdminSeasonAndCapUI();
+  updateAllUI();
+  save(true, true);
 }
 
 function setServerLevelCap(cap) {
-  state.serverMaxLevel = cap;
-  state.levelCap = cap;
-  log(`📢 [DECRETO REAL] O Lorde Soberano de Aden estabeleceu o Cap Máximo de Nível do Servidor em **Nível ${cap}**!`, 'rarity-legendary');
-  if (typeof floatText === 'function') floatText(`👑 CAP DO SERVIDOR: LV. ${cap}!`, 'float-jackpot');
-  
-  const capBadge = el('admin-current-cap-badge');
-  if (capBadge) capBadge.textContent = `Cap Atual: Nível ${cap}`;
+  const nCap = Math.max(1, Math.min(120, Number(cap) || 60));
+  state.serverMaxLevel = nCap;
+  state.levelCap = nCap;
+  state.serverCap = nCap;
+  window.globalServerCap = nCap;
 
+  if (typeof localStorage !== 'undefined') {
+    localStorage.setItem('aden_server_cap', String(nCap));
+  }
+
+  log(`📢 [DECRETO REAL] O Lorde Soberano de Aden estabeleceu o Cap Máximo de Nível do Servidor em **Nível ${nCap}**!`, 'rarity-legendary');
+  if (typeof floatText === 'function') floatText(`👑 CAP DO SERVIDOR: LV. ${nCap}!`, 'float-jackpot');
+  
   // Sincroniza o stage da temporada com o cap escolhido
   const CAP_TO_SEASON = { 40: 1, 60: 1, 75: 2, 85: 3, 100: 3, 120: 4 };
-  const targetSeason = CAP_TO_SEASON[cap] || 1;
+  const targetSeason = CAP_TO_SEASON[nCap] || (nCap >= 100 ? 4 : (nCap >= 80 ? 3 : (nCap >= 65 ? 2 : 1)));
   state.serverSeason = targetSeason;
   window.__serverSeason = targetSeason;
-  updateSeasonTabBadges(ROOT);
-
-  // Se aba atual ficou bloqueada, navega para zones
-  const currentTab = state.activeTab || 'zones';
-  if (!isFeatureUnlocked(currentTab)) {
-    switchTab('zones');
+  if (typeof localStorage !== 'undefined') {
+    localStorage.setItem('aden_server_season', String(targetSeason));
   }
+
+  updateSeasonTabBadges(ROOT);
+  updateTabVisibilityByLevel(state);
   
-  engineCheckLevelUp(state, { getStats, log, floatText, updateAllUI, save });
+  engineCheckLevelUp(state, { getStats, log, floatText, updateAllUI, save: (imm, force) => save(imm, force) });
+  syncAdminSeasonAndCapUI();
   updateAllUI();
-  save();
+  save(true, true);
 }
 
 
 function executeAdminCmd(cmd) {
-  if (cmd === 'setcap40') { setServerLevelCap(40); }
+  if (cmd === 'setseason1') { setServerSeason(1); }
+  else if (cmd === 'setseason2') { setServerSeason(2); }
+  else if (cmd === 'setseason3') { setServerSeason(3); }
+  else if (cmd === 'setseason4') { setServerSeason(4); }
+  else if (cmd === 'unlockallseasons') { unlockAllSeasons(); }
+  else if (cmd === 'setcap40') { setServerLevelCap(40); }
   else if (cmd === 'setcap60') { setServerLevelCap(60); }
   else if (cmd === 'setcap75') { setServerLevelCap(75); }
   else if (cmd === 'setcap85') { setServerLevelCap(85); }
@@ -6663,6 +6856,7 @@ function executeAdminCmd(cmd) {
   else if (cmd === 'level40') { applyAdminLevelChange(40); }
   else if (cmd === 'level76') { applyAdminLevelChange(76); }
   else if (cmd === 'level85') { applyAdminLevelChange(85); }
+  else if (cmd === 'level120') { applyAdminLevelChange(120); }
   else if (cmd === 'add1level') { applyAdminLevelChange((state.level || 1) + 1); }
   else if (cmd === 'add5levels') { applyAdminLevelChange((state.level || 1) + 5); }
   else if (cmd === 'gold1m') { addAdminGold(1000000); }
@@ -6671,8 +6865,18 @@ function executeAdminCmd(cmd) {
   else if (cmd === 'sp50k') { addAdminSP(50000); }
   else if (cmd === 'ac500') { addAdminAC(500); }
   else if (cmd === 'ac2000') { addAdminAC(2000); }
-  else if (cmd === 'godmode') { state.godMode = !state.godMode; log(`🛡️ [Admin] Invencibilidade: ${state.godMode ? 'ATIVADO' : 'DESATIVADO'}!`, 'rarity-legendary'); }
-  else if (cmd === 'healfull') { const stats = getStats(); state.hp = stats.maxHp; state.mp = stats.maxMp; log('❤️ [Admin] HP/MP Restaurados 100%!', 'rarity-legendary'); }
+  else if (cmd === 'godmode') { 
+    state.godMode = !state.godMode; 
+    log(`🛡️ [Admin] Invencibilidade: ${state.godMode ? 'ATIVADO' : 'DESATIVADO'}!`, 'rarity-legendary'); 
+    if (typeof floatText === 'function') floatText(`🛡️ GOD MODE: ${state.godMode ? 'ON' : 'OFF'}`, 'float-jackpot');
+  }
+  else if (cmd === 'healfull') { 
+    const stats = getStats(); 
+    state.hp = stats.maxHp; 
+    state.mp = stats.maxMp; 
+    log('❤️ [Admin] HP/MP Restaurados 100%!', 'rarity-legendary'); 
+    if (typeof floatText === 'function') floatText('❤️ HP/MP FULL!', 'float-jackpot');
+  }
   else if (cmd === 'unlocksagas') { adminUnlockSagas(); }
   else if (cmd === 'completequest') { adminCompleteQuest(); }
   else if (cmd === 'maxcraft') { adminMaxCraft(); }
@@ -6682,7 +6886,7 @@ function executeAdminCmd(cmd) {
   else if (cmd === 'resetsave') { resetSave(); }
 
   updateAllUI();
-  save();
+  save(true, true);
 }
 
 function updateZoneKillProgressUI() {
@@ -7583,10 +7787,11 @@ export function openPanel(tabName) {
   const targetTab = (!tabName || tabName === 'zones' || tabName === 'combat' || tabName === 'close') ? 'zones' : tabName;
 
   // Level Lock & Season Cap Guard
+  const isBypass = typeof window !== 'undefined' && (window.__adminUnlockedAll || (typeof localStorage !== 'undefined' && localStorage.getItem('aden_admin_unlock_all') === 'true') || state?.adminUnlockedAll);
   const currentLvl = Number(state?.level) || 1;
-  const globalCap = Number(typeof window !== 'undefined' && window.globalServerCap) || Number(state?.serverCap) || 40;
+  const globalCap = Number(typeof window !== 'undefined' && window.globalServerCap) || Number(state?.serverCap) || Number(state?.serverMaxLevel) || (typeof localStorage !== 'undefined' && Number(localStorage.getItem('aden_server_cap'))) || 120;
   const reqLvl = TAB_UNLOCK_LEVELS[targetTab] || 1;
-  if (targetTab !== 'zones' && (currentLvl < reqLvl || reqLvl > globalCap)) {
+  if (!isBypass && targetTab !== 'zones' && (currentLvl < reqLvl || reqLvl > globalCap)) {
     const tabLabel = TAB_NAMES_MAP[targetTab] || targetTab;
     const msg = currentLvl < reqLvl 
       ? `🔒 Aba [${tabLabel}] desbloqueia no Nível ${reqLvl}!` 
@@ -7833,9 +8038,10 @@ export function bindEvents() {
     qsa('.tab-btn').forEach(btn => {
       btn.onclick = () => {
         const tabName = btn.dataset.tab;
-        if (btn.classList.contains('tab-locked-by-level')) {
+        const isBypass = typeof window !== 'undefined' && (window.__adminUnlockedAll || (typeof localStorage !== 'undefined' && localStorage.getItem('aden_admin_unlock_all') === 'true') || state?.adminUnlockedAll);
+        if (!isBypass && btn.classList.contains('tab-locked-by-level')) {
           const reqLvl = TAB_UNLOCK_LEVELS[tabName] || 1;
-          const globalCap = Number(window.globalServerCap) || Number(state?.serverCap) || 40;
+          const globalCap = Number(window.globalServerCap) || Number(state?.serverCap) || Number(state?.serverMaxLevel) || 40;
           const msg = (state.level || 1) < reqLvl
             ? `🔒 Esta aba requer Nível ${reqLvl} para ser desbloqueada.`
             : `🔒 Conteúdo bloqueado na Temporada Atual (Cap Lv. ${globalCap}).`;
@@ -8219,6 +8425,17 @@ export function bindEvents() {
         const inp = el('admin-ac-custom');
         if (inp && inp.value) {
           addAdminAC(inp.value);
+          inp.value = '';
+        }
+      };
+    }
+
+    const applyCapBtn = el('admin-apply-cap-btn');
+    if (applyCapBtn) {
+      applyCapBtn.onclick = () => {
+        const inp = el('admin-cap-custom');
+        if (inp && inp.value) {
+          setServerLevelCap(parseInt(inp.value));
           inp.value = '';
         }
       };
@@ -10958,8 +11175,29 @@ export function init() {
       // Normalização defensiva de habilidades contra corrupções ou vazamento legado
       normalizeAndValidateSkills(state, { log });
 
+      // Preservar autoridade absoluta das configurações administrativas locais
+      const savedAdminSeason = (typeof localStorage !== 'undefined' && Number(localStorage.getItem('aden_server_season'))) || Number(cloudData.serverSeason) || Number(state.serverSeason) || 1;
+      state.serverSeason = savedAdminSeason;
+      window.__serverSeason = savedAdminSeason;
+
+      const savedAdminCap = (typeof localStorage !== 'undefined' && Number(localStorage.getItem('aden_server_cap'))) || Number(cloudData.serverMaxLevel) || Number(cloudData.levelCap) || Number(state.serverMaxLevel) || 60;
+      state.serverMaxLevel = savedAdminCap;
+      state.levelCap = savedAdminCap;
+      state.serverCap = savedAdminCap;
+      window.globalServerCap = savedAdminCap;
+
+      if ((typeof localStorage !== 'undefined' && localStorage.getItem('aden_admin_unlock_all') === 'true') || cloudData.adminUnlockedAll || state.adminUnlockedAll) {
+        state.adminUnlockedAll = true;
+        window.__adminUnlockedAll = true;
+      }
+
+      try {
+        updateSeasonTabBadges(ROOT);
+        updateTabVisibilityByLevel(state);
+      } catch (_) {}
+
       updateAllUI();
-      save();
+      save(true, true);
       if (cloudData.lastSaveTime) {
         setTimeout(() => checkOfflineProgress(cloudData.lastSaveTime), 600);
       }

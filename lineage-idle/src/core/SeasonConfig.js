@@ -21,7 +21,7 @@ export const SEASONS_DATA = {
     unlockedTabs: [
       "zones", "character", "inventory", "warehouse", "skills",
       "shop", "market", "craft", "alchemy", "astral", "quests", "rankings", "enchant", "dolls", "fishing",
-      "hunting", "expeditions"
+      "hunting", "expeditions", "gathering", "mining", "cosmetics"
     ],
     features: [
       "⚔️ Zonas de Caça Iniciais (Gludio, Dion, Giran)",
@@ -60,7 +60,7 @@ export const SEASONS_DATA = {
     id: 3,
     title: "Temporada 3: Os Sete Selos & Olimpíadas",
     subtitle: "Crônica III — O Despertar dos Selos e o Trono dos Heróis",
-    maxLevel: 80,
+    maxLevel: 85,
     maxGrade: "S",
     active: false,
     releaseDate: "Temporada Futura",
@@ -82,12 +82,18 @@ export const SEASONS_DATA = {
     id: 4,
     title: "Temporada 4: A Fúria dos Dragões & Multiverso",
     subtitle: "Crônica IV — O Clamor dos Antigos e a Batalha Dimensional",
-    maxLevel: 85,
+    maxLevel: 120,
     maxGrade: "S84",
     active: false,
     releaseDate: "Temporada Futura",
     description: "Os Dragões Lendários despertam de seu sono milenar. As barreiras dimensionais se rompem, revelando os campos de batalha 2D Pixel e 3D Arena!",
-    unlockedTabs: [],
+    unlockedTabs: [
+      "zones", "character", "inventory", "warehouse", "skills",
+      "shop", "market", "craft", "alchemy", "astral", "quests", "rankings", "enchant", "dolls", "fishing",
+      "hunting", "expeditions", "gathering", "mining", "cosmetics",
+      "clan", "tower", "magiclamp", "raids",
+      "sevensigns", "olympiad", "fortress", "colosseum", "codex"
+    ],
     features: [
       "🐉 World Bosses Supremos: Antharas e Valakas",
       "👾 Liberação Oficial do Modo 👾 Aden Pixel 2D",
@@ -100,11 +106,24 @@ export const SEASONS_DATA = {
 
 /**
  * Retorna o ID da season ativa em tempo real.
- * Prioridade: window.__serverSeason (definido pelo Admin) > state.serverSeason > 1
+ * Prioridade: window.__adminUnlockedAll (4) > window.__serverSeason > localStorage > state.serverSeason > 1
  */
 export function getCurrentSeasonId() {
+  if (typeof window !== 'undefined' && window.__adminUnlockedAll) {
+    return 4;
+  }
+  if (typeof localStorage !== 'undefined' && localStorage.getItem('aden_admin_unlock_all') === 'true') {
+    return 4;
+  }
   if (typeof window !== 'undefined' && window.__serverSeason >= 1) {
     return Number(window.__serverSeason);
+  }
+  if (typeof localStorage !== 'undefined') {
+    const stored = Number(localStorage.getItem('aden_server_season') || localStorage.getItem('aden_admin_season'));
+    if (stored >= 1) {
+      if (typeof window !== 'undefined') window.__serverSeason = stored;
+      return stored;
+    }
   }
   // Tenta ler do estado global se disponível
   try {
@@ -123,15 +142,25 @@ export function getCurrentSeason() {
 
 /**
  * Verifica se uma aba/recurso está desbloqueado na temporada ativa atual.
+ * Se o Admin ativou o modo 'unlock all', todas as abas retornam true.
  * Acumula: temporadas 1..currentSeason ficam todas desbloqueadas.
  * @param {string} tabId
  * @returns {boolean}
  */
 export function isFeatureUnlocked(tabId) {
+  if (typeof window !== 'undefined' && window.__adminUnlockedAll) {
+    return true;
+  }
+  if (typeof localStorage !== 'undefined' && localStorage.getItem('aden_admin_unlock_all') === 'true') {
+    return true;
+  }
   const currentId = getCurrentSeasonId();
+  if (currentId >= 4) {
+    return true;
+  }
   for (let s = 1; s <= currentId; s++) {
     const season = SEASONS_DATA[s];
-    if (season && season.unlockedTabs.includes(tabId)) {
+    if (season && season.unlockedTabs && season.unlockedTabs.includes(tabId)) {
       return true;
     }
   }
@@ -145,7 +174,7 @@ export function isFeatureUnlocked(tabId) {
  */
 export function getSeasonForFeature(tabId) {
   for (const s of Object.values(SEASONS_DATA)) {
-    if (s.unlockedTabs.includes(tabId)) {
+    if (s.unlockedTabs && s.unlockedTabs.includes(tabId)) {
       return s;
     }
   }
@@ -153,8 +182,16 @@ export function getSeasonForFeature(tabId) {
 }
 
 export function getSeasonMaxLevel() {
-  // Lê o cap da season ativa — não retorna 120 hardcoded
-  // Season 1 → 40, Season 2 → 75, Season 3 → 80, Season 4 → 85
+  if (typeof window !== 'undefined' && (window.__adminUnlockedAll || (typeof localStorage !== 'undefined' && localStorage.getItem('aden_admin_unlock_all') === 'true'))) {
+    return 120;
+  }
+  if (typeof window !== 'undefined' && window.globalServerCap) {
+    return Number(window.globalServerCap);
+  }
+  if (typeof localStorage !== 'undefined') {
+    const storedCap = Number(localStorage.getItem('aden_server_cap'));
+    if (storedCap >= 40) return storedCap;
+  }
   const season = getCurrentSeason();
   return season?.maxLevel ?? 40;
 }

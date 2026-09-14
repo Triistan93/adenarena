@@ -189,13 +189,14 @@ export const TAB_UNLOCK_LEVELS = {
 export function updateTabVisibilityByLevel(state) {
   const root = getShadowRoot();
   const currentLvl = Number(state?.level) || 1;
-  const globalCap = Number(typeof window !== 'undefined' && window.globalServerCap) || Number(state?.serverCap) || 40;
+  const isBypass = typeof window !== 'undefined' && (window.__adminUnlockedAll || (typeof localStorage !== 'undefined' && localStorage.getItem('aden_admin_unlock_all') === 'true') || state?.adminUnlockedAll);
+  const globalCap = Number(typeof window !== 'undefined' && window.globalServerCap) || Number(state?.serverCap) || Number(state?.serverMaxLevel) || (typeof localStorage !== 'undefined' && Number(localStorage.getItem('aden_server_cap'))) || 120;
 
   const tabBtns = root.querySelectorAll('.tab-btn[data-tab]');
   tabBtns.forEach(btn => {
     const tabKey = btn.dataset?.tab;
     const reqLvl = TAB_UNLOCK_LEVELS[tabKey] || 1;
-    const isLocked = currentLvl < reqLvl || reqLvl > globalCap;
+    const isLocked = !isBypass && (currentLvl < reqLvl || reqLvl > globalCap);
 
     if (isLocked) {
       btn.classList.add('tab-locked-by-level');

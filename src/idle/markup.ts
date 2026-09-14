@@ -1937,19 +1937,46 @@ export const IDLE_MARKUP = `
 
           <!-- TAB 2: LEVEL CAP & SEASONS -->
           <div id="admin-tab-cap" class="admin-tab-panel">
+            <!-- Part A: Crônicas & Temporadas -->
+            <div class="admin-section" style="background: rgba(15, 23, 42, 0.7); border: 1px solid #38bdf8; border-radius: 8px; padding: 14px; margin-bottom: 12px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <h3 style="margin:0; color:#38bdf8; font-family:'Cinzel',serif; font-size:14px;">📜 Desbloqueio Oficial de Crônicas &amp; Temporadas</h3>
+                <span id="admin-current-season-badge" style="font-size:11px; padding:3px 8px; border-radius:4px; background:rgba(56,189,248,0.2); border:1px solid #38bdf8; color:#38bdf8; font-weight:bold;">Crônica Ativa: Crônica I (O Despertar)</span>
+              </div>
+              <p style="font-size:11px; color:#cbd5e1; margin-bottom:10px; line-height:1.4;">
+                Alterne a Crônica do Servidor para liberar abas, sistemas e limites de forma 100% canônica e permanente no banco de dados:
+              </p>
+              <div class="admin-btn-group" style="display:flex; flex-wrap:wrap; gap:8px;">
+                <button class="admin-btn" data-admin-cmd="setseason1">📜 Crônica 1: O Despertar (Lv.40)</button>
+                <button class="admin-btn" data-admin-cmd="setseason2">🏰 Crônica 2: Clãs &amp; Castelos (Lv.75)</button>
+                <button class="admin-btn" data-admin-cmd="setseason3">🏛️ Crônica 3: Sete Selos (Lv.85)</button>
+                <button class="admin-btn" data-admin-cmd="setseason4">🐉 Crônica 4: High Five &amp; Dragões (Lv.120)</button>
+              </div>
+              <div style="margin-top:10px;">
+                <button class="admin-btn primary" data-admin-cmd="unlockallseasons" style="width:100%; background:linear-gradient(135deg, #065f46, #047857); border-color:#34d399; color:#ecfdf5; font-size:12px; font-weight:bold; padding:9px 12px; cursor:pointer;">
+                  🔓 Desbloquear TODAS as Crônicas &amp; Abas (100% Liberado / Modo Teste)
+                </button>
+              </div>
+            </div>
+
+            <!-- Part B: Gestão de Level Cap -->
             <div class="admin-section" style="background: rgba(30, 20, 10, 0.6); border: 1px solid var(--border-gilt); border-radius: 8px; padding: 14px;">
               <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                <h3 style="margin:0; color:#ffd877; font-family:'Cinzel',serif; font-size:14px;">⏳ Gestão de Cap de Servidor &amp; Temporadas</h3>
-                <span id="admin-current-cap-badge" style="font-size:11px; padding:3px 8px; border-radius:4px; background:rgba(212,167,68,0.2); border:1px solid var(--border-gilt); color:#ffd877; font-weight:bold;">Cap Atual: Nível 60 (Fase 1)</span>
+                <h3 style="margin:0; color:#ffd877; font-family:'Cinzel',serif; font-size:14px;">⏳ Gestão de Cap de Servidor (Level Cap)</h3>
+                <span id="admin-current-cap-badge" style="font-size:11px; padding:3px 8px; border-radius:4px; background:rgba(212,167,68,0.2); border:1px solid var(--border-gilt); color:#ffd877; font-weight:bold;">Cap Atual: Nível 60</span>
               </div>
-              <p style="font-size:11px; color:#cbd5e1; margin-bottom:12px;">Defina o teto de nível máximo acessível para todos os jogadores do servidor:</p>
+              <p style="font-size:11px; color:#cbd5e1; margin-bottom:10px;">Defina o teto de nível máximo acessível para todos os jogadores do servidor:</p>
               <div class="admin-btn-group" style="display:flex; flex-wrap:wrap; gap:8px;">
                 <button class="admin-btn" data-admin-cmd="setcap40">Cap Lv. 40 (Prelúdio)</button>
-                <button class="admin-btn primary" data-admin-cmd="setcap60">Cap Lv. 60 (Fase 1)</button>
+                <button class="admin-btn" data-admin-cmd="setcap60">Cap Lv. 60 (Fase 1)</button>
                 <button class="admin-btn" data-admin-cmd="setcap75">Cap Lv. 75 (Fase 2)</button>
                 <button class="admin-btn" data-admin-cmd="setcap85">Cap Lv. 85 (Fase 3 - Noblesse)</button>
                 <button class="admin-btn" data-admin-cmd="setcap100">Cap Lv. 100 (Fase 4 - Imperial)</button>
                 <button class="admin-btn" data-admin-cmd="setcap120" style="background:#7c2d12; border-color:#f59e0b; color:#fbbf24; font-weight:bold;">👑 Cap Lv. 120 (Supremo)</button>
+              </div>
+              <div class="admin-input-row" style="margin-top:10px; display:flex; gap:6px; align-items:center;">
+                <input type="number" id="admin-cap-custom" class="admin-num-input" placeholder="Cap Customizado (ex: 80)" min="1" max="120" style="flex:1;" />
+                <button id="admin-apply-cap-btn" class="admin-btn primary">Aplicar Cap</button>
               </div>
             </div>
           </div>
@@ -2032,6 +2059,7 @@ export const IDLE_MARKUP = `
                   <button class="admin-btn" data-admin-cmd="level40">Set Lv.40</button>
                   <button class="admin-btn" data-admin-cmd="level76">Set Lv.76</button>
                   <button class="admin-btn" data-admin-cmd="level85">Set Lv.85</button>
+                  <button class="admin-btn" data-admin-cmd="level120" style="background:#7c2d12; border-color:#f59e0b; color:#fbbf24; font-weight:bold;">👑 Set Lv.120</button>
                   <button class="admin-btn" data-admin-cmd="add1level">+1 Nível</button>
                   <button class="admin-btn" data-admin-cmd="add5levels">+5 Níveis</button>
                 </div>

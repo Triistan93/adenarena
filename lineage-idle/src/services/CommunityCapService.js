@@ -43,6 +43,13 @@ export class CommunityCapService {
    * Retorna o CAP de nível ativo do servidor
    */
   static getActiveServerCap() {
+    if (typeof window !== 'undefined' && (window.__adminUnlockedAll || (typeof localStorage !== 'undefined' && localStorage.getItem('aden_admin_unlock_all') === 'true'))) {
+      return 120;
+    }
+    if (typeof localStorage !== 'undefined') {
+      const adminCap = Number(localStorage.getItem('aden_server_cap'));
+      if (adminCap >= 40) return adminCap;
+    }
     const goal = this.getGoal();
     return goal.unlocked ? goal.targetCap : goal.baseCap;
   }
