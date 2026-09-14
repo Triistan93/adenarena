@@ -35,7 +35,7 @@ import { HuntingService }                                                     fr
 import { GatheringService }                                                   from './src/services/lifeActivities/GatheringService.js';
 import { MiningService }                                                      from './src/services/lifeActivities/MiningService.js';
 import { MercenaryService }                                                   from './src/services/MercenaryService.js';
-import { ExpeditionService }                                                  from './src/services/ExpeditionService.js';
+import { ExpeditionService, EXPEDITION_DESTINATIONS as CANONICAL_EXPEDITION_DESTINATIONS } from './src/services/ExpeditionService.js';
 import { renderFishingUI }                                                    from './src/ui/FishingUI.js';
 import { renderHuntingUI }                                                    from './src/ui/HuntingUI.js';
 import { renderGatheringUI }                                                  from './src/ui/GatheringUI.js';
@@ -9152,11 +9152,11 @@ export function init() {
     window.exchangeManorCrop = exchangeManorCrop;
     window.conquerCastle = conquerCastle;
     window.claimCastleTaxes = claimCastleTaxes;
-    window.startExpedition = startExpedition;
-    window.claimExpeditionReward = claimExpeditionReward;
+    window.startExpedition = (destId) => (typeof window.startStrategicExpedition === 'function' ? window.startStrategicExpedition(destId) : ExpeditionService.startExpedition(state, destId, [], { log, updateAllUI, save, floatText }));
+    window.claimExpeditionReward = (expId) => ExpeditionService.claimReward(state, expId, { log, updateAllUI, save, floatText });
     window.MANOR_SEEDS = MANOR_SEEDS;
     window.CASTLES_DEFS = CASTLES_DEFS;
-    window.EXPEDITION_DESTINATIONS = EXPEDITION_DESTINATIONS;
+    window.EXPEDITION_DESTINATIONS = CANONICAL_EXPEDITION_DESTINATIONS;
     window.selectFishingZone = (zId) => FishingService.selectZone(state, zId, { log, updateAllUI, save });
     window.selectFishingBait = (bId) => FishingService.selectBait(state, bId, { log, updateAllUI, save });
     window.buyFishingBait = (bId, qty) => FishingService.buyBait(state, bId, qty, { log, updateAllUI, save });
@@ -9219,6 +9219,36 @@ export function init() {
     window.toggleAutoMining = () => MiningService.toggleAutoMining(state, { log, updateAllUI, save, floatText });
     window.exchangeMiningOres = (oId, qty) => MiningService.exchangeOres(state, oId, qty, { log, updateAllUI, save, floatText });
     window.MiningService = MiningService;
+    window.recruitMercenary = (candidateUid) => MercenaryService.hireMercenary(state, candidateUid, { log, updateAllUI, save, floatText });
+    window.hireMercenary = window.recruitMercenary;
+    window.dismissMercenary = (mercUid) => MercenaryService.dismissMercenary(state, mercUid, { log, updateAllUI, save, floatText });
+    window.refreshMercenaryTavern = (force = true) => MercenaryService.refreshTavern(state, force, { log, updateAllUI, save });
+    window.refreshTavernContracts = window.refreshMercenaryTavern;
+    window.toggleMercenaryInExpeditionSquad = (destId, mercUid) => {
+      if (!window._expeditionSquadSelections) window._expeditionSquadSelections = {};
+      if (!window._expeditionSquadSelections[destId]) window._expeditionSquadSelections[destId] = [];
+      const squad = window._expeditionSquadSelections[destId];
+      const idx = squad.indexOf(mercUid);
+      if (idx >= 0) {
+        squad.splice(idx, 1);
+      } else {
+        if (squad.length >= 3) {
+          log('⚠️ Esquadrão já atingiu a capacidade máxima de 3 mercenários!', 'warning');
+          return;
+        }
+        squad.push(mercUid);
+      }
+      updateAllUI();
+    };
+    window.startStrategicExpedition = (destId) => {
+      const squad = (window._expeditionSquadSelections && window._expeditionSquadSelections[destId]) || [];
+      const res = ExpeditionService.startExpedition(state, destId, squad, { log, updateAllUI, save, floatText });
+      if (res && window._expeditionSquadSelections) {
+        delete window._expeditionSquadSelections[destId];
+      }
+      return res;
+    };
+    window.MercenaryService = MercenaryService;
     window.ExpeditionService = ExpeditionService;
     window.setForgeSubTab = (tabKey) => {
       window._forgeSubTab = tabKey;
