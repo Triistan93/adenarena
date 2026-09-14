@@ -223,8 +223,9 @@ export async function savePlayerStateToCloud(userId: string, stateData: any, imm
       }
 
       const charName = sanitizeString(cleanState.name || cleanState.charName || cleanState.playerName || 'Hero', 16);
-      const charId = cleanState.characterId || `char_${userId.slice(0, 16)}`;
-      const accId = cleanState.accountId || `acc_${userId.slice(0, 16)}`;
+      const isMyChar = !cleanState.ownerUid || cleanState.ownerUid === userId;
+      const charId = (isMyChar && cleanState.characterId) ? cleanState.characterId : `char_${userId.slice(0, 16)}`;
+      const accId = (isMyChar && cleanState.accountId) ? cleanState.accountId : `acc_${userId.slice(0, 16)}`;
 
       cleanState.characterId = charId;
       cleanState.accountId = accId;
@@ -297,8 +298,12 @@ export async function savePlayerStateToCloud(userId: string, stateData: any, imm
           charPayload.createdAt = cleanState.createdAt;
         }
         await setDoc(charRef, charPayload, { merge: true });
+      } catch (charErr) {
+        console.error(`[CanonicalSave:characters] Erro ao gravar characters/${charId}:`, charErr);
+      }
 
-        // 3. Atualiza presença online (Gate 1: Existência != Presença)
+      // 3. Atualiza presença online (Gate 1: Existência != Presença)
+      try {
         const presenceRef = doc(db, 'presence', charId);
         await setDoc(presenceRef, {
           characterId: charId,
@@ -307,8 +312,12 @@ export async function savePlayerStateToCloud(userId: string, stateData: any, imm
           lastSeenAt: Date.now(),
           heartbeatAt: Date.now()
         }, { merge: true });
+      } catch (presenceErr) {
+        console.error(`[CanonicalSave:presence] Erro ao gravar presence/${charId}:`, presenceErr);
+      }
 
-        // 4. Grava snapshot de ranking competitivo (Gate 7)
+      // 4. Grava snapshot de ranking competitivo (Gate 7)
+      try {
         const rankingRef = doc(db, 'pvp_rankings', `s1_cp_${charId}`);
         await setDoc(rankingRef, {
           entryId: `s1_cp_${charId}`,
@@ -324,8 +333,8 @@ export async function savePlayerStateToCloud(userId: string, stateData: any, imm
           losses: Number(cleanState.colosseum?.duelLosses || cleanState.duelLosses) || 0,
           updatedAt: Date.now()
         }, { merge: true });
-      } catch (canonErr) {
-        console.error('[CanonicalSave] Erro ao gravar nas coleções canônicas (characters, presence, pvp_rankings):', canonErr);
+      } catch (rankingErr) {
+        console.error(`[CanonicalSave:pvp_rankings] Erro ao gravar pvp_rankings/s1_cp_${charId}:`, rankingErr);
       }
 
       return true;

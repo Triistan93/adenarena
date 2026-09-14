@@ -43,51 +43,51 @@ service cloud.firestore {
 
     function isServerAdmin() {
       return isAuthenticated() && (
-        request.auth.token.email in ['duuh.alaminos@gmail.com', 'eduardol.alaminos@gmail.com'] ||
-        request.auth.token.admin == true
+        (('email' in request.auth.token) && request.auth.token.email in ['duuh.alaminos@gmail.com', 'eduardol.alaminos@gmail.com']) ||
+        (('admin' in request.auth.token) && request.auth.token.admin == true)
       );
     }
 
     // ─── Contas de Usuário (accounts) ────────────────────────────────────────
     match /accounts/{accountId} {
       allow read: if isAuthenticated() && (resource.data.ownerUid == request.auth.uid || isServerAdmin());
-      allow create: if isAuthenticated() && request.resource.data.ownerUid == request.auth.uid && noPrivilegeEscalation();
-      allow update: if isAuthenticated() && resource.data.ownerUid == request.auth.uid 
+      allow create: if isServerAdmin() || (isAuthenticated() && request.resource.data.ownerUid == request.auth.uid && noPrivilegeEscalation());
+      allow update: if isServerAdmin() || (isAuthenticated() && resource.data.ownerUid == request.auth.uid 
                     && request.resource.data.ownerUid == resource.data.ownerUid 
-                    && request.resource.data.accountId == resource.data.accountId 
-                    && noPrivilegeEscalation();
+                    && (!('accountId' in resource.data) || request.resource.data.accountId == resource.data.accountId) 
+                    && noPrivilegeEscalation());
       allow delete: if isServerAdmin(); // Permite exclusão exclusivamente em manutenção administrativa
     }
 
     // ─── Reserva Canônica de Nomes (character_names) ─────────────────────────
     match /character_names/{nameLower} {
       allow read: if isAuthenticated();
-      // Criação atômica: só permite criar se não existir previamente
-      allow create: if isAuthenticated() && request.resource.data.ownerUid == request.auth.uid;
-      allow update: if false; // Nome reservado é estritamente imutável
-      allow delete: if (isAuthenticated() && resource.data.ownerUid == request.auth.uid) || isServerAdmin();
+      // Criação atômica: só permite criar se não existir previamente ou se admin
+      allow create: if isServerAdmin() || (isAuthenticated() && request.resource.data.ownerUid == request.auth.uid);
+      allow update: if isServerAdmin(); // Nome reservado só pode ser alterado por admin
+      allow delete: if isServerAdmin() || (isAuthenticated() && resource.data.ownerUid == request.auth.uid);
     }
 
     // ─── Identidade Canônica do Personagem (characters) ───────────────────────
     match /characters/{characterId} {
       allow read: if isAuthenticated();
-      // CREATE: valida request.resource.data (Gate 3 e Gate 4)
-      allow create: if isAuthenticated() && isRealPlayerCreation(request.resource.data) && noPrivilegeEscalation();
-      // UPDATE: valida resource.data vs request.resource.data (Gate 2)
-      allow update: if isAuthenticated() && resource.data.ownerUid == request.auth.uid 
+      // CREATE: valida request.resource.data (Gate 3 e Gate 4) ou admin
+      allow create: if isServerAdmin() || (isAuthenticated() && isRealPlayerCreation(request.resource.data) && noPrivilegeEscalation());
+      // UPDATE: valida resource.data vs request.resource.data (Gate 2) ou admin
+      allow update: if isServerAdmin() || (isAuthenticated() && resource.data.ownerUid == request.auth.uid 
                     && immutableCharacterFieldsUnchanged() 
-                    && noPrivilegeEscalation();
-      allow delete: if (isAuthenticated() && resource.data.ownerUid == request.auth.uid) || isServerAdmin();
+                    && noPrivilegeEscalation());
+      allow delete: if isServerAdmin() || (isAuthenticated() && resource.data.ownerUid == request.auth.uid);
     }
 
     // ─── Presença em Tempo Real (presence) — Gate 1 ──────────────────────────
     match /presence/{characterId} {
       allow read: if isAuthenticated();
-      allow create: if isAuthenticated() && request.resource.data.ownerUid == request.auth.uid;
-      allow update: if isAuthenticated() 
+      allow create: if isServerAdmin() || (isAuthenticated() && request.resource.data.ownerUid == request.auth.uid);
+      allow update: if isServerAdmin() || (isAuthenticated() 
                     && (!('ownerUid' in resource.data) || resource.data.ownerUid == request.auth.uid)
-                    && request.resource.data.ownerUid == request.auth.uid;
-      allow delete: if (isAuthenticated() && resource.data.ownerUid == request.auth.uid) || isServerAdmin();
+                    && request.resource.data.ownerUid == request.auth.uid);
+      allow delete: if isServerAdmin() || (isAuthenticated() && resource.data.ownerUid == request.auth.uid);
     }
 
     // ─── Relações de Amizade (friends) ───────────────────────────────────────
