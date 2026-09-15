@@ -84,6 +84,19 @@ Nesta data, o **Aden Arena** passou pela maior reestruturação sistêmica e de 
 - **Scripts Padronizados no `package.json`**: `"test": "node --test test/*.test.js"` e `"typecheck": "tsc --noEmit"`.
 - **Pipeline GitHub Actions**: Criado `.github/workflows/ci.yml` cobrindo testes unitários, testes de segurança e build do Vite.
 
+### Frente H: Otimização de Armazenamento & Backup Remoto
+- **Liberação de Espaço Local (~2.75 GB reclaimed)**:
+  - Migração de pastas obsoletas/não utilizadas para `C:\Users\duuha\Downloads\adenarena-main\AdenOlderFiles`:
+    - `legado/` (1.63 GB)
+    - `adenarena/` (1.37 GB - clone duplicado com node_modules próprio)
+    - `public/assets/2d/effects/` (273 MB - 692 spritesheets órfãs não referenciadas)
+    - `visual-prototype-2d/` e `visual-prototype-2d.zip` (24 MB)
+  - Redução do tamanho da pasta de trabalho de ~4.9 GB para ~2.1 GB.
+  - Aceleração do tempo de build do Vite de ~14s para ~8.9s.
+- **Backup Local Integral do GitHub**:
+  - Clonado o repositório remoto de produção antes do push para `AdenOlderFiles/github_backup_remote`.
+  - Gerado bundle verificado `AdenOlderFiles/github_remote_origin_backup_2026-09-14.bundle`.
+
 ---
 
 ## 3. MAPA DE ARQUIVOS CRIADOS E MODIFICADOS
@@ -106,16 +119,19 @@ Nesta data, o **Aden Arena** passou pela maior reestruturação sistêmica e de 
 | `src/App.tsx` | **MODIFICADO** | Conversão de Arena 3D e Pixel 2D para `React.lazy` com `<Suspense>`. |
 | `vite.config.ts` | **MODIFICADO** | Configuração de `manualChunks` no Rollup para divisão de Three.js, Firebase, React e dados. |
 | `package.json` | **MODIFICADO** | Adição de scripts `"test"` e `"typecheck"`. |
+| `DIARIO_DE_DESENVOLVIMENTO_2026-09-14.md` | **MODIFICADO** | Registro de sessões, auditorias, otimização de disco e backups. |
 
 ---
 
 ## 4. ESTADO DO PROJETO & "SAVEPOINT" PARA CONTINUAÇÃO
 
-- **Deploy Vercel / GitHub**: O repositório está na revisão `9f21f51` no branch `main`.
-- **Zero Pendências de Compilação**: `npm run build` conclui em 12.45s com 0 erros.
-- **Zero Testes Quebrados**: Todos os 63 testes passam com 100% de integridade.
+- **Deploy Vercel / GitHub**: Repositório sincronizado com `origin/main`.
+- **Zero Pendências de Compilação**: `npm run build` conclui em ~8.9s com 0 erros.
+- **Suíte de Integridade**: Testes de segurança, integridade competitiva, identidade Firestore e cobertura Hero/Glory validados com 100% de sucesso.
+- **Armazenamento Otimizado**: Repositório limpo e leve, backups preservados em `AdenOlderFiles`.
 
 ### Próximos Passos Sugeridos para Sessões Futuras:
 1. **Cloud Functions / Backend Serverless**: Migrar transações atômicas de compra do Mercado P2P para Cloud Functions autoritativas, eliminando a dependência do cliente para fechar vendas.
 2. **Expansão de Temporadas Futuras**: As temporadas e limites de nível da Season 1 estão calibrados (Level Cap 40). Os dados para as Seasons seguintes já se encontram catalogados em `SeasonConfig.js`.
 3. **Ativação Opcional dos Modos Alternativos**: Os modos 2D e 3D já estão modulares e com carregamento assíncrono; caso desejado, o seletor de modos no topo pode ser reexibido para jogadores experientes.
+
