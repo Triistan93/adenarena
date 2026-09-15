@@ -2064,13 +2064,16 @@ function updateDetailedEquipStatsUI() {
 
   const defaultSlotIcons = {
     hair: '👒', gloves: '🧤', weapon: '⚔️', weapon2: '🗡️', necklace: '📿', ring: '💍', belt: '🪢',
-    helmet: '⛑️', armor: '🛡️', legs: '👖', shield: '🛡️', boots: '👢',
+    helmet: '⛑️', armor: '🛡️', chest: '🛡️', legs: '👖', shield: '🛡️', boots: '👢',
     hair2: '🎭', earring1: '💎', earring2: '💎', ring2: '💍', cloak: '🧥', talisman: '🔮', agathion: '🧚‍♂️', brooch: '❇️', talisman_bracelet: '🔮', agathion_bracelet: '🧚‍♂️'
   };
 
   for (const slot of ALL_EQUIP_SLOTS) {
-    const uid = state.equipment[slot];
-    const pdSlots = qsa(`.l2inv-pd-slot[data-slot="${slot}"]`);
+    if (slot === 'armor') continue; // chest é o slot canônico do paperdoll
+    const uid = state.equipment[slot] || (slot === 'chest' ? state.equipment.armor : null);
+    const pdSlots = (slot === 'chest')
+      ? qsa('.l2inv-pd-slot[data-slot="chest"], .l2inv-pd-slot[data-slot="armor"]')
+      : qsa(`.l2inv-pd-slot[data-slot="${slot}"]`);
     const pdSlot = pdSlots && pdSlots.length ? pdSlots[0] : null;
     const elem = el(`equip-${slot}`);
     const wrap = elem && elem.closest ? elem.closest('.equip-slot') : null;

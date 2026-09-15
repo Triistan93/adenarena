@@ -45,7 +45,12 @@ export function resolveEquipSlot(rawSlot, equipmentState = {}, preferredSlot = n
 
 export function migrateEquipmentSlots(state) {
   if (!state?.equipment) return;
-  if (state.equipment.armor && !state.equipment.chest) state.equipment.chest = state.equipment.armor;
+  if (!('chest' in state.equipment) && state.equipment.armor) {
+    state.equipment.chest = state.equipment.armor;
+  }
+  if ('chest' in state.equipment) {
+    state.equipment.armor = state.equipment.chest || null;
+  }
   if (state.equipment.head && !state.equipment.helmet) state.equipment.helmet = state.equipment.head;
   if ((state.equipment.offhand || state.equipment.sigil) && !state.equipment.shield) {
     state.equipment.shield = state.equipment.offhand || state.equipment.sigil;
@@ -58,7 +63,7 @@ export function migrateEquipmentSlots(state) {
   if (state.equipment.talisman && !state.equipment.talisman_bracelet) state.equipment.talisman_bracelet = state.equipment.talisman;
   if (state.equipment.agathion && !state.equipment.agathion_bracelet) state.equipment.agathion_bracelet = state.equipment.agathion;
   delete state.equipment.head;
-  delete state.equipment.armor;
+  // Preserva sincronia bidirecional entre chest e armor para compatibilidade
   delete state.equipment.offhand;
   delete state.equipment.sigil;
   delete state.equipment.dual;
@@ -112,10 +117,15 @@ export function equipItem(state, uid, targetSlotOrCallbacks = null, maybeCallbac
   }
 
   state.equipment[targetSlot] = uid;
+  if (targetSlot === 'chest') {
+    state.equipment.armor = uid;
+  } else if (targetSlot === 'armor') {
+    state.equipment.chest = uid;
+  }
   item.equipped = true;
   item.equippedSlot = targetSlot;
 
-  const slotLabel = targetSlot === 'weapon2' ? 'Arma Secundária (Slot 2)' : (targetSlot === 'weapon' ? 'Arma Primária (Slot 1)' : targetSlot);
+  const slotLabel = targetSlot === 'weapon2' ? 'Arma Secundária (Slot 2)' : (targetSlot === 'weapon' ? 'Arma Primária (Slot 1)' : (targetSlot === 'chest' || targetSlot === 'armor' ? 'Armadura / Peito' : targetSlot));
   if (callbacks.log) callbacks.log(`Equipou ${def.name} [${slotLabel}]`, 'loot');
 
   const stats = getStats(state);
@@ -187,6 +197,10 @@ export function unequipItem(state, slotOrUid, callbacks = {}) {
     delete item.equippedSlot;
   }
   state.equipment[targetSlot] = null;
+  if (targetSlot === 'chest' || targetSlot === 'armor') {
+    state.equipment.chest = null;
+    state.equipment.armor = null;
+  }
   const stats = getStats(state);
   state.maxHp = stats.maxHp;
   state.maxMp = stats.maxMp;
@@ -356,14 +370,14 @@ export function generateAutoEquipProposal(state) {
 
   const slotsToEvaluate = [
     'weapon', 'shield', 'weapon2',
-    'helmet', 'armor', 'legs', 'gloves', 'boots',
+    'helmet', 'chest', 'legs', 'gloves', 'boots',
     'necklace', 'earring1', 'earring2', 'ring1', 'ring2',
     'cloak', 'belt', 'hair1', 'hair2',
     'brooch', 'agathion_bracelet', 'talisman_bracelet'
   ];
 
   for (const slot of slotsToEvaluate) {
-    const currentUid = currentEquip[slot];
+    const currentUid = currentEquip[slot] || (slot === 'chest' ? currentEquip.armor : (slot === 'armor' ? currentEquip.chest : null));
     const currentItem = currentUid ? state.inventory.find(i => i.uid === currentUid) : null;
     const currentScore = currentItem ? calculateEquipmentRecommendationScore(state, currentItem, slot) : -99999;
 
@@ -377,6 +391,7 @@ export function generateAutoEquipProposal(state) {
         (slot === 'weapon' && (rawSlot === 'weapon' || rawSlot === 'twohand' || rawSlot === 'bow' || rawSlot === 'spear' || rawSlot === 'staff' || rawSlot === 'dual' || rawSlot === 'dagger' || rawSlot === 'sword' || rawSlot === 'blunt')) ||
         (slot === 'weapon2' && ['weapon', 'sword', 'dagger'].includes(rawSlot) && !isTwoHandedWeapon(def)) ||
         (slot === 'shield' && (rawSlot === 'shield' || rawSlot === 'shield_or_sigil' || rawSlot === 'offhand' || rawSlot === 'sigil')) ||
+        ((slot === 'chest' || slot === 'armor') && (rawSlot === 'chest' || rawSlot === 'armor' || rawSlot === 'body' || rawSlot === 'breastplate' || rawSlot === 'robe')) ||
         ((slot === 'ring1' || slot === 'ring2') && rawSlot.includes('ring')) ||
         ((slot === 'earring1' || slot === 'earring2') && rawSlot.includes('earring')) ||
         ((slot === 'hair1' || slot === 'hair2') && (rawSlot.includes('hair') || rawSlot === 'headgear' || rawSlot === 'mask')) ||
@@ -490,6 +505,11 @@ export function commitAutoEquipProposal(state, proposal, callbacks = {}) {
 
   // 2. Aplica novo loadout atômico
   state.equipment = { ...proposal.proposedLoadout };
+  if (state.equipment.chest && !state.equipment.armor) {
+    state.equipment.armor = state.equipment.chest;
+  } else if (state.equipment.armor && !state.equipment.chest) {
+    state.equipment.chest = state.equipment.armor;
+  }
   for (const [slot, uid] of Object.entries(state.equipment)) {
     if (uid) {
       const item = state.inventory?.find(i => i.uid === uid);

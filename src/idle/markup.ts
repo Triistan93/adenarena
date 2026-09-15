@@ -700,9 +700,9 @@ export const IDLE_MARKUP = `
                       <span class="l2inv-pd-icon">⛑️</span>
                       <span class="l2inv-pd-item" id="pd-item-helmet"></span>
                     </div>
-                    <div class="l2inv-pd-slot equip-slot" data-slot="armor" title="Armadura / Peito">
+                    <div class="l2inv-pd-slot equip-slot" data-slot="chest" data-slot-alias="armor" title="Armadura / Peito">
                       <span class="l2inv-pd-icon">🛡️</span>
-                      <span class="l2inv-pd-item" id="pd-item-armor"></span>
+                      <span class="l2inv-pd-item" id="pd-item-chest"></span>
                     </div>
                     <div class="l2inv-pd-slot equip-slot" data-slot="legs" title="Calças / Perneiras">
                       <span class="l2inv-pd-icon">👖</span>

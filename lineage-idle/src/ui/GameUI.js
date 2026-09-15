@@ -76,11 +76,13 @@ import { renderForgeRefinery, setRefineryCategory } from './RefineryUI.js';
    1. DOM ROOT & HELPERS
 ═══════════════════════════════════════════════════════════════════════════ */
 export function getRoot() {
-  return document.getElementById('idle-host')?.shadowRoot || document;
+  if (typeof document === 'undefined') return null;
+  return document.getElementById?.('idle-host')?.shadowRoot || document;
 }
 
 export function findElement(id) {
-  return getRoot().querySelector('#' + id) || document.getElementById(id);
+  const root = getRoot();
+  return root?.querySelector?.('#' + id) || (typeof document !== 'undefined' ? document.getElementById?.(id) : null);
 }
 
 export function escapeHTML(value) {
@@ -926,7 +928,7 @@ const MATERIAL_SLOTS = ['material', 'gem', 'ore', 'craft', 'crystal'];
 
 const SLOT_ICONS = {
   hair1: '👒', hair2: '🎭', helmet: '🪖',
-  earring1: '💎', armor: '🛡️', earring2: '💎',
+  earring1: '💎', armor: '🛡️', chest: '🛡️', earring2: '💎',
   necklace: '📿', legs: '👖', cloak: '🧥',
   weapon: '⚔️', weapon2: '🗡️', gloves: '🧤', shield: '🛡️',
   ring1: '💍', boots: '👢', ring2: '💍',
@@ -934,7 +936,13 @@ const SLOT_ICONS = {
 };
 
 function findEquipmentSlot(slot) {
-  return findElement(`equip-slot-${slot}`) || getRoot().querySelector(`[data-slot="${slot}"]`);
+  let el = findElement(`equip-slot-${slot}`) || getRoot().querySelector(`[data-slot="${slot}"]`);
+  if (!el && (slot === 'chest' || slot === 'armor')) {
+    el = findElement('equip-slot-chest') || findElement('equip-slot-armor') ||
+         getRoot().querySelector('[data-slot="chest"]') || getRoot().querySelector('[data-slot="armor"]') ||
+         getRoot().querySelector('[data-slot-alias="armor"]');
+  }
+  return el;
 }
 
 function createEquipmentSlotDynamically(slot) {
@@ -2686,11 +2694,12 @@ export function updateEquipmentUI(state, callbacks = {}) {
   migrateEquipmentSlots(state);
 
   for (const slot of ALL_EQUIP_SLOTS) {
+    if (slot === 'armor') continue; // chest é o slot canônico do paperdoll
     let slotEl = findEquipmentSlot(slot);
     if (!slotEl) slotEl = createEquipmentSlotDynamically(slot);
     if (!slotEl) continue;
 
-    const uid = state.equipment[slot];
+    const uid = state.equipment[slot] || (slot === 'chest' ? state.equipment.armor : null);
     const item = uid ? (state.inventory || []).find(i => i.uid === uid) : null;
     const def = item ? getItemDef(item.itemId) : null;
 

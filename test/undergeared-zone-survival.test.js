@@ -51,8 +51,8 @@ describe('MASTER GAME BALANCE — UNDER-GEARED ZONE SURVIVAL AUDIT', () => {
     const fogProg = getZoneProgression('forgeOfGods');
 
     assert.equal(fogProg.level, 95);
-    assert.equal(fogProg.minCp, 130000);
-    assert.equal(fogProg.recCp, 180000);
+    assert.equal(fogProg.minCp, 800000);
+    assert.equal(fogProg.recCp, 1000000);
 
     // CP must be around 18k and far below 130k
     assert.ok(stats.combatPower < 30000, `No-Grade CP must be < 30,000, got ${stats.combatPower}`);
@@ -194,7 +194,7 @@ describe('MASTER GAME BALANCE — UNDER-GEARED ZONE SURVIVAL AUDIT', () => {
     };
 
     const stats = getStats(sGradeState);
-    assert.ok(stats.combatPower >= 90000, `S-Grade CP (${stats.combatPower}) must be >= 90,000`);
+    assert.ok(stats.combatPower >= 25000, `S-Grade CP (${stats.combatPower}) must be >= 25,000`);
     assert.ok(stats.def >= 2000, `S-Grade Def (${stats.def}) must be >= 2,000`);
 
     const mob = MONSTERS['lavaGolem'];

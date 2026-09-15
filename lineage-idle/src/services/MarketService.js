@@ -62,6 +62,9 @@ let _marketBroadcastChannel = null;
 try {
   if (typeof BroadcastChannel !== 'undefined') {
     _marketBroadcastChannel = new BroadcastChannel('aden_market_sync');
+    if (typeof _marketBroadcastChannel.unref === 'function') {
+      _marketBroadcastChannel.unref();
+    }
     _marketBroadcastChannel.onmessage = (event) => {
       if (event && event.data && event.data.type) {
         MarketService.onBroadcastMessage(event.data);

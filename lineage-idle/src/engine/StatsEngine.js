@@ -116,7 +116,7 @@ export function getClass(classId) {
   if (!def) {
     const hCls = Object.values(HISTORICAL_CLASSES).find(c => c.id === rawId || c.id === canonicalId || c.sourceClassId === rawId || c.sourceClassId === canonicalId);
     if (hCls) {
-      const isMage = hCls.name.toLowerCase().includes('mage') || hCls.name.toLowerCase().includes('wizard') || hCls.name.toLowerCase().includes('sorcerer') || hCls.name.toLowerCase().includes('cleric') || hCls.name.toLowerCase().includes('bishop') || hCls.name.toLowerCase().includes('oracle') || hCls.name.toLowerCase().includes('elder') || hCls.name.toLowerCase().includes('shaman') || hCls.name.toLowerCase().includes('summoner') || hCls.name.toLowerCase().includes('saint') || hCls.name.toLowerCase().includes('hierophant') || hCls.name.toLowerCase().includes('cardinal') || hCls.name.toLowerCase().includes('soultaker') || hCls.name.toLowerCase().includes('screamer') || hCls.name.toLowerCase().includes('archmage') || hCls.name.toLowerCase().includes('muse');
+      const isMage = hCls.name.toLowerCase().includes('mage') || hCls.name.toLowerCase().includes('wizard') || hCls.name.toLowerCase().includes('sorcerer') || hCls.name.toLowerCase().includes('cleric') || hCls.name.toLowerCase().includes('bishop') || hCls.name.toLowerCase().includes('oracle') || hCls.name.toLowerCase().includes('elder') || hCls.name.toLowerCase().includes('shaman') || hCls.name.toLowerCase().includes('summoner') || hCls.name.toLowerCase().includes('saint') || hCls.name.toLowerCase().includes('hierophant') || hCls.name.toLowerCase().includes('cardinal') || hCls.name.toLowerCase().includes('soultaker') || hCls.name.toLowerCase().includes('screamer') || hCls.name.toLowerCase().includes('archmage') || hCls.name.toLowerCase().includes('muse') || hCls.name.toLowerCase().includes('mystic') || hCls.name.toLowerCase().includes('weaver');
       def = {
         name: hCls.name,
         race: hCls.race.toLowerCase(),
@@ -129,7 +129,7 @@ export function getClass(classId) {
 
   if (!def && NATIVE_SKILL_TREES[rawId]) {
     const parts = rawId.split('_');
-    const isMage = rawId.includes('mage') || rawId.includes('sorcerer') || rawId.includes('shaman') || rawId.includes('weaver') || rawId.includes('blood_rose');
+    const isMage = rawId.includes('mage') || rawId.includes('sorcerer') || rawId.includes('shaman') || rawId.includes('weaver') || rawId.includes('blood_rose') || rawId.includes('mystic');
     def = {
       name: rawId.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
       race: parts[0],
@@ -257,7 +257,11 @@ export function getEquipBonus(state, slot) {
 export function getTotalEquipBonuses(state) {
   const totals = { atk: 0, def: 0, matk: 0, mdef: 0, hp: 0, mp: 0, eva: 0, crit: 0, speed: 0, lifesteal: 0, xpBoost: 0, goldBoost: 0, adenaBoost: 0, str: 0, dex: 0, con: 0, int: 0, wit: 0, men: 0 };
   if (!state.equipment) return totals;
+  const seenUids = new Set();
   for (const slot of Object.keys(state.equipment)) {
+    const uid = state.equipment[slot];
+    if (!uid || seenUids.has(uid)) continue;
+    seenUids.add(uid);
     const b = getEquipBonus(state, slot);
     if (!b) continue;
     for (const k of Object.keys(totals)) {
@@ -318,7 +322,7 @@ export function getEquippedSetCount(state, setDef) {
   const slots = ['armor', 'helmet', 'boots', 'gloves', 'legs'];
 
   for (const slot of slots) {
-    const uid = state.equipment?.[slot];
+    const uid = state.equipment?.[slot] || (slot === 'armor' ? state.equipment?.chest : (slot === 'chest' ? state.equipment?.armor : null));
     if (!uid) continue;
     const item = state.inventory?.find(i => i.uid === uid);
     if (!item) continue;
@@ -543,7 +547,11 @@ export function getStats(state) {
 
   let itemCraftBonus = 0, itemLootBonus = 0;
   if (state.equipment) {
+    const seenCraftLootUids = new Set();
     for (const slot of Object.keys(state.equipment)) {
+      const uid = state.equipment[slot];
+      if (!uid || seenCraftLootUids.has(uid)) continue;
+      seenCraftLootUids.add(uid);
       const it = getEquipBonus(state, slot);
       if (!it) continue;
       if (it.craftBonus) itemCraftBonus += Number(it.craftBonus) || 0;

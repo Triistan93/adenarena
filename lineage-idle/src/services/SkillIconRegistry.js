@@ -1773,12 +1773,14 @@ export function getSkillSemanticData(skillId) {
     return {
       element: SKILL_ICON_REGISTRY[skillId].element,
       role: SKILL_ICON_REGISTRY[skillId].role,
-      semanticCategory: SKILL_ICON_REGISTRY[skillId].semanticCategory
+      semanticCategory: SKILL_ICON_REGISTRY[skillId].semanticCategory,
+      starRank: typeof SKILL_ICON_REGISTRY[skillId].starRank === 'number' ? SKILL_ICON_REGISTRY[skillId].starRank : 1
     };
   }
   return {
     element: 'Physical',
     role: 'damage',
-    semanticCategory: 'general'
+    semanticCategory: 'general',
+    starRank: 1
   };
 }
