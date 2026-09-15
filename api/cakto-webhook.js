@@ -1,5 +1,5 @@
 /**
- * api/cakto-webhook.ts — Webhook Handler para Pagamentos Cakto
+ * api/cakto-webhook.js — Webhook Handler para Pagamentos Cakto
  * 
  * Recebe notificações instantâneas de compras aprovadas (Passe Premium e Aden Coins)
  * e credita com segurança no banco de dados do Supabase.
@@ -12,7 +12,7 @@ export const config = {
 /**
  * Helper para mascarar dados sensíveis nos logs do servidor (PII Sanitization)
  */
-function maskIdentifier(val: string): string {
+function maskIdentifier(val) {
   if (!val) return 'anonymous';
   if (val.includes('@')) {
     const [name, domain] = val.split('@');
@@ -22,7 +22,7 @@ function maskIdentifier(val: string): string {
   return val.length > 6 ? `${val.substring(0, 3)}***${val.slice(-3)}` : '***';
 }
 
-export default async function handler(req: any, res: any) {
+export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method Not Allowed. Use POST.' });
   }
@@ -143,7 +143,7 @@ export default async function handler(req: any, res: any) {
       }
     });
 
-  } catch (err: any) {
+  } catch (err) {
     console.error('[Cakto-Webhook] Erro interno no processamento:', err?.message || err);
     return res.status(500).json({ error: 'Internal Server Error', details: err?.message });
   }

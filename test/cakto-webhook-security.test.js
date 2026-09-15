@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import handler from '../api/cakto-webhook.ts';
+import handler from '../api/cakto-webhook.js';
 
 function createMockRes() {
   const res = {
