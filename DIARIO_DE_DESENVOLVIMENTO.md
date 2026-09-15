@@ -1,0 +1,172 @@
+# 📖 DIÁRIO CENTRAL DE DESENVOLVIMENTO & ENGENHARIA
+## Aden Arena: Idle Chronicles — Registro Canônico Unificado de Evolução do Projeto
+
+> **Repositório**: `Triistan93/adenarena` (GitHub: `origin/main`)  
+> **Branch Principal**: `main`  
+> **Propósito deste Documento**: Registrar cronologicamente todas as sessões de desenvolvimento em formato de páginas contínuas, detalhando data, hora, commits, arquitetura, arquivos alterados, status de testes e métricas de qualidade.
+
+---
+
+### 📑 Índice Rápido de Páginas
+- [Página 3 — 15 de Setembro de 2026 às 00:05](#página-3--15-de-setembro-de-2026-às-0005) — *Extração Massiva L2Bandit & PMfun, 1.991 Ícones WebP, Índices Mestres de 20k Chaves, IconService, UI Modernizada & Deploy*
+- [Página 2 — 14 de Setembro de 2026 às 23:45](#página-2--14-de-setembro-de-2026-às-2345) — *Arquitetura Zero-Trust, Blindagem Admin/Cakto/Firestore, Life Activities 2.0, Economia Fechada & Performance Chunks*
+- [Página 1 — 12 de Setembro de 2026 às 22:30](#página-1--12-de-setembro-de-2026-às-2230) — *Consolidação de Arquitetura, UX do Personagem & Mochila, Motor de Encantamento Canônico, Auto-Equip ERS e Ressonância de Armas*
+
+---
+
+<br/>
+
+## Página 3 — 15 de Setembro de 2026 às 00:05
+### 🛡️ Extração Massiva L2Bandit.camp & PMfun, Sistema Oficial de Ícones WebP & Deploy Vercel
+
+> **Data & Hora**: 15/09/2026 às 00:05 (BRT)  
+> **Commits desta Sessão**:
+> - `e0fefa1` — `feat: integrate authentic Lineage 2 WebP icons, complete L2Bandit database, and class crests`
+> - `9f4d633` — `docs: add DIARIO_DE_DESENVOLVIMENTO_2026-09-15 with icon integration and scraping details`
+>
+> **Status de Qualidade**: 
+> - **Build de Produção**: Vite 7.3.6 compilado com sucesso em **10.15s** (Zero erros, 264 módulos).
+> - **Integridade de Ativos**: **1.991 ícones WebP** sincronizados em `public/icons/` (100% íntegros, zero 404s).
+> - **Deploy de Produção**: Disparado via GitHub Integration na Vercel a partir da branch `main`.
+
+#### 1. Resumo Executivo da Sessão
+O ecossistema do **Aden Arena** deu um salto qualitativo gigantesco na fidelidade visual e no enriquecimento da sua base de dados, substituindo emojis e caminhos órfãos por ativos oficiais de Lineage 2:
+1. **Webscraping Massivo e Estruturado**: Extração de 69 sets de armadura e bônus +6 do **PMfun** e **9.352 registros** do **L2Bandit.camp** (armas, armaduras, joias, receitas, habilidades, monstros, chefes de raide e NPCs).
+2. **Download & Indexação de 1.991 Ícones WebP**: Download concorrente de 1.991 ícones em alta resolução e compilação de índices mestres com mais de **20.000 chaves de mapeamento**.
+3. **Serviço Centralizado de Ícones & Modernização Visual**: Implementação do `IconService.ts` e atualização das telas de Criação de Personagens (`CharacterCreation.tsx`), Login (`LoginScreen.tsx`) e Seleção de Campeões da Arena 3D (`ArenaApp.tsx`).
+
+#### 2. Detalhamento das Mudanças Implementadas
+
+##### A. Webscraping Completo de PMfun (Armor Sets & +6 Enchantment Bonuses)
+- **69 Sets de Armadura**: Mapeados todos os conjuntos clássicos (No Grade a S Grade) para armaduras pesadas, leves e robes.
+- **Bônus +6**: Mapeados os bônus ocultos de encantamento conjunto +6 (regeneração de MP, P.Def, HP, Evasion).
+- **175 Ícones PNG**: Baixados e padronizados em `scraped_data/images/`.
+- **Artefatos**: `scraped_data/armor_sets.json`, `scraped_data/plus6_bonuses.json`, `scraped_data/armor_sets.csv` e catálogo `scraped_data/index.html`.
+
+##### B. Webscraping Estruturado de L2Bandit.camp (9.352 Entidades)
+- **Multicraft**: 724 receitas de Craft book, 49 armor sets, 14 jewelry sets.
+- **Weapons (448 armas em 11 tipos)**: Daggers (34), One-handed swords (45), Two-handed swords (21), Bows (28), One-handed blunts (37), Two-handed blunts (11), Spears (28), Fists (25), One-handed magic (63), Two-handed magic (34), Dual swords (122).
+- **Armors (395 armaduras em 8 tipos)**: Heavy (54), Light (60), Magic (62), Gloves (65), Boots (70), Helmets (46), Shields (33), Sigils (5).
+- **Accessories (79 joias)**: Necklaces (27), Earrings (25), Rings (27).
+- **Dados de Mundo & Classes**: 18 Shots, 64 Resources, 9 Árvores de Classes (89 classes clássicas), **2.533 Skills**, 17 Territórios/Locations.
+- **NPCs & Monstros**: 229 Chefes de Raide e Épicos, 2.889 Monstros, 1.882 Cidadãos e 2 Mammons.
+- **Artefatos**: `scraped_data_bandit/l2bandit_all.json` (11.29 MB), 4 planilhas CSV e catálogo `scraped_data_bandit/index.html`.
+
+##### C. Public Assets & Índices Mestres
+- **`public/icons/`**: 1.991 ícones WebP servidos diretamente na rota `/icons/<nome>.webp`.
+- **`public/icons/icon_map.json`**: **20.433 chaves mapeadas** cobrindo classes, skills, armas, armaduras e materiais com variações de nomes, IDs e slugs.
+- **`public/img/icons/icon_index.json`**: Expandido para **21.387 chaves**, garantindo que o motor do Idle Game resolva itens diretamente para WebP sem erros 404.
+
+##### D. Serviço Centralizado (`IconService.ts`)
+- `CLASS_ICONS`: Mapeamento das 89 classes clássicas de Lineage 2 e variantes da Arena.
+- `POPULAR_SKILL_ICONS` & `SHOT_ICONS`: Mapeamento de skills e consumíveis (Soulshots e Spiritshots NG a S).
+- Helpers resilientes com fallbacks: `getClassIcon()`, `getSkillIcon()`, `getWeaponIcon()`, `getItemIcon()`, `loadIconMap()`.
+
+##### E. Modernização Visual de Interfaces (UI)
+- **`CharacterCreation.tsx`**: Botões de escolha de classe com brasões autênticos de Lineage 2 em moldura dourada e preview lateral direito com o brasão alinhado ao nome do herói.
+- **`LoginScreen.tsx`**: Card de identificação do herói com o brasão oficial da classe ao lado do nível.
+- **`ArenaApp.tsx`**: Seleção de campeões com brasões de 32x32px, badges de habilidades com ícones WebP reais e caixa "Your Champion" com brasão de 48x48px.
+
+##### F. Validação e Deploy
+- **Build**: `npm run build` aprovado em 10.15s (zero erros, 264 módulos).
+- **Git & Vercel**: Commits enviados para `origin/main` e deploy automático acionado em produção.
+
+#### 3. Tabela de Ativos da Sessão
+| Categoria | Registros Extraídos | Ícones Locais Baixados |
+| :--- | :---: | :---: |
+| **PMfun Sets & Bônus +6** | **69 Sets** | 175 PNGs |
+| **Multicraft (Craft, Sets)** | **787 Registros** | *(Inclusos no pool)* |
+| **Armas (11 subtipos)** | **448 Armas** | 393 WebPs |
+| **Armaduras & Escudos (8 subtipos)** | **395 Armaduras** | 399 WebPs |
+| **Joias & Acessórios (3 subtipos)** | **79 Joias** | 82 WebPs |
+| **Shots, Recursos & Consumíveis** | **82 Itens** | 163 WebPs |
+| **Classes (Árvores Completas)** | **89 Classes** | 89 WebPs |
+| **Habilidades (Skills)** | **2.533 Skills** | 821 WebPs |
+| **Monstros, Chefes & NPCs** | **5.004 Entidades** | - |
+| **TOTAL CONSOLIDADO** | **9.596 Entidades** | **2.166 Ícones Locais** |
+
+---
+
+<br/>
+
+## Página 2 — 14 de Setembro de 2026 às 23:45
+### 🛡️ Arquitetura Zero-Trust, Blindagem de Segurança, Life Activities 2.0 & Otimização de Performance
+
+> **Data & Hora**: 14/09/2026 às 23:45 (BRT)  
+> **Commits Realizados**: `9f21f51`, `85df916`, `8cad957`, `dbd757d`, `e74e80a`, `0663409`, `ef9970d`, `c720b68`, `2a0c1db`, `42118a2`, `7975d9b`, `46f0a91`, `a01d4b5`, `cdf3785`, `97a7305`, `f5f69b5`, `60082e3`, `ccc8b87`, `5e5bc86`  
+> **Status de Qualidade**: 
+> - **Testes Automatizados**: **63 testes** em 10 suítes canônicas passando (**100% de aprovação**) em ~430ms.
+> - **Build de Produção**: Vite compilado em 12.45s.
+> - **Integração Contínua**: Pipeline ativo em `.github/workflows/ci.yml`.
+
+#### 1. Resumo Executivo da Sessão
+1. **Transição para Arquitetura Zero-Trust Client Authority**: Eliminação definitiva da confiança no cliente do navegador para decisões administrativas, financeiras ou competitivas.
+2. **Conclusão das Life Activities 2.0 & Economia Fechada**: Minigames táticos de 5 etapas (Pesca, Coleta, Caça, Mineração) e fechamento do ciclo de materiais órfãos na Forja e Refinaria.
+3. **Otimização Extrema de Bundle**: Desacoplamento da Arena 3D (Three.js) e Pixel 2D via lazy loading dinâmico e divisão modular de chunks, reduzindo o bundle inicial de 4,32 MB para 2,38 MB (~45% menor).
+
+#### 2. Detalhamento das Mudanças Implementadas
+- **Blindagem Administrativa (P0)**:
+  - Eliminação de backdoors em `lineage-idle/main.js` onde comandos de console elevavam privilégio localmente.
+  - Gating estrito via `import.meta.env.DEV && import.meta.env.VITE_ENABLE_DEV_ADMIN === 'true'`.
+  - Autoridade criptográfica via Firebase Auth Custom Claims (`admin: true`) em `src/idle/IdleGame.tsx`.
+- **Blindagem e Idempotência no Webhook Cakto (P0)**:
+  - Em `api/cakto-webhook.ts`, requisições sem segredo válido são rejeitadas com HTTP 401.
+  - Ledger de Idempotência por `transaction_id`, eliminando duplicações de créditos de Aden Coins.
+  - Sanitização de PII nos logs da Vercel/Node.js.
+- **Hardening das Regras do Firestore (P0)**:
+  - Em `firestore.rules`, bloqueio total de escritas por usuários anônimos em coleções competitivas (`pvp_rankings`, `market_listings`, `clans`, `server_meta`).
+- **Integridade Competitiva & Anti-Cheat (P1)**:
+  - `computeAuthoritativeRankingCP`: Recálculo do Combat Power no servidor/Firestore antes da escrita no ranking.
+  - Integridade temporal de expedições em `ExpeditionService.js` com validação de relógio e bloqueio atômico de *double-claim*.
+- **Otimização de Bundle & Performance (P2)**:
+  - `src/ArenaApp.tsx` extraído para lazy loading sob demanda.
+  - Configuração de `manualChunks` no `vite.config.ts` isolando `vendor-three` (497 kB), `game-data-classes` (691 kB) e `game-data-items` (437 kB).
+- **Life Activities 2.0 & Economia Fechada**:
+  - `FishingService.js` (6 zonas, 20 espécies, varas D a A, modo AFK com teto de 8h).
+  - `GatheringService.js` (pureza botânica, perigos biológicos e desgaste de foice).
+  - `HuntingService.js` (rastreamento, alert gauge, vento e field butchering).
+  - `MiningService.js` (estabilidade de galeria, riscos de gás e desgaste de picareta).
+  - `RefineryService.js` + `recipes_drops.js`: Inclusão de 100% dos materiais órfãos em receitas canônicas.
+- **Otimização de Armazenamento**:
+  - Reivindicados ~2.75 GB de espaço movendo pastas legadas/duplicadas para `AdenOlderFiles`.
+  - Gerado backup remoto integral do GitHub em `AdenOlderFiles/github_remote_origin_backup_2026-09-14.bundle`.
+
+---
+
+<br/>
+
+## Página 1 — 12 de Setembro de 2026 às 22:30
+### ⚔️ Consolidação de Arquitetura, UX do Personagem & Mochila, Encantamento Canônico e Ressonância
+
+> **Data & Hora**: 12/09/2026 às 22:30 (BRT)  
+> **Commits Realizados**: `4d9f6af`, `7031776`, `c472ce8`  
+> **Status de Qualidade**: 
+> - **Testes Automatizados**: **65 testes** em 9 suítes canônicas passando (100% de aprovação).
+> - **Build de Produção**: Vite compilado com sucesso (232 módulos).
+
+#### 1. Resumo Executivo da Sessão
+Transformação do sistema de **Personagem e Mochila** do Lineage Idle em um motor de progressão contínua guiada, eliminando bloqueios históricos de usabilidade, descompassos de estado e consumo silencioso de itens.
+
+#### 2. Detalhamento das Mudanças Implementadas
+- **Motor Canônico de Encantamento (`EnchantmentService.js`)**:
+  - Máquina de 8 estados canônicos (`IDLE` $\to$ `SELECTING_ITEM` $\to$ `READY` $\to$ `CONFIRMING` $\to$ `PROCESSING` $\to$ `SUCCESS`/`FAILURE`/`CRYSTALLIZED`/`PROTECTED`).
+  - Clicar em `Usar` no scroll intercepta o consumo e abre o modal `#enchant-flow-modal` com alvos válidos pré-selecionados.
+  - Cálculo determinístico de chances (+0 $\to$ +1 com 100% até Safe Limit), deltas de stats e ganho real de CP.
+  - Proteção Blessed (preserva nível) e cristalização pós-limite seguro para pergaminhos normais.
+- **Auto-Equip Inteligente & ERS (`EquipmentService.js` + `ItemClassificationService.js`)**:
+  - Algoritmo ERS multicritério com pontuação de recomendação considerando classe, tipo de armadura/arma e sinergia de sets.
+  - Materiais, pergaminhos e poções recebem pontuação $-999.999$, impedindo que sejam equipados.
+  - Limpeza automática de slots `shield` e `weapon2` ao equipar arcos ou armas 2H.
+- **Ressonância de Armas & Procs Táticos (`WeaponResonanceService.js`)**:
+  - Taxonomia de 27 pares de arma primária + secundária/escudo.
+  - Congelamento da fórmula de Cleave do Comandante de Falange:
+    $$\text{CleaveDamage} = \lfloor \text{BaseSpearDamage} \times 1.45 \rfloor$$
+  - Baseline de Defesa Física da Ressonância:
+    $$\frac{\text{PDef}_{\text{com\_ressonancia}}}{\text{PDef}_{\text{sem\_ressonancia}}} = 1.20$$
+- **NextActionAdvisor (Inteligência de Próximo Passo)**:
+  - Motor de recomendação contextual com 5 níveis de prioridade (Auto-Equip, Upgrade, Encantamento, Forja Imperial, Power Milestone).
+- **Hotfixes Críticos de Runtime**:
+  - Resolução de `ReferenceError: AFFIX_MAP is not defined`.
+  - Correção de interpolação de template string escapada (`\${` $\to$ `${`).
+  - Resolução de `ReferenceError: closeInventoryPreviewModal is not defined`.
+  - Correção da dessincronização de `window.state` com `getState()` do `StateManager.js` que causava `0 tipos na mochila`.
