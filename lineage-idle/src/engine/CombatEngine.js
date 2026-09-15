@@ -44,22 +44,42 @@ function hasValidState(state) {
 
 /**
  * Retorna a cidade mais próxima / vila segura correspondente à zona informada.
- * Evita que personagens avançados regridam para Talking Island ao morrer ou retornar.
+ * Garante que a cidade retornada seja compatível com o nível e CP do jogador,
+ * evitando que jogadores de nível baixo sejam enviados para Aden City ou outras cidades de nível alto.
  * @param {string} zoneId
+ * @param {Object} [state] — Estado do jogador (para validar nível e CP)
  * @returns {string}
  */
-export function getNearestTown(zoneId) {
+export function getNearestTown(zoneId, state = null) {
   if (!zoneId || !ZONES[zoneId]) return 'talkingIsland';
+
+  const playerLevel = (state && typeof state.level === 'number') ? state.level : 100;
+  const playerCp = (state && (state.stats?.combatPower || state.combatPower)) ? (state.stats?.combatPower || state.combatPower) : Infinity;
+
+  function isTownAccessible(tId) {
+    if (!tId || !ZONES[tId] || !ZONES[tId].town) return false;
+    const tZone = ZONES[tId];
+    if (playerLevel < tZone.level) return false;
+    const prog = getZoneProgression(tId);
+    if (prog && prog.minCp && playerCp < prog.minCp) return false;
+    return true;
+  }
+
   const current = ZONES[zoneId];
-  if (current.town) return zoneId;
-  if (current.shop && ZONES[current.shop]?.town) return current.shop;
-  if (current.shop && ZONES[current.shop]) return current.shop;
+  if (current.town && isTownAccessible(zoneId)) return zoneId;
+  if (current.shop && isTownAccessible(current.shop)) return current.shop;
   for (let i = SAGAS.length - 1; i >= 0; i--) {
     if (SAGAS[i].zones.includes(zoneId)) {
-      const townInSaga = SAGAS[i].zones.find(z => ZONES[z]?.town);
+      const townInSaga = SAGAS[i].zones.find(z => isTownAccessible(z));
       if (townInSaga) return townInSaga;
     }
   }
+
+  const candidateTowns = ['adenCity', 'gludioCastle', 'blackCitadel', 'giranOutskirts', 'talkingIsland'];
+  for (const tId of candidateTowns) {
+    if (isTownAccessible(tId)) return tId;
+  }
+
   return 'talkingIsland';
 }
 
@@ -77,12 +97,13 @@ export function startCombat(state, callbacks = {}) {
   const zoneProg = state.zone ? getZoneProgression(state.zone) : null;
   const playerCp = state.stats?.combatPower || state.combatPower || 0;
   if (zoneProg && zoneProg.minCp && playerCp < zoneProg.minCp && state.zone !== 'talkingIsland') {
-    const safeTown = getNearestTown(state.zone);
+    const safeTown = getNearestTown(state.zone, state);
     if (callbacks.log) {
       callbacks.log(`🔒 Poder de Combate Insuficiente para ${ZONES[state.zone]?.name || state.zone}! Requer ${zoneProg.minCp.toLocaleString()} CP (Seu CP: ${playerCp.toLocaleString()}). Retornando para ${ZONES[safeTown]?.name || safeTown}...`, 'warning');
     }
     state.zone = safeTown;
     state.currentZone = safeTown;
+    state.lastHuntingZone = safeTown;
     if (callbacks.updateAllUI) callbacks.updateAllUI();
     if (callbacks.save) callbacks.save();
   }
@@ -359,14 +380,14 @@ export function resurrect(state, useScroll = false, callbacks = {}) {
   state.target = null;
   state.activeMonster = null;
 
-  if (useScroll) {
-    state.zone = state.lastHuntingZone || state.zone || 'talkingIsland';
-  } else {
-    state.zone = getNearestTown(state.zone || state.lastHuntingZone || state.lastSafeZone);
-  }
+  // Sempre permanece no mesmo mapa ao ressuscitar (mantém hunting zone atual)
+  const currentHuntingZone = state.zone || state.lastHuntingZone || 'talkingIsland';
+  state.zone = ZONES[currentHuntingZone] ? currentHuntingZone : 'talkingIsland';
   state.currentZone = state.zone;
   if (ZONES[state.zone]?.town) {
     state.lastSafeZone = state.zone;
+  } else {
+    state.lastHuntingZone = state.zone;
   }
 
   if (callbacks.log) {

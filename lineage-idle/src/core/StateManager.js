@@ -10,6 +10,7 @@ import { SAVE_KEY, D } from './GameConfig.js';
 import { getSelectedSet } from '../services/InventoryService.js';
 import { generateStateChecksum, validateStateIntegrity, sanitizeGameState } from '../engine/SecurityEngine.js';
 import { getStarterSkillsForClass, normalizeAndValidateSkills } from '../services/SkillEligibility.js';
+import { getZoneProgression } from '../data/balance/progressionBalance.js';
 
 export const DEFAULT_STATE = () => ({
   characterId: null,
@@ -349,6 +350,18 @@ export function loadState() {
 
     currentState = { ...def, ...data };
     sanitizeGameState(currentState);
+
+    // Sanitização preventiva de zona salva: impede que saves antigos ou dessincronizados deixem o jogador preso em zonas de alto CP
+    if (currentState.zone && currentState.zone !== 'talkingIsland') {
+      const zProg = getZoneProgression(currentState.zone);
+      const pCp = currentState.stats?.combatPower || currentState.combatPower || 0;
+      const pLvl = currentState.level || 1;
+      if (zProg && ((zProg.level && pLvl < zProg.level) || (zProg.minCp && pCp > 0 && pCp < zProg.minCp))) {
+        currentState.zone = 'talkingIsland';
+        currentState.currentZone = 'talkingIsland';
+        currentState.lastHuntingZone = 'talkingIsland';
+      }
+    }
 
     currentState.privilegeLevel = Number(data.privilegeLevel) || (data.role === 'admin' ? 1 : 0) || 0;
     currentState.gender = data.gender || data.charGender || data.sex || def.gender || 'M';

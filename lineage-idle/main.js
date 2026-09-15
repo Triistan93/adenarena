@@ -1512,10 +1512,11 @@ function useItem(uid) {
   } 
   else if (def.type === 'teleport') {
     state.hp = state.maxHp; state.mp = state.maxMp;
-    const town = getNearestTown(state.zone);
+    const town = getNearestTown(state.zone, state);
     if (state.zone !== town) {
       state.zone = town;
       state.currentZone = town;
+      state.lastHuntingZone = town;
       const zn = el('zone-name');
       if (zn) zn.textContent = ZONES[state.zone]?.name || town;
       stopCombat();
@@ -6983,7 +6984,7 @@ function updateZoneKillProgressUI() {
   }
 }
 
-function startCombat() { return engineStartCombat(state, { log, attackMonster }); }
+function startCombat() { return engineStartCombat(state, { log, attackMonster, updateAllUI, save }); }
 function stopCombat() {
   try {
     if (globalVFXOrchestrator && typeof globalVFXOrchestrator.clear === 'function') globalVFXOrchestrator.clear();
@@ -10378,7 +10379,7 @@ export function init() {
     };
     window.teleportToQuestZone = (zoneId) => {
       if (zoneId) {
-        changeZone(zoneId);
+        selectZone(zoneId);
         openPanel('zones');
       }
     };
