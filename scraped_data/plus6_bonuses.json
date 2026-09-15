@@ -1,0 +1,32 @@
+[
+  {
+    "grade": "S Grade",
+    "heavyArmor": "P.Def. +56 MP Regen +2.0",
+    "lightArmor": "Evasion +2 M.Def. +32",
+    "robes": "P.Def. +36 Weight Gauge +30%"
+  },
+  {
+    "grade": "A Grade",
+    "heavyArmor": "P.Def. +50 MP Regen +2.0",
+    "lightArmor": "Evasion +2 M.Def. +28",
+    "robes": "P.Def. +32 Weight Gauge +30%"
+  },
+  {
+    "grade": "B Grade",
+    "heavyArmor": "P.Def. +44 MP Regen +2.0",
+    "lightArmor": "Evasion +2 M.Def. +24",
+    "robes": "P.Def. +28 Weight Gauge +30%"
+  },
+  {
+    "grade": "C Grade",
+    "heavyArmor": "P.Def. +38 MP Regen +2.0",
+    "lightArmor": "Evasion +2 M.Def. +20",
+    "robes": "P.Def. +24 Weight Gauge +30%"
+  },
+  {
+    "grade": "D Grade",
+    "heavyArmor": "P.Def. +25 MP Regen +2.0",
+    "lightArmor": "Evasion +2 M.Def. +12",
+    "robes": "P.Def. +16 Weight Gauge +30%"
+  }
+]

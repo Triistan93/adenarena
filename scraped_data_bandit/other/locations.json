@@ -1,0 +1,1993 @@
+[
+  {
+    "territory": {
+      "areaName": "talking-island",
+      "name": {
+        "en": "Talking Island",
+        "ru": "Говорящий остров"
+      }
+    },
+    "locations": [
+      {
+        "id": "talking-island-village",
+        "name": {
+          "en": "Talking Island Village",
+          "ru": "Деревня Говорящего Острова"
+        },
+        "levels": {
+          "min": 1,
+          "max": 70
+        }
+      },
+      {
+        "id": "talking-island-harbor",
+        "name": {
+          "en": "Talking Island Harbor",
+          "ru": "Гавань Говорящего Острова"
+        },
+        "levels": {
+          "min": 7,
+          "max": 11
+        }
+      },
+      {
+        "id": "cedrics-training-hall",
+        "name": {
+          "en": "Cedric's Training Hall",
+          "ru": "Школа Сэдрика"
+        },
+        "levels": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      {
+        "id": "einhovants-school-of-magic",
+        "name": {
+          "en": "Einhovant's School of Magic",
+          "ru": "Школа Магов Айнховант"
+        },
+        "levels": {
+          "min": 1,
+          "max": 8
+        }
+      },
+      {
+        "id": "obelisk-of-victory",
+        "name": {
+          "en": "Obelisk of Victory",
+          "ru": "Обелиск Победы"
+        },
+        "levels": {
+          "min": 4,
+          "max": 14
+        }
+      },
+      {
+        "id": "talking-island-northern-territory",
+        "name": {
+          "en": "Talking Island, Northern Territory",
+          "ru": "Север Говорящего Острова"
+        },
+        "levels": {
+          "min": 12,
+          "max": 16
+        }
+      },
+      {
+        "id": "elven-ruins",
+        "name": {
+          "en": "Elven Ruins",
+          "ru": "Эльфийские Руины"
+        },
+        "levels": {
+          "min": 9,
+          "max": 22
+        }
+      }
+    ]
+  },
+  {
+    "territory": {
+      "areaName": "elven-territory",
+      "name": {
+        "en": "Elven Territory",
+        "ru": "Эльфийская территория"
+      }
+    },
+    "locations": [
+      {
+        "id": "elven-village",
+        "name": {
+          "en": "Elven Village",
+          "ru": "Деревня Эльфов"
+        },
+        "levels": {
+          "min": 70,
+          "max": 70
+        }
+      },
+      {
+        "id": "mother-tree-glade",
+        "name": {
+          "en": "Shadow of the Mother Tree",
+          "ru": "Тень Древа Жизни"
+        },
+        "levels": {
+          "min": 1,
+          "max": 4
+        }
+      },
+      {
+        "id": "lake-iris",
+        "name": {
+          "en": "Lake Iris",
+          "ru": "Радужное Озеро"
+        },
+        "levels": {
+          "min": 8,
+          "max": 15
+        }
+      },
+      {
+        "id": "elven-fortress",
+        "name": {
+          "en": "Elven Fortress",
+          "ru": "Эльфийская Крепость"
+        },
+        "levels": {
+          "min": 10,
+          "max": 20
+        }
+      },
+      {
+        "id": "elven-forest",
+        "name": {
+          "en": "Elven Forest",
+          "ru": "Эльфийский Лес"
+        },
+        "levels": {
+          "min": 8,
+          "max": 18
+        }
+      }
+    ]
+  },
+  {
+    "territory": {
+      "areaName": "dark-elven-territory",
+      "name": {
+        "en": "Dark Elven Territory",
+        "ru": "Территория Темных Эльфов"
+      }
+    },
+    "locations": [
+      {
+        "id": "dark-elven-village",
+        "name": {
+          "en": "Dark Elven Village",
+          "ru": "Деревня Темных Эльфов"
+        },
+        "levels": {
+          "min": 70,
+          "max": 70
+        }
+      },
+      {
+        "id": "temple-of-shilen",
+        "name": {
+          "en": "The Shilen Temple",
+          "ru": "Храм Богини Шилен"
+        },
+        "levels": {
+          "min": 1,
+          "max": 70
+        }
+      },
+      {
+        "id": "swampland",
+        "name": {
+          "en": "Swampland",
+          "ru": "Топи"
+        },
+        "levels": {
+          "min": 13,
+          "max": 16
+        }
+      },
+      {
+        "id": "school-of-dark-arts",
+        "name": {
+          "en": "School of Dark Arts",
+          "ru": "Школа Темной Магии"
+        },
+        "levels": {
+          "min": 10,
+          "max": 22
+        }
+      },
+      {
+        "id": "altar-of-rites",
+        "name": {
+          "en": "Altar of Rites",
+          "ru": "Церемониальный Алтарь"
+        },
+        "levels": {
+          "min": 16,
+          "max": 20
+        }
+      },
+      {
+        "id": "spider-nest",
+        "name": {
+          "en": "Spider Nest",
+          "ru": "Гнездо Пауков"
+        },
+        "levels": {
+          "min": 16,
+          "max": 20
+        }
+      },
+      {
+        "id": "black-rock-hill",
+        "name": {
+          "en": "Black Rock Hill",
+          "ru": "Холм Черного Камня"
+        },
+        "levels": {
+          "min": 13,
+          "max": 17
+        }
+      }
+    ]
+  },
+  {
+    "territory": {
+      "areaName": "orc-territory",
+      "name": {
+        "en": "Orc Territory",
+        "ru": "Территория орков"
+      }
+    },
+    "locations": [
+      {
+        "id": "orc-village",
+        "name": {
+          "en": "Orc Village",
+          "ru": "Деревня Орков"
+        },
+        "levels": {
+          "min": 1,
+          "max": 70
+        }
+      },
+      {
+        "id": "temple-of-pagrio",
+        "name": {
+          "en": "Temple of Pagrio",
+          "ru": "Храм Паагрио"
+        },
+        "levels": {
+          "min": 1,
+          "max": 3
+        }
+      },
+      {
+        "id": "frozen-waterfalls",
+        "name": {
+          "en": "Frozen Waterfalls",
+          "ru": "Замерзший Водопад"
+        },
+        "levels": {
+          "min": 13,
+          "max": 17
+        }
+      },
+      {
+        "id": "cave-of-trials",
+        "name": {
+          "en": "Cave of Trials",
+          "ru": "Пещера Испытаний"
+        },
+        "levels": {
+          "min": 10,
+          "max": 39
+        }
+      },
+      {
+        "id": "immortal-plateau-northern-region",
+        "name": {
+          "en": "Immortal Plateau, Northern Region",
+          "ru": "Северная Часть Плато"
+        },
+        "levels": {
+          "min": 7,
+          "max": 17
+        }
+      },
+      {
+        "id": "immortal-plateau-southern-region",
+        "name": {
+          "en": "Immortal Plateau, Southern Region",
+          "ru": "Южная Часть Плато"
+        },
+        "levels": {
+          "min": 10,
+          "max": 39
+        }
+      }
+    ]
+  },
+  {
+    "territory": {
+      "areaName": "dwarven-territory",
+      "name": {
+        "en": "Dwarven Territory",
+        "ru": "Территория гномов"
+      }
+    },
+    "locations": [
+      {
+        "id": "dwarven-village",
+        "name": {
+          "en": "Dwarven Village",
+          "ru": "Деревня Гномов"
+        },
+        "levels": {
+          "min": 4,
+          "max": 70
+        }
+      },
+      {
+        "id": "strip-mine",
+        "name": {
+          "en": "Strip Mine",
+          "ru": "Рудник Возрождения"
+        },
+        "levels": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      {
+        "id": "abandoned-coal-mines",
+        "name": {
+          "en": "Abandoned Coal Mines",
+          "ru": "Заброшенный Угольный Рудник"
+        },
+        "levels": {
+          "min": 10,
+          "max": 19
+        }
+      },
+      {
+        "id": "mithril-mines",
+        "name": {
+          "en": "Mithril Mines",
+          "ru": "Мифриловый Рудник"
+        },
+        "levels": {
+          "min": 19,
+          "max": 30
+        }
+      },
+      {
+        "id": "western-mining-zone",
+        "name": {
+          "en": "Western Mining Zone",
+          "ru": "Западные Рудники"
+        },
+        "levels": {
+          "min": 8,
+          "max": 17
+        }
+      },
+      {
+        "id": "eastern-mining-zone",
+        "name": {
+          "en": "Eastern Mining Zone",
+          "ru": "Восточные Рудники"
+        },
+        "levels": {
+          "min": 18,
+          "max": 25
+        }
+      }
+    ]
+  },
+  {
+    "territory": {
+      "areaName": "gludin-territory",
+      "name": {
+        "en": "Gludin Territory",
+        "ru": "Территория Глудин"
+      }
+    },
+    "locations": [
+      {
+        "id": "gludin-village",
+        "name": {
+          "en": "Gludin Village",
+          "ru": "Деревня Глудин"
+        },
+        "levels": {
+          "min": 70,
+          "max": 70
+        }
+      },
+      {
+        "id": "gludin-harbor",
+        "name": {
+          "en": "Gludin Harbor",
+          "ru": "Гавань Глудина"
+        },
+        "levels": {
+          "min": 1,
+          "max": 80
+        }
+      },
+      {
+        "id": "windmill-hill",
+        "name": {
+          "en": "Windmill Hill",
+          "ru": "Холм Ветряных Мельниц"
+        },
+        "levels": {
+          "min": 15,
+          "max": 33
+        }
+      },
+      {
+        "id": "ol-mahum-checkpoint",
+        "name": {
+          "en": "Ol Mahum Checkpoint",
+          "ru": "Застава Гноллов"
+        },
+        "levels": {
+          "min": 22,
+          "max": 25
+        }
+      },
+      {
+        "id": "fellmere-harvest-grounds",
+        "name": {
+          "en": "Fellmere Harvest Grounds",
+          "ru": "Охотничьи Угодья Фельмер"
+        },
+        "levels": {
+          "min": 15,
+          "max": 24
+        }
+      },
+      {
+        "id": "orc-barracks",
+        "name": {
+          "en": "Orc Barracks",
+          "ru": "Лагерь Орков"
+        },
+        "levels": {
+          "min": 18,
+          "max": 35
+        }
+      },
+      {
+        "id": "windy-hill",
+        "name": {
+          "en": "Windy Hill",
+          "ru": "Холм Ветров"
+        },
+        "levels": {
+          "min": 18,
+          "max": 30
+        }
+      },
+      {
+        "id": "abandoned-camp",
+        "name": {
+          "en": "Abandoned Camp",
+          "ru": "Заброшенный Лагерь"
+        },
+        "levels": {
+          "min": 17,
+          "max": 29
+        }
+      },
+      {
+        "id": "forgotten-temple",
+        "name": {
+          "en": "Forgotten Temple",
+          "ru": "Забытый Храм"
+        },
+        "levels": {
+          "min": 16,
+          "max": 33
+        }
+      },
+      {
+        "id": "southern-entrance-of-wastelands",
+        "name": {
+          "en": "Southern Entrance of Wastelands",
+          "ru": "Южный Вход в Пустошь"
+        },
+        "levels": {
+          "min": 19,
+          "max": 25
+        }
+      },
+      {
+        "id": "fellmere-lake",
+        "name": {
+          "en": "Fellmere Lake",
+          "ru": "Озеро Фельмер"
+        },
+        "levels": {
+          "min": 25,
+          "max": 25
+        }
+      },
+      {
+        "id": "langk-lizardman-barracks",
+        "name": {
+          "en": "Langk Lizardman Dwellings",
+          "ru": "Поселение Ящеров Лангк"
+        },
+        "levels": {
+          "min": 19,
+          "max": 30
+        }
+      }
+    ]
+  },
+  {
+    "territory": {
+      "areaName": "gludio-territory",
+      "name": {
+        "en": "Gludio Territory",
+        "ru": "Территория Глудио"
+      }
+    },
+    "locations": [
+      {
+        "id": "gludio-castle-town",
+        "name": {
+          "en": "Town of Gludio",
+          "ru": "Город Глудио"
+        },
+        "levels": {
+          "min": 70,
+          "max": 70
+        }
+      },
+      {
+        "id": "gludio-castle",
+        "name": {
+          "en": "Gludio Castle",
+          "ru": "Замок Глудио"
+        },
+        "levels": {
+          "min": 20,
+          "max": 70
+        }
+      },
+      {
+        "id": "ruined-bend",
+        "name": {
+          "en": "The Ruined Bend",
+          "ru": "Вход в Руины"
+        },
+        "levels": {
+          "min": 19,
+          "max": 22
+        }
+      },
+      {
+        "id": "evil-hunting-grounds",
+        "name": {
+          "en": "Evil Hunting Grounds",
+          "ru": "Охотничьи Угодья Зла"
+        },
+        "levels": {
+          "min": 16,
+          "max": 21
+        }
+      },
+      {
+        "id": "windawood-manor",
+        "name": {
+          "en": "Windawood Manor",
+          "ru": "Поместье Виндавуд"
+        },
+        "levels": {
+          "min": 22,
+          "max": 25
+        }
+      },
+      {
+        "id": "ruins-of-despair",
+        "name": {
+          "en": "Ruins of Despair",
+          "ru": "Руины Отчаяния"
+        },
+        "levels": {
+          "min": 15,
+          "max": 25
+        }
+      },
+      {
+        "id": "ant-nest",
+        "name": {
+          "en": "The Ant Nest",
+          "ru": "Муравейник"
+        },
+        "levels": {
+          "min": 22,
+          "max": 40
+        }
+      },
+      {
+        "id": "wasteland",
+        "name": {
+          "en": "Wasteland",
+          "ru": "Пустошь"
+        },
+        "levels": {
+          "min": 22,
+          "max": 40
+        }
+      },
+      {
+        "id": "ruins-of-agony",
+        "name": {
+          "en": "Ruins of Agony",
+          "ru": "Руины Страданий"
+        },
+        "levels": {
+          "min": 15,
+          "max": 25
+        }
+      },
+      {
+        "id": "maille-barracks",
+        "name": {
+          "en": "Maille Lizardman Barracks",
+          "ru": "Лагерь Ящеров Мэль"
+        },
+        "levels": {
+          "min": 20,
+          "max": 30
+        }
+      },
+      {
+        "id": "neutral-zone",
+        "name": {
+          "en": "Neutral Zone",
+          "ru": "Нейтральная Зона"
+        },
+        "levels": {
+          "min": 14,
+          "max": 20
+        }
+      }
+    ]
+  },
+  {
+    "territory": {
+      "areaName": "dion-territory",
+      "name": {
+        "en": "Dion Territory",
+        "ru": "Территория Дион"
+      }
+    },
+    "locations": [
+      {
+        "id": "dion-castle-town",
+        "name": {
+          "en": "Town of Dion",
+          "ru": "Город Дион"
+        },
+        "levels": {
+          "min": 20,
+          "max": 70
+        }
+      },
+      {
+        "id": "dion-castle",
+        "name": {
+          "en": "Dion Castle",
+          "ru": "Замок Дион"
+        },
+        "levels": {
+          "min": 1,
+          "max": 80
+        }
+      },
+      {
+        "id": "floran-agricultural-area",
+        "name": {
+          "en": "Floran Agricultural Area",
+          "ru": "Угодья Флорана"
+        },
+        "levels": {
+          "min": 30,
+          "max": 34
+        }
+      },
+      {
+        "id": "plains-of-dion",
+        "name": {
+          "en": "Plains of Dion",
+          "ru": "Окресности Замка Дион"
+        },
+        "levels": {
+          "min": 23,
+          "max": 28
+        }
+      },
+      {
+        "id": "dion-hills",
+        "name": {
+          "en": "Dion Hills",
+          "ru": "Холмы Диона"
+        },
+        "levels": {
+          "min": 21,
+          "max": 25
+        }
+      },
+      {
+        "id": "cruma-marshlands",
+        "name": {
+          "en": "Cruma Marshlands",
+          "ru": "Топи Крумы"
+        },
+        "levels": {
+          "min": 25,
+          "max": 56
+        }
+      },
+      {
+        "id": "execution-ground",
+        "name": {
+          "en": "Execution Ground",
+          "ru": "Земля Казненных"
+        },
+        "levels": {
+          "min": 20,
+          "max": 36
+        }
+      },
+      {
+        "id": "partisan-hideaway",
+        "name": {
+          "en": "Partisan Hideaway",
+          "ru": "Лагерь Партизан"
+        },
+        "levels": {
+          "min": 23,
+          "max": 55
+        }
+      },
+      {
+        "id": "floran-village",
+        "name": {
+          "en": "Floran Village",
+          "ru": "Деревня Флоран"
+        },
+        "levels": {
+          "min": 30,
+          "max": 70
+        }
+      },
+      {
+        "id": "tanor-canyon",
+        "name": {
+          "en": "Tanor Canyon",
+          "ru": "Каньон Танор"
+        },
+        "levels": {
+          "min": 46,
+          "max": 50
+        }
+      }
+    ]
+  },
+  {
+    "territory": {
+      "areaName": "giran-territory",
+      "name": {
+        "en": "Giran Territory",
+        "ru": "Территория Гиран"
+      }
+    },
+    "locations": [
+      {
+        "id": "giran-castle-town",
+        "name": {
+          "en": "Town of Giran",
+          "ru": "Город Гиран"
+        },
+        "levels": {
+          "min": 39,
+          "max": 70
+        }
+      },
+      {
+        "id": "giran-castle",
+        "name": {
+          "en": "Giran Castle",
+          "ru": "Замок Гиран"
+        },
+        "levels": {
+          "min": 1,
+          "max": 80
+        }
+      },
+      {
+        "id": "giran-harbor",
+        "name": {
+          "en": "Giran Harbor",
+          "ru": "Гавань Гирана"
+        },
+        "levels": {
+          "min": 1,
+          "max": 80
+        }
+      },
+      {
+        "id": "brekas-stronghold",
+        "name": {
+          "en": "Breka's Stronghold",
+          "ru": "Укрепление Бреки"
+        },
+        "levels": {
+          "min": 30,
+          "max": 35
+        }
+      },
+      {
+        "id": "gorgorns-flower-garden",
+        "name": {
+          "en": "Gorgorn Flower Garden",
+          "ru": "Сад Цветов Горгон"
+        },
+        "levels": {
+          "min": 31,
+          "max": 36
+        }
+      },
+      {
+        "id": "death-pass",
+        "name": {
+          "en": "Death Pass",
+          "ru": "Долина Смерти"
+        },
+        "levels": {
+          "min": 30,
+          "max": 40
+        }
+      },
+      {
+        "id": "dragon-valley",
+        "name": {
+          "en": "Dragon valley",
+          "ru": "Долина Драконов"
+        },
+        "levels": {
+          "min": 30,
+          "max": 65
+        }
+      },
+      {
+        "id": "antharas-lair",
+        "name": {
+          "en": "The Lair of Antharas",
+          "ru": "Логово Антараса"
+        },
+        "levels": {
+          "min": 60,
+          "max": 75
+        }
+      },
+      {
+        "id": "hardins-academy",
+        "name": {
+          "en": "Hardin's Academy",
+          "ru": "Академия Хардина"
+        },
+        "levels": {
+          "min": 38,
+          "max": 40
+        }
+      }
+    ]
+  },
+  {
+    "territory": {
+      "areaName": "hunter-village-territory",
+      "name": {
+        "en": "Hunter Village Territory",
+        "ru": "Территория Деревни Охотников"
+      }
+    },
+    "locations": [
+      {
+        "id": "hunter-village",
+        "name": {
+          "en": "Hunter Village",
+          "ru": "Деревня Охотников"
+        },
+        "levels": {
+          "min": 40,
+          "max": 70
+        }
+      },
+      {
+        "id": "enchanted-valley",
+        "name": {
+          "en": "The Enchanted Valley",
+          "ru": "Зачарованная Долина"
+        },
+        "levels": {
+          "min": 45,
+          "max": 56
+        }
+      },
+      {
+        "id": "forest-of-mirrors",
+        "name": {
+          "en": "The Forest of Mirrors",
+          "ru": "Лес Зеркал"
+        },
+        "levels": {
+          "min": 40,
+          "max": 67
+        }
+      },
+      {
+        "id": "anghel-waterfall",
+        "name": {
+          "en": "Anghel Waterfall",
+          "ru": "Ангельский Водопад"
+        },
+        "levels": {
+          "min": 53,
+          "max": 59
+        }
+      }
+    ]
+  },
+  {
+    "territory": {
+      "areaName": "oren-territory",
+      "name": {
+        "en": "Oren Territory",
+        "ru": "Территория Орен"
+      }
+    },
+    "locations": [
+      {
+        "id": "town-of-oren",
+        "name": {
+          "en": "Town of Oren",
+          "ru": "Город Орен"
+        },
+        "levels": {
+          "min": 42,
+          "max": 70
+        }
+      },
+      {
+        "id": "oren-castle",
+        "name": {
+          "en": "Oren Castle",
+          "ru": "Замок Орен"
+        },
+        "levels": {
+          "min": 1,
+          "max": 80
+        }
+      },
+      {
+        "id": "timak-outpost",
+        "name": {
+          "en": "Timak Outpost",
+          "ru": "Застава Тимак"
+        },
+        "levels": {
+          "min": 41,
+          "max": 45
+        }
+      },
+      {
+        "id": "ivory-tower",
+        "name": {
+          "en": "Ivory Tower",
+          "ru": "Башня Слоновой Кости"
+        },
+        "levels": {
+          "min": 40,
+          "max": 70
+        }
+      },
+      {
+        "id": "sea-of-spores",
+        "name": {
+          "en": "Sea of Spores",
+          "ru": "Море Спор"
+        },
+        "levels": {
+          "min": 40,
+          "max": 50
+        }
+      },
+      {
+        "id": "border-outpost",
+        "name": {
+          "en": "Border Outpost",
+          "ru": "Западная Пограничная Застава"
+        },
+        "levels": {
+          "min": 1,
+          "max": 80
+        }
+      },
+      {
+        "id": "plains-of-the-lizardmen",
+        "name": {
+          "en": "Plains of the Lizardmen",
+          "ru": "Долина Ящеров"
+        },
+        "levels": {
+          "min": 35,
+          "max": 40
+        }
+      },
+      {
+        "id": "skyshadow-meadow",
+        "name": {
+          "en": "Skyshadow Meadow",
+          "ru": "Луга Небесной Тени"
+        },
+        "levels": {
+          "min": 40,
+          "max": 57
+        }
+      }
+    ]
+  },
+  {
+    "territory": {
+      "areaName": "aden-territory",
+      "name": {
+        "en": "Aden Territory",
+        "ru": "Территория Аден"
+      }
+    },
+    "locations": [
+      {
+        "id": "town-of-aden",
+        "name": {
+          "en": "Town of Aden",
+          "ru": "Город Аден"
+        },
+        "levels": {
+          "min": 45,
+          "max": 70
+        }
+      },
+      {
+        "id": "aden-castle",
+        "name": {
+          "en": "Aden Castle",
+          "ru": "Замок АДен"
+        },
+        "levels": {
+          "min": 45,
+          "max": 75
+        }
+      },
+      {
+        "id": "forest-of-outlaw",
+        "name": {
+          "en": "Forest of Outlaw",
+          "ru": "Лес Разбойников"
+        },
+        "levels": {
+          "min": 50,
+          "max": 56
+        }
+      },
+      {
+        "id": "forest-of-evil-spirit",
+        "name": {
+          "en": "Forest of Evil Spirit",
+          "ru": "Лес Зла"
+        },
+        "levels": {
+          "min": 46,
+          "max": 52
+        }
+      },
+      {
+        "id": "field-of-massacre",
+        "name": {
+          "en": "Field of Massacre",
+          "ru": "Поле Брани"
+        },
+        "levels": {
+          "min": 55,
+          "max": 80
+        }
+      },
+      {
+        "id": "tower-of-insolence",
+        "name": {
+          "en": "Tower of Insolence",
+          "ru": "Башня Дерзости"
+        },
+        "levels": {
+          "min": 60,
+          "max": 79
+        }
+      },
+      {
+        "id": "blazing-swamp",
+        "name": {
+          "en": "Blazing Swamp",
+          "ru": "Раскаленные Топи"
+        },
+        "levels": {
+          "min": 65,
+          "max": 75
+        }
+      },
+      {
+        "id": "cemetery",
+        "name": {
+          "en": "The Cemetery",
+          "ru": "Кладбище"
+        },
+        "levels": {
+          "min": 45,
+          "max": 62
+        }
+      },
+      {
+        "id": "forbidden-gateway",
+        "name": {
+          "en": "The Forbidden Gateway",
+          "ru": "Запретные Врата"
+        },
+        "levels": {
+          "min": 60,
+          "max": 75
+        }
+      },
+      {
+        "id": "narsell-lake",
+        "name": {
+          "en": "Narsell Lake",
+          "ru": "Озеро Нарсилл"
+        },
+        "levels": {
+          "min": 1,
+          "max": 80
+        }
+      },
+      {
+        "id": "forsaken-plains",
+        "name": {
+          "en": "Forsaken Plains",
+          "ru": "Забытые равнины"
+        },
+        "levels": {
+          "min": 54,
+          "max": 79
+        }
+      },
+      {
+        "id": "giants-cave",
+        "name": {
+          "en": "The Giant`s Cave",
+          "ru": "Пещера Гигантов"
+        },
+        "levels": {
+          "min": 54,
+          "max": 79
+        }
+      },
+      {
+        "id": "devasted-castle",
+        "name": {
+          "en": "Devasted Castle",
+          "ru": "Разоренный Замок"
+        },
+        "levels": {
+          "min": 55,
+          "max": 80
+        }
+      }
+    ]
+  },
+  {
+    "territory": {
+      "areaName": "heine-territory",
+      "name": {
+        "en": "Heine Territory",
+        "ru": "Территория Хейна"
+      }
+    },
+    "locations": [
+      {
+        "id": "heine",
+        "name": {
+          "en": "Heine",
+          "ru": "Хейн"
+        },
+        "levels": {
+          "min": 70,
+          "max": 70
+        }
+      },
+      {
+        "id": "innadril-castle",
+        "name": {
+          "en": "Innadril Castle",
+          "ru": "Замок Иннадрил"
+        },
+        "levels": {
+          "min": 1,
+          "max": 80
+        }
+      },
+      {
+        "id": "alligator-island",
+        "name": {
+          "en": "Alligator Island",
+          "ru": "Остров Аллигаторов"
+        },
+        "levels": {
+          "min": 40,
+          "max": 51
+        }
+      },
+      {
+        "id": "field-of-silence",
+        "name": {
+          "en": "Field of Silence",
+          "ru": "Поля Безмолвия"
+        },
+        "levels": {
+          "min": 30,
+          "max": 40
+        }
+      },
+      {
+        "id": "field-of-whispers",
+        "name": {
+          "en": "Field of Whispers",
+          "ru": "Шепчущие Поля"
+        },
+        "levels": {
+          "min": 34,
+          "max": 40
+        }
+      },
+      {
+        "id": "alligator-beach",
+        "name": {
+          "en": "Alligator Beach",
+          "ru": "Пляж Аллигаторов"
+        },
+        "levels": {
+          "min": 39,
+          "max": 40
+        }
+      },
+      {
+        "id": "garden-of-eva",
+        "name": {
+          "en": "Garden of Eva",
+          "ru": "Сад Богини Евы"
+        },
+        "levels": {
+          "min": 40,
+          "max": 47
+        }
+      },
+      {
+        "id": "devils-isle",
+        "name": {
+          "en": "Devil's Isle",
+          "ru": "Остров Дьявола"
+        },
+        "levels": {
+          "min": 43,
+          "max": 65
+        }
+      },
+      {
+        "id": "pirate-tunnel",
+        "name": {
+          "en": "Pirate Tunnel",
+          "ru": "Тоннель Пиратов"
+        },
+        "levels": {
+          "min": 43,
+          "max": 44
+        }
+      }
+    ]
+  },
+  {
+    "territory": {
+      "areaName": "rune-territory",
+      "name": {
+        "en": "Rune Territory",
+        "ru": "Территория Руны"
+      }
+    },
+    "locations": [
+      {
+        "id": "rune-castle-town",
+        "name": {
+          "en": "Rune Township",
+          "ru": "Руна"
+        },
+        "levels": {
+          "min": 78,
+          "max": 78
+        }
+      },
+      {
+        "id": "rune-harbor",
+        "name": {
+          "en": "Rune Harbor",
+          "ru": "Гавань Руны"
+        },
+        "levels": {
+          "min": 1,
+          "max": 80
+        }
+      },
+      {
+        "id": "rune-castle",
+        "name": {
+          "en": "Rune Castle",
+          "ru": "Замок Руна"
+        },
+        "levels": {
+          "min": 1,
+          "max": 80
+        }
+      },
+      {
+        "id": "cursed-village",
+        "name": {
+          "en": "Cursed Village",
+          "ru": "Проклятая деревня"
+        },
+        "levels": {
+          "min": 63,
+          "max": 73
+        }
+      },
+      {
+        "id": "forest-of-the-dead",
+        "name": {
+          "en": "Forest of the Dead",
+          "ru": "Лес Неупокоенных"
+        },
+        "levels": {
+          "min": 63,
+          "max": 71
+        }
+      },
+      {
+        "id": "beast-farm",
+        "name": {
+          "en": "Beast Farm",
+          "ru": "Ферма Диких Зверей"
+        },
+        "levels": {
+          "min": 60,
+          "max": 69
+        }
+      },
+      {
+        "id": "valley-of-saints",
+        "name": {
+          "en": "Valley of Saints",
+          "ru": "Долина Святых"
+        },
+        "levels": {
+          "min": 60,
+          "max": 70
+        }
+      },
+      {
+        "id": "swamp-of-screams",
+        "name": {
+          "en": "Swamp of Screams",
+          "ru": "Болото Криков"
+        },
+        "levels": {
+          "min": 66,
+          "max": 80
+        }
+      },
+      {
+        "id": "devils-pass",
+        "name": {
+          "en": "Devil's Pass",
+          "ru": "Ущелье Дьявола"
+        },
+        "levels": {
+          "min": 65,
+          "max": 69
+        }
+      },
+      {
+        "id": "primeval-isle",
+        "name": {
+          "en": "Primeval Isle",
+          "ru": "Первобытный остров"
+        },
+        "levels": {
+          "min": 78,
+          "max": 80
+        }
+      }
+    ]
+  },
+  {
+    "territory": {
+      "areaName": "goddard-territory",
+      "name": {
+        "en": "Goddard Territory",
+        "ru": "Территория Годдарда"
+      }
+    },
+    "locations": [
+      {
+        "id": "goddard-castle-town",
+        "name": {
+          "en": "Town of Goddard",
+          "ru": "Годдард"
+        },
+        "levels": {
+          "min": 68,
+          "max": 70
+        }
+      },
+      {
+        "id": "goddard-castle",
+        "name": {
+          "en": "Goddard Castle",
+          "ru": "Замок Годдард"
+        },
+        "levels": {
+          "min": 56,
+          "max": 80
+        }
+      },
+      {
+        "id": "wall-of-argos",
+        "name": {
+          "en": "Wall of Argos",
+          "ru": "Стена Аргоса"
+        },
+        "levels": {
+          "min": 68,
+          "max": 76
+        }
+      },
+      {
+        "id": "shrine-of-the-loyal",
+        "name": {
+          "en": "Shrine of the Loyal",
+          "ru": "Усыпальница Верности"
+        },
+        "levels": {
+          "min": 68,
+          "max": 75
+        }
+      },
+      {
+        "id": "imperial-tomb",
+        "name": {
+          "en": "Imperial Tomb",
+          "ru": "Гробница Императоров"
+        },
+        "levels": {
+          "min": 76,
+          "max": 84
+        }
+      },
+      {
+        "id": "four-sepulchers",
+        "name": {
+          "en": "The Four Sepulchers",
+          "ru": "Четыре Гробницы"
+        },
+        "levels": {
+          "min": 78,
+          "max": 85
+        }
+      },
+      {
+        "id": "ketra-orc-outpost",
+        "name": {
+          "en": "Ketra Orc Outpost",
+          "ru": "Застава Орков Кетра"
+        },
+        "levels": {
+          "min": 77,
+          "max": 87
+        }
+      },
+      {
+        "id": "piligrims-temple",
+        "name": {
+          "en": "Piligrims Temple",
+          "ru": "Храм Паломников"
+        },
+        "levels": {
+          "min": 1,
+          "max": 80
+        }
+      },
+      {
+        "id": "hot-springs",
+        "name": {
+          "en": "Hot Springs",
+          "ru": "Горячие Источники"
+        },
+        "levels": {
+          "min": 73,
+          "max": 76
+        }
+      },
+      {
+        "id": "hot-springs-guild-house",
+        "name": {
+          "en": "Hot Springs Guild House",
+          "ru": "Дворец Радужных Источников"
+        },
+        "levels": {
+          "min": 1,
+          "max": 80
+        }
+      },
+      {
+        "id": "forge-of-the-gods",
+        "name": {
+          "en": "Forge of the Gods",
+          "ru": "Кузница Богов"
+        },
+        "levels": {
+          "min": 78,
+          "max": 85
+        }
+      },
+      {
+        "id": "flame-path",
+        "name": {
+          "en": "Flame Path",
+          "ru": "Зал Пламени"
+        },
+        "levels": {
+          "min": 79,
+          "max": 84
+        }
+      },
+      {
+        "id": "lair-of-valakas",
+        "name": {
+          "en": "Lair of Valakas",
+          "ru": "Логово Валакаса"
+        },
+        "levels": {
+          "min": 1,
+          "max": 80
+        }
+      },
+      {
+        "id": "varka-silenos-outpost",
+        "name": {
+          "en": "Varka Silenos Outpost",
+          "ru": "Лагерь Фавнов Варка"
+        },
+        "levels": {
+          "min": 77,
+          "max": 87
+        }
+      },
+      {
+        "id": "garden-of-beasts",
+        "name": {
+          "en": "Garden of Beasts",
+          "ru": "Сад Чудовищ"
+        },
+        "levels": {
+          "min": 69,
+          "max": 85
+        }
+      },
+      {
+        "id": "monastery-of-silence",
+        "name": {
+          "en": "Monastery of Silence",
+          "ru": "Монастырь Безмолвия"
+        },
+        "levels": {
+          "min": 78,
+          "max": 80
+        }
+      }
+    ]
+  },
+  {
+    "territory": {
+      "areaName": "schuttgart-territory",
+      "name": {
+        "en": "Schuttgart Territory",
+        "ru": "Территория Шутгарта"
+      }
+    },
+    "locations": [
+      {
+        "id": "town-of-schuttgart",
+        "name": {
+          "en": "Town of Schuttgart",
+          "ru": "Шутгарт"
+        },
+        "levels": {
+          "min": 70,
+          "max": 70
+        }
+      },
+      {
+        "id": "schuttgart-castle",
+        "name": {
+          "en": "Schuttgart Castle",
+          "ru": "Замок Шутгарт"
+        },
+        "levels": {
+          "min": 66,
+          "max": 75
+        }
+      },
+      {
+        "id": "crypts-of-disgrace",
+        "name": {
+          "en": "Crypts of Disgrace",
+          "ru": "Склепы Позора"
+        },
+        "levels": {
+          "min": 25,
+          "max": 33
+        }
+      },
+      {
+        "id": "graverobber-hideout",
+        "name": {
+          "en": "Graverobber Hideout",
+          "ru": "Укрытие Грабителей Могил"
+        },
+        "levels": {
+          "min": 26,
+          "max": 30
+        }
+      },
+      {
+        "id": "windtail-waterfall",
+        "name": {
+          "en": "Windtail Waterfall",
+          "ru": "Водопад Хвост Ветра"
+        },
+        "levels": {
+          "min": 1,
+          "max": 80
+        }
+      },
+      {
+        "id": "carons-dungeon",
+        "name": {
+          "en": "Caron's Dungeon",
+          "ru": "Проход Карона"
+        },
+        "levels": {
+          "min": 42,
+          "max": 50
+        }
+      },
+      {
+        "id": "den-of-evil",
+        "name": {
+          "en": "Den of Evil",
+          "ru": "Логово Зла"
+        },
+        "levels": {
+          "min": 40,
+          "max": 46
+        }
+      },
+      {
+        "id": "pavel-ruins",
+        "name": {
+          "en": "Pavel Ruins",
+          "ru": "Заброшенная Мастерская"
+        },
+        "levels": {
+          "min": 45,
+          "max": 51
+        }
+      },
+      {
+        "id": "archaic-laboratory",
+        "name": {
+          "en": "Archaic Laboratory",
+          "ru": "Древняя Лаборатория"
+        },
+        "levels": {
+          "min": 48,
+          "max": 54
+        }
+      },
+      {
+        "id": "plunderous-plains",
+        "name": {
+          "en": "Plunderous Plains",
+          "ru": "Разграбленные Равнины"
+        },
+        "levels": {
+          "min": 30,
+          "max": 37
+        }
+      },
+      {
+        "id": "brigand-stronghold",
+        "name": {
+          "en": "Brigand Stronghold",
+          "ru": "Бандитская Твердыня"
+        },
+        "levels": {
+          "min": 30,
+          "max": 40
+        }
+      },
+      {
+        "id": "sky-wagon-relic",
+        "name": {
+          "en": "Sky Wagon Relic",
+          "ru": "Руины Воздушной Дороги"
+        },
+        "levels": {
+          "min": 38,
+          "max": 40
+        }
+      },
+      {
+        "id": "ice-queens-castle",
+        "name": {
+          "en": "The Ice Queen's Castle",
+          "ru": "Замок Снежной Королевы"
+        },
+        "levels": {
+          "min": 58,
+          "max": 60
+        }
+      },
+      {
+        "id": "frost-lake",
+        "name": {
+          "en": "Frost Lake",
+          "ru": "Замерзшее Озеро"
+        },
+        "levels": {
+          "min": 53,
+          "max": 56
+        }
+      },
+      {
+        "id": "frozen-labyrinth",
+        "name": {
+          "en": "Frozen Labyrinth",
+          "ru": "Ледяной Лабиринт"
+        },
+        "levels": {
+          "min": 57,
+          "max": 61
+        }
+      },
+      {
+        "id": "ice-merchant-cabin",
+        "name": {
+          "en": "Ice Merchant Cabin",
+          "ru": "Хижина Торговца Льдом"
+        },
+        "levels": {
+          "min": 53,
+          "max": 59
+        }
+      }
+    ]
+  },
+  {
+    "territory": {
+      "areaName": "seven-signs",
+      "name": {
+        "en": "Seven Signs",
+        "ru": "Семь Печатей"
+      }
+    },
+    "locations": [
+      {
+        "id": "necropolis-of-sacrifice",
+        "name": {
+          "en": "Necropolis of Sacrifice",
+          "ru": "Жертвенный Некрополь"
+        },
+        "levels": {
+          "min": 20,
+          "max": 30
+        }
+      },
+      {
+        "id": "catacomb-of-the-heretic",
+        "name": {
+          "en": "Catacomb of the Heretic",
+          "ru": "Катакомбы Еретиков"
+        },
+        "levels": {
+          "min": 30,
+          "max": 40
+        }
+      },
+      {
+        "id": "catacomb-of-the-branded",
+        "name": {
+          "en": "Catacomb of the Branded",
+          "ru": "Катакомбы Отлучённых"
+        },
+        "levels": {
+          "min": 40,
+          "max": 51
+        }
+      },
+      {
+        "id": "catacomb-of-the-apostate",
+        "name": {
+          "en": "Catacomb of the Apostate",
+          "ru": "Катакомбы Отступников"
+        },
+        "levels": {
+          "min": 50,
+          "max": 60
+        }
+      },
+      {
+        "id": "catacomb-of-the-witch",
+        "name": {
+          "en": "Catacomb of the Witch",
+          "ru": "Катакомбы Ведьм"
+        },
+        "levels": {
+          "min": 60,
+          "max": 72
+        }
+      },
+      {
+        "id": "catacomb-of-dark-omens",
+        "name": {
+          "en": "Catacomb of Dark Omens",
+          "ru": "Катакомбы Тёмного пророчества"
+        },
+        "levels": {
+          "min": 72,
+          "max": 80
+        }
+      },
+      {
+        "id": "catacomb-of-the-forbidden-path",
+        "name": {
+          "en": "Catacomb of the Forbidden Path",
+          "ru": "Катакомбы Запретного пути"
+        },
+        "levels": {
+          "min": 75,
+          "max": 80
+        }
+      },
+      {
+        "id": "pilgrims-necropolis",
+        "name": {
+          "en": "The Pilgrim's Necropolis",
+          "ru": "Некрополь Пилигримов"
+        },
+        "levels": {
+          "min": 32,
+          "max": 40
+        }
+      },
+      {
+        "id": "worshipes-necropolis",
+        "name": {
+          "en": "Necropolis of Worship",
+          "ru": "Некрополь Послушников"
+        },
+        "levels": {
+          "min": 42,
+          "max": 51
+        }
+      },
+      {
+        "id": "patriots-necropolis",
+        "name": {
+          "en": "The Patriot's Necropolis",
+          "ru": "Некрополь Повстанцев"
+        },
+        "levels": {
+          "min": 52,
+          "max": 60
+        }
+      },
+      {
+        "id": "ascetics-necropolis",
+        "name": {
+          "en": "Necropolis of Devotion",
+          "ru": "Некрополь Аскетов"
+        },
+        "levels": {
+          "min": 60,
+          "max": 67
+        }
+      },
+      {
+        "id": "martyrs-necropolis",
+        "name": {
+          "en": "Necropolis of Martyrdom",
+          "ru": "Некрополь Мучеников"
+        },
+        "levels": {
+          "min": 65,
+          "max": 72
+        }
+      },
+      {
+        "id": "saints-necropolis",
+        "name": {
+          "en": "The Saint's Necropolis",
+          "ru": "Некрополь Святых"
+        },
+        "levels": {
+          "min": 70,
+          "max": 78
+        }
+      },
+      {
+        "id": "disciples-necropolis",
+        "name": {
+          "en": "The Disciple's Necropolis",
+          "ru": "Некрополь Апостолов"
+        },
+        "levels": {
+          "min": 70,
+          "max": 80
+        }
+      },
+      {
+        "id": "dimensional-rift",
+        "name": {
+          "en": "Dimensional Rift",
+          "ru": "Пространственный Разлом"
+        },
+        "levels": {
+          "min": 28,
+          "max": 85
+        }
+      }
+    ]
+  }
+]

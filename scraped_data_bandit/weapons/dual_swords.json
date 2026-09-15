@@ -1,0 +1,3052 @@
+[
+  {
+    "key": 2516,
+    "data": {
+      "unitName": "saber*saber",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Saber*Saber",
+        "ru": "Сабля*Сабля"
+      },
+      "description": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 73,
+      "mAtk": 37
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 73,
+    "mAtk": 37
+  },
+  {
+    "key": 2520,
+    "data": {
+      "unitName": "saber*knight's_sword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Saber*Knight's Sword",
+        "ru": "Сабля*Меч Рыцаря"
+      },
+      "description": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 83,
+      "mAtk": 41
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 83,
+    "mAtk": 41
+  },
+  {
+    "key": 2519,
+    "data": {
+      "unitName": "saber*artisan's_sword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Saber*Artisan's Sword",
+        "ru": "Сабля*Меч Ремесленника"
+      },
+      "description": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 83,
+      "mAtk": 41
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 83,
+    "mAtk": 41
+  },
+  {
+    "key": 2518,
+    "data": {
+      "unitName": "saber*spinebone_sword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Saber*Spinebone Sword",
+        "ru": "Сабля*Хребетный Меч"
+      },
+      "description": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 83,
+      "mAtk": 41
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 83,
+    "mAtk": 41
+  },
+  {
+    "key": 2517,
+    "data": {
+      "unitName": "saber*bastard_sword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Saber*Bastard Sword",
+        "ru": "Сабля*Полуторный Меч"
+      },
+      "description": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 83,
+      "mAtk": 41
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 83,
+    "mAtk": 41
+  },
+  {
+    "key": 2533,
+    "data": {
+      "unitName": "spinebone_sword*spinebone_sword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Spinebone Sword*Spinebone Sword",
+        "ru": "Хребетный Меч*Хребетный Меч"
+      },
+      "description": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 96,
+      "mAtk": 47
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 96,
+    "mAtk": 47
+  },
+  {
+    "key": 2526,
+    "data": {
+      "unitName": "bastard_sword*spinebone_sword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Bastard Sword*Spinebone Sword",
+        "ru": "Полуторный Меч*Хребетный Меч"
+      },
+      "description": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 96,
+      "mAtk": 47
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 96,
+    "mAtk": 47
+  },
+  {
+    "key": 2525,
+    "data": {
+      "unitName": "bastard_sword*bastard_sword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Bastard Sword*Bastard Sword",
+        "ru": "Полуторный Меч*Полуторный Меч"
+      },
+      "description": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 96,
+      "mAtk": 47
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 96,
+    "mAtk": 47
+  },
+  {
+    "key": 2540,
+    "data": {
+      "unitName": "artisan's_sword*artisan's_sword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Artisan's Sword*Artisan's Sword",
+        "ru": "Меч Ремесленника*Меч Ремесленника"
+      },
+      "description": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 96,
+      "mAtk": 47
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 96,
+    "mAtk": 47
+  },
+  {
+    "key": 2528,
+    "data": {
+      "unitName": "bastard_sword*knight's_sword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Bastard Sword*Knight's Sword",
+        "ru": "Полуторный Меч*Меч Рыцаря"
+      },
+      "description": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 96,
+      "mAtk": 47
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 96,
+    "mAtk": 47
+  },
+  {
+    "key": 2535,
+    "data": {
+      "unitName": "spinebone_sword*knight's_sword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Spinebone Sword*Knight's Sword",
+        "ru": "Хребетный Меч*Меч Рыцаря"
+      },
+      "description": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 96,
+      "mAtk": 47
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 96,
+    "mAtk": 47
+  },
+  {
+    "key": 2534,
+    "data": {
+      "unitName": "spinebone_sword*artisan's_sword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Spinebone Sword*Artisan's Sword",
+        "ru": "Хребетный Меч*Меч Ремесленника"
+      },
+      "description": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 96,
+      "mAtk": 47
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 96,
+    "mAtk": 47
+  },
+  {
+    "key": 2527,
+    "data": {
+      "unitName": "bastard_sword*artisan's_sword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Bastard Sword*Artisan's Sword",
+        "ru": "Полуторный Меч*Меч Ремесленника"
+      },
+      "description": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 96,
+      "mAtk": 47
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 96,
+    "mAtk": 47
+  },
+  {
+    "key": 2521,
+    "data": {
+      "unitName": "saber*crimson_sword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Saber*Crimson Sword",
+        "ru": "Сабля*Багровый Меч"
+      },
+      "description": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 96,
+      "mAtk": 47
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 96,
+    "mAtk": 47
+  },
+  {
+    "key": 2541,
+    "data": {
+      "unitName": "artisan's_sword*knight's_sword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Artisan's Sword*Knight's Sword",
+        "ru": "Меч Ремесленника*Меч Рыцаря"
+      },
+      "description": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 96,
+      "mAtk": 47
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 96,
+    "mAtk": 47
+  },
+  {
+    "key": 2522,
+    "data": {
+      "unitName": "saber*elven_sword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Saber*Elven Sword",
+        "ru": "Сабля*Меч Эльфов"
+      },
+      "description": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 96,
+      "mAtk": 47
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 96,
+    "mAtk": 47
+  },
+  {
+    "key": 2546,
+    "data": {
+      "unitName": "knight's_sword*knight's_sword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Knight's Sword*Knight's Sword",
+        "ru": "Меч Рыцаря*Меч Рыцаря"
+      },
+      "description": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 96,
+      "mAtk": 47
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 96,
+    "mAtk": 47
+  },
+  {
+    "key": 2536,
+    "data": {
+      "unitName": "spinebone_sword*crimson_sword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Spinebone Sword*Crimson Sword",
+        "ru": "Хребетный Меч*Багровый Меч"
+      },
+      "description": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 107,
+      "mAtk": 51
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 107,
+    "mAtk": 51
+  },
+  {
+    "key": 2542,
+    "data": {
+      "unitName": "artisan's_sword*crimson_sword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Artisan's Sword*Crimson Sword",
+        "ru": "Меч Ремесленника*Багровый Меч"
+      },
+      "description": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 107,
+      "mAtk": 51
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 107,
+    "mAtk": 51
+  },
+  {
+    "key": 2547,
+    "data": {
+      "unitName": "knight's_sword*crimson_sword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Knight's Sword*Crimson Sword",
+        "ru": "Меч Рыцаря*Багровый Меч"
+      },
+      "description": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 107,
+      "mAtk": 51
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 107,
+    "mAtk": 51
+  },
+  {
+    "key": 2530,
+    "data": {
+      "unitName": "bastard_sword*elven_sword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Bastard Sword*Elven Sword",
+        "ru": "Полуторный Меч*Меч Эльфов"
+      },
+      "description": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 107,
+      "mAtk": 51
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 107,
+    "mAtk": 51
+  },
+  {
+    "key": 2529,
+    "data": {
+      "unitName": "bastard_sword*crimson_sword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Bastard Sword*Crimson Sword",
+        "ru": "Полуторный Меч*Багровый Меч"
+      },
+      "description": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 107,
+      "mAtk": 51
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 107,
+    "mAtk": 51
+  },
+  {
+    "key": 2548,
+    "data": {
+      "unitName": "knight's_sword*elven_sword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Knight's Sword*Elven Sword",
+        "ru": "Меч Рыцаря*Меч Эльфов"
+      },
+      "description": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 107,
+      "mAtk": 51
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 107,
+    "mAtk": 51
+  },
+  {
+    "key": 2543,
+    "data": {
+      "unitName": "artisan's_sword*elven_sword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Artisan's Sword*Elven Sword",
+        "ru": "Меч Ремесленника*Меч Эльфов"
+      },
+      "description": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 107,
+      "mAtk": 51
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 107,
+    "mAtk": 51
+  },
+  {
+    "key": 2537,
+    "data": {
+      "unitName": "spinebone_sword*elven_sword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Spinebone Sword*Elven Sword",
+        "ru": "Хребетный Меч*Меч Эльфов"
+      },
+      "description": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 107,
+      "mAtk": 51
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 107,
+    "mAtk": 51
+  },
+  {
+    "key": 2523,
+    "data": {
+      "unitName": "saber*sword_of_revolution",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Saber*Sword of Revolution",
+        "ru": "Сабля*Меч Революции"
+      },
+      "description": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 118,
+      "mAtk": 56
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 118,
+    "mAtk": 56
+  },
+  {
+    "key": 2551,
+    "data": {
+      "unitName": "crimson_sword*crimson_sword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Crimson Sword*Crimson Sword",
+        "ru": "Багровый Меч*Багровый Меч"
+      },
+      "description": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 118,
+      "mAtk": 56
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 118,
+    "mAtk": 56
+  },
+  {
+    "key": 2552,
+    "data": {
+      "unitName": "crimson_sword*elven_sword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Crimson Sword*Elven Sword",
+        "ru": "Багровый Меч*Меч Эльфов"
+      },
+      "description": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 118,
+      "mAtk": 56
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 118,
+    "mAtk": 56
+  },
+  {
+    "key": 2555,
+    "data": {
+      "unitName": "elven_sword*elven_sword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Elven Sword*Elven Sword",
+        "ru": "Меч Эльфов*Меч Эльфов"
+      },
+      "description": {
+        "en": " ",
+        "ru": ""
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 118,
+      "mAtk": 56
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 118,
+    "mAtk": 56
+  },
+  {
+    "key": 2531,
+    "data": {
+      "unitName": "bastard_sword*sword_of_revolution",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Bastard Sword*Sword of Revolution",
+        "ru": "Полуторный Меч*Меч Революции"
+      },
+      "description": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 124,
+      "mAtk": 58
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 124,
+    "mAtk": 58
+  },
+  {
+    "key": 2549,
+    "data": {
+      "unitName": "knight's_sword*sword_of_revolution",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Knight's Sword*Sword of Revolution",
+        "ru": "Меч Рыцаря*Меч Революции"
+      },
+      "description": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 124,
+      "mAtk": 58
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 124,
+    "mAtk": 58
+  },
+  {
+    "key": 2538,
+    "data": {
+      "unitName": "spinebone_sword*sword_of_revolution",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Spinebone Sword*Sword of Revolution",
+        "ru": "Хребетный Меч*Меч Революции"
+      },
+      "description": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 124,
+      "mAtk": 58
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 124,
+    "mAtk": 58
+  },
+  {
+    "key": 2544,
+    "data": {
+      "unitName": "artisan's_sword*sword_of_revolution",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Artisan's Sword*Sword of Revolution",
+        "ru": "Меч Ремесленника*Меч Революции"
+      },
+      "description": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 124,
+      "mAtk": 58
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 124,
+    "mAtk": 58
+  },
+  {
+    "key": 2524,
+    "data": {
+      "unitName": "saber*elven_long_sword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Saber*Elven Long Sword",
+        "ru": "Сабля*Длинный Меч Эльфов"
+      },
+      "description": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 130,
+      "mAtk": 61
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 130,
+    "mAtk": 61
+  },
+  {
+    "key": 2532,
+    "data": {
+      "unitName": "bastard_sword*elven_long_sword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Bastard Sword*Elven Long Sword",
+        "ru": "Полуторный Меч*Длинный Меч Эльфов"
+      },
+      "description": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 136,
+      "mAtk": 63
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 136,
+    "mAtk": 63
+  },
+  {
+    "key": 2550,
+    "data": {
+      "unitName": "knight's_sword*elven_long_sword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Knight's Sword*Elven Long Sword",
+        "ru": "Меч Рыцаря*Длинный Меч Эльфов"
+      },
+      "description": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 136,
+      "mAtk": 63
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 136,
+    "mAtk": 63
+  },
+  {
+    "key": 2553,
+    "data": {
+      "unitName": "crimson_sword*sword_of_revolution",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Crimson Sword*Sword of Revolution",
+        "ru": "Багровый Меч*Меч Революции"
+      },
+      "description": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 136,
+      "mAtk": 63
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 136,
+    "mAtk": 63
+  },
+  {
+    "key": 2556,
+    "data": {
+      "unitName": "elven_sword*sword_of_revolution",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Elven Sword*Sword of Revolution",
+        "ru": "Меч Эльфов*Меч Революции"
+      },
+      "description": {
+        "en": " ",
+        "ru": ""
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 136,
+      "mAtk": 63
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 136,
+    "mAtk": 63
+  },
+  {
+    "key": 2539,
+    "data": {
+      "unitName": "spinebone_sword*elven_long_sword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Spinebone Sword*Elven Long Sword",
+        "ru": "Хребетный Меч*Длинный Меч Эльфов"
+      },
+      "description": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 136,
+      "mAtk": 63
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 136,
+    "mAtk": 63
+  },
+  {
+    "key": 2545,
+    "data": {
+      "unitName": "artisan's_sword*elven_long_sword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Artisan's Sword*Elven Long Sword",
+        "ru": "Меч Ремесленника*Длинный Меч Эльфов"
+      },
+      "description": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 136,
+      "mAtk": 63
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 136,
+    "mAtk": 63
+  },
+  {
+    "key": 2554,
+    "data": {
+      "unitName": "crimson_sword*elven_long_sword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Crimson Sword*Elven Long Sword",
+        "ru": "Багровый Меч*Длинный Меч Эльфов"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, its Accuracy will increase by 2.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Точность +2."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 148,
+      "mAtk": 68
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 148,
+    "mAtk": 68
+  },
+  {
+    "key": 2557,
+    "data": {
+      "unitName": "elven_sword*elven_long_sword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Elven Sword*Elven Long Sword",
+        "ru": "Меч Эльфов*Длинный Меч Эльфов"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, its P. Atk will increase by 61 during a critical attack.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Ф. Атк. при крит. ударе +61."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 148,
+      "mAtk": 68
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 148,
+    "mAtk": 68
+  },
+  {
+    "key": 2558,
+    "data": {
+      "unitName": "sword_of_revolution*sword_of_revolution",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Sword of Revolution*Sword of Revolution",
+        "ru": "Меч Революции*Меч Революции"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, its maximum HP will increase by 25%.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Макс. HP +25%."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 148,
+      "mAtk": 68
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 148,
+    "mAtk": 68
+  },
+  {
+    "key": 2559,
+    "data": {
+      "unitName": "sword_of_revolution*elven_long_sword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Sword of Revolution*Elven Long Sword",
+        "ru": "Меч Революции*Длинный Меч Эльфов"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, its Critical Attack will increase by 50.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Крит. Атк. +50."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 155,
+      "mAtk": 70
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 155,
+    "mAtk": 70
+  },
+  {
+    "key": 2560,
+    "data": {
+      "unitName": "elven_long_sword*elven_long_sword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Elven Long Sword*Elven Long Sword",
+        "ru": "Длинный Меч Эльфов*Длинный Меч Эльфов"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, its Atk. Spd. will increase by 4%.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Скр. Атк. +4%."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 162,
+      "mAtk": 73
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 162,
+    "mAtk": 73
+  },
+  {
+    "key": 2561,
+    "data": {
+      "unitName": "stormbringer*stormbringer",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Stormbringer*Stormbringer",
+        "ru": "Громовержец*Громовержец"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, its Accuracy will increase by 2.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Точность +2."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 175,
+      "mAtk": 78
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 175,
+    "mAtk": 78
+  },
+  {
+    "key": 2562,
+    "data": {
+      "unitName": "stormbringer*shamshir",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Stormbringer*Shamshir",
+        "ru": "Громовержец*Шамшир"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, its P. Atk. will increase by 49 during a critical attack.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Ф. Атк. при крит. ударе +49."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 183,
+      "mAtk": 81
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 183,
+    "mAtk": 81
+  },
+  {
+    "key": 2563,
+    "data": {
+      "unitName": "stormbringer*katana",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Stormbringer*Katana",
+        "ru": "Громовержец*Катана"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, its maximum HP will increase by 25%.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Макс. HP +25%."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 183,
+      "mAtk": 81
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 183,
+    "mAtk": 81
+  },
+  {
+    "key": 2564,
+    "data": {
+      "unitName": "stormbringer*spirits_sword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Stormbringer*Spirit Sword",
+        "ru": "Громовержец*Меч Духов"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, its critical attack will increase by 24.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Крит. Атк. +24."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 183,
+      "mAtk": 81
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 183,
+    "mAtk": 81
+  },
+  {
+    "key": 2565,
+    "data": {
+      "unitName": "stormbringer*raid_sword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Stormbringer*Raid Sword",
+        "ru": "Громовержец*Меч Налетчика"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, its Atk. Spd. will increase by 2%.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Скр. Атк. +2%."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 183,
+      "mAtk": 81
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 183,
+    "mAtk": 81
+  },
+  {
+    "key": 2544,
+    "data": {
+      "unitName": "artisan's_sword*sword_of_revolution",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Artisan's Sword*Sword of Revolution",
+        "ru": "Меч Ремесленника*Меч Революции"
+      },
+      "description": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 124,
+      "mAtk": 58
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 124,
+    "mAtk": 58
+  },
+  {
+    "key": 2539,
+    "data": {
+      "unitName": "spinebone_sword*elven_long_sword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Spinebone Sword*Elven Long Sword",
+        "ru": "Хребетный Меч*Длинный Меч Эльфов"
+      },
+      "description": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 136,
+      "mAtk": 63
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 136,
+    "mAtk": 63
+  },
+  {
+    "key": 2545,
+    "data": {
+      "unitName": "artisan's_sword*elven_long_sword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Artisan's Sword*Elven Long Sword",
+        "ru": "Меч Ремесленника*Длинный Меч Эльфов"
+      },
+      "description": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 136,
+      "mAtk": 63
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 136,
+    "mAtk": 63
+  },
+  {
+    "key": 2559,
+    "data": {
+      "unitName": "sword_of_revolution*elven_long_sword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Sword of Revolution*Elven Long Sword",
+        "ru": "Меч Революции*Длинный Меч Эльфов"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, its Critical Attack will increase by 50.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Крит. Атк. +50."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 155,
+      "mAtk": 70
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 155,
+    "mAtk": 70
+  },
+  {
+    "key": 9000,
+    "data": {
+      "unitName": "event_stormbringer*stormbringer_bytime",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Shadow Item: Stormbringer*Stormbringer",
+        "ru": "Теневой Предмет: Громовержец*Громовержец"
+      },
+      "description": {
+        "en": "This Shadow Item contains the mirrored power of a Stormbringer*Stormbringer. It cannot be traded, dropped, crystallized, or given other functions. If one's PK count is 1 or more, it cannot be used.",
+        "ru": "Теневой предмет заключает в себе отраженную мощь Громовержца*Громовержца. Нельзя продать, выбросить, кристаллизовать и использовать другие функции."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 175,
+      "mAtk": 78
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 175,
+    "mAtk": 78
+  },
+  {
+    "key": 2563,
+    "data": {
+      "unitName": "stormbringer*katana",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Stormbringer*Katana",
+        "ru": "Громовержец*Катана"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, its maximum HP will increase by 25%.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Макс. HP +25%."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 183,
+      "mAtk": 81
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 183,
+    "mAtk": 81
+  },
+  {
+    "key": 2564,
+    "data": {
+      "unitName": "stormbringer*spirits_sword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Stormbringer*Spirit Sword",
+        "ru": "Громовержец*Меч Духов"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, its critical attack will increase by 24.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Крит. Атк. +24."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 183,
+      "mAtk": 81
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 183,
+    "mAtk": 81
+  },
+  {
+    "key": 2572,
+    "data": {
+      "unitName": "shamshir*shamshir",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Shamshir*Shamshir",
+        "ru": "Шамшир*Шамшир"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, its Accuracy will increase by 2.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Точность +2."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 190,
+      "mAtk": 83
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 190,
+    "mAtk": 83
+  },
+  {
+    "key": 2573,
+    "data": {
+      "unitName": "shamshir*katana",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Shamshir*Katana",
+        "ru": "Шамшир*Катана"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, its P. Atk. will increase by 84 during a critical attack.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Ф. Атк. при крит. ударе +84."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 190,
+      "mAtk": 83
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 190,
+    "mAtk": 83
+  },
+  {
+    "key": 2574,
+    "data": {
+      "unitName": "shamshir*spirits_sword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Shamshir*Spirit Sword",
+        "ru": "Шамшир*Меч Духов"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, its maximum HP will increase by 25%.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Макс. HP +25%."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 190,
+      "mAtk": 83
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 190,
+    "mAtk": 83
+  },
+  {
+    "key": 2575,
+    "data": {
+      "unitName": "shamshir*raid_sword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Shamshir*Raid Sword",
+        "ru": "Шамшир*Меч Налетчика"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, its critical will increase by 40.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Крит. Атк. +40."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 190,
+      "mAtk": 83
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 190,
+    "mAtk": 83
+  },
+  {
+    "key": 2566,
+    "data": {
+      "unitName": "stormbringer*caliburs",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Stormbringer*Caliburs",
+        "ru": "Громовержец*Экскалибур"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, its Accuracy will increase by 5.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Точность +5."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 197,
+      "mAtk": 86
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 197,
+    "mAtk": 86
+  },
+  {
+    "key": 2567,
+    "data": {
+      "unitName": "stormbringer*sword_of_limit",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Stormbringer*Sword of Limit",
+        "ru": "Громовержец*Меч Рубежа"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, its P. Atk will increase by 166 during a critical attack.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Ф. Атк. при крит. ударе +166."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 197,
+      "mAtk": 86
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 197,
+    "mAtk": 86
+  },
+  {
+    "key": 2568,
+    "data": {
+      "unitName": "stormbringer*sword_of_delusion",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Stormbringer*Sword of Delusion",
+        "ru": "Громовержец*Меч Иллюзий"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, its maximum HP will increase by 25%.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Макс. HP +25%."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 197,
+      "mAtk": 86
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 197,
+    "mAtk": 86
+  },
+  {
+    "key": 2569,
+    "data": {
+      "unitName": "stormbringer*sword_of_nightmare",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Stormbringer*Sword of Nightmare",
+        "ru": "Громовержец*Меч Кошмаров"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, its critical will increase by 76.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Крит. Атк. +76."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 197,
+      "mAtk": 86
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 197,
+    "mAtk": 86
+  },
+  {
+    "key": 2570,
+    "data": {
+      "unitName": "stormbringer*tsurugi",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Stormbringer*Tsurugi",
+        "ru": "Громовержец*Цуруги"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, its Atk. Spd. will increase by 7%.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Скр. Атк. +7%."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 197,
+      "mAtk": 86
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 197,
+    "mAtk": 86
+  },
+  {
+    "key": 2579,
+    "data": {
+      "unitName": "shamshir*sword_of_nightmare",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Shamshir*Sword of Nightmare",
+        "ru": "Шамшир*Меч Кошмаров"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, its critical will increase by 65.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Крит. Атк. +65."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 204,
+      "mAtk": 89
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 204,
+    "mAtk": 89
+  },
+  {
+    "key": 2580,
+    "data": {
+      "unitName": "shamshir*tsurugi",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Shamshir*Tsurugi",
+        "ru": "Шамшир*Цуруги"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, its Atk. Spd. will increase by 6%.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Скр. Атк. +6%."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 204,
+      "mAtk": 89
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 204,
+    "mAtk": 89
+  },
+  {
+    "key": 2585,
+    "data": {
+      "unitName": "katana*caliburs",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Katana*Caliburs",
+        "ru": "Катана*Экскалибур"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, Accuracy will increase by 4.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Точность +4."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 204,
+      "mAtk": 89
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 204,
+    "mAtk": 89
+  },
+  {
+    "key": 2586,
+    "data": {
+      "unitName": "katana*sword_of_limit",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Katana*Sword of Limit",
+        "ru": "Катана*Меч Рубежа"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, P. Atk. will increase by 146 during a critical attack.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Ф. Атк. при крит. ударе +146."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 204,
+      "mAtk": 89
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 204,
+    "mAtk": 89
+  },
+  {
+    "key": 2587,
+    "data": {
+      "unitName": "katana*sword_of_delusion",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Katana*Sword of Delusion",
+        "ru": "Катана*Меч Иллюзий"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, maximum HP will increase by 25%.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Макс. HP +25%."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 204,
+      "mAtk": 89
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 204,
+    "mAtk": 89
+  },
+  {
+    "key": 2588,
+    "data": {
+      "unitName": "katana*sword_of_nightmare",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Katana*Sword of Nightmare",
+        "ru": "Катана*Меч Кошмаров"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, critical will increase by 65.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Крит. Атк. +65."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 204,
+      "mAtk": 89
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 204,
+    "mAtk": 89
+  },
+  {
+    "key": 2589,
+    "data": {
+      "unitName": "katana*tsurugi",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Katana*Tsurugi",
+        "ru": "Катана*Цуруги"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, Atk. Spd. will increase by 6%.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Скр. Атк. +6%."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 204,
+      "mAtk": 89
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 204,
+    "mAtk": 89
+  },
+  {
+    "key": 2593,
+    "data": {
+      "unitName": "spirits_sword*caliburs",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Spirit Sword*Caliburs",
+        "ru": "Меч Духов*Экскалибур"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, Accuracy will increase by 4.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Точность +4."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 204,
+      "mAtk": 89
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 204,
+    "mAtk": 89
+  },
+  {
+    "key": 2594,
+    "data": {
+      "unitName": "spirits_sword*sword_of_limit",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Spirit Sword*Sword of Limit",
+        "ru": "Меч Духов*Меч Рубежа"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, P. Atk. will increase by 146 during a critical attack.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Ф. Атк. при крит. ударе +146."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 204,
+      "mAtk": 89
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 204,
+    "mAtk": 89
+  },
+  {
+    "key": 2596,
+    "data": {
+      "unitName": "spirits_sword*sword_of_nightmare",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Spirit Sword*Sword of Nightmare",
+        "ru": "Меч Духов*Меч Кошмаров"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, critical will increase by 65.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Крит. Атк. +65."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 204,
+      "mAtk": 89
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 204,
+    "mAtk": 89
+  },
+  {
+    "key": 2595,
+    "data": {
+      "unitName": "spirits_sword*sword_of_delusion",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Spirit Sword*Sword of Delusion",
+        "ru": "Меч Духов*Меч Иллюзий"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, maximum HP will increase by 25%.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Макс. HP +25%."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 204,
+      "mAtk": 89
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 204,
+    "mAtk": 89
+  },
+  {
+    "key": 2597,
+    "data": {
+      "unitName": "spirits_sword*tsurugi",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Spirit Sword*Tsurugi",
+        "ru": "Меч Духов*Цуруги"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, Atk. Spd. will increase by 6%.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Скр. Атк. +6%."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 204,
+      "mAtk": 89
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 204,
+    "mAtk": 89
+  },
+  {
+    "key": 2600,
+    "data": {
+      "unitName": "raid_sword*caliburs",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Raid Sword*Caliburs",
+        "ru": "Меч Налетчика*Экскалибур"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, Accuracy will increase by 4.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Точность +4."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 204,
+      "mAtk": 89
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 204,
+    "mAtk": 89
+  },
+  {
+    "key": 2601,
+    "data": {
+      "unitName": "raid_sword*sword_of_limit",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Raid Sword*Sword of Limit",
+        "ru": "Меч Налетчика*Меч Рубежа"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, P. Atk. will increase by 146 during a critical attack.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Ф. Атк. при крит. ударе +146."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 204,
+      "mAtk": 89
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 204,
+    "mAtk": 89
+  },
+  {
+    "key": 2602,
+    "data": {
+      "unitName": "raid_sword*sword_of_delusion",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Raid Sword*Sword of Delusion",
+        "ru": "Меч Налетчика*Меч Иллюзий"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, maximum HP will increase by 25%.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Макс. HP +25%."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 204,
+      "mAtk": 89
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 204,
+    "mAtk": 89
+  },
+  {
+    "key": 2604,
+    "data": {
+      "unitName": "raid_sword*tsurugi",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Raid Sword*Tsurugi",
+        "ru": "Меч Налетчика*Цуруги"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, Atk. Spd. will increase by 6%.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Скр. Атк. +6%."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 204,
+      "mAtk": 89
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 204,
+    "mAtk": 89
+  },
+  {
+    "key": 2603,
+    "data": {
+      "unitName": "raid_sword*sword_of_nightmare",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Raid Sword*Sword of Nightmare",
+        "ru": "Меч Налетчика*Меч Кошмаров"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, critical will increase by 65.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Крит. Атк. +65."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 204,
+      "mAtk": 89
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 204,
+    "mAtk": 89
+  },
+  {
+    "key": 2576,
+    "data": {
+      "unitName": "shamshir*caliburs",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Shamshir*Caliburs",
+        "ru": "Шамшир*Экскалибур"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, its Accuracy will increase by 4.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Точность +4."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 204,
+      "mAtk": 89
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 204,
+    "mAtk": 89
+  },
+  {
+    "key": 2577,
+    "data": {
+      "unitName": "shamshir*sword_of_limit",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Shamshir*Sword of Limit",
+        "ru": "Шамшир*Меч Рубежа"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, P. Atk. will increase by 146 during a critical attack.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Ф. Атк. при крит. ударе +146."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 204,
+      "mAtk": 89
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 204,
+    "mAtk": 89
+  },
+  {
+    "key": 2606,
+    "data": {
+      "unitName": "caliburs*caliburs",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Caliburs*Caliburs",
+        "ru": "Экскалибур*Экскалибур"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, P. Atk. will increase by 127 during a critical attack.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Ф. Атк. при крит. ударе +127."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 213,
+      "mAtk": 91
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 213,
+    "mAtk": 91
+  },
+  {
+    "key": 2607,
+    "data": {
+      "unitName": "caliburs*sword_of_limit",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Caliburs*Sword of Limit",
+        "ru": "Экскалибур*Меч Рубежа"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, maximum HP will increase by 25%.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Макс. HP +25%."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 213,
+      "mAtk": 91
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 213,
+    "mAtk": 91
+  },
+  {
+    "key": 2608,
+    "data": {
+      "unitName": "caliburs*sword_of_delusion",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Caliburs*Sword of Delusion",
+        "ru": "Экскалибур*Меч Иллюзий"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, critical will increase by 54.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Крит. Атк. +54."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 213,
+      "mAtk": 91
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 213,
+    "mAtk": 91
+  },
+  {
+    "key": 2609,
+    "data": {
+      "unitName": "caliburs*sword_of_nightmare",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Caliburs*Sword of Nightmare",
+        "ru": "Экскалибур*Меч Кошмаров"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, Atk. Spd. will increase by 5%.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Скр. Атк. +5%."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 213,
+      "mAtk": 91
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 213,
+    "mAtk": 91
+  },
+  {
+    "key": 2610,
+    "data": {
+      "unitName": "caliburs*tsurugi",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Caliburs*Tsurugi",
+        "ru": "Экскалибур*Цуруги"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, Accuracy will increase by 4.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Точность +4."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 213,
+      "mAtk": 91
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 213,
+    "mAtk": 91
+  },
+  {
+    "key": 2612,
+    "data": {
+      "unitName": "sword_of_limit*sword_of_limit",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Sword of Limit*Sword of Limit",
+        "ru": "Меч Рубежа*Меч Рубежа"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, P. Atk. will increase by 127 during a critical attack.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Ф. Атк. при крит. ударе +127."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 213,
+      "mAtk": 91
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 213,
+    "mAtk": 91
+  },
+  {
+    "key": 2613,
+    "data": {
+      "unitName": "sword_of_limit*sword_of_delusion",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Sword of Limit*Sword of Delusion",
+        "ru": "Меч Рубежа*Меч Иллюзий"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, maximum HP will increase by 25%.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Макс. HP +25%."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 213,
+      "mAtk": 91
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 213,
+    "mAtk": 91
+  },
+  {
+    "key": 2614,
+    "data": {
+      "unitName": "sword_of_limit*sword_of_nightmare",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Sword of Limit*Sword of Nightmare",
+        "ru": "Меч Рубежа*Меч Кошмаров"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, critical will increase by 54.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Крит. Атк. +54."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 213,
+      "mAtk": 91
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 213,
+    "mAtk": 91
+  },
+  {
+    "key": 2615,
+    "data": {
+      "unitName": "sword_of_limit*tsurugi",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Sword of Limit*Tsurugi",
+        "ru": "Меч Рубежа*Цуруги"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, Atk. Spd. will increase by 5%.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Скр. Атк. +5%."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 213,
+      "mAtk": 91
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 213,
+    "mAtk": 91
+  },
+  {
+    "key": 2571,
+    "data": {
+      "unitName": "stormbringer*samurai_longsword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Stormbringer*Samurai Long sword",
+        "ru": "Громовержец*Длинный Меч Самурая"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, its Accuracy will increase by 4.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Точность +4."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 213,
+      "mAtk": 91
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 213,
+    "mAtk": 91
+  },
+  {
+    "key": 2581,
+    "data": {
+      "unitName": "shamshir*samurai_longsword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Shamshir*Samurai Long Sword",
+        "ru": "Шамшир*Длинный Меч Самурая"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, its Accuracy will increase by 3.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Точность +3."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 220,
+      "mAtk": 94
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 220,
+    "mAtk": 94
+  },
+  {
+    "key": 2590,
+    "data": {
+      "unitName": "katana*samurai_longsword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Katana*Samurai Long Sword",
+        "ru": "Катана*Длинный Меч Самурая"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, P. Atk. will increase by 106 during a critical attack.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Ф. Атк. при крит. ударе +106."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 220,
+      "mAtk": 94
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 220,
+    "mAtk": 94
+  },
+  {
+    "key": 2598,
+    "data": {
+      "unitName": "spirits_sword*samurai_longsword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Spirit Sword*Samurai Long Sword",
+        "ru": "Меч Духов*Длинный Меч Самурая"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, maximum HP will increase by 25%.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Макс. HP +25%."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 220,
+      "mAtk": 94
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 220,
+    "mAtk": 94
+  },
+  {
+    "key": 2605,
+    "data": {
+      "unitName": "raid_sword*samurai_longsword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Raid Sword*Samurai Long Sword",
+        "ru": "Меч Налетчика*Длинный Меч Самурая"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, critical will increase by 43.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Крит. Атк. +43."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 220,
+      "mAtk": 94
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 220,
+    "mAtk": 94
+  },
+  {
+    "key": 2611,
+    "data": {
+      "unitName": "caliburs*samurai_longsword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Caliburs*Samurai Long Sword",
+        "ru": "Экскалибур*Длинный Меч Самурая"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, Atk. Spd. will increase by 5%.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Скр. Атк. +5%."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 228,
+      "mAtk": 97
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 228,
+    "mAtk": 97
+  },
+  {
+    "key": 2615,
+    "data": {
+      "unitName": "sword_of_limit*tsurugi",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Sword of Limit*Tsurugi",
+        "ru": "Меч Рубежа*Цуруги"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, Atk. Spd. will increase by 5%.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Скр. Атк. +5%."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 213,
+      "mAtk": 91
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 213,
+    "mAtk": 91
+  },
+  {
+    "key": 2617,
+    "data": {
+      "unitName": "sword_of_delusion*sword_of_delusion",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Sword of Delusion*Sword of Delusion",
+        "ru": "Меч Иллюзий*Меч Иллюзий"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, Accuracy will increase by 4.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Точность +4."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 213,
+      "mAtk": 91
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 213,
+    "mAtk": 91
+  },
+  {
+    "key": 2618,
+    "data": {
+      "unitName": "sword_of_delusion*sword_of_nightmare",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Sword of Delusion*Sword of Nightmare",
+        "ru": "Меч Иллюзий*Меч Кошмаров"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, P. Atk. will increase by 127 during a critical attack.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Ф. Атк. при крит. ударе +127."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 213,
+      "mAtk": 91
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 213,
+    "mAtk": 91
+  },
+  {
+    "key": 2619,
+    "data": {
+      "unitName": "sword_of_delusion*tsurugi",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Sword of Delusion*Tsurugi",
+        "ru": "Меч Иллюзий*Цуруги"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, maximum HP will increase by 25%.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Макс. HP +25%."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 213,
+      "mAtk": 91
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 213,
+    "mAtk": 91
+  },
+  {
+    "key": 2621,
+    "data": {
+      "unitName": "sword_of_nightmare*sword_of_nightmare",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Sword of Nightmare*Sword of Nightmare",
+        "ru": "Меч Кошмаров*Меч Кошмаров"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, critical will increase by 54.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Крит. Атк. +54."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 213,
+      "mAtk": 91
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 213,
+    "mAtk": 91
+  },
+  {
+    "key": 2622,
+    "data": {
+      "unitName": "sword_of_nightmare*tsurugi",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Sword of Nightmare*Tsurugi",
+        "ru": "Меч Кошмаров*Цуруги"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, Atk. Spd. will increase by 5%.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Скр. Атк. +5%."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 213,
+      "mAtk": 91
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 213,
+    "mAtk": 91
+  },
+  {
+    "key": 2624,
+    "data": {
+      "unitName": "tsurugi*tsurugi",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Tsurugi*Tsurugi",
+        "ru": "Цуруги*Цуруги"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, critical will increase by 54.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Крит. Атк. +54."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 213,
+      "mAtk": 91
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 213,
+    "mAtk": 91
+  },
+  {
+    "key": 9009,
+    "data": {
+      "unitName": "event_sword_of_delusion*sword_of_delusion_bytime",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Shadow Item: Sword of Delusion*Sword of Delusion",
+        "ru": "Теневой Предмет: Меч Иллюзий*Меч Иллюзий"
+      },
+      "description": {
+        "en": "This Shadow Item contains the mirrored power of a Sword of Delusion*Sword of Delusion. It cannot be traded, dropped, crystallized, or given other functions. If one's PK count is 1 or more, it cannot be used.",
+        "ru": "Теневой предмет заключает в себе отраженную мощь Меча Иллюзий*Меча Иллюзий. Нельзя продать, выбросить, кристаллизовать и использовать другие функции."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 213,
+      "mAtk": 91
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 213,
+    "mAtk": 91
+  },
+  {
+    "key": 2616,
+    "data": {
+      "unitName": "sword_of_limit*samurai_longsword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Sword of Limit*Samurai Long Sword",
+        "ru": "Меч Рубежа*Длинный Меч Самурая"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, Accuracy will increase by 3.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Точность +3."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 228,
+      "mAtk": 97
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 228,
+    "mAtk": 97
+  },
+  {
+    "key": 2620,
+    "data": {
+      "unitName": "sword_of_delusion*samurai_longsword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Sword of Delusion*Samurai Long Sword",
+        "ru": "Меч Иллюзий*Длинный Меч Самурая"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, P. Atk. will increase by 133 during a critical attack.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Ф. Атк. при крит. ударе +133."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 228,
+      "mAtk": 97
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 228,
+    "mAtk": 97
+  },
+  {
+    "key": 2623,
+    "data": {
+      "unitName": "sword_of_nightmare*samurai_longsword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Sword of Nightmare*Samurai Long Sword",
+        "ru": "Меч Кошмаров*Длинный Меч Самурая"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, maximum HP will increase by 25%.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Макс. HP +25%."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 228,
+      "mAtk": 97
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 228,
+    "mAtk": 97
+  },
+  {
+    "key": 2625,
+    "data": {
+      "unitName": "tsurugi*samurai_longsword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Tsurugi*Samurai Long Sword",
+        "ru": "Цуруги*Длинный Меч Самурая"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, critical will increase by 52.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Крит. Атк. +52."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 228,
+      "mAtk": 97
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 228,
+    "mAtk": 97
+  },
+  {
+    "key": 2626,
+    "data": {
+      "unitName": "samurai_longsword*samurai_longsword",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Samurai Long Sword*Samurai Long Sword",
+        "ru": "Длинный Меч Самурая*Длинный Меч Самурая"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, Atk. Spd. will increase by 4%.",
+        "ru": "При улучшении парных мечей их Ф. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении на +4 и выше: Скр. Атк. +4%."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 236,
+      "mAtk": 99
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 236,
+    "mAtk": 99
+  },
+  {
+    "key": 5233,
+    "data": {
+      "unitName": "kshanberk*kshanberk",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Keshanberk*Keshanberk",
+        "ru": "Кешанберк*Кешанберк"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, Atk. Spd. will increase by 8%. Inflicts additional damage to target during PvP.",
+        "ru": "При модификации двойных мечей их Физ. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении +4 и более Скор. Атк. увеличивается на 8%. Наносит дополнительный урон в PvP."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pAtk": 259,
+      "mAtk": 107
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 259,
+    "mAtk": 107
+  },
+  {
+    "key": 5704,
+    "data": {
+      "unitName": "_kshanberk*kshanberk",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Keshanberk*Keshanberk",
+        "ru": "Кешанберк*Кешанберк"
+      },
+      "description": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pAtk": 259,
+      "mAtk": 107
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 259,
+    "mAtk": 107
+  },
+  {
+    "key": 9017,
+    "data": {
+      "unitName": "event_kshanberk*kshanberk_bytime",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Shadow Item: Keshanberk*Keshanberk",
+        "ru": "Теневой Предмет: Кешанберк*Кешанберк"
+      },
+      "description": {
+        "en": "This Shadow Item contains the mirrored power of a Keshanberk*Keshanberk. It cannot be traded, dropped, crystallized, or given other functions. If one's PK count is 1 or more, it cannot be used.",
+        "ru": "Теневой предмет заключает в себе отраженную мощь Кешанберка*Кешанберка. Нельзя продать, выбросить, кристаллизовать и использовать другие функции."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pAtk": 259,
+      "mAtk": 107
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 259,
+    "mAtk": 107
+  },
+  {
+    "key": 5705,
+    "data": {
+      "unitName": "kshanberk*sword_of_damascus",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Keshanberk*Damascus",
+        "ru": "Кешанберк*Дамаскус"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, maximum HP will increase by 25% as well. Enhances damage to target during PvP.",
+        "ru": "При модификации двойных мечей их Физ. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении +4 и более Макс. HP увеличивается на 25%. Увеличивает урон в PvP."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pAtk": 275,
+      "mAtk": 112
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 275,
+    "mAtk": 112
+  },
+  {
+    "key": 9020,
+    "data": {
+      "unitName": "event_kshanberk*sword_of_damascus_bytime",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Shadow Item: Keshanberk*Damascus",
+        "ru": "Теневой Предмет: Кешанберк*Дамаскус"
+      },
+      "description": {
+        "en": "This Shadow Item contains the mirrored power of a Keshanberk*Damascus. It cannot be traded, dropped, crystallized, or given other functions. If one's PK count is 1 or more, it cannot be used.",
+        "ru": "Теневой предмет заключает в себе отраженную мощь Кешанберка*Дамаскуса. Нельзя продать, выбросить, кристаллизовать и использовать другие функции."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pAtk": 275,
+      "mAtk": 112
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 275,
+    "mAtk": 112
+  },
+  {
+    "key": 5706,
+    "data": {
+      "unitName": "sword_of_damascus*sword_of_damascus",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Damascus*Damascus",
+        "ru": "Дамаскус*Дамаскус"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk of a dualsword will increase more significantly than that of one-handed or fist weapon. When enchanted by 4 or more, Accuracy will increase by 6. Enhances damage to target during PvP.",
+        "ru": "При модификации двойных мечей их Физ. Атк. увеличивается в большей степени, нежели у одноручного оружия или кастетов. При улучшении +4 и более увеличивает Точность на 4. Увеличивает урон в PvP."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pAtk": 282,
+      "mAtk": 114
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 282,
+    "mAtk": 114
+  },
+  {
+    "key": 8938,
+    "data": {
+      "unitName": "tallum_blade*sword_of_damascus",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Damascus * Tallum Blade",
+        "ru": "Дамаскус*Клинок Таллума"
+      },
+      "description": {
+        "en": "When enchanted, the P.Atk. of a dualsword will increase more significantly than that of a one-handed or fist weapon. When enchanted by 4 or more, Atk. Spd. will increase by 8%. Inflicts additional damage to target during PvP.",
+        "ru": "При модификации Физ. Атк. парных мечей возрастет больше, чем для одноручного оружия или кастетов. Модифицированное на 4 и более, Скор. Атк. Возрастет на 8%. Наносит дополнительный урон цели в PvP."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pAtk": 305,
+      "mAtk": 121
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 305,
+    "mAtk": 121
+  },
+  {
+    "key": 6580,
+    "data": {
+      "unitName": "tallum_blade*dark_legion's_edge",
+      "icon": "/weapon_dual_sword_i00.webp",
+      "name": {
+        "en": "Tallum Blade*Dark Legion's Edge",
+        "ru": "Клинок Таллума*Темный Легион"
+      },
+      "description": {
+        "en": "P.Atk of dual swords will increase more than one-handed type weapon when enchanted. Max HP +15%, Max MP +20%, Max CP +30% when enchanted by 4 or more. Enhances damage to target during PvP.",
+        "ru": "При модификации Физ. Атк. парных мечей увеличивается больше, чем у одноручного оружия. При модификации до +4 и выше Макс. HP +15%, Макс. MP +20%, Макс. CP +30%. Увеличивает урон в PvP."
+      }
+    },
+    "grade": "S",
+    "stats": {
+      "pAtk": 342,
+      "mAtk": 132
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 342,
+    "mAtk": 132
+  },
+  {
+    "key": 6620,
+    "data": {
+      "unitName": "the_infinity_wings",
+      "icon": "/weapon_the_dualsword_of_hero_i00.webp",
+      "name": {
+        "en": "Infinity Wing",
+        "ru": "Крыло Вечности"
+      },
+      "description": {
+        "en": "When a critical attack occurs, increases Max HP, Max MP, Max CP and critical chance. Silences the target and has possibility of reflecting the skill back on the target. Enhances damage to target during PvP.",
+        "ru": "При критической атаке увеличивает Макс. HP, Макс. MP, Макс. CP и Шанс Крит. Уд. Накладывает на цель безмолвие и дает шанс отразит умение обратно игроку. Увеличивает урон в PvP."
+      }
+    },
+    "grade": "S",
+    "stats": {
+      "pAtk": 361,
+      "mAtk": 137
+    },
+    "category": "weapons",
+    "subtype": "dual_swords",
+    "type": "dual_swords",
+    "pAtk": 361,
+    "mAtk": 137
+  }
+]

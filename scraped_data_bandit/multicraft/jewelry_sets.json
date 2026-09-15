@@ -1,0 +1,198 @@
+[
+  {
+    "key": "elven-jewelry-set",
+    "data": {
+      "id": "elven-jewelry-set",
+      "name": {
+        "en": "Elven Jewelry Set",
+        "ru": "Эльфийский комплект украшений"
+      },
+      "necklace": "/accessary_elven_necklace_i00.webp",
+      "earring": "/accessary_elven_earing_i00.webp",
+      "ring": "/accessary_elven_ring_i00.webp"
+    },
+    "grade": "D"
+  },
+  {
+    "key": "darkness-jewelry-set",
+    "data": {
+      "id": "darkness-jewelry-set",
+      "name": {
+        "en": "Darkness Jewelry Set",
+        "ru": "Комплект украшений Тьмы"
+      },
+      "necklace": "/accessary_necklace_of_darkness_i00.webp",
+      "earring": "/accessary_onyxbeastseye_earing_i00.webp",
+      "ring": "/accessary_mithril_ring_i00.webp"
+    },
+    "grade": "D"
+  },
+  {
+    "key": "aquastone-jewelry-set",
+    "data": {
+      "id": "aquastone-jewelry-set",
+      "name": {
+        "en": "Aquastone Jewelry Set",
+        "ru": "Бирюзовый комплект украшений"
+      },
+      "necklace": "/accessary_aquastone_necklace_i00.webp",
+      "earring": "/accessary_moonstone_earing_i00.webp",
+      "ring": "/accessary_aquastone_ring_i00.webp"
+    },
+    "grade": "C"
+  },
+  {
+    "key": "protection-jewelry-set",
+    "data": {
+      "id": "protection-jewelry-set",
+      "name": {
+        "en": "Protection Jewelry Set",
+        "ru": "Защитный комплект украшений"
+      },
+      "necklace": "/accessary_necklace_of_protection_i00.webp",
+      "earring": "/accessary_earing_of_protection_i00.webp",
+      "ring": "/accessary_ring_of_protection_i00.webp"
+    },
+    "grade": "C"
+  },
+  {
+    "key": "mermaid-jewelry-set",
+    "data": {
+      "id": "mermaid-jewelry-set",
+      "name": {
+        "en": "Mermaid Jewelry Set",
+        "ru": "Комплект украшений Русалки"
+      },
+      "necklace": "/accessary_necklace_of_mermaid_i00.webp",
+      "earring": "/accessary_earing_of_binding_i00.webp",
+      "ring": "/accessary_ring_of_ages_i00.webp"
+    },
+    "grade": "C"
+  },
+  {
+    "key": "binding-jewelry-set",
+    "data": {
+      "id": "binding-jewelry-set",
+      "name": {
+        "en": "Binding Jewelry Set",
+        "ru": "Комплект украшений Печати"
+      },
+      "necklace": "/accessary_necklace_of_binding_i00.webp",
+      "earring": "/accessary_nassens_earing_i00.webp",
+      "ring": "/accessary_ring_of_binding_i00.webp"
+    },
+    "grade": "C"
+  },
+  {
+    "key": "adamantite-jewelry-set",
+    "data": {
+      "id": "adamantite-jewelry-set",
+      "name": {
+        "en": "Adamantite Jewelry Set",
+        "ru": "Адамантиновый комплект украшений"
+      },
+      "necklace": "/accessary_adamantite_necklace_i00.webp",
+      "earring": "/accessary_adamantite_earing_i00.webp",
+      "ring": "/accessary_adamantite_ring_i00.webp"
+    },
+    "grade": "B"
+  },
+  {
+    "key": "back-ore-jewelry-set",
+    "data": {
+      "id": "back-ore-jewelry-set",
+      "name": {
+        "en": "Back Ore Jewelry Set",
+        "ru": "Черный комплект украшений"
+      },
+      "necklace": "/accessary_necklace_of_black_ore_i00.webp",
+      "earring": "/accessary_earing_of_black_ore_i00.webp",
+      "ring": "/accessary_ring_of_black_ore_i00.webp"
+    },
+    "grade": "B"
+  },
+  {
+    "key": "phoenix-jewelry-set",
+    "data": {
+      "id": "phoenix-jewelry-set",
+      "name": {
+        "en": "Phoenix Jewelry Set",
+        "ru": "Комплект украшений Феникса"
+      },
+      "necklace": "/accessary_phoenixs_necklace_i02.webp",
+      "earring": "/accessary_phoenixs_earing_i02.webp",
+      "ring": "/accessary_phoenixs_ring_i02.webp"
+    },
+    "grade": "A"
+  },
+  {
+    "key": "majestic-jewelry-set",
+    "data": {
+      "id": "majestic-jewelry-set",
+      "name": {
+        "en": "Majestic Jewelry Set",
+        "ru": "Комплект украшений Величия"
+      },
+      "necklace": "/accessary_inferno_necklace_i02.webp",
+      "earring": "/accessary_inferno_earing_i02.webp",
+      "ring": "/accessary_inferno_ring_i02.webp"
+    },
+    "grade": "A"
+  },
+  {
+    "key": "tateossian-jewelry-set",
+    "data": {
+      "id": "tateossian-jewelry-set",
+      "name": {
+        "en": "Tateossian Jewelry Set",
+        "ru": "Комплект украшений Татеосса"
+      },
+      "necklace": "/accessory_tateossian_necklace_i02.webp",
+      "earring": "/accessory_tateossian_earring_i02.webp",
+      "ring": "/accessory_tateossian_ring_i02.webp"
+    },
+    "grade": "S"
+  },
+  {
+    "key": "dynasty-jewelry-set",
+    "data": {
+      "id": "dynasty-jewelry-set",
+      "name": {
+        "en": "Dynasty Jewelry Set",
+        "ru": "Комплект украшений Династии"
+      },
+      "necklace": "/accessary_dynasty_necklace_i01.webp",
+      "earring": "/accessary_dynasty_earing_i01.webp",
+      "ring": "/accessary_dynasty_ring_i01.webp"
+    },
+    "grade": "S80"
+  },
+  {
+    "key": "moirai-jewelry-set",
+    "data": {
+      "id": "moirai-jewelry-set",
+      "name": {
+        "en": "Moirai Jewelry Set",
+        "ru": "Комплект украшений Дестино"
+      },
+      "necklace": "/accessary_sealed_bluelycan_necklace_i00.webp",
+      "earring": "/accessary_sealed_bluelycan_earring_i00.webp",
+      "ring": "/accessary_sealed_bluelycan_ring_i00.webp"
+    },
+    "grade": "S80"
+  },
+  {
+    "key": "vesper-jewelry-set",
+    "data": {
+      "id": "vesper-jewelry-set",
+      "name": {
+        "en": "Vesper Jewelry Set",
+        "ru": "Комплект украшений Венеры"
+      },
+      "necklace": "/vesper_necklace_i01.webp",
+      "earring": "/vesper_earring_i01.webp",
+      "ring": "/vesper_ring_i01.webp"
+    },
+    "grade": "S84"
+  }
+]

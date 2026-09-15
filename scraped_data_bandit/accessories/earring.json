@@ -1,0 +1,677 @@
+[
+  {
+    "key": 112,
+    "data": {
+      "unitName": "apprentice's_earing",
+      "icon": "/accessary_apprentices_earing_i00.webp",
+      "name": {
+        "en": "Apprentice's Earring",
+        "ru": "Серьга Ученика"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 0,
+      "mDef": 11,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "earring",
+    "type": "earring",
+    "pDef": 0,
+    "mDef": 11,
+    "mp": 0
+  },
+  {
+    "key": 113,
+    "data": {
+      "unitName": "mage_earing",
+      "icon": "/accessary_mage_earing_i00.webp",
+      "name": {
+        "en": "Mystic's Earring",
+        "ru": "Серьга Мистика"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 0,
+      "mDef": 13,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "earring",
+    "type": "earring",
+    "pDef": 0,
+    "mDef": 13,
+    "mp": 0
+  },
+  {
+    "key": 114,
+    "data": {
+      "unitName": "earing_of_strength",
+      "icon": "/accessary_earing_of_strength_i00.webp",
+      "name": {
+        "en": "Earring of Strength",
+        "ru": "Серьга Силы"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 0,
+      "mDef": 16,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "earring",
+    "type": "earring",
+    "pDef": 0,
+    "mDef": 16,
+    "mp": 0
+  },
+  {
+    "key": 115,
+    "data": {
+      "unitName": "earing_of_wisdom",
+      "icon": "/accessary_earing_of_wisdom_i00.webp",
+      "name": {
+        "en": "Earring of Wisdom",
+        "ru": "Серьга Мудрости"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 0,
+      "mDef": 16,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "earring",
+    "type": "earring",
+    "pDef": 0,
+    "mDef": 16,
+    "mp": 0
+  },
+  {
+    "key": 845,
+    "data": {
+      "unitName": "cat'seye_earing",
+      "icon": "/accessary_catseye_earing_i00.webp",
+      "name": {
+        "en": "Cat's Eye Earring",
+        "ru": "Серьга Кошачьего Глаза"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 0,
+      "mDef": 19,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "earring",
+    "type": "earring",
+    "pDef": 0,
+    "mDef": 19,
+    "mp": 0
+  },
+  {
+    "key": 846,
+    "data": {
+      "unitName": "coral_earing",
+      "icon": "/accessary_coral_earing_i00.webp",
+      "name": {
+        "en": "Coral Earring",
+        "ru": "Коралловая Серьга"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 0,
+      "mDef": 21,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "earring",
+    "type": "earring",
+    "pDef": 0,
+    "mDef": 21,
+    "mp": 0
+  },
+  {
+    "key": 847,
+    "data": {
+      "unitName": "red_cresent_earing",
+      "icon": "/accessary_red_cresent_earing_i00.webp",
+      "name": {
+        "en": "Red Crescent Earring",
+        "ru": "Серьга Багрового Полумесяца"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 0,
+      "mDef": 24,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "earring",
+    "type": "earring",
+    "pDef": 0,
+    "mDef": 24,
+    "mp": 0
+  },
+  {
+    "key": 848,
+    "data": {
+      "unitName": "enchanted_earing",
+      "icon": "/accessary_enchanted_earing_i00.webp",
+      "name": {
+        "en": "Enchanted Earring",
+        "ru": "Зачарованная Серьга"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 0,
+      "mDef": 27,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "earring",
+    "type": "earring",
+    "pDef": 0,
+    "mDef": 27,
+    "mp": 0
+  },
+  {
+    "key": 849,
+    "data": {
+      "unitName": "tiger'seye_earing",
+      "icon": "/accessary_tigerseye_earing_i00.webp",
+      "name": {
+        "en": "Tiger's Eye Earring",
+        "ru": "Серьга Тигрового Глаза"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 0,
+      "mDef": 30,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "earring",
+    "type": "earring",
+    "pDef": 0,
+    "mDef": 30,
+    "mp": 0
+  },
+  {
+    "key": 850,
+    "data": {
+      "unitName": "elven_earing",
+      "icon": "/accessary_elven_earing_i00.webp",
+      "name": {
+        "en": "Elven Earring",
+        "ru": "Серьга Эльфов"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 0,
+      "mDef": 34,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "earring",
+    "type": "earring",
+    "pDef": 0,
+    "mDef": 34,
+    "mp": 0
+  },
+  {
+    "key": 851,
+    "data": {
+      "unitName": "onyxbeast'seye_earing",
+      "icon": "/accessary_onyxbeastseye_earing_i00.webp",
+      "name": {
+        "en": "Omen Beast's Eye Earring",
+        "ru": "Серьга Зверя Знамения"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 0,
+      "mDef": 36,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "earring",
+    "type": "earring",
+    "pDef": 0,
+    "mDef": 36,
+    "mp": 0
+  },
+  {
+    "key": 852,
+    "data": {
+      "unitName": "moonstone_earing",
+      "icon": "/accessary_moonstone_earing_i00.webp",
+      "name": {
+        "en": "Moonstone Earring",
+        "ru": "Серьга Лунного Камня"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 0,
+      "mDef": 39,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "earring",
+    "type": "earring",
+    "pDef": 0,
+    "mDef": 39,
+    "mp": 0
+  },
+  {
+    "key": 853,
+    "data": {
+      "unitName": "earing_of_protection",
+      "icon": "/accessary_earing_of_protection_i00.webp",
+      "name": {
+        "en": "Earring of Protection",
+        "ru": "Серьга Защиты"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 0,
+      "mDef": 42,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "earring",
+    "type": "earring",
+    "pDef": 0,
+    "mDef": 42,
+    "mp": 0
+  },
+  {
+    "key": 854,
+    "data": {
+      "unitName": "earing_of_binding",
+      "icon": "/accessary_earing_of_binding_i00.webp",
+      "name": {
+        "en": "Earring of Binding",
+        "ru": "Серьга Печати"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 0,
+      "mDef": 45,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "earring",
+    "type": "earring",
+    "pDef": 0,
+    "mDef": 45,
+    "mp": 0
+  },
+  {
+    "key": 855,
+    "data": {
+      "unitName": "nassen's_earing",
+      "icon": "/accessary_nassens_earing_i00.webp",
+      "name": {
+        "en": "Nassen's Earring",
+        "ru": "Серьга Нассена"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 0,
+      "mDef": 48,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "earring",
+    "type": "earring",
+    "pDef": 0,
+    "mDef": 48,
+    "mp": 0
+  },
+  {
+    "key": 856,
+    "data": {
+      "unitName": "adamantite_earing",
+      "icon": "/accessary_adamantite_earing_i00.webp",
+      "name": {
+        "en": "Adamantite Earring",
+        "ru": "Адамантитовая Серьга"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pDef": 0,
+      "mDef": 51,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "earring",
+    "type": "earring",
+    "pDef": 0,
+    "mDef": 51,
+    "mp": 0
+  },
+  {
+    "key": 864,
+    "data": {
+      "unitName": "earing_of_black_ore",
+      "icon": "/accessary_earing_of_black_ore_i00.webp",
+      "name": {
+        "en": "Earring of Black Ore",
+        "ru": "Черная Серьга"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pDef": 0,
+      "mDef": 54,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "earring",
+    "type": "earring",
+    "pDef": 0,
+    "mDef": 54,
+    "mp": 0
+  },
+  {
+    "key": 6324,
+    "data": {
+      "unitName": "sealed_phoenix's_earing",
+      "icon": "/accessary_phoenixs_earing_i02.webp",
+      "name": {
+        "en": "Sealed Phoenix Earring",
+        "ru": "Запечатанная Серьга Феникса"
+      },
+      "description": {
+        "en": "The seal can be broken with the help of the Blacksmith of Mammon. When the seal is broken, the effects of M. Def.+3 and MP+20 are given.",
+        "ru": "Печать можно снять у кузнеца в любой деревне. Когда печать снята, даются эффекты Маг. Защ.+3 и МР+20."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pDef": 0,
+      "mDef": 57,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "earring",
+    "type": "earring",
+    "pDef": 0,
+    "mDef": 57,
+    "mp": 0
+  },
+  {
+    "key": 6327,
+    "data": {
+      "unitName": "sealed_majestic_earing",
+      "icon": "/accessary_inferno_earing_i02.webp",
+      "name": {
+        "en": "Sealed Majestic Earring",
+        "ru": "Запечатанная Серьга Величия"
+      },
+      "description": {
+        "en": "The seal can be broken with the help of the Blacksmith of Mammon. When the seal is broken, the effects of M. Def.+3 and MP+25 are given.",
+        "ru": "Печать можно снять у кузнеца в любой деревне. Когда печать снята, даются эффекты Маг. Защ.+3 и МР+25."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pDef": 0,
+      "mDef": 60,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "earring",
+    "type": "earring",
+    "pDef": 0,
+    "mDef": 60,
+    "mp": 0
+  },
+  {
+    "key": 6724,
+    "data": {
+      "unitName": "sealed_sanddragon's_earing",
+      "icon": "/accessory_tateossian_earring_i02.webp",
+      "name": {
+        "en": "Sealed Tateossian Earring",
+        "ru": "Запечатанная Серьга Татеосса"
+      },
+      "description": {
+        "en": "The seal can be broken with the help of the Blacksmith of Mammon. When the seal is broken, the effect of M. Def+3 and MP+31 is given.",
+        "ru": "Печать может быть сломана с помощью Кузнеца Маммона. Снятие печати дает эффект Маг. Защ.+3 и MP+31."
+      }
+    },
+    "grade": "S",
+    "stats": {
+      "pDef": 0,
+      "mDef": 68,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "earring",
+    "type": "earring",
+    "pDef": 0,
+    "mDef": 68,
+    "mp": 0
+  },
+  {
+    "key": 9452,
+    "data": {
+      "unitName": "sealed_dynasty_earring",
+      "icon": "/accessary_dynasty_earing_i01.webp",
+      "name": {
+        "en": "Sealed Dynasty Earring",
+        "ru": "Запечатанная Серьга Династии"
+      },
+      "description": {
+        "en": "Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma. When the seal is released, M. Def. +15 and MP +50.",
+        "ru": "Печать можно снять у кузнеца Маммона или Мастера Ишумы. Снятие печати дает Маг. Защ.+8 и MP+35."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pDef": 0,
+      "mDef": 71,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "earring",
+    "type": "earring",
+    "pDef": 0,
+    "mDef": 71,
+    "mp": 0
+  },
+  {
+    "key": 15767,
+    "data": {
+      "unitName": "sealed_moirai_earring",
+      "icon": "/accessary_sealed_bluelycan_earring_i00.webp",
+      "name": {
+        "en": "Sealed Moirai Earring",
+        "ru": "Запечатанная Серьга Дестино"
+      },
+      "description": {
+        "en": "Sealed Moirai Earring. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma. When the seal is released, has M. Def. +10 and MP+36.",
+        "ru": "Запечатанная Серьга Дестино. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы. После снятия печати увеличивает Маг. Защ. на 10 и MP на 36."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pDef": 0,
+      "mDef": 76,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "earring",
+    "type": "earring",
+    "pDef": 0,
+    "mDef": 76,
+    "mp": 0
+  },
+  {
+    "key": 14160,
+    "data": {
+      "unitName": "sealed_vesper_earring",
+      "icon": "/vesper_earring_i01.webp",
+      "name": {
+        "en": "Sealed Vesper Earring",
+        "ru": "Запечатанная Серьга Венеры"
+      },
+      "description": {
+        "en": "Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma. When the seal is released, the effect is M. Def. +11 and MP+37.",
+        "ru": "Печать можно снять у Кузнеца Маммона или Мастера Ишумы. Когда печать снята, добавляется эффект Маг. Защ. +11, МР +37."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 0,
+      "mDef": 83,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "earring",
+    "type": "earring",
+    "pDef": 0,
+    "mDef": 83,
+    "mp": 0
+  },
+  {
+    "key": 15764,
+    "data": {
+      "unitName": "sealed_vorpal_earring",
+      "icon": "/accessary_sealed_ponshrnoen_earring_i00.webp",
+      "name": {
+        "en": "Sealed Vorpal Earring",
+        "ru": "Запечатанная Серьга Верпеса"
+      },
+      "description": {
+        "en": "Sealed Vorpal Earring. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma. When the seal is released, has an M. Def. +12 and MP+38.",
+        "ru": "Запечатанная Серьга Верпеса. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы. После снятия печати увеличивает Маг. Защ. на 12 и MP на 38."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 0,
+      "mDef": 86,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "earring",
+    "type": "earring",
+    "pDef": 0,
+    "mDef": 86,
+    "mp": 0
+  },
+  {
+    "key": 15761,
+    "data": {
+      "unitName": "sealed_elegia_earring",
+      "icon": "/accessary_sealed_verpes_earring_i00.webp",
+      "name": {
+        "en": "Sealed Elegia Earring",
+        "ru": "Запечатанная Серьга Элегии"
+      },
+      "description": {
+        "en": "Sealed Elegia Earring. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma. When the seal is released, has an M. Def. +12 and MP+39.",
+        "ru": "Запечатанная Серьга Элегии. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы. После снятия печати увеличивает Маг. Защ. на 12 и MP на 39."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 0,
+      "mDef": 92,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "earring",
+    "type": "earring",
+    "pDef": 0,
+    "mDef": 92,
+    "mp": 0
+  }
+]

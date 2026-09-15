@@ -1,0 +1,1218 @@
+[
+  {
+    "key": 1864,
+    "data": {
+      "unitName": "stem",
+      "icon": "/etc_branch_gold_i00.webp",
+      "name": {
+        "en": "Stem",
+        "ru": "Стебель"
+      },
+      "description": {
+        "en": "A material used to make Dwarven items. Can be sold in any shop.",
+        "ru": "Материал, используемый Гномами для создания предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "NG",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 1880,
+    "data": {
+      "unitName": "steel",
+      "icon": "/etc_lump_black_i00.webp",
+      "name": {
+        "en": "Steel",
+        "ru": "Сталь"
+      },
+      "description": {
+        "en": "A material used to make Dwarven items. Can be sold in any shop.",
+        "ru": "Материал, используемый Гномами для создания предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "NG",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 1870,
+    "data": {
+      "unitName": "coal",
+      "icon": "/etc_coal_i00.webp",
+      "name": {
+        "en": "Coal",
+        "ru": "Уголь"
+      },
+      "description": {
+        "en": "A material used to make Dwarven items. Can be sold in any shop.",
+        "ru": "Материал, используемый Гномами для создания предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "NG",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 1878,
+    "data": {
+      "unitName": "braided_hemp",
+      "icon": "/etc_braided_hemp_i00.webp",
+      "name": {
+        "en": "Braided Hemp",
+        "ru": "Плетеный Лен"
+      },
+      "description": {
+        "en": "A material used to make Dwarven items. Can be sold in any shop.",
+        "ru": "Материал, используемый Гномами для создания предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "NG",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 3031,
+    "data": {
+      "unitName": "spirit_ore",
+      "icon": "/etc_stone_gray_i00.webp",
+      "name": {
+        "en": "Spirit Ore",
+        "ru": "Руда Духов"
+      },
+      "description": {
+        "en": "A material used by Dwarves in item manufacturing. Can be sold in any shop.",
+        "ru": "Материал, используемый Гномами для создания предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "NG",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 1866,
+    "data": {
+      "unitName": "suede",
+      "icon": "/etc_suede_i00.webp",
+      "name": {
+        "en": "Suede",
+        "ru": "Замша"
+      },
+      "description": {
+        "en": "A material used to make Dwarven items. Can be sold in any shop.",
+        "ru": "Материал, используемый Гномами для создания предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "NG",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 1868,
+    "data": {
+      "unitName": "thread",
+      "icon": "/etc_skein_white_i00.webp",
+      "name": {
+        "en": "Thread",
+        "ru": "Нитки"
+      },
+      "description": {
+        "en": "A material used to make Dwarven items. Can be sold in any shop.",
+        "ru": "Материал, используемый Гномами для создания предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "NG",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 1883,
+    "data": {
+      "unitName": "steel_mold",
+      "icon": "/etc_mold_i00.webp",
+      "name": {
+        "en": "Steel Mold",
+        "ru": "Стальная Заготовка"
+      },
+      "description": {
+        "en": "A material used to make Dwarven items. Can be sold in any shop.",
+        "ru": "Материал, используемый Гномами для создания предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "NG",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 1867,
+    "data": {
+      "unitName": "animal_skin",
+      "icon": "/etc_leather_brown_i00.webp",
+      "name": {
+        "en": "Animal Skin",
+        "ru": "Шкура Животного"
+      },
+      "description": {
+        "en": "A material used to make Dwarven items. Can be sold in any shop.",
+        "ru": "Материал, используемый Гномами для создания предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "NG",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 1865,
+    "data": {
+      "unitName": "varnish",
+      "icon": "/etc_pouch_yellow_i00.webp",
+      "name": {
+        "en": "Varnish",
+        "ru": "Лак"
+      },
+      "description": {
+        "en": "A material used to make Dwarven items. Can be sold in any shop.",
+        "ru": "Материал, используемый Гномами для создания предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "NG",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 1869,
+    "data": {
+      "unitName": "iron_ore",
+      "icon": "/etc_lump_gray_i00.webp",
+      "name": {
+        "en": "Iron Ore",
+        "ru": "Железная Руда"
+      },
+      "description": {
+        "en": "A material used to make Dwarven items. Can be sold in any shop.",
+        "ru": "Материал, используемый Гномами для создания предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "NG",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 1785,
+    "data": {
+      "unitName": "soul_ore",
+      "icon": "/etc_crystal_white_i00.webp",
+      "name": {
+        "en": "Soul Ore",
+        "ru": "Руда Души"
+      },
+      "description": {
+        "en": "A material used by Dwarves in item manufacturing. Can be sold in any shop.",
+        "ru": "Материал, используемый Гномами для создания предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "NG",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 1872,
+    "data": {
+      "unitName": "animal_bone",
+      "icon": "/etc_piece_bone_white_i00.webp",
+      "name": {
+        "en": "Animal Bone",
+        "ru": "Кость Животного"
+      },
+      "description": {
+        "en": "A material used to make Dwarven items. Can be sold in any shop.",
+        "ru": "Материал, используемый Гномами для создания предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "NG",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 2130,
+    "data": {
+      "unitName": "gemstone_d",
+      "icon": "/etc_crystal_ball_silver_i00.webp",
+      "name": {
+        "en": "Gemstone D",
+        "ru": "Самоцвет: Ранг D"
+      },
+      "description": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    "grade": "D",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 1458,
+    "data": {
+      "unitName": "crystal_d",
+      "icon": "/etc_crystal_blue_i00.webp",
+      "name": {
+        "en": "Crystal (D-Grade)",
+        "ru": "Кристалл: Ранг D"
+      },
+      "description": {
+        "en": "A crystal of D-Grade.",
+        "ru": "Кристалл Ранга D."
+      }
+    },
+    "grade": "D",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 1873,
+    "data": {
+      "unitName": "silver_nugget",
+      "icon": "/etc_silver_i00.webp",
+      "name": {
+        "en": "Silver Nugget",
+        "ru": "Серебряный Слиток"
+      },
+      "description": {
+        "en": "A material used to make Dwarven items. Can be sold in any shop.",
+        "ru": "Материал, используемый Гномами для создания предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "D",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 1879,
+    "data": {
+      "unitName": "cokes",
+      "icon": "/etc_oil_pot_black_i00.webp",
+      "name": {
+        "en": "Cokes",
+        "ru": "Кокс"
+      },
+      "description": {
+        "en": "A material used to make Dwarven items. Can be sold in any shop.",
+        "ru": "Материал, используемый Гномами для создания предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "D",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 1881,
+    "data": {
+      "unitName": "coarse_bone_powder",
+      "icon": "/etc_powder_white_i00.webp",
+      "name": {
+        "en": "Coarse Bone Powder",
+        "ru": "Грубый Костный Порошок"
+      },
+      "description": {
+        "en": "A material used to make Dwarven items. Can be sold in any shop.",
+        "ru": "Материал, используемый Гномами для создания предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "D",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 1882,
+    "data": {
+      "unitName": "leather",
+      "icon": "/etc_leather_i00.webp",
+      "name": {
+        "en": "Leather",
+        "ru": "Кожа"
+      },
+      "description": {
+        "en": "A material used to make Dwarven items. Can be sold in any shop.",
+        "ru": "Материал, используемый Гномами для создания предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "D",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 1884,
+    "data": {
+      "unitName": "cord",
+      "icon": "/etc_skein_gray_i00.webp",
+      "name": {
+        "en": "Cord",
+        "ru": "Веревка"
+      },
+      "description": {
+        "en": "A material used to make Dwarven items. Can be sold in any shop.",
+        "ru": "Материал, используемый Гномами для создания предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "D",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 1885,
+    "data": {
+      "unitName": "high_grade_suede",
+      "icon": "/etc_pouch_yellow_i00.webp",
+      "name": {
+        "en": "High Grade Suede",
+        "ru": "Качественная Замша"
+      },
+      "description": {
+        "en": "A material used to make Dwarven items. Can be sold in any shop.",
+        "ru": "Материал, используемый Гномами для создания предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "D",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 1871,
+    "data": {
+      "unitName": "charcoal",
+      "icon": "/etc_charcoal_i00.webp",
+      "name": {
+        "en": "Charcoal",
+        "ru": "Древесный Уголь"
+      },
+      "description": {
+        "en": "A material used to make Dwarven items. Can be sold in any shop.",
+        "ru": "Материал, используемый Гномами для создания предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "D",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 1886,
+    "data": {
+      "unitName": "silver_mold",
+      "icon": "/etc_silver_mold_i00.webp",
+      "name": {
+        "en": "Silver Mold",
+        "ru": "Серебряная Заготовка"
+      },
+      "description": {
+        "en": "A material used to make Dwarven items. Can be sold in any shop.",
+        "ru": "Материал, используемый Гномами для создания предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "D",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 1890,
+    "data": {
+      "unitName": "mithirl_alloy",
+      "icon": "/etc_lump_white_i00.webp",
+      "name": {
+        "en": "Mithril Alloy",
+        "ru": "Мифриловый Сплав"
+      },
+      "description": {
+        "en": "A material used to make Dwarven items. Can be sold in any shop.",
+        "ru": "Материал, используемый Гномами для создания предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "C",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 1874,
+    "data": {
+      "unitName": "oriharukon_ore",
+      "icon": "/etc_oriharukon_ore_i00.webp",
+      "name": {
+        "en": "Oriharukon Ore",
+        "ru": "Орихаруконовая Руда"
+      },
+      "description": {
+        "en": "A material used to make Dwarven items. Can be sold in any shop.",
+        "ru": "Материал, используемый Гномами для создания предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "C",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 1892,
+    "data": {
+      "unitName": "blacksmith's_frame",
+      "icon": "/etc_blacksmiths_frame_i00.webp",
+      "name": {
+        "en": "Blacksmith's Frame",
+        "ru": "Заготовка Кузнеца"
+      },
+      "description": {
+        "en": "A material used to make Dwarven items. Can be sold in any shop.",
+        "ru": "Материал, используемый Гномами для создания предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "C",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 1889,
+    "data": {
+      "unitName": "compound_braid",
+      "icon": "/etc_compound_braid_i00.webp",
+      "name": {
+        "en": "Compound Braid",
+        "ru": "Прочный Шнурок"
+      },
+      "description": {
+        "en": "A material used to make Dwarven items. Can be sold in any shop.",
+        "ru": "Материал, используемый Гномами для создания предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "C",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 1894,
+    "data": {
+      "unitName": "crafted_leather",
+      "icon": "/etc_crafted_leather_i00.webp",
+      "name": {
+        "en": "Crafted Leather",
+        "ru": "Выделанная Кожа"
+      },
+      "description": {
+        "en": "A material used to make Dwarven items. Can be sold in any shop.",
+        "ru": "Материал, используемый Гномами для создания предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "C",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 1876,
+    "data": {
+      "unitName": "mithril_ore",
+      "icon": "/etc_mithril_ore_i00.webp",
+      "name": {
+        "en": "Mithril Ore",
+        "ru": "Мифриловая Руда"
+      },
+      "description": {
+        "en": "A material used to make Dwarven items. Can be sold in any shop.",
+        "ru": "Материал, используемый Гномами для создания предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "C",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 1895,
+    "data": {
+      "unitName": "metallic_fiber",
+      "icon": "/etc_metallic_fiber_i00.webp",
+      "name": {
+        "en": "Metallic Fiber",
+        "ru": "Металлическое Волокно"
+      },
+      "description": {
+        "en": "A material used to make Dwarven items. Can be sold in any shop.",
+        "ru": "Материал, используемый Гномами для создания предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "C",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 1891,
+    "data": {
+      "unitName": "artisan's_frame",
+      "icon": "/etc_artisans_frame_i00.webp",
+      "name": {
+        "en": "Artisan's Frame",
+        "ru": "Заготовка Ремесленника"
+      },
+      "description": {
+        "en": "A material used to make Dwarven items. Can be sold in any shop.",
+        "ru": "Материал, используемый Гномами для создания предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "C",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 1893,
+    "data": {
+      "unitName": "oriharukon",
+      "icon": "/etc_oriharukon_i00.webp",
+      "name": {
+        "en": "Oriharukon",
+        "ru": "Орихарукон"
+      },
+      "description": {
+        "en": "A material used to make Dwarven items. Can be sold in any shop.",
+        "ru": "Материал, используемый Гномами для создания предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "C",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 1875,
+    "data": {
+      "unitName": "stone_of_purity",
+      "icon": "/etc_crystal_ball_white_i00.webp",
+      "name": {
+        "en": "Stone of Purity",
+        "ru": "Камень Чистоты"
+      },
+      "description": {
+        "en": "A material used to make Dwarven items. Can be sold in any shop.",
+        "ru": "Материал, используемый Гномами для создания предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "C",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 2131,
+    "data": {
+      "unitName": "gemstone_c",
+      "icon": "/etc_crystal_ball_green_i00.webp",
+      "name": {
+        "en": "Gemstone C",
+        "ru": "Самоцвет: Ранг C"
+      },
+      "description": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    "grade": "C",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 1877,
+    "data": {
+      "unitName": "admantite_nugget",
+      "icon": "/etc_adamantite_i00.webp",
+      "name": {
+        "en": "Adamantite Nugget",
+        "ru": "Адамантитовый Слиток"
+      },
+      "description": {
+        "en": "A material used to make Dwarven items. Can be sold in any shop.",
+        "ru": "Материал, используемый Гномами для создания предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "C",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 1459,
+    "data": {
+      "unitName": "crystal_c",
+      "icon": "/etc_crystal_green_i00.webp",
+      "name": {
+        "en": "Crystal (C-Grade)",
+        "ru": "Кристалл: Ранг C"
+      },
+      "description": {
+        "en": "A crystal of C-Grade.",
+        "ru": "Кристалл Ранга C."
+      }
+    },
+    "grade": "C",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 5220,
+    "data": {
+      "unitName": "reinforcing_agent",
+      "icon": "/etc_plate_blue_i00.webp",
+      "name": {
+        "en": "Metal Hardener",
+        "ru": "Отвердитель Металла"
+      },
+      "description": {
+        "en": "Ingredient used by Dwarves. It is specifically designed to be used to create C-grade items. Available in general stores.",
+        "ru": "Материал, используемый Гномами для создания предметов Ранга C. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "C",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 1887,
+    "data": {
+      "unitName": "varnish_of_purity",
+      "icon": "/etc_potion_clear_i00.webp",
+      "name": {
+        "en": "Varnish of Purity",
+        "ru": "Очищенный Лак"
+      },
+      "description": {
+        "en": "A material used to make Dwarven items. Can be sold in any shop.",
+        "ru": "Материал, используемый Гномами для создания предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "C",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 1888,
+    "data": {
+      "unitName": "synthesis_cokes",
+      "icon": "/etc_synthetic_cokes_i00.webp",
+      "name": {
+        "en": "Synthetic Cokes",
+        "ru": "Синтетический Кокс"
+      },
+      "description": {
+        "en": "A material used to make Dwarven items. Can be sold in any shop.",
+        "ru": "Материал, используемый Гномами для создания предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "C",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 2132,
+    "data": {
+      "unitName": "gemstone_b",
+      "icon": "/etc_bead_green_i00.webp",
+      "name": {
+        "en": "Gemstone B",
+        "ru": "Самоцвет: Ранг B"
+      },
+      "description": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    "grade": "B",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 4046,
+    "data": {
+      "unitName": "maestro_anvil_lock",
+      "icon": "/etc_lump_dark_gray_i00.webp",
+      "name": {
+        "en": "Maestro Anvil Lock",
+        "ru": "Замок Мастера"
+      },
+      "description": {
+        "en": "Ingredient used in making Dwarven items. Can also be sold at ordinary shops.",
+        "ru": "Инструмент, используемый Гномами при создании предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "B",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 4039,
+    "data": {
+      "unitName": "mold_glue",
+      "icon": "/etc_reagent_red_i00.webp",
+      "name": {
+        "en": "Mold Glue",
+        "ru": "Клей"
+      },
+      "description": {
+        "en": "Ingredient for making upper garment tools. Can also be sold at ordinary shops.",
+        "ru": "Материал для создания различных вещей. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "B",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 4040,
+    "data": {
+      "unitName": "mold_lubricant",
+      "icon": "/etc_reagent_gold_i00.webp",
+      "name": {
+        "en": "Mold Lubricant",
+        "ru": "Смазка"
+      },
+      "description": {
+        "en": "Ingredient for making upper garment tools. Can also be sold at ordinary shops.",
+        "ru": "Материал для создания различных вещей. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "B",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 4041,
+    "data": {
+      "unitName": "mold_hardener",
+      "icon": "/etc_reagent_blue_i00.webp",
+      "name": {
+        "en": "Mold Hardener",
+        "ru": "Отвердитель Формы"
+      },
+      "description": {
+        "en": "Ingredient for making upper garment tools. Can also be sold at ordinary shops.",
+        "ru": "Материал для создания различных вещей. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "B",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 1460,
+    "data": {
+      "unitName": "crystal_b",
+      "icon": "/etc_crystal_red_i00.webp",
+      "name": {
+        "en": "Crystal (B-Grade)",
+        "ru": "Кристалл: Ранг B"
+      },
+      "description": {
+        "en": "A crystal of B-Grade.",
+        "ru": "Кристалл Ранга B."
+      }
+    },
+    "grade": "B",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 4048,
+    "data": {
+      "unitName": "maestro_mold",
+      "icon": "/etc_silver_mold_i00.webp",
+      "name": {
+        "en": "Maestro Mold",
+        "ru": "Заготовка Мастера"
+      },
+      "description": {
+        "en": "Ingredient used in making Dwarven items. Can also be sold at ordinary shops.",
+        "ru": "Инструмент, используемый Гномами при создании предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "B",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 4047,
+    "data": {
+      "unitName": "craftsman_mold",
+      "icon": "/etc_mold_i00.webp",
+      "name": {
+        "en": "Craftsman Mold",
+        "ru": "Заготовка Работника"
+      },
+      "description": {
+        "en": "Ingredient used in making Dwarven items. Can also be sold at ordinary shops.",
+        "ru": "Инструмент, используемый Гномами при создании предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "B",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 4045,
+    "data": {
+      "unitName": "maestro_holder",
+      "icon": "/etc_lump_yellow_i00.webp",
+      "name": {
+        "en": "Maestro Holder",
+        "ru": "Тиски Мастера"
+      },
+      "description": {
+        "en": "Ingredient used in making Dwarven items. Can also be sold at ordinary shops.",
+        "ru": "Инструмент, используемый Гномами при создании предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "B",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 4042,
+    "data": {
+      "unitName": "enria",
+      "icon": "/etc_gem_red_i00.webp",
+      "name": {
+        "en": "Enria",
+        "ru": "Энрия"
+      },
+      "description": {
+        "en": "Crystal representing revenge and destruction. Used for making items of B-Grade and above and can also be sold at ordinary shops.",
+        "ru": "Кристалл, символизирующий месть и разрушение. Используется для создания предметов Ранга B или выше. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "B",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 4043,
+    "data": {
+      "unitName": "asofe",
+      "icon": "/etc_gem_blue_i00.webp",
+      "name": {
+        "en": "Asofe",
+        "ru": "Азоф"
+      },
+      "description": {
+        "en": "Crystal representing life and protection. Used for making items of B-Grade and above and can also be sold at ordinary shops.",
+        "ru": "Кристалл, символизирующий жизнь и защиту. Используется для создания предметов Ранга B или выше. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "B",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 4048,
+    "data": {
+      "unitName": "maestro_mold",
+      "icon": "/etc_silver_mold_i00.webp",
+      "name": {
+        "en": "Maestro Mold",
+        "ru": "Заготовка Мастера"
+      },
+      "description": {
+        "en": "Ingredient used in making Dwarven items. Can also be sold at ordinary shops.",
+        "ru": "Инструмент, используемый Гномами при создании предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "B",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 1461,
+    "data": {
+      "unitName": "crystal_a",
+      "icon": "/etc_crystal_silver_i00.webp",
+      "name": {
+        "en": "Crystal (A-Grade)",
+        "ru": "Кристалл: Ранг A"
+      },
+      "description": {
+        "en": "A crystal of A-Grade.",
+        "ru": "Кристалл Ранга A."
+      }
+    },
+    "grade": "A",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 2133,
+    "data": {
+      "unitName": "gemstone_a",
+      "icon": "/etc_bead_red_i00.webp",
+      "name": {
+        "en": "Gemstone A",
+        "ru": "Самоцвет: Ранг A"
+      },
+      "description": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    "grade": "A",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 2134,
+    "data": {
+      "unitName": "gemstone_s",
+      "icon": "/etc_bead_silver_i00.webp",
+      "name": {
+        "en": "Gemstone S",
+        "ru": "Самоцвет: Ранг S"
+      },
+      "description": {
+        "en": "",
+        "ru": ""
+      }
+    },
+    "grade": "A",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 5549,
+    "data": {
+      "unitName": "iron_thread",
+      "icon": "/etc_skein_gray_i00.webp",
+      "name": {
+        "en": "Metallic Thread",
+        "ru": "Металлическая Нить"
+      },
+      "description": {
+        "en": "Material used by a Dwarf to make an item. It can be sold at a regular store.",
+        "ru": "Материал, используемый Гномами для создания предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "A",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 5550,
+    "data": {
+      "unitName": "reinforcing_plate",
+      "icon": "/etc_squares_wood_i00.webp",
+      "name": {
+        "en": "Durable Metal Plate",
+        "ru": "Прочный Лист Стали"
+      },
+      "description": {
+        "en": "Material used by a Dwarf to make an item. It can be sold at a regular store.",
+        "ru": "Материал, используемый Гномами для создания предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "A",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 5551,
+    "data": {
+      "unitName": "reorins_mold",
+      "icon": "/etc_blacksmiths_frame_i00.webp",
+      "name": {
+        "en": "Leolin's Mold",
+        "ru": "Заготовка Реорина"
+      },
+      "description": {
+        "en": "Material used by a Dwarf to make an item. It can be sold at a regular store.",
+        "ru": "Материал, используемый Гномами для создания предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "A",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 5552,
+    "data": {
+      "unitName": "warsmith_mold",
+      "icon": "/etc_blacksmiths_frame_i00.webp",
+      "name": {
+        "en": "Warsmith's Mold",
+        "ru": "Заготовка Оружейника"
+      },
+      "description": {
+        "en": "Material used by a Dwarf to make an item. It can be sold at a regular store.",
+        "ru": "Материал, используемый Гномами для создания предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "A",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 5553,
+    "data": {
+      "unitName": "arcsmith_anvil",
+      "icon": "/etc_blacksmiths_frame_i00.webp",
+      "name": {
+        "en": "Arcsmith's Anvil",
+        "ru": "Наковальня Кузнеца"
+      },
+      "description": {
+        "en": "Material used by a Dwarf to make an item. It can be sold at a regular store.",
+        "ru": "Материал, используемый Гномами для создания предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "A",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 5554,
+    "data": {
+      "unitName": "warsmith_holder",
+      "icon": "/etc_blacksmiths_frame_i00.webp",
+      "name": {
+        "en": "Warsmith's Holder",
+        "ru": "Рукоять Кузнеца"
+      },
+      "description": {
+        "en": "Material used by a Dwarf to make an item. It can be sold at a regular store.",
+        "ru": "Материал, используемый Гномами для создания предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "A",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 1462,
+    "data": {
+      "unitName": "crystal_s",
+      "icon": "/etc_crystal_gold_i00.webp",
+      "name": {
+        "en": "Crystal (S-Grade)",
+        "ru": "Кристалл: Ранг S"
+      },
+      "description": {
+        "en": "A crystal of S-Grade.",
+        "ru": "Кристалл Ранга S."
+      }
+    },
+    "grade": "S",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 9629,
+    "data": {
+      "unitName": "adamantine",
+      "icon": "/etc_adamantium_i00.webp",
+      "name": {
+        "en": "Adamantine",
+        "ru": "Адамантит"
+      },
+      "description": {
+        "en": "Material used to build Dwarven items. Can be sold at an ordinary store.",
+        "ru": "Материал, который используют Гномы для изготовления предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "S80",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 9628,
+    "data": {
+      "unitName": "leonard",
+      "icon": "/etc_high_gem_black_i00.webp",
+      "name": {
+        "en": "Leonard",
+        "ru": "Леонард"
+      },
+      "description": {
+        "en": "Material used to build Dwarven items. Can be sold at an ordinary store.",
+        "ru": "Материал, который используют Гномы для изготовления предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "S80",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  },
+  {
+    "key": 9630,
+    "data": {
+      "unitName": "orichalcum",
+      "icon": "/etc_oricalcum_i00.webp",
+      "name": {
+        "en": "Orichalcum",
+        "ru": "Медь"
+      },
+      "description": {
+        "en": "Material used to build Dwarven items. Can be sold at an ordinary store.",
+        "ru": "Материал, который используют Гномы для изготовления предметов. Можно продать в Торговой Лавке."
+      }
+    },
+    "grade": "S80",
+    "category": "other",
+    "subtype": "resource",
+    "type": "resource"
+  }
+]

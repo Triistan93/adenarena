@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>L2Bandit.camp - Base de Dados Completa</title>
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card-bg: #111827;
+      --border: #1f2937;
+      --accent: #f59e0b;
+      --accent-hover: #d97706;
+      --text: #f3f4f6;
+      --text-muted: #9ca3af;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+    body { background: var(--bg); color: var(--text); padding: 20px; }
+    header { max-width: 1300px; margin: 0 auto 20px auto; text-align: center; }
+    h1 { color: var(--accent); margin-bottom: 6px; font-size: 2.2rem; }
+    .subtitle { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 16px; }
+
+    .stats-bar { max-width: 1300px; margin: 0 auto 20px auto; background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 14px 20px; display: flex; flex-wrap: wrap; justify-content: space-around; gap: 12px; font-size: 0.85rem; text-align: center; }
+    .stat-item span { display: block; color: var(--accent); font-weight: bold; font-size: 1.1rem; margin-bottom: 2px; }
+
+    .nav-tabs { max-width: 1300px; margin: 0 auto 20px auto; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .tab-btn { background: var(--card-bg); border: 1px solid var(--border); color: var(--text); padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; transition: all 0.2s; font-weight: 500; }
+    .tab-btn.active, .tab-btn:hover { background: var(--accent); color: #000; font-weight: bold; border-color: var(--accent); }
+
+    .search-container { max-width: 600px; margin: 0 auto 24px auto; text-align: center; }
+    input#search { width: 100%; background: var(--card-bg); border: 1px solid var(--border); color: #fff; padding: 12px 18px; border-radius: 8px; font-size: 1rem; outline: none; }
+    input#search:focus { border-color: var(--accent); }
+
+    .grid { max-width: 1300px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 16px; display: flex; gap: 14px; align-items: flex-start; transition: transform 0.2s, border-color 0.2s; }
+    .card:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .card-icon { width: 44px; height: 44px; border-radius: 6px; background: #050811; border: 1px solid #374151; flex-shrink: 0; object-fit: contain; }
+    .card-body { flex: 1; min-width: 0; }
+    .card-title { font-size: 0.95rem; font-weight: 600; color: #fff; margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .card-subtitle { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px; }
+    .card-badge { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; background: #374151; color: #e5e7eb; margin-right: 6px; }
+    .card-badge.grade-s { background: #b91c1c; }
+    .card-badge.grade-a { background: #c2410c; }
+    .card-badge.grade-b { background: #b45309; }
+    .card-badge.grade-c { background: #15803d; }
+    .card-badge.grade-d { background: #0369a1; }
+    .card-desc { font-size: 0.75rem; color: #9ca3af; margin-top: 6px; line-height: 1.3; max-height: 48px; overflow: hidden; text-overflow: ellipsis; }
+    
+    .loading-msg { text-align: center; color: var(--text-muted); padding: 40px; font-size: 1.1rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>L2Bandit.camp Database</h1>
+    <p class="subtitle">Base de dados completa offline extraída de <strong>L2Bandit.camp</strong> com busca em tempo real e ícones locais.</p>
+  </header>
+
+  <div class="stats-bar">
+    <div class="stat-item"><span>9352</span>Total Registros</div>
+    <div class="stat-item"><span>448</span>Armas</div>
+    <div class="stat-item"><span>395</span>Armaduras</div>
+    <div class="stat-item"><span>63</span>Sets</div>
+    <div class="stat-item"><span>724</span>Crafts</div>
+    <div class="stat-item"><span>2533</span>Skills</div>
+    <div class="stat-item"><span>229</span>Bosses</div>
+    <div class="stat-item"><span>2889</span>Monstros</div>
+  </div>
+
+  <div class="nav-tabs" id="category-tabs">
+    <button class="tab-btn active" onclick="switchCategory('weapons', this)">Weapons (448)</button>
+    <button class="tab-btn" onclick="switchCategory('armors', this)">Armors (395)</button>
+    <button class="tab-btn" onclick="switchCategory('armorSets', this)">Armor Sets (49)</button>
+    <button class="tab-btn" onclick="switchCategory('jewelrySets', this)">Jewelry Sets (14)</button>
+    <button class="tab-btn" onclick="switchCategory('accessories', this)">Accessories (79)</button>
+    <button class="tab-btn" onclick="switchCategory('craftBook', this)">Craft Book (724)</button>
+    <button class="tab-btn" onclick="switchCategory('skills', this)">Skills (2533)</button>
+    <button class="tab-btn" onclick="switchCategory('bosses', this)">Bosses (229)</button>
+    <button class="tab-btn" onclick="switchCategory('monsters', this)">Monsters (2889)</button>
+    <button class="tab-btn" onclick="switchCategory('citizens', this)">Citizens (1882)</button>
+    <button class="tab-btn" onclick="switchCategory('shots', this)">Shots (18)</button>
+    <button class="tab-btn" onclick="switchCategory('resources', this)">Resources (64)</button>
+    <button class="tab-btn" onclick="switchCategory('classes', this)">Classes (9)</button>
+    <button class="tab-btn" onclick="switchCategory('locations', this)">Locations (17)</button>
+  </div>
+
+  <div class="search-container">
+    <input type="text" id="search" placeholder="Pesquisar por nome (EN / RU) ou tipo..." oninput="filterCurrent()" />
+  </div>
+
+  <div class="grid" id="items-grid">
+    <div class="loading-msg">Carregando dados...</div>
+  </div>
+
+  <script>
+    let currentCategory = 'weapons';
+    let loadedData = null;
+
+    async function init() {
+      const res = await fetch('l2bandit_all.json');
+      loadedData = await res.json();
+      renderCategory();
+    }
+
+    function switchCategory(cat, btn) {
+      currentCategory = cat;
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('search').value = '';
+      renderCategory();
+    }
+
+    function getCategoryList() {
+      if (!loadedData) return [];
+      switch (currentCategory) {
+        case 'weapons': return loadedData.weapons || [];
+        case 'armors': return loadedData.armors || [];
+        case 'armorSets': return loadedData.multicraft.armorSets || [];
+        case 'jewelrySets': return loadedData.multicraft.jewelrySets || [];
+        case 'accessories': return loadedData.accessories || [];
+        case 'craftBook': return loadedData.multicraft.craftBook || [];
+        case 'skills': return loadedData.other.skills || [];
+        case 'bosses': return loadedData.npc.bosses || [];
+        case 'monsters': return loadedData.npc.monsters || [];
+        case 'citizens': return loadedData.npc.citizens || [];
+        case 'shots': return loadedData.other.shots || [];
+        case 'resources': return loadedData.other.resources || [];
+        case 'classes': return loadedData.other.classes || [];
+        case 'locations': return loadedData.other.locations || [];
+        default: return [];
+      }
+    }
+
+    function renderCategory() {
+      const list = getCategoryList();
+      const q = document.getElementById('search').value.toLowerCase().trim();
+      const grid = document.getElementById('items-grid');
+
+      const filtered = list.filter(item => {
+        if (!q) return true;
+        const d = item.data || item;
+        const nameEn = (d.name?.en || d.name || '').toLowerCase();
+        const nameRu = (d.name?.ru || '').toLowerCase();
+        const type = (item.type || item.subtype || '').toLowerCase();
+        return nameEn.includes(q) || nameRu.includes(q) || type.includes(q);
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '<div class="loading-msg">Nenhum item encontrado.</div>';
+        return;
+      }
+
+      // Render first 200 items for snappy performance
+      const toRender = filtered.slice(0, 200);
+      grid.innerHTML = toRender.map(item => {
+        const d = item.data || item;
+        const nameEn = d.name?.en || d.name || 'Item';
+        const nameRu = d.name?.ru || '';
+        let iconName = d.icon || d.helmet || d.necklace || '';
+        if (iconName.startsWith('/')) iconName = iconName.replace(/^\//, '');
+        const iconSrc = iconName ? 'images/' + iconName : '';
+
+        const grade = item.grade || d.grade || '';
+        const gradeClass = grade ? 'grade-' + grade.toLowerCase() : '';
+        const type = item.subtype || item.type || '';
+        const desc = d.description?.en || d.description?.ru || '';
+
+        return `
+          <div class="card">
+            ${iconSrc ? `<img class="card-icon" src="${iconSrc}" alt="${nameEn}" onerror="this.style.opacity=0.3" />` : '<div class="card-icon"></div>'}
+            <div class="card-body">
+              <div class="card-title" title="${nameEn}">${nameEn}</div>
+              ${nameRu ? `<div class="card-subtitle">${nameRu}</div>` : ''}
+              <div>
+                ${grade ? `<span class="card-badge ${gradeClass}">Grade ${grade}</span>` : ''}
+                ${type ? `<span class="card-badge">${type}</span>` : ''}
+                ${item.level ? `<span class="card-badge">Lv ${item.level}</span>` : ''}
+              </div>
+              ${desc ? `<div class="card-desc" title="${desc}">${desc}</div>` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function filterCurrent() {
+      renderCategory();
+    }
+
+    window.onload = init;
+  </script>
+</body>
+</html>

@@ -1,0 +1,927 @@
+[
+  {
+    "key": 2370,
+    "data": {
+      "unitName": "union_member's_club",
+      "icon": "/weapon_club_i00.webp",
+      "name": {
+        "en": "Guild Member's Club",
+        "ru": "Дубина Гильдии"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 6,
+      "mAtk": 5
+    },
+    "category": "weapons",
+    "subtype": "blunt",
+    "type": "blunt",
+    "pAtk": 6,
+    "mAtk": 5
+  },
+  {
+    "key": 4,
+    "data": {
+      "unitName": "club",
+      "icon": "/weapon_club_i00.webp",
+      "name": {
+        "en": "Club",
+        "ru": "Дубина"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 8,
+      "mAtk": 6
+    },
+    "category": "weapons",
+    "subtype": "blunt",
+    "type": "blunt",
+    "pAtk": 8,
+    "mAtk": 6
+  },
+  {
+    "key": 152,
+    "data": {
+      "unitName": "heavy_chisel",
+      "icon": "/weapon_heavy_chisel_i00.webp",
+      "name": {
+        "en": "Heavy Chisel",
+        "ru": "Тяжелое Зубило"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 10,
+      "mAtk": 8
+    },
+    "category": "weapons",
+    "subtype": "blunt",
+    "type": "blunt",
+    "pAtk": 10,
+    "mAtk": 8
+  },
+  {
+    "key": 5,
+    "data": {
+      "unitName": "mace",
+      "icon": "/weapon_mace_i00.webp",
+      "name": {
+        "en": "Mace",
+        "ru": "Булава"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 11,
+      "mAtk": 9
+    },
+    "category": "weapons",
+    "subtype": "blunt",
+    "type": "blunt",
+    "pAtk": 11,
+    "mAtk": 9
+  },
+  {
+    "key": 153,
+    "data": {
+      "unitName": "sickle",
+      "icon": "/weapon_sickle_i00.webp",
+      "name": {
+        "en": "Sickle",
+        "ru": "Серп"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 12,
+      "mAtk": 9
+    },
+    "category": "weapons",
+    "subtype": "blunt",
+    "type": "blunt",
+    "pAtk": 12,
+    "mAtk": 9
+  },
+  {
+    "key": 1511,
+    "data": {
+      "unitName": "silversmith_hammer",
+      "icon": "/weapon_iron_hammer_i00.webp",
+      "name": {
+        "en": "Silversmith Hammer",
+        "ru": "Молот Кузнеца"
+      },
+      "description": {
+        "en": "A hammer silversmiths of the ancient Elmoreden used.",
+        "ru": "Молот, который когда-то использовали кузнецы Эльморедена."
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 13,
+      "mAtk": 10
+    },
+    "category": "weapons",
+    "subtype": "blunt",
+    "type": "blunt",
+    "pAtk": 13,
+    "mAtk": 10
+  },
+  {
+    "key": 154,
+    "data": {
+      "unitName": "dwarven_mace",
+      "icon": "/weapon_dwarven_mace_i00.webp",
+      "name": {
+        "en": "Dwarven Mace",
+        "ru": "Булава Гномов"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 17,
+      "mAtk": 12
+    },
+    "category": "weapons",
+    "subtype": "blunt",
+    "type": "blunt",
+    "pAtk": 17,
+    "mAtk": 12
+  },
+  {
+    "key": 2501,
+    "data": {
+      "unitName": "bone_club",
+      "icon": "/weapon_club_i00.webp",
+      "name": {
+        "en": "Bone Club",
+        "ru": "Костяная Дубина"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 24,
+      "mAtk": 17
+    },
+    "category": "weapons",
+    "subtype": "blunt",
+    "type": "blunt",
+    "pAtk": 24,
+    "mAtk": 17
+  },
+  {
+    "key": 87,
+    "data": {
+      "unitName": "iron_hammer",
+      "icon": "/weapon_iron_hammer_i00.webp",
+      "name": {
+        "en": "Iron Hammer",
+        "ru": "Железный Молот"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 31,
+      "mAtk": 21
+    },
+    "category": "weapons",
+    "subtype": "blunt",
+    "type": "blunt",
+    "pAtk": 31,
+    "mAtk": 21
+  },
+  {
+    "key": 155,
+    "data": {
+      "unitName": "buzdygan",
+      "icon": "/weapon_buzdygan_i00.webp",
+      "name": {
+        "en": "Buzdygan",
+        "ru": "Палица"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 31,
+      "mAtk": 21
+    },
+    "category": "weapons",
+    "subtype": "blunt",
+    "type": "blunt",
+    "pAtk": 31,
+    "mAtk": 21
+  },
+  {
+    "key": 156,
+    "data": {
+      "unitName": "hand_axe",
+      "icon": "/weapon_hand_axe_i00.webp",
+      "name": {
+        "en": "Hand Axe",
+        "ru": "Тесак"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 40,
+      "mAtk": 26
+    },
+    "category": "weapons",
+    "subtype": "blunt",
+    "type": "blunt",
+    "pAtk": 40,
+    "mAtk": 26
+  },
+  {
+    "key": 166,
+    "data": {
+      "unitName": "heavy_mace",
+      "icon": "/weapon_heavy_mace_i00.webp",
+      "name": {
+        "en": "Heavy Mace",
+        "ru": "Тяжелая Булава"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 40,
+      "mAtk": 26
+    },
+    "category": "weapons",
+    "subtype": "blunt",
+    "type": "blunt",
+    "pAtk": 40,
+    "mAtk": 26
+  },
+  {
+    "key": 167,
+    "data": {
+      "unitName": "scalpel",
+      "icon": "/weapon_scalpel_i00.webp",
+      "name": {
+        "en": "Scalpel",
+        "ru": "Кирка"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 40,
+      "mAtk": 26
+    },
+    "category": "weapons",
+    "subtype": "blunt",
+    "type": "blunt",
+    "pAtk": 40,
+    "mAtk": 26
+  },
+  {
+    "key": 168,
+    "data": {
+      "unitName": "work_hammer",
+      "icon": "/weapon_work_hammer_i00.webp",
+      "name": {
+        "en": "Work Hammer",
+        "ru": "Кузнечный Молот"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 40,
+      "mAtk": 26
+    },
+    "category": "weapons",
+    "subtype": "blunt",
+    "type": "blunt",
+    "pAtk": 40,
+    "mAtk": 26
+  },
+  {
+    "key": 86,
+    "data": {
+      "unitName": "tomahawk",
+      "icon": "/weapon_tomahawk_i00.webp",
+      "name": {
+        "en": "Tomahawk",
+        "ru": "Томагавк"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 51,
+      "mAtk": 32
+    },
+    "category": "weapons",
+    "subtype": "blunt",
+    "type": "blunt",
+    "pAtk": 51,
+    "mAtk": 32
+  },
+  {
+    "key": 157,
+    "data": {
+      "unitName": "spike_club",
+      "icon": "/weapon_spike_club_i00.webp",
+      "name": {
+        "en": "Spiked Club",
+        "ru": "Шипованная Дубина"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 64,
+      "mAtk": 39
+    },
+    "category": "weapons",
+    "subtype": "blunt",
+    "type": "blunt",
+    "pAtk": 64,
+    "mAtk": 39
+  },
+  {
+    "key": 88,
+    "data": {
+      "unitName": "morning_star",
+      "icon": "/weapon_morning_star_i00.webp",
+      "name": {
+        "en": "Morning Star",
+        "ru": "Моргенштерн"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 79,
+      "mAtk": 47
+    },
+    "category": "weapons",
+    "subtype": "blunt",
+    "type": "blunt",
+    "pAtk": 79,
+    "mAtk": 47
+  },
+  {
+    "key": 158,
+    "data": {
+      "unitName": "tarbar",
+      "icon": "/weapon_tarbar_i00.webp",
+      "name": {
+        "en": "Tarbar",
+        "ru": "Тарбар"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 79,
+      "mAtk": 47
+    },
+    "category": "weapons",
+    "subtype": "blunt",
+    "type": "blunt",
+    "pAtk": 79,
+    "mAtk": 47
+  },
+  {
+    "key": 169,
+    "data": {
+      "unitName": "skull_breaker",
+      "icon": "/weapon_skull_breaker_i00.webp",
+      "name": {
+        "en": "Skull Breaker",
+        "ru": "Череполом"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 79,
+      "mAtk": 47
+    },
+    "category": "weapons",
+    "subtype": "blunt",
+    "type": "blunt",
+    "pAtk": 79,
+    "mAtk": 47
+  },
+  {
+    "key": 172,
+    "data": {
+      "unitName": "heavy_bone_club",
+      "icon": "/weapon_heavy_bone_club_i00.webp",
+      "name": {
+        "en": "Heavy Bone Club",
+        "ru": "Тяжелая Костяная Дубина"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 79,
+      "mAtk": 47
+    },
+    "category": "weapons",
+    "subtype": "blunt",
+    "type": "blunt",
+    "pAtk": 79,
+    "mAtk": 47
+  },
+  {
+    "key": 159,
+    "data": {
+      "unitName": "bonebreaker",
+      "icon": "/weapon_bonebreaker_i00.webp",
+      "name": {
+        "en": "Bonebreaker",
+        "ru": "Костолом"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 92,
+      "mAtk": 54
+    },
+    "category": "weapons",
+    "subtype": "blunt",
+    "type": "blunt",
+    "pAtk": 92,
+    "mAtk": 54
+  },
+  {
+    "key": 89,
+    "data": {
+      "unitName": "big_hammer",
+      "icon": "/weapon_big_hammer_i00.webp",
+      "name": {
+        "en": "Big Hammer",
+        "ru": "Большой Молот"
+      },
+      "description": {
+        "en": "Bestows either Health, Rsk. Focus or Haste.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Здоровье, Риск. Фокусировка, Ускорение."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 107,
+      "mAtk": 61
+    },
+    "category": "weapons",
+    "subtype": "blunt",
+    "type": "blunt",
+    "pAtk": 107,
+    "mAtk": 61
+  },
+  {
+    "key": 160,
+    "data": {
+      "unitName": "battle_axe",
+      "icon": "/weapon_battle_axe_i00.webp",
+      "name": {
+        "en": "Battle Axe",
+        "ru": "Боевой Топор"
+      },
+      "description": {
+        "en": "Bestows either Anger, Rsk. Focus or Haste.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Ярость, Риск. Фокусировка, Ускорение."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 107,
+      "mAtk": 61
+    },
+    "category": "weapons",
+    "subtype": "blunt",
+    "type": "blunt",
+    "pAtk": 107,
+    "mAtk": 61
+  },
+  {
+    "key": 161,
+    "data": {
+      "unitName": "war_pick",
+      "icon": "/weapon_war_pick_i00.webp",
+      "name": {
+        "en": "Silver Axe",
+        "ru": "Серебряный Топор"
+      },
+      "description": {
+        "en": "Bestows either Anger, Rsk. Focus or Haste.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Ярость, Риск. Фокусировка, Ускорение."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 107,
+      "mAtk": 61
+    },
+    "category": "weapons",
+    "subtype": "blunt",
+    "type": "blunt",
+    "pAtk": 107,
+    "mAtk": 61
+  },
+  {
+    "key": 173,
+    "data": {
+      "unitName": "skull_graver",
+      "icon": "/weapon_skull_graver_i00.webp",
+      "name": {
+        "en": "Skull Graver",
+        "ru": "Череподав"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Anger, Health, or Rsk. Focus.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Ярость, Здоровье, Риск. Фокусировка."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 107,
+      "mAtk": 61
+    },
+    "category": "weapons",
+    "subtype": "blunt",
+    "type": "blunt",
+    "pAtk": 107,
+    "mAtk": 61
+  },
+  {
+    "key": 2502,
+    "data": {
+      "unitName": "dwarven_warhammer",
+      "icon": "/weapon_dwarven_warhammer_i00.webp",
+      "name": {
+        "en": "Dwarven War Hammer",
+        "ru": "Боевой Молот Гномов"
+      },
+      "description": {
+        "en": "Bestows either Anger, Health or Haste.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Ярость, Здоровье, Ускорение."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 122,
+      "mAtk": 68
+    },
+    "category": "weapons",
+    "subtype": "blunt",
+    "type": "blunt",
+    "pAtk": 122,
+    "mAtk": 68
+  },
+  {
+    "key": 162,
+    "data": {
+      "unitName": "war_axe",
+      "icon": "/weapon_war_axe_i00.webp",
+      "name": {
+        "en": "War Axe",
+        "ru": "Топор Войны"
+      },
+      "description": {
+        "en": "Bestows either Anger, Health or Haste.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Ярость, Здоровье, Ускорение."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 139,
+      "mAtk": 76
+    },
+    "category": "weapons",
+    "subtype": "blunt",
+    "type": "blunt",
+    "pAtk": 139,
+    "mAtk": 76
+  },
+  {
+    "key": 2503,
+    "data": {
+      "unitName": "yaksa_mace",
+      "icon": "/weapon_yaksa_mace_i00.webp",
+      "name": {
+        "en": "Yaksa Mace",
+        "ru": "Булава Якса"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Anger, Health, or Rsk. Focus.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Ярость, Здоровье, Риск. Фокусировка."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 156,
+      "mAtk": 83
+    },
+    "category": "weapons",
+    "subtype": "blunt",
+    "type": "blunt",
+    "pAtk": 156,
+    "mAtk": 83
+  },
+  {
+    "key": 91,
+    "data": {
+      "unitName": "heavy_war_axe",
+      "icon": "/weapon_heavy_war_axe_i00.webp",
+      "name": {
+        "en": "Heavy War Axe",
+        "ru": "Тяжелый Топор Войны"
+      },
+      "description": {
+        "en": "Bestows either Anger, Health, or Rsk. Focus.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Ярость, Здоровье, Риск. Фокусировка."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 175,
+      "mAtk": 91
+    },
+    "category": "weapons",
+    "subtype": "blunt",
+    "type": "blunt",
+    "pAtk": 175,
+    "mAtk": 91
+  },
+  {
+    "key": 175,
+    "data": {
+      "unitName": "art_of_battle_axe",
+      "icon": "/weapon_art_of_battle_axe_i00.webp",
+      "name": {
+        "en": "Art of Battle Axe",
+        "ru": "Топор Искусства Войны"
+      },
+      "description": {
+        "en": "Bestows either Health, Rsk. Focus or Haste.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Здоровье, Риск. Фокусировка, Ускорение."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 194,
+      "mAtk": 99
+    },
+    "category": "weapons",
+    "subtype": "blunt",
+    "type": "blunt",
+    "pAtk": 194,
+    "mAtk": 99
+  },
+  {
+    "key": 2504,
+    "data": {
+      "unitName": "meteor_shower",
+      "icon": "/weapon_meteor_shower_i00.webp",
+      "name": {
+        "en": "Meteor Shower",
+        "ru": "Метеоритный Дождь"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Focus, Critical Bleed, or Rsk. Haste.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Фокусировка, Крит. Кровопускание, Риск. Ускорение."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pAtk": 213,
+      "mAtk": 107
+    },
+    "category": "weapons",
+    "subtype": "blunt",
+    "type": "blunt",
+    "pAtk": 213,
+    "mAtk": 107
+  },
+  {
+    "key": 164,
+    "data": {
+      "unitName": "elysian",
+      "icon": "/weapon_elysian_i00.webp",
+      "name": {
+        "en": "Elysian",
+        "ru": "Элизиум"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Health, Anger, or a Critical Drain.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Здоровье, Ярость, Крит. Поглощение HP."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pAtk": 232,
+      "mAtk": 114
+    },
+    "category": "weapons",
+    "subtype": "blunt",
+    "type": "blunt",
+    "pAtk": 232,
+    "mAtk": 114
+  },
+  {
+    "key": 8680,
+    "data": {
+      "unitName": "barakiel_axe",
+      "icon": "/weapon_barakiel_axe_i00.webp",
+      "name": {
+        "en": "Barakiel's Axe",
+        "ru": "Топор Баракиэля"
+      },
+      "description": {
+        "en": "Bestows Health, Haste, or Focus.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Здоровье, Ускорение или Фокусировка."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pAtk": 251,
+      "mAtk": 121
+    },
+    "category": "weapons",
+    "subtype": "blunt",
+    "type": "blunt",
+    "pAtk": 251,
+    "mAtk": 121
+  },
+  {
+    "key": 6365,
+    "data": {
+      "unitName": "basalt_battlehammer",
+      "icon": "/weapon_basalt_battlehammer_i00.webp",
+      "name": {
+        "en": "Basalt Battlehammer",
+        "ru": "Базальтовый Боевой Молот"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: HP Drain, Health or HP Regeneration.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Поглощение HP, Здоровье или Регенерация НР."
+      }
+    },
+    "grade": "S",
+    "stats": {
+      "pAtk": 281,
+      "mAtk": 132
+    },
+    "category": "weapons",
+    "subtype": "blunt",
+    "type": "blunt",
+    "pAtk": 281,
+    "mAtk": 132
+  },
+  {
+    "key": 9448,
+    "data": {
+      "unitName": "dynasty_cudgel",
+      "icon": "/weapon_dynasty_hammer_i00.webp",
+      "name": {
+        "en": "Dynasty Cudgel",
+        "ru": "Дубина Династии"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Anger, Health, or Rsk. Focus.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Ярость Здоровье или Риск. Фокусировка."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pAtk": 333,
+      "mAtk": 151
+    },
+    "category": "weapons",
+    "subtype": "blunt",
+    "type": "blunt",
+    "pAtk": 333,
+    "mAtk": 151
+  },
+  {
+    "key": 10220,
+    "data": {
+      "unitName": "icarus_hammer",
+      "icon": "/weapon_icarus_hammer_i00.webp",
+      "name": {
+        "en": "Icarus Hammer",
+        "ru": "Молот Икара"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Anger, Health or Rsk. Focus.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Ярость, Здоровье или Риск. Фокусировка."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pAtk": 363,
+      "mAtk": 163
+    },
+    "category": "weapons",
+    "subtype": "blunt",
+    "type": "blunt",
+    "pAtk": 363,
+    "mAtk": 163
+  },
+  {
+    "key": 13463,
+    "data": {
+      "unitName": "vesper_avenger",
+      "icon": "/weapon_vesper_avenger_i00.webp",
+      "name": {
+        "en": "Vesper Avenger",
+        "ru": "Мститель Венеры"
+      },
+      "description": {
+        "en": "It can bestow one of the following functions: HP Regeneration, HP Drain, or Health.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Регенерация НР, Поглощение НР, Здоровье."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pAtk": 396,
+      "mAtk": 176
+    },
+    "category": "weapons",
+    "subtype": "blunt",
+    "type": "blunt",
+    "pAtk": 396,
+    "mAtk": 176
+  }
+]

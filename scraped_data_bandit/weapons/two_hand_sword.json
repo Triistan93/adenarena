@@ -1,0 +1,527 @@
+[
+  {
+    "key": 981,
+    "data": {
+      "unitName": "red_sunset_sword",
+      "icon": "/weapon_brandish_i00.webp",
+      "name": {
+        "en": "Red Sunset Sword",
+        "ru": "Меч Багрового Заката"
+      },
+      "description": {
+        "en": "A sword used by warriors belonging to the Red Sunset clan.",
+        "ru": "Меч, использовавшийся воинами Клана Багрового Заката."
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 16,
+      "mAtk": 10
+    },
+    "category": "weapons",
+    "subtype": "two_hand_sword",
+    "type": "two_hand_sword",
+    "pAtk": 16,
+    "mAtk": 10
+  },
+  {
+    "key": 1333,
+    "data": {
+      "unitName": "brandish",
+      "icon": "/weapon_brandish_i00.webp",
+      "name": {
+        "en": "Brandish",
+        "ru": "Тренировочный Двуручный Меч"
+      },
+      "description": {
+        "en": "A two-handed sword for beginners.",
+        "ru": "Двуручный меч для новичков."
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 21,
+      "mAtk": 12
+    },
+    "category": "weapons",
+    "subtype": "two_hand_sword",
+    "type": "two_hand_sword",
+    "pAtk": 21,
+    "mAtk": 12
+  },
+  {
+    "key": 3027,
+    "data": {
+      "unitName": "old_knight_sword",
+      "icon": "/weapon_brandish_i00.webp",
+      "name": {
+        "en": "Old Knight's Sword",
+        "ru": "Меч Старого Рыцаря"
+      },
+      "description": {
+        "en": "Use this sword to deliver the final blow to the spirit of Sir Herod.",
+        "ru": "Меч, которым необходимо нанести последний удар по Духу Сэра Херода."
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 29,
+      "mAtk": 17
+    },
+    "category": "weapons",
+    "subtype": "two_hand_sword",
+    "type": "two_hand_sword",
+    "pAtk": 29,
+    "mAtk": 17
+  },
+  {
+    "key": 5284,
+    "data": {
+      "unitName": "zweihander",
+      "icon": "/weapon_zweihander_i00.webp",
+      "name": {
+        "en": "Zweihander",
+        "ru": "Цвайхандэр"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 38,
+      "mAtk": 21
+    },
+    "category": "weapons",
+    "subtype": "two_hand_sword",
+    "type": "two_hand_sword",
+    "pAtk": 38,
+    "mAtk": 21
+  },
+  {
+    "key": 5285,
+    "data": {
+      "unitName": "heavy_sword",
+      "icon": "/weapon_heavy_sword_i00.webp",
+      "name": {
+        "en": "Heavy Sword",
+        "ru": "Тяжелый Меч"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 49,
+      "mAtk": 26
+    },
+    "category": "weapons",
+    "subtype": "two_hand_sword",
+    "type": "two_hand_sword",
+    "pAtk": 49,
+    "mAtk": 26
+  },
+  {
+    "key": 7880,
+    "data": {
+      "unitName": "iron_sword",
+      "icon": "/weapon_iron_sword_i00.webp",
+      "name": {
+        "en": "Steel Sword",
+        "ru": "Стальной Меч"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 49,
+      "mAtk": 26
+    },
+    "category": "weapons",
+    "subtype": "two_hand_sword",
+    "type": "two_hand_sword",
+    "pAtk": 49,
+    "mAtk": 26
+  },
+  {
+    "key": 124,
+    "data": {
+      "unitName": "two-handed_sword",
+      "icon": "/weapon_two_handed_sword_i00.webp",
+      "name": {
+        "en": "Two-Handed Sword",
+        "ru": "Двуручный Меч"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 78,
+      "mAtk": 39
+    },
+    "category": "weapons",
+    "subtype": "two_hand_sword",
+    "type": "two_hand_sword",
+    "pAtk": 78,
+    "mAtk": 39
+  },
+  {
+    "key": 7881,
+    "data": {
+      "unitName": "giants_sword",
+      "icon": "/weapon_giants_sword_i00.webp",
+      "name": {
+        "en": "Titan Sword",
+        "ru": "Меч Титана"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 96,
+      "mAtk": 47
+    },
+    "category": "weapons",
+    "subtype": "two_hand_sword",
+    "type": "two_hand_sword",
+    "pAtk": 96,
+    "mAtk": 47
+  },
+  {
+    "key": 70,
+    "data": {
+      "unitName": "claymore",
+      "icon": "/weapon_claymore_i00.webp",
+      "name": {
+        "en": "Claymore",
+        "ru": "Клеймор"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 112,
+      "mAtk": 54
+    },
+    "category": "weapons",
+    "subtype": "two_hand_sword",
+    "type": "two_hand_sword",
+    "pAtk": 112,
+    "mAtk": 54
+  },
+  {
+    "key": 71,
+    "data": {
+      "unitName": "flamberge",
+      "icon": "/weapon_flamberge_i00.webp",
+      "name": {
+        "en": "Flamberge",
+        "ru": "Фламберг"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Critical Damage, Focus or Light.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Крит. Урон, Фокусировка, Легкость."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 130,
+      "mAtk": 61
+    },
+    "category": "weapons",
+    "subtype": "two_hand_sword",
+    "type": "two_hand_sword",
+    "pAtk": 130,
+    "mAtk": 61
+  },
+  {
+    "key": 7882,
+    "data": {
+      "unitName": "sword_of_paagrio",
+      "icon": "/weapon_sword_of_paagrio_i00.webp",
+      "name": {
+        "en": "Pa'agrian Sword",
+        "ru": "Меч Паагрио"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Focus, Health or Critical Drain.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Фокусировка, Здоровье или Крит. Поглощение HP."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 169,
+      "mAtk": 76
+    },
+    "category": "weapons",
+    "subtype": "two_hand_sword",
+    "type": "two_hand_sword",
+    "pAtk": 169,
+    "mAtk": 76
+  },
+  {
+    "key": 5286,
+    "data": {
+      "unitName": "berserker_blade",
+      "icon": "/weapon_berserker_blade_i00.webp",
+      "name": {
+        "en": "Berserker Blade",
+        "ru": "Клинок Берсерка"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Focus Critical Damage, Focus or Haste.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Крит. Урон, Фокусировка, Ускорение."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 190,
+      "mAtk": 83
+    },
+    "category": "weapons",
+    "subtype": "two_hand_sword",
+    "type": "two_hand_sword",
+    "pAtk": 190,
+    "mAtk": 83
+  },
+  {
+    "key": 78,
+    "data": {
+      "unitName": "great_sword",
+      "icon": "/weapon_great_sword_i00.webp",
+      "name": {
+        "en": "Great Sword",
+        "ru": "Большой Меч"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Health, Critical Damage or Focus.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Здоровье, Крит. Урон, Фокусировка."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 213,
+      "mAtk": 91
+    },
+    "category": "weapons",
+    "subtype": "two_hand_sword",
+    "type": "two_hand_sword",
+    "pAtk": 213,
+    "mAtk": 91
+  },
+  {
+    "key": 7883,
+    "data": {
+      "unitName": "guardians_sword",
+      "icon": "/weapon_guardians_sword_i00.webp",
+      "name": {
+        "en": "Guardian Sword",
+        "ru": "Меч Стража"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Critical Drain, Health or Critical Bleed.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Крит. Поглощение HP, Здоровье или Крит. Кровопускание."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 236,
+      "mAtk": 99
+    },
+    "category": "weapons",
+    "subtype": "two_hand_sword",
+    "type": "two_hand_sword",
+    "pAtk": 236,
+    "mAtk": 99
+  },
+  {
+    "key": 7884,
+    "data": {
+      "unitName": "inferno_master",
+      "icon": "/weapon_inferno_master_i00.webp",
+      "name": {
+        "en": "Infernal Master",
+        "ru": "Мастер Инферно"
+      },
+      "description": {
+        "en": "Bestows either Haste, Critical Damage, or Focus.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Ускорение, Крит. Урон или Фокусировка."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pAtk": 259,
+      "mAtk": 107
+    },
+    "category": "weapons",
+    "subtype": "two_hand_sword",
+    "type": "two_hand_sword",
+    "pAtk": 259,
+    "mAtk": 107
+  },
+  {
+    "key": 81,
+    "data": {
+      "unitName": "dragon_slayer",
+      "icon": "/weapon_dragon_slayer_i00.webp",
+      "name": {
+        "en": "Dragon Slayer",
+        "ru": "Убийца Драконов"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Health, Critical Bleed or Critical Drain.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Здоровье, Крит. Кровопускание, Крит. Поглощение HP."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pAtk": 282,
+      "mAtk": 114
+    },
+    "category": "weapons",
+    "subtype": "two_hand_sword",
+    "type": "two_hand_sword",
+    "pAtk": 282,
+    "mAtk": 114
+  },
+  {
+    "key": 8679,
+    "data": {
+      "unitName": "sword_of_ipos",
+      "icon": "/weapon_sword_of_ipos_i00.webp",
+      "name": {
+        "en": "Sword of Ipos",
+        "ru": "Меч Ипоса"
+      },
+      "description": {
+        "en": "Bestows Focus, Haste, or Health.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Фокусировка, Ускорение или Здоровье."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pAtk": 305,
+      "mAtk": 121
+    },
+    "category": "weapons",
+    "subtype": "two_hand_sword",
+    "type": "two_hand_sword",
+    "pAtk": 305,
+    "mAtk": 121
+  },
+  {
+    "key": 6372,
+    "data": {
+      "unitName": "heavens_divider",
+      "icon": "/weapon_heavens_divider_i00.webp",
+      "name": {
+        "en": "Heaven's Divider",
+        "ru": "Разделитель Небес"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Haste, Health or Focus.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Ускорение, Здоровье или Фокусировка."
+      }
+    },
+    "grade": "S",
+    "stats": {
+      "pAtk": 342,
+      "mAtk": 132
+    },
+    "category": "weapons",
+    "subtype": "two_hand_sword",
+    "type": "two_hand_sword",
+    "pAtk": 342,
+    "mAtk": 132
+  },
+  {
+    "key": 9443,
+    "data": {
+      "unitName": "dynasty_blade",
+      "icon": "/weapon_dynasty_twohand_sword_i00.webp",
+      "name": {
+        "en": "Dynasty Blade",
+        "ru": "Клинок Династии"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Focus, Health, or Light.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Фокусировка, Здоровье или Легкость."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pAtk": 405,
+      "mAtk": 151
+    },
+    "category": "weapons",
+    "subtype": "two_hand_sword",
+    "type": "two_hand_sword",
+    "pAtk": 405,
+    "mAtk": 151
+  },
+  {
+    "key": 10218,
+    "data": {
+      "unitName": "icarus_heavy_arms",
+      "icon": "/weapon_icarus_heavy_arms_i00.webp",
+      "name": {
+        "en": "Icarus Heavy Arms",
+        "ru": "Тяжелые Руки Икара"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Focus, Health or Light.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Фокусировка, Здоровье или Легкость."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pAtk": 442,
+      "mAtk": 163
+    },
+    "category": "weapons",
+    "subtype": "two_hand_sword",
+    "type": "two_hand_sword",
+    "pAtk": 442,
+    "mAtk": 163
+  },
+  {
+    "key": 13458,
+    "data": {
+      "unitName": "vesper_slasher",
+      "icon": "/weapon_vesper_slasher_i00.webp",
+      "name": {
+        "en": "Vesper Slasher",
+        "ru": "Эспадон Венеры"
+      },
+      "description": {
+        "en": "It can bestow one of the following functions: Haste, Focus, or Health.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Ускорение, Фокусировка, Здоровье."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pAtk": 482,
+      "mAtk": 176
+    },
+    "category": "weapons",
+    "subtype": "two_hand_sword",
+    "type": "two_hand_sword",
+    "pAtk": 482,
+    "mAtk": 176
+  }
+]

@@ -1,0 +1,627 @@
+[
+  {
+    "key": 2368,
+    "data": {
+      "unitName": "training_gloves",
+      "icon": "/weapon_training_gloves_i00.webp",
+      "name": {
+        "en": "Training Gloves",
+        "ru": "Тренировочный Кастет"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 7,
+      "mAtk": 5
+    },
+    "category": "weapons",
+    "subtype": "fist",
+    "type": "fist",
+    "pAtk": 7,
+    "mAtk": 5
+  },
+  {
+    "key": 253,
+    "data": {
+      "unitName": "spike_glove",
+      "icon": "/weapon_spike_glove_i00.webp",
+      "name": {
+        "en": "Spiked Gloves",
+        "ru": "Шипованные Перчатки"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 10,
+      "mAtk": 6
+    },
+    "category": "weapons",
+    "subtype": "fist",
+    "type": "fist",
+    "pAtk": 10,
+    "mAtk": 6
+  },
+  {
+    "key": 254,
+    "data": {
+      "unitName": "iron_glove",
+      "icon": "/weapon_iron_glove_i00.webp",
+      "name": {
+        "en": "Iron Gloves",
+        "ru": "Железные Перчатки"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 13,
+      "mAtk": 9
+    },
+    "category": "weapons",
+    "subtype": "fist",
+    "type": "fist",
+    "pAtk": 13,
+    "mAtk": 9
+  },
+  {
+    "key": 2371,
+    "data": {
+      "unitName": "fist_of_butcher",
+      "icon": "/weapon_iron_glove_i00.webp",
+      "name": {
+        "en": "Fist of Butcher",
+        "ru": "Кастет Мясника"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 16,
+      "mAtk": 10
+    },
+    "category": "weapons",
+    "subtype": "fist",
+    "type": "fist",
+    "pAtk": 16,
+    "mAtk": 10
+  },
+  {
+    "key": 255,
+    "data": {
+      "unitName": "fox's_nail",
+      "icon": "/weapon_foxs_nail_i00.webp",
+      "name": {
+        "en": "Fox Claw Gloves",
+        "ru": "Кастет Лисы"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 21,
+      "mAtk": 12
+    },
+    "category": "weapons",
+    "subtype": "fist",
+    "type": "fist",
+    "pAtk": 21,
+    "mAtk": 12
+  },
+  {
+    "key": 256,
+    "data": {
+      "unitName": "cestus",
+      "icon": "/weapon_vipers_canine_i00.webp",
+      "name": {
+        "en": "Cestus",
+        "ru": "Цестус"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 29,
+      "mAtk": 17
+    },
+    "category": "weapons",
+    "subtype": "fist",
+    "type": "fist",
+    "pAtk": 29,
+    "mAtk": 17
+  },
+  {
+    "key": 257,
+    "data": {
+      "unitName": "viper's_canine",
+      "icon": "/weapon_vipers_canine_i00.webp",
+      "name": {
+        "en": "Viper's Fang",
+        "ru": "Клык Гадюки"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 38,
+      "mAtk": 21
+    },
+    "category": "weapons",
+    "subtype": "fist",
+    "type": "fist",
+    "pAtk": 38,
+    "mAtk": 21
+  },
+  {
+    "key": 258,
+    "data": {
+      "unitName": "bagh-nakh",
+      "icon": "/weapon_baghnakh_i00.webp",
+      "name": {
+        "en": "Bagh-Nakh",
+        "ru": "Коготь Тигра"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 49,
+      "mAtk": 26
+    },
+    "category": "weapons",
+    "subtype": "fist",
+    "type": "fist",
+    "pAtk": 49,
+    "mAtk": 26
+  },
+  {
+    "key": 259,
+    "data": {
+      "unitName": "single-edged_jamadhr",
+      "icon": "/weapon_single-edged_jamadhr_i00.webp",
+      "name": {
+        "en": "Single-Edged Jamadhr",
+        "ru": "Джамадхар"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 62,
+      "mAtk": 32
+    },
+    "category": "weapons",
+    "subtype": "fist",
+    "type": "fist",
+    "pAtk": 62,
+    "mAtk": 32
+  },
+  {
+    "key": 260,
+    "data": {
+      "unitName": "triple-edged_jamadhr",
+      "icon": "/weapon_triple-edged_jamadhr_i00.webp",
+      "name": {
+        "en": "Triple-Edged Jamadhr",
+        "ru": "Трехгранный Джамадхар"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 78,
+      "mAtk": 39
+    },
+    "category": "weapons",
+    "subtype": "fist",
+    "type": "fist",
+    "pAtk": 78,
+    "mAtk": 39
+  },
+  {
+    "key": 261,
+    "data": {
+      "unitName": "bich'hwa",
+      "icon": "/weapon_bichhwa_i00.webp",
+      "name": {
+        "en": "Bich'Hwa",
+        "ru": "Бичхва"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 96,
+      "mAtk": 47
+    },
+    "category": "weapons",
+    "subtype": "fist",
+    "type": "fist",
+    "pAtk": 96,
+    "mAtk": 47
+  },
+  {
+    "key": 262,
+    "data": {
+      "unitName": "scallop_jamadhr",
+      "icon": "/weapon_scallop_jamadhr_i00.webp",
+      "name": {
+        "en": "Scallop Jamadhr",
+        "ru": "Шипованный Джамадхар"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 112,
+      "mAtk": 54
+    },
+    "category": "weapons",
+    "subtype": "fist",
+    "type": "fist",
+    "pAtk": 112,
+    "mAtk": 54
+  },
+  {
+    "key": 263,
+    "data": {
+      "unitName": "chakram",
+      "icon": "/weapon_chakram_i00.webp",
+      "name": {
+        "en": "Chakram",
+        "ru": "Чакра"
+      },
+      "description": {
+        "en": "Bestows either Critical Drain, Critical Poison or Rsk. Haste.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Крит. Поглощение HP, Крит. Отравление, Риск. Ускорение."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 130,
+      "mAtk": 61
+    },
+    "category": "weapons",
+    "subtype": "fist",
+    "type": "fist",
+    "pAtk": 130,
+    "mAtk": 61
+  },
+  {
+    "key": 4233,
+    "data": {
+      "unitName": "knuckle_dust",
+      "icon": "/weapon_knuckle_dust_i00.webp",
+      "name": {
+        "en": "Knuckle Duster",
+        "ru": "Кастет"
+      },
+      "description": {
+        "en": "Bestows one of the following functions, Rsk. Evasion, Rsk. Haste or Haste.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Риск. Уклонение, Риск. Ускорение, Ускорение."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 148,
+      "mAtk": 68
+    },
+    "category": "weapons",
+    "subtype": "fist",
+    "type": "fist",
+    "pAtk": 148,
+    "mAtk": 68
+  },
+  {
+    "key": 265,
+    "data": {
+      "unitName": "fist_blade",
+      "icon": "/weapon_fist_blade_i00.webp",
+      "name": {
+        "en": "Fisted Blade",
+        "ru": "Кастетные Клинки"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Rsk. Evasion, Rsk. Haste or Haste.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Риск. Уклонение, Риск. Ускорение, Ускорение."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 169,
+      "mAtk": 76
+    },
+    "category": "weapons",
+    "subtype": "fist",
+    "type": "fist",
+    "pAtk": 169,
+    "mAtk": 76
+  },
+  {
+    "key": 266,
+    "data": {
+      "unitName": "great_pata",
+      "icon": "/weapon_great_pata_i00.webp",
+      "name": {
+        "en": "Great Pata",
+        "ru": "Большая Пата"
+      },
+      "description": {
+        "en": "Bestows either Critical Drain, Critical Poison or Rsk. Haste.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Крит. Поглощение HP, Крит. Отравление, Риск. Ускорение."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 190,
+      "mAtk": 83
+    },
+    "category": "weapons",
+    "subtype": "fist",
+    "type": "fist",
+    "pAtk": 190,
+    "mAtk": 83
+  },
+  {
+    "key": 267,
+    "data": {
+      "unitName": "arthro_nail",
+      "icon": "/weapon_arthro_nail_i00.webp",
+      "name": {
+        "en": "Arthro Nail",
+        "ru": "Коготь Артро"
+      },
+      "description": {
+        "en": "Bestows either Critical Poison, Rsk. Evasion or Rsk. Haste.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Крит. Отравление, Риск. Уклонение, Риск. Ускорение."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 213,
+      "mAtk": 91
+    },
+    "category": "weapons",
+    "subtype": "fist",
+    "type": "fist",
+    "pAtk": 213,
+    "mAtk": 91
+  },
+  {
+    "key": 268,
+    "data": {
+      "unitName": "bellion_cestus",
+      "icon": "/weapon_bellion_cestus_i00.webp",
+      "name": {
+        "en": "Bellion Cestus",
+        "ru": "Цестус Беллиона"
+      },
+      "description": {
+        "en": "Bestows either Critical Drain, Critical Poison or Rsk. Haste.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Крит. Поглощение HP, Крит. Отравление, Риск. Ускорение."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 236,
+      "mAtk": 99
+    },
+    "category": "weapons",
+    "subtype": "fist",
+    "type": "fist",
+    "pAtk": 236,
+    "mAtk": 99
+  },
+  {
+    "key": 269,
+    "data": {
+      "unitName": "blood_tornado",
+      "icon": "/weapon_blood_tornado_i00.webp",
+      "name": {
+        "en": "Blood Tornado",
+        "ru": "Кровавое Торнадо"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Haste, Focus, or Anger.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Ускорение, Фокусировка, Ярость."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pAtk": 259,
+      "mAtk": 107
+    },
+    "category": "weapons",
+    "subtype": "fist",
+    "type": "fist",
+    "pAtk": 259,
+    "mAtk": 107
+  },
+  {
+    "key": 270,
+    "data": {
+      "unitName": "dragon_grinder",
+      "icon": "/weapon_dragon_grinder_i00.webp",
+      "name": {
+        "en": "Dragon Grinder",
+        "ru": "Погибель Дракона"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Rsk. Evasion, Guidance, or Health.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Риск. Уклонение, Наведение, Здоровье."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pAtk": 282,
+      "mAtk": 114
+    },
+    "category": "weapons",
+    "subtype": "fist",
+    "type": "fist",
+    "pAtk": 282,
+    "mAtk": 114
+  },
+  {
+    "key": 8685,
+    "data": {
+      "unitName": "sobekk_hurricane",
+      "icon": "/weapon_sobekk_hurricane_i00.webp",
+      "name": {
+        "en": "Sobekk's Hurricane",
+        "ru": "Ураган Собекка"
+      },
+      "description": {
+        "en": "Bestows Rsk. Haste, Haste, or Critical Drain.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Риск. Ускорение, Ускорение или Крит. Поглощение HP."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pAtk": 305,
+      "mAtk": 121
+    },
+    "category": "weapons",
+    "subtype": "fist",
+    "type": "fist",
+    "pAtk": 305,
+    "mAtk": 121
+  },
+  {
+    "key": 6371,
+    "data": {
+      "unitName": "demon_splinter",
+      "icon": "/weapon_demon_splinter_i00.webp",
+      "name": {
+        "en": "Demon Splinter",
+        "ru": "Демон Одиночка"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Focus, Health or Crt. Stun.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Фокусировка, Здоровье или Крит. Оглушение."
+      }
+    },
+    "grade": "S",
+    "stats": {
+      "pAtk": 342,
+      "mAtk": 132
+    },
+    "category": "weapons",
+    "subtype": "fist",
+    "type": "fist",
+    "pAtk": 342,
+    "mAtk": 132
+  },
+  {
+    "key": 9450,
+    "data": {
+      "unitName": "dynasty_bagh_nakh",
+      "icon": "/weapon_dynasty_jamadhr_i00.webp",
+      "name": {
+        "en": "Dynasty Bagh-Nakh",
+        "ru": "Коготь Тигра Династии"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Rsk. Evasion, Focus, or Haste.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Риск. Уклонение, Фокусировка или Ускорение."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pAtk": 405,
+      "mAtk": 151
+    },
+    "category": "weapons",
+    "subtype": "fist",
+    "type": "fist",
+    "pAtk": 405,
+    "mAtk": 151
+  },
+  {
+    "key": 10221,
+    "data": {
+      "unitName": "icarus_hand",
+      "icon": "/weapon_icarus_knuckle_i00.webp",
+      "name": {
+        "en": "Icarus Hand",
+        "ru": "Рука Икара"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Rsk. Evasion, Focus, or Haste.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Риск. Уклонение, Фокусировка или Ускорение."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pAtk": 442,
+      "mAtk": 163
+    },
+    "category": "weapons",
+    "subtype": "fist",
+    "type": "fist",
+    "pAtk": 442,
+    "mAtk": 163
+  },
+  {
+    "key": 13461,
+    "data": {
+      "unitName": "vesper_fighter",
+      "icon": "/weapon_vesper_fighter_i00.webp",
+      "name": {
+        "en": "Vesper Fighter",
+        "ru": "Воитель Венеры"
+      },
+      "description": {
+        "en": "It can bestow one of the following functions: Focus, Health, or Critical Stun.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Фокусировка, Здоровье, Крит. Оглушение."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pAtk": 482,
+      "mAtk": 176
+    },
+    "category": "weapons",
+    "subtype": "fist",
+    "type": "fist",
+    "pAtk": 482,
+    "mAtk": 176
+  }
+]

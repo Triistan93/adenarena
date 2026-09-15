@@ -1,0 +1,2428 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lineage 2 Armor Sets - Base de Dados Scrapeada</title>
+  <style>
+    :root {
+      --bg: #0d141e;
+      --card-bg: #141f2e;
+      --border: #22344a;
+      --accent: #e5a93b;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --tag-bg: #1e293b;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); padding: 24px; line-height: 1.5; }
+    header { max-width: 1200px; margin: 0 auto 24px auto; text-align: center; }
+    h1 { color: var(--accent); margin-bottom: 8px; font-size: 2.2rem; }
+    .subtitle { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 16px; }
+    .controls { max-width: 1200px; margin: 0 auto 24px auto; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; align-items: center; }
+    input[type="text"] { background: var(--card-bg); border: 1px solid var(--border); color: #fff; padding: 10px 16px; border-radius: 8px; width: 320px; font-size: 0.95rem; outline: none; }
+    input[type="text"]:focus { border-color: var(--accent); }
+    .filter-btn { background: var(--card-bg); border: 1px solid var(--border); color: var(--text); padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; transition: all 0.2s; }
+    .filter-btn.active, .filter-btn:hover { background: var(--accent); color: #000; font-weight: bold; border-color: var(--accent); }
+    
+    .stats-bar { max-width: 1200px; margin: 0 auto 24px auto; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px 20px; display: flex; justify-content: space-around; text-align: center; font-size: 0.9rem; }
+    .stats-bar span { color: var(--accent); font-weight: bold; }
+
+    .grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 20px; }
+    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; transition: transform 0.2s, border-color 0.2s; }
+    .card:hover { border-color: var(--accent); transform: translateY(-3px); }
+    .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+    .card-title { font-size: 1.15rem; color: #fff; font-weight: 700; }
+    .card-grade { background: #b45309; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; text-transform: uppercase; }
+    .card-grade.s-grade { background: #b91c1c; }
+    .card-grade.a-grade { background: #c2410c; }
+    .card-grade.b-grade { background: #b45309; }
+    .card-grade.c-grade { background: #15803d; }
+    .card-grade.d-grade { background: #0369a1; }
+    .card-grade.no-grade { background: #475569; }
+
+    .card-type { font-size: 0.8rem; color: var(--accent); margin-bottom: 12px; font-weight: 600; text-transform: uppercase; }
+    
+    .bonuses-section { background: rgba(0,0,0,0.25); border-radius: 8px; padding: 12px; margin-bottom: 16px; border-left: 3px solid var(--accent); }
+    .bonuses-title { font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; font-weight: bold; }
+    .bonuses-list { list-style: none; font-size: 0.85rem; color: #cbd5e1; }
+    .bonuses-list li { margin-bottom: 4px; position: relative; padding-left: 14px; }
+    .bonuses-list li::before { content: '•'; color: var(--accent); position: absolute; left: 0; font-size: 1rem; line-height: 1; }
+    .bonuses-list a { color: #38bdf8; text-decoration: none; }
+    .bonuses-list a:hover { text-decoration: underline; }
+
+    .parts-section { margin-top: auto; }
+    .parts-title { font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; font-weight: bold; }
+    .parts-list { display: flex; flex-direction: column; gap: 8px; }
+    .part-item { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); padding: 6px 10px; border-radius: 6px; }
+    .part-img { width: 32px; height: 32px; border-radius: 4px; background: #0b1118; border: 1px solid #334155; flex-shrink: 0; }
+    .part-info { flex: 1; min-width: 0; }
+    .part-name { font-size: 0.85rem; font-weight: 500; color: #f1f5f9; text-decoration: none; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .part-name:hover { color: var(--accent); }
+    .part-stats { font-size: 0.75rem; color: var(--text-muted); }
+
+    .plus6-section { max-width: 1200px; margin: 40px auto; background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 24px; }
+    .plus6-section h2 { color: var(--accent); margin-bottom: 16px; text-align: center; }
+    table.plus6-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    table.plus6-table th, table.plus6-table td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border); }
+    table.plus6-table th { background: rgba(0,0,0,0.3); color: var(--accent); }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Lineage 2 Armor Sets Database</h1>
+    <p class="subtitle">Base de dados completa scrapeada de <strong>PMfun.com</strong> com imagens locais, estatísticas e efeitos de set.</p>
+  </header>
+
+  <div class="stats-bar">
+    <div>Sets Extraídos: <span id="stat-sets">46</span></div>
+    <div>Grades: <span>S, A, B, C, D, No Grade</span></div>
+    <div>Ícones Baixados: <span>175</span></div>
+    <div>Origem: <span>PMfun (C1 - High Five)</span></div>
+  </div>
+
+  <div class="controls">
+    <input type="text" id="search" placeholder="Pesquisar por nome do set, parte ou bônus..." oninput="filterCards()" />
+    <button class="filter-btn active" onclick="setFilter('ALL', this)">Todos</button>
+    <button class="filter-btn" onclick="setFilter('S Grade', this)">S Grade</button>
+    <button class="filter-btn" onclick="setFilter('A Grade', this)">A Grade</button>
+    <button class="filter-btn" onclick="setFilter('B Grade', this)">B Grade</button>
+    <button class="filter-btn" onclick="setFilter('C Grade', this)">C Grade</button>
+    <button class="filter-btn" onclick="setFilter('D Grade', this)">D Grade</button>
+    <button class="filter-btn" onclick="setFilter('No Grade', this)">No Grade</button>
+  </div>
+
+  <div class="grid" id="sets-grid">
+    
+        <div class="card" data-grade="S Grade" data-name="imperial crusader heavy armor set" data-bonuses="p def. +8% maximum hp +445 sleep/hold probability -70% dex -2 str +2 probability of poison/bleed -80% with imperial crusader shield equipped.">
+          <div class="card-header">
+            <div class="card-title">Imperial Crusader Heavy Armor Set</div>
+            <span class="card-grade s-grade">S Grade</span>
+          </div>
+          <div class="card-type">Heavy Armor Set</div>
+          
+          <div class="bonuses-section">
+            <div class="bonuses-title">Bônus do Set</div>
+            <ul class="bonuses-list">
+              <li>P Def. +8%</li><li>Maximum HP +445</li><li>Sleep/Hold Probability -70%</li><li><a href="https://lineage.pmfun.com/list/set#DEX" target="_blank">DEX -2</a></li><li><a href="https://lineage.pmfun.com/list/set#STR" target="_blank">STR +2</a></li><li>Probability of Poison/Bleed -80% with Imperial Crusader Shield equipped.</li>
+            </ul>
+          </div>
+
+          <div class="parts-section">
+            <div class="parts-title">Partes (6)</div>
+            <div class="parts-list">
+              
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t88_u_i00_0.png" alt="Imperial Crusader Breastplate" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/6373/imperial-crusader-breastplate.html" target="_blank" title="Imperial Crusader Breastplate">Imperial Crusader Breastplate</a>
+              <div class="part-stats">Sealed P.Def: 193 | Unsealed: 205 | Fee: 1,072,500 AA</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t88_l_i00_0.png" alt="Imperial Crusader Gaiters" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/6374/imperial-crusader-gaiters.html" target="_blank" title="Imperial Crusader Gaiters">Imperial Crusader Gaiters</a>
+              <div class="part-stats">Sealed P.Def: 121 | Unsealed: 128 | Fee: 672,000 AA</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_helmet_i00_0.png" alt="Imperial Crusader Helmet" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/6378/imperial-crusader-helmet.html" target="_blank" title="Imperial Crusader Helmet">Imperial Crusader Helmet</a>
+              <div class="part-stats">Sealed P.Def: 83 | Unsealed: - | Fee: 402,750 AA</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t88_g_i00_0.png" alt="Imperial Crusader Gauntlets" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/6375/imperial-crusader-gauntlets.html" target="_blank" title="Imperial Crusader Gauntlets">Imperial Crusader Gauntlets</a>
+              <div class="part-stats">Sealed P.Def: 55 | Unsealed: - | Fee: 268,500 AA</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t88_b_i00_0.png" alt="Imperial Crusader Boots" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/6376/imperial-crusader-boots.html" target="_blank" title="Imperial Crusader Boots">Imperial Crusader Boots</a>
+              <div class="part-stats">Sealed P.Def: 55 | Unsealed: - | Fee: 268,500 AA</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/shield_imperial_crusader_shield_i00_0.png" alt="Imperial Crusader Shield" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/6377/imperial-crusader-shield.html" target="_blank" title="Imperial Crusader Shield">Imperial Crusader Shield</a>
+              <div class="part-stats">Sealed P.Def: 276 | Unsealed: 290 | Fee: 282,000 AA</div>
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-grade="S Grade" data-name="draconic leather light armor set" data-bonuses="attack speed/p. atk +4% maximum mp +289 weight limit +5759 dex +1 str +1 con -2">
+          <div class="card-header">
+            <div class="card-title">Draconic Leather Light Armor Set</div>
+            <span class="card-grade s-grade">S Grade</span>
+          </div>
+          <div class="card-type">Light Armor Set</div>
+          
+          <div class="bonuses-section">
+            <div class="bonuses-title">Bônus do Set</div>
+            <ul class="bonuses-list">
+              <li>Attack Speed/P. Atk +4%</li><li>Maximum MP +289</li><li>Weight Limit +5759</li><li><a href="https://lineage.pmfun.com/list/set#DEX" target="_blank">DEX +1</a></li><li><a href="https://lineage.pmfun.com/list/set#STR" target="_blank">STR +1</a></li><li><a href="https://lineage.pmfun.com/list/set#CON" target="_blank">CON -2</a></li>
+            </ul>
+          </div>
+
+          <div class="parts-section">
+            <div class="parts-title">Partes (4)</div>
+            <div class="parts-list">
+              
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t89_ul_i00_0.png" alt="Draconic Leather Armor" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/6379/draconic-leather-armor.html" target="_blank" title="Draconic Leather Armor">Draconic Leather Armor</a>
+              <div class="part-stats">Sealed P.Def: 236 | Unsealed: 249 | Fee: 1,305,000 AA</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_leather_helmet_i00_0.png" alt="Draconic Leather Helmet" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/6382/draconic-leather-helmet.html" target="_blank" title="Draconic Leather Helmet">Draconic Leather Helmet</a>
+              <div class="part-stats">Sealed P.Def: 93 | Unsealed: - | Fee: 402,750 AA</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t89_g_i00_0.png" alt="Draconic Leather Gloves" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/6380/draconic-leather-gloves.html" target="_blank" title="Draconic Leather Gloves">Draconic Leather Gloves</a>
+              <div class="part-stats">Sealed P.Def: 55 | Unsealed: - | Fee: 268,500 AA</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t89_b_i00_0.png" alt="Draconic Leather Boots" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/6381/draconic-leather-boots.html" target="_blank" title="Draconic Leather Boots">Draconic Leather Boots</a>
+              <div class="part-stats">Sealed P.Def: 55 | Unsealed: - | Fee: 268,500 AA</div>
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-grade="S Grade" data-name="major arcana robe set" data-bonuses="m. atk +17% movement speed +7 casting cancel probability -50% weight limit +5759 wit +1 int +1 men -2 stun resistance +50%">
+          <div class="card-header">
+            <div class="card-title">Major Arcana Robe Set</div>
+            <span class="card-grade s-grade">S Grade</span>
+          </div>
+          <div class="card-type">Robe Set</div>
+          
+          <div class="bonuses-section">
+            <div class="bonuses-title">Bônus do Set</div>
+            <ul class="bonuses-list">
+              <li>M. Atk +17%</li><li>Movement Speed +7</li><li>Casting Cancel Probability -50%</li><li>Weight Limit +5759</li><li><a href="https://lineage.pmfun.com/list/set#WIT" target="_blank">WIT +1</a></li><li><a href="https://lineage.pmfun.com/list/set#INT" target="_blank">INT +1</a></li><li><a href="https://lineage.pmfun.com/list/set#MEN" target="_blank">MEN -2</a></li><li>Stun resistance +50%</li>
+            </ul>
+          </div>
+
+          <div class="parts-section">
+            <div class="parts-title">Partes (4)</div>
+            <div class="parts-list">
+              
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t90_ul_i00_0.png" alt="Major Arcana Robe" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/6383/major-arcana-robe.html" target="_blank" title="Major Arcana Robe">Major Arcana Robe</a>
+              <div class="part-stats">Sealed P.Def: 157 | Unsealed: 166 + 866 MP | Fee: 1,305,000 AA</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_leather_helmet_i00_0.png" alt="Major Arcana Circlet" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/6386/major-arcana-circlet.html" target="_blank" title="Major Arcana Circlet">Major Arcana Circlet</a>
+              <div class="part-stats">Sealed P.Def: 83 | Unsealed: - | Fee: 402,750 AA</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t90_g_i00_0.png" alt="Major Arcana Gloves" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/6384/major-arcana-gloves.html" target="_blank" title="Major Arcana Gloves">Major Arcana Gloves</a>
+              <div class="part-stats">Sealed P.Def: 55 | Unsealed: - | Fee: 268,500 AA</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t90_b_i00_0.png" alt="Major Arcana Boots" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/6385/major-arcana-boots.html" target="_blank" title="Major Arcana Boots">Major Arcana Boots</a>
+              <div class="part-stats">Sealed P.Def: 55 | Unsealed: - | Fee: 268,500 AA</div>
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-grade="S Grade" data-name="tateossian jewelry set" data-bonuses="more mdef more mp when unsealed">
+          <div class="card-header">
+            <div class="card-title">Tateossian Jewelry Set</div>
+            <span class="card-grade s-grade">S Grade</span>
+          </div>
+          <div class="card-type">Jewelry Set</div>
+          
+          <div class="bonuses-section">
+            <div class="bonuses-title">Bônus do Set</div>
+            <ul class="bonuses-list">
+              <li>More Mdef</li><li>More MP when unsealed</li>
+            </ul>
+          </div>
+
+          <div class="parts-section">
+            <div class="parts-title">Partes (3)</div>
+            <div class="parts-list">
+              
+          <div class="part-item">
+            <img class="part-img" src="images/accessory_tateossian_necklace_i00_0.png" alt="Tateossian Necklace" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/920/tateossian-necklace.html" target="_blank" title="Tateossian Necklace">Tateossian Necklace</a>
+              <div class="part-stats">Sealed P.Def: 91 | Unsealed: 95 + 42 MP | Fee: 1,494,460 AA</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/accessory_tateossian_earring_i00_0.png" alt="Tateossian Earring" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/858/tateossian-earring.html" target="_blank" title="Tateossian Earring">Tateossian Earring</a>
+              <div class="part-stats">Sealed P.Def: 68 | Unsealed: 71 + 31 MP | Fee: 1,120,845 AA</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/accessory_tateossian_ring_i00_0.png" alt="Tateossian Ring" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/889/tateossian-ring.html" target="_blank" title="Tateossian Ring">Tateossian Ring</a>
+              <div class="part-stats">Sealed P.Def: 46 | Unsealed: 48 + 21 MP | Fee: 747,230 AA</div>
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-grade="A Grade" data-name="majestic heavy set" data-bonuses="p. atk. +4% accuracy +3 stun resistance +50% str +2 con -2">
+          <div class="card-header">
+            <div class="card-title">Majestic Heavy Set</div>
+            <span class="card-grade a-grade">A Grade</span>
+          </div>
+          <div class="card-type">Heavy Armor Set</div>
+          
+          <div class="bonuses-section">
+            <div class="bonuses-title">Bônus do Set</div>
+            <ul class="bonuses-list">
+              <li>P. Atk. +4%</li><li>Accuracy +3</li><li>Stun Resistance +50%</li><li><a href="https://lineage.pmfun.com/list/set#STR" target="_blank">STR +2</a></li><li><a href="https://lineage.pmfun.com/list/set#CON" target="_blank">Con -2</a></li>
+            </ul>
+          </div>
+
+          <div class="parts-section">
+            <div class="parts-title">Partes (4)</div>
+            <div class="parts-list">
+              
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t83_ul_i00_0.png" alt="Majestic Plate Armor" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2383/majestic-plate-armor.html" target="_blank" title="Majestic Plate Armor">Majestic Plate Armor</a>
+              <div class="part-stats">Selado: Sealed Majestic Plate Armor</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t83_g_i00_0.png" alt="Majestic Gauntlets - Heavy Armor" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/5774/majestic-gauntlets--heavy-armor.html" target="_blank" title="Majestic Gauntlets - Heavy Armor">Majestic Gauntlets - Heavy Armor</a>
+              <div class="part-stats">Selado: Sealed Majestic Gauntlets</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t83_b_i00_0.png" alt="Majestic Boots - Heavy Armor" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/5786/majestic-boots--heavy-armor.html" target="_blank" title="Majestic Boots - Heavy Armor">Majestic Boots - Heavy Armor</a>
+              <div class="part-stats">Selado: Sealed Majestic Boots</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_leather_helmet_i00_0.png" alt="Majestic Circlet" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2419/majestic-circlet.html" target="_blank" title="Majestic Circlet">Majestic Circlet</a>
+              <div class="part-stats">Selado: Sealed Majestic Circlet</div>
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-grade="A Grade" data-name="nightmare heavy set" data-bonuses="p. atk. +4% sleep and hold resistance +70% con +2 dex -2 with a shield of nightmare, 5% of the damage inflicted by the enemy will be reflected back upon him.">
+          <div class="card-header">
+            <div class="card-title">Nightmare Heavy Set</div>
+            <span class="card-grade a-grade">A Grade</span>
+          </div>
+          <div class="card-type">Heavy Armor Set</div>
+          
+          <div class="bonuses-section">
+            <div class="bonuses-title">Bônus do Set</div>
+            <ul class="bonuses-list">
+              <li>P. Atk. +4%</li><li>Sleep and Hold Resistance +70%</li><li><a href="https://lineage.pmfun.com/list/set#CON" target="_blank">CON +2</a></li><li><a href="https://lineage.pmfun.com/list/set#DEX" target="_blank">DEX -2</a></li><li>With a shield of nightmare, 5% of the damage inflicted by the enemy will be reflected back upon him.</li>
+            </ul>
+          </div>
+
+          <div class="parts-section">
+            <div class="parts-title">Partes (5)</div>
+            <div class="parts-list">
+              
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t80_ul_i00_0.png" alt="Armor Of Nightmare" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/374/armor-of-nightmare.html" target="_blank" title="Armor Of Nightmare">Armor Of Nightmare</a>
+              <div class="part-stats">Selado: Sealed Armor Of Nightmare</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t80_g_i00_0.png" alt="Gauntlets Of Nightmare - Heavy Armor" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/5771/gauntlets-of-nightmare--heavy-armor.html" target="_blank" title="Gauntlets Of Nightmare - Heavy Armor">Gauntlets Of Nightmare - Heavy Armor</a>
+              <div class="part-stats">Selado: Sealed Gauntlets Of Nightmare</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t80_b_i00_0.png" alt="Boots Of Nightmare - Heavy Armor" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/5783/boots-of-nightmare--heavy-armor.html" target="_blank" title="Boots Of Nightmare - Heavy Armor">Boots Of Nightmare - Heavy Armor</a>
+              <div class="part-stats">Selado: Sealed Boots Of Nightmare</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_leather_helmet_i00_0.png" alt="Helm Of Nightmare" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2418/helm-of-nightmare.html" target="_blank" title="Helm Of Nightmare">Helm Of Nightmare</a>
+              <div class="part-stats">Selado: Sealed Helm Of Nightmare</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/shield_shield_of_nightmare_i00_0.png" alt="Shield Of Nightmare" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2498/shield-of-nightmare.html" target="_blank" title="Shield Of Nightmare">Shield Of Nightmare</a>
+              <div class="part-stats">Selado: Sealed Shield Of Nightmare</div>
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-grade="A Grade" data-name="tallum heavy set" data-bonuses="atk. spd. +8% weight increased plus the point at which a weight penalty is applied +5759 poison and bleed resistance +80% str +2 con -2">
+          <div class="card-header">
+            <div class="card-title">Tallum Heavy Set</div>
+            <span class="card-grade a-grade">A Grade</span>
+          </div>
+          <div class="card-type">Heavy Armor Set</div>
+          
+          <div class="bonuses-section">
+            <div class="bonuses-title">Bônus do Set</div>
+            <ul class="bonuses-list">
+              <li>Atk. Spd. +8%</li><li>Weight increased plus the point at which a weight penalty is applied +5759</li><li>Poison and Bleed Resistance +80%</li><li><a href="https://lineage.pmfun.com/list/set#STR" target="_blank">STR +2</a></li><li><a href="https://lineage.pmfun.com/list/set#CON" target="_blank">CON -2</a></li>
+            </ul>
+          </div>
+
+          <div class="parts-section">
+            <div class="parts-title">Partes (4)</div>
+            <div class="parts-list">
+              
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t77_ul_i00_0.png" alt="Tallum Plate Armor" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2382/tallum-plate-armor.html" target="_blank" title="Tallum Plate Armor">Tallum Plate Armor</a>
+              <div class="part-stats">Selado: Sealed Tallum Plate Armor</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t77_g_i00_0.png" alt="Tallum Gloves - Heavy Armor" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/5768/tallum-gloves--heavy-armor.html" target="_blank" title="Tallum Gloves - Heavy Armor">Tallum Gloves - Heavy Armor</a>
+              <div class="part-stats">Selado: Sealed Tallum Gloves</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t77_b_i00_0.png" alt="Tallum Boots - Heavy Armor" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/5780/tallum-boots--heavy-armor.html" target="_blank" title="Tallum Boots - Heavy Armor">Tallum Boots - Heavy Armor</a>
+              <div class="part-stats">Selado: Sealed Tallum Boots</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_helmet_i00_0.png" alt="Tallum Helm" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/547/tallum-helm.html" target="_blank" title="Tallum Helm">Tallum Helm</a>
+              <div class="part-stats">Selado: Sealed Tallum Helmet</div>
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-grade="A Grade" data-name="dark crystal heavy set" data-bonuses="heal +4% paralysis resistance +50% str -2 con +2 with a dark crystal shield, shield defense rate +18%">
+          <div class="card-header">
+            <div class="card-title">Dark Crystal Heavy Set</div>
+            <span class="card-grade a-grade">A Grade</span>
+          </div>
+          <div class="card-type">Heavy Armor Set</div>
+          
+          <div class="bonuses-section">
+            <div class="bonuses-title">Bônus do Set</div>
+            <ul class="bonuses-list">
+              <li>Heal +4%</li><li>Paralysis Resistance +50%</li><li><a href="https://lineage.pmfun.com/list/set#STR" target="_blank">STR -2</a></li><li><a href="https://lineage.pmfun.com/list/set#CON" target="_blank">CON +2</a></li><li>With a Dark Crystal Shield, shield defense rate +18%</li>
+            </ul>
+          </div>
+
+          <div class="parts-section">
+            <div class="parts-title">Partes (6)</div>
+            <div class="parts-list">
+              
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t74_u_i00_0.png" alt="Dark Crystal Breastplate" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/365/dark-crystal-breastplate.html" target="_blank" title="Dark Crystal Breastplate">Dark Crystal Breastplate</a>
+              <div class="part-stats">Selado: Sealed Dark Crystal Breastplate</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t74_l_i00_0.png" alt="Dark Crystal Gaiters" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/388/dark-crystal-gaiters.html" target="_blank" title="Dark Crystal Gaiters">Dark Crystal Gaiters</a>
+              <div class="part-stats">Selado: Sealed Dark Crystal Gaiters</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t74_g_i00_0.png" alt="Dark Crystal Gloves - Heavy Armor" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/5765/dark-crystal-gloves--heavy-armor.html" target="_blank" title="Dark Crystal Gloves - Heavy Armor">Dark Crystal Gloves - Heavy Armor</a>
+              <div class="part-stats">Selado: Sealed Dark Crystal Gloves</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t74_b_i00_0.png" alt="Dark Crystal Boots - Heavy Armor" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/5777/dark-crystal-boots--heavy-armor.html" target="_blank" title="Dark Crystal Boots - Heavy Armor">Dark Crystal Boots - Heavy Armor</a>
+              <div class="part-stats">Selado: Sealed Dark Crystal Boots</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_helmet_i00_0.png" alt="Dark Crystal Helmet" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/512/dark-crystal-helmet.html" target="_blank" title="Dark Crystal Helmet">Dark Crystal Helmet</a>
+              <div class="part-stats">Selado: Sealed Dark Crystal Helmet</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/shield_dark_crystal_shield_i00_0.png" alt="Dark Crystal Shield" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/641/dark-crystal-shield.html" target="_blank" title="Dark Crystal Shield">Dark Crystal Shield</a>
+              <div class="part-stats">Selado: Sealed Dark Crystal Shield</div>
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-grade="A Grade" data-name="majestic light set" data-bonuses="archery p. atk. +8% mp +240 weight increased plus the point at which a weight penalty is applied +5759 stun resistance +50% dex +1 con -1">
+          <div class="card-header">
+            <div class="card-title">Majestic Light Set</div>
+            <span class="card-grade a-grade">A Grade</span>
+          </div>
+          <div class="card-type">Light Armor Set</div>
+          
+          <div class="bonuses-section">
+            <div class="bonuses-title">Bônus do Set</div>
+            <ul class="bonuses-list">
+              <li>Archery P. Atk. +8%</li><li>MP +240</li><li>Weight increased plus the point at which a weight penalty is applied +5759</li><li>Stun Resistance +50%</li><li><a href="https://lineage.pmfun.com/list/set#DEX" target="_blank">DEX +1</a></li><li><a href="https://lineage.pmfun.com/list/set#CON" target="_blank">CON -1</a></li>
+            </ul>
+          </div>
+
+          <div class="parts-section">
+            <div class="parts-title">Partes (4)</div>
+            <div class="parts-list">
+              
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t84_ul_i00_0.png" alt="Majestic Leather Armor" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2395/majestic-leather-armor.html" target="_blank" title="Majestic Leather Armor">Majestic Leather Armor</a>
+              <div class="part-stats">Selado: Sealed Majestic Leather Armor</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t84_g_i00_0.png" alt="Majestic Gauntlets - Light Armor" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/5775/majestic-gauntlets--light-armor.html" target="_blank" title="Majestic Gauntlets - Light Armor">Majestic Gauntlets - Light Armor</a>
+              <div class="part-stats">Selado: Sealed Majestic Gauntlets</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t84_b_i00_0.png" alt="Majestic Boots - Light Armor" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/5787/majestic-boots--light-armor.html" target="_blank" title="Majestic Boots - Light Armor">Majestic Boots - Light Armor</a>
+              <div class="part-stats">Selado: Sealed Majestic Boots</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_leather_helmet_i00_0.png" alt="Majestic Circlet" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2419/majestic-circlet.html" target="_blank" title="Majestic Circlet">Majestic Circlet</a>
+              <div class="part-stats">Selado: Sealed Majestic Circlet</div>
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-grade="A Grade" data-name="nightmare light set" data-bonuses="m. def. +4% sleep and hold resistance +70% restores 3% of melee damage inflicted on the enemy to oneself dex +1 con -1">
+          <div class="card-header">
+            <div class="card-title">Nightmare Light Set</div>
+            <span class="card-grade a-grade">A Grade</span>
+          </div>
+          <div class="card-type">Light Armor Set</div>
+          
+          <div class="bonuses-section">
+            <div class="bonuses-title">Bônus do Set</div>
+            <ul class="bonuses-list">
+              <li>M. Def. +4%</li><li>Sleep and Hold Resistance +70%</li><li>Restores 3% of melee damage inflicted on the enemy to oneself</li><li><a href="https://lineage.pmfun.com/list/set#DEX" target="_blank">DEX +1</a></li><li><a href="https://lineage.pmfun.com/list/set#CON" target="_blank">CON -1</a></li>
+            </ul>
+          </div>
+
+          <div class="parts-section">
+            <div class="parts-title">Partes (4)</div>
+            <div class="parts-list">
+              
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t81_ul_i00_0.png" alt="Nightmarish Leather Armor" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2394/nightmarish-leather-armor.html" target="_blank" title="Nightmarish Leather Armor">Nightmarish Leather Armor</a>
+              <div class="part-stats">Selado: Sealed Leather Armor Of Nightmare</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t81_g_i00_0.png" alt="Gloves of Nightmare - Light Armor" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/5772/gauntlets-of-nightmare--light-armor.html" target="_blank" title="Gloves of Nightmare - Light Armor">Gloves of Nightmare - Light Armor</a>
+              <div class="part-stats">Selado: Sealed Gloves of Nightmare</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t81_b_i00_0.png" alt="Boots Of Nightmare - Light Armor" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/5784/boots-of-nightmare--light-armor.html" target="_blank" title="Boots Of Nightmare - Light Armor">Boots Of Nightmare - Light Armor</a>
+              <div class="part-stats">Selado: Sealed Boots Of Nightmare</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_leather_helmet_i00_0.png" alt="Helm Of Nightmare" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2418/helm-of-nightmare.html" target="_blank" title="Helm Of Nightmare">Helm Of Nightmare</a>
+              <div class="part-stats">Selado: Sealed Helm Of Nightmare</div>
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-grade="A Grade" data-name="tallum light set" data-bonuses="mp regeneration +8% mp +222 poison and bleed resistance +80% men +2 wit -2">
+          <div class="card-header">
+            <div class="card-title">Tallum Light Set</div>
+            <span class="card-grade a-grade">A Grade</span>
+          </div>
+          <div class="card-type">Light Armor Set</div>
+          
+          <div class="bonuses-section">
+            <div class="bonuses-title">Bônus do Set</div>
+            <ul class="bonuses-list">
+              <li>MP Regeneration +8%</li><li>MP +222</li><li>Poison and Bleed Resistance +80%</li><li><a href="https://lineage.pmfun.com/list/set#MEN" target="_blank">MEN +2</a></li><li><a href="https://lineage.pmfun.com/list/set#WIT" target="_blank">WIT -2</a></li>
+            </ul>
+          </div>
+
+          <div class="parts-section">
+            <div class="parts-title">Partes (4)</div>
+            <div class="parts-list">
+              
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t78_ul_i00_0.png" alt="Tallum Leather Armor" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2393/tallum-leather-armor.html" target="_blank" title="Tallum Leather Armor">Tallum Leather Armor</a>
+              <div class="part-stats">Selado: Sealed Tallum Leather Armor</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t78_g_i00_0.png" alt="Tallum Gloves - Light Armor" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/5769/tallum-gloves--light-armor.html" target="_blank" title="Tallum Gloves - Light Armor">Tallum Gloves - Light Armor</a>
+              <div class="part-stats">Selado: Sealed Tallum Gloves</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t78_b_i00_0.png" alt="Tallum Boots - Light Armor" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/5781/tallum-boots--light-armor.html" target="_blank" title="Tallum Boots - Light Armor">Tallum Boots - Light Armor</a>
+              <div class="part-stats">Selado: Sealed Tallum Boots</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_helmet_i00_0.png" alt="Tallum Helm" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/547/tallum-helm.html" target="_blank" title="Tallum Helm">Tallum Helm</a>
+              <div class="part-stats">Selado: Sealed Tallum Helmet</div>
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-grade="A Grade" data-name="dark crystal light set" data-bonuses="atk. spd. +4% p. atk. +4% paralysis resistance +50% str +1 con -1">
+          <div class="card-header">
+            <div class="card-title">Dark Crystal Light Set</div>
+            <span class="card-grade a-grade">A Grade</span>
+          </div>
+          <div class="card-type">Light Armor Set</div>
+          
+          <div class="bonuses-section">
+            <div class="bonuses-title">Bônus do Set</div>
+            <ul class="bonuses-list">
+              <li>Atk. Spd. +4%</li><li>P. Atk. +4%</li><li>Paralysis Resistance +50%</li><li><a href="https://lineage.pmfun.com/list/set#STR" target="_blank">STR +1</a></li><li><a href="https://lineage.pmfun.com/list/set#CON" target="_blank">CON -1</a></li>
+            </ul>
+          </div>
+
+          <div class="parts-section">
+            <div class="parts-title">Partes (5)</div>
+            <div class="parts-list">
+              
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t75_u_i00_0.png" alt="Dark Crystal Leather Armor" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2385/dark-crystal-leather-armor.html" target="_blank" title="Dark Crystal Leather Armor">Dark Crystal Leather Armor</a>
+              <div class="part-stats">Selado: Sealed Dark Crystal Leather Armor</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t75_l_i00_0.png" alt="Dark Crystal Leggings" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2389/dark-crystal-leggings.html" target="_blank" title="Dark Crystal Leggings">Dark Crystal Leggings</a>
+              <div class="part-stats">Selado: Sealed Dark Crystal Leggings</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t75_g_i00_0.png" alt="Dark Crystal Gloves - Light Armor" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/5766/dark-crystal-gloves--light-armor.html" target="_blank" title="Dark Crystal Gloves - Light Armor">Dark Crystal Gloves - Light Armor</a>
+              <div class="part-stats">Selado: Sealed Dark Crystal Gloves</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t75_b_i00_0.png" alt="Dark Crystal Boots - Light Armor" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/5778/dark-crystal-boots--light-armor.html" target="_blank" title="Dark Crystal Boots - Light Armor">Dark Crystal Boots - Light Armor</a>
+              <div class="part-stats">Selado: Sealed Dark Crystal Boots</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_helmet_i00_0.png" alt="Dark Crystal Helmet" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/512/dark-crystal-helmet.html" target="_blank" title="Dark Crystal Helmet">Dark Crystal Helmet</a>
+              <div class="part-stats">Selado: Sealed Dark Crystal Helmet</div>
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-grade="A Grade" data-name="majestic robe set" data-bonuses="mp +240 casting spd. +15% mp regeneration +8% stun resistance +50% men +1 int -1">
+          <div class="card-header">
+            <div class="card-title">Majestic Robe Set</div>
+            <span class="card-grade a-grade">A Grade</span>
+          </div>
+          <div class="card-type">Robe Set</div>
+          
+          <div class="bonuses-section">
+            <div class="bonuses-title">Bônus do Set</div>
+            <ul class="bonuses-list">
+              <li>MP +240</li><li>Casting Spd. +15%</li><li>MP Regeneration +8%</li><li>Stun Resistance +50%</li><li><a href="https://lineage.pmfun.com/list/set#MEN" target="_blank">MEN +1</a></li><li><a href="https://lineage.pmfun.com/list/set#INT" target="_blank">INT -1</a></li>
+            </ul>
+          </div>
+
+          <div class="parts-section">
+            <div class="parts-title">Partes (4)</div>
+            <div class="parts-list">
+              
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t85_ul_i00_0.png" alt="Majestic Robe" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2409/majestic-robe.html" target="_blank" title="Majestic Robe">Majestic Robe</a>
+              <div class="part-stats">Selado: Sealed Majestic Robe</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t85_g_i00_0.png" alt="Majestic Gloves - Robe" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/5776/majestic-gauntlets--robe.html" target="_blank" title="Majestic Gloves - Robe">Majestic Gloves - Robe</a>
+              <div class="part-stats">Selado: Sealed Majestic Gloves</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t85_b_i00_0.png" alt="Majestic Boots - Robe" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/5788/majestic-boots--robe.html" target="_blank" title="Majestic Boots - Robe">Majestic Boots - Robe</a>
+              <div class="part-stats">Selado: Sealed Majestic Boots</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_leather_helmet_i00_0.png" alt="Majestic Circlet" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2419/majestic-circlet.html" target="_blank" title="Majestic Circlet">Majestic Circlet</a>
+              <div class="part-stats">Selado: Sealed Majestic Circlet</div>
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-grade="A Grade" data-name="nightmare robe set" data-bonuses="mp regeneration +4% m. atk. +8% sleep and hold resistance +70% int +2 wit -2">
+          <div class="card-header">
+            <div class="card-title">Nightmare Robe Set</div>
+            <span class="card-grade a-grade">A Grade</span>
+          </div>
+          <div class="card-type">Robe Set</div>
+          
+          <div class="bonuses-section">
+            <div class="bonuses-title">Bônus do Set</div>
+            <ul class="bonuses-list">
+              <li>MP Regeneration +4%</li><li>M. Atk. +8%</li><li>Sleep and Hold Resistance +70%</li><li><a href="https://lineage.pmfun.com/list/set#INT" target="_blank">INT +2</a></li><li><a href="https://lineage.pmfun.com/list/set#WIT" target="_blank">WIT -2</a></li>
+            </ul>
+          </div>
+
+          <div class="parts-section">
+            <div class="parts-title">Partes (4)</div>
+            <div class="parts-list">
+              
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t82_ul_i00_0.png" alt="Nightmare Robe" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2408/nightmare-robe.html" target="_blank" title="Nightmare Robe">Nightmare Robe</a>
+              <div class="part-stats">Selado: Sealed Nightmare Robe</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t82_g_i00_0.png" alt="Gloves Of Nightmare - Robe" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/5773/gauntlets-of-nightmare--robe.html" target="_blank" title="Gloves Of Nightmare - Robe">Gloves Of Nightmare - Robe</a>
+              <div class="part-stats">Selado: Sealed Gloves Of Nightmare</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t82_b_i00_0.png" alt="Boots Of Nightmare - Robe" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/5785/boots-of-nightmare--robe.html" target="_blank" title="Boots Of Nightmare - Robe">Boots Of Nightmare - Robe</a>
+              <div class="part-stats">Selado: Sealed Boots Of Nightmare</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_leather_helmet_i00_0.png" alt="Helm Of Nightmare" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2418/helm-of-nightmare.html" target="_blank" title="Helm Of Nightmare">Helm Of Nightmare</a>
+              <div class="part-stats">Selado: Sealed Helm Of Nightmare</div>
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-grade="A Grade" data-name="tallum robe set" data-bonuses="casting spd. +15% m. def. +8% poison and bleed resistance +80% int -2 wit +2">
+          <div class="card-header">
+            <div class="card-title">Tallum Robe Set</div>
+            <span class="card-grade a-grade">A Grade</span>
+          </div>
+          <div class="card-type">Robe Set</div>
+          
+          <div class="bonuses-section">
+            <div class="bonuses-title">Bônus do Set</div>
+            <ul class="bonuses-list">
+              <li>Casting Spd. +15%</li><li>M. Def. +8%</li><li>Poison and Bleed Resistance +80%</li><li><a href="https://lineage.pmfun.com/list/set#INT" target="_blank">INT -2</a></li><li><a href="https://lineage.pmfun.com/list/set#WIT" target="_blank">WIT +2</a></li>
+            </ul>
+          </div>
+
+          <div class="parts-section">
+            <div class="parts-title">Partes (5)</div>
+            <div class="parts-list">
+              
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t79_u_i00_0.png" alt="Tallum Tunic" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2400/tallum-tunic.html" target="_blank" title="Tallum Tunic">Tallum Tunic</a>
+              <div class="part-stats">Selado: Sealed Tallum Tunic</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t79_l_i00_0.png" alt="Tallum Stockings" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2405/tallum-stockings.html" target="_blank" title="Tallum Stockings">Tallum Stockings</a>
+              <div class="part-stats">Selado: Sealed Tallum Stockings</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t79_g_i00_0.png" alt="Tallum Gloves - Robe" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/5770/tallum-gloves--robe.html" target="_blank" title="Tallum Gloves - Robe">Tallum Gloves - Robe</a>
+              <div class="part-stats">Selado: Sealed Tallum Gloves</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t79_b_i00_0.png" alt="Tallum Boots - Robe" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/5782/tallum-boots--robe.html" target="_blank" title="Tallum Boots - Robe">Tallum Boots - Robe</a>
+              <div class="part-stats">Selado: Sealed Tallum Boots</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_helmet_i00_0.png" alt="Tallum Helm" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/547/tallum-helm.html" target="_blank" title="Tallum Helm">Tallum Helm</a>
+              <div class="part-stats">Selado: Sealed Tallum Helmet</div>
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-grade="A Grade" data-name="dark crystal robe set" data-bonuses="p. def. +8% casting spd. +15% speed +7 small decrease in chance of spell interruption paralysis resistance +50% wit +2 men -2">
+          <div class="card-header">
+            <div class="card-title">Dark Crystal Robe Set</div>
+            <span class="card-grade a-grade">A Grade</span>
+          </div>
+          <div class="card-type">Robe Set</div>
+          
+          <div class="bonuses-section">
+            <div class="bonuses-title">Bônus do Set</div>
+            <ul class="bonuses-list">
+              <li>P. Def. +8%</li><li>Casting Spd. +15%</li><li>Speed +7</li><li>Small decrease in chance of spell interruption</li><li>Paralysis Resistance +50%</li><li><a href="https://lineage.pmfun.com/list/set#WIT" target="_blank">WIT +2</a></li><li><a href="https://lineage.pmfun.com/list/set#MEN" target="_blank">MEN -2</a></li>
+            </ul>
+          </div>
+
+          <div class="parts-section">
+            <div class="parts-title">Partes (4)</div>
+            <div class="parts-list">
+              
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t76_ul_i00_0.png" alt="Dark Crystal Robe" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2407/dark-crystal-robe.html" target="_blank" title="Dark Crystal Robe">Dark Crystal Robe</a>
+              <div class="part-stats">Selado: Sealed Dark Crystal Robe</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t76_g_i00_0.png" alt="Dark Crystal Gloves - Robe" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/5767/dark-crystal-gloves--robe.html" target="_blank" title="Dark Crystal Gloves - Robe">Dark Crystal Gloves - Robe</a>
+              <div class="part-stats">Selado: Sealed Dark Crystal Gloves</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t76_b_i00_0.png" alt="Dark Crystal Boots - Robe" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/5779/dark-crystal-boots--robe.html" target="_blank" title="Dark Crystal Boots - Robe">Dark Crystal Boots - Robe</a>
+              <div class="part-stats">Selado: Sealed Dark Crystal Boots</div>
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_helmet_i00_0.png" alt="Dark Crystal Helmet" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/512/dark-crystal-helmet.html" target="_blank" title="Dark Crystal Helmet">Dark Crystal Helmet</a>
+              <div class="part-stats">Selado: Sealed Dark Crystal Helmet</div>
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-grade="B Grade" data-name="heavy zubei set" data-bonuses="+ 5.24 % pdef + 294 hp">
+          <div class="card-header">
+            <div class="card-title">Heavy Zubei Set</div>
+            <span class="card-grade b-grade">B Grade</span>
+          </div>
+          <div class="card-type">Heavy armor</div>
+          
+          <div class="bonuses-section">
+            <div class="bonuses-title">Bônus do Set</div>
+            <ul class="bonuses-list">
+              <li>+ 5.24 % Pdef</li><li>+ 294 HP</li>
+            </ul>
+          </div>
+
+          <div class="parts-section">
+            <div class="parts-title">Partes (5)</div>
+            <div class="parts-list">
+              
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t64_u_i00_0.png" alt="Zubei's Breastplate" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/357/zubeis-breastplate.html" target="_blank" title="Zubei's Breastplate">Zubei's Breastplate</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t64_l_i00_0.png" alt="Zubei's Gaiters" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/383/zubeis-gaiters.html" target="_blank" title="Zubei's Gaiters">Zubei's Gaiters</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t64_g_i00_0.png" alt="Zubei's Gauntlets" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/612/zubeis-gauntlets.html" target="_blank" title="Zubei's Gauntlets">Zubei's Gauntlets</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t64_b_i00_0.png" alt="Zubei's Boots" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/554/zubeis-boots.html" target="_blank" title="Zubei's Boots">Zubei's Boots</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_helmet_i00_0.png" alt="Zubei's Helmet" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/503/zubeis-helmet.html" target="_blank" title="Zubei's Helmet">Zubei's Helmet</a>
+              
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-grade="B Grade" data-name="heavy avadon set" data-bonuses="+294 hp with shield +24% shield defense rate">
+          <div class="card-header">
+            <div class="card-title">Heavy Avadon Set</div>
+            <span class="card-grade b-grade">B Grade</span>
+          </div>
+          <div class="card-type">Heavy armor</div>
+          
+          <div class="bonuses-section">
+            <div class="bonuses-title">Bônus do Set</div>
+            <ul class="bonuses-list">
+              <li>+294 HP</li><li>with Shield +24% shield defense rate</li>
+            </ul>
+          </div>
+
+          <div class="parts-section">
+            <div class="parts-title">Partes (6)</div>
+            <div class="parts-list">
+              
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t66_u_i00_0.png" alt="Avadon Breastplate" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2376/avadon-breastplate.html" target="_blank" title="Avadon Breastplate">Avadon Breastplate</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t66_l_i00_0.png" alt="Avadon Gaiters" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2379/avadon-gaiters.html" target="_blank" title="Avadon Gaiters">Avadon Gaiters</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t66_g_i00_0.png" alt="Avadon Gloves" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2464/avadon-gloves.html" target="_blank" title="Avadon Gloves">Avadon Gloves</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t66_b_i00_0.png" alt="Avadon Boots" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/600/avadon-boots.html" target="_blank" title="Avadon Boots">Avadon Boots</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_leather_helmet_i00_0.png" alt="Avadon Circlet" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2415/avadon-circlet.html" target="_blank" title="Avadon Circlet">Avadon Circlet</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/shield_avadon_shield_i00_0.png" alt="Avadon Shield" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/673/avadon-shield.html" target="_blank" title="Avadon Shield">Avadon Shield</a>
+              
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-grade="B Grade" data-name="heavy blue wolf set" data-bonuses="speed +7 hp regeneration +5.24% str +3 con -1 dex -2">
+          <div class="card-header">
+            <div class="card-title">Heavy Blue Wolf Set</div>
+            <span class="card-grade b-grade">B Grade</span>
+          </div>
+          <div class="card-type">Heavy armor</div>
+          
+          <div class="bonuses-section">
+            <div class="bonuses-title">Bônus do Set</div>
+            <ul class="bonuses-list">
+              <li>Speed +7</li><li>HP Regeneration +5.24%</li><li><a href="https://lineage.pmfun.com/list/set#STR" target="_blank">STR +3</a></li><li><a href="https://lineage.pmfun.com/list/set#CON" target="_blank">CON -1</a></li><li><a href="https://lineage.pmfun.com/list/set#DEX" target="_blank">DEX -2</a></li>
+            </ul>
+          </div>
+
+          <div class="parts-section">
+            <div class="parts-title">Partes (5)</div>
+            <div class="parts-list">
+              
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t68_u_i00_0.png" alt="Blue Wolf Breastplate" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/358/blue-wolf-breastplate.html" target="_blank" title="Blue Wolf Breastplate">Blue Wolf Breastplate</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t68_l_i00_0.png" alt="Blue Wolf Gaiters" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2380/blue-wolf-gaiters.html" target="_blank" title="Blue Wolf Gaiters">Blue Wolf Gaiters</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t68_g_i00_0.png" alt="Blue Wolf Gloves" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2487/blue-wolf-gloves.html" target="_blank" title="Blue Wolf Gloves">Blue Wolf Gloves</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t68_b_i00_0.png" alt="Blue Wolf Boots" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2439/blue-wolf-boots.html" target="_blank" title="Blue Wolf Boots">Blue Wolf Boots</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_leather_helmet_i00_0.png" alt="Blue Wolf Helmet" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2416/blue-wolf-helmet.html" target="_blank" title="Blue Wolf Helmet">Blue Wolf Helmet</a>
+              
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-grade="B Grade" data-name="heavy doom set" data-bonuses="hp +320 breath gauge increased str -3 con +3 with a doom shield, shield defense rate +24%">
+          <div class="card-header">
+            <div class="card-title">Heavy Doom Set</div>
+            <span class="card-grade b-grade">B Grade</span>
+          </div>
+          <div class="card-type">Heavy armor</div>
+          
+          <div class="bonuses-section">
+            <div class="bonuses-title">Bônus do Set</div>
+            <ul class="bonuses-list">
+              <li>HP +320</li><li>Breath Gauge increased</li><li><a href="https://lineage.pmfun.com/list/set#STR" target="_blank">STR -3</a></li><li><a href="https://lineage.pmfun.com/list/set#CON" target="_blank">CON +3</a></li><li>With a Doom Shield, shield defense rate +24%</li>
+            </ul>
+          </div>
+
+          <div class="parts-section">
+            <div class="parts-title">Partes (5)</div>
+            <div class="parts-list">
+              
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t71_ul_i00_0.png" alt="Doom Plate Armor" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2381/doom-plate-armor.html" target="_blank" title="Doom Plate Armor">Doom Plate Armor</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t71_g_i00_0.png" alt="Doom Gloves" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2475/doom-gloves.html" target="_blank" title="Doom Gloves">Doom Gloves</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t71_b_i00_0.png" alt="Boots Of Doom" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/601/boots-of-doom.html" target="_blank" title="Boots Of Doom">Boots Of Doom</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_leather_helmet_i00_0.png" alt="Doom Helmet" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2417/doom-helmet.html" target="_blank" title="Doom Helmet">Doom Helmet</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/shield_doom_shield_i00_0.png" alt="Doom Shield" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/110/doom-shield.html" target="_blank" title="Doom Shield">Doom Shield</a>
+              
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-grade="B Grade" data-name="light zubei set" data-bonuses="+4 evasion">
+          <div class="card-header">
+            <div class="card-title">Light Zubei Set</div>
+            <span class="card-grade b-grade">B Grade</span>
+          </div>
+          <div class="card-type">Light Armor</div>
+          
+          <div class="bonuses-section">
+            <div class="bonuses-title">Bônus do Set</div>
+            <ul class="bonuses-list">
+              <li>+4 Evasion</li>
+            </ul>
+          </div>
+
+          <div class="parts-section">
+            <div class="parts-title">Partes (5)</div>
+            <div class="parts-list">
+              
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t65_u_i00_0.png" alt="Zubei's Leather Shirt" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2384/zubeis-leather-shirt.html" target="_blank" title="Zubei's Leather Shirt">Zubei's Leather Shirt</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t65_l_i00_0.png" alt="Zubei's Leather Gaiters" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2388/zubeis-leather-gaiters.html" target="_blank" title="Zubei's Leather Gaiters">Zubei's Leather Gaiters</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t65_g_i00_0.png" alt="Zubei's Gauntlets" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/612/zubeis-gauntlets.html" target="_blank" title="Zubei's Gauntlets">Zubei's Gauntlets</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t65_b_i00_0.png" alt="Zubei's Boots" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/554/zubeis-boots.html" target="_blank" title="Zubei's Boots">Zubei's Boots</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_helmet_i00_0.png" alt="Zubei's Helmet" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/503/zubeis-helmet.html" target="_blank" title="Zubei's Helmet">Zubei's Helmet</a>
+              
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-grade="B Grade" data-name="light avadon set" data-bonuses="m. def. +5.25% point at which a weight penalty is applied +5795">
+          <div class="card-header">
+            <div class="card-title">Light Avadon Set</div>
+            <span class="card-grade b-grade">B Grade</span>
+          </div>
+          <div class="card-type">Light Armor</div>
+          
+          <div class="bonuses-section">
+            <div class="bonuses-title">Bônus do Set</div>
+            <ul class="bonuses-list">
+              <li>M. Def. +5.25%</li><li>Point at which a weight penalty is applied +5795</li>
+            </ul>
+          </div>
+
+          <div class="parts-section">
+            <div class="parts-title">Partes (4)</div>
+            <div class="parts-list">
+              
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t67_ul_i00_0.png" alt="Avadon Leather Armor" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2390/avadon-leather-armor.html" target="_blank" title="Avadon Leather Armor">Avadon Leather Armor</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t67_g_i00_0.png" alt="Avadon Gloves" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2464/avadon-gloves.html" target="_blank" title="Avadon Gloves">Avadon Gloves</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t67_b_i00_0.png" alt="Avadon Boots" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/600/avadon-boots.html" target="_blank" title="Avadon Boots">Avadon Boots</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_leather_helmet_i00_0.png" alt="Avadon Circlet" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2415/avadon-circlet.html" target="_blank" title="Avadon Circlet">Avadon Circlet</a>
+              
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-grade="B Grade" data-name="light blue wolf set" data-bonuses="p. def. +5.24% casting spd. +15% int -2 men +3 wit -1">
+          <div class="card-header">
+            <div class="card-title">Light Blue Wolf Set</div>
+            <span class="card-grade b-grade">B Grade</span>
+          </div>
+          <div class="card-type">Light Armor</div>
+          
+          <div class="bonuses-section">
+            <div class="bonuses-title">Bônus do Set</div>
+            <ul class="bonuses-list">
+              <li>P. Def. +5.24%</li><li>Casting Spd. +15%</li><li><a href="https://lineage.pmfun.com/list/set#INT" target="_blank">INT -2</a></li><li><a href="https://lineage.pmfun.com/list/set#MEN" target="_blank">MEN +3</a></li><li><a href="https://lineage.pmfun.com/list/set#WIT" target="_blank">WIT -1</a></li>
+            </ul>
+          </div>
+
+          <div class="parts-section">
+            <div class="parts-title">Partes (4)</div>
+            <div class="parts-list">
+              
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t69_ul_i00_0.png" alt="Blue Wolf Leather Armor" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2391/blue-wolf-leather-armor.html" target="_blank" title="Blue Wolf Leather Armor">Blue Wolf Leather Armor</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t69_g_i00_0.png" alt="Blue Wolf Gloves" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2487/blue-wolf-gloves.html" target="_blank" title="Blue Wolf Gloves">Blue Wolf Gloves</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t69_b_i00_0.png" alt="Blue Wolf Boots" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2439/blue-wolf-boots.html" target="_blank" title="Blue Wolf Boots">Blue Wolf Boots</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_leather_helmet_i00_0.png" alt="Blue Wolf Helmet" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2416/blue-wolf-helmet.html" target="_blank" title="Blue Wolf Helmet">Blue Wolf Helmet</a>
+              
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-grade="B Grade" data-name="light doom set" data-bonuses="breath gauge increased p. atk. +2.7% mp regeneration +2.5% str -1 con -2 dex +3 poision resistance +20%">
+          <div class="card-header">
+            <div class="card-title">Light Doom Set</div>
+            <span class="card-grade b-grade">B Grade</span>
+          </div>
+          <div class="card-type">Light Armor</div>
+          
+          <div class="bonuses-section">
+            <div class="bonuses-title">Bônus do Set</div>
+            <ul class="bonuses-list">
+              <li>Breath Gauge increased</li><li>P. Atk. +2.7%</li><li>MP Regeneration +2.5%</li><li><a href="https://lineage.pmfun.com/list/set#STR" target="_blank">STR -1</a><a href="https://lineage.pmfun.com/list/set#CON" target="_blank">CON -2</a></li><li><a href="https://lineage.pmfun.com/list/set#DEX" target="_blank">DEX +3</a>Poision Resistance +20%</li>
+            </ul>
+          </div>
+
+          <div class="parts-section">
+            <div class="parts-title">Partes (4)</div>
+            <div class="parts-list">
+              
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t72_ul_i00_0.png" alt="Leather Armor Of Doom" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2392/leather-armor-of-doom.html" target="_blank" title="Leather Armor Of Doom">Leather Armor Of Doom</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t72_g_i00_0.png" alt="Doom Gloves" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2475/doom-gloves.html" target="_blank" title="Doom Gloves">Doom Gloves</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t72_b_i00_0.png" alt="Boots Of Doom" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/601/boots-of-doom.html" target="_blank" title="Boots Of Doom">Boots Of Doom</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_leather_helmet_i00_0.png" alt="Doom Helmet" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2417/doom-helmet.html" target="_blank" title="Doom Helmet">Doom Helmet</a>
+              
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-grade="B Grade" data-name="zubei robe set" data-bonuses="m. atk. +10% mp regeneration -5%">
+          <div class="card-header">
+            <div class="card-title">Zubei Robe Set</div>
+            <span class="card-grade b-grade">B Grade</span>
+          </div>
+          <div class="card-type">Robe Armor</div>
+          
+          <div class="bonuses-section">
+            <div class="bonuses-title">Bônus do Set</div>
+            <ul class="bonuses-list">
+              <li>M. Atk. +10%</li><li>MP Regeneration -5%</li>
+            </ul>
+          </div>
+
+          <div class="parts-section">
+            <div class="parts-title">Partes (5)</div>
+            <div class="parts-list">
+              
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t56_u_i00_0.png" alt="Tunic Of Zubei" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2397/tunic-of-zubei.html" target="_blank" title="Tunic Of Zubei">Tunic Of Zubei</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t56_l_i00_0.png" alt="Stockings Of Zubei" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2402/stockings-of-zubei.html" target="_blank" title="Stockings Of Zubei">Stockings Of Zubei</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t56_g_i00_0.png" alt="Zubei's Gauntlets" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/612/zubeis-gauntlets.html" target="_blank" title="Zubei's Gauntlets">Zubei's Gauntlets</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t56_b_i00_0.png" alt="Zubei's Boots" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/554/zubeis-boots.html" target="_blank" title="Zubei's Boots">Zubei's Boots</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_helmet_i00_0.png" alt="Zubei's Helmet" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/503/zubeis-helmet.html" target="_blank" title="Zubei's Helmet">Zubei's Helmet</a>
+              
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-grade="B Grade" data-name="avadon robe set" data-bonuses="p. def. +5.247% casting spd. +15%">
+          <div class="card-header">
+            <div class="card-title">Avadon Robe Set</div>
+            <span class="card-grade b-grade">B Grade</span>
+          </div>
+          <div class="card-type">Robe</div>
+          
+          <div class="bonuses-section">
+            <div class="bonuses-title">Bônus do Set</div>
+            <ul class="bonuses-list">
+              <li>P. Def. +5.247%</li><li>Casting Spd. +15%</li>
+            </ul>
+          </div>
+
+          <div class="parts-section">
+            <div class="parts-title">Partes (4)</div>
+            <div class="parts-list">
+              
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t59_ul_i00_0.png" alt="Avadon Robe" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2406/avadon-robe.html" target="_blank" title="Avadon Robe">Avadon Robe</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t59_g_i00_0.png" alt="Avadon Gloves" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2464/avadon-gloves.html" target="_blank" title="Avadon Gloves">Avadon Gloves</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t59_b_i00_0.png" alt="Avadon Boots" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/600/avadon-boots.html" target="_blank" title="Avadon Boots">Avadon Boots</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_leather_helmet_i00_0.png" alt="Avadon Circlet" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2415/avadon-circlet.html" target="_blank" title="Avadon Circlet">Avadon Circlet</a>
+              
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-grade="B Grade" data-name="blue wolf robe set" data-bonuses="mp +206 mp regeneration +5.24% int -2 men -1 wit +3">
+          <div class="card-header">
+            <div class="card-title">Blue Wolf Robe Set</div>
+            <span class="card-grade b-grade">B Grade</span>
+          </div>
+          <div class="card-type">Robe Armor</div>
+          
+          <div class="bonuses-section">
+            <div class="bonuses-title">Bônus do Set</div>
+            <ul class="bonuses-list">
+              <li>MP +206</li><li>MP Regeneration +5.24%</li><li><a href="https://lineage.pmfun.com/list/set#INT" target="_blank">INT -2</a></li><li><a href="https://lineage.pmfun.com/list/set#MEN" target="_blank">MEN -1</a></li><li><a href="https://lineage.pmfun.com/list/set#WIT" target="_blank">WIT +3</a></li>
+            </ul>
+          </div>
+
+          <div class="parts-section">
+            <div class="parts-title">Partes (5)</div>
+            <div class="parts-list">
+              
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t70_u_i00_0.png" alt="Blue Wolf Tunic" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2398/blue-wolf-tunic.html" target="_blank" title="Blue Wolf Tunic">Blue Wolf Tunic</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t70_l_i00_0.png" alt="Blue Wolf Stockings" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2403/blue-wolf-stockings.html" target="_blank" title="Blue Wolf Stockings">Blue Wolf Stockings</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t70_g_i00_0.png" alt="Blue Wolf Gloves" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2487/blue-wolf-gloves.html" target="_blank" title="Blue Wolf Gloves">Blue Wolf Gloves</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t70_b_i00_0.png" alt="Blue Wolf Boots" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2439/blue-wolf-boots.html" target="_blank" title="Blue Wolf Boots">Blue Wolf Boots</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_leather_helmet_i00_0.png" alt="Blue Wolf Helmet" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2416/blue-wolf-helmet.html" target="_blank" title="Blue Wolf Helmet">Blue Wolf Helmet</a>
+              
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-grade="B Grade" data-name="doom robe set" data-bonuses="speed + 7 breath gauge increased mp regeneration +5.24% int +2 men +1 wit -3">
+          <div class="card-header">
+            <div class="card-title">Doom Robe Set</div>
+            <span class="card-grade b-grade">B Grade</span>
+          </div>
+          <div class="card-type">Robe</div>
+          
+          <div class="bonuses-section">
+            <div class="bonuses-title">Bônus do Set</div>
+            <ul class="bonuses-list">
+              <li>Speed + 7</li><li>Breath Gauge increased</li><li>MP Regeneration +5.24%</li><li><a href="https://lineage.pmfun.com/list/set#INT" target="_blank">INT +2</a></li><li><a href="https://lineage.pmfun.com/list/set#MEN" target="_blank">MEN +1</a></li><li><a href="https://lineage.pmfun.com/list/set#WIT" target="_blank">WIT -3</a></li>
+            </ul>
+          </div>
+
+          <div class="parts-section">
+            <div class="parts-title">Partes (5)</div>
+            <div class="parts-list">
+              
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t73_u_i00_0.png" alt="Tunic Of Doom" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2399/tunic-of-doom.html" target="_blank" title="Tunic Of Doom">Tunic Of Doom</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t73_l_i00_0.png" alt="Stockings Of Doom" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2404/stockings-of-doom.html" target="_blank" title="Stockings Of Doom">Stockings Of Doom</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t73_g_i00_0.png" alt="Doom Gloves" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2475/doom-gloves.html" target="_blank" title="Doom Gloves">Doom Gloves</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t73_b_i00_0.png" alt="Boots Of Doom" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/601/boots-of-doom.html" target="_blank" title="Boots Of Doom">Boots Of Doom</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_leather_helmet_i00_0.png" alt="Doom Helmet" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2417/doom-helmet.html" target="_blank" title="Doom Helmet">Doom Helmet</a>
+              
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-grade="C Grade" data-name="chain mail set" data-bonuses="+5.24 % to dagger defense with shiled +198 hp">
+          <div class="card-header">
+            <div class="card-title">Chain Mail Set</div>
+            <span class="card-grade c-grade">C Grade</span>
+          </div>
+          <div class="card-type">Heavy armor</div>
+          
+          <div class="bonuses-section">
+            <div class="bonuses-title">Bônus do Set</div>
+            <ul class="bonuses-list">
+              <li>+5.24 % to Dagger Defense</li><li>with Shiled +198 HP</li>
+            </ul>
+          </div>
+
+          <div class="parts-section">
+            <div class="parts-title">Partes (4)</div>
+            <div class="parts-list">
+              
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t48_u_i00_0.png" alt="Chain Mail Shirt" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/354/chain-mail-shirt.html" target="_blank" title="Chain Mail Shirt">Chain Mail Shirt</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t48_l_i00_0.png" alt="Chain Gaiters" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/381/chain-gaiters.html" target="_blank" title="Chain Gaiters">Chain Gaiters</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_leather_helmet_i00_0.png" alt="Chain Hood" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2413/chain-hood.html" target="_blank" title="Chain Hood">Chain Hood</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/shield_chain_shield_i00_0.png" alt="Chain Shield" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2495/chain-shield.html" target="_blank" title="Chain Shield">Chain Shield</a>
+              
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-grade="C Grade" data-name="composite set" data-bonuses="point at which a weight penalty is applied +5795 with a composite shield, m. def. +5.26%">
+          <div class="card-header">
+            <div class="card-title">Composite Set</div>
+            <span class="card-grade c-grade">C Grade</span>
+          </div>
+          <div class="card-type">Heavy armor</div>
+          
+          <div class="bonuses-section">
+            <div class="bonuses-title">Bônus do Set</div>
+            <ul class="bonuses-list">
+              <li>Point at which a weight penalty is applied +5795</li><li>With a Composite Shield, M. Def. +5.26%</li>
+            </ul>
+          </div>
+
+          <div class="parts-section">
+            <div class="parts-title">Partes (3)</div>
+            <div class="parts-list">
+              
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t61_ul_i00_0.png" alt="Composite Armor" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/60/composite-armor.html" target="_blank" title="Composite Armor">Composite Armor</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_leather_helmet_i00_0.png" alt="Composite Helmet" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/517/composite-helmet.html" target="_blank" title="Composite Helmet">Composite Helmet</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/shield_composite_shield_i00_0.png" alt="Composite Shield" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/107/composite-shield.html" target="_blank" title="Composite Shield">Composite Shield</a>
+              
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-grade="C Grade" data-name="full plate set" data-bonuses="hp +270 with a full plate shield, shield defense rate +5.24%">
+          <div class="card-header">
+            <div class="card-title">Full Plate Set</div>
+            <span class="card-grade c-grade">C Grade</span>
+          </div>
+          <div class="card-type">Heavy armor</div>
+          
+          <div class="bonuses-section">
+            <div class="bonuses-title">Bônus do Set</div>
+            <ul class="bonuses-list">
+              <li>HP +270</li><li>With a Full Plate Shield, shield defense rate +5.24%</li>
+            </ul>
+          </div>
+
+          <div class="parts-section">
+            <div class="parts-title">Partes (3)</div>
+            <div class="parts-list">
+              
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t62_ul_i00_0.png" alt="Full Plate Armor" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/356/full-plate-armor.html" target="_blank" title="Full Plate Armor">Full Plate Armor</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_leather_helmet_i00_0.png" alt="Full Plate Helmet" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2414/full-plate-helmet.html" target="_blank" title="Full Plate Helmet">Full Plate Helmet</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/shield_full_plate_shield_i00_0.png" alt="Full Plate Shield" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2497/full-plate-shield.html" target="_blank" title="Full Plate Shield">Full Plate Shield</a>
+              
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-grade="C Grade" data-name="tempered mithril set" data-bonuses="evasion +4">
+          <div class="card-header">
+            <div class="card-title">Tempered Mithril Set</div>
+            <span class="card-grade c-grade">C Grade</span>
+          </div>
+          <div class="card-type">Light Armor</div>
+          
+          <div class="bonuses-section">
+            <div class="bonuses-title">Bônus do Set</div>
+            <ul class="bonuses-list">
+              <li>Evasion +4</li>
+            </ul>
+          </div>
+
+          <div class="parts-section">
+            <div class="parts-title">Partes (3)</div>
+            <div class="parts-list">
+              
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t47_u_i00_0.png" alt="Mithril Shirt" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/397/mithril-shirt.html" target="_blank" title="Mithril Shirt">Mithril Shirt</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t47_l_i00_0.png" alt="Tempered Mithril Gaiters" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2387/tempered-mithril-gaiters.html" target="_blank" title="Tempered Mithril Gaiters">Tempered Mithril Gaiters</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t47_b_i00_0.png" alt="Mithril Boots" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/62/mithril-boots.html" target="_blank" title="Mithril Boots">Mithril Boots</a>
+              
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-grade="C Grade" data-name="plated leather set" data-bonuses="+ 4 str - 1 con">
+          <div class="card-header">
+            <div class="card-title">Plated Leather Set</div>
+            <span class="card-grade c-grade">C Grade</span>
+          </div>
+          <div class="card-type">Light Armor</div>
+          
+          <div class="bonuses-section">
+            <div class="bonuses-title">Bônus do Set</div>
+            <ul class="bonuses-list">
+              <li><a href="https://lineage.pmfun.com/list/set#STR" target="_blank">+ 4 STR</a></li><li><a href="https://lineage.pmfun.com/list/set#CON" target="_blank">- 1 CON</a></li>
+            </ul>
+          </div>
+
+          <div class="parts-section">
+            <div class="parts-title">Partes (3)</div>
+            <div class="parts-list">
+              
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t47_u_i00_0.png" alt="Plated Leather" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/398/plated-leather.html" target="_blank" title="Plated Leather">Plated Leather</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t47_l_i00_0.png" alt="Plated Leather Gaiters" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/418/plated-leather-gaiters.html" target="_blank" title="Plated Leather Gaiters">Plated Leather Gaiters</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t47_b_i00_0.png" alt="Plated Leather Boots" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2431/plated-leather-boots.html" target="_blank" title="Plated Leather Boots">Plated Leather Boots</a>
+              
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-grade="C Grade" data-name="theca leather set" data-bonuses="p. def. +5.24%">
+          <div class="card-header">
+            <div class="card-title">Theca Leather Set</div>
+            <span class="card-grade c-grade">C Grade</span>
+          </div>
+          <div class="card-type">Light Armor</div>
+          
+          <div class="bonuses-section">
+            <div class="bonuses-title">Bônus do Set</div>
+            <ul class="bonuses-list">
+              <li>P. Def. +5.24%</li>
+            </ul>
+          </div>
+
+          <div class="parts-section">
+            <div class="parts-title">Partes (3)</div>
+            <div class="parts-list">
+              
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t63_u_i00_0.png" alt="Theca Leather Armor" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/400/theca-leather-armor.html" target="_blank" title="Theca Leather Armor">Theca Leather Armor</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t63_l_i00_0.png" alt="Theca Leather Gaiters" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/420/theca-leather-gaiters.html" target="_blank" title="Theca Leather Gaiters">Theca Leather Gaiters</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t63_b_i00_0.png" alt="Theca Leather Boots" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2436/theca-leather-boots.html" target="_blank" title="Theca Leather Boots">Theca Leather Boots</a>
+              
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-grade="C Grade" data-name="drake leather set" data-bonuses="+5.24% mdef">
+          <div class="card-header">
+            <div class="card-title">Drake Leather Set</div>
+            <span class="card-grade c-grade">C Grade</span>
+          </div>
+          <div class="card-type">Light Armor</div>
+          
+          <div class="bonuses-section">
+            <div class="bonuses-title">Bônus do Set</div>
+            <ul class="bonuses-list">
+              <li>+5.24% Mdef</li>
+            </ul>
+          </div>
+
+          <div class="parts-section">
+            <div class="parts-title">Partes (2)</div>
+            <div class="parts-list">
+              
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t21_ul_i00_0.png" alt="Drake Leather Armor" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/401/drake-leather-armor.html" target="_blank" title="Drake Leather Armor">Drake Leather Armor</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t21_b_i00_0.png" alt="Drake Leather Boots" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2437/drake-leather-boots.html" target="_blank" title="Drake Leather Boots">Drake Leather Boots</a>
+              
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-grade="C Grade" data-name="karmian set" data-bonuses="+ 5.24% pdef + 15% casting speed">
+          <div class="card-header">
+            <div class="card-title">Karmian Set</div>
+            <span class="card-grade c-grade">C Grade</span>
+          </div>
+          <div class="card-type">Robe</div>
+          
+          <div class="bonuses-section">
+            <div class="bonuses-title">Bônus do Set</div>
+            <ul class="bonuses-list">
+              <li>+ 5.24% Pdef</li><li>+ 15% Casting Speed</li>
+            </ul>
+          </div>
+
+          <div class="parts-section">
+            <div class="parts-title">Partes (3)</div>
+            <div class="parts-list">
+              
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t53_u_i00_0.png" alt="Karmian Tunic" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/439/karmian-tunic.html" target="_blank" title="Karmian Tunic">Karmian Tunic</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t53_l_i00_0.png" alt="Karmian Stockings" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/471/karmian-stockings.html" target="_blank" title="Karmian Stockings">Karmian Stockings</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t53_g_i00_0.png" alt="Karmian Gloves" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2454/karmian-gloves.html" target="_blank" title="Karmian Gloves">Karmian Gloves</a>
+              
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-grade="C Grade" data-name="demon set" data-bonuses="- 270 hp + 4 int -1 wit">
+          <div class="card-header">
+            <div class="card-title">Demon Set</div>
+            <span class="card-grade c-grade">C Grade</span>
+          </div>
+          <div class="card-type">Robe</div>
+          
+          <div class="bonuses-section">
+            <div class="bonuses-title">Bônus do Set</div>
+            <ul class="bonuses-list">
+              <li>- 270 HP</li><li><a href="https://lineage.pmfun.com/list/set#INT" target="_blank">+ 4 INT</a></li><li><a href="https://lineage.pmfun.com/list/set#WIT" target="_blank">-1 WIT</a></li>
+            </ul>
+          </div>
+
+          <div class="parts-section">
+            <div class="parts-title">Partes (3)</div>
+            <div class="parts-list">
+              
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t54_u_i00_0.png" alt="Demon's Tunic" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/441/demons-tunic.html" target="_blank" title="Demon's Tunic">Demon's Tunic</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t54_l_i00_0.png" alt="Demon's Stockings" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/472/demons-stockings.html" target="_blank" title="Demon's Stockings">Demon's Stockings</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t54_g_i00_0.png" alt="Demon's Gloves" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2459/demons-gloves.html" target="_blank" title="Demon's Gloves">Demon's Gloves</a>
+              
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-grade="C Grade" data-name="divine set" data-bonuses="+5.24% pdef +170 mp -1 int +1 wit">
+          <div class="card-header">
+            <div class="card-title">Divine Set</div>
+            <span class="card-grade c-grade">C Grade</span>
+          </div>
+          <div class="card-type">Robe</div>
+          
+          <div class="bonuses-section">
+            <div class="bonuses-title">Bônus do Set</div>
+            <ul class="bonuses-list">
+              <li>+5.24% Pdef</li><li>+170 MP</li><li><a href="https://lineage.pmfun.com/list/set#INT" target="_blank">-1 INT</a></li><li><a href="https://lineage.pmfun.com/list/set#WIT" target="_blank">+1 WIT</a></li>
+            </ul>
+          </div>
+
+          <div class="parts-section">
+            <div class="parts-title">Partes (3)</div>
+            <div class="parts-list">
+              
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t57_u_i00_0.png" alt="Divine Tunic" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/442/divine-tunic.html" target="_blank" title="Divine Tunic">Divine Tunic</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t57_l_i00_0.png" alt="Divine Stockings" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/473/divine-stockings.html" target="_blank" title="Divine Stockings">Divine Stockings</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t57_g_i00_0.png" alt="Divine Gloves" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2463/divine-gloves.html" target="_blank" title="Divine Gloves">Divine Gloves</a>
+              
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-grade="D Grade" data-name="mithril set" data-bonuses="+20 poison resistance with shield +126 hp">
+          <div class="card-header">
+            <div class="card-title">Mithril Set</div>
+            <span class="card-grade d-grade">D Grade</span>
+          </div>
+          <div class="card-type">Heavy armor</div>
+          
+          <div class="bonuses-section">
+            <div class="bonuses-title">Bônus do Set</div>
+            <ul class="bonuses-list">
+              <li>+20 Poison Resistance</li><li>with Shield +126 HP</li>
+            </ul>
+          </div>
+
+          <div class="parts-section">
+            <div class="parts-title">Partes (4)</div>
+            <div class="parts-list">
+              
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t19_u_i00_0.png" alt="Mithril Breastplate" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/58/mithril-breastplate.html" target="_blank" title="Mithril Breastplate">Mithril Breastplate</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t19_l_i00_0.png" alt="Mithril Gaiters" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/59/mithril-gaiters.html" target="_blank" title="Mithril Gaiters">Mithril Gaiters</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_helmet_i00_0.png" alt="Helmet" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/47/helmet.html" target="_blank" title="Helmet">Helmet</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/shield_hoplon_i00_0.png" alt="Hoplon" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/628/hoplon.html" target="_blank" title="Hoplon">Hoplon</a>
+              
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-grade="D Grade" data-name="brigandine set" data-bonuses="+153 hp +5% pdef with shield +20 hp">
+          <div class="card-header">
+            <div class="card-title">Brigandine Set</div>
+            <span class="card-grade d-grade">D Grade</span>
+          </div>
+          <div class="card-type">Heavy armor</div>
+          
+          <div class="bonuses-section">
+            <div class="bonuses-title">Bônus do Set</div>
+            <ul class="bonuses-list">
+              <li>+153 HP</li><li>+5% Pdef</li><li>with Shield +20 HP</li>
+            </ul>
+          </div>
+
+          <div class="parts-section">
+            <div class="parts-title">Partes (4)</div>
+            <div class="parts-list">
+              
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t43_u_i00_0.png" alt="Brigandine Tunic" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/352/brigandine-tunic.html" target="_blank" title="Brigandine Tunic">Brigandine Tunic</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t43_l_i00_0.png" alt="Brigandine Gaiters" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2378/brigandine-gaiters.html" target="_blank" title="Brigandine Gaiters">Brigandine Gaiters</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_leather_helmet_i00_0.png" alt="Brigandine Helmet" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2411/brigandine-helmet.html" target="_blank" title="Brigandine Helmet">Brigandine Helmet</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/shield_brigandine_shield_i00_0.png" alt="Brigandine Shield" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2493/brigandine-shield.html" target="_blank" title="Brigandine Shield">Brigandine Shield</a>
+              
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-grade="D Grade" data-name="reinforced leather set" data-bonuses="mp +80">
+          <div class="card-header">
+            <div class="card-title">Reinforced Leather Set</div>
+            <span class="card-grade d-grade">D Grade</span>
+          </div>
+          <div class="card-type">Light Armor</div>
+          
+          <div class="bonuses-section">
+            <div class="bonuses-title">Bônus do Set</div>
+            <ul class="bonuses-list">
+              <li>MP +80</li>
+            </ul>
+          </div>
+
+          <div class="parts-section">
+            <div class="parts-title">Partes (3)</div>
+            <div class="parts-list">
+              
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t13_u_i00_0.png" alt="Reinforced Leather Shirt" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/394/reinforced-leather-shirt.html" target="_blank" title="Reinforced Leather Shirt">Reinforced Leather Shirt</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t13_l_i00_0.png" alt="Reinforced Leather Gaiters" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/416/reinforced-leather-gaiters.html" target="_blank" title="Reinforced Leather Gaiters">Reinforced Leather Gaiters</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t13_b_i00_0.png" alt="Reinforced Leather Boots" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2422/reinforced-leather-boots.html" target="_blank" title="Reinforced Leather Boots">Reinforced Leather Boots</a>
+              
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-grade="D Grade" data-name="manticore set" data-bonuses="mp +92">
+          <div class="card-header">
+            <div class="card-title">Manticore Set</div>
+            <span class="card-grade d-grade">D Grade</span>
+          </div>
+          <div class="card-type">Light Armor</div>
+          
+          <div class="bonuses-section">
+            <div class="bonuses-title">Bônus do Set</div>
+            <ul class="bonuses-list">
+              <li>MP +92</li>
+            </ul>
+          </div>
+
+          <div class="parts-section">
+            <div class="parts-title">Partes (3)</div>
+            <div class="parts-list">
+              
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t42_u_i00_0.png" alt="Manticore Skin Shirt" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/395/manticore-skin-shirt.html" target="_blank" title="Manticore Skin Shirt">Manticore Skin Shirt</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t42_l_i00_0.png" alt="Manticore Skin Gaiters" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/417/manticore-skin-gaiters.html" target="_blank" title="Manticore Skin Gaiters">Manticore Skin Gaiters</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t42_b_i00_0.png" alt="Manticore Skin Boots" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2424/manticore-skin-boots.html" target="_blank" title="Manticore Skin Boots">Manticore Skin Boots</a>
+              
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-grade="D Grade" data-name="knowledge set" data-bonuses="+10% matk -5% mp regeneration">
+          <div class="card-header">
+            <div class="card-title">Knowledge Set</div>
+            <span class="card-grade d-grade">D Grade</span>
+          </div>
+          <div class="card-type">Robe</div>
+          
+          <div class="bonuses-section">
+            <div class="bonuses-title">Bônus do Set</div>
+            <ul class="bonuses-list">
+              <li>+10% Matk</li><li>-5% MP Regeneration</li>
+            </ul>
+          </div>
+
+          <div class="parts-section">
+            <div class="parts-title">Partes (3)</div>
+            <div class="parts-list">
+              
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t41_u_i00_0.png" alt="Tunic Of Knowledge" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/436/tunic-of-knowledge.html" target="_blank" title="Tunic Of Knowledge">Tunic Of Knowledge</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t41_l_i00_0.png" alt="Stockings Of Knowledge" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/469/stockings-of-knowledge.html" target="_blank" title="Stockings Of Knowledge">Stockings Of Knowledge</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t41_g_i00_0.png" alt="Gloves Of Knowledge" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2447/gloves-of-knowledge.html" target="_blank" title="Gloves Of Knowledge">Gloves Of Knowledge</a>
+              
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-grade="D Grade" data-name="elven mithril set" data-bonuses="+7 speed -1 int +1 wit">
+          <div class="card-header">
+            <div class="card-title">Elven Mithril Set</div>
+            <span class="card-grade d-grade">D Grade</span>
+          </div>
+          <div class="card-type">Robe</div>
+          
+          <div class="bonuses-section">
+            <div class="bonuses-title">Bônus do Set</div>
+            <ul class="bonuses-list">
+              <li>+7 Speed</li><li>-1 <a href="https://lineage.pmfun.com/list/set#INT" target="_blank">INT</a></li><li>+1 <a href="https://lineage.pmfun.com/list/set#WIT" target="_blank">WIT</a></li>
+            </ul>
+          </div>
+
+          <div class="parts-section">
+            <div class="parts-title">Partes (3)</div>
+            <div class="parts-list">
+              
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t51_u_i00_0.png" alt="Mithril Tunic" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/437/mithril-tunic.html" target="_blank" title="Mithril Tunic">Mithril Tunic</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t51_l_i00_0.png" alt="Mithril Stockings" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/470/mithril-stockings.html" target="_blank" title="Mithril Stockings">Mithril Stockings</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t51_g_i00_0.png" alt="Elven Mithril Gloves" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2450/elven-mithril-gloves.html" target="_blank" title="Elven Mithril Gloves">Elven Mithril Gloves</a>
+              
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-grade="No Grade" data-name="wooden set" data-bonuses="+2% pdef +41 hp">
+          <div class="card-header">
+            <div class="card-title">Wooden Set</div>
+            <span class="card-grade no-grade">No Grade</span>
+          </div>
+          <div class="card-type">Light armor</div>
+          
+          <div class="bonuses-section">
+            <div class="bonuses-title">Bônus do Set</div>
+            <ul class="bonuses-list">
+              <li>+2% Pdef</li><li>+41 HP</li>
+            </ul>
+          </div>
+
+          <div class="parts-section">
+            <div class="parts-title">Partes (3)</div>
+            <div class="parts-list">
+              
+          <div class="part-item">
+            <img class="part-img" src="images/armor_leather_helmet_i00_0.png" alt="Wooden Helmet" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/43/wooden-helmet.html" target="_blank" title="Wooden Helmet">Wooden Helmet</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t06_u_i00_0.png" alt="Wooden Breastplate" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/23/wooden-breastplate.html" target="_blank" title="Wooden Breastplate">Wooden Breastplate</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t06_l_i00_0.png" alt="Wooden Gaiters" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/2386/wooden-gaiters.html" target="_blank" title="Wooden Gaiters">Wooden Gaiters</a>
+              
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" data-grade="No Grade" data-name="devotion set" data-bonuses="+ 15 % casting speed">
+          <div class="card-header">
+            <div class="card-title">Devotion Set</div>
+            <span class="card-grade no-grade">No Grade</span>
+          </div>
+          <div class="card-type">Robe</div>
+          
+          <div class="bonuses-section">
+            <div class="bonuses-title">Bônus do Set</div>
+            <ul class="bonuses-list">
+              <li>+ 15 % Casting Speed</li>
+            </ul>
+          </div>
+
+          <div class="parts-section">
+            <div class="parts-title">Partes (3)</div>
+            <div class="parts-list">
+              
+          <div class="part-item">
+            <img class="part-img" src="images/armor_leather_helmet_i00_0.png" alt="Leather Helmet" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/44/leather-helmet.html" target="_blank" title="Leather Helmet">Leather Helmet</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t55_u_i00_0.png" alt="Tunic Of Devotion" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/1101/tunic-of-devotion.html" target="_blank" title="Tunic Of Devotion">Tunic Of Devotion</a>
+              
+            </div>
+          </div>
+          <div class="part-item">
+            <img class="part-img" src="images/armor_t55_l_i00_0.png" alt="Stockings Of Devotion" loading="lazy" />
+            <div class="part-info">
+              <a class="part-name" href="https://lineage.pmfun.com/item/1104/stockings-of-devotion.html" target="_blank" title="Stockings Of Devotion">Stockings Of Devotion</a>
+              
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+  </div>
+
+  <div class="plus6-section">
+    <h2>+6 Armor Bonuses</h2>
+    <table class="plus6-table">
+      <thead>
+        <tr>
+          <th>Grade</th>
+          <th>Heavy Armor</th>
+          <th>Light Armor</th>
+          <th>Robes</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+      <tr>
+        <td><strong>S Grade</strong></td>
+        <td>P.Def. +56 MP Regen +2.0</td>
+        <td>Evasion +2 M.Def. +32</td>
+        <td>P.Def. +36 Weight Gauge +30%</td>
+      </tr>
+      <tr>
+        <td><strong>A Grade</strong></td>
+        <td>P.Def. +50 MP Regen +2.0</td>
+        <td>Evasion +2 M.Def. +28</td>
+        <td>P.Def. +32 Weight Gauge +30%</td>
+      </tr>
+      <tr>
+        <td><strong>B Grade</strong></td>
+        <td>P.Def. +44 MP Regen +2.0</td>
+        <td>Evasion +2 M.Def. +24</td>
+        <td>P.Def. +28 Weight Gauge +30%</td>
+      </tr>
+      <tr>
+        <td><strong>C Grade</strong></td>
+        <td>P.Def. +38 MP Regen +2.0</td>
+        <td>Evasion +2 M.Def. +20</td>
+        <td>P.Def. +24 Weight Gauge +30%</td>
+      </tr>
+      <tr>
+        <td><strong>D Grade</strong></td>
+        <td>P.Def. +25 MP Regen +2.0</td>
+        <td>Evasion +2 M.Def. +12</td>
+        <td>P.Def. +16 Weight Gauge +30%</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    let currentFilter = 'ALL';
+
+    function setFilter(grade, btn) {
+      currentFilter = grade;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      filterCards();
+    }
+
+    function filterCards() {
+      const q = document.getElementById('search').value.toLowerCase().trim();
+      const cards = document.querySelectorAll('.card');
+      let visibleCount = 0;
+
+      cards.forEach(card => {
+        const grade = card.getAttribute('data-grade');
+        const name = card.getAttribute('data-name');
+        const bonuses = card.getAttribute('data-bonuses');
+
+        const matchesGrade = currentFilter === 'ALL' || grade.includes(currentFilter);
+        const matchesQuery = !q || name.includes(q) || bonuses.includes(q);
+
+        if (matchesGrade && matchesQuery) {
+          card.style.display = 'flex';
+          visibleCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      document.getElementById('stat-sets').innerText = visibleCount;
+    }
+  </script>
+</body>
+</html>

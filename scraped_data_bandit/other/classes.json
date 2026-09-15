@@ -1,0 +1,1039 @@
+[
+  {
+    "id": "fighter",
+    "name": {
+      "en": "Human Fighter",
+      "ru": "Воин"
+    },
+    "race": "human",
+    "icon": "/fighter.webp",
+    "prev": null,
+    "next": [
+      {
+        "id": "warrior",
+        "name": {
+          "en": "Warrior",
+          "ru": "Воитель"
+        },
+        "race": "human",
+        "icon": "/warrior.webp",
+        "prev": "fighter",
+        "next": [
+          {
+            "id": "gladiator",
+            "name": {
+              "en": "Gladiator",
+              "ru": "Гладиатор"
+            },
+            "race": "human",
+            "icon": "/gladiator.webp",
+            "prev": "warrior",
+            "next": [
+              {
+                "id": "duelist",
+                "name": {
+                  "en": "Duelist",
+                  "ru": "Дуэлист"
+                },
+                "race": "human",
+                "icon": "/duelist.webp",
+                "prev": "gladiator",
+                "next": []
+              }
+            ]
+          },
+          {
+            "id": "warlord",
+            "name": {
+              "en": "Warlord",
+              "ru": "Копейщик"
+            },
+            "race": "human",
+            "icon": "/warlord.webp",
+            "prev": "warrior",
+            "next": [
+              {
+                "id": "dreadnought",
+                "name": {
+                  "en": "Dreadnought",
+                  "ru": "Полководец"
+                },
+                "race": "human",
+                "icon": "/dreadnought.webp",
+                "prev": "warlord",
+                "next": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "knight",
+        "name": {
+          "en": "Human Knight",
+          "ru": "Рыцарь"
+        },
+        "race": "human",
+        "icon": "/knight.webp",
+        "prev": "fighter",
+        "next": [
+          {
+            "id": "paladin",
+            "name": {
+              "en": "Paladin",
+              "ru": "Паладин"
+            },
+            "race": "human",
+            "icon": "/paladin.webp",
+            "prev": "knight",
+            "next": [
+              {
+                "id": "phoenix_knight",
+                "name": {
+                  "en": "Phoenix Knight",
+                  "ru": "Рыцарь Феникса"
+                },
+                "race": "human",
+                "icon": "/phoenix_knight.webp",
+                "prev": "paladin",
+                "next": []
+              }
+            ]
+          },
+          {
+            "id": "dark_avenger",
+            "name": {
+              "en": "Dark Avenger",
+              "ru": "Мститель"
+            },
+            "race": "human",
+            "icon": "/dark_avenger.webp",
+            "prev": "knight",
+            "next": [
+              {
+                "id": "hell_knight",
+                "name": {
+                  "en": "Hell Knight",
+                  "ru": "Рыцарь Ада"
+                },
+                "race": "human",
+                "icon": "/hell_knight.webp",
+                "prev": "dark_avenger",
+                "next": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "rogue",
+        "name": {
+          "en": "Rogue",
+          "ru": "Разбойник"
+        },
+        "race": "human",
+        "icon": "/rogue.webp",
+        "prev": "fighter",
+        "next": [
+          {
+            "id": "treasure_hunter",
+            "name": {
+              "en": "Treasure Hunter",
+              "ru": "Искатель Сокровищ"
+            },
+            "race": "human",
+            "icon": "/treasure_hunter.webp",
+            "prev": "rogue",
+            "next": [
+              {
+                "id": "adventurer",
+                "name": {
+                  "en": "Adventurer",
+                  "ru": "Авантюрист"
+                },
+                "race": "human",
+                "icon": "/adventurer.webp",
+                "prev": "treasure_hunter",
+                "next": []
+              }
+            ]
+          },
+          {
+            "id": "hawkeye",
+            "name": {
+              "en": "Hawkeye",
+              "ru": "Стрелок"
+            },
+            "race": "human",
+            "icon": "/hawkeye.webp",
+            "prev": "rogue",
+            "next": [
+              {
+                "id": "sagittarius",
+                "name": {
+                  "en": "Sagittarius",
+                  "ru": "Снайпер"
+                },
+                "race": "human",
+                "icon": "/sagittarius.webp",
+                "prev": "hawkeye",
+                "next": []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mage",
+    "name": {
+      "en": "Human Mystic",
+      "ru": "Мистик"
+    },
+    "race": "human",
+    "icon": "/mage.webp",
+    "prev": null,
+    "next": [
+      {
+        "id": "wizard",
+        "name": {
+          "en": "Wizard",
+          "ru": "Маг"
+        },
+        "race": "human",
+        "icon": "/wizard.webp",
+        "prev": "mage",
+        "next": [
+          {
+            "id": "sorcerer",
+            "name": {
+              "en": "Sorcerer",
+              "ru": "Властитель Огня"
+            },
+            "race": "human",
+            "icon": "/sorcerer.webp",
+            "prev": "wizard",
+            "next": [
+              {
+                "id": "archmage",
+                "name": {
+                  "en": "Archmage",
+                  "ru": "Архимаг"
+                },
+                "race": "human",
+                "icon": "/archmage.webp",
+                "prev": "sorcerer",
+                "next": []
+              }
+            ]
+          },
+          {
+            "id": "necromancer",
+            "name": {
+              "en": "Necromancer",
+              "ru": "Некромант"
+            },
+            "race": "human",
+            "icon": "/necromancer.webp",
+            "prev": "wizard",
+            "next": [
+              {
+                "id": "soultaker",
+                "name": {
+                  "en": "Soultaker",
+                  "ru": "Пожиратель Душ"
+                },
+                "race": "human",
+                "icon": "/soultaker.webp",
+                "prev": "necromancer",
+                "next": []
+              }
+            ]
+          },
+          {
+            "id": "warlock",
+            "name": {
+              "en": "Warlock",
+              "ru": "Колдун"
+            },
+            "race": "human",
+            "icon": "/warlock.webp",
+            "prev": "wizard",
+            "next": [
+              {
+                "id": "arcana_lord",
+                "name": {
+                  "en": "Arcana Lord",
+                  "ru": "Чернокнижник"
+                },
+                "race": "human",
+                "icon": "/arcana_lord.webp",
+                "prev": "warlock",
+                "next": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "cleric",
+        "name": {
+          "en": "Cleric",
+          "ru": "Клерик"
+        },
+        "race": "human",
+        "icon": "/cleric.webp",
+        "prev": "mage",
+        "next": [
+          {
+            "id": "bishop",
+            "name": {
+              "en": "Bishop",
+              "ru": "Епископ"
+            },
+            "race": "human",
+            "icon": "/bishop.webp",
+            "prev": "cleric",
+            "next": [
+              {
+                "id": "cardinal",
+                "name": {
+                  "en": "Cardinal",
+                  "ru": "Кардинал"
+                },
+                "race": "human",
+                "icon": "/cardinal.webp",
+                "prev": "bishop",
+                "next": []
+              }
+            ]
+          },
+          {
+            "id": "prophet",
+            "name": {
+              "en": "Prophet",
+              "ru": "Проповедник"
+            },
+            "race": "human",
+            "icon": "/prophet.webp",
+            "prev": "cleric",
+            "next": [
+              {
+                "id": "hierophant",
+                "name": {
+                  "en": "Hierophant",
+                  "ru": "Апостол"
+                },
+                "race": "human",
+                "icon": "/hierophant.webp",
+                "prev": "prophet",
+                "next": []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "elven_fighter",
+    "name": {
+      "en": "Elven Fighter",
+      "ru": "Светлый Воин"
+    },
+    "race": "elf",
+    "icon": "/elven_fighter.webp",
+    "prev": null,
+    "next": [
+      {
+        "id": "elven_knight",
+        "name": {
+          "en": "Elven Knight",
+          "ru": "Светлый Рыцарь"
+        },
+        "race": "elf",
+        "icon": "/elven_knight.webp",
+        "prev": "elven_fighter",
+        "next": [
+          {
+            "id": "temple_knight",
+            "name": {
+              "en": "Temple Knight",
+              "ru": "Рыцарь Евы"
+            },
+            "race": "elf",
+            "icon": "/temple_knight.webp",
+            "prev": "elven_knight",
+            "next": [
+              {
+                "id": "evas_templar",
+                "name": {
+                  "en": "Evas Templar",
+                  "ru": "Храмовник Евы"
+                },
+                "race": "elf",
+                "icon": "/evas_templar.webp",
+                "prev": "temple_knight",
+                "next": []
+              }
+            ]
+          },
+          {
+            "id": "swordsinger",
+            "name": {
+              "en": "Swordsinger",
+              "ru": "Менестрель"
+            },
+            "race": "elf",
+            "icon": "/swordsinger.webp",
+            "prev": "elven_knight",
+            "next": [
+              {
+                "id": "sword_muse",
+                "name": {
+                  "en": "Sword Muse",
+                  "ru": "Виртуоз"
+                },
+                "race": "elf",
+                "icon": "/sword_muse.webp",
+                "prev": "swordsinger",
+                "next": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "elven_scout",
+        "name": {
+          "en": "Elven Scout",
+          "ru": "Разведчик"
+        },
+        "race": "elf",
+        "icon": "/elven_scout.webp",
+        "prev": "elven_fighter",
+        "next": [
+          {
+            "id": "plain_walker",
+            "name": {
+              "en": "Plainswalker",
+              "ru": "Следопыт"
+            },
+            "race": "elf",
+            "icon": "/plain_walker.webp",
+            "prev": "elven_scout",
+            "next": [
+              {
+                "id": "wind_rider",
+                "name": {
+                  "en": "Wind Rider",
+                  "ru": "Странник Ветра"
+                },
+                "race": "elf",
+                "icon": "/wind_rider.webp",
+                "prev": "plain_walker",
+                "next": []
+              }
+            ]
+          },
+          {
+            "id": "silver_ranger",
+            "name": {
+              "en": "Silver Ranger",
+              "ru": "Серебряный Рейнджер"
+            },
+            "race": "elf",
+            "icon": "/silver_ranger.webp",
+            "prev": "elven_scout",
+            "next": [
+              {
+                "id": "moonlight_sentinel",
+                "name": {
+                  "en": "Moonlight Sentinel",
+                  "ru": "Страж Лунного Света"
+                },
+                "race": "elf",
+                "icon": "/moonlight_sentinel.webp",
+                "prev": "silver_ranger",
+                "next": []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "elven_mage",
+    "name": {
+      "en": "Elven Mystic",
+      "ru": "Светлый Мистик"
+    },
+    "race": "elf",
+    "icon": "/elven_mage.webp",
+    "prev": null,
+    "next": [
+      {
+        "id": "elven_wizard",
+        "name": {
+          "en": "Elven Wizard",
+          "ru": "Светлый Маг"
+        },
+        "race": "elf",
+        "icon": "/elven_wizard.webp",
+        "prev": "elven_mage",
+        "next": [
+          {
+            "id": "spellsinger",
+            "name": {
+              "en": "Spellsinger",
+              "ru": "Певец Заклинаний"
+            },
+            "race": "elf",
+            "icon": "/spellsinger.webp",
+            "prev": "elven_wizard",
+            "next": [
+              {
+                "id": "mystic_muse",
+                "name": {
+                  "en": "Mystic Muse",
+                  "ru": "Магистр Магии"
+                },
+                "race": "elf",
+                "icon": "/mystic_muse.webp",
+                "prev": "spellsinger",
+                "next": []
+              }
+            ]
+          },
+          {
+            "id": "elemental_summoner",
+            "name": {
+              "en": "Elemental Summoner",
+              "ru": "Последователь Стихий"
+            },
+            "race": "elf",
+            "icon": "/elemental_summoner.webp",
+            "prev": "elven_wizard",
+            "next": [
+              {
+                "id": "elemental_master",
+                "name": {
+                  "en": "Elemental Master",
+                  "ru": "Мастер Стихий"
+                },
+                "race": "elf",
+                "icon": "/elemental_master.webp",
+                "prev": "elemental_summoner",
+                "next": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "oracle",
+        "name": {
+          "en": "Elven Oracle",
+          "ru": "Оракул Евы"
+        },
+        "race": "elf",
+        "icon": "/oracle.webp",
+        "prev": "elven_mage",
+        "next": [
+          {
+            "id": "elder",
+            "name": {
+              "en": "Elven Elder",
+              "ru": "Мудрец Евы"
+            },
+            "race": "elf",
+            "icon": "/elder.webp",
+            "prev": "oracle",
+            "next": [
+              {
+                "id": "evas_saint",
+                "name": {
+                  "en": "Evas Saint",
+                  "ru": "Жрец Евы"
+                },
+                "race": "elf",
+                "icon": "/evas_saint.webp",
+                "prev": "elder",
+                "next": []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dark_fighter",
+    "name": {
+      "en": "Dark Fighter",
+      "ru": "Темный Воин"
+    },
+    "race": "dark_elf",
+    "icon": "/dark_fighter.webp",
+    "prev": null,
+    "next": [
+      {
+        "id": "palus_knight",
+        "name": {
+          "en": "Palus Knight",
+          "ru": "Темный Рыцарь"
+        },
+        "race": "dark_elf",
+        "icon": "/palus_knight.webp",
+        "prev": "dark_fighter",
+        "next": [
+          {
+            "id": "shillien_knight",
+            "name": {
+              "en": "Shillien Knight",
+              "ru": "Рыцарь Шилен"
+            },
+            "race": "dark_elf",
+            "icon": "/shillien_knight.webp",
+            "prev": "palus_knight",
+            "next": [
+              {
+                "id": "shillien_templar",
+                "name": {
+                  "en": "Shillien Templar",
+                  "ru": "Храмовник Шилен"
+                },
+                "race": "dark_elf",
+                "icon": "/shillien_templar.webp",
+                "prev": "shillien_knight",
+                "next": []
+              }
+            ]
+          },
+          {
+            "id": "bladedancer",
+            "name": {
+              "en": "Bladedancer",
+              "ru": "Танцор Смерти"
+            },
+            "race": "dark_elf",
+            "icon": "/bladedancer.webp",
+            "prev": "palus_knight",
+            "next": [
+              {
+                "id": "spectral_dancer",
+                "name": {
+                  "en": "Spectral Dancer",
+                  "ru": "Призрачный Танцор"
+                },
+                "race": "dark_elf",
+                "icon": "/spectral_dancer.webp",
+                "prev": "bladedancer",
+                "next": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "assasin",
+        "name": {
+          "en": "Assassin",
+          "ru": "Темный Убийца"
+        },
+        "race": "dark_elf",
+        "icon": "/assasin.webp",
+        "prev": "dark_fighter",
+        "next": [
+          {
+            "id": "abyss_walker",
+            "name": {
+              "en": "Abyss Walker",
+              "ru": "Странник Бездны"
+            },
+            "race": "dark_elf",
+            "icon": "/abyss_walker.webp",
+            "prev": "assasin",
+            "next": [
+              {
+                "id": "ghost_hunter",
+                "name": {
+                  "en": "Ghost Hunter",
+                  "ru": "Призрачный охотник"
+                },
+                "race": "dark_elf",
+                "icon": "/ghost_hunter.webp",
+                "prev": "abyss_walker",
+                "next": []
+              }
+            ]
+          },
+          {
+            "id": "phantom_ranger",
+            "name": {
+              "en": "Phantom Ranger",
+              "ru": "Призрачный Рейнджер"
+            },
+            "race": "dark_elf",
+            "icon": "/phantom_ranger.webp",
+            "prev": "assasin",
+            "next": [
+              {
+                "id": "ghost_sentinel",
+                "name": {
+                  "en": "Ghost Sentinel",
+                  "ru": "Страж Теней"
+                },
+                "race": "dark_elf",
+                "icon": "/ghost_sentinel.webp",
+                "prev": "phantom_ranger",
+                "next": []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dark_mage",
+    "name": {
+      "en": "Dark Mystic",
+      "ru": "Темный Мистик"
+    },
+    "race": "dark_elf",
+    "icon": "/dark_mage.webp",
+    "prev": null,
+    "next": [
+      {
+        "id": "dark_wizard",
+        "name": {
+          "en": "Dark Wizard",
+          "ru": "Темный Маг"
+        },
+        "race": "dark_elf",
+        "icon": "/dark_wizard.webp",
+        "prev": "dark_mage",
+        "next": [
+          {
+            "id": "spellhowler",
+            "name": {
+              "en": "Spellhowler",
+              "ru": "Заклинатель Ветра"
+            },
+            "race": "dark_elf",
+            "icon": "/spellhowler.webp",
+            "prev": "dark_wizard",
+            "next": [
+              {
+                "id": "storm_screamer",
+                "name": {
+                  "en": "Storm Screamer",
+                  "ru": "Повелитель Бури"
+                },
+                "race": "dark_elf",
+                "icon": "/storm_screamer.webp",
+                "prev": "spellhowler",
+                "next": []
+              }
+            ]
+          },
+          {
+            "id": "phantom_summoner",
+            "name": {
+              "en": "Phantom Summoner",
+              "ru": "Последователь Тьмы"
+            },
+            "race": "dark_elf",
+            "icon": "/phantom_summoner.webp",
+            "prev": "dark_wizard",
+            "next": [
+              {
+                "id": "spectral_master",
+                "name": {
+                  "en": "Spectral Master",
+                  "ru": "Владыка Теней"
+                },
+                "race": "dark_elf",
+                "icon": "/spectral_master.webp",
+                "prev": "phantom_summoner",
+                "next": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "shillien_oracle",
+        "name": {
+          "en": "Shillien Oracle",
+          "ru": "Оракул Шилен"
+        },
+        "race": "dark_elf",
+        "icon": "/shillien_oracle.webp",
+        "prev": "dark_mage",
+        "next": [
+          {
+            "id": "shillien_elder",
+            "name": {
+              "en": "Shillien Elder",
+              "ru": "Мудрец Шилен"
+            },
+            "race": "dark_elf",
+            "icon": "/shillien_elder.webp",
+            "prev": "shillien_oracle",
+            "next": [
+              {
+                "id": "shillien_saint",
+                "name": {
+                  "en": "Shillien Saint",
+                  "ru": "Жрец Шилен"
+                },
+                "race": "dark_elf",
+                "icon": "/shillien_saint.webp",
+                "prev": "shillien_elder",
+                "next": []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "orc_fighter",
+    "name": {
+      "en": "Orc Fighter",
+      "ru": "Боец"
+    },
+    "race": "orc",
+    "icon": "/orc_fighter.webp",
+    "prev": null,
+    "next": [
+      {
+        "id": "orc_raider",
+        "name": {
+          "en": "Orc Raider",
+          "ru": "Налетчик"
+        },
+        "race": "orc",
+        "icon": "/orc_raider.webp",
+        "prev": "orc_fighter",
+        "next": [
+          {
+            "id": "destroyer",
+            "name": {
+              "en": "Destroyer",
+              "ru": "Разрушитель"
+            },
+            "race": "orc",
+            "icon": "/destroyer.webp",
+            "prev": "orc_raider",
+            "next": [
+              {
+                "id": "titan",
+                "name": {
+                  "en": "Titan",
+                  "ru": "Титан"
+                },
+                "race": "orc",
+                "icon": "/titan.webp",
+                "prev": "destroyer",
+                "next": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "orc_monk",
+        "name": {
+          "en": "Orc Monk",
+          "ru": "Монах"
+        },
+        "race": "orc",
+        "icon": "/orc_monk.webp",
+        "prev": "orc_fighter",
+        "next": [
+          {
+            "id": "tyrant",
+            "name": {
+              "en": "Tyrant",
+              "ru": "Отшельник"
+            },
+            "race": "orc",
+            "icon": "/tyrant.webp",
+            "prev": "orc_monk",
+            "next": [
+              {
+                "id": "grand_khavatari",
+                "name": {
+                  "en": "Grand Khavatari",
+                  "ru": "Аватар"
+                },
+                "race": "orc",
+                "icon": "/grand_khavatari.webp",
+                "prev": "tyrant",
+                "next": []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "orc_mage",
+    "name": {
+      "en": "Orc Mage",
+      "ru": "Адепт"
+    },
+    "race": "orc",
+    "icon": "/orc_mage.webp",
+    "prev": null,
+    "next": [
+      {
+        "id": "orc_shaman",
+        "name": {
+          "en": "Orc Shaman",
+          "ru": "Шаман"
+        },
+        "race": "orc",
+        "icon": "/orc_shaman.webp",
+        "prev": "orc_mage",
+        "next": [
+          {
+            "id": "overlord",
+            "name": {
+              "en": "Overlord",
+              "ru": "Верховный Шаман"
+            },
+            "race": "orc",
+            "icon": "/overlord.webp",
+            "prev": "orc_shaman",
+            "next": [
+              {
+                "id": "dominator",
+                "name": {
+                  "en": "Dominator",
+                  "ru": "Деспот"
+                },
+                "race": "orc",
+                "icon": "/dominator.webp",
+                "prev": "overlord",
+                "next": []
+              }
+            ]
+          },
+          {
+            "id": "warcryer",
+            "name": {
+              "en": "Warcryer",
+              "ru": "Вестник Войны"
+            },
+            "race": "orc",
+            "icon": "/warcryer.webp",
+            "prev": "orc_shaman",
+            "next": [
+              {
+                "id": "doomcryer",
+                "name": {
+                  "en": "Doomcryer",
+                  "ru": "Глас Судьбы"
+                },
+                "race": "orc",
+                "icon": "/doomcryer.webp",
+                "prev": "warcryer",
+                "next": []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dwarven_fighter",
+    "name": {
+      "en": "Dwarven Fighter",
+      "ru": "Подмастерье"
+    },
+    "race": "dwarf",
+    "icon": "/dwarven_fighter.webp",
+    "prev": null,
+    "next": [
+      {
+        "id": "scavenger",
+        "name": {
+          "en": "Scavenger",
+          "ru": "Собиратель"
+        },
+        "race": "dwarf",
+        "icon": "/scavenger.webp",
+        "prev": "dwarven_fighter",
+        "next": [
+          {
+            "id": "bounty_hunter",
+            "name": {
+              "en": "Bounty Hunter",
+              "ru": "Охотник за Наградой"
+            },
+            "race": "dwarf",
+            "icon": "/bounty_hunter.webp",
+            "prev": "scavenger",
+            "next": [
+              {
+                "id": "fortune_seeker",
+                "name": {
+                  "en": "Fortune Seeker",
+                  "ru": "Кладоискатель"
+                },
+                "race": "dwarf",
+                "icon": "/fortune_seeker.webp",
+                "prev": "bounty_hunter",
+                "next": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "artisan",
+        "name": {
+          "en": "Artisan",
+          "ru": "Ремесленник"
+        },
+        "race": "dwarf",
+        "icon": "/artisan.webp",
+        "prev": "dwarven_fighter",
+        "next": [
+          {
+            "id": "warsmith",
+            "name": {
+              "en": "Warsmith",
+              "ru": "Кузнец"
+            },
+            "race": "dwarf",
+            "icon": "/warsmith.webp",
+            "prev": "artisan",
+            "next": [
+              {
+                "id": "maestro",
+                "name": {
+                  "en": "Maestro",
+                  "ru": "Мастер"
+                },
+                "race": "dwarf",
+                "icon": "/maestro.webp",
+                "prev": "warsmith",
+                "next": []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

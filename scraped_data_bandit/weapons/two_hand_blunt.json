@@ -1,0 +1,277 @@
+[
+  {
+    "key": 7896,
+    "data": {
+      "unitName": "giants_hammer",
+      "icon": "/weapon_giants_hammer_i00.webp",
+      "name": {
+        "en": "Titan Hammer",
+        "ru": "Молот Титанов"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 96,
+      "mAtk": 47
+    },
+    "category": "weapons",
+    "subtype": "two_hand_blunt",
+    "type": "two_hand_blunt",
+    "pAtk": 96,
+    "mAtk": 47
+  },
+  {
+    "key": 7898,
+    "data": {
+      "unitName": "horn_of_karik",
+      "icon": "/weapon_horn_of_karik_i00.webp",
+      "name": {
+        "en": "Karik Horn",
+        "ru": "Рог Карика"
+      },
+      "description": {
+        "en": "Bestows either Focus, Haste, or Critical Drain.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Фокусировка, Ускорение или Крит. Поглощение HP."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 169,
+      "mAtk": 76
+    },
+    "category": "weapons",
+    "subtype": "two_hand_blunt",
+    "type": "two_hand_blunt",
+    "pAtk": 169,
+    "mAtk": 76
+  },
+  {
+    "key": 7897,
+    "data": {
+      "unitName": "dwarven_hammer",
+      "icon": "/weapon_dwarven_hammer_i00.webp",
+      "name": {
+        "en": "Dwarven Hammer",
+        "ru": "Молот Гномов"
+      },
+      "description": {
+        "en": "Bestows either Health, Anger, or Critical Bleed.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Здоровье, Ярость или Крит. Кровопускание."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 190,
+      "mAtk": 83
+    },
+    "category": "weapons",
+    "subtype": "two_hand_blunt",
+    "type": "two_hand_blunt",
+    "pAtk": 190,
+    "mAtk": 83
+  },
+  {
+    "key": 7900,
+    "data": {
+      "unitName": "ice_storm_hammer",
+      "icon": "/weapon_ice_storm_hammer_i00.webp",
+      "name": {
+        "en": "Ice Storm Hammer",
+        "ru": "Молот Ледяной Бури"
+      },
+      "description": {
+        "en": "Bestows either Focus, Anger, or Critical Bleed.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Фокусировка, Ярость или Крит. Кровопускание."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 213,
+      "mAtk": 91
+    },
+    "category": "weapons",
+    "subtype": "two_hand_blunt",
+    "type": "two_hand_blunt",
+    "pAtk": 213,
+    "mAtk": 91
+  },
+  {
+    "key": 7901,
+    "data": {
+      "unitName": "star_buster",
+      "icon": "/weapon_star_buster_i00.webp",
+      "name": {
+        "en": "Star Buster",
+        "ru": "Звезда Боли"
+      },
+      "description": {
+        "en": "Bestows either Health, Haste, or Rsk. Focus.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Здоровье, Ускорение или Риск. Фокусировка."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 236,
+      "mAtk": 99
+    },
+    "category": "weapons",
+    "subtype": "two_hand_blunt",
+    "type": "two_hand_blunt",
+    "pAtk": 236,
+    "mAtk": 99
+  },
+  {
+    "key": 7899,
+    "data": {
+      "unitName": "hammer_of_destroyer",
+      "icon": "/weapon_hammer_of_destroyer_i00.webp",
+      "name": {
+        "en": "Destroyer Hammer",
+        "ru": "Молот Разрушителя"
+      },
+      "description": {
+        "en": "Bestows either Health, Haste, or Critical Drain.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Здоровье, Ускорение или Крит. Поглощение HP."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pAtk": 259,
+      "mAtk": 107
+    },
+    "category": "weapons",
+    "subtype": "two_hand_blunt",
+    "type": "two_hand_blunt",
+    "pAtk": 259,
+    "mAtk": 107
+  },
+  {
+    "key": 7902,
+    "data": {
+      "unitName": "doom_crusher",
+      "icon": "/weapon_doom_crusher_i00.webp",
+      "name": {
+        "en": "Doom Crusher",
+        "ru": "Крушитель Рока"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Health, Anger or Rsk. Haste.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Здоровье, Ярость или Риск. Ускорение."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pAtk": 282,
+      "mAtk": 114
+    },
+    "category": "weapons",
+    "subtype": "two_hand_blunt",
+    "type": "two_hand_blunt",
+    "pAtk": 282,
+    "mAtk": 114
+  },
+  {
+    "key": 8681,
+    "data": {
+      "unitName": "tuning_fork_of_behemoth",
+      "icon": "/weapon_tuning_fork_of_behemoth_i00.webp",
+      "name": {
+        "en": "Behemoth's Tuning Fork",
+        "ru": "Трезубец Чудовища"
+      },
+      "description": {
+        "en": "Bestows Focus, Health, or Anger.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Фокусировка, Здоровье или Ярость."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pAtk": 305,
+      "mAtk": 121
+    },
+    "category": "weapons",
+    "subtype": "two_hand_blunt",
+    "type": "two_hand_blunt",
+    "pAtk": 305,
+    "mAtk": 121
+  },
+  {
+    "key": 6369,
+    "data": {
+      "unitName": "dragon_hunter_axe",
+      "icon": "/weapon_dragon_hunter_axe_i00.webp",
+      "name": {
+        "en": "Dragon Hunter Axe",
+        "ru": "Топор Охотника на Драконов"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: HP Regeneration, Health or HP Drain.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Регенерация НР, Здоровье или Поглощение HP."
+      }
+    },
+    "grade": "S",
+    "stats": {
+      "pAtk": 342,
+      "mAtk": 132
+    },
+    "category": "weapons",
+    "subtype": "two_hand_blunt",
+    "type": "two_hand_blunt",
+    "pAtk": 342,
+    "mAtk": 132
+  },
+  {
+    "key": 10253,
+    "data": {
+      "unitName": "dynasty_crusher",
+      "icon": "/weapon_dynasty_crusher_i00.webp",
+      "name": {
+        "en": "Dynasty Crusher",
+        "ru": "Крушитель Династии"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Anger, Health or Rsk. Focus.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Ярость, Здоровье или Риск. Фокусировка."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pAtk": 405,
+      "mAtk": 151
+    },
+    "category": "weapons",
+    "subtype": "two_hand_blunt",
+    "type": "two_hand_blunt",
+    "pAtk": 405,
+    "mAtk": 151
+  },
+  {
+    "key": 13464,
+    "data": {
+      "unitName": "vesper_retributer",
+      "icon": "/weapon_vesper_retributer_i00.webp",
+      "name": {
+        "en": "Vesper Retributer",
+        "ru": "Возмездие Венеры"
+      },
+      "description": {
+        "en": "It can bestow one of the following functions: HP Regeneration, HP Drain, or Health.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Регенерация НР, Поглощение НР, Здоровье."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pAtk": 482,
+      "mAtk": 176
+    },
+    "category": "weapons",
+    "subtype": "two_hand_blunt",
+    "type": "two_hand_blunt",
+    "pAtk": 482,
+    "mAtk": 176
+  }
+]

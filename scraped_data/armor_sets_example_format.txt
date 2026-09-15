@@ -1,0 +1,869 @@
+================================================================================
+S GRADE
+================================================================================
+S Grade
+Parts
+Sealed Pdef
+Unsealed Pdef
+Unseal Fee
+Modification
+Imperial Crusader
+Heavy Armor Set
+[Imperial Crusader Breastplate](https://lineage.pmfun.com/item/6373/imperial-crusader-breastplate.html)
+193
+205
+1,072,500 AA
+P Def. +8%
+Maximum HP +445
+Sleep/Hold Probability -70%
+[DEX -2](https://lineage.pmfun.com/list/set#DEX)
+[STR +2](https://lineage.pmfun.com/list/set#STR)
+Probability of Poison/Bleed -80% with Imperial Crusader Shield equipped.
+[Imperial Crusader Gaiters](https://lineage.pmfun.com/item/6374/imperial-crusader-gaiters.html)
+121
+128
+672,000 AA
+[Imperial Crusader Helmet](https://lineage.pmfun.com/item/6378/imperial-crusader-helmet.html)
+83
+-
+402,750 AA
+[Imperial Crusader Gauntlets](https://lineage.pmfun.com/item/6375/imperial-crusader-gauntlets.html)
+55
+-
+268,500 AA
+[Imperial Crusader Boots](https://lineage.pmfun.com/item/6376/imperial-crusader-boots.html)
+55
+-
+268,500 AA
+[Imperial Crusader Shield](https://lineage.pmfun.com/item/6377/imperial-crusader-shield.html)
+276
+290
+282,000 AA
+
+S Grade
+Parts
+Sealed Pdef
+Unsealed Pdef
+Unseal Fee
+Modification
+Draconic Leather
+Light Armor Set
+[Draconic Leather Armor](https://lineage.pmfun.com/item/6379/draconic-leather-armor.html)
+236
+249
+1,305,000 AA
+Attack Speed/P. Atk +4%
+Maximum MP +289
+Weight Limit +5759
+[DEX +1](https://lineage.pmfun.com/list/set#DEX)
+[STR +1](https://lineage.pmfun.com/list/set#STR)
+[CON -2](https://lineage.pmfun.com/list/set#CON)
+[Draconic Leather Helmet](https://lineage.pmfun.com/item/6382/draconic-leather-helmet.html)
+93
+-
+402,750 AA
+[Draconic Leather Gloves](https://lineage.pmfun.com/item/6380/draconic-leather-gloves.html)
+55
+-
+268,500 AA
+[Draconic Leather Boots](https://lineage.pmfun.com/item/6381/draconic-leather-boots.html)
+55
+-
+268,500 AA
+
+S Grade
+Parts
+Sealed Pdef
+Unsealed Pdef
+Unseal Fee
+Modification
+Major Arcana
+Robe Set
+[Major Arcana Robe](https://lineage.pmfun.com/item/6383/major-arcana-robe.html)
+157
+166 + 866 MP
+1,305,000 AA
+M. Atk +17%
+Movement Speed +7
+Casting Cancel Probability -50%
+Weight Limit +5759
+[WIT +1](https://lineage.pmfun.com/list/set#WIT)
+[INT +1](https://lineage.pmfun.com/list/set#INT)
+[MEN -2](https://lineage.pmfun.com/list/set#MEN)
+Stun resistance +50%
+[Major Arcana Circlet](https://lineage.pmfun.com/item/6386/major-arcana-circlet.html)
+83
+-
+402,750 AA
+[Major Arcana Gloves](https://lineage.pmfun.com/item/6384/major-arcana-gloves.html)
+55
+-
+268,500 AA
+[Major Arcana Boots](https://lineage.pmfun.com/item/6385/major-arcana-boots.html)
+55
+-
+268,500 AA
+
+S Grade
+Parts
+Sealed Pdef
+Unsealed Pdef
+Unseal Fee
+Modification
+Tateossian
+Jewelry Set
+[Tateossian Necklace](https://lineage.pmfun.com/item/920/tateossian-necklace.html)
+91
+95 + 42 MP
+1,494,460 AA
+More Mdef
+More MP when unsealed
+[Tateossian Earring](https://lineage.pmfun.com/item/858/tateossian-earring.html)
+68
+71 + 31 MP
+1,120,845 AA
+[Tateossian Ring](https://lineage.pmfun.com/item/889/tateossian-ring.html)
+46
+48 + 21 MP
+747,230 AA
+
+
+================================================================================
+A GRADE
+================================================================================
+A Grade
+Parts
+Unsealed parts
+Modification
+Majestic Heavy Set
+Heavy Armor Set
+[Majestic Plate Armor](https://lineage.pmfun.com/item/2383/majestic-plate-armor.html)
+[Sealed Majestic Plate Armor](https://lineage.pmfun.com/item/5316/sealed-majestic-plate-armor.html)
+P. Atk. +4%
+Accuracy +3
+Stun Resistance +50%
+[STR +2](https://lineage.pmfun.com/list/set#STR)
+[Con -2](https://lineage.pmfun.com/list/set#CON)
+[Majestic Gauntlets - Heavy Armor](https://lineage.pmfun.com/item/5774/majestic-gauntlets--heavy-armor.html)
+[Sealed Majestic Gauntlets](https://lineage.pmfun.com/item/5318/sealed-majestic-gauntlets.html)
+[Majestic Boots - Heavy Armor](https://lineage.pmfun.com/item/5786/majestic-boots--heavy-armor.html)
+[Sealed Majestic Boots](https://lineage.pmfun.com/item/5319/sealed-majestic-boots.html)
+[Majestic Circlet](https://lineage.pmfun.com/item/2419/majestic-circlet.html)
+[Sealed Majestic Circlet](https://lineage.pmfun.com/item/5317/sealed-majestic-circlet.html)
+
+A Grade
+Parts
+Unsealed parts
+Modification
+Nightmare Heavy Set
+Heavy Armor Set
+[Armor Of Nightmare](https://lineage.pmfun.com/item/374/armor-of-nightmare.html)
+[Sealed Armor Of Nightmare](https://lineage.pmfun.com/item/5311/sealed-armor-of-nightmare.html)
+P. Atk. +4%
+Sleep and Hold Resistance +70%
+[CON +2](https://lineage.pmfun.com/list/set#CON)
+[DEX -2](https://lineage.pmfun.com/list/set#DEX)
+With a shield of nightmare, 5% of the damage inflicted by the enemy will be reflected back upon him.
+[Gauntlets Of Nightmare - Heavy Armor](https://lineage.pmfun.com/item/5771/gauntlets-of-nightmare--heavy-armor.html)
+[Sealed Gauntlets Of Nightmare](https://lineage.pmfun.com/item/5313/sealed-gauntlets-of-nightmare.html)
+[Boots Of Nightmare - Heavy Armor](https://lineage.pmfun.com/item/5783/boots-of-nightmare--heavy-armor.html)
+[Sealed Boots Of Nightmare](https://lineage.pmfun.com/item/5314/sealed-boots-of-nightmare.html)
+[Helm Of Nightmare](https://lineage.pmfun.com/item/2418/helm-of-nightmare.html)
+[Sealed Helm Of Nightmare](https://lineage.pmfun.com/item/5312/sealed-helm-of-nightmare.html)
+[Shield Of Nightmare](https://lineage.pmfun.com/item/2498/shield-of-nightmare.html)
+[Sealed Shield Of Nightmare](https://lineage.pmfun.com/item/5315/sealed-shield-of-nightmare.html)
+
+A Grade
+Parts
+Unsealed parts
+Modification
+Tallum Heavy Set
+Heavy Armor Set
+[Tallum Plate Armor](https://lineage.pmfun.com/item/2382/tallum-plate-armor.html)
+[Sealed Tallum Plate Armor](https://lineage.pmfun.com/item/5293/sealed-tallum-plate-armor.html)
+Atk. Spd. +8%
+Weight increased plus the point at which a weight penalty is applied +5759
+Poison and Bleed Resistance +80%
+[STR +2](https://lineage.pmfun.com/list/set#STR)
+[CON -2](https://lineage.pmfun.com/list/set#CON)
+[Tallum Gloves - Heavy Armor](https://lineage.pmfun.com/item/5768/tallum-gloves--heavy-armor.html)
+[Sealed Tallum Gloves](https://lineage.pmfun.com/item/5295/sealed-tallum-gloves.html)
+[Tallum Boots - Heavy Armor](https://lineage.pmfun.com/item/5780/tallum-boots--heavy-armor.html)
+[Sealed Tallum Boots](https://lineage.pmfun.com/item/5296/sealed-tallum-boots.html)
+[Tallum Helm](https://lineage.pmfun.com/item/547/tallum-helm.html)
+[Sealed Tallum Helmet](https://lineage.pmfun.com/item/5294/sealed-tallum-helmet.html)
+
+A Grade
+Parts
+Unsealed parts
+Modification
+Dark Crystal Heavy Set
+Heavy Armor Set
+[Dark Crystal Breastplate](https://lineage.pmfun.com/item/365/dark-crystal-breastplate.html)
+[Sealed Dark Crystal Breastplate](https://lineage.pmfun.com/item/5287/sealed-dark-crystal-breastplate.html)
+Heal +4%
+Paralysis Resistance +50%
+[STR -2](https://lineage.pmfun.com/list/set#STR)
+[CON +2](https://lineage.pmfun.com/list/set#CON)
+With a Dark Crystal Shield, shield defense rate +18%
+[Dark Crystal Gaiters](https://lineage.pmfun.com/item/388/dark-crystal-gaiters.html)
+[Sealed Dark Crystal Gaiters](https://lineage.pmfun.com/item/5288/sealed-dark-crystal-gaiters.html)
+[Dark Crystal Gloves - Heavy Armor](https://lineage.pmfun.com/item/5765/dark-crystal-gloves--heavy-armor.html)
+[Sealed Dark Crystal Gloves](https://lineage.pmfun.com/item/5290/sealed-dark-crystal-gloves.html)
+[Dark Crystal Boots - Heavy Armor](https://lineage.pmfun.com/item/5777/dark-crystal-boots--heavy-armor.html)
+[Sealed Dark Crystal Boots](https://lineage.pmfun.com/item/5291/sealed-dark-crystal-boots.html)
+[Dark Crystal Helmet](https://lineage.pmfun.com/item/512/dark-crystal-helmet.html)
+[Sealed Dark Crystal Helmet](https://lineage.pmfun.com/item/5289/sealed-dark-crystal-helmet.html)
+[Dark Crystal Shield](https://lineage.pmfun.com/item/641/dark-crystal-shield.html)
+[Sealed Dark Crystal Shield](https://lineage.pmfun.com/item/5292/sealed-dark-crystal-shield.html)
+
+A Grade
+Parts
+Unsealed parts
+Modification
+Majestic Light Set
+Light Armor Set
+[Majestic Leather Armor](https://lineage.pmfun.com/item/2395/majestic-leather-armor.html)
+[Sealed Majestic Leather Armor](https://lineage.pmfun.com/item/5323/sealed-majestic-leather-armor.html)
+Archery P. Atk. +8%
+MP +240
+Weight increased plus the point at which a weight penalty is applied +5759
+Stun Resistance +50%
+[DEX +1](https://lineage.pmfun.com/list/set#DEX)
+[CON -1](https://lineage.pmfun.com/list/set#CON)
+[Majestic Gauntlets - Light Armor](https://lineage.pmfun.com/item/5775/majestic-gauntlets--light-armor.html)
+[Sealed Majestic Gauntlets](https://lineage.pmfun.com/item/5318/sealed-majestic-gauntlets.html)
+[Majestic Boots - Light Armor](https://lineage.pmfun.com/item/5787/majestic-boots--light-armor.html)
+[Sealed Majestic Boots](https://lineage.pmfun.com/item/5319/sealed-majestic-boots.html)
+[Majestic Circlet](https://lineage.pmfun.com/item/2419/majestic-circlet.html)
+[Sealed Majestic Circlet](https://lineage.pmfun.com/item/5317/sealed-majestic-circlet.html)
+
+A Grade
+Parts
+Unsealed parts
+Modification
+Nightmare Light Set
+Light Armor Set
+[Nightmarish Leather Armor](https://lineage.pmfun.com/item/2394/nightmarish-leather-armor.html)
+[Sealed Leather Armor Of Nightmare](https://lineage.pmfun.com/item/5320/sealed-leather-armor-of-nightmare.html)
+M. Def. +4%
+Sleep and Hold Resistance +70%
+Restores 3% of melee damage inflicted on the enemy to oneself
+[DEX +1](https://lineage.pmfun.com/list/set#DEX)
+[CON -1](https://lineage.pmfun.com/list/set#CON)
+[Gloves of Nightmare - Light Armor](https://lineage.pmfun.com/item/5772/gauntlets-of-nightmare--light-armor.html)
+[Sealed Gloves of Nightmare](https://lineage.pmfun.com/item/5313/sealed-gauntlets-of-nightmare.html)
+[Boots Of Nightmare - Light Armor](https://lineage.pmfun.com/item/5784/boots-of-nightmare--light-armor.html)
+[Sealed Boots Of Nightmare](https://lineage.pmfun.com/item/5314/sealed-boots-of-nightmare.html)
+[Helm Of Nightmare](https://lineage.pmfun.com/item/2418/helm-of-nightmare.html)
+[Sealed Helm Of Nightmare](https://lineage.pmfun.com/item/5312/sealed-helm-of-nightmare.html)
+
+A Grade
+Parts
+Unsealed parts
+Modification
+Tallum Light Set
+Light Armor Set
+[Tallum Leather Armor](https://lineage.pmfun.com/item/2393/tallum-leather-armor.html)
+[Sealed Tallum Leather Armor](https://lineage.pmfun.com/item/5301/sealed-tallum-leather-armor.html)
+MP Regeneration +8%
+MP +222
+Poison and Bleed Resistance +80%
+[MEN +2](https://lineage.pmfun.com/list/set#MEN)
+[WIT -2](https://lineage.pmfun.com/list/set#WIT)
+[Tallum Gloves - Light Armor](https://lineage.pmfun.com/item/5769/tallum-gloves--light-armor.html)
+[Sealed Tallum Gloves](https://lineage.pmfun.com/item/5295/sealed-tallum-gloves.html)
+[Tallum Boots - Light Armor](https://lineage.pmfun.com/item/5781/tallum-boots--light-armor.html)
+[Sealed Tallum Boots](https://lineage.pmfun.com/item/5296/sealed-tallum-boots.html)
+[Tallum Helm](https://lineage.pmfun.com/item/547/tallum-helm.html)
+[Sealed Tallum Helmet](https://lineage.pmfun.com/item/5294/sealed-tallum-helmet.html)
+
+A Grade
+Parts
+Unsealed parts
+Modification
+Dark Crystal Light Set
+Light Armor Set
+[Dark Crystal Leather Armor](https://lineage.pmfun.com/item/2385/dark-crystal-leather-armor.html)
+[Sealed Dark Crystal Leather Armor](https://lineage.pmfun.com/item/5297/sealed-dark-crystal-leather-armor.html)
+Atk. Spd. +4%
+P. Atk. +4%
+Paralysis Resistance +50%
+[STR +1](https://lineage.pmfun.com/list/set#STR)
+[CON -1](https://lineage.pmfun.com/list/set#CON)
+[Dark Crystal Leggings](https://lineage.pmfun.com/item/2389/dark-crystal-leggings.html)
+[Sealed Dark Crystal Leggings](https://lineage.pmfun.com/item/5298/sealed-dark-crystal-leggings.html)
+[Dark Crystal Gloves - Light Armor](https://lineage.pmfun.com/item/5766/dark-crystal-gloves--light-armor.html)
+[Sealed Dark Crystal Gloves](https://lineage.pmfun.com/item/5290/sealed-dark-crystal-gloves.html)
+[Dark Crystal Boots - Light Armor](https://lineage.pmfun.com/item/5778/dark-crystal-boots--light-armor.html)
+[Sealed Dark Crystal Boots](https://lineage.pmfun.com/item/5291/sealed-dark-crystal-boots.html)
+[Dark Crystal Helmet](https://lineage.pmfun.com/item/512/dark-crystal-helmet.html)
+[Sealed Dark Crystal Helmet](https://lineage.pmfun.com/item/5289/sealed-dark-crystal-helmet.html)
+
+A Grade
+Parts
+Unsealed parts
+Modification
+Majestic Robe Set
+[Majestic Robe](https://lineage.pmfun.com/item/2409/majestic-robe.html)
+[Sealed Majestic Robe](https://lineage.pmfun.com/item/5329/sealed-majestic-robe.html)
+MP +240
+Casting Spd. +15%
+MP Regeneration +8%
+Stun Resistance +50%
+[MEN +1](https://lineage.pmfun.com/list/set#MEN)
+[INT -1](https://lineage.pmfun.com/list/set#INT)
+[Majestic Gloves - Robe](https://lineage.pmfun.com/item/5776/majestic-gauntlets--robe.html)
+[Sealed Majestic Gloves](https://lineage.pmfun.com/item/5318/sealed-majestic-gauntlets.html)
+[Majestic Boots - Robe](https://lineage.pmfun.com/item/5788/majestic-boots--robe.html)
+[Sealed Majestic Boots](https://lineage.pmfun.com/item/5319/sealed-majestic-boots.html)
+[Majestic Circlet](https://lineage.pmfun.com/item/2419/majestic-circlet.html)
+[Sealed Majestic Circlet](https://lineage.pmfun.com/item/5317/sealed-majestic-circlet.html)
+
+A Grade
+Parts
+Unsealed parts
+Modification
+Nightmare Robe Set
+[Nightmare Robe](https://lineage.pmfun.com/item/2408/nightmare-robe.html)
+[Sealed Nightmare Robe](https://lineage.pmfun.com/item/5326/sealed-nightmare-robe.html)
+MP Regeneration +4%
+M. Atk. +8%
+Sleep and Hold Resistance +70%
+[INT +2](https://lineage.pmfun.com/list/set#INT)
+[WIT -2](https://lineage.pmfun.com/list/set#WIT)
+[Gloves Of Nightmare - Robe](https://lineage.pmfun.com/item/5773/gauntlets-of-nightmare--robe.html)
+[Sealed Gloves Of Nightmare](https://lineage.pmfun.com/item/5313/sealed-gauntlets-of-nightmare.html)
+[Boots Of Nightmare - Robe](https://lineage.pmfun.com/item/5785/boots-of-nightmare--robe.html)
+[Sealed Boots Of Nightmare](https://lineage.pmfun.com/item/5314/sealed-boots-of-nightmare.html)
+[Helm Of Nightmare](https://lineage.pmfun.com/item/2418/helm-of-nightmare.html)
+[Sealed Helm Of Nightmare](https://lineage.pmfun.com/item/5312/sealed-helm-of-nightmare.html)
+
+A Grade
+Parts
+Unsealed parts
+Modification
+Tallum Robe Set
+[Tallum Tunic](https://lineage.pmfun.com/item/2400/tallum-tunic.html)
+[Sealed Tallum Tunic](https://lineage.pmfun.com/item/5304/sealed-tallum-tunic.html)
+Casting Spd. +15%
+M. Def. +8%
+Poison and Bleed Resistance +80%
+[INT -2](https://lineage.pmfun.com/list/set#INT)
+[WIT +2](https://lineage.pmfun.com/list/set#WIT)
+[Tallum Stockings](https://lineage.pmfun.com/item/2405/tallum-stockings.html)
+[Sealed Tallum Stockings](https://lineage.pmfun.com/item/5305/sealed-tallum-stockings.html)
+[Tallum Gloves - Robe](https://lineage.pmfun.com/item/5770/tallum-gloves--robe.html)
+[Sealed Tallum Gloves](https://lineage.pmfun.com/item/5295/sealed-tallum-gloves.html)
+[Tallum Boots - Robe](https://lineage.pmfun.com/item/5782/tallum-boots--robe.html)
+[Sealed Tallum Boots](https://lineage.pmfun.com/item/5296/sealed-tallum-boots.html)
+[Tallum Helm](https://lineage.pmfun.com/item/547/tallum-helm.html)
+[Sealed Tallum Helmet](https://lineage.pmfun.com/item/5294/sealed-tallum-helmet.html)
+
+A Grade
+Parts
+Unsealed parts
+Modification
+Dark Crystal Robe Set
+[Dark Crystal Robe](https://lineage.pmfun.com/item/2407/dark-crystal-robe.html)
+[Sealed Dark Crystal Robe](https://lineage.pmfun.com/item/5308/sealed-dark-crystal-robe.html)
+P. Def. +8%
+Casting Spd. +15%
+Speed +7
+Small decrease in chance of spell interruption
+Paralysis Resistance +50%
+[WIT +2](https://lineage.pmfun.com/list/set#WIT)
+[MEN -2](https://lineage.pmfun.com/list/set#MEN)
+[Dark Crystal Gloves - Robe](https://lineage.pmfun.com/item/5767/dark-crystal-gloves--robe.html)
+[Sealed Dark Crystal Gloves](https://lineage.pmfun.com/item/5290/sealed-dark-crystal-gloves.html)
+[Dark Crystal Boots - Robe](https://lineage.pmfun.com/item/5779/dark-crystal-boots--robe.html)
+[Sealed Dark Crystal Boots](https://lineage.pmfun.com/item/5291/sealed-dark-crystal-boots.html)
+[Dark Crystal Helmet](https://lineage.pmfun.com/item/512/dark-crystal-helmet.html)
+[Sealed Dark Crystal Helmet](https://lineage.pmfun.com/item/5289/sealed-dark-crystal-helmet.html)
+
+
+================================================================================
+B GRADE
+================================================================================
+B Grade
+Parts
+Type
+Modification
+Heavy Zubei Set
+Heavy armor
+[Zubei's Breastplate](https://lineage.pmfun.com/item/357/zubeis-breastplate.html)
++ 5.24 % Pdef
++ 294 HP
+[Zubei's Gaiters](https://lineage.pmfun.com/item/383/zubeis-gaiters.html)
+[Zubei's Gauntlets](https://lineage.pmfun.com/item/612/zubeis-gauntlets.html)
+[Zubei's Boots](https://lineage.pmfun.com/item/554/zubeis-boots.html)
+[Zubei's Helmet](https://lineage.pmfun.com/item/503/zubeis-helmet.html)
+
+B Grade
+Parts
+Type
+Modification
+Heavy Avadon Set
+Heavy armor
+[Avadon Breastplate](https://lineage.pmfun.com/item/2376/avadon-breastplate.html)
++294 HP
+with Shield +24% shield defense rate
+[Avadon Gaiters](https://lineage.pmfun.com/item/2379/avadon-gaiters.html)
+[Avadon Gloves](https://lineage.pmfun.com/item/2464/avadon-gloves.html)
+[Avadon Boots](https://lineage.pmfun.com/item/600/avadon-boots.html)
+[Avadon Circlet](https://lineage.pmfun.com/item/2415/avadon-circlet.html)
+[Avadon Shield](https://lineage.pmfun.com/item/673/avadon-shield.html)
+
+B Grade
+Parts
+Type
+Modification
+Heavy Blue Wolf Set
+Heavy armor
+[Blue Wolf Breastplate](https://lineage.pmfun.com/item/358/blue-wolf-breastplate.html)
+Speed +7
+HP Regeneration +5.24%
+[STR +3](https://lineage.pmfun.com/list/set#STR)
+[CON -1](https://lineage.pmfun.com/list/set#CON)
+[DEX -2](https://lineage.pmfun.com/list/set#DEX)
+[Blue Wolf Gaiters](https://lineage.pmfun.com/item/2380/blue-wolf-gaiters.html)
+[Blue Wolf Gloves](https://lineage.pmfun.com/item/2487/blue-wolf-gloves.html)
+[Blue Wolf Boots](https://lineage.pmfun.com/item/2439/blue-wolf-boots.html)
+[Blue Wolf Helmet](https://lineage.pmfun.com/item/2416/blue-wolf-helmet.html)
+
+B Grade
+Parts
+Type
+Modification
+Heavy Doom Set
+Heavy armor
+[Doom Plate Armor](https://lineage.pmfun.com/item/2381/doom-plate-armor.html)
+HP +320
+Breath Gauge increased
+[STR -3](https://lineage.pmfun.com/list/set#STR)
+[CON +3](https://lineage.pmfun.com/list/set#CON)
+With a Doom Shield, shield defense rate +24%
+[Doom Gloves](https://lineage.pmfun.com/item/2475/doom-gloves.html)
+[Boots Of Doom](https://lineage.pmfun.com/item/601/boots-of-doom.html)
+[Doom Helmet](https://lineage.pmfun.com/item/2417/doom-helmet.html)
+[Doom Shield](https://lineage.pmfun.com/item/110/doom-shield.html)
+
+B Grade
+Parts
+Type
+Modification
+Light Zubei Set
+Light Armor
+[Zubei's Leather Shirt](https://lineage.pmfun.com/item/2384/zubeis-leather-shirt.html)
++4 Evasion
+[Zubei's Leather Gaiters](https://lineage.pmfun.com/item/2388/zubeis-leather-gaiters.html)
+[Zubei's Gauntlets](https://lineage.pmfun.com/item/612/zubeis-gauntlets.html)
+[Zubei's Boots](https://lineage.pmfun.com/item/554/zubeis-boots.html)
+[Zubei's Helmet](https://lineage.pmfun.com/item/503/zubeis-helmet.html)
+
+B Grade
+Parts
+Type
+Modification
+Light Avadon Set
+Light Armor
+[Avadon Leather Armor](https://lineage.pmfun.com/item/2390/avadon-leather-armor.html)
+M. Def. +5.25%
+Point at which a weight penalty is applied +5795
+[Avadon Gloves](https://lineage.pmfun.com/item/2464/avadon-gloves.html)
+[Avadon Boots](https://lineage.pmfun.com/item/600/avadon-boots.html)
+[Avadon Circlet](https://lineage.pmfun.com/item/2415/avadon-circlet.html)
+
+B Grade
+Parts
+Type
+Modification
+Light Blue Wolf Set
+Light Armor
+[Blue Wolf Leather Armor](https://lineage.pmfun.com/item/2391/blue-wolf-leather-armor.html)
+P. Def. +5.24%
+Casting Spd. +15%
+[INT -2](https://lineage.pmfun.com/list/set#INT)
+[MEN +3](https://lineage.pmfun.com/list/set#MEN)
+[WIT -1](https://lineage.pmfun.com/list/set#WIT)
+[Blue Wolf Gloves](https://lineage.pmfun.com/item/2487/blue-wolf-gloves.html)
+[Blue Wolf Boots](https://lineage.pmfun.com/item/2439/blue-wolf-boots.html)
+[Blue Wolf Helmet](https://lineage.pmfun.com/item/2416/blue-wolf-helmet.html)
+
+B Grade
+Parts
+Type
+Modification
+Light Doom Set
+Light Armor
+[Leather Armor Of Doom](https://lineage.pmfun.com/item/2392/leather-armor-of-doom.html)
+Breath Gauge increased
+P. Atk. +2.7%
+MP Regeneration +2.5%
+[STR -1](https://lineage.pmfun.com/list/set#STR)[CON -2](https://lineage.pmfun.com/list/set#CON)
+[DEX +3](https://lineage.pmfun.com/list/set#DEX)Poision Resistance +20%
+[Doom Gloves](https://lineage.pmfun.com/item/2475/doom-gloves.html)
+[Boots Of Doom](https://lineage.pmfun.com/item/601/boots-of-doom.html)
+[Doom Helmet](https://lineage.pmfun.com/item/2417/doom-helmet.html)
+
+B Grade
+Parts
+Type
+Modification
+Zubei Robe Set
+Robe Armor
+[Tunic Of Zubei](https://lineage.pmfun.com/item/2397/tunic-of-zubei.html)
+M. Atk. +10%
+MP Regeneration -5%
+[Stockings Of Zubei](https://lineage.pmfun.com/item/2402/stockings-of-zubei.html)
+[Zubei's Gauntlets](https://lineage.pmfun.com/item/612/zubeis-gauntlets.html)
+[Zubei's Boots](https://lineage.pmfun.com/item/554/zubeis-boots.html)
+[Zubei's Helmet](https://lineage.pmfun.com/item/503/zubeis-helmet.html)
+
+B Grade
+Parts
+Type
+Modification
+Avadon Robe Set
+[Avadon Robe](https://lineage.pmfun.com/item/2406/avadon-robe.html)
+P. Def. +5.247%
+Casting Spd. +15%
+[Avadon Gloves](https://lineage.pmfun.com/item/2464/avadon-gloves.html)
+[Avadon Boots](https://lineage.pmfun.com/item/600/avadon-boots.html)
+[Avadon Circlet](https://lineage.pmfun.com/item/2415/avadon-circlet.html)
+
+B Grade
+Parts
+Type
+Modification
+Blue Wolf Robe Set
+Robe Armor
+[Blue Wolf Tunic](https://lineage.pmfun.com/item/2398/blue-wolf-tunic.html)
+MP +206
+MP Regeneration +5.24%
+[INT -2](https://lineage.pmfun.com/list/set#INT)
+[MEN -1](https://lineage.pmfun.com/list/set#MEN)
+[WIT +3](https://lineage.pmfun.com/list/set#WIT)
+[Blue Wolf Stockings](https://lineage.pmfun.com/item/2403/blue-wolf-stockings.html)
+[Blue Wolf Gloves](https://lineage.pmfun.com/item/2487/blue-wolf-gloves.html)
+[Blue Wolf Boots](https://lineage.pmfun.com/item/2439/blue-wolf-boots.html)
+[Blue Wolf Helmet](https://lineage.pmfun.com/item/2416/blue-wolf-helmet.html)
+
+B Grade
+Parts
+Type
+Modification
+Doom Robe Set
+[Tunic Of Doom](https://lineage.pmfun.com/item/2399/tunic-of-doom.html)
+Speed + 7
+Breath Gauge increased
+MP Regeneration +5.24%
+[INT +2](https://lineage.pmfun.com/list/set#INT)
+[MEN +1](https://lineage.pmfun.com/list/set#MEN)
+[WIT -3](https://lineage.pmfun.com/list/set#WIT)
+[Stockings Of Doom](https://lineage.pmfun.com/item/2404/stockings-of-doom.html)
+[Doom Gloves](https://lineage.pmfun.com/item/2475/doom-gloves.html)
+[Boots Of Doom](https://lineage.pmfun.com/item/601/boots-of-doom.html)
+[Doom Helmet](https://lineage.pmfun.com/item/2417/doom-helmet.html)
+
+
+================================================================================
+C GRADE
+================================================================================
+C Grade
+Parts
+Type
+Modification
+Physical Defense
+MP Boost
+Chain Mail Set
+Heavy armor
+[Chain Mail Shirt](https://lineage.pmfun.com/item/354/chain-mail-shirt.html)
++5.24 % to Dagger Defense
+with Shiled +198 HP
+Physical Defense: 242
+MP Boost: 0
+[Chain Gaiters](https://lineage.pmfun.com/item/381/chain-gaiters.html)
+[Chain Hood](https://lineage.pmfun.com/item/2413/chain-hood.html)
+[Chain Shield](https://lineage.pmfun.com/item/2495/chain-shield.html)
+
+C Grade
+Parts
+Type
+Modification
+Physical Defense
+MP Boost
+Composite Set
+Heavy armor
+[Composite Armor](https://lineage.pmfun.com/item/60/composite-armor.html)
+Point at which a weight penalty is applied +5795
+With a Composite Shield, M. Def. +5.26%
+Physical Defense: 278
+MP Boost: 0
+[Composite Helmet](https://lineage.pmfun.com/item/517/composite-helmet.html)
+[Composite Shield](https://lineage.pmfun.com/item/107/composite-shield.html)
+
+C Grade
+Parts
+Type
+Modification
+Physical Defense
+MP Boost
+Full Plate Set
+Heavy armor
+[Full Plate Armor](https://lineage.pmfun.com/item/356/full-plate-armor.html)
+HP +270
+With a Full Plate Shield, shield defense rate +5.24%
+Physical Defense: 297
+MP Boost: 0
+[Full Plate Helmet](https://lineage.pmfun.com/item/2414/full-plate-helmet.html)
+[Full Plate Shield](https://lineage.pmfun.com/item/2497/full-plate-shield.html)
+
+C Grade
+Parts
+Type
+Modification
+Physical Defense
+MP Boost
+Tempered Mithril Set
+Light Armor
+[Mithril Shirt](https://lineage.pmfun.com/item/397/mithril-shirt.html)
+Evasion +4
+Physical Defense: 170
+MP Boost: 0
+[Tempered Mithril Gaiters](https://lineage.pmfun.com/item/2387/tempered-mithril-gaiters.html)
+[Mithril Boots](https://lineage.pmfun.com/item/62/mithril-boots.html)
+
+C Grade
+Parts
+Type
+Modification
+Physical Defense
+MP Boost
+Plated Leather Set
+Light Armor
+[Plated Leather](https://lineage.pmfun.com/item/398/plated-leather.html)
+[+ 4 STR](https://lineage.pmfun.com/list/set#STR)
+[- 1 CON](https://lineage.pmfun.com/list/set#CON)
+Physical Defense: 185
+MP Boost: 0
+[Plated Leather Gaiters](https://lineage.pmfun.com/item/418/plated-leather-gaiters.html)
+[Plated Leather Boots](https://lineage.pmfun.com/item/2431/plated-leather-boots.html)
+
+C Grade
+Parts
+Type
+Modification
+Physical Defense
+MP Boost
+Theca Leather Set
+Light Armor
+[Theca Leather Armor](https://lineage.pmfun.com/item/400/theca-leather-armor.html)
+P. Def. +5.24%
+Physical Defense: 209
+MP Boost: 0
+[Theca Leather Gaiters](https://lineage.pmfun.com/item/420/theca-leather-gaiters.html)
+[Theca Leather Boots](https://lineage.pmfun.com/item/2436/theca-leather-boots.html)
+
+C Grade
+Parts
+Type
+Modification
+Physical Defense
+MP Boost
+Drake Leather Set
+Light Armor
+[Drake Leather Armor](https://lineage.pmfun.com/item/401/drake-leather-armor.html)
++5.24% Mdef
+Physical Defense: 218
+MP Boost: 0
+[Drake Leather Boots](https://lineage.pmfun.com/item/2437/drake-leather-boots.html)
+
+C Grade
+Parts
+Type
+Modification
+Physical Defense
+MP Boost
+Karmian Set
+Robe
+[Karmian Tunic](https://lineage.pmfun.com/item/439/karmian-tunic.html)
++ 5.24% Pdef
++ 15% Casting Speed
+Physical Defense: 129
+MP Boost: 366
+[Karmian Stockings](https://lineage.pmfun.com/item/471/karmian-stockings.html)
+[Karmian Gloves](https://lineage.pmfun.com/item/2454/karmian-gloves.html)
+
+C Grade
+Parts
+Type
+Modification
+Physical Defense
+MP Boost
+Demon Set
+Robe
+[Demon's Tunic](https://lineage.pmfun.com/item/441/demons-tunic.html)
+- 270 HP
+[+ 4 INT](https://lineage.pmfun.com/list/set#INT)
+[-1 WIT](https://lineage.pmfun.com/list/set#WIT)
+Physical Defense: 148
+MP Boost: 461
+[Demon's Stockings](https://lineage.pmfun.com/item/472/demons-stockings.html)
+[Demon's Gloves](https://lineage.pmfun.com/item/2459/demons-gloves.html)
+
+C Grade
+Parts
+Type
+Modification
+Physical Defense
+MP Boost
+Divine Set
+Robe
+[Divine Tunic](https://lineage.pmfun.com/item/442/divine-tunic.html)
++5.24% Pdef
++170 MP
+[-1 INT](https://lineage.pmfun.com/list/set#INT)
+[+1 WIT](https://lineage.pmfun.com/list/set#WIT)
+Physical Defense: 159
+MP Boost: 510
+[Divine Stockings](https://lineage.pmfun.com/item/473/divine-stockings.html)
+[Divine Gloves](https://lineage.pmfun.com/item/2463/divine-gloves.html)
+
+
+================================================================================
+D GRADE
+================================================================================
+D Grade
+Parts
+Type
+Modification
+Physical Defense
+MP Boost
+Mithril Set
+Heavy armor
+[Mithril Breastplate](https://lineage.pmfun.com/item/58/mithril-breastplate.html)
++20 Poison Resistance
+with Shield +126 HP
+Physical Defense: 193
+MP Boost: 0
+[Mithril Gaiters](https://lineage.pmfun.com/item/59/mithril-gaiters.html)
+[Helmet](https://lineage.pmfun.com/item/47/helmet.html)
+[Hoplon](https://lineage.pmfun.com/item/628/hoplon.html)
+
+D Grade
+Parts
+Type
+Modification
+Physical Defense
+MP Boost
+Brigandine Set
+Heavy armor
+[Brigandine Tunic](https://lineage.pmfun.com/item/352/brigandine-tunic.html)
++153 HP
++5% Pdef
+with Shield +20 HP
+Physical Defense: 217
+MP Boost: 0
+[Brigandine Gaiters](https://lineage.pmfun.com/item/2378/brigandine-gaiters.html)
+[Brigandine Helmet](https://lineage.pmfun.com/item/2411/brigandine-helmet.html)
+[Brigandine Shield](https://lineage.pmfun.com/item/2493/brigandine-shield.html)
+
+D Grade
+Parts
+Type
+Modification
+Physical Defense
+MP Boost
+Reinforced Leather Set
+Light Armor
+[Reinforced Leather Shirt](https://lineage.pmfun.com/item/394/reinforced-leather-shirt.html)
+MP +80
+Physical Defense: 143
+MP Boost: 0
+[Reinforced Leather Gaiters](https://lineage.pmfun.com/item/416/reinforced-leather-gaiters.html)
+[Reinforced Leather Boots](https://lineage.pmfun.com/item/2422/reinforced-leather-boots.html)
+
+D Grade
+Parts
+Type
+Modification
+Physical Defense
+MP Boost
+Manticore Set
+Light Armor
+[Manticore Skin Shirt](https://lineage.pmfun.com/item/395/manticore-skin-shirt.html)
+MP +92
+Physical Defense: 159
+MP Boost: 0
+[Manticore Skin Gaiters](https://lineage.pmfun.com/item/417/manticore-skin-gaiters.html)
+[Manticore Skin Boots](https://lineage.pmfun.com/item/2424/manticore-skin-boots.html)
+
+D Grade
+Parts
+Type
+Modification
+Physical Defense
+MP Boost
+Knowledge Set
+Robe
+[Tunic Of Knowledge](https://lineage.pmfun.com/item/436/tunic-of-knowledge.html)
++10% Matk
+-5% MP Regeneration
+Physical Defense: 103
+MP Boost: 239
+[Stockings Of Knowledge](https://lineage.pmfun.com/item/469/stockings-of-knowledge.html)
+[Gloves Of Knowledge](https://lineage.pmfun.com/item/2447/gloves-of-knowledge.html)
+
+D Grade
+Parts
+Type
+Modification
+Physical Defense
+MP Boost
+Elven Mithril Set
+Robe
+[Mithril Tunic](https://lineage.pmfun.com/item/437/mithril-tunic.html)
++7 Speed
+-1 [INT](https://lineage.pmfun.com/list/set#INT)
++1 [WIT](https://lineage.pmfun.com/list/set#WIT)
+Physical Defense: 115
+MP Boost: 274
+[Mithril Stockings](https://lineage.pmfun.com/item/470/mithril-stockings.html)
+[Elven Mithril Gloves](https://lineage.pmfun.com/item/2450/elven-mithril-gloves.html)
+
+
+================================================================================
+NO GRADE
+================================================================================
+No Grade
+Parts
+Type
+Modification
+Physical Defense
+MP Boost
+Wooden Set
+Light armor
+[Wooden Helmet](https://lineage.pmfun.com/item/43/wooden-helmet.html)
++2% Pdef
++41 HP
+Physical Defense: 94
+MP Boost: 0
+[Wooden Breastplate](https://lineage.pmfun.com/item/23/wooden-breastplate.html)
+[Wooden Gaiters](https://lineage.pmfun.com/item/2386/wooden-gaiters.html)
+
+No Grade
+Parts
+Type
+Modification
+Physical Defense
+MP Boost
+Devotion Set
+Robe
+[Leather Helmet](https://lineage.pmfun.com/item/44/leather-helmet.html)
++ 15 % Casting Speed
+Physical Defense: 72
+MP Boost: 109
+[Tunic Of Devotion](https://lineage.pmfun.com/item/1101/tunic-of-devotion.html)
+[Stockings Of Devotion](https://lineage.pmfun.com/item/1104/stockings-of-devotion.html)
+

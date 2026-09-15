@@ -1,0 +1,344 @@
+[
+  {
+    "key": 1835,
+    "data": {
+      "unitName": "soulshot_none",
+      "icon": "/etc_spirit_bullet_white_i00.webp",
+      "name": {
+        "en": "Soulshot: No Grade",
+        "ru": "Заряд Души: Без Ранга"
+      },
+      "description": {
+        "en": "The power of a higher-level spirit is bestowed upon a weapon, temporarily increasing power of attack. Used with a No grade weapon.",
+        "ru": "Капсула, в которой заключена сила древнего духа. Придает оружию дополнительную силу. Используется с оружием Без Ранга."
+      }
+    },
+    "grade": "NG",
+    "category": "other",
+    "subtype": "soulshot",
+    "type": "soulshot"
+  },
+  {
+    "key": 2509,
+    "data": {
+      "unitName": "spiritshot_none",
+      "icon": "/etc_spell_shot_white_i00.webp",
+      "name": {
+        "en": "Spiritshot: No Grade",
+        "ru": "Заряд Духа: Без Ранга"
+      },
+      "description": {
+        "en": "The power of a higher-level spirit is bestowed upon a weapon causing its magic power to momentarily increase. Used with a no grade weapon.",
+        "ru": "Капсула, в которой заключена сила древнего духа. Увеличивает Маг. Атк. Используется с оружием без ранга."
+      }
+    },
+    "grade": "NG",
+    "category": "other",
+    "subtype": "soulshot",
+    "type": "soulshot"
+  },
+  {
+    "key": 3947,
+    "data": {
+      "unitName": "blessed_spiritshot_none",
+      "icon": "/etc_spell_shot_white_i01.webp",
+      "name": {
+        "en": "Blessed Spiritshot: No Grade",
+        "ru": "Благословенный Заряд Духа: Без Ранга"
+      },
+      "description": {
+        "en": "The power of a higher-level spirit is bestowed upon a weapon, temporarily increasing its magic significantly. Used with No Grade weapons.",
+        "ru": "Капсула, в которой заключена сила древнего духа. Значительно увеличивает Маг. Атк. Используется с оружием без ранга."
+      }
+    },
+    "grade": "NG",
+    "category": "other",
+    "subtype": "soulshot",
+    "type": "soulshot"
+  },
+  {
+    "key": 1463,
+    "data": {
+      "unitName": "soulshot_d",
+      "icon": "/etc_spirit_bullet_blue_i00.webp",
+      "name": {
+        "en": "Soulshot: D-grade",
+        "ru": "Заряд Души: Ранг D"
+      },
+      "description": {
+        "en": "The power of a higher-level spirit is bestowed upon a weapon, temporarily increasing power of attack. Used with a D-grade weapon.",
+        "ru": "Капсула, в которой заключена сила древнего духа. Придает оружию дополнительную силу. Используется с оружием Ранга D."
+      }
+    },
+    "grade": "D",
+    "category": "other",
+    "subtype": "soulshot",
+    "type": "soulshot"
+  },
+  {
+    "key": 2510,
+    "data": {
+      "unitName": "spiritshot_d",
+      "icon": "/etc_spell_shot_blue_i00.webp",
+      "name": {
+        "en": "Spiritshot: D-grade",
+        "ru": "Заряд Духа: Ранг D"
+      },
+      "description": {
+        "en": "The power of a higher-level spirit is bestowed upon a weapon causing its magic power to momentarily increase. Used with a D-grade weapon.",
+        "ru": "Капсула, в которой заключена сила древнего духа. Увеличивает Маг. Атк. Используется с оружием Ранга D."
+      }
+    },
+    "grade": "D",
+    "category": "other",
+    "subtype": "soulshot",
+    "type": "soulshot"
+  },
+  {
+    "key": 3948,
+    "data": {
+      "unitName": "blessed_spiritshot_d",
+      "icon": "/etc_spell_shot_blue_i01.webp",
+      "name": {
+        "en": "Blessed Spiritshot: D-Grade",
+        "ru": "Благословенный Заряд Духа: Ранг D"
+      },
+      "description": {
+        "en": "The power of a higher-level spirit is bestowed upon a weapon, temporarily increasing its magic significantly. Used with D-grade weapons.",
+        "ru": "Капсула, в которой заключена сила древнего духа. Значительно увеличивает Маг. Атк. Используется с оружием Ранга D."
+      }
+    },
+    "grade": "D",
+    "category": "other",
+    "subtype": "soulshot",
+    "type": "soulshot"
+  },
+  {
+    "key": 1464,
+    "data": {
+      "unitName": "soulshot_c",
+      "icon": "/etc_spirit_bullet_green_i00.webp",
+      "name": {
+        "en": "Soulshot: C-grade",
+        "ru": "Заряд Души: Ранг C"
+      },
+      "description": {
+        "en": "The power of a higher-level spirit is bestowed upon a weapon, temporarily increasing power of attack. Used with a C-grade weapon.",
+        "ru": "Капсула, в которой заключена сила древнего духа. Придает оружию дополнительную силу. Используется с оружием Ранга C."
+      }
+    },
+    "grade": "C",
+    "category": "other",
+    "subtype": "soulshot",
+    "type": "soulshot"
+  },
+  {
+    "key": 2511,
+    "data": {
+      "unitName": "spiritshot_c",
+      "icon": "/etc_spell_shot_green_i00.webp",
+      "name": {
+        "en": "Spiritshot: C-grade",
+        "ru": "Заряд Духа: Ранг C"
+      },
+      "description": {
+        "en": "The power of a higher-level spirit is bestowed upon a weapon causing its magic power to momentarily increase. Used with a C-grade weapon.",
+        "ru": "Капсула, в которой заключена сила древнего духа. Увеличивает Маг. Атк. Используется с оружием Ранга C."
+      }
+    },
+    "grade": "C",
+    "category": "other",
+    "subtype": "soulshot",
+    "type": "soulshot"
+  },
+  {
+    "key": 3949,
+    "data": {
+      "unitName": "blessed_spiritshot_c",
+      "icon": "/etc_spell_shot_green_i01.webp",
+      "name": {
+        "en": "Blessed Spiritshot: C-Grade",
+        "ru": "Благословенный Заряд Духа: Ранг C"
+      },
+      "description": {
+        "en": "The power of a higher-level spirit is bestowed upon a weapon, temporarily increasing its magic significantly. Used with C-grade weapons.",
+        "ru": "Капсула, в которой заключена сила древнего духа. Значительно увеличивает Маг. Атк. Используется с оружием Ранга C."
+      }
+    },
+    "grade": "C",
+    "category": "other",
+    "subtype": "soulshot",
+    "type": "soulshot"
+  },
+  {
+    "key": 1465,
+    "data": {
+      "unitName": "soulshot_b",
+      "icon": "/etc_spirit_bullet_red_i00.webp",
+      "name": {
+        "en": "Soulshot: B-grade",
+        "ru": "Заряд Души: Ранг B"
+      },
+      "description": {
+        "en": "The power of a higher-level spirit is bestowed upon a weapon, temporarily increasing power of attack. Used with a B-grade weapon.",
+        "ru": "Капсула, в которой заключена сила древнего духа. Придает оружию дополнительную силу. Используется с оружием Ранга B."
+      }
+    },
+    "grade": "B",
+    "category": "other",
+    "subtype": "soulshot",
+    "type": "soulshot"
+  },
+  {
+    "key": 2512,
+    "data": {
+      "unitName": "spiritshot_b",
+      "icon": "/etc_spell_shot_red_i00.webp",
+      "name": {
+        "en": "Spiritshot: B-grade",
+        "ru": "Заряд Духа: Ранг B"
+      },
+      "description": {
+        "en": "The power of a higher-level spirit is bestowed upon a weapon causing its magic power to momentarily increase. Used with a B-grade weapon.",
+        "ru": "Капсула, в которой заключена сила древнего духа. Увеличивает Маг. Атк. Используется с оружием Ранга B."
+      }
+    },
+    "grade": "B",
+    "category": "other",
+    "subtype": "soulshot",
+    "type": "soulshot"
+  },
+  {
+    "key": 3950,
+    "data": {
+      "unitName": "blessed_spiritshot_b",
+      "icon": "/etc_spell_shot_red_i01.webp",
+      "name": {
+        "en": "Blessed Spiritshot: B-Grade",
+        "ru": "Благословенный Заряд Духа: Ранг B"
+      },
+      "description": {
+        "en": "The power of a higher-level spirit is bestowed upon a weapon, temporarily increasing its magic significantly. Used with B-grade weapons.",
+        "ru": "Капсула, в которой заключена сила древнего духа. Значительно увеличивает Маг. Атк. Используется с оружием Ранга B."
+      }
+    },
+    "grade": "B",
+    "category": "other",
+    "subtype": "soulshot",
+    "type": "soulshot"
+  },
+  {
+    "key": 1466,
+    "data": {
+      "unitName": "soulshot_a",
+      "icon": "/etc_spirit_bullet_silver_i00.webp",
+      "name": {
+        "en": "Soulshot: A-grade",
+        "ru": "Заряд Души: Ранг A"
+      },
+      "description": {
+        "en": "The power of a higher-level spirit is bestowed upon a weapon, temporarily increasing power of attack. Used with an A-grade weapon.",
+        "ru": "Капсула, в которой заключена сила древнего духа. Придает оружию дополнительную силу. Используется с оружием Ранга A."
+      }
+    },
+    "grade": "A",
+    "category": "other",
+    "subtype": "soulshot",
+    "type": "soulshot"
+  },
+  {
+    "key": 2513,
+    "data": {
+      "unitName": "spiritshot_a",
+      "icon": "/etc_spell_shot_silver_i00.webp",
+      "name": {
+        "en": "Spiritshot: A-grade",
+        "ru": "Заряд Духа: Ранг A"
+      },
+      "description": {
+        "en": "The power of a higher-level spirit is bestowed upon a weapon causing its magic power to momentarily increase. Used with an A-grade weapon.",
+        "ru": "Капсула, в которой заключена сила древнего духа. Увеличивает Маг. Атк. Используется с оружием Ранга A."
+      }
+    },
+    "grade": "A",
+    "category": "other",
+    "subtype": "soulshot",
+    "type": "soulshot"
+  },
+  {
+    "key": 3951,
+    "data": {
+      "unitName": "blessed_spiritshot_a",
+      "icon": "/etc_spell_shot_silver_i01.webp",
+      "name": {
+        "en": "Blessed Spiritshot: A-Grade",
+        "ru": "Благословенный Заряд Духа: Ранг A"
+      },
+      "description": {
+        "en": "The power of a higher-level spirit is bestowed upon a weapon, temporarily increasing its magic significantly. Used with a-grade weapons.",
+        "ru": "Капсула, в которой заключена сила древнего духа. Значительно увеличивает Маг. Атк. Используется с оружием Ранга A."
+      }
+    },
+    "grade": "A",
+    "category": "other",
+    "subtype": "soulshot",
+    "type": "soulshot"
+  },
+  {
+    "key": 1467,
+    "data": {
+      "unitName": "soulshot_s",
+      "icon": "/etc_spirit_bullet_gold_i00.webp",
+      "name": {
+        "en": "Soulshot: S-grade",
+        "ru": "Заряд Души: Ранг S"
+      },
+      "description": {
+        "en": "The power of a higher-level spirit is bestowed upon a weapon, temporarily increasing power of attack. Used with an S-grade weapon.",
+        "ru": "Капсула, в которой заключена сила древнего духа. Придает оружию дополнительную силу. Используется с оружием Ранга S."
+      }
+    },
+    "grade": "S",
+    "category": "other",
+    "subtype": "soulshot",
+    "type": "soulshot"
+  },
+  {
+    "key": 2514,
+    "data": {
+      "unitName": "spiritshot_s",
+      "icon": "/etc_spell_shot_gold_i00.webp",
+      "name": {
+        "en": "Spiritshot: S-grade",
+        "ru": "Заряд Духа: Ранг S"
+      },
+      "description": {
+        "en": "The power of a higher-level spirit is bestowed upon a weapon causing its magic power to momentarily increase. Used with an S-grade weapon.",
+        "ru": "Капсула, в которой заключена сила древнего духа. Увеличивает Маг. Атк. Используется с оружием Ранга S."
+      }
+    },
+    "grade": "S",
+    "category": "other",
+    "subtype": "soulshot",
+    "type": "soulshot"
+  },
+  {
+    "key": 3952,
+    "data": {
+      "unitName": "blessed_spiritshot_s",
+      "icon": "/etc_spell_shot_gold_i01.webp",
+      "name": {
+        "en": "Blessed Spiritshot: S-Grade",
+        "ru": "Благословенный Заряд Духа: Ранг S"
+      },
+      "description": {
+        "en": "The power of a higher-level spirit is bestowed upon a weapon, temporarily increasing its magic significantly. Used with S-grade weapons.",
+        "ru": "Капсула, в которой заключена сила древнего духа. Значительно увеличивает Маг. Атк. Используется с оружием Ранга S."
+      }
+    },
+    "grade": "S",
+    "category": "other",
+    "subtype": "soulshot",
+    "type": "soulshot"
+  }
+]

@@ -1,0 +1,1622 @@
+[
+  {
+    "key": 1147,
+    "data": {
+      "unitName": "squire's_pants",
+      "icon": "/armor_t01_l_i00.webp",
+      "name": {
+        "en": "Squire's Pants",
+        "ru": "Бриджи Оруженосца"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 20,
+      "mDef": 0,
+      "mp": 20
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 20,
+    "mDef": 0,
+    "mp": 20
+  },
+  {
+    "key": 28,
+    "data": {
+      "unitName": "pants",
+      "icon": "/armor_t02_l_i00.webp",
+      "name": {
+        "en": "Pants",
+        "ru": "Бриджи"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 22,
+      "mDef": 0,
+      "mp": 22
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 22,
+    "mDef": 0,
+    "mp": 22
+  },
+  {
+    "key": 29,
+    "data": {
+      "unitName": "leather_pants",
+      "icon": "/armor_t04_l_i00.webp",
+      "name": {
+        "en": "Leather Pants",
+        "ru": "Кожаные Бриджи"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 27,
+      "mDef": 0,
+      "mp": 27
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 27,
+    "mDef": 0,
+    "mp": 27
+  },
+  {
+    "key": 2386,
+    "data": {
+      "unitName": "wooden_gaiters",
+      "icon": "/armor_t06_l_i00.webp",
+      "name": {
+        "en": "Wooden Gaiters",
+        "ru": "Деревянные Набедренники"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 29,
+      "mDef": 0,
+      "mp": 29
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 29,
+    "mDef": 0,
+    "mp": 29
+  },
+  {
+    "key": 30,
+    "data": {
+      "unitName": "hard_leather_pants",
+      "icon": "/armor_t06_l_i00.webp",
+      "name": {
+        "en": "Hard Leather Pants",
+        "ru": "Бриджи из Толстой Кожи"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 29,
+      "mDef": 0,
+      "mp": 29
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 29,
+    "mDef": 0,
+    "mp": 29
+  },
+  {
+    "key": 412,
+    "data": {
+      "unitName": "tights_pants",
+      "icon": "/armor_t07_l_i00.webp",
+      "name": {
+        "en": "Cotton Pants",
+        "ru": "Хлопковые Бриджи"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 32,
+      "mDef": 0,
+      "mp": 32
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 32,
+    "mDef": 0,
+    "mp": 32
+  },
+  {
+    "key": 31,
+    "data": {
+      "unitName": "bone_gaiters",
+      "icon": "/armor_t32_l_i00.webp",
+      "name": {
+        "en": "Bone Gaiters",
+        "ru": "Костяные Набедренники"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 32,
+      "mDef": 0,
+      "mp": 32
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 32,
+    "mDef": 0,
+    "mp": 32
+  },
+  {
+    "key": 33,
+    "data": {
+      "unitName": "hard_leather_gaiters",
+      "icon": "/armor_t30_l_i00.webp",
+      "name": {
+        "en": "Hard Leather Gaiters",
+        "ru": "Набедренники из Толстой Кожи"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 33,
+      "mDef": 0,
+      "mp": 33
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 33,
+    "mDef": 0,
+    "mp": 33
+  },
+  {
+    "key": 1146,
+    "data": {
+      "unitName": "squire's_shirt",
+      "icon": "/armor_t01_u_i00.webp",
+      "name": {
+        "en": "Squire's Shirt",
+        "ru": "Рубаха Оруженосца"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 33,
+      "mDef": 0,
+      "mp": 33
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 33,
+    "mDef": 0,
+    "mp": 33
+  },
+  {
+    "key": 21,
+    "data": {
+      "unitName": "shirt",
+      "icon": "/armor_t02_u_i00.webp",
+      "name": {
+        "en": "Shirt",
+        "ru": "Рубаха"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 36,
+      "mDef": 0,
+      "mp": 36
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 36,
+    "mDef": 0,
+    "mp": 36
+  },
+  {
+    "key": 22,
+    "data": {
+      "unitName": "leather_shirt",
+      "icon": "/armor_t04_u_i00.webp",
+      "name": {
+        "en": "Leather Shirt",
+        "ru": "Кожаная Рубаха"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 43,
+      "mDef": 0,
+      "mp": 43
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 43,
+    "mDef": 0,
+    "mp": 43
+  },
+  {
+    "key": 23,
+    "data": {
+      "unitName": "wooden_breastplate",
+      "icon": "/armor_t06_u_i00.webp",
+      "name": {
+        "en": "Wooden Breastplate",
+        "ru": "Деревянная Кираса"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 47,
+      "mDef": 0,
+      "mp": 47
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 47,
+    "mDef": 0,
+    "mp": 47
+  },
+  {
+    "key": 24,
+    "data": {
+      "unitName": "bone_breastplate",
+      "icon": "/armor_t32_u_i00.webp",
+      "name": {
+        "en": "Bone Breastplate",
+        "ru": "Костяная Кираса"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 50,
+      "mDef": 0,
+      "mp": 50
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 50,
+    "mDef": 0,
+    "mp": 50
+  },
+  {
+    "key": 390,
+    "data": {
+      "unitName": "tights_shirt",
+      "icon": "/armor_t07_u_i00.webp",
+      "name": {
+        "en": "Cotton Shirt",
+        "ru": "Хлопковая Рубаха"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 50,
+      "mDef": 0,
+      "mp": 50
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 50,
+    "mDef": 0,
+    "mp": 50
+  },
+  {
+    "key": 27,
+    "data": {
+      "unitName": "hard_leather_shirt",
+      "icon": "/armor_t30_u_i00.webp",
+      "name": {
+        "en": "Hard Leather Shirt",
+        "ru": "Рубаха из Толстой Кожи"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 53,
+      "mDef": 0,
+      "mp": 53
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 53,
+    "mDef": 0,
+    "mp": 53
+  },
+  {
+    "key": 413,
+    "data": {
+      "unitName": "puma_skin_gaiters",
+      "icon": "/armor_t09_l_i00.webp",
+      "name": {
+        "en": "Puma Skin Gaiters",
+        "ru": "Набедренники из Шкуры Пумы"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 36,
+      "mDef": 0,
+      "mp": 36
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 36,
+    "mDef": 0,
+    "mp": 36
+  },
+  {
+    "key": 414,
+    "data": {
+      "unitName": "lion_skin_gaiters",
+      "icon": "/armor_t18_l_i00.webp",
+      "name": {
+        "en": "Lion Skin Gaiters",
+        "ru": "Набедренники из Шкуры Льва"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 41,
+      "mDef": 0,
+      "mp": 41
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 41,
+    "mDef": 0,
+    "mp": 41
+  },
+  {
+    "key": 415,
+    "data": {
+      "unitName": "mithril_banded_gaiters",
+      "icon": "/armor_t10_l_i00.webp",
+      "name": {
+        "en": "Mithril Banded Gaiters",
+        "ru": "Усиленные Мифрилом Набедренники"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 46,
+      "mDef": 0,
+      "mp": 46
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 46,
+    "mDef": 0,
+    "mp": 46
+  },
+  {
+    "key": 416,
+    "data": {
+      "unitName": "reinforce_leather_gaiters",
+      "icon": "/armor_t13_l_i00.webp",
+      "name": {
+        "en": "Reinforced Leather Gaiters",
+        "ru": "Укрепленные Кожаные Набедренники"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 46,
+      "mDef": 0,
+      "mp": 46
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 46,
+    "mDef": 0,
+    "mp": 46
+  },
+  {
+    "key": 417,
+    "data": {
+      "unitName": "manticor_skin_gaiters",
+      "icon": "/armor_t42_l_i00.webp",
+      "name": {
+        "en": "Manticore Skin Gaiters",
+        "ru": "Набедренники из Шкуры Мантикоры"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 48,
+      "mDef": 0,
+      "mp": 48
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 48,
+    "mDef": 0,
+    "mp": 48
+  },
+  {
+    "key": 391,
+    "data": {
+      "unitName": "puma_skin_shirt",
+      "icon": "/armor_t09_u_i00.webp",
+      "name": {
+        "en": "Puma Skin Shirt",
+        "ru": "Рубаха из Шкуры Пумы"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 58,
+      "mDef": 0,
+      "mp": 58
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 58,
+    "mDef": 0,
+    "mp": 58
+  },
+  {
+    "key": 392,
+    "data": {
+      "unitName": "lion_skin_shirt",
+      "icon": "/armor_t18_u_i00.webp",
+      "name": {
+        "en": "Lion Skin Shirt",
+        "ru": "Рубаха из Шкуры Льва"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 65,
+      "mDef": 0,
+      "mp": 65
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 65,
+    "mDef": 0,
+    "mp": 65
+  },
+  {
+    "key": 393,
+    "data": {
+      "unitName": "mithril_banded_mail",
+      "icon": "/armor_t10_u_i00.webp",
+      "name": {
+        "en": "Mithril Banded Mail",
+        "ru": "Усиленная Мифрилом Броня"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 73,
+      "mDef": 0,
+      "mp": 73
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 73,
+    "mDef": 0,
+    "mp": 73
+  },
+  {
+    "key": 394,
+    "data": {
+      "unitName": "reinforce_leather_shirt",
+      "icon": "/armor_t13_u_i00.webp",
+      "name": {
+        "en": "Reinforced Leather Shirt",
+        "ru": "Укрепленная Кожаная Рубаха"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 73,
+      "mDef": 0,
+      "mp": 73
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 73,
+    "mDef": 0,
+    "mp": 73
+  },
+  {
+    "key": 395,
+    "data": {
+      "unitName": "manticor_skin_shirt",
+      "icon": "/armor_t42_u_i00.webp",
+      "name": {
+        "en": "Manticore Skin Shirt",
+        "ru": "Рубаха из Шкуры Мантикоры"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 77,
+      "mDef": 0,
+      "mp": 77
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 77,
+    "mDef": 0,
+    "mp": 77
+  },
+  {
+    "key": 7854,
+    "data": {
+      "unitName": "dress_of_oath",
+      "icon": "/armor_t1002_ul_i00.webp",
+      "name": {
+        "en": "Clan Oath Brigandine",
+        "ru": "Панцирь Клятвы"
+      },
+      "description": {
+        "en": "Full body armor.",
+        "ru": "Полный Доспех"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 119,
+      "mDef": 0,
+      "mp": 119
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 119,
+    "mDef": 0,
+    "mp": 119
+  },
+  {
+    "key": 396,
+    "data": {
+      "unitName": "slamander_skin_mail",
+      "icon": "/armor_t45_ul_i00.webp",
+      "name": {
+        "en": "Salamander Skin Mail",
+        "ru": "Рубаха из Кожи Саламандры"
+      },
+      "description": {
+        "en": "One-piece upper and lower body armor. Additional lower body armor cannot be worn while wearing this.",
+        "ru": "Доспех, закрывающий все тело целиком. Нельзя использовать дополнительно нижнюю часть доспехов."
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 136,
+      "mDef": 0,
+      "mp": 136
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 136,
+    "mDef": 0,
+    "mp": 136
+  },
+  {
+    "key": 2387,
+    "data": {
+      "unitName": "tempered_mithril_gaiters",
+      "icon": "/armor_t47_l_i00.webp",
+      "name": {
+        "en": "Tempered Mithril Gaiters",
+        "ru": "Укрепленные Мифриловые Набедренники"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 56,
+      "mDef": 0,
+      "mp": 56
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 56,
+    "mDef": 0,
+    "mp": 56
+  },
+  {
+    "key": 418,
+    "data": {
+      "unitName": "plate_leather_gaiters",
+      "icon": "/armor_t47_l_i00.webp",
+      "name": {
+        "en": "Plated Leather Gaiters",
+        "ru": "Латные Кожаные Набедренники"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 59,
+      "mDef": 0,
+      "mp": 59
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 59,
+    "mDef": 0,
+    "mp": 59
+  },
+  {
+    "key": 419,
+    "data": {
+      "unitName": "rind_leather_gaiters",
+      "icon": "/armor_t49_l_i00.webp",
+      "name": {
+        "en": "Rind Leather Gaiters",
+        "ru": "Набедренники из Грубой Кожи"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 60,
+      "mDef": 0,
+      "mp": 60
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 60,
+    "mDef": 0,
+    "mp": 60
+  },
+  {
+    "key": 420,
+    "data": {
+      "unitName": "theca_leather_gaiters",
+      "icon": "/armor_t63_l_i00.webp",
+      "name": {
+        "en": "Theca Leather Gaiters",
+        "ru": "Кожаные Набедренники Тека"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 66,
+      "mDef": 0,
+      "mp": 66
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 66,
+    "mDef": 0,
+    "mp": 66
+  },
+  {
+    "key": 397,
+    "data": {
+      "unitName": "tempered_mithril_shirt",
+      "icon": "/armor_t47_u_i00.webp",
+      "name": {
+        "en": "Mithril Shirt",
+        "ru": "Укрепленная Мифриловая Рубаха"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 90,
+      "mDef": 0,
+      "mp": 90
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 90,
+    "mDef": 0,
+    "mp": 90
+  },
+  {
+    "key": 398,
+    "data": {
+      "unitName": "plate_leather",
+      "icon": "/armor_t47_u_i00.webp",
+      "name": {
+        "en": "Plated Leather",
+        "ru": "Латный Кожаный Доспех"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 94,
+      "mDef": 0,
+      "mp": 94
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 94,
+    "mDef": 0,
+    "mp": 94
+  },
+  {
+    "key": 399,
+    "data": {
+      "unitName": "rind_leather_mail",
+      "icon": "/armor_t49_u_i00.webp",
+      "name": {
+        "en": "Rind Leather Armor",
+        "ru": "Доспех из Грубой Кожи"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 97,
+      "mDef": 0,
+      "mp": 97
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 97,
+    "mDef": 0,
+    "mp": 97
+  },
+  {
+    "key": 400,
+    "data": {
+      "unitName": "theca_leather_mail",
+      "icon": "/armor_t63_u_i00.webp",
+      "name": {
+        "en": "Theca Leather Armor",
+        "ru": "Кожаный Доспех Тека"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 106,
+      "mDef": 0,
+      "mp": 106
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 106,
+    "mDef": 0,
+    "mp": 106
+  },
+  {
+    "key": 401,
+    "data": {
+      "unitName": "drake_leather_mail",
+      "icon": "/armor_t21_ul_i00.webp",
+      "name": {
+        "en": "Drake Leather Armor",
+        "ru": "Кожаный Доспех Дрейка"
+      },
+      "description": {
+        "en": "Full body armor.",
+        "ru": "Полный доспех."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 179,
+      "mDef": 0,
+      "mp": 179
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 179,
+    "mDef": 0,
+    "mp": 179
+  },
+  {
+    "key": 2388,
+    "data": {
+      "unitName": "shrnoen's_leather_gaiters",
+      "icon": "/armor_t65_l_i00.webp",
+      "name": {
+        "en": "Zubei's Leather Gaiters",
+        "ru": "Кожаные Набедренники Зубея"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pDef": 73,
+      "mDef": 0,
+      "mp": 73
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 73,
+    "mDef": 0,
+    "mp": 73
+  },
+  {
+    "key": 2384,
+    "data": {
+      "unitName": "shrnoen's_leather_shirts",
+      "icon": "/armor_t65_u_i00.webp",
+      "name": {
+        "en": "Zubei's Leather Shirt",
+        "ru": "Кожаная Рубаха Зубея"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pDef": 117,
+      "mDef": 0,
+      "mp": 117
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 117,
+    "mDef": 0,
+    "mp": 117
+  },
+  {
+    "key": 2390,
+    "data": {
+      "unitName": "avadon_leather_mail",
+      "icon": "/armor_t67_ul_i00.webp",
+      "name": {
+        "en": "Avadon Leather Armor",
+        "ru": "Кожаный Доспех Авадона"
+      },
+      "description": {
+        "en": "Full body armor.",
+        "ru": "Полный доспех."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pDef": 191,
+      "mDef": 0,
+      "mp": 191
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 191,
+    "mDef": 0,
+    "mp": 191
+  },
+  {
+    "key": 2391,
+    "data": {
+      "unitName": "blue_wolve's_leather_mail",
+      "icon": "/armor_t69_ul_i00.webp",
+      "name": {
+        "en": "Blue Wolf Leather Armor",
+        "ru": "Кожаный Доспех Синего Волка"
+      },
+      "description": {
+        "en": "Full body armor.",
+        "ru": "Полный доспех."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pDef": 202,
+      "mDef": 0,
+      "mp": 202
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 202,
+    "mDef": 0,
+    "mp": 202
+  },
+  {
+    "key": 2392,
+    "data": {
+      "unitName": "leather_mail_of_doom",
+      "icon": "/armor_t72_ul_i00.webp",
+      "name": {
+        "en": "Leather Armor of Doom",
+        "ru": "Кожаный Доспех Рока"
+      },
+      "description": {
+        "en": "Full body armor.",
+        "ru": "Полный доспех."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pDef": 202,
+      "mDef": 0,
+      "mp": 202
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 202,
+    "mDef": 0,
+    "mp": 202
+  },
+  {
+    "key": 5298,
+    "data": {
+      "unitName": "sealed_legging_of_dark_crystal",
+      "icon": "/armor_t75_l_i02.webp",
+      "name": {
+        "en": "Sealed Dark Crystal Leggings",
+        "ru": "Запечатанные Поножи Кристалла Тьмы"
+      },
+      "description": {
+        "en": "Its seal can be broken with the help of the Blacksmith of Mammon.",
+        "ru": "Запечатанные Поножи Кристалла Тьмы. Печать можно снять у кузнеца в любой деревне."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pDef": 80,
+      "mDef": 0,
+      "mp": 80
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 80,
+    "mDef": 0,
+    "mp": 80
+  },
+  {
+    "key": 5297,
+    "data": {
+      "unitName": "sealed_dark_crystal_leather_mail",
+      "icon": "/armor_t75_u_i02.webp",
+      "name": {
+        "en": "Sealed Dark Crystal Leather Armor",
+        "ru": "Запечатанный Кожаный Доспех Кристалла Тьмы"
+      },
+      "description": {
+        "en": "Its seal can be broken with the help of the Blacksmith of Mammon.",
+        "ru": "Запечатанный Кожаный Доспех Кристалла Тьмы. Печать можно снять у кузнеца в любой деревне."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pDef": 128,
+      "mDef": 0,
+      "mp": 128
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 128,
+    "mDef": 0,
+    "mp": 128
+  },
+  {
+    "key": 5301,
+    "data": {
+      "unitName": "sealed_tallum_leather_mail",
+      "icon": "/armor_t78_ul_i02.webp",
+      "name": {
+        "en": "Sealed Tallum Leather Armor",
+        "ru": "Запечатанный Кожаный Доспех Таллума"
+      },
+      "description": {
+        "en": "Its seal can be broken with the help of the Blacksmith of Mammon.",
+        "ru": "Запечатанный Кожаный Доспех Таллума. Печать можно снять у кузнеца в любой деревне."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pDef": 209,
+      "mDef": 0,
+      "mp": 209
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 209,
+    "mDef": 0,
+    "mp": 209
+  },
+  {
+    "key": 7874,
+    "data": {
+      "unitName": "sealed_dress_of_apella",
+      "icon": "/armor_t1005_ul_i02.webp",
+      "name": {
+        "en": "Sealed Apella Brigandine",
+        "ru": "Запечатанный Панцирь Апеллы"
+      },
+      "description": {
+        "en": "May be worn by a Baron or a higher level Aristocrat. It can be opened with the help of the Blacksmith of Mammon.",
+        "ru": "Может носить персонаж в звании Старейшина и выше. Запечатанный Панцирь Апеллы. Печать можно снять у кузнеца в любой деревне."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pDef": 209,
+      "mDef": 0,
+      "mp": 209
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 209,
+    "mDef": 0,
+    "mp": 209
+  },
+  {
+    "key": 5320,
+    "data": {
+      "unitName": "sealed_leather_mail_of_nightmare",
+      "icon": "/armor_t81_ul_i02.webp",
+      "name": {
+        "en": "Sealed Leather Armor of Nightmare",
+        "ru": "Запечатанный Кожаный Доспех Кошмаров"
+      },
+      "description": {
+        "en": "Its seal can be broken with the help of the Blacksmith of Mammon.",
+        "ru": "Запечатанный Кожаный Доспех Кошмаров. Печать можно снять у кузнеца в любой деревне."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pDef": 220,
+      "mDef": 0,
+      "mp": 220
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 220,
+    "mDef": 0,
+    "mp": 220
+  },
+  {
+    "key": 5323,
+    "data": {
+      "unitName": "sealed_majestic_leather_mail",
+      "icon": "/armor_t84_ul_i02.webp",
+      "name": {
+        "en": "Sealed Majestic Leather Armor",
+        "ru": "Запечатанный Кожаный Доспех Величия"
+      },
+      "description": {
+        "en": "Its seal can be broken with the help of the Blacksmith of Mammon.",
+        "ru": "Запечатанный Кожаный Доспех Величия. Печать можно снять у кузнеца в любой деревне."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pDef": 220,
+      "mDef": 0,
+      "mp": 220
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 220,
+    "mDef": 0,
+    "mp": 220
+  },
+  {
+    "key": 6680,
+    "data": {
+      "unitName": "sealed_draconic_leather_armor",
+      "icon": "/armor_t89_ul_i02.webp",
+      "name": {
+        "en": "Sealed Draconic Leather Armor",
+        "ru": "Запечатанный Доспех из Драконьей Кожи"
+      },
+      "description": {
+        "en": "Its seal can be broken with the help of the Blacksmith of Mammon.",
+        "ru": "Запечатанный Доспех из Драконьей Кожи. Печать может быть сломана с помощью Кузнеца Маммона."
+      }
+    },
+    "grade": "S",
+    "stats": {
+      "pDef": 236,
+      "mDef": 0,
+      "mp": 236
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 236,
+    "mDef": 0,
+    "mp": 236
+  },
+  {
+    "key": 9519,
+    "data": {
+      "unitName": "sealed_dynasty_leather_armor",
+      "icon": "/armor_t92_u_i02.webp",
+      "name": {
+        "en": "Sealed Dynasty Leather Armor",
+        "ru": "Запечатанный Кожаный Доспех Династии"
+      },
+      "description": {
+        "en": "Sealed Dynasty Leather Armor. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанный Кожаный Доспех Династии. Печать можно снять у Кузнеца Маммона или Мастера Ишумы."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pDef": 161,
+      "mDef": 0,
+      "mp": 161
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 161,
+    "mDef": 0,
+    "mp": 161
+  },
+  {
+    "key": 15698,
+    "data": {
+      "unitName": "sealed_moirai_leather_breastplate",
+      "icon": "/armor_t95_u_i02.webp",
+      "name": {
+        "en": "Sealed Moirai Leather Breastplate",
+        "ru": "Запечатанная Кожаная Кираса Дестино"
+      },
+      "description": {
+        "en": "Sealed Moirai Leather Gaiters. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанная Кожаная Кираса Дестино. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pDef": 169,
+      "mDef": 0,
+      "mp": 169
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 169,
+    "mDef": 0,
+    "mp": 169
+  },
+  {
+    "key": 9520,
+    "data": {
+      "unitName": "sealed_dynasty_leather_leggings",
+      "icon": "/armor_t92_l_i02.webp",
+      "name": {
+        "en": "Sealed Dynasty Leather Leggings",
+        "ru": "Запечатанные Кожаные Поножи Династии"
+      },
+      "description": {
+        "en": "Sealed Dynasty Leather Legging. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанные Кожаные Поножи Династии. Печать можно снять у Кузнеца Маммона или Мастера Ишумы."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pDef": 100,
+      "mDef": 0,
+      "mp": 100
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 100,
+    "mDef": 0,
+    "mp": 100
+  },
+  {
+    "key": 15701,
+    "data": {
+      "unitName": "sealed_moirai_leather_legging",
+      "icon": "/armor_t95_l_i02.webp",
+      "name": {
+        "en": "Sealed Moirai Leather Legging",
+        "ru": "Запечатанные Кожаные Брюки Дестино"
+      },
+      "description": {
+        "en": "Sealed Moirai Leather Leggings. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанные Кожаные Брюки Дестино. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pDef": 105,
+      "mDef": 0,
+      "mp": 105
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 105,
+    "mDef": 0,
+    "mp": 105
+  },
+  {
+    "key": 14112,
+    "data": {
+      "unitName": "sealed_vesper_leather_leggings",
+      "icon": "/armor_t95_l_i02.webp",
+      "name": {
+        "en": "Sealed Vesper Leather Leggings",
+        "ru": "Запечатанные Кожаные Брюки Венеры"
+      },
+      "description": {
+        "en": "Sealed Vesper Leather Leggings. Seal can be removed by the blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанные Кожаные Брюки Венеры. Печать можно снять у Кузнеца Маммона или Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 111,
+      "mDef": 0,
+      "mp": 111
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 111,
+    "mDef": 0,
+    "mp": 111
+  },
+  {
+    "key": 17012,
+    "data": {
+      "unitName": "sealed_vesper_noble_leather_leggings",
+      "icon": "/armor_t95_l_i02.webp",
+      "name": {
+        "en": "Sealed Vesper Noble Leather Leggings",
+        "ru": "Запечатанные Красивые Кожаные Брюки Венеры"
+      },
+      "description": {
+        "en": "Sealed Vesper Noble Leather Legging. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанные Красивые Кожаные Брюки Венеры. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 111,
+      "mDef": 0,
+      "mp": 111
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 111,
+    "mDef": 0,
+    "mp": 111
+  },
+  {
+    "key": 15750,
+    "data": {
+      "unitName": "sealed_vorpal_leather_legging",
+      "icon": "/armor_t95_l_i02.webp",
+      "name": {
+        "en": "Sealed Vorpal Leather Legging",
+        "ru": "Запечатанные Кожаные Брюки Верпеса"
+      },
+      "description": {
+        "en": "Sealed Vorpal Leather Leggings. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанные Кожаные Брюки Верпеса. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 117,
+      "mDef": 0,
+      "mp": 117
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 117,
+    "mDef": 0,
+    "mp": 117
+  },
+  {
+    "key": 15733,
+    "data": {
+      "unitName": "sealed_elegia_leather_legging",
+      "icon": "/armor_t92_l_i02.webp",
+      "name": {
+        "en": "Sealed Elegia Leather Legging",
+        "ru": "Запечатанные Кожаные Брюки Элегии"
+      },
+      "description": {
+        "en": "Sealed Elegia Leather Leggings. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанные Кожаные Брюки Элегии. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 121,
+      "mDef": 0,
+      "mp": 121
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 121,
+    "mDef": 0,
+    "mp": 121
+  },
+  {
+    "key": 14106,
+    "data": {
+      "unitName": "sealed_vesper_leather_breastplate",
+      "icon": "/armor_t95_u_i02.webp",
+      "name": {
+        "en": "Sealed Vesper Leather Breastplate",
+        "ru": "Запечатанная Кожаная Кираса Венеры"
+      },
+      "description": {
+        "en": "Sealed Vesper Leather Breastplate. Seal can be removed by the blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанная Кожаная Кираса Венеры. Печать можно снять у Кузнеца Маммона или Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 177,
+      "mDef": 0,
+      "mp": 177
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 177,
+    "mDef": 0,
+    "mp": 177
+  },
+  {
+    "key": 17007,
+    "data": {
+      "unitName": "sealed_vesper_noble_leather_breastplate",
+      "icon": "/armor_t95_u_i02.webp",
+      "name": {
+        "en": "Sealed Vesper Noble Leather Breastplate",
+        "ru": "Запечатанная Красивая Кожаная Кираса Венеры"
+      },
+      "description": {
+        "en": "Sealed Vesper Noble Leather Breastplate. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанная Красивая Кожаная Кираса Венеры. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 177,
+      "mDef": 0,
+      "mp": 177
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 177,
+    "mDef": 0,
+    "mp": 177
+  },
+  {
+    "key": 15747,
+    "data": {
+      "unitName": "sealed_vorpal_leather_breastplate",
+      "icon": "/armor_t95_u_i02.webp",
+      "name": {
+        "en": "Sealed Vorpal Leather Breastplate",
+        "ru": "Запечатанная Кожаная Кираса Верпеса"
+      },
+      "description": {
+        "en": "Sealed Vorpal Leather Breastplate. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанная Кожаная Кираса Верпеса. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 187,
+      "mDef": 0,
+      "mp": 187
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 187,
+    "mDef": 0,
+    "mp": 187
+  },
+  {
+    "key": 15730,
+    "data": {
+      "unitName": "sealed_elegia_leather_breastplate",
+      "icon": "/armor_t92_u_i02.webp",
+      "name": {
+        "en": "Sealed Elegia Leather Breastplate",
+        "ru": "Запечатанная Кожаная Кираса Элегии"
+      },
+      "description": {
+        "en": "Sealed Elegia Leather Breastplate. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанная Кожаная Кираса Элегии. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 193,
+      "mDef": 0,
+      "mp": 193
+    },
+    "category": "armors",
+    "subtype": "light_armor",
+    "type": "light_armor",
+    "pDef": 193,
+    "mDef": 0,
+    "mp": 193
+  }
+]

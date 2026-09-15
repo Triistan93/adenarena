@@ -1,0 +1,1244 @@
+[
+  {
+    "key": 41,
+    "data": {
+      "unitName": "cloth_cap",
+      "icon": "/armor_cloth_helmet_i00.webp",
+      "name": {
+        "en": "Cloth Cap",
+        "ru": "Матерчатая Шляпа"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 13,
+      "mDef": 0,
+      "mp": 13
+    },
+    "category": "armors",
+    "subtype": "helmet",
+    "type": "helmet",
+    "pDef": 13,
+    "mDef": 0,
+    "mp": 13
+  },
+  {
+    "key": 42,
+    "data": {
+      "unitName": "leather_cap",
+      "icon": "/armor_leather_helmet_i00.webp",
+      "name": {
+        "en": "Leather Cap",
+        "ru": "Кожаная Шляпа"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 16,
+      "mDef": 0,
+      "mp": 16
+    },
+    "category": "armors",
+    "subtype": "helmet",
+    "type": "helmet",
+    "pDef": 16,
+    "mDef": 0,
+    "mp": 16
+  },
+  {
+    "key": 43,
+    "data": {
+      "unitName": "wooden_helmet",
+      "icon": "/armor_leather_helmet_i00.webp",
+      "name": {
+        "en": "Wooden Helmet",
+        "ru": "Деревянный Шлем"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 19,
+      "mDef": 0,
+      "mp": 19
+    },
+    "category": "armors",
+    "subtype": "helmet",
+    "type": "helmet",
+    "pDef": 19,
+    "mDef": 0,
+    "mp": 19
+  },
+  {
+    "key": 44,
+    "data": {
+      "unitName": "leather_helmet",
+      "icon": "/armor_leather_helmet_i00.webp",
+      "name": {
+        "en": "Leather Helmet",
+        "ru": "Кожаный Шлем"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 23,
+      "mDef": 0,
+      "mp": 23
+    },
+    "category": "armors",
+    "subtype": "helmet",
+    "type": "helmet",
+    "pDef": 23,
+    "mDef": 0,
+    "mp": 23
+  },
+  {
+    "key": 1148,
+    "data": {
+      "unitName": "hard_leather_helmet",
+      "icon": "/armor_leather_helmet_i00.webp",
+      "name": {
+        "en": "Hard Leather Helmet",
+        "ru": "Шлем из Толстой Кожи"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 26,
+      "mDef": 0,
+      "mp": 26
+    },
+    "category": "armors",
+    "subtype": "helmet",
+    "type": "helmet",
+    "pDef": 26,
+    "mDef": 0,
+    "mp": 26
+  },
+  {
+    "key": 45,
+    "data": {
+      "unitName": "bone_helmet",
+      "icon": "/armor_leather_helmet_i00.webp",
+      "name": {
+        "en": "Bone Helmet",
+        "ru": "Костяной Шлем"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 29,
+      "mDef": 0,
+      "mp": 29
+    },
+    "category": "armors",
+    "subtype": "helmet",
+    "type": "helmet",
+    "pDef": 29,
+    "mDef": 0,
+    "mp": 29
+  },
+  {
+    "key": 46,
+    "data": {
+      "unitName": "bronze_helmet",
+      "icon": "/armor_helmet_i00.webp",
+      "name": {
+        "en": "Bronze Helmet",
+        "ru": "Бронзовый Шлем"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 33,
+      "mDef": 0,
+      "mp": 33
+    },
+    "category": "armors",
+    "subtype": "helmet",
+    "type": "helmet",
+    "pDef": 33,
+    "mDef": 0,
+    "mp": 33
+  },
+  {
+    "key": 47,
+    "data": {
+      "unitName": "helmet",
+      "icon": "/armor_helmet_i00.webp",
+      "name": {
+        "en": "Helmet",
+        "ru": "Шлем"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 37,
+      "mDef": 0,
+      "mp": 37
+    },
+    "category": "armors",
+    "subtype": "helmet",
+    "type": "helmet",
+    "pDef": 37,
+    "mDef": 0,
+    "mp": 37
+  },
+  {
+    "key": 7850,
+    "data": {
+      "unitName": "helmet_of_oath",
+      "icon": "/armor_helmet_i00.webp",
+      "name": {
+        "en": "Clan Oath Helm",
+        "ru": "Шлем Клятвы"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 37,
+      "mDef": 0,
+      "mp": 37
+    },
+    "category": "armors",
+    "subtype": "helmet",
+    "type": "helmet",
+    "pDef": 37,
+    "mDef": 0,
+    "mp": 37
+  },
+  {
+    "key": 2411,
+    "data": {
+      "unitName": "brigandine_helmet",
+      "icon": "/armor_leather_helmet_i00.webp",
+      "name": {
+        "en": "Brigandine Helmet",
+        "ru": "Панцирный Шлем"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 41,
+      "mDef": 0,
+      "mp": 41
+    },
+    "category": "armors",
+    "subtype": "helmet",
+    "type": "helmet",
+    "pDef": 41,
+    "mDef": 0,
+    "mp": 41
+  },
+  {
+    "key": 2412,
+    "data": {
+      "unitName": "plate_helmet",
+      "icon": "/armor_leather_helmet_i00.webp",
+      "name": {
+        "en": "Plate Helmet",
+        "ru": "Латный Шлем"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 44,
+      "mDef": 0,
+      "mp": 44
+    },
+    "category": "armors",
+    "subtype": "helmet",
+    "type": "helmet",
+    "pDef": 44,
+    "mDef": 0,
+    "mp": 44
+  },
+  {
+    "key": 2413,
+    "data": {
+      "unitName": "chain_hood",
+      "icon": "/armor_leather_helmet_i00.webp",
+      "name": {
+        "en": "Chain Hood",
+        "ru": "Кольчужный Капюшон"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 47,
+      "mDef": 0,
+      "mp": 47
+    },
+    "category": "armors",
+    "subtype": "helmet",
+    "type": "helmet",
+    "pDef": 47,
+    "mDef": 0,
+    "mp": 47
+  },
+  {
+    "key": 500,
+    "data": {
+      "unitName": "great_helmet",
+      "icon": "/armor_helmet_i00.webp",
+      "name": {
+        "en": "Great Helmet",
+        "ru": "Большой Шлем"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 51,
+      "mDef": 0,
+      "mp": 51
+    },
+    "category": "armors",
+    "subtype": "helmet",
+    "type": "helmet",
+    "pDef": 51,
+    "mDef": 0,
+    "mp": 51
+  },
+  {
+    "key": 517,
+    "data": {
+      "unitName": "composite_helmet",
+      "icon": "/armor_leather_helmet_i00.webp",
+      "name": {
+        "en": "Composite Helmet",
+        "ru": "Композитный Шлем"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 54,
+      "mDef": 0,
+      "mp": 54
+    },
+    "category": "armors",
+    "subtype": "helmet",
+    "type": "helmet",
+    "pDef": 54,
+    "mDef": 0,
+    "mp": 54
+  },
+  {
+    "key": 1149,
+    "data": {
+      "unitName": "shining_circlet",
+      "icon": "/armor_circlet_i00.webp",
+      "name": {
+        "en": "Shining Circlet",
+        "ru": "Сверкающая Диадема"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 54,
+      "mDef": 0,
+      "mp": 54
+    },
+    "category": "armors",
+    "subtype": "helmet",
+    "type": "helmet",
+    "pDef": 54,
+    "mDef": 0,
+    "mp": 54
+  },
+  {
+    "key": 2414,
+    "data": {
+      "unitName": "full_plate_helmet",
+      "icon": "/armor_leather_helmet_i00.webp",
+      "name": {
+        "en": "Full Plate Helmet",
+        "ru": "Полный Латный Шлем"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 58,
+      "mDef": 0,
+      "mp": 58
+    },
+    "category": "armors",
+    "subtype": "helmet",
+    "type": "helmet",
+    "pDef": 58,
+    "mDef": 0,
+    "mp": 58
+  },
+  {
+    "key": 503,
+    "data": {
+      "unitName": "shrnoen's_helmet",
+      "icon": "/armor_helmet_i00.webp",
+      "name": {
+        "en": "Zubei's Helmet",
+        "ru": "Шлем Зубея"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pDef": 62,
+      "mDef": 0,
+      "mp": 62
+    },
+    "category": "armors",
+    "subtype": "helmet",
+    "type": "helmet",
+    "pDef": 62,
+    "mDef": 0,
+    "mp": 62
+  },
+  {
+    "key": 2415,
+    "data": {
+      "unitName": "avadon_circlet",
+      "icon": "/armor_leather_helmet_i00.webp",
+      "name": {
+        "en": "Avadon Circlet",
+        "ru": "Диадема Авадона"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pDef": 62,
+      "mDef": 0,
+      "mp": 62
+    },
+    "category": "armors",
+    "subtype": "helmet",
+    "type": "helmet",
+    "pDef": 62,
+    "mDef": 0,
+    "mp": 62
+  },
+  {
+    "key": 2416,
+    "data": {
+      "unitName": "blue_wolve's_helmet",
+      "icon": "/armor_leather_helmet_i00.webp",
+      "name": {
+        "en": "Blue Wolf Helmet",
+        "ru": "Шлем Синего Волка"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pDef": 66,
+      "mDef": 0,
+      "mp": 66
+    },
+    "category": "armors",
+    "subtype": "helmet",
+    "type": "helmet",
+    "pDef": 66,
+    "mDef": 0,
+    "mp": 66
+  },
+  {
+    "key": 2417,
+    "data": {
+      "unitName": "doom_helmet",
+      "icon": "/armor_leather_helmet_i00.webp",
+      "name": {
+        "en": "Doom Helmet",
+        "ru": "Шлем Рока"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pDef": 66,
+      "mDef": 0,
+      "mp": 66
+    },
+    "category": "armors",
+    "subtype": "helmet",
+    "type": "helmet",
+    "pDef": 66,
+    "mDef": 0,
+    "mp": 66
+  },
+  {
+    "key": 5289,
+    "data": {
+      "unitName": "sealed_dark_crystal_helmet",
+      "icon": "/armor_helmet_i02.webp",
+      "name": {
+        "en": "Sealed Dark Crystal Helmet",
+        "ru": "Запечатанный Шлем Кристалла Тьмы"
+      },
+      "description": {
+        "en": "Its seal can be broken with the help of the Blacksmith of Mammon.",
+        "ru": "Запечатанный Шлем Кристалла Тьмы. Печать можно снять у кузнеца в любой деревне."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pDef": 69,
+      "mDef": 0,
+      "mp": 69
+    },
+    "category": "armors",
+    "subtype": "helmet",
+    "type": "helmet",
+    "pDef": 69,
+    "mDef": 0,
+    "mp": 69
+  },
+  {
+    "key": 5294,
+    "data": {
+      "unitName": "sealed_tallum_bonnet",
+      "icon": "/armor_helmet_i02.webp",
+      "name": {
+        "en": "Sealed Tallum Helmet",
+        "ru": "Запечатанный Шлем Таллума"
+      },
+      "description": {
+        "en": "Its seal can be broken with the help of the Blacksmith of Mammon.",
+        "ru": "Запечатанный Шлем Таллума. Печать можно снять у кузнеца в любой деревне."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pDef": 69,
+      "mDef": 0,
+      "mp": 69
+    },
+    "category": "armors",
+    "subtype": "helmet",
+    "type": "helmet",
+    "pDef": 69,
+    "mDef": 0,
+    "mp": 69
+  },
+  {
+    "key": 7870,
+    "data": {
+      "unitName": "sealed_helmet_of_apella",
+      "icon": "/armor_helmet_i02.webp",
+      "name": {
+        "en": "Sealed Apella Helm",
+        "ru": "Запечатанный Шлем Апеллы"
+      },
+      "description": {
+        "en": "May be worn by a Baron or a higher level Aristocrat.  It can be opened with the help of the Blacksmith of Mammon.",
+        "ru": "Может носить персонаж в звании Старейшина и выше. Запечатанный Шлем Апеллы. Печать можно снять у кузнеца в любой деревне."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pDef": 69,
+      "mDef": 0,
+      "mp": 69
+    },
+    "category": "armors",
+    "subtype": "helmet",
+    "type": "helmet",
+    "pDef": 69,
+    "mDef": 0,
+    "mp": 69
+  },
+  {
+    "key": 5312,
+    "data": {
+      "unitName": "sealed_helm_of_nightmare",
+      "icon": "/armor_leather_helmet_i02.webp",
+      "name": {
+        "en": "Sealed Helm of Nightmare",
+        "ru": "Запечатанный Шлем Кошмаров"
+      },
+      "description": {
+        "en": "Its seal can be broken with the help of the Blacksmith of Mammon.",
+        "ru": "Запечатанный Шлем Кошмаров. Печать можно снять у кузнеца в любой деревне."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pDef": 73,
+      "mDef": 0,
+      "mp": 73
+    },
+    "category": "armors",
+    "subtype": "helmet",
+    "type": "helmet",
+    "pDef": 73,
+    "mDef": 0,
+    "mp": 73
+  },
+  {
+    "key": 5317,
+    "data": {
+      "unitName": "sealed_magestic_circlet",
+      "icon": "/armor_leather_helmet_i02.webp",
+      "name": {
+        "en": "Sealed Majestic Circlet",
+        "ru": "Запечатанная Диадема Величия"
+      },
+      "description": {
+        "en": "Its seal can be broken with the help of the Blacksmith of Mammon.",
+        "ru": "Запечатанная Диадема Величия. Печать можно снять у кузнеца в любой деревне."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pDef": 73,
+      "mDef": 0,
+      "mp": 73
+    },
+    "category": "armors",
+    "subtype": "helmet",
+    "type": "helmet",
+    "pDef": 73,
+    "mDef": 0,
+    "mp": 73
+  },
+  {
+    "key": 6679,
+    "data": {
+      "unitName": "sealed_imperial_crusader_helmet",
+      "icon": "/armor_helmet_i02.webp",
+      "name": {
+        "en": "Sealed Imperial Crusader Helmet",
+        "ru": "Запечатанный Шлем Имперского Крестоносца"
+      },
+      "description": {
+        "en": "Its seal can be broken with the help of the Blacksmith of Mammon.",
+        "ru": "Запечатанный Шлем Имперского Крестоносца. Печать может быть сломана с помощью Кузнеца Маммона."
+      }
+    },
+    "grade": "S",
+    "stats": {
+      "pDef": 83,
+      "mDef": 0,
+      "mp": 83
+    },
+    "category": "armors",
+    "subtype": "helmet",
+    "type": "helmet",
+    "pDef": 83,
+    "mDef": 0,
+    "mp": 83
+  },
+  {
+    "key": 6683,
+    "data": {
+      "unitName": "sealed_draconic_leather_helmet",
+      "icon": "/armor_leather_helmet_i02.webp",
+      "name": {
+        "en": "Sealed Draconic Leather Helmet",
+        "ru": "Запечатанный Шлем из Драконьей Кожи"
+      },
+      "description": {
+        "en": "Its seal can be broken with the help of the Blacksmith of Mammon.",
+        "ru": "Запечатанный Шлем из Драконьей Кожи. Печать может быть сломана с помощью Кузнеца Маммона."
+      }
+    },
+    "grade": "S",
+    "stats": {
+      "pDef": 83,
+      "mDef": 0,
+      "mp": 83
+    },
+    "category": "armors",
+    "subtype": "helmet",
+    "type": "helmet",
+    "pDef": 83,
+    "mDef": 0,
+    "mp": 83
+  },
+  {
+    "key": 6687,
+    "data": {
+      "unitName": "sealed_major_arcana_hood",
+      "icon": "/armor_leather_helmet_i02.webp",
+      "name": {
+        "en": "Sealed Major Arcana Circlet",
+        "ru": "Запечатанная Диадема Тайн"
+      },
+      "description": {
+        "en": "Its seal can be broken with the help of the Blacksmith of Mammon.",
+        "ru": "Запечатанная Диадема Тайн. Печать может быть сломана с помощью Кузнеца Маммона."
+      }
+    },
+    "grade": "S",
+    "stats": {
+      "pDef": 83,
+      "mDef": 0,
+      "mp": 83
+    },
+    "category": "armors",
+    "subtype": "helmet",
+    "type": "helmet",
+    "pDef": 83,
+    "mDef": 0,
+    "mp": 83
+  },
+  {
+    "key": 9526,
+    "data": {
+      "unitName": "sealed_dynasty_circlet",
+      "icon": "/armor_circlet_i02.webp",
+      "name": {
+        "en": "Sealed Dynasty Circlet",
+        "ru": "Запечатанная Диадема Династии"
+      },
+      "description": {
+        "en": "Sealed Dynasty Circlet. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанная Диадема Династии. Печать можно снять у Кузнеца Маммона или Мастера Ишумы."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pDef": 92,
+      "mDef": 0,
+      "mp": 92
+    },
+    "category": "armors",
+    "subtype": "helmet",
+    "type": "helmet",
+    "pDef": 92,
+    "mDef": 0,
+    "mp": 92
+  },
+  {
+    "key": 9516,
+    "data": {
+      "unitName": "sealed_dynasty_helmet",
+      "icon": "/armor_helmet_i02.webp",
+      "name": {
+        "en": "Sealed Dynasty Helmet",
+        "ru": "Запечатанный Шлем Династии"
+      },
+      "description": {
+        "en": "Sealed Dynasty Helmet. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанный Шлем Династии. Печать можно снять у Кузнеца Маммона или Мастера Ишумы."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pDef": 92,
+      "mDef": 0,
+      "mp": 92
+    },
+    "category": "armors",
+    "subtype": "helmet",
+    "type": "helmet",
+    "pDef": 92,
+    "mDef": 0,
+    "mp": 92
+  },
+  {
+    "key": 9521,
+    "data": {
+      "unitName": "sealed_dynasty_leather_helmet",
+      "icon": "/armor_leather_helmet_i02.webp",
+      "name": {
+        "en": "Sealed Dynasty Leather Helmet",
+        "ru": "Запечатанный Кожаный Шлем Династии"
+      },
+      "description": {
+        "en": "Sealed Dynasty Leather Helmet. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанный Кожаный Шлем Династии. Печать можно снять у Кузнеца Маммона или Мастера Ишумы."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pDef": 92,
+      "mDef": 0,
+      "mp": 92
+    },
+    "category": "armors",
+    "subtype": "helmet",
+    "type": "helmet",
+    "pDef": 92,
+    "mDef": 0,
+    "mp": 92
+  },
+  {
+    "key": 15696,
+    "data": {
+      "unitName": "sealed_moirai_circlet",
+      "icon": "/armor_circlet_i02.webp",
+      "name": {
+        "en": "Sealed Moirai Circlet",
+        "ru": "Запечатанная Диадема Дестино"
+      },
+      "description": {
+        "en": "Sealed Moirai Circlet. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанная Диадема Дестино. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pDef": 96,
+      "mDef": 0,
+      "mp": 96
+    },
+    "category": "armors",
+    "subtype": "helmet",
+    "type": "helmet",
+    "pDef": 96,
+    "mDef": 0,
+    "mp": 96
+  },
+  {
+    "key": 15694,
+    "data": {
+      "unitName": "sealed_moirai_helmet",
+      "icon": "/armor_helmet_i02.webp",
+      "name": {
+        "en": "Sealed Moirai Helmet",
+        "ru": "Запечатанный Шлем Дестино"
+      },
+      "description": {
+        "en": "Sealed Moirai Helmet. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанный Шлем Дестино. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pDef": 96,
+      "mDef": 0,
+      "mp": 96
+    },
+    "category": "armors",
+    "subtype": "helmet",
+    "type": "helmet",
+    "pDef": 96,
+    "mDef": 0,
+    "mp": 96
+  },
+  {
+    "key": 15695,
+    "data": {
+      "unitName": "sealed_moirai_leather_helmet",
+      "icon": "/armor_leather_helmet_i02.webp",
+      "name": {
+        "en": "Sealed Moirai Leather Helmet",
+        "ru": "Запечатанный Кожаный Шлем Дестино"
+      },
+      "description": {
+        "en": "Sealed Moirai Leather Helmet. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанный Кожаный Шлем Дестино. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pDef": 96,
+      "mDef": 0,
+      "mp": 96
+    },
+    "category": "armors",
+    "subtype": "helmet",
+    "type": "helmet",
+    "pDef": 96,
+    "mDef": 0,
+    "mp": 96
+  },
+  {
+    "key": 13145,
+    "data": {
+      "unitName": "sealed_vesper_circlet",
+      "icon": "/armor_circlet_i02.webp",
+      "name": {
+        "en": "Sealed Vesper Circlet",
+        "ru": "Запечатанная Диадема Венеры"
+      },
+      "description": {
+        "en": "Sealed Vesper Circlet. Seal can be removed by the blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанная Диадема Венеры. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 101,
+      "mDef": 0,
+      "mp": 101
+    },
+    "category": "armors",
+    "subtype": "helmet",
+    "type": "helmet",
+    "pDef": 101,
+    "mDef": 0,
+    "mp": 101
+  },
+  {
+    "key": 13143,
+    "data": {
+      "unitName": "sealed_vesper_helmet",
+      "icon": "/armor_helmet_i02.webp",
+      "name": {
+        "en": "Sealed Vesper Helmet",
+        "ru": "Запечатанный Шлем Венеры"
+      },
+      "description": {
+        "en": "Sealed Vesper Helmet. Seal can be removed by the blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанный Шлем Венеры. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 101,
+      "mDef": 0,
+      "mp": 101
+    },
+    "category": "armors",
+    "subtype": "helmet",
+    "type": "helmet",
+    "pDef": 101,
+    "mDef": 0,
+    "mp": 101
+  },
+  {
+    "key": 13144,
+    "data": {
+      "unitName": "sealed_vesper_leather_helmet",
+      "icon": "/armor_leather_helmet_i02.webp",
+      "name": {
+        "en": "Sealed Vesper Leather Helmet",
+        "ru": "Запечатанный Кожаный Шлем Венеры"
+      },
+      "description": {
+        "en": "Sealed Vesper Leather Helmet. Seal can be removed by the blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанный Кожаный Шлем Венеры. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 101,
+      "mDef": 0,
+      "mp": 101
+    },
+    "category": "armors",
+    "subtype": "helmet",
+    "type": "helmet",
+    "pDef": 101,
+    "mDef": 0,
+    "mp": 101
+  },
+  {
+    "key": 13148,
+    "data": {
+      "unitName": "sealed_vesper_noble_circlet",
+      "icon": "/armor_circlet_i02.webp",
+      "name": {
+        "en": "Sealed Vesper Noble Circlet",
+        "ru": "Запечатанная Красивая Диадема Венеры"
+      },
+      "description": {
+        "en": "Sealed Vesper Noble Circlet. Seal can be removed by the blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанная Красивая Диадема Венеры. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 101,
+      "mDef": 0,
+      "mp": 101
+    },
+    "category": "armors",
+    "subtype": "helmet",
+    "type": "helmet",
+    "pDef": 101,
+    "mDef": 0,
+    "mp": 101
+  },
+  {
+    "key": 13146,
+    "data": {
+      "unitName": "sealed_vesper_noble_helmet",
+      "icon": "/armor_helmet_i02.webp",
+      "name": {
+        "en": "Sealed Vesper Noble Helmet",
+        "ru": "Запечатанный Красивый Шлем Венеры"
+      },
+      "description": {
+        "en": "Sealed Vesper Noble Helmet. Seal can be removed by the blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанный Красивый Шлем Венеры. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 101,
+      "mDef": 0,
+      "mp": 101
+    },
+    "category": "armors",
+    "subtype": "helmet",
+    "type": "helmet",
+    "pDef": 101,
+    "mDef": 0,
+    "mp": 101
+  },
+  {
+    "key": 13147,
+    "data": {
+      "unitName": "sealed_vesper_noble_leather_helmet",
+      "icon": "/armor_leather_helmet_i02.webp",
+      "name": {
+        "en": "Sealed Vesper Noble Leather Helmet",
+        "ru": "Запечатанный Красивый Кожаный Шлем Венеры"
+      },
+      "description": {
+        "en": "Sealed Vesper Noble Leather Helmet. Seal can be removed by the blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанный Красивый Кожаный Шлем Венеры. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 101,
+      "mDef": 0,
+      "mp": 101
+    },
+    "category": "armors",
+    "subtype": "helmet",
+    "type": "helmet",
+    "pDef": 101,
+    "mDef": 0,
+    "mp": 101
+  },
+  {
+    "key": 15745,
+    "data": {
+      "unitName": "sealed_vorpal_circlet",
+      "icon": "/armor_circlet_i02.webp",
+      "name": {
+        "en": "Sealed Vorpal Circlet",
+        "ru": "Запечатанная Диадема Верпеса"
+      },
+      "description": {
+        "en": "Sealed Vorpal Circlet. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанная Диадема Верпеса. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 107,
+      "mDef": 0,
+      "mp": 107
+    },
+    "category": "armors",
+    "subtype": "helmet",
+    "type": "helmet",
+    "pDef": 107,
+    "mDef": 0,
+    "mp": 107
+  },
+  {
+    "key": 15743,
+    "data": {
+      "unitName": "sealed_vorpal_helmet",
+      "icon": "/armor_helmet_i02.webp",
+      "name": {
+        "en": "Sealed Vorpal Helmet",
+        "ru": "Запечатанный Шлем Верпеса"
+      },
+      "description": {
+        "en": "Sealed Vorpal Helmet. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанный Шлем Верпеса. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 107,
+      "mDef": 0,
+      "mp": 107
+    },
+    "category": "armors",
+    "subtype": "helmet",
+    "type": "helmet",
+    "pDef": 107,
+    "mDef": 0,
+    "mp": 107
+  },
+  {
+    "key": 15744,
+    "data": {
+      "unitName": "sealed_vorpal_leather_helmet",
+      "icon": "/armor_leather_helmet_i02.webp",
+      "name": {
+        "en": "Sealed Vorpal Leather Helmet",
+        "ru": "Запечатанный Кожаный Шлем Верпеса"
+      },
+      "description": {
+        "en": "Sealed Vorpal Leather Helmet. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанный Кожаный Шлем Верпеса. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 107,
+      "mDef": 0,
+      "mp": 107
+    },
+    "category": "armors",
+    "subtype": "helmet",
+    "type": "helmet",
+    "pDef": 107,
+    "mDef": 0,
+    "mp": 107
+  },
+  {
+    "key": 15728,
+    "data": {
+      "unitName": "sealed_elegia_circlet",
+      "icon": "/armor_circlet_i02.webp",
+      "name": {
+        "en": "Sealed Elegia Circlet",
+        "ru": "Запечатанная Диадема Элегии"
+      },
+      "description": {
+        "en": "Sealed Elegia Circlet. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанная Диадема Элегии. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 110,
+      "mDef": 0,
+      "mp": 110
+    },
+    "category": "armors",
+    "subtype": "helmet",
+    "type": "helmet",
+    "pDef": 110,
+    "mDef": 0,
+    "mp": 110
+  },
+  {
+    "key": 15726,
+    "data": {
+      "unitName": "sealed_elegia_helmet",
+      "icon": "/armor_helmet_i02.webp",
+      "name": {
+        "en": "Sealed Elegia Helmet",
+        "ru": "Запечатанный Шлем Элегии"
+      },
+      "description": {
+        "en": "Sealed Elegia Helmet. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанный Шлем Элегии. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 110,
+      "mDef": 0,
+      "mp": 110
+    },
+    "category": "armors",
+    "subtype": "helmet",
+    "type": "helmet",
+    "pDef": 110,
+    "mDef": 0,
+    "mp": 110
+  },
+  {
+    "key": 15727,
+    "data": {
+      "unitName": "sealed_elegia_leather_helmet",
+      "icon": "/armor_leather_helmet_i02.webp",
+      "name": {
+        "en": "Sealed Elegia Leather Helmet",
+        "ru": "Запечатанный Кожаный Шлем Элегии"
+      },
+      "description": {
+        "en": "Sealed Elegia Leather Helmet. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанный Кожаный Шлем Элегии. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 110,
+      "mDef": 0,
+      "mp": 110
+    },
+    "category": "armors",
+    "subtype": "helmet",
+    "type": "helmet",
+    "pDef": 110,
+    "mDef": 0,
+    "mp": 110
+  }
+]

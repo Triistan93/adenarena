@@ -1,0 +1,137 @@
+[
+  {
+    "key": 13886,
+    "data": {
+      "unitName": "sealed_dynasty_sigil",
+      "icon": "/armor_dynasty_sigil_i01.webp",
+      "name": {
+        "en": "Sealed Dynasty Sigil",
+        "ru": "Запечатанный Символ Династии"
+      },
+      "description": {
+        "en": "Sealed Dynasty Sigil. Seal can be removed by the blacksmith of Mammon.",
+        "ru": "Запечатанный Символ Династии. Снять печать можно у Кузнеца Маммона."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pDef": 15,
+      "mDef": 0,
+      "mp": 15
+    },
+    "category": "armors",
+    "subtype": "sigil",
+    "type": "sigil",
+    "pDef": 15,
+    "mDef": 0,
+    "mp": 15
+  },
+  {
+    "key": 15709,
+    "data": {
+      "unitName": "sealed_moirai_sigil",
+      "icon": "/weapon_tysandy_sigil_i00.webp",
+      "name": {
+        "en": "Sealed Moirai Sigil",
+        "ru": "Запечатанный Символ Дестино"
+      },
+      "description": {
+        "en": "Sealed Moirai Sigil. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанный Символ Дестино. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pDef": 16,
+      "mDef": 0,
+      "mp": 16
+    },
+    "category": "armors",
+    "subtype": "sigil",
+    "type": "sigil",
+    "pDef": 16,
+    "mDef": 0,
+    "mp": 16
+  },
+  {
+    "key": 13887,
+    "data": {
+      "unitName": "sealed_vesper_sigil",
+      "icon": "/armor_verper_sigil_i01.webp",
+      "name": {
+        "en": "Sealed Vesper Sigil",
+        "ru": "Запечатанный Символ Венеры"
+      },
+      "description": {
+        "en": "Sealed Vesper Sigil. Seal can be removed by the blacksmith of Mammon and Maestro Ishuma.",
+        "ru": "Запечатанный Символ Венеры. Снять печать можно у Кузнеца Маммона."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 17,
+      "mDef": 0,
+      "mp": 17
+    },
+    "category": "armors",
+    "subtype": "sigil",
+    "type": "sigil",
+    "pDef": 17,
+    "mDef": 0,
+    "mp": 17
+  },
+  {
+    "key": 15759,
+    "data": {
+      "unitName": "sealed_vorpal_sigil",
+      "icon": "/belleface_i00.webp",
+      "name": {
+        "en": "Sealed Vorpal Sigil",
+        "ru": "Запечатанный Символ Верпеса"
+      },
+      "description": {
+        "en": "Sealed Vorpal Sigil. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанный Символ Верпеса. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 19,
+      "mDef": 0,
+      "mp": 19
+    },
+    "category": "armors",
+    "subtype": "sigil",
+    "type": "sigil",
+    "pDef": 19,
+    "mDef": 0,
+    "mp": 19
+  },
+  {
+    "key": 15742,
+    "data": {
+      "unitName": "sealed_elegia_sigil",
+      "icon": "/weapon_pricklelotus_i00.webp",
+      "name": {
+        "en": "Sealed Elegia Sigil",
+        "ru": "Запечатанный Символ Элегии"
+      },
+      "description": {
+        "en": "Sealed Elegia Sigil. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанный Символ Элегии. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 21,
+      "mDef": 0,
+      "mp": 21
+    },
+    "category": "armors",
+    "subtype": "sigil",
+    "type": "sigil",
+    "pDef": 21,
+    "mDef": 0,
+    "mp": 21
+  }
+]

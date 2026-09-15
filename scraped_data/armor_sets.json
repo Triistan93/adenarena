@@ -1,0 +1,2832 @@
+{
+  "metadata": {
+    "source": "https://lineage.pmfun.com/list/set",
+    "scrapedAt": "2026-09-15T02:32:38.267Z",
+    "totalGrades": 6,
+    "totalSets": 46,
+    "totalImages": 175
+  },
+  "grades": [
+    {
+      "grade": "S Grade",
+      "headers": [
+        "S Grade",
+        "Parts",
+        "Sealed Pdef",
+        "Unsealed Pdef",
+        "Unseal Fee",
+        "Modification"
+      ],
+      "sets": [
+        {
+          "grade": "S Grade",
+          "setName": "Imperial Crusader Heavy Armor Set",
+          "rawNameLines": [
+            "Imperial Crusader",
+            "Heavy Armor Set"
+          ],
+          "type": "Heavy Armor Set",
+          "bonuses": [
+            "P Def. +8%",
+            "Maximum HP +445",
+            "Sleep/Hold Probability -70%",
+            "DEX -2",
+            "STR +2",
+            "Probability of Poison/Bleed -80% with Imperial Crusader Shield equipped."
+          ],
+          "bonusesMd": [
+            "P Def. +8%",
+            "Maximum HP +445",
+            "Sleep/Hold Probability -70%",
+            "[DEX -2](https://lineage.pmfun.com/list/set#DEX)",
+            "[STR +2](https://lineage.pmfun.com/list/set#STR)",
+            "Probability of Poison/Bleed -80% with Imperial Crusader Shield equipped."
+          ],
+          "parts": [
+            {
+              "name": "Imperial Crusader Breastplate",
+              "url": "https://lineage.pmfun.com/item/6373/imperial-crusader-breastplate.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t88_u_i00_0.png",
+              "imageFileName": "armor_t88_u_i00_0.png",
+              "localImagePath": "images/armor_t88_u_i00_0.png",
+              "sealedPdef": "193",
+              "unsealedPdef": "205",
+              "unsealFee": "1,072,500 AA"
+            },
+            {
+              "name": "Imperial Crusader Gaiters",
+              "url": "https://lineage.pmfun.com/item/6374/imperial-crusader-gaiters.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t88_l_i00_0.png",
+              "imageFileName": "armor_t88_l_i00_0.png",
+              "localImagePath": "images/armor_t88_l_i00_0.png",
+              "sealedPdef": "121",
+              "unsealedPdef": "128",
+              "unsealFee": "672,000 AA"
+            },
+            {
+              "name": "Imperial Crusader Helmet",
+              "url": "https://lineage.pmfun.com/item/6378/imperial-crusader-helmet.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_helmet_i00_0.png",
+              "imageFileName": "armor_helmet_i00_0.png",
+              "localImagePath": "images/armor_helmet_i00_0.png",
+              "sealedPdef": "83",
+              "unsealedPdef": "-",
+              "unsealFee": "402,750 AA"
+            },
+            {
+              "name": "Imperial Crusader Gauntlets",
+              "url": "https://lineage.pmfun.com/item/6375/imperial-crusader-gauntlets.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t88_g_i00_0.png",
+              "imageFileName": "armor_t88_g_i00_0.png",
+              "localImagePath": "images/armor_t88_g_i00_0.png",
+              "sealedPdef": "55",
+              "unsealedPdef": "-",
+              "unsealFee": "268,500 AA"
+            },
+            {
+              "name": "Imperial Crusader Boots",
+              "url": "https://lineage.pmfun.com/item/6376/imperial-crusader-boots.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t88_b_i00_0.png",
+              "imageFileName": "armor_t88_b_i00_0.png",
+              "localImagePath": "images/armor_t88_b_i00_0.png",
+              "sealedPdef": "55",
+              "unsealedPdef": "-",
+              "unsealFee": "268,500 AA"
+            },
+            {
+              "name": "Imperial Crusader Shield",
+              "url": "https://lineage.pmfun.com/item/6377/imperial-crusader-shield.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/shield_imperial_crusader_shield_i00_0.png",
+              "imageFileName": "shield_imperial_crusader_shield_i00_0.png",
+              "localImagePath": "images/shield_imperial_crusader_shield_i00_0.png",
+              "sealedPdef": "276",
+              "unsealedPdef": "290",
+              "unsealFee": "282,000 AA"
+            }
+          ]
+        },
+        {
+          "grade": "S Grade",
+          "setName": "Draconic Leather Light Armor Set",
+          "rawNameLines": [
+            "Draconic Leather",
+            "Light Armor Set"
+          ],
+          "type": "Light Armor Set",
+          "bonuses": [
+            "Attack Speed/P. Atk +4%",
+            "Maximum MP +289",
+            "Weight Limit +5759",
+            "DEX +1",
+            "STR +1",
+            "CON -2"
+          ],
+          "bonusesMd": [
+            "Attack Speed/P. Atk +4%",
+            "Maximum MP +289",
+            "Weight Limit +5759",
+            "[DEX +1](https://lineage.pmfun.com/list/set#DEX)",
+            "[STR +1](https://lineage.pmfun.com/list/set#STR)",
+            "[CON -2](https://lineage.pmfun.com/list/set#CON)"
+          ],
+          "parts": [
+            {
+              "name": "Draconic Leather Armor",
+              "url": "https://lineage.pmfun.com/item/6379/draconic-leather-armor.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t89_ul_i00_0.png",
+              "imageFileName": "armor_t89_ul_i00_0.png",
+              "localImagePath": "images/armor_t89_ul_i00_0.png",
+              "sealedPdef": "236",
+              "unsealedPdef": "249",
+              "unsealFee": "1,305,000 AA"
+            },
+            {
+              "name": "Draconic Leather Helmet",
+              "url": "https://lineage.pmfun.com/item/6382/draconic-leather-helmet.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_leather_helmet_i00_0.png",
+              "imageFileName": "armor_leather_helmet_i00_0.png",
+              "localImagePath": "images/armor_leather_helmet_i00_0.png",
+              "sealedPdef": "93",
+              "unsealedPdef": "-",
+              "unsealFee": "402,750 AA"
+            },
+            {
+              "name": "Draconic Leather Gloves",
+              "url": "https://lineage.pmfun.com/item/6380/draconic-leather-gloves.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t89_g_i00_0.png",
+              "imageFileName": "armor_t89_g_i00_0.png",
+              "localImagePath": "images/armor_t89_g_i00_0.png",
+              "sealedPdef": "55",
+              "unsealedPdef": "-",
+              "unsealFee": "268,500 AA"
+            },
+            {
+              "name": "Draconic Leather Boots",
+              "url": "https://lineage.pmfun.com/item/6381/draconic-leather-boots.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t89_b_i00_0.png",
+              "imageFileName": "armor_t89_b_i00_0.png",
+              "localImagePath": "images/armor_t89_b_i00_0.png",
+              "sealedPdef": "55",
+              "unsealedPdef": "-",
+              "unsealFee": "268,500 AA"
+            }
+          ]
+        },
+        {
+          "grade": "S Grade",
+          "setName": "Major Arcana Robe Set",
+          "rawNameLines": [
+            "Major Arcana",
+            "Robe Set"
+          ],
+          "type": "Robe Set",
+          "bonuses": [
+            "M. Atk +17%",
+            "Movement Speed +7",
+            "Casting Cancel Probability -50%",
+            "Weight Limit +5759",
+            "WIT +1",
+            "INT +1",
+            "MEN -2",
+            "Stun resistance +50%"
+          ],
+          "bonusesMd": [
+            "M. Atk +17%",
+            "Movement Speed +7",
+            "Casting Cancel Probability -50%",
+            "Weight Limit +5759",
+            "[WIT +1](https://lineage.pmfun.com/list/set#WIT)",
+            "[INT +1](https://lineage.pmfun.com/list/set#INT)",
+            "[MEN -2](https://lineage.pmfun.com/list/set#MEN)",
+            "Stun resistance +50%"
+          ],
+          "parts": [
+            {
+              "name": "Major Arcana Robe",
+              "url": "https://lineage.pmfun.com/item/6383/major-arcana-robe.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t90_ul_i00_0.png",
+              "imageFileName": "armor_t90_ul_i00_0.png",
+              "localImagePath": "images/armor_t90_ul_i00_0.png",
+              "sealedPdef": "157",
+              "unsealedPdef": "166 + 866 MP",
+              "unsealFee": "1,305,000 AA"
+            },
+            {
+              "name": "Major Arcana Circlet",
+              "url": "https://lineage.pmfun.com/item/6386/major-arcana-circlet.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_leather_helmet_i00_0.png",
+              "imageFileName": "armor_leather_helmet_i00_0.png",
+              "localImagePath": "images/armor_leather_helmet_i00_0.png",
+              "sealedPdef": "83",
+              "unsealedPdef": "-",
+              "unsealFee": "402,750 AA"
+            },
+            {
+              "name": "Major Arcana Gloves",
+              "url": "https://lineage.pmfun.com/item/6384/major-arcana-gloves.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t90_g_i00_0.png",
+              "imageFileName": "armor_t90_g_i00_0.png",
+              "localImagePath": "images/armor_t90_g_i00_0.png",
+              "sealedPdef": "55",
+              "unsealedPdef": "-",
+              "unsealFee": "268,500 AA"
+            },
+            {
+              "name": "Major Arcana Boots",
+              "url": "https://lineage.pmfun.com/item/6385/major-arcana-boots.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t90_b_i00_0.png",
+              "imageFileName": "armor_t90_b_i00_0.png",
+              "localImagePath": "images/armor_t90_b_i00_0.png",
+              "sealedPdef": "55",
+              "unsealedPdef": "-",
+              "unsealFee": "268,500 AA"
+            }
+          ]
+        },
+        {
+          "grade": "S Grade",
+          "setName": "Tateossian Jewelry Set",
+          "rawNameLines": [
+            "Tateossian",
+            "Jewelry Set"
+          ],
+          "type": "Jewelry Set",
+          "bonuses": [
+            "More Mdef",
+            "More MP when unsealed"
+          ],
+          "bonusesMd": [
+            "More Mdef",
+            "More MP when unsealed"
+          ],
+          "parts": [
+            {
+              "name": "Tateossian Necklace",
+              "url": "https://lineage.pmfun.com/item/920/tateossian-necklace.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/accessory_tateossian_necklace_i00_0.png",
+              "imageFileName": "accessory_tateossian_necklace_i00_0.png",
+              "localImagePath": "images/accessory_tateossian_necklace_i00_0.png",
+              "sealedPdef": "91",
+              "unsealedPdef": "95 + 42 MP",
+              "unsealFee": "1,494,460 AA"
+            },
+            {
+              "name": "Tateossian Earring",
+              "url": "https://lineage.pmfun.com/item/858/tateossian-earring.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/accessory_tateossian_earring_i00_0.png",
+              "imageFileName": "accessory_tateossian_earring_i00_0.png",
+              "localImagePath": "images/accessory_tateossian_earring_i00_0.png",
+              "sealedPdef": "68",
+              "unsealedPdef": "71 + 31 MP",
+              "unsealFee": "1,120,845 AA"
+            },
+            {
+              "name": "Tateossian Ring",
+              "url": "https://lineage.pmfun.com/item/889/tateossian-ring.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/accessory_tateossian_ring_i00_0.png",
+              "imageFileName": "accessory_tateossian_ring_i00_0.png",
+              "localImagePath": "images/accessory_tateossian_ring_i00_0.png",
+              "sealedPdef": "46",
+              "unsealedPdef": "48 + 21 MP",
+              "unsealFee": "747,230 AA"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "grade": "A Grade",
+      "headers": [
+        "A Grade",
+        "Parts",
+        "Unsealed parts",
+        "Modification"
+      ],
+      "sets": [
+        {
+          "grade": "A Grade",
+          "setName": "Majestic Heavy Set",
+          "rawNameLines": [
+            "Majestic Heavy Set"
+          ],
+          "type": "Heavy Armor Set",
+          "bonuses": [
+            "P. Atk. +4%",
+            "Accuracy +3",
+            "Stun Resistance +50%",
+            "STR +2",
+            "Con -2"
+          ],
+          "bonusesMd": [
+            "P. Atk. +4%",
+            "Accuracy +3",
+            "Stun Resistance +50%",
+            "[STR +2](https://lineage.pmfun.com/list/set#STR)",
+            "[Con -2](https://lineage.pmfun.com/list/set#CON)"
+          ],
+          "parts": [
+            {
+              "name": "Majestic Plate Armor",
+              "url": "https://lineage.pmfun.com/item/2383/majestic-plate-armor.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t83_ul_i00_0.png",
+              "imageFileName": "armor_t83_ul_i00_0.png",
+              "localImagePath": "images/armor_t83_ul_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Majestic Plate Armor",
+                "url": "https://lineage.pmfun.com/item/5316/sealed-majestic-plate-armor.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_t83_ul_i02_0.png",
+                "imageFileName": "armor_t83_ul_i02_0.png",
+                "localImagePath": "images/armor_t83_ul_i02_0.png"
+              }
+            },
+            {
+              "name": "Majestic Gauntlets - Heavy Armor",
+              "url": "https://lineage.pmfun.com/item/5774/majestic-gauntlets--heavy-armor.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t83_g_i00_0.png",
+              "imageFileName": "armor_t83_g_i00_0.png",
+              "localImagePath": "images/armor_t83_g_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Majestic Gauntlets",
+                "url": "https://lineage.pmfun.com/item/5318/sealed-majestic-gauntlets.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_t83_g_i02_0.png",
+                "imageFileName": "armor_t83_g_i02_0.png",
+                "localImagePath": "images/armor_t83_g_i02_0.png"
+              }
+            },
+            {
+              "name": "Majestic Boots - Heavy Armor",
+              "url": "https://lineage.pmfun.com/item/5786/majestic-boots--heavy-armor.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t83_b_i00_0.png",
+              "imageFileName": "armor_t83_b_i00_0.png",
+              "localImagePath": "images/armor_t83_b_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Majestic Boots",
+                "url": "https://lineage.pmfun.com/item/5319/sealed-majestic-boots.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_t83_b_i02_0.png",
+                "imageFileName": "armor_t83_b_i02_0.png",
+                "localImagePath": "images/armor_t83_b_i02_0.png"
+              }
+            },
+            {
+              "name": "Majestic Circlet",
+              "url": "https://lineage.pmfun.com/item/2419/majestic-circlet.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_leather_helmet_i00_0.png",
+              "imageFileName": "armor_leather_helmet_i00_0.png",
+              "localImagePath": "images/armor_leather_helmet_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Majestic Circlet",
+                "url": "https://lineage.pmfun.com/item/5317/sealed-majestic-circlet.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_leather_helmet_i02_0.png",
+                "imageFileName": "armor_leather_helmet_i02_0.png",
+                "localImagePath": "images/armor_leather_helmet_i02_0.png"
+              }
+            }
+          ]
+        },
+        {
+          "grade": "A Grade",
+          "setName": "Nightmare Heavy Set",
+          "rawNameLines": [
+            "Nightmare Heavy Set"
+          ],
+          "type": "Heavy Armor Set",
+          "bonuses": [
+            "P. Atk. +4%",
+            "Sleep and Hold Resistance +70%",
+            "CON +2",
+            "DEX -2",
+            "With a shield of nightmare, 5% of the damage inflicted by the enemy will be reflected back upon him."
+          ],
+          "bonusesMd": [
+            "P. Atk. +4%",
+            "Sleep and Hold Resistance +70%",
+            "[CON +2](https://lineage.pmfun.com/list/set#CON)",
+            "[DEX -2](https://lineage.pmfun.com/list/set#DEX)",
+            "With a shield of nightmare, 5% of the damage inflicted by the enemy will be reflected back upon him."
+          ],
+          "parts": [
+            {
+              "name": "Armor Of Nightmare",
+              "url": "https://lineage.pmfun.com/item/374/armor-of-nightmare.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t80_ul_i00_0.png",
+              "imageFileName": "armor_t80_ul_i00_0.png",
+              "localImagePath": "images/armor_t80_ul_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Armor Of Nightmare",
+                "url": "https://lineage.pmfun.com/item/5311/sealed-armor-of-nightmare.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_t80_ul_i02_0.png",
+                "imageFileName": "armor_t80_ul_i02_0.png",
+                "localImagePath": "images/armor_t80_ul_i02_0.png"
+              }
+            },
+            {
+              "name": "Gauntlets Of Nightmare - Heavy Armor",
+              "url": "https://lineage.pmfun.com/item/5771/gauntlets-of-nightmare--heavy-armor.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t80_g_i00_0.png",
+              "imageFileName": "armor_t80_g_i00_0.png",
+              "localImagePath": "images/armor_t80_g_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Gauntlets Of Nightmare",
+                "url": "https://lineage.pmfun.com/item/5313/sealed-gauntlets-of-nightmare.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_t80_g_i02_0.png",
+                "imageFileName": "armor_t80_g_i02_0.png",
+                "localImagePath": "images/armor_t80_g_i02_0.png"
+              }
+            },
+            {
+              "name": "Boots Of Nightmare - Heavy Armor",
+              "url": "https://lineage.pmfun.com/item/5783/boots-of-nightmare--heavy-armor.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t80_b_i00_0.png",
+              "imageFileName": "armor_t80_b_i00_0.png",
+              "localImagePath": "images/armor_t80_b_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Boots Of Nightmare",
+                "url": "https://lineage.pmfun.com/item/5314/sealed-boots-of-nightmare.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_t80_b_i02_0.png",
+                "imageFileName": "armor_t80_b_i02_0.png",
+                "localImagePath": "images/armor_t80_b_i02_0.png"
+              }
+            },
+            {
+              "name": "Helm Of Nightmare",
+              "url": "https://lineage.pmfun.com/item/2418/helm-of-nightmare.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_leather_helmet_i00_0.png",
+              "imageFileName": "armor_leather_helmet_i00_0.png",
+              "localImagePath": "images/armor_leather_helmet_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Helm Of Nightmare",
+                "url": "https://lineage.pmfun.com/item/5312/sealed-helm-of-nightmare.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_leather_helmet_i02_0.png",
+                "imageFileName": "armor_leather_helmet_i02_0.png",
+                "localImagePath": "images/armor_leather_helmet_i02_0.png"
+              }
+            },
+            {
+              "name": "Shield Of Nightmare",
+              "url": "https://lineage.pmfun.com/item/2498/shield-of-nightmare.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/shield_shield_of_nightmare_i00_0.png",
+              "imageFileName": "shield_shield_of_nightmare_i00_0.png",
+              "localImagePath": "images/shield_shield_of_nightmare_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Shield Of Nightmare",
+                "url": "https://lineage.pmfun.com/item/5315/sealed-shield-of-nightmare.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/shield_shield_of_nightmare_i02_0.png",
+                "imageFileName": "shield_shield_of_nightmare_i02_0.png",
+                "localImagePath": "images/shield_shield_of_nightmare_i02_0.png"
+              }
+            }
+          ]
+        },
+        {
+          "grade": "A Grade",
+          "setName": "Tallum Heavy Set",
+          "rawNameLines": [
+            "Tallum Heavy Set"
+          ],
+          "type": "Heavy Armor Set",
+          "bonuses": [
+            "Atk. Spd. +8%",
+            "Weight increased plus the point at which a weight penalty is applied +5759",
+            "Poison and Bleed Resistance +80%",
+            "STR +2",
+            "CON -2"
+          ],
+          "bonusesMd": [
+            "Atk. Spd. +8%",
+            "Weight increased plus the point at which a weight penalty is applied +5759",
+            "Poison and Bleed Resistance +80%",
+            "[STR +2](https://lineage.pmfun.com/list/set#STR)",
+            "[CON -2](https://lineage.pmfun.com/list/set#CON)"
+          ],
+          "parts": [
+            {
+              "name": "Tallum Plate Armor",
+              "url": "https://lineage.pmfun.com/item/2382/tallum-plate-armor.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t77_ul_i00_0.png",
+              "imageFileName": "armor_t77_ul_i00_0.png",
+              "localImagePath": "images/armor_t77_ul_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Tallum Plate Armor",
+                "url": "https://lineage.pmfun.com/item/5293/sealed-tallum-plate-armor.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_t77_ul_i02_0.png",
+                "imageFileName": "armor_t77_ul_i02_0.png",
+                "localImagePath": "images/armor_t77_ul_i02_0.png"
+              }
+            },
+            {
+              "name": "Tallum Gloves - Heavy Armor",
+              "url": "https://lineage.pmfun.com/item/5768/tallum-gloves--heavy-armor.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t77_g_i00_0.png",
+              "imageFileName": "armor_t77_g_i00_0.png",
+              "localImagePath": "images/armor_t77_g_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Tallum Gloves",
+                "url": "https://lineage.pmfun.com/item/5295/sealed-tallum-gloves.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_t77_g_i02_0.png",
+                "imageFileName": "armor_t77_g_i02_0.png",
+                "localImagePath": "images/armor_t77_g_i02_0.png"
+              }
+            },
+            {
+              "name": "Tallum Boots - Heavy Armor",
+              "url": "https://lineage.pmfun.com/item/5780/tallum-boots--heavy-armor.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t77_b_i00_0.png",
+              "imageFileName": "armor_t77_b_i00_0.png",
+              "localImagePath": "images/armor_t77_b_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Tallum Boots",
+                "url": "https://lineage.pmfun.com/item/5296/sealed-tallum-boots.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_t77_b_i02_0.png",
+                "imageFileName": "armor_t77_b_i02_0.png",
+                "localImagePath": "images/armor_t77_b_i02_0.png"
+              }
+            },
+            {
+              "name": "Tallum Helm",
+              "url": "https://lineage.pmfun.com/item/547/tallum-helm.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_helmet_i00_0.png",
+              "imageFileName": "armor_helmet_i00_0.png",
+              "localImagePath": "images/armor_helmet_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Tallum Helmet",
+                "url": "https://lineage.pmfun.com/item/5294/sealed-tallum-helmet.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_helmet_i02_0.png",
+                "imageFileName": "armor_helmet_i02_0.png",
+                "localImagePath": "images/armor_helmet_i02_0.png"
+              }
+            }
+          ]
+        },
+        {
+          "grade": "A Grade",
+          "setName": "Dark Crystal Heavy Set",
+          "rawNameLines": [
+            "Dark Crystal Heavy Set"
+          ],
+          "type": "Heavy Armor Set",
+          "bonuses": [
+            "Heal +4%",
+            "Paralysis Resistance +50%",
+            "STR -2",
+            "CON +2",
+            "With a Dark Crystal Shield, shield defense rate +18%"
+          ],
+          "bonusesMd": [
+            "Heal +4%",
+            "Paralysis Resistance +50%",
+            "[STR -2](https://lineage.pmfun.com/list/set#STR)",
+            "[CON +2](https://lineage.pmfun.com/list/set#CON)",
+            "With a Dark Crystal Shield, shield defense rate +18%"
+          ],
+          "parts": [
+            {
+              "name": "Dark Crystal Breastplate",
+              "url": "https://lineage.pmfun.com/item/365/dark-crystal-breastplate.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t74_u_i00_0.png",
+              "imageFileName": "armor_t74_u_i00_0.png",
+              "localImagePath": "images/armor_t74_u_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Dark Crystal Breastplate",
+                "url": "https://lineage.pmfun.com/item/5287/sealed-dark-crystal-breastplate.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_t74_u_i02_0.png",
+                "imageFileName": "armor_t74_u_i02_0.png",
+                "localImagePath": "images/armor_t74_u_i02_0.png"
+              }
+            },
+            {
+              "name": "Dark Crystal Gaiters",
+              "url": "https://lineage.pmfun.com/item/388/dark-crystal-gaiters.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t74_l_i00_0.png",
+              "imageFileName": "armor_t74_l_i00_0.png",
+              "localImagePath": "images/armor_t74_l_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Dark Crystal Gaiters",
+                "url": "https://lineage.pmfun.com/item/5288/sealed-dark-crystal-gaiters.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_t74_l_i02_0.png",
+                "imageFileName": "armor_t74_l_i02_0.png",
+                "localImagePath": "images/armor_t74_l_i02_0.png"
+              }
+            },
+            {
+              "name": "Dark Crystal Gloves - Heavy Armor",
+              "url": "https://lineage.pmfun.com/item/5765/dark-crystal-gloves--heavy-armor.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t74_g_i00_0.png",
+              "imageFileName": "armor_t74_g_i00_0.png",
+              "localImagePath": "images/armor_t74_g_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Dark Crystal Gloves",
+                "url": "https://lineage.pmfun.com/item/5290/sealed-dark-crystal-gloves.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_t74_g_i02_0.png",
+                "imageFileName": "armor_t74_g_i02_0.png",
+                "localImagePath": "images/armor_t74_g_i02_0.png"
+              }
+            },
+            {
+              "name": "Dark Crystal Boots - Heavy Armor",
+              "url": "https://lineage.pmfun.com/item/5777/dark-crystal-boots--heavy-armor.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t74_b_i00_0.png",
+              "imageFileName": "armor_t74_b_i00_0.png",
+              "localImagePath": "images/armor_t74_b_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Dark Crystal Boots",
+                "url": "https://lineage.pmfun.com/item/5291/sealed-dark-crystal-boots.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_t74_b_i02_0.png",
+                "imageFileName": "armor_t74_b_i02_0.png",
+                "localImagePath": "images/armor_t74_b_i02_0.png"
+              }
+            },
+            {
+              "name": "Dark Crystal Helmet",
+              "url": "https://lineage.pmfun.com/item/512/dark-crystal-helmet.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_helmet_i00_0.png",
+              "imageFileName": "armor_helmet_i00_0.png",
+              "localImagePath": "images/armor_helmet_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Dark Crystal Helmet",
+                "url": "https://lineage.pmfun.com/item/5289/sealed-dark-crystal-helmet.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_helmet_i02_0.png",
+                "imageFileName": "armor_helmet_i02_0.png",
+                "localImagePath": "images/armor_helmet_i02_0.png"
+              }
+            },
+            {
+              "name": "Dark Crystal Shield",
+              "url": "https://lineage.pmfun.com/item/641/dark-crystal-shield.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/shield_dark_crystal_shield_i00_0.png",
+              "imageFileName": "shield_dark_crystal_shield_i00_0.png",
+              "localImagePath": "images/shield_dark_crystal_shield_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Dark Crystal Shield",
+                "url": "https://lineage.pmfun.com/item/5292/sealed-dark-crystal-shield.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/shield_dark_crystal_shield_i02_0.png",
+                "imageFileName": "shield_dark_crystal_shield_i02_0.png",
+                "localImagePath": "images/shield_dark_crystal_shield_i02_0.png"
+              }
+            }
+          ]
+        },
+        {
+          "grade": "A Grade",
+          "setName": "Majestic Light Set",
+          "rawNameLines": [
+            "Majestic Light Set"
+          ],
+          "type": "Light Armor Set",
+          "bonuses": [
+            "Archery P. Atk. +8%",
+            "MP +240",
+            "Weight increased plus the point at which a weight penalty is applied +5759",
+            "Stun Resistance +50%",
+            "DEX +1",
+            "CON -1"
+          ],
+          "bonusesMd": [
+            "Archery P. Atk. +8%",
+            "MP +240",
+            "Weight increased plus the point at which a weight penalty is applied +5759",
+            "Stun Resistance +50%",
+            "[DEX +1](https://lineage.pmfun.com/list/set#DEX)",
+            "[CON -1](https://lineage.pmfun.com/list/set#CON)"
+          ],
+          "parts": [
+            {
+              "name": "Majestic Leather Armor",
+              "url": "https://lineage.pmfun.com/item/2395/majestic-leather-armor.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t84_ul_i00_0.png",
+              "imageFileName": "armor_t84_ul_i00_0.png",
+              "localImagePath": "images/armor_t84_ul_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Majestic Leather Armor",
+                "url": "https://lineage.pmfun.com/item/5323/sealed-majestic-leather-armor.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_t84_ul_i02_0.png",
+                "imageFileName": "armor_t84_ul_i02_0.png",
+                "localImagePath": "images/armor_t84_ul_i02_0.png"
+              }
+            },
+            {
+              "name": "Majestic Gauntlets - Light Armor",
+              "url": "https://lineage.pmfun.com/item/5775/majestic-gauntlets--light-armor.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t84_g_i00_0.png",
+              "imageFileName": "armor_t84_g_i00_0.png",
+              "localImagePath": "images/armor_t84_g_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Majestic Gauntlets",
+                "url": "https://lineage.pmfun.com/item/5318/sealed-majestic-gauntlets.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_t83_g_i02_0.png",
+                "imageFileName": "armor_t83_g_i02_0.png",
+                "localImagePath": "images/armor_t83_g_i02_0.png"
+              }
+            },
+            {
+              "name": "Majestic Boots - Light Armor",
+              "url": "https://lineage.pmfun.com/item/5787/majestic-boots--light-armor.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t84_b_i00_0.png",
+              "imageFileName": "armor_t84_b_i00_0.png",
+              "localImagePath": "images/armor_t84_b_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Majestic Boots",
+                "url": "https://lineage.pmfun.com/item/5319/sealed-majestic-boots.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_t83_b_i02_0.png",
+                "imageFileName": "armor_t83_b_i02_0.png",
+                "localImagePath": "images/armor_t83_b_i02_0.png"
+              }
+            },
+            {
+              "name": "Majestic Circlet",
+              "url": "https://lineage.pmfun.com/item/2419/majestic-circlet.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_leather_helmet_i00_0.png",
+              "imageFileName": "armor_leather_helmet_i00_0.png",
+              "localImagePath": "images/armor_leather_helmet_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Majestic Circlet",
+                "url": "https://lineage.pmfun.com/item/5317/sealed-majestic-circlet.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_leather_helmet_i02_0.png",
+                "imageFileName": "armor_leather_helmet_i02_0.png",
+                "localImagePath": "images/armor_leather_helmet_i02_0.png"
+              }
+            }
+          ]
+        },
+        {
+          "grade": "A Grade",
+          "setName": "Nightmare Light Set",
+          "rawNameLines": [
+            "Nightmare Light Set"
+          ],
+          "type": "Light Armor Set",
+          "bonuses": [
+            "M. Def. +4%",
+            "Sleep and Hold Resistance +70%",
+            "Restores 3% of melee damage inflicted on the enemy to oneself",
+            "DEX +1",
+            "CON -1"
+          ],
+          "bonusesMd": [
+            "M. Def. +4%",
+            "Sleep and Hold Resistance +70%",
+            "Restores 3% of melee damage inflicted on the enemy to oneself",
+            "[DEX +1](https://lineage.pmfun.com/list/set#DEX)",
+            "[CON -1](https://lineage.pmfun.com/list/set#CON)"
+          ],
+          "parts": [
+            {
+              "name": "Nightmarish Leather Armor",
+              "url": "https://lineage.pmfun.com/item/2394/nightmarish-leather-armor.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t81_ul_i00_0.png",
+              "imageFileName": "armor_t81_ul_i00_0.png",
+              "localImagePath": "images/armor_t81_ul_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Leather Armor Of Nightmare",
+                "url": "https://lineage.pmfun.com/item/5320/sealed-leather-armor-of-nightmare.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_t81_ul_i02_0.png",
+                "imageFileName": "armor_t81_ul_i02_0.png",
+                "localImagePath": "images/armor_t81_ul_i02_0.png"
+              }
+            },
+            {
+              "name": "Gloves of Nightmare - Light Armor",
+              "url": "https://lineage.pmfun.com/item/5772/gauntlets-of-nightmare--light-armor.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t81_g_i00_0.png",
+              "imageFileName": "armor_t81_g_i00_0.png",
+              "localImagePath": "images/armor_t81_g_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Gloves of Nightmare",
+                "url": "https://lineage.pmfun.com/item/5313/sealed-gauntlets-of-nightmare.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_t80_g_i02_0.png",
+                "imageFileName": "armor_t80_g_i02_0.png",
+                "localImagePath": "images/armor_t80_g_i02_0.png"
+              }
+            },
+            {
+              "name": "Boots Of Nightmare - Light Armor",
+              "url": "https://lineage.pmfun.com/item/5784/boots-of-nightmare--light-armor.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t81_b_i00_0.png",
+              "imageFileName": "armor_t81_b_i00_0.png",
+              "localImagePath": "images/armor_t81_b_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Boots Of Nightmare",
+                "url": "https://lineage.pmfun.com/item/5314/sealed-boots-of-nightmare.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_t80_b_i02_0.png",
+                "imageFileName": "armor_t80_b_i02_0.png",
+                "localImagePath": "images/armor_t80_b_i02_0.png"
+              }
+            },
+            {
+              "name": "Helm Of Nightmare",
+              "url": "https://lineage.pmfun.com/item/2418/helm-of-nightmare.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_leather_helmet_i00_0.png",
+              "imageFileName": "armor_leather_helmet_i00_0.png",
+              "localImagePath": "images/armor_leather_helmet_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Helm Of Nightmare",
+                "url": "https://lineage.pmfun.com/item/5312/sealed-helm-of-nightmare.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_leather_helmet_i02_0.png",
+                "imageFileName": "armor_leather_helmet_i02_0.png",
+                "localImagePath": "images/armor_leather_helmet_i02_0.png"
+              }
+            }
+          ]
+        },
+        {
+          "grade": "A Grade",
+          "setName": "Tallum Light Set",
+          "rawNameLines": [
+            "Tallum Light Set"
+          ],
+          "type": "Light Armor Set",
+          "bonuses": [
+            "MP Regeneration +8%",
+            "MP +222",
+            "Poison and Bleed Resistance +80%",
+            "MEN +2",
+            "WIT -2"
+          ],
+          "bonusesMd": [
+            "MP Regeneration +8%",
+            "MP +222",
+            "Poison and Bleed Resistance +80%",
+            "[MEN +2](https://lineage.pmfun.com/list/set#MEN)",
+            "[WIT -2](https://lineage.pmfun.com/list/set#WIT)"
+          ],
+          "parts": [
+            {
+              "name": "Tallum Leather Armor",
+              "url": "https://lineage.pmfun.com/item/2393/tallum-leather-armor.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t78_ul_i00_0.png",
+              "imageFileName": "armor_t78_ul_i00_0.png",
+              "localImagePath": "images/armor_t78_ul_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Tallum Leather Armor",
+                "url": "https://lineage.pmfun.com/item/5301/sealed-tallum-leather-armor.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_t78_ul_i02_0.png",
+                "imageFileName": "armor_t78_ul_i02_0.png",
+                "localImagePath": "images/armor_t78_ul_i02_0.png"
+              }
+            },
+            {
+              "name": "Tallum Gloves - Light Armor",
+              "url": "https://lineage.pmfun.com/item/5769/tallum-gloves--light-armor.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t78_g_i00_0.png",
+              "imageFileName": "armor_t78_g_i00_0.png",
+              "localImagePath": "images/armor_t78_g_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Tallum Gloves",
+                "url": "https://lineage.pmfun.com/item/5295/sealed-tallum-gloves.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_t77_g_i02_0.png",
+                "imageFileName": "armor_t77_g_i02_0.png",
+                "localImagePath": "images/armor_t77_g_i02_0.png"
+              }
+            },
+            {
+              "name": "Tallum Boots - Light Armor",
+              "url": "https://lineage.pmfun.com/item/5781/tallum-boots--light-armor.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t78_b_i00_0.png",
+              "imageFileName": "armor_t78_b_i00_0.png",
+              "localImagePath": "images/armor_t78_b_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Tallum Boots",
+                "url": "https://lineage.pmfun.com/item/5296/sealed-tallum-boots.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_t77_b_i02_0.png",
+                "imageFileName": "armor_t77_b_i02_0.png",
+                "localImagePath": "images/armor_t77_b_i02_0.png"
+              }
+            },
+            {
+              "name": "Tallum Helm",
+              "url": "https://lineage.pmfun.com/item/547/tallum-helm.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_helmet_i00_0.png",
+              "imageFileName": "armor_helmet_i00_0.png",
+              "localImagePath": "images/armor_helmet_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Tallum Helmet",
+                "url": "https://lineage.pmfun.com/item/5294/sealed-tallum-helmet.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_helmet_i02_0.png",
+                "imageFileName": "armor_helmet_i02_0.png",
+                "localImagePath": "images/armor_helmet_i02_0.png"
+              }
+            }
+          ]
+        },
+        {
+          "grade": "A Grade",
+          "setName": "Dark Crystal Light Set",
+          "rawNameLines": [
+            "Dark Crystal Light Set"
+          ],
+          "type": "Light Armor Set",
+          "bonuses": [
+            "Atk. Spd. +4%",
+            "P. Atk. +4%",
+            "Paralysis Resistance +50%",
+            "STR +1",
+            "CON -1"
+          ],
+          "bonusesMd": [
+            "Atk. Spd. +4%",
+            "P. Atk. +4%",
+            "Paralysis Resistance +50%",
+            "[STR +1](https://lineage.pmfun.com/list/set#STR)",
+            "[CON -1](https://lineage.pmfun.com/list/set#CON)"
+          ],
+          "parts": [
+            {
+              "name": "Dark Crystal Leather Armor",
+              "url": "https://lineage.pmfun.com/item/2385/dark-crystal-leather-armor.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t75_u_i00_0.png",
+              "imageFileName": "armor_t75_u_i00_0.png",
+              "localImagePath": "images/armor_t75_u_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Dark Crystal Leather Armor",
+                "url": "https://lineage.pmfun.com/item/5297/sealed-dark-crystal-leather-armor.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_t75_u_i02_0.png",
+                "imageFileName": "armor_t75_u_i02_0.png",
+                "localImagePath": "images/armor_t75_u_i02_0.png"
+              }
+            },
+            {
+              "name": "Dark Crystal Leggings",
+              "url": "https://lineage.pmfun.com/item/2389/dark-crystal-leggings.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t75_l_i00_0.png",
+              "imageFileName": "armor_t75_l_i00_0.png",
+              "localImagePath": "images/armor_t75_l_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Dark Crystal Leggings",
+                "url": "https://lineage.pmfun.com/item/5298/sealed-dark-crystal-leggings.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_t75_l_i02_0.png",
+                "imageFileName": "armor_t75_l_i02_0.png",
+                "localImagePath": "images/armor_t75_l_i02_0.png"
+              }
+            },
+            {
+              "name": "Dark Crystal Gloves - Light Armor",
+              "url": "https://lineage.pmfun.com/item/5766/dark-crystal-gloves--light-armor.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t75_g_i00_0.png",
+              "imageFileName": "armor_t75_g_i00_0.png",
+              "localImagePath": "images/armor_t75_g_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Dark Crystal Gloves",
+                "url": "https://lineage.pmfun.com/item/5290/sealed-dark-crystal-gloves.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_t74_g_i02_0.png",
+                "imageFileName": "armor_t74_g_i02_0.png",
+                "localImagePath": "images/armor_t74_g_i02_0.png"
+              }
+            },
+            {
+              "name": "Dark Crystal Boots - Light Armor",
+              "url": "https://lineage.pmfun.com/item/5778/dark-crystal-boots--light-armor.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t75_b_i00_0.png",
+              "imageFileName": "armor_t75_b_i00_0.png",
+              "localImagePath": "images/armor_t75_b_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Dark Crystal Boots",
+                "url": "https://lineage.pmfun.com/item/5291/sealed-dark-crystal-boots.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_t74_b_i02_0.png",
+                "imageFileName": "armor_t74_b_i02_0.png",
+                "localImagePath": "images/armor_t74_b_i02_0.png"
+              }
+            },
+            {
+              "name": "Dark Crystal Helmet",
+              "url": "https://lineage.pmfun.com/item/512/dark-crystal-helmet.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_helmet_i00_0.png",
+              "imageFileName": "armor_helmet_i00_0.png",
+              "localImagePath": "images/armor_helmet_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Dark Crystal Helmet",
+                "url": "https://lineage.pmfun.com/item/5289/sealed-dark-crystal-helmet.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_helmet_i02_0.png",
+                "imageFileName": "armor_helmet_i02_0.png",
+                "localImagePath": "images/armor_helmet_i02_0.png"
+              }
+            }
+          ]
+        },
+        {
+          "grade": "A Grade",
+          "setName": "Majestic Robe Set",
+          "rawNameLines": [
+            "Majestic Robe Set"
+          ],
+          "type": "Robe Set",
+          "bonuses": [
+            "MP +240",
+            "Casting Spd. +15%",
+            "MP Regeneration +8%",
+            "Stun Resistance +50%",
+            "MEN +1",
+            "INT -1"
+          ],
+          "bonusesMd": [
+            "MP +240",
+            "Casting Spd. +15%",
+            "MP Regeneration +8%",
+            "Stun Resistance +50%",
+            "[MEN +1](https://lineage.pmfun.com/list/set#MEN)",
+            "[INT -1](https://lineage.pmfun.com/list/set#INT)"
+          ],
+          "parts": [
+            {
+              "name": "Majestic Robe",
+              "url": "https://lineage.pmfun.com/item/2409/majestic-robe.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t85_ul_i00_0.png",
+              "imageFileName": "armor_t85_ul_i00_0.png",
+              "localImagePath": "images/armor_t85_ul_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Majestic Robe",
+                "url": "https://lineage.pmfun.com/item/5329/sealed-majestic-robe.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_t85_ul_i02_0.png",
+                "imageFileName": "armor_t85_ul_i02_0.png",
+                "localImagePath": "images/armor_t85_ul_i02_0.png"
+              }
+            },
+            {
+              "name": "Majestic Gloves - Robe",
+              "url": "https://lineage.pmfun.com/item/5776/majestic-gauntlets--robe.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t85_g_i00_0.png",
+              "imageFileName": "armor_t85_g_i00_0.png",
+              "localImagePath": "images/armor_t85_g_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Majestic Gloves",
+                "url": "https://lineage.pmfun.com/item/5318/sealed-majestic-gauntlets.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_t83_g_i02_0.png",
+                "imageFileName": "armor_t83_g_i02_0.png",
+                "localImagePath": "images/armor_t83_g_i02_0.png"
+              }
+            },
+            {
+              "name": "Majestic Boots - Robe",
+              "url": "https://lineage.pmfun.com/item/5788/majestic-boots--robe.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t85_b_i00_0.png",
+              "imageFileName": "armor_t85_b_i00_0.png",
+              "localImagePath": "images/armor_t85_b_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Majestic Boots",
+                "url": "https://lineage.pmfun.com/item/5319/sealed-majestic-boots.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_t83_b_i02_0.png",
+                "imageFileName": "armor_t83_b_i02_0.png",
+                "localImagePath": "images/armor_t83_b_i02_0.png"
+              }
+            },
+            {
+              "name": "Majestic Circlet",
+              "url": "https://lineage.pmfun.com/item/2419/majestic-circlet.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_leather_helmet_i00_0.png",
+              "imageFileName": "armor_leather_helmet_i00_0.png",
+              "localImagePath": "images/armor_leather_helmet_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Majestic Circlet",
+                "url": "https://lineage.pmfun.com/item/5317/sealed-majestic-circlet.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_leather_helmet_i02_0.png",
+                "imageFileName": "armor_leather_helmet_i02_0.png",
+                "localImagePath": "images/armor_leather_helmet_i02_0.png"
+              }
+            }
+          ]
+        },
+        {
+          "grade": "A Grade",
+          "setName": "Nightmare Robe Set",
+          "rawNameLines": [
+            "Nightmare Robe Set"
+          ],
+          "type": "Robe Set",
+          "bonuses": [
+            "MP Regeneration +4%",
+            "M. Atk. +8%",
+            "Sleep and Hold Resistance +70%",
+            "INT +2",
+            "WIT -2"
+          ],
+          "bonusesMd": [
+            "MP Regeneration +4%",
+            "M. Atk. +8%",
+            "Sleep and Hold Resistance +70%",
+            "[INT +2](https://lineage.pmfun.com/list/set#INT)",
+            "[WIT -2](https://lineage.pmfun.com/list/set#WIT)"
+          ],
+          "parts": [
+            {
+              "name": "Nightmare Robe",
+              "url": "https://lineage.pmfun.com/item/2408/nightmare-robe.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t82_ul_i00_0.png",
+              "imageFileName": "armor_t82_ul_i00_0.png",
+              "localImagePath": "images/armor_t82_ul_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Nightmare Robe",
+                "url": "https://lineage.pmfun.com/item/5326/sealed-nightmare-robe.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_t82_ul_i02_0.png",
+                "imageFileName": "armor_t82_ul_i02_0.png",
+                "localImagePath": "images/armor_t82_ul_i02_0.png"
+              }
+            },
+            {
+              "name": "Gloves Of Nightmare - Robe",
+              "url": "https://lineage.pmfun.com/item/5773/gauntlets-of-nightmare--robe.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t82_g_i00_0.png",
+              "imageFileName": "armor_t82_g_i00_0.png",
+              "localImagePath": "images/armor_t82_g_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Gloves Of Nightmare",
+                "url": "https://lineage.pmfun.com/item/5313/sealed-gauntlets-of-nightmare.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_t80_g_i02_0.png",
+                "imageFileName": "armor_t80_g_i02_0.png",
+                "localImagePath": "images/armor_t80_g_i02_0.png"
+              }
+            },
+            {
+              "name": "Boots Of Nightmare - Robe",
+              "url": "https://lineage.pmfun.com/item/5785/boots-of-nightmare--robe.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t82_b_i00_0.png",
+              "imageFileName": "armor_t82_b_i00_0.png",
+              "localImagePath": "images/armor_t82_b_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Boots Of Nightmare",
+                "url": "https://lineage.pmfun.com/item/5314/sealed-boots-of-nightmare.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_t80_b_i02_0.png",
+                "imageFileName": "armor_t80_b_i02_0.png",
+                "localImagePath": "images/armor_t80_b_i02_0.png"
+              }
+            },
+            {
+              "name": "Helm Of Nightmare",
+              "url": "https://lineage.pmfun.com/item/2418/helm-of-nightmare.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_leather_helmet_i00_0.png",
+              "imageFileName": "armor_leather_helmet_i00_0.png",
+              "localImagePath": "images/armor_leather_helmet_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Helm Of Nightmare",
+                "url": "https://lineage.pmfun.com/item/5312/sealed-helm-of-nightmare.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_leather_helmet_i02_0.png",
+                "imageFileName": "armor_leather_helmet_i02_0.png",
+                "localImagePath": "images/armor_leather_helmet_i02_0.png"
+              }
+            }
+          ]
+        },
+        {
+          "grade": "A Grade",
+          "setName": "Tallum Robe Set",
+          "rawNameLines": [
+            "Tallum Robe Set"
+          ],
+          "type": "Robe Set",
+          "bonuses": [
+            "Casting Spd. +15%",
+            "M. Def. +8%",
+            "Poison and Bleed Resistance +80%",
+            "INT -2",
+            "WIT +2"
+          ],
+          "bonusesMd": [
+            "Casting Spd. +15%",
+            "M. Def. +8%",
+            "Poison and Bleed Resistance +80%",
+            "[INT -2](https://lineage.pmfun.com/list/set#INT)",
+            "[WIT +2](https://lineage.pmfun.com/list/set#WIT)"
+          ],
+          "parts": [
+            {
+              "name": "Tallum Tunic",
+              "url": "https://lineage.pmfun.com/item/2400/tallum-tunic.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t79_u_i00_0.png",
+              "imageFileName": "armor_t79_u_i00_0.png",
+              "localImagePath": "images/armor_t79_u_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Tallum Tunic",
+                "url": "https://lineage.pmfun.com/item/5304/sealed-tallum-tunic.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_t79_u_i02_0.png",
+                "imageFileName": "armor_t79_u_i02_0.png",
+                "localImagePath": "images/armor_t79_u_i02_0.png"
+              }
+            },
+            {
+              "name": "Tallum Stockings",
+              "url": "https://lineage.pmfun.com/item/2405/tallum-stockings.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t79_l_i00_0.png",
+              "imageFileName": "armor_t79_l_i00_0.png",
+              "localImagePath": "images/armor_t79_l_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Tallum Stockings",
+                "url": "https://lineage.pmfun.com/item/5305/sealed-tallum-stockings.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_t79_l_i02_0.png",
+                "imageFileName": "armor_t79_l_i02_0.png",
+                "localImagePath": "images/armor_t79_l_i02_0.png"
+              }
+            },
+            {
+              "name": "Tallum Gloves - Robe",
+              "url": "https://lineage.pmfun.com/item/5770/tallum-gloves--robe.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t79_g_i00_0.png",
+              "imageFileName": "armor_t79_g_i00_0.png",
+              "localImagePath": "images/armor_t79_g_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Tallum Gloves",
+                "url": "https://lineage.pmfun.com/item/5295/sealed-tallum-gloves.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_t77_g_i02_0.png",
+                "imageFileName": "armor_t77_g_i02_0.png",
+                "localImagePath": "images/armor_t77_g_i02_0.png"
+              }
+            },
+            {
+              "name": "Tallum Boots - Robe",
+              "url": "https://lineage.pmfun.com/item/5782/tallum-boots--robe.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t79_b_i00_0.png",
+              "imageFileName": "armor_t79_b_i00_0.png",
+              "localImagePath": "images/armor_t79_b_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Tallum Boots",
+                "url": "https://lineage.pmfun.com/item/5296/sealed-tallum-boots.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_t77_b_i02_0.png",
+                "imageFileName": "armor_t77_b_i02_0.png",
+                "localImagePath": "images/armor_t77_b_i02_0.png"
+              }
+            },
+            {
+              "name": "Tallum Helm",
+              "url": "https://lineage.pmfun.com/item/547/tallum-helm.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_helmet_i00_0.png",
+              "imageFileName": "armor_helmet_i00_0.png",
+              "localImagePath": "images/armor_helmet_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Tallum Helmet",
+                "url": "https://lineage.pmfun.com/item/5294/sealed-tallum-helmet.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_helmet_i02_0.png",
+                "imageFileName": "armor_helmet_i02_0.png",
+                "localImagePath": "images/armor_helmet_i02_0.png"
+              }
+            }
+          ]
+        },
+        {
+          "grade": "A Grade",
+          "setName": "Dark Crystal Robe Set",
+          "rawNameLines": [
+            "Dark Crystal Robe Set"
+          ],
+          "type": "Robe Set",
+          "bonuses": [
+            "P. Def. +8%",
+            "Casting Spd. +15%",
+            "Speed +7",
+            "Small decrease in chance of spell interruption",
+            "Paralysis Resistance +50%",
+            "WIT +2",
+            "MEN -2"
+          ],
+          "bonusesMd": [
+            "P. Def. +8%",
+            "Casting Spd. +15%",
+            "Speed +7",
+            "Small decrease in chance of spell interruption",
+            "Paralysis Resistance +50%",
+            "[WIT +2](https://lineage.pmfun.com/list/set#WIT)",
+            "[MEN -2](https://lineage.pmfun.com/list/set#MEN)"
+          ],
+          "parts": [
+            {
+              "name": "Dark Crystal Robe",
+              "url": "https://lineage.pmfun.com/item/2407/dark-crystal-robe.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t76_ul_i00_0.png",
+              "imageFileName": "armor_t76_ul_i00_0.png",
+              "localImagePath": "images/armor_t76_ul_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Dark Crystal Robe",
+                "url": "https://lineage.pmfun.com/item/5308/sealed-dark-crystal-robe.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_t76_ul_i02_0.png",
+                "imageFileName": "armor_t76_ul_i02_0.png",
+                "localImagePath": "images/armor_t76_ul_i02_0.png"
+              }
+            },
+            {
+              "name": "Dark Crystal Gloves - Robe",
+              "url": "https://lineage.pmfun.com/item/5767/dark-crystal-gloves--robe.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t76_g_i00_0.png",
+              "imageFileName": "armor_t76_g_i00_0.png",
+              "localImagePath": "images/armor_t76_g_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Dark Crystal Gloves",
+                "url": "https://lineage.pmfun.com/item/5290/sealed-dark-crystal-gloves.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_t74_g_i02_0.png",
+                "imageFileName": "armor_t74_g_i02_0.png",
+                "localImagePath": "images/armor_t74_g_i02_0.png"
+              }
+            },
+            {
+              "name": "Dark Crystal Boots - Robe",
+              "url": "https://lineage.pmfun.com/item/5779/dark-crystal-boots--robe.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t76_b_i00_0.png",
+              "imageFileName": "armor_t76_b_i00_0.png",
+              "localImagePath": "images/armor_t76_b_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Dark Crystal Boots",
+                "url": "https://lineage.pmfun.com/item/5291/sealed-dark-crystal-boots.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_t74_b_i02_0.png",
+                "imageFileName": "armor_t74_b_i02_0.png",
+                "localImagePath": "images/armor_t74_b_i02_0.png"
+              }
+            },
+            {
+              "name": "Dark Crystal Helmet",
+              "url": "https://lineage.pmfun.com/item/512/dark-crystal-helmet.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_helmet_i00_0.png",
+              "imageFileName": "armor_helmet_i00_0.png",
+              "localImagePath": "images/armor_helmet_i00_0.png",
+              "sealedVariant": {
+                "name": "Sealed Dark Crystal Helmet",
+                "url": "https://lineage.pmfun.com/item/5289/sealed-dark-crystal-helmet.html",
+                "imageUrl": "https://lineage.pmfun.com/data/img/armor_helmet_i02_0.png",
+                "imageFileName": "armor_helmet_i02_0.png",
+                "localImagePath": "images/armor_helmet_i02_0.png"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "grade": "B Grade",
+      "headers": [
+        "B Grade",
+        "Parts",
+        "Type",
+        "Modification"
+      ],
+      "sets": [
+        {
+          "grade": "B Grade",
+          "setName": "Heavy Zubei Set",
+          "rawNameLines": [
+            "Heavy Zubei Set"
+          ],
+          "type": "Heavy armor",
+          "bonuses": [
+            "+ 5.24 % Pdef",
+            "+ 294 HP"
+          ],
+          "bonusesMd": [
+            "+ 5.24 % Pdef",
+            "+ 294 HP"
+          ],
+          "parts": [
+            {
+              "name": "Zubei's Breastplate",
+              "url": "https://lineage.pmfun.com/item/357/zubeis-breastplate.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t64_u_i00_0.png",
+              "imageFileName": "armor_t64_u_i00_0.png",
+              "localImagePath": "images/armor_t64_u_i00_0.png"
+            },
+            {
+              "name": "Zubei's Gaiters",
+              "url": "https://lineage.pmfun.com/item/383/zubeis-gaiters.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t64_l_i00_0.png",
+              "imageFileName": "armor_t64_l_i00_0.png",
+              "localImagePath": "images/armor_t64_l_i00_0.png"
+            },
+            {
+              "name": "Zubei's Gauntlets",
+              "url": "https://lineage.pmfun.com/item/612/zubeis-gauntlets.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t64_g_i00_0.png",
+              "imageFileName": "armor_t64_g_i00_0.png",
+              "localImagePath": "images/armor_t64_g_i00_0.png"
+            },
+            {
+              "name": "Zubei's Boots",
+              "url": "https://lineage.pmfun.com/item/554/zubeis-boots.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t64_b_i00_0.png",
+              "imageFileName": "armor_t64_b_i00_0.png",
+              "localImagePath": "images/armor_t64_b_i00_0.png"
+            },
+            {
+              "name": "Zubei's Helmet",
+              "url": "https://lineage.pmfun.com/item/503/zubeis-helmet.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_helmet_i00_0.png",
+              "imageFileName": "armor_helmet_i00_0.png",
+              "localImagePath": "images/armor_helmet_i00_0.png"
+            }
+          ]
+        },
+        {
+          "grade": "B Grade",
+          "setName": "Heavy Avadon Set",
+          "rawNameLines": [
+            "Heavy Avadon Set"
+          ],
+          "type": "Heavy armor",
+          "bonuses": [
+            "+294 HP",
+            "with Shield +24% shield defense rate"
+          ],
+          "bonusesMd": [
+            "+294 HP",
+            "with Shield +24% shield defense rate"
+          ],
+          "parts": [
+            {
+              "name": "Avadon Breastplate",
+              "url": "https://lineage.pmfun.com/item/2376/avadon-breastplate.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t66_u_i00_0.png",
+              "imageFileName": "armor_t66_u_i00_0.png",
+              "localImagePath": "images/armor_t66_u_i00_0.png"
+            },
+            {
+              "name": "Avadon Gaiters",
+              "url": "https://lineage.pmfun.com/item/2379/avadon-gaiters.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t66_l_i00_0.png",
+              "imageFileName": "armor_t66_l_i00_0.png",
+              "localImagePath": "images/armor_t66_l_i00_0.png"
+            },
+            {
+              "name": "Avadon Gloves",
+              "url": "https://lineage.pmfun.com/item/2464/avadon-gloves.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t66_g_i00_0.png",
+              "imageFileName": "armor_t66_g_i00_0.png",
+              "localImagePath": "images/armor_t66_g_i00_0.png"
+            },
+            {
+              "name": "Avadon Boots",
+              "url": "https://lineage.pmfun.com/item/600/avadon-boots.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t66_b_i00_0.png",
+              "imageFileName": "armor_t66_b_i00_0.png",
+              "localImagePath": "images/armor_t66_b_i00_0.png"
+            },
+            {
+              "name": "Avadon Circlet",
+              "url": "https://lineage.pmfun.com/item/2415/avadon-circlet.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_leather_helmet_i00_0.png",
+              "imageFileName": "armor_leather_helmet_i00_0.png",
+              "localImagePath": "images/armor_leather_helmet_i00_0.png"
+            },
+            {
+              "name": "Avadon Shield",
+              "url": "https://lineage.pmfun.com/item/673/avadon-shield.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/shield_avadon_shield_i00_0.png",
+              "imageFileName": "shield_avadon_shield_i00_0.png",
+              "localImagePath": "images/shield_avadon_shield_i00_0.png"
+            }
+          ]
+        },
+        {
+          "grade": "B Grade",
+          "setName": "Heavy Blue Wolf Set",
+          "rawNameLines": [
+            "Heavy Blue Wolf Set"
+          ],
+          "type": "Heavy armor",
+          "bonuses": [
+            "Speed +7",
+            "HP Regeneration +5.24%",
+            "STR +3",
+            "CON -1",
+            "DEX -2"
+          ],
+          "bonusesMd": [
+            "Speed +7",
+            "HP Regeneration +5.24%",
+            "[STR +3](https://lineage.pmfun.com/list/set#STR)",
+            "[CON -1](https://lineage.pmfun.com/list/set#CON)",
+            "[DEX -2](https://lineage.pmfun.com/list/set#DEX)"
+          ],
+          "parts": [
+            {
+              "name": "Blue Wolf Breastplate",
+              "url": "https://lineage.pmfun.com/item/358/blue-wolf-breastplate.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t68_u_i00_0.png",
+              "imageFileName": "armor_t68_u_i00_0.png",
+              "localImagePath": "images/armor_t68_u_i00_0.png"
+            },
+            {
+              "name": "Blue Wolf Gaiters",
+              "url": "https://lineage.pmfun.com/item/2380/blue-wolf-gaiters.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t68_l_i00_0.png",
+              "imageFileName": "armor_t68_l_i00_0.png",
+              "localImagePath": "images/armor_t68_l_i00_0.png"
+            },
+            {
+              "name": "Blue Wolf Gloves",
+              "url": "https://lineage.pmfun.com/item/2487/blue-wolf-gloves.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t68_g_i00_0.png",
+              "imageFileName": "armor_t68_g_i00_0.png",
+              "localImagePath": "images/armor_t68_g_i00_0.png"
+            },
+            {
+              "name": "Blue Wolf Boots",
+              "url": "https://lineage.pmfun.com/item/2439/blue-wolf-boots.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t68_b_i00_0.png",
+              "imageFileName": "armor_t68_b_i00_0.png",
+              "localImagePath": "images/armor_t68_b_i00_0.png"
+            },
+            {
+              "name": "Blue Wolf Helmet",
+              "url": "https://lineage.pmfun.com/item/2416/blue-wolf-helmet.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_leather_helmet_i00_0.png",
+              "imageFileName": "armor_leather_helmet_i00_0.png",
+              "localImagePath": "images/armor_leather_helmet_i00_0.png"
+            }
+          ]
+        },
+        {
+          "grade": "B Grade",
+          "setName": "Heavy Doom Set",
+          "rawNameLines": [
+            "Heavy Doom Set"
+          ],
+          "type": "Heavy armor",
+          "bonuses": [
+            "HP +320",
+            "Breath Gauge increased",
+            "STR -3",
+            "CON +3",
+            "With a Doom Shield, shield defense rate +24%"
+          ],
+          "bonusesMd": [
+            "HP +320",
+            "Breath Gauge increased",
+            "[STR -3](https://lineage.pmfun.com/list/set#STR)",
+            "[CON +3](https://lineage.pmfun.com/list/set#CON)",
+            "With a Doom Shield, shield defense rate +24%"
+          ],
+          "parts": [
+            {
+              "name": "Doom Plate Armor",
+              "url": "https://lineage.pmfun.com/item/2381/doom-plate-armor.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t71_ul_i00_0.png",
+              "imageFileName": "armor_t71_ul_i00_0.png",
+              "localImagePath": "images/armor_t71_ul_i00_0.png"
+            },
+            {
+              "name": "Doom Gloves",
+              "url": "https://lineage.pmfun.com/item/2475/doom-gloves.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t71_g_i00_0.png",
+              "imageFileName": "armor_t71_g_i00_0.png",
+              "localImagePath": "images/armor_t71_g_i00_0.png"
+            },
+            {
+              "name": "Boots Of Doom",
+              "url": "https://lineage.pmfun.com/item/601/boots-of-doom.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t71_b_i00_0.png",
+              "imageFileName": "armor_t71_b_i00_0.png",
+              "localImagePath": "images/armor_t71_b_i00_0.png"
+            },
+            {
+              "name": "Doom Helmet",
+              "url": "https://lineage.pmfun.com/item/2417/doom-helmet.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_leather_helmet_i00_0.png",
+              "imageFileName": "armor_leather_helmet_i00_0.png",
+              "localImagePath": "images/armor_leather_helmet_i00_0.png"
+            },
+            {
+              "name": "Doom Shield",
+              "url": "https://lineage.pmfun.com/item/110/doom-shield.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/shield_doom_shield_i00_0.png",
+              "imageFileName": "shield_doom_shield_i00_0.png",
+              "localImagePath": "images/shield_doom_shield_i00_0.png"
+            }
+          ]
+        },
+        {
+          "grade": "B Grade",
+          "setName": "Light Zubei Set",
+          "rawNameLines": [
+            "Light Zubei Set"
+          ],
+          "type": "Light Armor",
+          "bonuses": [
+            "+4 Evasion"
+          ],
+          "bonusesMd": [
+            "+4 Evasion"
+          ],
+          "parts": [
+            {
+              "name": "Zubei's Leather Shirt",
+              "url": "https://lineage.pmfun.com/item/2384/zubeis-leather-shirt.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t65_u_i00_0.png",
+              "imageFileName": "armor_t65_u_i00_0.png",
+              "localImagePath": "images/armor_t65_u_i00_0.png"
+            },
+            {
+              "name": "Zubei's Leather Gaiters",
+              "url": "https://lineage.pmfun.com/item/2388/zubeis-leather-gaiters.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t65_l_i00_0.png",
+              "imageFileName": "armor_t65_l_i00_0.png",
+              "localImagePath": "images/armor_t65_l_i00_0.png"
+            },
+            {
+              "name": "Zubei's Gauntlets",
+              "url": "https://lineage.pmfun.com/item/612/zubeis-gauntlets.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t65_g_i00_0.png",
+              "imageFileName": "armor_t65_g_i00_0.png",
+              "localImagePath": "images/armor_t65_g_i00_0.png"
+            },
+            {
+              "name": "Zubei's Boots",
+              "url": "https://lineage.pmfun.com/item/554/zubeis-boots.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t65_b_i00_0.png",
+              "imageFileName": "armor_t65_b_i00_0.png",
+              "localImagePath": "images/armor_t65_b_i00_0.png"
+            },
+            {
+              "name": "Zubei's Helmet",
+              "url": "https://lineage.pmfun.com/item/503/zubeis-helmet.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_helmet_i00_0.png",
+              "imageFileName": "armor_helmet_i00_0.png",
+              "localImagePath": "images/armor_helmet_i00_0.png"
+            }
+          ]
+        },
+        {
+          "grade": "B Grade",
+          "setName": "Light Avadon Set",
+          "rawNameLines": [
+            "Light Avadon Set"
+          ],
+          "type": "Light Armor",
+          "bonuses": [
+            "M. Def. +5.25%",
+            "Point at which a weight penalty is applied +5795"
+          ],
+          "bonusesMd": [
+            "M. Def. +5.25%",
+            "Point at which a weight penalty is applied +5795"
+          ],
+          "parts": [
+            {
+              "name": "Avadon Leather Armor",
+              "url": "https://lineage.pmfun.com/item/2390/avadon-leather-armor.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t67_ul_i00_0.png",
+              "imageFileName": "armor_t67_ul_i00_0.png",
+              "localImagePath": "images/armor_t67_ul_i00_0.png"
+            },
+            {
+              "name": "Avadon Gloves",
+              "url": "https://lineage.pmfun.com/item/2464/avadon-gloves.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t67_g_i00_0.png",
+              "imageFileName": "armor_t67_g_i00_0.png",
+              "localImagePath": "images/armor_t67_g_i00_0.png"
+            },
+            {
+              "name": "Avadon Boots",
+              "url": "https://lineage.pmfun.com/item/600/avadon-boots.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t67_b_i00_0.png",
+              "imageFileName": "armor_t67_b_i00_0.png",
+              "localImagePath": "images/armor_t67_b_i00_0.png"
+            },
+            {
+              "name": "Avadon Circlet",
+              "url": "https://lineage.pmfun.com/item/2415/avadon-circlet.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_leather_helmet_i00_0.png",
+              "imageFileName": "armor_leather_helmet_i00_0.png",
+              "localImagePath": "images/armor_leather_helmet_i00_0.png"
+            }
+          ]
+        },
+        {
+          "grade": "B Grade",
+          "setName": "Light Blue Wolf Set",
+          "rawNameLines": [
+            "Light Blue Wolf Set"
+          ],
+          "type": "Light Armor",
+          "bonuses": [
+            "P. Def. +5.24%",
+            "Casting Spd. +15%",
+            "INT -2",
+            "MEN +3",
+            "WIT -1"
+          ],
+          "bonusesMd": [
+            "P. Def. +5.24%",
+            "Casting Spd. +15%",
+            "[INT -2](https://lineage.pmfun.com/list/set#INT)",
+            "[MEN +3](https://lineage.pmfun.com/list/set#MEN)",
+            "[WIT -1](https://lineage.pmfun.com/list/set#WIT)"
+          ],
+          "parts": [
+            {
+              "name": "Blue Wolf Leather Armor",
+              "url": "https://lineage.pmfun.com/item/2391/blue-wolf-leather-armor.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t69_ul_i00_0.png",
+              "imageFileName": "armor_t69_ul_i00_0.png",
+              "localImagePath": "images/armor_t69_ul_i00_0.png"
+            },
+            {
+              "name": "Blue Wolf Gloves",
+              "url": "https://lineage.pmfun.com/item/2487/blue-wolf-gloves.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t69_g_i00_0.png",
+              "imageFileName": "armor_t69_g_i00_0.png",
+              "localImagePath": "images/armor_t69_g_i00_0.png"
+            },
+            {
+              "name": "Blue Wolf Boots",
+              "url": "https://lineage.pmfun.com/item/2439/blue-wolf-boots.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t69_b_i00_0.png",
+              "imageFileName": "armor_t69_b_i00_0.png",
+              "localImagePath": "images/armor_t69_b_i00_0.png"
+            },
+            {
+              "name": "Blue Wolf Helmet",
+              "url": "https://lineage.pmfun.com/item/2416/blue-wolf-helmet.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_leather_helmet_i00_0.png",
+              "imageFileName": "armor_leather_helmet_i00_0.png",
+              "localImagePath": "images/armor_leather_helmet_i00_0.png"
+            }
+          ]
+        },
+        {
+          "grade": "B Grade",
+          "setName": "Light Doom Set",
+          "rawNameLines": [
+            "Light Doom Set"
+          ],
+          "type": "Light Armor",
+          "bonuses": [
+            "Breath Gauge increased",
+            "P. Atk. +2.7%",
+            "MP Regeneration +2.5%",
+            "STR -1",
+            "CON -2",
+            "DEX +3",
+            "Poision Resistance +20%"
+          ],
+          "bonusesMd": [
+            "Breath Gauge increased",
+            "P. Atk. +2.7%",
+            "MP Regeneration +2.5%",
+            "[STR -1](https://lineage.pmfun.com/list/set#STR)[CON -2](https://lineage.pmfun.com/list/set#CON)",
+            "[DEX +3](https://lineage.pmfun.com/list/set#DEX)Poision Resistance +20%"
+          ],
+          "parts": [
+            {
+              "name": "Leather Armor Of Doom",
+              "url": "https://lineage.pmfun.com/item/2392/leather-armor-of-doom.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t72_ul_i00_0.png",
+              "imageFileName": "armor_t72_ul_i00_0.png",
+              "localImagePath": "images/armor_t72_ul_i00_0.png"
+            },
+            {
+              "name": "Doom Gloves",
+              "url": "https://lineage.pmfun.com/item/2475/doom-gloves.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t72_g_i00_0.png",
+              "imageFileName": "armor_t72_g_i00_0.png",
+              "localImagePath": "images/armor_t72_g_i00_0.png"
+            },
+            {
+              "name": "Boots Of Doom",
+              "url": "https://lineage.pmfun.com/item/601/boots-of-doom.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t72_b_i00_0.png",
+              "imageFileName": "armor_t72_b_i00_0.png",
+              "localImagePath": "images/armor_t72_b_i00_0.png"
+            },
+            {
+              "name": "Doom Helmet",
+              "url": "https://lineage.pmfun.com/item/2417/doom-helmet.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_leather_helmet_i00_0.png",
+              "imageFileName": "armor_leather_helmet_i00_0.png",
+              "localImagePath": "images/armor_leather_helmet_i00_0.png"
+            }
+          ]
+        },
+        {
+          "grade": "B Grade",
+          "setName": "Zubei Robe Set",
+          "rawNameLines": [
+            "Zubei Robe Set"
+          ],
+          "type": "Robe Armor",
+          "bonuses": [
+            "M. Atk. +10%",
+            "MP Regeneration -5%"
+          ],
+          "bonusesMd": [
+            "M. Atk. +10%",
+            "MP Regeneration -5%"
+          ],
+          "parts": [
+            {
+              "name": "Tunic Of Zubei",
+              "url": "https://lineage.pmfun.com/item/2397/tunic-of-zubei.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t56_u_i00_0.png",
+              "imageFileName": "armor_t56_u_i00_0.png",
+              "localImagePath": "images/armor_t56_u_i00_0.png"
+            },
+            {
+              "name": "Stockings Of Zubei",
+              "url": "https://lineage.pmfun.com/item/2402/stockings-of-zubei.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t56_l_i00_0.png",
+              "imageFileName": "armor_t56_l_i00_0.png",
+              "localImagePath": "images/armor_t56_l_i00_0.png"
+            },
+            {
+              "name": "Zubei's Gauntlets",
+              "url": "https://lineage.pmfun.com/item/612/zubeis-gauntlets.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t56_g_i00_0.png",
+              "imageFileName": "armor_t56_g_i00_0.png",
+              "localImagePath": "images/armor_t56_g_i00_0.png"
+            },
+            {
+              "name": "Zubei's Boots",
+              "url": "https://lineage.pmfun.com/item/554/zubeis-boots.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t56_b_i00_0.png",
+              "imageFileName": "armor_t56_b_i00_0.png",
+              "localImagePath": "images/armor_t56_b_i00_0.png"
+            },
+            {
+              "name": "Zubei's Helmet",
+              "url": "https://lineage.pmfun.com/item/503/zubeis-helmet.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_helmet_i00_0.png",
+              "imageFileName": "armor_helmet_i00_0.png",
+              "localImagePath": "images/armor_helmet_i00_0.png"
+            }
+          ]
+        },
+        {
+          "grade": "B Grade",
+          "setName": "Avadon Robe Set",
+          "rawNameLines": [
+            "Avadon Robe Set"
+          ],
+          "type": "Robe",
+          "bonuses": [
+            "P. Def. +5.247%",
+            "Casting Spd. +15%"
+          ],
+          "bonusesMd": [
+            "P. Def. +5.247%",
+            "Casting Spd. +15%"
+          ],
+          "parts": [
+            {
+              "name": "Avadon Robe",
+              "url": "https://lineage.pmfun.com/item/2406/avadon-robe.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t59_ul_i00_0.png",
+              "imageFileName": "armor_t59_ul_i00_0.png",
+              "localImagePath": "images/armor_t59_ul_i00_0.png"
+            },
+            {
+              "name": "Avadon Gloves",
+              "url": "https://lineage.pmfun.com/item/2464/avadon-gloves.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t59_g_i00_0.png",
+              "imageFileName": "armor_t59_g_i00_0.png",
+              "localImagePath": "images/armor_t59_g_i00_0.png"
+            },
+            {
+              "name": "Avadon Boots",
+              "url": "https://lineage.pmfun.com/item/600/avadon-boots.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t59_b_i00_0.png",
+              "imageFileName": "armor_t59_b_i00_0.png",
+              "localImagePath": "images/armor_t59_b_i00_0.png"
+            },
+            {
+              "name": "Avadon Circlet",
+              "url": "https://lineage.pmfun.com/item/2415/avadon-circlet.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_leather_helmet_i00_0.png",
+              "imageFileName": "armor_leather_helmet_i00_0.png",
+              "localImagePath": "images/armor_leather_helmet_i00_0.png"
+            }
+          ]
+        },
+        {
+          "grade": "B Grade",
+          "setName": "Blue Wolf Robe Set",
+          "rawNameLines": [
+            "Blue Wolf Robe Set"
+          ],
+          "type": "Robe Armor",
+          "bonuses": [
+            "MP +206",
+            "MP Regeneration +5.24%",
+            "INT -2",
+            "MEN -1",
+            "WIT +3"
+          ],
+          "bonusesMd": [
+            "MP +206",
+            "MP Regeneration +5.24%",
+            "[INT -2](https://lineage.pmfun.com/list/set#INT)",
+            "[MEN -1](https://lineage.pmfun.com/list/set#MEN)",
+            "[WIT +3](https://lineage.pmfun.com/list/set#WIT)"
+          ],
+          "parts": [
+            {
+              "name": "Blue Wolf Tunic",
+              "url": "https://lineage.pmfun.com/item/2398/blue-wolf-tunic.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t70_u_i00_0.png",
+              "imageFileName": "armor_t70_u_i00_0.png",
+              "localImagePath": "images/armor_t70_u_i00_0.png"
+            },
+            {
+              "name": "Blue Wolf Stockings",
+              "url": "https://lineage.pmfun.com/item/2403/blue-wolf-stockings.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t70_l_i00_0.png",
+              "imageFileName": "armor_t70_l_i00_0.png",
+              "localImagePath": "images/armor_t70_l_i00_0.png"
+            },
+            {
+              "name": "Blue Wolf Gloves",
+              "url": "https://lineage.pmfun.com/item/2487/blue-wolf-gloves.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t70_g_i00_0.png",
+              "imageFileName": "armor_t70_g_i00_0.png",
+              "localImagePath": "images/armor_t70_g_i00_0.png"
+            },
+            {
+              "name": "Blue Wolf Boots",
+              "url": "https://lineage.pmfun.com/item/2439/blue-wolf-boots.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t70_b_i00_0.png",
+              "imageFileName": "armor_t70_b_i00_0.png",
+              "localImagePath": "images/armor_t70_b_i00_0.png"
+            },
+            {
+              "name": "Blue Wolf Helmet",
+              "url": "https://lineage.pmfun.com/item/2416/blue-wolf-helmet.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_leather_helmet_i00_0.png",
+              "imageFileName": "armor_leather_helmet_i00_0.png",
+              "localImagePath": "images/armor_leather_helmet_i00_0.png"
+            }
+          ]
+        },
+        {
+          "grade": "B Grade",
+          "setName": "Doom Robe Set",
+          "rawNameLines": [
+            "Doom Robe Set"
+          ],
+          "type": "Robe",
+          "bonuses": [
+            "Speed + 7",
+            "Breath Gauge increased",
+            "MP Regeneration +5.24%",
+            "INT +2",
+            "MEN +1",
+            "WIT -3"
+          ],
+          "bonusesMd": [
+            "Speed + 7",
+            "Breath Gauge increased",
+            "MP Regeneration +5.24%",
+            "[INT +2](https://lineage.pmfun.com/list/set#INT)",
+            "[MEN +1](https://lineage.pmfun.com/list/set#MEN)",
+            "[WIT -3](https://lineage.pmfun.com/list/set#WIT)"
+          ],
+          "parts": [
+            {
+              "name": "Tunic Of Doom",
+              "url": "https://lineage.pmfun.com/item/2399/tunic-of-doom.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t73_u_i00_0.png",
+              "imageFileName": "armor_t73_u_i00_0.png",
+              "localImagePath": "images/armor_t73_u_i00_0.png"
+            },
+            {
+              "name": "Stockings Of Doom",
+              "url": "https://lineage.pmfun.com/item/2404/stockings-of-doom.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t73_l_i00_0.png",
+              "imageFileName": "armor_t73_l_i00_0.png",
+              "localImagePath": "images/armor_t73_l_i00_0.png"
+            },
+            {
+              "name": "Doom Gloves",
+              "url": "https://lineage.pmfun.com/item/2475/doom-gloves.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t73_g_i00_0.png",
+              "imageFileName": "armor_t73_g_i00_0.png",
+              "localImagePath": "images/armor_t73_g_i00_0.png"
+            },
+            {
+              "name": "Boots Of Doom",
+              "url": "https://lineage.pmfun.com/item/601/boots-of-doom.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t73_b_i00_0.png",
+              "imageFileName": "armor_t73_b_i00_0.png",
+              "localImagePath": "images/armor_t73_b_i00_0.png"
+            },
+            {
+              "name": "Doom Helmet",
+              "url": "https://lineage.pmfun.com/item/2417/doom-helmet.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_leather_helmet_i00_0.png",
+              "imageFileName": "armor_leather_helmet_i00_0.png",
+              "localImagePath": "images/armor_leather_helmet_i00_0.png"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "grade": "C Grade",
+      "headers": [
+        "C Grade",
+        "Parts",
+        "Type",
+        "Modification",
+        "Physical Defense",
+        "MP Boost"
+      ],
+      "sets": [
+        {
+          "grade": "C Grade",
+          "setName": "Chain Mail Set",
+          "rawNameLines": [
+            "Chain Mail Set"
+          ],
+          "type": "Heavy armor",
+          "physicalDefense": "242",
+          "mpBoost": "0",
+          "bonuses": [
+            "+5.24 % to Dagger Defense",
+            "with Shiled +198 HP"
+          ],
+          "bonusesMd": [
+            "+5.24 % to Dagger Defense",
+            "with Shiled +198 HP"
+          ],
+          "parts": [
+            {
+              "name": "Chain Mail Shirt",
+              "url": "https://lineage.pmfun.com/item/354/chain-mail-shirt.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t48_u_i00_0.png",
+              "imageFileName": "armor_t48_u_i00_0.png",
+              "localImagePath": "images/armor_t48_u_i00_0.png"
+            },
+            {
+              "name": "Chain Gaiters",
+              "url": "https://lineage.pmfun.com/item/381/chain-gaiters.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t48_l_i00_0.png",
+              "imageFileName": "armor_t48_l_i00_0.png",
+              "localImagePath": "images/armor_t48_l_i00_0.png"
+            },
+            {
+              "name": "Chain Hood",
+              "url": "https://lineage.pmfun.com/item/2413/chain-hood.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_leather_helmet_i00_0.png",
+              "imageFileName": "armor_leather_helmet_i00_0.png",
+              "localImagePath": "images/armor_leather_helmet_i00_0.png"
+            },
+            {
+              "name": "Chain Shield",
+              "url": "https://lineage.pmfun.com/item/2495/chain-shield.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/shield_chain_shield_i00_0.png",
+              "imageFileName": "shield_chain_shield_i00_0.png",
+              "localImagePath": "images/shield_chain_shield_i00_0.png"
+            }
+          ]
+        },
+        {
+          "grade": "C Grade",
+          "setName": "Composite Set",
+          "rawNameLines": [
+            "Composite Set"
+          ],
+          "type": "Heavy armor",
+          "physicalDefense": "278",
+          "mpBoost": "0",
+          "bonuses": [
+            "Point at which a weight penalty is applied +5795",
+            "With a Composite Shield, M. Def. +5.26%"
+          ],
+          "bonusesMd": [
+            "Point at which a weight penalty is applied +5795",
+            "With a Composite Shield, M. Def. +5.26%"
+          ],
+          "parts": [
+            {
+              "name": "Composite Armor",
+              "url": "https://lineage.pmfun.com/item/60/composite-armor.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t61_ul_i00_0.png",
+              "imageFileName": "armor_t61_ul_i00_0.png",
+              "localImagePath": "images/armor_t61_ul_i00_0.png"
+            },
+            {
+              "name": "Composite Helmet",
+              "url": "https://lineage.pmfun.com/item/517/composite-helmet.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_leather_helmet_i00_0.png",
+              "imageFileName": "armor_leather_helmet_i00_0.png",
+              "localImagePath": "images/armor_leather_helmet_i00_0.png"
+            },
+            {
+              "name": "Composite Shield",
+              "url": "https://lineage.pmfun.com/item/107/composite-shield.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/shield_composite_shield_i00_0.png",
+              "imageFileName": "shield_composite_shield_i00_0.png",
+              "localImagePath": "images/shield_composite_shield_i00_0.png"
+            }
+          ]
+        },
+        {
+          "grade": "C Grade",
+          "setName": "Full Plate Set",
+          "rawNameLines": [
+            "Full Plate Set"
+          ],
+          "type": "Heavy armor",
+          "physicalDefense": "297",
+          "mpBoost": "0",
+          "bonuses": [
+            "HP +270",
+            "With a Full Plate Shield, shield defense rate +5.24%"
+          ],
+          "bonusesMd": [
+            "HP +270",
+            "With a Full Plate Shield, shield defense rate +5.24%"
+          ],
+          "parts": [
+            {
+              "name": "Full Plate Armor",
+              "url": "https://lineage.pmfun.com/item/356/full-plate-armor.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t62_ul_i00_0.png",
+              "imageFileName": "armor_t62_ul_i00_0.png",
+              "localImagePath": "images/armor_t62_ul_i00_0.png"
+            },
+            {
+              "name": "Full Plate Helmet",
+              "url": "https://lineage.pmfun.com/item/2414/full-plate-helmet.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_leather_helmet_i00_0.png",
+              "imageFileName": "armor_leather_helmet_i00_0.png",
+              "localImagePath": "images/armor_leather_helmet_i00_0.png"
+            },
+            {
+              "name": "Full Plate Shield",
+              "url": "https://lineage.pmfun.com/item/2497/full-plate-shield.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/shield_full_plate_shield_i00_0.png",
+              "imageFileName": "shield_full_plate_shield_i00_0.png",
+              "localImagePath": "images/shield_full_plate_shield_i00_0.png"
+            }
+          ]
+        },
+        {
+          "grade": "C Grade",
+          "setName": "Tempered Mithril Set",
+          "rawNameLines": [
+            "Tempered Mithril Set"
+          ],
+          "type": "Light Armor",
+          "physicalDefense": "170",
+          "mpBoost": "0",
+          "bonuses": [
+            "Evasion +4"
+          ],
+          "bonusesMd": [
+            "Evasion +4"
+          ],
+          "parts": [
+            {
+              "name": "Mithril Shirt",
+              "url": "https://lineage.pmfun.com/item/397/mithril-shirt.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t47_u_i00_0.png",
+              "imageFileName": "armor_t47_u_i00_0.png",
+              "localImagePath": "images/armor_t47_u_i00_0.png"
+            },
+            {
+              "name": "Tempered Mithril Gaiters",
+              "url": "https://lineage.pmfun.com/item/2387/tempered-mithril-gaiters.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t47_l_i00_0.png",
+              "imageFileName": "armor_t47_l_i00_0.png",
+              "localImagePath": "images/armor_t47_l_i00_0.png"
+            },
+            {
+              "name": "Mithril Boots",
+              "url": "https://lineage.pmfun.com/item/62/mithril-boots.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t47_b_i00_0.png",
+              "imageFileName": "armor_t47_b_i00_0.png",
+              "localImagePath": "images/armor_t47_b_i00_0.png"
+            }
+          ]
+        },
+        {
+          "grade": "C Grade",
+          "setName": "Plated Leather Set",
+          "rawNameLines": [
+            "Plated Leather Set"
+          ],
+          "type": "Light Armor",
+          "physicalDefense": "185",
+          "mpBoost": "0",
+          "bonuses": [
+            "+ 4 STR",
+            "- 1 CON"
+          ],
+          "bonusesMd": [
+            "[+ 4 STR](https://lineage.pmfun.com/list/set#STR)",
+            "[- 1 CON](https://lineage.pmfun.com/list/set#CON)"
+          ],
+          "parts": [
+            {
+              "name": "Plated Leather",
+              "url": "https://lineage.pmfun.com/item/398/plated-leather.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t47_u_i00_0.png",
+              "imageFileName": "armor_t47_u_i00_0.png",
+              "localImagePath": "images/armor_t47_u_i00_0.png"
+            },
+            {
+              "name": "Plated Leather Gaiters",
+              "url": "https://lineage.pmfun.com/item/418/plated-leather-gaiters.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t47_l_i00_0.png",
+              "imageFileName": "armor_t47_l_i00_0.png",
+              "localImagePath": "images/armor_t47_l_i00_0.png"
+            },
+            {
+              "name": "Plated Leather Boots",
+              "url": "https://lineage.pmfun.com/item/2431/plated-leather-boots.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t47_b_i00_0.png",
+              "imageFileName": "armor_t47_b_i00_0.png",
+              "localImagePath": "images/armor_t47_b_i00_0.png"
+            }
+          ]
+        },
+        {
+          "grade": "C Grade",
+          "setName": "Theca Leather Set",
+          "rawNameLines": [
+            "Theca Leather Set"
+          ],
+          "type": "Light Armor",
+          "physicalDefense": "209",
+          "mpBoost": "0",
+          "bonuses": [
+            "P. Def. +5.24%"
+          ],
+          "bonusesMd": [
+            "P. Def. +5.24%"
+          ],
+          "parts": [
+            {
+              "name": "Theca Leather Armor",
+              "url": "https://lineage.pmfun.com/item/400/theca-leather-armor.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t63_u_i00_0.png",
+              "imageFileName": "armor_t63_u_i00_0.png",
+              "localImagePath": "images/armor_t63_u_i00_0.png"
+            },
+            {
+              "name": "Theca Leather Gaiters",
+              "url": "https://lineage.pmfun.com/item/420/theca-leather-gaiters.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t63_l_i00_0.png",
+              "imageFileName": "armor_t63_l_i00_0.png",
+              "localImagePath": "images/armor_t63_l_i00_0.png"
+            },
+            {
+              "name": "Theca Leather Boots",
+              "url": "https://lineage.pmfun.com/item/2436/theca-leather-boots.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t63_b_i00_0.png",
+              "imageFileName": "armor_t63_b_i00_0.png",
+              "localImagePath": "images/armor_t63_b_i00_0.png"
+            }
+          ]
+        },
+        {
+          "grade": "C Grade",
+          "setName": "Drake Leather Set",
+          "rawNameLines": [
+            "Drake Leather Set"
+          ],
+          "type": "Light Armor",
+          "physicalDefense": "218",
+          "mpBoost": "0",
+          "bonuses": [
+            "+5.24% Mdef"
+          ],
+          "bonusesMd": [
+            "+5.24% Mdef"
+          ],
+          "parts": [
+            {
+              "name": "Drake Leather Armor",
+              "url": "https://lineage.pmfun.com/item/401/drake-leather-armor.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t21_ul_i00_0.png",
+              "imageFileName": "armor_t21_ul_i00_0.png",
+              "localImagePath": "images/armor_t21_ul_i00_0.png"
+            },
+            {
+              "name": "Drake Leather Boots",
+              "url": "https://lineage.pmfun.com/item/2437/drake-leather-boots.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t21_b_i00_0.png",
+              "imageFileName": "armor_t21_b_i00_0.png",
+              "localImagePath": "images/armor_t21_b_i00_0.png"
+            }
+          ]
+        },
+        {
+          "grade": "C Grade",
+          "setName": "Karmian Set",
+          "rawNameLines": [
+            "Karmian Set"
+          ],
+          "type": "Robe",
+          "physicalDefense": "129",
+          "mpBoost": "366",
+          "bonuses": [
+            "+ 5.24% Pdef",
+            "+ 15% Casting Speed"
+          ],
+          "bonusesMd": [
+            "+ 5.24% Pdef",
+            "+ 15% Casting Speed"
+          ],
+          "parts": [
+            {
+              "name": "Karmian Tunic",
+              "url": "https://lineage.pmfun.com/item/439/karmian-tunic.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t53_u_i00_0.png",
+              "imageFileName": "armor_t53_u_i00_0.png",
+              "localImagePath": "images/armor_t53_u_i00_0.png"
+            },
+            {
+              "name": "Karmian Stockings",
+              "url": "https://lineage.pmfun.com/item/471/karmian-stockings.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t53_l_i00_0.png",
+              "imageFileName": "armor_t53_l_i00_0.png",
+              "localImagePath": "images/armor_t53_l_i00_0.png"
+            },
+            {
+              "name": "Karmian Gloves",
+              "url": "https://lineage.pmfun.com/item/2454/karmian-gloves.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t53_g_i00_0.png",
+              "imageFileName": "armor_t53_g_i00_0.png",
+              "localImagePath": "images/armor_t53_g_i00_0.png"
+            }
+          ]
+        },
+        {
+          "grade": "C Grade",
+          "setName": "Demon Set",
+          "rawNameLines": [
+            "Demon Set"
+          ],
+          "type": "Robe",
+          "physicalDefense": "148",
+          "mpBoost": "461",
+          "bonuses": [
+            "- 270 HP",
+            "+ 4 INT",
+            "-1 WIT"
+          ],
+          "bonusesMd": [
+            "- 270 HP",
+            "[+ 4 INT](https://lineage.pmfun.com/list/set#INT)",
+            "[-1 WIT](https://lineage.pmfun.com/list/set#WIT)"
+          ],
+          "parts": [
+            {
+              "name": "Demon's Tunic",
+              "url": "https://lineage.pmfun.com/item/441/demons-tunic.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t54_u_i00_0.png",
+              "imageFileName": "armor_t54_u_i00_0.png",
+              "localImagePath": "images/armor_t54_u_i00_0.png"
+            },
+            {
+              "name": "Demon's Stockings",
+              "url": "https://lineage.pmfun.com/item/472/demons-stockings.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t54_l_i00_0.png",
+              "imageFileName": "armor_t54_l_i00_0.png",
+              "localImagePath": "images/armor_t54_l_i00_0.png"
+            },
+            {
+              "name": "Demon's Gloves",
+              "url": "https://lineage.pmfun.com/item/2459/demons-gloves.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t54_g_i00_0.png",
+              "imageFileName": "armor_t54_g_i00_0.png",
+              "localImagePath": "images/armor_t54_g_i00_0.png"
+            }
+          ]
+        },
+        {
+          "grade": "C Grade",
+          "setName": "Divine Set",
+          "rawNameLines": [
+            "Divine Set"
+          ],
+          "type": "Robe",
+          "physicalDefense": "159",
+          "mpBoost": "510",
+          "bonuses": [
+            "+5.24% Pdef",
+            "+170 MP",
+            "-1 INT",
+            "+1 WIT"
+          ],
+          "bonusesMd": [
+            "+5.24% Pdef",
+            "+170 MP",
+            "[-1 INT](https://lineage.pmfun.com/list/set#INT)",
+            "[+1 WIT](https://lineage.pmfun.com/list/set#WIT)"
+          ],
+          "parts": [
+            {
+              "name": "Divine Tunic",
+              "url": "https://lineage.pmfun.com/item/442/divine-tunic.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t57_u_i00_0.png",
+              "imageFileName": "armor_t57_u_i00_0.png",
+              "localImagePath": "images/armor_t57_u_i00_0.png"
+            },
+            {
+              "name": "Divine Stockings",
+              "url": "https://lineage.pmfun.com/item/473/divine-stockings.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t57_l_i00_0.png",
+              "imageFileName": "armor_t57_l_i00_0.png",
+              "localImagePath": "images/armor_t57_l_i00_0.png"
+            },
+            {
+              "name": "Divine Gloves",
+              "url": "https://lineage.pmfun.com/item/2463/divine-gloves.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t57_g_i00_0.png",
+              "imageFileName": "armor_t57_g_i00_0.png",
+              "localImagePath": "images/armor_t57_g_i00_0.png"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "grade": "D Grade",
+      "headers": [
+        "D Grade",
+        "Parts",
+        "Type",
+        "Modification",
+        "Physical Defense",
+        "MP Boost"
+      ],
+      "sets": [
+        {
+          "grade": "D Grade",
+          "setName": "Mithril Set",
+          "rawNameLines": [
+            "Mithril Set"
+          ],
+          "type": "Heavy armor",
+          "physicalDefense": "193",
+          "mpBoost": "0",
+          "bonuses": [
+            "+20 Poison Resistance",
+            "with Shield +126 HP"
+          ],
+          "bonusesMd": [
+            "+20 Poison Resistance",
+            "with Shield +126 HP"
+          ],
+          "parts": [
+            {
+              "name": "Mithril Breastplate",
+              "url": "https://lineage.pmfun.com/item/58/mithril-breastplate.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t19_u_i00_0.png",
+              "imageFileName": "armor_t19_u_i00_0.png",
+              "localImagePath": "images/armor_t19_u_i00_0.png"
+            },
+            {
+              "name": "Mithril Gaiters",
+              "url": "https://lineage.pmfun.com/item/59/mithril-gaiters.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t19_l_i00_0.png",
+              "imageFileName": "armor_t19_l_i00_0.png",
+              "localImagePath": "images/armor_t19_l_i00_0.png"
+            },
+            {
+              "name": "Helmet",
+              "url": "https://lineage.pmfun.com/item/47/helmet.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_helmet_i00_0.png",
+              "imageFileName": "armor_helmet_i00_0.png",
+              "localImagePath": "images/armor_helmet_i00_0.png"
+            },
+            {
+              "name": "Hoplon",
+              "url": "https://lineage.pmfun.com/item/628/hoplon.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/shield_hoplon_i00_0.png",
+              "imageFileName": "shield_hoplon_i00_0.png",
+              "localImagePath": "images/shield_hoplon_i00_0.png"
+            }
+          ]
+        },
+        {
+          "grade": "D Grade",
+          "setName": "Brigandine Set",
+          "rawNameLines": [
+            "Brigandine Set"
+          ],
+          "type": "Heavy armor",
+          "physicalDefense": "217",
+          "mpBoost": "0",
+          "bonuses": [
+            "+153 HP",
+            "+5% Pdef",
+            "with Shield +20 HP"
+          ],
+          "bonusesMd": [
+            "+153 HP",
+            "+5% Pdef",
+            "with Shield +20 HP"
+          ],
+          "parts": [
+            {
+              "name": "Brigandine Tunic",
+              "url": "https://lineage.pmfun.com/item/352/brigandine-tunic.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t43_u_i00_0.png",
+              "imageFileName": "armor_t43_u_i00_0.png",
+              "localImagePath": "images/armor_t43_u_i00_0.png"
+            },
+            {
+              "name": "Brigandine Gaiters",
+              "url": "https://lineage.pmfun.com/item/2378/brigandine-gaiters.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t43_l_i00_0.png",
+              "imageFileName": "armor_t43_l_i00_0.png",
+              "localImagePath": "images/armor_t43_l_i00_0.png"
+            },
+            {
+              "name": "Brigandine Helmet",
+              "url": "https://lineage.pmfun.com/item/2411/brigandine-helmet.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_leather_helmet_i00_0.png",
+              "imageFileName": "armor_leather_helmet_i00_0.png",
+              "localImagePath": "images/armor_leather_helmet_i00_0.png"
+            },
+            {
+              "name": "Brigandine Shield",
+              "url": "https://lineage.pmfun.com/item/2493/brigandine-shield.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/shield_brigandine_shield_i00_0.png",
+              "imageFileName": "shield_brigandine_shield_i00_0.png",
+              "localImagePath": "images/shield_brigandine_shield_i00_0.png"
+            }
+          ]
+        },
+        {
+          "grade": "D Grade",
+          "setName": "Reinforced Leather Set",
+          "rawNameLines": [
+            "Reinforced Leather Set"
+          ],
+          "type": "Light Armor",
+          "physicalDefense": "143",
+          "mpBoost": "0",
+          "bonuses": [
+            "MP +80"
+          ],
+          "bonusesMd": [
+            "MP +80"
+          ],
+          "parts": [
+            {
+              "name": "Reinforced Leather Shirt",
+              "url": "https://lineage.pmfun.com/item/394/reinforced-leather-shirt.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t13_u_i00_0.png",
+              "imageFileName": "armor_t13_u_i00_0.png",
+              "localImagePath": "images/armor_t13_u_i00_0.png"
+            },
+            {
+              "name": "Reinforced Leather Gaiters",
+              "url": "https://lineage.pmfun.com/item/416/reinforced-leather-gaiters.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t13_l_i00_0.png",
+              "imageFileName": "armor_t13_l_i00_0.png",
+              "localImagePath": "images/armor_t13_l_i00_0.png"
+            },
+            {
+              "name": "Reinforced Leather Boots",
+              "url": "https://lineage.pmfun.com/item/2422/reinforced-leather-boots.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t13_b_i00_0.png",
+              "imageFileName": "armor_t13_b_i00_0.png",
+              "localImagePath": "images/armor_t13_b_i00_0.png"
+            }
+          ]
+        },
+        {
+          "grade": "D Grade",
+          "setName": "Manticore Set",
+          "rawNameLines": [
+            "Manticore Set"
+          ],
+          "type": "Light Armor",
+          "physicalDefense": "159",
+          "mpBoost": "0",
+          "bonuses": [
+            "MP +92"
+          ],
+          "bonusesMd": [
+            "MP +92"
+          ],
+          "parts": [
+            {
+              "name": "Manticore Skin Shirt",
+              "url": "https://lineage.pmfun.com/item/395/manticore-skin-shirt.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t42_u_i00_0.png",
+              "imageFileName": "armor_t42_u_i00_0.png",
+              "localImagePath": "images/armor_t42_u_i00_0.png"
+            },
+            {
+              "name": "Manticore Skin Gaiters",
+              "url": "https://lineage.pmfun.com/item/417/manticore-skin-gaiters.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t42_l_i00_0.png",
+              "imageFileName": "armor_t42_l_i00_0.png",
+              "localImagePath": "images/armor_t42_l_i00_0.png"
+            },
+            {
+              "name": "Manticore Skin Boots",
+              "url": "https://lineage.pmfun.com/item/2424/manticore-skin-boots.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t42_b_i00_0.png",
+              "imageFileName": "armor_t42_b_i00_0.png",
+              "localImagePath": "images/armor_t42_b_i00_0.png"
+            }
+          ]
+        },
+        {
+          "grade": "D Grade",
+          "setName": "Knowledge Set",
+          "rawNameLines": [
+            "Knowledge Set"
+          ],
+          "type": "Robe",
+          "physicalDefense": "103",
+          "mpBoost": "239",
+          "bonuses": [
+            "+10% Matk",
+            "-5% MP Regeneration"
+          ],
+          "bonusesMd": [
+            "+10% Matk",
+            "-5% MP Regeneration"
+          ],
+          "parts": [
+            {
+              "name": "Tunic Of Knowledge",
+              "url": "https://lineage.pmfun.com/item/436/tunic-of-knowledge.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t41_u_i00_0.png",
+              "imageFileName": "armor_t41_u_i00_0.png",
+              "localImagePath": "images/armor_t41_u_i00_0.png"
+            },
+            {
+              "name": "Stockings Of Knowledge",
+              "url": "https://lineage.pmfun.com/item/469/stockings-of-knowledge.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t41_l_i00_0.png",
+              "imageFileName": "armor_t41_l_i00_0.png",
+              "localImagePath": "images/armor_t41_l_i00_0.png"
+            },
+            {
+              "name": "Gloves Of Knowledge",
+              "url": "https://lineage.pmfun.com/item/2447/gloves-of-knowledge.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t41_g_i00_0.png",
+              "imageFileName": "armor_t41_g_i00_0.png",
+              "localImagePath": "images/armor_t41_g_i00_0.png"
+            }
+          ]
+        },
+        {
+          "grade": "D Grade",
+          "setName": "Elven Mithril Set",
+          "rawNameLines": [
+            "Elven Mithril Set"
+          ],
+          "type": "Robe",
+          "physicalDefense": "115",
+          "mpBoost": "274",
+          "bonuses": [
+            "+7 Speed",
+            "-1 INT",
+            "+1 WIT"
+          ],
+          "bonusesMd": [
+            "+7 Speed",
+            "-1 [INT](https://lineage.pmfun.com/list/set#INT)",
+            "+1 [WIT](https://lineage.pmfun.com/list/set#WIT)"
+          ],
+          "parts": [
+            {
+              "name": "Mithril Tunic",
+              "url": "https://lineage.pmfun.com/item/437/mithril-tunic.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t51_u_i00_0.png",
+              "imageFileName": "armor_t51_u_i00_0.png",
+              "localImagePath": "images/armor_t51_u_i00_0.png"
+            },
+            {
+              "name": "Mithril Stockings",
+              "url": "https://lineage.pmfun.com/item/470/mithril-stockings.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t51_l_i00_0.png",
+              "imageFileName": "armor_t51_l_i00_0.png",
+              "localImagePath": "images/armor_t51_l_i00_0.png"
+            },
+            {
+              "name": "Elven Mithril Gloves",
+              "url": "https://lineage.pmfun.com/item/2450/elven-mithril-gloves.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t51_g_i00_0.png",
+              "imageFileName": "armor_t51_g_i00_0.png",
+              "localImagePath": "images/armor_t51_g_i00_0.png"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "grade": "No Grade",
+      "headers": [
+        "No Grade",
+        "Parts",
+        "Type",
+        "Modification",
+        "Physical Defense",
+        "MP Boost"
+      ],
+      "sets": [
+        {
+          "grade": "No Grade",
+          "setName": "Wooden Set",
+          "rawNameLines": [
+            "Wooden Set"
+          ],
+          "type": "Light armor",
+          "physicalDefense": "94",
+          "mpBoost": "0",
+          "bonuses": [
+            "+2% Pdef",
+            "+41 HP"
+          ],
+          "bonusesMd": [
+            "+2% Pdef",
+            "+41 HP"
+          ],
+          "parts": [
+            {
+              "name": "Wooden Helmet",
+              "url": "https://lineage.pmfun.com/item/43/wooden-helmet.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_leather_helmet_i00_0.png",
+              "imageFileName": "armor_leather_helmet_i00_0.png",
+              "localImagePath": "images/armor_leather_helmet_i00_0.png"
+            },
+            {
+              "name": "Wooden Breastplate",
+              "url": "https://lineage.pmfun.com/item/23/wooden-breastplate.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t06_u_i00_0.png",
+              "imageFileName": "armor_t06_u_i00_0.png",
+              "localImagePath": "images/armor_t06_u_i00_0.png"
+            },
+            {
+              "name": "Wooden Gaiters",
+              "url": "https://lineage.pmfun.com/item/2386/wooden-gaiters.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t06_l_i00_0.png",
+              "imageFileName": "armor_t06_l_i00_0.png",
+              "localImagePath": "images/armor_t06_l_i00_0.png"
+            }
+          ]
+        },
+        {
+          "grade": "No Grade",
+          "setName": "Devotion Set",
+          "rawNameLines": [
+            "Devotion Set"
+          ],
+          "type": "Robe",
+          "physicalDefense": "72",
+          "mpBoost": "109",
+          "bonuses": [
+            "+ 15 % Casting Speed"
+          ],
+          "bonusesMd": [
+            "+ 15 % Casting Speed"
+          ],
+          "parts": [
+            {
+              "name": "Leather Helmet",
+              "url": "https://lineage.pmfun.com/item/44/leather-helmet.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_leather_helmet_i00_0.png",
+              "imageFileName": "armor_leather_helmet_i00_0.png",
+              "localImagePath": "images/armor_leather_helmet_i00_0.png"
+            },
+            {
+              "name": "Tunic Of Devotion",
+              "url": "https://lineage.pmfun.com/item/1101/tunic-of-devotion.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t55_u_i00_0.png",
+              "imageFileName": "armor_t55_u_i00_0.png",
+              "localImagePath": "images/armor_t55_u_i00_0.png"
+            },
+            {
+              "name": "Stockings Of Devotion",
+              "url": "https://lineage.pmfun.com/item/1104/stockings-of-devotion.html",
+              "imageUrl": "https://lineage.pmfun.com/data/img/armor_t55_l_i00_0.png",
+              "imageFileName": "armor_t55_l_i00_0.png",
+              "localImagePath": "images/armor_t55_l_i00_0.png"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "plus6ArmorBonuses": [
+    {
+      "grade": "S Grade",
+      "heavyArmor": "P.Def. +56 MP Regen +2.0",
+      "lightArmor": "Evasion +2 M.Def. +32",
+      "robes": "P.Def. +36 Weight Gauge +30%"
+    },
+    {
+      "grade": "A Grade",
+      "heavyArmor": "P.Def. +50 MP Regen +2.0",
+      "lightArmor": "Evasion +2 M.Def. +28",
+      "robes": "P.Def. +32 Weight Gauge +30%"
+    },
+    {
+      "grade": "B Grade",
+      "heavyArmor": "P.Def. +44 MP Regen +2.0",
+      "lightArmor": "Evasion +2 M.Def. +24",
+      "robes": "P.Def. +28 Weight Gauge +30%"
+    },
+    {
+      "grade": "C Grade",
+      "heavyArmor": "P.Def. +38 MP Regen +2.0",
+      "lightArmor": "Evasion +2 M.Def. +20",
+      "robes": "P.Def. +24 Weight Gauge +30%"
+    },
+    {
+      "grade": "D Grade",
+      "heavyArmor": "P.Def. +25 MP Regen +2.0",
+      "lightArmor": "Evasion +2 M.Def. +12",
+      "robes": "P.Def. +16 Weight Gauge +30%"
+    }
+  ]
+}

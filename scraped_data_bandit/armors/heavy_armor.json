@@ -1,0 +1,1460 @@
+[
+  {
+    "key": 32,
+    "data": {
+      "unitName": "piece_bone_gaiters",
+      "icon": "/armor_t33_l_i00.webp",
+      "name": {
+        "en": "Piece Bone Gaiters",
+        "ru": "Составные Костяные Набедренники"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 39,
+      "mDef": 0,
+      "mp": 39
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 39,
+    "mDef": 0,
+    "mp": 39
+  },
+  {
+    "key": 34,
+    "data": {
+      "unitName": "bronze_gaiters",
+      "icon": "/armor_t34_l_i00.webp",
+      "name": {
+        "en": "Bronze Gaiters",
+        "ru": "Бронзовые Набедренники"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 43,
+      "mDef": 0,
+      "mp": 43
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 43,
+    "mDef": 0,
+    "mp": 43
+  },
+  {
+    "key": 25,
+    "data": {
+      "unitName": "piece_bone_breastplate",
+      "icon": "/armor_t33_u_i00.webp",
+      "name": {
+        "en": "Piece Bone Breastplate",
+        "ru": "Составная Костяная Кираса"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 62,
+      "mDef": 0,
+      "mp": 62
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 62,
+    "mDef": 0,
+    "mp": 62
+  },
+  {
+    "key": 26,
+    "data": {
+      "unitName": "bronze_breastplate",
+      "icon": "/armor_t34_u_i00.webp",
+      "name": {
+        "en": "Bronze Breastplate",
+        "ru": "Бронзовая Кираса"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 68,
+      "mDef": 0,
+      "mp": 68
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 68,
+    "mDef": 0,
+    "mp": 68
+  },
+  {
+    "key": 376,
+    "data": {
+      "unitName": "iron_plate_gaiters",
+      "icon": "/armor_t12_l_i00.webp",
+      "name": {
+        "en": "Iron Plate Gaiters",
+        "ru": "Железные Латные Набедренники"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 48,
+      "mDef": 0,
+      "mp": 48
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 48,
+    "mDef": 0,
+    "mp": 48
+  },
+  {
+    "key": 377,
+    "data": {
+      "unitName": "scale_gaiters",
+      "icon": "/armor_t08_l_i00.webp",
+      "name": {
+        "en": "Scale Gaiters",
+        "ru": "Чешуйчатые Набедренники"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 54,
+      "mDef": 0,
+      "mp": 54
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 54,
+    "mDef": 0,
+    "mp": 54
+  },
+  {
+    "key": 378,
+    "data": {
+      "unitName": "compound_scale_gaiters",
+      "icon": "/armor_t20_l_i00.webp",
+      "name": {
+        "en": "Compound Scale Gaiters",
+        "ru": "Составные Чешуйчатые Набедренники"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 61,
+      "mDef": 0,
+      "mp": 61
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 61,
+    "mDef": 0,
+    "mp": 61
+  },
+  {
+    "key": 379,
+    "data": {
+      "unitName": "dwarven_scale_gaiters",
+      "icon": "/armor_t15_l_i00.webp",
+      "name": {
+        "en": "Dwarven Scale Gaiters",
+        "ru": "Чешуйчатые Набедренники Гномов"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 61,
+      "mDef": 0,
+      "mp": 61
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 61,
+    "mDef": 0,
+    "mp": 61
+  },
+  {
+    "key": 59,
+    "data": {
+      "unitName": "mithril_gaiters",
+      "icon": "/armor_t19_l_i00.webp",
+      "name": {
+        "en": "Mithril Gaiters",
+        "ru": "Мифриловые Набедренники"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 61,
+      "mDef": 0,
+      "mp": 61
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 61,
+    "mDef": 0,
+    "mp": 61
+  },
+  {
+    "key": 2378,
+    "data": {
+      "unitName": "brigandine_gaiters",
+      "icon": "/armor_t43_l_i00.webp",
+      "name": {
+        "en": "Brigandine Gaiters",
+        "ru": "Панцирные Набедренники"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 64,
+      "mDef": 0,
+      "mp": 64
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 64,
+    "mDef": 0,
+    "mp": 64
+  },
+  {
+    "key": 2377,
+    "data": {
+      "unitName": "mithril_scale_gaiters",
+      "icon": "/armor_t40_l_i00.webp",
+      "name": {
+        "en": "Mithril Scale Gaiters",
+        "ru": "Мифриловые Чешуйчатые Набедренники"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 64,
+      "mDef": 0,
+      "mp": 64
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 64,
+    "mDef": 0,
+    "mp": 64
+  },
+  {
+    "key": 380,
+    "data": {
+      "unitName": "plate_gaiters",
+      "icon": "/armor_t46_l_i00.webp",
+      "name": {
+        "en": "Plate Gaiters",
+        "ru": "Латные Набедренники"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 70,
+      "mDef": 0,
+      "mp": 70
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 70,
+    "mDef": 0,
+    "mp": 70
+  },
+  {
+    "key": 347,
+    "data": {
+      "unitName": "ring_breastplate",
+      "icon": "/armor_t12_u_i00.webp",
+      "name": {
+        "en": "Ring Mail Breastplate",
+        "ru": "Кольчужная Кираса"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 77,
+      "mDef": 0,
+      "mp": 77
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 77,
+    "mDef": 0,
+    "mp": 77
+  },
+  {
+    "key": 348,
+    "data": {
+      "unitName": "scale_mail",
+      "icon": "/armor_t08_u_i00.webp",
+      "name": {
+        "en": "Scale Mail",
+        "ru": "Чешуйчатая Броня"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 87,
+      "mDef": 0,
+      "mp": 87
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 87,
+    "mDef": 0,
+    "mp": 87
+  },
+  {
+    "key": 58,
+    "data": {
+      "unitName": "mithril_breastplate",
+      "icon": "/armor_t19_u_i00.webp",
+      "name": {
+        "en": "Mithril Breastplate",
+        "ru": "Мифриловая Кираса"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 95,
+      "mDef": 0,
+      "mp": 95
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 95,
+    "mDef": 0,
+    "mp": 95
+  },
+  {
+    "key": 350,
+    "data": {
+      "unitName": "dwarven_scale_mail",
+      "icon": "/armor_t15_u_i00.webp",
+      "name": {
+        "en": "Dwarven Scale Mail",
+        "ru": "Чешуйчатая Броня Гномов"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 95,
+      "mDef": 0,
+      "mp": 95
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 95,
+    "mDef": 0,
+    "mp": 95
+  },
+  {
+    "key": 349,
+    "data": {
+      "unitName": "compound_scale_mail",
+      "icon": "/armor_t20_u_i00.webp",
+      "name": {
+        "en": "Compound Scale Mail",
+        "ru": "Составная Чешуйчатая Броня"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 95,
+      "mDef": 0,
+      "mp": 95
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 95,
+    "mDef": 0,
+    "mp": 95
+  },
+  {
+    "key": 351,
+    "data": {
+      "unitName": "blast_plate",
+      "icon": "/armor_t40_u_i00.webp",
+      "name": {
+        "en": "Blast Plate",
+        "ru": "Закаленный Доспех"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 97,
+      "mDef": 0,
+      "mp": 97
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 97,
+    "mDef": 0,
+    "mp": 97
+  },
+  {
+    "key": 352,
+    "data": {
+      "unitName": "brigandine",
+      "icon": "/armor_t43_u_i00.webp",
+      "name": {
+        "en": "Brigandine Tunic",
+        "ru": "Панцирная Туника"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 103,
+      "mDef": 0,
+      "mp": 103
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 103,
+    "mDef": 0,
+    "mp": 103
+  },
+  {
+    "key": 353,
+    "data": {
+      "unitName": "half_plate",
+      "icon": "/armor_t46_u_i00.webp",
+      "name": {
+        "en": "Half Plate Armor",
+        "ru": "Полулаты"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 111,
+      "mDef": 0,
+      "mp": 111
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 111,
+    "mDef": 0,
+    "mp": 111
+  },
+  {
+    "key": 7851,
+    "data": {
+      "unitName": "armor_of_oath",
+      "icon": "/armor_t1001_ul_i00.webp",
+      "name": {
+        "en": "Clan Oath Armor",
+        "ru": "Доспех Клятвы"
+      },
+      "description": {
+        "en": "Full body armor.",
+        "ru": "Полный Доспех"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 158,
+      "mDef": 0,
+      "mp": 158
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 158,
+    "mDef": 0,
+    "mp": 158
+  },
+  {
+    "key": 381,
+    "data": {
+      "unitName": "chain_gaiters",
+      "icon": "/armor_t48_l_i00.webp",
+      "name": {
+        "en": "Chain Gaiters",
+        "ru": "Кольчужные Набедренники"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 75,
+      "mDef": 0,
+      "mp": 75
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 75,
+    "mDef": 0,
+    "mp": 75
+  },
+  {
+    "key": 382,
+    "data": {
+      "unitName": "dwarven_chain_gaiters",
+      "icon": "/armor_t60_l_i00.webp",
+      "name": {
+        "en": "Dwarven Chain Gaiters",
+        "ru": "Кольчужные Набедренники Гномов"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 80,
+      "mDef": 0,
+      "mp": 80
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 80,
+    "mDef": 0,
+    "mp": 80
+  },
+  {
+    "key": 354,
+    "data": {
+      "unitName": "chain_mail_shirt",
+      "icon": "/armor_t48_u_i00.webp",
+      "name": {
+        "en": "Chain Mail Shirt",
+        "ru": "Кольчужная Рубаха"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 120,
+      "mDef": 0,
+      "mp": 120
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 120,
+    "mDef": 0,
+    "mp": 120
+  },
+  {
+    "key": 355,
+    "data": {
+      "unitName": "dwarven_chain_mail_shirt",
+      "icon": "/armor_t60_u_i00.webp",
+      "name": {
+        "en": "Dwarven Chain Mail Shirt",
+        "ru": "Кольчужная Рубаха Гномов"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 129,
+      "mDef": 0,
+      "mp": 129
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 129,
+    "mDef": 0,
+    "mp": 129
+  },
+  {
+    "key": 60,
+    "data": {
+      "unitName": "composite_armor",
+      "icon": "/armor_t61_ul_i00.webp",
+      "name": {
+        "en": "Composite Armor",
+        "ru": "Композитный Доспех"
+      },
+      "description": {
+        "en": "Full body armor.",
+        "ru": "Полный доспех."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 224,
+      "mDef": 0,
+      "mp": 224
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 224,
+    "mDef": 0,
+    "mp": 224
+  },
+  {
+    "key": 356,
+    "data": {
+      "unitName": "full_plate_armor",
+      "icon": "/armor_t62_ul_i00.webp",
+      "name": {
+        "en": "Full Plate Armor",
+        "ru": "Полный Латный Доспех"
+      },
+      "description": {
+        "en": "Full body armor.",
+        "ru": "Полный доспех."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 239,
+      "mDef": 0,
+      "mp": 239
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 239,
+    "mDef": 0,
+    "mp": 239
+  },
+  {
+    "key": 383,
+    "data": {
+      "unitName": "shrnoen's_gaiters",
+      "icon": "/armor_t64_l_i00.webp",
+      "name": {
+        "en": "Zubei's Gaiters",
+        "ru": "Набедренники Зубея"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pDef": 98,
+      "mDef": 0,
+      "mp": 98
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 98,
+    "mDef": 0,
+    "mp": 98
+  },
+  {
+    "key": 2379,
+    "data": {
+      "unitName": "avadon_gaiters",
+      "icon": "/armor_t66_l_i00.webp",
+      "name": {
+        "en": "Avadon Gaiters",
+        "ru": "Набедренники Авадона"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pDef": 98,
+      "mDef": 0,
+      "mp": 98
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 98,
+    "mDef": 0,
+    "mp": 98
+  },
+  {
+    "key": 2380,
+    "data": {
+      "unitName": "blue_wolve's_gaiters",
+      "icon": "/armor_t68_l_i00.webp",
+      "name": {
+        "en": "Blue Wolf Gaiters",
+        "ru": "Набедренники Синего Волка"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pDef": 104,
+      "mDef": 0,
+      "mp": 104
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 104,
+    "mDef": 0,
+    "mp": 104
+  },
+  {
+    "key": 357,
+    "data": {
+      "unitName": "shrnoen's_breastplate",
+      "icon": "/armor_t64_u_i00.webp",
+      "name": {
+        "en": "Zubei's Breastplate",
+        "ru": "Кираса Зубея"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pDef": 157,
+      "mDef": 0,
+      "mp": 157
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 157,
+    "mDef": 0,
+    "mp": 157
+  },
+  {
+    "key": 2376,
+    "data": {
+      "unitName": "avadon_breastplate",
+      "icon": "/armor_t66_u_i00.webp",
+      "name": {
+        "en": "Avadon Breastplate",
+        "ru": "Кираса Авадона"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pDef": 157,
+      "mDef": 0,
+      "mp": 157
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 157,
+    "mDef": 0,
+    "mp": 157
+  },
+  {
+    "key": 358,
+    "data": {
+      "unitName": "blue_wolve's_breastplate",
+      "icon": "/armor_t68_u_i00.webp",
+      "name": {
+        "en": "Blue Wolf Breastplate",
+        "ru": "Кираса Синего Волка"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pDef": 166,
+      "mDef": 0,
+      "mp": 166
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 166,
+    "mDef": 0,
+    "mp": 166
+  },
+  {
+    "key": 2381,
+    "data": {
+      "unitName": "doom_plate_armor",
+      "icon": "/armor_t71_ul_i00.webp",
+      "name": {
+        "en": "Doom Plate Armor",
+        "ru": "Латный Доспех Рока"
+      },
+      "description": {
+        "en": "Full body armor.",
+        "ru": "Полный доспех."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pDef": 270,
+      "mDef": 0,
+      "mp": 270
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 270,
+    "mDef": 0,
+    "mp": 270
+  },
+  {
+    "key": 5288,
+    "data": {
+      "unitName": "sealed_dark_crystal_gaiters",
+      "icon": "/armor_t74_l_i02.webp",
+      "name": {
+        "en": "Sealed Dark Crystal Gaiters",
+        "ru": "Запечатанные Набедренники Кристалла Тьмы"
+      },
+      "description": {
+        "en": "Its seal can be broken with the help of the Blacksmith of Mammon.",
+        "ru": "Запечатанные Набедренники Кристалла Тьмы. Печать можно снять у кузнеца в любой деревне."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pDef": 107,
+      "mDef": 0,
+      "mp": 107
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 107,
+    "mDef": 0,
+    "mp": 107
+  },
+  {
+    "key": 5287,
+    "data": {
+      "unitName": "sealed_dark_crystal_breastplate",
+      "icon": "/armor_t74_u_i02.webp",
+      "name": {
+        "en": "Sealed Dark Crystal Breastplate",
+        "ru": "Запечатанная Кираса Кристалла Тьмы"
+      },
+      "description": {
+        "en": "Sealed Dark Crystal Breastplate. Its seal can be broken with the help of the Blacksmith of Mammon.",
+        "ru": "Запечатанная Кираса Кристалла Тьмы. Печать можно снять у кузнеца в любой деревне."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pDef": 171,
+      "mDef": 0,
+      "mp": 171
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 171,
+    "mDef": 0,
+    "mp": 171
+  },
+  {
+    "key": 5293,
+    "data": {
+      "unitName": "sealed_tallum_plate_armor",
+      "icon": "/armor_t77_ul_i02.webp",
+      "name": {
+        "en": "Sealed Tallum Plate Armor",
+        "ru": "Запечатанный Латный Доспех Таллума"
+      },
+      "description": {
+        "en": "Its seal can be broken with the help of the Blacksmith of Mammon.",
+        "ru": "Запечатанный Латный Доспех Таллума. Печать можно снять у кузнеца в любой деревне."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pDef": 278,
+      "mDef": 0,
+      "mp": 278
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 278,
+    "mDef": 0,
+    "mp": 278
+  },
+  {
+    "key": 7871,
+    "data": {
+      "unitName": "sealed_armor_of_apella",
+      "icon": "/armor_t1004_ul_i02.webp",
+      "name": {
+        "en": "Sealed Apella Plate Armor",
+        "ru": "Запечатанный Латный Доспех Апеллы"
+      },
+      "description": {
+        "en": "It can be opened with the help of the Blacksmith of Mammon.",
+        "ru": "Может носить персонаж в звании Старейшина и выше. Запечатанная Броня Апеллы. Печать можно снять у кузнеца в любой деревне."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pDef": 278,
+      "mDef": 0,
+      "mp": 278
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 278,
+    "mDef": 0,
+    "mp": 278
+  },
+  {
+    "key": 5311,
+    "data": {
+      "unitName": "sealed_armor_of_nightmare",
+      "icon": "/armor_t80_ul_i02.webp",
+      "name": {
+        "en": "Sealed Armor of Nightmare",
+        "ru": "Запечатанный Доспех Кошмаров"
+      },
+      "description": {
+        "en": "Its seal can be broken with the help of the Blacksmith of Mammon.",
+        "ru": "Запечатанный Доспех Кошмаров. Печать можно снять у кузнеца в любой деревне."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pDef": 293,
+      "mDef": 0,
+      "mp": 293
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 293,
+    "mDef": 0,
+    "mp": 293
+  },
+  {
+    "key": 5316,
+    "data": {
+      "unitName": "sealed_majestic_platte_armor",
+      "icon": "/armor_t83_ul_i02.webp",
+      "name": {
+        "en": "Sealed Majestic Plate Armor",
+        "ru": "Запечатанный Латный Доспех Величия"
+      },
+      "description": {
+        "en": "Its seal can be broken with the help of the Blacksmith of Mammon.",
+        "ru": "Запечатанный Латный Доспех Величия. Печать можно снять у кузнеца в любой деревне."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pDef": 293,
+      "mDef": 0,
+      "mp": 293
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 293,
+    "mDef": 0,
+    "mp": 293
+  },
+  {
+    "key": 6675,
+    "data": {
+      "unitName": "sealed_imperial_crusader_gaiters",
+      "icon": "/armor_t88_l_i02.webp",
+      "name": {
+        "en": "Sealed Imperial Crusader Gaiters",
+        "ru": "Запечатанные Набедренники Имперского Крестоносца"
+      },
+      "description": {
+        "en": "Its seal can be broken with the help of the Blacksmith of Mammon.",
+        "ru": "Запечатанные Набедренники Имперского Крестоносца. Печать может быть сломана с помощью Кузнеца Маммона."
+      }
+    },
+    "grade": "S",
+    "stats": {
+      "pDef": 121,
+      "mDef": 0,
+      "mp": 121
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 121,
+    "mDef": 0,
+    "mp": 121
+  },
+  {
+    "key": 6674,
+    "data": {
+      "unitName": "sealed_imperial_crusader_armor",
+      "icon": "/armor_t88_u_i02.webp",
+      "name": {
+        "en": "Sealed Imperial Crusader Breastplate",
+        "ru": "Запечатанная Кираса Имперского Крестоносца"
+      },
+      "description": {
+        "en": "Its seal can be broken with the help of the Blacksmith of Mammon.",
+        "ru": "Запечатанная Кираса Имперского Крестоносца. Печать может быть сломана с помощью Кузнеца Маммона."
+      }
+    },
+    "grade": "S",
+    "stats": {
+      "pDef": 193,
+      "mDef": 0,
+      "mp": 193
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 193,
+    "mDef": 0,
+    "mp": 193
+  },
+  {
+    "key": 9515,
+    "data": {
+      "unitName": "sealed_dynasty_gaiter",
+      "icon": "/armor_t91_l_i02.webp",
+      "name": {
+        "en": "Sealed Dynasty Gaiter",
+        "ru": "Запечатанные Набедренники Династии"
+      },
+      "description": {
+        "en": "Sealed Dynasty Gaiters Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанные Набедренники Династии. Печать можно снять у Кузнеца Маммона или Мастера Ишумы."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pDef": 134,
+      "mDef": 0,
+      "mp": 134
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 134,
+    "mDef": 0,
+    "mp": 134
+  },
+  {
+    "key": 15700,
+    "data": {
+      "unitName": "sealed_moirai_gaiter",
+      "icon": "/armor_t94_l_i02.webp",
+      "name": {
+        "en": "Sealed Moirai Gaiter",
+        "ru": "Запечатанные Набедренники Дестино"
+      },
+      "description": {
+        "en": "Sealed Moirai Gaiters. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанные Набедренники Дестино. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pDef": 141,
+      "mDef": 0,
+      "mp": 141
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 141,
+    "mDef": 0,
+    "mp": 141
+  },
+  {
+    "key": 9514,
+    "data": {
+      "unitName": "sealed_dynasty_breast_plate",
+      "icon": "/armor_t91_u_i02.webp",
+      "name": {
+        "en": "Sealed Dynasty Breast Plate",
+        "ru": "Запечатанная Кираса Династии"
+      },
+      "description": {
+        "en": "Sealed Dynasty Breastplate. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанная Кираса Династии. Печать можно снять у Кузнеца Маммона или Мастера Ишумы."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pDef": 214,
+      "mDef": 0,
+      "mp": 214
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 214,
+    "mDef": 0,
+    "mp": 214
+  },
+  {
+    "key": 15697,
+    "data": {
+      "unitName": "sealed_moirai_breastplate",
+      "icon": "/armor_t94_u_i02.webp",
+      "name": {
+        "en": "Sealed Moirai Breastplate",
+        "ru": "Запечатанная Кираса Дестино"
+      },
+      "description": {
+        "en": "Sealed Moirai Breastplate. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанная Кираса Дестино. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pDef": 225,
+      "mDef": 0,
+      "mp": 225
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 225,
+    "mDef": 0,
+    "mp": 225
+  },
+  {
+    "key": 14105,
+    "data": {
+      "unitName": "sealed_vesper_breastplate",
+      "icon": "/armor_t94_u_i02.webp",
+      "name": {
+        "en": "Sealed Vesper Breastplate",
+        "ru": "Запечатанная Кираса Венеры"
+      },
+      "description": {
+        "en": "Sealed Vesper Breastplate. Seal can be removed by the blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанная Кираса Венеры. Печать можно снять у Кузнеца Маммона или Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 236,
+      "mDef": 0,
+      "mp": 236
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 236,
+    "mDef": 0,
+    "mp": 236
+  },
+  {
+    "key": 17006,
+    "data": {
+      "unitName": "sealed_vesper_noble_breastplate",
+      "icon": "/armor_t94_u_i02.webp",
+      "name": {
+        "en": "Sealed Vesper Noble Breastplate",
+        "ru": "Запечатанная Красивая Кираса Венеры"
+      },
+      "description": {
+        "en": "Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанная Красивая Кираса Венеры. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 236,
+      "mDef": 0,
+      "mp": 236
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 236,
+    "mDef": 0,
+    "mp": 236
+  },
+  {
+    "key": 15746,
+    "data": {
+      "unitName": "sealed_vorpal_breastplate",
+      "icon": "/armor_t94_u_i02.webp",
+      "name": {
+        "en": "Sealed Vorpal Breastplate",
+        "ru": "Запечатанная Кираса Верпеса"
+      },
+      "description": {
+        "en": "Sealed Vorpal Breastplate. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанная Кираса Верпеса. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 249,
+      "mDef": 0,
+      "mp": 249
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 249,
+    "mDef": 0,
+    "mp": 249
+  },
+  {
+    "key": 15729,
+    "data": {
+      "unitName": "sealed_elegia_breastplate",
+      "icon": "/armor_t91_u_i02.webp",
+      "name": {
+        "en": "Sealed Elegia Breastplate",
+        "ru": "Запечатанная Кираса Элегии"
+      },
+      "description": {
+        "en": "Sealed Elegia Breastplate. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанная Кираса Элегии. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 257,
+      "mDef": 0,
+      "mp": 257
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 257,
+    "mDef": 0,
+    "mp": 257
+  },
+  {
+    "key": 14108,
+    "data": {
+      "unitName": "sealed_vesper_gaiters",
+      "icon": "/armor_t94_l_i02.webp",
+      "name": {
+        "en": "Sealed Vesper Gaiters",
+        "ru": "Запечатанные Набедренники Венеры"
+      },
+      "description": {
+        "en": "Sealed Vesper Gaiters. Seal can be removed by the blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанные Набедренники Венеры. Печать можно снять у Кузнеца Маммона или Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 148,
+      "mDef": 0,
+      "mp": 148
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 148,
+    "mDef": 0,
+    "mp": 148
+  },
+  {
+    "key": 17009,
+    "data": {
+      "unitName": "sealed_vesper_noble_gaiters",
+      "icon": "/armor_t94_l_i02.webp",
+      "name": {
+        "en": "Sealed Vesper Noble Gaiters",
+        "ru": "Запечатанные Красивые Набедренники Венеры"
+      },
+      "description": {
+        "en": "Sealed Vesper Noble Gaiter. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанные Красивые Набедренники Венеры. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 148,
+      "mDef": 0,
+      "mp": 148
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 148,
+    "mDef": 0,
+    "mp": 148
+  },
+  {
+    "key": 15749,
+    "data": {
+      "unitName": "sealed_vorpal_gaiter",
+      "icon": "/armor_t94_l_i02.webp",
+      "name": {
+        "en": "Sealed Vorpal Gaiter",
+        "ru": "Запечатанные Набедренники Верпеса"
+      },
+      "description": {
+        "en": "Sealed Vorpal Gaiters. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанные Набедренники Верпеса. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 156,
+      "mDef": 0,
+      "mp": 156
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 156,
+    "mDef": 0,
+    "mp": 156
+  },
+  {
+    "key": 15732,
+    "data": {
+      "unitName": "sealed_elegia_gaiter",
+      "icon": "/armor_t91_l_i02.webp",
+      "name": {
+        "en": "Sealed Elegia Gaiter",
+        "ru": "Запечатанные Набедренники Элегии"
+      },
+      "description": {
+        "en": "Sealed Elegia Gaiters. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанные Набедренники Элегии. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 161,
+      "mDef": 0,
+      "mp": 161
+    },
+    "category": "armors",
+    "subtype": "heavy_armor",
+    "type": "heavy_armor",
+    "pDef": 161,
+    "mDef": 0,
+    "mp": 161
+  }
+]

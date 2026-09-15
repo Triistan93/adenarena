@@ -1,0 +1,731 @@
+[
+  {
+    "key": 116,
+    "data": {
+      "unitName": "magic_ring",
+      "icon": "/accessary_magic_ring_i00.webp",
+      "name": {
+        "en": "Magic Ring",
+        "ru": "Магическое Кольцо"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 0,
+      "mDef": 7,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "ring",
+    "type": "ring",
+    "pDef": 0,
+    "mDef": 7,
+    "mp": 0
+  },
+  {
+    "key": 875,
+    "data": {
+      "unitName": "ring_of_knowledge",
+      "icon": "/accessary_ring_of_knowledge_i00.webp",
+      "name": {
+        "en": "Ring of Knowledge",
+        "ru": "Кольцо Знаний"
+      },
+      "description": {
+        "en": "A gold ring with delicately engraved rune characters of knowledge.",
+        "ru": "Золотое кольцо с выгравированными на нем рунами знаний."
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 0,
+      "mDef": 9,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "ring",
+    "type": "ring",
+    "pDef": 0,
+    "mDef": 9,
+    "mp": 0
+  },
+  {
+    "key": 876,
+    "data": {
+      "unitName": "ring_of_anguish",
+      "icon": "/accessary_ring_of_anguish_i00.webp",
+      "name": {
+        "en": "Ring of Anguish",
+        "ru": "Кольцо Мучений"
+      },
+      "description": {
+        "en": "A gold ring with engraved rune characters of anguish.",
+        "ru": "Золотое кольцо с рунами мучений."
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 0,
+      "mDef": 11,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "ring",
+    "type": "ring",
+    "pDef": 0,
+    "mDef": 11,
+    "mp": 0
+  },
+  {
+    "key": 1508,
+    "data": {
+      "unitName": "ring_of_raccoon",
+      "icon": "/accessary_ring_of_raccoon_i00.webp",
+      "name": {
+        "en": "Ring of Raccoon",
+        "ru": "Кольцо Енота"
+      },
+      "description": {
+        "en": "A ring given to apprentices of the Bronze Key Guild.",
+        "ru": "Кольцо учеников Гильдии Бронзового Ключа."
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 0,
+      "mDef": 11,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "ring",
+    "type": "ring",
+    "pDef": 0,
+    "mDef": 11,
+    "mp": 0
+  },
+  {
+    "key": 1509,
+    "data": {
+      "unitName": "ring_of_firefly",
+      "icon": "/accessary_ring_of_firefly_i00.webp",
+      "name": {
+        "en": "Ring of Firefly",
+        "ru": "Кольцо Светлячка"
+      },
+      "description": {
+        "en": "A ring given to apprentices of the Black Anvil Guild.",
+        "ru": "Кольцо учеников Гильдии Черной Наковальни."
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 0,
+      "mDef": 11,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "ring",
+    "type": "ring",
+    "pDef": 0,
+    "mDef": 11,
+    "mp": 0
+  },
+  {
+    "key": 877,
+    "data": {
+      "unitName": "ring_of_wisdom",
+      "icon": "/accessary_ring_of_wisdom_i00.webp",
+      "name": {
+        "en": "Ring of Wisdom",
+        "ru": "Кольцо Мудрости"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 0,
+      "mDef": 12,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "ring",
+    "type": "ring",
+    "pDef": 0,
+    "mDef": 12,
+    "mp": 0
+  },
+  {
+    "key": 878,
+    "data": {
+      "unitName": "blue_coral_ring",
+      "icon": "/accessary_blue_coral_ring_i00.webp",
+      "name": {
+        "en": "Blue Coral Ring",
+        "ru": "Синее Коралловое Кольцо"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 0,
+      "mDef": 14,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "ring",
+    "type": "ring",
+    "pDef": 0,
+    "mDef": 14,
+    "mp": 0
+  },
+  {
+    "key": 890,
+    "data": {
+      "unitName": "ring_of_devotion",
+      "icon": "/accessary_ring_of_devotion_i00.webp",
+      "name": {
+        "en": "Ring of Devotion",
+        "ru": "Кольцо Преданности"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 0,
+      "mDef": 16,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "ring",
+    "type": "ring",
+    "pDef": 0,
+    "mDef": 16,
+    "mp": 0
+  },
+  {
+    "key": 879,
+    "data": {
+      "unitName": "enchanted_ring",
+      "icon": "/accessary_enchanted_ring_i00.webp",
+      "name": {
+        "en": "Enchanted Ring",
+        "ru": "Зачарованное Кольцо"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 0,
+      "mDef": 18,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "ring",
+    "type": "ring",
+    "pDef": 0,
+    "mDef": 18,
+    "mp": 0
+  },
+  {
+    "key": 880,
+    "data": {
+      "unitName": "black_pearl_ring",
+      "icon": "/accessary_black_pearl_ring_i00.webp",
+      "name": {
+        "en": "Black Pearl Ring",
+        "ru": "Кольцо из Черного Жемчуга"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 0,
+      "mDef": 20,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "ring",
+    "type": "ring",
+    "pDef": 0,
+    "mDef": 20,
+    "mp": 0
+  },
+  {
+    "key": 881,
+    "data": {
+      "unitName": "elven_ring",
+      "icon": "/accessary_elven_ring_i00.webp",
+      "name": {
+        "en": "Elven Ring",
+        "ru": "Кольцо Эльфов"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 0,
+      "mDef": 22,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "ring",
+    "type": "ring",
+    "pDef": 0,
+    "mDef": 22,
+    "mp": 0
+  },
+  {
+    "key": 882,
+    "data": {
+      "unitName": "mithril_ring",
+      "icon": "/accessary_mithril_ring_i00.webp",
+      "name": {
+        "en": "Mithril Ring",
+        "ru": "Мифриловое Кольцо"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 0,
+      "mDef": 24,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "ring",
+    "type": "ring",
+    "pDef": 0,
+    "mDef": 24,
+    "mp": 0
+  },
+  {
+    "key": 883,
+    "data": {
+      "unitName": "aquastone_ring",
+      "icon": "/accessary_aquastone_ring_i00.webp",
+      "name": {
+        "en": "Aquastone Ring",
+        "ru": "Бирюзовое Кольцо"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 0,
+      "mDef": 26,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "ring",
+    "type": "ring",
+    "pDef": 0,
+    "mDef": 26,
+    "mp": 0
+  },
+  {
+    "key": 884,
+    "data": {
+      "unitName": "ring_of_protection",
+      "icon": "/accessary_ring_of_protection_i00.webp",
+      "name": {
+        "en": "Ring of Protection",
+        "ru": "Кольцо Защиты"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 0,
+      "mDef": 28,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "ring",
+    "type": "ring",
+    "pDef": 0,
+    "mDef": 28,
+    "mp": 0
+  },
+  {
+    "key": 885,
+    "data": {
+      "unitName": "ring_of_ages",
+      "icon": "/accessary_ring_of_ages_i00.webp",
+      "name": {
+        "en": "Ring of Ages",
+        "ru": "Кольцо Эпох"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 0,
+      "mDef": 30,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "ring",
+    "type": "ring",
+    "pDef": 0,
+    "mDef": 30,
+    "mp": 0
+  },
+  {
+    "key": 886,
+    "data": {
+      "unitName": "ring_of_binding",
+      "icon": "/accessary_ring_of_binding_i00.webp",
+      "name": {
+        "en": "Ring of Binding",
+        "ru": "Кольцо Печати"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 0,
+      "mDef": 32,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "ring",
+    "type": "ring",
+    "pDef": 0,
+    "mDef": 32,
+    "mp": 0
+  },
+  {
+    "key": 887,
+    "data": {
+      "unitName": "adamantite_ring",
+      "icon": "/accessary_adamantite_ring_i00.webp",
+      "name": {
+        "en": "Adamantite Ring",
+        "ru": "Адамантитовое Кольцо"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pDef": 0,
+      "mDef": 34,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "ring",
+    "type": "ring",
+    "pDef": 0,
+    "mDef": 34,
+    "mp": 0
+  },
+  {
+    "key": 895,
+    "data": {
+      "unitName": "ring_of_black_ore",
+      "icon": "/accessary_ring_of_black_ore_i00.webp",
+      "name": {
+        "en": "Ring of Black Ore",
+        "ru": "Черное Кольцо"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pDef": 0,
+      "mDef": 36,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "ring",
+    "type": "ring",
+    "pDef": 0,
+    "mDef": 36,
+    "mp": 0
+  },
+  {
+    "key": 6660,
+    "data": {
+      "unitName": "ring_of_queen_ant",
+      "icon": "/accessory_ring_of_queen_ant_i00.webp",
+      "name": {
+        "en": "Ring of Queen Ant",
+        "ru": "Кольцо Королевы Муравьев"
+      },
+      "description": {
+        "en": "Produces the following effects: MP +21, 60% increase in resistance to poisoning, increase in accuracy, increase in critical damage, and 40% increase in resistance to hold.  If a character wears two identical rings, only the effect of one ring will be appl",
+        "ru": "Дает следующие эффекты"
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pDef": 0,
+      "mDef": 48,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "ring",
+    "type": "ring",
+    "pDef": 0,
+    "mDef": 48,
+    "mp": 0
+  },
+  {
+    "key": 6325,
+    "data": {
+      "unitName": "sealed_phoenix's_ring",
+      "icon": "/accessary_phoenixs_ring_i02.webp",
+      "name": {
+        "en": "Sealed Phoenix Ring",
+        "ru": "Запечатанное Кольцо Феникса"
+      },
+      "description": {
+        "en": "The seal can be broken with the help of the Blacksmith of Mammon. When the seal is broken, the effects of M. Def.+2 and MP+13 are given.",
+        "ru": "Печать можно снять у кузнеца в любой деревне. Когда печать снята, даются эффекты Маг. Защ.+2 и МР+13."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pDef": 0,
+      "mDef": 38,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "ring",
+    "type": "ring",
+    "pDef": 0,
+    "mDef": 38,
+    "mp": 0
+  },
+  {
+    "key": 6328,
+    "data": {
+      "unitName": "sealed_majestic_ring",
+      "icon": "/accessary_inferno_ring_i02.webp",
+      "name": {
+        "en": "Sealed Majestic Ring",
+        "ru": "Запечатанное Кольцо Величия"
+      },
+      "description": {
+        "en": "The seal can be broken with the help of the Blacksmith of Mammon. When the seal is broken, the effects of M. Def.+2 and MP+17 are given.",
+        "ru": "Печать можно снять у кузнеца в любой деревне. Когда печать снята, даются эффекты Маг. Защ.+2 и МР+17."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pDef": 0,
+      "mDef": 40,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "ring",
+    "type": "ring",
+    "pDef": 0,
+    "mDef": 40,
+    "mp": 0
+  },
+  {
+    "key": 6725,
+    "data": {
+      "unitName": "sealed_ring_of_aurakyria",
+      "icon": "/accessory_tateossian_ring_i02.webp",
+      "name": {
+        "en": "Sealed Tateossian Ring",
+        "ru": "Запечатанное Кольцо Татеосса"
+      },
+      "description": {
+        "en": "The seal of this item can be broken by going through the Blacksmith of Mammon. When the seal is broken, it will produce the effects of M. Def. +2 and MP+21.",
+        "ru": "Печать может быть сломана с помощью Кузнеца Маммона. Снятие печати дает эффект Маг. Защ.+2 и MP+21."
+      }
+    },
+    "grade": "S",
+    "stats": {
+      "pDef": 0,
+      "mDef": 46,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "ring",
+    "type": "ring",
+    "pDef": 0,
+    "mDef": 46,
+    "mp": 0
+  },
+  {
+    "key": 9454,
+    "data": {
+      "unitName": "sealed_dynasty_ring",
+      "icon": "/accessary_dynasty_ring_i01.webp",
+      "name": {
+        "en": "Sealed Dynasty Ring",
+        "ru": "Запечатанное Кольцо Династии"
+      },
+      "description": {
+        "en": "Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma. When the seal is released, M. Def. +7 and MP +23.",
+        "ru": "Печать можно снять у кузнеца Маммона или Мастера Ишумы. Снятие печати дает Маг. Защ.+7 и MP+23."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pDef": 0,
+      "mDef": 53,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "ring",
+    "type": "ring",
+    "pDef": 0,
+    "mDef": 53,
+    "mp": 0
+  },
+  {
+    "key": 15766,
+    "data": {
+      "unitName": "sealed_moirai_ring",
+      "icon": "/accessary_sealed_bluelycan_ring_i00.webp",
+      "name": {
+        "en": "Sealed Moirai Ring",
+        "ru": "Запечатанное Кольцо Дестино"
+      },
+      "description": {
+        "en": "Sealed Moirai Ring. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma. When the seal is released, has an M. Def. +7 and MP+24.",
+        "ru": "Запечатанное Кольцо Дестино. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы. После снятия печати увеличивает Маг. Защ. На 7 и MP на 24."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pDef": 0,
+      "mDef": 53,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "ring",
+    "type": "ring",
+    "pDef": 0,
+    "mDef": 53,
+    "mp": 0
+  },
+  {
+    "key": 14162,
+    "data": {
+      "unitName": "sealed_vesper_ring",
+      "icon": "/vesper_ring_i01.webp",
+      "name": {
+        "en": "Sealed Vesper Ring",
+        "ru": "Запечатанное Кольцо Венеры"
+      },
+      "description": {
+        "en": "Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma. When the seal is released, the effect is M. Def.+7 and MP+25.",
+        "ru": "Печать можно снять у Кузнеца Маммона или Мастера Ишумы. Когда печать снята, добавляется эффект Маг. Защ. +7, МР +25."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 0,
+      "mDef": 55,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "ring",
+    "type": "ring",
+    "pDef": 0,
+    "mDef": 55,
+    "mp": 0
+  },
+  {
+    "key": 15763,
+    "data": {
+      "unitName": "sealed_vorpal_ring",
+      "icon": "/accessary_sealed_ponshrnoen_ring_i00.webp",
+      "name": {
+        "en": "Sealed Vorpal Ring",
+        "ru": "Запечатанное Кольцо Верпеса"
+      },
+      "description": {
+        "en": "Sealed Vorpal Ring. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma. When the seal is released, has an M. Def. +8 and MP+26.",
+        "ru": "Запечатанное Кольцо Верпеса. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы. После снятия печати увеличивает Маг. Защ. на 8 и MP на 26."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 0,
+      "mDef": 57,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "ring",
+    "type": "ring",
+    "pDef": 0,
+    "mDef": 57,
+    "mp": 0
+  },
+  {
+    "key": 15760,
+    "data": {
+      "unitName": "sealed_elegia_ring",
+      "icon": "/accessary_sealed_verpes_ring_i00.webp",
+      "name": {
+        "en": "Sealed Elegia Ring",
+        "ru": "Запечатанное Кольцо Элегии"
+      },
+      "description": {
+        "en": "Sealed Elegia Ring. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma. When the seal is released, has an M. Def. +8 and MP+27.",
+        "ru": "Запечатанное Кольцо Элегии. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы. После снятия печати увеличивает Маг. Защ. на 8 и MP на 27."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 0,
+      "mDef": 61,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "ring",
+    "type": "ring",
+    "pDef": 0,
+    "mDef": 61,
+    "mp": 0
+  }
+]

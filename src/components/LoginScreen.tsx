@@ -15,6 +15,7 @@ import {
 } from '../firebase';
 import { CharacterCreation, CharacterCreationData } from './CharacterCreation';
 import { getStarterKit } from '../data/starterKits';
+import { getClassIcon } from '../services/IconService';
 
 interface LoginScreenProps {
   onEnterGame: (cloudState?: any) => void;
@@ -541,7 +542,15 @@ export function LoginScreen({ onEnterGame }: LoginScreenProps) {
                     </div>
 
                     <div className="flex items-center justify-between text-[11px] text-[#c5a059] font-medium font-serif">
-                      <span>Nv. {heroLevel} · {heroClass}</span>
+                      <span className="inline-flex items-center gap-1.5">
+                        <img
+                          src={getClassIcon(cloudState?.class || heroClass)}
+                          alt={heroClass}
+                          className="w-4 h-4 object-contain rounded bg-black/60 border border-[#c5a059]/40 p-0.5"
+                          onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                        />
+                        <span>Nv. {heroLevel} · {heroClass}</span>
+                      </span>
                       <span className={isPrivileged ? "text-amber-400 font-bold" : "text-[#94a3b8]"}>
                         {isPrivileged ? "👑 Admin" : "👤 Jogador"}
                       </span>

@@ -1,0 +1,725 @@
+ID,Name_EN,Name_RU,Grade,Craft_Level,Type,Icon
+17,"Wooden Arrow","Деревянная Стрела",,1,etcitem,/etc_wooden_quiver_i00.webp
+734,"Haste Potion","Зелье Ускорения",,1,etcitem,/etc_potion_green_i00.webp
+735,"Potion of Alacrity","Зелье Быстрой Атаки",,1,etcitem,/etc_reagent_green_i00.webp
+1060,"Lesser Healing Potion","Малое Зелье Исцеления",,1,etcitem,/etc_lesser_potion_red_i00.webp
+1831,"Antidote","Противоядие",,1,etcitem,/etc_herb_green_i00.webp
+1833,"Bandage","Бинт",,1,etcitem,/etc_piece_of_cloth_white_i00.webp
+3030,"Key of Titan","Ключ Гигантов",,1,etcitem,/etc_key_i00.webp
+3139,"Journeyman Ring","Кольцо Мастера",,1,questitem,/accessary_ring_of_blessing_i00.webp
+1061,"Healing Potion","Зелье Исцеления",,2,etcitem,/etc_potion_scarlet_i00.webp
+1832,"Greater Antidote","Сильное Противоядие",,2,etcitem,/etc_reagent_green_i00.webp
+1834,"Emergency Dressing","Большой Бинт",,2,etcitem,/etc_piece_of_cloth_white_i00.webp
+3136,"Amber Bead","Янтарная Бусинка",,2,questitem,/etc_crystal_ball_red_i00.webp
+3846,"Titan's Powerstone","Машина Гигантов",,2,etcitem,/etc_mechanic_box_i00.webp
+1374,"Greater Haste Potion","Большое Зелье Ускорения",,3,etcitem,/etc_lesser_potion_green_i00.webp
+1375,"Greater Swift Attack Potion","Большое Зелье Стремительной Атаки",,3,etcitem,/etc_lesser_potion_purple_i00.webp
+1539,"Greater Healing Potion","Большое Зелье Исцеления",,5,etcitem,/etc_reagent_white_i00.webp
+1878,"Braided Hemp","Плетеный Лен",NG,1,resource,/etc_braided_hemp_i00.webp
+1880,"Steel","Сталь",NG,1,resource,/etc_lump_black_i00.webp
+1883,"Steel Mold","Стальная Заготовка",NG,2,resource,/etc_mold_i00.webp
+1879,"Cokes","Кокс",D,1,resource,/etc_oil_pot_black_i00.webp
+1881,"Coarse Bone Powder","Грубый Костный Порошок",D,1,resource,/etc_powder_white_i00.webp
+1882,"Leather","Кожа",D,1,resource,/etc_leather_i00.webp
+1341,"Bone Arrow","Костяная Стрела",D,2,etcitem,/etc_bone_quiver_i00.webp
+1463,"Soulshot: D-grade","Заряд Души: Ранг D",D,2,soulshot,/etc_spirit_bullet_blue_i00.webp
+1884,"Cord","Веревка",D,2,resource,/etc_skein_gray_i00.webp
+1885,"High Grade Suede","Качественная Замша",D,2,resource,/etc_pouch_yellow_i00.webp
+1886,"Silver Mold","Серебряная Заготовка",D,2,resource,/etc_silver_mold_i00.webp
+2510,"Spiritshot: D-grade","Заряд Духа: Ранг D",D,2,soulshot,/etc_spell_shot_blue_i00.webp
+3948,"Blessed Spiritshot: D-Grade","Благословенный Заряд Духа: Ранг D",D,2,soulshot,/etc_spell_shot_blue_i01.webp
+1887,"Varnish of Purity","Очищенный Лак",C,2,resource,/etc_potion_clear_i00.webp
+1888,"Synthetic Cokes","Синтетический Кокс",C,2,resource,/etc_synthetic_cokes_i00.webp
+1889,"Compound Braid","Прочный Шнурок",C,2,resource,/etc_compound_braid_i00.webp
+1342,"Fine Steel Arrow","Железная Стрела",C,3,etcitem,/etc_fine_steel_quiver_i00.webp
+1464,"Soulshot: C-grade","Заряд Души: Ранг C",C,4,soulshot,/etc_spirit_bullet_green_i00.webp
+1890,"Mithril Alloy","Мифриловый Сплав",C,4,resource,/etc_lump_white_i00.webp
+1891,"Artisan's Frame","Заготовка Ремесленника",C,4,resource,/etc_artisans_frame_i00.webp
+1892,"Blacksmith's Frame","Заготовка Кузнеца",C,4,resource,/etc_blacksmiths_frame_i00.webp
+1893,"Oriharukon","Орихарукон",C,4,resource,/etc_oriharukon_i00.webp
+1894,"Crafted Leather","Выделанная Кожа",C,4,resource,/etc_crafted_leather_i00.webp
+1895,"Metallic Fiber","Металлическое Волокно",C,4,resource,/etc_metallic_fiber_i00.webp
+2511,"Spiritshot: C-grade","Заряд Духа: Ранг C",C,4,soulshot,/etc_spell_shot_green_i00.webp
+1343,"Silver Arrow","Серебряная Стрела",B,4,etcitem,/etc_silver_quiver_i00.webp
+1465,"Soulshot: B-grade","Заряд Души: Ранг B",B,6,soulshot,/etc_spirit_bullet_red_i00.webp
+2512,"Spiritshot: B-grade","Заряд Духа: Ранг B",B,6,soulshot,/etc_spell_shot_red_i00.webp
+1344,"Mithril Arrow","Мифриловая Стрела",A,4,etcitem,/etc_mithril_quiver_i00.webp
+1466,"Soulshot: A-grade","Заряд Души: Ранг A",A,7,soulshot,/etc_spirit_bullet_silver_i00.webp
+2513,"Spiritshot: A-grade","Заряд Духа: Ранг A",A,7,soulshot,/etc_spell_shot_silver_i00.webp
+1345,"Shining Arrow","Сверкающая Стрела",S,5,etcitem,/etc_shining_quiver_i00.webp
+1467,"Soulshot: S-grade","Заряд Души: Ранг S",S,8,soulshot,/etc_spirit_bullet_gold_i00.webp
+2514,"Spiritshot: S-grade","Заряд Духа: Ранг S",S,8,soulshot,/etc_spell_shot_gold_i00.webp
+4469,"Dye of STR <Str+1 Con-1>","Краска СИЛ <СИЛ+1 ВЫН-1>",,4,etcitem,/etc_str_hena_i00.webp
+4470,"Dye of STR <Str+1 Dex-1>","Краска СИЛ <СИЛ+1 ЛВК-1>",,4,etcitem,/etc_str_hena_i00.webp
+4471,"Dye of CON <Con+1 Str-1>","Краска ВЫН <ВЫН+1 СИЛ-1>",,4,etcitem,/etc_con_hena_i00.webp
+4472,"Dye of CON <Con+1 Dex-1>","Краска ВЫН <ВЫН+1 ЛВК-1>",,4,etcitem,/etc_con_hena_i00.webp
+4473,"Dye of DEX <Dex+1 Str-1>","Краска ЛВК <ЛВК+1 СИЛ-1>",,4,etcitem,/etc_dex_hena_i00.webp
+4474,"Dye of DEX <Dex+1 Con-1>","Краска ЛВК <ЛВК+1 ВЫН-1>",,4,etcitem,/etc_dex_hena_i00.webp
+4475,"Dye of INT <Int+1 Men-1>","Краска ИНТ <ИНТ+1 ДУХ-1>",,4,etcitem,/etc_int_hena_i00.webp
+4476,"Dye of INT <Int+1 Wit-1>","Краска ИНТ <ИНТ+1 МДР-1>",,4,etcitem,/etc_int_hena_i00.webp
+4477,"Dye of MEN <Men+1 Int-1>","Краска ДУХ <ДУХ+1 ИНТ-1>",,4,etcitem,/etc_men_hena_i00.webp
+4478,"Dye of MEN <Men+1 Wit-1>","Краска ДУХ <ДУХ+1 МДР-1>",,4,etcitem,/etc_men_hena_i00.webp
+4479,"Dye of WIT <Wit+1 Int-1>","Краска МДР <МДР+1 ИНТ-1>",,4,etcitem,/etc_wit_hena_i00.webp
+4480,"Dye of WIT <Wit+1 Men-1>","Краска МДР <МДР+1 ДУХ-1>",,4,etcitem,/etc_wit_hena_i00.webp
+4553,"Greater Dye of STR <Str+1 Con-1>","Новая Краска СИЛ <СИЛ+1 ВЫН-1>",,4,etcitem,/etc_str_hena_i02.webp
+4554,"Greater Dye of STR <Str+1 Dex-1>","Новая Краска СИЛ <СИЛ+1 ЛВК-1>",,4,etcitem,/etc_str_hena_i02.webp
+4555,"Greater Dye of CON <Con+1 Str-1>","Новая Краска ВЫН <ВЫН+1 СИЛ-1>",,4,etcitem,/etc_con_hena_i02.webp
+4556,"Greater Dye of CON <Con+1 Dex-1>","Новая Краска ВЫН <ВЫН+1 ЛВК-1>",,4,etcitem,/etc_con_hena_i02.webp
+4557,"Greater Dye of DEX <Dex+1 Str-1>","Новая Краска ЛВК <ЛВК+1 СИЛ-1>",,4,etcitem,/etc_dex_hena_i02.webp
+4558,"Greater Dye of DEX <Dex+1 Con-1>","Новая Краска ЛВК <ЛВК+1 ВЫН-1>",,4,etcitem,/etc_dex_hena_i02.webp
+4559,"Greater Dye of INT <Int+1 Men-1>","Новая Краска ИНТ <ИНТ+1 ДУХ-1>",,4,etcitem,/etc_int_hena_i02.webp
+4560,"Greater Dye of INT <Int+1 Wit-1>","Новая Краска ИНТ <ИНТ+1 МДР-1>",,4,etcitem,/etc_int_hena_i02.webp
+4561,"Greater Dye of MEN <Men+1 Int-1>","Новая Краска ДУХ <ДУХ+1 ИНТ-1>",,4,etcitem,/etc_men_hena_i02.webp
+4562,"Greater Dye of MEN <Men+1 Wit-1>","Новая Краска ДУХ <ДУХ+1 МДР-1>",,4,etcitem,/etc_men_hena_i02.webp
+4563,"Greater Dye of WIT <Wit+1 Int-1>","Новая Краска МДР <МДР+1 ИНТ-1>",,4,etcitem,/etc_wit_hena_i02.webp
+4564,"Greater Dye of WIT <Wit+1 Men-1>","Новая Краска МДР <МДР+1 ДУХ-1>",,4,etcitem,/etc_wit_hena_i02.webp
+4589,"Greater Dye of STR <Str+2 Con-2>","Новая Краска СИЛ <СИЛ+2 ВЫН-2>",,5,etcitem,/etc_str_hena_i02.webp
+4590,"Greater Dye of STR <Str+2 Dex-2>","Новая Краска СИЛ <СИЛ+2 ЛВК-2>",,5,etcitem,/etc_str_hena_i02.webp
+4591,"Greater Dye of CON <Con+2 Str-2>","Новая Краска ВЫН <ВЫН+2 СИЛ-2>",,5,etcitem,/etc_con_hena_i02.webp
+4592,"Greater Dye of CON <Con+2 Dex-2>","Новая Краска ВЫН <ВЫН+2 ЛВК-2>",,5,etcitem,/etc_con_hena_i02.webp
+4593,"Greater Dye of DEX <Dex+2 Str-2>","Новая Краска ЛВК <ЛВК+2 СИЛ-2>",,5,etcitem,/etc_dex_hena_i02.webp
+4594,"Greater Dye of DEX <Dex+2 Con-2>","Новая Краска ЛВК <ЛВК+2 ВЫН-2>",,5,etcitem,/etc_dex_hena_i02.webp
+4595,"Greater Dye of INT <Int+2 Men-2>","Новая Краска ИНТ <ИНТ+2 ДУХ-2>",,5,etcitem,/etc_int_hena_i02.webp
+4596,"Greater Dye of INT <Int+2 Wit-2>","Новая Краска ИНТ <ИНТ+2 МДР-2>",,5,etcitem,/etc_int_hena_i02.webp
+4597,"Greater Dye of MEN <Men+2 Int-2>","Новая Краска ДУХ <ДУХ+2 ИНТ-2>",,5,etcitem,/etc_men_hena_i02.webp
+4598,"Greater Dye of MEN <Men+2 Wit-2>","Новая Краска ДУХ <ДУХ+2 МДР-2>",,5,etcitem,/etc_men_hena_i02.webp
+4599,"Greater Dye of WIT <Wit+2 Int-2>","Новая Краска МДР <МДР+2 ИНТ-2>",,5,etcitem,/etc_wit_hena_i02.webp
+4600,"Greater Dye of WIT <Wit+2 Men-2>","Новая Краска МДР <МДР+2 ДУХ-2>",,5,etcitem,/etc_wit_hena_i02.webp
+4601,"Greater Dye of STR <Str+3 Con-3>","Новая Краска СИЛ <СИЛ+3 ВЫН-3>",,5,etcitem,/etc_str_hena_i02.webp
+4602,"Greater Dye of STR <Str+3 Dex-3>","Новая Краска СИЛ <СИЛ+3 ЛВК-3>",,5,etcitem,/etc_str_hena_i02.webp
+4603,"Greater Dye of CON <Con+3 Str-3>","Новая Краска ВЫН <ВЫН+3 СИЛ-3>",,5,etcitem,/etc_con_hena_i02.webp
+4604,"Greater Dye of CON <Con+3 Dex-3>","Новая Краска ВЫН <ВЫН+3 ЛВК-3>",,5,etcitem,/etc_con_hena_i02.webp
+4605,"Greater Dye of DEX <Dex+3 Str-3>","Новая Краска ЛВК <ЛВК+3 СИЛ-3>",,5,etcitem,/etc_dex_hena_i02.webp
+4606,"Greater Dye of DEX <Dex+3 Con-3>","Новая Краска ЛВК <ЛВК+3 ВЫН-3>",,5,etcitem,/etc_dex_hena_i02.webp
+3949,"Blessed Spiritshot: C-Grade","Благословенный Заряд Духа: Ранг C",C,4,soulshot,/etc_spell_shot_green_i01.webp
+3950,"Blessed Spiritshot: B-Grade","Благословенный Заряд Духа: Ранг B",B,6,soulshot,/etc_spell_shot_red_i01.webp
+4045,"Maestro Holder","Тиски Мастера",B,6,resource,/etc_lump_yellow_i00.webp
+4046,"Maestro Anvil Lock","Замок Мастера",B,6,resource,/etc_lump_dark_gray_i00.webp
+4047,"Craftsman Mold","Заготовка Работника",B,6,resource,/etc_mold_i00.webp
+4048,"Maestro Mold","Заготовка Мастера",B,6,resource,/etc_silver_mold_i00.webp
+3951,"Blessed Spiritshot: A-Grade","Благословенный Заряд Духа: Ранг A",A,7,soulshot,/etc_spell_shot_silver_i01.webp
+3952,"Blessed Spiritshot: S-Grade","Благословенный Заряд Духа: Ранг S",S,8,soulshot,/etc_spell_shot_gold_i01.webp
+5135,"Compressed Package of Soulshots: D-grade","Пакет Зарядов Души: D-Ранг",,2,etcitem,/etc_pouch_yellow_i00.webp
+5141,"Compressed Package of Spiritshots: D-grade","Пакет Зарядов Духа: D-Ранг",,2,etcitem,/etc_pouch_yellow_i00.webp
+5147,"Compressed Package of Blessed Spiritshots: D-grade","Пакет Благословенных Зарядов Духа: D-Ранг",,2,etcitem,/etc_pouch_yellow_i00.webp
+5234,"Mystery Potion","Мистическое Зелье",,2,etcitem,/etc_lesser_potion_clear_i00.webp
+5251,"Greater Compressed Package of Soulshots: D-grade","Упаковка Зарядов Души: D-Ранг",,2,etcitem,/etc_pouch_gray_i00.webp
+5235,"Facelifting Potion - A","Зелье Изменения Внешности - A",,3,etcitem,/etc_lesser_potion_purple_i00.webp
+5236,"Facelifting Potion - B","Зелье Изменения Внешности - B",,3,etcitem,/etc_lesser_potion_purple_i00.webp
+5237,"Facelifting Potion - C","Зелье Изменения Внешности - C",,3,etcitem,/etc_lesser_potion_purple_i00.webp
+5238,"Dye Potion - A","Краска - A",,3,etcitem,/etc_lesser_potion_scarlet_i00.webp
+5239,"Dye Potion - B","Краска - B",,3,etcitem,/etc_lesser_potion_scarlet_i00.webp
+5240,"Dye Potion - C","Краска - C",,3,etcitem,/etc_lesser_potion_scarlet_i00.webp
+5241,"Dye Potion - D","Краска - D",,3,etcitem,/etc_lesser_potion_scarlet_i00.webp
+5242,"Hair Style Change Potion - A","Зелье Изменения Прически - A",,3,etcitem,/etc_lesser_potion_green_i00.webp
+5243,"Hair Style Change Potion - B","Зелье Изменения Прически - B",,3,etcitem,/etc_lesser_potion_green_i00.webp
+5244,"Hair Style Change Potion - C","Зелье Изменения Прически - C",,3,etcitem,/etc_lesser_potion_green_i00.webp
+5245,"Hair Style Change Potion - D","Зелье Изменения Прически - D",,3,etcitem,/etc_lesser_potion_green_i00.webp
+5246,"Hair Style Change Potion - E","Зелье Изменения Прически - E",,3,etcitem,/etc_lesser_potion_green_i00.webp
+5247,"Hair Style Change Potion - F","Зелье Изменения Прически - F",,3,etcitem,/etc_lesser_potion_green_i00.webp
+5248,"Hair Style Change Potion - G","Зелье Изменения Прически - G",,3,etcitem,/etc_lesser_potion_green_i00.webp
+5136,"Compressed Package of Soulshots: C-grade","Пакет Зарядов Души: C-Ранг",,4,etcitem,/etc_pouch_yellow_i00.webp
+5142,"Compressed Package of Spiritshots: C-grade","Пакет Зарядов Духа: C-Ранг",,4,etcitem,/etc_pouch_yellow_i00.webp
+5148,"Compressed Package of Blessed Spiritshots: C-grade","Пакет Благословенных Зарядов Духа: C-Ранг",,4,etcitem,/etc_pouch_yellow_i00.webp
+4607,"Greater Dye of INT <Int+3 Men-3>","Новая Краска ИНТ <ИНТ+3 ДУХ-3>",,5,etcitem,/etc_int_hena_i02.webp
+4608,"Greater Dye of INT <Int+3 Wit-3>","Новая Краска ИНТ <ИНТ+3 МДР-3>",,5,etcitem,/etc_int_hena_i02.webp
+4609,"Greater Dye of MEN <Men+3 Int-3>","Новая Краска ДУХ <ДУХ+3 ИНТ-3>",,5,etcitem,/etc_men_hena_i02.webp
+4610,"Greater Dye of MEN <Men+3 Wit-3>","Новая Краска ДУХ <ДУХ+3 МДР-3>",,5,etcitem,/etc_men_hena_i02.webp
+4611,"Greater Dye of WIT <Wit+3 Int-3>","Новая Краска МДР <МДР+3 ИНТ-3>",,5,etcitem,/etc_wit_hena_i02.webp
+4612,"Greater Dye of WIT <Wit+3 Men-3>","Новая Краска МДР <МДР+3 ДУХ-3>",,5,etcitem,/etc_wit_hena_i02.webp
+4613,"Greater Dye of STR <Str+4 Con-4>","Новая Краска СИЛ <СИЛ+4 ВЫН-4>",,6,etcitem,/etc_str_hena_i02.webp
+4614,"Greater Dye of STR <Str+4 Dex-4>","Новая Краска СИЛ <СИЛ+4 ЛВК-4>",,6,etcitem,/etc_str_hena_i02.webp
+4615,"Greater Dye of CON <Con+4 Str-4>","Новая Краска ВЫН <ВЫН+4 СИЛ-4>",,6,etcitem,/etc_con_hena_i02.webp
+4616,"Greater Dye of CON <Con+4 Dex-4>","Новая Краска ВЫН <ВЫН+4 ЛВК-4>",,6,etcitem,/etc_con_hena_i02.webp
+4617,"Greater Dye of DEX <Dex+4 Str-4>","Новая Краска ЛВК <ЛВК+4 СИЛ-4>",,6,etcitem,/etc_dex_hena_i02.webp
+4618,"Greater Dye of DEX <Dex+4 Con-4>","Новая Краска ЛВК <ЛВК+4 ВЫН-4>",,6,etcitem,/etc_dex_hena_i02.webp
+4619,"Greater Dye of INT <Int+4 Men-4>","Новая Краска ИНТ <ИНТ+4 ДУХ-4>",,6,etcitem,/etc_int_hena_i02.webp
+4620,"Greater Dye of INT <Int+4 Wit-4>","Новая Краска ИНТ <ИНТ+4 МДР-4>",,6,etcitem,/etc_int_hena_i02.webp
+4621,"Greater Dye of MEN <Men+4 Int-4>","Новая Краска ДУХ <ДУХ+4 ИНТ-4>",,6,etcitem,/etc_men_hena_i02.webp
+4622,"Greater Dye of MEN <Men+4 Wit-4>","Новая Краска ДУХ <ДУХ+4 МДР-4>",,6,etcitem,/etc_men_hena_i02.webp
+4623,"Greater Dye of WIT <Wit+4 Int-4>","Новая Краска МДР <МДР+4 ИНТ-4>",,6,etcitem,/etc_wit_hena_i02.webp
+4624,"Greater Dye of WIT <Wit+4 Men-4>","Новая Краска МДР <МДР+4 ДУХ-4>",,6,etcitem,/etc_wit_hena_i02.webp
+5137,"Compressed Package of Soulshots: B-grade","Пакет Зарядов Души: B-Ранг",,6,etcitem,/etc_pouch_yellow_i00.webp
+5143,"Compressed Package of Spiritshots: B-grade","Пакет Зарядов Духа: B-Ранг",,6,etcitem,/etc_pouch_yellow_i00.webp
+5149,"Compressed Package of Blessed Spiritshots: B-grade","Пакет Благословенных Зарядов Духа: B-Ранг",,6,etcitem,/etc_pouch_yellow_i00.webp
+5138,"Compressed Package of Soulshots: A-grade","Пакет Зарядов Души: A-Ранг",,7,etcitem,/etc_pouch_yellow_i00.webp
+5144,"Compressed Package of Spiritshots: A-grade","Пакет Зарядов Духа: A-Ранг",,7,etcitem,/etc_pouch_yellow_i00.webp
+5150,"Compressed Package of Blessed Spiritshots: A-grade","Пакет Благословенных Зарядов Духа: A-Ранг",,7,etcitem,/etc_pouch_yellow_i00.webp
+5139,"Compressed Package of Soulshots: S-grade","Пакет Зарядов Души: S-Ранг",,8,etcitem,/etc_pouch_yellow_i00.webp
+5145,"Compressed Package of Spiritshots: S-grade","Пакет Зарядов Духа: S-Ранг",,8,etcitem,/etc_pouch_yellow_i00.webp
+5151,"Compressed Package of Blessed Spiritshots: S-grade","Пакет Благословенных Зарядов Духа: S-Ранг",,8,etcitem,/etc_pouch_yellow_i00.webp
+5220,"Metal Hardener","Отвердитель Металла",C,4,resource,/etc_plate_blue_i00.webp
+6035,"Magic Haste Potion","Зелье Ускорения Магии",,1,etcitem,/etc_potion_of_acumen2_i00.webp
+8622,"Elixir of Life (No Grade)","Эликсир Жизни (Без Ранга)",,1,etcitem,/etc_super_hp_potion_i00.webp
+8628,"Elixir of Mental Strength (No Grade)","Эликсир Ментальной Силы (Без Ранга)",,1,etcitem,/etc_super_mp_potion_i00.webp
+8634,"Elixir of CP (No Grade)","Эликсир CP (Без Ранга)",,1,etcitem,/etc_super_cp_potion_i00.webp
+5257,"Greater Compressed Package of Spiritshots: D-grade","Упаковка Зарядов Духа: D-Ранг",,2,etcitem,/etc_pouch_gray_i00.webp
+5263,"Greater Compressed Package of Blessed Spiritshots: D-grade","Упаковка Благословенных Зарядов Духа: D-Ранг",,2,etcitem,/etc_pouch_gray_i00.webp
+6909,"Greater Fish Oil","Рыбий Жир",,2,etcitem,/etc_fish_oil_i01.webp
+6036,"Greater Magic Haste Potion","Большое Зелье Ускорения Магии",,3,etcitem,/etc_potion_of_acumen3_i00.webp
+6910,"Premium Fish Oil","Отличный Рыбий Жир",,3,etcitem,/etc_fish_oil_i02.webp
+5252,"Greater Compressed Package of Soulshots: C-grade","Упаковка Зарядов Души: C-Ранг",,4,etcitem,/etc_pouch_gray_i00.webp
+5258,"Greater Compressed Package of Spiritshots: C-grade","Упаковка Зарядов Духа: C-Ранг",,4,etcitem,/etc_pouch_gray_i00.webp
+5264,"Greater Compressed Package of Blessed Spiritshots: C-grade","Упаковка Благословенных Зарядов Духа: C-Ранг",,4,etcitem,/etc_pouch_gray_i00.webp
+5253,"Greater Compressed Package of Soulshots: B-grade","Упаковка Зарядов Души: B-Ранг",,6,etcitem,/etc_pouch_gray_i00.webp
+5259,"Greater Compressed Package of Spiritshots: B-grade","Упаковка Зарядов Духа: B-Ранг",,6,etcitem,/etc_pouch_gray_i00.webp
+5265,"Greater Compressed Package of Blessed Spiritshots: B-grade","Упаковка Благословенных Зарядов Духа: B-Ранг",,6,etcitem,/etc_pouch_gray_i00.webp
+5254,"Greater Compressed Package of Soulshots: A-grade","Упаковка Зарядов Души: A-Ранг",,7,etcitem,/etc_pouch_gray_i00.webp
+5260,"Greater Compressed Package of Spiritshots: A-grade","Упаковка Зарядов Духа: A-Ранг",,7,etcitem,/etc_pouch_gray_i00.webp
+5266,"Greater Compressed Package of Blessed Spiritshots: A-grade","Упаковка Благословенных Зарядов Духа: A-Ранг",,7,etcitem,/etc_pouch_gray_i00.webp
+5255,"Greater Compressed Package of Soulshots: S-grade","Упаковка Зарядов Души: S-Ранг",,8,etcitem,/etc_pouch_gray_i00.webp
+5261,"Greater Compressed Package of Spiritshots: S-grade","Упаковка Зарядов Духа: S-Ранг",,8,etcitem,/etc_pouch_gray_i00.webp
+5267,"Greater Compressed Package of Blessed Spiritshots: S-grade","Упаковка Благословенных Зарядов Духа: S-Ранг",,8,etcitem,/etc_pouch_gray_i00.webp
+25,"Piece Bone Breastplate","Составная Костяная Кираса",NG,1,heavy_armor,/armor_t33_u_i00.webp
+27,"Hard Leather Shirt","Рубаха из Толстой Кожи",NG,1,light_armor,/armor_t30_u_i00.webp
+32,"Piece Bone Gaiters","Составные Костяные Набедренники",NG,1,heavy_armor,/armor_t33_l_i00.webp
+33,"Hard Leather Gaiters","Набедренники из Толстой Кожи",NG,1,light_armor,/armor_t30_l_i00.webp
+37,"Leather Shoes","Кожаные Ботинки",NG,1,boots,/armor_t05_b_i00.webp
+39,"Boots","Сапоги",NG,1,boots,/armor_t30_b_i00.webp
+44,"Leather Helmet","Кожаный Шлем",NG,1,helmet,/armor_leather_helmet_i00.webp
+8623,"Elixir of Life (D-Grade)","Эликсир Жизни (D-Ранг)",D,2,etcitem,/etc_super_hp_potion_i01.webp
+8629,"Elixir of Mental Strength (D-Grade)","Эликсир Ментальной Силы (D-Ранг)",D,2,etcitem,/etc_super_mp_potion_i01.webp
+8635,"Elixir of CP (D-Grade)","Эликсир CP (D-Ранг)",D,2,etcitem,/etc_super_cp_potion_i01.webp
+40,"Leather Boots","Кожаные Сапоги",D,2,boots,/armor_t09_b_i00.webp
+8624,"Elixir of Life (C-Grade)","Эликсир Жизни (C-Ранг)",C,3,etcitem,/etc_super_hp_potion_i02.webp
+8630,"Elixir of Mental Strength (C-Grade)","Эликсир Ментальной Силы (C-Ранг)",C,3,etcitem,/etc_super_mp_potion_i02.webp
+8636,"Elixir of CP (C-Grade)","Эликсир CP (C-Ранг)",C,3,etcitem,/etc_super_cp_potion_i02.webp
+8625,"Elixir of Life (B-Grade)","Эликсир Жизни (B-Ранг)",B,4,etcitem,/etc_super_hp_potion_i03.webp
+8631,"Elixir of Mental Strength (B-Grade)","Эликсир Ментальной Силы (B-Ранг)",B,4,etcitem,/etc_super_mp_potion_i03.webp
+8637,"Elixir of CP (B-Grade)","Эликсир CP (B-Ранг)",B,4,etcitem,/etc_super_cp_potion_i03.webp
+5549,"Metallic Thread","Металлическая Нить",A,4,resource,/etc_skein_gray_i00.webp
+5550,"Durable Metal Plate","Прочный Лист Стали",A,4,resource,/etc_squares_wood_i00.webp
+5551,"Leolin's Mold","Заготовка Реорина",A,5,resource,/etc_blacksmiths_frame_i00.webp
+8626,"Elixir of Life (A-Grade)","Эликсир Жизни (A-Ранг)",A,5,etcitem,/etc_super_hp_potion_i04.webp
+8632,"Elixir of Mental Strength (A-Grade)","Эликсир Ментальной Силы (A-Ранг)",A,5,etcitem,/etc_super_mp_potion_i04.webp
+8638,"Elixir of CP (A-Grade)","Эликсир CP (A-Ранг)",A,5,etcitem,/etc_super_cp_potion_i04.webp
+5552,"Warsmith's Mold","Заготовка Оружейника",A,6,resource,/etc_blacksmiths_frame_i00.webp
+5553,"Arcsmith's Anvil","Наковальня Кузнеца",A,6,resource,/etc_blacksmiths_frame_i00.webp
+5554,"Warsmith's Holder","Рукоять Кузнеца",A,6,resource,/etc_blacksmiths_frame_i00.webp
+8627,"Elixir of Life (S-Grade)","Эликсир Жизни (S-Ранг)",S,6,etcitem,/etc_super_hp_potion_i05.webp
+8633,"Elixir of Mental Strength (S-Grade)","Эликсир Ментальной Силы (S-Ранг)",S,6,etcitem,/etc_super_mp_potion_i05.webp
+8639,"Elixir of CP (S-Grade)","Эликсир CP (S-Ранг)",S,6,etcitem,/etc_super_cp_potion_i05.webp
+50,"Leather Gloves","Кожаные Перчатки",NG,1,gloves,/armor_t32_g_i00.webp
+429,"Leather Tunic","Кожаная Туника",NG,1,magic_armor,/armor_t05_u_i00.webp
+464,"Leather Stockings","Кожаные Штаны",NG,1,magic_armor,/armor_t05_l_i00.webp
+45,"Bone Helmet","Костяной Шлем",D,2,helmet,/armor_leather_helmet_i00.webp
+348,"Scale Mail","Чешуйчатая Броня",D,2,heavy_armor,/armor_t08_u_i00.webp
+377,"Scale Gaiters","Чешуйчатые Набедренники",D,2,heavy_armor,/armor_t08_l_i00.webp
+434,"White Tunic","Белая Туника",D,2,magic_armor,/armor_t16_u_i00.webp
+467,"Dark Stockings","Темные Штаны",D,2,magic_armor,/armor_t16_l_i00.webp
+352,"Brigandine Tunic","Панцирная Туника",D,3,heavy_armor,/armor_t43_u_i00.webp
+393,"Mithril Banded Mail","Усиленная Мифрилом Броня",D,3,light_armor,/armor_t10_u_i00.webp
+395,"Manticore Skin Shirt","Рубаха из Шкуры Мантикоры",D,3,light_armor,/armor_t42_u_i00.webp
+415,"Mithril Banded Gaiters","Усиленные Мифрилом Набедренники",D,3,light_armor,/armor_t10_l_i00.webp
+417,"Manticore Skin Gaiters","Набедренники из Шкуры Мантикоры",D,3,light_armor,/armor_t42_l_i00.webp
+437,"Mithril Tunic","Мифриловая Туника",D,3,magic_armor,/armor_t51_u_i00.webp
+470,"Mithril Stockings","Мифриловые Штаны",D,3,magic_armor,/armor_t51_l_i00.webp
+61,"Mithril Gloves","Мифриловые Перчатки",D,4,gloves,/armor_t46_g_i00.webp
+353,"Half Plate Armor","Полулаты",D,4,heavy_armor,/armor_t46_u_i00.webp
+380,"Plate Gaiters","Латные Набедренники",D,4,heavy_armor,/armor_t46_l_i00.webp
+396,"Salamander Skin Mail","Рубаха из Кожи Саламандры",D,4,light_armor,/armor_t45_ul_i00.webp
+438,"Sage's Rag","Накидка Мудреца",D,4,magic_armor,/armor_t44_ul_i00.webp
+62,"Mithril Boots","Укрепленные Мифриловые Сапоги",C,4,boots,/armor_t47_b_i00.webp
+354,"Chain Mail Shirt","Кольчужная Рубаха",C,4,heavy_armor,/armor_t48_u_i00.webp
+381,"Chain Gaiters","Кольчужные Набедренники",C,4,heavy_armor,/armor_t48_l_i00.webp
+397,"Mithril Shirt","Укрепленная Мифриловая Рубаха",C,4,light_armor,/armor_t47_u_i00.webp
+439,"Karmian Tunic","Туника Кармиана",C,4,magic_armor,/armor_t53_u_i00.webp
+471,"Karmian Stockings","Штаны Кармиана",C,4,magic_armor,/armor_t53_l_i00.webp
+60,"Composite Armor","Композитный Доспех",C,5,heavy_armor,/armor_t61_ul_i00.webp
+64,"Composite Boots","Композитные Сапоги",C,5,boots,/armor_t61_b_i00.webp
+355,"Dwarven Chain Mail Shirt","Кольчужная Рубаха Гномов",C,5,heavy_armor,/armor_t60_u_i00.webp
+382,"Dwarven Chain Gaiters","Кольчужные Набедренники Гномов",C,5,heavy_armor,/armor_t60_l_i00.webp
+398,"Plated Leather","Латный Кожаный Доспех",C,5,light_armor,/armor_t47_u_i00.webp
+399,"Rind Leather Armor","Доспех из Грубой Кожи",C,5,light_armor,/armor_t49_u_i00.webp
+400,"Theca Leather Armor","Кожаный Доспех Тека",C,5,light_armor,/armor_t63_u_i00.webp
+418,"Plated Leather Gaiters","Латные Кожаные Набедренники",C,5,light_armor,/armor_t47_l_i00.webp
+419,"Rind Leather Gaiters","Набедренники из Грубой Кожи",C,5,light_armor,/armor_t49_l_i00.webp
+420,"Theca Leather Gaiters","Кожаные Набедренники Тека",C,5,light_armor,/armor_t63_l_i00.webp
+440,"Robe of Seal","Мантия Печати",C,5,magic_armor,/armor_t44_ul_i00.webp
+441,"Demon's Tunic","Туника Демона",C,5,magic_armor,/armor_t54_u_i00.webp
+472,"Demon's Stockings","Штаны Демона",C,5,magic_armor,/armor_t54_l_i00.webp
+500,"Great Helmet","Большой Шлем",C,5,helmet,/armor_helmet_i00.webp
+517,"Composite Helmet","Композитный Шлем",C,5,helmet,/armor_leather_helmet_i00.webp
+119,"Necklace of Binding","Ожерелье Печати",C,6,necklace,/accessary_necklace_of_binding_i00.webp
+356,"Full Plate Armor","Полный Латный Доспех",C,6,heavy_armor,/armor_t62_ul_i00.webp
+401,"Drake Leather Armor","Кожаный Доспех Дрейка",C,6,light_armor,/armor_t21_ul_i00.webp
+442,"Divine Tunic","Туника Божества",C,6,magic_armor,/armor_t57_u_i00.webp
+473,"Divine Stockings","Штаны Божества",C,6,magic_armor,/armor_t57_l_i00.webp
+357,"Zubei's Breastplate","Кираса Зубея",B,6,heavy_armor,/armor_t64_u_i00.webp
+383,"Zubei's Gaiters","Набедренники Зубея",B,6,heavy_armor,/armor_t64_l_i00.webp
+503,"Zubei's Helmet","Шлем Зубея",B,6,helmet,/armor_helmet_i00.webp
+358,"Blue Wolf Breastplate","Кираса Синего Волка",B,7,heavy_armor,/armor_t68_u_i00.webp
+907,"Necklace of Anguish","Ожерелье Мучений",NG,1,necklace,/accessary_necklace_of_anguish_i00.webp
+908,"Necklace of Wisdom","Ожерелье Мудрости",NG,1,necklace,/accessary_necklace_of_wisdom_i00.webp
+909,"Blue Diamond Necklace","Ожерелье с Синим Алмазом",NG,1,necklace,/accessary_blue_diamond_necklace_i00.webp
+604,"Crafted Leather Gloves","Перчатки Выделанной Кожи",D,2,gloves,/armor_t09_g_i00.webp
+910,"Necklace of Devotion","Ожерелье Преданности",D,2,necklace,/accessary_necklace_of_devotion_i00.webp
+911,"Enchanted Necklace","Зачарованное Ожерелье",D,2,necklace,/accessary_enchanted_necklace_i00.webp
+553,"Iron Boots","Железные Ботинки",D,3,boots,/armor_t10_b_i00.webp
+606,"Rip Gauntlets","Рваные Рукавицы",D,3,gloves,/armor_t40_g_i00.webp
+849,"Tiger's Eye Earring","Серьга Тигрового Глаза",D,3,earring,/accessary_tigerseye_earing_i00.webp
+850,"Elven Earring","Серьга Эльфов",D,3,earring,/accessary_elven_earing_i00.webp
+881,"Elven Ring","Кольцо Эльфов",D,3,ring,/accessary_elven_ring_i00.webp
+913,"Elven Necklace","Ожерелье Эльфов",D,3,necklace,/accessary_elven_necklace_i00.webp
+1124,"Boots of Power","Сапоги Силы",D,3,boots,/armor_t40_b_i00.webp
+2377,"Mithril Scale Gaiters","Мифриловые Чешуйчатые Набедренники",D,3,heavy_armor,/armor_t40_l_i00.webp
+2378,"Brigandine Gaiters","Панцирные Набедренники",D,3,heavy_armor,/armor_t43_l_i00.webp
+607,"Ogre Power Gauntlets","Рукавицы Огра",D,4,gloves,/armor_t45_g_i00.webp
+851,"Omen Beast's Eye Earring","Серьга Зверя Знамения",D,4,earring,/accessary_onyxbeastseye_earing_i00.webp
+882,"Mithril Ring","Мифриловое Кольцо",D,4,ring,/accessary_mithril_ring_i00.webp
+914,"Necklace of Darkness","Ожерелье Тьмы",D,4,necklace,/accessary_necklace_of_darkness_i00.webp
+1125,"Assault Boots","Штурмовые Сапоги",D,4,boots,/armor_t44_b_i00.webp
+852,"Moonstone Earring","Серьга Лунного Камня",C,4,earring,/accessary_moonstone_earing_i00.webp
+883,"Aquastone Ring","Бирюзовое Кольцо",C,4,ring,/accessary_aquastone_ring_i00.webp
+915,"Aquastone Necklace","Бирюзовое Ожерелье",C,4,necklace,/accessary_aquastone_necklace_i00.webp
+608,"Mithril Gauntlets","Мифриловые Рукавицы",C,5,gloves,/armor_t61_g_i00.webp
+853,"Earring of Protection","Серьга Защиты",C,5,earring,/accessary_earing_of_protection_i00.webp
+854,"Earring of Binding","Серьга Печати",C,5,earring,/accessary_earing_of_binding_i00.webp
+884,"Ring of Protection","Кольцо Защиты",C,5,ring,/accessary_ring_of_protection_i00.webp
+885,"Ring of Ages","Кольцо Эпох",C,5,ring,/accessary_ring_of_ages_i00.webp
+916,"Necklace of Protection","Ожерелье Защиты",C,5,necklace,/accessary_necklace_of_protection_i00.webp
+917,"Necklace of Mermaid","Ожерелье Русалки",C,5,necklace,/accessary_necklace_of_mermaid_i00.webp
+1126,"Crimson Boots","Багровые Сапоги",C,5,boots,/armor_t57_b_i00.webp
+1149,"Shining Circlet","Сверкающая Диадема",C,5,helmet,/armor_circlet_i00.webp
+603,"Divine Boots","Сапоги Божества",C,6,boots,/armor_t67_b_i00.webp
+855,"Nassen's Earring","Серьга Нассена",C,6,earring,/accessary_nassens_earing_i00.webp
+886,"Ring of Binding","Кольцо Печати",C,6,ring,/accessary_ring_of_binding_i00.webp
+554,"Zubei's Boots","Запечатанные Сапоги Зубея",B,6,boots,/armor_t64_b_i02.webp
+600,"Avadon Boots","Запечатанные Сапоги Авадона",B,6,boots,/armor_t66_b_i02.webp
+612,"Zubei's Gauntlets","Запечатанные Рукавицы Зубея",B,6,gloves,/armor_t64_g_i02.webp
+856,"Adamantite Earring","Адамантитовая Серьга",B,6,earring,/accessary_adamantite_earing_i00.webp
+887,"Adamantite Ring","Адамантитовое Кольцо",B,6,ring,/accessary_adamantite_ring_i00.webp
+918,"Adamantite Necklace","Адамантитовое Ожерелье",B,6,necklace,/accessary_adamantite_necklace_i00.webp
+2376,"Avadon Breastplate","Кираса Авадона",B,6,heavy_armor,/armor_t66_u_i00.webp
+2379,"Avadon Gaiters","Набедренники Авадона",B,6,heavy_armor,/armor_t66_l_i00.webp
+2384,"Zubei's Leather Shirt","Кожаная Рубаха Зубея",B,6,light_armor,/armor_t65_u_i00.webp
+601,"Boots of Doom","Запечатанные Сапоги Рока",B,7,boots,/armor_t71_b_i02.webp
+864,"Earring of Black Ore","Черная Серьга",B,7,earring,/accessary_earing_of_black_ore_i00.webp
+895,"Ring of Black Ore","Черное Кольцо",B,7,ring,/accessary_ring_of_black_ore_i00.webp
+926,"Necklace of Black Ore","Черное Ожерелье",B,7,necklace,/accessary_necklace_of_black_ore_i00.webp
+2380,"Blue Wolf Gaiters","Набедренники Синего Волка",B,7,heavy_armor,/armor_t68_l_i00.webp
+2381,"Doom Plate Armor","Латный Доспех Рока",B,7,heavy_armor,/armor_t71_ul_i00.webp
+2411,"Brigandine Helmet","Панцирный Шлем",D,3,helmet,/armor_leather_helmet_i00.webp
+2424,"Manticore Skin Boots","Сапоги из Шкуры Мантикоры",D,3,boots,/armor_t42_b_i00.webp
+2425,"Brigandine Boots","Панцирные Сапоги",D,3,boots,/armor_t43_b_i00.webp
+2426,"Elven Mithril Boots","Мифриловые Сапоги Эльфов",D,3,boots,/armor_t51_b_i00.webp
+2448,"Manticore Skin Gloves","Перчатки из Шкуры Мантикоры",D,3,gloves,/armor_t42_g_i00.webp
+2449,"Brigandine Gauntlets","Панцирные Рукавицы",D,3,gloves,/armor_t43_g_i00.webp
+2450,"Elven Mithril Gloves","Мифриловые Перчатки Эльфов",D,3,gloves,/armor_t51_g_i00.webp
+2412,"Plate Helmet","Латный Шлем",D,4,helmet,/armor_leather_helmet_i00.webp
+2427,"Salamander Skin Boots","Сапоги из Кожи Саламандры",D,4,boots,/armor_t45_b_i00.webp
+2428,"Plate Boots","Латные Сапоги",D,4,boots,/armor_t46_b_i00.webp
+2451,"Sage's Worn Gloves","Потрепанные Перчатки Мудреца",D,4,gloves,/armor_t44_g_i00.webp
+2387,"Tempered Mithril Gaiters","Укрепленные Мифриловые Набедренники",C,4,light_armor,/armor_t47_l_i00.webp
+2413,"Chain Hood","Кольчужный Капюшон",C,4,helmet,/armor_leather_helmet_i00.webp
+2429,"Chain Boots","Кольчужные Сапоги",C,4,boots,/armor_t48_b_i00.webp
+2430,"Karmian Boots","Сапоги Кармиана",C,4,boots,/armor_t53_b_i00.webp
+2431,"Plated Leather Boots","Латные Кожаные Сапоги",C,4,boots,/armor_t47_b_i00.webp
+2432,"Dwarven Chain Boots","Кольчужные Сапоги Гномов",C,4,boots,/armor_t60_b_i00.webp
+2433,"Boots of Seal","Сапоги Печати",C,4,boots,/armor_t44_b_i00.webp
+2452,"Reinforced Mithril Gloves","Укрепленные Мифриловые Перчатки",C,4,gloves,/armor_t47_g_i00.webp
+2453,"Chain Gloves","Кольчужные Перчатки",C,4,gloves,/armor_t48_g_i00.webp
+2454,"Karmian Gloves","Перчатки Кармиана",C,4,gloves,/armor_t53_g_i00.webp
+2434,"Rind Leather Boots","Сапоги из Грубой Кожи",C,5,boots,/armor_t49_b_i00.webp
+2435,"Demon's Boots","Сапоги Демона",C,5,boots,/armor_t54_b_i00.webp
+2436,"Theca Leather Boots","Кожаные Сапоги Тека",C,5,boots,/armor_t63_b_i00.webp
+2455,"Plated Leather Gloves","Латные Кожаные Перчатки",C,5,gloves,/armor_t47_g_i00.webp
+2456,"Dwarven Chain Gloves","Кольчужные Перчатки Гномов",C,5,gloves,/armor_t60_g_i00.webp
+2457,"Gloves of Seal","Перчатки Печати",C,5,gloves,/armor_t44_g_i00.webp
+2458,"Rind Leather Gloves","Перчатки из Грубой Кожи",C,5,gloves,/armor_t49_g_i00.webp
+2459,"Demon's Gloves","Перчатки Демона",C,5,gloves,/armor_t54_g_i00.webp
+2460,"Theca Leather Gloves","Кожаные Перчатки Тека",C,5,gloves,/armor_t63_g_i00.webp
+2414,"Full Plate Helmet","Полный Латный Шлем",C,6,helmet,/armor_leather_helmet_i00.webp
+2437,"Drake Leather Boots","Кожаные Сапоги Дрейка",C,6,boots,/armor_t21_b_i00.webp
+2438,"Full Plate Boots","Полные Латные Сапоги",C,6,boots,/armor_t62_b_i00.webp
+2461,"Drake Leather Gloves","Кожаные Перчатки Дрейка",C,6,gloves,/armor_t21_g_i00.webp
+2462,"Full Plate Gauntlets","Полные Латные Рукавицы",C,6,gloves,/armor_t62_g_i00.webp
+2388,"Zubei's Leather Gaiters","Кожаные Набедренники Зубея",B,6,light_armor,/armor_t65_l_i00.webp
+2390,"Avadon Leather Armor","Кожаный Доспех Авадона",B,6,light_armor,/armor_t67_ul_i00.webp
+2397,"Tunic of Zubei","Туника Зубея",B,6,magic_armor,/armor_t56_u_i00.webp
+2402,"Stockings of Zubei","Штаны Зубея",B,6,magic_armor,/armor_t56_l_i00.webp
+2406,"Avadon Robe","Мантия Авадона",B,6,magic_armor,/armor_t59_ul_i00.webp
+2415,"Avadon Circlet","Диадема Авадона",B,6,helmet,/armor_leather_helmet_i00.webp
+2391,"Blue Wolf Leather Armor","Кожаный Доспех Синего Волка",B,7,light_armor,/armor_t69_ul_i00.webp
+2392,"Leather Armor of Doom","Кожаный Доспех Рока",B,7,light_armor,/armor_t72_ul_i00.webp
+2398,"Blue Wolf Tunic","Туника Синего Волка",B,7,magic_armor,/armor_t70_u_i00.webp
+2399,"Tunic of Doom","Туника Рока",B,7,magic_armor,/armor_t73_u_i00.webp
+2403,"Blue Wolf Stockings","Штаны Синего Волка",B,7,magic_armor,/armor_t70_l_i00.webp
+2404,"Stockings of Doom","Штаны Рока",B,7,magic_armor,/armor_t73_l_i00.webp
+2416,"Blue Wolf Helmet","Шлем Синего Волка",B,7,helmet,/armor_leather_helmet_i00.webp
+2417,"Doom Helmet","Шлем Рока",B,7,helmet,/armor_leather_helmet_i00.webp
+2439,"Blue Wolf Boots","Запечатанные Сапоги Синего Волка",B,7,boots,/armor_t68_b_i02.webp
+5808,"Party Mask","Карнавальная Маска",,4,accessary,/etc_party_mask_i00.webp
+2463,"Divine Gloves","Перчатки Божества",C,6,gloves,/armor_t57_g_i00.webp
+2464,"Avadon Gloves","Запечатанные Перчатки Авадона",B,6,gloves,/armor_t66_g_i02.webp
+2475,"Doom Gloves","Запечатанные Перчатки Рока",B,7,gloves,/armor_t71_g_i02.webp
+2487,"Blue Wolf Gloves","Запечатанные Перчатки Синего Волка",B,7,gloves,/armor_t68_g_i02.webp
+5287,"Sealed Dark Crystal Breastplate","Запечатанная Кираса Кристалла Тьмы",A,7,heavy_armor,/armor_t74_u_i02.webp
+5288,"Sealed Dark Crystal Gaiters","Запечатанные Набедренники Кристалла Тьмы",A,7,heavy_armor,/armor_t74_l_i02.webp
+5289,"Sealed Dark Crystal Helmet","Запечатанный Шлем Кристалла Тьмы",A,7,helmet,/armor_helmet_i02.webp
+5290,"Sealed Dark Crystal Gloves","Запечатанные Перчатки Кристалла Тьмы",A,7,gloves,/armor_t74_g_i02.webp
+5291,"Sealed Dark Crystal Boots","Запечатанные Сапоги Кристалла Тьмы",A,7,boots,/armor_t74_b_i02.webp
+5293,"Sealed Tallum Plate Armor","Запечатанный Латный Доспех Таллума",A,7,heavy_armor,/armor_t77_ul_i02.webp
+5294,"Sealed Tallum Helmet","Запечатанный Шлем Таллума",A,7,helmet,/armor_helmet_i02.webp
+5295,"Sealed Tallum Gloves","Запечатанные Перчатки Таллума",A,7,gloves,/armor_t77_g_i02.webp
+5296,"Sealed Tallum Boots","Запечатанные Сапоги Таллума",A,7,boots,/armor_t77_b_i02.webp
+5297,"Sealed Dark Crystal Leather Armor","Запечатанный Кожаный Доспех Кристалла Тьмы",A,7,light_armor,/armor_t75_u_i02.webp
+5298,"Sealed Dark Crystal Leggings","Запечатанные Поножи Кристалла Тьмы",A,7,light_armor,/armor_t75_l_i02.webp
+5301,"Sealed Tallum Leather Armor","Запечатанный Кожаный Доспех Таллума",A,7,light_armor,/armor_t78_ul_i02.webp
+5304,"Sealed Tallum Tunic","Запечатанная Туника Таллума",A,7,magic_armor,/armor_t79_u_i02.webp
+5305,"Sealed Tallum Stockings","Запечатанные Штаны Таллума",A,7,magic_armor,/armor_t79_l_i02.webp
+5308,"Sealed Dark Crystal Robe","Запечатанная Мантия Кристалла Тьмы",A,7,magic_armor,/armor_t76_ul_i02.webp
+6323,"Sealed Phoenix Necklace","Запечатанное Ожерелье Феникса",A,7,necklace,/accessary_phoenixs_necklace_i02.webp
+6324,"Sealed Phoenix Earring","Запечатанная Серьга Феникса",A,7,earring,/accessary_phoenixs_earing_i02.webp
+6325,"Sealed Phoenix Ring","Запечатанное Кольцо Феникса",A,7,ring,/accessary_phoenixs_ring_i02.webp
+5311,"Sealed Armor of Nightmare","Запечатанный Доспех Кошмаров",A,8,heavy_armor,/armor_t80_ul_i02.webp
+5312,"Sealed Helm of Nightmare","Запечатанный Шлем Кошмаров",A,8,helmet,/armor_leather_helmet_i02.webp
+5313,"Sealed Gauntlets of Nightmare","Запечатанные Рукавицы Кошмаров",A,8,gloves,/armor_t80_g_i02.webp
+5314,"Sealed Boots of Nightmare","Запечатанные Сапоги Кошмаров",A,8,boots,/armor_t80_b_i02.webp
+5316,"Sealed Majestic Plate Armor","Запечатанный Латный Доспех Величия",A,8,heavy_armor,/armor_t83_ul_i02.webp
+5317,"Sealed Majestic Circlet","Запечатанная Диадема Величия",A,8,helmet,/armor_leather_helmet_i02.webp
+5318,"Sealed Majestic Gauntlets","Запечатанные Рукавицы Величия",A,8,gloves,/armor_t83_g_i02.webp
+5319,"Sealed Majestic Boots","Запечатанные Сапоги Величия",A,8,boots,/armor_t83_b_i02.webp
+5320,"Sealed Leather Armor of Nightmare","Запечатанный Кожаный Доспех Кошмаров",A,8,light_armor,/armor_t81_ul_i02.webp
+5323,"Sealed Majestic Leather Armor","Запечатанный Кожаный Доспех Величия",A,8,light_armor,/armor_t84_ul_i02.webp
+5326,"Sealed Nightmare Robe","Запечатанная Мантия Кошмаров",A,8,magic_armor,/armor_t82_ul_i02.webp
+5329,"Sealed Majestic Robe","Запечатанная Мантия Величия",A,8,magic_armor,/armor_t85_ul_i02.webp
+6326,"Sealed Majestic Necklace","Запечатанное Ожерелье Величия",A,8,necklace,/accessary_inferno_necklace_i02.webp
+6327,"Sealed Majestic Earring","Запечатанная Серьга Величия",A,8,earring,/accessary_inferno_earing_i02.webp
+6328,"Sealed Majestic Ring","Запечатанное Кольцо Величия",A,8,ring,/accessary_inferno_ring_i02.webp
+6674,"Sealed Imperial Crusader Breastplate","Запечатанная Кираса Имперского Крестоносца",S,9,heavy_armor,/armor_t88_u_i02.webp
+6675,"Sealed Imperial Crusader Gaiters","Запечатанные Набедренники Имперского Крестоносца",S,9,heavy_armor,/armor_t88_l_i02.webp
+6676,"Sealed Imperial Crusader Gauntlets","Запечатанные Рукавицы Имперского Крестоносца",S,9,gloves,/armor_t88_g_i02.webp
+6677,"Sealed Imperial Crusader Boots","Запечатанные Сапоги Имперского Крестоносца",S,9,boots,/armor_t88_b_i02.webp
+6679,"Sealed Imperial Crusader Helmet","Запечатанный Шлем Имперского Крестоносца",S,9,helmet,/armor_helmet_i02.webp
+6680,"Sealed Draconic Leather Armor","Запечатанный Доспех из Драконьей Кожи",S,9,light_armor,/armor_t89_ul_i02.webp
+6681,"Sealed Draconic Leather Gloves","Запечатанные Перчатки из Драконьей Кожи",S,9,gloves,/armor_t89_g_i02.webp
+6682,"Sealed Draconic Leather Boots","Запечатанные Сапоги из Драконьей Кожи",S,9,boots,/armor_t89_b_i02.webp
+6683,"Sealed Draconic Leather Helmet","Запечатанный Шлем из Драконьей Кожи",S,9,helmet,/armor_leather_helmet_i02.webp
+6684,"Sealed Major Arcana Robe","Запечатанная Мантия Тайн",S,9,magic_armor,/armor_t90_ul_i02.webp
+6685,"Sealed Major Arcana Gloves","Запечатанные Перчатки Тайн",S,9,gloves,/armor_t90_g_i02.webp
+6686,"Sealed Major Arcana Boots","Запечатанные Сапоги Тайн",S,9,boots,/armor_t90_b_i02.webp
+6843,"Cat Ear","Ушки Кошки",,4,accessary,/accessory_cat_ear_i00.webp
+6844,"Lady's Hair Pin","Заколка Леди",,4,accessary,/accessory_hairpin_i00.webp
+6845,"Pirate's Eye Patch","Глазная Повязка Пирата",,4,accessary,/accessory_eye_bandage_i00.webp
+6846,"Monocle","Монокль",,4,accessary,/accessory_glasses_i00.webp
+7680,"Raccoon Ears","Ушки Енота",,4,accessary,/accessory_racoon_ear_i00.webp
+7681,"Outlaw's Eyepatch","Глазная Повязка Бандита",,4,accessary,/accessory_outlaw_eyepatch_i00.webp
+7682,"Maiden's Hairpin","Заколка Девы",,4,accessary,/accessory_maidens_hairpin_i00.webp
+7683,"Rabbit Ears","Ушки Кролика",,4,accessary,/accessory_rabbit_ear_i00.webp
+7695,"Forget-me-not Hairpin","Заколка Незабудка",,4,accessary,/accessory_forget_me_not_hairpin_i00.webp
+7696,"Daisy Hairpin","Заколка Маргаритка",,4,accessary,/accessory_daisy_hairpin_i00.webp
+8187,"Demon Horns","Рога Демона",,4,accessary,/accessory_hair_cornu_i00.webp
+8188,"Little Angel Wings","Крылышко Ангела",,4,accessary,/accessory_hair_ring_i00.webp
+8189,"Fairy Antennae","Усики Феи",,4,accessary,/accessory_hair_feeler_i00.webp
+8184,"Party Hat","Праздничный Колпак",,6,accessary,/accessory_party_hat_i00.webp
+8185,"Feathered Hat","Украшенная Перьями Шляпа",,6,accessary,/accessory_archer_hat_i00.webp
+8186,"Artisan's Goggles","Защитные Очки Ремесленника",,6,accessary,/accessory_dwarf_goggle_i00.webp
+3,"Broadsword","Широкий Меч",NG,1,sword,/weapon_broad_sword_i00.webp
+8,"Willow Staff","Ивовый Посох",NG,1,two_hand_magic,/weapon_willow_staff_i00.webp
+9,"Cedar Staff","Кедровый Посох",NG,1,two_hand_magic,/weapon_cedar_staff_i00.webp
+14,"Bow","Лук",NG,1,bow,/weapon_bow_i00.webp
+15,"Short Spear","Короткое Копье",NG,1,spear,/weapon_short_spear_i00.webp
+87,"Iron Hammer","Железный Молот",NG,1,blunt,/weapon_iron_hammer_i00.webp
+88,"Morning Star","Моргенштерн",D,3,blunt,/weapon_morning_star_i00.webp
+90,"Goat Head Staff","Рогатый Посох",D,3,two_hand_magic,/weapon_goathead_staff_i00.webp
+93,"Winged Spear","Крылатое Копье",D,3,spear,/weapon_winged_spear_i00.webp
+70,"Claymore","Клеймор",D,4,two_hand_sword,/weapon_claymore_i00.webp
+71,"Flamberge","Фламберг",C,4,two_hand_sword,/weapon_flamberge_i00.webp
+72,"Stormbringer","Громовержец",C,4,sword,/weapon_stormbringer_i00.webp
+89,"Big Hammer","Большой Молот",C,4,blunt,/weapon_big_hammer_i00.webp
+96,"Scythe","Боевая Коса",C,4,spear,/weapon_scythe_i00.webp
+73,"Shamshir","Шамшир",C,5,sword,/weapon_shamshir_i00.webp
+74,"Katana","Катана",C,5,sword,/weapon_katana_i00.webp
+75,"Caliburs","Экскалибур",C,5,sword,/weapon_caliburs_i00.webp
+76,"Sword of Delusion","Меч Иллюзий",C,5,sword,/weapon_sword_of_delusion_i00.webp
+77,"Tsurugi","Цуруги",C,5,sword,/weapon_tsurugi_i00.webp
+84,"Homunkulus's Sword","Меч Гомункула",C,5,one_hand_magic,/weapon_homunkuluss_sword_i00.webp
+94,"Bec de Corbin","Бердыш",C,5,spear,/weapon_bech_de_corbin_i00.webp
+95,"Poleaxe","Секира",C,5,spear,/weapon_poleaxe_i00.webp
+78,"Great Sword","Большой Меч",B,6,two_hand_sword,/weapon_great_sword_i00.webp
+91,"Heavy War Axe","Тяжелый Топор Войны",B,6,blunt,/weapon_heavy_war_axe_i00.webp
+92,"Sprite's Staff","Посох Духа",B,6,two_hand_magic,/weapon_sprites_staff_i00.webp
+79,"Sword of Damascus","Дамаскус",B,7,sword,/weapon_sword_of_damascus_i00.webp
+97,"Lance","Пика",B,7,spear,/weapon_lancia_i00.webp
+80,"Tallum Blade","Клинок Таллума",A,7,sword,/weapon_tallum_blade_i00.webp
+98,"Halberd","Алебарда",A,7,spear,/weapon_halbard_i00.webp
+81,"Dragon Slayer","Убийца Драконов",A,8,two_hand_sword,/weapon_dragon_slayer_i00.webp
+6687,"Sealed Major Arcana Circlet","Запечатанная Диадема Тайн",S,9,helmet,/armor_leather_helmet_i02.webp
+6724,"Sealed Tateossian Earring","Запечатанная Серьга Татеосса",S,9,earring,/accessory_tateossian_earring_i02.webp
+6725,"Sealed Tateossian Ring","Запечатанное Кольцо Татеосса",S,9,ring,/accessory_tateossian_ring_i02.webp
+6726,"Sealed Tateossian Necklace","Запечатанное Ожерелье Татеосса",S,9,necklace,/accessory_tateossian_necklace_i02.webp
+120,"Sword of Reflection","Меч Отражения",NG,1,sword,/weapon_sword_of_watershadow_i00.webp
+123,"Saber","Сабля",D,2,sword,/weapon_saber_i00.webp
+125,"Spinebone Sword","Хребетный Меч",D,2,sword,/weapon_spinebone_sword_i00.webp
+180,"Mace of Judgment","Булава Правосудия",D,2,one_hand_magic,/weapon_mace_of_judgment_i00.webp
+184,"Conjuror's Staff","Посох Заклинателя",D,2,two_hand_magic,/weapon_conjure_staff_i00.webp
+124,"Two-Handed Sword","Двуручный Меч",D,3,two_hand_sword,/weapon_two_handed_sword_i00.webp
+129,"Sword of Revolution","Меч Революции",D,3,sword,/weapon_sword_of_revolution_i00.webp
+157,"Spiked Club","Шипованная Дубина",D,3,blunt,/weapon_spike_club_i00.webp
+158,"Tarbar","Тарбар",D,3,blunt,/weapon_tarbar_i00.webp
+169,"Skull Breaker","Череполом",D,3,blunt,/weapon_skull_breaker_i00.webp
+172,"Heavy Bone Club","Тяжелая Костяная Дубина",D,3,blunt,/weapon_heavy_bone_club_i00.webp
+159,"Bonebreaker","Костолом",D,4,blunt,/weapon_bonebreaker_i00.webp
+187,"Atuba Hammer","Молот Атубы",D,4,two_hand_magic,/weapon_atuba_hammer_i00.webp
+188,"Ghost Staff","Посох Призрака",D,4,two_hand_magic,/weapon_ghost_staff_i00.webp
+189,"Staff of Life","Посох Жизни",D,4,one_hand_magic,/weapon_life_stick_i00.webp
+190,"Atuba Mace","Булава Атубы",D,4,two_hand_magic,/weapon_atuba_mace_i00.webp
+160,"Battle Axe","Боевой Топор",C,4,blunt,/weapon_battle_axe_i00.webp
+161,"Silver Axe","Серебряный Топор",C,4,blunt,/weapon_war_pick_i00.webp
+173,"Skull Graver","Череподав",C,4,blunt,/weapon_skull_graver_i00.webp
+191,"Heavy Doom Hammer","Тяжелый Молот Рока",C,4,two_hand_magic,/weapon_heavy_doom_hammer_i00.webp
+192,"Crystal Staff","Кристальный Посох",C,4,two_hand_magic,/weapon_crystal_staff_i00.webp
+193,"Stick of Faith","Жезл Веры",C,4,one_hand_magic,/weapon_stick_of_faith_i00.webp
+194,"Heavy Doom Axe","Тяжелый Топор Рока",C,4,two_hand_magic,/weapon_heavy_doom_axe_i00.webp
+103,"Tower Shield","Башенный Щит",C,5,shield,/shield_tower_shield_i00.webp
+107,"Composite Shield","Композитный Щит",C,5,shield,/shield_composite_shield_i00.webp
+131,"Spirit Sword","Меч Духов",C,5,sword,/weapon_spirits_sword_i00.webp
+132,"Sword of Limit","Меч Рубежа",C,5,sword,/weapon_sword_of_limit_i00.webp
+133,"Raid Sword","Меч Налетчика",C,5,sword,/weapon_raid_sword_i00.webp
+134,"Sword of Nightmare","Меч Кошмаров",C,5,sword,/weapon_sword_of_nightmare_i00.webp
+145,"Sword of Whispering Death","Меч Шепчущей Смерти",C,5,one_hand_magic,/weapon_deathbreath_sword_i00.webp
+162,"War Axe","Топор Войны",C,5,blunt,/weapon_war_axe_i00.webp
+174,"Nirvana Axe","Топор Нирваны",C,5,one_hand_magic,/weapon_nirvana_axe_i00.webp
+195,"Cursed Staff","Проклятый Посох",C,5,two_hand_magic,/weapon_cursed_staff_i00.webp
+196,"Stick of Eternity","Жезл Избавления",C,5,one_hand_magic,/weapon_stick_of_eternity_i00.webp
+197,"Paradia Staff","Посох Парадии",C,5,two_hand_magic,/weapon_paradia_staff_i00.webp
+198,"Inferno Staff","Посох Инферно",C,5,two_hand_magic,/weapon_inferno_staff_i00.webp
+199,"Pa'agrian Hammer","Молот Паагрио",C,5,two_hand_magic,/weapon_paagrio_hammer_i00.webp
+200,"Sage's Staff","Посох Мудреца",C,5,two_hand_magic,/weapon_sages_staff_i00.webp
+201,"Club of Nature","Дубина Природы",C,5,one_hand_magic,/weapon_club_of_nature_i00.webp
+202,"Mace of The Underworld","Булава Преисподней",C,5,one_hand_magic,/weapon_mace_of_underworld_i00.webp
+203,"Pa'agrian Axe","Топор Паагрио",C,5,two_hand_magic,/weapon_paagrio_axe_i00.webp
+135,"Samurai Longsword","Длинный Меч Самурая",C,6,sword,/weapon_samurai_longsword_i00.webp
+142,"Keshanberk","Кешанберк",B,6,sword,/weapon_kshanberk_i00.webp
+148,"Sword of Valhalla","Меч Вальхаллы",B,6,one_hand_magic,/weapon_sword_of_valhalla_i00.webp
+110,"Doom Shield","Щит Рока",B,7,shield,/shield_doom_shield_i00.webp
+171,"Deadman's Glory","Топор Мертвеца",B,7,blunt,/weapon_deadmans_glory_i00.webp
+175,"Art of Battle Axe","Топор Искусства Войны",B,7,blunt,/weapon_art_of_battle_axe_i00.webp
+150,"Elemental Sword","Меч Стихий",A,7,one_hand_magic,/weapon_elemental_sword_i00.webp
+151,"Sword of Miracles","Легендарный Меч",A,8,one_hand_magic,/weapon_sword_of_miracle_i00.webp
+164,"Elysian","Элизиум",A,8,blunt,/weapon_elysian_i00.webp
+216,"Dirk","Кортик",NG,1,dagger,/weapon_dirk_i00.webp
+219,"Sword Breaker","Мечелом",NG,1,dagger,/weapon_sword_breaker_i00.webp
+272,"Forest Bow","Лесной Лук",NG,1,bow,/weapon_short_bow_i00.webp
+273,"Composition Bow","Композитный Лук",NG,1,bow,/weapon_composition_bow_i00.webp
+221,"Assassin Knife","Нож Ассасина",D,2,dagger,/weapon_assassin_knife_i00.webp
+276,"Elven Bow","Эльфийский Лук",D,2,bow,/weapon_elven_bow_i00.webp
+291,"Trident","Трезубец",D,2,spear,/weapon_trident_i00.webp
+224,"Maingauche","Дага",D,3,dagger,/weapon_maingauche_i00.webp
+241,"Shilen Knife","Нож Шилен",D,3,one_hand_magic,/weapon_knife_o_silenus_i00.webp
+261,"Bich'Hwa","Бичхва",D,3,fist,/weapon_bichhwa_i00.webp
+278,"Gastraphetes","Гастрафет",D,3,bow,/weapon_gastraphetes_i00.webp
+279,"Strengthened Long Bow","Усиленный Длинный Лук",D,3,bow,/weapon_strengthening_long_bow_i00.webp
+294,"War Pick","Молот Смерти",D,3,spear,/weapon_hammer_in_flames_i00.webp
+225,"Mithril Dagger","Мифриловый Кинжал",D,4,dagger,/weapon_mithril_dagger_i00.webp
+262,"Scallop Jamadhr","Шипованный Джамадхар",D,4,fist,/weapon_scallop_jamadhr_i00.webp
+280,"Light Crossbow","Легкий Лук",D,4,bow,/weapon_cyclone_bow_i00.webp
+226,"Cursed Dagger","Проклятый Кинжал",C,4,dagger,/weapon_cursed_dagger_i00.webp
+232,"Dark Elven Dagger","Кинжал Темных Эльфов",C,4,dagger,/weapon_darkelven_dagger_i00.webp
+263,"Chakram","Чакра",C,4,fist,/weapon_chakram_i00.webp
+281,"Crystallized Ice Bow","Ледяной Лук",C,4,bow,/weapon_crystallized_ice_bow_i00.webp
+227,"Stiletto","Стилет",C,5,dagger,/weapon_stiletto_i00.webp
+231,"Grace Dagger","Изящный Кинжал",C,5,dagger,/weapon_grace_dagger_i00.webp
+233,"Dark Screamer","Кинжал Тьмы",C,5,dagger,/weapon_dark_screamer_i00.webp
+242,"Soulfire Dirk","Кортик Духовного Пламени",C,5,one_hand_magic,/weapon_dagger_of_magicflame_i00.webp
+265,"Fisted Blade","Кастетные Клинки",C,5,fist,/weapon_fist_blade_i00.webp
+282,"Elemental Bow","Лук Стихии",C,5,bow,/weapon_elemental_bow_i00.webp
+283,"Akat Long Bow","Длинный Лук Аката",C,5,bow,/weapon_akat_long_bow_i00.webp
+285,"Noble Elven Bow","Элитный Эльфийский Лук",C,5,bow,/weapon_noble_elven_bow_i00.webp
+204,"Deadman's Staff","Посох Мертвеца",C,6,two_hand_magic,/weapon_deadmans_staff_i00.webp
+205,"Ghoul's Staff","Посох Вурдалака",C,6,two_hand_magic,/weapon_ghouls_staff_i00.webp
+206,"Demon's Staff","Посох Демона",C,6,two_hand_magic,/weapon_demons_staff_i00.webp
+228,"Crystal Dagger","Кристальный Кинжал",C,6,dagger,/weapon_crystal_dagger_i00.webp
+266,"Great Pata","Большая Пата",C,6,fist,/weapon_great_pata_i00.webp
+286,"Eminence Bow","Лук Превосходства",C,6,bow,/weapon_eminence_bow_i00.webp
+229,"Kris","Крис",B,6,dagger,/weapon_kris_i00.webp
+243,"Hell Knife","Нож Ада",B,6,one_hand_magic,/weapon_hell_knife_i00.webp
+267,"Arthro Nail","Коготь Артро",B,6,fist,/weapon_arthro_nail_i00.webp
+284,"Dark Elven Long Bow","Длинный Лук Темных Эльфов",B,6,bow,/weapon_dark_elven_long_bow_i00.webp
+210,"Staff of Evil Spirits","Посох Злых Духов",B,7,two_hand_magic,/weapon_staff_of_evil_sprit_i00.webp
+234,"Demon Dagger","Кинжал Демона",B,7,dagger,/weapon_demons_sword_i00.webp
+268,"Bellion Cestus","Цестус Беллиона",B,7,fist,/weapon_bellion_cestus_i00.webp
+287,"Bow of Peril","Лук Угрозы",B,7,bow,/weapon_hazard_bow_i00.webp
+212,"Dasparion's Staff","Посох Даспариона",A,7,two_hand_magic,/weapon_dasparions_staff_i00.webp
+235,"Bloody Orchid","Кровавая Орхидея",A,7,dagger,/weapon_bloody_orchid_i00.webp
+269,"Blood Tornado","Кровавое Торнадо",A,7,fist,/weapon_blood_tornado_i00.webp
+288,"Carnage Bow","Кровавый Лук",A,7,bow,/weapon_carnium_bow_i00.webp
+213,"Branch of The Mother Tree","Ветвь Древа Жизни",A,8,two_hand_magic,/weapon_worldtrees_branch_i00.webp
+236,"Soul Separator","Душегуб",A,8,dagger,/weapon_soul_separator_i00.webp
+270,"Dragon Grinder","Погибель Дракона",A,8,fist,/weapon_dragon_grinder_i00.webp
+289,"Soul Bow","Пронзатель Душ",A,8,bow,/weapon_soul_bow_i00.webp
+1333,"Brandish","Тренировочный Двуручный Меч",NG,1,two_hand_sword,/weapon_brandish_i00.webp
+295,"Dwarven Trident","Трезубец Гномов",D,2,spear,/weapon_dwarven_trident_i00.webp
+313,"Temptation of Abyss","Искушение Бездны",D,2,one_hand_magic,/weapon_temptation_of_abyss_i00.webp
+5285,"Heavy Sword","Тяжелый Меч",D,2,two_hand_sword,/weapon_heavy_sword_i00.webp
+7880,"Steel Sword","Стальной Меч",D,2,two_hand_sword,/weapon_iron_sword_i00.webp
+317,"Tome of Blood","Книга Крови",D,3,one_hand_magic,/weapon_tome_of_blood_i00.webp
+318,"Crucifix of Blood","Кровавое Распятие",D,3,one_hand_magic,/weapon_crucifix_of_blood_i00.webp
+629,"Kite Shield","Треугольный Щит",D,3,shield,/shield_kite_shield_i00.webp
+1660,"Cursed Maingauche","Проклятая Дага",D,3,dagger,/weapon_maingauche_i01.webp
+2493,"Brigandine Shield","Панцирный Щит",D,3,shield,/shield_brigandine_shield_i00.webp
+297,"Glaive","Глефа",D,4,spear,/weapon_glaive_i00.webp
+321,"Demon Fangs","Клыки Демона",D,4,one_hand_magic,/weapon_demon_fangs_i00.webp
+630,"Square Shield","Прямоугольный Щит",D,4,shield,/shield_square_shield_i00.webp
+2494,"Plate Shield","Латный Щит",D,4,shield,/shield_plate_shield_i00.webp
+2499,"Elven Long Sword","Длинный Меч Эльфов",D,4,sword,/weapon_elven_long_sword_i00.webp
+298,"Orcish Glaive","Глефа Орков",C,4,spear,/weapon_orcish_glaive_i00.webp
+302,"Body Slasher","Кромсатель",C,4,spear,/weapon_body_slasher_i00.webp
+631,"Eldarake","Элдарейк",C,4,shield,/shield_eldarake_i00.webp
+2495,"Chain Shield","Кольчужный Щит",C,4,shield,/shield_chain_shield_i00.webp
+301,"Scorpion","Скорпион",C,5,spear,/weapon_scorpion_i00.webp
+303,"Widow Maker","Селекционер",C,5,spear,/weapon_widow_maker_i00.webp
+325,"Horn of Glory","Рог Славы",C,5,one_hand_magic,/weapon_horn_of_glory_i00.webp
+326,"Heathen's Book","Книга Безбожника",C,5,one_hand_magic,/weapon_heathens_book_i00.webp
+632,"Knight's Shield","Щит Рыцаря",C,5,shield,/shield_knight_shield_i00.webp
+2496,"Dwarven Chain Shield","Кольчужный Щит Гномов",C,5,shield,/shield_dwarven_chain_shield_i00.webp
+2502,"Dwarven War Hammer","Боевой Молот Гномов",C,5,blunt,/weapon_dwarven_warhammer_i00.webp
+4233,"Knuckle Duster","Кастет",C,5,fist,/weapon_knuckle_dust_i00.webp
+299,"Orcish Poleaxe","Секира Орков",C,6,spear,/weapon_orcish_poleaxe_i00.webp
+2497,"Full Plate Shield","Полный Латный Щит",C,6,shield,/shield_full_plate_shield_i00.webp
+2503,"Yaksa Mace","Булава Якса",C,6,blunt,/weapon_yaksa_mace_i00.webp
+5286,"Berserker Blade","Клинок Берсерка",C,6,two_hand_sword,/weapon_berserker_blade_i00.webp
+300,"Great Axe","Двуручный Топор",B,6,spear,/weapon_great_axe_i00.webp
+633,"Zubei's Shield","Щит Зубея",B,6,shield,/shield_shrnoens_shield_i00.webp
+673,"Avadon Shield","Щит Авадона",B,6,shield,/shield_avadon_shield_i00.webp
+2504,"Meteor Shower","Метеоритный Дождь",A,7,blunt,/weapon_meteor_shower_i00.webp
+5292,"Sealed Dark Crystal Shield","Запечатанный Щит Кристалла Тьмы",A,7,shield,/shield_dark_crystal_shield_i02.webp
+305,"Tallum Glaive","Глефа Таллума",A,8,spear,/weapon_tallum_glaive_i00.webp
+2500,"Dark Legion's Edge","Темный Легион",A,8,sword,/weapon_dark_legions_edge_i00.webp
+5315,"Sealed Shield of Nightmare","Запечатанный Щит Кошмаров",A,8,shield,/shield_shield_of_nightmare_i02.webp
+6364,"Forgotten Blade","Забытый Клинок",S,9,sword,/weapon_forgotten_blade_i00.webp
+6365,"Basalt Battlehammer","Базальтовый Боевой Молот",S,9,blunt,/weapon_basalt_battlehammer_i00.webp
+6366,"Imperial Staff","Имперский Посох",S,9,two_hand_magic,/weapon_imperial_staff_i00.webp
+6367,"Angel Slayer","Убийца Ангелов",S,9,dagger,/weapon_angel_slayer_i00.webp
+6369,"Dragon Hunter Axe","Топор Охотника на Драконов",S,9,two_hand_blunt,/weapon_dragon_hunter_axe_i00.webp
+6370,"Saint Spear","Святое Копье",S,9,spear,/weapon_saint_spear_i00.webp
+6371,"Demon Splinter","Демон Одиночка",S,9,fist,/weapon_demon_splinter_i00.webp
+6372,"Heaven's Divider","Разделитель Небес",S,9,two_hand_sword,/weapon_heavens_divider_i00.webp
+6579,"Arcana Mace","Посох Тайн",S,9,one_hand_magic,/weapon_arcana_mace_i00.webp
+6678,"Sealed Imperial Crusader Shield","Запечатанный Щит Имперского Крестоносца",S,9,shield,/shield_imperial_crusader_shield_i02.webp
+7575,"Draconic Bow","Лук Дракона",S,9,bow,/weapon_draconic_bow_i00.webp
+7885,"Priest Sword","Меч Жреца",D,2,one_hand_magic,/weapon_sword_of_priest_i00.webp
+7881,"Titan Sword","Меч Титана",D,3,two_hand_sword,/weapon_giants_sword_i00.webp
+7886,"Sword of Magic Fog","Меч Магического Тумана",D,3,one_hand_magic,/weapon_sword_of_magic_fog_i00.webp
+7890,"Priest Mace","Булава Жреца",D,3,one_hand_magic,/weapon_mace_of_priest_i00.webp
+7896,"Titan Hammer","Молот Титанов",D,3,two_hand_blunt,/weapon_giants_hammer_i00.webp
+7887,"Mysterious Sword","Мистический Меч",C,4,one_hand_magic,/weapon_mystery_sword_i00.webp
+7882,"Pa'agrian Sword","Меч Паагрио",C,5,two_hand_sword,/weapon_sword_of_paagrio_i00.webp
+7898,"Karik Horn","Рог Карика",C,5,two_hand_blunt,/weapon_horn_of_karik_i00.webp
+7888,"Ecliptic Sword","Меч Затмения",C,6,one_hand_magic,/weapon_sword_of_eclipse_i00.webp
+7891,"Ecliptic Axe","Топор Затмения",C,6,one_hand_magic,/weapon_eclipse_axe_i00.webp
+7897,"Dwarven Hammer","Молот Гномов",C,6,two_hand_blunt,/weapon_dwarven_hammer_i00.webp
+7892,"Spell Breaker","Рассеиватель Заклинания",B,6,one_hand_magic,/weapon_spell_breaker_i00.webp
+7900,"Ice Storm Hammer","Молот Ледяной Бури",B,6,two_hand_blunt,/weapon_ice_storm_hammer_i00.webp
+7883,"Guardian Sword","Меч Стража",B,7,two_hand_sword,/weapon_guardians_sword_i00.webp
+7889,"Wizard's Tear","Слезы Чародея",B,7,one_hand_magic,/weapon_tears_of_wizard_i00.webp
+7893,"Kaim Vanul's Bones","Кости Каим Ванула",B,7,one_hand_magic,/weapon_bone_of_kaim_vanul_i00.webp
+7901,"Star Buster","Звезда Боли",B,7,two_hand_blunt,/weapon_star_buster_i00.webp
+7884,"Infernal Master","Мастер Инферно",A,7,two_hand_sword,/weapon_inferno_master_i00.webp
+7894,"Spiritual Eye","Глаз Духа",A,7,one_hand_magic,/weapon_eye_of_soul_i00.webp
+7899,"Destroyer Hammer","Молот Разрушителя",A,7,two_hand_blunt,/weapon_hammer_of_destroyer_i00.webp
+7895,"Flaming Dragon Skull","Пылающий Череп Дракона",A,8,one_hand_magic,/weapon_dragon_flame_head_i00.webp
+7902,"Doom Crusher","Крушитель Рока",A,8,two_hand_blunt,/weapon_doom_crusher_i00.webp
+8678,"Sirra's Blade","Клинок Сирры",A,8,sword,/weapon_sirr_blade_i00.webp
+8679,"Sword of Ipos","Меч Ипоса",A,8,two_hand_sword,/weapon_sword_of_ipos_i00.webp
+8680,"Barakiel's Axe","Топор Баракиэля",A,8,blunt,/weapon_barakiel_axe_i00.webp
+8681,"Behemoth's Tuning Fork","Трезубец Чудовища",A,8,two_hand_blunt,/weapon_tuning_fork_of_behemoth_i00.webp
+8682,"Naga Storm","Буря Наги",A,8,dagger,/weapon_naga_storm_i00.webp
+8683,"Tiphon's Spear","Копье Тифона",A,8,spear,/weapon_tiphon_spear_i00.webp
+8684,"Shyeed's Bow","Лук Шиид",A,8,bow,/weapon_shyid_bow_i00.webp
+8685,"Sobekk's Hurricane","Ураган Собекка",A,8,fist,/weapon_sobekk_hurricane_i00.webp
+8686,"Themis' Tongue","Язык Темиса",A,8,one_hand_magic,/weapon_tongue_of_themis_i00.webp
+8687,"Cabrio's Hand","Рука Кабрио",A,8,one_hand_magic,/weapon_hand_of_cabrio_i00.webp
+8688,"Daimon Crystal","Кристалл Дэймона",A,8,two_hand_magic,/weapon_crystal_of_deamon_i00.webp
+9452,"Sealed Dynasty Earring","Запечатанная Серьга Династии",S80,9,earring,/accessary_dynasty_earing_i01.webp
+15767,"Sealed Moirai Earring","Запечатанная Серьга Дестино",S80,9,earring,/accessary_sealed_bluelycan_earring_i00.webp
+9454,"Sealed Dynasty Ring","Запечатанное Кольцо Династии",S80,9,ring,/accessary_dynasty_ring_i01.webp
+15766,"Sealed Moirai Ring","Запечатанное Кольцо Дестино",S80,9,ring,/accessary_sealed_bluelycan_ring_i00.webp
+9453,"Sealed Dynasty Necklace","Запечатанное Ожерелье Династии",S80,9,necklace,/accessary_dynasty_necklace_i01.webp
+15768,"Sealed Moirai Necklace","Запечатанное Ожерелье Дестино",S80,9,necklace,/accessary_sealed_bluelycan_necklace_i00.webp
+9442,"Dynasty Sword","Меч Династии",S80,9,sword,/weapon_dynasty_blade_i00.webp
+10215,"Icarus Sawsword","Зазубренный Меч Икара",S80,9,sword,/weapon_icarus_sowsword_i00.webp
+9443,"Dynasty Blade","Клинок Династии",S80,9,two_hand_sword,/weapon_dynasty_twohand_sword_i00.webp
+10218,"Icarus Heavy Arms","Тяжелые Руки Икара",S80,9,two_hand_sword,/weapon_icarus_heavy_arms_i00.webp
+9448,"Dynasty Cudgel","Дубина Династии",S80,9,blunt,/weapon_dynasty_hammer_i00.webp
+10220,"Icarus Hammer","Молот Икара",S80,9,blunt,/weapon_icarus_hammer_i00.webp
+13457,"Vesper Cutter","Резак Венеры",S84,10,sword,/weapon_vesper_cutter_i00.webp
+13458,"Vesper Slasher","Эспадон Венеры",S84,10,two_hand_sword,/weapon_vesper_slasher_i00.webp
+14160,"Sealed Vesper Earring","Запечатанная Серьга Венеры",S84,9,earring,/vesper_earring_i01.webp
+14162,"Sealed Vesper Ring","Запечатанное Кольцо Венеры",S84,9,ring,/vesper_ring_i01.webp
+14161,"Sealed Vesper Necklace","Запечатанное Ожерелье Венеры",S84,9,necklace,/vesper_necklace_i01.webp
+10253,"Dynasty Crusher","Крушитель Династии",S80,9,two_hand_blunt,/weapon_dynasty_crusher_i00.webp
+9446,"Dynasty Knife","Нож Династии",S80,9,dagger,/weapon_dynasty_dagger_i00.webp
+10216,"Icarus Disperser","Распылитель Икара",S80,9,dagger,/weapon_icarus_disperser_i00.webp
+9445,"Dynasty Bow","Лук Династии",S80,9,bow,/weapon_dynasty_bow_i00.webp
+10223,"Icarus Spitter","Лук Икара",S80,9,bow,/weapon_icarus_spiter_i00.webp
+9450,"Dynasty Bagh-Nakh","Коготь Тигра Династии",S80,9,fist,/weapon_dynasty_jamadhr_i00.webp
+10221,"Icarus Hand","Рука Икара",S80,9,fist,/weapon_icarus_knuckle_i00.webp
+9447,"Dynasty Halberd","Алебарда Династии",S80,9,spear,/weapon_dynasty_spear_i00.webp
+10219,"Icarus Trident","Трезубец Икара",S80,9,spear,/weapon_icarus_trident_i00.webp
+9449,"Dynasty Mace","Булава Династии",S80,9,one_hand_magic,/weapon_dynasty_staff_i00.webp
+9444,"Dynasty Phantom","Фантом Династии",S80,9,one_hand_magic,/weapon_dynasty_magic_sword_i00.webp
+10222,"Icarus Hall","Холл Икара",S80,9,one_hand_magic,/weapon_icarus_stick_i00.webp
+10217,"Icarus Spirit","Дух Икара",S80,9,one_hand_magic,/weapon_icarus_spirits_i00.webp
+10252,"Dynasty Staff","Посох Династии",S80,9,two_hand_magic,/weapon_dynasty_twohand_staff_i00.webp
+9514,"Sealed Dynasty Breast Plate","Запечатанная Кираса Династии",S80,9,heavy_armor,/armor_t91_u_i02.webp
+15697,"Sealed Moirai Breastplate","Запечатанная Кираса Дестино",S80,9,heavy_armor,/armor_t94_u_i02.webp
+9519,"Sealed Dynasty Leather Armor","Запечатанный Кожаный Доспех Династии",S80,9,light_armor,/armor_t92_u_i02.webp
+15698,"Sealed Moirai Leather Breastplate","Запечатанная Кожаная Кираса Дестино",S80,9,light_armor,/armor_t95_u_i02.webp
+9524,"Sealed Dynasty Tunic","Запечатанная Туника Династии",S80,9,magic_armor,/armor_t93_u_i02.webp
+15699,"Sealed Moirai Tunic","Запечатанная Туника Дестино",S80,9,magic_armor,/armor_t96_u_i02.webp
+9515,"Sealed Dynasty Gaiter","Запечатанные Набедренники Династии",S80,9,heavy_armor,/armor_t91_l_i02.webp
+15700,"Sealed Moirai Gaiter","Запечатанные Набедренники Дестино",S80,9,heavy_armor,/armor_t94_l_i02.webp
+9520,"Sealed Dynasty Leather Leggings","Запечатанные Кожаные Поножи Династии",S80,9,light_armor,/armor_t92_l_i02.webp
+9525,"Sealed Dynasty Stockings","Запечатанные Штаны Династии",S80,9,magic_armor,/armor_t93_l_i02.webp
+15702,"Sealed Moirai Stockings","Запечатанные Штаны Дестино",S80,9,magic_armor,/armor_t96_l_i02.webp
+9526,"Sealed Dynasty Circlet","Запечатанная Диадема Династии",S80,9,helmet,/armor_circlet_i02.webp
+9516,"Sealed Dynasty Helmet","Запечатанный Шлем Династии",S80,9,helmet,/armor_helmet_i02.webp
+9521,"Sealed Dynasty Leather Helmet","Запечатанный Кожаный Шлем Династии",S80,9,helmet,/armor_leather_helmet_i02.webp
+15696,"Sealed Moirai Circlet","Запечатанная Диадема Дестино",S80,9,helmet,/armor_circlet_i02.webp
+15694,"Sealed Moirai Helmet","Запечатанный Шлем Дестино",S80,9,helmet,/armor_helmet_i02.webp
+15695,"Sealed Moirai Leather Helmet","Запечатанный Кожаный Шлем Дестино",S80,9,helmet,/armor_leather_helmet_i02.webp
+9517,"Sealed Dynasty Gauntlets","Запечатанные Рукавицы Династии",S80,9,gloves,/armor_t91_g_i02.webp
+13463,"Vesper Avenger","Мститель Венеры",S84,10,blunt,/weapon_vesper_avenger_i00.webp
+13464,"Vesper Retributer","Возмездие Венеры",S84,10,two_hand_blunt,/weapon_vesper_retributer_i00.webp
+13460,"Vesper Shaper","Острие Венеры",S84,10,dagger,/weapon_vesper_shaper_i00.webp
+13467,"Vesper Thrower","Бросок Венеры",S84,10,bow,/weapon_vesper_thrower_i00.webp
+13461,"Vesper Fighter","Воитель Венеры",S84,10,fist,/weapon_vesper_fighter_i00.webp
+13462,"Vesper Stormer","Буревестник Венеры",S84,10,spear,/weapon_vesper_stormer_i00.webp
+13459,"Vesper Buster","Расчленитель Венеры",S84,10,one_hand_magic,/weapon_vesper_burster_i00.webp
+13465,"Vesper Caster","Заклинатель Венеры",S84,10,one_hand_magic,/weapon_vesper_caster_i00.webp
+13466,"Vesper Singer","Певец Венеры",S84,10,two_hand_magic,/weapon_vesper_singer_i00.webp
+14105,"Sealed Vesper Breastplate","Запечатанная Кираса Венеры",S84,10,heavy_armor,/armor_t94_u_i02.webp
+14106,"Sealed Vesper Leather Breastplate","Запечатанная Кожаная Кираса Венеры",S84,10,light_armor,/armor_t95_u_i02.webp
+14107,"Sealed Vesper Tunic","Запечатанная Туника Венеры",S84,10,magic_armor,/armor_t96_u_i02.webp
+14108,"Sealed Vesper Gaiters","Запечатанные Набедренники Венеры",S84,10,heavy_armor,/armor_t94_l_i02.webp
+14112,"Sealed Vesper Leather Leggings","Запечатанные Кожаные Брюки Венеры",S84,10,light_armor,/armor_t95_l_i02.webp
+14115,"Sealed Vesper Stockings","Запечатанные Штаны Венеры",S84,10,magic_armor,/armor_t96_l_i02.webp
+13145,"Sealed Vesper Circlet","Запечатанная Диадема Венеры",S84,10,helmet,/armor_circlet_i02.webp
+13143,"Sealed Vesper Helmet","Запечатанный Шлем Венеры",S84,10,helmet,/armor_helmet_i02.webp
+13144,"Sealed Vesper Leather Helmet","Запечатанный Кожаный Шлем Венеры",S84,10,helmet,/armor_leather_helmet_i02.webp
+9527,"Sealed Dynasty Gloves","Запечатанные Перчатки Династии",S80,9,gloves,/armor_t93_g_i02.webp
+9522,"Sealed Dynasty Leather Gloves","Запечатанные Кожаные Перчатки Династии",S80,9,gloves,/armor_t92_g_i02.webp
+15703,"Sealed Moirai Gauntlet","Запечатанные Рукавицы Дестино",S80,9,gloves,/armor_t94_g_i02.webp
+15705,"Sealed Moirai Gloves","Запечатанные Перчатки Дестино",S80,9,gloves,/armor_t96_g_i02.webp
+15704,"Sealed Moirai Leather Gloves","Запечатанные Кожаные Перчатки Дестино",S80,9,gloves,/armor_t95_g_i02.webp
+9518,"Sealed Dynasty Boots","Запечатанные Сапоги Династии",S80,9,boots,/armor_t91_b_i02.webp
+9523,"Sealed Dynasty Leather Boots","Запечатанные Кожаные Сапоги Династии",S80,9,boots,/armor_t92_b_i02.webp
+9528,"Sealed Dynasty Shoes","Запечатанные Ботинки Династии",S80,9,boots,/armor_t93_b_i02.webp
+15706,"Sealed Moirai Boots","Запечатанные Сапоги Дестино",S80,9,boots,/armor_t94_b_i02.webp
+15707,"Sealed Moirai Leather Boots","Запечатанные Кожаные Сапоги Дестино",S80,9,boots,/armor_t95_b_i02.webp
+15708,"Sealed Moirai Shoes","Запечатанные Ботинки Дестино",S80,9,boots,/armor_t96_b_i02.webp
+9529,"Sealed Dynasty Shield","Запечатанный Щит Династии",S80,9,shield,/shield_dynasty_shield_i01.webp
+15710,"Sealed Moirai Shield","Запечатанный Щит Дестино",S80,9,shield,/weapon_tysandy_shield_i00.webp
+13886,"Sealed Dynasty Sigil","Запечатанный Символ Династии",S80,9,sigil,/armor_dynasty_sigil_i01.webp
+15709,"Sealed Moirai Sigil","Запечатанный Символ Дестино",S80,9,sigil,/weapon_tysandy_sigil_i00.webp
+15701,"Sealed Moirai Leather Legging","Запечатанные Кожаные Брюки Дестино",S80,9,light_armor,/armor_t95_l_i02.webp
+14109,"Sealed Vesper Gauntlet","Запечатанные Рукавицы Венеры",S84,10,gloves,/armor_t94_g_i02.webp
+14116,"Sealed Vesper Gloves","Запечатанные Перчатки Венеры",S84,10,gloves,/armor_t96_g_i02.webp
+14113,"Sealed Vesper Leather Gloves","Запечатанные Кожаные Перчатки Венеры",S84,10,gloves,/armor_t95_g_i02.webp
+14110,"Sealed Vesper Boots","Запечатанные Сапоги Венеры",S84,10,boots,/armor_t94_b_i02.webp
+14114,"Sealed Vesper Leather Boots","Запечатанные Кожаные Сапоги Венеры",S84,10,boots,/armor_t95_b_i02.webp
+14117,"Sealed Vesper Shoes","Запечатанные Ботинки Венеры",S84,10,boots,/armor_t96_b_i02.webp
+14111,"Sealed Vesper Shield","Запечатанный Защитник Венеры",S84,10,shield,/weapon_vesper_verteidiger_i00.webp
+13887,"Sealed Vesper Sigil","Запечатанный Символ Венеры",S84,10,sigil,/armor_verper_sigil_i01.webp

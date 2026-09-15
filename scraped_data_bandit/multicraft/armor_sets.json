@@ -1,0 +1,933 @@
+[
+  {
+    "key": "brigandine-set",
+    "data": {
+      "id": "brigandine-set",
+      "name": {
+        "en": "Brigandine Set",
+        "ru": "Панцирный набор"
+      },
+      "helmet": "/armor_leather_helmet_i00.webp",
+      "upperBody": "/armor_t43_u_i00.webp",
+      "lowerBody": "/armor_t43_l_i00.webp",
+      "fullBody": null,
+      "gloves": null,
+      "boots": null,
+      "shield": "/shield_brigandine_shield_i00.webp"
+    },
+    "grade": "D",
+    "type": "heavy"
+  },
+  {
+    "key": "manticore-set",
+    "data": {
+      "id": "manticore-set",
+      "name": {
+        "en": "Manticore Set",
+        "ru": "Набор из Шкуры мантикоры"
+      },
+      "helmet": null,
+      "upperBody": "/armor_t42_u_i00.webp",
+      "lowerBody": "/armor_t42_l_i00.webp",
+      "fullBody": null,
+      "gloves": null,
+      "boots": "/armor_t42_b_i00.webp",
+      "shield": null
+    },
+    "grade": "D",
+    "type": "light"
+  },
+  {
+    "key": "elven-mithril-set",
+    "data": {
+      "id": "elven-mithril-set",
+      "name": {
+        "en": "Elven Mithril Set",
+        "ru": "Магический Мифриловый набор"
+      },
+      "helmet": null,
+      "upperBody": "/armor_t51_u_i00.webp",
+      "lowerBody": "/armor_t51_l_i00.webp",
+      "fullBody": null,
+      "gloves": "/armor_t51_g_i00.webp",
+      "boots": null,
+      "shield": null
+    },
+    "grade": "D",
+    "type": "magic"
+  },
+  {
+    "key": "chain-set",
+    "data": {
+      "id": "chain-set",
+      "name": {
+        "en": "Chain Set",
+        "ru": "Кольчужный набор"
+      },
+      "helmet": "/armor_leather_helmet_i00.webp",
+      "upperBody": "/armor_t48_u_i00.webp",
+      "lowerBody": "/armor_t48_l_i00.webp",
+      "fullBody": null,
+      "gloves": null,
+      "boots": null,
+      "shield": "/shield_chain_shield_i00.webp"
+    },
+    "grade": "C",
+    "type": "heavy"
+  },
+  {
+    "key": "composite-set",
+    "data": {
+      "id": "composite-set",
+      "name": {
+        "en": "Composite Set",
+        "ru": "Композитный набор"
+      },
+      "helmet": "/armor_leather_helmet_i00.webp",
+      "upperBody": null,
+      "lowerBody": null,
+      "fullBody": "/armor_t61_ul_i00.webp",
+      "gloves": null,
+      "boots": null,
+      "shield": "/shield_composite_shield_i00.webp"
+    },
+    "grade": "C",
+    "type": "heavy"
+  },
+  {
+    "key": "full-plate-set",
+    "data": {
+      "id": "full-plate-set",
+      "name": {
+        "en": "Full Plate Set",
+        "ru": "Полный латный набор"
+      },
+      "helmet": "/armor_leather_helmet_i00.webp",
+      "upperBody": null,
+      "lowerBody": null,
+      "fullBody": "/armor_t62_ul_i00.webp",
+      "gloves": null,
+      "boots": null,
+      "shield": "/shield_full_plate_shield_i00.webp"
+    },
+    "grade": "C",
+    "type": "heavy"
+  },
+  {
+    "key": "tempered-mithril-set",
+    "data": {
+      "id": "tempered-mithril-set",
+      "name": {
+        "en": "Tempered Mithril Set",
+        "ru": "Закаленный мифриловый набор"
+      },
+      "helmet": null,
+      "upperBody": "/armor_t47_u_i00.webp",
+      "lowerBody": "/armor_t47_l_i00.webp",
+      "fullBody": null,
+      "gloves": null,
+      "boots": "/armor_t47_b_i00.webp",
+      "shield": null
+    },
+    "grade": "C",
+    "type": "light"
+  },
+  {
+    "key": "plate-leather-set",
+    "data": {
+      "id": "plate-leather-set",
+      "name": {
+        "en": "Plate Leather Set",
+        "ru": "Латный кожанный набор"
+      },
+      "helmet": null,
+      "upperBody": "/armor_t47_u_i00.webp",
+      "lowerBody": "/armor_t47_l_i00.webp",
+      "fullBody": null,
+      "gloves": null,
+      "boots": "/armor_t47_b_i00.webp",
+      "shield": null
+    },
+    "grade": "C",
+    "type": "light"
+  },
+  {
+    "key": "theca-leather-set",
+    "data": {
+      "id": "theca-leather-set",
+      "name": {
+        "en": "Theca Leather Set",
+        "ru": "Набор Тека"
+      },
+      "helmet": null,
+      "upperBody": "/armor_t63_u_i00.webp",
+      "lowerBody": "/armor_t63_l_i00.webp",
+      "fullBody": null,
+      "gloves": null,
+      "boots": "/armor_t63_b_i00.webp",
+      "shield": null
+    },
+    "grade": "C",
+    "type": "light"
+  },
+  {
+    "key": "drake-leather-set",
+    "data": {
+      "id": "drake-leather-set",
+      "name": {
+        "en": "Drake Leather Set",
+        "ru": "Набор Дрейка"
+      },
+      "helmet": null,
+      "upperBody": null,
+      "lowerBody": null,
+      "fullBody": "/armor_t21_ul_i00.webp",
+      "gloves": null,
+      "boots": "/armor_t21_b_i00.webp",
+      "shield": null
+    },
+    "grade": "C",
+    "type": "light"
+  },
+  {
+    "key": "karmian-set",
+    "data": {
+      "id": "karmian-set",
+      "name": {
+        "en": "Karmian Set",
+        "ru": "Набор Кармиана"
+      },
+      "helmet": null,
+      "upperBody": "/armor_t53_u_i00.webp",
+      "lowerBody": "/armor_t53_l_i00.webp",
+      "fullBody": null,
+      "gloves": "/armor_t53_g_i00.webp",
+      "boots": null,
+      "shield": null
+    },
+    "grade": "C",
+    "type": "magic"
+  },
+  {
+    "key": "demon-set",
+    "data": {
+      "id": "demon-set",
+      "name": {
+        "en": "Demon Set",
+        "ru": "Набор Демона"
+      },
+      "helmet": null,
+      "upperBody": "/armor_t54_u_i00.webp",
+      "lowerBody": "/armor_t54_l_i00.webp",
+      "fullBody": null,
+      "gloves": "/armor_t54_g_i00.webp",
+      "boots": null,
+      "shield": null
+    },
+    "grade": "C",
+    "type": "magic"
+  },
+  {
+    "key": "divine-set",
+    "data": {
+      "id": "divine-set",
+      "name": {
+        "en": "Divine Set",
+        "ru": "Набор Божества"
+      },
+      "helmet": null,
+      "upperBody": "/armor_t57_u_i00.webp",
+      "lowerBody": "/armor_t57_l_i00.webp",
+      "fullBody": null,
+      "gloves": "/armor_t57_g_i00.webp",
+      "boots": null,
+      "shield": null
+    },
+    "grade": "C",
+    "type": "magic"
+  },
+  {
+    "key": "zubei-heavy-set",
+    "data": {
+      "id": "zubei-heavy-set",
+      "name": {
+        "en": "Zubei Heavy Set",
+        "ru": "Тяжелый набор Зубея"
+      },
+      "helmet": "/armor_helmet_i00.webp",
+      "upperBody": "/armor_t64_u_i00.webp",
+      "lowerBody": "/armor_t64_l_i00.webp",
+      "fullBody": null,
+      "gloves": "/armor_t64_g_i02.webp",
+      "boots": "/armor_t64_b_i02.webp",
+      "shield": null
+    },
+    "grade": "B",
+    "type": "heavy"
+  },
+  {
+    "key": "avadon-heavy-set",
+    "data": {
+      "id": "avadon-heavy-set",
+      "name": {
+        "en": "Avadon Heavy Set",
+        "ru": "Тяжелый набор Авадона"
+      },
+      "helmet": "/armor_leather_helmet_i00.webp",
+      "upperBody": "/armor_t66_u_i00.webp",
+      "lowerBody": "/armor_t66_l_i00.webp",
+      "fullBody": null,
+      "gloves": "/armor_t66_g_i02.webp",
+      "boots": "/armor_t66_b_i02.webp",
+      "shield": "/shield_avadon_shield_i00.webp"
+    },
+    "grade": "B",
+    "type": "heavy"
+  },
+  {
+    "key": "blue-wolf-heavy-set",
+    "data": {
+      "id": "blue-wolf-heavy-set",
+      "name": {
+        "en": "Blue Wolf Heavy Set",
+        "ru": "Тяжелый набор Синего волка"
+      },
+      "helmet": "/armor_leather_helmet_i00.webp",
+      "upperBody": "/armor_t68_u_i00.webp",
+      "lowerBody": "/armor_t68_l_i00.webp",
+      "fullBody": null,
+      "gloves": "/armor_t68_g_i02.webp",
+      "boots": "/armor_t68_b_i02.webp",
+      "shield": null
+    },
+    "grade": "B",
+    "type": "heavy"
+  },
+  {
+    "key": "doom-heavy-set",
+    "data": {
+      "id": "doom-heavy-set",
+      "name": {
+        "en": "Doom Heavy Set",
+        "ru": "Тяжелый набор Рока"
+      },
+      "helmet": "/armor_leather_helmet_i00.webp",
+      "upperBody": null,
+      "lowerBody": null,
+      "fullBody": "/armor_t71_ul_i00.webp",
+      "gloves": "/armor_t71_g_i02.webp",
+      "boots": "/armor_t71_b_i02.webp",
+      "shield": "/shield_doom_shield_i00.webp"
+    },
+    "grade": "B",
+    "type": "heavy"
+  },
+  {
+    "key": "zubei-light-set",
+    "data": {
+      "id": "zubei-light-set",
+      "name": {
+        "en": "Zubei Light Set",
+        "ru": "Легкий набор Зубея"
+      },
+      "helmet": "/armor_helmet_i00.webp",
+      "upperBody": "/armor_t65_u_i00.webp",
+      "lowerBody": "/armor_t65_l_i00.webp",
+      "fullBody": null,
+      "gloves": "/armor_t64_g_i02.webp",
+      "boots": "/armor_t64_b_i02.webp",
+      "shield": null
+    },
+    "grade": "B",
+    "type": "light"
+  },
+  {
+    "key": "avadon-light-set",
+    "data": {
+      "id": "avadon-light-set",
+      "name": {
+        "en": "Avadon Light Set",
+        "ru": "Легкий набор Авадона"
+      },
+      "helmet": "/armor_leather_helmet_i00.webp",
+      "upperBody": null,
+      "lowerBody": null,
+      "fullBody": "/armor_t67_ul_i00.webp",
+      "gloves": "/armor_t66_g_i02.webp",
+      "boots": "/armor_t66_b_i02.webp",
+      "shield": null
+    },
+    "grade": "B",
+    "type": "light"
+  },
+  {
+    "key": "blue-wolf-light-set",
+    "data": {
+      "id": "blue-wolf-light-set",
+      "name": {
+        "en": "Blue Wolf Light Set",
+        "ru": "Легкий набор Синего волка"
+      },
+      "helmet": "/armor_leather_helmet_i00.webp",
+      "upperBody": null,
+      "lowerBody": null,
+      "fullBody": "/armor_t69_ul_i00.webp",
+      "gloves": "/armor_t68_g_i02.webp",
+      "boots": "/armor_t68_b_i02.webp",
+      "shield": null
+    },
+    "grade": "B",
+    "type": "light"
+  },
+  {
+    "key": "doom-light-set",
+    "data": {
+      "id": "doom-light-set",
+      "name": {
+        "en": "Doom Light Set",
+        "ru": "Легкий набор Рока"
+      },
+      "helmet": "/armor_leather_helmet_i00.webp",
+      "upperBody": null,
+      "lowerBody": null,
+      "fullBody": "/armor_t72_ul_i00.webp",
+      "gloves": "/armor_t71_g_i02.webp",
+      "boots": "/armor_t71_b_i02.webp",
+      "shield": null
+    },
+    "grade": "B",
+    "type": "light"
+  },
+  {
+    "key": "zubei-magic-set",
+    "data": {
+      "id": "zubei-magic-set",
+      "name": {
+        "en": "Zubei Magic Set",
+        "ru": "Магический набор Зубея"
+      },
+      "helmet": "/armor_helmet_i00.webp",
+      "upperBody": "/armor_t56_u_i00.webp",
+      "lowerBody": "/armor_t56_l_i00.webp",
+      "fullBody": null,
+      "gloves": "/armor_t64_g_i02.webp",
+      "boots": "/armor_t64_b_i02.webp",
+      "shield": null
+    },
+    "grade": "B",
+    "type": "magic"
+  },
+  {
+    "key": "avadon-magic-set",
+    "data": {
+      "id": "avadon-magic-set",
+      "name": {
+        "en": "Avadon Magic Set",
+        "ru": "Магический набор Авадона"
+      },
+      "helmet": "/armor_leather_helmet_i00.webp",
+      "upperBody": null,
+      "lowerBody": null,
+      "fullBody": "/armor_t59_ul_i00.webp",
+      "gloves": "/armor_t66_g_i02.webp",
+      "boots": "/armor_t66_b_i02.webp",
+      "shield": null
+    },
+    "grade": "B",
+    "type": "magic"
+  },
+  {
+    "key": "blue-wolf-magic-set",
+    "data": {
+      "id": "blue-wolf-magic-set",
+      "name": {
+        "en": "Blue Wolf Magic Set",
+        "ru": "Магический набор Синего волка"
+      },
+      "helmet": "/armor_leather_helmet_i00.webp",
+      "upperBody": "/armor_t70_u_i00.webp",
+      "lowerBody": "/armor_t70_l_i00.webp",
+      "fullBody": null,
+      "gloves": "/armor_t68_g_i02.webp",
+      "boots": "/armor_t68_b_i02.webp",
+      "shield": null
+    },
+    "grade": "B",
+    "type": "magic"
+  },
+  {
+    "key": "doom-magic-set",
+    "data": {
+      "id": "doom-magic-set",
+      "name": {
+        "en": "Doom Magic Set",
+        "ru": "Магический набор Рока"
+      },
+      "helmet": "/armor_leather_helmet_i00.webp",
+      "upperBody": "/armor_t73_u_i00.webp",
+      "lowerBody": "/armor_t73_l_i00.webp",
+      "fullBody": null,
+      "gloves": "/armor_t71_g_i02.webp",
+      "boots": "/armor_t71_b_i02.webp",
+      "shield": null
+    },
+    "grade": "B",
+    "type": "magic"
+  },
+  {
+    "key": "dark-crystal-heavy-set",
+    "data": {
+      "id": "dark-crystal-heavy-set",
+      "name": {
+        "en": "Dark Crystal Heavy Set",
+        "ru": "Тяжелый набор Кристалла тьмы"
+      },
+      "helmet": "/armor_helmet_i02.webp",
+      "upperBody": "/armor_t74_u_i02.webp",
+      "lowerBody": "/armor_t74_l_i02.webp",
+      "fullBody": null,
+      "gloves": "/armor_t74_g_i02.webp",
+      "boots": "/armor_t74_b_i02.webp",
+      "shield": "/shield_dark_crystal_shield_i02.webp"
+    },
+    "grade": "A",
+    "type": "heavy"
+  },
+  {
+    "key": "dark-crystal-light-set",
+    "data": {
+      "id": "dark-crystal-light-set",
+      "name": {
+        "en": "Dark Crystal Light Set",
+        "ru": "Легкий набор Кристалла тьмы"
+      },
+      "helmet": "/armor_helmet_i02.webp",
+      "upperBody": "/armor_t75_u_i02.webp",
+      "lowerBody": "/armor_t75_l_i02.webp",
+      "fullBody": null,
+      "gloves": "/armor_t74_g_i02.webp",
+      "boots": "/armor_t74_b_i02.webp",
+      "shield": null
+    },
+    "grade": "A",
+    "type": "light"
+  },
+  {
+    "key": "dark-crystal-magic-set",
+    "data": {
+      "id": "dark-crystal-magic-set",
+      "name": {
+        "en": "Dark Crystal Magic Set",
+        "ru": "Магический набор Кристалла тьмы"
+      },
+      "helmet": "/armor_helmet_i02.webp",
+      "upperBody": null,
+      "lowerBody": null,
+      "fullBody": "/armor_t76_ul_i02.webp",
+      "gloves": "/armor_t74_g_i02.webp",
+      "boots": "/armor_t74_b_i02.webp",
+      "shield": null
+    },
+    "grade": "A",
+    "type": "magic"
+  },
+  {
+    "key": "tallum-heavy-set",
+    "data": {
+      "id": "tallum-heavy-set",
+      "name": {
+        "en": "Tallum Heavy Set",
+        "ru": "Тяжелый набор Таллума"
+      },
+      "helmet": "/armor_helmet_i02.webp",
+      "upperBody": null,
+      "lowerBody": null,
+      "fullBody": "/armor_t77_ul_i02.webp",
+      "gloves": "/armor_t77_g_i02.webp",
+      "boots": "/armor_t77_b_i02.webp",
+      "shield": null
+    },
+    "grade": "A",
+    "type": "heavy"
+  },
+  {
+    "key": "tallum-light-set",
+    "data": {
+      "id": "tallum-light-set",
+      "name": {
+        "en": "Tallum Light Set",
+        "ru": "Легкий набор Таллума"
+      },
+      "helmet": "/armor_helmet_i02.webp",
+      "upperBody": null,
+      "lowerBody": null,
+      "fullBody": "/armor_t78_ul_i02.webp",
+      "gloves": "/armor_t77_g_i02.webp",
+      "boots": "/armor_t77_b_i02.webp",
+      "shield": null
+    },
+    "grade": "A",
+    "type": "light"
+  },
+  {
+    "key": "tallum-magic-set",
+    "data": {
+      "id": "tallum-magic-set",
+      "name": {
+        "en": "Tallum Magic Set",
+        "ru": "Магический набор Таллума"
+      },
+      "helmet": "/armor_helmet_i02.webp",
+      "upperBody": "/armor_t79_u_i02.webp",
+      "lowerBody": "/armor_t79_l_i02.webp",
+      "fullBody": null,
+      "gloves": "/armor_t77_g_i02.webp",
+      "boots": "/armor_t77_b_i02.webp",
+      "shield": null
+    },
+    "grade": "A",
+    "type": "magic"
+  },
+  {
+    "key": "nightmare-heavy-set",
+    "data": {
+      "id": "nightmare-heavy-set",
+      "name": {
+        "en": "Nightmare Heavy Set",
+        "ru": "Тяжелый набор Кошмаров"
+      },
+      "helmet": "/armor_leather_helmet_i02.webp",
+      "upperBody": null,
+      "lowerBody": null,
+      "fullBody": "/armor_t80_ul_i02.webp",
+      "gloves": "/armor_t80_g_i02.webp",
+      "boots": "/armor_t80_b_i02.webp",
+      "shield": "/shield_shield_of_nightmare_i02.webp"
+    },
+    "grade": "A",
+    "type": "heavy"
+  },
+  {
+    "key": "nightmare-light-set",
+    "data": {
+      "id": "nightmare-light-set",
+      "name": {
+        "en": "Nightmare Light Set",
+        "ru": "Легкий набор Кошмаров"
+      },
+      "helmet": "/armor_leather_helmet_i02.webp",
+      "upperBody": null,
+      "lowerBody": null,
+      "fullBody": "/armor_t81_ul_i02.webp",
+      "gloves": "/armor_t80_g_i02.webp",
+      "boots": "/armor_t80_b_i02.webp",
+      "shield": null
+    },
+    "grade": "A",
+    "type": "light"
+  },
+  {
+    "key": "nightmare-magic-set",
+    "data": {
+      "id": "nightmare-magic-set",
+      "name": {
+        "en": "Nightmare Magic Set",
+        "ru": "Магический набор Кошмаров"
+      },
+      "helmet": "/armor_leather_helmet_i02.webp",
+      "upperBody": null,
+      "lowerBody": null,
+      "fullBody": "/armor_t82_ul_i02.webp",
+      "gloves": "/armor_t80_g_i02.webp",
+      "boots": "/armor_t80_b_i02.webp",
+      "shield": null
+    },
+    "grade": "A",
+    "type": "magic"
+  },
+  {
+    "key": "majestic-heavy-set",
+    "data": {
+      "id": "majestic-heavy-set",
+      "name": {
+        "en": "Majestic Heavy Set",
+        "ru": "Тяжелый набор Величия"
+      },
+      "helmet": "/armor_leather_helmet_i02.webp",
+      "upperBody": null,
+      "lowerBody": null,
+      "fullBody": "/armor_t83_ul_i02.webp",
+      "gloves": "/armor_t83_g_i02.webp",
+      "boots": "/armor_t83_b_i02.webp",
+      "shield": null
+    },
+    "grade": "A",
+    "type": "heavy"
+  },
+  {
+    "key": "majestic-light-set",
+    "data": {
+      "id": "majestic-light-set",
+      "name": {
+        "en": "Majestic Light Set",
+        "ru": "Легкий набор Величия"
+      },
+      "helmet": "/armor_leather_helmet_i02.webp",
+      "upperBody": null,
+      "lowerBody": null,
+      "fullBody": "/armor_t84_ul_i02.webp",
+      "gloves": "/armor_t83_g_i02.webp",
+      "boots": "/armor_t83_b_i02.webp",
+      "shield": null
+    },
+    "grade": "A",
+    "type": "light"
+  },
+  {
+    "key": "majestic-magic-set",
+    "data": {
+      "id": "majestic-magic-set",
+      "name": {
+        "en": "Majestic Magic Set",
+        "ru": "Магический набор Величия"
+      },
+      "helmet": "/armor_leather_helmet_i02.webp",
+      "upperBody": null,
+      "lowerBody": null,
+      "fullBody": "/armor_t85_ul_i02.webp",
+      "gloves": "/armor_t83_g_i02.webp",
+      "boots": "/armor_t83_b_i02.webp",
+      "shield": null
+    },
+    "grade": "A",
+    "type": "magic"
+  },
+  {
+    "key": "imperial-crusader-set",
+    "data": {
+      "id": "imperial-crusader-set",
+      "name": {
+        "en": "Imperial Crusader Set",
+        "ru": "Набор Имперского крестоносца"
+      },
+      "helmet": "/armor_helmet_i02.webp",
+      "upperBody": "/armor_t88_u_i02.webp",
+      "lowerBody": "/armor_t88_l_i02.webp",
+      "fullBody": null,
+      "gloves": "/armor_t88_g_i02.webp",
+      "boots": "/armor_t88_b_i02.webp",
+      "shield": "/shield_imperial_crusader_shield_i02.webp"
+    },
+    "grade": "S",
+    "type": "heavy"
+  },
+  {
+    "key": "drakonic-set",
+    "data": {
+      "id": "drakonic-set",
+      "name": {
+        "en": "Drakonic Set",
+        "ru": "Набор из Драконьей кожи"
+      },
+      "helmet": "/armor_leather_helmet_i02.webp",
+      "upperBody": null,
+      "lowerBody": null,
+      "fullBody": "/armor_t89_ul_i02.webp",
+      "gloves": "/armor_t89_g_i02.webp",
+      "boots": "/armor_t89_b_i02.webp",
+      "shield": null
+    },
+    "grade": "S",
+    "type": "light"
+  },
+  {
+    "key": "major-arcana-set",
+    "data": {
+      "id": "major-arcana-set",
+      "name": {
+        "en": "Major Arcana Set",
+        "ru": "Набор Тайн"
+      },
+      "helmet": "/armor_leather_helmet_i02.webp",
+      "upperBody": null,
+      "lowerBody": null,
+      "fullBody": "/armor_t90_ul_i02.webp",
+      "gloves": "/armor_t90_g_i02.webp",
+      "boots": "/armor_t90_b_i02.webp",
+      "shield": null
+    },
+    "grade": "S",
+    "type": "magic"
+  },
+  {
+    "key": "dynasty-heavy-set",
+    "data": {
+      "id": "dynasty-heavy-set",
+      "name": {
+        "en": "Dynasty Heavy Set",
+        "ru": "Тяжелый набор Династии"
+      },
+      "helmet": "/armor_helmet_i02.webp",
+      "upperBody": "/armor_t91_u_i02.webp",
+      "lowerBody": "/armor_t91_l_i02.webp",
+      "fullBody": null,
+      "gloves": "/armor_t91_g_i02.webp",
+      "boots": "/armor_t91_b_i02.webp",
+      "shield": "/shield_dynasty_shield_i01.webp"
+    },
+    "grade": "S80",
+    "type": "heavy"
+  },
+  {
+    "key": "moirai-heavy-set",
+    "data": {
+      "id": "moirai-heavy-set",
+      "name": {
+        "en": "Moirai Heavy Set",
+        "ru": "Тяжелый набор Дестино"
+      },
+      "helmet": "/armor_helmet_i02.webp",
+      "upperBody": "/armor_t94_u_i02.webp",
+      "lowerBody": "/armor_t94_l_i02.webp",
+      "fullBody": null,
+      "gloves": "/armor_t94_g_i02.webp",
+      "boots": "/armor_t94_b_i02.webp",
+      "shield": "/weapon_tysandy_shield_i00.webp"
+    },
+    "grade": "S80",
+    "type": "heavy"
+  },
+  {
+    "key": "dynasty-light-set",
+    "data": {
+      "id": "dynasty-light-set",
+      "name": {
+        "en": "Dynasty Light Set",
+        "ru": "Легкий набор Династии"
+      },
+      "helmet": "/armor_leather_helmet_i02.webp",
+      "upperBody": "/armor_t92_u_i02.webp",
+      "lowerBody": "/armor_t92_l_i02.webp",
+      "fullBody": null,
+      "gloves": "/armor_t92_g_i02.webp",
+      "boots": "/armor_t92_b_i02.webp",
+      "shield": null
+    },
+    "grade": "S80",
+    "type": "light"
+  },
+  {
+    "key": "moirai-light-set",
+    "data": {
+      "id": "moirai-light-set",
+      "name": {
+        "en": "Moirai Light Set",
+        "ru": "Легкий набор Дестино"
+      },
+      "helmet": "/armor_leather_helmet_i02.webp",
+      "upperBody": "/armor_t95_u_i02.webp",
+      "lowerBody": "/armor_t95_l_i02.webp",
+      "fullBody": null,
+      "gloves": "/armor_t95_g_i02.webp",
+      "boots": "/armor_t95_b_i02.webp",
+      "shield": null
+    },
+    "grade": "S80",
+    "type": "light"
+  },
+  {
+    "key": "dynasty-robe-set",
+    "data": {
+      "id": "dynasty-robe-set",
+      "name": {
+        "en": "Dynasty Robe Set",
+        "ru": "Магический набор Династии"
+      },
+      "helmet": "/armor_circlet_i02.webp",
+      "upperBody": "/armor_t93_u_i02.webp",
+      "lowerBody": "/armor_t93_l_i02.webp",
+      "fullBody": null,
+      "gloves": "/armor_t93_g_i02.webp",
+      "boots": "/armor_t93_b_i02.webp",
+      "shield": null
+    },
+    "grade": "S80",
+    "type": "magic"
+  },
+  {
+    "key": "moirai-magic-set",
+    "data": {
+      "id": "moirai-magic-set",
+      "name": {
+        "en": "Moirai Magic Set",
+        "ru": "Магический набор Дестино"
+      },
+      "helmet": "/armor_circlet_i02.webp",
+      "upperBody": "/armor_t96_u_i02.webp",
+      "lowerBody": "/armor_t96_l_i02.webp",
+      "fullBody": null,
+      "gloves": "/armor_t96_g_i02.webp",
+      "boots": "/armor_t96_b_i02.webp",
+      "shield": null
+    },
+    "grade": "S80",
+    "type": "magic"
+  },
+  {
+    "key": "vesper-heavy-set",
+    "data": {
+      "id": "vesper-heavy-set",
+      "name": {
+        "en": "Vesper Heavy Set",
+        "ru": "Тяжелый набор Венеры"
+      },
+      "helmet": "/armor_helmet_i02.webp",
+      "upperBody": "/armor_t94_u_i02.webp",
+      "lowerBody": "/armor_t94_l_i02.webp",
+      "fullBody": null,
+      "gloves": "/armor_t94_g_i02.webp",
+      "boots": "/armor_t94_b_i02.webp",
+      "shield": "/weapon_vesper_verteidiger_i00.webp"
+    },
+    "grade": "S84",
+    "type": "heavy"
+  },
+  {
+    "key": "vesper-light-set",
+    "data": {
+      "id": "vesper-light-set",
+      "name": {
+        "en": "Vesper Light Set",
+        "ru": "Легкий набор Венеры"
+      },
+      "helmet": "/armor_leather_helmet_i02.webp",
+      "upperBody": "/armor_t95_u_i02.webp",
+      "lowerBody": "/armor_t95_l_i02.webp",
+      "fullBody": null,
+      "gloves": "/armor_t95_g_i02.webp",
+      "boots": "/armor_t95_b_i02.webp",
+      "shield": null
+    },
+    "grade": "S84",
+    "type": "light"
+  },
+  {
+    "key": "vesper-robe-set",
+    "data": {
+      "id": "vesper-robe-set",
+      "name": {
+        "en": "Vesper Robe Set",
+        "ru": "Магический набор Венеры"
+      },
+      "helmet": "/armor_circlet_i02.webp",
+      "upperBody": "/armor_t96_u_i02.webp",
+      "lowerBody": "/armor_t96_l_i02.webp",
+      "fullBody": null,
+      "gloves": "/armor_t96_g_i02.webp",
+      "boots": "/armor_t96_b_i02.webp",
+      "shield": null
+    },
+    "grade": "S84",
+    "type": "magic"
+  }
+]

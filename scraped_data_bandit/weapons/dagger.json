@@ -1,0 +1,852 @@
+[
+  {
+    "key": 10,
+    "data": {
+      "unitName": "dagger",
+      "icon": "/weapon_dagger_i00.webp",
+      "name": {
+        "en": "Dagger",
+        "ru": "Кинжал"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 5,
+      "mAtk": 5
+    },
+    "category": "weapons",
+    "subtype": "dagger",
+    "type": "dagger",
+    "pAtk": 5,
+    "mAtk": 5
+  },
+  {
+    "key": 11,
+    "data": {
+      "unitName": "bone_dagger",
+      "icon": "/weapon_bone_dagger_i00.webp",
+      "name": {
+        "en": "Bone Dagger",
+        "ru": "Костяной Кинжал"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 7,
+      "mAtk": 6
+    },
+    "category": "weapons",
+    "subtype": "dagger",
+    "type": "dagger",
+    "pAtk": 7,
+    "mAtk": 6
+  },
+  {
+    "key": 12,
+    "data": {
+      "unitName": "knife",
+      "icon": "/weapon_knife_i00.webp",
+      "name": {
+        "en": "Knife",
+        "ru": "Нож"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 10,
+      "mAtk": 9
+    },
+    "category": "weapons",
+    "subtype": "dagger",
+    "type": "dagger",
+    "pAtk": 10,
+    "mAtk": 9
+  },
+  {
+    "key": 215,
+    "data": {
+      "unitName": "doomed_dagger",
+      "icon": "/weapon_doomed_dagger_i00.webp",
+      "name": {
+        "en": "Doom Dagger",
+        "ru": "Кинжал Рока"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 10,
+      "mAtk": 9
+    },
+    "category": "weapons",
+    "subtype": "dagger",
+    "type": "dagger",
+    "pAtk": 10,
+    "mAtk": 9
+  },
+  {
+    "key": 3471,
+    "data": {
+      "unitName": "q_cybellins_dagger",
+      "icon": "/weapon_doomed_dagger_i00.webp",
+      "name": {
+        "en": "Cybellin's Dagger",
+        "ru": "Кинжал Сибелин"
+      },
+      "description": {
+        "en": "Dagger used in ceremony to raise the purity of blood crystal.",
+        "ru": "Ритуальный кинжал, используемый, чтобы полностью очистить Кристалл Крови."
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 10,
+      "mAtk": 9
+    },
+    "category": "weapons",
+    "subtype": "dagger",
+    "type": "dagger",
+    "pAtk": 10,
+    "mAtk": 9
+  },
+  {
+    "key": 4665,
+    "data": {
+      "unitName": "q_pipette_knife",
+      "icon": "/weapon_knife_i00.webp",
+      "name": {
+        "en": "Pipette Knife",
+        "ru": "Нож с Кровостоком"
+      },
+      "description": {
+        "en": "An instrument used to collect the blood of living creatures. Use it to cut Baium and obtain a blood sample.",
+        "ru": "Инструмент для сбора крови живых существ. Используйте его для сбора крови Баюма."
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 10,
+      "mAtk": 9
+    },
+    "category": "weapons",
+    "subtype": "dagger",
+    "type": "dagger",
+    "pAtk": 10,
+    "mAtk": 9
+  },
+  {
+    "key": 989,
+    "data": {
+      "unitName": "eldritch_dagger",
+      "icon": "/weapon_knife_i00.webp",
+      "name": {
+        "en": "Eldritch Dagger",
+        "ru": "Пугающий Кинжал"
+      },
+      "description": {
+        "en": "A steel dagger engraved with the runes of Shilen and Gran Kain.",
+        "ru": "Стальной кинжал с вырезанными рунами Шилен и Гран Каина."
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 11,
+      "mAtk": 10
+    },
+    "category": "weapons",
+    "subtype": "dagger",
+    "type": "dagger",
+    "pAtk": 11,
+    "mAtk": 10
+  },
+  {
+    "key": 216,
+    "data": {
+      "unitName": "dirk",
+      "icon": "/weapon_dirk_i00.webp",
+      "name": {
+        "en": "Dirk",
+        "ru": "Кортик"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 15,
+      "mAtk": 12
+    },
+    "category": "weapons",
+    "subtype": "dagger",
+    "type": "dagger",
+    "pAtk": 15,
+    "mAtk": 12
+  },
+  {
+    "key": 1182,
+    "data": {
+      "unitName": "netis_dagger",
+      "icon": "/weapon_knife_i00.webp",
+      "name": {
+        "en": "Neti's Dagger",
+        "ru": "Кинжал Нети"
+      },
+      "description": {
+        "en": "Neti used this dagger when she was a Treasure Hunter. Use it when hunting the skeletons and spartoi of the Ruins of Agony to gather bone pieces.",
+        "ru": "Кинжал Нети, который она использовала во время своих путешествий. Используйте его для охоты на скелетов в Руинах Страданий."
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 19,
+      "mAtk": 16
+    },
+    "category": "weapons",
+    "subtype": "dagger",
+    "type": "dagger",
+    "pAtk": 19,
+    "mAtk": 16
+  },
+  {
+    "key": 217,
+    "data": {
+      "unitName": "shining_knife",
+      "icon": "/weapon_shining_knife_i00.webp",
+      "name": {
+        "en": "Shining Knife",
+        "ru": "Сверкающий Нож"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 21,
+      "mAtk": 17
+    },
+    "category": "weapons",
+    "subtype": "dagger",
+    "type": "dagger",
+    "pAtk": 21,
+    "mAtk": 17
+  },
+  {
+    "key": 218,
+    "data": {
+      "unitName": "throw_knife",
+      "icon": "/weapon_throw_knife_i00.webp",
+      "name": {
+        "en": "Throwing Knife",
+        "ru": "Метательный Нож"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 21,
+      "mAtk": 17
+    },
+    "category": "weapons",
+    "subtype": "dagger",
+    "type": "dagger",
+    "pAtk": 21,
+    "mAtk": 17
+  },
+  {
+    "key": 219,
+    "data": {
+      "unitName": "sword_breaker",
+      "icon": "/weapon_sword_breaker_i00.webp",
+      "name": {
+        "en": "Sword Breaker",
+        "ru": "Мечелом"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 27,
+      "mAtk": 21
+    },
+    "category": "weapons",
+    "subtype": "dagger",
+    "type": "dagger",
+    "pAtk": 27,
+    "mAtk": 21
+  },
+  {
+    "key": 220,
+    "data": {
+      "unitName": "handiwork_dagger",
+      "icon": "/weapon_handiwork_dagger_i00.webp",
+      "name": {
+        "en": "Crafted Dagger",
+        "ru": "Кованый Кинжал"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 35,
+      "mAtk": 26
+    },
+    "category": "weapons",
+    "subtype": "dagger",
+    "type": "dagger",
+    "pAtk": 35,
+    "mAtk": 26
+  },
+  {
+    "key": 221,
+    "data": {
+      "unitName": "assassin_knife",
+      "icon": "/weapon_assassin_knife_i00.webp",
+      "name": {
+        "en": "Assassin Knife",
+        "ru": "Нож Ассасина"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 35,
+      "mAtk": 26
+    },
+    "category": "weapons",
+    "subtype": "dagger",
+    "type": "dagger",
+    "pAtk": 35,
+    "mAtk": 26
+  },
+  {
+    "key": 222,
+    "data": {
+      "unitName": "poniard_dagger",
+      "icon": "/weapon_dirk_i00.webp",
+      "name": {
+        "en": "Poniard Dagger",
+        "ru": "Трехгранный Кинжал"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 45,
+      "mAtk": 32
+    },
+    "category": "weapons",
+    "subtype": "dagger",
+    "type": "dagger",
+    "pAtk": 45,
+    "mAtk": 32
+  },
+  {
+    "key": 223,
+    "data": {
+      "unitName": "kukuri",
+      "icon": "/weapon_kukuri_i00.webp",
+      "name": {
+        "en": "Kukuri",
+        "ru": "Кукри"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 56,
+      "mAtk": 39
+    },
+    "category": "weapons",
+    "subtype": "dagger",
+    "type": "dagger",
+    "pAtk": 56,
+    "mAtk": 39
+  },
+  {
+    "key": 1660,
+    "data": {
+      "unitName": "cursed_maingauche",
+      "icon": "/weapon_maingauche_i01.webp",
+      "name": {
+        "en": "Cursed Maingauche",
+        "ru": "Проклятая Дага"
+      },
+      "description": {
+        "en": "Although its attack power is weak, it gives bleeding effect with a certain rate during critical attacks.",
+        "ru": "Имеет маленькую Ф. Атк., однако с некоторой вероятностью вызывает у противника кровотечение при нанесении критического урона."
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 62,
+      "mAtk": 42
+    },
+    "category": "weapons",
+    "subtype": "dagger",
+    "type": "dagger",
+    "pAtk": 62,
+    "mAtk": 42
+  },
+  {
+    "key": 224,
+    "data": {
+      "unitName": "maingauche",
+      "icon": "/weapon_maingauche_i00.webp",
+      "name": {
+        "en": "Maingauche",
+        "ru": "Дага"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 69,
+      "mAtk": 47
+    },
+    "category": "weapons",
+    "subtype": "dagger",
+    "type": "dagger",
+    "pAtk": 69,
+    "mAtk": 47
+  },
+  {
+    "key": 225,
+    "data": {
+      "unitName": "mithril_dagger",
+      "icon": "/weapon_mithril_dagger_i00.webp",
+      "name": {
+        "en": "Mithril Dagger",
+        "ru": "Мифриловый Кинжал"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 80,
+      "mAtk": 54
+    },
+    "category": "weapons",
+    "subtype": "dagger",
+    "type": "dagger",
+    "pAtk": 80,
+    "mAtk": 54
+  },
+  {
+    "key": 226,
+    "data": {
+      "unitName": "cursed_dagger",
+      "icon": "/weapon_cursed_dagger_i00.webp",
+      "name": {
+        "en": "Cursed Dagger",
+        "ru": "Проклятый Кинжал"
+      },
+      "description": {
+        "en": "Bestows Critical Bleed, Critical Poison or Rsk. Haste.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Крит. Кровопускание, Отравление, Риск. Ускорение."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 94,
+      "mAtk": 61
+    },
+    "category": "weapons",
+    "subtype": "dagger",
+    "type": "dagger",
+    "pAtk": 94,
+    "mAtk": 61
+  },
+  {
+    "key": 232,
+    "data": {
+      "unitName": "darkelven_dagger",
+      "icon": "/weapon_darkelven_dagger_i00.webp",
+      "name": {
+        "en": "Dark Elven Dagger",
+        "ru": "Кинжал Темных Эльфов"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Focus or Back Blow.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Фокусировка, Удар в Спину."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 94,
+      "mAtk": 61
+    },
+    "category": "weapons",
+    "subtype": "dagger",
+    "type": "dagger",
+    "pAtk": 94,
+    "mAtk": 61
+  },
+  {
+    "key": 227,
+    "data": {
+      "unitName": "stiletto",
+      "icon": "/weapon_stiletto_i00.webp",
+      "name": {
+        "en": "Stiletto",
+        "ru": "Стилет"
+      },
+      "description": {
+        "en": "Bestows either Critical Bleed or Critical Poison.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Крит. Кровопускание, Крит. Отравление."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 107,
+      "mAtk": 68
+    },
+    "category": "weapons",
+    "subtype": "dagger",
+    "type": "dagger",
+    "pAtk": 107,
+    "mAtk": 68
+  },
+  {
+    "key": 231,
+    "data": {
+      "unitName": "grace_dagger",
+      "icon": "/weapon_grace_dagger_i00.webp",
+      "name": {
+        "en": "Grace Dagger",
+        "ru": "Изящный Кинжал"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Evasion, Focus, or Back Blow.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Уклонение, Фокусировка, Удар в Спину."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 122,
+      "mAtk": 76
+    },
+    "category": "weapons",
+    "subtype": "dagger",
+    "type": "dagger",
+    "pAtk": 122,
+    "mAtk": 76
+  },
+  {
+    "key": 233,
+    "data": {
+      "unitName": "dark_screamer",
+      "icon": "/weapon_dark_screamer_i00.webp",
+      "name": {
+        "en": "Dark Screamer",
+        "ru": "Кинжал Тьмы"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Evasion, Focus, or Critical Bleed.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Уклонение, Фокусировка, Крит. Кровопускание."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 122,
+      "mAtk": 76
+    },
+    "category": "weapons",
+    "subtype": "dagger",
+    "type": "dagger",
+    "pAtk": 122,
+    "mAtk": 76
+  },
+  {
+    "key": 228,
+    "data": {
+      "unitName": "crystal_dagger",
+      "icon": "/weapon_crystal_dagger_i00.webp",
+      "name": {
+        "en": "Crystal Dagger",
+        "ru": "Кристальный Кинжал"
+      },
+      "description": {
+        "en": "Bestows Critical Bleed, Critical Damage or Critical Poison.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Крит. Кровопускание, Крит. Урон, Крит. Отравление."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 136,
+      "mAtk": 83
+    },
+    "category": "weapons",
+    "subtype": "dagger",
+    "type": "dagger",
+    "pAtk": 136,
+    "mAtk": 83
+  },
+  {
+    "key": 229,
+    "data": {
+      "unitName": "kris",
+      "icon": "/weapon_kris_i00.webp",
+      "name": {
+        "en": "Kris",
+        "ru": "Крис"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Evasion, Focus, or Back Blow.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Уклонение, Фокусировка, Удар в Спину."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 153,
+      "mAtk": 91
+    },
+    "category": "weapons",
+    "subtype": "dagger",
+    "type": "dagger",
+    "pAtk": 153,
+    "mAtk": 91
+  },
+  {
+    "key": 234,
+    "data": {
+      "unitName": "demon's_sword",
+      "icon": "/weapon_demons_sword_i00.webp",
+      "name": {
+        "en": "Demon Dagger",
+        "ru": "Кинжал Демона"
+      },
+      "description": {
+        "en": "Bestows Critical Bleed, Critical Damage or Critical Poison.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Крит. Кровопускание, Крит. Урон, Крит. Отравление."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 170,
+      "mAtk": 99
+    },
+    "category": "weapons",
+    "subtype": "dagger",
+    "type": "dagger",
+    "pAtk": 170,
+    "mAtk": 99
+  },
+  {
+    "key": 235,
+    "data": {
+      "unitName": "bloody_orchid",
+      "icon": "/weapon_bloody_orchid_i00.webp",
+      "name": {
+        "en": "Bloody Orchid",
+        "ru": "Кровавая Орхидея"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Focus, Back Blow, or Critical Bleed.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Фокусировка, Удар в Спину, Крит. Кровопускание."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pAtk": 186,
+      "mAtk": 107
+    },
+    "category": "weapons",
+    "subtype": "dagger",
+    "type": "dagger",
+    "pAtk": 186,
+    "mAtk": 107
+  },
+  {
+    "key": 236,
+    "data": {
+      "unitName": "soul_separator",
+      "icon": "/weapon_soul_separator_i00.webp",
+      "name": {
+        "en": "Soul Separator",
+        "ru": "Душегуб"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Guidance, Critical Damage, or Rsk. Haste.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Наведение, Крит. Урон, Риск. Ускорение."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pAtk": 203,
+      "mAtk": 114
+    },
+    "category": "weapons",
+    "subtype": "dagger",
+    "type": "dagger",
+    "pAtk": 203,
+    "mAtk": 114
+  },
+  {
+    "key": 8682,
+    "data": {
+      "unitName": "naga_storm",
+      "icon": "/weapon_naga_storm_i00.webp",
+      "name": {
+        "en": "Naga Storm",
+        "ru": "Буря Наги"
+      },
+      "description": {
+        "en": "Bestows Focus, Critical Damage, or Back Blow.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Фокусировка, Крит. Урон или Удар в Спину."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pAtk": 220,
+      "mAtk": 121
+    },
+    "category": "weapons",
+    "subtype": "dagger",
+    "type": "dagger",
+    "pAtk": 220,
+    "mAtk": 121
+  },
+  {
+    "key": 6367,
+    "data": {
+      "unitName": "angel_slayer",
+      "icon": "/weapon_angel_slayer_i00.webp",
+      "name": {
+        "en": "Angel Slayer",
+        "ru": "Убийца Ангелов"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Crt. Damage, HP Drain or Haste.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Крит. Урон, Поглощение HP или Ускорение."
+      }
+    },
+    "grade": "S",
+    "stats": {
+      "pAtk": 246,
+      "mAtk": 132
+    },
+    "category": "weapons",
+    "subtype": "dagger",
+    "type": "dagger",
+    "pAtk": 246,
+    "mAtk": 132
+  },
+  {
+    "key": 9446,
+    "data": {
+      "unitName": "dynasty_knife",
+      "icon": "/weapon_dynasty_dagger_i00.webp",
+      "name": {
+        "en": "Dynasty Knife",
+        "ru": "Нож Династии"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Focus, Evasion, or Critical Damage.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Фокусировка, Уклонение или Крит. Урон."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pAtk": 291,
+      "mAtk": 151
+    },
+    "category": "weapons",
+    "subtype": "dagger",
+    "type": "dagger",
+    "pAtk": 291,
+    "mAtk": 151
+  },
+  {
+    "key": 10216,
+    "data": {
+      "unitName": "icarus_disperser",
+      "icon": "/weapon_icarus_disperser_i00.webp",
+      "name": {
+        "en": "Icarus Disperser",
+        "ru": "Распылитель Икара"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Focus, Evasion or Crit. Damage.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Фокусировка, Уклонение или Крит. Урон."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pAtk": 318,
+      "mAtk": 163
+    },
+    "category": "weapons",
+    "subtype": "dagger",
+    "type": "dagger",
+    "pAtk": 318,
+    "mAtk": 163
+  },
+  {
+    "key": 13460,
+    "data": {
+      "unitName": "vesper_shaper",
+      "icon": "/weapon_vesper_shaper_i00.webp",
+      "name": {
+        "en": "Vesper Shaper",
+        "ru": "Острие Венеры"
+      },
+      "description": {
+        "en": "It can bestow one of the following functions: Critical Damage, HP Drain, or Haste.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Крит. Удар, Поглощение НР, Ускорение."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pAtk": 346,
+      "mAtk": 176
+    },
+    "category": "weapons",
+    "subtype": "dagger",
+    "type": "dagger",
+    "pAtk": 346,
+    "mAtk": 176
+  }
+]

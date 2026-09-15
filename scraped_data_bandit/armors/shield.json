@@ -1,0 +1,893 @@
+[
+  {
+    "key": 18,
+    "data": {
+      "unitName": "leather_shield",
+      "icon": "/shield_leather_shield_i00.webp",
+      "name": {
+        "en": "Leather Shield",
+        "ru": "Кожаный Щит"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 47,
+      "mDef": 0,
+      "mp": 47
+    },
+    "category": "armors",
+    "subtype": "shield",
+    "type": "shield",
+    "pDef": 47,
+    "mDef": 0,
+    "mp": 47
+  },
+  {
+    "key": 19,
+    "data": {
+      "unitName": "small_shield",
+      "icon": "/shield_small_shield_i00.webp",
+      "name": {
+        "en": "Small Shield",
+        "ru": "Маленький Щит"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 56,
+      "mDef": 0,
+      "mp": 56
+    },
+    "category": "armors",
+    "subtype": "shield",
+    "type": "shield",
+    "pDef": 56,
+    "mDef": 0,
+    "mp": 56
+  },
+  {
+    "key": 20,
+    "data": {
+      "unitName": "buckler",
+      "icon": "/shield_buckler_i00.webp",
+      "name": {
+        "en": "Buckler",
+        "ru": "Баклер"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 67,
+      "mDef": 0,
+      "mp": 67
+    },
+    "category": "armors",
+    "subtype": "shield",
+    "type": "shield",
+    "pDef": 67,
+    "mDef": 0,
+    "mp": 67
+  },
+  {
+    "key": 945,
+    "data": {
+      "unitName": "skeleton_buckler",
+      "icon": "/shield_skeleton_buckler_i00.webp",
+      "name": {
+        "en": "Skeleton Buckler",
+        "ru": "Баклер Скелета"
+      },
+      "description": {
+        "en": "A small wooden shield that perpetrators of mages use.",
+        "ru": "Маленький деревянный щит, используемый созданиями магов."
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 69,
+      "mDef": 0,
+      "mp": 69
+    },
+    "category": "armors",
+    "subtype": "shield",
+    "type": "shield",
+    "pDef": 69,
+    "mDef": 0,
+    "mp": 69
+  },
+  {
+    "key": 102,
+    "data": {
+      "unitName": "round_shield",
+      "icon": "/shield_round_shield_i00.webp",
+      "name": {
+        "en": "Round Shield",
+        "ru": "Круглый Щит"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 79,
+      "mDef": 0,
+      "mp": 79
+    },
+    "category": "armors",
+    "subtype": "shield",
+    "type": "shield",
+    "pDef": 79,
+    "mDef": 0,
+    "mp": 79
+  },
+  {
+    "key": 625,
+    "data": {
+      "unitName": "bone_shield",
+      "icon": "/shield_bone_shield_i00.webp",
+      "name": {
+        "en": "Bone Shield",
+        "ru": "Костяной Щит"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 90,
+      "mDef": 0,
+      "mp": 90
+    },
+    "category": "armors",
+    "subtype": "shield",
+    "type": "shield",
+    "pDef": 90,
+    "mDef": 0,
+    "mp": 90
+  },
+  {
+    "key": 6902,
+    "data": {
+      "unitName": "pledge_shield_agit",
+      "icon": "/shield_pledge_shield_i00.webp",
+      "name": {
+        "en": "Pledge Shield",
+        "ru": "Геральдический Щит"
+      },
+      "description": {
+        "en": "A shield that can only be used by the members of a clan that owns a clan hall.",
+        "ru": "Щит, который может быть использован членами клана, владеющего холлом клана"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 90,
+      "mDef": 0,
+      "mp": 90
+    },
+    "category": "armors",
+    "subtype": "shield",
+    "type": "shield",
+    "pDef": 90,
+    "mDef": 0,
+    "mp": 90
+  },
+  {
+    "key": 7015,
+    "data": {
+      "unitName": "pledge_shield_castle",
+      "icon": "/shield_pledge_shield_i00.webp",
+      "name": {
+        "en": "Shield of Castle Pledge",
+        "ru": "Геральдический Щит Клана"
+      },
+      "description": {
+        "en": "A shield that can only be used by the members of a clan that owns a castle.",
+        "ru": "Щит, который может использоваться только членами клана, которому принадлежит замок."
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 90,
+      "mDef": 0,
+      "mp": 90
+    },
+    "category": "armors",
+    "subtype": "shield",
+    "type": "shield",
+    "pDef": 90,
+    "mDef": 0,
+    "mp": 90
+  },
+  {
+    "key": 626,
+    "data": {
+      "unitName": "bronze_shield",
+      "icon": "/shield_bronze_shield_i00.webp",
+      "name": {
+        "en": "Bronze Shield",
+        "ru": "Бронзовый Щит"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 101,
+      "mDef": 0,
+      "mp": 101
+    },
+    "category": "armors",
+    "subtype": "shield",
+    "type": "shield",
+    "pDef": 101,
+    "mDef": 0,
+    "mp": 101
+  },
+  {
+    "key": 627,
+    "data": {
+      "unitName": "aspis",
+      "icon": "/shield_aspis_i00.webp",
+      "name": {
+        "en": "Aspis",
+        "ru": "Аспис"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 114,
+      "mDef": 0,
+      "mp": 114
+    },
+    "category": "armors",
+    "subtype": "shield",
+    "type": "shield",
+    "pDef": 114,
+    "mDef": 0,
+    "mp": 114
+  },
+  {
+    "key": 628,
+    "data": {
+      "unitName": "hoplon",
+      "icon": "/shield_hoplon_i00.webp",
+      "name": {
+        "en": "Hoplon",
+        "ru": "Хоплон"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 128,
+      "mDef": 0,
+      "mp": 128
+    },
+    "category": "armors",
+    "subtype": "shield",
+    "type": "shield",
+    "pDef": 128,
+    "mDef": 0,
+    "mp": 128
+  },
+  {
+    "key": 629,
+    "data": {
+      "unitName": "kite_shield",
+      "icon": "/shield_kite_shield_i00.webp",
+      "name": {
+        "en": "Kite Shield",
+        "ru": "Треугольный Щит"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 142,
+      "mDef": 0,
+      "mp": 142
+    },
+    "category": "armors",
+    "subtype": "shield",
+    "type": "shield",
+    "pDef": 142,
+    "mDef": 0,
+    "mp": 142
+  },
+  {
+    "key": 2493,
+    "data": {
+      "unitName": "brigandine_shield",
+      "icon": "/shield_brigandine_shield_i00.webp",
+      "name": {
+        "en": "Brigandine Shield",
+        "ru": "Панцирный Щит"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 142,
+      "mDef": 0,
+      "mp": 142
+    },
+    "category": "armors",
+    "subtype": "shield",
+    "type": "shield",
+    "pDef": 142,
+    "mDef": 0,
+    "mp": 142
+  },
+  {
+    "key": 630,
+    "data": {
+      "unitName": "square_shield",
+      "icon": "/shield_square_shield_i00.webp",
+      "name": {
+        "en": "Square Shield",
+        "ru": "Прямоугольный Щит"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 154,
+      "mDef": 0,
+      "mp": 154
+    },
+    "category": "armors",
+    "subtype": "shield",
+    "type": "shield",
+    "pDef": 154,
+    "mDef": 0,
+    "mp": 154
+  },
+  {
+    "key": 2494,
+    "data": {
+      "unitName": "plate_shield",
+      "icon": "/shield_plate_shield_i00.webp",
+      "name": {
+        "en": "Plate Shield",
+        "ru": "Латный Щит"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 154,
+      "mDef": 0,
+      "mp": 154
+    },
+    "category": "armors",
+    "subtype": "shield",
+    "type": "shield",
+    "pDef": 154,
+    "mDef": 0,
+    "mp": 154
+  },
+  {
+    "key": 631,
+    "data": {
+      "unitName": "eldarake",
+      "icon": "/shield_eldarake_i00.webp",
+      "name": {
+        "en": "Eldarake",
+        "ru": "Элдарейк"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 166,
+      "mDef": 0,
+      "mp": 166
+    },
+    "category": "armors",
+    "subtype": "shield",
+    "type": "shield",
+    "pDef": 166,
+    "mDef": 0,
+    "mp": 166
+  },
+  {
+    "key": 2495,
+    "data": {
+      "unitName": "chain_shield",
+      "icon": "/shield_chain_shield_i00.webp",
+      "name": {
+        "en": "Chain Shield",
+        "ru": "Кольчужный Щит"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 166,
+      "mDef": 0,
+      "mp": 166
+    },
+    "category": "armors",
+    "subtype": "shield",
+    "type": "shield",
+    "pDef": 166,
+    "mDef": 0,
+    "mp": 166
+  },
+  {
+    "key": 2496,
+    "data": {
+      "unitName": "dwarven_chain_shield",
+      "icon": "/shield_dwarven_chain_shield_i00.webp",
+      "name": {
+        "en": "Dwarven Chain Shield",
+        "ru": "Кольчужный Щит Гномов"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 174,
+      "mDef": 0,
+      "mp": 174
+    },
+    "category": "armors",
+    "subtype": "shield",
+    "type": "shield",
+    "pDef": 174,
+    "mDef": 0,
+    "mp": 174
+  },
+  {
+    "key": 632,
+    "data": {
+      "unitName": "knight_shield",
+      "icon": "/shield_knight_shield_i00.webp",
+      "name": {
+        "en": "Knight's Shield",
+        "ru": "Щит Рыцаря"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 178,
+      "mDef": 0,
+      "mp": 178
+    },
+    "category": "armors",
+    "subtype": "shield",
+    "type": "shield",
+    "pDef": 178,
+    "mDef": 0,
+    "mp": 178
+  },
+  {
+    "key": 103,
+    "data": {
+      "unitName": "tower_shield",
+      "icon": "/shield_tower_shield_i00.webp",
+      "name": {
+        "en": "Tower Shield",
+        "ru": "Башенный Щит"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 190,
+      "mDef": 0,
+      "mp": 190
+    },
+    "category": "armors",
+    "subtype": "shield",
+    "type": "shield",
+    "pDef": 190,
+    "mDef": 0,
+    "mp": 190
+  },
+  {
+    "key": 107,
+    "data": {
+      "unitName": "composite_shield",
+      "icon": "/shield_composite_shield_i00.webp",
+      "name": {
+        "en": "Composite Shield",
+        "ru": "Композитный Щит"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 190,
+      "mDef": 0,
+      "mp": 190
+    },
+    "category": "armors",
+    "subtype": "shield",
+    "type": "shield",
+    "pDef": 190,
+    "mDef": 0,
+    "mp": 190
+  },
+  {
+    "key": 2497,
+    "data": {
+      "unitName": "full_plate_shield",
+      "icon": "/shield_full_plate_shield_i00.webp",
+      "name": {
+        "en": "Full Plate Shield",
+        "ru": "Полный Латный Щит"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 203,
+      "mDef": 0,
+      "mp": 203
+    },
+    "category": "armors",
+    "subtype": "shield",
+    "type": "shield",
+    "pDef": 203,
+    "mDef": 0,
+    "mp": 203
+  },
+  {
+    "key": 633,
+    "data": {
+      "unitName": "shrnoen's_shield",
+      "icon": "/shield_shrnoens_shield_i00.webp",
+      "name": {
+        "en": "Zubei's Shield",
+        "ru": "Щит Зубея"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pDef": 216,
+      "mDef": 0,
+      "mp": 216
+    },
+    "category": "armors",
+    "subtype": "shield",
+    "type": "shield",
+    "pDef": 216,
+    "mDef": 0,
+    "mp": 216
+  },
+  {
+    "key": 673,
+    "data": {
+      "unitName": "avadon_shield",
+      "icon": "/shield_avadon_shield_i00.webp",
+      "name": {
+        "en": "Avadon Shield",
+        "ru": "Щит Авадона"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pDef": 216,
+      "mDef": 0,
+      "mp": 216
+    },
+    "category": "armors",
+    "subtype": "shield",
+    "type": "shield",
+    "pDef": 216,
+    "mDef": 0,
+    "mp": 216
+  },
+  {
+    "key": 110,
+    "data": {
+      "unitName": "doom_shield",
+      "icon": "/shield_doom_shield_i00.webp",
+      "name": {
+        "en": "Doom Shield",
+        "ru": "Щит Рока"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pDef": 230,
+      "mDef": 0,
+      "mp": 230
+    },
+    "category": "armors",
+    "subtype": "shield",
+    "type": "shield",
+    "pDef": 230,
+    "mDef": 0,
+    "mp": 230
+  },
+  {
+    "key": 5292,
+    "data": {
+      "unitName": "sealed_dark_crystal_shield",
+      "icon": "/shield_dark_crystal_shield_i02.webp",
+      "name": {
+        "en": "Sealed Dark Crystal Shield",
+        "ru": "Запечатанный Щит Кристалла Тьмы"
+      },
+      "description": {
+        "en": "Its seal can be broken with the help of the Blacksmith of Mammon.",
+        "ru": "Запечатанный Щит Кристалла Тьмы. Печать можно снять у кузнеца в любой деревне."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pDef": 243,
+      "mDef": 0,
+      "mp": 243
+    },
+    "category": "armors",
+    "subtype": "shield",
+    "type": "shield",
+    "pDef": 243,
+    "mDef": 0,
+    "mp": 243
+  },
+  {
+    "key": 5315,
+    "data": {
+      "unitName": "sealed_shield_of_nightmare",
+      "icon": "/shield_shield_of_nightmare_i02.webp",
+      "name": {
+        "en": "Sealed Shield of Nightmare",
+        "ru": "Запечатанный Щит Кошмаров"
+      },
+      "description": {
+        "en": "Its seal can be broken with the help of the Blacksmith of Mammon.",
+        "ru": "Запечатанный Щит Кошмаров. Печать можно снять у кузнеца в любой деревне."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pDef": 256,
+      "mDef": 0,
+      "mp": 256
+    },
+    "category": "armors",
+    "subtype": "shield",
+    "type": "shield",
+    "pDef": 256,
+    "mDef": 0,
+    "mp": 256
+  },
+  {
+    "key": 6678,
+    "data": {
+      "unitName": "sealed_imperial_crusader_shield",
+      "icon": "/shield_imperial_crusader_shield_i02.webp",
+      "name": {
+        "en": "Sealed Imperial Crusader Shield",
+        "ru": "Запечатанный Щит Имперского Крестоносца"
+      },
+      "description": {
+        "en": "Its seal can be broken with the help of the Blacksmith of Mammon.",
+        "ru": "Запечатанный Щит Имперского Крестоносца. Печать может быть сломана с помощью Кузнеца Маммона."
+      }
+    },
+    "grade": "S",
+    "stats": {
+      "pDef": 276,
+      "mDef": 0,
+      "mp": 276
+    },
+    "category": "armors",
+    "subtype": "shield",
+    "type": "shield",
+    "pDef": 276,
+    "mDef": 0,
+    "mp": 276
+  },
+  {
+    "key": 9529,
+    "data": {
+      "unitName": "sealed_dynasty_shield",
+      "icon": "/shield_dynasty_shield_i01.webp",
+      "name": {
+        "en": "Sealed Dynasty Shield",
+        "ru": "Запечатанный Щит Династии"
+      },
+      "description": {
+        "en": "Sealed Dynasty Shield. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанный Щит Династии. Печать можно снять у Кузнеца Маммона или Мастера Ишумы."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pDef": 305,
+      "mDef": 0,
+      "mp": 305
+    },
+    "category": "armors",
+    "subtype": "shield",
+    "type": "shield",
+    "pDef": 305,
+    "mDef": 0,
+    "mp": 305
+  },
+  {
+    "key": 15710,
+    "data": {
+      "unitName": "sealed_moirai_shield",
+      "icon": "/weapon_tysandy_shield_i00.webp",
+      "name": {
+        "en": "Sealed Moirai Shield",
+        "ru": "Запечатанный Щит Дестино"
+      },
+      "description": {
+        "en": "Sealed Moirai Shield. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанный Щит Дестино. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pDef": 337,
+      "mDef": 0,
+      "mp": 337
+    },
+    "category": "armors",
+    "subtype": "shield",
+    "type": "shield",
+    "pDef": 337,
+    "mDef": 0,
+    "mp": 337
+  },
+  {
+    "key": 14111,
+    "data": {
+      "unitName": "sealed_vesper_shield",
+      "icon": "/weapon_vesper_verteidiger_i00.webp",
+      "name": {
+        "en": "Sealed Vesper Shield",
+        "ru": "Запечатанный Защитник Венеры"
+      },
+      "description": {
+        "en": "Sealed Vesper Shield. Seal can be removed by the blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанный Защитник Венеры. Печать можно снять у Кузнеца Маммона или Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 352,
+      "mDef": 0,
+      "mp": 352
+    },
+    "category": "armors",
+    "subtype": "shield",
+    "type": "shield",
+    "pDef": 352,
+    "mDef": 0,
+    "mp": 352
+  },
+  {
+    "key": 15758,
+    "data": {
+      "unitName": "sealed_vorpal_shield",
+      "icon": "/evilgate_shield_i00.webp",
+      "name": {
+        "en": "Sealed Vorpal Shield",
+        "ru": "Запечатанный Щит Верпеса"
+      },
+      "description": {
+        "en": "Sealed Vorpal Shield. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанный Щит Верпеса. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 379,
+      "mDef": 0,
+      "mp": 379
+    },
+    "category": "armors",
+    "subtype": "shield",
+    "type": "shield",
+    "pDef": 379,
+    "mDef": 0,
+    "mp": 379
+  },
+  {
+    "key": 15741,
+    "data": {
+      "unitName": "sealed_elegia_shield",
+      "icon": "/heavengate_shield_i00.webp",
+      "name": {
+        "en": "Sealed Elegia Shield",
+        "ru": "Запечатанный Щит Элегии"
+      },
+      "description": {
+        "en": "Sealed Elegia Shield. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанный Щит Элегии. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 392,
+      "mDef": 0,
+      "mp": 392
+    },
+    "category": "armors",
+    "subtype": "shield",
+    "type": "shield",
+    "pDef": 392,
+    "mDef": 0,
+    "mp": 392
+  }
+]

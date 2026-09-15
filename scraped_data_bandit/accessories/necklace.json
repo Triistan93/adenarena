@@ -1,0 +1,731 @@
+[
+  {
+    "key": 118,
+    "data": {
+      "unitName": "necklace_of_magic",
+      "icon": "/accessary_necklace_of_magic_i00.webp",
+      "name": {
+        "en": "Necklace of Magic",
+        "ru": "Ожерелье Магии"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 0,
+      "mDef": 15,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "necklace",
+    "type": "necklace",
+    "pDef": 0,
+    "mDef": 15,
+    "mp": 0
+  },
+  {
+    "key": 1506,
+    "data": {
+      "unitName": "necklace_of_courage",
+      "icon": "/accessary_necklace_of_courage_i00.webp",
+      "name": {
+        "en": "Necklace of Courage",
+        "ru": "Ожерелье Бесстрашия"
+      },
+      "description": {
+        "en": "A necklace that is given to young Orcs who have proven their courage.",
+        "ru": "Ожерелье, которое может носить только Орк, доказавший свою храбрость."
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 0,
+      "mDef": 15,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "necklace",
+    "type": "necklace",
+    "pDef": 0,
+    "mDef": 15,
+    "mp": 0
+  },
+  {
+    "key": 906,
+    "data": {
+      "unitName": "necklace_of_knowledge",
+      "icon": "/accessary_necklace_of_knowledge_i00.webp",
+      "name": {
+        "en": "Necklace of Knowledge",
+        "ru": "Ожерелье Знаний"
+      },
+      "description": {
+        "en": "A silver necklace engraved with rune characters of knowledge.",
+        "ru": "Серебряное ожерелье с рунами знаний."
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 0,
+      "mDef": 18,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "necklace",
+    "type": "necklace",
+    "pDef": 0,
+    "mDef": 18,
+    "mp": 0
+  },
+  {
+    "key": 907,
+    "data": {
+      "unitName": "necklace_of_anguish",
+      "icon": "/accessary_necklace_of_anguish_i00.webp",
+      "name": {
+        "en": "Necklace of Anguish",
+        "ru": "Ожерелье Мучений"
+      },
+      "description": {
+        "en": "A silver necklace engraved with rune characters of anguish.",
+        "ru": "Серебряное ожерелье с рунами мучений."
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 0,
+      "mDef": 21,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "necklace",
+    "type": "necklace",
+    "pDef": 0,
+    "mDef": 21,
+    "mp": 0
+  },
+  {
+    "key": 1507,
+    "data": {
+      "unitName": "necklace_of_valor",
+      "icon": "/accessary_necklace_of_valor_i00.webp",
+      "name": {
+        "en": "Necklace of Valor",
+        "ru": "Ожерелье Доблести"
+      },
+      "description": {
+        "en": "A necklace that is given to young Orcs who have proven their valor.",
+        "ru": "Ожерелье, которое может носить только Орк, доказавший свою доблесть."
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 0,
+      "mDef": 21,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "necklace",
+    "type": "necklace",
+    "pDef": 0,
+    "mDef": 21,
+    "mp": 0
+  },
+  {
+    "key": 908,
+    "data": {
+      "unitName": "necklace_of_wisdom",
+      "icon": "/accessary_necklace_of_wisdom_i00.webp",
+      "name": {
+        "en": "Necklace of Wisdom",
+        "ru": "Ожерелье Мудрости"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 0,
+      "mDef": 25,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "necklace",
+    "type": "necklace",
+    "pDef": 0,
+    "mDef": 25,
+    "mp": 0
+  },
+  {
+    "key": 909,
+    "data": {
+      "unitName": "blue_diamond_necklace",
+      "icon": "/accessary_blue_diamond_necklace_i00.webp",
+      "name": {
+        "en": "Blue Diamond Necklace",
+        "ru": "Ожерелье с Синим Алмазом"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 0,
+      "mDef": 28,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "necklace",
+    "type": "necklace",
+    "pDef": 0,
+    "mDef": 28,
+    "mp": 0
+  },
+  {
+    "key": 910,
+    "data": {
+      "unitName": "necklace_of_devotion",
+      "icon": "/accessary_necklace_of_devotion_i00.webp",
+      "name": {
+        "en": "Necklace of Devotion",
+        "ru": "Ожерелье Преданности"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 0,
+      "mDef": 32,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "necklace",
+    "type": "necklace",
+    "pDef": 0,
+    "mDef": 32,
+    "mp": 0
+  },
+  {
+    "key": 911,
+    "data": {
+      "unitName": "enchanted_necklace",
+      "icon": "/accessary_enchanted_necklace_i00.webp",
+      "name": {
+        "en": "Enchanted Necklace",
+        "ru": "Зачарованное Ожерелье"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 0,
+      "mDef": 36,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "necklace",
+    "type": "necklace",
+    "pDef": 0,
+    "mDef": 36,
+    "mp": 0
+  },
+  {
+    "key": 912,
+    "data": {
+      "unitName": "near_forest_necklace",
+      "icon": "/accessary_near_forest_necklace_i00.webp",
+      "name": {
+        "en": "Near Forest Necklace",
+        "ru": "Ожерелье Подлеска"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 0,
+      "mDef": 40,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "necklace",
+    "type": "necklace",
+    "pDef": 0,
+    "mDef": 40,
+    "mp": 0
+  },
+  {
+    "key": 913,
+    "data": {
+      "unitName": "elven_necklace",
+      "icon": "/accessary_elven_necklace_i00.webp",
+      "name": {
+        "en": "Elven Necklace",
+        "ru": "Ожерелье Эльфов"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 0,
+      "mDef": 45,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "necklace",
+    "type": "necklace",
+    "pDef": 0,
+    "mDef": 45,
+    "mp": 0
+  },
+  {
+    "key": 914,
+    "data": {
+      "unitName": "necklace_of_darkness",
+      "icon": "/accessary_necklace_of_darkness_i00.webp",
+      "name": {
+        "en": "Necklace of Darkness",
+        "ru": "Ожерелье Тьмы"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 0,
+      "mDef": 48,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "necklace",
+    "type": "necklace",
+    "pDef": 0,
+    "mDef": 48,
+    "mp": 0
+  },
+  {
+    "key": 915,
+    "data": {
+      "unitName": "aquastone_necklace",
+      "icon": "/accessary_aquastone_necklace_i00.webp",
+      "name": {
+        "en": "Aquastone Necklace",
+        "ru": "Бирюзовое Ожерелье"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 0,
+      "mDef": 52,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "necklace",
+    "type": "necklace",
+    "pDef": 0,
+    "mDef": 52,
+    "mp": 0
+  },
+  {
+    "key": 916,
+    "data": {
+      "unitName": "necklace_of_protection",
+      "icon": "/accessary_necklace_of_protection_i00.webp",
+      "name": {
+        "en": "Necklace of Protection",
+        "ru": "Ожерелье Защиты"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 0,
+      "mDef": 56,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "necklace",
+    "type": "necklace",
+    "pDef": 0,
+    "mDef": 56,
+    "mp": 0
+  },
+  {
+    "key": 917,
+    "data": {
+      "unitName": "necklace_of_mermaid",
+      "icon": "/accessary_necklace_of_mermaid_i00.webp",
+      "name": {
+        "en": "Necklace of Mermaid",
+        "ru": "Ожерелье Русалки"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 0,
+      "mDef": 60,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "necklace",
+    "type": "necklace",
+    "pDef": 0,
+    "mDef": 60,
+    "mp": 0
+  },
+  {
+    "key": 119,
+    "data": {
+      "unitName": "necklace_of_binding",
+      "icon": "/accessary_necklace_of_binding_i00.webp",
+      "name": {
+        "en": "Necklace of Binding",
+        "ru": "Ожерелье Печати"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 0,
+      "mDef": 64,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "necklace",
+    "type": "necklace",
+    "pDef": 0,
+    "mDef": 64,
+    "mp": 0
+  },
+  {
+    "key": 918,
+    "data": {
+      "unitName": "adamantite_necklace",
+      "icon": "/accessary_adamantite_necklace_i00.webp",
+      "name": {
+        "en": "Adamantite Necklace",
+        "ru": "Адамантитовое Ожерелье"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pDef": 0,
+      "mDef": 68,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "necklace",
+    "type": "necklace",
+    "pDef": 0,
+    "mDef": 68,
+    "mp": 0
+  },
+  {
+    "key": 931,
+    "data": {
+      "unitName": "necklace_of_grace",
+      "icon": "/accessary_necklace_of_grace_i00.webp",
+      "name": {
+        "en": "Necklace of Grace",
+        "ru": "Ожерелье Грации"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pDef": 0,
+      "mDef": 68,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "necklace",
+    "type": "necklace",
+    "pDef": 0,
+    "mDef": 68,
+    "mp": 0
+  },
+  {
+    "key": 926,
+    "data": {
+      "unitName": "necklace_of_black_ore",
+      "icon": "/accessary_necklace_of_black_ore_i00.webp",
+      "name": {
+        "en": "Necklace of Black Ore",
+        "ru": "Черное Ожерелье"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pDef": 0,
+      "mDef": 72,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "necklace",
+    "type": "necklace",
+    "pDef": 0,
+    "mDef": 72,
+    "mp": 0
+  },
+  {
+    "key": 6323,
+    "data": {
+      "unitName": "sealed_phoenix's_necklace",
+      "icon": "/accessary_phoenixs_necklace_i02.webp",
+      "name": {
+        "en": "Sealed Phoenix Necklace",
+        "ru": "Запечатанное Ожерелье Феникса"
+      },
+      "description": {
+        "en": "The seal can be broken with the help of the Blacksmith of Mammon. When the seal is broken, the effects of M. Def+4 and MP+26 are given.",
+        "ru": "Печать можно снять у кузнеца в любой деревне. Когда печать снята, даются эффекты Маг. Защ.+4 и МР+26."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pDef": 0,
+      "mDef": 76,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "necklace",
+    "type": "necklace",
+    "pDef": 0,
+    "mDef": 76,
+    "mp": 0
+  },
+  {
+    "key": 6326,
+    "data": {
+      "unitName": "sealed_majestic_necklace",
+      "icon": "/accessary_inferno_necklace_i02.webp",
+      "name": {
+        "en": "Sealed Majestic Necklace",
+        "ru": "Запечатанное Ожерелье Величия"
+      },
+      "description": {
+        "en": "The seal can be broken with the help of the Blacksmith of Mammon. When the seal is broken, the effects of M. Def.+5 and MP+33 are given.",
+        "ru": "Печать можно снять у кузнеца в любой деревне. Когда печать снята, даются эффекты Маг. Защ.+5 и МР+33."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pDef": 0,
+      "mDef": 80,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "necklace",
+    "type": "necklace",
+    "pDef": 0,
+    "mDef": 80,
+    "mp": 0
+  },
+  {
+    "key": 6726,
+    "data": {
+      "unitName": "sealed_dragon_necklace",
+      "icon": "/accessory_tateossian_necklace_i02.webp",
+      "name": {
+        "en": "Sealed Tateossian Necklace",
+        "ru": "Запечатанное Ожерелье Татеосса"
+      },
+      "description": {
+        "en": "The seal can be broken with the help of the Blacksmith of Mammon. Once the seal is broken, the effect of M. Def+4 and MP+42 are given.",
+        "ru": "Печать может быть сломана с помощью Кузнеца Маммона. Снятие печати дает эффект Маг. Защ.+4 и MP+42."
+      }
+    },
+    "grade": "S",
+    "stats": {
+      "pDef": 0,
+      "mDef": 91,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "necklace",
+    "type": "necklace",
+    "pDef": 0,
+    "mDef": 91,
+    "mp": 0
+  },
+  {
+    "key": 9453,
+    "data": {
+      "unitName": "sealed_dynasty_necklace",
+      "icon": "/accessary_dynasty_necklace_i01.webp",
+      "name": {
+        "en": "Sealed Dynasty Necklace",
+        "ru": "Запечатанное Ожерелье Династии"
+      },
+      "description": {
+        "en": "Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma. When the seal is released, M. Def. +11 and MP +46.",
+        "ru": "Печать можно снять у кузнеца Маммона или Мастера Ишумы. Снятие печати дает Маг. Защ.+11 и MP+46."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pDef": 0,
+      "mDef": 95,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "necklace",
+    "type": "necklace",
+    "pDef": 0,
+    "mDef": 95,
+    "mp": 0
+  },
+  {
+    "key": 15768,
+    "data": {
+      "unitName": "sealed_moirai_necklace",
+      "icon": "/accessary_sealed_bluelycan_necklace_i00.webp",
+      "name": {
+        "en": "Sealed Moirai Necklace",
+        "ru": "Запечатанное Ожерелье Дестино"
+      },
+      "description": {
+        "en": "Sealed Moirai Necklace. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma. When the seal is released, has an M. Def. +14 and MP+48.",
+        "ru": "Запечатанное Ожерелье Дестино. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы. После снятия печати увеличивает Маг. Защ. на 14 и MP на 48."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pDef": 0,
+      "mDef": 101,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "necklace",
+    "type": "necklace",
+    "pDef": 0,
+    "mDef": 101,
+    "mp": 0
+  },
+  {
+    "key": 14161,
+    "data": {
+      "unitName": "sealed_vesper_necklace",
+      "icon": "/vesper_necklace_i01.webp",
+      "name": {
+        "en": "Sealed Vesper Necklace",
+        "ru": "Запечатанное Ожерелье Венеры"
+      },
+      "description": {
+        "en": "Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma. When the seal is released, the effect is M. Def.+15 and MP+50.",
+        "ru": "Печать можно снять у Кузнеца Маммона или Мастера Ишумы. Когда печать снята, добавляется эффект Маг. Защ. +15, МР +50."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 0,
+      "mDef": 110,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "necklace",
+    "type": "necklace",
+    "pDef": 0,
+    "mDef": 110,
+    "mp": 0
+  },
+  {
+    "key": 15765,
+    "data": {
+      "unitName": "sealed_vorpal_necklace",
+      "icon": "/accessary_sealed_ponshrnoen_necklace_i00.webp",
+      "name": {
+        "en": "Sealed Vorpal Necklace",
+        "ru": "Запечатанное Ожерелье Верпеса"
+      },
+      "description": {
+        "en": "Sealed Vorpal Necklace. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma. When the seal is released, has an M. Def. +16 and MP+51.",
+        "ru": "Запечатанное Ожерелье Верпеса. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы. После снятия печати увеличивает Маг. Защ. на 16 и MP на 51."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 0,
+      "mDef": 115,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "necklace",
+    "type": "necklace",
+    "pDef": 0,
+    "mDef": 115,
+    "mp": 0
+  },
+  {
+    "key": 15762,
+    "data": {
+      "unitName": "sealed_elegia_necklace",
+      "icon": "/accessary_sealed_verpes_necklace_i00.webp",
+      "name": {
+        "en": "Sealed Elegia Necklace",
+        "ru": "Запечатанное Ожерелье Элегии"
+      },
+      "description": {
+        "en": "Sealed Elegia Necklace. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma. When the seal is released, has an M. Def. +17 and MP+52.",
+        "ru": "Запечатанное Ожерелье Элегии. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы. После снятия печати увеличивает Маг. Защ. на 17 и MP на 52."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 0,
+      "mDef": 121,
+      "mp": 0
+    },
+    "category": "accessories",
+    "subtype": "necklace",
+    "type": "necklace",
+    "pDef": 0,
+    "mDef": 121,
+    "mp": 0
+  }
+]

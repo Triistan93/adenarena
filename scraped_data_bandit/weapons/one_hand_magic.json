@@ -1,0 +1,1577 @@
+[
+  {
+    "key": 6,
+    "data": {
+      "unitName": "apprentice's_wand",
+      "icon": "/weapon_apprentices_wand_i00.webp",
+      "name": {
+        "en": "Apprentice's Wand",
+        "ru": "Скипетр Новичка"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 5,
+      "mAtk": 7
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 5,
+    "mAtk": 7
+  },
+  {
+    "key": 7,
+    "data": {
+      "unitName": "apprentice's_rod",
+      "icon": "/weapon_apprentices_rod_i00.webp",
+      "name": {
+        "en": "Apprentice's Rod",
+        "ru": "Жезл Новичка"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 6,
+      "mAtk": 8
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 6,
+    "mAtk": 8
+  },
+  {
+    "key": 308,
+    "data": {
+      "unitName": "buffalo_horn",
+      "icon": "/weapon_buffalo_horn_i00.webp",
+      "name": {
+        "en": "Buffalo's Horn",
+        "ru": "Рог Буйвола"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 6,
+      "mAtk": 8
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 6,
+    "mAtk": 8
+  },
+  {
+    "key": 99,
+    "data": {
+      "unitName": "apprentice's_spellbook",
+      "icon": "/weapon_apprentices_spellbook_i00.webp",
+      "name": {
+        "en": "Apprentice's Spellbook",
+        "ru": "Книга Ученика"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 9,
+      "mAtk": 12
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 9,
+    "mAtk": 12
+  },
+  {
+    "key": 748,
+    "data": {
+      "unitName": "gallins_oak_wand",
+      "icon": "/weapon_club_i00.webp",
+      "name": {
+        "en": "Gallint's Oak Wand",
+        "ru": "Посох Галлинта"
+      },
+      "description": {
+        "en": "An oak wand enchanted by Gallint's spell. This will capture and seal the spirit of mirrors.",
+        "ru": "Дубовый посох, на который наложено заклинание Галлинта. Это оружие способно ловить и удерживать Духов Зеркал."
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 10,
+      "mAtk": 10
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 10,
+    "mAtk": 10
+  },
+  {
+    "key": 747,
+    "data": {
+      "unitName": "wand_of_adept",
+      "icon": "/weapon_apprentices_wand_i00.webp",
+      "name": {
+        "en": "Wand of Adept",
+        "ru": "Скипетр Адепта"
+      },
+      "description": {
+        "en": "The wand presented to those who have finished their studies at the school of magic.",
+        "ru": "Скипетр, выдаваемый выпускникам Школы Магии."
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 11,
+      "mAtk": 13
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 11,
+    "mAtk": 13
+  },
+  {
+    "key": 310,
+    "data": {
+      "unitName": "relic_of_saints",
+      "icon": "/weapon_apprentices_spellbook_i00.webp",
+      "name": {
+        "en": "Relic of The Saints",
+        "ru": "Реликвия Святых"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 19,
+      "mAtk": 22
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 19,
+    "mAtk": 22
+  },
+  {
+    "key": 309,
+    "data": {
+      "unitName": "tears_of_eva",
+      "icon": "/weapon_tears_of_eva_i00.webp",
+      "name": {
+        "en": "Tears of Eva",
+        "ru": "Слезы Евы"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 19,
+      "mAtk": 22
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 19,
+    "mAtk": 22
+  },
+  {
+    "key": 100,
+    "data": {
+      "unitName": "voodoo_doll",
+      "icon": "/weapon_voodoo_doll_i00.webp",
+      "name": {
+        "en": "Voodoo Doll",
+        "ru": "Кукла Вуду"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 25,
+      "mAtk": 28
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 25,
+    "mAtk": 28
+  },
+  {
+    "key": 311,
+    "data": {
+      "unitName": "crucifix_of_blessing",
+      "icon": "/weapon_crucifix_of_blessing_i00.webp",
+      "name": {
+        "en": "Crucifix of Blessing",
+        "ru": "Благословляющее Распятие"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 25,
+      "mAtk": 28
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 25,
+    "mAtk": 28
+  },
+  {
+    "key": 313,
+    "data": {
+      "unitName": "temptation_of_abyss",
+      "icon": "/weapon_temptation_of_abyss_i00.webp",
+      "name": {
+        "en": "Temptation of Abyss",
+        "ru": "Искушение Бездны"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 32,
+      "mAtk": 35
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 32,
+    "mAtk": 35
+  },
+  {
+    "key": 314,
+    "data": {
+      "unitName": "proof_of_revenge",
+      "icon": "/weapon_proof_of_revenge_i00.webp",
+      "name": {
+        "en": "Proof of Revenge",
+        "ru": "Доказательство Возмездия"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 32,
+      "mAtk": 35
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 32,
+    "mAtk": 35
+  },
+  {
+    "key": 7885,
+    "data": {
+      "unitName": "sword_of_priest",
+      "icon": "/weapon_sword_of_priest_i00.webp",
+      "name": {
+        "en": "Priest Sword",
+        "ru": "Меч Жреца"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 32,
+      "mAtk": 35
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 32,
+    "mAtk": 35
+  },
+  {
+    "key": 312,
+    "data": {
+      "unitName": "branch_of_life",
+      "icon": "/weapon_branch_of_life_i00.webp",
+      "name": {
+        "en": "Branch of Life",
+        "ru": "Ветвь Жизни"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 32,
+      "mAtk": 35
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 32,
+    "mAtk": 35
+  },
+  {
+    "key": 101,
+    "data": {
+      "unitName": "scroll_of_wisdom",
+      "icon": "/weapon_scroll_of_wisdom_i00.webp",
+      "name": {
+        "en": "Scroll of Wisdom",
+        "ru": "Свиток Мудрости"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 32,
+      "mAtk": 35
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 32,
+    "mAtk": 35
+  },
+  {
+    "key": 180,
+    "data": {
+      "unitName": "mace_of_judgment",
+      "icon": "/weapon_mace_of_judgment_i00.webp",
+      "name": {
+        "en": "Mace of Judgment",
+        "ru": "Булава Правосудия"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 41,
+      "mAtk": 43
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 41,
+    "mAtk": 43
+  },
+  {
+    "key": 181,
+    "data": {
+      "unitName": "mace_of_miracle",
+      "icon": "/weapon_mace_of_miracle_i00.webp",
+      "name": {
+        "en": "Mace of Miracle",
+        "ru": "Булава Мага"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 41,
+      "mAtk": 43
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 41,
+    "mAtk": 43
+  },
+  {
+    "key": 182,
+    "data": {
+      "unitName": "doom_hammer",
+      "icon": "/weapon_doom_hammer_i00.webp",
+      "name": {
+        "en": "Doom Hammer",
+        "ru": "Молот Рока"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 41,
+      "mAtk": 43
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 41,
+    "mAtk": 43
+  },
+  {
+    "key": 315,
+    "data": {
+      "unitName": "divine_tome",
+      "icon": "/weapon_divine_tome_i00.webp",
+      "name": {
+        "en": "Divine Tome",
+        "ru": "Божественный Жезл"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 41,
+      "mAtk": 43
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 41,
+    "mAtk": 43
+  },
+  {
+    "key": 179,
+    "data": {
+      "unitName": "mace_of_prayer",
+      "icon": "/weapon_mace_of_prayer_i00.webp",
+      "name": {
+        "en": "Mace of Prayer",
+        "ru": "Булава Послушника"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 41,
+      "mAtk": 43
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 41,
+    "mAtk": 43
+  },
+  {
+    "key": 144,
+    "data": {
+      "unitName": "sword_of_occult",
+      "icon": "/weapon_sword_of_occult_i00.webp",
+      "name": {
+        "en": "Sword of Occult",
+        "ru": "Меч Оккультиста"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 43,
+      "mAtk": 45
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 43,
+    "mAtk": 45
+  },
+  {
+    "key": 143,
+    "data": {
+      "unitName": "sword_of_mystic",
+      "icon": "/weapon_sword_of_mystic_i00.webp",
+      "name": {
+        "en": "Sword of Mystic",
+        "ru": "Меч Мистика"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 43,
+      "mAtk": 45
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 43,
+    "mAtk": 45
+  },
+  {
+    "key": 83,
+    "data": {
+      "unitName": "sword_of_magic",
+      "icon": "/weapon_sword_of_magic_i00.webp",
+      "name": {
+        "en": "Sword of Magic",
+        "ru": "Меч Магии"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 43,
+      "mAtk": 45
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 43,
+    "mAtk": 45
+  },
+  {
+    "key": 238,
+    "data": {
+      "unitName": "dagger_of_mana",
+      "icon": "/weapon_dagger_of_mana_i00.webp",
+      "name": {
+        "en": "Dagger of Mana",
+        "ru": "Кинжал Маны"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 45,
+      "mAtk": 52
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 45,
+    "mAtk": 52
+  },
+  {
+    "key": 239,
+    "data": {
+      "unitName": "mystic_knife",
+      "icon": "/weapon_mystic_knife_i00.webp",
+      "name": {
+        "en": "Mystic Knife",
+        "ru": "Нож Мистика"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 45,
+      "mAtk": 52
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 45,
+    "mAtk": 52
+  },
+  {
+    "key": 240,
+    "data": {
+      "unitName": "conjure_knife",
+      "icon": "/weapon_conjure_knife_i00.webp",
+      "name": {
+        "en": "Conjurer's Knife",
+        "ru": "Нож Заклинателя"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 45,
+      "mAtk": 52
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 45,
+    "mAtk": 52
+  },
+  {
+    "key": 241,
+    "data": {
+      "unitName": "knife_o'_silenus",
+      "icon": "/weapon_knife_o_silenus_i00.webp",
+      "name": {
+        "en": "Shilen Knife",
+        "ru": "Нож Шилен"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 45,
+      "mAtk": 52
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 45,
+    "mAtk": 52
+  },
+  {
+    "key": 317,
+    "data": {
+      "unitName": "tome_of_blood",
+      "icon": "/weapon_tome_of_blood_i00.webp",
+      "name": {
+        "en": "Tome of Blood",
+        "ru": "Книга Крови"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 51,
+      "mAtk": 52
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 51,
+    "mAtk": 52
+  },
+  {
+    "key": 316,
+    "data": {
+      "unitName": "blood_of_saints",
+      "icon": "/weapon_blood_of_saints_i00.webp",
+      "name": {
+        "en": "Blood of Saints",
+        "ru": "Кровь Святых"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 51,
+      "mAtk": 52
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 51,
+    "mAtk": 52
+  },
+  {
+    "key": 318,
+    "data": {
+      "unitName": "crucifix_of_blood",
+      "icon": "/weapon_crucifix_of_blood_i00.webp",
+      "name": {
+        "en": "Crucifix of Blood",
+        "ru": "Кровавое Распятие"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 63,
+      "mAtk": 63
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 63,
+    "mAtk": 63
+  },
+  {
+    "key": 7886,
+    "data": {
+      "unitName": "sword_of_magic_fog",
+      "icon": "/weapon_sword_of_magic_fog_i00.webp",
+      "name": {
+        "en": "Sword of Magic Fog",
+        "ru": "Меч Магического Тумана"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 63,
+      "mAtk": 63
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 63,
+    "mAtk": 63
+  },
+  {
+    "key": 7890,
+    "data": {
+      "unitName": "mace_of_priest",
+      "icon": "/weapon_mace_of_priest_i00.webp",
+      "name": {
+        "en": "Priest Mace",
+        "ru": "Булава Жреца"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 63,
+      "mAtk": 63
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 63,
+    "mAtk": 63
+  },
+  {
+    "key": 321,
+    "data": {
+      "unitName": "demon_fangs",
+      "icon": "/weapon_demon_fangs_i00.webp",
+      "name": {
+        "en": "Demon Fangs",
+        "ru": "Клыки Демона"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 67,
+      "mAtk": 66
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 67,
+    "mAtk": 66
+  },
+  {
+    "key": 189,
+    "data": {
+      "unitName": "life_stick",
+      "icon": "/weapon_life_stick_i00.webp",
+      "name": {
+        "en": "Staff of Life",
+        "ru": "Посох Жизни"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 74,
+      "mAtk": 72
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 74,
+    "mAtk": 72
+  },
+  {
+    "key": 193,
+    "data": {
+      "unitName": "stick_of_faith",
+      "icon": "/weapon_stick_of_faith_i00.webp",
+      "name": {
+        "en": "Stick of Faith",
+        "ru": "Жезл Веры"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Mana Up, Magic Hold or Mental Shield.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Увеличение Маны, Магические Оковы, Ментальный Щит."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 85,
+      "mAtk": 81
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 85,
+    "mAtk": 81
+  },
+  {
+    "key": 7887,
+    "data": {
+      "unitName": "mystery_sword",
+      "icon": "/weapon_mystery_sword_i00.webp",
+      "name": {
+        "en": "Mysterious Sword",
+        "ru": "Мистический Меч"
+      },
+      "description": {
+        "en": "Bestows either Acumen, Magic Power, or Magic Weakness.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Проницательность, Маг. Сила или Маг. Слабость."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 85,
+      "mAtk": 81
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 85,
+    "mAtk": 81
+  },
+  {
+    "key": 242,
+    "data": {
+      "unitName": "dagger_of_magicflame",
+      "icon": "/weapon_dagger_of_magicflame_i00.webp",
+      "name": {
+        "en": "Soulfire Dirk",
+        "ru": "Кортик Духовного Пламени"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Magic Hold, Magic Silence or Mana Up.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Магические Оковы, Безмолвие, Увеличение Маны."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 86,
+      "mAtk": 91
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 86,
+    "mAtk": 91
+  },
+  {
+    "key": 84,
+    "data": {
+      "unitName": "homunkulus's_sword",
+      "icon": "/weapon_homunkuluss_sword_i00.webp",
+      "name": {
+        "en": "Homunkulus's Sword",
+        "ru": "Меч Гомункула"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Acumen, Conversion or Paralyze.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Проницательность, Конверсия, Паралич."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 111,
+      "mAtk": 101
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 111,
+    "mAtk": 101
+  },
+  {
+    "key": 145,
+    "data": {
+      "unitName": "deathbreath_sword",
+      "icon": "/weapon_deathbreath_sword_i00.webp",
+      "name": {
+        "en": "Sword of Whispering Death",
+        "ru": "Меч Шепчущей Смерти"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Empower, M. Atk. or Magic Silence.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Воодушевление, Маг. Сила, Безмолвие."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 111,
+      "mAtk": 101
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 111,
+    "mAtk": 101
+  },
+  {
+    "key": 196,
+    "data": {
+      "unitName": "stick_of_eternity",
+      "icon": "/weapon_stick_of_eternity_i00.webp",
+      "name": {
+        "en": "Stick of Eternity",
+        "ru": "Жезл Избавления"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Empower, Rsk., Evasion, or Blessed Body.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Воодушевление, Риск. Уклонение, Благословение Тела."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 111,
+      "mAtk": 101
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 111,
+    "mAtk": 101
+  },
+  {
+    "key": 201,
+    "data": {
+      "unitName": "club_of_nature",
+      "icon": "/weapon_club_of_nature_i00.webp",
+      "name": {
+        "en": "Club of Nature",
+        "ru": "Дубина Природы"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Magic Mental Shield, Magic Hold or Acumen.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Ментальный Щит, Магические Оковы, Проницательность."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 111,
+      "mAtk": 101
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 111,
+    "mAtk": 101
+  },
+  {
+    "key": 202,
+    "data": {
+      "unitName": "mace_of_underworld",
+      "icon": "/weapon_mace_of_underworld_i00.webp",
+      "name": {
+        "en": "Mace of The Underworld",
+        "ru": "Булава Преисподней"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Mana Up, Magic Silence or Conversion.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Увеличение Маны, Безмолвие, Конверсия."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 111,
+      "mAtk": 101
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 111,
+    "mAtk": 101
+  },
+  {
+    "key": 174,
+    "data": {
+      "unitName": "nirvana_axe",
+      "icon": "/weapon_nirvana_axe_i00.webp",
+      "name": {
+        "en": "Nirvana Axe",
+        "ru": "Топор Нирваны"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Magic Poison, Magic Power or Magic Weakness.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Отравление, Маг. Сила, Маг. Слабость."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 111,
+      "mAtk": 101
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 111,
+    "mAtk": 101
+  },
+  {
+    "key": 7891,
+    "data": {
+      "unitName": "eclipse_axe",
+      "icon": "/weapon_eclipse_axe_i00.webp",
+      "name": {
+        "en": "Ecliptic Axe",
+        "ru": "Топор Затмения"
+      },
+      "description": {
+        "en": "Bestows one of the following functions:  Conversion, Magic Power or Magic Hold.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Конверсия, Маг. Сила или Магические Оковы."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 125,
+      "mAtk": 111
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 125,
+    "mAtk": 111
+  },
+  {
+    "key": 7888,
+    "data": {
+      "unitName": "sword_of_eclipse",
+      "icon": "/weapon_sword_of_eclipse_i00.webp",
+      "name": {
+        "en": "Ecliptic Sword",
+        "ru": "Меч Затмения"
+      },
+      "description": {
+        "en": "Bestows either Empower, Magic Power, or Magic Silence.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Воодушевление, Маг. Сила или Безмолвие."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 125,
+      "mAtk": 111
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 125,
+    "mAtk": 111
+  },
+  {
+    "key": 243,
+    "data": {
+      "unitName": "hell_knife",
+      "icon": "/weapon_hell_knife_i00.webp",
+      "name": {
+        "en": "Hell Knife",
+        "ru": "Нож Ада"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Mental Shield, Magic Weakness or Magic Regeneration.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Ментальный Щит, Маг. Слабость, Регенерация."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 122,
+      "mAtk": 122
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 122,
+    "mAtk": 122
+  },
+  {
+    "key": 148,
+    "data": {
+      "unitName": "sword_of_valhalla",
+      "icon": "/weapon_sword_of_valhalla_i00.webp",
+      "name": {
+        "en": "Sword of Valhalla",
+        "ru": "Меч Вальхаллы"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Acumen, Magic Weakness or Magic Regeneration.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Проницательность, Маг. Слабость, Регенерация."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 140,
+      "mAtk": 122
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 140,
+    "mAtk": 122
+  },
+  {
+    "key": 7892,
+    "data": {
+      "unitName": "spell_breaker",
+      "icon": "/weapon_spell_breaker_i00.webp",
+      "name": {
+        "en": "Spell Breaker",
+        "ru": "Рассеиватель Заклинания"
+      },
+      "description": {
+        "en": "Bestows either Acumen, Magic Mental Shield or Magic Hold.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Проницательность, Ментальный Щит или Магические Оковы."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 140,
+      "mAtk": 122
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 140,
+    "mAtk": 122
+  },
+  {
+    "key": 7893,
+    "data": {
+      "unitName": "bone_of_kaim_vanul",
+      "icon": "/weapon_bone_of_kaim_vanul_i00.webp",
+      "name": {
+        "en": "Kaim Vanul's Bones",
+        "ru": "Кости Каим Ванула"
+      },
+      "description": {
+        "en": "Bestows either Mana Up, Magic Silence, or Conversion.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Увеличение Маны, Безмолвие или Конверсия."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 155,
+      "mAtk": 132
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 155,
+    "mAtk": 132
+  },
+  {
+    "key": 7889,
+    "data": {
+      "unitName": "tears_of_wizard",
+      "icon": "/weapon_tears_of_wizard_i00.webp",
+      "name": {
+        "en": "Wizard's Tear",
+        "ru": "Слезы Чародея"
+      },
+      "description": {
+        "en": "Bestows either Acumen, Magic Power, or Conversion.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Проницательность, Маг. Сила или Конверсия."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 155,
+      "mAtk": 132
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 155,
+    "mAtk": 132
+  },
+  {
+    "key": 150,
+    "data": {
+      "unitName": "elemental_sword",
+      "icon": "/weapon_elemental_sword_i00.webp",
+      "name": {
+        "en": "Elemental Sword",
+        "ru": "Меч Стихий"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Magic Power, Magic Paralyze or Empower.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Маг. Сила, Паралич, Воодушевление."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pAtk": 170,
+      "mAtk": 143
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 170,
+    "mAtk": 143
+  },
+  {
+    "key": 7894,
+    "data": {
+      "unitName": "eye_of_soul",
+      "icon": "/weapon_eye_of_soul_i00.webp",
+      "name": {
+        "en": "Spiritual Eye",
+        "ru": "Глаз Духа"
+      },
+      "description": {
+        "en": "Bestows either Mana Up, Magic Poison, or Acumen.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Увеличение Маны, Отравление или Проницательность."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pAtk": 170,
+      "mAtk": 143
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 170,
+    "mAtk": 143
+  },
+  {
+    "key": 151,
+    "data": {
+      "unitName": "sword_of_miracle",
+      "icon": "/weapon_sword_of_miracle_i00.webp",
+      "name": {
+        "en": "Sword of Miracles",
+        "ru": "Легендарный Меч"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Magic Power, Magic Silence or Acumen.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Маг. Сила, Безмолвие, Проницательность."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pAtk": 186,
+      "mAtk": 152
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 186,
+    "mAtk": 152
+  },
+  {
+    "key": 7895,
+    "data": {
+      "unitName": "dragon_flame_head",
+      "icon": "/weapon_dragon_flame_head_i00.webp",
+      "name": {
+        "en": "Flaming Dragon Skull",
+        "ru": "Пылающий Череп Дракона"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Acumen, Magic Power or Magic Silence.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Проницательность, Маг. Сила или Безмолвие."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pAtk": 186,
+      "mAtk": 152
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 186,
+    "mAtk": 152
+  },
+  {
+    "key": 8686,
+    "data": {
+      "unitName": "tongue_of_themis",
+      "icon": "/weapon_tongue_of_themis_i00.webp",
+      "name": {
+        "en": "Themis' Tongue",
+        "ru": "Язык Темиса"
+      },
+      "description": {
+        "en": "Bestows Mana Up, Magic Mental Shield, or Magic Focus.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Увеличение Маны, Ментальный Щит или Маг. Фокусировка."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pAtk": 202,
+      "mAtk": 161
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 202,
+    "mAtk": 161
+  },
+  {
+    "key": 8687,
+    "data": {
+      "unitName": "hand_of_cabrio",
+      "icon": "/weapon_hand_of_cabrio_i00.webp",
+      "name": {
+        "en": "Cabrio's Hand",
+        "ru": "Рука Кабрио"
+      },
+      "description": {
+        "en": "Bestows Conversion, Mana Up, or Magic Silence.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Конверсия, Увеличение Маны или Безмолвие."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pAtk": 202,
+      "mAtk": 161
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 202,
+    "mAtk": 161
+  },
+  {
+    "key": 6579,
+    "data": {
+      "unitName": "arcana_mace",
+      "icon": "/weapon_arcana_mace_i00.webp",
+      "name": {
+        "en": "Arcana Mace",
+        "ru": "Посох Тайн"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Acumen, MP Regeneration or Mana Up.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Проницательность, Реген. MP или Увеличение Маны."
+      }
+    },
+    "grade": "S",
+    "stats": {
+      "pAtk": 225,
+      "mAtk": 175
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 225,
+    "mAtk": 175
+  },
+  {
+    "key": 9449,
+    "data": {
+      "unitName": "dynasty_mace",
+      "icon": "/weapon_dynasty_staff_i00.webp",
+      "name": {
+        "en": "Dynasty Mace",
+        "ru": "Булава Династии"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Mana Up, Conversion, or Acumen.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Увеличение Маны, Конверсия или Проницательность."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pAtk": 267,
+      "mAtk": 202
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 267,
+    "mAtk": 202
+  },
+  {
+    "key": 9444,
+    "data": {
+      "unitName": "dynasty_phantom",
+      "icon": "/weapon_dynasty_magic_sword_i00.webp",
+      "name": {
+        "en": "Dynasty Phantom",
+        "ru": "Фантом Династии"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Acumen, Mana Up, or Conversion.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Проницательность, Увеличение Маны или Конверсия."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pAtk": 267,
+      "mAtk": 202
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 267,
+    "mAtk": 202
+  },
+  {
+    "key": 10222,
+    "data": {
+      "unitName": "icarus_hall",
+      "icon": "/weapon_icarus_stick_i00.webp",
+      "name": {
+        "en": "Icarus Hall",
+        "ru": "Холл Икара"
+      },
+      "description": {
+        "en": "It can bestow one of the follow three functions, Mana Up, Conversion or Acumen.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Увеличение Маны, Конверсия или Проницательность."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pAtk": 290,
+      "mAtk": 217
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 290,
+    "mAtk": 217
+  },
+  {
+    "key": 10217,
+    "data": {
+      "unitName": "icarus_spirit",
+      "icon": "/weapon_icarus_spirits_i00.webp",
+      "name": {
+        "en": "Icarus Spirit",
+        "ru": "Дух Икара"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Acumen, Mana Up or Conversion.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Проницательность, Увеличение Маны или Конверсия."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pAtk": 290,
+      "mAtk": 217
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 290,
+    "mAtk": 217
+  },
+  {
+    "key": 13459,
+    "data": {
+      "unitName": "vesper_buster",
+      "icon": "/weapon_vesper_burster_i00.webp",
+      "name": {
+        "en": "Vesper Buster",
+        "ru": "Расчленитель Венеры"
+      },
+      "description": {
+        "en": "It can bestow one of the following functions: Acumen, Mana Up, or Magic Hold.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Проницательность, Увеличение Маны, Магические Оковы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pAtk": 317,
+      "mAtk": 234
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 317,
+    "mAtk": 234
+  },
+  {
+    "key": 13465,
+    "data": {
+      "unitName": "vesper_caster",
+      "icon": "/weapon_vesper_caster_i00.webp",
+      "name": {
+        "en": "Vesper Caster",
+        "ru": "Заклинатель Венеры"
+      },
+      "description": {
+        "en": "It can bestow one of the following functions: Acumen, MP Regeneration, or Mana Up.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Проницательность, Регенерация МР, Увеличение Маны."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pAtk": 317,
+      "mAtk": 234
+    },
+    "category": "weapons",
+    "subtype": "one_hand_magic",
+    "type": "one_hand_magic",
+    "pAtk": 317,
+    "mAtk": 234
+  }
+]

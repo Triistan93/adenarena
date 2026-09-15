@@ -1,0 +1,702 @@
+[
+  {
+    "key": 15,
+    "data": {
+      "unitName": "short_spear",
+      "icon": "/weapon_short_spear_i00.webp",
+      "name": {
+        "en": "Short Spear",
+        "ru": "Короткое Копье"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 24,
+      "mAtk": 17
+    },
+    "category": "weapons",
+    "subtype": "spear",
+    "type": "spear",
+    "pAtk": 24,
+    "mAtk": 17
+  },
+  {
+    "key": 3026,
+    "data": {
+      "unitName": "talins_spear",
+      "icon": "/weapon_short_spear_i00.webp",
+      "name": {
+        "en": "Talins Spear",
+        "ru": "Копье Талина"
+      },
+      "description": {
+        "en": "Use this spear to deliver the final blow to Eva's unicorn.",
+        "ru": "Копье, которым необходимо нанести последний удар по Единорогу Евы."
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 24,
+      "mAtk": 17
+    },
+    "category": "weapons",
+    "subtype": "spear",
+    "type": "spear",
+    "pAtk": 24,
+    "mAtk": 17
+  },
+  {
+    "key": 16,
+    "data": {
+      "unitName": "long_spear",
+      "icon": "/weapon_long_spear_i00.webp",
+      "name": {
+        "en": "Long Spear",
+        "ru": "Копье"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 31,
+      "mAtk": 21
+    },
+    "category": "weapons",
+    "subtype": "spear",
+    "type": "spear",
+    "pAtk": 31,
+    "mAtk": 21
+  },
+  {
+    "key": 291,
+    "data": {
+      "unitName": "trident",
+      "icon": "/weapon_trident_i00.webp",
+      "name": {
+        "en": "Trident",
+        "ru": "Трезубец"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 40,
+      "mAtk": 26
+    },
+    "category": "weapons",
+    "subtype": "spear",
+    "type": "spear",
+    "pAtk": 40,
+    "mAtk": 26
+  },
+  {
+    "key": 292,
+    "data": {
+      "unitName": "pike",
+      "icon": "/weapon_pike_i00.webp",
+      "name": {
+        "en": "Pike",
+        "ru": "Гизарма"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 51,
+      "mAtk": 32
+    },
+    "category": "weapons",
+    "subtype": "spear",
+    "type": "spear",
+    "pAtk": 51,
+    "mAtk": 32
+  },
+  {
+    "key": 295,
+    "data": {
+      "unitName": "dwarven_trident",
+      "icon": "/weapon_dwarven_trident_i00.webp",
+      "name": {
+        "en": "Dwarven Trident",
+        "ru": "Трезубец Гномов"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 51,
+      "mAtk": 32
+    },
+    "category": "weapons",
+    "subtype": "spear",
+    "type": "spear",
+    "pAtk": 51,
+    "mAtk": 32
+  },
+  {
+    "key": 293,
+    "data": {
+      "unitName": "war_hammer",
+      "icon": "/weapon_war_hammer_i00.webp",
+      "name": {
+        "en": "War Hammer",
+        "ru": "Молот Войны"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 64,
+      "mAtk": 39
+    },
+    "category": "weapons",
+    "subtype": "spear",
+    "type": "spear",
+    "pAtk": 64,
+    "mAtk": 39
+  },
+  {
+    "key": 296,
+    "data": {
+      "unitName": "dwarven_pike",
+      "icon": "/weapon_dwarven_pike_i00.webp",
+      "name": {
+        "en": "Dwarven Pike",
+        "ru": "Гизарма Гномов"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 64,
+      "mAtk": 39
+    },
+    "category": "weapons",
+    "subtype": "spear",
+    "type": "spear",
+    "pAtk": 64,
+    "mAtk": 39
+  },
+  {
+    "key": 93,
+    "data": {
+      "unitName": "winged_spear",
+      "icon": "/weapon_winged_spear_i00.webp",
+      "name": {
+        "en": "Winged Spear",
+        "ru": "Крылатое Копье"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 79,
+      "mAtk": 47
+    },
+    "category": "weapons",
+    "subtype": "spear",
+    "type": "spear",
+    "pAtk": 79,
+    "mAtk": 47
+  },
+  {
+    "key": 294,
+    "data": {
+      "unitName": "hammer_in_flames",
+      "icon": "/weapon_hammer_in_flames_i00.webp",
+      "name": {
+        "en": "War Pick",
+        "ru": "Молот Смерти"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 79,
+      "mAtk": 47
+    },
+    "category": "weapons",
+    "subtype": "spear",
+    "type": "spear",
+    "pAtk": 79,
+    "mAtk": 47
+  },
+  {
+    "key": 297,
+    "data": {
+      "unitName": "glaive",
+      "icon": "/weapon_glaive_i00.webp",
+      "name": {
+        "en": "Glaive",
+        "ru": "Глефа"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 92,
+      "mAtk": 54
+    },
+    "category": "weapons",
+    "subtype": "spear",
+    "type": "spear",
+    "pAtk": 92,
+    "mAtk": 54
+  },
+  {
+    "key": 96,
+    "data": {
+      "unitName": "scythe",
+      "icon": "/weapon_scythe_i00.webp",
+      "name": {
+        "en": "Scythe",
+        "ru": "Боевая Коса"
+      },
+      "description": {
+        "en": "Bestows either Anger, Critical Stun or Light.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Ярость, Крит. Оглушение, Легкость."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 107,
+      "mAtk": 61
+    },
+    "category": "weapons",
+    "subtype": "spear",
+    "type": "spear",
+    "pAtk": 107,
+    "mAtk": 61
+  },
+  {
+    "key": 298,
+    "data": {
+      "unitName": "orcish_glaive",
+      "icon": "/weapon_orcish_glaive_i00.webp",
+      "name": {
+        "en": "Orcish Glaive",
+        "ru": "Глефа Орков"
+      },
+      "description": {
+        "en": "Bestows either Anger, Critical Stun or Towering Blow.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Ярость, Крит. Оглушение или Радиус Удара. "
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 107,
+      "mAtk": 61
+    },
+    "category": "weapons",
+    "subtype": "spear",
+    "type": "spear",
+    "pAtk": 107,
+    "mAtk": 61
+  },
+  {
+    "key": 302,
+    "data": {
+      "unitName": "body_slasher",
+      "icon": "/weapon_body_slasher_i00.webp",
+      "name": {
+        "en": "Body Slasher",
+        "ru": "Кромсатель"
+      },
+      "description": {
+        "en": "Bestows either Critical Stun, Towering Blow or Wide Blow.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Крит. Оглушение, Радиус Удара или Угол Атаки. "
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 107,
+      "mAtk": 61
+    },
+    "category": "weapons",
+    "subtype": "spear",
+    "type": "spear",
+    "pAtk": 107,
+    "mAtk": 61
+  },
+  {
+    "key": 94,
+    "data": {
+      "unitName": "bech_de_corbin",
+      "icon": "/weapon_bech_de_corbin_i00.webp",
+      "name": {
+        "en": "Bec de Corbin",
+        "ru": "Бердыш"
+      },
+      "description": {
+        "en": "Bestows either Critical Stun, Towering Blow or Light.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Крит. Оглушение, Радиус Удара, Легкость."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 122,
+      "mAtk": 68
+    },
+    "category": "weapons",
+    "subtype": "spear",
+    "type": "spear",
+    "pAtk": 122,
+    "mAtk": 68
+  },
+  {
+    "key": 95,
+    "data": {
+      "unitName": "poleaxe",
+      "icon": "/weapon_poleaxe_i00.webp",
+      "name": {
+        "en": "Poleaxe",
+        "ru": "Секира"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Wide Blow, Towering Blow or Critical Stun.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Угол Атаки, Радиус Удара, Крит. Оглушение."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 139,
+      "mAtk": 76
+    },
+    "category": "weapons",
+    "subtype": "spear",
+    "type": "spear",
+    "pAtk": 139,
+    "mAtk": 76
+  },
+  {
+    "key": 301,
+    "data": {
+      "unitName": "scorpion",
+      "icon": "/weapon_scorpion_i00.webp",
+      "name": {
+        "en": "Scorpion",
+        "ru": "Скорпион"
+      },
+      "description": {
+        "en": "Bestows either Anger, Critical Stun or Wide Blow.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Ярость, Крит. Оглушение или Радиус Удара."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 144,
+      "mAtk": 78
+    },
+    "category": "weapons",
+    "subtype": "spear",
+    "type": "spear",
+    "pAtk": 144,
+    "mAtk": 78
+  },
+  {
+    "key": 303,
+    "data": {
+      "unitName": "widow_maker",
+      "icon": "/weapon_widow_maker_i00.webp",
+      "name": {
+        "en": "Widow Maker",
+        "ru": "Селекционер"
+      },
+      "description": {
+        "en": "Bestows either Critical Stun, Towering Blow or Wide Blow.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Крит. Оглушение, Радиус Удара или Угол Атаки. "
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 144,
+      "mAtk": 78
+    },
+    "category": "weapons",
+    "subtype": "spear",
+    "type": "spear",
+    "pAtk": 144,
+    "mAtk": 78
+  },
+  {
+    "key": 299,
+    "data": {
+      "unitName": "orcish_poleaxe",
+      "icon": "/weapon_orcish_poleaxe_i00.webp",
+      "name": {
+        "en": "Orcish Poleaxe",
+        "ru": "Секира Орков"
+      },
+      "description": {
+        "en": "Bestows either Critical Stun, Towering Blow or Wide Blow.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Крит. Оглушение, Радиус Удара, Угол Атаки."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 156,
+      "mAtk": 83
+    },
+    "category": "weapons",
+    "subtype": "spear",
+    "type": "spear",
+    "pAtk": 156,
+    "mAtk": 83
+  },
+  {
+    "key": 300,
+    "data": {
+      "unitName": "great_axe",
+      "icon": "/weapon_great_axe_i00.webp",
+      "name": {
+        "en": "Great Axe",
+        "ru": "Двуручный Топор"
+      },
+      "description": {
+        "en": "Bestows either Anger, Critical Stun or Light.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Ярость, Крит. Оглушение или Легкость."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 175,
+      "mAtk": 91
+    },
+    "category": "weapons",
+    "subtype": "spear",
+    "type": "spear",
+    "pAtk": 175,
+    "mAtk": 91
+  },
+  {
+    "key": 97,
+    "data": {
+      "unitName": "lancia",
+      "icon": "/weapon_lancia_i00.webp",
+      "name": {
+        "en": "Lance",
+        "ru": "Пика"
+      },
+      "description": {
+        "en": "Bestows either Anger, Critical Stun or Towering Blow.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Ярость, Крит. Оглушение, Радиус Удара."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 194,
+      "mAtk": 99
+    },
+    "category": "weapons",
+    "subtype": "spear",
+    "type": "spear",
+    "pAtk": 194,
+    "mAtk": 99
+  },
+  {
+    "key": 98,
+    "data": {
+      "unitName": "halbard",
+      "icon": "/weapon_halbard_i00.webp",
+      "name": {
+        "en": "Halberd",
+        "ru": "Алебарда"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Haste, Critical Stun or Wide Blow.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Ускорение, Крит. Оглушение, Угол Атаки."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pAtk": 213,
+      "mAtk": 107
+    },
+    "category": "weapons",
+    "subtype": "spear",
+    "type": "spear",
+    "pAtk": 213,
+    "mAtk": 107
+  },
+  {
+    "key": 305,
+    "data": {
+      "unitName": "tallum_glaive",
+      "icon": "/weapon_tallum_glaive_i00.webp",
+      "name": {
+        "en": "Tallum Glaive",
+        "ru": "Глефа Таллума"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Guidance, Health, or Wide Blow.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Наведение, Здоровье, Угол Атаки."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pAtk": 232,
+      "mAtk": 114
+    },
+    "category": "weapons",
+    "subtype": "spear",
+    "type": "spear",
+    "pAtk": 232,
+    "mAtk": 114
+  },
+  {
+    "key": 8683,
+    "data": {
+      "unitName": "tiphon_spear",
+      "icon": "/weapon_tiphon_spear_i00.webp",
+      "name": {
+        "en": "Tiphon's Spear",
+        "ru": "Копье Тифона"
+      },
+      "description": {
+        "en": "Bestows either Critical Stun, Towering Blow or Wide Blow.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Крит. Оглушение, Радиус Удара или Угол Атаки."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pAtk": 251,
+      "mAtk": 121
+    },
+    "category": "weapons",
+    "subtype": "spear",
+    "type": "spear",
+    "pAtk": 251,
+    "mAtk": 121
+  },
+  {
+    "key": 6370,
+    "data": {
+      "unitName": "saint_spear",
+      "icon": "/weapon_saint_spear_i00.webp",
+      "name": {
+        "en": "Saint Spear",
+        "ru": "Святое Копье"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Health, Guidance or Haste.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Здоровье, Наведение или Ускорение."
+      }
+    },
+    "grade": "S",
+    "stats": {
+      "pAtk": 281,
+      "mAtk": 132
+    },
+    "category": "weapons",
+    "subtype": "spear",
+    "type": "spear",
+    "pAtk": 281,
+    "mAtk": 132
+  },
+  {
+    "key": 9447,
+    "data": {
+      "unitName": "dynasty_halberd",
+      "icon": "/weapon_dynasty_spear_i00.webp",
+      "name": {
+        "en": "Dynasty Halberd",
+        "ru": "Алебарда Династии"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Anger, Critical Stun, or Light.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Ярость Крит. Оглушение или Легкость."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pAtk": 333,
+      "mAtk": 151
+    },
+    "category": "weapons",
+    "subtype": "spear",
+    "type": "spear",
+    "pAtk": 333,
+    "mAtk": 151
+  },
+  {
+    "key": 10219,
+    "data": {
+      "unitName": "icarus_trident",
+      "icon": "/weapon_icarus_trident_i00.webp",
+      "name": {
+        "en": "Icarus Trident",
+        "ru": "Трезубец Икара"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Anger, Critical Stun or Light.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Ярость, Крит. Оглушение или Легкость."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pAtk": 363,
+      "mAtk": 163
+    },
+    "category": "weapons",
+    "subtype": "spear",
+    "type": "spear",
+    "pAtk": 363,
+    "mAtk": 163
+  },
+  {
+    "key": 13462,
+    "data": {
+      "unitName": "vesper_stormer",
+      "icon": "/weapon_vesper_stormer_i00.webp",
+      "name": {
+        "en": "Vesper Stormer",
+        "ru": "Буревестник Венеры"
+      },
+      "description": {
+        "en": "It can bestow one of the following functions: Health, Guidance, or Haste.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Здоровье, Наведение, Ускорение."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pAtk": 396,
+      "mAtk": 176
+    },
+    "category": "weapons",
+    "subtype": "spear",
+    "type": "spear",
+    "pAtk": 396,
+    "mAtk": 176
+  }
+]

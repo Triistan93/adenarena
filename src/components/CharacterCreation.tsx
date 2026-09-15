@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { checkNicknameAvailability } from '../firebase';
+import { getClassIcon } from '../services/IconService';
 
 export interface CharacterCreationData {
   charName: string;
@@ -461,9 +462,20 @@ export const CharacterCreation: React.FC<CharacterCreationProps> = ({
                           : 'border-white/10 bg-white/5 text-slate-300 hover:border-amber-500/40 hover:bg-white/10'
                       }`}
                     >
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="text-lg">{cls.icon}</span>
-                        <span className="text-xs font-bold text-amber-300">{cls.name}</span>
+                      <div className="flex items-center gap-2.5 mb-1.5">
+                        <img
+                          src={getClassIcon(cls.id)}
+                          alt={cls.name}
+                          className="w-8 h-8 object-contain rounded-md bg-black/60 border border-amber-500/40 p-0.5 shadow-md shrink-0 transition-transform group-hover:scale-105"
+                          onError={(e) => {
+                            const target = e.currentTarget;
+                            target.style.display = 'none';
+                            const fallback = target.nextElementSibling;
+                            if (fallback) fallback.style.display = 'inline-block';
+                          }}
+                        />
+                        <span className="text-lg hidden">{cls.icon}</span>
+                        <span className="text-xs font-bold text-amber-300 leading-tight">{cls.name}</span>
                       </div>
                       <p className="text-[11px] text-slate-400 leading-tight">
                         {cls.desc}
@@ -526,10 +538,16 @@ export const CharacterCreation: React.FC<CharacterCreationProps> = ({
                   <span className="text-slate-400">Raça:</span>
                   <span className="font-bold text-amber-200">{currentRaceObj.name}</span>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between items-center">
                   <span className="text-slate-400">Classe:</span>
-                  <span className="font-bold text-amber-200">
-                    {currentRaceObj.allowedClasses.find(c => c.id === selectedClass)?.name || selectedClass}
+                  <span className="font-bold text-amber-200 flex items-center gap-1.5">
+                    <img
+                      src={getClassIcon(selectedClass)}
+                      alt={selectedClass}
+                      className="w-5 h-5 object-contain rounded bg-black/60 border border-amber-500/40 p-0.5"
+                      onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                    />
+                    <span>{currentRaceObj.allowedClasses.find(c => c.id === selectedClass)?.name || selectedClass}</span>
                   </span>
                 </div>
                 <div className="flex justify-between">

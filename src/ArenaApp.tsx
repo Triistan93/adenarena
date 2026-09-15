@@ -8,6 +8,7 @@ import {
   type RaceId,
 } from "./game/data";
 import { cn } from "./utils/cn";
+import { getClassIcon, getSkillIcon } from "./services/IconService";
 
 type Phase = "menu" | "playing" | "paused" | "gameover";
 
@@ -317,12 +318,20 @@ function MenuScreen({
                       }
                     >
                       <div className="flex items-center justify-between">
-                        <span
-                          className="text-3xl"
-                          style={{ filter: `drop-shadow(0 0 8px ${c.weapon.color})` }}
-                        >
-                          {c.weapon.emoji}
-                        </span>
+                        <div className="flex items-center gap-2">
+                          <img
+                            src={getClassIcon(c.id)}
+                            alt={c.name}
+                            className="w-8 h-8 object-contain rounded-md bg-black/60 border border-amber-500/40 p-0.5 shadow-sm"
+                            onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                          />
+                          <span
+                            className="text-2xl"
+                            style={{ filter: `drop-shadow(0 0 8px ${c.weapon.color})` }}
+                          >
+                            {c.weapon.emoji}
+                          </span>
+                        </div>
                         <span
                           className="rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider"
                           style={{
@@ -353,10 +362,21 @@ function MenuScreen({
                           <span
                             key={s.id}
                             title={`${s.name} — ${s.desc}`}
-                            className="inline-flex items-center gap-1 rounded-md bg-black/30 px-1.5 py-0.5 text-[10px] text-white/75"
+                            className="inline-flex items-center gap-1.5 rounded-md bg-black/40 border border-white/10 px-1.5 py-0.5 text-[10px] text-white/80"
                           >
-                            <span>{s.emoji}</span>
-                            {s.name}
+                            <img
+                              src={getSkillIcon(s.id || s.name)}
+                              alt={s.name}
+                              className="w-3.5 h-3.5 object-contain rounded-sm"
+                              onError={(e) => {
+                                const target = e.currentTarget;
+                                target.style.display = 'none';
+                                const fallback = target.nextElementSibling;
+                                if (fallback) fallback.style.display = 'inline';
+                              }}
+                            />
+                            <span className="hidden">{s.emoji}</span>
+                            <span>{s.name}</span>
                           </span>
                         ))}
                       </div>
@@ -384,8 +404,14 @@ function MenuScreen({
               <p className="text-[11px] font-semibold uppercase tracking-widest text-white/50">
                 Your Champion
               </p>
-              <div className="mt-1 flex items-center gap-2">
-                <span className="text-4xl" style={{ filter: `drop-shadow(0 0 10px ${cls.weapon.color})` }}>
+              <div className="mt-2 flex items-center gap-3">
+                <img
+                  src={getClassIcon(cls.id)}
+                  alt={cls.name}
+                  className="w-12 h-12 object-contain rounded-xl bg-black/60 border-2 border-amber-500/50 p-1 shadow-lg"
+                  onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                />
+                <span className="text-3xl" style={{ filter: `drop-shadow(0 0 10px ${cls.weapon.color})` }}>
                   {cls.weapon.emoji}
                 </span>
                 <div>

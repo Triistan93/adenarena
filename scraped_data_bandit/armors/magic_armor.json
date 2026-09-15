@@ -1,0 +1,1676 @@
+[
+  {
+    "key": 6408,
+    "data": {
+      "unitName": "wedding_dress",
+      "icon": "/armor_t2000_ul_i00.webp",
+      "name": {
+        "en": "Formal Wear",
+        "ru": "Свадебный Наряд"
+      },
+      "description": {
+        "en": "Formal wear appears as a wedding dress for female characters and as a tuxedo for male characters.",
+        "ru": "Одежда для свадеб. Выглядит как подвенечное платье для персонажей женского пола и как смокинг для персонажей мужского пола."
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 0,
+      "mDef": 0,
+      "mp": 0
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 0,
+    "mDef": 0,
+    "mp": 0
+  },
+  {
+    "key": 461,
+    "data": {
+      "unitName": "apprentice's_hose",
+      "icon": "/armor_t01_l_i00.webp",
+      "name": {
+        "en": "Apprentice's Stockings",
+        "ru": "Штаны Ученика"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 10,
+      "mDef": 0,
+      "mp": 10
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 10,
+    "mDef": 0,
+    "mp": 10
+  },
+  {
+    "key": 462,
+    "data": {
+      "unitName": "hose",
+      "icon": "/armor_t03_l_i00.webp",
+      "name": {
+        "en": "Stockings",
+        "ru": "Штаны"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 11,
+      "mDef": 0,
+      "mp": 11
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 11,
+    "mDef": 0,
+    "mp": 11
+  },
+  {
+    "key": 463,
+    "data": {
+      "unitName": "feriotic_hose",
+      "icon": "/armor_t52_l_i00.webp",
+      "name": {
+        "en": "Feriotic Stockings",
+        "ru": "Ферритовые Штаны"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 13,
+      "mDef": 0,
+      "mp": 13
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 13,
+    "mDef": 0,
+    "mp": 13
+  },
+  {
+    "key": 1103,
+    "data": {
+      "unitName": "cotton_hose",
+      "icon": "/armor_t50_l_i00.webp",
+      "name": {
+        "en": "Cotton Stockings",
+        "ru": "Хлопковые Штаны"
+      },
+      "description": {
+        "en": "A pair of pants made of tough cotton.",
+        "ru": "Пара штанов из плотного хлопка."
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 13,
+      "mDef": 0,
+      "mp": 13
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 13,
+    "mDef": 0,
+    "mp": 13
+  },
+  {
+    "key": 464,
+    "data": {
+      "unitName": "leather_hose",
+      "icon": "/armor_t05_l_i00.webp",
+      "name": {
+        "en": "Leather Stockings",
+        "ru": "Кожаные Штаны"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 16,
+      "mDef": 0,
+      "mp": 16
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 16,
+    "mDef": 0,
+    "mp": 16
+  },
+  {
+    "key": 425,
+    "data": {
+      "unitName": "apprentice's_tunic",
+      "icon": "/armor_t01_u_i00.webp",
+      "name": {
+        "en": "Apprentice's Tunic",
+        "ru": "Туника Ученика"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 17,
+      "mDef": 0,
+      "mp": 17
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 17,
+    "mDef": 0,
+    "mp": 17
+  },
+  {
+    "key": 426,
+    "data": {
+      "unitName": "tunic",
+      "icon": "/armor_t03_u_i00.webp",
+      "name": {
+        "en": "Tunic",
+        "ru": "Туника"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 18,
+      "mDef": 0,
+      "mp": 18
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 18,
+    "mDef": 0,
+    "mp": 18
+  },
+  {
+    "key": 1104,
+    "data": {
+      "unitName": "hose_of_devotion",
+      "icon": "/armor_t55_l_i00.webp",
+      "name": {
+        "en": "Stockings of Devotion",
+        "ru": "Штаны Преданности"
+      },
+      "description": {
+        "en": "Part of the devotion set.",
+        "ru": "Часть комплекта Преданности."
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 19,
+      "mDef": 0,
+      "mp": 19
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 19,
+    "mDef": 0,
+    "mp": 19
+  },
+  {
+    "key": 1105,
+    "data": {
+      "unitName": "hose_of_magicpower",
+      "icon": "/armor_t58_l_i00.webp",
+      "name": {
+        "en": "Stockings of Magic",
+        "ru": "Штаны Мага"
+      },
+      "description": {
+        "en": "A pair of pants, comfortably designed for mages.",
+        "ru": "Штаны, сшитые специально для магов."
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 21,
+      "mDef": 0,
+      "mp": 21
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 21,
+    "mDef": 0,
+    "mp": 21
+  },
+  {
+    "key": 1100,
+    "data": {
+      "unitName": "cotton_tunic",
+      "icon": "/armor_t50_u_i00.webp",
+      "name": {
+        "en": "Cotton Tunic",
+        "ru": "Хлопковая Туника"
+      },
+      "description": {
+        "en": "A tunic made of tough cotton.",
+        "ru": "Туника, сшитая из плотного хлопка."
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 21,
+      "mDef": 0,
+      "mp": 21
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 21,
+    "mDef": 0,
+    "mp": 21
+  },
+  {
+    "key": 428,
+    "data": {
+      "unitName": "feriotic_tunic",
+      "icon": "/armor_t52_u_i00.webp",
+      "name": {
+        "en": "Feriotic Tunic",
+        "ru": "Ферритовая Туника"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 21,
+      "mDef": 0,
+      "mp": 21
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 21,
+    "mDef": 0,
+    "mp": 21
+  },
+  {
+    "key": 429,
+    "data": {
+      "unitName": "leather_tunic",
+      "icon": "/armor_t05_u_i00.webp",
+      "name": {
+        "en": "Leather Tunic",
+        "ru": "Кожаная Туника"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 25,
+      "mDef": 0,
+      "mp": 25
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 25,
+    "mDef": 0,
+    "mp": 25
+  },
+  {
+    "key": 1101,
+    "data": {
+      "unitName": "tunic_of_devotion",
+      "icon": "/armor_t55_u_i00.webp",
+      "name": {
+        "en": "Tunic of Devotion",
+        "ru": "Туника Преданности"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 30,
+      "mDef": 0,
+      "mp": 30
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 30,
+    "mDef": 0,
+    "mp": 30
+  },
+  {
+    "key": 1102,
+    "data": {
+      "unitName": "tunic_of_magicpower",
+      "icon": "/armor_t58_u_i00.webp",
+      "name": {
+        "en": "Tunic of Magic",
+        "ru": "Туника Мага"
+      },
+      "description": {
+        "en": "A tunic, comfortably designed for mages.",
+        "ru": "Туника, созданная специально для магов."
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 34,
+      "mDef": 0,
+      "mp": 34
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 34,
+    "mDef": 0,
+    "mp": 34
+  },
+  {
+    "key": 465,
+    "data": {
+      "unitName": "cursed_hose",
+      "icon": "/armor_t14_l_i00.webp",
+      "name": {
+        "en": "Cursed Stockings",
+        "ru": "Проклятые Штаны"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 24,
+      "mDef": 0,
+      "mp": 24
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 24,
+    "mDef": 0,
+    "mp": 24
+  },
+  {
+    "key": 466,
+    "data": {
+      "unitName": "elven_hose",
+      "icon": "/armor_t11_l_i00.webp",
+      "name": {
+        "en": "Elven Stockings",
+        "ru": "Штаны Эльфов"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 27,
+      "mDef": 0,
+      "mp": 27
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 27,
+    "mDef": 0,
+    "mp": 27
+  },
+  {
+    "key": 467,
+    "data": {
+      "unitName": "dark_hose",
+      "icon": "/armor_t16_l_i00.webp",
+      "name": {
+        "en": "Dark Stockings",
+        "ru": "Темные Штаны"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 27,
+      "mDef": 0,
+      "mp": 27
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 27,
+    "mDef": 0,
+    "mp": 27
+  },
+  {
+    "key": 468,
+    "data": {
+      "unitName": "mage's_hose",
+      "icon": "/armor_t17_l_i00.webp",
+      "name": {
+        "en": "Mystic's Stockings",
+        "ru": "Штаны Мистика"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 27,
+      "mDef": 0,
+      "mp": 27
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 27,
+    "mDef": 0,
+    "mp": 27
+  },
+  {
+    "key": 469,
+    "data": {
+      "unitName": "hose_of_knowledge",
+      "icon": "/armor_t41_l_i00.webp",
+      "name": {
+        "en": "Stockings of Knowledge",
+        "ru": "Штаны Знаний"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 30,
+      "mDef": 0,
+      "mp": 30
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 30,
+    "mDef": 0,
+    "mp": 30
+  },
+  {
+    "key": 470,
+    "data": {
+      "unitName": "mithril_hose",
+      "icon": "/armor_t51_l_i00.webp",
+      "name": {
+        "en": "Mithril Stockings",
+        "ru": "Мифриловые Штаны"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 32,
+      "mDef": 0,
+      "mp": 32
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 32,
+    "mDef": 0,
+    "mp": 32
+  },
+  {
+    "key": 432,
+    "data": {
+      "unitName": "cursed_tunic",
+      "icon": "/armor_t14_u_i00.webp",
+      "name": {
+        "en": "Cursed Tunic",
+        "ru": "Проклятая Туника"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 39,
+      "mDef": 0,
+      "mp": 39
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 39,
+    "mDef": 0,
+    "mp": 39
+  },
+  {
+    "key": 435,
+    "data": {
+      "unitName": "mage's_tunic",
+      "icon": "/armor_t17_u_i00.webp",
+      "name": {
+        "en": "Mystic's Tunic",
+        "ru": "Туника Мистика"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 43,
+      "mDef": 0,
+      "mp": 43
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 43,
+    "mDef": 0,
+    "mp": 43
+  },
+  {
+    "key": 433,
+    "data": {
+      "unitName": "elven_tunic",
+      "icon": "/armor_t11_u_i00.webp",
+      "name": {
+        "en": "Elven Tunic",
+        "ru": "Туника Эльфов"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 43,
+      "mDef": 0,
+      "mp": 43
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 43,
+    "mDef": 0,
+    "mp": 43
+  },
+  {
+    "key": 434,
+    "data": {
+      "unitName": "white_tunic",
+      "icon": "/armor_t16_u_i00.webp",
+      "name": {
+        "en": "White Tunic",
+        "ru": "Белая Туника"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 43,
+      "mDef": 0,
+      "mp": 43
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 43,
+    "mDef": 0,
+    "mp": 43
+  },
+  {
+    "key": 436,
+    "data": {
+      "unitName": "tunic_of_knowledge",
+      "icon": "/armor_t41_u_i00.webp",
+      "name": {
+        "en": "Tunic of Knowledge",
+        "ru": "Туника Знаний"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 49,
+      "mDef": 0,
+      "mp": 49
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 49,
+    "mDef": 0,
+    "mp": 49
+  },
+  {
+    "key": 437,
+    "data": {
+      "unitName": "mithril_tunic",
+      "icon": "/armor_t51_u_i00.webp",
+      "name": {
+        "en": "Mithril Tunic",
+        "ru": "Мифриловая Туника"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 52,
+      "mDef": 0,
+      "mp": 52
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 52,
+    "mDef": 0,
+    "mp": 52
+  },
+  {
+    "key": 7857,
+    "data": {
+      "unitName": "coat_of_oath",
+      "icon": "/armor_t1003_ul_i00.webp",
+      "name": {
+        "en": "Clan Oath Aketon",
+        "ru": "Накидка Клятвы"
+      },
+      "description": {
+        "en": "Full body armor.",
+        "ru": "Полный Доспех"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 79,
+      "mDef": 0,
+      "mp": 79
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 79,
+    "mDef": 0,
+    "mp": 79
+  },
+  {
+    "key": 438,
+    "data": {
+      "unitName": "sage's_rag",
+      "icon": "/armor_t44_ul_i00.webp",
+      "name": {
+        "en": "Sage's Rag",
+        "ru": "Накидка Мудреца"
+      },
+      "description": {
+        "en": "One-piece upper and lower body armor. Additional lower body armor cannot be worn while wearing this.",
+        "ru": "Доспех, закрывающий все тело целиком. Нельзя использовать дополнительно нижнюю часть доспехов."
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 90,
+      "mDef": 0,
+      "mp": 90
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 90,
+    "mDef": 0,
+    "mp": 90
+  },
+  {
+    "key": 471,
+    "data": {
+      "unitName": "karmian_hose",
+      "icon": "/armor_t53_l_i00.webp",
+      "name": {
+        "en": "Karmian Stockings",
+        "ru": "Штаны Кармиана"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 37,
+      "mDef": 0,
+      "mp": 37
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 37,
+    "mDef": 0,
+    "mp": 37
+  },
+  {
+    "key": 472,
+    "data": {
+      "unitName": "demon's_hose",
+      "icon": "/armor_t54_l_i00.webp",
+      "name": {
+        "en": "Demon's Stockings",
+        "ru": "Штаны Демона"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 43,
+      "mDef": 0,
+      "mp": 43
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 43,
+    "mDef": 0,
+    "mp": 43
+  },
+  {
+    "key": 473,
+    "data": {
+      "unitName": "divine_hose",
+      "icon": "/armor_t57_l_i00.webp",
+      "name": {
+        "en": "Divine Stockings",
+        "ru": "Штаны Божества"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 46,
+      "mDef": 0,
+      "mp": 46
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 46,
+    "mDef": 0,
+    "mp": 46
+  },
+  {
+    "key": 439,
+    "data": {
+      "unitName": "karmian_tunic",
+      "icon": "/armor_t53_u_i00.webp",
+      "name": {
+        "en": "Karmian Tunic",
+        "ru": "Туника Кармиана"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 60,
+      "mDef": 0,
+      "mp": 60
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 60,
+    "mDef": 0,
+    "mp": 60
+  },
+  {
+    "key": 441,
+    "data": {
+      "unitName": "demon's_tunic",
+      "icon": "/armor_t54_u_i00.webp",
+      "name": {
+        "en": "Demon's Tunic",
+        "ru": "Туника Демона"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 69,
+      "mDef": 0,
+      "mp": 69
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 69,
+    "mDef": 0,
+    "mp": 69
+  },
+  {
+    "key": 442,
+    "data": {
+      "unitName": "divine_tunic",
+      "icon": "/armor_t57_u_i00.webp",
+      "name": {
+        "en": "Divine Tunic",
+        "ru": "Туника Божества"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 74,
+      "mDef": 0,
+      "mp": 74
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 74,
+    "mDef": 0,
+    "mp": 74
+  },
+  {
+    "key": 440,
+    "data": {
+      "unitName": "robe_of_seal",
+      "icon": "/armor_t44_ul_i00.webp",
+      "name": {
+        "en": "Robe of Seal",
+        "ru": "Мантия Печати"
+      },
+      "description": {
+        "en": "One-piece upper and lower body armor. Additional lower body armor cannot be worn while wearing this.",
+        "ru": "Доспех, закрывающий все тело целиком. Нельзя использовать дополнительно нижнюю часть доспехов."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 105,
+      "mDef": 0,
+      "mp": 105
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 105,
+    "mDef": 0,
+    "mp": 105
+  },
+  {
+    "key": 2402,
+    "data": {
+      "unitName": "hose_of_shrnoen",
+      "icon": "/armor_t56_l_i00.webp",
+      "name": {
+        "en": "Stockings of Zubei",
+        "ru": "Штаны Зубея"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pDef": 49,
+      "mDef": 0,
+      "mp": 49
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 49,
+    "mDef": 0,
+    "mp": 49
+  },
+  {
+    "key": 2403,
+    "data": {
+      "unitName": "blue_wolve's_hose",
+      "icon": "/armor_t70_l_i00.webp",
+      "name": {
+        "en": "Blue Wolf Stockings",
+        "ru": "Штаны Синего Волка"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pDef": 52,
+      "mDef": 0,
+      "mp": 52
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 52,
+    "mDef": 0,
+    "mp": 52
+  },
+  {
+    "key": 2404,
+    "data": {
+      "unitName": "hose_of_doom",
+      "icon": "/armor_t73_l_i00.webp",
+      "name": {
+        "en": "Stockings of Doom",
+        "ru": "Штаны Рока"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pDef": 52,
+      "mDef": 0,
+      "mp": 52
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 52,
+    "mDef": 0,
+    "mp": 52
+  },
+  {
+    "key": 2397,
+    "data": {
+      "unitName": "tunic_of_shrnoen",
+      "icon": "/armor_t56_u_i00.webp",
+      "name": {
+        "en": "Tunic of Zubei",
+        "ru": "Туника Зубея"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pDef": 78,
+      "mDef": 0,
+      "mp": 78
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 78,
+    "mDef": 0,
+    "mp": 78
+  },
+  {
+    "key": 2398,
+    "data": {
+      "unitName": "blue_wolve's_tunic",
+      "icon": "/armor_t70_u_i00.webp",
+      "name": {
+        "en": "Blue Wolf Tunic",
+        "ru": "Туника Синего Волка"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pDef": 83,
+      "mDef": 0,
+      "mp": 83
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 83,
+    "mDef": 0,
+    "mp": 83
+  },
+  {
+    "key": 2399,
+    "data": {
+      "unitName": "tunic_of_doom",
+      "icon": "/armor_t73_u_i00.webp",
+      "name": {
+        "en": "Tunic of Doom",
+        "ru": "Туника Рока"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pDef": 83,
+      "mDef": 0,
+      "mp": 83
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 83,
+    "mDef": 0,
+    "mp": 83
+  },
+  {
+    "key": 2406,
+    "data": {
+      "unitName": "avadon_robe",
+      "icon": "/armor_t59_ul_i00.webp",
+      "name": {
+        "en": "Avadon Robe",
+        "ru": "Мантия Авадона"
+      },
+      "description": {
+        "en": "Full body armor.",
+        "ru": "Полный доспех."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pDef": 127,
+      "mDef": 0,
+      "mp": 127
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 127,
+    "mDef": 0,
+    "mp": 127
+  },
+  {
+    "key": 5305,
+    "data": {
+      "unitName": "sealed_tallum_hose",
+      "icon": "/armor_t79_l_i02.webp",
+      "name": {
+        "en": "Sealed Tallum Stockings",
+        "ru": "Запечатанные Штаны Таллума"
+      },
+      "description": {
+        "en": "Its seal can be broken with the help of the Blacksmith of Mammon.",
+        "ru": "Запечатанные Штаны Таллума. Печать можно снять у кузнеца в любой деревне."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pDef": 53,
+      "mDef": 0,
+      "mp": 53
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 53,
+    "mDef": 0,
+    "mp": 53
+  },
+  {
+    "key": 5304,
+    "data": {
+      "unitName": "sealed_tallum_tunic",
+      "icon": "/armor_t79_u_i02.webp",
+      "name": {
+        "en": "Sealed Tallum Tunic",
+        "ru": "Запечатанная Туника Таллума"
+      },
+      "description": {
+        "en": "Its seal can be broken with the help of the Blacksmith of Mammon.",
+        "ru": "Запечатанная Туника Таллума. Печать можно снять у кузнеца в любой деревне."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pDef": 86,
+      "mDef": 0,
+      "mp": 86
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 86,
+    "mDef": 0,
+    "mp": 86
+  },
+  {
+    "key": 5308,
+    "data": {
+      "unitName": "sealed_dark_crystal_robe",
+      "icon": "/armor_t76_ul_i02.webp",
+      "name": {
+        "en": "Sealed Dark Crystal Robe",
+        "ru": "Запечатанная Мантия Кристалла Тьмы"
+      },
+      "description": {
+        "en": "Its seal can be broken with the help of the Blacksmith of Mammon.",
+        "ru": "Запечатанная Мантия Кристалла Тьмы. Печать можно снять у кузнеца в любой деревне."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pDef": 139,
+      "mDef": 0,
+      "mp": 139
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 139,
+    "mDef": 0,
+    "mp": 139
+  },
+  {
+    "key": 7877,
+    "data": {
+      "unitName": "sealed_coat_of_apella",
+      "icon": "/armor_t1006_ul_i02.webp",
+      "name": {
+        "en": "Sealed Apella Doublet",
+        "ru": "Запечатанная Накидка Апеллы"
+      },
+      "description": {
+        "en": "May be worn by a Baron or a higher level Aristocrat. It can be opened with the help of the Blacksmith of Mammon.",
+        "ru": "Может носить персонаж в звании Старейшина и выше. Запечатанная Накидка Апеллы. Печать можно снять у кузнеца в любой деревне."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pDef": 139,
+      "mDef": 0,
+      "mp": 139
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 139,
+    "mDef": 0,
+    "mp": 139
+  },
+  {
+    "key": 5326,
+    "data": {
+      "unitName": "sealed_robe_of_nightmare",
+      "icon": "/armor_t82_ul_i02.webp",
+      "name": {
+        "en": "Sealed Nightmare Robe",
+        "ru": "Запечатанная Мантия Кошмаров"
+      },
+      "description": {
+        "en": "Its seal can be broken with the help of the Blacksmith of Mammon.",
+        "ru": "Запечатанная Мантия Кошмаров. Печать можно снять у кузнеца в любой деревне."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pDef": 147,
+      "mDef": 0,
+      "mp": 147
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 147,
+    "mDef": 0,
+    "mp": 147
+  },
+  {
+    "key": 5329,
+    "data": {
+      "unitName": "sealed_majestic_robe",
+      "icon": "/armor_t85_ul_i02.webp",
+      "name": {
+        "en": "Sealed Majestic Robe",
+        "ru": "Запечатанная Мантия Величия"
+      },
+      "description": {
+        "en": "Its seal can be broken with the help of the Blacksmith of Mammon.",
+        "ru": "Запечатанная Мантия Величия. Печать можно снять у кузнеца в любой деревне."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pDef": 147,
+      "mDef": 0,
+      "mp": 147
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 147,
+    "mDef": 0,
+    "mp": 147
+  },
+  {
+    "key": 6684,
+    "data": {
+      "unitName": "sealed_major_arcana_robe",
+      "icon": "/armor_t90_ul_i02.webp",
+      "name": {
+        "en": "Sealed Major Arcana Robe",
+        "ru": "Запечатанная Мантия Тайн"
+      },
+      "description": {
+        "en": "Its seal can be broken with the help of the Blacksmith of Mammon.",
+        "ru": "Запечатанная Мантия Тайн. Печать может быть сломана с помощью Кузнеца Маммона."
+      }
+    },
+    "grade": "S",
+    "stats": {
+      "pDef": 157,
+      "mDef": 0,
+      "mp": 157
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 157,
+    "mDef": 0,
+    "mp": 157
+  },
+  {
+    "key": 9525,
+    "data": {
+      "unitName": "sealed_dynasty_stockings",
+      "icon": "/armor_t93_l_i02.webp",
+      "name": {
+        "en": "Sealed Dynasty Stockings",
+        "ru": "Запечатанные Штаны Династии"
+      },
+      "description": {
+        "en": "Sealed Dynasty Stockings. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанные Штаны Династии. Печать можно снять у Кузнеца Маммона или Мастера Ишумы."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pDef": 67,
+      "mDef": 0,
+      "mp": 67
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 67,
+    "mDef": 0,
+    "mp": 67
+  },
+  {
+    "key": 15702,
+    "data": {
+      "unitName": "sealed_moirai_stockings",
+      "icon": "/armor_t96_l_i02.webp",
+      "name": {
+        "en": "Sealed Moirai Stockings",
+        "ru": "Запечатанные Штаны Дестино"
+      },
+      "description": {
+        "en": "Sealed Moirai Stockings. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанные Штаны Дестино. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pDef": 70,
+      "mDef": 0,
+      "mp": 70
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 70,
+    "mDef": 0,
+    "mp": 70
+  },
+  {
+    "key": 9524,
+    "data": {
+      "unitName": "sealed_dynasty_tunic",
+      "icon": "/armor_t93_u_i02.webp",
+      "name": {
+        "en": "Sealed Dynasty Tunic",
+        "ru": "Запечатанная Туника Династии"
+      },
+      "description": {
+        "en": "Sealed Dynasty Tunic. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанная Туника Династии. Печать можно снять у Кузнеца Маммона или Мастера Ишумы."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pDef": 107,
+      "mDef": 0,
+      "mp": 107
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 107,
+    "mDef": 0,
+    "mp": 107
+  },
+  {
+    "key": 15699,
+    "data": {
+      "unitName": "sealed_moirai_tunic",
+      "icon": "/armor_t96_u_i02.webp",
+      "name": {
+        "en": "Sealed Moirai Tunic",
+        "ru": "Запечатанная Туника Дестино"
+      },
+      "description": {
+        "en": "Sealed Moirai Tunic. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанная Туника Дестино. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pDef": 112,
+      "mDef": 0,
+      "mp": 112
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 112,
+    "mDef": 0,
+    "mp": 112
+  },
+  {
+    "key": 17015,
+    "data": {
+      "unitName": "sealed_vesper_noble_stockings",
+      "icon": "/armor_t96_l_i02.webp",
+      "name": {
+        "en": "Sealed Vesper Noble Stockings",
+        "ru": "Запечатанные Красивые Штаны Венеры"
+      },
+      "description": {
+        "en": "Sealed Vesper Noble Stockings. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанные Красивые Штаны Венеры. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 74,
+      "mDef": 0,
+      "mp": 74
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 74,
+    "mDef": 0,
+    "mp": 74
+  },
+  {
+    "key": 14115,
+    "data": {
+      "unitName": "sealed_vesper_stockings",
+      "icon": "/armor_t96_l_i02.webp",
+      "name": {
+        "en": "Sealed Vesper Stockings",
+        "ru": "Запечатанные Штаны Венеры"
+      },
+      "description": {
+        "en": "Sealed Vesper Stockings. Seal can be removed by the blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанные Штаны Венеры. Печать можно снять у Кузнеца Маммона или Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 74,
+      "mDef": 0,
+      "mp": 74
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 74,
+    "mDef": 0,
+    "mp": 74
+  },
+  {
+    "key": 15751,
+    "data": {
+      "unitName": "sealed_vorpal_stockings",
+      "icon": "/armor_t96_l_i02.webp",
+      "name": {
+        "en": "Sealed Vorpal Stockings",
+        "ru": "Запечатанные Штаны Верпеса"
+      },
+      "description": {
+        "en": "Sealed Vorpal Stockings. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанные Штаны Верпеса. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 78,
+      "mDef": 0,
+      "mp": 78
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 78,
+    "mDef": 0,
+    "mp": 78
+  },
+  {
+    "key": 15734,
+    "data": {
+      "unitName": "sealed_elegia_stockings",
+      "icon": "/armor_t93_l_i02.webp",
+      "name": {
+        "en": "Sealed Elegia Stockings",
+        "ru": "Запечатанные Штаны Элегии"
+      },
+      "description": {
+        "en": "Sealed Elegia Stockings. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанные Штаны Элегии. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 80,
+      "mDef": 0,
+      "mp": 80
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 80,
+    "mDef": 0,
+    "mp": 80
+  },
+  {
+    "key": 17008,
+    "data": {
+      "unitName": "sealed_vesper_noble_tunic",
+      "icon": "/armor_t96_u_i02.webp",
+      "name": {
+        "en": "Sealed Vesper Noble Tunic",
+        "ru": "Запечатанная Красивая Туника Венеры"
+      },
+      "description": {
+        "en": "Sealed Vesper Noble Tunic. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанная Красивая Туника Венеры. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 118,
+      "mDef": 0,
+      "mp": 118
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 118,
+    "mDef": 0,
+    "mp": 118
+  },
+  {
+    "key": 14107,
+    "data": {
+      "unitName": "sealed_vesper_tunic",
+      "icon": "/armor_t96_u_i02.webp",
+      "name": {
+        "en": "Sealed Vesper Tunic",
+        "ru": "Запечатанная Туника Венеры"
+      },
+      "description": {
+        "en": "Sealed Vesper Tunic. Seal can be removed by the blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанная Туника Венеры. Печать можно снять у Кузнеца Маммона или Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 118,
+      "mDef": 0,
+      "mp": 118
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 118,
+    "mDef": 0,
+    "mp": 118
+  },
+  {
+    "key": 15748,
+    "data": {
+      "unitName": "sealed_vorpal_tunic",
+      "icon": "/armor_t96_u_i02.webp",
+      "name": {
+        "en": "Sealed Vorpal Tunic",
+        "ru": "Запечатанная Туника Верпеса"
+      },
+      "description": {
+        "en": "Sealed Vorpal Tunic. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанная Туника Верпеса. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 124,
+      "mDef": 0,
+      "mp": 124
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 124,
+    "mDef": 0,
+    "mp": 124
+  },
+  {
+    "key": 15731,
+    "data": {
+      "unitName": "sealed_elegia_tunic",
+      "icon": "/armor_t93_u_i02.webp",
+      "name": {
+        "en": "Sealed Elegia Tunic",
+        "ru": "Запечатанная Туника Элегии"
+      },
+      "description": {
+        "en": "Sealed Elegia Tunic. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанная Туника Элегии. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 129,
+      "mDef": 0,
+      "mp": 129
+    },
+    "category": "armors",
+    "subtype": "magic_armor",
+    "type": "magic_armor",
+    "pDef": 129,
+    "mDef": 0,
+    "mp": 129
+  }
+]

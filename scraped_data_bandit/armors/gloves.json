@@ -1,0 +1,1757 @@
+[
+  {
+    "key": 48,
+    "data": {
+      "unitName": "short_gloves",
+      "icon": "/armor_t02_g_i00.webp",
+      "name": {
+        "en": "Short Gloves",
+        "ru": "Короткие Перчатки"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 9,
+      "mDef": 0,
+      "mp": 9
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 9,
+    "mDef": 0,
+    "mp": 9
+  },
+  {
+    "key": 1119,
+    "data": {
+      "unitName": "short_leather_gloves",
+      "icon": "/armor_t04_g_i00.webp",
+      "name": {
+        "en": "Short Leather Gloves",
+        "ru": "Короткие Кожаные Перчатки"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 11,
+      "mDef": 0,
+      "mp": 11
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 11,
+    "mDef": 0,
+    "mp": 11
+  },
+  {
+    "key": 49,
+    "data": {
+      "unitName": "gloves",
+      "icon": "/armor_t06_g_i00.webp",
+      "name": {
+        "en": "Gloves",
+        "ru": "Перчатки"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 13,
+      "mDef": 0,
+      "mp": 13
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 13,
+    "mDef": 0,
+    "mp": 13
+  },
+  {
+    "key": 50,
+    "data": {
+      "unitName": "leather_gloves",
+      "icon": "/armor_t32_g_i00.webp",
+      "name": {
+        "en": "Leather Gloves",
+        "ru": "Кожаные Перчатки"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 15,
+      "mDef": 0,
+      "mp": 15
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 15,
+    "mDef": 0,
+    "mp": 15
+  },
+  {
+    "key": 51,
+    "data": {
+      "unitName": "bracer",
+      "icon": "/armor_t30_g_i00.webp",
+      "name": {
+        "en": "Bracer",
+        "ru": "Наручи"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pDef": 17,
+      "mDef": 0,
+      "mp": 17
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 17,
+    "mDef": 0,
+    "mp": 17
+  },
+  {
+    "key": 604,
+    "data": {
+      "unitName": "excellence_leather_gloves",
+      "icon": "/armor_t09_g_i00.webp",
+      "name": {
+        "en": "Crafted Leather Gloves",
+        "ru": "Перчатки Выделанной Кожи"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 19,
+      "mDef": 0,
+      "mp": 19
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 19,
+    "mDef": 0,
+    "mp": 19
+  },
+  {
+    "key": 605,
+    "data": {
+      "unitName": "leather_gauntlet",
+      "icon": "/armor_t18_g_i00.webp",
+      "name": {
+        "en": "Leather Gauntlets",
+        "ru": "Кожаные Рукавицы"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 22,
+      "mDef": 0,
+      "mp": 22
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 22,
+    "mDef": 0,
+    "mp": 22
+  },
+  {
+    "key": 7855,
+    "data": {
+      "unitName": "leather_gloves_of_oath",
+      "icon": "/armor_t1002_g_i00.webp",
+      "name": {
+        "en": "Clan Oath Leather Gloves Light Armor",
+        "ru": "Кожаные Перчатки Клятвы Легкий"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 24,
+      "mDef": 0,
+      "mp": 24
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 24,
+    "mDef": 0,
+    "mp": 24
+  },
+  {
+    "key": 7858,
+    "data": {
+      "unitName": "silk_gloves_of_oath",
+      "icon": "/armor_t1003_g_i00.webp",
+      "name": {
+        "en": "Clan Oath Padded Gloves Robe",
+        "ru": "Пластинчатые Перчатки Клятвы Магический"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 24,
+      "mDef": 0,
+      "mp": 24
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 24,
+    "mDef": 0,
+    "mp": 24
+  },
+  {
+    "key": 63,
+    "data": {
+      "unitName": "gauntlet",
+      "icon": "/armor_t10_g_i00.webp",
+      "name": {
+        "en": "Gauntlets",
+        "ru": "Рукавицы"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 24,
+      "mDef": 0,
+      "mp": 24
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 24,
+    "mDef": 0,
+    "mp": 24
+  },
+  {
+    "key": 2446,
+    "data": {
+      "unitName": "reinforce_leather_gloves",
+      "icon": "/armor_t13_g_i00.webp",
+      "name": {
+        "en": "Reinforced Leather Gloves",
+        "ru": "Укрепленные Кожаные Перчатки"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 24,
+      "mDef": 0,
+      "mp": 24
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 24,
+    "mDef": 0,
+    "mp": 24
+  },
+  {
+    "key": 7852,
+    "data": {
+      "unitName": "gauntlet_of_oath",
+      "icon": "/armor_t1001_g_i00.webp",
+      "name": {
+        "en": "Clan Oath Gauntlets Heavy Armor",
+        "ru": "Рукавицы Клятвы Тяжелый"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 24,
+      "mDef": 0,
+      "mp": 24
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 24,
+    "mDef": 0,
+    "mp": 24
+  },
+  {
+    "key": 2447,
+    "data": {
+      "unitName": "gloves_of_knowledge",
+      "icon": "/armor_t41_g_i00.webp",
+      "name": {
+        "en": "Gloves of Knowledge",
+        "ru": "Перчатки Знания"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 24,
+      "mDef": 0,
+      "mp": 24
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 24,
+    "mDef": 0,
+    "mp": 24
+  },
+  {
+    "key": 2449,
+    "data": {
+      "unitName": "brigandine_gauntlet",
+      "icon": "/armor_t43_g_i00.webp",
+      "name": {
+        "en": "Brigandine Gauntlets",
+        "ru": "Панцирные Рукавицы"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 27,
+      "mDef": 0,
+      "mp": 27
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 27,
+    "mDef": 0,
+    "mp": 27
+  },
+  {
+    "key": 606,
+    "data": {
+      "unitName": "gauntlet_of_repose_of_the_soul",
+      "icon": "/armor_t40_g_i00.webp",
+      "name": {
+        "en": "Rip Gauntlets",
+        "ru": "Рваные Рукавицы"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 27,
+      "mDef": 0,
+      "mp": 27
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 27,
+    "mDef": 0,
+    "mp": 27
+  },
+  {
+    "key": 2448,
+    "data": {
+      "unitName": "manticor_skin_gloves",
+      "icon": "/armor_t42_g_i00.webp",
+      "name": {
+        "en": "Manticore Skin Gloves",
+        "ru": "Перчатки из Шкуры Мантикоры"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 27,
+      "mDef": 0,
+      "mp": 27
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 27,
+    "mDef": 0,
+    "mp": 27
+  },
+  {
+    "key": 2450,
+    "data": {
+      "unitName": "elven_mithril_gloves",
+      "icon": "/armor_t51_g_i00.webp",
+      "name": {
+        "en": "Elven Mithril Gloves",
+        "ru": "Мифриловые Перчатки Эльфов"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 27,
+      "mDef": 0,
+      "mp": 27
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 27,
+    "mDef": 0,
+    "mp": 27
+  },
+  {
+    "key": 2451,
+    "data": {
+      "unitName": "sage's_worn_gloves",
+      "icon": "/armor_t44_g_i00.webp",
+      "name": {
+        "en": "Sage's Worn Gloves",
+        "ru": "Потрепанные Перчатки Мудреца"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 29,
+      "mDef": 0,
+      "mp": 29
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 29,
+    "mDef": 0,
+    "mp": 29
+  },
+  {
+    "key": 61,
+    "data": {
+      "unitName": "mithril_glove",
+      "icon": "/armor_t46_g_i00.webp",
+      "name": {
+        "en": "Mithril Gloves",
+        "ru": "Мифриловые Перчатки"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 29,
+      "mDef": 0,
+      "mp": 29
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 29,
+    "mDef": 0,
+    "mp": 29
+  },
+  {
+    "key": 607,
+    "data": {
+      "unitName": "ogre_power_gauntlet",
+      "icon": "/armor_t45_g_i00.webp",
+      "name": {
+        "en": "Ogre Power Gauntlets",
+        "ru": "Рукавицы Огра"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pDef": 29,
+      "mDef": 0,
+      "mp": 29
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 29,
+    "mDef": 0,
+    "mp": 29
+  },
+  {
+    "key": 2452,
+    "data": {
+      "unitName": "reinforce_mithril_gloves",
+      "icon": "/armor_t47_g_i00.webp",
+      "name": {
+        "en": "Reinforced Mithril Gloves",
+        "ru": "Укрепленные Мифриловые Перчатки"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 32,
+      "mDef": 0,
+      "mp": 32
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 32,
+    "mDef": 0,
+    "mp": 32
+  },
+  {
+    "key": 2453,
+    "data": {
+      "unitName": "chain_gloves",
+      "icon": "/armor_t48_g_i00.webp",
+      "name": {
+        "en": "Chain Gloves",
+        "ru": "Кольчужные Перчатки"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 32,
+      "mDef": 0,
+      "mp": 32
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 32,
+    "mDef": 0,
+    "mp": 32
+  },
+  {
+    "key": 2454,
+    "data": {
+      "unitName": "karmian_gloves",
+      "icon": "/armor_t53_g_i00.webp",
+      "name": {
+        "en": "Karmian Gloves",
+        "ru": "Перчатки Кармиана"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 32,
+      "mDef": 0,
+      "mp": 32
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 32,
+    "mDef": 0,
+    "mp": 32
+  },
+  {
+    "key": 2455,
+    "data": {
+      "unitName": "plate_leather_gloves",
+      "icon": "/armor_t47_g_i00.webp",
+      "name": {
+        "en": "Plated Leather Gloves",
+        "ru": "Латные Кожаные Перчатки"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 33,
+      "mDef": 0,
+      "mp": 33
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 33,
+    "mDef": 0,
+    "mp": 33
+  },
+  {
+    "key": 2456,
+    "data": {
+      "unitName": "dwarven_chain_gloves",
+      "icon": "/armor_t60_g_i00.webp",
+      "name": {
+        "en": "Dwarven Chain Gloves",
+        "ru": "Кольчужные Перчатки Гномов"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 34,
+      "mDef": 0,
+      "mp": 34
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 34,
+    "mDef": 0,
+    "mp": 34
+  },
+  {
+    "key": 2457,
+    "data": {
+      "unitName": "gloves_of_seal",
+      "icon": "/armor_t44_g_i00.webp",
+      "name": {
+        "en": "Gloves of Seal",
+        "ru": "Перчатки Печати"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 34,
+      "mDef": 0,
+      "mp": 34
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 34,
+    "mDef": 0,
+    "mp": 34
+  },
+  {
+    "key": 2458,
+    "data": {
+      "unitName": "rind_leather_gloves",
+      "icon": "/armor_t49_g_i00.webp",
+      "name": {
+        "en": "Rind Leather Gloves",
+        "ru": "Перчатки из Грубой Кожи"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 34,
+      "mDef": 0,
+      "mp": 34
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 34,
+    "mDef": 0,
+    "mp": 34
+  },
+  {
+    "key": 608,
+    "data": {
+      "unitName": "mithril_gauntlet",
+      "icon": "/armor_t61_g_i00.webp",
+      "name": {
+        "en": "Mithril Gauntlets",
+        "ru": "Мифриловые Рукавицы"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 36,
+      "mDef": 0,
+      "mp": 36
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 36,
+    "mDef": 0,
+    "mp": 36
+  },
+  {
+    "key": 2459,
+    "data": {
+      "unitName": "demon's_gloves",
+      "icon": "/armor_t54_g_i00.webp",
+      "name": {
+        "en": "Demon's Gloves",
+        "ru": "Перчатки Демона"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 36,
+      "mDef": 0,
+      "mp": 36
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 36,
+    "mDef": 0,
+    "mp": 36
+  },
+  {
+    "key": 2460,
+    "data": {
+      "unitName": "theca_leather_gloves",
+      "icon": "/armor_t63_g_i00.webp",
+      "name": {
+        "en": "Theca Leather Gloves",
+        "ru": "Кожаные Перчатки Тека"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 37,
+      "mDef": 0,
+      "mp": 37
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 37,
+    "mDef": 0,
+    "mp": 37
+  },
+  {
+    "key": 2461,
+    "data": {
+      "unitName": "drake_leather_gloves",
+      "icon": "/armor_t21_g_i00.webp",
+      "name": {
+        "en": "Drake Leather Gloves",
+        "ru": "Кожаные Перчатки Дрейка"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 39,
+      "mDef": 0,
+      "mp": 39
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 39,
+    "mDef": 0,
+    "mp": 39
+  },
+  {
+    "key": 2462,
+    "data": {
+      "unitName": "full_plate_gauntlet",
+      "icon": "/armor_t62_g_i00.webp",
+      "name": {
+        "en": "Full Plate Gauntlets",
+        "ru": "Полные Латные Рукавицы"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 39,
+      "mDef": 0,
+      "mp": 39
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 39,
+    "mDef": 0,
+    "mp": 39
+  },
+  {
+    "key": 2463,
+    "data": {
+      "unitName": "blessed_gloves",
+      "icon": "/armor_t57_g_i00.webp",
+      "name": {
+        "en": "Divine Gloves",
+        "ru": "Перчатки Божества"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pDef": 39,
+      "mDef": 0,
+      "mp": 39
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 39,
+    "mDef": 0,
+    "mp": 39
+  },
+  {
+    "key": 2464,
+    "data": {
+      "unitName": "avadon_gloves",
+      "icon": "/armor_t66_g_i02.webp",
+      "name": {
+        "en": "Avadon Gloves",
+        "ru": "Запечатанные Перчатки Авадона"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pDef": 41,
+      "mDef": 0,
+      "mp": 41
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 41,
+    "mDef": 0,
+    "mp": 41
+  },
+  {
+    "key": 612,
+    "data": {
+      "unitName": "shrnoen's_gauntlet",
+      "icon": "/armor_t64_g_i02.webp",
+      "name": {
+        "en": "Zubei's Gauntlets",
+        "ru": "Запечатанные Рукавицы Зубея"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pDef": 41,
+      "mDef": 0,
+      "mp": 41
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 41,
+    "mDef": 0,
+    "mp": 41
+  },
+  {
+    "key": 2475,
+    "data": {
+      "unitName": "doom_gloves",
+      "icon": "/armor_t71_g_i02.webp",
+      "name": {
+        "en": "Doom Gloves",
+        "ru": "Запечатанные Перчатки Рока"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pDef": 44,
+      "mDef": 0,
+      "mp": 44
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 44,
+    "mDef": 0,
+    "mp": 44
+  },
+  {
+    "key": 2487,
+    "data": {
+      "unitName": "blue_wolve's_gloves",
+      "icon": "/armor_t68_g_i02.webp",
+      "name": {
+        "en": "Blue Wolf Gloves",
+        "ru": "Запечатанные Перчатки Синего Волка"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pDef": 44,
+      "mDef": 0,
+      "mp": 44
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 44,
+    "mDef": 0,
+    "mp": 44
+  },
+  {
+    "key": 5290,
+    "data": {
+      "unitName": "sealed_dark_crystal_gloves",
+      "icon": "/armor_t74_g_i02.webp",
+      "name": {
+        "en": "Sealed Dark Crystal Gloves",
+        "ru": "Запечатанные Перчатки Кристалла Тьмы"
+      },
+      "description": {
+        "en": "Its seal can be broken with the help of the Blacksmith of Mammon.",
+        "ru": "Запечатанные Перчатки Кристалла Тьмы. Печать можно снять у кузнеца в любой деревне."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pDef": 46,
+      "mDef": 0,
+      "mp": 46
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 46,
+    "mDef": 0,
+    "mp": 46
+  },
+  {
+    "key": 5295,
+    "data": {
+      "unitName": "sealed_tallum_gloves",
+      "icon": "/armor_t77_g_i02.webp",
+      "name": {
+        "en": "Sealed Tallum Gloves",
+        "ru": "Запечатанные Перчатки Таллума"
+      },
+      "description": {
+        "en": "Its seal can be broken with the help of the Blacksmith of Mammon.",
+        "ru": "Запечатанные Перчатки Таллума. Печать можно снять у кузнеца в любой деревне."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pDef": 46,
+      "mDef": 0,
+      "mp": 46
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 46,
+    "mDef": 0,
+    "mp": 46
+  },
+  {
+    "key": 7872,
+    "data": {
+      "unitName": "sealed_gauntlet_of_apella",
+      "icon": "/armor_t1004_g_i02.webp",
+      "name": {
+        "en": "Sealed Apella Gauntlet",
+        "ru": "Запечатанные Рукавицы Апеллы"
+      },
+      "description": {
+        "en": "It can be opened with the help of the Blacksmith of Mammon.",
+        "ru": "Может носить персонаж в звании Старейшина и выше. Запечатанные Рукавицы Апеллы. Печать можно снять у кузнеца в любой деревне."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pDef": 46,
+      "mDef": 0,
+      "mp": 46
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 46,
+    "mDef": 0,
+    "mp": 46
+  },
+  {
+    "key": 7875,
+    "data": {
+      "unitName": "sealed_leather_gloves_of_apella",
+      "icon": "/armor_t1005_g_i02.webp",
+      "name": {
+        "en": "Sealed Apella Leather Gloves",
+        "ru": "Запечатанные Кожаные Перчатки Апеллы"
+      },
+      "description": {
+        "en": "May be worn by a Baron or a higher level Aristocrat. They can be opened with the help of the Blacksmith of Mammon.",
+        "ru": "Может носить персонаж в звании Старейшина и выше. Запечатанные Кожаные Перчатки Апеллы. Печать можно снять у кузнеца в любой деревне."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pDef": 46,
+      "mDef": 0,
+      "mp": 46
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 46,
+    "mDef": 0,
+    "mp": 46
+  },
+  {
+    "key": 7878,
+    "data": {
+      "unitName": "sealed_silk_gloves_of_apella",
+      "icon": "/armor_t1006_g_i02.webp",
+      "name": {
+        "en": "Sealed Apella Silk Gloves",
+        "ru": "Запечатанные Шелковые Перчатки Апеллы"
+      },
+      "description": {
+        "en": "They can be opened with the help of the Blacksmith of Mammon.",
+        "ru": "Может носить персонаж в звании Старейшина и выше. Запечатанные Шелковые Перчатки Апеллы. Печать можно снять у кузнеца в любой деревне."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pDef": 46,
+      "mDef": 0,
+      "mp": 46
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 46,
+    "mDef": 0,
+    "mp": 46
+  },
+  {
+    "key": 5313,
+    "data": {
+      "unitName": "sealed_gloves_of_nightmare",
+      "icon": "/armor_t80_g_i02.webp",
+      "name": {
+        "en": "Sealed Gauntlets of Nightmare",
+        "ru": "Запечатанные Рукавицы Кошмаров"
+      },
+      "description": {
+        "en": "Its seal can be broken with the help of the Blacksmith of Mammon.",
+        "ru": "Запечатанные Рукавицы Кошмаров. Печать можно снять у кузнеца в любой деревне."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pDef": 49,
+      "mDef": 0,
+      "mp": 49
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 49,
+    "mDef": 0,
+    "mp": 49
+  },
+  {
+    "key": 5318,
+    "data": {
+      "unitName": "sealed_magestic_gloves",
+      "icon": "/armor_t83_g_i02.webp",
+      "name": {
+        "en": "Sealed Majestic Gauntlets",
+        "ru": "Запечатанные Рукавицы Величия"
+      },
+      "description": {
+        "en": "Its seal can be broken with the help of the Blacksmith of Mammon.",
+        "ru": "Запечатанные Рукавицы Величия. Печать можно снять у кузнеца в любой деревне."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pDef": 49,
+      "mDef": 0,
+      "mp": 49
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 49,
+    "mDef": 0,
+    "mp": 49
+  },
+  {
+    "key": 6676,
+    "data": {
+      "unitName": "sealed_imperial_crusader_gauntlet",
+      "icon": "/armor_t88_g_i02.webp",
+      "name": {
+        "en": "Sealed Imperial Crusader Gauntlets",
+        "ru": "Запечатанные Рукавицы Имперского Крестоносца"
+      },
+      "description": {
+        "en": "Its seal can be broken with the help of the Blacksmith of Mammon.",
+        "ru": "Запечатанные Рукавицы Имперского Крестоносца. Печать может быть сломана с помощью Кузнеца Маммона."
+      }
+    },
+    "grade": "S",
+    "stats": {
+      "pDef": 55,
+      "mDef": 0,
+      "mp": 55
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 55,
+    "mDef": 0,
+    "mp": 55
+  },
+  {
+    "key": 6681,
+    "data": {
+      "unitName": "sealed_draconic_leather_gloves",
+      "icon": "/armor_t89_g_i02.webp",
+      "name": {
+        "en": "Sealed Draconic Leather Gloves",
+        "ru": "Запечатанные Перчатки из Драконьей Кожи"
+      },
+      "description": {
+        "en": "Its seal can be broken with the help of the Blacksmith of Mammon.",
+        "ru": "Запечатанные Перчатки из Драконьей Кожи. Печать может быть сломана с помощью Кузнеца Маммона."
+      }
+    },
+    "grade": "S",
+    "stats": {
+      "pDef": 55,
+      "mDef": 0,
+      "mp": 55
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 55,
+    "mDef": 0,
+    "mp": 55
+  },
+  {
+    "key": 6685,
+    "data": {
+      "unitName": "sealed_major_arcana_gloves",
+      "icon": "/armor_t90_g_i02.webp",
+      "name": {
+        "en": "Sealed Major Arcana Gloves",
+        "ru": "Запечатанные Перчатки Тайн"
+      },
+      "description": {
+        "en": "Its seal can be broken with the help of the Blacksmith of Mammon.",
+        "ru": "Запечатанные Перчатки Тайн. Печать может быть сломана с помощью Кузнеца Маммона."
+      }
+    },
+    "grade": "S",
+    "stats": {
+      "pDef": 55,
+      "mDef": 0,
+      "mp": 55
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 55,
+    "mDef": 0,
+    "mp": 55
+  },
+  {
+    "key": 9517,
+    "data": {
+      "unitName": "sealed_dynasty_gauntlets",
+      "icon": "/armor_t91_g_i02.webp",
+      "name": {
+        "en": "Sealed Dynasty Gauntlets",
+        "ru": "Запечатанные Рукавицы Династии"
+      },
+      "description": {
+        "en": "Sealed Dynasty Gauntlet. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанные Рукавицы Династии. Печать можно снять у Кузнеца Маммона или Мастера Ишумы."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pDef": 61,
+      "mDef": 0,
+      "mp": 61
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 61,
+    "mDef": 0,
+    "mp": 61
+  },
+  {
+    "key": 9527,
+    "data": {
+      "unitName": "sealed_dynasty_gloves",
+      "icon": "/armor_t93_g_i02.webp",
+      "name": {
+        "en": "Sealed Dynasty Gloves",
+        "ru": "Запечатанные Перчатки Династии"
+      },
+      "description": {
+        "en": "Sealed Dynasty Gloves. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанные Перчатки Династии. Печать можно снять у Кузнеца Маммона или Мастера Ишумы."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pDef": 61,
+      "mDef": 0,
+      "mp": 61
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 61,
+    "mDef": 0,
+    "mp": 61
+  },
+  {
+    "key": 9522,
+    "data": {
+      "unitName": "sealed_dynasty_leather_gloves",
+      "icon": "/armor_t92_g_i02.webp",
+      "name": {
+        "en": "Sealed Dynasty Leather Gloves",
+        "ru": "Запечатанные Кожаные Перчатки Династии"
+      },
+      "description": {
+        "en": "Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанные Кожаные Перчатки Династии. Печать можно снять у Кузнеца Маммона или Мастера Ишумы."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pDef": 61,
+      "mDef": 0,
+      "mp": 61
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 61,
+    "mDef": 0,
+    "mp": 61
+  },
+  {
+    "key": 15703,
+    "data": {
+      "unitName": "sealed_moirai_gauntlet",
+      "icon": "/armor_t94_g_i02.webp",
+      "name": {
+        "en": "Sealed Moirai Gauntlet",
+        "ru": "Запечатанные Рукавицы Дестино"
+      },
+      "description": {
+        "en": "Sealed Moirai Gauntlet. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанные Рукавицы Дестино. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pDef": 64,
+      "mDef": 0,
+      "mp": 64
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 64,
+    "mDef": 0,
+    "mp": 64
+  },
+  {
+    "key": 15705,
+    "data": {
+      "unitName": "sealed_moirai_gloves",
+      "icon": "/armor_t96_g_i02.webp",
+      "name": {
+        "en": "Sealed Moirai Gloves",
+        "ru": "Запечатанные Перчатки Дестино"
+      },
+      "description": {
+        "en": "Sealed Moirai Gloves. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанные Перчатки Дестино. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pDef": 64,
+      "mDef": 0,
+      "mp": 64
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 64,
+    "mDef": 0,
+    "mp": 64
+  },
+  {
+    "key": 15704,
+    "data": {
+      "unitName": "sealed_moirai_leather_gloves",
+      "icon": "/armor_t95_g_i02.webp",
+      "name": {
+        "en": "Sealed Moirai Leather Gloves",
+        "ru": "Запечатанные Кожаные Перчатки Дестино"
+      },
+      "description": {
+        "en": "Sealed Moirai Leather Gloves. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанные Кожаные Перчатки Дестино. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pDef": 64,
+      "mDef": 0,
+      "mp": 64
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 64,
+    "mDef": 0,
+    "mp": 64
+  },
+  {
+    "key": 14109,
+    "data": {
+      "unitName": "sealed_vesper_gauntlet",
+      "icon": "/armor_t94_g_i02.webp",
+      "name": {
+        "en": "Sealed Vesper Gauntlet",
+        "ru": "Запечатанные Рукавицы Венеры"
+      },
+      "description": {
+        "en": "Sealed Vesper Gauntlet. Seal can be removed by the blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанные Рукавицы Венеры. Печать можно снять у Кузнеца Маммона или Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 68,
+      "mDef": 0,
+      "mp": 68
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 68,
+    "mDef": 0,
+    "mp": 68
+  },
+  {
+    "key": 14116,
+    "data": {
+      "unitName": "sealed_vesper_gloves",
+      "icon": "/armor_t96_g_i02.webp",
+      "name": {
+        "en": "Sealed Vesper Gloves",
+        "ru": "Запечатанные Перчатки Венеры"
+      },
+      "description": {
+        "en": "Sealed Vesper Gloves. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанные Перчатки Венеры. Печать можно снять у Кузнеца Маммона или Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 68,
+      "mDef": 0,
+      "mp": 68
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 68,
+    "mDef": 0,
+    "mp": 68
+  },
+  {
+    "key": 14113,
+    "data": {
+      "unitName": "sealed_vesper_leather_gloves",
+      "icon": "/armor_t95_g_i02.webp",
+      "name": {
+        "en": "Sealed Vesper Leather Gloves",
+        "ru": "Запечатанные Кожаные Перчатки Венеры"
+      },
+      "description": {
+        "en": "Sealed Vesper Leather Gloves. Seal can be removed by the blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанные Кожаные Перчатки Венеры. Печать можно снять у Кузнеца Маммона или Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 68,
+      "mDef": 0,
+      "mp": 68
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 68,
+    "mDef": 0,
+    "mp": 68
+  },
+  {
+    "key": 17010,
+    "data": {
+      "unitName": "sealed_vesper_noble_gauntlet",
+      "icon": "/armor_t94_g_i02.webp",
+      "name": {
+        "en": "Sealed Vesper Noble Gauntlet",
+        "ru": "Запечатанные Красивые Рукавицы Венеры"
+      },
+      "description": {
+        "en": "Sealed Vesper Noble Gauntlet. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанные Красивые Рукавицы Венеры. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 68,
+      "mDef": 0,
+      "mp": 68
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 68,
+    "mDef": 0,
+    "mp": 68
+  },
+  {
+    "key": 17016,
+    "data": {
+      "unitName": "sealed_vesper_noble_gloves",
+      "icon": "/armor_t96_g_i02.webp",
+      "name": {
+        "en": "Sealed Vesper Noble Gloves",
+        "ru": "Запечатанные Красивые Перчатки Венеры"
+      },
+      "description": {
+        "en": "Sealed Vesper Noble Gloves. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанные Красивые Перчатки Венеры. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 68,
+      "mDef": 0,
+      "mp": 68
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 68,
+    "mDef": 0,
+    "mp": 68
+  },
+  {
+    "key": 17013,
+    "data": {
+      "unitName": "sealed_vesper_noble_leather_gloves",
+      "icon": "/armor_t95_g_i02.webp",
+      "name": {
+        "en": "Sealed Vesper Noble Leather Gloves",
+        "ru": "Запечатанные Красивые Кожаные Перчатки Венеры"
+      },
+      "description": {
+        "en": "Sealed Vesper Noble Leather Gloves. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанные Красивые Кожаные Перчатки Венеры. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 68,
+      "mDef": 0,
+      "mp": 68
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 68,
+    "mDef": 0,
+    "mp": 68
+  },
+  {
+    "key": 15752,
+    "data": {
+      "unitName": "sealed_vorpal_gauntlet",
+      "icon": "/armor_t94_g_i02.webp",
+      "name": {
+        "en": "Sealed Vorpal Gauntlet",
+        "ru": "Запечатанные Рукавицы Верпеса"
+      },
+      "description": {
+        "en": "Sealed Vorpal Gauntlet. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанные Рукавицы Верпеса. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 71,
+      "mDef": 0,
+      "mp": 71
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 71,
+    "mDef": 0,
+    "mp": 71
+  },
+  {
+    "key": 15754,
+    "data": {
+      "unitName": "sealed_vorpal_gloves",
+      "icon": "/armor_t96_g_i02.webp",
+      "name": {
+        "en": "Sealed Vorpal Gloves",
+        "ru": "Запечатанные Перчатки Верпеса"
+      },
+      "description": {
+        "en": "Sealed Vorpal Gloves. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанные Перчатки Верпеса. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 71,
+      "mDef": 0,
+      "mp": 71
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 71,
+    "mDef": 0,
+    "mp": 71
+  },
+  {
+    "key": 15753,
+    "data": {
+      "unitName": "sealed_vorpal_leather_gloves",
+      "icon": "/armor_t95_g_i02.webp",
+      "name": {
+        "en": "Sealed Vorpal Leather Gloves",
+        "ru": "Запечатанные Кожаные Перчатки Верпеса"
+      },
+      "description": {
+        "en": "Sealed Vorpal Leather Gloves. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанные Кожаные Перчатки Верпеса. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 71,
+      "mDef": 0,
+      "mp": 71
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 71,
+    "mDef": 0,
+    "mp": 71
+  },
+  {
+    "key": 15735,
+    "data": {
+      "unitName": "sealed_elegia_gauntlet",
+      "icon": "/armor_t91_g_i02.webp",
+      "name": {
+        "en": "Sealed Elegia Gauntlet",
+        "ru": "Запечатанные Рукавицы Элегии"
+      },
+      "description": {
+        "en": "Sealed Elegia Gauntlet. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанные Рукавицы Элегии. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 74,
+      "mDef": 0,
+      "mp": 74
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 74,
+    "mDef": 0,
+    "mp": 74
+  },
+  {
+    "key": 15737,
+    "data": {
+      "unitName": "sealed_elegia_gloves",
+      "icon": "/armor_t93_g_i02.webp",
+      "name": {
+        "en": "Sealed Elegia Gloves",
+        "ru": "Запечатанные Перчатки Элегии"
+      },
+      "description": {
+        "en": "Sealed Elegia Gloves. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанные Перчатки Элегии. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 74,
+      "mDef": 0,
+      "mp": 74
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 74,
+    "mDef": 0,
+    "mp": 74
+  },
+  {
+    "key": 15736,
+    "data": {
+      "unitName": "sealed_elegia_leather_gloves",
+      "icon": "/armor_t92_g_i02.webp",
+      "name": {
+        "en": "Sealed Elegia Leather Gloves",
+        "ru": "Запечатанные Кожаные Перчатки Элегии"
+      },
+      "description": {
+        "en": "Sealed Elegia Leather Gloves. Seal can be removed by the Blacksmith of Mammon or Maestro Ishuma.",
+        "ru": "Запечатанные Кожаные Перчатки Элегии. Печать можно снять у Кузнеца Маммона или у Мастера Ишумы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pDef": 74,
+      "mDef": 0,
+      "mp": 74
+    },
+    "category": "armors",
+    "subtype": "gloves",
+    "type": "gloves",
+    "pDef": 74,
+    "mDef": 0,
+    "mp": 74
+  }
+]

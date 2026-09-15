@@ -1,0 +1,7052 @@
+[
+  {
+    "key": "discard_guardian",
+    "data": {
+      "npcName": "discard_guardian",
+      "name": {
+        "en": "Discarded Guardian",
+        "ru": "Отверженный Стражник"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "elven-ruins",
+          "name": {
+            "en": "Elven Ruins",
+            "ru": "Эльфийские Руины"
+          }
+        }
+      ],
+      "icon": "/skill4291.webp"
+    },
+    "race": {
+      "type": "construct",
+      "name": {
+        "en": "Construct",
+        "ru": "Создания"
+      }
+    },
+    "exp": 3041766,
+    "isPlayerCanUseSa": false,
+    "level": 20
+  },
+  {
+    "key": "zombie_lord_farakelsus",
+    "data": {
+      "npcName": "zombie_lord_farakelsus",
+      "name": {
+        "en": "Zombie Lord Farakelsus",
+        "ru": "Повелитель Зомби Фаракелсус"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "elven-fortress",
+          "name": {
+            "en": "Elven Fortress",
+            "ru": "Эльфийская Крепость"
+          }
+        }
+      ],
+      "icon": "/skill4290.webp"
+    },
+    "race": {
+      "type": "undead",
+      "name": {
+        "en": "Undead",
+        "ru": "Нежить"
+      }
+    },
+    "exp": 3041766,
+    "isPlayerCanUseSa": false,
+    "level": 20
+  },
+  {
+    "key": "madness_beast",
+    "data": {
+      "npcName": "madness_beast",
+      "name": {
+        "en": "Madness Beast",
+        "ru": "Зверь Безумия"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "altar-of-rites",
+          "name": {
+            "en": "Altar of Rites",
+            "ru": "Церемониальный Алтарь"
+          }
+        }
+      ],
+      "icon": "/skill4292.webp"
+    },
+    "race": {
+      "type": "beast",
+      "name": {
+        "en": "Beast",
+        "ru": "Зверь"
+      }
+    },
+    "exp": 3041766,
+    "isPlayerCanUseSa": false,
+    "level": 20
+  },
+  {
+    "key": "serpent_demon_bifrons",
+    "data": {
+      "npcName": "serpent_demon_bifrons",
+      "name": {
+        "en": "Serpent Demon Bifrons",
+        "ru": "Змеедемон Бифронс"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4292.webp"
+    },
+    "race": {
+      "type": "beast",
+      "name": {
+        "en": "Beast",
+        "ru": "Зверь"
+      }
+    },
+    "exp": 2646357,
+    "isPlayerCanUseSa": false,
+    "level": 21
+  },
+  {
+    "key": "sukar_wererat_chief",
+    "data": {
+      "npcName": "sukar_wererat_chief",
+      "name": {
+        "en": "Sukar Wererat Chief",
+        "ru": "Вожак Трусливых Крысолюдов"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "evil-hunting-grounds",
+          "name": {
+            "en": "Evil Hunting Grounds",
+            "ru": "Охотничьи Угодья Зла"
+          }
+        }
+      ],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 2646357,
+    "isPlayerCanUseSa": false,
+    "level": 21
+  },
+  {
+    "key": "malex_herald_of_dagoniel",
+    "data": {
+      "npcName": "malex_herald_of_dagoniel",
+      "name": {
+        "en": "Malex Herald of Dagoniel ",
+        "ru": "Герольд Дагониэля Малекс"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4298.webp"
+    },
+    "race": {
+      "type": "demonic",
+      "name": {
+        "en": "Demonic",
+        "ru": "Демон"
+      }
+    },
+    "exp": 2646357,
+    "isPlayerCanUseSa": false,
+    "level": 21
+  },
+  {
+    "key": "kaysha_herald_of_ikaros",
+    "data": {
+      "npcName": "kaysha_herald_of_ikaros",
+      "name": {
+        "en": "Kaysha Herald of Icarus",
+        "ru": "Герольд Икара Кайша"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "school-of-dark-arts",
+          "name": {
+            "en": "School of Dark Arts",
+            "ru": "Школа Темной Магии"
+          }
+        }
+      ],
+      "icon": "/skill4298.webp"
+    },
+    "race": {
+      "type": "demonic",
+      "name": {
+        "en": "Demonic",
+        "ru": "Демон"
+      }
+    },
+    "exp": 2646357,
+    "isPlayerCanUseSa": false,
+    "level": 21
+  },
+  {
+    "key": "greyclaw_kutus",
+    "data": {
+      "npcName": "greyclaw_kutus",
+      "name": {
+        "en": "Greyclaw Kutus",
+        "ru": "Кутус Серый Коготь"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "abandoned-camp",
+          "name": {
+            "en": "Abandoned Camp",
+            "ru": "Заброшенный Лагерь"
+          }
+        }
+      ],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 2690117,
+    "isPlayerCanUseSa": false,
+    "level": 23
+  },
+  {
+    "key": "tracker_sharuk",
+    "data": {
+      "npcName": "tracker_sharuk",
+      "name": {
+        "en": "Tracker Leader Sharuk",
+        "ru": "Главарь Охотников Шарук"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "forgotten-temple",
+          "name": {
+            "en": "Forgotten Temple",
+            "ru": "Забытый Храм"
+          }
+        }
+      ],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 2690117,
+    "isPlayerCanUseSa": false,
+    "level": 23
+  },
+  {
+    "key": "priest_of_kuroboros",
+    "data": {
+      "npcName": "priest_of_kuroboros",
+      "name": {
+        "en": "Kuroboros' Priest",
+        "ru": "Жрец Куробороса"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "windmill-hill",
+          "name": {
+            "en": "Windmill Hill",
+            "ru": "Холм Ветряных Мельниц"
+          }
+        },
+        {
+          "id": "forgotten-temple",
+          "name": {
+            "en": "Forgotten Temple",
+            "ru": "Забытый Храм"
+          }
+        }
+      ],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 2690117,
+    "isPlayerCanUseSa": false,
+    "level": 23
+  },
+  {
+    "key": "love_reverser_kael",
+    "data": {
+      "npcName": "love_reverser_kael",
+      "name": {
+        "en": "Unrequited Kael",
+        "ru": "Отверженная Каэль"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "forgotten-temple",
+          "name": {
+            "en": "Forgotten Temple",
+            "ru": "Забытый Храм"
+          }
+        }
+      ],
+      "icon": "/skill4298.webp"
+    },
+    "race": {
+      "type": "demonic",
+      "name": {
+        "en": "Demonic",
+        "ru": "Демон"
+      }
+    },
+    "exp": 2584114,
+    "isPlayerCanUseSa": false,
+    "level": 24
+  },
+  {
+    "key": "langk_matriarch_rashkos",
+    "data": {
+      "npcName": "langk_matriarch_rashkos",
+      "name": {
+        "en": "Langk Matriarch Rashkos",
+        "ru": "Матриарх Лангк Рашкос"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "langk-lizardman-barracks",
+          "name": {
+            "en": "Langk Lizardman Dwellings",
+            "ru": "Поселение Ящеров Лангк"
+          }
+        }
+      ],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 2584114,
+    "isPlayerCanUseSa": false,
+    "level": 24
+  },
+  {
+    "key": "pan_draid",
+    "data": {
+      "npcName": "pan_draid",
+      "name": {
+        "en": "Pan Dryad",
+        "ru": "Пан Дриад"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4302.webp"
+    },
+    "race": {
+      "type": "fairy",
+      "name": {
+        "en": "Fairy",
+        "ru": "Фея"
+      }
+    },
+    "exp": 2541012,
+    "isPlayerCanUseSa": false,
+    "level": 25
+  },
+  {
+    "key": "princess_molrang",
+    "data": {
+      "npcName": "princess_molrang",
+      "name": {
+        "en": "Princess Molrang",
+        "ru": "Принцесса Молранг"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "fellmere-lake",
+          "name": {
+            "en": "Fellmere Lake",
+            "ru": "Озеро Фельмер"
+          }
+        }
+      ],
+      "icon": "/skill4293.webp"
+    },
+    "race": {
+      "type": "animal",
+      "name": {
+        "en": "Animal",
+        "ru": "Животное"
+      }
+    },
+    "exp": 2541012,
+    "isPlayerCanUseSa": false,
+    "level": 25
+  },
+  {
+    "key": "zombie_lord_crowl",
+    "data": {
+      "npcName": "zombie_lord_crowl",
+      "name": {
+        "en": "Zombie Lord Crowl",
+        "ru": "Повелитель Зомби Кроул"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "ruins-of-despair",
+          "name": {
+            "en": "Ruins of Despair",
+            "ru": "Руины Отчаяния"
+          }
+        }
+      ],
+      "icon": "/skill4290.webp"
+    },
+    "race": {
+      "type": "undead",
+      "name": {
+        "en": "Undead",
+        "ru": "Нежить"
+      }
+    },
+    "exp": 2541012,
+    "isPlayerCanUseSa": false,
+    "level": 25
+  },
+  {
+    "key": "ikuntai",
+    "data": {
+      "npcName": "ikuntai",
+      "name": {
+        "en": "Ikuntai",
+        "ru": "Икунтай"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "ruins-of-despair",
+          "name": {
+            "en": "Ruins of Despair",
+            "ru": "Руины Отчаяния"
+          }
+        }
+      ],
+      "icon": "/skill4290.webp"
+    },
+    "race": {
+      "type": "undead",
+      "name": {
+        "en": "Undead",
+        "ru": "Нежить"
+      }
+    },
+    "exp": 1589296,
+    "isPlayerCanUseSa": false,
+    "level": 25
+  },
+  {
+    "key": "soul_scavenger",
+    "data": {
+      "npcName": "soul_scavenger",
+      "name": {
+        "en": "Soul Scavenger",
+        "ru": "Собиратель Душ"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "ruins-of-agony",
+          "name": {
+            "en": "Ruins of Agony",
+            "ru": "Руины Страданий"
+          }
+        }
+      ],
+      "icon": "/skill4290.webp"
+    },
+    "race": {
+      "type": "undead",
+      "name": {
+        "en": "Undead",
+        "ru": "Нежить"
+      }
+    },
+    "exp": 2541012,
+    "isPlayerCanUseSa": false,
+    "level": 25
+  },
+  {
+    "key": "betrayer_of_urutu_freki",
+    "data": {
+      "npcName": "betrayer_of_urutu_freki",
+      "name": {
+        "en": "Betrayer of Urutu Freki",
+        "ru": "Предатель Уруту Фреки"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 2541012,
+    "isPlayerCanUseSa": false,
+    "level": 25
+  },
+  {
+    "key": "mammons_collector_talos",
+    "data": {
+      "npcName": "mammons_collector_talos",
+      "name": {
+        "en": "Mammon Collector Talos",
+        "ru": "Коллекционер Маммона Талос"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4298.webp"
+    },
+    "race": {
+      "type": "demonic",
+      "name": {
+        "en": "Demonic",
+        "ru": "Демон"
+      }
+    },
+    "exp": 2541012,
+    "isPlayerCanUseSa": false,
+    "level": 25
+  },
+  {
+    "key": "tiger_hornet",
+    "data": {
+      "npcName": "tiger_hornet",
+      "name": {
+        "en": "Tiger Hornet",
+        "ru": "Тигровый Шершень"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4301.webp"
+    },
+    "race": {
+      "type": "bug",
+      "name": {
+        "en": "Bug",
+        "ru": "Жук"
+      }
+    },
+    "exp": 2487618,
+    "isPlayerCanUseSa": false,
+    "level": 26
+  },
+  {
+    "key": "patriarch_kuroboros",
+    "data": {
+      "npcName": "patriarch_kuroboros",
+      "name": {
+        "en": "Patriarch Kuroboros",
+        "ru": "Патриарх Куроборос"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "forgotten-temple",
+          "name": {
+            "en": "Forgotten Temple",
+            "ru": "Забытый Храм"
+          }
+        }
+      ],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 2487618,
+    "isPlayerCanUseSa": false,
+    "level": 26
+  },
+  {
+    "key": "tirak",
+    "data": {
+      "npcName": "tirak",
+      "name": {
+        "en": "Tirak",
+        "ru": "Тирак"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "forgotten-temple",
+          "name": {
+            "en": "Forgotten Temple",
+            "ru": "Забытый Храм"
+          }
+        }
+      ],
+      "icon": "/skill4298.webp"
+    },
+    "race": {
+      "type": "demonic",
+      "name": {
+        "en": "Demonic",
+        "ru": "Демон"
+      }
+    },
+    "exp": 2390045,
+    "isPlayerCanUseSa": false,
+    "level": 28
+  },
+  {
+    "key": "partisan_leader_talakin",
+    "data": {
+      "npcName": "partisan_leader_talakin",
+      "name": {
+        "en": "Partisan Leader Talakin",
+        "ru": "Главарь Партизан Талакин"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "partisan-hideaway",
+          "name": {
+            "en": "Partisan Hideaway",
+            "ru": "Лагерь Партизан"
+          }
+        }
+      ],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 2390045,
+    "isPlayerCanUseSa": false,
+    "level": 28
+  },
+  {
+    "key": "r08_leader_anakazel",
+    "data": {
+      "npcName": "r08_leader_anakazel",
+      "name": {
+        "en": "Anakazel",
+        "ru": "Анаказель"
+      },
+      "title": {
+        "en": "Invaders' Leader",
+        "ru": "Лидер Захватчиков"
+      },
+      "locs": [
+        {
+          "id": "dimensional-rift",
+          "name": {
+            "en": "Dimensional Rift",
+            "ru": "Пространственный Разлом"
+          }
+        }
+      ],
+      "icon": "/skill4298.webp"
+    },
+    "race": {
+      "type": "demonic",
+      "name": {
+        "en": "Demonic",
+        "ru": "Демон"
+      }
+    },
+    "exp": 1673031,
+    "isPlayerCanUseSa": false,
+    "level": 28
+  },
+  {
+    "key": "elf_renoa",
+    "data": {
+      "npcName": "elf_renoa",
+      "name": {
+        "en": "Elf Renoa",
+        "ru": "Эльф Реноа"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4290.webp"
+    },
+    "race": {
+      "type": "undead",
+      "name": {
+        "en": "Undead",
+        "ru": "Нежить"
+      }
+    },
+    "exp": 2345715,
+    "isPlayerCanUseSa": false,
+    "level": 29
+  },
+  {
+    "key": "turek_mercenary_boss",
+    "data": {
+      "npcName": "turek_mercenary_boss",
+      "name": {
+        "en": "Turek Mercenary Captain",
+        "ru": "Капитан Наемников Турек"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 1868579,
+    "isPlayerCanUseSa": false,
+    "level": 30
+  },
+  {
+    "key": "catseye",
+    "data": {
+      "npcName": "catseye",
+      "name": {
+        "en": "Cat's Eye Bandit",
+        "ru": "Бандит Кошачий Глаз"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "partisan-hideaway",
+          "name": {
+            "en": "Partisan Hideaway",
+            "ru": "Лагерь Партизан"
+          }
+        }
+      ],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 1868579,
+    "isPlayerCanUseSa": false,
+    "level": 30
+  },
+  {
+    "key": "meana_agent_of_beres",
+    "data": {
+      "npcName": "meana_agent_of_beres",
+      "name": {
+        "en": "Agent of Beres, Meana",
+        "ru": "Агент Белефа Мина"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4292.webp"
+    },
+    "race": {
+      "type": "beast",
+      "name": {
+        "en": "Beast",
+        "ru": "Зверь"
+      }
+    },
+    "exp": 2308288,
+    "isPlayerCanUseSa": false,
+    "level": 30
+  },
+  {
+    "key": "ragraman",
+    "data": {
+      "npcName": "ragraman",
+      "name": {
+        "en": "Ragraman",
+        "ru": "Раграмэн"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 1868579,
+    "isPlayerCanUseSa": false,
+    "level": 30
+  },
+  {
+    "key": "apepi",
+    "data": {
+      "npcName": "apepi",
+      "name": {
+        "en": "Apepi",
+        "ru": "Апепи"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "field-of-silence",
+          "name": {
+            "en": "Field of Silence",
+            "ru": "Поля Безмолвия"
+          }
+        }
+      ],
+      "icon": "/skill4292.webp"
+    },
+    "race": {
+      "type": "beast",
+      "name": {
+        "en": "Beast",
+        "ru": "Зверь"
+      }
+    },
+    "exp": 2308288,
+    "isPlayerCanUseSa": false,
+    "level": 30
+  },
+  {
+    "key": "giant_wasteland_basil",
+    "data": {
+      "npcName": "giant_wasteland_basil",
+      "name": {
+        "en": "Giant Wasteland Basilisk",
+        "ru": "Гигантский Пустырный Василиск"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "ant-nest",
+          "name": {
+            "en": "The Ant Nest",
+            "ru": "Муравейник"
+          }
+        },
+        {
+          "id": "wasteland",
+          "name": {
+            "en": "Wasteland",
+            "ru": "Пустошь"
+          }
+        }
+      ],
+      "icon": "/skill4292.webp"
+    },
+    "race": {
+      "type": "beast",
+      "name": {
+        "en": "Beast",
+        "ru": "Зверь"
+      }
+    },
+    "exp": 2308288,
+    "isPlayerCanUseSa": false,
+    "level": 30
+  },
+  {
+    "key": "grave_robber_akata",
+    "data": {
+      "npcName": "grave_robber_akata",
+      "name": {
+        "en": "Boss Akata",
+        "ru": "Босс Аката"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "graverobber-hideout",
+          "name": {
+            "en": "Graverobber Hideout",
+            "ru": "Укрытие Грабителей Могил"
+          }
+        }
+      ],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 2308288,
+    "isPlayerCanUseSa": false,
+    "level": 30
+  },
+  {
+    "key": "queens_nobel_leader",
+    "data": {
+      "npcName": "queens_nobel_leader",
+      "name": {
+        "en": "Captain of Queen's Royal Guards",
+        "ru": "Капитан Королевской Стражи"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "cruma-marshlands",
+          "name": {
+            "en": "Cruma Marshlands",
+            "ru": "Топи Крумы"
+          }
+        }
+      ],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 1962692,
+    "isPlayerCanUseSa": false,
+    "level": 32
+  },
+  {
+    "key": "antaras_adherent_skyla",
+    "data": {
+      "npcName": "antaras_adherent_skyla",
+      "name": {
+        "en": "Skyla",
+        "ru": "Скайла"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 1962692,
+    "isPlayerCanUseSa": false,
+    "level": 32
+  },
+  {
+    "key": "vuku_witchdr_gharmash",
+    "data": {
+      "npcName": "vuku_witchdr_gharmash",
+      "name": {
+        "en": "Vuku Grand Seer Gharmash",
+        "ru": "Великий Пророк Вуку Гармаш"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 1932560,
+    "isPlayerCanUseSa": false,
+    "level": 33
+  },
+  {
+    "key": "nurkas_messenger",
+    "data": {
+      "npcName": "nurkas_messenger",
+      "name": {
+        "en": "Nurka's Messenger",
+        "ru": "Посланец Нурки"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "partisan-hideaway",
+          "name": {
+            "en": "Partisan Hideaway",
+            "ru": "Лагерь Партизан"
+          }
+        }
+      ],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 1932560,
+    "isPlayerCanUseSa": false,
+    "level": 33
+  },
+  {
+    "key": "corsair_captain_kylon",
+    "data": {
+      "npcName": "corsair_captain_kylon",
+      "name": {
+        "en": "Corsair Captain Kylon",
+        "ru": "Капитан Корсаров Килон"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4290.webp"
+    },
+    "race": {
+      "type": "undead",
+      "name": {
+        "en": "Undead",
+        "ru": "Нежить"
+      }
+    },
+    "exp": 1932560,
+    "isPlayerCanUseSa": false,
+    "level": 33
+  },
+  {
+    "key": "breka_warlock_pastu",
+    "data": {
+      "npcName": "breka_warlock_pastu",
+      "name": {
+        "en": "Breka Warlock Pastu",
+        "ru": "Колдун Брека Пасту"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "dragon-valley",
+          "name": {
+            "en": "Dragon valley",
+            "ru": "Долина Драконов"
+          }
+        }
+      ],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 1918617,
+    "isPlayerCanUseSa": false,
+    "level": 34
+  },
+  {
+    "key": "jeruna_queen",
+    "data": {
+      "npcName": "jeruna_queen",
+      "name": {
+        "en": "Stakato Queen Zyrnna",
+        "ru": "Королева Стакато Зирна"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "cruma-marshlands",
+          "name": {
+            "en": "Cruma Marshlands",
+            "ru": "Топи Крумы"
+          }
+        }
+      ],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 2316590,
+    "isPlayerCanUseSa": false,
+    "level": 34
+  },
+  {
+    "key": "cronoss_summons_mumu",
+    "data": {
+      "npcName": "cronoss_summons_mumu",
+      "name": {
+        "en": "Cronos's Servitor Mumu",
+        "ru": "Служитель Кроноса Маму"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "field-of-whispers",
+          "name": {
+            "en": "Field of Whispers",
+            "ru": "Шепчущие Поля"
+          }
+        }
+      ],
+      "icon": "/skill4296.webp"
+    },
+    "race": {
+      "type": "elemental",
+      "name": {
+        "en": "Elemental",
+        "ru": "Элементаль"
+      }
+    },
+    "exp": 1918617,
+    "isPlayerCanUseSa": false,
+    "level": 34
+  },
+  {
+    "key": "revenant_of_sir_calibus",
+    "data": {
+      "npcName": "revenant_of_sir_calibus",
+      "name": {
+        "en": "Revenant of Sir Calibus",
+        "ru": "Призрак Сэра Калибуса"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "execution-ground",
+          "name": {
+            "en": "Execution Ground",
+            "ru": "Земля Казненных"
+          }
+        }
+      ],
+      "icon": "/skill4290.webp"
+    },
+    "race": {
+      "type": "undead",
+      "name": {
+        "en": "Undead",
+        "ru": "Нежить"
+      }
+    },
+    "exp": 1918617,
+    "isPlayerCanUseSa": false,
+    "level": 34
+  },
+  {
+    "key": "remmel",
+    "data": {
+      "npcName": "remmel",
+      "name": {
+        "en": "Remmel",
+        "ru": "Реммель"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "cruma-marshlands",
+          "name": {
+            "en": "Cruma Marshlands",
+            "ru": "Топи Крумы"
+          }
+        }
+      ],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 1912395,
+    "isPlayerCanUseSa": false,
+    "level": 35
+  },
+  {
+    "key": "grandeur_soul_chertuba",
+    "data": {
+      "npcName": "grandeur_soul_chertuba",
+      "name": {
+        "en": "Chertuba of Great Soul",
+        "ru": "Чертуба Великий Дух"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "orc-barracks",
+          "name": {
+            "en": "Orc Barracks",
+            "ru": "Лагерь Орков"
+          }
+        }
+      ],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 1912395,
+    "isPlayerCanUseSa": false,
+    "level": 35
+  },
+  {
+    "key": "sejarr_s_summoner",
+    "data": {
+      "npcName": "sejarr_s_summoner",
+      "name": {
+        "en": "Sejarr's Servitor",
+        "ru": "Служитель Седжара"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4293.webp"
+    },
+    "race": {
+      "type": "animal",
+      "name": {
+        "en": "Animal",
+        "ru": "Животное"
+      }
+    },
+    "exp": 1912395,
+    "isPlayerCanUseSa": false,
+    "level": 35
+  },
+  {
+    "key": "warden_guillotine",
+    "data": {
+      "npcName": "warden_guillotine",
+      "name": {
+        "en": "Guilotine, Warden of the Execution Grounds",
+        "ru": "Смотритель Земли Казненных Гильотин"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "execution-ground",
+          "name": {
+            "en": "Execution Ground",
+            "ru": "Земля Казненных"
+          }
+        }
+      ],
+      "icon": "/skill4290.webp"
+    },
+    "race": {
+      "type": "undead",
+      "name": {
+        "en": "Undead",
+        "ru": "Нежить"
+      }
+    },
+    "exp": 1912395,
+    "isPlayerCanUseSa": false,
+    "level": 35
+  },
+  {
+    "key": "flamelord_shadar",
+    "data": {
+      "npcName": "flamelord_shadar",
+      "name": {
+        "en": "Flame Lord Shadar",
+        "ru": "Повелитель Пламени Шадар"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "partisan-hideaway",
+          "name": {
+            "en": "Partisan Hideaway",
+            "ru": "Лагерь Партизан"
+          }
+        }
+      ],
+      "icon": "/skill4298.webp"
+    },
+    "race": {
+      "type": "demonic",
+      "name": {
+        "en": "Demonic",
+        "ru": "Демон"
+      }
+    },
+    "exp": 1912395,
+    "isPlayerCanUseSa": false,
+    "level": 35
+  },
+  {
+    "key": "tasaba_patriarch_hellena",
+    "data": {
+      "npcName": "tasaba_patriarch_hellena",
+      "name": {
+        "en": "Tasaba Patriarch Hellena",
+        "ru": "Хелена Патриарх Тасаба"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "field-of-silence",
+          "name": {
+            "en": "Field of Silence",
+            "ru": "Поля Безмолвия"
+          }
+        }
+      ],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 1912395,
+    "isPlayerCanUseSa": false,
+    "level": 35
+  },
+  {
+    "key": "soul_collector_acheron",
+    "data": {
+      "npcName": "soul_collector_acheron",
+      "name": {
+        "en": "Soul Collector Acheron",
+        "ru": "Собиратель Душ Ашерон"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "execution-ground",
+          "name": {
+            "en": "Execution Ground",
+            "ru": "Земля Казненных"
+          }
+        }
+      ],
+      "icon": "/skill4298.webp"
+    },
+    "race": {
+      "type": "demonic",
+      "name": {
+        "en": "Demonic",
+        "ru": "Демон"
+      }
+    },
+    "exp": 1912395,
+    "isPlayerCanUseSa": false,
+    "level": 35
+  },
+  {
+    "key": "gargoyle_lord_sirocco",
+    "data": {
+      "npcName": "gargoyle_lord_sirocco",
+      "name": {
+        "en": "Gargoyle Lord Sirocco",
+        "ru": "Повелитель Горгулий Сирокко"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "ant-nest",
+          "name": {
+            "en": "The Ant Nest",
+            "ru": "Муравейник"
+          }
+        },
+        {
+          "id": "wasteland",
+          "name": {
+            "en": "Wasteland",
+            "ru": "Пустошь"
+          }
+        }
+      ],
+      "icon": "/skill4291.webp"
+    },
+    "race": {
+      "type": "construct",
+      "name": {
+        "en": "Construct",
+        "ru": "Создания"
+      }
+    },
+    "exp": 1912395,
+    "isPlayerCanUseSa": false,
+    "level": 35
+  },
+  {
+    "key": "redeye_leader_trakia",
+    "data": {
+      "npcName": "redeye_leader_trakia",
+      "name": {
+        "en": "Red Eye Captain Trakia",
+        "ru": "Красноглазый Капитан Тракиа"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "partisan-hideaway",
+          "name": {
+            "en": "Partisan Hideaway",
+            "ru": "Лагерь Партизан"
+          }
+        }
+      ],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 1912395,
+    "isPlayerCanUseSa": false,
+    "level": 35
+  },
+  {
+    "key": "eyes_of_bereth",
+    "data": {
+      "npcName": "eyes_of_bereth",
+      "name": {
+        "en": "Eye of Beleth",
+        "ru": "Глаз Белефа"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4291.webp"
+    },
+    "race": {
+      "type": "construct",
+      "name": {
+        "en": "Construct",
+        "ru": "Создания"
+      }
+    },
+    "exp": 1912395,
+    "isPlayerCanUseSa": false,
+    "level": 35
+  },
+  {
+    "key": "sebek",
+    "data": {
+      "npcName": "sebek",
+      "name": {
+        "en": "Sebek",
+        "ru": "Себек"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "field-of-silence",
+          "name": {
+            "en": "Field of Silence",
+            "ru": "Поля Безмолвия"
+          }
+        }
+      ],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 1916442,
+    "isPlayerCanUseSa": false,
+    "level": 36
+  },
+  {
+    "key": "demon_tempest",
+    "data": {
+      "npcName": "demon_tempest",
+      "name": {
+        "en": "Evil Spirit Tempest",
+        "ru": "Беспокойный Злой Дух"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "execution-ground",
+          "name": {
+            "en": "Execution Ground",
+            "ru": "Земля Казненных"
+          }
+        }
+      ],
+      "icon": "/skill4298.webp"
+    },
+    "race": {
+      "type": "demonic",
+      "name": {
+        "en": "Demonic",
+        "ru": "Демон"
+      }
+    },
+    "exp": 1916442,
+    "isPlayerCanUseSa": false,
+    "level": 36
+  },
+  {
+    "key": "rayito_the_looter",
+    "data": {
+      "npcName": "rayito_the_looter",
+      "name": {
+        "en": "Rayito the Looter",
+        "ru": "Грабитель Раито"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "brigand-stronghold",
+          "name": {
+            "en": "Brigand Stronghold",
+            "ru": "Бандитская Твердыня"
+          }
+        }
+      ],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 1932589,
+    "isPlayerCanUseSa": false,
+    "level": 37
+  },
+  {
+    "key": "lizardman_leader_hellion",
+    "data": {
+      "npcName": "lizardman_leader_hellion",
+      "name": {
+        "en": "Lizardmen Leader Hellion",
+        "ru": "Глава Ящеров Хеллион"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "cruma-marshlands",
+          "name": {
+            "en": "Cruma Marshlands",
+            "ru": "Топи Крумы"
+          }
+        }
+      ],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 1957608,
+    "isPlayerCanUseSa": false,
+    "level": 38
+  },
+  {
+    "key": "r18_leader_anakazel",
+    "data": {
+      "npcName": "r18_leader_anakazel",
+      "name": {
+        "en": "Anakazel",
+        "ru": "Анаказель"
+      },
+      "title": {
+        "en": "Invaders' Leader",
+        "ru": "Лидер Захватчиков"
+      },
+      "locs": [
+        {
+          "id": "dimensional-rift",
+          "name": {
+            "en": "Dimensional Rift",
+            "ru": "Пространственный Разлом"
+          }
+        }
+      ],
+      "icon": "/skill4298.webp"
+    },
+    "race": {
+      "type": "demonic",
+      "name": {
+        "en": "Demonic",
+        "ru": "Демон"
+      }
+    },
+    "exp": 1370326,
+    "isPlayerCanUseSa": false,
+    "level": 38
+  },
+  {
+    "key": "premo_prime_the_creature",
+    "data": {
+      "npcName": "premo_prime_the_creature",
+      "name": {
+        "en": "Premo Prime",
+        "ru": "Премо Прайм"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "field-of-whispers",
+          "name": {
+            "en": "Field of Whispers",
+            "ru": "Шепчущие Поля"
+          }
+        }
+      ],
+      "icon": "/skill4300.webp"
+    },
+    "race": {
+      "type": "giant",
+      "name": {
+        "en": "Giant",
+        "ru": "Гигант"
+      }
+    },
+    "exp": 1957608,
+    "isPlayerCanUseSa": false,
+    "level": 38
+  },
+  {
+    "key": "lost_cat_the_cat_a",
+    "data": {
+      "npcName": "lost_cat_the_cat_a",
+      "name": {
+        "en": "Leader of Cat Gang",
+        "ru": "Лидер Кошачьей Банды"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "giran-castle-town",
+          "name": {
+            "en": "Town of Giran",
+            "ru": "Город Гиран"
+          }
+        }
+      ],
+      "icon": "/skill4296.webp"
+    },
+    "race": {
+      "type": "elemental",
+      "name": {
+        "en": "Elemental",
+        "ru": "Элементаль"
+      }
+    },
+    "exp": 1988451,
+    "isPlayerCanUseSa": false,
+    "level": 39
+  },
+  {
+    "key": "spirits_of_nellis",
+    "data": {
+      "npcName": "spirits_of_nellis",
+      "name": {
+        "en": "Nellis' Vengeful Spirit",
+        "ru": "Мстительный Дух Нелли"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "sky-wagon-relic",
+          "name": {
+            "en": "Sky Wagon Relic",
+            "ru": "Руины Воздушной Дороги"
+          }
+        }
+      ],
+      "icon": "/skill4290.webp"
+    },
+    "race": {
+      "type": "undead",
+      "name": {
+        "en": "Undead",
+        "ru": "Нежить"
+      }
+    },
+    "exp": 1988451,
+    "isPlayerCanUseSa": false,
+    "level": 39
+  },
+  {
+    "key": "wizard_of_storm_teruk",
+    "data": {
+      "npcName": "wizard_of_storm_teruk",
+      "name": {
+        "en": "Wizard of Storm Teruk",
+        "ru": "Чародей Бури Терук"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "plains-of-the-lizardmen",
+          "name": {
+            "en": "Plains of the Lizardmen",
+            "ru": "Долина Ящеров"
+          }
+        }
+      ],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 2030965,
+    "isPlayerCanUseSa": false,
+    "level": 40
+  },
+  {
+    "key": "icarus_sample_21",
+    "data": {
+      "npcName": "icarus_sample_21",
+      "name": {
+        "en": "Icarus Sample 1",
+        "ru": "Тварь Икара I"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4291.webp"
+    },
+    "race": {
+      "type": "construct",
+      "name": {
+        "en": "Construct",
+        "ru": "Создания"
+      }
+    },
+    "exp": 2741414,
+    "isPlayerCanUseSa": false,
+    "level": 40
+  },
+  {
+    "key": "leto_chief_talkin",
+    "data": {
+      "npcName": "leto_chief_talkin",
+      "name": {
+        "en": "Leto Chief Talkin",
+        "ru": "Глава Лито Талкин"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "plains-of-the-lizardmen",
+          "name": {
+            "en": "Plains of the Lizardmen",
+            "ru": "Долина Ящеров"
+          }
+        }
+      ],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 2030965,
+    "isPlayerCanUseSa": false,
+    "level": 40
+  },
+  {
+    "key": "shaman_king_selu",
+    "data": {
+      "npcName": "shaman_king_selu",
+      "name": {
+        "en": "Shaman King Selu",
+        "ru": "Король Шаманов Селу"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "skyshadow-meadow",
+          "name": {
+            "en": "Skyshadow Meadow",
+            "ru": "Луга Небесной Тени"
+          }
+        }
+      ],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 2741414,
+    "isPlayerCanUseSa": false,
+    "level": 40
+  },
+  {
+    "key": "water_couatl_ateka",
+    "data": {
+      "npcName": "water_couatl_ateka",
+      "name": {
+        "en": "Water Couatle Ateka",
+        "ru": "Водный Змей Атека"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4292.webp"
+    },
+    "race": {
+      "type": "beast",
+      "name": {
+        "en": "Beast",
+        "ru": "Зверь"
+      }
+    },
+    "exp": 2030965,
+    "isPlayerCanUseSa": false,
+    "level": 40
+  },
+  {
+    "key": "fafurions_pagehood_sika",
+    "data": {
+      "npcName": "fafurions_pagehood_sika",
+      "name": {
+        "en": "Fafurion's Page Sika",
+        "ru": "Сика Паж Фафуриона"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4300.webp"
+    },
+    "race": {
+      "type": "giant",
+      "name": {
+        "en": "Giant",
+        "ru": "Гигант"
+      }
+    },
+    "exp": 2030965,
+    "isPlayerCanUseSa": false,
+    "level": 40
+  },
+  {
+    "key": "road_scavenger_leader",
+    "data": {
+      "npcName": "road_scavenger_leader",
+      "name": {
+        "en": "Road Scavenger Leader",
+        "ru": "Главарь Придорожных Падальщиков"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "death-pass",
+          "name": {
+            "en": "Death Pass",
+            "ru": "Долина Смерти"
+          }
+        }
+      ],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 2030965,
+    "isPlayerCanUseSa": false,
+    "level": 40
+  },
+  {
+    "key": "nakondas",
+    "data": {
+      "npcName": "nakondas",
+      "name": {
+        "en": "Nakondas",
+        "ru": "Накондас"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4299.webp"
+    },
+    "race": {
+      "type": "dragon",
+      "name": {
+        "en": "Dragon",
+        "ru": "Дракон"
+      }
+    },
+    "exp": 2030965,
+    "isPlayerCanUseSa": false,
+    "level": 40
+  },
+  {
+    "key": "water_spirit_lian",
+    "data": {
+      "npcName": "water_spirit_lian",
+      "name": {
+        "en": "Water Spirit Lian",
+        "ru": "Дух Воды Лиан"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "field-of-silence",
+          "name": {
+            "en": "Field of Silence",
+            "ru": "Поля Безмолвия"
+          }
+        }
+      ],
+      "icon": "/skill4302.webp"
+    },
+    "race": {
+      "type": "fairy",
+      "name": {
+        "en": "Fairy",
+        "ru": "Фея"
+      }
+    },
+    "exp": 2030965,
+    "isPlayerCanUseSa": false,
+    "level": 40
+  },
+  {
+    "key": "gwindorr",
+    "data": {
+      "npcName": "gwindorr",
+      "name": {
+        "en": "Gwindorr",
+        "ru": "Гвиндорр"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "field-of-whispers",
+          "name": {
+            "en": "Field of Whispers",
+            "ru": "Шепчущие Поля"
+          }
+        }
+      ],
+      "icon": "/skill4292.webp"
+    },
+    "race": {
+      "type": "beast",
+      "name": {
+        "en": "Beast",
+        "ru": "Зверь"
+      }
+    },
+    "exp": 2030965,
+    "isPlayerCanUseSa": false,
+    "level": 40
+  },
+  {
+    "key": "queen_ant",
+    "data": {
+      "npcName": "queen_ant",
+      "name": {
+        "en": "Queen Ant",
+        "ru": "Королева Муравьев"
+      },
+      "title": {
+        "en": "",
+        "ru": ""
+      },
+      "locs": [
+        {
+          "id": "ant-nest",
+          "name": {
+            "en": "The Ant Nest",
+            "ru": "Муравейник"
+          }
+        },
+        {
+          "id": "wasteland",
+          "name": {
+            "en": "Wasteland",
+            "ru": "Пустошь"
+          }
+        }
+      ],
+      "icon": "/skill4301.webp"
+    },
+    "race": {
+      "type": "bug",
+      "name": {
+        "en": "Bug",
+        "ru": "Жук"
+      }
+    },
+    "exp": 2179536,
+    "isPlayerCanUseSa": false,
+    "level": 40
+  },
+  {
+    "key": "retreat_spider_cletu",
+    "data": {
+      "npcName": "retreat_spider_cletu",
+      "name": {
+        "en": "Retreat Spider Cletu",
+        "ru": "Паук Клету"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "hunter-village",
+          "name": {
+            "en": "Hunter Village",
+            "ru": "Деревня Охотников"
+          }
+        }
+      ],
+      "icon": "/skill4301.webp"
+    },
+    "race": {
+      "type": "bug",
+      "name": {
+        "en": "Bug",
+        "ru": "Жук"
+      }
+    },
+    "exp": 3062105,
+    "isPlayerCanUseSa": false,
+    "level": 42
+  },
+  {
+    "key": "crazy_mechanic_golem",
+    "data": {
+      "npcName": "crazy_mechanic_golem",
+      "name": {
+        "en": "Crazy Mechanic Golem",
+        "ru": "Сумасшедший Механический Голем"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "ivory-tower",
+          "name": {
+            "en": "Ivory Tower",
+            "ru": "Башня Слоновой Кости"
+          }
+        }
+      ],
+      "icon": "/skill4291.webp"
+    },
+    "race": {
+      "type": "construct",
+      "name": {
+        "en": "Construct",
+        "ru": "Создания"
+      }
+    },
+    "exp": 3128858,
+    "isPlayerCanUseSa": false,
+    "level": 43
+  },
+  {
+    "key": "earth_protecter_panathen",
+    "data": {
+      "npcName": "earth_protecter_panathen",
+      "name": {
+        "en": "Earth Protector Panathen",
+        "ru": "Панатен Защитник Земли"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "alligator-island",
+          "name": {
+            "en": "Alligator Island",
+            "ru": "Остров Аллигаторов"
+          }
+        }
+      ],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 1976893,
+    "isPlayerCanUseSa": false,
+    "level": 43
+  },
+  {
+    "key": "timak_orc_hunter_a",
+    "data": {
+      "npcName": "timak_orc_hunter_a",
+      "name": {
+        "en": "Timak Orc Chief Ranger",
+        "ru": "Глава Рейнджеров Орков Тимак"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 3196387,
+    "isPlayerCanUseSa": false,
+    "level": 44
+  },
+  {
+    "key": "repiro_rot_tree",
+    "data": {
+      "npcName": "repiro_rot_tree",
+      "name": {
+        "en": "Rotten Tree Repiro",
+        "ru": "Трухлявое Дерево Репиро"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4294.webp"
+    },
+    "race": {
+      "type": "plant",
+      "name": {
+        "en": "Plant",
+        "ru": "Растение"
+      }
+    },
+    "exp": 2030767,
+    "isPlayerCanUseSa": false,
+    "level": 44
+  },
+  {
+    "key": "dread_avenger_kraven",
+    "data": {
+      "npcName": "dread_avenger_kraven",
+      "name": {
+        "en": "Dread Avenger Kraven",
+        "ru": "Грозный Мститель Крейвен"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4290.webp"
+    },
+    "race": {
+      "type": "undead",
+      "name": {
+        "en": "Undead",
+        "ru": "Нежить"
+      }
+    },
+    "exp": 2030767,
+    "isPlayerCanUseSa": false,
+    "level": 44
+  },
+  {
+    "key": "flamestone_golem",
+    "data": {
+      "npcName": "flamestone_golem",
+      "name": {
+        "en": "Flamestone Golem",
+        "ru": "Раскаленный Голем"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "ivory-tower",
+          "name": {
+            "en": "Ivory Tower",
+            "ru": "Башня Слоновой Кости"
+          }
+        }
+      ],
+      "icon": "/skill4291.webp"
+    },
+    "race": {
+      "type": "construct",
+      "name": {
+        "en": "Construct",
+        "ru": "Создания"
+      }
+    },
+    "exp": 2030767,
+    "isPlayerCanUseSa": false,
+    "level": 44
+  },
+  {
+    "key": "kelbar",
+    "data": {
+      "npcName": "kelbar",
+      "name": {
+        "en": "Thief Kelbar",
+        "ru": "Вор Келбар"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 2030767,
+    "isPlayerCanUseSa": false,
+    "level": 44
+  },
+  {
+    "key": "biconne_of_blue_sky",
+    "data": {
+      "npcName": "biconne_of_blue_sky",
+      "name": {
+        "en": "Biconne of Blue Sky",
+        "ru": "Птицезмей"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "alligator-island",
+          "name": {
+            "en": "Alligator Island",
+            "ru": "Остров Аллигаторов"
+          }
+        }
+      ],
+      "icon": "/skill4292.webp"
+    },
+    "race": {
+      "type": "beast",
+      "name": {
+        "en": "Beast",
+        "ru": "Зверь"
+      }
+    },
+    "exp": 2085510,
+    "isPlayerCanUseSa": false,
+    "level": 45
+  },
+  {
+    "key": "shacram",
+    "data": {
+      "npcName": "shacram",
+      "name": {
+        "en": "Shacram",
+        "ru": "Шакрам"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4300.webp"
+    },
+    "race": {
+      "type": "giant",
+      "name": {
+        "en": "Giant",
+        "ru": "Гигант"
+      }
+    },
+    "exp": 2085510,
+    "isPlayerCanUseSa": false,
+    "level": 45
+  },
+  {
+    "key": "king_tiger_karuta",
+    "data": {
+      "npcName": "king_tiger_karuta",
+      "name": {
+        "en": "Tiger King Karuta",
+        "ru": "Король Тигров Карута"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4292.webp"
+    },
+    "race": {
+      "type": "beast",
+      "name": {
+        "en": "Beast",
+        "ru": "Зверь"
+      }
+    },
+    "exp": 2085510,
+    "isPlayerCanUseSa": false,
+    "level": 45
+  },
+  {
+    "key": "iron_giant_totem",
+    "data": {
+      "npcName": "iron_giant_totem",
+      "name": {
+        "en": "Iron Giant Totem",
+        "ru": "Железный Гигантский Тотем"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "ivory-tower",
+          "name": {
+            "en": "Ivory Tower",
+            "ru": "Башня Слоновой Кости"
+          }
+        }
+      ],
+      "icon": "/skill4291.webp"
+    },
+    "race": {
+      "type": "construct",
+      "name": {
+        "en": "Construct",
+        "ru": "Создания"
+      }
+    },
+    "exp": 3259016,
+    "isPlayerCanUseSa": false,
+    "level": 45
+  },
+  {
+    "key": "archon_susceptor",
+    "data": {
+      "npcName": "archon_susceptor",
+      "name": {
+        "en": "Archon Suscepter",
+        "ru": "Сусцептор Архонт"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4291.webp"
+    },
+    "race": {
+      "type": "construct",
+      "name": {
+        "en": "Construct",
+        "ru": "Создания"
+      }
+    },
+    "exp": 2085510,
+    "isPlayerCanUseSa": false,
+    "level": 45
+  },
+  {
+    "key": "timak_orc_gosmos",
+    "data": {
+      "npcName": "timak_orc_gosmos",
+      "name": {
+        "en": "Timak Orc Gosmos",
+        "ru": "Орк Тимак Госмос"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 2085510,
+    "isPlayerCanUseSa": false,
+    "level": 45
+  },
+  {
+    "key": "monster_cyrion",
+    "data": {
+      "npcName": "monster_cyrion",
+      "name": {
+        "en": "Evil Spirit Cyrion",
+        "ru": "Злой Дух Сирион"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4299.webp"
+    },
+    "race": {
+      "type": "dragon",
+      "name": {
+        "en": "Dragon",
+        "ru": "Дракон"
+      }
+    },
+    "exp": 2085510,
+    "isPlayerCanUseSa": false,
+    "level": 45
+  },
+  {
+    "key": "istary_papurrion",
+    "data": {
+      "npcName": "istary_papurrion",
+      "name": {
+        "en": "Fafurion's Henchman Istary",
+        "ru": "Оруженосец Фафуриона Истари"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "alligator-island",
+          "name": {
+            "en": "Alligator Island",
+            "ru": "Остров Аллигаторов"
+          }
+        }
+      ],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 2085510,
+    "isPlayerCanUseSa": false,
+    "level": 45
+  },
+  {
+    "key": "barion",
+    "data": {
+      "npcName": "barion",
+      "name": {
+        "en": "Barion",
+        "ru": "Барион"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4290.webp"
+    },
+    "race": {
+      "type": "undead",
+      "name": {
+        "en": "Undead",
+        "ru": "Нежить"
+      }
+    },
+    "exp": 2205665,
+    "isPlayerCanUseSa": false,
+    "level": 47
+  },
+  {
+    "key": "necrosentinel_guard",
+    "data": {
+      "npcName": "necrosentinel_guard",
+      "name": {
+        "en": "Necrosentinel Royal Guard",
+        "ru": "Королевский Некростраж"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "dragon-valley",
+          "name": {
+            "en": "Dragon valley",
+            "ru": "Долина Драконов"
+          }
+        }
+      ],
+      "icon": "/skill4290.webp"
+    },
+    "race": {
+      "type": "undead",
+      "name": {
+        "en": "Undead",
+        "ru": "Нежить"
+      }
+    },
+    "exp": 2205665,
+    "isPlayerCanUseSa": false,
+    "level": 47
+  },
+  {
+    "key": "king_tarlk",
+    "data": {
+      "npcName": "king_tarlk",
+      "name": {
+        "en": "King Tarlk",
+        "ru": "Король Тарлк"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "ivory-tower",
+          "name": {
+            "en": "Ivory Tower",
+            "ru": "Башня Слоновой Кости"
+          }
+        }
+      ],
+      "icon": "/skill4300.webp"
+    },
+    "race": {
+      "type": "giant",
+      "name": {
+        "en": "Giant",
+        "ru": "Гигант"
+      }
+    },
+    "exp": 3443211,
+    "isPlayerCanUseSa": false,
+    "level": 48
+  },
+  {
+    "key": "r28_leader_anakazel",
+    "data": {
+      "npcName": "r28_leader_anakazel",
+      "name": {
+        "en": "Anakazel",
+        "ru": "Анаказель"
+      },
+      "title": {
+        "en": "Invaders' Leader",
+        "ru": "Лидер Захватчиков"
+      },
+      "locs": [
+        {
+          "id": "dimensional-rift",
+          "name": {
+            "en": "Dimensional Rift",
+            "ru": "Пространственный Разлом"
+          }
+        }
+      ],
+      "icon": "/skill4298.webp"
+    },
+    "race": {
+      "type": "demonic",
+      "name": {
+        "en": "Demonic",
+        "ru": "Демон"
+      }
+    },
+    "exp": 1586608,
+    "isPlayerCanUseSa": false,
+    "level": 48
+  },
+  {
+    "key": "handmaiden_of_orfen",
+    "data": {
+      "npcName": "handmaiden_of_orfen",
+      "name": {
+        "en": "Orfen's Handmaiden",
+        "ru": "Служанка Орфена"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "sea-of-spores",
+          "name": {
+            "en": "Sea of Spores",
+            "ru": "Море Спор"
+          }
+        }
+      ],
+      "icon": "/skill4301.webp"
+    },
+    "race": {
+      "type": "bug",
+      "name": {
+        "en": "Bug",
+        "ru": "Жук"
+      }
+    },
+    "exp": 2266583,
+    "isPlayerCanUseSa": false,
+    "level": 48
+  },
+  {
+    "key": "katu_van_atui",
+    "data": {
+      "npcName": "katu_van_atui",
+      "name": {
+        "en": "Katu Van Leader Atui",
+        "ru": "Кату Главарь Авангарда Атуи"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "forest-of-evil-spirit",
+          "name": {
+            "en": "Forest of Evil Spirit",
+            "ru": "Лес Зла"
+          }
+        },
+        {
+          "id": "ivory-tower",
+          "name": {
+            "en": "Ivory Tower",
+            "ru": "Башня Слоновой Кости"
+          }
+        }
+      ],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 2328069,
+    "isPlayerCanUseSa": false,
+    "level": 49
+  },
+  {
+    "key": "karte",
+    "data": {
+      "npcName": "karte",
+      "name": {
+        "en": "Karte",
+        "ru": "Карте"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4290.webp"
+    },
+    "race": {
+      "type": "undead",
+      "name": {
+        "en": "Undead",
+        "ru": "Нежить"
+      }
+    },
+    "exp": 2328069,
+    "isPlayerCanUseSa": false,
+    "level": 49
+  },
+  {
+    "key": "oblivion_s_mirror",
+    "data": {
+      "npcName": "oblivion_s_mirror",
+      "name": {
+        "en": "Mirror of Oblivion",
+        "ru": "Зеркало Забвения"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4302.webp"
+    },
+    "race": {
+      "type": "fairy",
+      "name": {
+        "en": "Fairy",
+        "ru": "Фея"
+      }
+    },
+    "exp": 2328069,
+    "isPlayerCanUseSa": false,
+    "level": 49
+  },
+  {
+    "key": "ghost_of_peasant_leader",
+    "data": {
+      "npcName": "ghost_of_peasant_leader",
+      "name": {
+        "en": "Ghost of Peasant Leader",
+        "ru": "Призрак Главаря Крестьян"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4290.webp"
+    },
+    "race": {
+      "type": "undead",
+      "name": {
+        "en": "Undead",
+        "ru": "Нежить"
+      }
+    },
+    "exp": 3551193,
+    "isPlayerCanUseSa": false,
+    "level": 50
+  },
+  {
+    "key": "obern_mgr_of_fairyqueen",
+    "data": {
+      "npcName": "obern_mgr_of_fairyqueen",
+      "name": {
+        "en": "Messenger of Fairy Queen Berun",
+        "ru": "Посланник Королевы Фей Берун"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4302.webp"
+    },
+    "race": {
+      "type": "fairy",
+      "name": {
+        "en": "Fairy",
+        "ru": "Фея"
+      }
+    },
+    "exp": 3551193,
+    "isPlayerCanUseSa": false,
+    "level": 50
+  },
+  {
+    "key": "carnage_lord_gato",
+    "data": {
+      "npcName": "carnage_lord_gato",
+      "name": {
+        "en": "Carnage Lord Gato",
+        "ru": "Кровавый Повелитель Гато"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 2389767,
+    "isPlayerCanUseSa": false,
+    "level": 50
+  },
+  {
+    "key": "cursed_clala",
+    "data": {
+      "npcName": "cursed_clala",
+      "name": {
+        "en": "Cursed Clara",
+        "ru": "Проклятая Клара"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4292.webp"
+    },
+    "race": {
+      "type": "beast",
+      "name": {
+        "en": "Beast",
+        "ru": "Зверь"
+      }
+    },
+    "exp": 2389767,
+    "isPlayerCanUseSa": false,
+    "level": 50
+  },
+  {
+    "key": "carnamakos",
+    "data": {
+      "npcName": "carnamakos",
+      "name": {
+        "en": "Carnamakos",
+        "ru": "Карнамакос"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "cruma-marshlands",
+          "name": {
+            "en": "Cruma Marshlands",
+            "ru": "Топи Крумы"
+          }
+        }
+      ],
+      "icon": "/skill4291.webp"
+    },
+    "race": {
+      "type": "construct",
+      "name": {
+        "en": "Construct",
+        "ru": "Создания"
+      }
+    },
+    "exp": 3551193,
+    "isPlayerCanUseSa": false,
+    "level": 50
+  },
+  {
+    "key": "liliths_oracle_marilion",
+    "data": {
+      "npcName": "liliths_oracle_marilion",
+      "name": {
+        "en": "Lilith's Witch Marilion",
+        "ru": "Марилион Ведьма Лилит"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4298.webp"
+    },
+    "race": {
+      "type": "demonic",
+      "name": {
+        "en": "Demonic",
+        "ru": "Демон"
+      }
+    },
+    "exp": 3551193,
+    "isPlayerCanUseSa": false,
+    "level": 50
+  },
+  {
+    "key": "chief_mate_tilion",
+    "data": {
+      "npcName": "chief_mate_tilion",
+      "name": {
+        "en": "Zaken's Chief Mate Tillion",
+        "ru": "Тилион Первый Помощник Закена"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "devils-isle",
+          "name": {
+            "en": "Devil's Isle",
+            "ru": "Остров Дьявола"
+          }
+        }
+      ],
+      "icon": "/skill4290.webp"
+    },
+    "race": {
+      "type": "undead",
+      "name": {
+        "en": "Undead",
+        "ru": "Нежить"
+      }
+    },
+    "exp": 2389767,
+    "isPlayerCanUseSa": false,
+    "level": 50
+  },
+  {
+    "key": "core",
+    "data": {
+      "npcName": "core",
+      "name": {
+        "en": "Core",
+        "ru": "Ядро"
+      },
+      "title": {
+        "en": "",
+        "ru": ""
+      },
+      "locs": [
+        {
+          "id": "cruma-marshlands",
+          "name": {
+            "en": "Cruma Marshlands",
+            "ru": "Топи Крумы"
+          }
+        }
+      ],
+      "icon": "/skill4291.webp"
+    },
+    "race": {
+      "type": "construct",
+      "name": {
+        "en": "Construct",
+        "ru": "Создания"
+      }
+    },
+    "exp": 2041407,
+    "isPlayerCanUseSa": false,
+    "level": 50
+  },
+  {
+    "key": "orfen",
+    "data": {
+      "npcName": "orfen",
+      "name": {
+        "en": "Orfen",
+        "ru": "Орфен"
+      },
+      "title": {
+        "en": "",
+        "ru": ""
+      },
+      "locs": [
+        {
+          "id": "sea-of-spores",
+          "name": {
+            "en": "Sea of Spores",
+            "ru": "Море Спор"
+          }
+        }
+      ],
+      "icon": "/skill4302.webp"
+    },
+    "race": {
+      "type": "fairy",
+      "name": {
+        "en": "Fairy",
+        "ru": "Фея"
+      }
+    },
+    "exp": 2041407,
+    "isPlayerCanUseSa": false,
+    "level": 50
+  },
+  {
+    "key": "verfa",
+    "data": {
+      "npcName": "verfa",
+      "name": {
+        "en": "Verfa",
+        "ru": "Верфа"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4290.webp"
+    },
+    "race": {
+      "type": "undead",
+      "name": {
+        "en": "Undead",
+        "ru": "Нежить"
+      }
+    },
+    "exp": 2256714,
+    "isPlayerCanUseSa": false,
+    "level": 51
+  },
+  {
+    "key": "ereve_deathman",
+    "data": {
+      "npcName": "ereve_deathman",
+      "name": {
+        "en": "Deadman Ereve",
+        "ru": "Мертвец Эрив"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4290.webp"
+    },
+    "race": {
+      "type": "undead",
+      "name": {
+        "en": "Undead",
+        "ru": "Нежить"
+      }
+    },
+    "exp": 2256714,
+    "isPlayerCanUseSa": false,
+    "level": 51
+  },
+  {
+    "key": "master_of_ledflag_shaka",
+    "data": {
+      "npcName": "master_of_ledflag_shaka",
+      "name": {
+        "en": "Captain of Red Flag Shaka",
+        "ru": "Капитан Красного Флага Шака"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 3849013,
+    "isPlayerCanUseSa": false,
+    "level": 52
+  },
+  {
+    "key": "grave_rabber_khim",
+    "data": {
+      "npcName": "grave_rabber_khim",
+      "name": {
+        "en": "Grave Robber Kim",
+        "ru": "Расхититель Могил Ким"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 2313340,
+    "isPlayerCanUseSa": false,
+    "level": 52
+  },
+  {
+    "key": "papurrion_pingolpin",
+    "data": {
+      "npcName": "papurrion_pingolpin",
+      "name": {
+        "en": "Fafurion's Envoy Pingolpin",
+        "ru": "Посланник Фафуриона Пинголпин"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4301.webp"
+    },
+    "race": {
+      "type": "bug",
+      "name": {
+        "en": "Bug",
+        "ru": "Жук"
+      }
+    },
+    "exp": 2313340,
+    "isPlayerCanUseSa": false,
+    "level": 52
+  },
+  {
+    "key": "dr_chaos_gigantic_golem",
+    "data": {
+      "npcName": "dr_chaos_gigantic_golem",
+      "name": {
+        "en": "Gigantic Chaos Golem",
+        "ru": "Гигантский Голем Хаоса"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4291.webp"
+    },
+    "race": {
+      "type": "construct",
+      "name": {
+        "en": "Construct",
+        "ru": "Создания"
+      }
+    },
+    "exp": 2313340,
+    "isPlayerCanUseSa": false,
+    "level": 52
+  },
+  {
+    "key": "atraiban",
+    "data": {
+      "npcName": "atraiban",
+      "name": {
+        "en": "Atraiban",
+        "ru": "Атрайбан"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "devils-isle",
+          "name": {
+            "en": "Devil's Isle",
+            "ru": "Остров Дьявола"
+          }
+        }
+      ],
+      "icon": "/skill4291.webp"
+    },
+    "race": {
+      "type": "construct",
+      "name": {
+        "en": "Construct",
+        "ru": "Создания"
+      }
+    },
+    "exp": 3895772,
+    "isPlayerCanUseSa": false,
+    "level": 53
+  },
+  {
+    "key": "magician_kenishee",
+    "data": {
+      "npcName": "magician_kenishee",
+      "name": {
+        "en": "Magus Kenishee",
+        "ru": "Маг Кениши"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "devils-isle",
+          "name": {
+            "en": "Devil's Isle",
+            "ru": "Остров Дьявола"
+          }
+        }
+      ],
+      "icon": "/skill4298.webp"
+    },
+    "race": {
+      "type": "demonic",
+      "name": {
+        "en": "Demonic",
+        "ru": "Демон"
+      }
+    },
+    "exp": 2368104,
+    "isPlayerCanUseSa": false,
+    "level": 53
+  },
+  {
+    "key": "darkness_shaman_baranka",
+    "data": {
+      "npcName": "darkness_shaman_baranka",
+      "name": {
+        "en": "Dark Shaman Varangka ",
+        "ru": "Темный Шаман Фаранги"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 2368104,
+    "isPlayerCanUseSa": false,
+    "level": 53
+  },
+  {
+    "key": "unicorn_paniel",
+    "data": {
+      "npcName": "unicorn_paniel",
+      "name": {
+        "en": "Paniel the Unicorn",
+        "ru": "Единорог Паниэль"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "enchanted-valley",
+          "name": {
+            "en": "The Enchanted Valley",
+            "ru": "Зачарованная Долина"
+          }
+        }
+      ],
+      "icon": "/skill4296.webp"
+    },
+    "race": {
+      "type": "elemental",
+      "name": {
+        "en": "Elemental",
+        "ru": "Элементаль"
+      }
+    },
+    "exp": 2422283,
+    "isPlayerCanUseSa": false,
+    "level": 54
+  },
+  {
+    "key": "furious_thieles",
+    "data": {
+      "npcName": "furious_thieles",
+      "name": {
+        "en": "Furious Thieles",
+        "ru": "Яростный Тилес"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "enchanted-valley",
+          "name": {
+            "en": "The Enchanted Valley",
+            "ru": "Зачарованная Долина"
+          }
+        }
+      ],
+      "icon": "/skill4296.webp"
+    },
+    "race": {
+      "type": "elemental",
+      "name": {
+        "en": "Elemental",
+        "ru": "Элементаль"
+      }
+    },
+    "exp": 3983098,
+    "isPlayerCanUseSa": false,
+    "level": 55
+  },
+  {
+    "key": "fairys_watcher_ruell",
+    "data": {
+      "npcName": "fairys_watcher_ruell",
+      "name": {
+        "en": "Enchanted Forest Watcher Ruell",
+        "ru": "Смотритель Зачарованного Леса Руэль"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "enchanted-valley",
+          "name": {
+            "en": "The Enchanted Valley",
+            "ru": "Зачарованная Долина"
+          }
+        }
+      ],
+      "icon": "/skill4296.webp"
+    },
+    "race": {
+      "type": "elemental",
+      "name": {
+        "en": "Elemental",
+        "ru": "Элементаль"
+      }
+    },
+    "exp": 2477107,
+    "isPlayerCanUseSa": false,
+    "level": 55
+  },
+  {
+    "key": "sorcery_isirr",
+    "data": {
+      "npcName": "sorcery_isirr",
+      "name": {
+        "en": "Sorcerer Isirr",
+        "ru": "Волшебник Исирр"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 2477107,
+    "isPlayerCanUseSa": false,
+    "level": 55
+  },
+  {
+    "key": "bereths_seer_sephia",
+    "data": {
+      "npcName": "bereths_seer_sephia",
+      "name": {
+        "en": "Beleth's Seer Sephia",
+        "ru": "Пророк Белефа Сефия"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4298.webp"
+    },
+    "race": {
+      "type": "demonic",
+      "name": {
+        "en": "Demonic",
+        "ru": "Демон"
+      }
+    },
+    "exp": 2477107,
+    "isPlayerCanUseSa": false,
+    "level": 55
+  },
+  {
+    "key": "witch_wimere",
+    "data": {
+      "npcName": "witch_wimere",
+      "name": {
+        "en": "Black Lily",
+        "ru": "Черная Лилия"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "dragon-valley",
+          "name": {
+            "en": "Dragon valley",
+            "ru": "Долина Драконов"
+          }
+        }
+      ],
+      "icon": "/skill4298.webp"
+    },
+    "race": {
+      "type": "demonic",
+      "name": {
+        "en": "Demonic",
+        "ru": "Демон"
+      }
+    },
+    "exp": 2477107,
+    "isPlayerCanUseSa": false,
+    "level": 55
+  },
+  {
+    "key": "harit_hero_tamash",
+    "data": {
+      "npcName": "harit_hero_tamash",
+      "name": {
+        "en": "Harit Hero Tamash",
+        "ru": "Герой Харит Тамаш"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 3983098,
+    "isPlayerCanUseSa": false,
+    "level": 55
+  },
+  {
+    "key": "zakens_butcher_krantz",
+    "data": {
+      "npcName": "zakens_butcher_krantz",
+      "name": {
+        "en": "Zaken's Butcher Krantz",
+        "ru": "Мясник Закена Кранц"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "devils-isle",
+          "name": {
+            "en": "Devil's Isle",
+            "ru": "Остров Дьявола"
+          }
+        }
+      ],
+      "icon": "/skill4300.webp"
+    },
+    "race": {
+      "type": "giant",
+      "name": {
+        "en": "Giant",
+        "ru": "Гигант"
+      }
+    },
+    "exp": 3983098,
+    "isPlayerCanUseSa": false,
+    "level": 55
+  },
+  {
+    "key": "pagan_warder_cerberon",
+    "data": {
+      "npcName": "pagan_warder_cerberon",
+      "name": {
+        "en": "Pagan Watcher Cerberon",
+        "ru": "Языческий Смотритель Церберон"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4297.webp"
+    },
+    "race": {
+      "type": "divine",
+      "name": {
+        "en": "Angel",
+        "ru": "Ангел"
+      }
+    },
+    "exp": 3983098,
+    "isPlayerCanUseSa": false,
+    "level": 55
+  },
+  {
+    "key": "bandit_leader_barda",
+    "data": {
+      "npcName": "bandit_leader_barda",
+      "name": {
+        "en": "Bandit Leader Barda",
+        "ru": "Барда Главарь Банды"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 2477107,
+    "isPlayerCanUseSa": false,
+    "level": 55
+  },
+  {
+    "key": "ghost_kabed",
+    "data": {
+      "npcName": "ghost_kabed",
+      "name": {
+        "en": "Ghost Knight Kabed",
+        "ru": "Призрачный Рыцарь Кабед"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4290.webp"
+    },
+    "race": {
+      "type": "undead",
+      "name": {
+        "en": "Undead",
+        "ru": "Нежить"
+      }
+    },
+    "exp": 2477107,
+    "isPlayerCanUseSa": false,
+    "level": 55
+  },
+  {
+    "key": "niniel_spirit_eva",
+    "data": {
+      "npcName": "niniel_spirit_eva",
+      "name": {
+        "en": "Eva's Spirit Niniel",
+        "ru": "Ниниэль Дух Евы"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4296.webp"
+    },
+    "race": {
+      "type": "elemental",
+      "name": {
+        "en": "Elemental",
+        "ru": "Элементаль"
+      }
+    },
+    "exp": 2477107,
+    "isPlayerCanUseSa": false,
+    "level": 55
+  },
+  {
+    "key": "refuge_hoper_leo",
+    "data": {
+      "npcName": "refuge_hoper_leo",
+      "name": {
+        "en": "Refugee Hopeful Leo",
+        "ru": "Отчаявшийся Беженец Лео"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "forest-of-outlaw",
+          "name": {
+            "en": "Forest of Outlaw",
+            "ru": "Лес Разбойников"
+          }
+        }
+      ],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 2529799,
+    "isPlayerCanUseSa": false,
+    "level": 56
+  },
+  {
+    "key": "harit_tutelar_garangky",
+    "data": {
+      "npcName": "harit_tutelar_garangky",
+      "name": {
+        "en": "Harit Guardian Garangky",
+        "ru": "Стражник Харита Гаранки"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4292.webp"
+    },
+    "race": {
+      "type": "beast",
+      "name": {
+        "en": "Beast",
+        "ru": "Зверь"
+      }
+    },
+    "exp": 2529799,
+    "isPlayerCanUseSa": false,
+    "level": 56
+  },
+  {
+    "key": "timak_seer_ragoth",
+    "data": {
+      "npcName": "timak_seer_ragoth",
+      "name": {
+        "en": "Timak Seer Ragoth",
+        "ru": "Пророк Тимака Рагот"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 2581681,
+    "isPlayerCanUseSa": false,
+    "level": 57
+  },
+  {
+    "key": "eva_guardian_millenu",
+    "data": {
+      "npcName": "eva_guardian_millenu",
+      "name": {
+        "en": "Eva's Guardian Millenu",
+        "ru": "Стражник Евы Миллену"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4298.webp"
+    },
+    "race": {
+      "type": "demonic",
+      "name": {
+        "en": "Demonic",
+        "ru": "Демон"
+      }
+    },
+    "exp": 4092905,
+    "isPlayerCanUseSa": false,
+    "level": 58
+  },
+  {
+    "key": "r38_leader_anakazel",
+    "data": {
+      "npcName": "r38_leader_anakazel",
+      "name": {
+        "en": "Anakazel",
+        "ru": "Анаказель"
+      },
+      "title": {
+        "en": "Invaders' Leader",
+        "ru": "Лидер Захватчиков"
+      },
+      "locs": [
+        {
+          "id": "dimensional-rift",
+          "name": {
+            "en": "Dimensional Rift",
+            "ru": "Пространственный Разлом"
+          }
+        }
+      ],
+      "icon": "/skill4298.webp"
+    },
+    "race": {
+      "type": "demonic",
+      "name": {
+        "en": "Demonic",
+        "ru": "Демон"
+      }
+    },
+    "exp": 1843815,
+    "isPlayerCanUseSa": false,
+    "level": 58
+  },
+  {
+    "key": "soulless_wild_boar",
+    "data": {
+      "npcName": "soulless_wild_boar",
+      "name": {
+        "en": "Soulless Wild Boar",
+        "ru": "Бездушный Дикий Кабан"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "anghel-waterfall",
+          "name": {
+            "en": "Anghel Waterfall",
+            "ru": "Ангельский Водопад"
+          }
+        }
+      ],
+      "icon": "/skill4293.webp"
+    },
+    "race": {
+      "type": "animal",
+      "name": {
+        "en": "Animal",
+        "ru": "Животное"
+      }
+    },
+    "exp": 2684275,
+    "isPlayerCanUseSa": false,
+    "level": 59
+  },
+  {
+    "key": "kurikups",
+    "data": {
+      "npcName": "kurikups",
+      "name": {
+        "en": "Demon Kurikups",
+        "ru": "Демон Курикупс"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "devils-isle",
+          "name": {
+            "en": "Devil's Isle",
+            "ru": "Остров Дьявола"
+          }
+        }
+      ],
+      "icon": "/skill4298.webp"
+    },
+    "race": {
+      "type": "demonic",
+      "name": {
+        "en": "Demonic",
+        "ru": "Демон"
+      }
+    },
+    "exp": 2684275,
+    "isPlayerCanUseSa": false,
+    "level": 59
+  },
+  {
+    "key": "nightmare_drake",
+    "data": {
+      "npcName": "nightmare_drake",
+      "name": {
+        "en": "Abyss Brukunt",
+        "ru": "Крыло Бездны"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "forest-of-mirrors",
+          "name": {
+            "en": "The Forest of Mirrors",
+            "ru": "Лес Зеркал"
+          }
+        }
+      ],
+      "icon": "/skill4299.webp"
+    },
+    "race": {
+      "type": "dragon",
+      "name": {
+        "en": "Dragon",
+        "ru": "Дракон"
+      }
+    },
+    "exp": 2684275,
+    "isPlayerCanUseSa": false,
+    "level": 59
+  },
+  {
+    "key": "freya_royalguard",
+    "data": {
+      "npcName": "freya_royalguard",
+      "name": {
+        "en": "Captain of the Ice Queen's Royal Guard",
+        "ru": "Начальник Стражи Снежной Королевы"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "ice-queens-castle",
+          "name": {
+            "en": "The Ice Queen's Castle",
+            "ru": "Замок Снежной Королевы"
+          }
+        }
+      ],
+      "icon": "/skill4291.webp"
+    },
+    "race": {
+      "type": "construct",
+      "name": {
+        "en": "Construct",
+        "ru": "Создания"
+      }
+    },
+    "exp": 1749007,
+    "isPlayerCanUseSa": false,
+    "level": 59
+  },
+  {
+    "key": "guardian_3_of_garden",
+    "data": {
+      "npcName": "guardian_3_of_garden",
+      "name": {
+        "en": "The 3rd Underwater Guardian",
+        "ru": "Третий Подводный Стражник"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4291.webp"
+    },
+    "race": {
+      "type": "construct",
+      "name": {
+        "en": "Construct",
+        "ru": "Создания"
+      }
+    },
+    "exp": 4154684,
+    "isPlayerCanUseSa": false,
+    "level": 60
+  },
+  {
+    "key": "manes_lidia",
+    "data": {
+      "npcName": "manes_lidia",
+      "name": {
+        "en": "Ghost of the Well Lidia",
+        "ru": "Лидия Призрак Родника"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "devasted-castle",
+          "name": {
+            "en": "Devasted Castle",
+            "ru": "Разоренный Замок"
+          }
+        }
+      ],
+      "icon": "/skill4298.webp"
+    },
+    "race": {
+      "type": "demonic",
+      "name": {
+        "en": "Demonic",
+        "ru": "Демон"
+      }
+    },
+    "exp": 2735033,
+    "isPlayerCanUseSa": false,
+    "level": 60
+  },
+  {
+    "key": "giant_marpanak",
+    "data": {
+      "npcName": "giant_marpanak",
+      "name": {
+        "en": "Giant Marpanak",
+        "ru": "Гигант Марпанак"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "giants-cave",
+          "name": {
+            "en": "The Giant`s Cave",
+            "ru": "Пещера Гигантов"
+          }
+        }
+      ],
+      "icon": "/skill4300.webp"
+    },
+    "race": {
+      "type": "giant",
+      "name": {
+        "en": "Giant",
+        "ru": "Гигант"
+      }
+    },
+    "exp": 4154684,
+    "isPlayerCanUseSa": false,
+    "level": 60
+  },
+  {
+    "key": "hatos",
+    "data": {
+      "npcName": "hatos",
+      "name": {
+        "en": "Guardian of the Statue of Giant Karum",
+        "ru": "Стражник Статуи Гиганта Карума"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4300.webp"
+    },
+    "race": {
+      "type": "giant",
+      "name": {
+        "en": "Giant",
+        "ru": "Гигант"
+      }
+    },
+    "exp": 2735033,
+    "isPlayerCanUseSa": false,
+    "level": 60
+  },
+  {
+    "key": "ancient_weird_drake",
+    "data": {
+      "npcName": "ancient_weird_drake",
+      "name": {
+        "en": "Ancient Weird Drake",
+        "ru": "Древний Астральный Дрейк"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "dragon-valley",
+          "name": {
+            "en": "Dragon valley",
+            "ru": "Долина Драконов"
+          }
+        }
+      ],
+      "icon": "/skill4299.webp"
+    },
+    "race": {
+      "type": "dragon",
+      "name": {
+        "en": "Dragon",
+        "ru": "Дракон"
+      }
+    },
+    "exp": 2735033,
+    "isPlayerCanUseSa": false,
+    "level": 60
+  },
+  {
+    "key": "taik_prefect_arak",
+    "data": {
+      "npcName": "taik_prefect_arak",
+      "name": {
+        "en": "Taik High Prefect Arak",
+        "ru": "Понтифик Тайк Арак"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "forsaken-plains",
+          "name": {
+            "en": "Forsaken Plains",
+            "ru": "Забытые равнины"
+          }
+        },
+        {
+          "id": "giants-cave",
+          "name": {
+            "en": "The Giant`s Cave",
+            "ru": "Пещера Гигантов"
+          }
+        }
+      ],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 2735033,
+    "isPlayerCanUseSa": false,
+    "level": 60
+  },
+  {
+    "key": "lord_ishka",
+    "data": {
+      "npcName": "lord_ishka",
+      "name": {
+        "en": "Lord Ishka ",
+        "ru": "Лорд Ишка"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "dragon-valley",
+          "name": {
+            "en": "Dragon valley",
+            "ru": "Долина Драконов"
+          }
+        }
+      ],
+      "icon": "/skill4290.webp"
+    },
+    "race": {
+      "type": "undead",
+      "name": {
+        "en": "Undead",
+        "ru": "Нежить"
+      }
+    },
+    "exp": 2735033,
+    "isPlayerCanUseSa": false,
+    "level": 60
+  },
+  {
+    "key": "zaken",
+    "data": {
+      "npcName": "zaken",
+      "name": {
+        "en": "Zaken",
+        "ru": "Закен"
+      },
+      "title": {
+        "en": "",
+        "ru": ""
+      },
+      "locs": [
+        {
+          "id": "devils-isle",
+          "name": {
+            "en": "Devil's Isle",
+            "ru": "Остров Дьявола"
+          }
+        }
+      ],
+      "icon": "/skill4290.webp"
+    },
+    "race": {
+      "type": "undead",
+      "name": {
+        "en": "Undead",
+        "ru": "Нежить"
+      }
+    },
+    "exp": 4879746,
+    "isPlayerCanUseSa": false,
+    "level": 60
+  },
+  {
+    "key": "ice_fairy_sirr",
+    "data": {
+      "npcName": "ice_fairy_sirr",
+      "name": {
+        "en": "Ice Fairy Sirra",
+        "ru": "Ледяная Фея Сирра"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "ice-queens-castle",
+          "name": {
+            "en": "The Ice Queen's Castle",
+            "ru": "Замок Снежной Королевы"
+          }
+        }
+      ],
+      "icon": "/skill4296.webp"
+    },
+    "race": {
+      "type": "elemental",
+      "name": {
+        "en": "Elemental",
+        "ru": "Элементаль"
+      }
+    },
+    "exp": 1610848,
+    "isPlayerCanUseSa": false,
+    "level": 60
+  },
+  {
+    "key": "fairy_queen_timiniel",
+    "data": {
+      "npcName": "fairy_queen_timiniel",
+      "name": {
+        "en": "Fairy Queen Timiniel",
+        "ru": "Королева Фей Тиминиэль"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "enchanted-valley",
+          "name": {
+            "en": "The Enchanted Valley",
+            "ru": "Зачарованная Долина"
+          }
+        }
+      ],
+      "icon": "/skill4302.webp"
+    },
+    "race": {
+      "type": "fairy",
+      "name": {
+        "en": "Fairy",
+        "ru": "Фея"
+      }
+    },
+    "exp": 2601295,
+    "isPlayerCanUseSa": false,
+    "level": 61
+  },
+  {
+    "key": "roaring_seer_kastor",
+    "data": {
+      "npcName": "roaring_seer_kastor",
+      "name": {
+        "en": "Roaring Lord Kastor",
+        "ru": "Ревущий Лорд Кастор"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 4417539,
+    "isPlayerCanUseSa": false,
+    "level": 62
+  },
+  {
+    "key": "gorgolos",
+    "data": {
+      "npcName": "gorgolos",
+      "name": {
+        "en": "Gorgolos",
+        "ru": "Горголос"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4291.webp"
+    },
+    "race": {
+      "type": "construct",
+      "name": {
+        "en": "Construct",
+        "ru": "Создания"
+      }
+    },
+    "exp": 2736355,
+    "isPlayerCanUseSa": false,
+    "level": 64
+  },
+  {
+    "key": "rahha",
+    "data": {
+      "npcName": "rahha",
+      "name": {
+        "en": "Rahha",
+        "ru": "Рахха"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4298.webp"
+    },
+    "race": {
+      "type": "demonic",
+      "name": {
+        "en": "Demonic",
+        "ru": "Демон"
+      }
+    },
+    "exp": 4489693,
+    "isPlayerCanUseSa": false,
+    "level": 65
+  },
+  {
+    "key": "fiercetiger_king_angel",
+    "data": {
+      "npcName": "fiercetiger_king_angel",
+      "name": {
+        "en": "Fierce Tiger King Angel",
+        "ru": "Свирепый Король Тигров"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4292.webp"
+    },
+    "race": {
+      "type": "beast",
+      "name": {
+        "en": "Beast",
+        "ru": "Зверь"
+      }
+    },
+    "exp": 4489693,
+    "isPlayerCanUseSa": false,
+    "level": 65
+  },
+  {
+    "key": "hekaton_prime",
+    "data": {
+      "npcName": "hekaton_prime",
+      "name": {
+        "en": "Hekaton Prime",
+        "ru": "Хекатон Прайм"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "giants-cave",
+          "name": {
+            "en": "The Giant`s Cave",
+            "ru": "Пещера Гигантов"
+          }
+        }
+      ],
+      "icon": "/skill4291.webp"
+    },
+    "race": {
+      "type": "construct",
+      "name": {
+        "en": "Construct",
+        "ru": "Создания"
+      }
+    },
+    "exp": 4489693,
+    "isPlayerCanUseSa": false,
+    "level": 65
+  },
+  {
+    "key": "gargoyle_lord_tiphon",
+    "data": {
+      "npcName": "gargoyle_lord_tiphon",
+      "name": {
+        "en": "Gargoyle Lord Tiphon",
+        "ru": "Повелитель Горгулий Тифон"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4291.webp"
+    },
+    "race": {
+      "type": "construct",
+      "name": {
+        "en": "Construct",
+        "ru": "Создания"
+      }
+    },
+    "exp": 4489693,
+    "isPlayerCanUseSa": false,
+    "level": 65
+  },
+  {
+    "key": "enmity_ghost_ramdal",
+    "data": {
+      "npcName": "enmity_ghost_ramdal",
+      "name": {
+        "en": "Enmity Ghost Ramdal",
+        "ru": "Враждебный Призрак Рамдал"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "tower-of-insolence",
+          "name": {
+            "en": "Tower of Insolence",
+            "ru": "Башня Дерзости"
+          }
+        }
+      ],
+      "icon": "/skill4290.webp"
+    },
+    "race": {
+      "type": "undead",
+      "name": {
+        "en": "Undead",
+        "ru": "Нежить"
+      }
+    },
+    "exp": 2780578,
+    "isPlayerCanUseSa": false,
+    "level": 65
+  },
+  {
+    "key": "priest_hisilrome",
+    "data": {
+      "npcName": "priest_hisilrome",
+      "name": {
+        "en": "Shilen's Priest Hisilrome",
+        "ru": "Хисилром Жрец Шилен"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4292.webp"
+    },
+    "race": {
+      "type": "beast",
+      "name": {
+        "en": "Beast",
+        "ru": "Зверь"
+      }
+    },
+    "exp": 2780578,
+    "isPlayerCanUseSa": false,
+    "level": 65
+  },
+  {
+    "key": "demonic_agent_falston",
+    "data": {
+      "npcName": "demonic_agent_falston",
+      "name": {
+        "en": "Demon's Agent Falston",
+        "ru": "Агент Демона Фальстон"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "valley-of-saints",
+          "name": {
+            "en": "Valley of Saints",
+            "ru": "Долина Святых"
+          }
+        }
+      ],
+      "icon": "/skill4298.webp"
+    },
+    "race": {
+      "type": "demonic",
+      "name": {
+        "en": "Demonic",
+        "ru": "Демон"
+      }
+    },
+    "exp": 4512325,
+    "isPlayerCanUseSa": false,
+    "level": 66
+  },
+  {
+    "key": "last_lesser_utenus",
+    "data": {
+      "npcName": "last_lesser_utenus",
+      "name": {
+        "en": "Last Titan Utenus",
+        "ru": "Последний Гигант Утенус"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "giants-cave",
+          "name": {
+            "en": "The Giant`s Cave",
+            "ru": "Пещера Гигантов"
+          }
+        }
+      ],
+      "icon": "/skill4300.webp"
+    },
+    "race": {
+      "type": "giant",
+      "name": {
+        "en": "Giant",
+        "ru": "Гигант"
+      }
+    },
+    "exp": 2826358,
+    "isPlayerCanUseSa": false,
+    "level": 66
+  },
+  {
+    "key": "malruks_oracle_sekina",
+    "data": {
+      "npcName": "malruks_oracle_sekina",
+      "name": {
+        "en": "Kernon's Faithful Servant Kelone",
+        "ru": "Ведьма Келона"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4292.webp"
+    },
+    "race": {
+      "type": "beast",
+      "name": {
+        "en": "Beast",
+        "ru": "Зверь"
+      }
+    },
+    "exp": 4534433,
+    "isPlayerCanUseSa": false,
+    "level": 67
+  },
+  {
+    "key": "r48_leader_anakazel",
+    "data": {
+      "npcName": "r48_leader_anakazel",
+      "name": {
+        "en": "Anakazel",
+        "ru": "Анаказель"
+      },
+      "title": {
+        "en": "Invaders' Leader",
+        "ru": "Лидер Захватчиков"
+      },
+      "locs": [
+        {
+          "id": "dimensional-rift",
+          "name": {
+            "en": "Dimensional Rift",
+            "ru": "Пространственный Разлом"
+          }
+        }
+      ],
+      "icon": "/skill4298.webp"
+    },
+    "race": {
+      "type": "demonic",
+      "name": {
+        "en": "Demonic",
+        "ru": "Демон"
+      }
+    },
+    "exp": 2044017,
+    "isPlayerCanUseSa": false,
+    "level": 68
+  },
+  {
+    "key": "bloody_priest_rudelto",
+    "data": {
+      "npcName": "bloody_priest_rudelto",
+      "name": {
+        "en": "Bloody Priest Rudelto",
+        "ru": "Кровавый Жрец Рудельто"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "antharas-lair",
+          "name": {
+            "en": "The Lair of Antharas",
+            "ru": "Логово Антараса"
+          }
+        }
+      ],
+      "icon": "/skill4298.webp"
+    },
+    "race": {
+      "type": "demonic",
+      "name": {
+        "en": "Demonic",
+        "ru": "Демон"
+      }
+    },
+    "exp": 4576841,
+    "isPlayerCanUseSa": false,
+    "level": 69
+  },
+  {
+    "key": "spirit_andras_betrayer",
+    "data": {
+      "npcName": "spirit_andras_betrayer",
+      "name": {
+        "en": "Spirit of Andras, the Betrayer",
+        "ru": "Дух Предателя Анраса"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4290.webp"
+    },
+    "race": {
+      "type": "undead",
+      "name": {
+        "en": "Undead",
+        "ru": "Нежить"
+      }
+    },
+    "exp": 2969653,
+    "isPlayerCanUseSa": false,
+    "level": 69
+  },
+  {
+    "key": "domb_death_cabrio",
+    "data": {
+      "npcName": "domb_death_cabrio",
+      "name": {
+        "en": "Shilen's Messenger Cabrio",
+        "ru": "Посланец Шилен Кабрио"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4298.webp"
+    },
+    "race": {
+      "type": "demonic",
+      "name": {
+        "en": "Demonic",
+        "ru": "Демон"
+      }
+    },
+    "exp": 4596479,
+    "isPlayerCanUseSa": false,
+    "level": 70
+  },
+  {
+    "key": "korim",
+    "data": {
+      "npcName": "korim",
+      "name": {
+        "en": "Korim",
+        "ru": "Корим"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "tower-of-insolence",
+          "name": {
+            "en": "Tower of Insolence",
+            "ru": "Башня Дерзости"
+          }
+        }
+      ],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 4596479,
+    "isPlayerCanUseSa": false,
+    "level": 70
+  },
+  {
+    "key": "roar_skylancer",
+    "data": {
+      "npcName": "roar_skylancer",
+      "name": {
+        "en": "Roaring Skylancer",
+        "ru": "Ревущий Налетчик"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4299.webp"
+    },
+    "race": {
+      "type": "dragon",
+      "name": {
+        "en": "Dragon",
+        "ru": "Дракон"
+      }
+    },
+    "exp": 4596479,
+    "isPlayerCanUseSa": true,
+    "level": 70
+  },
+  {
+    "key": "faf_herald_lokness",
+    "data": {
+      "npcName": "faf_herald_lokness",
+      "name": {
+        "en": "Fafurion's Herald Lokness",
+        "ru": "Герольд Фафуриона Локнес"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4299.webp"
+    },
+    "race": {
+      "type": "dragon",
+      "name": {
+        "en": "Dragon",
+        "ru": "Дракон"
+      }
+    },
+    "exp": 4596479,
+    "isPlayerCanUseSa": false,
+    "level": 70
+  },
+  {
+    "key": "palibati_queen_themis",
+    "data": {
+      "npcName": "palibati_queen_themis",
+      "name": {
+        "en": "Palibati Queen Themis",
+        "ru": "Королева Фалибати Темис"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "forbidden-gateway",
+          "name": {
+            "en": "The Forbidden Gateway",
+            "ru": "Запретные Врата"
+          }
+        }
+      ],
+      "icon": "/skill4292.webp"
+    },
+    "race": {
+      "type": "beast",
+      "name": {
+        "en": "Beast",
+        "ru": "Зверь"
+      }
+    },
+    "exp": 4596479,
+    "isPlayerCanUseSa": false,
+    "level": 70
+  },
+  {
+    "key": "beastlord_behemoth",
+    "data": {
+      "npcName": "beastlord_behemoth",
+      "name": {
+        "en": "Beast Lord Behemoth",
+        "ru": "Повелитель Зверей Бехемот"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4300.webp"
+    },
+    "race": {
+      "type": "giant",
+      "name": {
+        "en": "Giant",
+        "ru": "Гигант"
+      }
+    },
+    "exp": 4596479,
+    "isPlayerCanUseSa": true,
+    "level": 70
+  },
+  {
+    "key": "anakims_nemesis_zakaron",
+    "data": {
+      "npcName": "anakims_nemesis_zakaron",
+      "name": {
+        "en": "Anakim's Nemesis Zakaron",
+        "ru": "Закарон Возмездия Анаким"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4298.webp"
+    },
+    "race": {
+      "type": "demonic",
+      "name": {
+        "en": "Demonic",
+        "ru": "Демон"
+      }
+    },
+    "exp": 4596479,
+    "isPlayerCanUseSa": false,
+    "level": 70
+  },
+  {
+    "key": "blinding_fire_barakiel",
+    "data": {
+      "npcName": "blinding_fire_barakiel",
+      "name": {
+        "en": "Flame of Splendor Barakiel",
+        "ru": "Баракиэль"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "valley-of-saints",
+          "name": {
+            "en": "Valley of Saints",
+            "ru": "Долина Святых"
+          }
+        }
+      ],
+      "icon": "/skill4297.webp"
+    },
+    "race": {
+      "type": "divine",
+      "name": {
+        "en": "Angel",
+        "ru": "Ангел"
+      }
+    },
+    "exp": 4596479,
+    "isPlayerCanUseSa": false,
+    "level": 70
+  },
+  {
+    "key": "meanas_anor",
+    "data": {
+      "npcName": "meanas_anor",
+      "name": {
+        "en": "Meanas Anor",
+        "ru": "Минас Анор"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4299.webp"
+    },
+    "race": {
+      "type": "dragon",
+      "name": {
+        "en": "Dragon",
+        "ru": "Дракон"
+      }
+    },
+    "exp": 4596479,
+    "isPlayerCanUseSa": true,
+    "level": 70
+  },
+  {
+    "key": "raid_boss_von_helman",
+    "data": {
+      "npcName": "raid_boss_von_helman",
+      "name": {
+        "en": "Eilhalder von Hellmann",
+        "ru": "Айнхалдер фон Хельман"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "cursed-village",
+          "name": {
+            "en": "Cursed Village",
+            "ru": "Проклятая деревня"
+          }
+        }
+      ],
+      "icon": "/skill4298.webp"
+    },
+    "race": {
+      "type": "demonic",
+      "name": {
+        "en": "Demonic",
+        "ru": "Демон"
+      }
+    },
+    "exp": 5113018,
+    "isPlayerCanUseSa": true,
+    "level": 71
+  },
+  {
+    "key": "hope_immortality_mardil",
+    "data": {
+      "npcName": "hope_immortality_mardil",
+      "name": {
+        "en": "Immortal Savior Mardil",
+        "ru": "Бессмертный Спаситель Мадрил"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "tower-of-insolence",
+          "name": {
+            "en": "Tower of Insolence",
+            "ru": "Башня Дерзости"
+          }
+        }
+      ],
+      "icon": "/skill4298.webp"
+    },
+    "race": {
+      "type": "demonic",
+      "name": {
+        "en": "Demonic",
+        "ru": "Демон"
+      }
+    },
+    "exp": 3074084,
+    "isPlayerCanUseSa": false,
+    "level": 71
+  },
+  {
+    "key": "wdragon_priest_sheshark",
+    "data": {
+      "npcName": "wdragon_priest_sheshark",
+      "name": {
+        "en": "Water Dragon Seer Sheshark",
+        "ru": "Пророк Фафуриона Шешарк"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 5140647,
+    "isPlayerCanUseSa": false,
+    "level": 72
+  },
+  {
+    "key": "vanor_chief_kandra",
+    "data": {
+      "npcName": "vanor_chief_kandra",
+      "name": {
+        "en": "Vanor Chief Kandra",
+        "ru": "Глава Ванор Кандра"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "garden-of-beasts",
+          "name": {
+            "en": "Garden of Beasts",
+            "ru": "Сад Чудовищ"
+          }
+        }
+      ],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 5140647,
+    "isPlayerCanUseSa": false,
+    "level": 72
+  },
+  {
+    "key": "doom_blade_tanatos",
+    "data": {
+      "npcName": "doom_blade_tanatos",
+      "name": {
+        "en": "Doom Blade Tanatos",
+        "ru": "Клинок Судьбы Танатос"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4298.webp"
+    },
+    "race": {
+      "type": "demonic",
+      "name": {
+        "en": "Demonic",
+        "ru": "Демон"
+      }
+    },
+    "exp": 5140647,
+    "isPlayerCanUseSa": false,
+    "level": 72
+  },
+  {
+    "key": "hallate_the_death_lord",
+    "data": {
+      "npcName": "hallate_the_death_lord",
+      "name": {
+        "en": "Death Lord Hallate",
+        "ru": "Лорд Смерти Халлет"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "tower-of-insolence",
+          "name": {
+            "en": "Tower of Insolence",
+            "ru": "Башня Дерзости"
+          }
+        }
+      ],
+      "icon": "/skill4290.webp"
+    },
+    "race": {
+      "type": "undead",
+      "name": {
+        "en": "Undead",
+        "ru": "Нежить"
+      }
+    },
+    "exp": 5168419,
+    "isPlayerCanUseSa": false,
+    "level": 73
+  },
+  {
+    "key": "degeneration_golem",
+    "data": {
+      "npcName": "degeneration_golem",
+      "name": {
+        "en": "Plague Golem",
+        "ru": "Чумной Голем"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4291.webp"
+    },
+    "race": {
+      "type": "construct",
+      "name": {
+        "en": "Construct",
+        "ru": "Создания"
+      }
+    },
+    "exp": 5168419,
+    "isPlayerCanUseSa": false,
+    "level": 73
+  },
+  {
+    "key": "antaras_cloe",
+    "data": {
+      "npcName": "antaras_cloe",
+      "name": {
+        "en": "Antharas Priest Cloe",
+        "ru": "Жрица Антараса Кло"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "antharas-lair",
+          "name": {
+            "en": "The Lair of Antharas",
+            "ru": "Логово Антараса"
+          }
+        }
+      ],
+      "icon": "/skill4298.webp"
+    },
+    "race": {
+      "type": "demonic",
+      "name": {
+        "en": "Demonic",
+        "ru": "Демон"
+      }
+    },
+    "exp": 5199407,
+    "isPlayerCanUseSa": true,
+    "level": 74
+  },
+  {
+    "key": "krokian_padisha_sobekk",
+    "data": {
+      "npcName": "krokian_padisha_sobekk",
+      "name": {
+        "en": "Krokian Padisha Sobekk",
+        "ru": "Крок Падиша Собекк"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 5199407,
+    "isPlayerCanUseSa": true,
+    "level": 74
+  },
+  {
+    "key": "icicle_king_umpaloopa",
+    "data": {
+      "npcName": "icicle_king_umpaloopa",
+      "name": {
+        "en": "Icicle Emperor Bumbalump",
+        "ru": "Ледяной Император Бамбаламп"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4300.webp"
+    },
+    "race": {
+      "type": "giant",
+      "name": {
+        "en": "Giant",
+        "ru": "Гигант"
+      }
+    },
+    "exp": 5199407,
+    "isPlayerCanUseSa": false,
+    "level": 74
+  },
+  {
+    "key": "kernon",
+    "data": {
+      "npcName": "kernon",
+      "name": {
+        "en": "Kernon",
+        "ru": "Кернон "
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "tower-of-insolence",
+          "name": {
+            "en": "Tower of Insolence",
+            "ru": "Башня Дерзости"
+          }
+        }
+      ],
+      "icon": "/skill4298.webp"
+    },
+    "race": {
+      "type": "demonic",
+      "name": {
+        "en": "Demonic",
+        "ru": "Демон"
+      }
+    },
+    "exp": 5231148,
+    "isPlayerCanUseSa": false,
+    "level": 75
+  },
+  {
+    "key": "storm_winged_naga",
+    "data": {
+      "npcName": "storm_winged_naga",
+      "name": {
+        "en": "Storm Winged Naga",
+        "ru": "Нага Буреносец"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4299.webp"
+    },
+    "race": {
+      "type": "dragon",
+      "name": {
+        "en": "Dragon",
+        "ru": "Дракон"
+      }
+    },
+    "exp": 5231148,
+    "isPlayerCanUseSa": false,
+    "level": 75
+  },
+  {
+    "key": "last_lesser_olkuth",
+    "data": {
+      "npcName": "last_lesser_olkuth",
+      "name": {
+        "en": "Last Lesser Giant Olkuth",
+        "ru": "Последний Младший Гигант Олкут"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "giants-cave",
+          "name": {
+            "en": "The Giant`s Cave",
+            "ru": "Пещера Гигантов"
+          }
+        }
+      ],
+      "icon": "/skill4300.webp"
+    },
+    "race": {
+      "type": "giant",
+      "name": {
+        "en": "Giant",
+        "ru": "Гигант"
+      }
+    },
+    "exp": 5231148,
+    "isPlayerCanUseSa": false,
+    "level": 75
+  },
+  {
+    "key": "bloody_tree_vermilion",
+    "data": {
+      "npcName": "bloody_tree_vermilion",
+      "name": {
+        "en": "Palatanos of Horrific Power",
+        "ru": "Палатанос Ужасающей Мощи"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4294.webp"
+    },
+    "race": {
+      "type": "plant",
+      "name": {
+        "en": "Plant",
+        "ru": "Растение"
+      }
+    },
+    "exp": 5231148,
+    "isPlayerCanUseSa": false,
+    "level": 75
+  },
+  {
+    "key": "bloody_empress_decarbia",
+    "data": {
+      "npcName": "bloody_empress_decarbia",
+      "name": {
+        "en": "Bloody Empress Decarbia",
+        "ru": "Кровавая Императрица Декарбия"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "forbidden-gateway",
+          "name": {
+            "en": "The Forbidden Gateway",
+            "ru": "Запретные Врата"
+          }
+        }
+      ],
+      "icon": "/skill4298.webp"
+    },
+    "race": {
+      "type": "demonic",
+      "name": {
+        "en": "Demonic",
+        "ru": "Демон"
+      }
+    },
+    "exp": 5231148,
+    "isPlayerCanUseSa": false,
+    "level": 75
+  },
+  {
+    "key": "ipos_the_death_lord",
+    "data": {
+      "npcName": "ipos_the_death_lord",
+      "name": {
+        "en": "Death Lord Ipos",
+        "ru": "Лорд Смерти Ипос"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4290.webp"
+    },
+    "race": {
+      "type": "undead",
+      "name": {
+        "en": "Undead",
+        "ru": "Нежить"
+      }
+    },
+    "exp": 5231148,
+    "isPlayerCanUseSa": false,
+    "level": 75
+  },
+  {
+    "key": "shax_the_death_lord",
+    "data": {
+      "npcName": "shax_the_death_lord",
+      "name": {
+        "en": "Death Lord Shax",
+        "ru": "Лорд Смерти Шакс"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "devasted-castle",
+          "name": {
+            "en": "Devasted Castle",
+            "ru": "Разоренный Замок"
+          }
+        },
+        {
+          "id": "field-of-massacre",
+          "name": {
+            "en": "Field of Massacre",
+            "ru": "Поле Брани"
+          }
+        },
+        {
+          "id": "disciples-necropolis",
+          "name": {
+            "en": "The Disciple's Necropolis",
+            "ru": "Некрополь Апостолов"
+          }
+        }
+      ],
+      "icon": "/skill4290.webp"
+    },
+    "race": {
+      "type": "undead",
+      "name": {
+        "en": "Undead",
+        "ru": "Нежить"
+      }
+    },
+    "exp": 5231148,
+    "isPlayerCanUseSa": false,
+    "level": 75
+  },
+  {
+    "key": "baium",
+    "data": {
+      "npcName": "baium",
+      "name": {
+        "en": "Baium",
+        "ru": "Баюм"
+      },
+      "title": {
+        "en": "",
+        "ru": ""
+      },
+      "locs": [],
+      "icon": "/skill4290.webp"
+    },
+    "race": {
+      "type": "undead",
+      "name": {
+        "en": "Undead",
+        "ru": "Нежить"
+      }
+    },
+    "exp": 10253400,
+    "isPlayerCanUseSa": false,
+    "level": 75
+  },
+  {
+    "key": "baium_npc",
+    "data": {
+      "npcName": "baium_npc",
+      "name": {
+        "en": "Baium",
+        "ru": "Баюм"
+      },
+      "title": {
+        "en": "",
+        "ru": ""
+      },
+      "locs": [],
+      "icon": "/skill4290.webp"
+    },
+    "race": {
+      "type": "undead",
+      "name": {
+        "en": "Undead",
+        "ru": "Нежить"
+      }
+    },
+    "exp": 0,
+    "isPlayerCanUseSa": false,
+    "level": 75
+  },
+  {
+    "key": "benom",
+    "data": {
+      "npcName": "benom",
+      "name": {
+        "en": "Benom",
+        "ru": "Беном"
+      },
+      "title": {
+        "en": "Triol's Leader",
+        "ru": "Лидер Триолов"
+      },
+      "locs": [],
+      "icon": "/skill4298.webp"
+    },
+    "race": {
+      "type": "demonic",
+      "name": {
+        "en": "Demonic",
+        "ru": "Демон"
+      }
+    },
+    "exp": 2499951,
+    "isPlayerCanUseSa": false,
+    "level": 75
+  },
+  {
+    "key": "ocean_flame_ashakiel",
+    "data": {
+      "npcName": "ocean_flame_ashakiel",
+      "name": {
+        "en": "Ocean Flame Ashakiel",
+        "ru": "Ашакиэль Океан Пламени"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4297.webp"
+    },
+    "race": {
+      "type": "divine",
+      "name": {
+        "en": "Angel",
+        "ru": "Ангел"
+      }
+    },
+    "exp": 5267108,
+    "isPlayerCanUseSa": false,
+    "level": 76
+  },
+  {
+    "key": "flame_stone_golem",
+    "data": {
+      "npcName": "flame_stone_golem",
+      "name": {
+        "en": "Flamestone Giant",
+        "ru": "Гигант из Горящего Камня"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4291.webp"
+    },
+    "race": {
+      "type": "construct",
+      "name": {
+        "en": "Construct",
+        "ru": "Создания"
+      }
+    },
+    "exp": 5267108,
+    "isPlayerCanUseSa": false,
+    "level": 76
+  },
+  {
+    "key": "shuriel_fire_of_wrath",
+    "data": {
+      "npcName": "shuriel_fire_of_wrath",
+      "name": {
+        "en": "Fire of Wrath Shuriel",
+        "ru": "Шуриэль Пламя Гнева"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "tower-of-insolence",
+          "name": {
+            "en": "Tower of Insolence",
+            "ru": "Башня Дерзости"
+          }
+        }
+      ],
+      "icon": "/skill4297.webp"
+    },
+    "race": {
+      "type": "divine",
+      "name": {
+        "en": "Angel",
+        "ru": "Ангел"
+      }
+    },
+    "exp": 5346496,
+    "isPlayerCanUseSa": false,
+    "level": 78
+  },
+  {
+    "key": "last_lesser_glaki",
+    "data": {
+      "npcName": "last_lesser_glaki",
+      "name": {
+        "en": "Last Lesser Giant Glaki",
+        "ru": "Последний Младший Гигант Глаки"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "giants-cave",
+          "name": {
+            "en": "The Giant`s Cave",
+            "ru": "Пещера Гигантов"
+          }
+        }
+      ],
+      "icon": "/skill4300.webp"
+    },
+    "race": {
+      "type": "giant",
+      "name": {
+        "en": "Giant",
+        "ru": "Гигант"
+      }
+    },
+    "exp": 5346496,
+    "isPlayerCanUseSa": false,
+    "level": 78
+  },
+  {
+    "key": "daemon_of_hundred_eyes",
+    "data": {
+      "npcName": "daemon_of_hundred_eyes",
+      "name": {
+        "en": "Daimon the White-Eyed",
+        "ru": "Белоглазый Демон"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4291.webp"
+    },
+    "race": {
+      "type": "construct",
+      "name": {
+        "en": "Construct",
+        "ru": "Создания"
+      }
+    },
+    "exp": 5346496,
+    "isPlayerCanUseSa": false,
+    "level": 78
+  },
+  {
+    "key": "geyser_guardian_hestia",
+    "data": {
+      "npcName": "geyser_guardian_hestia",
+      "name": {
+        "en": "Hestia, Guardian Deity of the Hot Springs",
+        "ru": "Божественный Стражник Горячих Источников Гестия"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4302.webp"
+    },
+    "race": {
+      "type": "fairy",
+      "name": {
+        "en": "Fairy",
+        "ru": "Фея"
+      }
+    },
+    "exp": 5346496,
+    "isPlayerCanUseSa": false,
+    "level": 78
+  },
+  {
+    "key": "r58_leader_anakazel",
+    "data": {
+      "npcName": "r58_leader_anakazel",
+      "name": {
+        "en": "Anakazel",
+        "ru": "Анаказель"
+      },
+      "title": {
+        "en": "Invaders' Leader",
+        "ru": "Лидер Захватчиков"
+      },
+      "locs": [
+        {
+          "id": "dimensional-rift",
+          "name": {
+            "en": "Dimensional Rift",
+            "ru": "Пространственный Разлом"
+          }
+        }
+      ],
+      "icon": "/skill4298.webp"
+    },
+    "race": {
+      "type": "demonic",
+      "name": {
+        "en": "Demonic",
+        "ru": "Демон"
+      }
+    },
+    "exp": 2504378,
+    "isPlayerCanUseSa": true,
+    "level": 78
+  },
+  {
+    "key": "golkonda_longhorn",
+    "data": {
+      "npcName": "golkonda_longhorn",
+      "name": {
+        "en": "Longhorn Golkonda",
+        "ru": "Длиннорогий Голконда"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "tower-of-insolence",
+          "name": {
+            "en": "Tower of Insolence",
+            "ru": "Башня Дерзости"
+          }
+        }
+      ],
+      "icon": "/skill4300.webp"
+    },
+    "race": {
+      "type": "giant",
+      "name": {
+        "en": "Giant",
+        "ru": "Гигант"
+      }
+    },
+    "exp": 5390003,
+    "isPlayerCanUseSa": false,
+    "level": 79
+  },
+  {
+    "key": "cherub_garacsia",
+    "data": {
+      "npcName": "cherub_garacsia",
+      "name": {
+        "en": "Cherub Galaxia",
+        "ru": "Херувим Галаксия"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "tower-of-insolence",
+          "name": {
+            "en": "Tower of Insolence",
+            "ru": "Башня Дерзости"
+          }
+        }
+      ],
+      "icon": "/skill4297.webp"
+    },
+    "race": {
+      "type": "divine",
+      "name": {
+        "en": "Angel",
+        "ru": "Ангел"
+      }
+    },
+    "exp": 5390003,
+    "isPlayerCanUseSa": false,
+    "level": 79
+  },
+  {
+    "key": "antaras",
+    "data": {
+      "npcName": "antaras",
+      "name": {
+        "en": "Antharas",
+        "ru": "Антарас"
+      },
+      "title": {
+        "en": "",
+        "ru": ""
+      },
+      "locs": [],
+      "icon": "/skill4299.webp"
+    },
+    "race": {
+      "type": "dragon",
+      "name": {
+        "en": "Dragon",
+        "ru": "Дракон"
+      }
+    },
+    "exp": 262720918,
+    "isPlayerCanUseSa": false,
+    "level": 79
+  },
+  {
+    "key": "antaras_min",
+    "data": {
+      "npcName": "antaras_min",
+      "name": {
+        "en": "Antharas",
+        "ru": "Антарас"
+      },
+      "title": {
+        "en": "",
+        "ru": ""
+      },
+      "locs": [],
+      "icon": "/skill4299.webp"
+    },
+    "race": {
+      "type": "dragon",
+      "name": {
+        "en": "Dragon",
+        "ru": "Дракон"
+      }
+    },
+    "exp": 262720918,
+    "isPlayerCanUseSa": false,
+    "level": 79
+  },
+  {
+    "key": "antaras_normal",
+    "data": {
+      "npcName": "antaras_normal",
+      "name": {
+        "en": "Antharas",
+        "ru": "Антарас"
+      },
+      "title": {
+        "en": "",
+        "ru": ""
+      },
+      "locs": [],
+      "icon": "/skill4299.webp"
+    },
+    "race": {
+      "type": "dragon",
+      "name": {
+        "en": "Dragon",
+        "ru": "Дракон"
+      }
+    },
+    "exp": 354676030,
+    "isPlayerCanUseSa": false,
+    "level": 79
+  },
+  {
+    "key": "antaras_max",
+    "data": {
+      "npcName": "antaras_max",
+      "name": {
+        "en": "Antharas",
+        "ru": "Антарас"
+      },
+      "title": {
+        "en": "",
+        "ru": ""
+      },
+      "locs": [],
+      "icon": "/skill4299.webp"
+    },
+    "race": {
+      "type": "dragon",
+      "name": {
+        "en": "Dragon",
+        "ru": "Дракон"
+      }
+    },
+    "exp": 446624683,
+    "isPlayerCanUseSa": false,
+    "level": 79
+  },
+  {
+    "key": "lilith",
+    "data": {
+      "npcName": "lilith",
+      "name": {
+        "en": "Lilith",
+        "ru": "Лилит"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "devasted-castle",
+          "name": {
+            "en": "Devasted Castle",
+            "ru": "Разоренный Замок"
+          }
+        }
+      ],
+      "icon": "/skill4298.webp"
+    },
+    "race": {
+      "type": "demonic",
+      "name": {
+        "en": "Demonic",
+        "ru": "Демон"
+      }
+    },
+    "exp": 9911897,
+    "isPlayerCanUseSa": false,
+    "level": 80
+  },
+  {
+    "key": "anakim",
+    "data": {
+      "npcName": "anakim",
+      "name": {
+        "en": "Anakim",
+        "ru": "Анаким"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "devasted-castle",
+          "name": {
+            "en": "Devasted Castle",
+            "ru": "Разоренный Замок"
+          }
+        }
+      ],
+      "icon": "/skill4297.webp"
+    },
+    "race": {
+      "type": "divine",
+      "name": {
+        "en": "Angel",
+        "ru": "Ангел"
+      }
+    },
+    "exp": 9911897,
+    "isPlayerCanUseSa": false,
+    "level": 80
+  },
+  {
+    "key": "ketra_hero_hekaton",
+    "data": {
+      "npcName": "ketra_hero_hekaton",
+      "name": {
+        "en": "Ketra's Hero Hekaton",
+        "ru": "Герой Кетра Хекатон"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "ketra-orc-outpost",
+          "name": {
+            "en": "Ketra Orc Outpost",
+            "ru": "Застава Орков Кетра"
+          }
+        }
+      ],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 3775961,
+    "isPlayerCanUseSa": false,
+    "level": 80
+  },
+  {
+    "key": "ketra_commander_tayr",
+    "data": {
+      "npcName": "ketra_commander_tayr",
+      "name": {
+        "en": "Ketra's Commander Tayr",
+        "ru": "Командир Кетра Тайр"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "ketra-orc-outpost",
+          "name": {
+            "en": "Ketra Orc Outpost",
+            "ru": "Застава Орков Кетра"
+          }
+        }
+      ],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 3775961,
+    "isPlayerCanUseSa": false,
+    "level": 80
+  },
+  {
+    "key": "ketra_chief_brakki",
+    "data": {
+      "npcName": "ketra_chief_brakki",
+      "name": {
+        "en": "Ketra's Chief Brakki",
+        "ru": "Глава Кетра Бракки"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "ketra-orc-outpost",
+          "name": {
+            "en": "Ketra Orc Outpost",
+            "ru": "Застава Орков Кетра"
+          }
+        }
+      ],
+      "icon": "/skill4293.webp"
+    },
+    "race": {
+      "type": "animal",
+      "name": {
+        "en": "Animal",
+        "ru": "Животное"
+      }
+    },
+    "exp": 3775961,
+    "isPlayerCanUseSa": false,
+    "level": 80
+  },
+  {
+    "key": "flame_spirit_nastron",
+    "data": {
+      "npcName": "flame_spirit_nastron",
+      "name": {
+        "en": "Soul of Fire Nastron",
+        "ru": "Дух Огня Настрон"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4296.webp"
+    },
+    "race": {
+      "type": "elemental",
+      "name": {
+        "en": "Elemental",
+        "ru": "Элементаль"
+      }
+    },
+    "exp": 2643173,
+    "isPlayerCanUseSa": false,
+    "level": 80
+  },
+  {
+    "key": "varka_hero_shadith",
+    "data": {
+      "npcName": "varka_hero_shadith",
+      "name": {
+        "en": "Varka's Hero Shadith",
+        "ru": "Герой Варка Шадит"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "varka-silenos-outpost",
+          "name": {
+            "en": "Varka Silenos Outpost",
+            "ru": "Лагерь Фавнов Варка"
+          }
+        }
+      ],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 3775961,
+    "isPlayerCanUseSa": false,
+    "level": 80
+  },
+  {
+    "key": "varka_commnder_mos",
+    "data": {
+      "npcName": "varka_commnder_mos",
+      "name": {
+        "en": "Varka's Commander Mos",
+        "ru": "Командир Варка Мос"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "varka-silenos-outpost",
+          "name": {
+            "en": "Varka Silenos Outpost",
+            "ru": "Лагерь Фавнов Варка"
+          }
+        }
+      ],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 3775961,
+    "isPlayerCanUseSa": false,
+    "level": 80
+  },
+  {
+    "key": "varka_chief_horuth",
+    "data": {
+      "npcName": "varka_chief_horuth",
+      "name": {
+        "en": "Varka's Chief Horus",
+        "ru": "Глава Варка Хорус"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "varka-silenos-outpost",
+          "name": {
+            "en": "Varka Silenos Outpost",
+            "ru": "Лагерь Фавнов Варка"
+          }
+        }
+      ],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 3775961,
+    "isPlayerCanUseSa": false,
+    "level": 80
+  },
+  {
+    "key": "water_spirit_ashutar",
+    "data": {
+      "npcName": "water_spirit_ashutar",
+      "name": {
+        "en": "Soul of Water Ashutar",
+        "ru": "Дух Воды Ашутар"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4296.webp"
+    },
+    "race": {
+      "type": "elemental",
+      "name": {
+        "en": "Elemental",
+        "ru": "Элементаль"
+      }
+    },
+    "exp": 2643173,
+    "isPlayerCanUseSa": false,
+    "level": 80
+  },
+  {
+    "key": "amber",
+    "data": {
+      "npcName": "amber",
+      "name": {
+        "en": "Ember",
+        "ru": "Эмбер"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [],
+      "icon": "/skill4299.webp"
+    },
+    "race": {
+      "type": "dragon",
+      "name": {
+        "en": "Dragon",
+        "ru": "Дракон"
+      }
+    },
+    "exp": 5437589,
+    "isPlayerCanUseSa": true,
+    "level": 80
+  },
+  {
+    "key": "halisha_alectia",
+    "data": {
+      "npcName": "halisha_alectia",
+      "name": {
+        "en": "Shadow of Halisha",
+        "ru": "Тень Халиши"
+      },
+      "title": {
+        "en": "Ruler of Sepulcher",
+        "ru": "Загробный Правитель"
+      },
+      "locs": [
+        {
+          "id": "four-sepulchers",
+          "name": {
+            "en": "The Four Sepulchers",
+            "ru": "Четыре Гробницы"
+          }
+        }
+      ],
+      "icon": "/skill4298.webp"
+    },
+    "race": {
+      "type": "demonic",
+      "name": {
+        "en": "Demonic",
+        "ru": "Демон"
+      }
+    },
+    "exp": 2643173,
+    "isPlayerCanUseSa": false,
+    "level": 80
+  },
+  {
+    "key": "halisha_tishas",
+    "data": {
+      "npcName": "halisha_tishas",
+      "name": {
+        "en": "Shadow of Halisha",
+        "ru": "Тень Халиши"
+      },
+      "title": {
+        "en": "Ruler of Sepulcher",
+        "ru": "Загробный Правитель"
+      },
+      "locs": [
+        {
+          "id": "four-sepulchers",
+          "name": {
+            "en": "The Four Sepulchers",
+            "ru": "Четыре Гробницы"
+          }
+        }
+      ],
+      "icon": "/skill4298.webp"
+    },
+    "race": {
+      "type": "demonic",
+      "name": {
+        "en": "Demonic",
+        "ru": "Демон"
+      }
+    },
+    "exp": 2643173,
+    "isPlayerCanUseSa": false,
+    "level": 80
+  },
+  {
+    "key": "halisha_mekara",
+    "data": {
+      "npcName": "halisha_mekara",
+      "name": {
+        "en": "Shadow of Halisha",
+        "ru": "Тень Халиши"
+      },
+      "title": {
+        "en": "Ruler of Sepulcher",
+        "ru": "Загробный Правитель"
+      },
+      "locs": [
+        {
+          "id": "four-sepulchers",
+          "name": {
+            "en": "The Four Sepulchers",
+            "ru": "Четыре Гробницы"
+          }
+        }
+      ],
+      "icon": "/skill4298.webp"
+    },
+    "race": {
+      "type": "demonic",
+      "name": {
+        "en": "Demonic",
+        "ru": "Демон"
+      }
+    },
+    "exp": 2643173,
+    "isPlayerCanUseSa": false,
+    "level": 80
+  },
+  {
+    "key": "halisha_morigul",
+    "data": {
+      "npcName": "halisha_morigul",
+      "name": {
+        "en": "Shadow of Halisha",
+        "ru": "Тень Халиши"
+      },
+      "title": {
+        "en": "Ruler of Sepulcher",
+        "ru": "Загробный Правитель"
+      },
+      "locs": [
+        {
+          "id": "four-sepulchers",
+          "name": {
+            "en": "The Four Sepulchers",
+            "ru": "Четыре Гробницы"
+          }
+        }
+      ],
+      "icon": "/skill4298.webp"
+    },
+    "race": {
+      "type": "demonic",
+      "name": {
+        "en": "Demonic",
+        "ru": "Демон"
+      }
+    },
+    "exp": 2643173,
+    "isPlayerCanUseSa": false,
+    "level": 80
+  },
+  {
+    "key": "spike_stakato_qn_shyid",
+    "data": {
+      "npcName": "spike_stakato_qn_shyid",
+      "name": {
+        "en": "Queen Shyeed",
+        "ru": "Королева Шиид"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "swamp-of-screams",
+          "name": {
+            "en": "Swamp of Screams",
+            "ru": "Болото Криков"
+          }
+        }
+      ],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 3775961,
+    "isPlayerCanUseSa": false,
+    "level": 80
+  },
+  {
+    "key": "uruka",
+    "data": {
+      "npcName": "uruka",
+      "name": {
+        "en": "Uruka",
+        "ru": "Урука"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Рейдовый Босс"
+      },
+      "locs": [
+        {
+          "id": "primeval-isle",
+          "name": {
+            "en": "Primeval Isle",
+            "ru": "Первобытный остров"
+          }
+        }
+      ],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 3775961,
+    "isPlayerCanUseSa": false,
+    "level": 80
+  },
+  {
+    "key": "triolls_priest_andreas",
+    "data": {
+      "npcName": "triolls_priest_andreas",
+      "name": {
+        "en": "High Priestess van Halter",
+        "ru": "Андреас Ван Холтер"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Raid Boss"
+      },
+      "locs": [],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 2915973,
+    "isPlayerCanUseSa": false,
+    "level": 80
+  },
+  {
+    "key": "sailren",
+    "data": {
+      "npcName": "sailren",
+      "name": {
+        "en": "Sailren",
+        "ru": "Сэйлрен"
+      },
+      "title": {
+        "en": "Sealed Evil Power",
+        "ru": "Печать Сил Зла"
+      },
+      "locs": [],
+      "icon": "/skill4292.webp"
+    },
+    "race": {
+      "type": "beast",
+      "name": {
+        "en": "Beast",
+        "ru": "Зверь"
+      }
+    },
+    "exp": 4569145,
+    "isPlayerCanUseSa": false,
+    "level": 80
+  },
+  {
+    "key": "gordon",
+    "data": {
+      "npcName": "gordon",
+      "name": {
+        "en": "Gordon",
+        "ru": "Гордон"
+      },
+      "title": {
+        "en": "Knight of Destruction",
+        "ru": "Рыцарь Разрушения"
+      },
+      "locs": [
+        {
+          "id": "goddard-castle",
+          "name": {
+            "en": "Goddard Castle",
+            "ru": "Замок Годдард"
+          }
+        }
+      ],
+      "icon": "/skill4298.webp"
+    },
+    "race": {
+      "type": "demonic",
+      "name": {
+        "en": "Demonic",
+        "ru": "Демон"
+      }
+    },
+    "exp": 5885017,
+    "isPlayerCanUseSa": false,
+    "level": 80
+  },
+  {
+    "key": "anais_brilliance_master",
+    "data": {
+      "npcName": "anais_brilliance_master",
+      "name": {
+        "en": "Lord of Splendor Anays",
+        "ru": "Анаис"
+      },
+      "title": {
+        "en": "Raid Boss",
+        "ru": "Raid Boss"
+      },
+      "locs": [
+        {
+          "id": "monastery-of-silence",
+          "name": {
+            "en": "Monastery of Silence",
+            "ru": "Монастырь Безмолвия"
+          }
+        }
+      ],
+      "icon": "/skill4297.webp"
+    },
+    "race": {
+      "type": "divine",
+      "name": {
+        "en": "Angel",
+        "ru": "Ангел"
+      }
+    },
+    "exp": 8827525,
+    "isPlayerCanUseSa": false,
+    "level": 80
+  },
+  {
+    "key": "fenril_hound_kerinne",
+    "data": {
+      "npcName": "fenril_hound_kerinne",
+      "name": {
+        "en": "Fenril Hound Kerinne",
+        "ru": "Пес Фенрила Керин"
+      },
+      "title": {
+        "en": "Family of Valakas",
+        "ru": "Семейство Валакас"
+      },
+      "locs": [],
+      "icon": "/skill4292.webp"
+    },
+    "race": {
+      "type": "beast",
+      "name": {
+        "en": "Beast",
+        "ru": "Зверь"
+      }
+    },
+    "exp": 2407887,
+    "isPlayerCanUseSa": false,
+    "level": 84
+  },
+  {
+    "key": "fenril_hound_freki",
+    "data": {
+      "npcName": "fenril_hound_freki",
+      "name": {
+        "en": "Fenril Hound Freki",
+        "ru": "Пес Фенрила Фреки"
+      },
+      "title": {
+        "en": "Family of Valakas",
+        "ru": "Семейство Валакас"
+      },
+      "locs": [
+        {
+          "id": "flame-path",
+          "name": {
+            "en": "Flame Path",
+            "ru": "Зал Пламени"
+          }
+        }
+      ],
+      "icon": "/skill4292.webp"
+    },
+    "race": {
+      "type": "beast",
+      "name": {
+        "en": "Beast",
+        "ru": "Зверь"
+      }
+    },
+    "exp": 2434088,
+    "isPlayerCanUseSa": false,
+    "level": 84
+  },
+  {
+    "key": "fenril_hound_uruz",
+    "data": {
+      "npcName": "fenril_hound_uruz",
+      "name": {
+        "en": "Fenril Hound Uruz",
+        "ru": "Пес Фенрила Уруз"
+      },
+      "title": {
+        "en": "Family of Valakas",
+        "ru": "Семейство Валакас"
+      },
+      "locs": [
+        {
+          "id": "flame-path",
+          "name": {
+            "en": "Flame Path",
+            "ru": "Зал Пламени"
+          }
+        }
+      ],
+      "icon": "/skill4292.webp"
+    },
+    "race": {
+      "type": "beast",
+      "name": {
+        "en": "Beast",
+        "ru": "Зверь"
+      }
+    },
+    "exp": 2466262,
+    "isPlayerCanUseSa": false,
+    "level": 84
+  },
+  {
+    "key": "fenril_hound_kinaz",
+    "data": {
+      "npcName": "fenril_hound_kinaz",
+      "name": {
+        "en": "Fenril Hound Kinaz",
+        "ru": "Пес Фенрила Киназ"
+      },
+      "title": {
+        "en": "Family of Valakas",
+        "ru": "Семейство Валакас"
+      },
+      "locs": [
+        {
+          "id": "flame-path",
+          "name": {
+            "en": "Flame Path",
+            "ru": "Зал Пламени"
+          }
+        }
+      ],
+      "icon": "/skill4292.webp"
+    },
+    "race": {
+      "type": "beast",
+      "name": {
+        "en": "Beast",
+        "ru": "Зверь"
+      }
+    },
+    "exp": 2504880,
+    "isPlayerCanUseSa": false,
+    "level": 84
+  },
+  {
+    "key": "valakas_sentinel_ixion",
+    "data": {
+      "npcName": "valakas_sentinel_ixion",
+      "name": {
+        "en": "Wings of Flame, Ixion",
+        "ru": "Иксион Крылья Пламени"
+      },
+      "title": {
+        "en": "Gatekeeper of Valakas",
+        "ru": "Хранитель Портала Валакас"
+      },
+      "locs": [],
+      "icon": "/skill4299.webp"
+    },
+    "race": {
+      "type": "dragon",
+      "name": {
+        "en": "Dragon",
+        "ru": "Дракон"
+      }
+    },
+    "exp": 2535975,
+    "isPlayerCanUseSa": false,
+    "level": 84
+  },
+  {
+    "key": "valakas",
+    "data": {
+      "npcName": "valakas",
+      "name": {
+        "en": "Valakas",
+        "ru": "Валакас"
+      },
+      "title": {
+        "en": "",
+        "ru": ""
+      },
+      "locs": [],
+      "icon": "/skill4299.webp"
+    },
+    "race": {
+      "type": "dragon",
+      "name": {
+        "en": "Dragon",
+        "ru": "Дракон"
+      }
+    },
+    "exp": 284286178,
+    "isPlayerCanUseSa": false,
+    "level": 85
+  },
+  {
+    "key": "frintessa",
+    "data": {
+      "npcName": "frintessa",
+      "name": {
+        "en": "Frintezza",
+        "ru": "Принтесс"
+      },
+      "title": {
+        "en": "",
+        "ru": ""
+      },
+      "locs": [],
+      "icon": "/skill4295.webp"
+    },
+    "race": {
+      "type": "humanoid",
+      "name": {
+        "en": "Humanoid",
+        "ru": "Гуманоид"
+      }
+    },
+    "exp": 0,
+    "isPlayerCanUseSa": false,
+    "level": 85
+  },
+  {
+    "key": "follower_of_frintessa",
+    "data": {
+      "npcName": "follower_of_frintessa",
+      "name": {
+        "en": "Scarlet van Halisha",
+        "ru": "Скарлет Ван Халиша"
+      },
+      "title": {
+        "en": "",
+        "ru": ""
+      },
+      "locs": [],
+      "icon": "/skill4298.webp"
+    },
+    "race": {
+      "type": "demonic",
+      "name": {
+        "en": "Demonic",
+        "ru": "Демон"
+      }
+    },
+    "exp": 0,
+    "isPlayerCanUseSa": false,
+    "level": 85
+  },
+  {
+    "key": "follower_of_frintessa_tr",
+    "data": {
+      "npcName": "follower_of_frintessa_tr",
+      "name": {
+        "en": "Scarlet van Halisha",
+        "ru": "Скарлет Ван Халиша"
+      },
+      "title": {
+        "en": "",
+        "ru": ""
+      },
+      "locs": [],
+      "icon": "/skill4298.webp"
+    },
+    "race": {
+      "type": "demonic",
+      "name": {
+        "en": "Demonic",
+        "ru": "Демон"
+      }
+    },
+    "exp": 111550355,
+    "isPlayerCanUseSa": false,
+    "level": 85
+  }
+]

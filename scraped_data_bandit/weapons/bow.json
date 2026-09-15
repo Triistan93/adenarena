@@ -1,0 +1,702 @@
+[
+  {
+    "key": 13,
+    "data": {
+      "unitName": "short_bow",
+      "icon": "/weapon_short_bow_i00.webp",
+      "name": {
+        "en": "Short Bow",
+        "ru": "Короткий Лук"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 16,
+      "mAtk": 6
+    },
+    "category": "weapons",
+    "subtype": "bow",
+    "type": "bow",
+    "pAtk": 16,
+    "mAtk": 6
+  },
+  {
+    "key": 14,
+    "data": {
+      "unitName": "bow",
+      "icon": "/weapon_bow_i00.webp",
+      "name": {
+        "en": "Bow",
+        "ru": "Лук"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 23,
+      "mAtk": 9
+    },
+    "category": "weapons",
+    "subtype": "bow",
+    "type": "bow",
+    "pAtk": 23,
+    "mAtk": 9
+  },
+  {
+    "key": 271,
+    "data": {
+      "unitName": "hunting_bow",
+      "icon": "/weapon_hunting_bow_i00.webp",
+      "name": {
+        "en": "Hunting Bow",
+        "ru": "Охотничий Лук"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 34,
+      "mAtk": 12
+    },
+    "category": "weapons",
+    "subtype": "bow",
+    "type": "bow",
+    "pAtk": 34,
+    "mAtk": 12
+  },
+  {
+    "key": 3028,
+    "data": {
+      "unitName": "crescent_moon_bow",
+      "icon": "/weapon_short_bow_i00.webp",
+      "name": {
+        "en": "Crescent Moon Bow",
+        "ru": "Лук Полумесяца"
+      },
+      "description": {
+        "en": "Use this bow to deliver the final blow to Commander Kadesh.",
+        "ru": "Лук, которым необходимо нанести последний удар по Командору Кадешу."
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 34,
+      "mAtk": 12
+    },
+    "category": "weapons",
+    "subtype": "bow",
+    "type": "bow",
+    "pAtk": 34,
+    "mAtk": 12
+  },
+  {
+    "key": 1181,
+    "data": {
+      "unitName": "netis_bow",
+      "icon": "/weapon_bow_i00.webp",
+      "name": {
+        "en": "Neti's Bow",
+        "ru": "Лук Нети"
+      },
+      "description": {
+        "en": "A favorite bow used by Neti, who was once a Treasure Hunter. Use it when hunting the skeletons and spartoi of the Ruins of Agony to gather bone pieces.",
+        "ru": "Любимый лук Нети, который она носила во время своих путешествий. Используйте его для охоты на скелетов в Руинах Страданий."
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 45,
+      "mAtk": 16
+    },
+    "category": "weapons",
+    "subtype": "bow",
+    "type": "bow",
+    "pAtk": 45,
+    "mAtk": 16
+  },
+  {
+    "key": 272,
+    "data": {
+      "unitName": "bow_of_forest",
+      "icon": "/weapon_short_bow_i00.webp",
+      "name": {
+        "en": "Forest Bow",
+        "ru": "Лесной Лук"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 49,
+      "mAtk": 17
+    },
+    "category": "weapons",
+    "subtype": "bow",
+    "type": "bow",
+    "pAtk": 49,
+    "mAtk": 17
+  },
+  {
+    "key": 273,
+    "data": {
+      "unitName": "composition_bow",
+      "icon": "/weapon_composition_bow_i00.webp",
+      "name": {
+        "en": "Composition Bow",
+        "ru": "Композитный Лук"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 64,
+      "mAtk": 21
+    },
+    "category": "weapons",
+    "subtype": "bow",
+    "type": "bow",
+    "pAtk": 64,
+    "mAtk": 21
+  },
+  {
+    "key": 274,
+    "data": {
+      "unitName": "strengthening_bow",
+      "icon": "/weapon_strengthening_bow_i00.webp",
+      "name": {
+        "en": "Strengthened Bow",
+        "ru": "Усиленный Лук"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 82,
+      "mAtk": 26
+    },
+    "category": "weapons",
+    "subtype": "bow",
+    "type": "bow",
+    "pAtk": 82,
+    "mAtk": 26
+  },
+  {
+    "key": 276,
+    "data": {
+      "unitName": "elven_bow",
+      "icon": "/weapon_elven_bow_i00.webp",
+      "name": {
+        "en": "Elven Bow",
+        "ru": "Эльфийский Лук"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 105,
+      "mAtk": 32
+    },
+    "category": "weapons",
+    "subtype": "bow",
+    "type": "bow",
+    "pAtk": 105,
+    "mAtk": 32
+  },
+  {
+    "key": 277,
+    "data": {
+      "unitName": "dark_elven_bow",
+      "icon": "/weapon_dark_elven_bow_i00.webp",
+      "name": {
+        "en": "Dark Elven Bow",
+        "ru": "Лук Темных Эльфов"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 105,
+      "mAtk": 32
+    },
+    "category": "weapons",
+    "subtype": "bow",
+    "type": "bow",
+    "pAtk": 105,
+    "mAtk": 32
+  },
+  {
+    "key": 275,
+    "data": {
+      "unitName": "long_bow",
+      "icon": "/weapon_long_bow_i00.webp",
+      "name": {
+        "en": "Long Bow",
+        "ru": "Длинный Лук"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 114,
+      "mAtk": 35
+    },
+    "category": "weapons",
+    "subtype": "bow",
+    "type": "bow",
+    "pAtk": 114,
+    "mAtk": 35
+  },
+  {
+    "key": 278,
+    "data": {
+      "unitName": "gastraphetes",
+      "icon": "/weapon_gastraphetes_i00.webp",
+      "name": {
+        "en": "Gastraphetes",
+        "ru": "Гастрафет"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 132,
+      "mAtk": 39
+    },
+    "category": "weapons",
+    "subtype": "bow",
+    "type": "bow",
+    "pAtk": 132,
+    "mAtk": 39
+  },
+  {
+    "key": 279,
+    "data": {
+      "unitName": "strengthening_long_bow",
+      "icon": "/weapon_strengthening_long_bow_i00.webp",
+      "name": {
+        "en": "Strengthened Long Bow",
+        "ru": "Усиленный Длинный Лук"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 179,
+      "mAtk": 51
+    },
+    "category": "weapons",
+    "subtype": "bow",
+    "type": "bow",
+    "pAtk": 179,
+    "mAtk": 51
+  },
+  {
+    "key": 280,
+    "data": {
+      "unitName": "cyclone_bow",
+      "icon": "/weapon_cyclone_bow_i00.webp",
+      "name": {
+        "en": "Light Crossbow",
+        "ru": "Легкий Лук"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 191,
+      "mAtk": 54
+    },
+    "category": "weapons",
+    "subtype": "bow",
+    "type": "bow",
+    "pAtk": 191,
+    "mAtk": 54
+  },
+  {
+    "key": 281,
+    "data": {
+      "unitName": "crystallized_ice_bow",
+      "icon": "/weapon_crystallized_ice_bow_i00.webp",
+      "name": {
+        "en": "Crystallized Ice Bow",
+        "ru": "Ледяной Лук"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Guidance, Evasion, or Quick Recovery.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Наведение, Уклонение, Восстановление."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 220,
+      "mAtk": 61
+    },
+    "category": "weapons",
+    "subtype": "bow",
+    "type": "bow",
+    "pAtk": 220,
+    "mAtk": 61
+  },
+  {
+    "key": 285,
+    "data": {
+      "unitName": "noble_elven_bow",
+      "icon": "/weapon_noble_elven_bow_i00.webp",
+      "name": {
+        "en": "Noble Elven Bow",
+        "ru": "Элитный Эльфийский Лук"
+      },
+      "description": {
+        "en": "Bestows either Evasion, Miser or Cheap Shot.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Уклонение, Скупость, Экономия."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 252,
+      "mAtk": 68
+    },
+    "category": "weapons",
+    "subtype": "bow",
+    "type": "bow",
+    "pAtk": 252,
+    "mAtk": 68
+  },
+  {
+    "key": 282,
+    "data": {
+      "unitName": "elemental_bow",
+      "icon": "/weapon_elemental_bow_i00.webp",
+      "name": {
+        "en": "Elemental Bow",
+        "ru": "Лук Стихии"
+      },
+      "description": {
+        "en": "Bestows either Guidance, Miser or Quick Recovery.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Наведение, Скупость, Восстановление."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 277,
+      "mAtk": 75
+    },
+    "category": "weapons",
+    "subtype": "bow",
+    "type": "bow",
+    "pAtk": 277,
+    "mAtk": 75
+  },
+  {
+    "key": 283,
+    "data": {
+      "unitName": "akat_long_bow",
+      "icon": "/weapon_akat_long_bow_i00.webp",
+      "name": {
+        "en": "Akat Long Bow",
+        "ru": "Длинный Лук Аката"
+      },
+      "description": {
+        "en": "Bestows either Guidance, Evasion or Miser.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Наведение, Уклонение, Скупость."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 316,
+      "mAtk": 84
+    },
+    "category": "weapons",
+    "subtype": "bow",
+    "type": "bow",
+    "pAtk": 316,
+    "mAtk": 84
+  },
+  {
+    "key": 286,
+    "data": {
+      "unitName": "eminence_bow",
+      "icon": "/weapon_eminence_bow_i00.webp",
+      "name": {
+        "en": "Eminence Bow",
+        "ru": "Лук Превосходства"
+      },
+      "description": {
+        "en": "Bestows either Guidance, Miser or Cheap Shot.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Наведение, Скупость, Экономия."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 323,
+      "mAtk": 83
+    },
+    "category": "weapons",
+    "subtype": "bow",
+    "type": "bow",
+    "pAtk": 323,
+    "mAtk": 83
+  },
+  {
+    "key": 284,
+    "data": {
+      "unitName": "dark_elven_long_bow",
+      "icon": "/weapon_dark_elven_long_bow_i00.webp",
+      "name": {
+        "en": "Dark Elven Long Bow",
+        "ru": "Длинный Лук Темных Эльфов"
+      },
+      "description": {
+        "en": "Bestows either Evasion, Critical Bleed or Miser.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Уклонение, Крит. Кровопускание, Скупость."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 397,
+      "mAtk": 100
+    },
+    "category": "weapons",
+    "subtype": "bow",
+    "type": "bow",
+    "pAtk": 397,
+    "mAtk": 100
+  },
+  {
+    "key": 287,
+    "data": {
+      "unitName": "hazard_bow",
+      "icon": "/weapon_hazard_bow_i00.webp",
+      "name": {
+        "en": "Bow of Peril",
+        "ru": "Лук Угрозы"
+      },
+      "description": {
+        "en": "Bestows either Guidance, Quick Recovery or Cheap Shot.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Наведение, Восстановление, Экономия. "
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 400,
+      "mAtk": 99
+    },
+    "category": "weapons",
+    "subtype": "bow",
+    "type": "bow",
+    "pAtk": 400,
+    "mAtk": 99
+  },
+  {
+    "key": 288,
+    "data": {
+      "unitName": "carnium_bow",
+      "icon": "/weapon_carnium_bow_i00.webp",
+      "name": {
+        "en": "Carnage Bow",
+        "ru": "Кровавый Лук"
+      },
+      "description": {
+        "en": "Bestows either Light, Critical Bleed, or Mana Up.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Легкость, Крит. Кровопускание, Увеличение Маны."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pAtk": 440,
+      "mAtk": 107
+    },
+    "category": "weapons",
+    "subtype": "bow",
+    "type": "bow",
+    "pAtk": 440,
+    "mAtk": 107
+  },
+  {
+    "key": 289,
+    "data": {
+      "unitName": "soul_bow",
+      "icon": "/weapon_soul_bow_i00.webp",
+      "name": {
+        "en": "Soul Bow",
+        "ru": "Пронзатель Душ"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Cheap Shot, Quick Recovery, or Critical Poison.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Экономия, Восстановление, Крит. Отравление."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pAtk": 528,
+      "mAtk": 125
+    },
+    "category": "weapons",
+    "subtype": "bow",
+    "type": "bow",
+    "pAtk": 528,
+    "mAtk": 125
+  },
+  {
+    "key": 8684,
+    "data": {
+      "unitName": "shyid_bow",
+      "icon": "/weapon_shyid_bow_i00.webp",
+      "name": {
+        "en": "Shyeed's Bow",
+        "ru": "Лук Шиид"
+      },
+      "description": {
+        "en": "Bestows Cheap Shot, Focus, or Quick Recovery.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Экономия, Фокусировка или Быстрое Восстановление."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pAtk": 570,
+      "mAtk": 133
+    },
+    "category": "weapons",
+    "subtype": "bow",
+    "type": "bow",
+    "pAtk": 570,
+    "mAtk": 133
+  },
+  {
+    "key": 7575,
+    "data": {
+      "unitName": "draconic_bow",
+      "icon": "/weapon_draconic_bow_i00.webp",
+      "name": {
+        "en": "Draconic Bow",
+        "ru": "Лук Дракона"
+      },
+      "description": {
+        "en": "It can bestow one of the following functions: Cheap Shot, Focus, or Critical Slow.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Экономия, Фокусировка, Крит. Замедление."
+      }
+    },
+    "grade": "S",
+    "stats": {
+      "pAtk": 581,
+      "mAtk": 132
+    },
+    "category": "weapons",
+    "subtype": "bow",
+    "type": "bow",
+    "pAtk": 581,
+    "mAtk": 132
+  },
+  {
+    "key": 9445,
+    "data": {
+      "unitName": "dynasty_bow",
+      "icon": "/weapon_dynasty_bow_i00.webp",
+      "name": {
+        "en": "Dynasty Bow",
+        "ru": "Лук Династии"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Cheap Shot, Guidance, or Focus.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Экономия, Наведение или Фокусировка."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pAtk": 654,
+      "mAtk": 151
+    },
+    "category": "weapons",
+    "subtype": "bow",
+    "type": "bow",
+    "pAtk": 654,
+    "mAtk": 151
+  },
+  {
+    "key": 10223,
+    "data": {
+      "unitName": "icarus_spitter",
+      "icon": "/weapon_icarus_spiter_i00.webp",
+      "name": {
+        "en": "Icarus Spitter",
+        "ru": "Лук Икара"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Cheap Shot, Guidance or Focus.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Экономия, Наведение или Фокусировка."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pAtk": 689,
+      "mAtk": 163
+    },
+    "category": "weapons",
+    "subtype": "bow",
+    "type": "bow",
+    "pAtk": 689,
+    "mAtk": 163
+  },
+  {
+    "key": 13467,
+    "data": {
+      "unitName": "vesper_thrower",
+      "icon": "/weapon_vesper_thrower_i00.webp",
+      "name": {
+        "en": "Vesper Thrower",
+        "ru": "Бросок Венеры"
+      },
+      "description": {
+        "en": "It can bestow one of the following functions: Cheap Shot, Critical Slow, or Focus.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Экономия, Крит. Замедление, Фокусировка."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pAtk": 724,
+      "mAtk": 176
+    },
+    "category": "weapons",
+    "subtype": "bow",
+    "type": "bow",
+    "pAtk": 724,
+    "mAtk": 176
+  }
+]

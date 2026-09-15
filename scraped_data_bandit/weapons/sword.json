@@ -1,0 +1,1127 @@
+[
+  {
+    "key": 2369,
+    "data": {
+      "unitName": "squire's_sword",
+      "icon": "/weapon_squires_sword_i00.webp",
+      "name": {
+        "en": "Squire's Sword",
+        "ru": "Меч Оруженосца"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 6,
+      "mAtk": 5
+    },
+    "category": "weapons",
+    "subtype": "sword",
+    "type": "sword",
+    "pAtk": 6,
+    "mAtk": 5
+  },
+  {
+    "key": 1,
+    "data": {
+      "unitName": "small_sword",
+      "icon": "/weapon_small_sword_i00.webp",
+      "name": {
+        "en": "Short Sword",
+        "ru": "Короткий Меч"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 8,
+      "mAtk": 6
+    },
+    "category": "weapons",
+    "subtype": "sword",
+    "type": "sword",
+    "pAtk": 8,
+    "mAtk": 6
+  },
+  {
+    "key": 3,
+    "data": {
+      "unitName": "broad_sword",
+      "icon": "/weapon_broad_sword_i00.webp",
+      "name": {
+        "en": "Broadsword",
+        "ru": "Широкий Меч"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 11,
+      "mAtk": 9
+    },
+    "category": "weapons",
+    "subtype": "sword",
+    "type": "sword",
+    "pAtk": 11,
+    "mAtk": 9
+  },
+  {
+    "key": 738,
+    "data": {
+      "unitName": "sword_of_solidarity",
+      "icon": "/weapon_long_sword_i00.webp",
+      "name": {
+        "en": "Sword of Solidarity",
+        "ru": "Меч Единства"
+      },
+      "description": {
+        "en": "A bronze sword crafted long ago in memory of the union between the Humans and the Elves.",
+        "ru": "Бронзовый меч, созданный много лет назад как символ единства Людей и Эльфов."
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 12,
+      "mAtk": 9
+    },
+    "category": "weapons",
+    "subtype": "sword",
+    "type": "sword",
+    "pAtk": 12,
+    "mAtk": 9
+  },
+  {
+    "key": 1510,
+    "data": {
+      "unitName": "butcher",
+      "icon": "/weapon_orcish_sword_i00.webp",
+      "name": {
+        "en": "Butcher's Sword",
+        "ru": "Меч Мясника"
+      },
+      "description": {
+        "en": "A sword granted to young Orc Fighters who distinguished themselves at war.",
+        "ru": "Меч, вручаемый молодым Оркам-Воинам, отличившимся в битве."
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 13,
+      "mAtk": 10
+    },
+    "category": "weapons",
+    "subtype": "sword",
+    "type": "sword",
+    "pAtk": 13,
+    "mAtk": 10
+  },
+  {
+    "key": 743,
+    "data": {
+      "unitName": "sword_of_sentinel",
+      "icon": "/weapon_broad_sword_i00.webp",
+      "name": {
+        "en": "Sword of Sentinel",
+        "ru": "Меч Стража"
+      },
+      "description": {
+        "en": "A steel blade issued to those fighters that have been acknowledged as protectors of the woods.",
+        "ru": "Стальной клинок, выдаваемый воинам, защищающим леса."
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 14,
+      "mAtk": 11
+    },
+    "category": "weapons",
+    "subtype": "sword",
+    "type": "sword",
+    "pAtk": 14,
+    "mAtk": 11
+  },
+  {
+    "key": 975,
+    "data": {
+      "unitName": "bloodsaber",
+      "icon": "/weapon_broad_sword_i00.webp",
+      "name": {
+        "en": "Blood Saber",
+        "ru": "Кровавая Сабля"
+      },
+      "description": {
+        "en": "An Oriharukon sword crafted in the Abella style of the east.",
+        "ru": "Орихаруконовый меч в стиле Авеллы, изготовленный где-то на востоке."
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 14,
+      "mAtk": 11
+    },
+    "category": "weapons",
+    "subtype": "sword",
+    "type": "sword",
+    "pAtk": 14,
+    "mAtk": 11
+  },
+  {
+    "key": 66,
+    "data": {
+      "unitName": "gladius",
+      "icon": "/weapon_gladius_i00.webp",
+      "name": {
+        "en": "Gladius",
+        "ru": "Гладиус"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 17,
+      "mAtk": 12
+    },
+    "category": "weapons",
+    "subtype": "sword",
+    "type": "sword",
+    "pAtk": 17,
+    "mAtk": 12
+  },
+  {
+    "key": 67,
+    "data": {
+      "unitName": "orcish_sword",
+      "icon": "/weapon_orcish_sword_i00.webp",
+      "name": {
+        "en": "Orcish Sword",
+        "ru": "Меч Орков"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 17,
+      "mAtk": 12
+    },
+    "category": "weapons",
+    "subtype": "sword",
+    "type": "sword",
+    "pAtk": 17,
+    "mAtk": 12
+  },
+  {
+    "key": 122,
+    "data": {
+      "unitName": "handmade_sword",
+      "icon": "/weapon_handmade_sword_i00.webp",
+      "name": {
+        "en": "Handmade Sword",
+        "ru": "Кованый Меч"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 17,
+      "mAtk": 12
+    },
+    "category": "weapons",
+    "subtype": "sword",
+    "type": "sword",
+    "pAtk": 17,
+    "mAtk": 12
+  },
+  {
+    "key": 3029,
+    "data": {
+      "unitName": "sword_of_binding",
+      "icon": "/weapon_gladius_i00.webp",
+      "name": {
+        "en": "Sword of Binding",
+        "ru": "Меч Оков"
+      },
+      "description": {
+        "en": "Use this sword to deliver the final blow to Zeruel.",
+        "ru": "Меч, которым необходимо нанести последний удар по Зеруэлю."
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 17,
+      "mAtk": 12
+    },
+    "category": "weapons",
+    "subtype": "sword",
+    "type": "sword",
+    "pAtk": 17,
+    "mAtk": 12
+  },
+  {
+    "key": 1142,
+    "data": {
+      "unitName": "rusted_bronze_sword3",
+      "icon": "/weapon_broad_sword_i00.webp",
+      "name": {
+        "en": "Rusted Bronze Sword",
+        "ru": "Ржавый Меч"
+      },
+      "description": {
+        "en": "An old and rusty bronze sword called the 'Sword of Trial'. Use this to hunt poison spiders and arachnid trackers.",
+        "ru": "Старый бронзовый меч, известный также как \"Меч Испытаний\". Используйте его для охоты на Ядовитых Пауков и Арахнидов Охотников."
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 18,
+      "mAtk": 21
+    },
+    "category": "weapons",
+    "subtype": "sword",
+    "type": "sword",
+    "pAtk": 18,
+    "mAtk": 21
+  },
+  {
+    "key": 2,
+    "data": {
+      "unitName": "long_sword",
+      "icon": "/weapon_long_sword_i00.webp",
+      "name": {
+        "en": "Long Sword",
+        "ru": "Длинный Меч"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 24,
+      "mAtk": 17
+    },
+    "category": "weapons",
+    "subtype": "sword",
+    "type": "sword",
+    "pAtk": 24,
+    "mAtk": 17
+  },
+  {
+    "key": 120,
+    "data": {
+      "unitName": "sword_of_reflexion",
+      "icon": "/weapon_sword_of_watershadow_i00.webp",
+      "name": {
+        "en": "Sword of Reflection",
+        "ru": "Меч Отражения"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 24,
+      "mAtk": 17
+    },
+    "category": "weapons",
+    "subtype": "sword",
+    "type": "sword",
+    "pAtk": 24,
+    "mAtk": 17
+  },
+  {
+    "key": 121,
+    "data": {
+      "unitName": "sword_of_watershadow",
+      "icon": "/weapon_sword_of_watershadow_i00.webp",
+      "name": {
+        "en": "Sword of Watershadow",
+        "ru": "Меч Темной Воды"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 24,
+      "mAtk": 17
+    },
+    "category": "weapons",
+    "subtype": "sword",
+    "type": "sword",
+    "pAtk": 24,
+    "mAtk": 17
+  },
+  {
+    "key": 68,
+    "data": {
+      "unitName": "falchion",
+      "icon": "/weapon_falchion_i00.webp",
+      "name": {
+        "en": "Falchion",
+        "ru": "Фальшион"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 31,
+      "mAtk": 21
+    },
+    "category": "weapons",
+    "subtype": "sword",
+    "type": "sword",
+    "pAtk": 31,
+    "mAtk": 21
+  },
+  {
+    "key": 123,
+    "data": {
+      "unitName": "saber",
+      "icon": "/weapon_saber_i00.webp",
+      "name": {
+        "en": "Saber",
+        "ru": "Сабля"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 40,
+      "mAtk": 26
+    },
+    "category": "weapons",
+    "subtype": "sword",
+    "type": "sword",
+    "pAtk": 40,
+    "mAtk": 26
+  },
+  {
+    "key": 69,
+    "data": {
+      "unitName": "bastard_sword",
+      "icon": "/weapon_bastard_sword_i00.webp",
+      "name": {
+        "en": "Bastard Sword",
+        "ru": "Полуторный Меч"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 51,
+      "mAtk": 32
+    },
+    "category": "weapons",
+    "subtype": "sword",
+    "type": "sword",
+    "pAtk": 51,
+    "mAtk": 32
+  },
+  {
+    "key": 125,
+    "data": {
+      "unitName": "spinebone_sword",
+      "icon": "/weapon_spinebone_sword_i00.webp",
+      "name": {
+        "en": "Spinebone Sword",
+        "ru": "Хребетный Меч"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 51,
+      "mAtk": 32
+    },
+    "category": "weapons",
+    "subtype": "sword",
+    "type": "sword",
+    "pAtk": 51,
+    "mAtk": 32
+  },
+  {
+    "key": 126,
+    "data": {
+      "unitName": "artisan's_sword",
+      "icon": "/weapon_artisans_sword_i00.webp",
+      "name": {
+        "en": "Artisan's Sword",
+        "ru": "Меч Ремесленника"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 51,
+      "mAtk": 32
+    },
+    "category": "weapons",
+    "subtype": "sword",
+    "type": "sword",
+    "pAtk": 51,
+    "mAtk": 32
+  },
+  {
+    "key": 128,
+    "data": {
+      "unitName": "knight's_sword",
+      "icon": "/weapon_knights_sword_i00.webp",
+      "name": {
+        "en": "Knight's Sword",
+        "ru": "Меч Рыцаря"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 51,
+      "mAtk": 32
+    },
+    "category": "weapons",
+    "subtype": "sword",
+    "type": "sword",
+    "pAtk": 51,
+    "mAtk": 32
+  },
+  {
+    "key": 127,
+    "data": {
+      "unitName": "crimson_sword",
+      "icon": "/weapon_crimson_sword_i00.webp",
+      "name": {
+        "en": "Crimson Sword",
+        "ru": "Багровый Меч"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 64,
+      "mAtk": 39
+    },
+    "category": "weapons",
+    "subtype": "sword",
+    "type": "sword",
+    "pAtk": 64,
+    "mAtk": 39
+  },
+  {
+    "key": 130,
+    "data": {
+      "unitName": "elven_sword",
+      "icon": "/weapon_elven_sword_i00.webp",
+      "name": {
+        "en": "Elven Sword",
+        "ru": "Меч Эльфов"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 64,
+      "mAtk": 39
+    },
+    "category": "weapons",
+    "subtype": "sword",
+    "type": "sword",
+    "pAtk": 64,
+    "mAtk": 39
+  },
+  {
+    "key": 129,
+    "data": {
+      "unitName": "sword_of_revolution",
+      "icon": "/weapon_sword_of_revolution_i00.webp",
+      "name": {
+        "en": "Sword of Revolution",
+        "ru": "Меч Революции"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 79,
+      "mAtk": 47
+    },
+    "category": "weapons",
+    "subtype": "sword",
+    "type": "sword",
+    "pAtk": 79,
+    "mAtk": 47
+  },
+  {
+    "key": 2499,
+    "data": {
+      "unitName": "elven_long_sword",
+      "icon": "/weapon_elven_long_sword_i00.webp",
+      "name": {
+        "en": "Elven Long Sword",
+        "ru": "Длинный Меч Эльфов"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 92,
+      "mAtk": 54
+    },
+    "category": "weapons",
+    "subtype": "sword",
+    "type": "sword",
+    "pAtk": 92,
+    "mAtk": 54
+  },
+  {
+    "key": 72,
+    "data": {
+      "unitName": "stormbringer",
+      "icon": "/weapon_stormbringer_i00.webp",
+      "name": {
+        "en": "Stormbringer",
+        "ru": "Громовержец"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Critical Anger, Focus or Light.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Крит. Ярость, Фокусировка, Легкость."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 107,
+      "mAtk": 61
+    },
+    "category": "weapons",
+    "subtype": "sword",
+    "type": "sword",
+    "pAtk": 107,
+    "mAtk": 61
+  },
+  {
+    "key": 73,
+    "data": {
+      "unitName": "shamshir",
+      "icon": "/weapon_shamshir_i00.webp",
+      "name": {
+        "en": "Shamshir",
+        "ru": "Шамшир"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Guidance, Back Blow, Rsk. Or Evasion.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Наведение, Удар в Спину, Риск. Уклонение"
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 122,
+      "mAtk": 68
+    },
+    "category": "weapons",
+    "subtype": "sword",
+    "type": "sword",
+    "pAtk": 122,
+    "mAtk": 68
+  },
+  {
+    "key": 74,
+    "data": {
+      "unitName": "katana",
+      "icon": "/weapon_katana_i00.webp",
+      "name": {
+        "en": "Katana",
+        "ru": "Катана"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Focus, Critical Damage or Haste.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Фокусировка, Крит. Урон, Ускорение."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 122,
+      "mAtk": 68
+    },
+    "category": "weapons",
+    "subtype": "sword",
+    "type": "sword",
+    "pAtk": 122,
+    "mAtk": 68
+  },
+  {
+    "key": 131,
+    "data": {
+      "unitName": "spirits_sword",
+      "icon": "/weapon_spirits_sword_i00.webp",
+      "name": {
+        "en": "Spirit Sword",
+        "ru": "Меч Духов"
+      },
+      "description": {
+        "en": "Bestows either Critical Damage, Critical Poison or Haste",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Крит. Урон, Крит. Отравление, Ускорение."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 122,
+      "mAtk": 68
+    },
+    "category": "weapons",
+    "subtype": "sword",
+    "type": "sword",
+    "pAtk": 122,
+    "mAtk": 68
+  },
+  {
+    "key": 133,
+    "data": {
+      "unitName": "raid_sword",
+      "icon": "/weapon_raid_sword_i00.webp",
+      "name": {
+        "en": "Raid Sword",
+        "ru": "Меч Налетчика"
+      },
+      "description": {
+        "en": "Bestows either Focus, Critical Drain or Critical Poison",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Фокусировка, Крит. Поглощение HP, Крит. Отравление."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 122,
+      "mAtk": 68
+    },
+    "category": "weapons",
+    "subtype": "sword",
+    "type": "sword",
+    "pAtk": 122,
+    "mAtk": 68
+  },
+  {
+    "key": 75,
+    "data": {
+      "unitName": "caliburs",
+      "icon": "/weapon_caliburs_i00.webp",
+      "name": {
+        "en": "Caliburs",
+        "ru": "Экскалибур"
+      },
+      "description": {
+        "en": "Bestows either Guidance, Focus or Critical Damage.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Наведение, Фокусировка, Крит. Урон."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 139,
+      "mAtk": 76
+    },
+    "category": "weapons",
+    "subtype": "sword",
+    "type": "sword",
+    "pAtk": 139,
+    "mAtk": 76
+  },
+  {
+    "key": 76,
+    "data": {
+      "unitName": "sword_of_delusion",
+      "icon": "/weapon_sword_of_delusion_i00.webp",
+      "name": {
+        "en": "Sword of Delusion",
+        "ru": "Меч Иллюзий"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Focus, Health, or Rsk. Haste.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Фокусировка, Здоровье, Риск. Ускорение."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 139,
+      "mAtk": 76
+    },
+    "category": "weapons",
+    "subtype": "sword",
+    "type": "sword",
+    "pAtk": 139,
+    "mAtk": 76
+  },
+  {
+    "key": 77,
+    "data": {
+      "unitName": "tsurugi",
+      "icon": "/weapon_tsurugi_i00.webp",
+      "name": {
+        "en": "Tsurugi",
+        "ru": "Цуруги"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Focus, Critical Damage or Haste.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Фокусировка, Крит. Урон, Ускорение."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 139,
+      "mAtk": 76
+    },
+    "category": "weapons",
+    "subtype": "sword",
+    "type": "sword",
+    "pAtk": 139,
+    "mAtk": 76
+  },
+  {
+    "key": 132,
+    "data": {
+      "unitName": "sword_of_limit",
+      "icon": "/weapon_sword_of_limit_i00.webp",
+      "name": {
+        "en": "Sword of Limit",
+        "ru": "Меч Рубежа"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Guidance, Critical Drain, or Health.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Наведение, Крит. Поглощение HP, Здоровье."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 139,
+      "mAtk": 76
+    },
+    "category": "weapons",
+    "subtype": "sword",
+    "type": "sword",
+    "pAtk": 139,
+    "mAtk": 76
+  },
+  {
+    "key": 134,
+    "data": {
+      "unitName": "sword_of_nightmare",
+      "icon": "/weapon_sword_of_nightmare_i00.webp",
+      "name": {
+        "en": "Sword of Nightmare",
+        "ru": "Меч Кошмаров"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Health, Focus, or Light.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Здоровье, Фокусировка, Легкость."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 139,
+      "mAtk": 76
+    },
+    "category": "weapons",
+    "subtype": "sword",
+    "type": "sword",
+    "pAtk": 139,
+    "mAtk": 76
+  },
+  {
+    "key": 135,
+    "data": {
+      "unitName": "samurai_longsword",
+      "icon": "/weapon_samurai_longsword_i00.webp",
+      "name": {
+        "en": "Samurai Longsword",
+        "ru": "Длинный Меч Самурая"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Focus, Critical Damage or Haste.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Фокусировка, Крит. Урон, Ускорение."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 156,
+      "mAtk": 83
+    },
+    "category": "weapons",
+    "subtype": "sword",
+    "type": "sword",
+    "pAtk": 156,
+    "mAtk": 83
+  },
+  {
+    "key": 142,
+    "data": {
+      "unitName": "kshanberk",
+      "icon": "/weapon_kshanberk_i00.webp",
+      "name": {
+        "en": "Keshanberk",
+        "ru": "Кешанберк"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Guidance, Focus or Back Blow",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Наведение, Фокусировка, Удар в Спину."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 175,
+      "mAtk": 91
+    },
+    "category": "weapons",
+    "subtype": "sword",
+    "type": "sword",
+    "pAtk": 175,
+    "mAtk": 91
+  },
+  {
+    "key": 79,
+    "data": {
+      "unitName": "sword_of_damascus",
+      "icon": "/weapon_sword_of_damascus_i00.webp",
+      "name": {
+        "en": "Sword of Damascus",
+        "ru": "Дамаскус"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Focus, Critical Damage or Haste.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Фокусировка, Крит. Урон, Ускорение."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 194,
+      "mAtk": 99
+    },
+    "category": "weapons",
+    "subtype": "sword",
+    "type": "sword",
+    "pAtk": 194,
+    "mAtk": 99
+  },
+  {
+    "key": 80,
+    "data": {
+      "unitName": "tallum_blade",
+      "icon": "/weapon_tallum_blade_i00.webp",
+      "name": {
+        "en": "Tallum Blade",
+        "ru": "Клинок Таллума"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Critical Poison, Haste or Anger.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Крит. Отравление, Ускорение, Ярость."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pAtk": 213,
+      "mAtk": 107
+    },
+    "category": "weapons",
+    "subtype": "sword",
+    "type": "sword",
+    "pAtk": 213,
+    "mAtk": 107
+  },
+  {
+    "key": 2500,
+    "data": {
+      "unitName": "dark_legion's_edge",
+      "icon": "/weapon_dark_legions_edge_i00.webp",
+      "name": {
+        "en": "Dark Legion's Edge",
+        "ru": "Темный Легион"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Critical Damage, Health, or Rsk. Focus.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Крит. Урон, Здоровье, Риск. Фокусировка."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pAtk": 232,
+      "mAtk": 114
+    },
+    "category": "weapons",
+    "subtype": "sword",
+    "type": "sword",
+    "pAtk": 232,
+    "mAtk": 114
+  },
+  {
+    "key": 8678,
+    "data": {
+      "unitName": "sirr_blade",
+      "icon": "/weapon_sirr_blade_i00.webp",
+      "name": {
+        "en": "Sirra's Blade",
+        "ru": "Клинок Сирры"
+      },
+      "description": {
+        "en": "Bestows Haste, Health, or Critical Poison.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Ускорение, Здоровье или Крит. Отравление."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pAtk": 251,
+      "mAtk": 121
+    },
+    "category": "weapons",
+    "subtype": "sword",
+    "type": "sword",
+    "pAtk": 251,
+    "mAtk": 121
+  },
+  {
+    "key": 6364,
+    "data": {
+      "unitName": "forgotten_blade",
+      "icon": "/weapon_forgotten_blade_i00.webp",
+      "name": {
+        "en": "Forgotten Blade",
+        "ru": "Забытый Клинок"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Haste, Health or Focus.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Ускорение, Здоровье или Фокусировка."
+      }
+    },
+    "grade": "S",
+    "stats": {
+      "pAtk": 281,
+      "mAtk": 132
+    },
+    "category": "weapons",
+    "subtype": "sword",
+    "type": "sword",
+    "pAtk": 281,
+    "mAtk": 132
+  },
+  {
+    "key": 9442,
+    "data": {
+      "unitName": "dynasty_sword",
+      "icon": "/weapon_dynasty_blade_i00.webp",
+      "name": {
+        "en": "Dynasty Sword",
+        "ru": "Меч Династии"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Focus, Health, or Light.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Фокусировка, Здоровье или Легкость."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pAtk": 333,
+      "mAtk": 151
+    },
+    "category": "weapons",
+    "subtype": "sword",
+    "type": "sword",
+    "pAtk": 333,
+    "mAtk": 151
+  },
+  {
+    "key": 10215,
+    "data": {
+      "unitName": "icarus_sawsword",
+      "icon": "/weapon_icarus_sowsword_i00.webp",
+      "name": {
+        "en": "Icarus Sawsword",
+        "ru": "Зазубренный Меч Икара"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Focus, Health or Light.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Фокусировка, Здоровье или Легкость."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pAtk": 363,
+      "mAtk": 163
+    },
+    "category": "weapons",
+    "subtype": "sword",
+    "type": "sword",
+    "pAtk": 363,
+    "mAtk": 163
+  },
+  {
+    "key": 13457,
+    "data": {
+      "unitName": "vesper_cutter",
+      "icon": "/weapon_vesper_cutter_i00.webp",
+      "name": {
+        "en": "Vesper Cutter",
+        "ru": "Резак Венеры"
+      },
+      "description": {
+        "en": "It can bestow one of the following functions: Haste, Focus, or Health.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Ускорение, Фокусировка, Здоровье."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pAtk": 396,
+      "mAtk": 176
+    },
+    "category": "weapons",
+    "subtype": "sword",
+    "type": "sword",
+    "pAtk": 396,
+    "mAtk": 176
+  }
+]

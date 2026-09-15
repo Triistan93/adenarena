@@ -1,0 +1,852 @@
+[
+  {
+    "key": 8,
+    "data": {
+      "unitName": "willow_staff",
+      "icon": "/weapon_willow_staff_i00.webp",
+      "name": {
+        "en": "Willow Staff",
+        "ru": "Ивовый Посох"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 11,
+      "mAtk": 12
+    },
+    "category": "weapons",
+    "subtype": "two_hand_magic",
+    "type": "two_hand_magic",
+    "pAtk": 11,
+    "mAtk": 12
+  },
+  {
+    "key": 744,
+    "data": {
+      "unitName": "staff_of_sentinel",
+      "icon": "/weapon_cedar_staff_i00.webp",
+      "name": {
+        "en": "Staff of Sentinel",
+        "ru": "Посох Стража"
+      },
+      "description": {
+        "en": "A staff issued to those magicians that have been acknowledged as protectors of the woods.",
+        "ru": "Посох, выдаваемый магам, защищающим леса."
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 13,
+      "mAtk": 14
+    },
+    "category": "weapons",
+    "subtype": "two_hand_magic",
+    "type": "two_hand_magic",
+    "pAtk": 13,
+    "mAtk": 14
+  },
+  {
+    "key": 754,
+    "data": {
+      "unitName": "red_sunset_staff",
+      "icon": "/weapon_cedar_staff_i00.webp",
+      "name": {
+        "en": "Red Sunset Staff",
+        "ru": "Посох Багрового Заката"
+      },
+      "description": {
+        "en": "A staff used by warriors belonging to the Red Sunset clan.",
+        "ru": "Посох, принадлежащий воинам Клана Багрового Заката."
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 13,
+      "mAtk": 13
+    },
+    "category": "weapons",
+    "subtype": "two_hand_magic",
+    "type": "two_hand_magic",
+    "pAtk": 13,
+    "mAtk": 13
+  },
+  {
+    "key": 9,
+    "data": {
+      "unitName": "cedar_staff",
+      "icon": "/weapon_cedar_staff_i00.webp",
+      "name": {
+        "en": "Cedar Staff",
+        "ru": "Кедровый Посох"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 16,
+      "mAtk": 16
+    },
+    "category": "weapons",
+    "subtype": "two_hand_magic",
+    "type": "two_hand_magic",
+    "pAtk": 16,
+    "mAtk": 16
+  },
+  {
+    "key": 176,
+    "data": {
+      "unitName": "apprentice's_staff",
+      "icon": "/weapon_apprentices_staff_i00.webp",
+      "name": {
+        "en": "Journeyman's Staff",
+        "ru": "Посох Наемника"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 23,
+      "mAtk": 22
+    },
+    "category": "weapons",
+    "subtype": "two_hand_magic",
+    "type": "two_hand_magic",
+    "pAtk": 23,
+    "mAtk": 22
+  },
+  {
+    "key": 177,
+    "data": {
+      "unitName": "mage_staff",
+      "icon": "/weapon_apprentices_staff_i00.webp",
+      "name": {
+        "en": "Mage Staff",
+        "ru": "Магический Посох"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "NG",
+    "stats": {
+      "pAtk": 30,
+      "mAtk": 28
+    },
+    "category": "weapons",
+    "subtype": "two_hand_magic",
+    "type": "two_hand_magic",
+    "pAtk": 30,
+    "mAtk": 28
+  },
+  {
+    "key": 178,
+    "data": {
+      "unitName": "bone_staff",
+      "icon": "/weapon_apprentices_staff_i00.webp",
+      "name": {
+        "en": "Bone Staff",
+        "ru": "Костяной Посох"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 39,
+      "mAtk": 35
+    },
+    "category": "weapons",
+    "subtype": "two_hand_magic",
+    "type": "two_hand_magic",
+    "pAtk": 39,
+    "mAtk": 35
+  },
+  {
+    "key": 183,
+    "data": {
+      "unitName": "mystic_staff",
+      "icon": "/weapon_mystic_staff_i00.webp",
+      "name": {
+        "en": "Mystic Staff",
+        "ru": "Посох Мистика"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 50,
+      "mAtk": 43
+    },
+    "category": "weapons",
+    "subtype": "two_hand_magic",
+    "type": "two_hand_magic",
+    "pAtk": 50,
+    "mAtk": 43
+  },
+  {
+    "key": 184,
+    "data": {
+      "unitName": "conjure_staff",
+      "icon": "/weapon_conjure_staff_i00.webp",
+      "name": {
+        "en": "Conjuror's Staff",
+        "ru": "Посох Заклинателя"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 50,
+      "mAtk": 43
+    },
+    "category": "weapons",
+    "subtype": "two_hand_magic",
+    "type": "two_hand_magic",
+    "pAtk": 50,
+    "mAtk": 43
+  },
+  {
+    "key": 185,
+    "data": {
+      "unitName": "staff_of_mana",
+      "icon": "/weapon_staff_of_mana_i00.webp",
+      "name": {
+        "en": "Staff of Mana",
+        "ru": "Посох Маны"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 50,
+      "mAtk": 43
+    },
+    "category": "weapons",
+    "subtype": "two_hand_magic",
+    "type": "two_hand_magic",
+    "pAtk": 50,
+    "mAtk": 43
+  },
+  {
+    "key": 186,
+    "data": {
+      "unitName": "staff_of_magicpower",
+      "icon": "/weapon_staff_of_magicpower_i00.webp",
+      "name": {
+        "en": "Staff of Magic",
+        "ru": "Посох Магии"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 62,
+      "mAtk": 52
+    },
+    "category": "weapons",
+    "subtype": "two_hand_magic",
+    "type": "two_hand_magic",
+    "pAtk": 62,
+    "mAtk": 52
+  },
+  {
+    "key": 90,
+    "data": {
+      "unitName": "goathead_staff",
+      "icon": "/weapon_goathead_staff_i00.webp",
+      "name": {
+        "en": "Goat Head Staff",
+        "ru": "Рогатый Посох"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 77,
+      "mAtk": 63
+    },
+    "category": "weapons",
+    "subtype": "two_hand_magic",
+    "type": "two_hand_magic",
+    "pAtk": 77,
+    "mAtk": 63
+  },
+  {
+    "key": 187,
+    "data": {
+      "unitName": "atuba_hammer",
+      "icon": "/weapon_atuba_hammer_i00.webp",
+      "name": {
+        "en": "Atuba Hammer",
+        "ru": "Молот Атубы"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 90,
+      "mAtk": 72
+    },
+    "category": "weapons",
+    "subtype": "two_hand_magic",
+    "type": "two_hand_magic",
+    "pAtk": 90,
+    "mAtk": 72
+  },
+  {
+    "key": 188,
+    "data": {
+      "unitName": "ghost_staff",
+      "icon": "/weapon_ghost_staff_i00.webp",
+      "name": {
+        "en": "Ghost Staff",
+        "ru": "Посох Призрака"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 90,
+      "mAtk": 72
+    },
+    "category": "weapons",
+    "subtype": "two_hand_magic",
+    "type": "two_hand_magic",
+    "pAtk": 90,
+    "mAtk": 72
+  },
+  {
+    "key": 190,
+    "data": {
+      "unitName": "atuba_mace",
+      "icon": "/weapon_atuba_mace_i00.webp",
+      "name": {
+        "en": "Atuba Mace",
+        "ru": "Булава Атубы"
+      },
+      "description": {
+        "en": "No description for this item",
+        "ru": "Нет описания для этого предмета"
+      }
+    },
+    "grade": "D",
+    "stats": {
+      "pAtk": 90,
+      "mAtk": 72
+    },
+    "category": "weapons",
+    "subtype": "two_hand_magic",
+    "type": "two_hand_magic",
+    "pAtk": 90,
+    "mAtk": 72
+  },
+  {
+    "key": 191,
+    "data": {
+      "unitName": "heavy_doom_hammer",
+      "icon": "/weapon_heavy_doom_hammer_i00.webp",
+      "name": {
+        "en": "Heavy Doom Hammer",
+        "ru": "Тяжелый Молот Рока"
+      },
+      "description": {
+        "en": "Bestows either Regeneration, Mental Shield or Hold.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Регенерация, Ментальный Щит, Магические Оковы."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 103,
+      "mAtk": 81
+    },
+    "category": "weapons",
+    "subtype": "two_hand_magic",
+    "type": "two_hand_magic",
+    "pAtk": 103,
+    "mAtk": 81
+  },
+  {
+    "key": 192,
+    "data": {
+      "unitName": "crystal_staff",
+      "icon": "/weapon_crystal_staff_i00.webp",
+      "name": {
+        "en": "Crystal Staff",
+        "ru": "Кристальный Посох"
+      },
+      "description": {
+        "en": "Bestows either Rsk. Evasion, Mana Up, or Blessed Body.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Риск. Уклонение, Увеличение Маны, Благословение Тела."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 103,
+      "mAtk": 81
+    },
+    "category": "weapons",
+    "subtype": "two_hand_magic",
+    "type": "two_hand_magic",
+    "pAtk": 103,
+    "mAtk": 81
+  },
+  {
+    "key": 194,
+    "data": {
+      "unitName": "heavy_doom_axe",
+      "icon": "/weapon_heavy_doom_axe_i00.webp",
+      "name": {
+        "en": "Heavy Doom Axe",
+        "ru": "Тяжелый Топор Рока"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Magic Poison, Magic Weakness, or Magic Chaos.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Отравление, Маг. Слабость, Хаос."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 103,
+      "mAtk": 81
+    },
+    "category": "weapons",
+    "subtype": "two_hand_magic",
+    "type": "two_hand_magic",
+    "pAtk": 103,
+    "mAtk": 81
+  },
+  {
+    "key": 195,
+    "data": {
+      "unitName": "cursed_staff",
+      "icon": "/weapon_cursed_staff_i00.webp",
+      "name": {
+        "en": "Cursed Staff",
+        "ru": "Проклятый Посох"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Magic Hold, Magic Poison, or Magic Weakness.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Магические Оковы, Отравление, Маг. Слабость."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 119,
+      "mAtk": 91
+    },
+    "category": "weapons",
+    "subtype": "two_hand_magic",
+    "type": "two_hand_magic",
+    "pAtk": 119,
+    "mAtk": 91
+  },
+  {
+    "key": 197,
+    "data": {
+      "unitName": "paradia_staff",
+      "icon": "/weapon_paradia_staff_i00.webp",
+      "name": {
+        "en": "Paradia Staff",
+        "ru": "Посох Парадии"
+      },
+      "description": {
+        "en": "Bestows either Regeneration, Mental Shield or Hold.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Регенерация, Ментальный Щит, Магические Оковы."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 135,
+      "mAtk": 101
+    },
+    "category": "weapons",
+    "subtype": "two_hand_magic",
+    "type": "two_hand_magic",
+    "pAtk": 135,
+    "mAtk": 101
+  },
+  {
+    "key": 198,
+    "data": {
+      "unitName": "inferno_staff",
+      "icon": "/weapon_inferno_staff_i00.webp",
+      "name": {
+        "en": "Inferno Staff",
+        "ru": "Посох Инферно"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Magic Silence, Acumen or Magic Paralyze.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Безмолвие, Проницательность, Паралич."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 135,
+      "mAtk": 101
+    },
+    "category": "weapons",
+    "subtype": "two_hand_magic",
+    "type": "two_hand_magic",
+    "pAtk": 135,
+    "mAtk": 101
+  },
+  {
+    "key": 199,
+    "data": {
+      "unitName": "paagrio_hammer",
+      "icon": "/weapon_paagrio_hammer_i00.webp",
+      "name": {
+        "en": "Pa'agrian Hammer",
+        "ru": "Молот Паагрио"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Rsk. Evasion, Magic Poison, or Magic Weakness.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Риск. Уклонение, Отравление, Маг. Слабость."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 135,
+      "mAtk": 101
+    },
+    "category": "weapons",
+    "subtype": "two_hand_magic",
+    "type": "two_hand_magic",
+    "pAtk": 135,
+    "mAtk": 101
+  },
+  {
+    "key": 200,
+    "data": {
+      "unitName": "sage's_staff",
+      "icon": "/weapon_sages_staff_i00.webp",
+      "name": {
+        "en": "Sage's Staff",
+        "ru": "Посох Мудреца"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Magic Hold, Magic Poison, or Magic Weakness.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Магические Оковы, Отравление, Маг. Слабость."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 135,
+      "mAtk": 101
+    },
+    "category": "weapons",
+    "subtype": "two_hand_magic",
+    "type": "two_hand_magic",
+    "pAtk": 135,
+    "mAtk": 101
+  },
+  {
+    "key": 203,
+    "data": {
+      "unitName": "paagrio_axe",
+      "icon": "/weapon_paagrio_axe_i00.webp",
+      "name": {
+        "en": "Pa'agrian Axe",
+        "ru": "Топор Паагрио"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Mana Up, Magic Weakness, or Magic Chaos.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Увеличение Маны, Маг. Слабость, Хаос."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 141,
+      "mAtk": 104
+    },
+    "category": "weapons",
+    "subtype": "two_hand_magic",
+    "type": "two_hand_magic",
+    "pAtk": 141,
+    "mAtk": 104
+  },
+  {
+    "key": 204,
+    "data": {
+      "unitName": "deadman's_staff",
+      "icon": "/weapon_deadmans_staff_i00.webp",
+      "name": {
+        "en": "Deadman's Staff",
+        "ru": "Посох Мертвеца"
+      },
+      "description": {
+        "en": "Bestows either Regeneration, Mental Shield or Hold.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Регенерация, Ментальный Щит, Магические Оковы."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 152,
+      "mAtk": 111
+    },
+    "category": "weapons",
+    "subtype": "two_hand_magic",
+    "type": "two_hand_magic",
+    "pAtk": 152,
+    "mAtk": 111
+  },
+  {
+    "key": 205,
+    "data": {
+      "unitName": "ghoul's_staff",
+      "icon": "/weapon_ghouls_staff_i00.webp",
+      "name": {
+        "en": "Ghoul's Staff",
+        "ru": "Посох Вурдалака"
+      },
+      "description": {
+        "en": "Bestows either Rsk. Evasion, Mana Up or Blessed Body.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Риск. Уклонение, Увеличение Маны, Благословение Тела."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 152,
+      "mAtk": 111
+    },
+    "category": "weapons",
+    "subtype": "two_hand_magic",
+    "type": "two_hand_magic",
+    "pAtk": 152,
+    "mAtk": 111
+  },
+  {
+    "key": 206,
+    "data": {
+      "unitName": "demon's_staff",
+      "icon": "/weapon_demons_staff_i00.webp",
+      "name": {
+        "en": "Demon's Staff",
+        "ru": "Посох Демона"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Magic Poison, Magic Weakness, or Magic Chaos.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Отравление, Маг. Слабость, Хаос."
+      }
+    },
+    "grade": "C",
+    "stats": {
+      "pAtk": 152,
+      "mAtk": 111
+    },
+    "category": "weapons",
+    "subtype": "two_hand_magic",
+    "type": "two_hand_magic",
+    "pAtk": 152,
+    "mAtk": 111
+  },
+  {
+    "key": 210,
+    "data": {
+      "unitName": "staff_of_evil_sprit",
+      "icon": "/weapon_staff_of_evil_sprit_i00.webp",
+      "name": {
+        "en": "Staff of Evil Spirits",
+        "ru": "Посох Злых Духов"
+      },
+      "description": {
+        "en": "Bestows either Focus, Blessed Body or Poison.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Маг. Фокусировка, Благословение Тела, Отравление."
+      }
+    },
+    "grade": "B",
+    "stats": {
+      "pAtk": 189,
+      "mAtk": 132
+    },
+    "category": "weapons",
+    "subtype": "two_hand_magic",
+    "type": "two_hand_magic",
+    "pAtk": 189,
+    "mAtk": 132
+  },
+  {
+    "key": 212,
+    "data": {
+      "unitName": "dasparion's_staff",
+      "icon": "/weapon_dasparions_staff_i00.webp",
+      "name": {
+        "en": "Dasparion's Staff",
+        "ru": "Посох Даспариона"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Mana Up, Conversion, or Acumen.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Увеличение Маны, Конверсия, Проницательность."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pAtk": 207,
+      "mAtk": 143
+    },
+    "category": "weapons",
+    "subtype": "two_hand_magic",
+    "type": "two_hand_magic",
+    "pAtk": 207,
+    "mAtk": 143
+  },
+  {
+    "key": 213,
+    "data": {
+      "unitName": "worldtree's_branch",
+      "icon": "/weapon_worldtrees_branch_i00.webp",
+      "name": {
+        "en": "Branch of The Mother Tree",
+        "ru": "Ветвь Древа Жизни"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Conversion, Magic Damage, or Acumen.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Конверсия, Маг. Урон, Проницательность."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pAtk": 226,
+      "mAtk": 152
+    },
+    "category": "weapons",
+    "subtype": "two_hand_magic",
+    "type": "two_hand_magic",
+    "pAtk": 226,
+    "mAtk": 152
+  },
+  {
+    "key": 8688,
+    "data": {
+      "unitName": "crystal_of_deamon",
+      "icon": "/weapon_crystal_of_deamon_i00.webp",
+      "name": {
+        "en": "Daimon Crystal",
+        "ru": "Кристалл Дэймона"
+      },
+      "description": {
+        "en": "Bestows Mana Up, Acumen, or Magic Mental Shield.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Увеличение Маны, Проницательность или Ментальный Щит."
+      }
+    },
+    "grade": "A",
+    "stats": {
+      "pAtk": 245,
+      "mAtk": 161
+    },
+    "category": "weapons",
+    "subtype": "two_hand_magic",
+    "type": "two_hand_magic",
+    "pAtk": 245,
+    "mAtk": 161
+  },
+  {
+    "key": 6366,
+    "data": {
+      "unitName": "imperial_staff",
+      "icon": "/weapon_imperial_staff_i00.webp",
+      "name": {
+        "en": "Imperial Staff",
+        "ru": "Имперский Посох"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Empower, MP Regeneration or Magic Hold.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Воодушевление, Регенерация МР или Магические Оковы."
+      }
+    },
+    "grade": "S",
+    "stats": {
+      "pAtk": 274,
+      "mAtk": 175
+    },
+    "category": "weapons",
+    "subtype": "two_hand_magic",
+    "type": "two_hand_magic",
+    "pAtk": 274,
+    "mAtk": 175
+  },
+  {
+    "key": 10252,
+    "data": {
+      "unitName": "dynasty_staff",
+      "icon": "/weapon_dynasty_twohand_staff_i00.webp",
+      "name": {
+        "en": "Dynasty Staff",
+        "ru": "Посох Династии"
+      },
+      "description": {
+        "en": "Bestows one of the following functions: Acumen, Mana Up or Conversion.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Проницательность, Увеличение Маны или Конверсия."
+      }
+    },
+    "grade": "S80",
+    "stats": {
+      "pAtk": 325,
+      "mAtk": 222
+    },
+    "category": "weapons",
+    "subtype": "two_hand_magic",
+    "type": "two_hand_magic",
+    "pAtk": 325,
+    "mAtk": 222
+  },
+  {
+    "key": 13466,
+    "data": {
+      "unitName": "vesper_singer",
+      "icon": "/weapon_vesper_singer_i00.webp",
+      "name": {
+        "en": "Vesper Singer",
+        "ru": "Певец Венеры"
+      },
+      "description": {
+        "en": "It can bestow one of the following functions: Empower, MP Regeneration, or Magic Hold.",
+        "ru": "Дает возможность получить одно из следующих особых свойств: Воодушевление, Регенерация МР, Магические Оковы."
+      }
+    },
+    "grade": "S84",
+    "stats": {
+      "pAtk": 386,
+      "mAtk": 257
+    },
+    "category": "weapons",
+    "subtype": "two_hand_magic",
+    "type": "two_hand_magic",
+    "pAtk": 386,
+    "mAtk": 257
+  }
+]
