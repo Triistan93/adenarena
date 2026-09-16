@@ -206,3 +206,36 @@ Transformação do sistema de **Personagem e Mochila** do Lineage Idle em um mot
   - Correção de interpolação de template string escapada (`\${` $\to$ `${`).
   - Resolução de `ReferenceError: closeInventoryPreviewModal is not defined`.
   - Correção da dessincronização de `window.state` com `getState()` do `StateManager.js` que causava `0 tipos na mochila`.
+
+---
+
+<br/>
+
+## Página 2 — 16 de Setembro de 2026 às 00:30
+### 🌐 Webscraping Canônico L2Wiki Essence, 147 Classes, 2.947 Habilidades & Fix de Ícones
+
+> **Data & Hora**: 16/09/2026 às 00:30 (BRT)  
+> **Status de Qualidade**: 
+> - **Testes Automatizados**: **527 testes** em 76 suítes canônicas passando (100% de aprovação).
+> - **Build de Produção**: Vite compilado com sucesso em 11.22s.
+> - **Banco de Ícones**: 3.120 ícones locais (PNG e WebP de alta performance).
+
+#### 1. Resumo Executivo da Sessão
+Execução de webscraping exaustivo do portal oficial L2Wiki Essence (`https://l2wiki.com/essence/skills/`), cobrindo 100% das classes e linhagens de todas as 8 raças (Human, Elf, Dark Elf, Orc, Dwarf, Kamael, Sylph, High Elf). Saneamento de ícones impróprios (como martelo de ferreiro em `sleep`), download de 564 ícones autênticos convertidos para WebP, e aplicação do protocolo de isolamento de linhagem V2 com reembolso integral de SP (100%) para skills legadas/estrangeiras.
+
+#### 2. Detalhamento das Mudanças Implementadas
+- **Webscraping Completo L2Wiki Essence**:
+  - Contorno de barreira de cookies da L2Wiki (`Cookie: CCA=Y; PHPSESSID=...`).
+  - Coleta e estruturação de **147 classes** em `scraped_data_wiki/classes_summary.json` e **2.947 habilidades detalhadas** em `scraped_data_wiki/skills_detailed.json` (com níveis mínimos, custos de MP/SP, recargas, tempos de conjuração, alcances, descrições autênticas e ícones oficiais).
+- **Download e Conversão em Lote de Ícones (`public/icons/`)**:
+  - Script automatizado com `sharp` baixou 564 ícones faltantes diretamente dos servidores da L2Wiki.
+  - Conversão de 100% dos ativos para `.webp` (além de `.png`), totalizando 3.120 arquivos de ícones disponíveis no frontend sem requisições externas nem erros 404.
+- **Correção Canônica de Ícones (`CanonicalSkillRegistryV2.js`)**:
+  - Correção imediata do ícone da habilidade `sleep` de `/icons/skill3080.webp` para `/icons/skill1069.webp`.
+  - Substituição de todas as 9 outras ocorrências de `skill3080.webp` (`focus`, `might`, `shield`, `empower`, `heal`, `recharge`, `blessed_body`, `blessed_soul`, `guidance`) por seus respectivos ícones oficiais de jogador.
+- **Blindagem de Linhagem & Purga com Reembolso de SP (`SkillEligibility.js`)**:
+  - Implementação de `isSkillInV2Lineage(classId, skillId)`: validação estrita baseada no DAG de classes de `CANONICAL_CLASS_REGISTRY_V2`.
+  - Em `normalizeAndValidateSkills`: habilidades legadas ou fora da árvore da classe (ex.: `hydro_strike`, `heal_light` em magos V2) são suprimidas e expurgadas, com reembolso de 100% do SP investido para `state.sp`.
+- **Integridade da Suíte de Testes**:
+  - Todos os 527 testes unitários e de integração aprovados com 0 regressões.
+

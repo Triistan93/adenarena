@@ -23,6 +23,11 @@ export function calculateHistoricalSpSpent(baseCost = 5, level = 1) {
 
 // Deterministic mapping of old V1 synthetic / legacy skill IDs to V2 Canonical IDs
 export const OLD_TO_NEW_SKILL_MAP = Object.freeze({
+  // V1 synthetic shared skills
+  'hydro_strike': 'ice_bolt',
+  'heal_light': 'self_heal',
+  'energy_burst': 'power_shot',
+
   // Human Fighter V1 synthetic
   'shield_bash': 'shield_stun',
   'cleave_strike': 'spinning_slash',

@@ -366,6 +366,47 @@ function isSkillNativeOrAvailableNow(classId, def) {
 }
 
 /**
+ * Verifies if a skill belongs to the canonical V2 lineage DAG of a class (class + ancestors + descendants).
+ * @param {string} classId
+ * @param {string} skillId
+ * @returns {boolean}
+ */
+export function isSkillInV2Lineage(classId, skillId) {
+  if (!CANONICAL_CLASS_REGISTRY_V2 || !classId || !skillId) return false;
+  const canonical = resolveCanonicalClassId(classId) || classId;
+  const v2Class = CANONICAL_CLASS_REGISTRY_V2[classId] || CANONICAL_CLASS_REGISTRY_V2[canonical];
+  if (!v2Class) return false;
+
+  // 1. Direct class ownership
+  if (v2Class.skillIds?.includes(skillId)) return true;
+
+  // 2. Ancestor inheritance (parentClass chain)
+  let curr = v2Class;
+  const visitedParents = new Set([curr.id]);
+  while (curr.parentClass && CANONICAL_CLASS_REGISTRY_V2[curr.parentClass] && !visitedParents.has(curr.parentClass)) {
+    visitedParents.add(curr.parentClass);
+    curr = CANONICAL_CLASS_REGISTRY_V2[curr.parentClass];
+    if (curr.skillIds?.includes(skillId)) return true;
+  }
+
+  // 3. Descendant promotions
+  const queue = [v2Class.id];
+  const visitedDesc = new Set(queue);
+  while (queue.length > 0) {
+    const parentId = queue.shift();
+    for (const candidate of Object.values(CANONICAL_CLASS_REGISTRY_V2)) {
+      if (candidate.parentClass === parentId && !visitedDesc.has(candidate.id)) {
+        visitedDesc.add(candidate.id);
+        queue.push(candidate.id);
+        if (candidate.skillIds?.includes(skillId)) return true;
+      }
+    }
+  }
+
+  return false;
+}
+
+/**
  * Verifies if a skill belongs to the character's legitimate progression path (past, present, or future).
  * Rejects foreign classes, sibling branches, and opposite archetypes.
  *
@@ -505,6 +546,11 @@ export function getSkillDetailedVisibility(character, skill) {
 
   // 1. LEARNED check (owned by character)
   if ((charSkills[def.id] || 0) > 0 || (def.name && (charSkills[def.name] || 0) > 0)) {
+    const canonical = resolveCanonicalClassId(charClass) || charClass;
+    const isV2Class = !!(CANONICAL_CLASS_REGISTRY_V2 && (CANONICAL_CLASS_REGISTRY_V2[charClass] || CANONICAL_CLASS_REGISTRY_V2[canonical]));
+    if (isV2Class && !isSkillInV2Lineage(charClass, def.id)) {
+      return SKILL_DETAILED_VISIBILITY_STATES.HIDDEN_FOREIGN;
+    }
     return SKILL_DETAILED_VISIBILITY_STATES.LEARNED;
   }
 
@@ -686,7 +732,12 @@ export function getVisibleSkillsForCharacter(character) {
 
   // 5. Any skills already learned on character state (for verification/safe rendering)
   if (typeof character === 'object' && character.skills) {
+    const canonical = resolveCanonicalClassId(charClass) || charClass;
+    const isV2Class = !!(CANONICAL_CLASS_REGISTRY_V2 && (CANONICAL_CLASS_REGISTRY_V2[charClass] || CANONICAL_CLASS_REGISTRY_V2[canonical]));
     for (const sid of Object.keys(character.skills)) {
+      if (isV2Class && !isSkillInV2Lineage(charClass, sid)) {
+        continue;
+      }
       candidateIds.add(sid);
     }
   }
@@ -845,13 +896,16 @@ export function normalizeAndValidateSkills(state, callbacks = {}) {
     if (!def) continue;
 
     // Check progression path and stage/level eligibility
-    const inPath = isSkillInProgressionPath(state, def);
+    const canonical = resolveCanonicalClassId(state.class) || state.class;
+    const isV2Class = !!(CANONICAL_CLASS_REGISTRY_V2 && (CANONICAL_CLASS_REGISTRY_V2[state.class] || CANONICAL_CLASS_REGISTRY_V2[canonical]));
+    const inV2Lineage = isSkillInV2Lineage(state.class, sId);
+    const inPath = inV2Lineage || isSkillInProgressionPath(state, def);
     const reqLvl = Number(def.requiredLevel || def.reqLvl || def.identity?.unlockLevel) || 1;
     const skillStage = def.progressionStage || def.identity?.progressionStage;
     const stageReq = skillStage ? (STAGE_LEVEL_THRESHOLDS[skillStage] || 1) : reqLvl;
     const isLevelOk = (state.level || 1) >= reqLvl && (state.level || 1) >= stageReq;
 
-    if (inPath && isLevelOk) {
+    if (inPath && isLevelOk && (!isV2Class || inV2Lineage)) {
       validSkills[sId] = lvl;
     } else {
       // Skill was illegally acquired by save corruption or legacy bug

@@ -828,8 +828,11 @@ function buildEchoAdapter() {
     ['human_sorcerer', 'sorcerer', 'archmage'].forEach(alias => {
       CLASS_SKILLS_ECHO[alias] = [...sorcererSkills];
     });
-    CLASS_SKILLS_ECHO['mage'] = ['wind_strike', 'flame_strike', 'hydro_strike', 'heal_light', 'ice_bolt'];
-    CLASS_SKILLS_ECHO['human_mage'] = ['wind_strike', 'flame_strike', 'hydro_strike', 'heal_light', 'ice_bolt'];
+    const baseMageSkills = (typeof CANONICAL_CLASS_REGISTRY_V2 !== 'undefined' && CANONICAL_CLASS_REGISTRY_V2?.mage?.skillIds)
+      ? [...CANONICAL_CLASS_REGISTRY_V2.mage.skillIds]
+      : ['wind_strike', 'flame_strike', 'ice_bolt', 'self_heal', 'sleep', 'mages_will', 'robe_mastery', 'mp_increase'];
+    CLASS_SKILLS_ECHO['mage'] = [...baseMageSkills];
+    CLASS_SKILLS_ECHO['human_mage'] = [...baseMageSkills];
     // Reconstrução dinâmica do pool de Wizard a partir dos dados canônicos existentes (CLASSES_ECHO)
     if (CLASS_SKILLS_ECHO['wizard'] && CLASS_SKILLS_ECHO['wizard'].length > 0) {
       CLASS_SKILLS_ECHO['human_wizard'] = [...CLASS_SKILLS_ECHO['wizard']];
@@ -936,7 +939,9 @@ function buildEchoAdapter() {
     for (const [classId, classDef] of Object.entries(CANONICAL_CLASS_REGISTRY_V2)) {
       if (Array.isArray(classDef.skillIds)) {
         CLASS_SKILLS_V2_ECHO[classId] = [...classDef.skillIds];
-        CLASS_SKILLS_ECHO[classId] = [...classDef.skillIds];
+        if (!ACTIVE_CLASS_SKILLS[classId]) {
+          CLASS_SKILLS_ECHO[classId] = [...classDef.skillIds];
+        }
 
         for (const sid of classDef.skillIds) {
           if (SHARED_SKILL_IDS.includes(sid)) continue;
