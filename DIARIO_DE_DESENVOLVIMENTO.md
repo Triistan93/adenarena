@@ -24,6 +24,9 @@
 ### 🏰 Adaptação Integral dos Conceitos Canônicos do Lineage II Essence (Season 1 Lv 1–40), Economia Fechada, Coleções & Forja Autêntica
 
 > **Data & Hora**: 16/09/2026 às 18:30 (BRT)  
+> **Commits desta Sessão**:
+> - `e1353ab` — `feat(design): adapt Lineage II canonical systems to Aden Arena (Season 1) — closed economy, gear collections, D/C crafting, augmentation & brooch jewels`
+>
 > **Status de Qualidade**: 
 > - **Testes Automatizados**: **539 testes em 82 suítes passando (100% de aprovação, 0 falhas)**.
 > - **Build de Produção**: Vite compilado com sucesso em **19.63s** (268 módulos transformados, saída 0).
@@ -50,6 +53,16 @@ Em resposta à diretriz mandatória de transformar os conceitos teóricos do Lin
 - **`lineage-idle/src/services/SynthesisService.js`**: Restrição estrita para artefatos e progressão de nível de joias de broche.
 - **`lineage-idle/src/data/balance/cpBalance.js`**: Integração de CP do Codex e Joias de Broche com importação estrita de `CODEX_SETS`.
 - **`lineage-idle/main.js`**: Consumo de shots escalonado por arma e penalidade de mismatch de grau.
+
+#### 3. Auditoria de Conformidade & Cobertura de Testes
+- **Suíte Canônica de Adaptações (`test/canonical-lineage2-adaptations.test.js`)**: 12/12 testes aprovados.
+  - Registro de coleções com sacrifício permanente e imunidade a duplicatas.
+  - Forja em lote de 500x Soulshots com deduções exatas de Cristais D e Minérios.
+  - Gatekeeper de Augmentação impedindo uso sem Life Stone física no inventário.
+  - Barreira de Síntese rejeitando armas e promovendo joias de broche até Lv 5.
+  - Refino de pescado bruto consumindo diferentes espécies sem travas de ID.
+- **Auditoria Global de Regressão**: 539 testes em 82 suítes passando (0 falhas).
+- **Compilação de Produção**: Vite 7.3.6 compilado em 19.63s com chunks otimizados.
 
 ---
 
