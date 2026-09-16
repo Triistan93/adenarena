@@ -8,9 +8,43 @@
 ---
 
 ### 📑 Índice Rápido de Páginas
+- [Página 4 — 15 de Setembro de 2026 às 23:25](#página-4--15-de-setembro-de-2026-às-2325) — *Skill System Major Version Update (V2), 46 Linhagens, 142 Classes, 825 Skills Semânticas, Ledger SP & Celestial Destiny*
 - [Página 3 — 15 de Setembro de 2026 às 00:05](#página-3--15-de-setembro-de-2026-às-0005) — *Extração Massiva L2Bandit & PMfun, 1.991 Ícones WebP, Índices Mestres de 20k Chaves, IconService, UI Modernizada & Deploy*
 - [Página 2 — 14 de Setembro de 2026 às 23:45](#página-2--14-de-setembro-de-2026-às-2345) — *Arquitetura Zero-Trust, Blindagem Admin/Cakto/Firestore, Life Activities 2.0, Economia Fechada & Performance Chunks*
 - [Página 1 — 12 de Setembro de 2026 às 22:30](#página-1--12-de-setembro-de-2026-às-2230) — *Consolidação de Arquitetura, UX do Personagem & Mochila, Motor de Encantamento Canônico, Auto-Equip ERS e Ressonância de Armas*
+
+---
+
+<br/>
+
+## Página 4 — 15 de Setembro de 2026 às 23:25
+### ⚡ Skill System Major Version Update (V2) — Migração Canônica Celestial Destiny (Patch 3629)
+
+> **Data & Hora**: 15/09/2026 às 23:25 (BRT)  
+> **Commits desta Sessão**:
+> - `feat(skills): major version update to canonical skill system v2 (celestial destiny 3629)`
+>
+> **Status de Qualidade**: 
+> - **Testes Automatizados**: **527 testes passando em 76 suítes (0 falhas)**.
+> - **Build de Produção**: Vite 7.3.6 compilado com sucesso em **13.81s** (267 módulos transformados, código de saída 0).
+> - **Integridade de Ativos**: 271 ícones WebP autênticos verificados fisicamente; 554 habilidades com flags explícitas auditadas (`iconGap: true, iconGapReason: 'ASSET_NOT_IN_LIBRARY'`). Zero gaps mascarados.
+> - **Deploy de Produção**: Disparado via GitHub Integration na Vercel a partir da branch `main`.
+
+#### 1. Resumo Executivo da Sessão
+Executamos a **Major Version Update do Sistema de Habilidades do Aden Arena**, alinhando o jogo à versão canônica de **Lineage II Essence — Celestial Destiny (Patch 3629 de 29/07/2026)**:
+1. **Descontinuação do V1 Sintético**: O catálogo de 25 classes x 6 skills com IDs prefixados e inventados foi desativado do gameplay ativo, mantido exclusivamente na camada de migração de saves legados.
+2. **Autoridade Direta V2**: Implantação de uma infraestrutura limpa (`CANONICAL V2 -> V2 Resolver -> V2 Combat Contract -> Engine`) cobrindo todas as **46 linhagens canônicas**, **142 classes oficiais** e **825 habilidades únicas**.
+3. **Identidade Semântica Canônica**: Eliminação de duplicações artificiais. Habilidades possuem IDs semânticos globais (`power_strike`, `sonic_blaster`, `prominence`, `hell_inferno`, `dragons_breath`), vinculadas a classes via catálogo de desbloqueio.
+4. **Ledger Determinístico de Refund de SP**: Migração de saves com cálculo matemático de custo histórico real acumulado ($\sum_{l=0}^{\text{rank}-1} \lfloor \text{baseCost} \times 1.4^l \rfloor$) para habilidades descontinuadas, persistindo `state.migrationLedger` e estornando SP sem perda de progresso.
+
+#### 2. Detalhamento Arquitetural & Componentes
+- **`docs/L2_ESSENCE_CELESTIAL_DESTINY_SKILL_TREE.md`**: Catálogo mestre contendo as 46 linhagens, 142 classes em 4 estágios formais (Base Lv 1-19, 1ª Classe Lv 20-39, 2ª Classe Lv 40-75, 3ª Classe Lv 76+), com fórmulas de combate, custos, cooldowns e ícones oficiais.
+- **`CanonicalSkillRegistryV2.js`**: Objeto imutável contendo todas as 825 habilidades com status de gaps auditados, cooldowns canônicos em milissegundos e tipos de efeito.
+- **`CanonicalClassRegistryV2.js`**: Cadastro das 142 classes distribuídas em 19 Base, 32 First, 45 Second e 46 Third Classes com regras de herança cumulativa por DAG ancestral.
+- **`SkillMigrationService.js`**: Motor determinístico de migração com sanitização de hotbars, auto-cast e cálculo estrito de refund de SP.
+- **`echo-adapter.js` & `SkillEligibility.js`**: Integração de runtime conectando V2 à engine, garantindo isolamento estrito de classes irmãs (*sibling branch rejection*) e preservando o requisito de Lv 1 para habilidades gerais de guerreiro e mago.
+- **`StatsEngine.js`**: Incorporação de todas as passivas V2 canônicas de domínio de armas (dual, blunt, polearm, bow, dagger, fist), armaduras (heavy, light, robe) e atributos (focus, critical power, anti-magic).
+- **`test/skill-system-v2-migration.test.js`**: 9 testes formais cobrindo integridade do catálogo, idempotência da migração de saves, DAG de linhagens avançadas (*Grand Vanguard*, *Death Knight*, *ShineMaker*, *Archmage*) e autocast em combate.
 
 ---
 

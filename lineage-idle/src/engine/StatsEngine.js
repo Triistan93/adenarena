@@ -541,6 +541,14 @@ export function getStats(state) {
   baseMdef += sk('antiMagic') * 18;
   let mpRegenBonus = sk('higherMana') * 2;
 
+  // V2 Canonical Passives
+  baseAtk += (sk('sword_blunt_mastery') + sk('dual_weapon_mastery') + sk('polearm_mastery') + sk('bow_mastery') + sk('dagger_mastery') + sk('fist_mastery') + sk('weapon_mastery') + sk('master_of_combat')) * 5;
+  baseMatk += (sk('magic_mastery') + sk('robe_mastery')) * 4;
+  baseDef += (sk('heavy_armor_mastery') * 12) + (sk('light_armor_mastery') * 6) + (sk('armor_mastery') * 8);
+  baseEva += sk('light_armor_mastery') * 3;
+  baseMdef += sk('anti_magic') * 18;
+  mpRegenBonus += (sk('higher_mana') + sk('boost_mp') + sk('mana_recovery')) * 2;
+
   const eb = getTotalEquipBonuses(state);
   const setRes = getActiveSetBonuses(state);
   const setB = setRes.statTotals;
@@ -560,8 +568,9 @@ export function getStats(state) {
   }
 
   const now = Date.now();
-  let buffAtk = 0, buffDef = 0, buffSpd = 0, buffMatk = 0, buffMdef = 0, buffAtkMult = 0;
-  let buffCrit = 0, buffCritDmg = 0;
+  let buffAtk = 0, buffDef = 0, buffMatk = 0, buffMdef = 0, buffAtkMult = 0;
+  let buffCrit = (sk('focus') * 5), buffCritDmg = (sk('critical_power') * 0.05);
+  let buffSpd = (sk('quick_step') * 5);
 
   let xpBoost = 0, goldBoost = 0, luckBoost = 0, autoPotion = false;
   state.buffs = state.buffs || {};

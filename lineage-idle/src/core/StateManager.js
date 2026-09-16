@@ -11,6 +11,7 @@ import { getSelectedSet } from '../services/InventoryService.js';
 import { generateStateChecksum, validateStateIntegrity, sanitizeGameState } from '../engine/SecurityEngine.js';
 import { getStarterSkillsForClass, normalizeAndValidateSkills } from '../services/SkillEligibility.js';
 import { getZoneProgression } from '../data/balance/progressionBalance.js';
+import { migrateCharacterSave } from '../services/SkillMigrationService.js';
 
 export const DEFAULT_STATE = () => ({
   characterId: null,
@@ -569,6 +570,9 @@ export function loadState() {
     if (isBackupRestore) {
       saveState(false);
     }
+
+    // V2 Major Version Save Migration Cutover
+    migrateCharacterSave(currentState);
 
     // Normalização e auditoria defensiva de habilidades contra corrupções ou dados obsoletos
     normalizeAndValidateSkills(currentState);

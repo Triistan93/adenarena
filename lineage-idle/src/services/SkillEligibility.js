@@ -31,6 +31,8 @@ import {
 import { CLASS_IDENTITIES } from '../data/elemental/ClassIdentity.js';
 import { NATIVE_SKILL_TREES, ALL_NATIVE_SKILLS } from '../data/elemental/NativeSkillTrees.js';
 import { HISTORICAL_CLASSES } from '../data/elemental/HistoricalClasses.js';
+import { CANONICAL_SKILL_REGISTRY_V2 } from '../data/skills/CanonicalSkillRegistryV2.js';
+import { CANONICAL_CLASS_REGISTRY_V2 } from '../data/classes/CanonicalClassRegistryV2.js';
 
 // ─── Shared Skills Taxonomy (Lv 1–39 Generalist Pool) ──────────────────────────
 
@@ -199,6 +201,30 @@ export function resolveSkillDef(skillOrId) {
   const echoDefs = (typeof window !== 'undefined' && window.EchoData) ? window.EchoData.SKILL_DEFS_ECHO : null;
   if (echoDefs?.[sId]) return echoDefs[sId];
 
+  if (CANONICAL_SKILL_REGISTRY_V2 && CANONICAL_SKILL_REGISTRY_V2[sId]) {
+    const s = CANONICAL_SKILL_REGISTRY_V2[sId];
+    return {
+      id: s.id,
+      name: s.name,
+      type: s.type,
+      tier: s.starRank || 1,
+      starRank: s.starRank || 1,
+      cost: s.starRank >= 4 ? 100 : (s.starRank >= 3 ? 60 : 30),
+      max: 5,
+      pwr: s.balance?.pwr || 20,
+      baseCd: s.canonicalCooldownMs || 8000,
+      mpCost: s.balance?.mpCost || 15,
+      effect: s.type === 'buff' ? 'warcry' : (s.type === 'passive' ? 'stat' : (s.type === 'toggle' ? 'toggle' : (s.name.toLowerCase().includes('heal') ? 'heal' : 'dmg'))),
+      icon: s.icon,
+      iconGap: s.iconGap,
+      iconGapReason: s.iconGapReason,
+      vfxGap: s.vfxGap,
+      sfxGap: s.sfxGap,
+      classes: s.classes || [],
+      reqLvl: 1
+    };
+  }
+
   const dDefs = D()?.SKILL_DEFS;
   if (dDefs?.[sId]) return dDefs[sId];
 
@@ -261,6 +287,12 @@ function isSkillNativeOrAvailableNow(classId, def) {
   if (typeof window !== 'undefined' && window.EchoData?.CLASS_SKILLS_ECHO) {
     const echoSkills = window.EchoData.CLASS_SKILLS_ECHO[classId] || window.EchoData.CLASS_SKILLS_ECHO[canonical] || [];
     if (echoSkills.includes(def.id)) return true;
+  }
+
+  // Canonical V2 class skill check
+  if (CANONICAL_CLASS_REGISTRY_V2) {
+    if (CANONICAL_CLASS_REGISTRY_V2[classId]?.skillIds?.includes(def.id)) return true;
+    if (CANONICAL_CLASS_REGISTRY_V2[canonical]?.skillIds?.includes(def.id)) return true;
   }
 
   // Ancestor inheritance: Promoted classes (e.g. Archmage) inherit and can learn prior stage skills (e.g. Sorcerer)
@@ -357,11 +389,34 @@ export function isSkillInProgressionPath(character, skill) {
     return true;
   }
 
-  // 7. Explicit EchoData CLASS_SKILLS_ECHO definition
-  if (typeof window !== 'undefined' && window.EchoData?.CLASS_SKILLS_ECHO) {
-    const echoSkills = window.EchoData.CLASS_SKILLS_ECHO[charClass] || window.EchoData.CLASS_SKILLS_ECHO[canonicalCharClass] || [];
-    if (echoSkills.includes(def.id)) {
-      return true;
+  // 8. Canonical V2 Lineage and Ancestor / Descendant progression check
+  if (CANONICAL_CLASS_REGISTRY_V2) {
+    const v2Class = CANONICAL_CLASS_REGISTRY_V2[charClass] || CANONICAL_CLASS_REGISTRY_V2[canonicalCharClass];
+    if (v2Class) {
+      if (v2Class.skillIds?.includes(def.id)) return true;
+
+      // Ancestor inheritance (parentClass chain)
+      let curr = v2Class;
+      const visitedParents = new Set([curr.id]);
+      while (curr.parentClass && CANONICAL_CLASS_REGISTRY_V2[curr.parentClass] && !visitedParents.has(curr.parentClass)) {
+        visitedParents.add(curr.parentClass);
+        curr = CANONICAL_CLASS_REGISTRY_V2[curr.parentClass];
+        if (curr.skillIds?.includes(def.id)) return true;
+      }
+
+      // Descendant promotions
+      const queue = [v2Class.id];
+      const visitedDesc = new Set(queue);
+      while (queue.length > 0) {
+        const parentId = queue.shift();
+        for (const candidate of Object.values(CANONICAL_CLASS_REGISTRY_V2)) {
+          if (candidate.parentClass === parentId && !visitedDesc.has(candidate.id)) {
+            visitedDesc.add(candidate.id);
+            queue.push(candidate.id);
+            if (candidate.skillIds?.includes(def.id)) return true;
+          }
+        }
+      }
     }
   }
 

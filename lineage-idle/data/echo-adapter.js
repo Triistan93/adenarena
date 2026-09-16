@@ -22,6 +22,8 @@ import { CLASS_ALIASES as UNIVERSAL_CLASS_ALIASES, resolveCanonicalClassId } fro
 import { getSkillIcon } from "../src/services/SkillIconRegistry.js";
 import { getSkillMpCost } from "../src/data/balance/skillBalance.js";
 import { calculateHealAmount } from "../src/data/balance/combatBalance.js";
+import { CANONICAL_SKILL_REGISTRY_V2 } from "../src/data/skills/CanonicalSkillRegistryV2.js";
+import { CANONICAL_CLASS_REGISTRY_V2 } from "../src/data/classes/CanonicalClassRegistryV2.js";
 
 
 /** Transforma string em slug snake_case */
@@ -849,6 +851,120 @@ function buildEchoAdapter() {
   CLASS_SKILLS_ECHO['shared_mage'] = [...SHARED_MAGE_SKILL_IDS];
   CLASS_SKILLS_ECHO['shared_fighter'] = [...SHARED_FIGHTER_SKILL_IDS];
 
+  // ─── CANONICAL V2 INTEGRATION (46 Lineages, 142 Class Stages, 825 Skills) ───
+  if (CANONICAL_SKILL_REGISTRY_V2) {
+    for (const [sId, s] of Object.entries(CANONICAL_SKILL_REGISTRY_V2)) {
+      const starRank = s.starRank || 1;
+      const isUlt = starRank >= 4;
+      let reqBook = null;
+      if (starRank === 2) reqBook = 'book_2star';
+      else if (starRank === 3) reqBook = 'book_3star';
+      else if (starRank === 4) reqBook = 'book_4star';
+      else if (starRank >= 5) reqBook = 'book_5star';
+
+      const spCost = starRank >= 4 ? 100 : (starRank === 3 ? 60 : (starRank === 2 ? 30 : 15));
+      const isBuff = s.type === 'buff';
+      const isPassive = s.type === 'passive';
+      const isToggle = s.type === 'toggle';
+      const sNameLower = s.name.toLowerCase();
+      const isHeal = sNameLower.includes('heal') || sNameLower.includes('bandage') || sNameLower.includes('recovery');
+      const isVampiric = sNameLower.includes('drain') || sNameLower.includes('vampir') || sNameLower.includes('siphon');
+
+      let reqWeapon = 'any';
+      let reqShield = false;
+      if (/shot|arrow|bow|snipe/.test(sNameLower)) reqWeapon = 'bow';
+      else if (/dagger|backstab|mortal_blow|deadly_blow/.test(sNameLower)) reqWeapon = 'dagger';
+      else if (/dual|sonic/.test(sNameLower)) reqWeapon = 'dual';
+      else if (/spear|polearm|whirlwind/.test(sNameLower)) reqWeapon = 'spear';
+      else if (/blunt|hammer|crush|spoil/.test(sNameLower)) reqWeapon = 'blunt';
+      else if (/twohand|greatsword/.test(sNameLower)) reqWeapon = 'twohand';
+      else if (/fist|claw|punch/.test(sNameLower)) reqWeapon = 'fist';
+      if (/shield|shield_stun|shield_bash/.test(sNameLower)) reqShield = true;
+
+      if (!SKILL_DEFS_ECHO[sId]) {
+        SKILL_DEFS_ECHO[sId] = {
+          id: sId,
+          name: s.name,
+          type: s.type,
+          tier: starRank,
+          cost: spCost,
+          max: 5,
+          pwr: s.balance?.pwr || 20,
+          baseCd: s.canonicalCooldownMs || 8000,
+          mpCost: s.balance?.mpCost || 15,
+          effect: isBuff ? 'warcry' : (isPassive ? 'stat' : (isToggle ? 'toggle' : (isHeal ? 'heal' : (isVampiric ? 'vampiric' : 'dmg')))),
+          info: s.desc || s.canonicalEffect || s.name,
+          desc: s.desc || '',
+          effectText: s.canonicalEffect || '',
+          icon: s.icon,
+          iconGap: s.iconGap,
+          iconGapReason: s.iconGapReason,
+          vfxGap: s.vfxGap,
+          sfxGap: s.sfxGap,
+          classes: s.classes || [],
+          classReq: s.classes?.[0] || 'any',
+          reqLvl: 1,
+          requiredWeapon: reqWeapon,
+          requiredShield: reqShield,
+          requiredItemToUnlock: reqBook,
+          isUltimate: isUlt,
+          starRank,
+          overhit: true,
+          toggle: isToggle
+        };
+
+        if (!SKILL_REQS_ECHO[sId]) {
+          SKILL_REQS_ECHO[sId] = { reqLvl: 1 };
+        }
+      } else {
+        Object.assign(SKILL_DEFS_ECHO[sId], {
+          iconGap: s.iconGap,
+          iconGapReason: s.iconGapReason,
+          vfxGap: s.vfxGap,
+          sfxGap: s.sfxGap,
+          canonicalEffect: s.canonicalEffect,
+          canonicalCooldown: s.canonicalCooldown,
+          canonicalCooldownMs: s.canonicalCooldownMs,
+          classes: s.classes || SKILL_DEFS_ECHO[sId].classes || []
+        });
+      }
+    }
+  }
+
+  const CLASS_SKILLS_V2_ECHO = {};
+  if (CANONICAL_CLASS_REGISTRY_V2) {
+    for (const [classId, classDef] of Object.entries(CANONICAL_CLASS_REGISTRY_V2)) {
+      if (Array.isArray(classDef.skillIds)) {
+        CLASS_SKILLS_V2_ECHO[classId] = [...classDef.skillIds];
+        if (!CLASS_SKILLS_ECHO[classId]) {
+          CLASS_SKILLS_ECHO[classId] = [...classDef.skillIds];
+        }
+        for (const sid of classDef.skillIds) {
+          if (SHARED_SKILL_IDS.includes(sid)) continue;
+          if (SKILL_DEFS_ECHO[sid] && (!SKILL_DEFS_ECHO[sid].reqLvl || SKILL_DEFS_ECHO[sid].reqLvl === 1)) {
+            SKILL_DEFS_ECHO[sid].reqLvl = classDef.minLevel;
+            SKILL_REQS_ECHO[sid] = { reqLvl: classDef.minLevel };
+          }
+        }
+      }
+      if (classDef.lineageId && !CLASS_SKILLS_ECHO[classDef.lineageId]) {
+        CLASS_SKILLS_ECHO[classDef.lineageId] = [...classDef.skillIds];
+      }
+    }
+  }
+
+  // Ensure all shared generalist skills remain strictly Lv 1
+  for (const sid of SHARED_SKILL_IDS) {
+    if (SKILL_DEFS_ECHO[sid]) {
+      SKILL_DEFS_ECHO[sid].reqLvl = 1;
+      SKILL_REQS_ECHO[sid] = { reqLvl: 1 };
+    }
+  }
+
+  if (CLASS_SKILLS_ECHO['wizard']) {
+    CLASS_SKILLS_ECHO['human_wizard'] = [...CLASS_SKILLS_ECHO['wizard']];
+  }
+
   // Coordenadas fixas para as 10 shared skills (Grid 5x2)
   SHARED_SKILL_IDS.forEach((sid, idx) => {
     const col = idx % 5;
@@ -900,6 +1016,9 @@ function buildEchoAdapter() {
   E.SHARED_SKILL_IDS         = SHARED_SKILL_IDS;
   E.SHARED_MAGE_SKILL_IDS    = SHARED_MAGE_SKILL_IDS;
   E.SHARED_FIGHTER_SKILL_IDS = SHARED_FIGHTER_SKILL_IDS;
+  E.CANONICAL_SKILL_REGISTRY_V2 = CANONICAL_SKILL_REGISTRY_V2;
+  E.CANONICAL_CLASS_REGISTRY_V2 = CANONICAL_CLASS_REGISTRY_V2;
+  E.CLASS_SKILLS_V2_ECHO        = CLASS_SKILLS_V2_ECHO;
 
   console.log(
     '[echo-adapter] Skills autênticas geradas:', Object.keys(SKILL_DEFS_ECHO).length,
