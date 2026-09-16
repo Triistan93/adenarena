@@ -1,0 +1,247 @@
+[
+  {
+    "opportunityId": "OP-001",
+    "title": "Common Craft System como Conversor Universal de Abates Idle",
+    "sourceConcept": "Common Craft Universal Kill Charge Gauge",
+    "sourceUrl": "https://l2wiki.com/essence/mechanics/making/common/",
+    "adenArenaSystem": "Production / Idle Progression Loop",
+    "currentState": "CraftService has 13 manual recipes; idle kills do not generate self-crafting energy",
+    "observedGap": "Lack of autonomous converter turning long grinding sessions into utility scrolls and consumables",
+    "designPrinciple": "Continuous combat should passively fuel an auxiliary utility gauge rewarding active play with utility autonomy.",
+    "possibleAdaptation": "Add Common Craft charge meter to hunting UI filling every mob kill; at 100%, allows crafting D/C Enchant Scrolls and potions.",
+    "dependencies": [
+      "InventoryService",
+      "Consumables Catalog",
+      "Idle Combat Stage UI"
+    ],
+    "conflicts": "None. Aligns perfectly with idle game self-sufficiency.",
+    "season1Impact": "Critical. Provides casual and F2P players a reliable source of enchant scrolls.",
+    "contentGaps": "Point gain formula per monster level tier.",
+    "implementationComplexity": "Medium",
+    "status": "ADAPT"
+  },
+  {
+    "opportunityId": "OP-002",
+    "title": "Consumo Diferenciado de Tiros por Arma e Multiplicadores AoE",
+    "sourceConcept": "Soulshot/Spiritshot Weapon Consumption & AoE Multipliers",
+    "sourceUrl": "https://l2wiki.com/essence/articles/936.html",
+    "adenArenaSystem": "CombatSimulator / Consumables Economy",
+    "currentState": "Uniform 1 shot consumed per attack/spell regardless of weapon type or targets hit",
+    "observedGap": "Ranged and AoE classes clear screens without proportional operational resource costs",
+    "designPrinciple": "Operational cost must scale with projection power, attack range, and multi-target coverage.",
+    "possibleAdaptation": "Melee: 1 shot; Bows: 2-3 shots; AoE: x1 (1-3 targets), x2 (4-8 targets), x3 (9-16 targets).",
+    "dependencies": [
+      "CombatSimulator.js",
+      "IdleGame.tsx Auto-shot Handler"
+    ],
+    "conflicts": "Requires adjusting Adena drop rates in mid zones so archers don't run dry too quickly.",
+    "season1Impact": "High. Balances melee risk vs ranged safety.",
+    "contentGaps": "None. Fully documented in L2Wiki table.",
+    "implementationComplexity": "Low",
+    "status": "ADAPT"
+  },
+  {
+    "opportunityId": "OP-003",
+    "title": "Fechamento da Cadeia Econômica de Refino para Equipamentos D/C",
+    "sourceConcept": "Complete Dwarf Artisan Forging Chain",
+    "sourceUrl": "https://l2wiki.com/essence/articles/1033.html",
+    "adenArenaSystem": "Life Activities / RefineryService / CraftService",
+    "currentState": "Refinery creates 12 materials, but CRAFTING_RECIPES has only 13 items; mobs drop complete gear",
+    "observedGap": "Refined materials (Steel, Crafted Leather, Cord, Braided Hemp) have no recipe sinks, becoming orphan goods",
+    "designPrinciple": "Every refined material must have at least three viable equipment recipe sinks.",
+    "possibleAdaptation": "Expand CRAFTING_RECIPES for Brigandine, Manticore, Mithril, Full Plate, Plated Leather, Bastard Sword, and Elven Bow.",
+    "dependencies": [
+      "CraftService.js",
+      "recipes_drops.js",
+      "RefineryService.js",
+      "ResourceDictionary.js"
+    ],
+    "conflicts": "None. Enriches gameplay without altering power limits.",
+    "season1Impact": "Critical. Connects gathering, mining, and hunting directly to character power.",
+    "contentGaps": "Formalize exact ingredient quantities for Season 1 recipes.",
+    "implementationComplexity": "Medium",
+    "status": "REWORK"
+  },
+  {
+    "opportunityId": "OP-004",
+    "title": "Sistema de Coleções (Collections) como Ralo Eterno de Equipamento",
+    "sourceConcept": "Collections Metagame & Permanent Item Sacrificial Sink",
+    "sourceUrl": "https://l2wiki.com/essence/mechanics/collections/",
+    "adenArenaSystem": "CardCodexService / Inventory Management",
+    "currentState": "Surplus and obsolete gear is sold in bulk for negligible Adena via sellAllJunk",
+    "observedGap": "Absence of a permanent metagame sink consuming low-grade surplus gear from idle farming",
+    "designPrinciple": "Permanent sacrifice of surplus items for minor, cumulative account-wide stats stabilizes market values.",
+    "possibleAdaptation": "Create Season 1 Collections (Talking Island, Gludio, Dion) where registered gear is destroyed for +HP, +P.Def, +P.Atk.",
+    "dependencies": [
+      "CardCodexService.js",
+      "InventoryService.js",
+      "CombatPowerService.js"
+    ],
+    "conflicts": "Must strictly adhere to CP power budget contracts (Codex CP <= 5% total CP).",
+    "season1Impact": "High. Gives players a reason to farm and preserve diverse gear.",
+    "contentGaps": "Define 12 canonical Season 1 collections.",
+    "implementationComplexity": "Medium",
+    "status": "ADAPT"
+  },
+  {
+    "opportunityId": "OP-005",
+    "title": "Checkpoints de Segurança na Síntese de Soul Crystals",
+    "sourceConcept": "Soul Crystal Safety Checkpoints (Lv 1, 6, 11, 16)",
+    "sourceUrl": "https://l2wiki.com/essence/articles/225.html",
+    "adenArenaSystem": "CraftService.js (Special Abilities)",
+    "currentState": "Special Abilities upgrade without deterministic 5-level safety checkpoints",
+    "observedGap": "High risk of total regression demotivates players from attempting high crystal upgrades",
+    "designPrinciple": "Probabilistic upgrade systems require safety milestones to prevent catastrophic progress loss.",
+    "possibleAdaptation": "Implement checkpoints: Lv 1-5 fails to 1; Lv 6-10 fails to 6; Lv 11-15 fails to 11.",
+    "dependencies": [
+      "CraftService.js",
+      "soul_crystals.js"
+    ],
+    "conflicts": "None.",
+    "season1Impact": "Medium. Enhances satisfaction upon reaching Lv 5 crystal at Lv 40.",
+    "contentGaps": "None. Fully verified in L2Wiki table.",
+    "implementationComplexity": "Low",
+    "status": "ADAPT"
+  },
+  {
+    "opportunityId": "OP-006",
+    "title": "Pity System com Acúmulo de Falhas na Síntese de Dolls",
+    "sourceConcept": "Guaranteed Compounding Pity Gauge for Dolls",
+    "sourceUrl": "https://l2wiki.com/essence/articles/85.html",
+    "adenArenaSystem": "SynthesisService.js / Dolls",
+    "currentState": "Doll synthesis uses fixed chance without cumulative bad-luck protection",
+    "observedGap": "Severe bad luck streaks frustrate players who fail multiple consecutive syntheses",
+    "designPrinciple": "Every failure should contribute measurable progress toward a 100% guaranteed success.",
+    "possibleAdaptation": "Each failed synthesis adds +10 pity points; 100 points grants 100% success on next attempt.",
+    "dependencies": [
+      "SynthesisService.js",
+      "Synthesis Altar UI"
+    ],
+    "conflicts": "None.",
+    "season1Impact": "Medium. Protects players farming Monster Dolls.",
+    "contentGaps": "None.",
+    "implementationComplexity": "Low",
+    "status": "ADAPT"
+  },
+  {
+    "opportunityId": "OP-007",
+    "title": "Bônus Escalonados de Armaduras (3 Peças Parcial / 5 Peças Completo)",
+    "sourceConcept": "Tiered Armor Set System (3/5 Pieces)",
+    "sourceUrl": "https://l2wiki.com/essence/articles/1710.html",
+    "adenArenaSystem": "EquipmentService / rarity_sets.js",
+    "currentState": "Sets require all pieces equipped to unlock any set bonus",
+    "observedGap": "Players get 0 benefits while holding 3 or 4 pieces of an armor set",
+    "designPrinciple": "Reward incremental gear progression through intermediate synergy tiers.",
+    "possibleAdaptation": "Configure 3-piece partial bonus (+5% Max HP, +3 P.Def) and 5-piece full bonus in rarity_sets.js.",
+    "dependencies": [
+      "EquipmentService.js",
+      "rarity_sets.js"
+    ],
+    "conflicts": "None.",
+    "season1Impact": "High. Smooths transition between gear grades.",
+    "contentGaps": "Configure values for 8 core Season 1 sets.",
+    "implementationComplexity": "Low",
+    "status": "ADAPT"
+  },
+  {
+    "opportunityId": "OP-008",
+    "title": "Afinidade de Armas em Guardiões e Mascotes de Combate",
+    "sourceConcept": "Guardians Weapon Affinity Buffs/Debuffs",
+    "sourceUrl": "https://l2wiki.com/essence/articles/55.html",
+    "adenArenaSystem": "PetService.js",
+    "currentState": "Pets give static buffs without regard to hero's weapon archetype",
+    "observedGap": "Lack of tactical synergy between hero weapon choice and pet specialization",
+    "designPrinciple": "Symbiotic links between hero gear and companion enhance tactical depth.",
+    "possibleAdaptation": "Link pets to weapon types: Wolf buffs Daggers/Spears, Hawk buffs Bows, Buffalo buffs Heavy 2H, Kookaburra buffs Staves.",
+    "dependencies": [
+      "PetService.js",
+      "CombatSimulator.js"
+    ],
+    "conflicts": "Requires careful balance against CP caps.",
+    "season1Impact": "Medium.",
+    "contentGaps": "Audit current pet roster in PetService.js.",
+    "implementationComplexity": "Medium",
+    "status": "INVESTIGATE"
+  },
+  {
+    "opportunityId": "OP-009",
+    "title": "Magic Lamp como Jackpots Ocasionais de EXP/SP durante o Grind",
+    "sourceConcept": "Magic Lamp Stochastic EXP/SP Rolls",
+    "sourceUrl": "https://l2wiki.com/essence/mechanics/dailymission/",
+    "adenArenaSystem": "LevelEngine.js / magicLampBalance.js",
+    "currentState": "Documented in balance file but lacks active celebratory presentation during idle combat",
+    "observedGap": "Grind feels overly flat without occasional celebratory dopamine spikes",
+    "designPrinciple": "Controlled stochastic rewards break gameplay monotony without undermining the mathematical curve.",
+    "possibleAdaptation": "Grant 1 Magic Lamp every 1,000 kills; opening yields Green (65%), Blue (30%), Purple (4%), or Red (1%) jackpot.",
+    "dependencies": [
+      "LevelEngine.js",
+      "QuestService.js",
+      "Idle UI Celebratory Modal"
+    ],
+    "conflicts": "Must strictly respect monotonicity in MASTER_PROGRESSION_CONTRACT.",
+    "season1Impact": "High.",
+    "contentGaps": "None.",
+    "implementationComplexity": "Low",
+    "status": "ADAPT"
+  },
+  {
+    "opportunityId": "OP-010",
+    "title": "Alinhamento Fiscal e Teto de 10 Lotes no Mercado P2P",
+    "sourceConcept": "World Trade Rules (10 Lots, 14-Day Expiry, 5% Tax)",
+    "sourceUrl": "https://l2wiki.com/essence/articles/1138.html",
+    "adenArenaSystem": "MarketService.js",
+    "currentState": "Has 5% tax and cloud sync, but lacks formal 10-lot cap and 14-day expiry enforcement",
+    "observedGap": "Risk of database clutter and market saturation by inactive listings",
+    "designPrinciple": "Artificial listing scarcity forces realistic pricing and regular inventory turnover.",
+    "possibleAdaptation": "Cap listings at 10 per account, set 14-day lifespan, charge 5% upfront Adena listing fee.",
+    "dependencies": [
+      "MarketService.js",
+      "Firebase Firestore Rules"
+    ],
+    "conflicts": "None.",
+    "season1Impact": "Medium.",
+    "contentGaps": "None.",
+    "implementationComplexity": "Low",
+    "status": "ADAPT"
+  },
+  {
+    "opportunityId": "OP-011",
+    "title": "Pergaminhos de Bênção (Item Blessing) como Aprimoramento Seguro",
+    "sourceConcept": "Scroll of Blessing - Weapon/Armor (Non-destructive)",
+    "sourceUrl": "https://l2wiki.com/essence/articles/194.html",
+    "adenArenaSystem": "Enchantment / Non-Destructive Progression",
+    "currentState": "Gear enhancement focuses on breakable scrolls; no non-destructive prestige layer exists",
+    "observedGap": "Players at safe enchant (+3/+4) hesitate to risk destroying their pinnacle gear",
+    "designPrinciple": "Provide a horizontal, safe investment vector for cautious players at gear safe caps.",
+    "possibleAdaptation": "Allow Scroll of Blessing on C-Grade gear to grant Blessed status (+2 CP, +5% shot efficiency) with 0 break risk.",
+    "dependencies": [
+      "EnchantmentService.js",
+      "CombatPowerService.js"
+    ],
+    "conflicts": "Must be calibrated so it doesn't inflate CP.",
+    "season1Impact": "Medium. Great endgame goal for Lv 40.",
+    "contentGaps": "Determine source of scrolls (Queen Ant raid or Common Craft).",
+    "implementationComplexity": "Medium",
+    "status": "INVESTIGATE"
+  },
+  {
+    "opportunityId": "OP-012",
+    "title": "Integração do Manor com Sementes e Troca de Refinados",
+    "sourceConcept": "Manor System Agricultural Refining Connection",
+    "sourceUrl": "https://l2wiki.com/essence/articles/1033.html",
+    "adenArenaSystem": "ManorService.js / Life Activities",
+    "currentState": "ManorService exists as embryonic state, but crops do not feed refinery or alchemy",
+    "observedGap": "Manor is isolated from the main game economy",
+    "designPrinciple": "Agricultural systems should feed into consumable and refinery supply chains.",
+    "possibleAdaptation": "Connect harvested crops (Gludio Frost Wheat) to high-tier Haste Potions and Varnish of Purity.",
+    "dependencies": [
+      "ManorService.js",
+      "RefineryService.js"
+    ],
+    "conflicts": "Adds management complexity for idle players.",
+    "season1Impact": "Low for S1; primarily an S2 castle feature.",
+    "contentGaps": "Seed and reward catalogs for Dion and Giran.",
+    "implementationComplexity": "Medium",
+    "status": "KEEP INVESTIGATING"
+  }
+]

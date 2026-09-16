@@ -1,0 +1,461 @@
+[
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/articles/937.html",
+    "name": "Boss Weapons Series",
+    "category": "Weapons (A-grade Epic)",
+    "description": "Unique high-tier weapons forged from the essences of world bosses, featuring triggered combat procs and scaling stats.",
+    "facts": {
+      "grade": "A-grade",
+      "safe_enchant": "+4",
+      "max_enchant": "+10",
+      "items_list": [
+        {
+          "name": "Baium's Thunder Breaker",
+          "type": "Dagger",
+          "boss": "Baium",
+          "bonus_stats_at_plus_5": "STR and INT"
+        },
+        {
+          "name": "Core's Plasmic Bow",
+          "type": "Bow",
+          "boss": "Core",
+          "bonus_stats_at_plus_5": "STR and DEX"
+        },
+        {
+          "name": "Queen Ant's Stone Breaker",
+          "type": "One-handed blunt",
+          "boss": "Queen Ant",
+          "bonus_stats_at_plus_5": "DEX and WIT"
+        },
+        {
+          "name": "Orfen's Venom Sword",
+          "type": "Two-handed sword",
+          "boss": "Orfen",
+          "bonus_stats_at_plus_5": "DEX and CON"
+        },
+        {
+          "name": "Zaken's Blood Sword",
+          "type": "One-handed sword",
+          "boss": "Zaken",
+          "bonus_stats_at_plus_5": "STR and CON"
+        },
+        {
+          "name": "Anakim's Divine Pistols",
+          "type": "Pistols (Sylph)",
+          "boss": "Anakim",
+          "bonus_stats_at_plus_5": "STR and DEX"
+        },
+        {
+          "name": "Gorde's Flame Spear",
+          "type": "Spear",
+          "boss": "Gorde",
+          "bonus_stats_at_plus_5": "STR and CON"
+        },
+        {
+          "name": "Beleth's Soul Eater",
+          "type": "Magic Staff",
+          "boss": "Beleth",
+          "bonus_stats_at_plus_5": "INT and WIT"
+        }
+      ],
+      "base_stats_lvl_0_59": {
+        "dagger_patk": 238,
+        "dagger_matk": 145,
+        "bow_patk": 245,
+        "bow_matk": 212
+      },
+      "proc_triggers": "1% trigger rate at +0, scaling to 2% at +7, with power scaling from 72 to 204+"
+    },
+    "relationships": [
+      "raid_bosses",
+      "soul_crystals",
+      "life_stones",
+      "weapon_enchant"
+    ],
+    "requirements": {
+      "grade": "A",
+      "character_level": 76
+    },
+    "rewards": {
+      "massive_patk": true,
+      "triggered_skills": true,
+      "stat_bonuses": true
+    },
+    "notes": "[SEASON 1 OUT OF SCOPE] for Lv 1-40 gameplay, represents the endgame weapon ceiling.",
+    "status": "verified"
+  },
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/articles/1725.html",
+    "name": "Weapons of Immortality Series",
+    "category": "Weapons (A-grade Special)",
+    "description": "Exclusive class weapons that modify specific skill mechanics and damage multipliers.",
+    "facts": {
+      "weapons": [
+        {
+          "name": "Death Knight's Flame Sword",
+          "restriction": "Death Knight exclusive",
+          "enhanced_skills": [
+            "Deadly Pull -> Flame Whip",
+            "Flaming Body -> Dark Form"
+          ]
+        },
+        {
+          "name": "Axe of Immortality",
+          "restriction": "Unavailable to Sylphs/Vanguard/Assassins/Blood Roses/High Elves/Wargs/Samurais"
+        },
+        {
+          "name": "Ancient Sword of Immortality",
+          "restriction": "Kamael exclusive"
+        }
+      ],
+      "enchant_rates": [
+        {
+          "transition": "0 -> +1",
+          "rate": "50%"
+        },
+        {
+          "transition": "+1 -> +2",
+          "rate": "40%"
+        },
+        {
+          "transition": "+2 -> +3",
+          "rate": "30%"
+        },
+        {
+          "transition": "+3 -> +4",
+          "rate": "20%"
+        }
+      ]
+    },
+    "relationships": [
+      "special_craft",
+      "death_knight_class",
+      "weapon_enchant"
+    ],
+    "requirements": {
+      "special_craft_recipe": true,
+      "character_level": 76
+    },
+    "rewards": {
+      "skill_transformation": true,
+      "dp_cost_removal": true
+    },
+    "notes": "[SEASON 1 OUT OF SCOPE] for Lv 1-40, definitive source on low-level enchant success degradation.",
+    "status": "verified"
+  },
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/articles/825.html",
+    "name": "Frost Lord's Weapons",
+    "category": "Weapons (A-grade Special)",
+    "description": "Special cold-elemental weapons dropped from Glakias that inflict heavy attack speed and weapon resistance debuffs.",
+    "facts": {
+      "grade": "A-grade",
+      "shot_consumption": 2,
+      "skills": [
+        {
+          "name": "Furious Frost",
+          "weapons": "Dagger, Rapier",
+          "effect": "Atk. Spd./Casting Spd. -30% to -50%, P./M. Atk. -20% to -30% for 5s"
+        },
+        {
+          "name": "Absolute Zero",
+          "weapons": "Sword, Axe, Spear, Two-handed sword, Ancient sword, Dual swords, Fist",
+          "effect": "Holds target, All Weapon Resistance -20%"
+        }
+      ],
+      "proc_chances": [
+        {
+          "enchant": "0 ~ +4",
+          "basic_attack_proc": "1%",
+          "skill_proc": "1%"
+        },
+        {
+          "enchant": "+5",
+          "basic_attack_proc": "2%",
+          "skill_proc": "5%"
+        },
+        {
+          "enchant": "+6",
+          "basic_attack_proc": "5%",
+          "skill_proc": "10%"
+        }
+      ]
+    },
+    "relationships": [
+      "frost_lord_glakias",
+      "soul_crystals",
+      "weapon_enchant"
+    ],
+    "requirements": {
+      "grade": "A",
+      "character_level": 76
+    },
+    "rewards": {
+      "freeze_cc": true,
+      "weapon_resistance_debuff": true
+    },
+    "notes": "[SEASON 1 OUT OF SCOPE] for Lv 1-40.",
+    "status": "verified"
+  },
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/articles/539.html",
+    "name": "Special Armor & Armor of Protection",
+    "category": "Armor (A-grade)",
+    "description": "Endgame armor pieces granting heavy defensive buffs, weapon resistances, and received fixed damage reduction.",
+    "facts": {
+      "sets": [
+        {
+          "name": "Flaming Robe Set",
+          "pieces": [
+            "Flaming Tunic",
+            "Flaming Stockings"
+          ],
+          "role": "Mage"
+        },
+        {
+          "name": "Lightning Light Set",
+          "pieces": [
+            "Leather Armor of Lightning",
+            "Leather Leggings of Lightning"
+          ],
+          "role": "Rogue/Archer"
+        },
+        {
+          "name": "Ice Crystal Heavy Set",
+          "pieces": [
+            "Ice Crystal Breastplate",
+            "Ice Crystal Gaiters"
+          ],
+          "role": "Knight/Warrior"
+        },
+        {
+          "name": "Armor of Protection",
+          "pieces": [
+            "Breastplate",
+            "Gaiters",
+            "Helmet",
+            "Gauntlets",
+            "Boots"
+          ],
+          "role": "Universal Defense"
+        }
+      ],
+      "individual_pieces": [
+        "Stun Gauntlets",
+        "Sigil of Inevitability",
+        "Shield of Vengeance",
+        "Helmet of Mana",
+        "Boots of Evasion",
+        "Gloves of Silence"
+      ],
+      "enchant_bonus_sample": {
+        "special_armor": "Max HP +600, Resistance to All Weapons +2%, Received fixed damage -2%",
+        "armor_of_protection": "Max HP +1000, Resistance to All Weapons +3%, Received fixed damage -3%"
+      }
+    },
+    "relationships": [
+      "equipment_set_system",
+      "random_craft",
+      "boss_glakias"
+    ],
+    "requirements": {
+      "grade": "A",
+      "character_level": 76
+    },
+    "rewards": {
+      "high_pdef": true,
+      "crowd_control_resistance": true,
+      "weapon_resistances": true
+    },
+    "notes": "[SEASON 1 OUT OF SCOPE] for Lv 1-40.",
+    "status": "verified"
+  },
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/articles/88.html",
+    "name": "Talismans Series",
+    "category": "Accessory / Talisman",
+    "description": "Equippable talismans placed in the bracelet slots that confer extensive active and passive combat attributes.",
+    "facts": {
+      "major_talismans": [
+        {
+          "name": "Talisman of Aden",
+          "focus": "P./M. Atk, P./M. Def, Acquired EXP/SP boost",
+          "enchant_cap": 10
+        },
+        {
+          "name": "Talisman of Eva",
+          "focus": "Max MP, MP Recovery, Skill MP Consumption reduction, Magic Crit reduction",
+          "enchant_cap": 10
+        },
+        {
+          "name": "Talisman of Speed",
+          "focus": "Movement Speed, P./M. Def, Anomaly Resistance",
+          "enchant_cap": 10
+        },
+        {
+          "name": "Talisman of Authority",
+          "focus": "P./M. Skill Power, All Weapon Resistance",
+          "enchant_cap": 10
+        },
+        {
+          "name": "Talisman of Baium",
+          "focus": "Endgame Legendary: P./M. Atk +12%, Skill Power +15%, Cooldown -10%",
+          "enchant_cap": 5
+        },
+        {
+          "name": "Venir's Talisman",
+          "focus": "Stages 1-25 compounding, grants all base stats (STR, DEX, CON, INT, WIT, MEN)"
+        }
+      ]
+    },
+    "relationships": [
+      "bracelet_equipment",
+      "talisman_enchant",
+      "l_coin_store"
+    ],
+    "requirements": {
+      "bracelet_equipped": true
+    },
+    "rewards": {
+      "stats_scaling": true,
+      "exp_sp_boost": true
+    },
+    "notes": "Talisman of Aden and Talisman of Speed can be introduced early at Lv 20+ as introductory talisman slots.",
+    "status": "verified"
+  },
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/articles/84.html",
+    "name": "Brooches & Jewels",
+    "category": "Accessory / Brooch Jewels",
+    "description": "Brooch system unlocking up to 6 jewel slots where compounded gems (Lv 1 to Lv 8) grant specialized combat bonuses.",
+    "facts": {
+      "jewels_list": [
+        {
+          "name": "Ruby",
+          "effect": "Soulshot / Spiritshot damage increase (+5% to +25%)"
+        },
+        {
+          "name": "Sapphire",
+          "effect": "Skill Power bonus (+3% to +20%)"
+        },
+        {
+          "name": "Diamond",
+          "effect": "P. Def and received critical damage reduction"
+        },
+        {
+          "name": "Pearl",
+          "effect": "M. Def and received magic damage reduction"
+        },
+        {
+          "name": "Opal",
+          "effect": "Attribute Attack and Attribute Resistance"
+        },
+        {
+          "name": "Amber",
+          "effect": "Max HP, Max MP, and Trauma/Debuff resistance"
+        },
+        {
+          "name": "Beryl",
+          "effect": "Invincibility proc when critically hit"
+        }
+      ],
+      "compounding_mechanic": "Two identical jewels of same level compounded with Adena fee; failure yields 1 base jewel"
+    },
+    "relationships": [
+      "brooch_equipment",
+      "gem_compounding",
+      "shots_synergy"
+    ],
+    "requirements": {
+      "brooch_equipped": true,
+      "jewels_of_same_level": true
+    },
+    "rewards": {
+      "passive_stat_amplification": true,
+      "shot_damage_multipliers": true
+    },
+    "notes": "Ruby's Soulshot multiplier is a cornerstone of physical/magical burst damage calculation.",
+    "status": "verified"
+  },
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/articles/73.html",
+    "name": "Cloaks Series",
+    "category": "Accessory / Cloak",
+    "description": "Cloaks equipped in the dedicated back slot enhancing P. Def, M. Def, Max HP, and elemental resistances.",
+    "facts": {
+      "cloaks_list": [
+        {
+          "name": "Cloak of Protection",
+          "focus": "P./M. Def, Max HP, Acquired EXP/SP, received damage reduction",
+          "enchant_cap": 10
+        },
+        {
+          "name": "Cloak of War",
+          "focus": "PvP damage boost, P. Skill Power"
+        },
+        {
+          "name": "Cloak of Attack",
+          "focus": "P. Atk, M. Atk, Atk Speed"
+        },
+        {
+          "name": "Defender's Cloak",
+          "focus": "Shield defense, damage reflection"
+        }
+      ],
+      "safe_enchant": "+0 (enchanting starts with risk immediately)"
+    },
+    "relationships": [
+      "character_back_slot",
+      "enchant_scroll_cloak"
+    ],
+    "requirements": {
+      "character_level": 20
+    },
+    "rewards": {
+      "pdef_mdef_percentage": true,
+      "exp_sp_gain": true
+    },
+    "notes": "Cloak of Protection is standard gear obtainable from Lv 20+.",
+    "status": "verified"
+  },
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/articles/89.html",
+    "name": "Head Accessories Series",
+    "category": "Accessory / Hair Slots",
+    "description": "Circlets and hats occupying the two head accessory slots providing offensive, defensive, and elemental resilience stats.",
+    "facts": {
+      "circlets": [
+        {
+          "name": "Circlet of Hero",
+          "focus": "P. Atk, M. Atk, Max HP, Max CP, triggerable Hero's Shield"
+        },
+        {
+          "name": "Piercing Mask",
+          "focus": "Physical/Magical Critical Damage, Armor Penetration"
+        }
+      ],
+      "slots_occupied": "Hair Accessory (Upper) / Hair Accessory (Lower)"
+    },
+    "relationships": [
+      "head_slots",
+      "enchant_scroll_circlet"
+    ],
+    "requirements": {
+      "character_level": 1
+    },
+    "rewards": {
+      "crit_damage": true,
+      "penetration": true
+    },
+    "notes": "Provides minor baseline stats without grade penalty.",
+    "status": "verified"
+  }
+]

@@ -7,6 +7,7 @@
 
 import { ALL_ITEMS } from '../items/index.js';
 import { BRACELETS } from '../talismans.js';
+import { CODEX_SETS } from '../codex.js';
 
 export const CP_WEIGHTS = {
   levelMultiplier: 20,
@@ -270,14 +271,34 @@ export function calculateDetailedCombatPower(state) {
   if (state.codexUnlockedSets && Array.isArray(state.codexUnlockedSets)) {
     artifactCp += state.codexUnlockedSets.length * CP_WEIGHTS.specialBonuses.codexSet;
   }
+  if (state.codex && typeof state.codex === 'object') {
+    const codexSets = CODEX_SETS;
+    if (codexSets) {
+      for (const [sId, items] of Object.entries(state.codex)) {
+        const sDef = codexSets[sId];
+        if (sDef && Array.isArray(sDef.items) && sDef.items.every(i => items.includes(i))) {
+          artifactCp += (CP_WEIGHTS.specialBonuses?.codexSet || 350);
+        }
+      }
+    }
+  }
   if (state.bossDolls && Array.isArray(state.bossDolls)) {
     artifactCp += state.bossDolls.length * CP_WEIGHTS.specialBonuses.bossDoll;
   }
   trail.push({ component: 'artifactCp', source: 'Codex sets + Boss dolls', value: artifactCp });
 
-  // 12. JEWEL/BROOCH CP (epic jewels already in equipment/jewelry processing)
-  const jewelBroochCp = 0;
-  trail.push({ component: 'jewelBroochCp', source: 'Brooch jewels', value: jewelBroochCp });
+  // 12. JEWEL/BROOCH CP (Broche equipado + Joias de Broche engastadas)
+  let jewelBroochCp = 0;
+  if (state.equipment?.brooch) {
+    jewelBroochCp += 300;
+  }
+  if (state.broochJewels && Array.isArray(state.broochJewels)) {
+    for (const j of state.broochJewels) {
+      const lvl = Number(j?.level || 1);
+      jewelBroochCp += (lvl * 150);
+    }
+  }
+  trail.push({ component: 'jewelBroochCp', source: 'Brooch and jewels', value: jewelBroochCp });
 
   // 13. PASSIVE CP (Clan, Noblesse, Hero, Fortress, Seven Signs)
   let passiveCp = 0;

@@ -1,0 +1,138 @@
+[
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/articles/1033/",
+    "name": "Adena",
+    "category": "Primary In-Game Currency",
+    "description": "The primary circulating gold currency of Lineage II, dropped by all monsters and required for all basic town services, teleports, skills, and consumable purchases.",
+    "facts": {
+      "faucets": [
+        "Monster hunting drops",
+        "Quest rewards",
+        "Daily missions",
+        "Selling loot to NPC vendors"
+      ],
+      "sinks": [
+        "Soulshots / Spiritshots auto-consumption",
+        "Town teleporters",
+        "Skill learning fees",
+        "Equipment unsealing fees (Blacksmith)",
+        "Equipment sealing security scrolls (1,200 adena)",
+        "World Trade registration fee (100% of price in Adena)",
+        "Aden Laboratory research fees (10,000,000 adena per attempt)",
+        "Skill Enchantment fees (1,000,000 adena per roll + 3,000,000 for SP Pouch)",
+        "Doll compounding fees (100,000 adena per common attempt)"
+      ]
+    },
+    "relationships": [
+      "all_systems",
+      "economy",
+      "vendor_stores"
+    ],
+    "requirements": {
+      "in_game_activity": true
+    },
+    "rewards": {
+      "purchasing_power": true
+    },
+    "notes": "Core economic stabilizer. Sinks must balance faucets to prevent hyperinflation.",
+    "status": "verified"
+  },
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/articles/1138.html",
+    "name": "L-Coin",
+    "category": "Special Store Currency",
+    "description": "Specialized currency used to purchase premium items, talismans, enchant scrolls, doll summons, and runic catalysts from the L-Coin Store and World Trade.",
+    "facts": {
+      "faucets": [
+        "Daily hunting missions",
+        "Special raid events",
+        "World Trade sales",
+        "Store purchases"
+      ],
+      "sinks": [
+        "L-Coin Store exclusive catalog",
+        "World Trade 5% sales commission tax",
+        "Talisman purchases",
+        "Doll summoning packages"
+      ]
+    },
+    "relationships": [
+      "l_coin_store",
+      "world_trade",
+      "dolls",
+      "talismans"
+    ],
+    "requirements": {
+      "world_trade_or_store": true
+    },
+    "rewards": {
+      "premium_consumables_and_accessories": true
+    },
+    "notes": "In Essence, L-Coins partially replaced traditional monetization by being droppable/earnable via daily missions.",
+    "status": "verified"
+  },
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/articles/2523.html",
+    "name": "Eva's Points / Eva Coins",
+    "category": "Alternative Server Currency (Project Eva)",
+    "description": "Special non-monetized server currency earned through gameplay on Project Eva servers to purchase items from Eva's Shop without cash shop dependence.",
+    "facts": {
+      "faucets": [
+        "Daily quests",
+        "Active hunting",
+        "Event milestones"
+      ],
+      "sinks": [
+        "Eva's Shop: Growth Rune Lv 1 (4,500 Eva Points + 1M Adena)",
+        "Consumables",
+        "Enchant scrolls"
+      ]
+    },
+    "relationships": [
+      "eva_s_shop",
+      "growth_rune"
+    ],
+    "requirements": {
+      "project_eva_server_mode": true
+    },
+    "rewards": {
+      "fair_progression_items": true
+    },
+    "notes": "Represents the player-friendly, non-P2W economic model of Lineage II Essence.",
+    "status": "verified"
+  },
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/mechanics/exp/",
+    "name": "Skill Points (SP)",
+    "category": "Character Progression Resource",
+    "description": "Points accrued alongside EXP from monster kills, consumed to learn active and passive class skills and absorb experience into SP Pouches for Skill Enchanting.",
+    "facts": {
+      "faucets": [
+        "Monster kills",
+        "Daily mission completion",
+        "Magic Lamp rolls (Green/Purple lamps grant massive SP)"
+      ],
+      "sinks": [
+        "Learning class skills at levels 20, 40, 76+",
+        "Skill Enchantment SP Pouches"
+      ]
+    },
+    "relationships": [
+      "skills_tree",
+      "magic_lamp",
+      "skill_enchanting"
+    ],
+    "requirements": {
+      "combat_kills": true
+    },
+    "rewards": {
+      "skill_acquisitions": true
+    },
+    "notes": "In Aden Arena, SP is a core gating resource ensuring players strategically prioritize skill upgrades.",
+    "status": "verified"
+  }
+]

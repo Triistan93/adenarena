@@ -1,0 +1,347 @@
+[
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/mechanics/exp/",
+    "name": "Character Level & Experience Curve (Levels 1–40 Focus)",
+    "category": "Core Mathematical Progression",
+    "description": "Exact empirical experience requirements per level extracted from the official Lineage II Essence EXP table.",
+    "facts": {
+      "season_1_range": "Levels 1 to 40",
+      "total_levels_in_source": 100,
+      "levels_1_to_40_curve": [
+        {
+          "level": 1,
+          "total_exp": 0,
+          "exp_to_level": 0
+        },
+        {
+          "level": 2,
+          "total_exp": 1,
+          "exp_to_level": 1
+        },
+        {
+          "level": 3,
+          "total_exp": 4,
+          "exp_to_level": 3
+        },
+        {
+          "level": 4,
+          "total_exp": 12,
+          "exp_to_level": 8
+        },
+        {
+          "level": 5,
+          "total_exp": 29,
+          "exp_to_level": 17
+        },
+        {
+          "level": 6,
+          "total_exp": 61,
+          "exp_to_level": 32
+        },
+        {
+          "level": 7,
+          "total_exp": 113,
+          "exp_to_level": 52
+        },
+        {
+          "level": 8,
+          "total_exp": 195,
+          "exp_to_level": 82
+        },
+        {
+          "level": 9,
+          "total_exp": 314,
+          "exp_to_level": 119
+        },
+        {
+          "level": 10,
+          "total_exp": 483,
+          "exp_to_level": 169
+        },
+        {
+          "level": 11,
+          "total_exp": 713,
+          "exp_to_level": 230
+        },
+        {
+          "level": 12,
+          "total_exp": 1017,
+          "exp_to_level": 304
+        },
+        {
+          "level": 13,
+          "total_exp": 1412,
+          "exp_to_level": 395
+        },
+        {
+          "level": 14,
+          "total_exp": 1915,
+          "exp_to_level": 503
+        },
+        {
+          "level": 15,
+          "total_exp": 2544,
+          "exp_to_level": 629
+        },
+        {
+          "level": 16,
+          "total_exp": 3319,
+          "exp_to_level": 775
+        },
+        {
+          "level": 17,
+          "total_exp": 4263,
+          "exp_to_level": 944
+        },
+        {
+          "level": 18,
+          "total_exp": 5401,
+          "exp_to_level": 1138
+        },
+        {
+          "level": 19,
+          "total_exp": 6756,
+          "exp_to_level": 1355
+        },
+        {
+          "level": 20,
+          "total_exp": 8359,
+          "exp_to_level": 1603
+        },
+        {
+          "level": 21,
+          "total_exp": 10202,
+          "exp_to_level": 1843
+        },
+        {
+          "level": 22,
+          "total_exp": 12322,
+          "exp_to_level": 2120
+        },
+        {
+          "level": 23,
+          "total_exp": 14759,
+          "exp_to_level": 2437
+        },
+        {
+          "level": 24,
+          "total_exp": 17562,
+          "exp_to_level": 2803
+        },
+        {
+          "level": 25,
+          "total_exp": 20786,
+          "exp_to_level": 3224
+        },
+        {
+          "level": 26,
+          "total_exp": 24525,
+          "exp_to_level": 3739
+        },
+        {
+          "level": 27,
+          "total_exp": 28863,
+          "exp_to_level": 4338
+        },
+        {
+          "level": 28,
+          "total_exp": 33894,
+          "exp_to_level": 5031
+        },
+        {
+          "level": 29,
+          "total_exp": 39731,
+          "exp_to_level": 5837
+        },
+        {
+          "level": 30,
+          "total_exp": 46502,
+          "exp_to_level": 6771
+        },
+        {
+          "level": 31,
+          "total_exp": 54423,
+          "exp_to_level": 7921
+        },
+        {
+          "level": 32,
+          "total_exp": 63691,
+          "exp_to_level": 9268
+        },
+        {
+          "level": 33,
+          "total_exp": 74535,
+          "exp_to_level": 10844
+        },
+        {
+          "level": 34,
+          "total_exp": 87222,
+          "exp_to_level": 12687
+        },
+        {
+          "level": 35,
+          "total_exp": 102066,
+          "exp_to_level": 14844
+        },
+        {
+          "level": 36,
+          "total_exp": 119582,
+          "exp_to_level": 17516
+        },
+        {
+          "level": 37,
+          "total_exp": 140251,
+          "exp_to_level": 20669
+        },
+        {
+          "level": 38,
+          "total_exp": 164640,
+          "exp_to_level": 24389
+        },
+        {
+          "level": 39,
+          "total_exp": 193420,
+          "exp_to_level": 28780
+        },
+        {
+          "level": 40,
+          "total_exp": 227379,
+          "exp_to_level": 33959
+        },
+        {
+          "level": 41,
+          "total_exp": 267791,
+          "exp_to_level": 40412
+        },
+        {
+          "level": 42,
+          "total_exp": 315881,
+          "exp_to_level": 48090
+        },
+        {
+          "level": 43,
+          "total_exp": 373109,
+          "exp_to_level": 57228
+        },
+        {
+          "level": 44,
+          "total_exp": 441209,
+          "exp_to_level": 68100
+        }
+      ],
+      "key_milestones": [
+        {
+          "level": 1,
+          "exp_to_level": 0,
+          "total_exp": 0,
+          "title": "Novice"
+        },
+        {
+          "level": 20,
+          "exp_to_level": 24707,
+          "total_exp": 76092,
+          "title": "1st Class Transfer (D-Grade Unlock)"
+        },
+        {
+          "level": 40,
+          "exp_to_level": 818968,
+          "total_exp": 3881472,
+          "title": "2nd Class Transfer (C-Grade Unlock)"
+        }
+      ]
+    },
+    "relationships": [
+      "hunting_zones",
+      "monster_exp",
+      "daily_missions",
+      "class_transfer"
+    ],
+    "requirements": {
+      "monster_hunting": true
+    },
+    "rewards": {
+      "base_stats_growth": true,
+      "class_promotions": true,
+      "gear_grade_unlocks": true
+    },
+    "notes": "100% verified against L2Wiki Essence EXP Table. Forms the canonical leveling equation for Aden Arena Season 1.",
+    "status": "verified"
+  },
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/articles/1033/",
+    "name": "Class Transfer Progression Framework",
+    "category": "Class Architecture",
+    "description": "4-stage class transfer hierarchy governing archetype evolution and skill tier unlocking.",
+    "facts": {
+      "stages": [
+        {
+          "stage": 0,
+          "level_req": 1,
+          "name": "Base Class",
+          "unlocks": "No-Grade gear, baseline race passives, fundamental attack skills"
+        },
+        {
+          "stage": 1,
+          "level_req": 20,
+          "name": "1st Class Transfer",
+          "unlocks": "D-Grade gear, archetype specialization (Warrior, Knight, Rogue, Wizard, Cleric), Tier 1 passives"
+        },
+        {
+          "stage": 2,
+          "level_req": 40,
+          "name": "2nd Class Transfer",
+          "unlocks": "C-Grade gear, signature identity (Gladiator, Paladin, Hawkeye, Sorcerer, Bishop), signature procs and toggles"
+        },
+        {
+          "stage": 3,
+          "level_req": 76,
+          "name": "3rd Class Transfer",
+          "unlocks": "A-Grade gear, legendary mastery (Duelist, Phoenix Knight, Sagittarius, Archmage, Cardinal), 1-star to 4-star spellbooks [SEASON 1 OUT OF SCOPE]"
+        }
+      ]
+    },
+    "relationships": [
+      "classes_tree",
+      "skills_tree",
+      "equipment_grades"
+    ],
+    "requirements": {
+      "character_level": true,
+      "class_transfer_quest_or_fee": true
+    },
+    "rewards": {
+      "new_class_identity": true,
+      "substantial_stat_modifiers": true,
+      "advanced_skills": true
+    },
+    "notes": "Stages 0, 1, and 2 encompass the complete Aden Arena Season 1 experience.",
+    "status": "verified"
+  },
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/mechanics/collections/",
+    "name": "Collections Horizontal Progression",
+    "category": "Metagame Progression",
+    "description": "Account-wide card and item registration matrix bestowing permanent stackable stat bonuses.",
+    "facts": {
+      "structure": "Hundreds of item collections categorized by Combat, Defense, Utility, and Special",
+      "sacrifice_mechanic": "Registered equipment is permanently bound or destroyed, creating a perpetual economic sink for obsolete low-grade gear",
+      "stat_categories_count": 24
+    },
+    "relationships": [
+      "equipment",
+      "economy_sink",
+      "character_stats"
+    ],
+    "requirements": {
+      "specified_items_at_required_enchant": true
+    },
+    "rewards": {
+      "permanent_account_wide_stats": true
+    },
+    "notes": "Provides vital retention and long-term purpose for farming low-level hunting zones.",
+    "status": "verified"
+  }
+]

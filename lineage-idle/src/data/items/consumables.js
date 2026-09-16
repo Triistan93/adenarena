@@ -9,6 +9,8 @@ export const CONSUMABLES = {
   "hp_potion_m": {"id":"hp_potion_m","name":"Hp Potion M","slot":"consumable","tier":1,"healAmt":150,"stack":99999,"price":50,"icon":"consumables/hp_potion_m.png","desc":"Restaura HP."},
   "hp_potion_s": {"id":"hp_potion_s","name":"Hp Potion S","slot":"consumable","tier":1,"healAmt":100,"stack":99999,"price":50,"icon":"consumables/hp_potion_s.png","desc":"Restaura HP."},
   "hp_potion_xl": {"id":"hp_potion_xl","name":"Hp Potion Xl","slot":"consumable","tier":1,"healAmt":500,"stack":99999,"price":50,"icon":"consumables/hp_potion_xl.png","desc":"Restaura HP."},
+  "greater_healing_potion": {"id":"greater_healing_potion","name":"Greater Healing Potion","slot":"consumable","tier":2,"healAmt":850,"stack":99999,"price":120,"icon":"consumables/hp_potion_xl.png","desc":"Poção de cura concentrada de feudos rurais. Restaura 850 HP imediatamente."},
+  "stew_fish": {"id":"stew_fish","name":"Guisado de Peixe de Gludio","slot":"consumable","tier":2,"healAmt":0,"stack":99999,"price":150,"icon":"consumables/sages_tea.png","desc":"Guisado culinário tradicional de peixe fresco (+10% P.Atk e +10% M.Atk por 20 minutos).","buffDuration":1200,"buffStats":{"pAtkPct":0.10,"mAtkPct":0.10}},
   "mp_potion_l": {"id":"mp_potion_l","name":"Mp Potion L","slot":"consumable","tier":1,"healAmt":300,"stack":99999,"price":50,"icon":"consumables/mp_potion_l.png","desc":"Restaura MP."},
   "mp_potion_m": {"id":"mp_potion_m","name":"Mp Potion M","slot":"consumable","tier":1,"healAmt":150,"stack":99999,"price":50,"icon":"consumables/mp_potion_m.png","desc":"Restaura MP."},
   "mp_potion_s": {"id":"mp_potion_s","name":"Mp Potion S","slot":"consumable","tier":1,"healAmt":80,"stack":99999,"price":50,"icon":"consumables/mp_potion_s.png","desc":"Restaura MP."},

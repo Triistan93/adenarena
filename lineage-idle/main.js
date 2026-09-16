@@ -5808,14 +5808,12 @@ function attackMonster() {
     });
 
     if (shotItem) {
-      if ((shotItem.count || 1) > 1) shotItem.count--;
-      else removeFromInventory(shotItem.uid, 1);
-
-      // Detecta a Grade da Arma equipada para escalonar o dano
+      // Detecta a Grade da Arma equipada para escalonar o dano e consumo
       let weaponGrade = 'NG';
+      let wpnDef = null;
       if (state.equipment?.weapon) {
         const wpnItem = state.inventory?.find(i => i.uid === state.equipment.weapon);
-        const wpnDef = wpnItem ? D().ALL_ITEMS[wpnItem.itemId] : null;
+        wpnDef = wpnItem ? D().ALL_ITEMS[wpnItem.itemId] : null;
         if (wpnDef?.grade) weaponGrade = String(wpnDef.grade).toUpperCase();
         else if (wpnDef?.tier) {
           const TIER_GRADE = { 1: 'NG', 2: 'D', 3: 'C', 4: 'B', 5: 'A', 6: 'S' };
@@ -5823,16 +5821,45 @@ function attackMonster() {
         }
       }
 
+      // Consumo escalonado conforme Lineage II Canon (Arcos consomem 2 a 4 tiros)
+      let shotsToConsume = 1;
+      const wpnSlotOrType = `${wpnDef?.type || ''} ${wpnDef?.weaponType || ''} ${wpnDef?.slot || ''} ${wpnDef?.name || ''} ${wpnDef?.id || ''}`.toLowerCase();
+      const isBowWeapon = /bow|crossbow/.test(wpnSlotOrType);
+      if (isBowWeapon) {
+        if (weaponGrade === 'D') shotsToConsume = 2;
+        else if (weaponGrade === 'C') shotsToConsume = 3;
+        else if (['B', 'A', 'S'].includes(weaponGrade)) shotsToConsume = 4;
+        else shotsToConsume = 2;
+      }
+
+      const availableCount = shotItem.count || 1;
+      const actualDeduction = Math.min(availableCount, shotsToConsume);
+      if (availableCount > actualDeduction) {
+        shotItem.count -= actualDeduction;
+      } else {
+        removeFromInventory(shotItem.uid, actualDeduction);
+      }
+
       // Determina a grade efetiva: universal escala com a arma; shot por grau usa o teto do próprio tiro
       const isUniversalShot = shotItem.itemId.includes('universal');
       const specificShotGrade = (shotItem.itemId.split('_')[1] || 'NG').toUpperCase();
       const effectiveGrade = isUniversalShot ? weaponGrade : specificShotGrade;
 
+      // Penalidade de incompatibilidade de grau se o tiro for inferior à arma
+      const GRADE_RANK = { 'NG': 1, 'D': 2, 'C': 3, 'B': 4, 'A': 5, 'S': 6 };
+      const wRank = GRADE_RANK[weaponGrade] || 1;
+      const sRank = GRADE_RANK[specificShotGrade] || 1;
+      let gradePenalty = 1.0;
+      if (!isUniversalShot && sRank < wRank) {
+        gradePenalty = 0.50; // 50% de eficácia se usar tiro inferior ao grau da arma
+      }
+
       let shotMult = 2.0;
       if (isMageClass) {
         // Multiplicador Mágico (Spiritshot): NG 2.0x, D 2.10x, C 2.20x, B 2.30x, A 2.40x, S 2.50x + 10% MCrit
         const spsGradeMap = { 'NG': 2.0, 'D': 2.10, 'C': 2.20, 'B': 2.30, 'A': 2.40, 'S': 2.50 };
-        shotMult = spsGradeMap[effectiveGrade] || 2.0;
+        const rawMult = spsGradeMap[effectiveGrade] || 2.0;
+        shotMult = 1.0 + (rawMult - 1.0) * gradePenalty;
         if (effectiveGrade === 'S') soulshotCritBonus = 10;
         damage = Math.floor(damage * shotMult);
         const bonusPct = Math.round((shotMult - 1) * 100);
@@ -5840,7 +5867,8 @@ function attackMonster() {
       } else {
         // Multiplicador Físico (Soulshot): NG 2.0x, D 2.05x, C 2.10x, B 2.15x, A 2.20x, S 2.25x
         const ssGradeMap = { 'NG': 2.0, 'D': 2.05, 'C': 2.10, 'B': 2.15, 'A': 2.20, 'S': 2.25 };
-        shotMult = ssGradeMap[effectiveGrade] || 2.0;
+        const rawMult = ssGradeMap[effectiveGrade] || 2.0;
+        shotMult = 1.0 + (rawMult - 1.0) * gradePenalty;
         damage = Math.floor(damage * shotMult);
         const bonusPct = Math.round((shotMult - 1) * 100);
         stageFloat(`⚡ SS (+${bonusPct}%)`, 'sf-crit', 'left');

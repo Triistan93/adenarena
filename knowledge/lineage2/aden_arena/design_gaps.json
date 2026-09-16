@@ -1,0 +1,151 @@
+{
+  "summary": "Comprehensive audit of structural, economic, itemization, and progression gaps identified in Aden Arena.",
+  "gapsMatrix": [
+    {
+      "domain": "Crafting & Forging",
+      "currentState": "CRAFTING_RECIPES contains only 13 recipes (mostly boss/spellbook items)",
+      "externalEvidence": "Classic & Essence have exhaustive recipe catalogs for all D/C gear",
+      "observedGap": "95% of D-Grade and C-Grade equipment cannot be crafted from materials",
+      "impact": "Critical: invalidates dwarf crafting and isolates gathering/mining",
+      "severity": "CRITICAL"
+    },
+    {
+      "domain": "Refined Materials",
+      "currentState": "RefineryService creates 12 high-grade materials (Steel, Cord, Leather, etc.)",
+      "externalEvidence": "Refined materials are the mandatory inputs for all weapon/armor recipes",
+      "observedGap": "Refined materials accumulate in inventory with almost 0 consumption sinks",
+      "impact": "High: player investment in life activities leads to orphan items",
+      "severity": "HIGH"
+    },
+    {
+      "domain": "Monster Drops",
+      "currentState": "MONSTER_DROPS yields hundreds of complete, finished weapons and armors in common zones",
+      "externalEvidence": "Monsters primarily drop raw materials and patterns; whole gear is ultra-rare (<0.1%)",
+      "observedGap": "Common monsters bypass the crafting system by handing out finished products",
+      "impact": "Critical: devalues crafting, floods inventory, inflates vendor sell gold",
+      "severity": "CRITICAL"
+    },
+    {
+      "domain": "Equipment Sinks",
+      "currentState": "Obsolete low-grade gear is liquidated via sellAllJunk for minor Adena",
+      "externalEvidence": "Collections system permanently burns gear in exchange for account-wide stats",
+      "observedGap": "Lack of a sacrificial sink to absorb obsolete No-Grade and D-Grade gear",
+      "impact": "High: accelerates currency inflation and devalues low-grade gear",
+      "severity": "HIGH"
+    },
+    {
+      "domain": "Soulshot Economy",
+      "currentState": "Uniform 1 shot consumed per attack/cast regardless of weapon or target count",
+      "externalEvidence": "Bows consume 2-4 shots; AoE spells consume x1 to x3 shots based on mob count",
+      "observedGap": "Ranged and AoE classes operate at identical resource cost to melee classes",
+      "impact": "High: distorts class balance and operational sustainability",
+      "severity": "HIGH"
+    },
+    {
+      "domain": "Idle Autonomous Crafting",
+      "currentState": "Grinding generates gold, exp, and drops; no passive crafting charge exists",
+      "externalEvidence": "Common Craft gauge fills on mob kills, enabling autonomous scroll crafting",
+      "observedGap": "Grinding sessions do not generate enhancement scrolls autonomously",
+      "impact": "Medium: F2P and idle progression stalls at safe enchant thresholds",
+      "severity": "MEDIUM"
+    },
+    {
+      "domain": "Soul Crystal Safety",
+      "currentState": "Special Abilities 1-15 upgrade probabilistically without safety checkpoints",
+      "externalEvidence": "Soul Crystals have safe checkpoints at Lv 1, 6, 11, 16",
+      "observedGap": "Risk of complete progress loss causes player aversion to SA upgrading",
+      "impact": "Medium: discourages engagement with weapon socketing",
+      "severity": "MEDIUM"
+    },
+    {
+      "domain": "Doll Synthesis Pity",
+      "currentState": "Doll synthesis uses fixed RNG without bad-luck protection",
+      "externalEvidence": "Dolls feature guaranteed compounding with cumulative failure points",
+      "observedGap": "Bad luck streaks cause acute player frustration and waste duplicate dolls",
+      "impact": "Medium: impairs satisfaction in a core collection system",
+      "severity": "MEDIUM"
+    },
+    {
+      "domain": "Armor Set Synergies",
+      "currentState": "Armor set bonuses require 5 pieces equipped; partial set gives 0 bonus",
+      "externalEvidence": "Essence grants 3-piece partial bonuses and 5-piece full bonuses",
+      "observedGap": "Players receive 0 benefit while holding 3 or 4 pieces of a set",
+      "impact": "Medium: discourages gradual item equip during progression",
+      "severity": "MEDIUM"
+    }
+  ],
+  "orphanMaterials": [
+    {
+      "itemId": "steel",
+      "name": "Aço Temperado Puro",
+      "producedBy": "RefineryService",
+      "consumersCount": 1,
+      "status": "ORPHAN_CRITICAL"
+    },
+    {
+      "itemId": "crafted_leather",
+      "name": "Couro Trabalhado",
+      "producedBy": "RefineryService",
+      "consumersCount": 1,
+      "status": "ORPHAN_CRITICAL"
+    },
+    {
+      "itemId": "cord",
+      "name": "Cordão Trançado",
+      "producedBy": "RefineryService",
+      "consumersCount": 1,
+      "status": "ORPHAN_HIGH"
+    },
+    {
+      "itemId": "braided_hemp",
+      "name": "Cânhamo Trançado",
+      "producedBy": "RefineryService",
+      "consumersCount": 0,
+      "status": "ORPHAN_CRITICAL"
+    },
+    {
+      "itemId": "coarse_bone_powder",
+      "name": "Pó de Osso Grosso",
+      "producedBy": "RefineryService",
+      "consumersCount": 0,
+      "status": "ORPHAN_CRITICAL"
+    },
+    {
+      "itemId": "silver_mold",
+      "name": "Molde de Prata",
+      "producedBy": "RefineryService",
+      "consumersCount": 0,
+      "status": "ORPHAN_HIGH"
+    }
+  ],
+  "resourceHealthMap": {
+    "adena": {
+      "status": "HEALTHY",
+      "risk": "Inflationary pressure from bulk gear sales to NPC"
+    },
+    "adenCoins": {
+      "status": "HEALTHY",
+      "risk": "None (strictly segregated)"
+    },
+    "sp": {
+      "status": "HEALTHY",
+      "risk": "None (high sink demand in skills)"
+    },
+    "craftXp": {
+      "status": "PARTIAL",
+      "risk": "Accumulates without recipe variety to unlock"
+    },
+    "rawMaterials": {
+      "status": "HEALTHY_INFLOW",
+      "risk": "Output bottleneck at crafting stage"
+    },
+    "refinedMaterials": {
+      "status": "CRITICAL_GAPS",
+      "risk": "Severe lack of recipe consumers"
+    },
+    "crystals": {
+      "status": "HEALTHY",
+      "risk": "Well integrated into book forging"
+    }
+  }
+}

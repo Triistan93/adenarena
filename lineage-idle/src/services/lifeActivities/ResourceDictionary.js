@@ -335,6 +335,24 @@ export const CANONICAL_RESOURCES = {
     icon: 'materials/durable_metal_plate.png',
     price: 800,
     desc: 'Placa blindada de aço e mithril para peitorais e escudos pesados.'
+  },
+  fish_oil: {
+    itemId: 'fish_oil',
+    name: 'Óleo de Peixe Refinado',
+    category: RESOURCE_CATEGORIES.SPECIAL_COMPONENT,
+    grade: 'none',
+    icon: 'materials/varnish.png',
+    price: 80,
+    desc: 'Extrato oleoso refinado de peixes de Aden. Lubrificante para mecanismos e base culinária.'
+  },
+  pure_fish_oil: {
+    itemId: 'pure_fish_oil',
+    name: 'Óleo de Peixe Puro',
+    category: RESOURCE_CATEGORIES.SPECIAL_COMPONENT,
+    grade: 'd',
+    icon: 'materials/varnish_of_purity.png',
+    price: 280,
+    desc: 'Óleo purificado de peixes raros e verniz. Reagente essencial para forja e poções.'
   }
 };
 

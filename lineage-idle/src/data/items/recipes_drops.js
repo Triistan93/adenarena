@@ -1376,6 +1376,375 @@ const STATIC_CRAFTING_RECIPES = {
   "weapon_composition_bow": { "id": "weapon_composition_bow", "level": 1, "gold": 250, "reqs": [{ "id": "iron_ore", "count": 10 }, { "id": "suede", "count": 5 }] },
   "armor_full_plate_heavy_armor": { "id": "armor_full_plate_heavy_armor", "level": 40, "gold": 5000, "reqs": [{ "id": "iron_ore", "count": 50 }, { "id": "crafted_leather", "count": 20 }, { "id": "steel", "count": 10 }] },
   "armor_draconic_armor": { "id": "armor_draconic_armor", "level": 76, "gold": 50000, "reqs": [{ "id": "oriharukon_ore", "count": 100 }, { "id": "adamantite", "count": 50 }] },
+
+  // ─── SOULSHOTS & SPIRITSHOTS CANÔNICOS (Season 1) ───
+  "recipe_soulshot_d": {
+    "id": "recipe_soulshot_d",
+    "itemId": "soulshot_d",
+    "name": "Soulshot: D-Grade (Pacote 500x)",
+    "level": 20,
+    "craftLevel": 2,
+    "gold": 2500,
+    "outputQty": 500,
+    "materials": [{ "matId": "crystal_d", "qty": 2 }, { "matId": "coal", "qty": 10 }],
+    "reqs": [{ "id": "crystal_d", "matId": "crystal_d", "count": 2, "qty": 2 }, { "id": "coal", "matId": "coal", "count": 10, "qty": 10 }],
+    "result": "soulshot_d"
+  },
+  "recipe_spiritshot_d": {
+    "id": "recipe_spiritshot_d",
+    "itemId": "spiritshot_d",
+    "name": "Spiritshot: D-Grade (Pacote 500x)",
+    "level": 20,
+    "craftLevel": 2,
+    "gold": 4000,
+    "outputQty": 500,
+    "materials": [{ "matId": "crystal_d", "qty": 3 }, { "matId": "charcoal", "qty": 15 }],
+    "reqs": [{ "id": "crystal_d", "matId": "crystal_d", "count": 3, "qty": 3 }, { "id": "charcoal", "matId": "charcoal", "count": 15, "qty": 15 }],
+    "result": "spiritshot_d"
+  },
+  "recipe_soulshot_c": {
+    "id": "recipe_soulshot_c",
+    "itemId": "soulshot_c",
+    "name": "Soulshot: C-Grade (Pacote 500x)",
+    "level": 40,
+    "craftLevel": 3,
+    "gold": 6000,
+    "outputQty": 500,
+    "materials": [{ "matId": "crystal_c", "qty": 2 }, { "matId": "coal", "qty": 20 }],
+    "reqs": [{ "id": "crystal_c", "matId": "crystal_c", "count": 2, "qty": 2 }, { "id": "coal", "matId": "coal", "count": 20, "qty": 20 }],
+    "result": "soulshot_c"
+  },
+  "recipe_spiritshot_c": {
+    "id": "recipe_spiritshot_c",
+    "itemId": "spiritshot_c",
+    "name": "Spiritshot: C-Grade (Pacote 500x)",
+    "level": 40,
+    "craftLevel": 3,
+    "gold": 9000,
+    "outputQty": 500,
+    "materials": [{ "matId": "crystal_c", "qty": 3 }, { "matId": "charcoal", "qty": 30 }],
+    "reqs": [{ "id": "crystal_c", "matId": "crystal_c", "count": 3, "qty": 3 }, { "id": "charcoal", "matId": "charcoal", "count": 30, "qty": 30 }],
+    "result": "spiritshot_c"
+  },
+
+  // ─── CULINÁRIA & ALQUIMIA DE LIFE ACTIVITIES ───
+  "recipe_stew_fish": {
+    "id": "recipe_stew_fish",
+    "itemId": "stew_fish",
+    "name": "Guisado de Peixe de Gludio",
+    "level": 15,
+    "craftLevel": 1,
+    "gold": 200,
+    "outputQty": 1,
+    "materials": [{ "matId": "fish_oil", "qty": 1 }, { "matId": "branch", "qty": 2 }],
+    "reqs": [{ "id": "fish_oil", "matId": "fish_oil", "count": 1, "qty": 1 }, { "id": "branch", "matId": "branch", "count": 2, "qty": 2 }],
+    "result": "stew_fish"
+  },
+  "recipe_greater_healing_potion": {
+    "id": "recipe_greater_healing_potion",
+    "itemId": "greater_healing_potion",
+    "name": "Greater Healing Potion (Lote 5x)",
+    "level": 20,
+    "craftLevel": 1,
+    "gold": 500,
+    "outputQty": 5,
+    "materials": [{ "matId": "stem", "qty": 5 }, { "matId": "varnish", "qty": 2 }],
+    "reqs": [{ "id": "stem", "matId": "stem", "count": 5, "qty": 5 }, { "id": "varnish", "matId": "varnish", "count": 2, "qty": 2 }],
+    "result": "greater_healing_potion"
+  },
+
+  // ─── ARMAS D-GRADE CANÔNICAS (Consomem materiais refinados) ───
+  "weapon_crimson_sword": {
+    "id": "weapon_crimson_sword",
+    "itemId": "weapon_crimson_sword",
+    "name": "Crimson Sword (D-Grade)",
+    "level": 20,
+    "craftLevel": 2,
+    "gold": 7500,
+    "materials": [{ "matId": "steel", "qty": 12 }, { "matId": "varnish_of_purity", "qty": 4 }, { "matId": "coarse_bone_powder", "qty": 6 }],
+    "reqs": [{ "id": "steel", "matId": "steel", "count": 12, "qty": 12 }, { "id": "varnish_of_purity", "matId": "varnish_of_purity", "count": 4, "qty": 4 }, { "id": "coarse_bone_powder", "matId": "coarse_bone_powder", "count": 6, "qty": 6 }],
+    "result": "weapon_crimson_sword"
+  },
+  "weapon_elven_bow": {
+    "id": "weapon_elven_bow",
+    "itemId": "weapon_elven_bow",
+    "name": "Elven Bow (D-Grade)",
+    "level": 20,
+    "craftLevel": 2,
+    "gold": 8500,
+    "materials": [{ "matId": "compressed_wood", "qty": 15 }, { "matId": "cord", "qty": 10 }, { "matId": "braided_hemp", "qty": 6 }, { "matId": "pure_fish_oil", "qty": 2 }],
+    "reqs": [{ "id": "compressed_wood", "matId": "compressed_wood", "count": 15, "qty": 15 }, { "id": "cord", "matId": "cord", "count": 10, "qty": 10 }, { "id": "braided_hemp", "matId": "braided_hemp", "count": 6, "qty": 6 }, { "id": "pure_fish_oil", "matId": "pure_fish_oil", "count": 2, "qty": 2 }],
+    "result": "weapon_elven_bow"
+  },
+  "weapon_mystic_staff": {
+    "id": "weapon_mystic_staff",
+    "itemId": "weapon_mystic_staff",
+    "name": "Mystic Staff (D-Grade)",
+    "level": 20,
+    "craftLevel": 2,
+    "gold": 8000,
+    "materials": [{ "matId": "compressed_wood", "qty": 12 }, { "matId": "varnish", "qty": 8 }, { "matId": "silver_mold", "qty": 3 }],
+    "reqs": [{ "id": "compressed_wood", "matId": "compressed_wood", "count": 12, "qty": 12 }, { "id": "varnish", "matId": "varnish", "count": 8, "qty": 8 }, { "id": "silver_mold", "matId": "silver_mold", "count": 3, "qty": 3 }],
+    "result": "weapon_mystic_staff"
+  },
+  "weapon_saber_sword": {
+    "id": "weapon_saber_sword",
+    "itemId": "weapon_saber_sword",
+    "name": "Saber Sword (D-Grade)",
+    "level": 20,
+    "craftLevel": 2,
+    "gold": 7000,
+    "materials": [{ "matId": "steel", "qty": 10 }, { "matId": "coarse_bone_powder", "qty": 5 }, { "matId": "leather", "qty": 6 }],
+    "reqs": [{ "id": "steel", "matId": "steel", "count": 10, "qty": 10 }, { "id": "coarse_bone_powder", "matId": "coarse_bone_powder", "count": 5, "qty": 5 }, { "id": "leather", "matId": "leather", "count": 6, "qty": 6 }],
+    "result": "weapon_saber_sword"
+  },
+  "weapon_warhammer": {
+    "id": "weapon_warhammer",
+    "itemId": "weapon_warhammer",
+    "name": "Warhammer (D-Grade)",
+    "level": 20,
+    "craftLevel": 2,
+    "gold": 7500,
+    "materials": [{ "matId": "steel", "qty": 14 }, { "matId": "coal", "qty": 15 }, { "matId": "iron_ore", "qty": 20 }],
+    "reqs": [{ "id": "steel", "matId": "steel", "count": 14, "qty": 14 }, { "id": "coal", "matId": "coal", "count": 15, "qty": 15 }, { "id": "iron_ore", "matId": "iron_ore", "count": 20, "qty": 20 }],
+    "result": "weapon_warhammer"
+  },
+
+  // ─── CONJUNTO BRIGANDINE HEAVY (D-Grade) ───
+  "armor_brigandine_armor_heavy": {
+    "id": "armor_brigandine_armor_heavy",
+    "itemId": "armor_brigandine_armor_heavy",
+    "name": "Brigandine Armor Heavy",
+    "level": 20,
+    "craftLevel": 2,
+    "gold": 9500,
+    "materials": [{ "matId": "steel", "qty": 16 }, { "matId": "crafted_leather", "qty": 8 }, { "matId": "metallic_fiber", "qty": 6 }],
+    "reqs": [{ "id": "steel", "matId": "steel", "count": 16, "qty": 16 }, { "id": "crafted_leather", "matId": "crafted_leather", "count": 8, "qty": 8 }, { "id": "metallic_fiber", "matId": "metallic_fiber", "count": 6, "qty": 6 }],
+    "result": "armor_brigandine_armor_heavy"
+  },
+  "armor_brigandine_pants_heavy": {
+    "id": "armor_brigandine_pants_heavy",
+    "itemId": "armor_brigandine_pants_heavy",
+    "name": "Brigandine Pants Heavy",
+    "level": 20,
+    "craftLevel": 2,
+    "gold": 6500,
+    "materials": [{ "matId": "steel", "qty": 10 }, { "matId": "crafted_leather", "qty": 5 }, { "matId": "metallic_fiber", "qty": 4 }],
+    "reqs": [{ "id": "steel", "matId": "steel", "count": 10, "qty": 10 }, { "id": "crafted_leather", "matId": "crafted_leather", "count": 5, "qty": 5 }, { "id": "metallic_fiber", "matId": "metallic_fiber", "count": 4, "qty": 4 }],
+    "result": "armor_brigandine_pants_heavy"
+  },
+  "armor_brigandine_helmet_heavy": {
+    "id": "armor_brigandine_helmet_heavy",
+    "itemId": "armor_brigandine_helmet_heavy",
+    "name": "Brigandine Helmet Heavy",
+    "level": 20,
+    "craftLevel": 2,
+    "gold": 4500,
+    "materials": [{ "matId": "steel", "qty": 6 }, { "matId": "leather", "qty": 6 }, { "matId": "coarse_bone_powder", "qty": 4 }],
+    "reqs": [{ "id": "steel", "matId": "steel", "count": 6, "qty": 6 }, { "id": "leather", "matId": "leather", "count": 6, "qty": 6 }, { "id": "coarse_bone_powder", "matId": "coarse_bone_powder", "count": 4, "qty": 4 }],
+    "result": "armor_brigandine_helmet_heavy"
+  },
+  "armor_brigandine_boots_heavy": {
+    "id": "armor_brigandine_boots_heavy",
+    "itemId": "armor_brigandine_boots_heavy",
+    "name": "Brigandine Boots Heavy",
+    "level": 20,
+    "craftLevel": 2,
+    "gold": 4000,
+    "materials": [{ "matId": "steel", "qty": 4 }, { "matId": "crafted_leather", "qty": 5 }, { "matId": "cord", "qty": 6 }],
+    "reqs": [{ "id": "steel", "matId": "steel", "count": 4, "qty": 4 }, { "id": "crafted_leather", "matId": "crafted_leather", "count": 5, "qty": 5 }, { "id": "cord", "matId": "cord", "count": 6, "qty": 6 }],
+    "result": "armor_brigandine_boots_heavy"
+  },
+  "armor_brigandine_gloves_heavy": {
+    "id": "armor_brigandine_gloves_heavy",
+    "itemId": "armor_brigandine_gloves_heavy",
+    "name": "Brigandine Gloves Heavy",
+    "level": 20,
+    "craftLevel": 2,
+    "gold": 4000,
+    "materials": [{ "matId": "steel", "qty": 4 }, { "matId": "crafted_leather", "qty": 4 }, { "matId": "metallic_fiber", "qty": 4 }],
+    "reqs": [{ "id": "steel", "matId": "steel", "count": 4, "qty": 4 }, { "id": "crafted_leather", "matId": "crafted_leather", "count": 4, "qty": 4 }, { "id": "metallic_fiber", "matId": "metallic_fiber", "count": 4, "qty": 4 }],
+    "result": "armor_brigandine_gloves_heavy"
+  },
+
+  // ─── CONJUNTO MANTICORE LIGHT (D-Grade) ───
+  "armor_manticore_armor_light": {
+    "id": "armor_manticore_armor_light",
+    "itemId": "armor_manticore_armor_light",
+    "name": "Manticore Armor Light",
+    "level": 20,
+    "craftLevel": 2,
+    "gold": 8500,
+    "materials": [{ "matId": "crafted_leather", "qty": 14 }, { "matId": "cord", "qty": 8 }, { "matId": "braided_hemp", "qty": 6 }, { "matId": "fish_oil", "qty": 4 }],
+    "reqs": [{ "id": "crafted_leather", "matId": "crafted_leather", "count": 14, "qty": 14 }, { "id": "cord", "matId": "cord", "count": 8, "qty": 8 }, { "id": "braided_hemp", "matId": "braided_hemp", "count": 6, "qty": 6 }, { "id": "fish_oil", "matId": "fish_oil", "count": 4, "qty": 4 }],
+    "result": "armor_manticore_armor_light"
+  },
+  "armor_manticore_pants_light": {
+    "id": "armor_manticore_pants_light",
+    "itemId": "armor_manticore_pants_light",
+    "name": "Manticore Pants Light",
+    "level": 20,
+    "craftLevel": 2,
+    "gold": 5500,
+    "materials": [{ "matId": "crafted_leather", "qty": 9 }, { "matId": "cord", "qty": 5 }, { "matId": "braided_hemp", "qty": 4 }],
+    "reqs": [{ "id": "crafted_leather", "matId": "crafted_leather", "count": 9, "qty": 9 }, { "id": "cord", "matId": "cord", "count": 5, "qty": 5 }, { "id": "braided_hemp", "matId": "braided_hemp", "count": 4, "qty": 4 }],
+    "result": "armor_manticore_pants_light"
+  },
+
+  // ─── CONJUNTO MITHRIL ROBE (D-Grade) ───
+  "armor_mithril_tunic_robe": {
+    "id": "armor_mithril_tunic_robe",
+    "itemId": "armor_mithril_tunic_robe",
+    "name": "Mithril Tunic Robe",
+    "level": 20,
+    "craftLevel": 2,
+    "gold": 8500,
+    "materials": [{ "matId": "silver_thread", "qty": 12 }, { "matId": "cotton_thread", "qty": 15 }, { "matId": "varnish_of_purity", "qty": 4 }],
+    "reqs": [{ "id": "silver_thread", "matId": "silver_thread", "count": 12, "qty": 12 }, { "id": "cotton_thread", "matId": "cotton_thread", "count": 15, "qty": 15 }, { "id": "varnish_of_purity", "matId": "varnish_of_purity", "count": 4, "qty": 4 }],
+    "result": "armor_mithril_tunic_robe"
+  },
+  "armor_mithril_pants_robe": {
+    "id": "armor_mithril_pants_robe",
+    "itemId": "armor_mithril_pants_robe",
+    "name": "Mithril Pants Robe",
+    "level": 20,
+    "craftLevel": 2,
+    "gold": 5500,
+    "materials": [{ "matId": "silver_thread", "qty": 8 }, { "matId": "cotton_thread", "qty": 10 }, { "matId": "varnish", "qty": 5 }],
+    "reqs": [{ "id": "silver_thread", "matId": "silver_thread", "count": 8, "qty": 8 }, { "id": "cotton_thread", "matId": "cotton_thread", "count": 10, "qty": 10 }, { "id": "varnish", "matId": "varnish", "count": 5, "qty": 5 }],
+    "result": "armor_mithril_pants_robe"
+  },
+
+  // ─── ARMAS & ARMADURAS C-GRADE (Pinnacle Season 1) ───
+  "weapon_samurai_longsword": {
+    "id": "weapon_samurai_longsword",
+    "itemId": "weapon_samurai_longsword",
+    "name": "Samurai Longsword (C-Grade)",
+    "level": 40,
+    "craftLevel": 3,
+    "gold": 25000,
+    "materials": [{ "matId": "steel", "qty": 30 }, { "matId": "varnish_of_purity", "qty": 10 }, { "matId": "enria", "qty": 4 }, { "matId": "crystal_d", "qty": 15 }],
+    "reqs": [{ "id": "steel", "matId": "steel", "count": 30, "qty": 30 }, { "id": "varnish_of_purity", "matId": "varnish_of_purity", "count": 10, "qty": 10 }, { "id": "enria", "matId": "enria", "count": 4, "qty": 4 }, { "id": "crystal_d", "matId": "crystal_d", "count": 15, "qty": 15 }],
+    "result": "weapon_samurai_longsword"
+  },
+  "weapon_eminence_bow": {
+    "id": "weapon_eminence_bow",
+    "itemId": "weapon_eminence_bow",
+    "name": "Eminence Bow (C-Grade)",
+    "level": 40,
+    "craftLevel": 3,
+    "gold": 28000,
+    "materials": [{ "matId": "compressed_wood", "qty": 25 }, { "matId": "braided_hemp", "qty": 16 }, { "matId": "pure_fish_oil", "qty": 6 }, { "matId": "crystal_d", "qty": 15 }],
+    "reqs": [{ "id": "compressed_wood", "matId": "compressed_wood", "count": 25, "qty": 25 }, { "id": "braided_hemp", "matId": "braided_hemp", "count": 16, "qty": 16 }, { "id": "pure_fish_oil", "matId": "pure_fish_oil", "count": 6, "qty": 6 }, { "id": "crystal_d", "matId": "crystal_d", "count": 15, "qty": 15 }],
+    "result": "weapon_eminence_bow"
+  },
+  "weapon_homunkuluss_magic_sword": {
+    "id": "weapon_homunkuluss_magic_sword",
+    "itemId": "weapon_homunkuluss_magic_sword",
+    "name": "Homunkuluss Magic Sword (C-Grade)",
+    "level": 40,
+    "craftLevel": 3,
+    "gold": 26000,
+    "materials": [{ "matId": "mithril_alloy", "qty": 12 }, { "matId": "silver_mold", "qty": 8 }, { "matId": "enria", "qty": 5 }, { "matId": "crystal_d", "qty": 15 }],
+    "reqs": [{ "id": "mithril_alloy", "matId": "mithril_alloy", "count": 12, "qty": 12 }, { "id": "silver_mold", "matId": "silver_mold", "count": 8, "qty": 8 }, { "id": "enria", "matId": "enria", "count": 5, "qty": 5 }, { "id": "crystal_d", "matId": "crystal_d", "count": 15, "qty": 15 }],
+    "result": "weapon_homunkuluss_magic_sword"
+  },
+  "armor_theca_light_armor": {
+    "id": "armor_theca_light_armor",
+    "itemId": "armor_theca_light_armor",
+    "name": "Theca Light Armor (C-Grade)",
+    "level": 40,
+    "craftLevel": 3,
+    "gold": 24000,
+    "materials": [{ "matId": "crafted_leather", "qty": 25 }, { "matId": "braided_hemp", "qty": 12 }, { "matId": "enria", "qty": 4 }, { "matId": "crystal_d", "qty": 10 }],
+    "reqs": [{ "id": "crafted_leather", "matId": "crafted_leather", "count": 25, "qty": 25 }, { "id": "braided_hemp", "matId": "braided_hemp", "count": 12, "qty": 12 }, { "id": "enria", "matId": "enria", "count": 4, "qty": 4 }, { "id": "crystal_d", "matId": "crystal_d", "count": 10, "qty": 10 }],
+    "result": "armor_theca_light_armor"
+  },
+  "armor_karmian_robe_armor": {
+    "id": "armor_karmian_robe_armor",
+    "itemId": "armor_karmian_robe_armor",
+    "name": "Karmian Robe Armor (C-Grade)",
+    "level": 40,
+    "craftLevel": 3,
+    "gold": 24000,
+    "materials": [{ "matId": "silver_thread", "qty": 22 }, { "matId": "metallic_fiber", "qty": 14 }, { "matId": "varnish_of_purity", "qty": 8 }, { "matId": "crystal_d", "qty": 10 }],
+    "reqs": [{ "id": "silver_thread", "matId": "silver_thread", "count": 22, "qty": 22 }, { "id": "metallic_fiber", "matId": "metallic_fiber", "count": 14, "qty": 14 }, { "id": "varnish_of_purity", "matId": "varnish_of_purity", "count": 8, "qty": 8 }, { "id": "crystal_d", "matId": "crystal_d", "count": 10, "qty": 10 }],
+    "result": "armor_karmian_robe_armor"
+  },
+
+  // ─── SHOTS & CONSUMÍVEIS (D-Grade & C-Grade) ───
+  "recipe_soulshot_d": {
+    "id": "recipe_soulshot_d",
+    "itemId": "soulshot_d",
+    "name": "Receita: Soulshot (D-Grade) [500x]",
+    "level": 20,
+    "craftLevel": 1,
+    "gold": 1500,
+    "outputQty": 500,
+    "materials": [{ "matId": "crystal_d", "qty": 2 }, { "matId": "soul_ore", "qty": 5 }],
+    "reqs": [{ "id": "crystal_d", "matId": "crystal_d", "count": 2, "qty": 2 }, { "id": "soul_ore", "matId": "soul_ore", "count": 5, "qty": 5 }],
+    "result": "soulshot_d"
+  },
+  "recipe_spiritshot_d": {
+    "id": "recipe_spiritshot_d",
+    "itemId": "spiritshot_d",
+    "name": "Receita: Spiritshot (D-Grade) [500x]",
+    "level": 20,
+    "craftLevel": 1,
+    "gold": 2500,
+    "outputQty": 500,
+    "materials": [{ "matId": "crystal_d", "qty": 4 }, { "matId": "spirit_ore", "qty": 8 }],
+    "reqs": [{ "id": "crystal_d", "matId": "crystal_d", "count": 4, "qty": 4 }, { "id": "spirit_ore", "matId": "spirit_ore", "count": 8, "qty": 8 }],
+    "result": "spiritshot_d"
+  },
+  "recipe_soulshot_c": {
+    "id": "recipe_soulshot_c",
+    "itemId": "soulshot_c",
+    "name": "Receita: Soulshot (C-Grade) [500x]",
+    "level": 40,
+    "craftLevel": 2,
+    "gold": 3000,
+    "outputQty": 500,
+    "materials": [{ "matId": "crystal_c", "qty": 2 }, { "matId": "soul_ore", "qty": 10 }],
+    "reqs": [{ "id": "crystal_c", "matId": "crystal_c", "count": 2, "qty": 2 }, { "id": "soul_ore", "matId": "soul_ore", "count": 10, "qty": 10 }],
+    "result": "soulshot_c"
+  },
+  "recipe_spiritshot_c": {
+    "id": "recipe_spiritshot_c",
+    "itemId": "spiritshot_c",
+    "name": "Receita: Spiritshot (C-Grade) [500x]",
+    "level": 40,
+    "craftLevel": 2,
+    "gold": 5000,
+    "outputQty": 500,
+    "materials": [{ "matId": "crystal_c", "qty": 4 }, { "matId": "spirit_ore", "qty": 16 }],
+    "reqs": [{ "id": "crystal_c", "matId": "crystal_c", "count": 4, "qty": 4 }, { "id": "spirit_ore", "matId": "spirit_ore", "count": 16, "qty": 16 }],
+    "result": "spiritshot_c"
+  },
+  "recipe_stew_fish": {
+    "id": "recipe_stew_fish",
+    "itemId": "stew_fish",
+    "name": "Receita: Ensopado de Peixe do Pescador",
+    "level": 15,
+    "craftLevel": 1,
+    "gold": 800,
+    "outputQty": 1,
+    "materials": [{ "matId": "fish_oil", "qty": 3 }, { "matId": "stem", "qty": 5 }],
+    "reqs": [{ "id": "fish_oil", "matId": "fish_oil", "count": 3, "qty": 3 }, { "id": "stem", "matId": "stem", "count": 5, "qty": 5 }],
+    "result": "stew_fish"
+  },
+  "recipe_greater_healing_potion": {
+    "id": "recipe_greater_healing_potion",
+    "itemId": "greater_healing_potion",
+    "name": "Receita: Poção Maior de Vida (GHP) [10x]",
+    "level": 20,
+    "craftLevel": 1,
+    "gold": 1200,
+    "outputQty": 10,
+    "materials": [{ "matId": "pure_fish_oil", "qty": 1 }, { "matId": "stem", "qty": 10 }],
+    "reqs": [{ "id": "pure_fish_oil", "matId": "pure_fish_oil", "count": 1, "qty": 1 }, { "id": "stem", "matId": "stem", "count": 10, "qty": 10 }],
+    "result": "greater_healing_potion"
+  },
   
   // Tomos Sagrados de Habilidade (1★ a 3★ via Cristais na Forja; 4★ é drop exclusivo de Epic Bosses)
   "book_1star": {

@@ -1,0 +1,481 @@
+[
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/articles/1703.html",
+    "name": "Skill Enchanting",
+    "category": "Skill Enhancement",
+    "description": "System allowing players to enchant active and passive skills using Skill Enchantment points, Adena, and Spellbook absorption experience up to +3.",
+    "facts": {
+      "enchantment_levels": 3,
+      "rates_and_costs": [
+        {
+          "level": "+1",
+          "chance": "50%",
+          "exp_required": 900000,
+          "exp_refund_on_failure": 90000,
+          "adena_required": 1000000
+        },
+        {
+          "level": "+2",
+          "chance": "30%",
+          "exp_required": 900000,
+          "exp_refund_on_failure": 90000,
+          "adena_required": 1000000
+        },
+        {
+          "level": "+3",
+          "chance": "[CONTENT GAP - unlisted rate]",
+          "exp_required": 900000,
+          "exp_refund_on_failure": 90000,
+          "adena_required": 1000000
+        }
+      ],
+      "spellbook_absorption": {
+        "item": "SP Pouch",
+        "fee_adena": 3000000,
+        "exp_gained": {
+          "1_star": 2250,
+          "2_stars": 750,
+          "3_stars": 450,
+          "4_stars": 11
+        }
+      },
+      "class_skill_examples": [
+        {
+          "class": "Assassin",
+          "skill": "Hidden Power of Noda",
+          "effect": "Makes feature conditions easier to deal with, amplifies effect"
+        },
+        {
+          "class": "Duelist",
+          "skill": "Sword Spirit Lv 2",
+          "effect": "Increases P. Atk, Max HP, P. Skill Crit Rate, and power of additional triggered attack"
+        }
+      ]
+    },
+    "relationships": [
+      "character_progression",
+      "sp_pouch",
+      "adena_currency",
+      "spellbooks",
+      "skill_trees"
+    ],
+    "requirements": {
+      "min_level": 76,
+      "adena": 1000000,
+      "exp_points": 900000
+    },
+    "rewards": {
+      "skill_power_boost": "Varies by skill tier and enchant level",
+      "cooldown_reduction": "Applicable on select skills"
+    },
+    "notes": "Requires 3rd class transfer. In Aden Arena Season 1 (Lv 1-40), this mechanic is marked [SEASON 1 OUT OF SCOPE] for base progression, but provides structural design reference for future skill mastery tiers.",
+    "status": "verified"
+  },
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/articles/2697.html",
+    "name": "NEW STAGE Aden Laboratory",
+    "category": "Character Attribute Research",
+    "description": "Facility enabling players to invest Adena into systemic stat research across 4 progressive research tiers.",
+    "facts": {
+      "fees": {
+        "essence_research_fee": "10,000,000 adena",
+        "project_eva_research_fee": "1,000,000 adena",
+        "essence_confirmation_fee": "200,000,000 adena",
+        "project_eva_confirmation_fee": "20,000,000 adena"
+      },
+      "tiers": [
+        {
+          "level": 1,
+          "base_effect": "P./ M. Atk. +300",
+          "special_effect": "None"
+        },
+        {
+          "level": 2,
+          "base_effect": "P./ M. Atk. +700",
+          "special_effect": "Bonus effect when Queen Ant's Ring is equipped"
+        },
+        {
+          "level": 3,
+          "base_effect": "P./ M. Atk. +1200",
+          "special_effect": "Bonus effect when Orfen's Earring is equipped [PARTIAL DATA]"
+        },
+        {
+          "level": 4,
+          "base_effect": "P./ M. Atk. +2000",
+          "special_effect": "Bonus effect with Core/Baium epic jewels [PARTIAL DATA]"
+        }
+      ]
+    },
+    "relationships": [
+      "economy_adena_sink",
+      "boss_accessories",
+      "character_stats"
+    ],
+    "requirements": {
+      "min_character_level": 76,
+      "currency": "Adena"
+    },
+    "rewards": {
+      "flat_patk_matk_bonus": "Up to +2000 P./M. Atk",
+      "epic_accessory_synergy": true
+    },
+    "notes": "[SEASON 1 OUT OF SCOPE] for Aden Arena Lv 1-40 gameplay, serves as endgame Adena sink reference.",
+    "status": "verified"
+  },
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/articles/3014.html",
+    "name": "Hidden Power",
+    "category": "Character Stat Customization",
+    "description": "System where up to 4 hidden power bonuses can be unlocked and selected across 16 possible stats using Dye Potential.",
+    "facts": {
+      "total_slots": 16,
+      "active_bonuses_allowed": 4,
+      "max_power_level": 30,
+      "unlock_condition": "Expanded Potential of Dyes required for the 4th bonus slot",
+      "sample_bonuses": [
+        "P. Atk",
+        "M. Atk",
+        "P. Def",
+        "M. Def",
+        "Max HP",
+        "Max MP",
+        "Crit Rate",
+        "Crit Damage",
+        "Speed"
+      ]
+    },
+    "relationships": [
+      "dyes_system",
+      "character_progression",
+      "stats_engine"
+    ],
+    "requirements": {
+      "dye_potential": "Level-dependent",
+      "adena": "Replenishment fee scales by attempt"
+    },
+    "rewards": {
+      "stat_customization": "Player selects active bonus loadout"
+    },
+    "notes": "[SEASON 1 OUT OF SCOPE] for Lv 1-40, but informs the architecture of secondary passive allocation.",
+    "status": "verified"
+  },
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/articles/55.html",
+    "name": "Guardians System",
+    "category": "Combat Companions",
+    "description": "9 specialized combat creatures assisting the player with unique active and passive skills, equipment items, leveling, and evolution.",
+    "facts": {
+      "guardian_count": 9,
+      "guardians_list": [
+        "Kookaburra",
+        "Tiger",
+        "Wolf",
+        "Buffalo",
+        "Hawk",
+        "Dragon",
+        "Fox",
+        "Raven",
+        "Vulcan"
+      ],
+      "common_skills": [
+        "Steel Skin (Passive defense)",
+        "Physical Training (Passive stats)",
+        "Guardian's Gratitude - Common Craft (Increases craft charge)",
+        "Guardian's Gratitude - Magic Lamp (Increases magic lamp charge rate)"
+      ],
+      "evolution_stages": 3,
+      "weapon_affinity": "Each guardian has weapon type affinity granting bonus buffs when player equips matching weapon type, or debuff when non-matching"
+    },
+    "relationships": [
+      "common_craft",
+      "magic_lamp_exp",
+      "player_combat",
+      "guardian_items"
+    ],
+    "requirements": {
+      "summoning_item": "Specific Guardian summoning item or Atingo drop",
+      "character_level": 20
+    },
+    "rewards": {
+      "combat_assistance": true,
+      "craft_charge_bonus": true,
+      "passive_stat_auras": true
+    },
+    "notes": "Guardians bridge combat and passive crafting/lamp efficiency.",
+    "status": "verified"
+  },
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/articles/1710.html",
+    "name": "Equipment Set System",
+    "category": "Gear Synergy",
+    "description": "Synergy mechanic activating tiered set bonuses when equipping matching pieces of Armor sets (Helmets, Upper, Lower, Gloves, Boots).",
+    "facts": {
+      "activation_tiers": [
+        "Partial Set (3 pieces)",
+        "Full Set (5 pieces)"
+      ],
+      "bonus_types": [
+        "Max HP / MP increase",
+        "P. Def / M. Def percentage boost",
+        "Weapon skill resistance",
+        "Casting speed / Attack speed bonus"
+      ]
+    },
+    "relationships": [
+      "equipment_armor",
+      "unsealing_system",
+      "crafting_sets"
+    ],
+    "requirements": {
+      "matching_set_items": true
+    },
+    "rewards": {
+      "set_bonus_stats": true
+    },
+    "notes": "Core mechanic directly applicable to Aden Arena D-Grade and C-Grade armor sets (Brigandine, Reinforced Leather, Knowledge, Composite, Demon, etc.).",
+    "status": "verified"
+  },
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/articles/1479.html",
+    "name": "Equipment Sealing (Security)",
+    "category": "Account Security",
+    "description": "Anti-theft mechanism where items are stamped with a Security Seal to prevent transfer or trade if unauthorized access occurs.",
+    "facts": {
+      "fee_adena": "1,200 adena per scroll",
+      "monthly_limit": "50 pcs per month reset every 30 days at 06:30 UTC+3",
+      "effect": "Item becomes non-tradable and non-droppable until unsealed"
+    },
+    "relationships": [
+      "account_security",
+      "world_trade"
+    ],
+    "requirements": {
+      "scroll_of_sealing": true
+    },
+    "rewards": {
+      "account_theft_protection": true
+    },
+    "notes": "Distinct from classic Blacksmith Unsealing of dropped B/A grade armors.",
+    "status": "verified"
+  },
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/articles/1033.html",
+    "name": "Armor Unsealing (Blacksmith)",
+    "category": "Gear Activation",
+    "description": "Classic mechanic where dropped or crafted B-grade and A-grade armor pieces drop as (Sealed) and must be unsealed at town Blacksmiths.",
+    "facts": {
+      "service_npc": "Blacksmith NPCs in town (excluding starter villages)",
+      "unsealing_cost": "Adena fee scaling by item rank and grade",
+      "resealing": "Blacksmiths can re-seal armor pieces if player wants to change set variant"
+    },
+    "relationships": [
+      "equipment_armor",
+      "blacksmith_npc",
+      "economy_adena_sink"
+    ],
+    "requirements": {
+      "sealed_armor_piece": true,
+      "adena_fee": true
+    },
+    "rewards": {
+      "unsealed_armor_with_full_set_stats": true
+    },
+    "notes": "[SEASON 1 OUT OF SCOPE] for Lv 1-40 (D/C grade are not sealed), but relevant when B-grade is introduced.",
+    "status": "verified"
+  },
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/articles/1138.html",
+    "name": "World Trade",
+    "category": "Player Marketplace",
+    "description": "Asynchronous marketplace permitting trade of items between players across servers.",
+    "facts": {
+      "max_lots_per_account": 10,
+      "min_price": "20 L-Coins",
+      "max_items_per_lot": 1,
+      "listing_registration_fee": "100% of sale price in Adena",
+      "sale_tax_fee": "5% of sale price in L-Coins",
+      "listing_duration": "14 days",
+      "retrieval_deadline": "120 days for unsold items and claimed earnings"
+    },
+    "relationships": [
+      "economy_l_coin",
+      "economy_adena_sink",
+      "player_trading"
+    ],
+    "requirements": {
+      "tradable_item": true,
+      "listing_fee_adena": true,
+      "min_account_security": true
+    },
+    "rewards": {
+      "l_coin_revenue": true
+    },
+    "notes": "Provides definitive economic benchmarks: 5% sales tax, 14-day duration, 10 slot cap.",
+    "status": "verified"
+  },
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/articles/1175.html",
+    "name": "Class Change",
+    "category": "Character Progression",
+    "description": "Special service enabling characters with 3rd class change completed to switch to another class archetype while preserving progress.",
+    "facts": {
+      "requirements": [
+        "3rd class change completed",
+        "No active Hero status"
+      ],
+      "item_cost": "Class Change Coupon (Sealed)",
+      "skill_retention": "Returned skill books are sealed and account-locked, only saved for skills learned under modern rules"
+    },
+    "relationships": [
+      "classes_tree",
+      "character_progression",
+      "special_coupons"
+    ],
+    "requirements": {
+      "third_class_transfer": true,
+      "class_change_coupon": true
+    },
+    "rewards": {
+      "class_reassignment": true
+    },
+    "notes": "[SEASON 1 OUT OF SCOPE] for Lv 1-40, provides structural insight into class lineage.",
+    "status": "verified"
+  },
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/mechanics/collections/",
+    "name": "Collections",
+    "category": "Systemic Progression",
+    "description": "Account-wide permanent stat repository where registering specific combinations of equipment, consumables, or cards permanently bestows cumulative stat bonuses.",
+    "facts": {
+      "permanence": "Items registered into the collection are permanently consumed",
+      "stat_categories": [
+        "P. Atk / M. Atk",
+        "P. Def / M. Def",
+        "Max HP / Max MP / Max CP",
+        "P. Skill / M. Skill Critical Damage",
+        "P. Skill / M. Skill Critical Rate",
+        "CON / MEN / STR / INT / DEX / WIT",
+        "Received Damage Reduction",
+        "Anomaly / Debuff Resistance",
+        "Acquired Magic Lamp XP"
+      ]
+    },
+    "relationships": [
+      "equipment_sink",
+      "character_stats",
+      "long_term_progression"
+    ],
+    "requirements": {
+      "required_items": "Specific items with designated enchant levels"
+    },
+    "rewards": {
+      "permanent_account_stats": true
+    },
+    "notes": "Major gear sink that keeps lower-grade items (No-Grade, D-Grade, C-Grade) valuable indefinitely in the economy.",
+    "status": "verified"
+  },
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/mechanics/exp/",
+    "name": "Experience & Level Progression",
+    "category": "Core Progression",
+    "description": "Standard mathematical curve governing character experience requirements from Level 1 up to Level 100+.",
+    "facts": {
+      "level_cap": 100,
+      "sample_exp_curve": [
+        {
+          "level": 1,
+          "exp_required_to_level": 0,
+          "total_exp": 0
+        },
+        {
+          "level": 2,
+          "exp_required_to_level": 1,
+          "total_exp": 1
+        },
+        {
+          "level": 10,
+          "exp_required_to_level": 1109,
+          "total_exp": 2652
+        },
+        {
+          "level": 20,
+          "exp_required_to_level": 24707,
+          "total_exp": 76092
+        },
+        {
+          "level": 40,
+          "exp_required_to_level": 818968,
+          "total_exp": 3881472
+        }
+      ],
+      "progression_milestones": [
+        {
+          "level": 20,
+          "milestone": "1st Class Transfer & D-Grade Gear unlocked"
+        },
+        {
+          "level": 40,
+          "milestone": "2nd Class Transfer & C-Grade Gear unlocked"
+        },
+        {
+          "level": 76,
+          "milestone": "3rd Class Transfer & A-Grade Gear unlocked"
+        }
+      ]
+    },
+    "relationships": [
+      "hunting_zones",
+      "daily_missions",
+      "monster_kills"
+    ],
+    "requirements": {
+      "exp_accumulation": true
+    },
+    "rewards": {
+      "level_up": true,
+      "base_stat_scaling": true,
+      "skill_unlocks": true
+    },
+    "notes": "Direct mathematical bedrock for Aden Arena Season 1 (Levels 1–40).",
+    "status": "verified"
+  },
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/mechanics/dailymission/",
+    "name": "Daily Missions & Magic Lamp",
+    "category": "Daily Activities",
+    "description": "Daily mission system rewarding active monster extermination and daily logins with EXP, Adena, and Magic Lamps.",
+    "facts": {
+      "reset_frequency": "Daily at 06:30 UTC+3",
+      "magic_lamp_mechanic": "Earns separate Magic Lamp EXP from mob kills; upon 100% fill, grants a Magic Lamp roll awarding Red, Blue, Green, or Purple EXP/SP jackpot"
+    },
+    "relationships": [
+      "exp_progression",
+      "hunting_zones",
+      "character_sp"
+    ],
+    "requirements": {
+      "min_level": 20,
+      "daily_kill_counts": true
+    },
+    "rewards": {
+      "direct_exp": true,
+      "magic_lamps": true,
+      "adena": true,
+      "consumables": true
+    },
+    "notes": "Core retention loop directly portable to Aden Arena idle loops.",
+    "status": "verified"
+  }
+]

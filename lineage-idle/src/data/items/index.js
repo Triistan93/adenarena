@@ -25,6 +25,7 @@ import { RAID_BOSSES } from '../raids.js';
 import { CANONICAL_RESOURCES } from '../../services/lifeActivities/ResourceDictionary.js';
 import { FISH_CATALOG } from '../fishing.js';
 import { PREY_CATALOG } from '../hunting.js';
+import { BROOCHES, BROOCH_JEWELS } from './broochJewels.js';
 
 // Normaliza recursos canônicos de Life Activities para o catálogo oficial ALL_ITEMS
 const CANONICAL_RESOURCE_ITEMS = {};
@@ -99,7 +100,9 @@ export const ALL_ITEMS = {
   ...BELT_ITEMS,
   ...CANONICAL_RESOURCE_ITEMS,
   ...FISH_ITEMS,
-  ...PREY_ITEMS
+  ...PREY_ITEMS,
+  ...BROOCHES,
+  ...BROOCH_JEWELS
 };
 
 if (typeof window !== 'undefined') {

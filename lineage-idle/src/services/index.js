@@ -25,6 +25,7 @@ export * from './SynthesisService.js';
 export * from './ElementalService.js';
 export * from './StarterJourneyService.js';
 export * from './LiveOpsService.js';
+export * from './CollectionService.js';
 
 export * from './AchievementService.js';
 

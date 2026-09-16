@@ -1,0 +1,208 @@
+[
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/mechanics/making/common/",
+    "name": "Core Crafting Materials (Tier 1 Primary)",
+    "category": "Raw Crafting Ingredients",
+    "description": "Fundamental monster drops and gathering components used to assemble intermediate materials and equipment.",
+    "facts": {
+      "raw_materials": [
+        {
+          "name": "Iron Ore",
+          "typical_drop_zones": "Dwarven Mines, Abandoned Camp, Execution Grounds",
+          "uses": "Steel, Weapon parts"
+        },
+        {
+          "name": "Coal",
+          "typical_drop_zones": "Elven Forest, Neutral Zone, Gludio territory",
+          "uses": "Cokes, Steel"
+        },
+        {
+          "name": "Charcoal",
+          "typical_drop_zones": "Talking Island, Dark Elven Forest",
+          "uses": "Cokes, Purified varnish"
+        },
+        {
+          "name": "Animal Skin",
+          "typical_drop_zones": "Beast hunting zones",
+          "uses": "Leather, Leather armor sets"
+        },
+        {
+          "name": "Animal Bone",
+          "typical_drop_zones": "Undead hunting zones, Execution Grounds",
+          "uses": "Coarse Bone Powder"
+        },
+        {
+          "name": "Stem",
+          "typical_drop_zones": "Plant-type monsters",
+          "uses": "Braided Hemp, Cord"
+        },
+        {
+          "name": "Suede",
+          "typical_drop_zones": "Humanoid and animal mobs",
+          "uses": "Reinforced Leather"
+        },
+        {
+          "name": "Thread",
+          "typical_drop_zones": "Insect and humanoid mobs",
+          "uses": "Compound Braid, Robes"
+        },
+        {
+          "name": "Varnish",
+          "typical_drop_zones": "Golems, miners",
+          "uses": "Purified Varnish"
+        }
+      ]
+    },
+    "relationships": [
+      "common_craft",
+      "intermediate_materials",
+      "monster_drops"
+    ],
+    "requirements": {
+      "monster_hunting": true
+    },
+    "rewards": {
+      "crafting_inputs": true
+    },
+    "notes": "Essential foundational materials required for Aden Arena Season 1 D-Grade and C-Grade itemization.",
+    "status": "verified"
+  },
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/mechanics/making/common/",
+    "name": "Refined & Intermediate Crafting Materials (Tier 2)",
+    "category": "Refined Ingredients",
+    "description": "Compounded crafting components processed from raw materials via recipes.",
+    "facts": {
+      "refined_materials": [
+        {
+          "name": "Steel",
+          "formula": "Iron Ore x5 + Coal x5",
+          "uses": "Heavy armor, blades"
+        },
+        {
+          "name": "Cokes",
+          "formula": "Coal x3 + Charcoal x3",
+          "uses": "Refined metals, blunt weapons"
+        },
+        {
+          "name": "Coarse Bone Powder",
+          "formula": "Animal Bone x10",
+          "uses": "Bone weapons, arrows"
+        },
+        {
+          "name": "Leather",
+          "formula": "Animal Skin x6",
+          "uses": "Light armor sets"
+        },
+        {
+          "name": "Cord",
+          "formula": "Steel x1 + Thread x2",
+          "uses": "Bowstrings, bows"
+        },
+        {
+          "name": "Silver Mold",
+          "formula": "Silver Ore x5 + Cokes x1",
+          "uses": "Ornate hilts, jewelry"
+        },
+        {
+          "name": "Mithril Alloy",
+          "formula": "Mithril Ore x1 + Steel x2 + Varnish x1",
+          "uses": "Top C-grade / B-grade gear"
+        },
+        {
+          "name": "Synthetic Braid",
+          "formula": "Thread x5 + Cord x1",
+          "uses": "Reinforced textiles"
+        }
+      ]
+    },
+    "relationships": [
+      "raw_materials",
+      "dwarf_recipes",
+      "equipment_crafting"
+    ],
+    "requirements": {
+      "recipe_known": true,
+      "raw_materials_in_inventory": true
+    },
+    "rewards": {
+      "intermediate_crafting_stock": true
+    },
+    "notes": "Standard mathematical crafting pipeline.",
+    "status": "verified"
+  },
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/items/etcitem/ensoul_stone/",
+    "name": "Gemstones (D-grade, C-grade, B-grade, A-grade)",
+    "category": "Catalyst Gemstones",
+    "description": "Standardized gemstones serving as the universal catalyst currency for equipment insertion, unsealing, and craft upgrades.",
+    "facts": {
+      "tiers": [
+        {
+          "name": "D-grade Gemstone",
+          "vendor_source": "Town Grocery Store",
+          "base_price_adena": 1000,
+          "uses": "D-grade special options"
+        },
+        {
+          "name": "C-grade Gemstone",
+          "vendor_source": "Town Grocery Store",
+          "base_price_adena": 3000,
+          "uses": "C-grade socketing & craft"
+        },
+        {
+          "name": "B-grade Gemstone",
+          "vendor_source": "Luxury Shop / Grocery",
+          "base_price_adena": 10000,
+          "uses": "Soul Crystal Lv 1-20 insertion & extraction"
+        },
+        {
+          "name": "A-grade Gemstone",
+          "vendor_source": "High tier drop / Special Craft",
+          "uses": "Transcendent Soul Crystal socketing"
+        }
+      ]
+    },
+    "relationships": [
+      "soul_crystals",
+      "grocery_shop",
+      "adena_sink",
+      "equipment_upgrade"
+    ],
+    "requirements": {
+      "adena_purchase_or_drop": true
+    },
+    "rewards": {
+      "enhancement_catalyst": true
+    },
+    "notes": "B-grade Gemstones are explicitly documented as the fee currency in L2Wiki Soul Crystal tables.",
+    "status": "verified"
+  },
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/articles/1725.html",
+    "name": "Purified Sphere of Immortality & Boss Fragments",
+    "category": "High Tier Special Catalyst",
+    "description": "Mythic crafting ingredients required in Special Craft to forge boss weapons and weapons of immortality.",
+    "facts": {
+      "acquisition": "Glakias raid, Antharas raid, Special Craft compound",
+      "uses": "Forging Weapons of Immortality, Frost Lord weapon exchange coupons"
+    },
+    "relationships": [
+      "special_craft",
+      "boss_weapons",
+      "weapons_of_immortality"
+    ],
+    "requirements": {
+      "boss_raids": true
+    },
+    "rewards": {
+      "epic_weapon_craft": true
+    },
+    "notes": "[SEASON 1 OUT OF SCOPE] for Lv 1-40.",
+    "status": "verified"
+  }
+]

@@ -5,6 +5,48 @@
  */
 
 export const LIFE_STONES = {
+  life_stone_28: {
+    id: 'life_stone_28',
+    name: 'Life Stone - Level 28 (D-Grade)',
+    grade: 'normal',
+    level: 28,
+    icon: 'gradespecial/scrolls/scroll_enchant_weapon_d.png',
+    priceAdena: 25000,
+    glowChance: 0.15,
+    skillChance: 0.10,
+    statMultiplier: 0.6,
+    gemstonesNeeded: 5,
+    gemstoneGrade: 'D',
+    desc: 'Pedra da Vida de Nível 28 para armas D-Grade. Concede atributos de combate básicos.'
+  },
+  life_stone_34: {
+    id: 'life_stone_34',
+    name: 'Mid Life Stone - Level 34 (D-Grade TOP)',
+    grade: 'mid',
+    level: 34,
+    icon: 'gradespecial/scrolls/scroll_enchant_weapon_d.png',
+    priceAdena: 50000,
+    glowChance: 0.30,
+    skillChance: 0.20,
+    statMultiplier: 0.8,
+    gemstonesNeeded: 8,
+    gemstoneGrade: 'D',
+    desc: 'Pedra da Vida intermediária para armas D-Grade. Boa chance de rolagem de atributos raros.'
+  },
+  life_stone_40: {
+    id: 'life_stone_40',
+    name: 'Top Life Stone - Level 40 (C-Grade)',
+    grade: 'high',
+    level: 40,
+    icon: 'gradespecial/scrolls/scroll_enchant_weapon_c.png',
+    priceAdena: 120000,
+    glowChance: 0.50,
+    skillChance: 0.35,
+    statMultiplier: 1.0,
+    gemstonesNeeded: 10,
+    gemstoneGrade: 'C',
+    desc: 'Pedra da Vida superior de Nível 40 para armas C-Grade. Alta probabilidade de Glow e Habilidades de Item.'
+  },
   life_stone_mid_76: {
     id: 'life_stone_mid_76',
     name: 'Mid-Grade Life Stone - Level 76 💠',

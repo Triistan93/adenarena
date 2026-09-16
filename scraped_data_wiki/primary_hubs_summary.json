@@ -1,0 +1,3944 @@
+{
+  "mechanics": {
+    "url": "https://l2wiki.com/essence/articles/1033/",
+    "title": "Knowledge base Lineage II",
+    "headings": [
+      {
+        "level": "4",
+        "text": "Hidden Power"
+      },
+      {
+        "level": "4",
+        "text": "Guardians"
+      },
+      {
+        "level": "4",
+        "text": "Aden Laboratory"
+      },
+      {
+        "level": "4",
+        "text": "Eva&#39;s Shop"
+      },
+      {
+        "level": "4",
+        "text": "Name Background"
+      },
+      {
+        "level": "4",
+        "text": "Title"
+      },
+      {
+        "level": "4",
+        "text": "Skill Enchanting"
+      },
+      {
+        "level": "4",
+        "text": "Equipment set system"
+      },
+      {
+        "level": "4",
+        "text": "Equipment sealing"
+      },
+      {
+        "level": "4",
+        "text": "Share Location"
+      },
+      {
+        "level": "4",
+        "text": "World Trade"
+      },
+      {
+        "level": "4",
+        "text": "Class Change"
+      }
+    ],
+    "linksCount": 328,
+    "links": [
+      {
+        "href": "https://l2wiki.com/essence/",
+        "text": "Lineage II Essence"
+      },
+      {
+        "href": "https://l2wiki.com/essence/updates/",
+        "text": "Patchnotes"
+      },
+      {
+        "href": "https://l2wiki.com//beta.l2wiki.com/essence/",
+        "text": "Beta"
+      },
+      {
+        "href": "https://l2wiki.com/essence/",
+        "text": ""
+      },
+      {
+        "href": "https://l2wiki.com/essence/",
+        "text": "Main page"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/",
+        "text": "Items"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/",
+        "text": "Weapons"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/aden_wepon/",
+        "text": "Aden's Weapons"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/boss/",
+        "text": "Boss Weapon"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/weapon_of_immortality/",
+        "text": "Weapons"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/frost_lord/",
+        "text": "Frost Lord Weapon"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/ancientsword/",
+        "text": "Ancient Swords"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/bow/",
+        "text": "Bows"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/dagger/",
+        "text": "Daggers"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/dual/",
+        "text": "Dual swords"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/fishingrod/",
+        "text": "Fishing Rods"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/dualfist/",
+        "text": "Fist weapon"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/buster/",
+        "text": "Magic Swords"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/blunt/",
+        "text": "One-handed Blunts"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/staff/",
+        "text": "One-handed Staffs"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/sword/",
+        "text": "One-handed Swords"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/pole/",
+        "text": "Polearms"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/rapier/",
+        "text": "Rapiers"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/shooter/",
+        "text": "Shooter"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/twohandblunt/",
+        "text": "Two-handed Blunts"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/twohandstaff/",
+        "text": "Two-handed Staffs"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/twohandsword/",
+        "text": "Two-handed Swords"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/armor/",
+        "text": "Armor"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/armor/special_armor/",
+        "text": "Special Armor"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/armor/armor_sets/",
+        "text": "Armor Sets"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/armor/magic/",
+        "text": "Robe Armor"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/armor/light/",
+        "text": "Light Armor"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/armor/heavy/",
+        "text": "Heavy Armor"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/armor/head/",
+        "text": "Helmets"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/armor/gloves/",
+        "text": "Gloves"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/armor/feet/",
+        "text": "Boots"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/armor/shield/",
+        "text": "Shields"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/armor/sigil/",
+        "text": "Sigils"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/armor/cloaks/",
+        "text": "Cloaks"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/armor/belts/",
+        "text": "Belts"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/armor/underwear/",
+        "text": "Pendants"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/accessary/",
+        "text": "Accessories"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/accessary/bracelet/",
+        "text": "Bracelets"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/accessary/bracelet/agathions/",
+        "text": "Agathions"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/accessary/bracelet/talisman/",
+        "text": "Talismans"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/accessary/brooch/",
+        "text": "Brooches"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/accessary/brooch/gemstone/",
+        "text": "Gemstones"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/accessary/earring/",
+        "text": "Earrings"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/accessary/hair/",
+        "text": "Head Accessories"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/accessary/necklace/",
+        "text": "Necklaces"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/accessary/pendants/",
+        "text": "Pendants"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/accessary/ring/",
+        "text": "Rings"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/accessary/rare_accessories/",
+        "text": "Rare Accessories"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/etcitem/",
+        "text": "Other items"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/etcitem/books/",
+        "text": "Books"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/etcitem/dolls/",
+        "text": "Dolls"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/etcitem/dye/",
+        "text": "Dyes"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/etcitem/dye/patterns/",
+        "text": "Pattern"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/etcitem/pet_collar/",
+        "text": "Guardian"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/etcitem/life_stone/",
+        "text": "Life Stone"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/etcitem/rune/",
+        "text": "Runes"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/etcitem/ensoul_stone/",
+        "text": "Soul Crystals"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/",
+        "text": "Skills"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/human/",
+        "text": "Human"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/fighter/",
+        "text": "Fighter"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/warrior/",
+        "text": "Warrior"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/warlord/",
+        "text": "Warlord"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/dreadnought/",
+        "text": "Dreadnought"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/gladiator/",
+        "text": "Gladiator"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/duelist/",
+        "text": "Duelist"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/knight/",
+        "text": "Knight"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/paladin/",
+        "text": "Paladin"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/phoenix_knight/",
+        "text": "Phoenix Knight"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/dark_avenger/",
+        "text": "Dark Avenger"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/hell_knight/",
+        "text": "Hell Knight"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/rogue/",
+        "text": "Rogue"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/hawkeye/",
+        "text": "Hawkeye"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/sagittarius/",
+        "text": "Sagittarius"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/treasure_hunter/",
+        "text": "Treasure Hunter"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/adventurer/",
+        "text": "Adventurer"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/mage/",
+        "text": "Mystic"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/wizard/",
+        "text": "Wizard"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/sorcerer/",
+        "text": "Sorcerer"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/archmage/",
+        "text": "Archmage"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/necromancer/",
+        "text": "Necromancer"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/soultaker/",
+        "text": "Soultaker"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/warlock/",
+        "text": "Warlock"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/arcana_lord/",
+        "text": "Arcana Lord"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/cleric/",
+        "text": "Cleric"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/bishop/",
+        "text": "Bishop"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/cardinal/",
+        "text": "Cardinal"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/prophet/",
+        "text": "Prophet"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/hierophant/",
+        "text": "Hierophant"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/human_deathknight_0/",
+        "text": "Death Pilgrim"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/human_deathknight_1/",
+        "text": "Death Blade"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/human_deathknight_2/",
+        "text": "Death Messenger"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/human_deathknight_3/",
+        "text": "Death Knight"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/secret_assassin_male_0/",
+        "text": "Assassin"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/secret_assassin_male_1/",
+        "text": "Assassin"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/secret_assassin_male_2/",
+        "text": "Assassin"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/secret_assassin_male_3/",
+        "text": "Assassin"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/werewolf_0/",
+        "text": "Warg"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/werewolf_1/",
+        "text": "Warg"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/werewolf_2/",
+        "text": "Warg"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/werewolf_3/",
+        "text": "Warg"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/elf/",
+        "text": "Elf"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/elven_fighter/",
+        "text": "Elven Fighter"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/elven_knight/",
+        "text": "Elven Knight"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/temple_knight/",
+        "text": "Temple Knight"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/evas_templar/",
+        "text": "Eva's Templar"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/swordsinger/",
+        "text": "Swordsinger"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/sword_muse/",
+        "text": "Sword Muse"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/elven_scout/",
+        "text": "Elven Scout"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/plain_walker/",
+        "text": "Plains Walker"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/wind_rider/",
+        "text": "Wind Rider"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/silver_ranger/",
+        "text": "Silver Ranger"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/moonlight_sentinel/",
+        "text": "Moonlight Sentinel"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/elven_mage/",
+        "text": "Elven Mystic"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/elven_wizard/",
+        "text": "Elven Wizard"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/spellsinger/",
+        "text": "Spellsinger"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/mystic_muse/",
+        "text": "Mystic Muse"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/elemental_summoner/",
+        "text": "Elemental Summoner"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/elemental_master/",
+        "text": "Elemental Master"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/oracle/",
+        "text": "Elven Oracle"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/elder/",
+        "text": "Elven Elder"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/evas_saint/",
+        "text": "Eva's Saint"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/elf_deathknight_0/",
+        "text": "Death Pilgrim"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/elf_deathknight_1/",
+        "text": "Death Blade"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/elf_deathknight_2/",
+        "text": "Death Messenger"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/elf_deathknight_3/",
+        "text": "Death Knight"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/darkelf/",
+        "text": "Dark Elf"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/dark_fighter/",
+        "text": "Dark Fighter"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/palus_knight/",
+        "text": "Dark Knight"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/shillien_knight/",
+        "text": "Shillien Knight"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/shillien_templar/",
+        "text": "Shillien Templar"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/bladedancer/",
+        "text": "Bladedancer"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/spectral_dancer/",
+        "text": "Spectral Dancer"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/assassin/",
+        "text": "Dark Slayer"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/abyss_walker/",
+        "text": "Abyss Walker"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/ghost_hunter/",
+        "text": "Ghost Hunter"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/phantom_ranger/",
+        "text": "Phantom Ranger"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/ghost_sentinel/",
+        "text": "Ghost Sentinel"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/dark_mage/",
+        "text": "Dark Mystic"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/dark_wizard/",
+        "text": "Dark Wizard"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/spellhowler/",
+        "text": "Spellhowler"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/storm_screamer/",
+        "text": "Storm Screamer"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/phantom_summoner/",
+        "text": "Phantom Summoner"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/spectral_master/",
+        "text": "Spectral Master"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/shillien_oracle/",
+        "text": "Shillien Oracle"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/shillien_elder/",
+        "text": "Shillien Elder"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/shillien_saint/",
+        "text": "Shillien Saint"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/delf_deathknight_0/",
+        "text": "Death Pilgrim"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/delf_deathknight_1/",
+        "text": "Death Blade"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/delf_deathknight_2/",
+        "text": "Death Messenger"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/delf_deathknight_3/",
+        "text": "Death Knight"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/secret_assassin_female_0/",
+        "text": "Assassin"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/secret_assassin_female_1/",
+        "text": "Assassin"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/secret_assassin_female_2/",
+        "text": "Assassin"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/secret_assassin_female_3/",
+        "text": "Assassin"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/rose_vain_0/",
+        "text": "Blood Rose"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/rose_vain_1/",
+        "text": "Blood Rose"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/rose_vain_2/",
+        "text": "Blood Rose"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/rose_vain_3/",
+        "text": "Blood Rose"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/orc/",
+        "text": "Orc"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/orc_fighter/",
+        "text": "Orc Fighter"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/orc_raider/",
+        "text": "Orc Raider"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/destroyer/",
+        "text": "Destroyer"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/titan/",
+        "text": "Titan"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/orc_monk/",
+        "text": "Orc Monk"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/tyrant/",
+        "text": "Tyrant"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/grand_khavatari/",
+        "text": "Grand Khavatari"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/orc_mage/",
+        "text": "Orc Mystic"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/orc_shaman/",
+        "text": "Orc Shaman"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/overlord/",
+        "text": "Overlord"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/dominator/",
+        "text": "Dominator"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/warcryer/",
+        "text": "Warcryer"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/doomcryer/",
+        "text": "Doomcryer"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/orc_rider_0/",
+        "text": "Orc Lancer"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/orc_rider_1/",
+        "text": "Rider"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/orc_rider_2/",
+        "text": "Dragoon"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/orc_rider_3/",
+        "text": "Vanguard Rider"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/dwarf/",
+        "text": "Dwarf"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/dwarven_fighter/",
+        "text": "Dwarven Fighter"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/scavenger/",
+        "text": "Scavenger"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/bounty_hunter/",
+        "text": "Bounty Hunter"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/fortune_seeker/",
+        "text": "Fortune Seeker"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/artisan/",
+        "text": "Artisan"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/warsmith/",
+        "text": "Warsmith"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/maestro/",
+        "text": "Maestro"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/kamael/",
+        "text": "Kamael"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/jin_kamael_soldier/",
+        "text": "Kamael Soldier"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/trooper/",
+        "text": "Trooper"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/berserker/",
+        "text": "Berserker"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/doombringer/",
+        "text": "Doombringer"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/soul_finder/",
+        "text": "Soul Finder"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/soul_breaker/",
+        "text": "Soul Breaker"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/soul_hound/",
+        "text": "Soul Hound"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/warder/",
+        "text": "Warder"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/arbalester/",
+        "text": "Soul Ranger"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/trickster/",
+        "text": "Trickster"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/crow_0/",
+        "text": "Ashigaru"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/crow_1/",
+        "text": "Hatamoto"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/crow_2/",
+        "text": "Ronin"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/crow_3/",
+        "text": "Samurai"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/sylph/",
+        "text": "Sylph"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/sylphid/",
+        "text": "Sylph Gunner"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/sylph_gunner/",
+        "text": "Sharpshooter"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/wind_hunter/",
+        "text": "Wind Sniper"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/storm_blaster/",
+        "text": "Storm Blaster"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/highelf/",
+        "text": "High Elves"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/sacred_templar_0/",
+        "text": "Divine Templar"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/sacred_templar_1/",
+        "text": "Divine Templar"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/sacred_templar_2/",
+        "text": "Divine Templar"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/sacred_templar_3/",
+        "text": "Divine Templar"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/spirit_0/",
+        "text": "Element Weaver"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/spirit_1/",
+        "text": "Element Weaver"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/spirit_2/",
+        "text": "Element Weaver"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/spirit_3/",
+        "text": "Element Weaver"
+      },
+      {
+        "href": "https://l2wiki.com/essence/npcs/",
+        "text": "Monsters &amp; NPCs"
+      },
+      {
+        "href": "https://l2wiki.com/essence/npcs/monsters/",
+        "text": "Monsters"
+      },
+      {
+        "href": "https://l2wiki.com/essence/npcs/bosses/",
+        "text": "Bosses"
+      },
+      {
+        "href": "https://l2central.info/essence/npcs/29170.html",
+        "text": "Chaotic Core"
+      },
+      {
+        "href": "https://l2central.info/essence/npcs/29171.html",
+        "text": "Chaotic Orfen"
+      },
+      {
+        "href": "https://l2central.info/essence/npcs/29172.html",
+        "text": "Chaotic Queen Ant"
+      },
+      {
+        "href": "https://l2central.info/essence/npcs/29173.html",
+        "text": "Chaotic Zaken"
+      },
+      {
+        "href": "https://l2central.info/essence/npcs/29020.html",
+        "text": "Baium"
+      },
+      {
+        "href": "https://l2central.info/essence/npcs/29006.html",
+        "text": "Core"
+      },
+      {
+        "href": "https://l2central.info/essence/npcs/29014.html",
+        "text": "Orfen"
+      },
+      {
+        "href": "https://l2central.info/essence/npcs/29001.html",
+        "text": "Queen Ant"
+      },
+      {
+        "href": "https://l2central.info/essence/npcs/29022.html",
+        "text": "Zaken"
+      },
+      {
+        "href": "https://l2wiki.com/essence/npcs/bosses/world/antharas/",
+        "text": "Antharas"
+      },
+      {
+        "href": "https://l2central.info/essence/npcs/32478.html",
+        "text": "Game Assistant"
+      },
+      {
+        "href": "https://l2central.info/essence/npcs/34053.html",
+        "text": "Svein"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1037/",
+        "text": "Hunting Zones"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/special_zones/",
+        "text": "Special Zones"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/special_zones/transcendent_instance_zones/",
+        "text": "Transcendent Instance Zones"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/special_zones/alligator_island/",
+        "text": "Alligator Island"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/special_zones/ancient_ruins/",
+        "text": "Ancient Ruins"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/special_zones/aztacans_temple/",
+        "text": "Aztacan's Temple"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/special_zones/celestial_tower/",
+        "text": "Celestial Tower"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/special_zones/forgotten_primeval_garden/",
+        "text": "Forgotten Garden"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/special_zones/kelbims_fortress/",
+        "text": "Kelbim's Fortress"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/special_zones/pagan_temple/",
+        "text": "Pagan Temple"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/special_zones/primeval_isle/",
+        "text": "Primeval Isle"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/special_zones/tower_of_insolence/",
+        "text": "Tower of Insolence"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/special_zones/training/",
+        "text": "Training Zone"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/instance_zones/",
+        "text": "Instance Zones"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/instance_zones/party/dream_dungeon/",
+        "text": "Dream Dungeon"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/instance_zones/party/dwelling_of_spirits/",
+        "text": "Dwelling of Spirits"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/instance_zones/party/frintezza/",
+        "text": "Frintezza"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/instance_zones/party/valakas_temple/",
+        "text": "Valakas' Temple"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/instance_zones/clan/arena/",
+        "text": "Clan Arena"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/activity/antharas_worldraid/",
+        "text": "Antharas World Raid"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/activity/keber/",
+        "text": "Battle with Keber"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/activity/legion_of_darkness/",
+        "text": "Battle with the Legion of Darkness"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/activity/balok/",
+        "text": "Boss Extermination"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/activity/hellbound/",
+        "text": "Hellbound"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/activity/olympiad/",
+        "text": "Olympiad"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/activity/orc_fortress/",
+        "text": "Orc Fortress"
+      },
+      {
+        "href": "https://l2wiki.com/essence/mechanics/",
+        "text": "Mechanics"
+      },
+      {
+        "href": "https://l2wiki.com/essence/mechanics/collections/",
+        "text": "Collections"
+      },
+      {
+        "href": "https://l2wiki.com/essence/mechanics/making/craft/",
+        "text": "Special Craft"
+      },
+      {
+        "href": "https://l2wiki.com/essence/mechanics/making/common/",
+        "text": "Common Craft"
+      },
+      {
+        "href": "https://l2wiki.com/essence/mechanics/exp/",
+        "text": "EXP Table"
+      },
+      {
+        "href": "https://l2wiki.com/essence/mechanics/dailymission/",
+        "text": "Missions"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/",
+        "text": "Articles"
+      },
+      {
+        "href": "https://l2wiki.com/essence/events_and_promos/",
+        "text": "Activities"
+      },
+      {
+        "href": "https://l2wiki.com/essence/events_and_promos/1376/",
+        "text": "Contests"
+      },
+      {
+        "href": "https://l2wiki.com/essence/events_and_promos/331/",
+        "text": "Events"
+      },
+      {
+        "href": "https://l2wiki.com/essence/events_and_promos/332/",
+        "text": "Offers"
+      },
+      {
+        "href": "https://l2wiki.com/essence/notices/",
+        "text": "Announcements"
+      },
+      {
+        "href": "https://l2wiki.com/essence/notices/1223/",
+        "text": "Activities"
+      },
+      {
+        "href": "https://l2wiki.com/essence/notices/1222/",
+        "text": "Maintenance"
+      },
+      {
+        "href": "https://l2wiki.com/essence/events_and_promos/1377/",
+        "text": "Codes"
+      },
+      {
+        "href": "https://l2wiki.com/essence/events_and_promos/1466/",
+        "text": "Gift Boxes"
+      },
+      {
+        "href": "https://l2wiki.com/essence/events_and_promos/1465/",
+        "text": "Twitch Drops"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/15/",
+        "text": "Updates from Korea"
+      },
+      {
+        "href": "https://l2wiki.com/essence/lshop/",
+        "text": "L-Coin Store"
+      },
+      {
+        "href": "https://l2wiki.com/essence/guides/ess/",
+        "text": "Essence"
+      },
+      {
+        "href": "https://l2wiki.com/essence/guides/942/",
+        "text": "For newbie"
+      },
+      {
+        "href": "https://l2wiki.com/essence/guides/943/",
+        "text": "Сlasses"
+      },
+      {
+        "href": "https://l2wiki.com/essence/guides/eva/",
+        "text": "Eva"
+      },
+      {
+        "href": "https://l2wiki.com/essence/guides/1425/",
+        "text": "For newbie"
+      },
+      {
+        "href": "https://l2wiki.com/essence/guides/1426/",
+        "text": "Сlasses"
+      },
+      {
+        "href": "https://l2wiki.com/essence/",
+        "text": "Lineage II Essence"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/",
+        "text": "Articles"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1033/",
+        "text": "Game Mechanics"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/3014.html",
+        "text": ""
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1033/",
+        "text": "Game Mechanics"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/3014.html",
+        "text": "Hidden PowerJanuary 31, 2025, at 12:54"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/55.html",
+        "text": ""
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1033/",
+        "text": "Game Mechanics"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/55.html",
+        "text": "GuardiansDecember 1, 2024, at 10:00"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/2697.html",
+        "text": "NEW STAGE"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1033/",
+        "text": "Game Mechanics"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/2697.html",
+        "text": "Aden LaboratoryAugust 14, 2024, at 10:00"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/2523.html",
+        "text": "Project Eva"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1033/",
+        "text": "Game Mechanics"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/2523.html",
+        "text": "Eva&#39;s ShopMay 6, 2024, at 10:00"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/2490.html",
+        "text": ""
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1033/",
+        "text": "Game Mechanics"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/2490.html",
+        "text": "Name BackgroundApril 24, 2024, at 10:00"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/2427.html",
+        "text": ""
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1033/",
+        "text": "Game Mechanics"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/2427.html",
+        "text": "TitleMarch 15, 2024, at 12:12"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1703.html",
+        "text": ""
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1033/",
+        "text": "Game Mechanics"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1703.html",
+        "text": "Skill EnchantingMarch 9, 2023, at 10:00"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1710.html",
+        "text": ""
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1033/",
+        "text": "Game Mechanics"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1710.html",
+        "text": "Equipment set systemMarch 9, 2023, at 10:00"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1479.html",
+        "text": ""
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1033/",
+        "text": "Game Mechanics"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1479.html",
+        "text": "Equipment sealingOctober 5, 2022, at 12:24"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1365.html",
+        "text": ""
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1033/",
+        "text": "Game Mechanics"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1365.html",
+        "text": "Share LocationAugust 12, 2022, at 18:00"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1138.html",
+        "text": ""
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1033/",
+        "text": "Game Mechanics"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1138.html",
+        "text": "World TradeMarch 1, 2022, at 10:00"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1175.html",
+        "text": ""
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1033/",
+        "text": "Game Mechanics"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1175.html",
+        "text": "Class ChangeMarch 1, 2022, at 10:00"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1569.html?lang=en",
+        "text": "Program for streamers & bloggers"
+      },
+      {
+        "href": "https://l2wiki.com/essence/guides/1308.html?lang=en",
+        "text": "Collaboration program for Sages"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1033/",
+        "text": "1"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1033/?page=2",
+        "text": "2"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1033/?page=2",
+        "text": "Next page"
+      }
+    ],
+    "snippet": "Knowledge base Lineage II Game version&nbsp; Game version&nbsp; Game version&nbsp; Lineage II Lineage II Essence Patchnotes Login Play Beta Main page Items Weapons Aden's Weapons Boss Weapon Weapons Frost Lord Weapon Ancient Swords Bows Daggers Dual swords Fishing Rods Fist weapon Magic Swords One-handed Blunts One-handed Staffs One-handed Swords Polearms Rapiers Shooter Two-handed Blunts Two-handed Staffs Two-handed Swords Armor Special Armor Armor Sets Robe Armor Light Armor Heavy Armor Helmet"
+  },
+  "items": {
+    "url": "https://l2wiki.com/essence/articles/1034/",
+    "title": "Knowledge base Lineage II",
+    "headings": [
+      {
+        "level": "4",
+        "text": "Soul Crystals"
+      },
+      {
+        "level": "4",
+        "text": "Growth Rune"
+      },
+      {
+        "level": "4",
+        "text": "Unsealing"
+      },
+      {
+        "level": "4",
+        "text": "Emerald Weapon appearance change"
+      },
+      {
+        "level": "4",
+        "text": "Spiritshots and Soulshots"
+      },
+      {
+        "level": "4",
+        "text": "Item Blessing"
+      },
+      {
+        "level": "4",
+        "text": "Dolls"
+      }
+    ],
+    "linksCount": 310,
+    "links": [
+      {
+        "href": "https://l2wiki.com/essence/",
+        "text": "Lineage II Essence"
+      },
+      {
+        "href": "https://l2wiki.com/essence/updates/",
+        "text": "Patchnotes"
+      },
+      {
+        "href": "https://l2wiki.com//beta.l2wiki.com/essence/",
+        "text": "Beta"
+      },
+      {
+        "href": "https://l2wiki.com/essence/",
+        "text": ""
+      },
+      {
+        "href": "https://l2wiki.com/essence/",
+        "text": "Main page"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/",
+        "text": "Items"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/",
+        "text": "Weapons"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/aden_wepon/",
+        "text": "Aden's Weapons"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/boss/",
+        "text": "Boss Weapon"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/weapon_of_immortality/",
+        "text": "Weapons"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/frost_lord/",
+        "text": "Frost Lord Weapon"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/ancientsword/",
+        "text": "Ancient Swords"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/bow/",
+        "text": "Bows"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/dagger/",
+        "text": "Daggers"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/dual/",
+        "text": "Dual swords"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/fishingrod/",
+        "text": "Fishing Rods"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/dualfist/",
+        "text": "Fist weapon"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/buster/",
+        "text": "Magic Swords"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/blunt/",
+        "text": "One-handed Blunts"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/staff/",
+        "text": "One-handed Staffs"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/sword/",
+        "text": "One-handed Swords"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/pole/",
+        "text": "Polearms"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/rapier/",
+        "text": "Rapiers"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/shooter/",
+        "text": "Shooter"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/twohandblunt/",
+        "text": "Two-handed Blunts"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/twohandstaff/",
+        "text": "Two-handed Staffs"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/twohandsword/",
+        "text": "Two-handed Swords"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/armor/",
+        "text": "Armor"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/armor/special_armor/",
+        "text": "Special Armor"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/armor/armor_sets/",
+        "text": "Armor Sets"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/armor/magic/",
+        "text": "Robe Armor"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/armor/light/",
+        "text": "Light Armor"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/armor/heavy/",
+        "text": "Heavy Armor"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/armor/head/",
+        "text": "Helmets"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/armor/gloves/",
+        "text": "Gloves"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/armor/feet/",
+        "text": "Boots"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/armor/shield/",
+        "text": "Shields"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/armor/sigil/",
+        "text": "Sigils"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/armor/cloaks/",
+        "text": "Cloaks"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/armor/belts/",
+        "text": "Belts"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/armor/underwear/",
+        "text": "Pendants"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/accessary/",
+        "text": "Accessories"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/accessary/bracelet/",
+        "text": "Bracelets"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/accessary/bracelet/agathions/",
+        "text": "Agathions"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/accessary/bracelet/talisman/",
+        "text": "Talismans"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/accessary/brooch/",
+        "text": "Brooches"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/accessary/brooch/gemstone/",
+        "text": "Gemstones"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/accessary/earring/",
+        "text": "Earrings"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/accessary/hair/",
+        "text": "Head Accessories"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/accessary/necklace/",
+        "text": "Necklaces"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/accessary/pendants/",
+        "text": "Pendants"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/accessary/ring/",
+        "text": "Rings"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/accessary/rare_accessories/",
+        "text": "Rare Accessories"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/etcitem/",
+        "text": "Other items"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/etcitem/books/",
+        "text": "Books"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/etcitem/dolls/",
+        "text": "Dolls"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/etcitem/dye/",
+        "text": "Dyes"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/etcitem/dye/patterns/",
+        "text": "Pattern"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/etcitem/pet_collar/",
+        "text": "Guardian"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/etcitem/life_stone/",
+        "text": "Life Stone"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/etcitem/rune/",
+        "text": "Runes"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/etcitem/ensoul_stone/",
+        "text": "Soul Crystals"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/",
+        "text": "Skills"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/human/",
+        "text": "Human"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/fighter/",
+        "text": "Fighter"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/warrior/",
+        "text": "Warrior"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/warlord/",
+        "text": "Warlord"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/dreadnought/",
+        "text": "Dreadnought"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/gladiator/",
+        "text": "Gladiator"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/duelist/",
+        "text": "Duelist"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/knight/",
+        "text": "Knight"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/paladin/",
+        "text": "Paladin"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/phoenix_knight/",
+        "text": "Phoenix Knight"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/dark_avenger/",
+        "text": "Dark Avenger"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/hell_knight/",
+        "text": "Hell Knight"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/rogue/",
+        "text": "Rogue"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/hawkeye/",
+        "text": "Hawkeye"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/sagittarius/",
+        "text": "Sagittarius"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/treasure_hunter/",
+        "text": "Treasure Hunter"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/adventurer/",
+        "text": "Adventurer"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/mage/",
+        "text": "Mystic"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/wizard/",
+        "text": "Wizard"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/sorcerer/",
+        "text": "Sorcerer"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/archmage/",
+        "text": "Archmage"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/necromancer/",
+        "text": "Necromancer"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/soultaker/",
+        "text": "Soultaker"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/warlock/",
+        "text": "Warlock"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/arcana_lord/",
+        "text": "Arcana Lord"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/cleric/",
+        "text": "Cleric"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/bishop/",
+        "text": "Bishop"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/cardinal/",
+        "text": "Cardinal"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/prophet/",
+        "text": "Prophet"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/hierophant/",
+        "text": "Hierophant"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/human_deathknight_0/",
+        "text": "Death Pilgrim"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/human_deathknight_1/",
+        "text": "Death Blade"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/human_deathknight_2/",
+        "text": "Death Messenger"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/human_deathknight_3/",
+        "text": "Death Knight"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/secret_assassin_male_0/",
+        "text": "Assassin"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/secret_assassin_male_1/",
+        "text": "Assassin"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/secret_assassin_male_2/",
+        "text": "Assassin"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/secret_assassin_male_3/",
+        "text": "Assassin"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/werewolf_0/",
+        "text": "Warg"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/werewolf_1/",
+        "text": "Warg"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/werewolf_2/",
+        "text": "Warg"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/werewolf_3/",
+        "text": "Warg"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/elf/",
+        "text": "Elf"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/elven_fighter/",
+        "text": "Elven Fighter"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/elven_knight/",
+        "text": "Elven Knight"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/temple_knight/",
+        "text": "Temple Knight"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/evas_templar/",
+        "text": "Eva's Templar"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/swordsinger/",
+        "text": "Swordsinger"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/sword_muse/",
+        "text": "Sword Muse"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/elven_scout/",
+        "text": "Elven Scout"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/plain_walker/",
+        "text": "Plains Walker"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/wind_rider/",
+        "text": "Wind Rider"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/silver_ranger/",
+        "text": "Silver Ranger"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/moonlight_sentinel/",
+        "text": "Moonlight Sentinel"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/elven_mage/",
+        "text": "Elven Mystic"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/elven_wizard/",
+        "text": "Elven Wizard"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/spellsinger/",
+        "text": "Spellsinger"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/mystic_muse/",
+        "text": "Mystic Muse"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/elemental_summoner/",
+        "text": "Elemental Summoner"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/elemental_master/",
+        "text": "Elemental Master"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/oracle/",
+        "text": "Elven Oracle"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/elder/",
+        "text": "Elven Elder"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/evas_saint/",
+        "text": "Eva's Saint"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/elf_deathknight_0/",
+        "text": "Death Pilgrim"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/elf_deathknight_1/",
+        "text": "Death Blade"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/elf_deathknight_2/",
+        "text": "Death Messenger"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/elf_deathknight_3/",
+        "text": "Death Knight"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/darkelf/",
+        "text": "Dark Elf"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/dark_fighter/",
+        "text": "Dark Fighter"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/palus_knight/",
+        "text": "Dark Knight"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/shillien_knight/",
+        "text": "Shillien Knight"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/shillien_templar/",
+        "text": "Shillien Templar"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/bladedancer/",
+        "text": "Bladedancer"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/spectral_dancer/",
+        "text": "Spectral Dancer"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/assassin/",
+        "text": "Dark Slayer"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/abyss_walker/",
+        "text": "Abyss Walker"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/ghost_hunter/",
+        "text": "Ghost Hunter"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/phantom_ranger/",
+        "text": "Phantom Ranger"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/ghost_sentinel/",
+        "text": "Ghost Sentinel"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/dark_mage/",
+        "text": "Dark Mystic"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/dark_wizard/",
+        "text": "Dark Wizard"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/spellhowler/",
+        "text": "Spellhowler"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/storm_screamer/",
+        "text": "Storm Screamer"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/phantom_summoner/",
+        "text": "Phantom Summoner"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/spectral_master/",
+        "text": "Spectral Master"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/shillien_oracle/",
+        "text": "Shillien Oracle"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/shillien_elder/",
+        "text": "Shillien Elder"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/shillien_saint/",
+        "text": "Shillien Saint"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/delf_deathknight_0/",
+        "text": "Death Pilgrim"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/delf_deathknight_1/",
+        "text": "Death Blade"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/delf_deathknight_2/",
+        "text": "Death Messenger"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/delf_deathknight_3/",
+        "text": "Death Knight"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/secret_assassin_female_0/",
+        "text": "Assassin"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/secret_assassin_female_1/",
+        "text": "Assassin"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/secret_assassin_female_2/",
+        "text": "Assassin"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/secret_assassin_female_3/",
+        "text": "Assassin"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/rose_vain_0/",
+        "text": "Blood Rose"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/rose_vain_1/",
+        "text": "Blood Rose"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/rose_vain_2/",
+        "text": "Blood Rose"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/rose_vain_3/",
+        "text": "Blood Rose"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/orc/",
+        "text": "Orc"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/orc_fighter/",
+        "text": "Orc Fighter"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/orc_raider/",
+        "text": "Orc Raider"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/destroyer/",
+        "text": "Destroyer"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/titan/",
+        "text": "Titan"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/orc_monk/",
+        "text": "Orc Monk"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/tyrant/",
+        "text": "Tyrant"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/grand_khavatari/",
+        "text": "Grand Khavatari"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/orc_mage/",
+        "text": "Orc Mystic"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/orc_shaman/",
+        "text": "Orc Shaman"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/overlord/",
+        "text": "Overlord"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/dominator/",
+        "text": "Dominator"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/warcryer/",
+        "text": "Warcryer"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/doomcryer/",
+        "text": "Doomcryer"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/orc_rider_0/",
+        "text": "Orc Lancer"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/orc_rider_1/",
+        "text": "Rider"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/orc_rider_2/",
+        "text": "Dragoon"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/orc_rider_3/",
+        "text": "Vanguard Rider"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/dwarf/",
+        "text": "Dwarf"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/dwarven_fighter/",
+        "text": "Dwarven Fighter"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/scavenger/",
+        "text": "Scavenger"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/bounty_hunter/",
+        "text": "Bounty Hunter"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/fortune_seeker/",
+        "text": "Fortune Seeker"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/artisan/",
+        "text": "Artisan"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/warsmith/",
+        "text": "Warsmith"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/maestro/",
+        "text": "Maestro"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/kamael/",
+        "text": "Kamael"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/jin_kamael_soldier/",
+        "text": "Kamael Soldier"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/trooper/",
+        "text": "Trooper"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/berserker/",
+        "text": "Berserker"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/doombringer/",
+        "text": "Doombringer"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/soul_finder/",
+        "text": "Soul Finder"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/soul_breaker/",
+        "text": "Soul Breaker"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/soul_hound/",
+        "text": "Soul Hound"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/warder/",
+        "text": "Warder"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/arbalester/",
+        "text": "Soul Ranger"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/trickster/",
+        "text": "Trickster"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/crow_0/",
+        "text": "Ashigaru"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/crow_1/",
+        "text": "Hatamoto"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/crow_2/",
+        "text": "Ronin"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/crow_3/",
+        "text": "Samurai"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/sylph/",
+        "text": "Sylph"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/sylphid/",
+        "text": "Sylph Gunner"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/sylph_gunner/",
+        "text": "Sharpshooter"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/wind_hunter/",
+        "text": "Wind Sniper"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/storm_blaster/",
+        "text": "Storm Blaster"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/highelf/",
+        "text": "High Elves"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/sacred_templar_0/",
+        "text": "Divine Templar"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/sacred_templar_1/",
+        "text": "Divine Templar"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/sacred_templar_2/",
+        "text": "Divine Templar"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/sacred_templar_3/",
+        "text": "Divine Templar"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/spirit_0/",
+        "text": "Element Weaver"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/spirit_1/",
+        "text": "Element Weaver"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/spirit_2/",
+        "text": "Element Weaver"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/spirit_3/",
+        "text": "Element Weaver"
+      },
+      {
+        "href": "https://l2wiki.com/essence/npcs/",
+        "text": "Monsters &amp; NPCs"
+      },
+      {
+        "href": "https://l2wiki.com/essence/npcs/monsters/",
+        "text": "Monsters"
+      },
+      {
+        "href": "https://l2wiki.com/essence/npcs/bosses/",
+        "text": "Bosses"
+      },
+      {
+        "href": "https://l2central.info/essence/npcs/29170.html",
+        "text": "Chaotic Core"
+      },
+      {
+        "href": "https://l2central.info/essence/npcs/29171.html",
+        "text": "Chaotic Orfen"
+      },
+      {
+        "href": "https://l2central.info/essence/npcs/29172.html",
+        "text": "Chaotic Queen Ant"
+      },
+      {
+        "href": "https://l2central.info/essence/npcs/29173.html",
+        "text": "Chaotic Zaken"
+      },
+      {
+        "href": "https://l2central.info/essence/npcs/29020.html",
+        "text": "Baium"
+      },
+      {
+        "href": "https://l2central.info/essence/npcs/29006.html",
+        "text": "Core"
+      },
+      {
+        "href": "https://l2central.info/essence/npcs/29014.html",
+        "text": "Orfen"
+      },
+      {
+        "href": "https://l2central.info/essence/npcs/29001.html",
+        "text": "Queen Ant"
+      },
+      {
+        "href": "https://l2central.info/essence/npcs/29022.html",
+        "text": "Zaken"
+      },
+      {
+        "href": "https://l2wiki.com/essence/npcs/bosses/world/antharas/",
+        "text": "Antharas"
+      },
+      {
+        "href": "https://l2central.info/essence/npcs/32478.html",
+        "text": "Game Assistant"
+      },
+      {
+        "href": "https://l2central.info/essence/npcs/34053.html",
+        "text": "Svein"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1037/",
+        "text": "Hunting Zones"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/special_zones/",
+        "text": "Special Zones"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/special_zones/transcendent_instance_zones/",
+        "text": "Transcendent Instance Zones"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/special_zones/alligator_island/",
+        "text": "Alligator Island"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/special_zones/ancient_ruins/",
+        "text": "Ancient Ruins"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/special_zones/aztacans_temple/",
+        "text": "Aztacan's Temple"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/special_zones/celestial_tower/",
+        "text": "Celestial Tower"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/special_zones/forgotten_primeval_garden/",
+        "text": "Forgotten Garden"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/special_zones/kelbims_fortress/",
+        "text": "Kelbim's Fortress"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/special_zones/pagan_temple/",
+        "text": "Pagan Temple"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/special_zones/primeval_isle/",
+        "text": "Primeval Isle"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/special_zones/tower_of_insolence/",
+        "text": "Tower of Insolence"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/special_zones/training/",
+        "text": "Training Zone"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/instance_zones/",
+        "text": "Instance Zones"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/instance_zones/party/dream_dungeon/",
+        "text": "Dream Dungeon"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/instance_zones/party/dwelling_of_spirits/",
+        "text": "Dwelling of Spirits"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/instance_zones/party/frintezza/",
+        "text": "Frintezza"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/instance_zones/party/valakas_temple/",
+        "text": "Valakas' Temple"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/instance_zones/clan/arena/",
+        "text": "Clan Arena"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/activity/antharas_worldraid/",
+        "text": "Antharas World Raid"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/activity/keber/",
+        "text": "Battle with Keber"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/activity/legion_of_darkness/",
+        "text": "Battle with the Legion of Darkness"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/activity/balok/",
+        "text": "Boss Extermination"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/activity/hellbound/",
+        "text": "Hellbound"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/activity/olympiad/",
+        "text": "Olympiad"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/activity/orc_fortress/",
+        "text": "Orc Fortress"
+      },
+      {
+        "href": "https://l2wiki.com/essence/mechanics/",
+        "text": "Mechanics"
+      },
+      {
+        "href": "https://l2wiki.com/essence/mechanics/collections/",
+        "text": "Collections"
+      },
+      {
+        "href": "https://l2wiki.com/essence/mechanics/making/craft/",
+        "text": "Special Craft"
+      },
+      {
+        "href": "https://l2wiki.com/essence/mechanics/making/common/",
+        "text": "Common Craft"
+      },
+      {
+        "href": "https://l2wiki.com/essence/mechanics/exp/",
+        "text": "EXP Table"
+      },
+      {
+        "href": "https://l2wiki.com/essence/mechanics/dailymission/",
+        "text": "Missions"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/",
+        "text": "Articles"
+      },
+      {
+        "href": "https://l2wiki.com/essence/events_and_promos/",
+        "text": "Activities"
+      },
+      {
+        "href": "https://l2wiki.com/essence/events_and_promos/1376/",
+        "text": "Contests"
+      },
+      {
+        "href": "https://l2wiki.com/essence/events_and_promos/331/",
+        "text": "Events"
+      },
+      {
+        "href": "https://l2wiki.com/essence/events_and_promos/332/",
+        "text": "Offers"
+      },
+      {
+        "href": "https://l2wiki.com/essence/notices/",
+        "text": "Announcements"
+      },
+      {
+        "href": "https://l2wiki.com/essence/notices/1223/",
+        "text": "Activities"
+      },
+      {
+        "href": "https://l2wiki.com/essence/notices/1222/",
+        "text": "Maintenance"
+      },
+      {
+        "href": "https://l2wiki.com/essence/events_and_promos/1377/",
+        "text": "Codes"
+      },
+      {
+        "href": "https://l2wiki.com/essence/events_and_promos/1466/",
+        "text": "Gift Boxes"
+      },
+      {
+        "href": "https://l2wiki.com/essence/events_and_promos/1465/",
+        "text": "Twitch Drops"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/15/",
+        "text": "Updates from Korea"
+      },
+      {
+        "href": "https://l2wiki.com/essence/lshop/",
+        "text": "L-Coin Store"
+      },
+      {
+        "href": "https://l2wiki.com/essence/guides/ess/",
+        "text": "Essence"
+      },
+      {
+        "href": "https://l2wiki.com/essence/guides/942/",
+        "text": "For newbie"
+      },
+      {
+        "href": "https://l2wiki.com/essence/guides/943/",
+        "text": "Сlasses"
+      },
+      {
+        "href": "https://l2wiki.com/essence/guides/eva/",
+        "text": "Eva"
+      },
+      {
+        "href": "https://l2wiki.com/essence/guides/1425/",
+        "text": "For newbie"
+      },
+      {
+        "href": "https://l2wiki.com/essence/guides/1426/",
+        "text": "Сlasses"
+      },
+      {
+        "href": "https://l2wiki.com/essence/",
+        "text": "Lineage II Essence"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/",
+        "text": "Articles"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1034/",
+        "text": "Items"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/225.html",
+        "text": ""
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1034/",
+        "text": "Items"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/225.html",
+        "text": "Soul CrystalsOctober 25, 2023, at 10:00"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1317.html",
+        "text": ""
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1034/",
+        "text": "Items"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1317.html",
+        "text": "Growth RuneJuly 1, 2022, at 11:24"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1033.html",
+        "text": ""
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1034/",
+        "text": "Items"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1033.html",
+        "text": "UnsealingNovember 19, 2021, at 13:00"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/836.html",
+        "text": ""
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1034/",
+        "text": "Items"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/836.html",
+        "text": "Emerald Weapon appearance changeNovember 19, 2021, at 12:00"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/936.html",
+        "text": ""
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1034/",
+        "text": "Items"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/936.html",
+        "text": "Spiritshots and SoulshotsNovember 12, 2021, at 15:00"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/194.html",
+        "text": ""
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1034/",
+        "text": "Items"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/194.html",
+        "text": "Item BlessingSeptember 21, 2020, at 18:15"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/85.html",
+        "text": ""
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1034/",
+        "text": "Items"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/85.html",
+        "text": "DollsAugust 10, 2020, at 13:44"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1569.html?lang=en",
+        "text": "Program for streamers & bloggers"
+      },
+      {
+        "href": "https://l2wiki.com/essence/guides/1308.html?lang=en",
+        "text": "Collaboration program for Sages"
+      }
+    ],
+    "snippet": "Knowledge base Lineage II Game version&nbsp; Game version&nbsp; Game version&nbsp; Lineage II Lineage II Essence Patchnotes Login Play Beta Main page Items Weapons Aden's Weapons Boss Weapon Weapons Frost Lord Weapon Ancient Swords Bows Daggers Dual swords Fishing Rods Fist weapon Magic Swords One-handed Blunts One-handed Staffs One-handed Swords Polearms Rapiers Shooter Two-handed Blunts Two-handed Staffs Two-handed Swords Armor Special Armor Armor Sets Robe Armor Light Armor Heavy Armor Helmet"
+  },
+  "equipment": {
+    "url": "https://l2wiki.com/essence/articles/1035/",
+    "title": "Knowledge base Lineage II",
+    "headings": [
+      {
+        "level": "4",
+        "text": "Weapons of Immortality"
+      },
+      {
+        "level": "4",
+        "text": "Boss Weapons"
+      },
+      {
+        "level": "4",
+        "text": "Frost Lord&#39;s Weapon"
+      },
+      {
+        "level": "4",
+        "text": "Head Accessories"
+      },
+      {
+        "level": "4",
+        "text": "Talismans"
+      },
+      {
+        "level": "4",
+        "text": "Brooches and Jewels"
+      },
+      {
+        "level": "4",
+        "text": "Cloaks"
+      },
+      {
+        "level": "4",
+        "text": "Special Armor"
+      }
+    ],
+    "linksCount": 313,
+    "links": [
+      {
+        "href": "https://l2wiki.com/essence/",
+        "text": "Lineage II Essence"
+      },
+      {
+        "href": "https://l2wiki.com/essence/updates/",
+        "text": "Patchnotes"
+      },
+      {
+        "href": "https://l2wiki.com//beta.l2wiki.com/essence/",
+        "text": "Beta"
+      },
+      {
+        "href": "https://l2wiki.com/essence/",
+        "text": ""
+      },
+      {
+        "href": "https://l2wiki.com/essence/",
+        "text": "Main page"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/",
+        "text": "Items"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/",
+        "text": "Weapons"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/aden_wepon/",
+        "text": "Aden's Weapons"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/boss/",
+        "text": "Boss Weapon"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/weapon_of_immortality/",
+        "text": "Weapons"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/frost_lord/",
+        "text": "Frost Lord Weapon"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/ancientsword/",
+        "text": "Ancient Swords"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/bow/",
+        "text": "Bows"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/dagger/",
+        "text": "Daggers"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/dual/",
+        "text": "Dual swords"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/fishingrod/",
+        "text": "Fishing Rods"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/dualfist/",
+        "text": "Fist weapon"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/buster/",
+        "text": "Magic Swords"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/blunt/",
+        "text": "One-handed Blunts"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/staff/",
+        "text": "One-handed Staffs"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/sword/",
+        "text": "One-handed Swords"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/pole/",
+        "text": "Polearms"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/rapier/",
+        "text": "Rapiers"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/shooter/",
+        "text": "Shooter"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/twohandblunt/",
+        "text": "Two-handed Blunts"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/twohandstaff/",
+        "text": "Two-handed Staffs"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/weapon/twohandsword/",
+        "text": "Two-handed Swords"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/armor/",
+        "text": "Armor"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/armor/special_armor/",
+        "text": "Special Armor"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/armor/armor_sets/",
+        "text": "Armor Sets"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/armor/magic/",
+        "text": "Robe Armor"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/armor/light/",
+        "text": "Light Armor"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/armor/heavy/",
+        "text": "Heavy Armor"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/armor/head/",
+        "text": "Helmets"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/armor/gloves/",
+        "text": "Gloves"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/armor/feet/",
+        "text": "Boots"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/armor/shield/",
+        "text": "Shields"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/armor/sigil/",
+        "text": "Sigils"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/armor/cloaks/",
+        "text": "Cloaks"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/armor/belts/",
+        "text": "Belts"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/armor/underwear/",
+        "text": "Pendants"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/accessary/",
+        "text": "Accessories"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/accessary/bracelet/",
+        "text": "Bracelets"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/accessary/bracelet/agathions/",
+        "text": "Agathions"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/accessary/bracelet/talisman/",
+        "text": "Talismans"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/accessary/brooch/",
+        "text": "Brooches"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/accessary/brooch/gemstone/",
+        "text": "Gemstones"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/accessary/earring/",
+        "text": "Earrings"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/accessary/hair/",
+        "text": "Head Accessories"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/accessary/necklace/",
+        "text": "Necklaces"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/accessary/pendants/",
+        "text": "Pendants"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/accessary/ring/",
+        "text": "Rings"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/accessary/rare_accessories/",
+        "text": "Rare Accessories"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/etcitem/",
+        "text": "Other items"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/etcitem/books/",
+        "text": "Books"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/etcitem/dolls/",
+        "text": "Dolls"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/etcitem/dye/",
+        "text": "Dyes"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/etcitem/dye/patterns/",
+        "text": "Pattern"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/etcitem/pet_collar/",
+        "text": "Guardian"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/etcitem/life_stone/",
+        "text": "Life Stone"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/etcitem/rune/",
+        "text": "Runes"
+      },
+      {
+        "href": "https://l2wiki.com/essence/items/etcitem/ensoul_stone/",
+        "text": "Soul Crystals"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/",
+        "text": "Skills"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/human/",
+        "text": "Human"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/fighter/",
+        "text": "Fighter"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/warrior/",
+        "text": "Warrior"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/warlord/",
+        "text": "Warlord"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/dreadnought/",
+        "text": "Dreadnought"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/gladiator/",
+        "text": "Gladiator"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/duelist/",
+        "text": "Duelist"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/knight/",
+        "text": "Knight"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/paladin/",
+        "text": "Paladin"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/phoenix_knight/",
+        "text": "Phoenix Knight"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/dark_avenger/",
+        "text": "Dark Avenger"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/hell_knight/",
+        "text": "Hell Knight"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/rogue/",
+        "text": "Rogue"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/hawkeye/",
+        "text": "Hawkeye"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/sagittarius/",
+        "text": "Sagittarius"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/treasure_hunter/",
+        "text": "Treasure Hunter"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/adventurer/",
+        "text": "Adventurer"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/mage/",
+        "text": "Mystic"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/wizard/",
+        "text": "Wizard"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/sorcerer/",
+        "text": "Sorcerer"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/archmage/",
+        "text": "Archmage"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/necromancer/",
+        "text": "Necromancer"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/soultaker/",
+        "text": "Soultaker"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/warlock/",
+        "text": "Warlock"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/arcana_lord/",
+        "text": "Arcana Lord"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/cleric/",
+        "text": "Cleric"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/bishop/",
+        "text": "Bishop"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/cardinal/",
+        "text": "Cardinal"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/prophet/",
+        "text": "Prophet"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/hierophant/",
+        "text": "Hierophant"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/human_deathknight_0/",
+        "text": "Death Pilgrim"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/human_deathknight_1/",
+        "text": "Death Blade"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/human_deathknight_2/",
+        "text": "Death Messenger"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/human_deathknight_3/",
+        "text": "Death Knight"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/secret_assassin_male_0/",
+        "text": "Assassin"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/secret_assassin_male_1/",
+        "text": "Assassin"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/secret_assassin_male_2/",
+        "text": "Assassin"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/secret_assassin_male_3/",
+        "text": "Assassin"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/werewolf_0/",
+        "text": "Warg"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/werewolf_1/",
+        "text": "Warg"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/werewolf_2/",
+        "text": "Warg"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/werewolf_3/",
+        "text": "Warg"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/elf/",
+        "text": "Elf"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/elven_fighter/",
+        "text": "Elven Fighter"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/elven_knight/",
+        "text": "Elven Knight"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/temple_knight/",
+        "text": "Temple Knight"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/evas_templar/",
+        "text": "Eva's Templar"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/swordsinger/",
+        "text": "Swordsinger"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/sword_muse/",
+        "text": "Sword Muse"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/elven_scout/",
+        "text": "Elven Scout"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/plain_walker/",
+        "text": "Plains Walker"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/wind_rider/",
+        "text": "Wind Rider"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/silver_ranger/",
+        "text": "Silver Ranger"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/moonlight_sentinel/",
+        "text": "Moonlight Sentinel"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/elven_mage/",
+        "text": "Elven Mystic"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/elven_wizard/",
+        "text": "Elven Wizard"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/spellsinger/",
+        "text": "Spellsinger"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/mystic_muse/",
+        "text": "Mystic Muse"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/elemental_summoner/",
+        "text": "Elemental Summoner"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/elemental_master/",
+        "text": "Elemental Master"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/oracle/",
+        "text": "Elven Oracle"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/elder/",
+        "text": "Elven Elder"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/evas_saint/",
+        "text": "Eva's Saint"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/elf_deathknight_0/",
+        "text": "Death Pilgrim"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/elf_deathknight_1/",
+        "text": "Death Blade"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/elf_deathknight_2/",
+        "text": "Death Messenger"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/elf_deathknight_3/",
+        "text": "Death Knight"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/darkelf/",
+        "text": "Dark Elf"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/dark_fighter/",
+        "text": "Dark Fighter"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/palus_knight/",
+        "text": "Dark Knight"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/shillien_knight/",
+        "text": "Shillien Knight"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/shillien_templar/",
+        "text": "Shillien Templar"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/bladedancer/",
+        "text": "Bladedancer"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/spectral_dancer/",
+        "text": "Spectral Dancer"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/assassin/",
+        "text": "Dark Slayer"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/abyss_walker/",
+        "text": "Abyss Walker"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/ghost_hunter/",
+        "text": "Ghost Hunter"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/phantom_ranger/",
+        "text": "Phantom Ranger"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/ghost_sentinel/",
+        "text": "Ghost Sentinel"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/dark_mage/",
+        "text": "Dark Mystic"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/dark_wizard/",
+        "text": "Dark Wizard"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/spellhowler/",
+        "text": "Spellhowler"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/storm_screamer/",
+        "text": "Storm Screamer"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/phantom_summoner/",
+        "text": "Phantom Summoner"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/spectral_master/",
+        "text": "Spectral Master"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/shillien_oracle/",
+        "text": "Shillien Oracle"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/shillien_elder/",
+        "text": "Shillien Elder"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/shillien_saint/",
+        "text": "Shillien Saint"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/delf_deathknight_0/",
+        "text": "Death Pilgrim"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/delf_deathknight_1/",
+        "text": "Death Blade"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/delf_deathknight_2/",
+        "text": "Death Messenger"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/delf_deathknight_3/",
+        "text": "Death Knight"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/secret_assassin_female_0/",
+        "text": "Assassin"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/secret_assassin_female_1/",
+        "text": "Assassin"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/secret_assassin_female_2/",
+        "text": "Assassin"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/secret_assassin_female_3/",
+        "text": "Assassin"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/rose_vain_0/",
+        "text": "Blood Rose"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/rose_vain_1/",
+        "text": "Blood Rose"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/rose_vain_2/",
+        "text": "Blood Rose"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/rose_vain_3/",
+        "text": "Blood Rose"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/orc/",
+        "text": "Orc"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/orc_fighter/",
+        "text": "Orc Fighter"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/orc_raider/",
+        "text": "Orc Raider"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/destroyer/",
+        "text": "Destroyer"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/titan/",
+        "text": "Titan"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/orc_monk/",
+        "text": "Orc Monk"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/tyrant/",
+        "text": "Tyrant"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/grand_khavatari/",
+        "text": "Grand Khavatari"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/orc_mage/",
+        "text": "Orc Mystic"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/orc_shaman/",
+        "text": "Orc Shaman"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/overlord/",
+        "text": "Overlord"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/dominator/",
+        "text": "Dominator"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/warcryer/",
+        "text": "Warcryer"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/doomcryer/",
+        "text": "Doomcryer"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/orc_rider_0/",
+        "text": "Orc Lancer"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/orc_rider_1/",
+        "text": "Rider"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/orc_rider_2/",
+        "text": "Dragoon"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/orc_rider_3/",
+        "text": "Vanguard Rider"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/dwarf/",
+        "text": "Dwarf"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/dwarven_fighter/",
+        "text": "Dwarven Fighter"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/scavenger/",
+        "text": "Scavenger"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/bounty_hunter/",
+        "text": "Bounty Hunter"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/fortune_seeker/",
+        "text": "Fortune Seeker"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/artisan/",
+        "text": "Artisan"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/warsmith/",
+        "text": "Warsmith"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/maestro/",
+        "text": "Maestro"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/kamael/",
+        "text": "Kamael"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/jin_kamael_soldier/",
+        "text": "Kamael Soldier"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/trooper/",
+        "text": "Trooper"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/berserker/",
+        "text": "Berserker"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/doombringer/",
+        "text": "Doombringer"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/soul_finder/",
+        "text": "Soul Finder"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/soul_breaker/",
+        "text": "Soul Breaker"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/soul_hound/",
+        "text": "Soul Hound"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/warder/",
+        "text": "Warder"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/arbalester/",
+        "text": "Soul Ranger"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/trickster/",
+        "text": "Trickster"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/crow_0/",
+        "text": "Ashigaru"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/crow_1/",
+        "text": "Hatamoto"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/crow_2/",
+        "text": "Ronin"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/crow_3/",
+        "text": "Samurai"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/sylph/",
+        "text": "Sylph"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/sylphid/",
+        "text": "Sylph Gunner"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/sylph_gunner/",
+        "text": "Sharpshooter"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/wind_hunter/",
+        "text": "Wind Sniper"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/storm_blaster/",
+        "text": "Storm Blaster"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/highelf/",
+        "text": "High Elves"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/sacred_templar_0/",
+        "text": "Divine Templar"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/sacred_templar_1/",
+        "text": "Divine Templar"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/sacred_templar_2/",
+        "text": "Divine Templar"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/sacred_templar_3/",
+        "text": "Divine Templar"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/spirit_0/",
+        "text": "Element Weaver"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/spirit_1/",
+        "text": "Element Weaver"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/spirit_2/",
+        "text": "Element Weaver"
+      },
+      {
+        "href": "https://l2wiki.com/essence/skills/spirit_3/",
+        "text": "Element Weaver"
+      },
+      {
+        "href": "https://l2wiki.com/essence/npcs/",
+        "text": "Monsters &amp; NPCs"
+      },
+      {
+        "href": "https://l2wiki.com/essence/npcs/monsters/",
+        "text": "Monsters"
+      },
+      {
+        "href": "https://l2wiki.com/essence/npcs/bosses/",
+        "text": "Bosses"
+      },
+      {
+        "href": "https://l2central.info/essence/npcs/29170.html",
+        "text": "Chaotic Core"
+      },
+      {
+        "href": "https://l2central.info/essence/npcs/29171.html",
+        "text": "Chaotic Orfen"
+      },
+      {
+        "href": "https://l2central.info/essence/npcs/29172.html",
+        "text": "Chaotic Queen Ant"
+      },
+      {
+        "href": "https://l2central.info/essence/npcs/29173.html",
+        "text": "Chaotic Zaken"
+      },
+      {
+        "href": "https://l2central.info/essence/npcs/29020.html",
+        "text": "Baium"
+      },
+      {
+        "href": "https://l2central.info/essence/npcs/29006.html",
+        "text": "Core"
+      },
+      {
+        "href": "https://l2central.info/essence/npcs/29014.html",
+        "text": "Orfen"
+      },
+      {
+        "href": "https://l2central.info/essence/npcs/29001.html",
+        "text": "Queen Ant"
+      },
+      {
+        "href": "https://l2central.info/essence/npcs/29022.html",
+        "text": "Zaken"
+      },
+      {
+        "href": "https://l2wiki.com/essence/npcs/bosses/world/antharas/",
+        "text": "Antharas"
+      },
+      {
+        "href": "https://l2central.info/essence/npcs/32478.html",
+        "text": "Game Assistant"
+      },
+      {
+        "href": "https://l2central.info/essence/npcs/34053.html",
+        "text": "Svein"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1037/",
+        "text": "Hunting Zones"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/special_zones/",
+        "text": "Special Zones"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/special_zones/transcendent_instance_zones/",
+        "text": "Transcendent Instance Zones"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/special_zones/alligator_island/",
+        "text": "Alligator Island"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/special_zones/ancient_ruins/",
+        "text": "Ancient Ruins"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/special_zones/aztacans_temple/",
+        "text": "Aztacan's Temple"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/special_zones/celestial_tower/",
+        "text": "Celestial Tower"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/special_zones/forgotten_primeval_garden/",
+        "text": "Forgotten Garden"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/special_zones/kelbims_fortress/",
+        "text": "Kelbim's Fortress"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/special_zones/pagan_temple/",
+        "text": "Pagan Temple"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/special_zones/primeval_isle/",
+        "text": "Primeval Isle"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/special_zones/tower_of_insolence/",
+        "text": "Tower of Insolence"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/special_zones/training/",
+        "text": "Training Zone"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/instance_zones/",
+        "text": "Instance Zones"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/instance_zones/party/dream_dungeon/",
+        "text": "Dream Dungeon"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/instance_zones/party/dwelling_of_spirits/",
+        "text": "Dwelling of Spirits"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/instance_zones/party/frintezza/",
+        "text": "Frintezza"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/instance_zones/party/valakas_temple/",
+        "text": "Valakas' Temple"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/instance_zones/clan/arena/",
+        "text": "Clan Arena"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/activity/antharas_worldraid/",
+        "text": "Antharas World Raid"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/activity/keber/",
+        "text": "Battle with Keber"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/activity/legion_of_darkness/",
+        "text": "Battle with the Legion of Darkness"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/activity/balok/",
+        "text": "Boss Extermination"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/activity/hellbound/",
+        "text": "Hellbound"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/activity/olympiad/",
+        "text": "Olympiad"
+      },
+      {
+        "href": "https://l2wiki.com/essence/locations/activity/orc_fortress/",
+        "text": "Orc Fortress"
+      },
+      {
+        "href": "https://l2wiki.com/essence/mechanics/",
+        "text": "Mechanics"
+      },
+      {
+        "href": "https://l2wiki.com/essence/mechanics/collections/",
+        "text": "Collections"
+      },
+      {
+        "href": "https://l2wiki.com/essence/mechanics/making/craft/",
+        "text": "Special Craft"
+      },
+      {
+        "href": "https://l2wiki.com/essence/mechanics/making/common/",
+        "text": "Common Craft"
+      },
+      {
+        "href": "https://l2wiki.com/essence/mechanics/exp/",
+        "text": "EXP Table"
+      },
+      {
+        "href": "https://l2wiki.com/essence/mechanics/dailymission/",
+        "text": "Missions"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/",
+        "text": "Articles"
+      },
+      {
+        "href": "https://l2wiki.com/essence/events_and_promos/",
+        "text": "Activities"
+      },
+      {
+        "href": "https://l2wiki.com/essence/events_and_promos/1376/",
+        "text": "Contests"
+      },
+      {
+        "href": "https://l2wiki.com/essence/events_and_promos/331/",
+        "text": "Events"
+      },
+      {
+        "href": "https://l2wiki.com/essence/events_and_promos/332/",
+        "text": "Offers"
+      },
+      {
+        "href": "https://l2wiki.com/essence/notices/",
+        "text": "Announcements"
+      },
+      {
+        "href": "https://l2wiki.com/essence/notices/1223/",
+        "text": "Activities"
+      },
+      {
+        "href": "https://l2wiki.com/essence/notices/1222/",
+        "text": "Maintenance"
+      },
+      {
+        "href": "https://l2wiki.com/essence/events_and_promos/1377/",
+        "text": "Codes"
+      },
+      {
+        "href": "https://l2wiki.com/essence/events_and_promos/1466/",
+        "text": "Gift Boxes"
+      },
+      {
+        "href": "https://l2wiki.com/essence/events_and_promos/1465/",
+        "text": "Twitch Drops"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/15/",
+        "text": "Updates from Korea"
+      },
+      {
+        "href": "https://l2wiki.com/essence/lshop/",
+        "text": "L-Coin Store"
+      },
+      {
+        "href": "https://l2wiki.com/essence/guides/ess/",
+        "text": "Essence"
+      },
+      {
+        "href": "https://l2wiki.com/essence/guides/942/",
+        "text": "For newbie"
+      },
+      {
+        "href": "https://l2wiki.com/essence/guides/943/",
+        "text": "Сlasses"
+      },
+      {
+        "href": "https://l2wiki.com/essence/guides/eva/",
+        "text": "Eva"
+      },
+      {
+        "href": "https://l2wiki.com/essence/guides/1425/",
+        "text": "For newbie"
+      },
+      {
+        "href": "https://l2wiki.com/essence/guides/1426/",
+        "text": "Сlasses"
+      },
+      {
+        "href": "https://l2wiki.com/essence/",
+        "text": "Lineage II Essence"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/",
+        "text": "Articles"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1035/",
+        "text": "Equipment"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1725.html",
+        "text": ""
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1035/",
+        "text": "Equipment"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1725.html",
+        "text": "Weapons of ImmortalityMarch 9, 2023, at 13:00"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/937.html",
+        "text": ""
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1035/",
+        "text": "Equipment"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/937.html",
+        "text": "Boss WeaponsNovember 15, 2021, at 17:00"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/825.html",
+        "text": ""
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1035/",
+        "text": "Equipment"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/825.html",
+        "text": "Frost Lord&#39;s WeaponSeptember 20, 2021, at 14:44"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/89.html",
+        "text": ""
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1035/",
+        "text": "Equipment"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/89.html",
+        "text": "Head AccessoriesAugust 11, 2020, at 11:51"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/88.html",
+        "text": ""
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1035/",
+        "text": "Equipment"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/88.html",
+        "text": "TalismansAugust 10, 2020, at 18:03"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/84.html",
+        "text": ""
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1035/",
+        "text": "Equipment"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/84.html",
+        "text": "Brooches and JewelsAugust 10, 2020, at 10:45"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/73.html",
+        "text": ""
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1035/",
+        "text": "Equipment"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/73.html",
+        "text": "CloaksAugust 6, 2020, at 17:10"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/539.html",
+        "text": ""
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1035/",
+        "text": "Equipment"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/539.html",
+        "text": "Special ArmorMarch 24, 2021, at 12:27"
+      },
+      {
+        "href": "https://l2wiki.com/essence/articles/1569.html?lang=en",
+        "text": "Program for streamers & bloggers"
+      },
+      {
+        "href": "https://l2wiki.com/essence/guides/1308.html?lang=en",
+        "text": "Collaboration program for Sages"
+      }
+    ],
+    "snippet": "Knowledge base Lineage II Game version&nbsp; Game version&nbsp; Game version&nbsp; Lineage II Lineage II Essence Patchnotes Login Play Beta Main page Items Weapons Aden's Weapons Boss Weapon Weapons Frost Lord Weapon Ancient Swords Bows Daggers Dual swords Fishing Rods Fist weapon Magic Swords One-handed Blunts One-handed Staffs One-handed Swords Polearms Rapiers Shooter Two-handed Blunts Two-handed Staffs Two-handed Swords Armor Special Armor Armor Sets Robe Armor Light Armor Heavy Armor Helmet"
+  }
+}

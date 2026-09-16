@@ -1,0 +1,241 @@
+{
+  "graph_overview": "Directed bipartite and multigraph modeling input, catalyst, dependency, and output flows across all Lineage II systems.",
+  "nodes": [
+    {
+      "id": "player",
+      "category": "Entity",
+      "label": "Player Character"
+    },
+    {
+      "id": "hunting_zones",
+      "category": "Activity",
+      "label": "Hunting Zones (Lv 1-40+)"
+    },
+    {
+      "id": "daily_missions",
+      "category": "Activity",
+      "label": "Daily Missions & Magic Lamp"
+    },
+    {
+      "id": "world_bosses",
+      "category": "Activity",
+      "label": "World Boss Raids (Queen Ant, Core, etc.)"
+    },
+    {
+      "id": "raw_materials",
+      "category": "Item",
+      "label": "Raw Materials (Iron Ore, Coal, Bones, etc.)"
+    },
+    {
+      "id": "refined_materials",
+      "category": "Item",
+      "label": "Refined Materials (Steel, Cokes, Leather, etc.)"
+    },
+    {
+      "id": "adena",
+      "category": "Resource",
+      "label": "Adena Currency"
+    },
+    {
+      "id": "l_coin",
+      "category": "Resource",
+      "label": "L-Coin Currency"
+    },
+    {
+      "id": "sp",
+      "category": "Resource",
+      "label": "Skill Points (SP)"
+    },
+    {
+      "id": "exp",
+      "category": "Resource",
+      "label": "Character EXP"
+    },
+    {
+      "id": "crafting_common",
+      "category": "Mechanic",
+      "label": "Common Craft System"
+    },
+    {
+      "id": "crafting_dwarf",
+      "category": "Mechanic",
+      "label": "Classic Dwarf Recipe Craft"
+    },
+    {
+      "id": "equipment",
+      "category": "Gear",
+      "label": "Weapons, Armor & Accessories"
+    },
+    {
+      "id": "enchant_system",
+      "category": "Mechanic",
+      "label": "Equipment Enchanting (+1 to +16)"
+    },
+    {
+      "id": "soul_crystals",
+      "category": "Mechanic",
+      "label": "Soul Crystal Insertion & Compounding"
+    },
+    {
+      "id": "dolls",
+      "category": "Mechanic",
+      "label": "Dolls System"
+    },
+    {
+      "id": "collections",
+      "category": "Mechanic",
+      "label": "Collections System"
+    },
+    {
+      "id": "world_trade",
+      "category": "Market",
+      "label": "World Trade Marketplace"
+    }
+  ],
+  "edges": [
+    {
+      "from": "player",
+      "to": "hunting_zones",
+      "type": "engages_in",
+      "note": "Player farms monsters for hours"
+    },
+    {
+      "from": "hunting_zones",
+      "to": "adena",
+      "type": "produces",
+      "note": "Monster gold drops"
+    },
+    {
+      "from": "hunting_zones",
+      "to": "raw_materials",
+      "type": "produces",
+      "note": "Primary material drops"
+    },
+    {
+      "from": "hunting_zones",
+      "to": "exp",
+      "type": "produces",
+      "note": "Direct leveling experience"
+    },
+    {
+      "from": "hunting_zones",
+      "to": "sp",
+      "type": "produces",
+      "note": "Skill points from kills"
+    },
+    {
+      "from": "hunting_zones",
+      "to": "equipment",
+      "type": "produces",
+      "note": "Low percentage whole item drops"
+    },
+    {
+      "from": "hunting_zones",
+      "to": "daily_missions",
+      "type": "advances",
+      "note": "Kill counter fills mission bar"
+    },
+    {
+      "from": "daily_missions",
+      "to": "exp",
+      "type": "rewards",
+      "note": "Mission completion & Magic Lamp rolls"
+    },
+    {
+      "from": "daily_missions",
+      "to": "l_coin",
+      "type": "rewards",
+      "note": "Daily milestone rewards"
+    },
+    {
+      "from": "raw_materials",
+      "to": "refined_materials",
+      "type": "consumed_by",
+      "note": "Crafted into steel, cokes, leather"
+    },
+    {
+      "from": "refined_materials",
+      "to": "crafting_dwarf",
+      "type": "consumed_by",
+      "note": "Assembled into D/C grade gear"
+    },
+    {
+      "from": "hunting_zones",
+      "to": "crafting_common",
+      "type": "charges",
+      "note": "Kills charge Common Craft gauge"
+    },
+    {
+      "from": "crafting_common",
+      "to": "enchant_system",
+      "type": "supplies_scrolls",
+      "note": "Crafts Enchant Weapon/Armor scrolls"
+    },
+    {
+      "from": "adena",
+      "to": "equipment",
+      "type": "consumes_for_shots",
+      "note": "Purchases Soulshots/Spiritshots"
+    },
+    {
+      "from": "equipment",
+      "to": "enchant_system",
+      "type": "target_of",
+      "note": "Enchanting gear for massive stats"
+    },
+    {
+      "from": "equipment",
+      "to": "soul_crystals",
+      "type": "socketed_with",
+      "note": "Adds Soul Crystals into gear slots"
+    },
+    {
+      "from": "equipment",
+      "to": "collections",
+      "type": "permanently_consumed",
+      "note": "Surplus/obsolete gear registered for account stats"
+    },
+    {
+      "from": "world_bosses",
+      "to": "equipment",
+      "type": "drops_epic",
+      "note": "Boss weapons and Queen Ant ring"
+    },
+    {
+      "from": "world_bosses",
+      "to": "dolls",
+      "type": "drops_dolls",
+      "note": "Boss dolls"
+    },
+    {
+      "from": "dolls",
+      "to": "player",
+      "type": "buffs_stats",
+      "note": "Account-wide passive stat bonuses"
+    },
+    {
+      "from": "collections",
+      "to": "player",
+      "type": "buffs_stats",
+      "note": "Permanent account stat boosts"
+    },
+    {
+      "from": "equipment",
+      "to": "world_trade",
+      "type": "sold_on",
+      "note": "Tradable gear sold for L-Coins"
+    },
+    {
+      "from": "world_trade",
+      "to": "l_coin",
+      "type": "generates",
+      "note": "Player receives L-Coins minus 5% tax"
+    },
+    {
+      "from": "adena",
+      "to": "world_trade",
+      "type": "listing_fee",
+      "note": "100% of price paid in Adena (destroyed)"
+    }
+  ]
+}

@@ -1,0 +1,319 @@
+{
+  "summary": "Comprehensive evaluation of Aden Arena's 5 core life activities plus refinery and manor.",
+  "activities": {
+    "fishing": {
+      "service": "FishingService.js",
+      "linesOfCode": 736,
+      "currentState": "Fully implemented turn-based minigame with zones, rods, baits, tension gauge, and auto-fishing.",
+      "currentLoop": "Select zone -> Equip rod & bait -> Cast line -> Turn-based fight (Reel/Yield/Force/Rest) -> Catch/Escape.",
+      "currentRewards": [
+        "Common to titan fish",
+        "Fish weight & sell value",
+        "Branch / Pearl / Scale material rewards"
+      ],
+      "currentResources": {
+        "consumed": [
+          "Rod durability",
+          "Bait items",
+          "Repair Adena"
+        ],
+        "produced": [
+          "Fish items",
+          "Fishing XP"
+        ]
+      },
+      "currentDecisions": [
+        "Bait type vs target fish profile",
+        "Tactical choices under line tension (Yield on red, Reel on green)"
+      ],
+      "currentRisks": [
+        "Line snap and bait loss",
+        "Rod breakage at 0 durability"
+      ],
+      "currentFailureStates": [
+        "Fish breaks line",
+        "Fish escapes after max turns"
+      ],
+      "currentProgression": "Fishing level 1-40 unlocking deeper waters and higher-tier rods.",
+      "evaluation": {
+        "preparation": "HIGH",
+        "playerChoice": "VERY_HIGH",
+        "risk": "MODERATE",
+        "failure": "ACTIVE",
+        "reward": "PARTIAL (needs culinary/alchemy sinks)",
+        "resourceConsumption": "ACTIVE",
+        "mastery": "HIGH",
+        "progression": "SOLID",
+        "replayability": "HIGH",
+        "interactionWithEconomy": "MODERATE",
+        "interactionWithCrafting": "WEAK (few recipes use fish products)",
+        "offlineBehavior": "FUNCTIONAL"
+      }
+    },
+    "hunting": {
+      "service": "HuntingService.js",
+      "linesOfCode": 683,
+      "currentState": "Wild hunting engine featuring wind directions, lures, knives, approach tactics, and field butchering.",
+      "currentLoop": "Read wind direction -> Select lure & knife -> Stalk/Ambush -> Abate -> Field butchering (focus Pelts vs Bones).",
+      "currentRewards": [
+        "Pelts (raw skins)",
+        "Bones",
+        "Suede",
+        "Leather",
+        "Meat"
+      ],
+      "currentResources": {
+        "consumed": [
+          "Knife durability",
+          "Aromatic lures",
+          "Honing Adena"
+        ],
+        "produced": [
+          "Pelt",
+          "Bone",
+          "Suede",
+          "Hunting XP"
+        ]
+      },
+      "currentDecisions": [
+        "Approach tactic matching wind direction",
+        "Carcass extraction focus (Pelt vs Bone)"
+      ],
+      "currentRisks": [
+        "Prey catches scent and flees",
+        "Carcass butchering damage from poor technique"
+      ],
+      "currentFailureStates": [
+        "Prey flees before contact",
+        "Minimal yield from ruined carcass"
+      ],
+      "currentProgression": "Hunting level 1-40 unlocking apex beasts and steel/mithril knives.",
+      "evaluation": {
+        "preparation": "VERY_HIGH",
+        "playerChoice": "VERY_HIGH",
+        "risk": "HIGH",
+        "failure": "ACTIVE",
+        "reward": "SOLID",
+        "resourceConsumption": "ACTIVE",
+        "mastery": "HIGH",
+        "progression": "SOLID",
+        "replayability": "HIGH",
+        "interactionWithEconomy": "HIGH",
+        "interactionWithCrafting": "STRONG_REFINERY_WEAK_FORGE",
+        "offlineBehavior": "FUNCTIONAL"
+      }
+    },
+    "gathering": {
+      "service": "lifeActivities/GatheringService.js",
+      "linesOfCode": 610,
+      "currentState": "Botanical gathering engine featuring flora nodes, sickles, moisture pouches, tactics, and botanical hazards.",
+      "currentLoop": "Select zone -> Inspect node signals -> Select tactic (Delicate/Fast/Deep/Sap-Bleed) -> Harvest -> Manage hazards.",
+      "currentRewards": [
+        "Branch",
+        "Stem",
+        "Charcoal",
+        "Medicinal herbs",
+        "Distilled sap"
+      ],
+      "currentResources": {
+        "consumed": [
+          "Sickle durability",
+          "Moisture pouches",
+          "Sharpening Adena"
+        ],
+        "produced": [
+          "Branch",
+          "Stem",
+          "Charcoal",
+          "Gathering XP"
+        ]
+      },
+      "currentDecisions": [
+        "Inspection of sap freshness vs toxic spores",
+        "Delicate cutting vs rapid clearing"
+      ],
+      "currentRisks": [
+        "Toxic spore explosion (damage & yield drop)",
+        "Node destruction from clumsy technique"
+      ],
+      "currentFailureStates": [
+        "Node crushed/wilted",
+        "Contaminated harvest"
+      ],
+      "currentProgression": "Botanist level 1-40 unlocking surgical sickles and exotic Dion/Cruma fungi.",
+      "evaluation": {
+        "preparation": "HIGH",
+        "playerChoice": "HIGH",
+        "risk": "MODERATE",
+        "failure": "ACTIVE",
+        "reward": "SOLID",
+        "resourceConsumption": "ACTIVE",
+        "mastery": "MODERATE",
+        "progression": "SOLID",
+        "replayability": "HIGH",
+        "interactionWithEconomy": "HIGH",
+        "interactionWithCrafting": "STRONG_REFINERY_WEAK_FORGE",
+        "offlineBehavior": "FUNCTIONAL"
+      }
+    },
+    "mining": {
+      "service": "lifeActivities/MiningService.js",
+      "linesOfCode": 622,
+      "currentState": "Subterranean mining engine with veins, pickaxes, miner lamps, percussion tactics, and gallery shoring against cave-ins.",
+      "currentLoop": "Select gallery -> Probe vein density & gas pockets -> Shore up gallery with wood -> Choose impact tactic -> Extract ore.",
+      "currentRewards": [
+        "Iron Ore",
+        "Coal",
+        "Silver Nugget",
+        "Mithril Ore",
+        "Adamantite"
+      ],
+      "currentResources": {
+        "consumed": [
+          "Pickaxe durability",
+          "Lamp oil",
+          "Compressed wood for shoring"
+        ],
+        "produced": [
+          "Iron Ore",
+          "Coal",
+          "Silver Nugget",
+          "Mining XP"
+        ]
+      },
+      "currentDecisions": [
+        "Spend wood to reinforce gallery or risk collapse",
+        "Precision pick (gems) vs heavy pick (iron)"
+      ],
+      "currentRisks": [
+        "Ceiling collapse destroying the vein",
+        "Gas explosion from spark"
+      ],
+      "currentFailureStates": [
+        "Gallery cave-in",
+        "Blunted pickaxe failure"
+      ],
+      "currentProgression": "Miner level 1-40 unlocking hardened pickaxes and deep silver/mithril veins.",
+      "evaluation": {
+        "preparation": "EXCELLENT",
+        "playerChoice": "VERY_HIGH",
+        "risk": "HIGH",
+        "failure": "ACTIVE",
+        "reward": "CRITICAL",
+        "resourceConsumption": "VERY_ACTIVE (consumes Gathering wood!)",
+        "mastery": "VERY_HIGH",
+        "progression": "SOLID",
+        "replayability": "HIGH",
+        "interactionWithEconomy": "HIGH",
+        "interactionWithCrafting": "STRONG_REFINERY_WEAK_FORGE",
+        "offlineBehavior": "FUNCTIONAL"
+      }
+    },
+    "expeditions": {
+      "service": "ExpeditionService.js",
+      "linesOfCode": 384,
+      "currentState": "Mercenary dispatch framework with rarities, traits, squad synergies, risk directives, and dynamic dilemmas.",
+      "currentLoop": "Select destination -> Assemble 3-mercenary squad -> Set risk directive -> Dispatch -> Resolve moral dilemma -> Claim loot.",
+      "currentRewards": [
+        "Supply crates",
+        "Gemstones D/C",
+        "Ancient coins",
+        "Rare refining formulas"
+      ],
+      "currentResources": {
+        "consumed": [
+          "Hiring Adena",
+          "Rations"
+        ],
+        "produced": [
+          "Gemstones",
+          "Treasure chests",
+          "Mercenary XP"
+        ]
+      },
+      "currentDecisions": [
+        "Squad archetype composition for dungeon requirements",
+        "Moral/strategic choices in random dilemmas"
+      ],
+      "currentRisks": [
+        "Squad wipe on high-risk directives",
+        "Loss of rewards from dilemma mistakes"
+      ],
+      "currentFailureStates": [
+        "Squad returns empty-handed with injured members"
+      ],
+      "currentProgression": "Mercenary leveling, guild reputation, high-tier dungeon unlocks.",
+      "evaluation": {
+        "preparation": "EXCEPTIONAL",
+        "playerChoice": "MAXIMUM",
+        "risk": "MODERATE_TO_HIGH",
+        "failure": "ACTIVE",
+        "reward": "VERY_HIGH",
+        "resourceConsumption": "ACTIVE",
+        "mastery": "VERY_HIGH",
+        "progression": "SOLID",
+        "replayability": "VERY_HIGH",
+        "interactionWithEconomy": "HIGH",
+        "interactionWithCrafting": "SOURCE_OF_GEMSTONES",
+        "offlineBehavior": "IDEAL_FOR_IDLE"
+      }
+    },
+    "refinery": {
+      "service": "lifeActivities/RefineryService.js",
+      "linesOfCode": 353,
+      "currentState": "Batch refining workbench processing 12 canonical materials across wood, leather, metal, and textiles with O(1) bulk calculations.",
+      "recipesCount": 12,
+      "inputOutputs": [
+        {
+          "inputs": "branch x5 + charcoal x2",
+          "output": "compressed_wood x1"
+        },
+        {
+          "inputs": "stem x5",
+          "output": "varnish x1"
+        },
+        {
+          "inputs": "cotton_thread x4",
+          "output": "cord x1"
+        },
+        {
+          "inputs": "stem x4 + cord x2",
+          "output": "braided_hemp x1"
+        },
+        {
+          "inputs": "pelt x3",
+          "output": "leather x1"
+        },
+        {
+          "inputs": "leather x4 + cord x2",
+          "output": "crafted_leather x1"
+        },
+        {
+          "inputs": "bone x10",
+          "output": "coarse_bone_powder x1"
+        },
+        {
+          "inputs": "iron_ore x5 + coal x5",
+          "output": "steel x1"
+        },
+        {
+          "inputs": "iron_ore x10 + coal x5",
+          "output": "steel_ingot x1"
+        },
+        {
+          "inputs": "silver_nugget x5 + coal x3",
+          "output": "silver_mold x1"
+        },
+        {
+          "inputs": "cotton_thread x5 + silver_nugget x1",
+          "output": "silver_thread x1"
+        },
+        {
+          "inputs": "varnish x3 + charcoal x2",
+          "output": "varnish_of_purity x1"
+        }
+      ],
+      "bottleneck": "CRITICAL: refined outputs lack downstream equipment recipe sinks in CRAFTING_RECIPES."
+    }
+  }
+}

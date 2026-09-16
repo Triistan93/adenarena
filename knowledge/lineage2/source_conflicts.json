@@ -1,0 +1,58 @@
+[
+  {
+    "conflict_id": "CONFLICT_001_SEALING_DUALITY",
+    "topic": "Sealing vs Unsealing Terminology",
+    "source_a": {
+      "article": "Equipment Sealing (mechanics/articles/1479.html)",
+      "claim": "Sealing is an account security measure using a 1,200 adena security scroll to lock an item against theft/trading."
+    },
+    "source_b": {
+      "article": "Unsealing (items/articles/1033.html)",
+      "claim": "Sealing is the classic Lineage II state where dropped B/A grade armors drop as '(Sealed)' and must be unlocked at town Blacksmiths to activate full set stats."
+    },
+    "resolution": "These are two entirely separate systems sharing the word 'Seal'. System A is 'Security Item Lock'. System B is 'Classic Blacksmith Unsealing'. In Aden Arena, System B is adopted for equipment progression while System A is reserved for player inventory locking.",
+    "tag": "[SOURCE CONFLICT — RESOLVED]"
+  },
+  {
+    "conflict_id": "CONFLICT_002_SHOTS_UNIFICATION",
+    "topic": "Soulshot & Spiritshot Grade Requirements",
+    "source_a": {
+      "article": "Spiritshots and Soulshots (items/articles/936.html)",
+      "claim": "Essence uses unified universal Soulshots and Spiritshots that work on all weapon grades (No-Grade to A-Grade), scaling only consumption per shot."
+    },
+    "source_b": {
+      "article": "Lineage II Classic / Traditional Game Mechanics",
+      "claim": "Shots are strictly grade-segregated (No-grade Soulshot, D-grade Soulshot, C-grade Soulshot, etc.) and cannot be loaded into non-matching grade weapons."
+    },
+    "resolution": "Lineage II Essence eliminated grade-specific shots to streamline inventory and auto-hunting. In Aden Arena Season 1, adopting Essence's unified shot mechanism reduces inventory clutter and eliminates friction during grade transitions.",
+    "tag": "[SOURCE CONFLICT — RESOLVED]"
+  },
+  {
+    "conflict_id": "CONFLICT_003_ENCHANT_FAILURE_CONSEQUENCE",
+    "topic": "Enchant Failure: Crystallization vs Destruction",
+    "source_a": {
+      "article": "L2Wiki Essence Equipment Overview",
+      "claim": "Failing an enchant on standard weapons/armor completely destroys the item into nothingness, unless protected by Blessed/Stable scrolls."
+    },
+    "source_b": {
+      "article": "Lineage II Classic / Main Base Game",
+      "claim": "Failing an enchant breaks the item into a predetermined quantity of Crystals and Gemstones matching the item's grade and enchant level."
+    },
+    "resolution": "Total item destruction without residual materials creates extreme player frustration in early-to-mid progression. Aden Arena resolves this by combining both: failed standard enchants destroy the gear but yield Gemstones and Crystals (Classic style) which feed into Collections and Soul Crystal insertion fees.",
+    "tag": "[SOURCE CONFLICT — RESOLVED]"
+  },
+  {
+    "conflict_id": "CONFLICT_004_CURRENCY_MODEL_ESSENCE_VS_EVA",
+    "topic": "L-Coin Store vs Eva's Shop Economy",
+    "source_a": {
+      "article": "World Trade & L-Coin Store (mechanics/articles/1138.html)",
+      "claim": "Premium economy relies on L-Coins as the central trading medium and store currency."
+    },
+    "source_b": {
+      "article": "Project Eva Eva's Shop (mechanics/articles/2523.html)",
+      "claim": "Project Eva removes direct cash dependency by using Eva Points earned via in-game daily activity + Adena to buy core items (Runes, talismans)."
+    },
+    "resolution": "For Aden Arena, Project Eva's philosophy is superior for an idle browser game: gameplay activity generates the secondary progression currency, preserving fairness.",
+    "tag": "[SOURCE CONFLICT — RESOLVED]"
+  }
+]

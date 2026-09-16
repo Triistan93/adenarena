@@ -1,4 +1,4 @@
-﻿/**
+/**
  * SynthesisService.js — Sistema de Síntese e Fusão de Duplicatas na Forja (NÍVEL 16).
  * 
  * Permite fundir itens idênticos para desbloquear Synthesis Ranks (1 a 5) em armas/armaduras
@@ -7,6 +7,7 @@
 
 import { D } from '../core/GameConfig.js';
 import { getItemGrade } from './InventoryService.js';
+import { ALL_ITEMS } from '../data/items/index.js';
 
 export const SYNTHESIS_CONFIG = {
   // Configuração por Rank Alvo (Target Rank)
@@ -58,19 +59,25 @@ export class SynthesisService {
     return Number(item.synthesisRank || item.compoundRank || item.compoundLevel) || 0;
   }
 
-  /**
-   * Verifica se o item é elegível para síntese.
-   */
   static isEligible(item) {
     if (!item) return false;
     const def = this.getItemDef(item.itemId || item.id);
     const slot = def?.slot || item.slot || '';
 
-    // Equipamentos (armas, armaduras, joias, escudos, etc.)
-    const isGear = ['weapon', 'armor', 'chest', 'legs', 'head', 'helmet', 'gloves', 'boots', 'shield', 'necklace', 'earring1', 'earring2', 'ring1', 'ring2', 'cloak', 'belt'].includes(slot);
-    const isArtifact = (item.itemId || '').includes('talisman') || (item.itemId || '').includes('jewel') || (item.itemId || '').includes('ruby') || (item.itemId || '').includes('sapphire') || (item.itemId || '').includes('emerald') || (item.itemId || '').includes('opal') || (item.itemId || '').includes('diamond') || (item.itemId || '').includes('agathion');
+    // Apenas artefatos sofrem síntese / fusão (Broches, Joias de Broche, Talismãs, Dolls, Agathions e Cintos)
+    // No Lineage II clássico, armas e armaduras não sofrem fusão gacha de duplicatas.
+    const isArtifact = ['talisman', 'jewel', 'agathion', 'doll', 'belt', 'brooch'].includes(slot) ||
+      String(item.itemId || item.id || '').includes('talisman') ||
+      String(item.itemId || item.id || '').includes('jewel_') ||
+      String(item.itemId || item.id || '').includes('ruby') ||
+      String(item.itemId || item.id || '').includes('sapphire') ||
+      String(item.itemId || item.id || '').includes('diamond') ||
+      String(item.itemId || item.id || '').includes('pearl') ||
+      String(item.itemId || item.id || '').includes('opal') ||
+      String(item.itemId || item.id || '').includes('agathion') ||
+      String(item.itemId || item.id || '').includes('belt');
 
-    return isGear || isArtifact;
+    return isArtifact;
   }
 
   /**
@@ -132,7 +139,7 @@ export class SynthesisService {
       return { success: false, reason: 'missing_items' };
     }
 
-    if (primaryItem.uid === secondaryItem.uid) {
+    if (primaryItem === secondaryItem || (primaryItem.uid && primaryItem.uid === secondaryItem.uid)) {
       log('Você não pode sacrificar o próprio item alvo!', 'error');
       return { success: false, reason: 'same_item' };
     }
@@ -173,13 +180,15 @@ export class SynthesisService {
 
     // Verificar custo em Adena
     const cost = config.costAdena;
-    if ((state.gold || 0) < cost) {
-      log(`Adena insuficiente! A síntese requer ${cost.toLocaleString()} Adena (você tem ${(state.gold || 0).toLocaleString()}).`, 'error');
+    const currentGold = (state.gold !== undefined ? state.gold : (state.adena || 0));
+    if (currentGold < cost) {
+      log(`Adena insuficiente! A síntese requer ${cost.toLocaleString()} Adena (você tem ${currentGold.toLocaleString()}).`, 'error');
       return { success: false, reason: 'insufficient_funds' };
     }
 
     // Cobrar custo
-    state.gold -= cost;
+    if (state.gold !== undefined) state.gold -= cost;
+    if (state.adena !== undefined) state.adena -= cost;
 
     // Consumir o ingrediente secundário
     const secIdx = inv.findIndex(i => (i.uid === secondaryUid || i.id === secondaryUid));
@@ -219,6 +228,22 @@ export class SynthesisService {
         };
       }
 
+      // Se for Joia de Broche, atualiza o itemId e metadados para o próximo nível
+      const jewelMatch = String(primaryId).match(/^jewel_(ruby|sapphire|diamond|pearl|opal)_(\d)$/);
+      if (jewelMatch) {
+        const jType = jewelMatch[1];
+        const nextLvl = Math.min(5, Number(jewelMatch[2]) + 1);
+        const nextId = `jewel_${jType}_${nextLvl}`;
+        const allItems = D()?.ALL_ITEMS || ALL_ITEMS || {};
+        const nextDef = allItems[nextId];
+        primaryItem.itemId = nextId;
+        primaryItem.level = nextLvl;
+        if (nextDef) {
+          primaryItem.name = nextDef.name;
+          primaryItem.icon = nextDef.icon;
+        }
+      }
+
       const stars = '★'.repeat(targetRank);
       log(`✨ SÍNTESE BEM-SUCEDIDA! "${itemName}" ascendeu ao Rank ${targetRank} ${stars}! (+${targetRank * 10}% Atributos Base)`, 'rarity-legendary');
 
@@ -229,7 +254,7 @@ export class SynthesisService {
       if (typeof updateAllUI === 'function') updateAllUI();
       if (typeof save === 'function') save();
 
-      return { success: true, newRank: targetRank };
+      return { success: true, newRank: targetRank, resultItem: primaryItem };
     } else {
       // Falha na síntese
       let regressed = false;
@@ -253,5 +278,12 @@ export class SynthesisService {
 
       return { success: false, regressed, currentRank: primaryItem.synthesisRank || currentRank };
     }
+  }
+
+  /**
+   * Alias de conveniência para executeSynthesis.
+   */
+  static synthesize(state, primaryUid, secondaryUid, callbacks = {}) {
+    return this.executeSynthesis(state, primaryUid, secondaryUid, callbacks);
   }
 }

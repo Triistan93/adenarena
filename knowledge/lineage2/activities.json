@@ -1,0 +1,196 @@
+[
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/articles/1037/",
+    "name": "Hunting Zones Hierarchy (Levels 1–40)",
+    "category": "PvE Open World Hunting",
+    "description": "Tiered open-world hunting territories populated with distinct monster families, drops, and difficulty scaling.",
+    "facts": {
+      "starter_zones_lvl_1_20": [
+        {
+          "zone": "Talking Island Territory",
+          "mobs": "Wolves, Goblins, Orcs, Werewolves",
+          "drops": "No-grade gear, Iron Ore, Coal, Animal Skin"
+        },
+        {
+          "zone": "Elven Forest",
+          "mobs": "Dryads, Spriggans, Spiders, Brown Kookaburras",
+          "drops": "Stem, Charcoal, Suede"
+        },
+        {
+          "zone": "Dark Elven Forest",
+          "mobs": "Lesser Dark Horrors, Marsh Zombies",
+          "drops": "Animal Bone, Thread"
+        },
+        {
+          "zone": "Orc Village / Plateau",
+          "mobs": "Kasha Bears, Kasha Spiders",
+          "drops": "Iron Ore, Animal Skin"
+        },
+        {
+          "zone": "Dwarven Plunder / Mines",
+          "mobs": "Goblins, Mine Bats, Spiders",
+          "drops": "Iron Ore, Coal, Varnish"
+        }
+      ],
+      "d_grade_zones_lvl_20_30": [
+        {
+          "zone": "Abandoned Camp",
+          "mobs": "Ol Mahum patrol, recruits, archers",
+          "level_range": "21-25",
+          "drops": "D-grade weapons, D-grade armor patterns, Steel, Coal"
+        },
+        {
+          "zone": "Dion Hills",
+          "mobs": "Monster Eye, Mandragora, Hobgoblins",
+          "level_range": "25-30",
+          "drops": "D-grade gear, Coarse Bone Powder, Thread"
+        }
+      ],
+      "c_grade_onboarding_lvl_30_40": [
+        {
+          "zone": "Execution Grounds",
+          "mobs": "Specters, Ghouls, Hanging Man Trees, Dead Seekers",
+          "level_range": "30-35",
+          "drops": "D-grade top / C-grade low, Animal Bone, Suede"
+        },
+        {
+          "zone": "Cruma Tower Floor 1 & Marsh",
+          "mobs": "Marsh Stakato, Porta, Excuro",
+          "level_range": "35-40",
+          "drops": "C-grade weapons, C-grade armor patterns, Mithril Alloy, Cokes"
+        }
+      ],
+      "high_tier_reference_lvl_40_plus": [
+        {
+          "zone": "Dragon Valley (West/East)",
+          "level_range": "75-80",
+          "status": "[SEASON 1 OUT OF SCOPE]"
+        },
+        {
+          "zone": "Tower of Insolence",
+          "level_range": "75-90",
+          "status": "[SEASON 1 OUT OF SCOPE]"
+        }
+      ]
+    },
+    "relationships": [
+      "monster_drops",
+      "exp_progression",
+      "materials_raw",
+      "daily_missions"
+    ],
+    "requirements": {
+      "recommended_character_level": true,
+      "appropriate_gear_grade": true
+    },
+    "rewards": {
+      "exp": true,
+      "sp": true,
+      "adena": true,
+      "raw_materials": true,
+      "gear_drops": true
+    },
+    "notes": "Maps 1-to-1 with Aden Arena's idle stage zones.",
+    "status": "verified"
+  },
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/mechanics/dailymission/",
+    "name": "Daily Hunting Missions & Exterminations",
+    "category": "Structured Daily Activities",
+    "description": "Daily mission system providing structured kill quotas per level bracket.",
+    "facts": {
+      "reset_time": "06:30 UTC+3 daily",
+      "brackets": [
+        {
+          "bracket": "Lv 1 - 20",
+          "target": "Kill 100 monsters",
+          "rewards": "EXP boost, Adena, Beginner Soulshots"
+        },
+        {
+          "bracket": "Lv 20 - 40",
+          "target": "Kill 300 monsters",
+          "rewards": "EXP, SP, Magic Lamps, D-Grade Gemstones"
+        },
+        {
+          "bracket": "Lv 40+",
+          "target": "Kill 500 monsters",
+          "rewards": "EXP, SP, Magic Lamps, L-Coins, C-Grade Gemstones"
+        }
+      ]
+    },
+    "relationships": [
+      "daily_missions",
+      "magic_lamp",
+      "hunting_zones"
+    ],
+    "requirements": {
+      "daily_quota_completion": true
+    },
+    "rewards": {
+      "direct_exp": true,
+      "magic_lamp_exp": true,
+      "currencies": true
+    },
+    "notes": "Guarantees daily idle progression regardless of drop RNG.",
+    "status": "verified"
+  },
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/articles/937.html",
+    "name": "World Boss Raids (Queen Ant, Core, Orfen)",
+    "category": "Epic Boss Raids",
+    "description": "Massive cooperative encounters against legendary Lineage II bosses, yielding boss weapons, epic accessories, and dolls.",
+    "facts": {
+      "bosses": [
+        {
+          "name": "Queen Ant",
+          "level": 40,
+          "spawn_location": "Wasteland / Queen Ant's Nest",
+          "drops": "Queen Ant's Ring, Queen Ant's Stone Breaker, Queen Ant Doll"
+        },
+        {
+          "name": "Core",
+          "level": 50,
+          "spawn_location": "Cruma Tower Floor 3",
+          "drops": "Ring of Core, Core's Plasmic Bow, Core Doll [PARTIALLY SEASON 1]"
+        },
+        {
+          "name": "Orfen",
+          "level": 50,
+          "spawn_location": "Sea of Spores",
+          "drops": "Earring of Orfen, Orfen's Venom Sword, Orfen Doll [PARTIALLY SEASON 1]"
+        },
+        {
+          "name": "Baium",
+          "level": 75,
+          "spawn_location": "Tower of Insolence Floor 14",
+          "status": "[SEASON 1 OUT OF SCOPE]"
+        },
+        {
+          "name": "Zaken",
+          "level": 75,
+          "spawn_location": "Devil's Isle",
+          "status": "[SEASON 1 OUT OF SCOPE]"
+        }
+      ],
+      "mechanics": "Requires boss immunity stripping, add management, and heavy burst damage windows"
+    },
+    "relationships": [
+      "boss_weapons",
+      "dolls",
+      "aden_laboratory"
+    ],
+    "requirements": {
+      "raid_group_or_high_combat_power": true
+    },
+    "rewards": {
+      "epic_accessories": true,
+      "boss_weapons": true,
+      "boss_dolls": true
+    },
+    "notes": "Queen Ant (Lv 40) serves as the definitive pinnacle boss of Aden Arena Season 1.",
+    "status": "verified"
+  }
+]

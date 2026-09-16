@@ -8,12 +8,48 @@
 ---
 
 ### 📑 Índice Rápido de Páginas
+- [Página 7 — 16 de Setembro de 2026 às 18:30](#página-7--16-de-setembro-de-2026-às-1830) — *Adaptação Integral dos Conceitos Canônicos do Lineage II Essence (Season 1 Lv 1–40), Economia Fechada, Coleções Perpétuas, Crafting D/C, Augmentação e Brooches*
 - [Página 6 — 16 de Setembro de 2026 às 01:00](#página-6--16-de-setembro-de-2026-às-0100) — *Expurgo de Vínculos Sintéticos, Reconstrução Canônica Baseada no Webscraping Oficial do L2Wiki Essence, Duelista com Blade Punishment (39 Skills) e Sincronização Integral de 142 Classes V2*
 - [Página 5 — 16 de Setembro de 2026 às 00:30](#página-5--16-de-setembro-de-2026-às-0030) — *Webscraping Canônico L2Wiki Essence, 147 Classes, 2.947 Habilidades & Fix de Ícones*
 - [Página 4 — 15 de Setembro de 2026 às 23:25](#página-4--15-de-setembro-de-2026-às-2325) — *Skill System Major Version Update (V2), 46 Linhagens, 142 Classes, 825 Skills Semânticas, Ledger SP & Celestial Destiny*
 - [Página 3 — 15 de Setembro de 2026 às 00:05](#página-3--15-de-setembro-de-2026-às-0005) — *Extração Massiva L2Bandit & PMfun, 1.991 Ícones WebP, Índices Mestres de 20k Chaves, IconService, UI Modernizada & Deploy*
 - [Página 2 — 14 de Setembro de 2026 às 23:45](#página-2--14-de-setembro-de-2026-às-2345) — *Arquitetura Zero-Trust, Blindagem Admin/Cakto/Firestore, Life Activities 2.0, Economia Fechada & Performance Chunks*
 - [Página 1 — 12 de Setembro de 2026 às 22:30](#página-1--12-de-setembro-de-2026-às-2230) — *Consolidação de Arquitetura, UX do Personagem & Mochila, Motor de Encantamento Canônico, Auto-Equip ERS e Ressonância de Armas*
+
+---
+
+<br/>
+
+## Página 7 — 16 de Setembro de 2026 às 18:30
+### 🏰 Adaptação Integral dos Conceitos Canônicos do Lineage II Essence (Season 1 Lv 1–40), Economia Fechada, Coleções & Forja Autêntica
+
+> **Data & Hora**: 16/09/2026 às 18:30 (BRT)  
+> **Status de Qualidade**: 
+> - **Testes Automatizados**: **539 testes em 82 suítes passando (100% de aprovação, 0 falhas)**.
+> - **Build de Produção**: Vite compilado com sucesso em **19.63s** (268 módulos transformados, saída 0).
+> - **Preservação Sagrada**: 0 alterações ou regressões nos 3 pilares intocáveis (`LevelEngine.js` Curva Monotônica 1-40, `MarketService.js` Mercado 10 slots 5%, `ExpeditionService.js` Expedições).
+
+#### 1. Resumo Executivo da Sessão
+Em resposta à diretriz mandatória de transformar os conceitos teóricos do Lineage II Essence em mecânicas reais e funcionais no Aden Arena (mantendo os pilares consolidados de Nível 1–40, Mercado e Expedições), executou-se a reconstrução profunda do ecossistema econômico, progressão de equipamentos e ciclo de combate:
+1. **Coleções de Equipamentos (Permanent Gear Sink)**: Criação do `CollectionService.js` e expansão de `codex.js` com 15 coleções Season 1 (No-Grade e D-Grade). Itens duplicados ou obsoletos são sacrificados e destruídos permanentemente do inventário/armazém em troca de atributos perenes e Combat Power (CP).
+2. **Forja & Crafting Canônico Grau D e C**: Eliminação da dependência excessiva de drop pronto. Adição de receitas oficiais de armas (Crimson Sword, Samurai Longsword, Eminence Bow, Homunkuluss Sword), armaduras completas (Brigandine Heavy, Manticore Light, Mithril Robe, Theca Light, Karmian Robe) e consumíveis (Shots D/C em lotes de 500x, Ensopado de Peixe e Poções Maiores).
+3. **Integração de Life Activities 2.0 (Refino de Pescado)**: Criação de receitas na bancada de refino (`RefineryService.js` + `ResourceDictionary.js`) para processar peixes pescados em `fish_oil` e `pure_fish_oil`, alimentando o ciclo de culinária e forja nobre.
+4. **Augmentação Autêntica de Armas**: Overhaul de `AugmentationService.js`, tornando estritamente obrigatória a presença física de Life Stone no inventário + Gemstones/Cristais do respectivo grau + taxa de Adena do ferreiro, eliminando o roll gratuito com adena.
+5. **Broches e Joias de Broche (Expurgo de Fusão Gacha Comum)**: Remoção definitiva de armas e armaduras comuns da síntese de duplicatas (`SynthesisService.js`), restringindo a fusão exclusivamente a artefatos e joias de broche (Ruby, Sapphire, Diamond, Pearl, Opal) com progressão determinística de níveis 1 a 5.
+6. **Combate & Consumo Real de Shots**: Consumo escalonado de Soulshots/Spiritshots por tipo de arma (arcos consomem de 2 a 4 shots por disparo) e penalidade de 50% de eficácia em caso de tiro de grau inferior ao da arma.
+
+#### 2. Detalhamento Arquitetural & Arquivos Alterados
+- **`lineage-idle/src/services/CollectionService.js`** *(NOVO)*: Motor canônico de coleções de conta com sacrifício definitivo de itens e cálculo cumulativo de atributos.
+- **`lineage-idle/src/data/items/broochJewels.js`** *(NOVO)*: Catálogo canônico de broches Grau D/C e joias de broche (Ruby, Sapphire, Diamond, Pearl, Opal Lv 1–5).
+- **`test/canonical-lineage2-adaptations.test.js`** *(NOVO)*: Suíte com 12 testes unitários auditando coleções, crafting de shots, augmentação, síntese de joias e refino.
+- **`lineage-idle/src/services/lifeActivities/RefineryService.js`**: Receitas de `refine_fish_oil` e `refine_pure_fish_oil` integradas com agregação polimórfica de pescados.
+- **`lineage-idle/src/services/lifeActivities/ResourceDictionary.js`**: Registro canônico de `fish_oil` e `pure_fish_oil`.
+- **`lineage-idle/src/data/items/recipes_drops.js`**: Inclusão de receitas D e C com suporte a `outputQty` em lote (500x shots).
+- **`lineage-idle/src/services/CraftService.js`**: Respeito a `recipe.outputQty` e fallback resiliente a `CRAFTING_RECIPES`.
+- **`lineage-idle/src/services/AugmentationService.js`**: Validação estrita de Life Stones e Gemstones/Cristais físicos.
+- **`lineage-idle/src/services/SynthesisService.js`**: Restrição estrita para artefatos e progressão de nível de joias de broche.
+- **`lineage-idle/src/data/balance/cpBalance.js`**: Integração de CP do Codex e Joias de Broche com importação estrita de `CODEX_SETS`.
+- **`lineage-idle/main.js`**: Consumo de shots escalonado por arma e penalidade de mismatch de grau.
 
 ---
 

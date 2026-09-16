@@ -1,0 +1,135 @@
+[
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/articles/1138.html",
+    "name": "World Trade Marketplace Economy",
+    "category": "Macroeconomic Exchange",
+    "description": "Rules, taxes, listing caps, and timing constraints governing peer-to-peer commerce across servers.",
+    "facts": {
+      "listing_capacity": "10 lots maximum per account (includes active, sold pending claim, and expired)",
+      "price_floor": "20 L-Coins",
+      "unit_restriction": "1 item per lot listing",
+      "upfront_fee": "100% of listing price in Adena (Adena sink)",
+      "sales_tax": "5% deduction on completed transactions paid in L-Coins",
+      "active_listing_lifespan": "14 days",
+      "settlement_window": "120 days to claim proceeds or recover expired goods"
+    },
+    "relationships": [
+      "world_trade",
+      "l_coin",
+      "adena_sink",
+      "player_inventory"
+    ],
+    "requirements": {
+      "tradable_items": true,
+      "adena_balance": true
+    },
+    "rewards": {
+      "peer_to_peer_commerce": true
+    },
+    "notes": "5% sales tax acts as systemic deflationary sink against currency buildup.",
+    "status": "verified"
+  },
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/articles/2523.html",
+    "name": "Eva's Shop Economy (Project Eva)",
+    "category": "Fair-Play Token Economy",
+    "description": "In-game store where premium advancement goods are acquired strictly through in-game gameplay points (Eva Points) combined with Adena.",
+    "facts": {
+      "sample_prices": [
+        {
+          "item": "Growth Rune Lv. 1 x1",
+          "cost": "Eva's points x4,500 + Adena x1,000,000"
+        },
+        {
+          "item": "Growth Rune Lv. 2 x1",
+          "cost": "Eva's points x9,000 + Adena x2,000,000 [INFERENCE / PATTERN]"
+        }
+      ],
+      "design_philosophy": "Eliminates pay-to-win real-money cash shop advantages in favor of active play metrics"
+    },
+    "relationships": [
+      "eva_s_shop",
+      "growth_rune",
+      "adena_sink"
+    ],
+    "requirements": {
+      "eva_points": true,
+      "adena": true
+    },
+    "rewards": {
+      "core_enhancement_items": true
+    },
+    "notes": "Provides the philosophical and structural foundation for Aden Arena's idle progression.",
+    "status": "verified"
+  },
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/articles/1033/",
+    "name": "Macroeconomic Sinks & Faucets Architecture",
+    "category": "Monetary Balance",
+    "description": "Systemic balance of currency generation and destruction mechanisms across Lineage II Essence.",
+    "facts": {
+      "faucet_channels": [
+        {
+          "channel": "Monster Drop Adena",
+          "volume_share": "60-70% of total currency inflow"
+        },
+        {
+          "channel": "Daily Missions & Magic Lamp Rewards",
+          "volume_share": "20-25%"
+        },
+        {
+          "channel": "Junk / Loot Sales to NPC Vendors",
+          "volume_share": "10-15%"
+        }
+      ],
+      "sink_channels": [
+        {
+          "channel": "Soulshots / Spiritshots",
+          "mechanism": "Continuous drain per combat swing/cast",
+          "impact": "High continuous sink"
+        },
+        {
+          "channel": "Skill Learning & Skill Enchantment",
+          "mechanism": "Fixed million-scale Adena gates",
+          "impact": "High milestone sink"
+        },
+        {
+          "channel": "Aden Laboratory Research",
+          "mechanism": "10M to 200M Adena per tier",
+          "impact": "Endgame hyper-sink"
+        },
+        {
+          "channel": "Blacksmith Unsealing & Equipment Security Sealing",
+          "mechanism": "Per-item unsealing fees",
+          "impact": "Medium steady sink"
+        },
+        {
+          "channel": "Teleportation Network",
+          "mechanism": "Zone-based teleport fees",
+          "impact": "Low frequent sink"
+        },
+        {
+          "channel": "World Trade Registration & Taxes",
+          "mechanism": "100% Adena listing fee + 5% sales tax",
+          "impact": "High macro sink"
+        }
+      ]
+    },
+    "relationships": [
+      "all_systems",
+      "adena",
+      "l_coin"
+    ],
+    "requirements": {
+      "active_gameplay": true
+    },
+    "rewards": {
+      "currency_stability": true
+    },
+    "notes": "Critical balance equation: If Adena faucets exceed sinks, consumable prices and market inflation destroy early-game onboarding.",
+    "status": "verified"
+  }
+]

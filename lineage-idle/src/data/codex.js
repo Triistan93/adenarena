@@ -8,6 +8,7 @@
  * Cada set exige que o jogador registre todos os `items` para ganhar o `bonus`.
  */
 export const CODEX_SETS = {
+  // ─── COLEÇÕES INICIAIS (NO-GRADE) ───
   novice_weapons: {
     name:  '⚔️ Armamento de Recruta',
     desc:  'Registre as armas iniciais de caça dos novatos.',
@@ -22,6 +23,27 @@ export const CODEX_SETS = {
     bonus: { def: 30, mdef: 30 },
     label: '+30 P. Def & +30 M. Def'
   },
+  novice_heavy: {
+    name:  '🛡️ Infantaria Básica de Gludio',
+    desc:  'Armaduras pesadas dos primeiros combatentes.',
+    items: ['bone_breastplate', 'bronze_breastplate_heavy'],
+    bonus: { def: 20, hp: 50 },
+    label: '+20 P. Def & +50 Max HP'
+  },
+  novice_light: {
+    name:  '🥋 Caçadores da Floresta',
+    desc:  'Trajes leves e machados rústicos dos caçadores novatos.',
+    items: ['leather_vest_light', 'tomahawk_axe'],
+    bonus: { def: 15, eva: 6 },
+    label: '+15 P. Def & +6 Evasion'
+  },
+  novice_robe: {
+    name:  '🔮 Discípulos de Einhovant',
+    desc:  'Túnicas e maças sagradas dos noviços dos templos.',
+    items: ['devotion_armor_robe', 'crucifix_of_blessing_magicblunt'],
+    bonus: { mdef: 25, mp: 60 },
+    label: '+25 M. Def & +60 Max MP'
+  },
   novice_jewels: {
     name:  '📿 Joias Elegantes de Aden',
     desc:  'Registre joias de treino com propriedades místicas.',
@@ -29,41 +51,110 @@ export const CODEX_SETS = {
     bonus: { hp: 100, mp: 50 },
     label: '+100 Max HP & +50 Max MP'
   },
+
+  // ─── COLEÇÕES D-GRADE (Season 1 Core) ───
+  d_grade_infantry: {
+    name:  '🛡️ Legião de Ferro Brigandine',
+    desc:  'O conjunto pesado completo dos defensores de Dion.',
+    items: ['brigandine_armor_heavy', 'brigandine_pants_heavy', 'brigandine_helmet_heavy'],
+    bonus: { def: 45, hp: 120 },
+    label: '+45 P. Def & +120 Max HP'
+  },
+  d_grade_scouts: {
+    name:  '🏹 Patrulheiros Manticore',
+    desc:  'Armaduras de couro reforçado para batedores rápidos.',
+    items: ['manticore_armor_light', 'manticore_pants_light'],
+    bonus: { def: 30, eva: 10, crit: 4 },
+    label: '+30 P. Def, +10 Eva & +4% Crit'
+  },
+  d_grade_scholars: {
+    name:  '✨ Círculo Arcano de Mithril',
+    desc:  'Vestes mágicas tecidas com fios de mithril e prata.',
+    items: ['mithril_tunic_robe', 'mithril_pants_robe'],
+    bonus: { mdef: 40, matk: 25, mp: 100 },
+    label: '+40 M. Def, +25 M. Atk & +100 Max MP'
+  },
+  d_grade_swords: {
+    name:  '⚔️ Mestres da Espada D-Grade',
+    desc:  'Lâminas consagradas dos cavaleiros de Gludio.',
+    items: ['crimson_sword', 'saber_sword', 'dual_bastard_sword'],
+    bonus: { atk: 50, crit: 6 },
+    label: '+50 P. Atk & +6% Crit Rate'
+  },
+  d_grade_archery: {
+    name:  '🎯 Arquearia Élfica dos Ermos',
+    desc:  'Arcos nobres empregados nas patrulhas de Talking Island.',
+    items: ['elven_bow', 'bow_of_silence'],
+    bonus: { atk: 45, crit: 8 },
+    label: '+45 P. Atk & +8% Ranged Crit'
+  },
+  d_grade_mystic: {
+    name:  '🔮 Bastões de Poder Elemental',
+    desc:  'Armamentos dos feiticeiros e sacerdotes de Dion.',
+    items: ['mystic_staff', 'staff_of_magic', 'bronze_mace'],
+    bonus: { matk: 55, mp: 80 },
+    label: '+55 M. Atk & +80 Max MP'
+  },
+  d_grade_blunt: {
+    name:  '🔨 Martelos de Guerra Anões',
+    desc:  'Pesadas armas de impacto forjadas nas cavernas de Mithril.',
+    items: ['warhammer', 'titan_hammer', 'wepoan_war_mace'],
+    bonus: { atk: 45, hp: 140 },
+    label: '+45 P. Atk & +140 Max HP'
+  },
+  d_grade_jewelry: {
+    name:  '💎 Conjunto de Joias Élficas',
+    desc:  'Amuletos ornamentados que amplificam a resistência mágica.',
+    items: ['jewel_elven_ring', 'jewel_elven_earring', 'jewel_elven_necklace'],
+    bonus: { mdef: 50, hp: 100, mp: 60 },
+    label: '+50 M. Def, +100 Max HP & +60 Max MP'
+  },
   d_grade_champions: {
-    name:  '🗡️ Equipamentos de Ordem D-Grade',
+    name:  '🗡️ Campeões Comprovados D-Grade',
     desc:  'Registre lâminas e vestes de guerreiros comprovados.',
     items: ['crimson_sword', 'elven_bow', 'brigandine_armor_heavy'],
     bonus: { atk: 50, crit: 5 },
     label: '+50 P. Atk & +5% P. Crit Rate'
   },
+
+  // ─── COLEÇÕES C-GRADE (Season 1 Pinnacle) ───
+  c_grade_guardians: {
+    name:  '🛡️ Guardiões da Placa Completa',
+    desc:  'Armadura pesada suprema de Grau C e joia abençoada.',
+    items: ['full_plate_heavy_armor', 'jewel_blessed_ring'],
+    bonus: { def: 60, hp: 200 },
+    label: '+60 P. Def & +200 Max HP'
+  },
+  c_grade_assassins: {
+    name:  '🩸 Lâminas das Sombras de Theca',
+    desc:  'Equipamentos de alta mobilidade e corte fatal.',
+    items: ['theca_light_armor', 'darkelven_dagger'],
+    bonus: { def: 40, crit: 8, eva: 12 },
+    label: '+40 P. Def, +8% Crit & +12 Eva'
+  },
+  c_grade_magisters: {
+    name:  '🌟 Magistério Carmesim de Dion',
+    desc:  'O manto arcano Karmian empunhando o gládio de Homúnculo.',
+    items: ['karmian_robe_armor', 'homunkuluss_magic_sword'],
+    bonus: { matk: 70, mdef: 45, mp: 150 },
+    label: '+70 M. Atk, +45 M. Def & +150 Max MP'
+  },
+  c_grade_arsenal: {
+    name:  '⚡ Arsenal Veterano de Cruma',
+    desc:  'Espadas nobres e arcos de longo alcance de veteranos.',
+    items: ['samurai_longsword', 'katana', 'eminence_bow'],
+    bonus: { atk: 75, crit: 10 },
+    label: '+75 P. Atk & +10% Crit Rate'
+  },
   c_grade_legion: {
     name:  '🛡️ Legião de Ferro C-Grade',
     desc:  'Registre armas e armaduras dos veteranos de Gludio.',
-    items: ['berserker_blade', 'composite_armor_heavy', 'eminence_bow'],
+    items: ['battle_axe', 'full_plate_heavy_armor', 'eminence_bow'],
     bonus: { atk: 75, def: 50, hp: 200 },
     label: '+75 P. Atk, +50 Def, +200 HP'
   },
-  b_grade_knights: {
-    name:  '⚔️ Cavaleiros da Ordem B-Grade',
-    desc:  'Registre armaduras e lâminas nobres de Giran.',
-    items: ['great_sword', 'blue_wolf_breastplate_heavy', 'bow_of_peril'],
-    bonus: { atk: 120, def: 80, crit: 8 },
-    label: '+120 P. Atk, +80 Def, +8% Crit'
-  },
-  a_grade_sovereign: {
-    name:  '👑 Soberania Real A-Grade',
-    desc:  'Registre o poder majestoso das tropas reais de Aden.',
-    items: ['dragon_slayer', 'dark_crystal_breastplate_heavy', 'carnage_bow'],
-    bonus: { atk: 200, matk: 200, hp: 500, def: 120 },
-    label: '+200 P. Atk, +200 M. Atk, +500 HP, +120 Def'
-  },
-  s_grade_immortals: {
-    name:  '🌌 Relíquias dos Imortais S-Grade',
-    desc:  'Registre o poder supremo forjado pelos deuses de Elmore-Aden.',
-    items: ['draconic_bow', 'imperial_crusader_breastplate', 'arcana_mace_staff'],
-    bonus: { atk: 350, matk: 350, hp: 1000, def: 200, crit: 15 },
-    label: '+350 P. Atk, +350 M. Atk, +1000 HP, +200 Def, +15% Crit'
-  },
+
+  // ─── COLEÇÕES ESPECIAIS & META ───
   crystal_masters: {
     name:  '💎 Pedras Elementais de Aden',
     desc:  'Registre gemas extraídas das cavernas místicas.',

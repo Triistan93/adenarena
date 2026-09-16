@@ -201,6 +201,35 @@ export const REFINERY_RECIPES = [
     output: { matId: 'durable_metal_plate', qty: 1 },
     adenaCost: 1500,
     forgeExp: 22
+  },
+
+  // ─── 5. Pescado & Óleos Nobres (Fishing & Biological Oils) ───
+  {
+    id: 'refine_fish_oil',
+    name: 'Óleo de Peixe Refinado',
+    desc: 'Óleo orgânico extraído da prensagem a frio de peixes frescos de Aden. Base para lubrificantes e guisados.',
+    category: 'alchemy',
+    icon: 'materials/varnish.png',
+    inputs: [
+      { matId: 'fish_raw', qty: 3 }
+    ],
+    output: { matId: 'fish_oil', qty: 1 },
+    adenaCost: 200,
+    forgeExp: 6
+  },
+  {
+    id: 'refine_pure_fish_oil',
+    name: 'Óleo de Peixe Puro',
+    desc: 'Óleo destilado com verniz vegetal de alta densidade. Usado em forja de armaduras leves e arcos nobres.',
+    category: 'alchemy',
+    icon: 'materials/varnish_of_purity.png',
+    inputs: [
+      { matId: 'fish_oil', qty: 3 },
+      { matId: 'varnish', qty: 1 }
+    ],
+    output: { matId: 'pure_fish_oil', qty: 1 },
+    adenaCost: 600,
+    forgeExp: 14
   }
 ];
 
@@ -218,7 +247,11 @@ export const RefineryService = {
     if (!state || !Array.isArray(state.inventory)) return 0;
     let total = 0;
     for (const item of state.inventory) {
-      if ((item.id === matId || item.itemId === matId) && !item.equipped) {
+      if (!item || item.equipped) continue;
+      const itemId = item.itemId || item.id;
+      if (itemId === matId || item.id === matId) {
+        total += (item.count || 1);
+      } else if (matId === 'fish_raw' && typeof itemId === 'string' && itemId.startsWith('fish_') && itemId !== 'fish_oil' && itemId !== 'fish_stew') {
         total += (item.count || 1);
       }
     }
@@ -279,7 +312,10 @@ export const RefineryService = {
       let toDeduct = inp.qty * count;
       for (let i = state.inventory.length - 1; i >= 0 && toDeduct > 0; i--) {
         const item = state.inventory[i];
-        if ((item.id === inp.matId || item.itemId === inp.matId) && !item.equipped) {
+        if (!item || item.equipped) continue;
+        const itemId = item.itemId || item.id;
+        const isMatch = (itemId === inp.matId || item.id === inp.matId) || (inp.matId === 'fish_raw' && typeof itemId === 'string' && itemId.startsWith('fish_') && itemId !== 'fish_oil' && itemId !== 'fish_stew');
+        if (isMatch) {
           const currentStack = item.count || 1;
           if (currentStack <= toDeduct) {
             toDeduct -= currentStack;

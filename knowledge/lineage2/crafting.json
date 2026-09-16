@@ -1,0 +1,144 @@
+[
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/mechanics/making/common/",
+    "name": "Common Craft System",
+    "category": "Universal Crafting",
+    "description": "Accessible crafting interface open to all player classes where crafting points are accrued through monster kills to produce scrolls, consumables, and gear.",
+    "facts": {
+      "charge_mechanism": "Common Craft gauge fills as monsters are defeated in hunting zones; Guardian's Gratitude buff accelerates fill rate",
+      "creation_pool": [
+        "Scroll: Enchant Weapon",
+        "Scroll: Enchant Armor",
+        "Magic Tablet",
+        "Spellbook: White Guardian",
+        "Improved Scroll: Enchant Weapon",
+        "Improved Scroll: Enchant Armor",
+        "Scroll of Blessing - Weapon (Sealed)",
+        "Scroll of Blessing - Armor (Sealed)"
+      ],
+      "points_consumption": "Fixed charge points consumed per craft attempt"
+    },
+    "relationships": [
+      "guardians_system",
+      "hunting_zones",
+      "enchant_scrolls",
+      "blessing_scrolls"
+    ],
+    "requirements": {
+      "full_craft_charge_bar": true,
+      "craft_recipe_unlocked": true
+    },
+    "rewards": {
+      "tradeable_or_sealed_enhancement_items": true
+    },
+    "notes": "Essential replacement for classic Dwarf artisan reliance in Essence, allowing solo and idle characters to generate their own scrolls.",
+    "status": "verified"
+  },
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/mechanics/making/craft/",
+    "name": "Special Craft System",
+    "category": "High-Tier Deterministic Crafting",
+    "description": "Deterministic and probability-based crafting catalog allowing players to forge boss gear, immortal weapons, and coupons using designated materials.",
+    "facts": {
+      "craft_categories": [
+        "Weapons / Armor",
+        "Accessories",
+        "Special items",
+        "Event items"
+      ],
+      "examples": [
+        {
+          "product": "Purified Sphere of Immortality (Sealed)",
+          "time_limit": "No limit",
+          "requirements": "Boss raid fragments + high adena"
+        },
+        {
+          "product": "Frost Lord's Weapon Coupon",
+          "time_limit": "Seasonal / Event",
+          "requirements": "Glakias crystals + Giran Seals"
+        }
+      ],
+      "mechanic_types": [
+        "100% Guaranteed Recipe Craft",
+        "Probability Craft with partial refund on failure"
+      ]
+    },
+    "relationships": [
+      "boss_weapons",
+      "weapons_of_immortality",
+      "giran_seals"
+    ],
+    "requirements": {
+      "specific_rare_materials": true,
+      "adena_catalysts": true
+    },
+    "rewards": {
+      "end_game_equipment": true
+    },
+    "notes": "[SEASON 1 OUT OF SCOPE] for Lv 1-40, provides structural blueprint for Aden Arena's endgame weapon forging.",
+    "status": "verified"
+  },
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/articles/1033.html",
+    "name": "Classic Dwarf Recipe Crafting",
+    "category": "Artisan Production",
+    "description": "Foundational Lineage II crafting system where Artisan/Warsmith dwarves utilize recipe books, key materials, and basic ingredients to construct D-grade and C-grade equipment.",
+    "facts": {
+      "recipe_grades": [
+        "Common (Level 1-9)",
+        "Dwarven Craft (Level 1-9)"
+      ],
+      "mp_consumption": "Consumes character MP upon crafting execution",
+      "sample_d_grade_recipes": [
+        {
+          "name": "Brigandine Breastplate",
+          "recipe_lvl": 2,
+          "ingredients": "Brigandine Pattern x4, Iron Ore x30, Animal Skin x60"
+        },
+        {
+          "name": "Bastard Sword",
+          "recipe_lvl": 2,
+          "ingredients": "Bastard Sword Blade x3, Steel x20, Coarse Bone Powder x15"
+        },
+        {
+          "name": "Elven Long Bow",
+          "recipe_lvl": 2,
+          "ingredients": "Elven Bow Shaft x3, Cord x25, Animal Bone x30"
+        }
+      ],
+      "sample_c_grade_recipes": [
+        {
+          "name": "Chain Mail Shirt",
+          "recipe_lvl": 4,
+          "ingredients": "Chain Mail Pattern x7, Steel x40, Cokes x20"
+        },
+        {
+          "name": "Samurai Longsword",
+          "recipe_lvl": 4,
+          "ingredients": "SLS Blade x8, Mithril Alloy x35, Synthetic Braid x25"
+        }
+      ]
+    },
+    "relationships": [
+      "materials_raw",
+      "materials_refined",
+      "dwarf_class_tree",
+      "equipment_d_grade",
+      "equipment_c_grade"
+    ],
+    "requirements": {
+      "dwarven_craft_skill_level": "Matches recipe grade",
+      "recipe_registered_in_book": true,
+      "all_materials_present": true
+    },
+    "rewards": {
+      "equipment_crafted": true,
+      "critical_craft_chance_bonus_item": true
+    },
+    "notes": "L2Wiki Essence omits detailed low-level Dwarf recipes because Essence streamlined early game, but Aden Arena incorporates D-grade and C-grade classic recipes for Season 1. Marked [SOURCE CONFLICT / CANONICAL ADAPTATION].",
+    "status": "verified"
+  }
+]

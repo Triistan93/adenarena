@@ -8,48 +8,87 @@ export class AugmentationService {
   /**
    * Refina/Augmenta uma arma com uma Life Stone.
    */
-  static augmentWeapon(state, weaponItem, lifeStoneId = 'life_stone_top_76', callbacks = {}) {
+  static augmentWeapon(state, weaponItem, lifeStoneId = 'life_stone_28', callbacks = {}) {
     const { log = console.log, onUpdate = () => {} } = callbacks;
-    const stone = LIFE_STONES[lifeStoneId] || LIFE_STONES.life_stone_top_76;
+    const stone = LIFE_STONES[lifeStoneId] || LIFE_STONES.life_stone_28;
 
-    if (!weaponItem) {
+    let weapon = weaponItem;
+    if (typeof weapon === 'string') {
+      weapon = (state.inventory || []).find(i => (i.id === weapon || i.itemId === weapon)) || (state.equipment && state.equipment[weapon]);
+    }
+
+    if (!weapon) {
       log('Selecione uma arma válida para realizar a Augmentação.', 'error');
       return { success: false, reason: 'no_weapon' };
     }
 
-    if (weaponItem.slot !== 'weapon' && !weaponItem.id?.startsWith('weapon_')) {
+    const isWeapon = weapon.slot === 'weapon' || weapon.type === 'weapon' || String(weapon.id || '').startsWith('weapon_') || String(weapon.itemId || '').startsWith('weapon_');
+    if (!isWeapon) {
       log('Apenas armas podem receber o poder das Pedras da Vida (Life Stones).', 'error');
       return { success: false, reason: 'not_a_weapon' };
     }
 
-    if (weaponItem.augmentation) {
+    if (weapon.augmentation) {
       log('Esta arma já possui uma Augmentação ativa. Remova a anterior com o Ferreiro antes de aplicar uma nova.', 'warning');
       return { success: false, reason: 'already_augmented' };
     }
 
-    // Verificar item Life Stone no inventário ou cobrar custo em Adena
-    let hasStone = (state.inventory || []).some(i => (typeof i === 'object' ? i.id : i) === stone.id);
-    const feeAdena = stone.priceAdena;
+    // 1. Verificar obrigatoriedade da Life Stone no inventário
+    const stoneIdx = (state.inventory || []).findIndex(i => {
+      const itId = typeof i === 'object' ? (i.itemId || i.id) : i;
+      return itId === stone.id && !i.equipped;
+    });
 
-    if (!hasStone && (state.gold || 0) < feeAdena) {
-      log(`Você precisa de 1x ${stone.name} ou ${feeAdena.toLocaleString()} Adena para o Ferreiro lapidar a pedra.`, 'error');
+    if (stoneIdx === -1) {
+      log(`⚠️ Você precisa de 1x ${stone.name} em seu inventário para que o Ferreiro realize a Augmentação.`, 'error');
+      return { success: false, reason: 'missing_life_stone' };
+    }
+
+    // 2. Verificar Gemstones / Cristais necessários conforme o grau da pedra
+    const reqCrystals = stone.gemstonesNeeded || 5;
+    const crystalId = stone.gemstoneGrade === 'C' ? 'crystal_c' : 'crystal_d';
+    const crystalIdx = (state.inventory || []).findIndex(i => {
+      const itId = typeof i === 'object' ? (i.itemId || i.id) : i;
+      return (itId === crystalId || itId === `gemstone_${stone.gemstoneGrade?.toLowerCase()}`) && !i.equipped;
+    });
+    const crystalItem = crystalIdx !== -1 ? state.inventory[crystalIdx] : null;
+    const crystalCount = crystalItem ? (crystalItem.count || 1) : 0;
+
+    if (crystalCount < reqCrystals) {
+      log(`⚠️ Gemstones insuficientes! O Ferreiro exige ${reqCrystals}x Cristais/Gemstones Grau ${stone.gemstoneGrade || 'D'} para canalizar a pedra.`, 'error');
+      return { success: false, reason: 'insufficient_gemstones' };
+    }
+
+    // 3. Verificar taxa de Adena do Ferreiro
+    const feeAdena = stone.priceAdena || 25000;
+    const currentGold = (state.gold !== undefined ? state.gold : (state.adena || 0));
+    if (currentGold < feeAdena) {
+      log(`⚠️ Adena insuficiente para a mão de obra do Ferreiro (${feeAdena.toLocaleString()} Adena necessária).`, 'error');
       return { success: false, reason: 'insufficient_funds' };
     }
 
-    // Consumir recursos
-    if (hasStone) {
-      const idx = state.inventory.findIndex(i => (typeof i === 'object' ? i.id : i) === stone.id);
-      if (idx !== -1) {
-        const itm = state.inventory[idx];
-        if (typeof itm === 'object' && itm.count && itm.count > 1) {
-          itm.count -= 1;
-        } else {
-          state.inventory.splice(idx, 1);
-        }
-      }
+    // Consumir Life Stone
+    const stoneItm = state.inventory[stoneIdx];
+    if (typeof stoneItm === 'object' && stoneItm.count && stoneItm.count > 1) {
+      stoneItm.count -= 1;
     } else {
-      state.gold -= feeAdena;
+      state.inventory.splice(stoneIdx, 1);
     }
+
+    // Consumir Cristais
+    if (crystalItem.count && crystalItem.count > reqCrystals) {
+      crystalItem.count -= reqCrystals;
+    } else if (crystalItem.count === reqCrystals) {
+      const curIdx = state.inventory.indexOf(crystalItem);
+      if (curIdx !== -1) state.inventory.splice(curIdx, 1);
+    } else {
+      const curIdx = state.inventory.indexOf(crystalItem);
+      if (curIdx !== -1) state.inventory.splice(curIdx, 1);
+    }
+
+    // Consumir taxa de Adena
+    if (state.gold !== undefined) state.gold -= feeAdena;
+    if (state.adena !== undefined) state.adena -= feeAdena;
 
     // 1. Rolar 2 atributos aleatórios
     const rolledStats = {};
@@ -77,7 +116,7 @@ export class AugmentationService {
     }
 
     // Gravar a augmentação no objeto da arma
-    weaponItem.augmentation = {
+    weapon.augmentation = {
       lifeStoneId: stone.id,
       lifeStoneName: stone.name,
       grade: stone.grade,
@@ -94,13 +133,14 @@ export class AugmentationService {
     const skillText = acquiredSkill ? ` e adquiriu a Habilidade Rara [${acquiredSkill.name}]` : '';
     const glowText = hasGlow ? ` ✨ Concedeu Brilho (${glowColor})!` : '';
 
-    const triumphMsg = `💎 AUGMENTAÇÃO CONCLUÍDA COM SUCESSO! ${weaponItem.name || 'Sua Arma'} recebeu: [${statSummary}]${skillText}${glowText}`;
+    const triumphMsg = `💎 AUGMENTAÇÃO CONCLUÍDA COM SUCESSO! ${weapon.name || 'Sua Arma'} recebeu: [${statSummary}]${skillText}${glowText}`;
     log(triumphMsg, 'success');
 
     onUpdate();
     return {
       success: true,
-      augmentation: weaponItem.augmentation
+      item: weapon,
+      augmentation: weapon.augmentation
     };
   }
 

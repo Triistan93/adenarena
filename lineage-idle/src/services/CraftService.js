@@ -24,6 +24,7 @@ import {
   RECYCLE_POINTS_BY_TIER,
   rollCanonicalRandomCraftSlots
 } from '../data/economy/randomCraftBalance.js';
+import { CRAFTING_RECIPES } from '../data/items/recipes_drops.js';
 
 /**
  * Retorna o nível de personagem necessário para cada nível de receita de craft.
@@ -43,7 +44,7 @@ export function getRecipeDef(recipeId) {
   if (!recipeId) return null;
   const gData = D();
   const allItems = gData?.ALL_ITEMS || {};
-  let recipesData = gData?.CRAFTING_RECIPES;
+  let recipesData = gData?.CRAFTING_RECIPES || CRAFTING_RECIPES;
   if (!recipesData && gData?.generateAllCraftingRecipes) {
     recipesData = gData.generateAllCraftingRecipes(allItems);
   }
@@ -185,7 +186,7 @@ export function craftItem(state, recipeId, qty = 1, callbacks = {}) {
   const allItems = gData?.ALL_ITEMS || {};
   const itemDef = allItems[recipeId] || allItems[recipe.itemId || recipe.id] || recipe;
   const isConsumable = itemDef && ['potion', 'consumable', 'scroll', 'soulshot', 'spiritshot'].includes(itemDef.slot);
-  const baseYieldPerUnit = (isConsumable && (recipeId.includes('shot') || recipeId.includes('potion'))) ? 50 : 1;
+  const baseYieldPerUnit = recipe.outputQty || ((isConsumable && (recipeId.includes('shot') || recipeId.includes('potion'))) ? 50 : 1);
 
   // Cálculo de Critical Craft (Double Craft & Foundation)
   const isDwarf = state.race === 'dwarf' || state.class === 'artisan' || state.class === 'warsmith';

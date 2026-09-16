@@ -1,0 +1,172 @@
+[
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/articles/1035/",
+    "name": "Weapon & Armor Enchanting",
+    "category": "Equipment Enchantment",
+    "description": "Core item enhancement using Enchant Weapon / Enchant Armor scrolls. Increases basic P. Atk, M. Atk, P. Def, and unlocks special glow/stat milestones.",
+    "facts": {
+      "safe_enchant_regular_weapons": "+3",
+      "safe_enchant_one_piece_armor": "+4",
+      "safe_enchant_two_piece_armor_body": "+3",
+      "break_mechanic": "In Classic/Main, failing above safe level crystallizes the item into Gemstones and Crystals. In Essence, failing regular scrolls destroys the item; Blessed/Stable scrolls preserve item or reset to safe value.",
+      "success_rates_curve": [
+        {
+          "level": "0 -> +3 (weapons)",
+          "rate": "100% (Safe)"
+        },
+        {
+          "level": "+3 -> +4",
+          "rate": "66% standard (weapons)"
+        },
+        {
+          "level": "+4 -> +5",
+          "rate": "50%"
+        },
+        {
+          "level": "+5 -> +6",
+          "rate": "40%"
+        },
+        {
+          "level": "+6 -> +7",
+          "rate": "33%"
+        },
+        {
+          "level": "+7+",
+          "rate": "Degrades down to 20-25%"
+        }
+      ],
+      "visual_effects": {
+        "+4 to +6": "Faint blue aura",
+        "+7 to +14": "Intense blue glow",
+        "+15": "Radiant purple aura",
+        "+16+": "Blazing red aura (iconic milestone)"
+      }
+    },
+    "relationships": [
+      "scroll_enchant_weapon",
+      "scroll_enchant_armor",
+      "crystalization_gemstones",
+      "weapons",
+      "armor"
+    ],
+    "requirements": {
+      "enchant_scroll": true,
+      "equipment_matching_grade": true
+    },
+    "rewards": {
+      "exponential_patk_pdef_scaling": true,
+      "glow_visuals": true
+    },
+    "notes": "In Aden Arena Season 1, safe enchant is +3 weapons / +4 full armor. Broken gear produces D/C Gemstones and Crystals.",
+    "status": "verified"
+  },
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/articles/225.html",
+    "name": "Soul Crystal Insertion & Compounding",
+    "category": "Socket Enhancement",
+    "description": "Insertion of Aden and Hardin soul crystals into weapon/armor slots and combining duplicate crystals to elevate crystal rank.",
+    "facts": {
+      "max_level": 20,
+      "compounding_success_rule": "Combine 2 identical crystals of Level X; success produces Level X+1; failure resets to safety checkpoint (Lv 1, Lv 6, Lv 11, Lv 16)",
+      "insertion_catalyst": "B-grade Gemstone (1 to 20 per attempt)",
+      "socket_slots": "2 slots available on weapons, 1-2 on armor"
+    },
+    "relationships": [
+      "soul_crystals",
+      "b_grade_gemstone",
+      "weapons",
+      "armor"
+    ],
+    "requirements": {
+      "soul_crystal": true,
+      "b_grade_gemstones": true
+    },
+    "rewards": {
+      "stat_multipliers": true,
+      "stun_silence_trigger_skills": true
+    },
+    "notes": "Provides deterministic safety tiers every 5 levels.",
+    "status": "verified"
+  },
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/articles/1703.html",
+    "name": "Skill Enchanting Mechanics",
+    "category": "Skill Enhancement",
+    "description": "System to enchant 3rd class active and passive skills up to +3 using EXP, Adena, and Spellbook absorption experience.",
+    "facts": {
+      "level_1_chance": "50% (Cost: 900,000 EXP + 1,000,000 Adena; failure refunds 90,000 EXP)",
+      "level_2_chance": "30% (Cost: 900,000 EXP + 1,000,000 Adena; failure refunds 90,000 EXP)",
+      "level_3_chance": "[CONTENT GAP - undisclosed in wiki, estimated ~15-20%]",
+      "exp_absorption": "Players can feed SP Pouches (3M adena) or Spellbooks to satisfy modification EXP requirements"
+    },
+    "relationships": [
+      "skill_trees",
+      "adena_sink",
+      "character_exp"
+    ],
+    "requirements": {
+      "min_level": 76,
+      "adena": 1000000,
+      "exp": 900000
+    },
+    "rewards": {
+      "skill_power_boost": true,
+      "cooldown_reduction": true
+    },
+    "notes": "[SEASON 1 OUT OF SCOPE] for Lv 1-40.",
+    "status": "verified"
+  },
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/articles/84.html",
+    "name": "Jewel Compounding",
+    "category": "Accessory Compounding",
+    "description": "Synthesizing identical brooch jewels to advance from Level 1 up to Level 8.",
+    "facts": {
+      "compounding_rule": "Combine Jewel A (Lv X) + Jewel A (Lv X) with Adena fee",
+      "failure_result": "One jewel is preserved at Lv X, the other is destroyed",
+      "stat_multipliers": "Lv 1 = +5% shot dmg -> Lv 8 = +25% shot dmg + 15% skill power + passive damage reflection"
+    },
+    "relationships": [
+      "brooches_and_jewels",
+      "adena_sink"
+    ],
+    "requirements": {
+      "two_identical_jewels": true,
+      "adena_fee": true
+    },
+    "rewards": {
+      "higher_tier_jewel": true
+    },
+    "notes": "Standard compounding progression.",
+    "status": "verified"
+  },
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/articles/85.html",
+    "name": "Doll Compounding",
+    "category": "Totem Compounding",
+    "description": "Compounding duplicate boss dolls of the same grade to synthesize higher tier dolls.",
+    "facts": {
+      "success_rate": "10% base chance for single doll compounding",
+      "guaranteed_compounding": "Accumulates failure points until a 100% pity threshold is achieved",
+      "grade_jump": "Common (Grade 1) -> Heroic (Grade 2) -> Legendary (Grade 3) -> Mythic (Grade 4)"
+    },
+    "relationships": [
+      "dolls",
+      "adena_sink"
+    ],
+    "requirements": {
+      "matching_grade_dolls": true,
+      "adena_fee": "100,000 Adena per try"
+    },
+    "rewards": {
+      "higher_grade_doll": true
+    },
+    "notes": "Pity system eliminates complete RNG dead-ends.",
+    "status": "verified"
+  }
+]

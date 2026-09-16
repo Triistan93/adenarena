@@ -1,0 +1,272 @@
+[
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/articles/936.html",
+    "name": "Soulshots & Spiritshots",
+    "category": "Consumable / Combat Enhancer",
+    "description": "Core consumables that instantly empower the next physical attack (Soulshot: 100% P. Atk bonus) or magic spell (Spiritshot: 100% M. Atk & Cast Speed boost).",
+    "facts": {
+      "consumption_rules": {
+        "all_weapons_except_bows": {
+          "no_rank": 1,
+          "d_grade": 1,
+          "c_grade": 1,
+          "b_grade": 1,
+          "a_grade": 2
+        },
+        "bows": {
+          "no_rank": 2,
+          "d_grade": 2,
+          "c_grade": 3,
+          "b_grade": 4,
+          "a_grade": 5
+        },
+        "aoe_target_scaling": [
+          {
+            "targets": "1 ~ 3",
+            "multiplier": "x1"
+          },
+          {
+            "targets": "4 ~ 8",
+            "multiplier": "x2"
+          },
+          {
+            "targets": "9 ~ 16",
+            "multiplier": "x3"
+          }
+        ]
+      },
+      "shot_types": [
+        "Soulshot (Sealed / Unsealed)",
+        "Spiritshot (Sealed / Unsealed)",
+        "Beast Soulshot (for Guardians/Pets)"
+      ]
+    },
+    "relationships": [
+      "weapons",
+      "combat_loop",
+      "economy_adena_sink",
+      "ruby_jewel"
+    ],
+    "requirements": {
+      "matching_weapon_equipped": true,
+      "auto_shot_enabled": true
+    },
+    "rewards": {
+      "damage_doubling": true,
+      "cast_speed_boost": true
+    },
+    "notes": "In Essence, shot grades are unified into single universal Soulshots/Spiritshots (unlike Classic which had grade-specific D/C/B/A shots). [SOURCE CONFLICT — documented in source_conflicts.json].",
+    "status": "verified"
+  },
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/articles/225.html",
+    "name": "Soul Crystals (Aden & Hardin)",
+    "category": "Enhancement Stone / Ensoul",
+    "description": "Gemstones inserted into weapon and armor sockets (Slot 1 and Slot 2) to grant customizable scaling passive attributes and proc chances.",
+    "facts": {
+      "types": [
+        "Aden's Soul Crystal - Weapon",
+        "Aden's Soul Crystal - Armor",
+        "Hardin's Soul Crystal",
+        "Transcendent Soul Crystal"
+      ],
+      "level_range": "1 to 20",
+      "insertion_currency": "B-grade Gemstone for standard, A-grade Gemstone for Transcendent",
+      "fee_table_sample": [
+        {
+          "level": 1,
+          "slot1_cost": "B-grade Gemstone x1",
+          "slot2_cost": "B-grade Gemstone x2",
+          "replacement": "B-grade Gemstone x2",
+          "extraction": "B-grade Gemstone x1"
+        },
+        {
+          "level": 2,
+          "slot1_cost": "B-grade Gemstone x2",
+          "slot2_cost": "B-grade Gemstone x4",
+          "replacement": "B-grade Gemstone x4",
+          "extraction": "B-grade Gemstone x3"
+        }
+      ],
+      "compounding_safeguards": [
+        {
+          "level_before": "1 - 5",
+          "failure_level_reset": 1
+        },
+        {
+          "level_before": "6 - 10",
+          "failure_level_reset": 6
+        },
+        {
+          "level_before": "11 - 15",
+          "failure_level_reset": 11
+        },
+        {
+          "level_before": "16 - 20",
+          "failure_level_reset": 16
+        }
+      ],
+      "stat_effects_at_lv1": {
+        "health_boost": "+4% Max HP",
+        "mana_boost": "+4% Max MP",
+        "patk_boost": "+50 P. Atk",
+        "matk_boost": "+50 M. Atk",
+        "speed": "+4 Speed",
+        "crit_rate": "+30 P. Crit Rate",
+        "stun_proc": "3% trigger chance for 3s Stun on attack (60s cd)",
+        "silence_proc": "3% trigger chance for 5s Silence on attack (60s cd)"
+      }
+    },
+    "relationships": [
+      "weapons",
+      "armor",
+      "b_grade_gemstone",
+      "compounding_system"
+    ],
+    "requirements": {
+      "socketable_equipment": true,
+      "b_grade_gemstones": true
+    },
+    "rewards": {
+      "stat_customization": true,
+      "crowd_control_procs": true
+    },
+    "notes": "Core progression mechanic providing continuous stat scaling throughout mid and endgame.",
+    "status": "verified"
+  },
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/articles/85.html",
+    "name": "Dolls System",
+    "category": "Companion Stat Totem",
+    "description": "Account-wide collectible totems representing Lineage II bosses and monsters that grant passive stats and active aura abilities.",
+    "facts": {
+      "grades": [
+        "Common (Grade 1)",
+        "Heroic (Grade 2)",
+        "Legendary (Grade 3)",
+        "Mythic (Grade 4)"
+      ],
+      "notable_boss_dolls": [
+        {
+          "name": "Queen Ant Doll",
+          "bonus": "P. Atk / P. Skill Power / Critical Damage boost"
+        },
+        {
+          "name": "Orfen Doll",
+          "bonus": "M. Atk / M. Skill Power / Magic Critical Damage boost"
+        },
+        {
+          "name": "Baium Doll",
+          "bonus": "All Skill Cooldown reduction / P. & M. Atk boost"
+        },
+        {
+          "name": "Zaken Doll",
+          "bonus": "Vampiric Rage (HP Drain) / Critical Rate boost"
+        },
+        {
+          "name": "Antharas Doll",
+          "focus": "Damage reflection / Max HP & CP / Stun resistance"
+        },
+        {
+          "name": "Core Doll",
+          "focus": "Anomaly resistance / Magic evasion / Evasion"
+        }
+      ],
+      "compounding_cost": {
+        "common_attempt_fee": "100,000 Adena",
+        "compounding_success_rate": "10% per attempt for 1 doll compound, scaling with guaranteed pity points"
+      }
+    },
+    "relationships": [
+      "character_stats",
+      "l_coin_store",
+      "adena_sink",
+      "compounding_system"
+    ],
+    "requirements": {
+      "inventory_or_doll_collection": true
+    },
+    "rewards": {
+      "permanent_passive_stats": true,
+      "specialized_combat_perks": true
+    },
+    "notes": "Dolls apply account-wide passively from inventory without occupying equipment slots.",
+    "status": "verified"
+  },
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/articles/1317.html",
+    "name": "Growth Rune",
+    "category": "Progression Inventory Rune",
+    "description": "Stackable inventory item upgrading from Level 1 to Level 25 via compounding that amplifies Acquired EXP, SP, and flat offensive stats.",
+    "facts": {
+      "level_range": "1 to 25",
+      "stacking_rule": "Equipping multiple runes of the same level does not sum up the buff; highest active takes effect",
+      "acquisition": "L-Coin Store, Project Eva Shop (Lv 1 costs 4500 Eva Points + 1,000,000 Adena)",
+      "enhancement": "Compounding with another Growth Rune of the exact same level"
+    },
+    "relationships": [
+      "character_exp_sp",
+      "eva_shop",
+      "l_coin_store",
+      "compounding_system"
+    ],
+    "requirements": {
+      "inventory_slot": true
+    },
+    "rewards": {
+      "exp_sp_percent_boost": true,
+      "patk_matk_boost": true
+    },
+    "notes": "Direct idle acceleration mechanic.",
+    "status": "verified"
+  },
+  {
+    "source": "L2Wiki Essence",
+    "sourceUrl": "https://l2wiki.com/essence/articles/194.html",
+    "name": "Scroll of Blessing (Weapon & Armor)",
+    "category": "Enhancement Consumable",
+    "description": "Special scrolls imbuing equipment with Blessed status, granting Combat Power, bonus stats, and unique visual aura.",
+    "facts": {
+      "scroll_types": [
+        {
+          "name": "Scroll of Blessing - Weapon (Sealed / Unsealed)",
+          "target": "Weapons",
+          "combat_power_bonus": 2
+        },
+        {
+          "name": "Scroll of Blessing - Armor (Sealed / Unsealed)",
+          "target": "Armor",
+          "combat_power_bonus": 1
+        }
+      ],
+      "acquisition": [
+        "Antharas' Lair",
+        "Item Transformation",
+        "Common Craft"
+      ],
+      "blessing_effects": {
+        "weapon": "Adds bonus P./M. Atk, increases Soulshot/Spiritshot efficiency",
+        "armor": "Adds bonus Max HP, Max MP, and damage reduction"
+      }
+    },
+    "relationships": [
+      "weapons",
+      "armor",
+      "common_craft",
+      "combat_power"
+    ],
+    "requirements": {
+      "unblessed_equipment": true
+    },
+    "rewards": {
+      "blessed_status": true,
+      "bonus_combat_power": true
+    },
+    "notes": "Can be applied safely without breaking the item on failure.",
+    "status": "verified"
+  }
+]

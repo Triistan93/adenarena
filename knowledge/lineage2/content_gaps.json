@@ -1,0 +1,55 @@
+[
+  {
+    "gap_id": "GAP_001_EARLY_CRAFT_RECIPES",
+    "system": "Crafting & Itemization (D-Grade & C-Grade)",
+    "missing_data": "L2Wiki Essence omits low-level Dwarf Artisan crafting recipe tables for D-grade and C-grade weapons/armors, having streamlined early leveling directly to A-grade.",
+    "impact_on_aden_arena": "Aden Arena Season 1 takes place in Levels 1–40 where D-grade and C-grade crafting is the core player gameplay loop.",
+    "proposed_canonical_solution": "Extract and canonicalize the classic Lineage II recipe database for all D-grade and C-grade weapons, armors, and materials.",
+    "proposed_canonical_ids": [
+      "RECIPE_BRIGANDINE_BREASTPLATE",
+      "RECIPE_BRIGANDINE_GAITERS",
+      "RECIPE_BASTARD_SWORD",
+      "RECIPE_ELVEN_LONG_BOW",
+      "RECIPE_CHAIN_MAIL_SHIRT",
+      "RECIPE_SAMURAI_LONGSWORD"
+    ],
+    "status": "[CONTENT GAP — NEW CANONICAL ID REQUIRED]"
+  },
+  {
+    "gap_id": "GAP_002_EXACT_BOSS_DROP_PERCENTAGES",
+    "system": "Loot & Drop Tables",
+    "missing_data": "L2Wiki Essence lists drop items for Queen Ant, Core, and Orfen (Boss Weapons, Boss Dolls, Epic Jewels) but suppresses exact fractional percentage drop rates (e.g. 0.05% vs 1.0%).",
+    "impact_on_aden_arena": "Combat simulation and boss loot balance require explicit numerical drop rates.",
+    "proposed_canonical_solution": "Establish balanced canonical drop rates calibrated for Aden Arena's idle raid cadence: Boss Weapons at 0.5%, Boss Dolls at 1.0%, Epic Accessories at 0.8%, with guarantee pity fragments awarded on every raid kill.",
+    "proposed_canonical_ids": [
+      "DROP_RATE_QUEEN_ANT_RING",
+      "DROP_RATE_STONE_BREAKER",
+      "DROP_RATE_QUEEN_ANT_DOLL"
+    ],
+    "status": "[CONTENT GAP — NUMERICAL MODEL REQUIRED]"
+  },
+  {
+    "gap_id": "GAP_003_SKILL_ENCHANT_LV3_CHANCE",
+    "system": "Skill Enchanting",
+    "missing_data": "L2Wiki Essence Table #1 provides exact rates for +1 (50%) and +2 (30%), but omits the exact value for +3.",
+    "impact_on_aden_arena": "Endgame skill mastery formula.",
+    "proposed_canonical_solution": "Extrapolating the geometric progression (50% -> 30% -> 15%), canonicalize +3 success rate as 15%.",
+    "proposed_canonical_ids": [
+      "ENCHANT_RATE_SKILL_PLUS_3"
+    ],
+    "status": "[CONTENT GAP — INFERRED RATE]"
+  },
+  {
+    "gap_id": "GAP_004_LOW_LEVEL_COLLECTIONS",
+    "system": "Collections System",
+    "missing_data": "L2Wiki Collections page lists stat categories but lacks the full exhaustive item requirement matrix for No-Grade and D-Grade collections.",
+    "impact_on_aden_arena": "Lower tier equipment sinks need defined collection sets.",
+    "proposed_canonical_solution": "Design 8 canonical starter collections for Season 1: 'Talking Island Pioneer' (No-grade weapon set), 'Dion Defender' (D-grade armor set), 'Executioner's Arsenal' (Top D-grade weapons), etc.",
+    "proposed_canonical_ids": [
+      "COLLECTION_NOVICE_ADVENTURER",
+      "COLLECTION_DION_MILITIA",
+      "COLLECTION_CRUMA_EXPLORER"
+    ],
+    "status": "[CONTENT GAP — NEW CANONICAL ID REQUIRED]"
+  }
+]
