@@ -166,6 +166,12 @@ export function areSiblingBranches(classA, classB) {
  */
 export function getSkillUnlockLevelForClass(classId, skillId) {
   if (!classId || !skillId || !CANONICAL_CLASS_REGISTRY_V2) return 1;
+
+  // Shared skills are unlocked at level 1 for all matching archetypes
+  if (SHARED_SKILL_IDS?.includes(skillId) || SHARED_MAGE_SKILL_IDS?.includes(skillId) || SHARED_FIGHTER_SKILL_IDS?.includes(skillId)) {
+    return 1;
+  }
+
   const canonical = resolveCanonicalClassId(classId) || classId;
   const v2Class = CANONICAL_CLASS_REGISTRY_V2[classId] || CANONICAL_CLASS_REGISTRY_V2[canonical];
   if (!v2Class) return 1;
@@ -177,23 +183,23 @@ export function getSkillUnlockLevelForClass(classId, skillId) {
     if (def.isUltimate || def.starRank === 4 || def.tier === 4 || def.reqLvl >= 80) return 80;
   }
 
-  // 1. Current class
-  if (v2Class.skillIds?.includes(skillId)) {
-    return v2Class.minLevel;
-  }
-
-  // 2. Ancestor class
+  // 1 & 2. Current and Ancestor classes: find earliest (lowest) minLevel
+  let minLevelFound = v2Class.skillIds?.includes(skillId) ? v2Class.minLevel : Infinity;
   let curr = v2Class;
   const visited = new Set([curr.id]);
   while (curr.parentClass && CANONICAL_CLASS_REGISTRY_V2[curr.parentClass] && !visited.has(curr.parentClass)) {
     visited.add(curr.parentClass);
     curr = CANONICAL_CLASS_REGISTRY_V2[curr.parentClass];
     if (curr.skillIds?.includes(skillId)) {
-      return curr.minLevel;
+      minLevelFound = Math.min(minLevelFound, curr.minLevel);
     }
   }
+  if (minLevelFound !== Infinity) {
+    return minLevelFound;
+  }
 
-  // 3. Descendant classes
+  // 3. Descendant classes: find earliest descendant minLevel
+  let minDescLevel = Infinity;
   const queue = [v2Class.id];
   const visitedDesc = new Set(queue);
   while (queue.length > 0) {
@@ -203,10 +209,13 @@ export function getSkillUnlockLevelForClass(classId, skillId) {
         visitedDesc.add(candidate.id);
         queue.push(candidate.id);
         if (candidate.skillIds?.includes(skillId)) {
-          return candidate.minLevel;
+          minDescLevel = Math.min(minDescLevel, candidate.minLevel);
         }
       }
     }
+  }
+  if (minDescLevel !== Infinity) {
+    return minDescLevel;
   }
 
   return 1;
@@ -373,6 +382,18 @@ function isSkillNativeOrAvailableNow(classId, def) {
  */
 export function isSkillInV2Lineage(classId, skillId) {
   if (!CANONICAL_CLASS_REGISTRY_V2 || !classId || !skillId) return false;
+
+  // Shared skills belong to all classes of matching archetype
+  if (SHARED_MAGE_SKILL_IDS?.includes(skillId)) {
+    return isMageClass(classId);
+  }
+  if (SHARED_FIGHTER_SKILL_IDS?.includes(skillId)) {
+    return !isMageClass(classId);
+  }
+  if (SHARED_SKILL_IDS?.includes(skillId)) {
+    return true;
+  }
+
   const canonical = resolveCanonicalClassId(classId) || classId;
   const v2Class = CANONICAL_CLASS_REGISTRY_V2[classId] || CANONICAL_CLASS_REGISTRY_V2[canonical];
   if (!v2Class) return false;

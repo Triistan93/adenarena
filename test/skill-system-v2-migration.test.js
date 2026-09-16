@@ -32,10 +32,10 @@ import { isSkillInProgressionPath, resolveSkillDef, isMageClass, areSiblingBranc
 import { isSkillAllowedForClass } from '../lineage-idle/src/services/CharacterService.js';
 import { getStats } from '../lineage-idle/src/engine/StatsEngine.js';
 
-test('1. V2 Catalog Integrity: 46 Lineages, 142 Classes, 825 Skills, 0 Silent Gaps', () => {
+test('1. V2 Catalog Integrity: 46 Lineages, 142 Classes, 761 Skills, 0 Silent Gaps', () => {
   const report = SkillSystemV2Validator.validateCanonicalCatalog();
   assert.equal(report.valid, true, `Catalog audit failed: ${report.errors.join('; ')}`);
-  assert.equal(report.metrics.totalSkills, 825, 'Must contain exactly 825 unique canonical skills');
+  assert.equal(report.metrics.totalSkills, 761, 'Must contain exactly 761 unique canonical skills');
   assert.equal(report.metrics.totalClasses, 142, 'Must contain 142 canonical classes across 4 stages');
   assert.equal(report.metrics.totalLineages, 46, 'Must contain all 46 official lineages');
 
@@ -63,7 +63,7 @@ test('2. Save Migration Pipeline: Deterministic remapping and 100% SP refund led
     sp: 100,
     skills: {
       'fireball': 3,               // Mapped -> prominence rank 3
-      'cinderblade': 2,            // Mapped -> death_raid rank 2
+      'cinderblade': 2,            // Mapped -> hellfire rank 2
       'obsolete_ancient_curse': 4  // Removed skill -> 100% SP refund
     },
     hotbar: ['fireball', 'obsolete_ancient_curse', null],
@@ -77,7 +77,7 @@ test('2. Save Migration Pipeline: Deterministic remapping and 100% SP refund led
 
   assert.equal(legacySave.skillSystemVersion, 2, 'Must set skillSystemVersion to 2');
   assert.equal(legacySave.skills['prominence'], 3, 'fireball must be translated to prominence rank 3');
-  assert.equal(legacySave.skills['death_raid'], 2, 'cinderblade must be translated to death_raid rank 2');
+  assert.equal(legacySave.skills['hellfire'], 2, 'cinderblade must be translated to hellfire rank 2');
   assert.equal(legacySave.skills['obsolete_ancient_curse'], undefined, 'Obsolete skill must be removed');
 
   assert.equal(ledger.totalSpRefunded, expectedRefund, `Refund must match historical calculation (${expectedRefund})`);
@@ -117,14 +117,14 @@ test('4. V2 Progression Gating: Gladiator Lv 40 progression path vs sibling and 
 
   // Base and 1st class skills must be in progression path (ancestors)
   assert.ok(isSkillInProgressionPath(gladiator, 'power_strike'), 'Gladiator inherits Base Fighter power_strike');
-  assert.ok(isSkillInProgressionPath(gladiator, 'power_smash'), 'Gladiator inherits 1st Class Warrior power_smash');
+  assert.ok(isSkillInProgressionPath(gladiator, 'wild_sweep'), 'Gladiator inherits 1st Class Warrior wild_sweep');
 
   // 2nd class current skills must be in progression path
-  assert.ok(isSkillInProgressionPath(gladiator, 'triple_slash'), 'Gladiator owns 2nd class triple_slash');
-  assert.ok(isSkillInProgressionPath(gladiator, 'sonic_blaster'), 'Gladiator owns 2nd class sonic_blaster');
+  assert.ok(isSkillInProgressionPath(gladiator, 'blade_strike'), 'Gladiator owns 2nd class blade_strike');
+  assert.ok(isSkillInProgressionPath(gladiator, 'slashing_blade'), 'Gladiator owns 2nd class slashing_blade');
 
   // 3rd class future skills must be in progression path (descendants)
-  assert.ok(isSkillInProgressionPath(gladiator, 'sonic_focus'), 'Gladiator has 3rd class Duelist sonic_focus in future path');
+  assert.ok(isSkillInProgressionPath(gladiator, 'blade_punishment'), 'Gladiator has 3rd class Duelist blade_punishment in future path');
 
   // Sibling branch skills (Knight / Paladin) must be strictly rejected
   assert.equal(isSkillInProgressionPath(gladiator, 'shield_stun'), false, 'Gladiator cannot access Knight shield_stun');
@@ -168,29 +168,29 @@ test('6. Sibling Branch DAG Isolation: areSiblingBranches verifies lineage diver
   assert.ok(areSiblingBranches('gladiator', 'paladin'), 'gladiator and paladin are sibling branches');
 });
 
-test('7. Advanced Lineages Progression Gating: Grand Vanguard, Death Knight, ShineMaker, Archmage', () => {
+test('7. Advanced Lineages Progression Gating: Grand Vanguard, Death Knight, Divine Templar, Archmage', () => {
   // 1. Grand Vanguard (3rd class) inherits from 2nd, 1st, and Base
-  assert.ok(isSkillAllowedForClass('grandVanguard', 'dragons_breath'), 'Grand Vanguard has native 3rd class dragons_breath');
-  assert.ok(isSkillAllowedForClass('grandVanguard', 'devastating_charge'), 'Grand Vanguard inherits 2nd class vanguardRider devastating_charge');
-  assert.ok(isSkillAllowedForClass('grandVanguard', 'trample'), 'Grand Vanguard inherits 1st class dragoon trample');
-  assert.ok(isSkillAllowedForClass('grandVanguard', 'lance_charge'), 'Grand Vanguard inherits Base rider lance_charge');
+  assert.ok(isSkillAllowedForClass('grandVanguard', 'wild_charge'), 'Grand Vanguard has native 3rd class wild_charge');
+  assert.ok(isSkillAllowedForClass('grandVanguard', 'wild_assault'), 'Grand Vanguard inherits 2nd class dragoon wild_assault');
+  assert.ok(isSkillAllowedForClass('grandVanguard', 'wild_rush'), 'Grand Vanguard inherits 1st class rider wild_rush');
+  assert.ok(isSkillAllowedForClass('grandVanguard', 'blazing_fury'), 'Grand Vanguard inherits Base rider blazing_fury');
 
   // Rejects foreign lineage skills
-  assert.equal(isSkillAllowedForClass('grandVanguard', 'death_storm'), false, 'Grand Vanguard cannot access Death Knight death_storm');
-  assert.equal(isSkillAllowedForClass('grandVanguard', 'triple_slash'), false, 'Grand Vanguard cannot access Duelist triple_slash');
+  assert.equal(isSkillAllowedForClass('grandVanguard', 'hellfire'), false, 'Grand Vanguard cannot access Death Knight hellfire');
+  assert.equal(isSkillAllowedForClass('grandVanguard', 'blade_strike'), false, 'Grand Vanguard cannot access Duelist blade_strike');
 
   // 2. Death Knight (3rd class)
-  assert.ok(isSkillAllowedForClass('deathKnight', 'death_storm'), 'Death Knight has native death_storm');
-  assert.ok(isSkillAllowedForClass('deathKnight', 'death_raid'), 'Death Knight inherits death_raid');
-  assert.equal(isSkillAllowedForClass('deathKnight', 'dragons_breath'), false, 'Death Knight cannot access Grand Vanguard dragons_breath');
+  assert.ok(isSkillAllowedForClass('deathKnight', 'hellfire'), 'Death Knight has native hellfire');
+  assert.ok(isSkillAllowedForClass('deathKnight', 'punishment'), 'Death Knight inherits punishment');
+  assert.equal(isSkillAllowedForClass('deathKnight', 'wild_charge'), false, 'Death Knight cannot access Grand Vanguard wild_charge');
 
-  // 3. ShineMaker (3rd class)
-  assert.ok(isSkillAllowedForClass('shinemaker', 'star_fall'), 'ShineMaker has native star_fall');
-  assert.ok(isSkillAllowedForClass('shinemaker', 'holy_light'), 'ShineMaker inherits High Elf holy_light');
-  assert.equal(isSkillAllowedForClass('shinemaker', 'sonic_blaster'), false, 'ShineMaker cannot access Duelist sonic_blaster');
+  // 3. Divine Templar (3rd class)
+  assert.ok(isSkillAllowedForClass('divineTemplar', 'judgment'), 'Divine Templar has native judgment');
+  assert.ok(isSkillAllowedForClass('divineTemplar', 'sacral_strike'), 'Divine Templar inherits sacral_strike');
+  assert.equal(isSkillAllowedForClass('divineTemplar', 'blade_strike'), false, 'Divine Templar cannot access Duelist blade_strike');
 
   // 4. Archmage (3rd class)
-  assert.ok(isSkillAllowedForClass('archmage', 'hell_inferno'), 'Archmage has native hell_inferno');
+  assert.ok(isSkillAllowedForClass('archmage', 'meteor'), 'Archmage has native meteor');
   assert.ok(isSkillAllowedForClass('archmage', 'prominence'), 'Archmage inherits Sorcerer prominence');
   assert.equal(isSkillAllowedForClass('archmage', 'aqua_splash'), false, 'Archmage cannot access Mystic Muse aqua_splash');
 });
@@ -204,13 +204,13 @@ test('8. AutoCast & Hotbar Combat Execution Parity with V2 Skills', () => {
     level: 76,
     sp: 5000,
     skills: {
-      'triple_slash': 3,
-      'sonic_blaster': 2,
-      'sonic_focus': 1,
-      'dual_weapon_mastery': 5
+      'blade_strike': 3,
+      'slashing_blade': 2,
+      'blade_punishment': 1,
+      'dual_weapon_defense': 5
     },
-    hotbar: ['triple_slash', 'sonic_blaster', 'sonic_focus'],
-    skillAutoCast: { 'triple_slash': true, 'sonic_blaster': true, 'sonic_focus': false }
+    hotbar: ['blade_strike', 'slashing_blade', 'blade_punishment'],
+    skillAutoCast: { 'blade_strike': true, 'slashing_blade': true, 'blade_punishment': false }
   };
 
   const autoCastSettings = playerState.skillAutoCast || {};
@@ -219,7 +219,7 @@ test('8. AutoCast & Hotbar Combat Execution Parity with V2 Skills', () => {
   for (const [sId, lvl] of Object.entries(playerState.skills)) {
     const def = SKILL_DEFS[sId];
     if (lvl > 0 && def) {
-      const isPassive = def.type === 'passive' || def.type === 'stat';
+      const isPassive = def.type === 'passive' || def.type === 'stat' || def.type === 'buff';
       if (!isPassive) {
         if (autoCastSettings[sId] === false) continue;
         const belongsToClass = isSkillAllowedForClass(playerState.class, sId) && (Number(def.requiredLevel || def.reqLvl) || 1) <= playerState.level;
@@ -232,15 +232,15 @@ test('8. AutoCast & Hotbar Combat Execution Parity with V2 Skills', () => {
 
   // Verify queued skills
   assert.equal(activeSkills.length, 2, 'Exactly 2 active skills must be queued for autoCast');
-  assert.equal(activeSkills[0].id, 'triple_slash');
+  assert.equal(activeSkills[0].id, 'blade_strike');
   assert.equal(activeSkills[0].lvl, 3);
-  assert.equal(activeSkills[1].id, 'sonic_blaster');
+  assert.equal(activeSkills[1].id, 'slashing_blade');
   assert.equal(activeSkills[1].lvl, 2);
 
-  // sonic_focus was false in autoCast
-  assert.ok(!activeSkills.some(s => s.id === 'sonic_focus'), 'sonic_focus must be skipped due to autoCast: false');
-  // dual_weapon_mastery is passive
-  assert.ok(!activeSkills.some(s => s.id === 'dual_weapon_mastery'), 'dual_weapon_mastery must be excluded as passive');
+  // blade_punishment was false in autoCast
+  assert.ok(!activeSkills.some(s => s.id === 'blade_punishment'), 'blade_punishment must be skipped due to autoCast: false');
+  // dual_weapon_defense is buff/passive
+  assert.ok(!activeSkills.some(s => s.id === 'dual_weapon_defense'), 'dual_weapon_defense must be excluded as buff/passive');
 });
 
 test('9. Deterministic Multi-Skill SP Refund & Save Idempotency', () => {
@@ -249,12 +249,12 @@ test('9. Deterministic Multi-Skill SP Refund & Save Idempotency', () => {
     level: 76,
     sp: 1000,
     skills: {
-      'dragons_breath': 2,               // Native V2 match
+      'wild_charge': 2,               // Native V2 match
       'obsolete_ancient_charge': 3,       // Removed skill: rank 3 -> 5 + 7 + 9 = 21 SP
       'obsolete_old_banner': 5            // Removed skill: rank 5 -> 5 + 7 + 9 + 13 + 19 = 53 SP
     },
-    hotbar: ['dragons_breath', 'obsolete_ancient_charge', 'obsolete_old_banner'],
-    skillAutoCast: { 'dragons_breath': true, 'obsolete_ancient_charge': true }
+    hotbar: ['wild_charge', 'obsolete_ancient_charge', 'obsolete_old_banner'],
+    skillAutoCast: { 'wild_charge': true, 'obsolete_ancient_charge': true }
   };
 
   const expectedTotalRefund = calculateHistoricalSpSpent(5, 3) + calculateHistoricalSpSpent(5, 5); // 21 + 53 = 74 SP
@@ -268,10 +268,10 @@ test('9. Deterministic Multi-Skill SP Refund & Save Idempotency', () => {
   // Both obsolete skills removed from skills object
   assert.equal(complexSave.skills['obsolete_ancient_charge'], undefined);
   assert.equal(complexSave.skills['obsolete_old_banner'], undefined);
-  assert.equal(complexSave.skills['dragons_breath'], 2);
+  assert.equal(complexSave.skills['wild_charge'], 2);
 
   // Hotbar cleaned
-  assert.equal(complexSave.hotbar[0], 'dragons_breath');
+  assert.equal(complexSave.hotbar[0], 'wild_charge');
   assert.equal(complexSave.hotbar[1], null);
   assert.equal(complexSave.hotbar[2], null);
 

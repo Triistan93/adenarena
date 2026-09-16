@@ -91,7 +91,7 @@ test('1. Human Sorcerer / Mage: ZERO Dwarf Mage skills present', () => {
   for (const alias of baseMageAliases) {
     const list = classSkills[alias] || getClassSkills(alias);
     assert.ok(list, `Skills for ${alias} must exist`);
-    assert.equal(list.length, 8, `Base class ${alias} must have 8 canonical V2 mage skills`);
+    assert.equal(list.length, 6, `Base class ${alias} must have 6 canonical V2 mage skills`);
 
     for (const dwarfSkill of DWARF_MAGE_SKILLS) {
       assert.equal(

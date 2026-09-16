@@ -825,7 +825,7 @@ function buildEchoAdapter() {
   // Garantia canônica da linhagem do Mago Humano (Sorcerer / Archmage)
   if (ACTIVE_CLASS_SKILLS['human_sorcerer']) {
     const sorcererSkills = [...ACTIVE_CLASS_SKILLS['human_sorcerer']];
-    ['human_sorcerer', 'sorcerer', 'archmage'].forEach(alias => {
+    ['human_sorcerer'].forEach(alias => {
       CLASS_SKILLS_ECHO[alias] = [...sorcererSkills];
     });
     const baseMageSkills = (typeof CANONICAL_CLASS_REGISTRY_V2 !== 'undefined' && CANONICAL_CLASS_REGISTRY_V2?.mage?.skillIds)
@@ -939,9 +939,7 @@ function buildEchoAdapter() {
     for (const [classId, classDef] of Object.entries(CANONICAL_CLASS_REGISTRY_V2)) {
       if (Array.isArray(classDef.skillIds)) {
         CLASS_SKILLS_V2_ECHO[classId] = [...classDef.skillIds];
-        if (!ACTIVE_CLASS_SKILLS[classId]) {
-          CLASS_SKILLS_ECHO[classId] = [...classDef.skillIds];
-        }
+        CLASS_SKILLS_ECHO[classId] = [...classDef.skillIds];
 
         for (const sid of classDef.skillIds) {
           if (SHARED_SKILL_IDS.includes(sid)) continue;

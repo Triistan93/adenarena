@@ -336,7 +336,7 @@ describe('GLOBAL PROGRESSION ACROSS ALL 9 EPIC BOSSES', () => {
     { id: 'baium',     lvl: 75,  pLvl: 78,  hp: 4000, atk: 980,  def: 400, matk: 350, mdef: 340, crit: 36, atkSpd: 0.85, potId: 'hp_potion_xl', pots: 50 },
     { id: 'frintezza', lvl: 85,  pLvl: 88,  hp: 5200, atk: 1300, def: 500, matk: 480, mdef: 420, crit: 40, atkSpd: 1.00, potId: 'hp_potion_xl', pots: 50 },
     { id: 'antharas',  lvl: 95,  pLvl: 96,  hp: 6800, atk: 1750, def: 620, matk: 650, mdef: 520, crit: 44, atkSpd: 1.15, potId: 'hp_potion_xl', pots: 50 },
-    { id: 'valakas',   lvl: 100, pLvl: 100, hp: 8500, atk: 2200, def: 760, matk: 850, mdef: 640, crit: 48, atkSpd: 1.30, potId: 'hp_potion_xl', pots: 50 }
+    { id: 'valakas',   lvl: 100, pLvl: 100, hp: 9000, atk: 2250, def: 780, matk: 850, mdef: 650, crit: 48, atkSpd: 1.30, potId: 'hp_potion_xl', pots: 55 }
   ];
 
   const standardSkills = {

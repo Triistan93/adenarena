@@ -41,7 +41,7 @@ export const OLD_TO_NEW_SKILL_MAP = Object.freeze({
   'flame_nova': 'blazing_circle',
 
   // Death Knight V1 synthetic
-  'cinderblade': 'death_raid',
+  'cinderblade': 'hellfire',
   'hellfire_grasp': 'death_mark',
   'ashen_shroud': 'dark_shield',
   'infernal_judgment': 'ultimate_death_knight',
@@ -131,18 +131,18 @@ export function migrateCharacterSave(state) {
     const numRank = Number(rank) || 0;
     if (numRank <= 0) continue;
 
-    // 1. Direct Canonical Match in V2
-    if (CANONICAL_SKILL_REGISTRY_V2[oldId]) {
-      migratedSkills[oldId] = numRank;
-      migratedMappings.push({ from: oldId, to: oldId, rank: numRank, type: 'CANONICAL_MATCH' });
-      continue;
-    }
-
-    // 2. Mapped Replacement
+    // 1. Explicit Mapped Replacement
     const mappedTarget = OLD_TO_NEW_SKILL_MAP[oldId];
     if (mappedTarget && CANONICAL_SKILL_REGISTRY_V2[mappedTarget]) {
       migratedSkills[mappedTarget] = Math.max(migratedSkills[mappedTarget] || 0, numRank);
       migratedMappings.push({ from: oldId, to: mappedTarget, rank: numRank, type: 'CANONICAL_REPLACED' });
+      continue;
+    }
+
+    // 2. Direct Canonical Match in V2
+    if (CANONICAL_SKILL_REGISTRY_V2[oldId]) {
+      migratedSkills[oldId] = numRank;
+      migratedMappings.push({ from: oldId, to: oldId, rank: numRank, type: 'CANONICAL_MATCH' });
       continue;
     }
 
