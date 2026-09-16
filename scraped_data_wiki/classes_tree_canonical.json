@@ -1,0 +1,448 @@
+[
+  {
+    "race": "human",
+    "raceName": "Humano (Human)",
+    "branches": [
+      {
+        "lineageName": "Duelist (Dual Swords)",
+        "role": "Physical Melee / Combo Attacker",
+        "base": "fighter",
+        "first": "warrior",
+        "second": "gladiator",
+        "third": "duelist"
+      },
+      {
+        "lineageName": "Dreadnought (Polearm / Spear)",
+        "role": "Physical Melee / AoE Specialist",
+        "base": "fighter",
+        "first": "warrior",
+        "second": "warlord",
+        "third": "dreadnought"
+      },
+      {
+        "lineageName": "Phoenix Knight (Sword & Shield Tank)",
+        "role": "Physical Tank / Holy Defender",
+        "base": "fighter",
+        "first": "knight",
+        "second": "paladin",
+        "third": "phoenix_knight"
+      },
+      {
+        "lineageName": "Hell Knight (Dark Tank / Panther)",
+        "role": "Physical Tank / Dark Summoner",
+        "base": "fighter",
+        "first": "knight",
+        "second": "dark_avenger",
+        "third": "hell_knight"
+      },
+      {
+        "lineageName": "Adventurer (Dagger / Critical)",
+        "role": "Physical Melee / Critical Assassin",
+        "base": "fighter",
+        "first": "rogue",
+        "second": "treasure_hunter",
+        "third": "adventurer"
+      },
+      {
+        "lineageName": "Sagittarius (Long Bow)",
+        "role": "Physical Ranged / Long Bow Sniper",
+        "base": "fighter",
+        "first": "rogue",
+        "second": "hawkeye",
+        "third": "sagittarius"
+      },
+      {
+        "lineageName": "Archmage (Fire Magic)",
+        "role": "Magical Ranged / High Fire DPS",
+        "base": "mage",
+        "first": "wizard",
+        "second": "sorcerer",
+        "third": "archmage"
+      },
+      {
+        "lineageName": "Soultaker (Necromancer / Dark Magic)",
+        "role": "Magical Ranged / Curses & Undead Summon",
+        "base": "mage",
+        "first": "wizard",
+        "second": "necromancer",
+        "third": "soultaker"
+      },
+      {
+        "lineageName": "Arcana Lord (Cat Summoner)",
+        "role": "Summoner / Beast Lord & Party Buffs",
+        "base": "mage",
+        "first": "wizard",
+        "second": "warlock",
+        "third": "arcana_lord"
+      },
+      {
+        "lineageName": "Cardinal (Healer / Holy Priest)",
+        "role": "Healer / Mass Resurrection & Cleanse",
+        "base": "mage",
+        "first": "cleric",
+        "second": "bishop",
+        "third": "cardinal"
+      },
+      {
+        "lineageName": "Hierophant (Buffer / Enchanter)",
+        "role": "Buffer / Versatile Blessings & Stats",
+        "base": "mage",
+        "first": "cleric",
+        "second": "prophet",
+        "third": "hierophant"
+      },
+      {
+        "lineageName": "Death Knight Human (Dark Sword Tank)",
+        "role": "Melee Hybrid / Dark Points & Ice Spikes",
+        "base": "human_deathknight_0",
+        "first": "human_deathknight_1",
+        "second": "human_deathknight_2",
+        "third": "human_deathknight_3"
+      },
+      {
+        "lineageName": "Assassin Male (Dual Dagger Shadow)",
+        "role": "Physical Melee / Shadow Clones & Assassination",
+        "base": "secret_assassin_male_0",
+        "first": "secret_assassin_male_1",
+        "second": "secret_assassin_male_2",
+        "third": "secret_assassin_male_3"
+      },
+      {
+        "lineageName": "Warg / Werewolf (Beast Fighter)",
+        "role": "Physical Melee / Lycan Beast & Berserk",
+        "base": "werewolf_0",
+        "first": "werewolf_1",
+        "second": "werewolf_2",
+        "third": "werewolf_3"
+      }
+    ]
+  },
+  {
+    "race": "elf",
+    "raceName": "Elfo (Elf)",
+    "branches": [
+      {
+        "lineageName": "Eva's Templar (Evasive Tank)",
+        "role": "Physical Tank / Cubics & High Evasion",
+        "base": "elven_fighter",
+        "first": "elven_knight",
+        "second": "temple_knight",
+        "third": "evas_templar"
+      },
+      {
+        "lineageName": "Sword Muse (Song Enchanter)",
+        "role": "Hybrid Support / Defensive Songs & Sword",
+        "base": "elven_fighter",
+        "first": "elven_knight",
+        "second": "swordsinger",
+        "third": "sword_muse"
+      },
+      {
+        "lineageName": "Wind Rider (Agile Dagger)",
+        "role": "Physical Melee / Extreme Speed & Evasion",
+        "base": "elven_fighter",
+        "first": "elven_scout",
+        "second": "plain_walker",
+        "third": "wind_rider"
+      },
+      {
+        "lineageName": "Moonlight Sentinel (Rapid Bow)",
+        "role": "Physical Ranged / Fastest Attack Speed Bow",
+        "base": "elven_fighter",
+        "first": "elven_scout",
+        "second": "silver_ranger",
+        "third": "moonlight_sentinel"
+      },
+      {
+        "lineageName": "Mystic Muse (Water & Ice Magic)",
+        "role": "Magical Ranged / Fastest Casting Speed & Slows",
+        "base": "elven_mage",
+        "first": "elven_wizard",
+        "second": "spellsinger",
+        "third": "mystic_muse"
+      },
+      {
+        "lineageName": "Elemental Master (Unicorn Summoner)",
+        "role": "Summoner / Unicorn Spirits & Magic Buffs",
+        "base": "elven_mage",
+        "first": "elven_wizard",
+        "second": "elemental_summoner",
+        "third": "elemental_master"
+      },
+      {
+        "lineageName": "Eva's Saint (Recharge & Holy Support)",
+        "role": "Healer & Buffer / Mana Recharge & Cleanse",
+        "base": "elven_mage",
+        "first": "oracle",
+        "second": "elder",
+        "third": "evas_saint"
+      },
+      {
+        "lineageName": "Death Knight Elf (Light & Ice Sword)",
+        "role": "Melee Hybrid / High Evasion & Frost Aura",
+        "base": "elf_deathknight_0",
+        "first": "elf_deathknight_1",
+        "second": "elf_deathknight_2",
+        "third": "elf_deathknight_3"
+      }
+    ]
+  },
+  {
+    "race": "darkelf",
+    "raceName": "Elfo Negro (Dark Elf)",
+    "branches": [
+      {
+        "lineageName": "Shillien Templar (Vampiric Tank)",
+        "role": "Physical Tank / Vampiric Cubics & Dark Magic",
+        "base": "dark_fighter",
+        "first": "palus_knight",
+        "second": "shillien_knight",
+        "third": "shillien_templar"
+      },
+      {
+        "lineageName": "Spectral Dancer (Dual Swords Dance)",
+        "role": "Hybrid Support / Offensive Dances & Duals",
+        "base": "dark_fighter",
+        "first": "palus_knight",
+        "second": "bladedancer",
+        "third": "spectral_dancer"
+      },
+      {
+        "lineageName": "Ghost Hunter (Lethal Dagger)",
+        "role": "Physical Melee / Highest Critical Damage",
+        "base": "dark_fighter",
+        "first": "assassin",
+        "second": "abyss_walker",
+        "third": "ghost_hunter"
+      },
+      {
+        "lineageName": "Ghost Sentinel (Heavy Bow)",
+        "role": "Physical Ranged / Highest Raw Bow Power",
+        "base": "dark_fighter",
+        "first": "assassin",
+        "second": "phantom_ranger",
+        "third": "ghost_sentinel"
+      },
+      {
+        "lineageName": "Storm Screamer (Wind & Dark Magic)",
+        "role": "Magical Ranged / Highest Raw Magic Attack",
+        "base": "dark_mage",
+        "first": "dark_wizard",
+        "second": "spellhowler",
+        "third": "storm_screamer"
+      },
+      {
+        "lineageName": "Spectral Master (Demon Shadow Summoner)",
+        "role": "Summoner / Silhouette Shadows & Dark Lord",
+        "base": "dark_mage",
+        "first": "dark_wizard",
+        "second": "phantom_summoner",
+        "third": "spectral_master"
+      },
+      {
+        "lineageName": "Shillien Saint (Vampiric Healer & Empower)",
+        "role": "Healer & Buffer / Empower Buff & Dark Recovery",
+        "base": "dark_mage",
+        "first": "shillien_oracle",
+        "second": "shillien_elder",
+        "third": "shillien_saint"
+      },
+      {
+        "lineageName": "Death Knight Dark Elf (Hellfire Sword)",
+        "role": "Melee Hybrid / Dark Magic Crits & Soul Absorption",
+        "base": "delf_deathknight_0",
+        "first": "delf_deathknight_1",
+        "second": "delf_deathknight_2",
+        "third": "delf_deathknight_3"
+      },
+      {
+        "lineageName": "Assassin Female (Shadow Strike & Venoms)",
+        "role": "Physical Melee / Lethal Venoms & Teleport Blows",
+        "base": "secret_assassin_female_0",
+        "first": "secret_assassin_female_1",
+        "second": "secret_assassin_female_2",
+        "third": "secret_assassin_female_3"
+      },
+      {
+        "lineageName": "Blood Rose (Thorns & Life Leech)",
+        "role": "Magical Melee / Blood Magic & Thorn Vortex",
+        "base": "rose_vain_0",
+        "first": "rose_vain_1",
+        "second": "rose_vain_2",
+        "third": "rose_vain_3"
+      }
+    ]
+  },
+  {
+    "race": "orc",
+    "raceName": "Orc (Orc)",
+    "branches": [
+      {
+        "lineageName": "Titan (Two-Handed Sword / Blunt)",
+        "role": "Physical Melee / Frenzy & Colossal HP",
+        "base": "orc_fighter",
+        "first": "orc_raider",
+        "second": "destroyer",
+        "third": "titan"
+      },
+      {
+        "lineageName": "Grand Khavatari (Fists / Totems)",
+        "role": "Physical Melee / Rapid Totems & High Attack Speed",
+        "base": "orc_fighter",
+        "first": "orc_monk",
+        "second": "tyrant",
+        "third": "grand_khavatari"
+      },
+      {
+        "lineageName": "Dominator (Clan Mage & Mass Debuffs)",
+        "role": "Magical Shaman / Mass Clan Buffs & Seal Debuffs",
+        "base": "orc_mage",
+        "first": "orc_shaman",
+        "second": "overlord",
+        "third": "dominator"
+      },
+      {
+        "lineageName": "Doomcryer (Party Shaman & War Chants)",
+        "role": "Magical Shaman / Party Chants & Vampiric Rage",
+        "base": "orc_mage",
+        "first": "orc_shaman",
+        "second": "warcryer",
+        "third": "doomcryer"
+      },
+      {
+        "lineageName": "Grand Vanguard (Mounted Dragon Rider)",
+        "role": "Mounted Melee / Wyvern Charge & Spear Piercing",
+        "base": "orc_rider_0",
+        "first": "orc_rider_1",
+        "second": "orc_rider_2",
+        "third": "orc_rider_3"
+      }
+    ]
+  },
+  {
+    "race": "dwarf",
+    "raceName": "Anão (Dwarf)",
+    "branches": [
+      {
+        "lineageName": "Fortune Seeker (Spoil & Dagger/Blunt)",
+        "role": "Physical Melee / Extra Drop Scavenger & Spoil",
+        "base": "dwarven_fighter",
+        "first": "scavenger",
+        "second": "bounty_hunter",
+        "third": "fortune_seeker"
+      },
+      {
+        "lineageName": "Maestro (Master Crafter & Golems)",
+        "role": "Crafter & Melee / Siege Golems & Mechanical Cannon",
+        "base": "dwarven_fighter",
+        "first": "artisan",
+        "second": "warsmith",
+        "third": "maestro"
+      },
+      {
+        "lineageName": "ShineMaker (Celestial Hammer Support)",
+        "role": "Melee & Holy Support / Light Hammer & Party Barrier",
+        "base": "shineMakerBase",
+        "first": "shineMakerS1",
+        "second": "shineMakerS2",
+        "third": "shinemaker"
+      }
+    ]
+  },
+  {
+    "race": "kamael",
+    "raceName": "Kamael (Kamael)",
+    "branches": [
+      {
+        "lineageName": "Doombringer (Ancient Sword Berserker)",
+        "role": "Physical Melee / Disarm, Rush Impact & Soul Blade",
+        "base": "jin_kamael_soldier",
+        "first": "trooper",
+        "second": "berserker",
+        "third": "doombringer"
+      },
+      {
+        "lineageName": "Soul Hound (Rapier & Dark Magic)",
+        "role": "Hybrid Melee-Mage / Rapier Teleports & Soul Steal",
+        "base": "jin_kamael_soldier",
+        "first": "soul_finder",
+        "second": "soul_breaker",
+        "third": "soul_hound"
+      },
+      {
+        "lineageName": "Trickster (Crossbow Specialist)",
+        "role": "Physical Ranged / Traps & Rapid Crossbow Bolts",
+        "base": "jin_kamael_soldier",
+        "first": "warder",
+        "second": "arbalester",
+        "third": "trickster"
+      },
+      {
+        "lineageName": "Samurai (Katana / Iaijutsu Master)",
+        "role": "Physical Melee / Ancestral Katana & Quick Draw",
+        "base": "crow_0",
+        "first": "crow_1",
+        "second": "crow_2",
+        "third": "crow_3"
+      }
+    ]
+  },
+  {
+    "race": "sylph",
+    "raceName": "Sylph (Sylph)",
+    "branches": [
+      {
+        "lineageName": "Storm Blaster (Elemental Firearms)",
+        "role": "Ranged Gunner / Rapid Wind Shots & Pistol Fire",
+        "base": "sylphid",
+        "first": "sylph_gunner",
+        "second": "wind_hunter",
+        "third": "storm_blaster"
+      }
+    ]
+  },
+  {
+    "race": "highelf",
+    "raceName": "Alto Elfo (High Elf)",
+    "branches": [
+      {
+        "lineageName": "Divine Templar (Sacred Shield Guardian)",
+        "role": "Holy Tank / Divine Aegis & Radiant Light",
+        "base": "sacred_templar_0",
+        "first": "sacred_templar_1",
+        "second": "sacred_templar_2",
+        "third": "sacred_templar_3"
+      },
+      {
+        "lineageName": "Element Weaver (Tri-Elemental Sage)",
+        "role": "Magical Ranged / Combined Tri-Elements (Fire, Water, Wind)",
+        "base": "spirit_0",
+        "first": "spirit_1",
+        "second": "spirit_2",
+        "third": "spirit_3"
+      }
+    ]
+  },
+  {
+    "race": "ertheia",
+    "raceName": "Ertheia (Ertheia)",
+    "branches": [
+      {
+        "lineageName": "Eviscerator (Garras & Fúria de Sayha)",
+        "role": "Physical Melee / Rapid Claws & Tornado Combos",
+        "base": "marauderBase",
+        "first": "marauder",
+        "second": "ertheiaWarrior",
+        "third": "eviscerator"
+      },
+      {
+        "lineageName": "Sayha Seeker (Espíritos do Vendaval)",
+        "role": "Magical Ranged / Wind Elementalism & Storm Spirits",
+        "base": "sayhaMageBase",
+        "first": "sayhaSeer",
+        "second": "windRiderErth",
+        "third": "sayhaSeeker"
+      }
+    ]
+  }
+]
