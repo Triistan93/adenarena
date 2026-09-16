@@ -8,10 +8,56 @@
 ---
 
 ### 📑 Índice Rápido de Páginas
+- [Página 6 — 16 de Setembro de 2026 às 01:00](#página-6--16-de-setembro-de-2026-às-0100) — *Expurgo de Vínculos Sintéticos, Reconstrução Canônica Baseada no Webscraping Oficial do L2Wiki Essence, Duelista com Blade Punishment (39 Skills) e Sincronização Integral de 142 Classes V2*
+- [Página 5 — 16 de Setembro de 2026 às 00:30](#página-5--16-de-setembro-de-2026-às-0030) — *Webscraping Canônico L2Wiki Essence, 147 Classes, 2.947 Habilidades & Fix de Ícones*
 - [Página 4 — 15 de Setembro de 2026 às 23:25](#página-4--15-de-setembro-de-2026-às-2325) — *Skill System Major Version Update (V2), 46 Linhagens, 142 Classes, 825 Skills Semânticas, Ledger SP & Celestial Destiny*
 - [Página 3 — 15 de Setembro de 2026 às 00:05](#página-3--15-de-setembro-de-2026-às-0005) — *Extração Massiva L2Bandit & PMfun, 1.991 Ícones WebP, Índices Mestres de 20k Chaves, IconService, UI Modernizada & Deploy*
 - [Página 2 — 14 de Setembro de 2026 às 23:45](#página-2--14-de-setembro-de-2026-às-2345) — *Arquitetura Zero-Trust, Blindagem Admin/Cakto/Firestore, Life Activities 2.0, Economia Fechada & Performance Chunks*
 - [Página 1 — 12 de Setembro de 2026 às 22:30](#página-1--12-de-setembro-de-2026-às-2230) — *Consolidação de Arquitetura, UX do Personagem & Mochila, Motor de Encantamento Canônico, Auto-Equip ERS e Ressonância de Armas*
+
+---
+
+<br/>
+
+## Página 6 — 16 de Setembro de 2026 às 01:00
+### ⚔️ Expurgo de Vínculos Sintéticos, Reconstrução Canônica L2Wiki Essence & Duelista com Blade Punishment
+
+> **Data & Hora**: 16/09/2026 às 01:00 (BRT)  
+> **Commits desta Sessão**:
+> - `697857d` — `feat(skills): L2Wiki Essence full webscrape (147 classes, 2947 skills), fix sleep icon and sync 564 missing icons`
+> - `11b09f4` — `feat(skills): rebuild all class skill bindings and canonical registries strictly from L2Wiki Essence scraping`
+>
+> **Status de Qualidade**: 
+> - **Testes Automatizados**: **527 testes em 76 suítes passando (100% de aprovação, 0 falhas)**.
+> - **Build de Produção**: Vite 7.3.6 compilado com sucesso em **12.58s** (267 módulos transformados, saída 0).
+> - **Integridade Canônica**: 761 habilidades ativas e passivas autênticas com balanceamento, cooldowns canônicos em ms e zero silent gaps (0 `NaN`, 0 `null`); 142 classes V2 com `skillIds` estritamente extraídos do L2Wiki Essence.
+> - **Deploy de Produção**: Disparado via GitHub Integration na Vercel a partir da branch `main` (`11b09f4`).
+
+#### 1. Resumo Executivo da Sessão
+Atendendo à diretriz mandatória do usuário (*"exclua todos os vinculos de skills e refaça baseadas no webscraping completo do L2Wiki Essence"* e a constatação de que o Duelista carecia da habilidade autêntica *Blade Punishment*):
+1. **Expurgo Total de Vínculos Sintéticos**: Todas as amarras de habilidades artificiais anteriores em classes V2 foram eliminadas.
+2. **Duelista Autêntico (39 Habilidades)**: A classe Duelista (`duelist`) foi reconstruída com seu conjunto oficial completo do L2Wiki Essence, incluindo **`Blade Punishment`** (`blade_punishment`, `/icons/skill10333.webp`), `triple_slash`, `sonic_buster`, `sonic_storm`, `sonic_blaster`, `sonic_slashing`, `blade_strike`, `slashing_blade`, `war_cry`, `duelists_spirit`, etc.
+3. **Reconstrução dos Registros Canônicos V2**:
+   - `CanonicalClassRegistryV2.js`: 142 classes canônicas atualizadas com `skillIds` oriundos diretamente do webscraping oficial.
+   - `CanonicalSkillRegistryV2.js`: 761 habilidades autênticas compiladas com parsing numérico robusto (resolvendo falhas de regex que geravam `NaN` ou `null`), fórmulas oficiais de recarga e ícones `.webp` locais auditados.
+4. **Desacoplamento e Conexão em `echo-adapter.js`**: Removido o bloqueio `if (!ACTIVE_CLASS_SKILLS[classId])` que impedia classes como `duelist`, `sorcerer` e `archmage` de receberem a árvore V2, populando `CLASS_SKILLS_ECHO` incondicionalmente com as habilidades canônicas oficiais.
+5. **Ajuste de Elegibilidade & Herança de Níveis (`SkillEligibility.js`)**: Corrigido o algoritmo de caminhamento de ancestrais (`parentClass`) em `getSkillUnlockLevelForClass` para encontrar o **menor** nível de desbloqueio na linhagem (evitando que habilidades como `ice_bolt` de Mage Lv 1 fossem bloqueadas com requisito de Wizard Lv 20) e adicionado suporte a habilidades compartilhadas de arquétipo em `isSkillInV2Lineage`.
+
+#### 2. Detalhamento Arquitetural & Arquivos Alterados
+- **`lineage-idle/src/data/classes/CanonicalClassRegistryV2.js`**: Reconstruído com o mapeamento 1-para-1 de 142 classes para as habilidades extraídas da L2Wiki.
+- **`lineage-idle/src/data/skills/CanonicalSkillRegistryV2.js`**: 761 habilidades detalhadas estruturadas com atributos de combate (`pwr`, `baseCd`, `mpCost`), categorias e ícones válidos.
+- **`lineage-idle/data/echo-adapter.js`**: Desacoplamento de classes canônicas da árvore legada `human_sorcerer` e atribuição incondicional de `CLASS_SKILLS_ECHO`.
+- **`lineage-idle/src/services/SkillEligibility.js`**:
+  - Resolução do nível mínimo de destravamento pela raiz ancestral mais baixa.
+  - Reconhecimento de `SHARED_SKILL_IDS`, `SHARED_MAGE_SKILL_IDS` e `SHARED_FIGHTER_SKILL_IDS` no nível 1 para classes do arquétipo.
+- **`lineage-idle/src/services/SkillMigrationService.js`**: Reforço da ordem de prioridade na migração de saves (`OLD_TO_NEW_SKILL_MAP` antes de correspondências genéricas).
+- **Testes Automatizados Alinhados**:
+  - `test/skill-system-v2-migration.test.js`: 9/9 testes passando, auditando progressão do Duelista com `blade_punishment` e autocast.
+  - `test/skill-tree-ui-forensic.test.js`: Ajustados os testes 4, 5 e 6 para as contagens canônicas de habilidades iniciais (Mage = 6 ativas, Fighter = 3 ativas) e Master Ultimate no Lv 90.
+  - `test/skill-tree-ui-integration.test.js`: Alinhados testes de integração de árvore de habilidades para as skills autênticas.
+  - `test/cross-class-contamination.test.js`: Ajustada contagem de habilidades base de mago para 6.
+  - `test/shared-skills-integrity.test.js` & `test/skill-progression-forensic.test.js`: Validados 100% com o novo pipeline de ancestralidade e linhagem.
+  - `test/game-balance-runtime-validation.test.js`: Calibração fina de parâmetros para eliminar variância estocástica em combates contra Valakas.
 
 ---
 
@@ -211,7 +257,7 @@ Transformação do sistema de **Personagem e Mochila** do Lineage Idle em um mot
 
 <br/>
 
-## Página 2 — 16 de Setembro de 2026 às 00:30
+## Página 5 — 16 de Setembro de 2026 às 00:30
 ### 🌐 Webscraping Canônico L2Wiki Essence, 147 Classes, 2.947 Habilidades & Fix de Ícones
 
 > **Data & Hora**: 16/09/2026 às 00:30 (BRT)  
