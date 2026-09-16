@@ -8,6 +8,7 @@
 ---
 
 ### 📑 Índice Rápido de Páginas
+- [Página 8 — 16 de Setembro de 2026 às 20:50](#página-8--16-de-setembro-de-2026-às-2050) — *Economia Canônica de Soulshots/Spiritshots: Grade Matching (+100%) vs Universal Wildcard (+30%) e Consumo Justo 1:1*
 - [Página 7 — 16 de Setembro de 2026 às 18:30](#página-7--16-de-setembro-de-2026-às-1830) — *Adaptação Integral dos Conceitos Canônicos do Lineage II Essence (Season 1 Lv 1–40), Economia Fechada, Coleções Perpétuas, Crafting D/C, Augmentação e Brooches*
 - [Página 6 — 16 de Setembro de 2026 às 01:00](#página-6--16-de-setembro-de-2026-às-0100) — *Expurgo de Vínculos Sintéticos, Reconstrução Canônica Baseada no Webscraping Oficial do L2Wiki Essence, Duelista com Blade Punishment (39 Skills) e Sincronização Integral de 142 Classes V2*
 - [Página 5 — 16 de Setembro de 2026 às 00:30](#página-5--16-de-setembro-de-2026-às-0030) — *Webscraping Canônico L2Wiki Essence, 147 Classes, 2.947 Habilidades & Fix de Ícones*
@@ -15,6 +16,39 @@
 - [Página 3 — 15 de Setembro de 2026 às 00:05](#página-3--15-de-setembro-de-2026-às-0005) — *Extração Massiva L2Bandit & PMfun, 1.991 Ícones WebP, Índices Mestres de 20k Chaves, IconService, UI Modernizada & Deploy*
 - [Página 2 — 14 de Setembro de 2026 às 23:45](#página-2--14-de-setembro-de-2026-às-2345) — *Arquitetura Zero-Trust, Blindagem Admin/Cakto/Firestore, Life Activities 2.0, Economia Fechada & Performance Chunks*
 - [Página 1 — 12 de Setembro de 2026 às 22:30](#página-1--12-de-setembro-de-2026-às-2230) — *Consolidação de Arquitetura, UX do Personagem & Mochila, Motor de Encantamento Canônico, Auto-Equip ERS e Ressonância de Armas*
+
+---
+
+<br/>
+
+## Página 8 — 16 de Setembro de 2026 às 20:50
+### 🏹 Economia Canônica de Soulshots/Spiritshots: Grade Matching (+100%) vs Universal Wildcard (+30%) e Consumo Justo 1:1
+
+> **Data & Hora**: 16/09/2026 às 20:50 (BRT)  
+> **Commits desta Sessão**:
+> - `feat(combat): implement authentic soulshot grade matching (+100%) vs universal wildcard (+30%) with 1:1 consumption`
+>
+> **Status de Qualidade**: 
+> - **Testes Automatizados**: **545 testes em 83 suítes passando (100% de aprovação, 0 falhas)**.
+> - **Build de Produção**: Vite compilado com sucesso com chunks otimizados.
+> - **Preservação Sagrada**: 0 alterações ou regressões nos 3 pilares intocáveis (`LevelEngine.js` Curva Monotônica 1-40, `MarketService.js` Mercado 10 slots 5%, `ExpeditionService.js` Expedições).
+
+#### 1. Resumo Executivo da Sessão
+Em resposta ao refinamento de gameplay onde no Aden Arena todos os combatentes engajam à mesma distância abstrata no ciclo idle, a antiga proposta de cobrança escalonada de 2 a 4 tiros para arcos foi refatorada para um sistema autêntico e economicamente recompensador de **Correspondência Estrita de Grau**:
+1. **Consumo Justo e Homogêneo (1:1)**: Todas as armas (espadas, adagas, maças, varinhas e arcos) consomem exatamente **1 tiro por ataque normal**. O arqueiro não sofre mais taxação arbitrária de recursos.
+2. **Vantagem de Grau Correto (+100% de Dano)**: Usar o tiro dedicado da grade exata da arma equipada (`soulshot_ng` para No-Grade, `soulshot_d` para D-Grade, `soulshot_c` para C-Grade) concede o bônus canônico total de **+100% de dano** (multiplicador 2.0x).
+3. **Soulshot Universal como Coringa Moderado (+30% de Dano)**: O `soulshot_universal` e `spiritshot_universal` funcionam como coringa para qualquer grau de arma (ideal para passes, drops e iniciantes), mas concedem bônus de **+30% de dano** (multiplicador 1.30x), incentivando a progressão para a forja de tiros dedicados de cada grau.
+4. **Proteção contra Desperdício & Bloqueio de Grau Inferior**: Tiros de grau inferior ao da arma equipada (ex: arma D-Grade com apenas `soulshot_ng` no inventário) **não ativam**. O tiro é preservado e o dano é desferido em base (1.0x).
+5. **Prioridade Inteligente de Inventário**: Quando o personagem possui tanto o tiro dedicado quanto o universal, o motor consome prioritariamente o tiro dedicado (+100%). Ao esgotar, recorre automaticamente ao universal (+30%).
+6. **Módulo Desacoplado no Motor (`CombatEngine.js`)**: Função canônica `resolveSoulshotEffect(state, weaponDef, isMageClass)` exportada para simulações e testes independentes de UI/DOM.
+
+#### 2. Detalhamento Arquitetural & Arquivos Alterados
+- **`lineage-idle/src/engine/CombatEngine.js`**: Implementação e exportação de `resolveSoulshotEffect(state, weaponDef, isMageClass)`.
+- **`lineage-idle/main.js`**: Integração no ciclo `attackMonster()`, flutuadores visuais com labels específicos (`SS (+100%)`, `SS Univ (+30%)`, `SPS (+100%)`, `SPS Univ (+30%)`) e consumo 1:1.
+- **`test/canonical-lineage2-adaptations.test.js`**: Adição do bloco 6 com 6 novos testes unitários cobrindo tiros dedicados, universais, não-ativação de grau inferior, prioridade de consumo e armas mágicas (total da suíte: 18 testes).
+- **`docs/ADEN_ARENA_LINEAGE2_CROSS_REFERENCE.md`**: Atualização da Matriz de Decisões de Arquitetura (Seção 7).
+- **`docs/IMPLEMENTATION_PLAN_SEASON1_ADAPTATIONS.md`**: Atualização do Diagnóstico (Seção 2) e da Arquitetura de Combate (Seção 6.3).
+- **`DIARIO_DE_DESENVOLVIMENTO.md`**: Registro desta Página 8.
 
 ---
 

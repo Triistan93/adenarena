@@ -415,3 +415,73 @@ export function toggleAutoPotion(state, callbacks = {}) {
   if (callbacks.log) callbacks.log(`Auto-Poção ${state.autoPotionActive ? 'ATIVADA (Bebe poção quando HP < 50%)' : 'DESATIVADA'}.`, 'system');
   if (callbacks.save) callbacks.save();
 }
+
+/**
+ * Determina o efeito, multiplicador de dano e item de tiro a ser consumido.
+ * - Tiro dedicado da Grade correta da arma: +100% de dano (2.0x).
+ * - Tiro Universal (curinga para qualquer grau): +30% de dano (1.30x).
+ * - Tiro de grau inferior: NÃO ativa (retorna null, não consome, dano 1.0x).
+ * - Consumo: exatamente 1 tiro por ataque para todas as armas.
+ *
+ * @param {Object} state
+ * @param {Object} [weaponDef]
+ * @param {boolean} [isMageClass]
+ * @returns {{ shotItem: Object|null, isUniversal: boolean, multiplier: number, label: string|null, soulshotCritBonus: number }}
+ */
+export function resolveSoulshotEffect(state, weaponDef = null, isMageClass = false) {
+  if (!state || !state.soulshotActive || !Array.isArray(state.inventory)) {
+    return { shotItem: null, isUniversal: false, multiplier: 1.0, label: null, soulshotCritBonus: 0 };
+  }
+
+  let weaponGrade = 'NG';
+  if (weaponDef?.grade) {
+    weaponGrade = String(weaponDef.grade).toUpperCase();
+  } else if (weaponDef?.tier) {
+    const TIER_GRADE = { 1: 'NG', 2: 'D', 3: 'C', 4: 'B', 5: 'A', 6: 'S' };
+    weaponGrade = TIER_GRADE[weaponDef.tier] || 'NG';
+  }
+
+  const gradeSuffix = weaponGrade.toLowerCase();
+  const dedicatedShotId = isMageClass 
+    ? `spiritshot_${gradeSuffix}` 
+    : `soulshot_${gradeSuffix}`;
+
+  // 1. Prioridade Máxima: Tiro dedicado da Grade correta da arma (+100% de dano)
+  let shotItem = state.inventory.find(i => i && (i.count || 1) > 0 && i.itemId === dedicatedShotId);
+  let isUniversal = false;
+
+  // 2. Fallback: Tiro Universal como curinga automático para qualquer grau (+30% de dano)
+  if (!shotItem) {
+    shotItem = state.inventory.find(i => {
+      if (!i || (i.count || 1) <= 0) return false;
+      const id = String(i.itemId || '');
+      return isMageClass 
+        ? (id === 'blessed_spiritshot_universal' || id === 'spiritshot_universal')
+        : (id === 'soulshot_universal');
+    });
+    if (shotItem) isUniversal = true;
+  }
+
+  if (!shotItem) {
+    return { shotItem: null, isUniversal: false, multiplier: 1.0, label: null, soulshotCritBonus: 0 };
+  }
+
+  const multiplier = isUniversal ? 1.30 : 2.0;
+  let soulshotCritBonus = 0;
+  let label = '';
+
+  if (isMageClass) {
+    if (shotItem.itemId === 'blessed_spiritshot_universal') soulshotCritBonus = 5;
+    label = isUniversal ? 'SPS Univ (+30%)' : 'SPS (+100%)';
+  } else {
+    label = isUniversal ? 'SS Univ (+30%)' : 'SS (+100%)';
+  }
+
+  return {
+    shotItem,
+    isUniversal,
+    multiplier,
+    label,
+    soulshotCritBonus
+  };
+}

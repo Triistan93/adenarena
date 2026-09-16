@@ -181,7 +181,7 @@ A auditoria comprova que o Aden Arena não é um mero clone defasado; em diversa
 |:---|:---|:---|
 | **Season 1 Scope (Lv 1–40)** | **CONGELAR RIGOROSAMENTE** | Sistemas A-Grade, S-Grade, Awakening e Aden Lab permanecem como referência para Seasons 2 e 3. |
 | **Crafting & Drops** | **RECONECTAR CADEIAS QUEBRADAS** | Criar receitas canônicas D e C que consumam os materiais refinados da bancada de Life Activities. |
-| **Shots Economy** | **ADOTAR CONSUMO ESCALONADO** | Balancear arcos (2–4 tiros) e magias AoE (x1 a x3) contra armas melee (1 tiro). |
+| **Shots Economy** | **TIRO DEDICADO (+100%) VS UNIVERSAL (+30%)** | Consumo justo 1:1 para todas as armas (distância homogênea em idle). Arma exige tiro da sua grade exata para +100% de dano; tiro universal funciona como coringa (+30% de dano); tiros de grau inferior não ativam em armas superiores. |
 | **Collections** | **PROJETAR MÓDULO S1** | Criar coleções de No-Grade e D-Grade para queimar surplus de itens dropados no idle. |
 | **Common Craft** | **ADOTAR COMO FEATURE IDLE** | Implementar a barra de carga universal por abates para fabricação de pergaminhos. |
 | **Dolls & Crystals** | **INCORPORAR PITY E CHECKPOINTS** | Checkpoints a cada 5 níveis de cristal e pity bar determinística em fusão de dolls. |

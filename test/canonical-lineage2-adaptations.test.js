@@ -1,4 +1,4 @@
-﻿import { describe, it } from 'node:test';
+import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 
 import { CollectionService } from '../lineage-idle/src/services/CollectionService.js';
@@ -6,6 +6,7 @@ import * as CraftService from '../lineage-idle/src/services/CraftService.js';
 import { AugmentationService } from '../lineage-idle/src/services/AugmentationService.js';
 import { SynthesisService } from '../lineage-idle/src/services/SynthesisService.js';
 import { RefineryService } from '../lineage-idle/src/services/lifeActivities/RefineryService.js';
+import { resolveSoulshotEffect } from '../lineage-idle/src/engine/CombatEngine.js';
 import { CRAFTING_RECIPES } from '../lineage-idle/src/data/items/recipes_drops.js';
 import { ALL_ITEMS } from '../lineage-idle/src/data/items/index.js';
 import { DEFAULT_STATE } from '../lineage-idle/src/core/StateManager.js';
@@ -189,6 +190,100 @@ describe('Lineage II Canonical Adaptations Suite (Season 1)', () => {
       const res = RefineryService.refine(state, 'refine_fish_oil', 1);
       assert.equal(res.success, true);
       assert.ok(state.inventory.some(i => i.itemId === 'fish_oil'));
+    });
+  });
+
+  describe('6. Authentic Soulshot Economics: Grade Matching (+100%) vs Universal Wildcard (+30%)', () => {
+    it('activates dedicated matching shot with +100% damage and 1-to-1 consumption', () => {
+      const state = DEFAULT_STATE();
+      state.soulshotActive = true;
+      state.inventory = [
+        { id: 'ss_d', itemId: 'soulshot_d', count: 100 }
+      ];
+      const weaponDef = { id: 'weapon_crimson_sword', grade: 'D', tier: 2 };
+
+      const res = resolveSoulshotEffect(state, weaponDef, false);
+      assert.ok(res.shotItem);
+      assert.equal(res.shotItem.itemId, 'soulshot_d');
+      assert.equal(res.isUniversal, false);
+      assert.equal(res.multiplier, 2.0); // +100% bonus
+      assert.equal(res.label, 'SS (+100%)');
+    });
+
+    it('activates universal shot as wildcard with +30% damage when matching shot is absent', () => {
+      const state = DEFAULT_STATE();
+      state.soulshotActive = true;
+      state.inventory = [
+        { id: 'ss_u', itemId: 'soulshot_universal', count: 100 }
+      ];
+      const weaponDef = { id: 'weapon_crimson_sword', grade: 'D', tier: 2 };
+
+      const res = resolveSoulshotEffect(state, weaponDef, false);
+      assert.ok(res.shotItem);
+      assert.equal(res.shotItem.itemId, 'soulshot_universal');
+      assert.equal(res.isUniversal, true);
+      assert.equal(res.multiplier, 1.30); // +30% bonus
+      assert.equal(res.label, 'SS Univ (+30%)');
+    });
+
+    it('does NOT activate lower grade shot on higher grade weapon (preserves shot, 1.0x damage)', () => {
+      const state = DEFAULT_STATE();
+      state.soulshotActive = true;
+      state.inventory = [
+        { id: 'ss_ng', itemId: 'soulshot_ng', count: 500 }
+      ];
+      // D-Grade weapon cannot use No-Grade shots
+      const weaponDef = { id: 'weapon_crimson_sword', grade: 'D', tier: 2 };
+
+      const res = resolveSoulshotEffect(state, weaponDef, false);
+      assert.equal(res.shotItem, null);
+      assert.equal(res.multiplier, 1.0);
+      assert.equal(res.label, null);
+    });
+
+    it('prioritizes dedicated matching shot (+100%) over universal wildcard (+30%) when both are present', () => {
+      const state = DEFAULT_STATE();
+      state.soulshotActive = true;
+      state.inventory = [
+        { id: 'ss_u', itemId: 'soulshot_universal', count: 50 },
+        { id: 'ss_d', itemId: 'soulshot_d', count: 20 }
+      ];
+      const weaponDef = { id: 'weapon_crimson_sword', grade: 'D', tier: 2 };
+
+      const res = resolveSoulshotEffect(state, weaponDef, false);
+      assert.ok(res.shotItem);
+      assert.equal(res.shotItem.itemId, 'soulshot_d');
+      assert.equal(res.isUniversal, false);
+      assert.equal(res.multiplier, 2.0);
+    });
+
+    it('supports magic weapons with dedicated spiritshot (+100%) and universal spiritshot (+30%)', () => {
+      const state = DEFAULT_STATE();
+      state.soulshotActive = true;
+      const weaponDef = { id: 'staff_of_life', grade: 'D', tier: 2 };
+
+      // Dedicated match
+      state.inventory = [{ id: 'sps_d', itemId: 'spiritshot_d', count: 50 }];
+      const resDedicated = resolveSoulshotEffect(state, weaponDef, true);
+      assert.equal(resDedicated.multiplier, 2.0);
+      assert.equal(resDedicated.label, 'SPS (+100%)');
+
+      // Universal wildcard
+      state.inventory = [{ id: 'sps_u', itemId: 'spiritshot_universal', count: 50 }];
+      const resUniversal = resolveSoulshotEffect(state, weaponDef, true);
+      assert.equal(resUniversal.multiplier, 1.30);
+      assert.equal(resUniversal.label, 'SPS Univ (+30%)');
+    });
+
+    it('does not apply bonus if soulshotActive is false', () => {
+      const state = DEFAULT_STATE();
+      state.soulshotActive = false;
+      state.inventory = [{ id: 'ss_d', itemId: 'soulshot_d', count: 100 }];
+      const weaponDef = { id: 'weapon_crimson_sword', grade: 'D', tier: 2 };
+
+      const res = resolveSoulshotEffect(state, weaponDef, false);
+      assert.equal(res.shotItem, null);
+      assert.equal(res.multiplier, 1.0);
     });
   });
 });

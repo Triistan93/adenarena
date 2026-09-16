@@ -21,7 +21,7 @@ O objetivo deste plano é **utilizar os conceitos, regras e mecânicas comprovad
 |:---|:---|:---|:---|
 | **Forja & Refinaria** | `RefineryService` refina 12 materiais; `CraftService` tem 13 receitas | Os 12 materiais refinados não têm onde ser usados (órfãos). Monstros dropam equipamentos prontos aos montes. Não há receitas de armaduras/armas D-Grade reais. | **Cadeia de Forja D-Grade**: Receitas clássicas (Brigandine, Reinforced, Mithril, Bastard Sword) consumindo os materiais refinados + Peças de equipamentos dos monstros. |
 | **Descarte de Equipamentos** | `sellAllJunk` vende gear obsoleta por ouro básico | O jogador acumula centenas de armas/armaduras D e No-Grade no idle. Vendê-las gera inflação de Adena e esvazia o valor dos itens. | **Sistema de Coleções (Collections)**: Sacrifício e destruição permanente de equipamentos antigos para registrar em coleções temáticas com bônus perpétuos de conta. |
-| **Consumo de Tiros (Shots)** | Custo plano de 1 tiro por ataque em qualquer arma ou magia | Arcos e magias em área (AoE) ficam desbalanceadamente baratos, distorcendo o equilíbrio entre guerreiros corpo a corpo e arqueiros/magos. | **Consumo Escalonado L2**: Arcos consomem 2 a 4 tiros por disparo; habilidades AoE consomem x1 (1–3 alvos), x2 (4–8 alvos), x3 (9–16 alvos). |
+| **Consumo de Tiros (Shots)** | Custo plano genérico de tiros universais sem diferenciação de grau | Desvaloriza o crafting de Soulshots/Spiritshots por grau e não dá vantagem ao tiro correto. Em combates idle com distância homogênea, penalizar arcos com múltiplos tiros seria punitivo sem ganho tático. | **Regra Canônica de Tiro & Grau**: Consumo 1:1 justo para todas as armas. Arma exige o tiro da sua grade exata para bônus total (+100% de dano). O tiro Universal opera como curinga concedendo bônus moderado (+30% de dano). Tiros de grau inferior não ativam em armas superiores. |
 | **Cristalização no Enchant** | Itens quebram em `crystal_d` / `crystal_c` ao falhar +4 | Cristais não possuem utilidade real na Season 1 além de 2 receitas de tomos. O jogador sente a perda de encantamento como punição sem retorno. | **Utilidade dos Cristais**: Cristais D/C tornam-se o ingrediente essencial para confecção em massa de Soulshots D/C e Tomos Sagrados. |
 | **Augmentação (Life Stones)** | Ferreiro aceita Adena se o jogador não tiver a Life Stone; padrão Lv 76 | Bypassa o drop de Life Stones; quebra a itemização; ignora o cap de Season 1 (Lv 40); não consome Gemstones. | **Regra Canônica de Augment**: Exige Life Stone real (Lv 28, 34, 40) + Gemstones D/C. Remove bypass em Adena. Taxa de remoção justa no ferreiro. |
 | **Broches & Joias** | Slot existe no paperdoll; `jewelBroochCp = 0`; joias são brincos/anéis | O sistema de Broches e Joias do L2 simplesmente não existe: não há pedras de Ruby, Sapphire, Opal, etc., nem fusão de ranks. | **Broche & Joias de Broche Lv 1 a 5**: Broche abre slots para Ruby (+P.Atk/Shots), Sapphire (+M.Atk/Shots), Diamond (+P.Def), Pearl (+M.Def), Opal (+Stats) com síntese. |
@@ -127,17 +127,15 @@ O objetivo deste plano é **utilizar os conceitos, regras e mecânicas comprovad
 
 ---
 
-### 6.3 Simulação de Combate: Consumo de Tiros e Bônus de Conjunto
+### 6.3 Mecânica de Tiros (Shots) e Bônus de Conjunto
 
-#### [MODIFY] [`CombatSimulator.js`](file:///D:/BROWSER/AdenArena/lineage-idle/src/services/CombatSimulator.js)
-- Implementar consumo escalonado de tiros por tipo de arma:
-  - Espadas/Adagas/Maças/Varinhas: 1 tiro por golpe.
-  - Arcos: 2 a 4 tiros por disparo (conforme peso/grau do arco).
-- Implementar consumo de tiros em habilidades em área (AoE):
-  - 1 a 3 alvos: x1 consumo base.
-  - 4 a 8 alvos: x2 consumo base.
-  - 9 a 16 alvos: x3 consumo base.
-- Se o jogador não tiver Soulshots/Spiritshots correspondentes ao grau da arma, o bônus de dano (+100% P.Atk / +100% M.Atk) é desativado para aquele ataque.
+#### [MODIFY] [`CombatEngine.js`](file:///c:/Users/duuha/Downloads/adenarena-main/adenarena-main/lineage-idle/src/engine/CombatEngine.js) / [`main.js`](file:///c:/Users/duuha/Downloads/adenarena-main/adenarena-main/lineage-idle/main.js)
+- Implementar regra de ativação por grau e consumo justo 1:1:
+  - Consumo: exatamente 1 tiro por ataque para todas as armas (sem penalidade arbitrária de 2–4 tiros para arcos, dada a distância homogênea em jogo idle).
+  - Tiro dedicado da grade da arma (`soulshot_ng`, `soulshot_d`, `soulshot_c`): concede **+100% de dano** (2.0x).
+  - Tiro universal (`soulshot_universal`, `spiritshot_universal`): atua como coringa automático para qualquer grau, concedendo **+30% de dano** (1.30x).
+  - Tiros de grau inferior ao da arma não ativam em armas superiores (ex: arma D com apenas shot NG não consome o tiro e mantém dano base 1.0x).
+  - Prioridade inteligente: se houver tiros dedicados e universais no inventário, consome primeiro o tiro dedicado para entregar o multiplicador máximo (+100%).
 
 #### [MODIFY] [`EquipmentService.js`](file:///D:/BROWSER/AdenArena/lineage-idle/src/services/EquipmentService.js)
 - Implementar suporte canônico a **Bônus Parcial de Conjuntos de Armadura (3/5 peças)**:
