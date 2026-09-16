@@ -23,10 +23,11 @@
 > **Data & Hora**: 15/09/2026 às 23:25 (BRT)  
 > **Commits desta Sessão**:
 > - `feat(skills): major version update to canonical skill system v2 (celestial destiny 3629)`
+> - `fix(skills): activate canonical v2 skills for base classes and resolve skill window pipeline`
 >
 > **Status de Qualidade**: 
 > - **Testes Automatizados**: **527 testes passando em 76 suítes (0 falhas)**.
-> - **Build de Produção**: Vite 7.3.6 compilado com sucesso em **13.81s** (267 módulos transformados, código de saída 0).
+> - **Build de Produção**: Vite 7.3.6 compilado com sucesso em **12.07s** (267 módulos transformados, código de saída 0).
 > - **Integridade de Ativos**: 271 ícones WebP autênticos verificados fisicamente; 554 habilidades com flags explícitas auditadas (`iconGap: true, iconGapReason: 'ASSET_NOT_IN_LIBRARY'`). Zero gaps mascarados.
 > - **Deploy de Produção**: Disparado via GitHub Integration na Vercel a partir da branch `main`.
 
@@ -43,6 +44,7 @@ Executamos a **Major Version Update do Sistema de Habilidades do Aden Arena**, a
 - **`CanonicalClassRegistryV2.js`**: Cadastro das 142 classes distribuídas em 19 Base, 32 First, 45 Second e 46 Third Classes com regras de herança cumulativa por DAG ancestral.
 - **`SkillMigrationService.js`**: Motor determinístico de migração com sanitização de hotbars, auto-cast e cálculo estrito de refund de SP.
 - **`echo-adapter.js` & `SkillEligibility.js`**: Integração de runtime conectando V2 à engine, garantindo isolamento estrito de classes irmãs (*sibling branch rejection*) e preservando o requisito de Lv 1 para habilidades gerais de guerreiro e mago.
+- **Skill Window & Base Class V2 Activation**: Eliminação das habilidades sintéticas legadas compartilhadas (`hydro_strike`, `heal_light`) na UI do Human Mage (Lv 1), ativando o catálogo autêntico de 8 habilidades (6 ativas: `wind_strike`, `flame_strike`, `ice_bolt`, `self_heal`, `sleep`, `mages_will`; 2 passivas: `robe_mastery`, `mp_increase`) com suporte completo a ícones `.webp` em `SkillIconRegistry.js` e starterSkill canônico (`power_strike`) para Fighter em `starterKits.ts`.
 - **`StatsEngine.js`**: Incorporação de todas as passivas V2 canônicas de domínio de armas (dual, blunt, polearm, bow, dagger, fist), armaduras (heavy, light, robe) e atributos (focus, critical power, anti-magic).
 - **`test/skill-system-v2-migration.test.js`**: 9 testes formais cobrindo integridade do catálogo, idempotência da migração de saves, DAG de linhagens avançadas (*Grand Vanguard*, *Death Knight*, *ShineMaker*, *Archmage*) e autocast em combate.
 

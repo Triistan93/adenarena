@@ -936,19 +936,46 @@ function buildEchoAdapter() {
     for (const [classId, classDef] of Object.entries(CANONICAL_CLASS_REGISTRY_V2)) {
       if (Array.isArray(classDef.skillIds)) {
         CLASS_SKILLS_V2_ECHO[classId] = [...classDef.skillIds];
-        if (!CLASS_SKILLS_ECHO[classId]) {
-          CLASS_SKILLS_ECHO[classId] = [...classDef.skillIds];
-        }
+        CLASS_SKILLS_ECHO[classId] = [...classDef.skillIds];
+
         for (const sid of classDef.skillIds) {
           if (SHARED_SKILL_IDS.includes(sid)) continue;
-          if (SKILL_DEFS_ECHO[sid] && (!SKILL_DEFS_ECHO[sid].reqLvl || SKILL_DEFS_ECHO[sid].reqLvl === 1)) {
-            SKILL_DEFS_ECHO[sid].reqLvl = classDef.minLevel;
-            SKILL_REQS_ECHO[sid] = { reqLvl: classDef.minLevel };
+          if (SKILL_DEFS_ECHO[sid]) {
+            const sDef = SKILL_DEFS_ECHO[sid];
+            const currentReq = sDef.reqLvl;
+            const isMasterUlt = sDef.starRank === 5 || sDef.tier === 5 || currentReq >= 90;
+            const isUlt = sDef.isUltimate || sDef.starRank === 4 || sDef.tier === 4 || currentReq >= 80;
+
+            let targetReq = classDef.minLevel;
+            if (isMasterUlt) {
+              targetReq = 90;
+            } else if (isUlt) {
+              targetReq = 80;
+            } else if (classDef.stage === 0) {
+              targetReq = 1;
+            } else if (currentReq && currentReq > 1 && currentReq < classDef.minLevel) {
+              targetReq = currentReq;
+            }
+
+            sDef.reqLvl = targetReq;
+            SKILL_REQS_ECHO[sid] = { reqLvl: targetReq };
           }
         }
       }
       if (classDef.lineageId && !CLASS_SKILLS_ECHO[classDef.lineageId]) {
         CLASS_SKILLS_ECHO[classDef.lineageId] = [...classDef.skillIds];
+      }
+    }
+
+    // Ensure all Stage 0 (Base class) skills have strictly reqLvl = 1
+    for (const classDef of Object.values(CANONICAL_CLASS_REGISTRY_V2)) {
+      if (classDef.stage === 0 && Array.isArray(classDef.skillIds)) {
+        for (const sid of classDef.skillIds) {
+          if (SKILL_DEFS_ECHO[sid]) {
+            SKILL_DEFS_ECHO[sid].reqLvl = 1;
+            SKILL_REQS_ECHO[sid] = { reqLvl: 1 };
+          }
+        }
       }
     }
   }
@@ -961,6 +988,9 @@ function buildEchoAdapter() {
     }
   }
 
+  if (CLASS_SKILLS_ECHO['mage']) {
+    CLASS_SKILLS_ECHO['human_mage'] = [...CLASS_SKILLS_ECHO['mage']];
+  }
   if (CLASS_SKILLS_ECHO['wizard']) {
     CLASS_SKILLS_ECHO['human_wizard'] = [...CLASS_SKILLS_ECHO['wizard']];
   }

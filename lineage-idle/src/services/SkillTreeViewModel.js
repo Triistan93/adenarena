@@ -19,7 +19,8 @@ import {
   SHARED_MAGE_SKILL_IDS,
   SHARED_FIGHTER_SKILL_IDS,
   isMageClass,
-  resolveSkillDef
+  resolveSkillDef,
+  getSkillUnlockLevelForClass
 } from './SkillEligibility.js';
 
 import {
@@ -193,7 +194,9 @@ export function getSkillTreeViewModel(character, options = {}) {
     if (!def) continue;
 
     // Strict future check: requiredLevel > charLevel must NEVER be presented
-    const reqLvl = Number(def.requiredLevel || def.reqLvl || def.identity?.unlockLevel) || 1;
+    const classSpecificReq = getSkillUnlockLevelForClass(charClass, sId);
+    const baseReq = Number(def.requiredLevel || def.reqLvl || def.identity?.unlockLevel) || 1;
+    const reqLvl = Math.max(classSpecificReq, baseReq);
     if (charLevel < reqLvl) continue;
 
     const currentRank = charSkills[sId] || 0;

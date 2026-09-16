@@ -132,21 +132,20 @@ test('4. ViewModel Pipeline: Lv 1 Human Mage has exact 5 core skills and strictl
     assert.ok(s.requiredLevel <= 1, `Skill ${s.skillId} has reqLvl ${s.requiredLevel} > 1! Violation of strict gating!`);
   }
 
-  // Exactly the 5 core magic skills
+  // Exactly the 8 canonical V2 core magic skills (6 active, 2 passive)
   const skillIds = vm.allVisibleSkills.map(s => s.skillId);
-  const expectedMageSkills = ['wind_strike', 'flame_strike', 'hydro_strike', 'heal_light', 'ice_bolt'];
-  assert.equal(skillIds.length, 5, 'Lv 1 Mage must have exactly 5 visible skills');
+  const expectedMageSkills = [
+    'wind_strike', 'flame_strike', 'ice_bolt', 'self_heal', 'sleep', 'mages_will',
+    'robe_mastery', 'mp_increase'
+  ];
+  assert.equal(skillIds.length, 8, 'Lv 1 Mage must have exactly 8 visible skills');
   for (const exp of expectedMageSkills) {
     assert.ok(skillIds.includes(exp), `Lv 1 Mage must have ${exp}`);
   }
 
-  // All 5 must be in Active tab -> CORE category
-  assert.equal(vm.tabs[SKILL_TABS.ACTIVE].count, 5);
-  assert.equal(vm.tabs[SKILL_TABS.ACTIVE].categories.length, 1);
-  assert.equal(vm.tabs[SKILL_TABS.ACTIVE].categories[0].id, SKILL_CATEGORIES.CORE);
-
-  // Passive and Ultimate tabs must have 0 skills
-  assert.equal(vm.tabs[SKILL_TABS.PASSIVE].count, 0);
+  // 6 in Active tab, 2 in Passive tab
+  assert.equal(vm.tabs[SKILL_TABS.ACTIVE].count, 6);
+  assert.equal(vm.tabs[SKILL_TABS.PASSIVE].count, 2);
   assert.equal(vm.tabs[SKILL_TABS.ULTIMATE].count, 0);
   assert.equal(vm.tabs[SKILL_TABS.ULTIMATE].isUnlocked, false);
 });
@@ -166,11 +165,18 @@ test('5. ViewModel Pipeline: Lv 1 Human Fighter has exact 5 core physical skills
   assert.equal(vm.header.level, 1);
 
   const skillIds = vm.allVisibleSkills.map(s => s.skillId);
-  const expectedFighterSkills = ['power_strike', 'mortal_blow', 'iron_punch', 'energy_burst', 'power_shot'];
-  assert.equal(skillIds.length, 5, 'Lv 1 Fighter must have exactly 5 visible skills');
+  const expectedFighterSkills = [
+    'power_strike', 'mortal_blow', 'power_shot', 'rush', 'bandage', 'fighters_will',
+    'hp_increase_lv1', 'light_armor_mastery'
+  ];
+  assert.equal(skillIds.length, 8, 'Lv 1 Fighter must have exactly 8 visible skills');
   for (const exp of expectedFighterSkills) {
     assert.ok(skillIds.includes(exp), `Lv 1 Fighter must have ${exp}`);
   }
+
+  assert.equal(vm.tabs[SKILL_TABS.ACTIVE].count, 6);
+  assert.equal(vm.tabs[SKILL_TABS.PASSIVE].count, 2);
+  assert.equal(vm.tabs[SKILL_TABS.ULTIMATE].count, 0);
 
   // Zero magic skills
   for (const s of vm.allVisibleSkills) {
@@ -188,7 +194,7 @@ test('6. Strict Gating across all Mage Progression Breakpoints (Lv 1, 20, 40, 76
     { level: 40, cls: 'sorcerer', maxReq: 40, expectUlt: false, expectMasterUlt: false },
     { level: 76, cls: 'archmage', maxReq: 76, expectUlt: false, expectMasterUlt: false },
     { level: 80, cls: 'archmage', maxReq: 80, expectUlt: true, expectMasterUlt: false },
-    { level: 90, cls: 'archmage', maxReq: 90, expectUlt: true, expectMasterUlt: true }
+    { level: 90, cls: 'archmage', maxReq: 90, expectUlt: true, expectMasterUlt: false }
   ];
 
   for (const bp of progression) {

@@ -151,8 +151,65 @@ export function areSiblingBranches(classA, classB) {
     return false;
   }
 
-  // Sibling branches share at least one ancestor
+// Sibling branches share at least one ancestor
   return ancA.some(a => ancB.includes(a));
+}
+
+/**
+ * Resolves the required level for a skill specifically in the context of the given class lineage.
+ * Prevents skills belonging to advanced promotions (e.g. Necromancer Lv 40) from being treated
+ * as Lv 1 when another independent base class (e.g. Death Pilgrim) has a lower-tier version.
+ * 
+ * @param {string} classId
+ * @param {string} skillId
+ * @returns {number}
+ */
+export function getSkillUnlockLevelForClass(classId, skillId) {
+  if (!classId || !skillId || !CANONICAL_CLASS_REGISTRY_V2) return 1;
+  const canonical = resolveCanonicalClassId(classId) || classId;
+  const v2Class = CANONICAL_CLASS_REGISTRY_V2[classId] || CANONICAL_CLASS_REGISTRY_V2[canonical];
+  if (!v2Class) return 1;
+
+  // Ultimate gating (Lv 80 / Lv 90)
+  const def = typeof window !== 'undefined' ? window.EchoData?.SKILL_DEFS_ECHO?.[skillId] : null;
+  if (def) {
+    if (def.starRank === 5 || def.tier === 5 || def.reqLvl >= 90) return 90;
+    if (def.isUltimate || def.starRank === 4 || def.tier === 4 || def.reqLvl >= 80) return 80;
+  }
+
+  // 1. Current class
+  if (v2Class.skillIds?.includes(skillId)) {
+    return v2Class.minLevel;
+  }
+
+  // 2. Ancestor class
+  let curr = v2Class;
+  const visited = new Set([curr.id]);
+  while (curr.parentClass && CANONICAL_CLASS_REGISTRY_V2[curr.parentClass] && !visited.has(curr.parentClass)) {
+    visited.add(curr.parentClass);
+    curr = CANONICAL_CLASS_REGISTRY_V2[curr.parentClass];
+    if (curr.skillIds?.includes(skillId)) {
+      return curr.minLevel;
+    }
+  }
+
+  // 3. Descendant classes
+  const queue = [v2Class.id];
+  const visitedDesc = new Set(queue);
+  while (queue.length > 0) {
+    const parentId = queue.shift();
+    for (const candidate of Object.values(CANONICAL_CLASS_REGISTRY_V2)) {
+      if (candidate.parentClass === parentId && !visitedDesc.has(candidate.id)) {
+        visitedDesc.add(candidate.id);
+        queue.push(candidate.id);
+        if (candidate.skillIds?.includes(skillId)) {
+          return candidate.minLevel;
+        }
+      }
+    }
+  }
+
+  return 1;
 }
 
 // ─── Starter Skills Resolution ────────────────────────────────────────────────
@@ -479,7 +536,9 @@ export function getSkillDetailedVisibility(character, skill) {
   }
 
   // 5. Level & Stage Gate -> HIDDEN_FUTURE (Zero vazamento para DOM)
-  const reqLvl = Number(def.requiredLevel || def.reqLvl || def.identity?.unlockLevel) || 1;
+  const classSpecificReq = getSkillUnlockLevelForClass(charClass, def.id);
+  const baseReq = Number(def.requiredLevel || def.reqLvl || def.identity?.unlockLevel) || 1;
+  const reqLvl = Math.max(classSpecificReq, baseReq);
   const skillStage = def.progressionStage || def.identity?.progressionStage;
   const stageReq = (skillStage && STAGE_LEVEL_THRESHOLDS[skillStage]) ? STAGE_LEVEL_THRESHOLDS[skillStage] : 1;
 
@@ -551,41 +610,77 @@ export function getVisibleSkillsForCharacter(character) {
   const charLevel = (typeof character === 'object' && typeof character.level === 'number') ? character.level : 1;
 
   // Build targeted candidate list from:
-  // 1. Shared skills for character's archetype
   const candidateIds = new Set();
-  const sharedIds = isMageClass(charClass) ? SHARED_MAGE_SKILL_IDS : SHARED_FIGHTER_SKILL_IDS;
-  for (const sid of sharedIds) candidateIds.add(sid);
 
-  // 2. ClassIdentity skillPools for character's class
-  const identity = CLASS_IDENTITIES[canonicalDagClass] || CLASS_IDENTITIES[canonicalClass] || CLASS_IDENTITIES[charClass];
-  if (identity?.skillPools) {
-    for (const pool of Object.values(identity.skillPools)) {
-      if (Array.isArray(pool)) {
-        for (const sid of pool) candidateIds.add(sid);
+  const v2Class = CANONICAL_CLASS_REGISTRY_V2 && (CANONICAL_CLASS_REGISTRY_V2[charClass] || CANONICAL_CLASS_REGISTRY_V2[canonicalClass] || CANONICAL_CLASS_REGISTRY_V2[canonicalDagClass]);
+  if (v2Class) {
+    if (Array.isArray(v2Class.skillIds)) {
+      for (const sid of v2Class.skillIds) candidateIds.add(sid);
+    }
+    // Ancestors
+    let curr = v2Class;
+    const visitedParents = new Set([curr.id]);
+    while (curr.parentClass && CANONICAL_CLASS_REGISTRY_V2[curr.parentClass] && !visitedParents.has(curr.parentClass)) {
+      visitedParents.add(curr.parentClass);
+      curr = CANONICAL_CLASS_REGISTRY_V2[curr.parentClass];
+      if (Array.isArray(curr.skillIds)) {
+        for (const sid of curr.skillIds) candidateIds.add(sid);
       }
     }
-  }
+    // Descendants
+    const queue = [v2Class.id];
+    const visitedDesc = new Set(queue);
+    while (queue.length > 0) {
+      const parentId = queue.shift();
+      for (const candidate of Object.values(CANONICAL_CLASS_REGISTRY_V2)) {
+        if (candidate.parentClass === parentId && !visitedDesc.has(candidate.id)) {
+          visitedDesc.add(candidate.id);
+          queue.push(candidate.id);
+          if (Array.isArray(candidate.skillIds)) {
+            for (const sid of candidate.skillIds) candidateIds.add(sid);
+          }
+        }
+      }
+    }
+    if (typeof window !== 'undefined' && window.EchoData?.CLASS_SKILLS_ECHO?.[charClass]) {
+      for (const sid of window.EchoData.CLASS_SKILLS_ECHO[charClass]) candidateIds.add(sid);
+    }
+  } else {
+    // 1. Shared skills for character's archetype
+    const sharedIds = isMageClass(charClass) ? SHARED_MAGE_SKILL_IDS : SHARED_FIGHTER_SKILL_IDS;
+    for (const sid of sharedIds) candidateIds.add(sid);
 
-  // 3. Native skill trees for character's class
-  const nativeSkills = NATIVE_SKILL_TREES[canonicalDagClass] || NATIVE_SKILL_TREES[canonicalClass] || NATIVE_SKILL_TREES[charClass] || [];
-  for (const s of nativeSkills) {
-    candidateIds.add(s.id);
-  }
+    // 2. ClassIdentity skillPools for character's class
+    const identity = CLASS_IDENTITIES[canonicalDagClass] || CLASS_IDENTITIES[canonicalClass] || CLASS_IDENTITIES[charClass];
+    if (identity?.skillPools) {
+      for (const pool of Object.values(identity.skillPools)) {
+        if (Array.isArray(pool)) {
+          for (const sid of pool) candidateIds.add(sid);
+        }
+      }
+    }
 
-  // 4. Lineage progression path (ancestors + current + descendants) from CLASS_SKILLS_ECHO
-  if (typeof window !== 'undefined' && window.EchoData?.CLASS_SKILLS_ECHO) {
-    const classSet = new Set([
-      charClass,
-      canonicalClass,
-      canonicalDagClass,
-      ...getLineage(charClass, charRace),
-      ...getLineage(canonicalDagClass, charRace),
-      ...getDescendants(charClass, charRace),
-      ...getDescendants(canonicalDagClass, charRace)
-    ]);
-    for (const c of classSet) {
-      const skills = window.EchoData.CLASS_SKILLS_ECHO[c] || [];
-      for (const sid of skills) candidateIds.add(sid);
+    // 3. Native skill trees for character's class
+    const nativeSkills = NATIVE_SKILL_TREES[canonicalDagClass] || NATIVE_SKILL_TREES[canonicalClass] || NATIVE_SKILL_TREES[charClass] || [];
+    for (const s of nativeSkills) {
+      candidateIds.add(s.id);
+    }
+
+    // 4. Lineage progression path (ancestors + current + descendants) from CLASS_SKILLS_ECHO
+    if (typeof window !== 'undefined' && window.EchoData?.CLASS_SKILLS_ECHO) {
+      const classSet = new Set([
+        charClass,
+        canonicalClass,
+        canonicalDagClass,
+        ...getLineage(charClass, charRace),
+        ...getLineage(canonicalDagClass, charRace),
+        ...getDescendants(charClass, charRace),
+        ...getDescendants(canonicalDagClass, charRace)
+      ]);
+      for (const c of classSet) {
+        const skills = window.EchoData.CLASS_SKILLS_ECHO[c] || [];
+        for (const sid of skills) candidateIds.add(sid);
+      }
     }
   }
 

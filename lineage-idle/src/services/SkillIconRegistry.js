@@ -1694,7 +1694,7 @@ export function getSkillIcon(skillOrId, def = null) {
   }
 
   // 2. Definition explicit icon (if already valid path)
-  if (skillDef?.icon && typeof skillDef.icon === 'string' && (skillDef.icon.endsWith('.png') || skillDef.icon.endsWith('.jpg'))) {
+  if (skillDef?.icon && typeof skillDef.icon === 'string' && (skillDef.icon.endsWith('.png') || skillDef.icon.endsWith('.jpg') || skillDef.icon.endsWith('.webp'))) {
     const path = skillDef.icon.startsWith('/') ? skillDef.icon : `/assets/skills/icons/${skillDef.icon}`;
     return {
       skillId,

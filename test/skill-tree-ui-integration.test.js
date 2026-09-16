@@ -82,19 +82,19 @@ test('3. CLASS_SKILLS_ECHO contains canonical skills for classes and aliases', (
   assert.ok(humanFighterSkills.includes('titanbreaker'));
   assert.ok(humanFighterSkills.includes('master_titanbreaker'));
 
-  // Legacy alias
+  // V2 Canonical Fighter
   const fighterSkills = cs['fighter'];
   assert.ok(fighterSkills, 'fighter must be present in CLASS_SKILLS_ECHO');
-  assert.ok(fighterSkills.includes('shield_bash'));
-  assert.ok(fighterSkills.includes('titanbreaker'));
-  assert.ok(fighterSkills.includes('master_titanbreaker'));
+  assert.ok(fighterSkills.includes('power_strike'));
+  assert.ok(fighterSkills.includes('mortal_blow'));
+  assert.ok(fighterSkills.includes('fighters_will'));
 
-  // Sorcerer alias
+  // V2 Canonical Sorcerer
   const sorcererSkills = cs['sorcerer'];
   assert.ok(sorcererSkills, 'sorcerer must have canonical skills');
-  assert.ok(sorcererSkills.includes('fireball'));
-  assert.ok(sorcererSkills.includes('meteor'));
-  assert.ok(sorcererSkills.includes('master_meteor'));
+  assert.ok(sorcererSkills.includes('prominence'));
+  assert.ok(sorcererSkills.includes('blizzard'));
+  assert.ok(sorcererSkills.includes('aura_flash'));
 });
 
 test('4. SKILL_TREE_LAYOUT_ECHO positions skills in 2 columns and 3 rows', () => {

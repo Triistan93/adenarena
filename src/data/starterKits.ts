@@ -281,7 +281,7 @@ export function getStarterKit(race: string, className: string): StarterKitConfig
     weapon: 'knight_sword',
     armorType: 'heavy',
     ...HEAVY_STARTER,
-    starterSkill: 'shield_bash',
+    starterSkill: 'power_strike',
     shotType: 'soulshot_ng',
     potions: { itemId: 'hp_potion_s', count: 20 },
     shotsCount: 500
