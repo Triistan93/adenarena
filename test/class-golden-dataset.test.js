@@ -23,7 +23,8 @@ import { CANONICAL_RACES } from '../lineage-idle/src/data/classes/CanonicalRaceR
 
 test('Golden Dataset Authority: CanonicalClassGraph vs classes_tree_canonical.json', async (t) => {
   const rawJson = fs.readFileSync('scraped_data_wiki/classes_tree_canonical.json', 'utf8');
-  const sha256 = crypto.createHash('sha256').update(rawJson).digest('hex');
+  const normalizedJson = rawJson.replace(/\r\n/g, '\n');
+  const sha256 = crypto.createHash('sha256').update(normalizedJson).digest('hex');
   const treeData = JSON.parse(rawJson);
 
   await t.test('1. SHA-256 Authority Fingerprint', () => {
