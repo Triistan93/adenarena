@@ -47,17 +47,26 @@ const PURGED_SKILL_IDS = new Set([
   'mount_glorious_steed', 'mount_shining_lady', 'change_appearance',
   'mount_night_mare', 'mount_pegasus', 'mount_saber_toothed_cougar',
   'mount_black_bear', 'mount_kukuru', 'mount_griffin',
-  'mount_elemental_lyn_draco', 'mount_unicorn'
+  'mount_elemental_lyn_draco', 'mount_unicorn',
+  'white_guardian_transformation', 'transformation_pirate',
+  'dark_assassin_transformation', 'light_assassin_transformation',
+  'assassinS3_change_appearance', 'change_appearance_rose_vain',
+  'adventurer_detection', 'warg_transformation'
 ]);
 
 /**
- * Determines if a skill ID is purged (mount/appearance/cosmetic).
+ * Determines if a skill ID is purged (mount/appearance/cosmetic/transformation).
  * @param {string} skillId
  * @returns {boolean}
  */
 export function isPurgedSkill(skillId) {
   if (!skillId) return true;
-  return PURGED_SKILL_IDS.has(skillId);
+  const s = String(skillId).toLowerCase().trim();
+  if (PURGED_SKILL_IDS.has(s)) return true;
+  if (s.startsWith('mount_') || s.includes('appearance') || s.includes('transformation') || s === 'detection' || s.endsWith('_detection')) {
+    return true;
+  }
+  return false;
 }
 
 /**

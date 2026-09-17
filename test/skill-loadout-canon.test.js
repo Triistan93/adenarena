@@ -355,4 +355,65 @@ describe('Skill Loadout 2.0 — Combat Integration', () => {
     assert.ok(result.success, 'Buff should be equippable in core slot');
     assert.equal(state.skillLoadout.core1, 'war_cry');
   });
+
+  it('37. Universal purge rejects all transformations, appearances, and mounts', () => {
+    const purgedIds = [
+      'white_guardian_transformation',
+      'dragon_slayer_appearance',
+      'mount_glorious_steed',
+      'mount_shining_lady',
+      'transformation_pirate',
+      'dark_assassin_transformation',
+      'light_assassin_transformation',
+      'mount_golden_lion',
+      'mount_pegasus',
+      'detection',
+      'adventurer_detection',
+      'assassinS3_change_appearance',
+      'change_appearance'
+    ];
+    for (const pid of purgedIds) {
+      assert.ok(isPurgedSkill(pid), `${pid} must be recognized as purged`);
+    }
+  });
+
+  it('38. ViewModel for Eva\'s Templar Lv 120 has strictly 0 purged skills and 0 cosmetic mounts', async () => {
+    const { getSkillTreeViewModel } = await import('../lineage-idle/src/services/SkillTreeViewModel.js');
+    const state = { class: 'evas_templar', race: 'elf', level: 120, sp: 33481, skills: {} };
+    const vm = getSkillTreeViewModel(state, { activeTab: 'ultimate' });
+    const allSkills = [
+      ...vm.tabs.active.skills,
+      ...vm.tabs.passive.skills,
+      ...vm.tabs.ultimate.skills
+    ];
+    for (const s of allSkills) {
+      assert.ok(!isPurgedSkill(s.skillId), `Skill ${s.skillId} should not appear in ViewModel`);
+      assert.ok(!s.name.toLowerCase().includes('transformation'), `No transformation skill in ViewModel: ${s.name}`);
+      assert.ok(!s.name.toLowerCase().includes('mount '), `No mount skill in ViewModel: ${s.name}`);
+      assert.ok(!s.name.toLowerCase().includes('appearance'), `No appearance skill in ViewModel: ${s.name}`);
+    }
+  });
+
+  it('39. normalizeAndValidateSkills strips purged skills from state.skills and state.skillLoadout', async () => {
+    const { normalizeAndValidateSkills } = await import('../lineage-idle/src/services/SkillEligibility.js');
+    const state = {
+      class: 'evas_templar',
+      race: 'elf',
+      level: 120,
+      skills: {
+        aqua_strike: 5,
+        white_guardian_transformation: 5,
+        mount_shining_lady: 5
+      },
+      skillLoadout: {
+        basic: 'aqua_strike',
+        ultimate: 'white_guardian_transformation'
+      }
+    };
+    normalizeAndValidateSkills(state);
+    assert.equal(state.skills.white_guardian_transformation, undefined, 'white_guardian_transformation must be purged');
+    assert.equal(state.skills.mount_shining_lady, undefined, 'mount_shining_lady must be purged');
+    assert.equal(state.skillLoadout.ultimate, null, 'ultimate loadout slot must be cleared of purged skill');
+    assert.equal(state.skills.aqua_strike, 5, 'valid skill must remain');
+  });
 });

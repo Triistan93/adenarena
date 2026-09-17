@@ -23,6 +23,8 @@ import {
   getSkillUnlockLevelForClass
 } from './SkillEligibility.js';
 
+import { isPurgedSkill } from './SkillTagService.js';
+
 import {
   resolveCanonicalClassId,
   resolveCanonicalDagClassId,
@@ -190,8 +192,9 @@ export function getSkillTreeViewModel(character, options = {}) {
 
   for (const item of visibleList) {
     const sId = item.skillId;
+    if (isPurgedSkill(sId)) continue;
     const def = item.skillDef || resolveSkillDef(sId);
-    if (!def) continue;
+    if (!def || def.disabled || isPurgedSkill(def.id)) continue;
 
     // Strict future check: requiredLevel > charLevel must NEVER be presented
     const classSpecificReq = getSkillUnlockLevelForClass(charClass, sId);

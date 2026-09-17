@@ -33,6 +33,7 @@ import { NATIVE_SKILL_TREES, ALL_NATIVE_SKILLS } from '../data/elemental/NativeS
 import { HISTORICAL_CLASSES } from '../data/elemental/HistoricalClasses.js';
 import { CANONICAL_SKILL_REGISTRY_V2 } from '../data/skills/CanonicalSkillRegistryV2.js';
 import { CANONICAL_CLASS_REGISTRY_V2 } from '../data/classes/CanonicalClassRegistryV2.js';
+import { isPurgedSkill } from './SkillTagService.js';
 
 // ─── Shared Skills Taxonomy (Lv 1–39 Generalist Pool) ──────────────────────────
 
@@ -261,14 +262,22 @@ export function getStarterSkillsForClass(classId) {
  */
 export function resolveSkillDef(skillOrId) {
   if (!skillOrId) return null;
-  if (typeof skillOrId === 'object' && skillOrId.id) return skillOrId;
+  const sId = typeof skillOrId === 'object' ? skillOrId.id : String(skillOrId);
+  if (isPurgedSkill(sId)) return null;
+  if (typeof skillOrId === 'object' && skillOrId.id) {
+    if (skillOrId.disabled) return null;
+    return skillOrId;
+  }
 
-  const sId = String(skillOrId);
   const echoDefs = (typeof window !== 'undefined' && window.EchoData) ? window.EchoData.SKILL_DEFS_ECHO : null;
-  if (echoDefs?.[sId]) return echoDefs[sId];
+  if (echoDefs?.[sId]) {
+    if (echoDefs[sId].disabled || isPurgedSkill(sId)) return null;
+    return echoDefs[sId];
+  }
 
   if (CANONICAL_SKILL_REGISTRY_V2 && CANONICAL_SKILL_REGISTRY_V2[sId]) {
     const s = CANONICAL_SKILL_REGISTRY_V2[sId];
+    if (s.disabled || isPurgedSkill(sId) || s.removalReason === 'cosmetic_mount_purge') return null;
     return {
       id: s.id,
       name: s.name,
@@ -382,6 +391,7 @@ function isSkillNativeOrAvailableNow(classId, def) {
  */
 export function isSkillInV2Lineage(classId, skillId) {
   if (!CANONICAL_CLASS_REGISTRY_V2 || !classId || !skillId) return false;
+  if (isPurgedSkill(skillId)) return false;
 
   // Shared skills belong to all classes of matching archetype
   if (SHARED_MAGE_SKILL_IDS?.includes(skillId)) {
@@ -436,8 +446,10 @@ export function isSkillInV2Lineage(classId, skillId) {
  * @returns {boolean}
  */
 export function isSkillInProgressionPath(character, skill) {
+  const sId = typeof skill === 'string' ? skill : skill?.id;
+  if (!sId || isPurgedSkill(sId)) return false;
   const def = resolveSkillDef(skill);
-  if (!def) return false;
+  if (!def || def.disabled) return false;
 
   const charClass = (typeof character === 'string') ? character : character?.class;
   if (!charClass) return false;
@@ -555,8 +567,11 @@ export function isSkillInProgressionPath(character, skill) {
  * @returns {string} One of SKILL_DETAILED_VISIBILITY_STATES
  */
 export function getSkillDetailedVisibility(character, skill) {
+  const sId = typeof skill === 'string' ? skill : skill?.id;
+  if (!sId || isPurgedSkill(sId)) return SKILL_DETAILED_VISIBILITY_STATES.HIDDEN_FOREIGN;
+
   const def = resolveSkillDef(skill);
-  if (!def) return SKILL_DETAILED_VISIBILITY_STATES.HIDDEN_FOREIGN;
+  if (!def || def.disabled || isPurgedSkill(def.id)) return SKILL_DETAILED_VISIBILITY_STATES.HIDDEN_FOREIGN;
 
   const charClass = (typeof character === 'string') ? character : character?.class;
   if (!charClass) return SKILL_DETAILED_VISIBILITY_STATES.HIDDEN_FOREIGN;
@@ -756,6 +771,7 @@ export function getVisibleSkillsForCharacter(character) {
     const canonical = resolveCanonicalClassId(charClass) || charClass;
     const isV2Class = !!(CANONICAL_CLASS_REGISTRY_V2 && (CANONICAL_CLASS_REGISTRY_V2[charClass] || CANONICAL_CLASS_REGISTRY_V2[canonical]));
     for (const sid of Object.keys(character.skills)) {
+      if (isPurgedSkill(sid)) continue;
       if (isV2Class && !isSkillInV2Lineage(charClass, sid)) {
         continue;
       }
@@ -772,8 +788,9 @@ export function getVisibleSkillsForCharacter(character) {
   };
 
   for (const sId of candidateIds) {
+    if (isPurgedSkill(sId)) continue;
     const def = resolveSkillDef(sId);
-    if (!def) continue;
+    if (!def || def.disabled || isPurgedSkill(def.id)) continue;
 
     const detailed = getSkillDetailedVisibility(character, def);
     if (detailed === SKILL_DETAILED_VISIBILITY_STATES.LEARNED) {
@@ -948,6 +965,14 @@ export function normalizeAndValidateSkills(state, callbacks = {}) {
 
   state.skills = validSkills;
   state.sp = (state.sp || 0) + spRefunded;
+
+  if (state.skillLoadout) {
+    for (const [slot, sid] of Object.entries(state.skillLoadout)) {
+      if (sid && (isPurgedSkill(sid) || !state.skills[sid])) {
+        state.skillLoadout[slot] = null;
+      }
+    }
+  }
 
   if (!state.selectedSkill || !state.skills[state.selectedSkill]) {
     state.selectedSkill = starterSkills[0] || Object.keys(state.skills)[0] || null;

@@ -236,6 +236,7 @@ import {
 } from './src/services/CharacterService.js';
 
 import { getLoadoutForCombat, getLoadout, autoEquipLoadout, shouldCastSkill } from './src/services/SkillLoadoutService.js';
+import { isPurgedSkill } from './src/services/SkillTagService.js';
 import { SLOT_PRIORITY_ORDER } from './src/data/balance/SkillUnlockSchedule.js';
 
 import {
@@ -6788,8 +6789,18 @@ function adminMaxSkills() {
   if (!isAuthorizedAdmin()) return;
   const skillDefs = D().SKILL_DEFS || {};
   for (const [skillId, def] of Object.entries(skillDefs)) {
+    if (!skillId || isPurgedSkill(skillId) || def?.disabled) continue;
     if (def && classSatisfies(state.class, def.classReq)) {
       state.skills[skillId] = def.max || 5;
+    }
+  }
+  // Sanitize any previously learned purged skills
+  for (const sid of Object.keys(state.skills || {})) {
+    if (isPurgedSkill(sid)) delete state.skills[sid];
+  }
+  if (state.skillLoadout) {
+    for (const [slot, sid] of Object.entries(state.skillLoadout)) {
+      if (sid && (isPurgedSkill(sid) || !state.skills[sid])) state.skillLoadout[slot] = null;
     }
   }
   log('📖 [Admin] Todas as Habilidades da Classe foram MAXIMIZADAS!', 'rarity-legendary');

@@ -24,6 +24,7 @@ import { getSkillMpCost } from "../src/data/balance/skillBalance.js";
 import { calculateHealAmount } from "../src/data/balance/combatBalance.js";
 import { CANONICAL_SKILL_REGISTRY_V2 } from "../src/data/skills/CanonicalSkillRegistryV2.js";
 import { CANONICAL_CLASS_REGISTRY_V2 } from "../src/data/classes/CanonicalClassRegistryV2.js";
+import { isPurgedSkill } from "../src/services/SkillTagService.js";
 
 
 /** Transforma string em slug snake_case */
@@ -857,6 +858,9 @@ function buildEchoAdapter() {
   // ─── CANONICAL V2 INTEGRATION (46 Lineages, 142 Class Stages, 825 Skills) ───
   if (CANONICAL_SKILL_REGISTRY_V2) {
     for (const [sId, s] of Object.entries(CANONICAL_SKILL_REGISTRY_V2)) {
+      if (s.disabled || isPurgedSkill(sId) || s.removalReason === 'cosmetic_mount_purge') {
+        continue;
+      }
       const starRank = s.starRank || 1;
       const isUlt = starRank >= 4;
       let reqBook = null;
@@ -1037,6 +1041,17 @@ function buildEchoAdapter() {
     ['sorcerer', 'archmage'].forEach(alias => {
       SKILL_TREE_LAYOUT_ECHO[alias] = SKILL_TREE_LAYOUT_ECHO['human_sorcerer'];
     });
+  }
+
+  // Limpeza definitiva de habilidades cosméticas, montarias e transformações
+  for (const sId of Object.keys(SKILL_DEFS_ECHO)) {
+    if (isPurgedSkill(sId) || SKILL_DEFS_ECHO[sId]?.disabled) {
+      delete SKILL_DEFS_ECHO[sId];
+      delete SKILL_REQS_ECHO[sId];
+    }
+  }
+  for (const [cId, skills] of Object.entries(CLASS_SKILLS_ECHO)) {
+    CLASS_SKILLS_ECHO[cId] = skills.filter(sid => !isPurgedSkill(sid));
   }
 
   // Publica em window.EchoData (o que main.js lê)

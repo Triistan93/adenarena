@@ -11,6 +11,7 @@
 
 import { CANONICAL_SKILL_REGISTRY_V2 } from '../data/skills/CanonicalSkillRegistryV2.js';
 import { CANONICAL_CLASS_REGISTRY_V2 } from '../data/classes/CanonicalClassRegistryV2.js';
+import { isPurgedSkill } from './SkillTagService.js';
 
 // Historical skill cost formula from SkillEngine.js: baseCost * 1.4^lvl
 export function calculateHistoricalSpSpent(baseCost = 5, level = 1) {
@@ -116,6 +117,22 @@ export const OLD_TO_NEW_SKILL_MAP = Object.freeze({
 export function migrateCharacterSave(state) {
   if (!state || typeof state !== 'object') return null;
 
+  // Always scrub any purged skills even on current version saves
+  if (state.skills) {
+    for (const sid of Object.keys(state.skills)) {
+      if (isPurgedSkill(sid) || CANONICAL_SKILL_REGISTRY_V2[sid]?.disabled) {
+        delete state.skills[sid];
+      }
+    }
+  }
+  if (state.skillLoadout) {
+    for (const [slot, sid] of Object.entries(state.skillLoadout)) {
+      if (sid && (isPurgedSkill(sid) || CANONICAL_SKILL_REGISTRY_V2[sid]?.disabled)) {
+        state.skillLoadout[slot] = null;
+      }
+    }
+  }
+
   // Already on V2
   if (state.skillSystemVersion && state.skillSystemVersion >= 2) {
     return state.migrationLedger || null;
@@ -131,16 +148,30 @@ export function migrateCharacterSave(state) {
     const numRank = Number(rank) || 0;
     if (numRank <= 0) continue;
 
+    // Purged / cosmetic / mount skills are never kept — full refund
+    if (isPurgedSkill(oldId) || CANONICAL_SKILL_REGISTRY_V2[oldId]?.disabled) {
+      const baseCost = 5;
+      const spRefund = calculateHistoricalSpSpent(baseCost, numRank);
+      totalSpRefunded += spRefund;
+      refunds.push({
+        oldSkillId: oldId,
+        oldRank: numRank,
+        spRefunded: spRefund,
+        reason: 'PURGED_COSMETIC_MOUNT_REFUND'
+      });
+      continue;
+    }
+
     // 1. Explicit Mapped Replacement
     const mappedTarget = OLD_TO_NEW_SKILL_MAP[oldId];
-    if (mappedTarget && CANONICAL_SKILL_REGISTRY_V2[mappedTarget]) {
+    if (mappedTarget && CANONICAL_SKILL_REGISTRY_V2[mappedTarget] && !CANONICAL_SKILL_REGISTRY_V2[mappedTarget].disabled && !isPurgedSkill(mappedTarget)) {
       migratedSkills[mappedTarget] = Math.max(migratedSkills[mappedTarget] || 0, numRank);
       migratedMappings.push({ from: oldId, to: mappedTarget, rank: numRank, type: 'CANONICAL_REPLACED' });
       continue;
     }
 
     // 2. Direct Canonical Match in V2
-    if (CANONICAL_SKILL_REGISTRY_V2[oldId]) {
+    if (CANONICAL_SKILL_REGISTRY_V2[oldId] && !CANONICAL_SKILL_REGISTRY_V2[oldId].disabled && !isPurgedSkill(oldId)) {
       migratedSkills[oldId] = numRank;
       migratedMappings.push({ from: oldId, to: oldId, rank: numRank, type: 'CANONICAL_MATCH' });
       continue;
@@ -148,7 +179,7 @@ export function migrateCharacterSave(state) {
 
     // 3. Prefix strip match (e.g. fighter_power_strike -> power_strike)
     const strippedId = oldId.replace(/^[a-zA-Z0-9]+_/, '');
-    if (CANONICAL_SKILL_REGISTRY_V2[strippedId]) {
+    if (CANONICAL_SKILL_REGISTRY_V2[strippedId] && !CANONICAL_SKILL_REGISTRY_V2[strippedId].disabled && !isPurgedSkill(strippedId)) {
       migratedSkills[strippedId] = Math.max(migratedSkills[strippedId] || 0, numRank);
       migratedMappings.push({ from: oldId, to: strippedId, rank: numRank, type: 'PREFIX_STRIPPED_MATCH' });
       continue;

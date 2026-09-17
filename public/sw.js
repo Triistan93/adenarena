@@ -3,7 +3,7 @@
  * Caching inteligente com prioridade de rede para scripts, HTML e dados atualizados
  */
 
-const CACHE_NAME = 'aden-arena-cache-v7';
+const CACHE_NAME = 'aden-arena-cache-v8';
 const STATIC_ASSETS = [
   '/manifest.webmanifest',
   '/icon-192.png',
