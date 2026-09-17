@@ -29,6 +29,9 @@ import { CP_WEIGHTS } from '../data/balance/cpBalance.js';
 import { getSkillCost } from '../engine/SkillEngine.js';
 import { getSkillTreeViewModel, SKILL_TABS, SKILL_CATEGORIES } from '../services/SkillTreeViewModel.js';
 import { getSkillIcon, getSkillSemanticData } from '../services/SkillIconRegistry.js';
+import { getLoadout, equipSkill, unequipSkill, isSkillEquipped, getEquippedSkillIds, autoEquipLoadout, getSkillSlot, getSkillCondition, setSkillCondition, clearSkillCondition, getConditionBadgeText } from '../services/SkillLoadoutService.js';
+import { getUnlockedSlots, getSlotUnlockLevel, getProgressionLabel, ALL_SLOT_NAMES } from '../data/balance/SkillUnlockSchedule.js';
+import { getSkillSlotCategory, getSlotLabel, isPurgedSkill } from '../services/SkillTagService.js';
 import { ZONES, SAGAS, ZONE_BACKGROUNDS } from '../data/zones.js';
 import { getZoneProgression } from '../data/balance/progressionBalance.js';
 import { MONSTERS, MONSTER_BY_NAME } from '../data/monsters.js';
@@ -3674,6 +3677,91 @@ export function renderZoneMap(state, callbacks = {}) {
 /* ═══════════════════════════════════════════════════════════════════════════
    5. SKILLS
 ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ─── 5.0 Loadout Bar ─────────────────────────────────────────────────── */
+
+const SKILL_LOADOUT_SLOT_ICONS = { basic: '⚔️', core1: '🔥', core2: '🔥', special1: '💠', special2: '💠', signature: '✨', ultimate: '🌟' };
+const SKILL_LOADOUT_SLOT_LABELS = { basic: 'Basic', core1: 'Core 1', core2: 'Core 2', special1: 'Spec 1', special2: 'Spec 2', signature: 'Signat.', ultimate: 'Ultim.' };
+
+function renderLoadoutBar(state) {
+  const loadout = getLoadout(state);
+  const unlockedSlots = getUnlockedSlots(state.level || 1);
+  const echoData = typeof window !== 'undefined' ? window.EchoData : null;
+  const SKILL_DEFS = echoData?.SKILL_DEFS_ECHO || D()?.SKILL_DEFS || {};
+  const progressLabel = getProgressionLabel(state.level || 1);
+
+  const slotsHtml = ALL_SLOT_NAMES.map(slotName => {
+    const isUnlocked = unlockedSlots.includes(slotName);
+    const skillId = loadout[slotName];
+    const def = skillId ? SKILL_DEFS[skillId] : null;
+    const unlockLvl = getSlotUnlockLevel(slotName);
+    const slotLabel = SKILL_LOADOUT_SLOT_LABELS[slotName] || slotName;
+    const slotIcon = SKILL_LOADOUT_SLOT_ICONS[slotName] || '⚔️';
+
+    if (!isUnlocked) {
+      return `
+        <div class="loadout-slot is-locked" data-slot="${slotName}" title="${slotLabel} — Desbloqueia no Nível ${unlockLvl}">
+          <div class="loadout-slot-frame">
+            <span class="loadout-lock-icon">🔒</span>
+          </div>
+          <span class="loadout-slot-label">${slotLabel}</span>
+          <span class="loadout-unlock-lvl">Lv.${unlockLvl}</span>
+        </div>
+      `;
+    }
+
+    if (!skillId || !def) {
+      return `
+        <div class="loadout-slot is-empty" data-slot="${slotName}" title="${slotLabel} — Vazio (arraste uma habilidade ou selecione abaixo)">
+          <div class="loadout-slot-frame">
+            <span class="loadout-empty-icon">${slotIcon}</span>
+          </div>
+          <span class="loadout-slot-label">${slotLabel}</span>
+          <span class="loadout-slot-hint">Vazio</span>
+        </div>
+      `;
+    }
+
+    const iconUrl = getAssetUrl(getSkillIcon(skillId) || def.icon || '/assets/skills/icons/power_strike.png');
+    const skillLevel = state.skills[skillId] || 0;
+    const cond = getSkillCondition(state, slotName);
+    const condBadge = getConditionBadgeText(cond);
+    const condBadgeHtml = condBadge
+      ? `<span class="loadout-condition-badge" title="Tática Ativa: ${condBadge}">⚙️ ${condBadge}</span>`
+      : '';
+
+    return `
+      <div class="loadout-slot is-equipped" data-slot="${slotName}" data-skill-id="${skillId}" title="${def.name} (${slotLabel}) — Clique para ver detalhes e configurar táticas">
+        <div class="loadout-slot-frame">
+          <img src="${iconUrl}" class="loadout-skill-icon" alt="${def.name}" onerror="this.src='${getAssetUrl('/assets/skills/icons/power_strike.png')}'; this.onerror=null;" />
+          ${skillLevel > 1 ? `<span class="loadout-skill-lvl">${skillLevel}</span>` : ''}
+          <button class="loadout-slot-unequip-btn" data-slot="${slotName}" title="Desequipar ${def.name}">×</button>
+        </div>
+        <span class="loadout-slot-label">${slotLabel}</span>
+        ${condBadgeHtml}
+      </div>
+    `;
+  }).join('');
+
+  return `
+    <div class="loadout-bar">
+      <div class="loadout-header">
+        <div class="loadout-header-left">
+          <span class="loadout-title">⚔️ Loadout de Combate</span>
+          <span class="loadout-progress">${progressLabel} · ${unlockedSlots.length}/7 Slots</span>
+        </div>
+        <div class="loadout-header-actions">
+          <button class="loadout-btn-action loadout-btn-auto" type="button" title="Auto-equipa as melhores habilidades aprendidas nos slots disponíveis">⚡ Auto-Equipar</button>
+          <button class="loadout-btn-action loadout-btn-clear" type="button" title="Desequipa todas as habilidades do loadout">✕ Limpar</button>
+        </div>
+      </div>
+      <div class="loadout-slots">
+        ${slotsHtml}
+      </div>
+    </div>
+  `;
+}
+
 function renderSkillCard(skill, state) {
   const isSelected = state.selectedSkill === skill.skillId;
   const rank = skill.rank;
@@ -3684,6 +3772,12 @@ function renderSkillCard(skill, state) {
   const isBookLocked = cost.isBookLocked;
   const isUlt = skill.ultimate;
 
+  const equippedSlot = getSkillSlot(state, skill.skillId);
+  const slotPill = equippedSlot
+    ? `<span class="skill-loadout-slot-pill" title="Equipado no slot ${SKILL_LOADOUT_SLOT_LABELS[equippedSlot] || equippedSlot}">⚡ ${SKILL_LOADOUT_SLOT_LABELS[equippedSlot] || equippedSlot}</span>`
+    : '';
+  const isDraggable = isLearned && !skill.isPassive && !isPurgedSkill(skill.skillId);
+
   const cardClasses = ['skill-node-card'];
   if (isLearned) cardClasses.push('is-learned');
   else cardClasses.push('is-available');
@@ -3692,6 +3786,7 @@ function renderSkillCard(skill, state) {
   if (isSelected) cardClasses.push('is-selected');
   if (isBookLocked) cardClasses.push('book-locked');
   if (isUlt) cardClasses.push('is-ultimate');
+  if (equippedSlot) cardClasses.push('is-in-loadout');
 
   const starPill = skill.starRank >= 4
     ? `<span class="skill-star-pill">${skill.starRank}★</span>`
@@ -3717,11 +3812,13 @@ function renderSkillCard(skill, state) {
          data-skill-id="${skill.skillId}"
          role="button"
          tabindex="0"
-         title="${skill.name} (${skill.element})">
+         draggable="${isDraggable ? 'true' : 'false'}"
+         title="${skill.name} (${skill.element})${equippedSlot ? ` — Equipado no Loadout: ${SKILL_LOADOUT_SLOT_LABELS[equippedSlot] || equippedSlot}` : ''}">
       <div class="skill-icon-frame-48">
         <img src="${iconUrl}" class="skill-icon-img" alt="${skill.name}" onerror="this.src='${getAssetUrl('/assets/skills/icons/power_strike.png')}'; this.onerror=null;" />
         ${starPill}
         ${rankBadge}
+        ${slotPill}
       </div>
       <div class="skill-card-body">
         <div class="skill-card-title">${skill.name}</div>
@@ -3923,6 +4020,8 @@ export function updateSkillUI(state, callbacks = {}) {
         </div>
       </div>
 
+      ${renderLoadoutBar(state)}
+
       <div class="skill-window-tabs">
         <button class="skill-subtab-btn ${activeTab === SKILL_TABS.ACTIVE ? 'active' : ''}" data-tab="${SKILL_TABS.ACTIVE}">
           <span class="tab-icon">⚔️</span>
@@ -3960,10 +4059,115 @@ export function updateSkillUI(state, callbacks = {}) {
     };
   });
 
+  // 7.1 Wire Loadout Bar (Drag-and-Drop, Auto-Equip, Clear, Unequip, Selection)
+  const echoDataDefs = (typeof window !== 'undefined' ? window.EchoData?.SKILL_DEFS_ECHO : null) || D()?.SKILL_DEFS || {};
+
+  const autoBtn = wrap.querySelector('.loadout-btn-auto');
+  if (autoBtn) {
+    autoBtn.onclick = (e) => {
+      e.preventDefault();
+      autoEquipLoadout(state, echoDataDefs, isSkillAllowedForClass);
+      updateSkillUI(state, callbacks);
+      updateSkillInfoPanel(state, callbacks);
+      if (typeof window !== 'undefined' && typeof window.floatText === 'function') {
+        window.floatText('⚡ Loadout Auto-Equipado!', 'float-epic');
+      }
+    };
+  }
+
+  const clearBtn = wrap.querySelector('.loadout-btn-clear');
+  if (clearBtn) {
+    clearBtn.onclick = (e) => {
+      e.preventDefault();
+      for (const slotName of ALL_SLOT_NAMES) {
+        unequipSkill(state, slotName);
+      }
+      updateSkillUI(state, callbacks);
+      updateSkillInfoPanel(state, callbacks);
+      if (typeof window !== 'undefined' && typeof window.floatText === 'function') {
+        window.floatText('Loadout Limpo', 'float-neutral');
+      }
+    };
+  }
+
+  wrap.querySelectorAll('.loadout-slot-unequip-btn').forEach(btn => {
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      const slotName = btn.dataset.slot;
+      if (slotName) {
+        unequipSkill(state, slotName);
+        updateSkillUI(state, callbacks);
+        updateSkillInfoPanel(state, callbacks);
+      }
+    };
+  });
+
+  wrap.querySelectorAll('.loadout-slot').forEach(slotEl => {
+    const slotName = slotEl.dataset.slot;
+    if (!slotName || slotEl.classList.contains('is-locked')) return;
+
+    // Drag-over and drop support
+    slotEl.ondragover = (e) => {
+      e.preventDefault();
+      if (e.dataTransfer) e.dataTransfer.dropEffect = 'move';
+    };
+    slotEl.ondragenter = (e) => {
+      e.preventDefault();
+      slotEl.classList.add('drag-over');
+    };
+    slotEl.ondragleave = () => {
+      slotEl.classList.remove('drag-over');
+    };
+    slotEl.ondrop = (e) => {
+      e.preventDefault();
+      slotEl.classList.remove('drag-over');
+      const draggedSkillId = e.dataTransfer ? e.dataTransfer.getData('text/skill-id') : null;
+      if (draggedSkillId) {
+        const res = equipSkill(state, slotName, draggedSkillId, echoDataDefs);
+        if (res.success) {
+          state.selectedSkill = draggedSkillId;
+          updateSkillUI(state, callbacks);
+          updateSkillInfoPanel(state, callbacks);
+          if (typeof window !== 'undefined' && typeof window.floatText === 'function') {
+            const slotLabel = SKILL_LOADOUT_SLOT_LABELS[slotName] || slotName;
+            window.floatText(`Equipado em [${slotLabel}]!`, 'sf-heal');
+          }
+        } else if (typeof window !== 'undefined' && typeof window.floatText === 'function') {
+          window.floatText(res.error || 'Não pode equipar', 'float-warning');
+        }
+      }
+    };
+
+    // Click on slot selects skill if equipped
+    slotEl.onclick = (e) => {
+      if (e.target.closest('.loadout-slot-unequip-btn')) return;
+      const sId = slotEl.dataset.skillId;
+      if (sId) {
+        state.selectedSkill = sId;
+        updateSkillUI(state, callbacks);
+        updateSkillInfoPanel(state, callbacks);
+      }
+    };
+  });
+
   // 8. Wire Skill Cards
   wrap.querySelectorAll('.skill-node-card').forEach(card => {
     const sId = card.dataset.skillId;
     if (!sId) return;
+
+    if (card.getAttribute('draggable') === 'true') {
+      card.ondragstart = (e) => {
+        if (e.dataTransfer) {
+          e.dataTransfer.setData('text/skill-id', sId);
+          e.dataTransfer.effectAllowed = 'copyMove';
+        }
+        card.classList.add('is-dragging');
+      };
+      card.ondragend = () => {
+        card.classList.remove('is-dragging');
+      };
+    }
 
     if (callbacks.showSkillTooltip) {
       card.onmouseenter = (e) => callbacks.showSkillTooltip(sId, e);
@@ -4133,6 +4337,68 @@ export function updateSkillInfoPanel(state, callbacks = {}) {
   const elemTag = `<span class="skill-element-tag ${elemClass}" style="margin-left:4px;">${semantic.element || def.element || 'Physical'}</span>`;
   const roleTag = `<span class="skill-role-tag" style="margin-left:4px;">${semantic.role || def.type || 'Skill'}</span>`;
 
+  let loadoutSectionHtml = '';
+  const isPassive = def.type === 'passive' || def.type === 'stat';
+  if (lvl > 0 && !isPassive && !isPurgedSkill(id)) {
+    const curSlot = getSkillSlot(state, id);
+    const unlocked = getUnlockedSlots(state.level || 1);
+
+    if (curSlot) {
+      const cond = getSkillCondition(state, curSlot);
+      loadoutSectionHtml = `
+        <div class="si-loadout-panel" style="margin-top:12px; padding:10px; background:rgba(15,23,42,0.7); border:1px solid rgba(212,167,68,0.4); border-radius:6px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <span style="color:#d4a744; font-size:12px; font-weight:bold;">⚡ Equipado no Loadout: <strong style="color:#34d399;">${SKILL_LOADOUT_SLOT_LABELS[curSlot] || curSlot}</strong></span>
+            <button class="si-btn-unequip" data-slot="${curSlot}" style="padding:3px 10px; font-size:11px; background:#ef4444; border:none; border-radius:4px; color:#fff; cursor:pointer; font-weight:bold;">Desequipar</button>
+          </div>
+          <div style="font-size:11px; color:#94a3b8; margin-bottom:6px; font-weight:bold;">⚙️ Condições de Auto-Battle:</div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; font-size:11px;">
+            <div>
+              <label style="color:#cbd5e1; font-size:10px; display:block; margin-bottom:2px;">Gatilho de HP:</label>
+              <select class="si-cond-select" data-slot="${curSlot}" data-field="hpTrigger" style="width:100%; background:#1e293b; color:#f8fafc; border:1px solid #475569; border-radius:4px; padding:4px;">
+                <option value="none" ${cond.hpTrigger === 'none' ? 'selected' : ''}>Sempre (Cooldown)</option>
+                <option value="self_below_75" ${cond.hpTrigger === 'self_below_75' ? 'selected' : ''}>Meu HP < 75%</option>
+                <option value="self_below_50" ${cond.hpTrigger === 'self_below_50' ? 'selected' : ''}>Meu HP < 50%</option>
+                <option value="self_below_30" ${cond.hpTrigger === 'self_below_30' ? 'selected' : ''}>Meu HP < 30% (Pânico)</option>
+                <option value="target_below_30" ${cond.hpTrigger === 'target_below_30' ? 'selected' : ''}>HP Inimigo < 30% (Execução)</option>
+                <option value="target_below_50" ${cond.hpTrigger === 'target_below_50' ? 'selected' : ''}>HP Inimigo < 50%</option>
+              </select>
+            </div>
+            <div>
+              <label style="color:#cbd5e1; font-size:10px; display:block; margin-bottom:2px;">Tipo de Alvo:</label>
+              <select class="si-cond-select" data-slot="${curSlot}" data-field="bossTarget" style="width:100%; background:#1e293b; color:#f8fafc; border:1px solid #475569; border-radius:4px; padding:4px;">
+                <option value="any" ${cond.bossTarget === 'any' ? 'selected' : ''}>Qualquer Monstro</option>
+                <option value="boss_only" ${cond.bossTarget === 'boss_only' ? 'selected' : ''}>Apenas Bosses / Raids</option>
+                <option value="normal_only" ${cond.bossTarget === 'normal_only' ? 'selected' : ''}>Apenas Monstros Comuns</option>
+              </select>
+            </div>
+            <div style="grid-column: span 2;">
+              <label style="color:#cbd5e1; font-size:10px; display:block; margin-bottom:2px;">Inimigos Mínimos (Tática AoE):</label>
+              <select class="si-cond-select" data-slot="${curSlot}" data-field="minEnemies" style="width:100%; background:#1e293b; color:#f8fafc; border:1px solid #475569; border-radius:4px; padding:4px;">
+                <option value="1" ${Number(cond.minEnemies) === 1 ? 'selected' : ''}>1+ Inimigo (Padrão)</option>
+                <option value="2" ${Number(cond.minEnemies) === 2 ? 'selected' : ''}>2+ Inimigos (Foco em Grupo)</option>
+                <option value="3" ${Number(cond.minEnemies) === 3 ? 'selected' : ''}>3+ Inimigos (Horda)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      `;
+    } else {
+      const slotOptions = unlocked.map(s => `<option value="${s}">${SKILL_LOADOUT_SLOT_LABELS[s] || s}</option>`).join('');
+      loadoutSectionHtml = `
+        <div class="si-loadout-panel" style="margin-top:12px; padding:10px; background:rgba(15,23,42,0.7); border:1px dashed rgba(212,167,68,0.4); border-radius:6px;">
+          <div style="color:#d4a744; font-size:12px; font-weight:bold; margin-bottom:6px;">⚡ Equipar no Loadout de Combate:</div>
+          <div style="display:flex; gap:6px; align-items:center;">
+            <select class="si-equip-slot-choice" style="flex:1; background:#1e293b; color:#f8fafc; border:1px solid #475569; border-radius:4px; padding:4px 8px; font-size:12px;">
+              ${slotOptions}
+            </select>
+            <button class="si-btn-do-equip" data-skill="${id}" style="padding:4px 12px; font-size:12px; background:linear-gradient(180deg,#10b981,#059669); color:#fff; border:none; border-radius:4px; cursor:pointer; font-weight:bold;">Equipar</button>
+          </div>
+        </div>
+      `;
+    }
+  }
+
   panel.innerHTML = `
     <div class="si-head">${siIconHtml}<div class="si-title"><h3>${def.name}</h3><div style="display:flex; align-items:center; gap:4px; margin-top:2px;"><p class="si-tier">${tier} · Lv.${lvl}/${max}</p>${elemTag}${roleTag}</div></div></div>
     ${weaponReqBadge}
@@ -4141,6 +4407,7 @@ export function updateSkillInfoPanel(state, callbacks = {}) {
     <div class="si-reqs"><span class="si-label">Requires</span>${reqHtml}</div>
     <button class="si-btn" data-skillup="${id}" ${!canLearn ? 'disabled' : ''} style="${requiresBookNow && hasRequiredBook ? 'background:linear-gradient(180deg,#f59e0b,#b45309); color:#fff; font-weight:bold;' : ''}">${btnLabel}</button>
     <p class="si-sp">SP available: <strong>${(state.sp || 0).toLocaleString()}</strong></p>
+    ${loadoutSectionHtml}
     ${legacySectionHtml}
   `;
 
@@ -4150,6 +4417,47 @@ export function updateSkillInfoPanel(state, callbacks = {}) {
       if (callbacks.spendSP) callbacks.spendSP(btn.dataset.skillup);
     };
   }
+
+  const unequipBtn = panel.querySelector('.si-btn-unequip');
+  if (unequipBtn) {
+    unequipBtn.onclick = () => {
+      unequipSkill(state, unequipBtn.dataset.slot);
+      updateSkillUI(state, callbacks);
+      updateSkillInfoPanel(state, callbacks);
+    };
+  }
+
+  const equipBtn = panel.querySelector('.si-btn-do-equip');
+  if (equipBtn) {
+    equipBtn.onclick = () => {
+      const choiceSelect = panel.querySelector('.si-equip-slot-choice');
+      const targetSlot = choiceSelect ? choiceSelect.value : 'basic';
+      const echoData = typeof window !== 'undefined' ? window.EchoData : null;
+      const defs = echoData?.SKILL_DEFS_ECHO || D()?.SKILL_DEFS || {};
+      const res = equipSkill(state, targetSlot, equipBtn.dataset.skill, defs);
+      if (res.success) {
+        updateSkillUI(state, callbacks);
+        updateSkillInfoPanel(state, callbacks);
+        if (typeof window !== 'undefined' && typeof window.floatText === 'function') {
+          const slotLabel = SKILL_LOADOUT_SLOT_LABELS[targetSlot] || targetSlot;
+          window.floatText(`Equipado em [${slotLabel}]!`, 'sf-heal');
+        }
+      } else if (typeof window !== 'undefined' && typeof window.floatText === 'function') {
+        window.floatText(res.error || 'Erro ao equipar', 'float-warning');
+      }
+    };
+  }
+
+  panel.querySelectorAll('.si-cond-select').forEach(sel => {
+    sel.onchange = () => {
+      const slot = sel.dataset.slot;
+      const field = sel.dataset.field;
+      let val = sel.value;
+      if (field === 'minEnemies') val = Number(val) || 1;
+      setSkillCondition(state, slot, { [field]: val });
+      updateSkillUI(state, callbacks);
+    };
+  });
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════

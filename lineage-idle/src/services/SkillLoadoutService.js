@@ -21,6 +21,27 @@
 
 import { getSkillSlotCategory, isPurgedSkill, SLOT_CATEGORIES } from './SkillTagService.js';
 import { ALL_SLOT_NAMES, getUnlockedSlots, SLOT_PRIORITY_ORDER } from '../data/balance/SkillUnlockSchedule.js';
+import {
+  DEFAULT_CONDITION,
+  getSkillCondition,
+  setSkillCondition,
+  clearSkillCondition,
+  getSmartConditionDefaults,
+  shouldCastSkill,
+  getConditionBadgeText,
+  evaluateCondition
+} from './SkillConditionService.js';
+
+export {
+  DEFAULT_CONDITION,
+  getSkillCondition,
+  setSkillCondition,
+  clearSkillCondition,
+  getSmartConditionDefaults,
+  shouldCastSkill,
+  getConditionBadgeText,
+  evaluateCondition
+};
 
 /**
  * Default empty loadout — all slots null.
@@ -159,6 +180,9 @@ export function equipSkill(state, slotName, skillId, skillDefs) {
 
   // Equip
   loadout[slotName] = skillId;
+  if (def && (!state.skillConditions || !state.skillConditions[slotName])) {
+    setSkillCondition(state, slotName, getSmartConditionDefaults(def));
+  }
   return { success: true };
 }
 
@@ -281,6 +305,12 @@ export function autoEquipLoadout(state, skillDefs, classFilter) {
   fillSlot('core1', [SLOT_CATEGORIES.CORE]);
   fillSlot('core2', [SLOT_CATEGORIES.CORE, SLOT_CATEGORIES.BASIC]);
   fillSlot('basic', [SLOT_CATEGORIES.BASIC, SLOT_CATEGORIES.CORE]);
+  for (const slotName of ALL_SLOT_NAMES) {
+    const sId = loadout[slotName];
+    if (sId && skillDefs?.[sId]) {
+      setSkillCondition(state, slotName, getSmartConditionDefaults(skillDefs[sId]));
+    }
+  }
 }
 
 /**

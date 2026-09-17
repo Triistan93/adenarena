@@ -235,7 +235,7 @@ import {
   validateAndFixCharacterClass as serviceValidateAndFixCharacterClass
 } from './src/services/CharacterService.js';
 
-import { getLoadoutForCombat, getLoadout, autoEquipLoadout } from './src/services/SkillLoadoutService.js';
+import { getLoadoutForCombat, getLoadout, autoEquipLoadout, shouldCastSkill } from './src/services/SkillLoadoutService.js';
 import { SLOT_PRIORITY_ORDER } from './src/data/balance/SkillUnlockSchedule.js';
 
 import {
@@ -5546,6 +5546,11 @@ function attackMonster() {
     const wpnCheck = (typeof canCastSkillWeapon === 'function') ? canCastSkillWeapon(state, skill.def) : { ok: true };
     if (!wpnCheck.ok) {
       continue; // Arma ou Escudo incompatível com o requisito da skill
+    }
+
+    // 0.1 Validação de Condições Táticas de Auto-Battle (HP%, Inimigos Mínimos, Alvo Boss)
+    if (!shouldCastSkill(state, skill.id, skill.slot, monster)) {
+      continue;
     }
 
     const isBuff = skill.def.type === 'buff' || skill.def.type === 'harmony' || skill.def.type === 'toggle' || skill.def.effect === 'warcry';

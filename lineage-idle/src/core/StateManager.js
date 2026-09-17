@@ -38,6 +38,7 @@ export const DEFAULT_STATE = () => ({
     special1: null, special2: null,
     signature: null, ultimate: null
   },
+  skillConditions: {},
   quests: { progress: {}, claimed: [], lastDailyReset: 0, lastWeeklyReset: 0 },
   battlePass: { xp: 0, claimedFree: [], claimedPremium: [], unlockedPremium: false },
   dailyRewards: { currentDay: 1, claimedDays: [], lastClaimDate: '', streak: 0, totalClaims: 0 },

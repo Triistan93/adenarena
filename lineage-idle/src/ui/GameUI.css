@@ -673,6 +673,264 @@
   font-weight: 600;
 }
 
+/* ─── Loadout Bar ─── */
+.loadout-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 14px;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.9));
+  border: 1px solid rgba(212, 167, 68, 0.4);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.loadout-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.loadout-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.loadout-title {
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffd700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.loadout-progress {
+  font-size: 11px;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.loadout-header-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.loadout-btn-action {
+  padding: 3px 8px;
+  font-size: 11px;
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.loadout-btn-auto {
+  background: linear-gradient(180deg, #10b981, #059669);
+  color: #ffffff;
+  border-color: #34d399;
+}
+.loadout-btn-auto:hover {
+  background: linear-gradient(180deg, #34d399, #10b981);
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+}
+
+.loadout-btn-clear {
+  background: rgba(239, 68, 68, 0.15);
+  color: #fca5a5;
+  border-color: rgba(239, 68, 68, 0.4);
+}
+.loadout-btn-clear:hover {
+  background: rgba(239, 68, 68, 0.3);
+  color: #ffffff;
+}
+
+.loadout-slots {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+
+@media (max-width: 640px) {
+  .loadout-slots {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.loadout-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 6px 4px;
+  background: rgba(10, 15, 29, 0.7);
+  border: 1.5px solid rgba(148, 163, 184, 0.2);
+  border-radius: 6px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 0;
+}
+
+.loadout-slot:hover {
+  border-color: rgba(212, 167, 68, 0.5);
+  background: rgba(15, 23, 42, 0.9);
+}
+
+.loadout-slot.drag-over {
+  border-color: #10b981;
+  background: rgba(16, 185, 129, 0.2);
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+  transform: scale(1.04);
+}
+
+.loadout-slot.is-equipped {
+  border-color: rgba(212, 167, 68, 0.7);
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.95));
+  box-shadow: 0 0 8px rgba(212, 167, 68, 0.2);
+}
+
+.loadout-slot.is-locked {
+  opacity: 0.55;
+  border-style: dashed;
+  cursor: not-allowed;
+}
+
+.loadout-slot-frame {
+  width: 42px;
+  height: 42px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.loadout-skill-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.loadout-skill-lvl {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid #ffd700;
+  color: #ffd700;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 0 3px;
+  border-radius: 3px;
+  line-height: 12px;
+}
+
+.loadout-lock-icon {
+  font-size: 16px;
+  opacity: 0.7;
+}
+
+.loadout-empty-icon {
+  font-size: 16px;
+  opacity: 0.4;
+}
+
+.loadout-slot-label {
+  font-size: 10px;
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  color: #cbd5e1;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+.loadout-unlock-lvl {
+  font-size: 9px;
+  color: #ef4444;
+  font-weight: 600;
+}
+
+.loadout-slot-hint {
+  font-size: 9px;
+  color: #64748b;
+}
+
+.loadout-slot-unequip-btn {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #ef4444;
+  color: #ffffff;
+  border: 1px solid #fff;
+  font-size: 11px;
+  line-height: 12px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  z-index: 5;
+}
+
+.loadout-slot.is-equipped:hover .loadout-slot-unequip-btn {
+  display: flex;
+}
+
+.loadout-condition-badge {
+  font-size: 8.5px;
+  padding: 1px 4px;
+  border-radius: 3px;
+  background: rgba(59, 130, 246, 0.25);
+  border: 1px solid rgba(59, 130, 246, 0.5);
+  color: #93c5fd;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* Card Loadout Slot Pill */
+.skill-loadout-slot-pill {
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #fff;
+  font-size: 8px;
+  font-weight: 800;
+  padding: 1px 4px;
+  border-radius: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+  z-index: 4;
+}
+
+.skill-node-card.is-in-loadout {
+  border-color: rgba(16, 185, 129, 0.6);
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.15);
+}
+
+.skill-node-card.is-dragging {
+  opacity: 0.4;
+  transform: scale(0.95);
+}
+
 /* Tabs */
 .skill-window-tabs {
   display: flex;
