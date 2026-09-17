@@ -15,6 +15,7 @@ import { MonsterAIEngine, ARCHETYPE_INFO, HUNTING_DIFFICULTIES } from './Monster
 import { getMonsterSpawnMultipliers } from '../data/balance/monsterBalance.js';
 import { getZoneProgression } from '../data/balance/progressionBalance.js';
 import { combatEvents, CombatEventType, CombatEventFactory } from '../vfx/CombatEvent.js';
+import { ClassValidationService } from '../services/ClassValidationService.js';
 
 export { combatEvents, CombatEventType, CombatEventFactory };
 
@@ -428,10 +429,12 @@ export function toggleAutoPotion(state, callbacks = {}) {
  * @param {boolean} [isMageClass]
  * @returns {{ shotItem: Object|null, isUniversal: boolean, multiplier: number, label: string|null, soulshotCritBonus: number }}
  */
-export function resolveSoulshotEffect(state, weaponDef = null, isMageClass = false) {
+export function resolveSoulshotEffect(state, weaponDef = null, isMage = null) {
   if (!state || !state.soulshotActive || !Array.isArray(state.inventory)) {
     return { shotItem: null, isUniversal: false, multiplier: 1.0, label: null, soulshotCritBonus: 0 };
   }
+
+  const isMageClass = isMage !== null ? Boolean(isMage) : ClassValidationService.isMageClass(state.class);
 
   let weaponGrade = 'NG';
   if (weaponDef?.grade) {

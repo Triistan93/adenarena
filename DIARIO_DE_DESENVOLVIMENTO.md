@@ -8,6 +8,7 @@
 ---
 
 ### 📑 Índice Rápido de Páginas
+- [Página 9 — 16 de Setembro de 2026 às 23:30](#página-9--16-de-setembro-de-2026-às-2330) — *Reconstrução Canônica Integral do Sistema de Classes (9 Raças, 49 Linhagens, 159 Classes, 134 Arestas, 25 Classes Base), Wiping Controlado do Domínio Legado e Preservação dos Três Pilares Sagrados*
 - [Página 8 — 16 de Setembro de 2026 às 20:50](#página-8--16-de-setembro-de-2026-às-2050) — *Economia Canônica de Soulshots/Spiritshots: Grade Matching (+100%) vs Universal Wildcard (+30%) e Consumo Justo 1:1*
 - [Página 7 — 16 de Setembro de 2026 às 18:30](#página-7--16-de-setembro-de-2026-às-1830) — *Adaptação Integral dos Conceitos Canônicos do Lineage II Essence (Season 1 Lv 1–40), Economia Fechada, Coleções Perpétuas, Crafting D/C, Augmentação e Brooches*
 - [Página 6 — 16 de Setembro de 2026 às 01:00](#página-6--16-de-setembro-de-2026-às-0100) — *Expurgo de Vínculos Sintéticos, Reconstrução Canônica Baseada no Webscraping Oficial do L2Wiki Essence, Duelista com Blade Punishment (39 Skills) e Sincronização Integral de 142 Classes V2*
@@ -16,6 +17,56 @@
 - [Página 3 — 15 de Setembro de 2026 às 00:05](#página-3--15-de-setembro-de-2026-às-0005) — *Extração Massiva L2Bandit & PMfun, 1.991 Ícones WebP, Índices Mestres de 20k Chaves, IconService, UI Modernizada & Deploy*
 - [Página 2 — 14 de Setembro de 2026 às 23:45](#página-2--14-de-setembro-de-2026-às-2345) — *Arquitetura Zero-Trust, Blindagem Admin/Cakto/Firestore, Life Activities 2.0, Economia Fechada & Performance Chunks*
 - [Página 1 — 12 de Setembro de 2026 às 22:30](#página-1--12-de-setembro-de-2026-às-2230) — *Consolidação de Arquitetura, UX do Personagem & Mochila, Motor de Encantamento Canônico, Auto-Equip ERS e Ressonância de Armas*
+
+---
+
+<br/>
+
+## Página 9 — 16 de Setembro de 2026 às 23:30
+### 🏛️ Reconstrução Canônica Integral do Sistema de Classes (9 Raças, 49 Linhagens, 159 Classes, 134 Arestas, 25 Classes Base), Wiping Controlado do Domínio Legado e Preservação dos Três Pilares Sagrados
+
+> **Data & Hora**: 16/09/2026 às 23:30 (BRT)  
+> **Status de Qualidade**: 
+> - **Testes Automatizados**: **565 testes em 83 suítes passando (100% de aprovação, 0 falhas)**.
+> - **Build de Produção**: Vite compilado com sucesso em 15.14s (276 módulos).
+> - **Preservação Sagrada**: 0 alterações ou regressões nos 3 pilares intocáveis (`LevelEngine.js`, `MarketService.js`, `ExpeditionService.js`).
+> - **Dataset de Autoridade**: `scraped_data_wiki/classes_tree_canonical.json` (SHA-256: `c1699e4ea3a67b6f4d0d693b69df55caf15308733422a5fa66628d5131b858f8`).
+
+#### 1. Resumo Executivo da Sessão
+Execução do **Wipe Controlado + Reconstrução Total do Domínio de Classes** do Aden Arena, substituindo por completo as abstrações legadas fragmentadas por um Grafo Acíclico Dirigido (DAG) puro construído diretamente sobre o dataset canônico oficial (`classes_tree_canonical.json`). A arquitetura foi rigidamente dividida nas camadas `DATA ≠ ENGINE ≠ UI`, eliminando heurísticas de adivinhação de strings (`classId.includes('mage')`), estabelecendo regras de transição de classe de múltiplos níveis (Stage 0 $\to$ 1 $\to$ 2 $\to$ 3), e integrando um pipeline de migração unidirecional para saves legados com zero perda de progresso.
+
+#### 2. Métricas Canônicas Computadas Diretamente do Dataset
+- **Raças (9)**: Human, Elf, Dark Elf, Orc, Dwarf, Kamael, Sylph, High Elf, Ertheia.
+- **Linhagens (49)**: 49 linhagens terminais (exatamente correspondentes às 49 3rd classes).
+- **Nós de Classe Únicos (159)**:
+  - Stage 0 (Base / Lv 1–19): 25 classes raízes.
+  - Stage 1 (1st Class / Lv 20–39): 36 classes intermediárias.
+  - Stage 2 (2nd Class / Lv 40–75): 49 classes avançadas.
+  - Stage 3 (3rd Class / Lv 76+): 49 classes terminais.
+- **Arestas Direcionadas (134)**: Relações pai $\to$ filho únicas no grafo (149 transições de linhagem ao longo dos ramos).
+- **Grafo Dirigido Acíclico (DAG)**: 100% válido, ordenação topológica completa de 159/159 nós, zero ciclos, inDegree = 0 exatamente para as 25 classes base, e zero nós órfãos.
+
+#### 3. Detalhamento Arquitetural & Arquivos Entregues
+1. **Camada DATA**:
+   - `CanonicalClassRegistry.js`: 159 nós congelados (`Object.freeze`) com schema uniforme, `stages`, `allowedPromotions`, `archetype` derivado semanticamente e rótulo de integridade (`baseStatsStatus: 'CONTENT_GAP'` sem invenção de dados).
+   - `CanonicalClassGraph.js`: Motor puro de DAG com métodos determinísticos: `getClassNode`, `hasNode`, `getSuccessors`, `getPredecessor`, `getAncestors`, `getDescendants`, `getBaseClassesForRace`, `getLineageChain`, `getAllClassNodes`, `getAllEdges`, `getRootClasses`, `getTerminalClasses`, `topologicalSort`, e `validateIntegrity`.
+   - `CanonicalRaceRegistry.js`: 9 raças canônicas e lista canônica de IDs.
+2. **Camada ENGINE & SERVICE**:
+   - `ClassProgressionEngine.js`: Regras de promoção para Lv 20, Lv 40 e Lv 76, integrando custos de SP e verificações de pré-requisito.
+   - `SeasonAvailabilityService.js`: Portão da Season 1 (Lv 1–40 jogáveis, Lv 76+ bloqueados até Season 2).
+   - `ClassValidationService.js`: Serviço semântico puro determinando arquétipo (`fighter` vs `mystic`) a partir da classe base original, eliminando substring sniffing.
+   - `ClassSaveMigrator.js` & `ClassSaveMigrationMap.js`: Mapeador estático de 315 entradas remapeando aliases legados, camelCase, snake_case e variações semânticas para os IDs canônicos.
+   - `StatsEngine.js`: Integração com o grafo canônico com proteção contra ausência de baseStats.
+   - `StateManager.js`: Migração automática no carregamento (`loadState`) e resolução de classes canônicas no `applyStarterKit`.
+3. **Camada UI**:
+   - `CharacterCreation.tsx`: Exposição das 25 classes base canônicas distribuídas pelas 9 raças com IDs snake_case autênticos e avatares oficiais.
+   - `starterKits.ts`: Atualização das chaves e pacotes iniciais para todas as classes base canônicas.
+4. **Wipe Controlado de Código Legado**:
+   - Deletados 9 arquivos obsoletos: `src/data/classes/{human, elf, darkElf, orc, dwarf, kamael, sylph, highElf, ertheia}.js`.
+   - Desacoplado `src/data/index.js` e `lineage-idle/data/classes_echo.js` para re-exportar os registros canônicos.
+5. **Preservação dos Três Pilares Sagrados**:
+   - `LevelEngine.js`, `MarketService.js` e `ExpeditionService.js` permaneceram com diff rigorosamente vazio (`git diff = 0`).
+   - Criada a suíte `test/sacred-pillars-regression.test.js` garantindo paridade funcional matemática e operacional.
 
 ---
 

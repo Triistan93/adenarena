@@ -55,7 +55,7 @@ export function getStarterKit(race: string, className: string): StarterKitConfig
   // 2. Mapeamento Específico por Classe / Especialização
 
   // 🐉 Orc Vanguard Rider — Exclusivo de Lança (Spear) e Heavy Armor
-  if (c === 'rider' || c === 'orcrider' || c === 'vanguard' || c === 'vanguardrider') {
+  if (c === 'rider' || c === 'orcrider' || c === 'vanguard' || c === 'vanguardrider' || c === 'orc_rider_0') {
     return {
       weapon: 'short_spear',
       armorType: 'heavy',
@@ -68,7 +68,7 @@ export function getStarterKit(race: string, className: string): StarterKitConfig
   }
 
   // 🐺 Warg / Beast Fighter — Machados/Garras
-  if (c === 'wargbase' || c === 'wargs0' || c === 'warg') {
+  if (c === 'wargbase' || c === 'wargs0' || c === 'warg' || c === 'werewolf_0') {
     return {
       weapon: 'tomahawk_axe',
       armorType: 'heavy',
@@ -133,7 +133,7 @@ export function getStarterKit(race: string, className: string): StarterKitConfig
   }
 
   // 🔫 Sylph Gunner / Storm Blaster — Armas de Fogo e Vento
-  if (c === 'sylphgunner' || r === 'sylph') {
+  if (c === 'sylphgunner' || r === 'sylph' || c === 'sylphid') {
     return {
       weapon: 'sword_breaker',
       armorType: 'light',
@@ -146,7 +146,7 @@ export function getStarterKit(race: string, className: string): StarterKitConfig
   }
 
   // ⚒️ Anão Artesão / ShineMaker — Martelos Pesados de Forja
-  if (c === 'dwarffighter' || c === 'artisan' || c === 'artisandwarf' || c.includes('shine')) {
+  if (c === 'dwarffighter' || c === 'dwarven_fighter' || c === 'artisan' || c === 'artisandwarf' || c.includes('shine')) {
     return {
       weapon: 'iron_hammer',
       armorType: 'heavy',
@@ -159,7 +159,7 @@ export function getStarterKit(race: string, className: string): StarterKitConfig
   }
 
   // 🌹 Dark Elf Blood Rose — Magia de Rosas e Espinhos
-  if (c.includes('bloodrose') || c.includes('blood_rose')) {
+  if (c.includes('bloodrose') || c.includes('blood_rose') || c === 'rose_vain_0') {
     return {
       weapon: 'crucifix_of_blessing_magicblunt',
       armorType: 'robe',
@@ -185,7 +185,7 @@ export function getStarterKit(race: string, className: string): StarterKitConfig
   }
 
   // 🛡️ High Elf Divine Templar — Espada Sagrada
-  if (c === 'highelfbase' || c === 'divinetemplars1' || c === 'divinetemplar') {
+  if (c === 'highelfbase' || c === 'divinetemplars1' || c === 'divinetemplar' || c === 'sacred_templar_0') {
     return {
       weapon: 'falchion_sword',
       armorType: 'heavy',
@@ -198,7 +198,7 @@ export function getStarterKit(race: string, className: string): StarterKitConfig
   }
 
   // 🌀 High Elf Element Weaver — Mago Supremo Elemental
-  if (c === 'elementweavers1' || c === 'elementweaver') {
+  if (c === 'elementweavers1' || c === 'elementweaver' || c === 'spirit_0') {
     return {
       weapon: 'crucifix_of_blessing_magicblunt',
       armorType: 'robe',
@@ -211,7 +211,7 @@ export function getStarterKit(race: string, className: string): StarterKitConfig
   }
 
   // ⛩️ Kamael Soulbreaker / Samurai
-  if (r === 'kamael' || c.includes('samurai') || c.includes('hatamoto') || c === 'soulbreaker') {
+  if (r === 'kamael' || c.includes('samurai') || c.includes('hatamoto') || c === 'soulbreaker' || c === 'jin_kamael_soldier' || c === 'crow_0') {
     return {
       weapon: 'sword_breaker',
       armorType: 'light',

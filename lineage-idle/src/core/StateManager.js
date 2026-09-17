@@ -12,6 +12,9 @@ import { generateStateChecksum, validateStateIntegrity, sanitizeGameState } from
 import { getStarterSkillsForClass, normalizeAndValidateSkills } from '../services/SkillEligibility.js';
 import { getZoneProgression } from '../data/balance/progressionBalance.js';
 import { migrateCharacterSave } from '../services/SkillMigrationService.js';
+import { ClassSaveMigrator } from '../services/ClassSaveMigrator.js';
+import { ClassValidationService } from '../services/ClassValidationService.js';
+import { CanonicalClassGraph } from '../data/classes/CanonicalClassGraph.js';
 
 export const DEFAULT_STATE = () => ({
   characterId: null,
@@ -571,6 +574,9 @@ export function loadState() {
       saveState(false);
     }
 
+    // Canonical Class System Save Migration Cutover
+    ClassSaveMigrator.migrateState(currentState);
+
     // V2 Major Version Save Migration Cutover
     migrateCharacterSave(currentState);
 
@@ -607,7 +613,18 @@ export function resetState() {
 export function applyStarterKit(state, race, classId, charName = null, gender = null) {
   if (!state) return;
   const canonicalRace = race || state.race || 'human';
-  const canonicalClass = classId || state.class || 'fighter';
+  let canonicalClass = classId || state.class || 'fighter';
+
+  // Resolves canonical class ID if a legacy name or root was provided
+  if (!CanonicalClassGraph.hasNode(canonicalClass)) {
+    const migration = ClassSaveMigrator.migrateState({ class: canonicalClass });
+    if (migration.canonicalClass && CanonicalClassGraph.hasNode(migration.canonicalClass)) {
+      canonicalClass = migration.canonicalClass;
+    } else {
+      const baseClasses = CanonicalClassGraph.getBaseClassesForRace(canonicalRace);
+      canonicalClass = baseClasses.length > 0 ? baseClasses[0].id : 'fighter';
+    }
+  }
 
   state.race = canonicalRace;
   state.class = canonicalClass;
@@ -647,13 +664,10 @@ export function applyStarterKit(state, race, classId, charName = null, gender = 
   state.randomCraft = { points: 0, charge: 0, slots: [], history: [] };
   state.skills = {};
 
-  // Determina o arquétipo inicial (Mage, Bow/Gunner, Dagger/Assassin, ou Melee/Fighter/Tank)
-  const cLower = String(canonicalClass).toLowerCase();
-  const isMage = cLower.includes('mage') || cLower.includes('wizard') || cLower.includes('cleric') || 
-                 cLower.includes('elementweaver') || cLower.includes('sayha') || cLower.includes('bloodrose') ||
-                 cLower.includes('shinemaker');
-  const isBowOrGun = cLower.includes('bow') || cLower.includes('gun') || cLower.includes('sylph') || cLower.includes('archer') || cLower.includes('sniper');
-  const isDagger = cLower.includes('dagger') || cLower.includes('assassin') || cLower.includes('scavenger') || cLower.includes('bounty');
+  // Determina o arquétipo inicial (Mage, Bow/Gunner, Dagger/Assassin, ou Melee/Fighter/Tank) via ClassValidationService
+  const isMage = ClassValidationService.isMageClass(canonicalClass);
+  const isBowOrGun = canonicalClass === 'sylph_gunner_0' || canonicalClass.includes('bow') || canonicalClass.includes('gunner');
+  const isDagger = canonicalClass === 'secret_assassin_male_0' || canonicalClass === 'secret_assassin_female_0' || canonicalClass.includes('assassin') || canonicalClass.includes('dagger');
 
   let starterWpnId = 'weapon_knight_sword';
   let starterArmorId = 'armor_leather_vest_light';

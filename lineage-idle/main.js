@@ -13,6 +13,9 @@ import { getSkillIcon, getSkillSemanticData } from './src/services/SkillIconRegi
 // ─── Sprint 1: Importa módulos de dados extraídos ───────────────────────────
 import { RACE_BASE_ATTRIBUTES, RACES, CLASSES, DWARF_CLASS, KAMAEL_CLASS } from './src/data/races.js';
 import { resolveCanonicalClassId, resolveCanonicalDagClassId, getCanonicalCharacterClass } from './src/data/classes/class_aliases.js';
+import { ClassValidationService } from './src/services/ClassValidationService.js';
+import { ClassProgressionEngine } from './src/engine/ClassProgressionEngine.js';
+import { CanonicalClassGraph } from './src/data/classes/CanonicalClassGraph.js';
 import { getClassEntity } from './src/data/elemental/ClassLineage.js';
 import { HISTORICAL_CLASS_MAP } from './src/data/elemental/HistoricalClasses.js';
 import { CLASS_IDENTITIES } from './src/data/elemental/ClassIdentity.js';
@@ -591,13 +594,35 @@ function openClassTransferModal(classInfo) {
   const eligibleAdvancements = progState.availableAdvancements || [];
 
   const candidates = [];
-  for (const succ of eligibleAdvancements) {
-    const succId = succ.id || succ.sourceClassId;
-    const succDef = getClass(succId) || getClass(succ.sourceClassId) || succ;
-    const canonId = resolveCanonicalClassId(succId) || succId;
-    if (!seenClassIds.has(canonId)) {
-      seenClassIds.add(canonId);
-      candidates.push({ id: succId, def: succDef });
+
+  // 1. Prioridade Canônica: Avalia pelo Grafo Oficial e Motor de Progressão
+  const canonicalPromotions = ClassProgressionEngine.getPromotionOptions(state.class, state.level, state.race);
+  if (canonicalPromotions && canonicalPromotions.length > 0) {
+    for (const opt of canonicalPromotions) {
+      const target = opt.targetClass;
+      if (!seenClassIds.has(target.id)) {
+        seenClassIds.add(target.id);
+        candidates.push({
+          id: target.id,
+          def: target,
+          isEligible: opt.isEligible,
+          isSeasonGated: opt.isSeasonGated,
+          reasons: opt.reasons
+        });
+      }
+    }
+  }
+
+  // 2. Fallback Secundário: Histórico de Progressão legado se candidatos vazios
+  if (candidates.length === 0) {
+    for (const succ of eligibleAdvancements) {
+      const succId = succ.id || succ.sourceClassId;
+      const succDef = getClass(succId) || getClass(succ.sourceClassId) || succ;
+      const canonId = resolveCanonicalClassId(succId) || succId;
+      if (!seenClassIds.has(canonId)) {
+        seenClassIds.add(canonId);
+        candidates.push({ id: succId, def: succDef });
+      }
     }
   }
 
@@ -2630,7 +2655,7 @@ function updateCombatControlsUI() {
     const isSsActive = !!state.soulshotActive;
     ssBtn.classList.toggle('active', isSsActive);
     ssBtn.classList.toggle('autoshot-active', isSsActive);
-    const isMage = state.class === 'mage' || state.class === 'soulbreaker' || (getClass(state.class)?.archetype === 'mage');
+    const isMage = ClassValidationService.isMageClass(state.class);
     
     // Contagem total de tiros no inventário (universais + legado por grau)
     let shotCount = 0;
@@ -5796,7 +5821,7 @@ function attackMonster() {
   
   let soulshotCritBonus = 0;
   if (state.soulshotActive) {
-    const isMageClass = state.class === 'mage' || state.class === 'soulbreaker' || (getClass(state.class)?.archetype === 'mage');
+    const isMageClass = ClassValidationService.isMageClass(state.class);
     // Detecta a Grade da Arma equipada
     let weaponGrade = 'NG';
     let wpnDef = null;

@@ -17,9 +17,8 @@ import { DyeService } from '../services/DyeService.js';
 import { DYES_CATALOG } from '../data/dyes.js';
 import { PetService } from '../services/PetService.js';
 import { resolveCanonicalClassId } from '../data/classes/class_aliases.js';
-import { CLASSES_ECHO } from '../data/classes/classes_echo_defs.js';
-import { HISTORICAL_CLASSES } from '../data/elemental/HistoricalClasses.js';
-import { NATIVE_SKILL_TREES } from '../data/elemental/NativeSkillTrees.js';
+import { CanonicalClassGraph } from '../data/classes/CanonicalClassGraph.js';
+import { CLASS_SAVE_MIGRATION_MAP } from '../services/ClassSaveMigrationMap.js';
 import { WeaponResonanceService } from '../services/WeaponResonanceService.js';
 
 export const STR_MODIFIERS = {
@@ -109,52 +108,44 @@ export function getAstralMasteryBonuses(state) {
 export function getClass(classId) {
   if (!classId) return null;
   const rawId = String(classId).trim();
-  const canonicalId = resolveCanonicalClassId(rawId);
-  const classes = (typeof window !== 'undefined' && window.EchoData && window.EchoData.CLASSES_ECHO) ? window.EchoData.CLASSES_ECHO : CLASSES_ECHO;
-  let def = classes[rawId] || classes[canonicalId] || classes[String(rawId).toLowerCase()] || classes[String(canonicalId).toLowerCase()] || CLASSES[rawId] || CLASSES[canonicalId] || null;
+  const node = CanonicalClassGraph.getClassNode(rawId);
+  if (node) {
+    return {
+      id: node.id,
+      name: node.name,
+      race: node.race,
+      archetype: node.archetypeGroup,
+      archetypeGroup: node.archetypeGroup,
+      stage: node.stage,
+      parent: node.parentClass,
+      role: node.role,
+      weapons: node.weapons,
+      base: node.baseStats || { atk: 0, def: 0, hp: 100, mp: 40, eva: 5, crit: 5, matk: 0, mdef: 5 }
+    };
+  }
 
-  if (!def) {
-    const hCls = Object.values(HISTORICAL_CLASSES).find(c => c.id === rawId || c.id === canonicalId || c.sourceClassId === rawId || c.sourceClassId === canonicalId);
-    if (hCls) {
-      const isMage = hCls.name.toLowerCase().includes('mage') || hCls.name.toLowerCase().includes('wizard') || hCls.name.toLowerCase().includes('sorcerer') || hCls.name.toLowerCase().includes('cleric') || hCls.name.toLowerCase().includes('bishop') || hCls.name.toLowerCase().includes('oracle') || hCls.name.toLowerCase().includes('elder') || hCls.name.toLowerCase().includes('shaman') || hCls.name.toLowerCase().includes('summoner') || hCls.name.toLowerCase().includes('saint') || hCls.name.toLowerCase().includes('hierophant') || hCls.name.toLowerCase().includes('cardinal') || hCls.name.toLowerCase().includes('soultaker') || hCls.name.toLowerCase().includes('screamer') || hCls.name.toLowerCase().includes('archmage') || hCls.name.toLowerCase().includes('muse') || hCls.name.toLowerCase().includes('mystic') || hCls.name.toLowerCase().includes('weaver');
-      def = {
-        name: hCls.name,
-        race: hCls.race.toLowerCase(),
-        archetype: isMage ? 'mage' : 'fighter',
-        stage: hCls.stage || (hCls.lineageType === 'THIRD_CLASS_AWAKENING' ? 3 : hCls.lineageType === 'SECOND_CLASS_TRANSFER' ? 2 : hCls.lineageType === 'FIRST_CLASS_TRANSFER' ? 1 : 0),
-        id: hCls.id
+  // Fallback via migration map para compatibilidade com saves legados não migrados
+  const migration = CLASS_SAVE_MIGRATION_MAP[rawId] || CLASS_SAVE_MIGRATION_MAP[rawId.toLowerCase()];
+  if (migration) {
+    const migratedNode = CanonicalClassGraph.getClassNode(migration.canonicalId);
+    if (migratedNode) {
+      return {
+        id: migratedNode.id,
+        name: migratedNode.name,
+        race: migratedNode.race,
+        archetype: migratedNode.archetypeGroup,
+        archetypeGroup: migratedNode.archetypeGroup,
+        stage: migratedNode.stage,
+        parent: migratedNode.parentClass,
+        role: migratedNode.role,
+        weapons: migratedNode.weapons,
+        base: migratedNode.baseStats || { atk: 0, def: 0, hp: 100, mp: 40, eva: 5, crit: 5, matk: 0, mdef: 5 }
       };
     }
   }
 
-  if (!def && NATIVE_SKILL_TREES[rawId]) {
-    const parts = rawId.split('_');
-    const isMage = rawId.includes('mage') || rawId.includes('sorcerer') || rawId.includes('shaman') || rawId.includes('weaver') || rawId.includes('blood_rose') || rawId.includes('mystic');
-    def = {
-      name: rawId.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
-      race: parts[0],
-      archetype: isMage ? 'mage' : 'fighter',
-      stage: 1,
-      id: rawId
-    };
-  }
-
-  if (!def) return null;
-
-  if (def.archetype === undefined && def.parent) {
-    let current = def.parent;
-    const visited = new Set([classId]);
-    while (current && !visited.has(current)) {
-      visited.add(current);
-      const parentDef = classes[current] || classes[String(current).toLowerCase()];
-      if (!parentDef) break;
-      if (parentDef.archetype !== undefined) {
-        return { ...def, archetype: parentDef.archetype };
-      }
-      current = parentDef.parent;
-    }
-  }
-  return def;
+  const legacyClasses = (typeof window !== 'undefined' && window.EchoData && window.EchoData.CLASSES_ECHO) ? window.EchoData.CLASSES_ECHO : {};
+  return legacyClasses[rawId] || null;
 }
 
 /**
@@ -166,7 +157,7 @@ export function getClass(classId) {
 export function getBaseAttributes(raceKey, classKey) {
   const r = String(raceKey || 'human').toLowerCase();
   const c = getClass(classKey);
-  const isMage = c?.archetype === 'mage';
+  const isMage = c?.archetypeGroup === 'mage' || c?.archetype === 'mage';
 
   let key = 'human_fighter';
   if (r === 'darkelf') key = isMage ? 'darkelf_mage' : 'darkelf_fighter';
@@ -174,6 +165,9 @@ export function getBaseAttributes(raceKey, classKey) {
   else if (r === 'orc') key = isMage ? 'orc_mage' : 'orc_fighter';
   else if (r === 'dwarf') key = 'dwarf_fighter';
   else if (r === 'kamael') key = 'kamael_male';
+  else if (r === 'sylph') key = 'elf_fighter';
+  else if (r === 'highelf') key = isMage ? 'elf_mage' : 'elf_fighter';
+  else if (r === 'ertheia') key = isMage ? 'elf_mage' : 'elf_fighter';
   else if (r === 'human') key = isMage ? 'human_mage' : 'human_fighter';
 
   return { ...(RACE_BASE_ATTRIBUTES[key] || RACE_BASE_ATTRIBUTES.human_fighter) };
