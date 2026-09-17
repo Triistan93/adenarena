@@ -8,6 +8,7 @@
 ---
 
 ### 📑 Índice Rápido de Páginas
+- [Página 11 — 17 de Setembro de 2026 às 00:40](#página-11--17-de-setembro-de-2026-às-0040) — *Skill Progression 2.0: Sistema de Loadout de Combate com 7 Slots, Táticas de Auto-Batalha, Drag-and-Drop na UI e Blindagem Universal Anti-Cosméticos*
 - [Página 10 — 16 de Setembro de 2026 às 23:50](#página-10--16-de-setembro-de-2026-às-2350) — *Expurgamento Global de Habilidades Cosméticas, Montarias ("Mount") e de Aparência ("Appearance") em 100% das Classes do Jogo*
 - [Página 9 — 16 de Setembro de 2026 às 23:30](#página-9--16-de-setembro-de-2026-às-2330) — *Reconstrução Canônica Integral do Sistema de Classes (9 Raças, 49 Linhagens, 159 Classes, 134 Arestas, 25 Classes Base), Wiping Controlado do Domínio Legado e Preservação dos Três Pilares Sagrados*
 - [Página 8 — 16 de Setembro de 2026 às 20:50](#página-8--16-de-setembro-de-2026-às-2050) — *Economia Canônica de Soulshots/Spiritshots: Grade Matching (+100%) vs Universal Wildcard (+30%) e Consumo Justo 1:1*
@@ -18,6 +19,81 @@
 - [Página 3 — 15 de Setembro de 2026 às 00:05](#página-3--15-de-setembro-de-2026-às-0005) — *Extração Massiva L2Bandit & PMfun, 1.991 Ícones WebP, Índices Mestres de 20k Chaves, IconService, UI Modernizada & Deploy*
 - [Página 2 — 14 de Setembro de 2026 às 23:45](#página-2--14-de-setembro-de-2026-às-2345) — *Arquitetura Zero-Trust, Blindagem Admin/Cakto/Firestore, Life Activities 2.0, Economia Fechada & Performance Chunks*
 - [Página 1 — 12 de Setembro de 2026 às 22:30](#página-1--12-de-setembro-de-2026-às-2230) — *Consolidação de Arquitetura, UX do Personagem & Mochila, Motor de Encantamento Canônico, Auto-Equip ERS e Ressonância de Armas*
+
+---
+
+<br/>
+
+## Página 11 — 17 de Setembro de 2026 às 00:40
+### ⚔️ Skill Progression 2.0: Sistema de Loadout de Combate com 7 Slots, Táticas de Auto-Batalha, Drag-and-Drop na UI e Blindagem Universal Anti-Cosméticos
+
+> **Data & Hora**: 17/09/2026 às 00:40 (BRT)  
+> **Status de Qualidade**: 
+> - **Testes Automatizados**: **622 testes em 92 suítes passando (100% de aprovação, 0 falhas)**.
+> - **Build de Produção**: Vite compilado com sucesso em 12.54s (280 módulos).
+> - **Preservação Sagrada**: Regra estrita **Zero New Skills** respeitada 100%; 3 Pilares Sagrados (`LevelEngine.js`, `MarketService.js`, `ExpeditionService.js`) com 0 alterações.
+> - **Invalidação de Cache**: Service Worker elevado para `aden-arena-cache-v8`.
+
+#### 1. Resumo Executivo da Sessão
+Implementação integral do **Skill Progression 2.0**, transformando a execução de combate de uma rotação genérica de todas as habilidades aprendidas para um sistema tático de **Loadout de Combate com 7 Slots** desbloqueados progressivamente por nível global. O sistema inclui atribuição de regras táticas inteligentes de auto-batalha (gatilhos de HP do jogador e alvo, contagem de inimigos para AoE, priorização de chefes), suporte nativo a Drag-and-Drop na interface, e a resolução definitiva de vazamento de habilidades cosméticas/montarias através de uma blindagem multi-camada universal.
+
+#### 2. Arquitetura do Sistema de Loadout 2.0
+- **Classificação Canônica de Habilidades (`SkillTagService.js`)**:
+  - Classificação estrita em 5 tipos de slot: `basic`, `core`, `special`, `signature` e `ultimate`.
+  - Habilidades passivas são mantidas **sempre ativas** em segundo plano e nunca ocupam slots de combate.
+  - Buffs e Toggles ocupam slots do loadout, exigindo escolhas táticas de composição de build.
+  - Regra absoluta **Zero Novas Habilidades**: Nenhuma habilidade sintética ou ID fictício foi criado; todo o sistema opera puramente sobre as habilidades canônicas existentes do Lineage II.
+- **Desbloqueio Progressivo por Nível Global (`SkillUnlockSchedule.js`)**:
+  - **Nível 1**: 2 slots desbloqueados (`basic`, `core1`).
+  - **Nível 20**: 4 slots desbloqueados (`basic`, `core1`, `core2`, `special1`).
+  - **Nível 40**: 6 slots desbloqueados (`basic`, `core1`, `core2`, `special1`, `special2`, `signature`).
+  - **Nível 76+**: 7 slots desbloqueados (`basic`, `core1`, `core2`, `special1`, `special2`, `signature`, `ultimate`).
+- **Serviço de Loadout & Auto-Equip (`SkillLoadoutService.js`)**:
+  - Funções puras e imutáveis: `equipSkill()`, `unequipSkill()`, `clearLoadout()`, `autoEquip()`.
+  - Migração retrocompatível: Saves legados recebem auto-equipamento determinístico com as melhores habilidades ativas aprendidas de sua classe.
+
+#### 3. Motor de Condições Táticas de Auto-Batalha (`SkillConditionService.js`)
+- **Gatilhos Táticos Inteligentes**:
+  - **HP do Jogador**: `self_below_75` (cura preventiva), `self_below_50` (cura de emergência), `self_below_30` (defesas críticas).
+  - **HP do Alvo**: `target_below_30` (executores/finalizadores), `target_below_50`.
+  - **Filtro de Alvos**: `boss_only` (reserva ultimates/grandes recargas para Bosses/Raids/Elites), `normal_only`, `any`.
+  - **Filtro de Inimigos**: Requer 1+, 2+ ou 3+ inimigos simultâneos para disparo de habilidades AoE.
+- **Predefinições Automáticas Inteligentes**:
+  - Habilidades de cura recebem automaticamente a regra `HP < 75%`.
+  - Habilidades de área (AoE) recebem automaticamente `2+ Inimigos`.
+  - Habilidades de finalização recebem `Alvo < 30%`.
+- **Gating no Loop de Combate (`main.js` - `attackMonster()`)**:
+  - A rotação de ataque foi refatorada para iterar exclusivamente as habilidades equipadas nos slots ativos do `state.skillLoadout`.
+  - Cada habilidade passa pela avaliação `shouldCastSkill(state, skill.id, skill.slot, monster)` antes do gasto de mana e execução, garantindo que recursos não sejam desperdiçados.
+
+#### 4. Interface Visual & Experiência do Usuário (UI/UX)
+- **Barra de Loadout de 7 Slots (`GameUI.js` & `GameUI.css`)**:
+  - Renderizada no topo da janela de habilidades com visual MMORPG responsivo.
+  - Exibe ícones específicos por tipo de slot, nível de desbloqueio quando travado, badge de condição tática ativa (ex.: `⚙️ 👑 Boss · HP<75%`) e botão de remoção rápida `[×]` ao passar o mouse.
+  - Botões de ação rápida no cabeçalho: `⚡ Auto-Equipar` e `✕ Limpar`.
+- **Drag-and-Drop & Click-to-Equip**:
+  - Suporte completo a HTML5 Drag-and-Drop arrastando cards da biblioteca diretamente para os slots desbloqueados da barra.
+  - Integração no painel lateral de detalhes da habilidade com botão direto para equipar em slot disponível e controles interativos de configuração de condições táticas (HP trigger, alvo, contagem de inimigos).
+  - Badges nos cards da biblioteca (`⚡ Core 1`) indicando em tempo real quais habilidades estão em combate.
+
+#### 5. Blindagem Definitiva Universal contra Cosméticos, Montarias e Transformações
+- **Causa Raiz Diagnosticada**:
+  - Skills de montaria/transformação com `classes: []` eram tratadas como `classReq: 'any'` no adaptador legado, sendo injetadas por ferramentas de Admin (`adminMaxSkills`) e preservadas por fallbacks de migração.
+- **Blindagem Multi-Camada**:
+  1. `SkillTagService.js`: `isPurgedSkill()` com correspondência por padrões globais (`mount_*`, `*appearance*`, `*transformation*`, `*detection*`).
+  2. `echo-adapter.js`: Bloqueio estrito no gerador canônico e higienização direta de `SKILL_DEFS_ECHO` e `CLASS_SKILLS_ECHO` ao inicializar `window.EchoData`.
+  3. `SkillEligibility.js` & `SkillTreeViewModel.js`: Bloqueio de resolução, elegibilidade e renderização (zero habilidades cosméticas/montarias visíveis ou selecionáveis).
+  4. `SkillMigrationService.js`: Varredura em cada carregamento de save, expurgando habilidades proibidas e reembolsando 100% do SP investido.
+  5. `main.js`: A função `adminMaxSkills()` filtra rigorosamente contra a lista negra e padrões proibidos.
+- **Invalidação de Cache (`public/sw.js`)**:
+  - Cache elevado para `aden-arena-cache-v8`, garantindo que navegadores destruam bundles antigos em cache ao recarregar a página.
+
+#### 6. Métricas de Cobertura e Validação
+- **Suíte de Testes**: **622 testes em 92 arquivos** executados com `node --test test/*.test.js` passando com 100% de sucesso.
+- **Testes Forenses Dedicados**:
+  - `test/skill-loadout-canon.test.js`: 39 testes cobrindo integridade do loadout, regras de slots, auto-equip, persistência em saves e validação de 0 skills proibidas em personagem Admin Lv. 120.
+  - `test/skill-conditions.test.js`: 18 testes cobrindo avaliação funcional de condições, predefinições inteligentes e gating no loop de combate.
+- **Build de Produção**: `npm run build` bem-sucedido em 12.54s com empacotamento modular e zero erros de tipo ou linter.
 
 ---
 
