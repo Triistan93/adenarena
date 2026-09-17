@@ -235,6 +235,9 @@ import {
   validateAndFixCharacterClass as serviceValidateAndFixCharacterClass
 } from './src/services/CharacterService.js';
 
+import { getLoadoutForCombat, getLoadout, autoEquipLoadout } from './src/services/SkillLoadoutService.js';
+import { SLOT_PRIORITY_ORDER } from './src/data/balance/SkillUnlockSchedule.js';
+
 import {
   checkQuestResets as serviceCheckQuestResets,
   triggerQuestEvent as serviceTriggerQuestEvent,
@@ -5488,32 +5491,53 @@ function attackMonster() {
   const now = combatTick * 200;
 
   const activeSkills = [];
-  const classSkillIds = getClassSkills(state.class);
   const autoCastSettings = state.skillAutoCast || {};
-  const priorityOrder = state.skillPriorityOrder || [];
 
-  for(const [sId, lvl] of Object.entries(state.skills)) {
-    const def = SKILL_DEFS[sId];
-    if(lvl > 0 && def) {
+  // Skill Loadout 2.0: iterate only equipped skills in slot priority order
+  const loadout = state.skillLoadout || {};
+  const hasLoadout = Object.values(loadout).some(v => v != null);
+
+  if (hasLoadout) {
+    // Loadout path: only equipped skills, in priority order (ultimate → basic)
+    for (const slotName of SLOT_PRIORITY_ORDER) {
+      const sId = loadout[slotName];
+      if (!sId) continue;
+      const lvl = state.skills[sId];
+      const def = SKILL_DEFS[sId];
+      if (!def || !lvl || lvl <= 0) continue;
       const isPassive = def.type === 'passive' || def.type === 'stat';
-      if (!isPassive) {
-        if (autoCastSettings[sId] === false) continue;
-        const belongsToClass = isSkillAllowedForClass(state.class, sId) && (Number(def.requiredLevel || def.reqLvl) || 1) <= state.level;
-        if (belongsToClass) {
-          activeSkills.push({ id: sId, lvl, def });
+      if (isPassive) continue;
+      if (autoCastSettings[sId] === false) continue;
+      if (!isSkillAllowedForClass(state.class, sId)) continue;
+      if ((Number(def.requiredLevel || def.reqLvl) || 1) > state.level) continue;
+      activeSkills.push({ id: sId, lvl, def, slot: slotName });
+    }
+  } else {
+    // Legacy fallback: iterate all learned skills (for saves before migration completes)
+    const priorityOrder = state.skillPriorityOrder || [];
+    for (const [sId, lvl] of Object.entries(state.skills)) {
+      const def = SKILL_DEFS[sId];
+      if (lvl > 0 && def) {
+        const isPassive = def.type === 'passive' || def.type === 'stat';
+        if (!isPassive) {
+          if (autoCastSettings[sId] === false) continue;
+          const belongsToClass = isSkillAllowedForClass(state.class, sId) && (Number(def.requiredLevel || def.reqLvl) || 1) <= state.level;
+          if (belongsToClass) {
+            activeSkills.push({ id: sId, lvl, def });
+          }
         }
       }
     }
+    activeSkills.sort((a, b) => {
+      const pA = priorityOrder.indexOf(a.id);
+      const pB = priorityOrder.indexOf(b.id);
+      if (pA !== -1 && pB !== -1) return pA - pB;
+      if (pA !== -1) return -1;
+      if (pB !== -1) return 1;
+      return (b.def.tier || 0) - (a.def.tier || 0);
+    });
   }
 
-  activeSkills.sort((a, b) => {
-    const pA = priorityOrder.indexOf(a.id);
-    const pB = priorityOrder.indexOf(b.id);
-    if (pA !== -1 && pB !== -1) return pA - pB;
-    if (pA !== -1) return -1;
-    if (pB !== -1) return 1;
-    return (b.def.tier || 0) - (a.def.tier || 0);
-  });
 
   const realNow = Date.now();
   let castedSkillThisTick = false;

@@ -15,6 +15,7 @@ import { migrateCharacterSave } from '../services/SkillMigrationService.js';
 import { ClassSaveMigrator } from '../services/ClassSaveMigrator.js';
 import { ClassValidationService } from '../services/ClassValidationService.js';
 import { CanonicalClassGraph } from '../data/classes/CanonicalClassGraph.js';
+import { autoEquipLoadout, EMPTY_LOADOUT } from '../services/SkillLoadoutService.js';
 
 export const DEFAULT_STATE = () => ({
   characterId: null,
@@ -32,6 +33,11 @@ export const DEFAULT_STATE = () => ({
   maxHp: 100, hp: 100, maxMp: 50, mp: 50,
   base: { atk: 0, def: 0, eva: 0, matk: 0, mdef: 0 },
   skills: {},
+  skillLoadout: {
+    basic: null, core1: null, core2: null,
+    special1: null, special2: null,
+    signature: null, ultimate: null
+  },
   quests: { progress: {}, claimed: [], lastDailyReset: 0, lastWeeklyReset: 0 },
   battlePass: { xp: 0, claimedFree: [], claimedPremium: [], unlockedPremium: false },
   dailyRewards: { currentDay: 1, claimedDays: [], lastClaimDate: '', streak: 0, totalClaims: 0 },
@@ -582,6 +588,19 @@ export function loadState() {
 
     // Normalização e auditoria defensiva de habilidades contra corrupções ou dados obsoletos
     normalizeAndValidateSkills(currentState);
+
+    // Skill Loadout 2.0 Migration: auto-equip if loadout is missing or empty
+    if (!currentState.skillLoadout || Object.values(currentState.skillLoadout).every(v => v == null)) {
+      currentState.skillLoadout = { ...EMPTY_LOADOUT };
+      try {
+        const skillDefs = (typeof window !== 'undefined' && window.EchoData?.SKILL_DEFS_ECHO) || {};
+        if (Object.keys(currentState.skills || {}).length > 0 && Object.keys(skillDefs).length > 0) {
+          autoEquipLoadout(currentState, skillDefs);
+        }
+      } catch (e) {
+        console.warn('[StateManager] Loadout auto-equip migration deferred:', e.message);
+      }
+    }
 
     EventBus.emit('state:loaded', currentState);
     return true;
